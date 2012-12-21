@@ -56,6 +56,9 @@ class CmsLayoutStylesheet
   {
     $str = trim($str);
     if( !$str ) throw new CmsInvalidDataException('Name cannot be empty');
+		if( preg_match('<^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$>', $str) ) {
+			throw new CmsInvalidDataException('Invalid characters in name');
+		}
     $this->_data['name'] = $str;
     $this->_dirty = TRUE;
   }
@@ -153,7 +156,7 @@ class CmsLayoutStylesheet
                 WHERE css_id = ?';
       $tmp = $db->GetCol($query,array($this->get_id()));
       if( is_array($tmp) && count($tmp) ) {
-	$this->_design_assoc = $tmp;
+				$this->_design_assoc = $tmp;
       }
     }
     return $this->_design_assoc;

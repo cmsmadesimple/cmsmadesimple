@@ -95,10 +95,15 @@ class Content extends ContentBase
       $this->AddContentProperty('searchable',8);
       $this->AddContentProperty('pagedata',25);
       $this->AddContentProperty('disable_wysiwyg',60);
-
-      #Turn on preview
-      $this->mPreview = true;
     }
+
+	/**
+	 * Has Preview
+	 */
+	public function HasPreview()
+	{
+		return TRUE;
+	}
 
 	/**
 	 * Set content attribute values (from parameters received from admin add/edit form) 
@@ -190,13 +195,7 @@ class Content extends ContentBase
 		//
 		$hash = array();
 		$blocks = null;
-		try {
-			$blocks = $this->get_content_blocks(); 
-		}
-		catch( CmsException $e ) 
-		{
-			$this->SetError($e->getMessage());
-		}
+		$blocks = $this->get_content_blocks(); 
 
 		//
 		// main tab

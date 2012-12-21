@@ -55,6 +55,13 @@ function smarty_cms_function_form_start($params, &$template)
 
     case 'url':
       $key = 'action';
+      if( dirname($value) == '.' ) {
+	$config = cmsms()->GetConfig();
+	$value = $config['admin_url'].'/'.trim($value);
+      }
+      $tagparms[$key] = trim($value);
+      break;
+
     case 'enctype':
     case 'id':
     case 'class':

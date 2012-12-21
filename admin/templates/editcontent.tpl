@@ -78,6 +78,7 @@ $(document).ready(function(){
 {/function}
 
 <div class="pagecontainer">
+{*
   <div class="pageheader">
   {if $content_id > 0}
     {lang('editcontent')} :: {$content_id}
@@ -85,10 +86,11 @@ $(document).ready(function(){
     {lang('addcontent')}
   {/if}
   </div>
+*}
 
 <div id="Edit_Content_Result"></div>
 <div id="Edit_Content">
-{form_start url=$smarty.server.REQUEST_URI content_id=$content_obj->Id() orig_content_type=$cur_content_type }
+{form_start url='editcontent.php' content_id=$content_obj->Id() orig_content_type=$cur_content_type }
 {foreach from=$tabnames item='tabname' name='tabs'} 
   {assign var='tmp' value='tab_'|cat:$smarty.foreach.tabs.index}
   {tab_header name=$tmp label=$tabname}

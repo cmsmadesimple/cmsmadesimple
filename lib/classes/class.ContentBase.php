@@ -54,14 +54,6 @@ abstract class ContentBase
   protected $mName = '';
 
   /**
-   * The type of content (page, url, etc..)
-   * String
-   *
-   * @internal
-   */
-  protected $mType = '';
-
-  /**
    * The owner of the content
    * Integer
    *
@@ -203,13 +195,6 @@ abstract class ContentBase
   protected $mURL = '';
 
   /**
-   * Does this content have a preview function?
-   *
-   * @internal
-   */
-  protected $mPreview = '';
-
-  /**
    * Should it show up in the menu?
    *
    * @internal
@@ -223,11 +208,6 @@ abstract class ContentBase
    */
   protected $mDefaultContent = false;
 	
-  /**
-   * What type of markup is ths?  HTML is the default
-   */
-  protected $mMarkup = 'html';
-
   /**
    * Last user to modify this content
    *
@@ -267,7 +247,6 @@ abstract class ContentBase
 
   private $_attributes;
   private $_prop_defaults;
-  private $_add_mode;
   private $_error;
 
   /************************************************************************/
@@ -287,16 +266,18 @@ abstract class ContentBase
   /**
    * Sets object to some sane initial values
    *
+   * @abstract
    * @internal
    */
   protected function SetInitialValues()
   {
-    $this->mType = strtolower(get_class($this)) ;
   }
 
   /**
    * Subclasses should override this to set their property types using a lot
    * of mProperties.Add statements
+   *
+   * @abstract
    */
   protected function SetProperties()
   {
@@ -407,19 +388,7 @@ abstract class ContentBase
    */
   public function Type()
   {
-    return strtolower($this->mType);
-  }
-
-  /**
-   * Set the page type
-   *
-   * @param string type
-   * @internal
-   */
-  protected function SetType($type)
-  {
-    $this->DoReadyForEdit();
-    $this->mType = strtolower($type);
+    return strtolower(get_class($this));
   }
 
   /**
@@ -580,33 +549,6 @@ abstract class ContentBase
     $this->mParentId = $parentid;
   }
 
-  /**
-   * Retrieve the 'old parent id' for this page.
-   * This may return a value if the page's parent has changed or the page has been copied.
-   *
-   * @deprecated
-   * @internal
-   * @return integer
-   */
-   public function OldParentId()
-   {
-     return $this->mOldParentId;
-   }
-
-   /**
-    * Sets the OldParentId value for this page
-    * This may be necessary when changin page ownership or copying a page
-    *
-    * @deprecated
-    * @internal
-    * @param int ParentID ... -1 indicates no parent.
-    */
-   public function SetOldParentId($parentid)
-   {
-     $this->DoReadyForEdit();
-     $this->mOldParentId = $parentid;
-   }
-
    /**
     * Return the id of the page template associated with this content page.
     *
@@ -650,31 +592,6 @@ abstract class ContentBase
    {
      $this->DoReadyForEdit();
      $this->mItemOrder = $itemorder;
-   }
-
-   /**
-    * Return the old item order.
-    *
-    * @deprecated
-    * @internal
-    * @return int
-    */
-   public function OldItemOrder()
-   {
-     return $this->mOldItemOrder;
-   }
-
-   /**
-    * Sets the old item order.
-    *
-    * @deprecated
-    * @internal
-    * @param int The item order.
-    */
-   public function SetOldItemOrder($itemorder)
-   {
-     $this->DoReadyForEdit();
-     $this->mOldItemOrder = $itemorder;
    }
 
    /**
@@ -776,7 +693,7 @@ abstract class ContentBase
     */
    public function HasPreview()
    {
-     return (bool) $this->mPreview;
+     return FALSE;
    }
 
    /**
@@ -888,29 +805,6 @@ abstract class ContentBase
     {
       $this->DoReadyForEdit();
       $this->mURL = $url;
-    }
-
-    /**
-     * Return the markup for this page. usually xhtml or html.
-     * 
-     * @deprecated
-     * @return string
-     */
-    public function Markup()
-    {
-      return $this->mMarkup;
-    }
-
-    /**
-     * Set the markup for this page. usually xhtml or html.
-     * 
-     * @deprecated
-     * @param string
-     */
-    public function SetMarkup($markup)
-    {
-      $this->DoReadyForEdit();
-      $this->mMarkup = $markup;
     }
 
     /**
@@ -1036,10 +930,9 @@ abstract class ContentBase
     {
       $hm = cmsms()->GetHierarchyManager();
       $node = $hm->getNodeById($this->mId);
-      if( $node )
-	{
-	  return $node->count_children();
-	}
+      if( $node ) {
+	return $node->count_children();
+      }
     }
 
     /**
@@ -1220,89 +1113,12 @@ abstract class ContentBase
      */
     protected function DoReadyForEdit()
     {
-      if ($this->mReadyForEdit == false)
-	{
-	  $this->ReadyForEdit();
-	  $this->mReadyForEdit = true;
-	}
+      if ($this->mReadyForEdit == false) {
+	$this->ReadyForEdit();
+	$this->mReadyForEdit = true;
+      }
     }
     
-    /**
-     * Load the content of the object from an ID
-     * This method modifies the current object.
-     *
-     * @param $id		the ID of the element
-     * @param $loadProperties	whether to load or not the properties
-     *
-     * @returns bool		If it fails, the object comes back to initial values and returns FALSE
-     *				If everything goes well, it returns TRUE
-     */
-    public function LoadFromId($id, $loadProperties = false)
-    {
-      $gCms = cmsms();
-      $db = $gCms->GetDb();
-      $config = $gCms->GetConfig();
-	  
-      $result = false;
-
-      if (-1 < $id) {
-	$query = "SELECT * FROM ".cms_db_prefix()."content WHERE content_id = ?";
-	$row = $db->Execute($query, array($id));
-
-	if ($row && !$row->EOF) {
-	  $this->mId                         = $row->fields["content_id"];
-	  $this->mName                       = $row->fields["content_name"];
-	  $this->mAlias                      = $row->fields["content_alias"];
-	  $this->mOldAlias                   = $row->fields["content_alias"];
-	  $this->mType                       = strtolower($row->fields["type"]);
-	  $this->mOwner                      = $row->fields["owner_id"];
-	  $this->mParentId                   = $row->fields["parent_id"];
-	  $this->mOldParentId                = $row->fields["parent_id"];
-	  $this->mTemplateId                 = $row->fields["template_id"];
-	  $this->mItemOrder                  = $row->fields["item_order"];
-	  $this->mOldItemOrder               = $row->fields["item_order"];
-	  $this->mMetadata                   = $row->fields['metadata'];
-	  $this->mHierarchy                  = $row->fields["hierarchy"];
-	  $this->mIdHierarchy                = $row->fields["id_hierarchy"];
-	  $this->mHierarchyPath              = $row->fields["hierarchy_path"];
-	  $this->mMenuText                   = $row->fields['menu_text'];
-	  $this->mMarkup                     = $row->fields['markup'];
-	  $this->mTitleAttribute             = $row->fields['titleattribute'];
-	  $this->mAccessKey                  = $row->fields['accesskey'];
-	  $this->mTabIndex                   = $row->fields['tabindex'];
-	  $this->mActive                     = ($row->fields["active"] == 1          ? true : false);
-	  $this->mDefaultContent             = ($row->fields["default_content"] == 1 ? true : false);
-	  $this->mShowInMenu                 = ($row->fields["show_in_menu"] == 1    ? true : false);
-	  $this->mCachable                   = ($row->fields["cachable"] == 1        ? true : false);
-	  $this->mSecure                     = $row->fields['secure'];
-	  $this->mURL                        = $row->fields['page_url'];
-	  $this->mLastModifiedBy             = $row->fields["last_modified_by"];
-	  $this->mCreationDate               = $row->fields["create_date"];
-	  $this->mModifiedDate               = $row->fields["modified_date"];
-
-	  $result = true;
-	}
-
-	if ($row) $row->Close();
-
-	if ($result && $loadProperties) {
-	  if( !is_array($this->_props) ) $this->_load_properties();
-
-	  if (!is_array($this->_props) ) {
-	    $result = false;
-	  }
-	}
-
-	if (false == $result) {
-	  $this->SetInitialValues();
-	}
-      }
-
-      $this->Load();
-
-      return $result;
-    }
-
     /**
      * Load the content of the object from an array
      * This method modifies the current object.
@@ -1320,7 +1136,6 @@ abstract class ContentBase
       $this->mName                       = $data["content_name"];
       $this->mAlias                      = $data["content_alias"];
       $this->mOldAlias                   = $data["content_alias"];
-      $this->mType                       = strtolower($data["type"]);
       $this->mOwner                      = $data["owner_id"];
       $this->mParentId                   = $data["parent_id"];
       $this->mOldParentId                = $data["parent_id"];
@@ -1332,7 +1147,6 @@ abstract class ContentBase
       $this->mIdHierarchy                = $data["id_hierarchy"];
       $this->mHierarchyPath              = $data["hierarchy_path"];
       $this->mMenuText                   = $data['menu_text'];
-      $this->mMarkup                     = $data['markup'];
       $this->mTitleAttribute             = $data['titleattribute'];
       $this->mAccessKey                  = $data['accesskey'];
       $this->mTabIndex                   = $data['tabindex'];
@@ -1378,7 +1192,7 @@ abstract class ContentBase
      *
      * @todo This function should return something (or throw an exception)
      */
-    function Save()
+    public function Save()
     {
       Events::SendEvent('Core', 'ContentEditPre', array('content' => &$this));
 
@@ -1431,11 +1245,11 @@ abstract class ContentBase
 
       $this->mModifiedDate = trim($db->DBTimeStamp(time()), "'");
 
-      $query = "UPDATE ".cms_db_prefix()."content SET content_name = ?, owner_id = ?, type = ?, template_id = ?, parent_id = ?, active = ?, default_content = ?, show_in_menu = ?, cachable = ?, secure = ?, page_url = ?, menu_text = ?, content_alias = ?, metadata = ?, titleattribute = ?, accesskey = ?, tabindex = ?, modified_date = ?, item_order = ?, markup = ?, last_modified_by = ? WHERE content_id = ?";
+      $query = "UPDATE ".cms_db_prefix()."content SET content_name = ?, owner_id = ?, type = ?, template_id = ?, parent_id = ?, active = ?, default_content = ?, show_in_menu = ?, cachable = ?, secure = ?, page_url = ?, menu_text = ?, content_alias = ?, metadata = ?, titleattribute = ?, accesskey = ?, tabindex = ?, modified_date = ?, item_order = ?, last_modified_by = ? WHERE content_id = ?";
       $dbresult = $db->Execute($query, array(
 					     $this->mName,
 					     $this->mOwner,
-					     strtolower($this->mType),
+					     $this->Type(),
 					     $this->mTemplateId,
 					     $this->mParentId,
 					     ($this->mActive == true         ? 1 : 0),
@@ -1452,7 +1266,6 @@ abstract class ContentBase
 					     $this->mTabIndex,
 					     $this->mModifiedDate,
 					     $this->mItemOrder,
-					     $this->mMarkup,
 					     $this->mLastModifiedBy,
 					     $this->mId
 					     ));
@@ -1525,13 +1338,13 @@ abstract class ContentBase
 
       $this->mModifiedDate = $this->mCreationDate = trim($db->DBTimeStamp(time()), "'");
 
-      $query = "INSERT INTO ".cms_db_prefix()."content (content_id, content_name, content_alias, type, owner_id, parent_id, template_id, item_order, hierarchy, id_hierarchy, active, default_content, show_in_menu, cachable, secure, page_url, menu_text, markup, metadata, titleattribute, accesskey, tabindex, last_modified_by, create_date, modified_date) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+      $query = "INSERT INTO ".cms_db_prefix()."content (content_id, content_name, content_alias, type, owner_id, parent_id, template_id, item_order, hierarchy, id_hierarchy, active, default_content, show_in_menu, cachable, secure, page_url, menu_text, metadata, titleattribute, accesskey, tabindex, last_modified_by, create_date, modified_date) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
       $dbresult = $db->Execute($query, array(
 					     $newid,
 					     $this->mName,
 					     $this->mAlias,
-					     strtolower($this->mType),
+					     $this->Type(),
 					     $this->mOwner,
 					     $this->mParentId,
 					     $this->mTemplateId,
@@ -1545,7 +1358,6 @@ abstract class ContentBase
 					     $this->mSecure,
 					     $this->mURL,
 					     $this->mMenuText,
-					     $this->mMarkup,
 					     $this->mMetadata,
 					     $this->mTitleAttribute,
 					     $this->mAccessKey,
@@ -1586,6 +1398,7 @@ abstract class ContentBase
      * We do not check the Id because there can be no Id (new content)
      * That's up to Save to check this.
      *
+     * @abstract
      * @returns	FALSE if data is ok, and an array of invalid parameters else
      */
     public function ValidateData()
@@ -2081,15 +1894,6 @@ abstract class ContentBase
       return FALSE;
     }
 
-    /**
-     * Set a flag indicating that we are adding a new content object and not editing an existing one
-     * This is usually called from a script that provides the ability to add content objects.
-     */
-    public function SetAddMode($flag = true)
-    {
-      $this->_add_mode = $flag;
-    }
-
     /* private */
     private function _handleRemovedBaseProperty($name,$member)
     {
@@ -2101,14 +1905,6 @@ abstract class ContentBase
 	}
       }
       return FALSE;
-    }
-
-    /**
-     * @deprecated 
-     */
-    public function AddExtraProperty($name,$type = 'string')
-    {
-      return; // debug
     }
 
     /**
@@ -2371,21 +2167,8 @@ abstract class ContentBase
 	break;
 
       default:
-	stack_trace();
-	die('unknown property '.$one);
+	throw new CmsInvalidDataException('Attempt to display invalid property '.$one);
       }
-    }
-
-    protected function SetError($str)
-    {
-      // we don't need this being serialized.
-      cms_utils::set_app_data('content_error',$str);
-    }
-
-    public function GetError()
-    {
-      $str = cms_utils::get_app_data('content_error');
-      return $str;
     }
 }
 ?>

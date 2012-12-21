@@ -156,7 +156,6 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 		menu_text C(255),
 		content_alias C(255),
 		show_in_menu I1,
-		markup C(25),
 		active I1,
 		cachable I1,
 		id_hierarchy C(255),

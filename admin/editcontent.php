@@ -84,7 +84,6 @@ if( $content_id < 1 ) {
   $parent_id = get_preference($userid, 'default_parent', -2);
 
   $contentobj = $contentops->CreateNewContent($content_type);
-  $contentobj->SetAddMode();
   $contentobj->SetOwner($userid);
   $contentobj->SetCachable($page_cachable);
   $contentobj->SetActive($active);
@@ -221,9 +220,6 @@ foreach ($existingtypes as $onetype => $onetypename ) {
 $typesdropdown .= "</select>";
 
 $tabnames = $contentobj->TabNames();
-if( !$error ) {
-  $error = $contentobj->GetError();
-}
 if (FALSE == empty($error)) {
   echo $themeObject->ShowErrors($error);
 }

@@ -41,6 +41,7 @@ function redirect($to, $noappend=false)
   $schema = 'http';
   if( isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' ) $schema = 'https';
 
+  $host = $_SERVER['HTTP_HOST'];
   $components = parse_url($to);
   if(count($components) > 0) {
     $to =  (isset($components['scheme']) && startswith($components['scheme'], 'http') ? $components['scheme'] : $schema) . '://';
@@ -56,10 +57,14 @@ function redirect($to, $noappend=false)
 	$to .= (strlen(dirname($_SERVER['PHP_SELF'])) > 1 ?  dirname($_SERVER['PHP_SELF']).'/' : '/') . $components['path'];
       }
       else if (isset($_SERVER['REQUEST_URI']) && !is_null($_SERVER['REQUEST_URI'])) { //Lighttpd
-	if (endswith($_SERVER['REQUEST_URI'], '/'))
+	if (endswith($_SERVER['REQUEST_URI'], '/')) {
 	  $to .= (strlen($_SERVER['REQUEST_URI']) > 1 ? $_SERVER['REQUEST_URI'] : '/') . $components['path'];
-	else
-	  $to .= (strlen(dirname($_SERVER['REQUEST_URI'])) > 1 ? dirname($_SERVER['REQUEST_URI']).'/' : '/') . $components['path'];
+	}
+	else {
+	  $dn = dirname($_SERVER['REQUEST_URI']);
+	  if( !endswith($dn,'/') ) $dn .= '/';
+	  $to .= $dn . $components['path'];
+	}
       }
     }
     $to .= isset($components['query']) ? '?' . $components['query'] : '';

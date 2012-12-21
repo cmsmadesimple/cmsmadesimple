@@ -82,9 +82,11 @@ class ErrorPage extends Content
 
     $this->RemoveProperty('alias','');
     $this->AddBaseProperty('alias',10,1);
+  }
 
-    #Turn on preview
-    $this->mPreview = true;
+  function HasPreview() 
+  {
+	  return TRUE;
   }
 
   function IsCopyable()

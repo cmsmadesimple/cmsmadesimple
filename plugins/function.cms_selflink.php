@@ -52,12 +52,12 @@ function smarty_function_cms_selflink($params, &$template)
       $external_text ='( '.$params['ext_info'].' )';
     }
 	
-	$result='<a class="external" href="'.$url.'" '.$title.''.$target.'>'.$text.'<span>'.$external_text.'</span></a>';
-	if( isset($params['assign']) ){
-	    $smarty->assign(trim($params['assign']),$result);
-	    return;
-        }
-        return $result;
+    $result='<a class="external" href="'.$url.'" '.$title.''.$target.'>'.$text.'<span>'.$external_text.'</span></a>';
+    if( isset($params['assign']) ){
+      $smarty->assign(trim($params['assign']),$result);
+      return;
+    }
+    return $result;
 
   }
 

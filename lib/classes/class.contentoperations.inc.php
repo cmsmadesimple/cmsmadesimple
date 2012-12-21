@@ -641,13 +641,11 @@ class ContentOperations
 		$query = "SELECT content_id FROM ".cms_db_prefix()."content WHERE default_content=1";
 		$old_id = $db->GetOne($query);
 		if (isset($old_id)) {
-			$one = new Content();
-			$one->LoadFromId($old_id);
+			$one = $this->LoadContentFromId($old_id);
 			$one->SetDefaultContent(false);
 			$one->Save();
 		}
-		$one = new Content();
-		$one->LoadFromId($id);
+		$one = $this->LoadContentFromId($id);
 		$one->SetDefaultContent(true);
 		$one->Save();
 	}
