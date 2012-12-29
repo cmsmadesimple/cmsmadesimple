@@ -2148,6 +2148,12 @@ $lang['admin']['help_function_contact_form'] = <<<EOT
   <p>You can use the module FormBuilder instead.</p>
 EOT;
 
+$lang['admin']['help_function_cms_action_url'] = <<<EOT
+
+	TODO
+
+EOT;
+
 $lang['admin']['help_function_cms_versionname'] = <<<EOT
 	<h3>What does this do?</h3>
 	<p>This tag is used to insert the current version name of CMS into your template or page.  It doesn't display any extra besides the version name.</p>
@@ -2202,6 +2208,12 @@ $lang['admin']['help_function_cms_selflink'] = <<<EOT
 		<li><em>(optional)</em> <tt>ext_info</tt> - Used together with &quot;ext&quot; defaults to (external link).</li>
         <li><em>(optional)</em> <tt>assign</tt> - Assign the results to the named smarty variable.</li>
 		</ul>
+EOT;
+
+$lang['admin']['help_function_cms_textarea'] = <<<EOT
+
+	TODO
+
 EOT;
 
 $lang['admin']['help_function_cms_module'] = <<<EOT
