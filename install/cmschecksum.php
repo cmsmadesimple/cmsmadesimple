@@ -77,8 +77,6 @@ function lang()
 	}
 	else
 	{
-		// put mention into the admin log
-		audit('', 'Languagestring: "' . $name . '"', 'Is missing in the languagefile...');
 		$result = "-- Missing Languagestring - $name --";
 	}
 
