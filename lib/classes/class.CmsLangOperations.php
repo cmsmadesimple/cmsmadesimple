@@ -179,7 +179,12 @@ final class CmsLangOperations
 
     $curlang = CmsNlsOperations::get_current_language();
     self::_load_realm($realm);
-    if( !isset(self::$_langdata[$curlang][$realm][$key]) ) return "-- Missing Languagestring: $key --";
+    if( !isset(self::$_langdata[$curlang][$realm][$key]) ) 
+	{
+		// put mention into the admin log
+		audit('', 'Languagestring: "' . $key . '"', 'Is missing in the languagefile...');
+		return "-- Missing Languagestring: $key --";
+	}
 
     if( count($params) ) {
       $result = vsprintf(self::$_langdata[$curlang][$realm][$key], $params);
