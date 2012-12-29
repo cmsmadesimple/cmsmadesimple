@@ -1,6 +1,6 @@
 <?php
 #CMS - CMS Made Simple
-#(c)2004-2011 by Ted Kulp (wishy@users.sf.net)
+#(c)2004 by Ted Kulp (wishy@users.sf.net)
 #This project's homepage is: http://www.cmsmadesimple.org
 #
 #This program is free software; you can redistribute it and/or modify
@@ -49,7 +49,7 @@ function smarty_function_cms_init_editor($params, &$template)
 
   if( !$output ) return;
 
-  // assign it or echo it.
+  // assign it or echo it
   if( isset($params['assign']) )
     {
       $smarty->assign(trim($params['assign']).$output);
@@ -58,26 +58,20 @@ function smarty_function_cms_init_editor($params, &$template)
   return $output;
 }
 
-
 function smarty_cms_help_function_cms_init_editor()
 {
-  echo lang('help_function_cms_init_editor');
+	echo lang('help_function_cms_init_editor');
 }
-
 
 function smarty_cms_about_function_cms_init_editor()
 {
-	?>
+?>
 	<p>Author: Robert Campbell&lt;calguy1000@cmsmadesimple.org&gt;</p>
-	<p>Version: 1.0</p>
-	<p>
-	Change History:<br/>
-	None
-	</p>
-	<?php
+	
+	<p>Change History:</p>
+	<ul>
+		<li>None</li>
+	</ul>
+<?php
 }
-
-#
-# EOF
-#
 ?>

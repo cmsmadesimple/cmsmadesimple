@@ -18,26 +18,20 @@
 
 function smarty_function_anchor($params, &$template)
 {
-  $smarty = $template->smarty;
-	$gCms = cmsms();
+	$smarty = $template->smarty;
 	
-	$class="";
-	$title="";
-	$tabindex="";
-	$accesskey="";
-	if (isset($params['class'])) $class = ' class="'.$params['class'].'"';
-    if (isset($params['title'])) $title = ' title="'.$params['title'].'"';
-    if (isset($params['tabindex'])) $tabindex = ' tabindex="'.$params['tabindex'].'"';
-	if (isset($params['accesskey'])) $accesskey = ' accesskey="'.$params['accesskey'].'"';
-
+	$class					= isset($params['class']) ? $class = ' class="'.$params['class'].'"' : '';
+    $title 					= isset($params['title']) ? $title = ' title="'.$params['title'].'"' : '';
+    $tabindex 				= isset($params['tabindex']) ? $tabindex = ' tabindex="'.$params['tabindex'].'"' : '';
+	$accesskey 				= isset($params['accesskey']) ? $accesskey = ' accesskey="'.$params['accesskey'].'"' : '';
 	
-	 $pageURL = 'http';
-	 if (isset($_SERVER["HTTPS"]) && $_SERVER["HTTPS"] == "on") {$pageURL .= "s";}
-	 $pageURL .= "://";
-	 if ($_SERVER["SERVER_PORT"] != "80") {
+	$pageURL = 'http';
+	if (isset($_SERVER["HTTPS"]) && $_SERVER["HTTPS"] == "on") {$pageURL .= "s";}
+	$pageURL .= "://";
+	if ($_SERVER["SERVER_PORT"] != "80") {
 	  $pageURL .= $_SERVER["SERVER_NAME"].":".$_SERVER["SERVER_PORT"].$_SERVER["REQUEST_URI"];
-	 } 
-	 else{
+	} 
+	else {
 		   $str = $_SERVER['REQUEST_URI'];
 		   $pos = strpos($str,'?');
 	           if( $pos !== FALSE )
@@ -54,37 +48,31 @@ function smarty_function_anchor($params, &$template)
 		$url = str_replace('&', '&amp;', $url);
 		$url = str_replace('***','&amp;',$url);
 		if (isset($params['onlyhref']) && ($params['onlyhref'] == '1' || $params['onlyhref'] == 'true'))
-			#Note if you set 'onlyheref' that is what you get - no class or title or tabindex or text
 			$tmp =  $url;
 		else
-			#Line replaced by Russ
-			#	echo '<a href="'.$url.'">'.$params['text'].'</a>';
-			#Line replaced with -  by Russ to reflect class and title for anchor 2006/07/19
 			$tmp = '<a href="'.$url.'"'.$class.$title.$tabindex.$accesskey.'>'.$params['text'].'</a>';
-			#End of second part added by Russ 2006/07/19
 	}
 
-	if( isset($params['assign']) ){
+	if( isset($params['assign']) ) {
 	    $smarty->assign(trim($params['assign']),$tmp);
 	    return;
         }
 	echo $tmp;
-	
 }
 
 function smarty_cms_help_function_anchor() {
-  echo lang('help_function_anchor');
+	echo lang('help_function_anchor');
 }
 
 function smarty_cms_about_function_anchor() {
 ?>
 	<p>Author: Ted Kulp&lt;tedkulp@users.sf.net&gt;</p>
-	<p>Version: 1.1</p>
-	<p>Change History:<br />
-	<strong>Update to version 1.1 from 1.0</strong> <em>2006/07/19</em><br />
-	Russ added the means to insert a title, a tabindex and a class for the anchor link.<br />
-	Westis added accesskey and changed parameter names to not include 'anchorlink'.<br />
-	</p>
+
+	<p>Change History:</p>
+	<ul>
+		<li>2006/07/19 - Russ added the means to insert a title, a tabindex and a class for the anchor link.<br />
+		Westis added accesskey and changed parameter names to not include 'anchorlink'.</li>
+	</ul>
 <?php
 }
 ?>

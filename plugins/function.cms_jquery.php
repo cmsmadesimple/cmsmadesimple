@@ -1,6 +1,6 @@
-<?php // -*- mode:php; tab-width:4; indent-tabs-mode:t; c-basic-offset:4; -*-
+<?php
 #CMS - CMS Made Simple
-#(c)2004-2010 by Ted Kulp (ted@cmsmadesimple.org)
+#(c)2004 by Ted Kulp (ted@cmsmadesimple.org)
 #This project's homepage is: http://cmsmadesimple.org
 #
 #This program is free software; you can redistribute it and/or modify
@@ -19,13 +19,13 @@
 function smarty_function_cms_jquery($params, &$template)
 {
 	$smarty = $template->smarty;
-	$exclude = isset($params['exclude']) && !empty($params['exclude'])?$params['exclude']:'';
-	$cdn = isset($params['cdn']) && ($params['cdn'])=='true'?true:false;
-	$append = isset($params['append']) && !empty($params['append'])?$params['append']:'';
-	$ssl = isset($params['ssl']) && ($params['ssl'])=='true'?true:null;
-	$custom_root = isset($params['custom_root']) && !empty($params['custom_root'])?$params['custom_root']:'';
+	$exclude = isset($params['exclude']) && !empty($params['exclude']) ? $params['exclude'] : '';
+	$cdn = isset($params['cdn']) && ($params['cdn'])=='true' ? true : false;
+	$append = isset($params['append']) && !empty($params['append']) ? $params['append'] : '';
+	$ssl = isset($params['ssl']) && ($params['ssl'])=='true' ? true : null;
+	$custom_root = isset($params['custom_root']) && !empty($params['custom_root']) ? $params['custom_root'] : '';
 
-	// get the output.
+	// get the output
 	$out = cms_get_jquery($exclude,$ssl,$cdn,$append,$custom_root);
 	if( isset($params['assign']) )
 	{
@@ -43,14 +43,13 @@ function smarty_cms_help_function_cms_jquery()
 
 function smarty_cms_about_function_cms_jquery()
 {
-	?>
+?>
 	<p>Author: Tapio L&ouml;ytty &lt;tapsa@blackmilk.fi&gt;</p>
-	<p>Version: 0.1</p>
-	<p>
-	Change History:
-	</p>
-	<?php
-}
 
-# vim:ts=4 sw=4 noet
+	<p>Change History:</p>
+	<ul>
+		<li>None</li>
+	</ul>
+<?php
+}
 ?>

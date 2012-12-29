@@ -1,6 +1,6 @@
 <?php
 #CMS - CMS Made Simple
-#(c)2004-2012 by Ted Kulp (wishy@users.sf.net)
+#(c)2004 by Ted Kulp (wishy@users.sf.net)
 #This project's homepage is: http://www.cmsmadesimple.org
 #
 #This program is free software; you can redistribute it and/or modify
@@ -18,14 +18,14 @@
 
 function smarty_function_cms_get_language($params, &$template)
 {
-  $smarty = $template->smarty;
-  $lang = CmsNlsOperations::get_current_language();
-  if( isset($params['assign']) )
-    {
-      $smarty->assign(trim($params['assign']),$lang);
-      return;
-    }
-  return $lang;
+	$smarty = $template->smarty;
+	$lang = CmsNlsOperations::get_current_language();
+  
+	if( isset($params['assign']) )
+		{
+		$smarty->assign(trim($params['assign']),$lang);
+		return;
+		}
+	return $lang;
 }
-
 ?>

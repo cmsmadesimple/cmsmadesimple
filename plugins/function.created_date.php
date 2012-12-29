@@ -18,9 +18,9 @@
 
 function smarty_function_created_date($params, &$template)
 {
-  $smarty = $template->smarty;
-	$gCms = cmsms();
-	$content_obj = $gCms->variables['content_obj'];
+	$smarty = $template->smarty;
+
+	$content_obj = cmsms()->variables['content_obj'];
 
 	if(empty($params['format']))
 	{
@@ -33,31 +33,31 @@ function smarty_function_created_date($params, &$template)
 
 	if (is_object($content_obj) && $content_obj->GetCreationDate() > -1)
 	{
-	  $time = $content_obj->GetCreationDate();
-	  $str = cms_htmlentities(strftime($format, $time));;
+		$time = $content_obj->GetCreationDate();
+		$str = cms_htmlentities(strftime($format, $time));;
 
-	  if( isset($params['assign']) )
+		if( isset($params['assign']) )
 	    {
-	      $smarty->assign(trim($params['assign']),$str);
-	      return;
+			$smarty->assign(trim($params['assign']),$str);
+			return;
 	    }
-	  return $str;
+		return $str;
 	}
-
 }
 
 function smarty_cms_help_function_created_date()
 {
-  echo lang('help_function_created_date');
+	echo lang('help_function_created_date');
 }
 
 function smarty_cms_about_function_created_date() {
 	?>
 	<p>Author: Ted Kulp&lt;tedkulp@users.sf.net&gt;</p>
-	<p>Version: 1.0</p>
-	<p>
-	Change History:<br/>
-	</p>
-	<?php
+
+	<p>Change History:</p>
+	<ul>
+		<li>None</li>
+	</ul>
+<?php
 }
 ?>

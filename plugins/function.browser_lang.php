@@ -53,61 +53,58 @@ function smarty_function_browser_lang($params, &$template)
   //
   // process the accepted languages and the default
   // makes sure the array is unique, and that the default
-  // is listed first.
+  // is listed first
   //
   $accepted = array_merge(array($default),$accepted);
   $accepted = array_unique($accepted);
 
   // 
-  // now process browser language.
+  // now process browser language
   //
   $res = $default;
   if (isset($_SERVER["HTTP_ACCEPT_LANGUAGE"])) 
     {
-      $alllang = $_SERVER["HTTP_ACCEPT_LANGUAGE"];
-      if (strpos($alllang, ";") !== FALSE)
-	$alllang = substr($alllang,0,strpos($alllang, ";"));
-      $langs = explode(",", $alllang);
+		$alllang = $_SERVER["HTTP_ACCEPT_LANGUAGE"];
+		if (strpos($alllang, ";") !== FALSE)
+			$alllang = substr($alllang,0,strpos($alllang, ";"));
+		$langs = explode(",", $alllang);
 
-      if( is_array($langs) && count($langs) )
-	{
-	  foreach( $langs as $one )
-	    {
-	      if( in_array($one,$accepted) )
+		if( is_array($langs) && count($langs) )
 		{
-		  $res = $one;
-		  break;
+			foreach( $langs as $one )
+			{
+				if( in_array($one,$accepted) )
+				{
+					$res = $one;
+				break;
+				}
+			}
 		}
-	    }
-	}
     }
 
   if( isset($params['assign']) )
     {
-      $smarty->assign(trim($params['assign']),$res);
-      return;
+		$smarty->assign(trim($params['assign']),$res);
+		return;
     }
   
   return $res;
 }
 
-
 function smarty_cms_help_function_browser_lang()
 {
- echo lang('help_function_browser_lang');
+	echo lang('help_function_browser_lang');
 }
-
 
 function smarty_cms_about_function_browser_lang()
 {
 ?>
-  <p>Author: Robert Campbell &lt;calguy1000@cmsmadesimple.org&gt;</p>
-  <p>Version: 1.0</p>
-  <p>
-  Change History:<br/>
-  <ul>
-   <li>Version 1.0 written for CMSMS 1.9</li>
-  </ul>
-  </p>
+	<p>Author: Robert Campbell &lt;calguy1000@cmsmadesimple.org&gt;</p>
+
+	<p>Change History:</p>
+	<ul>
+		<li>Written for CMSMS 1.9</li>
+	</ul>
 <?php
 }
+?>

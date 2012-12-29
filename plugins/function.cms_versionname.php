@@ -18,7 +18,7 @@
 
 function smarty_function_cms_versionname($params, $template) {
 
-  $smarty = $template->smarty;
+	$smarty = $template->smarty;
     global $CMS_VERSION_NAME;
 	
 	if( isset($params['assign']) ){
@@ -30,18 +30,17 @@ function smarty_function_cms_versionname($params, $template) {
 }
 
 function smarty_cms_help_function_cms_versionname() {
-  echo lang('help_function_cms_versionname');
+	echo lang('help_function_cms_versionname');
 }
 
 function smarty_cms_about_function_cms_versionname() {
-	?>
+?>
 	<p>Author: Ted Kulp&lt;tedkulp@users.sf.net&gt;</p>
 	<p>Version: 1.0</p>
 	<p>
 	Change History:<br/>
 	None
 	</p>
-	<?php
+<?php
 }
-
 ?>

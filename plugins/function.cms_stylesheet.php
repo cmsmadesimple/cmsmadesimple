@@ -1,6 +1,6 @@
-<?php // -*- mode:php; tab-width:4; indent-tabs-mode:t; c-basic-offset:4; -*-
+<?php
 #CMS - CMS Made Simple
-#(c)2004-2010 by Ted Kulp (ted@cmsmadesimple.org)
+#(c)2004 by Ted Kulp (ted@cmsmadesimple.org)
 #This project's homepage is: http://cmsmadesimple.org
 #
 #This program is free software; you can redistribute it and/or modify
@@ -15,10 +15,6 @@
 #You should have received a copy of the GNU General Public License
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-
-/**********************************************************
-	Main function
-**********************************************************/
 
 function smarty_cms_function_cms_stylesheet($params, &$template)
 {
@@ -181,10 +177,10 @@ function smarty_cms_function_cms_stylesheet($params, &$template)
 				$all_timestamps_string .= $one['modified']; // <- This is for media param
 			}			
 		
-			// Stupid media parameter...
+			// media parameter...
 			if (isset($params['media'])) {
 
-				// combine all matches into one stylesheet.
+				// combine all matches into one stylesheet
 				$filename = 'stylesheet_combined_'.md5($design_id.$use_https.serialize($params).$all_timestamps_string.$fnsuffix).'.css';
 				$fn = cms_join_path($cache_dir,$filename);	
 	
@@ -365,13 +361,12 @@ function smarty_cms_about_function_cms_stylesheet()
 {
 	?>
 	<p>Author: jeff&lt;jeff@ajprogramming.com&gt;</p>
-	<p>Version: 0.7</p>
-	<p>Change History:<br/>
+
+	<p>Change History:</p>
 	<ul>
-		<li>0.6 - Rework from {stylesheet}</li>
-		<li>0.7 - (Stikki and Calguy1000) Code cleanup, Added grouping by media type / media query, Fixed cache issues</li>
+		<li>Rework from {stylesheet}</li>
+		<li>(Stikki and Calguy1000) Code cleanup, Added grouping by media type / media query, Fixed cache issues</li>
 	</ul>
-	</p>
 	<?php
 } // end of about
 ?>
