@@ -292,6 +292,7 @@ $lang['admin']['edited_udt'] = 'Edited User Defined Tag';
 $lang['admin']['edited_user'] = 'Edited User';
 $lang['admin']['edited_user_preferences'] = 'Edited User Preferences';
 $lang['admin']['editeventhandler'] = 'Edit Event Handler';
+$lang['admin']['editeventshandler'] = 'TODO *ROLF* new string needed or typo in line 462 of lib\classes\class.CmsAdminThemeBase.php??? TODO';
 $lang['admin']['editgroup'] = 'Edit Group';
 $lang['admin']['edithtmlblob'] = 'Edit Global Content Block';
 $lang['admin']['edithtmlblobsuccess'] = 'Global content block updated';
