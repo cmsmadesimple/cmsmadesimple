@@ -228,8 +228,7 @@ function cms_module_ProcessTemplateFromData(&$modinstance, $data)
  */
 function cms_module_ProcessTemplateFromDatabase(&$modinstance, $tpl_name, $designation = '', $cache = false, $modulename = '')
 {
-	$gCms = cmsms();
-	$smarty = $gCms->GetSmarty();
+	$smarty = cmsms()->GetSmarty();
 
 	if( $modulename == '' ) $modulename = $modinstance->GetName();
 

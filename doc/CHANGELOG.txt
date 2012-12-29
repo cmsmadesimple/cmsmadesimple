@@ -1,3 +1,10 @@
+Version 1.11.5 - 
+-----------------------------
+Core - General
+  - GCB's can now only have letters and numbers in the name.
+  - Fixes to caching issues in MenuManager and module templates
+  - admin module actions now catch an exception.
+
 Version 1.11.4 - Fernandina
 -----------------------------
 Core - General
