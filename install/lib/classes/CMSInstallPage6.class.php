@@ -87,6 +87,7 @@ class CMSInstallerPage6 extends CMSInstallerPage
 	echo " [" . ilang('done') . "]</p>";
       }
       catch( CmsException $e ) {
+	debug_display($e);
 	echo ' [ERROR: '.$e->GetMessage().']</p>';
       }
 

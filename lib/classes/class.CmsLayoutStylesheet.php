@@ -56,8 +56,8 @@ class CmsLayoutStylesheet
   {
     $str = trim($str);
     if( !$str ) throw new CmsInvalidDataException('Name cannot be empty');
-		if( preg_match('<^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$>', $str) ) {
-			throw new CmsInvalidDataException('Invalid characters in name');
+		if( !preg_match('<^[a-zA-Z_\x7f-\xff][a-zA-Z0-9\s\+_\-\x7f-\xff]*$>', $str) ) {
+			throw new CmsInvalidDataException('Invalid characters in name '.$str);
 		}
     $this->_data['name'] = $str;
     $this->_dirty = TRUE;

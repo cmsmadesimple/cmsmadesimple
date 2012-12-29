@@ -103,7 +103,6 @@ function siteprefs_display_permissions($permsarr)
 
 $access = check_permission($userid, 'Modify Site Preferences');
 if (!$access) {
-
     die('Permission Denied'); // <- Pretty cruel huh? maybe redirection and message, or something. -Stikki-
     return;
 }
@@ -160,8 +159,8 @@ $smarty_cachemodules = 'never';
 $smarty_cacheudt = 'never';
 
 if (isset($_POST["cancel"])) {
-	redirect("index.php".$urlext);
-	return;
+  redirect("index.php".$urlext);
+  return;
 }
 
 /**
@@ -214,227 +213,197 @@ $smarty_cacheudt = get_site_preference('smarty_cacheudt',$smarty_cacheudt);
  */
 $tab='';
 if( isset($_POST['active_tab']) ) {
-
-    $tab = trim($_POST['active_tab']);
+  $tab = trim($_POST['active_tab']);
 }
 
 /**
  * Submit 
  */
 $testresults = lang('untested');
-if (isset($_POST["testumask"]))
-{
+if (isset($_POST["testumask"])) {
   $testdir = TMP_CACHE_LOCATION;
   $testfile = $testdir.DIRECTORY_SEPARATOR.'dummy.tst';
-  if( !is_writable($testdir) )
-    {
-      $testresults = lang('errordirectorynotwritable');
-    }
-  else
-    {
-      @umask(octdec($global_umask));
-      
-      $fh = @fopen($testfile,"w");      
-      if( !$fh )
-	{
-	  $testresults = lang('errorcantcreatefile').' ('.$testfile.')';
-	}
-      else
-	{
-	  @fclose($fh);
-	  $filestat = stat($testfile);
-	  
-	  if( $filestat == FALSE )
-	    {
-	      $testresults = lang('errorcantcreatefile');
-	    }
-	  
-	  if(function_exists("posix_getpwuid")) //function posix_getpwuid not available on WAMP systems
-	    {
-	      $userinfo = @posix_getpwuid($filestat[4]);
-	      
-	      $username = isset($userinfo['name'])?$userinfo['name']:lang('unknown');
-	      $permsstr = siteprefs_display_permissions(siteprefs_interpret_permissions($filestat[2]));
-	      $testresults = sprintf("%s: %s<br/>%s:<br/>&nbsp;&nbsp;%s",
-				     lang('owner'),$username,
-				     lang('permissions'),$permsstr);
-	      
-	      
-	    } else {
-	    $testresults = sprintf("%s: %s<br/>%s:<br/>&nbsp;&nbsp;%s",
-				   lang('owner'),"N/A",
-				   lang('permissions'),"N/A");
-	    
-	  }
-	  @unlink($testfile);
-	}	
-    }
+  if( !is_writable($testdir) ) {
+    $testresults = lang('errordirectorynotwritable');
   }
-else /*if (isset($_POST['clearcache']))
-{
-	cmsms()->clear_cached_files();
-	// put mention into the admin log
-	audit(-1,'Website Cache', 'Cleared');
-	$message .= lang('cachecleared');
+  else {
+    @umask(octdec($global_umask));
+      
+    $fh = @fopen($testfile,"w");      
+    if( !$fh ) {
+      $testresults = lang('errorcantcreatefile').' ('.$testfile.')';
+    }
+    else {
+      @fclose($fh);
+      $filestat = stat($testfile);
+
+      if( $filestat == FALSE ) {
+	$testresults = lang('errorcantcreatefile');
+      }
+
+      if(function_exists("posix_getpwuid")) {
+	//function posix_getpwuid not available on WAMP systems
+	$userinfo = @posix_getpwuid($filestat[4]);
+
+	$username = isset($userinfo['name'])?$userinfo['name']:lang('unknown');
+	$permsstr = siteprefs_display_permissions(siteprefs_interpret_permissions($filestat[2]));
+	$testresults = sprintf("%s: %s<br/>%s:<br/>&nbsp;&nbsp;%s",
+			       lang('owner'),$username,
+			       lang('permissions'),$permsstr);
+      } else {
+	$testresults = sprintf("%s: %s<br/>%s:<br/>&nbsp;&nbsp;%s",
+			       lang('owner'),"N/A",
+			       lang('permissions'),"N/A");
+      }
+      @unlink($testfile);
+    }	
+  }
 }
-else*/ if (isset($_POST["editsiteprefs"]))
-{
-  if ($access)
-    {
-      switch( $tab )
-	{
-	case 'general':
-	  // tab 1
-	  if (isset($_POST['sitename'])) $sitename = cms_htmlentities($_POST['sitename']);
-	  set_site_preference('sitename', $sitename);
-	  if (isset($_POST['frontendlang'])) $frontendlang = $_POST['frontendlang'];
-	  set_site_preference('frontendlang', $frontendlang);      
-	  if (isset($_POST['frontendwysiwyg'])) $frontendwysiwyg = $_POST['frontendwysiwyg'];
-	  set_site_preference('frontendwysiwyg', $frontendwysiwyg);
-	  if (isset($_POST['metadata'])) $metadata = $_POST['metadata'];
-	  set_site_preference('metadata', $metadata);
-	  if (isset($_POST["logintheme"])) $logintheme = $_POST["logintheme"];
-	  set_site_preference('logintheme', $logintheme);
-	  if (isset($_POST['backendwysiwyg'])) $backendwysiwyg = $_POST['backendwysiwyg'];
-	  set_site_preference('backendwysiwyg', $backendwysiwyg);	  
-	  if (isset($_POST["defaultdateformat"])) $defaultdateformat = $_POST["defaultdateformat"];
-	  set_site_preference('defaultdateformat', $defaultdateformat);
-	  if (isset($_POST['nogcbwysiwyg'])) $nogcbwysiwyg = $_POST['nogcbwysiwyg'];
-	  set_site_preference('nogcbwysiwyg', $nogcbwysiwyg);
-	  if( isset($_POST['thumbnail_width']) ) $thumbnail_width = (int)$_POST['thumbnail_width'];
-	  if( isset($_POST['thumbnail_height']) ) $thumbnail_height = (int)$_POST['thumbnail_height'];
-	  set_site_preference('thumbnail_width',$thumbnail_width);
-	  set_site_preference('thumbnail_height',$thumbnail_height);
-	  if( isset($_POST['search_module']) )
-	    {
-	      $search_module = trim($_POST['search_module']);
-	      set_site_preference('searchmodule',$search_module);
-	    }
-	  break;
 
-	case 'editcontent':
-	  $content_autocreate_urls = (int)$_POST['content_autocreate_urls'];
-	  set_site_preference('content_autocreate_urls',$content_autocreate_urls);
-	  $content_autocreate_flaturls = (int)$_POST['content_autocreate_flaturls'];
-	  set_site_preference('content_autocreate_flaturls',$content_autocreate_flaturls);
-	  $content_mandatory_urls = (int)$_POST['content_mandatory_urls'];
-	  set_site_preference('content_mandatory_urls',$content_mandatory_urls);
-	  $content_imagefield_path = trim($_POST['content_imagefield_path']);
-	  set_site_preference('content_imagefield_path',$content_imagefield_path);
-	  $content_thumbnailfield_path = trim($_POST['content_thumbnailfield_path']);
-	  set_site_preference('content_thumbnailfield_path',$content_thumbnailfield_path);
-	  $contentimage_path = trim($_POST['contentimage_path']);
-	  set_site_preference('contentimage_path',$contentimage_path);
-	  if( isset($_POST['basic_attributes']) )
-	    {
-	      $basic_attributes = implode(',',($_POST['basic_attributes']));
-	    }
-	  else
-	    {
-	      $basic_attributes = '';
-	    }
-	  set_site_preference('basic_attributes',$basic_attributes);
-	  $disallowed_contenttypes = '';
-	  if( isset($_POST['disallowed_contenttypes']) )
-	    {
-	      $disallowed_contenttypes = implode(',',$_POST['disallowed_contenttypes']);
-	    }
-	  set_site_preference('disallowed_contenttypes',$disallowed_contenttypes);
-	  break;
+if (isset($_POST["editsiteprefs"])) {
+  if ($access) {
+    switch( $tab ) {
+    case 'general':
+      // tab 1
+      if (isset($_POST['sitename'])) $sitename = cms_htmlentities($_POST['sitename']);
+      set_site_preference('sitename', $sitename);
+      if (isset($_POST['frontendlang'])) $frontendlang = $_POST['frontendlang'];
+      set_site_preference('frontendlang', $frontendlang);      
+      if (isset($_POST['frontendwysiwyg'])) $frontendwysiwyg = $_POST['frontendwysiwyg'];
+      set_site_preference('frontendwysiwyg', $frontendwysiwyg);
+      if (isset($_POST['metadata'])) $metadata = $_POST['metadata'];
+      set_site_preference('metadata', $metadata);
+      if (isset($_POST["logintheme"])) $logintheme = $_POST["logintheme"];
+      set_site_preference('logintheme', $logintheme);
+      if (isset($_POST['backendwysiwyg'])) $backendwysiwyg = $_POST['backendwysiwyg'];
+      set_site_preference('backendwysiwyg', $backendwysiwyg);	  
+      if (isset($_POST["defaultdateformat"])) $defaultdateformat = $_POST["defaultdateformat"];
+      set_site_preference('defaultdateformat', $defaultdateformat);
+      if (isset($_POST['nogcbwysiwyg'])) $nogcbwysiwyg = $_POST['nogcbwysiwyg'];
+      set_site_preference('nogcbwysiwyg', $nogcbwysiwyg);
+      if( isset($_POST['thumbnail_width']) ) $thumbnail_width = (int)$_POST['thumbnail_width'];
+      if( isset($_POST['thumbnail_height']) ) $thumbnail_height = (int)$_POST['thumbnail_height'];
+      set_site_preference('thumbnail_width',$thumbnail_width);
+      set_site_preference('thumbnail_height',$thumbnail_height);
+      if( isset($_POST['search_module']) ) {
+	$search_module = trim($_POST['search_module']);
+	set_site_preference('searchmodule',$search_module);
+      }
+      break;
 
-	case 'listcontent':
-	  $listcontent_showalias = (int)$_POST['listcontent_showalias'];
-	  set_site_preference('listcontent_showalias',$listcontent_showalias);
-	  $listcontent_showurl = (int)$_POST['listcontent_showurl'];
-	  set_site_preference('listcontent_showurl',$listcontent_showurl);
-	  $listcontent_showtitle = (int)$_POST['listcontent_showtitle'];
-	  set_site_preference('listcontent_showtitle',$listcontent_showtitle);
-	  break;
+    case 'editcontent':
+      $content_autocreate_urls = (int)$_POST['content_autocreate_urls'];
+      set_site_preference('content_autocreate_urls',$content_autocreate_urls);
+      $content_autocreate_flaturls = (int)$_POST['content_autocreate_flaturls'];
+      set_site_preference('content_autocreate_flaturls',$content_autocreate_flaturls);
+      $content_mandatory_urls = (int)$_POST['content_mandatory_urls'];
+      set_site_preference('content_mandatory_urls',$content_mandatory_urls);
+      $content_imagefield_path = trim($_POST['content_imagefield_path']);
+      set_site_preference('content_imagefield_path',$content_imagefield_path);
+      $content_thumbnailfield_path = trim($_POST['content_thumbnailfield_path']);
+      set_site_preference('content_thumbnailfield_path',$content_thumbnailfield_path);
+      $contentimage_path = trim($_POST['contentimage_path']);
+      set_site_preference('contentimage_path',$contentimage_path);
+      if( isset($_POST['basic_attributes']) ) {
+	$basic_attributes = implode(',',($_POST['basic_attributes']));
+      }
+      else {
+	$basic_attributes = '';
+      }
+      set_site_preference('basic_attributes',$basic_attributes);
+      $disallowed_contenttypes = '';
+      if( isset($_POST['disallowed_contenttypes']) ) {
+	$disallowed_contenttypes = implode(',',$_POST['disallowed_contenttypes']);
+      }
+      set_site_preference('disallowed_contenttypes',$disallowed_contenttypes);
+      break;
 
-	case 'sitedown':
-	  if( isset($_POST['sitedownexcludes']) )
-	    {
-	      $sitedownexcludes = trim($_POST['sitedownexcludes']);
-	    }
-	  $sitedownexcludeadmins = (int)$_POST['sitedownexcludeadmins'];
-	  if (isset($_POST["enablesitedownmessage"])) $enablesitedownmessage=$_POST['enablesitedownmessage'];
-	  if (isset($_POST["sitedownmessage"])) $sitedownmessage = $_POST["sitedownmessage"];
-	  if (isset($_POST["use_wysiwyg"])) $use_wysiwyg = $_POST["use_wysiwyg"];
-	  set_site_preference('enablesitedownmessage', $enablesitedownmessage);
-	  set_site_preference('sitedown_use_wysiwyg', $use_wysiwyg);
-	  set_site_preference('sitedownmessage', $sitedownmessage);
-	  set_site_preference('sitedownexcludes',$sitedownexcludes);
-	  set_site_preference('sitedownexcludeadmins',$sitedownexcludeadmins);
-	  break;
+    case 'listcontent':
+      $listcontent_showalias = (int)$_POST['listcontent_showalias'];
+      set_site_preference('listcontent_showalias',$listcontent_showalias);
+      $listcontent_showurl = (int)$_POST['listcontent_showurl'];
+      set_site_preference('listcontent_showurl',$listcontent_showurl);
+      $listcontent_showtitle = (int)$_POST['listcontent_showtitle'];
+      set_site_preference('listcontent_showtitle',$listcontent_showtitle);
+      break;
 
-	case 'setup':
-	  if (isset($_POST["disablesafemodewarning"])) $disablesafemodewarning = $_POST['disablesafemodewarning'];
-	  if (isset($_POST["enablenotifications"])) $enablenotifications = $_POST['enablenotifications'];
-	  if (isset($_POST["xmlmodulerepository"])) $xmlmodulerepository = $_POST["xmlmodulerepository"];
-	  if (isset($_POST["checkversion"])) $checkversion = (int) $_POST["checkversion"];
-	  if (isset($_POST['global_umask'])) 
-	    {
-	      $global_umask = $_POST['global_umask'];
-	    }
-	  set_site_preference('global_umask', $global_umask);
-	  set_site_preference('xmlmodulerepository', $xmlmodulerepository);
-	  set_site_preference('checkversion', $checkversion);
-	  set_site_preference('disablesafemodewarning',$disablesafemodewarning);
-	  set_site_preference('enablenotifications',$enablenotifications);
-	  if( isset($_POST['allow_browser_cache']) )
-	    {
-	      $allow_browser_cache = (int)$_POST['allow_browser_cache'];
-	      set_site_preference('allow_browser_cache',$allow_browser_cache);
-	    }
-	  if( isset($_POST['browser_cache_expiry']) )
-	    {
-	      $browser_cache_expiry = (int)$_POST['browser_cache_expiry'];
-	      set_site_preference('browser_cache_expiry',$browser_cache_expiry);
-	    }
-	  if( isset($_POST['auto_clear_cache_age']) )
-	    {
-	      $auto_clear_cache_age = (int)$_POST['auto_clear_cache_age'];
-	      set_site_preference('auto_clear_cache_age',$auto_clear_cache_age);
-	    }
-	  if( isset($_POST['pseudocron_granularity']) )
-	    {
-	      $pseudocron_granularity = (int)$_POST['pseudocron_granularity'];
-	      set_site_preference('pseudocron_granularity',$pseudocron_granularity);
-	    }
-	  if (isset($_POST["adminlog_lifetime"])) {
-	    $adminlog_lifetime = $_POST["adminlog_lifetime"];
-	    set_site_preference('adminlog_lifetime',$adminlog_lifetime);
-	  }
-	  break;
+    case 'sitedown':
+      if( isset($_POST['sitedownexcludes']) ) {
+	$sitedownexcludes = trim($_POST['sitedownexcludes']);
+      }
+      $sitedownexcludeadmins = (int)$_POST['sitedownexcludeadmins'];
+      if (isset($_POST["enablesitedownmessage"])) $enablesitedownmessage=$_POST['enablesitedownmessage'];
+      if (isset($_POST["sitedownmessage"])) $sitedownmessage = $_POST["sitedownmessage"];
+      if (isset($_POST["use_wysiwyg"])) $use_wysiwyg = $_POST["use_wysiwyg"];
+      set_site_preference('enablesitedownmessage', $enablesitedownmessage);
+      set_site_preference('sitedown_use_wysiwyg', $use_wysiwyg);
+      set_site_preference('sitedownmessage', $sitedownmessage);
+      set_site_preference('sitedownexcludes',$sitedownexcludes);
+      set_site_preference('sitedownexcludeadmins',$sitedownexcludeadmins);
+      break;
+
+    case 'setup':
+      if (isset($_POST["disablesafemodewarning"])) $disablesafemodewarning = $_POST['disablesafemodewarning'];
+      if (isset($_POST["enablenotifications"])) $enablenotifications = $_POST['enablenotifications'];
+      if (isset($_POST["xmlmodulerepository"])) $xmlmodulerepository = $_POST["xmlmodulerepository"];
+      if (isset($_POST["checkversion"])) $checkversion = (int) $_POST["checkversion"];
+      if (isset($_POST['global_umask'])) {
+	$global_umask = $_POST['global_umask'];
+      }
+      set_site_preference('global_umask', $global_umask);
+      set_site_preference('xmlmodulerepository', $xmlmodulerepository);
+      set_site_preference('checkversion', $checkversion);
+      set_site_preference('disablesafemodewarning',$disablesafemodewarning);
+      set_site_preference('enablenotifications',$enablenotifications);
+      if( isset($_POST['allow_browser_cache']) ) {
+	$allow_browser_cache = (int)$_POST['allow_browser_cache'];
+	set_site_preference('allow_browser_cache',$allow_browser_cache);
+      }
+      if( isset($_POST['browser_cache_expiry']) ) {
+	$browser_cache_expiry = (int)$_POST['browser_cache_expiry'];
+	set_site_preference('browser_cache_expiry',$browser_cache_expiry);
+      }
+      if( isset($_POST['auto_clear_cache_age']) ) {
+	$auto_clear_cache_age = (int)$_POST['auto_clear_cache_age'];
+	set_site_preference('auto_clear_cache_age',$auto_clear_cache_age);
+      }
+      if( isset($_POST['pseudocron_granularity']) ) {
+	$pseudocron_granularity = (int)$_POST['pseudocron_granularity'];
+	set_site_preference('pseudocron_granularity',$pseudocron_granularity);
+      }
+      if (isset($_POST["adminlog_lifetime"])) {
+	$adminlog_lifetime = $_POST["adminlog_lifetime"];
+	set_site_preference('adminlog_lifetime',$adminlog_lifetime);
+      }
+      break;
 	  
-	case 'smarty':
-	  if( isset($_POST['use_smartycache']) ) {
-	    $use_smartycache = $_POST['use_smartycache'];
-	    set_site_preference('use_smartycache',$use_smartycache);
-	  }
-	  if( isset($_POST['use_smartycompilecheck']) ) {
-	    $use_smartycompilecheck = $_POST['use_smartycompilecheck'];
-	    set_site_preference('use_smartycompilecheck',$use_smartycompilecheck);
-	  }
-	  if( isset($_POST['smarty_cachemodules']) ) {
-	    $smarty_cachemodules = $_POST['smarty_cachemodules'];
-	    set_site_preference('smarty_cachemodules',$smarty_cachemodules);
-	  }
-	  if( isset($_POST['smarty_cacheudt']) ) {
-	    $smarty_cacheudt = $_POST['smarty_cacheudt'];
-	    set_site_preference('smarty_cacheudt',$smarty_cacheudt);
-	  }
-	  $gCms->clear_cached_files();
-	}
+    case 'smarty':
+      if( isset($_POST['use_smartycache']) ) {
+	$use_smartycache = $_POST['use_smartycache'];
+	set_site_preference('use_smartycache',$use_smartycache);
+      }
+      if( isset($_POST['use_smartycompilecheck']) ) {
+	$use_smartycompilecheck = $_POST['use_smartycompilecheck'];
+	set_site_preference('use_smartycompilecheck',$use_smartycompilecheck);
+      }
+      if( isset($_POST['smarty_cachemodules']) ) {
+	$smarty_cachemodules = $_POST['smarty_cachemodules'];
+	set_site_preference('smarty_cachemodules',$smarty_cachemodules);
+      }
+      if( isset($_POST['smarty_cacheudt']) ) {
+	$smarty_cacheudt = $_POST['smarty_cacheudt'];
+	set_site_preference('smarty_cacheudt',$smarty_cacheudt);
+      }
+      $gCms->clear_cached_files();
+    }
 
-      // put mention into the admin log
-      audit(-1, 'Global Settings', 'Edited');
-      $message .= lang('siteprefsupdated');
-    }
-  else
-    {
-      $error .= "<li>".lang('noaccessto', array('Modify Site Permissions'))."</li>";
-    }
+    // put mention into the admin log
+    audit(-1, 'Global Settings', 'Edited');
+    $message .= lang('siteprefsupdated');
+  }
+  else {
+    $error .= "<li>".lang('noaccessto', array('Modify Site Permissions'))."</li>";
+  }
 } 
 
 /**
@@ -444,12 +413,10 @@ else*/ if (isset($_POST["editsiteprefs"]))
 include_once("header.php");
 
 if ($error != "") {
-	
-	$themeObject->ShowErrors($error);
+  $themeObject->ShowErrors($error);
 }
 if ($message != "") {
-	
-	$themeObject->ShowMessage($message);
+  $themeObject->ShowMessage($message);
 }
  
 $templates = array();
@@ -458,39 +425,23 @@ $templates['-1'] = lang('none');
 $query = "SELECT * FROM ".cms_db_prefix()."templates where active = 1 ORDER BY template_name";
 $result = $db->Execute($query);
 
-while ($result && $row = $result->FetchRow())
-{
-	$templates[$row['template_id']] = $row['template_name'];
+while ($result && $row = $result->FetchRow()) {
+  $templates[$row['template_id']] = $row['template_name'];
 }
 
 // Make sure cache folder is writable
 if (FALSE == is_writable(TMP_CACHE_LOCATION) || 
-    FALSE == is_writable(TMP_TEMPLATES_C_LOCATION) )
-{
+    FALSE == is_writable(TMP_TEMPLATES_C_LOCATION) ) {
   $themeObject->ShowErrors(lang('cachenotwritable'));
 }
 
-/*
-// warning: uber hack.
-$tmp = ModuleOperations::get_instance()->GetInstalledModules();
-for( $i = 0; $i < count($tmp); $i++ )
-{
-  if( !ModuleOperations::get_instance()->IsSystemModule($tmp[$i]) ) continue;
-  $mod = cms_utils::get_module($tmp[$i]);
-  if( is_object($mod) ) break;
-}
-$smarty->assign('mod',$mod);
-*/
-
 $modules = ModuleOperations::get_instance()->get_modules_with_capability('search');
-if( is_array($modules) && count($modules) )
-{
+if( is_array($modules) && count($modules) ) {
   $tmp = array();
   $tmp['-1'] = lang('none');
-  for( $i = 0; $i < count($modules); $i++ )
-{
-  $tmp[$modules[$i]] = $modules[$i];
-}
+  for( $i = 0; $i < count($modules); $i++ ) {
+    $tmp[$modules[$i]] = $modules[$i];
+  }
   $smarty->assign('search_modules',$tmp);
 }
 
@@ -501,24 +452,21 @@ $smarty->assign('templates',$templates);
 {
   $tmp = module_meta::get_instance()->module_list_by_method('IsWYSIWYG');
   $tmp2 = array(-1=>lang('none'));
-  for( $i = 0; $i < count($tmp); $i++ )
-    {
-      $tmp2[$tmp[$i]] = $tmp[$i];
-    }
+  for( $i = 0; $i < count($tmp); $i++ ) {
+    $tmp2[$tmp[$i]] = $tmp[$i];
+  }
   $smarty->assign('wysiwyg',$tmp2);
 }
 
 if ($dir=opendir(dirname(__FILE__)."/themes/")) 
 { 
   $themes = array();
-  while (($file = readdir($dir)) !== false )
-    {
-      if( @is_dir("themes/".$file) && ($file[0]!='.') &&
-	  @is_readable("themes/{$file}/{$file}Theme.php"))
-	{
-	  $themes[$file] = $file;
-	}
+  while (($file = readdir($dir)) !== false ) {
+    if( @is_dir("themes/".$file) && ($file[0]!='.') &&
+	@is_readable("themes/{$file}/{$file}Theme.php")) {
+      $themes[$file] = $file;
     }
+  }
   $smarty->assign('themes',$themes);
   $smarty->assign('logintheme',get_site_preference('logintheme','default'));
 }
@@ -592,7 +540,6 @@ $tmp = array(15=>lang('cron_15m'),30=>lang('cron_30m'),
 	     24*60=>lang('cron_24h'),
 	     -1=>lang('cron_request'));
 $smarty->assign('pseudocron_options',$tmp);	     
-$smarty->assign('lang_pseudocron_granularity',lang('pseudocron_granularity'));
 $smarty->assign('lang_info_pseudocron_granularity',lang('info_pseudocron_granularity'));
 
 $tmp = array(
@@ -605,49 +552,24 @@ $tmp = array(
 	     -1=>lang('adminlog_manual'));
 $smarty->assign('adminlog_options',$tmp);
 
-$smarty->assign('lang_adminlog_lifetime',lang('adminlog_lifetime'));
 $smarty->assign('lang_info_adminlog_lifetime',lang('info_adminlog_lifetime'));
 $smarty->assign('lang_info_autoclearcache',lang('info_autoclearcache'));
 $smarty->assign('lang_autoclearcache',lang('autoclearcache'));
-$smarty->assign('lang_thumbnail_width',lang('thumbnail_width'));
-$smarty->assign('lang_thumbnail_height',lang('thumbnail_height'));
 
-//$smarty->assign('lang_general',lang('general_settings'));
-//$smarty->assign('lang_listcontent',lang('listcontent_settings'));
-//$smarty->assign('lang_sitedown',lang('sitedown_settings'));
 $smarty->assign('lang_cancel',lang('cancel'));
 $smarty->assign('lang_submit',lang('submit'));
 $smarty->assign('lang_clearcache',lang('clearcache'));
 $smarty->assign('lang_clear',lang('clear'));
-//$smarty->assign('lang_setup',lang('setup'));
-//$smarty->assign('lang_smarty',lang('smarty_settings'));
-$smarty->assign('lang_sitename',lang('sitename'));
-$smarty->assign('lang_global_umask',lang('global_umask'));
-$smarty->assign('lang_test',lang('test'));
-$smarty->assign('lang_results',lang('results'));
 $smarty->assign('lang_frontendlang',lang('frontendlang'));
 $smarty->assign('lang_frontendwysiwygtouse',lang('frontendwysiwygtouse'));
-$smarty->assign('lang_nogcbwysiwyg',lang('nogcbwysiwyg'));
-$smarty->assign('lang_globalmetadata',lang('globalmetadata'));
 $smarty->assign('lang_template',lang('template'));
-$smarty->assign('lang_backendwysiwygtouse',lang('backendwysiwygtouse'));
-$smarty->assign('lang_enablesitedown',lang('enablesitedown'));
-$smarty->assign('lang_sitedownmessage',lang('sitedownmessage'));
-$smarty->assign('lang_checkversion',lang('checkversion'));
 $smarty->assign('lang_clear_version_check_cache',lang('clear_version_check_cache'));
-$smarty->assign('lang_logintheme',lang('master_admintheme'));
-$smarty->assign('lang_disablesafemodewarning',lang('disablesafemodewarning'));
-$smarty->assign('lang_date_format_string',lang('date_format_string'));
 $smarty->assign('lang_date_format_string_help',lang('date_format_string_help'));
-$smarty->assign('lang_admin_enablenotifications',lang('admin_enablenotifications'));
-$smarty->assign('lang_sitedownexcludes',lang('sitedownexcludes'));
 $smarty->assign('lang_info_sitedownexcludes',lang('info_sitedownexcludes'));
-$smarty->assign('lang_basic_attributes',lang('basic_attributes'));
 $smarty->assign('lang_info_basic_attributes',lang('info_basic_attributes'));
-//$smarty->assign('lang_editcontent_settings',lang('editcontent_settings'));
-$smarty->assign('lang_enablewysiwyg',lang('enablewysiwyg'));
 
 $all_attributes = array();
+$all_attributes['design_id'] = lang('design_id');
 $all_attributes['template'] = lang('template');
 $all_attributes['active'] = lang('active');
 $all_attributes['secure'] = lang('secure_page');
@@ -687,10 +609,7 @@ $smarty->assign('backurl', $themeObject->backUrl());
 $smarty->assign('formurl', $thisurl);
 
 # begin outputg
-//echo '<div class="pagecontainer">'.$themeObject->ShowHeader('siteprefs')."\n";
 $smarty->display('siteprefs.tpl');
-//echo '</div>'."\n";
-//echo '<p class="pageback"><a class="pageback" href="'.$themeObject->BackUrl().'">&#171; '.lang('back').'</a></p>'."\n";
 include_once("footer.php");
 
 # vim:ts=4 sw=4 noet

@@ -2709,10 +2709,9 @@ abstract class CMSModule
    * This method accepts variable arguments.  The first argument (required) is the language string key (a string)
    * Further arguments may be sprintf arguments matching the specified key.
    *
-   * @final
    * @return string
    */
-  final public function Lang()
+  public function Lang()
   {
     //Push module name onto front of array
     $args = func_get_args();

@@ -39,22 +39,12 @@ class Content extends ContentBase
 	 * @access private
 	 * @var array
 	 */
-    protected $_contentBlocks = array();
-	/**
-	 * @access private
-	 * @var array
-	 */
-    protected $_contentBlocksLoaded = false;
+    private $_contentBlocks = null;
 	/**
 	 * @access private
 	 * @var boolean
 	 */
     protected $doAutoAliasIfEnabled = true;
-	/**
-	 * @access private
-	 * @var string
-	 */
-    protected $stylesheet;
 	/**
 	 * @access private
 	 * @var array
@@ -82,6 +72,16 @@ class Content extends ContentBase
     }
 
 	/**
+	 * test whether or not content may be made the default content
+	 *
+	 * @return boolean whether or not content may be made the default content
+	 */
+    function IsDefaultPossible()
+    {
+		return TRUE;
+    }
+
+	/**
 	 * Set up base property attributes for this content type
 	 *
 	 * @return void
@@ -89,12 +89,12 @@ class Content extends ContentBase
     function SetProperties()
     {
       parent::SetProperties();
-	  $this->AddBaseProperty('design_id',3);
-      $this->AddBaseProperty('template',4);
-      $this->AddBaseProperty('pagemetadata',20);
-      $this->AddContentProperty('searchable',8);
-      $this->AddContentProperty('pagedata',25);
-      $this->AddContentProperty('disable_wysiwyg',60);
+	  $this->AddProperty('design_id',3,self::TAB_OPTIONS);
+      $this->AddProperty('template',4,self::TAB_OPTIONS);
+      $this->AddProperty('pagemetadata',20,self::TAB_OPTIONS);
+      $this->AddProperty('searchable',8,self::TAB_OPTIONS);
+      $this->AddProperty('pagedata',25,self::TAB_OPTIONS);
+      $this->AddProperty('disable_wysiwyg',60,self::TAB_OPTIONS);
     }
 
 	/**
@@ -171,167 +171,29 @@ class Content extends ContentBase
 		return $this->GetPropertyValue($param);
     }
 
-	/**
-	 * test whether or not content may be made the default content
-	 *
-	 * @return boolean whether or not content may be made the default content
-	 */
-    function IsDefaultPossible()
-    {
-		return TRUE;
-    }
-
-	/**
-	 * Setup form elements for adding or editing.
-	 * This method is called internally when adding or editing a content page of this type
-	 * to build a hash of editable fields.
-	 *
-	 * @return hash of array fields.
-	 */
-	protected function SetupForm($adding = FALSE)
+	public function GetEditableProperties()
 	{
-		//
-		// setup
-		//
-		$hash = array();
-		$blocks = null;
-		$blocks = $this->get_content_blocks(); 
+		$props = parent::GetEditableProperties();
 
-		//
-		// main tab
-		//
-		$hash[lang('main')] = array();
-		$ret = array();
-		$tmp = $this->display_attributes($adding);
-		if( !empty($tmp) ) {
-			foreach( $tmp as $one ) {
-				$ret[] = $one;
-			}
-		}
-
+		// add in content blocks
+		$blocks = $this->get_content_blocks();
 		if( is_array($blocks) && count($blocks) ) {
-			foreach($blocks as $blockName => $blockInfo) {
-				if( !isset($blockInfo['tab']) || $blockInfo['tab'] == '' || 
-					$blockInfo['tab'] == 'main' ) {
-					$parameters[] = $blockInfo['id'];
+			$priority = 100;
+			foreach( $blocks as $block ) {
+				// todo, skip this block if permissions don't allow.
 
-					$data = $this->GetPropertyValue($blockInfo['id']);
-					if( empty($data) && isset($blockInfo['default']) ) $data = $blockInfo['default'];
-					$tmp = $this->display_content_block($blockName,$blockInfo,$data,$adding);
-					if( !$tmp ) continue;
-					$ret[] = $tmp;
-				}
+				$prop = new stdClass;
+				$prop->name = $block['name'];
+				$prop->extra = $block;
+				if( !isset($block['tab']) || $block['tab'] == '' ) $block['tab'] = self::TAB_MAIN;
+				$prop->tab = $block['tab'];
+				$prop->priority = $priority++;
+				$props[] = $prop;
 			}
 		}
 
-		$hash[lang('main')] = $ret;
-
-		// 
-		// other tabs.
-		//
-		if( is_array($blocks) && count($blocks) ) {
-			foreach($blocks as $blockName => $blockInfo) {
-				if( isset($blockInfo['tab']) && $blockInfo['tab'] != '' && 
-					$blockInfo['tab'] != 'options') {
-					$parameters[] = $blockInfo['id'];
-
-					$data = $this->GetPropertyValue($blockInfo['id']);
-					if( empty($data) && isset($blockInfo['default']) ) $data = $blockInfo['default'];
-					$tmp = $this->display_content_block($blockName,$blockInfo,$data,$adding);
-					if( !$tmp ) continue;
-
-					if( !isset($hash[$blockInfo['tab']]) ) {
-						$hash[$blockInfo['tab']] = array();
-					}
-					$hash[$blockInfo['tab']][] = $tmp;
-				}
-			}
-		}
-
-		//
-		// options tab
-		//
-		if( check_permission(get_userid(),'Manage All Content') )
-		{
-			// now do advanced attributes
-			$ret = array();
-			$tmp = $this->display_attributes($adding,1);
-			if( !empty($tmp) ) {
-				foreach( $tmp as $one ) {
-					$ret[] = $one;
-				}
-			}
-
-			if( is_array($blocks) && count($blocks) ) {
-				// and the content blocks
-				foreach($blocks as $blockName => $blockInfo) {
-					if( isset($blockInfo['tab']) && $blockInfo['tab'] == 'options' ) {
-						$parameters[] = $blockInfo['id'];
-
-						$data = $this->GetPropertyValue($blockInfo['id']);
-						if( empty($data) && isset($blockInfo['default']) ) 
-							$data = $blockInfo['default'];
-						$tmp = $this->display_content_block($blockName,$blockInfo,$data,$adding);
-						if( !$tmp ) continue;
-						$ret[] = $tmp;
-					}
-				}
-			}
-
-			// and extra info.
-			$tmp = get_preference(get_userid(),'date_format_string','%x %X');
-			if( empty($tmp) ) $tmp = '%x %X';
-			$ret[]=array(lang('last_modified_at').':', strftime($tmp, strtotime($this->mModifiedDate) ) );
-			$userops = cmsms()->GetUserOperations();
-			$modifiedbyuser = $userops->LoadUserByID($this->mLastModifiedBy);
-			if($modifiedbyuser) $ret[]=array(lang('last_modified_by').':', $modifiedbyuser->username); 
-
-			if( count($ret) ) $hash[lang('options')] = $ret;
-		}
-		return $hash;
+		return $props;
 	}
-
-	private function _get_form_data()
-	{
-		if( isset($this->__fieldhash) && is_array($this->__fieldhash) ) return;
-		$tmp = $this->SetupForm();
-		if( is_array($tmp) && count($tmp) ) $this->__fieldhash = $tmp;
-	}
-
-	/**
-	 * Get a list of custom tabs this content type shows in the admin for adding / editing
-	 *
-	 * @return array list of custom tabs
-	 */
-    function TabNames()
-    {
-		$this->_get_form_data();
-		return array_keys($this->__fieldhash);
-    }
-
-	/**
-	 * Get a form for editing the content in the admin
-	 *
-	 * @param boolean $adding  true if the content is being added for the first time
-	 * @param boolean $tab which tab to display
-	 * @param string $showadmin 
-	 * @return array 
-	 */
-    function EditAsArray($adding = false, $tab = 0, $showadmin = false)
-    {
-		$this->_get_form_data();
-		$tabnames = $this->TabNames(); 
-	
-		$ret = array();
-		$this->stylesheet = '';
-		if ($this->TemplateId() > 0) {
-			$this->stylesheet = '../stylesheet.php?templateid='.$this->TemplateId();
-		}
-
-		if( isset($tabnames[$tab]) ) {
-			return $this->__fieldhash[$tabnames[$tab]];
-		}
-    }
 
 	/**
 	 * Validate the user's entries in the content add/edit form
@@ -388,37 +250,23 @@ class Content extends ContentBase
 		return (count($errors) > 0?$errors:FALSE);
 	}
 
-    /**
-     * Function to return an array of content blocks
-     * @return array of content blocks
-     */
-    public function get_content_blocks()
-    {
-		if( $this->parse_content_blocks() ) {
-			return $this->_contentBlocks;
-		}
-    }
-
 	/**
-	 * parse content blocks
+	 * Parse content blocks in the current page's templates.
+	 *
+	 * This method can only be called once per request.
 	 *
 	 * @access private
 	 * @internal
 	 */
-    private function parse_content_blocks()
+    private function get_content_blocks()
     {
-		if ($this->_contentBlocksLoaded) return TRUE;
+		if( is_array($this->_contentBlocks) ) return $this->_contentBlocks;
 
 		$parser = cmsms()->get_template_parser();
 		$parser->fetch('cms_template:'.$this->TemplateId()); // do the magic.
 
 		$this->_contentBlocks = CMS_Content_Block::get_content_blocks();
-
-		if( !is_array($this->_contentBlocks) || !count($this->_contentBlocks) ) 
-			return FALSE;
-
-		$this->_contentBlocksLoaded = TRUE;
-		return TRUE;
+		return $this->_contentBlocks;
     }
 	
 	/**
@@ -513,7 +361,18 @@ class Content extends ContentBase
 			break;
 
 		default:
-			return parent::display_single_element($one,$adding);
+			// check if it's content block
+			$blocks = $this->get_content_blocks();
+			if( isset($blocks[$one]) ) {
+				// its a content block
+				$block = $blocks[$one];
+				$data = $this->GetPropertyValue($block['id']);
+				return $this->display_content_block($one,$block,$data,$adding);
+			}
+			else {
+				// call the parent class
+				return parent::display_single_element($one,$adding);
+			}
 		}
     }
 
@@ -541,7 +400,7 @@ class Content extends ContentBase
 				$block_wysiwyg = $blockInfo['usewysiwyg'] == 'false'?false:true;
 			}
 
-			$ret = create_textarea($block_wysiwyg, $value, $blockInfo['id'], '', $blockInfo['id'], '', $this->stylesheet);
+			$ret = create_textarea($block_wysiwyg, $value, $blockInfo['id'], '', $blockInfo['id']);
 		}
 		return $ret;
 	}

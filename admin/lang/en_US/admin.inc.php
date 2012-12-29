@@ -1084,6 +1084,7 @@ $lang['admin']['movecontent'] = 'Move Pages';
 $lang['admin']['msg_defaultcontent'] = 'Add code here that should appear as the default content of all new pages';
 $lang['admin']['msg_defaultmetadata'] = 'Add code here that should appear in the metadata section of all new pages';
 $lang['admin']['msg_grantall_found'] = 'Found a &quot;GRANT ALL&quot; statement that appears to be suitable';
+$lang['admin']['msg_permstab'] = 'Authorized administrators, or page owners can adjust the ownership and additional editors of a content page';
 $lang['admin']['myaccount'] = 'My Account';
 $lang['admin']['myaccountdescription'] = 'This is where you can update your personal account details.';
 $lang['admin']['myprefs'] = 'My Preferences';
@@ -1360,6 +1361,10 @@ $lang['admin']['system_verification'] = 'System Verification';
 //   S
 //   S
 
+$lang['admin']['aa_main_tab__'] = 'Main';
+$lang['admin']['zz_nav_tab__'] = 'Navigation';
+$lang['admin']['zz_options_tab__'] = 'Options';
+$lang['admin']['zz_perms_tab__'] = 'Permissions';
 $lang['admin']['tabindex'] = 'Tab Index';
 $lang['admin']['tagdescription'] = 'Tags are little bits of functionality that can be added to your content and/or templates.';
 $lang['admin']['tags'] = 'Tags';

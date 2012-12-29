@@ -94,7 +94,7 @@ $(document).ready(function(){
 {foreach from=$tabnames item='tabname' name='tabs'} 
   {assign var='tmp' value='tab_'|cat:$smarty.foreach.tabs.index}
   {tab_header name=$tmp label=$tabname}
-{/foreach}  
+{/foreach}
 {if $content_obj->HasPreview()}
   {tab_header name='_preview_' label='preview'|lang}
 {/if}
@@ -105,6 +105,9 @@ $(document).ready(function(){
     {if $smarty.foreach.tabs.index == 0}
       {submit_buttons}
     {/if}
+
+    {if isset($tab_message_array[$idx])}{$tab_message_array[$idx]}{/if}
+
     {if isset($tab_contents_array[$idx])}
       {foreach from=$tab_contents_array[$idx] item='fld'}
       <div class="pageoverflow">

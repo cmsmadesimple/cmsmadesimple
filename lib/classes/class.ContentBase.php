@@ -39,6 +39,11 @@ define('CMS_CONTENT_HIDDEN_NAME','--------');
  */
 abstract class ContentBase
 {
+  const TAB_MAIN = 'aa_main_tab__';
+  const TAB_NAV = 'zz_nav_tab__';
+  const TAB_OPTIONS = 'zz_options_tab__';
+  const TAB_PERMS = 'zz_perms_tab__';
+  
   /**
    * The unique ID identifier of the element
    * Integer
@@ -103,7 +108,7 @@ abstract class ContentBase
   protected $mOldItemOrder = -1;
 
   /**
-   * The metadata (head tags) fir this content
+   * The metadata (head tags) for this content
    *
    * @internal
    */
@@ -247,7 +252,7 @@ abstract class ContentBase
 
   private $_attributes;
   private $_prop_defaults;
-  private $_error;
+  private $_editable_properties;
 
   /************************************************************************/
   /* Constructor related													*/
@@ -281,29 +286,29 @@ abstract class ContentBase
    */
   protected function SetProperties()
   {
-    $this->AddBaseProperty('title',1,1);
-    $this->AddBaseProperty('menutext',2,1);
-    $this->AddBaseProperty('alias',5);
-    $this->AddBaseProperty('page_url',6);
-    $this->AddBaseProperty('parent',7,1);
-    $this->AddBaseProperty('active',8);
-    $this->AddBaseProperty('showinmenu',9);
-    $this->AddBaseProperty('secure',10);
-    $this->AddBaseProperty('cachable',11);
-    $this->AddContentProperty('target',12);
-      
-    $this->AddContentProperty('image',50);
-    $this->AddContentProperty('thumbnail',50);
-    $this->AddBaseProperty('titleattribute',55);
-    $this->AddBaseProperty('accesskey',56);
-    $this->AddBaseProperty('tabindex',57);
+    $this->AddProperty('title',1,self::TAB_MAIN,1);
+
+    $this->AddProperty('menutext',1,self::TAB_NAV,1);
+    $this->AddProperty('parent',2,self::TAB_NAV,1);
+    $this->AddProperty('page_url',3,self::TAB_NAV);
+    $this->AddProperty('showinmenu',4,self::TAB_NAV);
+    $this->AddProperty('titleattribute',5,self::TAB_NAV);
+    $this->AddProperty('accesskey',6,self::TAB_NAV);
+    $this->AddProperty('tabindex',7,self::TAB_NAV);	  
+    $this->AddProperty('target',8,self::TAB_NAV);      
+
+    $this->AddProperty('alias',1,self::TAB_OPTIONS);
+    $this->AddProperty('active',2,self::TAB_OPTIONS);
+    $this->AddProperty('secure',3,self::TAB_OPTIONS);
+    $this->AddProperty('cachable',4,self::TAB_OPTIONS);
+    $this->AddProperty('image',5,self::TAB_OPTIONS);
+    $this->AddProperty('thumbnail',6,self::TAB_OPTIONS);
+    $this->AddProperty('extra1',7,self::TAB_OPTIONS);
+    $this->AddProperty('extra2',8,self::TAB_OPTIONS);
+    $this->AddProperty('extra3',9,self::TAB_OPTIONS);
 	  
-    $this->AddContentProperty('extra1',80);
-    $this->AddContentProperty('extra2',81);
-    $this->AddContentProperty('extra3',82);
-	  
-    $this->AddBaseProperty('owner',90);
-    $this->AddBaseProperty('additionaleditors',91);
+    $this->AddProperty('owner',1,self::TAB_PERMS);
+    $this->AddProperty('additionaleditors',2,self::TAB_PERMS);
   }
 
     
@@ -851,6 +856,17 @@ abstract class ContentBase
     public function IsViewable()
     {
       return TRUE;
+    }
+
+    /**
+     * Indicates wether this content type can be the default page for a CMSMS website
+     *
+     * @abstract
+     * @returns boolean
+     */
+    public function IsDefaultPossible()
+    {
+      return FALSE;
     }
 
     /**
@@ -1740,7 +1756,53 @@ abstract class ContentBase
     public function Show($param = '')
     {
     }
-	
+
+    /**
+     * Used to get the list of all editable properties for this content page.
+     * Other content types may override this method, but should call the base method at the start.
+     *
+     * @abstract
+     * @return an array of stdclass objects containing name (string), tab (string), priority (integer), required (boolean) members
+     */
+    public function GetEditableProperties()
+    {
+      return $this->_attributes;
+
+      // filter out the elements that this user isn't allowed to see.
+    }
+
+    private function _GetEditableProperties()
+    {
+      if( isset($this->_editable_properties) ) {
+	return $this->_editable_properties;
+      }
+
+      $props = $this->GetEditableProperties();
+
+      // remove properties based on permissions
+
+      // sort the properties.
+      // sort the attributes by tab, priority, name...
+      usort($props,function($a,$b) {
+	      if( !isset($a->tab) || $a->tab == '' ) $a->tab = ContentBase::TAB_MAIN;
+	      if( !isset($b->tab) || $b->tab == '' ) $b->tab = ContentBase::TAB_MAIN;
+
+	      // sort tabs that don't start with _ to be after _main
+	      $atab = $a->tab;
+	      $btab = $b->tab;
+
+	      $res = null;
+	      if( ($r = strcmp($atab,$btab)) != 0 ) $res = $r;
+	      else if( $a->priority < $b->priority ) $res = -1;
+	      else if( $a->priority > $b->priority ) $res = 1;
+	      else $res = strcmp($a->name,$b->name);
+	      return $res;
+      });
+
+      $this->_editable_properties = $props;
+      return $props;
+    }
+
     /**
      * Used from a page that allows content editing. This method the list of distinct sections
      * that devides up the various logical sections that this content type supports for editing.
@@ -1748,24 +1810,72 @@ abstract class ContentBase
      * @abstract
      * @return array List of tab name strings.
      */
-    public function TabNames()
+    public function GetTabNames($keys = FALSE)
     {
-        return array();
+      $props = $this->_GetEditableProperties();
+      $arr = array();
+      foreach( $props as $one ) {
+	if( !isset($one->tab) || $one->tab == '' ) $one->tab = self::TAB_MAIN;
+	if( !isset($arr[$one->tab]) ) $arr[$one->tab] = 0;
+	$arr[$one->tab]++;
+      }
+      
+      $arr = array_keys($arr);
+      if( !$keys ) {
+	for( $i = 0; $i < count($arr); $i++ ) {
+	  $one =& $arr[$i];
+	  if( endswith($one,'_tab__') ) {
+	    $one = lang($one);
+	  }
+	}
+      }
+      return $arr;
     }
 
-    /** 
-     * Used from within a page that allows editing content this method returns the input fields for
-     * the various fields that can be edited.
+    /**
+     * Get an optional message for each tab.
      *
      * @abstract
-     * @param boolean Wether we are adding a new content page, or editing an existing content page.
-     * @param int     The tab index.
-     * @param boolean unused??
+     * @param mixed either a tab name (untranslated) or an integer index
      */
-    public function EditAsArray($adding = false, $tab = 0, $showadmin = false)
+    public function GetTabMessage($key)
     {
-	# :TODO:
-	return array(array('Error','Edit Not Defined!'));
+      if( (int)$key >= 0 ) {
+	$tabs = $this->GetTabNames(TRUE);
+	if( $key >= count($tabs) ) $key = 0;
+	$key = $tabs[$key];
+      }
+
+      switch( $key ) {
+      case self::TAB_PERMS:
+	return '<div class="information">'.lang('msg_permstab').'</div>';
+	break;
+      }
+    }
+
+    /**
+     * Get the attributes for a specific tab
+     *
+     * @param mixed either a tab name (untranslated) or an integer index
+     */
+    public function GetTabElements($key,$adding = FALSE)
+    {
+      if( (int)$key >= 0 ) {
+	$tabs = $this->GetTabNames(TRUE);
+	if( $key >= count($tabs) ) $key = 0;
+	$key = $tabs[$key];
+      }
+
+      $props = $this->_GetEditableProperties();
+
+      $out = array();
+      foreach( $props as $one ) {
+	if( !isset($one->tab) || $one->tab == '' ) $one->tab = self::TAB_MAIN;
+	if( $key != $one->tab ) continue;
+
+	$out[] = $this->display_single_element($one->name,$adding);
+      }
+      return $out;
     }
 
     /**
@@ -1883,17 +1993,6 @@ abstract class ContentBase
       return self::GetAdditionalEditorInput($addteditors,$this->Owner());
     }
 
-    /**
-     * Indicates wether this content type can be the default page for a CMSMS website
-     *
-     * @abstract
-     * @returns boolean
-     */
-    public function IsDefaultPossible()
-    {
-      return FALSE;
-    }
-
     /* private */
     private function _handleRemovedBaseProperty($name,$member)
     {
@@ -1919,13 +2018,33 @@ abstract class ContentBase
       if( !is_array($this->_attributes) ) return;
       $tmp = array();
       for( $i = 0; $i < count($this->_attributes); $i++ ) {
-	if( is_array($this->_attributes[$i]) && $this->_attributes[$i][0] == $name ) {
+	if( is_array($this->_attributes[$i]) && $this->_attributes[$i]->name == $name ) {
 	  continue;
 	}
 	$tmp[] = $this->_attributes[$i];
       }
       $this->_attributes = $tmp;
       $this->_prop_defaults[$name] = $dflt;
+    }
+
+    /**
+     * Add a property
+     *
+     * @since 1.11
+     */
+    protected function AddProperty($name,$priority,$tab,$required = FALSE)
+    {
+      $ob = new StdClass;
+      $ob->name = $name;
+      $ob->priority = $priority;
+      $ob->tab = $tab;
+      $ob->required = $required;
+
+      if( !is_array($this->_attributes) ) {
+	$this->_attributes = array();
+      }
+
+      $this->_attributes[] = $ob;
     }
 
     /*
@@ -1935,114 +2054,21 @@ abstract class ContentBase
      * @param integer The priority
      * @param boolean Whether this field is required for this content type
      * @param string  (optional) unused.
+     * @deprecated
      */
-    protected function AddBaseProperty($name,$priority,$is_required = 0,$type = 'string')
+    protected function AddBaseProperty($name,$priority,$is_required = 0)
     {
-      if( !is_array($this->_attributes) ) {
-	$this->_attributes = array();
-      }
-
-      $this->_attributes[] = array($name,$priority,$is_required);
+      $this->AddProperty($name,$priority,self::TAB_OPTIONS,$is_required);
     }
 
     /*
      * Alias for AddBaseProperty
-     */
-    protected function AddContentProperty($name,$priority,$is_required = 0,$type = 'string')
-    {
-      return $this->AddBaseProperty($name,$priority,$is_required,$type);
-    }
-
-    /*
-     * Given the list of registered properties, cross reference with our
-     * basic attributes list, and figure out which ones should be displayed
      *
-     * @return array of input elements of attributes that can be edited for this form.
+     * @deprecated
      */
-    protected function display_attributes($adding,$negative = 0)
+    protected function AddContentProperty($name,$priority,$is_required = 0)
     {
-      // get our required attributes
-      $basic_attributes = array();
-      foreach( $this->_attributes as $one ) {
-	if( $one[2] == 1 ) $basic_attributes[] = $one;
-      }
-
-      // merge in preferred basic attributes
-      $tmp = get_site_preference('basic_attributes');
-      if( !empty($tmp) ) {
-	$tmp = explode(',',$tmp);
-	foreach( $tmp as $basic ) {
-	  $found = NULL;
-	  foreach( $this->_attributes as $one ) {
-	    if( $one[0] == $basic ) {
-	      $found = $one;
-	      break;
-	    }
-	  }
-	  if( $found ) {
-	    $basic_attributes[] = $found;
-	  }
-	}
-      }
-
-      $attrs = $basic_attributes;
-      if( $negative ) {
-	// build a new list of all properties... except those in the basic_attributes
-	$attrs = array();
-	foreach( $this->_attributes as $one ) {
-	  $found = 0;
-	  foreach( $basic_attributes as $basic ) {
-	    if( $basic[0] == $one[0] ) {
-	      $found = 1;
-	    }
-	  }
-
-	  if( !$found ) {
-	    $attrs[] = $one;
-	  }
-	}
-      }
-
-      // remove any duplicates
-      $tmp = array();
-      foreach( $attrs as $one ) {
-	$found = 0;
-	foreach( $tmp as $t1 ) {
-	  if( $one[0] == $t1[0] ) {
-	    $found = 1;
-	    break;
-	  }
-	}
-	if( !$found ) {
-	  $tmp[] = $one;
-	}
-      }
-      $attrs = $tmp;
-
-      // sort the attributes on the 2nd element...
-      usort($attrs,function($a,$b) {
-	      if( $a[1] < $b[1] ) return -1;
-	      else if( $a[1] == $b[1] ) return 0;
-	      else return 1;
-      });
-
-      $tmp = $this->display_admin_attributes($attrs,$adding);
-      return $tmp;
-    }
-
-    /* private */
-    private function display_admin_attributes($attributelist,$adding)
-    {
-      // sort the attributes
-
-      $ret = array();
-      foreach( $attributelist as $one ) {
-	$tmp = $this->display_single_element($one[0],$adding);
-	if( is_array($tmp) ) {
-	  $ret[] = $tmp;
-	}
-      }
-      return $ret;
+      return $this->AddProperty($name,$priority,self::TAB_OPTIONS,$is_required);
     }
 
     /**

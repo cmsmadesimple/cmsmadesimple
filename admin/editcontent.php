@@ -219,17 +219,22 @@ foreach ($existingtypes as $onetype => $onetypename ) {
 }
 $typesdropdown .= "</select>";
 
-$tabnames = $contentobj->TabNames();
+$tabnames = $contentobj->GetTabNames();
 if (FALSE == empty($error)) {
   echo $themeObject->ShowErrors($error);
 }
 
 $numberoftabs = count($tabnames);
 $tab_contents_array = array();
+$tab_message_array = array();
 for ($currenttab = 0; $currenttab < $numberoftabs; $currenttab++) {
-  $contentarray = $contentobj->EditAsArray(false, $currenttab, $adminaccess);
+  $contentarray = $contentobj->GetTabElements($currenttab);
+  $tmp = $contentobj->GetTabMessage($currenttab);
+  if( $tmp ) {
+    $tab_message_array[$currenttab] = $tmp;
+  }
   $tab_contents_array[$currenttab] = $contentarray;
-}
+ }
 
 // give stuff to smarty
 $config = cmsms()->GetConfig();
@@ -240,6 +245,7 @@ $smarty->assign('cur_content_type',$cur_content_type);
 $smarty->assign('content_obj',$contentobj);
 $smarty->assign('tabnames',$tabnames);
 $smarty->assign('tab_contents_array',$tab_contents_array);
+$smarty->assign('tab_message_array',$tab_message_array);
 $modobj = cms_utils::get_wysiwyg_module();
 if( $modobj ) {
   $smarty->assign('wysiwyg_submit_script',$modobj->WYSIWYGPageFormSubmit());

@@ -11,11 +11,11 @@
 		</div>
 
 		<div class="pageoverflow">
-		  <p class="pagetext">{$lang_sitename}</p>
+		  <p class="pagetext">{lang('sitename')}:</p>
 		  <p class="pageinput"><input type="text" class="pagesmalltextarea" name="sitename" size="30" value="{$sitename}" /></p>
 		</div>
 		<div class="pageoverflow">
-		  <p class="pagetext">{$lang_frontendlang}</p>
+		  <p class="pagetext">{lang('frontendlang')}:</p>
 		  <p class="pageinput">
 			<select name="frontendlang" style="vertical-align: middle;">
 			   {html_options options=$languages selected=$frontendlang}
@@ -24,7 +24,7 @@
 		</div>
 
 		<div class="pageoverflow">
-			<p class="pagetext">{$lang_frontendwysiwygtouse}:</p>
+			<p class="pagetext">{lang('frontendwysiwygtouse')}:</p>
 			<p class="pageinput">
 				<select name="frontendwysiwyg">
 				{html_options options=$wysiwyg selected=$frontendwysiwyg}
@@ -33,17 +33,17 @@
 		</div>
 
 		<div class="pageoverflow">
-		  <p class="pagetext">{$lang_nogcbwysiwyg}:</p>
+		  <p class="pagetext">{lang('nogcbwysiwyg')}:</p>
 		  <p class="pageinput"><input type="hidden" name="nogcbwysiwyg" value="0"/><input class="pagenb" type="checkbox" value="1" name="nogcbwysiwyg" {if $nogcbwysiwyg == "1"}checked="checked"{/if} /></p>
 		</div>
 		<div class="pageoverflow">
-		  <p class="pagetext">{$lang_globalmetadata}:</p>
+		  <p class="pagetext">{lang('globalmetadata')}:</p>
 		  <p class="pageinput"><textarea class="pagesmalltextarea" name="metadata" cols="80" rows="20">{$metadata}</textarea>
 		  </p>
 		</div>
 		{if isset($themes)}
 		<div class="pageoverflow">
-		  <p class="pagetext">{$lang_logintheme}:</p>
+		  <p class="pagetext">{lang('master_admintheme')}:</p>
 		  <p class="pageinput">
 			<select name="logintheme">
 			  {html_options options=$themes selected=$logintheme}
@@ -52,7 +52,7 @@
 		</div>
 		{/if}
 		<div class="pageoverflow">
-			<p class="pagetext">{$lang_backendwysiwygtouse}:</p>
+			<p class="pagetext">{lang('backendwysiwygtouse')}:</p>
 			<p class="pageinput">
 				<select name="backendwysiwyg">
 				{html_options options=$wysiwyg selected=$backendwysiwyg}
@@ -60,7 +60,7 @@
 			</p>
 		</div>
 		<div class="pageoverflow">
-		  <p class="pagetext">{$lang_date_format_string}:</p>
+		  <p class="pagetext">{lang('date_format_string')}:</p>
 		  <p class="pageinput">
 			<input class="pagenb" type="text" name="defaultdateformat" size="20" maxlength="255" value="{$defaultdateformat}"/>
 			<br/>{$lang_date_format_string_help}
@@ -68,14 +68,14 @@
 		</div>
 
 		<div class="pageoverflow">
-		  <p class="pagetext">{$lang_thumbnail_width}:</p>
+		  <p class="pagetext">{lang('thumbnail_width')}:</p>
 		  <p class="pageinput">
 			<input class="pagenb" type="text" name="thumbnail_width" size="3" maxlength="3" value="{$thumbnail_width}"/>
 		  </p>
 		</div>
 
 		<div class="pageoverflow">
-		  <p class="pagetext">{$lang_thumbnail_height}:</p>
+		  <p class="pagetext">{lang('thumbnail_height')}:</p>
 		  <p class="pageinput">
 			<input class="pagenb" type="text" name="thumbnail_height" size="3" maxlength="3" value="{$thumbnail_height}"/>
 		  </p>
@@ -95,8 +95,8 @@
 		<div class="pageoverflow">
 		  <p class="pagetext">&nbsp;</p>
 		  <p class="pageinput">
-			<input type="submit" name="submit" value="{$lang_submit}" class="pagebutton"  />
-			<input type="submit" name="cancel" value="{$lang_cancel}" class="pagebutton"  />
+			<input type="submit" name="submit" value="{lang('submit')}" class="pagebutton"  />
+			<input type="submit" name="cancel" value="{lang('cancel')}" class="pagebutton"  />
 		  </p>
 		</div>
 	</form>
@@ -140,8 +140,8 @@
 		<div class="pageoverflow">
 		  <p class="pagetext">&nbsp;</p>
 		  <p class="pageinput">
-			<input type="submit" name="submit" value="{$lang_submit}" class="pagebutton"  />
-			<input type="submit" name="cancel" value="{$lang_cancel}" class="pagebutton"  />
+			<input type="submit" name="submit" value="{lang('submit')}" class="pagebutton"  />
+			<input type="submit" name="cancel" value="{lang('cancel')}" class="pagebutton"  />
 		  </p>
 		</div>
 	</form>
@@ -196,9 +196,9 @@
 		</div>
 
 		<div class="pageoverflow">
-		  <p class="pagetext">{$lang_basic_attributes}:</p>
+		  <p class="pagetext">{lang('basic_attributes')}:</p>
 		  <p class="pageinput">
-			<select name="basic_attributes[]" multiple="multiple" size="5">
+			<select class="multicolumn" name="basic_attributes[]" multiple="multiple" size="5">
 			  {html_options options=$all_attributes selected=$basic_attributes}
 			</select>
 			<br/>
@@ -236,8 +236,8 @@
 		<div class="pageoverflow">
 		  <p class="pagetext">&nbsp;</p>
 		  <p class="pageinput">
-			<input type="submit" name="submit" value="{$lang_submit}" class="pagebutton"  />
-			<input type="submit" name="cancel" value="{$lang_cancel}" class="pagebutton"  />
+			<input type="submit" name="submit" value="{lang('submit')}" class="pagebutton"  />
+			<input type="submit" name="cancel" value="{lang('cancel')}" class="pagebutton"  />
 		  </p>
 		</div>
 
@@ -253,16 +253,16 @@
 		</div>
 
 		<div class="pageoverflow">
-		  <p class="pagetext">{$lang_enablesitedown}:</p>
+		  <p class="pagetext">{lang('enablesitedown')}:</p>
 		  <p class="pageinput"><input type="hidden" name="enablesitedownmessage" value="0"/><input class="pagenb" type="checkbox" value="1" name="enablesitedownmessage" {if $enablesitedownmessage == "1"}checked="checked"{/if}/></p>
 		</div>
 		<div class="pageoverflow">
-		  <p class="pagetext">{$lang_enablewysiwyg}:</p>
+		  <p class="pagetext">{lang('enablewysiwyg')}:</p>
 		  <p class="pageinput"><input type="hidden" name="use_wysiwyg" value="0"/><input type="checkbox" name="use_wysiwyg" id='use_wysiwyg' value="1" class="pagenb" {if $use_wysiwyg == "1"}checked="checked"{/if}/></p>
 		</div>
 
 		<div class="pageoverflow">
-		  <p class="pagetext">{$lang_sitedownmessage}:</p>
+		  <p class="pagetext">{lang('sitedownmessage')}:</p>
 		  <p class="pageinput">{$textarea_sitedownmessage}</p>
 		</div>
 
@@ -275,7 +275,7 @@
 		</div>
 
 		<div class="pageoverflow">
-		  <p class="pagetext">{$lang_sitedownexcludes}:</p>
+		  <p class="pagetext">{lang('sitedownexcludes')}:</p>
 		  <p class="pageinput">
 			 <input type="text" name="sitedownexcludes" size="50" maxlength="255" value="{$sitedownexcludes}"/>
 			 <br/>
@@ -287,8 +287,8 @@
 		<div class="pageoverflow">
 		  <p class="pagetext">&nbsp;</p>
 		  <p class="pageinput">
-			<input type="submit" name="submit" value="{$lang_submit}" class="pagebutton"  />
-			<input type="submit" name="cancel" value="{$lang_cancel}" class="pagebutton"  />
+			<input type="submit" name="submit" value="{lang('submit')}" class="pagebutton"  />
+			<input type="submit" name="cancel" value="{lang('cancel')}" class="pagebutton"  />
 		  </p>
 		</div>
 	</form>
@@ -333,7 +333,7 @@
 		<fieldset>
 		<legend>{'general_operation_settings'|lang}:&nbsp;</legend>
 		<div class="pageoverflow">
-		  <p class="pagetext">{$lang_global_umask}:</p>
+		  <p class="pagetext">{lang('global_umask')}:</p>
 		  <p class="pageinput">
 			<input type="text" class="pagesmalltextarea" name="global_umask" size="4" value="{$global_umask}" />
 			<br/>
@@ -342,24 +342,24 @@
 		</div>
 		{if isset($testresults)}
 		<div class="pageoverflow">
-		  <p class="pagetext">{$lang_results}</p>
+		  <p class="pagetext">{lang('results')}</p>
 		  <p class="pageinput"><strong>{$testresults}</strong></p>
 		</div>
 		{/if}
 		<div class="pageoverflow">
 		  <p class="pagetext">&nbsp;</p>
-		  <p class="pageinput"><input type="submit" name="testumask" value="{$lang_test}" class="pagebutton"  /></p>
+		  <p class="pageinput"><input type="submit" name="testumask" value="{lang('test')}" class="pagebutton"  /></p>
 		</div>
 		<div class="pageoverflow">
-		  <p class="pagetext">{$lang_disablesafemodewarning}:</p>
+		  <p class="pagetext">{lang('disablesafemodewarning')}:</p>
 		  <p class="pageinput"><input type="hidden" name="disablesafemodwarning" value="0"/><input class="pagenb" type="checkbox" value="1" name="disablesafemodewarning" {if $disablesafemodewarning}checked="checked"{/if} /></p>
 		</div>
 		<div class="pageoverflow">
-		  <p class="pagetext">{$lang_admin_enablenotifications}:</p>
+		  <p class="pagetext">{lang('admin_enablenotifications')}:</p>
 		  <p class="pageinput"><input type="hidden" name="enablenotifications" value="0"/><input class="pagenb" type="checkbox" value="1" name="enablenotifications" {if $enablenotifications}checked="checked"{/if} /></p>
 		</div>
 		<div class="pageoverflow">
-		  <p class="pagetext">{$lang_pseudocron_granularity}:</p>
+		  <p class="pagetext">{lang('pseudocron_granularity')}:</p>
 		  <p class="pageinput">
 			<select name="pseudocron_granularity">
 			{html_options options=$pseudocron_options selected=$pseudocron_granularity}
@@ -368,7 +368,7 @@
 		  </p>
 		</div>
 		<div class="pageoverflow">
-		  <p class="pagetext">{$lang_adminlog_lifetime}:</p>
+		  <p class="pagetext">{lang('adminlog_lifetime')}:</p>
 		  <p class="pageinput">
 			<select name="adminlog_lifetime">
 			{html_options options=$adminlog_options selected=$adminlog_lifetime}
@@ -377,7 +377,7 @@
 		  </p>
 		</div>
 		<div class="pageoverflow">
-		  <p class="pagetext">{$lang_checkversion}:</p>
+		  <p class="pagetext">{lang('checkversion')}:</p>
 		  <p class="pageinput">
 			<input type="hidden" name="checkversion" value="0"/>
 			<input type="checkbox" name="checkversion" value="1" {if $checkversion}checked="checked"{/if}/>
@@ -389,8 +389,8 @@
 		<div class="pageoverflow">
 		  <p class="pagetext">&nbsp;</p>
 		  <p class="pageinput">
-			<input type="submit" name="submit" value="{$lang_submit}" class="pagebutton"  />
-			<input type="submit" name="cancel" value="{$lang_cancel}" class="pagebutton"  />
+			<input type="submit" name="submit" value="{lang('submit')}" class="pagebutton"  />
+			<input type="submit" name="cancel" value="{lang('cancel')}" class="pagebutton"  />
 		  </p>
 		</div>
 	</form>
@@ -450,8 +450,8 @@
 		<div class="pageoverflow">
 		  <p class="pagetext">&nbsp;</p>
 		  <p class="pageinput">
-			<input type="submit" name="submit" value="{$lang_submit}" class="pagebutton"  />
-			<input type="submit" name="cancel" value="{$lang_cancel}" class="pagebutton"  />
+			<input type="submit" name="submit" value="{lang('submit')}" class="pagebutton"  />
+			<input type="submit" name="cancel" value="{lang('cancel')}" class="pagebutton"  />
 		  </p>
 		</div>
 	</form>

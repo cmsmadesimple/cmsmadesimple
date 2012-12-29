@@ -17,7 +17,7 @@ try {
 }
 catch( CmsException $e ) {
   // log it
-  debug_to_log(__FILE__.':'.__LINE.' '.$e->GetMessage());
+  debug_to_log(__FILE__.':'.__LINE__.' '.$e->GetMessage());
   audit('',$this->GetName(),'Installation Error: '.$e->GetMessage());
 }
 
@@ -35,7 +35,7 @@ try {
 }
 catch( CmsException $e ) {
   // log it
-  debug_to_log(__FILE__.':'.__LINE.' '.$e->GetMessage());
+  debug_to_log(__FILE__.':'.__LINE__.' '.$e->GetMessage());
   audit('',$this->GetName(),'Installation Error: '.$e->GetMessage());
 }
 
@@ -51,7 +51,7 @@ try {
 }
 catch( CmsException $e ) {
   // log it
-  debug_to_log(__FILE__.':'.__LINE.' '.$e->GetMessage());
+  debug_to_log(__FILE__.':'.__LINE__.' '.$e->GetMessage());
   audit('',$this->GetName(),'Installation Error: '.$e->GetMessage());
 }
 
@@ -68,7 +68,7 @@ try {
 }
 catch( CmsException $e ) {
   // log it
-  debug_to_log(__FILE__.':'.__LINE.' '.$e->GetMessage());
+  debug_to_log(__FILE__.':'.__LINE__.' '.$e->GetMessage());
   audit('',$this->GetName(),'Installation Error: '.$e->GetMessage());
 }
 
