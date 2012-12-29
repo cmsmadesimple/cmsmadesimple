@@ -296,6 +296,7 @@ $lang['startdate'] = 'Start Date';
 $lang['startdatetoolate'] = 'The Start Date is too late (after end date?)';
 $lang['startoffset'] = 'Start displaying at the nth item';
 $lang['startrequiresend'] = 'Entering a start date requires an end date also';
+$lang['state'] = 'TODO';
 $lang['status'] = 'Status';
 $lang['status_asc'] = 'Status Ascending';
 $lang['status_desc'] = 'Status Descending';
