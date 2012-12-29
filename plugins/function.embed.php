@@ -16,11 +16,8 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-#Author: Sorin Sbarnea / INTERSOL SRL
 function smarty_function_embed($params, &$template)
 {
-  $gCms = cmsms();
-
   $name = 'myframe';
   if(isset($params['name']) )
     {
@@ -119,30 +116,21 @@ IFRAMECODE;
     }
   else return "<pre>Invalid call for embed function.<pre>";
   
-  //	$params['height']='200%';
-  //	$params['width']='100%';
-  //
-  //	return '<iframe width="'.$params['width'].
-  //		'" scrolling="yes" height="'.$params['height'].
-  //		'" frameborder="0" marginwidth="0" marginheight="0" src="http://www2.romanianoffice.ro/forum/index.php"></iframe>';
-  
   return   "<iframe id='{$name}' name='{$name}' src='$url' scrolling='no' marginwidth='0' marginheight='0' frameborder='0' style='overflow:visible; width:99%; display:none'></iframe>";
-  
 }
 
 function smarty_cms_help_function_embed() {
-  echo lang('help_function_embed');
+	echo lang('help_function_embed');
 }
 
 function smarty_cms_about_function_embed() {
-	?>
+?>
 	<p>Author: Sorin Sbarnea&lt;sorin2000@intersol.ro&gt; (remove 2000)</p>
-	<p>Version: 1.0</p>
-	<p>
-	Change History:<br/>
-	None
-	</p>
-	<?php
-}
 
+	<p>Change History:</p>
+	<ul>
+		<li>None</li>
+	</ul>
+<?php
+}
 ?>

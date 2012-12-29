@@ -18,17 +18,18 @@
 
 function smarty_function_global_content($params, &$template)
 {
-  $smarty = $template->smarty;
-  $smarty->assign('gcb_params',$params);
-  $txt = $smarty->fetch('cms_template:'.$params['name']);
-  if( isset($params['assign']) ) {
-    $smarty->assign(trim($params['assign']),$txt);
-    return;
-  }
-  return $txt;
+	$smarty = $template->smarty;
+	$smarty->assign('gcb_params',$params);
+	$txt = $smarty->fetch('cms_template:'.$params['name']);
+	if( isset($params['assign']) )
+	{
+		$smarty->assign(trim($params['assign']),$txt);
+		return;
+	}
+	return $txt;
 }
 
 function smarty_cms_help_function_global_content() {
-  echo lang('help_function_global_content');
+	echo lang('help_function_global_content');
 }
 ?>

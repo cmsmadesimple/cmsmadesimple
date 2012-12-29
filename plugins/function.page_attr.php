@@ -18,43 +18,41 @@
 
 function smarty_function_page_attr($params, &$template)
 {
-  $smarty = $template->smarty;
-  $result = '';
-  $key = '';
+	$smarty = $template->smarty;
+	$result = '';
+	$key = '';
 
-  if( isset($params['key']) ) {
-    $key = $params['key'];
-    $gCms = cmsms();
-	$contentops = $gCms->GetContentOperations();
-	$contentobj = $contentops->getContentObject();
-    if( is_object($contentobj) )
-      {
-	
-	$result = $contentobj->GetPropertyValue($key);
-	if( $result == -1 ) $result = '';
-      }
-    
-    if( isset($params['assign']) )
-      {
-	$smarty->assign($params['assign'],$result);
-	return;
-      }
-  }
-
-  return $result;
+	if( isset($params['key']) )
+	{
+		$key = $params['key'];
+		$contentops = cmsms()->GetContentOperations();
+		$contentobj = $contentops->getContentObject();
+		if( is_object($contentobj) )
+		{
+			$result = $contentobj->GetPropertyValue($key);
+			if( $result == -1 ) $result = '';
+		}
+		if( isset($params['assign']) )
+		{
+			$smarty->assign($params['assign'],$result);
+			return;
+		}
+	}
+	return $result;
 }
+
 function smarty_cms_help_function_page_attr() {
-  echo lang('help_function_page_attr');
+	echo lang('help_function_page_attr');
 }
 
 function smarty_cms_about_function_page_attr() {
-	?>
+?>
 	<p>Author: Ted Kulp&lt;tedkulp@users.sf.net&gt;</p>
-	<p>Version: 1.0</p>
-	<p>
-	Change History:<br/>
-	None
-	</p>
-	<?php
+
+	<p>Change History:</p>
+	<ul>
+		<li>None</li>
+	</ul>
+<?php
 }
 ?>

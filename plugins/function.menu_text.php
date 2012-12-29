@@ -18,40 +18,42 @@
 
 function smarty_function_menu_text($params, &$template)
 {
-  $smarty = $template->smarty;
-  $gCms = cmsms();
-  $content_obj = &$gCms->variables['content_obj'];
-  $config = $gCms->config;
-  if (!is_object($content_obj) || $content_obj->Id() == -1)
+	$smarty = $template->smarty;
+	$content_obj = cmsms()->variables['content_obj'];
+	$config = cmsms()->config;
+	
+	if (!is_object($content_obj) || $content_obj->Id() == -1)
     {
-      // We've a custom error message...  set a message
-      $result="404 Error";
-    }
-  else {
-    $result = $content_obj->MenuText();
-    if (!(isset($config["use_smarty_php_tags"]) && $config["use_smarty_php_tags"] == true)) {
-      $result = preg_replace("/\{\/?php\}/", "", $result);
-    }
-  }
-  if( isset($params['assign']) ){
-    $smarty->assign(trim($params['assign']),$result);
-    return;
-  }
-  return $result;
+		// We've a custom error message...  set a message
+		$result="404 Error";
+    } else {
+		$result = $content_obj->MenuText();
+		if (!(isset($config["use_smarty_php_tags"]) && $config["use_smarty_php_tags"] == true))
+		{
+			$result = preg_replace("/\{\/?php\}/", "", $result);
+		}
+	}
+	
+	if( isset($params['assign']) ){
+		$smarty->assign(trim($params['assign']),$result);
+		return;
+	}
+	
+	return $result;
 }
 
 function smarty_cms_help_function_menu_text() {
-  echo lang('help_function_menu_text');
+	echo lang('help_function_menu_text');
 }
 
 function smarty_cms_about_function_menu_text() {
-	?>
+?>
 	<p>Author: Ted Kulp&lt;tedkulp@users.sf.net&gt;</p>
-	<p>Version: 1.0</p>
-	<p>
-	Change History:<br/>
-	None
-	</p>
-	<?php
+
+	<p>Change History:</p>
+	<ul>
+		<li>None</li>
+	</ul>
+<?php
 }
 ?>

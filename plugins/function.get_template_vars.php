@@ -18,11 +18,11 @@
 
 function smarty_cms_function_get_template_vars($params, &$template)
 {
-  $smarty = $template->smarty;
+	$smarty = $template->smarty;
 	$tpl_vars = $smarty->get_template_vars();
 	$str = '<pre>';
 	foreach( $tpl_vars as $key => $value )
-	  {
+	{
 	    if( is_object($value) )
              {
                $str .= "$key = Object<br/>";
@@ -35,8 +35,8 @@ function smarty_cms_function_get_template_vars($params, &$template)
              {
 	       $str .= "$key = ".cms_htmlentities(trim($value))."<br/>";
              }
-	  }
-	  $str.'</pre>';
+	}
+	$str.'</pre>';
 	if( isset($params['assign']) ){
 	    $smarty->assign(trim($params['assign']),$str);
 	    return;
@@ -45,17 +45,17 @@ function smarty_cms_function_get_template_vars($params, &$template)
 }
 
 function smarty_cms_help_function_get_template_vars() {
-  echo lang('help_function_get_template_vars');
+	echo lang('help_function_get_template_vars');
 }
 
 function smarty_cms_about_function_get_template_vars() {
-	?>
+?>
 	<p>Author: Robert Campbell&lt;calguy1000@hotmail.com&gt;</p>
-	<p>Version: 1.0</p>
-	<p>
-	Change History:<br/>
-	None
-	</p>
-	<?php
+
+	<p>Change History:</p>
+	<ul>
+		<li>None</li>
+	</ul>
+<?php
 }
 ?>

@@ -219,18 +219,17 @@ function smarty_function_dump($params, &$template)
 
 
 function smarty_cms_help_function_dump() {
-  echo lang('help_function_dump');
+	echo lang('help_function_dump');
 }
-
 
 function smarty_cms_about_function_dump() {
 	?>
 	<p>Author: Robert Campbell&lt;calguy1000@hotmail.com&gt;</p>
-	<p>Version: 1.0</p>
-	<p>
-	Change History:<br/>
-	None
-	</p>
-	<?php
+
+	<p>Change History:</p>
+	<ul>
+		<li>None</li>
+	</ul>
+<?php
 }
 ?>

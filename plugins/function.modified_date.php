@@ -18,9 +18,8 @@
 
 function smarty_function_modified_date($params, &$template)
 {
-  $smarty = $template->smarty;
-	$gCms = cmsms();
-	$content_obj = $gCms->variables['content_obj'];
+	$smarty = $template->smarty;
+	$content_obj = cmsms()->variables['content_obj'];
 
 	if(empty($params['format']))
 	{
@@ -33,35 +32,31 @@ function smarty_function_modified_date($params, &$template)
 
 	if (is_object($content_obj) && $content_obj->GetModifiedDate() && $content_obj->GetModifiedDate() > -1)
 	{
-	  $time = $content_obj->GetModifiedDate();
-	  $str = cms_htmlentities(strftime($format, $time));
+		$time = $content_obj->GetModifiedDate();
+		$str = cms_htmlentities(strftime($format, $time));
 
-	  if( isset($params['assign']) )
+		if( isset($params['assign']) )
 	    {
-	      $smarty->assign($params['assign'],$str);
-	      return;
+			$smarty->assign($params['assign'],$str);
+			return;
 	    }
-	  return $str;
+		return $str;
 	}
 }
 
-
 function smarty_cms_help_function_modified_date()
 {
-  echo lang('help_function_modified_date');
+	echo lang('help_function_modified_date');
 }
 
 function smarty_cms_about_function_modified_date() {
-	?>
+?>
 	<p>Author: Ted Kulp&lt;tedkulp@users.sf.net&gt;</p>
-	<p>Version: 1.1</p>
-	<p>
-	Change History:<br/>
-        <ul>
-          <li>v1.1 - (calguy1000) Added assign param</li>
+
+	<p>Change History:</p>
+		<ul>
+			<li>Added assign paramater (calguy1000)</li>
         </ul>
-	None
-	</p>
-	<?php
+<?php
 }
 ?>

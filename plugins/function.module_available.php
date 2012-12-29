@@ -1,6 +1,6 @@
 <?php
 #CMS - CMS Made Simple
-#(c)2004-2012 by Ted Kulp (wishy@users.sf.net)
+#(c)2004 by Ted Kulp (wishy@users.sf.net)
 #This project's homepage is: http://www.cmsmadesimple.org
 #
 #This program is free software; you can redistribute it and/or modify
@@ -18,44 +18,44 @@
 
 function smarty_cms_function_module_available($params, &$template) 
 {
-  $smarty = $template->smarty;
-  $name = '';
-  if( isset($params['name']) ) {
-    $name = trim($params['name']);
-  }
-  if( isset($params['m']) ) {
-    $name = trim($params['m']);
-  }
-  if( isset($params['module']) ) {
-    $name = trim($params['module']);
-  }
-  
-  $out = FALSE;
-  if( $name ) {
-    $out = cms_utils::module_available($name);
-  }
-
-  if( isset($params['assign']) )
+	$smarty = $template->smarty;
+	$name = '';
+	if( isset($params['name']) ) 
+	{
+		$name = trim($params['name']);
+	}
+	if( isset($params['m']) ) 
+	{
+		$name = trim($params['m']);
+	}
+	if( isset($params['module']) )
+	{
+		$name = trim($params['module']);
+	}
+	$out = FALSE;
+	if( $name ) {
+		$out = cms_utils::module_available($name);
+	}
+	if( isset($params['assign']) )
     {
-      $smarty->assign(trim($params['assign']),$out);
-      return;
+		$smarty->assign(trim($params['assign']),$out);
+		return;
     }
-  return $out;
+	return $out;
 }
 
 function smarty_cms_help_function_module_available() {
-  echo lang('help_function_module_available');
+	echo lang('help_function_module_available');
 }
 
 function smarty_cms_about_function_module_available() {
-	?>
+?>
 	<p>Author: Robert Campbell&lt;calguy1000@cmsmadesimple.org&gt;</p>
-	<p>Version: 1.0</p>
-	<p>Change History:<br/>
+
+	<p>Change History:</p>
         <ul>
-          <li>Initial version (for CMSMS 1.11)</li>
+			<li>Initial version (for CMSMS 1.11)</li>
         </ul>
-	</p>
-	<?php
+<?php
 }
 ?>

@@ -18,59 +18,56 @@
 
 function smarty_function_last_modified_by($params, &$template) 
 {
-  $smarty = $template->smarty;
-  $gCms = cmsms();
-  $content_obj = $gCms->variables['content_obj'];
-
-  $id = "";
+	$smarty = $template->smarty;
+	$content_obj = cmsms()->variables['content_obj'];
+	$id = "";
  
-  if (isset($content_obj) && 
-      $content_obj->LastModifiedBy() > -1) {
-    $id = $content_obj->LastModifiedBy();
-  } else {
-    return "";
-  }
+	if (isset($content_obj) && $content_obj->LastModifiedBy() > -1)
+	{
+		$id = $content_obj->LastModifiedBy();
+	} else {
+		return "";
+	}
 
-  if(empty($params['format'])) {
-    $format = "id";
-  }
-  else {
-    $format = $params['format'];
-    $userops = $gCms->GetUserOperations();
-    $thisuser = $userops->LoadUserByID($id);
-  }
+	if(empty($params['format']))
+	{
+		$format = "id";
+	} else {
+		$format = $params['format'];
+		$userops = cmsms()->GetUserOperations();
+		$thisuser = $userops->LoadUserByID($id);
+	}
 
-  $output = '';
-  if($format==="id") {
-     $output = $id;
-  } else if ($format==="username") {
-     $output = cms_htmlentities($thisuser->username);
-  } else if ($format==="fullname") {
-     $output = cms_htmlentities($thisuser->firstname ." ". $thisuser->lastname);
-  }
+	$output = '';
+	if($format==="id") {
+		$output = $id;
+	} else if ($format==="username") {
+		$output = cms_htmlentities($thisuser->username);
+	} else if ($format==="fullname") {
+		$output = cms_htmlentities($thisuser->firstname ." ". $thisuser->lastname);
+	}
 
-  if( isset($params['assign']) ) {
-    $smarty->assign(trim($params['assign']),$output);
-    return;
-  }
-  return $output;
+	if( isset($params['assign']) ) {
+		$smarty->assign(trim($params['assign']),$output);
+		return;
+	}
+	return $output;
 }
 
 function smarty_cms_help_function_last_modified_by()
 {
-  echo lang('help_function_last_modified_by');
+	echo lang('help_function_last_modified_by');
 }
 
 function smarty_cms_about_function_last_modified_by() {
-	?>
+?>
 	<p>Author: Ted Kulp&lt;tedkulp@users.sf.net&gt;</p>
-	<p>Version: 1.1</p>
-	<p>
-	Change History:<br/>
-        <ul>
-	   <li>v1.1 - (calguy) Added assign param.</li>
+
+	<ul>Change History:</p>
+		<ul>
+			<li>Added assign parameter (Calguy)</li>
         </ul>
 	</p>
-	<?php
+<?php
 }
 ?>

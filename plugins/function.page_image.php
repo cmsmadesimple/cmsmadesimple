@@ -18,44 +18,42 @@
 
 function smarty_function_page_image($params, &$template)
 {
-  $smarty = $template->smarty;
-  $result = '';
-  $propname = 'image';
+	$smarty = $template->smarty;
+	$result = '';
+	$propname = 'image';
 
-  if( isset($params['thumbnail']) )
+	if( isset($params['thumbnail']) )
     {
-      $propname = 'thumbnail';
+		$propname = 'thumbnail';
     }
 
-  $gCms=cmsms();
-  $contentobj = cms_utils::get_current_content();
-  if( is_object($contentobj) )
+	$contentobj = cms_utils::get_current_content();
+	if( is_object($contentobj) )
     {
-      $result = $contentobj->GetPropertyValue($propname);
-      if( $result == -1 ) $result = '';
+		$result = $contentobj->GetPropertyValue($propname);
+		if( $result == -1 ) $result = '';
     }
 
-  if( isset($params['assign']) )
+	if( isset($params['assign']) )
     {
-      $smarty->assign($params['assign'],$result);
-      return;
+		$smarty->assign($params['assign'],$result);
+		return;
     }
-
-  return $result;
+	return $result;
 }
 
 function smarty_cms_help_function_page_image() {
-  echo lang('help_function_page_image');
+	echo lang('help_function_page_image');
 }
 
 function smarty_cms_about_function_page_image() {
-	?>
+?>
 	<p>Author: Ted Kulp&lt;tedkulp@users.sf.net&gt;</p>
-	<p>Version: 1.0</p>
-	<p>
-	Change History:<br/>
-	1.01, Fix for CMSMS 1.9
-	</p>
-	<?php
+
+	<p>Change History:</p>
+	<ul>
+		<li>Fix for CMSMS 1.9</li>
+	</ul>
+<?php
 }
 ?>
