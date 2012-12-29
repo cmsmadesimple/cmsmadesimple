@@ -3,7 +3,10 @@
 $lang['all'] = 'All';
 
 // D
+$lang['desc_css_search'] = 'TODO';
+$lang['desc_content_search'] = 'TODO';
 $lang['desc_filter_all'] = 'Toggle all filters';
+$lang['desc_template_search'] = 'TODO';
 
 // E
 $lang['error_nosearchtext'] = 'Please enter a search text';
@@ -40,6 +43,8 @@ $lang['lbl_template_search'] = 'Search Templates';
 $lang['moddescription'] = 'A utility to search the database tables for rows containing certain text. Useful for finding where certain styles, tags, or modules are used.';
 
 // P
+$lang['param_formtemplate'] = 'TODO';
+$lang['param_resulttemplate'] = 'TODO';
 $lang['postinstall'] = 'Admin Search module installed';
 $lang['postuninstall'] = 'Admin Search module uninstalled';
 
