@@ -829,6 +829,8 @@ $lang['admin']['groupsdescription'] = 'This is where you manage groups.';
 // H  H
 // H  H
 
+$lang['admin']['h_udtcode'] = 'TODO';
+$lang['admin']['h_udtdesc'] = 'TODO';
 $lang['admin']['handler'] = 'Handler (user defined tag)';
 $lang['admin']['handle_404'] = 'Custom 404 Handling';
 $lang['admin']['hasdependents'] = 'Has Dependents';
