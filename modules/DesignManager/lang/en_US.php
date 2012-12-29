@@ -163,8 +163,6 @@ $lang['no'] = 'No';
 
 
 #P
-$lang['param_formtemplate'] = 'TODO';
-$lang['param_resulttemplate'] = 'TODO';
 $lang['postinstall'] = 'Design Manager Module Installed';
 $lang['postuninstall'] = 'Design Manager Module Uninstalled';
 $lang['prompt_add'] = 'Add';
