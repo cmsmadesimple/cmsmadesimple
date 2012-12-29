@@ -35,8 +35,10 @@ using the print-plugin<br />
 $lang["help_class"] = "Class for the link, defaults to 'noprint'";
 $lang["help_class_img"] = "Class of &lt;img&gt; tag if showbutton is set";
 $lang["help_includetemplate"] = "If set to 'true' this options makes the print process the whole template, not just the main content. This probably requires some work on print-specific styles with the mediatype 'print' enabled.";
+$lang["help_linktemplate"] = "TODO";
 $lang["help_more"] = "Place additional options inside the &lt;a&gt; link";
 $lang["help_onlyurl"] = "Outputs just the url, not a complete link";
+$lang["help_printtemplate"] = "TODO";
 $lang["help_popup"] = "Set to 'true' and page for printing will by opened in new window.";
 $lang["help_script"] = "Set to 'true' and in print page javascript will be used for automatically show the print-dialog";
 $lang["help_showbutton"] = "Set to 'true' to show a graphical button";
