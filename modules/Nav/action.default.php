@@ -42,7 +42,7 @@ $show_root_siblings = FALSE;
 $start_element = null;
 $start_page = null;
 $childrenof = null;
-$deep = FALSE;
+$deep = TRUE;
 
 $template = null;
 if( isset($params['template']) ) {
@@ -144,6 +144,7 @@ if( !$smarty->isCached($this->GetTemplateResource($template),$cache_id,$compile_
     }
   }
   else if( $items ) {
+    if( $nlevels < 1 ) $nlevels = 1;
     $items = explode(',',$items);
     foreach( $items as $item ) {
       $item = trim($item);

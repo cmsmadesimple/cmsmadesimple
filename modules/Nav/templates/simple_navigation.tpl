@@ -1,22 +1,37 @@
 {* simple navigation *}
 {* note, function can only be defined once *}
-{function name=Nav_menu depth=1}
+{* 
+  variables:
+  node: contains the current node.
+  aclass: is used to build a string containing class names given to the a tag if one is used
+  liclass: is used to build a string containing class names given to the li tag.
+*}
+
+{function name=Nav_menu depth=1}{strip}
 <ul>
-  {foreach from=$data item='node' name='nodelist'}
+  {foreach $data as $node}
+    {* setup classes for the anchor and list item *}
     {assign var='liclass' value=' depth'|cat:$depth}
     {assign var='aclass' value=''}
 
-    {if $smarty.foreach.nodelist.first}{assign var='liclass' value=$liclass|cat:' first_child'}{/if}
-    {if $smarty.foreach.nodelist.last}{assign var='liclass' value=$liclass|cat:' last_child'}{/if}
+    {* the first child gets a special class *}
+    {if $node@first && $node@total > 1}{assign var='liclass' value=$liclass|cat:' first_child'}{/if}
+
+    {* the last child gets a special class *}
+    {if $node@last && $node@total > 1}{assign var='liclass' value=$liclass|cat:' last_child'}{/if}
+
     {if $node->current}
-       {assign var='liclass' value=$liclass|cat:' currentpage'}
-       {assign var='aclass' value=$liclass|cat:' currentpage'}
+      {* this is the current page *}
+      {assign var='liclass' value=$liclass|cat:' currentpage'}
+      {assign var='aclass' value=$liclass|cat:' currentpage'}
     {/if}
     {if $node->parent}
+      {* this is a parent of the current page *}
       {assign var='liclass' value=$liclass|cat:' activeparent'}
       {assign var='aclass' value=$aclass|cat:' activeparent'}
     {/if}
 
+    {* build the menu item node *}
     {if $node->type == 'sectionheader'}
       <li class='sectionheader {$liclass}'>{$node->menutext}
         {if isset($node->children)}
@@ -36,7 +51,7 @@
     {/if}
   {/foreach}
 </ul>
-{/function}
+{/strip}{/function}
 
 {if isset($nodes)}
 <h3>Nodes:</h3>

@@ -80,11 +80,29 @@ final class Nav_utils
 	}
       }
 
+      if( $content->DefaultContent() ) {
+	$obj->default = 1;
+      }
       if( $deep ) {
 	if ($content->HasProperty('target'))
 	  $obj->target = $content->GetPropertyValue('target');
-	if( $content->DefaultContent() ) {
-	  $obj->default = 1;
+	$config = cmsms()->GetConfig();
+	$obj->extra1 = $content->GetPropertyValue('extra1');
+	$obj->extra2 = $content->GetPropertyValue('extra2');
+	$obj->extra3 = $content->GetPropertyValue('extra3');
+	$tmp = $content->GetPropertyValue('image');
+	if( !empty($tmp) && $tmp != -1 ) {
+	  $url = get_site_preference('content_imagefield_path').'/'.$tmp;
+	  if( !startswith($url,'/') ) $url = '/'.$url;
+	  $url = $config['image_uploads_url'].$url;
+	  $obj->image = $url;
+	}
+	$tmp = $content->GetPropertyValue('thumbnail');
+	if( !empty($tmp) && $tmp != -1 ) {
+	  $url = get_site_preference('content_thumbnailfield_path').'/'.$tmp;
+	  if( !startswith($url,'/') ) $url = '/'.$url;
+	  $url = $config['image_uploads_url'].$url;
+	  $obj->thumbnail = $url;
 	}
       }
 

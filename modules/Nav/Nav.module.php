@@ -63,6 +63,7 @@ final class Nav extends CMSModule
     $this->SetParameterType('start_page',CLEAN_STRING); 
     $this->SetParameterType('template',CLEAN_STRING); 
     $this->SetParameterType('childrenof',CLEAN_STRING);
+    $this->SetParameterType('loadprops',CLEAN_INT);
   }
 
   public function InitializeAdmin()
@@ -76,6 +77,7 @@ final class Nav extends CMSModule
     $this->CreateParameter('template', '', $this->lang('help_template'));
     $this->CreateParameter('childrenof','',$this->Lang('help_childrenof'));
     $this->CreateParameter('action','',$this->Lang('help_action'));
+    $this->CreateParameter('loadprops','',$this->Lang('help_loadprops'));
   }
 
   final static public function smarty_cms_breadcrumbs($params,&$smarty)
