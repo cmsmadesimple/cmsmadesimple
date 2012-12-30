@@ -18,26 +18,30 @@
 
 function smarty_postfilter_postcompilefunc($tpl_output, &$template)
 {
-  $smarty = $template->smarty;
+	$smarty = $template->smarty;
 	$result = explode(':', $smarty->_current_file);
+	
 	if (count($result) > 1)
 	{
 		switch ($result[0])
 		{
-		case 'stylesheet':
-		  Events::SendEvent('Core','StylesheetPostCompile',array('stylesheet'=>&$tpl_output));
-		  break;
+			case 'stylesheet':
+				Events::SendEvent('Core','StylesheetPostCompile',array('stylesheet'=>&$tpl_output));
+				break;
 
 			case "content":
 				Events::SendEvent('Core', 'ContentPostCompile', array('content' => &$tpl_output));
 				break;
 
-		case "template":
-		case 'tpl_top':
-		case 'tpl_body':
-		case 'tpl_head':
-		  Events::SendEvent('Core','TemplatePostCompile',array('template'=>&$tpl_output,'type'=>$result[0]));
-		  break;
+			case "template":
+			
+			case 'tpl_top':
+			
+			case 'tpl_body':
+			
+			case 'tpl_head':
+				Events::SendEvent('Core','TemplatePostCompile',array('template'=>&$tpl_output,'type'=>$result[0]));
+				break;
 
 			case "globalcontent":
 				Events::SendEvent('Core', 'GlobalContentPostCompile', array('global_content' => &$tpl_output));

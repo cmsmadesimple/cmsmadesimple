@@ -46,7 +46,7 @@ function smarty_cms_function_form_start($params, &$template)
 	}
 
 	if( $mactparms['returnid'] != '' ) {
-		$hm = $gCms->GetHierarchyManager();
+		$hm = cmsms()->GetHierarchyManager();
 		$node = $hm->sureGetNodeById($returnid);
 		if( $node ) {
 			$content_obj = $node->getContent();

@@ -18,33 +18,31 @@
 
 function smarty_function_sitename($params, &$template)
 {
-  $smarty = $template->smarty;
-  $result = get_site_preference('sitename', 'CMSMS Site');
-  if( isset($params['assign']) )
+	$smarty = $template->smarty;
+	$result = get_site_preference('sitename', 'CMSMS Site');
+	
+	if( isset($params['assign']) )
     {
-      $gCms = cmsms();
       $smarty->assign(trim($params['assign']),$result);
       return;
     }
-  return $result;
+	return $result;
 }
 
 function smarty_cms_help_function_sitename()
 {
-  echo lang('help_function_sitename');
+	echo lang('help_function_sitename');
 }
 
 function smarty_cms_about_function_sitename()
 {
-        ?>
+?>
         <p>Author: Ted Kulp &lt;ted@cmsmadesimple.org&gt;</p>
-        <p>Version: 1.0</p>
-        <p>
-        Change History:<br/>
-        1.0 - Initial release
-        </p>
-        <?php
-}
 
-# vim:ts=4 sw=4 noet
+        <p>Change History:</p>
+        <ul>
+			<li>None</li>
+        </ul>
+<?php
+}
 ?>

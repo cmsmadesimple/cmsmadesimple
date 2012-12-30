@@ -20,7 +20,7 @@ function smarty_function_description($params, &$template)
 {
 	$smarty = $template->smarty;
 	$content_obj = cmsms()->variables['content_obj'];
-	$config = $gCms->config;
+	$config = cmsms()->config;
 	if (!is_object($content_obj) || $content_obj->Id() == -1)
 	{
 		// We've a custom error message...  set a message
@@ -49,7 +49,7 @@ function smarty_cms_help_function_description() {
 
 function smarty_cms_about_function_description() {
 ?>
-	<p>Author: Elijah Lofgren&lt;elijahlofgren@elijahlofgren.com&gt;</p>
+	<p>Author: Elijah Lofgren &lt;elijahlofgren@elijahlofgren.com&gt;</p>
 
 	<p>Change History:</p>
 	<ul>

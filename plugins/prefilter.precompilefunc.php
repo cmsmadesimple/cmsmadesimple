@@ -18,32 +18,37 @@
 
 function smarty_prefilter_precompilefunc($tpl_output, &$template)
 {
-  $smarty = $template->smarty;
+	$smarty = $template->smarty;
 	$result = explode(':', $smarty->_current_file);
+	
 	if (count($result) > 1)
 	{
-	  if( startswith($result[0],'tmp_') ) $result[0] = 'template';
+		if( startswith($result[0],'tmp_') ) $result[0] = 'template';
 
 		switch ($result[0])
 		{
-		case 'stylesheet':
-		  Events::SendEvent('Core','StylesheetPreCompile',array('stylesheet'=>&$tpl_output));
-		  break;
+			case 'stylesheet':
+				Events::SendEvent('Core','StylesheetPreCompile',array('stylesheet'=>&$tpl_output));
+			break;
 
 			case "content":
 				Events::SendEvent('Core', 'ContentPreCompile', array('content' => &$tpl_output));
 				break;
 
-		case 'tpl_top':
-		case 'tpl_body':
-		case 'tpl_head':
-		case "template":
-		  Events::SendEvent('Core', 'TemplatePreCompile', array('template' => &$tpl_output,'type'=>$result[0]));
-		  break;
+			case 'tpl_top':
+		
+			case 'tpl_body':
+		
+			case 'tpl_head':
+		
+			case "template":
+				Events::SendEvent('Core', 'TemplatePreCompile', array('template' => &$tpl_output,'type'=>$result[0]));
+				break;
 
 			case "globalcontent":
 				Events::SendEvent('Core', 'GlobalContentPreCompile', array('global_content' => &$tpl_output));
 				break;
+			
 			default:
 				break;
 		}

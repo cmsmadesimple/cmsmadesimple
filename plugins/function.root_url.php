@@ -18,40 +18,39 @@
 
 function smarty_function_root_url($params, &$template)
 {
-  $smarty = $template->smarty;
+	$smarty = $template->smarty;
 	$config = cmsms()->GetConfig();
      
-        $str = $config['root_url'];
+    $str = $config['root_url'];
 
 	if( !isset($params['autossl']) || $params['autossl'] != 0 )
-	  {
-	    $str = $config->smart_root_url();
-	  }
+	{
+		$str = $config->smart_root_url();
+	}
 
-        if( isset($params['assign']) )
-        {
-           $smarty->assign(trim($params['assign']),$str);
-	   return;
-        }
+    if( isset($params['assign']) )
+    {
+		$smarty->assign(trim($params['assign']),$str);
+		return;
+    }
+
 	return $str;
 }
 
 function smarty_cms_help_function_root_url() {
-  echo lang('help_function_root_url');
+	echo lang('help_function_root_url');
 }
 
 function smarty_cms_about_function_root_url() {
-	?>
+?>
 	<p>Author: Ted Kulp&lt;ted@cmsmadesimple.org&gt;</p>
-	<p>Version: 1.2</p>
-	<p>
-	Change History:
+
+	<p>Change History:</p>
 	<ul>
-          <li>Initial Version.</li>
-          <li>Added assign parameter for CMSMS 1.10</li>
-          <li>Added autossl parameter for CMSMS 1.10</li>
-        </ul>
-	</p>
-	<?php
+		<li>Initial Version</li>
+		<li>Added assign parameter for CMSMS 1.10</li>
+		<li>Added autossl parameter for CMSMS 1.10</li>
+    </ul>
+<?php
 }
 ?>

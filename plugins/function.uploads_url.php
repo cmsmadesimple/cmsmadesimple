@@ -18,13 +18,15 @@
 
 function smarty_function_uploads_url($params, &$template)
 {
-  $smarty = $template->smarty;
-	$gCms = cmsms();
-	$config = $gCms->GetConfig();
-	if( isset($params['assign']) ){
-	  $smarty->assign(trim($params['assign']),$config->smart_uploads_url());
-	  return;
+	$smarty = $template->smarty;
+	$config = cmsms()->GetConfig();
+	
+	if( isset($params['assign']) )
+	{
+		$smarty->assign(trim($params['assign']),$config->smart_uploads_url());
+		return;
 	}
+	
 	return $config->smart_uploads_url();
 }
 
@@ -33,13 +35,13 @@ function smarty_cms_help_function_uploads_url() {
 }
 
 function smarty_cms_about_function_uploads_url() {
-	?>
-	<p>Author: Nuno Costa&lt nuno.mfcosta@sapo.pt&gt;</p>
-	<p>Version: 1.0</p>
-	<p>
-	Change History:<br/>
-	None
-	</p>
-	<?php
+?>
+	<p>Author: Nuno Costa &ltnuno.mfcosta@sapo.pt&gt;</p>
+
+	<p>Change History:</p>
+	<ul>
+		<li>None</li>
+	</ul>
+<?php
 }
 ?>

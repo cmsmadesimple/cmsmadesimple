@@ -18,18 +18,17 @@
 
 function smarty_function_site_mapper($params, &$template)
 {
-  $smarty = $template->smarty;
-  $params['module'] = 'MenuManager';
-  if( !isset($params['template']) )
+	$smarty = $template->smarty;
+	$params['module'] = 'MenuManager';
+	
+	if( !isset($params['template']) )
     {
-      $params['template'] = 'minimal_menu.tpl';
+		$params['template'] = 'minimal_menu.tpl';
     }
-  return cms_module_plugin($params,$smarty);
+	return cms_module_plugin($params,$smarty);
 }
 
 function smarty_cms_help_function_site_mapper() {
-  echo lang('help_function_site_mapper');
+	echo lang('help_function_site_mapper');
 }
-
-
 ?>

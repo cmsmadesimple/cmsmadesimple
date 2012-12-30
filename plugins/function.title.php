@@ -18,11 +18,11 @@
 
 function smarty_function_title($params, &$template)
 {
-  $smarty = $template->smarty;
-	$gCms = cmsms();
-	$contentobj = $gCms->variables['content_obj'];
-	$config = $gCms->GetConfig();
+	$smarty = $template->smarty;
+	$contentobj = cmsms()->variables['content_obj'];
+	$config = cmsms()->GetConfig();
 	$result = '';
+	
 	if (!is_object($contentobj))
 	{
 		#We've a custom error message...  set a current timestamp
@@ -30,10 +30,10 @@ function smarty_function_title($params, &$template)
 	}
 	else
 	{
-	  $result = cms_htmlentities($contentobj->Name());
+		$result = cms_htmlentities($contentobj->Name());
 		if (!(isset($config["use_smarty_php_tags"]) && $config["use_smarty_php_tags"] == true))
 		{
-		  $result = preg_replace("/\{\/?php\}/", "", $result);
+			$result = preg_replace("/\{\/?php\}/", "", $result);
 		}
 	}
 
@@ -41,22 +41,22 @@ function smarty_function_title($params, &$template)
 	{
 	    $smarty->assign(trim($params['assign']),$result);
 	    return;
-        }
-        return $result;
+    }
+    return $result;
 }
 
 function smarty_cms_help_function_title() {
-  echo lang('help_function_title');
+	echo lang('help_function_title');
 }
 
 function smarty_cms_about_function_title() {
-	?>
+?>
 	<p>Author: Ted Kulp&lt;tedkulp@users.sf.net&gt;</p>
-	<p>Version: 1.0</p>
-	<p>
-	Change History:<br/>
-	None
-	</p>
-	<?php
+
+	<p>Change History:</p>
+	<ul>
+		<li>None</li>
+	</ul>
+<?php
 }
 ?>

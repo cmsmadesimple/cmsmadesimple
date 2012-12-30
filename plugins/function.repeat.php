@@ -18,7 +18,7 @@
 
 function smarty_function_repeat($params, &$template)
 {
-  $smarty = $template->smarty;
+	$smarty = $template->smarty;
 	$out=(isset($params['times']) && intval($params['times']) > 0 ? str_repeat($params['string'], $params['times']) : '');
 	
 	if( isset($params['assign']) ){
@@ -26,11 +26,10 @@ function smarty_function_repeat($params, &$template)
 		return;
 	}
 	return $out;
-	#return str_repeat($params['string'], $params['times']);
 }
 
 function smarty_cms_help_function_repeat()
 {
-  echo lang('help_function_repeat');
+	echo lang('help_function_repeat');
 }
 ?>
