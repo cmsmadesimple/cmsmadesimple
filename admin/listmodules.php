@@ -154,7 +154,7 @@ if ($access) {
       echo '<p class="pageheader">'.lang('moduleerrormessage', $module).'</p>';					
       echo $result[1];
       echo "</div>";
-      echo '<p class="pageback"><a class="pageback" href="{$thisurl}">&#171; '.lang('back').'</a></p>';
+      echo '<p class="pageback"><a class="pageback" href="'.$thisurl.'">&#171; '.lang('back').'</a></p>';
       include_once("footer.php");
       exit;
     }
