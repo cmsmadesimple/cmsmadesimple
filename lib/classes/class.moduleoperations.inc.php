@@ -609,7 +609,7 @@ final class ModuleOperations
 				  }
 			  }
 			  if( !$res && !isset($CMS_FORCE_MODULE_LOAD)) {
-				  audit('','Core',"Cannot load module $module_name ... problem loadind dependent module $name");
+				  audit('','Core',"Cannot load module $module_name ... Problem loading dependent module $name");
 				  debug_buffer("Cannot load $module_name... cannot load it's dependants.");
 				  unset($obj);
 				  return FALSE;
