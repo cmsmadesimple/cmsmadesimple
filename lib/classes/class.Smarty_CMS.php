@@ -55,7 +55,6 @@ class Smarty_CMS extends SmartyBC
 		$this->setCompileDir(TMP_TEMPLATES_C_LOCATION);
 		$this->setCacheDir(TMP_CACHE_LOCATION);
 		$this->assign('app_name','CMS');
-		$this->error_reporting = 0;
 
 		if ($config["debug"] == true) {
 		
