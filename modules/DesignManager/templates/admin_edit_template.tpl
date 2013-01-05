@@ -157,7 +157,7 @@ $(document).ready(function(){
 
 <div style="display: none;">{strip}
   <div id="help_template_name" title="{$mod->Lang('prompt_help')}">{$mod->Lang('help_template_name')}</div>
-  <div id="help_template_design" title="{$mod->Lang('prompt_help')}">{$mod->Lang('help_template_design')}</div>
+  <div id="help_template_designs" title="{$mod->Lang('prompt_help')}">{$mod->Lang('help_template_designs')}</div>
   <div id="help_template_type" title="{$mod->Lang('prompt_help')}">{$mod->Lang('help_template_type')}</div>
   <div id="help_template_dflt" title="{$mod->Lang('prompt_help')}">{$mod->Lang('help_template_dflt')}</div>
   <div id="help_template_category" title="{$mod->Lang('prompt_help')}">{$mod->Lang('help_template_category')}</div>
