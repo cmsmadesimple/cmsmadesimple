@@ -65,6 +65,7 @@ $lang['help'] = <<<EOT
    </li>
 </ul>
 EOT;
+$lang['help_action'] = 'TODO';
 $lang['help_childrenof'] = 'This option will have the menu only display items that are descendants of the selected page id or alias.  i.e: <code>{menu childrenof=$page_alias}</code> will only display the children of the current page.';
 $lang['help_items'] = 'Specify a comma separated list of page aliases that this menu should display.';
 $lang['help_loadprops'] = 'Use this parameter when NOT using advanced properties in your menu manager template.  This will disable the loading of all of the content properties for each node (such as extra1, image, thumbnail, etc).  This will dramatically decrease the number of queries required to build a menu, and increase memory requirements, but will remove the possibility for much more advanced menus';
