@@ -162,7 +162,7 @@ function smarty_function_cms_selflink($params, &$template)
 							break;
 						}
 					}
-					else if ($flatcontent[$i]->getTag() == $gCms->variables['content_id'])
+					else if ($flatcontent[$i]->getTag() == cmsms()->variables['content_id'])
 					{
 						$number = $i;
 						break;
