@@ -315,8 +315,8 @@ function smarty_function_cms_selflink($params, &$template)
 	else
     {
 		if (! isset($params['label_side']) || $params['label_side'] == 'left' && $label != '') $result .= $label.' ';
-		$result .= '<a href="'.$url.'"';      
-		$result .= ' title="'.$title.'" ';
+		$result .= '<a href="'.$url.'"';
+		if ( (isset($params['text'])) && (strtolower($params['text']) != strtolower($title)) ) $result .= ' title="'.$title.'" ';
 		if (isset($params['target'])) $result .= ' target="'.$params['target'].'"';
 		if (isset($params['id'])) $result .= ' id="'.$params['id'].'"';
     	if (isset($params['class'])) $result .= ' class="'.$params['class'].'"';
