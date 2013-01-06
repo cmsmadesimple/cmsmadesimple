@@ -1,5 +1,26 @@
 Version 1.12 - NO NAME SET
 -----------------------------
+Core - General
+  -
+
+Core - Bug Reports:
+  -
+
+Core - Feature Requests:
+  - #4178 Improve behavior of cms_selflink
+  
+FileManager
+  -
+  
+MenuManager
+  -
+  
+MicroTiny
+  -
+  
+News 
+  -
+
 
 Version 1.11.4 - Fernandina
 -----------------------------
