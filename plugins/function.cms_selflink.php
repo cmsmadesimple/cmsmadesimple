@@ -376,6 +376,8 @@ function smarty_cms_about_function_cms_selflink() {
 
 		<p>Change History:</p>
 		<ul>
+		<li>Change behavior of the title tag (W3c) FR #4178</li>
+		<li>Link to a page_alias that does not exist does show the linktext now in red textcolor</li>
 		<li>Adds width and height parameters.</li>
 		<li>Fixes a problem with too many queries when using the dir=start option.</li>
 		<li>Added a new option for &quot;dir&quot;, &quot;up&quot;, for links to the parent page e.g. dir=&quot;up&quot;</li>
