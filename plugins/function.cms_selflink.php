@@ -31,28 +31,16 @@ function smarty_function_cms_selflink($params, &$template)
 		$url = $params['ext'];
 		$text = $params['ext'];
 		
-		if ( isset($params['text'] ))
-		{
-			$text = $params['text'];
-		}
+		if ( isset($params['text'] )) $text = $params['text'];
 		
 		$title= '';
-		if ( isset($params['title']) )
-		{
-			$title=' title="'.$params['title'].'" ';
-		}
+		if ( isset($params['title']) ) $title=' title="'.$params['title'].'" ';
 		
 		$target = '';
-		if ( isset($params['target']) && ( strlen($params['target']) > 0 ) )
-		{
-			$target=' target="'.$params['target'].'" ';
-		}
+		if ( isset($params['target']) && (strlen($params['target']) > 0) ) $target=' target="'.$params['target'].'" ';
 		
 		$external_text = '(external link)';
-		if ( isset($params['ext_info']) )
-		{
-			$external_text ='( '.$params['ext_info'].' )';
-		}
+		if ( isset($params['ext_info']) ) $external_text ='( '.$params['ext_info'].' )';
 		
 		$result='<a class="external" href="'.$url.'" '.$title.''.$target.'>'.$text.'<span>'.$external_text.'</span></a>';
 		if( isset($params['assign']) )
@@ -64,10 +52,7 @@ function smarty_function_cms_selflink($params, &$template)
 	}
 
 	$urlparam = '';
-	if ( isset($params['urlparam']) && ( strlen($params['urlparam']) > 0 ) )
-	{
-		$urlparam = trim($params['urlparam']);
-	}
+	if ( isset($params['urlparam']) && (strlen($params['urlparam']) > 0) ) $urlparam = trim($params['urlparam']);
 
 	$label = '';
 	if (isset($params['page']) or isset($params['href']))
@@ -81,14 +66,16 @@ function smarty_function_cms_selflink($params, &$template)
 			$page = $params['page'];
 		}
 		$name = $page;
-     
-		// check if the page exists in the db
+
+		// check if the page exists in the datebase
 		$manager = cmsms()->GetHierarchyManager();
 		$node = $manager->sureGetNodeByAlias($page);
-		if (!isset($node)) 
-		{
-			return;
+		if (!isset($node)) {
+		$title = lang_by_realm('cms_selflink','page_not_exist');
+		echo '<a href="#" title="'.$title.'"><span style="color: red">' . $params['text'] . '</span></a>';
+		return;
 		}
+
 		$content = $node->GetContent();
 		if ($content !== FALSE && is_object($content) && $content->Active() && $content->HasUsableLink() )
 		{
@@ -98,53 +85,45 @@ function smarty_function_cms_selflink($params, &$template)
 			$url = $content->GetUrl();
 			$menu_text = $content->MenuText();
 			$titleattr = $content->TitleAttribute();
-	 
-			if (isset($params['anchorlink']))
-			{
-				$url .= '#' . ltrim($params['anchorlink'], '#');
-			}
-	 
+			if (isset($params['anchorlink'])) $url .= '#' . ltrim($params['anchorlink'], '#');
 			if( $urlparam != '' ) $url .= $urlparam;
 		}
     }
 	elseif (isset($params['dir'])) 
     {
-		if (isset($params['anchorlink']))
-		{
-			$anchorlink = ltrim($params['anchorlink'], '#');
-		}
-
+		if (isset($params['anchorlink'])) $anchorlink = ltrim($params['anchorlink'], '#');
+		
 		$condition = false;
 		switch (strtolower($params['dir']))
 		{
 			case 'next':
-				$condition = '>';
+				$condition = 'next';
 				$label=lang_by_realm('cms_selflink','next_label');
 				break;
 			case 'prev':
 			case 'previous':
-				$condition = '<';
+				$condition = 'previous';
 				$label=lang_by_realm('cms_selflink','prev_label');
 				break;
 			case 'anchor':
-				$condition = '^';
+				$condition = 'anchor';
 				$label='';
 				break;
 			case 'start':
-				$condition = '-';
+				$condition = 'start';
 				$label = '';
 				break;
 			case 'up':
-				$condition = '|';
+				$condition = 'up';
 				$label='';
 				break;
 		}
 
-		if ($condition )
+		if ($condition)
 		{
 			$hm = cmsms()->GetHierarchyManager();
 			$flatcontent = array();
-			if ($condition != '|') // uplink (we don't need the flatcontent for an uplink)
+			if ($condition != 'up')
 			{
 				$flatcontent = $hm->getFlatList();
 				$contentops = cmsms()->GetContentOperations();
@@ -152,7 +131,7 @@ function smarty_function_cms_selflink($params, &$template)
 				$number = 0;
 				for ($i = 0; $i < count($flatcontent); $i++)
 				{
-					if ($condition == '-')
+					if ($condition == 'start')
 					{
 						// start link...
 						// redundant...
@@ -168,9 +147,9 @@ function smarty_function_cms_selflink($params, &$template)
 						break;
 					}
 				}
-			} // uplink addition
+			}
 
-			if ($condition == '<')
+			if ($condition == 'previous')
 			{
 				if ($number > 0)
 				{
@@ -193,7 +172,7 @@ function smarty_function_cms_selflink($params, &$template)
 					}
 				}
 			}
-			else if ($condition == '>')
+			else if ($condition == 'next')
 			{
 				if ($number < count($flatcontent))
 				{
@@ -216,9 +195,8 @@ function smarty_function_cms_selflink($params, &$template)
 					}
 				}
 			}
-			else if ($condition == '^') 
+			else if ($condition == 'anchor') 
 			{
-				// anchor link... why they used stupid characters I'll never know
 				// cg: this code is not needed... get current objects url, add anchor stuff
 				if ($number < count($flatcontent))
 				{
@@ -245,18 +223,12 @@ function smarty_function_cms_selflink($params, &$template)
 					}
 				}
 			} 
-			else if ($condition == '|') 
+			else if ($condition == 'up') 
 			{
-				// Uplink
 				$node = $hm->getNodeById(cmsms()->variables['content_id']);
-				if( !isset($node) ) 
-				{
-					return;
-				}
+				if( !isset($node) ) return;
 				$node = $node->getParentNode();
-				if (!isset($node)) {
-					return;
-				}
+				if (!isset($node)) return;
 				$content = $node->GetContent();
 				if ($content != FALSE)
 				{
@@ -270,8 +242,8 @@ function smarty_function_cms_selflink($params, &$template)
 						$titleattr = $content->TitleAttribute();
 					}
 				}
-			} // End uplink
-			else if ($condition == '-')
+			}
+			else if ($condition == 'start')
 			{
 				$content = $flatcontent[$number]->getContent();
 				if (isset($content))
@@ -307,11 +279,7 @@ function smarty_function_cms_selflink($params, &$template)
 		$title = cms_htmlentities($title);
 	}
 
-	if( empty($url) )
-    {
-		// no url to link to, therefore nothing to do
-		return;
-    }
+	if( empty($url) ) return; // no url to link to, therefore nothing to do
 
 	if( isset($params['href']) )
     {
@@ -340,52 +308,29 @@ function smarty_function_cms_selflink($params, &$template)
 				$result .= $params['dir'];
 				break;
 		}
-      
+
 		$result .= '" title="'.$title.'" ';
 		$result .= 'href="'.$url.'" />';
     }
 	else
     {
-		if (! isset($params['label_side']) || $params['label_side'] == 'left' && $label != '')
-		{
-			$result .= $label.' ';
-		}
+		if (! isset($params['label_side']) || $params['label_side'] == 'left' && $label != '') $result .= $label.' ';
 		$result .= '<a href="'.$url.'"';      
 		$result .= ' title="'.$title.'" ';
-		if (isset($params['target']))
-		{
-			$result .= ' target="'.$params['target'].'"';
-		}
-		if (isset($params['id']))
-		{
-			$result .= ' id="'.$params['id'].'"';
-		}
-      
-		if (isset($params['class']))
-		{
-			$result .= ' class="'.$params['class'].'"';
-		}
-      
-		if (isset($params['tabindex']))
-		{
-			$result .= ' tabindex="'.$params['tabindex'].'"';
-		}
-      
-		if (isset($params['more']))
-		{
-			$result .= ' '.$params['more'];
-		}
-      
+		if (isset($params['target'])) $result .= ' target="'.$params['target'].'"';
+		if (isset($params['id'])) $result .= ' id="'.$params['id'].'"';
+    	if (isset($params['class'])) $result .= ' class="'.$params['class'].'"';
+		if (isset($params['tabindex'])) $result .= ' tabindex="'.$params['tabindex'].'"';
+		if (isset($params['more'])) $result .= ' '.$params['more'];
 		$result .= '>';
-      
-		if (isset($params['text']))
+		if (isset($params['text'])) 
 		{
 			$linktext = $params['text'];
-		} 
+		}
 		elseif (isset($params['menu']) && $params['menu'] == "1")
-		{ 
+		{
 			$linktext = $menu_text;
-		} 
+		}
 		else
 		{
 			$linktext = $name; 
@@ -402,21 +347,15 @@ function smarty_function_cms_selflink($params, &$template)
 			if( $height ) $height = max(1,$height);
 			if( $height ) $result .= " height=\"$height\"";
 			$result .= "/>";
-			if (! (isset($params['imageonly']) && $params['imageonly']))
-			{
-				$result .= " $linktext";
-			}
-		} 
+			if (! (isset($params['imageonly']) && $params['imageonly'])) $result .= " $linktext";
+		}
 		else
 		{
 			$result .= $linktext;
 		}
-      
+
 		$result .= '</a>';
-		if (isset($params['label_side']) && $params['label_side'] == 'right')
-		{
-			$result .= ' '.$label;
-		}
+		if (isset($params['label_side']) && $params['label_side'] == 'right') $result .= ' '.$label;
     }
 
 	if( isset($params['assign']) )
