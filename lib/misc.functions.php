@@ -1612,7 +1612,7 @@ function cms_get_jquery($exclude = '',$ssl = null,$cdn = false,$append = '',$cus
   $scripts['jquery.json.min.js'] = '<script type="text/javascript" src="'.$basePath.'/lib/jquery/js/jquery.json-2.3.min.js"></script>'."\n";
   if( cmsms()->test_state(CmsApp::STATE_ADMIN_PAGE) ) {
     $url = $config['admin_url'];
-    $scripts['cms_js_setup'] = '<script type="text/javascript" src="'.$url.'/cms_js_setup.php?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY].'"></script>'."\n";
+    $scripts['cms_js_setup'] = '<script type="text/javascript" src="'.$url.'/cms_js_setup.php?'.CMS_SECURE_PARAM_NAME.'='.isset($_SESSION[CMS_USER_KEY]).'"></script>'."\n";
     $scripts['jquery.cms_admin.js'] = '<script type="text/javascript" src="'.$basePath.'/lib/jquery/js/jquery.cms_admin.js"></script>'."\n";
   }
 
