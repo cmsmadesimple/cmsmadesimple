@@ -1758,27 +1758,26 @@ $lang['admin']['help_function_content_image'] = <<<EOT
 <p>Just insert the tag into your page template like: <code>{content_image block='image1'}</code>.</p>
 <h3>What parameters does it take?</h3>
 <ul>
-  <li><strong>(required)</strong> block - The name for this additional content block.
+  <li><strong>(required)</strong> block='' - The name for this additional content block.
   <p>Example:</p>
   <pre>{content_image block='image1'}</pre><br/>
   </li>
-  <li><em>(optional)</em> label - A label or prompt for this content block in the edit content page.  If not specified, the block name will be used.</li>
-
-  <li><em>(optional)</em> dir - The name of a directory (relative to the uploads directory, from which to select image files. If not specified, the preference from the global settings page will be used.  If that preference is empty, the uploads directory will be used.
+  <li><em>(optional)</em> label='' - A label or prompt for this content block in the edit content page.  If not specified, the block name will be used.</li>
+  <li><em>(optional)</em> dir='' - The name of a directory (relative to the uploads directory, from which to select image files. If not specified, the preference from the global settings page will be used.  If that preference is empty, the uploads directory will be used.
   <p>Example: use images from the uploads/images directory.</p>
   <pre>{content_image block='image1' dir='images'}</pre><br/>
   </li>
-  <li><em>(optional)</em> class - The css class name to use on the img tag in frontend display.</li>
-  <li><em>(optional)</em> id - The id name to use on the img tag in frontend display.</li> 
-  <li><em>(optional)</em> name - The tag name to use on the img tag in frontend display.</li> 
-  <li><em>(optional)</em> width - The desired width of the image.</li>
-  <li><em>(optional)</em> height - The desired height of the image.</li>
-  <li><em>(optional)</em> alt - Alternative text if the image cannot be found.</li>
-  <li><em>(optional)</em> urlonly - output only the url to the image, ignoring all parameters like id, name, width, height, etc.</li>
-  <li><em>(optional)</em> tab - The desired tab to display this field on in the edit form..</li>
-  <li><em>(optional)</em> exclude - Specify a prefix of files to exclude.  i.e: thumb_</li>
-  <li><em>(optional)</em> sort - optionally sort the options. Default is to not sort.</li>
-  <li><em>(optional)</em> assign (string) - Assign the results to a smarty variable with that name.</li>
+  <li><em>(optional)</em> class='' - The css class name to use on the img tag in frontend display.</li>
+  <li><em>(optional)</em> id='' - The id name to use on the img tag in frontend display.</li> 
+  <li><em>(optional)</em> name='' - The tag name to use on the img tag in frontend display.</li> 
+  <li><em>(optional)</em> width='' - The desired width of the image.</li>
+  <li><em>(optional)</em> height='' - The desired height of the image.</li>
+  <li><em>(optional)</em> alt='' - Alternative text if the image cannot be found.</li>
+  <li><em>(optional)</em> urlonly='' - output only the url to the image, ignoring all parameters like id, name, width, height, etc.</li>
+  <li><em>(optional)</em> tab='' - The desired tab to display this field on in the edit form..</li>
+  <li><em>(optional)</em> exclude='' - Specify a prefix of files to exclude.  i.e: thumb_</li>
+  <li><em>(optional)</em> sort='' - optionally sort the options. Default is to not sort.</li>
+  <li><em>(optional)</em> assign='' (string) - Assign the results to a smarty variable with that name.</li>
 </ul>
 EOT;
 
