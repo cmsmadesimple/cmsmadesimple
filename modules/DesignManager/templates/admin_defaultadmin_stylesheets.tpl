@@ -21,12 +21,12 @@ $(document).ready(function(){
   <div class="pageoptions" style="text-align: right;">
     <label for="filter_limit_css">{$mod->Lang('prompt_limit')}:</label>
     &nbsp;<select id="filter_limit_css" name="{$actionid}filter_limit_css">
-      <option value="2"{if $filter.limit_css == 2} selected="selected"{/if}>2</option>
-      <option value="5"{if $filter.limit_css == 5} selected="selected"{/if}>5</option>
-      <option value="10"{if $filter.limit_css == 10} selected="selected"{/if}>10</option>
-      <option value="25"{if $filter.limit_css == 25} selected="selected"{/if}>25</option>
-      <option value="50"{if $filter.limit_css == 50} selected="selected"{/if}>50</option>
-      <option value="100"{if $filter.limit_css == 100} selected="selected"{/if}>100</option>
+      <option value="2"{if (isset($filter_limit_css) && ($filter_limit_css == 2)) } selected="selected"{/if}>2</option>
+      <option value="5"{if (isset($filter_limit_css) && ($filter_limit_css == 5)) } selected="selected"{/if}>5</option>
+      <option value="10"{if (isset($filter_limit_css) && ($filter_limit_css == 10)) } selected="selected"{/if}>10</option>
+      <option value="25"{if (isset($filter_limit_css) && ($filter_limit_css == 25)) } selected="selected"{/if}>25</option>
+      <option value="50"{if (isset($filter_limit_css) && ($filter_limit_css == 50)) } selected="selected"{/if}>50</option>
+      <option value="100"{if (isset($filter_limit_css) && ($filter_limit_css == 100)) } selected="selected"{/if}>100</option>
     </select>
     <input type="submit" name="{$actionid}submit_filter_css" value="{$mod->Lang('submit')}"/>
   </div>
