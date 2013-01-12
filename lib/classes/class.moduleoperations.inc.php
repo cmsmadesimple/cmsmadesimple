@@ -49,7 +49,7 @@ final class ModuleOperations
 	private $_moduleinfo;
 	private $_errors = null;
 	
-	private $xml_exclude_files = array('^\.svn' , '^CVS$' , '^\#.*\#$' , '~$', '\.bak$' );
+	private $xml_exclude_files = array('^\.svn' , '^CVS$' , '^\#.*\#$' , '~$', '\.bak$', '^\.git');
 	private $xmldtd = '
 <!DOCTYPE module [
   <!ELEMENT module (dtdversion,name,version,description*,help*,about*,requires*,file+)>
