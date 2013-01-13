@@ -58,7 +58,7 @@ RewriteEngine on
 	ExpiresActive On
 	ExpiresDefault "access plus 1 year"
 <IfModule mod_header.c>
-# Setting cache control to public allowes proxy servers to cache the items too
+# Setting cache control to public allows proxy servers to cache the items too
 	Header set Cache-Control "public"
 </IfModule>
 </FilesMatch>
