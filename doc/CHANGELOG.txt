@@ -4,6 +4,7 @@ Core - General
   - GCB's can now only have letters and numbers in the name.
   - Fixes to caching issues in MenuManager and module templates
   - admin module actions now catch an exception.
+  - Erase the alias of a sectionheader on save.
   - Fixes problem with error_reporting, takes error_reporting correctly from php.ini
 
 Version 1.11.4 - Fernandina
