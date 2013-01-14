@@ -284,7 +284,7 @@ final class CMS_Content_Block
 	
 	$oldvalue = $smarty->caching;
 	$smarty->caching = false;
-	if( $id == '_preview_' || $id == '') {
+	if( $id == '_preview_') {
 	  // note: content precompile/postcompile events will not be triggererd in preview.
 	  $val = $contentobj->Show($block);
 	  $result = $smarty->fetch('string:'.$val);
