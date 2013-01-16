@@ -66,7 +66,7 @@ final class MenuManager extends CMSModule
     $this->CreateParameter('start_level', '2', $this->lang('help_start_level'));
     $this->CreateParameter('start_element', '1.2', $this->lang('help_start_element'));
     $this->CreateParameter('start_page', 'home', $this->lang('help_start_page'));
-    $this->CreateParameter('template', 'simple_navigation.tpl', $this->lang('help_template'));
+    $this->CreateParameter('template', '', $this->lang('help_template'));
     $this->CreateParameter('excludeprefix','',$this->Lang('help_excludeprefix'));
     $this->CreateParameter('includeprefix','',$this->Lang('help_includeprefix'));
     $this->CreateParameter('childrenof','',$this->Lang('help_childrenof'));

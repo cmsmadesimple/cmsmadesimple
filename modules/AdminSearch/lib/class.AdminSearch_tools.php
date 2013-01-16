@@ -53,7 +53,7 @@ final class AdminSearch_tools
     }
   }
 
-  public function summarize($text,$len = 255)
+  public static function summarize($text,$len = 255)
   {
     $text = strip_tags($text);
     return substr($text,0,$len);
