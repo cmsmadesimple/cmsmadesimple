@@ -42,12 +42,13 @@
 /**
  * A singleton class to manage internal CMSMS Variables.
  *
- * This is an internal class.  Using this class to adjust internal variables from third party code is not supported
+ * This is an internal class.  Using this class to read or adjust internal variables from third party code is not supported
  * and constites a violation of forge rules.  This class is slowly being removed.
  *
  * @package CMS
  * @deprecated
  * @internal
+ * @ignore
  * @author Robert Campbell
  * @copyright Copyright (c) 2010, Robert Campbell <calguy1000@cmsmadesimple.org>
  */
