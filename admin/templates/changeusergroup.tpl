@@ -31,14 +31,32 @@
 <div class="hidden">
   <input type="hidden" name="{$cms_secure_param_name}" value="{$cms_user_key}" />
 </div>
+{assign var='group_count' value=count($group_list)}
 <table cellspacing="0" class="pagetable" id="permtable">
   <thead>
   <tr>
     <th>{if isset($title_group)}{$title_group}{/if}</th>
-	{foreach from=$group_list item=thisgroup}
-		{if $thisgroup->id != -1}<th class="g{$thisgroup->id}">{$thisgroup->name}</th>{/if}
-	{/foreach}
- </tr>
+    {foreach from=$group_list item=thisgroup}
+      {if $thisgroup->id != -1}
+        {assign var='title' value=''}
+        {assign var='text' value=$thisgroup->name}
+        {assign var='tag' value='span'}
+        {if !$thisgroup->active}
+          {assign var='tag' value='em'}
+          {assign var='title' value=lang('info_group_inactive')}
+          {assign var='text' value=$thisgroup->name}
+          {if $group_count >= 5}
+            {assign var='text' value=$thisgroup->name|cat:'!'}
+          {else}
+            {assign var='text' value=$thisgroup->name|cat:"&nbsp;({lang('inactive')})"}
+          {/if}
+        {/if}
+        <th class="g{$thisgroup->id}">
+          <{$tag} title="{$title}">{$text}</{$tag}>
+        </th>
+      {/if}
+    {/foreach}
+  </tr>
   </thead>
   <tbody>
   {foreach from=$users item=user}

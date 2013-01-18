@@ -900,6 +900,7 @@ $lang['admin']['info_estrict_failed'] = 'Some libraries that CMSMS uses do not w
 $lang['admin']['info_generate_cksum_file'] = <<<EOT
 This function will allow you to generate a checksum file and save it on your local computer for later validation.  This should be done just prior to rolling out the website, and/or after any upgrades, or major modifications.
 EOT;
+$lang['admin']['info_group_inactive'] = 'This group is inactive.  Members of this group will not realize the permissions associated with the group';
 $lang['admin']['info_pagealias'] = 'Specify a unique alias for this page.';
 $lang['admin']['info_pagedefaults'] = 'This form allows specifying various options as to the initial settings when creating new content pages.  The items in this page have no effect when editing existing pages';
 $lang['admin']['info_preview_notice'] = 'Warning: This preview panel behaves much like a browser window allowing you to navigate away from the initially previewed page. However, if you do that, you may experience unexpected behaviour. If you navigate away from the initial display and return, you may not see the un-committed content until you make a change to the content in the main tab, and then reload this tab. When adding content, if you navigate away from this page, you will be unable to return, and must refresh this panel.';
