@@ -29,8 +29,8 @@ check_login();
 $userid = get_userid();
 $access = check_permission($userid, "Modify Users") || check_permission($userid, "Remove Users") || check_permission($userid, "Add Users");
 if (!$access) {
-	die('Permission Denied');
-return;
+  die('Permission Denied');
+  return;
 }
 
 include_once("header.php");
@@ -38,168 +38,153 @@ $gCms = cmsms();
 $db = $gCms->GetDb();
 
 if (isset($_GET["message"])) {
-	$message = preg_replace('/\</','',$_GET['message']);
-	echo '<div class="pagemcontainer"><p class="pagemessage">'.$message.'</p></div>';
+  $message = preg_replace('/\</','',$_GET['message']);
+  echo '<div class="pagemcontainer"><p class="pagemessage">'.$message.'</p></div>';
 }
 
 
-if (isset($_GET["toggleactive"]))
-{
- if($_GET["toggleactive"]==1) {
-   $error .= "<li>".lang('errorupdatinguser')."</li>";
- } else {
-   $userops = $gCms->GetUserOperations();
-  $thisuser =& $userops->LoadUserByID($_GET["toggleactive"]);
+if (isset($_GET["toggleactive"])) {
+  if($_GET["toggleactive"]==1) {
+    $error .= "<li>".lang('errorupdatinguser')."</li>";
+  } else {
+    $userops = $gCms->GetUserOperations();
+    $thisuser =& $userops->LoadUserByID($_GET["toggleactive"]);
 
-  if($thisuser) {
+    if( $thisuser ) {
 
-//modify users, is this enough?
-    $userid = get_userid();
-    $permission = check_permission($userid, 'Modify Users');
+      //modify users, is this enough?
+      $userid = get_userid();
+      $permission = check_permission($userid, 'Modify Users');
 
-    $result = false;
-    if($permission)
-      {
+      $result = false;
+      if($permission) {
 	$thisuser->active == 1 ? $thisuser->active = 0 : $thisuser->active=1;
 	Events::SendEvent('Core','EditUserPre',array('user'=>$thisuser));
         $result = $thisuser->save();
       }
 
-      if ($result)
-         {
-           // put mention into the admin log
-		   audit($userid, 'Admin Username: '.$thisuser->username, 'Edited');
-	   Events::SendEvent('Core','EditUserPost',array('user'=>$thisuser));
-        } else {
-           $error .= "<li>".lang('errorupdatinguser')."</li>";
-        }
-   }
-}
+      if ($result) {
+	// put mention into the admin log
+	audit($userid, 'Admin Username: '.$thisuser->username, 'Edited');
+	Events::SendEvent('Core','EditUserPost',array('user'=>$thisuser));
+      } else {
+	$error .= "<li>".lang('errorupdatinguser')."</li>";
+      }
+    }
+  }
 }
 
 if (FALSE == empty($error)) {
-	echo $themeObject->ShowErrors('<ul class="error">'.$error.'</ul>');
+  echo $themeObject->ShowErrors('<ul class="error">'.$error.'</ul>');
 }
 
 
 ?>
-
 <div class="pagecontainer">
-	<div class="pageoverflow">
+  <div class="pageoverflow">
+  <?php
+    $userid = get_userid();
+    $edit = check_permission($userid, 'Modify Users');
+    $remove = check_permission($userid, 'Remove Users');
 
-<?php
+    $query = "SELECT user_id, username, active FROM ".cms_db_prefix()."users ORDER BY user_id";
+    $result = $db->Execute($query);
 
-	$userid = get_userid();
-        $edit = check_permission($userid, 'Modify Users');
-        $remove = check_permission($userid, 'Remove Users');
+    $userops = $gCms->GetUserOperations();
+    $userlist =& $userops->LoadUsers();
 
-	$query = "SELECT user_id, username, active FROM ".cms_db_prefix()."users ORDER BY user_id";
-	$result = $db->Execute($query);
+    $page = 1;
+    if (isset($_GET['page'])) $page = $_GET['page'];
+    $limit = 20;
+    if (count($userlist) > $limit) {
+      echo "<p class=\"pageshowrows\">".pagination($page, count($userlist), $limit)."</p>";
+    }
+    echo $themeObject->ShowHeader('currentusers').'</div>';
+    if ($userlist && count($userlist) > 0) {
+      echo "<table cellspacing=\"0\" class=\"pagetable\">\n";
+      echo '<thead>';
+      echo "<tr>\n";
+      echo "<th>".lang('username')."</th>\n";
+      echo "<th style=\"text-align: center;\">".lang('active')."</th>\n";
+      echo "<th class=\"pageicon\">&nbsp;</th>\n";
+      if ($remove) echo "<th class=\"pageicon\">&nbsp;</th>\n";
+      echo "</tr>\n";
+      echo '</thead>';
+      echo '<tbody>';
 
-	$userops = $gCms->GetUserOperations();
-	$userlist =& $userops->LoadUsers();
+      $currow = "row1";
+      // construct true/false button images
+      $image_true = $themeObject->DisplayImage('icons/system/true.gif', lang('true'),'','','systemicon');
+      $image_false = $themeObject->DisplayImage('icons/system/false.gif', lang('false'),'','','systemicon');
 
-	$page = 1;
-	if (isset($_GET['page'])) $page = $_GET['page'];
-	$limit = 20;
-	if (count($userlist) > $limit)
-	{
-		echo "<p class=\"pageshowrows\">".pagination($page, count($userlist), $limit)."</p>";
+      $counter=0;
+      foreach ($userlist as $oneuser) {
+	// can access user if: i have edit permission AND user is not in group1 unless I am also in group 1
+	// except, I can always edit my own account.  can't delete myself though.
+	$this_user = $userid == $oneuser->id;
+	$access_to_user = $edit;
+	if( $userops->UserInGroup($oneuser->id,1) && !$userops->UserInGroup($userid,1) ) {
+	  $access_to_user = FALSE;
 	}
-	echo $themeObject->ShowHeader('currentusers').'</div>';
-	if ($userlist && count($userlist) > 0){
-		echo "<table cellspacing=\"0\" class=\"pagetable\">\n";
-		echo '<thead>';
-		echo "<tr>\n";
-		echo "<th class=\"pagew70\">".lang('username')."</th>\n";
-		echo "<th class=\"pagepos\">".lang('active')."</th>\n";
-		echo "<th class=\"pageicon\">&nbsp;</th>\n";
-		if ($remove)
-			echo "<th class=\"pageicon\">&nbsp;</th>\n";
-		echo "</tr>\n";
-		echo '</thead>';
-		echo '<tbody>';
+	$access_user = $this_user || $access_to_user;
 
-		$currow = "row1";
-		// construct true/false button images
-        $image_true = $themeObject->DisplayImage('icons/system/true.gif', lang('true'),'','','systemicon');
-        $image_false = $themeObject->DisplayImage('icons/system/false.gif', lang('false'),'','','systemicon');
+	if ($counter < $page*$limit && $counter >= ($page*$limit)-$limit) {
+	  echo "<tr class=\"$currow\">\n";
+	  if( $access_user ) {
+	    echo "<td><a href=\"edituser.php".$urlext."&amp;user_id=".$oneuser->id."\">".$oneuser->username."</a></td>\n";
+	  }
+	  else {
+	    echo "<td>{$oneuser->username}</td>\n";
+	  }
 
-		$counter=0;
-		foreach ($userlist as $oneuser){
+	  if( $oneuser->id != 1 && $oneuser->id != $userid ) {
+	    echo "<td class=\"pagepos\"><a href=\"listusers.php".$urlext."&amp;toggleactive=".$oneuser->id."\">".($oneuser->active == 1?$image_true:$image_false)."</a></td>\n";
+	  }
+	  else {
+	    echo "<td class=\"pagepos\">&nbsp;</td>\n";
+	  }
 
-		  // can access user if: i have edit permission AND user is not in group1 unless I am also in group 1
-		  // except, I can always edit my own account.  can't delete myself though.
-		  $this_user = $userid == $oneuser->id;
-		  $access_to_user = $edit;
-		  if( $userops->UserInGroup($oneuser->id,1) && !$userops->UserInGroup($userid,1) ) {
-		    $access_to_user = FALSE;
-		  }
-		  $access_user = $this_user || $access_to_user;
+	  if ($access_user) {
+	    echo "<td><a href=\"edituser.php".$urlext."&amp;user_id=".$oneuser->id."\">";
+	    echo $themeObject->DisplayImage('icons/system/edit.gif', lang('edit'),'','','systemicon');
+	    echo "</a></td>\n";
+	  }
+	  else {
+	    echo "<td>&nbsp;</td>\n";
+	  }
 
-			if ($counter < $page*$limit && $counter >= ($page*$limit)-$limit) {
-  			    echo "<tr class=\"$currow\">\n";
-			    if( $access_user )
-			      {
-				echo "<td><a href=\"edituser.php".$urlext."&amp;user_id=".$oneuser->id."\">".$oneuser->username."</a></td>\n";
-			      }
-			    else
-			      {
-				echo "<td>{$oneuser->username}</td>\n";
-			      }
+	  if ($remove && $oneuser->id != 1 && $oneuser->id != $userid) {
+	    echo "<td><a href=\"deleteuser.php".$urlext."&amp;user_id=".$oneuser->id."\" onclick=\"return confirm('".cms_html_entity_decode_utf8(lang('deleteconfirm', $oneuser->username),true)."');\">";
+	    echo $themeObject->DisplayImage('icons/system/delete.gif', lang('delete'),'','','systemicon');
+	    echo "</a></td>\n";
+	  }
+	  else if( $remove ) {
+	    echo '<td></td>';
+	  }
+	  echo "</tr>\n";
 
-				if( $oneuser->id != 1 && $oneuser->id != $userid )
-				  {
-				    echo "<td class=\"pagepos\"><a href=\"listusers.php".$urlext."&amp;toggleactive=".$oneuser->id."\">".($oneuser->active == 1?$image_true:$image_false)."</a></td>\n";
-				  }
-				else
-				  {
-				    echo "<td class=\"pagepos\">&nbsp;</td>\n";
-				  }
-				if ($access_user)
-				    {
-				      echo "<td><a href=\"edituser.php".$urlext."&amp;user_id=".$oneuser->id."\">";
-				      echo $themeObject->DisplayImage('icons/system/edit.gif', lang('edit'),'','','systemicon');
-				      echo "</a></td>\n";
-				    }
-				else
-				    {
-				      echo "<td>&nbsp;</td>\n";
-				    }
-				if ($remove && $oneuser->id != 1 && $oneuser->id != $userid)
-				  {
-				    echo "<td><a href=\"deleteuser.php".$urlext."&amp;user_id=".$oneuser->id."\" onclick=\"return confirm('".cms_html_entity_decode_utf8(lang('deleteconfirm', $oneuser->username),true)."');\">";
-				    echo $themeObject->DisplayImage('icons/system/delete.gif', lang('delete'),'','','systemicon');
-				    echo "</a></td>\n";
-				  }
-				else
-				    {
-				      echo "<td>&nbsp;</td>\n";
-				    }
-        		echo "</tr>\n";
-
-				($currow=="row1"?$currow="row2":$currow="row1");
-			}
-			$counter++;
-		}
-
-		echo '</tbody>';
-		echo "</table>\n";
-
+	  ($currow=="row1"?$currow="row2":$currow="row1");
 	}
+	$counter++;
+      }
 
-if (check_permission($userid, 'Add Users')) {
-?>
-	<div class="pageoptions">
-		<p class="pageoptions">
-			<a href="adduser.php<?php echo $urlext ?>">
-				<?php 
-					echo $themeObject->DisplayImage('icons/system/newobject.gif', lang('adduser'),'','','systemicon').'</a>';
-					echo ' <a class="pageoptions" href="adduser.php'.$urlext.'">'.lang("adduser");
-				?>
-			</a>
-		</p>
-	</div>
+      echo '</tbody>';
+      echo "</table>\n";
+
+    }
+
+    if (check_permission($userid, 'Add Users')) {
+  ?>
+  <div class="pageoptions">
+    <p class="pageoptions">
+      <a href="adduser.php<?php echo $urlext ?>">
+	<?php 
+	  echo $themeObject->DisplayImage('icons/system/newobject.gif', lang('adduser'),'','','systemicon').'</a>';
+          echo ' <a class="pageoptions" href="adduser.php'.$urlext.'">'.lang("adduser");
+	?>
+      </a>
+    </p>
+  </div>
 </div>
 
 <p class="pageback"><a class="pageback" href="<?php echo $themeObject->BackUrl(); ?>">&#171; <?php echo lang('back')?></a></p>

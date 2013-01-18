@@ -28,13 +28,11 @@ $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 check_login();
 
 $userid = get_userid();
-$access = check_permission($userid, "Modify Permissions")
-||
-check_permission($userid, "Modify Group Assignments")
-||
-check_permission($userid, "Modify Groups")
-||
-check_permission($userid, "Remove Groups");
+$access = check_permission($userid, "Modify Permissions") ||
+  check_permission($userid, "Modify Group Assignments") ||
+  check_permission($userid, "Add Groups") ||
+  check_permission($userid, "Modify Groups") ||
+  check_permission($userid, "Remove Groups");
 
 if (!$access) {
   die('Permission Denied');
@@ -104,7 +102,12 @@ $gCms = cmsms();
 		foreach ($grouplist as $onegroup){
 			if ($counter < $page*$limit && $counter >= ($page*$limit)-$limit) {
 				echo "<tr class=\"$currow\">\n";
-				echo "<td><a title=\"".$onegroup->description."\" href=\"editgroup.php".$urlext."&amp;group_id=".$onegroup->id."\">".$onegroup->name."</a></td>\n";
+				if( $edit ) {
+				  echo "<td><a title=\"".$onegroup->description."\" href=\"editgroup.php".$urlext."&amp;group_id=".$onegroup->id."\">".$onegroup->name."</a></td>\n";
+				}
+				else {
+				  echo "<td>{$onegroup->name}</td>\n";
+				}
 				echo "<td class=\"pagepos\">";
 				if( $onegroup->id == 1 ) 
 				  {

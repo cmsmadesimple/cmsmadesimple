@@ -54,7 +54,7 @@ final class CmsPermission
 			throw new CmsInvalidDataException($key.' is not a valid key for a CmsPermission Object');
 		}
 
-		if( isset($_data[$key]) ) return $_data[$key];
+		if( isset($this->_data[$key]) ) return $this->_data[$key];
 	}
 
 	public function __set($key,$value)

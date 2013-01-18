@@ -420,7 +420,7 @@ class UserOperations
 
 		try {
 			foreach( $groups as $gid ) {
-				if( GroupOperations::get_instance()->CheckPermission($groupid,$permname) ) {
+				if( GroupOperations::get_instance()->CheckPermission($gid,$permname) ) {
 					return TRUE;
 				}
 			}

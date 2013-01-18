@@ -42,7 +42,7 @@ class GroupOperations
 	protected function __construct() {}
 
 	private static $_instance;
-	private static $_perm_cache;
+	private $_perm_cache;
 
 	public static function &get_instance()
 	{
@@ -196,12 +196,14 @@ class GroupOperations
 		if( !is_array($this->_perm_cache) || !isset($this->_perm_cache[$groupid]) ) {
 			$db = cmsms()->GetDb();
 			$query = 'SELECT permission_id FROM '.cms_db_prefix().'group_perms 
-                      WHHERE group_id = ?';
-			$dbr = $db->GetCol($query,array($groupid));
-			$this->_perm_cache[$groupid] = $dbr;
+                      WHERE group_id = ?';
+			$dbr = $db->GetCol($query,array((int)$groupid));
+			if( is_array($dbr) && count($dbr) ) {
+				$this->_perm_cache[$groupid] = $dbr;
+			}
 		}
 
-		return in_array($permid,$this->_perm_cache[$groupid]);
+		return isset($this->_perm_cache[$groupid]) && in_array($permid,$this->_perm_cache[$groupid]);
 	}
 
 	public function GrantPermission($groupid,$perm)
@@ -221,7 +223,7 @@ class GroupOperations
                   (group_perm_id,group_id,permission_id,create_date,modified_date)
                   VALUES (?,?,?,$now,$now)";
  		$dbr = $db->Execute($query,array($new_id,$this->id,$perm));
-		unset(self::$_perm_cache);
+		unset($this->_perm_cache);
 	}
 
 	public function RemovePermission($groupid,$perm)
@@ -233,7 +235,7 @@ class GroupOperations
 		$query = 'DELETE FROM '.cms_db_prefix().'group_perms
                   WHERE group_id = ? AND perm_id = ?';
 		$dbr = $db->Execute($query,array($groupid,$permid));
-		unset(self::$_perm_cache);
+		unset($this->_perm_cache);
 	}
 }
 

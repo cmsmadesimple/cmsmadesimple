@@ -162,8 +162,7 @@ if (isset($_POST["adduser"]))
 
 include_once("header.php");
 
-if ($error != "")
-{
+if ($error != "") {
   echo $themeObject->ShowErrors('<ul class="error">'.$error.'</ul>');
 }
 
@@ -174,103 +173,94 @@ else {
 ?>
 
 <div class="pagecontainer">
-	<?php echo $themeObject->ShowHeader('adduser'); ?>
-	<form method="post" action="adduser.php">
+  <?php echo $themeObject->ShowHeader('adduser'); ?>
+  <form method="post" action="adduser.php">
   <div>
-  <input type="hidden" name="<?php echo CMS_SECURE_PARAM_NAME ?>" value="<?php echo $_SESSION[CMS_USER_KEY] ?>" />
+    <input type="hidden" name="<?php echo CMS_SECURE_PARAM_NAME ?>" value="<?php echo $_SESSION[CMS_USER_KEY] ?>" />
   </div>
-		<div class="pageoverflow">
-			<p class="pagetext">*<?php echo lang('name')?>:</p>
-			<p class="pageinput"><input type="text" name="user" maxlength="255" value="<?php echo $user?>" /></p>
-		</div>
-		<div class="pageoverflow">
-			<p class="pagetext">*<?php echo lang('password')?>:</p>
-			<p class="pageinput"><input type="password" name="password" maxlength="25" value="" /></p>
-		</div>
-		<div class="pageoverflow">
-			<p class="pagetext">*<?php echo lang('passwordagain')?>:</p>
-			<p class="pageinput"><input type="password" name="passwordagain" maxlength="25" value="" /></p>
-		</div>
-		<div class="pageoverflow">
-			<p class="pagetext"><?php echo lang('firstname')?>:</p>
-			<p class="pageinput"><input type="text" name="firstname" maxlength="50" value="<?php echo $firstname ?>" /></p>
-		</div>
-		<div class="pageoverflow">
-			<p class="pagetext"><?php echo lang('lastname')?>:</p>
-			<p class="pageinput"><input type="text" name="lastname" maxlength="50" value="<?php echo $lastname ?>" /></p>
-		</div>
-		<div class="pageoverflow">
-			<p class="pagetext"><?php echo lang('email')?>:</p>
-			<p class="pageinput"><input type="text" name="email" maxlength="255" value="<?php echo $email ?>" /></p>
-		</div>
-		<div class="pageoverflow">
-			<div class="pagetext"><?php echo lang('wysiwygtouse'); ?>:</div>
-			<div class="pageinput">
-				<select name="wysiwyg">
-				<option value="-1"><?php echo lang('none'); ?></option>
-				<?php
-				$modules = module_meta::get_instance() -> module_list_by_method('IsWYSIWYG');
-				foreach( $modules as $key )
-				{
-					echo '<option value="'.$key.'"';
-					if (get_site_preference('backendwysiwyg') == $key)
-					{
-					  echo ' selected="selected"';
-					}
-				      echo '>'.$key.'</option>';
-				}
-				?>
-				</select>
-			</div>
-		</div>		
-		<div class="pageoverflow">
-			<p class="pagetext"><?php echo lang('active')?>:</p>
-			<p class="pageinput"><input class="pagecheckbox" type="checkbox" name="active" <?php echo ($active == 1?"checked=\"checked\"":"")?> /></p>
-		</div>
-		<?php
-      if ($assign_group_perm)
-      {
-      ?>
-		<div class="pageoverflow">
-			<div class="pagetext"><?php  echo $themeObject->DisplayImage('icons/system/permissions.gif', lang('permissions'),'','','icon-extra');?><b><?php echo lang('groups')?>:</b></div>
-			<div class="pageinput">
+  <div class="pageoverflow">
+    <p class="pagetext">*<?php echo lang('name')?>:</p>
+    <p class="pageinput"><input type="text" name="user" maxlength="255" value="<?php echo $user?>" /></p>
+  </div>
+  <div class="pageoverflow">
+    <p class="pagetext">*<?php echo lang('password')?>:</p>
+    <p class="pageinput"><input type="password" name="password" maxlength="25" value="" /></p>
+  </div>
+  <div class="pageoverflow">
+    <p class="pagetext">*<?php echo lang('passwordagain')?>:</p>
+    <p class="pageinput"><input type="password" name="passwordagain" maxlength="25" value="" /></p>
+  </div>
+  <div class="pageoverflow">
+    <p class="pagetext"><?php echo lang('firstname')?>:</p>
+    <p class="pageinput"><input type="text" name="firstname" maxlength="50" value="<?php echo $firstname ?>" /></p>
+  </div>
+  <div class="pageoverflow">
+    <p class="pagetext"><?php echo lang('lastname')?>:</p>
+    <p class="pageinput"><input type="text" name="lastname" maxlength="50" value="<?php echo $lastname ?>" /></p>
+  </div>
+  <div class="pageoverflow">
+    <p class="pagetext"><?php echo lang('email')?>:</p>
+    <p class="pageinput"><input type="text" name="email" maxlength="255" value="<?php echo $email ?>" /></p>
+  </div>
+  <div class="pageoverflow">
+    <div class="pagetext"><?php echo lang('wysiwygtouse'); ?>:</div>
+    <div class="pageinput">
+      <select name="wysiwyg">
+      <option value="-1"><?php echo lang('none'); ?></option>
       <?php
-	     echo '<div class="group_memberships clear"><input type="hidden" name="groups" value="1" />';
-
-		$userops = $gCms->GetUserOperations();
-		$adminuser = ($userops->UserInGroup($userid,1) || $userid == 1);
-        foreach($group_list as $thisGroup)
-            {
-			if( $thisGroup->id == 1 && $adminuser == false )
-			  {
-				continue;
-			  }
-            echo '<div class="group"><input type="checkbox" name="g'.$thisGroup->id.'" id="g'.$thisGroup->id.
-               '" value="1" /><label for="g'.$thisGroup->id.'">'.$thisGroup->name.'</label></div>';
-            }
-        echo '</div>';
+	$modules = module_meta::get_instance() -> module_list_by_method('IsWYSIWYG');
+        foreach( $modules as $key ) {
+	  echo '<option value="'.$key.'"';
+	  if (get_site_preference('backendwysiwyg') == $key) {
+	    echo ' selected="selected"';
+	  }
+	  echo '>'.$key.'</option>';
+	}
       ?>
-         </div>
-		</div>
+      </select>
+    </div>
+  </div>		
+  <div class="pageoverflow">
+    <p class="pagetext"><?php echo lang('active')?>:</p>
+    <p class="pageinput"><input class="pagecheckbox" type="checkbox" name="active" <?php echo ($active == 1?"checked=\"checked\"":"")?> /></p>
+  </div>
+  <?php
+  if ($assign_group_perm) {
+  ?>
+  <div class="pageoverflow">
+    <div class="pagetext"><?php  echo $themeObject->DisplayImage('icons/system/permissions.gif', lang('permissions'),'','','icon-extra');?><b><?php echo lang('groups')?>:</b></div>
+    <div class="pageinput">
+    <?php
+      echo '<div class="group_memberships clear"><input type="hidden" name="groups" value="1" />';
 
-      <?php
+      $userops = $gCms->GetUserOperations();
+      $adminuser = ($userops->UserInGroup($userid,1) || $userid == 1);
+      foreach($group_list as $thisGroup) {
+	if( $thisGroup->id == 1 && $adminuser == false ) continue;
+        echo '<div class="group"><input type="checkbox" name="g'.$thisGroup->id.'" id="g'.$thisGroup->id.
+             '" value="1" /><label for="g'.$thisGroup->id.'">'.$thisGroup->name.'</label></div>';
       }
-      ?>
-		
-		<div class="pageoverflow">
-			<p class="pagetext">&nbsp;</p>
-			<p class="pageinput">
-				<input type="hidden" name="adduser" value="true" />
-				<input class="pagebutton" type="submit" value="<?php echo lang('submit')?>" />
-				<input class="pagebutton" type="submit" name="cancel" value="<?php echo lang('cancel')?>" />
-			</p>
-		</div>
-	</form>
+      echo '</div>';
+    ?>
+    </div>
+  </div>
+  <?php
+  }
+  ?>
+	
+  <div class="pageoverflow">
+    <p class="pagetext">&nbsp;</p>
+    <p class="pageinput">
+      <input type="hidden" name="adduser" value="true" />
+      <input class="pagebutton" type="submit" value="<?php echo lang('submit')?>" />
+      <input class="pagebutton" type="submit" name="cancel" value="<?php echo lang('cancel')?>" />
+    </p>
+  </div>
+  </form>
 </div>
 
 <?php
 }
-
 echo '<p class="pageback"><a class="pageback" href="'.$themeObject->BackUrl().'">&#171; '.lang('back').'</a></p>';
 
 include_once("footer.php");
