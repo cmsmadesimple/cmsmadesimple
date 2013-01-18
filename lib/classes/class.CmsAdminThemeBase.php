@@ -252,7 +252,7 @@ abstract class CmsAdminThemeBase
 	private function _SetAggregatePermissions($force = FALSE)
 	{
 		$this->_SetModuleAdminInterfaces();
-		if( is_array($this->_perms && $force == FALSE ) ) return;
+		if( is_array($this->_perms) && $force == FALSE ) return;
 
 		$this->_perms = array();
 		$this->_breadcrumbs = array();
