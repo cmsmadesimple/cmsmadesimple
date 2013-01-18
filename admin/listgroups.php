@@ -104,7 +104,7 @@ $gCms = cmsms();
 		foreach ($grouplist as $onegroup){
 			if ($counter < $page*$limit && $counter >= ($page*$limit)-$limit) {
 				echo "<tr class=\"$currow\">\n";
-				echo "<td><a href=\"editgroup.php".$urlext."&amp;group_id=".$onegroup->id."\">".$onegroup->name."</a></td>\n";
+				echo "<td><a title=\"".$onegroup->description."\" href=\"editgroup.php".$urlext."&amp;group_id=".$onegroup->id."\">".$onegroup->name."</a></td>\n";
 				echo "<td class=\"pagepos\">";
 				if( $onegroup->id == 1 ) 
 				  {

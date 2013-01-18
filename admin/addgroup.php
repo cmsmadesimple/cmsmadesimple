@@ -31,6 +31,9 @@ $error = "";
 $group= "";
 if (isset($_POST["group"])) $group = $_POST["group"];
 
+$description= "";
+if (isset($_POST["description"])) $description = $_POST["description"];
+
 $active = 1;
 if (!isset($_POST["active"]) && isset($_POST["addgroup"])) $active = 0;
 
@@ -42,81 +45,78 @@ if (isset($_POST["cancel"])) {
 $userid = get_userid();
 $access = check_permission($userid, 'Add Groups');
 
-if ($access)
-{
-	if (isset($_POST["addgroup"]))
-	{
-		$validinfo = true;
+if ($access) {
+  if (isset($_POST["addgroup"])) {
+    $validinfo = true;
 
-		if ($group == "")
-		{
-			$error .= "<li>".lang('nofieldgiven', lang('groupname'))."</li>";
-			$validinfo = false;
-		}
+    if ($group == "") {
+      $error .= "<li>".lang('nofieldgiven', lang('groupname'))."</li>";
+      $validinfo = false;
+    }
 
-		if ($validinfo)
-		{
-			$groupobj = new Group();
-			$groupobj->name = $group;
-			$groupobj->active = $active;
+    if ($validinfo) {
+      $groupobj = new Group();
+      $groupobj->name = $group;
+      $groupobj->description = $description;
+      $groupobj->active = $active;
 			
-			Events::SendEvent('Core', 'AddGroupPre', array('group' => &$groupobj));
+      Events::SendEvent('Core', 'AddGroupPre', array('group' => &$groupobj));
 
-			$result = $groupobj->save();
+      $result = $groupobj->save();
 
-			if ($result)
-			{
-				Events::SendEvent('Core', 'AddGroupPost', array('group' => &$groupobj));
-				// put mention into the admin log
-				audit($groupobj->id, 'Admin User Group: '.$groupobj->name, 'Added');
-				redirect("listgroups.php".$urlext);
-				return;
-			}
-			else
-			{
-				$error .= "<li>".lang('errorinsertinggroup')."</li>";
-			}
-		}
-	}
+      if ($result) {
+	Events::SendEvent('Core', 'AddGroupPost', array('group' => &$groupobj));
+	// put mention into the admin log
+	audit($groupobj->id, 'Admin User Group: '.$groupobj->name, 'Added');
+	redirect("listgroups.php".$urlext);
+	return;
+      }
+      else {
+	$error .= "<li>".lang('errorinsertinggroup')."</li>";
+      }
+    }
+  }
 }
 
 include_once("header.php");
 
-if (!$access)
-{
-	echo "<div class=\"pageerrorcontainer\"><p class=\"pageerror\">".lang('noaccessto', array(lang('addgroup')))."</p></div>";
+if (!$access) {
+  echo "<div class=\"pageerrorcontainer\"><p class=\"pageerror\">".lang('noaccessto', array(lang('addgroup')))."</p></div>";
 }
-else
-{
-	if ($error != "")
-	{
-		echo "<div class=\"pageerrorcontainer\"><ul class=\"pageerror\">".$error."</ul></div>";
-	}
+else {
+  if ($error != "") {
+    echo "<div class=\"pageerrorcontainer\"><ul class=\"pageerror\">".$error."</ul></div>";
+  }
 ?>
 
 <div class="pagecontainer">
-	<?php echo $themeObject->ShowHeader('addgroup'); ?>
-	<form method="post" action="addgroup.php">
-          <div>
-          <input type="hidden" name="<?php echo CMS_SECURE_PARAM_NAME ?>" value="<?php echo $_SESSION[CMS_USER_KEY] ?>" />
-        </div>
-		<div class="pageoverflow">
-			<p class="pagetext">*<?php echo lang('name')?>:</p>
-			<p class="pageinput"><input type="text" name="group" maxlength="255" value="<?php echo $group?>" /></p>
-		</div>
-		<div class="pageoverflow">
-			<p class="pagetext"><?php echo lang('active')?>:</p>
-			<p class="pageinput"><input class="pagecheckbox" type="checkbox" name="active" <?php echo ($active == 1?"checked=\"checked\"":"")?> /></p>
-		</div>
-		<div class="pageoverflow">
-			<p class="pagetext">&nbsp;</p>
-			<p class="pageinput">
-				<input type="hidden" name="addgroup" value="true" />
-				<input type="submit" value="<?php echo lang('submit')?>" class="pagebutton" />
-				<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="pagebutton" />			
-			</p>
-		</div>
-	</form>
+  <?php echo $themeObject->ShowHeader('addgroup'); ?>
+  <form method="post" action="addgroup.php">
+  <div>
+    <input type="hidden" name="<?php echo CMS_SECURE_PARAM_NAME ?>" value="<?php echo $_SESSION[CMS_USER_KEY] ?>" />
+  </div>
+  <div class="pagewarning"><?php echo lang('warn_addgroup'); ?></div>
+  <div class="pageoverflow">
+    <p class="pagetext">*<?php echo lang('name')?>:</p>
+    <p class="pageinput"><input type="text" name="group" maxlength="255" value="<?php echo $group?>" /></p>
+  </div>
+  <div class="pageoverflow">
+    <p class="pagetext"><?php echo lang('description')?>:</p>
+    <p class="pageinput"><input type="text" name="description" maxlength="255" size="80" value="<?php echo $description?>" /></p>
+  </div>
+  <div class="pageoverflow">
+    <p class="pagetext"><?php echo lang('active')?>:</p>
+    <p class="pageinput"><input class="pagecheckbox" type="checkbox" name="active" <?php echo ($active == 1?"checked=\"checked\"":"")?> /></p>
+  </div>
+  <div class="pageoverflow">
+    <p class="pagetext">&nbsp;</p>
+    <p class="pageinput">
+      <input type="hidden" name="addgroup" value="true" />
+      <input type="submit" value="<?php echo lang('submit')?>" class="pagebutton" />
+      <input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="pagebutton" />			
+    </p>
+  </div>
+  </form>
 </div>
 
 <?php

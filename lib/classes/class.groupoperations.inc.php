@@ -61,12 +61,13 @@ class GroupOperations
 	{
 		$db = cmsms()->GetDb();
 		$result = array();
-		$query = "SELECT group_id, group_name, active FROM ".cms_db_prefix()."groups ORDER BY group_id";
+		$query = "SELECT group_id, group_name, group_desc, active FROM ".cms_db_prefix()."groups ORDER BY group_id";
 		$dbresult = $db->Execute($query);
 		while ($dbresult && $row = $dbresult->FetchRow()) {
 			$onegroup = new Group();
 			$onegroup->id = $row['group_id'];
 			$onegroup->name = $row['group_name'];
+			$onegroup->description = $row['group_desc'];
 			$onegroup->active = $row['active'];
 			$result[] = $onegroup;
 		}
@@ -85,13 +86,14 @@ class GroupOperations
 		$result = false;
 		$db = cmsms()->GetDb();
 
-		$query = "SELECT group_id, group_name, active FROM ".cms_db_prefix()."groups WHERE group_id = ? ORDER BY group_id";
+		$query = "SELECT group_id, group_name, group_desc, active FROM ".cms_db_prefix()."groups WHERE group_id = ? ORDER BY group_id";
 		$dbresult = $db->Execute($query, array($id));
 
 		while ($dbresult && $row = $dbresult->FetchRow()) {
 			$onegroup = new Group();
 			$onegroup->id = $row['group_id'];
 			$onegroup->name = $row['group_name'];
+			$onegroup->description = $row['group_desc'];
 			$onegroup->active = $row['active'];
 			$result = $onegroup;
 		}
@@ -118,8 +120,10 @@ class GroupOperations
 
 		$new_group_id = $db->GenID(cms_db_prefix()."groups_seq");
 		$time = $db->DBTimeStamp(time());
-		$query = "INSERT INTO ".cms_db_prefix()."groups (group_id, group_name, active, create_date, modified_date) VALUES (?,?,?,".$time.", ".$time.")";
-		$dbresult = $db->Execute($query, array($new_group_id, $group->name, $group->active));
+		$query = "INSERT INTO ".cms_db_prefix()."groups
+                  (group_id, group_name, group_desc, active, create_date, modified_date) 
+                  VALUES (?,?,?,?,".$time.", ".$time.")";
+		$dbresult = $db->Execute($query, array($new_group_id, $group->name, $group->description, $group->active));
 		if ($dbresult !== false) {
 			$result = $new_group_id;
 		}
@@ -145,8 +149,9 @@ class GroupOperations
 		}
 
 		$time = $db->DBTimeStamp(time());
-		$query = "UPDATE ".cms_db_prefix()."groups SET group_name = ?, active = ?, modified_date = ".$time." WHERE group_id = ?";
-		$dbresult = $db->Execute($query, array($group->name, $group->active, $group->id));
+		$query = "UPDATE ".cms_db_prefix()."groups SET group_name = ?, group_desc = ?,
+           active = ?, modified_date = ".$time." WHERE group_id = ?";
+		$dbresult = $db->Execute($query, array($group->name, $group->description, $group->active, $group->id));
 		if ($dbresult !== false) {
 			$result = true;
 		}

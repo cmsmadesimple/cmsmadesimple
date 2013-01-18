@@ -291,6 +291,7 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 	$flds = "
 		group_id I KEY,
 		group_name C(25),
+                group_desc C(255),
 		active I1,
 		create_date DT,
 		modified_date DT

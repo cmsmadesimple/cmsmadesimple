@@ -56,17 +56,20 @@ foreach( $perms as $one_perm ) {
 //
 $admin_group = new Group();
 $admin_group->name = 'Admin';
+$admin_gruup->description = 'Members of this group can manage the entire site.';
 $admin_group->active = 1;
 $admin_group->Save();
 
 $editor_group = new Group();
 $editor_group->name = 'Editor';
+$editor_group->description = 'Members of this group can manage content';
 $editor_group->active = 1;
 $editor_group->Save();
 $editor_group->GrantPermission('Manage All Content');
 
 $designer_group = new Group();
 $designer_group->name = 'Designer';
+$designer_group->description = 'Members of this group can manage stylesheets, templates, and content';
 $designer_group->active = 1;
 $designer_group->Save();
 $designer_group->GrantPermission('Add Templates');

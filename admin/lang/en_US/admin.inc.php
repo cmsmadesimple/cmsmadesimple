@@ -1487,6 +1487,7 @@ $lang['admin']['view_page'] = 'View this page in a new window';
 //  W W W W
 //   W   W
 
+$lang['admin']['warn_addgroup'] = 'Creating a new group does not assign any permissions. You will need to assign permissons to the new group in a separate step.';
 $lang['admin']['warning_mail_settings'] = <<<EOT
 Your mail settings have not been configured.  This could interfere with the ability of your website to send email messages.  You should go to <a href="%s">Extensions >> CMSMailer</a> and configure the mail settings with the information provided by your host.
 EOT;

@@ -34,6 +34,7 @@ class Group
 {
 	var $id;
 	var $name;
+	var $description;
 	var $active;
 
 	/**
@@ -54,6 +55,7 @@ class Group
 	{
 		$this->id = -1;
 		$this->name = '';
+		$this->description = '';
 		$this->active = false;
 	}
 
