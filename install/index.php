@@ -31,7 +31,9 @@ define('CMS_INSTALL_BASE', dirname(__FILE__));
 define('CMS_BASE', dirname(CMS_INSTALL_BASE));
 
 require_once CMS_BASE . DIRECTORY_SEPARATOR . 'lib' . DIRECTORY_SEPARATOR . 'misc.functions.php';
-require_once cms_join_path(CMS_BASE, 'fileloc.php');
+define('CONFIG_FILE_LOCATION',CMS_BASE.'/config.php');
+define('TMP_CACHE_LOCATION',cms_join_path(CMS_BASE,'tmp','cache'));
+define('TMP_TEMPLATES_C_LOCATION',cms_join_path(CMS_BASE,'tmp','templates_c'));
 require_once cms_join_path(CMS_BASE, 'lib', 'test.functions.php');
 require_once cms_join_path(CMS_INSTALL_BASE, 'lib', 'functions.php');
 require_once cms_join_path(CMS_INSTALL_BASE, 'translation.functions.php');

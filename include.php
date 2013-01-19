@@ -59,14 +59,15 @@ if(!@session_id()) session_start();
  * @package CMS
  */
 #magic_quotes_runtime is a nuisance...  turn it off before it messes something up
-if (version_compare(phpversion(),"5.3.0","<")) 
-{
-	set_magic_quotes_runtime(false);
+if (version_compare(phpversion(),"5.3.0","<")) {
+  set_magic_quotes_runtime(false);
 }
 
 // minimum stuff to get started (autoloader needs the cmsms() and the config stuff.
 // require_once($dirname.DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR.'classes'.DIRECTORY_SEPARATOR.'class.cms_variables.php');
-require_once($dirname.DIRECTORY_SEPARATOR.'fileloc.php');
+if( !defined('CONFIG_FILE_LOCATION') ) {
+  define('CONFIG_FILE_LOCATION',dirname(__FILE__).'/config.php');
+}
 require_once($dirname.DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR.'classes'.DIRECTORY_SEPARATOR.'class.CmsException.php');
 require_once($dirname.DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR.'classes'.DIRECTORY_SEPARATOR.'class.cms_config.php');
 require_once($dirname.DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR.'classes'.DIRECTORY_SEPARATOR.'class.CmsApp.php');

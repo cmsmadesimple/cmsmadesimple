@@ -106,9 +106,12 @@ class cms_config implements ArrayAccess
     $this->_types['set_names'] = self::TYPE_BOOL;
     $this->_types['admin_url'] = self::TYPE_STRING;
     $this->_types['ignore_lazy_load'] = self::TYPE_BOOL;
+	$this->_types['tmp_cache_location'] = self::TYPE_STRING;
+	$this->_types['tmp_templates_c_location'] = self::TYPE_STRING;
+	$this->_types['public_cache_location'] = self::TYPE_STRING;
 
     $config = array();
-    if (file_exists(CONFIG_FILE_LOCATION)) {
+    if (defined('CONFIG_FILE_LOCATION') && file_exists(CONFIG_FILE_LOCATION)) {
 		include(CONFIG_FILE_LOCATION);
 		foreach( $config as $key => &$value ) {
 			if( isset($this->_types[$key]) ) {
@@ -166,6 +169,13 @@ class cms_config implements ArrayAccess
 
       // now load the config
       self::$_instance->load_config();
+
+	  global $CMS_INSTALL_PAGE;
+	  if( !isset($CMS_INSTALL_PAGE) ) {
+		  define('TMP_CACHE_LOCATION',self::$_instance['tmp_cache_location']);
+		  define('PUBLIC_CACHE_LOCATION',self::$_instance['public_cache_location']);
+		  define('TMP_TEMPLATES_C_LOCATION',self::$_instance['tmp_templates_c_location']);
+	  }
     }
 
     return self::$_instance;
@@ -361,6 +371,13 @@ class cms_config implements ArrayAccess
 
 	  case 'ssl_css_url':
 		  return $this->offsetGet('ssl_url').'/tmp/cache/';
+
+	  case 'tmp_cache_location':
+	  case 'public_cache_location':
+		  return cms_join_path($this->offsetGet('root_path'),'tmp','cache');
+
+	  case 'tmp_templates_c_location':
+		  return cms_join_path($this->offsetGet('root_path'),'tmp','templates_c');
 
 	  default:
 		  // not a mandatory key for the config.php file... and one we don't understand.

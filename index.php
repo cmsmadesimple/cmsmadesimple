@@ -20,7 +20,6 @@
 
 $orig_memory = (function_exists('memory_get_usage')?memory_get_usage():0);
 $dirname = dirname(__FILE__);
-require_once($dirname.'/fileloc.php');
 
 /**
  * Entry point for all non-admin pages
@@ -30,47 +29,42 @@ require_once($dirname.'/fileloc.php');
 
 $starttime = microtime();
 clearstatcache();
+define('CONFIG_FILE_LOCATION',__DIR__.'/config.php');
 
-if (!isset($_SERVER['REQUEST_URI']) && isset($_SERVER['QUERY_STRING']))
-{
+if (!isset($_SERVER['REQUEST_URI']) && isset($_SERVER['QUERY_STRING'])) {
 	$_SERVER['REQUEST_URI'] = $_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING'];
-}
-
-if (!file_exists(CONFIG_FILE_LOCATION) || filesize(CONFIG_FILE_LOCATION) < 100)
-{
-	@touch(CONFIG_FILE_LOCATION); // attempt to create the config.php if it doesn't already exist
 }
 
 if (!file_exists(CONFIG_FILE_LOCATION) || filesize(CONFIG_FILE_LOCATION) < 100) 
 {
-	require_once($dirname.'/lib/misc.functions.php');
-	if (FALSE == is_file($dirname.'/install/index.php')) 
-	{
-		die ('There is no config.php file or install/index.php please correct one these errors!');
-	} 
-	else 
-	{
-		redirect('install/');
-	}
-}
-else if (file_exists(TMP_CACHE_LOCATION.'/SITEDOWN')) 
-{
-	echo "<html><head><title>Maintenance</title></head><body><p>Site down for maintenance.</p></body></html>";
-	exit;
+  @touch(CONFIG_FILE_LOCATION); // attempt to create the config.php if it doesn't already exist
+  require_once($dirname.'/lib/misc.functions.php');
+  if (FALSE == is_file($dirname.'/install/index.php')) {
+    die ('There is no config.php file or install/index.php please correct one these errors!');
+  } 
+  else {
+    redirect('install/');
+  }
 }
 
-if (!is_writable(TMP_TEMPLATES_C_LOCATION) || !is_writable(TMP_CACHE_LOCATION)) 
-{
-	echo '<html><title>Error</title></head><body>';
-	echo '<p>The following directories must be writable by the web server:<br />';
-	echo 'tmp/cache<br />';
-	echo 'tmp/templates_c<br /></p>';
-	echo '<p>Please correct by executing:<br /><em>chmod 777 tmp/cache<br />chmod 777 tmp/templates_c</em><br />or the equivilent for your platform before continuing.</p>';
-	echo '</body></html>';
-	exit;
-}
 
 require_once($dirname.'/include.php'); 
+
+if (file_exists(TMP_CACHE_LOCATION.'/SITEDOWN')) {
+  echo "<html><head><title>Maintenance</title></head><body><p>Site down for maintenance.</p></body></html>";
+  exit;
+}
+
+if (!is_writable(TMP_TEMPLATES_C_LOCATION) || !is_writable(TMP_CACHE_LOCATION)) {
+  echo '<html><title>Error</title></head><body>';
+  echo '<p>The following directories must be writable by the web server:<br />';
+  echo 'tmp/cache<br />';
+  echo 'tmp/templates_c<br /></p>';
+  echo '<p>Please correct by executing:<br /><em>chmod 777 tmp/cache<br />chmod 777 tmp/templates_c</em><br />or the equivilent for your platform before continuing.</p>';
+  echo '</body></html>';
+  exit;
+}
+
 @ob_start();
 
 // initial setup
