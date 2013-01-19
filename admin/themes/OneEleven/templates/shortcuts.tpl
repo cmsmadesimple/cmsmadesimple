@@ -8,9 +8,11 @@
 			<a href="http://docs.cmsmadesimple.org/" rel="external" title="{'documentation'|lang}">{'documentation'|lang}</a>	
 		{/if}
 		</li>
+                {if isset($myaccount)}
 		<li class="settings">
 			<a href="myaccount.php?{$secureparam}" title="{'myaccount'|lang}">{'myaccount'|lang}</a>
 		</li>
+                {/if}
 		{if isset($marks)}
 		<li class="favorites open">
 			<a href="listbookmarks.php?{$secureparam}" title="{'bookmarks'|lang}">{'bookmarks'|lang}</a>

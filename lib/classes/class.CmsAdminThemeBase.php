@@ -296,6 +296,10 @@ abstract class CmsAdminThemeBase
 			$this->_perms['eventPerms'] |
 			$this->_perms['taghelpPerms'] |
             (isset($this->_sectionCount['extensions']) && $this->_sectionCount['extensions'] > 0);
+
+		$this->_perms['myaccount'] = check_permission($this->userid,'Manage My Settings');
+		$this->_perms['bookmarks'] = check_permission($this->userid,'Manage My Bookmarks');
+		$this->_perms['myprefs'] = $this->_perms['myaccount'] | $this->_perms['bookmarks'];
 	}
 
 
@@ -489,15 +493,15 @@ abstract class CmsAdminThemeBase
 		// base my prefs menu ---------------------------------------------------------
 		$items['myprefs'] = array('url'=>'index.php?section=myprefs','parent'=>-1,
 								  'title'=>$this->_FixSpaces(lang('myprefs')),
-								  'description'=>lang('myprefsdescription'),'show_in_menu'=>true);
+								  'description'=>lang('myprefsdescription'),'show_in_menu'=>$this->_perms['myprefs']);
 		$items['myaccount'] = array('url'=>'myaccount.php','parent'=>'myprefs',
 									'title'=>$this->_FixSpaces(lang('myaccount')),
 									'description'=>lang('myaccountdescription'),
-									'show_in_menu'=>true);
+									'show_in_menu'=>$this->_perms['myaccount']);
 		$items['managebookmarks'] = array('url'=>'listbookmarks.php','parent'=>'myprefs',
 										  'title'=>$this->_FixSpaces(lang('managebookmarks')),
 										  'description'=>lang('managebookmarksdescription'),
-										  'show_in_menu'=>true);
+										  'show_in_menu'=>$this->_perms['bookmarks']);
 		$items['addbookmark'] = array('url'=>'addbookmark.php','parent'=>'myprefs',
 									  'title'=>$this->_FixSpaces(lang('addbookmark')),
 									  'description'=>lang('addbookmark'),'show_in_menu'=>false);

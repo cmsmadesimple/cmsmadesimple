@@ -221,8 +221,13 @@ class OneElevenTheme extends CmsAdminThemeBase {
 			$smarty->assign('module_help_url', $module_help_url);
 		}
 
+		// my preferences
+		if (check_permission(get_userid(),'Manage My Settings')) {
+		  $smarty->assign('myaccount',1);
+		}
+
 		// if bookmarks
-		if (get_preference(get_userid(), 'bookmarks')) {
+		if (get_preference(get_userid(), 'bookmarks') && check_permission(get_userid(),'Manage My Bookmarks')) {
 			$marks = $this->get_bookmarks();
 			$smarty->assign('marks', $marks);
 		}

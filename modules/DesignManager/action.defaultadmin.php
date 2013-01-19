@@ -137,7 +137,7 @@ if( $this->CheckPermission('Manage Designs') ) {
   $opts[$this->Lang('prompt_user')] = $tmp;
 }
 
-if( $this->CheckPermission('Modify Stylesheets') ) {
+if( $this->CheckPermission('Manage Stylesheets') ) {
 	$tmp = cms_userprefs::get($this->GetName().'css_filter');
 	if( $tmp ) $filter_css_rec = unserialize($tmp);
 	if( isset($params['css_page']) ) {
@@ -167,7 +167,7 @@ $smarty->assign('tpl_filter',$filter_tpl_rec);
 
 $tmp = ($this->CheckPermission('Modify Templates') || count($templates))?1:0;
 $smarty->assign('has_templates',$tmp);
-$smarty->assign('manage_stylesheets',$this->CheckPermission('Modify Stylesheets'));
+$smarty->assign('manage_stylesheets',$this->CheckPermission('Manage Stylesheets'));
 $smarty->assign('manage_templates',$this->CheckPermission('Modify Templates'));
 $smarty->assign('manage_designs',$this->CheckPermission('Manage Designs'));
 $smarty->assign('import_url',$this->create_url($id,'admin_import_template'));

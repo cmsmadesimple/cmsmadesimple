@@ -19,7 +19,7 @@
 #
 #-------------------------------------------------------------------------
 if( !isset($gCms) ) exit;
-if( !$this->CheckPermission('Modify Stylesheets') ) return;
+if( !$this->CheckPermission('Manage Stylesheets') ) return;
 
 $this->SetCurrentTab('stylesheets');
 if( isset($params['cancel']) ) {

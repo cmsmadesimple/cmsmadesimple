@@ -33,7 +33,7 @@ try {
   }
   $design = CmsLayoutCollection::load($params['design']);
 
-  $can_delete_stylesheets = $this->CheckPermission('Remove Stylesheets');
+  $can_delete_stylesheets = $this->CheckPermission('Manage Stylesheets');
   $can_delete_templates = $this->CheckPermission('Modify Templates');
 
   if( isset($params['submit']) ) {

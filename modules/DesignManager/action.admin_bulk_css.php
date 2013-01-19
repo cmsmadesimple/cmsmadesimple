@@ -19,7 +19,7 @@
 #
 #-------------------------------------------------------------------------
 if( !isset($gCms) ) exit;
-if( !$this->CheckPermission('Modify Stylesheets') ) return;
+if( !$this->CheckPermission('Manage Stylesheets') ) return;
 
 if( isset($params['allparms']) ) {
   $params = array_merge($params,unserialize(base64_decode($params['allparms'])));
