@@ -193,7 +193,7 @@ class GroupOperations
 		if( $permid < 1 ) return FALSE;
 		if( $groupid == 1 ) return TRUE;
 
-		if( !is_array($this->_perm_cache) || !isset($this->_perm_cache[$groupid]) ) {
+		if( !isset($this->_perm_cache) || !is_array($this->_perm_cache) || !isset($this->_perm_cache[$groupid]) ) {
 			$db = cmsms()->GetDb();
 			$query = 'SELECT permission_id FROM '.cms_db_prefix().'group_perms 
                       WHERE group_id = ?';
@@ -214,7 +214,6 @@ class GroupOperations
 
 		$db = cmsms()->GetDb();
 
-		if( $perm <= 0 ) return;
 		$new_id = $db->GenId(cms_db_prefix().'group_perm');
 		if( !$new_id ) return;
 
@@ -222,7 +221,7 @@ class GroupOperations
 		$query = 'INSERT INTO '.cms_db_prefix()."group_perms
                   (group_perm_id,group_id,permission_id,create_date,modified_date)
                   VALUES (?,?,?,$now,$now)";
- 		$dbr = $db->Execute($query,array($new_id,$this->id,$perm));
+ 		$dbr = $db->Execute($query,array($new_id,$groupid,$perm));
 		unset($this->_perm_cache);
 	}
 

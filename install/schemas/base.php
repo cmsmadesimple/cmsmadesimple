@@ -54,7 +54,7 @@ foreach( $perms as $one_perm ) {
 //
 $admin_group = new Group();
 $admin_group->name = 'Admin';
-$admin_gruup->description = 'Members of this group can manage the entire site.';
+$admin_group->description = 'Members of this group can manage the entire site.';
 $admin_group->active = 1;
 $admin_group->Save();
 
