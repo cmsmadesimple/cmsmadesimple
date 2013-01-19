@@ -52,7 +52,7 @@ if (isset($_POST["cancel"])) {
 }
 
 $userid = get_userid();
-$access = check_permission($userid, 'Modify Groups');
+$access = check_permission($userid, 'Manage Groups');
 $userops = $gCms->GetUserOperations();
 $useringroup = $userops->UserInGroup($userid,$group_id);
 

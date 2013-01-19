@@ -26,8 +26,12 @@ $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 
 check_login();
 $userid = get_userid();
-$access = check_permission($userid, 'Add Users');
-$assign_group_perm = check_permission($userid,'Modify Group Assignments');
+if( !check_permission($userid, 'Manage Users') ) {
+  die('Permission Denied');
+  return;
+}
+
+$assign_group_perm = check_permission($userid,'Manage Groups');
 
 $gCms = cmsms();
 $db = $gCms->GetDb();
@@ -63,102 +67,83 @@ if (!isset($_POST["active"]) && isset($_POST["adduser"])) $active = 0;
 $adminaccess = 1;
 if (!isset($_POST["adminaccess"]) && isset($_POST["adduser"])) $adminaccess = 0;
 
-if (isset($_POST["cancel"]) || !check_permission($userid, 'Add Users'))
-{
-	redirect("listusers.php".$urlext);
-	return;
+if( isset($_POST["cancel"]) ) {
+  redirect("listusers.php".$urlext);
+  return;
 }
 
-if (isset($_POST["adduser"]))
-{
-	$validinfo = true;
+if (isset($_POST["adduser"])) {
+  $validinfo = true;
 
-	if ($user == "")
-	{
-		$validinfo = false;
-		$error .= "<li>".lang('nofieldgiven', array(lang('username')))."</li>";
-	}
-	else if ( !preg_match("/^[a-zA-Z0-9\._ ]+$/", $user) ) {
-		$validinfo = false;
-		$error .= "<li>".lang('illegalcharacters', array(lang('username')))."</li>";
-	} 
+  if ($user == "") {
+    $validinfo = false;
+    $error .= "<li>".lang('nofieldgiven', array(lang('username')))."</li>";
+  }
+  else if ( !preg_match("/^[a-zA-Z0-9\._ ]+$/", $user) ) {
+    $validinfo = false;
+    $error .= "<li>".lang('illegalcharacters', array(lang('username')))."</li>";
+  } 
 
-	if ($password == "")
-	{
-		$validinfo = false;
-		$error .= "<li>".lang('nofieldgiven', array(lang('password')))."</li>";
-	}
-	else if ($password != $passwordagain)
-	{
-		#We don't want to see this if no password was given
-		$validinfo = false;
-		$error .= "<li>".lang('nopasswordmatch')."</li>";
-	}
+  if ($password == "") {
+    $validinfo = false;
+    $error .= "<li>".lang('nofieldgiven', array(lang('password')))."</li>";
+  }
+  else if ($password != $passwordagain) {
+    // We don't want to see this if no password was given
+    $validinfo = false;
+    $error .= "<li>".lang('nopasswordmatch')."</li>";
+  }
 
-	if (!empty($email) && !is_email($email))
-	  {
-	    $validinfo = false;
-	    $error .= '<li>'.lang('invalidemail').'</li>';
+  if (!empty($email) && !is_email($email)) {
+    $validinfo = false;
+    $error .= '<li>'.lang('invalidemail').'</li>';
+  }
+
+  if ($validinfo) {
+    $newuser = new User();
+    $newuser->username = $user;
+    $newuser->SetPassword($password);
+    $newuser->active = $active;
+    $newuser->firstname = $firstname;
+    $newuser->lastname = $lastname;
+    $newuser->email = $email;
+    $newuser->adminaccess = $adminaccess;
+    $newuser->SetPassword($password);
+
+    Events::SendEvent('Core', 'AddUserPre', array('user' => &$newuser));
+
+    $result = $newuser->save();
+
+    if ($result) {
+      Events::SendEvent('Core', 'AddUserPost', array('user' => &$newuser));
+
+      // set some default preferences, based on the user creating this user
+      $adminid = get_userid();
+      $userid = $newuser->id;
+      set_preference($userid, 'wysiwyg', $wysiwyg);
+      set_preference($userid, 'default_cms_language', get_preference($adminid, 'default_cms_language'));
+      set_preference($userid, 'admintheme', get_site_preference('logintheme',CmsAdminThemeBase::GetDefaultTheme()));
+      set_preference($userid, 'bookmarks', get_preference($adminid, 'bookmarks'));
+      set_preference($userid, 'recent', get_preference($adminid, 'recent'));
+
+      if ($assign_group_perm && isset($_POST['groups'])) {
+	$iquery = "insert into ".cms_db_prefix()."user_groups (user_id,group_id) VALUES (?,?)";
+	foreach($group_list as $thisGroup) {
+	  if (isset($_POST['g'.$thisGroup->id]) && $_POST['g'.$thisGroup->id] == 1) {
+	    $result = $db->Execute($iquery,array($userid,$thisGroup->id));
 	  }
-
-	if ($validinfo)
-	{
-		#$new_user_id = $db->GenID(cms_db_prefix()."users_seq");
-		#$query = "INSERT INTO ".cms_db_prefix()."users (user_id, username, password, active, create_date, modified_date) VALUES ($new_user_id, ".$db->qstr($user).", ".$db->qstr(md5($password)).", $active, '".$db->DBTimeStamp(time())."', '".$db->DBTimeStamp(time())."')";
-		#$result = $db->Execute($query);
-
-		$newuser = new User();
-		$newuser->username = $user;
-		$newuser->SetPassword($password);
-		$newuser->active = $active;
-		$newuser->firstname = $firstname;
-		$newuser->lastname = $lastname;
-		$newuser->email = $email;
-		$newuser->adminaccess = $adminaccess;
-		$newuser->SetPassword($password);
-
-		Events::SendEvent('Core', 'AddUserPre', array('user' => &$newuser));
-
-		$result = $newuser->save();
-
-		if ($result)
-		{
-			Events::SendEvent('Core', 'AddUserPost', array('user' => &$newuser));
-
-			# set some default preferences, based on the user creating this user
-			$adminid = get_userid();
-			$userid = $newuser->id;
-			set_preference($userid, 'wysiwyg', $wysiwyg);
-			set_preference($userid, 'default_cms_language', get_preference($adminid, 'default_cms_language'));
-			set_preference($userid, 'admintheme', get_site_preference('logintheme',CmsAdminThemeBase::GetDefaultTheme()));
-			set_preference($userid, 'bookmarks', get_preference($adminid, 'bookmarks'));
-			set_preference($userid, 'recent', get_preference($adminid, 'recent'));
-
-			if ($assign_group_perm && isset($_POST['groups']))
-            {
-            $iquery = "insert into ".cms_db_prefix().
-               "user_groups (user_id,group_id) VALUES (?,?)";
-            foreach($group_list as $thisGroup)
-               {
-               if (isset($_POST['g'.$thisGroup->id]) && $_POST['g'.$thisGroup->id] == 1)
-                  {
-                  $result = $db->Execute($iquery,array($userid,$thisGroup->id));
-                  }
-               }
-            }
-
-
-			// put mention into the admin log
-			audit($newuser->id, 'Admin Username: '.$newuser->username, 'Added');
-			redirect("listusers.php".$urlext);
-		}
-		else
-		{
-			$error .= "<li>".lang('errorinsertinguser')."</li>";
-		}
 	}
-}
+      }
 
+      // put mention into the admin log
+      audit($newuser->id, 'Admin Username: '.$newuser->username, 'Added');
+      redirect("listusers.php".$urlext);
+    }
+    else {
+      $error .= "<li>".lang('errorinsertinguser')."</li>";
+    }
+  }
+}
 
 include_once("header.php");
 
@@ -166,10 +151,7 @@ if ($error != "") {
   echo $themeObject->ShowErrors('<ul class="error">'.$error.'</ul>');
 }
 
-if (!$access) {
-  echo $themeObject->ShowErrors(lang('noaccessto',lang('adduser')));
-}
-else {
+{
 ?>
 
 <div class="pagecontainer">

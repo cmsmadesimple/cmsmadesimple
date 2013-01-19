@@ -34,14 +34,11 @@ cms_siteprefs::set('sitedownexcludes','');
 // permissions
 //
 $all_perms = array();
-$perms = array('Add Pages','Add Groups','Add Templates','Add Users','Modify Any Page',
-	       'Modify Groups','Modify Group Assignments','Modify Permissions',
-	       'Modify Templates','Modify Users','Remove Pages','Remove Groups',
-	       'Remove Users','Modify Modules','Modify Files','Modify Site Preferences',
-	       'Modify Stylesheets',
-	       'Manage Designs','Modify User-defined Tags','Clear Admin Log',
-	       'Modify Events',
-	       'View Tag Help','Manage All Content','Reorder Content');
+$perms = array('Add Pages','Manage Groups','Add Templates','Manage Users','Modify Any Page',
+	       'Modify Permissions','Modify Templates','Remove Pages',
+	       'Modify Modules','Modify Files','Modify Site Preferences',
+	       'Modify Stylesheets','Manage Designs','Modify User-defined Tags','Clear Admin Log',
+	       'Modify Events','View Tag Help','Manage All Content','Reorder Content');
 foreach( $perms as $one_perm ) {
   $permission = new CmsPermission();
   $permission->source = 'Core';

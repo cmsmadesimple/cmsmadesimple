@@ -17,7 +17,6 @@
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 #$Id$
-
 $CMS_ADMIN_PAGE=1;
 
 require_once("../include.php");
@@ -25,52 +24,49 @@ $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 
 check_login();
 $cur_userid = get_userid();
+if( !check_permission($cur_userid, 'Manage Users') ) {
+  die('Permission Denied');
+  return;
+}
 
 $dodelete = true;
 
 $user_id = -1;
-if (isset($_GET["user_id"]))
-{
-	$user_id = $_GET["user_id"];
-	$user_name = "";
-	$userid = get_userid();
-	$access = check_permission($userid, 'Remove Users');
+if (isset($_GET["user_id"])) {
+  $user_id = $_GET["user_id"];
+  $user_name = "";
+  $userid = get_userid();
 
-	if ($access && $user_id != $cur_userid)
-	{
-	  $gCms = cmsms();
-	  $userops = $gCms->GetUserOperations();
-	  $oneuser = $userops->LoadUserByID($user_id);
-	  $user_name = $oneuser->username;
-	  $ownercount = $userops->CountPageOwnershipByID($user_id);
+  if ($user_id != $cur_userid) {
+    $gCms = cmsms();
+    $userops = $gCms->GetUserOperations();
+    $oneuser = $userops->LoadUserByID($user_id);
+    $user_name = $oneuser->username;
+    $ownercount = $userops->CountPageOwnershipByID($user_id);
 
-		if ($ownercount > 0)
-		{
-			$dodelete = false;
-		}
+    if ($ownercount > 0) {
+      $dodelete = false;
+    }
 
-		if ($dodelete)
-		{
-			Events::SendEvent('Core', 'DeleteUserPre', array('user' => &$oneuser));
+    if ($dodelete) {
+      Events::SendEvent('Core', 'DeleteUserPre', array('user' => &$oneuser));
 
-			cms_userprefs::remove_for_user($user_id);
-			$oneuser->Delete();
+      cms_userprefs::remove_for_user($user_id);
+      $oneuser->Delete();
 
-			Events::SendEvent('Core', 'DeleteUserPost', array('user' => &$oneuser));
+      Events::SendEvent('Core', 'DeleteUserPost', array('user' => &$oneuser));
 
-			// put mention into the admin log
-			audit($user_id, 'Admin Username: '.$user_name, 'Deleted');
-		}
-	}
+      // put mention into the admin log
+      audit($user_id, 'Admin Username: '.$user_name, 'Deleted');
+    }
+  }
 }
 
-if ($dodelete == true)
-{
-	redirect("listusers.php".$urlext);
+if ($dodelete == true) {
+  redirect("listusers.php".$urlext);
 }
-else
-{
-	redirect("listusers.php".$urlext."&message=".lang('erroruserinuse'));
+else {
+  redirect("listusers.php".$urlext."&message=".lang('erroruserinuse'));
 }
 
 # vim:ts=4 sw=4 noet

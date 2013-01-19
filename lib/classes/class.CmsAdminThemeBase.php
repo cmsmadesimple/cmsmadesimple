@@ -269,18 +269,10 @@ abstract class CmsAdminThemeBase
 			(isset($this->_sectionCount['files']) && $this->_sectionCount['files'] > 0);
     
 		// user/group
-        $this->_perms['userPerms'] = check_permission($this->userid, 'Add Users') |
-			check_permission($this->userid, 'Modify Users') |
-			check_permission($this->userid, 'Remove Users');
-        $this->_perms['groupPerms'] = check_permission($this->userid, 'Add Groups') |
-			check_permission($this->userid, 'Modify Groups') |
-			check_permission($this->userid, 'Remove Groups');
-        $this->_perms['groupPermPerms'] = check_permission($this->userid, 'Modify Permissions');
-        $this->_perms['groupMemberPerms'] =  check_permission($this->userid, 'Modify Group Assignments');
+        $this->_perms['userPerms'] = check_permission($this->userid, 'Manage Users');
+        $this->_perms['groupPerms'] = check_permission($this->userid, 'Manage Groups');
         $this->_perms['usersGroupsPerms'] = $this->_perms['userPerms'] |
 			$this->_perms['groupPerms'] |
-			$this->_perms['groupPermPerms'] |
-			$this->_perms['groupMemberPerms'] |
 			(isset($this->_sectionCount['usersgroups']) &&
 			 $this->_sectionCount['usersgroups'] > 0);
 
@@ -431,11 +423,11 @@ abstract class CmsAdminThemeBase
 									   'parent'=>'usersgroups',
 									   'title'=>$this->_FixSpaces(lang('groupassignments')),
 									   'description'=>lang('groupassignmentdescription'),
-									   'show_in_menu'=>$this->HasPerm('groupMemberPerms'));
+									   'show_in_menu'=>$this->HasPerm('groupPerms'));
 		$items['groupperms'] = array('url'=>'changegroupperm.php','parent'=>'usersgroups',
 									 'title'=>$this->_FixSpaces(lang('groupperms')),
 									 'description'=>lang('grouppermsdescription'),
-									 'show_in_menu'=>$this->HasPerm('groupPermPerms'));
+									 'show_in_menu'=>$this->HasPerm('groupPerms'));
 		// base extensions menu ---------------------------------------------------------
 		$items['extensions'] = array('url'=>'index.php?section=extensions','parent'=>-1,
 									 'title'=>$this->_FixSpaces(lang('extensions')),

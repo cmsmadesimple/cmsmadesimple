@@ -25,6 +25,11 @@ require_once("../lib/classes/class.user.inc.php");
 $urlext=CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 
 check_login();
+$userid = get_userid();
+if( !check_permission($userid, 'Manage Users') ) {
+  die('Permission Denied');
+  return;
+}
 
 $error = "";
 
@@ -54,7 +59,6 @@ if (!isset($_POST["adminaccess"]) && isset($_POST["edituser"])) $adminaccess = 0
 $active = 1;
 if (!isset($_POST["active"]) && isset($_POST["edituser"])) $active = 0;
 
-$userid = get_userid();
 $user_id = $userid;
 if (isset($_POST["user_id"])) $user_id = cleanValue($_POST["user_id"]);
 else if (isset($_GET["user_id"])) $user_id = cleanValue($_GET["user_id"]);
@@ -73,23 +77,15 @@ if (strlen($thisuser->username) > 0)
   }
 
 // this is now always true... but we may want to change how things work, so I'll leave it
-$access_perm = check_permission($userid, 'Modify Users');
 $access_user = ($userid == $user_id);
 $access_group = $userops->UserInGroup($userid,1) || (!$userops->UserInGroup($user_id,1));
-$access = ($access_perm || $access_user) && $access_group;
-
-$assign_group_perm = check_permission($userid,'Modify Group Assignments');
-
+$access = $access_user && $access_group;
+$assign_group_perm = check_permission($userid,'Manage Groups');
 $use_wysiwyg = "";
-#if (isset($_POST["use_wysiwyg"])){$use_wysiwyg = $_POST["use_wysiwyg"];}
-#else{$use_wysiwyg = get_preference($userid, 'use_wysiwyg');}
-
-if ($access) {
-
-  if (isset($_POST["cancel"])) {
-    redirect("index.php?section=usersgroups&".$urlext);
-    return;
-  }
+if (isset($_POST["cancel"])) {
+  redirect("index.php?section=usersgroups&".$urlext);
+  return;
+}
 
   if (isset($_POST["edituser"])) {
 	
@@ -110,68 +106,49 @@ if ($access) {
       $error .= "<li>".lang('nopasswordmatch')."</li>";
     }
 
-    if (!empty($email) && !is_email($email))
-      {
-	$validinfo = false;
-	$error .= '<li>'.lang('invalidemail').': '.$email.'</li>';
-      }
+    if (!empty($email) && !is_email($email)) {
+      $validinfo = false;
+      $error .= '<li>'.lang('invalidemail').': '.$email.'</li>';
+    }
 
     if ($validinfo) {
-#set_preference($userid, 'use_wysiwyg', $use_wysiwyg);
-#audit(-1, '', 'Edited User');
-
       $result = false;
-      if ($thisuser)
-	{
+      if ($thisuser) {
 	  $thisuser->username = $user;
 	  $thisuser->firstname = $firstname;
 	  $thisuser->lastname = $lastname;
 	  $thisuser->email = $email;
 	  $thisuser->adminaccess = $adminaccess;
 	  $thisuser->active = $active;
-	  if ($password != "")
-	    {
-	      $thisuser->SetPassword($password);
-	    }
+	  if ($password != "") {
+	    $thisuser->SetPassword($password);
+	  }
 				
 	  Events::SendEvent('Core', 'EditUserPre', array('user' => &$thisuser));
 
-
 	  $result = $thisuser->save();
 				
-	  if ($assign_group_perm && isset($_POST['groups']))
-	    {
-	      $dquery = "delete from ".cms_db_prefix()."user_groups where user_id=?";
-	      $iquery = "insert into ".cms_db_prefix().
-		"user_groups (user_id,group_id) VALUES (?,?)";
-	      $result = $db->Execute($dquery,array($thisuser->id));
-	      foreach($group_list as $thisGroup)
-		{
-                  if (isset($_POST['g'.$thisGroup->id]) && $_POST['g'.$thisGroup->id] == 1)
-		    {
-		      $result = $db->Execute($iquery,array($thisuser->id,$thisGroup->id));
-		    }
-		}
+	  if ($assign_group_perm && isset($_POST['groups'])) {
+	    $dquery = "delete from ".cms_db_prefix()."user_groups where user_id=?";
+	    $iquery = "insert into ".cms_db_prefix().
+		       "user_groups (user_id,group_id) VALUES (?,?)";
+	    $result = $db->Execute($dquery,array($thisuser->id));
+	    foreach($group_list as $thisGroup) {
+	      if (isset($_POST['g'.$thisGroup->id]) && $_POST['g'.$thisGroup->id] == 1) {
+		$result = $db->Execute($iquery,array($thisuser->id,$thisGroup->id));
+	      }
 	    }
-	}
+	  }
+      }
 
-      if ($result)
-	{
-	  // put mention into the admin log
-	  audit($user_id, 'Admin Username: '.$thisuser->username, 'Edited');
-	  Events::SendEvent('Core', 'EditUserPost', array('user' => &$thisuser));
-	  $gCms->clear_cached_files();
+      if ($result) {
+	// put mention into the admin log
+	audit($user_id, 'Admin Username: '.$thisuser->username, 'Edited');
+	Events::SendEvent('Core', 'EditUserPost', array('user' => &$thisuser));
+	$gCms->clear_cached_files();
 				
-	  if ($access_perm)
-	    {
-	      redirect("listusers.php?".$urlext);
-	    }
-	  else
-	    {
-	      redirect("index.php?section=usersgroups&".$urlext);
-	    }
-
-	}
+	redirect("listusers.php?".$urlext);
+      }
       else {
 	$error .= "<li>".lang('errorupdatinguser')."</li>";
       }
@@ -185,17 +162,12 @@ if ($access) {
     $adminaccess = $thisuser->adminaccess;
     $active = $thisuser->active;
   }
-}
 
 include_once("header.php");
 
-if (!$access) {
-	echo "<div class=\"pageerrorcontainer\"><p class=\"pageerror\">".lang('noaccessto', array(lang('edituser')))."</p></div>";	
+if (FALSE == empty($error)) {
+  echo $themeObject->ShowErrors('<ul class="error">'.$error.'</ul>');
 }
-else {
-	if (FALSE == empty($error)) {
-	    echo $themeObject->ShowErrors('<ul class="error">'.$error.'</ul>');
-	}
 ?>
 
 <div class="pagecontainer">
@@ -229,7 +201,7 @@ else {
 			<p class="pageinput"><input type="text" name="email" maxlength="255" value="<?php echo $email?>" class="standard" /></p>
 		</div>
 	   <?php
-  	   if( $access_perm && !$access_user && ($user_id != 1) ) {
+  	   if(!$access_user && ($user_id != 1) ) {
            ?>
 		<div class="pageoverflow">
 			<p class="pagetext"><?php echo lang('active')?>:</p>
@@ -249,38 +221,33 @@ else {
             </div>
 			<div class="pageinput">
       <?php
-	     $query = "SELECT group_id FROM ".cms_db_prefix()."user_groups where user_id=?";
-
-	     $result = $db->Execute($query,array($user_id));
+        $query = "SELECT group_id FROM ".cms_db_prefix()."user_groups where user_id=?";
+	$result = $db->Execute($query,array($user_id));
         $groups=array();
-	     while($result && $row = $result->FetchRow())
-            {
-            $groups[$row['group_id']] = 1;
-            }
+	while($result && $row = $result->FetchRow()) {
+	  $groups[$row['group_id']] = 1;
+	}
 
-	     echo '<div class="group_memberships clear"><input type="hidden" name="groups" value="1" />';
-		$adminuser = ($userops->UserInGroup($userid,1) || $userid == 1);
-        foreach($group_list as $thisGroup)
-            {
-			if( $thisGroup->id == 1 && $adminuser == false )
-			  {
-				continue;
-			  }
-            echo '<div class="group"><input type="checkbox" name="g'.$thisGroup->id.'" id="g'.$thisGroup->id.
-               '" value="1" ';
-            if (isset($groups[$thisGroup->id]) && $groups[$thisGroup->id] == 1)
-               {
-               echo 'checked="checked"';
-               }
-            echo '/><label for="g'.$thisGroup->id.'">'.$thisGroup->name.'</label></div>';
-            }
+	echo '<div class="group_memberships clear"><input type="hidden" name="groups" value="1" />';
+	$adminuser = ($userops->UserInGroup($userid,1) || $userid == 1);
+        foreach($group_list as $thisGroup) {
+	  if( $thisGroup->id == 1 && $adminuser == false ) {
+	    continue;
+	  }
+	  echo '<div class="group"><input type="checkbox" name="g'.$thisGroup->id.'" id="g'.$thisGroup->id.
+	    '" value="1" ';
+	  if (isset($groups[$thisGroup->id]) && $groups[$thisGroup->id] == 1) {
+	    echo 'checked="checked"';
+	  }
+	  echo '/><label for="g'.$thisGroup->id.'">'.$thisGroup->name.'</label></div>';
+	}
         echo '</div>';
       ?>
          </div>
 		</div>
 
       <?php
-      }
+	     }
            ?>
 		<div class="pageoverflow">
 			<div class="pagetext">&nbsp;</div>
@@ -294,8 +261,6 @@ else {
 	</form>
 </div>
 <?php
-
-}
 
 echo '<p class="pageback"><a class="pageback" href="'.$themeObject->BackUrl().'">&#171; '.lang('back').'</a></p>';
 

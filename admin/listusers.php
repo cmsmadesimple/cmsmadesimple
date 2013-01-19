@@ -27,8 +27,7 @@ $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 
 check_login();
 $userid = get_userid();
-$access = check_permission($userid, "Modify Users") || check_permission($userid, "Remove Users") || check_permission($userid, "Add Users");
-if (!$access) {
+if( !check_permission($userid, 'Manage Users') ) {
   die('Permission Denied');
   return;
 }
@@ -54,14 +53,11 @@ if (isset($_GET["toggleactive"])) {
 
       //modify users, is this enough?
       $userid = get_userid();
-      $permission = check_permission($userid, 'Modify Users');
 
       $result = false;
-      if($permission) {
-	$thisuser->active == 1 ? $thisuser->active = 0 : $thisuser->active=1;
-	Events::SendEvent('Core','EditUserPre',array('user'=>$thisuser));
-        $result = $thisuser->save();
-      }
+      $thisuser->active == 1 ? $thisuser->active = 0 : $thisuser->active=1;
+      Events::SendEvent('Core','EditUserPre',array('user'=>$thisuser));
+      $result = $thisuser->save();
 
       if ($result) {
 	// put mention into the admin log
@@ -84,14 +80,12 @@ if (FALSE == empty($error)) {
   <div class="pageoverflow">
   <?php
     $userid = get_userid();
-    $edit = check_permission($userid, 'Modify Users');
-    $remove = check_permission($userid, 'Remove Users');
 
     $query = "SELECT user_id, username, active FROM ".cms_db_prefix()."users ORDER BY user_id";
     $result = $db->Execute($query);
 
     $userops = $gCms->GetUserOperations();
-    $userlist =& $userops->LoadUsers();
+    $userlist = $userops->LoadUsers();
 
     $page = 1;
     if (isset($_GET['page'])) $page = $_GET['page'];
@@ -107,7 +101,7 @@ if (FALSE == empty($error)) {
       echo "<th>".lang('username')."</th>\n";
       echo "<th style=\"text-align: center;\">".lang('active')."</th>\n";
       echo "<th class=\"pageicon\">&nbsp;</th>\n";
-      if ($remove) echo "<th class=\"pageicon\">&nbsp;</th>\n";
+      echo "<th class=\"pageicon\">&nbsp;</th>\n";
       echo "</tr>\n";
       echo '</thead>';
       echo '<tbody>';
@@ -122,7 +116,7 @@ if (FALSE == empty($error)) {
 	// can access user if: i have edit permission AND user is not in group1 unless I am also in group 1
 	// except, I can always edit my own account.  can't delete myself though.
 	$this_user = $userid == $oneuser->id;
-	$access_to_user = $edit;
+	$access_to_user = TRUE;
 	if( $userops->UserInGroup($oneuser->id,1) && !$userops->UserInGroup($userid,1) ) {
 	  $access_to_user = FALSE;
 	}
@@ -153,12 +147,12 @@ if (FALSE == empty($error)) {
 	    echo "<td>&nbsp;</td>\n";
 	  }
 
-	  if ($remove && $oneuser->id != 1 && $oneuser->id != $userid) {
+	  if ($oneuser->id != 1 && $oneuser->id != $userid) {
 	    echo "<td><a href=\"deleteuser.php".$urlext."&amp;user_id=".$oneuser->id."\" onclick=\"return confirm('".cms_html_entity_decode_utf8(lang('deleteconfirm', $oneuser->username),true)."');\">";
 	    echo $themeObject->DisplayImage('icons/system/delete.gif', lang('delete'),'','','systemicon');
 	    echo "</a></td>\n";
 	  }
-	  else if( $remove ) {
+	  else {
 	    echo '<td></td>';
 	  }
 	  echo "</tr>\n";
@@ -170,10 +164,7 @@ if (FALSE == empty($error)) {
 
       echo '</tbody>';
       echo "</table>\n";
-
     }
-
-    if (check_permission($userid, 'Add Users')) {
   ?>
   <div class="pageoptions">
     <p class="pageoptions">
@@ -190,7 +181,6 @@ if (FALSE == empty($error)) {
 <p class="pageback"><a class="pageback" href="<?php echo $themeObject->BackUrl(); ?>">&#171; <?php echo lang('back')?></a></p>
 
 <?php
-}
 
 include_once("footer.php");
 
