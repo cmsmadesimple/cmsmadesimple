@@ -14,10 +14,10 @@ $lang['help'] = <<<EOT
   <p>The &quot;Nav&quot; module is an engine for generating navigations from the CMSMS content tree and a smarty template.  This module provides flexible filtering capabilities to allow building numerous navigations based on different criteria, and a simple to use hierarchical data format for generating navigations with complete flexibility.</p>
   <p>This module has no admin interface of its own, insted it uses the DesignManager to manage menu templates.</p>
 <h3>How do I use it?</h3>
-<p>The simplest way to use this module is to insert the <code>{Nav}</code> tag into a template.  The module accepts numerous parameters to alter its behavior and filter the data.</p>
+<p>The simplest way to use this module is to insert the <code>{Navigator}</code> tag into a template.  The module accepts numerous parameters to alter its behavior and filter the data.</p>
 <h3>Why do I care about templates?</h3>
 <p>This is the power of CMSMS.  Navigations can be built automatically using the data from your content hierarchy, and a smarty template.  There is no need to edit a navigation object each time a content page is added or removed from the system.  Additionally, navigation templates can easily include javascript or advanced functionality and can be shared between websites.</p>
-<p>This module is distributed with a few sample templates, they are only samples.  You are free and encouraged to copy them and modify the templaes to your liking.  Styling of the navigation is accomplished by editing a CMSMS stylesheet.  Stylesheets are not included with the Nav module.</p>
+<p>This module is distributed with a few sample templates, they are only samples.  You are free and encouraged to copy them and modify the templaes to your liking.  Styling of the navigation is accomplished by editing a CMSMS stylesheet.  Stylesheets are not included with the Navigator module.</p>
 <h3>The node object:</h3>
   <p>Each nav template is provided with an array of node objects that match the criteria specified on the tag.  Below is a description of the members of the node object:</p>
 <ul>
@@ -46,22 +46,22 @@ $lang['help'] = <<<EOT
 <h3>Examples:</h3>
 <ul>
    <li>A simple navigation that is only 2 levels deep, using the default template:<br/>
-     <pre><code>{Nav number_of_levels=2}</code></pre>
+     <pre><code>{Navigator number_of_levels=2}</code></pre>
    </li>
      <li>Display a simple navigation two levels deep starting with the children of the current page.  Use the default template:</li>
-     <pre><code>{Nav number_of_levels=2 start_page=\$page_lias}</code></pre>
+     <pre><code>{Navigator number_of_levels=2 start_page=\$page_lias}</code></pre>
    </li>
    <li>Display a simple navigation two levels deep starting with the children of the current page.  Use the default template:</li>
-     <pre><code>{Nav number_of_levels=2 childrenof=\$page_lias}</code></pre>
+     <pre><code>{Navigator number_of_levels=2 childrenof=\$page_lias}</code></pre>
    </li>
    <li>Display a simple navigation two levels deep starting with the current page, and everything below it.  Use the default template:</li>
-     <pre><code>{Nav number_of_levels=2 start_page=\$page_lias}</code></pre>
+     <pre><code>{Navigator number_of_levels=2 start_page=\$page_lias}</code></pre>
    </li>
    <li>Display a navigation two levels deep starting with the current page, its peers, and everything below it.  Use the default template:</li>
-     <pre><code>{Nav start_page=\$page_lias show_root_siblings=1}</code></pre>
+     <pre><code>{Navigator start_page=\$page_lias show_root_siblings=1}</code></pre>
    </li>
    <li>Display a navigation of the specified menu items and their children.  Use the templte named mymenu</li>
-     <pre><code>{Nav items='alias1,alias2,alias3' number_of_levels=20 template=mymenu}</code></pre>
+     <pre><code>{Navigator items='alias1,alias2,alias3' number_of_levels=20 template=mymenu}</code></pre>
    </li>
 </ul>
 EOT;
@@ -74,7 +74,7 @@ $lang['help_show_all'] = 'This option will cause the menu to show all nodes even
 $lang['help_show_root_siblings'] = 'This option only becomes useful if start_element or start_page are used.  It basically will display the siblings along side of the selected start_page/element.';
 $lang['help_start_element'] = 'Starts the menu displaying at the given start_element and showing that element and it\'s children only.  Takes a hierarchy position (e.g. 5.1.2).';
 $lang['help_start_page'] = 'Starts the menu displaying at the given start_page and showing that element and it\'s children only.  Takes a page alias.';
-$lang['help_template'] = 'The template to use for displaying the menu.  The named template must exist in the DesignManager or an error will be displayed.  If this parameter is not specified the default template of type Nav::Navigation will be used';
+$lang['help_template'] = 'The template to use for displaying the menu.  The named template must exist in the DesignManager or an error will be displayed.  If this parameter is not specified the default template of type Navigator::Navigation will be used';
 #I
 #J
 #K
@@ -88,7 +88,7 @@ $lang['help_template'] = 'The template to use for displaying the menu.  The name
 #S
 #T
 $lang['type_navigation'] = 'Navigation';
-$lang['type_Nav'] = 'Nav';
+$lang['type_Nav'] = 'Navigator';
 
 #U
 #V

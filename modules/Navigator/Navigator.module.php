@@ -1,7 +1,7 @@
 <?php
 #BEGIN_LICENSE
 #-------------------------------------------------------------------------
-# Module: Nav (c) 2013 by Robert Campbell 
+# Module: Navigator (c) 2013 by Robert Campbell 
 #         (calguy1000@cmsmadesimple.org)
 #  An module for CMS Made Simple to allow building hierarchical navigations.
 # 
@@ -35,9 +35,9 @@
 #END_LICENSE
 #$Id: News.module.php 2114 2005-11-04 21:51:13Z wishy $
 
-final class Nav extends CMSModule
+final class Navigator extends CMSModule
 {
-  function GetName() { return 'Nav'; }
+  function GetName() { return get_class($this); }
   function GetFriendlyName() { return $this->Lang('friendlyname'); }
   function IsPluginModule() { return true; }
   function HasAdmin() { return false; }

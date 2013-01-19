@@ -1,7 +1,7 @@
 <?php
 #BEGIN_LICENSE
 #-------------------------------------------------------------------------
-# Module: Nav (c) 2013 by Robert Campbell 
+# Module: Navigator (c) 2013 by Robert Campbell 
 #         (calguy1000@cmsmadesimple.org)
 #  An module for CMS Made Simple to allow building hierarchical navigations.
 # 

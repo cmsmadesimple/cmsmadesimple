@@ -1,7 +1,7 @@
 <?php
 #BEGIN_LICENSE
 #-------------------------------------------------------------------------
-# Module: Nav (c) 2013 by Robert Campbell 
+# Module: Navigator (c) 2013 by Robert Campbell 
 #         (calguy1000@cmsmadesimple.org)
 #  An module for CMS Made Simple to allow building hierarchical navigations.
 # 
@@ -34,52 +34,10 @@
 #-------------------------------------------------------------------------
 #END_LICENSE
 #$Id: News.module.php 2114 2005-11-04 21:51:13Z wishy $
-if (!isset($gCms)) exit;
 
-$uid = null;
-if( cmsms()->test_state(CmsApp::STATE_INSTALL) ) {
-  $uid = 1; // hardcode to first user
-} else {
-  $uid = get_userid();
-}
-
-try {
-  $menu_template_type = new CmsLayoutTemplateType();
-  $menu_template_type->set_originator($this->GetName());
-  $menu_template_type->set_name('navigation');
-  $menu_template_type->set_dflt_flag(TRUE);
-  $menu_template_type->set_lang_callback('Nav::page_type_lang_callback');
-  $menu_template_type->set_content_callback('Nav::reset_page_type_defaults');
-  $menu_template_type->reset_content_to_factory();
-  $menu_template_type->save();
-}
-catch( CmsException $e ) {
-  // log it
-  debug_to_log(__FILE__.':'.__LINE__.' '.$e->GetMessage());
-  audit('',$this->GetName(),'Installation Error: '.$e->GetMessage());
-}
-
-try {
-  $fn = cms_join_path(dirname(__FILE__),'templates','simple_navigation.tpl');
-  if( file_exists( $fn ) ) {
-    $template = @file_get_contents($fn);
-    $tpl = new CmsLayoutTemplate();
-    $tpl->set_name('Simple Navigation');
-    $tpl->set_owner($uid);
-    $tpl->set_content($template);
-    $tpl->set_type($menu_template_type);
-    $tpl->set_type_dflt(TRUE);
-    $tpl->save();
-  }
-}
-catch( CmsException $e ) {
-  debug_to_log(__FILE__.':'.__LINE__.' '.$e->GetMessage());
-  audit('',$this->GetName(),'Installation Error: '.$e->GetMessage());
-}
-
-// register plugins
-$this->RegisterModulePlugin(true);
-$this->RegisterSmartyPlugin('nav_breadcrumbs','function','nav_breadcrumbs');
+$this->RemovePreference();
+$this->DeleteTemplate();
+$this->RemoveSmartyPlugin();
 
 #
 # EOF
