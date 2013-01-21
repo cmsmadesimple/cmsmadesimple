@@ -161,7 +161,7 @@ else
           <input type="hidden" name="<?php echo CMS_SECURE_PARAM_NAME ?>" value="<?php echo $_SESSION[CMS_USER_KEY] ?>" />
         </div>
 		<div class="pageoverflow">
-			<p class="pagetext">*<?php echo lang('name')?>:</p>
+			<p class="pagetext">*<?php echo lang('name') .' '. lang('gcb_name_help')?>:</p>
 			<p class="pageinput"><input type="text" name="htmlblob" maxlength="255" value="<?php echo $htmlblob?>" class="standard" /></p>
 		</div>
 		<?php if (get_site_preference('nogcbwysiwyg','0') == '0') { ?>

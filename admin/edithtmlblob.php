@@ -311,7 +311,7 @@ else
 			</p>
 		</div>
 		<div class="pageoverflow">
-			<p class="pagetext"><?php echo lang('name')?>:</p>
+			<p class="pagetext"><?php echo lang('name') .' '. lang('gcb_name_help')?>:</p>
 			<p class="pageinput"><input type="text" name="htmlblob" maxlength="255" value="<?php echo $htmlblob?>" class="standard" /></p>
 		</div>
                 
