@@ -274,10 +274,10 @@ jQuery(document).ready(function($) {
 			$('.pagewarning').addClass('hidden');
 		}
 		
-		$('.message').click(function() {
+		$('.message:not(.no-slide)').click(function() {
 				$('.message').slideUp();
 			});
-		$('.message, .pageerrorcontainer, .pagemcontainer').each(function() {
+		$('.message:not(.no-slide), .pageerrorcontainer:not(.no-slide), .pagemcontainer:not(.no-slide)').each(function() {
 			var message = $(this);
 			$(message).hide()
 				.slideDown(1000, function() {
