@@ -39,13 +39,11 @@ final class Nav_utils
 {
   private function __construct() {}
 
-  public static function fill_node(cms_content_tree $node,$deep,$nlevels,$show_all,$depth = 0)
+  public static function fill_node(cms_content_tree $node,$deep,$nlevels,$show_all,$collapse = FALSE,$depth = 0)
   {
     if( !is_object($node) ) return;
     $gCms = cmsms();
-    debug_buffer('test1');
     $content = $node->getContent(TRUE,TRUE);
-    debug_buffer('test2');
     if( is_object($content) ) {
       if( !$content->Active() ) return;
       if( !$content->ShowInMenu() && !$show_all ) return;
@@ -67,6 +65,8 @@ final class Nav_utils
       $obj->alias = $content->Alias();
       $obj->current = FALSE;
       $obj->parent = FALSE;
+      $obj->has_children = FALSE;
+
       if (isset($gCms->variables['content_id']) && $obj->id == $gCms->variables['content_id']) {
 	$obj->current = true;
       }
@@ -106,7 +106,13 @@ final class Nav_utils
 	}
       }
 
-      if( $node->has_children() && ($nlevels < 0 || $depth+1 < $nlevels) ) {
+      $children = null;
+      if( $node->has_children() ) $children = $node->get_children();
+      
+      // are we recursing?
+//      if( is_array($children) && count($children) && ($nlevels < 0 || $depth+1 < $nlevels) && 
+//	  (($collapse && ($obj->parent || $obj->current)) || !$collapse) ) {
+      if( is_array($children) && count($children) ) {
 	$children = $node->get_children();
 	$child_nodes = array();
 	for( $i = 0; $i < count($children); $i++ ) {

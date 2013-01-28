@@ -21,7 +21,6 @@
 $CMS_ADMIN_PAGE=1;
 
 require_once("../include.php");
-require_once("../lib/classes/class.user.inc.php");
 $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 
 check_login();
@@ -31,48 +30,39 @@ if( !check_permission($userid, 'Manage Users') ) {
   return;
 }
 
-$assign_group_perm = check_permission($userid,'Manage Groups');
-
 $gCms = cmsms();
 $db = $gCms->GetDb();
+$assign_group_perm = check_permission($userid,'Manage Groups');
 $groupops = $gCms->GetGroupOperations();
-$group_list = $groupops->LoadGroups();
-
 $error = "";
-
 $user= "";
-if (isset($_POST["user"])) $user = cleanValue($_POST["user"]);
-
 $firstname = "";
-if (isset($_POST["firstname"])) $firstname = cleanValue($_POST["firstname"]);
-
 $lastname = "";
-if (isset($_POST["lastname"])) $lastname = cleanValue($_POST["lastname"]);
-
-$password= "";
-if (isset($_POST["password"])) $password = $_POST["password"];
-
-$passwordagain= "";
-if (isset($_POST["passwordagain"])) $passwordagain = $_POST["passwordagain"];
-
+$password = "";
+$passwordagain = "";
 $email = "";
-if (isset($_POST["email"])) $email = trim(strip_tags($_POST["email"]));
-
-$wysiwyg = '';
-if (isset($_POST["wysiwyg"])) $wysiwyg = $_POST["wysiwyg"];
-
 $active = 1;
-if (!isset($_POST["active"]) && isset($_POST["adduser"])) $active = 0;
-
+$copyusersettings = null;
 $adminaccess = 1;
-if (!isset($_POST["adminaccess"]) && isset($_POST["adduser"])) $adminaccess = 0;
+$sel_groups = array();
+
+if (isset($_POST["user"])) $user = cleanValue($_POST["user"]);
+if (isset($_POST["firstname"])) $firstname = cleanValue($_POST["firstname"]);
+if (isset($_POST["lastname"])) $lastname = cleanValue($_POST["lastname"]);
+if (isset($_POST["password"])) $password = trim($_POST["password"]);
+if (isset($_POST["passwordagain"])) $passwordagain = trim($_POST["passwordagain"]);
+if (isset($_POST["email"])) $email = trim(strip_tags($_POST["email"]));
+if (!isset($_POST["active"]) && isset($_POST["adduser"])) $active = 0;
+if (isset($_POST['copyusersettings'])) $copyusersettings = (int)$_POST['copyusersettings'];
+if (!isset($_POST["adminaccess"]) && isset($_POST["submit"])) $adminaccess = 0;
+if ( isset($_POST['sel_groups']) && is_array($_POST['sel_groups']) ) $sel_groups = $_POST['sel_groups'];
 
 if( isset($_POST["cancel"]) ) {
   redirect("listusers.php".$urlext);
   return;
 }
 
-if (isset($_POST["adduser"])) {
+if (isset($_POST["submit"])) {
   $validinfo = true;
 
   if ($user == "") {
@@ -120,18 +110,26 @@ if (isset($_POST["adduser"])) {
       // set some default preferences, based on the user creating this user
       $adminid = get_userid();
       $userid = $newuser->id;
-      set_preference($userid, 'wysiwyg', $wysiwyg);
-      set_preference($userid, 'default_cms_language', get_preference($adminid, 'default_cms_language'));
-      set_preference($userid, 'admintheme', get_site_preference('logintheme',CmsAdminThemeBase::GetDefaultTheme()));
-      set_preference($userid, 'bookmarks', get_preference($adminid, 'bookmarks'));
-      set_preference($userid, 'recent', get_preference($adminid, 'recent'));
-
-      if ($assign_group_perm && isset($_POST['groups'])) {
-	$iquery = "insert into ".cms_db_prefix()."user_groups (user_id,group_id) VALUES (?,?)";
-	foreach($group_list as $thisGroup) {
-	  if (isset($_POST['g'.$thisGroup->id]) && $_POST['g'.$thisGroup->id] == 1) {
-	    $result = $db->Execute($iquery,array($userid,$thisGroup->id));
+      if( $copyusersettings > 0 ) {
+	$prefs = cms_userprefs::get_all_for_user($copyusersettings);
+	if( is_array($prefs) && count($prefs) ) {
+	  foreach( $prefs as $k => $v ) {
+	    cms_userprefs::set_for_user($userid,$k,$v);
 	  }
+	}
+      }
+      else {
+	set_preference($userid, 'default_cms_language', get_preference($adminid, 'default_cms_language'));
+	set_preference($userid, 'admintheme', get_site_preference('logintheme',CmsAdminThemeBase::GetDefaultTheme()));
+	set_preference($userid, 'bookmarks', get_preference($adminid, 'bookmarks'));
+	set_preference($userid, 'recent', get_preference($adminid, 'recent'));
+      }
+
+      if ($assign_group_perm && is_array($sel_groups) && count($sel_groups) ) {
+	$iquery = "insert into ".cms_db_prefix()."user_groups (user_id,group_id) VALUES (?,?)";
+	foreach( $sel_grouops as $gid ) {
+	  $gid = (int)$gid;
+	  $db->Execute($iquery,array($userid,$thisGroup->id));
 	}
       }
 
@@ -151,98 +149,32 @@ if ($error != "") {
   echo $themeObject->ShowErrors('<ul class="error">'.$error.'</ul>');
 }
 
-{
-?>
-
-<div class="pagecontainer">
-  <?php echo $themeObject->ShowHeader('adduser'); ?>
-  <form method="post" action="adduser.php">
-  <div>
-    <input type="hidden" name="<?php echo CMS_SECURE_PARAM_NAME ?>" value="<?php echo $_SESSION[CMS_USER_KEY] ?>" />
-  </div>
-  <div class="pageoverflow">
-    <p class="pagetext">*<?php echo lang('name')?>:</p>
-    <p class="pageinput"><input type="text" name="user" maxlength="255" value="<?php echo $user?>" /></p>
-  </div>
-  <div class="pageoverflow">
-    <p class="pagetext">*<?php echo lang('password')?>:</p>
-    <p class="pageinput"><input type="password" name="password" maxlength="25" value="" /></p>
-  </div>
-  <div class="pageoverflow">
-    <p class="pagetext">*<?php echo lang('passwordagain')?>:</p>
-    <p class="pageinput"><input type="password" name="passwordagain" maxlength="25" value="" /></p>
-  </div>
-  <div class="pageoverflow">
-    <p class="pagetext"><?php echo lang('firstname')?>:</p>
-    <p class="pageinput"><input type="text" name="firstname" maxlength="50" value="<?php echo $firstname ?>" /></p>
-  </div>
-  <div class="pageoverflow">
-    <p class="pagetext"><?php echo lang('lastname')?>:</p>
-    <p class="pageinput"><input type="text" name="lastname" maxlength="50" value="<?php echo $lastname ?>" /></p>
-  </div>
-  <div class="pageoverflow">
-    <p class="pagetext"><?php echo lang('email')?>:</p>
-    <p class="pageinput"><input type="text" name="email" maxlength="255" value="<?php echo $email ?>" /></p>
-  </div>
-  <div class="pageoverflow">
-    <div class="pagetext"><?php echo lang('wysiwygtouse'); ?>:</div>
-    <div class="pageinput">
-      <select name="wysiwyg">
-      <option value="-1"><?php echo lang('none'); ?></option>
-      <?php
-	$modules = module_meta::get_instance() -> module_list_by_method('IsWYSIWYG');
-        foreach( $modules as $key ) {
-	  echo '<option value="'.$key.'"';
-	  if (get_site_preference('backendwysiwyg') == $key) {
-	    echo ' selected="selected"';
-	  }
-	  echo '>'.$key.'</option>';
-	}
-      ?>
-      </select>
-    </div>
-  </div>		
-  <div class="pageoverflow">
-    <p class="pagetext"><?php echo lang('active')?>:</p>
-    <p class="pageinput"><input class="pagecheckbox" type="checkbox" name="active" <?php echo ($active == 1?"checked=\"checked\"":"")?> /></p>
-  </div>
-  <?php
-  if ($assign_group_perm) {
-  ?>
-  <div class="pageoverflow">
-    <div class="pagetext"><?php  echo $themeObject->DisplayImage('icons/system/permissions.gif', lang('permissions'),'','','icon-extra');?><b><?php echo lang('groups')?>:</b></div>
-    <div class="pageinput">
-    <?php
-      echo '<div class="group_memberships clear"><input type="hidden" name="groups" value="1" />';
-
-      $userops = $gCms->GetUserOperations();
-      $adminuser = ($userops->UserInGroup($userid,1) || $userid == 1);
-      foreach($group_list as $thisGroup) {
-	if( $thisGroup->id == 1 && $adminuser == false ) continue;
-        echo '<div class="group"><input type="checkbox" name="g'.$thisGroup->id.'" id="g'.$thisGroup->id.
-             '" value="1" /><label for="g'.$thisGroup->id.'">'.$thisGroup->name.'</label></div>';
-      }
-      echo '</div>';
-    ?>
-    </div>
-  </div>
-  <?php
-  }
-  ?>
-	
-  <div class="pageoverflow">
-    <p class="pagetext">&nbsp;</p>
-    <p class="pageinput">
-      <input type="hidden" name="adduser" value="true" />
-      <input class="pagebutton" type="submit" value="<?php echo lang('submit')?>" />
-      <input class="pagebutton" type="submit" name="cancel" value="<?php echo lang('cancel')?>" />
-    </p>
-  </div>
-  </form>
-</div>
-
-<?php
+$smarty = cmsms()->GetSmarty();
+$smarty->assign('adminaccess',$adminaccess);
+$smarty->assign('active',$active);
+$smarty->assign('user',$user);
+$smarty->assign('password',$password);
+$smarty->assign('passwordagain',$passwordagain);
+$smarty->assign('firstname',$firstname);
+$smarty->assign('lastname',$lastname);
+$smarty->assign('email',$email);
+$smarty->assign('active',$active);
+$smarty->assign('copyusersettings',$copyusersettings);
+$smarty->assign('sel_groups',$sel_groups);
+$smarty->assign('my_userid',get_userid());
+if($assign_group_perm ) {
+  $groups = GroupOperations::get_instance()->LoadGroups();
+  $smarty->assign('groups',$groups);
 }
+
+$out = array(-1=>lang('none'));
+$userlist = UserOperations::get_instance()->LoadUsers();
+foreach( $userlist as $one ) {
+  $out[$one->id] = $one->username;
+}
+$smarty->assign('users',$out);
+
+$smarty->display('adduser.tpl');
 echo '<p class="pageback"><a class="pageback" href="'.$themeObject->BackUrl().'">&#171; '.lang('back').'</a></p>';
 
 include_once("footer.php");

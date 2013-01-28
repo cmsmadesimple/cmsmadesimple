@@ -21,8 +21,6 @@
 $CMS_ADMIN_PAGE=1;
 
 require_once("../include.php");
-require_once(cms_join_path($dirname,'lib','html_entity_decode_utf8.php'));
-require_once("../lib/classes/class.user.inc.php");
 $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 
 check_login();
@@ -35,19 +33,19 @@ if( !check_permission($userid, 'Manage Users') ) {
 include_once("header.php");
 $gCms = cmsms();
 $db = $gCms->GetDb();
-
-if (isset($_GET["message"])) {
-  $message = preg_replace('/\</','',$_GET['message']);
-  echo '<div class="pagemcontainer"><p class="pagemessage">'.$message.'</p></div>';
-}
-
+$templateuser = cms_siteprefs::get('template_userid');
+$page = 1;
+$limit = 20;
+$message = '';
+$error = '';
+$userops = UserOperations::get_instance();
 
 if (isset($_GET["toggleactive"])) {
   if($_GET["toggleactive"]==1) {
     $error .= "<li>".lang('errorupdatinguser')."</li>";
   } else {
     $userops = $gCms->GetUserOperations();
-    $thisuser =& $userops->LoadUserByID($_GET["toggleactive"]);
+    $thisuser = $userops->LoadUserByID($_GET["toggleactive"]);
 
     if( $thisuser ) {
 
@@ -69,13 +67,131 @@ if (isset($_GET["toggleactive"])) {
     }
   }
 }
+else if( isset($_POST['bulk']) && isset($_POST['bulkaction']) && 
+	 isset($_POST['multiselect']) && is_array($_POST['multiselect']) && count($_POST['multiselect']) ) {
+  switch( $_POST['bulkaction'] ) {
+  case 'delete':
+    $userops = UserOperations::get_instance();
+    $ndeleted = 0;
+    foreach( $_POST['multiselect'] as $uid ) {
+      $uid = (int)$uid;
+      if( $uid <= 1 ) continue; // can't delete the magic user... 
+      if( $uid == get_userid() ) continue; // can't delete self.
+      $oneuser = $userops->LoadUserById($uid);
+      if( !is_object($oneuser) ) continue; // invalid user
+      $ownercount = $userops->CountPageOwnershipById($uid);
+      if( $ownercount > 0 ) continue; // can't delete user who owns pages.
+      
+      // ready to delete.
+      Events::SendEvent('Core', 'DeleteUserPre', array('user' => &$oneuser));
+      $oneuser->Delete();
+      Events::SendEvent('Core', 'DeleteUserPost', array('user' => &$oneuser));
+      audit($uid, 'Admin Username: '.$user_name, 'Deleted');
+      $ndeleted++;
+    }
+    if( $ndeleted > 0 ) {
+      $message = lang('msg_userdeleted',$ndeleted);
+    }
+    break;
+
+  case 'clearoptions':
+    $nusers = 0;
+    foreach( $_POST['multiselect'] as $uid ) {
+      $uid = (int)$uid;
+      if( $uid <= 1 ) continue; // can't edit the magic user... 
+      $oneuser = $userops->LoadUserById($uid);
+      if( !is_object($oneuser) ) continue; // invalid user
+
+      Events::SendEvent('Core','EditUserPre',array('user'=>$oneuser));
+      cms_userprefs::remove_for_user($uid);
+      Events::SendEvent('Core','EditUserPost',array('user'=>$oneuser));
+      audit($uid,'Admin Username: '.$oneuser->username,'Settings cleared');
+      $nusers++;
+    }
+    if( $nusers > 0 ) {
+      $message = lang('msg_usersedited',$nusers);
+    }
+    break;
+
+  case 'disable':
+    $nusers = 0;
+    foreach( $_POST['multiselect'] as $uid ) {
+      $uid = (int)$uid;
+      if( $uid <= 1 ) continue; // can't disable the magic user... 
+      if( $uid == get_userid() ) continue; // can't disable self.
+      $oneuser = $userops->LoadUserById($uid);
+      if( !is_object($oneuser) ) continue; // invalid user
+
+      if( $oneuser->active ) {
+	Events::SendEvent('Core','EditUserPre',array('user'=>$oneuser));
+	$oneuser->active = 0;
+	$oneuser->save();
+	Events::SendEvent('Core','EditUserPost',array('user'=>$oneuser));
+	audit($uid,'Admin Username: '.$oneuser->username,'Disabled');
+	$nusers++;
+      }
+    }
+    if( $nusers > 0 ) {
+      $message = lang('msg_usersedited',$nusers);
+    }
+    break;
+
+  case 'enable':
+    $nusers = 0;
+    foreach( $_POST['multiselect'] as $uid ) {
+      $uid = (int)$uid;
+      if( $uid <= 1 ) continue; // can't disable the magic user... 
+      if( $uid == get_userid() ) continue; // can't disable self.
+      $oneuser = $userops->LoadUserById($uid);
+      if( !is_object($oneuser) ) continue; // invalid user
+
+      if( !$oneuser->active ) {
+	Events::SendEvent('Core','EditUserPre',array('user'=>$oneuser));
+	$oneuser->active = 1;
+	$oneuser->save();
+	Events::SendEvent('Core','EditUserPost',array('user'=>$oneuser));
+	audit($uid,'Admin Username: '.$oneuser->username,'Enabled');
+	$nusers++;
+      }
+    }
+    if( $nusers > 0 ) {
+      $message = lang('msg_usersedited',$nusers);
+    }
+    break;
+  }
+}
 
 if (FALSE == empty($error)) {
   echo $themeObject->ShowErrors('<ul class="error">'.$error.'</ul>');
 }
+if (isset($_GET["message"])) {
+  $message = preg_replace('/\</','',$_GET['message']);
+}
+if( FALSE == empty($message)) {
+  echo '<div class="pagemcontainer"><p class="pagemessage">'.$message.'</p></div>';
+}
 
 
+$offset = ((int)$page - 1)*$limit;
+$userlist = $userops->LoadUsers($limit,$offset);
+foreach( $userlist as &$oneuser ) {
+  $oneuser->access_to_user = 1;
+  if( $userops->UserInGroup($oneuser->id,1) && !$userops->UserInGroup($userid,1) ) {
+    $oneuser->access_to_user = 0;
+  }
+  $oneuser->pagecount = $userops->CountPageOwnershipById($uid);
+}
+$smarty->assign('users',$userlist);
+$smarty->assign('my_userid',get_userid());
+$smarty->assign('urlext',$urlext);
+
+$smarty->display('listusers.tpl');
 ?>
+<p class="pageback"><a class="pageback" href="<?php echo $themeObject->BackUrl(); ?>">&#171; <?php echo lang('back')?></a></p>
+<?php
+include_once("footer.php");
+
+ /*
 <div class="pagecontainer">
   <div class="pageoverflow">
   <?php
@@ -100,8 +216,10 @@ if (FALSE == empty($error)) {
       echo "<tr>\n";
       echo "<th>".lang('username')."</th>\n";
       echo "<th style=\"text-align: center;\">".lang('active')."</th>\n";
+      echo "<th class=\"pageicon\">".lang('templateuser')."</th>\n";
       echo "<th class=\"pageicon\">&nbsp;</th>\n";
       echo "<th class=\"pageicon\">&nbsp;</th>\n";
+      echo "<th class=\"pageicon\"><input type=\"checkbox\" id=\"sel_all\" value=\"1\"></th>\n";
       echo "</tr>\n";
       echo '</thead>';
       echo '<tbody>';
@@ -139,16 +257,24 @@ if (FALSE == empty($error)) {
 	  }
 
 	  if ($access_user) {
+	    if( $templateuser > 0 && $templateuser == $oneuser->id ) {
+              echo '<td style="text-align: center;">'.$themeObject->DisplayImage('icons/system/true.gif', lang('info_templateuser'),'','','systemicon').'</td>';
+	    }
+	    else {
+              echo '<td></td>';
+	    }
+
 	    echo "<td><a href=\"edituser.php".$urlext."&amp;user_id=".$oneuser->id."\">";
 	    echo $themeObject->DisplayImage('icons/system/edit.gif', lang('edit'),'','','systemicon');
 	    echo "</a></td>\n";
 	  }
 	  else {
 	    echo "<td>&nbsp;</td>\n";
+	    echo "<td>&nbsp;</td>\n";
 	  }
 
 	  if ($oneuser->id != 1 && $oneuser->id != $userid) {
-	    echo "<td><a href=\"deleteuser.php".$urlext."&amp;user_id=".$oneuser->id."\" onclick=\"return confirm('".cms_html_entity_decode_utf8(lang('deleteconfirm', $oneuser->username),true)."');\">";
+	    echo "<td><a href=\"deleteuser.php".$urlext."&amp;user_id=".$oneuser->id."\" onclick=\"return confirm('".lang('deleteconfirm', $oneuser->username)."');\">";
 	    echo $themeObject->DisplayImage('icons/system/delete.gif', lang('delete'),'','','systemicon');
 	    echo "</a></td>\n";
 	  }
@@ -168,6 +294,7 @@ if (FALSE == empty($error)) {
   ?>
   <div class="pageoptions">
     <p class="pageoptions">
+
       <a href="adduser.php<?php echo $urlext ?>">
 	<?php 
 	  echo $themeObject->DisplayImage('icons/system/newobject.gif', lang('adduser'),'','','systemicon').'</a>';
@@ -183,6 +310,6 @@ if (FALSE == empty($error)) {
 <?php
 
 include_once("footer.php");
-
+ */
 # vim:ts=4 sw=4 noet
 ?>

@@ -55,12 +55,12 @@ final class cms_userprefs
 
   private static function _userid()
   {
-    return get_userid(false);
+	  return get_userid(false);
   }
 
   private static function _reset()
   {
-    self::$_prefs = null;
+	  self::$_prefs = null;
   }
 
   /**
@@ -73,11 +73,11 @@ final class cms_userprefs
    */
   public static function get_for_user($userid,$key,$dflt = '')
   {
-    self::_read($userid);
-    if( isset(self::$_prefs[$userid][$key]) ) {
-		return self::$_prefs[$userid][$key];
-	}
-    return $dflt;
+	  self::_read($userid);
+	  if( isset(self::$_prefs[$userid][$key]) ) {
+		  return self::$_prefs[$userid][$key];
+	  }
+	  return $dflt;
   }
 
   
@@ -90,9 +90,21 @@ final class cms_userprefs
    */
   public static function get($key,$dflt = '')
   {
-    return self::get_for_user(self::_userid(),$key,$dflt);
+	  return self::get_for_user(self::_userid(),$key,$dflt);
   }
 
+  /**
+   * Return an array of all user preferences
+   *
+   * @param integer user_id
+   * @return array Associative array of preferences and values.
+   */
+  public static function get_all_for_user($userid)
+  {
+	  $userid = (int)$userid;
+	  self::_read($userid);
+	  if( isset(self::$_prefs[$userid]) ) return self::$_prefs[$userid];
+  }
 
   /**
    * A method to test if a preference exists for a user
@@ -103,9 +115,10 @@ final class cms_userprefs
    */
   public static function exists_for_user($userid,$key)
   {
-    self::_read($userid);
-    if( isset(self::$_prefs[$userid][$key]) ) return TRUE;
-    return FALSE;
+	  $userid = (int)$userid;
+	  self::_read($userid);
+	  if( isset(self::$_prefs[$userid][$key]) ) return TRUE;
+	  return FALSE;
   }
 
 
@@ -117,7 +130,7 @@ final class cms_userprefs
    */
   public static function exists($key)
   {
-    return self::exists_for_user(self::_userid(),$key);
+	  return self::exists_for_user(self::_userid(),$key);
   }
 
 
@@ -131,17 +144,18 @@ final class cms_userprefs
    */
   public static function set_for_user($userid,$key,$value)
   {
-    self::_read($userid);
-    $db = cmsms()->GetDb();
-    if( !self::exists_for_user($userid,$key) ) {
-		$query = 'INSERT INTO '.cms_db_prefix().'userprefs (user_id,preference,value) VALUES (?,?,?)';
-		$dbr = $db->Execute($query,array($userid,$key,$value));
-	}
-    else {
-		$query = 'UPDATE '.cms_db_prefix().'userprefs SET value = ? WHERE user_id = ? AND preference = ?';
-		$dbr = $db->Execute($query,array($value,$userid,$key));
-	}
-    self::$_prefs[$userid][$key] = $value;
+	  $userid = (int)$userid;
+	  self::_read($userid);
+	  $db = cmsms()->GetDb();
+	  if( !self::exists_for_user($userid,$key) ) {
+		  $query = 'INSERT INTO '.cms_db_prefix().'userprefs (user_id,preference,value) VALUES (?,?,?)';
+		  $dbr = $db->Execute($query,array($userid,$key,$value));
+	  }
+	  else {
+		  $query = 'UPDATE '.cms_db_prefix().'userprefs SET value = ? WHERE user_id = ? AND preference = ?';
+		  $dbr = $db->Execute($query,array($value,$userid,$key));
+	  }
+	  self::$_prefs[$userid][$key] = $value;
   }
 
 
@@ -154,7 +168,7 @@ final class cms_userprefs
    */
   public static function set($key,$value)
   {
-    return self::set_for_user(self::_userid(),$key,$value);
+	  return self::set_for_user(self::_userid(),$key,$value);
   }
 
 
@@ -168,22 +182,23 @@ final class cms_userprefs
    */
   public static function remove_for_user($userid,$key = '',$like = FALSE)
   {
-    self::_read($userid);
-	$parms = array();
-	$query = 'DELETE FROM '.cms_db_prefix().'userprefs WHERE user_id = ?';
-	$parms[] = $userid;
-	if( $key ) {
-		$query2 = ' AND preference = ?';
-		if( $like ) {
-			$query2 = ' AND preference LIKE ?';
-			$key .= '%';
-		}
-		$query .= $query2;
-		$parms[] = $key;
-	}
-    $db = cmsms()->GetDb();
-    $db->Execute($query,$parms);
-    self::_reset();
+	  $userid = (int)$userid;
+	  self::_read($userid);
+	  $parms = array();
+	  $query = 'DELETE FROM '.cms_db_prefix().'userprefs WHERE user_id = ?';
+	  $parms[] = $userid;
+	  if( $key ) {
+		  $query2 = ' AND preference = ?';
+		  if( $like ) {
+			  $query2 = ' AND preference LIKE ?';
+			  $key .= '%';
+		  }
+		  $query .= $query2;
+		  $parms[] = $key;
+	  }
+	  $db = cmsms()->GetDb();
+	  $db->Execute($query,$parms);
+	  self::_reset();
   }
 
 
@@ -196,9 +211,9 @@ final class cms_userprefs
    */
   public static function remove($key,$like = FALSE)
   {
-    return self::remove_for_user(self::_userid(),$key,$like);
+	  return self::remove_for_user(self::_userid(),$key,$like);
   }
-}
+} // end of class
 
 #
 # EOF

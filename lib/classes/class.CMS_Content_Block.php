@@ -396,9 +396,9 @@ final class CMS_Content_Block
     }
     else {
       $out = '<img src="'.$img.'" ';
-      if( !empty($name) ) {
-	$out .= 'name="'.$name.'" ';
-      }
+//       if( !empty($name) ) {
+// 	$out .= 'name="'.$name.'" ';
+//       }
       if( !empty($class) ) {
 	$out .= 'class="'.$class.'" ';
       }

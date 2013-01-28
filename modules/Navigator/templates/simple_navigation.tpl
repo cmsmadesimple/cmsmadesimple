@@ -11,7 +11,7 @@
 <ul>
   {foreach $data as $node}
     {* setup classes for the anchor and list item *}
-    {assign var='liclass' value=' depth'|cat:$depth}
+    {assign var='liclass' value='menudepth'|cat:$depth}
     {assign var='aclass' value=''}
 
     {* the first child gets a special class *}
@@ -22,18 +22,24 @@
 
     {if $node->current}
       {* this is the current page *}
-      {assign var='liclass' value=$liclass|cat:' currentpage'}
-      {assign var='aclass' value=$liclass|cat:' currentpage'}
+      {assign var='liclass' value=$liclass|cat:' menuactive'}
+      {assign var='aclass' value=$aclass|cat:' menuactive'}
     {/if}
+
     {if $node->parent}
       {* this is a parent of the current page *}
-      {assign var='liclass' value=$liclass|cat:' activeparent'}
-      {assign var='aclass' value=$aclass|cat:' activeparent'}
+      {assign var='liclass' value=$liclass|cat:' menuactive menuparent'}
+      {assign var='aclass' value=$aclass|cat:' menuactive menuparent'}
+    {/if}
+
+    {if $node->has_children}
+      {assign var='liclass' value=$liclass|cat:' parent'}
+      {assign var='aclass' value=$aclass|cat:' parent'}
     {/if}
 
     {* build the menu item node *}
     {if $node->type == 'sectionheader'}
-      <li class='sectionheader {$liclass}'>{$node->menutext}
+      <li class='sectionheader {$liclass}'><span>{$node->menutext}</span>
         {if isset($node->children)}
           {Nav_menu data=$node->children depth=$depth+1}
         {/if}
@@ -42,8 +48,8 @@
       <li class='separator {$liclass}'><hr class='separator'/></li>
     {else}
       {* regular item *}
-      <li class="menuitem{$liclass}'>
-        <a class="{$aclass}" href="{$node->url}"{if $node->target ne ""} target="{$node->target}"{/if}>{$node->menutext}</a>
+      <li class="{$liclass}">
+        <a class="{$aclass}" href="{$node->url}"{if $node->target ne ""} target="{$node->target}"{/if}><span>{$node->menutext}</span></a>
         {if isset($node->children)}
           {Nav_menu data=$node->children depth=$depth+1}
         {/if}
@@ -54,8 +60,5 @@
 {/strip}{/function}
 
 {if isset($nodes)}
-<h3>Nodes:</h3>
-<div id="menu">
-  {Nav_menu data=$nodes depth=0}
-</div>
+{Nav_menu data=$nodes depth=0}
 {/if}

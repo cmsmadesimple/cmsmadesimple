@@ -43,6 +43,7 @@ $start_element = null;
 $start_page = null;
 $childrenof = null;
 $deep = TRUE;
+$collapse = FALSE;
 
 $template = null;
 if( isset($params['template']) ) {
@@ -104,8 +105,14 @@ if( !$smarty->isCached($this->GetTemplateResource($template),$cache_id,$compile_
       $start_element = null;
       $childrenof = trim($value);
       break;
+
+    case 'collapse':
+      $collapse = (int)$value;
+      break;
     }
   }
+
+  if( $items ) $collapse = FALSE;
 
   $hm = cmsms()->GetHierarchyManager();
   $rootnodes = array();
@@ -153,7 +160,7 @@ if( !$smarty->isCached($this->GetTemplateResource($template),$cache_id,$compile_
     }
   }
   else {
-    // start tat the top
+    // start at the top
     if( $hm->has_children() ) {
       $children = $hm->get_children();
       for( $i = 0; $i < count($children); $i++ ) {
@@ -167,7 +174,7 @@ if( !$smarty->isCached($this->GetTemplateResource($template),$cache_id,$compile_
   // ready to fill the nodes
   $outtree = array();
   foreach( $rootnodes as $node ) {
-    $tmp = Nav_utils::fill_node($node,$deep,$nlevels,$show_all);
+    $tmp = Nav_utils::fill_node($node,$deep,$nlevels,$show_all,$collapse);
     if( $tmp ) $outtree[] = $tmp;
   }
 

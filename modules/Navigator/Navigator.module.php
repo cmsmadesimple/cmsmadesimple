@@ -64,6 +64,7 @@ final class Navigator extends CMSModule
     $this->SetParameterType('template',CLEAN_STRING); 
     $this->SetParameterType('childrenof',CLEAN_STRING);
     $this->SetParameterType('loadprops',CLEAN_INT);
+    $this->SetParameterType('collapse',CLEAN_INT);
   }
 
   public function InitializeAdmin()
@@ -78,6 +79,7 @@ final class Navigator extends CMSModule
     $this->CreateParameter('childrenof','',$this->Lang('help_childrenof'));
     $this->CreateParameter('action','',$this->Lang('help_action'));
     $this->CreateParameter('loadprops','',$this->Lang('help_loadprops'));
+    $this->CreateParameter('loadprops','',$this->Lang('help_collapse'));
   }
 
   final static public function smarty_cms_breadcrumbs($params,&$smarty)

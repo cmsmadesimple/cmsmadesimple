@@ -475,8 +475,6 @@ class ContentOperations
 	/**
 	 * Loads a set of content objects into the cached tree.
 	 *
-	 * @param boolean $loadprops If true, load the properties of those content objects
-	 * @param boolean $onlyexpanded Not implemented
 	 * @param boolean $loadcontent If false, only create the nodes in the tree, 
 	 *                             don't load the content objects
 	 * @return mixed The cached tree of content

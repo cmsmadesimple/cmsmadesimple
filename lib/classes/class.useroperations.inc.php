@@ -61,17 +61,18 @@ class UserOperations
 	 * @returns array An array of User objects
 	 * @since 0.6.1
 	 */
-	function &LoadUsers()
+	function &LoadUsers($limit = 10000,$offset = 0)
 	{
 		$gCms = cmsms();
 		$db = $gCms->GetDb();
-
 		$result = array();
 
-		$query = "SELECT user_id, username, password, first_name, last_name, email, active, admin_access FROM ".cms_db_prefix()."users ORDER BY username";
-		$dbresult = $db->Execute($query);
+		$query = "SELECT user_id, username, password, first_name, last_name, email, active, admin_access 
+                  FROM ".cms_db_prefix()."users ORDER BY username";
+		$dbresult = $db->SelectLimit($query,$limit,$offset);
 
-		while ($dbresult && $row = $dbresult->FetchRow()) {
+		while( $dbresult && !$dbresult->EOF ) {
+			$row = $dbresult->fields;
 			$oneuser = new User();
 			$oneuser->id = $row['user_id'];
 			$oneuser->username = $row['username'];
@@ -82,6 +83,7 @@ class UserOperations
 			$oneuser->active = $row['active'];
 			$oneuser->adminaccess = $row['admin_access'];
 			$result[] = $oneuser;
+			$dbresult->MoveNext();
 		}
 
 		return $result;
