@@ -36,9 +36,9 @@ function begin_section($id,$txt)
   echo "<script type=\"text/javascript\">parent.begin_section('{$id}','{$txt}')</script>";
 }
 
-function add_result($listid,$content,$title,$url)
+function add_result($listid,$content,$title,$url,$text = '')
 {
-  $tmp = "parent.add_result('{$listid}','{$content}','{$title}','{$url}')";
+  $tmp = "parent.add_result('{$listid}','{$content}','{$title}','{$url}','{$text}')";
   echo '<script type="text/javascript">'.$tmp.'</script>';
 }
 
@@ -76,9 +76,11 @@ if( is_array($slaves) && count($slaves) ) {
 
     $obj->set_params($searchparams);
     $results = $obj->get_matches();
-    begin_section($one_slave['class'],$obj->get_name());
-    foreach( $results as $one ) {
-      add_result($one_slave['class'],$one['title'],$one['description'],$one['edit_url']);
+    if( is_array($results) && count($results) ) {
+      begin_section($one_slave['class'],$obj->get_name());
+      foreach( $results as $one ) {
+	add_result($one_slave['class'],$one['title'],$one['description'],$one['edit_url'],$one['text']);
+      }
     }
     end_section();
   }

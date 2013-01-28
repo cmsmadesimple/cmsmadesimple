@@ -45,10 +45,20 @@ final class AdminSearch_template_slave extends AdminSearch_slave
 	$one = $row['id'];
 	// here we could actually have a smarty template to build the description.
 	$mod = cms_utils::get_module('DesignManager');
+	$text = '';
+	$pos = strpos($row['content'],$this->get_text());
+	if( $pos !== FALSE ) {
+	  $start = max(0,$pos - 50);
+	  $end = min(strlen($row['content']),$pos+50);
+	  $text = substr($row['content'],$start,$end-$start);
+	  $text = cms_htmlentities($text);
+	  $text = str_replace($this->get_text(),'<span class="search_oneresult">'.$this->get_text().'</span>',$text);
+	  $text = str_replace("\n",'',$text);
+	}
 	$url = $mod->create_url('m1_','admin_edit_template','',array('tpl'=>$one));
 	$tmp = array('title'=>$row['name'],
 		     'description'=>AdminSearch_tools::summarize($row['description']),
-		     'edit_url'=>$url);
+		     'edit_url'=>$url,'text'=>$text);
 	$output[] = $tmp;
       }
 

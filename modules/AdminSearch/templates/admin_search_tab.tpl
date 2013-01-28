@@ -6,6 +6,9 @@
   max-height: 25em;
   overflow:   auto;
 }
+.search_oneresult {
+  color: red;
+}
 </style>
 
 <script type="text/javascript">
