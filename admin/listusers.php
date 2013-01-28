@@ -113,6 +113,37 @@ else if( isset($_POST['bulk']) && isset($_POST['bulkaction']) &&
     }
     break;
 
+  case 'copyoptions':
+    $nusers = 0;
+    if( isset($_POST['userlist']) ) {
+      $fromuser = (int)$_POST['userlist'];
+      if( $fromuser > 0 ) {
+	$prefs = cms_userprefs::get_all_for_user($fromuser);
+	if( is_array($prefs) && count($prefs) ) {
+	  foreach( $_POST['multiselect'] as $uid ) {
+	    $uid = (int)$uid;
+	    if( $uid <= 1 ) continue; // can't edit the magic user... 
+	    if( $uid == $fromuser ) continue; // can't overwrite the same users prefs.
+	    $oneuser = $userops->LoadUserById($uid);
+	    if( !is_object($oneuser) ) continue; // invalid user
+	  
+	    Events::SendEvent('Core','EditUserPre',array('user'=>$oneuser));
+	    cms_userprefs::remove_for_user($uid);
+	    foreach( $prefs as $k => $v ) {
+	      cms_userprefs::set_for_user($uid,$k,$v);
+	    }
+	    Events::SendEvent('Core','EditUserPost',array('user'=>$oneuser));
+	    audit($uid,'Admin Username: '.$oneuser->username,'Settings cleared');
+	    $nusers++;
+	  }
+	}
+      }
+    }
+    if( $nusers > 0 ) {
+      $message = lang('msg_usersedited',$nusers);
+    }
+    break;
+
   case 'disable':
     $nusers = 0;
     foreach( $_POST['multiselect'] as $uid ) {
@@ -179,137 +210,22 @@ foreach( $userlist as &$oneuser ) {
   if( $userops->UserInGroup($oneuser->id,1) && !$userops->UserInGroup($userid,1) ) {
     $oneuser->access_to_user = 0;
   }
-  $oneuser->pagecount = $userops->CountPageOwnershipById($uid);
+  $oneuser->pagecount = $userops->CountPageOwnershipById($oneuser->id);
 }
 $smarty->assign('users',$userlist);
 $smarty->assign('my_userid',get_userid());
 $smarty->assign('urlext',$urlext);
+
+$out = array();
+foreach( $userlist as $one ) {
+  $out[$one->id] = $one->username;
+}
+$smarty->assign('userlist',$out);
 
 $smarty->display('listusers.tpl');
 ?>
 <p class="pageback"><a class="pageback" href="<?php echo $themeObject->BackUrl(); ?>">&#171; <?php echo lang('back')?></a></p>
 <?php
 include_once("footer.php");
-
- /*
-<div class="pagecontainer">
-  <div class="pageoverflow">
-  <?php
-    $userid = get_userid();
-
-    $query = "SELECT user_id, username, active FROM ".cms_db_prefix()."users ORDER BY user_id";
-    $result = $db->Execute($query);
-
-    $userops = $gCms->GetUserOperations();
-    $userlist = $userops->LoadUsers();
-
-    $page = 1;
-    if (isset($_GET['page'])) $page = $_GET['page'];
-    $limit = 20;
-    if (count($userlist) > $limit) {
-      echo "<p class=\"pageshowrows\">".pagination($page, count($userlist), $limit)."</p>";
-    }
-    echo $themeObject->ShowHeader('currentusers').'</div>';
-    if ($userlist && count($userlist) > 0) {
-      echo "<table cellspacing=\"0\" class=\"pagetable\">\n";
-      echo '<thead>';
-      echo "<tr>\n";
-      echo "<th>".lang('username')."</th>\n";
-      echo "<th style=\"text-align: center;\">".lang('active')."</th>\n";
-      echo "<th class=\"pageicon\">".lang('templateuser')."</th>\n";
-      echo "<th class=\"pageicon\">&nbsp;</th>\n";
-      echo "<th class=\"pageicon\">&nbsp;</th>\n";
-      echo "<th class=\"pageicon\"><input type=\"checkbox\" id=\"sel_all\" value=\"1\"></th>\n";
-      echo "</tr>\n";
-      echo '</thead>';
-      echo '<tbody>';
-
-      $currow = "row1";
-      // construct true/false button images
-      $image_true = $themeObject->DisplayImage('icons/system/true.gif', lang('true'),'','','systemicon');
-      $image_false = $themeObject->DisplayImage('icons/system/false.gif', lang('false'),'','','systemicon');
-
-      $counter=0;
-      foreach ($userlist as $oneuser) {
-	// can access user if: i have edit permission AND user is not in group1 unless I am also in group 1
-	// except, I can always edit my own account.  can't delete myself though.
-	$this_user = $userid == $oneuser->id;
-	$access_to_user = TRUE;
-	if( $userops->UserInGroup($oneuser->id,1) && !$userops->UserInGroup($userid,1) ) {
-	  $access_to_user = FALSE;
-	}
-	$access_user = $this_user || $access_to_user;
-
-	if ($counter < $page*$limit && $counter >= ($page*$limit)-$limit) {
-	  echo "<tr class=\"$currow\">\n";
-	  if( $access_user ) {
-	    echo "<td><a href=\"edituser.php".$urlext."&amp;user_id=".$oneuser->id."\">".$oneuser->username."</a></td>\n";
-	  }
-	  else {
-	    echo "<td>{$oneuser->username}</td>\n";
-	  }
-
-	  if( $oneuser->id != 1 && $oneuser->id != $userid ) {
-	    echo "<td class=\"pagepos\"><a href=\"listusers.php".$urlext."&amp;toggleactive=".$oneuser->id."\">".($oneuser->active == 1?$image_true:$image_false)."</a></td>\n";
-	  }
-	  else {
-	    echo "<td class=\"pagepos\">&nbsp;</td>\n";
-	  }
-
-	  if ($access_user) {
-	    if( $templateuser > 0 && $templateuser == $oneuser->id ) {
-              echo '<td style="text-align: center;">'.$themeObject->DisplayImage('icons/system/true.gif', lang('info_templateuser'),'','','systemicon').'</td>';
-	    }
-	    else {
-              echo '<td></td>';
-	    }
-
-	    echo "<td><a href=\"edituser.php".$urlext."&amp;user_id=".$oneuser->id."\">";
-	    echo $themeObject->DisplayImage('icons/system/edit.gif', lang('edit'),'','','systemicon');
-	    echo "</a></td>\n";
-	  }
-	  else {
-	    echo "<td>&nbsp;</td>\n";
-	    echo "<td>&nbsp;</td>\n";
-	  }
-
-	  if ($oneuser->id != 1 && $oneuser->id != $userid) {
-	    echo "<td><a href=\"deleteuser.php".$urlext."&amp;user_id=".$oneuser->id."\" onclick=\"return confirm('".lang('deleteconfirm', $oneuser->username)."');\">";
-	    echo $themeObject->DisplayImage('icons/system/delete.gif', lang('delete'),'','','systemicon');
-	    echo "</a></td>\n";
-	  }
-	  else {
-	    echo '<td></td>';
-	  }
-	  echo "</tr>\n";
-
-	  ($currow=="row1"?$currow="row2":$currow="row1");
-	}
-	$counter++;
-      }
-
-      echo '</tbody>';
-      echo "</table>\n";
-    }
-  ?>
-  <div class="pageoptions">
-    <p class="pageoptions">
-
-      <a href="adduser.php<?php echo $urlext ?>">
-	<?php 
-	  echo $themeObject->DisplayImage('icons/system/newobject.gif', lang('adduser'),'','','systemicon').'</a>';
-          echo ' <a class="pageoptions" href="adduser.php'.$urlext.'">'.lang("adduser");
-	?>
-      </a>
-    </p>
-  </div>
-</div>
-
-<p class="pageback"><a class="pageback" href="<?php echo $themeObject->BackUrl(); ?>">&#171; <?php echo lang('back')?></a></p>
-
-<?php
-
-include_once("footer.php");
- */
 # vim:ts=4 sw=4 noet
 ?>

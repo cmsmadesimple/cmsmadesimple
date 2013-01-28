@@ -38,6 +38,14 @@ $(document).ready(function(){
     }
     toggle_bulk();
   });
+  $('#withselected').change(function(){
+    var v = $(this).val();
+    if( v == 'copyoptions' ) {
+      $('#userlist').show();
+    } else {
+      $('#userlist').hide();
+    }
+  });
 });
 </script>
 
@@ -102,9 +110,16 @@ $(document).ready(function(){
       <select name="bulkaction" id="withselected">
         <option value="delete">{lang('delete')}</option>
         <option value="clearoptions">{lang('clearusersettings')}</option>
+        <option value="copyoptions">{lang('copyusersettings2')}</option>
         <option value="disable">{lang('disable')}</option>
         <option value="enable">{lang('enable')}</option>
       </select>&nbsp;
+      <div id="userlist" style="display: none;">
+        <label for="userlist_sub">{lang('copyfromuser')}:</label>&nbsp;
+        <select name="userlist" id="userlist_sub">
+          {html_options options=$userlist}
+        </select>&nbsp;
+      </div>
       <input type="submit" id="bulksubmit" name="bulk" value="{lang('submit')}"/>
     </div>
   </div>
