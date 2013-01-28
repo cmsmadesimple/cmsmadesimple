@@ -121,17 +121,17 @@ else {
           <input type="hidden" name="<?php echo CMS_SECURE_PARAM_NAME ?>" value="<?php echo $_SESSION[CMS_USER_KEY] ?>" />
         </div>
 	<div class="pageoverflow">
-	  <p class="pagetext"><?php echo lang('name')?>:</p>
- 	  <p class="pageinput"><input type="text" name="group" maxlength="25" value="<?php echo $group?>" /></p>
+	  <p class="pagetext"><label for="groupname"><?php echo lang('name')?>:</label></p>
+ 	  <p class="pageinput"><input type="text" id="groupname" name="group" maxlength="25" value="<?php echo $group?>" /></p>
         </div>
 	<div class="pageoverflow">
-	  <p class="pagetext"><?php echo lang('description')?>:</p>
- 	  <p class="pageinput"><input type="text" name="description" size="80" maxlength="255" value="<?php echo $description?>" /></p>
+	  <p class="pagetext"><label for="description"><?php echo lang('description')?>:</label></p>
+ 	  <p class="pageinput"><input type="text" id="description" name="description" size="80" maxlength="255" value="<?php echo $description?>" /></p>
         </div>
 	<?php if( !$useringroup && ($group_id != 1) ) { ?>
 	  <div class="pageoverflow">
-	    <p class="pagetext"><?php echo lang('active')?>:</p>
-	    <p class="pageinput"><input type="checkbox" name="active" <?php echo ($active == 1?"checked=\"checked\"":"")?> /></p>
+	    <p class="pagetext"><label for="active"><?php echo lang('active')?>:</label></p>
+	    <p class="pageinput"><input type="checkbox" id="active" name="active" <?php echo ($active == 1?"checked=\"checked\"":"")?> /></p>
 	  </div>
  	   <?php } else { ?>
                 <div><input type="hidden" name="active" value="<?php echo $active ?>"/></div>
