@@ -23,9 +23,9 @@
 <table class="pagetable" cellspacing="0"><tr valign="top">
 <td width="50%">
 <div class="pageoverflow">
-  <p class="pagetext">{$mod->Lang('search_text')}:</p>
+  <p class="pagetext"><label for="searchtext">{$mod->Lang('search_text')}:</label></p>
   <p class="pageinput">
-    <input type="text" name="{$actionid}search_text" value="{$saved_search.search_text|default:''}" size="80" maxlength="80" id="searchtext"/>
+    <input id="searchtext" type="text" name="{$actionid}search_text" value="{$saved_search.search_text|default:''}" size="80" maxlength="80" id="searchtext"/>
   </p>
 </div>
 <div class="pageoverflow">
