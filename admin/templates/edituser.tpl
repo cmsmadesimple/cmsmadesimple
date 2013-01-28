@@ -15,48 +15,48 @@ $(document).ready(function(){
 {if $manage_users == true}{tab_header name='settings' label=lang('settings')}{/if}
 {tab_start name='user'}
 <div class="pageoverflow">
-  <p class="pagetext">{lang('name')}:</p>
+  <p class="pagetext"><label for="username">{lang('name')}:</label></p>
   <p class="pageinput">
-    <input type="text" name="user" maxlength="25" value="{$user}" class="standard"/>
+    <input type="text" id="username" name="user" maxlength="25" value="{$user}" class="standard"/>
   </p>
 </div>
 <div class="pageoverflow">
-  <p class="pagetext">{lang('password')}:</p>
+  <p class="pagetext"><label for="password">{lang('password')}:</label></p>
   <p class="pageinput">
-    <input type="password" name="password" maxlength="25" value="" class="standard"/>
+    <input type="password" id="password" name="password" maxlength="25" value="" class="standard"/>
     <br/>{lang('info_edituser_password')}
   </p>
 </div>
 <div class="pageoverflow">
-  <p class="pagetext">{lang('passwordagain')}:</p>
+  <p class="pagetext"><label for="passwordagain">{lang('passwordagain')}:</label></p>
   <p class="pageinput">
-    <input type="password" name="passwordagain" maxlength="25" value="" class="standard"/>
+    <input id="passwordagain" type="password" name="passwordagain" maxlength="25" value="" class="standard"/>
     <br/>{lang('info_edituser_passwordagain')}
   </p>
 </div>
 <div class="pageoverflow">
-  <p class="pagetext">{lang('firstname')}:</p>
+  <p class="pagetext"><label for="firstname">{lang('firstname')}:</label></p>
   <p class="pageinput">
-    <input type="text" name="firstname" maxlength="50" value="{$firstname}" class="standard"/>
+    <input id="firstname" type="text" name="firstname" maxlength="50" value="{$firstname}" class="standard"/>
   </p>
 </div>
 <div class="pageoverflow">
-  <p class="pagetext">{lang('lastname')}:</p>
+  <p class="pagetext"><label for="lastname">{lang('lastname')}:</label></p>
   <p class="pageinput">
-    <input type="text" name="lastname" maxlength="50" value="{$lastname}" class="standard"/>
+    <input id="lastname" type="text" name="lastname" maxlength="50" value="{$lastname}" class="standard"/>
   </p>
 </div>
 <div class="pageoverflow">
-  <p class="pagetext">{lang('email')}:</p>
+  <p class="pagetext"><label for="email">{lang('email')}:</label></p>
   <p class="pageinput">
-    <input type="text" name="email" maxlength="255" value="{$email}" class="standard"/>
+    <input id="email" type="text" name="email" maxlength="255" value="{$email}" class="standard"/>
   </p>
 </div>
 {if !$access_user && ($user_id != 1)}
 <div class="pageoverflow">
-  <p class="pagetext">{lang('active')}:</p>
+  <p class="pagetext"><label for="active">{lang('active')}:</label></p>
   <p class="pageinput">
-    <input type="checkbox" class="pagecheckbox" name="active" value="1"{if $active == 1} checked="checked"{/if}/>
+    <input id="active" type="checkbox" class="pagecheckbox" name="active" value="1"{if $active == 1} checked="checked"{/if}/>
     <br/>{lang('info_user_active')}
   </p>
 </div>
