@@ -73,19 +73,22 @@ if( isset($_POST['submit']) || isset($_POST['apply']) ) {
   if( $record['code'] == '' ) {
     $error[] = lang('nofieldgiven', array(lang('code')));
   }
-  else {
-    $lastopenbrace = strrpos($record['code'], '{');
-    $lastclosebrace = strrpos($record['code'], '}');
-    if ($lastopenbrace > $lastclosebrace) {
-      $error[] = lang('invalidcode');
-      $error[] = lang('invalidcode_brace_missing');
-    }
+  
+  $code = $record['code'];
+  if( startswith($code,'<?php') ) $code = substr($code,5);
+  if( endswith($code,'?>') ) $code = substr($code,0,-2);
+
+  $lastopenbrace = strrpos($code, '{');
+  $lastclosebrace = strrpos($code, '}');
+  if ($lastopenbrace > $lastclosebrace) {
+    $error[] = lang('invalidcode');
+    $error[] = lang('invalidcode_brace_missing');
   }
 
   if( count($error) == 0 ) {
     srand();
     ob_start();
-    if (eval('function testfunction'.rand().'() {'.$record['code']."\n}") === FALSE) {
+    if (eval('function testfunction'.rand().'() {'.$code."\n}") === FALSE) {
       $error[] = lang('invalidcode');
       $buffer = ob_get_clean();
       //add error
@@ -106,9 +109,7 @@ if( isset($_POST['submit']) || isset($_POST['apply']) ) {
 
   $details = lang('usertagupdated');
 
-  debug_to_log($error,'foo');
   if( !$error ) {
-    debug_to_log('foo');
     if( isset($_POST['run']) ) {
       @ob_start();
       $params = array();
@@ -138,7 +139,6 @@ if( isset($_POST['submit']) || isset($_POST['apply']) ) {
       echo $themeObject->ShowErrors($error);
     }
     $out = array('response'=>'Error','details'=>$error);
-    debug_to_log($out);
     echo json_encode($out);
     exit;
   }

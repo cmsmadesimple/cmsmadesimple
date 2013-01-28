@@ -3090,25 +3090,6 @@ abstract class CMSModule
   }
 
   /**
-   * Creates a string containing links to all the pages.
-   *
-   * @deprecated
-   * @param string The id given to the module on execution
-   * @param string The action that this form should do when the form is submitted
-   * @param string The id to eventually return to when the module is finished it's task
-   * @param string the current page to display
-   * @param string the amount of items being listed
-   * @param string the amount of items to list per page
-   * @param boolean A flag to determine if actions should be handled inline (no moduleinterface.php -- only works for frontend)
-   * @return string
-   */
-  function CreatePagination($id, $action, $returnid, $page, $totalrows, $limit, $inline=false)
-  {
-    $this->LoadMiscMethods();
-    return cms_module_CreatePagination($this, $id, $action, $returnid, $page, $totalrows, $limit, $inline);
-  }
-
-  /**
    * ShowMessage
    * Returns a formatted page status message
    *

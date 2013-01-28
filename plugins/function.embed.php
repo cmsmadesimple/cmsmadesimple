@@ -19,14 +19,12 @@
 function smarty_function_embed($params, &$template)
 {
   $name = 'myframe';
-  if(isset($params['name']) )
-    {
-      $name = trim($params['name']);
-    }
+  if(isset($params['name']) ) {
+    $name = trim($params['name']);
+  }
 
-  if(isset($params['header']))
-    {
-      $code = <<<IFRAMECODE
+  if(isset($params['header'])) {
+    $code = <<<IFRAMECODE
 <script type="text/javascript">
   // <![CDATA[
 
@@ -41,13 +39,12 @@ function smarty_function_embed($params, &$template)
 //Separate each ID with a comma. Examples: ["myframe1", "myframe2"] or ["myframe"] or [] for none:
 
 IFRAMECODE;
-      // and add the name.
-      $code .= 'var iframeids=["'.$name.'"]'."\n";
-      $tmp = <<<IFRAMECODE
 
+// and add the name.
+$code .= 'var iframeids=["'.$name.'"]'."\n";
+$tmp = <<<IFRAMECODE
 //Should script hide iframe from browsers that don't support this script (non IE5+/NS6+ browsers. Recommended):
 var iframehide="yes"
-
 var getFFVersion=navigator.userAgent.substring(navigator.userAgent.indexOf("Firefox")).split("/")[1]
 var FFextraHeight=parseFloat(getFFVersion)>=0.1? 16 : 0 //extra height in px to add to iframe in FireFox 1.0+ browsers
 
