@@ -979,7 +979,7 @@ function display_content_list($themeObject = null)
     $headoflist .= "<th class=\"pageicon\">&nbsp;</th>\n";
   }
   if( $columnstodisplay['multiselect'] ) {
-    $headoflist .= '<th scope="col" title="'.lang('lctitle_multiselect').'" class="checkbox"><input id="selectall" type="checkbox"/><label for="selectall" class="invisible">'.lang('toggle').'</label></th>'."\n"; // checkbox column
+    $headoflist .= '<th scope="col" title="'.lang('lctitle_multiselect').'" class="checkbox"><input id="selectall" title="'.lang('selectall').'" type="checkbox"/><label for="selectall" class="invisible">'.lang('toggle').'</label></th>'."\n"; // checkbox column
   }
   $headoflist .= "</tr>\n";
   $headoflist .= '</thead>';
