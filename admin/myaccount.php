@@ -38,7 +38,6 @@ $message = '';
  * Get preferences
  */
 $ignoredmodules = explode(',', get_preference($userid, 'ignoredmodules'));
-$gcb_wysiwyg = get_preference($userid, 'gcb_wysiwyg', 1);
 $wysiwyg = get_preference($userid, 'wysiwyg');
 $syntaxhighlighter = get_preference($userid, 'syntaxhighlighter');
 $default_cms_language = get_preference($userid, 'default_cms_language');
@@ -52,7 +51,6 @@ $date_format_string = get_preference($userid, 'date_format_string', '%x %X');
 $default_parent = get_preference($userid, 'default_parent', -2);
 $listtemplates_pagelimit = get_preference($userid, 'listtemplates_pagelimit', 20);
 $liststylesheets_pagelimit = get_preference($userid, 'liststylesheets_pagelimit', 20);
-$listgcbs_pagelimit = get_preference($userid, 'listgcbs_pagelimit', 20);
 $homepage = get_preference($userid, 'homepage');
 if( strpos($homepage,'&') !== FALSE && strpos($homepage,'&amp;') === FALSE ) {
   $homepage = str_replace('&','&amp;',$homepage);
@@ -179,7 +177,6 @@ if( isset($_POST['active_tab']) ) {
 if (isset($_POST['submit_prefs'])) {
 	
 	# Get values from request and drive em to variables
-	$gcb_wysiwyg = (isset($_POST['gcb_wysiwyg']) ? 1 : 0);
 	$wysiwyg = $_POST['wysiwyg'];
 	$syntaxhighlighter = $_POST['syntaxhighlighter'];
 	$default_cms_language = '';
@@ -212,11 +209,6 @@ if (isset($_POST['submit_prefs'])) {
 	if (isset($_POST['liststylesheets_pagelimit'])) {
 		$liststylesheets_pagelimit = $_POST['liststylesheets_pagelimit'];
 	}
-	$listgcbs_pagelimit = '20';
-	if (isset($_POST['listgcbs_pagelimit'])) {
-	
-		$listgcbs_pagelimit = $_POST['listgcbs_pagelimit'];
-	}
 	$homepage = $_POST['homepage'];
 	$hide_help_links = (isset($_POST['hide_help_links']) ? 1 : 0);
 	$ignoredmodules = array();
@@ -229,7 +221,6 @@ if (isset($_POST['submit_prefs'])) {
 	}
 
 	# Set prefs
-	set_preference($userid, 'gcb_wysiwyg', $gcb_wysiwyg);
 	set_preference($userid, 'wysiwyg', $wysiwyg);
 	set_preference($userid, 'syntaxhighlighter', $syntaxhighlighter);
 	set_preference($userid, 'default_cms_language', $default_cms_language);
@@ -244,7 +235,6 @@ if (isset($_POST['submit_prefs'])) {
 	set_preference($userid, 'homepage', $homepage);
 	set_preference($userid, 'listtemplates_pagelimit', $listtemplates_pagelimit);
 	set_preference($userid, 'liststylesheets_pagelimit', $liststylesheets_pagelimit);
-	set_preference($userid, 'listgcbs_pagelimit', $listgcbs_pagelimit);
 	set_preference($userid, 'ignoredmodules', implode(',', $ignoredmodules));
 
 	# Audit, message, cleanup
@@ -316,7 +306,6 @@ $smarty->assign('tab_end',$themeObject->EndTab());
 
 # Prefs
 $smarty->assign('module_opts', $modules);
-$smarty->assign('gcb_wysiwyg', $gcb_wysiwyg);
 $smarty->assign('wysiwyg', $wysiwyg);
 $smarty->assign('syntaxhighlighter', $syntaxhighlighter);
 $smarty->assign('language_opts', get_language_list());
@@ -330,12 +319,11 @@ $smarty->assign('enablenotifications', $enablenotifications);
 $smarty->assign('paging', $paging);
 $smarty->assign('date_format_string', $date_format_string);
 $smarty->assign('default_parent', $contentops->CreateHierarchyDropdown(0, $default_parent, 'parent_id', 0, 1));
-$smarty->assign('homepage', $themeObject->GetAdminPageDropdown('homepage', $homepage));
+$smarty->assign('homepage', $themeObject->GetAdminPageDropdown('homepage', $homepage, 'homepage'));
 $tmp = array(10 => 10, 20 => 20, 50 => 50, 100 => 100);
 $smarty->assign('pagelimit_opts', $tmp);
 $smarty->assign('listtemplates_pagelimit', $listtemplates_pagelimit);
 $smarty->assign('liststylesheets_pagelimit', $liststylesheets_pagelimit);
-$smarty->assign('listgcbs_pagelimit', $listgcbs_pagelimit);
 $smarty->assign('ignoredmodules', $ignoredmodules);
 //$smarty->assign('header', $themeObject -> showHeader('userprefs')); // <- Totally useless as far i can see -Stikki-
 $smarty->assign('backurl', $themeObject -> backUrl());
