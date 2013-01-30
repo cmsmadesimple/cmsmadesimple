@@ -186,7 +186,7 @@ class OneElevenTheme extends CmsAdminThemeBase {
 
 		// get a page title
 		$title = $this->get_value('pagetitle');
-        $alias = $this->get_value('pagetitle');
+		$alias = $this->get_value('pagetitle');
 		if ($title) {
 			if (!$module_help_type) {
 				// if not doing module help, translate the string.
@@ -196,11 +196,16 @@ class OneElevenTheme extends CmsAdminThemeBase {
 				$title = lang($title, $extra);
 			}
 		} else {
-			// no title, get one from the breadcrumbs.
-			$bc = $this->get_breadcrumbs();
-			if (is_array($bc) && count($bc)) {
-				$title = $bc[count($bc) - 1]['title'];
-			}
+		  if( $this->title ) {
+		    $title = $this->title;
+		  }
+		  else {
+		    // no title, get one from the breadcrumbs.
+		    $bc = $this->get_breadcrumbs();
+		    if (is_array($bc) && count($bc)) {
+		      $title = $bc[count($bc) - 1]['title'];
+		    }
+		  }
 		}
         // page title and alias
 		$smarty->assign('pagetitle', $title);

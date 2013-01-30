@@ -112,12 +112,12 @@ function copycontentobj(&$contentobj, $content_type, $params = null)
 	$tmpobj->SetMenuText($contentobj->MenuText());
 	$tmpobj->SetTemplateId($contentobj->TemplateId());
 	$tmpobj->SetParentId($contentobj->ParentId());
-	$tmpobj->SetOldParentId($contentobj->OldParentId());
+	//$tmpobj->SetOldParentId($contentobj->OldParentId());
 	$tmpobj->SetAlias($contentobj->Alias());
 	$tmpobj->SetOwner($contentobj->Owner());
 	$tmpobj->SetActive($contentobj->Active());
 	$tmpobj->SetItemOrder($contentobj->ItemOrder());
-	$tmpobj->SetOldItemOrder($contentobj->OldItemOrder());
+	//$tmpobj->SetOldItemOrder($contentobj->OldItemOrder());
 	$tmpobj->SetShowInMenu($contentobj->ShowInMenu());
 	$tmpobj->SetCachable($contentobj->Cachable());
 	$tmpobj->SetHierarchy($contentobj->Hierarchy());

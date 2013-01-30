@@ -56,7 +56,9 @@ abstract class CmsAdminThemeBase
 	
 	// tab variables
 	private $_activetab;
-
+	private $_title;
+	private $_subtitle;
+	
 	/**
 	 * Constructor
 	 */
@@ -102,6 +104,8 @@ abstract class CmsAdminThemeBase
 			return $class;
 		}
 		if( $key == 'userid' ) return get_userid();
+		if( $key == 'title' ) return $this->_title;
+		if( $key == 'subtitle' ) return $this->_title;
 	}
 
     /**
@@ -357,10 +361,9 @@ abstract class CmsAdminThemeBase
 
 		$config = cmsms()->GetConfig();
 		debug_buffer('before populate admin navigation');	
-        $this->subtitle = $subtitle;
+		if( $subtitle ) $this->_subtitle = $subtitle;
 
 		debug_buffer('before menu items');
-
 		$this->_menuItems = array();
 		$items =& $this->_menuItems;
 		// base main menu ---------------------------------------------------------
@@ -638,7 +641,7 @@ abstract class CmsAdminThemeBase
 				$a = preg_match('/(module|mact)=([^&,]+)/',$this->_query,$matches);
 				if ($a > 0 && $matches[2] == $sectionKey) {
 					$this->_menuItems[$sectionKey]['selected'] = true;
-					$this->title .= $sectionArray['title'];
+					$this->_title .= $sectionArray['title'];
 					if ($sectionArray['parent'] != -1) {
 						$parent = $sectionArray['parent'];
 						while ($parent != -1) {
@@ -654,7 +657,7 @@ abstract class CmsAdminThemeBase
 			else if (strstr($_SERVER['REQUEST_URI'],$sectionArray['url']) !== FALSE &&
 					 (!isset($sectionArray['type']) || $sectionArray['type'] != 'external')) {
 				$this->_menuItems[$sectionKey]['selected'] = true;
-				$this->title .= $sectionArray['title'];
+				$this->_title .= $sectionArray['title'];
 				if ($sectionArray['parent'] != -1) {
 					$parent = $sectionArray['parent'];
 					while ($parent != -1) {
@@ -669,7 +672,7 @@ abstract class CmsAdminThemeBase
 		}
 		// fix subtitle, if any
 		if ($subtitle != '') {
-			$this->title .= ': '.$subtitle;
+			$this->_title .= ': '.$subtitle;
 		}
 		// generate breadcrumb array
 
@@ -690,13 +693,45 @@ abstract class CmsAdminThemeBase
 				$this->_breadcrumbs[$count-1]['url'] = $tmp;
 			}
 			unset($this->_breadcrumbs[$count-1]['url']);
-			if ($this->subtitle != '') {
-				$this->_breadcrumbs[$count-1]['title'] .=  ': '.$this->subtitle;
+			if ($this->_subtitle != '') {
+				$this->_breadcrumbs[$count-1]['title'] .=  ': '.$this->_subtitle;
 			}
 		}
 		debug_buffer('after populate admin navigation');
     }
     
+
+	/**
+	 * Set the page title.
+	 * This is used in the admin to set the title for the page, and for the visible page header.
+	 * Note: if no title is specified, the theme will try to calculate one automatically.
+	 *
+	 * @since 2.0
+	 * @param string The page title.
+	 * @return void
+	 */
+	public function SetTitle($str)
+	{
+		if( $str == '' ) $str = null;
+		$this->_title = $str;
+	}
+
+
+	/**
+	 * Set the page subtitle.
+	 * This is used in the admin to set the title for the page, and for the visible page header.
+	 * Note: if no title is specified, the theme will try to calculate one automatically.
+	 *
+	 * @since 2.0
+	 * @param string The page subtitle.
+	 * @return void
+	 */
+	public function SetSubTitle($str)
+	{
+		if( $str == '' ) $str = null;
+		$this->_subtitle = $str;
+	}
+
 
     /**
      * HasPerm
@@ -816,7 +851,7 @@ abstract class CmsAdminThemeBase
 			$urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 			$mark= new Bookmark();
 			$mark->title = lang('addbookmark');
-			$mark->url = 'makebookmark.php'.$urlext.'&amp;title='.urlencode($this->title);
+			$mark->url = 'makebookmark.php'.$urlext.'&amp;title='.urlencode($this->_title);
 			$marks[] = $mark;
 
 			$mark = new Bookmark();

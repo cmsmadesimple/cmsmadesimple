@@ -40,16 +40,6 @@ class Content extends ContentBase
 	 * @var array
 	 */
     private $_contentBlocks = null;
-	/**
-	 * @access private
-	 * @var boolean
-	 */
-    protected $doAutoAliasIfEnabled = true;
-	/**
-	 * @access private
-	 * @var array
-	 */
-	private $__fieldhash;
 
 	/**
 	 * Indicate whether or not this content type may be copied
@@ -117,13 +107,12 @@ class Content extends ContentBase
 		$config = $gCms->GetConfig();
 
 		if (isset($params)) {
-			$this->__fieldhash = null; // clear the field hash.
 			$parameters = array('pagedata','searchable','disable_wysiwyg','design_id');
 
 			//pick up the template id before we do parameters
 			if (isset($params['template_id'])) {
 				if ($this->mTemplateId != $params['template_id']) {
-					$this->_contentBlocksLoaded = false;
+					$this->_contentBlocks = null;
 				}
 				$this->mTemplateId = $params['template_id'];
 			}

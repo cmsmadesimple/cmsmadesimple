@@ -73,7 +73,11 @@ if( !$access ) {
 // get the content object.
 $contentobj = '';
 $content_type = 'content'; // default content type.
+
 if( $content_id < 1 ) {
+  if( isset($_POST['content_type']) ) {
+    $content_type = $_POST['content_type'];
+  }
   // create a new content object.
   $page_secure = get_site_preference('page_secure',0);
   $page_cachable = ((get_site_preference('page_cachable',"1")=="1")?true:false);
@@ -125,10 +129,9 @@ else {
   // load the content object from the database.
   $contentobj = $contentops->LoadContentFromId($content_id);
   $content_type = $contentobj->Type();
-}
-
-if( isset($_POST['content_type']) ) {
-  $content_type = $_POST['content_type'];
+  if( isset($_POST['content_type']) ) {
+    $content_type = $_POST['content_type'];
+  }
 }
 
 // validate the content type we want...
@@ -197,7 +200,6 @@ if ($submit || $apply) {
 //
 // BUILD THE DISPLAY
 //
-
 include_once("header.php");
 
 $tmpfname = '';
@@ -229,6 +231,10 @@ $tab_contents_array = array();
 $tab_message_array = array();
 for ($currenttab = 0; $currenttab < $numberoftabs; $currenttab++) {
   $contentarray = $contentobj->GetTabElements($currenttab);
+  if( $currenttab == 0 ) {
+    $tmp = array('<label for="content_type">'.lang('contenttype').'</label>',$typesdropdown);
+    $contentarray = array_merge(array($tmp),$contentarray);
+  }
   $tmp = $contentobj->GetTabMessage($currenttab);
   if( $tmp ) {
     $tab_message_array[$currenttab] = $tmp;
@@ -252,9 +258,17 @@ if( $modobj ) {
 }
 $smarty->assign('preview_url',"{$config['root_url']}/index.php?{$config['query_var']}=__CMS_PREVIEW_PAGE__");
 
+$key = 'editcontent';
+if( $content_id < 1 ) {
+  $key = 'addcontent';
+}
+
+echo '<div class="pagecontainer">';
+echo '<div class="pageoverflow">'.$themeObject->ShowHeader($key).'</div>';
 echo $smarty->fetch('editcontent.tpl');
 
 echo '<p class="pageback"><a class="pageback" href="'.$themeObject->BackUrl().'">&#171; '.lang('back').'</a></p>';
+echo '</div>';
 
 include_once("footer.php");
 

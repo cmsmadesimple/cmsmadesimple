@@ -35,11 +35,6 @@
  */
 class AdminTheme extends CmsAdminThemeBase
 {
-    /**
-     * Subtitle, for use in breadcrumb trails
-     */
-    protected $subtitle;
-
 	/**
 	 * Url
 	 */
@@ -95,9 +90,6 @@ class AdminTheme extends CmsAdminThemeBase
 	private function _SetInitialValues($cms, $userid, $themeName)
 	{
 		$this->themeName = $themeName;
-
-		$this->title = '';
-		$this->subtitle = '';
 	}
 
     /**
@@ -744,8 +736,6 @@ EOT;
 				  if ($colonLocation !== false) {
 					  $title = substr($title,0,strpos($title,':'));
 				  }
-				  // Get the key of the title so we can use the en_US version for the URL
-				  $title_key = $this->_ArraySearchRecursive($title, $this->menuItems);
 			  }
 		  }
 
@@ -870,24 +860,22 @@ EOT;
 	{
 		$this->DisplayDocType();
 		$this->DisplayHTMLStartTag();
-		$headtext = $this->get_value('headertext');
-		$this->DisplayHTMLHeader(false, $headtext);
+		$addtext = $this->get_value('headertext');
+		$this->DisplayHTMLHeader(false, $addtext);
 		$this->DisplayBodyTag();
 		$this->DisplayTopMenu();
 		$this->DisplayMainDivStart();
 		$this->DisplayNotifications(3); // todo, a preference.
 
 		$marks = get_preference(get_userid(), 'bookmarks');
-		if ($marks)
-			{
-				$this->StartRighthandColumn();
-				if ($marks)
-					{
-						$this->DoBookmarks();
-					}
-
-				$this->EndRighthandColumn();
+		if ($marks) {
+			$this->StartRighthandColumn();
+			if ($marks) {
+				$this->DoBookmarks();
 			}
+
+			$this->EndRighthandColumn();
+		}
 	}
 
 	public function do_footer()

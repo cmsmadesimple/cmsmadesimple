@@ -248,8 +248,6 @@ abstract class ContentBase
    *
    * @internal
    */
-  protected $mReadyForEdit;
-
   private $_attributes;
   private $_prop_defaults;
   private $_editable_properties;
@@ -265,7 +263,6 @@ abstract class ContentBase
   {
     $this->SetInitialValues();
     $this->SetProperties();
-    $this->mReadyForEdit = false;
   }
 
   /**
@@ -344,7 +341,6 @@ abstract class ContentBase
   {
     if( $id <= 0 ) return;
     $this->mId = $id;
-    $this->DoReadyForEdit();
   }
 
   /**
@@ -372,7 +368,6 @@ abstract class ContentBase
    */
   public function SetName($name)
   {
-    $this->DoReadyForEdit();
     $this->mName = $name;
   }
 
@@ -384,6 +379,19 @@ abstract class ContentBase
   public function Alias()
   {
     return $this->mAlias;
+  }
+
+  /**
+   * Returns the OldAlias
+   * The old alias is used when editing pages
+   *
+   * @internal
+   * @deprecated
+   * @return string
+   */
+  public function OldAlias()
+  {
+    return $this->mOldAlias;
   }
 
   /**
@@ -414,8 +422,8 @@ abstract class ContentBase
    */
   public function SetOwner($owner)
   {
+    $owner = (int)$owner;
     if( $owner <= 0 ) return;
-    $this->DoReadyForEdit();
     $this->mOwner = $owner;
   }
 
@@ -432,7 +440,8 @@ abstract class ContentBase
   /**
    * Content object handles the alias
    *
-   * @return boolean
+   * @abstract
+   * @return boolean default is false.
    */
   public function HandlesAlias()
   {
@@ -446,7 +455,6 @@ abstract class ContentBase
    */
   public function SetMetadata($metadata)
   {
-    $this->DoReadyForEdit();
     $this->mMetadata = $metadata;
   }
 
@@ -467,7 +475,6 @@ abstract class ContentBase
    */
   public function SetTabIndex($tabindex)
   {
-    $this->DoReadyForEdit();
     $this->mTabIndex = $tabindex;
   }
 
@@ -508,7 +515,6 @@ abstract class ContentBase
    */
   public function SetTitleAttribute($titleattribute)
   {
-    $this->DoReadyForEdit();
     $this->mTitleAttribute = $titleattribute;
   }
 
@@ -529,7 +535,6 @@ abstract class ContentBase
    */
   public function SetAccessKey($accesskey)
   {
-    $this->DoReadyForEdit();
     $this->mAccessKey = $accesskey;
   }
 
@@ -550,7 +555,6 @@ abstract class ContentBase
    */
   public function SetParentId($parentid)
   {
-    $this->DoReadyForEdit();
     $this->mParentId = $parentid;
   }
 
@@ -571,7 +575,6 @@ abstract class ContentBase
     */
    public function SetTemplateId($templateid)
    {
-     $this->DoReadyForEdit();
      $this->mTemplateId = $templateid;
    }
 
@@ -595,8 +598,34 @@ abstract class ContentBase
     */
    public function SetItemOrder($itemorder)
    {
-     $this->DoReadyForEdit();
      $this->mItemOrder = $itemorder;
+   }
+
+
+   /**
+    * Returns the OldItemOrder
+    * The OldItemOrder is used to specify the item order before changes were done
+    *
+    * @deprecated
+    * @return int
+    */
+   public function OldItemOrder()
+   {
+     return $this->mItemOrder;
+   }
+
+   /**
+    * Sets the ItemOrder
+    * The ItemOrder is used to specify the order of this page within the parent.
+    * The OldItemOrder is used when editing pages.
+    *
+    * @internal
+    * @deprecated
+    * @param int the itemorder.
+    */
+   public function SetOldItemOrder($itemorder)
+   {
+     $this->mOldItemOrder = $itemorder;
    }
 
    /**
@@ -619,7 +648,6 @@ abstract class ContentBase
     */
    public function SetHierarchy($hierarchy)
    {
-     $this->DoReadyForEdit();
      $this->mHierarchy = $hierarchy;
    }
 
@@ -628,22 +656,9 @@ abstract class ContentBase
     *
     * @return string
     */
-   public function IdHierarchy()
+   final public function IdHierarchy()
    {
      return $this->mIdHierarchy;
-   }
-
-
-   /**
-    * Sets the Id Hierarchy
-    *
-    * @internal
-    * @param string
-    */
-   public function SetIdHierarchy($idhierarchy)
-   {
-     $this->DoReadyForEdit();
-     $this->mIdHierarchy = $idhierarchy;
    }
 
 
@@ -652,21 +667,9 @@ abstract class ContentBase
     *
     * @return string
     */
-   public function HierarchyPath()
+   final public function HierarchyPath()
    {
      return $this->mHierarchyPath;
-   }
-
-   /**
-    * Sets the Hierarchy Path
-    *
-    * @internal
-    * @param string
-    */
-   public function SetHierarchyPath($hierarchypath)
-   {
-     $this->DoReadyForEdit();
-     $this->mHierarchyPath = $hierarchypath;
    }
 
    /**
@@ -686,7 +689,6 @@ abstract class ContentBase
     */
    public function SetActive($active)
    {
-     $this->DoReadyForEdit();
      $this->mActive = $active;
    }
 
@@ -718,7 +720,6 @@ abstract class ContentBase
     */
    public function SetShowInMenu($showinmenu)
    {
-     $this->DoReadyForEdit();
      $this->mShowInMenu = $showinmenu;
    }
 
@@ -727,8 +728,9 @@ abstract class ContentBase
     *
     * @return boolean
     */
-   public function DefaultContent()
+   final public function DefaultContent()
    {
+     if( !$this->IsDefaultPossible() ) return FALSE;
      return $this->mDefaultContent;
    }
 
@@ -740,7 +742,6 @@ abstract class ContentBase
     */
    public function SetDefaultContent($defaultcontent)
    {
-     $this->DoReadyForEdit();
      $this->mDefaultContent = $defaultcontent;
    }
 
@@ -761,7 +762,6 @@ abstract class ContentBase
     */
     public function SetCachable($cachable)
     {
-	$this->DoReadyForEdit();
 	$this->mCachable = $cachable;
     }
 
@@ -784,7 +784,6 @@ abstract class ContentBase
     */
     public function SetSecure($secure)
     {
-	$this->DoReadyForEdit();
 	$this->mSecure = $secure;
     }
 
@@ -808,15 +807,14 @@ abstract class ContentBase
      */
     public function SetURL($url)
     {
-      $this->DoReadyForEdit();
       $this->mURL = $url;
     }
 
     /**
-     * Return the last modified date for this item
+     * Return the last modified user for this item
      * This is usually set on save.
      * 
-     * @return Date
+     * @return Integer admin user id.
      */
     public function LastModifiedBy()
     {
@@ -831,7 +829,6 @@ abstract class ContentBase
      */
     public function SetLastModifiedBy($lastmodifiedby)
     {
-      $this->DoReadyForEdit();
       $this->mLastModifiedBy = $lastmodifiedby;
     }
 
@@ -851,7 +848,7 @@ abstract class ContentBase
      * some content types (like redirection links) are not viewable.
      *
      * @abstract
-     * @return boolean
+     * @return boolean Default is True
      */
     public function IsViewable()
     {
@@ -862,7 +859,7 @@ abstract class ContentBase
      * Indicates wether this content type can be the default page for a CMSMS website
      *
      * @abstract
-     * @returns boolean
+     * @returns boolean Default is false
      */
     public function IsDefaultPossible()
     {
@@ -880,7 +877,6 @@ abstract class ContentBase
      */
     public function SetAlias($alias = '', $doAutoAliasIfEnabled = true)
     {
-      $this->DoReadyForEdit();
       $gCms = cmsms();
       $config = $gCms->GetConfig();
 
@@ -933,7 +929,6 @@ abstract class ContentBase
      */
     public function SetMenuText($menutext)
     {
-      $this->DoReadyForEdit();
       $this->mMenuText = $menutext;
     }
 
@@ -1067,7 +1062,8 @@ abstract class ContentBase
      * have any children.
      * 
      * @since 0.11
-     * @return boolean
+     * @abstract
+     * @return boolean Default TRUE
      */
     public function WantsChildren()
     {
@@ -1079,7 +1075,7 @@ abstract class ContentBase
      * useful output?  (Like next/previous links in cms_selflink, for example)
      *
      * @abstract
-     * @return boolean
+     * @return boolean Default TRUE
      */
     public function HasUsableLink()
     {
@@ -1090,7 +1086,7 @@ abstract class ContentBase
      * Is this content type copyable ?
      *
      * @abstract
-     * @return boolean
+     * @return boolean default FALSE
      */
     public function IsCopyable()
     {
@@ -1100,7 +1096,7 @@ abstract class ContentBase
     /**
      * Indicates wether this is a system page type.
      *
-     * @return boolean
+     * @return boolean default FALSE
      */
     public function IsSystemPage()
     {
@@ -1111,30 +1107,6 @@ abstract class ContentBase
     /* The rest																*/
     /************************************************************************/
 
-    /**
-     * This is a callback function to handle any things that might need to be done before the content page is edited.
-     * edited.
-     *
-     * @abstract
-     * @return void
-     */
-    public function ReadyForEdit()
-    {
-    }
-
-    /**
-     * A method that sets the content page into a 'ready for edit stage';
-     *
-     * @return void
-     */
-    protected function DoReadyForEdit()
-    {
-      if ($this->mReadyForEdit == false) {
-	$this->ReadyForEdit();
-	$this->mReadyForEdit = true;
-      }
-    }
-    
     /**
      * Load the content of the object from an array
      * This method modifies the current object.
@@ -1198,6 +1170,7 @@ abstract class ContentBase
      * Callback function for content types to use to preload content or other things if necessary.  This
      * is called right after the content is loaded from the database.
      *
+     * @abstract
      */
     protected function Load()
     {
@@ -1710,12 +1683,7 @@ abstract class ContentBase
 
       $base_url = $config['root_url'];
       if( $this->Secure() ) {
-	if( isset($config['ssl_url']) ) {
-	  $base_url = $config['ssl_url'];
-	}
-	else {
-	  $base_url = str_replace('http://','https://',$base_url);
-	}
+	$base_url = $config['ssl_url'];
       }
 
       /* use root_url for default content */
@@ -1787,7 +1755,7 @@ abstract class ContentBase
 	      if( !isset($a->tab) || $a->tab == '' ) $a->tab = ContentBase::TAB_MAIN;
 	      if( !isset($b->tab) || $b->tab == '' ) $b->tab = ContentBase::TAB_MAIN;
 
-	      // sort tabs that don't start with _ to be after _main
+	      // sort elements by tabname, and then priority
 	      $atab = $a->tab;
 	      $btab = $b->tab;
 
@@ -1836,7 +1804,9 @@ abstract class ContentBase
      * Get an optional message for each tab.
      *
      * @abstract
+     * @since 2.0
      * @param mixed either a tab name (untranslated) or an integer index
+     * @return string html text to display at the top of the tab.
      */
     public function GetTabMessage($key)
     {
@@ -1857,6 +1827,7 @@ abstract class ContentBase
      * Get the attributes for a specific tab
      *
      * @param mixed either a tab name (untranslated) or an integer index
+     * @return An array of arrays.  Index 0 of each element should be a prompt field, and index 1 should be the input field for the prompt.
      */
     public function GetTabElements($key,$adding = FALSE)
     {

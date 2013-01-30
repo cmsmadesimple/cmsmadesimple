@@ -49,7 +49,6 @@ $(document).ready(function(){
 });
 </script>
 
-<div class="pagecontainer">
   {form_start url='listusers.php'}
   <table class="pagetable" cellspacing="0">
     <thead>
@@ -124,4 +123,3 @@ $(document).ready(function(){
     </div>
   </div>
   {form_end}
-</div>

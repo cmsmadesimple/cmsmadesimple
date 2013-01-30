@@ -3438,8 +3438,9 @@ abstract class CMSModule
    * 
    * @abstract
    * @param int Notification priority between 1 and 3
-   * @return object A stdClass object with two properties.... priority (1->3)... and
-   * html, which indicates the text to display for the Notification.
+   * @return mixed.  A stdClass object with two properties.... priority (1->3)... and
+   * html, which indicates the text to display for the Notification.  
+   * Also supports returning an array of stdclass objects.
    */
   function GetNotificationOutput($priority=2) 
   {

@@ -51,13 +51,13 @@ include_once("header.php");
 	$groupops = $gCms->GetGroupOperations();
 	$grouplist = $groupops->LoadGroups();
 
+	echo $themeObject->ShowHeader('currentgroups').'</div>';
 	$page = 1;
 	if (isset($_GET['page'])) $page = $_GET['page'];
 	$limit = 20;
         if (count($grouplist) > $limit) {
 	  echo "<p class=\"pageshowrows\">".pagination($page, count($grouplist), $limit)."</p>";
 	}
-	echo $themeObject->ShowHeader('currentgroups').'</div>';
 	if (count($grouplist) > 0) {
 	  echo "<table cellspacing=\"0\" class=\"pagetable\">\n";
 	  echo '<thead>';

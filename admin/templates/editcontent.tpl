@@ -14,7 +14,7 @@ $(document).ready(function(){
   });
   {/if}
 
-  $('#template_id').live('change',function(){
+  $('#template_id, #content_type').live('change',function(){
     $(this).closest('form').submit();
   });
 
@@ -77,17 +77,6 @@ $(document).ready(function(){
 </p>
 {/function}
 
-<div class="pagecontainer">
-{*
-  <div class="pageheader">
-  {if $content_id > 0}
-    {lang('editcontent')} :: {$content_id}
-  {else}
-    {lang('addcontent')}
-  {/if}
-  </div>
-*}
-
 <div id="Edit_Content_Result"></div>
 <div id="Edit_Content">
 {form_start url='editcontent.php' content_id=$content_obj->Id() orig_content_type=$cur_content_type }
@@ -125,4 +114,3 @@ $(document).ready(function(){
 {/if}
 {tab_end}
 {form_end}
-</div>

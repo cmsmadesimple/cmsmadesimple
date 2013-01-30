@@ -443,7 +443,7 @@ class microtiny_utils {
 	public static function SaveStaticConfig($frontend=false, $themeid='', $languageid='') 
 	{ 
 	  $configcontent = self::GenerateConfig($frontend, $themeid, $languageid);
-	  $fn = cms_join_path(TMP_CACHE_LOCATION,'mt_'.session_id().'.js');
+	  $fn = cms_join_path(PUBLIC_CACHE_LOCATION,'mt_'.md5(session_id()).'.js');
 	  $res = file_put_contents($fn,$configcontent);
 	  if( !$res ) return;
 	  return basename($fn);
