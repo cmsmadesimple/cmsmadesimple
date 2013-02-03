@@ -866,6 +866,7 @@ final class ModuleOperations
   public function UpgradeModule( $module_name, $to_version = '')
   {
 	  $module_obj = $this->get_module_instance($module_name);
+	  if( !is_object($module_obj) ) return FALSE;
 	  return $this->_upgrade_module($module_obj,$to_version);
   }
 
