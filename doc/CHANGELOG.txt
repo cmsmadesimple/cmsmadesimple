@@ -1,4 +1,4 @@
-Version 1.11.5 - 
+Version 1.11.5 - Puerto Ayora
 -----------------------------
 Core - General
   - GCB's can now only have letters and numbers in the name
@@ -9,7 +9,8 @@ Core - General
   - Fixes problem with contentprecompile not being fired
   - Significant performance improvement in admin theme calculations (fixes silly error)
   - Fix typo in /lib/classes/module_support/modtemplates.inc.php
-  
+  - Fixes issues wrt the News module being upgraded before the cms_routes table is created.
+
 
 Version 1.11.4 - Fernandina
 -----------------------------
