@@ -199,7 +199,7 @@ function smarty_cms_function_cms_stylesheet($params, &$template)
 							if( !endswith($text,"\n") ) $text .= "\n";
 					}
 
-					cms_stylesheet_writeCache($fn, $text, $trimbackground, $smarty, $forceblackandwhite);
+					cms_stylesheet_writeCache($fn, $text, $trimbackground, $smarty, $forceblackandwhite, $template_id);
 				}
 
 				cms_stylesheet_toString($filename, $params['media'], '', $root_url, $stylesheet, $params);
@@ -233,7 +233,7 @@ function smarty_cms_function_cms_stylesheet($params, &$template)
 							if( !endswith($text,"\n") ) $text .= "\n";
 						}
 
-						cms_stylesheet_writeCache($fn, $text, $trimbackground, $smarty, $forceblackandwhite);
+						cms_stylesheet_writeCache($fn, $text, $trimbackground, $smarty, $forceblackandwhite, $template_id);
 					}
 
 					cms_stylesheet_toString($filename, $media_query, $media_type, $root_url, $stylesheet, $params);
@@ -260,7 +260,7 @@ function smarty_cms_function_cms_stylesheet($params, &$template)
 				
 				if (!file_exists($fn)) {
 		
-					cms_stylesheet_writeCache($fn, $one['css_text'], $trimbackground, $smarty, $forceblackandwhite);					
+					cms_stylesheet_writeCache($fn, $one['css_text'], $trimbackground, $smarty, $forceblackandwhite, $template_id);					
 				}
 
 				cms_stylesheet_toString($filename, $media_query, $media_type, $root_url, $stylesheet, $params);
@@ -303,12 +303,23 @@ function smarty_cms_function_cms_stylesheet($params, &$template)
 	Misc functions
 **********************************************************/
 
-function cms_stylesheet_writeCache($filename, $string, $trimbackground, &$smarty, $forceblackandwhite = false)
+function cms_stylesheet_writeCache($filename, $string, $trimbackground, &$smarty, $forceblackandwhite = false, $template_id = null)
 {
+	$_contents = '';
+
 	// Smarty processing
 	$smarty->left_delimiter = '[[';
 	$smarty->right_delimiter = ']]';
-	$_contents = $smarty->fetch('string:'.$string);
+
+	try {
+
+		$_contents = $smarty->fetch('string:'.$string);
+	}	
+	catch (SmartyException $e)
+	{
+		audit($template_id, 'Plugin: cms_stylesheet', 'Smarty Compile process failed, unable to write cache file');
+	}	
+	
 	$smarty->left_delimiter = '{';
 	$smarty->right_delimiter = '}';					
 
