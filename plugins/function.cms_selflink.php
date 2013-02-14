@@ -76,27 +76,25 @@ function smarty_function_cms_selflink($params, &$template)
   $label = '';
   if (isset($params['page']) or isset($params['href']))
     {
-      /* LeisureLarry - Begin */
-      if (isset($params['href']))
-	{
-	  $page = $params['href'];
-	}
-      /* LeisureLarry - End */
-      else
-	{
-	  $page = $params['page'];
-	}
+      if (isset($params['href'])) {
+	$page = $params['href'];
+      }
+      else {
+	$page = $params['page'];
+      }
       $name = $page;
      
       // check if the page exists in the db
       $manager = $gCms->GetHierarchyManager();
-      $node = $manager->sureGetNodeByAlias($page);
-      if (!isset($node)) 
-	{
+      $node = $manager->find_by_tag('alias',$page);
+      if (!isset($node)) {
+	$node = $manager->find_by_tag('id',$page);
+	if( !$node ) {
 	  if (isset($params['lang'])) cms_set_frontend_language();
 	  return;
 	}
-      $content =& $node->GetContent();
+      }
+      $content = $node->GetContent();
       if ($content !== FALSE && is_object($content) && $content->Active() && $content->HasUsableLink() )
 	{
 	  $pageid = $content->Id();
@@ -150,12 +148,12 @@ function smarty_function_cms_selflink($params, &$template)
       if ($condition )
 	{
 	  $gCms = cmsms();
-	  $hm =& $gCms->GetHierarchyManager();
+	  $hm = $gCms->GetHierarchyManager();
 	  $flatcontent = array();
 	  if ($condition != '|') // uplink (we don't need the flatcontent for an uplink)
 	    {
-	      $flatcontent =& $hm->getFlatList();
-	      $contentops =& $gCms->GetContentOperations();
+	      $flatcontent = $hm->getFlatList();
+	      $contentops = $gCms->GetContentOperations();
 	      $defaultid = $contentops->GetDefaultPageID();
 	      $number = 0;
 	      for ($i = 0; $i < count($flatcontent); $i++)
