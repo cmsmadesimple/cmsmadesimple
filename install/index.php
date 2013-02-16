@@ -160,7 +160,7 @@ $smarty->assign('languages', $installer->dropdown_lang());
 
 $help_lang = installerHelpLanguage($frontendlang, 'en_US');
 $help_lang = (empty($help_lang)) ? '' : '/'.$help_lang;
-$smarty->assign('cms_install_help_url', CMS_INSTALL_HELP_URL . $help_lang);
+$smarty->assign('cms_install_help_url', CMS_INSTALL_HELP_URL);
 
 $installer->run($process);
 ?>
