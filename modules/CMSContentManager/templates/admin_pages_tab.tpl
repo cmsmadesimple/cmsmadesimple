@@ -154,11 +154,13 @@ $(document).ready(function(){
   <a href="{cms_action_url action=admin_editcontent}" accesskey="n" title="{$mod->Lang('addcontent')}" class="pageoptions">{admin_icon icon='newobject.gif' alt=$mod->Lang('addcontent')}&nbsp;{$mod->Lang('addcontent')}</a>&nbsp;
 {/if}
 <a class="expandall" href="{cms_action_url action='admin_pages_tab' expandall=1}" accesskey="e" title="{$mod->Lang('prompt_expandall')}" class="pageoptions">{admin_icon icon='expandall.gif' alt=$mod->Lang('expandall')}&nbsp;{$mod->Lang('expandall')}</a>&nbsp;
-<a class="collapseall" href="{cms_action_url action='admin_pages_tab' collapseall=1}" accesskey="c" title="{$mod->Lang('prompt_collapseall')}" class="pageoptions">{admin_icon icon='contract.gif' alt=$mod->Lang('contractall')}&nbsp;{$mod->Lang('contractall')}</a>&nbsp;
+<a class="collapseall" href="{cms_action_url action='admin_pages_tab' collapseall=1}" accesskey="c" title="{$mod->Lang('prompt_collapseall')}" class="pageoptions">{admin_icon icon='contractall.gif' alt=$mod->Lang('contractall')}&nbsp;{$mod->Lang('contractall')}</a>&nbsp;
 {if $can_reorder_content}
   <a id="ordercontent" href="{cms_action_url action=ordercontent}" accesskey="r" title="{$mod->Lang('prompt_ordercontent')}" class="pageoptions">{admin_icon icon='reorder.gif' alt=$mod->Lang('reorderpages')}&nbsp;{$mod->Lang('reorderpages')}</a>&nbsp;
 {/if}
 </div>
+
+<div class="clearb"></div>
 
 {form_start action='admin_pages_tab'}
 {/if} {* ajax *}
