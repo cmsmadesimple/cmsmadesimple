@@ -111,6 +111,13 @@ function setup_js() {
     });
     return false;
   });
+  $('a.page_delete').on('click',function(){
+    var url = $(this).attr('href')+'&showtemplate=false&{$actionid}ajax=1';
+    $('#contentlist').load(url,function(){
+      setup_js();
+    });
+    return false;
+  });
 }
 
 $(document).ready(function(){
@@ -241,7 +248,7 @@ $(document).ready(function(){
       {/if}
     {elseif $column == 'delete'}
       {if $row.delete != ''}
-	{admin_icon icon='delete.gif' class='page_delete' title=$mod->Lang('prompt_page_delete')}
+	<a href="{cms_action_url action='admin_pages_tab' delete=$row.id}" class="page_delete" accesskey="r">{admin_icon icon='delete.gif' class='page_delete' title=$mod->Lang('prompt_page_delete')}</a>
       {/if}
     {elseif $column == 'multiselect'}
       {if $row.multiselect != ''}

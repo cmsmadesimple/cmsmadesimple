@@ -90,6 +90,12 @@ if( isset($params['moveup']) ) {
 if( isset($params['movedown']) ) {
   $builder->move_content($params['movedown'],1);
 }
+if( isset($params['delete']) ) {
+  $res = $builder->delete_content($params['delete']);
+  if( $res != '' ) {
+    
+  }
+}
 
 $editinfo = $builder->get_content_list();
 $smarty->assign('columns',$columns);

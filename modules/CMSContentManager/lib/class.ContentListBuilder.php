@@ -34,6 +34,21 @@
 #-------------------------------------------------------------------------
 #END_LICENSE
 
+/**
+ * @package CMS
+ */
+
+/**
+ * A simple class for building, and managing content lists.
+ *
+ * This is an internal class.  Not intended for use by external third parties.
+ *
+ * @package CMS
+ * @internal
+ * @ignore
+ * @author Robert Campbell
+ * @copyright Copyright (c) 2013, Robert Campbell <calguy1000@cmsmadesimple.org>
+ */
 final class ContentListBuilder 
 {
   private $_opened_array = array();
@@ -43,6 +58,11 @@ final class ContentListBuilder
   private $_pagelimit = 100000;
   private $_offset    = 0;
 
+  /**
+   * Constructor
+   *
+   * Caches the opened pages, and userid
+   */
   public function __construct(CMSModule $mod)
   {
     if( get_class($mod) != 'CMSContentManager' ) {
@@ -55,6 +75,9 @@ final class ContentListBuilder
     if( $tmp ) $this->_opened_array = explode(',',$tmp);
   }
 
+  /**
+   * Expand a section, given a parent page_id.  Results in the children of this page being visible.
+   */
   public function expand_section($parent_page_id)
   {
     $parent_page_id = (int)$parent_page_id;
@@ -67,6 +90,9 @@ final class ContentListBuilder
     cms_userprefs::set('opened_pages',implode(',',$this->_opened_array));
   }
 
+  /**
+   * Marks all parent pages as expanded.  Results in all content pages being visible.
+   */
   public function expand_all()
   {
     $hm = cmsms()->GetHierarchyManager();
@@ -94,12 +120,18 @@ final class ContentListBuilder
     cms_userprefs::set('opened_pages',implode(',',$this->_opened_array));
   }
 
+  /**
+   * Marks all parent pages as collapsed.  Results in no child pages beng visible.
+   */
   public function collapse_all()
   {
     $this->_opened_array = array();
     cms_userprefs::remove('opened_pages');
   }
 
+  /**
+   * Collapse a parent page, results in its child pages not being visible in the content list.
+   */
   public function collapse_section($parent_page_id)
   {
     $parent_page_id = (int)$parent_page_id;
@@ -119,6 +151,9 @@ final class ContentListBuilder
     }
   }
 
+  /**
+   * Toggle the active state of a content page
+   */
   public function set_active($page_id,$state = TRUE)
   {
     $state = (bool)$state;
@@ -139,6 +174,9 @@ final class ContentListBuilder
     $content->Save();
   }
 
+  /**
+   * Set the specified page as the default page
+   */
   public function set_default($page_id)
   {
     $page_id = (int)$page_id;
@@ -166,6 +204,9 @@ final class ContentListBuilder
     $content2->Save();
   }
 
+  /**
+   * Move a content page up, or down wrt it's peers.
+   */
   public function move_content($page_id,$direction)
   {
     $page_id = (int)$page_id;
@@ -177,7 +218,7 @@ final class ContentListBuilder
     if( $this->_module->CheckPermission('Manage All Content') ) {
       $test = TRUE;
     }
-    else if( $this->_module->CheckPermission('Reorder Content') && check_per_authorship(get_userid(),$page_id) ) {
+    else if( $this->_module->CheckPermission('Reorder Content') && check_peer_authorship($this->_userid,$page_id) ) {
       $test = TRUE;
     }
 
@@ -195,6 +236,55 @@ final class ContentListBuilder
     $contentops->ClearCache();
   }
 
+  /**
+   * Delete a content page.
+   *
+   * returns error message on failure.  null on success;
+   */
+  public function delete_content($page_id)
+  {
+    $page_id = (int)$page_id;
+    if( $page_id < 1 ) return $this->_module->Lang('error_invalidpageid');
+
+    $test = FALSE;
+    if( $this->_module->CheckPermission('Manage All Content') ) {
+      $test = TRUE;
+    }
+    else if( $this->_module->CheckPermission('Remove Pages') && check_authorship($this->_userid,$page_id) ) {
+      $test = TRUE;
+    }
+
+    if( !$test ) return $this->_module->Lang('error_delete_permission');
+
+    $contentops = cmsms()->GetContentOperations();
+    $hm = cmsms()->GetHierarchyManager();
+    $node = $hm->find_by_tag('id',$page_id);
+    if( !$node ) return $this->_module->Lang('error_invalidpageid');
+
+    if( $node->has_children() ) return $this->_module->Lang('error_delete_haschildren');
+
+    $parent = $node->get_parent();
+    $parent_id = $node->get_tag('id');
+    $childcount = 0;
+    if( $parent ) $childcount = $parent->count_children();
+
+    $content = $node->GetContent(FALSE,FALSE,FALSE);
+    if( $content->DefaultContent() ) return $this->_module->Lang('error_delete_defaultcontent');
+
+    $content->Delete();
+    $contentops->SetAllHierarchyPositions();
+
+    if( $childcount == 1 && $parent_id > -1 ) {
+      $this->collapse_section($parent_id);
+    }
+    $this->collapse_section($page_id);
+
+    $contentops->ClearCache();
+  }
+
+  /**
+   * Get the columns that are visible to display in the content list
+   */
   public function get_display_columns()
   {
     $mod = $this->_module;
@@ -218,6 +308,9 @@ final class ContentListBuilder
     return $columnstodisplay;
   }
 
+  /**
+   * Recursive function to generate a list of all content pages.
+   */
   private function _get_all_pages(cms_tree $node)
   {
     $out = array();
@@ -235,6 +328,9 @@ final class ContentListBuilder
     return $out;
   }
 
+  /**
+   * Load all content that the user has access to.
+   */
   private function _load_editable_content()
   {
     $pagelist = null;
@@ -245,7 +341,7 @@ final class ContentListBuilder
       $pagelist = $this->_get_all_pages($hm);
     }
     else {
-      $pagelist = author_pages(get_userid());
+      $pagelist = author_pages($this->_userid);
     }
 
     // remove children of pages that a: have children, and b: are not in the opened_array
@@ -276,6 +372,9 @@ final class ContentListBuilder
     return $display;
   }
 
+  /**
+   * Given a content id, and a userid indicate wether the user has access to all peers of the content page.
+   */
   private function _check_peer_authorship($content_id,$userid = null)
   {
     if( $content_id < 1 ) return FALSE;
@@ -294,7 +393,7 @@ final class ContentListBuilder
     $children = $parent->get_children();
     if( !$children ) return FALSE;
 
-    if( $userid <= 0 ) $userid = get_userid();
+    if( $userid <= 0 ) $userid = $this->_userid;
     $mypages = author_pages($userid);
     for( $i = 0; $i < count($children); $i++ ) {
       $the_id = $chidren[$i]->get_tag('id');
@@ -303,13 +402,19 @@ final class ContentListBuilder
     return TRUE;
   }
 
+  /**
+   * Checks if the specified user is the author of the specified content page
+   */
   private function _check_authorship($content_id,$userid = null)
   {
-    if( $userid <= 0 ) $userid = get_userid();
+    if( $userid <= 0 ) $userid = $this->_userid;
     $mypages = author_pages($userid);
     return quick_check_authorship($content_id,$mypages);
   }
 
+  /**
+   * Load, and cache all users
+   */
   private function _get_users()
   {
     static $_users = null;
@@ -326,13 +431,16 @@ final class ContentListBuilder
     return $_users;
   }
 
+  /**
+   * Givena list of displayable pages, builds display info for each page.
+   */
   private function _get_display_data($page_list)
   {
     $users = $this->_get_users();
     $hm = cmsms()->GetHierarchyManager();
     $mod = $this->_module;
     $columns = $this->get_display_columns();
-    $userid = get_userid();
+    $userid = $this->_userid;
 
     // preload the templates.
     $tpl_list = array();
@@ -514,6 +622,9 @@ final class ContentListBuilder
     return $out;
   }
 
+  /**
+   * Master function, returns an array of display data for viewable/editable content
+   */
   public function get_content_list()
   {
     $pagelist = $this->_load_editable_content();

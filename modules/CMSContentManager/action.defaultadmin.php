@@ -36,6 +36,8 @@
 if( !isset($gCms) ) exit;
 if( !$this->VisibleToAdminUser() ) return;
 
+echo '<noscript><h3 style="color: red; text-align: center;">'.$this->Lang('info_javascript_required').'</h3></noscript>'."\n";
+
 echo $this->StartTabHeaders();
 if( $this->CanEditContent() ) {
   echo $this->SetTabHeader('pages',$this->Lang('pages'));

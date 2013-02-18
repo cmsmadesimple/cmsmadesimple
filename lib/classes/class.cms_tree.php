@@ -231,12 +231,23 @@ class cms_tree
    * Get a reference to the parent node.
    *
    * @return cms_tree Reference to the parent node, or null.
+   * @since 2.0
+   */
+  public function &get_parent()
+  {
+	  return $this->_parent;
+  }
+
+  /**
+   * Get a reference to the parent node.
+   *
+   * @return cms_tree Reference to the parent node, or null.
+   * @deprecated
    */
   public function &getParent()
   {
 	  return $this->_parent;
   }
-
 
   /**
    * Add the specified node as a child to this node.
