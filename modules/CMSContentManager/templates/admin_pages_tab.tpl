@@ -240,7 +240,7 @@ $(document).ready(function(){
       {/if}
     {elseif $column == 'copy'}
       {if $row.copy != ''}
-	{admin_icon icon='copy.gif' class='page_copy' title=$mod->Lang('prompt_page_copy')}
+	<a href="{cms_action_url action='admin_copycontent' page=$row.id}" accesskey="o">{admin_icon icon='copy.gif' class='page_copy' title=$mod->Lang('prompt_page_copy')}</a>
       {/if}
     {elseif $column == 'edit'}
       {if $row.can_edit}
@@ -261,6 +261,10 @@ $(document).ready(function(){
     </td>
   {/foreach}
 {/function}
+
+{if isset($error)}
+<div class="pageerrorcontainer"><ul class="pageerror"><li>{$error}</li></ul></div>
+{/if}
 
 <table id="contenttable" cellspacing="0" class="pagetable" width="100%">
   <thead>

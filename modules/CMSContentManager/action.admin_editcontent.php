@@ -37,6 +37,7 @@ if( !isset($gCms) ) exit;
 
 $this->SetCurrentTab('pages');
 if( isset($params['cancel']) ) {
+  unset($_SESSION['__cms_copy_obj__']);
   $this->RedirectToAdminTab();
 }
 
@@ -73,7 +74,11 @@ $existingtypes = $contentops->ListContentTypes(false,true);
 // load or create the initial content object
 //
 try {
-  if( $content_id < 1 ) {
+  if( $content_id == 'copy' && isset($_SESSION['__cms_copy_obj__']) ) {
+    // we're copying a content object.
+    $content_obj = unserialize($_SESSION['__cms_copy_obj__']);
+  }
+  else if( $content_id < 1 ) {
     // creating a new content object
     if( isset($params['content_type']) ) $content_type = trim($params['content_type']);
     $content_obj = $contentops->CreateNewContent($content_type);
@@ -158,6 +163,7 @@ try {
       $content_obj->SetLastModifiedBy(get_userid());
       $content_obj->Save();
       $contentops->SetAllHierarchyPositions();
+      unset($_SESSION['__cms_copy_obj__']);
       audit($content_obj->Id(),'Content Item: '.$content_obj->Name(),' Edited');
       if( isset($params['submit']) ) {
 	$this->SetMessage($this->Lang('msg_editpage_success'));

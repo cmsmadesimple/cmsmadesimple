@@ -33,6 +33,9 @@
 #
 #-------------------------------------------------------------------------
 #END_LICENSE
+if( !isset($gCms) ) exit;
+
+$error = '';
 
 if( !function_exists('cm_prettyurls_ok') ) {
   function cm_prettyurls_ok()
@@ -58,15 +61,17 @@ $smarty->assign('can_reorder_content',$this->CheckPermission('Manage All Content
 $builder = new ContentListBuilder($this);
 $columns  = $builder->get_display_columns();
 
+//
 // handle all of the possible ajaxy/sub actions.
+//
 $ajax = 0;
 if( isset($params['ajax']) ) {
   $ajax = 1;
 }
-if( isset($params['expandall']) ) {
+if( isset($params['expandall']) || isset($_GET['expandall']) ) {
   $builder->expand_all();
 }
-if( isset($params['collapseall']) ) {
+if( isset($params['collapseall']) || isset($_GET['collapseall']) ) {
   $builder->collapse_all();
 }
 if( isset($params['expand']) ) {
@@ -77,30 +82,37 @@ if( isset($params['collapse']) ) {
 }
 if( isset($params['setinactive']) ) {
   $builder->set_active($params['setinactive'],FALSE);
+  if( !$res ) $error = $this->Lang('error_setinactive');
 }
 if( isset($params['setactive']) ) {
-  $builder->set_active($params['setactive'],TRUE);
+  $res = $builder->set_active($params['setactive'],TRUE);
+  if( !$res ) $error = $this->Lang('error_setactive');
 }
 if( isset($params['setdefault']) ) {
-  $builder->set_default($params['setdefault'],TRUE);
+  $res = $builder->set_default($params['setdefault'],TRUE);
+  if( !$res ) $error = $this->Lang('error_setdefault');
 }
 if( isset($params['moveup']) ) {
-  $builder->move_content($params['moveup'],-1);
+  $res = $builder->move_content($params['moveup'],-1);
+  if( !$res ) $error = $this->Lang('error_movecontent');
 }
 if( isset($params['movedown']) ) {
-  $builder->move_content($params['movedown'],1);
+  $res = $builder->move_content($params['movedown'],1);
+  if( !$res ) $error = $this->Lang('error_movecontent');
 }
 if( isset($params['delete']) ) {
   $res = $builder->delete_content($params['delete']);
-  if( $res != '' ) {
-    
-  }
+  if( $res ) $error = $res;
 }
 
+//
+// build the display
+//
 $editinfo = $builder->get_content_list();
 $smarty->assign('columns',$columns);
 $smarty->assign('content_list',$editinfo);
 $smarty->assign('ajax',$ajax);
+if( $error ) $smarty->assign('error',$error);
 
 if( $ajax == 0 ) {
   $opts = array();

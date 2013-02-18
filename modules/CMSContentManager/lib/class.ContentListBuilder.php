@@ -135,7 +135,7 @@ final class ContentListBuilder
   public function collapse_section($parent_page_id)
   {
     $parent_page_id = (int)$parent_page_id;
-    if( $parent_page_id < 1 ) return;
+    if( $parent_page_id < 1 ) return FALSE;
 
     $tmp = array();
     foreach( $this->_opened_array as $one ) {
@@ -149,6 +149,7 @@ final class ContentListBuilder
     else {
       cms_userprefs::remove('opened_pages');
     }
+    return TRUE;
   }
 
   /**
@@ -158,20 +159,21 @@ final class ContentListBuilder
   {
     $state = (bool)$state;
     $page_id = (int)$page_id;
-    if( $page_id < 1 ) return;
+    if( $page_id < 1 ) return FALSE;
 
     if( !$this->_module->CheckPermission('Manage All Content') ) {
-      return;
+      return FALSE;
     }
 
     $hm = cmsms()->GetHierarchyManager();
     $node = $hm->find_by_tag('id',$page_id);
-    if( !$node ) return;
+    if( !$node ) return FALSE;
     $content = $node->GetContent(FALSE,FALSE,FALSE);
-    if( !$content ) return;
+    if( !$content ) return FALSE;
 
     $content->SetActive($state);
     $content->Save();
+    return TRUE;
   }
 
   /**
@@ -180,28 +182,29 @@ final class ContentListBuilder
   public function set_default($page_id)
   {
     $page_id = (int)$page_id;
-    if( $page_id < 1 ) return;
+    if( $page_id < 1 ) return FALSE;
 
     if( !$this->_module->CheckPermission('Manage All Content') ) return;
 
     $hm = cmsms()->GetHierarchyManager();
     $node = $hm->find_by_tag('id',$page_id);
-    if( !$node ) return;
+    if( !$node ) return FALSE;
     $content1 = $node->GetContent(FALSE,FALSE,FALSE);
-    if( !$content1 ) return;
-    if( !$content1->IsDefaultPossible() ) return;
-    if( !$content1->Active() ) return;
+    if( !$content1 ) return FALSE;
+    if( !$content1->IsDefaultPossible() ) return FALSE;
+    if( !$content1->Active() ) return FALSE;
 
     $page_id2 = ContentOperations::get_instance()->GetDefaultContent();
     $node = $hm->find_by_tag('id',$page_id2);
-    if( !$node ) return;
+    if( !$node ) return FALSE;
     $content2 = $node->GetContent(FALSE,FALSE,FALSE);
-    if( !$content2 ) return;
+    if( !$content2 ) return FALSE;
 
     $content1->SetDefaultContent(TRUE);
     $content1->Save();
     $content2->SetDefaultContent(FALSE);
     $content2->Save();
+    return TRUE;
   }
 
   /**
@@ -210,9 +213,9 @@ final class ContentListBuilder
   public function move_content($page_id,$direction)
   {
     $page_id = (int)$page_id;
-    if( $page_id < 1 ) return;
+    if( $page_id < 1 ) return FALSE;
     $direction = (int)$direction;
-    if( $direction == 0 ) return;
+    if( $direction == 0 ) return FALSE;
 
     $test = FALSE;
     if( $this->_module->CheckPermission('Manage All Content') ) {
@@ -222,18 +225,19 @@ final class ContentListBuilder
       $test = TRUE;
     }
 
-    if( !$test ) return;
+    if( !$test ) return FALSE;
     
     $hm = cmsms()->GetHierarchyManager();
     $node = $hm->find_by_tag('id',$page_id);
-    if( !$node ) return;
+    if( !$node ) return FALSE;
     $content1 = $node->GetContent(FALSE,FALSE,FALSE);
-    if( !$content1 ) return;
+    if( !$content1 ) return FALSE;
 
     $content1->ChangeItemOrder($direction);
     $contentops = ContentOperations::get_instance();
     $contentops->SetAllHierarchyPositions();
     $contentops->ClearCache();
+    return TRUE;
   }
 
   /**
