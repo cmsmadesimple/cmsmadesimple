@@ -78,19 +78,19 @@ try {
     if( isset($params['content_type']) ) $content_type = trim($params['content_type']);
     $content_obj = $contentops->CreateNewContent($content_type);
     $content_obj->SetOwner($user_id);
-    $content_obj->SetLastModified($user_id);
+    $content_obj->SetLastModifiedBy($user_id);
     $content_obj->SetActive($pagedefaults['active']);
     $content_obj->SetSecure($pagedefaults['secure']);
     $content_obj->SetCachable($pagedefaults['cachable']);
     $content_obj->SetShowInMenu($pagedefaults['showinmenu']);
-    $content_obj->SetProperty('design_id',$pagedefaults['design_id']);
+    $content_obj->SetPropertyValue('design_id',$pagedefaults['design_id']);
     $content_obj->SetTemplateId($pagedefaults['template_id']);
-    $content_obj->SetProperty('searchable',$pagedefaults['searchable']);
-    $content_obj->SetProperty('content_en',$pagedefaults['content']);
-    $content_obj->SetProperty('pagemetadata',$pagedefaults['metadata']);
-    $content_obj->SetProperty('extra1',$pagedfaults['extra1']);
-    $content_obj->SetProperty('extra2',$pagedfaults['extra2']);
-    $content_obj->SetProperty('extra3',$pagedfaults['extra3']);
+    $content_obj->SetPropertyValue('searchable',$pagedefaults['searchable']);
+    $content_obj->SetPropertyValue('content_en',$pagedefaults['content']);
+    $content_obj->SetPropertyValue('pagemetadata',$pagedefaults['metadata']);
+    $content_obj->SetPropertyValue('extra1',$pagedefaults['extra1']);
+    $content_obj->SetPropertyValue('extra2',$pagedefaults['extra2']);
+    $content_obj->SetPropertyValue('extra3',$pagedefaults['extra3']);
     $content_obj->SetAdditionalEditors($pagedefaults['addteditors']);
   }
   else {
@@ -118,7 +118,7 @@ catch( Exception $e ) {
 try {
   if( $content_id != -1 && $content_type != $content_obj->Type() ) {
     // content type changed. create a new content object, but preserve the id.
-    $tmpobj = $contentops->CreateNewContent($newcontenttype);
+    $tmpobj = $contentops->CreateNewContent($content_type);
     $tmpobj->SetId($contentobj->Id());
     $tmpobj->SetName($contentobj->Name());
     $tmpobj->SetMenuText($contentobj->MenuText());
@@ -140,7 +140,7 @@ try {
   if( strtoupper($_SERVER['REQUEST_METHOD']) == 'POST' ) {
     // if we're in a POST action, another item may have changed that requires reloading the page
     // filling the params will make sure that no edited content was lost.
-    $content_obj->FillParams($params,($content_id < 1));
+    $content_obj->FillParams($_POST,($content_id < 1));
   }
 
   if( isset($params['submit']) || isset($params['apply']) || isset($params['preview']) ) {
@@ -158,7 +158,7 @@ try {
       $content_obj->SetLastModifiedBy(get_userid());
       $content_obj->Save();
       $contentops->SetAllHierarchyPositions();
-      audit($content_obj->Id(),'Content Item: '.$contentobj->Name(),' Edited');
+      audit($content_obj->Id(),'Content Item: '.$content_obj->Name(),' Edited');
       if( isset($params['submit']) ) {
 	$this->SetMessage($this->Lang('msg_editpage_success'));
 	$this->RedirectToAdminTab();

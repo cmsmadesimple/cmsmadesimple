@@ -55,9 +55,13 @@ final class CmsContentManagerUtils
 
   public static function get_pagedefaults()
   {
+    $tpl = CmsLayoutTemplate::load_dflt_by_type('__CORE__::page');
+    $tpl_id = -1;
+    if( $tpl ) $tpl_id = $tpl->get_id();
     $page_prefs = array('contenttype'=>'content', // string
 			'disallowed_types'=>'', // array of strings
 			'design_id'=>CmsLayoutCollection::load_default()->get_id(), // int
+			'template_id'=>$tpl_id,
 			'parent_id'=>-2, // int
 			'secure'=>0, // boolean
 			'cachable'=>1, // boolean

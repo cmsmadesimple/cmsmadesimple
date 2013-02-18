@@ -144,12 +144,12 @@ $(document).ready(function(){
 
 <div class="pageoptions" style="float: left">
 {if $can_add_content}
-  <a href="{cms_action_url action=admin_addcontent}" accesskey="n" title="{$mod->Lang('addcontent')}">{admin_icon icon='newobject.gif' alt=$mod->Lang('addcontent')}&nbsp;{$mod->Lang('addcontent')}</a>&nbsp;
+  <a href="{cms_action_url action=admin_editcontent}" accesskey="n" title="{$mod->Lang('addcontent')}" class="pageoptions">{admin_icon icon='newobject.gif' alt=$mod->Lang('addcontent')}&nbsp;{$mod->Lang('addcontent')}</a>&nbsp;
 {/if}
-<a class="expandall" href="{cms_action_url action='admin_pages_tab' expandall=1}" accesskey="e" title="{$mod->Lang('prompt_expandall')}">{admin_icon icon='expandall.gif' alt=$mod->Lang('expandall')}&nbsp;{$mod->Lang('expandall')}</a>&nbsp;
-<a class="collapseall" href="{cms_action_url action='admin_pages_tab' collapseall=1}" accesskey="c" title="{$mod->Lang('prompt_collapseall')}">{admin_icon icon='contract.gif' alt=$mod->Lang('contractall')}&nbsp;{$mod->Lang('contractall')}</a>&nbsp;
+<a class="expandall" href="{cms_action_url action='admin_pages_tab' expandall=1}" accesskey="e" title="{$mod->Lang('prompt_expandall')}" class="pageoptions">{admin_icon icon='expandall.gif' alt=$mod->Lang('expandall')}&nbsp;{$mod->Lang('expandall')}</a>&nbsp;
+<a class="collapseall" href="{cms_action_url action='admin_pages_tab' collapseall=1}" accesskey="c" title="{$mod->Lang('prompt_collapseall')}" class="pageoptions">{admin_icon icon='contract.gif' alt=$mod->Lang('contractall')}&nbsp;{$mod->Lang('contractall')}</a>&nbsp;
 {if $can_reorder_content}
-  <a id="ordercontent" href="{cms_action_url action=ordercontent}" accesskey="r" title="{$mod->Lang('prompt_ordercontent')}">{admin_icon icon='reorder.gif' alt=$mod->Lang('reorderpages')}&nbsp;{$mod->Lang('reorderpages')}</a>&nbsp;
+  <a id="ordercontent" href="{cms_action_url action=ordercontent}" accesskey="r" title="{$mod->Lang('prompt_ordercontent')}" class="pageoptions">{admin_icon icon='reorder.gif' alt=$mod->Lang('reorderpages')}&nbsp;{$mod->Lang('reorderpages')}</a>&nbsp;
 {/if}
 </div>
 
@@ -173,6 +173,7 @@ $(document).ready(function(){
       {$row.hier}
     {elseif $column == 'page'}
       {if $row.can_edit}
+	{repeat string='-&nbsp;&nbsp;' times=$row.depth-2}
         <a href="{cms_action_url action='admin_editcontent' content_id=$row.id}" class="page_edit tooltip" accesskey="e" title="{$mod->Lang('prompt_page_edit')}">
            <span style="display: none;">
               <strong>{$mod->Lang('prompt_content_id')}:</strong> {$row.id}<br/>
@@ -216,6 +217,7 @@ $(document).ready(function(){
         <a href="{cms_action_url action='admin_pages_tab' setdefault=$row.id}" class="page_setdefault" accesskey="d">{admin_icon icon='false.gif' class='page_setdefault' title=$mod->Lang('prompt_page_setdefault')}</a>
       {/if}
     {elseif $column == 'move'}
+      {if isset($row.move)}
       {if $row.move == 'up'}
         <a href="{cms_action_url action='admin_pages_tab' moveup=$row.id}" class="page_sortup" accesskey="m">{admin_icon icon='sort_up.gif' title=$mod->Lang('prompt_page_sortup')}</a>
       {elseif $row.move == 'down'}
@@ -223,6 +225,7 @@ $(document).ready(function(){
       {elseif $row.move == 'both'}
         <a href="{cms_action_url action='admin_pages_tab' moveup=$row.id}" class="page_sortup" accesskey="m">{admin_icon icon='sort_up.gif' title=$mod->Lang('prompt_page_sortup')}</a>
         <a href="{cms_action_url action='admin_pages_tab' movedown=$row.id}" class="page_sortdown" accesskey="m">{admin_icon icon='sort_down.gif' title=$mod->Lang('prompt_page_sortdown')}</a>
+      {/if}
       {/if}
     {elseif $column == 'view'}
       {if $row.view != ''}
