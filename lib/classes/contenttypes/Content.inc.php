@@ -51,6 +51,19 @@ class Content extends ContentBase
         return TRUE;
     }
 
+    /**
+     * Indicates wether ths page type uses a template.
+     * i.e: some content types like sectionheader and separator do not.
+     *
+     * @since 2.0
+     * @abstract
+     * @return boolean default FALSE
+     */
+	public function HasTemplate()
+	{
+		return TRUE;
+	}
+
 	/**
 	 * Get the friendly (e.g., human-readable) name for this content type
 	 *
@@ -279,14 +292,10 @@ class Content extends ContentBase
 			if( is_array($_tpl) && count($_tpl) > 0 ) {
 				$_templates = array();
 				foreach( $_tpl as $tpl_id => $tpl_name ) {
-					$_templates[] = array('key'=>$tpl_id,'value'=>$tpl_name,'title'=>'foo');
+					$_templates[] = array('key'=>$tpl_id,'value'=>$tpl_name);
 				}
 			}
-			$_designs = CmsLayoutCollection::get_all();
-			$_designlist = array();
-			foreach( $_designs as $one_design ) {
-				$_designlist[$one_design->get_id()] = $one_design->get_name();
-			}
+			$_designslist = CmsLayoutCollection::get_list();
 		}
 		
 		switch($one) {
@@ -317,7 +326,7 @@ class Content extends ContentBase
 				$dflt_tpl = CmsLayoutTemplate::load_dflt_by_type('__CORE__::page');
 				$template_id = $this->TemplateId();
 				if( $template_id < 1 ) $template_id = $dflt_tpl->get_id();
-				$out = CmsFormutils::create_dropdown('template_id',$_templates,$template_id,array('id'=>'template_id'));
+				$out = CmsFormUtils::create_dropdown('template_id',$_templates,$template_id,array('id'=>'template_id'));
 				return array('<label for="template_id">*'.lang('template').':</label>',
 							 $out,lang('info_editcontent_template'));
 			}

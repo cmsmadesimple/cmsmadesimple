@@ -1,9 +1,10 @@
 <?php
 
-class CmsFormUtils {
+class CmsFormUtils 
+{
   private function __construct() {}
 
-  private static function create_option($key,$value,$selected = '',$title = '') 
+  public static function create_option($key,$value,$selected = '',$title = '') 
   {
     $out = '';
     if( is_array($value) ) {
@@ -25,7 +26,7 @@ class CmsFormUtils {
     else {
       $addtext = '';
       if( $title != '' ) $addtext=" title=\"{$title}\"";
-      if( $selected == $key ) {
+      if( (is_array($selected) && in_array($key,$selected)) || $selected == $key ) {
 	$out .= "<option value=\"$key\" selected=\"selected\"{$addtext}>$value</option>\n";
       }
       else {
@@ -35,16 +36,23 @@ class CmsFormUtils {
     return $out;
   }
 
+  public static function create_options($options,$selected = '')
+  {
+    if( !is_array($options) || count($options) == 0 ) return;
+
+    $out = '';
+    foreach( $options as $key => $value ) {
+      $out .= self::create_option($key,$value,$selected);
+    }
+    return $out;
+  }
+
   public static function create_dropdown($name,$list_options,$selected,$params = array())
   {
     if( $name == '' ) return;
     if( !is_array($list_options) || count($list_options) == 0 ) return;
     
-    $options = '';
-    foreach( $list_options as $key => $value ) {
-      $options .= self::create_option($key,$value,$selected);
-    }
-
+    $options = self::create_options($list_options,$selected);
     $elem_id = $name;
 
     if( isset($params['multiple']) && !endswith($name,'[]') ) {

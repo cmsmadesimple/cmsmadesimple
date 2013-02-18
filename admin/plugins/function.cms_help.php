@@ -42,6 +42,10 @@ function smarty_function_cms_help($params,&$template)
 		}
 	}
 
+	if( !$key1 ) {
+	  $module = $smarty->get_template_vars('actionmodule');
+	  if( $module ) $key1 = $module;
+	}
 	if( !$key1 ) return;
 	$key = $key1;
 	if( $key2 !== '' ) $key .= '__'.$key2;

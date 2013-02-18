@@ -254,9 +254,11 @@ abstract class CmsAdminThemeBase
 									 check_permission($this->userid, 'Remove Pages') ||
 									 check_permission($this->userid, 'Manage All Content')
 									 );
-        $thisUserPages = author_pages($this->userid);
-        if (count($thisUserPages) > 0) {
-			$this->_perms['pagePerms'] = true;
+		if( $this->_perms['pagePerms'] == FALSE ) {
+			$thisUserPages = author_pages($this->userid);
+			if (count($thisUserPages) > 0) {
+				$this->_perms['pagePerms'] = true;
+			}
 		}
         $this->_perms['contentPerms'] = $this->_perms['pagePerms'] | 
 			(isset($this->_sectionCount['content']) && $this->_sectionCount['content'] > 0);
@@ -1152,7 +1154,7 @@ abstract class CmsAdminThemeBase
 	 *                           is marked as selected.
 	 * @return string The select list of pages
 	 */
-	public function GetAdminPageDropdown($name,$selected)
+	public function GetAdminPageDropdown($name,$selected,$id = '')
 	{
 		$opts = array();
 		$opts[ucfirst(lang('none'))] = '';
@@ -1188,7 +1190,11 @@ abstract class CmsAdminThemeBase
 			}
 		}
 
-		$output = '<select name="'.$name.'">'."\n";
+		$atext = '';
+		if( $id != '' ) {
+			$atext = ' id="'.trim($id).'"';
+		}
+		$output = '<select'.$atext.' name="'.$name.'">'."\n";
 		foreach( $opts as $key => $value ) {
 			if( $value == $selected ) {
 				$output .= sprintf("<option selected=\"selected\" value=\"%s\">%s</option>\n",

@@ -1,6 +1,5 @@
 <?php
 #CMS - CMS Made Simple
-#(c)2004 by Ted Kulp (wishy@users.sf.net)
 #This project's homepage is: http://www.cmsmadesimple.org
 #
 #This program is free software; you can redistribute it and/or modify
@@ -16,48 +15,21 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-function smarty_function_admin_icon($params,&$template)
+function smarty_cms_function_cms_yesno($params, &$template)
 {
-  $smarty = $template->smarty;
-  
-  if( !cmsms()->test_state(CmsApp::STATE_ADMIN_PAGE) ) return;
+  $smarty   = $template->smarty;
 
-  $icon = null;
-  $tagparms = array();
-  foreach( $params as $key => $value ) {
-    switch( $key ) {
-    case 'icon':
-      $icon = trim($value);
-      break;
-    case 'width':
-    case 'height':
-    case 'alt':
-    case 'rel':
-    case 'class':
-    case 'id':
-    case 'name':
-    case 'title':
-    case 'accesskey':
-      $tagparms[$key] = trim($value);
-      break;
-    case 'assign':
-      break;
+  $opts = array(0=>lang('no'),1=>lang('yes'));
+
+  $out = '';
+  foreach( $opts as $k => $v ) {
+    $out .= '<option value="'.$k.'"';
+    if( isset($params['selected']) && $k == $params['selected'] ) {
+      $out .= ' selected="selected"';
     }
+    $out .= '>'.$v.'</option>';
   }
-
-  if( !$icon ) return;
-  $fnd = cms_admin_utils::get_icon($icon);
-  if( !$fnd ) return;
-
-  if( !isset($tagparms['alt']) ) {
-    $tagparms['alt'] = basename($fnd);
-  }
-
-  $out = "<img src=\"{$fnd}\"";
-  foreach( $tagparms as $key => $value ) {
-    $out .= " $key=\"$value\"";
-  }
-  $out .= '/>';
+  $out .= "\n";
 
   if( isset($params['assign']) ) {
     $smarty->assign(trim($params['assign']),$out);
@@ -65,4 +37,8 @@ function smarty_function_admin_icon($params,&$template)
   }
   return $out;
 }
+
+#
+# EOF
+#
 ?>

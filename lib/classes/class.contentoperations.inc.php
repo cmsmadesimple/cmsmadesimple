@@ -366,7 +366,7 @@ class ContentOperations
 	 * @param boolean optionally trim the list of content types that are allowed by the site preference.
 	 * @return array List of content types registered in the system.
 	 */
-	function ListContentTypes($byclassname = false,$allowed = false)
+	function ListContentTypes($byclassname = false,$allowed = false,$system = FALSE)
 	{
 		$disallowed_a = array(); 
 		$tmp = get_site_preference('disallowed_contenttypes');
@@ -460,15 +460,13 @@ class ContentOperations
 		$db = cmsms()->GetDb();
 
 		$query = "SELECT content_id FROM ".cms_db_prefix()."content";
-		$dbresult = $db->Execute($query);
+		$dbresult = $db->GetCol($query);
 
-		while ($dbresult && !$dbresult->EOF) {
-		    $this->_SetHierarchyPosition($dbresult->fields['content_id']);
-			$dbresult->MoveNext();
+		foreach( $dbresult as $one ) {
+		    $this->_SetHierarchyPosition($one);
 		}
-		
-		if ($dbresult) $dbresult->Close();
-		cms_content_cache::clear();
+
+		$this->ClearCache();
 	}
 
 	

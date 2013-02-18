@@ -50,20 +50,12 @@ else
     // Display a warning if CMSMS needs upgrading
     {
       $db = $gCms->GetDb();
-      $current_version = $CMS_SCHEMA_VERSION;
-      $query = "SELECT version from ".cms_db_prefix()."version";
-      $row = $db->GetRow($query);
-      if ($row) {
-	$current_version = $row["version"];
-      }
-
-      if ($current_version < $CMS_SCHEMA_VERSION) {
+      $current_version = $gCms->get_installed_schema_version();
+      if ($current_version < CMS_SCHEMA_VERSION) {
 	$warning_upgrade = 
-	  lang('warning_upgrade') . "<br />" . lang('warning_upgrade_info1',$current_version,  
-						    $CMS_SCHEMA_VERSION) . "<br /> " . lang('warning_upgrade_info2',
-											    '<a href="'.$config['root_url'].'/install/upgrade.php">'.lang('start_upgrade_process').'</a>')
-	  ;
-	      
+	  lang('warning_upgrade') . '<br />' . lang('warning_upgrade_info1',$current_version, CMS_SCHEMA_VERSION).
+	  '<br/>' . lang('warning_upgrade_info2','<a href="'.$config['root_url'].'/install/upgrade.php">'.
+			 lang('start_upgrade_process').'</a>');
 	$themeObject->AddNotification(1,'Core', $warning_upgrade);
       }
     }

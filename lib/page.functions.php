@@ -293,31 +293,34 @@ function check_authorship($userid, $contentid = '')
 function author_pages($userid)
 {
   $gCms = cmsms();
-  $db = $gCms->GetDb();
-  $userops = $gCms->GetUserOperations();
   $variables = &$gCms->variables;
   if (!isset($variables['authorpages'])) {
     // Get all of the pages this user owns
-    $query = "SELECT content_id FROM ".cms_db_prefix()."content WHERE owner_id = ?";
-    $data = $db->GetCol($query, array($userid));
+    $db = $gCms->GetDb();
+    $query = "SELECT content_id,hierarchy FROM ".cms_db_prefix()."content WHERE owner_id = ? ORDER BY hierarchy";
+    $tmp = $db->GetArray($query, array($userid));
+    $data = array();
+    for( $i = 0; $i < count($tmp); $i++ ) {
+      $data[$tmp[$i]['content_id']] = $tmp[$i]['hierarchy'];
+    }
 
     // Get all of the pages this user has access to.
-    $query = "SELECT user_id,content_id FROM ".cms_db_prefix()."additional_users";
-    $result = $db->GetArray($query);
-    foreach( $result as $row ) {
-      $uid = $row['user_id'];
-      $content_id = $row['content_id'];
-      if( $uid == $userid ) {
-	$data[] = $content_id;
-      }
-      else if( $uid < 0 ) {
-	$gid = $uid * -1;
-	if( $userops->UserInGroup($userid,$gid) ) {
-	  $data[] = $content_id;
-	}
-      }
+    $query = "SELECT A.content_id,B.hierarchy FROM ".cms_db_prefix()."additional_users A 
+              LEFT JOIN ".cms_db_prefix().'content B ON A.content_id = B.content_id
+              WHERE A.user_id = ?
+              ORDER BY B.hierarchy';
+    $tmp = $db->GetArray($query, array($userid));
+    for( $i = 0; $i < count($tmp); $i++ ) {
+      $content_id = $tmp[$i]['content_id'];
+      if( isset($data['content_id']) ) continue;
+      $data[$content_id] = $tmp[$i]['hierarchy'];
     }
-    $variables['authorpages'] = $data;
+
+    if( count($data) ) {
+      asort($data);
+    }
+
+    $variables['authorpages'] = array_keys($data);
   }
 
   return $variables['authorpages'];

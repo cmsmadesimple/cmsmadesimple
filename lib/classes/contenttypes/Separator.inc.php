@@ -57,7 +57,7 @@ class Separator extends ContentBase
 
     function HasUsableLink()
     {
-	return false;
+		return false;
     }
 
     function WantsChildren()
@@ -95,13 +95,13 @@ class Separator extends ContentBase
 
     function ValidateData()
     {
-      $this->mName = CMS_CONTENT_HIDDEN_NAME;
-      return parent::ValidateData();
+		$this->mName = CMS_CONTENT_HIDDEN_NAME;
+		return parent::ValidateData();
     }
 
     function GetURL($rewrite = true)
     {
-	return '#';
+		return '#';
     }
  
    function IsViewable() { return FALSE; }

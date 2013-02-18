@@ -524,7 +524,6 @@ class CmsLayoutCollection
       }
 			return $out;
     }
-
   }
 
 	public static function get_list()

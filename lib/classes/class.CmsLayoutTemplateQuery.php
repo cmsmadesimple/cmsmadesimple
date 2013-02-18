@@ -35,7 +35,7 @@ class CmsLayoutTemplateQuery extends CmsDbQueryBase
     if( !is_null($this->_rs) ) return;
 
     $query = 'SELECT SQL_CALC_FOUND_ROWS id FROM '.cms_db_prefix().CmsLayoutTemplate::TABLENAME;
-    $where = array('type'=>array(),'category'=>array(),'user'=>array(),'design'=>array());
+    $where = array('id'=>array(),'type'=>array(),'category'=>array(),'user'=>array(),'design'=>array());
 
     $this->_limit = 1000;
     $this->_offset = 0;
@@ -48,14 +48,29 @@ class CmsLayoutTemplateQuery extends CmsDbQueryBase
       switch( strtolower($key) ) {
 			case 'o': // orginator
 				break;
+			case 'i': // id list
+				$second = trim($second);
+				$tmp = explode(',',$second);
+				$tmp2 = array();
+				for( $i = 0; $i < count($tmp); $i++ ) {
+					$tmp3 = (int)$tmp[$i];
+					if( $tmp3 < 1 ) continue;
+					if( in_array($tmp3,$tmp2) ) continue;
+					$tmp2[] = $tmp3;
+				}
+				$where['id'][] = 'id IN '.implode(',',$tmp2);
+				break;
+
       case 't': // type
 				$second = (int)$second;
 				$where['type'][] = 'type_id = '.$db->qstr($second);
 				break;
+
       case 'c': // category
 				$second = (int)$second;
 				$where['category'][] = 'category_id = '.$db->qstr($second);
 				break;
+
       case 'd': // design
 				// find all the templates in design: d
 				$q2 = 'SELECT tpl_id FROM '.cms_db_prefix().CmsLayoutCollection::TPLTABLE.'
@@ -63,6 +78,7 @@ class CmsLayoutTemplateQuery extends CmsDbQueryBase
 				$tpls = $db->GetCol($q2,array((int)$second));
 				$where['design'][] = 'id IN ('.implode(',',$tpls).')';
 				break;
+
       case 'u': // user
 				$second = (int)$second;
 				$where['user'][] = 'owner_id = '.$db->qstr($second);

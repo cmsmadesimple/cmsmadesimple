@@ -113,6 +113,21 @@ final class CmsApp {
 
 
 	/**
+	 * Retrieve the installed schema version.
+	 *
+	 * @since 2.0
+	 */
+	public function get_installed_schema_version()
+	{
+		static $_schema = -1;
+		if( $_schema == -1 ) {
+			$db = $this->GetDb();
+			$_schema = $db->GetOne('SELECT version FROM '.cms_db_prefix().'version');
+		}
+		return $_schema;
+	}
+
+	/**
 	 * Retrieve the list of errors
 	 *
 	 * @since 1.9

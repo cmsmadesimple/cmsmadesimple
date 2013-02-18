@@ -1755,6 +1755,7 @@ abstract class CMSModule
     $smarty->assign('actionparams',$params);
     $smarty->assign('returnid',$returnid);
     $smarty->assign('actionmodule',$this->GetName());
+    $smarty->assign('mod',$this);
 
     $output = $this->DoAction($name, $id, $params, $returnid);
 
@@ -3130,11 +3131,9 @@ abstract class CMSModule
    */
   function ShowErrors($errors)
   {
-    $gCms = cmsms();
-    if (isset($gCms->variables['admintheme'])) {
-      $admintheme =& $gCms->variables['admintheme']; //php4 friendly
-      $x = $admintheme->ShowErrors($errors);
-      return $x;
+    $theme = cms_utils::get_theme_object();
+    if( is_object($theme) ) {
+      return $theme->ShowErrors($errors);
     }
     return '';
   }

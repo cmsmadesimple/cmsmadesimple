@@ -1096,9 +1096,23 @@ abstract class ContentBase
     /**
      * Indicates wether this is a system page type.
      *
+     * @abstract
      * @return boolean default FALSE
      */
     public function IsSystemPage()
+    {
+      return FALSE;
+    }
+
+    /**
+     * Indicates wether ths page type uses a template.
+     * i.e: some content types like sectionheader and separator do not.
+     *
+     * @since 2.0
+     * @abstract
+     * @return boolean default FALSE
+     */
+    public function HasTemplate()
     {
       return FALSE;
     }
@@ -1714,6 +1728,40 @@ abstract class ContentBase
       return $url;
     }
 
+    /**
+     * Move this content up, or down with respect to its peers.
+     *
+     * Note: This method modifies two content objects.
+     *
+     * @since 2.0
+     * @param integer direction. negative value indicates up, positive value indicates down.
+     * @return void
+     */
+    public function ChangeItemOrder($direction)
+    {
+      $db = cmsms()->GetDb();
+      $time = $db->DBTimeStamp(time());
+      $parentid = $this->ParentId();
+      $order = $this->ItemOrder();
+      if( $direction < 0 && $this->ItemOrder() > 1 ) {
+	// up
+	$query = 'UPDATE '.cms_db_prefix().'content SET item_order = (item_order + 1), modified_date = '.$time.' 
+                  WHERE item_order = ? AND parent_id = ?';
+	$db->Execute($query,array($order-1,$parentid));
+	$query = 'UPDATE '.cms_db_prefix().'content SET item_order = (item_order - 1), modified_date = '.$time.'
+                  WHERE content_id = ?';
+	$db->Execute($query,array($this->Id()));
+      }
+      else if( $direction > 0 ) {
+	// down.
+	$query = 'UPDATE '.cms_db_prefix().'content SET item_order = (item_order - 1), modified_date = '.$time.'
+                  WHERE item_order = ? AND parent_id = ?';
+	$db->Execute($query,array($order+1,$parentid));
+	$query = 'UPDATE '.cms_db_prefix().'content SET item_order = (item_order + 1), modified_date = '.$time.'
+                  WHERE content_id = ?';
+	$db->Execute($query,array($this->Id()));
+      }
+    }
 
     /**
      * Show the content
@@ -1911,37 +1959,38 @@ abstract class ContentBase
       $this->mAdditionalEditors = $editorarray;
     }
 
+    static public function GetAdditionalEditorOptions()
+    {
+      $opts = array();
+      $gCms = cmsms();
+      $userops = $gCms->GetUserOperations();
+      $groupops = $gCms->GetGroupOperations();
+      $allusers = $userops->LoadUsers();
+      $allgroups = $groupops->LoadGroups();
+      foreach ($allusers as $oneuser) {
+	$opt[$oneuser->id] = $oneuser->username;
+      }
+      foreach ($allgroups as $onegroup) {
+	if( $onegroup->id == 1 ) continue; // exclude admin group (they have all privileges anyways)
+	$val = $onegroup->id*-1;
+	$opts[$val] = lang('group').': '.$onegroup->name;
+      }
+      return $opts;
+    }
+
     static public function GetAdditionalEditorInput($addteditors,$owner_id = -1)
     {
       $ret[] = lang('additionaleditors');
       $text = '<input name="additional_editors" type="hidden" value=""/>';
       $text .= '<select name="additional_editors[]" multiple="multiple" size="5">';
 
-      $gCms = cmsms();
-      $userops = $gCms->GetUserOperations();
-      $groupops = $gCms->GetGroupOperations();
-      $allusers = $userops->LoadUsers();
-      $allgroups = $groupops->LoadGroups();
-      foreach ($allgroups as $onegroup) {
-	if( $onegroup->id == 1 ) continue;
-	$val = $onegroup->id*-1;
-	$text .= '<option value="'.$val.'"';
-	if( in_array($val,$addteditors) ) {
-	  $text .= ' selected="selected"';
-	}
-	$text .= '>'.lang('group').': '.$onegroup->name."</option>";
+      $topts = self::GetAdditionalEditorOptions();
+      foreach( $topts as $k => $v ) {
+	if( $k == $owner_id ) continue;
+	$text .= CmsFormUtils::create_option($k,$v,$addteditors);
       }
-
-      foreach ($allusers as $oneuser) {
-	if ($oneuser->id != $owner_id && $oneuser->id != 1) {
-	  $text .= '<option value="'.$oneuser->id.'"';
-	  if (in_array($oneuser->id, $addteditors)) {
-	    $text .= ' selected="selected"';
-	  }
-	  $text .= '>'.$oneuser->username.'</option>';
-	}
-      }
-
+      
+      
       $text .= '</select>';
       $ret[] = $text;
       return $ret;

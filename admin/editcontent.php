@@ -28,8 +28,6 @@ $userid = get_userid();
 
 include_once("../lib/classes/class.admintheme.inc.php");
 
-$dateformat = get_preference(get_userid(),'date_format_string','%x %X');
-
 require_once(dirname(__FILE__).'/editcontent_extra.php');
 
 if (isset($_POST["cancel"])) {
@@ -51,7 +49,7 @@ if (isset($_POST["apply"])) $apply = true;
 if (isset($_POST['preview'])) $preview = 1;
 if (isset($_POST['ajax']) && $_POST['ajax']) $ajax = true;
 
-#Get a list of content types and pick a default if necessary
+// Get a list of content types and pick a default if necessary
 $gCms = cmsms();
 $contentops = $gCms->GetContentOperations();
 $existingtypes = $contentops->ListContentTypes(false,true);
@@ -201,8 +199,6 @@ if ($submit || $apply) {
 // BUILD THE DISPLAY
 //
 include_once("header.php");
-
-$tmpfname = '';
 
 #Get a list of content_types and build the dropdown to select one
 $typesdropdown = '<select name="content_type" id="content_type" onchange="document.Edit_Content.submit()" class="standard">';

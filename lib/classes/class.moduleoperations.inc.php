@@ -635,45 +635,48 @@ final class ModuleOperations
 		  }
 	  }
 
-	  // check to see if an upgrade is needed.
-	  allow_admin_lang(TRUE); // isn't this ugly.
-	  if( isset($info[$module_name]) && $info[$module_name]['status'] == 'installed' ) {
-		  $dbversion = $info[$module_name]['version'];
-		  if( version_compare($dbversion, $obj->GetVersion()) == -1 ) {
-			  // upgrade is needed
-			  if( ($obj->AllowAutoUpgrade() == TRUE || 
-				   $this->_is_queued_for_install($module_name)) && $allow_auto ) {
-				  // we're allowed to upgrade
-				  $res = $this->_upgrade_module($obj);
-				  if( !isset($_SESSION['moduleoperations_result']) ) {
-					  $_SESSION['moduleoperations_result'] = array();
+	  $tmp = cmsms()->get_installed_schema_version();
+	  if( $tmp == CMS_SCHEMA_VERSION ) {
+		  // can't auto upgrade modules if cmsms schema versions don't match.
+		  // check to see if an upgrade is needed.
+		  allow_admin_lang(TRUE); // isn't this ugly.
+		  if( isset($info[$module_name]) && $info[$module_name]['status'] == 'installed' ) {
+			  $dbversion = $info[$module_name]['version'];
+			  if( version_compare($dbversion, $obj->GetVersion()) == -1 ) {
+				  // upgrade is needed
+				  if( ($obj->AllowAutoUpgrade() == TRUE || 
+					   $this->_is_queued_for_install($module_name)) && $allow_auto ) {
+					  // we're allowed to upgrade
+					  $res = $this->_upgrade_module($obj);
+					  if( !isset($_SESSION['moduleoperations_result']) ) {
+						  $_SESSION['moduleoperations_result'] = array();
+					  }
+					  if( $res ) {
+						  $res2 = array(TRUE,lang('moduleupgraded'));
+						  $_SESSION['moduleoperations_result'][$module_name] = $res2;
+						  return TRUE;
+					  }
+					  else {
+						  $res2 = array(FALSE,lang('moduleupgradeerror'));
+						  $_SESSION['moduleoperations_result'][$module_name] = $res2;
+						  return FALSE;
+					  }
+					  if( !$res ) {
+						  // upgrade failed
+						  allow_admin_lang(FALSE); // isn't this ugly.
+						  debug_buffer("Automatic upgrade of $module_name failed");
+						  unset($obj);
+						  return FALSE;
+					  }
 				  }
-				  if( $res ) {
-					  $res2 = array(TRUE,lang('moduleupgraded'));
-					  $_SESSION['moduleoperations_result'][$module_name] = $res2;
-					  return TRUE;
-				  }
-				  else {
-					  $res2 = array(FALSE,lang('moduleupgradeerror'));
-					  $_SESSION['moduleoperations_result'][$module_name] = $res2;
-					  return FALSE;
-				  }
-				  if( !$res ) {
-					  // upgrade failed
+				  else if( !isset($CMS_FORCE_MODULE_LOAD) ) {
+					  // nope, can't auto upgrade either
 					  allow_admin_lang(FALSE); // isn't this ugly.
-					  debug_buffer("Automatic upgrade of $module_name failed");
 					  unset($obj);
 					  return FALSE;
 				  }
 			  }
-			  else if( !isset($CMS_FORCE_MODULE_LOAD) ) {
-				  // nope, can't auto upgrade either
-				  allow_admin_lang(FALSE); // isn't this ugly.
-				  unset($obj);
-				  return FALSE;
-			  }
 		  }
-
 	  }
 
 	  if( (isset($info[$module_name]) && $info[$module_name]['status'] == 'installed') || 
@@ -827,6 +830,7 @@ final class ModuleOperations
   public function UpgradeModule( $module_name, $to_version = '')
   {
 	  $module_obj = $this->get_module_instance($module_name);
+	  if( !is_object($module_obj) ) return FALSE;
 	  return $this->_upgrade_module($module_obj,$to_version);
   }
 

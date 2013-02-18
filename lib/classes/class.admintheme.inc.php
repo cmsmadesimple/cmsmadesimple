@@ -396,42 +396,35 @@ class AdminTheme extends CmsAdminThemeBase
 	function renderMenuSection($section, $depth, $maxdepth)
 	{
 		$menuitems = $this->get_admin_navigation();
-		if ($maxdepth > 0 && $depth> $maxdepth)
-			{
+		if ($maxdepth > 0 && $depth> $maxdepth) {
 			return;
-			}
-		if (! $menuitems[$section]['show_in_menu'])
-			{
+		}
+		if (! $menuitems[$section]['show_in_menu']) {
 			return;
-			}
-		if (strlen($menuitems[$section]['url']) < 1)
-		    {
+		}
+		if (strlen($menuitems[$section]['url']) < 1) {
             echo "<li>".$menuitems[$section]['title']."</li>";
             return;
-            }
+		}
 		echo "<li><a href=\"";
 		echo $menuitems[$section]['url'];
 		echo "\"";
-		if (array_key_exists('target', $menuitems[$section]))
-			{
+		if (array_key_exists('target', $menuitems[$section])) {
 			echo " target=" . $menuitems[$section]['target'];
-			}
-		if ($menuitems[$section]['selected'])
-			{
+		}
+		if ($menuitems[$section]['selected']) {
 			echo " class=\"selected\"";
-			}
+		}
 		echo ">";
 		echo $menuitems[$section]['title'];
 		echo "</a>";
-		if ($this->HasDisplayableChildren($section))
-			{
+		if ($this->HasDisplayableChildren($section)) {
 			echo "<ul>";
-			foreach ($menuitems[$section]['children'] as $child)
-				{
+			foreach ($menuitems[$section]['children'] as $child) {
 				$this->renderMenuSection($child, $depth+1, $maxdepth);
-				}
-			echo "</ul>";
 			}
+			echo "</ul>";
+		}
 		echo "</li>";
 		return;
 	}
@@ -453,13 +446,11 @@ class AdminTheme extends CmsAdminThemeBase
     {
         echo "<div id=\"TopMenu\"><ul id=\"nav\">\n";
 		$menuitems = $this->get_admin_navigation();
-        foreach ( $menuitems as $key=>$menuItem)
-        	{
-				if ($menuItem['parent'] == -1)
-					{
-						$this->renderMenuSection($key, 0, -1);
-					}
-        	}
+        foreach ( $menuitems as $key=>$menuItem) {
+			if ($menuItem['parent'] == -1) {
+				$this->renderMenuSection($key, 0, -1);
+			}
+		}
         echo "</ul></div>\n";
     }
 
@@ -504,8 +495,8 @@ class AdminTheme extends CmsAdminThemeBase
      * This method outputs the HEAD section of the html page in the admin Theme section,
      * after OutputHeaderJavascript() and before $addt.
      */
-	function ThemeHeader(){
-		
+	function ThemeHeader()
+    {
 		if(file_exists('themes/'. $this->themeName. '/includes/standard.js')) {
 			return '<script type="text/javascript" src="themes/'. $this->themeName. '/includes/standard.js"></script>'."\n";
 		}
@@ -546,13 +537,11 @@ EOT;
 		$tmp1 = $this->ThemeHeader();
 		$tmp2 = ob_get_contents();
 		ob_end_clean();
-		if( $tmp1 )
-		{
+		if( $tmp1 ) {
 			// data is returned
 			$str .= $tmp1;
 		}
-		else
-		{
+		else {
 			// assume data is echoed
 			$str .= $tmp2;
 		}
@@ -631,50 +620,46 @@ EOT;
 		if( count($tnotifications) == 0 ) return;
 		// count the total number of notifications
 		$count=0;
-		for( $i = 0; $i < count($tnotifications); $i++ )
-			{
-				if( $tnotifications[$i]->priority <= $priority ) $count++;
-			}
+		for( $i = 0; $i < count($tnotifications); $i++ ) {
+			if( $tnotifications[$i]->priority <= $priority ) $count++;
+		}
 	  
-	  // Define that is singular or plural
-	  $singular_or_plural = $count;
+		// Define that is singular or plural
+		$singular_or_plural = $count;
 	  
-	  if($singular_or_plural > 1)
-		  {
-			  $tmp = lang('notifications_to_handle',$count);
-		  }
-	  else
-		  {
-			  $tmp = lang('notification_to_handle',$count);
-		  } 
+		if($singular_or_plural > 1) {
+			$tmp = lang('notifications_to_handle',$count);
+		}
+		else {
+			$tmp = lang('notification_to_handle',$count);
+		}
 
-	  // remove html tags like <b>2</b>
-	  $no_html_tags = preg_replace('/(<\/?)(\w+)([^>]*>)/e','',$tmp);
-	  
-      echo '<div class="full-Notifications clear">'."\n";
-      echo '<div class="Notifications-title">' . $tmp . '</div>'."\n";
-	  echo '<div title="'.$no_html_tags.'" id="notifications-display" class="notifications-show" onclick="change(\'notifications-display\', \'notifications-hide\', \'notifications-show\'); change(\'notifications-container\', \'invisible\', \'visible\');"></div>'."\n";
-	  echo '<div id="notifications-container" class="invisible">'."\n";
-	  
-      echo "<ul id=\"Notifications-area\">\n";
-      for( $i = 0; $i < count($tnotifications); $i++ )
-		  {
-			  $data = $tnotifications[$i];
-			  if( $data->priority > $priority ) continue;
+		// remove html tags like <b>2</b>
+		$no_html_tags = preg_replace('/(<\/?)(\w+)([^>]*>)/e','',$tmp);
 
-              echo '<li class="NotificationsItem NotificationsPriority'.$data->priority.'">';
-			  echo '<span class="NotificationsItemModuleName">'."\n";
-			  echo $data->module."\n";
-			  echo "</span>\n";
-			  echo '<span class="NotificationsItemData">'."\n";
-			  echo $data->html."\n";
-			  echo "</span>\n";
-			  echo '</li>';		  
-		  }
-      echo "</ul>";
-	  echo "</div><!-- notifications-container -->\n";
-      echo "</div><!-- full-Notifications -->\n";
-	  echo "<div class=\"clearb\">&nbsp;</div>\n";
+		echo '<div class="full-Notifications clear">'."\n";
+		echo '<div class="Notifications-title">' . $tmp . '</div>'."\n";
+		echo '<div title="'.$no_html_tags.'" id="notifications-display" class="notifications-show" onclick="change(\'notifications-display\', \'notifications-hide\', \'notifications-show\'); change(\'notifications-container\', \'invisible\', \'visible\');"></div>'."\n";
+		echo '<div id="notifications-container" class="invisible">'."\n";
+
+		echo "<ul id=\"Notifications-area\">\n";
+		for( $i = 0; $i < count($tnotifications); $i++ ) {
+			$data = $tnotifications[$i];
+			if( $data->priority > $priority ) continue;
+
+			echo '<li class="NotificationsItem NotificationsPriority'.$data->priority.'">';
+			echo '<span class="NotificationsItemModuleName">'."\n";
+			echo $data->module."\n";
+			echo "</span>\n";
+			echo '<span class="NotificationsItemData">'."\n";
+			echo $data->html."\n";
+			echo "</span>\n";
+			echo '</li>';		  
+		}
+		echo "</ul>";
+		echo "</div><!-- notifications-container -->\n";
+		echo "</div><!-- full-Notifications -->\n";
+		echo "<div class=\"clearb\">&nbsp;</div>\n";
     }
 
 
@@ -795,36 +780,30 @@ EOT;
     public function ShowErrors($errors, $get_var = '')
     {
 		$config = cmsms()->GetConfig();
-      $image_error = $this->DisplayImage('icons/system/stop.gif', lang('error'),'','','systemicon');
-      $output  = '<div class="pageerrorcontainer"';
-      if (FALSE == empty($get_var))
-	{
-	  if (FALSE == empty($_GET[$get_var]))
-	    {
-	      $errors = cleanValue(lang(cleanValue($_GET[$get_var])));
-	    }
-	  else
-	    {
-	      $errors = '';
-	      $output .= ' style="display:none;"';
-	    }
-	}
-      $output .= '><div class="pageoverflow">';
-      if (FALSE != is_array($errors))
-	{
-	  $output .= '<ul class="pageerror">';
-	  foreach ($errors as $oneerror)
-	    {
-	      $output .= '<li>'.$oneerror.'</li>';
-	    }
-	  $output .= '</ul>';
-	}
-      else
-	{
-	  $output  .= $image_error.' '.$errors;
-	}
-      $output .= '</div></div>';
-      return $output;
+		$image_error = $this->DisplayImage('icons/system/stop.gif', lang('error'),'','','systemicon');
+		$output  = '<div class="pageerrorcontainer"';
+		if (FALSE == empty($get_var)) {
+			if (FALSE == empty($_GET[$get_var])) {
+				$errors = cleanValue(lang(cleanValue($_GET[$get_var])));
+			}
+			else {
+				$errors = '';
+				$output .= ' style="display:none;"';
+			}
+		}
+		$output .= '><div class="pageoverflow">';
+		if (FALSE != is_array($errors)) {
+			$output .= '<ul class="pageerror">';
+			foreach ($errors as $oneerror) {
+				$output .= '<li>'.$oneerror.'</li>';
+			}
+			$output .= '</ul>';
+		}
+		else {
+			$output  .= $image_error.' '.$errors;
+		}
+		$output .= '</div></div>';
+		return $output;
     }
     
     /**
@@ -839,18 +818,15 @@ EOT;
     {
       $image_done = $this->DisplayImage('icons/system/accept.gif', lang('success'), '','','systemicon');
       $output = '<div class="pagemcontainer"';
-      if (FALSE == empty($get_var))
-	{
-	  if (FALSE == empty($_GET[$get_var]))
-	    {
-	      $message = lang(cleanValue($_GET[$get_var]));
-	    }
-	  else
-	    {
-	      $message = '';
-	      $output .= ' style="display:none;"';
-	    }
-	}
+      if (FALSE == empty($get_var)) {
+		  if (FALSE == empty($_GET[$get_var])) {
+			  $message = lang(cleanValue($_GET[$get_var]));
+		  }
+		  else {
+			  $message = '';
+			  $output .= ' style="display:none;"';
+		  }
+	  }
       $output .= '><p class="pagemessage">'.$image_done.' '.$message.'</p></div>';
       return $output;
     }
@@ -889,12 +865,10 @@ EOT;
 	{
 		$this->ShowShortcuts();
 		$this->DisplaySectionMenuDivStart();
-		if( $section_name )
-		{
+		if( $section_name ) {
 			$this->DisplaySectionPages( $section_name );
 		}
-		else
-		{
+		else {
 			$this->DisplayAllSectionPages();
 		}
 		$this->DisplaySectionMenuDivEnd();
@@ -903,8 +877,7 @@ EOT;
 	public function do_login($params)
 	{
 		// by default we're gonna grab the theme name
-		foreach( $params as $key => $val )
-		{
+		foreach( $params as $key => $val ) {
 			$$key = $val;
 		}
 		$config = cmsms()->GetConfig();
