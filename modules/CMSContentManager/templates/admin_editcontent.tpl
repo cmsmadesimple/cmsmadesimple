@@ -6,10 +6,10 @@ $(document).ready(function(){
     // serialize the form data
     {$wysiwyg_submit_script|default:''}
     var data = $('#Edit_Content').find('input:not([type=submit]), select, textarea').serializeArray();
-    data.push({ 'name': 'preview', 'value': 1});
-    data.push({ 'name': 'ajax', 'value': 1});
+    data.push({ 'name': '{$actionid}preview', 'value': 1});
+    data.push({ 'name': '{$actionid}ajax', 'value': 1});
     $.post('{$smarty.server.REQUEST_URI}&showtemplate=false',data,function(resultdata,text){
-        $('#previewframe').attr('src','{$preview_url}');
+	$('#previewframe').attr('src','{$preview_url}');
     });
   });
   {/if}
@@ -31,8 +31,8 @@ $(document).ready(function(){
   $('[name=apply]').live('click',function(){
     {$wysiwyg_submit_script|default:''}
     var data = $('#Edit_Content').find('input:not([type=submit]), select, textarea').serializeArray();
-    data.push({ 'name': 'ajax', 'value': 1});
-    data.push({ 'name': 'apply', 'value': 1 });
+    data.push({ 'name': '{$actionid}ajax', 'value': 1});
+    data.push({ 'name': '{$actionid}apply', 'value': 1 });
     $.post('{$smarty.server.REQUEST_URI}&showtemplate=false',data,function(data,text){
        var event = $.Event('cms_ajax_apply');
        event.response = data.response;

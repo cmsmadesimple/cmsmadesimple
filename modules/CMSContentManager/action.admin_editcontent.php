@@ -142,7 +142,7 @@ try {
     // filling the params will make sure that no edited content was lost.
     $content_obj->FillParams($_POST,($content_id < 1));
   }
-
+  
   if( isset($params['submit']) || isset($params['apply']) || isset($params['preview']) ) {
     $error = $content_obj->ValidateData();
 
@@ -169,6 +169,12 @@ try {
 	echo json_encode($tmp);
 	exit;
       }
+    }
+    else if( isset($params['preview']) && $content_obj->HasPreview() ) {
+      debug_to_log($content_obj->GetPropertyValue('content_en','content_en'));
+      $_SESSION['__cms_preview__'] = serialize($content_obj);
+      $_SESSION['__cms_preview_type__'] = $content_type;
+      exit;
     }
   }
 }

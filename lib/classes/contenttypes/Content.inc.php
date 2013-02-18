@@ -148,7 +148,6 @@ class Content extends ContentBase
 			// do the content property parameters
 			foreach ($parameters as $oneparam) {
 				if (isset($params[$oneparam])) {
-					debug_to_log('set property value '.$oneparam.' to '.$params[$oneparam]);
 					$this->SetPropertyValue($oneparam, $params[$oneparam]);
 				}
 			}

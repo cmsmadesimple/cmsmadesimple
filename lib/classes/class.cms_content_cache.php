@@ -106,7 +106,6 @@ final class cms_content_cache
 			}
 			
 			if( $dirty ) {
-				debug_to_log($list);
 				$deep = FALSE;
 				foreach( $list as $one ) {
 					$obj = self::get_content($one);

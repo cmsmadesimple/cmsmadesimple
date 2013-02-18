@@ -281,13 +281,14 @@ final class CMS_Content_Block
       else {
 	$block = (isset($params['block']))?$params['block']:'content_en';
 	$result = '';
-	
+	$config = $gCms->GetConfig();
+
 	$oldvalue = $smarty->caching;
 	$smarty->caching = false;
-	if( $id == '_preview_') {
+	if( isset($_SESSION['__cms_preview__']) && $contentobj->Id() == '__CMS_PREVIEW_PAGE__' ) {
 	  // note: content precompile/postcompile events will not be triggererd in preview.
 	  $val = $contentobj->Show($block);
-	  $result = $smarty->fetch('string:'.$val);
+	  $result = $smarty->fetch('eval:'.$val);
 	}
 	else {
 	  $result = $smarty->fetch(str_replace(' ', '_', 'content:' . $block), '|'.$block, $contentobj->Id().$block);
@@ -306,14 +307,14 @@ final class CMS_Content_Block
     $gCms = cmsms();
 
     $contentobj = $gCms->variables['content_obj'];
-    if( isset($_SESSION['cms_preview_data']) && $contentobj->Id() == '__CMS_PREVIEW_PAGE__' ) {
-      // it's a preview.
-      if( !isset($_SESSION['cms_preview_data']['content_obj']) ) {
-	$contentops = $gCms->GetContentOperations();
-	$_SESSION['cms_preview_data']['content_obj'] = $contentops->LoadContentFromSerializedData($_SESSION['cms_preview_data']);
-      }
-      $contentobj =& $_SESSION['cms_preview_data']['content_obj'];
-    }
+//     if( isset($_SESSION['__cms_preview__']) && $contentobj->Id() == '__CMS_PREVIEW_PAGE__' ) {
+//       // it's a preview.
+//       if( !isset($_SESSION['cms_preview_data']['content_obj']) ) {
+// 	$contentops = $gCms->GetContentOperations();
+// 	$_SESSION['cms_preview_data']['content_obj'] = $contentops->LoadContentFromSerializedData($_SESSION['cms_preview_data']);
+//       }
+//       $contentobj =& $_SESSION['cms_preview_data']['content_obj'];
+//     }
     if( !is_object($contentobj) || $contentobj->Id() <= 0 ) {
       return self::content_return('', $params, $smarty);
     }
@@ -333,14 +334,14 @@ final class CMS_Content_Block
     $config = $gCms->GetConfig();
 
     $contentobj = $gCms->variables['content_obj'];
-    if( isset($_SESSION['cms_preview_data']) && $contentobj->Id() == '__CMS_PREVIEW_PAGE__' ) {
-      // it's a preview.
-      if( !isset($_SESSION['cms_preview_data']['content_obj']) ) {
-	$contentops = $gCms->GetContentOperations();
-	$_SESSION['cms_preview_data']['content_obj'] = $contentops->LoadContentFromSerializedData($_SESSION['cms_preview_data']);
-      }
-      $contentobj =& $_SESSION['cms_preview_data']['content_obj'];
-    }
+//     if( isset($_SESSION['__cms_preview__']) && $contentobj->Id() == '__CMS_PREVIEW_PAGE__' ) {
+//       // it's a preview.
+//       if( !isset($_SESSION['cms_preview_data']['content_obj']) ) {
+// 	$contentops = $gCms->GetContentOperations();
+// 	$_SESSION['cms_preview_data']['content_obj'] = $contentops->LoadContentFromSerializedData($_SESSION['cms_preview_data']);
+//       }
+//       $contentobj =& $_SESSION['cms_preview_data']['content_obj'];
+//     }
     if( !is_object($contentobj) || $contentobj->Id() <= 0 ) {
       return self::content_return('', $params, $smarty);
     }

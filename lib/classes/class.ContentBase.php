@@ -339,7 +339,6 @@ abstract class ContentBase
    */
   public function SetId($id)
   {
-    if( $id <= 0 ) return;
     $this->mId = $id;
   }
 
