@@ -33,6 +33,7 @@ $lang['contractall'] = 'Collapse All';
 
 #E
 $lang['error_contenttype_disallowed'] = 'Default Content Type is also set to Disallowed';
+$lang['error_copy_permission'] = 'You do not have permission to copy this content page';
 $lang['error_delete_defaultcontent'] = 'You cannot delete the default content page';
 $lang['error_delete_haschildren'] = 'You cannot delete a page that has children';
 $lang['error_delete_permission'] = 'You do not have permission to delete this content page';
@@ -86,6 +87,7 @@ $lang['prompt_editpage_addcontent']= 'Add Content Page';
 $lang['prompt_editpage_contenttype'] = 'Content Type';
 $lang['prompt_editpage_editcontent']= 'Edit Content Page';
 $lang['prompt_expandall'] = 'Expand all content pages';
+$lang['prompt_multiselect_toggle'] = 'Select this page for bulk content operations';
 $lang['prompt_name'] = 'Name';
 $lang['prompt_ordercontent'] = 'Reorder Content';
 $lang['prompt_listsettings'] = 'Content List Settings';
@@ -105,6 +107,8 @@ $lang['prompt_pagedflt_searchable'] = 'Is the contents of this page searchable';
 $lang['prompt_pagedflt_secure'] = 'Is this page secure?';
 $lang['prompt_pagedflt_showinmenu'] = 'Can this page show in the menu?';
 $lang['prompt_pagedflt_template_id'] = 'Default Page Template';
+$lang['prompt_page_collapse'] = 'Hide children of this page';
+$lang['prompt_page_expand'] = 'Show children of this page';
 $lang['prompt_page_copy'] = 'Copy this page';
 $lang['prompt_page_default'] = 'This is the default page.  i.e: The home page for the website';
 $lang['prompt_page_delete'] = 'Delete this page';
