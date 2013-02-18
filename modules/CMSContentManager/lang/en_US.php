@@ -18,7 +18,7 @@ $lang['colhdr_expand'] = 'Expand';
 $lang['colhdr_friendlyname'] = 'Type';
 $lang['colhdr_hier'] = 'Hierarchy';
 $lang['colhdr_move'] = 'Move';
-$lang['colhdr_multiselect'] = 'Multiselet';
+$lang['colhdr_multiselect'] = 'Multiselect';
 $lang['colhdr_owner'] = 'Owner';
 $lang['colhdr_page'] = 'Name';
 $lang['colhdr_template'] = 'Template';
@@ -53,6 +53,19 @@ $lang['friendlyname'] = 'Content Manager';
 #G
 
 #H
+$lang['help_pagedflt_active'] = 'TODO';
+$lang['help_pagedflt_addteditors'] = 'TODO';
+$lang['help_pagedflt_cachable'] = 'TODO';
+$lang['help_pagedflt_contenttype'] = 'TODO';
+$lang['help_pagedflt_design_id'] = 'TODO';
+$lang['help_pagedflt_disallowed_types'] = 'TODO';
+$lang['help_pagedflt_extra1'] = 'TODO';
+$lang['help_pagedflt_extra2'] = 'TODO';
+$lang['help_pagedflt_extra3'] = 'TODO';
+$lang['help_pagedflt_searchable'] = 'TODO';
+$lang['help_pagedflt_secure'] = 'TODO';
+$lang['help_pagedflt_showinmenu'] = 'TODO';
+$lang['help_pagedflt_template_id'] = 'TODO';
 
 #I
 $lang['info_javascript_required'] = '<strong>Warning:</strong> In order to operate correctly, this module requires a browser with javascript support enabled.';
