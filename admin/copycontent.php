@@ -76,7 +76,6 @@ if( isset($_GET['submit']) ) {
   $tmpobj->SetAlias($to_alias);
   //$tmpobj->mOldAlias = ''; // no method for this.
   $tmpobj->SetParentId($to_parentid);
-  $tmpobj->SetOldParentId($to_parentid);
   $tmpobj->SetAccessKey($to_accesskey);
   
   $tmpobj->SetDefaultContent(0);
