@@ -34,7 +34,6 @@
 #-------------------------------------------------------------------------
 #END_LICENSE
 if( !isset($gCms) ) exit;
-
 $error = '';
 
 if( !function_exists('cm_prettyurls_ok') ) {

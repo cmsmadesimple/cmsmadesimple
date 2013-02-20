@@ -8,6 +8,7 @@ $lang['apply'] = 'Apply';
 #C
 $lang['cancel'] = 'Cancel';
 $lang['close'] = 'Close';
+$lang['colhdr_id'] = 'Id';
 $lang['colhdr_active'] = 'Active';
 $lang['colhdr_alias'] = 'Alias';
 $lang['colhdr_copy'] = 'Copy';

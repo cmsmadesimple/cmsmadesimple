@@ -292,23 +292,25 @@ final class ContentListBuilder
   public function get_display_columns()
   {
     $mod = $this->_module;
+    $cols = explode(',',$mod->GetPreference('list_visiblecolumns'));
+
     $columnstodisplay = array();
-    $columnstodisplay['expand'] = 1;
-    $columnstodisplay['hier'] = 1;
-    $columnstodisplay['page'] = 1;
-    $columnstodisplay['alias'] = get_site_preference('listcontent_showalias',1);
-    $columnstodisplay['url'] = get_site_preference('listcontent_showurl',1);
-    $columnstodisplay['template'] = 1;
-    $columnstodisplay['friendlyname'] = 1;
-    $columnstodisplay['owner'] = 1;
-    $columnstodisplay['active'] = $mod->CheckPermission('Manage All Content');
-    $columnstodisplay['default'] = $mod->CheckPermission('Manage All Content');
-    $columnstodisplay['move'] = $mod->CheckPermission('Manage All Content') || $mod->CheckPermission('Reorder Content');
-    $columnstodisplay['view'] = 1;
-    $columnstodisplay['copy'] = $mod->CheckPermission('Add Pages') || $mod->CheckPermission('Manage All Content');
-    $columnstodisplay['edit'] = 1;
-    $columnstodisplay['delete'] = $mod->CheckPermission('Remove Pages') || $mod->CheckPermission('Manage All Content');
-    $columnstodisplay['multiselect'] = $mod->CheckPermission('Remove Pages') || $mod->CheckPermission('Manage All Content');
+    $columnstodisplay['expand'] = in_array('expand',$cols);
+    $columnstodisplay['hier'] = in_array('hier',$cols);
+    $columnstodisplay['page'] = in_array('page',$cols);
+    $columnstodisplay['alias'] = in_array('alias',$cols) && get_site_preference('listcontent_showalias',1);
+    $columnstodisplay['url'] = in_array('url',$cols) && get_site_preference('listcontent_showurl',1);
+    $columnstodisplay['template'] = in_array('template',$cols);
+    $columnstodisplay['friendlyname'] = in_array('friendlyname',$cols);
+    $columnstodisplay['owner'] = in_array('owner',$cols);
+    $columnstodisplay['active'] = in_array('active',$cols) && $mod->CheckPermission('Manage All Content');
+    $columnstodisplay['default'] = in_array('default',$cols) && $mod->CheckPermission('Manage All Content');
+    $columnstodisplay['move'] = in_array('move',$cols) && ($mod->CheckPermission('Manage All Content') || $mod->CheckPermission('Reorder Content'));
+    $columnstodisplay['view'] = in_array('view',$cols);
+    $columnstodisplay['copy'] = in_array('copy',$cols) && ($mod->CheckPermission('Add Pages') || $mod->CheckPermission('Manage All Content'));
+    $columnstodisplay['edit'] = in_array('edit',$cols);
+    $columnstodisplay['delete'] = in_array('delete',$cols) && ($mod->CheckPermission('Remove Pages') || $mod->CheckPermission('Manage All Content'));
+    $columnstodisplay['multiselect'] = in_array('multiselect',$cols) && ($mod->CheckPermission('Remove Pages') || $mod->CheckPermission('Manage All Content'));
     return $columnstodisplay;
   }
 

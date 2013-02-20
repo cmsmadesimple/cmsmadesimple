@@ -43,6 +43,7 @@ $smarty->assign('design_list',CmsLayoutCollection::get_list());
 $smarty->assign('template_list',CmsLayoutTemplate::template_query(array('as_list'=>1)));
 $smarty->assign('addteditor_list',ContentBase::GetAdditionalEditorOptions());
 echo $this->ProcessTemplate('admin_pagedefaults_tab.tpl');
+
 #
 # EOF
 #

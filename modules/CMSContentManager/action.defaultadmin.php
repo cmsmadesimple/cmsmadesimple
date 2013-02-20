@@ -52,7 +52,7 @@ echo $this->StartTabContent();
 
 if( $this->CanEditContent() ) {
   echo $this->StartTab('pages',$params);
-  echo $this->DoAction('admin_pages_tab',$id,$params);
+  include(__DIR__.'/action.admin_pages_tab.php');
   echo $this->EndTab();
 }
 
