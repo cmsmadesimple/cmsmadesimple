@@ -474,6 +474,11 @@ final class ContentListBuilder
       $rec['template_id'] = $content->TemplateId();
       $rec['can_edit_tpl'] = $mod->CheckPermission('Modify Templates');
       $rec['id'] = $content->Id();
+      $rec['lastmodified'] = $content->GetModifiedDate();
+      $rec['created'] = $content->GetCreationDate();
+      if( $content->LastModifiedBy() > 0 && isset($users[$content->LastModifiedBy()]) ) {
+	$rec['lastmodifiedby'] = $users[$content->LastModifiedBy()]->username;
+      }
       $rec['can_edit'] = $mod->CheckPermission('Modify Any Page') || $mod->CheckPermission('Manage All Content') ||
 	$this->_check_authorship();
 

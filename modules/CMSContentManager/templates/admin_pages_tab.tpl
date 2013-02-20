@@ -212,7 +212,16 @@ $(document).ready(function(){
     {elseif $column == 'friendlyname'}
       {$row.friendlyname}
     {elseif $column == 'owner'}
-      {$row.owner}
+      <a href="javascript: void();" class="tooltip">
+       <span style="display: none;">
+         <strong>{$mod->Lang('prompt_created')}:</strong> {$row.created|cms_date_format}<br/>
+         <strong>{$mod->Lang('prompt_lastmodified')}:</strong> {$row.lastmodified|cms_date_format}<br/>
+         {if isset($row.lastmodifiedby)}
+         <strong>{$mod->Lang('prompt_lastmodifiedby')}:</strong> {$row.lastmodifiedby}<br/>
+         {/if}
+       </span>
+       {$row.owner}
+      </a>
     {elseif $column == 'active'}
       {if $row.active == 'inactive'}
         <a href="{cms_action_url action='admin_pages_tab' setactive=$row.id}" class="page_setactive" accesskey="a">{admin_icon icon='false.gif' title=$mod->Lang('prompt_page_setactive')}</a>
