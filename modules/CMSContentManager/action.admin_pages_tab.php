@@ -109,6 +109,12 @@ if( isset($params['delete']) ) {
 //
 $editinfo = $builder->get_content_list();
 $smarty->assign('columns',$columns);
+if( $this->GetPreference('list_namecolumn','menutext') == 'title' ) {
+  $smarty->assign('colhdr_page',$this->Lang('colhdr_name'));
+}
+else {
+  $smarty->assign('colhdr_page',$this->Lang('colhdr_menutext'));
+}
 $smarty->assign('content_list',$editinfo);
 $smarty->assign('ajax',$ajax);
 if( $error ) $smarty->assign('error',$error);

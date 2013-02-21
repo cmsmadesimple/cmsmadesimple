@@ -212,7 +212,7 @@ $(document).ready(function(){
     {elseif $column == 'friendlyname'}
       {$row.friendlyname}
     {elseif $column == 'owner'}
-      <a href="javascript: void();" class="tooltip">
+      <a href="javascript:void();" class="tooltip">
        <span style="display: none;">
          <strong>{$mod->Lang('prompt_created')}:</strong> {$row.created|cms_date_format}<br/>
          <strong>{$mod->Lang('prompt_lastmodified')}:</strong> {$row.lastmodified|cms_date_format}<br/>
@@ -287,6 +287,8 @@ $(document).ready(function(){
             {* no colum header *}
           {elseif $column == 'multiselect'}
             <input type="checkbox" id="selectall" value="1" title="{$mod->Lang('select_all')}"/>
+          {elseif $column == 'page'}
+            {$colhdr_page}
           {else}
             {$mod->Lang("colhdr_{$column}")}
           {/if}

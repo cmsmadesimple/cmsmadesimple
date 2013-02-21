@@ -504,6 +504,9 @@ final class ContentListBuilder
 	case 'page':
 	  if( $content->MenuText() == CMS_CONTENT_HIDDEN_NAME ) continue;
 	  $rec[$column] = $content->MenuText();
+	  if( $mod->GetPreference('list_namecolumn','title') == 'title' ) {
+	    $rec[$column] = $content->Name();
+	  }
 	  break;
 
 	case 'alias':
