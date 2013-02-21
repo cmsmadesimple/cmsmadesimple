@@ -63,6 +63,7 @@ if( count($multicontent) == 0 ) {
 try {
   $contentops = ContentOperations::get_instance()->LoadChildren(-1,FALSE,TRUE,$multicontent);
   $hm = cmsms()->GetHierarchyManager();
+  $i = 0;
   foreach( $multicontent as $pid ) {
     $node = $hm->find_by_tag('id',$pid);
     if( !$node ) continue;
@@ -71,6 +72,7 @@ try {
     $content->SetCachable($cachable);
     $content->SetLastModifiedBy(get_userid());
     $content->Save();
+    $i++;
   }
   audit('','Core','Changed cachable status on '.count($multicontent).' pages');
   $this->SetMessage($this->Lang('msg_bulk_successful'));

@@ -192,7 +192,7 @@ $(document).ready(function(){
               {if $row.secure}
 	      <strong>{$mod->Lang('prompt_secure')}:</strong> {$mod->Lang('yes')}<br/>
               {/if}
-	      <strong>{$mod->Lang('prompt_cachable')}:</strong> {if $row.secure}{$mod->Lang('yes')}{else}{$mod->Lang('no')}{/if}<br/>
+	      <strong>{$mod->Lang('prompt_cachable')}:</strong> {if $row.cachable}{$mod->Lang('yes')}{else}{$mod->Lang('no')}{/if}<br/>
            </span>
           {$row.page}
         </a>
