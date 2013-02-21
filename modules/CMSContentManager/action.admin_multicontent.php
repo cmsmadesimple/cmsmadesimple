@@ -113,10 +113,18 @@ switch( $bulkaction ) {
    $this->Redirect($id,'admin_bulk_secure',$returnid,$parms);
    break;
 
+ case 'showinmenu':
+   $parms['showinmenu'] = 1;
+   $this->Redirect($id,'admin_bulk_showinmenu',$returnid,$parms);
+   break;
+
+ case 'hidefrommenu':
+   $parms['showinmenu'] = 0;
+   $this->Redirect($id,'admin_bulk_showinmenu',$returnid,$parms);
+   break;
+
  case 'settemplate':
  case 'changeowner':
- case 'showinmenu':
- case 'hidefrommenu':
  case 'delete':
    $this->Redirect($id,'admin_bulk_'.$bulkaction,$returnid,$parms);
    break;
