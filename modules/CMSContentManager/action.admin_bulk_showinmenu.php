@@ -61,7 +61,7 @@ if( count($multicontent) == 0 ) {
 
 // do the real work
 try {
-  $contentops = ContentOperations::get_instance()->LoadChildren(-1,FALSE,TRUE,$multicontent);
+  ContentOperations::get_instance()->LoadChildren(-1,FALSE,TRUE,$multicontent);
   $hm = cmsms()->GetHierarchyManager();
   $i = 0;
   foreach( $multicontent as $pid ) {
