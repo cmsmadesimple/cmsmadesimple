@@ -189,6 +189,10 @@ $(document).ready(function(){
               <strong>{$mod->Lang('prompt_title')}:</strong> {$row.title}<br/>
               <strong>{$mod->Lang('prompt_name')}:</strong> {$row.menutext}<br/>
               <strong>{$mod->Lang('prompt_alias')}:</strong> {$row.alias}<br/>
+              {if $row.secure}
+	      <strong>{$mod->Lang('prompt_secure')}:</strong> {$mod->Lang('yes')}<br/>
+              {/if}
+	      <strong>{$mod->Lang('prompt_cachable')}:</strong> {if $row.secure}{$mod->Lang('yes')}{else}{$mod->Lang('no')}{/if}<br/>
            </span>
           {$row.page}
         </a>
@@ -264,7 +268,7 @@ $(document).ready(function(){
     {elseif $column == 'multiselect'}
       {if $row.multiselect != ''}
         <label class="invisible" for="multicontent-{$row.id}">{$mod->Lang('prompt_multiselect_toggle')}</label>
-        <input type="checkbox" class="multicontent" name="multicontent-{$row.id}" value="1" title="{$mod->Lang('prompt_multiselect_toggle')}"/>
+        <input type="checkbox" class="multicontent" name="{$actionid}multicontent[]" value="{$row.id}" title="{$mod->Lang('prompt_multiselect_toggle')}"/>
       {/if}
     {else}
       {* unknown column *}

@@ -478,6 +478,8 @@ final class ContentListBuilder
       $rec['id'] = $content->Id();
       $rec['lastmodified'] = $content->GetModifiedDate();
       $rec['created'] = $content->GetCreationDate();
+      $rec['secure'] = $content->Secure();
+      $rec['cachable'] = $content->Cachable();
       if( $content->LastModifiedBy() > 0 && isset($users[$content->LastModifiedBy()]) ) {
 	$rec['lastmodifiedby'] = $users[$content->LastModifiedBy()]->username;
       }

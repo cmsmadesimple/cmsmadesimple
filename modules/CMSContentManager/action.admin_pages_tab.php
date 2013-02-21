@@ -51,6 +51,19 @@ if( !function_exists('cm_prettyurls_ok') ) {
   }
 }
 
+if( isset($params['multisubmit']) && isset($params['multiaction']) && 
+    isset($params['multicontent']) && is_array($params['multicontent']) && count($params['multicontent']) > 0 ) {
+  list($module,$bulkaction) = explode('::',$params['multiaction'],2);
+  if( $module == '' || $module == '-1' || $bulkaction == '' || $bulkaction == '-1' ) {
+    $this->SetMessage($this->Lang('error_nobulkaction'));
+    $this->RedirectToAdminTab();
+  }
+  // redirect to special action to handle bulk content stuff.
+  $this->Redirect($id,'admin_multicontent',$returnid,
+		  array('multicontent'=>serialize($params['multicontent']),
+			'multiaction'=>$params['multiaction']));
+}
+
 $smarty->assign('prettyurls_ok',cm_prettyurls_ok());
 $smarty->assign('can_add_content',$this->CheckPermission('Add Pages') || $this->CheckPermission('Manage All Content'));
 $smarty->assign('can_reorder_content',$this->CheckPermission('Manage All Content'));

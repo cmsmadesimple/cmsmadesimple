@@ -27,6 +27,7 @@ $lang['colhdr_page'] = 'Name';
 $lang['colhdr_template'] = 'Template';
 $lang['colhdr_url'] = 'URL';
 $lang['colhdr_view'] = 'View';
+$lang['confirm_expandall'] = 'Are you sure you want to expand all content?  On large sites this may cause problems.  Please use caution';
 $lang['confirm_setdefault'] = 'Are you sure you want to change the default content page for this website?';
 $lang['confirm_setinactive'] = 'Are you sure you want to set this page inactive?\nThis page will not be viewable, and may affect the behavior of a working website?';
 $lang['confirm_viewpage'] = 'Are you sure you want to open a new window to view this page?';
@@ -42,9 +43,11 @@ $lang['error_delete_haschildren'] = 'You cannot delete a page that has children'
 $lang['error_delete_permission'] = 'You do not have permission to delete this content page';
 $lang['error_editpage_contenttype'] = 'The content type selected is invalid';
 $lang['error_editpage_permission'] = 'Insufficient permission to edit content pages (or this content page)';
+$lang['error_invalidbulkaction'] = 'Invalid bulk action';
 $lang['error_invalidpageid'] = 'Invalid page id';
 $lang['error_missingparam'] = 'A parameter required for this action was missing, or invalid';
 $lang['error_movecontent'] = 'Could not move content page';
+$lang['error_nobulkaction'] = 'No bulk action (or invalid bulk action) selected';
 $lang['error_setactive'] = 'Could not activate this page.  This could be a database problem, or a permissions issue.';
 $lang['error_setdefault'] = 'Could not change the default content page.  This could be a database problem, or a permissions issue.';
 $lang['error_setinactive'] = 'Could deactivate this page.  This could be a database problem, or a permissions issue.';
@@ -83,11 +86,13 @@ $lang['info_preview_notice'] = '<strong>Warning:</strong> This preview panel beh
 
 #M
 $lang['moddescription'] = 'A module for managing content within CMSMS';
+$lang['msg_bulk_successful'] = 'Bulk content operation successful';
 $lang['msg_editpage_success'] = 'Content Updated';
 $lang['msg_cancelled'] = 'Operation Cancelled';
 $lang['msg_prefs_saved'] = 'Preferences saved';
 
 #N
+$lang['no'] = 'No';
 
 #O
 
@@ -97,6 +102,7 @@ $lang['postinstall'] = 'Content module installed';
 $lang['postuninstall'] = 'The content module has been uninstalled. Note: no content has been removed from CMSMS.  You are free to reinstall this module or install an alternate content management module';
 $lang['preuninstall'] = 'Are you sure you want to uninstall this module?\nAlthough uninstalling this module will not destroy any content, it may prevent you from being able to manage the pages of your website.';
 $lang['prompt_alias'] = 'Alias';
+$lang['prompt_cachable'] = 'Cachable';
 $lang['prompt_collapseall'] = 'Collapse all pages';
 $lang['prompt_content_id'] = 'Content ID';
 $lang['prompt_created'] = 'Created';
@@ -142,6 +148,7 @@ $lang['prompt_page_template'] = 'Edit this template';
 $lang['prompt_page_title'] = 'Title';
 $lang['prompt_page_view'] = 'View this page in another window';
 $lang['prompt_preview'] = 'Preview';
+$lang['prompt_secure'] = 'Secure';
 $lang['prompt_title'] = 'Title';
 $lang['prompt_withselected'] = 'With Selected';
 
@@ -169,6 +176,7 @@ $lang['title_editpage_view'] = 'View the current content page <em>(saved changes
 #X
 
 #Y
+$lang['yes'] = 'Yes';
 
 #Z
 
