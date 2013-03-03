@@ -224,6 +224,7 @@ try {
 		// in smarty 3, we could use eval:{content} I think.
 		//$html = $smarty->fetch('eval:{content}')."\n";
 		$html = $smarty->fetch('template:notemplate')."\n";
+		$trycount = 99;
 	}
 	else
 	{
