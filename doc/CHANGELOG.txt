@@ -11,6 +11,8 @@ Core - General
   - Fix typo in /lib/classes/module_support/modtemplates.inc.php
   - Fixes issues wrt the News module being upgraded before the cms_routes table is created.
   - Fixes issue with compilation process of stylesheets when using smarty tags
+  - Fixes issue with showtemplate=false causing ajax stuff to be called twice.
+  - Fixes issue with aliases on sectionheaders being navigable. (Now throws 404 error)
 
   
 Version 1.11.4 - Fernandina

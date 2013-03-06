@@ -372,38 +372,35 @@ function author_pages($userid)
   $gCms = cmsms();
   $db = $gCms->GetDb();
   $userops = $gCms->GetUserOperations();
-        $variables = &$gCms->variables;
-	if (!isset($variables['authorpages']))
-	{
-		// Get all of the pages this user owns
-		$query = "SELECT content_id FROM ".cms_db_prefix()."content WHERE owner_id = ?";
-		$data = $db->GetCol($query, array($userid));
+  $variables = &$gCms->variables;
+  if (!isset($variables['authorpages'])) {
+    // Get all of the pages this user owns
+    $query = "SELECT content_id FROM ".cms_db_prefix()."content WHERE owner_id = ?";
+    $data = $db->GetCol($query, array($userid));
 
-		// Get all of the pages this user has access to.
-		$query = "SELECT user_id,content_id FROM ".cms_db_prefix()."additional_users";
-		$result = $db->GetArray($query);
-		foreach( $result as $row )
-		{
-		  $uid = $row['user_id'];
-		  $content_id = $row['content_id'];
-		  if( $uid == $userid )
-		    {
-		      $data[] = $content_id;
-		    }
-		  else if( $uid < 0 )
-		    {
-		      $gid = $uid * -1;
-		      if( $userops->UserInGroup($userid,$gid) )
-			{
-			  $data[] = $content_id;
-			}
-		    }
-		}
-
-		$variables['authorpages'] = $data;
+    // Get all of the pages this user has access to.
+    $query = "SELECT user_id,content_id FROM ".cms_db_prefix()."additional_users";
+    $result = $db->GetArray($query);
+    if( is_array($result) && count($result) ) {
+      foreach( $result as $row ) {
+	$uid = $row['user_id'];
+	$content_id = $row['content_id'];
+	if( $uid == $userid ) {
+	  $data[] = $content_id;
 	}
+	else if( $uid < 0 ) {
+	  $gid = $uid * -1;
+	  if( $userops->UserInGroup($userid,$gid) ) {
+	    $data[] = $content_id;
+	  }
+	}
+      }
+    }
 
-	return $variables['authorpages'];
+    $variables['authorpages'] = $data;
+  }
+
+  return $variables['authorpages'];
 }
 
 /**

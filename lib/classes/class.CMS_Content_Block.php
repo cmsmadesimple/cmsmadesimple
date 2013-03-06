@@ -112,29 +112,17 @@ final class CMS_Content_Block
     $rec = array('type'=>'image','id'=>'','name'=>'','label'=>'',
 		 'upload'=>true,'dir'=>'','default'=>'','tab'=>'',
 		 'exclude'=>'','sort'=>0);
-    foreach( $params as $key => $value )
-      {
-	if( $key == 'type' ) continue;
-	if( $key == 'block' )
-	  {	
-	    $key = 'name';
-	  }
+    foreach( $params as $key => $value ) {
+      if( $key == 'type' ) continue;
+      if( $key == 'block' ) $key = 'name';
+      if( isset($rec[$key]) ) $rec[$key] = trim($value,"'\"");
+    }
 
-	if( isset($rec[$key]) )
-	  {
-	    $rec[$key] = trim($value,"'");
-	  }
-      }
-
-    if( !$rec['name'] ) 
-      {
-	$n = count(self::$_contentBlocks)+1;
-	$rec['id'] = $rec['name'] = 'image_'+$n;
-      }
-    if( !$rec['id'] )
-      {	
-	$rec['id'] = str_replace(' ','_',$rec['name']);
-      }
+    if( !$rec['name'] ) {
+      $n = count(self::$_contentBlocks)+1;
+      $rec['id'] = $rec['name'] = 'image_'+$n;
+    }
+    if( !$rec['id'] ) $rec['id'] = str_replace(' ','_',$rec['name']);
 
     // check for duplicate.
     if( isset(self::$_contentBlocks[$rec['name']]) ) {

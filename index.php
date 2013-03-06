@@ -132,10 +132,12 @@ try {
 	if( !$contentobj->IsViewable() )
 	{
 		$url = $contentobj->GetURL();
-		if( $url != '' && $url != '#' )
-		{
-			redirect($url);
+		if( $url != '' && $url != '#' ) {
+		  redirect($url);
 		}
+
+		// not viewable, throw a 404.
+		throw new CmsError404Exception('Cannot view an unviewable page');
 	}
 
 	if( $contentobj->Secure() && (! isset($_SERVER['HTTPS']) || empty($_SERVER['HTTPS']) || $_SERVER['HTTPS'] == 'off') )
@@ -228,7 +230,6 @@ try {
 	}
 	else
 	{
-	
 		//debug_display('display content '.$contentobj->Alias().' '.$page);
 		debug_buffer('process template top');
 		$top  = $smarty->fetch('tpl_top:'.$contentobj->TemplateId());

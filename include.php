@@ -185,6 +185,16 @@ if (!isset($DONT_LOAD_DB))
   debug_buffer('Initialize Database');
   cmsms()->GetDb();
   debug_buffer('Done Initializing Database');
+
+  if( isset($CMS_ADMIN_PAGE) && !isset($CMS_LOGIN_PAGE) ) {
+    $db = cmsms()->GetDb();
+    $current_version = $CMS_SCHEMA_VERSION;
+    $query = "SELECT version from ".cms_db_prefix()."version";
+    $current_version = $db->GetOne($query);
+    if ($current_version < $CMS_SCHEMA_VERSION) {
+      redirect($config['root_url'] . "/install/upgrade.php");
+    }
+  }
 }
 
 debug_buffer('Initialize Smarty');

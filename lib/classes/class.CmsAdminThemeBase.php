@@ -1036,31 +1036,26 @@ abstract class CmsAdminThemeBase
 	{
 		// @todo: fix me...
 		if( !is_array($this->_imageLink) ) $this->_imageLink = array();
-		if (! isset($this->_imageLink[$imageName]))
-			{
-				if (strpos($imageName,'/') !== false)
-					{
-						$imagePath = substr($imageName,0,strrpos($imageName,'/')+1);
-						$imageName = substr($imageName,strrpos($imageName,'/')+1);
-					}
-				else
-					{
-						$imagePath = '';
-					}
-    	   	
-				$config = cmsms()->GetConfig();
-				$str = dirname($config['root_path'].'/'.$config['admin_dir']."/themes/{$this->themeName}/images/{$imagePath}{$imageName}");
-				if (file_exists("{$str}/{$imageName}"))
-					{
-						$str = "themes/{$this->themeName}/images/{$imagePath}{$imageName}";
-						$this->_imageLink[$imageName] = $str;
-					}
-				else
-					{
-						// todo: uses default theme.
-						$this->_imageLink[$imageName] = 'themes/default/images/' . $imagePath . $imageName;
-					}
+		if (! isset($this->_imageLink[$imageName])) {
+			if (strpos($imageName,'/') !== false) {
+				$imagePath = substr($imageName,0,strrpos($imageName,'/')+1);
+				$imageName = substr($imageName,strrpos($imageName,'/')+1);
 			}
+			else {
+				$imagePath = '';
+			}
+    	   	
+			$config = cmsms()->GetConfig();
+			$str = dirname($config['root_path'].'/'.$config['admin_dir']."/themes/{$this->themeName}/images/{$imagePath}{$imageName}");
+			if (file_exists("{$str}/{$imageName}")) {
+				$str = "themes/{$this->themeName}/images/{$imagePath}{$imageName}";
+				$this->_imageLink[$imageName] = $str;
+			}
+			else {
+				// todo: uses default theme.
+				$this->_imageLink[$imageName] = 'themes/default/images/' . $imagePath . $imageName;
+			}
+		}
 
 		$retStr = '<img src="'.$this->_imageLink[$imageName].'"';
 		if ($class != '')
