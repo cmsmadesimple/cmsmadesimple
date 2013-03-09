@@ -65,7 +65,10 @@ if (isset($CMS_INSTALL_DROP_TABLES)) {
 	$dbdict->ExecuteSQLArray($sqlarray);
 	$sqlarray = $dbdict->DropTableSQL($db_prefix."version");
 	$dbdict->ExecuteSQLArray($sqlarray);
-
+	$sqlarray = $dbdict->DropTableSQL($db_prefix."module_smarty_plugins");
+	$dbdict->ExecuteSQLArray($sqlarray);
+	$sqlarray = $dbdict->DropTableSQL($db_prefix."routes");
+	$dbdict->ExecuteSQLArray($sqlarray);
 }
 
 if (isset($CMS_INSTALL_CREATE_TABLES)) {

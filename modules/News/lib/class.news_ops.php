@@ -38,9 +38,20 @@ final class news_ops
     }
     else {
       $categories = explode(',', $params['category']);
-      for( $i = 0; $i < count($tmp); $i++ ) {
-	if( !count($categories) || in_array($tmp[$i]['news_category_name'],$categories) ) {
-	  $catinfo[] = $tmp[$i];
+      foreach( $categories as $onecat ) {
+	if( strpos($onecat,'*') !== FALSE ) {
+	  foreach( $tmp as $rec ) {
+ 	    if( fnmatch($onecat,$rec['long_name']) ) {
+	      $catinfo[] = $rec;
+	    }
+	  }
+	}
+	else {
+	  foreach( $tmp as $rec ) {
+	    if( $rec['long_name'] == $onecat ) {
+	      $catinfo[] = $rec;
+	    }
+	  }
 	}
       }
     }
@@ -58,6 +69,7 @@ final class news_ops
     $depth = 1;
     $db = cmsms()->GetDb();
     $counts = array();
+
     {
       $q2 = 'SELECT news_category_id,COUNT(news_id) AS cnt FROM '.cms_db_prefix().'module_news WHERE news_category_id IN (';
       $q2 .= implode(',',$cat_ids).')';
@@ -65,8 +77,7 @@ final class news_ops
 	$q2 .= " AND (end_time < ".$db->DBTimeStamp(time()).") ";
       }
       else {
-	$q2 .= " AND ((".$db->IfNull('end_time',$db->DBTimeStamp(1))." = ".$db->DBTimeStamp(1).") 
-                 OR (end_time > ".$db->DBTimeStamp(time()).")) ";
+	$q2 .= " AND ((".$db->IfNull('end_time',$db->DBTimeStamp(1))." = ".$db->DBTimeStamp(1).") OR (end_time > ".$db->DBTimeStamp(time()).")) ";
       }
       $q2 .= ' AND status = \'published\' GROUP BY news_category_id';
       $tmp = $db->GetArray($q2);
@@ -111,9 +122,7 @@ final class news_ops
       $db = cmsms()->GetDb();
       $query = "SELECT * FROM ".cms_db_prefix()."module_news_categories ORDER BY hierarchy";
       $dbresult = $db->GetArray($query);
-      if( $dbresult ) {
-	self::$_cached_categories = $dbresult;
-      }
+      if( $dbresult ) self::$_cached_categories = $dbresult;
       self::$_categories_loaded = TRUE;
     }
     return self::$_cached_categories;
@@ -365,9 +374,7 @@ final class news_ops
 
   public static function preloadFieldData($ids)
   {
-    if( !is_array($ids) && is_numeric($ids) ) {
-      $ids = array($ids);
-    }
+    if( !is_array($ids) && is_numeric($ids) ) $ids = array($ids);
 
     $tmp = array();
     for( $i = 0; $i < count($ids); $i++ ) {

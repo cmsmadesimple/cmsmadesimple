@@ -297,10 +297,21 @@ function smarty_cms_function_cms_stylesheet($params, &$template)
 
 function cms_stylesheet_writeCache($filename, $string, $trimbackground, &$smarty, $forceblackandwhite = false)
 {
+	$_contents = '';
+
 	// Smarty processing
 	$smarty->left_delimiter = '[[';
 	$smarty->right_delimiter = ']]';
-	$_contents = $smarty->fetch('string:'.$string);
+
+	try {
+
+		$_contents = $smarty->fetch('string:'.$string);
+	}	
+	catch (SmartyException $e)
+	{
+		audit('Plugin: cms_stylesheet', 'Smarty Compile process failed, unable to write cache file');
+	}	
+	
 	$smarty->left_delimiter = '{';
 	$smarty->right_delimiter = '}';					
 

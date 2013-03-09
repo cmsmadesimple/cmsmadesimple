@@ -56,6 +56,8 @@ class CMSGlobalContentTemplateResource extends CMS_Fixed_Resource_Custom
     else
       {
 	$source = "<!-- Html blob '" . $name . "' does not exist  -->";
+		// put mention into the admin log
+		audit('', 'Global Content Block: '.$name , 'Can not open or does not exist!');
 	$mtime = time();
       }
     debug_buffer('end global_content_get_template');

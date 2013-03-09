@@ -252,34 +252,31 @@ class cms_config implements ArrayAccess
 		  return $out;
 
 	  case 'root_url':
-		  {
-			  $parts = parse_url($_SERVER['PHP_SELF']);
-			  $path = '';
-			  if( !empty($parts['path']) )
-				  {
-					  $path = dirname($parts['path']);
-                                          if( endswith($path,'install') ) {
-						  $path = substr($path,0,strlen($path)-strlen('install')-1);
-					  }
-					  else if( endswith($path,$this->offsetGet('admin_dir')) ) {
-						  $path = substr($path,0,strlen($path)-strlen($this->offsetGet('admin_dir'))-1);
-					  }
-					  else if (strstr($path,'/lib') !== FALSE) {
-						  while( strstr($path,'/lib') !== FALSE ) {
-							  $path = dirname($path);
-						  }
-					  }
-					  while(endswith($path, DIRECTORY_SEPARATOR)) {
-						  $path = substr($path,0,strlen($path)-1);
-					  }
-         				  if( endswith($path,'/index.php') ) {
-					    $path = dirname($path);
-                                          }
+		  $parts = parse_url($_SERVER['PHP_SELF']);
+		  $path = '';
+		  if( !empty($parts['path']) ) {
+			  $path = dirname($parts['path']);
+			  if( endswith($path,'install') ) {
+				  $path = substr($path,0,strlen($path)-strlen('install')-1);
+			  }
+			  else if( endswith($path,$this->offsetGet('admin_dir')) ) {
+				  $path = substr($path,0,strlen($path)-strlen($this->offsetGet('admin_dir'))-1);
+			  }
+			  else if (strstr($path,'/lib') !== FALSE) {
+				  while( strstr($path,'/lib') !== FALSE ) {
+					  $path = dirname($path);
 				  }
-			  $str = 'http://'.$_SERVER['HTTP_HOST'].$path;
-			  $this->_cache[$key] = $str;
-			  return $str;
+			  }
+			  while(endswith($path, DIRECTORY_SEPARATOR)) {
+				  $path = substr($path,0,strlen($path)-1);
+			  }
+			  if( ($pos = strpos($path,'/index.php')) !== FALSE ) {
+				  $path = substr($path,0,$pos);
+			  }
 		  }
+		  $str = 'http://'.$_SERVER['HTTP_HOST'].$path;
+		  $this->_cache[$key] = $str;
+		  return $str;
 		  break;
 		  
 	  case 'ssl_url':

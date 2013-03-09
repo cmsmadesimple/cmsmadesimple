@@ -686,6 +686,20 @@ aside.message,
 	margin:0;
 	left: 35%
 }
+aside .no-slide,
+.no-slide  {
+	position: inherit;
+	left: auto;
+	top: auto;
+	border-radius: 4px;
+	box-shadow: none;
+	border: 1px solid #ae432e;
+	-webkit-box-shadow: none;
+	background-image: none;
+	width: auto;
+	display: block;
+	z-index: 0
+}
 .pageerrorcontainer ul {
 	border: none;
 	margin-left: 25px;

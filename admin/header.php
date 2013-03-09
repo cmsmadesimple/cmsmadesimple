@@ -7,16 +7,12 @@ if (!(isset($USE_OUTPUT_BUFFERING) && $USE_OUTPUT_BUFFERING == false)) {
   @ob_start();
 }
 
-$gCms = cmsms();
-$config = $gCms->GetConfig();
 $userid = get_userid();
 
-if (isset($USE_THEME) && $USE_THEME == false)
-{
+if (isset($USE_THEME) && $USE_THEME == false) {
   //echo '<!-- admin theme disabled -->';
 }
-else
-{
+else {
   debug_buffer('before theme load');
   $themeObject = cms_utils::get_theme_object();
   debug_buffer('after theme load');
@@ -28,8 +24,7 @@ else
   // Display notification stuff from modules
   // should be controlled by preferences or something
   $ignoredmodules = explode(',',get_preference($userid,'ignoredmodules'));
-  if( get_site_preference('enablenotifications',1) && 
-      get_preference($userid,'enablenotifications',1) ) {
+  if( get_site_preference('enablenotifications',1) && get_preference($userid,'enablenotifications',1) ) {
     debug_buffer('before notifications');
     if( ($data = get_site_preference('__NOTIFICATIONS__')) ) {
       $data = unserialize($data);
@@ -40,26 +35,11 @@ else
 	  $to = CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 	  $new = preg_replace($regex,$to,$old);
 
-	  $themeObject->AddNotification($item->priority,
-					$item->name,
-					$item->html);
+	  $themeObject->AddNotification($item->priority,$item->name,$item->html);
 	}
       }
     }
-	
-    // Display a warning if CMSMS needs upgrading
-    {
-      $db = $gCms->GetDb();
-      $current_version = $gCms->get_installed_schema_version();
-      if ($current_version < CMS_SCHEMA_VERSION) {
-	$warning_upgrade = 
-	  lang('warning_upgrade') . '<br />' . lang('warning_upgrade_info1',$current_version, CMS_SCHEMA_VERSION).
-	  '<br/>' . lang('warning_upgrade_info2','<a href="'.$config['root_url'].'/install/upgrade.php">'.
-			 lang('start_upgrade_process').'</a>');
-	$themeObject->AddNotification(1,'Core', $warning_upgrade);
-      }
-    }
-	  
+
     // if the install directory still existsx
     // add a priority 1 dashboard item
     if( file_exists(dirname(dirname(__FILE__)).'/install') ) {
@@ -82,8 +62,8 @@ else
     // but only do a check once per day
     {
       $timelastchecked = get_site_preference('lastcmsversioncheck',0);
-      if( (get_site_preference('checkversion',1) && 
-	   (time() - $timelastchecked) > (24 * 60 * 60)) || isset($_GET['forceversioncheck']) ) {
+      if( (get_site_preference('checkversion',1) && (time() - $timelastchecked) > (24 * 60 * 60)) || 
+	  isset($_GET['forceversioncheck']) ) {
 	$req = new cms_http_request();
 	$req->setTimeout(10);
 	$req->execute(CMS_DEFAULT_VERSIONCHECK_URL);

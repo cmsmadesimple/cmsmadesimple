@@ -22,6 +22,34 @@ News
   -
 
 
+Version 1.11.5 - Puerto Ayora
+-----------------------------
+Core - General
+  - GCB's can now only have letters and numbers in the name
+  - Fixes to caching issues in MenuManager and module templates
+  - Admin module actions now catch an exception
+  - Erase the alias of a sectionheader on save
+  - Fixes problem with error_reporting, takes error_reporting correctly from php.ini
+  - Fixes problem with contentprecompile not being fired
+  - Significant performance improvement in admin theme calculations (fixes silly error)
+  - Fix typo in /lib/classes/module_support/modtemplates.inc.php
+  - Fixes issues wrt the News module being upgraded before the cms_routes table is created.
+  - Fixes issue with compilation process of stylesheets when using smarty tags
+  - Fixes issue with showtemplate=false causing ajax stuff to be called twice.
+  - Fixes issue with aliases on sectionheaders being navigable. (Now throws 404 error)
+  - Modules can no longer be upgraded if the schema version in the database does not match the version.php file
+    (this solves the problem of the modules being upgraded too early in the upgrade process).
+  - Fixes problem with module_help links in the OneEleven admin theme.
+
+Core - News
+  - Fixes issue with wildcard category arguments in the browsecat action.
+  - Removes redundant SearchResult method
+  - Clean up main php file a bit.
+
+Core - Search
+  - Fixes issue with detailpage parameter.
+
+  
 Version 1.11.4 - Fernandina
 -----------------------------
 Core - General
@@ -37,7 +65,7 @@ Core - General
   - Fixes to cleaning of values in edit_user and add_user wrt email fields (now consistent)
   - Numerous SSL fixes
   - {uploads_url} tag now uses cms_config->smart_uploads_url() (new function)
-  - fixes a minor issue with cleaning of the incoming page variable
+  - Fixes a minor issue with cleaning of the incoming page variable
   - Fixes an error with UDT's and syntax hilighters
   - Minor fix to cms_stylesheet
   - Fixes problem with Events listing none active modules.

@@ -146,45 +146,6 @@ class News extends CMSModule
     return $text;
   }
 
-  function SearchResult($returnid, $articleid, $attr = '')
-  {
-    $result = array();
-
-    if ($attr == 'article') {
-      $db = $this->GetDb();
-      $now = $db->DbTimeStamp(time());
-      $zerotime = $db->DbTimeStamp(1);
-      $q = "SELECT news_title,news_url FROM ".cms_db_prefix()."module_news 
-            WHERE news_id = ?";
-      if( $this->GetPreference('expired_searchable',1) == 0 ) {
-	// make sure we don't return expired articles.
-	// if we don't want em to.
-	$q .= " AND ((".$db->IfNull('end_time',$zerotime)." = ".$zerotime.") OR (end_time > $now))";
-      }
-      $dbresult = $db->Execute( $q, array( $articleid ) );
-      if ($dbresult) {
-	$row = $dbresult->FetchRow();
-
-	//0 position is the prefix displayed in the list results.
-	$result[0] = $this->GetFriendlyName();
-
-	//1 position is the title
-	$result[1] = $row['news_title'];
-
-	//2 position is the URL to the title.
-	$pretty_url = $row['news_url'];
-	if( $pretty_url == '' ) {
-	  $aliased_title = munge_string_to_url($row['news_title']);
-	  $prettyurl = 'news/' . $articleid.'/'.$returnid."/$aliased_title";
-	}
-	$result[2] = $this->CreateLink('cntnt01', 'detail', $returnid, '', array('articleid' => $articleid) ,'', true, false, '', true, $prettyurl);
-      }
-    }
-
-    return $result;
-  }
-
-
   function SearchResultWithParams($returnid, $articleid, $attr = '', $params = '')
   {
     $gCms = cmsms();

@@ -105,6 +105,8 @@ while( $trycount < 2 ) {
       if( $url != '' && $url != '#' ) {
 	redirect($url);
       }
+      // not viewable, throw a 404.
+      throw new CmsError404Exception('Cannot view an unviewable page');
     }
 
     if( $contentobj->Secure() && (!isset($_SERVER['HTTPS']) || empty($_SERVER['HTTPS']) || $_SERVER['HTTPS'] == 'off') ) {
@@ -180,6 +182,7 @@ while( $trycount < 2 ) {
       $smarty->setCaching(false);
       // in smarty 3, we could use eval:{content} I think
       $html = $smarty->fetch('cms_template:notemplate')."\n";
+      $trycount = 99;
     }
     else {
       debug_buffer('process template top');
@@ -249,9 +252,11 @@ while( $trycount < 2 ) {
 
 Events::SendEvent('Core', 'ContentPostRender', array('content' => &$html));
 
-$ct = cmsms()->get_variable('content-type');
-if( !$ct ) $ct = 'text/html';
-header("Content-Type: $ct; charset=" . get_encoding());
+if( !headers_sent() ) {
+  $ct = cmsms()->get_variable('content-type');
+  if( !$ct ) $ct = 'text/html';
+  header("Content-Type: $ct; charset=" . get_encoding());
+}
 echo $html;
 
 @ob_flush();

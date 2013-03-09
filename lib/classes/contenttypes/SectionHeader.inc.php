@@ -34,7 +34,6 @@
  */
 class SectionHeader extends ContentBase
 {
-
     function FriendlyName()
     {
       return lang('contenttype_sectionheader');
@@ -62,39 +61,35 @@ class SectionHeader extends ContentBase
 		return false;
     }
 
-
 	function RequiresAlias()
 	{
-		return FALSE;
+		return TRUE;
 	}
 
     function TabNames()
     {
-      $res = array(lang('main'));
-      if( check_permission(get_userid(),'Manage All Content') )
-	{
-	  $res[] = lang('options');
-	}
-      return $res;
+		$res = array(lang('main'));
+		if( check_permission(get_userid(),'Manage All Content') ) {
+			$res[] = lang('options');
+		}
+		return $res;
     }
 
     function EditAsArray($adding = false, $tab = 0, $showadmin = false)
     {
-      switch($tab)
-	{
-	case '0':
-	  return $this->display_attributes($adding);
-	  break;
-	case '1':
-	  return $this->display_attributes($adding,1);
-	  break;
-	}
+		switch($tab) {
+		case '0':
+			return $this->display_attributes($adding);
+			break;
+		case '1':
+			return $this->display_attributes($adding,1);
+			break;
+		}
     }
 
     function ValidateData()
     {
       $res = parent::ValidateData();
-	  $this->mAlias = '';
       if( is_array($res) && $this->mId < 1 ) {
 		  // some error occurred..
 		  // reset the menu text
@@ -108,12 +103,12 @@ class SectionHeader extends ContentBase
 
     function GetURL($rewrite = true)
     {
-	return '#';
+		return '#';
     }
 
     function IsViewable()
     {
-      return FALSE;
+		return FALSE;
     }
 }
 

@@ -49,7 +49,7 @@ final class ModuleOperations
 	private $_moduleinfo;
 	private $_errors = null;
 	
-	private $xml_exclude_files = array('^\.svn' , '^CVS$' , '^\#.*\#$' , '~$', '\.bak$' );
+	private $xml_exclude_files = array('^\.svn' , '^CVS$' , '^\#.*\#$' , '~$', '\.bak$', '^\.git');
 	private $xmldtd = '
 <!DOCTYPE module [
   <!ELEMENT module (dtdversion,name,version,description*,help*,about*,requires*,file+)>
@@ -769,9 +769,7 @@ final class ModuleOperations
 		  if( isset($CMS_STYLESHEET) && !isset($CMS_STYLESHEET) ) continue;
 		  $this->get_module_instance($module_name);
 	  }
-	  if( isset($_SESSION['moduleoperations']) && 
-		  is_array($_SESSION['moduleoperations']) && 
-		  count($_SESSION['moduleoperations']) ) {
+	  if( isset($_SESSION['moduleoperations']) && is_array($_SESSION['moduleoperations']) && count($_SESSION['moduleoperations']) ) {
 		  // there are modules queued for install/upgrade that may not have been loaded.
 		  foreach($_SESSION['moduleoperations'] as $module_name => $info ) {
 			  if( !isset($allinfo[$module_name]) ) {
@@ -792,6 +790,11 @@ final class ModuleOperations
 
   private function _upgrade_module( &$module_obj, $to_version = '' )
   {
+	  // we can't upgrade a module if the schema is not up to date.
+	  $db = cmsms()->GetDb();
+	  $tmp = $db->GetOne('SELECT version FROM '.cms_db_prefix().'version');
+	  if( $tmp && $tmp < CMS_SCHEMA_VERSION ) return FALSE;
+
 	  $info = $this->_get_module_info();
 	  $module_name = $module_obj->GetName();
 	  $dbversion = $info[$module_name]['version'];

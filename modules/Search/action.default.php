@@ -66,6 +66,9 @@ if( !$smarty->isCached($this->GetDatabaseResource($template),$cache_id,$compile_
   if( isset( $params['modules'] ) ) {
     $hidden .= $this->CreateInputHidden( $id, 'modules', trim($params['modules']) );
   }
+  if( isset( $params['detailpage'] ) ) {
+    $hidden .= $this->CreateInputHidden( $id, 'detailpage', trim($params['detailpage']) );
+  }
   foreach( $params as $key => $value ) {
     if( preg_match( '/^passthru_/', $key ) > 0 ) {
       $hidden .= $this->CreateInputHidden($id,$key,$value);
