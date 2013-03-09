@@ -13,6 +13,17 @@ Core - General
   - Fixes issue with compilation process of stylesheets when using smarty tags
   - Fixes issue with showtemplate=false causing ajax stuff to be called twice.
   - Fixes issue with aliases on sectionheaders being navigable. (Now throws 404 error)
+  - Modules can no longer be upgraded if the schema version in the database does not match the version.php file
+    (this solves the problem of the modules being upgraded too early in the upgrade process).
+  - Fixes problem with module_help links in the OneEleven admin theme.
+
+Core - News
+  - Fixes issue with wildcard category arguments in the browsecat action.
+  - Removes redundant SearchResult method
+  - Clean up main php file a bit.
+
+Core - Search
+  - Fixes issue with detailpage parameter.
 
   
 Version 1.11.4 - Fernandina

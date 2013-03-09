@@ -219,8 +219,10 @@ class OneElevenTheme extends CmsAdminThemeBase {
 		}
 
 		// module_help_url
-		if (($module_help_url = $this->get_value('module_help_url'))) {
-			$smarty->assign('module_help_url', $module_help_url);
+		if( !get_preference(get_userid(),'hide_help_links',0) ) {
+		  if (($module_help_url = $this->get_value('module_help_url'))) {
+		    $smarty->assign('module_help_url', $module_help_url);
+		  }
 		}
 
 		// if bookmarks

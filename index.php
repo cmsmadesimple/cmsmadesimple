@@ -289,9 +289,11 @@ catch (CmsError404Exception $e) // <- Catch CMSMS 404 error
 
 Events::SendEvent('Core', 'ContentPostRender', array('content' => &$html));
 
-$ct = cmsms()->get_variable('content-type');
-if( !$ct ) $ct = 'text/html';
-header("Content-Type: $ct; charset=" . get_encoding());
+if( !headers_sent() ) {
+  $ct = cmsms()->get_variable('content-type');
+  if( !$ct ) $ct = 'text/html';
+  header("Content-Type: $ct; charset=" . get_encoding());
+}
 echo $html;
 
 @ob_flush();
