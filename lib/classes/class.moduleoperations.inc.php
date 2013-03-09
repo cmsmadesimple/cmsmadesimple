@@ -793,8 +793,7 @@ final class ModuleOperations
 
 	  $allinfo = $this->_get_module_info();
 	  if( !is_array($allinfo) ) return; // no modules installed, probably an empty database... edge case.
-	  foreach( $allinfo as $module_name => $info )
-	  {
+	  foreach( $allinfo as $module_name => $info ) {
 		  if( $info['status'] != 'installed' ) continue;
 		  if( !$info['active'] ) continue;
 		  if( ($info['admin_only'] || (isset($info['allow_fe_lazyload']) && $info['allow_fe_lazyload'])) && !isset($CMS_ADMIN_PAGE) ) continue;
@@ -803,13 +802,10 @@ final class ModuleOperations
 		  if( isset($CMS_STYLESHEET) && !isset($CMS_STYLESHEET) ) continue;
 		  $this->get_module_instance($module_name);
 	  }
-	  if( isset($_SESSION['moduleoperations']) && is_array($_SESSION['moduleoperations']) && count($_SESSION['moduleoperations']) )
-	  {
+	  if( isset($_SESSION['moduleoperations']) && is_array($_SESSION['moduleoperations']) && count($_SESSION['moduleoperations']) ) {
 		  // there are modules queued for install/upgrade that may not have been loaded.
-		  foreach($_SESSION['moduleoperations'] as $module_name => $info )
-		  {
-			  if( !isset($allinfo[$module_name]) )
-			  {
+		  foreach($_SESSION['moduleoperations'] as $module_name => $info ) {
+			  if( !isset($allinfo[$module_name]) ) {
 				  // we don't know about this module yet...
 				  $rec = array('module_name'=>$module_name,'status'=>'not installed','version'=>'0.0',
 							   'admin_only'=>0,'active'=>0,'allow_fe_lazyload'=>0,'allow_admin_lazyload'=>0);
@@ -827,6 +823,11 @@ final class ModuleOperations
 
   private function _upgrade_module( &$module_obj, $to_version = '' )
   {
+	  // we can't upgrade a module if the schema is not up to date.
+	  $db = cmsms()->GetDb();
+	  $tmp = $db->GetOne('SELECT version FROM '.cms_db_prefix().'version');
+	  if( $tmp && $tmp < CMS_SCHEMA_VERSION ) return FALSE;
+
 	  $info = $this->_get_module_info();
 	  $module_name = $module_obj->GetName();
 	  $dbversion = $info[$module_name]['version'];
@@ -834,8 +835,7 @@ final class ModuleOperations
 	  if( $to_version == '' ) $to_version = $module_obj->GetVersion();
 
 	  $result = $module_obj->Upgrade($dbversion,$to_version);
-	  if( $result !== FALSE )
-	  {
+	  if( $result !== FALSE ) {
 		  $db = cmsms()->GetDb();
 		  $lazyload_fe    = (method_exists($module_obj,'LazyLoadFrontend') && $module_obj->LazyLoadFrontend())?1:0;
 		  $lazyload_admin = (method_exists($module_obj,'LazyLoadAdmin') && $module_obj->LazyLoadAdmin())?1:0;
