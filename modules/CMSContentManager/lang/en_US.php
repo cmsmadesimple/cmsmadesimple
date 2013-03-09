@@ -4,6 +4,17 @@ $lang['addcontent'] = 'Add New Content';
 $lang['apply'] = 'Apply';
 
 #B
+$lang['bulk_active'] = 'Set Active';
+$lang['bulk_cachable'] = 'Set Cachable';
+$lang['bulk_changeowner'] = 'Change Owner';
+$lang['bulk_delete'] = 'Delete';
+$lang['bulk_hidefrommenu'] = 'Hide From Menu';
+$lang['bulk_inactive'] = 'Set Inactive';
+$lang['bulk_insecure'] = 'Set Insecure (HTTP)';
+$lang['bulk_noncachable'] = 'Set Not Cachable';
+$lang['bulk_secure'] = 'Set Secure (HTTPS)';
+$lang['bulk_setdesign'] = 'Set Design &amp; Template';
+$lang['bulk_showinmenu'] = 'Show In Menu';
 
 #C
 $lang['cancel'] = 'Cancel';
@@ -98,6 +109,7 @@ $lang['no'] = 'No';
 #O
 
 #P
+$lang['page'] = 'Page';
 $lang['pages'] = 'Pages';
 $lang['postinstall'] = 'Content module installed';
 $lang['postuninstall'] = 'The content module has been uninstalled. Note: no content has been removed from CMSMS.  You are free to reinstall this module or install an alternate content management module';

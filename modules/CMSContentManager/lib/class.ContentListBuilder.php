@@ -55,8 +55,9 @@ final class ContentListBuilder
   private $_module;
   private $_userid;
   private $_use_perms = TRUE;
-  private $_pagelimit = 100000;
+  private $_pagelimit = 500;
   private $_offset    = 0;
+  private $_pagelist;
 
   /**
    * Constructor
@@ -103,7 +104,7 @@ final class ContentListBuilder
       $out = null;
       if( $node->has_children() ) {
 	$out = array();
-	$out[] = $node->get_tag('id');
+	if( $node->get_tag('id') ) $out[] = $node->get_tag('id');
         $children = $node->get_children();
 	for( $i = 0; $i < count($children); $i++ ) {
 	  $tmp = $func($children[$i]);
@@ -174,6 +175,75 @@ final class ContentListBuilder
     $content->SetActive($state);
     $content->Save();
     return TRUE;
+  }
+
+  /**
+   * Set the page limit.
+   * This must be called BEFORE get_content_list() is called.
+   *
+   * @param integer The page limit (min 1, max 500)
+   * @return void
+   */
+  public function set_pagelimit($n)
+  {
+    if( !is_int($n) ) return;
+    $n = max(1,min(500,$n));
+    $this->_pagelimit = $n;
+  }
+
+
+  /**
+   * Get the page limit.
+   *
+   * @return integer
+   */
+  public function get_pagelimit()
+  {
+    return $this->_pagelimit;
+  }
+
+  /**
+   * Set the page offset
+   * This must be called before get_content_list() is called.
+   *
+   * @param int page offset (min 0, max is set by get_content_list())
+   */
+  public function set_offset($n)
+  {
+    $n = (int)$n;
+    $n = max(0,$n);
+    $this->_offset = $n;
+  }
+
+  /**
+   * Get the current offset
+   *
+   * @return integer
+   */
+  public function get_offset()
+  {
+    return $this->_offset;
+  }
+
+  public function set_page($n)
+  {
+    $n = (int)$n;
+    $n = max(1,$n);
+    $this->_offset = $this->_pagelimit * ($n-1);
+  }
+
+  /**
+   * Get the number of pages.
+   * Can only be called AFTER get_content_list has been called.
+   *
+   * @return integer
+   */
+  public function get_numpages()
+  {
+    if( !is_array($this->_pagelist) ) return;
+    $npages = (int)(count($this->_pagelist) / $this->_pagelimit);
+    if( count($this->_pagelist) % $this->_pagelimit  != 0 ) $npages++;
+    return $npages;
   }
 
   /**
@@ -372,7 +442,9 @@ final class ContentListBuilder
       if( !in_array($pagelist[$i],$remove) ) $display[] = $pagelist[$i];
     }
 
-    $display = array_slice($display,$this->_offset,$this->_pagelimit);
+    $this->_pagelist = $display;
+    $offset = min(count($pagelist),$this->_offset);
+    $display = array_slice($display,$offset,$this->_pagelimit);
 
     ContentOperations::get_instance()->LoadChildren(-1,FALSE,TRUE,$display);
     return $display;

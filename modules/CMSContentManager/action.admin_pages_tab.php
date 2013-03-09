@@ -71,7 +71,9 @@ $smarty->assign('can_reorder_content',$this->CheckPermission('Manage All Content
 // load all the content that this user can display... 
 // organize it into a tree
 $builder = new ContentListBuilder($this);
-$columns  = $builder->get_display_columns();
+$curpage = 1;
+$pagelimit = 6;
+if( isset($params['curpage']) ) $curpage = (int)$params['curpage'];
 
 //
 // handle all of the possible ajaxy/sub actions.
@@ -82,15 +84,19 @@ if( isset($params['ajax']) ) {
 }
 if( isset($params['expandall']) || isset($_GET['expandall']) ) {
   $builder->expand_all();
+  $curpage = 1;
 }
 if( isset($params['collapseall']) || isset($_GET['collapseall']) ) {
   $builder->collapse_all();
+  $curpage = 1;
 }
 if( isset($params['expand']) ) {
   $builder->expand_section($params['expand']);
+  $curpage = 1;
 }
 if( isset($params['collapse']) ) {
   $builder->collapse_section($params['collapse']);
+  $curpage = 1;
 }
 if( isset($params['setinactive']) ) {
   $builder->set_active($params['setinactive'],FALSE);
@@ -120,7 +126,19 @@ if( isset($params['delete']) ) {
 //
 // build the display
 //
+
+//$builder->set_pagelimit(6);
+$builder->set_page($curpage);
 $editinfo = $builder->get_content_list();
+$npages = $builder->get_numpages();
+$pagelist = array();
+for( $i = 0; $i < $npages; $i++ ) {
+  $pagelist[$i+1] = $i+1;
+}
+$smarty->assign('pagelist',$pagelist);
+$smarty->assign('curpage',$curpage);
+$smarty->assign('npages',$npages);
+$columns  = $builder->get_display_columns();
 $smarty->assign('columns',$columns);
 if( $this->GetPreference('list_namecolumn','menutext') == 'title' ) {
   $smarty->assign('colhdr_page',$this->Lang('colhdr_name'));
@@ -136,19 +154,19 @@ if( $ajax == 0 ) {
   $opts = array();
   if( $this->CheckPermission('Remove Pages') || 
       $this->CheckPermission('Manage All Content') ) {
-    bulkcontentoperations::register_function(lang('delete'),'delete');
+    bulkcontentoperations::register_function($this->Lang('bulk_delete'),'delete');
   }
   if( $this->CheckPermission('Manage All Content')) {
-    bulkcontentoperations::register_function(lang('active'),'active');
-    bulkcontentoperations::register_function(lang('inactive'),'inactive');
-    bulkcontentoperations::register_function(lang('cachable'),'setcachable');
-    bulkcontentoperations::register_function(lang('noncachable'),'setnoncachable');
-    bulkcontentoperations::register_function(lang('showinmenu'),'showinmenu');
-    bulkcontentoperations::register_function(lang('hidefrommenu'),'hidefrommenu');
-    bulkcontentoperations::register_function(lang('secure'),'secure');
-    bulkcontentoperations::register_function(lang('insecure'),'insecure');
-    bulkcontentoperations::register_function(lang('settemplate'),'settemplate');
-    bulkcontentoperations::register_function(lang('changeowner'),'changeowner');
+    bulkcontentoperations::register_function($this->Lang('bulk_active'),'active');
+    bulkcontentoperations::register_function($this->Lang('bulk_inactive'),'inactive');
+    bulkcontentoperations::register_function($this->Lang('bulk_cachable'),'setcachable');
+    bulkcontentoperations::register_function($this->Lang('bulk_noncachable'),'setnoncachable');
+    bulkcontentoperations::register_function($this->Lang('bulk_showinmenu'),'showinmenu');
+    bulkcontentoperations::register_function($this->Lang('bulk_hidefrommenu'),'hidefrommenu');
+    bulkcontentoperations::register_function($this->Lang('bulk_secure'),'secure');
+    bulkcontentoperations::register_function($this->Lang('bulk_insecure'),'insecure');
+    bulkcontentoperations::register_function($this->Lang('bulk_setdesign'),'setdesign');
+    bulkcontentoperations::register_function($this->Lang('bulk_changeowner'),'changeowner');
   }
   $opts = bulkcontentoperations::get_operation_list();
   $smarty->assign('bulk_options',$opts);
