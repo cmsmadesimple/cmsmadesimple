@@ -107,7 +107,7 @@ final class cms_userprefs
   public static function exists_for_user($userid,$key)
   {
     self::_read($userid);
-    if( isset(self::$_prefs[$userid][$key]) ) return TRUE;
+	if( in_array($key,array_keys(self::$_prefs[$userid])) ) return TRUE;
     return FALSE;
   }
 
