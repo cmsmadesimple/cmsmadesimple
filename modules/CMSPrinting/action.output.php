@@ -66,7 +66,7 @@ $smarty->assign("encoding", $encoding);
 $smarty->assign("rooturl", $config["root_url"]."/");
 header("Cache-Control: no-cache, must-revalidate"); // HTTP/1.1
 header("Expires: Sat, 26 Jul 1997 05:00:00 GMT"); // Date in the past
-header("Content-Type: " . cmsms()->get_variable('content-type') . "; charset=" .get_encoding());
+header("Content-Type: " . cmsms()->get_content_type() . "; charset=" .get_encoding());
 if ($script) {
   $smarty->assign("printscript", '<script type="text/javascript">window.print();</script>');
 } else {

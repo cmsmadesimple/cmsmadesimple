@@ -38,7 +38,7 @@ class CMSContentTemplateResource extends CMS_Fixed_Resource_Custom
   {
     $gCms = cmsms();
     $config = $gCms->GetConfig();
-    $contentobj = $gCms->variables['content_obj'];
+    $contentobj = $gCms->get_content_object();
 
     if (!is_object($contentobj)) {
       // We've a custom error message...  return it here

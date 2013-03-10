@@ -19,7 +19,7 @@
 function smarty_function_title($params, &$template)
 {
 	$smarty = $template->smarty;
-	$contentobj = cmsms()->variables['content_obj'];
+	$contentobj = cmsms()->get_content_object();
 	$config = cmsms()->GetConfig();
 	$result = '';
 	

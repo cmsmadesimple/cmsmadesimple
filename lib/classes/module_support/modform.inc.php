@@ -32,12 +32,7 @@
 function cms_module_CreateFormStart(&$modinstance, $id, $action='default', $returnid='', $method='post', $enctype='', $inline=false, $idsuffix='', $params = array(), $extra='')
 {
 	$gCms = cmsms();
-
-	$formcount = 1;
-	$variables = &$gCms->variables;
-
-	if (isset($variables['formcount']))
-		$formcount = $variables['formcount'];
+	static $_formcount = 1;
 
 	$id = cms_htmlentities($id);
 	$action = cms_htmlentities($action);
@@ -46,8 +41,7 @@ function cms_module_CreateFormStart(&$modinstance, $id, $action='default', $retu
 	$enctype = cms_htmlentities($enctype);
 	$idsuffix = cms_htmlentities($idsuffix);
 
-	if ($idsuffix == '')
-		$idsuffix = $formcount;
+	if ($idsuffix == '') $idsuffix = $_formcount++;
 
 	$goto = 'moduleinterface.php';
 	if( $returnid != '' ) {
@@ -87,9 +81,6 @@ function cms_module_CreateFormStart(&$modinstance, $id, $action='default', $retu
 			$text .= '<input type="hidden" name="'.$id.$key.'" value="'.$value.'" />'."\n";
 	}
 	$text .= "</div>\n";
-
-	$formcount = $formcount + 1;
-	$variables['formcount'] = $formcount;
 
 	return $text;
 }

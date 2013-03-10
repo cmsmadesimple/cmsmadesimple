@@ -49,7 +49,7 @@ $pages = null;
 //
 // get data
 //
-if( isset($params['multicontent']) ) $multicontent = unserialize($params['multicontent']);
+if( isset($params['multicontent']) ) $multicontent = unserialize(base64_decode($params['multicontent']));
 if( isset($params['multiaction']) ) $multiaction = $params['multiaction'];
 
 //

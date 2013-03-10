@@ -15,7 +15,9 @@ if( !$smarty->isCached($this->GetTemplateResource($template),$cache_id,$compile_
   // initialization
   //
   $hm = $gCms->GetHierarchyManager();
-  $thispageid = $gCms->variables['content_id'];
+  $content_obj = $gCms->get_content_object();
+  if( !$content_obj ) return; //  no current page?
+  $thispageid = $content_obj->Id();
   if( !$thispageid ) return; // no current page?
   $endNode = $hm->GetNodeById($thispageid);
   if( !$endNode ) return; // no current page?
@@ -23,27 +25,16 @@ if( !$smarty->isCached($this->GetTemplateResource($template),$cache_id,$compile_
   $stopat = '***DEFAULT_PAGE***';
   $showall = 0;
   $tpl_name = 'breadcrumbs.tpl';
-  $usefile = true;
+  $usefile = false;
 
   //
   // get parameters
   //
-  if( isset($params['loadprops']) && $params['loadprops'] = 0 )
-    $deep = 0;
-  if( isset($params['show_all']) && $params['show_all'] )
-    $showall = 1;
-  if (isset($params['template']) && $params['template'] != '') {
-    $tpl_name = $params['template'];
-  }
-  if( endswith($tpl_name, '.tpl') ) {
-    $usefile = true;
-  }
-  else {
-    $usefile = false;
-  }
-  if( isset($params['root']) ) {
-    $stopat = trim($params['root']);
-  }
+  if( isset($params['loadprops']) && $params['loadprops'] = 0 ) $deep = 0;
+  if( isset($params['show_all']) && $params['show_all'] ) $showall = 1;
+  if( isset($params['template']) && $params['template'] != '') $tpl_name = $params['template'];
+  if( endswith($tpl_name, '.tpl') ) $usefile = true;
+  if( isset($params['root']) ) $stopat = trim($params['root']);
 
   $pagestack = array();
   $curNode = $endNode;
@@ -53,7 +44,7 @@ if( !$smarty->isCached($this->GetTemplateResource($template),$cache_id,$compile_
   while( is_object($curNode) && $curNode->get_tag('id') > 0 ) {
     $content = $curNode->getContent($deep,true,true);
     if( !$content ) {
-      $curNode = $curNode->getParentNode();
+      $curNode = $curNode->get_parent();
       break;
     }
     

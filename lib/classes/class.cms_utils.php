@@ -181,7 +181,7 @@ final class cms_utils
    */
   final public static function get_current_content()
   {
-    return cmsms()->get_variable('content_obj');
+	  return cmsms()->get_content_object();
   }
 
 
@@ -196,7 +196,8 @@ final class cms_utils
    */
   final public static function get_current_alias()
   {
-    return cmsms()->get_variable('page_name');
+	  $obj = cmsms()->get_content_object();
+	  if( $obj ) return $obj->Alias();
   }
 
 
@@ -211,7 +212,7 @@ final class cms_utils
    */
   final public static function get_current_pageid()
   {
-    return cmsms()->get_variable('content_id');
+	  return cmsms()->get_content_id();
   }
 
 

@@ -46,7 +46,7 @@ if( isset($params['showinmenu']) ) $showinmenu = (int)$params['showinmenu'];
 
 $multicontent = array();
 if( $this->CheckPermission('Manage All Content') || $this->CheckPermission('Modify Any Page') ) {
-  $multicontent = unserialize($params['multicontent']);
+  $multicontent = unserialize(base64_decode($params['multicontent']));
 }
 else {
   foreach( unserialize($params['multicontent']) as $pid ) {
@@ -63,7 +63,7 @@ if( count($multicontent) == 0 ) {
 try {
   ContentOperations::get_instance()->LoadChildren(-1,FALSE,TRUE,$multicontent);
   $hm = cmsms()->GetHierarchyManager();
-  $i = 0;
+
   foreach( $multicontent as $pid ) {
     $node = $hm->find_by_tag('id',$pid);
     if( !$node ) continue;
@@ -72,7 +72,6 @@ try {
     $content->SetShowInMenu($showinmenu);
     $content->SetLastModifiedBy(get_userid());
     $content->Save();
-    $i++;
   }
   audit('','Core','Changed show-in-menu status on '.count($multicontent).' pages');
   $this->SetMessage($this->Lang('msg_bulk_successful'));

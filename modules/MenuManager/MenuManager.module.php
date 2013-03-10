@@ -242,16 +242,14 @@ final class MenuManager extends CMSModule
 	$onenode->target = $content->GetPropertyValue('target');
     }
 
-    if (isset($gCms->variables['content_id']) && $onenode->id == $gCms->variables['content_id']) {
+    if( $onenode->id == $gCms->get_content_id() ) {
       $onenode->current = true;
     }
     else {
       $onenode->current = false;
-      //So, it's not current.  Lets check to see if it's a direct parent
-      if (isset($gCms->variables["friendly_position"])) {
-	if( startswith($gCms->variables['friendly_position'].'.',$content->Hierarchy().'.') ) {
-	  $onenode->parent = true;
-	}
+      //So, it's not current.  Lets check to see if it's a direct parent of the current page.
+      if( ContentOperations::get_instance()->CheckParentage($onenode->id) ) {
+	$onenode->parent = true;
       }
     }
 

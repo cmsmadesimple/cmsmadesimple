@@ -54,7 +54,7 @@ function smarty_cms_function_cms_stylesheet($params, &$template)
 	if (isset($params['designid']) && $params['designid']!='') {
 		$design_id = (int)$params['designid'];
 	} else {
-		$content_obj = cmsms()->variables['content_obj'];
+	  $content_obj = cmsms()->get_content_object();
 		if( !is_object($content_obj) ) return;
 		$design_id = $content_obj->GetPropertyValue('design_id');
 		$use_https = (int)$content_obj->Secure();
@@ -309,7 +309,7 @@ function cms_stylesheet_writeCache($filename, $string, $trimbackground, &$smarty
 	}	
 	catch (SmartyException $e)
 	{
-		audit('Plugin: cms_stylesheet', 'Smarty Compile process failed, unable to write cache file');
+	  audit('','Plugin: cms_stylesheet', 'Smarty Compile process failed, unable to write cache file');
 	}	
 	
 	$smarty->left_delimiter = '{';

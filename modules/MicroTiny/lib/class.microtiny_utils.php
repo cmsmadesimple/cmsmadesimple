@@ -163,7 +163,7 @@ class microtiny_utils {
       // for the frontend
       $contentobj = null;
       if( cmsms()->is_frontend_request() ) {
-	$contentobj = cmsms()->get_variable('content_obj');
+	$contentobj = cmsms()->get_content_object();
       }
       else {
 	$contentobj = cms_utils::get_app_data('editing_content');

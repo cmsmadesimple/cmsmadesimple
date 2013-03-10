@@ -31,70 +31,53 @@
  * @version $Revision$
  * @license GPL
  **/
-class bulkcontentoperations {
-  
-  /**
-   * Register a function to show in the bulk content operations list
-   * in listcontent.php.
-   *
-   * @param string $label Label to show to users
-   * @param string $name Name of the action to call
-   * @param string $module Name of module, defaults to "core"
-   * @return void
-   */
-  static public function register_function($label,$name,$module='core')
-    {
+final class bulkcontentoperations 
+{
+	private function __construct() {}
+	private static $_list = array();
+	
+	/**
+	 * Register a function to show in the bulk content operations list
+	 * in listcontent.php.
+	 *
+	 * @param string $label Label to show to users
+	 * @param string $name Name of the action to call
+	 * @param string $module Name of module, defaults to "core"
+	 * @return void
+	 */
+	static public function register_function($label,$name,$module='core')
+	{
       if( empty($name) || empty($label) ) return FALSE;
 
-      $gCms = cmsms();
-      if( !isset($gCms->variables['bulkcontent']) )
-		  {
-			  $gCms->variables['bulkcontent'] = array();
-		  }
-      $bulk = $gCms->variables['bulkcontent'];
-
       $name = $module.'::'.$name;
-      $bulk[$name] = $label;
-	  $gCms->variables['bulkcontent'] = $bulk;
-      return TRUE;
-      
+	  self::$_list[$name] = $label;
     }
 
-  /**
-   * Gets a list of the registered bulk operations.
-   *
-   * @param boolean $separate_modules Split out the actions from various modules
-   *                                  with a horizontal line.
-   * @return array The list of operations
-   */
-  static public function get_operation_list($separate_modules = true)
+	/**
+	 * Gets a list of the registered bulk operations.
+	 *
+	 * @param boolean $separate_modules Split out the actions from various modules
+	 *                                  with a horizontal line.
+	 * @return array The list of operations
+	 */
+	static public function get_operation_list($separate_modules = true)
     {
-      $gCms = cmsms();
-      if( !isset($gCms->variables['bulkcontent']) )
-	{
-	  return FALSE;
-	}
-
-      $tmpc = array();
-      $tmpm = array();
-      foreach( $gCms->variables['bulkcontent'] as $name => $label )
-	{
-	  if( startswith($name,'core::') )
-	    {
-	      $tmpc[$name] = $label;
-	    }
-	  else
-	    {
-	      $tmpm[$name] = $label;
-	    }
-	}
+		$tmpc = array();
+		$tmpm = array();
+		foreach( self::$_list as $name => $label ) {
+			if( startswith($name,'core::') ) {
+				$tmpc[$name] = $label;
+			}
+			else {
+				$tmpm[$name] = $label;
+			}
+		}
       
-      if( $separate_modules && count($tmpm) )
-	{
-	  $tmpc[-1] = '----------';
-	}
-      $tmpc = array_merge($tmpc,$tmpm);
-      return $tmpc;
+		if( $separate_modules && count($tmpm) ) {
+			$tmpc[-1] = '----------';
+		}
+		$tmpc = array_merge($tmpc,$tmpm);
+		return $tmpc;
     }
 } // end of class
 

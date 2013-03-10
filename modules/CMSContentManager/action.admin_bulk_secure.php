@@ -46,7 +46,7 @@ if( isset($params['secure']) ) $secure = (int)$params['secure'];
 
 $multicontent = array();
 if( $this->CheckPermission('Manage All Content') || $this->CheckPermission('Modify Any Page') ) {
-  $multicontent = unserialize($params['multicontent']);
+  $multicontent = unserialize(base64_decode($params['multicontent']));
 }
 else {
   foreach( unserialize($params['multicontent']) as $pid ) {

@@ -88,15 +88,12 @@ if( !$smarty->isCached($this->GetTemplateResource($template),$cache_id,$compile_
     }
   }
   else if (isset($params['start_level']) && intval($params['start_level']) > 1) {
-    $curnode = $hm->sureGetNodeById($gCms->variables['content_id']);
-    if (isset($curnode)) {
-      $curcontent = $curnode->GetContent();
-      if( $curcontent )  {
-	$properparentpos = $this->nthPos($curcontent->Hierarchy() . '.', '.', intval($params['start_level']) - 1);
-	if ($properparentpos > -1) {
-	  $prevdepth = intval($params['start_level']);
-	  $rootnode = $hm->getNodeByHierarchy(substr($curcontent->Hierarchy(), 0, $properparentpos));
-	}
+    $curcontent = $gCms->get_content_object();
+    if( $curcontent )  {
+      $properparentpos = $this->nthPos($curcontent->Hierarchy() . '.', '.', intval($params['start_level']) - 1);
+      if ($properparentpos > -1) {
+	$prevdepth = intval($params['start_level']);
+	$rootnode = $hm->getNodeByHierarchy(substr($curcontent->Hierarchy(), 0, $properparentpos));
       }
     }
   }
@@ -139,11 +136,10 @@ if( !$smarty->isCached($this->GetTemplateResource($template),$cache_id,$compile_
 
   if (isset($params['collapse']) && $params['collapse'] == '1') {
     $newpos = '';
-    if (isset($gCms->variables['friendly_position'])) {
-      foreach (explode('.', $gCms->variables['friendly_position']) as $level) {
-	$newpos .= $level . '.';
-	$showparents[] = $newpos;
-      }
+    $node = $hm->find_by_tag('id',$gCms->get_content_id());
+    while( $node ) {
+      $showparents[] = $node->get_tag('id');
+      $node = $node->get_parent();
     }
   }
 

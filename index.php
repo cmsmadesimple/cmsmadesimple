@@ -135,21 +135,11 @@ while( $trycount < 2 ) {
       header('Last-Modified: ' . gmdate('D, d M Y H:i:s',$the_date) . ' GMT');
     }
 
-    cmsms()->set_variable('content_obj',$contentobj);
-    cmsms()->set_variable('content_id',$contentobj->Id());
-    cmsms()->set_variable('page_id',$page);
-    cmsms()->set_variable('page_name',$contentobj->Alias());
-    cmsms()->set_variable('position',$contentobj->Hierarchy());
-    cmsms()->set_variable('friendly_position',$contentops->CreateFriendlyHierarchyPosition($contentobj->Hierarchy()));
-
+    cmsms()->set_content_object($contentobj);
     $smarty->assign('content_obj',$contentobj);
     $smarty->assign('content_id', $contentobj->Id());
-    $smarty->assign('page', $page);
     $smarty->assign('page_id', $page);
-    $smarty->assign('page_name', $contentobj->Alias());
     $smarty->assign('page_alias', $contentobj->Alias());
-    $smarty->assign('position', $contentobj->Hierarchy());
-    $smarty->assign('friendly_position', cmsms()->variables['friendly_position']);
 
     if( $contentobj->Secure() && (! isset($_SERVER['HTTPS']) || empty($_SERVER['HTTPS']) || $_SERVER['HTTPS'] == 'off') ) {
       redirect($contentobj->GetURL()); // if this page is marked to be secure, make sure we redirect to the secure page
@@ -253,8 +243,7 @@ while( $trycount < 2 ) {
 Events::SendEvent('Core', 'ContentPostRender', array('content' => &$html));
 
 if( !headers_sent() ) {
-  $ct = cmsms()->get_variable('content-type');
-  if( !$ct ) $ct = 'text/html';
+  $ct = cmsms()->get_content_type();
   header("Content-Type: $ct; charset=" . get_encoding());
 }
 echo $html;

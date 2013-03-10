@@ -80,12 +80,6 @@ debug_buffer('done loading required files');
 # sanitize $_GET
 array_walk_recursive($_GET, 'sanitize_get_var'); 
 
-if (isset($starttime))
-{
-	cmsms()->set_variable('starttime',$starttime);
-}
-
-
 if( isset($CMS_ADMIN_PAGE) ) 
 {
 	function cms_admin_sendheaders($content_type = 'text/html',$charset = '')
@@ -141,18 +135,18 @@ if( isset($config['php_memory_limit']) && !empty($config['php_memory_limit'])  )
 	ini_set('memory_limit',trim($config['php_memory_limit']));
 }
 
-#Add users if they exist in the session
-cmsms()->set_variable('user_id','');
-cmsms()->set_variable('username','');
-if (isset($_SESSION['cms_admin_user_id'])) 
-{
-	cmsms()->set_variable('user_id',$_SESSION['cms_admin_user_id']);
-}
+// #Add users if they exist in the session
+// cmsms()->set_variable('user_id','');
+// cmsms()->set_variable('username','');
+// if (isset($_SESSION['cms_admin_user_id'])) 
+// {
+// 	cmsms()->set_variable('user_id',$_SESSION['cms_admin_user_id']);
+// }
 
-if (isset($_SESSION['cms_admin_username'])) 
-{
-	cmsms()->set_variable('username',$_SESSION['cms_admin_username']);
-}
+// if (isset($_SESSION['cms_admin_username'])) 
+// {
+// 	cmsms()->set_variable('username',$_SESSION['cms_admin_username']);
+// }
 
 if ($config["debug"] == true) 
 {

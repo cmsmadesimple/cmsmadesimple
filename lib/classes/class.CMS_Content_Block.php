@@ -190,7 +190,7 @@ final class CMS_Content_Block
     $smarty = $template->smarty;
     $gCms = cmsms();
 
-    $contentobj = $gCms->variables['content_obj'];
+    $contentobj = cmsms()->get_content_object();
     if (is_object($contentobj)) {
       $id = '';
       $modulename = '';
@@ -291,7 +291,7 @@ final class CMS_Content_Block
 	return self::content_return($result, $params, $smarty);
       }
     }
-    return _smarty_cms_function_content_return('', $params, $smarty);
+    return self::content_return('', $params, $smarty);
   }
 
   public static function smarty_fetch_pagedata($params,&$template)
@@ -299,15 +299,7 @@ final class CMS_Content_Block
     $smarty = $template->smarty;
     $gCms = cmsms();
 
-    $contentobj = $gCms->variables['content_obj'];
-//     if( isset($_SESSION['__cms_preview__']) && $contentobj->Id() == '__CMS_PREVIEW_PAGE__' ) {
-//       // it's a preview.
-//       if( !isset($_SESSION['cms_preview_data']['content_obj']) ) {
-// 	$contentops = $gCms->GetContentOperations();
-// 	$_SESSION['cms_preview_data']['content_obj'] = $contentops->LoadContentFromSerializedData($_SESSION['cms_preview_data']);
-//       }
-//       $contentobj =& $_SESSION['cms_preview_data']['content_obj'];
-//     }
+    $contentobj = cmsms()->get_content_object();
     if( !is_object($contentobj) || $contentobj->Id() <= 0 ) {
       return self::content_return('', $params, $smarty);
     }
@@ -326,15 +318,7 @@ final class CMS_Content_Block
     $gCms = cmsms();
     $config = $gCms->GetConfig();
 
-    $contentobj = $gCms->variables['content_obj'];
-//     if( isset($_SESSION['__cms_preview__']) && $contentobj->Id() == '__CMS_PREVIEW_PAGE__' ) {
-//       // it's a preview.
-//       if( !isset($_SESSION['cms_preview_data']['content_obj']) ) {
-// 	$contentops = $gCms->GetContentOperations();
-// 	$_SESSION['cms_preview_data']['content_obj'] = $contentops->LoadContentFromSerializedData($_SESSION['cms_preview_data']);
-//       }
-//       $contentobj =& $_SESSION['cms_preview_data']['content_obj'];
-//     }
+    $contentobj = $gCms->get_content_object();
     if( !is_object($contentobj) || $contentobj->Id() <= 0 ) {
       return self::content_return('', $params, $smarty);
     }
@@ -429,7 +413,7 @@ final class CMS_Content_Block
     $block = $params['block'];
 
     $gCms = cmsms();
-    $content_obj = &$gCms->variables['content_obj'];
+    $content_obj = $gCms->get_content_object();
     if( is_object($content_obj) ) {
       $result = $content_obj->GetPropertyValue($block);
       if( $result == -1 ) $result = '';

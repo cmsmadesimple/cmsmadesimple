@@ -58,7 +58,7 @@ if( isset($params['submit']) ) {
     $this->SetError($this->Lang('error_notconfirmed'));
     $this->RedirectToAdminTab();
   }
-  if( !isset($params['design']) || !isset($params['template']) ) {
+  if( !isset($params['owner']) ) {
     $this->SetError($this->Lang('error_missingparam'));
     $this->RedirectToAdminTab();
   }
@@ -74,21 +74,20 @@ if( isset($params['submit']) ) {
       $content = $node->getContent(FALSE,FALSE,TRUE);
       if( !is_object($content) ) continue;
 
-      $content->SetTemplateId((int)$params['template']);
-      $content->SetPropertyValue('design_id',$params['design']);
+      $content->SetOwner((int)$params['owner']);
       $content->SetLastModifiedBy(get_userid());
       $content->Save();
       $i++;
     }
     if( $i != count($pagelist) ) {
-      throw new CmsException('Bulk operation to set design did not adjust all selected pages');
+      throw new CmsException('Bulk operation to change ownership did not adjust all selected pages');
     }
-    audit('','Core','Changed template and design on '.count($pagelist).' pages');
+    audit('','Core','Changed owner on '.count($pagelist).' pages');
     $this->SetMessage($this->Lang('msg_bulk_successful'));
     $this->RedirectToAdminTab();
   }
   catch( Exception $e ) {
-    audit('','Core','Bulk setting design and template failed: '.$e->GetMessage());
+    audit('','Core','Bulk setting changing ownership failed: '.$e->GetMessage());
     $this->SetError($e->GetMessage());
     $this->RedirectToAdminTab();
   }
@@ -112,16 +111,15 @@ foreach( $pagelist as $pid ) {
 
 $smarty->assign('multicontent',$params['multicontent']);
 $smarty->assign('displaydata',$displaydata);
-$smarty->assign('alldesigns',CmsLayoutCollection::get_list());
-$dflt_design = CmsLayoutCollection::load_default();
-$smarty->assign('dflt_design_id',$dflt_design->get_id());
+$userlist = UserOperations::get_instance()->LoadUsers();
+$tmp = array();
+foreach( $userlist as $user ) {
+  $tmp[$user->id] = $user->username;
+}
+$smarty->assign('userlist',$tmp);
+$smarty->assign('userid',get_userid());
 
-$dflt_tpl = CmsLayoutTemplate::load_dflt_by_type('__CORE__::page');
-$smarty->assign('dflt_tpl_id',$dflt_tpl->get_id());
-$_tpl = CmsLayoutTemplate::template_query(array('as_list'=>1));
-$smarty->assign('alltemplates',$_tpl);
-
-echo $this->ProcessTemplate('admin_bulk_setdesign.tpl');
+echo $this->ProcessTemplate('admin_bulk_changeowner.tpl');
 
 #
 # EOF

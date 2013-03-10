@@ -335,13 +335,9 @@ function debug_bt()
 */
 function debug_display($var, $title="", $echo_to_screen = true, $use_html = true)
 {
-  $variables =& cmsms()->variables;
-
   $starttime = microtime();
-  if (isset($variables['starttime']))
-    $starttime = $variables['starttime'];
-  else
-    $variables['starttime'] = $starttime;
+  $tmp = cms_utils::get_app_data('__starttime');
+  if( !$tmp ) cms_utils::set_app_data('__starttime',$starttime);
 
   $titleText = "Debug: ";
   if($title) {

@@ -43,6 +43,7 @@ class ContentOperations
 	private $_content_types;
 	private $_default_content_id;
 	private static $_instance;
+	private $_authorpages;
 
 	public static function &get_instance()
 	{
@@ -59,14 +60,9 @@ class ContentOperations
 	 * @since 1.9
 	 * @return getContentObject()
 	 */
-	public function &getContentObject()
+	public function getContentObject()
 	{
-		$gCms = cmsms();
-		$res = null;
-		if( isset($gCms->variables['content_obj']) && is_object($gCms->variables['content_obj']) ) {
-			$res = $gCms->variables['content_obj'];
-		}
-		return $res;
+		return cmsms()->get_content_object();
 	}
 
 
@@ -938,6 +934,30 @@ class ContentOperations
 		return $tmp;
 	}
 
+	/**
+	 * Check if the supplied page id is a parent of the specified base page (or the current page)
+	 *
+	 * @since 2.0
+	 * @author Robert Campbell <calguy1000@hotmail.com>
+	 * @param integer Page ID to test
+	 * @param integer (optional) Page ID to act as the base page.  The current page is used if not specified.
+	 * @return boolean
+	 */
+	public function CheckParentage($test_id,$base_id = null)
+	{
+		$gCms = cmsms();
+		if( !$base_id ) $base_id = $gCms->get_content_id();
+		$base_id = (int)$base_id;
+		if( $base_id < 1 ) return FALSE;
+
+		$hm = $gCms->GetHierarchyManager();
+		$node = $hm->find_by_tag('id',$base_id);
+		while( $node ) {
+			if( $node->get_tag('id') == $test_id ) return TRUE;
+			$node = $node->get_parent();
+		}
+		return FALSE;
+	}
 
 	/**
 	 * Grab URLs from the content table and register them with the route manager.
@@ -961,6 +981,46 @@ class ContentOperations
 				cms_route_manager::register($route);
 			}
 		}
+	}
+
+	public function GetPageAccessForUser($userid)
+	{
+		if( !is_array($this->_authorpages) ) {
+			$this->_authorpages = array();
+
+			$db = cmsms()->GetDb();
+			$query = 'SELECT content_id,hierarchy FROM '.cms_db_prefix().'content WHERE owner_id = ? ORDER BY hierarchy';
+			$tmp = $db->GetArray($query,array($userid));
+			$data = array();
+			for( $i = 0; $i < count($tmp); $i++ ) {
+				$data[$tmp[$i]['content_id']] = $tmp[$i]['hierarchy'];
+			}
+
+			// Get all of the pages this user has access to.
+			$query = "SELECT A.content_id,B.hierarchy FROM ".cms_db_prefix()."additional_users A 
+                      LEFT JOIN ".cms_db_prefix().'content B ON A.content_id = B.content_id
+                      WHERE A.user_id = ?
+                      ORDER BY B.hierarchy';
+			$tmp = $db->GetArray($query, array($userid));
+			for( $i = 0; $i < count($tmp); $i++ ) {
+				$content_id = $tmp[$i]['content_id'];
+				if( isset($data['content_id']) ) continue;
+				$data[$content_id] = $tmp[$i]['hierarchy'];
+			}
+
+			if( count($data) ) {
+				asort($data);
+			}
+
+			$this->_authorpages = array_keys($data);
+		}
+		return $this->_authorpages;
+	}
+
+	public function CheckPageAuthorship($userid,$contentid)
+	{
+		$author_pages = $this->GetPageAccessForUser($userid);
+		return in_array($contentid,$author_pages);
 	}
 }
 

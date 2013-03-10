@@ -3067,12 +3067,11 @@ abstract class CMSModule
    *
    * @abstract
    * @param string Value to set the content-type header too
-   * @return string valid content type string.
+   * @return void
    */
   function SetContentType($contenttype)
   {
-    $variables = cmsms()->variables;
-    $variables['content-type'] = $contenttype;
+    cmsms()->set_content_type($contenttype);
   }
 
   /**

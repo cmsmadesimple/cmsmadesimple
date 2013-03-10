@@ -24,8 +24,6 @@
  * @package CMS
  */
 
-require_once(dirname(__FILE__).'/class.cms_variables.php');
-
 /**
  * Simple global object to hold references to other objects
  *
@@ -48,6 +46,20 @@ final class CmsApp {
 	private static $_instance;
 
 	/**
+	 * The current content object
+	 *
+	 * @since 2.0
+	 */
+	private $_current_content_page;
+
+	/**
+	 * The request content type
+	 *
+	 * @since 2.0
+	 */
+	private $_content_type;
+
+	/**
 	 * List of currrent states.
 	 * @ignore
 	 */
@@ -67,15 +79,6 @@ final class CmsApp {
 	 */
 	var $errors = array();
 
-	/**
-	 * content types array - List of available content types
-	 *
-	 * @internal
-	 * @ignore
-	 */
-	private $contenttypes = array();
-
-
 	public function __get($key)
 	{
 		switch($key) {
@@ -83,11 +86,11 @@ final class CmsApp {
 			return cms_config::get_instance();
 			break;
 		case 'variables':
+			stack_trace(); die();
 			return cms_variables::get_instance();
 			break;
 		}
 	}
-
 
 	/**
 	 * Constructor
@@ -96,7 +99,6 @@ final class CmsApp {
 	{
 		register_shutdown_function(array(&$this, 'dbshutdown'));
 	}
-
 
 	/**
 	 * Retrieve the single app instancce.
@@ -157,34 +159,65 @@ final class CmsApp {
 
 
 	/**
-	 * Retrieve the value of an internal variable.
+	 * Retrieve the request content type
 	 *
-	 * @internal
-	 * @access private
-	 * @since 1.9
-	 * @param string The variable name to get
-	 * @return mixed The value of the internal variable, or null.
+	 * If no content type is explicity set, text/html is assumed.
+	 *
+	 * @since 2.0
 	 */
-	public function get_variable($key)
+	public function get_content_type()
 	{
-		if( $key != '' && isset($this->variables[$key]) ) {
-			return $this->variables[$key];
+		if( $this->_content_type ) return $this->_content_type;
+		return 'text/html';
+	}
+
+	/**
+	 * Set the request content type to a valid mime type.
+	 *
+	 * @since 2.0
+	 */
+	public function set_content_type($txt = '')
+	{
+		if( $txt ) {
+			$this->_content_type = $txt;
+		}
+		else {
+			$this->_content_type = null;
 		}
 	}
 
-	
 	/**
-	 * Set the value of an internal variable
+	 * Set the current content page
 	 *
+	 * @since 2.0
 	 * @internal
 	 * @access private
-	 * @since 1.9
-	 * @param string The variable name to set
-	 * @param mixed  The value
+	 * @ignore
 	 */
-	public function set_variable($key,$value)
+	public function set_content_object(ContentBase &$content)
 	{
-		$this->variables[$key] = $value;
+		$this->_current_content_page = $content;
+	}
+
+	/**
+	 * Get the current content page
+	 *
+	 * @since 2.0
+	 */
+	public function get_content_object()
+	{
+		return $this->_current_content_page;
+	}
+
+	/**
+	 * Get the ID of the current content page
+	 *
+	 * @since 2.0
+	 */
+	public function get_content_id()
+	{
+		$obj = $this->get_content_object();
+		if( is_object($obj) ) return $obj->Id();
 	}
 
 

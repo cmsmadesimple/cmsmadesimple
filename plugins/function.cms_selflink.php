@@ -168,7 +168,7 @@ function smarty_function_cms_selflink($params, &$template)
 			  break;
 			}
 		    }
-		  else if ($flatcontent[$i]->getTag() == $gCms->variables['content_id'])
+		  else if ($flatcontent[$i]->getTag() == $gCms->get_content_id());
 		    {
 		      $number = $i;
 		      break;
@@ -254,7 +254,7 @@ function smarty_function_cms_selflink($params, &$template)
 	  else if ($condition == '|') 
 	    {
 	      // Uplink
-	      $node = $hm->getNodeById($gCms->variables['content_id']);
+	      $node = $hm->getNodeById($gCms->get_content_id());
 	      if( !isset($node) ) {
                 return;
               }

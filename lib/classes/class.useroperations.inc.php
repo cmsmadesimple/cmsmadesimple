@@ -341,7 +341,7 @@ class UserOperations
 	{
 		$result = '';
 
-		$allusers = UserOperations::LoadUsers();
+		$allusers = $this->LoadUsers();
 
 		if (count($allusers) > 0) {
 			$result .= '<select name="'.$name.'">';

@@ -117,7 +117,7 @@ final class cms_userprefs
   {
 	  $userid = (int)$userid;
 	  self::_read($userid);
-	  if( isset(self::$_prefs[$userid][$key]) ) return TRUE;
+	  if( in_array($key,array_keys(self::$_prefs[$userid])) ) return TRUE;
 	  return FALSE;
   }
 
