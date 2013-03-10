@@ -60,7 +60,7 @@ if( isset($params['multisubmit']) && isset($params['multiaction']) &&
   }
   // redirect to special action to handle bulk content stuff.
   $this->Redirect($id,'admin_multicontent',$returnid,
-		  array('multicontent'=>serialize($params['multicontent']),
+		  array('multicontent'=>base64_encode(serialize($params['multicontent'])),
 			'multiaction'=>$params['multiaction']));
 }
 
@@ -72,7 +72,6 @@ $smarty->assign('can_reorder_content',$this->CheckPermission('Manage All Content
 // organize it into a tree
 $builder = new ContentListBuilder($this);
 $curpage = 1;
-$pagelimit = 6;
 if( isset($params['curpage']) ) $curpage = (int)$params['curpage'];
 
 //
@@ -92,7 +91,6 @@ if( isset($params['collapseall']) || isset($_GET['collapseall']) ) {
 }
 if( isset($params['expand']) ) {
   $builder->expand_section($params['expand']);
-  $curpage = 1;
 }
 if( isset($params['collapse']) ) {
   $builder->collapse_section($params['collapse']);
@@ -127,14 +125,22 @@ if( isset($params['delete']) ) {
 // build the display
 //
 
-//$builder->set_pagelimit(6);
+if( isset($params['setoptions']) ) {
+  cms_userprefs::set($this->GetName().'_pagelimit',(int)$params['pagelimit']);
+}
+$pagelimit = cms_userprefs::get($this->GetName().'_pagelimit',500);
+
+$builder->set_pagelimit($pagelimit);
 $builder->set_page($curpage);
 $editinfo = $builder->get_content_list();
 $npages = $builder->get_numpages();
+$pagelimits = array(10=>10,25=>25,100=>100,250=>250,500=>500);
+$smarty->assign('pagelimits',$pagelimits);
 $pagelist = array();
 for( $i = 0; $i < $npages; $i++ ) {
   $pagelist[$i+1] = $i+1;
 }
+$smarty->assign('pagelimit',$pagelimit);
 $smarty->assign('pagelist',$pagelist);
 $smarty->assign('curpage',$curpage);
 $smarty->assign('npages',$npages);

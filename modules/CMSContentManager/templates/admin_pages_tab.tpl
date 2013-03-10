@@ -1,5 +1,36 @@
 {if $ajax == 0}
 {* pages tab *}
+<style type="text/css">
+#subnav {
+  margin: 0;
+  padding: 0;
+  height: 1em;
+  list-style-type: none;
+}
+#subnav li {
+  float: left;
+  display: block;
+  padding: 0;
+  padding-right: 0.5em;
+/*  position: relative;
+*/
+}
+#subnav li ul {
+  display: none;
+  margin: 0;
+  padding: 0;
+}
+#subnav li:hover ul {
+  display: block;
+  position: absolute;
+  background-color: #fff;
+  border: 1px solid black;
+}
+#subnav li:hover li {
+  float: none;
+}
+</style>
+
 <script type="text/javascript">
 //<![CDATA[
 function setup_js() {
@@ -118,6 +149,20 @@ function setup_js() {
     });
     return false;
   });
+  $('#myoptions').on('click',function(){
+    $('#useroptions').dialog({
+      resizable: false,
+      buttons: {
+        '{$mod->Lang('submit')}': function() {
+          $(this).dialog('close');
+          $('#myoptions_form').submit();
+        },
+        '{$mod->Lang('cancel')}': function() {
+          $(this).dialog('close');
+        },
+      }
+    });
+  });
 }
 
 $(document).ready(function(){
@@ -125,18 +170,6 @@ $(document).ready(function(){
     $('table#contenttable tbody.contentrows').sortable();
     $('table#contenttable tbody.contentrows').disableSelection();
     $('#reorderbox').dialog({
-      resizable: false,
-      modal: false,
-      buttons: {
-        '{$mod->Lang('submit')}': function() {
-          alert('submit');
-          $(this).dialog('close');
-        },
-        '{$mod->Lang('cancel')}': function() {
-          $(this).dialog('close');
-          location.reload();
-        },
-      }
     });
     return false;
   });
@@ -145,22 +178,24 @@ $(document).ready(function(){
 //]]>
 </script>
 
-<div id="reorderbox" style="display: none;" title="{$mod->Lang('prompt_ordercontent')}">
-  <p>Testing 123</p>
+<div id="useroptions" style="display: none;" title="{$mod->Lang('title_userpageoptions')}">
+  {form_start action='admin_pages_tab' id='myoptions_form'}
+  <div class="pageoverflow">
+    <input type="hidden" name="{$actionid}setoptions" value="1"/>
+    <p class="pagetext">{$mod->Lang('prompt_pagelimit')}:</p>
+    <p class="pageinput">
+      <select name="{$actionid}pagelimit">
+        {html_options options=$pagelimits selected=$pagelimit}
+      </select>
+    </p>
+  </div>
+  {form_end}
 </div>
 
+{*
 <div class="pageoverflow">
-  <div class="pageoptions" style="float: left; width: 59%;">
-  {if $can_add_content}
-    <a href="{cms_action_url action=admin_editcontent}" accesskey="n" title="{$mod->Lang('addcontent')}" class="pageoptions">{admin_icon icon='newobject.gif' alt=$mod->Lang('addcontent')}&nbsp;{$mod->Lang('addcontent')}</a>&nbsp;
-  {/if}
-  <a class="expandall" href="{cms_action_url action='admin_pages_tab' expandall=1}" accesskey="e" title="{$mod->Lang('prompt_expandall')}" class="pageoptions">{admin_icon icon='expandall.gif' alt=$mod->Lang('expandall')}&nbsp;{$mod->Lang('expandall')}</a>&nbsp;
-  <a class="collapseall" href="{cms_action_url action='admin_pages_tab' collapseall=1}" accesskey="c" title="{$mod->Lang('prompt_collapseall')}" class="pageoptions">{admin_icon icon='contractall.gif' alt=$mod->Lang('contractall')}&nbsp;{$mod->Lang('contractall')}</a>&nbsp;
-  {if $can_reorder_content}
-    <a id="ordercontent" href="{cms_action_url action=ordercontent}" accesskey="r" title="{$mod->Lang('prompt_ordercontent')}" class="pageoptions">{admin_icon icon='reorder.gif' alt=$mod->Lang('reorderpages')}&nbsp;{$mod->Lang('reorderpages')}</a>&nbsp;
-  {/if}
-  </div>
 </div>
+*}
 
 <div class="clearb"></div>
 
@@ -284,6 +319,23 @@ $(document).ready(function(){
 {/if}
 
 <div class="pageoverflow">
+  <div class="pageoptions" style="float: left; width: 59%;">
+  <ul id="subnav">
+  {if $can_add_content}
+    <li><a href="{cms_action_url action=admin_editcontent}" accesskey="n" title="{$mod->Lang('addcontent')}" class="pageoptions">{admin_icon icon='newobject.gif' alt=$mod->Lang('addcontent')}&nbsp;{$mod->Lang('addcontent')}</a></li>
+  {/if}
+     <li>{admin_icon icon='run.gif' alt=$mod->Lang('prompt_options')}&nbsp;{$mod->Lang('prompt_options')}
+       <ul id="popupmenucontents">
+         <li><a class="expandall" href="{cms_action_url action='admin_pages_tab' expandall=1}" accesskey="e" title="{$mod->Lang('prompt_expandall')}">{admin_icon icon='expandall.gif' alt=$mod->Lang('expandall')}&nbsp;{$mod->Lang('expandall')}</a></li>
+          <li><a class="collapseall" href="{cms_action_url action='admin_pages_tab' collapseall=1}" accesskey="c" title="{$mod->Lang('prompt_collapseall')}">{admin_icon icon='contractall.gif' alt=$mod->Lang('contractall')}&nbsp;{$mod->Lang('contractall')}</a></li>
+          {if $can_reorder_content}
+          <li><a id="ordercontent" href="{cms_action_url action=ordercontent}" accesskey="r" title="{$mod->Lang('prompt_ordercontent')}">{admin_icon icon='reorder.gif' alt=$mod->Lang('reorderpages')}&nbsp;{$mod->Lang('reorderpages')}</a></li>
+          {/if}
+          <li><a id="myoptions" accesskey="o" title="{$mod->Lang('prompt_settings')}">{admin_icon icon='edit.gif' alt=$mod->Lang('prompt_settings')}&nbsp;{$mod->lang('prompt_settings')}</a></li>
+       </ul>
+     </ul>
+  </div>
+
   <div class="pageoptions" style="float: right; width: 40%; text-align: right;">
   {if $npages > 1}
     {form_start action='admin_pages_tab'}

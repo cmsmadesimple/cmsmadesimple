@@ -186,7 +186,7 @@ final class ContentListBuilder
    */
   public function set_pagelimit($n)
   {
-    if( !is_int($n) ) return;
+    $n = (int)$n;
     $n = max(1,min(500,$n));
     $this->_pagelimit = $n;
   }

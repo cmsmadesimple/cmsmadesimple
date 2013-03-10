@@ -47,6 +47,7 @@ $lang['contractall'] = 'Collapse All';
 #D
 
 #E
+$lang['error_bulk_permission'] = 'You do not have permission to perform this bulk action';
 $lang['error_contenttype_disallowed'] = 'Default Content Type is also set to Disallowed';
 $lang['error_copy_permission'] = 'You do not have permission to copy this content page';
 $lang['error_delete_defaultcontent'] = 'You cannot delete the default content page';
@@ -117,6 +118,7 @@ $lang['preuninstall'] = 'Are you sure you want to uninstall this module?\nAlthou
 $lang['prompt_alias'] = 'Alias';
 $lang['prompt_bulk_delete_content'] = 'Bulk Delete Content Pages';
 $lang['prompt_bulk_delete_content2'] = 'These pages are due to be deleted';
+$lang['prompt_bulk_setdesign'] = 'Bulk Change Template and Design';
 $lang['prompt_cachable'] = 'Cachable';
 $lang['prompt_collapseall'] = 'Collapse all pages';
 $lang['prompt_confirm_operation'] = 'Confirm Operation';
@@ -124,12 +126,14 @@ $lang['prompt_confirm1'] = 'Yes, I am sure I want to do this';
 $lang['prompt_confirm2'] = 'Yes, I am really sure I want to do this';
 $lang['prompt_content_id'] = 'Content ID';
 $lang['prompt_created'] = 'Created';
+$lang['prompt_design'] = 'Design';
 $lang['prompt_editpage_addcontent']= 'Add Content Page';
 $lang['prompt_editpage_contenttype'] = 'Content Type';
 $lang['prompt_editpage_editcontent']= 'Edit Content Page';
 $lang['prompt_expandall'] = 'Expand all content pages';
 $lang['prompt_multiselect_toggle'] = 'Select this page for bulk content operations';
 $lang['prompt_name'] = 'Name';
+$lang['prompt_options'] = 'Options';
 $lang['prompt_ordercontent'] = 'Reorder Content';
 $lang['prompt_lastmodified'] = 'Last Modified';
 $lang['prompt_lastmodifiedby'] = 'Last Modified By';
@@ -150,6 +154,7 @@ $lang['prompt_pagedflt_searchable'] = 'Is the contents of this page searchable';
 $lang['prompt_pagedflt_secure'] = 'Is this page secure?';
 $lang['prompt_pagedflt_showinmenu'] = 'Can this page show in the menu?';
 $lang['prompt_pagedflt_template_id'] = 'Default Page Template';
+$lang['prompt_pagelimit'] = 'Page Limit';
 $lang['prompt_page_collapse'] = 'Hide children of this page';
 $lang['prompt_page_expand'] = 'Show children of this page';
 $lang['prompt_page_copy'] = 'Copy this page';
@@ -167,6 +172,8 @@ $lang['prompt_page_title'] = 'Title';
 $lang['prompt_page_view'] = 'View this page in another window';
 $lang['prompt_preview'] = 'Preview';
 $lang['prompt_secure'] = 'Secure';
+$lang['prompt_settings'] = 'Settings';
+$lang['prompt_template'] = 'Template';
 $lang['prompt_title'] = 'Title';
 $lang['prompt_withselected'] = 'With Selected';
 
@@ -184,6 +191,7 @@ $lang['title_editpage_apply'] = 'Save the changes to this content page, and cont
 $lang['title_editpage_cancel'] = 'Abandon all unsaved changes to this page, and return to the content list';
 $lang['title_editpage_submit'] = 'Save the changes to this content page, and return to the content list';
 $lang['title_editpage_view'] = 'View the current content page <em>(saved changes only)</em>.';
+$lang['title_userpageoptions'] = 'Page List Options';
 
 #U
 

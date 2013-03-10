@@ -123,11 +123,12 @@ switch( $bulkaction ) {
    $this->Redirect($id,'admin_bulk_showinmenu',$returnid,$parms);
    break;
 
- case 'settemplate':
+ case 'setdesign':
  case 'changeowner':
  case 'delete':
    $this->Redirect($id,'admin_bulk_'.$bulkaction,$returnid,$parms);
    break;
+
 }
 
 $this->SetError($this->Lang('error_nobulkaction'));
