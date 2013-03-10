@@ -10,18 +10,18 @@
 </div>
 
 <div class="pageoverflow">
-  <p class="pagetext">{$mod->Lang('prompt_design')}:</p>
+  <p class="pagetext"><label for="design_ctl">{$mod->Lang('prompt_design')}:</label></p>
   <p class="pageinput">
-    <select name="{$actionid}design">
+    <select id="design_ctl" name="{$actionid}design">
     {html_options options=$alldesigns selected=$dflt_design_id}
     </select>
   </p>
 </div>
 
 <div class="pageoverflow">
-  <p class="pagetext">{$mod->Lang('prompt_template')}:</p>
+  <p class="pagetext"><label for="template_ctl">{$mod->Lang('prompt_template')}:</label></p>
   <p class="pageinput">
-    <select name="{$actionid}template">
+    <select id="template_ctl" name="{$actionid}template">
     {html_options options=$alltemplates selected=$dflt_tpl_id}
     </select>
   </p>

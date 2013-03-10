@@ -77,17 +77,13 @@ final class CmsApp {
 	 * Internal error array - So functions/modules can store up debug info and spit it all out at once
 	 * @ignore
 	 */
-	var $errors = array();
+	private $errors = array();
 
 	public function __get($key)
 	{
 		switch($key) {
 		case 'config':
 			return cms_config::get_instance();
-			break;
-		case 'variables':
-			stack_trace(); die();
-			return cms_variables::get_instance();
 			break;
 		}
 	}
@@ -437,8 +433,7 @@ final class CmsApp {
 	{
 		if (isset($this->db)) {
 			$db = $this->db;
-			if ($db->IsConnected())
-				$db->Close();
+			if ($db->IsConnected())	$db->Close();
 		}
 	}
 

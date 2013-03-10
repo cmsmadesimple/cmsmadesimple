@@ -192,16 +192,10 @@ $(document).ready(function(){
   {form_end}
 </div>
 
-{*
-<div class="pageoverflow">
-</div>
-*}
-
 <div class="clearb"></div>
-
-{form_start action='admin_pages_tab'}
 {/if} {* ajax *}
 
+{form_start action='admin_pages_tab'}
 <div id="contentlist">{* everything from here down is part of the ajax stuff *}
 {if isset($content_list)}
 {function do_content_row}
@@ -380,7 +374,6 @@ $(document).ready(function(){
 {/if}
 </div>{* #contentlist *}
 
-{if $ajax == 0}
 <div class="pageoptions" style="float: right">
   <label for="multiaction">{$mod->Lang('prompt_withselected')}:</label>&nbsp;&nbsp;
   <select name="{$actionid}multiaction" id="multiaction">
@@ -388,6 +381,6 @@ $(document).ready(function(){
   </select>
   <input type="submit" id="multisubmit" name="{$actionid}multisubmit" accesskey="s" value="{$mod->Lang('submit')}"/>
 </div>
-<div class="clearb"></div>
 {form_end}
-{/if}
+
+<div class="clearb"></div>

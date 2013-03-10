@@ -15,26 +15,20 @@ function load_adodb()
   $gCms = cmsms();
   $config = $gCms->GetConfig();
 
-	// @TODO: Remove dependence on PEAR for error handling	
-	if( !defined('ADODB_OUTP') )
-	  {
-	    define('ADODB_OUTP', 'debug_sql');
-	  }
-	//define('ADODB_ERROR_HANDLER', 'adodb_error');
+  // @TODO: Remove dependence on PEAR for error handling	
+  if( !defined('ADODB_OUTP') ) define('ADODB_OUTP', 'debug_sql');
 	
-	$adodb_light = cms_join_path(dirname(__FILE__),'adodb_lite','adodb.inc.php');
-	if (file_exists($adodb_light))
-	  {
-	    // Load ADOdb Lite
-	    require_once($adodb_light);
-	  }
-	else
-	  {
-	    // ADOdb cannot be found, show a message and stop the script execution
-	    die('The ADOdb Lite database abstraction library cannot be found, CMS Made Simple cannot load.');
-	  }
-	
-	if( !defined('CMS_ADODB_DT') ) define('CMS_ADODB_DT', $config['use_adodb_lite'] ? 'DT' : 'T');
+  $adodb_light = cms_join_path(dirname(__FILE__),'adodb_lite','adodb.inc.php');
+  if (file_exists($adodb_light)) {
+    // Load ADOdb Lite
+    require_once($adodb_light);
+  }
+  else {
+    // ADOdb cannot be found, show a message and stop the script execution
+    die('The ADOdb Lite database abstraction library cannot be found, CMS Made Simple cannot load.');
+  }
+
+  if( !defined('CMS_ADODB_DT') ) define('CMS_ADODB_DT', $config['use_adodb_lite'] ? 'DT' : 'T');
 }
 
 /**

@@ -57,7 +57,7 @@ class Smarty_CMS extends SmartyBC
     $this->assign('app_name','CMSMS');
 
     if ($config["debug"] == true) {
-      $this->force_compile = true;
+      //$this->force_compile = true;
       $this->debugging = false;
     }
 
@@ -126,7 +126,7 @@ class Smarty_CMS extends SmartyBC
 					 'plugins'));
 
       $this->setCaching(false);
-      $this->force_compile = true;
+      //$this->force_compile = true;
       $this->setTemplateDir(cms_join_path($config['root_path'],$config['admin_dir'],'templates'));
       $this->setConfigDir(cms_join_path($config['root_path'],$config['admin_dir'],'configs'));;
       $this->registerResource('globalcontent',new CMSNullTemplateResource());

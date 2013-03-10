@@ -1,7 +1,6 @@
 <?php
 
 cms_admin_sendheaders();
-$orig_memory = (function_exists('memory_get_usage')?memory_get_usage():0);
 $starttime = microtime();
 if (!(isset($USE_OUTPUT_BUFFERING) && $USE_OUTPUT_BUFFERING == false)) {
   @ob_start();

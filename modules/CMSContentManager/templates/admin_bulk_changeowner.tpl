@@ -10,9 +10,9 @@
 </div>
 
 <div class="pageoverflow">
-  <p class="pagetext">{$mod->Lang('prompt_owner')}:</p>
+  <p class="pagetext"><label for="owner_ctl">{$mod->Lang('prompt_owner')}:</label></p>
   <p class="pageinput">
-    <select name="{$actionid}owner">
+    <select id="owner_ctl" name="{$actionid}owner">
     {html_options options=$userlist selected=$userid}
     </select>
   </p>

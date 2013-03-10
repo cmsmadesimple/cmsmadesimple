@@ -335,9 +335,12 @@ function debug_bt()
 */
 function debug_display($var, $title="", $echo_to_screen = true, $use_html = true)
 {
-  $starttime = microtime();
-  $tmp = cms_utils::get_app_data('__starttime');
-  if( !$tmp ) cms_utils::set_app_data('__starttime',$starttime);
+  $orig_starttime = microtime();
+  $starttime = cms_utils::get_app_data('__starttime');
+  if( !$starttime ) {
+    cms_utils::set_app_data('__starttime',$orig_starttime);
+    $starttime = $orig_starttime;
+  }
 
   $titleText = "Debug: ";
   if($title) {
@@ -346,7 +349,7 @@ function debug_display($var, $title="", $echo_to_screen = true, $use_html = true
   $titleText .= '(' . microtime_diff($starttime,microtime()) . ')';
 
   if (function_exists('memory_get_usage')) {
-    $titleText .= ' - (usage: '.memory_get_usage().')';
+    $titleText .= ' - (usage: '.memory_get_usage(TRUE).')';
   }
 
   $memory_peak = (function_exists('memory_get_peak_usage')?memory_get_peak_usage():'');
@@ -447,9 +450,7 @@ function debug_to_log($var, $title='',$filename = '')
 function debug_buffer($var, $title="")
 {
   $config = cmsms()->GetConfig();
-  if($config["debug"] == true) {
-    cmsms()->add_error(debug_display($var, $title, false, true));
-  }
+  if($config["debug"] == true) cmsms()->add_error(debug_display($var, $title, false, true));
 }
 
 

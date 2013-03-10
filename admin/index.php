@@ -18,11 +18,14 @@
 #
 #$Id$
 
+$orig_memory = (function_exists('memory_get_usage')?memory_get_usage(TRUE):0);
+
 $CMS_ADMIN_PAGE=1;
 $CMS_TOP_MENU='main';
 $CMS_ADMIN_TITLE='adminhome';
 $CMS_ADMIN_TITLE='mainmenu';
 $CMS_EXCLUDE_FROM_RECENT=1;
+
 
 require_once("../include.php");
 

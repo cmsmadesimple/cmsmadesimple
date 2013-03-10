@@ -156,27 +156,25 @@ $smarty->assign('content_list',$editinfo);
 $smarty->assign('ajax',$ajax);
 if( $error ) $smarty->assign('error',$error);
 
-if( $ajax == 0 ) {
-  $opts = array();
-  if( $this->CheckPermission('Remove Pages') || 
-      $this->CheckPermission('Manage All Content') ) {
-    bulkcontentoperations::register_function($this->Lang('bulk_delete'),'delete');
-  }
-  if( $this->CheckPermission('Manage All Content')) {
-    bulkcontentoperations::register_function($this->Lang('bulk_active'),'active');
-    bulkcontentoperations::register_function($this->Lang('bulk_inactive'),'inactive');
-    bulkcontentoperations::register_function($this->Lang('bulk_cachable'),'setcachable');
-    bulkcontentoperations::register_function($this->Lang('bulk_noncachable'),'setnoncachable');
-    bulkcontentoperations::register_function($this->Lang('bulk_showinmenu'),'showinmenu');
-    bulkcontentoperations::register_function($this->Lang('bulk_hidefrommenu'),'hidefrommenu');
-    bulkcontentoperations::register_function($this->Lang('bulk_secure'),'secure');
-    bulkcontentoperations::register_function($this->Lang('bulk_insecure'),'insecure');
-    bulkcontentoperations::register_function($this->Lang('bulk_setdesign'),'setdesign');
-    bulkcontentoperations::register_function($this->Lang('bulk_changeowner'),'changeowner');
-  }
-  $opts = bulkcontentoperations::get_operation_list();
-  $smarty->assign('bulk_options',$opts);
+$opts = array();
+if( $this->CheckPermission('Remove Pages') || 
+    $this->CheckPermission('Manage All Content') ) {
+  bulkcontentoperations::register_function($this->Lang('bulk_delete'),'delete');
 }
+if( $this->CheckPermission('Manage All Content')) {
+  bulkcontentoperations::register_function($this->Lang('bulk_active'),'active');
+  bulkcontentoperations::register_function($this->Lang('bulk_inactive'),'inactive');
+  bulkcontentoperations::register_function($this->Lang('bulk_cachable'),'setcachable');
+  bulkcontentoperations::register_function($this->Lang('bulk_noncachable'),'setnoncachable');
+  bulkcontentoperations::register_function($this->Lang('bulk_showinmenu'),'showinmenu');
+  bulkcontentoperations::register_function($this->Lang('bulk_hidefrommenu'),'hidefrommenu');
+  bulkcontentoperations::register_function($this->Lang('bulk_secure'),'secure');
+  bulkcontentoperations::register_function($this->Lang('bulk_insecure'),'insecure');
+  bulkcontentoperations::register_function($this->Lang('bulk_setdesign'),'setdesign');
+  bulkcontentoperations::register_function($this->Lang('bulk_changeowner'),'changeowner');
+}
+$opts = bulkcontentoperations::get_operation_list();
+$smarty->assign('bulk_options',$opts);
 
 echo $this->ProcessTemplate('admin_pages_tab.tpl');
 #
