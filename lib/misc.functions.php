@@ -349,7 +349,7 @@ function debug_display($var, $title="", $echo_to_screen = true, $use_html = true
   $titleText .= '(' . microtime_diff($starttime,microtime()) . ')';
 
   if (function_exists('memory_get_usage')) {
-    $titleText .= ' - (usage: '.memory_get_usage(TRUE).')';
+    $titleText .= ' - (usage: '.memory_get_usage().')';
   }
 
   $memory_peak = (function_exists('memory_get_peak_usage')?memory_get_peak_usage():'');
@@ -1608,7 +1608,8 @@ function cms_get_jquery($exclude = '',$ssl = null,$cdn = false,$append = '',$cus
   $scripts['jquery.ui.nestedSortable.js'] = '<script type="text/javascript" src="'.$basePath.'/lib/jquery/js/jquery.ui.nestedSortable-1.3.4.js"></script>'."\n";
   $scripts['jquery.json.min.js'] = '<script type="text/javascript" src="'.$basePath.'/lib/jquery/js/jquery.json-2.3.min.js"></script>'."\n";
   if( cmsms()->test_state(CmsApp::STATE_ADMIN_PAGE) ) {
-    if( isset($_SESSION[CMS_USER_KEY]) ) {
+    global $CMS_LOGIN_PAGE;
+    if( isset($_SESSION[CMS_USER_KEY]) && !isset($CMS_LOGIN_PAGE) ) {
       $url = $config['admin_url'];
       $scripts['cms_js_setup'] = '<script type="text/javascript" src="'.$url.'/cms_js_setup.php?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY].'"></script>'."\n";
     }

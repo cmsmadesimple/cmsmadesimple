@@ -18,7 +18,7 @@
 #
 #$Id$
 
-$orig_memory = (function_exists('memory_get_usage')?memory_get_usage(TRUE):0);
+$orig_memory = (function_exists('memory_get_usage')?memory_get_usage():0);
 
 $CMS_ADMIN_PAGE=1;
 $CMS_TOP_MENU='main';

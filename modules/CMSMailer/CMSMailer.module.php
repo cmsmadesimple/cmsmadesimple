@@ -65,7 +65,7 @@ class CMSMailer extends CMSModule
    ---------------------------------------------------------*/
   function GetVersion()
   {
-    return '5.2.1';
+    return '5.2.2';
   }
 
 
@@ -198,6 +198,15 @@ class CMSMailer extends CMSModule
    LazyLoadFrontend()
    ---------------------------------------------------------*/
   function LazyLoadFrontend()
+  {
+    return TRUE;
+  }
+
+
+  /*---------------------------------------------------------
+   LazyLoadAdmin()
+   ---------------------------------------------------------*/
+  function LazyLoadAdmin()
   {
     return TRUE;
   }

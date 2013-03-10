@@ -21,7 +21,7 @@
 $CMS_ADMIN_PAGE=1;
 $CMS_MODULE_PAGE=1;
 
-$orig_memory = (function_exists('memory_get_usage')?memory_get_usage(TRUE):0);
+$orig_memory = (function_exists('memory_get_usage')?memory_get_usage():0);
 $starttime = microtime();
 
 require_once("../include.php");

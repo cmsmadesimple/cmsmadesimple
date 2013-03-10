@@ -25,12 +25,12 @@
 
 function __cms_load($filename)
 {
-  $gCms = cmsms();
+  $gCms = cmsms(); // wierd, but this is required.
   static $_cumulative = 0;
-  $mem = memory_get_usage(TRUE);
+  $mem = memory_get_usage();
   $filesize = @filesize($filename);
   require_once($filename);
-  $mem = memory_get_usage(TRUE) - $mem;
+  $mem = memory_get_usage() - $mem;
   $_cumulative += $mem;
   debug_buffer("Loaded $filename ($filesize) = $mem bytes for an approximate total of $_cumulative");
 }

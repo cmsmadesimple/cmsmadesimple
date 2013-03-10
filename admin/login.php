@@ -247,12 +247,8 @@ if (isset($_POST["username"]) && isset($_POST["password"])) {
 
 		// redirect to upgrade if db_schema it's old
 		$current_version = $CMS_SCHEMA_VERSION;
-	
-		$query = "SELECT version from ".cms_db_prefix()."version";
-		$row = $db->GetRow($query);
-		if ($row) $current_version = $row["version"];
 
-		if ($current_version < $CMS_SCHEMA_VERSION)
+		if( $gCms->get_installed_schema_version() < $CMS_SCHEMA_VERSION )
 		{
 			redirect($gCms->config['root_url'] . "/install/upgrade.php");
 		}
@@ -267,9 +263,9 @@ if (isset($_POST["username"]) && isset($_POST["password"])) {
 			{
 				echo "Debug is on.  Redirecting disabled...  Please click this link to continue.<br />";
 				echo "<a href=\"".$_SESSION["redirect_url"]."\">".$_SESSION["redirect_url"]."</a><br />";
-				foreach ($gCms->errors as $globalerror)
-				{
-					echo $globalerror;
+				$arr = $gCms->get_errors();
+				foreach ($arr as $globalerror) {
+				  echo $globalerror;
 				}
 			}
 			else
@@ -303,10 +299,10 @@ if (isset($_POST["username"]) && isset($_POST["password"])) {
 			  $url = 'index.php?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 			  echo "Debug is on.  Redirecting disabled...  Please click this link to continue.<br />";
 			  echo "<a href=\"{$url}\">{$url}</a><br />";
-			  foreach ($gCms->errors as $globalerror)
-			    {
-			      echo $globalerror;
-			    }
+			  $arr = $gCms->get_errors();
+			  foreach ($arr as $globalerror) {
+			    echo $globalerror;
+			  }
 			}
 			else
 			{
