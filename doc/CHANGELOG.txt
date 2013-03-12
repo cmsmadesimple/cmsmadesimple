@@ -25,6 +25,9 @@ Core - News
 Core - Search
   - Fixes issue with detailpage parameter
 
+Core - ThemeManager
+  - On Import, now use // as a delimiter between theme name and item name, cuz smarty treets a : as a delimiter for a resource.
+
   
 Version 1.11.4 - Fernandina
 -----------------------------
