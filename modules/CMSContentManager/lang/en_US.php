@@ -1,4 +1,4 @@
-<?php
+o<?php
 #A
 $lang['addcontent'] = 'Add New Content';
 $lang['apply'] = 'Apply';
@@ -61,6 +61,7 @@ $lang['error_missingparam'] = 'A parameter required for this action was missing,
 $lang['error_movecontent'] = 'Could not move content page';
 $lang['error_nobulkaction'] = 'No bulk action (or invalid bulk action) selected';
 $lang['error_notconfirmed'] = 'Operation not confirmed';
+$lang['error_ordercontent_nothingtodo'] = 'Nothing to do!';
 $lang['error_setactive'] = 'Could not activate this page.  This could be a database problem, or a permissions issue.';
 $lang['error_setdefault'] = 'Could not change the default content page.  This could be a database problem, or a permissions issue.';
 $lang['error_setinactive'] = 'Could deactivate this page.  This could be a database problem, or a permissions issue.';
@@ -88,6 +89,7 @@ $lang['help_pagedflt_template_id'] = 'TODO';
 
 #I
 $lang['info_javascript_required'] = '<strong>Warning:</strong> In order to operate correctly, this module requires a browser with javascript support enabled.';
+$lang['info_ordercontent'] = 'Drag and drop elements to adjust their order in the content tree.  <strong>Note: </strong> Some content items, such as separators do not accept children';
 $lang['info_pagedflt'] = 'This panel allows setting default values for various content properties when creating a new page of type &quot;Content&quot; <em>or its derived types.  These settings will have no effect on existing pages, and user settings may override some settings.</em>';
 $lang['info_preview_notice'] = '<strong>Warning:</strong> This preview panel behaves much like a browser window allowing you to navigate away from the initially previewed page. However, if you do that, you may experience unexpected behaviour. If you navigate away from the initial display and return, you may not see the un-committed content until you make a change to the content in the main tab, and then reload this tab. When adding content, if you navigate away from this page, you will be unable to return, and must refresh this panel.';
 
@@ -183,6 +185,7 @@ $lang['prompt_withselected'] = 'With Selected';
 
 #R
 $lang['reorderpages'] = 'Reorder Content';
+$lang['revert'] = 'Revert';
 
 #S
 $lang['select_all'] = 'Select All';

@@ -23,6 +23,8 @@
 #subnav li:hover ul {
   display: block;
   position: absolute;
+  opacity: 1.0;
+  z-index: 1000;
   background-color: #fff;
   border: 1px solid black;
 }
@@ -166,13 +168,6 @@ function setup_js() {
 }
 
 $(document).ready(function(){
-  $('#ordercontent').on('click',function(){
-    $('table#contenttable tbody.contentrows').sortable();
-    $('table#contenttable tbody.contentrows').disableSelection();
-    $('#reorderbox').dialog({
-    });
-    return false;
-  });
   setup_js();
 });
 //]]>
@@ -199,9 +194,9 @@ $(document).ready(function(){
 <div id="contentlist">{* everything from here down is part of the ajax stuff *}
 {if isset($content_list)}
 {function do_content_row}
+  <div id="content_{$row.id}" style="display: none;"></div>
   {foreach from=$columns key='column' item='flag'}
-    {if $flag == 0} {continue} {/if}
-
+    {if $flag == 0}{continue}{/if}
     <td>
     {if $column == 'expand'}
       {if $row.expand == 'open'}
@@ -323,7 +318,7 @@ $(document).ready(function(){
          <li><a class="expandall" href="{cms_action_url action='admin_pages_tab' expandall=1}" accesskey="e" title="{$mod->Lang('prompt_expandall')}">{admin_icon icon='expandall.gif' alt=$mod->Lang('expandall')}&nbsp;{$mod->Lang('expandall')}</a></li>
           <li><a class="collapseall" href="{cms_action_url action='admin_pages_tab' collapseall=1}" accesskey="c" title="{$mod->Lang('prompt_collapseall')}">{admin_icon icon='contractall.gif' alt=$mod->Lang('contractall')}&nbsp;{$mod->Lang('contractall')}</a></li>
           {if $can_reorder_content}
-          <li><a id="ordercontent" href="{cms_action_url action=ordercontent}" accesskey="r" title="{$mod->Lang('prompt_ordercontent')}">{admin_icon icon='reorder.gif' alt=$mod->Lang('reorderpages')}&nbsp;{$mod->Lang('reorderpages')}</a></li>
+          <li><a id="ordercontent" href="{cms_action_url action=admin_ordercontent}" accesskey="r" title="{$mod->Lang('prompt_ordercontent')}">{admin_icon icon='reorder.gif' alt=$mod->Lang('reorderpages')}&nbsp;{$mod->Lang('reorderpages')}</a></li>
           {/if}
           <li><a id="myoptions" accesskey="o" title="{$mod->Lang('prompt_settings')}">{admin_icon icon='edit.gif' alt=$mod->Lang('prompt_settings')}&nbsp;{$mod->lang('prompt_settings')}</a></li>
        </ul>
@@ -365,7 +360,7 @@ $(document).ready(function(){
   <tbody class="contentrows">
   {foreach from=$content_list item='row'}
     {cycle values="row1,row2" assign='rowclass'}
-    <tr class="{$rowclass}" onmouseover="this.className='{$rowclass}hover';" onmouseout="this.className='{$rowclass}';">
+    <tr id="row_{$row.id}" class="{$rowclass}" onmouseover="this.className='{$rowclass}hover';" onmouseout="this.className='{$rowclass}';">
     {do_content_row row=$row columns=$columns}
     </tr>
   {/foreach}
