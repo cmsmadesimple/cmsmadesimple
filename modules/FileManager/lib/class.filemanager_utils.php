@@ -244,6 +244,7 @@ final class filemanager_utils
       $info['dir'] = FALSE;
       $info['image'] = FALSE;
       $info['archive'] = FALSE;
+      $info['mime'] = mime_content_type($fullname);
       $statinfo=stat($fullname);
 
       if (is_dir($fullname)) {

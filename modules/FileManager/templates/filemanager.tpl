@@ -1,17 +1,17 @@
 {if !isset($noform)}
-{literal}
 <script type="text/javascript">
-var refresh_url = '{/literal}{$refresh_url}{literal}'+'&showtemplate=false';
+var refresh_url = '{$refresh_url}'+'&showtemplate=false';
 refresh_url = refresh_url.replace(/amp;/g,'');
 // <![CDATA[
   function enable_action_buttons() {
     var files = $("#filesarea input[type='checkbox'].fileselect").filter(':checked').length;
-    var dirs = $("#filesarea input[type='checkbox'].dir").filter(':checked:').length;
-    var arch = $("#filesarea input[type='checkbox'].archive").filter(':checked:').length;
-    var imgs = $("#filesarea input[type='checkbox'].image").filter(':checked:').length;
+    var dirs  = $("#filesarea input[type='checkbox'].dir").filter(':checked:').length;
+    var arch  = $("#filesarea input[type='checkbox'].archive").filter(':checked:').length;
+    var text  = $("#filesarea input[type='checkbox'].text").filter(':checked:').length;
+    var imgs  = $("#filesarea input[type='checkbox'].image").filter(':checked:').length;
     $('.filebtn').attr('disabled','disabled');
     if( jQuery.ui ) $('.filebtn').button( "option", "disabled", true ).addClass('disabled');
-    if( files == 0 &&  dirs == 0 ) {
+    if( files == 0 && dirs == 0 ) {
       // nothing selected, enable anything with select_none
       $('#btn_newdir').removeAttr('disabled').removeClass('disabled');
       if( jQuery.ui ) $('#btn_newdir').button( "option", "disabled", false );
@@ -40,6 +40,10 @@ refresh_url = refresh_url.replace(/amp;/g,'');
       if( imgs == 1 ) {
         $('#btn_thumb').removeAttr('disabled').removeClass('disabled');
         if( jQuery.ui ) $('#btn_thumb').button( "option", "disabled", false );
+      }
+      if( text == 1 ) {
+        $('#btn_view').removeAttr('disabled').removeClass('disabled');
+        if( jQuery.ui ) $('#btn_view').button( "option", "disabled", false );
       }
     }
     else if( files > 1 && dirs == 0 ) {
@@ -99,6 +103,16 @@ refresh_url = refresh_url.replace(/amp;/g,'');
       }
     });
 
+    $('#btn_view').live('click',function(){
+      // find the selected item.
+      var tmp = $("#filesarea input[type='checkbox'].text").filter(':checked:').val();
+      var url = '{$viewfile_url}&showtemplate=false&{$actionid}viewfile='+tmp;
+      url = url.replace(/amp;/g,'');
+      $('#popup_contents').load(url);
+      $('#popup').dialog();
+      return false;
+    });
+
     $('td.clickable').live('click',function(){
       var t = $(this).parent().find(':checkbox:').attr('checked');
       if( t != 'checked' ) {
@@ -110,9 +124,13 @@ refresh_url = refresh_url.replace(/amp;/g,'');
     });
   });
 // ]]>
-</script>{/literal}
+</script>
 
 <h3>{$currentpath} {$path}</h3>
+
+<div id="popup" style="display: none;">
+  <div id="popup_contents" style="height: 400px; width: 500px; overflow: auto; font-family: monospace;"></div>
+</div>
 
 <div>
   {$formstart}
@@ -120,6 +138,7 @@ refresh_url = refresh_url.replace(/amp;/g,'');
 <div>
   <fieldset>
     <input type="submit" id="btn_newdir" name="{$actionid}fileactionnewdir" value="{$mod->Lang('newdir')}" class="filebtn"/>
+    <input type="submit" id="btn_view"   value="{$mod->Lang('view')}" class="filebtn"/> 
     <input type="submit" id="btn_rename" name="{$actionid}fileactionrename" value="{$mod->Lang('rename')}" class="filebtn"/>
     <input type="submit" id="btn_delete" name="{$actionid}fileactiondelete" value="{$mod->Lang('delete')}" class="filebtn"/> 
     <input type="submit" id="btn_move" name="{$actionid}fileactionmove" value="{$mod->Lang('move')}" class="filebtn"/> 
@@ -139,6 +158,7 @@ refresh_url = refresh_url.replace(/amp;/g,'');
     <th class="pageicon">&nbsp;</th>
     <th>{$filenametext}</th>
 
+    <th class="pageicon">{$mod->Lang('mimetype')}</th>
     <th class="pageicon">{$fileinfotext}</th>
     <th class="pageicon">{$fileownertext}</th>
     <th class="pageicon">{$filepermstext}</th>
@@ -157,7 +177,7 @@ refresh_url = refresh_url.replace(/amp;/g,'');
   <tr class="{$rowclass}">    
     <td valign="middle">{if isset($file->thumbnail) && $file->thumbnail!=''}{$file->thumbnail}{else}{$file->iconlink}{/if}</td>
     <td class="clickable" valign="middle">{$file->txtlink}</td>
-
+    <td class="clickable" valign="middle">{$file->mime}</td>
     <td class="clickable" style="padding-right:8px;" valign="middle">{$file->fileinfo}</td>
     <td class="clickable" style="padding-right:8px;" valign="middle">{if isset($file->fileowner)}{$file->fileowner}{else}&nbsp;{/if}</td>
     <td class="clickable" style="padding-right:8px;" valign="middle">{$file->filepermissions}</td>
@@ -166,7 +186,8 @@ refresh_url = refresh_url.replace(/amp;/g,'');
     <td class="clickable" style="padding-right:8px;" valign="middle">{$file->filedate|cms_date_format|replace:" ":"&nbsp;"|replace:"-":"&minus;"}</td>
     <td>
       {if !isset($file->noCheckbox)}
-      <input type="checkbox" name="{$actionid}selall[]" value="{$file->urlname}" class="fileselect {$file->type}" {if isset($file->checked)}checked="checked"{/if}/>
+      <label for="x_{$file->urlname}" style="display: none;">{$mod->Lang('toggle')}</label>
+      <input type="checkbox" title="{$mod->Lang('toggle')}" id="x_{$file->urlname}" name="{$actionid}selall[]" value="{$file->urlname}" class="fileselect {implode(' ',$file->type)}" {if isset($file->checked)}checked="checked"{/if}/>
       {/if}
     </td>
   

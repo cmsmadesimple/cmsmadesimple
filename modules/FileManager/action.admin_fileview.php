@@ -41,8 +41,6 @@ $params["newsort"] = $newsort;
 //}
 $titlelink = $this->CreateLink($id, "defaultadmin", $returnid, $titlelink, $params);
 $this->smarty->assign('filesizetext', $titlelink);
-
-
 $this->smarty->assign('fileownertext', $this->Lang("fileowner"));
 $this->smarty->assign('filepermstext', $this->Lang("fileperms"));
 $this->smarty->assign('fileinfotext', $this->Lang("fileinfo"));
@@ -57,11 +55,18 @@ $files = array();
 
 for ($i = 0; $i < count($filelist); $i++) {
   $onerow = new stdClass();
+  $onerow->name = $filelist[$i]['name'];
   $onerow->urlname = $this->encodefilename($filelist[$i]['name']);
-  $onerow->type = 'file';
+  $onerow->type = array('file');
+  $onerow->mime = $filelist[$i]['mime'];
   if( isset($params[$onerow->urlname]) ) {
     $onerow->checked = true;
   }
+
+  if( strpos($onerow->mime,'text') !== FALSE ) {
+    $onerow->type[] = 'text';
+  }
+
   if ($filelist[$i]["dir"]) {
     $urlname="dir_" . $this->encodefilename($filelist[$i]["name"]);
     $value="";
@@ -77,7 +82,7 @@ for ($i = 0; $i < count($filelist); $i++) {
   $onerow->thumbnail = '';
   if ($this->GetPreference("showthumbnails", 0) == 1) {
     if ($filelist[$i]["image"]) {
-      $onerow->type = 'image';
+      $onerow->type[] = 'image';
       //if (stripos($filelist[$i]["url"], $config["image_uploads_url"]) !== false) {
       $onerow->thumbnail = $this->GetThumbnailLink($filelist[$i], $path);
     }
@@ -97,7 +102,7 @@ for ($i = 0; $i < count($filelist); $i++) {
   if ($filelist[$i]["dir"]) {
     if( $filelist[$i]['name'] != '..' ) {
       $countdirs++;
-      $onerow->type = 'dir';
+      $onerow->type = array('dir');
     }
     else {
       $onerow->noCheckbox = 1;
@@ -113,10 +118,10 @@ for ($i = 0; $i < count($filelist); $i++) {
     $onerow->txtlink = "<a href='" . $filelist[$i]["url"] . "' target='_blank'>" . $link . "</a>";
   }
   if( $filelist[$i]['archive']  ) {
-    $onerow->type = 'archive';
+    $onerow->type[] = 'archive';
   }
 
-  $onerow->fileinfo = $filelist[$i]["fileinfo"];
+  $onerow->fileinfo = trim($filelist[$i]["fileinfo"]);
   if ($filelist[$i]["name"] == "..") {
     $onerow->fileaction = "&nbsp;";
     $onerow->filepermissions = "&nbsp;";
@@ -140,7 +145,24 @@ for ($i = 0; $i < count($filelist); $i++) {
 
   $files[] = $onerow;
 }
-$this->smarty->assign_by_ref('files', $files);
+
+if( isset($params['viewfile']) && $params['viewfile'] ) {
+  foreach( $files as $file ) {
+    if( $file->urlname == $params['viewfile'] ) {
+      $fn = cms_join_path(filemanager_utils::get_full_cwd(),$file->name);
+      if( file_exists($fn) ) $data = @file_get_contents($fn);
+      if( $data ) {
+	$data = cms_htmlentities($data);
+	$data = nl2br($data);
+	echo $data;
+	exit;
+      }
+    }
+  }
+}
+
+// build display
+$this->smarty->assign('files', $files);
 $this->smarty->assign('itemcount', count($files));
 $totalsize = $this->FormatFileSize($countfilesize);
 $counts = $totalsize["size"] . " " . $totalsize["unit"] . " " . $this->Lang("in") . " " . $countfiles . " ";
@@ -152,11 +174,9 @@ $this->smarty->assign('countstext', $counts);
 
 $this->smarty->assign('formend', $this->CreateFormEnd());
 
-if( isset($params['noform']) )
-  {
-    $smarty->assign('noform',1);
-  }
+if( isset($params['noform']) ) $smarty->assign('noform',1);
 $smarty->assign('refresh_url',$this->Create_url($id,'admin_fileview','',array('noform'=>1)));
+$smarty->assign('viewfile_url',$this->create_url($id,'admin_fileview','',array('ajax'=>1)));
 $smarty->assign('mod',$this);
 $smarty->assign('confirm_unpack',$this->Lang('confirm_unpack'));
 echo $this->ProcessTemplate('filemanager.tpl');

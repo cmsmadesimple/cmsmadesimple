@@ -77,12 +77,12 @@ $lang['filedateformat'] = 'm/d/Y H:m:s';
 $lang['filedeletefail'] = ' was not deleted due to an error';
 $lang['filedeletesuccess'] = 'was successfully deleted';
 $lang['fileexistsdest'] = '%s already exists at the destination';
-$lang['fileinfo'] = 'Fileinfo';
+$lang['fileinfo'] = 'File info';
 $lang['filename'] = 'Filename';
 $lang['fileno'] = 'File no.';
 $lang['filenotfound'] = 'File not found';
 $lang['fileoutsideuploads'] = 'You are not allowed to modify files outside the uploads-dir! (That requires the Advanced File Management permission)';
-$lang['fileowner'] = 'Fileowner';
+$lang['fileowner'] = 'Owner';
 $lang['fileperms'] = 'Permissions';
 $lang['files'] = 'files';
 $lang['filescopiedfailed'] = '%s file(s) failed being copied';
@@ -132,6 +132,7 @@ $lang['largeicons'] = 'Large icons';
 
 // M
 $lang['mb'] = 'mb';
+$lang['mimetype'] = 'Mime Type';
 $lang['moddescription'] = 'Handling of files and directories in the upload-filesection of cmsms';
 $lang['morethanonefiledirselected'] = 'Only one file or directory should be marked for this action.';
 $lang['move'] = 'Move';
@@ -236,6 +237,9 @@ $lang['uploadmethod'] = 'Upload method';
 $lang['uploadnewfile'] = 'Upload new file(s):';
 $lang['uploadsuccess'] = 'was uploaded successfully';
 $lang['uploadview'] = 'Upload files';
+
+// V
+$lang['view'] = 'View';
 
 // W
 $lang['writable'] = 'Writable';
