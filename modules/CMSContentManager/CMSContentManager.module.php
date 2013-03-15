@@ -77,6 +77,26 @@ final class CMSContentManager extends CMSModule
     
     return $this->CanEditContent();
   }
+
+  public function GetAdminMenuItems()
+  {
+    $out = array();
+    if( $this->CheckPermission('Add Pages') ||	$this->CheckPermission('Remove Pages') || $this->CanEditContent() ) {
+      $out[] = CmsAdminMenuItem::from_module($this);
+    }
+
+    if( $this->CheckPermission('Modify Site Preferences') ) {
+      $obj = new CmsAdminMenuItem();
+      $obj->module = $this->GetName();
+      $obj->section = 'siteadmin';
+      $obj->title = $this->Lang('title_contentmanager_settings');
+      $obj->description = $this->Lang('desc_contentmanager_settings');
+      $obj->action = 'admin_settings';
+      $obj->url = $this->create_url('m1_',$obj->action);
+      $out[] = $obj;
+    }
+    return $out;
+  }
 } // class
 
 ?>

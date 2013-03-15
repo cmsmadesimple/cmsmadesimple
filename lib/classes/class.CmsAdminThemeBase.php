@@ -148,12 +148,17 @@ abstract class CmsAdminThemeBase
 			$usermoduleinfo = array();
 			foreach( $allmodules as $key ) {
 				$object = ModuleOperations::get_instance()->get_module_instance($key);
-				if( $object && $object->HasAdmin() && $object->VisibleToAdminUser() ) {
-					$rec = array();
-					$rec['adminsection'] = $object->GetAdminSection();
-					$rec['friendlyname'] = $object->GetFriendlyName();
-					$rec['admindescription'] = $object->GetAdminDescription();
-					$usermoduleinfo[$key] = $rec;
+				if( is_object($object) && $object->HasAdmin() ) {
+					$recs = $object->GetAdminMenuItems();
+					$suffix = 1;
+					if( is_array($recs) && count($recs) ) {
+						foreach( $recs as $one ) {
+							if( !$one->valid() ) continue;
+							if( ModuleOperations::Get_instance()->IsSystemModule($object->GetName()) ) $one->system = TRUE;
+							$key = $one->module.$suffix++;
+							$usermoduleinfo[$key] = $one;
+						}
+					}
 				}
 			}
 
@@ -194,37 +199,35 @@ abstract class CmsAdminThemeBase
 			// put mention into the admin log
 			audit(get_userid(FALSE),'Admin Theme','No module information found for user');
 		}
+		else {
+			// Are there any modules with an admin interface?
+			foreach( $usermoduleinfo as $key => $obj ) {
+				if( $obj->section == '' ) $obj->section = 'extensions';
 
-		// Are there any modules with an admin interface?
-		foreach( $usermoduleinfo as $key => $rec ) {
-			$section = $rec['adminsection'];
-			if( $section == '' ) $section == 'extensions';
-
-			if (! isset($this->_sectionCount[$section])) {
-				$this->_sectionCount[$section] = 0;
-			}
-
-			$data = array();
-			$data['key'] = $key;
-			$data['friendlyname'] = (isset($rec['friendlyname']))?$rec['friendlyname']:$key;
-			$data['name'] = $data['friendlyname'];
-			$data['description'] = ($rec['admindescription']!='')?$rec['admindescription']:'';
-			$config = cmsms()->GetConfig();
-
-			$tmp = array("modules/{$key}/images/icon.gif",
-						 "modules/{$key}/icons/icons.gif",
-						 "modules/{$key}/images/icon.png",
-						 "modules/{$key}/icons/icons.png");
-			foreach( $tmp as $one ) {
-				$fn = cms_join_path($config['root_path'],$one);
-				if( file_exists($fn) ) {
-					$data['icon'] = $config['root_url'].'/'.$one;
-					break;
+				$section = $obj->section;
+				if (! isset($this->_sectionCount[$section])) {
+					$this->_sectionCount[$section] = 0;
 				}
-			}
 
-			$this->_modulesBySection[$section][] = $data;
-			$this->_sectionCount[$section]++;
+				// find an icon for this thing.
+				if( $obj->icon == '' ) {
+					$config = cmsms()->GetConfig();
+					$tmp = array("modules/{$key}/images/icon.gif",
+								 "modules/{$key}/icons/icons.gif",
+								 "modules/{$key}/images/icon.png",
+								 "modules/{$key}/icons/icons.png");
+					foreach( $tmp as $one ) {
+						$fn = cms_join_path($config['root_path'],$one);
+						if( file_exists($fn) ) {
+							$obj->icon = $config['root_url'].'/'.$one;
+							break;
+						}
+					}
+				}
+
+				$this->_modulesBySection[$section][] = $obj;
+				$this->_sectionCount[$section]++;
+			}
 		}
     }
 
@@ -323,7 +326,7 @@ abstract class CmsAdminThemeBase
      */
     private function _MenuListSectionModules($section)
     {
-    	$modList = array();
+		die('this function is dead');
         if (isset($this->_sectionCount[$section]) && $this->_sectionCount[$section] > 0) {
 			// Sort modules by name
             $names = array();
@@ -331,15 +334,8 @@ abstract class CmsAdminThemeBase
             	$names[$key] = $this->_modulesBySection[$section][$key]['name'];
             }
             array_multisort($names, SORT_ASC, $this->_modulesBySection[$section]);
-
-            foreach($this->_modulesBySection[$section] as $sectionModule) {
-                $modList[$sectionModule['key']]['url'] = "moduleinterface.php?".CMS_SECURE_PARAM_NAME."=".$_SESSION[CMS_USER_KEY]."&amp;module=".
-		  $sectionModule['key'];
-                $modList[$sectionModule['key']]['description'] = $sectionModule['description'];
-                $modList[$sectionModule['key']]['name'] = $sectionModule['name'];
-			}
+			return $this->_modulesBySection[$section];
 		}
-        return $modList;
     }
 
     /**
@@ -387,6 +383,7 @@ abstract class CmsAdminThemeBase
 								 'title'=>$this->_FixSpaces(lang('content')),
 								 'description'=>lang('contentdescription'),
 								 'show_in_menu'=>$this->HasPerm('contentPerms'));
+		/*
 		$items['pages'] = array('url'=>'listcontent.php','parent'=>'content',
 								'title'=>$this->_FixSpaces(lang('pages')),
 								'description'=>lang('pagesdescription'),
@@ -394,6 +391,7 @@ abstract class CmsAdminThemeBase
 		$items['editpage'] = array('url'=>'editcontent.php','parent'=>'pages',
 								   'title'=>$this->_FixSpaces(lang('editpage')),
 								   'description'=>lang('editpage'),'show_in_menu'=>false);
+		*/
 		$items['images'] = array('url'=>'imagefiles.php','parent'=>'content',
 								 'title'=>$this->_FixSpaces(lang('imagemanager')),
 								 'description'=>lang('imagemanagerdescription'),
@@ -521,9 +519,9 @@ abstract class CmsAdminThemeBase
 									'title'=>$this->_FixSpaces(lang('ecommerce')),
 									'description'=>lang('ecommerce_desc'),
 									'show_in_menu'=>true);
-	
+
 		// adjust all the urls to include the session key
-		// and set an icon if we can.
+		// and set an icon if we can. also mark them as system items.
 		foreach( $this->_menuItems as $sectionKey => $sectionArray ) {
 			if( isset($sectionArray['url']) && 
 				(!isset($sectionArray['type']) || $sectionArray['type'] != 'external' )) {
@@ -538,75 +536,69 @@ abstract class CmsAdminThemeBase
 
 				$this->_menuItems[$sectionKey]['url'] = $url;
 			}
+			$this->_menuItems[$sectionKey]['system'] = 1;
 		}
-		
-		debug_buffer('before syste modules');
+
+		debug_buffer('before system modules');
 
 		// add in all of the 'system' modules too
 		$gCms = cmsms();
 		foreach ($this->_menuItems as $sectionKey=>$sectionArray) {
-			$tmpArray = $this->_MenuListSectionModules($sectionKey);
-			$first = true;
-			foreach ($tmpArray as $thisKey=>$thisVal) {
-				$thisModuleKey = $thisKey;
-				$counter = 0;
-				  
+			if( !isset($this->_modulesBySection[$sectionKey]) ) continue;
+			$tmpArray = $this->_modulesBySection[$sectionKey];
+
+			foreach ($tmpArray as $menuItem) {
+				if( !$menuItem->system ) continue;
+
 				// don't clobber existing keys
-				if (array_key_exists($thisModuleKey,$this->_menuItems)) {
-					while (array_key_exists($thisModuleKey,$this->_menuItems)) {
-						$thisModuleKey = $thisKey.$counter;
+				$key = $menuItem->module;
+				if (array_key_exists($key,$this->_menuItems)) {
+				    $counter = 2;
+					while (array_key_exists($key,$this->_menuItems)) {
+						$key = $menuItem->module.$counter;
 						$counter++;
 					}
 				}
-				  
-				// if it's a system module...
-				if( ModuleOperations::get_instance()->IsSystemModule($thisModuleKey) ) {
-					$this->_menuItems[$thisModuleKey]=array('url'=>$thisVal['url'],
-															'parent'=>$sectionKey,
-															'title'=>$this->_FixSpaces($thisVal['name']),
-															'description'=>$thisVal['description'],
-															'show_in_menu'=>true);
-						  
-				}
+
+				$this->_menuItems[$key]=array('url'=>$menuItem->url,
+											  'parent'=>$sectionKey,
+											  'title'=>$this->_FixSpaces($menuItem->title),
+											  'description'=>$menuItem->description,
+											  'show_in_menu'=>true,
+											  'system'=>1);
 			}
 		}
-	
-		debug_buffer('before module menu items');
 
-		// add in all of the modules
+		debug_buffer('before non system module menu items');
+
+		// add in all of the non system modules
         foreach ($this->_menuItems as $sectionKey=>$sectionArray) {
-			$tmpArray = $this->_MenuListSectionModules($sectionKey);
-			$first = true;
-			foreach ($tmpArray as $thisKey=>$thisVal) {
-				$thisModuleKey = $thisKey;
-				$counter = 0;
+			if( !isset($this->_modulesBySection[$sectionKey]) ) continue;
+			$tmpArray = $this->_modulesBySection[$sectionKey];
+
+			foreach ($tmpArray as $menuItem) {
+				if( $menuItem->system ) continue;
 
 				// don't clobber existing keys
-				if (array_key_exists($thisModuleKey,$this->_menuItems)) {
-					while (array_key_exists($thisModuleKey,$this->_menuItems)) {
-						$thisModuleKey = $thisKey.$counter;
+				$key = $menuItem->module;
+				if (array_key_exists($key,$this->_menuItems)) {
+				    $counter = 2;
+					while (array_key_exists($key,$this->_menuItems)) {
+						$key = $menuItem->module.$counter;
 						$counter++;
 					}
-					if( $counter > 0 ) {
-						continue;
-					}
 				}
-				$this->_menuItems[$thisModuleKey]=array('url'=>$thisVal['url'],
-														'parent'=>$sectionKey,
-														'title'=>$this->_FixSpaces($thisVal['name']),
-														'description'=>$thisVal['description'],
-														'show_in_menu'=>true);
-				if ($first) {
-					$this->_menuItems[$thisModuleKey]['firstmodule'] = 1;
-					$first = false;
-				}
-				else {
-					$this->_menuItems[$thisModuleKey]['module'] = 1;
-				}
+
+				$this->_menuItems[$key]=array('url'=>$menuItem->url,
+											  'parent'=>$sectionKey,
+											  'title'=>$this->_FixSpaces($menuItem->title),
+											  'description'=>$menuItem->description,
+											  'show_in_menu'=>true,
+											  'module'=>1);
 			}
 		}
 	
-		debug_buffer('after module menu items');
+		debug_buffer('after non system module menu items');
 
 		// remove any top level items that don't have children
 		$parents = array();
@@ -625,7 +617,23 @@ abstract class CmsAdminThemeBase
 			}
 			if( !$found ) unset($this->_menuItems[$oneparent]);
 		}
-	
+
+		// sort the menu items by system, priority, and name (case insensitive)
+		$fn = function($a,$b) {
+			$sa = isset($a['system'])?$a['system']:0;
+			$sb = isset($b['system'])?$b['system']:0;
+			if( $sa && !$sb ) return -1;
+			if( $sb && !$sa ) return 1;
+
+			$pa = isset($a['priority'])?$a['priority']:999;
+			$pb = isset($b['priority'])?$b['priority']:999;
+			if( $pa < $pb ) return -1;
+			if( $pa > $pb ) return 1;
+
+			return strcasecmp($a['title'],$b['title']);
+		};
+		uasort($this->_menuItems,$fn);
+
 		// resolve the tree to be doubly-linked,
 		// and make sure the selections are selected            
 		foreach ($this->_menuItems as $sectionKey=>$sectionArray) {
@@ -672,6 +680,7 @@ abstract class CmsAdminThemeBase
 				$this->_menuItems[$sectionKey]['selected'] = false;
 			}
 		}
+
 		// fix subtitle, if any
 		if ($subtitle != '') {
 			$this->_title .= ': '.$subtitle;

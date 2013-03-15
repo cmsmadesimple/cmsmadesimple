@@ -1,4 +1,4 @@
-o<?php
+<?php
 #A
 $lang['addcontent'] = 'Add New Content';
 $lang['apply'] = 'Apply';
@@ -45,6 +45,7 @@ $lang['confirm_viewpage'] = 'Are you sure you want to open a new window to view 
 $lang['contractall'] = 'Collapse All';
 
 #D
+$lang['desc_contentmanager_settings'] = 'Adjust settings related to listing, or editing content pages';
 
 #E
 $lang['error_bulk_permission'] = 'You do not have permission to perform this bulk action';
@@ -192,11 +193,13 @@ $lang['select_all'] = 'Select All';
 $lang['submit'] = 'Submit';
 
 #T
+$lang['title_contentmanager_settings'] = 'Content Manager Settings';
 $lang['title_editpage_apply'] = 'Save the changes to this content page, and continue editing';
 $lang['title_editpage_cancel'] = 'Abandon all unsaved changes to this page, and return to the content list';
 $lang['title_editpage_submit'] = 'Save the changes to this content page, and return to the content list';
 $lang['title_editpage_view'] = 'View the current content page <em>(saved changes only)</em>.';
 $lang['title_userpageoptions'] = 'Page List Options';
+$lang['toggle'] = 'Toggle Selected';
 
 #U
 

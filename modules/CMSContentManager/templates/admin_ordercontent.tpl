@@ -13,11 +13,12 @@ function parseTree(ul) {
 
 $(document).ready(function(){
   $('#btn_submit').live('click',function(){
-    var tree = $.toJSON(parseTree($('#masterlist')));
-    var ajax_res = false;
+    if( confirm('') ) {
+      var tree = $.toJSON(parseTree($('#masterlist')));
+      var ajax_res = false;
 
-    $('#orderlist').val(tree);
-    return true;
+      $('#orderlist').val(tree);
+      return true;
   });
 
   $('ul.sortable').nestedSortable({

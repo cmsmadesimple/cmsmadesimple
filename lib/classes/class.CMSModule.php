@@ -1290,6 +1290,24 @@ abstract class CMSModule
   }
 
   /**
+   * Return a array of CmsAdminMenuItem objects representing menu items for the admin nav for this module.
+   *
+   * This method should do all permissions checking when building the array of objects. 
+   *
+   * @since 2.0
+   * @abstract
+   * @return array of objects.
+   */
+  public function GetAdminMenuItems()
+  {
+    if( !$this->VisibleToAdminUser() ) return;
+
+    $out = array();
+    $out[] = CmsAdminMenuItem::from_module($this);
+    return $out;
+  }
+
+  /**
    * Returns true or false, depending on whether the user has the
    * right permissions to see the module in their Admin menus.
    *

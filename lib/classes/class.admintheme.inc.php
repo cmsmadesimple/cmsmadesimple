@@ -73,12 +73,10 @@ class AdminTheme extends CmsAdminThemeBase
 
 	public function __get($key)
 	{
-		if( $key == 'menuItems' )
-		{
+		if( $key == 'menuItems' ) {
 			return $this->get_admin_navigation();
 		}
-		elseif ( $key == 'breadcrumbs' )
-		{
+		elseif ( $key == 'breadcrumbs' ) {
 			return $this->get_breadcrumbs();
 		}
 		return parent::__get($key);
