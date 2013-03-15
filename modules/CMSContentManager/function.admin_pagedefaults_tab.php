@@ -36,6 +36,7 @@
 if( !isset($gCms) ) exit;
 if( !$this->CheckPermission('Modify Site Preferences') ) return;
 
+echo __FILE__;
 /*
 $page_prefs = CmsContentManagerUtils::get_pagedefaults();
 $smarty->assign('page_prefs',$page_prefs);

@@ -154,6 +154,7 @@ abstract class CmsAdminThemeBase
 					if( is_array($recs) && count($recs) ) {
 						foreach( $recs as $one ) {
 							if( !$one->valid() ) continue;
+							$one->url = str_replace('&amp;','&',$one->url);
 							if( ModuleOperations::Get_instance()->IsSystemModule($object->GetName()) ) $one->system = TRUE;
 							$key = $one->module.$suffix++;
 							$usermoduleinfo[$key] = $one;
@@ -634,12 +635,17 @@ abstract class CmsAdminThemeBase
 		};
 		uasort($this->_menuItems,$fn);
 
+		// set everthing to be selected.
+		foreach ($this->_menuItems as $sectionKey=>$sectionArray) {
+			$this->_menuItems[$sectionKey]['selected'] = FALSE;
+			$this->_menuItems[$sectionKey]['children'] = array();
+		}
+
 		// resolve the tree to be doubly-linked,
 		// and make sure the selections are selected            
 		foreach ($this->_menuItems as $sectionKey=>$sectionArray) {
 			// link the children to the parents; a little clumsy since we can't
 			// assume php5-style references in a foreach.
-			$this->_menuItems[$sectionKey]['children'] = array();
 			foreach ($this->_menuItems as $subsectionKey=>$subsectionArray) {
 				if ($subsectionArray['parent'] == $sectionKey) {
 					$this->_menuItems[$sectionKey]['children'][] = $subsectionKey;
@@ -647,53 +653,47 @@ abstract class CmsAdminThemeBase
 			}
 
 			// set selected
-			if ($this->_script == 'moduleinterface.php') {
-				$a = preg_match('/(module|mact)=([^&,]+)/',$this->_query,$matches);
-				if ($a > 0 && $matches[2] == $sectionKey) {
-					$this->_menuItems[$sectionKey]['selected'] = true;
-					$this->_title .= $sectionArray['title'];
+			if( strstr($_SERVER['REQUEST_URI'],'moduleinterface.php') !== FALSE ) {
+				if( strstr($sectionArray['url'],$_SERVER['REQUEST_URI']) !== FALSE ) {
+					$this->_menuItems[$sectionKey]['selected'] = TRUE;
+					$this->_breadcrumbs[] = array('title'=>$this->_menuItems[$sectionKey]['title'], 
+												  'url'=>$this->_menuItems[$sectionKey]['url']);
 					if ($sectionArray['parent'] != -1) {
 						$parent = $sectionArray['parent'];
 						while ($parent != -1) {
-							$this->_menuItems[$parent]['selected'] = true;
+							$this->_menuItems[$parent]['selected'] = TRUE;
+							$this->_breadcrumbs[] = array('title'=>$this->_menuItems[$parent]['title'], 
+														  'url'=>$this->_menuItems[$parent]['url']);
 							$parent = $this->_menuItems[$parent]['parent'];
 						}
 					}
 				}
-				else {
-					$this->_menuItems[$sectionKey]['selected'] = false;
-				}
 			}
 			else if (strstr($_SERVER['REQUEST_URI'],$sectionArray['url']) !== FALSE &&
 					 (!isset($sectionArray['type']) || $sectionArray['type'] != 'external')) {
-				$this->_menuItems[$sectionKey]['selected'] = true;
+				$this->_menuItems[$sectionKey]['selected'] = TRUE;
 				$this->_title .= $sectionArray['title'];
+				$this->_breadcrumbs[] = array('title'=>$this->_menuItems[$sectionKey]['title'], 
+											  'url'=>$this->_menuItems[$sectionKey]['url']);
 				if ($sectionArray['parent'] != -1) {
 					$parent = $sectionArray['parent'];
 					while ($parent != -1) {
-						$this->_menuItems[$parent]['selected'] = true;
+						$this->_menuItems[$parent]['selected'] = TRUE;
+						$this->_breadcrumbs[] = array('title'=>$this->_menuItems[$parent]['title'], 
+													  'url'=>$this->_menuItems[$parent]['url']);
 						$parent = $this->_menuItems[$parent]['parent'];
 					}
 				}
 			}
-			else {
-				$this->_menuItems[$sectionKey]['selected'] = false;
-			}
 		}
+		$this->_breadcrumbs = array_reverse($this->_breadcrumbs);
 
 		// fix subtitle, if any
-		if ($subtitle != '') {
-			$this->_title .= ': '.$subtitle;
-		}
-		// generate breadcrumb array
+		if ($subtitle != '') $this->_title .= ': '.$subtitle;
+		
 
+		/*
 		$count = 0;
-		foreach ($this->_menuItems as $key=>$menuItem) {
-			if ($menuItem['selected']) {
-				$this->_breadcrumbs[] = array('title'=>$menuItem['title'], 'url'=>$menuItem['url']);
-				$count++;
-			}
-		}
 		if ($count > 0) {
 			// and fix up the last breadcrumb...
 			if ($this->_query != '' && 
@@ -708,6 +708,7 @@ abstract class CmsAdminThemeBase
 				$this->_breadcrumbs[$count-1]['title'] .=  ': '.$this->_subtitle;
 			}
 		}
+		*/
 		debug_buffer('after populate admin navigation');
     }
     

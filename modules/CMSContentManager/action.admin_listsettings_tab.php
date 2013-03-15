@@ -40,7 +40,7 @@ $this->SetCurrentTab('listsettings');
 $this->SetPreference('list_namecolumn',trim($params['list_namecolumn']));
 $this->SetPreference('list_visiblecolumns',implode(',',$params['list_visiblecolumns']));
 $this->SetMessage($this->Lang('msg_prefs_saved'));
-$this->RedirectToAdminTab();
+$this->RedirectToAdminTab('','','admin_settings');
 
 #
 # EOF

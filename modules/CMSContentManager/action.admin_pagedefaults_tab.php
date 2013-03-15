@@ -61,7 +61,7 @@ if( isset($params['pagedefaults']) && isset($params['submit']) ) {
   }
 }
 
-$this->RedirectToAdminTab();
+$this->RedirectToAdminTab('','','admin_settings');
 
 #
 # EOF
