@@ -53,6 +53,7 @@ abstract class CmsAdminThemeBase
 	// meta information
 	private $_sectionCount;
 	private $_modulesBySection;
+	private $_active_item;
 	
 	// tab variables
 	private $_activetab;
@@ -656,6 +657,7 @@ abstract class CmsAdminThemeBase
 			if( strstr($_SERVER['REQUEST_URI'],'moduleinterface.php') !== FALSE ) {
 				if( strstr($sectionArray['url'],$_SERVER['REQUEST_URI']) !== FALSE ) {
 					$this->_menuItems[$sectionKey]['selected'] = TRUE;
+					$this->_active_item = $sectionKey;
 					$this->_breadcrumbs[] = array('title'=>$this->_menuItems[$sectionKey]['title'], 
 												  'url'=>$this->_menuItems[$sectionKey]['url']);
 					if ($sectionArray['parent'] != -1) {
@@ -673,6 +675,7 @@ abstract class CmsAdminThemeBase
 					 (!isset($sectionArray['type']) || $sectionArray['type'] != 'external')) {
 				$this->_menuItems[$sectionKey]['selected'] = TRUE;
 				$this->_title .= $sectionArray['title'];
+				$this->_active_item = $sectionKey;
 				$this->_breadcrumbs[] = array('title'=>$this->_menuItems[$sectionKey]['title'], 
 											  'url'=>$this->_menuItems[$sectionKey]['url']);
 				if ($sectionArray['parent'] != -1) {
@@ -887,6 +890,17 @@ abstract class CmsAdminThemeBase
 	
 
 	/**
+	 * Return the title of the active item.
+	 *
+	 * @return string
+	 */
+	public function get_active_title()
+	{
+		$this->_populate_admin_navigation();
+		return $this->_menuItems[$this->_active_item]['title'];
+	}
+
+	/**
 	 * Attach some data to the admin theme.
 	 *
 	 * @param string key
@@ -1015,7 +1029,7 @@ abstract class CmsAdminThemeBase
 
 	/**
 	 * Abstract method for showing a header in the content area of a theme
-	 * This is usually an advanced function with some speciial behaviour based on the module_help_type
+	 * This is usually an advanced function with some special behaviour based on the module_help_type
 	 *
 	 * @abstract
 	 * @deprecated

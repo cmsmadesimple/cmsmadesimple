@@ -246,40 +246,34 @@ class AdminTheme extends CmsAdminThemeBase
      */
     public function DisplaySectionPages($section)
     {
-      if (count($this->menuItems) < 1)
-	{
-	  // menu should be initialized before this gets called.
-	  // TODO: try to do initialization.
-	  // Problem: current page selection, url, etc?
-	  return -1;
-	}
+		if (count($this->menuItems) < 1) {
+			// menu should be initialized before this gets called.
+			// TODO: try to do initialization.
+			// Problem: current page selection, url, etc?
+			return -1;
+		}
 
-      foreach ($this->menuItems[$section]['children'] as $thisChild)
-	{
-	  $thisItem = $this->menuItems[$thisChild];
-	  if (! $thisItem['show_in_menu'] || strlen($thisItem['url']) < 1)
-	    {
-	      continue;
-	    }
+		foreach ($this->menuItems[$section]['children'] as $thisChild) {
+			$thisItem = $this->menuItems[$thisChild];
+			if (! $thisItem['show_in_menu'] || strlen($thisItem['url']) < 1) {
+				continue;
+			}
 
-	  echo "<div class=\"MainMenuItem\">\n";
-	  echo "<a href=\"".$thisItem['url']."\"";
-	  if (array_key_exists('target', $thisItem))
-	    {
-	      echo " target=" . $thisItem['target'];
-	    }
-	  if ($thisItem['selected'])
-	    {
-	      echo " class=\"selected\"";
-	    }
-	  echo ">".$thisItem['title']."</a>\n";
-	  if (isset($thisItem['description']) && strlen($thisItem['description']) > 0)
-	    {
-	      echo "<span class=\"description\">";
-	      echo $thisItem['description'];
-	      echo "</span>\n";
-	    }
-	  echo "</div>\n";
+			echo "<div class=\"MainMenuItem\">\n";
+			echo "<a href=\"".$thisItem['url']."\"";
+			if (array_key_exists('target', $thisItem)) {
+				echo " target=" . $thisItem['target'];
+			}
+			if ($thisItem['selected']) {
+				echo " class=\"selected\"";
+			}
+			echo ">".$thisItem['title']."</a>\n";
+			if (isset($thisItem['description']) && strlen($thisItem['description']) > 0) {
+				echo "<span class=\"description\">";
+				echo $thisItem['description'];
+				echo "</span>\n";
+			}
+			echo "</div>\n";
         }
     }
 
@@ -294,11 +288,10 @@ class AdminTheme extends CmsAdminThemeBase
      {
      	$next = $section;
 		$node = $this->menuItems[$next];
-        while ($node['parent'] != -1)
-        	{
+        while ($node['parent'] != -1) {
         	$next = $node['parent'];
         	$node = $this->menuItems[$next];
-        	}
+		}
         return $next;
      }
 
@@ -313,30 +306,25 @@ class AdminTheme extends CmsAdminThemeBase
      */
     function ListSectionPages($section)
     {
-        if (! isset($this->menuItems[$section]['children']) || count($this->menuItems[$section]['children']) < 1)
-            {
+        if (! isset($this->menuItems[$section]['children']) || count($this->menuItems[$section]['children']) < 1) {
             return;
-            }
+		}
 
-        if ($this->HasDisplayableChildren($section))
-            {
+        if ($this->HasDisplayableChildren($section)) {
             echo " ".lang('subitems').": ";
             $count = 0;
-            foreach($this->menuItems[$section]['children'] as $thisChild)
-                {
+            foreach($this->menuItems[$section]['children'] as $thisChild) {
                 $thisItem = $this->menuItems[$thisChild];
-                if (! $thisItem['show_in_menu']  || strlen($thisItem['url']) < 1)
-                    {
+                if (! $thisItem['show_in_menu']  || strlen($thisItem['url']) < 1) {
                     continue;
-                    }
-                if ($count++ > 0)
-                    {
+				}
+                if ($count++ > 0) {
                     echo ", ";
-                    }
+				}
                 echo "<a href=\"".$thisItem['url'];
                 echo "\">".$thisItem['title']."</a>";
-                }
-            }
+			}
+		}
     }
 
 
@@ -350,43 +338,36 @@ class AdminTheme extends CmsAdminThemeBase
      */
     public function DisplayAllSectionPages()
     {
-    	if (count($this->menuItems) < 1)
-            {
+    	if (count($this->menuItems) < 1) {
             // menu should be initialized before this gets called.
             // TODO: try to do initialization.
             // Problem: current page selection, url, etc?
             return -1;
-            }
-        foreach ($this->menuItems as $thisSection=>$menuItem)
-            {
-            if ($menuItem['parent'] != -1)
-            	{
+		}
+        foreach ($this->menuItems as $thisSection=>$menuItem) {
+            if ($menuItem['parent'] != -1) {
             	continue;
-            	}
-            if (! $menuItem['show_in_menu'])
-                {
+			}
+            if (! $menuItem['show_in_menu']) {
                 continue;
-                }
+			}
             echo "<div class=\"MainMenuItem\">\n";
             echo "<a href=\"".$menuItem['url']."\"";
-			if (array_key_exists('target', $menuItem))
-				{
+			if (array_key_exists('target', $menuItem)) {
 				echo " target=" . $menuItem['target'];
-				}
-			if ($menuItem['selected'])
-				{
+			}
+			if ($menuItem['selected']) {
 				echo " class=\"selected\"";
-				}
+			}
             echo ">".$menuItem['title']."</a>\n";
             echo "<span class=\"description\">";
-            if (isset($menuItem['description']) && strlen($menuItem['description']) > 0)
-                {
+            if (isset($menuItem['description']) && strlen($menuItem['description']) > 0) {
                 echo $menuItem['description'];
-                }
+			}
             $this->ListSectionPages($thisSection);
             echo "</span>\n";
             echo "</div>\n";
-            }
+		}
     }
 
 

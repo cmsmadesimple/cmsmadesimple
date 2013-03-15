@@ -102,7 +102,7 @@ if( !isset($USE_THEME) || $USE_THEME != false ) {
   if (!$suppressOutput) {
     echo '<div class="pagecontainer">';
     echo '<div class="pageoverflow">';
-    echo $themeObject->ShowHeader($modinst->GetFriendlyName(), '', '', 'both').'</div>';
+    echo $themeObject->ShowHeader($themeObject->get_active_title(), '', '', 'both').'</div>';
   }
 }  
 if( $USE_OUTPUT_BUFFERING ) {
