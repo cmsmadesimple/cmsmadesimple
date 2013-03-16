@@ -250,7 +250,7 @@ final class cms_content_cache
    */
   public static function get_loaded_page_ids()
   {
-	  return array_keys(self::$_id_map);
+	  if( is_array(self::$_id_map) && count(self::$_id_map) )  return array_keys(self::$_id_map);
   }
 
 
@@ -281,6 +281,19 @@ final class cms_content_cache
 	  if( !isset(self::$_id_map[$id]) ) return FALSE;
 	  $hash = self::$_id_map[$id];
 	  return array_search($hash,self::$_alias_map);
+  }
+
+  /**
+   * Indicates wether we have preloaded cached data
+   *
+   * @return boolean
+   */
+  public static function have_preloaded()
+  {
+	  if( is_array(self::get_instance()->_preload_cache) ) {
+		  return TRUE;
+	  }
+	  return FALSE;
   }
 }
 

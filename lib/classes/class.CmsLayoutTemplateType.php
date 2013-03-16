@@ -628,7 +628,7 @@ class CmsLayoutTemplateType
 			if( isset(self::$_cache[$one]) ) continue;
 			$list2[] = $one;
 		}
-
+		
 	  $db = cmsms()->GetDb();
 	  $query = 'SELECT * FROM '.cms_db_prefix().self::TABLENAME.'
               WHERE id IN ('.implode(',',$list).')';

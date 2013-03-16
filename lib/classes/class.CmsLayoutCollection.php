@@ -38,6 +38,7 @@ class CmsLayoutCollection
   private $_css_assoc = array();
   private $_tpl_assoc = array();
   private static $_raw_cache;
+	private static $_dflt_id;
 
   public function get_id()
   {
@@ -262,7 +263,7 @@ class CmsLayoutCollection
 
 		if( $this->get_default() ) {
 			$query = 'UPDATE '.cms_db_prefix().self::TABLENAME.'
-                SET dflt = 0 where id != ?';
+                SET dflt = 0 WHERE id != ?';
 			$dbr = $db->Execute($query,array($this->get_id()));
 			if( !$dbr ) {
 				throw new CmsSQLErrorException($db->sql.' -- '.$db->ErrorMsg());
@@ -309,7 +310,7 @@ class CmsLayoutCollection
 
 		if( $this->get_default() ) {
 			$query = 'UPDATE '.cms_db_prefix().self::TABLENAME.'
-                SET dflt = 0 where id != ?';
+                SET dflt = 0 WHERE id != ?';
 			$dbr = $db->Execute($query,array($this->get_id()));
 			if( !$dbr ) {
 				throw new CmsSQLErrorException($db->sql.' -- '.$db->ErrorMsg());
@@ -470,7 +471,7 @@ class CmsLayoutCollection
     return self::_load_from_data($row);
   }
 
-  public static function get_all()
+  public static function get_all($quick = FALSE)
   {
     $out = null;
     $query = 'SELECT * FROM '.cms_db_prefix().self::TABLENAME.'
@@ -485,36 +486,38 @@ class CmsLayoutCollection
         $cache[$row['id']] = $row;
       }
 
-      $query = 'SELECT * FROM '.cms_db_prefix().self::CSSTABLE.'
-                WHERE design_id IN ('.implode(',',$ids).')
-                ORDER BY design_id,item_order';
-      $dbr2 = $db->GetArray($query);
-      if( is_array($dbr2) && count($dbr2) ) {
-				foreach( $dbr2 as $row ) {
-					if( !isset($cache[$row['design_id']]) ) continue; // orphaned entry, bad.
-					$design = &$cache[$row['design_id']];
-					if( !isset($design['css']) ) {
-						$design['css'] = array();
-					}
-					if( !in_array($row['css_id'],$design['css']) ) {
-						$design['css'][] = $row['css_id'];
+			if( !$quick ) {
+				$query = 'SELECT * FROM '.cms_db_prefix().self::CSSTABLE.'
+                  WHERE design_id IN ('.implode(',',$ids).')
+                  ORDER BY design_id,item_order';
+				$dbr2 = $db->GetArray($query);
+				if( is_array($dbr2) && count($dbr2) ) {
+					foreach( $dbr2 as $row ) {
+						if( !isset($cache[$row['design_id']]) ) continue; // orphaned entry, bad.
+						$design = &$cache[$row['design_id']];
+						if( !isset($design['css']) ) {
+							$design['css'] = array();
+						}
+						if( !in_array($row['css_id'],$design['css']) ) {
+							$design['css'][] = $row['css_id'];
+						}
 					}
 				}
-      }
 
-      $query = 'SELECT * FROM '.cms_db_prefix().self::TPLTABLE.'
-                WHERE design_id IN ('.implode(',',$ids).') ORDER BY design_id';
-      $dbr2 = $db->GetArray($query);
-      if( is_array($dbr2) && count($dbr2) ) {
-				foreach( $dbr2 as $row ) {
-					if( !isset($cache[$row['design_id']]) ) continue; // orphaned entry, bad.
-					$design = &$cache[$row['design_id']];
-					if( !isset($design['templates']) ) {
-						$design['templates'] = array();
+				$query = 'SELECT * FROM '.cms_db_prefix().self::TPLTABLE.'
+                  WHERE design_id IN ('.implode(',',$ids).') ORDER BY design_id';
+				$dbr2 = $db->GetArray($query);
+				if( is_array($dbr2) && count($dbr2) ) {
+					foreach( $dbr2 as $row ) {
+						if( !isset($cache[$row['design_id']]) ) continue; // orphaned entry, bad.
+						$design = &$cache[$row['design_id']];
+						if( !isset($design['templates']) ) {
+							$design['templates'] = array();
+						}
+						$design['templates'][] = $row['tpl_id'];
 					}
-					$design['templates'][] = $row['tpl_id'];
 				}
-      }
+			}
 
       self::$_raw_cache = $cache;
 
@@ -528,7 +531,7 @@ class CmsLayoutCollection
 
 	public static function get_list()
 	{
-		$designs = self::get_all();
+		$designs = self::get_all(TRUE);
 		if( is_array($designs) && count($designs) ) {
 			$out = array();
 			foreach( $designs as $one ) {
@@ -540,14 +543,24 @@ class CmsLayoutCollection
 
 	public static function &load_default()
 	{
-		$query = 'SELECT id FROM '.cms_db_prefix().self::TABLENAME.'
-              WHERE dflt = 1';
-		$db = cmsms()->GetDb();
-		$tmp = $db->GetOne($query);
-		if( $tmp > 0 ) {
-			return self::load($tmp);
+		$tmp = null;
+		if( self::$_dflt_id == '' ) {
+			$query = 'SELECT * FROM '.cms_db_prefix().self::TABLENAME.' WHERE dflt = 1';
+			$db = cmsms()->GetDb();
+			$tmp = $db->GetRow($query);
+			if( $tmp && $tmp['id'] > 0 && $tmp['dflt'] == 1) {
+				self::$_dflt_id = $tmp['id'];
+			}
 		}
-		
+
+		if( self::$_dflt_id > 0 ) {
+			if( is_array($tmp) ) {
+				if( !is_array(self::$_raw_cache) ) self::$_raw_cache = array();
+				self::$_raw_cache[$tmp['id']] = $tmp;
+			}
+			return self::load(self::$_dflt_id);
+		}
+
     throw new CmsInvalidDataException('There is no default design selected');
 	}
 

@@ -77,6 +77,10 @@ class microtiny_utils {
     $origname = $name;
     if( !startswith($name,'mt_') ) $name = 'mt_'.$name;
     self::add_textarea($name);
+    
+    if( strstr($addtext,'class=') !== FALSE ) {
+      $addtext = 'class="microtiny" '.$addtext;
+    }
 
     $rows = max(5,min(50,$rows));
     $output = '';

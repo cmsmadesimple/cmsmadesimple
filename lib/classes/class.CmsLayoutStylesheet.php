@@ -152,7 +152,7 @@ class CmsLayoutStylesheet
     if( is_null($this->_design_assoc) ) {
       $this->_design_assoc = null;
       $db = cmsms()->GetDb();
-      $query = 'SELECt design_id FROM '.cms_db_prefix().CmsLayoutCollection::CSSTABLE.'
+      $query = 'SELECT design_id FROM '.cms_db_prefix().CmsLayoutCollection::CSSTABLE.'
                 WHERE css_id = ?';
       $tmp = $db->GetCol($query,array($this->get_id()));
       if( is_array($tmp) && count($tmp) ) {

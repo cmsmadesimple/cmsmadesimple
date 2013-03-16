@@ -92,12 +92,13 @@ class Content extends ContentBase
     function SetProperties()
     {
       parent::SetProperties();
-	  $this->AddProperty('design_id',3,self::TAB_OPTIONS);
-      $this->AddProperty('template',4,self::TAB_OPTIONS);
-      $this->AddProperty('pagemetadata',20,self::TAB_OPTIONS);
-      $this->AddProperty('searchable',8,self::TAB_OPTIONS);
-      $this->AddProperty('pagedata',25,self::TAB_OPTIONS);
+	  $this->AddProperty('design_id',2,self::TAB_OPTIONS);
+      $this->AddProperty('template',2,self::TAB_OPTIONS);
+      $this->AddProperty('searchable',20,self::TAB_OPTIONS);
       $this->AddProperty('disable_wysiwyg',60,self::TAB_OPTIONS);
+
+      $this->AddProperty('pagemetadata',1,self::TAB_LOGIC);
+      $this->AddProperty('pagedata',2,self::TAB_LOGIC);
     }
 
 	/**
@@ -289,7 +290,7 @@ class Content extends ContentBase
 		static $_designtree;
 		static $_designlist;
 		static $_templates;
-		if( $_designs == null ) {
+		if( $_designlist == null ) {
 			$_tpl = CmsLayoutTemplate::template_query(array('as_list'=>1));
 			if( is_array($_tpl) && count($_tpl) > 0 ) {
 				$_templates = array();
@@ -314,8 +315,8 @@ class Content extends ContentBase
 					$out = CmsFormUtils::create_dropdown('design_id',$_designlist,
 														 $this->GetPropertyValue('design_id'),
 														 array('id'=>'design_id'));
-					return array('<label for="design_id">*'.lang('design').':</label>', 
-								 $out,lang('info_editcontent_design'));
+					$help = '&nbsp;'.cms_admin_utils::get_help_tag('info_editcontent_design');
+					return array('<label for="design_id">*'.lang('design').':</label>'.$help,$out);
 				}
 			}
 			catch( CmsException $e ) {
@@ -329,8 +330,8 @@ class Content extends ContentBase
 				$template_id = $this->TemplateId();
 				if( $template_id < 1 ) $template_id = $dflt_tpl->get_id();
 				$out = CmsFormUtils::create_dropdown('template_id',$_templates,$template_id,array('id'=>'template_id'));
-				return array('<label for="template_id">*'.lang('template').':</label>',
-							 $out,lang('info_editcontent_template'));
+				$help = '&nbsp;'.cms_admin_utils::get_help_tag('info_editcontent_template');
+				return array('<label for="template_id">*'.lang('template').':</label>'.$help,$out);
 			}
 			catch( CmsException $e ) {
 				// nothing here yet.
@@ -338,24 +339,27 @@ class Content extends ContentBase
 			break;
 
 		case 'pagemetadata':
-			return array('<label for="id_pagemetadata">'.lang('page_metadata').':</label>',create_textarea(false, $this->Metadata(), 'metadata', 'pagesmalltextarea', 'metadata', '', '', '80', '6'));
+			$help = '&nbsp;'.cms_admin_utils::get_help_tag('help_content_pagemeta');
+			return array('<label for="id_pagemetadata">'.lang('page_metadata').':</label>'.$help,create_textarea(false, $this->Metadata(), 'metadata', 'pagesmalltextarea', 'metadata', '', '', '80', '6'));
 
 		case 'pagedata':
-			return array('<label for="id_pagedata">'.lang('pagedata_codeblock').':</label>',
+			$help = '&nbsp;'.cms_admin_utils::get_help_tag('help_content_pagedata');
+			return array('<label for="id_pagedata">'.lang('pagedata_codeblock').':</label>'.$help,
 						 create_textarea(false,$this->GetPropertyValue('pagedata'),'pagedata','pagesmalltextarea','id_pagedata','','','80','6'));
 
 		case 'searchable':
 			$searchable = $this->GetPropertyValue('searchable');
 			if( $searchable == '' ) $searchable = 1;
-			return array('<label for="id_searchable">'.lang('searchable').':</label>',
+			$help = '&nbsp;'.cms_admin_utils::get_help_tag('help_page_searchable');
+			return array('<label for="id_searchable">'.lang('searchable').':</label>'.$help,
 						 '<input type="hidden" name="searchable" value="0"/>
-                          <input id="id_searchable" type="checkbox" name="searchable" value="1" '.($searchable==1?'checked="checked"':'').'/>',
-						 lang('help_page_searchable'));
+                          <input id="id_searchable" type="checkbox" name="searchable" value="1" '.($searchable==1?'checked="checked"':'').'/>');
 
 		case 'disable_wysiwyg':
 			$disable_wysiwyg = $this->GetPropertyValue('disable_wysiwyg');
 			if( $disable_wysiwyg == '' ) $disable_wysiwyg = 0;
-			return array('<label for="id_disablewysiwyg">'.lang('disable_wysiwyg').':</label>',
+			$help = '&nbsp;'.cms_admin_utils::get_help_tag('help_page_disablewysiwyg');
+			return array('<label for="id_disablewysiwyg">'.lang('disable_wysiwyg').':</label>'.$help,
 						 '<input type="hidden" name="disable_wysiwyg" value="0" />
              <input id="id_disablewysiwyg" type="checkbox" name="disable_wysiwyg" value="1"  '.($disable_wysiwyg==1?'checked="checked"':'').' onclick="this.form.submit()" />');
 			break;
@@ -475,7 +479,8 @@ class Content extends ContentBase
 		switch( $blockInfo['type'] ) {
 		case 'text':
 			if( $blockName == 'content_en' && $label == '' ) {
-				$label = '<label for="content_en">*'.lang('content').'</label>';
+				$help = '&nbsp;'.cms_admin_utils::get_help_tag('help_content_content_en');
+				$label = '<label for="content_en">*'.lang('content').'</label>'.$help;
 			}
 			$field = $this->_display_text_block($blockInfo,$value,$adding);
 			break;

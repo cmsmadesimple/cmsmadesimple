@@ -1,5 +1,5 @@
-{process_pagedata}<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" >
+{process_pagedata}<!doctype html>
+<html lang="{cms_get_language}">
 <head>
 <title>{sitename} - {title}</title>
 {metadata}
@@ -8,22 +8,22 @@
 <body>
 
 <!-- start header -->
-<div id="header">
+<header id="header">
   <h1>{sitename}</h1>
-</div>
+</header>
 <!-- end header -->
 
 <!-- start menu -->
-<div id="menu">
+<nav id="menu">
   {menu}
-</div>
+</nav>
 <!-- end menu -->
 
 <!-- start content -->
-<div id="content">
+<section id="content">
   <h1>{title}</h1>
   {content}
-</div>
+</section>
 <!-- end content -->
 
 </body>

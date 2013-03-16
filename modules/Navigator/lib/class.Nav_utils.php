@@ -111,12 +111,12 @@ final class Nav_utils
       if( $node->has_children() ) $children = $node->get_children();
       
       // are we recursing?
-     if( is_array($children) && count($children) && ($nlevels < 0 || $depth+1 < $nlevels) && 
-	 (($collapse && ($obj->parent || $obj->current)) || !$collapse) ) {
-	$children = $node->get_children();
+      if( is_array($children) && count($children) && ($nlevels < 0 || $depth+1 < $nlevels) && 
+	  (($collapse && ($obj->parent || $obj->current)) || !$collapse) ) {
+
 	$child_nodes = array();
 	for( $i = 0; $i < count($children); $i++ ) {
-	  $tmp = self::fill_node($children[$i],$deep,$nlevels,$show_all,$depth+1);
+	  $tmp = self::fill_node($children[$i],$deep,$nlevels,$show_all,$collapse,$depth+1);
 	  if( is_object($tmp) ) {
 	    $child_nodes[] = $tmp;
 	  }

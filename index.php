@@ -18,6 +18,7 @@
 #
 #$Id$
 
+$starttime = microtime();
 $orig_memory = (function_exists('memory_get_usage')?memory_get_usage():0);
 
 /**
@@ -26,7 +27,6 @@ $orig_memory = (function_exists('memory_get_usage')?memory_get_usage():0);
  * @package CMS
  */	
 
-$starttime = microtime();
 clearstatcache();
 define('CONFIG_FILE_LOCATION',__DIR__.'/config.php');
 

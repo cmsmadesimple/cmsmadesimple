@@ -852,6 +852,49 @@ $lang['admin']['help'] = 'Help';
 $lang['admin']['helpaddtemplate'] = '<p>A template is what controls the look and feel of your site\'s content.</p><p>Create the layout here and also add your CSS in the Stylesheet section to control the look of your various elements.</p>';
 $lang['admin']['helplisttemplate'] = '<p>This page allows you to edit, delete, and create templates.</p><p>To create a new template, click on the <u>Add New Template</u> button.</p><p>If you wish to set all content pages to use the same template, click on the <u>Set All Content</u> link.</p><p>If you wish to duplicate a template, click on the <u>Copy</u> icon and you will be prompted to name the new duplicate template.</p>';
 $lang['admin']['helpwithsection'] = '%s Help';
+$lang['admin']['help_content_accesskey'] = 'Specify an access key character (single character) that can be used to access this content page.  This is useful for accessibility purposes';
+$lang['admin']['help_content_addteditor'] = 'This field allows you to specify other admin users who will be able to edit this content page.  This field is useful when editors have limited access privileges, and need the ability to edit different pages.';
+$lang['admin']['help_content_cachable'] = 'This toggle indicates wether the content of this page should be cached on the server, and on the browser.  If a page is not cachable, then it must be regenerated on each and every request';
+$lang['admin']['help_content_content_en'] = 'This is the default content block.  Here you enter the content that will be most prominently displayed on the content page';
+$lang['admin']['help_content_disablewysiwyg'] = 'This checkbox is used to indicate that regardless of settings in the page template, or user settings no wysiwyg editor should be used at all in any text area on this page.  This is useful when the page uses a standard site page template, but contains either hard coded HTML, smarty logic, or only displays the output of a third party module';
+$lang['admin']['help_content_extra1'] = 'This field is used for advanced navigations or template logic.  Consult your site developer to see if you need to edit this value when managing content';
+$lang['admin']['help_content_extra2'] = 'This field is used for advanced navigations or template logic.  Consult your site developer to see if you need to edit this value when managing content';
+$lang['admin']['help_content_extra3'] = 'This field is used for advanced navigations or template logic.  Consult your site developer to see if you need to edit this value when managing content';
+$lang['admin']['help_content_image'] = 'This field allows you to associate an image with the content page.  The images must have already been uploaded to the website in a directory specified by the website designer.  The image may optionally be displayed on the page, or used when building a navigation';
+$lang['admin']['help_content_menutext'] = 'The menu text is the text that represents this page in the navigation';
+$lang['admin']['help_content_owner'] = 'This field allows you to adjust the owner of this content item.  It is useful when giving access to this page to an editor with less access privileges';
+$lang['admin']['help_content_pagedata'] = 'This is a field where you can enter smarty tags or logic that are specific to this content page, will probably not generate any direct output, and must be processed before anything else on the page';
+$lang['admin']['help_content_parent'] = 'Select an existing page in the content hierarchy which will be the parent page for this content page.  This relationship is used when building a navigation';
+$lang['admin']['help_content_secure'] = 'Specify wether this page should be accessed via a secure (encrypted) connection.  i.e: via HTTPS';
+$lang['admin']['help_content_showinmenu'] = 'Select wether this page will be visible (by default) in the navigation.';
+$lang['admin']['help_content_tabindex'] = 'Specify an integer value for the tab order used when surfing the navigation to browse to this page. This is useful when building accessible websites';
+$lang['admin']['help_content_thumbnail'] = 'This field allows you to associate a thumbnail image with the content page.  The images must have already been generated on the website <em>(The FileManager module can generate thumbnails on upload)</em> to a directory specified by the website designer.  The image may optionally be displayed on the page, or used when building a navigation';
+$lang['admin']['help_content_target'] = 'Specify a target attribute to use when including this item in the navigation.  A target of _blank will open this page in a new navigator window, or tab.';
+$lang['admin']['help_content_title'] = 'The title of the page is displayed in the title bar of the browser, is used in search engine optimization, and is usually displayed prominently on the website';
+$lang['admin']['help_content_titleattribute'] = 'Specify a brief description for this content page.  This data can be used for search engine optimization, or in the navigation';
+$lang['admin']['help_content_type'] = <<<EOT
+<p>The content type is the overall control of the behavior of the page.  Numerous types of content are included with CMSMS and addon modules may provide even more.</p><br/>
+<ul>
+  <li>Content
+    <p>The Content page provides standard HTML layout.  Styling is provided by associating a design with the content page, and the layout of a page is provided by associating a page template.</p>
+  </li>
+  <li>Link
+    <p>The link content type is used strictly to build a navigation item that points to an external URL.</p>
+  </li>
+  <li>PageLink
+<p>This content type is used to build a navigation item that points to another content page, providing the ability to link to the same content page from multiple places in the navigation.</p>
+  </li>
+  <li>SectionHeader
+<p>This content type is used to build a navigation item that does not have any action or content of its own, and merely helps to organize your navigation by displaying a list of its child pages.</p>
+  </li>
+  <li>Separator
+<p>This content type is used to logically separate items in the navigation <em>(usually with a horizontal or vertical bar)</em>.  It does not allow any children, and does not have any URL or content of its own.</p>
+  </li>
+  <li>ErrorPage
+<p>This content type is used to display 404 <em>(content not found)</em> errors on your website.  Only one page of this typeis allowed in each installation.</p>
+  </li>
+</ul>
+EOT;
 $lang['admin']['help_css_max_age'] = 'This parameter should be set relatively high for static sites, and should be set to 0 for site development';
 $lang['admin']['help_page_alias'] = 'The alias is used as an alternate to the page id to uniquely identify a page. It must be unique across all pages.  The alias is also used to assist in building the URL for the page';
 $lang['admin']['help_page_cachable'] = 'Performance can be increased by setting as many pages as possible to cachable.  However this cannot be used for pages where content may change on a per request basis';
@@ -1396,9 +1439,10 @@ $lang['admin']['system_verification'] = 'System Verification';
 //   S
 
 $lang['admin']['aa_main_tab__'] = 'Main';
-$lang['admin']['zz_nav_tab__'] = 'Navigation';
-$lang['admin']['zz_options_tab__'] = 'Options';
-$lang['admin']['zz_perms_tab__'] = 'Permissions';
+$lang['admin']['zz_1nav_tab__'] = 'Navigation';
+$lang['admin']['zz_2logic_tab__'] = 'Logic';
+$lang['admin']['zz_3options_tab__'] = 'Options';
+$lang['admin']['zz_4perms_tab__'] = 'Permissions';
 $lang['admin']['tabindex'] = 'Tab Index';
 $lang['admin']['tagdescription'] = 'Tags are little bits of functionality that can be added to your content and/or templates.';
 $lang['admin']['tags'] = 'Tags';

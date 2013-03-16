@@ -552,6 +552,7 @@ class CmsLayoutTemplate
 			$list2[] = $one;
 		}
 		$list2 = array_unique($list2);
+		if( !count($list2) ) return;
 
 		// get the data and populate the cache.
 		$query = 'SELECT * FROM '.cms_db_prefix().self::TABLENAME.' WHERE id IN ('.
@@ -577,6 +578,8 @@ class CmsLayoutTemplate
 
 	public static function &load($a)
 	{
+		static $_nn = 0;
+
 		$db = cmsms()->GetDb();
 		$row = null;
 		if( (int)$a > 0 ) {

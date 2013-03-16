@@ -45,6 +45,7 @@ class UserOperations
 
 	private static $_instance;
 	private static $_user_groups;
+	private $_users;
 
 	public static function &get_instance()
 	{
@@ -63,30 +64,34 @@ class UserOperations
 	 */
 	function &LoadUsers($limit = 10000,$offset = 0)
 	{
-		$gCms = cmsms();
-		$db = $gCms->GetDb();
-		$result = array();
+		if( !is_array($this->_users) ) {
+			$gCms = cmsms();
+			$db = $gCms->GetDb();
+			$result = array();
 
-		$query = "SELECT user_id, username, password, first_name, last_name, email, active, admin_access 
-                  FROM ".cms_db_prefix()."users ORDER BY username";
-		$dbresult = $db->SelectLimit($query,$limit,$offset);
+			$query = "SELECT user_id, username, password, first_name, last_name, email, active, admin_access 
+                      FROM ".cms_db_prefix()."users ORDER BY username";
+			$dbresult = $db->SelectLimit($query,$limit,$offset);
 
-		while( $dbresult && !$dbresult->EOF ) {
-			$row = $dbresult->fields;
-			$oneuser = new User();
-			$oneuser->id = $row['user_id'];
-			$oneuser->username = $row['username'];
-			$oneuser->firstname = $row['first_name'];
-			$oneuser->lastname = $row['last_name'];
-			$oneuser->email = $row['email'];
-			$oneuser->password = $row['password'];
-			$oneuser->active = $row['active'];
-			$oneuser->adminaccess = $row['admin_access'];
-			$result[] = $oneuser;
-			$dbresult->MoveNext();
+			while( $dbresult && !$dbresult->EOF ) {
+				$row = $dbresult->fields;
+				$oneuser = new User();
+				$oneuser->id = $row['user_id'];
+				$oneuser->username = $row['username'];
+				$oneuser->firstname = $row['first_name'];
+				$oneuser->lastname = $row['last_name'];
+				$oneuser->email = $row['email'];
+				$oneuser->password = $row['password'];
+				$oneuser->active = $row['active'];
+				$oneuser->adminaccess = $row['admin_access'];
+				$result[] = $oneuser;
+				$dbresult->MoveNext();
+			}
+
+			$this->_users = $result;
 		}
 
-		return $result;
+		return $this->_users;
 	}
 
 

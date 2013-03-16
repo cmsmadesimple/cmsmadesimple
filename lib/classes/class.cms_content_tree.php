@@ -231,7 +231,7 @@ class cms_content_tree extends cms_tree
    * @param bool Optionally load all the siblings for the selected content object at the same time (a preformance optimization)
    * @param bool If loading siblings, include inactive/disabled pages.
    */
-  public function &getContent($deep = false,$loadsiblings = true,$loadall = false) // loadall used to be true: calguy1000, June 25 2011
+  public function &getContent($deep = false,$loadsiblings = true,$loadall = false)
   {
 	  if( !cms_content_cache::content_exists($this->get_tag('id')) ) {
 		  // not in cache

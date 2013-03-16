@@ -55,37 +55,95 @@ final class cms_admin_utils
 
   public static function get_icon($icon)
   {
-    $theme = cms_utils::get_theme_object();
-    if( !is_object($theme) ) return;
+	  $theme = cms_utils::get_theme_object();
+	  if( !is_object($theme) ) return;
 
-    $smarty = cmsms()->GetSmarty();
-    $module = $smarty->get_template_vars('actionmodule');
+	  $smarty = cmsms()->GetSmarty();
+	  $module = $smarty->get_template_vars('actionmodule');
 
-    $dirs = array();
-    if( $module ) {
-      $obj = cms_utils::get_module($module);
-      if( is_object($obj) ) {
-	$img = basename($icon);
-	$dirs[] = array(cms_join_path($obj->GetModulePath(),'icons',"{$img}"),
-			$obj->GetModuleURLPath()."/icons/{$img}");
-	$dirs[] = array(cms_join_path($obj->GetModulePath(),'images',"{$img}"),
-			$obj->GetModuleURLPath()."/images/{$img}");
-      }
-    }
-    if( basename($icon) == $icon ) {
-      $icon = "icons/system/{$icon}";
-    }
-    $config = cmsms()->GetConfig();
-    $dirs[] = array(cms_join_path($config['root_path'],$config['admin_dir'],"themes/{$theme->themeName}/images/{$icon}"),
-		    $config['admin_url']."/themes/{$theme->themeName}/images/{$icon}");
+	  $dirs = array();
+	  if( $module ) {
+		  $obj = cms_utils::get_module($module);
+		  if( is_object($obj) ) {
+			  $img = basename($icon);
+			  $dirs[] = array(cms_join_path($obj->GetModulePath(),'icons',"{$img}"),
+							  $obj->GetModuleURLPath()."/icons/{$img}");
+			  $dirs[] = array(cms_join_path($obj->GetModulePath(),'images',"{$img}"),
+							  $obj->GetModuleURLPath()."/images/{$img}");
+		  }
+	  }
+	  if( basename($icon) == $icon ) {
+		  $icon = "icons/system/{$icon}";
+	  }
+	  $config = cmsms()->GetConfig();
+	  $dirs[] = array(cms_join_path($config['root_path'],$config['admin_dir'],"themes/{$theme->themeName}/images/{$icon}"),
+					  $config['admin_url']."/themes/{$theme->themeName}/images/{$icon}");
 
-    $fnd = null;
-    foreach( $dirs as $one ) {
-      if( file_exists($one[0]) ) {
-	$fnd = $one[1];
-      }
-    }
-    return $fnd;
+	  $fnd = null;
+	  foreach( $dirs as $one ) {
+		  if( file_exists($one[0]) ) {
+			  $fnd = $one[1];
+		  }
+	  }
+	  return $fnd;
+  }
+
+  public static function get_help_tag()
+  {
+	  if( !cmsms()->test_state(CmsApp::STATE_ADMIN_PAGE) ) return;
+
+	  $params = array();
+	  $args = func_get_args();
+	  if( count($args) == 1 && !is_string($args[0]) ) {
+		  $params['key2'] = $args[0];
+	  }
+	  else {
+		  $params = $args;
+	  }
+
+	  $theme = cms_utils::get_theme_object();
+	  if( !is_object($theme) ) return;
+
+	  $key1 = '';
+	  $key2 = '';
+	  $helptext = '';
+	  foreach( $params as $key => $value ) {
+		  switch( $key ) {
+		  case 'key1':
+			  $key1 = trim($value);
+			  break;
+		  case 'key2':
+			  $key2 = trim($value);
+			  break;
+		  case 'value':
+			  $helptext = $value;
+		  }
+	  }
+
+	  if( !$key1 ) {
+		  $smarty = cmsms()->GetSamrty();
+		  $module = $smarty->get_template_vars('actionmodule');
+		  if( $module ) {
+			  $key1 = $module;
+		  }
+		  else {
+			  $key1 = 'core';
+		  }
+	  }
+	  if( !$key1 ) return;
+	  $key = $key1;
+	  if( $key2 !== '' ) $key .= '__'.$key2;
+
+	  $icon = self::get_icon('info.gif');
+	  if( !$icon ) return;
+
+	  if( !$helptext ) {
+		  $out = '<span class="cms_help"><img class="cms_helpicon" src="'.$icon.'" alt="'.$icon.'"/><span class="cms_helpkey" style="display: none;">'.$key.'</span></span>';
+	  }
+	  else {
+		  $out = '<div class="cms_helptext title="'.lang('help').'" id="cmshelp_'.$key.'" style="display: none;">'.$helptext.'</div>';
+	  }
+	  return $out;
   }
 } // end of class
 

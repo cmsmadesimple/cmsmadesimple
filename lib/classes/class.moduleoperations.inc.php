@@ -791,8 +791,7 @@ final class ModuleOperations
   private function _upgrade_module( &$module_obj, $to_version = '' )
   {
 	  // we can't upgrade a module if the schema is not up to date.
-	  $db = cmsms()->GetDb();
-	  $tmp = $db->GetOne('SELECT version FROM '.cms_db_prefix().'version');
+	  $tmp = cmsms()->get_installed_schema_version();
 	  if( $tmp && $tmp < CMS_SCHEMA_VERSION ) return FALSE;
 
 	  $info = $this->_get_module_info();
@@ -801,9 +800,9 @@ final class ModuleOperations
 
 	  if( $to_version == '' ) $to_version = $module_obj->GetVersion();
 
+	  $db = cmsms()->GetDb();
 	  $result = $module_obj->Upgrade($dbversion,$to_version);
 	  if( $result !== FALSE ) {
-		  $db = cmsms()->GetDb();
 		  $lazyload_fe    = (method_exists($module_obj,'LazyLoadFrontend') && $module_obj->LazyLoadFrontend())?1:0;
 		  $lazyload_admin = (method_exists($module_obj,'LazyLoadAdmin') && $module_obj->LazyLoadAdmin())?1:0;
 

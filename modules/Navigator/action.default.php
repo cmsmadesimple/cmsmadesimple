@@ -35,6 +35,7 @@
 #END_LICENSE
 #$Id: News.module.php 2114 2005-11-04 21:51:13Z wishy $
 
+debug_buffer('Start Navigator default action');
 $items = null;
 $nlevels = -1;
 $show_all = FALSE;
@@ -171,6 +172,11 @@ if( !$smarty->isCached($this->GetTemplateResource($template),$cache_id,$compile_
 
   if( count($rootnodes) == 0 ) return; // nothing to do.
 
+  // preload all active content
+  if( !cms_content_cache::have_preloaded() ) {
+    ContentOperations::get_instance()->LoadAllContent($deep,$show_all);
+  }
+
   // ready to fill the nodes
   $outtree = array();
   foreach( $rootnodes as $node ) {
@@ -181,6 +187,7 @@ if( !$smarty->isCached($this->GetTemplateResource($template),$cache_id,$compile_
   $smarty->assign('nodes',$outtree);
 }
 echo $smarty->fetch($this->GetTemplateResource($template),$cache_id,$compile_id);
+debug_buffer('End Navigator default action');
 #
 # EOF
 #

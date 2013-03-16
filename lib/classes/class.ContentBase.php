@@ -40,9 +40,10 @@ define('CMS_CONTENT_HIDDEN_NAME','--------');
 abstract class ContentBase
 {
   const TAB_MAIN = 'aa_main_tab__';
-  const TAB_NAV = 'zz_nav_tab__';
-  const TAB_OPTIONS = 'zz_options_tab__';
-  const TAB_PERMS = 'zz_perms_tab__';
+  const TAB_NAV = 'zz_1nav_tab__';
+  const TAB_LOGIC = 'zz_2logic_tab__';
+  const TAB_OPTIONS = 'zz_3options_tab__';
+  const TAB_PERMS = 'zz_4perms_tab__';
   
   /**
    * The unique ID identifier of the element
@@ -285,8 +286,8 @@ abstract class ContentBase
   {
     $this->AddProperty('title',1,self::TAB_MAIN,1);
 
-    $this->AddProperty('menutext',1,self::TAB_NAV,1);
     $this->AddProperty('parent',2,self::TAB_NAV,1);
+    $this->AddProperty('menutext',1,self::TAB_NAV,1);
     $this->AddProperty('page_url',3,self::TAB_NAV);
     $this->AddProperty('showinmenu',4,self::TAB_NAV);
     $this->AddProperty('titleattribute',5,self::TAB_NAV);
@@ -1979,9 +1980,10 @@ abstract class ContentBase
 
     static public function GetAdditionalEditorInput($addteditors,$owner_id = -1)
     {
-      $ret[] = lang('additionaleditors');
+      $help = '&nbsp;'.cms_admin_utils::get_help_tag('help_content_addteditor');
+      $ret[] = '<label for="addteditors">'.lang('additionaleditors').':</label>'.$help;
       $text = '<input name="additional_editors" type="hidden" value=""/>';
-      $text .= '<select name="additional_editors[]" multiple="multiple" size="5">';
+      $text .= '<select id="addteditors" name="additional_editors[]" multiple="multiple" size="5">';
 
       $topts = self::GetAdditionalEditorOptions();
       foreach( $topts as $k => $v ) {
@@ -2105,31 +2107,40 @@ abstract class ContentBase
 
       switch( $one ) {
       case 'cachable':
-	return array('<label for="in_cachable">'.lang('cachable').':</label>',
+	$help = '&nbsp;'.cms_admin_utils::get_help_tag('help_content_cachable');
+	return array('<label for="in_cachable">'.lang('cachable').':</label>'.$help,
 		     '<input type="hidden" name="cachable" value="0"/><input id="in_cachable" class="pagecheckbox" type="checkbox" value="1" name="cachable"'.($this->mCachable?' checked="checked"':'').' />',lang('help_page_cachable'));
 
       case 'title':
-	return array('<label for="in_title">*'.lang('title').'</label>:','<input type="text" id="in_title" name="title" value="'.cms_htmlentities($this->mName).'" />');
+	$help = '&nbsp;'.cms_admin_utils::get_help_tag('help_content_title');
+	return array('<label for="in_title">*'.lang('title').':</label>'.$help,
+		     '<input type="text" id="in_title" name="title" value="'.cms_htmlentities($this->mName).'" />');
 	      
       case 'menutext':
-	return array('<label for="in_menutext">*'.lang('menutext').'</label>:','<input type="text" name="menutext" id="in_menutext" value="'.cms_htmlentities($this->mMenuText).'" />');
+	$help = '&nbsp;'.cms_admin_utils::get_help_tag('help_content_menutext');
+	return array('<label for="in_menutext">*'.lang('menutext').':</label>'.$help,
+		     '<input type="text" name="menutext" id="in_menutext" value="'.cms_htmlentities($this->mMenuText).'" />');
 
       case 'parent':
 	$contentops = $gCms->GetContentOperations();
 	$tmp = $contentops->CreateHierarchyDropdown($this->mId, $this->mParentId, 'parent_id', 0, 1, 0, 1,get_site_preference('listcontent_showtitle',true) );
 	if( empty($tmp) && !check_permission(get_userid(),'Manage All Content') )
 	  return array('','<input type="hidden" name="parent_id" value="'.$this->mParentId.'" />');
-	if( !empty($tmp) ) return array('<label for="parent_id">'.lang('parent').'</label>:',$tmp);
+	$help = '&nbsp;'.cms_admin_utils::get_help_tag('help_content_parent');
+	if( !empty($tmp) ) return array('<label for="parent_id">*'.lang('parent').':</label>'.$help,$tmp);
 	break;
 
       case 'active':
 	if( !$this->DefaultContent() ) {
-	  return array('<label for="id_active">'.lang('active').'</label>:','<input type="hidden" name="active" value="0"/><input class="pagecheckbox" type="checkbox" name="active" id="id_active" value="1"'.($this->mActive?' checked="checked"':'').' />');
+	  $help = '&nbsp;'.cms_admin_utils::get_help_tag('help_content_active');
+	  return array('<label for="id_active">'.lang('active').':</label>'.$help,'<input type="hidden" name="active" value="0"/><input class="pagecheckbox" type="checkbox" name="active" id="id_active" value="1"'.($this->mActive?' checked="checked"':'').' />');
 	}
 	break;
 
       case 'showinmenu':
-	return array('<label for="showinmenu">'.lang('showinmenu').'</label>:','<input type="hidden" name="showinmenu" value="0"/><input class="pagecheckbox" type="checkbox" value="1" name="showinmenu" id="showinmenu"'.($this->mShowInMenu?' checked="checked"':'').' />');
+	$help = '&nbsp;'.cms_admin_utils::get_help_tag('help_content_active');
+	return array('<label for="showinmenu">'.lang('showinmenu').':</label>'.$help,
+		     '<input type="hidden" name="showinmenu" value="0"/><input class="pagecheckbox" type="checkbox" value="1" name="showinmenu" id="showinmenu"'.($this->mShowInMenu?' checked="checked"':'').' />');
 
       case 'target':
 	$text = '<option value="---">'.lang('none').'</option>';
@@ -2137,11 +2148,14 @@ abstract class ContentBase
 	$text .= '<option value="_parent"'.($this->GetPropertyValue('target')=='_parent'?' selected="selected"':'').'>_parent</option>';
 	$text .= '<option value="_self"'.($this->GetPropertyValue('target')=='_self'?' selected="selected"':'').'>_self</option>';
 	$text .= '<option value="_top"'.($this->GetPropertyValue('target')=='_top'?' selected="selected"':'').'>_top</option>';
-	return array('<label for="target">'.lang('target').'</label>:','<select name="target" id="target">'.$text.'</select>',
-		     lang('info_target'));
+	$help = '&nbsp;'.cms_admin_utils::get_help_tag('help_content_target');
+	return array('<label for="target">'.lang('target').':</label>'.$help,
+		     '<select name="target" id="target">'.$text.'</select>');
 
       case 'alias':
-	return array('<label for="alias">'.lang('pagealias').'</label>:','<input type="text" name="alias" id="alias" value="'.$this->mAlias.'" />',lang('help_page_alias'));
+	$help = '&nbsp;'.cms_admin_utils::get_help_tag('help_page_alias');
+	return array('<label for="alias">'.lang('pagealias').':</label>'.$help,
+		     '<input type="text" name="alias" id="alias" value="'.$this->mAlias.'" />');
 
       case 'secure':
 	$opt = '';
@@ -2150,16 +2164,18 @@ abstract class ContentBase
 	}
 	$str  = '<input type="hidden" name="secure" value="0"/>';
 	$str .= '<input type="checkbox" name="secure" id="secure" value="1"'.$opt.'/>';
-	return array('<label for="secure">'.lang('secure_page').'</label>:',$str);
+	$help = '&nbsp;'.cms_admin_utils::get_help_tag('help_content_secure');
+	return array('<label for="secure">'.lang('secure_page').':</label>'.$help,$str);
 
       case 'page_url':
 	if( !$this->DefaultContent() ) {
 	  $str = '<input type="text" name="page_url" id="page_url" value="'.$this->mURL.'" size="50" maxlength="255"/>';
-	  $prompt = '<label for="page_url">'.lang('page_url').'</label>:';
+	  $prompt = '<label for="page_url">'.lang('page_url').':</label>';
 	  if( get_site_preference('content_mandatory_urls',0) ) {
 	    $prompt = '*'.$prompt;
 	  }
-	  return array($prompt,$str,lang('help_page_url'));
+	  $help = '&nbsp;'.cms_admin_utils::get_help_tag('help_page_url');
+	  return array($prompt.$help,$str);
 	}
 	break;
 
@@ -2168,38 +2184,53 @@ abstract class ContentBase
  	$data = $this->GetPropertyValue('image');
 	$dropdown = create_file_dropdown('image',$dir,$data,'jpg,jpeg,png,gif','',true,'','thumb_',1,1);
 	if( !$dropdown ) return;
-	return array('<label for="image">'.lang('image').'</label>:',$dropdown);
+	$help = '&nbsp;'.cms_admin_utils::get_help_tag('help_content_image');
+	return array('<label for="image">'.lang('image').':</label>'.$help,$dropdown);
 
       case 'thumbnail':
 	$dir = cms_join_path($config['image_uploads_path'],get_site_preference('content_thumbnailfield_path'));
 	$data = $this->GetPropertyValue('thumbnail');
 	$dropdown = create_file_dropdown('thumbnail',$dir,$data,'jpg,jpeg,png,gif','',true,'','thumb_',0,1);
 	if( !$dropdown ) return FALSE;
-	return array('<label for="thumbnail">'.lang('thumbnail').'</label>:',$dropdown);
+	$help = '&nbsp;'.cms_admin_utils::get_help_tag('help_content_thumbnail');
+	return array('<label for="thumbnail">'.lang('thumbnail').':</label>'.$help,$dropdown);
 
       case 'titleattribute':
-	return array('<label for="titleattribute">'.lang('titleattribute').'</label>:','<input type="text" name="titleattribute" id="titleattribute" maxlength="255" size="80" value="'.cms_htmlentities($this->mTitleAttribute).'" />');
+	$help = '&nbsp;'.cms_admin_utils::get_help_tag('help_content_titleattribute');
+	return array('<label for="titleattribute">'.lang('titleattribute').':</label>'.$help,
+		     '<input type="text" name="titleattribute" id="titleattribute" maxlength="255" size="80" value="'.cms_htmlentities($this->mTitleAttribute).'" />');
 
       case 'accesskey':
-	return array('<label for="accesskey">'.lang('accesskey').'</label>:','<input type="text" name="accesskey" id="accesskey" maxlength="5" value="'.cms_htmlentities($this->mAccessKey).'" />');
+	$help = '&nbsp;'.cms_admin_utils::get_help_tag('help_content_accesskey');
+	return array('<label for="accesskey">'.lang('accesskey').':</label>'.$help,
+		     '<input type="text" name="accesskey" id="accesskey" maxlength="5" value="'.cms_htmlentities($this->mAccessKey).'" />');
 
       case 'tabindex':
-	return array('<label for="tabindex">'.lang('tabindex').'</label>:','<input type="text" name="tabindex" id="tabindex" maxlength="5" value="'.cms_htmlentities($this->mTabIndex).'" />');
+	$help = '&nbsp;'.cms_admin_utils::get_help_tag('help_content_tabindex');
+	return array('<label for="tabindex">'.lang('tabindex').':</label>'.$help,
+		     '<input type="text" name="tabindex" id="tabindex" maxlength="5" value="'.cms_htmlentities($this->mTabIndex).'" />');
 
       case 'extra1':
-	return array('<label for="extra1">'.lang('extra1').'</label>:','<input type="text" name="extra1" id="extra1" maxlength="255" size="80" value="'.cms_htmlentities($this->GetPropertyValue('extra1')).'" />');
+	$help = '&nbsp;'.cms_admin_utils::get_help_tag('help_content_extra1');
+	return array('<label for="extra1">'.lang('extra1').':</label>'.$help,
+		     '<input type="text" name="extra1" id="extra1" maxlength="255" size="80" value="'.cms_htmlentities($this->GetPropertyValue('extra1')).'" />');
 
       case 'extra2':
-	return array('<label for="extra2">'.lang('extra2').'</label>:','<input type="text" name="extra2" id="extra2" maxlength="255" size="80" value="'.cms_htmlentities($this->GetPropertyValue('extra2')).'" />');
+	$help = '&nbsp;'.cms_admin_utils::get_help_tag('help_content_extra2');
+	return array('<label for="extra2">'.lang('extra2').':</label>'.$help,
+		     '<input type="text" name="extra2" id="extra2" maxlength="255" size="80" value="'.cms_htmlentities($this->GetPropertyValue('extra2')).'" />');
 	      
       case 'extra3':
-	return array('<label for="extra3">'.lang('extra3').'</label>:','<input type="text" name="extra3" id="extra3" maxlength="255" size="80" value="'.cms_htmlentities($this->GetPropertyValue('extra3')).'" />');
+	$help = '&nbsp;'.cms_admin_utils::get_help_tag('help_content_extra3');
+	return array('<label for="extra3">'.lang('extra3').':</label>'.$help,
+		     '<input type="text" name="extra3" id="extra3" maxlength="255" size="80" value="'.cms_htmlentities($this->GetPropertyValue('extra3')).'" />');
 
       case 'owner':
 	$showadmin = check_ownership(get_userid(), $this->Id());
 	$userops = $gCms->GetUserOperations();
 	if (!$adding && ($showadmin || check_permission(get_userid(),'Manage All Content')) ) {
-	  return array('<label for="owner">'.lang('owner').'</label>:', $userops->GenerateDropdown($this->Owner()));
+	  $help = '&nbsp;'.cms_admin_utils::get_help_tag('help_content_owner');
+	  return array('<label for="owner">'.lang('owner').':</label>'.$help, $userops->GenerateDropdown($this->Owner()));
 	}
 	break;
 
