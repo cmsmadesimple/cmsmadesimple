@@ -85,19 +85,19 @@ final class Navigator extends CMSModule
   final static public function smarty_cms_breadcrumbs($params,&$smarty)
   {
     $params['action'] = 'breadcrumbs';
-    $params['module'] = 'Nav';
+    $params['module'] = __CLASS__;
     return cms_module_plugin($params,$smarty);
   }
 
   final public static function page_type_lang_callback($str)
   {
-    $mod = cms_utils::get_module('Nav');
+    $mod = cms_utils::get_module(__CLASS__);
     if( is_object($mod) ) return $mod->Lang('type_'.$str);
   }
 
   public static function reset_page_type_defaults(CmsLayoutTemplateType $type)
   {
-    if( $type->get_originator() != 'Nav' ) {
+    if( $type->get_originator() != __CLASS__ ) {
       throw new CmsLogicException('Cannot reset contents for this template type');
     }
 

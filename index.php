@@ -259,7 +259,7 @@ if( $config['debug'] == TRUE || (isset($config['show_performance_info']) && ($sh
     echo "<p>Generated in ".microtime_diff($starttime,$endtime)." seconds by CMS Made Simple using ".(isset($db->query_count)?$db->query_count:'')." SQL queries and {$memory} bytes of memory (peak memory usage was {$memory_peak})</p>";
   }
   else if( isset($config['show_performance_info']) && ($showtemplate == true) ) {
-    $txt = microtime_diff($starttime,$endtime)." / ".(isset($db->query_count)?$db->query_count:'')." / {$memory} / {$memory_peak}";
+    $txt = microtime_diff($starttime,$endtime).' / '.$db->query_time_total.' / '.(isset($db->query_count)?$db->query_count:'')." / {$memory} / {$memory_peak}";
     debug_display($txt);
     echo '<!-- '.$txt." -->\n";
     $txt = strftime('%x %X').'/'.$txt;

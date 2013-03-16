@@ -41,36 +41,30 @@ function &adodb_connect()
 {
   $gCms = cmsms();
   $config = $gCms->GetConfig();
-	
+
   $str = 'pear:date:extend';
   $dbinstance = ADONewConnection($config['dbms'], $str);
-	$dbinstance->raiseErrorFn = "adodb_error";
-	$conn_func = (isset($config['persistent_db_conn']) && $config['persistent_db_conn'] == true) ? 'PConnect' : 'Connect';
-	if(!empty($config['db_port'])) $dbinstance->port = $config['db_port'];
-	$connect_result = $dbinstance->$conn_func($config['db_hostname'], $config['db_username'], $config['db_password'], $config['db_name']);
-	
-	if (FALSE == $connect_result)
-	{
-	  $str = "Attempt to connect to database {$config['db_name']} on {$config['db_username']}@{$config['db_hostname']} failed";
-	  trigger_error($str,E_USER_ERROR);
-	  die($str);
-	}
+  $dbinstance->raiseErrorFn = "adodb_error";
+  $conn_func = (isset($config['persistent_db_conn']) && $config['persistent_db_conn'] == true) ? 'PConnect' : 'Connect';
+  if(!empty($config['db_port'])) $dbinstance->port = $config['db_port'];
+  $connect_result = $dbinstance->$conn_func($config['db_hostname'], $config['db_username'], $config['db_password'], $config['db_name']);
 
-	$dbinstance->raiseErrorFn = null;
-	
-	$dbinstance->SetFetchMode(ADODB_FETCH_ASSOC);
-	
-	if ($config['debug'] == true)
-	{
-		$dbinstance->debug = true;
-	}
-	
-	if($config['set_names'] == true)
-	{
-	  $dbinstance->Execute("SET NAMES 'utf8'");
-	}
-	
-	return $dbinstance;
+  if (FALSE == $connect_result) {
+    $str = "Attempt to connect to database {$config['db_name']} on {$config['db_username']}@{$config['db_hostname']} failed";
+    trigger_error($str,E_USER_ERROR);
+    die($str);
+  }
+
+  $dbinstance->raiseErrorFn = null;
+  $dbinstance->SetFetchMode(ADODB_FETCH_ASSOC);
+  if ($config['debug'] == true) {
+    $dbinstance->debug = true;
+  }
+  if($config['set_names'] == true) {
+    $dbinstance->Execute("SET NAMES 'utf8'");
+  }
+
+  return $dbinstance;
 }
 
 
@@ -79,17 +73,15 @@ function &adodb_connect()
  */
 function adodb_error($dbtype, $function_performed, $error_number, $error_message, $host, $database, &$connection_obj)
 {
-	if(file_exists(cms_join_path(dirname(CONFIG_FILE_LOCATION), 'db_error.html')))
-	{
-		include_once cms_join_path(dirname(CONFIG_FILE_LOCATION), 'db_error.html');
-		exit;
-	}
-	else
-	{
-		echo "<strong>Database Connection Failed</strong><br />";
-		echo "Error: {$error_message} ({$error_number})<br />";
-		echo "Function Performed: {$function_performed}<br />";
-	}
+  if(file_exists(cms_join_path(dirname(CONFIG_FILE_LOCATION), 'db_error.html'))) {
+    include_once cms_join_path(dirname(CONFIG_FILE_LOCATION), 'db_error.html');
+    exit;
+  }
+  else {
+    echo "<strong>Database Connection Failed</strong><br />";
+    echo "Error: {$error_message} ({$error_number})<br />";
+    echo "Function Performed: {$function_performed}<br />";
+  }
 }
 
 ?>

@@ -741,10 +741,27 @@ class CmsLayoutTemplate
               WHERE type_id = ? AND type_dflt = ?';
 		$tmp = $db->GetRow($query,array($t2->get_id(),1));
 		if( !is_array($tmp) || count($tmp) == 0 ) {
-			throw new CmsDataNotFoundException('Could not find CmsLayoutTemplate row identified by '.$t);
+			throw new CmsDataNotFoundException('Could not find default CmsLayoutTemplate row for type '.$t);
 		}
 
 		return self::_load_from_data($tmp);
+	}
+
+	public static function load_all_by_type(CmsLayoutTemplateType $type)
+	{
+		$db = cmsms()->GetDb();
+		$query = 'SELECT * FROM '.cms_db_prefix().self::TABLENAME.'
+              WHERE type_id = ?';
+		$tmp = $db->GetArray($query,array($type->get_id()));
+		if( !is_array($tmp) || count($tmp) == 0 ) {
+			throw new CmsDataNotFoundException('Could not find CmsLayoutTemplate rows for type '.$type->get_id());
+		}
+		
+		$out = array();
+		foreach( $tmp as $row ) {
+			$out[] = self::_load_from_data($row);
+		}
+		return $out;
 	}
 
 	public static function process_by_name($name)

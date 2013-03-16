@@ -10,6 +10,8 @@
 .bullet_sectionheader - To style section header
 hr.separator - To style the ruler for the separator *} 
 
+{if !isset($depth)}{$depth=0}{/if}
+
 {if isset($nodes)}{strip}
 <ul>
   {foreach $nodes as $node}
@@ -25,14 +27,14 @@ hr.separator - To style the ruler for the separator *}
       <li style="list-style-type: none;"><hr class="separator"/></li>
     {else}
       {* regular item *}
-      {assign var='liclass' value=''}
-      {assign var='aclass' value=''}
+      {$liclass=''}
+      {$aclass=''}
       {if $node->current}
-	{assign var='liclass' value='currentpage'}
-	{assign var='aclass' value='currentpage'}
+        {$liclass='currentpage'}
+        {$aclass='currentpage'}
       {elseif $node->parent}
-        {assign var='liclass' value='activeparent'}
-	{assign var='aclass' value='activeparent'}
+        {$liclass='activeparent'}
+        {$aclass='activeparent'}
       {/if}
       <li{if $liclass != ''} class="{$liclass}"{/if}>
         <a{if $aclass !=''} class="{$aclass}"{/if} href="{$node->url}"{if $node->target ne ""} target="{$node->target}"{/if}>{$node->menutext}</a>

@@ -39,6 +39,26 @@ $this->RemovePreference();
 $this->DeleteTemplate();
 $this->RemoveSmartyPlugin();
 
+try {
+  $types = CmsLayoutTemplateType::load_all_by_originator('Navigator');
+  foreach( $types as $type ) {
+    $templates = $type->get_template_list();
+    if( is_array($templates) && count($templates) ) {
+      foreach( $templates as $tpl ) {
+	$tpl->delete();
+      }
+    }
+    $type->delete();
+  }
+  CmsLayoutTemplateType::load('Navigator::navigation');
+}
+catch( CmsException $e ) {
+  // log it
+  debug_to_log(__FILE__.':'.__LINE__.' '.$e->GetMessage());
+  audit('',$this->GetName(),'Uninstall Error: '.$e->GetMessage());
+  return FALSE;
+}
+
 #
 # EOF
 #

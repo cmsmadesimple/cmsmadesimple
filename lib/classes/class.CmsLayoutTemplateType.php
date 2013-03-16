@@ -410,7 +410,7 @@ class CmsLayoutTemplateType
    */
   public function get_template_list()
   {
-	  return CmsLayoutTemplate::list_by_type($this);
+	  return CmsLayoutTemplate::load_all_by_type($this);
   }
 
   /**

@@ -368,20 +368,21 @@ abstract class CmsAdminThemeBase
 		$items =& $this->_menuItems;
 		// base main menu ---------------------------------------------------------
 		$items['main'] = array('url'=>'index.php','parent'=>-1,
-							   'title'=>'CMS',
+							   'title'=>'CMS','priority'=>1,
 							   'description'=>'','show_in_menu'=>true);
-		$items['home'] = array('url'=>'index.php','parent'=>'main',
+		$items['home'] = array('url'=>'index.php','parent'=>'main','priority'=>1,
 							   'title'=>$this->_FixSpaces(lang('home')),
 							   'description'=>'','show_in_menu'=>true);
 		$items['viewsite'] = array('url'=>$config['root_url'].'/index.php','parent'=>'main',
-								  'title'=>$this->_FixSpaces(lang('viewsite')),
-								  'type'=>'external',
-								  'description'=>'','show_in_menu'=>true, 'target'=>'_blank');
+								   'title'=>$this->_FixSpaces(lang('viewsite')),
+								   'type'=>'external','priority'=>2,
+								   'description'=>'','show_in_menu'=>true, 'target'=>'_blank');
 		$items['logout'] = array('url'=>'logout.php','parent'=>'main',
-								 'title'=>$this->_FixSpaces(lang('logout')),
+								 'title'=>$this->_FixSpaces(lang('logout')),'priority'=>3,
 								 'description'=>'','show_in_menu'=>true);
 		// base content menu ---------------------------------------------------------
 		$items['content'] = array('url'=>'index.php?section=content','parent'=>-1,
+								  'priority'=>2,
 								 'title'=>$this->_FixSpaces(lang('content')),
 								 'description'=>lang('contentdescription'),
 								 'show_in_menu'=>$this->HasPerm('contentPerms'));
@@ -399,13 +400,13 @@ abstract class CmsAdminThemeBase
 								 'description'=>lang('imagemanagerdescription'),
 								 'show_in_menu'=>$this->HasPerm('filePerms'));
 		// base layout menu ---------------------------------------------------------
-		$items['layout'] = array('url'=>'index.php?section=layout','parent'=>-1,
+		$items['layout'] = array('url'=>'index.php?section=layout','parent'=>-1,'priority'=>3,
 								 'title'=>$this->_FixSpaces(lang('layout')),
 								 'description'=>lang('layoutdescription'),
 								 'show_in_menu'=>$this->HasPerm('layoutPerms'));
 		// base user/groups menu ---------------------------------------------------------
 		$items['usersgroups'] = array('url'=>'index.php?section=usersgroups','parent'=>-1,
-									  'title'=>$this->_FixSpaces(lang('usersgroups')),
+									  'title'=>$this->_FixSpaces(lang('usersgroups')),'priority'=>4,
 									  'description'=>lang('usersgroupsdescription'),
 									  'show_in_menu'=>$this->HasPerm('usersGroupsPerms'));
 		$items['users'] = array('url'=>'listusers.php','parent'=>'usersgroups',
@@ -467,7 +468,7 @@ abstract class CmsAdminThemeBase
 									  'description'=>lang('editusertag'),'show_in_menu'=>false);
 		// base admin menu ---------------------------------------------------------
 		$items['siteadmin'] = array('url'=>'index.php?section=siteadmin','parent'=>-1,
-									'title'=>$this->_FixSpaces(lang('admin')),
+									'title'=>$this->_FixSpaces(lang('admin')),'priority'=>5,
 									'description'=>lang('admindescription'),
 									'show_in_menu'=>$this->HasPerm('siteAdminPerms'));
 		$items['siteprefs'] = array('url'=>'siteprefs.php','parent'=>'siteadmin',

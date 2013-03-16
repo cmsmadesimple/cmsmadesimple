@@ -48,8 +48,8 @@ try {
   $menu_template_type->set_originator($this->GetName());
   $menu_template_type->set_name('navigation');
   $menu_template_type->set_dflt_flag(TRUE);
-  $menu_template_type->set_lang_callback('Nav::page_type_lang_callback');
-  $menu_template_type->set_content_callback('Nav::reset_page_type_defaults');
+  $menu_template_type->set_lang_callback('Navigator::page_type_lang_callback');
+  $menu_template_type->set_content_callback('Navigator::reset_page_type_defaults');
   $menu_template_type->reset_content_to_factory();
   $menu_template_type->save();
 }
@@ -57,6 +57,7 @@ catch( CmsException $e ) {
   // log it
   debug_to_log(__FILE__.':'.__LINE__.' '.$e->GetMessage());
   audit('',$this->GetName(),'Installation Error: '.$e->GetMessage());
+  return FALSE;
 }
 
 try {
@@ -75,6 +76,7 @@ try {
 catch( CmsException $e ) {
   debug_to_log(__FILE__.':'.__LINE__.' '.$e->GetMessage());
   audit('',$this->GetName(),'Installation Error: '.$e->GetMessage());
+  return FALSE;
 }
 
 // register plugins
