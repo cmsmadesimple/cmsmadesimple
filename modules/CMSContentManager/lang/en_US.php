@@ -74,19 +74,22 @@ $lang['friendlyname'] = 'Content Manager';
 #G
 
 #H
-$lang['help_pagedflt_active'] = 'TODO';
-$lang['help_pagedflt_addteditors'] = 'TODO';
-$lang['help_pagedflt_cachable'] = 'TODO';
-$lang['help_pagedflt_contenttype'] = 'TODO';
-$lang['help_pagedflt_design_id'] = 'TODO';
-$lang['help_pagedflt_disallowed_types'] = 'TODO';
-$lang['help_pagedflt_extra1'] = 'TODO';
-$lang['help_pagedflt_extra2'] = 'TODO';
-$lang['help_pagedflt_extra3'] = 'TODO';
-$lang['help_pagedflt_searchable'] = 'TODO';
-$lang['help_pagedflt_secure'] = 'TODO';
-$lang['help_pagedflt_showinmenu'] = 'TODO';
-$lang['help_pagedflt_template_id'] = 'TODO';
+$lang['help_listsettings_namecolumn'] = 'Specify what text should be displayed in the &quot;Name&quot; column of the content list view.  Choose either the page title, or menu text';
+$lang['help_listsettings_visiblecolumns'] = 'Select which columns to display in the content list view.  Use caution here as some functionality may not be available if the column is hidden';
+$lang['help_pagedflt_active'] = 'Indicate wether new pages will be active by default.  Site visitors cannot navigate to inactive pages';
+$lang['help_pagedflt_addteditors'] = 'Specify a default list of additional editors for each new page';
+$lang['help_pagedflt_cachable'] = 'Specify wether new pages should be cachable or not.';
+$lang['help_pagedflt_content'] = 'Specify the default HTML or smarty code that should be placed in the primary content area of the newly created page';
+$lang['help_pagedflt_contenttype'] = 'Specify the default content type for new pages.  This is useful if using other third party modules that provide optional content editing functionality';
+$lang['help_pagedflt_metadata'] = 'Specify HTML tags <em>(usually meta tags)</em> or smarty tags here that are specific to each page, and should be placed by default in the head section of each page.  You will have the ability to customize this code for each page when creating or editing the page.';
+$lang['help_pagedflt_design_id'] = 'Specify the default design of the new content page.  The design is used to find the stylesheets to use';
+$lang['help_pagedflt_extra1'] = 'Specify the default value for the extra1 field for newly created content pages';
+$lang['help_pagedflt_extra2'] = 'Specify the default value for the extra1 field for newly created content pages';
+$lang['help_pagedflt_extra3'] = 'Specify the default value for the extra1 field for newly created content pages';
+$lang['help_pagedflt_searchable'] = 'Specify wether new pages should be searchable, or not.';
+$lang['help_pagedflt_secure'] = 'Specify wether new pages should be <em>(by default)</em> secure <em>(uses the HTTPS protocol)</em>.  For secure pages to work the site must have a valid certificate installed on the web server, and the site must be configured properly';
+$lang['help_pagedflt_showinmenu'] = 'Specify wether new pages should be visible in normal navigations by default';
+$lang['help_pagedflt_template_id'] = 'Specify the default template to use for the new content page.  The template controls page logic, and what content blocks are visible to the editor';
 
 #I
 $lang['info_javascript_required'] = '<strong>Warning:</strong> In order to operate correctly, this module requires a browser with javascript support enabled.';
@@ -149,11 +152,13 @@ $lang['prompt_pagedefaults'] = 'New Page Defaults';
 $lang['prompt_pagedflt_active'] = 'Is this page active?';
 $lang['prompt_pagedflt_addteditors'] = 'Additional Editors';
 $lang['prompt_pagedflt_cachable'] = 'Is this page cachable?';
+$lang['prompt_pagedflt_content'] = 'Default Content';
 $lang['prompt_pagedflt_contenttype'] = 'Default Content Type';
 $lang['prompt_pagedflt_design_id'] = 'Default Page Design';
 $lang['prompt_pagedflt_extra1'] = 'Extra1 Field value';
 $lang['prompt_pagedflt_extra2'] = 'Extra2 Field value';
 $lang['prompt_pagedflt_extra3'] = 'Extra3 Field value';
+$lang['prompt_pagedflt_metadata'] = 'Metadata';
 $lang['prompt_pagedflt_searchable'] = 'Is the contents of this page searchable';
 $lang['prompt_pagedflt_secure'] = 'Is this page secure?';
 $lang['prompt_pagedflt_showinmenu'] = 'Can this page show in the menu?';

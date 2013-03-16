@@ -658,8 +658,20 @@ abstract class CmsAdminThemeBase
 			if( strstr($_SERVER['REQUEST_URI'],'moduleinterface.php') !== FALSE && 
 				isset($_REQUEST['mact']) &&
 				isset($sectionArray['module']) && $sectionArray['module'] ) {
-				$tmp = explode(',',$_REQUEST['mact']);
-				if( strstr($sectionArray['url'],$_SERVER['REQUEST_URI']) !== FALSE ) {
+
+				$u1 = new cms_url($sectionArray['url']);
+				$v1 = array();
+				parse_str($u1->get_query(),$v1);
+				$u2 = new cms_url($_SERVER['REQUEST_URI']);
+				$v2 = array();
+				parse_str($u2->get_query(),$v2);
+				if( $u1->get_path() == $u2->get_path() && 
+					isset($v1['mact']) && isset($v2['mact']) && 
+					$v1['mact'] == $v2['mact'] ) {
+//				$tmp = explode(',',$_REQUEST['mact']);
+// 				debug_display($sectionArray['url'],$_SERVER['REQUEST_URI']);
+//				if( startswith($sectionArray['url'],$_SERVER['REQUEST_URI']) ) {
+// 				if( strstr($_SERVER['REQUEST_URI'],$sectionArray['url']) !== FALSE ) {
 					$this->_menuItems[$sectionKey]['selected'] = TRUE;
 					$this->_active_item = $sectionKey;
 					$this->_breadcrumbs[] = array('title'=>$this->_menuItems[$sectionKey]['title'], 
@@ -674,10 +686,10 @@ abstract class CmsAdminThemeBase
 						}
 					}
 				}
-				else if( $tmp[0] == $sectionArray['module'] && !$this->_active_item ) {
-					// this will ensure we get to the right module, but not necessarily the right parent action.
-					$this->_active_item = $sectionKey;
-				}
+// 				else if( $tmp[0] == $sectionArray['module'] && !$this->_active_item ) {
+// 					// this will ensure we get to the right module, but not necessarily the right parent action.
+// 					$this->_active_item = $sectionKey;
+// 				}
 			}
 			else if (strstr($_SERVER['REQUEST_URI'],$sectionArray['url']) !== FALSE &&
 					 (!isset($sectionArray['type']) || $sectionArray['type'] != 'external')) {
@@ -696,9 +708,6 @@ abstract class CmsAdminThemeBase
 					}
 				}
 			}
-		}
-		if( count($this->_breadcrumbs) > 3 ) {
-			debug_display($this->_breadcrumbs); die();
 		}
 		$this->_breadcrumbs = array_reverse($this->_breadcrumbs);
 
@@ -908,7 +917,7 @@ abstract class CmsAdminThemeBase
 	public function get_active_title()
 	{
 		$this->_populate_admin_navigation();
-		return $this->_menuItems[$this->_active_item]['title'];
+		if( $this->_active_item ) return $this->_menuItems[$this->_active_item]['title'];
 	}
 
 	/**
