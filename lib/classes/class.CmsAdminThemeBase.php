@@ -373,7 +373,7 @@ abstract class CmsAdminThemeBase
 		$items['home'] = array('url'=>'index.php','parent'=>'main',
 							   'title'=>$this->_FixSpaces(lang('home')),
 							   'description'=>'','show_in_menu'=>true);
-		$items['viewsit'] = array('url'=>$config['root_url'].'/index.php','parent'=>'main',
+		$items['viewsite'] = array('url'=>$config['root_url'].'/index.php','parent'=>'main',
 								  'title'=>$this->_FixSpaces(lang('viewsite')),
 								  'type'=>'external',
 								  'description'=>'','show_in_menu'=>true, 'target'=>'_blank');
@@ -474,10 +474,12 @@ abstract class CmsAdminThemeBase
 									'title'=>$this->_FixSpaces(lang('globalconfig')),
 									'description'=>lang('preferencesdescription'),
 									'show_in_menu'=>$this->HasPerm('sitePrefPerms'));
+		/*
 		$items['pagedefaults'] = array('url'=>'pagedefaults.php','parent'=>'siteadmin',
 									   'title'=>$this->_FixSpaces(lang('pagedefaults')),
 									   'description'=>lang('pagedefaultsdescription'),
 									   'show_in_menu'=>$this->HasPerm('sitePrefPerms'));
+		*/
 		$items['systeminfo'] = array('url' => 'systeminfo.php', 'parent' => 'siteadmin',
 									 'title' => $this->_FixSpaces(lang('systeminfo')),
 									 'description' => lang('systeminfodescription'),
