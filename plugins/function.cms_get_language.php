@@ -20,12 +20,10 @@ function smarty_function_cms_get_language($params, &$template)
 {
 	$smarty = $template->smarty;
 	$lang = CmsNlsOperations::get_current_language();
-  
-	if( isset($params['assign']) )
-		{
-		$smarty->assign(trim($params['assign']),$lang);
-		return;
-		}
+	if( isset($params['assign']) ) {
+	  $smarty->assign(trim($params['assign']),$lang);
+	  return;
+	}
 	return $lang;
 }
 ?>
