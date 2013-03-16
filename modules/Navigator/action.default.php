@@ -42,6 +42,7 @@ $show_all = FALSE;
 $show_root_siblings = FALSE;
 $start_element = null;
 $start_page = null;
+$start_level = null;
 $childrenof = null;
 $deep = TRUE;
 $collapse = FALSE;
@@ -92,18 +93,28 @@ if( !$smarty->isCached($this->GetTemplateResource($template),$cache_id,$compile_
     case 'start_element':
       $start_element = trim($value);
       $start_page = null;
+      $start_level = null;
       $childrenof = null;
       break;
 
     case 'start_page':
       $start_element = null;
       $start_page = trim($value);
+      $start_level = null;
       $childrenof = null;
+      break;
+
+    case 'start_level':
+      $start_element = null;
+      $start_page = null;
+      $value = (int)$value;
+      $start_level = (int)$value;
       break;
 
     case 'childrenof':
       $start_page = null;
       $start_element = null;
+      $start_level = null;
       $childrenof = trim($value);
       break;
 
@@ -138,6 +149,20 @@ if( !$smarty->isCached($this->GetTemplateResource($template),$cache_id,$compile_
       if( is_object($tmp) ) {
 	$rootnodes[] = $tmp;
       }
+    }
+  }
+  else if( $start_level > 0 ) {
+    $tmp = $hm->find_by_tag('id',cmsms()->get_content_id());
+    $arr = array();
+    while( $tmp ) {
+      $id = $tmp->get_tag('id');
+      if( !$id ) break;
+      $arr[] = $id;
+      $tmp = $tmp->get_parent();
+    }
+    if( $start_level - 1 < count($arr) && $arr[$start_level-1] > 0) {
+      $rootnodes[] = $arr[$start_level-1];
+      die('good '.$start_level);
     }
   }
   else if( $childrenof ) {
