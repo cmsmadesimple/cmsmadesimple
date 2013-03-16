@@ -36,16 +36,14 @@
 if( !isset($gCms) ) exit;
 if( !$this->CheckPermission('Modify Site Preferences') ) return;
 
-echo __FILE__;
-/*
 $page_prefs = CmsContentManagerUtils::get_pagedefaults();
 $smarty->assign('page_prefs',$page_prefs);
 $smarty->assign('all_contenttypes',ContentOperations::get_instance()->ListContentTypes(FALSE,FALSE));
 $smarty->assign('design_list',CmsLayoutCollection::get_list());
 $smarty->assign('template_list',CmsLayoutTemplate::template_query(array('as_list'=>1)));
 $smarty->assign('addteditor_list',ContentBase::GetAdditionalEditorOptions());
+
 echo $this->ProcessTemplate('admin_pagedefaults_tab.tpl');
-*/
 
 #
 # EOF

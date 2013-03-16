@@ -149,7 +149,7 @@ function smarty_cms_function_cms_stylesheet($params, &$template)
 	
 		// Combine stylesheets
 		if($combine_stylesheets) {
-		
+
 			// Group queries & types
 			$all_media = array();
 			$all_timestamps = array();
@@ -176,7 +176,7 @@ function smarty_cms_function_cms_stylesheet($params, &$template)
 
 				$all_timestamps_string .= $one['modified']; // <- This is for media param
 			}			
-		
+
 			// media parameter...
 			if (isset($params['media'])) {
 
@@ -207,7 +207,7 @@ function smarty_cms_function_cms_stylesheet($params, &$template)
 				
 					$all_timestamps[$k] = implode($v);
 				}
-				
+
 				foreach($all_media as $hash=>$onemedia) {
 				
 					// combine all matches into one stylesheet.
@@ -304,14 +304,17 @@ function cms_stylesheet_writeCache($filename, $string, $trimbackground, &$smarty
 	$smarty->right_delimiter = ']]';
 
 	try {
-
 		$_contents = $smarty->fetch('string:'.$string);
-	}	
+	}
 	catch (SmartyException $e)
 	{
+	  debug_display($e->GetMessage()); die();
+	  debug_to_log('Error Processing Stylesheet');
+	  debug_to_log($e->GetMessage());
 	  audit('','Plugin: cms_stylesheet', 'Smarty Compile process failed, unable to write cache file');
-	}	
-	
+	  return;
+	}
+
 	$smarty->left_delimiter = '{';
 	$smarty->right_delimiter = '}';					
 
@@ -325,7 +328,7 @@ function cms_stylesheet_writeCache($filename, $string, $trimbackground, &$smarty
 		$_contents = preg_replace('/(\w*?background-image.*?\:\w*?).*?(;.*?)/', '', $_contents);
 		$_contents = preg_replace('/(\w*?background.*?\:\w*?).*?(;.*?)/', '', $_contents);
 	}
-	
+
 	if( $forceblackandwhite ) {
 		$_contents .= 'body.mceContentBody { background: #fff; color: #000; !important }'."\n";
 	}
@@ -344,15 +347,15 @@ function cms_stylesheet_toString($filename, $media_query = '', $media_type = '',
 	{
 		$stylesheet .= $root_url.$filename.',';
 	} else {
-	
+
 		if (!empty($media_query)) {
-			
+
 			$stylesheet .= '<link rel="stylesheet" type="text/css" href="'.$root_url.$filename.'" media="'.$media_query.'" />'."\n";
 		} elseif (!empty($media_type)) {
-		
+
 			$stylesheet .= '<link rel="stylesheet" type="text/css" href="'.$root_url.$filename.'" media="'.$media_type.'" />'."\n";
 		} else {
-		
+
 			$stylesheet .= '<link rel="stylesheet" type="text/css" href="'.$root_url.$filename.'" />'."\n";
 		}
 	}

@@ -102,51 +102,6 @@
 	</form>
 {$tab_end}
 
-{$listcontent_start}
-	<form id="siteprefform_general" method="post" action="{$formurl}">
-		<div>
-		  <input type="hidden" name="{$SECURE_PARAM_NAME}" value="{$CMS_USER_KEY}"/>
-		  <input type="hidden" name="active_tab" value="listcontent" />
-		  <input type="hidden" name="editsiteprefs" value="true" />
-		</div>
-
-		<div class="pageoverflow">
-		  <p class="pagetext"><label for="listcontent_showtitle">{'listcontent_showtitle'|lang}:</label></p>
-		  <p class="pageinput">
-			<select id="listcontent_showtitle" name="listcontent_showtitle">
-			  {html_options options=$titlemenu selected=$listcontent_showtitle}
-			</select>
-		  </p>
-		</div>
-
-		<div class="pageoverflow">
-		  <p class="pagetext"><label for="listcontent_showalias">{'listcontent_showalias'|lang}:</label></p>
-		  <p class="pageinput">
-			<select id="listcontent_showalias" name="listcontent_showalias">
-			  {html_options options=$yesno selected=$listcontent_showalias}
-			</select>
-		  </p>
-		</div>
-
-		<div class="pageoverflow">
-		  <p class="pagetext"><label for="listcontent_showurl">{'listcontent_showurl'|lang}:</label></p>
-		  <p class="pageinput">
-			<select id="listcontent_showurl" name="listcontent_showurl">
-			  {html_options options=$yesno selected=$listcontent_showurl}
-			</select>
-		  </p>
-		</div>
-
-		<div class="pageoverflow">
-		  <p class="pagetext">&nbsp;</p>
-		  <p class="pageinput">
-			<input type="submit" name="submit" value="{lang('submit')}" class="pagebutton"  />
-			<input type="submit" name="cancel" value="{lang('cancel')}" class="pagebutton"  />
-		  </p>
-		</div>
-	</form>
-{$tab_end}
-
 {$editcontent_start}
 	<form id="siteprefform_editcontent" method="post" action="{$formurl}">
 		<div>

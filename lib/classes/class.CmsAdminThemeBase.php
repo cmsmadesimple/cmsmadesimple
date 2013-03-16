@@ -567,7 +567,8 @@ abstract class CmsAdminThemeBase
 											  'title'=>$this->_FixSpaces($menuItem->title),
 											  'description'=>$menuItem->description,
 											  'show_in_menu'=>true,
-											  'system'=>1);
+											  'system'=>1,
+											  'module'=>$menuItem->module);
 			}
 		}
 
@@ -596,7 +597,7 @@ abstract class CmsAdminThemeBase
 											  'title'=>$this->_FixSpaces($menuItem->title),
 											  'description'=>$menuItem->description,
 											  'show_in_menu'=>true,
-											  'module'=>1);
+											  'module'=>$menuItem->module);
 			}
 		}
 	
@@ -636,7 +637,7 @@ abstract class CmsAdminThemeBase
 		};
 		uasort($this->_menuItems,$fn);
 
-		// set everthing to be selected.
+		// set everthing to be not selected.
 		foreach ($this->_menuItems as $sectionKey=>$sectionArray) {
 			$this->_menuItems[$sectionKey]['selected'] = FALSE;
 			$this->_menuItems[$sectionKey]['children'] = array();
@@ -654,7 +655,10 @@ abstract class CmsAdminThemeBase
 			}
 
 			// set selected
-			if( strstr($_SERVER['REQUEST_URI'],'moduleinterface.php') !== FALSE ) {
+			if( strstr($_SERVER['REQUEST_URI'],'moduleinterface.php') !== FALSE && 
+				isset($_REQUEST['mact']) &&
+				isset($sectionArray['module']) && $sectionArray['module'] ) {
+				$tmp = explode(',',$_REQUEST['mact']);
 				if( strstr($sectionArray['url'],$_SERVER['REQUEST_URI']) !== FALSE ) {
 					$this->_menuItems[$sectionKey]['selected'] = TRUE;
 					$this->_active_item = $sectionKey;
@@ -669,6 +673,10 @@ abstract class CmsAdminThemeBase
 							$parent = $this->_menuItems[$parent]['parent'];
 						}
 					}
+				}
+				else if( $tmp[0] == $sectionArray['module'] && !$this->_active_item ) {
+					// this will ensure we get to the right module, but not necessarily the right parent action.
+					$this->_active_item = $sectionKey;
 				}
 			}
 			else if (strstr($_SERVER['REQUEST_URI'],$sectionArray['url']) !== FALSE &&
@@ -688,6 +696,9 @@ abstract class CmsAdminThemeBase
 					}
 				}
 			}
+		}
+		if( count($this->_breadcrumbs) > 3 ) {
+			debug_display($this->_breadcrumbs); die();
 		}
 		$this->_breadcrumbs = array_reverse($this->_breadcrumbs);
 

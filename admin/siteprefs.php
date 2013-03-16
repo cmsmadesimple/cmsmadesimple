@@ -141,9 +141,6 @@ $auto_clear_cache_age = 0;
 $allow_browser_cache = 0;
 $browser_cache_expiry = 60;
 $pseudocron_granularity = 60;
-$listcontent_showalias = 1;
-$listcontent_showurl = 1;
-$listcontent_showtitle = 1;
 $content_autocreate_urls = 0;
 $content_autocreate_flaturls = 0;
 $content_mandatory_urls = 0;
@@ -192,9 +189,6 @@ $sitedownexcludes = get_site_preference('sitedownexcludes',$sitedownexcludes);
 $sitedownexcludeadmins = get_site_preference('sitedownexcludeadmins',$sitedownexcludeadmins);
 $disallowed_contenttypes = get_site_preference('disallowed_contenttypes',$disallowed_contenttypes);
 $basic_attributes = get_site_preference('basic_attributes',$basic_attributes);
-$listcontent_showalias = get_site_preference('listcontent_showalias',$listcontent_showalias);
-$listcontent_showurl = get_site_preference('listcontent_showurl',$listcontent_showurl);
-$listcontent_showtitle = get_site_preference('listcontent_showtitle',$listcontent_showtitle);
 $content_autocreate_urls = get_site_preference('content_autocreate_urls',$content_autocreate_urls);
 $content_autocreate_flaturls = get_site_preference('content_autocreate_flaturls',$content_autocreate_flaturls);
 $content_mandatory_urls = get_site_preference('content_mandatory_urls',$content_mandatory_urls);
@@ -316,15 +310,6 @@ if (isset($_POST["editsiteprefs"])) {
 	$disallowed_contenttypes = implode(',',$_POST['disallowed_contenttypes']);
       }
       set_site_preference('disallowed_contenttypes',$disallowed_contenttypes);
-      break;
-
-    case 'listcontent':
-      $listcontent_showalias = (int)$_POST['listcontent_showalias'];
-      set_site_preference('listcontent_showalias',$listcontent_showalias);
-      $listcontent_showurl = (int)$_POST['listcontent_showurl'];
-      set_site_preference('listcontent_showurl',$listcontent_showurl);
-      $listcontent_showtitle = (int)$_POST['listcontent_showtitle'];
-      set_site_preference('listcontent_showtitle',$listcontent_showtitle);
       break;
 
     case 'sitedown':
@@ -474,7 +459,6 @@ if ($dir=opendir(dirname(__FILE__)."/themes/"))
 #Tabs
 $smarty->assign('tab_start',$themeObject->StartTabHeaders().
 							$themeObject->SetTabHeader('general',lang('general_settings'), ('general' == $tab)?true:false).
-							$themeObject->SetTabHeader('listcontent',lang('listcontent_settings'), ('listcontent' == $tab)?true:false).
 							$themeObject->SetTabHeader('editcontent',lang('editcontent_settings'), ('editcontent' == $tab)?true:false).
 							$themeObject->SetTabHeader('sitedown',lang('sitedown_settings'), ('sitedown' == $tab)?true:false).
 							$themeObject->SetTabHeader('setup',lang('setup'), ('setup' == $tab)?true:false).
@@ -483,7 +467,6 @@ $smarty->assign('tab_start',$themeObject->StartTabHeaders().
 							$themeObject->StartTabContent());
 $smarty->assign('tabs_end',$themeObject->EndTabContent());
 $smarty->assign('general_start',$themeObject->StartTab("general"));
-$smarty->assign('listcontent_start',$themeObject->StartTab("listcontent"));
 $smarty->assign('editcontent_start',$themeObject->StartTab("editcontent"));
 $smarty->assign('sitedown_start',$themeObject->StartTab("sitedown"));
 $smarty->assign('setup_start',$themeObject->StartTab("setup"));
@@ -517,9 +500,6 @@ $smarty->assign('allow_browser_cache',$allow_browser_cache);
 $smarty->assign('browser_cache_expiry',$browser_cache_expiry);
 $smarty->assign('auto_clear_cache_age',$auto_clear_cache_age);
 $smarty->assign('pseudocron_granularity',$pseudocron_granularity);
-$smarty->assign('listcontent_showalias',$listcontent_showalias);
-$smarty->assign('listcontent_showurl',$listcontent_showurl);
-$smarty->assign('listcontent_showtitle',$listcontent_showtitle);
 $smarty->assign('content_autocreate_urls',$content_autocreate_urls);
 $smarty->assign('content_autocreate_flaturls',$content_autocreate_flaturls);
 $smarty->assign('content_mandatory_urls',$content_mandatory_urls);

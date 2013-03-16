@@ -1,18 +1,16 @@
 {form_start action=admin_pagedefaults_tab pagedefaults=1}
 <div class="information">{$mod->Lang('info_pagedflt')}</div>
 <div class="pageoverflow">
+  <p class="pagetext"></p>
+  <p class="pageinput">
+    <input type="submit" name="{$actionid}submit" value="{$mod->Lang('submit')}"/>
+  </p>
+</div>
+<div class="pageoverflow">
   <p class="pagetext">{$mod->Lang('prompt_pagedflt_contenttype')}:&nbsp;{cms_help key2='help_pagedflt_contenttype'}</p>
   <p class="pageinput">
     <select name="{$actionid}contenttype">
       {html_options options=$all_contenttypes selected=$page_prefs.contenttype}
-    </select>
-  </p>
-</div>
-<div class="pageoverflow">
-  <p class="pagetext">{$mod->Lang('prompt_pagedflt_disallowed_types')}:&nbsp;{cms_help key2='help_pagedflt_disallowed_types'}</p>
-  <p class="pageinput">
-    <select name="{$actionid}disallowed_types[]" multiple="multiple" size="5">
-      {html_options options=$all_contenttypes selected=$page_prefs.disallowed_types}
     </select>
   </p>
 </div>
@@ -96,12 +94,6 @@
   <p class="pagetext">{$mod->Lang('prompt_pagedflt_extra3')}:&nbsp;{cms_help key2='help_pagedflt_extra3'}</p>
   <p class="pageinput">
     <input type="text" name="{$actionid}extra3" value="{$page_prefs.extra3}" size="80" maxlength="255"/>
-  </p>
-</div>
-<div class="pageoverflow">
-  <p class="pagetext"></p>
-  <p class="pageinput">
-    <input type="submit" name="{$actionid}submit" value="{$mod->Lang('submit')}"/>
   </p>
 </div>
 {form_end}

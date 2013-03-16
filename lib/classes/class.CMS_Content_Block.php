@@ -58,7 +58,7 @@ final class CMS_Content_Block
   {
     // {content} tag encountered.
     $rec = array('type'=>'text','id'=>'','name'=>'','usewysiwyg'=>'true','oneline'=>'false','default'=>'','label'=>'',
-		 'size'=>'50','tab'=>'','maxlength'=>'255');
+		 'size'=>'50','tab'=>'','maxlength'=>'255','required'=>0);
     foreach( $params as $key => $value ) {
       $value = trim($value,'"\'');
       if( $key == 'type' ) continue;
@@ -244,6 +244,7 @@ final class CMS_Content_Block
 	    unset($params['default']);
 	    unset($params['size']);
 	    unset($params['tab']);
+	    unset($params['required']);
 	    $params = array_merge($params, ModuleOperations::get_instance()->GetModuleParameters($id));
 	    $returnid = '';
 	    if (isset($params['returnid'])) {

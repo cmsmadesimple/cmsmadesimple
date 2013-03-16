@@ -214,10 +214,10 @@ class Content extends ContentBase
 			$result = false;
 		}
 
-		if ($this->GetPropertyValue('content_en') == '') {
-			$errors[]= lang('nofieldgiven',array(lang('content')));
-			$result = false;
-		}
+// 		if ($this->GetPropertyValue('content_en') == '') {
+// 			$errors[]= lang('nofieldgiven',array(lang('content')));
+// 			$result = false;
+// 		}
 
 		$blocks = $this->get_content_blocks();
 		if( !$blocks ) {
@@ -230,6 +230,9 @@ class Content extends ContentBase
 			if( $blockInfo['id'] == 'content_en' ) {
 				$have_content_en = TRUE;
 		    }
+			if( $blockInfo['required'] && ($val = $this->GetPropertyValue($blockName)) == '' ) {
+				$errors[] = lang('nofieldgiven',array($blockName));
+			}
 			if( isset($blockInfo['type']) && $blockInfo['type'] == 'module' ) {
 				$module = cms_utils::get_module($blockInfo['module']);
 				if( !is_object($module) ) continue;
@@ -294,7 +297,7 @@ class Content extends ContentBase
 					$_templates[] = array('key'=>$tpl_id,'value'=>$tpl_name);
 				}
 			}
-			$_designslist = CmsLayoutCollection::get_list();
+			$_designlist = CmsLayoutCollection::get_list();
 		}
 		
 		switch($one) {

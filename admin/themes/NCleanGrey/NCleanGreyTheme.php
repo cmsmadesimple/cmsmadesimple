@@ -64,7 +64,7 @@ class NCleanGreyTheme extends AdminTheme
       {
 	$class[] = 'first_module';
       }
-    else if (isset($this->menuItems[$section]['module']))
+    else if ( !isset($this->menuItems[$section]['system']) && isset($this->menuItems[$section]['module']))
       {
 	$class[] = 'module';
       }
