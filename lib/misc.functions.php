@@ -333,7 +333,7 @@ function debug_bt()
 * @param boolean $echo_to_screen (optional)
 * @return string
 */
-function debug_display($var, $title="", $echo_to_screen = true, $use_html = true)
+function debug_display($var, $title="", $echo_to_screen = true, $use_html = true,$showtitle = TRUE)
 {
   $orig_starttime = microtime();
   $starttime = cms_utils::get_app_data('__starttime');
@@ -342,27 +342,23 @@ function debug_display($var, $title="", $echo_to_screen = true, $use_html = true
     $starttime = $orig_starttime;
   }
 
-  $titleText = "Debug: ";
-  if($title) {
-    $titleText = "Debug display of '$title':";
-  }
-  $titleText .= '(' . microtime_diff($starttime,microtime()) . ')';
-
-  if (function_exists('memory_get_usage')) {
-    $titleText .= ' - (usage: '.memory_get_usage().')';
-  }
-
-  $memory_peak = (function_exists('memory_get_peak_usage')?memory_get_peak_usage():'');
-  if( $memory_peak ) {
-    $titleText .= ' - (peak: '.$memory_peak.')';
-  }
-
   ob_start();
-  if ($use_html) {
-    echo "<div><b>$titleText</b>\n";
-  }
-  else {
-    echo "$titleText\n";
+
+  if( $showtitle ) {
+    $titleText = "Debug: ";
+    if($title) $titleText = "Debug display of '$title':";
+    $titleText .= '(' . microtime_diff($starttime,microtime()) . ')';
+    if (function_exists('memory_get_usage')) $titleText .= ' - (usage: '.memory_get_usage().')';
+
+    $memory_peak = (function_exists('memory_get_peak_usage')?memory_get_peak_usage():'');
+    if( $memory_peak ) $titleText .= ' - (peak: '.$memory_peak.')';
+
+    if ($use_html) {
+      echo "<div><b>$titleText</b>\n";
+    }
+    else {
+      echo "$titleText\n";
+    }
   }
 
   if(FALSE == empty($var)) {
@@ -432,7 +428,7 @@ function debug_to_log($var, $title='',$filename = '')
       $x = @filemtime($filename);
       if( $x !== FALSE && $x < (time() - 24 * 3600) ) @unlink($filename);
     }
-    $errlines = explode("\n",debug_display($var, $title, false, false));
+    $errlines = explode("\n",debug_display($var, $title, false, false, false));
     foreach ($errlines as $txt) {
       error_log($txt . "\n", 3, $filename);
     }

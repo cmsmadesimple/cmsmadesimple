@@ -43,6 +43,7 @@ final class Nav_utils
   {
     if( !is_object($node) ) return;
     $gCms = cmsms();
+    $hm = $gCms->GetHierarchyManager();
     $content = $node->getContent(TRUE,TRUE);
     if( is_object($content) ) {
       if( !$content->Active() ) return;
@@ -67,16 +68,17 @@ final class Nav_utils
       $obj->parent = FALSE;
       $obj->has_children = FALSE;
 
-      if (isset($gCms->variables['content_id']) && $obj->id == $gCms->variables['content_id']) {
+      if( ($tmp = cmsms()->get_content_id()) && $obj->id == $tmp ) {
 	$obj->current = true;
       }
       else {
-	$obj->current = false;
-	//So, it's not current.  Lets check to see if it's a direct parent
-	if (isset($gCms->variables["friendly_position"])) {
-	  if( startswith($gCms->variables['friendly_position'].'.',$content->Hierarchy().'.') ) {
-	    $obj->parent = true;
+	$tmp_node = $hm->find_by_tag('id',$tmp);
+	while( $tmp_node ) {
+	  if( $tmp_node->get_tag('id') == $obj->id ) {
+	    $obj->parent = TRUE;
+	    break;
 	  }
+	  $tmp_node = $tmp_node->get_parent();
 	}
       }
 
@@ -84,8 +86,7 @@ final class Nav_utils
 	$obj->default = 1;
       }
       if( $deep ) {
-	if ($content->HasProperty('target'))
-	  $obj->target = $content->GetPropertyValue('target');
+	if ($content->HasProperty('target')) $obj->target = $content->GetPropertyValue('target');
 	$config = cmsms()->GetConfig();
 	$obj->extra1 = $content->GetPropertyValue('extra1');
 	$obj->extra2 = $content->GetPropertyValue('extra2');
@@ -110,9 +111,8 @@ final class Nav_utils
       if( $node->has_children() ) $children = $node->get_children();
       
       // are we recursing?
-//      if( is_array($children) && count($children) && ($nlevels < 0 || $depth+1 < $nlevels) && 
-//	  (($collapse && ($obj->parent || $obj->current)) || !$collapse) ) {
-      if( is_array($children) && count($children) ) {
+     if( is_array($children) && count($children) && ($nlevels < 0 || $depth+1 < $nlevels) && 
+	 (($collapse && ($obj->parent || $obj->current)) || !$collapse) ) {
 	$children = $node->get_children();
 	$child_nodes = array();
 	for( $i = 0; $i < count($children); $i++ ) {
