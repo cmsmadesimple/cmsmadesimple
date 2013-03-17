@@ -232,7 +232,7 @@ class Content extends ContentBase
 				$have_content_en = TRUE;
 		    }
 			if( $blockInfo['required'] && ($val = $this->GetPropertyValue($blockName)) == '' ) {
-				$errors[] = lang('nofieldgiven',array($blockName));
+				$errors[] = lang('emptyblock',array($blockName));
 			}
 			if( isset($blockInfo['type']) && $blockInfo['type'] == 'module' ) {
 				$module = cms_utils::get_module($blockInfo['module']);

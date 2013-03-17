@@ -20,7 +20,7 @@ function smarty_function_cms_help($params,&$template)
 {
   $smarty = $template->smarty;
 
-  $out = cms_admin_utils::help_tag($params);
+  $out = cms_admin_utils::get_help_tag($params);
 
   if( isset($params['assign']) ) {
     $smarty->assign($params['assign'],$out);

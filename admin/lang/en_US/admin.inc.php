@@ -312,6 +312,7 @@ $lang['admin']['edittemplatesuccess'] = 'Template updated';
 $lang['admin']['edituser'] = 'Edit User';
 $lang['admin']['editusertag'] = 'Edit User Defined Tag';
 $lang['admin']['email'] = 'Email Address';
+$lang['admin']['emptyblock'] = 'Empty content block: %s';
 $lang['admin']['enable'] = 'Enable';
 $lang['admin']['enablecustom404'] = 'Enable Custom 404 Message';
 $lang['admin']['enablenotifications'] = 'Enable user notifications in the admin section';
@@ -2221,6 +2222,7 @@ $lang['admin']['help_function_content'] = <<<EOT
 <li><em>(optional) </em>maxlength - Applicable only when the oneline option is used this optional parameter allows you to specify the maximum length of input for the edit field.  The default value is 255.</li>
 		<li><em>(optional) </em>default - Allows you to specify default content for this content blocks (additional content blocks only).</li>
 		<li><em>(optional) </em>label - Allows specifying a label for display in the edit content page.</li>
+	        <li><em>(optional)</em> required - Allows specifying that the content block must contain some text.</em>
                 <li><em>(optional)</em> tab - The desired tab to display this field on in the edit form..</li>
 		<li><em>(optional) </em>assign - Assigns the content to a smarty parameter, which you can then use in other areas of the page, or use to test whether content exists in it or not.
 <p>Example of passing page content to a User Defined Tag as a parameter:</p></li>

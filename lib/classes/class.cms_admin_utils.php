@@ -94,11 +94,11 @@ final class cms_admin_utils
 
 	  $params = array();
 	  $args = func_get_args();
-	  if( count($args) == 1 && !is_string($args[0]) ) {
+	  if( count($args) == 1 && is_string($args[0]) ) {
 		  $params['key2'] = $args[0];
 	  }
 	  else {
-		  $params = $args;
+		  $params = $args[0];
 	  }
 
 	  $theme = cms_utils::get_theme_object();
@@ -121,7 +121,7 @@ final class cms_admin_utils
 	  }
 
 	  if( !$key1 ) {
-		  $smarty = cmsms()->GetSamrty();
+		  $smarty = cmsms()->GetSmarty();
 		  $module = $smarty->get_template_vars('actionmodule');
 		  if( $module ) {
 			  $key1 = $module;

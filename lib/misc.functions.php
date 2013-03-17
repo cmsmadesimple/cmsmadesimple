@@ -335,11 +335,9 @@ function debug_bt()
 */
 function debug_display($var, $title="", $echo_to_screen = true, $use_html = true,$showtitle = TRUE)
 {
-  $orig_starttime = microtime();
-  $starttime = cms_utils::get_app_data('__starttime');
+  global $starttime;
   if( !$starttime ) {
-    cms_utils::set_app_data('__starttime',$orig_starttime);
-    $starttime = $orig_starttime;
+    $starttime = microtime();
   }
 
   ob_start();
