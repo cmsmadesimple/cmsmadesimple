@@ -89,8 +89,8 @@ $lang['help_template'] = 'The template to use for displaying the menu.  The name
 #R
 #S
 #T
+$lang['type_Navigator'] = 'Navigator';
 $lang['type_navigation'] = 'Navigation';
-$lang['type_Nav'] = 'Navigator';
 
 #U
 #V

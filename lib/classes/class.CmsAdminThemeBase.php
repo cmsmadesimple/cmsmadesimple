@@ -124,8 +124,6 @@ abstract class CmsAdminThemeBase
 		else return preg_replace('/\s+/',"&nbsp;",$str); // bad UTF8
     }
 
-
-
 	private function _fix_url_userkey($url)
 	{
 		$from = '/'.CMS_SECURE_PARAM_NAME.'=[a-zA-Z0-9]{8}/i';

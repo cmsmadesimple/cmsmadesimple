@@ -1,55 +1,65 @@
-<script type="text/javascript">
-$(document).ready(function(){
-  $('.helpicon').click(function(){
-    var x = $(this).attr('name');
-    $('#'+x).dialog();
-  });
-});
-</script>
-<h3>{$mod->Lang('edit_type')}</h3>
+<h3>{$mod->Lang('edit_type')}:</h3>
 
 <fieldset>
   <div class="pagecontainer" style="width: 49%; float: left;">{* left container *}
     <div class="pageoverflow">
-      <p class="pagetext">{$mod->Lang('prompt_originator')}:</p>
+      <p class="pagetext"></p>
       <p class="pageinput">
-        <input type="text" readonly="readonly" value="{$type->get_originator(TRUE)}"/>
+        <input type="submit" name="{$actionid}submit" value="{$mod->Lang('submit')}"/>
+        <input type="submit" name="{$actionid}cancel" value="{$mod->Lang('cancel')}"/>
       </p>
     </div>
 
     <div class="pageoverflow">
-      <p class="pagetext">{$mod->Lang('prompt_name')}:</p>
+      <p class="pagetext"><label for="originator">{$mod->Lang('prompt_originator')}:</label>&nbsp;{cms_help key2='help_type_originator'}</p>
       <p class="pageinput">
-        <input type="text" readonly="readonly" value="{$type->get_name()}"/>
+        <input id="originator" type="text" readonly="readonly" value="{$type->get_originator(TRUE)}"/>
       </p>
     </div>
 
     <div class="pageoverflow">
-      <p class="pagetext">{$mod->Lang('prompt_descriptive_name')}:</p>
+      <p class="pagetext"><label for="name">{$mod->Lang('prompt_name')}:</label>&nbsp;{cms_help key2='help_type_name'}</p>
       <p class="pageinput">
-        <input type="text" readonly="readonly" value="{$type->get_langified_display_value()}"/>
+        <input id="name" type="text" readonly="readonly" value="{$type->get_name()}"/>
       </p>
     </div>
+
+    <div class="pageoverflow">
+      <p class="pagetext"><label for="descname">{$mod->Lang('prompt_descriptive_name')}:</label>&nbsp;{cms_help key2='help_type_descriptive_name'}</p>
+      <p class="pageinput">
+        <input id="descname" type="text" readonly="readonly" value="{$type->get_langified_display_value()}"/>
+      </p>
+    </div>
+
   </div>{* left container *}
 
   {* right container *}
   <div style="width: 45%; float: right;">
     <div class="pageoverflow">
-      <p class="pagetext">{$mod->Lang('prompt_has_dflt')}:&nbsp;{admin_icon icon='info.gif' class='helpicon' name=help_has_dflt}</p>
+      <p class="pagetext"><label for="hasdflt">{$mod->Lang('prompt_has_dflt')}:</label>&nbsp;{cms_help key2=help_has_dflt}</p>
       <p class="pageinput">
-        <input type="text" readonly="readonly" value="{if $type->get_dflt_flag()}{$mod->Lang('yes')}{else}{$mod->Lang('no')}{/if}"/>
+        <input id="hasdflt" type="text" readonly="readonly" value="{if $type->get_dflt_flag()}{$mod->Lang('yes')}{else}{$mod->Lang('no')}{/if}"/>
+      </p>
+    </div>
+
+    <div class="pageoverflow">
+      <p class="pagetext"><label for="rcb">{$mod->Lang('prompt_requires_content_blocks')}:</label>&nbsp;{cms_help key2='help_type_reqcontentblocks'}</p>
+      <p class="pageinput">
+        {$tmp=$mod->Lang('no')}{if $type->get_content_block_flag()}{$tmp=$mod->Lang('yes')}{/if}
+        <input id="rcb" type="text" readonly="readonly" value="{$tmp}"/>
+      </p>
+    </div>
+
+    <div class="pageoverflow">
+      <p class="pagetext"><label for="created">{$mod->Lang('prompt_created')}:</label>&nbsp;{cms_help key2='help_type_createdate'}</p>
+      <p class="pageinput">
+        <input id="created" type="text" readonly="readonly" value="{$type->get_create_date()|date_format:'%x %X'}"/>
       </p>
     </div>
     <div class="pageoverflow">
-      <p class="pagetext">{$mod->Lang('prompt_created')}:</p>
+      <p class="pagetext"><label for="modified">{$mod->Lang('prompt_modified')}:</label>&nbsp;{cms_help key2='help_type_modifieddate'}</p>
       <p class="pageinput">
-        <input type="text" readonly="readonly" value="{$type->get_create_date()|date_format:'%x %X'}"/>
-      </p>
-    </div>
-    <div class="pageoverflow">
-      <p class="pagetext">{$mod->Lang('prompt_modified')}:</p>
-      <p class="pageinput">
-        <input type="text" readonly="readonly" value="{$type->get_modified_date()|date_format:'%x %X'}"/>
+        <input id="modified" type="text" readonly="readonly" value="{$type->get_modified_date()|date_format:'%x %X'}"/>
       </p>
     </div>
   </div>{* right container *}
@@ -66,27 +76,27 @@ $(document).ready(function(){
 
 {if $type->get_content_callback() != ''}
 {tab_start name='content'}
-{syntax_area prefix=$actionid name=dflt_contents value=$type->get_dflt_contents()}
-{admin_icon icon='info.gif' name='help_dflt_template' class='helpicon' title=$mod->Lang('whats_this')}
-<div class="pagecontainer">
-  <input type="submit" name="{$actionid}reset" value="{$mod->Lang('reset_factory')}" onclick="return confirm('{$mod->Lang('confirm_reset_type')}')"/>
+<div class="pageoverflow">
+  <p class="pagetext">
+    <label for="type_dflt_contents">{$mod->Lang('prompt_dflt_template')}:</label>&nbsp;{cms_help key2='help_dflt_template'}
+  </p>
+  <p class="pageinput">
+    {syntax_area id=type_dflt_contents prefix=$actionid name=dflt_contents value=$type->get_dflt_contents()}
+  </p>
+
+  <div class="pagecontainer">
+    <input type="submit" name="{$actionid}reset" value="{$mod->Lang('reset_factory')}" onclick="return confirm('{$mod->Lang('confirm_reset_type')}')"/>
+  </div>
 </div>
 {/if}
 
 {tab_start name='description'}
-<textarea name="{$actionid}description" rows="5" cols="80">{$type->get_description()}</textarea>
-{tab_end}
-
 <div class="pageoverflow">
-  <p class="pagetext"></p>
+  <p class="pagetext"><label for="type_description">{$mod->Lang('prompt_description')}:</label>&nbsp;{cms_help key2='help_type_description'}
   <p class="pageinput">
-    <input type="submit" name="{$actionid}submit" value="{$mod->Lang('submit')}"/>
-    <input type="submit" name="{$actionid}cancel" value="{$mod->Lang('cancel')}"/>
+    <textarea id="type_description" name="{$actionid}description" rows="5" cols="80">{$type->get_description()}</textarea>
   </p>
 </div>
-{form_end}
+{tab_end}
 
-<div style="display: none;">{strip}
-  <div id="help_has_dflt" title="{$mod->Lang('prompt_help')}">{$mod->Lang('help_has_dflt')}</div>
-  <div id="help_dflt_template" title="{$mod->Lang('prompt_help')}">{$mod->Lang('help_dflt_template')}</div>
-{/strip}</div>
+{form_end}

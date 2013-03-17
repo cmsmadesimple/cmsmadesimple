@@ -340,7 +340,7 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 	echo ilang('install_creating_table', 'module_deps', $ado_ret);
 
 
-
+	// deprecated
 	$flds = "
 		module_name C(160),
 		template_name C(160),
@@ -503,6 +503,7 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
          description X,
          lang_cb     C(255),
          dflt_content_cb C(255),
+         requires_contentblocks I1,
          owner   I,
          created I,
          modified I";

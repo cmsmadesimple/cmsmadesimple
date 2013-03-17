@@ -53,7 +53,8 @@ class CmsLayoutTemplateCategory
   {
     $str = trim($str);
     if( !$str ) throw new CmsInvalidDataException('Name cannot be empty');
-		if( preg_match('<^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$>', $str) ) {
+		if( !preg_match('<^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff\ ]*$>', $str) ) {
+			stack_trace(); die();
 			throw new CmsInvalidDataException('Invalid characters in name');
 		}
     $this->_data['name'] = $str;
@@ -97,7 +98,7 @@ class CmsLayoutTemplateCategory
       throw new CmsInvalidDataException('A Template Categoy must have a name');
     }
 
-		if( !preg_match('/[A-Za-z0-9_\,\.\ ]/',$this->get_name()) ) {
+		if( !preg_match('<^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$>', $this->get_name()) ) {
 			throw new CmsInvalidDataException('Name must contain only numbers letters, spaces and underscores.');
 		}
 

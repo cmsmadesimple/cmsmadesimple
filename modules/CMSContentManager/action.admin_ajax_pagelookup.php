@@ -41,7 +41,7 @@ $out = array();
 if( isset($_REQUEST['term']) ) {
   // find all pages with this text... 
   // that this user can edit.
-  $term = trim($_REQUEST['term']);
+  $term = trim(strip_tags($_REQUEST['term']));
 
   $pref = $this->GetPreference('list_namecolumn','title');
   $field = 'content_name';

@@ -59,6 +59,7 @@ $page_template_type->set_dflt_flag(TRUE);
 $page_template_type->set_lang_callback('CmsTemplateResource::page_type_lang_callback');
 $page_template_type->set_content_callback('CmsTemplateResource::reset_page_type_defaults');
 $page_template_type->reset_content_to_factory();
+$page_template_type->set_content_block_flag(TRUE);
 $page_template_type->save();
 
 $gcb_template_type = new CmsLayoutTemplateType();

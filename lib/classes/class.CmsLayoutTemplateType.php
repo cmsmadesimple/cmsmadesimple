@@ -263,6 +263,26 @@ class CmsLayoutTemplateType
 	  if( isset($this->_data['content_callback']) ) return $this->_data['content_callback'];
   }
 
+	/**
+	 * Get the content block flag
+	 * The content block flag indicates that this template type requires content blocks
+	 *
+	 * @return boolean
+	 */
+	public function get_content_block_flag()
+	{
+	  if( isset($this->_data['requires_contentblocks']) ) return $this->_data['requires_contentblocks'];
+	}
+
+	/**
+	 * Set the content block flag to indicate that this template type requires content blocks
+	 */
+	public function set_content_block_flag($flag)
+	{
+		$flag = (bool)$flag;
+		$this->_data['requires_contentblocks'] = $flag;
+	}
+
   /**
    * Validate the integrity of a template type object.
    *
@@ -325,8 +345,8 @@ class CmsLayoutTemplateType
 	  $now = time();
 	  $query = 'INSERT INTO '.cms_db_prefix().self::TABLENAME.'
                 (originator,name,has_dflt,dflt_contents,description,
-                 lang_cb,dflt_content_cb,owner,created,modified)
-                VALUES (?,?,?,?,?,?,?,?,?,?)';
+                 lang_cb,dflt_content_cb,requires_contentblocks,owner,created,modified)
+                VALUES (?,?,?,?,?,?,?,?,?,?,?)';
 	  $dbr = $db->Execute($query,array($this->get_originator(),
 									   $this->get_name(),
 									   $this->get_dflt_flag(),
@@ -334,6 +354,7 @@ class CmsLayoutTemplateType
 									   $this->get_description(),
 									   serialize($this->get_lang_callback()),
 									   serialize($this->get_content_callback()),
+ 									   $this->get_content_block_flag() ? 1 : 0,
 									   $this->get_owner(),
 									   $now,$now));
 	  if( !$dbr ) {
@@ -363,7 +384,7 @@ class CmsLayoutTemplateType
 	  $query = 'UPDATE '.cms_db_prefix().self::TABLENAME.'
                 SET originator = ?, name = ?, has_dflt = ?, 
                     dflt_contents = ?, description = ?,
-                    lang_cb = ?, dflt_content_cb = ?, owner = ?, modified = ?
+                    lang_cb = ?, dflt_content_cb = ?, requires_content_blocks = ?, owner = ?, modified = ?
                 WHERE id = ?';
 	  $dbr = $db->Execute($query,array($this->get_originator(),
 									   $this->get_name(),
@@ -372,6 +393,7 @@ class CmsLayoutTemplateType
 									   $this->get_description(),
 									   serialize($this->get_lang_callback()),
 									   serialize($this->get_content_callback()),
+ 									   $this->get_content_block_flag() ? 1 : 0,
 									   $this->get_owner(),
 									   $now,
 									   $this->get_id()));
