@@ -135,7 +135,12 @@ if( isset($params['setoptions']) ) {
 $pagelimit = cms_userprefs::get($this->GetName().'_pagelimit',500);
 
 $builder->set_pagelimit($pagelimit);
-$builder->set_page($curpage);
+if( isset($params['seek']) && $params['seek'] != '' ) {
+  $builder->seek_to((int)$params['seek']);
+}
+else {
+  $builder->set_page($curpage);
+}
 $editinfo = $builder->get_content_list();
 $npages = $builder->get_numpages();
 $pagelimits = array(10=>10,25=>25,100=>100,250=>250,500=>500);
@@ -146,7 +151,7 @@ for( $i = 0; $i < $npages; $i++ ) {
 }
 $smarty->assign('pagelimit',$pagelimit);
 $smarty->assign('pagelist',$pagelist);
-$smarty->assign('curpage',$curpage);
+$smarty->assign('curpage',$builder->get_page());
 $smarty->assign('npages',$npages);
 $columns  = $builder->get_display_columns();
 $smarty->assign('columns',$columns);

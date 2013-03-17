@@ -103,7 +103,6 @@ function check_login($no_redirect = false)
       }
 
       if( $v != $_SESSION[CMS_USER_KEY] && !isset($config['stupidly_ignore_xss_vulnerability']) ) {
-	debug_buffer('Session key mismatch problem... redirect to login');
 	if (false == $no_redirect) {
 	  redirect($config['admin_url'].'/login.php');
 	}

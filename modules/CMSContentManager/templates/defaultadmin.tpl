@@ -39,6 +39,8 @@ function setup_js() {
   $('#multiaction').attr('disabled','disabled');
   $('#multisubmit').attr('disabled','disabled');
 
+  $('tr.selected').css('background','yellow');
+
   $('a.tooltip').mouseover(function(){
     $('span',this).css('width', '250px');
     $('span',this).css('display', 'inline-block');
@@ -164,6 +166,18 @@ function setup_js() {
         },
       }
     });
+  });
+  $('#ajax_find').autocomplete({
+    source: '{cms_action_url action=admin_ajax_pagelookup forjs=1}&showtemplate=false',
+    minLength: 2,
+    select: function( event, ui ) {
+      $(this).val(ui.item.label);
+      var url = '{cms_action_url action=defaultadmin forjs=1}&showtemplate=false&{$actionid}ajax=1&{$actionid}seek='+ui.item.value;
+      $('#contentlist').load(url,function(){
+        setup_js();
+      });
+      return false;
+    }
   });
 }
 
@@ -308,31 +322,34 @@ $(document).ready(function(){
 {/if}
 
 <div class="pageoverflow">
-  <div class="pageoptions" style="float: left; width: 59%;">
+  <div class="pageoptions" style="float: left; width: 29%;">
   <ul id="subnav">
   {if $can_add_content}
     <li><a href="{cms_action_url action=admin_editcontent}" accesskey="n" title="{$mod->Lang('addcontent')}" class="pageoptions">{admin_icon icon='newobject.gif' alt=$mod->Lang('addcontent')}&nbsp;{$mod->Lang('addcontent')}</a></li>
   {/if}
-     <li>{admin_icon icon='run.gif' alt=$mod->Lang('prompt_options')}&nbsp;{$mod->Lang('prompt_options')}
-       <ul id="popupmenucontents">
-         <li><a class="expandall" href="{cms_action_url action='defaultadmin' expandall=1}" accesskey="e" title="{$mod->Lang('prompt_expandall')}">{admin_icon icon='expandall.gif' alt=$mod->Lang('expandall')}&nbsp;{$mod->Lang('expandall')}</a></li>
-          <li><a class="collapseall" href="{cms_action_url action='defaultadmin' collapseall=1}" accesskey="c" title="{$mod->Lang('prompt_collapseall')}">{admin_icon icon='contractall.gif' alt=$mod->Lang('contractall')}&nbsp;{$mod->Lang('contractall')}</a></li>
-          {if $can_reorder_content}
-          <li><a id="ordercontent" href="{cms_action_url action=admin_ordercontent}" accesskey="r" title="{$mod->Lang('prompt_ordercontent')}">{admin_icon icon='reorder.gif' alt=$mod->Lang('reorderpages')}&nbsp;{$mod->Lang('reorderpages')}</a></li>
-          {/if}
-          <li><a id="myoptions" accesskey="o" title="{$mod->Lang('prompt_settings')}">{admin_icon icon='edit.gif' alt=$mod->Lang('prompt_settings')}&nbsp;{$mod->lang('prompt_settings')}</a></li>
-       </ul>
-     </ul>
+  <li>{admin_icon icon='run.gif' alt=$mod->Lang('prompt_options')}&nbsp;{$mod->Lang('prompt_options')}
+    <ul id="popupmenucontents">
+      <li><a class="expandall" href="{cms_action_url action='defaultadmin' expandall=1}" accesskey="e" title="{$mod->Lang('prompt_expandall')}">{admin_icon icon='expandall.gif' alt=$mod->Lang('expandall')}&nbsp;{$mod->Lang('expandall')}</a></li>
+      <li><a class="collapseall" href="{cms_action_url action='defaultadmin' collapseall=1}" accesskey="c" title="{$mod->Lang('prompt_collapseall')}">{admin_icon icon='contractall.gif' alt=$mod->Lang('contractall')}&nbsp;{$mod->Lang('contractall')}</a></li>
+      {if $can_reorder_content}
+      <li><a id="ordercontent" href="{cms_action_url action=admin_ordercontent}" accesskey="r" title="{$mod->Lang('prompt_ordercontent')}">{admin_icon icon='reorder.gif' alt=$mod->Lang('reorderpages')}&nbsp;{$mod->Lang('reorderpages')}</a></li>
+      {/if}
+      <li><a id="myoptions" accesskey="o" title="{$mod->Lang('prompt_settings')}">{admin_icon icon='edit.gif' alt=$mod->Lang('prompt_settings')}&nbsp;{$mod->lang('prompt_settings')}</a></li>
+   </ul>
+  </ul>
   </div>
 
-  <div class="pageoptions" style="float: right; width: 40%; text-align: right;">
+  <div class="pageoptions" style="float: right; width: 70%; text-align: right;">
+  <span><label for="ajax_find">{$mod->Lang('find')}:</label>&nbsp;<input type="text" id="ajax_find" name="ajax_find" value="" size="25"/></span>
   {if $npages > 1}
     {form_start action='defaultadmin'}
+    <span>
     {$mod->Lang('page')}:&nbsp;
     <select name="{$actionid}curpage">
       {html_options options=$pagelist selected=$curpage}
     </select>
     <button name="{$actionid}submitpage">GO</button>
+    </span>
     {form_end}
   </div>
   {/if}
@@ -360,7 +377,7 @@ $(document).ready(function(){
   <tbody class="contentrows">
   {foreach from=$content_list item='row'}
     {cycle values="row1,row2" assign='rowclass'}
-    <tr id="row_{$row.id}" class="{$rowclass}" onmouseover="this.className='{$rowclass}hover';" onmouseout="this.className='{$rowclass}';">
+    <tr id="row_{$row.id}" class="{$rowclass} {if isset($row.selected)}selected{/if}" onmouseover="this.className='{$rowclass}hover';" onmouseout="this.className='{$rowclass}';">
     {do_content_row row=$row columns=$columns}
     </tr>
   {/foreach}

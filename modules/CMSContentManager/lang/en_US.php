@@ -69,6 +69,7 @@ $lang['error_setinactive'] = 'Could deactivate this page.  This could be a datab
 $lang['expandall'] = 'Expand All';
 
 #F
+$lang['find'] = 'Find';
 $lang['friendlyname'] = 'Content Manager';
 
 #G

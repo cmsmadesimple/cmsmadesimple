@@ -58,6 +58,7 @@ final class ContentListBuilder
   private $_pagelimit = 500;
   private $_offset    = 0;
   private $_pagelist;
+  private $_seek_to;
 
   /**
    * Constructor
@@ -225,11 +226,27 @@ final class ContentListBuilder
     return $this->_offset;
   }
 
+  public function seek_to($n)
+  {
+    $n = (int)$n;
+    $n = max(1,$n);
+    $this->_seek_to = $n;
+  }
+
   public function set_page($n)
   {
     $n = (int)$n;
     $n = max(1,$n);
     $this->_offset = $this->_pagelimit * ($n-1);
+  }
+
+  /**
+   * This can be called after the content list is returned as
+   * the offset can be adjusted because of seeking to a content id.
+   */
+  public function get_page()
+  {
+    return (int)($this->_offset / $this->_pagelimit) + 1;
   }
 
   /**
@@ -436,13 +453,22 @@ final class ContentListBuilder
 	}
       }
     }
-
     $display = array();
     for( $i = 0; $i < count($pagelist); $i++ ) {
       if( !in_array($pagelist[$i],$remove) ) $display[] = $pagelist[$i];
     }
-
     $this->_pagelist = $display;
+
+    if( $this->_seek_to > 0 ) {
+      // re-calculate an offset
+      $idx = array_search($this->_seek_to,$this->_pagelist);
+      if( $idx > 0 ) {
+	// item found.
+	$pagenum = (int)($idx / $this->_pagelimit);
+	$this->_offset = (int)($pagenum * $this->_pagelimit);
+      }
+    }
+
     $offset = min(count($pagelist),$this->_offset);
     $display = array_slice($display,$offset,$this->_pagelimit);
 
@@ -552,6 +578,9 @@ final class ContentListBuilder
       $rec['created'] = $content->GetCreationDate();
       $rec['secure'] = $content->Secure();
       $rec['cachable'] = $content->Cachable();
+      if( $page_id == $this->_seek_to ) {
+	$rec['selected'] = 1;
+      }
       if( $content->LastModifiedBy() > 0 && isset($users[$content->LastModifiedBy()]) ) {
 	$rec['lastmodifiedby'] = $users[$content->LastModifiedBy()]->username;
       }
