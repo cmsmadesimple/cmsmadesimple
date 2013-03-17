@@ -97,33 +97,41 @@ $(document).ready(function(){
 </div>
 
 {tab_start name='description'}
-<textarea name="{$actionid}description" {if !$has_manage_right}readonly="readonly"{/if}>{$template->get_description()}</textarea>&nbsp;
-{admin_icon name='help_template_description' icon='info.gif' class='helpicon'}
+<div class="pageoverflow">
+  <p class="pagetext"><label for="description">{$mod->Lang('prompt_description')}:</label>&nbsp;{cms_help key2=help_template_description}</p>
+  <p class="pageinput">
+    <textarea id="description" name="{$actionid}description" {if !$has_manage_right}readonly="readonly"{/if}>{$template->get_description()}</textarea>
+</div>
 
 {if $has_themes_right}
 {tab_start name='designs'}
-<select name="{$actionid}design_list[]" multiple="multiple" size="5">
-  {html_options options=$design_list selected=$template->get_designs()}
-</select>&nbsp;{admin_icon icon='info.gif' class='helpicon' name='help_template_designs'}
+<div class="pageoverflow">
+  <p class="pagetext"><label for="designlist">{$mod->Lang('prompt_designs')}:</label>&nbsp;{cms_help key2=help_template_designlist}</p>
+  <p class="pageinput">
+    <select id="designlist" name="{$actionid}design_list[]" multiple="multiple" size="5">
+    {html_options options=$design_list selected=$template->get_designs()}
+    </select>
+  </p>
+</div>
 {/if}
 
 {if $has_manage_right}
 {tab_start name='advanced'}
   {if isset($type_list)}
     <div class="pageoverflow">
-      <p class="pagetext"><label for="tpl_type">{$mod->Lang('prompt_type')}:</label></p>
+      <p class="pagetext"><label for="tpl_type">{$mod->Lang('prompt_type')}:</label>&nbsp;{cms_help key2=help_template_type}</p>
       <p class="pageinput">
         <select id="tpl_type" name="{$actionid}type"{if $type_is_readonly} readonly="readonly"{/if}>
           {html_options options=$type_list selected=$template->get_type_id()}
-        </select>&nbsp;{admin_icon name='help_template_type' icon='info.gif' class='helpicon'}
+        </select>
       </p>
     </div>
     {if $type_obj->get_dflt_flag()}
       <div class="pageoverflow">
-        <p class="pagetext"><label for="tpl_dflt">{$mod->Lang('prompt_default')}:</label></p>
+        <p class="pagetext"><label for="tpl_dflt">{$mod->Lang('prompt_default')}:</label>&nbsp;{cms_help key2=help_template_dflt}</p>
         <p class="pageinput">
           <input type="hidden" name="{$actionid}default" value="{if $template->get_type_dflt()}1{else}0{/if}"/>
-          <input id="tpl_dflt" type="checkbox" name="{$actionid}default" value="1" {if $template->get_type_dflt()}checked="checked" disabled="disabled"{/if}/>&nbsp;{admin_icon name='help_template_dflt' icon='info.gif' class='helpicon'}
+          <input id="tpl_dflt" type="checkbox" name="{$actionid}default" value="1" {if $template->get_type_dflt()}checked="checked" disabled="disabled"{/if}/>
       </p>
       </div>
     {/if}
@@ -131,11 +139,11 @@ $(document).ready(function(){
 
   {if isset($category_list)}
   <div class="pageoverflow">
-    <p class="pagetext"><label for="tpl_category">{$mod->Lang('prompt_category')}:</label></p>
+    <p class="pagetext"><label for="tpl_category">{$mod->Lang('prompt_category')}:</label>&nbsp;{cms_help key2=help_template_category}</p>
     <p class="pageinput">
       <select id="tpl_category" name="{$actionid}category_id">
         {html_options options=$category_list selected=$template->get_category_id()}
-      </select>&nbsp;{admin_icon name='help_template_category' icon='info.gif' class='helpicon'}
+      </select>
     </p>
   </div>
   {/if}
@@ -145,21 +153,21 @@ $(document).ready(function(){
 {tab_start name='permissions'}
 {if isset($user_list)}
 <div class="pageoverflow">
-  <p class="pagetext"><label for="tpl_owner">{$mod->Lang('prompt_owner')}:</label></p>
+  <p class="pagetext"><label for="tpl_owner">{$mod->Lang('prompt_owner')}:</label>&nbsp;{cms_help key2=help_template_owner}</p>
   <p class="pageinput">
     <select id="tpl_owner" name="{$actionid}owner_id">
     {html_options options=$user_list selected=$template->get_owner_id()}
-    </select>&nbsp;{admin_icon icon='info.gif' class='helpicon' name='help_template_owner'}
+    </select>
   </p>
 </div>
 {/if}
 {if isset($addt_editor_list)}
 <div class="pageoverflow">
-  <p class="pagetext"><label for="tpl_addeditor">{$mod->Lang('prompt_owner')}:</label></p>
+  <p class="pagetext"><label for="tpl_addeditor">{$mod->Lang('prompt_owner')}:</label>&nbsp;{cms_help key2=help_template_addteditors}</p>
   <p class="pageinput">
     <select id="tpl_addeditor" name="{$actionid}addt_editors[]" multiple="multiple" size="5">
     {html_options options=$addt_editor_list selected=$template->get_additional_editors()}
-    </select>&nbsp;{admin_icon icon='info.gif' class='helpicon' name='help_template_addteditors'}
+    </select>
   </p>
 </div>
 {/if}
