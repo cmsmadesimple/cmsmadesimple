@@ -1,5 +1,6 @@
 <h3>{$mod->Lang('edit_type')}:</h3>
 
+{form_start}
 <fieldset>
   <div class="pagecontainer" style="width: 49%; float: left;">{* left container *}
     <div class="pageoverflow">
@@ -66,7 +67,7 @@
   <div style="clear: both;"></div>
 </fieldset>{* container *}
 
-{form_start}<input type="hidden" name="{$actionid}type" value="{$type->get_id()}"/>
+<input type="hidden" name="{$actionid}type" value="{$type->get_id()}"/>
 
 {if $type->get_content_callback() != ''}
 {tab_header name='content' label=$mod->Lang('prompt_dflt_template')}
