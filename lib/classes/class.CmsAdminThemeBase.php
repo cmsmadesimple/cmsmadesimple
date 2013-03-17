@@ -125,6 +125,15 @@ abstract class CmsAdminThemeBase
     }
 
 
+
+	private function _fix_url_userkey($url)
+	{
+		$from = '/'.CMS_SECURE_PARAM_NAME.'=[a-zA-Z0-9]{8}/i';
+		$to = CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
+		$newurl = preg_replace($from,$to,$url);
+		return $newurl;
+	}
+
 	/**
 	 * _get_user_module_info
 	 *
@@ -210,6 +219,9 @@ abstract class CmsAdminThemeBase
 				if (! isset($this->_sectionCount[$section])) {
 					$this->_sectionCount[$section] = 0;
 				}
+
+				// fix up the session key stuff.
+				$obj->url = $this->_fix_url_userkey($obj->url);
 
 				// find an icon for this thing.
 				if( $obj->icon == '' ) {
@@ -537,6 +549,7 @@ abstract class CmsAdminThemeBase
 				else {
 					$url .= '?';
 				}
+				$before = $url;
 				$url .= CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 
 				$this->_menuItems[$sectionKey]['url'] = $url;
@@ -624,6 +637,8 @@ abstract class CmsAdminThemeBase
 			if( !$found ) unset($this->_menuItems[$oneparent]);
 		}
 
+		// fix up all of the menu items to have the correct user key.
+		
 		// sort the menu items by system, priority, and name (case insensitive)
 		$fn = function($a,$b) {
 			$sa = isset($a['system'])?$a['system']:0;
