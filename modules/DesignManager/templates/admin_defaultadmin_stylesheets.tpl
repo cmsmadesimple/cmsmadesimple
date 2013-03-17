@@ -85,7 +85,7 @@ $(document).ready(function(){
         {elseif count($t1) == 0}
           <span title="{$mod->Lang('help_stylesheet_no_designs')}">{$mod->Lang('prompt_none')}</span>
         {else}
-          <span title="{$mod->Lang('help_stylesheet_multiple_designs')}">{$mod->Lang('prompt_multiple')} ({count($t1)})</span>
+          <span title="{$mod->Lang('help_stylesheet_multiple_designs')}" style="color: red;">{$mod->Lang('prompt_multiple')} ({count($t1)})</span>
         {/if}
      </td>
      <td>{$css->get_modified()|date_format:'%x %X'}</td>

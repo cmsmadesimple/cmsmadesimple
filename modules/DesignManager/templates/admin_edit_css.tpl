@@ -1,10 +1,5 @@
 <script type="text/javascript">
 $(document).ready(function(){
-  $('.helpicon').click(function(){
-    var x = $(this).attr('name');
-    $('#'+x).dialog();
-  });
-
   $('#applybtn').live('click',function(e){
     // serialize the form
     e.preventDefault();
@@ -14,7 +9,6 @@ $(document).ready(function(){
       $('#cancelbtn').attr('value','{$mod->Lang('close')}');
     });
   });
-
 });
 </script>
 
@@ -28,9 +22,20 @@ $(document).ready(function(){
 <fieldset>
   <div style="width: 49%; float: left;">
     <div class="pageoverflow">
-      <p class="pagetext"><label for="css_name">*{$mod->Lang('prompt_name')}:</label></p>
+      <p class="pagetext"></p>
       <p class="pageinput">
-        <input id="css_name" type="text" name="{$actionid}name" size="50" maxlength="50" value="{$css->get_name()}"/>&nbsp;{admin_icon name='help_stylesheet_name' icon='info.gif' class='helpicon'}
+        <input type="submit" name="{$actionid}submit" value="{$mod->Lang('submit')}"/>
+        {if $css->get_id()}
+        <input type="submit" id="applybtn" name="{$actionid}apply" value="{$mod->Lang('apply')}"/>
+        {/if}
+        <input type="submit" id="cancelbtn" name="{$actionid}cancel" value="{$mod->Lang('cancel')}"/>
+      </p>
+    </div>
+
+    <div class="pageoverflow">
+      <p class="pagetext"><label for="css_name">*{$mod->Lang('prompt_name')}:</label>&nbsp;{cms_help key2=help_stylesheet_name}</p>
+      <p class="pageinput">
+        <input id="css_name" type="text" name="{$actionid}name" size="50" maxlength="50" value="{$css->get_name()}"/>
       </p>
     </div>
   </div>{* column *}
@@ -38,13 +43,13 @@ $(document).ready(function(){
   <div style="width: 49%; float: right;">
     {if $css->get_id()}
     <div class="pageoverflow">
-      <p class="pagetext"><label for="css_created">{$mod->Lang('prompt_created')}:</label></p>
+      <p class="pagetext"><label for="css_created">{$mod->Lang('prompt_created')}:</label>&nbsp;{cms_help key2=help_stylesheet_created}</p>
       <p class="pageinput">
         <input type="text" id="css_created" value="{$css->get_created()|date_format:'%x %X'}" readonly="readonly"/>
       </p>
     </div>
     <div class="pageoverflow">
-      <p class="pagetext"><label for="css_modified">{$mod->Lang('prompt_modified')}:</label></p>
+      <p class="pagetext"><label for="css_modified">{$mod->Lang('prompt_modified')}:</label>&nbsp;{cms_help key2=help_stylesheet_modified}</p>
       <p class="pageinput">
         <input type="text" id="css_modified" value="{$css->get_modified()|date_format:'%x %X'}" readonly="readonly"/>
       </p>
@@ -62,13 +67,17 @@ $(document).ready(function(){
 {/if}
 
 {tab_start name='content'}
-{syntax_area prefix=$actionid name=content value=$css->get_content() type=css}&nbsp;
-{admin_icon name='help_css_content' icon='info.gif' class='helpicon'}
+<div class="pageoverflow">
+  <p class="pagetext"><label for="stylesheet">{$mod->Lang('prompt_stylesheet')}:</label>&nbsp;{cms_help key2=help_stylesheet_content}</p>
+  <p class="pageinput">
+    {syntax_area id='stylesheet' prefix=$actionid name=content value=$css->get_content() type=css}
+  </p>
+</div>
 
 {tab_start name='media_type'}
 <div class="pagewarning">{$mod->Lang('info_editcss_mediatype_tab')}</div>
 <div class="pageoverflow">
-
+  <p class="patetext">{$mod->Lang('prompt_media_type')}:</p>
   {assign var='tmp' value='all,aural,speech,braille,embossed,handheld,print,projection,screen,tty,tv'}
   {assign var='all_types' value=explode(',',$tmp)}
   <p class="pageinput">
@@ -84,39 +93,33 @@ $(document).ready(function(){
 
 {tab_start name='media_query'}
 <div class="pagewarning">{$mod->Lang('info_editcss_mediaquery_tab')}</div>
-<textarea name="{$actionid}media_query" rows="10" columns="80">{$css->get_media_query()}</textarea>&nbsp;
-{admin_icon name='help_css_mediaquery' icon='info.gif' class='helpicon'}
+<div class="pageoverflow">
+  <p class="pagetext"><label for="mediaquery">{$mod->Lang('prompt_media_query')}:</label>&nbsp;{cms_help key2=help_css_mediaquery}</p>
+  <p class="pageinput">
+    <textarea id="mediaquery" name="{$actionid}media_query" rows="10" columns="80">{$css->get_media_query()}</textarea>
+  </p>
+</div>
 
 {tab_start name='description'}
-<textarea name="{$actionid}description" rows="10" columns="80">{$css->get_description()}</textarea>&nbsp;
-{admin_icon name='help_css_description' icon='info.gif' class='helpicon'}
+<div class="pageoverflow">
+  <p class="pagetext"><label for="description">{$mod->Lang('prompt_description')}:</label>&nbsp;{cms_help key2=help_css_description}</p>
+  <p class="pageinput">
+    <textarea id="description" name="{$actionid}description" rows="10" columns="80">{$css->get_description()}</textarea>
+  </p>
+</div>
 
 {if $has_designs_right}
 {tab_start name='designs'}
-  <select name="{$actionid}design_list[]" multiple="multiple" size="5">
-  {html_options options=$design_list selected=$css->get_designs()}
-  </select>&nbsp;{admin_icon icon='info.gif' class='helpicon' name='help_css_designs'}
+<div class="pageoverflow">
+  <p class="pagetext"><label for="designlist">{$mod->Lang('prompt_designs')}:</label>&nbsp;{cms_help key2=help_css_designs}</p>
+  <p class="pageinput">
+    <select name="{$actionid}design_list[]" multiple="multiple" size="5">
+    {html_options options=$design_list selected=$css->get_designs()}
+    </select>
+  </p>
+</div>
 {/if}
 
 {tab_end}
 
-<div class="pageoverflow">
-  <p class="pagetext"></p>
-  <p class="pageinput">
-    <input type="submit" name="{$actionid}submit" value="{$mod->Lang('submit')}"/>
-    {if $css->get_id()}
-    <input type="submit" id="applybtn" name="{$actionid}apply" value="{$mod->Lang('apply')}"/>
-    {/if}
-    <input type="submit" id="cancelbtn" name="{$actionid}cancel" value="{$mod->Lang('cancel')}"/>
-  </p>
-</div>
-
 {form_end}
-
-<div style="display: none;">{strip}
-  <div id="help_stylesheet_name" title="{$mod->Lang('prompt_help')}">{$mod->Lang('help_stylesheet_name')}</div>
-  <div id="help_css_content" title="{$mod->Lang('prompt_help')}">{$mod->Lang('help_stylesheet_content')}</div>
-  <div id="help_css_mediaquery" title="{$mod->Lang('prompt_help')}">{$mod->Lang('help_stylesheet_mediaquery')}</div>
-  <div id="help_css_description" title="{$mod->Lang('prompt_help')}">{$mod->Lang('help_stylesheet_description')}</div>
-  <div id="help_css_designs" title="{$mod->Lang('prompt_help')}">{$mod->Lang('help_stylesheet_designs')}</div>
-{/strip}</div>
