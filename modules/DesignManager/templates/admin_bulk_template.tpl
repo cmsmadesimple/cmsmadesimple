@@ -1,7 +1,7 @@
 <h3>{$mod->Lang($bulk_op)}</h3>
 
 {if isset($templates)}
-<table class="pagetable" cellspacing="0">
+<table class="pagetable">
   <thead>
    <tr>
      <th>{$mod->Lang('prompt_id')}</th>

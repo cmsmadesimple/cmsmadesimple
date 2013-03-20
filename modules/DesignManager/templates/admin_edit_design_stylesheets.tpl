@@ -1,16 +1,16 @@
 {* stylesheets tab for edit template *}
-<div class="pagewarning">{$mod->Lang('info_edittemplate_stylesheets_tab')}</div>
+<div class="information">{$mod->Lang('info_edittemplate_stylesheets_tab')}</div>
 {if !isset($all_stylesheets)}
 <div class="pagewarning">{$mod->Lang('warning_edittemplate_nostylesheets')}</div>
 {/if}
 
 {assign var='cssl' value=$design->get_stylesheets()}
 <div>
-  <table class="pagetable" cellspacing="0" style="border: none;">
+  <table class="pagetable" style="border: none;">
   <tr valign="center">
     <td valign="top">
       <fieldset>
-        <legend>{$mod->Lang('available_stylesheets')}:</legend>
+        <legend><label for="avail_css">{$mod->Lang('available_stylesheets')}:</label></legend>
         <select id="avail_css" multiple="multiple" size="10">
         {foreach from=$all_stylesheets item='css'}
           {if !$cssl or !in_array($css->get_id(),$cssl)}
@@ -28,7 +28,7 @@
     </td>
     <td valign="top">
       <fieldset>
-        <legend>{$mod->Lang('attached_stylesheets')}:</legend>
+        <legend><label for="assoc_css">{$mod->Lang('attached_stylesheets')}:</label></legend>
         <select class="selall" id="assoc_css" name="{$actionid}assoc_css[]" multiple="multiple" size="10">
           {foreach from=$design->get_stylesheets() item='one'}
           <pre>{$one|@print_r}</pre>

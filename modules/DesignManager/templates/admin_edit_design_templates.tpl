@@ -1,14 +1,14 @@
-<div class="pagewarning">{$mod->Lang('info_edittemplate_templates_tab')}</div>
+<div class="information">{$mod->Lang('info_edittemplate_templates_tab')}</div>
 {if !isset($all_templates)}
 <div class="pagewarning">{$mod->Lang('warning_edittemplate_notemplates')}</div>
 {else}
 
 {assign var='tmpl' value=$design->get_templates()}
-<table class="pagetable" cellspacing="0" style="border: none;">
+<table class="pagetable" style="border: none;">
 <tr valign="center">
   <td valign="top">
     <fieldset>
-      <legend>{$mod->Lang('available_templates')}:</legend>
+      <legend><label for="avail_tpl">{$mod->Lang('available_templates')}:</label></legend>
       <select id="avail_tpl" multiple="multiple" size="10">
       {foreach from=$all_templates item='tpl'}
         {if !$tmpl || !in_array($tpl->get_id(),$tmpl)}
@@ -26,7 +26,7 @@
   </td>
   <td valign="top">
     <fieldset>
-      <legend>{$mod->Lang('attached_templates')}:</legend>
+      <legend><label for="assoc_tpl">{$mod->Lang('attached_templates')}:</label></legend>
       <select class="selall" id="assoc_tpl" name="{$actionid}assoc_tpl[]" size="10">
       {foreach from=$all_templates item='tpl'}
         {if $tmpl && in_array($tpl->get_id(),$tmpl)}

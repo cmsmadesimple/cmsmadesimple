@@ -1,10 +1,10 @@
 {if isset($list_designs)}
-<table class="pagetable" cellspacing="0">
+<table class="pagetable">
   <thead>
     <tr>
       <th width="5%">{$mod->Lang('prompt_id')}</th>
       <th>{$mod->Lang('prompt_name')}</th>
-      <th class="pageicon">{lang('default')}</th>
+      <th class="pageicon"><span title="{$mod->Lang('title_designs_default')}">{lang('default')}</span></th>
       <th class="pageicon"></th>
       <th class="pageicon"></th>
       <th class="pageicon"></th>

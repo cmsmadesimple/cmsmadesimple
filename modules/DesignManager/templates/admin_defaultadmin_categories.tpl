@@ -19,7 +19,7 @@ $(document).ready(function(){
 
 <div class="pagewarning">{$mod->Lang('warning_category_dragdrop')}</div>
 
-<table id="categorylist" class="pagetable" cellspacing="0"/>
+<table id="categorylist" class="pagetable">
   <thead>
     <tr>
       <th width="5%">{$mod->Lang('prompt_id')}</th>

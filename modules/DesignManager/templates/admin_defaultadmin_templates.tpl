@@ -62,7 +62,7 @@ $(document).ready(function(){
   </div>
   {/if}
 
-  <table class="pagetable" cellspacing="0">
+  <table class="pagetable">
     <thead>
       <tr>
         <th width="5%">{$mod->Lang('prompt_id')}</th>

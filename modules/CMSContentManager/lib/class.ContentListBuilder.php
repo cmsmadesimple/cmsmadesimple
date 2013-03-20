@@ -378,8 +378,9 @@ final class ContentListBuilder
    */
   public function get_display_columns()
   {
+    $dflt = 'expand,hier,page,alias,url,template,friendlyname,owner,active,default,move,view,copy,edit,delete,multiselect';
     $mod = $this->_module;
-    $cols = explode(',',$mod->GetPreference('list_visiblecolumns'));
+    $cols = explode(',',$mod->GetPreference('list_visiblecolumns',$dflt));
 
     $columnstodisplay = array();
     $columnstodisplay['expand'] = in_array('expand',$cols);

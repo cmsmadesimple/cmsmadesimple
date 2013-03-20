@@ -1,5 +1,5 @@
 {if isset($list_all_types)}
-<table class="pagetable" cellspacing="0">
+<table class="pagetable">
   <thead>
     <tr>
       <th width="5%">{$mod->Lang('prompt_id')}</th>
@@ -28,7 +28,7 @@
         <a href="{$create_url}" title="{$mod->Lang('prompt_import')}">{admin_icon icon='import.gif'}</a>
       </td>
       {/if}
-      <td><a href="{$edit_url}"" title="{$mod->Lang('prompt_edit')}">{admin_icon icon='edit.gif'}</a></td>
+      <td><a href="{$edit_url}" title="{$mod->Lang('prompt_edit')}">{admin_icon icon='edit.gif'}</a></td>
     </tr>
   {/foreach}
   </tbody>

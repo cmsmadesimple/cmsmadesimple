@@ -17,7 +17,7 @@
     </div>
 
     <div class="pageoverflow">
-      <p class="pagetext"><label for="design_name">{$mod->Lang('prompt_name')}</label>:&nbsp;{admin_icon name='help_design_name' icon='info.gif' class='helpicon'}</p>
+      <p class="pagetext"><label for="design_name">{$mod->Lang('prompt_name')}</label>:&nbsp;{cms_help key2='help_design_name'}</p>
       <p class="pageinput">
         <input type="text" id="design_name" name="{$actionid}name" value="{$design->get_name()}" size="50" maxlength="50"/>
       </p>
@@ -25,16 +25,16 @@
   </div>
   <div style="width: 49%; float: right;">
     <div class="pageoverflow">
-      <p class="pagetext">{$mod->Lang('prompt_created')}:</p>
+      <p class="pagetext"><label for="created">{$mod->Lang('prompt_created')}:</label>&nbsp;{cms_help key2='help_design_created'}</p>
       <p class="pageinput">
-        <input type="text" readonly="readonly" value="{$design->get_created()|date_format:'%x %X'}"/>
+        <input id="created" type="text" readonly="readonly" value="{$design->get_created()|date_format:'%x %X'}"/>
       </p>
     </div>
 
     <div class="pageoverflow">
-      <p class="pagetext">{$mod->Lang('prompt_modified')}:</p>
+      <p class="pagetext"><label for="modified">{$mod->Lang('prompt_modified')}:</label>&nbsp;{cms_help key2='help_design_modified'}</p>
       <p class="pageinput">
-        <input type="text" readonly="readonly" value="{$design->get_modified()|date_format:'%x %X'}"/>
+        <input id="modified" type="text" readonly="readonly" value="{$design->get_modified()|date_format:'%x %X'}"/>
       </p>
     </div>
   </div>
@@ -48,8 +48,12 @@
 {tab_start name='stylesheets'}
 {include file='module_file_tpl:DesignManager;admin_edit_design_stylesheets.tpl' scope='root'}
 {tab_start name='description'}
-<textarea name="{$actionid}description">{$design->get_description()}</textarea>&nbsp;
-{admin_icon icon='info.gif' class='helpicon' name='help_description'}
+  <div class="pageoverflow">
+    <p class="pagetext"><label for="description">{$mod->Lang('prompt_description')}:</label>&nbsp;{cms_help key2=help_design_description}</p>
+    <p class="pageinput">
+      <textarea id="description" name="{$actionid}description">{$design->get_description()}</textarea>
+    </p>
+  </div>
 {tab_end}
 {form_end}
 <div style="display: none;">{strip}
@@ -61,10 +65,6 @@ $(document).ready(function(){
   $('#submitme').live('click',function(){
     $('select.selall').attr('multiple','multiple');	
     $('select.selall option').attr('selected','selected');
-  });
-  $('.helpicon').click(function(){
-    var x = $(this).attr('name');
-    $('#'+x).dialog();
   });
 });
 </script>

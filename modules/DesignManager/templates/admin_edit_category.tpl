@@ -17,6 +17,13 @@ $(document).ready(function(){
   <input type="hidden" name="{$actionid}cat" value="{$category->get_id()}"/>
 {/if}
 <div class="pageoverflow">
+  <p class="pagetext"></p>
+  <p class="pageinput">
+    <input type="submit" name="{$actionid}submit" value="{$mod->Lang('submit')}"/>
+    <input type="submit" name="{$actionid}cancel" value="{$mod->Lang('cancel')}"/>
+  </p>
+</div>
+<div class="pageoverflow">
   <p class="pagetext"><label for="cat_name">*{$mod->Lang('prompt_name')}:&nbsp;{admin_icon icon='info.gif' name='help_category_name' class='helpicon'}</label></p>
   <p class="pageinput">
     <input type="text" id="cat_name" name="{$actionid}name" value="{$category->get_name()}" size="50" maxlength="50"/>
@@ -26,13 +33,6 @@ $(document).ready(function(){
   <p class="pagetext"><label for="cat_description">{$mod->Lang('prompt_description')}:&nbsp;{admin_icon icon='info.gif' name='help_category_desc' class='helpicon'}</label></p>
   <p class="pageinput">
     <textarea id="cat_description" name="{$actionid}description" rows="5" cols="80">{$category->get_description()}</textarea>
-  </p>
-</div>
-<div class="pageoverflow">
-  <p class="pagetext"></p>
-  <p class="pageinput">
-    <input type="submit" name="{$actionid}submit" value="{$mod->Lang('submit')}"/>
-    <input type="submit" name="{$actionid}cancel" value="{$mod->Lang('cancel')}"/>
   </p>
 </div>
 {form_end}

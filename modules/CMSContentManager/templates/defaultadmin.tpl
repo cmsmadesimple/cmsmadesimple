@@ -354,6 +354,7 @@ $(document).ready(function(){
   </div>
   {/if}
 </div>
+
 <table id="contenttable" cellspacing="0" class="pagetable" width="100%">
   <thead>
     <tr>

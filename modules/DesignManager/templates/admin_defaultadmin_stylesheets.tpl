@@ -13,16 +13,22 @@ $(document).ready(function(){
   $('.tpl_select').live('clicked',function(){
     $('#css_selectall').removeAttr('checked');
   });
+
+  $('a.tooltip').mouseover(function(){
+    $(this).next().css('width', '250px');
+    $(this).next().css('display', 'inline-block');
+  });
+  $('a.tooltip').mouseout(function(){
+    $(this).next().hide();
+  });
 });
 </script>
 
 {if isset($stylesheets)}
-  {form_start}{strip}
+  {form_start}{*strip*}
   <div class="pageoptions" style="text-align: right;">
     <label for="filter_limit_css">{$mod->Lang('prompt_limit')}:</label>
     &nbsp;<select id="filter_limit_css" name="{$actionid}filter_limit_css">
-      <option value="2"{if (isset($filter_limit_css) && ($filter_limit_css == 2)) } selected="selected"{/if}>2</option>
-      <option value="5"{if (isset($filter_limit_css) && ($filter_limit_css == 5)) } selected="selected"{/if}>5</option>
       <option value="10"{if (isset($filter_limit_css) && ($filter_limit_css == 10)) } selected="selected"{/if}>10</option>
       <option value="25"{if (isset($filter_limit_css) && ($filter_limit_css == 25)) } selected="selected"{/if}>25</option>
       <option value="50"{if (isset($filter_limit_css) && ($filter_limit_css == 50)) } selected="selected"{/if}>50</option>
@@ -51,20 +57,20 @@ $(document).ready(function(){
   </div>
   {/if}
 
-<table class="pagetable" cellspacing="0">
+<table class="pagetable">
   <thead>
-    <tr/>
+    <tr>
     <th>{$mod->Lang('prompt_id')}</th>
     <th>{$mod->Lang('prompt_name')}</th>
-    <th>{$mod->Lang('prompt_design')}</th>
-    <th>{$mod->Lang('prompt_modified')}</th>
+    <th><span title="{$mod->Lang('title_css_desings')}">{$mod->Lang('prompt_design')}</span></th>
+    <th><span title="{$mod->Lang('title_css_modified')}">{$mod->Lang('prompt_modified')}</span></th>
     <th class="pageicon"></th>{* edit *}
     <th class="pageicon"></th>{* delete *}
-    <th class="pageicon"><input id="css_selectall" type="checkbox" value="1"/></th>{* multiple *}
+    <th class="pageicon"><label for="css_selectall" style="display: none;">{$mod->Lang('title_css_selectall')}</label><input id="css_selectall" type="checkbox" value="1" title="{$mod->Lang('title_css_selectall')}"/></th>{* multiple *}
     </tr>
   </thead>
   <tbody>
-  {foreach from=$stylesheets item='css'}
+  {foreach $stylesheets as $css}
    {cms_action_url action='admin_edit_css' css=$css->get_id() assign='edit_css'}
    {cms_action_url action='admin_delete_css' css=$css->get_id() assign='delete_css'}
    {cycle values="row1,row2" assign='rowclass'}
@@ -85,13 +91,22 @@ $(document).ready(function(){
         {elseif count($t1) == 0}
           <span title="{$mod->Lang('help_stylesheet_no_designs')}">{$mod->Lang('prompt_none')}</span>
         {else}
-          <span title="{$mod->Lang('help_stylesheet_multiple_designs')}" style="color: red;">{$mod->Lang('prompt_multiple')} ({count($t1)})</span>
+          <a class="tooltip" title="{$mod->Lang('help_stylesheet_multiple_designs')}" style="color: red;">{$mod->Lang('prompt_multiple')} ({count($t1)})
+          <span style="display: none;">
+          {foreach $t1 as $dsn_id}
+            {*<a href="{cms_action_url action=admin_edit_design design=$dsn_id}" title="{$mod->Lang('edit_design')}">{$design_names.$dsn_id}</a>*}
+	    {$design_names.$dsn_id}{if !$dsn_id@last}<br/>{/if}
+          {/foreach}
+          </span>
+          </span>
         {/if}
      </td>
      <td>{$css->get_modified()|date_format:'%x %X'}</td>
      <td><a href="{$edit_css}" title="{$mod->Lang('edit_stylesheet')}">{admin_icon icon='edit.gif' title=$mod->Lang('edit_stylesheet')}</a></td>
      <td><a href="{$delete_css}" title="{$mod->Lang('delete_stylesheet')}">{admin_icon icon='delete.gif' title=$mod->Lang('delete_stylesheet')}</a></td>
-     <td><input type="checkbox" class="css_select" name="{$actionid}css_select[]" value="{$css->get_id()}"/></td>
+     <td>
+       <label for="css_select{$css@index}" style="display: none;">{$mod->Lang('prompt_select')}:</label>
+       <input id="{$css@index}" type="checkbox" class="css_select" name="{$actionid}css_select[]" value="{$css->get_id()}"/></td>
    </tr>
   {/foreach}
   </tbody>
@@ -106,7 +121,7 @@ $(document).ready(function(){
   </p>
 </div>
 <div class="clearb"></div>
-{/strip}{form_end}
+{*/strip*}{form_end}
 {/if}
 
 <div class="pagecontainer">
