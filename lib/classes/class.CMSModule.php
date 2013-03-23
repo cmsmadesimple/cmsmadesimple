@@ -2756,7 +2756,7 @@ abstract class CMSModule
 	 * @final
 	 * @return string
 	 */
-	final public function Lang()
+	public function Lang()
 	{
 		$this->LoadLangMethods();
 
