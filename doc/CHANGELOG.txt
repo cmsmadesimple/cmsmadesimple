@@ -4,12 +4,10 @@ Core - General
   - Global Content Blocks (GCB's) can now only have letters and numbers in the name!!
   - Fixes to caching issues in MenuManager and module templates
   - Admin module actions now catch an exception
-  - Erase the alias of a sectionheader on save
   - Fixes problem with error_reporting, takes error_reporting correctly from php.ini
   - Fixes problem with contentprecompile not being fired
   - Significant performance improvement in admin theme calculations (fixes silly error)
   - Fix typo in /lib/classes/module_support/modtemplates.inc.php
-  - Fixes issues wrt the News module being upgraded before the cms_routes table is created.
   - Fixes issue with compilation process of stylesheets when using smarty tags
   - Fixes issue with showtemplate=false causing ajax stuff to be called twice
   - Fixes issue with aliases on sectionheaders being navigable. (Now throws 404 error)
@@ -18,6 +16,7 @@ Core - General
   - Fixes problem with module_help links in the OneEleven admin theme
   - Fixes problem where CMSMS internal parser mixed <head to <header.
   - Module API method Lang(), no longer final.
+  - Minor fix to cms_selflink
 
 Core - News
   - Fixes issue with wildcard category arguments in the browsecat action

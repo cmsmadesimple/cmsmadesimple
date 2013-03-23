@@ -18,9 +18,6 @@
 
 function smarty_function_cms_selflink($params, &$template) 
 {
-  global $CMS_ADMIN_PAGE;
-  if( isset($CMS_ADMIN_PAGE) ) return;
-
   $smarty = $template->smarty;
   $gCms = cmsms();
 
@@ -114,6 +111,9 @@ function smarty_function_cms_selflink($params, &$template)
     }
   elseif (isset($params['dir'])) 
     {
+      global $CMS_ADMIN_PAGE;
+      if( isset($CMS_ADMIN_PAGE) ) return;
+
       if (isset($params['anchorlink']))
 	{
 	  $anchorlink = ltrim($params['anchorlink'], '#');
