@@ -16,6 +16,8 @@ Core - General
   - Modules can no longer be upgraded if the schema version in the database does not match the version.php file
      (this solves the problem of the modules being upgraded too early in the upgrade process)
   - Fixes problem with module_help links in the OneEleven admin theme
+  - Fixes problem where CMSMS internal parser mixed <head to <header.
+  - Module API method Lang(), no longer final.
 
 Core - News
   - Fixes issue with wildcard category arguments in the browsecat action
