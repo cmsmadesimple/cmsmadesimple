@@ -154,15 +154,23 @@ if( !$smarty->isCached($this->GetTemplateResource($template),$cache_id,$compile_
   else if( $start_level > 0 ) {
     $tmp = $hm->find_by_tag('id',cmsms()->get_content_id());
     $arr = array();
+    $arr2 = array();
     while( $tmp ) {
       $id = $tmp->get_tag('id');
       if( !$id ) break;
-      $arr[] = $id;
+      $arr[] = $tmp;
+      $arr2[] = $id;
       $tmp = $tmp->get_parent();
     }
-    if( $start_level - 1 < count($arr) && $arr[$start_level-1] > 0) {
-      $rootnodes[] = $arr[$start_level-1];
-      die('good '.$start_level);
+    if( $start_level - 1 < count($arr) ) {
+      // now do a childrenof the last element.
+      $tmp = $arr[$start_level-1];
+      if( $tmp->has_children() ) {
+	$children = $tmp->get_children();
+	foreach( $children as $one ) {
+	  $rootnodes[] = $one;
+	}
+      }
     }
   }
   else if( $childrenof ) {

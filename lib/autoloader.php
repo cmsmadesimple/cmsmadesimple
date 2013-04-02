@@ -81,16 +81,16 @@ function cms_autoloader($classname)
     return;
   }
 
-  // module loaded content types
-  $contentops = ContentOperations::get_instance();
-  if( $contentops ) {
-    // why would this ever NOT be true.. dunno, but hey.
-    $types = $contentops->ListContentTypes();
-    if( in_array(strtolower($classname),array_keys($types)) ) {
-      $contentops->LoadContentType(strtolower($classname));
-      return;
-    }
-  }
+//   // module loaded content types
+//   $contentops = ContentOperations::get_instance();
+//   if( $contentops ) {
+//     // why would this ever NOT be true.. dunno, but hey.
+//     $types = $contentops->ListContentTypes();
+//     if( in_array(strtolower($classname),array_keys($types)) ) {
+//       $contentops->LoadContentType(strtolower($classname));
+//       return;
+//     }
+//   }
 
   $fn = $config['root_path']."/modules/{$classname}/{$classname}.module.php";
   if( file_exists($fn) ) {

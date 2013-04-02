@@ -67,6 +67,7 @@ final class Nav_utils
       $obj->current = FALSE;
       $obj->parent = FALSE;
       $obj->has_children = FALSE;
+      $obj->children_exist = FALSE;
 
       if( ($tmp = cmsms()->get_content_id()) && $obj->id == $tmp ) {
 	$obj->current = true;
@@ -107,13 +108,26 @@ final class Nav_utils
 	}
       }
 
+      // load all the children ... just to see if we have children that 'could' be displayed
       $children = null;
-      if( $node->has_children() ) $children = $node->get_children();
-      
+      if( $node->has_children() ) {
+	$children = $node->getChildren($deep,$show_all);
+	if( is_array($children) && count($children) ) {
+	  foreach( $children as $node ) {
+	    $id = $node->get_tag('id');
+	    if( cms_content_cache::content_exists($id) ) {
+	      $obj->children_exist = TRUE;
+	      break;
+	    }
+	  }
+	}
+      }
+
       // are we recursing?
       if( is_array($children) && count($children) && ($nlevels < 0 || $depth+1 < $nlevels) && 
 	  (($collapse && ($obj->parent || $obj->current)) || !$collapse) ) {
 
+	$obj->has_children = TRUE;
 	$child_nodes = array();
 	for( $i = 0; $i < count($children); $i++ ) {
 	  $tmp = self::fill_node($children[$i],$deep,$nlevels,$show_all,$collapse,$depth+1);

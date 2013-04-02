@@ -26,26 +26,15 @@ final class AdminSearch extends CMSModule
   function GetVersion()  { return '1.0'; }
   function MinimumCMSVersion()  { return '1.12-alpha0';  }
   function LazyLoadAdmin() { return TRUE; }
-  function IsPluginModule() { return false; }
+  function LazyLoadFrontend() { return TRUE; }
+  function IsPluginModule() { return FALSE; }
   function GetAuthor() { return 'Calguy1000'; }
   function GetAuthorEmail() { return 'calguy1000@cmsmadesimple.org'; }
   function HasAdmin() { return true; }
   function GetAdminSection() { return 'extensions'; }
-
-  function GetHelp()
-  {
-    return $this->Lang('help');
-  }
-
-  function GetChangeLog()
-  {
-    return file_get_contents(dirname(__FILE__).'/changelog.inc');
-  }
-
-  function GetAdminDescription()
-  {
-    return $this->Lang('moddescription');
-  }
+  function GetHelp() { return $this->Lang('help'); }
+  function GetChangeLog() { return file_get_contents(dirname(__FILE__).'/changelog.inc'); }
+  function GetAdminDescription() { return $this->Lang('moddescription'); }
   
   function VisibleToAdminUser()
   {

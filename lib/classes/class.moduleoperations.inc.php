@@ -1033,31 +1033,25 @@ final class ModuleOperations
    */
   public function &get_module_instance($module_name,$version = '',$force = FALSE)
   {
-	  if( empty($module_name) && isset($this->variables['module']))
-	  {
+	  if( empty($module_name) && isset($this->variables['module'])) {
 		  $module_name = $this->variables['module'];
 	  }
 
 	  $obj = null;
-	  if( isset($this->_modules[$module_name]) )
-	  {
+	  if( isset($this->_modules[$module_name]) ) {
 		  $obj =& $this->_modules[$module_name];
 	  }
-	  if( !is_object($obj) )
-	  {
+	  if( !is_object($obj) ) {
 		  // gotta load it.
 		  $res = $this->_load_module($module_name,$force);
-		  if( $res )
-		  {
+		  if( $res ) {
 			  $obj =& $this->_modules[$module_name];
 		  }
 	  }
 
-	  if( is_object($obj) && !empty($version) )
-	  {
+	  if( is_object($obj) && !empty($version) ) {
 		  $res = version_compare($obj->GetVersion(),$version);
-		  if( $res < 0 OR $res === FALSE ) 
-			  $obj = null;
+		  if( $res < 0 OR $res === FALSE ) $obj = null;
 	  }
 	  return $obj;
   }

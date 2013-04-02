@@ -149,14 +149,14 @@ if( !$smarty->isCached($this->GetDatabaseResource($template),$cache_id) ) {
   }
 
   $pagelimit = 100000;
-
   if( isset( $params['pagelimit'] ) ) {
     $pagelimit = intval($params['pagelimit']);
   }
   else if( isset( $params['number'] ) ) {
     $pagelimit = intval($params['number']);
   }
-	
+  $pagelimit = max(2,$pagelimit);
+
   // Get the number of rows (so we can determine the numer of pages)
   $pagecount = -1;
   $startelement = 0;
@@ -190,19 +190,11 @@ if( !$smarty->isCached($this->GetDatabaseResource($template),$cache_id) ) {
   }
   else {
     $params['pagenumber']=$pagenumber-1;
-    $smarty->assign('prevpage',
-		    $this->CreateFrontendLink($id,$returnid,'default',
-					      $this->Lang('prevpage'),$params));
-    $smarty->assign('prevurl',
-		    $this->CreateFrontendLink($id,$returnid,'default','',
-					      $params, '', true));
+    $smarty->assign('prevpage',$this->CreateFrontendLink($id,$returnid,'default',$this->Lang('prevpage'),$params));
+    $smarty->assign('prevurl',$this->CreateFrontendLink($id,$returnid,'default','',$params, '', true));
     $params['pagenumber']=1;
-    $smarty->assign('firstpage',
-		    $this->CreateFrontendLink($id,$returnid,'default',
-					      $this->Lang('firstpage'),$params));
-    $smarty->assign('firsturl',
-		    $this->CreateFrontendLink($id,$returnid,'default','',
-					      $params, '', true));
+    $smarty->assign('firstpage',$this->CreateFrontendLink($id,$returnid,'default',$this->Lang('firstpage'),$params));
+    $smarty->assign('firsturl',$this->CreateFrontendLink($id,$returnid,'default','',$params, '', true));
   }
   
   if( $pagenumber >= $pagecount ) {
@@ -211,21 +203,11 @@ if( !$smarty->isCached($this->GetDatabaseResource($template),$cache_id) ) {
   }
   else {
     $params['pagenumber']=$pagenumber+1;
-    $smarty->assign('nextpage',
-		    $this->CreateFrontendLink($id,$returnid,'default',
-					      $this->Lang('nextpage'),
-					      $params));
-    $smarty->assign('nexturl',
-		    $this->CreateFrontendLink($id,$returnid,'default','',
-					      $params, '', true));
+    $smarty->assign('nextpage',$this->CreateFrontendLink($id,$returnid,'default',$this->Lang('nextpage'),$params));
+    $smarty->assign('nexturl',$this->CreateFrontendLink($id,$returnid,'default','',$params, '', true));
     $params['pagenumber']=$pagecount;
-    $smarty->assign('lastpage',
-		    $this->CreateFrontendLink($id,$returnid,'default',
-					      $this->Lang('lastpage'),
-					      $params));
-    $smarty->assign('lasturl',
-		    $this->CreateFrontendLink($id,$returnid,'default','',
-					      $params, '', true));
+    $smarty->assign('lastpage',$this->CreateFrontendLink($id,$returnid,'default',$this->Lang('lastpage'),$params));
+    $smarty->assign('lasturl',$this->CreateFrontendLink($id,$returnid,'default','',$params, '', true));
   }
   $smarty->assign('pagenumber',$pagenumber);
   $smarty->assign('pagecount',$pagecount);

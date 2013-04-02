@@ -2969,7 +2969,7 @@ abstract class CMSModule
    * @param string The tab name
    * @return void
    */
-  final public function SetCurrentTab($tab)
+  public function SetCurrentTab($tab)
   {
     $this->__current_tab = $tab;
     cms_admin_tabs::set_current_tab($tab);
@@ -2983,7 +2983,7 @@ abstract class CMSModule
    * @final
    * @return string
    */ 
-  final public function StartTabHeaders()
+  public function StartTabHeaders()
   {
     return cms_admin_tabs::start_tab_headers();
   }
@@ -2999,7 +2999,7 @@ abstract class CMSModule
    * @param booleban A flag indicating wether this tab is active.
    * @return string
    */
-  final public function SetTabHeader($tabid,$title,$active=false)
+  public function SetTabHeader($tabid,$title,$active=false)
   {
     return cms_admin_tabs::set_tab_header($tabid,$title,$active);
   }
@@ -3010,7 +3010,7 @@ abstract class CMSModule
    * @final
    * @return string
    */
-  final public function EndTabHeaders()
+  public function EndTabHeaders()
   {
     return cms_admin_tabs::end_tab_headers();
   }
@@ -3021,7 +3021,7 @@ abstract class CMSModule
    * @final
    * @return string
    */
-  final public function StartTabContent()
+  public function StartTabContent()
   {
     return cms_admin_tabs::start_tab_content();
   }
@@ -3032,7 +3032,7 @@ abstract class CMSModule
    * @final
    * @return string
    */
-  final public function EndTabContent()
+  public function EndTabContent()
   {
     return cms_admin_tabs::end_tab_content();
   }
@@ -3045,7 +3045,7 @@ abstract class CMSModule
    * @param arrray Parameters
    * @return string
    */
-  final public function StartTab($tabid, $params = array())
+  public function StartTab($tabid, $params = array())
   {
     return cms_admin_tabs::start_tab($tabid,$params);
   }
@@ -3056,7 +3056,7 @@ abstract class CMSModule
    * @final
    * @return string
    */
-  final public function EndTab()
+  public function EndTab()
   {
     return cms_admin_tabs::end_tab();
   }

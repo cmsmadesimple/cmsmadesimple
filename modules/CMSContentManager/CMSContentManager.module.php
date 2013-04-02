@@ -43,8 +43,9 @@ final class CMSContentManager extends CMSModule
   function GetAuthorEmail() { return 'calguy1000@cmsmadesimple.org'; }
   function GetChangeLog() { return @file_get_contents(dirname(__FILE__).'/changelog.inc'); }
   function IsPluginModule() { return FALSE; }
-  function LazyLoadAdmin() { return FALSE; }
   function HasAdmin() { return TRUE; }
+  function LazyLoadAdmin() { return TRUE; }
+  function LazyLoadFrontend() { return TRUE; }
   function GetAdminSection() { return 'content'; }
   function GetAdminDescription() { return $this->Lang('moddescription'); }
   function MinimumCMSVersion() { return "1.99-alpha0"; }
