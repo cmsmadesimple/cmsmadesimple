@@ -244,7 +244,7 @@ final class filemanager_utils
       $info['dir'] = FALSE;
       $info['image'] = FALSE;
       $info['archive'] = FALSE;
-      $info['mime'] = mime_content_type($fullname);
+      $info['mime'] = self::mime_content_type($fullname);
       $statinfo=stat($fullname);
 
       if (is_dir($fullname)) {
@@ -320,6 +320,100 @@ final class filemanager_utils
     return 0;
   }
 
+  public static function mime_content_type($filename)
+  {
+    $mime_type = null;
+    if( version_compare(phpversion(),'5.3','ge') && function_exists('finfo_open') ) {
+      $fh = finfo_open(FILEINFO_MIME_TYPE);
+      if( $fh ) {
+      $mime_type = finfo_file($fh,$filename);
+      finfo_close($fh);
+      return $mime_type;
+      }
+    }
+
+    if(!function_exists('mime_content_type')) {
+
+      // Try to recreate a "very" simple mechanism for mime_content_type($filename);
+      function mime_content_type($filename) {
+
+        $mime_types = array(
+
+            'txt' => 'text/plain',
+            'htm' => 'text/html',
+            'html' => 'text/html',
+            'php' => 'text/html',
+            'css' => 'text/css',
+            'js' => 'application/javascript',
+            'json' => 'application/json',
+            'xml' => 'application/xml',
+            'swf' => 'application/x-shockwave-flash',
+            'flv' => 'video/x-flv',
+
+            // images
+            'png' => 'image/png',
+            'jpe' => 'image/jpeg',
+            'jpeg' => 'image/jpeg',
+            'jpg' => 'image/jpeg',
+            'gif' => 'image/gif',
+            'bmp' => 'image/bmp',
+            'ico' => 'image/vnd.microsoft.icon',
+            'tiff' => 'image/tiff',
+            'tif' => 'image/tiff',
+            'svg' => 'image/svg+xml',
+            'svgz' => 'image/svg+xml',
+
+            // archives
+            'zip' => 'application/zip',
+            'rar' => 'application/x-rar-compressed',
+            'exe' => 'application/x-msdownload',
+            'msi' => 'application/x-msdownload',
+            'cab' => 'application/vnd.ms-cab-compressed',
+
+            // audio/video
+            'mp3' => 'audio/mpeg',
+            'qt' => 'video/quicktime',
+            'mov' => 'video/quicktime',
+
+            // adobe
+            'pdf' => 'application/pdf',
+            'psd' => 'image/vnd.adobe.photoshop',
+            'ai' => 'application/postscript',
+            'eps' => 'application/postscript',
+            'ps' => 'application/postscript',
+
+            // ms office
+            'doc' => 'application/msword',
+            'rtf' => 'application/rtf',
+            'xls' => 'application/vnd.ms-excel',
+            'ppt' => 'application/vnd.ms-powerpoint',
+
+            // open office
+            'odt' => 'application/vnd.oasis.opendocument.text',
+            'ods' => 'application/vnd.oasis.opendocument.spreadsheet',
+        );
+
+        $ext = explode('.',$filename);
+        $ext = strtolower(array_pop($ext));
+        if (array_key_exists($ext, $mime_types)) {
+            return $mime_types[$ext];
+        }
+        elseif (function_exists('finfo_open')) {
+            $finfo = finfo_open(FILEINFO_MIME);
+            $mimetype = finfo_file($finfo, $filename);
+            finfo_close($finfo);
+            return $mimetype;
+        }
+        else {
+            //Nothing instead of "application/octet-stream"
+            return '';
+        }
+      }
+    }   
+    
+    // Now we can call this function
+    return mime_content_type($filename);
+  }
 
   // get post max size and give a portion of it to smarty for max chunk size.
   public static function str_to_bytes($val)
