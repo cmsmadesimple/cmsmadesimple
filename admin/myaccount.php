@@ -22,6 +22,8 @@
  * Init variables / objects
  */
 
+$orig_memory = (function_exists('memory_get_usage')?memory_get_usage():0);
+
 $CMS_ADMIN_PAGE = 1;
 $CMS_TOP_MENU = 'admin';
 $CMS_ADMIN_TITLE = 'myaccount';
@@ -51,8 +53,6 @@ $enablenotifications = get_preference($userid, 'enablenotifications', 1);
 $paging = get_preference($userid, 'paging', 0);
 $date_format_string = get_preference($userid, 'date_format_string', '%x %X');
 $default_parent = get_preference($userid, 'default_parent', -2);
-$listtemplates_pagelimit = get_preference($userid, 'listtemplates_pagelimit', 20);
-$liststylesheets_pagelimit = get_preference($userid, 'liststylesheets_pagelimit', 20);
 $homepage = get_preference($userid, 'homepage');
 if( strpos($homepage,'&') !== FALSE && strpos($homepage,'&amp;') === FALSE ) {
   $homepage = str_replace('&','&amp;',$homepage);
@@ -161,10 +161,6 @@ if (isset($_POST['submit_prefs']) && check_permission($userid,'Manage My Setting
   $date_format_string = $_POST['date_format_string'];
   $default_parent = '';
   if (isset($_POST['parent_id'])) $default_parent = $_POST['parent_id'];
-  $listtemplates_pagelimit = '20';
-  if (isset($_POST['listtemplates_pagelimit'])) $listtemplates_pagelimit = $_POST['listtemplates_pagelimit'];
-  $liststylesheets_pagelimit = '20';
-  if (isset($_POST['liststylesheets_pagelimit'])) $liststylesheets_pagelimit = $_POST['liststylesheets_pagelimit'];
   $homepage = $_POST['homepage'];
   $hide_help_links = (isset($_POST['hide_help_links']) ? 1 : 0);
   $ignoredmodules = array();
@@ -186,8 +182,6 @@ if (isset($_POST['submit_prefs']) && check_permission($userid,'Manage My Setting
   set_preference($userid, 'date_format_string', $date_format_string);
   set_preference($userid, 'default_parent', $default_parent);
   set_preference($userid, 'homepage', $homepage);
-  set_preference($userid, 'listtemplates_pagelimit', $listtemplates_pagelimit);
-  set_preference($userid, 'liststylesheets_pagelimit', $liststylesheets_pagelimit);
   set_preference($userid, 'ignoredmodules', implode(',', $ignoredmodules));
 
   // Audit, message, cleanup
@@ -243,8 +237,10 @@ foreach ((array)$allmodules as $onemodule) {
 }
 
 #Tabs
-$out = $themeObject->StartTabHeaders().
-  $themeObject->SetTabHeader('maintab',lang('useraccount'), ('maintab' == $tab)?true:false);
+$out = $themeObject->StartTabHeaders();
+if( check_permission($userid,'Manage My Account') ) {
+  $out .= $themeObject->SetTabHeader('maintab',lang('useraccount'), ('maintab' == $tab)?true:false);
+}
 if( check_permission($userid,'Manage My Settings') ) {
   $out .= $themeObject->SetTabHeader('advancedtab',lang('userprefs'), ('advtab' == $tab)?true:false);
 }
@@ -274,13 +270,11 @@ $smarty->assign('default_parent', $contentops->CreateHierarchyDropdown(0, $defau
 $smarty->assign('homepage', $themeObject->GetAdminPageDropdown('homepage', $homepage, 'homepage'));
 $tmp = array(10 => 10, 20 => 20, 50 => 50, 100 => 100);
 $smarty->assign('pagelimit_opts', $tmp);
-$smarty->assign('listtemplates_pagelimit', $listtemplates_pagelimit);
-$smarty->assign('liststylesheets_pagelimit', $liststylesheets_pagelimit);
 $smarty->assign('ignoredmodules', $ignoredmodules);
-//$smarty->assign('header', $themeObject -> showHeader('userprefs')); // <- Totally useless as far i can see -Stikki-
 $smarty->assign('backurl', $themeObject -> backUrl());
 $smarty->assign('formurl', $thisurl);
 $smarty->assign('userobj', $userobj);
+$smarty->assign('manageaccount',check_permission($userid,'Manage My Account'));
 $smarty->assign('managesettings',check_permission($userid,'Manage My Settings'));
 
 # Output

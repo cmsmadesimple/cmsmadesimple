@@ -897,6 +897,24 @@ $lang['admin']['help_content_type'] = <<<EOT
 </ul>
 EOT;
 $lang['admin']['help_css_max_age'] = 'This parameter should be set relatively high for static sites, and should be set to 0 for site development';
+$lang['admin']['help_myaccount_admincallout'] = 'If enabled administrative bookmarks <em>(shortcuts)</em> will be enabled allowing you to manage a list of frequently used actions in the admin console.';
+$lang['admin']['help_myaccount_admintheme'] = 'Select an adminstration theme to use.  Different administration themes have different menu layouts, work better for mobile displays, and have varous additional features.';
+$lang['admin']['help_myaccount_dateformat'] = 'Specify a date format string to use when dates are displayed.  This string uses <a href="http://php.net/manual/en/function.strftime.php">strftime</a> format.  <strong>Note:</strong> some third party addons may not obey this setting.</strong>';
+$lang['admin']['help_myaccount_dfltparent'] = 'Specify the default parent page for creating a new content page.  The use of this setting also depends on your content editing permissions';
+$lang['admin']['help_myaccount_email'] = 'Specify an email address.  This is used for the lost password functionality, and for any notification emails sent by the system (or addon modules).';
+$lang['admin']['help_myaccount_enablenotifications'] = 'If enabled, the system will display various notifications about things that need to be taken care of in the navigation';
+$lang['admin']['help_myaccount_firstname'] = 'Optionally specify your given name.  This may be used in the admin theme, or to personally address emails to you';
+$lang['admin']['help_myaccount_hidehelp'] = 'If enabled the system will hide module help links from the admin console.  In most circumstances the help provided with modules is targetted towards site developers and may not be useful to content editors.';
+$lang['admin']['help_myaccount_homepage'] = 'You may select a page to automatically direct to when you login to the CMSMS admin console.  This may be useful when you primarily use one function.';
+$lang['admin']['help_myaccount_ignoremodules'] = 'If admin notifications are enabled you can select to ignore notifications from some modules';
+$lang['admin']['help_myaccount_indent'] = 'This option will indent the content list view to illustrate the parent and child page relationship';
+$lang['admin']['help_myaccount_language'] = 'Select the language to display for the admin interface.  The list of available languages may vary on each CMSMS install';
+$lang['admin']['help_myaccount_lastname'] = 'Optionally specify your surname.  This may be used in the admin theme, or to personally address emails to you';
+$lang['admin']['help_myaccount_password'] = 'Please enter a unique, and secure password for this website.  The password should be more more than six characters long, and should use a combination of upper case, lower case, non alphanumeric, and digits.  Please leave this field blank if you do no wish to change your password.';
+$lang['admin']['help_myaccount_passwordagain'] = 'To reduce errors, please enter your password again.  Leave this field empty if you do not wish to change your password.';
+$lang['admin']['help_myaccount_syntax'] = 'Select which syntax highlighting module to use when editing HTML, or smarty code.  The list of available modules may change depending on what your site administrator has configured';
+$lang['admin']['help_myaccount_username'] = 'Your username is your unique name for the CMSMS admin panel.  Please use only alphanumeric characters and the underscore';
+$lang['admin']['help_myaccount_wysiwyg'] = 'Select which WYSIWYG <em>(What You See Is What You Get)</em> module to use when editing HTML content.  YOU may also select &quot;None&quot; if you are comfortable with HTML.  The list of available WYSIWYG editors may change depending on what t he site administrator has configured.';
 $lang['admin']['help_page_alias'] = 'The alias is used as an alternate to the page id to uniquely identify a page. It must be unique across all pages.  The alias is also used to assist in building the URL for the page';
 $lang['admin']['help_page_cachable'] = 'Performance can be increased by setting as many pages as possible to cachable.  However this cannot be used for pages where content may change on a per request basis';
 $lang['admin']['help_page_searchable'] = 'This setting indicates whether the content of this page should be indexed by the Search module';
@@ -905,7 +923,7 @@ $lang['admin']['help_systeminformation'] = <<<EOT
 The information displayed below is collected from a variety of locations, and summarized here so that you may be able to conveniently find some of the information required when trying to diagnose a problem or request help with your CMS Made Simple&trade; installation.
 EOT;
 $lang['admin']['hidefrommenu'] = 'Hide From Menu';
-$lang['admin']['hide_help_links'] = 'Hide module help link';
+$lang['admin']['hide_help_links'] = 'Hide module help links';
 $lang['admin']['hide_help_links_help'] = 'Disable the module help link in page headers.';
 $lang['admin']['home'] = 'Home';
 $lang['admin']['homepage'] = 'Homepage';
@@ -1361,7 +1379,7 @@ $lang['admin']['settemplate'] = 'Set Template';
 $lang['admin']['settrue'] = 'Set True';
 $lang['admin']['setup'] = 'Advanced Setup';
 $lang['admin']['showall'] = 'Show All';
-$lang['admin']['showbookmarks'] = 'Show Admin Shortcuts';
+$lang['admin']['showbookmarks'] = 'Show Admin Bookmarks';
 $lang['admin']['showfilters']='Edit filter';
 $lang['admin']['showinmenu'] = 'Show in Menu';
 $lang['admin']['showrecent'] = 'Show Recently Used Pages';

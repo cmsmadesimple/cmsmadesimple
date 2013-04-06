@@ -9,52 +9,55 @@ jQuery(document).ready(function(){
 
 <div class="pagecontainer">
 {$tab_start}
-{$maintab_start}
 
-	<form method="post" action="{$formurl}">
-	
-		<input type="hidden" name="active_tab" value="maintab" />
-	
-		<div class="pageoverflow">
-			<p class="pagetext"><label for="username">*{lang('name')}:</label>&nbsp;{admin_icon name='help_username' icon='info.gif' class='helpicon'}</p>
-			<p class="pageinput"><input type="text" id="username" name="user" maxlength="25" value="{$userobj->username}" class="standard" /></p>
-		</div>
-		
-		<div class="pageoverflow">
-			<p class="pagetext"><label for="password">{lang('password')}:</label></p>
-			<p class="pageinput"><input type="password" id="password" name="password" maxlength="25" value="" />&nbsp;{lang('info_edituser_password')}</p>
-		</div>
-		
-		<div class="pageoverflow">
-			<p class="pagetext"><label for="passwordagain">{lang('passwordagain')}:</label></p>
-			<p class="pageinput"><input type="password" id="passwordagain" name="passwordagain" maxlength="25" value="" class="standard" />&nbsp;{lang('info_edituser_passwordagain')}</p>
-		</div>
-		
-		<div class="pageoverflow">
-			<p class="pagetext"><label for="firstname">{lang('firstname')}:</label></p>
-			<p class="pageinput"><input type="text" id="firstname" name="firstname" maxlength="50" value="{$userobj->firstname}" class="standard" /></p>
-		</div>
-		
-		<div class="pageoverflow">
-			<p class="pagetext"><label for="lastname">{lang('lastname')}:</label></p>
-			<p class="pageinput"><input type="text" id="lastname" name="lastname" maxlength="50" value="{$userobj->lastname}" class="standard" /></p>
-		</div>
-		
-		<div class="pageoverflow">
-			<p class="pagetext"><label for="email">{lang('email')}:</label></p>
-			<p class="pageinput"><input type="text" id="email" name="email" maxlength="255" value="{$userobj->email}" class="standard" /></p>
-		</div>
-	
-		<div class="pageoverflow">
-			<div class="pagetext">&nbsp;</div>
-			<div class="pageinput">
-				<input class="pagebutton" type="submit" name="submit_account" value="{lang('submit')}" />
-				<input class="pagebutton" type="submit" name="cancel" value="{lang('cancel')}" />
-			</div>
-		</div>
-	</form>
+{if $manageaccount}
+  {$maintab_start}
+  <form method="post" action="{$formurl}">
+    <input type="hidden" name="active_tab" value="maintab" />
+    <div class="pageoverflow">
+      <div class="pagetext"></div>
+      <div class="pageinput">
+	<input class="pagebutton" type="submit" name="submit_account" value="{lang('submit')}" />
+	<input class="pagebutton" type="submit" name="cancel" value="{lang('cancel')}" />
+      </div>
+    </div>
 
-{$tab_end}
+    <div class="pageoverflow">
+      <p class="pagetext">
+        <label for="username">*{lang('name')}:</label>&nbsp;{cms_help key2='help_myaccount_username'}
+      </p>
+      <p class="pageinput"><input type="text" id="username" name="user" maxlength="25" value="{$userobj->username}" class="standard" /></p>
+    </div>
+
+    <div class="pageoverflow">
+      <p class="pagetext"><label for="password">{lang('password')}:</label>&nbsp;{cms_help key2='help_myaccount_password'}</p>
+      <p class="pageinput">
+        <input type="password" id="password" name="password" maxlength="25" value="" />&nbsp;{lang('info_edituser_password')}
+      </p>
+    </div>
+		
+    <div class="pageoverflow">
+      <p class="pagetext"><label for="passwordagain">{lang('passwordagain')}:</label>&nbsp;{cms_help key2='help_myaccount_passwordagain'}</p>
+      <p class="pageinput"><input type="password" id="passwordagain" name="passwordagain" maxlength="25" value="" class="standard" />&nbsp;{lang('info_edituser_passwordagain')}</p>
+    </div>
+
+    <div class="pageoverflow">
+      <p class="pagetext"><label for="firstname">{lang('firstname')}:</label>&nbsp;{cms_help key2='help_myaccount_firstname'}</p>
+      <p class="pageinput"><input type="text" id="firstname" name="firstname" maxlength="50" value="{$userobj->firstname}" class="standard" /></p>
+    </div>
+
+    <div class="pageoverflow">
+      <p class="pagetext"><label for="lastname">{lang('lastname')}:</label>&nbsp;{cms_help key2='help_myaccount_lastname'}</p>
+      <p class="pageinput"><input type="text" id="lastname" name="lastname" maxlength="50" value="{$userobj->lastname}" class="standard" /></p>
+    </div>
+
+    <div class="pageoverflow">
+      <p class="pagetext"><label for="email">{lang('email')}:</label>&nbsp;{cms_help key2='help_myaccount_email'}</p>
+      <p class="pageinput"><input type="text" id="email" name="email" maxlength="255" value="{$userobj->email}" class="standard" /></p>
+    </div>
+  </form>
+  {$tab_end}
+{/if}
 
 {if $managesettings}
 {$advancedtab_start}
@@ -71,55 +74,52 @@ jQuery(document).ready(function(){
       </p>
     </div>
     <fieldset>
-      <legend>{'lang_settings_legend'|lang}</legend>
-      <!-- Language -->
+      <legend>{'lang_settings_legend'|lang}:</legend>
       <div class="pageoverflow">
-	<p class="pagetext"><label for="language">{'language'|lang}:</label></p>
+	<p class="pagetext"><label for="language">{'language'|lang}:</label>&nbsp;{cms_help key2='help_myaccount_language'}</p>
 	<p class="pageinput">
 	  <select id="language" name="default_cms_language">
 	    {html_options options=$language_opts selected=$default_cms_language}
 	  </select>
 	</p>
       </div>
-      <!-- language //-->
-      <!-- date format -->
+
       <div class="pageoverflow">
-        <p class="pagetext"><label for="dateformat">{'date_format_string'|lang}:</label></p>
+        <p class="pagetext"><label for="dateformat">{'date_format_string'|lang}:</label>&nbsp;{cms_help key2='help_myaccount_dateformat'}</p>
 	<p class="pageinput">
  	  <input class="pagenb" size="20" maxlength="255" type="text" name="date_format_string" value="{$date_format_string}" />
  	  {'date_format_string_help'|lang}
 	</p>
       </div>
-      <!-- date format //-->
     </fieldset>
 
     <fieldset>
-      <legend>{'content_editor_legend'|lang}</legend>
-      <!-- wysiwyg to use -->
+      <legend>{'content_editor_legend'|lang}:</legend>
       <div class="pageoverflow">
-        <p class="pagetext"><label for="wysiwyg">{'wysiwygtouse'|lang}:</label></p>
+        <p class="pagetext"><label for="wysiwyg">{'wysiwygtouse'|lang}:</label>&nbsp;{cms_help key2='help_myaccount_wysiwyg'}</p>
         <p class="pageinput">
 	  <select id="wysiwyg" name="wysiwyg">
 	    {html_options options=$wysiwyg_opts selected=$wysiwyg}
 	  </select>
 	</p>
       </div>
-      <!-- wysiwyg to use //-->
 
-      <!-- syntaxhighlighter to use -->
       <div class="pageoverflow">
-	<p class="pagetext"><label for="syntaxh">{'syntaxhighlightertouse'|lang}:</syntax></p>
+	<p class="pagetext"><label for="syntaxh">{'syntaxhighlightertouse'|lang}:</label>&nbsp;{cms_help key2='help_myaccount_syntax'}</p>
 	<p class="pageinput">
 	  <select id="syntaxh" name="syntaxhighlighter">
 	    {html_options options=$syntax_opts selected=$syntaxhighlighter}
 	  </select>
 	</p>
       </div>
-      <!-- syntaxhighlighter to use //-->
 
-      <!-- content display -->
       <div class="pageoverflow">
-	<p class="pagetext"><label for="indent">{'adminindent'|lang}:</label></p>
+        <p class="pagetext"><label for="parent_id">{'defaultparentpage'|lang}:</label>&nbsp;{cms_help key2='help_myaccount_dfltparent'}</p>
+	<p class="pageinput">{$default_parent}</p>
+      </div>
+
+      <div class="pageoverflow">
+	<p class="pagetext"><label for="indent">{'adminindent'|lang}:</label>&nbsp;{cms_help key2='help_myaccount_indent'}</p>
 	<p class="pageinput">
 	  <input class="pagenb" type="checkbox" id="indent" name="indent" {if $indent == true}checked="checked"{/if} />
 	  {'indent'|lang}
@@ -129,95 +129,54 @@ jQuery(document).ready(function(){
     </fieldset>
 
     <fieldset>
-      <legend>{'admin_layout_legend'|lang}</legend>
-      <!-- administration theme --> 
+      <legend>{'admin_layout_legend'|lang}:</legend>
       <div class="pageoverflow">
-	<p class="pagetext"><label for="admintheme">{'admintheme'|lang}:</label></p>
+	<p class="pagetext"><label for="admintheme">{'admintheme'|lang}:</label>&nbsp;{cms_help key2='help_myaccount_admintheme'}</p>
 	<p class="pageinput">
 	  <select id="admintheme" name="admintheme">
 	    {html_options options=$themes_opts selected=$admintheme}
 	  </select>
 	</p>
       </div>
-      <!-- administration theme //-->
 
-      <!-- homepage -->
       <div class="pageoverflow">
-        <p class="pagetext"><label for="homepage">{'homepage'|lang}:</label></p>
+        <p class="pagetext"><label for="homepage">{'homepage'|lang}:</label>&nbsp;{cms_help key2='help_myaccount_homepage'}</p>
         <p class="pageinput">
 	  {$homepage}
 	</p>
       </div>
-      <!-- homepage //-->
 
-      <!-- bookmarks -->
       <div class="pageoverflow">
-	<p class="pagetext"><label for="admincallout">{'admincallout'|lang}:</label></p>
+	<p class="pagetext"><label for="admincallout">{'admincallout'|lang}:</label>&nbsp;{cms_help key2='help_myaccount_admincallout'}</p>
 	<p class="pageinput">
 	  <input class="pagenb" id="admincallout" type="checkbox" name="bookmarks" {if $bookmarks == true}checked="checked"{/if} />
 	  {'showbookmarks'|lang}
 	</p>
       </div>
-      <!-- bookmarks //-->
 
-      <!-- hide module help link -->
       <div class="pageoverflow">
-	<p class="pagetext"><label for="hidehelp">{'hide_help_links'|lang}:</label></p>
+	<p class="pagetext"><label for="hidehelp">{'hide_help_links'|lang}:</label>&nbsp;{cms_help key2='help_myaccount_hidehelp'}</p>
 	<p class="pageinput">
 	  <input class="pagenb" id="hidehelp" type="checkbox" name="hide_help_links" {if $hide_help_links == true}checked="checked"{/if} />
 	  {'hide_help_links_help'|lang}
 	</p>
       </div>
-      <!-- hide module help link //-->
 
-      <!-- default parent page --> 
       <div class="pageoverflow">
-        <p class="pagetext"><label for="parent_id">{'defaultparentpage'|lang}:</label></p>
-	<p class="pageinput">{$default_parent}</p>
-      </div>
-      <!-- default parent page //-->
-
-      <!-- number of rows per page when viewing templates --> 
-      <div class="pageoverflow">
-	<p class="pagetext"><label for="tplpagelimit">{'listtemplates_pagelimit'|lang}:</label></p>
-	<p class="pageinput">
-	  <select id="tplpagelimit" name="listtemplates_pagelimit">
-	    {html_options options=$pagelimit_opts selected=$listtemplates_pagelimit}
-	  </select>
-	</p>
-      </div>
-      <!-- number of rows per page when viewing templates //-->	
-
-      <!-- number of rows per page when viewing stylesheets --> 
-      <div class="pageoverflow">
-	<p class="pagetext"><label for="csspagelimit">{'liststylesheets_pagelimit'|lang}:</label></p>
-	<p class="pageinput">
-	  <select id="csspagelimit" name="liststylesheets_pagelimit">
-	    {html_options options=$pagelimit_opts selected=$liststylesheets_pagelimit}
-	  </select>
-	</p>
-      </div>
-      <!-- number of rows per page when viewing stylesheets //-->
-
-      <!-- enable user notifications in the admin section -->
-      <div class="pageoverflow">
-        <p class="pagetext"><label for="notifications">{'enablenotifications'|lang}:</label></p>
+        <p class="pagetext"><label for="notifications">{'enablenotifications'|lang}:</label>&nbsp;{cms_help key2='help_myaccount_enablenotifications'}</p>
 	<p class="pageinput">
 	  <input class="pagenb" type="checkbox" id="notifications" name="enablenotifications" {if $enablenotifications == 1}checked="checked"{/if} />
 	</p>
       </div>
-      <!-- enable user notifications in the admin section //-->
 
-      <!-- ignore notifications from these modules --> 
       <div class="pageoverflow">
-	<p class="pagetext"><label for="ignoremodules">{'ignorenotificationsfrommodules'|lang}:</label></p>
+	<p class="pagetext"><label for="ignoremodules">{'ignorenotificationsfrommodules'|lang}:</label>&nbsp;{cms_help key2='help_myaccount_ignoremodules'}</p>
 	<p class="pageinput">
 	  <select id="ignoremodules" name="ignoredmodules[]" multiple="multiple" size="5">
 	    {html_options options=$module_opts selected=$ignoredmodules}
 	  </select>
 	</p>
       </div>
-      <!-- ignore notifications from these modules //-->
     </fieldset>
 
    <div class="pageoverflow">
