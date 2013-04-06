@@ -60,6 +60,8 @@ if( isset($_REQUEST['term']) ) {
 
   $list = $db->GetArray($query,$parms);
   if( is_array($list) && count($list) ) {
+    $builder = new ContentListBuilder($this);
+    $builder->expand_all();
     $contentops = ContentOperations::get_instance();
     foreach( $list as $row ) {
       $label = $contentops->CreateFriendlyHierarchyPosition($row['hierarchy']);
