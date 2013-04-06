@@ -2108,7 +2108,7 @@ abstract class ContentBase
       case 'cachable':
 	$help = '&nbsp;'.cms_admin_utils::get_help_tag('core','help_content_cachable');
 	return array('<label for="in_cachable">'.lang('cachable').':</label>'.$help,
-		     '<input type="hidden" name="cachable" value="0"/><input id="in_cachable" class="pagecheckbox" type="checkbox" value="1" name="cachable"'.($this->mCachable?' checked="checked"':'').' />';
+		     '<input type="hidden" name="cachable" value="0"/><input id="in_cachable" class="pagecheckbox" type="checkbox" value="1" name="cachable"'.($this->mCachable?' checked="checked"':'').' />');
 
       case 'title':
 	$help = '&nbsp;'.cms_admin_utils::get_help_tag('core','help_content_title');
