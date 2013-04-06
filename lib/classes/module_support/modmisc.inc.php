@@ -32,19 +32,14 @@
 function cms_module_GetAbout(&$modinstance)
 {
 	$str = '';
-	if ($modinstance->GetAuthor() != '')
-	{
+	if ($modinstance->GetAuthor() != '') {
 		$str .= "<br />".lang('author').": " . $modinstance->GetAuthor();
-		if ($modinstance->GetAuthorEmail() != '')
-		{
-			$str .= ' &lt;' . $modinstance->GetAuthorEmail() . '&gt;';
-		}
+		if ($modinstance->GetAuthorEmail() != '') $str .= ' &lt;' . $modinstance->GetAuthorEmail() . '&gt;';
 		$str .= "<br />";
 	}
 	$str .= "<br />".lang('version').": " .$modinstance->GetVersion() . "<br />";
 
-	if ($modinstance->GetChangeLog() != '')
-	{
+	if ($modinstance->GetChangeLog() != '') {
 		$str .= "<br />".lang('changehistory').":<br />";
 		$str .= $modinstance->GetChangeLog() . '<br />';
 	}
@@ -62,12 +57,10 @@ function cms_module_GetHelpPage(&$modinstance)
 	$str .= @ob_get_contents();
 	@ob_end_clean();
 	$dependencies = $modinstance->GetDependencies();
-	if (count($dependencies) > 0 )
-	{
+	if (count($dependencies) > 0 ) {
 		$str .= '<h3>'.lang('dependencies').'</h3>';
 		$str .= '<ul>';
-		foreach( $dependencies as $dep => $ver )
-		{
+		foreach( $dependencies as $dep => $ver ) {
 			$str .= '<li>';
 			$str .= $dep.' =&gt; '.$ver;
 			$str .= '</li>';
@@ -75,21 +68,14 @@ function cms_module_GetHelpPage(&$modinstance)
 		$str .= '</ul>';
 	}
 	$paramarray = $modinstance->GetParameters();
-	if (count($paramarray) > 0)
-	{
+	if (count($paramarray) > 0) {
 		$str .= '<h3>'.lang('parameters').'</h3>';
 		$str .= '<ul>';
-		foreach ($paramarray as $oneparam)
-		{
+		foreach ($paramarray as $oneparam) {
 			$str .= '<li>';
-			if ($oneparam['optional'] == true)
-			{
-				$str .= '<em>(optional)</em> ';
-			}
 			$help = '';
-			if( isset($oneparam['help']) ) {
-				$help = $oneparam['help'];
-			}
+			if ($oneparam['optional'] == true) $str .= '<em>(optional)</em> ';
+			if( isset($oneparam['help']) ) $help = $oneparam['help'];
 			$str .= $oneparam['name'].'="'.$oneparam['default'].'" - '.$help.'</li>';
 		}
 		$str .= '</ul>';

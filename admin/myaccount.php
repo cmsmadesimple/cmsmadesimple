@@ -29,6 +29,8 @@ require_once ("../include.php");
 $urlext = '?' . CMS_SECURE_PARAM_NAME . '=' . $_SESSION[CMS_USER_KEY];
 $thisurl = basename(__FILE__) . $urlext;
 $userid = get_userid(); // Checks also login
+if( !check_permission($userid,'Manage My Settings') && !check_permission($userid,'Manage My Account') ) return;
+
 $userobj = UserOperations::get_instance()->LoadUserByID($userid); // <- Safe to do, cause if $userid fails, it redirects automatically to login.
 $db = cmsms()->GetDb();
 $error = '';
@@ -63,185 +65,135 @@ if( $pos !== FALSE )  {
 }
 $hide_help_links = get_preference($userid, 'hide_help_links', 0);
 
-
 /**
  * Cancel
  */
-
-if (isset($_POST["cancel"])) {
-
-	redirect("index.php" . $urlext);
-	return;
-}
+if (isset($_POST["cancel"])) redirect("index.php" . $urlext);
 
 /**
  * Check tab
  */
 $tab='';
-if( isset($_POST['active_tab']) ) {
-
-    $tab = trim($_POST['active_tab']);
-}
+if( isset($_POST['active_tab']) ) $tab = trim($_POST['active_tab']);
 
 /**
  * Submit account
  *
  * NOTE: Assumes that we succesfully acquired user object.
  */
- if (isset($_POST['submit_account'])) {
+if (isset($_POST['submit_account']) && check_permission($userid,'Manage My Account')) {
+  // Collect params
+  $username = '';
+  if (isset($_POST["user"])) $username = cleanValue($_POST["user"]);
 
-	// Collect params
- 
-	$username = '';
-	if (isset($_POST["user"])) $username = cleanValue($_POST["user"]);
+  $password = '';
+  if (isset($_POST["password"])) $password = $_POST["password"];
 
-	$password = '';
-	if (isset($_POST["password"])) $password = $_POST["password"];
+  $passwordagain = '';
+  if (isset($_POST["passwordagain"])) $passwordagain = $_POST["passwordagain"];
 
-	$passwordagain = '';
-	if (isset($_POST["passwordagain"])) $passwordagain = $_POST["passwordagain"];
+  $firstname = '';
+  if (isset($_POST["firstname"])) $firstname = cleanValue($_POST["firstname"]);
 
-	$firstname = '';
-	if (isset($_POST["firstname"])) $firstname = cleanValue($_POST["firstname"]);
+  $lastname = '';
+  if (isset($_POST["lastname"])) $lastname = cleanValue($_POST["lastname"]);
 
-	$lastname = '';
-	if (isset($_POST["lastname"])) $lastname = cleanValue($_POST["lastname"]);
+  $email = '';
+  if (isset($_POST["email"])) $email = trim($_POST["email"]);	
 
-	$email = '';
-	if (isset($_POST["email"])) $email = trim($_POST["email"]);	
-	
-	// Do validations
-	
-	$validinfo = true;
-	
-	if ($username == "") {
-	
-		$validinfo = false;
-		$error = lang('nofieldgiven', array(lang('username')));
-	}
+  // Do validations
+  $validinfo = true;
+  if ($username == "") {
+    $validinfo = false;
+    $error = lang('nofieldgiven', array(lang('username')));
+  }
+  else if ( !preg_match("/^[a-zA-Z0-9\._ ]+$/", $username) ) {
+    $validinfo = false;
+    $error = lang('illegalcharacters', array(lang('username')));
+  } 
+  else if ($password != $passwordagain) {
+    $validinfo = false;
+    $error = lang('nopasswordmatch');
+  }
+  else if (!empty($email) && !is_email($email)) {
+    $validinfo = false;
+    $error = lang('invalidemail').': '.$email;
+  }
 
-	else if ( !preg_match("/^[a-zA-Z0-9\._ ]+$/", $username) ) {
-	
-		$validinfo = false;
-		$error = lang('illegalcharacters', array(lang('username')));
-	} 
-
-	else if ($password != $passwordagain) {
-	
-		$validinfo = false;
-		$error = lang('nopasswordmatch');
-	}
-
-	else if (!empty($email) && !is_email($email)) {
-	
-		$validinfo = false;
-		$error = lang('invalidemail').': '.$email;
-	}
- 
-	// If success do action
- 
-	if($validinfo) {
- 
-		$userobj->username = $username;
-		$userobj->firstname = $firstname;
-		$userobj->lastname = $lastname;
-		$userobj->email = $email;
+  // If success do action
+  if($validinfo) {
+    $userobj->username = $username;
+    $userobj->firstname = $firstname;
+    $userobj->lastname = $lastname;
+    $userobj->email = $email;
+    if ($password != '') $userobj->SetPassword($password);
 		
-		if ($password != '') {
-		
-			$userobj->SetPassword($password);
-		}
-		
-		Events::SendEvent('Core', 'EditUserPre', array('user' => &$userobj));
+    Events::SendEvent('Core', 'EditUserPre', array('user' => &$userobj));
+    $result = $userobj->Save();
 
-		$result = $userobj->Save();
-		
-		if($result) {
-		
-			// put mention into the admin log
-			audit($userid, 'Admin Username: '.$userobj->username, 'Edited');
-			Events::SendEvent('Core', 'EditUserPost', array('user' => &$userobj));	
-			$message = lang('accountupdated');			
-			
-		} else {
-		
-			// throw exception? update just failed.
-		}
-	}
-	
+    if($result) {
+      // put mention into the admin log
+      audit($userid, 'Admin Username: '.$userobj->username, 'Edited');
+      Events::SendEvent('Core', 'EditUserPost', array('user' => &$userobj));	
+      $message = lang('accountupdated');			
+    } else {
+      // throw exception? update just failed.
+    }
+  }	
 } // end of account submit
  
 /**
  * Submit prefs
  */ 
-if (isset($_POST['submit_prefs'])) {
-	
-	# Get values from request and drive em to variables
-	$wysiwyg = $_POST['wysiwyg'];
-	$syntaxhighlighter = $_POST['syntaxhighlighter'];
-	$default_cms_language = '';
-	if (isset($_POST['default_cms_language'])) {
-	
-		$default_cms_language = $_POST['default_cms_language'];
-	}
-	$old_default_cms_lang = '';
-	if (isset($_POST['old_default_cms_lang'])) {
-	
-		$old_default_cms_lang = $_POST['old_default_cms_lang'];
-	}
-	$admintheme = $_POST['admintheme'];
-	$bookmarks = (isset($_POST['bookmarks']) ? 1 : 0);
-	$indent = (isset($_POST['indent']) ? true : false);
-	$enablenotifications = (isset($_POST['enablenotifications']) ? 1 : 0);
-	$paging = (isset($_POST['paging']) ? 1 : 0);
-	$date_format_string = $_POST['date_format_string'];
-	$default_parent = '';
-	if (isset($_POST['parent_id'])) {
-	
-		$default_parent = $_POST['parent_id'];
-	}
-	$listtemplates_pagelimit = '20';
-	if (isset($_POST['listtemplates_pagelimit'])) {
-	
-		$listtemplates_pagelimit = $_POST['listtemplates_pagelimit'];
-	}
-	$liststylesheets_pagelimit = '20';
-	if (isset($_POST['liststylesheets_pagelimit'])) {
-		$liststylesheets_pagelimit = $_POST['liststylesheets_pagelimit'];
-	}
-	$homepage = $_POST['homepage'];
-	$hide_help_links = (isset($_POST['hide_help_links']) ? 1 : 0);
-	$ignoredmodules = array();
-	if (isset($_POST['ignoredmodules'])) {
-	
-		$ignoredmodules = $_POST['ignoredmodules'];
-		if (in_array('**none**', $ignoredmodules)) {
-			$ignoredmodules = array();
-		}
-	}
+if (isset($_POST['submit_prefs']) && check_permission($userid,'Manage My Settings')) {
+  // Get values from request and drive em to variables
+  $wysiwyg = $_POST['wysiwyg'];
+  $syntaxhighlighter = $_POST['syntaxhighlighter'];
+  $default_cms_language = '';
+  if (isset($_POST['default_cms_language'])) $default_cms_language = $_POST['default_cms_language'];
+  $old_default_cms_lang = '';
+  if (isset($_POST['old_default_cms_lang'])) $old_default_cms_lang = $_POST['old_default_cms_lang'];
+  $admintheme = $_POST['admintheme'];
+  $bookmarks = (isset($_POST['bookmarks']) ? 1 : 0);
+  $indent = (isset($_POST['indent']) ? true : false);
+  $enablenotifications = (isset($_POST['enablenotifications']) ? 1 : 0);
+  $paging = (isset($_POST['paging']) ? 1 : 0);
+  $date_format_string = $_POST['date_format_string'];
+  $default_parent = '';
+  if (isset($_POST['parent_id'])) $default_parent = $_POST['parent_id'];
+  $listtemplates_pagelimit = '20';
+  if (isset($_POST['listtemplates_pagelimit'])) $listtemplates_pagelimit = $_POST['listtemplates_pagelimit'];
+  $liststylesheets_pagelimit = '20';
+  if (isset($_POST['liststylesheets_pagelimit'])) $liststylesheets_pagelimit = $_POST['liststylesheets_pagelimit'];
+  $homepage = $_POST['homepage'];
+  $hide_help_links = (isset($_POST['hide_help_links']) ? 1 : 0);
+  $ignoredmodules = array();
+  if (isset($_POST['ignoredmodules'])) {
+    $ignoredmodules = $_POST['ignoredmodules'];
+    if (in_array('**none**', $ignoredmodules)) $ignoredmodules = array();
+  }
 
-	# Set prefs
-	set_preference($userid, 'wysiwyg', $wysiwyg);
-	set_preference($userid, 'syntaxhighlighter', $syntaxhighlighter);
-	set_preference($userid, 'default_cms_language', $default_cms_language);
-	set_preference($userid, 'admintheme', $admintheme);
-	set_preference($userid, 'bookmarks', $bookmarks);
-	set_preference($userid, 'hide_help_links', $hide_help_links);
-	set_preference($userid, 'indent', $indent);
-	set_preference($userid, 'enablenotifications', $enablenotifications);
-	set_preference($userid, 'paging', $paging);
-	set_preference($userid, 'date_format_string', $date_format_string);
-	set_preference($userid, 'default_parent', $default_parent);
-	set_preference($userid, 'homepage', $homepage);
-	set_preference($userid, 'listtemplates_pagelimit', $listtemplates_pagelimit);
-	set_preference($userid, 'liststylesheets_pagelimit', $liststylesheets_pagelimit);
-	set_preference($userid, 'ignoredmodules', implode(',', $ignoredmodules));
+  // Set prefs
+  set_preference($userid, 'wysiwyg', $wysiwyg);
+  set_preference($userid, 'syntaxhighlighter', $syntaxhighlighter);
+  set_preference($userid, 'default_cms_language', $default_cms_language);
+  set_preference($userid, 'admintheme', $admintheme);
+  set_preference($userid, 'bookmarks', $bookmarks);
+  set_preference($userid, 'hide_help_links', $hide_help_links);
+  set_preference($userid, 'indent', $indent);
+  set_preference($userid, 'enablenotifications', $enablenotifications);
+  set_preference($userid, 'paging', $paging);
+  set_preference($userid, 'date_format_string', $date_format_string);
+  set_preference($userid, 'default_parent', $default_parent);
+  set_preference($userid, 'homepage', $homepage);
+  set_preference($userid, 'listtemplates_pagelimit', $listtemplates_pagelimit);
+  set_preference($userid, 'liststylesheets_pagelimit', $liststylesheets_pagelimit);
+  set_preference($userid, 'ignoredmodules', implode(',', $ignoredmodules));
 
-	# Audit, message, cleanup
-	audit($userid, 'Admin Username: '.$userobj->username, 'Edited');
-	$message = lang('prefsupdated');
-	cmsms()->clear_cached_files();
-
+  // Audit, message, cleanup
+  audit($userid, 'Admin Username: '.$userobj->username, 'Edited');
+  $message = lang('prefsupdated');
+  cmsms()->clear_cached_files();
 } // end of prefs submit
 
 /**
@@ -251,12 +203,10 @@ if (isset($_POST['submit_prefs'])) {
 include_once ("header.php");
 
 if ($error != "") {
-	
-	$themeObject->ShowErrors($error);
+  $themeObject->ShowErrors($error);
 }
 if ($message != "") {
-	
-	$themeObject->ShowMessage($message);
+  $themeObject->ShowMessage($message);
 }
 
 $smarty = cmsms()->GetSmarty();
@@ -268,7 +218,7 @@ $smarty->assign('CMS_USER_KEY', $_SESSION[CMS_USER_KEY]); // Assigned at include
 $tmp = module_meta::get_instance()->module_list_by_method('IsWYSIWYG');
 $tmp2 = array(-1 => lang('none'));
 for ($i = 0; $i < count($tmp); $i++) {
-	$tmp2[$tmp[$i]] = $tmp[$i];
+  $tmp2[$tmp[$i]] = $tmp[$i];
 }
 
 $smarty -> assign('wysiwyg_opts', $tmp2);
@@ -277,7 +227,7 @@ $smarty -> assign('wysiwyg_opts', $tmp2);
 $tmp = module_meta::get_instance()->module_list_by_method('IsSyntaxHighlighter');
 $tmp2 = array(-1 => lang('none'));
 for ($i = 0; $i < count($tmp); $i++) {
-	$tmp2[$tmp[$i]] = $tmp[$i];
+  $tmp2[$tmp[$i]] = $tmp[$i];
 }
 
 $smarty->assign('syntax_opts', $tmp2);
@@ -289,16 +239,18 @@ $smarty->assign('themes_opts',CmsAdminThemeBase::GetAvailableThemes());
 $allmodules = ModuleOperations::get_instance()->GetInstalledModules();
 $modules = array();
 foreach ((array)$allmodules as $onemodule) {
-
-	$modules[$onemodule] = $onemodule;
+  $modules[$onemodule] = $onemodule;
 }
 
 #Tabs
-$smarty->assign('tab_start',$themeObject->StartTabHeaders().
-							$themeObject->SetTabHeader('maintab',lang('useraccount'), ('maintab' == $tab)?true:false).
-							$themeObject->SetTabHeader('advancedtab',lang('userprefs'), ('advtab' == $tab)?true:false).
-							$themeObject->EndTabHeaders() . 
-							$themeObject->StartTabContent());
+$out = $themeObject->StartTabHeaders().
+  $themeObject->SetTabHeader('maintab',lang('useraccount'), ('maintab' == $tab)?true:false);
+if( check_permission($userid,'Manage My Settings') ) {
+  $out .= $themeObject->SetTabHeader('advancedtab',lang('userprefs'), ('advtab' == $tab)?true:false);
+}
+$out .= $themeObject->EndTabHeaders() . $themeObject->StartTabContent();
+$smarty->assign('tab_start',$out);
+
 $smarty->assign('tabs_end',$themeObject->EndTabContent());
 $smarty->assign('maintab_start',$themeObject->StartTab("maintab"));
 $smarty->assign('advancedtab_start',$themeObject->StartTab("advancedtab"));
@@ -329,6 +281,7 @@ $smarty->assign('ignoredmodules', $ignoredmodules);
 $smarty->assign('backurl', $themeObject -> backUrl());
 $smarty->assign('formurl', $thisurl);
 $smarty->assign('userobj', $userobj);
+$smarty->assign('managesettings',check_permission($userid,'Manage My Settings'));
 
 # Output
 $smarty->display('myaccount.tpl');

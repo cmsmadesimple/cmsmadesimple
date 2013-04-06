@@ -254,10 +254,12 @@ $(document).ready(function(){
         <span style="color: red;">{$row.url}</span>
       {/if}
     {elseif $column == 'template'}
-      {if $row.can_edit_tpl}
-        <a href="{cms_action_url module='DesignManager' action='admin_edit_template' tpl=$row.template_id}" class="page_template" title="{$mod->Lang('prompt_page_template')}">{$row.template}</a>
-      {else}
-        {$row.template}
+      {if isset($row.template) && $row.template != ''}
+        {if $row.can_edit_tpl}
+          <a href="{cms_action_url module='DesignManager' action='admin_edit_template' tpl=$row.template_id}" class="page_template" title="{$mod->Lang('prompt_page_template')}">{$row.template}</a>
+        {else}
+          {$row.template}
+        {/if}
       {/if}
     {elseif $column == 'friendlyname'}
       {$row.friendlyname}

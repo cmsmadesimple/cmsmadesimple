@@ -33,13 +33,11 @@ function cms_module_RedirectToAdmin(&$modinstance, $page, $params=array())
 {
   $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
   $url = $page.$urlext;
-  if( count($params) )
-    {
-      foreach ($params as $key=>$value)
-      {
-        $url .= '&'.$key.'='.rawurlencode($value);
+  if( count($params) ) {
+      foreach ($params as $key=>$value) {
+		  $url .= '&'.$key.'='.rawurlencode($value);
       }
-    }
+  }
   redirect($url);
 }
 
@@ -54,67 +52,44 @@ function cms_module_Redirect(&$modinstance, $id, $action, $returnid='', $params=
 	$name = $modinstance->GetName();
 
 	#Suggestion by Calguy to make sure 2 actions don't get sent
-	if (isset($params['action']))
-	{
-		unset($params['action']);
-	}
-	if (isset($params['id']))
-	{
-		unset($params['id']);
-	}
-	if (isset($params['module']))
-	{
-		unset($params['module']);
-	}
-
-	if (!$inline && $returnid != '')
-		$id = 'cntnt01';
+	if (isset($params['action']))unset($params['action']);
+	if (isset($params['id'])) unset($params['id']);
+	if (isset($params['module'])) unset($params['module']);
+	if (!$inline && $returnid != '') $id = 'cntnt01';
 
 	$text = '';
-	if ($returnid != '')
-	{
+	if ($returnid != '') {
 		// gotta get the URL for this page.
 		$contentops = $gCms->GetContentOperations();
 		$content = $contentops->LoadContentFromId($returnid);
-		if( !is_object($content) )
-		{
+		if( !is_object($content) ) {
 			// no destination content object
 			return;
 		}
 		$text .= $content->GetURL();
-		//$text .= 'index.php';
 
 		$parts = parse_url($text);
-		if( isset($parts['query']) && $parts['query'] != '?' )
-		{
+		if( isset($parts['query']) && $parts['query'] != '?' ) {
 			$text .= '&';
 		}
-		else
-		{
+		else {
 			$text .= '?';
 		}		
 	}
-	else
-	{
+	else {
 		$text .= 'moduleinterface.php?';
 	}
 
 	$text .= 'mact='.$name.','.$id.','.$action.','.($inline == true?1:0);
-	if ($returnid != '')
-	{
+	if ($returnid != '') {
 		$text .= '&'.$id.'returnid='.$returnid;
 	}
-	else
-	{
+	else {
 	    $text .= '&'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 	}
 
-	foreach ($params as $key=>$value)
-	{
-		if( $key !== '' && $value !== '' )
-		{
-			$text .= '&'.$id.$key.'='.rawurlencode($value);
-		}
+	foreach ($params as $key=>$value) {
+		if( $key !== '' && $value !== '' ) $text .= '&'.$id.$key.'='.rawurlencode($value);
 	}
 	redirect($text);
 }

@@ -39,7 +39,7 @@ $perms = array('Add Pages','Manage Groups','Add Templates','Manage Users','Modif
 	       'Modify Modules','Modify Files','Modify Site Preferences',
 	       'Manage Stylesheets','Manage Designs','Modify User-defined Tags','Clear Admin Log',
 	       'Modify Events','View Tag Help','Manage All Content','Reorder Content','Manage My Settings',
-	       'Manage My Bookmarks');
+	       'Manage My Account', 'Manage My Bookmarks');
 foreach( $perms as $one_perm ) {
   $permission = new CmsPermission();
   $permission->source = 'Core';
@@ -64,6 +64,7 @@ $editor_group->description = 'Members of this group can manage content';
 $editor_group->active = 1;
 $editor_group->Save();
 $editor_group->GrantPermission('Manage All Content');
+$editor_group->GrantPermission('Manage My Account');
 $editor_group->GrantPermission('Manage My Settings');
 $editor_group->GrantPermission('Manage My Bookmarks');
 
@@ -76,6 +77,7 @@ $designer_group->GrantPermission('Add Templates');
 $designer_group->GrantPermission('Modify Templates');
 $designer_group->GrantPermission('Manage Stylesheets');
 $designer_group->GrantPermission('Manage All Content');
+$designer_group->GrantPermission('Manage My Account');
 $designer_group->GrantPermission('Manage My Settings');
 $designer_group->GrantPermission('Manage My Bookmarks');
 

@@ -315,7 +315,8 @@ abstract class CmsAdminThemeBase
 			$this->_perms['taghelpPerms'] |
             (isset($this->_sectionCount['extensions']) && $this->_sectionCount['extensions'] > 0);
 
-		$this->_perms['myaccount'] = check_permission($this->userid,'Manage My Settings');
+		$this->_perms['myaccount'] = check_permission($this->userid,'Manage My Settings') |
+			check_permission($this->userid,'Manage My Account');
 		$this->_perms['bookmarks'] = check_permission($this->userid,'Manage My Bookmarks');
 		$this->_perms['myprefs'] = $this->_perms['myaccount'] | $this->_perms['bookmarks'];
 	}

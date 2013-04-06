@@ -56,6 +56,7 @@ jQuery(document).ready(function(){
 
 {$tab_end}
 
+{if $managesettings}
 {$advancedtab_start}
 <form method="post" action="{$formurl}">
   <input type="hidden" name="active_tab" value="advtab" />
@@ -231,7 +232,9 @@ jQuery(document).ready(function(){
    </div>		
  </form>
 	
-{$tab_end}	
+{$tab_end}
+{/if}
+
 {$tabs_end}
   <p class="pageback">
     <a class="pageback" href="{$backurl}">&#171; {'back'|lang}</a>
