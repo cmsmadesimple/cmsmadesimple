@@ -4,7 +4,7 @@
 
 <p>{lang_install a=install_admin_setup}</p>
 
-<form action="{$smarty.server.PHP_SELF}" method="post" name="page6form" id="page6form">
+<form action="{$smarty.server.PHP_SELF|strip_tags}" method="post" name="page6form" id="page6form">
 <table cellpadding="2" border="1" class="regtable">
 	<tr class="row1">
 		<td>{lang_install a=install_admin_docroot}</td>

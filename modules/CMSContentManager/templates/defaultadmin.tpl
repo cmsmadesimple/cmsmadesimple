@@ -204,7 +204,7 @@ $(document).ready(function(){
 <div class="clearb"></div>
 {/if} {* ajax *}
 
-{form_start action='defaultadmin'}
+{form_start action='defaultadmin' id='listform'}
 <div id="contentlist">{* everything from here down is part of the ajax stuff *}
 {if isset($content_list)}
 {function do_content_row}
@@ -340,7 +340,7 @@ $(document).ready(function(){
   </div>
 
   <div class="pageoptions" style="float: right; width: 70%; text-align: right;">
-  <span><label for="ajax_find">{$mod->Lang('find')}:</label>&nbsp;<input type="text" id="ajax_find" name="ajax_find" value="" size="25"/></span>
+  <span><label for="ajax_find">{$mod->Lang('find')}:</label>&nbsp;<input type="text" id="ajax_find" name="ajax_find" title="{$mod->Lang('title_listcontent_find')}" value="" size="25"/></span>
   {if $npages > 1}
     {form_start action='defaultadmin'}
     <span>

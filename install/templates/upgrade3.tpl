@@ -31,7 +31,7 @@
 </table>
 
 
-<form action="{$smarty.server.PHP_SELF}" method="post" name="page3form" id="page3form">
+<form action="{$smarty.server.PHP_SELF|strip_tags}" method="post" name="page3form" id="page3form">
         <div class="continue">
 		<input type="hidden" name="page" value="4" />
                 <input type="hidden" name="default_cms_lang" value="{$default_cms_lang}" />

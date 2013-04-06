@@ -205,6 +205,7 @@ $lang['title_editpage_apply'] = 'Save the changes to this content page, and cont
 $lang['title_editpage_cancel'] = 'Abandon all unsaved changes to this page, and return to the content list';
 $lang['title_editpage_submit'] = 'Save the changes to this content page, and return to the content list';
 $lang['title_editpage_view'] = 'View the current content page <em>(saved changes only)</em>.';
+$lang['title_listcontent_find'] = 'Enter a portion of a page title or menu text and select a matching page';
 $lang['title_userpageoptions'] = 'Page List Options';
 $lang['toggle'] = 'Toggle Selected';
 

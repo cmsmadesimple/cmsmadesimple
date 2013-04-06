@@ -50,6 +50,10 @@ $tplmaster = 0;
 $copyfromtemplate = 1;
 $message = '';
 
+$user_id = $userid;
+if (isset($_POST["user_id"])) $user_id = cleanValue($_POST["user_id"]);
+else if (isset($_GET["user_id"])) $user_id = cleanValue($_GET["user_id"]);
+
 if (isset($_POST["user"])) $user = cleanValue($_POST["user"]);
 if (isset($_POST["password"])) $password = $_POST["password"];
 if (isset($_POST["passwordagain"])) $passwordagain = $_POST["passwordagain"];
@@ -57,11 +61,7 @@ if (isset($_POST["firstname"])) $firstname = cleanValue($_POST["firstname"]);
 if (isset($_POST["lastname"])) $lastname = cleanValue($_POST["lastname"]);
 if (isset($_POST["email"])) $email = trim(strip_tags($_POST["email"]));
 if (!isset($_POST["adminaccess"]) && isset($_POST["submit"])) $adminaccess = 0;
-if (!isset($_POST["active"]) && isset($_POST["submit"])) $active = 0;
-
-$user_id = $userid;
-if (isset($_POST["user_id"])) $user_id = cleanValue($_POST["user_id"]);
-else if (isset($_GET["user_id"])) $user_id = cleanValue($_GET["user_id"]);
+if (!isset($_POST["active"]) && ($user_id != $userid) && $userid != 1 && isset($_POST["submit"]) ) $active = 0;
 
 $gCms = cmsms();
 $userops = $gCms->GetUserOperations();
@@ -142,7 +142,6 @@ if (isset($_POST["submit"])) {
     audit($user_id, 'Admin Username: '.$thisuser->username, ' Edited');
     $message = lang('edited_user');
     if ($result) {
-
       if( isset($_POST['copyusersettings']) && $_POST['copyusersettings'] > 0 ) {
 	// copy user preferences from the template user to this user.
 	$prefs = cms_userprefs::get_all_for_user((int)$_POST['copyusersettings']);

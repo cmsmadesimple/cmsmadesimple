@@ -2038,7 +2038,7 @@ abstract class ContentBase
       if( !is_array($this->_attributes) ) return;
       $tmp = array();
       for( $i = 0; $i < count($this->_attributes); $i++ ) {
-	if( is_array($this->_attributes[$i]) && $this->_attributes[$i]->name == $name ) {
+	if( is_object($this->_attributes[$i]) && $this->_attributes[$i]->name == $name ) {
 	  continue;
 	}
 	$tmp[] = $this->_attributes[$i];

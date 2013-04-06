@@ -2,7 +2,7 @@
 <div class="error">{$error}</div>
 {/foreach}
 
-<form action="{$smarty.server.PHP_SELF}" method="post" name="page5form" id="page5form">
+<form action="{$smarty.server.PHP_SELF|strip_tags}" method="post" name="page5form" id="page5form">
 
 	<h3>{lang_install a=sitename}</h3>
 

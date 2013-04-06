@@ -29,7 +29,7 @@
 </table>
 
 
-<form action="{$smarty.server.PHP_SELF}" method="post" name="page5form" id="page5form">
+<form action="{$smarty.server.PHP_SELF|strip_tags}" method="post" name="page5form" id="page5form">
         <div class="continue">
 		<input type="hidden" name="page" value="6" />
 		<input type="hidden" name="default_cms_lang" value="{$default_cms_lang}" />
