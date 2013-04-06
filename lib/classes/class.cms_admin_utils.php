@@ -94,7 +94,11 @@ final class cms_admin_utils
 
 	  $params = array();
 	  $args = func_get_args();
-	  if( count($args) == 1 && is_string($args[0]) ) {
+	  if( count($args) == 2 && is_string($args[0]) && is_string($args[1]) ) {
+		  $params['key1'] = $args[0];
+		  $params['key2'] = $args[1];
+	  }
+	  else if( count($args) == 1 && is_string($args[0]) ) {
 		  $params['key2'] = $args[0];
 	  }
 	  else {

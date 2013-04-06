@@ -30,6 +30,8 @@ if( isset($_GET['key']) ) $key = cms_htmlentities(trim($_GET['key']));
 if( strstr($key,'__') !== FALSE ) {
   list($realm,$key) = explode('__',$key,2);
 }
+if( strtolower($realm) == 'core' ) $realm = 'admin';
+debug_to_log("help $realm/$key");
 $out = CmsLangOperations::lang_from_realm($realm,$key);
 
 echo $out;

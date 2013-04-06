@@ -315,7 +315,7 @@ class Content extends ContentBase
 					$out = CmsFormUtils::create_dropdown('design_id',$_designlist,
 														 $this->GetPropertyValue('design_id'),
 														 array('id'=>'design_id'));
-					$help = '&nbsp;'.cms_admin_utils::get_help_tag('info_editcontent_design');
+					$help = '&nbsp;'.cms_admin_utils::get_help_tag('core','info_editcontent_design');
 					return array('<label for="design_id">*'.lang('design').':</label>'.$help,$out);
 				}
 			}
@@ -330,7 +330,7 @@ class Content extends ContentBase
 				$template_id = $this->TemplateId();
 				if( $template_id < 1 ) $template_id = $dflt_tpl->get_id();
 				$out = CmsFormUtils::create_dropdown('template_id',$_templates,$template_id,array('id'=>'template_id'));
-				$help = '&nbsp;'.cms_admin_utils::get_help_tag('info_editcontent_template');
+				$help = '&nbsp;'.cms_admin_utils::get_help_tag('core','info_editcontent_template');
 				return array('<label for="template_id">*'.lang('template').':</label>'.$help,$out);
 			}
 			catch( CmsException $e ) {
@@ -339,18 +339,18 @@ class Content extends ContentBase
 			break;
 
 		case 'pagemetadata':
-			$help = '&nbsp;'.cms_admin_utils::get_help_tag('help_content_pagemeta');
+			$help = '&nbsp;'.cms_admin_utils::get_help_tag('core','help_content_pagemeta');
 			return array('<label for="id_pagemetadata">'.lang('page_metadata').':</label>'.$help,create_textarea(false, $this->Metadata(), 'metadata', 'pagesmalltextarea', 'metadata', '', '', '80', '6'));
 
 		case 'pagedata':
-			$help = '&nbsp;'.cms_admin_utils::get_help_tag('help_content_pagedata');
+			$help = '&nbsp;'.cms_admin_utils::get_help_tag('core','help_content_pagedata');
 			return array('<label for="id_pagedata">'.lang('pagedata_codeblock').':</label>'.$help,
 						 create_textarea(false,$this->GetPropertyValue('pagedata'),'pagedata','pagesmalltextarea','id_pagedata','','','80','6'));
 
 		case 'searchable':
 			$searchable = $this->GetPropertyValue('searchable');
 			if( $searchable == '' ) $searchable = 1;
-			$help = '&nbsp;'.cms_admin_utils::get_help_tag('help_page_searchable');
+			$help = '&nbsp;'.cms_admin_utils::get_help_tag('core','help_page_searchable');
 			return array('<label for="id_searchable">'.lang('searchable').':</label>'.$help,
 						 '<input type="hidden" name="searchable" value="0"/>
                           <input id="id_searchable" type="checkbox" name="searchable" value="1" '.($searchable==1?'checked="checked"':'').'/>');
@@ -358,7 +358,7 @@ class Content extends ContentBase
 		case 'disable_wysiwyg':
 			$disable_wysiwyg = $this->GetPropertyValue('disable_wysiwyg');
 			if( $disable_wysiwyg == '' ) $disable_wysiwyg = 0;
-			$help = '&nbsp;'.cms_admin_utils::get_help_tag('help_page_disablewysiwyg');
+			$help = '&nbsp;'.cms_admin_utils::get_help_tag('core','help_page_disablewysiwyg');
 			return array('<label for="id_disablewysiwyg">'.lang('disable_wysiwyg').':</label>'.$help,
 						 '<input type="hidden" name="disable_wysiwyg" value="0" />
              <input id="id_disablewysiwyg" type="checkbox" name="disable_wysiwyg" value="1"  '.($disable_wysiwyg==1?'checked="checked"':'').' onclick="this.form.submit()" />');
@@ -474,13 +474,13 @@ class Content extends ContentBase
 		$field = '';
 		$label = '';
 		if( isset($blockInfo['label']) && $blockInfo['label'] != '') {
-			$label = '<label for="'.$blockInfo['id'].'">'.$blockInfo['label'].'</label>';
+			$label = '<label for="'.$blockInfo['id'].'">'.$blockInfo['label'].':</label>';
 		}
 		switch( $blockInfo['type'] ) {
 		case 'text':
 			if( $blockName == 'content_en' && $label == '' ) {
-				$help = '&nbsp;'.cms_admin_utils::get_help_tag('help_content_content_en');
-				$label = '<label for="content_en">*'.lang('content').'</label>'.$help;
+				$help = '&nbsp;'.cms_admin_utils::get_help_tag('core','help_content_content_en');
+				$label = '<label for="content_en">*'.lang('content').':</label>&nbsp;'.$help;
 			}
 			$field = $this->_display_text_block($blockInfo,$value,$adding);
 			break;
@@ -506,10 +506,8 @@ class Content extends ContentBase
 			break;
 		}
 		if( empty($field) ) return FALSE;
-		if( empty($label) ) {
-			$label = $blockName;
-		}
-		return array($label.':',$field);
+		if( empty($label) ) $label = $blockName.':';
+		return array($label,$field);
 	}
 
 } // end of class

@@ -1979,7 +1979,7 @@ abstract class ContentBase
 
     static public function GetAdditionalEditorInput($addteditors,$owner_id = -1)
     {
-      $help = '&nbsp;'.cms_admin_utils::get_help_tag('help_content_addteditor');
+      $help = '&nbsp;'.cms_admin_utils::get_help_tag('core','help_content_addteditor');
       $ret[] = '<label for="addteditors">'.lang('additionaleditors').':</label>'.$help;
       $text = '<input name="additional_editors" type="hidden" value=""/>';
       $text .= '<select id="addteditors" name="additional_editors[]" multiple="multiple" size="5">';
@@ -2106,17 +2106,17 @@ abstract class ContentBase
 
       switch( $one ) {
       case 'cachable':
-	$help = '&nbsp;'.cms_admin_utils::get_help_tag('help_content_cachable');
+	$help = '&nbsp;'.cms_admin_utils::get_help_tag('core','help_content_cachable');
 	return array('<label for="in_cachable">'.lang('cachable').':</label>'.$help,
-		     '<input type="hidden" name="cachable" value="0"/><input id="in_cachable" class="pagecheckbox" type="checkbox" value="1" name="cachable"'.($this->mCachable?' checked="checked"':'').' />',lang('help_page_cachable'));
+		     '<input type="hidden" name="cachable" value="0"/><input id="in_cachable" class="pagecheckbox" type="checkbox" value="1" name="cachable"'.($this->mCachable?' checked="checked"':'').' />';
 
       case 'title':
-	$help = '&nbsp;'.cms_admin_utils::get_help_tag('help_content_title');
+	$help = '&nbsp;'.cms_admin_utils::get_help_tag('core','help_content_title');
 	return array('<label for="in_title">*'.lang('title').':</label>'.$help,
 		     '<input type="text" id="in_title" name="title" value="'.cms_htmlentities($this->mName).'" />');
 	      
       case 'menutext':
-	$help = '&nbsp;'.cms_admin_utils::get_help_tag('help_content_menutext');
+	$help = '&nbsp;'.cms_admin_utils::get_help_tag('core','help_content_menutext');
 	return array('<label for="in_menutext">*'.lang('menutext').':</label>'.$help,
 		     '<input type="text" name="menutext" id="in_menutext" value="'.cms_htmlentities($this->mMenuText).'" />');
 
@@ -2125,19 +2125,19 @@ abstract class ContentBase
 	$tmp = $contentops->CreateHierarchyDropdown($this->mId, $this->mParentId, 'parent_id', 0, 1, 0, 1,get_site_preference('listcontent_showtitle',true) );
 	if( empty($tmp) && !check_permission(get_userid(),'Manage All Content') )
 	  return array('','<input type="hidden" name="parent_id" value="'.$this->mParentId.'" />');
-	$help = '&nbsp;'.cms_admin_utils::get_help_tag('help_content_parent');
+	$help = '&nbsp;'.cms_admin_utils::get_help_tag('core','help_content_parent');
 	if( !empty($tmp) ) return array('<label for="parent_id">*'.lang('parent').':</label>'.$help,$tmp);
 	break;
 
       case 'active':
 	if( !$this->DefaultContent() ) {
-	  $help = '&nbsp;'.cms_admin_utils::get_help_tag('help_content_active');
+	  $help = '&nbsp;'.cms_admin_utils::get_help_tag('core','help_content_active');
 	  return array('<label for="id_active">'.lang('active').':</label>'.$help,'<input type="hidden" name="active" value="0"/><input class="pagecheckbox" type="checkbox" name="active" id="id_active" value="1"'.($this->mActive?' checked="checked"':'').' />');
 	}
 	break;
 
       case 'showinmenu':
-	$help = '&nbsp;'.cms_admin_utils::get_help_tag('help_content_active');
+	$help = '&nbsp;'.cms_admin_utils::get_help_tag('core','help_content_active');
 	return array('<label for="showinmenu">'.lang('showinmenu').':</label>'.$help,
 		     '<input type="hidden" name="showinmenu" value="0"/><input class="pagecheckbox" type="checkbox" value="1" name="showinmenu" id="showinmenu"'.($this->mShowInMenu?' checked="checked"':'').' />');
 
@@ -2147,12 +2147,12 @@ abstract class ContentBase
 	$text .= '<option value="_parent"'.($this->GetPropertyValue('target')=='_parent'?' selected="selected"':'').'>_parent</option>';
 	$text .= '<option value="_self"'.($this->GetPropertyValue('target')=='_self'?' selected="selected"':'').'>_self</option>';
 	$text .= '<option value="_top"'.($this->GetPropertyValue('target')=='_top'?' selected="selected"':'').'>_top</option>';
-	$help = '&nbsp;'.cms_admin_utils::get_help_tag('help_content_target');
+	$help = '&nbsp;'.cms_admin_utils::get_help_tag('core','help_content_target');
 	return array('<label for="target">'.lang('target').':</label>'.$help,
 		     '<select name="target" id="target">'.$text.'</select>');
 
       case 'alias':
-	$help = '&nbsp;'.cms_admin_utils::get_help_tag('help_page_alias');
+	$help = '&nbsp;'.cms_admin_utils::get_help_tag('core','help_page_alias');
 	return array('<label for="alias">'.lang('pagealias').':</label>'.$help,
 		     '<input type="text" name="alias" id="alias" value="'.$this->mAlias.'" />');
 
@@ -2163,7 +2163,7 @@ abstract class ContentBase
 	}
 	$str  = '<input type="hidden" name="secure" value="0"/>';
 	$str .= '<input type="checkbox" name="secure" id="secure" value="1"'.$opt.'/>';
-	$help = '&nbsp;'.cms_admin_utils::get_help_tag('help_content_secure');
+	$help = '&nbsp;'.cms_admin_utils::get_help_tag('core','help_content_secure');
 	return array('<label for="secure">'.lang('secure_page').':</label>'.$help,$str);
 
       case 'page_url':
@@ -2173,7 +2173,7 @@ abstract class ContentBase
 	  if( get_site_preference('content_mandatory_urls',0) ) {
 	    $prompt = '*'.$prompt;
 	  }
-	  $help = '&nbsp;'.cms_admin_utils::get_help_tag('help_page_url');
+	  $help = '&nbsp;'.cms_admin_utils::get_help_tag('core','help_page_url');
 	  return array($prompt.$help,$str);
 	}
 	break;
@@ -2183,7 +2183,7 @@ abstract class ContentBase
  	$data = $this->GetPropertyValue('image');
 	$dropdown = create_file_dropdown('image',$dir,$data,'jpg,jpeg,png,gif','',true,'','thumb_',1,1);
 	if( !$dropdown ) return;
-	$help = '&nbsp;'.cms_admin_utils::get_help_tag('help_content_image');
+	$help = '&nbsp;'.cms_admin_utils::get_help_tag('core','help_content_image');
 	return array('<label for="image">'.lang('image').':</label>'.$help,$dropdown);
 
       case 'thumbnail':
@@ -2191,36 +2191,36 @@ abstract class ContentBase
 	$data = $this->GetPropertyValue('thumbnail');
 	$dropdown = create_file_dropdown('thumbnail',$dir,$data,'jpg,jpeg,png,gif','',true,'','thumb_',0,1);
 	if( !$dropdown ) return FALSE;
-	$help = '&nbsp;'.cms_admin_utils::get_help_tag('help_content_thumbnail');
+	$help = '&nbsp;'.cms_admin_utils::get_help_tag('core','help_content_thumbnail');
 	return array('<label for="thumbnail">'.lang('thumbnail').':</label>'.$help,$dropdown);
 
       case 'titleattribute':
-	$help = '&nbsp;'.cms_admin_utils::get_help_tag('help_content_titleattribute');
+	$help = '&nbsp;'.cms_admin_utils::get_help_tag('core','help_content_titleattribute');
 	return array('<label for="titleattribute">'.lang('titleattribute').':</label>'.$help,
 		     '<input type="text" name="titleattribute" id="titleattribute" maxlength="255" size="80" value="'.cms_htmlentities($this->mTitleAttribute).'" />');
 
       case 'accesskey':
-	$help = '&nbsp;'.cms_admin_utils::get_help_tag('help_content_accesskey');
+	$help = '&nbsp;'.cms_admin_utils::get_help_tag('core','help_content_accesskey');
 	return array('<label for="accesskey">'.lang('accesskey').':</label>'.$help,
 		     '<input type="text" name="accesskey" id="accesskey" maxlength="5" value="'.cms_htmlentities($this->mAccessKey).'" />');
 
       case 'tabindex':
-	$help = '&nbsp;'.cms_admin_utils::get_help_tag('help_content_tabindex');
+	$help = '&nbsp;'.cms_admin_utils::get_help_tag('core','help_content_tabindex');
 	return array('<label for="tabindex">'.lang('tabindex').':</label>'.$help,
 		     '<input type="text" name="tabindex" id="tabindex" maxlength="5" value="'.cms_htmlentities($this->mTabIndex).'" />');
 
       case 'extra1':
-	$help = '&nbsp;'.cms_admin_utils::get_help_tag('help_content_extra1');
+	$help = '&nbsp;'.cms_admin_utils::get_help_tag('core','help_content_extra1');
 	return array('<label for="extra1">'.lang('extra1').':</label>'.$help,
 		     '<input type="text" name="extra1" id="extra1" maxlength="255" size="80" value="'.cms_htmlentities($this->GetPropertyValue('extra1')).'" />');
 
       case 'extra2':
-	$help = '&nbsp;'.cms_admin_utils::get_help_tag('help_content_extra2');
+	$help = '&nbsp;'.cms_admin_utils::get_help_tag('core','help_content_extra2');
 	return array('<label for="extra2">'.lang('extra2').':</label>'.$help,
 		     '<input type="text" name="extra2" id="extra2" maxlength="255" size="80" value="'.cms_htmlentities($this->GetPropertyValue('extra2')).'" />');
 	      
       case 'extra3':
-	$help = '&nbsp;'.cms_admin_utils::get_help_tag('help_content_extra3');
+	$help = '&nbsp;'.cms_admin_utils::get_help_tag('core','help_content_extra3');
 	return array('<label for="extra3">'.lang('extra3').':</label>'.$help,
 		     '<input type="text" name="extra3" id="extra3" maxlength="255" size="80" value="'.cms_htmlentities($this->GetPropertyValue('extra3')).'" />');
 
@@ -2228,7 +2228,7 @@ abstract class ContentBase
 	$showadmin = check_ownership(get_userid(), $this->Id());
 	$userops = $gCms->GetUserOperations();
 	if (!$adding && ($showadmin || check_permission(get_userid(),'Manage All Content')) ) {
-	  $help = '&nbsp;'.cms_admin_utils::get_help_tag('help_content_owner');
+	  $help = '&nbsp;'.cms_admin_utils::get_help_tag('core','help_content_owner');
 	  return array('<label for="owner">'.lang('owner').':</label>'.$help, $userops->GenerateDropdown($this->Owner()));
 	}
 	break;

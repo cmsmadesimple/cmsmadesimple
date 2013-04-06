@@ -76,6 +76,7 @@ $lang['friendlyname'] = 'Content Manager';
 #G
 
 #H
+$lang['help_content_type'] = 'The content type controls the overall function of an item.  Some content types are used for building HTML pages, while others are for building links or other navigation functions.';
 $lang['help_listsettings_namecolumn'] = 'Specify what text should be displayed in the &quot;Name&quot; column of the content list view.  Choose either the page title, or menu text';
 $lang['help_listsettings_visiblecolumns'] = 'Select which columns to display in the content list view.  Use caution here as some functionality may not be available if the column is hidden';
 $lang['help_pagedflt_active'] = 'Indicate wether new pages will be active by default.  Site visitors cannot navigate to inactive pages';
