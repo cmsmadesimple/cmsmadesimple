@@ -167,6 +167,12 @@ function setup_js() {
       }
     });
   });
+  $('#ajax_find').keypress(function(e){
+    if( e.which == 13 ) {
+      e.preventDefault(); 
+      return false;
+    }
+  });
   $('#ajax_find').autocomplete({
     source: '{cms_action_url action=admin_ajax_pagelookup forjs=1}&showtemplate=false',
     minLength: 2,
