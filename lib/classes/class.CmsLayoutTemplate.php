@@ -583,11 +583,8 @@ class CmsLayoutTemplate
 		$db = cmsms()->GetDb();
 		$row = null;
 		if( (int)$a > 0 ) {
-			if( isset(self::$_obj_cache[$a]) ) {
-				return self::$_obj_cache[$a];
-			}
-			$query = 'SELECT * FROM '.cms_db_prefix().self::TABLENAME.'
-                WHERE id = ?';
+			if( isset(self::$_obj_cache[$a]) ) return self::$_obj_cache[$a];
+			$query = 'SELECT * FROM '.cms_db_prefix().self::TABLENAME.' WHERE id = ?';
 			$row = $db->GetRow($query,array((int)$a));
 		}
 		else if( is_string($a) && strlen($a) > 0 ) {
@@ -596,8 +593,7 @@ class CmsLayoutTemplate
 				return self::$_obj_cache[$n];
 			}
 
-			$query = 'SELECT * FROM '.cms_db_prefix().self::TABLENAME.'
-                WHERE name = ?';
+			$query = 'SELECT * FROM '.cms_db_prefix().self::TABLENAME.' WHERE name = ?';
 			$row = $db->GetRow($query,array($a));
 		}
 		if( !is_array($row) || count($row) == 0 ) {

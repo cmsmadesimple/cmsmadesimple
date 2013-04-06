@@ -7,7 +7,7 @@ if( isset($params['template']) ) {
   $template = trim($params['template']);
 }
 
-$cache_id = '|ns'.md5(serialize($params));
+$cache_id = '|nav'.md5(serialize($params));
 $compile_id = '';
 
 if( !$smarty->isCached($this->GetTemplateResource($template),$cache_id,$compile_id) ) {
@@ -39,7 +39,7 @@ if( !$smarty->isCached($this->GetTemplateResource($template),$cache_id,$compile_
   $pagestack = array();
   $curNode = $endNode;
   $count = 0;
-  $prevedepth = 1;
+  $prevdepth = 1;
 
   while( is_object($curNode) && $curNode->get_tag('id') > 0 ) {
     $content = $curNode->getContent($deep,true,true);

@@ -6,10 +6,11 @@ final class AdminSearch_tools
 
   public static function get_slave_classes()
   {
-    $cachefn = cms_join_path(TMP_CACHE_LOCATION,'c'.md5(get_class()));
-    if( !file_exists($cachefn) || filemtime($cachefn) < time() - 3600 ) {
-      // cache file needs refreshing.
-      
+    $key = __CLASS__.'slaves';
+    $results = null;
+    $data =  cms_cache_handler::get_instance()->get($key);
+    if( !$data ) {
+      // cache needs refreshing.    
       $results = array();
 
       // get module results.
@@ -44,13 +45,13 @@ final class AdminSearch_tools
       }
 
       // store the results into the cache.
-      file_put_contents($cachefn,serialize($results));
+      cms_cache_handler::get_instance()->set($key,serialize($results));
+    }
+    else {
+      $results = unserialize($data);
     }
 
-    $data = file_get_contents($cachefn);
-    if( $data ) {
-      return unserialize($data);
-    }
+    return $results;
   }
 
   public static function summarize($text,$len = 255)

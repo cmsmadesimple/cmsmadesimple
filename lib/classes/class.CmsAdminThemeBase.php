@@ -148,9 +148,11 @@ abstract class CmsAdminThemeBase
 	private function _get_user_module_info()
 	{
 		$uid = get_userid(FALSE);
-		$fn = TMP_CACHE_LOCATION.'/themeinfo_'.$uid.'.cache';
-		$data = null;
-		if( !file_exists($fn) ) {
+		if( ($data = cms_cache_handler::get_instance()->get('themeinfo'.$uid)) ) {
+			$data = base64_decode($data);
+			$data = unserialize($data);
+		}
+		else {
 			// data doesn't exist.. gotta build it.
 			$allmodules = ModuleOperations::get_instance()->GetInstalledModules();
 			$usermoduleinfo = array();
@@ -174,12 +176,7 @@ abstract class CmsAdminThemeBase
 			// even if the array is empty... serialize the info.
 			$data = $usermoduleinfo;
 			$tmp = serialize($data);
-			file_put_contents($fn,base64_encode($tmp));
-		}
-		else {
-			$data = file_get_contents($fn);
-			$data = base64_decode($data);
-			$data = unserialize($data);
+			cms_cache_handler::get_instance()->set('themeinfo'.$uid,base64_encode($tmp));
 		}
 		return $data;
 	}

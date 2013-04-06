@@ -1,4 +1,4 @@
-<?php
+<?php // -*- mode:php; tab-width:2; indent-tabs-mode:t; c-basic-offset:2; -*-
 #BEGIN_LICENSE
 #-------------------------------------------------------------------------
 # Module: Navigator (c) 2013 by Robert Campbell 
@@ -61,11 +61,13 @@ final class Navigator extends CMSModule
     $this->SetParameterType('show_root_siblings',CLEAN_INT);
     $this->SetParameterType('start_element',CLEAN_STRING); // yeah, it's a string
     $this->SetParameterType('start_page',CLEAN_STRING); 
+    $this->SetParameterType('start_text',CLEAN_STRING); 
     $this->SetParameterType('start_level',CLEAN_INT);
     $this->SetParameterType('template',CLEAN_STRING); 
     $this->SetParameterType('childrenof',CLEAN_STRING);
     $this->SetParameterType('loadprops',CLEAN_INT);
     $this->SetParameterType('collapse',CLEAN_INT);
+    $this->SetParameterType('root',CLEAN_STRING);
   }
 
   public function InitializeAdmin()
@@ -76,15 +78,17 @@ final class Navigator extends CMSModule
     $this->CreateParameter('show_root_siblings', '1', $this->lang('help_show_root_siblings'));
     $this->CreateParameter('start_element', '1.2', $this->lang('help_start_element'));
     $this->CreateParameter('start_page', '', $this->lang('help_start_page'));
+    $this->CreateParameter('start_text', '', $this->lang('help_start_text'));
     $this->CreateParameter('start_level', '', $this->lang('help_start_level'));
     $this->CreateParameter('template', '', $this->lang('help_template'));
     $this->CreateParameter('childrenof','',$this->Lang('help_childrenof'));
     $this->CreateParameter('action','',$this->Lang('help_action'));
     $this->CreateParameter('loadprops','',$this->Lang('help_loadprops'));
     $this->CreateParameter('collapse','',$this->Lang('help_collapse'));
+    $this->CreateParameter('root','',$this->Lang('help_root'));
   }
 
-  final static public function smarty_cms_breadcrumbs($params,&$smarty)
+  final static public function nav_breadcrumbs($params,&$smarty)
   {
     $params['action'] = 'breadcrumbs';
     $params['module'] = __CLASS__;
@@ -108,12 +112,13 @@ final class Navigator extends CMSModule
     case 'navigation':
       $fn = 'simple_navigation.tpl';
       break;
+    case 'breadcrumbs':
+      $fn = 'dflt_breadcrumbs.tpl';
+      break;
     }
 
     $fn = cms_join_path(dirname(__FILE__),'templates',$fn);
-    if( file_exists($fn) ) {
-      return @file_get_contents($fn);
-    }
+    if( file_exists($fn) ) return @file_get_contents($fn);
   }
 } // End of class
 

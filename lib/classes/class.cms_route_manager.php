@@ -324,37 +324,27 @@ final class cms_route_manager
 
 	private static function _get_routes_from_cache()
 	{
-		$fn = self::_get_cache_filespec();
-		if( !file_exists($fn) ) {
-			$db = cmsms()->GetDb();
-			$query = 'SELECT * FROM '.cms_db_prefix().'routes';
-			$tmp = $db->GetArray($query);
-			self::$_routes_loaded = TRUE;
-			if( is_array($tmp) && count($tmp) ) {
-				$fn = self::_get_cache_filespec();
-				file_put_contents($fn,serialize($tmp));
-				return $tmp;
-			}
+		if( ($data = cms_cache_handler::get_instance()->get(__CLASS__)) ) {
+			return unserialize($data);
 		}
-		else {
-			self::$_routes_loaded = TRUE;
-			return unserialize(file_get_contents($fn));
+
+		$db = cmsms()->GetDb();
+		$query = 'SELECT * FROM '.cms_db_prefix().'routes';
+		$tmp = $db->GetArray($query);
+		self::$_routes_loaded = TRUE;
+		if( is_array($tmp) && count($tmp) ) {
+			cms_cache_handler::get_instance()->set(__CLASS__,serialize($tmp));
+			return $tmp;
 		}
-	}
-
-
-	private static function _get_cache_filespec()
-	{
-		return TMP_CACHE_LOCATION.'/'.md5(TMP_CACHE_LOCATION.get_class()).'.dat';
 	}
 
 
 	private static function _clear_cache()
 	{
-		@unlink(self::_get_cache_filespec());
+		// note: dynamic routes don't get cleared.
+		cms_cache_handler::get_instance()->erase(__CLASS__);
 		self::$_routes = null;
 		self::$_routes_loaded = FALSE;
-		// note: dynamic routes don't get cleared.
 	}
 } // end of class
 

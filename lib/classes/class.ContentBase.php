@@ -1529,8 +1529,7 @@ abstract class ContentBase
 	$query = "UPDATE ".cms_db_prefix()."content SET item_order = item_order - 1 WHERE parent_id = ? AND item_order > ?";
 	$result = $db->Execute($query,array($this->ParentId(),$this->ItemOrder()));
 
-	$cachefilename = TMP_CACHE_LOCATION . '/contentcache.php';
-	@unlink($cachefilename);
+	cms_cache_handler::get_instance()->erase('contentcache');
 
 	// DELETE properties
 	$query = 'DELETE FROM '.cms_db_prefix().'content_props WHERE content_id = ?';

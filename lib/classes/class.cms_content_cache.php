@@ -57,21 +57,21 @@ final class cms_content_cache
 	{
 		if( !cmsms()->is_frontend_request() ) return;
 
+		$content_ids = null;
+		$deep = FALSE;
 		$this->_key = 'pc'.md5($_SERVER['REQUEST_URI'].serialize($_GET));
-		$fn = cms_join_path(TMP_CACHE_LOCATION,$this->_key);
-		if( file_exists($fn) && filemtime($fn) >= time() - 3600 ) {
-			$content_ids = null;
-			$tmp = file_get_contents($fn);
+		if( ($data = cms_cache_handler::get_instance()->get($this->_key,__CLASS__)) ) {
+			list($lastmtime,$deep,$content_ids) = unserialize($data);
+			if( $lastmtime < ContentOperations::get_instance()->GetLastContentModification() ) {
+				$deep = null;
+				$content_ids = null;
+			}
+		}
+		if( is_array($content_ids) && count($content_ids) ) {
+			$this->_preload_cache = $content_ids;
+			$contentops = ContentOperations::get_instance();
 			$deep = false;
-			if( $tmp ) {
-				list($deep,$content_ids) = unserialize($tmp);
-			}
-			if( is_array($content_ids) && count($content_ids) ) {
-				$this->_preload_cache = $content_ids;
-				$contentops = ContentOperations::get_instance();
-				$deep = false;
-				$tmp = $contentops->LoadChildren(null,$deep,false,$content_ids);
-			}
+			$tmp = $contentops->LoadChildren(null,$deep,false,$content_ids);
 		}
 	}
 
@@ -116,9 +116,8 @@ final class cms_content_cache
 						break;
 					}
 				}
-				$tmp = array($deep,$list);
-				$fn = cms_join_path(TMP_CACHE_LOCATION,$this->_key);
-				file_put_contents($fn,serialize($tmp));
+				$tmp = array(time(),$deep,$list);
+				cms_cache_handler::get_instance()->set($this->_key,serialize($tmp),__CLASS__);
 			}
 		}
 	}

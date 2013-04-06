@@ -29,7 +29,7 @@
  * @package CMS
  * @author Robert Campbell (calguy1000@cmsmadesimple.org)
  */
-class cms_config implements ArrayAccess
+final class cms_config implements ArrayAccess
 {
   const TYPE_STRING = 'STRING';
   const TYPE_INT = 'INT';
@@ -278,11 +278,11 @@ class cms_config implements ArrayAccess
 		  $this->_cache[$key] = $str;
 		  return $str;
 		  break;
-		  
+
 	  case 'ssl_url':
 		  $this->_cache[$key] = str_replace('http://','https://',$this->offsetGet('root_url'));
 		  return $this->_cache[$key];
-		  
+
 	  case 'uploads_path':
 		  $this->_cache[$key] = cms_join_path($this->offsetGet('root_path'),'uploads');
 		  return $this->_cache[$key];
@@ -290,11 +290,11 @@ class cms_config implements ArrayAccess
 	  case 'uploads_url':
 		  $this->_cache[$key] = $this->offsetGet('root_url').'/uploads';
 		  return $this->_cache[$key];
-		  
+
 	  case 'ssl_uploads_url':
 		  $this->_cache[$key] = str_replace('http://','https://',$this->offsetGet('uploads_url'));
 		  return $this->_cache[$key];
-		  
+
 	  case 'image_uploads_path':
 		  $this->_cache[$key] = cms_join_path($this->offsetGet('uploads_path'),'images');
 		  return $this->_cache[$key];
@@ -306,7 +306,7 @@ class cms_config implements ArrayAccess
 	  case 'ssl_image_uploads_url':
 		  $this->_cache[$key] = str_replace('http://','https://',$this->offsetGet('image_uploads_url'));
 		  return $this->_cache[$key];
-		  
+
 	  case 'previews_path':
 		  return TMP_CACHE_LOCATION;
 
@@ -361,7 +361,7 @@ class cms_config implements ArrayAccess
 		  return false;
 
 	  case 'css_path':
-		  return TMP_CACHE_LOCATION.'/';
+		  return PUBLIC_CACHE_LOCATION.'/';
 
 	  case 'css_url':
 		  return $this->offsetGet('root_url').'/tmp/cache/';
@@ -451,7 +451,7 @@ class cms_config implements ArrayAccess
 
 	  $output = "<?php\n# CMS Made Simple Configuration File\n# Documentation: /doc/CMSMS_config_reference.pdf\n#\n";
 	  // output header to the config file.
-	  
+
 	  foreach( $this->_data as $key => $value ) {
 		  $outvalue = $this->_printable_value($key,$value);
 		  $output .= "\$config['{$key}'] = $outvalue;\n";
@@ -492,4 +492,8 @@ class cms_config implements ArrayAccess
   }
 } // end of class
 
+#
+# EOF
+#
+# vim:ts=4 sw=4 noet
 ?>

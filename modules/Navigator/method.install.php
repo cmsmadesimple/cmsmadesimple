@@ -61,6 +61,23 @@ catch( CmsException $e ) {
 }
 
 try {
+  $bc_template_type = new CmsLayoutTemplateType();
+  $bc_template_type->set_originator($this->GetName());
+  $bc_template_type->set_name('breadcrumbs');
+  $bc_template_type->set_dflt_flag(TRUE);
+  $bc_template_type->set_lang_callback('Navigator::page_type_lang_callback');
+  $bc_template_type->set_content_callback('Navigator::reset_page_type_defaults');
+  $bc_template_type->reset_content_to_factory();
+  $bc_template_type->save();
+}
+catch( CmsException $e ) {
+  // log it
+  debug_to_log(__FILE__.':'.__LINE__.' '.$e->GetMessage());
+  audit('',$this->GetName(),'Installation Error: '.$e->GetMessage());
+  return FALSE;
+}
+
+try {
   $fn = cms_join_path(dirname(__FILE__),'templates','simple_navigation.tpl');
   if( file_exists( $fn ) ) {
     $template = @file_get_contents($fn);
@@ -69,6 +86,18 @@ try {
     $tpl->set_owner($uid);
     $tpl->set_content($template);
     $tpl->set_type($menu_template_type);
+    $tpl->set_type_dflt(TRUE);
+    $tpl->save();
+  }
+
+  $fn = cms_join_path(dirname(__FILE__),'templates','dflt_breadcrumbs.tpl');
+  if( file_exists( $fn ) ) {
+    $template = @file_get_contents($fn);
+    $tpl = new CmsLayoutTemplate();
+    $tpl->set_name('Breadcrumbs');
+    $tpl->set_owner($uid);
+    $tpl->set_content($template);
+    $tpl->set_type($bc_template_type);
     $tpl->set_type_dflt(TRUE);
     $tpl->save();
   }

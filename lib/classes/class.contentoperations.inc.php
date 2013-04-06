@@ -465,7 +465,25 @@ class ContentOperations
 		$this->ClearCache();
 	}
 
-	
+
+	/**
+	 * Get the date of last content modification
+	 *
+	 * @since 2.0
+	 * @return unix timestamp representing the last time a content page was modified.
+	 */
+	function GetLastContentModification()
+	{
+		static $last_modified = -1;
+		if( $last_modified <= 0 ) {
+			$db = cmsms()->GetDb();
+			$query = 'SELECT modified_date FROM '.cms_db_prefix().'content ORDER BY modified_date DESC';
+			$val = $db->GetOne($query);
+			$last_modified = $db->UnixTimeStamp($val);
+		}
+		return $last_modified;
+	}
+
 	/**
 	 * Loads a set of content objects into the cached tree.
 	 *
@@ -480,46 +498,25 @@ class ContentOperations
 		$gCms = cmsms();
 		$db = $gCms->GetDb();
 		$tree = null;
-		$cachefilename = TMP_CACHE_LOCATION . '/contentcache.php';
 		$loadedcache = false;
 
-		if (file_exists($cachefilename)) {
-			$last_modified = cms_utils::get_app_data('last_content_modification');
-			if( $last_modified <= 0 ); {
-				$query = 'SELECT modified_date FROM '.cms_db_prefix().'content ORDER BY modified_date DESC';
-				$val = $db->GetOne($query);
-				$last_modified = $db->UnixTimeStamp($val);
-				cms_utils::set_app_data('last_content_modification',$last_modified);
-			}
-			if ($last_modified > 0 && $last_modified < filemtime($cachefilename)) {
-				debug_buffer('Content tree file needs loading');
-				
-				$handle = fopen($cachefilename, "r");
-				$data = fread($handle, filesize($cachefilename));
-				fclose($handle);
-				
-				$tree = unserialize(substr($data, 16));
-				
-				if (strtolower(get_class($tree)) == 'cms_content_tree') {
+		if( ($tmp = cms_cache_handler::get_instance()->get('contentcache')) ) {
+			list($mtime,$data) = unserialize($tmp);
+			if( $mtime > $this->GetLastContentModification() ) {
+				if( get_class($data) == 'cms_content_tree' ) {
+					$tree = $data;
 					$loadedcache = true;
-				}
-				else {
-					$loadedcache = false;
 				}
 			}
 		}
 
 		if (!$loadedcache) {
-			debug_buffer('', 'Start Loading Children into Tree');
+			debug_buffer('', 'Start loading content tree from database and serializing');
 			$query = 'SELECT content_id,parent_id,content_alias FROM '.cms_db_prefix().'content ORDER BY parent_id,item_order';
 			$nodes = $db->GetArray($query);
 			$tree = cms_tree_operations::load_from_list($nodes);
-			debug_buffer('', 'End Loading Children into Tree');
-		}
-
-		if (!$loadedcache) {
-			debug_buffer("Serializing...");
-			@file_put_contents($cachefilename, '<?php return; ?>'.serialize($tree));
+			cms_cache_handler::get_instance()->set('contentcache',serialize(array(time(),$tree)));
+			debug_buffer('', 'End content loading tree from database and serializing');
 		}
 
 		if( $loadcontent ) {
@@ -977,13 +974,7 @@ class ContentOperations
 		unset($gCms->hrinstance);
 		$smarty->clear_all_cache();
 		$smarty->clear_compiled_tpl();
-
-		if (is_file(TMP_CACHE_LOCATION . '/contentcache.php')) {
-			unlink(TMP_CACHE_LOCATION . '/contentcache.php');
-		}
-
-		@touch(cms_join_path(TMP_CACHE_LOCATION,'index.html'));
-		@touch(cms_join_path(TMP_TEMPLATES_C_LOCATION,'index.html'));
+		$gCms->clear_cached_files();
 	}
 
 	/**
