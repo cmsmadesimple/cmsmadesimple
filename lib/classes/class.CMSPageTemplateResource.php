@@ -1,4 +1,4 @@
-<?php
+<?php // -*- mode:php; tab-width:4; indent-tabs-mode:t; c-basic-offset:4; -*-
 #CMS - CMS Made Simple
 #(c)2004-2012 by Ted Kulp (wishy@users.sf.net)
 #This project's homepage is: http://www.cmsmadesimple.org
@@ -39,8 +39,7 @@ class CMSPageTemplateResource extends CMS_Fixed_Resource_Custom
 
 	public function __construct($section = '')
 	{
-		if( in_array($section,array('top','head','body')) ) 
-		{
+		if( in_array($section,array('top','head','body')) ) {
 			$this->_section = $section;
 		}
 	}
@@ -52,8 +51,7 @@ class CMSPageTemplateResource extends CMS_Fixed_Resource_Custom
 
 	private function get_template($name)
 	{
-		if( !is_array(self::$_templates) || !isset(self::$_templates[$name]) )
-		{
+		if( !is_array(self::$_templates) || !isset(self::$_templates[$name]) ) {
 			if( !is_array(self::$_templates) ) self::$_templates = array();
 
 			$templateops = cmsms()->GetTemplateOperations();
@@ -64,8 +62,7 @@ class CMSPageTemplateResource extends CMS_Fixed_Resource_Custom
 				$templateobj = $templateops->LoadTemplateByID($name);
 			}
 
-			if( is_object($templateobj) && $templateobj !== FALSE )
-			{
+			if( is_object($templateobj) && $templateobj !== FALSE ) {
 				$name = $templateobj->name;
 				self::$_templates[$name] = $templateobj;
 			}
@@ -74,20 +71,17 @@ class CMSPageTemplateResource extends CMS_Fixed_Resource_Custom
 			}
 		}
 		
-		if( isset(self::$_templates[$name]) )
-		{
+		if( isset(self::$_templates[$name]) ) {
 			return self::$_templates[$name];
 		}
 	}
 
 	protected function fetch($name,&$source,&$mtime)
 	{
-		if( is_sitedown() && cmsms()->is_frontend_request() ) 
-		{
+		if( is_sitedown() && cmsms()->is_frontend_request() ) {
 			$source = '';
 			$mtime = time();
-			if( $this->_section == 'body' ) 
-			{
+			if( $this->_section == 'body' ) {
 				header('HTTP/1.0 503 Service Unavailable');
 				header('Status: 503 Service Unavailable');
 				$source = get_site_preference('sitedownmessage');
@@ -96,8 +90,7 @@ class CMSPageTemplateResource extends CMS_Fixed_Resource_Custom
 			return;
 		}
 
-		if( $name == 'notemplate' ) 
-		{
+		if( $name == 'notemplate' ) {
 			$source = '{content}';
 			$mtime = time(); // never cache...
 			return;
@@ -115,50 +108,39 @@ class CMSPageTemplateResource extends CMS_Fixed_Resource_Custom
 		$tpl = $this->get_template($name);
 		if( !is_object($tpl) ) return;
 
-		// Make sure that <head or </head won't collapse
-		$compare_content = $tpl->content;
-		$compare_content = preg_replace('/<(head|\/head).+\b[^>]*>/', '##DUMMY##', $compare_content);
-		
 		// Get section, do magic.
 		switch( $this->_section ) {
-		
 			case 'top':
-			
 				$mtime = $tpl->modified_date;
-				$pos = stripos($compare_content,'<head');
-				if( $pos === FALSE ) return;
-				$source = substr($tpl->content,0,$pos);
-	
+				$pos1 = stripos($tpl->content,'<head');
+				$pos2 = stripos($tpl->content,'<header');
+				if( $pos1 === FALSE || $pos1 == $pos2 ) return;
+				$source = substr($tpl->content,0,$pos1);
 				return;
 
 			case 'head':
-			
 				$mtime = $tpl->modified_date;
-				$pos1 = stripos($compare_content,'<head');
-				$pos2 = stripos($compare_content,'</head>');
-				if( $pos1 === FALSE || $pos2 === FALSE ) return;
+				$pos1 = stripos($tpl->content,'<head');
+				$pos1a = stripos($tpl->content,'<header');
+				$pos2 = stripos($tpl->content,'</head>');
+				if( $pos1 === FALSE || $pos1 == $pos1a || $pos2 === FALSE ) return;
 				$source = substr($tpl->content,$pos1,$pos2-$pos1+7);
-				
 				return;
 
 			case 'body':
-			
 				$mtime = $tpl->modified_date;
-				$pos = stripos($compare_content,'</head>');
+				$pos = stripos($tpl->content,'</head>');
 				if( $pos !== FALSE ) {
 					$source = substr($tpl->content,$pos+7);
 				}
 				else {
 					$source = $tpl->content;
 				}
-				
 				return;
 
 			default:
-			
 				$source = $tpl->content;
 				$mtime = $tpl->modified_date;
-				
 				return;
 		}
 	}
@@ -167,4 +149,5 @@ class CMSPageTemplateResource extends CMS_Fixed_Resource_Custom
 #
 # EOF
 #
+# vim:ts=4 sw=4 noet
 ?>
