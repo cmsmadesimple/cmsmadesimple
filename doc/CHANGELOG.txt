@@ -2,6 +2,7 @@ Version 1.11.6 - Merchena
 -----------------------------
 Core - General
   - Fixes a problem with template parsing and <head vs. <header
+  - Fixes a problem with some modules not listening to the {cms_set_language} stuff... order of execution problem.
 
 
 Version 1.11.5 - Puerto Ayora
