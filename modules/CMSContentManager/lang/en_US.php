@@ -54,6 +54,7 @@ $lang['error_copy_permission'] = 'You do not have permission to copy this conten
 $lang['error_delete_defaultcontent'] = 'You cannot delete the default content page';
 $lang['error_delete_haschildren'] = 'You cannot delete a page that has children';
 $lang['error_delete_permission'] = 'You do not have permission to delete this content page';
+$lang['error_delete_novalidpages'] = 'None of the pages you selected can be deleted at this time';
 $lang['error_editpage_contenttype'] = 'The content type selected is invalid';
 $lang['error_editpage_permission'] = 'Insufficient permission to edit content pages (or this content page)';
 $lang['error_invalidbulkaction'] = 'Invalid bulk action';

@@ -143,6 +143,11 @@ foreach( $pagelist as $pid ) {
   $content = $node->getContent(FALSE,FALSE,FALSE);
   if( !is_object($content) ) continue; // this should never happen either
   
+  if( $content->DefaultContent() ) {
+    echo $this->ShowErrors($this->Lang('error_delete_defaultcontent'));
+    continue;
+  }
+
   $rec = array();
   $rec['id'] = $content->Id();
   $rec['name'] = $content->Name();
@@ -150,6 +155,11 @@ foreach( $pagelist as $pid ) {
   $rec['owner'] = $content->Owner();
   $rec['alias'] = $content->Alias();
   $displaydata[] = $rec;
+}
+
+if( count($displaydata) == 0 ) {
+  $this->SetError($this->Lang('error_delete_novalidpages'));
+  $this->RedirectToAdminTab();
 }
 
 $smarty->assign('pagelist',base64_encode(serialize($pagelist)));

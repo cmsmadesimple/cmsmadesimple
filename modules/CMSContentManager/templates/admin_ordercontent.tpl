@@ -19,6 +19,7 @@ $(document).ready(function(){
 
       $('#orderlist').val(tree);
       return true;
+    };
   });
 
   $('ul.sortable').nestedSortable({
