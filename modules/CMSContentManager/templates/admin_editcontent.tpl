@@ -63,6 +63,8 @@ $(document).ready(function(){
 // ]]>
 </script>
 
+{$extra_content|default:''}
+
 {if $content_id < 1}
 <h3>{$mod->Lang('prompt_editpage_addcontent')}</h3>
 {else}

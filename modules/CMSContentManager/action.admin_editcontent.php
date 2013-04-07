@@ -240,6 +240,12 @@ $modobj = cms_utils::get_wysiwyg_module();
 if( is_object($modobj) ) {
   $smarty->assign('wysiwyg_submit_script',$modobj->WYSIWYGPageFormSubmit());
 }
+$factory = new ContentAssistantFactory($content_obj);
+$assistant = $factory->getEditContentAssistant();
+if( is_object($assistant) ) {
+  $smarty->assign('extra_content',$assistant->getExtraCode());
+}
+
 
 echo $this->ProcessTemplate('admin_editcontent.tpl');
 
