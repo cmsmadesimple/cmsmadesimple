@@ -80,10 +80,14 @@ for ($i = 0; $i < count($filelist); $i++) {
   }
 
   $onerow->thumbnail = '';
-  if ($this->GetPreference("showthumbnails", 0) == 1) {
-    if ($filelist[$i]["image"]) {
-      $onerow->type[] = 'image';
-      //if (stripos($filelist[$i]["url"], $config["image_uploads_url"]) !== false) {
+  $onerow->editor = '';
+  if ($filelist[$i]["image"]) {
+    $onerow->type[] = 'image';
+    
+    $source = urlencode('../../../'.$path.'/'.$filelist[$i]['name']);
+    $onerow->editor = $config['root_url'].'/modules/'.$this->GetName().'/pie/index.php?imagesrc='.$source;
+    
+    if($this->GetPreference("showthumbnails", 0) == 1) {
       $onerow->thumbnail = $this->GetThumbnailLink($filelist[$i], $path);
     }
   }
@@ -103,8 +107,7 @@ for ($i = 0; $i < count($filelist); $i++) {
     if( $filelist[$i]['name'] != '..' ) {
       $countdirs++;
       $onerow->type = array('dir');
-    }
-    else {
+    } else {
       $onerow->noCheckbox = 1;
     }
     $onerow->txtlink = $this->CreateLink($id,

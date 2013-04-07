@@ -1,0 +1,22 @@
+/* Slider
+----------------------------------*/
+.ui-slider { position: relative; text-align: left; top: 15px; }
+.ui-slider .ui-slider-handle { background: url(../images/slider_pointer.gif) 0 0 no-repeat; position: absolute; z-index: 2; width: 11px; height: 17px; cursor: pointer; background-color: none; border: 0; }
+.ui-slider .ui-slider-range { position: absolute; z-index: 1; font-size: 1%; display: block; border: 0; }
+
+	
+
+.ui-slider-horizontal { background: url(../images/slider_track.gif) 0 0 repeat-x; height: 7px; background-color: none; border: 0; width: 401px;}
+
+#panel_4 .ui-slider-horizontal { background: url(../images/slider_track_small.gif) 0 0 repeat-x; height: 7px; background-color: none; border: 0; width: 255px;}
+
+.ui-slider-horizontal .ui-slider-handle { top: -.6em; margin-left: -5px; }
+.ui-slider-horizontal .ui-slider-range { top: 0; height: 100%; }
+.ui-slider-horizontal .ui-slider-range-min { left: 0; }
+.ui-slider-horizontal .ui-slider-range-max { right: 0; }
+
+.ui-slider-vertical { width: .8em; height: 100px; }
+.ui-slider-vertical .ui-slider-handle { left: -.3em; margin-left: 0; margin-bottom: -.6em; }
+.ui-slider-vertical .ui-slider-range { left: 0; width: 100%; }
+.ui-slider-vertical .ui-slider-range-min { bottom: 0; }
+.ui-slider-vertical .ui-slider-range-max { top: 0; }

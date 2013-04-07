@@ -176,7 +176,7 @@ refresh_url = refresh_url.replace(/amp;/g,'');
 	{cycle values="row1,row2" assign=rowclass}
   <tr class="{$rowclass}">    
     <td valign="middle">{if isset($file->thumbnail) && $file->thumbnail!=''}{$file->thumbnail}{else}{$file->iconlink}{/if}</td>
-    <td class="clickable" valign="middle">{$file->txtlink}</td>
+    <td class="clickable" valign="middle">{$file->txtlink}&nbsp;&nbsp;{if $file->editor}<a onclick="window.open('{$file->editor}', 'image_edition', config='height=600, width=600, toolbar=no, menubar=no, scrollbars=no, resizable=no, location=no, directories=no, status=no')" href="javascript:;"><img src='{root_url}/modules/FileManager/images/edit_pencil.gif' alt='edit image'/></a>{/if}</td>
     <td class="clickable" valign="middle">{$file->mime}</td>
     <td class="clickable" style="padding-right:8px;" valign="middle">{$file->fileinfo}</td>
     <td class="clickable" style="padding-right:8px;" valign="middle">{if isset($file->fileowner)}{$file->fileowner}{else}&nbsp;{/if}</td>
