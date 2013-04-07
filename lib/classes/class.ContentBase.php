@@ -1,4 +1,4 @@
-<?php
+<?php // -*- mode:php; tab-width:4; indent-tabs-mode:t; c-basic-offset:4; -*-
 # CMS - CMS Made Simple
 # (c)2004 by Ted Kulp (tedkulp@users.sf.net)
 # This project's homepage is: http://www.cmsmadesimple.org
@@ -2245,5 +2245,7 @@ abstract class ContentBase
 	throw new CmsInvalidDataException('Attempt to display invalid property '.$one);
       }
     }
-}
+} // end of class
+
+# vim:ts=4 sw=4 noet
 ?>
