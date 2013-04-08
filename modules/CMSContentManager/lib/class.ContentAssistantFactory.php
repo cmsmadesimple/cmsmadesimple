@@ -36,28 +36,31 @@
 
 class ContentAssistantFactory
 {
-  private $_content_obj;
+	private $_content_obj;
 
-  public function __construct(ContentBase $content_obj)
-  {
-    $this->_content_obj = $content_obj;
-  }
+	public function __construct(ContentBase $content_obj)
+	{
+		$this->_content_obj = $content_obj;
+	}
 
-  public function &getEditContentAssistant()
-  {
-    $classname = get_class($this->_content_obj);
-    while( 1 ) {
-      $test = $classname.'EditContentAssistant';
-      if( class_exists($test) ) {
-	$obj = new $test($this->_content_obj);
-	return $obj;
-      }
-      $classname = get_parent_class($classname);
-      if( !$classname ) {
-	$obj = null;
-	return $obj;
-      }
-    }
+	public function &getEditContentAssistant()
+	{
+		$classname = get_class($this->_content_obj);
+		$n = 0;
+		while( $n < 10 ) {
+			$n++;
+			$test = $classname.'EditContentAssistant';
+			if( class_exists($test) ) {
+				$obj = new $test($this->_content_obj);
+				return $obj;
+			}
+			$classname = get_parent_class($classname);
+			if( !$classname ) {
+				$obj = null;
+				return $obj;
+			}
+		}
+		throw new CmsException('Too many levels of hierarchy without finding an assistant');
   }
 } // end of class
 
