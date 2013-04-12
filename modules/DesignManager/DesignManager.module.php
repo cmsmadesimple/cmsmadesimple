@@ -32,7 +32,7 @@ final class DesignManager extends CMSModule
   function GetAuthorEmail() { return 'calguy1000@cmsmadesimple.org'; }
   function HasAdmin() { return true; }
   function GetAdminSection() { return 'layout'; }
-	function AllowAutoInstall() { return TRUE; }
+  function AllowAutoInstall() { return TRUE; }
   function GetHelp() { return file_get_contents(dirname(__FILE__).'/help.inc'); }
   function GetChangeLog() { return file_get_contents(dirname(__FILE__).'/changelog.inc'); }
   function GetAdminDescription() { return $this->Lang('moddescription'); }
