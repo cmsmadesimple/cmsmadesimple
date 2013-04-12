@@ -84,6 +84,18 @@ $lang['event_desc_editdesignpost'] = 'TODO';
 $lang['event_desc_editdesignpre'] = 'TODO';
 $lang['event_desc_edittemplatetypepost'] = 'TODO';
 $lang['event_desc_edittemplatetypepre'] = 'TODO';
+$lang['event_help_adddesignpre'] = 'TODO';
+$lang['event_help_adddesignpost'] = 'TODO';
+$lang['event_help_addtemplatetypepre'] = 'TODO';
+$lang['event_help_addtemplatetypepost'] = 'TODO';
+$lang['event_help_deletetemplatetypepre'] = 'TODO';
+$lang['event_help_deletetemplatetypepost'] = 'TODO';
+$lang['event_help_deletedesignpre'] = 'TODO';
+$lang['event_help_deletedesignpost'] = 'TODO';
+$lang['event_help_edittemplatetypepre'] = 'TODO';
+$lang['event_help_edittemplatetypepost'] = 'TODO';
+$lang['event_help_editdesignpre'] = 'TODO';
+$lang['event_help_editdesignpost'] = 'TODO';
 $lang['export_design'] = 'Export Design to XML';
 
 #F
