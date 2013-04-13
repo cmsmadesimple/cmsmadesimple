@@ -172,6 +172,7 @@ $lang['packfilewritefail'] = 'Could not open the file %s for writing';
 $lang['permission'] = 'Usage of the File Manager module';
 $lang['permissionadvanced'] = 'Advanced usage of the File Manager module';
 $lang['permissionstyle'] = 'Permission style';
+$lang['pie'] = 'Image editor';
 $lang['postinstall'] = 'FileManager module was installed';
 $lang['postletexists'] = 'Warning! Please remove the modules/FileManager/postlet directory completely. The CMS doesn\'t use it anymore.';
 $lang['prompt_copy'] = 'Copy one or more Items';

@@ -40,6 +40,9 @@ refresh_url = refresh_url.replace(/amp;/g,'');
       if( imgs == 1 ) {
         $('#btn_thumb').removeAttr('disabled').removeClass('disabled');
         if( jQuery.ui ) $('#btn_thumb').button( "option", "disabled", false );
+
+        $('#btn_pie').removeAttr('disabled').removeClass('disabled');
+        if( jQuery.ui ) $('#btn_pie').button( "option", "disabled", false );
       }
       if( text == 1 ) {
         $('#btn_view').removeAttr('disabled').removeClass('disabled');
@@ -105,7 +108,7 @@ refresh_url = refresh_url.replace(/amp;/g,'');
 
     $('#btn_view').live('click',function(){
       // find the selected item.
-      var tmp = $("#filesarea input[type='checkbox'].text").filter(':checked:').val();
+      var tmp = $("#filesarea input[type='checkbox']").filter(':checked:').val();
       var url = '{$viewfile_url}&showtemplate=false&{$actionid}viewfile='+tmp;
       url = url.replace(/amp;/g,'');
       $('#popup_contents').load(url);
@@ -121,6 +124,15 @@ refresh_url = refresh_url.replace(/amp;/g,'');
       else {
         $(this).parent().find(':checkbox:').removeAttr('checked').trigger('change');
       }
+    });
+
+    $('#btn_pie').live('click',function(){
+      // find the selected item.
+      var tmp = $("#filesarea input[type='checkbox']").filter(':checked:').val();
+      tmp = tmp.replace("=","");
+      var url = $("#pie_"+tmp).val();
+      window.open(url, 'image_edition', config='height=600, width=600, toolbar=no, menubar=no, scrollbars=no, resizable=no, location=no, directories=no, status=no');
+      return false;
     });
   });
 // ]]>
@@ -145,6 +157,7 @@ refresh_url = refresh_url.replace(/amp;/g,'');
     <input type="submit" id="btn_copy" name="{$actionid}fileactioncopy" value="{$mod->Lang('copy')}" class="filebtn"/> 
     <input type="submit" id="btn_unpack" name="{$actionid}fileactionunpack" value="{$mod->Lang('unpack')}" class="filebtn" onclick="return confirm('{$confirm_unpack}');"/>
     <input type="submit" id="btn_thumb" name="{$actionid}fileactionthumb" value="{$mod->Lang('thumbnail')}" class="filebtn"/>
+    <input type="submit" id="btn_pie" name="{$actionid}fileactionpie" value="{$mod->Lang('pie')}" class="filebtn"/>
   </fieldset>
 
 </div>
@@ -176,7 +189,7 @@ refresh_url = refresh_url.replace(/amp;/g,'');
 	{cycle values="row1,row2" assign=rowclass}
   <tr class="{$rowclass}">    
     <td valign="middle">{if isset($file->thumbnail) && $file->thumbnail!=''}{$file->thumbnail}{else}{$file->iconlink}{/if}</td>
-    <td class="clickable" valign="middle">{$file->txtlink}&nbsp;&nbsp;{if $file->editor}<a onclick="window.open('{$file->editor}', 'image_edition', config='height=600, width=600, toolbar=no, menubar=no, scrollbars=no, resizable=no, location=no, directories=no, status=no')" href="javascript:;"><img src='{root_url}/modules/FileManager/images/edit_pencil.gif' alt='edit image'/></a>{/if}</td>
+    <td class="clickable" valign="middle">{$file->txtlink}{if $file->editor}<input id='pie_{$file->urlname|replace:"=":""}' type='hidden' value='{$file->editor}'/>{/if}</td>
     <td class="clickable" valign="middle">{$file->mime}</td>
     <td class="clickable" style="padding-right:8px;" valign="middle">{$file->fileinfo}</td>
     <td class="clickable" style="padding-right:8px;" valign="middle">{if isset($file->fileowner)}{$file->fileowner}{else}&nbsp;{/if}</td>
