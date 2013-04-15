@@ -47,11 +47,11 @@
 						{/if}
 						{if !isset($smarty.get.forgotpw) && empty($smarty.get.forgotpw)}
 							<label for="lbpassword">{'password'|lang}</label>
-							<input id="lbpassword"{if !isset($smarty.post.lbpassword) or isset($error)} class="focus"{/if} placeholder="{'password'|lang}" name="password" type="password" size="15" />
+							<input id="lbpassword"{if !isset($smarty.post.lbpassword) or isset($error)} class="focus"{/if} placeholder="{'password'|lang}" name="password" type="password" size="15" maxlength="25" onpaste="return false;" />
 						{/if}
 						{if isset($changepwhash) && !empty($changepwhash)} 
 							<label for="lbpasswordagain">{'passwordagain'|lang}</label>
-							<input id="lbpasswordagain"  name="passwordagain" type="password" size="15" placeholder="{'passwordagain'|lang}" />
+							<input id="lbpasswordagain"  name="passwordagain" type="password" size="15" placeholder="{'passwordagain'|lang}" maxlength="25" onpaste="return false;"/>
 							<input type="hidden" name="forgotpwchangeform" value="1" />
 							<input type="hidden" name="changepwhash" value="{$changepwhash}" />
 						{/if}

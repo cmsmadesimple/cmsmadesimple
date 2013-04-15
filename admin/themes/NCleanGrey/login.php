@@ -82,8 +82,8 @@
 						</div>
 						<div class="login-fields">
 							<form method="post" action="login.php">
-								<input id="lbpassword"  name="password" type="password" size="15" /><br />
-								<input id="lbpasswordagain"  name="passwordagain" type="password" size="15" /><br />
+								<input id="lbpassword"  name="password" type="password" size="15" maxlength="25" /><br />
+								<input id="lbpasswordagain"  name="passwordagain" type="password" size="15" maxlength="25" /><br />
 								<input type="hidden" name="changepwhash" value="<?php echo $changepwhash ?>" />
 								<input type="hidden" name="forgotpwchangeform" value="1" />
 								<input class="loginsubmit" name="loginsubmit" type="submit" value="<?php echo lang('submit')?>" /> 
@@ -113,9 +113,9 @@
 						<p>
 							<input id="lbusername" name="username" <?php if(!isset($_POST['username'])) echo 'class="defaultfocus"' ?> type="text" size="15" value="<?php echo htmlentities(isset($_POST['username'])?$_POST['username']:'')?>" /><br />
 						<?php if(isset($error) && $error!='') {
-						  echo '<input id="lbpassword" class="defaultfocus" name="password" type="password" size="15" /><br />';
+						  echo '<input id="lbpassword" class="defaultfocus" name="password" type="password" size="15" maxlength="25" onpaste="return false;"/><br />';
 						} else {
-						  echo '<input id="lbpassword"  name="password" type="password" size="15" /><br />';
+						  echo '<input id="lbpassword"  name="password" type="password" size="15" maxlength="25" onpaste="return false;"/><br />';
 						} ?>
 							<input class="loginsubmit" name="loginsubmit" type="submit" value="<?php echo lang('submit')?>" /> 
 							<input class="loginsubmit" name="logincancel" type="submit" value="<?php echo lang('cancel')?>" />

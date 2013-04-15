@@ -1,358 +1,320 @@
-<?php
-#CMS - CMS Made Simple
-#(c)2004 by Ted Kulp (wishy@users.sf.net)
-#This project's homepage is: http://www.cmsmadesimple.org
+<?php // -*- mode:php; tab-width:4; indent-tabs-mode:t; c-basic-offset:4; -*-
+#BEGIN_LICENSE
+#-------------------------------------------------------------------------
+# cms_selflink (c) 2013 by Robert Campbell 
+#         (calguy1000@cmsmadesimple.org)
+#  A function for retrieving A url or link to an internal CMSMS Page.
+#  This is a rewrite of the original cms_selflink plugin by Ted Kulk and various authors.
 #
-#This program is free software; you can redistribute it and/or modify
-#it under the terms of the GNU General Public License as published by
-#the Free Software Foundation; either version 2 of the License, or
-#(at your option) any later version.
+#-------------------------------------------------------------------------
+# CMS - CMS Made Simple is (c) 2004-2013 by Ted Kulp (wishy@cmsmadesimple.org)
+# This project's homepage is: http://www.cmsmadesimple.org
 #
-#This program is distributed in the hope that it will be useful,
-#but WITHOUT ANY WARRANTY; without even the implied warranty of
-#MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#GNU General Public License for more details.
-#You should have received a copy of the GNU General Public License
-#along with this program; if not, write to the Free Software
-#Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+#-------------------------------------------------------------------------
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# However, as a special exception to the GPL, this software is distributed
+# as an addon module to CMS Made Simple.  You may not use this software
+# in any Non GPL version of CMS Made simple, or in any version of CMS
+# Made simple that does not indicate clearly and obviously in its admin 
+# section that the site was built with CMS Made simple.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+# Or read it online: http://www.gnu.org/licenses/licenses.html#GPL
+#
+#-------------------------------------------------------------------------
+#END_LICENSE
 
 function smarty_function_cms_selflink($params, &$template) 
 {
-  $smarty = $template->smarty;
-  $gCms = cmsms();
-
-  $rellink = (isset($params['rellink']) && $params['rellink'] == '1' ? true : false);
-  $url = '';
-
-  /* ugly hack by tsw for external links with wiki styling */
-  if ( isset($params['ext']) ) {
-    /* thanks elijah */
-    $url = $params['ext'];
-    $text = $params['ext'];
-    
-    if ( isset($params['text'] )) $text = $params['text'];
-    
-    $title= '';
-    if ( isset($params['title']) ) $title=' title="'.$params['title'].'" ';
-    
-    $target = '';
-    if ( isset($params['target']) && ( strlen($params['target']) > 0 ) )  {
-      $target=' target="'.$params['target'].'" ';
-    }
-    
-    $external_text = '(external link)';
-    if ( isset($params['ext_info']) ) $external_text ='( '.$params['ext_info'].' )';
-	
-    $result='<a class="external" href="'.$url.'" '.$title.''.$target.'>'.$text.'<span>'.$external_text.'</span></a>';
-    if( isset($params['assign']) ){
-      $smarty->assign(trim($params['assign']),$result);
-      return;
-    }
-    return $result;
-  }
-
-  if (isset($params['lang'])) {
-    // attempt to override the chosen frontend lang.
-    $lang = trim($params['lang']);
-    cms_set_frontend_language($lang);
-  }
-
-  $urlparam = '';
-  if ( isset($params['urlparam']) && ( strlen($params['urlparam']) > 0 ) ) {
-    $urlparam = trim($params['urlparam']);
-  }
-
-  $label = '';
-  if (isset($params['page']) or isset($params['href'])) {
-    if (isset($params['href'])) {
-      $page = $params['href'];
-    }
-    else {
-      $page = $params['page'];
-    }
-    $name = $page;
-     
-    // check if the page exists in the db
-    $manager = $gCms->GetHierarchyManager();
-    $node = $manager->find_by_tag('alias',$page);
-    if (!isset($node)) {
-      $node = $manager->find_by_tag('id',$page);
-      if( !$node ) {
-	if (isset($params['lang'])) cms_set_frontend_language();
-	return;
-      }
-    }
-    $content = $node->GetContent();
-    if ($content !== FALSE && is_object($content) && $content->Active() && $content->HasUsableLink() ) {
-      $pageid = $content->Id();
-      $alias = $content->Alias();
-      $name = $content->Name(); //mbv - 21-06-2005
-      $url = $content->GetUrl();
-      $menu_text = $content->MenuText();
-      $titleattr = $content->TitleAttribute();
-
-      if (isset($params['anchorlink'])) $url .= '#' . ltrim($params['anchorlink'], '#');
-
-      if( $urlparam != '' ) $url .= $urlparam;
-    }
-  }
-  elseif (isset($params['dir'])) {
-    global $CMS_ADMIN_PAGE;
-    if( isset($CMS_ADMIN_PAGE) ) return;
-
-    if (isset($params['anchorlink'])) $anchorlink = ltrim($params['anchorlink'], '#');
-
-    $condition = false;
-    switch (strtolower($params['dir'])) {
-    case 'next':
-      $condition = '>';
-      $label=lang_by_realm('cms_selflink','next_label');
-      break;
-    case 'prev':
-    case 'previous':
-      $condition = '<';
-      $label=lang_by_realm('cms_selflink','prev_label');
-      break;
-    case 'anchor': // Start Russ addition
-      $condition = '^';
-      $label=''; //No label needed
-      break; // End Russ addition
-    case 'start':
-      $condition = '-';
-      $label = ''; // no label needed.
-      break;
-    case 'up': // Start uplink
-      $condition = '|';
-      $label='';
-      break; // End uplink
-    }
-
-    if ($condition ) {
-      $gCms = cmsms();
-      $hm = $gCms->GetHierarchyManager();
-      $flatcontent = array();
-      if ($condition != '|') { // uplink (we don't need the flatcontent for an uplink)
-	$flatcontent = $hm->getFlatList();
+	$smarty = $template->smarty;
+	$gCms = cmsms();
+	$url = '';
+	$urlparam = '';
+	$label_side = 'left';
+	$label = '';
+	$urlonly = 0;
 	$contentops = $gCms->GetContentOperations();
-	$defaultid = $contentops->GetDefaultPageID();
-	$number = 0;
-	for ($i = 0; $i < count($flatcontent); $i++) {
-	  if ($condition == '-') {
-	    // start link...
-	    // redundant...
-	    if ($flatcontent[$i]->getTag() == $defaultid) {
-	      $number = $i;
-	      break;
-	    }
-	  }
-	  else if ($flatcontent[$i]->getTag() == $gCms->get_content_id()) {
-	    $number = $i;
-	    break;
-	  }
-	}
-      } // uplink addition
+	$manager = $gCms->GetHierarchyManager();
+	$node = null;
+	$dir = null;
+	$pageid = null;
 
-      if ($condition == '<') {
-	if ($number > 0) {
-	  for ($i = $number - 1; $i >= 0; $i--) {
-	    $content =& $flatcontent[$i]->getContent();
-	    if (isset($content) && $content != NULL) {
-	      if ($content->Active() && $content->ShowInMenu() && $content->HasUsableLink()) {
-		$pageid = $content->Id();
-		$alias = $content->Alias();
-		$name = $content->Name();
-		$menu_text = $content->MenuText();
-		$url = $content->GetURL();
-		$titleattr = $content->TitleAttribute();
-		break;
-	      }
-	    }
-	  }
+	$rellink = (isset($params['rellink']) && $params['rellink'] == '1' ? true : false);
+	if ( isset($params['urlparam']) && ( strlen($params['urlparam']) > 0 ) ) {
+		$urlparam = trim($params['urlparam']);
 	}
-      }
-      else if ($condition == '>') {
-	if ($number < count($flatcontent)) {
-	  for ($i = $number + 1; $i < count($flatcontent); $i++) {
-	    $content = $flatcontent[$i]->getContent();
-	    if(isset($content) && $content != NULL) {
-	      if ($content->Active() && $content->ShowInMenu() && $content->HasUsableLink()) {
-		$pageid = $content->Id();
-		$alias = $content->Alias();
-		$name = $content->Name();
-		$menu_text = $content->MenuText();
-		$url = $content->GetURL();
-		$titleattr = $content->TitleAttribute();
-		break;
-	      }
-	    }
-	  }
+
+	if (isset($params['page']) or isset($params['href'])) {
+		$page = null;
+		if (isset($params['href'])) {
+			$page = $params['href'];
+			$urlonly = 1;
+		}
+		else {
+			$page = $params['page'];
+		}
+
+		if( $page ) {
+			$node = $manager->find_by_tag('alias',$page);
+			if( !$node ) $node = $manager->find_by_tag('id',$page);
+			if( !$node ) return;
+			$pageid = $node->get_tag('id');
+		}
 	}
-      }
-      else if ($condition == '^') {
-	// anchor link... why they used stupid characters I'll never know.
-	// cg: this code is not needed... get current objects url, add anchor stuff.
-	if ($number < count($flatcontent)) {
-	  for ($i = $number; $i < count($flatcontent); $i++) {
-	    $content = $flatcontent[$i]->getContent();
-	    if (isset($content)) {
-	      if ($content->Active() && $content->ShowInMenu() && $content->HasUsableLink()) {
-		$pageid = $content->Id();
-		$alias = $content->Alias();
-		$name = $content->Name();
-		$menu_text = $content->MenuText();
-		$url = $content->GetURL().'#'.$anchorlink; //set as Param
-		$titleattr = $content->TitleAttribute();
-		break;
-	      }
-	    }
-	    else {
-	      break;
-	    }
-	  }
+
+	if( isset($params['dir']) ) {
+		$startpage = null;
+		if( $pageid ) $startpage = $pageid;
+		if( !$startpage ) $startpage = $gCms->get_content_id();
+		$dir = strtolower(trim($params['dir']));
+
+		switch( $dir ) {
+		case 'next':
+			// next visible page.
+			$flatcontent = $manager->getFlatList();
+			for( $i = 0; $i < count($flatcontent); $i++ ) {
+				if( $flatcontent[$i]->getTag() == $startpage ) {
+					// found it.
+					break;
+				}
+			}
+			if( $i < count($flatcontent) ) {
+				for( $j = $i + 1; $j < count($flatcontent); $j++ ) {
+					$content = $flatcontent[$j]->getContent();
+					if( !$content->Active() || !$content->HasUsableLink() || !$content->ShowInMenu() ) continue;
+					$pageid = $content->Id();
+					$label = CmsLangOperations::lang_from_realm('cms_selflink','next_label');
+					break;
+				}
+			}
+			break;
+
+		case 'nextpeer':
+		case 'nextsibling':
+			// next valid peer page.
+			$node = $manager->find_by_tag('id',$startpage);
+			if( !$node ) return;
+			$parent = $node->get_parent();
+			if( !$parent ) $parent = $manager;
+			$children = $parent->get_children();
+			for( $i = 0; $i < count($children); $i++ ) {
+				$id = $children[$i]->get_tag('id');
+				if( $id == $startpage ) break;
+			}
+			if( $i < count($children) ) {
+				for( $j = $i + 1; $j < count($children); $j++ ) {
+					$content = $children[$j]->getContent();
+					if( !$content->Active() || !$content->HasUsableLink() || !$content->ShowInMenu() ) continue;
+					$pageid = $content->Id();
+					$label = CmsLangOperations::lang_from_realm('cms_selflink','next_label');
+					break;
+				}
+			}
+			break;
+
+		case 'prev':
+		case 'previous':
+			// previous visible page.
+			$flatcontent = $manager->getFlatList();
+			for( $i = 0; $i < count($flatcontent); $i++ ) {
+				if( $flatcontent[$i]->getTag() == $startpage ) {
+					// found it.
+					break;
+				}
+			}
+			if( $i < count($flatcontent) ) {
+				for( $j = $i - 1; $j >= 0; $j-- ) {
+					$content = $flatcontent[$j]->getContent();
+					if( !$content->Active() || !$content->HasUsableLink() || !$content->ShowInMenu() ) continue;
+					$pageid = $content->Id();
+					$label = CmsLangOperations::lang_from_realm('cms_selflink','prev_label');
+					break;
+				}
+			}
+			break;
+
+		case 'prevpeer':
+		case 'prevsibling':
+			// previous valid peer page.
+			$node = $manager->find_by_tag('id',$startpage);
+			if( !$node ) return;
+			$parent = $node->get_parent();
+			if( !$parent ) $parent = $manager;
+			$children = $parent->get_children();
+			for( $i = 0; $i < count($children); $i++ ) {
+				$id = $children[$i]->get_tag('id');
+				if( $id == $startpage ) break;
+			}
+			if( $i < count($children) ) {
+				for( $j = $i - 1; $j >= 0; $j-- ) {
+					$content = $children[$j]->getContent();
+					if( !$content->Active() || !$content->HasUsableLink() || !$content->ShowInMenu() ) continue;
+					$pageid = $content->Id();
+					$label = CmsLangOperations::lang_from_realm('cms_selflink','prev_label');
+					break;
+				}
+			}
+			break;
+
+		case 'start':
+			// default home page
+			$pageid = $contentops->GetDefaultPageId();
+			break;
+
+		case 'up':
+			// parent page.
+			$node = $manager->find_by_tag('id',$startpage);
+			if( !$node ) return;
+			$node->get_parent();
+			if( !$node ) return;
+			$content = $node->GetContent();
+			if( !$content ) return;
+			$pageid = $content->Id();
+			break;
+
+		default:
+			// unknown direction... prolly should do something here.
+			return;
+		}
 	}
-      } 
-      else if ($condition == '|') {
-	// Uplink
-	$node = $hm->getNodeById($gCms->get_content_id());
-	if( !isset($node) ) {
-	  return;
-	}
-	$node = $node->getParentNode();
-	if (!isset($node)) {
-	  if (isset($params['lang'])) cms_set_frontend_language();
-	  return;
-	}
+
+	if( $pageid == '' ) return;
+
+	// one final check to see if this page exists.
+	$node = $manager->find_by_tag('id',$pageid);
+	if( !$node ) return;
+
+	// get the content object.
 	$content = $node->GetContent();
-	if ($content != FALSE) {
-	  if ($content->Active() && $content->HasUsableLink()) {
-	    $pageid = $content->Id();
-	    $alias = $content->Alias();
-	    $name = $content->Name();
-	    $menu_text = $content->MenuText();
-	    $url = $content->GetURL();
-	    $titleattr = $content->TitleAttribute();
-	  }
+	if( !$content || !is_object($content) || !$content->Active() || !$content->HasUsableLink() ) return;
+
+	// get our raw display data
+	$alias = $content->Alias();
+	$name = $content->Name();
+	$url = $content->GetUrl();
+	$menu_text = $content->MenuText();
+	$titleattr = $content->TitleAttribute();
+	if (isset($params['anchorlink'])) $url .= '#' . ltrim($params['anchorlink'], '#');
+	if( $urlparam != '' ) $url .= $urlparam;
+
+	if( empty($url) ) {
+		// no url to link to, therefore nothing to do.
+		return;
 	}
-      } //* End uplink
-      else if ($condition == '-') {
-	$content = $flatcontent[$number]->getContent();
-	if (isset($content)) {
-	  $pageid = $content->Id();
-	  $alias = $content->Alias();
-	  $name = $content->Name();
-	  $menu_text = $content->MenuText();
-	  $url = $content->GetURL();
-	  $titleattr = $content->TitleAttribute();
+
+	if( isset($params['urlonly']) ) {
+		$urlonly = cms_to_bool($params['urlonly']);
 	}
-      }
-    }
-    unset($condition);
-  } // end of next-prev code
 
-  // Now we build the output.
-  $result = "";
-  if (isset($params['label'])) {
-    $label = $params['label'];
-    $label = cms_htmlentities($label);
-  }
+	if( $urlonly ) {
+		if( isset($params['assign']) ) {
+			$smarty->assign(trim($params['assign']),$url);
+			return;
+		}
+		return $url;
+	}
 
-  $title = (isset($name)) ? $name : '';
-  if( isset($params['title']) ) $title = $params['title'];
-  else if( !empty($titleattr) ) $title = $titleattr;
-  $title = cms_htmlentities($title);
+	// Now we build the output.
+	$result = "";
+	if (isset($params['label'])) {
+		$label = $params['label'];
+		$label = cms_htmlentities($label);
+	}
 
-  if( empty($url) ) {
-    // no url to link to, therefore nothing to do.
-    if (isset($params['lang'])) cms_set_frontend_language();
-    return;
-  }
+	$title = (isset($name)) ? $name : '';
+	if( isset($params['title']) ) {
+		$title = $params['title'];
+	}
+	else if( !empty($titleattr) ) {
+		$title = $titleattr;
+	}
+	$title = cms_htmlentities($title);
 
-  if( isset($params['href']) ) {
-    if (isset($params['lang'])) cms_set_frontend_language();
-    if( isset($params['assign']) ) {
-      $smarty->assign(trim($params['assign']),$url);
-      return;
-    }
-    return $url;
-  }
+	if ($rellink && $dir != '' ) {
+		// output a relative link.
+		$result .= '<link rel="';
+		switch($dir) {
+		case 'prev':
+		case 'previous':
+			$result .= 'prev';
+			break;
 
-  if ($rellink && isset($params['dir'])) {
-    // output a relative link.
-    $result .= '<link rel="';
-    switch($params['dir']) {
-    case 'prev':
-    case 'previous':
-      $result .= 'prev';
-      break;
-    case 'start':
-    case 'anchor':
-    case 'next':
-    case 'up':
-      $result .= $params['dir'];
-      break;
-    }
+		case 'start':
+		case 'anchor':
+		case 'next':
+		case 'up':
+			$result .= $dir;
+			break;
+		}
 
-    $result .= '" title="'.$title.'" ';
-    $result .= 'href="'.$url.'" />';
-  }
-  else {
-    if (! isset($params['label_side']) || $params['label_side'] == 'left' && $label != '') {
-      $result .= $label.' ';
-    }
-    $result .= '<a href="'.$url.'"';      
-    $result .= ' title="'.$title.'" ';
-    if (isset($params['target'])) $result .= ' target="'.$params['target'].'"';
-    if (isset($params['id'])) $result .= ' id="'.$params['id'].'"';
-    if (isset($params['class'])) $result .= ' class="'.$params['class'].'"';
-    if (isset($params['tabindex'])) $result .= ' tabindex="'.$params['tabindex'].'"';
-    if (isset($params['more'])) $result .= ' '.$params['more'];
-    $result .= '>';
-      
-    if (isset($params['text'])){
-      $linktext = $params['text'];
-    } elseif (isset($params['menu']) && $params['menu'] == "1")	   { 
-      $linktext = $menu_text;
-    } else {
-      $linktext = $name; 
-    }
-      
-    if (isset($params['image']) && ! empty($params['image'])) {
-      $width = (isset($params['width']) && !empty($params['width'])) ? (int)$params['width'] : '';
-      $height = (isset($params['height']) && !empty($params['height'])) ? (int)$params['height'] : '';
-      $alt = (isset($params['alt']) && ! empty($params['alt'])) ? $params['alt'] : '';
-      $result .= "<img src=\"{$params['image']}\" alt=\"$alt\"";
-      if( $width ) $width = max(1,$width);
-      if( $width ) $result .= " width=\"$width\"";
-      if( $height ) $height = max(1,$height);
-      if( $height ) $result .= " height=\"$height\"";
-      $result .= "/>";
-      if (! (isset($params['imageonly']) && $params['imageonly'])) {
-	$result .= " $linktext";
-      }
-    } else {
-      $result .= $linktext;
-    }
+		$result .= '" title="'.$title.'" ';
+		$result .= 'href="'.$url.'" />';
+	}
+	else {
+		if( isset($params['label_side']) ) $label_side = strtolower(trim($params['label_side']));
+		if( $label_side == 'left' ) $result .= $label.' ';
+		$result .= '<a href="'.$url.'"';      
+		$result .= ' title="'.$title.'" ';
+		if (isset($params['target'])) $result .= ' target="'.$params['target'].'"';
+		if (isset($params['id'])) $result .= ' id="'.$params['id'].'"';
+		if (isset($params['class'])) $result .= ' class="'.$params['class'].'"';
+		if (isset($params['tabindex'])) $result .= ' tabindex="'.$params['tabindex'].'"';
+		if (isset($params['more'])) $result .= ' '.$params['more'];
+		$result .= '>';
 
-    $result .= '</a>';
-    if (isset($params['label_side']) && $params['label_side'] == 'right') {
-      $result .= ' '.$label;
-    }
-  }
+		if (isset($params['text'])) {
+			$linktext = $params['text'];
+		} elseif (isset($params['menu']) && $params['menu'] == "1") {
+			$linktext = $menu_text;
+		} else {
+			$linktext = $name; 
+		}
 
-  if (isset($params['lang'])) cms_set_frontend_language();
-  if( isset($params['assign']) ){
-    $smarty->assign(trim($params['assign']),$result);
-    return;
-  }
-  return $result;
+		if (isset($params['image']) && ! empty($params['image'])) {
+			$width = (isset($params['width']) && !empty($params['width'])) ? (int)$params['width'] : '';
+			$height = (isset($params['height']) && !empty($params['height'])) ? (int)$params['height'] : '';
+			$alt = (isset($params['alt']) && ! empty($params['alt'])) ? $params['alt'] : '';
+			$result .= "<img src=\"{$params['image']}\" alt=\"$alt\"";
+			if( $width ) $width = max(1,$width);
+			if( $width ) $result .= " width=\"$width\"";
+			if( $height ) $height = max(1,$height);
+			if( $height ) $result .= " height=\"$height\"";
+			$result .= "/>";
+			if (! (isset($params['imageonly']) && $params['imageonly'])) {
+				$result .= " $linktext";
+			}
+		} else {
+			$result .= $linktext;
+		}
+
+		$result .= '</a>';
+		if( $label_side == 'right' ) $result .= ' '.$label;
+	}
+
+	if( isset($params['assign']) ){
+		$smarty->assign(trim($params['assign']),$result);
+		return;
+	}
+	return $result;
 }
 
 function smarty_cms_help_function_cms_selflink() {
-  echo lang('help_function_cms_selflink');
+	echo lang('help_function_cms_selflink');
 }
 
 function smarty_cms_about_function_cms_selflink() {
-  echo lang('about_function_cms_selflink');
+	echo lang('about_function_cms_selflink');
 }
 
 # vim:ts=4 sw=4 noet

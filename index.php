@@ -272,4 +272,5 @@ if ( !is_sitedown() && $config["debug"] == true) {
     echo $error;
   }
 }
+exit();
 ?>

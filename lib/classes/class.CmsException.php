@@ -40,12 +40,29 @@
 
 /**
  * A base CMSMS Exception
+ *
+ * This exception can accept an integer 'code' for an exception or a language key.
+ * if the string passed in contains a space it is not translated.
  * 
  * @package CMS
  * @author Robert Campbell (calguy1000@cmsmadesimple.org)
  * @since 1.10
  */
-class CmsException extends Exception {}
+class CmsException extends Exception 
+{
+  public function __construct($msg,$code = 0, Exception $prev = null ) {
+    if( is_int($msg) ) {
+      $msg = 'CMSEX_'.$msg;
+    }
+    if( startswith($msg,'CMSEX_') && !CmsLangOperations::key_exists($msg) ) {
+      $msg = 'MISSING TRANSLATION FOR '.$msg;
+    }
+    else if( strpos($msg,' ') === FALSE && CmsLangOperations::key_exists($msg) ) {
+      $msg = CmsLangOperations::lang($msg);
+    }
+    parent::__construct($msg,$code,$prev);
+  }
+}
 
 /**
  * A base CMSMS Logic Exception

@@ -10,21 +10,21 @@
 <div class="pageoverflow">
   <p class="pagetext"><label for="username">*{lang('name')}:</label></p>
   <p class="pageinput">
-    <input id="username" type="text" name="user" maxlength="25" value="{$user}" class="standard"/>
+    <input id="username" type="text" name="user" maxlength="25" value="{$user}" class="standard" onpaste="return false;"/>
     <br/>{lang('info_adduser_username')}
   </p>
 </div>
 <div class="pageoverflow">
   <p class="pagetext"><label for="password">*{lang('password')}:</label></p>
   <p class="pageinput">
-    <input type="password" id="password" name="password" maxlength="25" value="{$password}" class="standard"/>
+    <input type="password" id="password" name="password" maxlength="25" value="{$password}" class="standard" onpaste="return false;"/>
     <br/>{lang('info_edituser_password')}
   </p>
 </div>
 <div class="pageoverflow">
   <p class="pagetext"><label for="passwordagain">*{lang('passwordagain')}:</label></p>
   <p class="pageinput">
-    <input type="password" id="passwordagain" name="passwordagain" maxlength="25" value="{$passwordagain}" class="standard"/>
+    <input type="password" id="passwordagain" name="passwordagain" maxlength="25" value="{$passwordagain}" class="standard" onpaste="return false;"/>
     <br/>{lang('info_edituser_passwordagain')}
   </p>
 </div>

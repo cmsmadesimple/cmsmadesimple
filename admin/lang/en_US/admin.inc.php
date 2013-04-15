@@ -2284,14 +2284,13 @@ EOT;
 
 $lang['admin']['help_function_cms_selflink'] = <<<EOT
 		<h3>What does this do?</h3>
-		<p>Creates a link to another CMSMS content page inside your template or content. Can also be used for external links with the ext parameter.</p>
+		<p>Creates a link to another CMSMS content page inside your template or content.</p>
 		<h3>How do I use it?</h3>
 		<p>Just insert the tag into your template/page like: <code>{cms_selflink page=&quot;1&quot;}</code> or  <code>{cms_selflink page=&quot;alias&quot;}</code></p>
 		<h3>What parameters does it take?</h3>
 		<ul>
 		<li><em>(optional)</em> <tt>page</tt> - Page ID or alias to link to.</li>
-		<li><em>(optional)</em> <tt>dir anchor (internal links)</tt> - New option for an internal page link. If this is used then <tt>anchorlink</tt> should be set to your link. </li> <!-- Russ - 25-04-2006 -->
-		<li><em>(optional)</em> <tt>anchorlink</tt> - New paramater for an internal page link. If this is used then <tt>dir =&quot;anchor&quot;</tt> should also be set. No need to add the #, because it is added automatically.</li> <!-- Russ - 25-04-2006 -->
+		<li><em>(optional)</em> <tt>anchorlink</tt> - Specifies an anchor to add to the generated URL.</li>
 		<li><em>(optional)</em> <tt>urlparam</tt> - Specify additional parameters to the URL.  <strong>Do not use this in conjunction with the <em>anchorlink</em> parameter</strong></li>
 		<li><em>(optional)</em> <tt>tabindex =&quot;a value&quot;</tt> - Set a tabindex for the link.</li> <!-- Russ - 22-06-2005 -->
 		<li><em>(optional)</em> <tt>dir start/next/prev/up (previous)</tt> - Links to the default start page or the next or previous page, or the parent page (up). If this is used <tt>page</tt> should not be set.</li> <!-- mbv - 21-06-2005 -->
@@ -2308,14 +2307,13 @@ $lang['admin']['help_function_cms_selflink'] = <<<EOT
 		<li><em>(optional)</em> <tt>label_side left/right</tt> - Side of link to place the label (defaults to "left").</li>
 		<li><em>(optional)</em> <tt>title</tt> - Text to use in the title attribute.  If none is given, then the title of the page will be used for the title.</li>
 		<li><em>(optional)</em> <tt>rellink 1/0</tt> - Make a relational link for accessible navigation.  Only works if the dir parameter is set and should only go in the head section of a template.</li>
-		<li><em>(optional)</em> <tt>href</tt> - If href is used only the href value is generated (no other parameters possible). <strong>Example:</strong> &lt;a href=&quot;{cms_selflink href=&quot;alias&quot;}&quot;&gt;&lt;img src=&quot;&quot;&gt;&lt;/a&gt;</li>
+												       <li><em>(optional)</em> <tt>href</tt> - Specifies that only the result URL to the page alias specified will be returned.  This is essentially equal to {cms_selflink page=&quot;alias&quot; urlonly=1}. <strong>Example:</strong> &lt;a href=&quot;{cms_selflink href=&quot;alias&quot;}&quot;&gt;&lt;img src=&quot;&quot;&gt;&lt;/a&gt;.</li>
+		<li><em>(optional)</em> <tt>urlonly</tt> - Specifies that only the resulting url should be output.  All parameters related to generating links are ignored.</li>
 		<li><em>(optional)</em> <tt>image</tt> - A url of an image to use in the link. <strong>Example:</strong> {cms_selflink dir=&quot;next&quot; image=&quot;next.png&quot; text=&quot;Next&quot;}</li>
 		<li><em>(optional)</em> <tt>alt</tt> - Alternative text to be used with image (alt="" will be used if no alt parameter is given).</li>
 		<li><em>(optional)</em> <tt>width</tt> - Width to be used with image (no width attribute will be used on output img tag if not provided.).</li>
 		<li><em>(optional)</em> <tt>height</tt> - Height to be used with image (no height attribute will be used on output img tag if not provided.).</li>
 		<li><em>(optional)</em> <tt>imageonly</tt> - If using an image, whether to suppress display of text links. If you want no text in the link at all, also set lang=0 to suppress the label. <strong>Example:</strong> {cms_selflink dir=&quot;next&quot; image=&quot;next.png&quot; text=&quot;Next&quot; imageonly=1}</li>
-		<li><em>(optional)</em> <tt>ext</tt> - For external links, will add class=&quot;external and info text. <strong>warning:</strong> only text, target and title parameters are compatible with this parameter</li>
-		<li><em>(optional)</em> <tt>ext_info</tt> - Used together with &quot;ext&quot; defaults to (external link).</li>
         <li><em>(optional)</em> <tt>assign</tt> - Assign the results to the named smarty variable.</li>
 		</ul>
 EOT;

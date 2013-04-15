@@ -376,4 +376,5 @@ class cms_content_tree extends cms_tree
   }
 } // end of class.
 
+# vim:ts=4 sw=4 noet
 ?>

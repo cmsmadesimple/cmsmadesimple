@@ -1,18 +1,15 @@
 <?php
+require_once('_init.php');
 
-// we should have some config variable to get this
-require_once('test_settings.php');
-define('SIMPLETEST',$test_settings['simpletest']);
-define('CMSMS',dirname(dirname(__FILE__)));
-
-require_once(SIMPLETEST.'/autorun.php');
+// this initializes cmsms.
+require_once(CMSMS.'/include.php');
 
 class BasicTests extends TestSuite 
 {
   function __construct()
   {
     parent::__construct();
-    $dir = dirname(__FILE__).'/basics';
+    $dir = dirname(__FILE__).'/basic_tests';
     $files = glob($dir.'/test_*php');
     if( is_array($files) && count($files) ) {
       foreach( $files as $one_file ) $this->addFile($one_file);
