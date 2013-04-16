@@ -4,7 +4,7 @@
 
 <h3>{lang_install a=install_admin_umask}</h3>
 
-<form action="{$smarty.server.PHP_SELF}" method="post" name="page3form" id="page3form">
+<form action="{$smarty.server.PHP_SELF|htmlspecialchars}" method="post" name="page3form" id="page3form">
 
 <table class="settings" border="0">
 <thead class="tbcaption">

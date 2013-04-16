@@ -4,7 +4,7 @@
 
 <h3>{lang_install a=upgrade_admin_checksum}</h3>
 
-<form action="{$smarty.server.PHP_SELF}" method="post" name="page1form" id="page1form" enctype="multipart/form-data">
+<form action="{$smarty.server.PHP_SELF|htmlspecialchars}" method="post" name="page1form" id="page1form" enctype="multipart/form-data">
 
 <table class="settings" border="0">
 		<tr class="tbcaption">

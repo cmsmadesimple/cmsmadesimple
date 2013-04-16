@@ -6,7 +6,7 @@
 
 <p>{lang_install a=install_admin_info}</p>
 
-<form action="{$smarty.server.PHP_SELF}" method="post" name="page4form" id="page4form">
+<form action="{$smarty.server.PHP_SELF|htmlspecialchars}" method="post" name="page4form" id="page4form">
 
 <table border="0" class="adminaccount">
 <thead class="tbcaption">

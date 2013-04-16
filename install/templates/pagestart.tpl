@@ -1,6 +1,6 @@
 <h2>Thanks for choosing CMS Made Simple</h2>
 
-<form action="{$smarty.server.PHP_SELF}?sessiontest=1" method="post" name="pagestartform" id="pagestartform">
+<form action="{$smarty.server.PHP_SELF|htmlspecialchars}?sessiontest=1" method="post" name="pagestartform" id="pagestartform">
 <table class="settings" border="0">
 	<thead class="tbcaption">
 	    <tr>

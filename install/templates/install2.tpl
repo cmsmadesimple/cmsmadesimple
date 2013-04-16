@@ -193,7 +193,7 @@ function toggle(obj) {
 //-->
 </script>
 {/literal}
-<form action="{$smarty.server.PHP_SELF}?sessiontest=1" method="post" name="page2form" id="page2form">
+<form action="{$smarty.server.PHP_SELF|htmlspecialchars}?sessiontest=1" method="post" name="page2form" id="page2form">
 	<div class="continue">
 		<input type="reset" name="togglephpinfo" value="{lang_install a=phpinfo}" onclick="toggle('phpinfo');return false;" />
 		<input type="hidden" name="page" value="3" />
