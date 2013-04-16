@@ -791,12 +791,12 @@ function get_pageid_or_alias_from_url()
   if (isset($smarty->id) && isset($params[$smarty->id . 'returnid']))
     {
       // get page from returnid parameter in module action
-      $page = $params[$smarty->id . 'returnid'];
+      $page = (int)$params[$smarty->id . 'returnid'];
     }
-  else if (isset($config["query_var"]) && $config["query_var"] != '' && isset($_GET[$config["query_var"]]))
+  else if (isset($config["query_var"]) && $config["query_var"] != '' && isset($_REQUEST[$config["query_var"]]))
     {
       // using non friendly urls... get the page alias/id from the query var.
-      $page = trim(cms_htmlentities($_GET[$config["query_var"]])); 
+      $page = trim(cms_htmlentities($_REQUEST[$config["query_var"]])); 
     }
   else
     {
@@ -813,7 +813,7 @@ function get_pageid_or_alias_from_url()
 	}
     }
 
-  unset($_GET['query_var']);
+  unset($_REQUEST[$config['query_var']]);
 
   // by here, if page is empty, use the default page id
   if ($page == '')
