@@ -464,7 +464,7 @@ if(isset($results))
 
 echo '<h4 style="color:navy;">'.lang('install_test_checksum').'</h4>';
 ?>
-<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post" name="page1form" id="page1form" enctype="multipart/form-data">
+<form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="post" name="page1form" id="page1form" enctype="multipart/form-data">
 	<input type="file" name="cksumdat" id="cksumdat" maxlength="255" /><br />
 	<input type="submit" name="recheck" value=" Check " />
 </form>
