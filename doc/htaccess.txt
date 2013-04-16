@@ -3,6 +3,7 @@
 # has given your account appropriate permissions
 #php_value upload_max_filesize "10M"
 #php_value session_save_path "tmp/cache"
+php_value session.cookie_httponly true
 
 #php_flag magic_quotes_gpc Off
 #php_flag register_globals Off
@@ -44,10 +45,12 @@ RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^(.+)$ index.php?page=$1 [QSA]
 </IfModule>
 
-<IfModule mod_header.c>
+<IfModule mod_headers.c>
 # Disable ETags
 Header unset ETag
 FileEtag None
+# For Security
+Header set X-Frame-Options "SAMEORIGIN"
 </IfModule>
 
 <IfModule mod_deflate.c>
@@ -60,7 +63,7 @@ AddOutputFilterByType DEFLATE text/css text/plain text/xml image/gif image/jpeg 
 # Set expires tags on various files... so that the browser wont attempt to reload them.
 ExpiresActive On
 ExpiresDefault "access plus 1 year"
-<IfModule mod_header.c>
+<IfModule mod_headers.c>
   # Setting cache control to public allows proxy servers to cache the items too.
   Header set Cache-Control "public"
 </IfModule>
