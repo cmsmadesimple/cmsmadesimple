@@ -50,5 +50,5 @@ $nls['file']['fa_IR'] = array(dirname(__FILE__).'/fa_IR/admin.inc.php');
 # Only change this when translations exist in HTMLarea and plugin dirs
 # (please send language files to HTMLarea development)
 
-$nls['htmlarea']['fa_IR'] = 'ja';
+$nls['htmlarea']['fa_IR'] = 'fa';
 ?>
