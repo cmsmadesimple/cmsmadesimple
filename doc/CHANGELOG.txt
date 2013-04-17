@@ -4,6 +4,7 @@ Core - General
   - Fixes a couple of XSS vulnerabilities, ** upgrading is recommended **
   - Fixes a problem with template parsing and <head vs. <header
   - Fixes a problem with some modules not listening to the {cms_set_language} stuff... order of execution problem.
+  - Simplex Theme, functions.js rewriten, fixes to touch menu in Android Chrome and Sample Slider
 
 
 Version 1.11.5 - Puerto Ayora

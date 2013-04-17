@@ -1,81 +1,166 @@
-jQuery(document).ready(function () {
-    // .banner slider 
-    /*
-     * this is just a quick sample slider
-     * If you need a slider with repsonsive support look at some nice jQuery solutions like (or use a search engine):
-     * http://dmmalam.github.com/Responsly.js/
-     * http://swipejs.com/   
-     * http://marktyrrell.com/labs/blueberry/
-     */
-    // trying to resize image wrapping div so it fits current window size                           
-    $('.banner-image').height($('.banner-image div').height());
-    $(window).resize(function () {
-        $('.banner-image').height($('.banner-image div').height());
-    });
-    // fade images 
-    $('.banner-image > div:gt(0)').hide();
-    setInterval(function () {
-        $('.banner-image > div:first').fadeOut(1000).next().fadeIn(1000).end().appendTo('.banner-image');
-    }, 6000);
-    
-    // check for common mobile devices and change menu behavior 
-    /*
-     * Do not fully rely on below detection
-     * This is just a quick detection of common devices, but as you know there are more around there
-     * You should look at different solutions depending on your current project
-     * there is nothing perfect that works out of the box, pick what best fits the task
-     */                    
-    if (navigator.userAgent.match(/(Android|iPhone|iPad|iPod|Blackberry|Dolphin|IEMobile|Kindle|Mobile|MMP|MIDP|Pocket|PSP|Symbian|Smartphone|Sreo|Up.Browser|Up.Link|Vodafone|WAP|Opera Mini)/)) {
-        
-        // if a device matches above prevent default hyperlink "click" event and show submenu
-        /*  Original code from: https://github.com/mehrpadin/Superfish-for-Drupal/sftouchscreen.js
-         * sf-Touchscreen v1.0b - Provides touchscreen compatibility for the jQuery Superfish plugin.
-         *
-         * Developer's note:
-         * Built as a part of the Superfish project for Drupal (http://drupal.org/project/superfish) 
-         * Found any bug? have any cool ideas? contact me right away! http://drupal.org/user/619294/contact
-         *
-         * jQuery version: 1.3.x or higher.
-         *
-         * Dual licensed under the MIT and GPL licenses:
-         *  http://www.opensource.org/licenses/mit-license.php
-         *  http://www.gnu.org/licenses/gpl.html
-         */
-        $('#nav ul').each(function () {
-            // Select hyperlinks from parent menu items.
-            $(this).find('>li>ul').parent('li').children('a').each(function () {
-                var $item = $(this);
-                // append close button to sublevel ul
-                $item.next('ul').append('<span class="close-button">close</span>');
-                // if close button is clicked/touched remove active class from parent and hide submenu
-                $('.close-button').click(function() {
-                	if ($item.hasClass('active')) {
-                		// remove class
-                        $item.removeClass('active');
+/* -----------------------------------------------  
+  Detect few Mobile device
+  
+  This a !!!!DEMO!!! do not rely on this detection!!!
+  If you want it to work perfect use proper plugins
+  or functions available on the interwebs. 
+  For example use Modernizr (http://modernizr.com/)
+  and check against Modernizr.touch even though
+  one can touch a Screen to.
+  
+------------------------------------------------ */
+function detectMobile() {
+           
+        if (navigator.userAgent.match(/(Android|iPhone|iPad|iPod|Blackberry|Dolphin|IEMobile|Kindle|Mobile|MMP|MIDP|Pocket|PSP|Symbian|Smartphone|Sreo|Up.Browser|Up.Link|Vodafone|WAP|Opera Mini)/)) {
+            
+            return true;
+            
+        } else {
+            
+            return  false;
+        }
+}
+
+/* -----------------------------------------------  
+  Touch Menu
+  
+  This a !!!!DEMO!!! do not rely on this!!!
+  It is intended as demonstration purpose, there is 
+  plethora of different touch and mobile capable
+  menus in the world of www, pick one that is suitable
+  for your project.
+  
+------------------------------------------------ */
+
+var mobileMenu = {
+
+    init : function() {
+
+        var menuItem = $('#nav ul > li.parent');
+
+        menuItem.each(function() {
+
+            var currentItem = $(this);
+
+            this.addEventListener('touchstart', function(e) {
+                if (e.touches.length === 1) {
+                    e.stopPropagation();
+
+                    // toggle class for dropdown
+                    if (!currentItem.hasClass('active')) {
+
+                        // prevent opening link on first touch
+                        if (e.target === this || e.target.parentNode === this) {
+                            e.preventDefault();
+                        }
+
+                        // hide open dropdowns
+                        menuItem.removeClass('active');
+                        menuItem.not('.active').children('ul').hide();
+                        
+                        // show current touched dropdown
+                        currentItem.addClass('active');
+                        currentItem.children('ul').show();
+                        currentItem.children('ul').append('<span class="close-button">close</span>');
+                        
+                        closeButton = $('.close-button');
+
+                        // hide dropdown on touch outside or close button
+                        closeDropdown = function(e) {
+                            e.stopPropagation();
+
+                            currentItem.removeClass('active');
+                            currentItem.not('.active').children('ul').hide();
+                            
+                            closeButton.hide();
+                            document.removeEventListener('touchstart', closeDropdown);
+                        }
+                        
+                        document.addEventListener('touchstart', closeDropdown);
+                        closeButton.on('click', closeDropdown);
                     }
-                    // hide submenu
-                    $(this).parent('ul').hide();
-                });
-                // No .toggle() here as it's not possible to reset it.
-                $item.click(function(e) {
-                	// show submenu
-                	$(this).next('ul').show();
-                    // Already clicked? proceed to the URI.
-                    if ($item.hasClass('active')) {
-                        var $uri = $item.attr('href');
-                        window.location = $uri;
-                    } else {
-                        e.preventDefault();
-                        $item.addClass('active');
-                    }
-                }).parent('li').mouseleave(function () {
-                    // So, we reset everything.
-                    $item.removeClass('active');
-                });
-            });
+                }
+            }, false);
         });
-    } // end device detection
-    // add class to first and last child
-    $('#nav li:first-child').addClass('first');
-    $('#nav li:last-child').addClass('last');
+    }
+}
+
+/* -----------------------------------------------  
+  Sample image Slider
+  
+  AGAIN this a !!!!DEMO!!! do not rely on this!!!
+  Slider in Simplex is plain simple and not something you
+  should consider as perfect for production use.
+  There are numerous jQuery plugins for this task,
+  so pick one you like and use it!
+  
+  If you need a slider with responsive support look at 
+  some nice jQuery solutions like (or use a search engine!!):
+  
+  http://dmmalam.github.com/Responsly.js/
+  http://swipejs.com/
+  http://marktyrrell.com/labs/blueberry/ 
+  
+  No need for bug reports on this! 
+  
+------------------------------------------------ */
+
+var simpleSlide = {
+    
+    init: function() {
+        
+        var imageHolder = $('.banner-image'),
+            textHolder = $('.banner-text');
+            
+            // Attempt to resize image placeholder div ( could fail to so do not rely on it)
+            imageHolder.height(textHolder.height());
+            
+            // do same on window resize
+            $(window).resize(function() {
+                imageHolder.height(textHolder.height());
+            });
+            
+            // Actual slides
+            
+            $('.banner-image > div:gt(0)').hide(); // hide if not first
+            
+            // set slide interval
+            setInterval(function() {
+                $('.banner-image > div:first')
+                    .fadeOut(1000)
+                    .next()
+                    .fadeIn(1000)
+                    .end()
+                    .appendTo('.banner-image');
+            }, 6000);
+    }
+}
+
+/* -----------------------------------------------  
+  Menu generic
+  Adds first and last classes to first and last 
+  list elemnt in menu
+------------------------------------------------ */
+
+var listClass = {
+    
+    init: function() {
+        
+        $('#nav li:first-child').addClass('first');
+        $('#nav li:last-child').addClass('last');
+    }
+}
+
+/* -----------------------------------------------  
+  Beam me up, Scotty!
+------------------------------------------------ */
+
+$(function() {
+    if (detectMobile()) {
+        mobileMenu.init();
+    }
+    
+    simpleSlide.init();
+    listClass.init();
+    
 });
