@@ -3,15 +3,15 @@
 # has given your account appropriate permissions
 #php_value upload_max_filesize "10M"
 #php_value session_save_path "tmp/cache"
-php_value session.cookie_httponly true
 
 #php_flag magic_quotes_gpc Off
 #php_flag register_globals Off
 #php_flag session.use_trans_sid Off
 
-# (this is important, so uncomment if your host permit)
+# This is important, so uncomment if your host permit
 #Options -Indexes
 #ServerSignature Off
+#php_value session.cookie_httponly true
 
 #Options +FollowSymLinks
 
