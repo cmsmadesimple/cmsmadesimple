@@ -5,11 +5,11 @@
 	#php_value session_save_path "tmp/cache"
 	#php_flag magic_quotes_gpc Off
 	#php_flag register_globals Off
-	#php_flag session.use_trans_sid Off
 
 # Security - These settings are important, so uncomment if your host permit!
 	#Options -Indexes
 	#ServerSignature Off
+	#php_flag session.use_trans_sid Off
 
 # To prevent E_STRICT problems with PHP 5.3+ you can uncomment the following lines
 # Note: These settings should only be enabled for production sites!
