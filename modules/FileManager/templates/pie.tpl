@@ -52,7 +52,7 @@
                 $viewport.observator.set_property(event_name,$(this).val());
               });
             }
-            $viewport.$container.append('<div>Image natual size: '
+            $viewport.$container.append('<div>{$mod->Lang("pie_image_natural_size")}: '
               +$viewport.$image.originalWidth+' x '
               +$viewport.$image.originalHeight+'</div>')
           }
@@ -71,7 +71,7 @@
       
 
     <div class="pane clearfix">
-      <img src="{$image}" alt="Loulou form Sos Chats Geneva" />
+      <img src="{$image}" alt="" />
     
   	  <form action='{$formUrl}' method='GET' >
         <table class="coords">
@@ -82,7 +82,7 @@
 
           <tr><td>image width</td><td><input type="text" id='{$id}iw' name='{$id}iw' /></td></tr>
           <tr><td>image height</td><td><input type="text" id='{$id}ih' name='{$id}ih' /></td></tr>
-          <tr><td>lock proportion</td><td><input type="checkbox" checked="checked" /></td></tr>
+          <tr><td>{$mod->Lang("pie_lock_proportion")}</td><td><input type="checkbox" checked="checked" /></td></tr>
         </table>
         {foreach $hiddens hidden}{$hidden}{/foreach}
         <input type='hidden' id='showtemplate' name='showtemplate' value='false' />

@@ -20,11 +20,6 @@ foreach($secuPattern as $pattern) {
 	}
 }
 
-if(empty($params['imagesrc'])) {
-	echo "empty parameter imagesrc";
-	return;
-}
-
 //print_r($params);
 
 $image = $config['root_url'].'/'.$params['imagesrc'];
