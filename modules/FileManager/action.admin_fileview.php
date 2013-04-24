@@ -84,8 +84,8 @@ for ($i = 0; $i < count($filelist); $i++) {
   if ($filelist[$i]["image"]) {
     $onerow->type[] = 'image';
     
-    $source = urlencode('../../../'.$path.'/'.$filelist[$i]['name']);
-    $onerow->editor = $config['root_url'].'/modules/'.$this->GetName().'/pie/index.php?imagesrc='.$source;
+    $params['imagesrc'] = $path.'/'.$filelist[$i]['name'];
+    $onerow->editor = $this->CreateLink($id, "pie", $returnid, $titlelink, $params, "", true);
     
     if($this->GetPreference("showthumbnails", 0) == 1) {
       $onerow->thumbnail = $this->GetThumbnailLink($filelist[$i], $path);
