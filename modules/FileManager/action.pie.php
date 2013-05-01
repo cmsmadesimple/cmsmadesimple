@@ -29,32 +29,29 @@ if(!file_exists($imagepath)){
 	return;
 }
 
-//Create new image Manipulator classe
-$imageEditor = new imageEditor();
-
 if(empty($params['reset'])
 	&& !empty($params['cx']) && !empty($params['cy']) 
 	&& !empty($params['cw']) && !empty($params['ch']) 
 	&& !empty($params['iw']) && !empty($params['ih'])){
 	
 	//Get the mimeType
-	$mimeType = $imageEditor->getMime($imagepath);
+	$mimeType = imageEditor::getMime($imagepath);
 
 	//Open new Instance
-	$instance = $imageEditor->open($imagepath);
+	$instance = imageEditor::open($imagepath);
 
 	//Resize it if necessary
 	if(!empty($params['resize']) && $params['resize'] == 'resize'){
-		$instance = $imageEditor->resize($instance, $mimeType, $params['iw'], $params['ih']);
+		$instance = imageEditor::resize($instance, $mimeType, $params['iw'], $params['ih']);
 	}
 
 	//Crop it if necessary
 	if(!empty($params['crop']) && $params['crop'] == 'crop'){
-		$instance = $imageEditor->crop($instance, $mimeType, $params['cx'], $params['cy'], $params['cw'], $params['ch']);
+		$instance = imageEditor::crop($instance, $mimeType, $params['cx'], $params['cy'], $params['cw'], $params['ch']);
 	}
 	
 	//Save it
-	$imageEditor->save($instance, $imagepath, $mimeType);
+	imageEditor::save($instance, $imagepath, $mimeType);
 }
 
 
@@ -77,7 +74,7 @@ $hiddens[] = "<input type='hidden' id='mact' name='mact' value='".$_GET['mact'].
 $hiddens[] = "<input type='hidden' id='_sx_' name='_sx_' value='".$_GET['_sx_']."' />";
 
 $smarty->assign('image',$image);
-$smarty->assign('image_width',$imageEditor->getWidth($imagepath));
+$smarty->assign('image_width',imageEditor::getWidth($imagepath));
 
 $smarty->assign('id',$id);
 $smarty->assign('hiddens',$hiddens);

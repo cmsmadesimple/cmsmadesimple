@@ -1,10 +1,43 @@
 <?php
+# FileManager. A plugin for CMS - CMS Made Simple
+# Copyright (c) 2006-08 by Morten Poulsen <morten@poulsen.org>
+#
+#CMS - CMS Made Simple
+#(c)2004 by Ted Kulp (wishy@users.sf.net)
+#This project's homepage is: http://www.cmsmadesimple.org
+#
+#This program is free software; you can redistribute it and/or modify
+#it under the terms of the GNU General Public License as published by
+#the Free Software Foundation; either version 2 of the License, or
+#(at your option) any later version.
+#
+#This program is distributed in the hope that it will be useful,
+#but WITHOUT ANY WARRANTY; without even the implied warranty of
+#MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#GNU General Public License for more details.
+#You should have received a copy of the GNU General Public License
+#along with this program; if not, write to the Free Software
+#Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+#
 
+/**
+ * Public utility class used to manipulate instances of images.
+ */
 final class imageEditor 
 {
-	public function __construct() {}
+	private function __construct() {}
   
-	public function resize($image, $mimeType, $image_width, $image_height){
+	/**
+	 * process a resize on a instance of image
+	 *
+	 * @param image the instance of image
+	 * @param mimeType the mimetype of the image
+	 * @param image_width the new width 
+	 * @param image_height the new height
+	 *
+	 * @return image instance of the image resized
+	 **/
+	public static function resize($image, $mimeType, $image_width, $image_height){
   
 		$newImage = @imagecreatetruecolor($image_width, $image_height);
 		if ($mimeType && ($mimeType == image_type_to_mime_type(IMAGETYPE_GIF) || $mimeType == image_type_to_mime_type(IMAGETYPE_PNG))) { 
@@ -18,7 +51,19 @@ final class imageEditor
 		return $newImage;
 	}
   
-	public function crop($image, $mimeType, $crop_x, $crop_y, $crop_width, $crop_height){
+	/**
+	 * process a crop on a instance of image
+	 *
+	 * @param image the instance of image
+	 * @param mimeType the mimetype of the image
+	 * @param crop_x the x position to begin the crop (top-left)
+	 * @param crop_y the y position to begin the crop (top-left)
+	 * @param crop_width the width to end the crop (from the left to the right)
+	 * @param crop_height the height to end the crop (from the top to the bottom)
+	 *
+	 * @return image instance of the image cropped
+	 **/
+	public static function crop($image, $mimeType, $crop_x, $crop_y, $crop_width, $crop_height){
 
 		$newImage = @imagecreatetruecolor($crop_width, $crop_height);
 		if ($mimeType && ($mimeType == image_type_to_mime_type(IMAGETYPE_GIF) || $mimeType == image_type_to_mime_type(IMAGETYPE_PNG))) { 
@@ -28,12 +73,18 @@ final class imageEditor
 			imagesavealpha($newImage, true);
 		}
 				
-		//imagecopyresampled($newImage, $image, 0, 0, $cropLeft, $cropTop, $crop_width, $crop_height, $crop_width, $crop_height);
 		imagecopyresampled($newImage, $image, 0, 0, $crop_x, $crop_y, $crop_width, $crop_height, $crop_width, $crop_height);
 		return $newImage;
 	}
   
-	public function getMime($path){
+	/**
+	 * return the mimetype of a file 
+	 *
+	 * @param path the path of the file
+	 *
+	 * @return mime the mimetype of the file
+	 **/
+	public static function getMime($path){
 		$info = getimagesize($path);
 		if (!$info) {
 			return false;
@@ -47,7 +98,14 @@ final class imageEditor
 		return $mime;
 	}
 
-	public function getWidth($path){
+	/**
+	 * return the width of a file 
+	 *
+	 * @param path the path of the file
+	 *
+	 * @return int the width of the file
+	 **/
+	public static function getWidth($path){
 		$info = getimagesize($path);
 		if (!$info) {
 			return false;
@@ -55,25 +113,19 @@ final class imageEditor
 		return $info[0];
 	}
   
-	public function open($path, $pathTemp = null) {
-		
-		$mimeType = $this->getMime($path);
-
+	/**
+	 * Will load the file $path and return an instance of image
+	 *
+	 * @param path the path of the file
+	 *
+	 * @return image instance of the image
+	 **/
+	public static function open($path) {
+	
+		$mimeType = imageEditor::getMime($path);
 		if (!$mimeType){
 			return "INVALID IMAGE TYPE";
 		}
-		/*
-		if($pathTemp != null){
-			$dirTemp = dirname($pathTemp);
-			if(!is_dir($dirTemp) && !mkdir ($dirTemp, 0775, true)){
-				return "COPY FAILED";
-			}
-			
-			if(!copy($path, $pathTemp)){
-				return "COPY FAILED";
-			}
-			$path = $pathTemp;
-		}*/
 				
 		if ($mimeType == image_type_to_mime_type(IMAGETYPE_JPEG)) {	
 			return imagecreatefromjpeg($path);
@@ -88,15 +140,14 @@ final class imageEditor
 		return NULL;
 	}
 	
-	function save($image, $path, $mimeType){
-	/*
-		if($path != null){
-						
-			if(!copy($pathTemp, $path)){
-				return "COPY FAILED";
-			}
-			$pathTemp = $path;
-		}*/
+	/**
+	 * Will save the instance of $image into the file $path
+	 *
+	 * @param image instance of the image
+	 * @param path the path of the file
+	 * @param mimeType the mimetype of the image
+	 **/
+	public static function save($image, $path, $mimeType){
 		if ($mimeType == image_type_to_mime_type(IMAGETYPE_JPEG)) {	
 			imagejpeg($image, $path);		
 		} else if ($mimeType == image_type_to_mime_type(IMAGETYPE_GIF)) {	

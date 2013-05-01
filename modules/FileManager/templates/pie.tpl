@@ -4,23 +4,19 @@
     <title>Image Editor</title>
 
     <link rel="stylesheet" type="text/css" href="{root_url}/modules/FileManager/js/jrac/style.jrac.css" />
-    <link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.7/themes/base/jquery-ui.css" />
+    <link rel="stylesheet" type="text/css" href="{root_url}/lib/jquery/css/smoothness/jquery-ui-1.8.21.custom.css" />
+ 	
 
-    <style>
+    <style type="text/css">
       .pane > * {
           float: left;
       }
     </style>
 
-    <script type="text/javascript" src="http://code.jquery.com/jquery-1.6.2.js"></script>
-    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.7/jquery-ui.js"></script>
+	
+	<script type="text/javascript" src="{root_url}/lib/jquery/js/jquery-1.7.2.min.js"></script>
+	<script type="text/javascript" src="{root_url}/lib/jquery/js/jquery-ui-1.8.21.custom.min.js"></script>
     <script type="text/javascript" src="{root_url}/modules/FileManager/js/jrac/jquery.jrac.js"></script>
-
-        <!-- SHJS - Syntax Highlighting for JavaScript -->
-    <script type="text/javascript" src="http://shjs.sourceforge.net/sh_main.min.js"></script>
-    <script type="text/javascript" src="http://shjs.sourceforge.net/lang/sh_javascript.min.js"></script>
-    <link type="text/css" rel="stylesheet" href="http://shjs.sourceforge.net/sh_style.css" />
-    <script type="text/javascript">$(document).ready(function(){ sh_highlightDocument(); });</script>
 
     <script type="text/javascript">
       <!--//--><![CDATA[//><!--
@@ -73,24 +69,26 @@
     <div class="pane clearfix">
       <img src="{$image}" alt="" />
     
-  	  <form action='{$formUrl}' method='GET' >
+  	  <form action='{$formUrl}' method='get' >
         <table class="coords">
-          <tr><td>crop x</td><td><input type="text" id='{$id}cx' name='{$id}cx' /></td></tr>
-          <tr><td>crop y</td><td><input type="text" id='{$id}cy' name='{$id}cy' /></td></tr>
-          <tr><td>crop width</td><td><input type="text" id='{$id}cw' name='{$id}cw' /></td></tr>
-          <tr><td>crop height</td><td><input type="text" id='{$id}ch' name='{$id}ch' /></td></tr>
+          <tr><td>{$mod->Lang("pie_crop_x")}</td><td><input type="text" id='{$id}cx' name='{$id}cx' /></td></tr>
+          <tr><td>{$mod->Lang("pie_crop_y")}</td><td><input type="text" id='{$id}cy' name='{$id}cy' /></td></tr>
+          <tr><td>{$mod->Lang("pie_crop_w")}</td><td><input type="text" id='{$id}cw' name='{$id}cw' /></td></tr>
+          <tr><td>{$mod->Lang("pie_crop_h")}</td><td><input type="text" id='{$id}ch' name='{$id}ch' /></td></tr>
 
-          <tr><td>image width</td><td><input type="text" id='{$id}iw' name='{$id}iw' /></td></tr>
-          <tr><td>image height</td><td><input type="text" id='{$id}ih' name='{$id}ih' /></td></tr>
+          <tr><td>{$mod->Lang("pie_image_w")}</td><td><input type="text" id='{$id}iw' name='{$id}iw' /></td></tr>
+          <tr><td>{$mod->Lang("pie_image_h")}</td><td><input type="text" id='{$id}ih' name='{$id}ih' /></td></tr>
           <tr><td>{$mod->Lang("pie_lock_proportion")}</td><td><input type="checkbox" checked="checked" /></td></tr>
         </table>
         {foreach $hiddens hidden}{$hidden}{/foreach}
         <input type='hidden' id='showtemplate' name='showtemplate' value='false' />
         
-        <input id='{$id}resize' type='submit' name='{$id}resize' value='resize' onclick='javascript:return confirm("Are you sure? There is no Crtl+z down here..");'/>
-        <input id='{$id}crop' type='submit' name='{$id}crop' value='crop' onclick='javascript:return confirm("Are you sure? There is no Crtl+z down here..");'/>
-        <input id='{$id}reset' type='submit' name='{$id}reset' value='reset' onclick='javascript:return confirm("Are you sure? It will reset your current modifications");'/>
-        <input type='button' value='close' onclick='javascript:window.close();'/>
+        <input id='{$id}resize' type='submit' name='{$id}resize' value='{$mod->Lang("pie_resize")}' onclick='javascript:return confirm("{$mod->Lang("pie_warn_action")}");'/>
+		
+        <input id='{$id}crop' type='submit' name='{$id}crop' value='{$mod->Lang("pie_crop")}' onclick='javascript:return confirm("{$mod->Lang("pie_warn_action")}");'/>
+		
+        <input id='{$id}reset' type='submit' name='{$id}reset' value='{$mod->Lang("pie_reset")}' onclick='javascript:return confirm("{$mod->Lang("pie_warn_reset")}");'/>
+        <input type='button' value='{$mod->Lang("pie_close")}' onclick='javascript:window.close();'/>
       </form>
 	  
     </div>
