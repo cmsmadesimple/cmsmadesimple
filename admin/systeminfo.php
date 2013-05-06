@@ -96,7 +96,9 @@ $tmp = array(0=>array(), 1=>array());
 $tmp[0]['php_memory_limit'] = testConfig('php_memory_limit', 'php_memory_limit');
 $tmp[0]['process_whole_template'] = testConfig('process_whole_template', 'process_whole_template');
 $tmp[1]['debug'] = testConfig('debug', 'debug');
-$tmp[0]['output_compression'] = testConfig('output_compression', 'output_compression');
+$tmp[1]['timezone'] = testConfig('timezone','timezone');
+$tmp[1]['set_names'] = testConfig('set_names','set_names');
+$tmp[1]['set_timezone'] = testConfig('set_names','set_timezone');
 
 $tmp[0]['max_upload_size'] = testConfig('max_upload_size', 'max_upload_size');
 $tmp[0]['url_rewriting'] = testConfig('url_rewriting', 'url_rewriting');
@@ -252,10 +254,25 @@ $smarty->assign('php_information', $tmp);
 /* Server Information */
 
 $tmp = array(0=>array(), 1=>array());
-
 $tmp[1]['server_software'] = testDummy('', $_SERVER['SERVER_SOFTWARE'], '');
 $tmp[0]['server_api'] = testDummy('', PHP_SAPI, '');
 $tmp[1]['server_os'] = testDummy('', PHP_OS . ' ' . php_uname('r') .' '. lang('on') .' '. php_uname('m'), '');
+{
+  $n = abs(time() - $db->GetOne('SELECT UNIX_TIMESTAMP(NOW())'));
+  $test = new CmsInstallTest();
+  $test->title = lang('foo');
+  $test->ini_val = FALSE;
+  $test->value = $n;
+  $test->res = 'green';
+  if( $n < 5) {
+    $test->res = 'green';
+  }
+  else {
+    $test->res = 'red';
+  }
+  getTestReturn($test,1,lang('foo1'));
+  $tmp[1]['tz_offset'] = $test;
+}
 
 switch($config['dbms']) //workaround: ServerInfo() is unsupported in adodblite
 {
@@ -316,7 +333,6 @@ $tmp[1]['config_file'] = testDummy('', substr(sprintf('%o', fileperms(CONFIG_FIL
 
 $smarty->assign('count_permission_info', count($tmp[0]));
 $smarty->assign('permission_info', $tmp);
-
 
 
 if(isset($_GET['cleanreport']) && $_GET['cleanreport'] == 1) echo $smarty->fetch('systeminfo.txt.tpl');

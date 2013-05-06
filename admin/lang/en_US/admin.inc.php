@@ -1,4 +1,5 @@
 <?php
+$lang['admin']['tz_offset'] = 'Timezone Offset';
 $lang['admin']['gcb_name_help'] = '(can only contain letters and numbers)';
 $lang['admin']['pagedefaultsupdated'] = 'Page default settings updated';
 $lang['admin']['help_function_module_available'] = <<<EOT

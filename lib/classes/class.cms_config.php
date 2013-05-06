@@ -108,6 +108,7 @@ class cms_config implements ArrayAccess
     $this->_types['default_encoding'] = self::TYPE_STRING;
     $this->_types['admin_encoding'] = self::TYPE_STRING;
     $this->_types['set_names'] = self::TYPE_BOOL;
+    $this->_types['set_timezone'] = self::TYPE_BOOL;
     $this->_types['admin_url'] = self::TYPE_STRING;
     $this->_types['ignore_lazy_load'] = self::TYPE_BOOL;
 
@@ -227,6 +228,9 @@ class cms_config implements ArrayAccess
 		  return false;
 
 	  case 'set_names':
+		  return true;
+
+	  case 'set_timezone':
 		  return true;
 
 	  case 'root_path':
