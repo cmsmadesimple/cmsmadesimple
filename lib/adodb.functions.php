@@ -75,7 +75,7 @@ function &adodb_connect()
 	if($config['set_names'] == true) {
 	  $p1[] = "NAMES 'utf8'";
 	}
-	if($config['set_timezone'] == true) {
+	if($config['set_db_timezone'] == true) {
 	  $dt = new DateTime();
 	  $dtz = new DateTimeZone($config['timezone']);
 	  $offset = timezone_offset_get($dtz,$dt);

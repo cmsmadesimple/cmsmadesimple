@@ -47,28 +47,24 @@ class cms_config implements ArrayAccess
   private function get_upload_size()
   {
     $maxFileSize = ini_get('upload_max_filesize');
-    if (!is_numeric($maxFileSize))
-      {
-		  $l=strlen($maxFileSize);
-		  $i=0;$ss='';$x=0;
-		  while ($i < $l)
-			  {
-				  if (is_numeric($maxFileSize[$i]))
-					  {$ss .= $maxFileSize[$i];}
-				  else
-					  {
-						  if (strtolower($maxFileSize[$i]) == 'm') $x=1000000;
-						  if (strtolower($maxFileSize[$i]) == 'k') $x=1000;
-					  }
-				  $i ++;
-			  }
-		  $maxFileSize=$ss;
-		  if ($x >0) $maxFileSize = $ss * $x;
-      }
-    else
-      {
-		  $maxFileSize = 1000000;
-      }
+    if (!is_numeric($maxFileSize)) {
+		$l=strlen($maxFileSize);
+		$i=0;$ss='';$x=0;
+		while ($i < $l) {
+			if (is_numeric($maxFileSize[$i]))
+				{$ss .= $maxFileSize[$i];}
+			else {
+				if (strtolower($maxFileSize[$i]) == 'm') $x=1000000;
+				if (strtolower($maxFileSize[$i]) == 'k') $x=1000;
+			}
+			$i ++;
+		}
+		$maxFileSize=$ss;
+		if ($x >0) $maxFileSize = $ss * $x;
+	}
+    else {
+		$maxFileSize = 1000000;
+	}
     return $maxFileSize;
   }
 
@@ -108,17 +104,16 @@ class cms_config implements ArrayAccess
     $this->_types['default_encoding'] = self::TYPE_STRING;
     $this->_types['admin_encoding'] = self::TYPE_STRING;
     $this->_types['set_names'] = self::TYPE_BOOL;
-    $this->_types['set_timezone'] = self::TYPE_BOOL;
+    $this->_types['set_db_timezone'] = self::TYPE_BOOL;
     $this->_types['admin_url'] = self::TYPE_STRING;
     $this->_types['ignore_lazy_load'] = self::TYPE_BOOL;
 
     $config = array();
-    if (file_exists(CONFIG_FILE_LOCATION))
-      {
-		  include(CONFIG_FILE_LOCATION);
-		  unset($config['max_upload_size']);
-		  unset($config['upload_max_filesize']);
-      }
+    if (file_exists(CONFIG_FILE_LOCATION)) {
+		include(CONFIG_FILE_LOCATION);
+		unset($config['max_upload_size']);
+		unset($config['upload_max_filesize']);
+	}
 
     $this->_data = $config;
   }
@@ -135,10 +130,7 @@ class cms_config implements ArrayAccess
     $trace = debug_backtrace(FALSE);
     $class = '';
     if( isset($trace[1]['class']) ) $class = $trace[1]['class'];
-    if( $class && in_array($class,$this->_friends) )
-      {
-		  $this->_data = array_merge($this->_data,$newconfig);
-      }
+    if( $class && in_array($class,$this->_friends) ) $this->_data = array_merge($this->_data,$newconfig);
   }
 
 
@@ -172,48 +164,41 @@ class cms_config implements ArrayAccess
   {
 	  // hardcoded config vars
 	  // usually old values valid in past versions.
-	  switch( $key )
-		  {
-		  case 'use_adodb_lite':
-		  case 'use_hierarchy':
-			  // deprecated, backwards compat only
-			  return TRUE;
+	  switch( $key ) {
+	  case 'use_adodb_lite':
+	  case 'use_hierarchy':
+		  // deprecated, backwards compat only
+		  return TRUE;
 
-		  case 'use_smarty_php_tags':
-		  case 'output_compression':
-			  // deprecated, backwards compat only
-			  return FALSE;
+	  case 'use_smarty_php_tags':
+	  case 'output_compression':
+		  // deprecated, backwards compat only
+		  return FALSE;
 
-		  case 'default_upload_permission':
-			  // deprecated, backwards compat only
-			  return '664';
+	  case 'default_upload_permission':
+		  // deprecated, backwards compat only
+		  return '664';
 
-		  case 'assume_mod_rewrite':
-			  // deprecated, backwards compat only
-			  return ($this['url_rewriting'] == 'mod_rewrite')?true:false;
+	  case 'assume_mod_rewrite':
+		  // deprecated, backwards compat only
+		  return ($this['url_rewriting'] == 'mod_rewrite')?true:false;
 
-		  case 'internal_pretty_urls':
-			  // deprecated, backwards compat only
-			  return ($this['url_rewriting'] == 'internal')?true:false;
-		  }
-
-	  // from the config file.
-	  if( isset($this->_data[$key]) )
-	  {
-		  return $this->_data[$key];
+	  case 'internal_pretty_urls':
+		  // deprecated, backwards compat only
+		  return ($this['url_rewriting'] == 'internal')?true:false;
 	  }
 
+	  // from the config file.
+	  if( isset($this->_data[$key]) ) return $this->_data[$key];
+
 	  // cached, calculated values.
-	  if( isset($this->_cache[$key]) )
-	  {
+	  if( isset($this->_cache[$key]) ) {
 		  // this saves recursion and dynamic calculations all the time.
 		  return $this->_cache[$key];
 	  }
 
-	  // it's not explicitly specified in the config file.
-	  //$calculated_root_path = dirname(dirname(dirname(__FILE__)));
-	  switch( $key )
-	  {
+	  // it's not explicitly specified in the config file, or cached.
+	  switch( $key ) {
 	  case 'dbms':
 	  case 'db_hostname':
 	  case 'db_username':
@@ -230,12 +215,12 @@ class cms_config implements ArrayAccess
 	  case 'set_names':
 		  return true;
 
-	  case 'set_timezone':
-		  return true;
+	  case 'set_db_timezone':
+		  return FALSE;
 
 	  case 'root_path':
 		  $out = dirname(dirname(dirname(__FILE__)));
-                  $this->_cache[$key] = $out;
+		  $this->_cache[$key] = $out;
 		  return $out;
 
 	  case 'root_url':
@@ -366,16 +351,14 @@ class cms_config implements ArrayAccess
   {
     $tmp = debug_backtrace();
     $parent = '';
-    if( isset($tmp[1]) && isset($tmp[1]['class']) )
-      {
-	$class = $tmp[1]['class'];
-	$parent = get_parent_class($class);
-      }
-    if( $parent != 'CMSInstallerPage' )
-      {
-	trigger_error('Modification of config variables is deprecated',E_USER_ERROR);
-	return;
-      }
+    if( isset($tmp[1]) && isset($tmp[1]['class']) ) {
+		$class = $tmp[1]['class'];
+		$parent = get_parent_class($class);
+	}
+    if( $parent != 'CMSInstallerPage' ) {
+		trigger_error('Modification of config variables is deprecated',E_USER_ERROR);
+		return;
+	}
     $this->_data[$key] = $value;
   }
 
@@ -390,26 +373,22 @@ class cms_config implements ArrayAccess
   {
 	  $type = self::TYPE_STRING;
 
-	  if( isset($this->_types[$key]) )
-		  {
-			  $type = $this->_types[$key];
-		  }
+	  if( isset($this->_types[$key]) ) $type = $this->_types[$key];
 
 	  $str = '';
-	  switch( $type )
-		  {
-		  case self::TYPE_STRING:
-			  $str = "'".$value."'";
-			  break;
+	  switch( $type ) {
+	  case self::TYPE_STRING:
+		  $str = "'".$value."'";
+		  break;
 
-		  case self::TYPE_BOOL:
-			  $str = ($value)?'true':'false';
-			  break;
+	  case self::TYPE_BOOL:
+		  $str = ($value)?'true':'false';
+		  break;
 
-		  case self::TYPE_INT:
-			  $str = (int)$value;
-			  break;
-		  }
+	  case self::TYPE_INT:
+		  $str = (int)$value;
+		  break;
+	  }
 	  return $str;
   }
 
@@ -424,58 +403,44 @@ class cms_config implements ArrayAccess
    */
   public function save($verbose = true,$filename = '')
   {
-    if( !$filename )
-      {
-		  $filename = CONFIG_FILE_LOCATION;
-      }
+    if( !$filename ) $filename = CONFIG_FILE_LOCATION;
 
     // backup the original config.php file (just in case)
-    if( file_exists($filename) )
-      {
-		  @copy($filename,cms_join_path(TMP_CACHE_LOCATION,basename($filename).time().'.bak'));
-      }
+    if( file_exists($filename) ) @copy($filename,cms_join_path(TMP_CACHE_LOCATION,basename($filename).time().'.bak'));
 
     $output = "<?php\n# CMS Made Simple Configuration File\n# Documentation: /doc/CMSMS_config_reference.pdf\n#\n";
     // output header to the config file.
 
-    foreach( $this->_data as $key => $value )
-    {
-      $outvalue = $this->_printable_value($key,$value);
-      $output .= "\$config['{$key}'] = $outvalue;\n";
+    foreach( $this->_data as $key => $value ) {
+		$outvalue = $this->_printable_value($key,$value);
+		$output .= "\$config['{$key}'] = $outvalue;\n";
     }
 
     $output .= "?>\n";
 
     // and write it.
     $fh = fopen($filename,'w');
-    if( $fh )
-      {
-		  fwrite($fh,$output);
-		  fclose($fh);
-      }
+    if( $fh ) {
+		fwrite($fh,$output);
+		fclose($fh);
+	}
   }
 
   public function smart_root_url()
   {
-	  if( isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' ) {
-		  return $this->offsetGet('ssl_url');
-	  }
+	  if( isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' ) return $this->offsetGet('ssl_url');
 	  return $this->offsetGet('root_url');
   }
 
   public function smart_uploads_url()
   {
-	  if( isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' ) {
-		  return $this->offsetGet('ssl_uploads_url');
-	  }
+	  if( isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' ) return $this->offsetGet('ssl_uploads_url');
 	  return $this->offsetGet('uploads_url');
   }
 
   public function smart_image_uploads_url()
   {
-	  if( isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' ) {
-		  return $this->offsetGet('ssl_image_uploads_url');
-	  }
+	  if( isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' ) return $this->offsetGet('ssl_image_uploads_url');
 	  return $this->offsetGet('image_uploads_url');
   }
 } // end of class
