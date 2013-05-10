@@ -71,18 +71,20 @@ function &adodb_connect()
 		$dbinstance->debug = true;
 	}
 	
-	$q2 = array();
-	if($config['set_names'] == true) $q2[] = "SET NAMES 'utf8'";
+	if($config['set_names'] == true) {
+	  $query = "SET NAMES 'utf8'";
+	  $dbinstance->Execute($query);
+	}
 	if($config['set_timezone'] == true) {
 	  $dt = new DateTime();
 	  $dtz = new DateTimeZone($config['timezone']);
 	  $offset = timezone_offset_get($dtz,$dt);
-	  $hrs = (int)($offset / 3600);
-	  $mins = (int)($offset % 3600);
-	  $str = "$hrs:$mins";
-	  $q2[] = "SET time_zone  = '{$str}'";
+	  $symbol = ($offset < 0) ? '-' : '+';
+	  $hrs = abs((int)($offset / 3600));
+	  $mins = abs((int)($offset % 3600));
+	  $query = sprintf("SET time_zone  = '%s%d:%02d'",$symbol,$hrs,$mins);
+	  $dbinstance->Execute($query);
 	}
-	if( count($q2) ) $dbinstance->Execute(implode(';',$q2));
 	return $dbinstance;
 }
 
