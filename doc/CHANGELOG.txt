@@ -1,3 +1,10 @@
+Version 1.11.7 -
+-----------------------------
+Core - General
+  - Added set_db_timezone config option which will execute the mysql command SET timezone attempting to solve the problem with date calculates wrt
+    server timezone vs. user timezone.
+
+
 Version 1.11.6 - Merchena
 -----------------------------
 Core - General
