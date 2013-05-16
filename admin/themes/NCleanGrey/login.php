@@ -113,7 +113,7 @@
 						<p>
 							<input id="lbusername" name="username" <?php if(!isset($_POST['username'])) echo 'class="defaultfocus"' ?> type="text" size="15" value="<?php echo htmlentities(isset($_POST['username'])?$_POST['username']:'')?>" /><br />
 						<?php if(isset($error) && $error!='') {
-						  echo '<input id="lbpassword" class="defaultfocus" name="password" type="password" size="15" maxlength="25" onpaste="return false;"/><br />';
+						  echo '<input id="lbpassword" class="defaultfocus" name="password" type="password" size="15" maxlength="100"/><br />';
 						} else {
 						  echo '<input id="lbpassword"  name="password" type="password" size="15" maxlength="25" onpaste="return false;"/><br />';
 						} ?>

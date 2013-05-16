@@ -1,4 +1,4 @@
-<?php
+<?php // -*- mode:php; tab-width:4; indent-tabs-mode:t; c-basic-offset:4; -*-
 
 /**
  * @package CMS
@@ -57,13 +57,20 @@ function &adodb_connect()
 
   $dbinstance->raiseErrorFn = null;
   $dbinstance->SetFetchMode(ADODB_FETCH_ASSOC);
-  if ($config['debug'] == true) {
-    $dbinstance->debug = true;
-  }
-  if($config['set_names'] == true) {
-    $dbinstance->Execute("SET NAMES 'utf8'");
-  }
+  if ($config['debug'] == true) $dbinstance->debug = true;
 
+  $p1 = array();
+  if($config['set_names'] == true) $p1[] = "NAMES 'utf8'";
+  if($config['set_db_timezone'] == true) {
+    $dt = new DateTime();
+    $dtz = new DateTimeZone($config['timezone']);
+    $offset = timezone_offset_get($dtz,$dt);
+    $symbol = ($offset < 0) ? '-' : '+';
+    $hrs = abs((int)($offset / 3600));
+    $mins = abs((int)($offset % 3600));
+    $p1[] = sprintf("time_zone = '%s%d:%02d'",$symbol,$hrs,$mins);
+  }
+  $dbinstance->Execute('SET '.implode(',',$p1));
   return $dbinstance;
 }
 
@@ -84,4 +91,5 @@ function adodb_error($dbtype, $function_performed, $error_number, $error_message
   }
 }
 
+# vim:ts=4 sw=4 noet
 ?>

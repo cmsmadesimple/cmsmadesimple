@@ -11,7 +11,7 @@
 
 	{if isset($timezones)}
 	<h3>{lang_install a=timezone}</h3>
-        <p>{lang_install a=install_timezone}</p>
+        <p>{lang_install a=install_timezone2}</p>
         <p style="text-align: center;">
           <select name="timezone">{html_options options=$timezones selected=$values.timezone}</select>
         </p>

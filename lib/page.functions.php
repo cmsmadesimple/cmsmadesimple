@@ -648,7 +648,7 @@ function get_pageid_or_alias_from_url()
   $page = '';
   if (isset($smarty->id) && isset($params[$smarty->id . 'returnid'])) {
     // get page from returnid parameter in module action
-    $page = $params[$smarty->id . 'returnid'];
+    $page = (int)$params[$smarty->id . 'returnid'];
   }
   else if (isset($config["query_var"]) && $config["query_var"] != '' && 
 	   isset($_GET[$config["query_var"]])) {

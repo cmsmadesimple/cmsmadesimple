@@ -74,9 +74,7 @@ final class cms_userprefs
   public static function get_for_user($userid,$key,$dflt = '')
   {
 	  self::_read($userid);
-	  if( isset(self::$_prefs[$userid][$key]) ) {
-		  return self::$_prefs[$userid][$key];
-	  }
+	  if( isset(self::$_prefs[$userid][$key]) ) return self::$_prefs[$userid][$key];
 	  return $dflt;
   }
 
@@ -218,4 +216,5 @@ final class cms_userprefs
 #
 # EOF
 #
+# vim:ts=4 sw=4 noet
 ?>

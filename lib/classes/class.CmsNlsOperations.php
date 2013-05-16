@@ -1,4 +1,4 @@
-<?php
+<?php // -*- mode:php; tab-width:4; indent-tabs-mode:t; c-basic-offset:4; -*-
 #CMS - CMS Made Simple
 #(c)2004-2012 by Ted Kulp (wishy@users.sf.net)
 #This project's homepage is: http://www.cmsmadesimple.org
@@ -86,8 +86,7 @@ final class CmsNlsOperations
 	  if( !is_file($files[$i]) ) continue;
 	  $fn = basename($files[$i]);
 	  $tlang = substr($fn,0,strpos($fn,'.'));
-	  if( $tlang != 'en_US' && 
-	      !file_exists(cms_join_path($langdir,'ext',$tlang,'admin.inc.php')) ) {
+	  if( $tlang != 'en_US' && !file_exists(cms_join_path($langdir,'ext',$tlang,'admin.inc.php')) ) {
 	    continue;
 	  }
 
@@ -112,9 +111,7 @@ final class CmsNlsOperations
   public static function get_installed_languages()
   {
     self::_load_nls();
-    if( is_array(self::$_nls) ) {
-      return array_keys(self::$_nls);
-    }
+    if( is_array(self::$_nls) ) return array_keys(self::$_nls);
   }
 
   /**
@@ -126,9 +123,7 @@ final class CmsNlsOperations
   public static function get_language_info($lang)
   {
     self::_load_nls();
-    if( isset(self::$_nls[$lang]) ) {
-      return self::$_nls[$lang];
-    }
+    if( isset(self::$_nls[$lang]) ) return self::$_nls[$lang];
   }
 
   /**
@@ -150,17 +145,9 @@ final class CmsNlsOperations
   public static function set_language($lang = null)
   {
     $curlang = '';
-    if( self::$_cur_lang != '') {
-      // lang has been previously set.
-      $curlang = self::$_cur_lang;
-    }
-    if( $lang != '' ) {
-      $lang = self::find_nls_match($lang);
-    }
-    if( $lang == '' ) {
-      $lang = self::get_default_language();
-    }
-
+    if( self::$_cur_lang != '') $curlang = self::$_cur_lang;
+    if( $lang != '' ) $lang = self::find_nls_match($lang);
+    if( $lang == '' ) $lang = self::get_default_language();
     if( $curlang == $lang ) return TRUE; // nothing to do.
     
     self::_load_nls();
@@ -185,7 +172,6 @@ final class CmsNlsOperations
   public static function get_current_language()
   {
     if( isset(self::$_cur_lang) ) return self::$_cur_lang;
-
     return self::get_default_language();
   }
 
@@ -234,9 +220,7 @@ final class CmsNlsOperations
    */
   protected static function get_frontend_language()
   {
-    if( is_object(self::$_fe_language_detector) ) {
-      return self::$_fe_language_detector->find_language();
-    }
+    if( is_object(self::$_fe_language_detector) ) return self::$_fe_language_detector->find_language();
     $x = trim(get_site_preference('frontendlang'));
     if( !$x ) $x = 'en_US';
     return $x;
@@ -262,9 +246,7 @@ final class CmsNlsOperations
       }
     }
 
-    if( !$lang ) {
-      $lang = self::detect_browser_language();
-    }
+    if( !$lang ) $lang = self::detect_browser_language();
 
     if( $uid && isset($_POST['default_cms_language']) ) {
       // a hack to handle the editpref case of the user changing his language
@@ -272,9 +254,7 @@ final class CmsNlsOperations
       // actually be set.
       self::_load_nls();
       $a2 = basename(trim($_POST['default_cms_language']));
-      if( $a2 && isset(self::$_nls[$a2]) ) {
-	$lang = $a2;
-      }
+      if( $a2 && isset(self::$_nls[$a2]) ) $lang = $a2;
     }
 
     if( $lang == '' ) $lang = 'en_US';
@@ -298,9 +278,7 @@ final class CmsNlsOperations
       if( isset(self::$_nls[$onelang]) ) return $onelang;
 
       foreach( self::$_nls as $key => $obj ) {
-	if( $obj->matches($onelang) ) {
-	  return $obj->name();
-	}
+	if( $obj->matches($onelang) ) return $obj->name();
       }
     }
   }
@@ -349,8 +327,7 @@ final class CmsNlsOperations
 
     // is it specified in the config.php?
     $config = cmsms()->GetConfig();
-    if( isset($config['default_encoding']) && $config['default_encoding'] != '' )
-      return $config['default_encoding'];
+    if( isset($config['default_encoding']) && $config['default_encoding'] != '' ) return $config['default_encoding'];
 
     $lang = self::get_current_language();
     if( !$lang ) return 'UTF-8'; // no language.. weird.
@@ -402,9 +379,7 @@ final class CmsNlsOperations
     }
 
     if( $locale ) {
-      if( !is_array($locale) ) {
-	$locale = explode(',',$locale);
-      }
+      if( !is_array($locale) ) $locale = explode(',',$locale);
       $res = setlocale(LC_ALL,$locale);
       $_locale_set = 1;
     }
@@ -443,7 +418,9 @@ final class CmsNlsOperations
     }
   }
 } // end of class
+
 #
 # EOF
 #
+# vim:ts=4 sw=4 noet
 ?>

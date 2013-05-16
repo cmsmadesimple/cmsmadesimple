@@ -72,18 +72,14 @@ final class cms_admin_utils
 							  $obj->GetModuleURLPath()."/images/{$img}");
 		  }
 	  }
-	  if( basename($icon) == $icon ) {
-		  $icon = "icons/system/{$icon}";
-	  }
+	  if( basename($icon) == $icon ) $icon = "icons/system/{$icon}";
 	  $config = cmsms()->GetConfig();
 	  $dirs[] = array(cms_join_path($config['root_path'],$config['admin_dir'],"themes/{$theme->themeName}/images/{$icon}"),
 					  $config['admin_url']."/themes/{$theme->themeName}/images/{$icon}");
 
 	  $fnd = null;
 	  foreach( $dirs as $one ) {
-		  if( file_exists($one[0]) ) {
-			  $fnd = $one[1];
-		  }
+		  if( file_exists($one[0]) ) $fnd = $one[1];
 	  }
 	  return $fnd;
   }
@@ -154,4 +150,5 @@ final class cms_admin_utils
 #
 #
 # EOF
+# vim:ts=4 sw=4 noet
 ?>

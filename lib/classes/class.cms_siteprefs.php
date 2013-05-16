@@ -67,8 +67,7 @@ final class cms_siteprefs
   public static function get($key,$dflt = '')
   {
     self::_read();
-    if( isset(self::$_prefs[$key]) ) 
-      return self::$_prefs[$key];
+    if( isset(self::$_prefs[$key]) )  return self::$_prefs[$key];
     return $dflt;
   }
 
@@ -134,4 +133,5 @@ final class cms_siteprefs
 #
 # EOF
 #
+# vim:ts=4 sw=4 noet
 ?>

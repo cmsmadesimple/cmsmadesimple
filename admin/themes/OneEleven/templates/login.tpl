@@ -47,7 +47,7 @@
 						{/if}
 						{if !isset($smarty.get.forgotpw) && empty($smarty.get.forgotpw)}
 							<label for="lbpassword">{'password'|lang}</label>
-							<input id="lbpassword"{if !isset($smarty.post.lbpassword) or isset($error)} class="focus"{/if} placeholder="{'password'|lang}" name="password" type="password" size="15" maxlength="25" onpaste="return false;" />
+							<input id="lbpassword"{if !isset($smarty.post.lbpassword) or isset($error)} class="focus"{/if} placeholder="{'password'|lang}" name="password" type="password" size="15" maxlength="100"/>
 						{/if}
 						{if isset($changepwhash) && !empty($changepwhash)} 
 							<label for="lbpasswordagain">{'passwordagain'|lang}</label>

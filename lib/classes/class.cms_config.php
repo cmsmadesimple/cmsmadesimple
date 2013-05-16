@@ -104,6 +104,7 @@ final class cms_config implements ArrayAccess
     $this->_types['default_encoding'] = self::TYPE_STRING;
     $this->_types['admin_encoding'] = self::TYPE_STRING;
     $this->_types['set_names'] = self::TYPE_BOOL;
+    $this->_types['set_db_timezone'] = self::TYPE_BOOL;
     $this->_types['admin_url'] = self::TYPE_STRING;
     $this->_types['ignore_lazy_load'] = self::TYPE_BOOL;
 	$this->_types['tmp_cache_location'] = self::TYPE_STRING;
@@ -149,9 +150,7 @@ final class cms_config implements ArrayAccess
     $trace = debug_backtrace(FALSE);
     $class = '';
     if( isset($trace[1]['class']) ) $class = $trace[1]['class'];
-    if( $class && in_array($class,$this->_friends) ) {
-		$this->_data = array_merge($this->_data,$newconfig);
-	}
+    if( $class && in_array($class,$this->_friends) ) $this->_data = array_merge($this->_data,$newconfig);
   }
 
 
@@ -246,6 +245,9 @@ final class cms_config implements ArrayAccess
 	  case 'set_names':
 		  return true;
 
+	  case 'set_db_timezone':
+		  return true;
+
 	  case 'root_path':
 		  $out = dirname(dirname(dirname(__FILE__)));
 		  $this->_cache[$key] = $out;
@@ -270,9 +272,7 @@ final class cms_config implements ArrayAccess
 			  while(endswith($path, DIRECTORY_SEPARATOR)) {
 				  $path = substr($path,0,strlen($path)-1);
 			  }
-			  if( ($pos = strpos($path,'/index.php')) !== FALSE ) {
-				  $path = substr($path,0,$pos);
-			  }
+			  if( ($pos = strpos($path,'/index.php')) !== FALSE ) $path = substr($path,0,$pos);
 		  }
 		  $str = 'http://'.$_SERVER['HTTP_HOST'].$path;
 		  $this->_cache[$key] = $str;
@@ -407,10 +407,7 @@ final class cms_config implements ArrayAccess
   private function _printable_value($key,$value)
   {
 	  $type = self::TYPE_STRING;
-
-	  if( isset($this->_types[$key]) ) {
-		  $type = $this->_types[$key];
-	  }
+	  if( isset($this->_types[$key]) ) $type = $this->_types[$key];
 
 	  $str = '';
 	  switch( $type ) {
@@ -440,14 +437,10 @@ final class cms_config implements ArrayAccess
    */
   public function save($verbose = true,$filename = '')
   {
-	  if( !$filename ) {
-		  $filename = CONFIG_FILE_LOCATION;
-      }
+	  if( !$filename ) $filename = CONFIG_FILE_LOCATION;
 
 	  // backup the original config.php file (just in case)
-	  if( file_exists($filename) ) {
-		  @copy($filename,cms_join_path(TMP_CACHE_LOCATION,basename($filename).time().'.bak'));
-      }
+	  if( file_exists($filename) ) @copy($filename,cms_join_path(TMP_CACHE_LOCATION,basename($filename).time().'.bak'));
 
 	  $output = "<?php\n# CMS Made Simple Configuration File\n# Documentation: /doc/CMSMS_config_reference.pdf\n#\n";
 	  // output header to the config file.
@@ -469,25 +462,19 @@ final class cms_config implements ArrayAccess
 
   public function smart_root_url()
   {
-	  if( isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' ) {
-		  return $this->offsetGet('ssl_url');
-	  }
+	  if( isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' ) return $this->offsetGet('ssl_url');
 	  return $this->offsetGet('root_url');
   }
 
   public function smart_uploads_url()
   {
-	  if( isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' ) {
-		  return $this->offsetGet('ssl_uploads_url');
-	  }
+	  if( isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' ) return $this->offsetGet('ssl_uploads_url');
 	  return $this->offsetGet('uploads_url');
   }
 
   public function smart_image_uploads_url()
   {
-	  if( isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' ) {
-		  return $this->offsetGet('ssl_image_uploads_url');
-	  }
+	  if( isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' ) return $this->offsetGet('ssl_image_uploads_url');
 	  return $this->offsetGet('image_uploads_url');
   }
 } // end of class

@@ -50,21 +50,14 @@ final class CmsPermission
 
 	public function __get($key)
 	{
-		if( !in_array($key,self::$_keys) ) {
-			throw new CmsInvalidDataException($key.' is not a valid key for a CmsPermission Object');
-		}
-
+		if( !in_array($key,self::$_keys) ) throw new CmsInvalidDataException($key.' is not a valid key for a CmsPermission Object');
 		if( isset($this->_data[$key]) ) return $this->_data[$key];
 	}
 
 	public function __set($key,$value)
 	{
-		if( !in_array($key,self::$_keys) ) {
-			throw new CmsInvalidDataException($key.' is not a valid key for a CmsPermission Object');
-		}
-		if( $key == 'id' ) {
-			throw new CmsInvalidDataException($key.' cannot be set this way in a CmsPermission Object');
-		}
+		if( !in_array($key,self::$_keys) ) throw new CmsInvalidDataException($key.' is not a valid key for a CmsPermission Object');
+		if( $key == 'id' ) throw new CmsInvalidDataException($key.' cannot be set this way in a CmsPermission Object');
 
 		$this->_data[$key] = $value;
 	}
@@ -75,22 +68,15 @@ final class CmsPermission
 
 		$db = cmsms()->GetDb();
 		$new_id = $db->GenID(cms_db_prefix().'permissions_seq');
-		if( !$new_id ) {
-			throw new CmsSQLErrorException($db->sql.' -- '.$db->ErrorMsg());
-		}
+		if( !$new_id ) throw new CmsSQLErrorException($db->sql.' -- '.$db->ErrorMsg());
 
 		$now = $db->DbTimeStamp(time());
 		$query = 'INSERT INTO '.cms_db_prefix()."permissions 
               (permission_id,permission_name,permission_text,permission_source,create_date,
                modified_date) VALUES (?,?,?,?,$now,$now)";
 		$dbr = $db->Execute($query,
-							array($new_id,
-								  $this->_data['name'],
-								  $this->_data['text'],
-								  $this->_data['source']));
-		if( !$dbr ) {
-			throw new CmsSQLErrorException($db->sql.' -- '.$db->ErrorMsg());
-		}
+							array($new_id, $this->_data['name'], $this->_data['text'], $this->_data['source']));
+		if( !$dbr ) throw new CmsSQLErrorException($db->sql.' -- '.$db->ErrorMsg());
 		$this->_data['id'] = $new_id;
 	}
 
@@ -109,17 +95,13 @@ final class CmsPermission
 			$query = 'SElECT permission_id FROM '.cms_db_prefix().'permissions
                 WHERE permission_name = ?';
 			$dbr = $db->GetOne($query,array($this->_data['name']));
-			if( $dbr > 0 ) {
-				throw new CmsInvalidDataException('Permission with name '.$this->_data['name'].' already exists');
-			}
+			if( $dbr > 0 ) throw new CmsInvalidDataException('Permission with name '.$this->_data['name'].' already exists');
 		}
 	}
 
 	public function save()
 	{
-		if( !isset($this->_data['id']) || $this->_data['id'] < 1 ) {
-			return $this->_insert();
-		}
+		if( !isset($this->_data['id']) || $this->_data['id'] < 1 ) return $this->_insert();
 		throw new CmsLogicException('Cannot update an existing CmsPermission object');
 	}
 
@@ -201,4 +183,5 @@ final class CmsPermission
 #
 # EOF
 #
+# vim:ts=4 sw=4 noet
 ?>

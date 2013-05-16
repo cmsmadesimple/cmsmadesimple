@@ -1,4 +1,4 @@
-<?php
+<?php // -*- mode:php; tab-width:4; indent-tabs-mode:t; c-basic-offset:4; -*-
 # CMS - CMS Made Simple
 # (c)2004-6 by Ted Kulp (ted@cmsmadesimple.org)
 # This project's homepage is: http://cmsmadesimple.org
@@ -156,8 +156,7 @@ abstract class CMSModule
 
       $this->InitializeFrontend();
     }
-    else if( isset($CMS_ADMIN_PAGE) && !isset($CMS_STYLESHEET) 
-	     && !isset($CMS_INSTALL_PAGE) ) {
+    else if( isset($CMS_ADMIN_PAGE) && !isset($CMS_STYLESHEET) && !isset($CMS_INSTALL_PAGE) ) {
       $this->InitializeAdmin();
     }
   }
@@ -660,9 +659,7 @@ abstract class CMSModule
 	$mapped = true;
       }
 
-      if( $clean_keys ) {
-	$key = cms_htmlentities($key);
-      }
+      if( $clean_keys ) $key = cms_htmlentities($key);
 
       if( !$mapped && !$allow_unknown ) {
 	trigger_error('Parameter '.$key.' is not known by module '.$modulename.' dropped',E_USER_WARNING);
@@ -878,7 +875,7 @@ abstract class CMSModule
    * @deprecated
    * @return array The config hash.
    */
-  final public function GetConfig()
+  final public function &GetConfig()
   {
     return cmsms()->GetConfig();
   }
@@ -890,7 +887,7 @@ abstract class CMSModule
    * @deprecated
    * @return object Adodb Database object.
    */
-  final public function & GetDb()
+  final public function &GetDb()
   {
     return cmsms()->GetDb();
   }
@@ -1240,10 +1237,7 @@ abstract class CMSModule
 
     $query = "SELECT child_module FROM ".cms_db_prefix()."module_deps WHERE parent_module = ? LIMIT 1";
     $tmp = $db->GetOne($query,array($this->GetName()));
-    if( $tmp ) {
-      $result = true;
-    }
-
+    if( $tmp ) $result = true;
     return $result;
   }
 
@@ -1687,22 +1681,11 @@ abstract class CMSModule
   function DoAction($name, $id, $params, $returnid='')
   {
     if( $returnid == '' ) {
-      if( isset($params['__activetab']) ) {
-	$this->SetCurrentTab(trim($params['__activetab']));
-      }
-      if( isset($params['__errors']) ) {
-	$this->__errors = explode('::err::',$params['__errors']);
-      }
-      if( isset($params['__messages']) ) {
-	$this->__messages = explode('::msg::',$params['__messages']);
-      }
-
-      if( is_array($this->__errors) && count($this->__errors) ) {
-	echo $this->ShowErrors($this->__errors);
-      }
-      if( is_array($this->__messages) && count($this->__messages) ) {
-	echo $this->ShowMessage($this->__messages[0]);
-      }
+      if( isset($params['__activetab']) ) $this->SetCurrentTab(trim($params['__activetab']));
+      if( isset($params['__errors']) ) $this->__errors = explode('::err::',$params['__errors']);
+      if( isset($params['__messages']) ) $this->__messages = explode('::msg::',$params['__messages']);
+      if( is_array($this->__errors) && count($this->__errors) ) echo $this->ShowErrors($this->__errors);
+      if( is_array($this->__messages) && count($this->__messages) ) echo $this->ShowMessage($this->__messages[0]);
     }
 
     if ($name != '') {
@@ -1746,23 +1729,18 @@ abstract class CMSModule
       // used to try to avert XSS flaws, this will
       // clean as many parameters as possible according
       // to a map specified with the SetParameterType metods.
-      $params = $this->_cleanParamHash($this->GetName(),$params,$this->param_map,
-				       !$this->restrict_unknown_params);
+      $params = $this->_cleanParamHash($this->GetName(),$params,$this->param_map, !$this->restrict_unknown_params);
     }
 
     // handle the stupid input type='image' problem.
     foreach( $params as $key => $value ) {
       if( endswith($key,'_x') ) {
 	$base = substr($key,0,strlen($key)-2);
-	if( isset($params[$base.'_y']) && !isset($params[$base]) ) {
-	  $params[$base] = $base;
-	}
+	if( isset($params[$base.'_y']) && !isset($params[$base]) ) $params[$base] = $base;
       }
     }
 
-    if( !isset($params['action']) ) {
-      $params['action'] = $name;
-    }
+    if( !isset($params['action']) ) $params['action'] = $name;
     $params['action'] = cms_htmlentities($params['action']);
     $returnid = cms_htmlentities($returnid);
     $id = cms_htmlentities($id);
@@ -2596,16 +2574,10 @@ abstract class CMSModule
   function RedirectToAdminTab($tab = '',$params = '',$action = '')
   {
     if( $tab == '' ) {
-      if( $this->__current_tab ) {
-	$tab = $this->__current_tab;
-      }
+      if( $this->__current_tab ) $tab = $this->__current_tab;
     }
-    if( $params == '' ) {
-      $params = array();
-    }
-    if( $tab != '' ) {
-      $params['__activetab'] = $tab;
-    }
+    if( $params == '' ) $params = array();
+    if( $tab != '' ) $params['__activetab'] = $tab;
     if( empty($action) ) $action = 'defaultadmin';
     $this->Redirect('m1_',$action,'',$params,TRUE);
   }
@@ -2637,12 +2609,8 @@ abstract class CMSModule
   function Redirect($id, $action, $returnid='', $params=array(), $inline=false)
   {
     if( $returnid == '' ) {
-      if( is_array($this->__errors) && count($this->__errors) ) {
-	$params['__errors'] = implode('::err::',$this->__errors);
-      }
-      if( is_array($this->__messages) && count($this->__messages) ) {
-	$params['__messages'] = implode('::msg::',$this->__messages);
-      }
+      if( is_array($this->__errors) && count($this->__errors) ) $params['__errors'] = implode('::err::',$this->__errors);
+      if( is_array($this->__messages) && count($this->__messages) ) $params['__messages'] = implode('::msg::',$this->__messages);
     }
 
     $this->LoadRedirectMethods();
@@ -2757,9 +2725,7 @@ abstract class CMSModule
    */
   final public function GetDatabaseResource($template)
   {
-    if( endswith($template,'.tpl') ) {
-      return 'module_file_tpl:'.$this->GetName().';'.$template;
-    }
+    if( endswith($template,'.tpl') ) return 'module_file_tpl:'.$this->GetName().';'.$template;
     return 'cms_template:'.$template;
   }
 
@@ -2774,9 +2740,7 @@ abstract class CMSModule
    */
   final public function GetTemplateResource($template)
   {
-    if( endswith($template,'.tpl') ) {
-      return 'module_file_tpl:'.$this->GetName().';'.$template;
-    }
+    if( endswith($template,'.tpl') ) return 'module_file_tpl:'.$this->GetName().';'.$template;
     return 'cms_template:'.$template;
   }
 
@@ -3247,8 +3211,7 @@ abstract class CMSModule
    */
   final public function GetPreference($preference_name, $defaultvalue='')
   {
-    return cms_siteprefs::get($this->GetName().'_mapi_pref_'.$preference_name,
-			      $defaultvalue);
+    return cms_siteprefs::get($this->GetName().'_mapi_pref_'.$preference_name, $defaultvalue);
   }
 
   /**
@@ -3261,8 +3224,7 @@ abstract class CMSModule
    */
   final public function SetPreference($preference_name, $value)
   {
-    return cms_siteprefs::set($this->GetName().'_mapi_pref_'.$preference_name,
-			      $value);
+    return cms_siteprefs::set($this->GetName().'_mapi_pref_'.$preference_name, $value);
   }
 
   /**
@@ -3275,9 +3237,7 @@ abstract class CMSModule
    */
   final public function RemovePreference($preference_name='')
   {
-    if( $preference_name == '' ) {
-      return cms_siteprefs::remove($this->GetName().'_mapi_pref_',true);
-    }
+    if( $preference_name == '' ) return cms_siteprefs::remove($this->GetName().'_mapi_pref_',true);
     return cms_siteprefs::remove($this->GetName().'_mapi_pref_'.$preference_name);
   }
 

@@ -1,63 +1,72 @@
-# Attempt to override some php settings
-# These settings may be helpful on some hosts if your default configuration does not meet CMS's minimum requirements
-# and your host has given your account appropriate permissions...
-	#php_value upload_max_filesize "10M"
-	#php_value session_save_path "tmp/cache"
-	#php_flag magic_quotes_gpc Off
-	#php_flag register_globals Off
+# Attempt to override some php settings, these settings may be helpful on some hosts if your
+# default configuration does not meet CMS's minimum requirements, and your host
+# has given your account appropriate permissions
+#php_value upload_max_filesize "10M"
+#php_value session_save_path "tmp/cache"
+#php_value session.cookie_httponly true
+#php_flag magic_quotes_gpc Off
+#php_flag register_globals Off
 
-# Security - These settings are important, so uncomment if your host permit!
-	#Options -Indexes
-	#ServerSignature Off
+#php_flag magic_quotes_gpc Off
+#php_flag register_globals Off
+#php_flag session.use_trans_sid Off
 	#php_flag session.use_trans_sid Off
+
+# (this is important, so uncomment if your host permit)
+#Options -Indexes
+#ServerSignature Off
+
+#Options +FollowSymLinks
 
 # To prevent E_STRICT problems with PHP 5.3+ you can uncomment the following lines
 # Note: These settings should only be enabled for production sites!
-	#php_flag display_startup_errors 0
-	#php_flag display_errors 0
-	#php_flag html_errors 0
-	#php_value docref_root 0
-	#php_value docref_ext 0
+#php_flag display_startup_errors 0
+#php_flag display_errors 0
+#php_flag html_errors 0
+#php_value docref_root 0
+#php_value docref_ext 0
 
 <IfModule mod_rewrite.c>
 RewriteEngine on
-# Pretty Urls - Change this if your website in a sub directory, in example: /cmsms
-	RewriteBase /
+#
+#Sub-dir e.g: /cmsms
+RewriteBase /
 
-# 301 Redirect all requests that don't contain a dot or trailing slash to include a trailing slash but ignore POST requests
-	#RewriteCond %{REQUEST_URI} !/$
-	#RewriteCond %{REQUEST_URI} !\.
-	#RewriteCond %{REQUEST_METHOD} !POST$
-	#RewriteRule ^(.*) %{REQUEST_URI}/ [R=301,L]
+# 301 Redirect all requests that don't contain a dot or trailing slash to
+# include a trailing slash
+# but ignore POST requests.
+#RewriteCond %{REQUEST_URI} !/$
+#RewriteCond %{REQUEST_URI} !\.
+#RewriteCond %{REQUEST_METHOD} !POST$
+#RewriteRule ^(.*) %{REQUEST_URI}/ [R=301,L]
 
-# Rewrites urls in the form of /parent/child/ but only rewrites if the requested URL is not a file or directory
-	RewriteCond %{REQUEST_FILENAME} !-f
-	RewriteCond %{REQUEST_FILENAME} !-d
-	RewriteRule ^(.+)$ index.php?page=$1 [QSA]
+# Rewrites urls in the form of /parent/child/
+# but only rewrites if the requested URL is not a file or directory
+#
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.+)$ index.php?page=$1 [QSA]
 </IfModule>
 
-<IfModule mod_header.c>
+<IfModule mod_headers.c>
 # Disable ETags
-	Header unset ETag
-	FileEtag None
+Header unset ETag
+FileEtag None
+# For Security
+Header set X-Frame-Options "SAMEORIGIN"
 </IfModule>
 
 <IfModule mod_deflate.c>
-# Compress css, plaintext, xml, gif, and images in transport
-	AddOutputFilterByType DEFLATE text/css text/plain text/xml image/gif image/jpeg image/png
+# Compress css, plaintext, xml, gif, and images in transport.
+AddOutputFilterByType DEFLATE text/css text/plain text/xml image/gif image/jpeg image/png
 </IfModule>
-
-<FilesMatch "fileloc.php|version.php|include.php">
-	Limit Deny Allow
-	Deny From All
-<FilesMatch>
 
 <IfModule mod_expires.c>
 <FilesMatch "\.(ico|pdf|flv|jpg|jpeg|png|gif|js|css|swf)$">
-# Set expires tags on various files so that the browser won't attempt to reload them
-	ExpiresActive On
-	ExpiresDefault "access plus 1 year"
-<IfModule mod_header.c>
+# Set expires tags on various files... so that the browser wont attempt to reload them.
+ExpiresActive On
+ExpiresDefault "access plus 1 year"
+<IfModule mod_headers.c>
   # Setting cache control to public allows proxy servers to cache the items too.
   Header set Cache-Control "public"
 </IfModule>

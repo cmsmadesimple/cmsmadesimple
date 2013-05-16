@@ -103,9 +103,7 @@ final class CmsApp {
 	 */
 	public static function &get_instance()
 	{
-		if( !self::$_instance  ) {
-			self::$_instance = new CmsApp();
-		}
+		if( !self::$_instance  ) self::$_instance = new CmsApp();
 		return self::$_instance;
 	}
 
@@ -174,12 +172,8 @@ final class CmsApp {
 	 */
 	public function set_content_type($txt = '')
 	{
-		if( $txt ) {
-			$this->_content_type = $txt;
-		}
-		else {
-			$this->_content_type = null;
-		}
+		$this->_content_type = null;
+		if( $txt ) 	$this->_content_type = $txt;
 	}
 
 	/**
@@ -246,7 +240,7 @@ final class CmsApp {
 	 * @return object Reference to the module object, or null.
 	 * @deprecated
 	 */
-	public function & GetModuleInstance($module_name,$version = '')
+	public function &GetModuleInstance($module_name,$version = '')
 	{
 		return ModuleOperations::get_instance()->get_module_instance($module_name,$version);
 	}
@@ -260,7 +254,7 @@ final class CmsApp {
 	* @final
 	* @return ADOConnection a handle to the ADODB database object
 	*/
-	public function & GetDb()
+	public function &GetDb()
 	{
 		global $DONT_LOAD_DB;
 		/* Check to see if we have a valid instance.
@@ -351,10 +345,7 @@ final class CmsApp {
 	*/	
 	public function & GetBookmarkOperations()
 	{
-        if (!isset($this->bookmarkoperations)) {
-			$this->bookmarkoperations = new BookmarkOperations();
-		}
-
+        if (!isset($this->bookmarkoperations)) $this->bookmarkoperations = new BookmarkOperations();
 		return $this->bookmarkoperations;
 	}
 
@@ -456,9 +447,7 @@ final class CmsApp {
 	      $dirIterator = new RecursiveDirectoryIterator($start_dir);
  	      $dirContents = new RecursiveIteratorIterator($dirIterator);
 	      foreach( $dirContents as $one ) {
-			  if( $one->isFile() && $one->getMTime() <= $the_time ) {
-				  @unlink($one->getPathname());
-			  }
+			  if( $one->isFile() && $one->getMTime() <= $the_time ) @unlink($one->getPathname());
 		  }
 	  }
 
@@ -498,16 +487,9 @@ final class CmsApp {
 
 			$this->_states = array();
 			
-			if( isset($CMS_ADMIN_PAGE) ) 
-				$this->_states[] = self::STATE_ADMIN_PAGE;
-						
-			if( isset($CMS_INSTALL_PAGE) ) {
-				$this->_states[] = self::STATE_INSTALL;
-			}
-			
-			if( isset($CMS_STYLESHEET) )
-				$this->_states[] = self::STATE_STYLESHEET;
-			
+			if( isset($CMS_ADMIN_PAGE) ) $this->_states[] = self::STATE_ADMIN_PAGE;
+			if( isset($CMS_INSTALL_PAGE) ) $this->_states[] = self::STATE_INSTALL;
+			if( isset($CMS_STYLESHEET) ) $this->_states[] = self::STATE_STYLESHEET;
 		}
 	}
 
@@ -523,9 +505,7 @@ final class CmsApp {
 	 */
 	public function test_state($state)
 	{
-		if( !in_array($state,self::$_statelist) ) {
-			throw new CmsInvalidDataException($state.' is an invalid CMSMS state');
-		}
+		if( !in_array($state,self::$_statelist) ) throw new CmsInvalidDataException($state.' is an invalid CMSMS state');
 		$this->set_states();
 		if( is_array($this->_states) && in_array($state,$this->_states) ) return TRUE;
 		return FALSE;
@@ -558,9 +538,7 @@ final class CmsApp {
 	 */
     public function add_state($state)
     {
-		if( !in_array($state,self::$_statelist) ) {
-			throw new CmsInvalidDataException($state.' is an invalid CMSMS state');
-		}
+		if( !in_array($state,self::$_statelist) ) throw new CmsInvalidDataException($state.' is an invalid CMSMS state');
 		$this->set_states();
 		$this->_states[] = $state;
     }
@@ -579,9 +557,7 @@ final class CmsApp {
 	 */
     public function remove_state($state)
     {
-		if( !in_array($state,self::$_statelist) ) {
-			throw new CmsInvalidDataException($state.' is an invalid CMSMS state');
-		}
+		if( !in_array($state,self::$_statelist) ) throw new CmsInvalidDataException($state.' is an invalid CMSMS state');
 		$this->set_states();
 		if( !is_array($this->_states) || !in_array($state,$this->_states) ) {
 			$key = array_search($state,$this->_states);

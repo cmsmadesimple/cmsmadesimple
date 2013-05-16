@@ -182,7 +182,7 @@ $lang['install_test_failed'] = 'One or more tests have resulted in a failure or 
 $lang['install_test_passed'] = 'All tests passed (at least at a minimum level). Please click the "Continue" button.';
 $lang['install_test_umask'] = 'Please click Test button for check the umask entered...';
 $lang['install_thanks'] = 'Thanks for installing CMS Made Simple';
-$lang['install_timezone'] = 'Some servers running PHP 5.3 do not have the timezone set correctly. Please select the appropriate timezone from the list below before proceeding. If this is not necessary on your server, you may select &quot;None&quot;. <strong>Note:</strong> Please select your servers timezone, this is not a display setting, but is used in arithmetic related to dates.  This setting can be changed after installation by modifying the config.php file.';
+$lang['install_timezone2'] = 'Please select the timezone for your installation.  This timezone value will be used for entering times into the system and for date and time calculations.<br/><br/>CMSMS has attempted to choose an intelligent default for you based on your servers current location, however this may not be correct.<br/><br/><strong style="color: red;">Note:</strong> This is a change in behavior from previous versions of CMSMS. Also, you may need to enable the set_db_timezone config value if your server is in a different timezone than your primary user base.';
 $lang['install_title'] = 'CMS Made Simple Install (step %s)';
 $lang['install_try_again'] = 'Try Again';
 $lang['install_value_exceed'] = 'A setting meets or exceeds the recommended threshhold<br />or... A capability that <em>may</em> be required for some optional functionality is available';

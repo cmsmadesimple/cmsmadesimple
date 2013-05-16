@@ -23,14 +23,14 @@ $(document).ready(function(){
 <div class="pageoverflow">
   <p class="pagetext"><label for="password">{lang('password')}:</label></p>
   <p class="pageinput">
-    <input type="password" id="password" name="password" maxlength="25" value="" class="standard"/>
+    <input type="password" id="password" name="password" maxlength="100" value="" class="standard"/>
     <br/>{lang('info_edituser_password')}
   </p>
 </div>
 <div class="pageoverflow">
   <p class="pagetext"><label for="passwordagain">{lang('passwordagain')}:</label></p>
   <p class="pageinput">
-    <input id="passwordagain" type="password" name="passwordagain" maxlength="25" value="" class="standard"/>
+    <input id="passwordagain" type="password" name="passwordagain" maxlength="100" value="" class="standard"/>
     <br/>{lang('info_edituser_passwordagain')}
   </p>
 </div>
