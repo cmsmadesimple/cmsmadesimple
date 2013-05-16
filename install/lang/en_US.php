@@ -10,7 +10,7 @@ $lang['ip_addr'] = 'IP Address';
 $lang['install_admin_pwsalt_note'] = 'If you choose to enable password salts, there is absolutely no way to reset lost admin passwords, other than through the lost password functionality.   It is critical that you associate an email address with each admin account';
 $lang['admin_salt'] = 'Salt Admin Passwords';
 $lang['setup_flat_urls'] = 'Flat URLs are setup';
-$lang['install_timezone'] = 'Some servers running PHP 5.3 do not have the timezone set correctly. Please select the appropriate timezone from the list below before proceeding. If this is not necessary on your server, you may select &quot;None&quot;. <strong>Note:</strong> Please select your servers timezone, this is not a display setting, but is used in arithmetic related to dates.  This setting can be changed after installation by modifying the config.php file.';
+$lang['install_timezone2'] = 'Please select the timezone for your installation.  This timezone value will be used for entering times into the system and for date and time calculations.<br/><br/>CMSMS has attempted to choose an intelligent default for you based on your servers current location, however this may not be correct.<br/><br/><strong style="color: red;">Note:</strong> This is a change in behavior from previous versions of CMSMS. Also, you may need to enable the set_db_timezone config value if your server is in a different timezone than your primary user base.';
 $lang['timezone'] = 'Timezone';
 $lang['none'] = 'None';
 $lang['test_error_estrict'] = 'Testing error_reporting to ensure E_STRICT is disabled';
