@@ -299,8 +299,25 @@ class cms_utils
     {
       $ip=$_SERVER['REMOTE_ADDR'];
     }
-    return $ip;
+	
+	if(self::is_valid_ipv4($ip))
+		return $ip;
+		
+	return null;
   }
+  
+  /**
+   * Check if IP is valid IPV4 address.
+   *
+   * @author Stikki
+   * @since 1.11.6.1
+   * @returns true on correct IP address, else false.
+   */
+  public static function is_valid_ipv4($ip)
+  {
+	return preg_match('/\b(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.'.
+	'(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\b/', $ip) !== 0;
+  }  
 
   /**
    * Get a reference to the current theme object

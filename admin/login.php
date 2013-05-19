@@ -341,8 +341,9 @@ if (isset($_POST["username"]) && isset($_POST["password"])) {
 
 		Events::SendEvent('Core','LoginFailed',array('user'=>$_POST['username']));;
 		// put mention into the admin log
-		$ip_login_failed = cms_utils::get_real_ip(); 
-		audit('', '(IP: ' . $ip_login_failed . ') ' . "Admin Username: " . $username, 'Login Failed');
+		$ip_login_failed = cms_utils::get_real_ip();
+		if($ip_login_failed) // <- Silently ignore audit if return values is not ture, had admin XSS vulne.
+			audit('', '(IP: ' . $ip_login_failed . ') ' . "Admin Username: " . $username, 'Login Failed');
 
 		#Now call the event
 		//Events::SendEvent('Core', 'LoginPost', $username);
