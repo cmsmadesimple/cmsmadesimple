@@ -310,7 +310,7 @@ class cms_utils
    * Check if IP is valid IPV4 address.
    *
    * @author Stikki
-   * @since 1.11.6.1
+   * @since 1.11.7
    * @returns true on correct IP address, else false.
    */
   public static function is_valid_ipv4($ip)

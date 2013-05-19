@@ -3,6 +3,7 @@ Version 1.11.7 -
 Core - General
   - Added set_db_timezone config option which will execute the mysql command SET timezone attempting to solve the problem with date calculates wrt
     server timezone vs. user timezone.
+  - Fixes BR#9269. Now it actually validates if output of get_real_ip() is actual IP address. Added another validation to login.php. Thanks to blokaas for reporting this.
 
 
 Version 1.11.6 - Merchena
