@@ -18,8 +18,8 @@
 #
 #$Id$
 
-$CMS_VERSION = "1.11.6";
-$CMS_VERSION_NAME = "Merchena";
+$CMS_VERSION = "1.11.7";
+$CMS_VERSION_NAME = "Genovesa";
 $CMS_SCHEMA_VERSION = "36";
 
 define('CMS_VERSION', $CMS_VERSION);
