@@ -73,8 +73,15 @@ require_once($dirname.DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR.'module.func
 require_once($dirname.DIRECTORY_SEPARATOR.'version.php');
 debug_buffer('done loading required files');
 
-# sanitize $_GET
-array_walk_recursive($_GET, 'sanitize_get_var'); 
+# sanitize $_GET and $_SERVER
+{
+  $sanitize = function(&$value,$key) {
+    $value = preg_replace('/\<\/?script[^\>]*\>/i', '', $value);
+    $value = preg_replace('/javascript\:/i', '', $value);
+  };
+  array_walk_recursive($_GET,$sanitize);
+  array_walk_recursive($_SERVER,$sanitize);
+}
 
 if( isset($CMS_ADMIN_PAGE) ) {
   function cms_admin_sendheaders($content_type = 'text/html',$charset = '')
@@ -213,9 +220,4 @@ if (! isset($CMS_INSTALL_PAGE)) {
 }
 
 $smarty->assign('sitename', get_site_preference('sitename', 'CMSMS Site'));
-
-function sanitize_get_var(&$value, $key)
-{
-  $value = preg_replace('/\<\/?script[^\>]*\>/i', '', $value); //the i makes it caseinsensitive
-}
 ?>

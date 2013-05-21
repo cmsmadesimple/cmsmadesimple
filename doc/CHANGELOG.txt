@@ -1,7 +1,7 @@
 Version 1.12 - NO NAME SET
 -----------------------------
 Core - General
-  -
+  - default upload permission is now based on the umask.
 
 Core - Bug Reports:
   -
