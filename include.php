@@ -76,9 +76,9 @@ require_once($dirname.DIRECTORY_SEPARATOR.'version.php');
 debug_buffer('done loading required files');
 
 // sanitize $_GET
-array_walk_recursive($_GET, 'sanitize_get_var');
+array_walk_recursive($_GET, 'sanitize_input_array');
 // sanitize $_SERVER
-array_walk_recursive($_SERVER,'sanitize_get_var');
+array_walk_recursive($_SERVER,'sanitize_input_array');
 
 if (isset($starttime))
 {
@@ -278,9 +278,10 @@ if (! isset($CMS_INSTALL_PAGE))
 
 $smarty->assign('sitename', get_site_preference('sitename', 'CMSMS Site'));
 
-function sanitize_get_var(&$value, $key)
+function sanitize_input_array(&$value, $key)
 {
   $value = preg_replace('/\<\/?script[^\>]*\>/i', '', $value); //the i makes it caseinsensitive
+  $value = preg_replace('/javascript\:/i', '', $value); //the i makes it caseinsensitive
 }
 
 # vim:ts=4 sw=4 noet
