@@ -75,8 +75,10 @@ require_once($dirname.DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR.'module.func
 require_once($dirname.DIRECTORY_SEPARATOR.'version.php');
 debug_buffer('done loading required files');
 
-# sanitize $_GET
-array_walk_recursive($_GET, 'sanitize_get_var'); 
+// sanitize $_GET
+array_walk_recursive($_GET, 'sanitize_get_var');
+// sanitize $_SERVER
+array_walk_recursive($_SERVER,'sanitize_get_var');
 
 if (isset($starttime))
 {
@@ -278,11 +280,7 @@ $smarty->assign('sitename', get_site_preference('sitename', 'CMSMS Site'));
 
 function sanitize_get_var(&$value, $key)
 {
-  if (version_compare(phpversion(),"5.3.0","<")) {
-    $value = eregi_replace('\<\/?script[^\>]*\>', '', $value);
-  } else {
-    $value = preg_replace('/\<\/?script[^\>]*\>/i', '', $value); //the i makes it caseinsensitive
-  }
+  $value = preg_replace('/\<\/?script[^\>]*\>/i', '', $value); //the i makes it caseinsensitive
 }
 
 # vim:ts=4 sw=4 noet
