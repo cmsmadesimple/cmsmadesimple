@@ -286,23 +286,16 @@ class cms_utils
    */
   public static function get_real_ip()
   {
-    $ip = null;
-    if (!empty($_SERVER['HTTP_CLIENT_IP']))   //check ip from share internet
-    {
-      $ip=$_SERVER['HTTP_CLIENT_IP'];
+	$ip = $_SERVER['REMOTE_ADDR'];
+    if (empty($ip) && !empty($_SERVER['HTTP_CLIENT_IP'])) {
+      $ip = $_SERVER['HTTP_CLIENT_IP'];
     }
-    elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR']))   //to check ip is pass from proxy
-    {
-      $ip=$_SERVER['HTTP_X_FORWARDED_FOR'];
-    }
-    else
-    {
-      $ip=$_SERVER['REMOTE_ADDR'];
+    elseif (empty($ip) && !empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+      $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
     }
 	
-	if(self::is_valid_ipv4($ip))
-		return $ip;
-		
+	if( filter_var($ip,FILTER_VALIDATE_IP) ) return $ip;
+
 	return null;
   }
   
