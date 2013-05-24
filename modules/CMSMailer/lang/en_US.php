@@ -1,22 +1,9 @@
 <?php
-// A
-$lang['accessdenied'] = 'Access Denied. Please check your permissions.';
-
-// C
-$lang['cancel'] = 'Cancel';
-$lang['charset'] = 'Character Set';
-
-// E
-$lang['error'] = 'Error!';
-$lang['error_notestaddress'] = 'Error: Test address not specified';
-
-// F
 $lang['friendlyname'] = 'CMSMailer';
-$lang['from'] = 'From address';
-$lang['fromuser'] = 'From Username';
 
 // H
 $lang['help'] = '<h3>What Does This Do?</h3>
+<p><strong>NOTE:</strong> This module is deprecated and will be removed in later versions of CMSMS.</p>
 <p>This module provides no end user functionality.  It is designed to be integrated into other modules to provide email capabilities.  Thats it, nothing more.</p>
 <h3>How Do I Use It</h3>
 <p>This module provides a simple wrapper around all of the methods and variables of phpmailer.  It is designed for use by other module developers, below is an example, and a brief API reference.  Please read the PHPMailer documentation included for more information.</p>
@@ -275,64 +262,8 @@ of the license for the full disclaimer.</p>
 <p>Copyright &copy; 2005, Robert Campbell <a href=\'mailto:calguy1000@hotmail.com\'>&lt;calguy1000@hotmail.com&gt;</a>. All Rights Are Reserved.</p>
 <p>This module has been released under the <a href=\'http://www.gnu.org/licenses/licenses.html#GPL\'>GNU Public License</a>. You must agree to this license before using the module.</p>
 ';
-$lang['host'] = 'SMTP host name<br /><i>(or IP address)</i>';
 
-// I
-$lang['info_cmsmailer'] = 'This module is used by numerous other modules to facilitate sending emails.  It must be properly configured to your hosts requirements.  Please use the information provided by your host to adjust these settings.  If you still cannot get the test message to send properly, you may have to contact your host for assistance.';
-$lang['info_from'] = 'Address used as the sender in all emails. <br/><strong>Note</strong>, this email address must be set correctly for your host or you will have difficulty sending emails.<br/>If you do not know the proper value for this setting, you may need to contact your host.';
-$lang['info_fromuser'] = 'Friendly name used for sending all emails';
-$lang['info_host'] = 'SMTP hostname (only valid for the smtp mailer method)';
-$lang['info_mailer'] = 'Mail method to use (sendmail, smtp, mail).  Usually smtp is the most reliable.';
-$lang['info_password'] = 'SMTP authentication password (valid only for smtp mailer method, when smtp auth is selected)';
-$lang['info_port'] = 'SMTP port number (usually 25) (only valid for the smtp mailer method)';
-$lang['info_secure'] = 'Applicable only to the SMTP mailer method, this option allows specifying different encryption mechanisms for the connection';
-$lang['info_sendmail'] = 'The complete path to your sendmail executable (only valid for the sendmail mailer method)';
-$lang['info_smtpauth'] = 'Does your smtp host require authentication (valid only for the smtp mailer method)';
-$lang['info_timeout'] = 'The number of seconds in an SMTP conversation before an error occurs (valid for the smtp mailer method)';
-$lang['info_username'] = 'SMTP authentication username (valid only for smtp mailer method, when smtp auth is selected)';
-$lang['installed'] = 'Module version %s installed.';
-
-// M
-$lang['mailer'] = 'Mailer method';
 $lang['moddescription'] = 'This is a simple wrapper around PHPMailer, it has an equivalent API (function for function) and a simple interface for some defaults.';
 
-// N
-$lang['none'] = 'None';
-
-// P
-$lang['password'] = 'Password';
-$lang['port'] = 'Port of SMTP server';
 $lang['postinstall'] = 'CMSMailer module has been successfully installed';
 $lang['postuninstall'] = 'CMSMailer module uninstalled... sorry to see you leave';
-$lang['prompt_testaddress'] = 'Test Email Address';
-
-// S
-$lang['secure'] = 'Encryption mechanism';
-$lang['sendmail'] = 'Sendmail location';
-$lang['sendtest'] = 'Send Test Message';
-$lang['sendtestmailconfirm'] = 'This will send a test message to the address specified. If the send process suceeded, you will be returned to this page.  Do you want to continue?';
-$lang['settingsconfirm'] = 'Write current values to CMSMailer settings?';
-$lang['settings_title'] = 'Settings';
-$lang['smtpauth'] = 'SMTP Authentication';
-$lang['ssl'] = 'SSL';
-$lang['submit'] = 'Submit';
-
-// T
-$lang['testbody'] = 'This message is intended only to verify the validity of the settings in the CMSMailer module. If you received it, everything is working fine.';
-$lang['testsubject'] = 'CMSMailer Test Message';
-$lang['test_title'] = 'Test'; 
-$lang['timeout']  = 'SMTP timeout';
-$lang['title_admin_panel'] = 'CMSMailer Module';
-$lang['title_mod_admin'] = 'Module Admin Panel';
-$lang['title_mod_prefs'] = 'Module Preferences';
-$lang['tls'] = 'TLS';
-
-// U
-$lang['uninstalled'] = 'Module Uninstalled.';
-$lang['upgraded'] = 'Module upgraded to version %s.';
-$lang['username'] = 'Username';
-
-// W
-$lang['warning_cron_updated'] = 'This test is generated on an infrequent basis.  It may take some time for it to go away';
-
-?>

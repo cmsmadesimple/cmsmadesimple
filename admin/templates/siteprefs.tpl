@@ -1,421 +1,559 @@
 <div class="pagecontainer">
 
-{$tab_start}
+{if !$mail_is_set}
+<div class="warning">{lang('info_mail_notset')}</div>
+{/if}
 
-{$general_start}
-	<form id="siteprefform_general" method="post" action="{$formurl}">
-		<div>
-		  <input type="hidden" name="{$SECURE_PARAM_NAME}" value="{$CMS_USER_KEY}"/>
-		  <input type="hidden" name="active_tab" value="general" />
-		  <input type="hidden" name="editsiteprefs" value="true" />
-		</div>
+{tab_header name='general' label=lang('general_settings') active=$tab}
+{tab_header name='editcontent' label=lang('editcontent_settings') active=$tab}
+{tab_header name='sitedown' label=lang('sitedown_settings') active=$tab}
+{tab_header name='mail' label=lang('mail_settings') active=$tab}
+{tab_header name='setup' label=lang('setup') active=$tab}
+{tab_header name='smarty' label=lang('smarty_settings') active=$tab}
 
-		<div class="pageoverflow">
-		  <p class="pagetext"><label for="sitename">{lang('sitename')}:</label></p>
-		  <p class="pageinput"><input type="text" id="sitename" class="pagesmalltextarea" name="sitename" size="30" value="{$sitename}" /></p>
-		</div>
-		<div class="pageoverflow">
-		  <p class="pagetext"><label for="frontendlang">{lang('frontendlang')}:</label></p>
-		  <p class="pageinput">
-			<select id="frontendlang" name="frontendlang" style="vertical-align: middle;">
-			   {html_options options=$languages selected=$frontendlang}
-			</select>
-		  </p>
-		</div>
+{tab_start name='general'}
+  <form id="siteprefform_general" method="post" action="{$formurl}">
+    <div>
+      <input type="hidden" name="{$SECURE_PARAM_NAME}" value="{$CMS_USER_KEY}"/>
+      <input type="hidden" name="active_tab" value="general" />
+      <input type="hidden" name="editsiteprefs" value="true" />
+    </div>
+    <div class="pageoverflow">
+      <p class="pageinput">
+	<input type="submit" name="submit" value="{lang('submit')}" class="pagebutton"  />
+	<input type="submit" name="cancel" value="{lang('cancel')}" class="pagebutton"  />
+      </p>
+      <div style="border-top: 1px dashed black;"></div>
+    </div>
 
-		<div class="pageoverflow">
-			<p class="pagetext"><label for="frontendwysiwyg">{lang('frontendwysiwygtouse')}:</label></p>
-			<p class="pageinput">
-				<select id="frontendwysiwyg" name="frontendwysiwyg">
-				{html_options options=$wysiwyg selected=$frontendwysiwyg}
-				</select>
-			</p>
-		</div>
+    <div class="pageoverflow">
+      <p class="pagetext"><label for="sitename">{'sitename'|lang}:</label></p>
+      <p class="pageinput"><input type="text" id="sitename" class="pagesmalltextarea" name="sitename" size="30" value="{$sitename}" /></p>
+    </div>
+    <div class="pageoverflow">
+      <p class="pagetext"><label for="frontendlang">{lang('frontendlang')}:</label></p>
+      <p class="pageinput">
+	<select id="frontendlang" name="frontendlang" style="vertical-align: middle;">
+	   {html_options options=$languages selected=$frontendlang}
+	</select>
+       </p>
+    </div>
 
-		<div class="pageoverflow">
-		  <p class="pagetext"><label for="nogcbwysiwyg">{lang('nogcbwysiwyg')}:</label></p>
-		  <p class="pageinput"><input type="hidden" name="nogcbwysiwyg" value="0"/><input id="nogcbwysiwyg" class="pagenb" type="checkbox" value="1" name="nogcbwysiwyg" {if $nogcbwysiwyg == "1"}checked="checked"{/if} /></p>
-		</div>
-		<div class="pageoverflow">
-		  <p class="pagetext"><label for="globalmetadata">{lang('globalmetadata')}:</label></p>
-		  <p class="pageinput"><textarea id="globalmetadata" class="pagesmalltextarea" name="metadata" cols="80" rows="20">{$metadata}</textarea>
-		  </p>
-		</div>
-		{if isset($themes)}
-		<div class="pageoverflow">
-		  <p class="pagetext"><label for="logintheme">{lang('master_admintheme')}:</label></p>
-		  <p class="pageinput">
-			<select id="logintheme" name="logintheme">
-			  {html_options options=$themes selected=$logintheme}
-			</select>
-		  </p>
-		</div>
-		{/if}
-		<div class="pageoverflow">
-			<p class="pagetext"><label for="backendwysiwyg">{lang('backendwysiwygtouse')}:</label></p>
-			<p class="pageinput">
-				<select id="backendwysiwyg" name="backendwysiwyg">
-				{html_options options=$wysiwyg selected=$backendwysiwyg}
-				</select>
-			</p>
-		</div>
-		<div class="pageoverflow">
-		  <p class="pagetext"><label for="defaultdateformat">{lang('date_format_string')}:</label></p>
-		  <p class="pageinput">
-			<input class="pagenb" id="defaultdateformat" type="text" name="defaultdateformat" size="20" maxlength="255" value="{$defaultdateformat}"/>
-			<br/>{$lang_date_format_string_help}
-		  </p>
-		</div>
+    <div class="pageoverflow">
+      <p class="pagetext"><label for="frontendwysiwyg">{lang('frontendwysiwygtouse')}:</label></p>
+      <p class="pageinput">
+        <select id="frontendwysiwyg" name="frontendwysiwyg">
+	  {html_options options=$wysiwyg selected=$frontendwysiwyg}
+	</select>
+      </p>
+    </div>
 
-		<div class="pageoverflow">
-		  <p class="pagetext"><label for="thumbnail_width">{lang('thumbnail_width')}:</label></p>
-		  <p class="pageinput">
-			<input class="pagenb" id="thumbnail_width" type="text" name="thumbnail_width" size="3" maxlength="3" value="{$thumbnail_width}"/>
-		  </p>
-		</div>
+    <div class="pageoverflow">
+      <p class="pagetext"><label for="nogcbwysiwyg">{lang('nogcbwysiwyg')}:</label></p>
+      <p class="pageinput"><input type="hidden" name="nogcbwysiwyg" value="0"/><input id="nogcbwysiwyg" class="pagenb" type="checkbox" value="1" name="nogcbwysiwyg" {if $nogcbwysiwyg == "1"}checked="checked"{/if} /></p>
+    </div>
+    <div class="pageoverflow">
+      <p class="pagetext"><label for="globalmetadata">{lang('globalmetadata')}:</label></p>
+      <p class="pageinput"><textarea id="globalmetadata" class="pagesmalltextarea" name="metadata" cols="80" rows="20">{$metadata}</textarea></p>
+    </div>
+    {if isset($themes)}
+      <div class="pageoverflow">
+        <p class="pagetext"><label for="logintheme">{lang('master_admintheme')}:</label></p>
+	<p class="pageinput">
+	  <select id="logintheme" name="logintheme">
+	    {html_options options=$themes selected=$logintheme}
+	  </select>
+        </p>
+      </div>
+    {/if}
+    <div class="pageoverflow">
+      <p class="pagetext"><label for="backendwysiwyg">{lang('backendwysiwygtouse')}:</label></p>
+      <p class="pageinput">
+        <select id="backendwysiwyg" name="backendwysiwyg">
+          {html_options options=$wysiwyg selected=$backendwysiwyg}
+	</select>
+      </p>
+    </div>
+    <div class="pageoverflow">
+      <p class="pagetext"><label for="defaultdateformat">{lang('date_format_string')}:</label></p>
+      <p class="pageinput">
+	<input class="pagenb" id="defaultdateformat" type="text" name="defaultdateformat" size="20" maxlength="255" value="{$defaultdateformat}"/>
+	<br/>{$lang_date_format_string_help}
+      </p>
+    </div>
+    <div class="pageoverflow">
+      <p class="pagetext"><label for="thumbnail_width">{lang('thumbnail_width')}:</label></p>
+      <p class="pageinput">
+	<input class="pagenb" id="thumbnail_width" type="text" name="thumbnail_width" size="3" maxlength="3" value="{$thumbnail_width}"/>
+      </p>
+    </div>
+    <div class="pageoverflow">
+      <p class="pagetext"><label for="thumbnail_height">{lang('thumbnail_height')}:</label></p>
+      <p class="pageinput">
+	<input id="thumbnail_height" class="pagenb" type="text" name="thumbnail_height" size="3" maxlength="3" value="{$thumbnail_height}"/>
+      </p>
+    </div>
+    {if isset($search_modules)}
+      <p class="pagetext"><label for="search_module">{'search_module'|lang}:</label></p>
+      <p class="pageinput">
+	<select id="search_module" name="search_module">
+	  {html_options options=$search_modules selected=$search_module}
+	</select>
+	<br/>{'info_search_module'|lang}
+      </p>
+    {/if}
+  </form>
 
-		<div class="pageoverflow">
-		  <p class="pagetext"><label for="thumbnail_height">{lang('thumbnail_height')}:</label></p>
-		  <p class="pageinput">
-			<input id="thumbnail_height" class="pagenb" type="text" name="thumbnail_height" size="3" maxlength="3" value="{$thumbnail_height}"/>
-		  </p>
-		</div>
+{tab_start name='editcontent'}
+  <form id="siteprefform_editcontent" method="post" action="{$formurl}">
+    <div>
+      <input type="hidden" name="{$SECURE_PARAM_NAME}" value="{$CMS_USER_KEY}"/>
+      <input type="hidden" name="active_tab" value="editcontent" />
+      <input type="hidden" name="editsiteprefs" value="true" />
+    </div>
+    <div class="pageoverflow">
+      <p class="pageinput">
+	<input type="submit" name="submit" value="{lang('submit')}" class="pagebutton"  />
+	<input type="submit" name="cancel" value="{lang('cancel')}" class="pagebutton"  />
+      </p>
+      <div style="border-top: 1px dashed black;"></div>
+    </div>
 
-		{if isset($search_modules)}
-		  <p class="pagetext"><label for="search_module">{'search_module'|lang}:</label></p>
-		  <p class="pageinput">
-			<select id="search_module" name="search_module">
-			{html_options options=$search_modules selected=$search_module}
-			</select>
-			<br/>
-			{'info_search_module'|lang}
-		  </p>
-		{/if}
+    <div class="pageoverflow">
+      <p class="pagetext"><label for="content_autocreate_urls">{'content_autocreate_urls'|lang}:</label></p>
+      <p class="pageinput">
+	<select id="content_autocreate_urls" name="content_autocreate_urls">
+	  {html_options options=$yesno selected=$content_autocreate_urls}
+	</select>
+      </p>
+    </div>
+    <div class="pageoverflow">
+      <p class="pagetext"><label for="content_autocreate_flaturls">{'content_autocreate_flaturls'|lang}:</label></p>
+      <p class="pageinput">
+	<select id="content_autocreate_flaturls" name="content_autocreate_flaturls">
+	  {html_options options=$yesno selected=$content_autocreate_flaturls}
+	</select>
+	<br/>{'info_content_autocreate_flaturls'|lang}
+      </p>
+    </div>
+    <div class="pageoverflow">
+      <p class="pagetext"><label for="content_mandatory_urls">{'content_mandatory_urls'|lang}:</label></p>
+      <p class="pageinput">
+	<select id="content_mandatory_urls" name="content_mandatory_urls">
+	  {html_options options=$yesno selected=$content_mandatory_urls}
+	</select>
+      </p>
+    </div>
+    <div class="pageoverflow">
+      <p class="pagetext"><label for="disallowed_contenttypes">{'disallowed_contenttypes'|lang}:</label></p>
+      <p class="pageinput">
+	<select id="disallowed_contenttypes" name="disallowed_contenttypes[]" multiple="multiple" size="5">
+	  {html_options options=$all_contenttypes selected=$disallowed_contenttypes}
+	</select>
+	<br/>{'info_disallowed_contenttypes'|lang}
+      </p>
+    </div>
+    <div class="pageoverflow">
+      <p class="pagetext"><label for="basic_attributes">{lang('basic_attributes')}:</label></p>
+      <p class="pageinput">
+	<select id="basic_attributes" class="multicolumn" name="basic_attributes[]" multiple="multiple" size="5">
+	  {html_options options=$all_attributes selected=$basic_attributes}
+	</select>
+	<br/>{$lang_info_basic_attributes}
+      </p>
+    </div>
+    <div class="pageoverflow">
+      <p class="pagetext"><label for="imagefield_path">{'content_imagefield_path'|lang}:</label></p>
+      <p class="pageinput">
+	<input id="imagefield_path" type="text" name="content_imagefield_path" size="50" maxlength="255" value="{$content_imagefield_path}"/>
+	<br/>{'info_content_imagefield_path'|lang}
+      </p>
+    </div>
+    <div class="pageoverflow">
+      <p class="pagetext"><label for="thumbfield_path">{'content_thumbnailfield_path'|lang}:</label></p>
+      <p class="pageinput">
+	<input id="thumbfield_path" type="text" name="content_thumbnailfield_path" size="50" maxlength="255" value="{$content_thumbnailfield_path}"/>
+	<br/>{'info_content_thumbnailfield_path'|lang}
+      </p>
+    </div>
+    <div class="pageoverflow">
+      <p class="pagetext"><label for="contentimage_path">{'contentimage_path'|lang}:</label></p>
+      <p class="pageinput">
+	<input type="text" id="contentimage_path" name="contentimage_path" size="50" maxlength="255" value="{$contentimage_path}"/>
+	<br/>{'info_contentimage_path'|lang}
+      </p>
+    </div>
+  </form>
 
-		<div class="pageoverflow">
-		  <p class="pagetext">&nbsp;</p>
-		  <p class="pageinput">
-			<input type="submit" name="submit" value="{lang('submit')}" class="pagebutton"  />
-			<input type="submit" name="cancel" value="{lang('cancel')}" class="pagebutton"  />
-		  </p>
-		</div>
-	</form>
-{$tab_end}
+{tab_start name='sitedown'}
+  <form id="siteprefform_sitedown" method="post" action="{$formurl}">
+    <div>
+      <input type="hidden" name="{$SECURE_PARAM_NAME}" value="{$CMS_USER_KEY}"/>
+      <input type="hidden" name="active_tab" value="sitedown" />
+      <input type="hidden" name="editsiteprefs" value="true" />
+    </div>
+    <div class="pageoverflow">
+      <p class="pageinput">
+	<input type="submit" name="submit" value="{lang('submit')}" class="pagebutton"  />
+	<input type="submit" name="cancel" value="{lang('cancel')}" class="pagebutton"  />
+      </p>
+      <div style="border-top: 1px dashed black;"></div>
+    </div>
 
-{$editcontent_start}
-	<form id="siteprefform_editcontent" method="post" action="{$formurl}">
-		<div>
-		  <input type="hidden" name="{$SECURE_PARAM_NAME}" value="{$CMS_USER_KEY}"/>
-		  <input type="hidden" name="active_tab" value="editcontent" />
-		  <input type="hidden" name="editsiteprefs" value="true" />
-		</div>
+    <div class="pageoverflow">
+      <p class="pagetext"><label for="enablesitedown">{lang('enablesitedown')}:</label></p>
+      <p class="pageinput"><input type="hidden" name="enablesitedownmessage" value="0"/><input id="enablesitedown" class="pagenb" type="checkbox" value="1" name="enablesitedownmessage" {if $enablesitedownmessage == "1"}checked="checked"{/if}/></p>
+    </div>
+    <div class="pageoverflow">
+      <p class="pagetext"><label for="enablewysiwyg">{lang('enablewysiwyg')}:</label></p>
+      <p class="pageinput"><input type="hidden" name="use_wysiwyg" value="0"/><input id="enablewysiwyg" type="checkbox" name="use_wysiwyg" id='use_wysiwyg' value="1" class="pagenb" {if $use_wysiwyg == "1"}checked="checked"{/if}/></p>
+    </div>
+    <div class="pageoverflow">
+      <p class="pagetext">{lang('sitedownmessage')}:</p>
+      <p class="pageinput">{$textarea_sitedownmessage}</p>
+    </div>
+    <div class="pageoverflow">
+      <p class="pagetext">{'sitedownexcludeadmins'|lang}:</p>
+      <p class="pageinput">
+	<input type="hidden" name="sitedownexcludeadmins" value="0"/>
+	<input type="checkbox" name="sitedownexcludeadmins" value="1" {if $sitedownexcludeadmins == 1}checked="checked"{/if}/>
+      </p>
+    </div>
+    <div class="pageoverflow">
+      <p class="pagetext"><label for="sitedownexcludes">{lang('sitedownexcludes')}:</label></p>
+      <p class="pageinput">
+	<input id="sitedownexcludes" type="text" name="sitedownexcludes" size="50" maxlength="255" value="{$sitedownexcludes}"/>
+	<br/><strong>{'your_ipaddress'|lang}:</strong>&nbsp;{$smarty.server.REMOTE_ADDR}<br/>{$lang_info_sitedownexcludes}
+      </p>
+    </div>
+  </form>
 
-		<div class="pageoverflow">
-		  <p class="pagetext"><label for="content_autocreate_urls">{'content_autocreate_urls'|lang}:</label></p>
-		  <p class="pageinput">
-			<select id="content_autocreate_urls" name="content_autocreate_urls">
-			{html_options options=$yesno selected=$content_autocreate_urls}
-			</select>
-		  </p>
-		</div>
+{tab_start name='mail'}
+<script type="text/javascript">
+function on_mailer()
+{
+  var v = $('#mailer').val();
+  if( v == 'mail' ) {
+    $('#set_smtp').find('input,select').attr('disabled','disabled');
+    $('#set_sendmail').find('input,select').attr('disabled','disabled');
+  }
+  else if( v == 'smtp' ) {
+    $('#set_smtp').find('input,select').removeAttr('disabled');
+    $('#set_sendmail').find('input,select').attr('disabled','disabled');
+  }
+  else if( v == 'sendmail' ) {
+    $('#set_smtp').find('input,select').attr('disabled','disabled');
+    $('#set_sendmail').find('input,select').removeAttr('disabled');
+  }
+}
+$(document).ready(function(){
+{if !$mail_is_set}$('#mailertest').hide();{/if}
+  $('#mailertest').live('click',function(e){
+    $('#testpopup').dialog({
+      modal: true
+    });
+    return false;
+  });
 
-		<div class="pageoverflow">
-		  <p class="pagetext"><label for="content_autocreate_flaturls">{'content_autocreate_flaturls'|lang}:</label></p>
-		  <p class="pageinput">
-			<select id="content_autocreate_flaturls" name="content_autocreate_flaturls">
-			{html_options options=$yesno selected=$content_autocreate_flaturls}
-			</select>
-			<br/>
-			{'info_content_autocreate_flaturls'|lang}
-		  </p>
-		</div>
+  $('#testcancel').live('click',function(e){
+    $('#testpopup').dialog('close');
+  });
+  $('#testsend').live('click',function(e){
+    $('#testpopup').dialog('close');
+    $(this).closest('form').submit();
+  });
 
-		<div class="pageoverflow">
-		  <p class="pagetext"><label for="content_mandatory_urls">{'content_mandatory_urls'|lang}:</label></p>
-		  <p class="pageinput">
-			<select id="content_mandatory_urls" name="content_mandatory_urls">
-			{html_options options=$yesno selected=$content_mandatory_urls}
-			</select>
-		  </p>
-		</div>
+  $('#mailer').change(function(){
+    on_mailer();
+  });
+  on_mailer();
+});
+</script>
 
-		<div class="pageoverflow">
-		  <p class="pagetext"><label for="disallowed_contenttypes">{'disallowed_contenttypes'|lang}:</label></p>
-		  <p class="pageinput">
-			<select id="disallowed_contenttypes" name="disallowed_contenttypes[]" multiple="multiple" size="5">
-			  {html_options options=$all_contenttypes selected=$disallowed_contenttypes}
-			</select>
-			<br/>
-			{'info_disallowed_contenttypes'|lang}
-		  </p>
-		</div>
+  <div id="testpopup" title="{lang('title_mailtest')}" style="display: none;">
+    <form id="siteprefform_mail" method="post" action="{$formurl}">
+      <div>
+        <input type="hidden" name="{$SECURE_PARAM_NAME}" value="{$CMS_USER_KEY}"/>
+        <input type="hidden" name="active_tab" value="mail" />
+        <input type="hidden" name="testmail" value="1"/>
+      </div>
+      <div class="information">{lang('info_mailtest')}</div>
+      <div class="pageoverflow">
+        <p class="pagetext"><label for="testaddress">{lang('settings_testaddress')}:</label></p>
+        <p class="pageinput">
+          <input type="text" id="testaddress" name="mailtest_testaddress" size="50" maxlength="255"/>
+        </p>
+      </div>
+      <div class="pageoverflow">
+        <p class="pagetext"></p>
+        <p class="pageinput">
+          <input id="testsend" type="submit" name="sendtest" value="{lang('sendtest')}"/>
+          <input id="testcancel" type="submit" value="{lang('cancel')}"/>
+        </p>
+      </div>
+    </form>
+  </div>
 
-		<div class="pageoverflow">
-		  <p class="pagetext"><label for="basic_attributes">{lang('basic_attributes')}:</label></p>
-		  <p class="pageinput">
-			<select id="basic_attributes" class="multicolumn" name="basic_attributes[]" multiple="multiple" size="5">
-			  {html_options options=$all_attributes selected=$basic_attributes}
-			</select>
-			<br/>
-			{$lang_info_basic_attributes}
-		  </p>
-		</div>
+  <form id="siteprefform_mail" method="post" action="{$formurl}">
+    <div>
+      <input type="hidden" name="{$SECURE_PARAM_NAME}" value="{$CMS_USER_KEY}"/>
+      <input type="hidden" name="active_tab" value="mail" />
+      <input type="hidden" name="editsiteprefs" value="true" />
+    </div>
+    <div class="pageoverflow">
+      <p class="pageinput">
+	<input type="submit" name="submit" value="{lang('submit')}" class="pagebutton"  />
+	<input id="mailertest" type="submit" name="testemail" value="{lang('test')}" class="pagebutton"  />
+	<input type="submit" name="cancel" value="{lang('cancel')}" class="pagebutton"  />
+      </p>
+      <div style="border-top: 1px dashed black;"></div>
+    </div>
 
-		<div class="pageoverflow">
-		  <p class="pagetext"><label for="imagefield_path">{'content_imagefield_path'|lang}:</label></p>
-		  <p class="pageinput">
-			<input id="imagefield_path" type="text" name="content_imagefield_path" size="50" maxlength="255" value="{$content_imagefield_path}"/>
-			<br/>
-			{'info_content_imagefield_path'|lang}
-		  </p>
-		</div>
+    <fieldset id="set_general">
+      <legend>{lang('general_settings')}:</legend>
+      <div class="pageoverflow">
+        <p class="pagetext"><label for="mailer">{lang('settings_mailer')}:</labei></p>
+        <p class="pageinput">
+          <select id="mailer" name="mailprefs_mailer">
+          {html_options options=$maileritems selected=$mailprefs.mailer}
+          </select>
+        </p>
+      </div>
+      <div class="pageoverflow">
+        <p class="pagetext"><label for="from">{lang('settings_mailfrom')}:</label></p>
+        <p class="pageinput">
+          <input type="text" id="from" name="mailprefs_from" value="{$mailprefs.from}" size="50" maxlength="255"/>
+        </p>
+      </div>
+      <div class="pageoverflow">
+        <p class="pagetext"><label for="fromuser">{lang('settings_mailfromuser')}:</label></p>
+        <p class="pageinput">
+          <input type="text" id="fromuser" name="mailprefs_fromuser" value="{$mailprefs.fromuser}" size="50" maxlength="255"/>
+        </p>
+      </div>
+    </fieldset>
 
-		<div class="pageoverflow">
-		  <p class="pagetext"><label for="thumbfield_path">{'content_thumbnailfield_path'|lang}:</label></p>
-		  <p class="pageinput">
-			<input id="thumbfield_path" type="text" name="content_thumbnailfield_path" size="50" maxlength="255" value="{$content_thumbnailfield_path}"/>
-			<br/>
-			{'info_content_thumbnailfield_path'|lang}
-		  </p>
-		</div>
+    <fieldset id="set_smtp">
+      <legend>{lang('smtp_settings')}:</legend>
+      <div class="pageoverflow">
+        <p class="pagetext"><label for="host">{lang('settings_smtphost')}:</label></p>
+        <p class="pageinput">
+          <input type="text" id="host" name="mailprefs_host" value="{$mailprefs.host}" size="50" maxlength="255"/>
+        </p>
+      </div>
 
-		<div class="pageoverflow">
-		  <p class="pagetext"><label for="contentimage_path">{'contentimage_path'|lang}:</label></p>
-		  <p class="pageinput">
-			<input type="text" id="contentimage_path" name="contentimage_path" size="50" maxlength="255" value="{$contentimage_path}"/>
-			<br/>
-			{'info_contentimage_path'|lang}
-		  </p>
-		</div>
+      <div class="pageoverflow">
+        <p class="pagetext"><label for="port">{lang('settings_smtpport')}:</label></p>
+        <p class="pageinput">
+          <input type="text" id="port" name="mailprefs_port" value="{$mailprefs.port}" size="6" maxlength="8"/>
+        </p>
+      </div>
 
-		<div class="pageoverflow">
-		  <p class="pagetext">&nbsp;</p>
-		  <p class="pageinput">
-			<input type="submit" name="submit" value="{lang('submit')}" class="pagebutton"  />
-			<input type="submit" name="cancel" value="{lang('cancel')}" class="pagebutton"  />
-		  </p>
-		</div>
+      <div class="pageoverflow">
+        <p class="pagetext"><label for="timeout">{lang('settings_smtptimeout')}:</label></p>
+        <p class="pageinput">
+          <input type="text" id="timeout" name="mailprefs_timeout" value="{$mailprefs.timeout}" size="6" maxlength="8"/>
+        </p>
+      </div>
 
-	</form>
-{$tab_end}
+      <fieldset>
+        <legend>{lang('settings_authentication')}:</legend>
+        <div class="pageoverflow">
+          <p class="pagetext"><label for="smtpauth">{lang('settings_smtpauth')}:</label></p>
+          <p class="pageinput">
+            <select id="smtpauth" name="mailprefs_smtpauth">
+            {cms_yesno selected=$prefs.smtpauth}
+            </select>
+          </p>
+        </div>
 
-{$sitedown_start}
-	<form id="siteprefform_sitedown" method="post" action="{$formurl}">
-		<div>
-		  <input type="hidden" name="{$SECURE_PARAM_NAME}" value="{$CMS_USER_KEY}"/>
-		  <input type="hidden" name="active_tab" value="sitedown" />
-		  <input type="hidden" name="editsiteprefs" value="true" />
-		</div>
+        <div class="pageoverflow">
+          <p class="pagetext"><label for="secure">{lang('settings_authsecure')}:</label></p>
+          <p class="pageinput">
+            <select id="secure" name="mailprefs_secure">
+            {html_options options=$secure_opts selected=$prefs.secure}
+            </select>
+          </p>
+        </div>
 
-		<div class="pageoverflow">
-		  <p class="pagetext"><label for="enablesitedown">{lang('enablesitedown')}:</label></p>
-		  <p class="pageinput"><input type="hidden" name="enablesitedownmessage" value="0"/><input id="enablesitedown" class="pagenb" type="checkbox" value="1" name="enablesitedownmessage" {if $enablesitedownmessage == "1"}checked="checked"{/if}/></p>
-		</div>
-		<div class="pageoverflow">
-		  <p class="pagetext"><label for="enablewysiwyg">{lang('enablewysiwyg')}:</label></p>
-		  <p class="pageinput"><input type="hidden" name="use_wysiwyg" value="0"/><input id="enablewysiwyg" type="checkbox" name="use_wysiwyg" id='use_wysiwyg' value="1" class="pagenb" {if $use_wysiwyg == "1"}checked="checked"{/if}/></p>
-		</div>
+        <div class="pageoverflow">
+          <p class="pagetext"><label for="username">{lang('settings_authusername')}:</label></p>
+          <p class="pageinput">
+            <input type="text" id="username" name="mailprefs_username" value="{$mailprefs.username}" size="50" maxlength="255"/>
+          </p>
+        </div>
 
-		<div class="pageoverflow">
-		  <p class="pagetext">{lang('sitedownmessage')}:</p>
-		  <p class="pageinput">{$textarea_sitedownmessage}</p>
-		</div>
+        <div class="pageoverflow">
+          <p class="pagetext"><label for="password">{lang('settings_authpassword')}:</label></p>
+          <p class="pageinput">
+            <input type="password" id="password" name="mailprefs_password" value="{$mailprefs.password}" size="30" maxlength="30"/>
+          </p>
+        </div>
+      </fieldset>
+    </fieldset>
 
-		<div class="pageoverflow">
-		  <p class="pagetext">{'sitedownexcludeadmins'|lang}:</p>
-		  <p class="pageinput">
-			<input type="hidden" name="sitedownexcludeadmins" value="0"/>
-			<input type="checkbox" name="sitedownexcludeadmins" value="1" {if $sitedownexcludeadmins == 1}checked="checked"{/if}/>
-		  </p>
-		</div>
+    <fieldset id="set_sendmail">
+      <legend>{lang('sendmail_settings')}:</legend>
+      <div class="pageoverflow">
+        <p class="pagetext"><label for="sendmail">{lang('settings_sendmailpath')}:</label></p>
+        <p class="pageinput">
+          <input type="text" id="sendmail" name="mailprefs_sendmail" value="{$mailprefs.sendmail}" size="50" maxlength="255"/>
+        </p>
+      </div>
+    </fieldset>
+  </form>
 
-		<div class="pageoverflow">
-		  <p class="pagetext"><label for="sitedownexcludes">{lang('sitedownexcludes')}:</label></p>
-		  <p class="pageinput">
-			 <input id="sitedownexcludes" type="text" name="sitedownexcludes" size="50" maxlength="255" value="{$sitedownexcludes}"/>
-			 <br/>
-			 <strong>{'your_ipaddress'|lang}:</strong>&nbsp;{$smarty.server.REMOTE_ADDR}<br/>
-			 {$lang_info_sitedownexcludes}
-		  </p>
-		</div>
+{tab_start name='setup'}
+  <form id="siteprefform_setup" method="post" action="{$formurl}">
+    <div>
+      <input type="hidden" name="{$SECURE_PARAM_NAME}" value="{$CMS_USER_KEY}"/>
+      <input type="hidden" name="active_tab" value="setup" />
+      <input type="hidden" name="editsiteprefs" value="true" />
+    </div>
+    <div class="pageoverflow">
+      <p class="pageinput">
+	<input type="submit" name="submit" value="{lang('submit')}" class="pagebutton"  />
+	<input type="submit" name="cancel" value="{lang('cancel')}" class="pagebutton"  />
+      </p>
+      <div style="border-top: 1px dashed black;"></div>
+    </div>
 
-		<div class="pageoverflow">
-		  <p class="pagetext">&nbsp;</p>
-		  <p class="pageinput">
-			<input type="submit" name="submit" value="{lang('submit')}" class="pagebutton"  />
-			<input type="submit" name="cancel" value="{lang('cancel')}" class="pagebutton"  />
-		  </p>
-		</div>
-	</form>
-{$tab_end}
+    <fieldset>
+      <legend>{'browser_cache_settings'|lang}:&nbsp;</legend>
+      <div class="pageoverflow">
+	<p class="pagetext"><label for="allow_browser_cache">{'allow_browser_cache'|lang}:</label></p>
+	<p class="pageinput">
+	  <input type="hidden" name="allow_browser_cache" value="0"/><input class="pagenb" id="allow_browser_cache" value="1" type="checkbox" name="allow_browser_cache" {if $allow_browser_cache}checked="checked"{/if} /><br/>{'info_browser_cache'|lang}
+        </p>
+      </div>  
+      <div class="pageoverflow">
+	<p class="pagetext"><label for="browser_expiry">{'browser_cache_expiry'|lang}:</label></p>
+	<p class="pageinput">
+          <input type="text" id="browser_expiry" name="browser_cache_expiry" value="{$browser_cache_expiry}" size="6" maxlength="10"/><br/>{'info_browser_cache_expiry'|lang}
+        </p>
+      </div>  
+    </fieldset>
 
-{$setup_start}
-	<form id="siteprefform_setup" method="post" action="{$formurl}">
-		<div>
-		  <input type="hidden" name="{$SECURE_PARAM_NAME}" value="{$CMS_USER_KEY}"/>
-		  <input type="hidden" name="active_tab" value="setup" />
-		  <input type="hidden" name="editsiteprefs" value="true" />
-		</div>
-
-		<fieldset>
-		<legend>{'browser_cache_settings'|lang}:&nbsp;</legend>
-		<div class="pageoverflow">
-		  <p class="pagetext"><label for="allow_browser_cache">{'allow_browser_cache'|lang}:</label></p>
-		  <p class="pageinput">
-		   <input type="hidden" name="allow_browser_cache" value="0"/><input class="pagenb" id="allow_browser_cache" value="1" type="checkbox" name="allow_browser_cache" {if $allow_browser_cache}checked="checked"{/if} /><br/>{'info_browser_cache'|lang}</p>
-		</div>  
-		<div class="pageoverflow">
-		  <p class="pagetext"><label for="browser_expiry">{'browser_cache_expiry'|lang}:</label></p>
-		  <p class="pageinput">
-		   <input type="text" id="browser_expiry" name="browser_cache_expiry" value="{$browser_cache_expiry}" size="6" maxlength="10"/><br/>{'info_browser_cache_expiry'|lang}</p>
-		</div>  
-		</fieldset>
-
-		<fieldset>
-		<legend>{'server_cache_settings'|lang}:&nbsp;</legend>
-
-		<div class="pageoverflow">
-		  <p class="pagetext"><label for="autoclearcache2">{'autoclearcache2'|lang}:</label></p>
-		  <p class="pageinput">
-			<input id="autoclearcache2" type="text" class="pagesmalltextarea"  name="auto_clear_cache_age" size="4" value="{$auto_clear_cache_age}" maxlength="4"/>
-			<br/>
-			{$lang_info_autoclearcache}
-		  </p>
-		</div>
-
-		</fieldset>
-
-		<fieldset>
-		<legend>{'general_operation_settings'|lang}:&nbsp;</legend>
-		<div class="pageoverflow">
-		  <p class="pagetext"><label for="umask">{lang('global_umask')}:</label></p>
-		  <p class="pageinput">
-			<input id="umask" type="text" class="pagesmalltextarea" name="global_umask" size="4" value="{$global_umask}" />
-			<br/>
-			{'info_umask'|lang}
-		  </p>
-		</div>
-		{if isset($testresults)}
-		<div class="pageoverflow">
-		  <p class="pagetext">{lang('results')}</p>
-		  <p class="pageinput"><strong>{$testresults}</strong></p>
-		</div>
-		{/if}
-		<div class="pageoverflow">
-		  <p class="pagetext">&nbsp;</p>
-		  <p class="pageinput"><input type="submit" name="testumask" value="{lang('test')}" class="pagebutton"  /></p>
-		</div>
-		<div class="pageoverflow">
-		  <p class="pagetext"><label for="safemodewarn">{lang('disablesafemodewarning')}:</label></p>
-		  <p class="pageinput"><input type="hidden" name="disablesafemodwarning" value="0"/><input id="safemodewarn" class="pagenb" type="checkbox" value="1" name="disablesafemodewarning" {if $disablesafemodewarning}checked="checked"{/if} /></p>
-		</div>
-		<div class="pageoverflow">
-		  <p class="pagetext"><label for="notifications">{lang('admin_enablenotifications')}:</label></p>
-		  <p class="pageinput"><input type="hidden" name="enablenotifications" value="0"/><input id="notifications" class="pagenb" type="checkbox" value="1" name="enablenotifications" {if $enablenotifications}checked="checked"{/if} /></p>
-		</div>
-		<div class="pageoverflow">
-		  <p class="pagetext"><label for="pseudocron">{lang('pseudocron_granularity')}:</label></p>
-		  <p class="pageinput">
-			<select id="pseudocron" name="pseudocron_granularity">
-			{html_options options=$pseudocron_options selected=$pseudocron_granularity}
-			</select><br/>
-			{$lang_info_pseudocron_granularity}
-		  </p>
-		</div>
-		<div class="pageoverflow">
-		  <p class="pagetext"><label for="adminlog">{lang('adminlog_lifetime')}:</label></p>
-		  <p class="pageinput">
-			<select id="adminlog" name="adminlog_lifetime">
-			{html_options options=$adminlog_options selected=$adminlog_lifetime}
-			</select><br/>
-			{$lang_info_adminlog_lifetime}
-		  </p>
-		</div>
-		<div class="pageoverflow">
-		  <p class="pagetext"><label for="checkversion">{lang('checkversion')}:</label></p>
-		  <p class="pageinput">
-			<input type="hidden" name="checkversion" value="0"/>
-			<input id="checkversion" type="checkbox" name="checkversion" value="1" {if $checkversion}checked="checked"{/if}/>
-			<br/>{'info_checkversion'|lang}
-		  </p>
-		</div>
-		</fieldset>
-
-		<div class="pageoverflow">
-		  <p class="pagetext">&nbsp;</p>
-		  <p class="pageinput">
-			<input type="submit" name="submit" value="{lang('submit')}" class="pagebutton"  />
-			<input type="submit" name="cancel" value="{lang('cancel')}" class="pagebutton"  />
-		  </p>
-		</div>
-	</form>
-{$tab_end}
-
-{$smarty_start}
-	<form id="siteprefform_setup" method="post" action="{$formurl}">
-		<div>
-		  <input type="hidden" name="{$SECURE_PARAM_NAME}" value="{$CMS_USER_KEY}"/>
-		  <input type="hidden" name="active_tab" value="smarty" />
-		  <input type="hidden" name="editsiteprefs" value="true" />
-		</div>
-		<div class="pageoverflow">
-		  <p class="pagetext"><label for="smartycache">{'prompt_use_smartycaching'|lang}:</label></p>
-		  <p class="pageinput">
-			<select id="smartycache" name="use_smartycache">
-			  {html_options options=$yesno selected=$use_smartycache}
-			</select>
-			<br/>
-			{'info_smarty_caching'|lang}
-		  </p>
-		</div>
-		<div class="pageoverflow">
-		  <p class="pagetext">{'info_smarty_options'|lang}</p>
-		</div>
-		<div class="pageoverflow">
-		  <p class="pagetext"><label for="compilecheck">{'prompt_smarty_compilecheck'|lang}:</label></p>
-		  <p class="pageinput">
-			<select for="compilecheck" name="use_smartycompilecheck">
-			  {html_options options=$yesno selected=$use_smartycompilecheck}
-			</select>
-			<br/>
-			{'info_smarty_compilecheck'|lang}
-		  </p>
-		</div>
-		<div class="pageoverflow">
-		  <p class="pagetext"><label for="cachemodules">{'prompt_smarty_cachemodules'|lang}:</label></p>
-		  <p class="pageinput">
-			<select id="cachemodules" name="smarty_cachemodules">
-			  {html_options options=$smarty_cacheoptions selected=$smarty_cachemodules}
-			</select>
-			<br/>
-			{'info_smarty_cachemodules'|lang}
-		  </p>
-		</div>
-		<div class="pageoverflow">
-		  <p class="pagetext"><label for="cacheudt">{'prompt_smarty_cacheudt'|lang}:</label></p>
-		  <p class="pageinput">
-			<select id="cacheudt" name="smarty_cacheudt">
-			  {html_options options=$smarty_cacheoptions2 selected=$smarty_cacheudt}
-			</select>
-			<br/>
-			{'info_smarty_cacheudt'|lang}
-		  </p>
-		</div>
-
-		<div class="pageoverflow">
-		  <p class="pagetext">&nbsp;</p>
-		  <p class="pageinput">
-			<input type="submit" name="submit" value="{lang('submit')}" class="pagebutton"  />
-			<input type="submit" name="cancel" value="{lang('cancel')}" class="pagebutton"  />
-		  </p>
-		</div>
-	</form>
-{$tab_end}
-
-{$tabs_end}
-
-	<p class="pageback">
-		<a class="pageback" href="{$backurl}">&#171; {lang('back')}</a>
+    <fieldset>
+      <legend>{'server_cache_settings'|lang}:&nbsp;</legend>
+      <div class="pageoverflow">
+	<p class="pagetext"><label for="autoclearcache2">{'autoclearcache2'|lang}:</label></p>
+	<p class="pageinput">
+	  <input id="autoclearcache2" type="text" class="pagesmalltextarea"  name="auto_clear_cache_age" size="4" value="{$auto_clear_cache_age}" maxlength="4"/>
+	  <br/>{$lang_info_autoclearcache}
+        </p>
+      </div>
+    </fieldset>
+    <fieldset>
+      <legend>{'general_operation_settings'|lang}:&nbsp;</legend>
+      <div class="pageoverflow">
+	<p class="pagetext"><label for="umask">{lang('global_umask')}:</label></p>
+	<p class="pageinput">
+	  <input id="umask" type="text" class="pagesmalltextarea" name="global_umask" size="4" value="{$global_umask}" />
+	  <br/>{'info_umask'|lang}
 	</p>
+      </div>
+      {if isset($testresults)}
+      <div class="pageoverflow">
+	<p class="pagetext">{lang('results')}</p>
+	<p class="pageinput"><strong>{$testresults}</strong></p>
+      </div>
+      {/if}
+      <div class="pageoverflow">
+	<p class="pagetext">&nbsp;</p>
+	<p class="pageinput"><input type="submit" name="testumask" value="{lang('test')}" class="pagebutton"  /></p>
+      </div>
+      <div class="pageoverflow">
+	<p class="pagetext"><label for="safemodewarn">{lang('disablesafemodewarning')}:</label></p>
+	<p class="pageinput"><input type="hidden" name="disablesafemodwarning" value="0"/><input id="safemodewarn" class="pagenb" type="checkbox" value="1" name="disablesafemodewarning" {if $disablesafemodewarning}checked="checked"{/if} /></p>
+      </div>
+      <div class="pageoverflow">
+	<p class="pagetext"><label for="notifications">{lang('admin_enablenotifications')}:</label></p>
+	<p class="pageinput"><input type="hidden" name="enablenotifications" value="0"/><input id="notifications" class="pagenb" type="checkbox" value="1" name="enablenotifications" {if $enablenotifications}checked="checked"{/if} /></p>
+      </div>
+      <div class="pageoverflow">
+	<p class="pagetext"><label for="pseudocron">{lang('pseudocron_granularity')}:</label></p>
+	<p class="pageinput">
+	  <select id="pseudocron" name="pseudocron_granularity">
+	    {html_options options=$pseudocron_options selected=$pseudocron_granularity}
+	  </select><br/>{$lang_info_pseudocron_granularity}
+        </p>
+      </div>
+      <div class="pageoverflow">
+	<p class="pagetext"><label for="adminlog">{lang('adminlog_lifetime')}:</label></p>
+	<p class="pageinput">
+	  <select id="adminlog" name="adminlog_lifetime">
+	    {html_options options=$adminlog_options selected=$adminlog_lifetime}
+	  </select><br/>{$lang_info_adminlog_lifetime}
+        </p>
+      </div>
+      <div class="pageoverflow">
+	<p class="pagetext"><label for="checkversion">{lang('checkversion')}:</label></p>
+	<p class="pageinput">
+	  <input type="hidden" name="checkversion" value="0"/>
+	  <input id="checkversion" type="checkbox" name="checkversion" value="1" {if $checkversion}checked="checked"{/if}/>
+	  <br/>{'info_checkversion'|lang}
+	</p>
+      </div>
+    </fieldset>
+  </form>
+
+{tab_start name='smarty'}
+  <form id="siteprefform_setup" method="post" action="{$formurl}">
+    <div>
+      <input type="hidden" name="{$SECURE_PARAM_NAME}" value="{$CMS_USER_KEY}"/>
+      <input type="hidden" name="active_tab" value="smarty" />
+      <input type="hidden" name="editsiteprefs" value="true" />
+    </div>
+    <div class="pageoverflow">
+      <p class="pageinput">
+	<input type="submit" name="submit" value="{lang('submit')}" class="pagebutton"  />
+	<input type="submit" name="cancel" value="{lang('cancel')}" class="pagebutton"  />
+      </p>
+      <div style="border-top: 1px dashed black;"></div>
+    </div>
+
+    <div class="pageoverflow">
+      <p class="pagetext"><label for="smartycache">{'prompt_use_smartycaching'|lang}:</label></p>
+      <p class="pageinput">
+	<select id="smartycache" name="use_smartycache">
+	  {html_options options=$yesno selected=$use_smartycache}
+	</select>
+	<br/>{'info_smarty_caching'|lang}
+      </p>
+    </div>
+    <div class="pageoverflow">
+      <p class="information">{'info_smarty_options'|lang}</p>
+    </div>
+    <div class="pageoverflow">
+      <p class="pagetext"><label for="compilecheck">{'prompt_smarty_compilecheck'|lang}:</label></p>
+      <p class="pageinput">
+	<select for="compilecheck" name="use_smartycompilecheck">
+	  {html_options options=$yesno selected=$use_smartycompilecheck}
+	</select><br/>{'info_smarty_compilecheck'|lang}
+      </p>
+    </div>
+    <div class="pageoverflow">
+      <p class="pagetext"><label for="cachemodules">{'prompt_smarty_cachemodules'|lang}:</label></p>
+      <p class="pageinput">
+	<select id="cachemodules" name="smarty_cachemodules">
+	  {html_options options=$smarty_cacheoptions selected=$smarty_cachemodules}
+	</select><br/>{'info_smarty_cachemodules'|lang}
+      </p>
+    </div>
+    <div class="pageoverflow">
+      <p class="pagetext"><label for="cacheudt">{'prompt_smarty_cacheudt'|lang}:</label></p>
+      <p class="pageinput">
+	<select id="cacheudt" name="smarty_cacheudt">
+	  {html_options options=$smarty_cacheoptions2 selected=$smarty_cacheudt}
+	</select><br/>{'info_smarty_cacheudt'|lang}
+      </p>
+    </div>
+  </form>
+{tab_end}
+
+<p class="pageback">
+  <a class="pageback" href="{$backurl}">&#171; {lang('back')}</a>
+</p>
 
 </div>

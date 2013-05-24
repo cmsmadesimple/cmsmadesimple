@@ -24,8 +24,7 @@ class cms_admin_tabs
   public static function set_tab_header($tabid,$title,$active = FALSE)
   {
     if( $active == FALSE ) {
-      if( (self::$_tab_idx == 0 && self::$_current_tab == '') 
-	  || $tabid == self::$_current_tab ) {
+      if( (self::$_tab_idx == 0 && self::$_current_tab == '') || $tabid == self::$_current_tab ) {
 	$active = TRUE;
       }
       self::$_tab_idx++;

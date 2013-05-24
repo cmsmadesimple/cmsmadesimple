@@ -13,4 +13,5 @@
 <li>Version 2.0.1 - January, 2011 - Remove cancel button.</li>
 <li>Version 2.0.2 - September, 2011 - Set default charset to utf-8.</li>
 <li>Version 5.2.1 - June, 2012 - Update of library files.</li>
+<li>Version 5.2.3 - May 2013 - Deprecate this module... now just a wrapper for cms_mailer class.</li>
 </ul>

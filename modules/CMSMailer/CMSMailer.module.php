@@ -34,432 +34,49 @@ if( !isset($gCms) ) exit;
 */ 
 class CMSMailer extends CMSModule
 {
-  var $the_mailer = null;
+  private $the_mailer = null;
 
-  function __construct()
+  public function __construct()
   {
-    parent::__construct();
+    $this->the_mailer = new cms_mailer();
   }
 
-
-  /*---------------------------------------------------------
-   GetName()
-   ---------------------------------------------------------*/
-  function GetName()
-  {
-    return 'CMSMailer';
-  }
-
-
-  /*---------------------------------------------------------
-   GetFriendlyName()
-   ---------------------------------------------------------*/
-  function GetFriendlyName()
-  {
-    return $this->Lang('friendlyname');
-  }
-
-	
-  /*---------------------------------------------------------
-   GetVersion()
-   ---------------------------------------------------------*/
-  function GetVersion()
-  {
-    return '5.2.2';
-  }
-
-
-  /*---------------------------------------------------------
-   MinimumCMSVersion()
-   ---------------------------------------------------------*/
-  function MinimumCMSVersion()
-  {
-    return '1.7';
-  }
-
-
-  /*---------------------------------------------------------
-   GetHelp()
-   ---------------------------------------------------------*/
-  function GetHelp()
-  {
-    return $this->Lang('help');
-  }
-
-  
-  /*---------------------------------------------------------
-   GetAuthor()
-   ---------------------------------------------------------*/
-  function GetAuthor()
-  {
-    return 'Calguy1000';
-  }
-
-
-  /*---------------------------------------------------------
-   GetAuthorEmail()
-   ---------------------------------------------------------*/
-  function GetAuthorEmail()
-  {
-    return 'calguy1000@hotmail.com';
-  }
-
-  
-  /*---------------------------------------------------------
-   GetChangeLog()
-   ---------------------------------------------------------*/
-  function GetChangeLog()
-  {
-    return file_get_contents(dirname(__FILE__).'/changelog.inc');
-  }
-
-  
-  /*---------------------------------------------------------
-   IsPluginModule()
-   ---------------------------------------------------------*/
-  function IsPluginModule()
-  {
-    return false;
-  }
-
-
-  /*---------------------------------------------------------
-   HasAdmin()
-   ---------------------------------------------------------*/
-  function HasAdmin()
-  {
-    return true;
-  }
-
-
-  /*---------------------------------------------------------
-   GetAdminSection()
-   ---------------------------------------------------------*/
-  function GetAdminSection()
-  {
-    return 'extensions';
-  }
-
-
-  /*---------------------------------------------------------
-   GetAdminDescription()
-   ---------------------------------------------------------*/
-  function GetAdminDescription()
-  {
-    return $this->Lang('moddescription');
-  }
-  
-
-  /*---------------------------------------------------------
-   VisibleToAdminUser()
-   ---------------------------------------------------------*/
-  function VisibleToAdminUser()
-  {
-    return $this->CheckPermission('Modify Site Preferences' );
-  }
-
-  /*---------------------------------------------------------
-   GetDependencies()
-   ---------------------------------------------------------*/
-  function GetDependencies()
-  {
-    return array();
-  }
-  
-
-  /*---------------------------------------------------------
-   Install()
-   ---------------------------------------------------------*/
-  function Install()
-  {
-    $this->SetPreference('mailer', 'smtp');
-    $this->SetPreference('host', 'localhost');
-    $this->SetPreference('port', 25 );
-    $this->SetPreference('from', 'root@localhost');
-    $this->SetPreference('fromuser', 'CMS Administrator');
-    $this->SetPreference('sendmail', '/usr/sbin/sendmail');
-    $this->SetPreference('timeout', 1000);
-    $this->SetPreference('smtpauth',0);
-    $this->SetPreference('username','');
-    $this->SetPreference('password','');
-    $this->SetPreference('secure','');
-  }
-
-
-  /*---------------------------------------------------------
-   InstallPostMessage()
-   ---------------------------------------------------------*/
-  function InstallPostMessage()
-  {
-    return $this->Lang('postinstall');
-  }
-
-  /*---------------------------------------------------------
-   LazyLoadFrontend()
-   ---------------------------------------------------------*/
-  function LazyLoadFrontend()
-  {
-    return TRUE;
-  }
-
-
-  /*---------------------------------------------------------
-   LazyLoadAdmin()
-   ---------------------------------------------------------*/
-  function LazyLoadAdmin()
-  {
-    return TRUE;
-  }
-
-
-  /*---------------------------------------------------------
-   UninstallPostMessage()
-   ---------------------------------------------------------*/
-  function UninstallPostMessage()
-  {
-    return $this->Lang('postuninstall');
-  }
-
-
-  /*---------------------------------------------------------
-   Upgrade()
-   ---------------------------------------------------------*/
-  function Upgrade($oldversion, $newversion)
-  {
-    // nothing here
-  }
-	
-	
-  /*---------------------------------------------------------
-   Uninstall()
-   ---------------------------------------------------------*/
-  function Uninstall()
-  {
-    $this->RemovePreference('mailer');
-    $this->RemovePreference('host');
-    $this->RemovePreference('port');
-    $this->RemovePreference('from');
-    $this->RemovePreference('fromuser');
-    $this->RemovePreference('sendmail');
-    $this->RemovePreference('timeout');
-    $this->RemovePreference('smtpauth',0);
-    $this->RemovePreference('username');
-    $this->RemovePreference('password');
-    $this->RemovePreference('secure');
-  }
-
-
-  /*---------------------------------------------------------
-   DoAction($action, $id, $params, $return_id)
-   ---------------------------------------------------------*/
-  function DoAction($action, $id, $params, $returnid=-1)
-  {
-    $gCms = cmsms();
-    $smarty =& $gCms->GetSmarty();
-    $smarty->assign_by_ref('mod',$this);
-
-    switch ($action)
-      {
-      case 'default':
-	{
-	  break;
-	}
-      case 'setadminprefs':
-	{
-	  $this->_SetAdminPrefs( $id, $params, $returnid );
-	  break;
-	}
-      default:
-	parent::DoAction($action,$id,$params,$returnid);
-      }
-  }
-
-
-  /*---------------------------------------------------------
-   DisplayErrorPage($id, $params, $return_id, $message)
-   NOT PART OF THE MODULE API
-   ---------------------------------------------------------*/
-  function _DisplayErrorPage($id, &$params, $returnid, $message='')
-  {
-    $this->smarty->assign('title_error', $this->Lang('error'));
-    if ($message != '')
-      {
-	$this->smarty->assign('message', $message);
-      }
-    
-    // Display the populated template
-    echo $this->ProcessTemplate('error.tpl');
-  }
-
-  /*---------------------------------------------------------
-   GetNotificationOutput()
-   ---------------------------------------------------------*/
-  function GetNotificationOutput($priority = 3)
-  {
-    if( !get_site_preference('mail_is_set',0) )
-      {
-	$obj = new StdClass;
-	$obj->priority = 1;
-	$obj->link = $this->create_url('m1_','defaultadmin');
-	$obj->html = lang('warning_mail_settings', $obj->link).'&nbsp;'.$this->Lang('warning_cron_updated');
-	
-	return $obj;
-      }
-  }
+  function GetName() { return 'CMSMailer'; }
+  function GetFriendlyName() { return $this->Lang('friendlyname'); }
+  function GetVersion() { return '5.2.4'; }
+  function MinimumCMSVersion() { return '1.11.5'; }
+  function GetHelp() { return $this->Lang('help'); }
+  function GetAuthor() { return 'Calguy1000'; }
+  function GetAuthorEmail() { return 'calguy1000@hotmail.com'; }
+  function GetChangeLog() { return __DIR__.'/changelog.inc'; }
+  function IsPluginModule() { return FALSE; }
+  function HasAdmin() { return FALSE; }
+  function GetAdminSection() { return 'extensions'; }
+  function GetAdminDescription() { return $this->Lang('moddescription'); }
+  function VisibleToAdminUser() { return FALSE; }
+  function InstallPostMessage() { return $this->Lang('postinstall'); }
+  function LazyLoadFrontend() { return TRUE; }
+  function LazyLoadAdmin() { return TRUE; }
+  function UninstallPostMessage() { return $this->Lang('postuninstall'); }
 
   //////////////////////////////////////////////////////////////////////
   //// BEGIN API SECTION
   //////////////////////////////////////////////////////////////////////
 
-  /*---------------------------------------------------------
-   reset()
-   NOT PART OF THE MODULE API
-   ---------------------------------------------------------*/
-  function reset()
+  public function __call($method,$args)
   {
-    $this->_load();
-    $this->the_mailer->Timeout = $this->GetPreference('timeout');
-    $this->the_mailer->Sendmail = $this->GetPreference('sendmail');
-    $this->the_mailer->Port   = $this->GetPreference('port');
-    $this->the_mailer->Mailer = $this->GetPreference('mailer');
-    $this->the_mailer->FromName = $this->GetPreference('fromuser');
-    $this->the_mailer->From = $this->GetPreference('from');
-    $this->the_mailer->Host = $this->GetPreference('host');
-    $this->the_mailer->SMTPAuth = $this->GetPreference('smtpauth');
-    $this->the_mailer->Username = $this->GetPreference('username');
-    $this->the_mailer->Password = $this->GetPreference('password');
-    $this->the_mailer->SMTPSecure = $this->GetPreference('secure');
-    $this->the_mailer->ErrorInfo = '';
-    $this->the_mailer->ClearAddresses();
-    $this->the_mailer->ClearAttachments();
-    $this->the_mailer->ClearCustomHeaders();
-    $this->the_mailer->ClearBCCs();
-    $this->the_mailer->ClearCCs();
-    $this->the_mailer->ClearReplyTos();
-    $charset = $this->GetPreference('charset','utf-8');
-    if( $charset == '' ) $charset = 'utf-8';
-    $this->SetCharSet($charset);
+    if( method_exists($this->the_mailer,$method) ) {
+      return call_user_func_array(array($this->the_mailer,$method),$args);
+    }
+    // todo, throw exception here.
   }
 
-
-  /*---------------------------------------------------------
-   _SetAdminPrefs($id, $params, $return_id )
-   NOT PART OF THE MODULE API
-   ---------------------------------------------------------*/
-  function _SetAdminPrefs($id, &$params, $returnid )
-  {
-    if( !$this->CheckPermission('Modify Site Preferences') )
-      return;
-
-    set_site_preference('mail_is_set',1);
-
-    if( isset( $params['input_mailer'] ) )
-      {
-	$this->SetPreference('mailer',$params['input_mailer']);
-      }
-
-    if( isset( $params['input_host'] ) )
-      {
-	$this->SetPreference('host',$params['input_host']);
-      }
-
-    if( isset( $params['input_secure'] ) )
-      {
-	$this->SetPreference('secure',$params['input_secure']);
-      }
-
-    if( isset( $params['input_port'] ) )
-      {
-	$this->SetPreference('port',$params['input_port']);
-      }
-
-    if( isset( $params['input_from'] ) )
-      {
-	$this->SetPreference('from',$params['input_from']);
-      }
-
-    if( isset( $params['input_fromuser'] ) )
-      {
-	$this->SetPreference('fromuser',$params['input_fromuser']);
-      }
-
-    if( isset( $params['input_sendmail'] ) )
-      {
-	$this->SetPreference('sendmail',$params['input_sendmail']);
-      }
-
-    if( isset( $params['input_timeout'] ) )
-      {
-	$this->SetPreference('timeout',$params['input_timeout']);
-      }
-
-    if( isset( $params['input_smtpauth'] ) )
-      {
-	$this->SetPreference('smtpauth',$params['input_smtpauth']);
-      }
-    else
-      {
-	$this->SetPreference('smtpauth',0);
-      }
-
-    if( isset( $params['input_username'] ) )
-      {
-	$this->SetPreference('username',$params['input_username']);
-      }
-
-    if( isset( $params['input_password'] ) )
-      {
-	$this->SetPreference('password',$params['input_password']);
-      }
-
-    if( isset( $params['input_charset'] ) )
-      {
-	$this->SetPreference('charset',trim($params['input_charset']));
-      }
-
-    $this->reset();
-
-    if( isset( $params['sendtest'] ) )
-      {
-	// here we're gonna send a nice, hard coded test message
-	if( !isset( $params['input_testaddress'] ) || trim($params['input_testaddress']) == '' )
-	  {
-	    $this->_DisplayErrorPage( $id, $params, $returnid, 
-				      $this->Lang('error_notestaddress'));
-	    return;
-	  }
-	else
-	  {
-	    $this->AddAddress( $params['input_testaddress'] );
-	    $this->IsHTML(true);
-	    $this->SetBody( $this->Lang('testbody'));
-	    $this->SetSubject( $this->Lang('testsubject'));
-	    $this->Send();
-	    $this->reset(); // yes, another reset
-	  }
-      }
-
-    $this->Redirect( $id, 'defaultadmin', $returnid, $params );
-  }
-
-  ////////////////////////////////////////////////////////////
-  //                     UTILITIES                          //
-  ////////////////////////////////////////////////////////////
-  function _load()
-  {
-    if( $this->the_mailer == NULL )
-      {
-	require_once(dirname(__FILE__).'/phpmailer/class.phpmailer.php' );
-	$this->the_mailer = new PHPMailer;
-	$this->the_mailer->PluginDir=dirname(__FILE__).'/phpmailer/';
-	$this->reset();
-      }
-  }
 
   ////////////////////////////////////////////////////////////
   //                     API FUNCTIONS                      //
   ////////////////////////////////////////////////////////////
 
+  /* use call instead....
   function GetAltBody()
   {
     $this->_load();
@@ -760,8 +377,7 @@ class CMSMailer extends CMSModule
     return $this->the_mailer->AddAddress( $address, $name );
   }
 
-  function AddAttachment( $path, $name = '', $encoding = 'base64',
-			  $type = 'application/octet-stream' )
+  function AddAttachment( $path, $name = '', $encoding = 'base64', $type = 'application/octet-stream' )
   {
     $this->_load();
     return $this->the_mailer->AddAttachment( $path, $name, $encoding, $type );
@@ -785,12 +401,10 @@ class CMSMailer extends CMSModule
     $this->the_mailer->AddCustomHeader( $txt );
   }
 
-  function AddEmbeddedImage( $path, $cid, $name = '', $encoding = 'base64',
-			     $type = 'application/octet-stream' )
+  function AddEmbeddedImage( $path, $cid, $name = '', $encoding = 'base64', $type = 'application/octet-stream' )
   {
     $this->_load();
-    return $this->the_mailer->AddEmbeddedImage( $path, $cid, 
-						$name, $encoding, $type );
+    return $this->the_mailer->AddEmbeddedImage( $path, $cid, $name, $encoding, $type );
   }
 
   function AddReplyTo( $addr, $name = '' )
@@ -800,8 +414,7 @@ class CMSMailer extends CMSModule
   }
 
 
-  function AddStringAttachment( $string, $filename, $encoding = 'base64',
-				$type = 'application/octet-stream' )
+  function AddStringAttachment( $string, $filename, $encoding = 'base64', $type = 'application/octet-stream' )
   {
     $this->_load();
     $this->the_mailer->AddStringAttachment( $string, $filename, $encoding, $type );
@@ -912,13 +525,13 @@ class CMSMailer extends CMSModule
   function SetSecure($value)
   {
     $value = strtolower($value);
-    if( $value == '' || $value == 'ssl' || $value == 'tls' )
-      {
-	$this->_load();
-	$this->the_mailer->SMTPSecure = $value;
-      }
+    if( $value == '' || $value == 'ssl' || $value == 'tls' ) {
+      $this->_load();
+      $this->the_mailer->SMTPSecure = $value;
+    }
   }
 
+  */
 } // class CMSMailer
 
 ?>

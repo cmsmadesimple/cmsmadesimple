@@ -2573,9 +2573,7 @@ abstract class CMSModule
    */
   function RedirectToAdminTab($tab = '',$params = '',$action = '')
   {
-    if( $tab == '' ) {
-      if( $this->__current_tab ) $tab = $this->__current_tab;
-    }
+    if( $tab == '' ) if( $this->__current_tab ) $tab = $this->__current_tab;
     if( $params == '' ) $params = array();
     if( $tab != '' ) $params['__activetab'] = $tab;
     if( empty($action) ) $action = 'defaultadmin';
@@ -2673,14 +2671,14 @@ abstract class CMSModule
     $result=array();
     $tmp = ModuleOperations::get_modules_with_capability($capability,$params);
     if( is_array($tmp) && count($tmp) ) {
-      for( $i = 0; $i < count($tmp); $i++ ) {
-	if( is_object($tmp[$i]) ) {
-	  $result[] = get_class($tmp[$i]);
-	}
-	else {
-	  $result[] = $tmp[$i];
-	}
-      }
+		for( $i = 0; $i < count($tmp); $i++ ) {
+			if( is_object($tmp[$i]) ) {
+				$result[] = get_class($tmp[$i]);
+			}
+			else {
+				$result[] = $tmp[$i];
+			}
+		}
     }
     return $result;
   }
@@ -3082,9 +3080,7 @@ abstract class CMSModule
   function ShowMessage($message)
   {
     $theme = cms_utils::get_theme_object();
-    if( is_object($theme) ) {
-      return $theme->ShowMessage($message);
-    }
+    if( is_object($theme) ) return $theme->ShowMessage($message);
     return '';
   }
 
@@ -3113,9 +3109,7 @@ abstract class CMSModule
   function ShowErrors($errors)
   {
     $theme = cms_utils::get_theme_object();
-    if( is_object($theme) ) {
-      return $theme->ShowErrors($errors);
-    }
+    if( is_object($theme) ) return $theme->ShowErrors($errors);
     return '';
   }
 
@@ -3293,17 +3287,17 @@ abstract class CMSModule
   function DoEvent( $originator, $eventname, &$params )
   {
     if ($originator != '' && $eventname != '') {
-      $filename = dirname(dirname(dirname(__FILE__))) . '/modules/'.$this->GetName().'/event.' 
-	. $originator . "." . $eventname . '.php';
+		$filename = dirname(dirname(dirname(__FILE__))) . '/modules/'.$this->GetName().'/event.' 
+			. $originator . "." . $eventname . '.php';
 
-      if (@is_file($filename)) {
-	$gCms = cmsms();
-	$db = $gCms->GetDb();
-	$config = $gCms->GetConfig();
-	$smarty = $gCms->GetSmarty();
+		if (@is_file($filename)) {
+			$gCms = cmsms();
+			$db = $gCms->GetDb();
+			$config = $gCms->GetConfig();
+			$smarty = $gCms->GetSmarty();
 
-	include($filename);
-      }
+			include($filename);
+		}
     }
   }
 
