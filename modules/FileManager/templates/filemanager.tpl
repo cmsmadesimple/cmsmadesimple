@@ -43,6 +43,9 @@ refresh_url = refresh_url.replace(/amp;/g,'');
 
         $('#btn_pie').removeAttr('disabled').removeClass('disabled');
         if( jQuery.ui ) $('#btn_pie').button( "option", "disabled", false );
+
+        $('#btn_rotate').removeAttr('disabled').removeClass('disabled');
+        if( jQuery.ui ) $('#btn_rotate').button( "option", "disabled", false );
       }
       if( text == 1 ) {
         $('#btn_view').removeAttr('disabled').removeClass('disabled');
@@ -131,7 +134,7 @@ refresh_url = refresh_url.replace(/amp;/g,'');
       var tmp = $("#filesarea input[type='checkbox']").filter(':checked:').val();
       tmp = tmp.replace("=","");
       var url = $("#pie_"+tmp).val();
-      window.open(url, 'image_edition', config='height=530, width=920, toolbar=no, menubar=no, location=no, directories=no, status=no');
+      window.open(url, 'image_editor', config='height=530, width=920, toolbar=no, menubar=no, location=no, directories=no, status=no');
       return false;
     });
   });
@@ -158,6 +161,7 @@ refresh_url = refresh_url.replace(/amp;/g,'');
     <input type="submit" id="btn_unpack" name="{$actionid}fileactionunpack" value="{$mod->Lang('unpack')}" class="filebtn" onclick="return confirm('{$confirm_unpack}');"/>
     <input type="submit" id="btn_thumb" name="{$actionid}fileactionthumb" value="{$mod->Lang('thumbnail')}" class="filebtn"/>
     <input type="submit" id="btn_pie" name="{$actionid}fileactionpie" value="{$mod->Lang('pie')}" class="filebtn"/>
+    <input type="submit" id="btn_rotate" name="{$actionid}fileactionrotate" value="{$mod->Lang('rotate')}" class="filebtn"/>
   </fieldset>
 
 </div>

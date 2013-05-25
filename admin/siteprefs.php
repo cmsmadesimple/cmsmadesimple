@@ -1,4 +1,4 @@
-<?php
+<?php // -*- mode:php; tab-width:4; indent-tabs-mode:t; c-basic-offset:4; -*-
 #CMS - CMS Made Simple
 #(c)2004 by Ted Kulp (wishy@users.sf.net)
 #This project's homepage is: http://www.cmsmadesimple.org
@@ -84,6 +84,7 @@ $gCms = cmsms();
 $db = $gCms->GetDb();
 $config = $gCms->GetConfig();
 
+$pretty_urls = $config['url_rewriting'] == 'none' ? 0 : 1;
 $error = "";
 $message = "";
 $mail_is_set = cms_siteprefs::get('mail_is_set',0);
@@ -489,6 +490,7 @@ $smarty->assign('mailprefs',$mailprefs);
 $smarty->assign('languages',get_language_list());
 $smarty->assign('templates',$templates);
 $smarty->assign('tab',$tab);
+$smarty->assign('pretty_urls',$pretty_urls);
 
 // need a list of wysiwyg modules.
 {

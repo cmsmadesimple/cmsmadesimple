@@ -94,7 +94,7 @@ $lang['admin']['automatedtask_success'] = 'Automated task performed';
 // BBB
 
 $lang['admin']['back'] = 'Back to Menu';
-$lang['admin']['backendwysiwygtouse'] = 'Default backend wysiwyg (for new user accounts)';
+$lang['admin']['backendwysiwygtouse'] = 'Default backend WYSIWYG (for new user accounts)';
 $lang['admin']['backtoplugins'] = 'Back to Plugins List';
 $lang['admin']['basic_attributes'] = 'Basic Properties';
 $lang['admin']['blobexists'] = 'Global Content Block name already exists';
@@ -263,6 +263,7 @@ $lang['admin']['dependencies'] = 'Dependencies';
 $lang['admin']['depsformodule'] = 'Dependencies for %s Module';
 $lang['admin']['description'] = 'Description';
 $lang['admin']['design'] = 'Design';
+$lang['admin']['design_id'] = 'Design Id';
 $lang['admin']['destinationnotfound'] = 'The selected page could not be found or is invalid';
 $lang['admin']['destination_page'] = 'Destination Page';
 $lang['admin']['directoryabove'] = 'directory above current level';
@@ -967,19 +968,13 @@ $lang['admin']['info_adduser_username'] = 'The username field must consist of al
 $lang['admin']['info_adminlog_lifetime']='Remove log-entries that are older than the specified period.';
 $lang['admin']['info_autoalias'] = 'If this field is empty, an alias will be created automatically.';
 $lang['admin']['info_autoclearcache'] = 'Specify an integer value. Enter 0 to disable automatic cache clearing';
-$lang['admin']['info_basic_attributes'] = 'This field allows you to specify which content properties that users without the &quot;Manage All Content&quot; permission are allowed to edit. The selected properties will appear in the &quot;Main Tab&quot; on the edit content page.';
 $lang['admin']['info_browser_cache'] = 'Applicable only to cachable pages, this setting indicates that browsers should be allowed to cache the pages for an amount of time.  If enabled repeat visitors to your site may not immediately see changes to the content of the pages.';
 $lang['admin']['info_browser_cache_expiry'] = 'Specify the amount of time (in minutes) that browsers should cache pages for.  Setting this value to 0 disables the functionality';
 $lang['admin']['info_checkversion'] = 'If enabled, the system will perform a daily check for a new release of CMSMS';
 $lang['admin']['info_clearusersettings'] = 'This will remove all user settings from the database, setting every preference back to defaults';
 $lang['admin']['info_copyusersettings'] = 'Ensure that this users settings and preferences are identical to that of another existing user';
-$lang['admin']['info_contentimage_path'] = 'Relative to the uploads path, specify a directory name that contains the paths containing files for the {content_image} tag.  This value is used as a default for the dir parameter';
-$lang['admin']['info_content_autocreate_flaturls'] = 'This will set all URLs to the same value as the Page Alias. Note: The two values will not be synchronised after first being set';
-$lang['admin']['info_content_imagefield_path'] = 'Relative to the image uploads path, specify a directory name that contains the paths containing files for the image field';
-$lang['admin']['info_content_thumbnailfield_path'] = 'Relative to the image uploads path, specify a directory name that contains the paths containing files for the image field.  Usually this will be the same as the path above.';
 $lang['admin']['info_default_contenttype'] = 'Applicable when adding new content objects, this control specifies the type that is selected by default.  Please ensure that the selected item is not one of the &quot;disallowed types&quot;.';
 $lang['admin']['info_deletepages'] = 'Note: due to permission restrictions, some of the pages you selected for deletion may not be listed below';
-$lang['admin']['info_disallowed_contenttypes'] = 'Select which content types to remove from the content type dropdown when editing or adding content.  Use CTRL+Click to select, unselect items.  Having no selected items will indicate that all content types are allowed. <em>(applies to all users)</em>';
 $lang['admin']['info_edeprecated_failed'] = 'If E_DEPRECATED is enabled in your error reporting users will see a lot of warning messages that could affect the display and functionality';
 $lang['admin']['info_editcontent_design'] = 'Associating a design with a content page allows the rendering engine to output the proper stylesheets for the page';
 $lang['admin']['info_editcontent_template'] = 'You must associate a template with each content page, and that template must have at least the default <code>{content}</code> block defined within it.  The template does not need to be a page template type';
@@ -997,7 +992,6 @@ $lang['admin']['info_pagealias'] = 'Specify a unique alias for this page.';
 $lang['admin']['info_pagedefaults'] = 'This form allows specifying various options as to the initial settings when creating new content pages.  The items in this page have no effect when editing existing pages';
 $lang['admin']['info_preview_notice'] = 'Warning: This preview panel behaves much like a browser window allowing you to navigate away from the initially previewed page. However, if you do that, you may experience unexpected behaviour. If you navigate away from the initial display and return, you may not see the un-committed content until you make a change to the content in the main tab, and then reload this tab. When adding content, if you navigate away from this page, you will be unable to return, and must refresh this panel.';
 $lang['admin']['info_pseudocron_granularity'] = 'This setting indicates how often the system will attempt to handle regularly scheduled tasks';
-$lang['admin']['info_search_module'] = 'Select the module that should be used to index words for searching, and will provide the site search capabilities';
 $lang['admin']['info_selectuser'] = 'Toggle selection to perform actions on multiple users at once';
 $lang['admin']['info_setusersettings'] = 'Set this users settings to be a template for newly created users and to effect other users';
 $lang['admin']['info_sitedownexcludes'] = <<<EOT
@@ -1623,6 +1617,7 @@ $lang['admin']['warn_addgroup'] = 'Creating a new group does not assign any perm
 $lang['admin']['warning_mail_settings'] = <<<EOT
 Your mail settings have not been configured.  This could interfere with the ability of your website to send email messages.  You should go to <a href="%s">Extensions >> CMSMailer</a> and configure the mail settings with the information provided by your host.
 EOT;
+$lang['admin']['warn_nosefurl'] = 'SEO Friendly or <em>Pretty</em> URLs have not been configured, some of these settings are irrelevant';
 $lang['admin']['warning_safe_mode'] = '<strong><em>WARNING:</em></strong> PHP Safe mode is enabled. This will cause difficulty with files uploaded via the web browser interface, including images, theme and module XML packages.  You are advised to contact your site administrator to see about disabling safe mode.';
 $lang['admin']['warning_upgrade'] = '<em><strong>Warning:</strong></em> CMSMS is in need of an upgrade.';
 $lang['admin']['warning_upgrade_info1'] = 'You are now running schema version %s. and you need to be upgraded to version %s';
@@ -1731,12 +1726,12 @@ EOT;
 
 $lang['admin']['help_function_cms_init_editor'] = <<<EOT
 <h3>What does this do?</h3>
-<p>This plugin is used to initialize the selected wysiwyg editor for display when wysiwyg functionalities are required for frontend data submission.  This module will find the selected frontend wysiwyg, determine if it has been requested, and if so generate the appropriate html code <em>(usually javascript links)</em> so that the wysiwyg will initialize properly when the page is loaded.  If no wysiwyg editors have been requested for the frontend request this plugin will produce no output.</p>
+  <p>This plugin is used to initialize the selected WYSIWYG editor for display when WYSIWYG functionalities are required for frontend data submission.  This module will find the selected frontend WYSIWYG, determine if it has been requested, and if so generate the appropriate html code <em>(usually javascript links)</em> so that the WYSIWYG will initialize properly when the page is loaded.  If no WYSIWYG editors have been requested for the frontend request this plugin will produce no output.</p>
 <h3>How do I use it?</h3>
-<p>The first thing you must do is select the frontend WYSIWYG editor to use in the global settings page of the admin console.  Next If you use frontend wysiwyg editors on numerous pages, it may be best to place the {cms_init_editor} plugin directly into your page template.  If you only require the wysiwyg editor to be enabled on a limited amount of pages you may just place it into the &quot;Page Specific Metadata&quot; field in each page.</p>
+<p>The first thing you must do is select the frontend WYSIWYG editor to use in the global settings page of the admin console.  Next If you use frontend WYSIWYG editors on numerous pages, it may be best to place the {cms_init_editor} plugin directly into your page template.  If you only require the WYSIWYG editor to be enabled on a limited amount of pages you may just place it into the &quot;Page Specific Metadata&quot; field in each page.</p>
 <h3>What parameters does it take?</h3>
 <ul>
-<li><em>(optional)wysiwyg</em> - Specify the name of the wysiwyg editor module to initialize.  Use with caution.  If you have a different wysiwyg editor selected in the global settings, this will force the specified  editor to be initialized.</li>
+<li><em>(optional)wysiwyg</em> - Specify the name of the WYSIWYG editor module to initialize.  Use with caution.  If you have a different WYSIWYG editor selected in the global settings, this will force the specified  editor to be initialized.</li>
 <li><em>(optional)force=0</em> - Normally this plugin will not initialize the specified (or detected) editor if it has not been marked as &quot;active&quot;.  This parameter will override that behavior.</li>
 <li><em>(optional)assign</em> - Assign the output of the plugin to the named smarty variable.</li>
 </ul>
@@ -2267,7 +2262,7 @@ $lang['admin']['help_function_content'] = <<<EOT
 <p>Example:</p>
 <pre>{content block="second_content_block" label="Second Content Block"}</pre>
 <p>Now, when you edit a page there will a textarea called "Second Content Block".</p></li>
-		<li><em>(optional) </em>wysiwyg (true/false) - If set to false, then a wysiwyg will never be used while editing this block. If true, then it acts as normal.  Only works when block parameter is used.</li>
+		<li><em>(optional) </em>wysiwyg (true/false) - If set to false, then a WYSIWYG will never be used while editing this block. If true, then it acts as normal.  Only works when block parameter is used.</li>
 		<li><em>(optional) </em>oneline (true/false) - If set to true, then only one edit line will be shown while editing this block. If false, then it acts as normal.  Only works when block parameter is used.</li>
 <li><em>(optional) </em>size - Applicable only when the oneline option is used this optional parameter allows you to specify the size of the edit field.  The default value is 50.</li>
 <li><em>(optional) </em>maxlength - Applicable only when the oneline option is used this optional parameter allows you to specify the maximum length of input for the edit field.  The default value is 255.</li>

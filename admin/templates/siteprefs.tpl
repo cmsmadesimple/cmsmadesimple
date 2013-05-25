@@ -27,11 +27,11 @@
     </div>
 
     <div class="pageoverflow">
-      <p class="pagetext"><label for="sitename">{'sitename'|lang}:</label></p>
+      <p class="pagetext"><label for="sitename">{'sitename'|lang}:</label>&nbsp;{cms_help key2='siteprefs_sitename'}</p>
       <p class="pageinput"><input type="text" id="sitename" class="pagesmalltextarea" name="sitename" size="30" value="{$sitename}" /></p>
     </div>
     <div class="pageoverflow">
-      <p class="pagetext"><label for="frontendlang">{lang('frontendlang')}:</label></p>
+      <p class="pagetext"><label for="frontendlang">{lang('frontendlang')}:</label>&nbsp;{cms_help key2='siteprefs_frontendlang'}</p>
       <p class="pageinput">
 	<select id="frontendlang" name="frontendlang" style="vertical-align: middle;">
 	   {html_options options=$languages selected=$frontendlang}
@@ -40,7 +40,7 @@
     </div>
 
     <div class="pageoverflow">
-      <p class="pagetext"><label for="frontendwysiwyg">{lang('frontendwysiwygtouse')}:</label></p>
+      <p class="pagetext"><label for="frontendwysiwyg">{lang('frontendwysiwygtouse')}:</label>&nbsp;{cms_help key2='siteprefs_frontendwysiwyg'}</p>
       <p class="pageinput">
         <select id="frontendwysiwyg" name="frontendwysiwyg">
 	  {html_options options=$wysiwyg selected=$frontendwysiwyg}
@@ -49,16 +49,16 @@
     </div>
 
     <div class="pageoverflow">
-      <p class="pagetext"><label for="nogcbwysiwyg">{lang('nogcbwysiwyg')}:</label></p>
+      <p class="pagetext"><label for="nogcbwysiwyg">{lang('nogcbwysiwyg')}:</label>&nbsp;{cms_help key2='siteprefs_nogcbwysiwyg'}</p>
       <p class="pageinput"><input type="hidden" name="nogcbwysiwyg" value="0"/><input id="nogcbwysiwyg" class="pagenb" type="checkbox" value="1" name="nogcbwysiwyg" {if $nogcbwysiwyg == "1"}checked="checked"{/if} /></p>
     </div>
     <div class="pageoverflow">
-      <p class="pagetext"><label for="globalmetadata">{lang('globalmetadata')}:</label></p>
+      <p class="pagetext"><label for="globalmetadata">{lang('globalmetadata')}:</label>&nbsp;{cms_help key2='siteprefs_globalmetadata'}</p>
       <p class="pageinput"><textarea id="globalmetadata" class="pagesmalltextarea" name="metadata" cols="80" rows="20">{$metadata}</textarea></p>
     </div>
     {if isset($themes)}
       <div class="pageoverflow">
-        <p class="pagetext"><label for="logintheme">{lang('master_admintheme')}:</label></p>
+        <p class="pagetext"><label for="logintheme">{lang('master_admintheme')}:</label>&nbsp;{cms_help key2='siteprefs_logintheme'}</p>
 	<p class="pageinput">
 	  <select id="logintheme" name="logintheme">
 	    {html_options options=$themes selected=$logintheme}
@@ -67,7 +67,7 @@
       </div>
     {/if}
     <div class="pageoverflow">
-      <p class="pagetext"><label for="backendwysiwyg">{lang('backendwysiwygtouse')}:</label></p>
+      <p class="pagetext"><label for="backendwysiwyg">{lang('backendwysiwygtouse')}:</label>&nbsp;{cms_help key2='siteprefs_backendwysiwyg'}</p>
       <p class="pageinput">
         <select id="backendwysiwyg" name="backendwysiwyg">
           {html_options options=$wysiwyg selected=$backendwysiwyg}
@@ -75,31 +75,29 @@
       </p>
     </div>
     <div class="pageoverflow">
-      <p class="pagetext"><label for="defaultdateformat">{lang('date_format_string')}:</label></p>
+      <p class="pagetext"><label for="defaultdateformat">{lang('date_format_string')}:</label>&nbsp;{cms_help key2='siteprefs_dateformat'}</p>
       <p class="pageinput">
 	<input class="pagenb" id="defaultdateformat" type="text" name="defaultdateformat" size="20" maxlength="255" value="{$defaultdateformat}"/>
-	<br/>{$lang_date_format_string_help}
       </p>
     </div>
     <div class="pageoverflow">
-      <p class="pagetext"><label for="thumbnail_width">{lang('thumbnail_width')}:</label></p>
+      <p class="pagetext"><label for="thumbnail_width">{lang('thumbnail_width')}:</label>&nbsp;{cms_help key2='siteprefs_thumbwidth'}</p>
       <p class="pageinput">
 	<input class="pagenb" id="thumbnail_width" type="text" name="thumbnail_width" size="3" maxlength="3" value="{$thumbnail_width}"/>
       </p>
     </div>
     <div class="pageoverflow">
-      <p class="pagetext"><label for="thumbnail_height">{lang('thumbnail_height')}:</label></p>
+      <p class="pagetext"><label for="thumbnail_height">{lang('thumbnail_height')}:</label>&nbsp;{cms_help key2='siteprefs_thumbheight'}</p>
       <p class="pageinput">
 	<input id="thumbnail_height" class="pagenb" type="text" name="thumbnail_height" size="3" maxlength="3" value="{$thumbnail_height}"/>
       </p>
     </div>
     {if isset($search_modules)}
-      <p class="pagetext"><label for="search_module">{'search_module'|lang}:</label></p>
+      <p class="pagetext"><label for="search_module">{'search_module'|lang}:</label>&nbsp;{cms_help key2='settings_searchmodule'}</p>
       <p class="pageinput">
 	<select id="search_module" name="search_module">
 	  {html_options options=$search_modules selected=$search_module}
 	</select>
-	<br/>{'info_search_module'|lang}
       </p>
     {/if}
   </form>
@@ -111,6 +109,9 @@
       <input type="hidden" name="active_tab" value="editcontent" />
       <input type="hidden" name="editsiteprefs" value="true" />
     </div>
+    {if !$pretty_urls}
+    <div class="warning">{lang('warn_nosefurl')}&nbsp;&nbsp;{cms_help key2='settings_nosefurl'}</div>
+    {/if}
     <div class="pageoverflow">
       <p class="pageinput">
 	<input type="submit" name="submit" value="{lang('submit')}" class="pagebutton"  />
@@ -120,7 +121,7 @@
     </div>
 
     <div class="pageoverflow">
-      <p class="pagetext"><label for="content_autocreate_urls">{'content_autocreate_urls'|lang}:</label></p>
+      <p class="pagetext"><label for="content_autocreate_urls">{lang('content_autocreate_urls')}:</label>&nbsp;{cms_help key2='settings_autocreate_url'}</p>
       <p class="pageinput">
 	<select id="content_autocreate_urls" name="content_autocreate_urls">
 	  {html_options options=$yesno selected=$content_autocreate_urls}
@@ -128,16 +129,15 @@
       </p>
     </div>
     <div class="pageoverflow">
-      <p class="pagetext"><label for="content_autocreate_flaturls">{'content_autocreate_flaturls'|lang}:</label></p>
+      <p class="pagetext"><label for="content_autocreate_flaturls">{lang('content_autocreate_flaturls')}:</label>&nbsp;{cms_help key2='settings_autocreate_flaturls'}</p>
       <p class="pageinput">
 	<select id="content_autocreate_flaturls" name="content_autocreate_flaturls">
 	  {html_options options=$yesno selected=$content_autocreate_flaturls}
 	</select>
-	<br/>{'info_content_autocreate_flaturls'|lang}
       </p>
     </div>
     <div class="pageoverflow">
-      <p class="pagetext"><label for="content_mandatory_urls">{'content_mandatory_urls'|lang}:</label></p>
+      <p class="pagetext"><label for="content_mandatory_urls">{lang('content_mandatory_urls')}:</label>&nbsp;{cms_help key2='settings_mandatory_urls'}</p>
       <p class="pageinput">
 	<select id="content_mandatory_urls" name="content_mandatory_urls">
 	  {html_options options=$yesno selected=$content_mandatory_urls}
@@ -145,42 +145,38 @@
       </p>
     </div>
     <div class="pageoverflow">
-      <p class="pagetext"><label for="disallowed_contenttypes">{'disallowed_contenttypes'|lang}:</label></p>
+      <p class="pagetext"><label for="disallowed_contenttypes">{lang('disallowed_contenttypes')}:</label>&nbsp;{cms_help key2='settings_badtypes'}</p>
       <p class="pageinput">
 	<select id="disallowed_contenttypes" name="disallowed_contenttypes[]" multiple="multiple" size="5">
 	  {html_options options=$all_contenttypes selected=$disallowed_contenttypes}
 	</select>
-	<br/>{'info_disallowed_contenttypes'|lang}
       </p>
     </div>
     <div class="pageoverflow">
-      <p class="pagetext"><label for="basic_attributes">{lang('basic_attributes')}:</label></p>
+      <p class="pagetext"><label for="basic_attributes">{lang('basic_attributes')}:</label>&nbsp;{cms_help key2='settings_basicattribs'}</p>
       <p class="pageinput">
 	<select id="basic_attributes" class="multicolumn" name="basic_attributes[]" multiple="multiple" size="5">
 	  {html_options options=$all_attributes selected=$basic_attributes}
 	</select>
-	<br/>{$lang_info_basic_attributes}
       </p>
     </div>
     <div class="pageoverflow">
-      <p class="pagetext"><label for="imagefield_path">{'content_imagefield_path'|lang}:</label></p>
+      <p class="pagetext"><label for="imagefield_path">{lang('content_imagefield_path')}:</label>&nbsp;{cms_help key2='settings_imagefield_path'}</p>
       <p class="pageinput">
 	<input id="imagefield_path" type="text" name="content_imagefield_path" size="50" maxlength="255" value="{$content_imagefield_path}"/>
-	<br/>{'info_content_imagefield_path'|lang}
       </p>
     </div>
     <div class="pageoverflow">
-      <p class="pagetext"><label for="thumbfield_path">{'content_thumbnailfield_path'|lang}:</label></p>
+      <p class="pagetext"><label for="thumbfield_path">{lang('content_thumbnailfield_path')}:</label>&nbsp;{cms_help key2='settings_thumbfield_path'}</p>
       <p class="pageinput">
 	<input id="thumbfield_path" type="text" name="content_thumbnailfield_path" size="50" maxlength="255" value="{$content_thumbnailfield_path}"/>
-	<br/>{'info_content_thumbnailfield_path'|lang}
       </p>
     </div>
     <div class="pageoverflow">
-      <p class="pagetext"><label for="contentimage_path">{'contentimage_path'|lang}:</label></p>
+      <p class="pagetext"><label for="contentimage_path">{lang('contentimage_path')}:</label></p>
       <p class="pageinput">
 	<input type="text" id="contentimage_path" name="contentimage_path" size="50" maxlength="255" value="{$contentimage_path}"/>
-	<br/>{'info_contentimage_path'|lang}
+	&nbsp;{cms_help key2='settings_contentimage_path'}
       </p>
     </div>
   </form>
@@ -279,7 +275,7 @@ $(document).ready(function(){
       </div>
       <div class="information">{lang('info_mailtest')}</div>
       <div class="pageoverflow">
-        <p class="pagetext"><label for="testaddress">{lang('settings_testaddress')}:</label></p>
+        <p class="pagetext"><label for="testaddress">{lang('settings_testaddress')}:</label>&nbsp;</p>
         <p class="pageinput">
           <input type="text" id="testaddress" name="mailtest_testaddress" size="50" maxlength="255"/>
         </p>

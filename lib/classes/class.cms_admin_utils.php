@@ -127,7 +127,7 @@ final class cms_admin_utils
 			  $key1 = $module;
 		  }
 		  else {
-			  $key1 = 'core';
+			  $key1 = 'help';
 		  }
 	  }
 	  if( !$key1 ) return;
@@ -141,7 +141,7 @@ final class cms_admin_utils
 		  $out = '<span class="cms_help"><img class="cms_helpicon" src="'.$icon.'" alt="'.$icon.'"/><span class="cms_helpkey" style="display: none;">'.$key.'</span></span>';
 	  }
 	  else {
-		  $out = '<div class="cms_helptext title="'.lang('help').'" id="cmshelp_'.$key.'" style="display: none;">'.$helptext.'</div>';
+		  $out = '<div class="cms_helptext title="'.lang('help').': '.$key.'" id="cmshelp_'.$key.'" style="display: none;">'.$helptext.'</div>';
 	  }
 	  return $out;
   }
