@@ -27,30 +27,30 @@
     </div>
 
     <div class="pageoverflow">
-      <p class="pagetext"><label for="sitename">{'sitename'|lang}:</label>&nbsp;{cms_help key2='siteprefs_sitename'}</p>
-      <p class="pageinput"><input type="text" id="sitename" class="pagesmalltextarea" name="sitename" size="30" value="{$sitename}" /></p>
+      <p class="pagetext"><label for="sitename">{'sitename'|lang}:</label></p>
+      <p class="pageinput"><input type="text" id="sitename" class="pagesmalltextarea" name="sitename" size="30" value="{$sitename}" />&nbsp;{cms_help key2='siteprefs_sitename'}</p>
     </div>
     <div class="pageoverflow">
-      <p class="pagetext"><label for="frontendlang">{lang('frontendlang')}:</label>&nbsp;{cms_help key2='siteprefs_frontendlang'}</p>
+      <p class="pagetext"><label for="frontendlang">{lang('frontendlang')}:</label></p>
       <p class="pageinput">
 	<select id="frontendlang" name="frontendlang" style="vertical-align: middle;">
 	   {html_options options=$languages selected=$frontendlang}
-	</select>
+	</select>&nbsp;{cms_help key2='siteprefs_frontendlang'}
        </p>
     </div>
 
     <div class="pageoverflow">
-      <p class="pagetext"><label for="frontendwysiwyg">{lang('frontendwysiwygtouse')}:</label>&nbsp;{cms_help key2='siteprefs_frontendwysiwyg'}</p>
+      <p class="pagetext"><label for="frontendwysiwyg">{lang('frontendwysiwygtouse')}:</label></p>
       <p class="pageinput">
         <select id="frontendwysiwyg" name="frontendwysiwyg">
 	  {html_options options=$wysiwyg selected=$frontendwysiwyg}
-	</select>
+	</select>&nbsp;{cms_help key2='siteprefs_frontendwysiwyg'}
       </p>
     </div>
 
     <div class="pageoverflow">
-      <p class="pagetext"><label for="nogcbwysiwyg">{lang('nogcbwysiwyg')}:</label>&nbsp;{cms_help key2='siteprefs_nogcbwysiwyg'}</p>
-      <p class="pageinput"><input type="hidden" name="nogcbwysiwyg" value="0"/><input id="nogcbwysiwyg" class="pagenb" type="checkbox" value="1" name="nogcbwysiwyg" {if $nogcbwysiwyg == "1"}checked="checked"{/if} /></p>
+      <p class="pagetext"><label for="nogcbwysiwyg">{lang('nogcbwysiwyg')}:</label></p>
+      <p class="pageinput"><input type="hidden" name="nogcbwysiwyg" value="0"/><input id="nogcbwysiwyg" class="pagenb" type="checkbox" value="1" name="nogcbwysiwyg" {if $nogcbwysiwyg == "1"}checked="checked"{/if} />&nbsp;{cms_help key2='siteprefs_nogcbwysiwyg'}</p>
     </div>
     <div class="pageoverflow">
       <p class="pagetext"><label for="globalmetadata">{lang('globalmetadata')}:</label>&nbsp;{cms_help key2='siteprefs_globalmetadata'}</p>
@@ -58,46 +58,48 @@
     </div>
     {if isset($themes)}
       <div class="pageoverflow">
-        <p class="pagetext"><label for="logintheme">{lang('master_admintheme')}:</label>&nbsp;{cms_help key2='siteprefs_logintheme'}</p>
+        <p class="pagetext"><label for="logintheme">{lang('master_admintheme')}:</label></p>
 	<p class="pageinput">
 	  <select id="logintheme" name="logintheme">
 	    {html_options options=$themes selected=$logintheme}
-	  </select>
+	  </select>&nbsp;{cms_help key2='siteprefs_logintheme'}
         </p>
       </div>
     {/if}
     <div class="pageoverflow">
-      <p class="pagetext"><label for="backendwysiwyg">{lang('backendwysiwygtouse')}:</label>&nbsp;{cms_help key2='siteprefs_backendwysiwyg'}</p>
+      <p class="pagetext"><label for="backendwysiwyg">{lang('backendwysiwygtouse')}:</label></p>
       <p class="pageinput">
         <select id="backendwysiwyg" name="backendwysiwyg">
           {html_options options=$wysiwyg selected=$backendwysiwyg}
-	</select>
+	</select>&nbsp;{cms_help key2='siteprefs_backendwysiwyg'}
       </p>
     </div>
     <div class="pageoverflow">
-      <p class="pagetext"><label for="defaultdateformat">{lang('date_format_string')}:</label>&nbsp;{cms_help key2='siteprefs_dateformat'}</p>
+      <p class="pagetext"><label for="defaultdateformat">{lang('date_format_string')}:</label></p>
       <p class="pageinput">
-	<input class="pagenb" id="defaultdateformat" type="text" name="defaultdateformat" size="20" maxlength="255" value="{$defaultdateformat}"/>
+	<input class="pagenb" id="defaultdateformat" type="text" name="defaultdateformat" size="20" maxlength="255" value="{$defaultdateformat}"/>&nbsp;{cms_help key2='siteprefs_dateformat'}
       </p>
     </div>
     <div class="pageoverflow">
-      <p class="pagetext"><label for="thumbnail_width">{lang('thumbnail_width')}:</label>&nbsp;{cms_help key2='siteprefs_thumbwidth'}</p>
+      <p class="pagetext"><label for="thumbnail_width">{lang('thumbnail_width')}:</label></p>
       <p class="pageinput">
 	<input class="pagenb" id="thumbnail_width" type="text" name="thumbnail_width" size="3" maxlength="3" value="{$thumbnail_width}"/>
+        &nbsp;{cms_help key2='siteprefs_thumbwidth'}
       </p>
     </div>
     <div class="pageoverflow">
-      <p class="pagetext"><label for="thumbnail_height">{lang('thumbnail_height')}:</label>&nbsp;{cms_help key2='siteprefs_thumbheight'}</p>
+      <p class="pagetext"><label for="thumbnail_height">{lang('thumbnail_height')}:</label></p>
       <p class="pageinput">
 	<input id="thumbnail_height" class="pagenb" type="text" name="thumbnail_height" size="3" maxlength="3" value="{$thumbnail_height}"/>
+	&nbsp;{cms_help key2='siteprefs_thumbheight'}
       </p>
     </div>
     {if isset($search_modules)}
-      <p class="pagetext"><label for="search_module">{'search_module'|lang}:</label>&nbsp;{cms_help key2='settings_searchmodule'}</p>
+      <p class="pagetext"><label for="search_module">{lang('search_module')}:</label></p>
       <p class="pageinput">
 	<select id="search_module" name="search_module">
 	  {html_options options=$search_modules selected=$search_module}
-	</select>
+	</select>&nbsp;{cms_help key2='settings_searchmodule'}
       </p>
     {/if}
   </form>
@@ -121,27 +123,27 @@
     </div>
 
     <div class="pageoverflow">
-      <p class="pagetext"><label for="content_autocreate_urls">{lang('content_autocreate_urls')}:</label>&nbsp;{cms_help key2='settings_autocreate_url'}</p>
+      <p class="pagetext"><label for="content_autocreate_urls">{lang('content_autocreate_urls')}:</label></p>
       <p class="pageinput">
 	<select id="content_autocreate_urls" name="content_autocreate_urls">
 	  {html_options options=$yesno selected=$content_autocreate_urls}
-	</select>
+	</select>&nbsp;{cms_help key2='settings_autocreate_url'}
       </p>
     </div>
     <div class="pageoverflow">
-      <p class="pagetext"><label for="content_autocreate_flaturls">{lang('content_autocreate_flaturls')}:</label>&nbsp;{cms_help key2='settings_autocreate_flaturls'}</p>
+      <p class="pagetext"><label for="content_autocreate_flaturls">{lang('content_autocreate_flaturls')}:</label></p>
       <p class="pageinput">
 	<select id="content_autocreate_flaturls" name="content_autocreate_flaturls">
 	  {html_options options=$yesno selected=$content_autocreate_flaturls}
-	</select>
+	</select>&nbsp;{cms_help key2='settings_autocreate_flaturls'}
       </p>
     </div>
     <div class="pageoverflow">
-      <p class="pagetext"><label for="content_mandatory_urls">{lang('content_mandatory_urls')}:</label>&nbsp;{cms_help key2='settings_mandatory_urls'}</p>
+      <p class="pagetext"><label for="content_mandatory_urls">{lang('content_mandatory_urls')}:</label></p>
       <p class="pageinput">
 	<select id="content_mandatory_urls" name="content_mandatory_urls">
 	  {html_options options=$yesno selected=$content_mandatory_urls}
-	</select>
+	</select>&nbsp;{cms_help key2='settings_mandatory_urls'}
       </p>
     </div>
     <div class="pageoverflow">
@@ -161,15 +163,16 @@
       </p>
     </div>
     <div class="pageoverflow">
-      <p class="pagetext"><label for="imagefield_path">{lang('content_imagefield_path')}:</label>&nbsp;{cms_help key2='settings_imagefield_path'}</p>
+      <p class="pagetext"><label for="imagefield_path">{lang('content_imagefield_path')}:</label></p>
       <p class="pageinput">
 	<input id="imagefield_path" type="text" name="content_imagefield_path" size="50" maxlength="255" value="{$content_imagefield_path}"/>
+	&nbsp;{cms_help key2='settings_imagefield_path'}
       </p>
     </div>
     <div class="pageoverflow">
-      <p class="pagetext"><label for="thumbfield_path">{lang('content_thumbnailfield_path')}:</label>&nbsp;{cms_help key2='settings_thumbfield_path'}</p>
+      <p class="pagetext"><label for="thumbfield_path">{lang('content_thumbnailfield_path')}:</label></p>
       <p class="pageinput">
-	<input id="thumbfield_path" type="text" name="content_thumbnailfield_path" size="50" maxlength="255" value="{$content_thumbnailfield_path}"/>
+	<input id="thumbfield_path" type="text" name="content_thumbnailfield_path" size="50" maxlength="255" value="{$content_thumbnailfield_path}"/>&nbsp;{cms_help key2='settings_thumbfield_path'}
       </p>
     </div>
     <div class="pageoverflow">
@@ -188,6 +191,7 @@
       <input type="hidden" name="active_tab" value="sitedown" />
       <input type="hidden" name="editsiteprefs" value="true" />
     </div>
+    <div class="information">{lang('info_settings_sitedown')}</div>
     <div class="pageoverflow">
       <p class="pageinput">
 	<input type="submit" name="submit" value="{lang('submit')}" class="pagebutton"  />
@@ -198,11 +202,17 @@
 
     <div class="pageoverflow">
       <p class="pagetext"><label for="enablesitedown">{lang('enablesitedown')}:</label></p>
-      <p class="pageinput"><input type="hidden" name="enablesitedownmessage" value="0"/><input id="enablesitedown" class="pagenb" type="checkbox" value="1" name="enablesitedownmessage" {if $enablesitedownmessage == "1"}checked="checked"{/if}/></p>
+      <p class="pageinput">
+        <select id="enablesitedown" name="enablesitedownmessage">
+        {cms_yesno selected=$enablesitedownmessage}
+        </select>
     </div>
     <div class="pageoverflow">
       <p class="pagetext"><label for="enablewysiwyg">{lang('enablewysiwyg')}:</label></p>
-      <p class="pageinput"><input type="hidden" name="use_wysiwyg" value="0"/><input id="enablewysiwyg" type="checkbox" name="use_wysiwyg" id='use_wysiwyg' value="1" class="pagenb" {if $use_wysiwyg == "1"}checked="checked"{/if}/></p>
+      <p class="pageinput">
+        <select id="enablewysiwyg">
+        {cms_yesno selected=$enablewysiwyg}
+        </select>
     </div>
     <div class="pageoverflow">
       <p class="pagetext">{lang('sitedownmessage')}:</p>
@@ -211,15 +221,16 @@
     <div class="pageoverflow">
       <p class="pagetext">{'sitedownexcludeadmins'|lang}:</p>
       <p class="pageinput">
-	<input type="hidden" name="sitedownexcludeadmins" value="0"/>
-	<input type="checkbox" name="sitedownexcludeadmins" value="1" {if $sitedownexcludeadmins == 1}checked="checked"{/if}/>
+        <select id="sitedownexcludeadmins" name="sitedownexcludeadmins">
+        {cms_yesno selected=$sitedownexcludeadmins}
+        </select>
       </p>
     </div>
     <div class="pageoverflow">
       <p class="pagetext"><label for="sitedownexcludes">{lang('sitedownexcludes')}:</label></p>
       <p class="pageinput">
 	<input id="sitedownexcludes" type="text" name="sitedownexcludes" size="50" maxlength="255" value="{$sitedownexcludes}"/>
-	<br/><strong>{'your_ipaddress'|lang}:</strong>&nbsp;{$smarty.server.REMOTE_ADDR}<br/>{$lang_info_sitedownexcludes}
+	<br/><strong>{lang('your_ipaddress')}:</strong>&nbsp;<span style="color: red;">{cms_utils::get_real_ip()}</span><br/>{$lang_info_sitedownexcludes}
       </p>
     </div>
   </form>
