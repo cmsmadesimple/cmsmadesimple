@@ -289,6 +289,7 @@ $(document).ready(function(){
         <p class="pagetext"><label for="testaddress">{lang('settings_testaddress')}:</label>&nbsp;</p>
         <p class="pageinput">
           <input type="text" id="testaddress" name="mailtest_testaddress" size="50" maxlength="255"/>
+	  &nbsp;{cms_help key2='settings_mailtest_testaddress'}
         </p>
       </div>
       <div class="pageoverflow">
@@ -323,19 +324,21 @@ $(document).ready(function(){
         <p class="pageinput">
           <select id="mailer" name="mailprefs_mailer">
           {html_options options=$maileritems selected=$mailprefs.mailer}
-          </select>
+          </select>&nbsp;{cms_help key2='settings_mailprefs_mailer'}
         </p>
       </div>
       <div class="pageoverflow">
         <p class="pagetext"><label for="from">{lang('settings_mailfrom')}:</label></p>
         <p class="pageinput">
           <input type="text" id="from" name="mailprefs_from" value="{$mailprefs.from}" size="50" maxlength="255"/>
+          &nbsp;{cms_help key2='settings_mailprefs_from'}
         </p>
       </div>
       <div class="pageoverflow">
         <p class="pagetext"><label for="fromuser">{lang('settings_mailfromuser')}:</label></p>
         <p class="pageinput">
           <input type="text" id="fromuser" name="mailprefs_fromuser" value="{$mailprefs.fromuser}" size="50" maxlength="255"/>
+	  &nbsp;{cms_help key2='settings_mailprefs_fromuser'}
         </p>
       </div>
     </fieldset>
@@ -346,6 +349,7 @@ $(document).ready(function(){
         <p class="pagetext"><label for="host">{lang('settings_smtphost')}:</label></p>
         <p class="pageinput">
           <input type="text" id="host" name="mailprefs_host" value="{$mailprefs.host}" size="50" maxlength="255"/>
+          &nbsp;{cms_help key2='settings_mailprefs_smtphost'}
         </p>
       </div>
 
@@ -353,6 +357,7 @@ $(document).ready(function(){
         <p class="pagetext"><label for="port">{lang('settings_smtpport')}:</label></p>
         <p class="pageinput">
           <input type="text" id="port" name="mailprefs_port" value="{$mailprefs.port}" size="6" maxlength="8"/>
+          &nbsp;{cms_help key2='settings_mailprefs_smtpport'}
         </p>
       </div>
 
@@ -360,6 +365,7 @@ $(document).ready(function(){
         <p class="pagetext"><label for="timeout">{lang('settings_smtptimeout')}:</label></p>
         <p class="pageinput">
           <input type="text" id="timeout" name="mailprefs_timeout" value="{$mailprefs.timeout}" size="6" maxlength="8"/>
+          &nbsp;{cms_help key2='settings_mailprefs_smtptimeout'}
         </p>
       </div>
 
@@ -370,7 +376,7 @@ $(document).ready(function(){
           <p class="pageinput">
             <select id="smtpauth" name="mailprefs_smtpauth">
             {cms_yesno selected=$prefs.smtpauth}
-            </select>
+            </select>&nbsp;{cms_help key2='settings_mailprefs_smtpauth'}
           </p>
         </div>
 
@@ -379,7 +385,7 @@ $(document).ready(function(){
           <p class="pageinput">
             <select id="secure" name="mailprefs_secure">
             {html_options options=$secure_opts selected=$prefs.secure}
-            </select>
+            </select>&nbsp;{cms_help key2='settings_mailprefs_smtpsecure'}
           </p>
         </div>
 
@@ -387,6 +393,7 @@ $(document).ready(function(){
           <p class="pagetext"><label for="username">{lang('settings_authusername')}:</label></p>
           <p class="pageinput">
             <input type="text" id="username" name="mailprefs_username" value="{$mailprefs.username}" size="50" maxlength="255"/>
+	    &nbsp;{cms_help key2='settings_mailprefs_smtpusername'}
           </p>
         </div>
 
@@ -394,6 +401,7 @@ $(document).ready(function(){
           <p class="pagetext"><label for="password">{lang('settings_authpassword')}:</label></p>
           <p class="pageinput">
             <input type="password" id="password" name="mailprefs_password" value="{$mailprefs.password}" size="30" maxlength="30"/>
+	    &nbsp;{cms_help key2='settings_mailprefs_smtppassword'}
           </p>
         </div>
       </fieldset>
@@ -405,6 +413,7 @@ $(document).ready(function(){
         <p class="pagetext"><label for="sendmail">{lang('settings_sendmailpath')}:</label></p>
         <p class="pageinput">
           <input type="text" id="sendmail" name="mailprefs_sendmail" value="{$mailprefs.sendmail}" size="50" maxlength="255"/>
+          &nbsp;{cms_help key2='settings_mailprefs_sendmail'}
         </p>
       </div>
     </fieldset>
@@ -428,15 +437,18 @@ $(document).ready(function(){
     <fieldset>
       <legend>{'browser_cache_settings'|lang}:&nbsp;</legend>
       <div class="pageoverflow">
-	<p class="pagetext"><label for="allow_browser_cache">{'allow_browser_cache'|lang}:</label></p>
+	<p class="pagetext"><label for="allow_browser_cache">{lang('allow_browser_cache')}:</label></p>
 	<p class="pageinput">
-	  <input type="hidden" name="allow_browser_cache" value="0"/><input class="pagenb" id="allow_browser_cache" value="1" type="checkbox" name="allow_browser_cache" {if $allow_browser_cache}checked="checked"{/if} /><br/>{'info_browser_cache'|lang}
+          <select name="allow_browser_cache">
+          {cms_yesno selected=$allow_browser_cache}
+          </select>&nbsp;{cms_help key2='settings_browsercache'}
         </p>
       </div>  
       <div class="pageoverflow">
-	<p class="pagetext"><label for="browser_expiry">{'browser_cache_expiry'|lang}:</label></p>
+	<p class="pagetext"><label for="browser_expiry">{lang('browser_cache_expiry')}:</label></p>
 	<p class="pageinput">
-          <input type="text" id="browser_expiry" name="browser_cache_expiry" value="{$browser_cache_expiry}" size="6" maxlength="10"/><br/>{'info_browser_cache_expiry'|lang}
+          <input type="text" id="browser_expiry" name="browser_cache_expiry" value="{$browser_cache_expiry}" size="6" maxlength="10"/>
+          &nbsp;{cms_help key2='settings_browsercache_expiry'}
         </p>
       </div>  
     </fieldset>
@@ -446,8 +458,7 @@ $(document).ready(function(){
       <div class="pageoverflow">
 	<p class="pagetext"><label for="autoclearcache2">{'autoclearcache2'|lang}:</label></p>
 	<p class="pageinput">
-	  <input id="autoclearcache2" type="text" class="pagesmalltextarea"  name="auto_clear_cache_age" size="4" value="{$auto_clear_cache_age}" maxlength="4"/>
-	  <br/>{$lang_info_autoclearcache}
+	  <input id="autoclearcache2" type="text" name="auto_clear_cache_age" size="4" value="{$auto_clear_cache_age}" maxlength="4"/>&nbsp;{cms_help key2='settings_autoclearcache'}
         </p>
       </div>
     </fieldset>
@@ -457,7 +468,7 @@ $(document).ready(function(){
 	<p class="pagetext"><label for="umask">{lang('global_umask')}:</label></p>
 	<p class="pageinput">
 	  <input id="umask" type="text" class="pagesmalltextarea" name="global_umask" size="4" value="{$global_umask}" />
-	  <br/>{'info_umask'|lang}
+          &nbsp;{cms_help key2='settings_umask'}
 	</p>
       </div>
       {if isset($testresults)}
@@ -472,18 +483,24 @@ $(document).ready(function(){
       </div>
       <div class="pageoverflow">
 	<p class="pagetext"><label for="safemodewarn">{lang('disablesafemodewarning')}:</label></p>
-	<p class="pageinput"><input type="hidden" name="disablesafemodwarning" value="0"/><input id="safemodewarn" class="pagenb" type="checkbox" value="1" name="disablesafemodewarning" {if $disablesafemodewarning}checked="checked"{/if} /></p>
+	<p class="pageinput">
+          <select id="safemodewarn" name="disablesafemodewarning">
+          {cms_yesno selected=$disablesafemodewarning}
+          </select>&nbsp;{cms_help key2='settings_disablesafemodewarn'}n
       </div>
       <div class="pageoverflow">
 	<p class="pagetext"><label for="notifications">{lang('admin_enablenotifications')}:</label></p>
-	<p class="pageinput"><input type="hidden" name="enablenotifications" value="0"/><input id="notifications" class="pagenb" type="checkbox" value="1" name="enablenotifications" {if $enablenotifications}checked="checked"{/if} /></p>
+	<p class="pageinput">
+          <select id="notifications" name="enablenotifications">
+          {cms_yesno selected=$enablenotifications}
+          </select>&nbsp;{cms_help key2='settings_enablenotifications'}
       </div>
       <div class="pageoverflow">
 	<p class="pagetext"><label for="pseudocron">{lang('pseudocron_granularity')}:</label></p>
 	<p class="pageinput">
 	  <select id="pseudocron" name="pseudocron_granularity">
 	    {html_options options=$pseudocron_options selected=$pseudocron_granularity}
-	  </select><br/>{$lang_info_pseudocron_granularity}
+	  </select>&nbsp;{cms_help key2='settings_pseudocron_granularity'}
         </p>
       </div>
       <div class="pageoverflow">
@@ -491,15 +508,15 @@ $(document).ready(function(){
 	<p class="pageinput">
 	  <select id="adminlog" name="adminlog_lifetime">
 	    {html_options options=$adminlog_options selected=$adminlog_lifetime}
-	  </select><br/>{$lang_info_adminlog_lifetime}
+	  </select>&nbsp;{cms_help key2='settings_adminlog_lifetime'}
         </p>
       </div>
       <div class="pageoverflow">
 	<p class="pagetext"><label for="checkversion">{lang('checkversion')}:</label></p>
 	<p class="pageinput">
-	  <input type="hidden" name="checkversion" value="0"/>
-	  <input id="checkversion" type="checkbox" name="checkversion" value="1" {if $checkversion}checked="checked"{/if}/>
-	  <br/>{'info_checkversion'|lang}
+          <select id="checkversion" name="checkversion">
+          {cms_yesno options=$checkversion}
+          <select>&nbsp;{cms_help key2='settings_checkversion'}	  
 	</p>
       </div>
     </fieldset>
@@ -521,39 +538,19 @@ $(document).ready(function(){
     </div>
 
     <div class="pageoverflow">
-      <p class="pagetext"><label for="smartycache">{'prompt_use_smartycaching'|lang}:</label></p>
+      <p class="pagetext"><label for="smartycache">{lang('prompt_use_smartycaching')}:</label></p>
       <p class="pageinput">
 	<select id="smartycache" name="use_smartycache">
 	  {html_options options=$yesno selected=$use_smartycache}
-	</select>
-	<br/>{'info_smarty_caching'|lang}
+	</select>&nbsp;{cms_help key2='settings_smartycaching'}
       </p>
     </div>
     <div class="pageoverflow">
-      <p class="information">{'info_smarty_options'|lang}</p>
-    </div>
-    <div class="pageoverflow">
-      <p class="pagetext"><label for="compilecheck">{'prompt_smarty_compilecheck'|lang}:</label></p>
+      <p class="pagetext"><label for="compilecheck">{lang('prompt_smarty_compilecheck')}:</label></p>
       <p class="pageinput">
 	<select for="compilecheck" name="use_smartycompilecheck">
 	  {html_options options=$yesno selected=$use_smartycompilecheck}
-	</select><br/>{'info_smarty_compilecheck'|lang}
-      </p>
-    </div>
-    <div class="pageoverflow">
-      <p class="pagetext"><label for="cachemodules">{'prompt_smarty_cachemodules'|lang}:</label></p>
-      <p class="pageinput">
-	<select id="cachemodules" name="smarty_cachemodules">
-	  {html_options options=$smarty_cacheoptions selected=$smarty_cachemodules}
-	</select><br/>{'info_smarty_cachemodules'|lang}
-      </p>
-    </div>
-    <div class="pageoverflow">
-      <p class="pagetext"><label for="cacheudt">{'prompt_smarty_cacheudt'|lang}:</label></p>
-      <p class="pageinput">
-	<select id="cacheudt" name="smarty_cacheudt">
-	  {html_options options=$smarty_cacheoptions2 selected=$smarty_cacheudt}
-	</select><br/>{'info_smarty_cacheudt'|lang}
+	</select>&nbsp;{cms_help key2='settings_smartycompilecheck'}
       </p>
     </div>
   </form>

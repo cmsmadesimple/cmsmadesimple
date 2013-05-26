@@ -300,40 +300,29 @@ abstract class CMSModule
    * @param mixed Indicate wether this plugins output should be cachable.  If null, use the site preferences, and the can_cache_output method.  Otherwise a boolean is expected.
    * @deprecated
    */
-  final public function RegisterModulePlugin($forcedb = FALSE,$cachable = null)
+  final public function RegisterModulePlugin($forcedb = FALSE,$cachable = false)
   {
-    global $CMS_ADMIN_PAGE;
-    global $CMS_INSTALL_PAGE;
+	  global $CMS_ADMIN_PAGE;
+	  global $CMS_INSTALL_PAGE;
 
-    if( is_null($cachable) ) {
-      $do_cache = get_site_preference('smarty_cachemodules','never');
-      $cachable = false;
-      if( $do_cache == 'always' ) {
-	$cachable = true;
-      }
-      else if( $do_cache == 'moduledecides' ) {
-	$cachable = $this->can_cache_output();
-      }
-    }
-
-    // frontend request.
-    $admin_req = (isset($CMS_ADMIN_PAGE) && !$this->LazyLoadAdmin())?1:0;
-    $fe_req = (!isset($CMS_ADMIN_PAGE) && !$this->LazyLoadFrontend())?1:0;
-    if( ($fe_req || $admin_req) && !$forcedb ) {
-      // no lazy loading.
-      $gCms = cmsms();
-      $smarty = $gCms->GetSmarty();
-      $smarty->register_function($this->GetName(),
-				 array($this->GetName(),'function_plugin'),
-				 $cachable
-				 );
-      return TRUE;
-    }
-    else {
-      return cms_module_smarty_plugin_manager::addStatic($this->GetName(),$this->GetName(),
-							 'function',
-							 'function_plugin',$cachable);
-    }
+	  // frontend request.
+	  $admin_req = (isset($CMS_ADMIN_PAGE) && !$this->LazyLoadAdmin())?1:0;
+	  $fe_req = (!isset($CMS_ADMIN_PAGE) && !$this->LazyLoadFrontend())?1:0;
+	  if( ($fe_req || $admin_req) && !$forcedb ) {
+		  // no lazy loading.
+		  $gCms = cmsms();
+		  $smarty = $gCms->GetSmarty();
+		  $smarty->register_function($this->GetName(),
+									 array($this->GetName(),'function_plugin'),
+									 $cachable
+									 );
+		  return TRUE;
+	  }
+	  else {
+		  return cms_module_smarty_plugin_manager::addStatic($this->GetName(),$this->GetName(),
+															 'function',
+															 'function_plugin',$cachable);
+	  }
   }
 
   /**

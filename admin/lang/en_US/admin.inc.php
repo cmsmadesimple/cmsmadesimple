@@ -965,12 +965,7 @@ $lang['admin']['indent'] = 'Indent Pagelist to Emphasize Hierarchy';
 $lang['admin']['informationmissing'] = 'Information missing';
 $lang['admin']['info_adduser'] = 'Add a administrative new user account';
 $lang['admin']['info_adduser_username'] = 'The username field must consist of alphanumeric characters,, the dot (.), underscore, or space';
-$lang['admin']['info_adminlog_lifetime']='Remove log-entries that are older than the specified period.';
 $lang['admin']['info_autoalias'] = 'If this field is empty, an alias will be created automatically.';
-$lang['admin']['info_autoclearcache'] = 'Specify an integer value. Enter 0 to disable automatic cache clearing';
-$lang['admin']['info_browser_cache'] = 'Applicable only to cachable pages, this setting indicates that browsers should be allowed to cache the pages for an amount of time.  If enabled repeat visitors to your site may not immediately see changes to the content of the pages.';
-$lang['admin']['info_browser_cache_expiry'] = 'Specify the amount of time (in minutes) that browsers should cache pages for.  Setting this value to 0 disables the functionality';
-$lang['admin']['info_checkversion'] = 'If enabled, the system will perform a daily check for a new release of CMSMS';
 $lang['admin']['info_clearusersettings'] = 'This will remove all user settings from the database, setting every preference back to defaults';
 $lang['admin']['info_copyusersettings'] = 'Ensure that this users settings and preferences are identical to that of another existing user';
 $lang['admin']['info_default_contenttype'] = 'Applicable when adding new content objects, this control specifies the type that is selected by default.  Please ensure that the selected item is not one of the &quot;disallowed types&quot;.';
@@ -991,7 +986,6 @@ $lang['admin']['info_group_inactive'] = 'This group is inactive.  Members of thi
 $lang['admin']['info_pagealias'] = 'Specify a unique alias for this page.';
 $lang['admin']['info_pagedefaults'] = 'This form allows specifying various options as to the initial settings when creating new content pages.  The items in this page have no effect when editing existing pages';
 $lang['admin']['info_preview_notice'] = 'Warning: This preview panel behaves much like a browser window allowing you to navigate away from the initially previewed page. However, if you do that, you may experience unexpected behaviour. If you navigate away from the initial display and return, you may not see the un-committed content until you make a change to the content in the main tab, and then reload this tab. When adding content, if you navigate away from this page, you will be unable to return, and must refresh this panel.';
-$lang['admin']['info_pseudocron_granularity'] = 'This setting indicates how often the system will attempt to handle regularly scheduled tasks';
 $lang['admin']['info_selectuser'] = 'Toggle selection to perform actions on multiple users at once';
 $lang['admin']['info_settings_sitedown'] = 'These options allow you to toggle the website as &quot;down for maintenance&quot; for website visitor.';
 $lang['admin']['info_setusersettings'] = 'Set this users settings to be a template for newly created users and to effect other users';
@@ -1003,13 +997,10 @@ This parameter allows listing a comma separated list of ip addresses or networks
 EOT;
 $lang['admin']['info_smarty_cachemodules'] = 'Select how to cache tags in various templates that call module actions.  If enabled, all module calls will be cached.  This may have negative effects on some modules, or modules with forms.  <em>(note: you can override this using the nocache option as described in the smarty manual)</em>.  If disabled no module calls will be cached which may have an effect on performance.   If you select to allow the module to decide, the default is that caching is not performed.  The module can override this, and you can disable caching using the nocache parameter when calling the module.';
 $lang['admin']['info_smarty_cacheudt'] = 'If enabled, all calls to user defined tags will be cached.  This will be useful for tags that display the output of database queries.  You can disable caching using the nocache parameter in the udt call.  i.e: <code>{myusertag nocache}</code>';
-$lang['admin']['info_smarty_caching'] = 'When enabled, the output from various plugins will be cached to increase performance.  This only applies to output on content pages marked as cachable, and only for non-admin users.  Note, this functionality may interfere with the behavior of some modules or plugins, or plugins that use non-inline forms.';
-$lang['admin']['info_smarty_compilecheck'] = 'If disabled, smarty will not check the modification dates of templates to see if they have been modified.  This can significantly improve performance.  However performing any template change (or even some content changes) may require a cache clearing';
 $lang['admin']['info_smarty_options'] = 'The following options have effect only when the above caching options are enabled';
 $lang['admin']['info_target'] = 'This option may used by the Menu Manager to indicate when and how new frames or windows should be opened.  Some menu manager templates may ignore this option.'; 
 $lang['admin']['info_templateuser'] = 'This account is the template user account.  New users will be created using this accounts settings';
 $lang['admin']['info_this_templateuser'] = 'This account is set as the template user.  New accounts will inherit this users settings, and you can copy this users settings to any user account';
-$lang['admin']['info_umask'] = 'The &quot;umask&quot; is an octal value that is used to specify the default permission for newly created files (this is used for files in the cache directory, and uploaded files.  For more information see the appropriate <a href="http://en.wikipedia.org/wiki/Umask">wikipedia article.</a>';
 $lang['admin']['info_user_active'] = 'Toggle this checkbox off to preserve the user information, but prevent the user from logging in to the admin console';
 $lang['admin']['info_user_active2'] = 'Toggle this flag to preserve the user information, but prevent the user from logging in to the admin console';
 $lang['admin']['info_validation'] = <<<EOT

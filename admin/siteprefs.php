@@ -127,8 +127,6 @@ $adminlog_lifetime = (60*60*24*31);
 $search_module = 'Search';
 $use_smartycache = 0;
 $use_smartycompilecheck = 1;
-$smarty_cachemodules = 'never';
-$smarty_cacheudt = 'never';
 $mailprefs = array('mailer'=>'mail',
 		   'host'=>'localhost',
 		   'port'=>25,
@@ -186,8 +184,6 @@ $adminlog_lifetime = cms_siteprefs::get('adminlog_lifetime',$adminlog_lifetime);
 $search_module = cms_siteprefs::get('searchmodule',$search_module);
 $use_smartycache = cms_siteprefs::get('use_smartycache',$use_smartycache);
 $use_smartycompilecheck = cms_siteprefs::get('use_smartycompilecheck',$use_smartycompilecheck);
-$smarty_cachemodules = cms_siteprefs::get('smarty_cachemodules',$smarty_cachemodules);
-$smarty_cacheudt = cms_siteprefs::get('smarty_cacheudt',$smarty_cacheudt);
 $tmp = cms_siteprefs::get('mailprefs');
 if( $tmp ) $mailprefs = unserialize($tmp);
 
@@ -374,58 +370,51 @@ if (isset($_POST["editsiteprefs"])) {
       break;
 
     case 'setup':
-      if (isset($_POST["disablesafemodewarning"])) $disablesafemodewarning = $_POST['disablesafemodewarning'];
-      if (isset($_POST["enablenotifications"])) $enablenotifications = $_POST['enablenotifications'];
-      if (isset($_POST["xmlmodulerepository"])) $xmlmodulerepository = $_POST["xmlmodulerepository"];
-      if (isset($_POST["checkversion"])) $checkversion = (int) $_POST["checkversion"];
-      if (isset($_POST['global_umask'])) {
-	$global_umask = $_POST['global_umask'];
-      }
-      cms_siteprefs::set('global_umask', $global_umask);
-      cms_siteprefs::set('xmlmodulerepository', $xmlmodulerepository);
-      cms_siteprefs::set('checkversion', $checkversion);
-      cms_siteprefs::set('disablesafemodewarning',$disablesafemodewarning);
-      cms_siteprefs::set('enablenotifications',$enablenotifications);
-      if( isset($_POST['allow_browser_cache']) ) {
-	$allow_browser_cache = (int)$_POST['allow_browser_cache'];
-	cms_siteprefs::set('allow_browser_cache',$allow_browser_cache);
-      }
-      if( isset($_POST['browser_cache_expiry']) ) {
-	$browser_cache_expiry = (int)$_POST['browser_cache_expiry'];
-	cms_siteprefs::set('browser_cache_expiry',$browser_cache_expiry);
-      }
-      if( isset($_POST['auto_clear_cache_age']) ) {
-	$auto_clear_cache_age = (int)$_POST['auto_clear_cache_age'];
-	cms_siteprefs::set('auto_clear_cache_age',$auto_clear_cache_age);
-      }
-      if( isset($_POST['pseudocron_granularity']) ) {
-	$pseudocron_granularity = (int)$_POST['pseudocron_granularity'];
-	cms_siteprefs::set('pseudocron_granularity',$pseudocron_granularity);
-      }
-      if (isset($_POST["adminlog_lifetime"])) {
-	$adminlog_lifetime = $_POST["adminlog_lifetime"];
-	cms_siteprefs::set('adminlog_lifetime',$adminlog_lifetime);
-      }
-      break;
+		if (isset($_POST["disablesafemodewarning"])) $disablesafemodewarning = $_POST['disablesafemodewarning'];
+		if (isset($_POST["enablenotifications"])) $enablenotifications = $_POST['enablenotifications'];
+		if (isset($_POST["xmlmodulerepository"])) $xmlmodulerepository = $_POST["xmlmodulerepository"];
+		if (isset($_POST["checkversion"])) $checkversion = (int) $_POST["checkversion"];
+		if (isset($_POST['global_umask'])) {
+			$global_umask = $_POST['global_umask'];
+		}
+		cms_siteprefs::set('global_umask', $global_umask);
+		cms_siteprefs::set('xmlmodulerepository', $xmlmodulerepository);
+		cms_siteprefs::set('checkversion', $checkversion);
+		cms_siteprefs::set('disablesafemodewarning',$disablesafemodewarning);
+		cms_siteprefs::set('enablenotifications',$enablenotifications);
+		if( isset($_POST['allow_browser_cache']) ) {
+			$allow_browser_cache = (int)$_POST['allow_browser_cache'];
+			cms_siteprefs::set('allow_browser_cache',$allow_browser_cache);
+		}
+		if( isset($_POST['browser_cache_expiry']) ) {
+			$browser_cache_expiry = (int)$_POST['browser_cache_expiry'];
+			cms_siteprefs::set('browser_cache_expiry',$browser_cache_expiry);
+		}
+		if( isset($_POST['auto_clear_cache_age']) ) {
+			$auto_clear_cache_age = (int)$_POST['auto_clear_cache_age'];
+			cms_siteprefs::set('auto_clear_cache_age',$auto_clear_cache_age);
+		}
+		if( isset($_POST['pseudocron_granularity']) ) {
+			$pseudocron_granularity = (int)$_POST['pseudocron_granularity'];
+			cms_siteprefs::set('pseudocron_granularity',$pseudocron_granularity);
+		}
+		if (isset($_POST["adminlog_lifetime"])) {
+			$adminlog_lifetime = $_POST["adminlog_lifetime"];
+			cms_siteprefs::set('adminlog_lifetime',$adminlog_lifetime);
+		}
+		break;
 	  
     case 'smarty':
-      if( isset($_POST['use_smartycache']) ) {
-	$use_smartycache = $_POST['use_smartycache'];
-	cms_siteprefs::set('use_smartycache',$use_smartycache);
-      }
-      if( isset($_POST['use_smartycompilecheck']) ) {
-	$use_smartycompilecheck = $_POST['use_smartycompilecheck'];
-	cms_siteprefs::set('use_smartycompilecheck',$use_smartycompilecheck);
-      }
-      if( isset($_POST['smarty_cachemodules']) ) {
-	$smarty_cachemodules = $_POST['smarty_cachemodules'];
-	cms_siteprefs::set('smarty_cachemodules',$smarty_cachemodules);
-      }
-      if( isset($_POST['smarty_cacheudt']) ) {
-	$smarty_cacheudt = $_POST['smarty_cacheudt'];
-	cms_siteprefs::set('smarty_cacheudt',$smarty_cacheudt);
-      }
-      $gCms->clear_cached_files();
+		if( isset($_POST['use_smartycache']) ) {
+			$use_smartycache = $_POST['use_smartycache'];
+			cms_siteprefs::set('use_smartycache',$use_smartycache);
+		}
+		if( isset($_POST['use_smartycompilecheck']) ) {
+			$use_smartycompilecheck = $_POST['use_smartycompilecheck'];
+			cms_siteprefs::set('use_smartycompilecheck',$use_smartycompilecheck);
+		}
+		$gCms->clear_cached_files();
+		break;
     }
 
     // put mention into the admin log
@@ -559,8 +548,6 @@ $smarty->assign('adminlog_lifetime',$adminlog_lifetime);
 $smarty->assign('search_module',$search_module);
 $smarty->assign('use_smartycache',$use_smartycache);
 $smarty->assign('use_smartycompilecheck',$use_smartycompilecheck);
-$smarty->assign('smarty_cachemodules',$smarty_cachemodules);
-$smarty->assign('smarty_cacheudt',$smarty_cacheudt);
 
 $tmp = array(15=>lang('cron_15m'),30=>lang('cron_30m'),
 	     60=>lang('cron_60m'),120=>lang('cron_120m'),
