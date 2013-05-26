@@ -22,9 +22,8 @@
 if (!function_exists("cmsms")) exit;
 if (!$this->CheckPermission("Modify Files") && !$this->AdvancedAccessAllowed()) exit;
 
-if (isset($params["cancel"])) {
-  $this->Redirect($id,"defaultadmin",$returnid,$params);
-}
+if (isset($params["cancel"])) $this->Redirect($id,"defaultadmin",$returnid,$params);
+
 $selall = $params['selall'];
 if( !is_array($selall) ) {
   $selall = unserialize($selall);
@@ -41,9 +40,9 @@ if (count($selall)>1) {
 }
 
 $advancedmode = filemanager_utils::check_advanced_mode();
-$basedir = $config['root_path'];
 
 $config=cmsms()->GetConfig();
+$basedir = $config['root_path'];
 $filename=$this->decodefilename($selall[0]);
 $src = filemanager_utils::join_path($basedir,filemanager_utils::get_cwd(),$filename);
 if( !file_exists($src) ) {
@@ -54,7 +53,7 @@ $thumb = filemanager_utils::join_path($basedir,filemanager_utils::get_cwd(),'thu
 
 if( isset($params['submit']) ) {
   $thumb = filemanager_utils::join_path($basedir,filemanager_utils::get_cwd(),'thumb_'.$filename);
-  $thumb = cms_utils::generate_thumbnail($src);
+  $thumb = filemanager_utils::create_thumbnail($src);
   
   if( !$thumb ) {
     $params["fmerror"]="thumberror";
@@ -72,12 +71,9 @@ $smarty->assign('filename',$filename);
 $smarty->assign('filespec',$src);
 $smarty->assign('thumb',$thumb);
 $smarty->assign('thumbexists',file_exists($thumb));
-if( is_array($selall) ) {
-  $params['selall'] = serialize($selall);
-}
+if( is_array($selall) ) $params['selall'] = serialize($selall);
 $smarty->assign('startform', $this->CreateFormStart($id, 'fileaction', $returnid,"post","",false,"",$params));
 $smarty->assign('mod',$this);
-$smarty->assign('filename',$filename);
 $smarty->assign('endform', $this->CreateFormEnd());
 echo $this->ProcessTemplate('filethumbnail.tpl');
 

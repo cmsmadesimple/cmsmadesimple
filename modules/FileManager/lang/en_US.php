@@ -8,6 +8,7 @@ $lang['advancedhelp'] = 'Lets you gain access to whole CMSMS filesystem, not jus
 $lang['afilecontainsillegalchars'] = 'A filename contains one or more illegal characters (\',",+,*,\\,/,&,$). Upload cancelled.';
 $lang['afileistoobig'] = 'A file is too big. Upload cancelled.';
 $lang['and'] = 'and';
+$lang['angle'] = 'Angle';
 
 // B
 $lang['bytes'] = 'bytes';
@@ -39,6 +40,7 @@ $lang['create'] = 'Create';
 $lang['createnewdir'] = 'Create new directory';
 $lang['createthumbnail'] = 'Create <em>(or recreate)</em> an image thumbnail';
 $lang['create_thumbnails'] = 'Create thumbnails on upload';
+$lang['croptosize'] = 'Crop the rotated image to the size of the original image';
 $lang['currentpath'] = 'Current path:';
 
 // D
@@ -77,10 +79,12 @@ $lang['filedateformat'] = 'm/d/Y H:m:s';
 $lang['filedeletefail'] = ' was not deleted due to an error';
 $lang['filedeletesuccess'] = 'was successfully deleted';
 $lang['fileexistsdest'] = '%s already exists at the destination';
+$lang['fileimagetype'] = 'Cannot perform this action on this type of image';
 $lang['fileinfo'] = 'File info';
 $lang['filename'] = 'Filename';
 $lang['fileno'] = 'File no.';
 $lang['filenotfound'] = 'File not found';
+$lang['filenotimage'] = 'File specified is not an image (or there is some error with the file)';
 $lang['fileoutsideuploads'] = 'You are not allowed to modify files outside the uploads-dir! (That requires the Advanced File Management permission)';
 $lang['fileowner'] = 'Owner';
 $lang['fileperms'] = 'Permissions';
@@ -110,11 +114,14 @@ EOF;
 // I
 $lang['iconsize'] = 'Icon size';
 $lang['ie_upload_message'] = 'Drag and Drop, or multiple file upload is not available in Internet Explorer.  To enable these features use a more capable browser such as Firefox or Chrome';
+$lang['image'] = 'Image';
 $lang['imsure'] = 'I\'m sure';
 $lang['in'] = 'in';
 $lang['info_createthumb'] = 'The following thumbnail will be created';
 $lang['info_create_thumbnails'] = 'If enabled, thumbnail files for images will be created on upload';
 $lang['info_move'] = 'This option will allow moving one or more items to a different directory.  Use this with caution as it can break links to files, or break other functionality on the website';
+$lang['info_rotate'] = 'The saved image will not appear identical to the rotated image in this view, and the dimensions of the saved image may change';
+$lang['info_rotate_slider'] = 'Drag this slider to the desired rotation angle';
 $lang['installed'] = 'FileManager version %s installed';
 $lang['insufficientpermission'] = 'Insufficient permission to %s';
 $lang['internalerror'] = 'Internal error (meaning something didn\'t make sense at all, please report what you did)';
@@ -189,6 +196,7 @@ $lang['pie_warn_action'] = 'Are you sure? There is no Crtl+z down here..';
 $lang['pie_warn_reset'] = 'Are you sure? It will reset your current modifications';
 $lang['postinstall'] = 'FileManager module was installed';
 $lang['postletexists'] = 'Warning! Please remove the modules/FileManager/postlet directory completely. The CMS doesn\'t use it anymore.';
+$lang['predefined'] = 'Predefined Angles';
 $lang['prompt_copy'] = 'Copy one or more Items';
 $lang['prompt_dropfiles'] = 'Drop files here to upload';
 $lang['prompt_move'] = 'Move Items to Another Directory';
@@ -206,9 +214,12 @@ $lang['renameerror'] = 'Error! Item could not be renamed';
 $lang['renamefailure'] = 'Renaming of file failed';
 $lang['renamesuccess'] = 'Item successfully renamed';
 $lang['return'] = 'Return';
+$lang['rotate'] = 'Rotate';
+$lang['rotateimage'] = 'Rotate Image';
 $lang['rwxstyle'] = 'rwx style';
 
 // S
+$lang['save'] = 'Save';
 $lang['savesettings'] = 'Save settings';
 $lang['selecttargetdir'] = 'Select target dir for move/copy';
 $lang['setpermissions'] = 'Set permissions';

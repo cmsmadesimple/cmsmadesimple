@@ -72,37 +72,42 @@ foreach ($filerec as $key => $value) {
 } */
 
 if (isset($params["fileactionnewdir"]) || $fileaction=="newdir") {
-  include_once(dirname(__FILE__)."/action.newdir.php");
+  include_once(__DIR__."/action.newdir.php");
   return;
 }
 
 if (isset($params["fileactionrename"]) || $fileaction=="rename") {
-  include_once(dirname(__FILE__)."/action.rename.php");
+  include_once(__DIR__."/action.rename.php");
   return;
 }
 
 if (isset($params["fileactiondelete"]) || $fileaction=="delete") {
-  include_once(dirname(__FILE__)."/action.delete.php");
+  include_once(__DIR__."/action.delete.php");
   return;
 }
 
 if (isset($params["fileactioncopy"]) || $fileaction=="copy") {
-  include_once(dirname(__FILE__)."/action.copy.php");
+  include_once(__DIR__."/action.copy.php");
   return;
 }
 
 if (isset($params["fileactionmove"]) || $fileaction=="move") {
-  include_once(dirname(__FILE__)."/action.move.php");
+  include_once(__DIR__."/action.move.php");
   return;
 }
 
 if (isset($params["fileactionunpack"]) || $fileaction=="unpack") {
-  include_once(dirname(__FILE__)."/action.unpack.php");
+  include_once(__DIR__."/action.unpack.php");
   return;
 }
 
 if (isset($params["fileactionthumb"]) || $fileaction=="thumb") {
-  include_once(dirname(__FILE__)."/action.thumb.php");
+  include_once(__DIR__."/action.thumb.php");
+  return;
+}
+
+if (isset($params['fileactionrotate']) || $fileaction == 'rotate') {
+  include_once(__DIR__.'/action.rotate.php');
   return;
 }
 

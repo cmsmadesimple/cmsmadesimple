@@ -33,28 +33,24 @@ final class filemanager_utils
     if( strpos($name,'\\') !== false ) return FALSE;
     if( strpos($name,'..') !== false ) return FALSE;
     if( $name[0] == '.' || $name[0] == ' ' ) return FALSE;
-    if( preg_match('/[\n\r\t\[\]\&\?\<\>\!\@\#\$\%\*\(\)\{\}\|\"\'\:\;\+]/',$name) )
-      {
-	return FALSE;
-      }
+    if( preg_match('/[\n\r\t\[\]\&\?\<\>\!\@\#\$\%\*\(\)\{\}\|\"\'\:\;\+]/',$name) ) {
+      return FALSE;
+    }
     return TRUE;
   }
 
   public static function can_do_advanced()
   {
-    if( self::$_can_do_advanced < 0 )
-      {
-	$filemod = cms_utils::get_module('FileManager');
-	$config = cmsms()->GetConfig();
-	if( startswith($config['uploads_path'],$config['root_path']) && $filemod->AdvancedAccessAllowed() )
-	  {
-	    self::$_can_do_advanced = 1;
-	  }
-	else
-	  {
-	    self::$_can_do_advanced = 0;
-	  }
+    if( self::$_can_do_advanced < 0 ) {
+      $filemod = cms_utils::get_module('FileManager');
+      $config = cmsms()->GetConfig();
+      if( startswith($config['uploads_path'],$config['root_path']) && $filemod->AdvancedAccessAllowed() ) {
+	self::$_can_do_advanced = 1;
       }
+      else {
+	self::$_can_do_advanced = 0;
+      }
+    }
     return self::$_can_do_advanced;
   }
 
@@ -72,12 +68,8 @@ final class filemanager_utils
     $config = cmsms()->GetConfig();
     $advancedmode=filemanager_utils::check_advanced_mode();
     $dir = $config['uploads_path'];
-    if( !startswith($dir,$config['root_path']) ) {
-      $dir = $config['root_path'].'/uploads';
-    }
-    if( $advancedmode ) {
-      $dir = $config['root_path'];
-    }
+    if( !startswith($dir,$config['root_path']) ) $dir = $config['root_path'].'/uploads';
+    if( $advancedmode ) $dir = $config['root_path'];
 
     $dir = substr($dir,strlen($config['root_path'])+1);
     if( $dir == '' ) $dir = '/';
@@ -93,9 +85,7 @@ final class filemanager_utils
     $prefix = $config['root_path'];
     $path = self::join_path($prefix,$path);
     $path=realpath($path);
-    if( $path === FALSE ) {
-      return true;
-    }
+    if( $path === FALSE ) return true;
 
     if (!$advancedmode) {
       // uploading in 'non advanced mode', path has to start with the upload dir.
@@ -113,9 +103,7 @@ final class filemanager_utils
   {
     // check the path
     $path = cms_userprefs::get('filemanager_cwd',self::get_default_cwd());
-    if( self::test_invalid_path($path) ) {
-      $path = self::get_default_cwd();
-    }
+    if( self::test_invalid_path($path) ) $path = self::get_default_cwd();
     if( $path == '' ) $path = '/';
     return $path;
   }
@@ -123,21 +111,15 @@ final class filemanager_utils
   public static function set_cwd($path)
   {
     $config = cmsms()->GetConfig();
-    if( startswith($path,$config['root_path']) ) {
-      $path = substr($path,strlen($config['root_path'])+1);
-    }
+    if( startswith($path,$config['root_path']) ) $path = substr($path,strlen($config['root_path'])+1);
     $advancedmode = self::check_advanced_mode();      
 
     // validate the path.
     $prefix = $config['root_path'];
     $tmp = self::join_path($prefix,$path);
     $tmp = realpath($tmp);
-    if( !is_dir($tmp) ) {
-      throw new Exception('Cannot set current working directory to an invalid path');
-    }
-    if( !self::test_invalid_path($tmp) ) {
-      throw new Exception('Cannot set current working directory to an invalid path');
-    }
+    if( !is_dir($tmp) ) throw new Exception('Cannot set current working directory to an invalid path');
+    if( !self::test_invalid_path($tmp) ) throw new Exception('Cannot set current working directory to an invalid path');
 
     $path = str_replace('\\','/',substr($tmp,strlen($prefix)+1));
     cms_userprefs::set('filemanager_cwd',$path);
@@ -165,9 +147,7 @@ final class filemanager_utils
   {
     $path = self::get_cwd();
     $config = cmsms()->GetConfig();
-    if( self::test_invalid_path($path) ) {
-      $path = self::get_default_cwd();
-    }
+    if( self::test_invalid_path($path) ) $path = self::get_default_cwd();
     $base = $config['root_path'];
     $realpath = self::join_path($base,$path);
     return $realpath;
@@ -177,9 +157,7 @@ final class filemanager_utils
   {
     $path = self::get_cwd();
     $config = cmsms()->GetConfig();
-    if( self::test_invalid_path($path) ) {
-      $path = self::get_default_cwd();
-    }
+    if( self::test_invalid_path($path) ) $path = self::get_default_cwd();
     $url = $config['root_url'].'/'.$path;
     return $url;
   }
@@ -199,9 +177,7 @@ final class filemanager_utils
   {
     $tmp = array('.tar.gz','.tar.bz2','.zip','.tgz');
     foreach( $tmp as $t2 ) {
-      if( endswith(strtolower($file),$t2) ) {
-	return TRUE;
-      }
+      if( endswith(strtolower($file),$t2) ) return TRUE;
     }
     return FALSE;
   }
@@ -326,9 +302,9 @@ final class filemanager_utils
     if( version_compare(phpversion(),'5.3','ge') && function_exists('finfo_open') ) {
       $fh = finfo_open(FILEINFO_MIME_TYPE);
       if( $fh ) {
-      $mime_type = finfo_file($fh,$filename);
-      finfo_close($fh);
-      return $mime_type;
+	$mime_type = finfo_file($fh,$filename);
+	finfo_close($fh);
+	return $mime_type;
       }
     }
 
@@ -338,7 +314,6 @@ final class filemanager_utils
       function mime_content_type($filename) {
 
         $mime_types = array(
-
             'txt' => 'text/plain',
             'htm' => 'text/html',
             'html' => 'text/html',
@@ -418,20 +393,18 @@ final class filemanager_utils
   // get post max size and give a portion of it to smarty for max chunk size.
   public static function str_to_bytes($val)
   {
-    if(is_string($val) && $val != '')
-      {
-	$val = trim($val);
-	$last = strtolower(substr($val, strlen($val/1), 1));
-	switch($last)
-	  {
-	  case 'g':
-	    $val *= 1024;
-	  case 'm':
-	    $val *= 1024;
-	  case 'k':
-	    $val *= 1024;
-	  }
+    if(is_string($val) && $val != '') {
+      $val = trim($val);
+      $last = strtolower(substr($val, strlen($val/1), 1));
+      switch($last) {
+      case 'g':
+	$val *= 1024;
+      case 'm':
+	$val *= 1024;
+      case 'k':
+	$val *= 1024;
       }
+    }
 
     return (int) $val;
   }
@@ -443,16 +416,12 @@ final class filemanager_utils
     $showhiddenfiles = $mod->GetPreference('showhiddenfiles');
     $startdir = $config['uploads_path'];
     $advancedmode = self::check_advanced_mode();
-    if( $advancedmode ) {
-      $startdir = $config['root_path'];
-    }
+    if( $advancedmode ) $startdir = $config['root_path'];
 
     // now get a simple list of all of the directories we have 'write' access to.
     function fmutils_get_dirs($startdir,$prefix = '/') {
       $res = array();
-      if( !is_dir($startdir) ) {
-	return;
-      }
+      if( !is_dir($startdir) ) return;
 
       global $showhiddenfiles;
       $dh = opendir($startdir);
@@ -460,16 +429,12 @@ final class filemanager_utils
 	if( $entry == '.' ) continue;
 	$full = filemanager_utils::join_path($startdir,$entry);
 	if( !is_dir($full) ) continue;
-	if( !$showhiddenfiles && ($entry[0] == '.' || $entry[0] == '_') ) {
-	  continue;
-	}
+	if( !$showhiddenfiles && ($entry[0] == '.' || $entry[0] == '_') ) continue;
 
 	if( $entry == '.svn' || $entry == '.git' ) continue;
 	$res[$prefix.$entry] = $prefix.$entry;
 	$tmp = fmutils_get_dirs($full,$prefix.$entry.'/');
-	if( is_array($tmp) && count($tmp) ) {
-	  $res = array_merge($res,$tmp);
-	}
+	if( is_array($tmp) && count($tmp) ) $res = array_merge($res,$tmp);
       }
       closedir($dh);
       return $res;
@@ -481,6 +446,48 @@ final class filemanager_utils
       ksort($output);
     }
     return $output;
+  }
+
+  public static function create_thumbnail($src,$dest = null)
+  {
+    if( !file_exists($src) ) return FALSE;
+    if( !$dest ) {
+      $bn = basename($src);
+      $dn = dirname($src);
+      $dest = $dn.'/thumb_'.$bn;
+    }
+    if( file_exists($dest) && !is_writable($dest) ) return FALSE;
+
+    $info = getimagesize($src);
+    if( !$info || !isset($info['mime']) ) return FALSE;
+
+    $i_src = imagecreatefromstring(file_get_contents($src));
+    $width = cms_siteprefs::get('thumbnail_width',96);
+    $height = cms_siteprefs::get('thumbnail_height',96);
+
+    $i_dest = imagecreatetruecolor($width,$height);
+    imagealphablending($i_dest,FALSE);
+    $color = imageColorAllocateAlpha($i_src, 255, 255, 255, 127);
+    imagecolortransparent($i_dest,$color);
+    imagefill($i_dest,0,0,$color);
+    imagesavealpha($i_dest,TRUE);
+    imagecopyresampled($i_dest,$i_src,0,0,0,0,$width,$height,imagesx($i_src),imagesy($i_src));
+
+    $res = null;
+    switch( $info['mime'] ) {
+    case 'image/gif':
+      $res = imagegif($i_dest,$dest);
+      break;
+    case 'image/png':
+      $res = imagepng($i_dest,$dest,9);
+      break;
+    case 'image/jpeg':
+      $res = imagejpeg($i_dest,$dest,100);
+      break;
+    }
+
+    if( !$res ) return FALSE;
+    return TRUE;
   }
 } // end of class
 
