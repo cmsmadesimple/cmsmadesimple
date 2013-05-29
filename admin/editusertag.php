@@ -157,6 +157,7 @@ if( $syntaxmodule &&
 
 $smarty = cmsms()->GetSmarty();
 $smarty->assign('record',$record);
+$smarty->assign('back_url',$themeObject->BackURL());
 echo $smarty->display('editusertag.tpl');
 include_once("footer.php");
 
