@@ -245,6 +245,7 @@ $lang['thousanddelimiter'] = 'Thousand delimiter';
 $lang['thumberror'] = 'Problem creating thumbnail';
 $lang['thumbnail'] = 'Create Thumbnail';
 $lang['thumbsuccess'] = 'Thumbnail successfully created';
+$lang['toggle'] = 'TODO';
 
 // U
 $lang['uninstalled'] = 'FileManager module uninstalled';
