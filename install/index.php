@@ -40,6 +40,12 @@ require_once cms_join_path(CMS_INSTALL_BASE, 'translation.functions.php');
 require_once cms_join_path(CMS_INSTALL_BASE, 'lib', 'classes', 'CMSInstaller.class.php');
 
 
+/* Check for the presence of a filled CMSMS Config file */
+if ( (file_exists(CMS_BASE.'/config.php')) && (file_get_contents(CMS_BASE.'/config.php') != '') ) {
+	installerShowErrorPage('CAUTION! You are doing a new install of CMS Made Simple, but it looks like it is already installed!<br />
+	The install process finds a filled config.php file at your server...');
+}
+
 
 /* Check SESSION */
 if(! extension_loaded_or('session') )
