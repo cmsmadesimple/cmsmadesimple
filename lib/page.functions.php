@@ -467,43 +467,31 @@ function create_textarea($enablewysiwyg, $text, $name, $classname = '', $id = ''
 {
   // todo: rewrite me with var args... to accept a numeric array of arguments, or a hash.
   $gCms = cmsms();
+  $haveit = FALSE;
   $result = '';
   $uid = get_userid(false);
+  if( !$classname ) $classname = "cms_textarea";
 
   if ($enablewysiwyg == true || $forcewysiwyg) {
-    $module = null;
+    $haveit = TRUE;
     $module = cms_utils::get_wysiwyg_module($forcewysiwyg);
-    if( $module ) {
-      $result = $module->WYSIWYGTextArea($name,$width,$height,$encoding,$text,$stylesheet,$addtext);
-    }
+    $module->SetWYSIWYGActive();
+    $classname .= " cms_wysiwyg ".$module->GetName();
   }
 
   if( !$result && $wantedsyntax ) {
     // here we should get a list of installed/available modules.
     $module = cmsms()->GetModuleOperations()->GetSyntaxHighlighter($wantedsyntax);
-    if( $module ) {
-      $result = $module->SyntaxTextArea($name,$wantedsyntax,$width,$height,$encoding,$text,$addtext);
-    }
+    $module->SetSyntaxActive();
+    $classname .= " cms_syntaxarea ".$module->GetName();
+    $haveit = TRUE;
   }
 
-  if ($result == '') {
-    $result = '<textarea name="'.$name.'" cols="'.$width.'" rows="'.$height.'"';
-    if ($classname != '') {
-      $result .= ' class="'.$classname.'"';
-    }
-    else {
-      $result .= ' class="cms_textarea"';
-    }
-    if ($id != '') {
-      $result .= ' id="'.$id.'"';
-    }
-    if( !empty( $addtext ) ) {
-      $result .= ' '.$addtext;
-    }
-      
-    $result .= '>'.cms_htmlentities($text,ENT_NOQUOTES,get_encoding($encoding)).'</textarea>';
-  }
-  
+  $result = '<textarea name="'.$name.'" cols="'.$width.'" rows="'.$height.'"';
+  if ($classname != '') $result .= ' class="'.$classname.'"';
+  if ($id != '') $result .= ' id="'.$id.'"';
+  if( !empty( $addtext ) ) $result .= ' '.$addtext;
+  $result .= '>'.cms_htmlentities($text,ENT_NOQUOTES,get_encoding($encoding)).'</textarea>';
   return $result;
 }
 

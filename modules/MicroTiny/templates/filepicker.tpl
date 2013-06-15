@@ -6,33 +6,24 @@
 <link rel="stylesheet" type="text/css" href="{$rooturl}/modules/MicroTiny/filepicker.css" />
 <link rel="stylesheet" type="text/css" href="{$rooturl}/modules/MicroTiny/tinymce/themes/advanced/skins/default/dialog.css" />
 <script language="javascript" type="text/javascript" src="{$rooturl}/modules/MicroTiny/tinymce/tiny_mce_popup.js"></script>
-{literal}
 <script language="javascript" type="text/javascript">
-
 function SubmitElement(filename) {
   var URL = filename;
   var win = tinyMCEPopup.getWindowArg("window");
-
-  // insert information now
   win.document.getElementById(tinyMCEPopup.getWindowArg("input")).value = URL;
-{/literal}
   
-  {if $isimage=='1'}
+  {if $isimage == '1'}
   // for image browsers: update image dimensions
   if (win.ImageDialog.getImageData) win.ImageDialog.getImageData();
-  if (win.ImageDialog.showPreviewImage) win.ImageDialog.showPreviewImage(URL);
-  {/if} 
+  if (win.ImageDialog.showPreviewImage) win.ImageDialog.showPreviewImage(URL);{/if}
   
-{literal}
-   // close popup window
+  // close popup window
   tinyMCEPopup.close();
 }
-{/literal}
 </script>
 </head>
 <body>
 <div id="full-fp">
-
 <div class="header">
 
 <fieldset>
@@ -72,7 +63,7 @@ function SubmitElement(filename) {
       {/if}
     {else}
       <div class="thumbnail">
-      <a title="{$file->name}" href='#' onclick='SubmitElement("{$file->fullurl}")'>
+      <a title="{$file->name}" href='#' onclick='SubmitElement("{$file->relative_url}")'>
       {if isset($file->thumbnail) && $file->thumbnail!=''}
       
         {$file->thumbnail}
@@ -91,7 +82,7 @@ function SubmitElement(filename) {
     {/if}
     </td>
     <td align="left">
-       <a  title="{$file->name}" href='#' onclick='SubmitElement("{$file->fullurl}")'>
+       <a  title="{$file->name}" href='#' onclick='SubmitElement("{$file->relative_url}")'>
      {$file->name}
        </a>
     </td>

@@ -24,19 +24,17 @@ function fp_format_size($size)
 {
     $suffix = '';
     $val = $size;
-    if( $size > 1024 )
-    {
-        // kilobytes
-        $val = (float)$size / 1024.0;
-        $suffix = 'Kb';
-        $val = round($val);
+    if( $size > 1024 ) {
+      // kilobytes
+      $val = (float)$size / 1024.0;
+      $suffix = 'Kb';
+      $val = round($val);
 
-        if( $val > 1024 )
-        {
-            $val = (float)$size / 1024.0 / 1024.0;
-            $suffix = 'Mb';
-            $val = round($val,2);
-        }
+      if( $val > 1024 ) {
+	$val = (float)$size / 1024.0 / 1024.0;
+	$suffix = 'Mb';
+	$val = round($val,2);
+      }
     }
 
     return $val.$suffix;
@@ -88,12 +86,13 @@ while ($entry = $d->read()) {
   }
 
   $file=array();
-  $file["name"]=$entry;
-  $file["isimage"]="0";
-  $file["fullpath"]=$startdir.'/'.$entry;
-  $file["fullurl"]=$starturl.'/'.$entry;
-  $file["ext"]=strtolower(substr($entry,strrpos($entry,".")));
-  $file["isdir"]=is_dir($file["fullpath"]);
+  $file['name']=$entry;
+  $file['isimage']="0";
+  $file['fullpath']=$startdir.'/'.$entry;
+  $file['fullurl']=$starturl.'/'.$entry;
+  $file['relurl'] = str_replace($config['root_url'].'/','',$file['fullurl']);
+  $file['ext']=strtolower(substr($entry,strrpos($entry,".")));
+  $file['isdir']=is_dir($file["fullpath"]);
 
   if (!$file["isdir"]) {
     if ($type=="image") {
@@ -169,6 +168,7 @@ foreach($files as $file) {
     } else {
       $onerow->dimensions="&nbsp;";
     }
+    $onerow->relative_url = $file['relurl'];
     $onerow->size=fp_format_size($file['size']);
     $filecount++;
   }

@@ -236,10 +236,6 @@ $smarty->assign('content_obj',$content_obj);
 $smarty->assign('tab_names',$tabnames);
 $smarty->assign('tab_contents_array',$tab_contents_array);
 $smarty->assign('tab_message_array',$tab_message_array);
-$modobj = cms_utils::get_wysiwyg_module();
-if( is_object($modobj) ) {
-  $smarty->assign('wysiwyg_submit_script',$modobj->WYSIWYGPageFormSubmit());
-}
 $factory = new ContentAssistantFactory($content_obj);
 $assistant = $factory->getEditContentAssistant();
 if( is_object($assistant) ) {

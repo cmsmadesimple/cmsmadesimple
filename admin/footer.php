@@ -42,28 +42,16 @@ if( is_array($loaded) && count($loaded) ) {
   foreach( $loaded as $name => &$object ) {
     if( !is_object($object) ) continue;
     if( $object->IsWYSIWYG() && $object->WYSIWYGActive() ) {
-      $bodytext       .= $object->WYSIWYGGenerateBody();
-      $headertext     .= $object->WYSIWYGGenerateHeader($htmlresult);
-      $formtext       .= $object->WYSIWYGPageForm();
-      $formsubmittext .= $object->WYSIWYGPageFormSubmit();
-      //break;
+      $headertext .= $object->WYSIWYGGenerateHeader($htmlresult);
     }
     else if( $object->IsSyntaxHighlighter() && $object->SyntaxActive() ) {
-      $bodytext.=$object->SyntaxGenerateBody();
-      $headertext.=$object->SyntaxGenerateHeader($htmlresult);
-      $formtext.=$object->SyntaxPageForm();
-      $formsubmittext.=$object->SyntaxPageFormSubmit();
-      // break;
+      $headertext .= $object->SyntaxGenerateHeader($htmlresult);
     }
   }
 }
 
 $htmlresult = $themeObject->postprocess($htmlresult);
 $htmlresult = str_replace('<!-- THIS IS WHERE HEADER STUFF SHOULD GO -->', $headertext, $htmlresult);
-$htmlresult = str_replace('##FORMSUBMITSTUFFGOESHERE##', ' '.$formtext, $htmlresult);
-$htmlresult = str_replace('##INLINESUBMITSTUFFGOESHERE##', ' '.$formsubmittext, $htmlresult);
-$htmlresult = str_replace('##BODYSUBMITSTUFFGOESHERE##', ' '.$bodytext, $htmlresult);
-
 echo $htmlresult;
 
 if( isset($gCms->config['show_performance_info']) ) {

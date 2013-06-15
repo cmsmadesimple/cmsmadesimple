@@ -20,10 +20,9 @@
  #$Id$
  #
  */
- 
-class microtiny_utils {
+class microtiny_utils 
+{
 
-  static private $_textareas = array();
   static private $_theme_id;
 
   /**
@@ -32,65 +31,6 @@ class microtiny_utils {
    * @since 1.0
    */	
   public function __construct() { }
-  
-  /**
-   * add textarea name
-   */
-  static private function add_textarea($name)
-  {
-    if( !in_array($name,self::$_textareas) ) {
-      self::$_textareas[] = $name;
-    }
-  }
-
-  /**
-   * Module API wrapper function
-   *
-   * @since 1.0
-   * @return string
-   */	
-  static public function WYSIWYGTextarea($name='textarea',$columns='80',$rows='15',$encoding='',$content='',$stylesheet='',$addtext='') 
-  {
-    $mod = cms_utils::get_module('MicroTiny');
-
-    // Check if we are in object instance
-    if(!is_object($mod)) return false; // TODO: some error message?
-
-    // Force WYSIWYG on
-    $mod->SetWysiwygActive();
-
-    if ($stylesheet != '') {
-      $_SESSION["microtiny_live_templateid"]=substr($stylesheet, strpos($stylesheet,"=")+1);
-    } else {
-      $obj = cms_utils::get_app_data('editing_content');
-      if( is_object($obj) ) {
-	self::$_theme_id = $obj->GetPropertyValue('theme_id');
-      }
-      else {
-	$collection = CmsLayoutCollection::load_default();
-	if( is_object($collection) ) {
-	  self::$_theme_id = $collection->get_id();
-	}
-      }
-    }
-
-    $origname = $name;
-    if( !startswith($name,'mt_') ) $name = 'mt_'.$name;
-    self::add_textarea($name);
-    
-    if( strstr($addtext,'class=') !== FALSE ) {
-      $addtext = 'class="microtiny" '.$addtext;
-    }
-
-    $rows = max(5,min(50,$rows));
-    $output = '';
-    $output .= '<textarea id="'.$name.'" name="'.$origname.'" cols="'.$columns.'" rows="'.$rows.'" '.$addtext.'>'.cms_htmlentities($content,ENT_NOQUOTES,get_encoding($encoding)).'</textarea>';
-    global $CMS_ADMIN_PAGE;
-    if( $CMS_ADMIN_PAGE && $mod->CheckPermission('MicroTiny View HTML Source') ) {
-      $output .= '<span style="display:block; margin-top:10px;"><input type="checkbox" id="toggle_'.$name.'" onclick="toggleMicroTiny(\''.$name.'\');"/><label for="toggle_'.$name.'">'.$mod->Lang('view_html').'</label></span>';
-    }
-    return $output;
-  }
 
   /**
    * Module API wrapper function
@@ -112,16 +52,11 @@ class microtiny_utils {
     if( !isset($CMS_ADMIN_PAGE) ) $frontend = TRUE;
 
     $languageid = self::GetLanguageId($frontend);
-
     $fn = self::SaveStaticConfig($frontend,'',$languageid);
 
-//     if ($mod->WYSIWYGactive()) {
-      $output='<script type="text/javascript" src="'.$config->smart_root_url().'/modules/MicroTiny/tinymce/tiny_mce.js"></script>';
-      $configurl = $config->smart_root_url().'/tmp/cache/'.$fn.'?t='.time();
-      $output.='<script type="text/javascript" src="'.$configurl.'"></script>';			
-//     } else {		  
-//       $output="<!-- MicroTiny Session vars empty -->";
-//     }
+    $output='<script type="text/javascript" src="'.$config->smart_root_url().'/modules/MicroTiny/tinymce/tiny_mce.js"></script>';
+    $configurl = $config->smart_root_url().'/tmp/cache/'.$fn.'?t='.time();
+    $output.='<script type="text/javascript" src="'.$configurl.'" defer="defer"></script>';
 
     return $output;
   }	
@@ -150,14 +85,10 @@ class microtiny_utils {
       $mod->smarty->assign("isfrontend",true);
     } else {
       $mod->smarty->assign("isfrontend",false);
+      $mod->smarty->assign('allow_viewsource',$mod->CheckPermission('MicroTiny View HTML Source'));
+      $mod->smarty->assign('view_source',$mod->Lang('view_source'));
       $result .= self::GetCMSLinker();
       $linker="cmslinker,";
-    }
-
-    if( count(self::$_textareas) ) {
-      $tmp = implode(',',self::$_textareas);
-      self::$_textareas = array();
-      $mod->smarty->assign('textareas',$tmp);		    
     }
 
     if( $themeid <= 0 ) {
@@ -251,245 +182,195 @@ class microtiny_utils {
     return $result;
   }	
 	
-	/**
-	* Generates TinyMCE Entry object
-	*
-	* @since 1.0
-	* @param string $menu
-	* @param string $entry
-	* @return string
-	*/	
-	public static function AddEntry($menu,$entry) {
-	
-	  // Check if we are in object instance
-	  $mod = cms_utils::get_module('MicroTiny');
-	  if(!is_object($mod)) return false; // TODO: some error?
+  /**
+   * Generates TinyMCE Entry object
+   *
+   * @since 1.0
+   * @param string $menu
+   * @param string $entry
+   * @return string
+   */	
+  public static function AddEntry($menu,$entry) 
+  {
+    // Check if we are in object instance
+    $mod = cms_utils::get_module('MicroTiny');
+    if(!is_object($mod)) return false; // TODO: some error?
 
-	  // Init
-	  $config = cms_utils::get_config();
-	  $link="";
-	  $result="";
-	  
-	  //{format : 'text'}
-	  $menutext=$entry->Hierarchy()." ".$entry->MenuText();
-	  if (strlen($menutext)>30) {
-	    $menutext=htmlspecialchars(substr($menutext,0,30),ENT_QUOTES)." &#133;";
-	  } else {
-	    $menutext=htmlspecialchars($menutext,ENT_QUOTES);
-	  }
-	  $result.="
-						".$menu.".add({title : '".$menutext."', onclick : function() {
-							var sel=tinyMCE.activeEditor.selection.getContent();
-							if (sel=='') sel='".htmlspecialchars($entry->MenuText(),ENT_QUOTES)."';";
+    // Init
+    $config = cms_utils::get_config();
+    $link="";
+    $result="";
 
-		/*if ($mod->GetPreference("cmslinkerstyle","selflink")=="a") {
-			if (($config['url_rewriting'] != 'none')
-			 //&& $config['use_hierarchy'] == true)
-    {
-		  if ($config['url_rewriting'] == 'mod_rewrite') {
-			  $link = $config['root_url']."/".$entry->HierarchyPath().$config['page_extension'];
-			} else {
-				$link= $config['root_url']."/index.php/".$entry->HierarchyPath().$config['page_extension'];
-			  }
-		  }	else {
-			//if ($tiny->GetPreference("cmslinkerstyle","selflink")=="a") {
-			$link="index.php?".$config['query_var']."=".$entry->Alias();
-			//}
-		  }
-			$result.="
-							tinyMCE.activeEditor.execCommand('mceInsertContent', false, '<a href=\"".$link."\">'+sel+'</a>');";
-		} else {
-			$result.="
-							tinyMCE.activeEditor.execCommand('mceInsertContent', false, \"{cms_selflink page='".$entry->Alias()."' text='\"+sel+\"'}\");";
-		}
-		$*/
+    $menutext=$entry->Hierarchy()." ".$entry->MenuText();
+    if (strlen($menutext)>30) {
+      $menutext=htmlspecialchars(substr($menutext,0,30),ENT_QUOTES)." &#133;";
+    } else {
+      $menutext=htmlspecialchars($menutext,ENT_QUOTES);
+    }
+    $result.=" ".$menu.".add({title : '".$menutext."', onclick : function() {
+      var sel=tinyMCE.activeEditor.selection.getContent();
+      if (sel=='') sel='".htmlspecialchars($entry->MenuText(),ENT_QUOTES)."';";
     $href="'".$entry->Alias()."'";
-    $result.="
-							tinyMCE.activeEditor.execCommand('mceInsertContent', false, \"<a href=\\\"{cms_selflink href=".$href."}\\\">\"+sel+\"</a>\");";
-    $result.="
-						}});
-		";
-		return $result;
-	}	
+    $result.="tinyMCE.activeEditor.execCommand('mceInsertContent', false, \"<a href=\\\"{cms_selflink href=".$href."}\\\">\"+sel+\"</a>\");";
+    $result.="}});";
+    return $result;
+  }	
+
+  /**
+   * Generates TinyMCE sub object
+   *
+   * @since 1.0
+   * @param string $menu
+   * @param string $entry
+   * @param string $result // Stikki: why?
+   * @return string
+   */	
+  private static function AddSub($menu,$entry,&$result) {
+    $menutext=$entry->Hierarchy()." ".$entry->MenuText();
+    if (strlen($menutext)>30) {
+      $menutext=htmlspecialchars(substr($menutext,0,30),ENT_QUOTES)." &#133;";
+    } else {
+      $menutext=htmlspecialchars($menutext,ENT_QUOTES);
+    }
+
+    $newmenu=$menu."m";
+    $result.=" var ".$newmenu." = ".$menu.".addMenu({title : '".$menutext."'});";
+    if ($entry->Type()!="sectionheader") {
+      $result.= self::AddEntry($newmenu,$entry);
+      $result.=" ".$newmenu.".addSeparator();";
+    }
+    return $newmenu;
+  }
 	
-	/**
-	* Generates TinyMCE sub object
-	*
-	* @since 1.0
-	* @param string $menu
-	* @param string $entry
-	* @param string $result // Stikki: why?
-	* @return string
-	*/	
-	public static function AddSub($menu,$entry,&$result) {
-	
-		$menutext=$entry->Hierarchy()." ".$entry->MenuText();
+  /**
+   * Get CMSLinker for TinyMCE
+   *
+   * @since 1.0
+   * @return string
+   */		
+  private static function GetCMSLinker() 
+  {
+    $mod = cms_utils::get_module('MicroTiny');
+    $result="";
+    $config = cms_utils::get_config();
+    $result.="//Creates a new plugin class and a custom listbox
+      tinymce.create('tinymce.plugins.CMSLinkerPlugin', {
+      createControl: function(n, cm) {
+      switch (n) {
+      case 'cmslinker':
+	var c = cm.createMenuButton('cmslinker', {
+	title : '".$mod->Lang("cmsmslinker")."',image : '".$config->smart_root_url()."/modules/MicroTiny/images/cmsmslink.gif',
+	icons : false
+      });
+     c.onRenderMenu.add(function(c, m) {
+    ";
+
+    $content_ops = cmsms()->GetContentOperations();
+    $content_array=$content_ops->GetAllContent();
+
+    $level=0;
+    $menu="m";
+
+    foreach ($content_array as $one) {
+      if ($one->Active()!=1) continue;
+      if ($one->FriendlyName() == 'Separator') {
+	continue;
+      }
+      $thislevel=substr_count($one->Hierarchy(),".");
+      if ($thislevel<$level) {
+	$menu=substr($menu,($level-$thislevel));
+	$level-=($level-$thislevel);
+      }
+      if ($one->ChildCount()>0) {
+	$menu = self::AddSub($menu,$one,$result);
+	$level++;
+      } else {
+	$result .= self::AddEntry($menu,$one);
+      }
+    }
+    $result.="}); 
+      // Return the new menu button instance
+      return c;
+      }
+      return null;
+      }
+    });
+
+    // Register plugin with a short name
+    tinymce.PluginManager.add('cmslinker', tinymce.plugins.CMSLinkerPlugin);";
+    return $result;
+  }	
+
+  /**
+   * Get Language ID
+   *
+   * @since 1.0
+   * @return string
+   */			
+  private static function GetLanguageId() {
+    $mylang = get_preference(get_userid(FALSE),'default_cms_language');
+    if ($mylang=="") return "en"; //Lang setting "No default selected"
+    $mylang = substr($mylang,0,2);
 		
-		if (strlen($menutext)>30) {
-			$menutext=htmlspecialchars(substr($menutext,0,30),ENT_QUOTES)." &#133;";
-		} else {
-			$menutext=htmlspecialchars($menutext,ENT_QUOTES);
-		}
-		
-		$newmenu=$menu."m";
-		$result.="					var ".$newmenu." = ".$menu.".addMenu({title : '".$menutext."'});
-		";
-		
-		if ($entry->Type()!="sectionheader") {
-		  $result.= self::AddEntry($newmenu,$entry);
-		  $result.="					".$newmenu.".addSeparator();
-		";
-		}
-		
-		return $newmenu;
-	}
+    switch ($mylang) {			
+    case "tw" : return strtolower($mylang);
+    default : return $mylang;
+    }
+  }
+
+
+  /**
+   * Save Static configuration
+   *
+   * @since 1.0
+   * @param boolean $frontend	
+   * @param string $templateid	
+   * @param string $languageid	
+   * @return string
+   * @deleteme
+   */		
+  private static function SaveStaticConfig($frontend=false, $themeid='', $languageid='') 
+  { 
+    $configcontent = self::GenerateConfig($frontend, $themeid, $languageid);
+    $fn = cms_join_path(PUBLIC_CACHE_LOCATION,'mt_'.md5(session_id()).'.js');
+    $res = file_put_contents($fn,$configcontent);
+    if( !$res ) return;
+    return basename($fn);
+  }
 	
-	/**
-	* Get CMSLinker for TinyMCE
-	*
-	* @since 1.0
-	* @return string
-	*/		
-	public static function GetCMSLinker() {
-
-	  $mod = cms_utils::get_module('MicroTiny');
-		$result="";
-		$config = cms_utils::get_config();
-		$result.="
-		//Creates a new plugin class and a custom listbox
-		tinymce.create('tinymce.plugins.CMSLinkerPlugin', {
-		createControl: function(n, cm) {
-			switch (n) {
-				case 'cmslinker':
-					var c = cm.createMenuButton('cmslinker', {
-						title : '".$mod->Lang("cmsmslinker")."',
-						image : '".$config->smart_root_url()."/modules/MicroTiny/images/cmsmslink.gif',
-						icons : false
-					});
-
-					c.onRenderMenu.add(function(c, m) {
-		";
-
-		$content_ops = cmsms()->GetContentOperations();
-		$content_array=$content_ops->GetAllContent();
-
-		$level=0;
-		$menu="m";
-
-		foreach ($content_array as $one) {
-		if ($one->Active()!=1) continue;
-		if ($one->FriendlyName() == 'Separator') {
-			continue;
-		}
-			//print_r($one);
-		$thislevel=substr_count($one->Hierarchy(),".");
-		//echo $thislevel.":".$level;
-		if ($thislevel<$level) {
-		$menu=substr($menu,($level-$thislevel));
-				$level-=($level-$thislevel);
-
-			}
-		//if ($thislevel==$level) {
-			if ($one->ChildCount()>0) {
-				$menu = self::AddSub($menu,$one,$result);
-				$level++;
-			} else {
-				$result .= self::AddEntry($menu,$one);
-			}
-		}
-
-		$result.="
-					});
-
-					// Return the new menu button instance
-					return c;
-			}
-
-			return null;
-		}
-		});
-
-		// Register plugin with a short name
-		tinymce.PluginManager.add('cmslinker', tinymce.plugins.CMSLinkerPlugin);
-
-		";
-		return $result;
-	}	
-
-	/**
-	* Get Language ID
-	*
-	* @since 1.0
-	* @return string
-	*/			
-	public static function GetLanguageId() {
-	
-		$mylang = get_preference(get_userid(FALSE),'default_cms_language');
-		if ($mylang=="") return "en"; //Lang setting "No default selected"
-		$mylang = substr($mylang,0,2);
-		
-		switch ($mylang) {			
-			case "tw" : return strtolower($mylang);
-			default : return $mylang;
-		}
-	}
-
-
-	/**
-	* Save Static configuration
-	*
-	* @since 1.0
-	* @param boolean $frontend	
-	* @param string $templateid	
-	* @param string $languageid	
-	* @return string
-	*/		
-	public static function SaveStaticConfig($frontend=false, $themeid='', $languageid='') 
-	{ 
-	  $configcontent = self::GenerateConfig($frontend, $themeid, $languageid);
-	  $fn = cms_join_path(PUBLIC_CACHE_LOCATION,'mt_'.md5(session_id()).'.js');
-	  $res = file_put_contents($fn,$configcontent);
-	  if( !$res ) return;
-	  return basename($fn);
-	}
-	
-	/**
-	* Get Thumbnail File
-	*
-	* @since 1.0
-	* @param string $file	
-	* @param string $path	
-	* @param string $url	
-	* @return string
-	*/		
-	public static function GetThumbnailFile($file,$path,$url) {
-	
-		$image="";
-		$imagepath = self::Slashes($path."/thumb_".$file);
-		$imageurl = self::Slashes($url."/thumb_".$file);
-		//echo "<pre>".$imageurl."</pre><br/>";
-		if (!file_exists($imagepath)) {
-		  //echo $imagepath;
-		  $image="";//$mod->GetFileIcon($file["ext"],$file["dir"]);
-		} else {
-		  $image="<img src='".$imageurl."' alt='".$file."' title='".$file."' />";
-		}
-		
-		return $image;
-	}
-
-
-	/**
-	* Fix Slashes
-	*
-	* @since 1.0	
-	* @return string
-	*/		
-	static private function Slashes($url) {
-	
-		$result=str_replace("\\","/",$url);
-		return $result;
-	}	
+  /**
+   * Get Thumbnail File
+   *
+   * @since 1.0
+   * @param string $file	
+   * @param string $path	
+   * @param string $url	
+   * @return string
+   */		
+  public static function GetThumbnailFile($file,$path,$url) 
+  {
+    $image='';
+    $imagepath = self::Slashes($path."/thumb_".$file);
+    $imageurl = self::Slashes($url."/thumb_".$file);
+    if (!file_exists($imagepath)) {
+      $image='';
+    } else {
+      $image="<img src='".$imageurl."' alt='".$file."' title='".$file."' />";
+    }
+    return $image;
+  }
+  
+  /**
+   * Fix Slashes
+   *
+   * @since 1.0	
+   * @return string
+   */		
+  static private function Slashes($url) 
+  {
+    $result=str_replace("\\","/",$url);
+    return $result;
+  }	
 	
 
 } // end of class

@@ -70,7 +70,7 @@ $lang['usestaticconfig_help'] = 'This generates a static configuration file inst
 $lang['usestaticconfig_text'] = 'Use static config';
 
 // V
-$lang['view_html'] = 'View HTML';
+$lang['view_source'] = 'View Source';
 
 // Y
 $lang['youareintext'] = 'You are in';
