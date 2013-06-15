@@ -69,14 +69,14 @@ switch( $imageinfo['mime'] ) {
 }
 $width = $imageinfo[0];
 $height = $imageinfo[1];
-$croptosize = cms_userprefs::get($this->GetName().'rotate_croptosize',1);
+$postrotate = cms_userprefs::get($this->GetName().'rotate_postrotate',1);
 $createthumb = cms_userprefs::get($this->GetName().'rotate_createthumb',0);
 
 if( isset($params['save']) ) {
   // save prefs.
   $createthumb = (int)$params['createthumb'];
-  $croptosize = (int)$params['croptosize'];
-  cms_userprefs::set($this->GetName().'rotate_croptosize',$croptosize);
+  $postrotate = trim($params['postrotate']);
+  cms_userprefs::set($this->GetName().'rotate_postrotate',$postrotate);
   cms_userprefs::set($this->GetName().'rotate_createthumb',$createthumb);
 
   // do the work
@@ -90,7 +90,8 @@ if( isset($params['save']) ) {
   imagealphablending($rotated, false);
   imagesavealpha($rotated, true);
 
-  if( $croptosize ) {
+  if( $postrotate == 'crop' ) {
+    // calculates crop dimensions based on center of image
     $x2 = (int)($width / 2);
     $y2 = (int)($height / 2);
     $new_w = imagesx($rotated);
@@ -107,6 +108,37 @@ if( isset($params['save']) ) {
     imagefill($newimg,0,0,$bgcolor);
     imagesavealpha($newimg,TRUE);
     imagecopy($newimg,$rotated,0,0,$x0,$y0,$width,$height);
+    
+    imagedestroy($rotated);
+    $rotated = $newimg;
+  }
+  else if( $postrotate == 'resize' ) {
+    $src_w = imagesx($rotated);
+    $src_h = imagesy($rotated);
+
+    if( $width < $height ) {
+      // height is greater... 
+      $new_h = $height;
+      $new_w = round(($new_h / $src_h) * $src_w, 0);
+    }
+    else {
+      // width is greater.
+      $new_w = $width;
+      $new_h = round(($new_w / $src_w) * $src_h, 0);
+    }
+
+    $x0 = (int)(($src_w - $new_w) / 2);
+    $y0 = (int)(($src_h - $new_h) / 2);
+
+    //die("rotated={$src_w}x{$src_h} orig={$width}x{$height} new={$new_w},{$new_h} offset = $x0,$y0");
+    $newimg = imagecreatetruecolor($new_w,$new_h);
+    imagealphablending($newimg,FALSE);
+    imagecolortransparent($newimg,$bgcolor);
+    imagefill($newimg,0,0,$bgcolor);
+    imagesavealpha($newimg,TRUE);
+
+
+    imagecopyresampled($newimg,$rotated,$x0,$y0,0,0,$new_w,$new_h,$src_w,$src_h);
     
     imagedestroy($rotated);
     $rotated = $newimg;
@@ -135,8 +167,12 @@ if( isset($params['save']) ) {
 //
 // build the form
 //
+$opts = array('none'=>$this->Lang('none'),
+	      'crop'=>$this->Lang('crop'),
+	      'resize'=>$this->Lang('resize'));
+$smarty->assign('opts',$opts);
 $url = filemanager_utils::get_cwd_url()."/$filename";
-$smarty->assign('croptosize',$croptosize);
+$smarty->assign('postrotate',$postrotate);
 $smarty->assign('createthumb',$createthumb);
 $smarty->assign('filename',$filename);
 $smarty->assign('width',$width);

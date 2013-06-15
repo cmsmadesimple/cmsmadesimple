@@ -402,11 +402,11 @@ abstract class CmsAdminThemeBase
 		$items['editpage'] = array('url'=>'editcontent.php','parent'=>'pages',
 								   'title'=>$this->_FixSpaces(lang('editpage')),
 								   'description'=>lang('editpage'),'show_in_menu'=>false);
-		*/
 		$items['images'] = array('url'=>'imagefiles.php','parent'=>'content',
 								 'title'=>$this->_FixSpaces(lang('imagemanager')),
 								 'description'=>lang('imagemanagerdescription'),
 								 'show_in_menu'=>$this->HasPerm('filePerms'));
+		*/
 		// base layout menu ---------------------------------------------------------
 		$items['layout'] = array('url'=>'index.php?section=layout','parent'=>-1,'priority'=>3,
 								 'title'=>$this->_FixSpaces(lang('layout')),

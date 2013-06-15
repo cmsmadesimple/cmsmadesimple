@@ -321,9 +321,7 @@ final class cms_utils
 	{
 		if( !file_exists($srcfile) ) return;
 		$ext =  strtolower(strrchr($srcfile,'.'));
-		while( startswith($ext,'.') ) {
-			$ext = substr($ext,1);
-		}
+		while( startswith($ext,'.') ) $ext = substr($ext,1);
 		if( !in_array($ext,array('jpg','jpeg','png','bmp','gif')) ) {
 			return; // not gonna create a thumb on anything but an image.
 		} 
@@ -346,8 +344,7 @@ final class cms_utils
 
 		$transform = new Image_Transform;
 		$img = $transform->factory($config['image_manipulation_prog']);
-		$img->load($srcfile);
-	  
+		$img->load($srcfile);	  
 		$img->resize($width,$height);
 		$img->save($thumb);
 		return $thumb;

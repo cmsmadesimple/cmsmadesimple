@@ -72,7 +72,7 @@ if ($access) {
     $modops = $gCms->GetModuleOperations();
     $orig_lang = CmsNlsOperations::get_current_language();
     CmsNlsOperations::set_language('en_US');
-    $object = cms_utils::get_module($module);
+    $object = $modops->get_module_instance($module,'',TRUE);
     $xmltxt = $modops->CreateXMLPackage($object,$message,$files);
     CmsNlsOperations::set_language($orig_lang);
     if( $files == 0 ) {

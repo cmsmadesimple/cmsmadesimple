@@ -26,9 +26,9 @@ final class FileManager extends CMSModule {
   function GetName() { return 'FileManager'; }
   function LazyLoadFrontend() { return TRUE; }
   function GetChangeLog() { return $this->ProcessTemplate('changelog.tpl'); }
+  function GetHeaderHTML() { return $this->_output_header_javascript(); }
   function GetFriendlyName() { return $this->Lang('friendlyname'); }
   function GetVersion() { return '1.5'; }
-  function GetHeaderHTML() { return $this->_output_header_javascript(); }
   function GetHelp() { return $this->Lang('help'); }
   function GetAuthor() { return 'Morten Poulsen (Silmarillion)'; }
   function GetAuthorEmail() { return 'morten@poulsen.org'; }
@@ -54,12 +54,6 @@ final class FileManager extends CMSModule {
 
   public function AdvancedAccessAllowed() {
     return $this->CheckPermission('Use FileManager Advanced',0);
-  }
-
-  function GetActionIcon($action) {
-    $config = cmsms()->GetConfig();
-    return "<img style='border:0;' src='".$config["root_url"]."/modules/FileManager/icons/themes/default/actions/".strtolower($action).".gif' ".
-      "alt='".$this->Lang($action)."' />";
   }
 
   function GetFileIcon($extension,$isdir=false) {
@@ -92,7 +86,7 @@ final class FileManager extends CMSModule {
     return $result;
   }
 
-  function Slash($str,$str2="",$str3="") {
+  protected function Slash($str,$str2="",$str3="") {
     if ($str=="") return $str2;
     if ($str2=="") return $str;
     if ($str[strlen($str)-1]!="/") {
@@ -112,18 +106,7 @@ final class FileManager extends CMSModule {
     return "Error in Slash-function. Please report";
   }
 
-  function ContainsIllegalChars($filename) {
-    if (strpos($filename, "'")!==false) return true;
-    if (strpos($filename, "\"")!==false) return true;
-    if (strpos($filename, "/")!==false) return true;
-    if (strpos($filename, "\\")!==false) return true;
-    if (strpos($filename, "&")!==false) return true;
-    if (strpos($filename, "\$")!==false) return true;
-    if (strpos($filename, "+")!==false) return true;
-    return false;
-  }
-
-  function FormatFileSize($_size) {
+  protected function FormatFileSize($_size) {
     $unit=$this->Lang("bytes");
     $size=$_size;
 
@@ -147,9 +130,9 @@ final class FileManager extends CMSModule {
     return $result;
   }
 
-  function FormatPermissions($mode,$style="xxx") {
+  public function FormatPermissions($mode,$style="xxx") {
     switch ($style) {
-    case "xxx" : {
+    case 'xxx':
       $owner=0;
       if ($mode & 0400) $owner+=4;
       if ($mode & 0200) $owner+=2;
@@ -163,8 +146,8 @@ final class FileManager extends CMSModule {
       if ($mode & 0002) $others+=2;
       if ($mode & 0001) $others+=1;
       return $owner.$group.$others;
-    }
-    case "xxxxxxxxx" : {
+
+    case 'xxxxxxxxx':
       $owner="";					
       if ($mode & 0400) $owner.="r"; else $owner.="-";
       if ($mode & 0200) $owner.="w"; else $owner.="-";
@@ -179,38 +162,6 @@ final class FileManager extends CMSModule {
       if ($mode & 0001) $others.="x"; else $others.="-";
       return $owner.$group.$others;
     }
-    }
-  }
-
-  function SetMode($mode,$path,$file="") {
-    $config = cmsms()->GetConfig();
-    $realfile="";
-    if ($file!="") {
-      $realfile=$this->Slash($path,$file);
-    } else {
-      $realfile=$path;
-    }
-	  
-    return chmod($realfile,"0".octdec($mode));
-  }
-	
-  function SetModeWin($mode,$path,$file="") {
-    $config = cmsms()->GetConfig();
-    $realfile="";
-    if ($file!="") {
-      $realfile=$this->Slash($path,$file);
-    } else {
-      $realfile=$path;
-    }
-    $realfile=$this->WinSlashes($realfile);
-    $returnvar="";
-    $output=array();
-    if ($mode=="777") {
-      exec("attrib -R ".$realfile,$output,$returnvar);
-    } else {
-      exec("attrib +R ".$realfile,$output,$returnvar);
-    }
-    return ($returnvar==0);
   }
 
   function GetPermissions($path,$file) {
@@ -289,44 +240,6 @@ final class FileManager extends CMSModule {
     return $owner.$group.$others;
   }
 
-  function CHModMakesSense() {
-    return function_exists("posix_getpwuid");
-  }
-
-  function ParamsArray($params,$additional=array()) {
-    $path=""; if (isset($params["path"]) && $params["path"]!="") $path=$params["path"];
-  }
-
-  function ConfirmModeSanity($newmode) {
-    return true;
-  }
-	
-  function GetThumbnailLink($file,$path) {
-    $gCms = cmsms();
-
-    $config = $gCms->GetConfig();
-    $advancedmode = filemanager_utils::check_advanced_mode();
-    $basedir = $config['root_path'];
-    $baseurl = $config['root_url'];
-
-    $filepath=$basedir.'/'.$path;
-    $url=$baseurl.'/'.$path;
-    $image="";
-    $imagepath=$this->Slashes($filepath."/thumb_".$file["name"]);
-    if (!file_exists($imagepath)) {
-      $image=$this->GetFileIcon($file["ext"],$file["dir"]);
-    } else {
-      $imageurl=$url.'/thumb_'.$file["name"];
-      $image="<img src=\"".$imageurl."\" alt=\"".$file["name"]."\" title=\"".$file["name"]."\" />";
-    }
-
-    $result="<a href=\"".$file["url"]."\" target=\"_blank\">";
-    $result.=$image;
-    $result.="</a>";
-
-    return $result;
-  }
-
   function WinSlashes($url) {
     return str_replace("/","\\",$url);
   }
@@ -337,30 +250,34 @@ final class FileManager extends CMSModule {
     return $result;
   }
 
-  function CreateFilePickerButton($id,$inputname,$params) {
-    $output="";
-  }
-
   protected function _output_header_javascript()
   {
-    $urlpath = $this->GetModuleURLPath()."/js";
-    $files = array('jquery-file-upload/jquery.iframe-transport.js');
-    $files[] = 'jquery-file-upload/jquery.fileupload.js';
-    $files[] = 'jqueryrotate/jQueryRotate-2.2.min.js';
-    $fmt = '<script type="text/javascript" src="%s/%s"></script>';
-
     $out = '';
-    foreach( $files as $one ) {
+    $urlpath = $this->GetModuleURLPath()."/js";
+    $jsfiles = array('jquery-file-upload/jquery.iframe-transport.js');
+    $jsfiles[] = 'jquery-file-upload/jquery.fileupload.js';
+    $jsfiles[] = 'jqueryrotate/jQueryRotate-2.2.min.js';
+    $jsfiles[] = 'jrac/jquery.jrac.js';
+    
+    $fmt = '<script type="text/javascript" src="%s/%s"></script>';
+    foreach( $jsfiles as $one ) {
       $out .= sprintf($fmt,$urlpath,$one)."\n";
     }
+
+    $fmt = '<link rel="stylesheet" type="text/css" href="%s/%s"/>';
+    $cssfiles = array('jrac/style.jrac.css');
+    foreach( $cssfiles as $one ) {
+      $out .= sprintf($fmt,$urlpath,$one);
+    }
+
     return $out;
   }
 
-  function encodefilename($filename) {
+  protected function encodefilename($filename) {
     return str_replace("==","",base64_encode($filename));
   }
 
-  function decodefilename($encodedfilename) {
+  protected function decodefilename($encodedfilename) {
     return base64_decode($encodedfilename."==");
   }
 } // end of class

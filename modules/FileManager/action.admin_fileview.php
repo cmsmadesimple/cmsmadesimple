@@ -84,7 +84,6 @@ for ($i = 0; $i < count($filelist); $i++) {
   if ($filelist[$i]["image"]) {
     $onerow->type[] = 'image';
     $params['imagesrc'] = $path.'/'.$filelist[$i]['name'];
-    $onerow->editor = $this->CreateLink($id, "pie", $returnid, $titlelink, $params, "", true);
     if($this->GetPreference("showthumbnails", 0) == 1) $onerow->thumbnail = $this->GetThumbnailLink($filelist[$i], $path);
   }
 

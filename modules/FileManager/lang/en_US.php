@@ -40,7 +40,7 @@ $lang['create'] = 'Create';
 $lang['createnewdir'] = 'Create new directory';
 $lang['createthumbnail'] = 'Create <em>(or recreate)</em> an image thumbnail';
 $lang['create_thumbnails'] = 'Create thumbnails on upload';
-$lang['croptosize'] = 'Crop the rotated image to the size of the original image';
+$lang['crop'] = 'Crop';
 $lang['currentpath'] = 'Current path:';
 
 // D
@@ -110,6 +110,14 @@ $lang['help']=<<<EOF
 		<h3>How do I use it?</h3>
 		<p>Select it from the content-menu from in the admin.</p>
 EOF;
+$lang['help_postrotate'] = <<<EOT
+<p>Options:</p><br/>
+<ul>
+  <li><strong>None</strong> - No postrotate action will be taken.  The rotated image could be larger than the original image.</li>
+  <li><strong>Crop</strong> - The rotated image will be cropped to the size of the original source image.  This may result in some of the image being clipped.</li>
+<li><strong>Resize</strong> - The rotated image will be resized to fit inside the largest dimension of the rotated image.  The result will most likely be larger than the original image, but nothing should be clipped.';
+</ul>
+EOT;
 
 // I
 $lang['iconsize'] = 'Icon size';
@@ -179,7 +187,6 @@ $lang['packfilewritefail'] = 'Could not open the file %s for writing';
 $lang['permission'] = 'Usage of the File Manager module';
 $lang['permissionadvanced'] = 'Advanced usage of the File Manager module';
 $lang['permissionstyle'] = 'Permission style';
-$lang['pie'] = 'Resize/Crop';
 $lang['pie_image_natural_size'] = 'Image natual size';
 $lang['pie_lock_proportion'] = 'lock proportion';
 $lang['pie_resize'] = 'resize';
@@ -196,6 +203,7 @@ $lang['pie_warn_action'] = 'Are you sure? There is no Crtl+z down here..';
 $lang['pie_warn_reset'] = 'Are you sure? It will reset your current modifications';
 $lang['postinstall'] = 'FileManager module was installed';
 $lang['postletexists'] = 'Warning! Please remove the modules/FileManager/postlet directory completely. The CMS doesn\'t use it anymore.';
+$lang['postrotate'] = 'Action for after image rotation';
 $lang['predefined'] = 'Predefined Angles';
 $lang['prompt_copy'] = 'Copy one or more Items';
 $lang['prompt_dropfiles'] = 'Drop files here to upload';
@@ -213,9 +221,21 @@ $lang['renamecancelled'] = 'Renaming cancelled';
 $lang['renameerror'] = 'Error! Item could not be renamed';
 $lang['renamefailure'] = 'Renaming of file failed';
 $lang['renamesuccess'] = 'Item successfully renamed';
+$lang['resize'] = 'Resize';
+$lang['resizecrop'] = 'Resize/Crop';
 $lang['return'] = 'Return';
 $lang['rotate'] = 'Rotate';
 $lang['rotateimage'] = 'Rotate Image';
+$lang['rotate_neg180'] = 'Negative 180 degrees';
+$lang['rotate_neg135'] = 'Negative 135 degrees';
+$lang['rotate_neg90'] = 'Negative 90 degrees';
+$lang['rotate_neg45'] = 'Negative 45 degrees';
+$lang['rotate_neg30'] = 'Negative 30 degrees';
+$lang['rotate_pos30'] = 'Positive 30 degrees';
+$lang['rotate_pos45'] = 'Positive 45 degrees';
+$lang['rotate_pos90'] = 'Positive 90 degrees';
+$lang['rotate_pos135'] = 'Positive 135 degrees';
+$lang['rotate_pos180'] = 'Positive 180 degrees';
 $lang['rwxstyle'] = 'rwx style';
 
 // S

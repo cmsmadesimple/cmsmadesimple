@@ -106,6 +106,11 @@ if (isset($params["fileactionthumb"]) || $fileaction=="thumb") {
   return;
 }
 
+if (isset($params['fileactionresizecrop']) || $fileaction == 'resizecrop') {
+  include_once(__DIR__.'/action.resizecrop.php');
+  return;
+}
+
 if (isset($params['fileactionrotate']) || $fileaction == 'rotate') {
   include_once(__DIR__.'/action.rotate.php');
   return;

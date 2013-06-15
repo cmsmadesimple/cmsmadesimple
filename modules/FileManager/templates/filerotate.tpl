@@ -39,32 +39,34 @@ $(function(){
   </p>
 </div>
 <div class="pageoverflow">
-  <p class="pagetext">{$mod->Lang('angle')}: <input type="text" readonly="readonly" id="angletxt" name="{$actionid}angle" value="0"/></p>
+  <p class="pagetext"><label>{$mod->Lang('angle')}: <input type="text" readonly="readonly" id="angletxt" name="{$actionid}angle" value="0"/></label></p>
   <p class="pageinput">{$mod->Lang('predefined')}:
-    <button class="autorotate" id="neg180">-180</button>
-    <button class="autorotate" id="neg135">-135</button>
-    <button class="autorotate" id="neg90">-90</button>
-    <button class="autorotate" id="neg45">-45</button>
-    <button class="autorotate" id="neg30">-30</button>
-    <button class="autorotate" id="pos30">+30</button>
-    <button class="autorotate" id="pos45">+45</button>
-    <button class="autorotate" id="pos90">+90</button>
-    <button class="autorotate" id="pos135">+135</button>
-    <button class="autorotate" id="pos180">+180</button>
+    <button class="autorotate" id="neg180" title="{$mod->Lang('rotate_neg180')}">-180</button>
+    <button class="autorotate" id="neg135" title="{$mod->Lang('rotate_neg135')}">-135</button>
+    <button class="autorotate" id="neg90" title="{$mod->Lang('rotate_neg90')}">-90</button>
+    <button class="autorotate" id="neg45" title="{$mod->Lang('rotate_neg45')}">-45</button>
+    <button class="autorotate" id="neg30" title="{$mod->Lang('rotate_neg30')}">-30</button>
+    <button class="autorotate" id="pos30" title="{$mod->Lang('rotate_pos30')}">+30</button>
+    <button class="autorotate" id="pos45" title="{$mod->Lang('rotate_pos45')}">+45</button>
+    <button class="autorotate" id="pos90" title="{$mod->Lang('rotate_pos90')}">+90</button>
+    <button class="autorotate" id="pos135" title="{$mod->Lang('rotate_pos135')}">+135</button>
+    <button class="autorotate" id="pos180" title="{$mod->Lang('rotate_pos180')}">+180</button>
   </p>
   <p class="pageinput" id="rotangle" title="{$mod->Lang('info_rotate_slider')}">
   </p>
 </div>
 <div class="pageoverflow">
-  <p class="pagetext">{$mod->Lang('croptosize')}:</p>
+  <p class="pagetext"><label for="postrotate">{$mod->Lang('postrotate')}:</label>&nbsp;{cms_help key2='help_postrotate'}</p>
   <p class="pageinput">
-    <select name="{$actionid}croptosize">{cms_yesno selected=$croptosize}</select>
+    <select id="postrotate" name="{$actionid}postrotate">
+    {html_options options=$opts selected=$postrotate}
+    </select>
   </p>
 </div>
 <div class="pageoverflow">
-  <p class="pagetext">{$mod->Lang('createthumbnail')}:</p>
+  <p class="pagetext"><label for="createthumb">{$mod->Lang('createthumbnail')}:</label></p>
   <p class="pageinput">
-    <select name="{$actionid}createthumb">{cms_yesno selected=$createthumb}</select>
+    <select id="createthumb" name="{$actionid}createthumb">{cms_yesno selected=$createthumb}</select>
   </p>
 </div>
 <div class="pageoverflow">

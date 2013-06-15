@@ -41,8 +41,8 @@ refresh_url = refresh_url.replace(/amp;/g,'');
         $('#btn_thumb').removeAttr('disabled').removeClass('disabled');
         if( jQuery.ui ) $('#btn_thumb').button( "option", "disabled", false );
 
-        $('#btn_pie').removeAttr('disabled').removeClass('disabled');
-        if( jQuery.ui ) $('#btn_pie').button( "option", "disabled", false );
+        $('#btn_resizecrop').removeAttr('disabled').removeClass('disabled');
+        if( jQuery.ui ) $('#btn_resizecrop').button( "option", "disabled", false );
 
         $('#btn_rotate').removeAttr('disabled').removeClass('disabled');
         if( jQuery.ui ) $('#btn_rotate').button( "option", "disabled", false );
@@ -128,15 +128,6 @@ refresh_url = refresh_url.replace(/amp;/g,'');
         $(this).parent().find(':checkbox:').removeAttr('checked').trigger('change');
       }
     });
-
-    $('#btn_pie').live('click',function(){
-      // find the selected item.
-      var tmp = $("#filesarea input[type='checkbox']").filter(':checked:').val();
-      tmp = tmp.replace("=","");
-      var url = $("#pie_"+tmp).val();
-      window.open(url, 'image_editor', config='height=530, width=920, toolbar=no, menubar=no, location=no, directories=no, status=no');
-      return false;
-    });
   });
 // ]]>
 </script>
@@ -160,7 +151,7 @@ refresh_url = refresh_url.replace(/amp;/g,'');
     <input type="submit" id="btn_copy" name="{$actionid}fileactioncopy" value="{$mod->Lang('copy')}" class="filebtn"/> 
     <input type="submit" id="btn_unpack" name="{$actionid}fileactionunpack" value="{$mod->Lang('unpack')}" class="filebtn" onclick="return confirm('{$confirm_unpack}');"/>
     <input type="submit" id="btn_thumb" name="{$actionid}fileactionthumb" value="{$mod->Lang('thumbnail')}" class="filebtn"/>
-    <input type="submit" id="btn_pie" name="{$actionid}fileactionpie" value="{$mod->Lang('pie')}" class="filebtn"/>
+    <input type="submit" id="btn_resizecrop" name="{$actionid}fileactionresizecrop" value="{$mod->Lang('resizecrop')}" class="filebtn"/>
     <input type="submit" id="btn_rotate" name="{$actionid}fileactionrotate" value="{$mod->Lang('rotate')}" class="filebtn"/>
   </fieldset>
 
@@ -193,7 +184,7 @@ refresh_url = refresh_url.replace(/amp;/g,'');
 	{cycle values="row1,row2" assign=rowclass}
   <tr class="{$rowclass}">    
     <td valign="middle">{if isset($file->thumbnail) && $file->thumbnail!=''}{$file->thumbnail}{else}{$file->iconlink}{/if}</td>
-    <td class="clickable" valign="middle">{$file->txtlink}{if $file->editor}<input id='pie_{$file->urlname|replace:"=":""}' type='hidden' value='{$file->editor}&amp;showtemplate=false'/>{/if}</td>
+    <td class="clickable" valign="middle">{$file->txtlink}</td>
     <td class="clickable" valign="middle">{$file->mime}</td>
     <td class="clickable" style="padding-right:8px;" valign="middle">{$file->fileinfo}</td>
     <td class="clickable" style="padding-right:8px;" valign="middle">{if isset($file->fileowner)}{$file->fileowner}{else}&nbsp;{/if}</td>
