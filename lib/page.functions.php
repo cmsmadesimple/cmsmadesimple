@@ -123,13 +123,8 @@ function check_login($no_redirect = false)
  */
 function get_userid($check = true)
 {
-  if ($check) {
-    check_login(); //It'll redirect out to login if it fails
-  }
-
-  if (isset($_SESSION["cms_admin_user_id"])) {
-    return $_SESSION["cms_admin_user_id"];
-  }
+  if ($check) check_login(); //It'll redirect out to login if it fails
+  if (isset($_SESSION["cms_admin_user_id"])) return $_SESSION["cms_admin_user_id"];
   return false;
 }
 
@@ -295,10 +290,7 @@ function author_pages($userid)
 function quick_check_authorship($contentid, $hispages)
 {
   $check = false;
-
-  if (in_array($contentid, $hispages)) {
-    $check = true;
-  }
+  if (in_array($contentid, $hispages)) $check = true;
 
   return $check;
 }
@@ -335,13 +327,9 @@ function audit($itemid, $itemname, $action)
     }
   }
   
-  if (isset($_SESSION["cms_admin_username"])) {
-    $username = $_SESSION["cms_admin_username"];
-  }
+  if (isset($_SESSION["cms_admin_username"])) $username = $_SESSION["cms_admin_username"];
   
-  if (!isset($userid) || $userid == "") {
-    $userid = 0;
-  }
+  if (!isset($userid) || $userid == "") $userid = 0;
 
   $query = "INSERT INTO ".cms_db_prefix()."adminlog (timestamp, user_id, username, item_id, item_name, action, ip_addr) VALUES (?,?,?,?,?,?,?)";
   $db->Execute($query,array(time(),$userid,$username,$itemid,$itemname,$action,$ip_addr));
@@ -465,34 +453,9 @@ function & stripslashes_deep(&$value)
  */
 function create_textarea($enablewysiwyg, $text, $name, $classname = '', $id = '', $encoding = '', $stylesheet = '', $width = '80', $height = '15', $forcewysiwyg = '', $wantedsyntax = '', $addtext = '')
 {
-  // todo: rewrite me with var args... to accept a numeric array of arguments, or a hash.
-  $gCms = cmsms();
-  $haveit = FALSE;
-  $result = '';
-  $uid = get_userid(false);
-  if( !$classname ) $classname = "cms_textarea";
-
-  if ($enablewysiwyg == true || $forcewysiwyg) {
-    $haveit = TRUE;
-    $module = cms_utils::get_wysiwyg_module($forcewysiwyg);
-    $module->SetWYSIWYGActive();
-    $classname .= " cms_wysiwyg ".$module->GetName();
-  }
-
-  if( !$result && $wantedsyntax ) {
-    // here we should get a list of installed/available modules.
-    $module = cmsms()->GetModuleOperations()->GetSyntaxHighlighter($wantedsyntax);
-    $module->SetSyntaxActive();
-    $classname .= " cms_syntaxarea ".$module->GetName();
-    $haveit = TRUE;
-  }
-
-  $result = '<textarea name="'.$name.'" cols="'.$width.'" rows="'.$height.'"';
-  if ($classname != '') $result .= ' class="'.$classname.'"';
-  if ($id != '') $result .= ' id="'.$id.'"';
-  if( !empty( $addtext ) ) $result .= ' '.$addtext;
-  $result .= '>'.cms_htmlentities($text,ENT_NOQUOTES,get_encoding($encoding)).'</textarea>';
-  return $result;
+  return CmsFormUtils::create_textarea($enablewysiwyg,$text,$name,$classname,$id,
+				       $encoding,$stylesheet,$width,$height,$forcewysiwyg,
+				       $wantedsyntax,$addtext);
 }
 
 
@@ -585,24 +548,16 @@ function create_file_dropdown($name,$dir,$value,$allowed_extensions,$optprefix='
   $out = "<select name=\"{$name}\" id=\"{$name}\" {$extratext}>\n";
   if( $allownone ) {
     $txt = '';
-    if( empty($value) ) {
-      $txt = 'selected="selected"';
-    }
+    if( empty($value) ) $txt = 'selected="selected"';
     $out .= "  <option value=\"-1\" $txt>--- ".lang('none')." ---</option>\n";
   }
 
-  if( $sortresults ) {
-    natcasesort($files);
-  }
+  if( $sortresults ) natcasesort($files);
   foreach( $files as $file ) {
     $txt = '';
     $opt = $file;
-    if( !empty($optprefix) ) {
-      $opt = $optprefix.'/'.$file;
-    }
-    if( $opt == $value ) {
-      $txt = 'selected="selected"';
-    }
+    if( !empty($optprefix) ) $opt = $optprefix.'/'.$file;
+    if( $opt == $value ) $txt = 'selected="selected"';
     $out .= "  <option value=\"{$opt}\" {$txt}>{$file}</option>\n";
   }
   $out .= "</select>";
@@ -658,22 +613,15 @@ function get_pageid_or_alias_from_url()
   unset($_GET['query_var']);
 
   // by here, if page is empty, use the default page id
-  if ($page == '') {
-    // assume default content
-    $page = $contentops->GetDefaultContent();
-  }
+  if ($page == '') $page = $contentops->GetDefaultContent(); // assume default content
 
   // by here, if we're not assuming pretty urls of any sort
   // and we have a value... we're done.
-  if( $config['url_rewriting'] == 'none' ) {
-    return $page;
-  }
+  if( $config['url_rewriting'] == 'none' ) return $page;
 
   // some kind of a pretty url.
   // strip off GET params.
-  if( ($tmp = strpos($page,'?')) !== FALSE ) {
-    $page = substr($page,0,$tmp);
-  }
+  if( ($tmp = strpos($page,'?')) !== FALSE ) $page = substr($page,0,$tmp);
 
   // strip off page extension
   if ($config['page_extension'] != '' && endswith($page, $config['page_extension'])) {
@@ -697,16 +645,11 @@ function get_pageid_or_alias_from_url()
 
       // it's a module route
       //Now setup some assumptions
-      if (!isset($matches['id']))
-	$matches['id'] = 'cntnt01';
-      if (!isset($matches['action']))
-	$matches['action'] = 'defaulturl';
-      if (!isset($matches['inline']))
-	$matches['inline'] = 0;
-      if (!isset($matches['returnid']))
-	$matches['returnid'] = ''; #Look for default page
-      if (!isset($matches['module']))
-	$matches['module'] = $route->get_dest();
+      if (!isset($matches['id'])) $matches['id'] = 'cntnt01';
+      if (!isset($matches['action'])) $matches['action'] = 'defaulturl';
+      if (!isset($matches['inline'])) $matches['inline'] = 0;
+      if (!isset($matches['returnid']))	$matches['returnid'] = ''; #Look for default page
+      if (!isset($matches['module'])) $matches['module'] = $route->get_dest();
       
       //Get rid of numeric matches
       foreach ($matches as $key=>$val) {
@@ -714,8 +657,7 @@ function get_pageid_or_alias_from_url()
 	  unset($matches[$key]);
 	}
 	else {
-	  if ($key != 'id')
-	    $_REQUEST[$matches['id'] . $key] = $val;
+	  if ($key != 'id') $_REQUEST[$matches['id'] . $key] = $val;
 	}
       }
 
@@ -724,16 +666,12 @@ function get_pageid_or_alias_from_url()
       if (is_array($tmp) && count($tmp) > 0) {
 	foreach ($tmp as $key=>$val) {
 	  $_REQUEST[$matches['id'] . $key] = $val;
-	  if (array_key_exists($key, $matches)) {
-	    $matches[$key] = $val;
-	  }
+	  if (array_key_exists($key, $matches)) $matches[$key] = $val;
 	}
       }
 
       //Get a decent returnid
-      if ($matches['returnid'] == '') {
-	$matches['returnid'] = $contentops->GetDefaultPageID();
-      }
+      if ($matches['returnid'] == '') $matches['returnid'] = $contentops->GetDefaultPageID();
 
       // Put the resulting mact into the request so that the subsequent smarty plugins
       // can grab it...
@@ -745,16 +683,10 @@ function get_pageid_or_alias_from_url()
   }
 
   // if no route matched... grab the alias from the last /
-  if( ($pos = strrpos($page,'/')) !== FALSE && $matched == false ) {
-    $page = substr($page, $pos + 1);
-  }
+  if( ($pos = strrpos($page,'/')) !== FALSE && $matched == false ) $page = substr($page, $pos + 1);
 
   // if there's nothing use the default content.
-  if( empty($page) ) {
-    // maybe it's the home page.
-    $page = $contentops->GetDefaultContent();
-  }
-
+  if( empty($page) ) $page = $contentops->GetDefaultContent(); // maybe it's the home page.
   return $page;
 }
 

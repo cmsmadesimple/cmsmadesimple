@@ -1,7 +1,10 @@
 <?php
 
-class CmsFormUtils 
+final class CmsFormUtils 
 {
+  private static $_activated_wysiwyg;
+  private static $_activated_syntax;
+
   private function __construct() {}
 
   public static function create_option($key,$value,$selected = '',$title = '') 
@@ -89,6 +92,91 @@ class CmsFormUtils
     $out .= ">".$options."</select>\n";
 
     return $out;
+  }
+
+  private static function _add_syntax($module_name)
+  {
+    if( !is_array(self::$_activated_syntax) ) self::$_activated_syntax = array();
+    if( !in_array($module_name,self::$_activated_syntax) ) {
+      self::$_activated_syntax[] = $module_name;
+    }
+  }
+
+  public static function get_syntax_modules()
+  {
+    return self::$_activated_syntax;
+  }
+
+  private static function _add_wysiwyg($module_name)
+  {
+    if( !is_array(self::$_activated_wysiwyg) ) self::$_activated_wysiwyg = array();
+    if( !in_array($module_name,self::$_activated_wysiwyg) ) {
+      self::$_activated_wysiwyg[] = $module_name;
+    }
+  }
+
+  public static function get_wysiwyg_modules()
+  {
+    return self::$_activated_wysiwyg;
+  }
+
+
+  /**
+   * A method to create a text area control
+   *
+   * @internal
+   * @access private
+   * @param boolean Wether or not we are enabling a wysiwyg.  If false, and forcewysiwyg is not empty then a syntax area is used.
+   * @param string  The contents of the text area
+   * @param string  The name of the text area
+   * @param string  An optional class name
+   * @param string  An optional ID (HTML ID) value
+   * @param string  The optional encoding
+   * @param string  Optional style information
+   * @param integer Width (the number of columns) (CSS can and will override this)
+   * @param integer Hieght (the number of rows) (CSS can and will override this)
+   * @param string  Optional name of the syntax hilighter or wysiwyg to use.  If empty, preferences indicate which a syntax editor or wysiwyg should be used.
+   * @param string  Optional name of the language used.  If non empty it indicates that a syntax highlihter will be used.
+   * @param string  Optional additional text to include in the textarea tag
+   * @return string
+   * @deprecated
+   */
+  public static function create_textarea($enablewysiwyg, $text, $name, $classname = '', $id = '', 
+			   $encoding = '', $stylesheet = '', $width = '80', $height = '15', 
+			   $forcewysiwyg = '', $wantedsyntax = '', $addtext = '')
+  {
+    // todo: rewrite me with var args... to accept a numeric array of arguments, or a hash.
+    $gCms = cmsms();
+    $haveit = FALSE;
+    $result = '';
+    $uid = get_userid(false);
+    if( !$classname ) $classname = "cms_textarea";
+
+    if ($enablewysiwyg == true || $forcewysiwyg) {
+      $haveit = TRUE;
+      $module = cms_utils::get_wysiwyg_module($forcewysiwyg);
+      if( $module ) {
+	self::_add_wysiwyg($module->GetName());
+	$classname .= " cms_wysiwyg ".$module->GetName();
+      }
+    }
+
+    if( !$haveit && $wantedsyntax ) {
+      // here we should get a list of installed/available modules.
+      $haveit = TRUE;
+      $module = cmsms()->GetModuleOperations()->GetSyntaxHighlighter($wantedsyntax);
+      if( $module ) {
+	self::_add_syntax($module->GetName());
+	$classname .= " cms_syntaxarea ".$module->GetName();
+      }
+    }
+
+    $result = '<textarea name="'.$name.'" cols="'.$width.'" rows="'.$height.'"';
+    if ($classname != '') $result .= ' class="'.$classname.'"';
+    if ($id != '') $result .= ' id="'.$id.'"';
+    if( !empty( $addtext ) ) $result .= ' '.$addtext;
+    $result .= '>'.cms_htmlentities($text,ENT_NOQUOTES,get_encoding($encoding)).'</textarea>';
+    return $result;
   }
 
 } // end of class

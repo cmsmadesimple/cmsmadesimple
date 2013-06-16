@@ -33,20 +33,21 @@ $headertext = '';
 $formtext = '';
 $formsubmittext = '';
 $bodytext = '';
-
 $userid = get_userid();
 
-// get the active wysiwyg
-$loaded = ModuleOperations::get_instance()->GetLoadedModules();
-if( is_array($loaded) && count($loaded) ) {
-  foreach( $loaded as $name => &$object ) {
-    if( !is_object($object) ) continue;
-    if( $object->IsWYSIWYG() && $object->WYSIWYGActive() ) {
-      $headertext .= $object->WYSIWYGGenerateHeader($htmlresult);
-    }
-    else if( $object->IsSyntaxHighlighter() && $object->SyntaxActive() ) {
-      $headertext .= $object->SyntaxGenerateHeader($htmlresult);
-    }
+// get the active wysiwyg and syntax modules initialized.
+$list = CmsFormUtils::get_wysiwyg_modules();
+if( is_array($list) && count($list) ) {
+  foreach( $list as $one ) {
+    $obj = cms_utils::get_module($one);
+    if( is_object($obj) ) $headertext .= $obj->WYSIWYGGenerateHeader($htmlresult);
+  }
+}
+$list = CmsFormUtils::get_syntax_modules();
+if( is_array($list) && count($list) ) {
+  foreach( $list as $one ) {
+    $obj = cms_utils::get_module($one);
+    if( is_object($obj) ) $headertext .= $obj->SyntaxGenerateHeader($htmlresult);
   }
 }
 

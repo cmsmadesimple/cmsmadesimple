@@ -57,11 +57,6 @@ if( !$modinst ) {
   redirect("index.php".$urlext);
 }
 
-if( get_preference($userid,'use_wysiwyg') == '1' && $modinst->IsWYSIWYG() ) {
-  $htmlarea_flag = "true";
-  $htmlarea_replaceall = true;
-}
-
 $USE_THEME = true;
 $USE_OUTPUT_BUFFERING = true;
 if (isset($_REQUEST[$id . 'disable_buffer']) || isset($_REQUEST['disable_buffer']) ) {

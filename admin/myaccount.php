@@ -209,7 +209,7 @@ $smarty->assign('SECURE_PARAM_NAME', CMS_SECURE_PARAM_NAME); // Assigned at incl
 $smarty->assign('CMS_USER_KEY', $_SESSION[CMS_USER_KEY]); // Assigned at include.php?
 
 # WYSIWYG editor
-$tmp = module_meta::get_instance()->module_list_by_method('IsWYSIWYG');
+$tmp = module_meta::get_instance()->module_list_by_capability('wysiwyg');
 $tmp2 = array(-1 => lang('none'));
 for ($i = 0; $i < count($tmp); $i++) {
   $tmp2[$tmp[$i]] = $tmp[$i];

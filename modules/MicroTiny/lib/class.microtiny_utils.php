@@ -270,7 +270,6 @@ class microtiny_utils
 
     $level=0;
     $menu="m";
-
     foreach ($content_array as $one) {
       if ($one->Active()!=1) continue;
       if ($one->FriendlyName() == 'Separator') {

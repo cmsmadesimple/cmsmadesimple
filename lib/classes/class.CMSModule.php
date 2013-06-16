@@ -1552,44 +1552,6 @@ abstract class CMSModule
    */
 
   /**
-   * Returns true if this module should be treated as a WYSIWYG module. It
-   * returns false be default.
-   *
-   * @abstract
-   * @return boolean
-   */
-  function IsWYSIWYG()
-  {
-    return false;
-  }
-
-  /**
-   * Returns true if this wysiwyg should be considered active, eventhough it's
-   * not the choice of the user. Used for forcing a wysiwyg.
-   * returns false be default.
-   *
-   * @abstract
-   * @return boolean
-   */
-  function WYSIWYGActive()
-  {
-    return FALSE;
-  }
-
-  /**
-   * Set the wysiwyg module as active.
-   *
-   * @since 2.0
-   * @abstract
-   * @param flag boolean
-   * @return void
-   */
-  function SetWYSIWYGActive($flag = TRUE)
-  {
-	  // nothing here.
-  }
-
-  /**
    * Returns header code specific to this WYSIWYG
    *
    * @abstract
@@ -2352,7 +2314,7 @@ abstract class CMSModule
    */
   function CreateTextArea($enablewysiwyg, $id, $text, $name, $classname='', $htmlid='', $encoding='', $stylesheet='', $cols='80', $rows='15',$forcewysiwyg='',$wantedsyntax='',$addtext='')
   {
-    return create_textarea($enablewysiwyg, $text, $id.$name, $classname, $htmlid, $encoding, $stylesheet, $cols, $rows,$forcewysiwyg,$wantedsyntax,$addtext);
+	  return CmsFormUtils::create_textarea($enablewysiwyg, $text, $id.$name, $classname, $htmlid, $encoding, $stylesheet, $cols, $rows,$forcewysiwyg,$wantedsyntax,$addtext);
   }
 
 

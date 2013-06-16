@@ -483,7 +483,7 @@ $smarty->assign('pretty_urls',$pretty_urls);
 
 // need a list of wysiwyg modules.
 {
-  $tmp = module_meta::get_instance()->module_list_by_method('IsWYSIWYG');
+  $tmp = module_meta::get_instance()->module_list_by_capability('wysiwyg');
   $tmp2 = array(-1=>lang('none'));
   for( $i = 0; $i < count($tmp); $i++ ) {
     $tmp2[$tmp[$i]] = $tmp[$i];

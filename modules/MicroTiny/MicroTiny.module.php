@@ -23,14 +23,11 @@
 
 class MicroTiny extends CMSModule 
 {
-  private $wysiwygactive;
-
   public function __construct() { parent::__construct(); }
   public function GetName() { return 'MicroTiny'; }
   public function GetFriendlyName() { return $this->Lang("friendlyname"); }
   public function GetVersion(){ return '1.3'; }
   public function HasAdmin() { return TRUE; }
-  public function IsWYSIWYG() { return TRUE; }
   public function IsPluginModule() { return TRUE; }
   public function LazyLoadFrontend() { return TRUE; }
   public function LazyLoadAdmin() { return TRUE; }
@@ -57,9 +54,5 @@ class MicroTiny extends CMSModule
     return $this->wysiwygactive;
   }
 
-  public function SetWYSIWYGActive($flag = true)
-  {
-    $this->wysiwygactive = (bool)$flag;
-  }
 } // end of module class
 ?>
