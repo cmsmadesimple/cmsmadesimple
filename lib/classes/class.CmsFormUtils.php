@@ -151,7 +151,8 @@ final class CmsFormUtils
     $result = '';
     $uid = get_userid(false);
     if( !$classname ) $classname = "cms_textarea";
-
+    if( !$id ) $id = $name;
+    
     if ($enablewysiwyg == true || $forcewysiwyg) {
       $haveit = TRUE;
       $module = cms_utils::get_wysiwyg_module($forcewysiwyg);

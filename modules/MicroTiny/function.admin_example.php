@@ -1,6 +1,5 @@
 <?php
 
-$this->SetWYSIWYGActive();
 if (!$this->VisibleToAdminUser()) {
 	$this->ShowErrors($this->Lang("accessdenied"));
 	return;
