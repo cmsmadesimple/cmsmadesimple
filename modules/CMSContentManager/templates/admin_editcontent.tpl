@@ -1,10 +1,24 @@
+<style type="text/css">
+form.dirtyForm { color: salmon; }
+</style>
+
 <script type="text/javascript">
 // <![CDATA[
-$(document).ready(function(){ 
+$(document).ready(function(){
+  $('#Edit_Content').dirtyForm({
+    onDirty: function(){
+      $('[name$=apply],[name$=submit]').show('slow');
+    }
+  });
+  $(document).on('cmsms_textchange',function(event){
+    // editor textchange, set the form dirty.
+    $('#Edit_Content').dirtyForm('option','dirty',true);
+  });
+  $('[name$=apply],[name$=submit]').hide();
+
   {if $content_obj->HasPreview()}
   $('#_preview_').click(function(){
     // serialize the form data
-    {$wysiwyg_submit_script|default:''}
     var data = $('#Edit_Content').find('input:not([type=submit]), select, textarea').serializeArray();
     data.push({ 'name': '{$actionid}preview', 'value': 1});
     data.push({ 'name': '{$actionid}ajax', 'value': 1});
@@ -14,11 +28,19 @@ $(document).ready(function(){
   });
   {/if}
 
+  // here we want to disable the dirtyform stuff when these fields are changed
+  $('#content_type').change(function(){
+    $('#Edit_Content').dirtyForm('disable');
+  });
+  $('#id_disablewysiwyg').change(function(){
+    $('#Edit_Content').dirtyForm('disable');
+  });
+
   $('#template_id, #content_type').live('change',function(){
     $(this).closest('form').submit();
   });
 
-  $('[name=cancel]').click(function(){
+  $('[name$=cancel]').click(function(){
     var tmp = $(this).val();
     if( tmp == '{$mod->Lang('close')}' ) {
       return true;
@@ -28,8 +50,7 @@ $(document).ready(function(){
     }
   });
 
-  $('[name=apply]').live('click',function(){
-    {$wysiwyg_submit_script|default:''}
+  $('[name$=apply]').live('click',function(){
     var data = $('#Edit_Content').find('input:not([type=submit]), select, textarea').serializeArray();
     data.push({ 'name': '{$actionid}ajax', 'value': 1});
     data.push({ 'name': '{$actionid}apply', 'value': 1 });

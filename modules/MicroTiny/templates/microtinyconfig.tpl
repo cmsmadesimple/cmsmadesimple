@@ -31,6 +31,17 @@ function microTiny_init(idlist_string) {
    theme_advanced_buttons2 : "",
    theme_advanced_buttons3 : "",
    {if $isfrontend == false}
+   setup: function(ed) {
+     ed.onChange.add(function(ed,l) {
+       if(typeof(jQuery) != 'undefined') {
+	 $(ed.getElement()).trigger('cmsms_textchange',{
+           'elem': ed.getElement(),
+	   'module': 'MicroTiny',
+           'content': l.content 
+         });
+       }
+     });
+   },
    {if $show_statusbar == 1}
    theme_advanced_statusbar_location: "bottom",
    {if $allow_resize == 1}

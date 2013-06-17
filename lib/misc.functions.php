@@ -1277,6 +1277,7 @@ function cms_get_jquery($exclude = '',$ssl = null,$cdn = false,$append = '',$cus
       $scripts['cms_js_setup'] = '<script type="text/javascript" src="'.$url.'/cms_js_setup.php?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY].'"></script>'."\n";
     }
     $scripts['jquery.cms_admin.js'] = '<script type="text/javascript" src="'.$basePath.'/lib/jquery/js/jquery.cms_admin.js"></script>'."\n";
+    $scripts['jquery.cmsms_dirtyform.js'] = '<script type="text/javascript" src="'.$basePath.'/lib/jquery/js/jquery.cmsms_dirtyform.js"></script>'."\n";
   }
 
   // Check if we need exclude some script

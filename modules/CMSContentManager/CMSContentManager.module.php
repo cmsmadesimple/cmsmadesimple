@@ -98,6 +98,15 @@ final class CMSContentManager extends CMSModule
     }
     return $out;
   }
+
+  public function GetHeaderHTML()
+  {
+    $config = cmsms()->GetConfig();
+    $url = $config['root_url'].'/lib/jquery/dirtyFields/jquery.dirtyFields.packed.js';
+    $fmt = '<script type="text/javascript" src="%s"></script>';
+    return sprintf($fmt,$url);
+  }
+
 } // class
 
 ?>

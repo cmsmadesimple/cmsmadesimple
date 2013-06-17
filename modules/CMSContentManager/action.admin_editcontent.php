@@ -124,20 +124,20 @@ try {
   if( $content_id != -1 && $content_type != $content_obj->Type() ) {
     // content type changed. create a new content object, but preserve the id.
     $tmpobj = $contentops->CreateNewContent($content_type);
-    $tmpobj->SetId($contentobj->Id());
-    $tmpobj->SetName($contentobj->Name());
-    $tmpobj->SetMenuText($contentobj->MenuText());
-    $tmpobj->SetTemplateId($contentobj->TemplateId());
-    $tmpobj->SetParentId($contentobj->ParentId());
-    $tmpobj->SetAlias($contentobj->Alias());
-    $tmpobj->SetOwner($contentobj->Owner());
-    $tmpobj->SetActive($contentobj->Active());
-    $tmpobj->SetItemOrder($contentobj->ItemOrder());
-    $tmpobj->SetShowInMenu($contentobj->ShowInMenu());
-    $tmpobj->SetCachable($contentobj->Cachable());
-    $tmpobj->SetHierarchy($contentobj->Hierarchy());
-    $tmpobj->SetLastModifiedBy($contentobj->LastModifiedBy());
-    $tmpobj->SetAdditionalEditors($contentobj->GetAdditionalEditors());
+    $tmpobj->SetId($content_obj->Id());
+    $tmpobj->SetName($content_obj->Name());
+    $tmpobj->SetMenuText($content_obj->MenuText());
+    $tmpobj->SetTemplateId($content_obj->TemplateId());
+    $tmpobj->SetParentId($content_obj->ParentId());
+    $tmpobj->SetAlias($content_obj->Alias());
+    $tmpobj->SetOwner($content_obj->Owner());
+    $tmpobj->SetActive($content_obj->Active());
+    $tmpobj->SetItemOrder($content_obj->ItemOrder());
+    $tmpobj->SetShowInMenu($content_obj->ShowInMenu());
+    $tmpobj->SetCachable($content_obj->Cachable());
+    $tmpobj->SetHierarchy($content_obj->Hierarchy());
+    $tmpobj->SetLastModifiedBy($content_obj->LastModifiedBy());
+    $tmpobj->SetAdditionalEditors($content_obj->GetAdditionalEditors());
     $tmpobj->Properties();
     $content_obj = $tmpobj;
   }
