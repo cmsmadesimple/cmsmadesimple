@@ -1,5 +1,20 @@
+<script type="text/javascript">
+$(document).ready(function(){
+  $('#edit_news').dirtyForm({
+    onDirty: function(){
+      $('[name$=apply],[name$=submit]').show('slow');
+    }
+  });
+  $(document).on('cmsms_textchange',function(event){
+    // editor textchange, set the form dirty.
+    $('#edit_news').dirtyForm('option','dirty',true);
+  });
+});
+</script>
+
 <div id="editarticle_result"></div>
 
+<div id="edit_news">
 {$startform}
 <div class="pageoverflow">
   <p class="pagetext">&nbsp;</p>
@@ -184,3 +199,4 @@ jQuery(document).ready(function(){
   <p class="pageinput">{$hidden}{$submit}{$cancel}{if isset($apply)}{$apply}{/if}</p>
 </div>
 {$endform}
+</div>{* #edit_news *}
