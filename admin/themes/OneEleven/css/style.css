@@ -513,6 +513,15 @@ menu {
 	border-right: 1px solid #ddd;	
 	background: #f0f0f0		
 }
+textarea {
+	resize: both;
+}
+.resize-horizontal {
+	resize: horizontal;
+}
+.resize-vertical {
+	resize: vertical;
+}
 input {
 	text-indent: 5px;
 	margin-right: 5px
@@ -576,10 +585,16 @@ input[type="checkbox"] {
 	border: none
 }
 textarea {
+	min-width: 30em;
+	min-height: 20em;
+}
+/*
+textarea {
 	width: 48em;
 	height: 30em;
 	overflow: auto
 }
+*/
 /* Notification messages */
 .orange {
 	color: #e6c26e
@@ -669,6 +684,9 @@ textarea {
 	margin: 2px 0;
 	font-size: 14px;
 	color: #e6c26e
+}
+.block {
+	display: block;
 }
 aside.message,
 .pagemcontainer,
@@ -1595,15 +1613,18 @@ p.pagemessage {
 input.pagecheckbox {
 	border: none
 }
+/*
 textarea.pagebigtextarea {
 	height: 40em;
 	width: 55em
 }
+*/
 .pageinput textarea {
 	font-family: Consolas, 'Andale Mono WT', 'Andale Mono', 'Lucida Console', 'Lucida Sans Typewriter', 'Courier New', monospace;
 	font-size: 12px;
 	line-height: 1.6
 }
+/*
 textarea.pagesmalltextarea {
 	height: 15em;
 	width: 48em
@@ -1612,6 +1633,7 @@ textarea.pageextrasmalltextarea {
 	height: 8em;
 	width: 28em;
 }
+*/
 /*** tabs ***/
 #page_tabs {
 	overflow: hidden;
@@ -2047,10 +2069,12 @@ a.toggle-dropzone:focus {
 	.sidebar-on #page_tabs div.active {
 		color: #fff;
 		background: #147fdb
-	}	
+	}
+	/*
 	textarea {
 		width: 43em;
 	}
+	*/
 	header .header-top {
 		overflow: hidden
 	}
@@ -2262,6 +2286,7 @@ a.toggle-dropzone:focus {
 		max-width: 90%
 	}
 	textarea {
+		min-width: auto;
 		max-width: 40em
 	}
 	iframe {
@@ -2310,6 +2335,7 @@ a.toggle-dropzone:focus {
 	}
 	textarea,
 	select {
+		min-width: auto;
 		max-width: 23em
 	}
 	#login div.login-container,
