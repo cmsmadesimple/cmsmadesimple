@@ -1,5 +1,5 @@
 /*
- * jQuery XDomainRequest Transport Plugin 1.0.2
+ * jQuery XDomainRequest Transport Plugin 1.1.3
  * https://github.com/blueimp/jQuery-File-Upload
  *
  * Copyright 2011, Sebastian Tschan
@@ -13,11 +13,20 @@
  */
 
 /*jslint unparam: true */
-/*global jQuery, window, XDomainRequest */
+/*global define, window, XDomainRequest */
 
-(function ($) {
+(function (factory) {
     'use strict';
-    if (window.XDomainRequest) {
+    if (typeof define === 'function' && define.amd) {
+        // Register as an anonymous AMD module:
+        define(['jquery'], factory);
+    } else {
+        // Browser globals:
+        factory(window.jQuery);
+    }
+}(function ($) {
+    'use strict';
+    if (window.XDomainRequest && !$.support.cors) {
         $.ajaxTransport(function (s) {
             if (s.crossDomain && s.async) {
                 if (s.timeout) {
@@ -27,20 +36,22 @@
                 var xdr;
                 return {
                     send: function (headers, completeCallback) {
+                        var addParamChar = /\?/.test(s.url) ? '&' : '?';
                         function callback(status, statusText, responses, responseHeaders) {
-                            xdr.onload = xdr.onerror = xdr.ontimeout = jQuery.noop;
+                            xdr.onload = xdr.onerror = xdr.ontimeout = $.noop;
                             xdr = null;
                             completeCallback(status, statusText, responses, responseHeaders);
                         }
                         xdr = new XDomainRequest();
                         // XDomainRequest only supports GET and POST:
                         if (s.type === 'DELETE') {
-                            s.url = s.url + (/\?/.test(s.url) ? '&' : '?') +
-                                '_method=DELETE';
+                            s.url = s.url + addParamChar + '_method=DELETE';
                             s.type = 'POST';
                         } else if (s.type === 'PUT') {
-                            s.url = s.url + (/\?/.test(s.url) ? '&' : '?') +
-                                '_method=PUT';
+                            s.url = s.url + addParamChar + '_method=PUT';
+                            s.type = 'POST';
+                        } else if (s.type === 'PATCH') {
+                            s.url = s.url + addParamChar + '_method=PATCH';
                             s.type = 'POST';
                         }
                         xdr.open(s.type, s.url);
@@ -65,7 +76,7 @@
                     },
                     abort: function () {
                         if (xdr) {
-                            xdr.onerror = jQuery.noop();
+                            xdr.onerror = $.noop();
                             xdr.abort();
                         }
                     }
@@ -73,4 +84,4 @@
             }
         });
     }
-}(jQuery));
+}));
