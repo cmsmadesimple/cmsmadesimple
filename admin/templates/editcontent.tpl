@@ -14,7 +14,7 @@ $(document).ready(function(){
   });
   {/if}
 
-  $('#template_id, #content_type').live('change',function(){
+  $('#template_id, #content_type').on('change',function(){
     $(this).closest('form').submit();
   });
 
@@ -28,7 +28,7 @@ $(document).ready(function(){
     }
   });
 
-  $('[name=apply]').live('click',function(){
+  $('[name=apply]').on('click',function(){
     {$wysiwyg_submit_script}
     var data = $('#Edit_Content').find('input:not([type=submit]), select, textarea').serializeArray();
     data.push({ 'name': 'ajax', 'value': 1});

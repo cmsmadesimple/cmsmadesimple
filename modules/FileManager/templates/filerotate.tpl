@@ -17,7 +17,7 @@ $(function(){
 			    $('#rotimg').rotate({ animateTo: ui.value });
                           }
                         });
-   $('button.autorotate').live('click',function(){
+   $('button.autorotate').on('click',function(){
       var id = $(this).attr('id');
       var dir = id.substr(0,3);
       var val = parseInt(id.substr(3),10);

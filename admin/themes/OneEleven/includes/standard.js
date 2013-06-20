@@ -1,17 +1,3 @@
-// ACTIVATE A TAB
-function activatetab(index) {
-    var container = jQuery('#navt_tabs');
-    if (container.length === 0) {
-        container = jQuery('#page_tabs');
-    }
-    container.find('div:eq(' + index + ')').mousedown();
-}
-
-// JQUERY WRAPPER FOR BACKWARDS COMPATIBILITY
-function togglecollapse(cid) {
-    jQuery('#' + cid).toggle();
-}
-
 // EQUAL HEIGHT COLS
 function equalHeight(group) {
     var tallest = 0;
@@ -24,39 +10,13 @@ function equalHeight(group) {
     group.height(tallest);
 }
 
-jQuery(document).ready(function($) {
 
-    // Test for textarea CSS resize property
-    var resizableTextArea = (function() {
-        var textarea = document.createElement('textarea');
-
-        if (textarea.style.resize == undefined || $('textarea').hasClass('resizable')) {
-            $('textarea').resizable({
-                handles: 'se',
-                ghost: true
-            });
-        }
-    })()
+jQuery(document).ready(function() {
 
     // EXTERNAL LINKS
     $('a[rel=external]').attr('target', '_blank');
     // AUTOFOCUS
     $('input.defaultfocus:eq(0)').focus();
-
-    // INIT NAV TABS
-    var tabs = $('#navt_tabs, #page_tabs').find('div');
-    tabs.mousedown(function() {
-        tabs.each(function() {
-            $(this).removeClass('active');
-            $('#' + $(this).attr('id') + '_c').hide();
-        });
-        $(this).addClass('active');
-        $('#' + $(this).attr('id') + '_c').show();
-        return true;
-    });
-    if (tabs.filter('.active').mousedown().length === 0) {
-        activatetab(0);
-    }
 
     // SIDEBAR
     var objMain = $('#oe_container');
@@ -165,24 +125,6 @@ jQuery(document).ready(function($) {
         $('.pageheader').addClass('drop-hidden');
     }
 
-    // Jquery UI DIALOG
-    $(function() {
-        var dialogs = {};
-        $('.dialog').each(function() {
-            var dialog_id = $(this).prev('.open').attr('title');
-            dialogs[dialog_id] = $(this).dialog({
-                autoOpen : false,
-                modal : true,
-                title : '<strong> ' + $(this).attr('title') + ' </strong>'
-            });
-        });
-        $('.open').click(function(event) {
-            event.preventDefault();
-            dialogs[$(this).attr('title')].dialog('open').removeClass('invisible');
-            $('.ui-dialog').css('top', '120px');
-            return false;
-        });
-    });
     // SIDEBAR MENU
     $(function() {
         var pagemenu = $('#oe_pagemenu');
@@ -307,4 +249,4 @@ jQuery(document).ready(function($) {
     jQuery.event.add(window, "load", resizeFrame);
     jQuery.event.add(window, "resize", resizeFrame);
 
-});
+}); 

@@ -106,7 +106,7 @@ $(document).ready(function(){
 {$start_tab_preview}
 <script type="text/javascript">{literal}
 jQuery(document).ready(function(){
-  jQuery('[name=m1_apply]').live('click',function(){
+  jQuery('[name=m1_apply]').on('click',function(){
     if( typeof tinyMCE != 'undefined') tinyMCE.triggerSave();
     var data = jQuery('form').find('input:not([type=submit]), select, textarea').serializeArray();
     data.push({'name': 'm1_ajax', 'value': 1});

@@ -43,7 +43,7 @@ $(document).ready(function(){
   if( typeof(sel_all) != undefined ) {
     $('#filter_box input:checkbox').attr('checked','checked');
   }
-  $('#filter_box input:checkbox').live('click',function(e){
+  $('#filter_box input:checkbox').on('click',function(e){
     var v = $(this).val();
     if( v == -1 ) {
       var t = $(this).attr('checked');
@@ -57,10 +57,10 @@ $(document).ready(function(){
       $('#filter_all').removeAttr('checked');
     }
   });
-  $('#searchbtn').live('click',function(e){
+  $('#searchbtn').on('click',function(e){
     $('#searchresults').html('');
   });
-  $('li.section').live('click',function(){
+  $('li.section').on('click',function(){
     $('.section_children').hide();
     $(this).children('ul').show();
   });

@@ -24,7 +24,7 @@
 		<!-- THIS IS WHERE HEADER STUFF SHOULD GO -->
 	 	{$headertext|default:''}
 		<!-- custom jQueryUI Theme 1.8.21 see style.css or link in UI Stylesheet for color reference //-->
-		<link href="{$config.admin_url}/themes/OneEleven/css/default-cmsms/jquery-ui-1.8.21.custom.css" rel="stylesheet" />
+		<link href="{$config.admin_url}/themes/OneEleven/css/default-cmsms/jquery-ui-1.10.3.custom.min.css" rel="stylesheet" />
         {module_available name='FileManager' assign='fmgood'}
         {if isset($fmgood) && $fmgood}{cms_module module=FileManager action='javascript'}{/if}
 	</head>

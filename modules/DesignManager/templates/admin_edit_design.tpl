@@ -62,7 +62,7 @@
 
 <script type="text/javascript">
 $(document).ready(function(){
-  $('#submitme').live('click',function(){
+  $('#submitme').on('click',function(){
     $('select.selall').attr('multiple','multiple');	
     $('select.selall option').attr('selected','selected');
   });

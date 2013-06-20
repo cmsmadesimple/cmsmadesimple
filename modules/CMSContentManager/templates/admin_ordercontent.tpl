@@ -12,7 +12,7 @@ function parseTree(ul) {
 }
 
 $(document).ready(function(){
-  $('#btn_submit').live('click',function(){
+  $('#btn_submit').on('click',function(){
     if( confirm('') ) {
       var tree = $.toJSON(parseTree($('#masterlist')));
       var ajax_res = false;

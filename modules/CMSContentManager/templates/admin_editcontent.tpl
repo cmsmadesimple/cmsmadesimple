@@ -36,7 +36,7 @@ $(document).ready(function(){
     $('#Edit_Content').dirtyForm('disable');
   });
 
-  $('#template_id, #content_type').live('change',function(){
+  $('#template_id, #content_type').on('change',function(){
     $(this).closest('form').submit();
   });
 
@@ -50,7 +50,7 @@ $(document).ready(function(){
     }
   });
 
-  $('[name$=apply]').live('click',function(){
+  $('[name$=apply]').on('click',function(){
     var data = $('#Edit_Content').find('input:not([type=submit]), select, textarea').serializeArray();
     data.push({ 'name': '{$actionid}ajax', 'value': 1});
     data.push({ 'name': '{$actionid}apply', 'value': 1 });

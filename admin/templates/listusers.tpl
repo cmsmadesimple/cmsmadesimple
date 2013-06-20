@@ -22,7 +22,7 @@ $(document).ready(function(){
   $('.toggleactive').click(function(){
     return confirm('{lang('confirm_toggleuseractive')}');
   });
-  $('#bulksubmit').live('click',function(){
+  $('#bulksubmit').on('click',function(){
     return confirm('{lang('confirm_bulkuserop')}');
   });
   $('.multiselect').click(function(){ 

@@ -76,18 +76,18 @@ refresh_url = refresh_url.replace(/amp;/g,'');
   $(document).ready(function(){
     enable_action_buttons(); 
     $('#refresh').unbind('click');
-    $('#refresh').live('click',function(){
+    $('#refresh').on('click',function(){
       // ajaxy reload for the files area.
       $('#filesarea').load(refresh_url);
       return false;
     });
 
-    $(this).live('dropzone_chdir',function(e,data){
+    $(this).on('dropzone_chdir',function(e,data){
       // if change dir via the dropzone, make sure filemanager refreshes.
       location.reload();
     });
 
-    $("#filesarea input[type='checkbox'].fileselect").live('change',function(e){
+    $("#filesarea input[type='checkbox'].fileselect").on('change',function(e){
       // find the parent row
       e.stopPropagation();
       var t = $(this).attr('checked');
@@ -100,7 +100,7 @@ refresh_url = refresh_url.replace(/amp;/g,'');
       enable_action_buttons();
     });
 
-    $('#tagall').live('change',function(event){
+    $('#tagall').on('change',function(event){
       if( $(this).attr('checked') == 'checked' ) {
         $('#filesarea input:checkbox.fileselect').attr('checked','checked').trigger('change');
       }
@@ -109,7 +109,7 @@ refresh_url = refresh_url.replace(/amp;/g,'');
       }
     });
 
-    $('#btn_view').live('click',function(){
+    $('#btn_view').on('click',function(){
       // find the selected item.
       var tmp = $("#filesarea input[type='checkbox']").filter(':checked:').val();
       var url = '{$viewfile_url}&showtemplate=false&{$actionid}viewfile='+tmp;
@@ -119,7 +119,7 @@ refresh_url = refresh_url.replace(/amp;/g,'');
       return false;
     });
 
-    $('td.clickable').live('click',function(){
+    $('td.clickable').on('click',function(){
       var t = $(this).parent().find(':checkbox:').attr('checked');
       if( t != 'checked' ) {
         $(this).parent().find(':checkbox:').attr('checked','checked').trigger('change');

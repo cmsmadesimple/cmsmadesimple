@@ -1266,10 +1266,11 @@ function cms_get_jquery($exclude = '',$ssl = null,$cdn = false,$append = '',$cus
   $basePath=$custom_root!=''?trim($custom_root,'/'):$base_url;
   
   // Scripts to include
-  $scripts['jquery.min.js'] = '<script type="text/javascript" src="'.($cdn?'https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js':$basePath.'/lib/jquery/js/jquery-1.7.2.min.js').'"></script>'."\n";
-  $scripts['jquery-ui.min.js'] = '<script type="text/javascript" src="'.($cdn?'https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.21/jquery-ui.min.js':$basePath.'/lib/jquery/js/jquery-ui-1.8.21.custom.min.js').'"></script>'."\n";
-  $scripts['jquery.ui.nestedSortable.js'] = '<script type="text/javascript" src="'.$basePath.'/lib/jquery/js/jquery.ui.nestedSortable-1.3.4.js"></script>'."\n";
-  $scripts['jquery.json.min.js'] = '<script type="text/javascript" src="'.$basePath.'/lib/jquery/js/jquery.json-2.3.min.js"></script>'."\n";
+  $scripts['jquery.min.js'] = '<script type="text/javascript" src="'.($cdn?'https://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js':$basePath.'/lib/jquery/js/jquery-1.10.1.min.js').'"></script>'."\n";
+  $scripts['jquery-ui.min.js'] = '<script type="text/javascript" src="'.($cdn?'https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js':$basePath.'/lib/jquery/js/jquery-ui-1.10.3.custom.min.js').'"></script>'."\n";
+  $scripts['jquery.ui.nestedSortable.js'] = '<script type="text/javascript" src="'.$basePath.'/lib/jquery/js/jquery.mjs.nestedSortable.js"></script>'."\n";
+  $scripts['jquery.json.min.js'] = '<script type="text/javascript" src="'.$basePath.'/lib/jquery/js/jquery.json-2.4.min.js"></script>'."\n";
+  $scripts['jquery-migrate.min.js'] = '<script type="text/javascript" src="'.$basePath.'/lib/jquery/js/jquery-migrate-1.2.1.min.js"></script>'."\n";
   if( cmsms()->test_state(CmsApp::STATE_ADMIN_PAGE) ) {
     global $CMS_LOGIN_PAGE;
     if( isset($_SESSION[CMS_USER_KEY]) && !isset($CMS_LOGIN_PAGE) ) {
@@ -1290,13 +1291,14 @@ function cms_get_jquery($exclude = '',$ssl = null,$cdn = false,$append = '',$cus
       }
       if ($one == 'jquery-ui-1.8.14.min.js') {
           $one = 'jquery-ui.min.js';
-      }
+      }	  
       if ($one == 'jquery.json-2.2.js') {
           $one = 'jquery.json.min.js';
       }
       if ($one == 'jquery.ui.nestedSortable-1.3.4.js') {
           $one = 'jquery.ui.nestedSortable.js';
       }
+    
       
       unset($scripts[$one]);
     }		

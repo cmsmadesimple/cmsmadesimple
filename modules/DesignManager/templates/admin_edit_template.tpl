@@ -5,7 +5,7 @@ $(document).ready(function(){
     $('#'+x).dialog();
   });
 
-  $('#applybtn').live('click',function(e){
+  $('#applybtn').on('click',function(e){
     // serialize the form
     e.preventDefault();
     var url = $('#form_edittemplate').attr('action')+'?showtemplate=false&m1_apply=1';
