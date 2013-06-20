@@ -1,6 +1,6 @@
 <script type="text/javascript">
 $(document).ready(function(){
-  $('#css_selectall').on('click',function(){
+  $(document).on('click', '#css_selectall', function(){
     var v = $(this).attr('checked');
     if( v == 'checked' ) {
       $('.css_select').attr('checked','checked');
@@ -10,7 +10,7 @@ $(document).ready(function(){
     }
   });
 
-  $('.tpl_select').on('clicked',function(){
+  $(document).on('click', '.tpl_select', function(){
     $('#css_selectall').removeAttr('checked');
   });
 

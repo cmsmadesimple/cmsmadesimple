@@ -50,7 +50,7 @@ $(document).ready(function(){
     }
   });
 
-  $('[name$=apply]').on('click',function(){
+  $(document).on('click', '[name$=apply]', function(){
     var data = $('#Edit_Content').find('input:not([type=submit]), select, textarea').serializeArray();
     data.push({ 'name': '{$actionid}ajax', 'value': 1});
     data.push({ 'name': '{$actionid}apply', 'value': 1 });

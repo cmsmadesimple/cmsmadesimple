@@ -255,17 +255,17 @@ function on_mailer()
 }
 $(document).ready(function(){
 {if !$mail_is_set}$('#mailertest').hide();{/if}
-  $('#mailertest').on('click',function(e){
+  $(document).on('click', '#mailertest', function(e){
     $('#testpopup').dialog({
       modal: true
     });
     return false;
   });
 
-  $('#testcancel').on('click',function(e){
+  $(document).on('click', '#testcancel', function(e){
     $('#testpopup').dialog('close');
   });
-  $('#testsend').on('click',function(e){
+  $(document).on('click','#testsend', function(e){
     $('#testpopup').dialog('close');
     $(this).closest('form').submit();
   });

@@ -1,6 +1,6 @@
 <script type="text/javascript">
 $(document).ready(function(){
-  $('#applybtn').on('click',function(e){
+  $(document).on('click', '#applybtn', function(e){
     // serialize the form
     e.preventDefault();
     var url = $('#form_editcss').attr('action')+'?showtemplate=false&m1_apply=1';

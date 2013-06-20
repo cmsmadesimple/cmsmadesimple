@@ -1,7 +1,7 @@
 <script type="text/javascript">
 // <![CDATA[
 $(document).ready(function(){  
-  $('#runbtn').on('click',function(){
+  $(document).on('click', '#runbtn', function(){
     // get the data
     if( !confirm('{lang('confirm_runusertag')}') ) return false;
     {$syntax_module_submit_js|default:''}
@@ -30,7 +30,7 @@ $(document).ready(function(){
     return false;
   });
 
-  $('#applybtn').on('click',function(){
+  $(document).on('click', '#applybtn', function(){
     {$syntax_module_submit_js|default:''}
 
     var data = $('#edit_userplugin').find('input:not([type=submit]), select, textarea').serializeArray();

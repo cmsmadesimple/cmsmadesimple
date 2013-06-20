@@ -48,7 +48,7 @@ function setup_js() {
   $('a.tooltip').mouseout(function(){
     $('span',this).hide();
   });
-  $('.multicontent').on('click',function(){
+  $(document).on('click', '.multicontent', function(){
     $('#selectall').removeAttr('checked');
     if( $('.multicontent:checked').length > 0 ) {
       $('#multiaction').removeAttr('disabled');
@@ -61,7 +61,7 @@ function setup_js() {
       $('#multisubmit[class*=ui-button]').button('disable');
     }
   });
-  $('#selectall').on('click',function(){
+  $(document).on('click', '#selectall', function(){
     if( $(this).is(':checked') ) {
       $('.multicontent').attr('checked','checked');
     } else {
@@ -78,35 +78,35 @@ function setup_js() {
       $('#multisubmit[class*=ui-button]').button('disable');
     }
   });
-  $('a.expandall').on('click',function(){
+  $(document).on('click', 'a.expandall', function(){
     var url = $(this).attr('href')+'&showtemplate=false&{$actionid}ajax=1';
     $('#contentlist').load(url,function(){
       setup_js();
     });
     return false;
   });
-  $('a.collapseall').on('click',function(){
+  $(document).on('click', 'a.collapseall', function(){
     var url = $(this).attr('href')+'&showtemplate=false&{$actionid}ajax=1';
     $('#contentlist').load(url,function(){
       setup_js();
     });
     return false;
   });
-  $('a.page_expand').on('click',function(){
+  $(document).on('click', 'a.page_expand', function(){
     var url = $(this).attr('href')+'&showtemplate=false&{$actionid}ajax=1';
     $('#contentlist').load(url,function(){
       setup_js();
     });
     return false;
   });
-  $('a.page_collapse').on('click',function(){
+  $(document).on('click', 'a.page_collapse', function(){
     var url = $(this).attr('href')+'&showtemplate=false&{$actionid}ajax=1';
     $('#contentlist').load(url,function(){
       setup_js();
     });
     return false;
   });
-  $('a.page_setinactive').on('click',function(){
+  $(document).on('click', 'a.page_setinactive', function(){
     if( !confirm('{$mod->Lang('confirm_setinactive')}') ) return false;
     var url = $(this).attr('href')+'&showtemplate=false&{$actionid}ajax=1';
     $('#contentlist').load(url,function(){
@@ -114,14 +114,14 @@ function setup_js() {
     });
     return false;
   });
-  $('a.page_setactive').on('click',function(){
+  $(document).on('click', 'a.page_setactive', function(){
     var url = $(this).attr('href')+'&showtemplate=false&{$actionid}ajax=1';
     $('#contentlist').load(url,function(){
       setup_js();
     });
     return false;
   });
-  $('a.page_setdefault').on('click',function(){
+  $(document).on('click', 'a.page_setdefault', function(){
     if( !confirm('{$mod->Lang('confirm_setdefault')}') ) return false;
     var url = $(this).attr('href')+'&showtemplate=false&{$actionid}ajax=1';
     $('#contentlist').load(url,function(){
@@ -129,31 +129,31 @@ function setup_js() {
     });
     return false;
   });
-  $('a.page_view').on('click',function(){
+  $(document).on('click', 'a.page_view', function(){
     return confirm('{$mod->Lang('confirm_viewpage')}');   
   });
-  $('a.page_sortup').on('click',function(){
+  $(document).on('click','a.page_sortup', function(){
     var url = $(this).attr('href')+'&showtemplate=false&{$actionid}ajax=1';
     $('#contentlist').load(url,function(){
       setup_js();
     });
     return false;
   });
-  $('a.page_sortdown').on('click',function(){
+  $(document).on('click', 'a.page_sortdown', function(){
     var url = $(this).attr('href')+'&showtemplate=false&{$actionid}ajax=1';
     $('#contentlist').load(url,function(){
       setup_js();
     });
     return false;
   });
-  $('a.page_delete').on('click',function(){
+  $(document).on('click', 'a.page_delete', function(){
     var url = $(this).attr('href')+'&showtemplate=false&{$actionid}ajax=1';
     $('#contentlist').load(url,function(){
       setup_js();
     });
     return false;
   });
-  $('#myoptions').on('click',function(){
+  $(document).on('click', '#myoptions', function(){
     $('#useroptions').dialog({
       resizable: false,
       buttons: {

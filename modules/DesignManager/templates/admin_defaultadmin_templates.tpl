@@ -1,6 +1,6 @@
 <script type="text/javascript">
 $(document).ready(function(){
- $('#tpl_selall').on('click',function(e){
+ $(document).on('click', '#tpl_selall', function(e){
    var x = $(this).attr('checked');
    if( x == 'checked' ) {
      $('.tpl_select').attr('checked','checked');
@@ -10,11 +10,11 @@ $(document).ready(function(){
    }
  });
 
- $('.tpl_select').on('click',function(e){
+ $(document).on('click', '.tpl_select', function(e){
    $('#tpl_selall').removeAttr('checked');
  });
 
- $('#tpl_bulk_submit').on('click',function(e){
+ $(document).on('click', '#tpl_bulk_submit', function(e){
    var n = $('input:checkbox:checked.tpl_select').length
    if( n == 0 ) {
      alert('{$mod->Lang('error_nothingselected')}');

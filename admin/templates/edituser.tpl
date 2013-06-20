@@ -1,6 +1,6 @@
 <script type="text/javascript">
 $(document).ready(function(){
-  $('#submit').on('click',function(){
+  $(document).on('click', '#submit', function(){
     return confirm('{lang('confirm_edituser')}');
   });
 });
