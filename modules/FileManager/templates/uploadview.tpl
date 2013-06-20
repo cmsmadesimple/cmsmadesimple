@@ -9,7 +9,7 @@ $(function() {
         e.preventDefault();
     });
 
-    $('#cancel').on('click',function(e){
+    $(document).on('click', '#cancel', function(e){
         e.preventDefault();
         aborting = true;
         var ul = $('#fileupload').data('fileupload');
