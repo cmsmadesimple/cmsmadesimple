@@ -1683,3 +1683,77 @@ div.reorder-pages ul li {
 	border-radius: 4px;
 	background:#b3f83d
 }	
+
+/* 2.0 STYLES, moved from inline .tpl, please do not add inline styles, thank you
+ * and this needs more work
+ */
+
+.row {
+	width: 100%;
+	margin: 0 auto;
+	position: relative;
+}
+
+.row:before, .row:after {
+	content: " ";
+	display: table;
+}
+
+.row:after {
+	clear: both;
+}
+
+.half {
+	width: 50%;
+	float: left;
+}
+
+.options-form {
+	text-align: right;
+}
+
+.options-menu {
+	margin: 0;
+	padding: 0;
+	height: 35px;
+	z-index: 999;
+	list-style-type: none;
+}
+
+.options-menu > li {
+	line-height: 35px;
+	float: left;
+	display: block;
+	padding: 0 1em;
+	position: relative;
+}
+
+.options-menu li ul {
+	position: absolute;
+	left: -999em;
+	top: 0;
+	margin: 0;
+	padding: 15px;;
+}
+
+.options-menu li.parent:hover {
+	background: #fafafa;
+	cursor: pointer;
+}
+
+.options-menu li:hover ul {
+	left: 0;
+	top: 32px;
+	width: 240px;
+	background: #fafafa;
+	z-index: 99;
+}
+
+.options-menu li li {
+	display: block;
+	cursor: pointer;
+}
+
+.text-red {
+	color: #ae432e
+}
