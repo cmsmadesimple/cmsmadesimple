@@ -315,7 +315,7 @@ function cms_cleanfile($filename)
  */
 function my_htmlentities($val, $convert_single_quotes = false)
 {
-  return cms_htmlentities($val,ENT_QUOTES,'UTF-8',$confvert_single_quotes);
+  return cms_htmlentities($val,ENT_QUOTES,'UTF-8',$convert_single_quotes);
 }
 
 
