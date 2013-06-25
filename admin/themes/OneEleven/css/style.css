@@ -607,7 +607,9 @@ a.tooltip {
 	color: #e6c26e
 }
 .red,
-.text-red {
+.text-red,
+a.text-red,
+table.pagetable a.text-red  {
 	color: #ae432e
 }
 .blue {

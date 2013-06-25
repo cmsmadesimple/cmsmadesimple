@@ -584,10 +584,20 @@ textarea {
 	overflow: auto
 }
 /* Notification messages */
+.tooltip {
+	cursor: help;
+}
+
+a.tooltip {
+	cursor: pointer;
+}
 .orange {
 	color: #e6c26e
 }
-.red {
+.red,
+.text-red,
+a.text-red,
+table.pagetable a.text-red {
 	color: #ae432e
 }
 .blue {
