@@ -1,115 +1,47 @@
 {if $ajax == 0}
 <script type="text/javascript">
 //<![CDATA[
-function setup_js() {
-    $('#multiaction').attr('disabled', 'disabled');
-    $('#multisubmit').attr('disabled', 'disabled');
-
-    $('tr.selected').css('background', 'yellow');
-
-    $(document).on('click', '.multicontent', function () {
-        $('#selectall').removeAttr('checked');
-        if ($('.multicontent:checked').length > 0) {
-            $('#multiaction').removeAttr('disabled');
-            $('#multisubmit').removeAttr('disabled');
-            $('#multisubmit[class*=ui-button]').button('enable');
-        } else {
-            $('#multiaction').attr('disabled', 'disabled');
-            $('#multisubmit').attr('disabled', 'disabled');
-            $('#multisubmit[class*=ui-button]').button('disable');
+function cms_CMloadUrl(link, lang) {
+    $(document).on('click', link, function (e) {
+        var url = $(this).attr('href') + '&showtemplate=false&{$actionid}ajax=1';
+        if (lang !== 0) {
+            if (!confirm(lang)) return false;
         }
+        $('#contenttable').load(url + ' #contenttable > *');
+        e.preventDefault();
     });
-    $(document).on('click', '#selectall', function () {
+}
+
+function cms_CMtoggleState(el) {
+    $(el).attr('disabled', true);
+
+    $(document).on('click', 'input:checkbox', function () {
         if ($(this).is(':checked')) {
-            $('.multicontent').attr('checked', 'checked');
+            $(el).attr('disabled', false);
+            $('button' + el).button({ 'disabled' : false });
         } else {
-            $('.multicontent').removeAttr('checked');
-        }
-        if ($('.multicontent:checked').length > 0) {
-            $('#multiaction').removeAttr('disabled');
-            $('#multisubmit').removeAttr('disabled');
-            $('#multisubmit[class*=ui-button]').button('enable');
-        } else {
-            $('#multiaction').attr('disabled', 'disabled');
-            $('#multisubmit').attr('disabled', 'disabled');
-            $('#multisubmit[class*=ui-button]').button('disable');
+            $(el).attr('disabled', true);
+            $('button' + el).button({ 'disabled' : true });
         }
     });
-    $(document).on('click', 'a.expandall', function () {
-        var url = $(this).attr('href') + '&showtemplate=false&{$actionid}ajax=1';
-        $('#contentlist').load(url, function () {
-            setup_js();
-        });
-        return false;
-    });
-    $(document).on('click', 'a.collapseall', function () {
-        var url = $(this).attr('href') + '&showtemplate=false&{$actionid}ajax=1';
-        $('#contentlist').load(url, function () {
-            setup_js();
-        });
-        return false;
-    });
-    $(document).on('click', 'a.page_expand', function () {
-        var url = $(this).attr('href') + '&showtemplate=false&{$actionid}ajax=1';
-        $('#contentlist').load(url, function () {
-            setup_js();
-        });
-        return false;
-    });
-    $(document).on('click', 'a.page_collapse', function () {
-        var url = $(this).attr('href') + '&showtemplate=false&{$actionid}ajax=1';
-        $('#contentlist').load(url, function () {
-            setup_js();
-        });
-        return false;
-    });
-    $(document).on('click', 'a.page_setinactive', function () {
-        if (!confirm('{$mod->Lang('confirm_setinactive')}')) return false;
-        var url = $(this).attr('href') + '&showtemplate=false&{$actionid}ajax=1';
-        $('#contentlist').load(url, function () {
-            setup_js();
-        });
-        return false;
-    });
-    $(document).on('click', 'a.page_setactive', function () {
-        var url = $(this).attr('href') + '&showtemplate=false&{$actionid}ajax=1';
-        $('#contentlist').load(url, function () {
-            setup_js();
-        });
-        return false;
-    });
-    $(document).on('click', 'a.page_setdefault', function () {
-        if (!confirm('{$mod->Lang('confirm_setdefault')}')) return false;
-        var url = $(this).attr('href') + '&showtemplate=false&{$actionid}ajax=1';
-        $('#contentlist').load(url, function () {
-            setup_js();
-        });
-        return false;
-    });
-    $(document).on('click', 'a.page_view', function () {
-        return confirm('{$mod->Lang('confirm_viewpage')}');
-    });
-    $(document).on('click', 'a.page_sortup', function () {
-        var url = $(this).attr('href') + '&showtemplate=false&{$actionid}ajax=1';
-        $('#contentlist').load(url, function () {
-            setup_js();
-        });
-        return false;
-    });
-    $(document).on('click', 'a.page_sortdown', function () {
-        var url = $(this).attr('href') + '&showtemplate=false&{$actionid}ajax=1';
-        $('#contentlist').load(url, function () {
-            setup_js();
-        });
-        return false;
-    });
-    $(document).on('click', 'a.page_delete', function () {
-        var url = $(this).attr('href') + '&showtemplate=false&{$actionid}ajax=1';
-        $('#contentlist').load(url, function () {
-            setup_js();
-        });
-        return false;
-    });
+}
+
+$(document).ready(function () {
+
+    cms_CMtoggleState('#multiaction'),
+    cms_CMtoggleState('#multisubmit'),
+    cms_checkAll('#selectall'),
+    cms_CMloadUrl('a.expandall', 0),
+    cms_CMloadUrl('a.collapseall', 0),
+    cms_CMloadUrl('a.page_collapse', 0),
+    cms_CMloadUrl('a.page_setinactive', '{$mod->Lang('confirm_setinactive')}'),
+    cms_CMloadUrl('a.page_setactive', 0),
+    cms_CMloadUrl('a.page_setdefault', '{$mod->Lang('confirm_setdefault')}'),
+    cms_CMloadUrl('a.page_view', '{$mod->Lang('confirm_viewpage')}'),
+    cms_CMloadUrl('a.page_sortup', 0),
+    cms_CMloadUrl('a.page_sortdown', 0),
+    cms_CMloadUrl('a.page_delete', 0);
+
     $(document).on('click', '#myoptions', function () {
         $('#useroptions').dialog({
             resizable: false,
@@ -124,12 +56,13 @@ function setup_js() {
             }
         });
     });
+    
     $('#ajax_find').keypress(function (e) {
         if (e.which == 13) {
             e.preventDefault();
-            return false;
         }
     });
+    
     $('#ajax_find').autocomplete({
         source: '{cms_action_url action=admin_ajax_pagelookup forjs=1}&showtemplate=false',
         minLength: 2,
@@ -140,16 +73,16 @@ function setup_js() {
         select: function (event, ui) {
             $(this).val(ui.item.label);
             var url = '{cms_action_url action=defaultadmin forjs=1}&showtemplate=false&{$actionid}ajax=1&{$actionid}seek=' + ui.item.value;
-            $('#contentlist').load(url, function () {
-                setup_js();
-            });
-            return false;
+            $('#contenttable').load(url + ' #contenttable > *');
+
+            event.preventDefault();
         }
     });
-}
 
-$(document).ready(function () {
-    setup_js();
+    $(document).ajaxComplete(function () {
+        $('tr.selected').css('background', 'yellow');
+    });
+
 });
 //]]>
 </script>
@@ -268,12 +201,8 @@ $(document).ready(function () {
 									{admin_icon icon='sort_down.gif' title=$mod->Lang('prompt_page_sortdown')}
 								</a>
 							{elseif $row.move == 'both'}
-								<a href="{cms_action_url action='defaultadmin' moveup=$row.id}" class="page_sortup" accesskey="m">
-									{admin_icon icon='sort_up.gif' title=$mod->Lang('prompt_page_sortup')}
-								</a>
-								<a href="{cms_action_url action='defaultadmin' movedown=$row.id}" class="page_sortdown" accesskey="m">
-									{admin_icon icon='sort_down.gif' title=$mod->Lang('prompt_page_sortdown')}
-								</a>
+								<a href="{cms_action_url action='defaultadmin' moveup=$row.id}" class="page_sortup" accesskey="m">{admin_icon icon='sort_up.gif' title=$mod->Lang('prompt_page_sortup')}</a>
+								<a href="{cms_action_url action='defaultadmin' movedown=$row.id}" class="page_sortdown" accesskey="m">{admin_icon icon='sort_down.gif' title=$mod->Lang('prompt_page_sortdown')}</a>
 							{/if}
 						{/if}
 					{elseif $column == 'view'}
@@ -388,7 +317,7 @@ $(document).ready(function () {
 {/if}
 </div>{* #contentlist *}
 
-<div class="pageoptions" style="float: right">
+<div class="pageoptions no-ajax" style="float: right">
 	<label for="multiaction">{$mod->Lang('prompt_withselected')}:</label>&nbsp;&nbsp;
 	<select name="{$actionid}multiaction" id="multiaction">
 		{html_options options=$bulk_options}
