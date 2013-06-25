@@ -102,11 +102,14 @@ $(document).ready(function () {
 
     $(document).on('click', '#btn_view', function () {
         // find the selected item.
-        var tmp = $("#filesarea input[type='checkbox']").filter(':visible').val();
+        var tmp = $("#filesarea input[type='checkbox']").filter(':checked').val();
         var url = '{$viewfile_url}&showtemplate=false&{$actionid}viewfile=' + tmp;
         url = url.replace(/amp;/g, '');
         $('#popup_contents').load(url);
-        $('#popup').dialog();
+        $('#popup').dialog({
+        	minWidth: 380,
+        	maxHeight: 600
+        });
         return false;
     });
 
@@ -125,7 +128,7 @@ $(document).ready(function () {
 <h3>{$currentpath} {$path}</h3>
 
 <div id="popup" style="display: none;">
-	<div id="popup_contents" style="height: 400px; width: 500px; overflow: auto; font-family: monospace;"></div>
+	<div id="popup_contents" style="min-width: 500px; max-height: 600px;"></div>
 </div>
 
 <div>
