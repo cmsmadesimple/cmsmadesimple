@@ -111,11 +111,11 @@ $(document).ready(function () {
     });
 
     $(document).on('click', 'td.clickable', function () {
-        var t = $(this).parent().find(':checkbox:').attr('checked');
+        var t = $(this).parent().find(':checkbox').attr('checked');
         if (t != 'checked') {
-            $(this).parent().find(':checkbox:').attr('checked', true).trigger('change');
+            $(this).parent().find(':checkbox').attr('checked', true).trigger('change');
         } else {
-            $(this).parent().find(':checkbox:').attr('checked', false).trigger('change');
+            $(this).parent().find(':checkbox').attr('checked', false).trigger('change');
         }
     });
 });
