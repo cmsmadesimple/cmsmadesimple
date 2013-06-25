@@ -317,7 +317,7 @@ $(document).ready(function () {
 {/if}
 </div>{* #contentlist *}
 
-<div class="pageoptions no-ajax" style="float: right">
+<div class="pageoptions" style="float: right">
 	<label for="multiaction">{$mod->Lang('prompt_withselected')}:</label>&nbsp;&nbsp;
 	<select name="{$actionid}multiaction" id="multiaction">
 		{html_options options=$bulk_options}

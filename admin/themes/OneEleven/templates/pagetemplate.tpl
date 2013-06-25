@@ -25,8 +25,8 @@
 		<!-- custom jQueryUI Theme 1.8.21 see style.css or link in UI Stylesheet for color reference //-->
 		<link rel="stylesheet" href="style.php?{$secureparam}" />
 		<link href="{$config.admin_url}/themes/OneEleven/css/default-cmsms/jquery-ui-1.10.3.custom.min.css" rel="stylesheet" />
-        {module_available name='FileManager' assign='fmgood'}
-        {if isset($fmgood) && $fmgood}{cms_module module=FileManager action='javascript'}{/if}
+		{module_available name='FileManager' assign='fmgood'}
+		{if (isset($fmgood) && $fmgood && $pagealias != 'File-nbsp-Manager')}{cms_module module=FileManager action='javascript'}{/if}
 	</head>
 	<body##BODYSUBMITSTUFFGOESHERE## lang="{$lang|truncate:'2':''}" id="{$pagetitle|md5}" class="oe_{$pagealias}">
 		<!-- start container -->
