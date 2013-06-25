@@ -1,31 +1,7 @@
 {if isset($list_categories)}
 <script type="text/javascript">
 $(document).ready(function () {
-
-    var uiFixHelper = function (e, ui) {
-        ui.children().each(function () {
-            $(this).width($(this).width());
-        });
-        return ui;
-    };
-    $('#categorylist tbody').sortable({
-        helper: uiFixHelper,
-        update: function (event, ui) {
-            var url = '{cms_action_url action='ajax_order_cats' forjs=1}&showtemplate=false',
-            	info = $(this).sortable('serialize');
-
-            $('#categorylist').find('tr:odd').attr('class', 'row2');
-            $('#categorylist').find('tr:even').attr('class', 'row1');
-
-            $.post(url + '&' + info,
-                function (data) {
-                    if (data.substr(0, 5) == 'ERROR') {
-                        alert(data);
-                    }
-                });
-        }
-    });
-
+    cms_initSortable('#categorylist', '{cms_action_url action='ajax_order_cats' forjs=1}&showtemplate=false')
 });
 </script>
 
