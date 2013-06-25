@@ -4,16 +4,15 @@ $(document).ready(function () {
 
     var uiFixHelper = function (e, ui) {
         ui.children().each(function () {
-            jQuery(this).width(jQuery(this).width());
+            $(this).width($(this).width());
         });
         return ui;
     };
     $('#categorylist tbody').sortable({
         helper: uiFixHelper,
         update: function (event, ui) {
-            var url = '{cms_action_url action='
-            ajax_order_cats ' forjs=1}&showtemplate=false';
-            var info = $(this).sortable('serialize');
+            var url = '{cms_action_url action='ajax_order_cats' forjs=1}&showtemplate=false',
+            	info = $(this).sortable('serialize');
 
             $('#categorylist').find('tr:odd').attr('class', 'row2');
             $('#categorylist').find('tr:even').attr('class', 'row1');
