@@ -47,7 +47,7 @@ function smarty_cms_function_form_start($params, &$template)
 
 	if( $mactparms['returnid'] != '' ) {
 		$hm = cmsms()->GetHierarchyManager();
-		$node = $hm->sureGetNodeById($returnid);
+		$node = $hm->sureGetNodeById($mactparms['returnid']);
 		if( $node ) {
 			$content_obj = $node->getContent();
 			if( $content_obj ) $tagparms['action'] = $content_obj->GetURL();
