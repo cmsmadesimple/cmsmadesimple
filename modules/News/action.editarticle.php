@@ -223,9 +223,7 @@ if( isset($params['submit']) || isset($params['apply']) ) {
     @$this->SendEvent('NewsArticleEdited', array('news_id' => $articleid, 'category_id' => $usedcategory, 'title' => $title, 'content' => $content, 'summary' => $summary, 'status' => $status, 'start_time' => $startdate, 'end_time' => $enddate, 'extra' => $extra, 'useexp' => $useexp, 'news_url'=>$news_url));
     // put mention into the admin log
     audit($articleid, 'News: '.$articleid, 'Article edited');
-  }
-
- } // else if no error
+  } // if no error.
 
   if( isset($params['apply']) && isset($params['ajax']) ) {
     $response = '<EditArticle>';

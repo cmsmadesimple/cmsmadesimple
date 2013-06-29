@@ -79,7 +79,8 @@ if( is_array($slaves) && count($slaves) ) {
     if( is_array($results) && count($results) ) {
       begin_section($one_slave['class'],$obj->get_name());
       foreach( $results as $one ) {
-	add_result($one_slave['class'],$one['title'],$one['description'],$one['edit_url'],$one['text']);
+	$text = isset($one['text'])?$one['text']:'';
+	add_result($one_slave['class'],$one['title'],$one['description'],$one['edit_url'],$text);
       }
     }
     end_section();

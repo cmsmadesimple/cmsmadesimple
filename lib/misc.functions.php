@@ -1256,53 +1256,58 @@ function cms_get_jquery($exclude = '',$ssl = null,$cdn = false,$append = '',$cus
 {
   $config = cms_config::get_instance();
   $scripts = array();
-  $base_url = $config['root_url'];
-  if( is_null($ssl) ) {
-    $base_url = $config->smart_root_url();
-  }
-  else if( $ssl === true || $ssl === TRUE ) {
-    $base_url = $config['ssl_url'];
-  }
+  $base_url = $config->smart_root_url();
+  if( $ssl === true || $ssl === TRUE ) $base_url = $config['ssl_url'];
   $basePath=$custom_root!=''?trim($custom_root,'/'):$base_url;
   
   // Scripts to include
-  $scripts['jquery.min.js'] = '<script type="text/javascript" src="'.($cdn?'https://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js':$basePath.'/lib/jquery/js/jquery-1.10.1.min.js').'"></script>'."\n";
-  $scripts['jquery-ui.min.js'] = '<script type="text/javascript" src="'.($cdn?'https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js':$basePath.'/lib/jquery/js/jquery-ui-1.10.3.custom.min.js').'"></script>'."\n";
-  $scripts['jquery.ui.nestedSortable.js'] = '<script type="text/javascript" src="'.$basePath.'/lib/jquery/js/jquery.mjs.nestedSortable.js"></script>'."\n";
-  $scripts['jquery.json.min.js'] = '<script type="text/javascript" src="'.$basePath.'/lib/jquery/js/jquery.json-2.4.min.js"></script>'."\n";
-  $scripts['jquery-migrate.min.js'] = '<script type="text/javascript" src="'.$basePath.'/lib/jquery/js/jquery-migrate-1.2.1.min.js"></script>'."\n";
+  $scripts['jquery'] = array('cdn'=>'https://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js',
+			     'local'=>$basePath.'/lib/jquery/js/jquery-1.10.1.min.js',
+			     'aliases'=>array('jquery.min.js'));
+  $scripts['jquery-ui'] = array('cdn'=>'https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js',
+				'local'=>$basePath.'/lib/jquery/js/jquery-ui-1.10.3.custom.min.js',
+				'aliases'=>array('jquery-ui.min.js','ui'));
+  $scripts['nestedSortable'] = array('local'=>$basePath.'/lib/jquery/js/jquery.mjs.nestedSortable.js');
+  $scripts['json'] = array('local'=>$basePath.'/lib/jquery/js/jquery.json-2.4.min.js');
+  $scripts['migrate'] = array('local'=>$basePath.'/lib/jquery/js/jquery-migrate-1.2.1.min.js');
+
   if( cmsms()->test_state(CmsApp::STATE_ADMIN_PAGE) ) {
     global $CMS_LOGIN_PAGE;
     if( isset($_SESSION[CMS_USER_KEY]) && !isset($CMS_LOGIN_PAGE) ) {
       $url = $config['admin_url'];
-      $scripts['cms_js_setup'] = '<script type="text/javascript" src="'.$url.'/cms_js_setup.php?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY].'"></script>'."\n";
+      $scripts['cms_js_setup'] = array('local'=>$url.'/cms_js_setup.php?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY]);
     }
-    $scripts['jquery.cms_admin.js'] = '<script type="text/javascript" src="'.$basePath.'/lib/jquery/js/jquery.cms_admin.js"></script>'."\n";
-    $scripts['jquery.cmsms_dirtyform.js'] = '<script type="text/javascript" src="'.$basePath.'/lib/jquery/js/jquery.cmsms_dirtyform.js"></script>'."\n";
+    $scripts['cms_admin'] = array('local'=>$basePath.'/lib/jquery/js/jquery.cms_admin.js');
+    $scripts['cms_dirtyform'] = array('local'=>$basePath.'/lib/jquery/js/jquery.cmsms_dirtyform.js');
   }
 
-  // Check if we need exclude some script
+  // Check if we need to exclude some script
   if(!empty($exclude)) {
     
     $exclude_list = explode(",", trim(str_replace(' ','',$exclude)));
     foreach($exclude_list as $one) {
-      if ($one == 'jquery-1.6.2.min.js') {
-          $one = 'jquery.min.js';
+      // find a match
+      $found = null;
+      foreach( $scripts as $key => $rec ) {
+	if( strtolower($one) == strtolower($key) ) {
+	  $found = $key;
+	  break;
+	}
+	if( isset($rec['aliases']) && is_array($rec['aliases']) ) {
+	  foreach( $rec['aliases'] as $alias ) {
+	    if( strtolower($one) == strtolower($alias) ) {
+	      $found = $key;
+	      break;
+	    }
+	  }
+	  if( $found ) break;
+	}
       }
-      if ($one == 'jquery-ui-1.8.14.min.js') {
-          $one = 'jquery-ui.min.js';
-      }	  
-      if ($one == 'jquery.json-2.2.js') {
-          $one = 'jquery.json.min.js';
-      }
-      if ($one == 'jquery.ui.nestedSortable-1.3.4.js') {
-          $one = 'jquery.ui.nestedSortable.js';
-      }
-    
-      
-      unset($scripts[$one]);
-    }		
+
+      if( $found ) unset($scripts[$found]);
+    }
   }
+
   // let them add scripts to the end ie: a jQuery plugin
   if(!empty($append)) {
     $append_list = explode(",", trim(str_replace(' ','',$append)));
@@ -1310,11 +1315,14 @@ function cms_get_jquery($exclude = '',$ssl = null,$cdn = false,$append = '',$cus
       $scripts['user_'+$key]='<script type="text/javascript" src="'.($item).'"></script>'."\n";;
     }		
   }
-  // Output
 
+  // Output
   $output = '';
+  $fmt = '<script type="text/javascript" src="%s"></script>';
   foreach($scripts as $script) {
-    $output .= $script;		
+    $url = $script['local'];
+    if( $cdn && isset($script['cdn']) ) $url = $script['cdn'];
+    $output .= sprintf($fmt,$url)."\n";
   }
   return $output;
 }

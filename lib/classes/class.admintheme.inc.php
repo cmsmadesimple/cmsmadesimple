@@ -537,7 +537,7 @@ EOT;
      */
     public function DisplayBodyTag()
     {
-        echo "<body##BODYSUBMITSTUFFGOESHERE##>\n";
+        echo "<body>\n";
     }
 
     

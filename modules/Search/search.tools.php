@@ -33,9 +33,7 @@ function search_StemPhrase(&$module,$phrase)
   
   // split into words
   // strtolower isn't friendly to other charsets
-  $phrase = preg_replace("/([A-Z]+)/e",
-			 "strtolower('\\1')",
-			 $phrase);
+  $phrase = preg_replace('/([A-Z]+)/e', "strtolower('\\1')", $phrase);
 
   //$words = preg_split('/[\s,!.()+-\/\\\\]+/', $phrase);
   $words = preg_split('/[\s,!.;:\?()+-\/\\\\]+/', $phrase);
@@ -44,40 +42,24 @@ function search_StemPhrase(&$module,$phrase)
   $words = $module->RemoveStopWordsFromArray($words);
   
   // strip off anything 3 chars or less
-  if( !function_exists('__search_stemphrase_filter') )
-    {
-      function __search_stemphrase_filter($a)
-      {
-	return (strlen($a) >= 3);
-      }
-    }
-  $words = array_filter($words, '__search_stemphrase_filter');
-
+  $fn = function($a) { return (strlen($a) >= 3); };
+  $words = array_filter($words, $fn);
   
   // stem words
   $stemmed_words = array();
   $stemmer = null; 
-  if( $module->GetPreference('usestemming', 'false') != 'false' )
-    {
-       $stemmer = new PorterStemmer();
+  if( $module->GetPreference('usestemming', 'false') != 'false' ) $stemmer = new PorterStemmer();
+  foreach ($words as $word) {
+    //trim words get rid of wrapping quotes
+    $word = trim($word, ' \'"');
+
+    if (is_object($stemmer)) {
+      $stemmed_words[] = $stemmer->stem($word, true);
     }
-  foreach ($words as $word)
-    {
-      //trim words get rid of wrapping quotes
-      $word = trim($word, ' \'"');
-      
-      if (strlen($word) < 3)
-	{
-	  continue;
-	}
-     
-      if (is_object($stemmer))
-        {
-	  $stemmed_words[] = $stemmer->stem($word, true);
-        }
-      else
-	$stemmed_words[] = $word;
+    else {
+      $stemmed_words[] = $word;
     }
+  }
   
   return $stemmed_words;
 }
@@ -93,42 +75,36 @@ function search_AddWords(&$obj, $module = 'Search', $id = -1, $attr = '', $conte
 
   @$obj->SendEvent('SearchItemAdded', array($module, $id, $attr, &$content, $expires));
 		
-  if ($content != "")
-    {		
-      //Clean up the content
-      $stemmed_words = $obj->StemPhrase($content);
-      $words = array_count_values($stemmed_words);
-		
-      $q = "SELECT id FROM ".cms_db_prefix().'module_search_items WHERE module_name=?';
-      $parms = array($module);
+  if ($content != "") {
+    //Clean up the content
+    $stemmed_words = $obj->StemPhrase($content);
+    $words = array_count_values($stemmed_words);
 
-      if( $id != -1 )
-	{
-	  $q .= " AND content_id=?";
-	  $parms[] = $id;
-	}
-      if( $attr != '' )
-	{
-	  $q .= " AND extra_attr=?";
-	  $parms[] = $attr;
-	}
-      $dbresult = $db->Execute($q, $parms);
-		
-      if ($dbresult && $dbresult->RecordCount() > 0 && $row = $dbresult->FetchRow())
-	{
-	  $itemid = $row['id'];
-	}
-      else
-	{
-	  $itemid = $db->GenID(cms_db_prefix()."module_search_items_seq");
-	  $db->Execute('INSERT INTO '.cms_db_prefix().'module_search_items (id, module_name, content_id, extra_attr, expires) VALUES (?,?,?,?,?)', array($itemid, $module, $id, $attr, ($expires != NULL ? trim($db->DBTimeStamp($expires), "'") : NULL) ));
-	}
-		
-      foreach ($words as $word=>$count)
-	{
-	  $db->Execute('INSERT INTO '.cms_db_prefix().'module_search_index (item_id, word, count) VALUES (?,?,?)', array($itemid, $word, $count));
-	}
+    $q = "SELECT id FROM ".cms_db_prefix().'module_search_items WHERE module_name=?';
+    $parms = array($module);
+
+    if( $id != -1 ) {
+      $q .= " AND content_id=?";
+      $parms[] = $id;
     }
+    if( $attr != '' ) {
+      $q .= " AND extra_attr=?";
+      $parms[] = $attr;
+    }
+    $dbresult = $db->Execute($q, $parms);
+
+    if ($dbresult && $dbresult->RecordCount() > 0 && $row = $dbresult->FetchRow()) {
+      $itemid = $row['id'];
+    }
+    else {
+      $itemid = $db->GenID(cms_db_prefix()."module_search_items_seq");
+      $db->Execute('INSERT INTO '.cms_db_prefix().'module_search_items (id, module_name, content_id, extra_attr, expires) VALUES (?,?,?,?,?)', array($itemid, $module, $id, $attr, ($expires != NULL ? trim($db->DBTimeStamp($expires), "'") : NULL) ));
+    }
+
+    foreach ($words as $word=>$count) {
+      $db->Execute('INSERT INTO '.cms_db_prefix().'module_search_index (item_id, word, count) VALUES (?,?,?)', array($itemid, $word, $count));
+    }
+  }
 }
 
 function search_DeleteWords(&$obj, $module = 'Search', $id = -1, $attr = '')
@@ -136,16 +112,14 @@ function search_DeleteWords(&$obj, $module = 'Search', $id = -1, $attr = '')
   $db = $obj->GetDb();
   $parms = array( $module );
   $q = "DELETE FROM ".cms_db_prefix().'module_search_items WHERE module_name=?';
-  if( $id != -1 )
-    {
-      $q .= " AND content_id=?";
-      $parms[] = $id;
-    }
-  if( $attr != '' )
-    {
-      $q .= " AND extra_attr=?";
-      $parms[] = $attr;
-    }
+  if( $id != -1 ) {
+    $q .= " AND content_id=?";
+    $parms[] = $id;
+  }
+  if( $attr != '' ) {
+    $q .= " AND extra_attr=?";
+    $parms[] = $attr;
+  }
   $db->Execute($q, $parms);
   $db->Execute('DELETE FROM '.cms_db_prefix().'module_search_index WHERE item_id NOT IN (SELECT id FROM '.cms_db_prefix().'module_search_items)');
   @$obj->SendEvent('SearchItemDeleted', array($module, $id, $attr));
@@ -185,17 +159,15 @@ function search_Reindex(&$module)
   */
 
   $modules = ModuleOperations::get_instance()->GetInstalledModules();
-  foreach( $modules as $name )
-    {
-      if( !$name || $name == 'Search' ) continue;
-      $object = ModuleOperations::get_instance()->get_module_instance($name);
-      if( !is_object($object) ) continue;
+  foreach( $modules as $name ) {
+    if( !$name || $name == 'Search' ) continue;
+    $object = ModuleOperations::get_instance()->get_module_instance($name);
+    if( !is_object($object) ) continue;
 
-      if (method_exists($object, 'SearchReindex'))
-	{
-	  $object->SearchReindex($module);
-	}
+    if (method_exists($object, 'SearchReindex')) {
+      $object->SearchReindex($module);
     }
+  }
 }
 
 
@@ -293,7 +265,7 @@ function search_DoEvent(&$module, $originator, $eventname, &$params )
 	else {
 	  $module->DeleteWords($module->GetName(), $template->id, 'template');
 	}
-		  
+
 	if( ($non_indexable && $was_indexed) ) {
 	  // we can't index the template, and it was indexed
 	  // meaning we need to delete all indexes from

@@ -210,9 +210,7 @@ EOT;
 
   public static function reset_page_type_defaults(CmsLayoutTemplateType $type)
   {
-    if( $type->get_originator() != 'Search' ) {
-      throw new CmsLogicException('Cannot reset contents for this template type');
-    }
+    if( $type->get_originator() != 'Search' ) throw new CmsLogicException('Cannot reset contents for this template type');
 
     $mod = cms_utils::get_module('Search');
     if( !is_object($mod) ) return;
