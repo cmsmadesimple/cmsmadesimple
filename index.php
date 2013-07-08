@@ -203,8 +203,10 @@ try {
 	$html = '';
 	$showtemplate = true; 
 	
-	if ((isset($_REQUEST['showtemplate']) && $_REQUEST['showtemplate'] == 'false') || 
-		(isset($smarty->id) && $smarty->id != '' && isset($_REQUEST[$smarty->id.'showtemplate']) 
+	if ((isset($_REQUEST['showtemplate']) && 
+	     $_REQUEST['showtemplate'] == 'false') || 
+		(isset($smarty->id) && $smarty->id != '' && 
+		 isset($_REQUEST[$smarty->id.'showtemplate']) 
 		&& $_REQUEST[$smarty->id.'showtemplate'] == 'false'))
 	{
 		$showtemplate = false;

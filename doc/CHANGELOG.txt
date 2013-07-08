@@ -1,3 +1,10 @@
+Version 1.11.8 -
+-----------------------------
+Core - General
+  - Updated config reference
+  - Fixes to module loading order stuff.
+  - fixes so that a modules create_url method is called from module_support CreateLink function.
+
 Version 1.11.7 - Genovesa
 -----------------------------
 Core - General
