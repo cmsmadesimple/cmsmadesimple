@@ -595,7 +595,6 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 	echo ilang('install_creating_table', CmsLayoutCollection::TABLENAME, $ado_ret);
 
 
-
 	$flds = "
          design_id I KEY NOT NULL,
          tpl_id   I KEY NOT NULL
@@ -612,6 +611,32 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix.CmsLayoutCollection::CSSTABLE, $flds, $taboptarray);
 	$return = $dbdict->ExecuteSQLArray($sqlarray);
 	echo ilang('install_creating_table', CmsLayoutCollection::CSSTABLE, $ado_ret);
+
+	$flds = "
+                 id I AUTO KEY NOT NULL,
+                 type C(20) NOT NULL,
+                 oid  I NOT NULL,
+                 uid  I NOT NULL,
+                 created I NOT NULL,
+                 modified I NOT NULL,
+                 lifetime I NOT NULL,
+                 expires  I NOT NULL
+                ";
+	$sqlarray = $dbdict->CreateTableSQL($db_prefix.CmsLock::LOCK_TABLE, $flds, $taboptarray);
+	$return = $dbdict->ExecuteSQLArray($sqlarray);
+	$ado_ret = ($return == 2) ? ilang('done') : ilang('failed');
+
+	$sqlarray = $dbdict->CreateIndexSQL($db_prefix.'index_locks1', $db_prefix."locks", 'type,oid', array('UNIQUE'));
+	$return = $dbdict->ExecuteSQLArray($sqlarray);
+
+	$sqlarray = $dbdict->CreateIndexSQL($db_prefix.'index_locks1', $db_prefix."locks", 'expires');
+	$return = $dbdict->ExecuteSQLArray($sqlarray);
+
+	$sqlarray = $dbdict->CreateIndexSQL($db_prefix.'index_locks1', $db_prefix."locks", 'uid');
+	$return = $dbdict->ExecuteSQLArray($sqlarray);
+
+	echo ilang('install_creating_table', CmsLock::LOCK_TABLE, $ado_ret);
+
 }
 
 # vim:ts=4 sw=4 noet

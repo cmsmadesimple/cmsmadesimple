@@ -1,4 +1,6 @@
 <?php
+$lang['siteprefs_lockrefresh'] = 'This field specifies the minimum frequency (in minutes) the ajax based locking mechanism should &quot;touch&quot; a lock.  An ideal value for this field is 5.';
+$lang['siteprefs_locktimeout'] = 'This field specifies the number of minutes of inactivity before a lock times out.  After a lock times out other users may steal the lock.  In order for a lock to not timeout it must be &quot;touched&quot; before its expiry time.  This resets the expiry time of the lock.  Under most circumstances a 60 minute lock should be suitable.';
 $lang['siteprefs_sitename'] = 'This is a human readable name for your website, i.e: the business, club, or organization name';
 $lang['siteprefs_frontendlang'] = 'The default language that your webiste displays on the frontend.  This can be changed on a per-page basis using different smarty tags. i.e: <code>{cms_set_language}</code>';
 $lang['siteprefs_frontendwysiwyg'] = 'When WYSIWYG editors are provided on frontend forms, what WYSIWYG module should be used?  Or none.';

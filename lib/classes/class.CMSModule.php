@@ -87,7 +87,7 @@ abstract class CMSModule
    * @access private
    * @ignore
    */
-  private $restrict_unknown_params = false;
+  private $restrict_unknown_params = TRUE;
 
   /**
    * @access private
@@ -724,7 +724,7 @@ abstract class CMSModule
    */
   final public function RestrictUnknownParams($flag = true)
   {
-    $this->restrict_unknown_params = $flag;
+	  $this->restrict_unknown_params = (bool)$flag;
   }
 
   /**
@@ -1591,28 +1591,28 @@ abstract class CMSModule
    */
   function DoAction($name, $id, $params, $returnid='')
   {
-    if( $returnid == '' ) {
-      if( isset($params['__activetab']) ) $this->SetCurrentTab(trim($params['__activetab']));
-      if( isset($params['__errors']) ) $this->__errors = explode('::err::',$params['__errors']);
-      if( isset($params['__messages']) ) $this->__messages = explode('::msg::',$params['__messages']);
-      if( is_array($this->__errors) && count($this->__errors) ) echo $this->ShowErrors($this->__errors);
-      if( is_array($this->__messages) && count($this->__messages) ) echo $this->ShowMessage($this->__messages[0]);
-    }
+	  if( $returnid == '' ) {
+		  if( isset($params['__activetab']) ) $this->SetCurrentTab(trim($params['__activetab']));
+		  if( isset($params['__errors']) ) $this->__errors = explode('::err::',$params['__errors']);
+		  if( isset($params['__messages']) ) $this->__messages = explode('::msg::',$params['__messages']);
+		  if( is_array($this->__errors) && count($this->__errors) ) echo $this->ShowErrors($this->__errors);
+		  if( is_array($this->__messages) && count($this->__messages) ) echo $this->ShowMessage($this->__messages[0]);
+	  }
 
-    if ($name != '') {
-      //Just in case DoAction is called directly and it's not overridden.
-      //See: http://0x6a616d6573.blogspot.com/2010/02/cms-made-simple-166-file-inclusion.html
-      $name = preg_replace('/[^A-Za-z0-9\-_+]/', '', $name);
-		
-      $filename = dirname(dirname(dirname(__FILE__))) . '/modules/'.$this->GetName().'/action.' . $name . '.php';
-      if (@is_file($filename)) {
-	$gCms = cmsms();
-	$db = $gCms->GetDb();
-	$config = $gCms->GetConfig();
-	$smarty = $gCms->GetSmarty();
-	include($filename);
-      }
-    }
+	  if ($name != '') {
+		  //Just in case DoAction is called directly and it's not overridden.
+		  //See: http://0x6a616d6573.blogspot.com/2010/02/cms-made-simple-166-file-inclusion.html
+		  $name = preg_replace('/[^A-Za-z0-9\-_+]/', '', $name);
+
+		  $filename = dirname(dirname(dirname(__FILE__))) . '/modules/'.$this->GetName().'/action.' . $name . '.php';
+		  if (@is_file($filename)) {
+			  $gCms = cmsms();
+			  $db = $gCms->GetDb();
+			  $config = $gCms->GetConfig();
+			  $smarty = $gCms->GetSmarty();
+			  include($filename);
+		  }
+	  }
   }
 
   /**
@@ -1631,48 +1631,48 @@ abstract class CMSModule
    */
   final public function DoActionBase($name, $id, $params, $returnid='')
   {
-    $name = preg_replace('/[^A-Za-z0-9\-_+]/', '', $name);
-    if( $returnid != '' ) {
-      if( !$this->restrict_unknown_params ) {
-	// put mention into the admin log
-	audit('',$this->GetName(),'Module is not properly cleaning input params');
-      }
-      // used to try to avert XSS flaws, this will
-      // clean as many parameters as possible according
-      // to a map specified with the SetParameterType metods.
-      $params = $this->_cleanParamHash($this->GetName(),$params,$this->param_map, !$this->restrict_unknown_params);
-    }
+	  $name = preg_replace('/[^A-Za-z0-9\-_+]/', '', $name);
+	  if( $returnid != '' ) {
+		  if( !$this->restrict_unknown_params ) {
+			  // put mention into the admin log
+			  audit('',$this->GetName(),'Module is not properly cleaning input params');
+		  }
+		  // used to try to avert XSS flaws, this will
+		  // clean as many parameters as possible according
+		  // to a map specified with the SetParameterType metods.
+		  $params = $this->_cleanParamHash($this->GetName(),$params,$this->param_map, !$this->restrict_unknown_params);
+	  }
 
-    // handle the stupid input type='image' problem.
-    foreach( $params as $key => $value ) {
-      if( endswith($key,'_x') ) {
-	$base = substr($key,0,strlen($key)-2);
-	if( isset($params[$base.'_y']) && !isset($params[$base]) ) $params[$base] = $base;
-      }
-    }
+	  // handle the stupid input type='image' problem.
+	  foreach( $params as $key => $value ) {
+		  if( endswith($key,'_x') ) {
+			  $base = substr($key,0,strlen($key)-2);
+			  if( isset($params[$base.'_y']) && !isset($params[$base]) ) $params[$base] = $base;
+		  }
+	  }
 
-    if( !isset($params['action']) ) $params['action'] = $name;
-    $params['action'] = cms_htmlentities($params['action']);
-    $returnid = cms_htmlentities($returnid);
-    $id = cms_htmlentities($id);
-    $name = cms_htmlentities($name);
+	  if( !isset($params['action']) ) $params['action'] = $name;
+	  $params['action'] = cms_htmlentities($params['action']);
+	  $returnid = cms_htmlentities($returnid);
+	  $id = cms_htmlentities($id);
+	  $name = cms_htmlentities($name);
 
-    $smarty = cmsms()->GetSmarty();
-    $smarty->assign('actionid',$id);
-    $smarty->assign('actionparams',$params);
-    $smarty->assign('returnid',$returnid);
-    $smarty->assign('actionmodule',$this->GetName());
-    $smarty->assign('mod',$this);
+	  $smarty = cmsms()->GetSmarty();
+	  $smarty->assign('actionid',$id);
+	  $smarty->assign('actionparams',$params);
+	  $smarty->assign('returnid',$returnid);
+	  $smarty->assign('actionmodule',$this->GetName());
+	  $smarty->assign('mod',$this);
 
-    $output = $this->DoAction($name, $id, $params, $returnid);
+	  $output = $this->DoAction($name, $id, $params, $returnid);
 
-    if( isset($params['assign']) ) {
-      $gCms = cmsms();
-      $smarty = $gCms->GetSmarty();
-      $smarty->assign(cms_htmlentities($params['assign']),$output);
-      return;
-    }
-    return $output;
+	  if( isset($params['assign']) ) {
+		  $gCms = cmsms();
+		  $smarty = $gCms->GetSmarty();
+		  $smarty->assign(cms_htmlentities($params['assign']),$output);
+		  return;
+	  }
+	  return $output;
   }
 
 

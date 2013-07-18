@@ -1,0 +1,137 @@
+<?php
+#BEGIN_LICENSE
+#-------------------------------------------------------------------------
+# Class: CmsLockOperations (c) 2013 by Robert Campbell 
+#         (calguy1000@cmsmadesimple.org)
+#  A class for managing locks on various objects.
+# 
+#-------------------------------------------------------------------------
+# CMS - CMS Made Simple is (c) 2004 by Ted Kulp (wishy@cmsmadesimple.org)
+# This project's homepage is: http://www.cmsmadesimple.org
+#
+#-------------------------------------------------------------------------
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# However, as a special exception to the GPL, this software is distributed
+# as an addon module to CMS Made Simple.  You may not use this software
+# in any Non GPL version of CMS Made simple, or in any version of CMS
+# Made simple that does not indicate clearly and obviously in its admin 
+# section that the site was built with CMS Made simple.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+# Or read it online: http://www.gnu.org/licenses/licenses.html#GPL
+#
+#-------------------------------------------------------------------------
+#END_LICENSE
+
+final class CmsLockOperations
+{
+  private function __construct($type,$id) {}
+
+  /**
+   * Touch any lock of the specified type, and id that matches the currently logged in UID
+   */
+  public static function touch($lock_id,$type,$oid)
+  {
+    $uid = get_userid(FALSE);
+    $lock = CmsLock::load_by_id($lock_id,$type,$oid,$uid);
+    $lock->save();
+    return $lock['expires'];
+  }
+
+  /**
+   * Delete any lock of the specified type, and id that matches the currently logged in UID
+   */
+  public static function delete($lock_id,$type,$oid)
+  {
+    return self::unlock($lock_id,$type,$oid);
+  }
+
+  /**
+   * Delete any lock of the specified type, and id that matches the currently logged in UID
+   */
+  public static function unlock($lock_id,$type,$oid)
+  {
+    $uid = get_userid(FALSE);
+    $lock = CmsLock::load_by_id($lock_id,$type,$oid);
+    $lock->delete();
+  }
+
+  /**
+   * test for any lock of the specified type, and id
+   */
+  public static function is_locked($type,$oid)
+  {
+    try {
+      $lock = CmsLock::load($type,$oid);
+      return TRUE;
+    }
+    catch( CmsNoLockException $e ) {
+      return FALSE;
+    }
+  }
+  
+  /**
+   * Delete any locks that have expired.
+   */
+  private static function delete_expired($expires = null,$type = null)
+  {
+    if( $expires == null ) $expires == time();
+    $db = cmsms()->GetDb();
+    $query = 'DELETE FROM '.cms_db_prefix().CmsLock::LOCK_TABLE.' WHERE expires < ?';
+    $parms = array($expires);
+    if( $type ) {
+      $query .= ' AND type = ?';
+      $parms[] = $type;
+    }
+    $dbr = $db->Execute($query,$parms);
+  }
+
+  /**
+   * Get all locks of a specific type
+   */
+  public static function get_locks($type)
+  {
+    $db = cmsms()->GetDb();
+    $query = 'SELECT * FROM '.cms_db_prefix().CmsLock::LOCK_TABLE.' WHERE type = ?';
+    $tmp = $db->GetArray($query,array($type));
+    if( !is_array($tmp) || count($tmp) == 0 ) return;
+
+    $locks = array();
+    foreach( $tmp as $row ) {
+      $obj = CmsLock::from_row($row);
+      $locks[] = $obj;
+    }
+    return $locks;
+  }
+
+  public static function delete_for_user()
+  {
+    $uid = get_userid(FALSE);
+    $db = cmsms()->GetDb();
+    $query = 'DELETE FROM '.cms_db_prefix().CmsLock::LOCK_TABLE.' WHERE uid = ?';
+    $db->Execute($query,array($uid));
+  }
+  
+  public static function locking_enabled()
+  {
+    $timeout = cms_siteprefs::get('lock_timeout');
+    if( $timeout > 0 ) return TRUE;
+    return FALSE;
+  }
+} // end of class
+
+#
+# EOF
+#
+?>

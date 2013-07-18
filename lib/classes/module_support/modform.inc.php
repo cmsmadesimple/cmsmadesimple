@@ -623,8 +623,7 @@ function cms_module_CreateLink(&$modinstance, $id, $action, $returnid='', $conte
   $class = (isset($params['class'])?cms_htmlentities($params['class']):'');
 
   // create url....
-  $text = cms_module_create_url($modinstance,$id,$action,$returnid,$params,
-								$inline,$targetcontentonly,$prettyurl);
+  $text = $modinstance->create_url($id,$action,$returnid,$params,$inline,$targetcontentonly,$prettyurl);
 
   if (!$onlyhref) {
 	  $beginning = '<a';

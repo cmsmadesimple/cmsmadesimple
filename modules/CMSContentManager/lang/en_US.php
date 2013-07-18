@@ -49,6 +49,7 @@ $lang['desc_contentmanager_settings'] = 'Adjust settings related to listing, or 
 
 #E
 $lang['error_bulk_permission'] = 'You do not have permission to perform this bulk action';
+$lang['error_contentlocked'] = 'It appears that this content is already locked.  Try to refresh this page to see information about the current editor';
 $lang['error_contenttype_disallowed'] = 'Default Content Type is also set to Disallowed';
 $lang['error_copy_permission'] = 'You do not have permission to copy this content page';
 $lang['error_delete_defaultcontent'] = 'You cannot delete the default content page';
@@ -105,6 +106,11 @@ $lang['info_preview_notice'] = '<strong>Warning:</strong> This preview panel beh
 #K
 
 #L
+$lang['locked_by'] = 'Locked By';
+$lang['locked_since'] = 'Since';
+$lang['locked_steal'] = 'You can steal this lock';
+$lang['lock_expired'] = 'Expired';
+$lang['lock_expires'] = 'Expires';
 
 #M
 $lang['moddescription'] = 'A module for managing content within CMSMS';
@@ -185,6 +191,7 @@ $lang['prompt_page_view'] = 'View this page in another window';
 $lang['prompt_preview'] = 'Preview';
 $lang['prompt_secure'] = 'Secure';
 $lang['prompt_settings'] = 'Settings';
+$lang['prompt_steal_lock_edit'] = 'Steal this lock and edit the page';
 $lang['prompt_template'] = 'Template';
 $lang['prompt_title'] = 'Title';
 $lang['prompt_withselected'] = 'With Selected';

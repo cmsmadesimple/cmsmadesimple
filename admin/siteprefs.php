@@ -127,6 +127,8 @@ $adminlog_lifetime = (60*60*24*31);
 $search_module = 'Search';
 $use_smartycache = 0;
 $use_smartycompilecheck = 1;
+$lock_timeout = '';
+$lock_refresh = '';
 $mailprefs = array('mailer'=>'mail',
 		   'host'=>'localhost',
 		   'port'=>25,
@@ -184,6 +186,8 @@ $adminlog_lifetime = cms_siteprefs::get('adminlog_lifetime',$adminlog_lifetime);
 $search_module = cms_siteprefs::get('searchmodule',$search_module);
 $use_smartycache = cms_siteprefs::get('use_smartycache',$use_smartycache);
 $use_smartycompilecheck = cms_siteprefs::get('use_smartycompilecheck',$use_smartycompilecheck);
+$lock_timeout = cms_siteprefs::get('lock_timeout',$lock_timeout);
+$lock_refresh = cms_siteprefs::get('lock_refresh',$lock_refresh);
 $tmp = cms_siteprefs::get('mailprefs');
 if( $tmp ) $mailprefs = unserialize($tmp);
 
@@ -402,6 +406,16 @@ if (isset($_POST["editsiteprefs"])) {
 			$adminlog_lifetime = $_POST["adminlog_lifetime"];
 			cms_siteprefs::set('adminlog_lifetime',$adminlog_lifetime);
 		}
+		if( isset($_POST['lock_timeout']) ) {
+			$lock_timeout = (int)$_POST['lock_timeout'];
+			$lock_timeout = max(10,min(3600,$lock_timeout));
+			cms_siteprefs::set('lock_timeout',$lock_timeout);
+		}
+		if( isset($_POST['lock_refresh']) ) {
+			$lock_refresh = (int)$_POST['lock_refresh'];
+			$lock_refresh = max(1,min($lock_timeout-1,$lock_refresh));
+			cms_siteprefs::set('lock_refresh',$lock_refresh);
+		}
 		break;
 	  
     case 'smarty':
@@ -548,6 +562,8 @@ $smarty->assign('adminlog_lifetime',$adminlog_lifetime);
 $smarty->assign('search_module',$search_module);
 $smarty->assign('use_smartycache',$use_smartycache);
 $smarty->assign('use_smartycompilecheck',$use_smartycompilecheck);
+$smarty->assign('lock_timeout',$lock_timeout);
+$smarty->assign('lock_refresh',$lock_refresh);
 
 $tmp = array(15=>lang('cron_15m'),30=>lang('cron_30m'),
 	     60=>lang('cron_60m'),120=>lang('cron_120m'),

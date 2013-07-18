@@ -65,9 +65,7 @@ abstract class CmsAdminThemeBase
 	 */
 	protected function __construct()
 	{
-		if( is_object(self::$_instance) ) {
-			throw new CmsLogicExceptin('Only one instance of a theme object is permitted');
-		}
+		if( is_object(self::$_instance) ) throw new CmsLogicExceptin('Only one instance of a theme object is permitted');
 
 		$this->_url = $_SERVER['SCRIPT_NAME'];
 		$this->_query = (isset($_SERVER['QUERY_STRING'])?$_SERVER['QUERY_STRING']:'');
@@ -75,9 +73,7 @@ abstract class CmsAdminThemeBase
 			$tmp = explode(',',$_POST['mact']);
 			$this->_query = 'module='.$tmp[0];
 		}
-		if ($this->_query == '' && isset($_POST['module']) && $_POST['module'] != '') {
-			$this->_query = 'module='.$_POST['module'];
-		}
+		if ($this->_query == '' && isset($_POST['module']) && $_POST['module'] != '') $this->_query = 'module='.$_POST['module'];
         if (strpos( $this->_url, '/' ) === false) {
 			$this->_script = $this->_url;
 		}
@@ -811,6 +807,8 @@ abstract class CmsAdminThemeBase
 	 */
 	protected function get_admin_navigation()
 	{
+		$smarty = cmsms()->GetSmarty();
+		$smarty->assign('secureparam', CMS_SECURE_PARAM_NAME . '=' . $_SESSION[CMS_USER_KEY]);
 		$this->_populate_admin_navigation();
 		return $this->_menuItems;
 	}
@@ -963,9 +961,7 @@ abstract class CmsAdminThemeBase
 	 */
 	public function get_value($key)
 	{
-		if( is_array($this->_data) && isset($this->_data[$key]) ) {
-			return $this->_data[$key];
-		}
+		if( is_array($this->_data) && isset($this->_data[$key]) ) return $this->_data[$key];
 	}
 
 
@@ -1086,8 +1082,7 @@ abstract class CmsAdminThemeBase
 		if( is_array($tmp) && count($tmp) ) {
 			$tmp = array_keys($tmp);
 			$logintheme = get_site_preference('logintheme');
-			if( $logintheme && in_array($logintheme,$tmp) )
-				return $logintheme;
+			if( $logintheme && in_array($logintheme,$tmp) )	return $logintheme;
 			return $tmp[0];
 		}
 	}

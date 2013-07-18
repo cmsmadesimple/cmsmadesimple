@@ -36,10 +36,6 @@
 if( !isset($gCms) ) exit;
 
 $this->SetCurrentTab('pages');
-if( isset($params['cancel']) ) {
-  unset($_SESSION['__cms_copy_obj__']);
-  $this->RedirectToAdminTab();
-}
 
 //
 // init
@@ -52,12 +48,19 @@ $pagedefaults = CmsContentManagerUtils::get_pagedefaults();
 $content_type = $pagedefaults['contenttype'];
 $error = null;
 
+if( isset($params['content_id']) ) $content_id = (int)$params['content_id'];
+
 if( isset($params['cancel']) ) {
+  try {
+    if( $content_id && CmsLockOperations::locking_enabled() ) CmsLockOperations::unlock('content',$content_id);
+  }
+  catch( Exception $e ) {
+    // do nothing.
+  }
+  unset($_SESSION['__cms_copy_obj__']);
   $this->SetMessage($this->Lang('msg_cancelled'));
   $this->RedirectToAdminTab();
 }
-
-if( isset($params['content_id']) ) $content_id = (int)$params['content_id'];
 
 if( !$this->CanEditContent($content_id) ) {
   // nope, can't edit this page anyways.
@@ -166,6 +169,12 @@ try {
       unset($_SESSION['__cms_copy_obj__']);
       audit($content_obj->Id(),'Content Item: '.$content_obj->Name(),' Edited');
       if( isset($params['submit']) ) {
+	try {
+	  if( $content_id && CmsLockOperations::locking_enabled() ) CmsLockOperations::unlock('content',$content_id);
+	}
+	catch( Exception $e ) {
+	  // do nothing.
+	}
 	$this->SetMessage($this->Lang('msg_editpage_success'));
 	$this->RedirectToAdminTab();
       }
@@ -240,6 +249,10 @@ $factory = new ContentAssistantFactory($content_obj);
 $assistant = $factory->getEditContentAssistant();
 if( is_object($assistant) ) {
   $smarty->assign('extra_content',$assistant->getExtraCode());
+}
+if( $content_id && CmsLockOperations::locking_enabled() ) {
+  $lock = new CmsLock('content',$content_id);
+  $smarty->assign('lock',$lock);
 }
 
 

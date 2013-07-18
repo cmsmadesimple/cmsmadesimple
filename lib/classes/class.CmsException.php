@@ -39,6 +39,52 @@
  */
 
 /**
+ * A basic exception class that holds on to extended information.
+ */
+abstract class CmsExtraDataException extends Exception
+{
+  private $_extra;
+
+  public function __construct(/* var args */)
+  {
+    $args = $msg = $prev = NULL;
+    $code = 0;
+    $args = func_get_args();
+    if( is_array($args) && count($args) == 1 ) $args = $args[0];
+    for( $i = 0; $i < count($args); $i++ ) {
+      switch( $i ) {
+      case 0:
+	$msg = $args[$i];
+	break;
+
+      case 1:
+        $code = (int)$args[$i];
+	break;
+
+      case 2:
+	if( is_object($args[$i]) ) {
+	  $prev = $args[$i];
+	}
+	else {
+	  $this->_extra = $args[$i];
+	}
+	break;
+
+      case 3:
+	if( $prev == null && is_object($args[$i]) ) $prev = $args[$i];
+	break;
+      }
+    }
+    parent::__construct($msg,$code,$prev);
+  }
+
+  public function GetExtraData()
+  {
+    return $this->_extra;
+  }
+}
+
+/**
  * A base CMSMS Exception
  *
  * This exception can accept an integer 'code' for an exception or a language key.
@@ -48,19 +94,18 @@
  * @author Robert Campbell (calguy1000@cmsmadesimple.org)
  * @since 1.10
  */
-class CmsException extends Exception 
+class CmsException extends CmsExtraDataException 
 {
-  public function __construct($msg,$code = 0, Exception $prev = null ) {
-    if( is_int($msg) ) {
-      $msg = 'CMSEX_'.$msg;
+  public function __construct(/* var args */) {
+    $args = func_get_args();
+    parent::__construct($args);
+    if( is_int($this->message) ) $this->messsage = 'CMSEX_'.$msg;
+    if( startswith($this->message,'CMSEX_') && !CmsLangOperations::key_exists($this->message) ) {
+      $this->message = 'MISSING TRANSLATION FOR '.$this->message;
     }
-    if( startswith($msg,'CMSEX_') && !CmsLangOperations::key_exists($msg) ) {
-      $msg = 'MISSING TRANSLATION FOR '.$msg;
+    else if( strpos($this->message,' ') === FALSE && CmsLangOperations::key_exists($this->message) ) {
+      $this->message = CmsLangOperations::lang($this->message);
     }
-    else if( strpos($msg,' ') === FALSE && CmsLangOperations::key_exists($msg) ) {
-      $msg = CmsLangOperations::lang($msg);
-    }
-    parent::__construct($msg,$code,$prev);
   }
 }
 

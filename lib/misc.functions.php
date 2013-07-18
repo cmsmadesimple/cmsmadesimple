@@ -1279,6 +1279,7 @@ function cms_get_jquery($exclude = '',$ssl = null,$cdn = false,$append = '',$cus
     }
     $scripts['cms_admin'] = array('local'=>$basePath.'/lib/jquery/js/jquery.cms_admin.js');
     $scripts['cms_dirtyform'] = array('local'=>$basePath.'/lib/jquery/js/jquery.cmsms_dirtyform.js');
+    $scripts['cms_lock'] = array('local'=>$basePath.'/lib/jquery/js/jquery.cmsms_lock.js');
   }
 
   // Check if we need to exclude some script
@@ -1312,8 +1313,8 @@ function cms_get_jquery($exclude = '',$ssl = null,$cdn = false,$append = '',$cus
   if(!empty($append)) {
     $append_list = explode(",", trim(str_replace(' ','',$append)));
     foreach($append_list as $key => $item) {
-      $scripts['user_'+$key]='<script type="text/javascript" src="'.($item).'"></script>'."\n";;
-    }		
+      $scripts['user_'+$key] = array('local'=>$item);
+    }
   }
 
   // Output

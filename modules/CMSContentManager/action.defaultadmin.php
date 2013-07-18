@@ -141,6 +141,8 @@ if( isset($params['seek']) && $params['seek'] != '' ) {
 else {
   $builder->set_page($curpage);
 }
+
+
 $editinfo = $builder->get_content_list();
 $npages = $builder->get_numpages();
 $pagelimits = array(10=>10,25=>25,100=>100,250=>250,500=>500);
@@ -149,10 +151,13 @@ $pagelist = array();
 for( $i = 0; $i < $npages; $i++ ) {
   $pagelist[$i+1] = $i+1;
 }
+
+$smarty->assign('locks',$builder->get_locks());
 $smarty->assign('pagelimit',$pagelimit);
 $smarty->assign('pagelist',$pagelist);
 $smarty->assign('curpage',$builder->get_page());
 $smarty->assign('npages',$npages);
+$smarty->assign('admin_url',$config['admin_url']);
 $columns  = $builder->get_display_columns();
 $smarty->assign('columns',$columns);
 if( $this->GetPreference('list_namecolumn','menutext') == 'title' ) {

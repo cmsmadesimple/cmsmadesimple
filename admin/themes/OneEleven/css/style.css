@@ -733,6 +733,12 @@ aside .no-slide,
 	margin-left: 25px;
 	background: none
 }
+.errorDialog { 
+  border: 1px solid red;
+  color: red;
+  height: 100%;
+  line-height: 100%;
+}
 /* close notification */
 .close-warning {
 	float:right;

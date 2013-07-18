@@ -59,6 +59,7 @@ final class ContentListBuilder
   private $_offset    = 0;
   private $_pagelist;
   private $_seek_to;
+  private $_locks;
 
   /**
    * Constructor
@@ -518,6 +519,44 @@ final class ContentListBuilder
   }
 
   /**
+   * Get a hash of current page locks.
+   */
+  public function get_locks()
+  {
+    if( is_array($this->_locks) ) return $this->_locks;
+    $this->_locks = array();
+    $tmp = CmsLockOperations::get_locks('content');
+    if( is_array($tmp) && count($tmp) ) {
+      foreach( $tmp as $lock_obj ) {
+	$this->_locks[$lock_obj['oid']] = $lock_obj;
+      }
+    }
+    return $this->_locks;
+  }
+
+  /**
+   * Checks if the current page is locked.
+   */
+  private function _is_locked($page_id)
+  {
+    $locks = $this->get_locks();
+    if( !is_array($locks) || count($locks) == 0 ) return FALSE;
+    if( in_array($page_id,array_keys($locks)) ) return TRUE;
+    return FALSE;
+  }
+
+  private function _is_lock_expired($page_id)
+  {
+    $locks = $this->get_locks();
+    if( !is_array($locks) || count($locks) == 0 ) return FALSE;
+    if( isset($locks[$page_id]) ) {
+      $lock = $locks[$page_id];
+      if( $lock->expired() ) return TRUE;
+    }
+    return FALSE;
+  }
+
+  /**
    * Load, and cache all users
    */
   private function _get_users()
@@ -579,14 +618,19 @@ final class ContentListBuilder
       $rec['created'] = $content->GetCreationDate();
       $rec['secure'] = $content->Secure();
       $rec['cachable'] = $content->Cachable();
-      if( $page_id == $this->_seek_to ) {
-	$rec['selected'] = 1;
+      if( $this->_is_locked($page_id) ) {
+	$lock = $this->_locks[$page_id];
+	$rec['lockuser'] = $users[$lock['uid']]->username;
+	$rec['lock'] = $this->_locks[$page_id];
       }
+      if( $page_id == $this->_seek_to ) $rec['selected'] = 1;
       if( $content->LastModifiedBy() > 0 && isset($users[$content->LastModifiedBy()]) ) {
 	$rec['lastmodifiedby'] = $users[$content->LastModifiedBy()]->username;
       }
-      $rec['can_edit'] = $mod->CheckPermission('Modify Any Page') || $mod->CheckPermission('Manage All Content') ||
-	$this->_check_authorship();
+      $rec['can_edit'] = ($mod->CheckPermission('Modify Any Page') || $mod->CheckPermission('Manage All Content') ||
+			  $this->_check_authorship()) && !$this->_is_locked($page_id);
+      $rec['can_steal'] = ($mod->CheckPermission('Modify Any Page') || $mod->CheckPermission('Manage All Content') ||
+			   $this->_check_authorship()) && $this->_is_locked($page_id) && $this->_is_lock_expired($page_id);
 
       foreach( array_keys($columns) as $column ) {
 	switch( $column ) {
@@ -608,22 +652,16 @@ final class ContentListBuilder
 	case 'page':
 	  if( $content->MenuText() == CMS_CONTENT_HIDDEN_NAME ) continue;
 	  $rec[$column] = $content->MenuText();
-	  if( $mod->GetPreference('list_namecolumn','title') == 'title' ) {
-	    $rec[$column] = $content->Name();
-	  }
+	  if( $mod->GetPreference('list_namecolumn','title') == 'title' ) $rec[$column] = $content->Name();
 	  break;
 
 	case 'alias':
-	  if( $content->HasUsableLink() && $content->Alias() != '' ) {
-	    $rec[$column] = $content->Alias();
-	  }
+	  if( $content->HasUsableLink() && $content->Alias() != '' ) $rec[$column] = $content->Alias();
 	  break;
 
 	case 'url':
 	  $rec[$column] = '';
-	  if( $content->HasUsableLink() && $content->URL() != '' ) {
-	    $rec[$column] = $content->URL();
-	  }
+	  if( $content->HasUsableLink() && $content->URL() != '' ) $rec[$column] = $content->URL();
 	  break;
 
 	case 'template':
@@ -638,18 +676,15 @@ final class ContentListBuilder
 	  break;
 
 	case 'owner':
-	  if( $content->Owner() > 0 ) {
-	    $rec[$column] = $users[$content->Owner()]->username;
-	  }
+	  if( $content->Owner() > 0 ) $rec[$column] = $users[$content->Owner()]->username;
 	  break;
 
 	case 'active':
-	  if( $mod->CheckPermission('Manage All Content') && !$content->IsSystemPage() ) {
+	  $rec[$column] = '';
+	  if( $mod->CheckPermission('Manage All Content') && !$content->IsSystemPage() && !$this->_is_locked($page_id) ) {
 	    if( $content->Active() ) {
 	      $rec[$column] = 'active';
-	      if( $content->DefaultContent() ) {
-		$rec[$column] = 'default';
-	      }
+	      if( $content->DefaultContent() ) $rec[$column] = 'default';
 	    } else {
 	      $rec[$column] = 'inactive';
 	    }
@@ -658,10 +693,8 @@ final class ContentListBuilder
 
 	case 'default':
 	  $rec[$column] = '';
-	  if( $this->_module->CheckPermission('Manage All Content') ) {
-	    if( $content->IsDefaultPossible() && $content->Active() ) {
-	      $rec[$column] = ($content->DefaultContent())?'yes':'no';
-	    }
+	  if( $this->_module->CheckPermission('Manage All Content') && !$this->_is_locked($page_id) ) {
+	    if( $content->IsDefaultPossible() && $content->Active() ) $rec[$column] = ($content->DefaultContent())?'yes':'no';
 	  }
 	  break;
 
@@ -681,9 +714,7 @@ final class ContentListBuilder
 
 	case 'view':
 	  $rec[$column] = '';
-	  if( $content->HasUsableLink() && $content->IsViewable() && $content->Active() ) {
-	    $rec[$column] = $content->GetURL();
-	  }
+	  if( $content->HasUsableLink() && $content->IsViewable() && $content->Active() ) $rec[$column] = $content->GetURL();
 	  break;
 
 	case 'copy':
@@ -700,7 +731,12 @@ final class ContentListBuilder
 
 	case 'edit':
 	  $rec[$column] = '';
-	  if( $rec['can_edit'] ) $rec[$column] = 'yes';
+	  if( $rec['can_edit'] ) {
+	    $rec[$column] = 'yes';
+	  }
+	  elseif( $rec['can_steal'] ) {
+	    $rec[$column] = 'steal';
+	  }
 	  break;
 
 	case 'delete':
@@ -719,7 +755,7 @@ final class ContentListBuilder
 
 	case 'multiselect':
 	  $rec[$column] = '';
-	  if( !$content->IsSystemPage() ) {
+	  if( !$content->IsSystemPage() && !$this->_is_locked($content->Id()) ) {
 	    if( $mod->CheckPermission('Manage All Content') || $this->CheckPermission('Modify Any Page') ) {
 	      $rec[$column] = 'yes';
 	    }
@@ -746,10 +782,7 @@ final class ContentListBuilder
   public function get_content_list()
   {
     $pagelist = $this->_load_editable_content();
-
-    if( is_array($pagelist) && count($pagelist) ) {
-      return $this->_get_display_data($pagelist);
-    }
+    if( is_array($pagelist) && count($pagelist) ) return $this->_get_display_data($pagelist);
   }
 
 } // end of class

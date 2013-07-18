@@ -42,6 +42,44 @@ $(document).ready(function () {
     cms_CMloadUrl('a.page_sortdown', 0),
     cms_CMloadUrl('a.page_delete', 0);
 
+    $('a.steal_lock').on('click',function(e) {
+      // we're gonna confirm stealing this lock.
+      var v = confirm('{$mod->Lang('confirm_steal_lock')}');
+      $(this).data('steal_lock',v);
+    });
+
+    $('a.page_edit').on('click',function() {
+      var v = $(this).data('steal_lock');
+      $(this).removeData('steal_lock');
+      if( typeof(v) != 'undefined' && v != null && !v ) return false;
+      if( typeof(v) == 'undefined' || v != null ) return true;
+
+      // do a double check to see if this page is locked or not.
+      var content_id = $(this).attr('data-cms-content');
+      var url = '{$admin_url}/ajax_lock.php?showtemplate=false';
+      var opts = { opt: 'check', type: 'content', oid: content_id };
+      var ok = false;
+      opts[cms_data.secure_param_name] = cms_data.user_key;
+      $.ajax({
+        url: url,
+        async: false,
+        data: opts,
+        success: function(data,textStatus,jqXHR) {
+	  if( data.status == 'success' ) {
+            if( data.locked ) {
+              // gotta display a message.
+	      alert('{$mod->Lang('error_contentlocked')}');
+            }
+            else {
+              // we're okay to edit
+	      ok = true;
+            }
+          }
+        }
+      });
+      return ok;
+    });
+
     $(document).on('click', '#myoptions', function () {
         $('#useroptions').dialog({
             resizable: false,
@@ -136,11 +174,27 @@ $(document).ready(function () {
 								<strong>{$mod->Lang('prompt_cachable')}:</strong> {if $row.cachable}{$mod->Lang('yes')}{else}{$mod->Lang('no')}{/if}<br/>
 							{/strip}{/capture}
 	
-						<a href="{cms_action_url action='admin_editcontent' content_id=$row.id}" class="page_edit tooltip" accesskey="e" data-cms-description='{$tooltip_pageinfo|htmlentities}'>
+						<a href="{cms_action_url action='admin_editcontent' content_id=$row.id}" class="page_edit tooltip" accesskey="e" data-cms-content='{$row.id}' data-cms-description='{$tooltip_pageinfo|htmlentities}'>
 							{$row.page}
 						</a>
 					{else}
-						{$row.page}
+						{if isset($row.lock)}
+							{capture assign='tooltip_lockinfo'}{strip}
+							{if $row.can_steal}
+							<strong>{$mod->Lang('locked_steal')}:</strong><br/>
+							{/if}
+							<strong>{$mod->Lang('locked_by')}:</strong> {$row.lockuser}<br/>
+							<strong>{$mod->Lang('locked_since')}:</strong> {$row.lock.created|date_format:'%x %H:%M'}<br/>
+							{if $row.lock.expires < $smarty.now}<span style="color: red;"><strong>{$mod->Lang('lock_expired')}:</strong> {$row.lock.expires|relative_time}</span>{else}<strong>{$mod->Lang('lock_expires')}:</strong> {$row.lock.expires|relative_time}{/if}<br/>
+							{/strip}{/capture}
+							{if !$row.can_steal}
+   								<span class="tooltip" data-cms-description='{$tooltip_lockinfo|htmlentities}'>{$row.page}</span>
+							{else}
+								<a href="{cms_action_url action='admin_editcontent' content_id=$row.id}" class="page_edit tooltip steal_lock" accesskey="e" data-cms-content='{$row.id}' data-cms-description='{$tooltip_lockinfo|htmlentities}'>{$row.page}</a>
+							{/if}
+						{else}
+							{$row.page}
+						{/if}
 					{/if}
 				{elseif $column == 'alias'}
 					{$row.alias}
@@ -177,21 +231,21 @@ $(document).ready(function () {
 						<a href="{cms_action_url action='defaultadmin' setactive=$row.id}" class="page_setactive" accesskey="a">
 							{admin_icon icon='false.gif' title=$mod->Lang('prompt_page_setactive')}
 						</a>
-					{else if $row.active != 'default'}
+					{else if $row.active != 'default' && $row.active != ''}
 						<a href="{cms_action_url action='defaultadmin' setinactive=$row.id}" class="page_setinactive" accesskey="a">
 							{admin_icon icon='true.gif' title=$mod->Lang('prompt_page_setinactive')}
 						</a>
 					{/if}
-					{elseif $column == 'default'}
-						{if $row.default == 'yes'}
-							{admin_icon icon='true.gif' class='page_default' title=$mod->Lang('prompt_page_default')}
-						{else if $row.default == 'no'}
-							<a href="{cms_action_url action='defaultadmin' setdefault=$row.id}" class="page_setdefault" accesskey="d">
-								{admin_icon icon='false.gif' class='page_setdefault' title=$mod->Lang('prompt_page_setdefault')}
-							</a>
-						{/if}
-					{elseif $column == 'move'}
-						{if isset($row.move)}
+				{elseif $column == 'default'}
+					{if $row.default == 'yes'}
+						{admin_icon icon='true.gif' class='page_default' title=$mod->Lang('prompt_page_default')}
+					{else if $row.default == 'no'}
+						<a href="{cms_action_url action='defaultadmin' setdefault=$row.id}" class="page_setdefault" accesskey="d">
+							{admin_icon icon='false.gif' class='page_setdefault' title=$mod->Lang('prompt_page_setdefault')}
+						</a>
+					{/if}
+				{elseif $column == 'move'}
+					{if isset($row.move)}
 							{if $row.move == 'up'}
 								<a href="{cms_action_url action='defaultadmin' moveup=$row.id}" class="page_sortup" accesskey="m">
 									{admin_icon icon='sort_up.gif' title=$mod->Lang('prompt_page_sortup')}
@@ -219,9 +273,15 @@ $(document).ready(function () {
 						{/if}
 					{elseif $column == 'edit'}
 						{if $row.can_edit}
-							<a href="{cms_action_url action=admin_editcontent}" accesskey="e" title="{$mod->Lang('addcontent')}">
+							<a href="{cms_action_url action=admin_editcontent content_id=$row.id}" accesskey="e" class="page_edit" title="{$mod->Lang('addcontent')}" data-cms-content="{$row.id}">
 								{admin_icon icon='edit.gif' class='page_edit' title=$mod->Lang('prompt_page_edit')}
 							</a>
+						{else}
+                                                	{if isset($row.lock) && $row.can_steal}
+							<a href="{cms_action_url action=admin_editcontent content_id=$row.id}" accesskey="e" class="page_edit" title="{$mod->Lang('addcontent')}" data-cms-content="{$row.id}" class="steal_lock">
+								{admin_icon icon='permissions.gif' class='page_edit steal_lock' title=$mod->Lang('prompt_steal_lock_edit')}
+							</a>
+							{/if}
 						{/if}
 					{elseif $column == 'delete'}
 						{if $row.delete != ''}
@@ -241,13 +301,9 @@ $(document).ready(function () {
 		{/foreach}
 	{/function}
 
-{if isset($error)}
-	<div class="pageerrorcontainer">
-		<ul class="pageerror">
-			<li>{$error}</li>
-		</ul>
-	</div>
-{/if}
+<div id="error_cont" class="error" style="color-red: text-align: center; vertical-align: middle; display: none;">
+{$error|default:''}
+</div>
 
 <div class="row">
 	<div class="pageoptions options-menu half">

@@ -5,16 +5,33 @@ form.dirtyForm { color: salmon; }
 <script type="text/javascript">
 // <![CDATA[
 $(document).ready(function(){
+  // initialize the dirtyform stuff.
   $('#Edit_Content').dirtyForm({
     onDirty: function(){
       $('[name$=apply],[name$=submit]').show('slow');
+    },
+    beforeUnload: function() {
+      $('#Edit_Content').lockManager('unlock');
     }
   });
   $(document).on('cmsms_textchange',function(event){
     // editor textchange, set the form dirty.
     $('#Edit_Content').dirtyForm('option','dirty',true);
+    $('#Edit_Content').lockManager('option','change_noticed',true);
   });
+
+  // hide sumit and apply buttons, till something changes
   $('[name$=apply],[name$=submit]').hide();
+
+  // initialize lock manager
+  $('#Edit_Content').lockManager({
+    type: 'content',
+    oid: {$content_id},
+    uid: {get_userid(FALSE)},
+    error_handler: function(err) {
+      alert('got error '+err.type+' // '+err.msg);
+    }
+  });
 
   {if $content_obj->HasPreview()}
   $('#_preview_').click(function(){
@@ -36,13 +53,16 @@ $(document).ready(function(){
     $('#Edit_Content').dirtyForm('disable');
   });
 
+  // submit the form if template id, and/or content-type fields are changed.
   $('#template_id, #content_type').on('change',function(){
     $(this).closest('form').submit();
   });
 
-  $('[name$=cancel]').click(function(){
+  // handle cancel/close ... and unlock
+  $(document).on('click', '[name$=cancel]', function(){
     var tmp = $(this).val();
     if( tmp == '{$mod->Lang('close')}' ) {
+      $('#Edit_Content').lockManager('unlock');
       return true;
     }
     else {
@@ -50,6 +70,7 @@ $(document).ready(function(){
     }
   });
 
+  // handle apply (ajax submit)
   $(document).on('click', '[name$=apply]', function(){
     var data = $('#Edit_Content').find('input:not([type=submit]), select, textarea').serializeArray();
     data.push({ 'name': '{$actionid}ajax', 'value': 1});
@@ -63,15 +84,14 @@ $(document).ready(function(){
     },'json');
     return false;
   });
-
   jQuery('body').on('cms_ajax_apply',function(e){
     var htmlShow = '';
     if( e.response == 'Success' ) {
       // here we could fire a custom event, give the details and let something else handle it.
       htmlShow = '<div class="pagemcontainer"><p class="pagemessage">' + e.details + '<\/p><\/div>';
-      jQuery('[name=cancel]').fadeOut();
-      jQuery('[name=cancel]').attr('value','{$mod->Lang('close')}');
-      jQuery('[name=cancel]').fadeIn();
+      $('[name$=cancel]').fadeOut();
+      $('[name$=cancel]').attr('value','{$mod->Lang('close')}');
+      $('[name$=cancel]').fadeIn();
     }
     else {
       htmlShow = '<div class="pageerrorcontainer"><ul class="pageerror">';

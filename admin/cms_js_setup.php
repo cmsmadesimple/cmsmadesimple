@@ -30,13 +30,32 @@ $config = cmsms()->GetConfig();
 $data = array();
 $data['ajax_help_url'] = 'ajax_help.php'.$urlext;
 $data['title_help'] = lang('help');
+$data['lang_alert'] = lang('alert');
+$data['lang_error'] = lang('error');
+$data['lang_ok'] = lang('ok');
+$data['lang_cancel'] = lang('cancel');
+$data['lang_yes'] = lang('yes');
+$data['lang_no'] = lang('no');
+$data['admin_url'] = $config['admin_url'];
+$data['secure_param_name'] = CMS_SECURE_PARAM_NAME;
+$data['user_key'] = $_SESSION[CMS_USER_KEY];
 
 // output some javascript
-$out = 'var cms_data = new Array();'."\n";
+$out = 'var cms_data = {}'."\n";
 foreach( $data as $key => $value ) {
   $out .= "cms_data['{$key}'] = '{$value}';\n";
 }
 
+$out .= <<<EOT
+function cms_lang(key) {
+  key = 'lang_'+key;
+  if( typeof(cms_data[key]) != 'undefined' ) return cms_data[key];
+}
+EOT;
+header('Pragma: public');
+header('Expires: 0');
+header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+header('Cache-Control: private',false);
 header('Content-type: text/javascript');
 echo $out;
 exit;
