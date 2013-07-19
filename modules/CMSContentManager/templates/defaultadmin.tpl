@@ -46,6 +46,11 @@ $(document).ready(function () {
       // we're gonna confirm stealing this lock.
       var v = confirm('{$mod->Lang('confirm_steal_lock')}');
       $(this).data('steal_lock',v);
+      if( v ) {
+        var url = $(this).attr('href');
+        url = url + '{$actionid}steal=1';
+        $(this).attr('href',url);
+      }
     });
 
     $('a.page_edit').on('click',function() {

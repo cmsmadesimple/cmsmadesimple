@@ -34,6 +34,7 @@ $data['lang_alert'] = lang('alert');
 $data['lang_error'] = lang('error');
 $data['lang_ok'] = lang('ok');
 $data['lang_cancel'] = lang('cancel');
+$data['lang_confirm'] = lang('confirm');
 $data['lang_yes'] = lang('yes');
 $data['lang_no'] = lang('no');
 $data['admin_url'] = $config['admin_url'];

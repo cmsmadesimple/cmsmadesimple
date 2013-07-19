@@ -307,15 +307,25 @@ if (isset($_POST["editsiteprefs"])) {
       $contentimage_path = trim($_POST['contentimage_path']);
       cms_siteprefs::set('contentimage_path',$contentimage_path);
       if( isset($_POST['basic_attributes']) ) {
-	$basic_attributes = implode(',',($_POST['basic_attributes']));
+		  $basic_attributes = implode(',',($_POST['basic_attributes']));
       }
       else {
-	$basic_attributes = '';
+		  $basic_attributes = '';
       }
       cms_siteprefs::set('basic_attributes',$basic_attributes);
       $disallowed_contenttypes = '';
       if( isset($_POST['disallowed_contenttypes']) ) $disallowed_contenttypes = implode(',',$_POST['disallowed_contenttypes']);
       cms_siteprefs::set('disallowed_contenttypes',$disallowed_contenttypes);
+	  if( isset($_POST['lock_timeout']) ) {
+		  $lock_timeout = (int)$_POST['lock_timeout'];
+		  $lock_timeout = max(10,min(3600,$lock_timeout));
+		  cms_siteprefs::set('lock_timeout',$lock_timeout);
+	  }
+	  if( isset($_POST['lock_refresh']) ) {
+		  $lock_refresh = (int)$_POST['lock_refresh'];
+		  $lock_refresh = max(1,min($lock_timeout-1,$lock_refresh));
+		  cms_siteprefs::set('lock_refresh',$lock_refresh);
+	  }
       break;
 
     case 'sitedown':
@@ -405,16 +415,6 @@ if (isset($_POST["editsiteprefs"])) {
 		if (isset($_POST["adminlog_lifetime"])) {
 			$adminlog_lifetime = $_POST["adminlog_lifetime"];
 			cms_siteprefs::set('adminlog_lifetime',$adminlog_lifetime);
-		}
-		if( isset($_POST['lock_timeout']) ) {
-			$lock_timeout = (int)$_POST['lock_timeout'];
-			$lock_timeout = max(10,min(3600,$lock_timeout));
-			cms_siteprefs::set('lock_timeout',$lock_timeout);
-		}
-		if( isset($_POST['lock_refresh']) ) {
-			$lock_refresh = (int)$_POST['lock_refresh'];
-			$lock_refresh = max(1,min($lock_timeout-1,$lock_refresh));
-			cms_siteprefs::set('lock_refresh',$lock_refresh);
 		}
 		break;
 	  

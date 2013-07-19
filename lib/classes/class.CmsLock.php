@@ -88,7 +88,7 @@ final class CmsLock implements ArrayAccess
   {
     $type = trim($type);
     $oid = trim($oid);
-    if( $type == '' ) throw new CmsInvalidDataException('error_locktypeempty');
+    if( $type == '' ) throw new CmsInvalidDataException('CMSEX_L003');
 
     $this->_data['type'] = $type;
     $this->_data['oid'] = $oid;
@@ -111,7 +111,7 @@ final class CmsLock implements ArrayAccess
     case 'modified':
     case 'lifetime':
     case 'expires':
-      if( !isset($this->_data[$key]) ) throw new CmsLogicException('error_locknotsaved');
+      if( !isset($this->_data[$key]) ) throw new CmsLogicException('CMSEX_L004');
       return $this->_data[$key];
     }
   }
@@ -121,9 +121,7 @@ final class CmsLock implements ArrayAccess
     switch( $key ) {
     case 'type':
     case 'oid':
-      if( isset($this->_data['id']) ) {
-	throw new CmsInvalidDataException('error_objectcantsetthis',$key);
-      }
+      if( isset($this->_data['id']) ) throw new CmsInvalidDataException('CMSEX_G001');
       $this->_data[$key] = trim($value);
       $this->_dirty = TRUE;
       break;
@@ -134,7 +132,7 @@ final class CmsLock implements ArrayAccess
     case 'modified':
     case 'expires':
       // can't set this.
-      throw new CmsInvalidDataException('error_objectcantsetthis',$key);
+      throw new CmsInvalidDataException('CMSEX_G001');
 
     case 'lifetime':
       $this->_data[$key] = max(1,(int)$value);
@@ -183,7 +181,7 @@ final class CmsLock implements ArrayAccess
       $dbr = $db->Execute($query,array($this->_data['lifetime'],$this->_data['expires'],time(),
 				       $this->_data['type'],$this->_data['oid'],$this->_data['uid'],$this->_data['id']));
     }
-    if( !$dbr ) throw new CmsSqlErrorException('Problem creating/updating lock record',null,$db->ErrorMsg());
+    if( !$dbr ) throw new CmsSqlErrorException('CMSEX_SQL001',null,$db->ErrorMsg());
     $this->_dirty = FALSE;
   }
 
@@ -199,8 +197,17 @@ final class CmsLock implements ArrayAccess
 
   public function delete()
   {
-    if( !isset($this->_data['id']) || $this->_data['id'] < 1 ) {
-      throw new CmsLogicException('Attempt to delete a lock when it has yet to be saved');
+    if( !isset($this->_data['id']) || $this->_data['id'] < 1 ) throw new CmsLogicException('CMSEX_L002');
+
+    $uid = get_userid(FALSE);
+    if( !$this->expired() && $uid != $this->_data['uid'] ) {
+      audit($uid,'Locking','Attempt to delete a non expired lock owned by another user');
+      throw new CmsLockOwnerException('CMSEX_L001');
+    }
+    
+    if( $uid != $this->_data['uid'] ) {
+      audit($uid,'Locking',sprintf("Lock %s (%s/%d) owned by uid %s deleted by non owner",
+				   $this->_data['id'],$this->_data['type'],$this->_data['oid'],$this->_data['uid']));
     }
 
     $db = cmsms()->GetDb();
@@ -220,7 +227,7 @@ final class CmsLock implements ArrayAccess
       $parms[] = $uid;
     }
     $row = $db->GetRow($query,$parms);
-    if( !is_array($row) || count($row) == 0 ) throw new CmsNoLockException('No lock exists for this object','',array($type,$uid));
+    if( !is_array($row) || count($row) == 0 ) throw new CmsNoLockException('CMSEX_L005','',array($lock_id,$type,$oid,$uid));
 
     return self::from_row($row);
   }
@@ -235,7 +242,7 @@ final class CmsLock implements ArrayAccess
       $parms[] = $uid;
     }
     $row = $db->GetRow($query,$parms);
-    if( !is_array($row) || count($row) == 0 ) throw new CmsNoLockException('No lock exists for this object','',array($type,$uid));
+    if( !is_array($row) || count($row) == 0 ) throw new CmsNoLockException('CMSEX_L005','',array($type,$uid,$uid));
 
     return self::from_row($row);
   }

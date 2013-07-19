@@ -30,6 +30,14 @@ $(document).ready(function(){
     uid: {get_userid(FALSE)},
     error_handler: function(err) {
       alert('got error '+err.type+' // '+err.msg);
+    },
+    lostlock_handler: function(err) {
+      // we lost the lock on this content... make sure we can't save anything.
+      // and display a nice message.
+      $('[name$=apply],[name$=submit]').hide('slow');
+      $('[name$=cancel]').fadeOut().attr('value','{$mod->Lang('close')}').fadeIn();
+      $('#Edit_Content').dirtyForm('option','dirty',false);
+      alert('{$mod->Lang('msg_lostlock')}');
     }
   });
 

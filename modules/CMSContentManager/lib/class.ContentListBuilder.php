@@ -535,6 +535,15 @@ final class ContentListBuilder
   }
 
   /**
+   * Test if we have any locks.
+   */
+  public function have_locks()
+  {
+    if( count($this->get_locks()) ) return TRUE;
+    return FALSE;
+  }
+
+  /**
    * Checks if the current page is locked.
    */
   private function _is_locked($page_id)
@@ -542,6 +551,14 @@ final class ContentListBuilder
     $locks = $this->get_locks();
     if( !is_array($locks) || count($locks) == 0 ) return FALSE;
     if( in_array($page_id,array_keys($locks)) ) return TRUE;
+    return FALSE;
+  }
+
+  private function _is_default_locked()
+  {
+    $dflt_content_id = ContentOperations::get_instance()->GetDefaultContent();
+    $locks = $this->get_locks();
+    if( is_array($locks) && count($locks) && in_array($dflt_content_id,array_keys($locks)) ) return TRUE;
     return FALSE;
   }
 
@@ -693,13 +710,14 @@ final class ContentListBuilder
 
 	case 'default':
 	  $rec[$column] = '';
-	  if( $this->_module->CheckPermission('Manage All Content') && !$this->_is_locked($page_id) ) {
+	  if( $this->_module->CheckPermission('Manage All Content') && !$this->_is_locked($page_id) && !$this->_is_default_locked() ) {
 	    if( $content->IsDefaultPossible() && $content->Active() ) $rec[$column] = ($content->DefaultContent())?'yes':'no';
 	  }
 	  break;
 
 	case 'move':
-	  if( $this->_check_peer_authorship($content->Id()) && ($nsiblings = $node->count_siblings()) > 1 ) {
+	  $rec[$column] = '';
+	  if( !$this->have_locks() && $this->_check_peer_authorship($content->Id()) && ($nsiblings = $node->count_siblings()) > 1 ) {
 	    if( $content->ItemOrder() == 1 ) {
 	      $rec[$column] = 'down';
 	    }
@@ -719,7 +737,7 @@ final class ContentListBuilder
 
 	case 'copy':
 	  $rec[$column] = '';
-	  if( $content->IsCopyable() ) {
+	  if( $content->IsCopyable() && !$this->_is_locked($content->Id()) ) {
 	    if( $mod->CheckPermission('Manage All Content') ) {
 	      $rec[$column] = 'yes';
 	    }

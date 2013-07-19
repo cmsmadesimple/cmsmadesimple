@@ -74,7 +74,7 @@ final class CmsLockOperations
   {
     try {
       $lock = CmsLock::load($type,$oid);
-      return TRUE;
+      return $lock['id'];
     }
     catch( CmsNoLockException $e ) {
       return FALSE;

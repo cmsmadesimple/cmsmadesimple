@@ -201,6 +201,20 @@ catch( CmsEditContentException $e ) {
 //
 // BUILD THE DISPLAY
 //
+if( $content_id && CmsLockOperations::locking_enabled() ) {
+  try {
+    // here we are attempting to steal a lock.
+    $lock_id = CmsLockOperations::is_locked('content',$content_id);
+    if( $lock_id > 0 ) CmsLockOperations::unlock($lock_id,'content',$content_id);
+    $lock = new CmsLock('content',$content_id);
+    $smarty->assign('lock',$lock);
+  }
+  catch( CmsException $e ) {
+    $this->SetError($e->getMessage());
+    $this->RedirectToAdminTab();
+  }
+}
+
 if( $error ) echo $this->ShowErrors($error);
 
 $tabnames = $content_obj->GetTabNames();
@@ -250,11 +264,6 @@ $assistant = $factory->getEditContentAssistant();
 if( is_object($assistant) ) {
   $smarty->assign('extra_content',$assistant->getExtraCode());
 }
-if( $content_id && CmsLockOperations::locking_enabled() ) {
-  $lock = new CmsLock('content',$content_id);
-  $smarty->assign('lock',$lock);
-}
-
 
 echo $this->ProcessTemplate('admin_editcontent.tpl');
 

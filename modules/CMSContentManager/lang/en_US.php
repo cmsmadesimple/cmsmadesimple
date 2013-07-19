@@ -41,6 +41,7 @@ $lang['colhdr_view'] = 'View';
 $lang['confirm_expandall'] = 'Are you sure you want to expand all content?  On large sites this may cause problems.  Please use caution';
 $lang['confirm_setdefault'] = 'Are you sure you want to change the default content page for this website?';
 $lang['confirm_setinactive'] = 'Are you sure you want to set this page inactive?\nThis page will not be viewable, and may affect the behavior of a working website?';
+$lang['confirm_steal_lock'] = 'This page is locked.  Although you may steal this lock it is not always a nice thing to do.  The other party may lose valuable content edits.\n\n Are you sure you want to continue?';
 $lang['confirm_viewpage'] = 'Are you sure you want to open a new window to view this page?';
 $lang['contractall'] = 'Collapse All';
 
@@ -117,6 +118,7 @@ $lang['moddescription'] = 'A module for managing content within CMSMS';
 $lang['msg_bulk_successful'] = 'Bulk content operation successful';
 $lang['msg_editpage_success'] = 'Content Updated';
 $lang['msg_cancelled'] = 'Operation Cancelled';
+$lang['msg_lostlock'] = 'The lock on this content page has expired and been lost.  You can no longer save changes to this content page.  Please return to the content list and re-edit this page.';
 $lang['msg_prefs_saved'] = 'Preferences saved';
 
 #N
