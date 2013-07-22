@@ -54,6 +54,7 @@ final class cms_config implements ArrayAccess
 			if (is_numeric($maxFileSize[$i]))
 				{$ss .= $maxFileSize[$i];}
 			else {
+				if (strtolower($maxFileSize[$i]) == 'g') $x=1000000000;
 				if (strtolower($maxFileSize[$i]) == 'm') $x=1000000;
 				if (strtolower($maxFileSize[$i]) == 'k') $x=1000;
 			}
