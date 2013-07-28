@@ -462,6 +462,8 @@ $lang['admin']['help_function_content_image'] = <<<EOT
   </li>
 
   <li><em>(optional)</em> class='' - The css class name to use on the img tag in frontend display.</li>
+  
+  <li><em>(optional)</em> default='' - Use to set a default image used when no image is selected.</li>
 
   <li><em>(optional)</em> id='' - The id name to use on the img tag in frontend display.</li> 
 
