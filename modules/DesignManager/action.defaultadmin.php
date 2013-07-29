@@ -66,9 +66,7 @@ if( isset($efilter['tpl']) && $efilter['tpl'] != '' ) {
 	$efilter[] = $efilter['tpl'];
 	unset($efilter['tpl']);
 }
-if( !$this->CheckPermission('Modify Templates') ) {
-  $efilter[] = 'e:'.get_userid();
-}
+if( !$this->CheckPermission('Modify Templates') ) $efilter[] = 'e:'.get_userid();
 
 $tpl_query = new CmsLayoutTemplateQuery($efilter);
 $templates = $tpl_query->GetMatches();

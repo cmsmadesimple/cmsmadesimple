@@ -1,6 +1,6 @@
 <?php // -*- mode:php; tab-width:2; indent-tabs-mode:t; c-basic-offset:2; -*-
 #-------------------------------------------------------------------------
-# Module: AdminSearch - A CMSMS addon module to provide template management.
+# Module: DesignManager - A CMSMS addon module to provide template management.
 # (c) 2012 by Robert Campbell <calguy1000@cmsmadesimple.org>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -54,6 +54,25 @@ final class DesignManager extends CMSModule
     $smarty->assign('mod',$this);
     return parent::DoAction($name,$id,$params,$returnid);
   }
+
+  public function GetAdminMenuItems()
+  {
+    $out = array();
+    if( $this->VisibleToAdminUser() ) $out[] = CmsAdminMenuItem::from_module($this);
+
+    if( $this->CheckPermission('Modify Site Preferences') ) {
+      $obj = new CmsAdminMenuItem();
+      $obj->module = $this->GetName();
+      $obj->section = 'siteadmin';
+      $obj->title = $this->Lang('title_designmanager_settings');
+      $obj->description = $this->Lang('desc_designmanager_settings');
+      $obj->action = 'admin_settings';
+      $obj->url = $this->create_url('m1_',$obj->action);
+      $out[] = $obj;
+    }
+    return $out;
+  }
+
 
 } // class
 

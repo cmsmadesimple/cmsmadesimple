@@ -45,8 +45,6 @@ try {
       $out['error'] = array('type'=>'useridmismatch','msg'=>lang('CMSEX_L006'));
     }
     $out['uid'] = $ruid;
-    $out['lock_timeout'] = (int)cms_siteprefs::get('lock_timeout');
-    $out['lock_refresh'] = (int)cms_siteprefs::get('lock_refresh');
     break;
 
   case 'test':      // alias for check

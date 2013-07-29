@@ -1,9 +1,40 @@
 <script type="text/javascript">
 $(document).ready(function(){
-  $('.helpicon').click(function(){
-    var x = $(this).attr('name');
-    $('#'+x).dialog();
+  $('[name$=apply],[name$=submit]').hide();
+  $('#form_edittemplate').dirtyForm({
+    onDirty: function(){
+      $('[name$=apply],[name$=submit]').show('slow');
+    },
+    beforeUnload: function() {
+      $('#form_edittemplate').lockManager('unlock');
+    }
   });
+  $(document).on('cmsms_textchange',function(event){
+    // editor textchange, set the form dirty.
+    $('#form_edittemplate').dirtyForm('option','dirty',true);
+  });
+
+  // initialize lock manager
+  {if isset($tpl_id)}
+  $('#form_edittemplate').lockManager({
+    type: 'template',
+    oid: {$tpl_id},
+    uid: {get_userid(FALSE)},
+    lock_timout: {$lock_timeout},
+    lock_refresh: {$lock_refresh},
+    error_handler: function(err) {
+      alert('got error '+err.type+' // '+err.msg);
+    },
+    lostlock_handler: function(err) {
+      // we lost the lock on this content... make sure we can't save anything.
+      // and display a nice message.
+      $('[name$=apply],[name$=submit]').hide('slow');
+      $('[name$=cancel]').fadeOut().attr('value','{$mod->Lang('close')}').fadeIn();
+      $('#form_edittemplate').dirtyForm('option','dirty',false);
+      alert('{$mod->Lang('msg_lostlock')}');
+    }
+  });
+  {/if}
 
   $(document).on('click', '#applybtn', function(e){
     // serialize the form

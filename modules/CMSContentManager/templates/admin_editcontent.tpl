@@ -28,6 +28,8 @@ $(document).ready(function(){
     type: 'content',
     oid: {$content_id},
     uid: {get_userid(FALSE)},
+    lock_timout: {$lock_timeout},
+    lock_refresh: {$lock_refresh},
     error_handler: function(err) {
       alert('got error '+err.type+' // '+err.msg);
     },

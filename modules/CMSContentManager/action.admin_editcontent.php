@@ -52,7 +52,7 @@ if( isset($params['content_id']) ) $content_id = (int)$params['content_id'];
 
 if( isset($params['cancel']) ) {
   try {
-    if( $content_id && CmsLockOperations::locking_enabled() ) CmsLockOperations::unlock('content',$content_id);
+    if( $content_id && CmsContentManagerUtils::locking_enabled() ) CmsLockOperations::unlock('content',$content_id);
   }
   catch( Exception $e ) {
     // do nothing.
@@ -170,7 +170,7 @@ try {
       audit($content_obj->Id(),'Content Item: '.$content_obj->Name(),' Edited');
       if( isset($params['submit']) ) {
 	try {
-	  if( $content_id && CmsLockOperations::locking_enabled() ) CmsLockOperations::unlock('content',$content_id);
+	  if( $content_id && CmsContentManagerUtils::locking_enabled() ) CmsLockOperations::unlock('content',$content_id);
 	}
 	catch( Exception $e ) {
 	  // do nothing.
@@ -201,7 +201,7 @@ catch( CmsEditContentException $e ) {
 //
 // BUILD THE DISPLAY
 //
-if( $content_id && CmsLockOperations::locking_enabled() ) {
+if( $content_id && CmsContentManagerUtils::locking_enabled() ) {
   try {
     // here we are attempting to steal a lock.
     $lock_id = CmsLockOperations::is_locked('content',$content_id);
@@ -254,6 +254,8 @@ if( $content_obj->HasPreview() ) {
   $smarty->assign('has_preview',1);
   $smarty->assign('preview_url',"{$config['root_url']}/index.php?{$config['query_var']}=__CMS_PREVIEW_PAGE__");
 }
+$smarty->assign('lock_timeout',$this->GetPreference('locktimeout'));
+$smarty->assign('lock_refresh',$this->GetPreference('lockrefresh'));
 $smarty->assign('content_id',$content_id);
 $smarty->assign('content_obj',$content_obj);
 $smarty->assign('tab_names',$tabnames);

@@ -80,6 +80,13 @@ final class CmsContentManagerUtils
 
     return $page_prefs;
   }
+
+  public static function locking_enabled()
+  {
+    $timeout = cms_siteprefs::get('locktimeout');
+    if( $timeout > 0 ) return TRUE;
+    return FALSE;
+  }
 } // end of class
 #
 # EOF

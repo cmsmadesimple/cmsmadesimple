@@ -74,34 +74,43 @@ $(document).ready(function(){
 		{foreach from=$templates item='template'}
 			{cycle values="row1,row2" assign='rowclass'}
 			<tr class="{$rowclass}">
+    		        {$edit_tpl=''}
+			{if !$template->locked()}
 				{cms_action_url action='admin_edit_template' tpl=$template->get_id() assign='edit_tpl'}
-					{if $has_add_right}
-						{cms_action_url action='admin_copy_template' tpl=$template->get_id() assign='copy_tpl'}
-					{/if}
+				{if $has_add_right}
+				  {cms_action_url action='admin_copy_template' tpl=$template->get_id() assign='copy_tpl'}
+				{/if}
 				{cms_action_url action='admin_delete_template' tpl=$template->get_id() assign='delete_tpl'}
-				<td><a href="{$edit_tpl}" title="{$mod->Lang('edit_template')}">{$template->get_id()}</a></td>
-				<td><a href="{$edit_tpl}" title="{$mod->Lang('edit_template')}">{$template->get_name()}</a></td>
-				<td>{assign var='n' value=$template->get_type_id()}{$list_types.$n}</td>
-				<td>
+ 			{/if}
+			{cms_action_url action='admin_ajax' mode='template-tooltip' tpl=$template->get_id() assign='url_tooltip'}
+			{if !$template->locked()}
+				<td><a href="{$edit_tpl}" class="tooltip" data-cms-ajax='{$url_tooltip}' title="{$mod->Lang('edit_template')}">{$template->get_id()}</a></td>
+				<td><a href="{$edit_tpl}" class="tooltip" data-cms-ajax='{$url_tooltip}' title="{$mod->Lang('edit_template')}">{$template->get_name()}</a></td>
+			{else}
+				<td>{$template->get_id()}</td>
+				<td><span class="tooltip" data-cms-ajax='{$url_tooltip}'>{$template->get_name()}</span></td>
+			{/if}
+			<td>{assign var='n' value=$template->get_type_id()}{$list_types.$n}</td>
+			<td>
 				{assign var='t1' value=$template->get_designs()}
-					{if count($t1) == 1}
-						{assign var='t1' value=$t1[0]}
-						{assign var='hn' value=$design_names.$t1}
-						{if $manage_designs}
-							{cms_action_url action=admin_edit_design design=$t1 assign='edit_design_url'}
-							<a href="{$edit_design_url}" title="{$mod->Lang('edit_design')}">{$hn}</a>
-						{else}
-							{$hn}
-						{/if}
-					{elseif count($t1) == 0}
-						<span title="{$mod->Lang('help_template_no_designs')}">{$mod->Lang('prompt_none')}</span>
+				{if count($t1) == 1}
+					{assign var='t1' value=$t1[0]}
+					{assign var='hn' value=$design_names.$t1}
+					{if $manage_designs}
+						{cms_action_url action=admin_edit_design design=$t1 assign='edit_design_url'}
+						<a href="{$edit_design_url}" title="{$mod->Lang('edit_design')}">{$hn}</a>
 					{else}
-						<span title="{$mod->Lang('help_template_multiple_designs')}">{$mod->Lang('prompt_multiple')} ({count($t1)})</span>
+						{$hn}
 					{/if}
-				</td>
-				<td>{if isset($list_users)}{assign var='u' value=$template->get_owner_id()}{$list_users.$u}{else}n/a{/if}</td>
-				<td>{$template->get_modified()|date_format:'%x %X'}</td>
-				<td>
+				{elseif count($t1) == 0}
+					<span title="{$mod->Lang('help_template_no_designs')}">{$mod->Lang('prompt_none')}</span>
+				{else}
+					<span title="{$mod->Lang('help_template_multiple_designs')}">{$mod->Lang('prompt_multiple')} ({count($t1)})</span>
+				{/if}
+			</td>
+			<td>{if isset($list_users)}{assign var='u' value=$template->get_owner_id()}{$list_users.$u}{else}n/a{/if}</td>
+			<td>{$template->get_modified()|date_format:'%x %X'}</td>
+			<td>
 	 			{assign var='the_type' value=$list_all_types.$n}
 				{if $the_type->get_dflt_flag()}
 					{if $template->get_type_dflt()}
@@ -112,28 +121,32 @@ $(document).ready(function(){
 				{else}
 					<span title="{$mod->Lang('prompt_title_na')}">{$mod->Lang('prompt_na')}</span>
 				{/if}
-				</td>
+			</td>
+			{if !$template->locked()}
 				<td><a href="{$edit_tpl}" title="{$mod->Lang('edit_template')}">{admin_icon icon='edit.gif' title=$mod->Lang('prompt_edit')}</a></td>
 				{if $has_add_right}
-				<td><a href="{$copy_tpl}" title="{$mod->Lang('copy_template')}">{admin_icon icon='copy.gif' title=$mod->Lang('prompt_copy_template')}</a></td>
+					<td><a href="{$copy_tpl}" title="{$mod->Lang('copy_template')}">{admin_icon icon='copy.gif' title=$mod->Lang('prompt_copy_template')}</a></td>
 				{/if}
-				<td>
-	 			{if !$template->get_type_dflt()}
-					{if $template->get_owner_id() == get_userid() || $manage_templates}
-						<a href="{$delete_tpl}" title="{$mod->Lang('delete_template')}">{admin_icon icon='delete.gif' title=$mod->Lang('delete_template')}</a>
-					{/if}
+			{else}
+				<td></td>
+				<td></td>
+			{/if}
+			<td>
+ 			{if !$template->get_type_dflt()}
+				{if $template->get_owner_id() == get_userid() || $manage_templates}
+					<a href="{$delete_tpl}" title="{$mod->Lang('delete_template')}">{admin_icon icon='delete.gif' title=$mod->Lang('delete_template')}</a>
 				{/if}
-				</td>
-				<td>
-					{if $template->get_owner_id() == get_userid() || $manage_templates }
-						<input type="checkbox" class="tpl_select" name="{$actionid}tpl_select[]" value="{$template->get_id()}"/>
-				</td>
+			{/if}
+			</td>
+			<td>
+				{if !$template->locked() && ($template->get_owner_id() == get_userid() || $manage_templates) }
+					<input type="checkbox" class="tpl_select" name="{$actionid}tpl_select[]" value="{$template->get_id()}"/>
 				{/if}
+			</td>
 			</tr>
 		{/foreach}
 		</tbody>
 	</table>
-	
 {else}
 	{page_warning msg=$mod->Lang('warning_no_templates_available')}
 {/if}

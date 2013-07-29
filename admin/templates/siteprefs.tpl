@@ -190,20 +190,6 @@ $(document).ready(function(){
 	&nbsp;{cms_help key2='settings_contentimage_path'}
       </p>
     </div>
-      <div class="pageoverflow">
-        <p class="pagetext"><label for="lock_timeout">{lang('lock_timeout')}:</label></p>
-        <p class="pageinput">
-          <input type="text" id="lock_timeout" name="lock_timeout" value="{$lock_timeout}" size="4" maxlength="4"/>
-          &nbsp;{cms_help key2='siteprefs_locktimeout'}
-        </p>
-      </div>
-      <div class="pageoverflow">
-        <p class="pagetext"><label for="lock_refresh">{lang('lock_refresh')}:</label></p>
-        <p class="pageinput">
-          <input type="text" id="lock_refresh" name="lock_refresh" value="{$lock_refresh}" size="4" maxlength="4"/>
-          &nbsp;{cms_help key2='siteprefs_lockrefresh'}
-        </p>
-      </div>
   </form>
 
 {tab_start name='sitedown'}

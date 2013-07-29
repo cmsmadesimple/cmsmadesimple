@@ -123,12 +123,6 @@ final class CmsLockOperations
     $db->Execute($query,array($uid));
   }
   
-  public static function locking_enabled()
-  {
-    $timeout = cms_siteprefs::get('lock_timeout');
-    if( $timeout > 0 ) return TRUE;
-    return FALSE;
-  }
 } // end of class
 
 #

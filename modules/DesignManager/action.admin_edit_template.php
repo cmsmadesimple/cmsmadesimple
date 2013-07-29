@@ -33,9 +33,7 @@ if( !$this->CheckPermission('Modify Templates') ) {
 $this->SetCurrentTab('templates');
 
 if( isset($params['cancel']) ) {
-	if( $params['cancel'] == $this->Lang('cancel') ) {
-		$this->SetMessage($this->Lang('msg_cancelled'));
-	}
+	if( $params['cancel'] == $this->Lang('cancel') ) $this->SetMessage($this->Lang('msg_cancelled'));
   $this->RedirectToAdminTab();
 }
 
@@ -61,9 +59,7 @@ try {
   }
 
   try {
-		if( isset($params['tpl_setall']) ) {
-			$this->Redirect($id,'admin_set_all_pages',$returnid,array('tpl'=>$params['tpl']));
-		}
+		if( isset($params['tpl_setall']) ) $this->Redirect($id,'admin_set_all_pages',$returnid,array('tpl'=>$params['tpl']));
 
     if( isset($params['submit']) || isset($params['apply']) ) {
 			try {
@@ -78,25 +74,14 @@ try {
 
       $tpl_obj->set_name($params['name']);
       $tpl_obj->set_content($params['contents']);
-			if( isset($params['description']) ) {
-				$tpl_obj->set_description($params['description']);
-			}
-			if( isset($params['type']) ) {
-				$tpl_obj->set_type($params['type']);
-			}
-			if( isset($params['default']) ) {
-				$tpl_obj->set_type_dflt($params['default']);
-			}
-      if( isset($params['owner_id']) ) {
-				$tpl_obj->set_owner($params['owner_id']);
-      }
-      if( isset($params['addt_editors']) && is_array($params['addt_editors']) &&
-					count($params['addt_editors']) ) {
+			if( isset($params['description']) ) $tpl_obj->set_description($params['description']);
+			if( isset($params['type']) ) $tpl_obj->set_type($params['type']);
+			if( isset($params['default']) ) $tpl_obj->set_type_dflt($params['default']);
+      if( isset($params['owner_id']) ) $tpl_obj->set_owner($params['owner_id']);
+      if( isset($params['addt_editors']) && is_array($params['addt_editors']) && count($params['addt_editors']) ) {
 				$tpl_obj->set_additional_editors($params['addt_editors']);
       }
-      if( isset($params['category_id']) ) {
-				$tpl_obj->set_category($params['category_id']);
-      }
+      if( isset($params['category_id']) ) $tpl_obj->set_category($params['category_id']);
 
 			$type_obj = CmsLayoutTemplateType::load($tpl_obj->get_type_id());
 			if( $type_obj->get_content_block_flag() ) {
@@ -111,9 +96,7 @@ try {
 
 			if( $this->CheckPermission('Manage Designs') ) {
 				$design_list = array();
-				if( isset($params['design_list']) ) {
-					$design_list = $params['design_list'];
-				}
+				if( isset($params['design_list']) ) $design_list = $params['design_list'];
 				$tpl_obj->set_designs($design_list);
 			}
 
@@ -133,9 +116,24 @@ try {
     echo $this->ShowErrors($e->GetMessage());
   }
 
+	// 
+	// BUILD THE DISPLAY
+	//
+	if( $tpl_obj && $tpl_obj->get_id() && dm_utils::locking_enabled() ) {
+		try {
+			$lock_id = CmsLockOperations::is_locked('template',$tpl_obj->get_id());
+			if( $lock_id > 0 ) CmsLockOperations::unlock($lock_id,'template',$tpl_obj->get_id());
+			$lock = new CmsLock('template',$tpl_obj->get_id());
+			$smarty->assign('lock',$lock);
+		}
+		catch( CmsException $e ) {
+			$this->SetMessage($e->GetMessage());
+			$this->RedirectToAdminTab();
+		}
+	}
+	
 	$type_obj = CmsLayoutTemplateType::load($tpl_obj->get_type_id());
 	$smarty->assign('type_obj',$type_obj);
-
   $smarty->assign('extraparms',$extraparms);
   $smarty->assign('template',$tpl_obj);
 
@@ -170,10 +168,14 @@ try {
     $smarty->assign('design_list',$out);
   }
 
+  if( $tpl_obj->get_id() ) {
+		$smarty->assign('tpl_id',$tpl_obj->get_id());
+		$smarty->assign('lock_timeout',$this->GetPreference('lock_timeout'));
+		$smarty->assign('lock_refresh',$this->GetPreference('lock_refresh'));
+	}
   $smarty->assign('has_manage_right',$this->CheckPermission('Modify Templates'));
   $smarty->assign('has_themes_right',$this->CheckPermission('Manage Designs'));
-  if( $this->CheckPermission('Modify Templates') || 
-      $tpl_obj->get_owner_id() == get_userid()) {
+  if( $this->CheckPermission('Modify Templates') || $tpl_obj->get_owner_id() == get_userid()) {
 
     $userops = cmsms()->GetUserOperations();
     $allusers = $userops->LoadUsers();
@@ -181,9 +183,7 @@ try {
     foreach( $allusers as $one ) {
       $tmp[$one->id] = $one->username;
     }
-    if( is_array($tmp) && count($tmp) ) {
-      $smarty->assign('user_list',$tmp);
-    }
+    if( is_array($tmp) && count($tmp) ) $smarty->assign('user_list',$tmp);
     
     $groupops = cmsms()->GetGroupOperations();
     $allgroups = $groupops->LoadGroups();
@@ -191,9 +191,7 @@ try {
       if( $one->active == 0 ) continue;
       $tmp[$one->id*-1] = $this->Lang('prompt_group').': '.$one->name; // appends to the tmp array.
     }
-    if( is_array($tmp) && count($tmp) ) {
-      $smarty->assign('addt_editor_list',$tmp);
-    }
+    if( is_array($tmp) && count($tmp) ) $smarty->assign('addt_editor_list',$tmp);
   }
   echo $this->ProcessTemplate('admin_edit_template.tpl');
 }

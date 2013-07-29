@@ -162,9 +162,11 @@ $columns  = $builder->get_display_columns();
 $smarty->assign('columns',$columns);
 if( $this->GetPreference('list_namecolumn','menutext') == 'title' ) {
   $smarty->assign('colhdr_page',$this->Lang('colhdr_name'));
+  $smarty->assign('coltitle_page',$this->Lang('coltitle__name'));
 }
 else {
   $smarty->assign('colhdr_page',$this->Lang('colhdr_menutext'));
+  $smarty->assign('coltitle_page',$this->Lang('coltitle_menutext'));
 }
 $smarty->assign('content_list',$editinfo);
 $smarty->assign('ajax',$ajax);

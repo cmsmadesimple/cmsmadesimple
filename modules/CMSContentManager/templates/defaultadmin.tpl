@@ -351,13 +351,13 @@ $(document).ready(function () {
 				{if $flag}
 				<th>
 					{if $column == 'expand' or $column == 'hier' or $column == 'view' or $column == 'copy' or $column == 'edit' or $column == 'delete'}
-					{* no colum header *}
+					<span title="{$mod->Lang("coltitle_{$column}")}">&nbsp;</span>{* no colum header *}
 					{elseif $column == 'multiselect'}
 						<input type="checkbox" id="selectall" value="1" title="{$mod->Lang('select_all')}"/>
 					{elseif $column == 'page'}
-						{$colhdr_page}
+						<span title="{$coltitle_page}">{$colhdr_page}</span>
 					{else}
-						{$mod->Lang("colhdr_{$column}")}
+						<span title="{$mod->Lang("coltitle_{$column}")}">{$mod->Lang("colhdr_{$column}")}</span>
 					{/if}
 				</th>
 				{/if}

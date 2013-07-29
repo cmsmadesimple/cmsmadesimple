@@ -428,11 +428,11 @@ final class ContentListBuilder
    */
   private function _load_editable_content()
   {
+    $hm = cmsms()->GetHierarchyManager();
     $pagelist = null;
     if( $this->_use_perms && 
 	($this->_module->CheckPermission('Manage All Content') || $this->_module->CheckPermission('Modify Any Page')) ) {
       // get all of the content ids
-      $hm = cmsms()->GetHierarchyManager();
       $pagelist = $this->_get_all_pages($hm);
     }
     else {
@@ -440,7 +440,6 @@ final class ContentListBuilder
     }
 
     // remove children of pages that a: have children, and b: are not in the opened_array
-    $hm = cmsms()->GetHierarchyManager();
     $remove = array();
     for( $i = 0; $i < count($pagelist); $i++ ) {
       $node = $hm->find_by_tag('id',$pagelist[$i]);
@@ -759,7 +758,7 @@ final class ContentListBuilder
 
 	case 'delete':
 	  $rec[$column] = '';
-	  if( !$content->DefaultContent() ) {
+	  if( !$content->DefaultContent() && !$this->_is_locked($content->Id()) ) {
 	    if( !$node->has_children() ) {
 	      if( $mod->CheckPermission('Manage All Content') ) {
 		$rec[$column] = 'yes';

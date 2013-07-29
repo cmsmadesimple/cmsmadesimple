@@ -20,6 +20,9 @@
 #-------------------------------------------------------------------------
 if( !isset($gCms) ) exit;
 
+$this->SetPreference('lock_timeout',60);
+$this->SetPreference('lock_refresh',120);
+
 #
 # EOF
 #
