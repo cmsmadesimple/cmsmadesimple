@@ -169,6 +169,7 @@ $smarty->assign('manage_stylesheets',$this->CheckPermission('Manage Stylesheets'
 $smarty->assign('manage_templates',$this->CheckPermission('Modify Templates'));
 $smarty->assign('manage_designs',$this->CheckPermission('Manage Designs'));
 $smarty->assign('import_url',$this->create_url($id,'admin_import_template'));
+$smarty->assign('admin_url',$config['admin_url']);
 $smarty->assign('has_add_right',
 								$this->CheckPermission('Modify Templates') || 
 								$this->CheckPermission('Add Templates'));

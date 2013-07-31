@@ -567,12 +567,9 @@ class CmsLayoutTemplateType
 	  $db = cmsms()->GetDb();
 	  $row = null;
 	  if( (int)$val > 0 ) {
-			if( isset(self::$_cache[$val]) ) {
-				return self::$_cache[$val];
-			}
+			if( isset(self::$_cache[$val]) ) return self::$_cache[$val];
 
-		  $query = 'SELECT * FROM '.cms_db_prefix().self::TABLENAME.'
-                WHERE id = ?';
+		  $query = 'SELECT * FROM '.cms_db_prefix().self::TABLENAME.' WHERE id = ?';
 		  $row = $db->GetRow($query,array($val));
 	  }
 	  elseif( strlen($val) > 0 ) {
@@ -583,8 +580,7 @@ class CmsLayoutTemplateType
 
 		  $tmp = explode('::',$val);
 		  if( count($tmp) == 2 ) {
-			  $query = 'SELECT * FROM '.cms_db_prefix().self::TABLENAME.'
-                        WHERE originator = ? AND name = ?';
+			  $query = 'SELECT * FROM '.cms_db_prefix().self::TABLENAME.' WHERE originator = ? AND name = ?';
 			  $row = $db->GetRow($query,array(trim($tmp[0]),trim($tmp[1])));
 		  }
 	  }

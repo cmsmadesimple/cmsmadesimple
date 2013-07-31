@@ -100,10 +100,12 @@ $lang['event_help_editdesignpost'] = 'TODO';
 $lang['export_design'] = 'Export Design to XML';
 
 #F
+$lang['filter'] = 'Filter';
+$lang['filterapplied'] = 'Filter Applied';
 $lang['friendlyname'] = 'Design Manager';
 
 #G
-
+$lang['go'] = 'Go';
 
 #H
 $lang['help_category_desc'] = 'A description for a template category is optional, but may help when organizing templates';
@@ -204,6 +206,7 @@ $lang['msg_category_deleted'] = 'Category Deleted';
 $lang['msg_category_saved'] = 'Category Saved';
 $lang['msg_lostlock'] = 'Sorry, but you have lost the lock on this item, and somebody else has made edits to this item.  You can save your changes to a text file for future use, but you can no longer commit any changes';
 $lang['msg_options_saved'] = 'Options Saved';
+$lang['msg_steal_lock'] = 'You can steal this lock';
 $lang['msg_stylesheet_deleted'] = 'Stylesheet Deleted';
 $lang['msg_template_copied_edit'] = 'Template has been copied, you are now editing the new version';
 $lang['msg_template_copied'] = 'Template Copied';
@@ -242,6 +245,7 @@ $lang['prompt_dest_template'] = 'Destination Template';
 $lang['prompt_dflt'] = 'Default';
 $lang['prompt_dflt_template'] = 'Default Template';
 $lang['prompt_edit'] = 'Edit';
+$lang['prompt_editfilter'] = 'Edit Template Filter';
 $lang['prompt_filter'] = 'Filter';
 $lang['prompt_firstpage'] = 'First page';
 $lang['prompt_has_dflt'] = 'Has Default Template Contents';
@@ -268,6 +272,7 @@ $lang['prompt_none'] = 'None';
 $lang['prompt_notdflt'] = 'This is not a default template';
 $lang['prompt_notdflt_tpl'] = 'This is not a default template for this template type.';
 $lang['prompt_of'] = 'Of';
+$lang['prompt_options'] = 'Options';
 $lang['prompt_orig_name'] = 'Original Name';
 $lang['prompt_originator'] = 'Originator';
 $lang['prompt_owner'] = 'Owner';
@@ -280,6 +285,7 @@ $lang['prompt_return'] = 'Return';
 $lang['prompt_select'] = 'TODO';
 $lang['prompt_select_all'] = 'Select all';
 $lang['prompt_source_template'] = 'Source Template';
+$lang['prompt_steal_lock'] = 'Steal this lock';
 $lang['prompt_stylesheet'] = 'Stylesheet';
 $lang['prompt_stylesheets'] = 'Stylesheets';
 $lang['prompt_template'] = 'Template';
@@ -314,8 +320,18 @@ $lang['title_css_selectall'] = 'Select <em>(or deselect)</em> all visible styles
 $lang['title_delete'] = 'TODO';
 $lang['title_designmanager_settings'] = 'Design Manager Settings';
 $lang['title_designs_default'] = 'The default design is automatically selected when creating new content pages.';
+$lang['title_filter'] = 'Select an item in this list to reduce the number of visible templates';
+$lang['title_filterapplied'] = 'A filter has been selected which limits the number of templates listed';
+$lang['title_filterlimit'] = 'Select the number of items to view on each page';
 $lang['title_template_setallpages'] = 'Set all pages to use this template';
+$lang['title_tpl_design'] = 'This column displays the name of the design (if any) that a template is associated with.  A template can be associated with multiple designs';
+$lang['title_tpl_dflt'] = 'This column displays wether the template is the default template for its type';
+$lang['title_tpl_id'] = 'This column displays the unique numeric template ID';
+$lang['title_tpl_modified'] = 'This column displays the name date the template was last modified';
+$lang['title_tpl_name'] = 'This column displays the unique template name';
+$lang['title_tpl_type'] = 'This column displays the type of each template';
 $lang['tpl_originators'] = 'Originators';
+$lang['tpl_type'] = 'Template Type';
 $lang['tpl_types'] = 'Template Types';
 
 #U
