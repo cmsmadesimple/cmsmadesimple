@@ -67,7 +67,7 @@ $from = "";
 if (isset($_REQUEST["from"])) $from = $_REQUEST["from"];
 
 $templateid = "";
-if (isset($_REQUEST["templateid"])) $templateid = $_REQUEST["templateid"];
+if (isset($_REQUEST["templateid"])) $templateid = (int)$_REQUEST["templateid"];
 
 # the old name of the css (if it has changed, we'll have to check that the new
 # one is not already used.&
