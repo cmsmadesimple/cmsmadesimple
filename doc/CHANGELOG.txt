@@ -4,6 +4,12 @@ Core - General
   - Updated config reference
   - Fixes to module loading order stuff.
   - fixes so that a modules create_url method is called from module_support CreateLink function.
+  - Adds the TemplatePrefetch event
+  - Minor fixes to module XML export
+  - Adds the LoadAllContent method and optimizes loading of content list dropdoowns and Listcontent
+  - Performance optimizations for static and dynamic URL handling.
+  - Fixes issues when max_upload_filesize is specified in Gigabytes (G) #9415
+  - Improve the help for content_image
 
 Version 1.11.7 - Genovesa
 -----------------------------
