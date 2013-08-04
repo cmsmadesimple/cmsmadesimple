@@ -58,7 +58,7 @@ function smarty_cms_function_cms_stylesheet($params, &$template)
 	if (isset($params["templateid"]) && $params["templateid"]!="") {
 		$template_id = $params["templateid"];
 	} else {
-		$content_obj = cmsms()->variables['content_obj'];
+		$content_obj = cms_utils::get_current_content();
 		if( !is_object($content_obj) ) return;
 		$template_id = $content_obj->TemplateId();
 		$use_https = (int)$content_obj->Secure();

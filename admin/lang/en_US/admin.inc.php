@@ -1791,6 +1791,7 @@ $lang['admin']['event_desc_edittemplatepost'] = 'Sent after edits to a template 
 $lang['admin']['event_desc_deletetemplatepre'] = 'Sent before a template is deleted from the system';
 $lang['admin']['event_desc_deletetemplatepost'] = 'Sent after a template is deleted from the system';
 $lang['admin']['event_desc_templateprecompile'] = 'Sent before a template is sent to smarty for processing';
+$lang['admin']['event_desc_templateprefetch'] = 'Sent before a template is fetched from smarty';
 $lang['admin']['event_desc_templatepostcompile'] = 'Sent after a template has been processed by smarty';
 $lang['admin']['event_desc_addglobalcontentpre'] = 'Sent before a new global content block is created';
 $lang['admin']['event_desc_addglobalcontentpost'] = 'Sent after a new global content block is created';
@@ -1983,6 +1984,16 @@ $lang['admin']['event_help_templateprecompile'] = '<p>Sent before a template is 
 <ul>
 <li>\'template\' - Reference to the affected template text.</li>
 <li>\'type\' - The type of template call.  i.e: template for a whole template, tpl_head, tpl_body, or tpl_top for a partial template.</li>
+</ul>
+';
+$lang['admin']['event_help_templateprefetch'] = '<p>Sent before a template is fetched from smarty.
+<h4>Parameters</h4>
+<ul>
+<li>\'template\' (string reference) - The name of the template.</li>
+<li>\'cache_id\' (string reference) - The template cache id (if applicable).</li>
+<li>\'compile_id\' (string reference) - The template cache id (if applicable).</li>
+<li>\'display\' (integer reference) - Indecates whether the output is being displayed or assigned.</li>
+<li>\'no_output_filter\' (integer reference) - Indicates whether output filters should be applied.</li>
 </ul>
 ';
 $lang['admin']['event_help_templatepostcompile'] = '<p>Sent after a template has been processed by smarty.</p>

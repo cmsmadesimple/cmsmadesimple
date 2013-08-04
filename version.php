@@ -18,7 +18,7 @@
 #
 #$Id$
 
-$CMS_VERSION = "1.11.7";
+$CMS_VERSION = "1.11.7-custom1";
 $CMS_VERSION_NAME = "Genovesa";
 $CMS_SCHEMA_VERSION = "36";
 
