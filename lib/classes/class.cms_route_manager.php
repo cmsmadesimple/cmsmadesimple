@@ -38,6 +38,17 @@
  * @package CMS
  */
 
+if( !function_exists('__internal_cmp_routes') ) {
+	/**
+	 * @internal
+	 * @ignore
+	 */
+	function __internal_cmp_routes($a,$b)
+	{
+		return strcmp($a['term'],$b['term']);
+	}
+}
+
 /**
  * A class to manage all recognized routes in the system.
  * 
@@ -54,6 +65,66 @@ final class cms_route_manager
 	private static $_routes;
 	private static $_dynamic_routes;
 
+	static private function _find_match($needle,$haystack,$exact)
+	{
+		// split the haystack into an array of 'absolute' or 'regex' matches
+		$absolute = array();
+		$regex = array();
+		foreach( $haystack as $sig => $rec ) {
+			if( $exact || (isset($rec['absolute']) && $rec['absolute']) ) {
+				$absolute[] = $rec;
+			}
+			else {
+				$regex[] = $rec;
+			}
+		}
+
+		// sort the list of absolutes
+		usort($absolute,'__internal_cmp_routes');
+
+		// do a binary search on the absolute routes
+		if( count($absolute) ) {
+			$res = self::route_binarySearch($needle,$absolute,'__internal_cmp_routes');
+			if( $res !== FALSE ) return $absolute[$res];
+		}
+
+		// do the linear regex thing.
+		for( $i = 0; $i < count($regex); $i++ ) {
+			$rec = $regex[$i];
+			if( $rec->matches($needle) ) return $rec;
+		}
+		return FALSE;
+	}
+
+	// this function should go into a global utils class somewhere.
+	static private function route_binarySearch($needle,$haystack,$comparator)
+	{
+		if( count($haystack) == 0 ) return FALSE;
+
+		// credits: temporal dot pl at gmail dot com
+		// reference: http://php.net/manual/en/function.array-search.php
+		$high = Count( $haystack ) -1;
+		$low = 0;
+
+		while ( $high >= $low ) {
+			$probe = Floor( ( $high + $low ) / 2 );
+			$comparison = $comparator( $haystack[$probe], $needle );
+			if ( $comparison < 0 ) {
+				$low = $probe +1;
+			}
+			elseif ( $comparison > 0 ) {
+				$high = $probe -1;
+			}
+			else {
+				return $probe;
+			}
+		}
+
+		//The loop ended without a match 
+		//Compensate for needle greater than highest haystack element
+		if($comparator($haystack[count($haystack)-1], $needle) < 0) $probe = count($haystack);
+		return FALSE;
+	}
 
 	/**
 	 * Test wether the specified route exists.
@@ -65,21 +136,16 @@ final class cms_route_manager
 	static public function route_exists(CmsRoute $route,$static_only = FALSE)
 	{
 		self::_load_static_routes();
-
 		if( is_array(self::$_routes) ) {
-			foreach( self::$_routes as $test ) {
-				if( $test == $route ) return TRUE;
-			}
+			if( isset(self::$_routes[$route->signature()]) ) return TRUE;
 		}
 
 		if( $static_only ) return FALSE;
 
-		if( is_array(self::$_dynamic_routes) ) {
-			foreach( self::$_dynamic_routes as $test ) {
-				if( $test == $route ) return TRUE;
-			}
-		}
 
+		if( is_array(self::$_dynamic_routes) ) {
+			if( isset(self::$_dynamic_routes[$route->signature()]) ) return TRUE;
+		}
 		return FALSE;
 	}
 
@@ -97,21 +163,15 @@ final class cms_route_manager
 		self::_load_static_routes();
 
 		if( is_array(self::$_routes) ) {
-			foreach( self::$_routes as $route ) {
-				if( $route->matches($str,$exact) ) {
-					return $route;
-				}
-			}
+			$res = self::_find_match($str,self::$_routes,$exact);
+			if( is_object($res) ) return $res;
 		}
 
 		if( $static_only ) return;
 
 		if( is_array(self::$_dynamic_routes) ) {
-			foreach( self::$_dynamic_routes as $route ) {
-				if( $route->matches($str,$exact) ) {
-					return $route;
-				}
-			}
+			$res = self::_find_match($str,self::$_routes,$exact);
+			if( is_object($res) ) return $res;
 		}
 	}
 
@@ -131,15 +191,10 @@ final class cms_route_manager
 		self::_load_static_routes();
 		if( self::route_exists($route) ) return TRUE;
 
-		$query = 'INSERT INTO '.cms_db_prefix().'routes (term,key1,key2,key3,data,created)
-                  VALUES (?,?,?,?,?,NOW())';
+		$query = 'INSERT INTO '.cms_db_prefix().'routes (term,key1,key2,key3,data,created) VALUES (?,?,?,?,?,NOW())';
 		
 		$db = cmsms()->GetDb();
-		$dbr = $db->Execute($query,array($route['term'],
-										 $route['key1'],
-										 $route['key2'],
-										 $route['key3'],
-										 serialize($route)));
+		$dbr = $db->Execute($query,array($route['term'], $route['key1'], $route['key2'], $route['key3'], serialize($route)));
 		if( !$dbr ) {
 			die($db->sql.' -- '.$db->ErrorMsg());
 			return FALSE;
@@ -206,17 +261,17 @@ final class cms_route_manager
 	 * @author Robert Campbell <calguy1000@cmsmadesimple.org>
 	 * @since 1.11
 	 * @param CmsRoute The dynamic route object to add
+	 * @param boolean  Flag indicating wether duplicate checking should be done.
 	 * @return boolean.
 	 */
 	public static function add_dynamic(CmsRoute& $route)
 	{
-		if( self::route_exists($route) )
-			return TRUE;
-
-		if( !is_array(self::$_dynamic_routes) ) {
-			self::$_dynamic_routes = array();
+		if( self::route_exists($route) ) return FALSE;
+		if( cms_utils::get_app_data('trace1') ) {
+			debug_display(self::$_dynamic_routes);
 		}
-		self::$_dynamic_routes[] = $route;
+		if( !is_array(self::$_dynamic_routes) ) self::$_dynamic_routes = array();
+		self::$_dynamic_routes[$route->signature()] = $route;
 		return TRUE;
 	}
 
@@ -227,6 +282,7 @@ final class cms_route_manager
 	 *
 	 * @see add_dynamic
 	 * @param CmsRoute The route to register
+	 * @param boolean  Flag indicating wether duplicate checking should be done.
 	 * @return boolean
 	 */
 	static public function register(CmsRoute $route)
@@ -259,9 +315,7 @@ final class cms_route_manager
 			$module->SetParameters();
 		}
 
-		if( $flag ) {
-			$CMS_ADMIN_PAGE = $flag;
-		}
+		if( $flag ) $CMS_ADMIN_PAGE = $flag;
 	}
 
 	/**
@@ -280,8 +334,7 @@ final class cms_route_manager
 		$db->Execute($query);
 
 		// get content routes
-		$query = 'SELECT content_id,page_url FROM '.cms_db_prefix()."content 
-             WHERE active=1 AND COALESCE(page_url,'') != ''";
+		$query = 'SELECT content_id,page_url FROM '.cms_db_prefix()."content WHERE active=1 AND COALESCE(page_url,'') != ''";
 		$tmp = $db->GetArray($query);
 		if( is_array($tmp) && count($tmp) ) {
 			for( $i = 0; $i < count($tmp); $i++ ) {
@@ -294,12 +347,11 @@ final class cms_route_manager
 		$installed = ModuleOperations::get_instance()->GetInstalledModules();
 		foreach( $installed as $module_name ) {
 			$modobj = cms_utils::get_module($module_name);
-			if( !$modobj ) continue;
-			
+			if( !$modobj ) continue;		
 			$routes = $modobj->CreateStaticRoutes();
 		}
 	}
-
+	
 	/**
 	 * Load existing static routes from the cache
 	 * This method will also refresh the cache from the database if the cache cannot be found.
@@ -315,7 +367,8 @@ final class cms_route_manager
 		if( is_array($data) && count($data) ) {
 			self::$_routes = array();
 			for( $i = 0; $i < count($data); $i++ ) {
-				self::$_routes[] = @unserialize($data[$i]['data']);
+				$obj = @unserialize($data[$i]['data']);
+				self::$_routes[$obj->signature()] = $obj;
 			}
 			self::$_routes_loaded = TRUE;
 		}

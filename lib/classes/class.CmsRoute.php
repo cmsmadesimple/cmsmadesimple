@@ -88,6 +88,13 @@ class CmsRoute implements ArrayAccess
 	  return $obj;
   }
 
+  public function signature()
+  {
+	  $tmp = serialize($this->_data);
+	  $tmp = md5($tmp);
+	  return $tmp;
+  }
+
   public function OffsetGet($key)
   {
 	  if( in_array($key,self::$_keys) && isset($this->_data[$key]) ) {
@@ -206,17 +213,14 @@ class CmsRoute implements ArrayAccess
 		$b = trim($str);
 		$b = trim($b,'/');
 		
-		if( !strcasecmp($a,$b) ) {
-			return TRUE;
-		}
+		if( !strcasecmp($a,$b) ) return TRUE;
 		return FALSE;
 	}
 
+	// regular expression matches.
     $tmp = array();
     $res = (bool)preg_match($this->_data['term'],$str,$tmp);
-    if( $res && is_array($tmp) ) {
-		$this->_results = $tmp;
-	}
+    if( $res && is_array($tmp) ) $this->_results = $tmp;
     return $res;
   }
 

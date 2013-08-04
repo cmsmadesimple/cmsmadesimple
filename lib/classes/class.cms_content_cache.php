@@ -109,18 +109,16 @@ final class cms_content_cache
   {
     if( !self::$_content_cache ) return FALSE;
 
-    if( is_numeric($identifier) )
-      {
-	if( !self::$_id_map ) return FALSE;
-	if( !isset(self::$_id_map[$identifier]) ) return FALSE;
-	return self::$_id_map[$identifier];
-      }
-    else if( is_string($identifier) )
-      {
-	if( !self::$_alias_map ) return FALSE;
-	if( !isset(self::$_alias_map[$identifier]) ) return FALSE;
-	return self::$_alias_map[$identifier];
-      }
+    if( is_numeric($identifier) ) {
+		if( !self::$_id_map ) return FALSE;
+		if( !isset(self::$_id_map[$identifier]) ) return FALSE;
+		return self::$_id_map[$identifier];
+	}
+    else if( is_string($identifier) ) {
+		if( !self::$_alias_map ) return FALSE;
+		if( !isset(self::$_alias_map[$identifier]) ) return FALSE;
+		return self::$_alias_map[$identifier];
+	}
     return FALSE;
   }
 
@@ -145,10 +143,7 @@ final class cms_content_cache
     
     $hash = md5($id.$alias);
     self::$_content_cache[$hash] = $obj;
-	if( $alias )
-		{
-			self::$_alias_map[$alias] = $hash;
-		}
+	if( $alias ) self::$_alias_map[$alias] = $hash;
     self::$_id_map[$id] = $hash;
     return TRUE;
   }
@@ -185,7 +180,7 @@ final class cms_content_cache
    */
   public static function get_loaded_page_ids()
   {
-    return array_keys(self::$_id_map);
+	  if( is_array(self::$_id_map) )  return array_keys(self::$_id_map);
   }
 
 

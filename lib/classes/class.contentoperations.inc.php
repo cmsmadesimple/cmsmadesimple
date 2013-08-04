@@ -611,6 +611,17 @@ class ContentOperations
 		$contentrows = '';
 		if( is_array($explicit_ids) && count($explicit_ids) )
 		{
+			$loaded_ids = cms_content_cache::get_loaded_page_ids();
+			if( is_array($loaded_ids) && count($loaded_ids) ) {
+				$tmp = array();
+				foreach( $explicit_ids as $one ) {
+					if( in_array($one,$loaded_ids) ) continue;
+					$tmp[] = $one;
+				}
+				if( count($tmp) == 0 ) return;
+				$explicit_ids = $tmp;
+			}
+
 			$expr = 'content_id IN ('.implode(',',$explicit_ids).')';
 			if( !$all ) $expr .= ' AND active = 1';
 
@@ -623,8 +634,7 @@ class ContentOperations
 			if( !$id ) { $id = -1; }
 			// get the content rows
 			$query = "SELECT * FROM ".cms_db_prefix()."content WHERE parent_id = ? AND active = 1 ORDER BY hierarchy";
-			if( $all )
-				$query = "SELECT * FROM ".cms_db_prefix()."content WHERE parent_id = ? ORDER BY hierarchy";
+			if( $all ) $query = "SELECT * FROM ".cms_db_prefix()."content WHERE parent_id = ? ORDER BY hierarchy";
 			$contentrows = $db->GetArray($query, array($id));
 		}
 		$contentprops = '';
@@ -718,6 +728,86 @@ class ContentOperations
 		$one->Save();
 	}
 
+	public function LoadAllContent($loadprops = FALSE,$inactive = FALSE,$showinmenu = FALSE)
+	{
+		static $_loaded = 0;
+		if( $_loaded == 1 ) return;
+		$_loaded = 1;
+
+		$db = cmsms()->GetDb();
+
+		$expr = array();
+		$parms = array();
+		if( !$inactive ) {
+			$expr[] = 'active = ?';
+			$parms[] = 1;
+		}
+		if( $showinmenu ) {
+			$expr[] = 'show_in_menu = ?';
+			$parms[] = 1;
+		}
+
+		$loaded_ids = cms_content_cache::get_loaded_page_ids();
+		if( is_array($loaded_ids) && count($loaded_ids) ) {
+			$expr[] = 'content_id NOT IN ('.implode(',',$loaded_ids).')';
+		}
+
+		$query = 'SELECT * FROM '.cms_db_prefix().'content FORCE INDEX ('.cms_db_prefix().'index_content_by_idhier)';
+		if( count($expr) ) $query .= ' WHERE '.implode(' AND ',$expr);
+		$contentrows = $db->GetArray($query,$parms);
+
+		if( $loadprops ) {
+		    $child_ids = array();
+		    for( $i = 0; $i < count($contentrows); $i++ ) {
+				$child_ids[] = $contentrows[$i]['content_id'];
+			}
+
+			$tmp = null;
+			if( count($child_ids) ) {
+				// get all the properties for the child_ids
+				$query = 'SELECT * FROM '.cms_db_prefix().'content_props WHERE content_id IN ('.implode(',',$child_ids).') ORDER BY content_id';
+				$tmp = $db->GetArray($query);
+			}
+
+		    // re-organize the tmp data into a hash of arrays of properties for each content id.
+		    if( $tmp ) {
+				$contentprops = array();
+				for( $i = 0; $i < count($contentrows); $i++ ) {
+					$content_id = $contentrows[$i]['content_id'];
+					$t2 = array();
+					for( $j = 0; $j < count($tmp); $j++ ) {
+						if( $tmp[$j]['content_id'] == $content_id ) {
+							$t2[] = $tmp[$j];
+						}
+					}
+					$contentprops[$content_id] = $t2;
+				}
+			}
+		}
+
+		// build the content objects
+		for( $i = 0; $i < count($contentrows); $i++ ) {
+		    $row = $contentrows[$i];
+		    $id = $row['content_id'];
+			
+		    if (!in_array($row['type'], array_keys($this->ListContentTypes()))) continue;
+		    $contentobj = $this->CreateNewContent($row['type']);
+
+		    if ($contentobj) {
+				$contentobj->LoadFromData($row, false);
+				if( $loadprops && $contentprops && isset($contentprops[$id]) ) {
+					// load the properties from local cache.
+					$props = $contentprops[$id];
+					foreach( $props as $oneprop ) {
+						$contentobj->SetPropertyValueNoLoad($oneprop['prop_name'],$oneprop['content']);
+					}
+				}
+
+				// cache the content objects
+				cms_content_cache::add_content($id,$contentobj->Alias(),$contentobj);
+			}
+		}
+	}
 
 	/**
 	 * Returns an array of all content objects in the system, active or not.
@@ -732,6 +822,7 @@ class ContentOperations
 		$gCms = cmsms();
 		$tree = $gCms->GetHierarchyManager();
 		$list = $tree->getFlatList();
+		$this->LoadAllContent($loadprops);
 
 		$output = array();
 		foreach( $list as &$one )

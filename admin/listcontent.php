@@ -1262,6 +1262,9 @@ if (isset($_GET['col']) && isset($_GET['content_id']))
 
 echo '<div class="pageoverflow">';
 echo $themeObject->ShowHeader('currentpages').'</div>';
+debug_buffer('test before loadallcontent');
+cmsms()->GetContentOperations()->LoadAllContent(FALSE,TRUE);
+debug_buffer('test after loadallcontent');
 echo '<div id="contentlist">'.display_content_list($themeObject).'</div>';
 
 ?>
