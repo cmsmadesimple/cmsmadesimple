@@ -10,6 +10,7 @@ Core - General
   - Performance optimizations for static and dynamic URL handling.
   - Fixes issues when max_upload_filesize is specified in Gigabytes (G) #9415
   - Improve the help for content_image
+  - Performance improvements for listcontent and add/editcontent.
 
 Version 1.11.7 - Genovesa
 -----------------------------
