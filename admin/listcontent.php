@@ -193,19 +193,22 @@ function content_collapseall()
 function expandall()
 {
 	$userid = get_userid();
-	$contentops = cmsms()->GetContentOperations();
-	$all = $contentops->GetAllContent(false);
-	$cs = '';
-	foreach ($all as $thisitem)
+	$hiermanager = cmsms()->GetHierarchyManager();
+
+	function _expandall_sub($node,&$list)
 	{
-	  if( is_object($thisitem) && $thisitem instanceof ContentBase )
-	    {
-		if ($thisitem->HasChildren())
-		{
-			$cs .= $thisitem->Id().'=1.';
-		}
+	  if( $node->has_children() ) {
+	    if( ($id = $node->get_tag('id')) > 0 ) $list[] = "$id=1";
+	    $children = $node->get_children();
+	    for( $i = 0; $i < count($children); $i++ ) {
+	      _expandall_sub($children[$i],$list);
 	    }
+	  }
 	}
+
+	$list = array();
+	_expandall_sub($hiermanager,$list);
+	$cs = implode('.',$list);
 	set_preference($userid, 'collapse', $cs);
 }
 
@@ -924,7 +927,7 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$users, &$menupos, &$o
 
 function display_content_list($themeObject = null)
 {
-  $gCms = cmsms();
+        $gCms = cmsms();
 	global $thisurl;
 	global $urlext;
 
@@ -998,7 +1001,7 @@ function display_content_list($themeObject = null)
 		}
 	}
 
-  debug_buffer('At Start of Display Content List');
+	debug_buffer('At Start of Display Content List');
         $hierarchy = $gCms->GetHierarchyManager();
 
 	$rowcount = 0;
@@ -1208,6 +1211,7 @@ function display_content_list($themeObject = null)
 	return $headoflist . $thelist . $footer .'</form></div>';
 }
 
+
 echo $themeObject->ShowMessage('', 'message');
 echo $themeObject->ShowErrors('' ,'error');
 ?>
@@ -1264,6 +1268,7 @@ echo '<div class="pageoverflow">';
 echo $themeObject->ShowHeader('currentpages').'</div>';
 debug_buffer('test before loadallcontent');
 cmsms()->GetContentOperations()->LoadAllContent(FALSE,TRUE);
+
 debug_buffer('test after loadallcontent');
 echo '<div id="contentlist">'.display_content_list($themeObject).'</div>';
 

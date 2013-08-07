@@ -42,6 +42,7 @@ class ContentOperations
 	protected function __construct() {}
 	private $_content_types;
 	private $_default_content_id;
+	private $_quickfind;
 	private static $_instance;
 
 	public static function &get_instance()
@@ -787,6 +788,7 @@ class ContentOperations
 
 		// build the content objects
 		for( $i = 0; $i < count($contentrows); $i++ ) {
+			if( $i > 4000 ) { continue; } // debug
 		    $row = $contentrows[$i];
 		    $id = $row['content_id'];
 			
@@ -1191,6 +1193,16 @@ class ContentOperations
 				cms_route_manager::register($route);
 			}
 		}
+	}
+
+	public function quickfind_node_by_id($id)
+	{
+		if( !is_array($this->_quickfind) ) {
+			$this->_quickfind = cmsms()->GetHierarchyManager()->getFlatList();
+			ksort($this->_quickfind);
+		}
+
+		if( isset($this->_quickfind[$id]) ) return $this->_quickfind[$id];
 	}
 }
 

@@ -51,6 +51,22 @@
 class cms_content_tree extends cms_tree
 {
   /**
+   * Find a tree node given a specfied tag and value.
+   *
+   * @param string The tag name to search for
+   * @param mixed  The tag value to search for
+   * @param boolean Wether the value should be treated as case insensitive.
+   * @return cms_tree or null on failure.
+   */
+  public function find_by_tag($tag_name,$value,$case_insensitive = FALSE)
+  {
+	  if( $tag_name == 'id' && $case_insensitive == FALSE && ($this->getParent() == null || $this->get_tag('id') == '') ) {
+		  return cmsms()->GetContentOperations()->quickfind_node_by_id($value);
+	  }
+	  return parent::find_by_tag($tag_name,$value,$case_insensitive);
+  }
+
+  /**
    * Retrieve a node by it's id.
    *
    * A backwards compatibility method.
@@ -121,10 +137,7 @@ class cms_content_tree extends cms_tree
 	$gCms = cmsms();
     $contentops = $gCms->GetContentOperations();
     $id = $contentops->GetPageIDFromHierarchy($position);
-    if ($id)
-    {
-      $result = $this->find_by_tag('id',$id);
-    }
+    if ($id)  $result = $this->find_by_tag('id',$id);
     return $result;
   }
 
@@ -234,29 +247,25 @@ class cms_content_tree extends cms_tree
    */
   public function &getContent($deep = false,$loadsiblings = true,$loadall = false) // loadall used to be true: calguy1000, June 25 2011
   {
-    if( !cms_content_cache::content_exists($this->get_tag('id')) )
-      {
+	  if( !cms_content_cache::content_exists($this->get_tag('id')) ) {
 		  // not in cache
 		  $parent = $this->getParent();
-		  if( !$loadsiblings || !$parent )
-			  {
-				  // only load this content object
-				  $gCms = cmsms();
-				  $contentops = $gCms->GetContentOperations();
-				  // todo: LoadContentFromId should use content cache.
-				  $content = $contentops->LoadContentFromId($this->get_tag('id'), $deep);
-				  return $content;
+		  if( !$loadsiblings || !$parent ) {
+			  // only load this content object
+			  $gCms = cmsms();
+			  $contentops = $gCms->GetContentOperations();
+			  // todo: LoadContentFromId should use content cache.
+			  $content = $contentops->LoadContentFromId($this->get_tag('id'), $deep);
+			  return $content;
+		  }
+		  else {
+			  $parent->getChildren($deep,$loadall);
+			  if( cms_content_cache::content_exists($this->get_tag('id')) ) {
+				  return cms_content_cache::get_content($this->get_tag('id'));
 			  }
-		  else
-			  {
-				  $parent->getChildren($deep,$loadall);
-				  if( cms_content_cache::content_exists($this->get_tag('id')) )
-					  {
-						  return cms_content_cache::get_content($this->get_tag('id'));
-					  }
-			  }
+		  }
       }
-    return cms_content_cache::get_content($this->get_tag('id'));
+	  return cms_content_cache::get_content($this->get_tag('id'));
   }
 
  
@@ -321,29 +330,21 @@ class cms_content_tree extends cms_tree
   public function &getChildren($deep = false,$all = false,$loadcontent = true)
   {
     $children = $this->get_children();
-    if( is_array($children) && count($children) && $loadcontent )
-      {
-		  // check to see if we need to load anything.
-		  $ids = array();
-		  for( $i = 0; $i < count($children); $i++ )
-			  {
-				  if( !$children[$i]->isContentCached() )
-					  {
-						  $ids[] = $children[$i]->get_tag('id');
-					  }
-			  }
+    if( is_array($children) && count($children) && $loadcontent ) {
+		// check to see if we need to load anything.
+		$ids = array();
+		for( $i = 0; $i < count($children); $i++ ) {
+			if( !$children[$i]->isContentCached() ) $ids[] = $children[$i]->get_tag('id');
+		}
 		  
-		  if( count($ids) )
-			  {
-				  // load the children that aren't loaded yet.
-				  $gCms = cmsms();
-				  $contentops = $gCms->GetContentOperations();
-				  $contentops->LoadChildren($this->get_tag('id'),$deep,$all,$ids);
-			  }
+		if( count($ids) ) {
+			// load the children that aren't loaded yet.
+			$gCms = cmsms();
+			$contentops = $gCms->GetContentOperations();
+			$contentops->LoadChildren($this->get_tag('id'),$deep,$all,$ids);
+		}
+	}
 
-      }
-	
-	
     return $children;
   }
 
@@ -358,16 +359,11 @@ class cms_content_tree extends cms_tree
   {
     $result = array();
 
-    if( $this->has_children() )
-    {
+    if( $this->has_children() ) {
 		$children = $this->get_children();
-		for( $i = 0; $i < count($children); $i++ )
-		{
-			$result[] =& $children[$i];
-			if( $children[$i]->has_children() )
-			{
-				$result = array_merge($result,$children[$i]->getFlatList());
-			}
+		for( $i = 0; $i < count($children); $i++ ) {
+			$result[$children[$i]->get_tag('id')] =& $children[$i];
+			if( $children[$i]->has_children() )	$result = array_merge($result,$children[$i]->getFlatList());
 		}
     }
 
@@ -382,12 +378,8 @@ class cms_content_tree extends cms_tree
    */
   public function isContentCached()
   {
-    if( cms_content_cache::content_exists($this->get_tag('id')) )
-      {
-	return TRUE;
-      }
-
-    return FALSE;
+	  if( cms_content_cache::content_exists($this->get_tag('id')) ) return TRUE;
+	  return FALSE;
   }
 } // end of class.
 
