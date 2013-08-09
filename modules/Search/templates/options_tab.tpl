@@ -27,6 +27,8 @@
 </div>
 <div class="pageoverflow">
   <p class="pagetext"></p>
-  <p class="pageinput">{$submit}{$reindex}</p>
+  <p class="pageinput">{$submit}
+    <input type="submit" name="{$actionid}reindex" value="{$mod->Lang('reindexallcontent')}" onclick="return confirm('{$mod->Lang('confirm_reindex')}');>
+  </p>
 </div>
 {$formend}

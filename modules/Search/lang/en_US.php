@@ -2,6 +2,7 @@
 // C
 $lang['clear'] = 'Clear';
 $lang['confirm_clearstats'] = 'Are you sure you want to permanently clear all statistics?';
+$lang['confirm_reindex'] = 'This operation could take an extended amount of time, and/or require an extensive amount of PHP memory.  Are you sure you want to re-index all content?';
 $lang['count'] = 'Count';
 
 // D
