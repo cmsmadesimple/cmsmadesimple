@@ -160,7 +160,7 @@ $smarty->assign('npages',$npages);
 $smarty->assign('admin_url',$config['admin_url']);
 $columns  = $builder->get_display_columns();
 $smarty->assign('columns',$columns);
-if( $this->GetPreference('list_namecolumn','menutext') == 'title' ) {
+if( CmsContentManagerUtils::get_pagenav_display() == 'title' ) {
   $smarty->assign('colhdr_page',$this->Lang('colhdr_name'));
   $smarty->assign('coltitle_page',$this->Lang('coltitle__name'));
 }

@@ -163,13 +163,10 @@ final class ContentListBuilder
     $state = (bool)$state;
     $page_id = (int)$page_id;
     if( $page_id < 1 ) return FALSE;
+    if( !$this->_module->CheckPermission('Manage All Content') ) return FALSE;
 
-    if( !$this->_module->CheckPermission('Manage All Content') ) {
-      return FALSE;
-    }
-
-    $hm = cmsms()->GetHierarchyManager();
-    $node = $hm->find_by_tag('id',$page_id);
+    $contentops = cmsms()->GetContentOperations();
+    $node = $contentops->quickfind_node_by_id($page_id);
     if( !$node ) return FALSE;
     $content = $node->GetContent(FALSE,FALSE,FALSE);
     if( !$content ) return FALSE;
@@ -274,8 +271,8 @@ final class ContentListBuilder
 
     if( !$this->_module->CheckPermission('Manage All Content') ) return;
 
-    $hm = cmsms()->GetHierarchyManager();
-    $node = $hm->find_by_tag('id',$page_id);
+    $contentops = cmsms()->GetContentOperations();
+    $node = $contentops->quickfind_node_by_id($page_id);
     if( !$node ) return FALSE;
     $content1 = $node->GetContent(FALSE,FALSE,FALSE);
     if( !$content1 ) return FALSE;
@@ -283,8 +280,8 @@ final class ContentListBuilder
     if( !$content1->Active() ) return FALSE;
 
     $page_id2 = ContentOperations::get_instance()->GetDefaultContent();
-    $node = $hm->find_by_tag('id',$page_id2);
-    if( !$node ) return FALSE;
+    $contentops = cmsms()->GetContentOperations();
+    $node = $contentops->quickfind_node_by_id($page_id);
     $content2 = $node->GetContent(FALSE,FALSE,FALSE);
     if( !$content2 ) return FALSE;
 
@@ -315,8 +312,8 @@ final class ContentListBuilder
 
     if( !$test ) return FALSE;
     
-    $hm = cmsms()->GetHierarchyManager();
-    $node = $hm->find_by_tag('id',$page_id);
+    $contentops = cmsms()->GetContentOperations();
+    $node = $contentops->quickfind_node_by_id($page_id);
     if( !$node ) return FALSE;
     $content1 = $node->GetContent(FALSE,FALSE,FALSE);
     if( !$content1 ) return FALSE;
@@ -349,8 +346,7 @@ final class ContentListBuilder
     if( !$test ) return $this->_module->Lang('error_delete_permission');
 
     $contentops = cmsms()->GetContentOperations();
-    $hm = cmsms()->GetHierarchyManager();
-    $node = $hm->find_by_tag('id',$page_id);
+    $node = $contentops->quickfind_node_by_id($page_id);
     if( !$node ) return $this->_module->Lang('error_invalidpageid');
 
     if( $node->has_children() ) return $this->_module->Lang('error_delete_haschildren');
@@ -428,36 +424,69 @@ final class ContentListBuilder
    */
   private function _load_editable_content()
   {
+    // build a display list
+    // 1.  add in top level items (items with parent == -1) which cannot be closed
+    // 2.  for reach item in opened array
+    //       for each parent
+    //         if not in opened array break
+    //     if got to root, add items children
+    // 3.  reduce list by items we are able to view (author pages)
+    
+    $contentops = cmsms()->GetContentOperations();
+    $display = array();
+
+    // add in top level items.
     $hm = cmsms()->GetHierarchyManager();
-    $pagelist = null;
-    if( $this->_use_perms && 
-	($this->_module->CheckPermission('Manage All Content') || $this->_module->CheckPermission('Modify Any Page')) ) {
-      // get all of the content ids
-      $pagelist = $this->_get_all_pages($hm);
-    }
-    else {
-      $pagelist = author_pages($this->_userid);
+    {
+      $children = $hm->get_children();
+      foreach( $children as $child ) {
+	$display[] = $child->get_tag('id');
+      }
     }
 
-    // remove children of pages that a: have children, and b: are not in the opened_array
-    $remove = array();
-    for( $i = 0; $i < count($pagelist); $i++ ) {
-      $node = $hm->find_by_tag('id',$pagelist[$i]);
-      if( $node && $node->has_children() && !in_array($pagelist[$i],$this->_opened_array) ) {
+    // add children of opened_array items to the list.
+    $list = array();
+    foreach( $this->_opened_array as $one ) {
+      $node = $contentops->quickfind_node_by_id($one);
+      while( $node ) {
 	$children = $node->get_children();
-	if( $children ) {
+	if( $children && count($children) ) {
 	  foreach( $children as $child ) {
-	    if( in_array($child->get_tag('id'),$pagelist) ) {
-	      $remove[] = $child->get_tag('id');
-	    }
+	    $list[] = $child->get_tag('id');
 	  }
+	}
+	$node = $node->get_parent();
+	if( $node && $node->get_tag('id') > 0 && !in_array($node->get_tag('id'),$this->_opened_array) ) {
+	  $list = null;
+	  break;
 	}
       }
     }
-    $display = array();
-    for( $i = 0; $i < count($pagelist); $i++ ) {
-      if( !in_array($pagelist[$i],$remove) ) $display[] = $pagelist[$i];
+    if( is_array($list) && count($list) ) $display = array_merge($display,$list);
+    $display = array_unique($display);
+
+    // filter the display list by what we're authorized to view.
+    if( $this->_use_perms && ($this->_module->CheckPermission('Manage All Content') || $this->_module->CheckPermission('Modify Any Page')) ) {
+      // we can view anything.
     }
+    else {
+      $valid = author_pages($this->_userid);
+      $tmp = array();
+      foreach( $valid as $one ) {
+	if( in_array($one,$display) ) $tmp[] = $one;
+      }
+      $display = $tmp;
+    }
+
+    // now order the page id list by hierarchy.
+    usort($display,function($a,$b) use ($hm,$contentops) {
+      $node_a = $contentops->quickfind_node_by_id($a);
+      $hier_a = $node_a->getHierarchy();
+      $node_b = $contentops->quickfind_node_by_id($b);
+      $hier_b = $node_b->getHierarchy();
+      return strcmp($hier_a,$hier_b);
+    });
+
     $this->_pagelist = $display;
 
     if( $this->_seek_to > 0 ) {
@@ -470,7 +499,7 @@ final class ContentListBuilder
       }
     }
 
-    $offset = min(count($pagelist),$this->_offset);
+    $offset = min(count($this->_pagelist),$this->_offset);
     $display = array_slice($display,$offset,$this->_pagelimit);
 
     ContentOperations::get_instance()->LoadChildren(-1,FALSE,TRUE,$display);
@@ -597,7 +626,7 @@ final class ContentListBuilder
   private function _get_display_data($page_list)
   {
     $users = $this->_get_users();
-    $hm = cmsms()->GetHierarchyManager();
+    $contentops = cmsms()->GetContentOperations();
     $mod = $this->_module;
     $columns = $this->get_display_columns();
     $userid = $this->_userid;
@@ -605,7 +634,7 @@ final class ContentListBuilder
     // preload the templates.
     $tpl_list = array();
     foreach( $page_list as $page_id ) {
-      $node = $hm->find_by_tag('id',$page_id);
+      $node = $contentops->quickfind_node_by_id($page_id);
       if( !$node ) continue;
       $content = $node->GetContent(FALSE,FALSE,TRUE);
       if( !$content ) continue;
@@ -616,7 +645,7 @@ final class ContentListBuilder
 
     $out = array();
     foreach( $page_list as $page_id ) {
-      $node = $hm->find_by_tag('id',$page_id);
+      $node = $contentops->quickfind_node_by_id($page_id);
       if( !$node ) continue;
       $content = $node->GetContent(FALSE,FALSE,TRUE);
       if( !$content ) continue;
@@ -668,7 +697,7 @@ final class ContentListBuilder
 	case 'page':
 	  if( $content->MenuText() == CMS_CONTENT_HIDDEN_NAME ) continue;
 	  $rec[$column] = $content->MenuText();
-	  if( $mod->GetPreference('list_namecolumn','title') == 'title' ) $rec[$column] = $content->Name();
+	  if( CmsContentManagerUtils::get_pagenav_display() == 'title' ) $rec[$column] = $content->Name();
 	  break;
 
 	case 'alias':

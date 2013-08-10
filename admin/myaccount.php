@@ -43,6 +43,7 @@ $message = '';
  */
 $ignoredmodules = explode(',', get_preference($userid, 'ignoredmodules'));
 $wysiwyg = get_preference($userid, 'wysiwyg');
+$ce_navdisplay = get_preference($userid,'ce_navdisplay');
 $syntaxhighlighter = get_preference($userid, 'syntaxhighlighter');
 $default_cms_language = get_preference($userid, 'default_cms_language');
 $old_default_cms_lang = $default_cms_language;
@@ -82,6 +83,7 @@ if( isset($_POST['active_tab']) ) $tab = trim($_POST['active_tab']);
  * NOTE: Assumes that we succesfully acquired user object.
  */
 if (isset($_POST['submit_account']) && check_permission($userid,'Manage My Account')) {
+
   // Collect params
   $username = '';
   if (isset($_POST["user"])) $username = cleanValue($_POST["user"]);
@@ -148,6 +150,7 @@ if (isset($_POST['submit_account']) && check_permission($userid,'Manage My Accou
 if (isset($_POST['submit_prefs']) && check_permission($userid,'Manage My Settings')) {
   // Get values from request and drive em to variables
   $wysiwyg = $_POST['wysiwyg'];
+  $ce_navdisplay = $_POST['ce_navdisplay'];
   $syntaxhighlighter = $_POST['syntaxhighlighter'];
   $default_cms_language = '';
   if (isset($_POST['default_cms_language'])) $default_cms_language = $_POST['default_cms_language'];
@@ -171,6 +174,7 @@ if (isset($_POST['submit_prefs']) && check_permission($userid,'Manage My Setting
 
   // Set prefs
   set_preference($userid, 'wysiwyg', $wysiwyg);
+  set_preference($userid, 'ce_navdisplay', $ce_navdisplay);
   set_preference($userid, 'syntaxhighlighter', $syntaxhighlighter);
   set_preference($userid, 'default_cms_language', $default_cms_language);
   set_preference($userid, 'admintheme', $admintheme);
@@ -255,6 +259,7 @@ $smarty->assign('tab_end',$themeObject->EndTab());
 # Prefs
 $smarty->assign('module_opts', $modules);
 $smarty->assign('wysiwyg', $wysiwyg);
+$smarty->assign('ce_navdisplay', $ce_navdisplay);
 $smarty->assign('syntaxhighlighter', $syntaxhighlighter);
 $smarty->assign('language_opts', get_language_list());
 $smarty->assign('default_cms_language', $default_cms_language);

@@ -40,6 +40,7 @@
 class ContentOperations
 {
 	protected function __construct() {}
+	private $_quickfind;
 	private $_content_types;
 	private $_default_content_id;
 	private static $_instance;
@@ -47,9 +48,7 @@ class ContentOperations
 
 	public static function &get_instance()
 	{
-		if( !is_object( self::$_instance ) ) {
-			self::$_instance = new ContentOperations();
-		}
+		if( !is_object( self::$_instance ) ) self::$_instance = new ContentOperations();
 		return self::$_instance;
 	}
 
@@ -481,7 +480,13 @@ class ContentOperations
 			$val = $db->GetOne($query);
 			$last_modified = $db->UnixTimeStamp($val);
 		}
-		return $last_modified;
+		$last_modified_b = cms_cache_handler::get_instance()->get('lastmodified');
+		return max($last_modified,$last_modified_b);
+	}
+
+	function SetContentModified()
+	{
+		cms_cache_handler::get_instance()->set('lastmodified',time());
 	}
 
 	/**
@@ -515,13 +520,12 @@ class ContentOperations
 			$query = 'SELECT content_id,parent_id,content_alias FROM '.cms_db_prefix().'content ORDER BY parent_id,item_order';
 			$nodes = $db->GetArray($query);
 			$tree = cms_tree_operations::load_from_list($nodes);
-			cms_cache_handler::get_instance()->set('contentcache',serialize(array(time(),$tree)));
+			$data = serialize(array(time(),$tree));
+			cms_cache_handler::get_instance()->set('contentcache',$data);
 			debug_buffer('', 'End content loading tree from database and serializing');
 		}
 
-		if( $loadcontent ) {
-		    $this->LoadChildren(-1, true, true);
-		}
+		if( $loadcontent ) $this->LoadChildren(-1, true, true);
 
 		debug_buffer('', 'ending tree');
 		return $tree;
@@ -554,13 +558,15 @@ class ContentOperations
 
 		$query = 'SELECT * FROM '.cms_db_prefix().'content FORCE INDEX ('.cms_db_prefix().'index_content_by_idhier) WHERE ';
 		$query .= implode(' AND ',$expr);
-		$contentrows = $db->GetArray($query,$parms);
+		$dbr = $db->Execute($query,$parms);
 
 		if( $loadprops ) {
 		    $child_ids = array();
-		    for( $i = 0; $i < count($contentrows); $i++ ) {
-				$child_ids[] = $contentrows[$i]['content_id'];
+			while( !$dbr->EOF() ) {
+				$child_ids[] = $dbr->fields['content_id'];
+				$dbr->MoveNext();
 			}
+			$dbr->MoveFirst();
 
 			$tmp = null;
 			if( count($child_ids) ) {
@@ -572,8 +578,8 @@ class ContentOperations
 		    // re-organize the tmp data into a hash of arrays of properties for each content id.
 		    if( $tmp ) {
 				$contentprops = array();
-				for( $i = 0; $i < count($contentrows); $i++ ) {
-					$content_id = $contentrows[$i]['content_id'];
+				while( !$dbr->EOF() ) {
+					$content_id = $dbr->fields['content_id'];
 					$t2 = array();
 					for( $j = 0; $j < count($tmp); $j++ ) {
 						if( $tmp[$j]['content_id'] == $content_id ) {
@@ -581,13 +587,15 @@ class ContentOperations
 						}
 					}
 					$contentprops[$content_id] = $t2;
+					$dbr->MoveNext();
 				}
+				$dbr->MoveFirst();
 			}
 		}
 
 		// build the content objects
-		for( $i = 0; $i < count($contentrows); $i++ ) {
-		    $row = $contentrows[$i];
+		while( !$dbr->EOF() ) {
+		    $row = $dbr->fields;
 		    $id = $row['content_id'];
 
 		    if (!in_array($row['type'], array_keys($this->ListContentTypes()))) continue;
@@ -604,9 +612,12 @@ class ContentOperations
 				}
 
 				// cache the content objects
+				debug_display('before add to cache'); flush();
 				cms_content_cache::add_content($id,$contentobj->Alias(),$contentobj);
 			}
+			$dbr->MoveNext();
 		}
+		$dbr->Close();
 	}
 
 	/**
@@ -645,12 +656,13 @@ class ContentOperations
 			$contentrows = $db->GetArray($query);
 		}
 		else {
-			if( !$id ) { $id = -1; }
+			if( !$id ) $id = -1;
 			// get the content rows
 			$query = "SELECT * FROM ".cms_db_prefix()."content WHERE parent_id = ? AND active = 1 ORDER BY hierarchy";
-			if( $all )
-				$query = "SELECT * FROM ".cms_db_prefix()."content WHERE parent_id = ? ORDER BY hierarchy";
+			if( $all ) $query = "SELECT * FROM ".cms_db_prefix()."content WHERE parent_id = ? ORDER BY hierarchy";
 			$contentrows = $db->GetArray($query, array($id));
+			debug_to_log($db->sql);
+			debug_to_log($contentrows);
 		}
 		$contentprops = '';
 
@@ -751,12 +763,13 @@ class ContentOperations
 			$tmp = $one->GetContent(false,true,true);
 			if( is_object($tmp) ) $output[] = $tmp;
 		}
+		debug_display('test1'); die();
 
 		debug_buffer('end get all content...');
 		return $output;
 	}
 
-
+	
 	/**
 	 * Create a hierarchical ordered dropdown of all the content objects in the system for use
 	 * in the admin and various modules.  If $current or $parent variables are passed, care is taken
@@ -778,85 +791,108 @@ class ContentOperations
 	function CreateHierarchyDropdown($current = '', $parent = '', $name = 'parent_id', $allowcurrent = 0, 
 									 $use_perms = 0, $ignore_current = 0, $allow_all = false, $use_name = null)
 	{
-		$result = '';
-		$userid = -1;
-
-		if( is_null($use_name) ) {
-			$use_name = get_site_preference('listcontent_showtitle',true);
+		static $count = 0;
+		$count++;
+		$id = 'cms_hierdropdown'.$count;
+		$value = $parent;
+		
+		$out = "<input type=\"text\" title=\"".lang('title_hierselect')."\" name=\"{$name}\" id=\"{$id}\" class=\"cms_hierdropdown\" value=\"{$value}\" size=\"50\" maxlength=\"50\"/>";
+		$opts = array();
+		//$opts['value'] = $parent;
+		$opts['allowcurrent'] = ($allowcurrent)?'true':'false';
+		$opts['use_perms'] = ($use_perms)?'true':'false';
+		$opts['ignore_current'] = ($ignore_current)?'true':'false';
+		$opts['allow_all'] = ($allow_all)?'true':'false';
+		$opts['use_name'] = ($use_name)?'true':'false';
+		$str = '{';
+		foreach($opts as $key => $val) {
+			$str .= $key.': '.$val.',';
 		}
-
-		$allcontent = $this->GetAllContent(false);
-		if ($allcontent !== FALSE && count($allcontent) > 0) {
-			if( $use_perms ) {
-			    $userid = get_userid();
-			}
-			if( ($userid > 0 && check_permission($userid,'Manage All Content')) || 
-			    $userid == -1 || $parent == -1 ) {
-			    $result .= '<option value="-1">'.lang('none').'</option>';
-			}
-			$curhierarchy = '';
-
-			foreach ($allcontent as $one) {
-				if( !is_object($one) ) continue;
-				$value = $one->Id();
-				if ($value == $current) {
-					// Grab hierarchy just in case we need to check children
-					// (which will always be after)
-					$curhierarchy = $one->Hierarchy();
-
-					if( !$allowcurrent ) {
-						// Then jump out.  We don't want ourselves in the list.
-						continue;
-					}
-					$value = -1;
-			    }
-
-				// If it doesn't have a valid link...
-				// don't include it.
-				if( !$allow_all && !$one->HasUsableLink() ) {
-					continue;
-			    }
-
-				// If it's a child of the current, we don't want to show it as it
-				// could cause a deadlock.
-				if (!$allowcurrent && $curhierarchy != '' &&
-					strstr($one->Hierarchy() . '.', $curhierarchy . '.') == $one->Hierarchy() . '.') {
-					continue;
-			    }
-
-				// If we have a valid userid... only include pages where this user
-				// has write access... or is an admin user... or has appropriate permission.
-				if( $userid > 0 && $one->Id() != $parent) {
-					if( !check_permission($userid,'Manage All Content') && 
-						!check_authorship($userid,$one->Id()) ) {
-						continue;
-					}
-			    }				
-
-				// Don't include content types that do not want children either...
-				if (!$one->WantsChildren()) continue;
-			    $result .= '<option value="'.$value.'"';
-			    
-			    // Select current parent if it exists
-			    if ($one->Id() == $parent) {
-					$result .= ' selected="selected"';
-				}
-			    $txt=$use_name?$one->Name():$one->MenuText();
-			    if( ($value == -1) && ($ignore_current == 0) ) {
-					$result .= '>'.$one->Hierarchy().'. - '.$txt.' ('.lang('invalid').')</option>';
-				}
-			    else {
-					$result .= '>'.$one->Hierarchy().'. - '.$txt.'</option>';
-				}
-			}
-		}
-
-		if( !empty($result) ) {
-			$result = '<select name="'.$name.'" id="'.$name.'">'.$result.'</select>';
-		}
-
-		return $result;
+		$str = substr($str,0,-1).'}';
+		$out .= '<script type="text/javascript">$(document).ready(function(){ $(\'#'.$id.'\').hierselector('.$str.'); });</script>';
+		return $out;
 	}
+// 	function CreateHierarchyDropdown($current = '', $parent = '', $name = 'parent_id', $allowcurrent = 0, 
+// 									 $use_perms = 0, $ignore_current = 0, $allow_all = false, $use_name = null)
+// 	{
+// 		$result = '';
+// 		$userid = -1;
+
+// 		if( is_null($use_name) ) {
+// 			$use_name = get_site_preference('listcontent_showtitle',true);
+// 		}
+
+// 		$allcontent = $this->GetAllContent(false);
+// 		if ($allcontent !== FALSE && count($allcontent) > 0) {
+// 			if( $use_perms ) {
+// 			    $userid = get_userid();
+// 			}
+// 			if( ($userid > 0 && check_permission($userid,'Manage All Content')) || 
+// 			    $userid == -1 || $parent == -1 ) {
+// 			    $result .= '<option value="-1">'.lang('none').'</option>';
+// 			}
+// 			$curhierarchy = '';
+
+// 			foreach ($allcontent as $one) {
+// 				if( !is_object($one) ) continue;
+// 				$value = $one->Id();
+// 				if ($value == $current) {
+// 					// Grab hierarchy just in case we need to check children
+// 					// (which will always be after)
+// 					$curhierarchy = $one->Hierarchy();
+
+// 					if( !$allowcurrent ) {
+// 						// Then jump out.  We don't want ourselves in the list.
+// 						continue;
+// 					}
+// 					$value = -1;
+// 			    }
+
+// 				// If it doesn't have a valid link...
+// 				// don't include it.
+// 				if( !$allow_all && !$one->HasUsableLink() ) {
+// 					continue;
+// 			    }
+
+// 				// If it's a child of the current, we don't want to show it as it
+// 				// could cause a deadlock.
+// 				if (!$allowcurrent && $curhierarchy != '' &&
+// 					strstr($one->Hierarchy() . '.', $curhierarchy . '.') == $one->Hierarchy() . '.') {
+// 					continue;
+// 			    }
+
+// 				// If we have a valid userid... only include pages where this user
+// 				// has write access... or is an admin user... or has appropriate permission.
+// 				if( $userid > 0 && $one->Id() != $parent) {
+// 					if( !check_permission($userid,'Manage All Content') && !check_authorship($userid,$one->Id()) ) {
+// 						continue;
+// 					}
+// 			    }				
+
+// 				// Don't include content types that do not want children either...
+// 				if (!$one->WantsChildren()) continue;
+// 			    $result .= '<option value="'.$value.'"';
+			    
+// 			    // Select current parent if it exists
+// 			    if ($one->Id() == $parent) {
+// 					$result .= ' selected="selected"';
+// 				}
+// 			    $txt=$use_name?$one->Name():$one->MenuText();
+// 			    if( ($value == -1) && ($ignore_current == 0) ) {
+// 					$result .= '>'.$one->Hierarchy().'. - '.$txt.' ('.lang('invalid').')</option>';
+// 				}
+// 			    else {
+// 					$result .= '>'.$one->Hierarchy().'. - '.$txt.'</option>';
+// 				}
+// 			}
+// 		}
+
+// 		if( !empty($result) ) {
+// 			$result = '<select name="'.$name.'" id="'.$name.'">'.$result.'</select>';
+// 		}
+
+// 		return $result;
+// 	}
 
 
 	/**
@@ -1104,6 +1140,21 @@ class ContentOperations
 	{
 		$author_pages = $this->GetPageAccessForUser($userid);
 		return in_array($contentid,$author_pages);
+	}
+
+	public function quickfind_node_by_id($id)
+	{
+		if( !is_array($this->_quickfind) ) {
+			$hm = cmsms()->GetHierarchyManager();
+			$tmp = $hm->getFlatList();
+			$this->_quickfind = array();
+			for( $i = 0; $i < count($tmp); $i++ ) {
+				$this->_quickfind[$tmp[$i]->get_tag('id')] = $tmp[$i];
+			}
+			ksort($this->_quickfind);
+		}
+
+		if( isset($this->_quickfind[$id]) ) return $this->_quickfind[$id];
 	}
 }
 

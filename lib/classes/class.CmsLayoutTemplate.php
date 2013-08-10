@@ -695,7 +695,7 @@ class CmsLayoutTemplate
 			$t2 = CmsLayoutTemplateType::load($t);
 		}
 		else if( is_object($t) && is_a($t,'CmsLayoutTemplateType') ) {
-			$t2 = t;
+			$t2 = $t;
 		}
 
 		if( !$t2 ) throw new CmsInvalidDataException('Invalid data passed to CmsLayoutTemplate::;load_dflt_by_type()');

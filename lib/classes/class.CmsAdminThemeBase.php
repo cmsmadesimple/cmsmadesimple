@@ -160,7 +160,7 @@ abstract class CmsAdminThemeBase
 					if( is_array($recs) && count($recs) ) {
 						foreach( $recs as $one ) {
 							if( !$one->valid() ) continue;
-							$one->url = str_replace('&amp;','&',$one->url);
+							//$one->url = str_replace('&amp;','&',$one->url);
 							if( ModuleOperations::Get_instance()->IsSystemModule($object->GetName()) ) $one->system = TRUE;
 							$key = $one->module.$suffix++;
 							$usermoduleinfo[$key] = $one;

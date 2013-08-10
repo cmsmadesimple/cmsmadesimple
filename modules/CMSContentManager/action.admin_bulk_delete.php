@@ -76,10 +76,10 @@ if( isset($params['submit']) ) {
     $pagelist = unserialize(base64_decode($params['deletecontent']));
 
     try {
-      $contentops = ContentOperations::get_instance()->LoadChildren(-1,FALSE,TRUE,$multicontent);
+      $contentops = ContentOperations::get_instance();
       $hm = cmsms()->GetHierarchyManager();
       foreach( $pagelist as $pid ) {
-	$node = $hm->find_by_tag('id',$pid);
+	$node = $contentops->quickfind_node_by_id($pid);
 	if( !$node ) continue;
 	$content = $node->getContent(FALSE,FALSE,TRUE);
 	if( !is_object($content) ) continue;
@@ -87,7 +87,8 @@ if( isset($params['submit']) ) {
 	$i++;
       }
       if( $i > 0 ) {
-	ContentOperations::get_instance()->SetAllHierarchyPositions();
+	$contentops->SetAllHierarchyPositions();
+	$contentops->SetContentModified();
 	audit('','Core','Deleted '.$i.' pages');
 	$this->SetMessage($this->Lang('msg_bulk_successful'));
       }
@@ -122,10 +123,10 @@ if( count($multicontent) == 0 ) {
   $this->RedirectToAdminTab();
 }
 
-$hm = cmsms()->GetHierarchyManager();
+$contentops = ContentOperations::get_instance();
 $pagelist = array();
 foreach( $multicontent as $pid ) {
-  $node = $hm->find_by_tag('id',$pid);
+  $node = $contentops->quickfind_node_by_id($pid);
   if( !$node ) continue;
   $pagelist[] = $pid;
   $tmp = cmscm_admin_bulk_delete_get_children($node);
@@ -135,10 +136,10 @@ foreach( $multicontent as $pid ) {
 //
 // build the confirmation display
 //
-ContentOperations::get_instance()->LoadChildren(-1,FALSE,FALSE,$pagelist);
+$contentops->LoadChildren(-1,FALSE,FALSE,$pagelist);
 $displaydata =  array();
 foreach( $pagelist as $pid ) {
-  $node = $hm->find_by_tag('id',$pid);
+  $node = $contentops->quickfind_node_by_id($pid);
   if( !$node ) continue;  // this should not happen, but hey.
   $content = $node->getContent(FALSE,FALSE,FALSE);
   if( !is_object($content) ) continue; // this should never happen either

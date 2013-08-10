@@ -87,6 +87,18 @@ final class CmsContentManagerUtils
     if( $timeout > 0 ) return TRUE;
     return FALSE;
   }
+
+  public static function get_pagenav_display()
+  {
+    $userid = get_userid(FALSE);
+    $pref = get_preference($userid,'ce_navdisplay');
+    if( !$pref ) {
+      $mod = cms_utils::get_module('CMSContentManager');
+      $pref = $mod->GetPreference('list_namecolumn');
+      if( !$pref ) $pref = 'title';
+    }
+    return $pref;
+  }
 } // end of class
 #
 # EOF

@@ -28,7 +28,7 @@
 		{module_available name='FileManager' assign='fmgood'}
 		{if (isset($fmgood) && $fmgood && $pagealias != 'File-nbsp-Manager')}{cms_module module=FileManager action='javascript'}{/if}
 	</head>
-	<body##BODYSUBMITSTUFFGOESHERE## lang="{$lang|truncate:'2':''}" id="{$pagetitle|md5}" class="oe_{$pagealias}">
+	<body lang="{$lang|truncate:'2':''}" id="{$pagetitle|md5}" class="oe_{$pagealias}">
 		<!-- start container -->
 		<div id="oe_container" class="sidebar-on">
 			<!-- start header -->

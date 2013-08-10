@@ -51,6 +51,23 @@
 class cms_content_tree extends cms_tree
 {
   /**
+   * Find a tree node given a specfied tag and value.
+   *
+   * @param string The tag name to search for
+   * @param mixed  The tag value to search for
+   * @param boolean Wether the value should be treated as case insensitive.
+   * @return cms_tree or null on failure.
+   */
+  public function &find_by_tag($tag_name,$value,$case_insensitive = FALSE)
+  {
+	  if( $tag_name == 'id' && $case_insensitive == FALSE && ($this->get_parent() == null || $this->get_tag('id') == '') ) {
+		  $res = cmsms()->GetContentOperations()->quickfind_node_by_id($value);
+		  return $res;
+	  }
+	  return parent::find_by_tag($tag_name,$value,$case_insensitive);
+  }
+
+  /**
    * Retrieve a node by it's id.
    *
    * A backwards compatibility method.
@@ -374,6 +391,51 @@ class cms_content_tree extends cms_tree
 
 	  return FALSE;
   }
+
+
+  /**
+   * A recursive method to find the (estimated) hierarchy position of this node.
+   *
+   * @return string
+   */
+  private function _getPeerIndex()
+  {
+	  // find index of current node amongst peers.
+	  $parent = $this->get_parent();
+	  if( $parent ) {
+		  $children = $parent->get_children();
+		  for( $i = 0; $i < count($children); $i++ ) {
+			  if( $children[$i]->get_tag('id') == $this->get_tag('id') ) return $i+1;
+		  }
+	  }
+  }
+
+  private function _getHierarchyArray()
+  {
+	  $list = array();
+	  $list[] = $this->_getPeerIndex();
+	  $parent = $this->get_parent();
+	  if( $parent ) {
+		  $out = $parent->_getHierarchyArray();
+		  if( $out ) $list = array_merge($list,$out);
+	  }
+	  return $list;
+  }
+
+  public function getHierarchy()
+  {
+	  if( ($hier = $this->get_tag('hierarchy')) != '' ) return $hier;
+
+	  $list = $this->_getHierarchyArray();
+	  foreach( $list as &$one ) {
+		  $one = sprintf('%05d',$one);
+	  }
+	  $out = implode('.',array_reverse(array_splice($list,0,-1)));
+	  $this->set_tag('hierarchy',$out);
+
+	  return $out;
+  }
+
 } // end of class.
 
 # vim:ts=4 sw=4 noet

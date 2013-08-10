@@ -503,7 +503,7 @@ class CmsLayoutTemplateType
    * @see CmsLayoutTemplate::load_dflt_by_type()
    * @return CmsLayoutTemplate object, or null.
    */
-  public function &get_dflt_template()
+  public function get_dflt_template()
   {
 	  return CmsLayoutTemplate::load_dflt_by_type($this);
   }

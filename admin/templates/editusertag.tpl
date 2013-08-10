@@ -19,9 +19,15 @@ $(document).ready(function(){
     data.push({ 'name': 'apply', 'value': 1 });
     data.push({ 'name': 'ajax', 'value': 1 });
     $.post('{$smarty.server.REQUEST_URI}',data,function(resultdata,text) {
+      alert(resultdata);
       var x = $.parseJSON(resultdata);
-      var r = x.response;
-      var d = x.details;
+      var r,d;
+      if( typeof x.response != 'undefined' ) {
+        r = x.response;
+        d = x.details;
+      } else {
+        d = resultdata;
+      }
 
       var e = $('<div />').text(d).html(); // quick tip for entity encoding.
       $('#edit_userplugin_runout').html(e);

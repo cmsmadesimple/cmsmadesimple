@@ -114,6 +114,18 @@ jQuery(document).ready(function(){
       </div>
 
       <div class="pageoverflow">
+        <p class="pagetext"><label for="ce_navdisplay">{lang('ce_navdisplay')}:</label>&nbsp;{cms_help key2='help_myaccount_ce_navdisplay'}</p>
+        <p class="pageinput">
+          {$opts['']=lang('none')}
+          {$opts['menutext']=lang('menutext')}
+          {$opts['title']=lang('title')}
+          <select id="ce_navdisplay" name="ce_navdisplay">
+          {html_options options=$opts selected=$ce_navdisplay}
+          </select>
+        </p>
+      </div>
+
+      <div class="pageoverflow">
         <p class="pagetext"><label for="parent_id">{'defaultparentpage'|lang}:</label>&nbsp;{cms_help key2='help_myaccount_dfltparent'}</p>
 	<p class="pageinput">{$default_parent}</p>
       </div>

@@ -221,6 +221,7 @@ $tabnames = $content_obj->GetTabNames();
 $numberoftabs = count($tabnames);
 $tab_contents_array = array();
 $tab_message_array = array();
+
 for( $currenttab = 0; $currenttab < $numberoftabs; $currenttab++ ) {
   $tmp = $content_obj->GetTabMessage($currenttab);
   if( $tmp ) {
