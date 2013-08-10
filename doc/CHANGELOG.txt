@@ -11,6 +11,7 @@ Core - General
   - Fixes issues when max_upload_filesize is specified in Gigabytes (G) #9415
   - Improve the help for content_image
   - Performance improvements for listcontent and add/editcontent.
+  - Search Tweaks
 
 Version 1.11.7 - Genovesa
 -----------------------------
