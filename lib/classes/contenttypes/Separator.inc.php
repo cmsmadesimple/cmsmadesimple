@@ -37,61 +37,45 @@ class Separator extends ContentBase
 
     function SetProperties()
     {
-      parent::SetProperties();
-      $this->RemoveProperty('secure',0);
-      $this->RemoveProperty('template','-1');
-      $this->RemoveProperty('alias','');
-      $this->RemoveProperty('title','');
-      $this->RemoveProperty('menutext','');
-      $this->RemoveProperty('target','');
-      $this->RemoveProperty('accesskey','');
-      $this->RemoveProperty('titleattribute','');
-      $this->RemoveProperty('cachable',true);
-	  $this->RemoveProperty('page_url','');
-	  $this->RemoveProperty('tabindex','');
+		parent::SetProperties();
+		$this->RemoveProperty('secure',0);
+		$this->RemoveProperty('template','-1');
+		$this->RemoveProperty('alias','');
+		$this->RemoveProperty('title','');
+		$this->RemoveProperty('menutext','');
+		$this->RemoveProperty('target','');
+		$this->RemoveProperty('accesskey','');
+		$this->RemoveProperty('titleattribute','');
+		$this->RemoveProperty('cachable',true);
+		$this->RemoveProperty('page_url','');
+		$this->RemoveProperty('tabindex','');
     }
 
-    function FriendlyName()
-    {
-      return lang('contenttype_separator');
-    }
-
-    function HasUsableLink()
-    {
-		return false;
-    }
-
-    function WantsChildren()
-    {
-	return false;
-    }
-
-    function RequiresAlias()
-    {
-      return FALSE;
-    }
+    function GetURL($rewrite = true) { return '#';  }
+	function IsViewable() { return FALSE; }
+    function FriendlyName() { return lang('contenttype_separator'); }
+    function HasUsableLink() { return false; }
+    function WantsChildren() { return false; }
+    function RequiresAlias() { return FALSE; }
+	public function HasSearchableContent() { return FALSE; }
 
     function TabNames()
     {
-      $res = array(lang('main'));
-      if( check_permission(get_userid(),'Manage All Content') )
-	{
-	  $res[] = lang('options');
-	}
-      return $res;
+		$res = array(lang('main'));
+		if( check_permission(get_userid(),'Manage All Content') ) $res[] = lang('options');
+		return $res;
     }
 
     function EditAsArray($adding = false, $tab = 0, $showadmin = false)
     {
-      switch($tab)
-	{
-	case '0':
-	  return $this->display_attributes($adding);
-	  break;
-	case '1':
-	  return $this->display_attributes($adding,1);
-	  break;
-	}
+		switch($tab) {
+		case '0':
+			return $this->display_attributes($adding);
+			break;
+		case '1':
+			return $this->display_attributes($adding,1);
+			break;
+		}
     }
 
     function ValidateData()
@@ -100,12 +84,6 @@ class Separator extends ContentBase
 		return parent::ValidateData();
     }
 
-    function GetURL($rewrite = true)
-    {
-		return '#';
-    }
- 
-   function IsViewable() { return FALSE; }
 }
 
 # vim:ts=4 sw=4 noet

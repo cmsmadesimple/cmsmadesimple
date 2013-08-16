@@ -104,9 +104,7 @@ class ContentOperations
 
 		$ctph = $this->_get_content_type($type);
 		if( is_object($ctph) ) {
-			if( !class_exists( $ctph->class ) && file_exists( $ctph->filename ) ) {
-				include_once( $ctph->filename );
-			}
+			if( !class_exists( $ctph->class ) && file_exists( $ctph->filename ) ) include_once( $ctph->filename );
 		}
 
 		return $ctph;
@@ -125,15 +123,11 @@ class ContentOperations
 	 */
 	public function &CreateNewContent($type)
 	{
-		if( is_object($type) && $type instanceof CmsContentTypePlaceHolder ) {
-			$type = $type->type;
-		}
+		if( is_object($type) && $type instanceof CmsContentTypePlaceHolder ) $type = $type->type;
 		$result = NULL;
 
 		$ctph = $this->LoadContentType($type);
-		if( is_object($ctph) && class_exists($ctph->class) ) {
-			$result = new $ctph->class;
-		}
+		if( is_object($ctph) && class_exists($ctph->class) ) $result = new $ctph->class;
 		return $result;
 	}
 
@@ -147,9 +141,7 @@ class ContentOperations
      */
 	function &LoadContentFromId($id,$loadprops=false)
 	{
-		if( cms_content_cache::content_exists($id) ) {
-			return cms_content_cache::get_content($id);
-		}
+		if( cms_content_cache::content_exists($id) ) return cms_content_cache::get_content($id);
 
 		$result = FALSE;
 		$gCms = cmsms();
@@ -179,9 +171,7 @@ class ContentOperations
      */
 	function &LoadContentFromAlias($alias, $only_active = false)
 	{
-		if( cms_content_cache::content_exists($alias) ) {
-			return cms_content_cache::get_content($alias);
-		}
+		if( cms_content_cache::content_exists($alias) ) return cms_content_cache::get_content($alias);
 
 		$gCms = cmsms();
 		$db = $gCms->GetDb();
@@ -189,16 +179,12 @@ class ContentOperations
 		$row = '';
 		if (is_numeric($alias) && strpos($alias,'.') === FALSE && strpos($alias,',') === FALSE) {
 			$query = "SELECT * FROM ".cms_db_prefix()."content WHERE content_id = ?";
-			if ($only_active == true) {
-				$query .= " AND active = 1";
-			}
+			if ($only_active == true) $query .= " AND active = 1";
 			$row = $db->GetRow($query, array($alias));
 		}
 		else {
 			$query = "SELECT * FROM ".cms_db_prefix()."content WHERE content_alias = ?";
-			if ($only_active == true) {
-				$query .= " AND active = 1";
-			}
+			if ($only_active == true) $query .= " AND active = 1";
 			$row = $db->GetRow($query, array($alias));
 		}
 
@@ -243,9 +229,7 @@ class ContentOperations
 			// Just get something...
 			$query = "SELECT content_id FROM ".cms_db_prefix()."content";
 			$row = $db->GetRow($query);
-			if ($row) {
-				$result = $row['content_id'];
-			}
+			if ($row) $result = $row['content_id'];
 		}
 
 		$this->_default_content_id = $result;
@@ -329,8 +313,9 @@ class ContentOperations
 		$name = strtolower($name);
 		$this->_get_content_types();
 		if( is_array($this->_content_types) ) {
-			if( isset($this->_content_types[$name]) && $this->_content_types[$name] instanceof CmsContentTypePlaceHolder )
+			if( isset($this->_content_types[$name]) && $this->_content_types[$name] instanceof CmsContentTypePlaceHolder ) {
 				return $this->_content_types[$name];
+			}
 		}
 	}
 
@@ -366,7 +351,7 @@ class ContentOperations
 		$disallowed_a = array(); 
 		$tmp = get_site_preference('disallowed_contenttypes');
 		if( $tmp ) $disallowed_a = explode(',',$tmp);
-			
+
 		$this->_get_content_types();
 		$types = $this->_content_types;
 		if ( isset($types) ) {
@@ -582,9 +567,7 @@ class ContentOperations
 					$content_id = $dbr->fields['content_id'];
 					$t2 = array();
 					for( $j = 0; $j < count($tmp); $j++ ) {
-						if( $tmp[$j]['content_id'] == $content_id ) {
-							$t2[] = $tmp[$j];
-						}
+						if( $tmp[$j]['content_id'] == $content_id ) $t2[] = $tmp[$j];
 					}
 					$contentprops[$content_id] = $t2;
 					$dbr->MoveNext();
@@ -612,7 +595,6 @@ class ContentOperations
 				}
 
 				// cache the content objects
-				debug_display('before add to cache'); flush();
 				cms_content_cache::add_content($id,$contentobj->Alias(),$contentobj);
 			}
 			$dbr->MoveNext();
@@ -635,7 +617,7 @@ class ContentOperations
 		$gCms = cmsms();
 		$db = $gCms->GetDb();
 
-		$contentrows = '';
+		$contentrows = null;
 		if( is_array($explicit_ids) && count($explicit_ids) ) {
 			$loaded_ids = cms_content_cache::get_loaded_page_ids();
 			if( is_array($loaded_ids) && count($loaded_ids) ) {
@@ -661,12 +643,10 @@ class ContentOperations
 			$query = "SELECT * FROM ".cms_db_prefix()."content WHERE parent_id = ? AND active = 1 ORDER BY hierarchy";
 			if( $all ) $query = "SELECT * FROM ".cms_db_prefix()."content WHERE parent_id = ? ORDER BY hierarchy";
 			$contentrows = $db->GetArray($query, array($id));
-			debug_to_log($db->sql);
-			debug_to_log($contentrows);
 		}
-		$contentprops = '';
 
 		// get the content ids from the returned data
+		$contentprops = null;
 		if( $loadprops ) {
 		    $child_ids = array();
 		    for( $i = 0; $i < count($contentrows); $i++ ) {
@@ -687,12 +667,11 @@ class ContentOperations
 					$content_id = $contentrows[$i]['content_id'];
 					$t2 = array();
 					for( $j = 0; $j < count($tmp); $j++ ) {
-						if( $tmp[$j]['content_id'] == $content_id ) {
-							$t2[] = $tmp[$j];
-						}
+						if( $tmp[$j]['content_id'] == $content_id ) $t2[] = $tmp[$j];
 					}
 					$contentprops[$content_id] = $t2;
 				}
+				unset($tmp);
 			}
 		}
 		
@@ -703,7 +682,7 @@ class ContentOperations
 
 		    if (!in_array($row['type'], array_keys($this->ListContentTypes()))) continue;
 		    $contentobj = $this->CreateNewContent($row['type']);
-
+			
 		    if ($contentobj) {
 				$contentobj->LoadFromData($row, false);
 				if( $loadprops && $contentprops && isset($contentprops[$id]) ) {
@@ -716,8 +695,13 @@ class ContentOperations
 
 				// cache the content objects
 				cms_content_cache::add_content($id,$contentobj->Alias(),$contentobj);
+				$contentobj = null;
+				unset($contentobj);
 			}
 		}
+
+		unset($contentrows);
+		unset($contentprops);
 	}
 
 	/**
@@ -747,6 +731,9 @@ class ContentOperations
 	/**
 	 * Returns an array of all content objects in the system, active or not.
 	 *
+	 * Caution:  it is entirely possible that this method (and other similar methods of loading content) will result in a memory outage
+	 * if there are large amounts of content objects AND/OR large amounts of content properties.  Use with caution.
+	 *
 	 * @param boolean $loadprops Not implemented
 	 * @return array The array of content objects
 	 */
@@ -763,7 +750,6 @@ class ContentOperations
 			$tmp = $one->GetContent(false,true,true);
 			if( is_object($tmp) ) $output[] = $tmp;
 		}
-		debug_display('test1'); die();
 
 		debug_buffer('end get all content...');
 		return $output;
@@ -985,9 +971,7 @@ class ContentOperations
 			}
 			$row = $db->GetRow($query, $params);
 
-			if ($row) {
-				$error = lang('aliasalreadyused');
-			}
+			if ($row) $error = lang('aliasalreadyused');
 		}
 
 		return $error;
@@ -1127,9 +1111,7 @@ class ContentOperations
 				$data[$content_id] = $tmp[$i]['hierarchy'];
 			}
 
-			if( count($data) ) {
-				asort($data);
-			}
+			if( count($data) ) asort($data);
 
 			$this->_authorpages = array_keys($data);
 		}

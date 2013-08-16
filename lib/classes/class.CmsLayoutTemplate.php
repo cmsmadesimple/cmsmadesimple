@@ -356,9 +356,8 @@ class CmsLayoutTemplate
 		$this->validate();
 
 		$query = 'UPDATE '.cms_db_prefix().self::TABLENAME.'
-                SET name = ?, content = ?, description = ?, type_id = ?, type_dflt = ?,
-                    category_id = ?, owner_id = ?, modified = ?
-                WHERE id = ?';
+              SET name = ?, content = ?, description = ?, type_id = ?, type_dflt = ?, category_id = ?, owner_id = ?, modified = ?
+              WHERE id = ?';
 		$db = cmsms()->GetDb();
 		$dbr = $db->Execute($query,
 							array($this->get_name(),$this->get_content(),$this->get_description(),
@@ -369,8 +368,7 @@ class CmsLayoutTemplate
 
 		if( $this->get_type_dflt() ) {
 			// if it's default for a type, unset default flag for all other records with this type
-			$query = 'UPDATE '.cms_db_prefix().self::TABLENAME.' SET type_dflt = 0
-                    WHERE type_id = ? AND type_dflt = 1 AND id != ?';
+			$query = 'UPDATE '.cms_db_prefix().self::TABLENAME.' SET type_dflt = 0 WHERE type_id = ? AND type_dflt = 1 AND id != ?';
 			$dbr = $db->Execute($query,array($this->get_type_id(),$this->get_id()));
 			if( !$dbr ) throw new CmsSQLErrorException($db->sql.' -- '.$db->ErrorMsg());
 		}
@@ -424,8 +422,7 @@ class CmsLayoutTemplate
 
 		if( $this->get_type_dflt() ) {
 			// if it's default for a type, unset default flag for all other records with this type
-			$query = 'UPDATE '.cms_db_prefix().self::TABLENAME.' SET type_dflt = 0
-                WHERE type_id = ? AND type_dflt = 1 AND id != ?';
+			$query = 'UPDATE '.cms_db_prefix().self::TABLENAME.' SET type_dflt = 0 WHERE type_id = ? AND type_dflt = 1 AND id != ?';
 			$dbr = $db->Execute($query,array($this->get_type_id(),$this->get_id()));
 			if( !$dbr ) throw new CmsSQLErrorException($db->sql.' -- '.$db->ErrorMsg());
 		}

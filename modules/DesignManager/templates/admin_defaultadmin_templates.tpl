@@ -166,25 +166,34 @@ $(document).ready(function(){
 			</tr>
 		</thead>
 		<tbody>
-		{foreach from=$templates item='template'}
-			{cycle values="row1,row2" assign='rowclass'}
-			<tr class="{$rowclass}">
-    		        {$edit_tpl=''}
+		{foreach from=$templates item='template'}{strip}
+		{cycle values="row1,row2" assign='rowclass'}
+                {include file='module_file_tpl:DesignManager;admin_defaultadmin_tpltooltip.tpl' assign='tpl_tooltip'}
+		<tr class="{$rowclass}">
+
 			{cms_action_url action='admin_edit_template' tpl=$template->get_id() assign='edit_tpl'}
 			{if $has_add_right}
 				{cms_action_url action='admin_copy_template' tpl=$template->get_id() assign='copy_tpl'}
 			{/if}
 			{cms_action_url action='admin_delete_template' tpl=$template->get_id() assign='delete_tpl'}
-			{cms_action_url action='admin_ajax' mode='template-tooltip' tpl=$template->get_id() assign='tpl_tooltip'}
-			{cms_action_url action='admin_ajax' mode='tpltype-tooltip' type=$template->get_type_id() assign='tpltype_tooltip'}
+
+			{* template id, and template name columns *}
 			{if !$template->locked()}
-				<td><a href="{$edit_tpl}" data-tpl-id="{$template->get_id()}" class="edit_tpl tooltip" title="{$mod->Lang('edit_template')}" data-cms-ajax='{$tpl_tooltip}'>{$template->get_id()}</a></td>
-				<td><a href="{$edit_tpl}" data-tpl-id="{$template->get_type_id()}" class="edit_tpl tooltip" title="{$mod->Lang('edit_template')}" data-cms-ajax='{$tpl_tooltip}'>{$template->get_name()}</a></td>
+				<td><a href="{$edit_tpl}" data-tpl-id="{$template->get_id()}" class="edit_tpl tooltip" title="{$mod->Lang('edit_template')}" data-cms-description='{$tpl_tooltip}'>{$template->get_id()}</a></td>
+				<td><a href="{$edit_tpl}" data-tpl-id="{$template->get_type_id()}" class="edit_tpl tooltip" title="{$mod->Lang('edit_template')}" data-cms-description='{$tpl_tooltip}'>{$template->get_name()}</a></td>
 			{else}
 				<td>{$template->get_id()}</td>
-				<td><span class="tooltip" data-cms-ajax='{$tpl_tooltip}'>{$template->get_name()}</span></td>
+				<td><span class="tooltip" data-cms-description='{$tpl_tooltip}'>{$template->get_name()}</span></td>
 			{/if}
-			<td>{assign var='n' value=$template->get_type_id()}<span class="tooltip" data-cms-ajax='{$tpltype_tooltip}'>{$list_types.$n}</span></td>
+
+			{* template type column *}
+			<td>
+				{$type_id=$template->get_type_id()}
+				{include file='module_file_tpl:DesignManager;admin_defaultadmin_tpltype_tooltip.tpl' assign='tpltype_tooltip'}
+				<span class="tooltip" data-cms-description='{$tpltype_tooltip}'>{$list_types.$type_id}</span>
+			</td>
+
+			{* design column *}
 			<td>
 				{assign var='t1' value=$template->get_designs()}
 				{if count($t1) == 1}
@@ -202,9 +211,13 @@ $(document).ready(function(){
 					<span title="{$mod->Lang('help_template_multiple_designs')}">{$mod->Lang('prompt_multiple')} ({count($t1)})</span>
 				{/if}
 			</td>
+
+			{* modified date column *}
 			<td>{$template->get_modified()|date_format:'%x %X'}</td>
+
+			{* default column *}
 			<td>
-	 			{assign var='the_type' value=$list_all_types.$n}
+	 			{assign var='the_type' value=$list_all_types.$type_id}
 				{if $the_type->get_dflt_flag()}
 					{if $template->get_type_dflt()}
 						{admin_icon icon='true.gif' title=$mod->Lang('prompt_dflt')}
@@ -215,6 +228,8 @@ $(document).ready(function(){
 					<span title="{$mod->Lang('prompt_title_na')}">{$mod->Lang('prompt_na')}</span>
 				{/if}
 			</td>
+
+			{* edit/copy iconsm, or steal icons *}
 			{if !$template->locked()}
 				<td><a href="{$edit_tpl}" data-tpl-id="{$template->get_id()}" class="edit_tpl" title="{$mod->Lang('edit_template')}">{admin_icon icon='edit.gif' title=$mod->Lang('prompt_edit')}</a></td>
 				{if $has_add_right}
@@ -229,6 +244,8 @@ $(document).ready(function(){
 				</td>
 				<td></td>
 			{/if}
+
+			{* delete column *}
 			<td>
  			{if !$template->get_type_dflt()}
 				{if $template->get_owner_id() == get_userid() || $manage_templates}
@@ -236,13 +253,15 @@ $(document).ready(function(){
 				{/if}
 			{/if}
 			</td>
+
+			{* checkbox column *}
 			<td>
 				{if !$template->locked() && ($template->get_owner_id() == get_userid() || $manage_templates) }
-					<input type="checkbox" class="tpl_select" name="{$actionid}tpl_select[]" value="{$template->get_id()}"/>
+					<input type="checkbox" class="tpl_select" name="{$actionid}tpl_select[]" value="{$template->get_id()}" title="{$mod->Lang('title_tpl_bulk')}"/>
 				{/if}
 			</td>
-			</tr>
-		{/foreach}
+		</tr>
+		{/strip}{/foreach}
 		</tbody>
 	</table>
 {else}

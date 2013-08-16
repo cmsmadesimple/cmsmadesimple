@@ -33,111 +33,84 @@
  */
 class Link extends ContentBase
 {
-
-    function IsCopyable()
-    {
-        return TRUE;
-    }
-
-    function IsViewable()
-    {
-      return FALSE;
-    }
-
-    function FriendlyName()
-    {
-      return lang('contenttype_redirlink');
-    }
+    public function IsCopyable() { return TRUE; }
+    public function IsViewable() { return FALSE; }
+	public function HasSearchableContent() { return FALSE; }
+    public function FriendlyName() { return lang('contenttype_redirlink'); }
 
     function SetProperties()
     {
-      parent::SetProperties();
-      $this->RemoveProperty('secure',0);
-      $this->RemoveProperty('cachable',true);
-      $this->AddProperty('url',3,self::TAB_MAIN);
+		parent::SetProperties();
+		$this->RemoveProperty('secure',0);
+		$this->RemoveProperty('cachable',true);
+		$this->AddProperty('url',3,self::TAB_MAIN);
     }
 
     function FillParams($params,$editing = false)
     {
 		parent::FillParams($params,$editing);
 
-	if (isset($params))
-	{
-	  $parameters = array('url');
-	  foreach ($parameters as $oneparam)
-	    {
-	      if (isset($params[$oneparam]))
-		{
-		  $this->SetPropertyValue($oneparam, $params[$oneparam]);
-		}
-	    }
+		if (isset($params)) {
+			$parameters = array('url');
+			foreach ($parameters as $oneparam) {
+				if (isset($params[$oneparam])) $this->SetPropertyValue($oneparam, $params[$oneparam]);
+			}
 
-	  if (isset($params['file_url']))
-	    {
-	    	$this->SetPropertyValue('url', $params['file_url']);
-            } 
-	}
+			if (isset($params['file_url'])) $this->SetPropertyValue('url', $params['file_url']);
+		}
     }
 
     function ValidateData()
     {
-      $errors = parent::ValidateData();
-      if( $errors === FALSE )
-	{
-	  $errors = array();
-	}
+		$errors = parent::ValidateData();
+		if( $errors === FALSE )	$errors = array();
 
-      if ($this->GetPropertyValue('url') == '')
-	{
-	  $errors[]= lang('nofieldgiven',array(lang('url')));
-	  $result = false;
-	}
+		if ($this->GetPropertyValue('url') == '') {
+			$errors[]= lang('nofieldgiven',array(lang('url')));
+			$result = false;
+		}
 
-      return (count($errors) > 0?$errors:FALSE);
+		return (count($errors) > 0?$errors:FALSE);
     }
 
     function TabNames()
     {
-      $res = array(lang('main'));
-      if( check_permission(get_userid(),'Manage All Content') )
-	{
-	  $res[] = lang('options');
-	}
-      return $res;
+		$res = array(lang('main'));
+		if( check_permission(get_userid(),'Manage All Content') ) {
+			$res[] = lang('options');
+		}
+		return $res;
     }
 
     function display_single_element($one,$adding)
     {
-      switch($one) {
-	case 'url':
-	  {
-	    return array(lang('url').':','<input type="text" name="url" size="80" value="'.cms_htmlentities($this->GetPropertyValue('url')).'" />');
-	  }
-	  break;
+		switch($one) {
+		case 'url':
+			return array(lang('url').':','<input type="text" name="url" size="80" value="'.cms_htmlentities($this->GetPropertyValue('url')).'" />');
+			break;
 
-      default:
-	return parent::display_single_element($one,$adding);
-      }
+		default:
+			return parent::display_single_element($one,$adding);
+		}
     }
 
     function EditAsArray($adding = false, $tab = 0, $showadmin = false)
     {
-      $gCms = cmsms();
+		$gCms = cmsms();
 
-      switch($tab)
-	{
-	case '0':
-	  return $this->display_attributes($adding);
-	  break;
-	case '1':
-	  return $this->display_attributes($adding,1);
-	  break;
-	}
+		switch($tab) {
+		case '0':
+			return $this->display_attributes($adding);
+			break;
+		case '1':
+			return $this->display_attributes($adding,1);
+			break;
+		}
     }
 
     function GetURL($rewrite = true)
     {
-	return cms_htmlentities($this->GetPropertyValue('url'));
+		return cms_htmlentities($this->GetPropertyValue('url'));
     }
 }
 

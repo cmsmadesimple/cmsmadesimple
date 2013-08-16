@@ -35,163 +35,128 @@
 class PageLink extends ContentBase
 {
 
-    function IsCopyable()
-    {
-        return TRUE;
-    }
+    public function IsCopyable() { return TRUE; }
+    public function IsViewable() { return FALSE; }
+	public function HasSearchableContent() { return FALSE; }
+    public function FriendlyName() { return lang('contenttype_pagelink'); }
 
-    function IsViewable()
-    {
-      return FALSE;
-    }
-
-    function FriendlyName()
-    {
-      return lang('contenttype_pagelink');
-    }
-
-// calguy1000: commented this out so that this page can be seen in cms_selflink
-// but not sure what it's gonna mess up.
-//     function HasUsableLink()
-//     {
-//       return false;
-//     }
+	// calguy1000: commented this out so that this page can be seen in cms_selflink
+	// but not sure what it's gonna mess up.
+	//     function HasUsableLink()
+	//     {
+	//       return false;
+	//     }
 
     function SetProperties()
     {
-      parent::SetProperties();
-      $this->RemoveProperty('cachable',1);
-      //$this->RemoveProperty('showinmenu',1);
-      $this->RemoveProperty('secure',0);
-      $this->AddProperty('page',3,self::TAB_MAIN);
-      $this->AddProperty('params',4,self::TAB_OPTIONS);
+		parent::SetProperties();
+		$this->RemoveProperty('cachable',1);
+		//$this->RemoveProperty('showinmenu',1);
+		$this->RemoveProperty('secure',0);
+		$this->AddProperty('page',3,self::TAB_MAIN);
+		$this->AddProperty('params',4,self::TAB_OPTIONS);
 		
-      //Turn off caching
-      $this->mCachable = false;
+		//Turn off caching
+		$this->mCachable = false;
     }
 
     function FillParams($params,$editing = false)
     {
 		parent::FillParams($params,$editing);
 
-      if (isset($params))
-	{
-	  $parameters = array('page', 'params' );
-	  foreach ($parameters as $oneparam)
-	    {
-	      if (isset($params[$oneparam]))
-		{
-		  $this->SetPropertyValue($oneparam, $params[$oneparam]);
+		if (isset($params)) {
+			$parameters = array('page', 'params' );
+			foreach ($parameters as $oneparam) {
+				if (isset($params[$oneparam])) $this->SetPropertyValue($oneparam, $params[$oneparam]);
+			}
 		}
-	    }
-	}
     }
 
     function ValidateData()
     {
-      $errors = parent::ValidateData();
-      if( $errors === FALSE )
-	{
-	  $errors = array();
-	}
+		$errors = parent::ValidateData();
+		if( $errors === FALSE ) $errors = array();
 
-      $gCms = cmsms();
-      $contentops = $gCms->GetContentOperations();		
-		
-      $page = $this->GetPropertyValue('page');
-      if ($page == '-1')
-	{
-	  $errors[]= lang('nofieldgiven',array(lang('page')));
-	  $result = false;
-	}
+		$gCms = cmsms();
+		$contentops = $gCms->GetContentOperations();
 
-      // get the content type of page.
-      else
-	{
-	  $destobj = $contentops->LoadContentFromID($page);
-	  if( !is_object($destobj) )
-	    {
-	      $errors[] = lang('destinationnotfound');
-	      $result = false;
-	    }
-	  else if( $destobj->Type() == 'pagelink' )
-	    {
-	      $errors[] = lang('pagelink_circular');
-	      $result = false;
-	    }
-	  else if( $destobj->Alias() == $this->mAlias )
-	    {
-	      $errors[] = lang('pagelink_circular');
-	      $result = false;
-	    }
-	}
-      
-      return (count($errors) > 0?$errors:FALSE);
+		$page = $this->GetPropertyValue('page');
+		if ($page == '-1') {
+			$errors[]= lang('nofieldgiven',array(lang('page')));
+			$result = false;
+		}
+
+		// get the content type of page.
+		else {
+			$destobj = $contentops->LoadContentFromID($page);
+			if( !is_object($destobj) ) {
+				$errors[] = lang('destinationnotfound');
+				$result = false;
+			}
+			else if( $destobj->Type() == 'pagelink' ) {
+				$errors[] = lang('pagelink_circular');
+				$result = false;
+			}
+			else if( $destobj->Alias() == $this->mAlias ) {
+				$errors[] = lang('pagelink_circular');
+				$result = false;
+			}
+		}
+		return (count($errors) > 0?$errors:FALSE);
     }
 
     function TabNames()
     {
-      $res = array(lang('main'));
-      if( check_permission(get_userid(),'Manage All Content') )
-	{
-	  $res[] = lang('options');
-	}
-      return $res;
+		$res = array(lang('main'));
+		if( check_permission(get_userid(),'Manage All Content') ) $res[] = lang('options');
+		return $res;
     }
 
     function display_single_element($one,$adding)
     {
-      switch($one) {
-      case 'page':
-	{
-	  $gCms = cmsms();
-	  $contentops = $gCms->GetContentOperations();
-	  
-	  $tmp = $contentops->CreateHierarchyDropdown($this->mId, 
-						      $this->GetPropertyValue('page'), 'page', 1, 0, 0, 0);
-	  if( !empty($tmp) ) return array(lang('destination_page').':',$tmp);
-	}
-	break;
+		switch($one) {
+		case 'page':
+			$gCms = cmsms();
+			$contentops = $gCms->GetContentOperations();
+			$tmp = $contentops->CreateHierarchyDropdown($this->mId, $this->GetPropertyValue('page'), 'page', 1, 0, 0, 0);
+			if( !empty($tmp) ) return array(lang('destination_page').':',$tmp);
+			break;
 	
-      case 'params':
-	{
-	  $val = cms_htmlentities($this->GetPropertyValue('params'));
-	  return array(lang('additional_params').':','<input type="text" name="params" value="'.$val.'" />');
-	}
-	break;
+		case 'params':
+			$val = cms_htmlentities($this->GetPropertyValue('params'));
+			return array(lang('additional_params').':','<input type="text" name="params" value="'.$val.'" />');
+			break;
 
-      default:
-	return parent::display_single_element($one,$adding);
-      }
+		default:
+			return parent::display_single_element($one,$adding);
+		}
     }
 
     function EditAsArray($adding = false, $tab = 0, $showadmin = false)
     {
-      switch($tab)
-	{
-	case '0':
-	  return $this->display_attributes($adding);
-	  break;
-	case '1':
-	  return $this->display_attributes($adding,1);
-	  break;
-	}
+		switch($tab) {
+		case '0':
+			return $this->display_attributes($adding);
+			break;
+		case '1':
+			return $this->display_attributes($adding,1);
+			break;
+		}
     }
 
     function GetURL($rewrite = true)
     {
-      $page = $this->GetPropertyValue('page');
-      $params = $this->GetPropertyValue('params');
+		$page = $this->GetPropertyValue('page');
+		$params = $this->GetPropertyValue('params');
       
-      $gCms = cmsms();
-      $contentops = $gCms->GetContentOperations();
-      $destcontent = $contentops->LoadContentFromId($page);
-      if( is_object( $destcontent ) ) 
-	{
-	  $url = $destcontent->GetURL();
-	  $url .= $params;
-	  return $url;
-	}
+		$gCms = cmsms();
+		$contentops = $gCms->GetContentOperations();
+		$destcontent = $contentops->LoadContentFromId($page);
+		if( is_object( $destcontent ) ) {
+			$url = $destcontent->GetURL();
+			$url .= $params;
+			return $url;
+		}
     } 
 }
 

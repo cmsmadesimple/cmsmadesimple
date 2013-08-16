@@ -324,6 +324,7 @@ $lang['title_filter'] = 'Select an item in this list to reduce the number of vis
 $lang['title_filterapplied'] = 'A filter has been selected which limits the number of templates listed';
 $lang['title_filterlimit'] = 'Select the number of items to view on each page';
 $lang['title_template_setallpages'] = 'Set all pages to use this template';
+$lang['title_tpl_bulk'] = 'Select this template for bulk actions';
 $lang['title_tpl_design'] = 'This column displays the name of the design (if any) that a template is associated with.  A template can be associated with multiple designs';
 $lang['title_tpl_dflt'] = 'This column displays wether the template is the default template for its type';
 $lang['title_tpl_id'] = 'This column displays the unique numeric template ID';

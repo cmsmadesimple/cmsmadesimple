@@ -34,37 +34,28 @@
  */
 class SectionHeader extends ContentBase
 {
-    function FriendlyName()
-    {
-      return lang('contenttype_sectionheader');
-    }
+    function FriendlyName() { return lang('contenttype_sectionheader'); }
 
     function SetProperties()
     {
-      parent::SetProperties();
-      $this->RemoveProperty('secure',0);
-      $this->RemoveProperty('accesskey','');
-      $this->RemoveProperty('title','');
-      //$this->RemoveProperty('showinmenu',true);
-      $this->RemoveProperty('cachable',true);
-      $this->RemoveProperty('target','');
-	  //$this->RemoveProperty('alias','');
-	  $this->RemoveProperty('page_url','');
-	  $this->SetURL(''); // url will be lost when going back to a content page.
+		parent::SetProperties();
+		$this->RemoveProperty('secure',0);
+		$this->RemoveProperty('accesskey','');
+		$this->RemoveProperty('title','');
+		$this->RemoveProperty('cachable',true);
+		$this->RemoveProperty('target','');
+		$this->RemoveProperty('page_url','');
+		$this->SetURL(''); // url will be lost when going back to a content page.
 
-      #Turn off caching
-      $this->mCachable = false;
+#Turn off caching
+		$this->mCachable = false;
     }
 
-    function HasUsableLink()
-    {
-		return false;
-    }
-
-	function RequiresAlias()
-	{
-		return TRUE;
-	}
+    public function HasUsableLink() { return false; }
+	public function RequiresAlias() { return TRUE; }
+	public function HasSearchableContent() { return FALSE; }
+    public function GetURL($rewrite = true) { return '#'; }
+    public function IsViewable() { return FALSE; }
 
     function TabNames()
     {
@@ -89,27 +80,18 @@ class SectionHeader extends ContentBase
 
     function ValidateData()
     {
-      $res = parent::ValidateData();
-      if( is_array($res) && $this->mId < 1 ) {
-		  // some error occurred..
-		  // reset the menu text
-		  // and the alias
-		  $this->mName = '';
-		  $this->mMenuText = '';
-	  }
-      $this->mTemplateId = -1;
-      return $res;
+		$res = parent::ValidateData();
+		if( is_array($res) && $this->mId < 1 ) {
+			// some error occurred..
+			// reset the menu text
+			// and the alias
+			$this->mName = '';
+			$this->mMenuText = '';
+		}
+		$this->mTemplateId = -1;
+		return $res;
     }
 
-    function GetURL($rewrite = true)
-    {
-		return '#';
-    }
-
-    function IsViewable()
-    {
-		return FALSE;
-    }
 }
 
 # vim:ts=4 sw=4 noet

@@ -78,9 +78,7 @@ final class cms_content_cache
 
 	public static function &get_instance() 
 	{
-		if( !is_object(self::$_instance) ) {
-			self::$_instance = new cms_content_cache();
-		}
+		if( !is_object(self::$_instance) ) self::$_instance = new cms_content_cache();
 		return self::$_instance;
 	}
 
@@ -100,9 +98,7 @@ final class cms_content_cache
 			}
 			else {
 				$t2 = array_diff($list,$this->_preload_cache);
-				if( is_array($t2) && count($t2) ) {
-					$dirty = true;
-				}
+				if( is_array($t2) && count($t2) ) $dirty = true;
 			}
 			
 			if( $dirty ) {
@@ -129,9 +125,7 @@ final class cms_content_cache
 	{
 		$res = null;
 		if( self::$_content_cache ) {
-			if( isset(self::$_content_cache[$hash]) ) {
-				$res = self::$_content_cache[$hash];
-			}
+			if( isset(self::$_content_cache[$hash]) ) $res = self::$_content_cache[$hash];
 		}
 		return $res;
 	}
@@ -210,9 +204,7 @@ final class cms_content_cache
     
     $hash = md5($id.$alias);
     self::$_content_cache[$hash] = $obj;
-	if( $alias ) {
-		self::$_alias_map[$alias] = $hash;
-	}
+	if( $alias ) self::$_alias_map[$alias] = $hash;
     self::$_id_map[$id] = $hash;
     return TRUE;
   }
@@ -289,10 +281,35 @@ final class cms_content_cache
    */
   public static function have_preloaded()
   {
-	  if( is_array(self::get_instance()->_preload_cache) ) {
-		  return TRUE;
-	  }
+	  if( is_array(self::get_instance()->_preload_cache) ) return TRUE;
 	  return FALSE;
+  }
+
+  /**
+   * Unload the specified content id (numeric id or alias) if loaded.
+   * Note, this should be used with caution, as the next time this page is requested it will be loaded from the database again.n
+   *
+   * If the identifier is an integer, an id search is performed.
+   * If the identifier is a string, an alias search is performed.
+   *
+   * @author Robert Campbell
+   * @since  2.0
+   * @param mixed Unique identifier
+   * @return void
+   */
+  public static function unload($identifier)
+  {
+	  $hash = self::content_exists($identifier);
+	  if( $hash ) {
+		  $id = array_search($identifier,self::$_id_map);
+		  $alias = array_search($identifier,self::$_alias_map);
+		  if( $alias !== FALSE && $id != FALSE ) {
+			  unset(self::$_id_map[$id]);
+			  unset(self::$_alias_map[$alias]);
+			  self::$_content_cache[$hash] = null;
+			  unset(self::$_content_cache[$hash]);
+		  }
+	  }
   }
 }
 
