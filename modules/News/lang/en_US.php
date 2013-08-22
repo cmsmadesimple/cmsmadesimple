@@ -12,7 +12,7 @@ $lang['anonymous'] = 'Anonymous';
 $lang['apply'] = 'Apply';
 $lang['approve'] = 'Set Status to \'Published\'';
 $lang['areyousure'] = 'Are you sure you want to delete?';
-$lang['areyousure_deletemultiple'] = 'Are you sure you want to delete all of these news articles?\nThis action cannot be undone!';
+$lang['areyousure_multiple'] = 'Are you sure you want to perform this action on multiple articles?';
 $lang['article'] = 'Article';
 $lang['articleadded'] = 'The article was successfully added.';
 $lang['articledeleted'] = 'The article was successfully deleted.';
@@ -23,6 +23,10 @@ $lang['author_label'] = 'Posted by:';
 $lang['auto_create_thumbnails'] = 'Automatically create thumbnail files for files with these extensions';
 
 // B
+$lang['bulk_delete'] = 'Delete';
+$lang['bulk_setcategory'] = 'Set Category';
+$lang['bulk_setdraft'] = 'Set to Draft';
+$lang['bulk_setpublished'] = 'Set to Published';
 $lang['browsecattemplate'] = 'Browse Category Templates';
 
 // C
@@ -242,6 +246,7 @@ $lang['msg_categoriesreordered'] = 'Category order updated';
 $lang['msg_contenttype_removed'] = <<<EOT
 The news content type has been removed.  Please place {news} tags with appropriate parameters into your page template or into your page content to replace this functionality.
 EOT;
+$lang['msg_success'] = 'Operation Successful';
 $lang['more'] = 'More';
 $lang['moretext'] = 'More Text';
 
@@ -364,5 +369,6 @@ $lang['viewfilter'] = 'View Filter';
 
 // W
 $lang['warning_preview'] = 'Warning: This preview panel behaves much like a browser window allowing you to navigate away from the initially previewed page. However, if you do that, you may experience unexpected behaviour.  Navigating away from the initial page and returning will not give the expected results.<br/><strong>Note:</strong> The preview does not upload files you may have selected for upload.';
+$lang['with_selected'] = 'With Selected';
 
 ?>

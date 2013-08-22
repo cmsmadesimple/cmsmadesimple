@@ -1,4 +1,3 @@
-{literal}
 <script type="text/javascript">
 //<![CDATA[
 $(document).ready(function(){
@@ -7,10 +6,31 @@ $(document).ready(function(){
   $('#toggle_filter').click(function(){
     $('#filter').toggle('slow');
   });
+  $('#bulkactions').hide();
+  $('#articlelist').on('cms_checkall_toggle','[type=checkbox]',function(){
+    var l = $('#articlelist :checked').length;
+    if( l == 0 ) {
+      $('#bulkactions').hide('slow');
+    } else {
+      $('#bulkactions').show('slow');
+    }
+  });
+  $('#bulk_category').hide();
+  $('#bulk_action').on('change',function(){
+    var v = $(this).val();
+    if( v == 'setcategory' ) {
+      $('#bulk_category').show('slow');
+    }
+    else {
+      $('#bulk_category').hide('slow');
+    }
+  });
+  $('#bulkactions').on('click','#submit_bulkaction',function(){
+    return confirm('{$mod->Lang('areyousure_multiple')}');
+  });
 });
 //]]>
 </script>
-{/literal}
 
 {if isset($formstart) }
 <fieldset id="filter">
@@ -120,7 +140,19 @@ $(document).ready(function(){
 {/if}
 {if $itemcount > 0}
   <div class="pageoptions" style="float: right; text-align: right;" id="bulkactions">
-    {$reassigntext}:&nbsp;{$categoryinput}{$submit_reassign}{if isset($submit_massdelete)}<br/>{$submit_massdelete}{/if}
+    <label for="bulk_action">{$mod->Lang('with_selected')}:</label>
+    <select id="bulk_action" name="{$actionid}bulk_action">
+    {if isset($submit_massdelete)}
+    <option value="delete">{$mod->Lang('bulk_delete')}</option>
+    {/if}
+    <option value="setdraft">{$mod->Lang('bulk_setdraft')}</option>
+    <option value="setpublished">{$mod->Lang('bulk_setpublished')}</option>
+    <option value="setcategory">{$mod->Lang('bulk_setcategory')}</option>
+    </select>
+    <div id="bulk_category" style="display: inline-block;">
+      {$mod->Lang('category')}: {$categoryinput}
+    </div>
+    <input type="submit" id="submit_bulkaction" name="{$actionid}submit_bulkaction" value="{$mod->Lang('submit')}"/>
   </div>
 {/if}
 <div class="clearb"></div>

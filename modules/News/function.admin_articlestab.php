@@ -3,28 +3,61 @@ if( !isset($gCms) ) exit;
 
 $smarty->assign('formstart',$this->CreateFormStart($id,'defaultadmin'));  
 
-if (isset($params['submit_massdelete']) ) {
-  if (!$this->CheckPermission('Delete News')) {
-    echo $this->ShowErrors($this->Lang('needpermission', array('Modify News')));
-  }
-  else if( isset($params['sel']) && is_array($params['sel']) &&
-	   count($params['sel']) > 0 ) {
-    foreach( $params['sel'] as $news_id ) {
-      news_admin_ops::delete_article( $news_id );
-    }
-  }
-}
-else if (isset($params['submit_reassign']) ) {
-  if( isset($params['sel']) && is_array($params['sel']) && count($params['sel']) > 0 ) {
-    $tmp = str_repeat('?,',count($params['sel']));
-    $tmp = substr($tmp,0,strlen($tmp)-1);
-    $query = 'UPDATE '.cms_db_prefix().'module_news SET news_category_id = ? WHERE news_id IN ('.$tmp.')';
-    $parms = array($params['category']);
-    foreach( $params['sel']  as $p ) $parms[] = $p;
-    $db->Execute($query,$parms);
+if (isset($params['submit_bulkaction']) && isset($params['bulk_action']) ) {
+  if( !isset($params['sel']) || !is_array($params['sel']) || count($params['sel']) == 0 ) {
+    echo $this->ShowErrors($this->Lang('error_noarticlesselected'));
   }
   else {
-    echo $this->ShowErrors($this->Lang('error_noarticlesselected'));
+
+    $sel = array();
+    foreach( $params['sel'] as $one ) {
+      $one = (int)$one;
+      if( $one < 1 ) continue;
+      if( in_array($one,$sel) ) continue;
+      $sel[] = $one;
+    }
+
+    switch($params['bulk_action']) {
+    case 'delete':
+      if (!$this->CheckPermission('Delete News')) {
+	echo $this->ShowErrors($this->Lang('needpermission', array('Modify News')));
+      }
+      else {
+	foreach( $sel as $news_id ) {
+	  news_admin_ops::delete_article( $news_id );
+	}
+      }
+      echo $this->ShowMessage($this->Lang('msg_success'));
+      break;
+
+    case 'setcategory':
+      $query = 'UPDATE '.cms_db_prefix().'module_news SET news_category_id = ?, modified_date = NOW()
+                WHERE news_id IN ('.implode(',',$sel).')';
+      $parms = array((int)$params['category']);
+      $db->Execute($query,$parms);
+      audit('',$this->GetName(),'category changed on '.count($sel).' articles');
+      echo $this->ShowMessage($this->Lang('msg_success'));
+      break;
+
+    case 'setpublished':
+      $query = 'UPDATE '.cms_db_prefix().'module_news SET status = ?, modified_date = NOW()
+                WHERE news_id IN ('.implode(',',$sel).')';
+      $db->Execute($query,array('published'));
+      audit('',$this->GetName(),'status changed on '.count($sel).' articles');
+      echo $this->ShowMessage($this->Lang('msg_success'));
+      break;
+
+    case 'setdraft':
+      $query = 'UPDATE '.cms_db_prefix().'module_news SET status = ?, modified_date = NOW()
+                WHERE news_id IN ('.implode(',',$sel).')';
+      $db->Execute($query,array('draft'));
+      audit('',$this->GetName(),'status changed on '.count($sel).' articles');
+      echo $this->ShowMessage($this->Lang('msg_success'));
+      break;
+
+    default:
+      break;
+    }
   }
 }
 
