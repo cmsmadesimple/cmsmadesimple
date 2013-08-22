@@ -74,23 +74,26 @@ $(document).ready(function(){
 {/if}
 
 {if $itemcount > 0}
-<div class="pageoptions">
-<input type="checkbox" id="toggle_filter" value="1"/>
-<label for="toggle_filter">{$mod->Lang('viewfilter')}</label>
-{if isset($addlink)}&nbsp;{$addlink}{/if}
-</div>
+<div class=row">
+  <div class="pageoptions half" style="margin-top: 8px;">
+    <input type="checkbox" id="toggle_filter" value="1"/>
+    <label for="toggle_filter">{$mod->Lang('viewfilter')}</label>
+    {if isset($addlink)}&nbsp;{$addlink}{/if}
+  </div>
 
-{if $pagecount > 1}
-  <p>
-{if $pagenumber > 1}
-{$firstpage}&nbsp;{$prevpage}&nbsp;
-{/if}
-{$pagenumber}&nbsp;{$oftext}&nbsp;{$pagecount}
-{if $pagenumber < $pagecount}
-&nbsp;{$nextpage}&nbsp;{$lastpage}
-{/if}
-</p>
-{/if}
+  {if $pagecount > 1}
+    <div class="pageoptions" style="text-align: right;">
+      {form_start}
+      {$mod->Lang('prompt_page')}&nbsp;
+      <select name="{$actionid}pagenumber">
+        {cms_pageoptions numpages=$pagecount curpage=$pagenumber}
+      </select>&nbsp;
+      {$mod->Lang('prompt_of')}&nbsp;{$pagecount}&nbsp;
+      <input type="submit" name-"{$actionid}paginate" value="{$mod->Lang('prompt_go')}"/>
+      {form_end}
+    </div>
+  {/if}
+</div>{* .row *}
 
 {$form2start}
 <table cellspacing="0" class="pagetable" id="articlelist">

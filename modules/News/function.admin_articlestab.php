@@ -171,39 +171,7 @@ $pagecount = (int)($numrows/$pagelimit);
 if( ($numrows % $pagelimit) != 0 ) $pagecount++;
 $pagenumber = min($pagecount,$pagenumber);
 
-// some pagination variables to smarty.
-if( $pagenumber == 1 ) {
-  $smarty->assign('prevpage','<');
-  $smarty->assign('firstpage','<<');
-}
-else {
-  $smarty->assign('prevpage',
-		  $this->CreateLink($id,'defaultadmin',
-				    $returnid,'<',
-				    array('pagenumber'=>$pagenumber-1,
-					  'active_tab'=>'articles')));
-  $smarty->assign('firstpage',
-		  $this->CreateLink($id,'defaultadmin',
-				    $returnid,'<<',
-				    array('pagenumber'=>1,
-					  'active_tab'=>'articles')));
-}
-if( $pagenumber >= $pagecount ) {
-  $smarty->assign('nextpage','>');
-  $smarty->assign('lastpage','>>');
-}
-else {
-  $smarty->assign('nextpage',
-		  $this->CreateLink($id,'defaultadmin',
-				    $returnid,'>',
-				    array('pagenumber'=>$pagenumber+1,
-					  'active_tab'=>'articles')));
-  $smarty->assign('lastpage',
-		  $this->CreateLink($id,'defaultadmin',
-				    $returnid,'>>',
-				    array('pagenumber'=>$pagecount,
-					  'active_tab'=>'articles')));
-}
+$smarty->assign('mod',$this);
 $smarty->assign('pagenumber',$pagenumber);
 $smarty->assign('pagecount',$pagecount);
 $smarty->assign('oftext',$this->Lang('prompt_of'));

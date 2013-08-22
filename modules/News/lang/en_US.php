@@ -287,6 +287,7 @@ $lang['preview'] = 'Preview';
 $lang['prevpage'] = '&lt;';
 $lang['print'] = 'Print';
 $lang['prompt_default'] = 'Default';
+$lang['prompt_go'] = 'Go';
 $lang['prompt_name'] = 'Name';
 $lang['prompt_newtemplate'] = 'Create A New Template';
 $lang['prompt_of'] = 'of';
