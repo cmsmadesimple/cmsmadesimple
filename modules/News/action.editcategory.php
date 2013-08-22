@@ -3,41 +3,70 @@ if (!isset($gCms)) exit;
 if (!$this->CheckPermission('Modify Site Preferences')) return;
 
 $this->SetCurrentTab('categories');
-if (isset($params['cancel'])) {
-  $this->Redirect($id, 'defaultadmin', $returnid);
-}
+if (isset($params['cancel'])) $this->RedirectToAdminTab();
 
 $catid = '';
-if (isset($params['catid'])) {
-  $catid = $params['catid'];
+$row = null;
+$name = '';
+$parentid = -1;
+if( isset($params['catid']) ) {
+  $catid = (int)$params['catid'];
+  $query = 'SELECT * FROM '.cms_db_prefix().'module_news_categories WHERE news_category_id = ?';
+  $row = $db->GetRow($query, array($catid));
+  if( !$row ) {
+    $this->SetError($this->Lang('error_categorynotfound'));
+    $this->RedirectToAdminTab();
+  }
+  $name = $row['news_category_name'];
+  $parentid = (int)$row['parent_id'];
 }
 
 $parentid = '-1';
-if (isset($params['parent'])) {
+
+if( isset($params['submit']) ) {
   $parentid = (int)$params['parent'];
-}
-
-$origname = '';
-if (isset($params['origname'])) {
-  $origname = $params['origname'];
-}
-
-$name = '';
-if (isset($params['name'])) {
   $name = trim($params['name']);
-  if ($name != '') {
-    $query = 'SELECT news_category_id FROM '.cms_db_prefix().'module_news_categories WHERE parent_id = ? AND news_category_name = ? AND news_category_id != ?';
+
+  if( $name == '' ) {
+    echo $this->ShowErrors($this->Lang('nonamegiven'));
+  }
+  else {
+    // its an update.
+    $query = 'SELECT news_category_id FROM '.cms_db_prefix().'module_news_categories 
+              WHERE parent_id = ? AND news_category_name = ? AND news_category_id != ?';
     $tmp = $db->GetOne($query,array($parentid,$name,$catid));
     if( $tmp ) {
       echo $this->ShowErrors($this->Lang('error_duplicatename'));
     }
     else {
-      $query = 'UPDATE '.cms_db_prefix().'module_news_categories SET news_category_name = ?, parent_id = ?, modified_date = '.$db->DBTimeStamp(time()).' WHERE news_category_id = ?';
-      $parms = array($name,$parentid);
+      if( $parentid == $catid ) {
+	echo $this->ShowErrors($this->Lang('error_categoryparent'));
+      }
+      else if( $parentid != $row['parent_id'] ) {
+	// parent changed
+
+	// gotta figure out a new item order.
+	$query = 'SELECT max(item_order) FROM '.cms_db_prefix().'module_news_categories
+                  WHERE parent_id = ?';
+	$maxn = (int)$db->GetOne($query,array($parentid));
+	$maxn++;
+
+	$query = 'UPDATE '.cms_db_prefix().'module_news_categories SET item_order = item_order - 1
+                  WHERE parent_id = ? AND item_order > ?';
+	$db->Execute($query,array($row['parent_id'],$row['item_order']));
+
+	$row['item_order'] = $maxn;
+      }
+
+      $query = 'UPDATE '.cms_db_prefix().'module_news_categories 
+                SET news_category_name = ?, item_order = ?, parent_id = ?, modified_date = NOW()
+                WHERE news_category_id = ?';
+      $parms = array($name,$row['item_order'],$parentid);
       $parms[] = $catid;
       $db->Execute($query, $parms);
 
       news_admin_ops::UpdateHierarchyPositions();
+
       @$this->SendEvent('NewsCategoryEdited', array('category_id' => $catid, 'name' => $name, 'origname' => $origname));
       // put mention into the admin log
       audit($catid, 'News category: '.$catid, ' Category edited');
@@ -46,17 +75,6 @@ if (isset($params['name'])) {
       $this->RedirectToAdminTab();
     }
   }
-  else {
-    echo $this->ShowErrors($this->Lang('nonamegiven'));
-  }
-}
-else {
-  $query = 'SELECT * FROM '.cms_db_prefix().'module_news_categories WHERE news_category_id = ?';
-  $row = $db->GetRow($query, array($catid));
-  if ($row) {
-    $name = $row['news_category_name'];
-    $parentid = (int)$row['parent_id'];
-  }
 }
 
 #Display template
@@ -64,13 +82,16 @@ $tmp = news_ops::get_category_list();
 $tmp2 = array_flip($tmp);
 $categories = array(-1=>$this->Lang('none'));
 foreach( $tmp2 as $k => $v ) {
+  if( $k == $catid ) continue;
   $categories[$k] = $v;
 }
-$parms = array('catid'=>$catid,'origname'=>$origname);
+$parms = array('catid'=>$catid);
+$smarty->assign('catid',$catid);
 $smarty->assign('parent',$parentid);
 $smarty->assign('name',$name);
 $smarty->assign('categories',$categories);
-$smarty->assign('startform', $this->CreateFormStart($id, 'editcategory', $returnid, 'post', '', false, '', $parms));
+$smarty->assign('startform', $this->CreateFormStart($id, 'editcategory', 
+						    $returnid, 'post', '', false, '', $parms));
 $smarty->assign('endform', $this->CreateFormEnd());
 $smarty->assign('nametext', $this->Lang('name'));
 $smarty->assign('inputname', $this->CreateInputText($id, 'name', $name, 20, 255));

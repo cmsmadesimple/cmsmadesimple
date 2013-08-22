@@ -351,7 +351,7 @@ else {
 }
 $smarty->assign('hide_summary_field',$this->GetPreference('hide_summary_field','0'));
 $smarty->assign('authortext', $this->Lang('author'));
-
+$smarty->assign('articleid',$articleid);
 $smarty->assign('titletext', $this->Lang('title'));
 
 $smarty->assign('extratext',$this->Lang('extra'));
@@ -366,11 +366,11 @@ $smarty->assign('inputsummary', $this->CreateTextArea($this->GetPreference('allo
 $smarty->assign('useexp',$useexp);
 $smarty->assign('actionid',$id);
 $smarty->assign('inputexp', $this->CreateInputCheckbox($id, 'useexp', '1', $useexp, 'class="pagecheckbox"'));
-$smarty->assign_by_ref('postdate', $postdate);
+$smarty->assign('postdate', $postdate);
 $smarty->assign('postdateprefix', $id.'postdate_');
-$smarty->assign_by_ref('startdate', $startdate);
+$smarty->assign('startdate', $startdate);
 $smarty->assign('startdateprefix', $id.'startdate_');
-$smarty->assign_by_ref('enddate', $enddate);
+$smarty->assign('enddate', $enddate);
 $smarty->assign('enddateprefix', $id.'enddate_');
 if( $this->CheckPermission('Approve News') ) {
   $smarty->assign('statustext', lang('status'));

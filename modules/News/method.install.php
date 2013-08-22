@@ -45,6 +45,7 @@ $flds = "
 	news_category_name C(255),
 	parent_id I,
 	hierarchy C(255),
+        item_order I,
 	long_name X,
 	create_date T,
 	modified_date T

@@ -3,6 +3,7 @@
 {else}
 <h3>{$mod->Lang('addcategory')}</h3>
 {/if}
+<div class="information">{$mod->Lang('info_categories')}</div>
 
 {$startform}
 	<div class="pageoverflow">

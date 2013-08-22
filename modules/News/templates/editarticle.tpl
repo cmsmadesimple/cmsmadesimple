@@ -12,6 +12,12 @@ $(document).ready(function(){
 });
 </script>
 
+{if isset($articleid)}
+<h3>{$mod->Lang('editarticle')}</h3>
+{else}
+<h3>{$mod->Lang('addarticle')}</h3>
+{/if}
+
 <div id="editarticle_result"></div>
 
 <div id="edit_news">

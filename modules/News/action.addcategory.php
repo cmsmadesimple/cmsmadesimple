@@ -22,12 +22,19 @@ if (isset($params['name'])) {
       echo $this->ShowErrors($this->Lang('error_duplicatename'));
     }
     else {
+      $query = 'SELECT max(item_order) FROM '.cms_db_prefix().'module_news_category 
+                WHERE parent_id = ?';
+      $item_order = (int)$db->GetOne($query,array($parentid));
+      $item_order++;
+
       $catid = $db->GenID(cms_db_prefix()."module_news_categories_seq");
-      $time = $db->DBTimeStamp(time());
-      $query = 'INSERT INTO '.cms_db_prefix().'module_news_categories (news_category_id, news_category_name, parent_id, create_date, modified_date) VALUES (?,?,?,'.$time.','.$time.')';
-      $parms = array($catid,$name,$parent);
+
+      $query = 'INSERT INTO '.cms_db_prefix().'module_news_categories (news_category_id, news_category_name, parent_id, item_order, create_date, modified_date) VALUES (?,?,?,?,NOW(),NOW())';
+      $parms = array($catid,$name,$parent,$item_order);
       $db->Execute($query, $parms);
+
       news_admin_ops::UpdateHierarchyPositions();
+
       @$this->SendEvent('NewsCategoryAdded', array('category_id' => $catid, 'name' => $name));
       // put mention into the admin log
       audit($catid, 'News category: '.$catid, ' Category added');

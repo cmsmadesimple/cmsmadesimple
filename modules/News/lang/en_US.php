@@ -56,12 +56,16 @@ $lang['dropdown'] = 'Dropdown';
 
 // E
 $lang['edit'] = 'Edit';
+$lang['editarticle'] = 'Edit Article';
+$lang['editcategory'] = 'Edit Category';
 $lang['editfielddef'] = 'Edit Field Definition';
 $lang['email_subject'] = 'The Subject of the outgoing email';
 $lang['email_template'] = 'The format of the email message';
 $lang['enddate'] = 'End Date';
 $lang['endrequiresstart'] = 'Entering an end date requires a start date also';
 $lang['entries'] = '%s Entries';
+$lang['error_categorynotfoun'] = 'The category specified was not found';
+$lang['error_categoryparent'] = 'Invalid category parent';
 $lang['error_duplicatename'] = 'An item with that name already exists';
 $lang['error_filesize'] = 'An uploaded file exceeded the maximum allowed size';
 $lang['error_insufficientparams'] = 'Insufficient (or empty) parameters';
@@ -219,6 +223,7 @@ $lang['help_pagelimit'] = 'Maximum number of items to display (per page).  If th
 $lang['hide_summary_field'] = 'Hide the summary field when adding or editing articles';
 
 // I
+$lang['info_categories'] = 'For organization purposes news articles can be organized into hierarchical categories';
 $lang['info_detail_returnid'] = 'This preference is used to determine a page (and therefore a template) to use to view detail pages.  Individualized News Detail URLS will not work if this parameter is not set to a valid page.  Additionally, if this preference is set, and no detailpage parameter is provided on the news tag, then this value will be used for detail links';
 $lang['info_expired_viewable'] = 'If enabled, expired articles can be viewed in detail mode (this is reproducing older functionality).  the showall parameter can be used on the URL (when not using pretty urls) to also indicate that expired articles can be viewed';
 $lang['info_maxlength'] = 'The maximum length only applies to text input fields.';
@@ -286,6 +291,7 @@ $lang['published'] = 'Published';
 // R
 $lang['reassign_category'] = 'Change Category To';
 $lang['removed'] = 'Removed';
+$lang['reorder'] = 'Reorder';
 $lang['reset'] = 'Reset';
 $lang['resettodefault'] = 'Reset to Factory Defaults';
 $lang['restoretodefaultsmsg'] = 'This operation will restore the template contents to their system defaults.  Are you sure you want to proceed?';

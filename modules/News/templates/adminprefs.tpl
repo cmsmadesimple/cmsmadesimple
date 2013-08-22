@@ -2,40 +2,58 @@
 <fieldset>
 <legend>{$title_submission_settings}</legend>
 	<div class="pageoverflow">
-		<p class="pagetext">{$title_default_category}:</p>
-		<p class="pageinput">{$input_default_category}</p>
+		<p class="pagetext"><label for="dfltcat">{$title_default_category}:</label></p>
+		<p class="pageinput">
+                  <select id="dfltcat" name="{$actionid}default_category"> 
+                  {html_options options=$categorylist selected=$default_category}
+                  </select>
+                </p>
 	</div>
 	<div class="pageoverflow">
-		<p class="pagetext">{$title_allowed_upload_types}:</p>
-		<p class="pageinput">{$input_allowed_upload_types}</p>
+		<p class="pagetext"><label for="fld2">{$title_allowed_upload_types}:</label></p>
+		<p class="pageinput">
+                  <input type="text" id="fld2" name="{$actionid}allowed_upload_types" value="{$allowed_upload_types}" size="50"/>
+                </p>
 	</div>
 	<div class="pageoverflow">
-		<p class="pagetext">{$title_hide_summary_field}:</p>
-		<p class="pageinput">{$input_hide_summary_field}</p>
+		<p class="pagetext"><label for="fld3">{$title_hide_summary_field}:</label></p>
+		<p class="pageinput">
+                  <input type="checkbox" id="fld3" name="{$actionid}hide_summary_field" value="1" {if $hide_summary_field == 1}checked="checked"{/if}/>
+                </p>
 	</div>
 	<div class="pageoverflow">
-		<p class="pagetext">{$title_allow_summary_wysiwyg}:</p>
-		<p class="pageinput">{$input_allow_summary_wysiwyg}</p>
+		<p class="pagetext"><label for="fld4">{$title_allow_summary_wysiwyg}:</label></p>
+		<p class="pageinput">
+                  <input type="checkbox" id="fld4" name="{$actionid}allow_summary_wysiwyg" value="1" {if $allow_summary_wysiwyg}checked="checked"{/if}/>
+                </p>
 	</div>
 	<div class="pageoverflow">
-		<p class="pagetext">{$title_expiry_interval}:</p>
-		<p class="pageinput">{$input_expiry_interval}</p>
+		<p class="pagetext"><label for="fld5">{$title_expiry_interval}:</label></p>
+		<p class="pageinput">
+                  <input type="text" id="fld5" name="{$actionid}expiry_interval" value="{$expiry_interval}" size="4" maxlength="4"/>
+                </p>
 	</div>
 </fieldset>
 <br/>
 <fieldset>
 <legend>{$title_notification_settings}</legend>
 	<div class="pageoverflow">
-		<p class="pagetext">{$title_formsubmit_emailaddress}:</p>
-		<p class="pageinput">{$input_formsubmit_emailaddress}</p>
+		<p class="pagetext"><label for="fld6">{$title_formsubmit_emailaddress}:</label></p>
+		<p class="pageinput">
+                   <input type="text" id="fld6" name="{$actionid}formsubmit_emailaddress" value="{$formsubmit_emailaddress}" size="50" maxlength="255"/>
+                </p>
 	</div>
 	<div class="pageoverflow">
-		<p class="pagetext">{$title_email_subject}:</p>
-		<p class="pageinput">{$input_email_subject}</p>
+		<p class="pagetext"><label for="fld7">{$title_email_subject}:</label></p>
+		<p class="pageinput">
+		  <input type="text" id="fld7" name="{$actionid}email_subject" value="{$email_subject}" size="50" maxlength="255"/>
+                </p>
 	</div>
 	<div class="pageoverflow">
-		<p class="pagetext">{$title_email_template}:</p>
-		<p class="pageinput">{$input_email_template}</p>
+		<p class="pagetext"><label for="fld8">{$title_email_template}:</label></p>
+		<p class="pageinput">
+                  <textarea id="fld8" name="{$actionid}email_template" rows="5" cols="80">{$email_template}</textarea>
+                </p>
 	</div>
 </fieldset>
 <br/>
@@ -43,12 +61,18 @@
 <fieldset>
 <legend>{$title_fesubmit_settings}</legend>
 	<div class="pageoverflow">
-		<p class="pagetext">{$title_fesubmit_status}:</p>
-		<p class="pageinput">{$input_fesubmit_status}</p>
+		<p class="pagetext"><label for="fld9">{$title_fesubmit_status}:</label></p>
+		<p class="pageinput">
+                  <select id="fld9" name="{$actionid}fesubmit_status">
+                  {html_options options=$statuses selected=$fesubmit_status}
+                  </select>
+                </p>
 	</div>
 	<div class="pageoverflow">
-		<p class="pagetext">{$title_fesubmit_redirect}:</p>
-		<p class="pageinput">{$input_fesubmit_redirect}</p>
+		<p class="pagetext"><label for="fld10">{$title_fesubmit_redirect}:</label></p>
+		<p class="pageinput">
+                   <input type="text" id="fld10" name-"{$actionid}fesubmit_redirect" value="{$fesubmit_redirect}" size="20" maxlength="20"/>
+                </p>
 	</div>
 </fieldset>
 <br/>
@@ -60,13 +84,15 @@
 		<p class="pageinput">{$input_detail_returnid}<br/>{$info_detail_returnid}</p>
 	</div>
 	<div class="pageoverflow">
-		<p class="pagetext">{$title_expired_searchable}:</p>
-		<p class="pageinput">{$input_expired_searchable}</p>
+		<p class="pagetext"><label for="fld12">{$title_expired_searchable}:</label></p>
+		<p class="pageinput">
+                  <input type="checkbox" id="fld12" name="{$actionid}expired_searchable" value="1" {if $expired_searchable}checked="checked"{/if}/>
+                </p>
 	</div>
         <div class="pageoverflow">
-	  <p class="pagetext">{$title_expired_viewable}</p>
+	  <p class="pagetext"><label for="fld13">{$title_expired_viewable}</label></p>
 	  <p class="pagetext">
-            <input type="checkbox" name="{$actionid}expired_viewable" value="1" {if $expired_viewable}checked="checked"{/if}/>
+            <input type="checkbox" id="fld13" name="{$actionid}expired_viewable" value="1" {if $expired_viewable}checked="checked"{/if}/>
             <br/>
             {$info_expired_viewable}
           </p>
@@ -74,6 +100,7 @@
 </fieldset>
 	<div class="pageoverflow">
 		<p class="pagetext">&nbsp;</p>
-		<p class="pageinput">{$submit}</p>
+		<p class="pageinput">
+                  <input type="submit" name="{$actionid}optionssubmitbutton" value="{$mod->Lang('submit')}"/>
 	</div>
 {$endform}

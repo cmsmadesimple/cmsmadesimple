@@ -300,6 +300,51 @@ if( version_compare($oldversion,'2.13') < 0 ) {
   $dict = NewDataDictionary($db);
   $sqlarray = $dict->AddColumnSQL(cms_db_prefix().'module_news_fielddefs', 'extra X');
   $dict->ExecuteSQLArray($sqlarray);
+
+  $sqlarray = $dict->AddColumnSQL(cms_db_prefix().'module_news_categories', 'item_order I');
+  $dict->ExecuteSQLArray($sqlarray);
+
+  $query = 'SELECT * FROM '.cms_db_prefix().'module_news_categories';
+  $allcats = $db->GetArray($query);
+
+  function news_hierarchy_get_tree($allcats,$parent_id = -1)
+  {
+    $out = array();
+    foreach( $allcats as $onecat ) {
+      if( $onecat['parent_id'] != $parent_id ) continue;
+      $tmp = news_hierarchy_get_tree($allcats,$onecat['news_category_id']);
+      if( is_array($tmp) && count($tmp) ) $onecat['children'] = $tmp;
+      $out[] = $onecat;
+    }
+    return $out;
+  }
+
+  function news_hierarchy_update_order(&$tree)
+  {
+    $order = 1;
+    foreach( $tree as &$node ) {
+      $node['item_order'] = $order++;
+      if( isset($node['children']) ) {
+	news_hierarchy_update_order($node['children']);
+      }
+    }
+  }
+
+  function news_hierarchy_save_tree($tree,$depth = 0)
+  {
+    $query = 'UPDATE '.cms_db_prefix().'module_news_categories SET parent_id = ?, item_order = ?
+              WHERE news_category_id = ?';
+    $db = cmsms()->GetDb();
+    foreach( $tree as &$node ) {
+      $db->Execute($query,array($node['parent_id'],$node['item_order'],$node['news_category_id']));
+      if( isset($node['children']) ) news_hierarchy_save_tree($node['children'],$depth+1);
+    }
+  }
+
+  $tree = news_hierarchy_get_tree($allcats);
+  news_hierarchy_update_order($tree);
+  news_hierarchy_save_tree($tree);
+  news_admin_ops::UpdateHierarchyPositions();
 }
 
 ?>
