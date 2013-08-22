@@ -79,7 +79,7 @@ $(document).ready(function(){
 
 	<div class="pageoverflow">
 		<p class="pagetext">{$postdatetext}:</p>
-		<p class="pageinput">{html_select_date prefix=$postdateprefix time=$postdate start_year="-10" end_year="+15"} {html_select_time prefix=$postdateprefix time=$postdate}</p>
+		<p class="pageinput">{html_select_date prefix=$postdateprefix time=$postdate start_year='1980' end_year='+15'} {html_select_time prefix=$postdateprefix time=$postdate}</p>
 	</div>
 {if isset($statustext)}
 	<div class="pageoverflow">

@@ -358,14 +358,6 @@ $this->RegisterModulePlugin(TRUE);
 $this->RegisterSmartyPlugin('news','function','function_plugin');
 
 // and routes...
-$route = new CmsRoute('/[nN]ews\/(?P<articleid>[0-9]+)\/(?P<returnid>[0-9]+)\/(?P<junk>.*?)\/d,(?P<detailtemplate>.*?)$/',
-		      $this->GetName());
-cms_route_manager::add_static($route);
-$route = new CmsRoute('/[nN]ews\/(?P<articleid>[0-9]+)\/(?P<returnid>[0-9]+)\/(?P<junk>.*?)$/',$this->GetName());
-cms_route_manager::add_static($route);
-$route = new CmsRoute('/[nN]ews\/(?P<articleid>[0-9]+)\/(?P<returnid>[0-9]+)$/',$this->GetName());
-cms_route_manager::add_static($route);
-$route = new CmsRoute('/[nN]ews\/(?P<articleid>[0-9]+)$/',$this->GetName());
-cms_route_manager::add_static($route);
+$this->CreateStaticRoutes();
 
 ?>

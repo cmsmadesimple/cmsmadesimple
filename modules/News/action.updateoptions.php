@@ -25,6 +25,7 @@ $this->SetPreference('fesubmit_status', $params['fesubmit_status']);
 $this->SetPreference('fesubmit_redirect', trim($params['fesubmit_redirect']));
 $this->SetPreference('detail_returnid',(int)$params['detail_returnid']);
 
+$this->CreateStaticRoutes();
 $params = array('tab_message'=> 'optionsupdated', 'active_tab' => 'options');
 $this->Redirect($id, 'defaultadmin', '', $params);
 ?>

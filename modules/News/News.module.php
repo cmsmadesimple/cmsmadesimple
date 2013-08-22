@@ -274,6 +274,8 @@ class News extends CMSModule
   
   public function CreateStaticRoutes()
   {
+    cms_route_manager::del_static('',$this->GetName());
+
     $db = cmsms()->GetDb();
     $str = $this->GetName();
     $c = strtoupper($str[0]);
@@ -287,7 +289,8 @@ class News extends CMSModule
     cms_route_manager::add_static($route);
     $route = new CmsRoute('/'.$x1.'\/(?P<articleid>[0-9]+)\/(?P<returnid>[0-9]+)$/',$this->GetName());
     cms_route_manager::add_static($route);
-    $route = new CmsRoute('/'.$x1.'\/(?P<articleid>[0-9]+)$/',$this->GetName());
+    $route = new CmsRoute('/'.$x1.'\/(?P<articleid>[0-9]+)$/',$this->GetName(),
+			  array('returnid'=>$this->GetPreference('detail_returnid',-1)));
     cms_route_manager::add_static($route);
 
     $query = 'SELECT news_id,news_url FROM '.cms_db_prefix().'module_news
