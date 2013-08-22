@@ -110,7 +110,13 @@ $(document).ready(function(){
 	<tbody>
 	{foreach from=$items item=entry}
 		<tr class="{$entry->rowclass}">
-			<td>{$entry->title}</td>
+			<td>
+                        {if isset($entry->edit_url)}
+                          <a href="{$entry->edit_url}" title="{$mod->Lang('editarticle')}">{$entry->news_title|cms_escape}</a>
+                        {else}
+                          {$entry->news_title|cms_escape}
+                        {/if}
+                        </td>
 			<td>{$entry->u_postdate|cms_date_format}</td>
                         <td>{if !empty($entry->u_enddate)}{$entry->u_startdate|cms_date_format}{/if}</td>
                         <td>{if $entry->expired == 1}
@@ -123,8 +129,16 @@ $(document).ready(function(){
                         </td>
 			<td>{$entry->category}</td>
 			<td>{if isset($entry->approve_link)}{$entry->approve_link}{/if}</td>
-			<td>{$entry->editlink|default:''}</td>
-			<td>{if isset($entry->deletelink)}{$entry->deletelink}{/if}</td>
+			<td>
+                          {if isset($entry->edit_url)}
+                          <a href="{$entry->edit_url}" title="{$mod->Lang('editarticle')}">{admin_icon icon='edit.gif'}</a>
+                          {/if}
+                        </td>
+			<td>
+                          {if isset($entry->delete_url)}
+                          <a href="{$entry->delete_url}" title="{$mod->Lang('delete_article')}">{admin_icon icon='delete.gif'}</a>
+                          {/if}
+                        </td>
 			<td><input type="checkbox" name="{$actionid}sel[]" value="$entry->id" title="{$mod->Lang('toggle_bulk')}"/></td>
 		</tr>
 	{/foreach}

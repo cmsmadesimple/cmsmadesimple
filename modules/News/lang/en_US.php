@@ -46,6 +46,7 @@ $lang['dateformat'] = '%s not in a valid yyyy-mm-dd hh:mm:ss format';
 $lang['default_category'] = 'Default Category';
 $lang['default_templates'] = 'Default Templates';
 $lang['delete'] = 'Delete';
+$lang['delete_article'] = 'Delete Article';
 $lang['delete_selected'] = 'Delete Selected Articles';
 $lang['deprecated'] = 'unsupported';
 $lang['description'] = 'Add, edit and remove News entries';

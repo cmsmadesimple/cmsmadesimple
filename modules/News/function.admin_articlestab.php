@@ -216,6 +216,7 @@ while ($dbresult && $row = $dbresult->FetchRow()) {
   $onerow = new stdClass();
 
   $onerow->id = $row['news_id'];
+  $onerow->news_title = $row['news_title'];
   $onerow->title = $this->CreateLink($id, 'editarticle', $returnid, $row['news_title'], array('articleid'=>$row['news_id']));
   $onerow->data = $row['news_data'];
   $onerow->expired = 0;
@@ -246,9 +247,14 @@ while ($dbresult && $row = $dbresult->FetchRow()) {
   $onerow->rowclass = $rowclass;
 
   if( $this->CheckPermission('Modify News') ) {
+    $onerow->edit_url = $this->create_url($id,'editarticle',$returnid,
+					  array('articleid'=>$row['news_id']));
     $onerow->editlink = $this->CreateLink($id, 'editarticle', $returnid, $admintheme->DisplayImage('icons/system/edit.gif', $this->Lang('edit'),'','','systemicon'), array('articleid'=>$row['news_id']));
   }
   if( $this->CheckPermission('Delete News') ) {
+    $onerow->delete_url = $this->create_url($id,'deletearticle',$returnid,
+					    array('articleid'=>$row['news_id']));
+
     $onerow->deletelink = $this->CreateLink($id, 'deletearticle', $returnid, $admintheme->DisplayImage('icons/system/delete.gif', $this->Lang('delete'),'','','systemicon'), array('articleid'=>$row['news_id']), $this->Lang('areyousure'));
   }
 
