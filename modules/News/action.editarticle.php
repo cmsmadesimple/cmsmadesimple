@@ -37,6 +37,9 @@ if (isset($params['useexp'])) $useexp = 1;
 $extra = '';
 if( isset($params['extra']) ) $extra = trim($params['extra']);
 
+$searchable = 1;
+if( isset($params['searchable']) ) $searchable = (int)$params['searchable'];
+
 $startdate = time();
 if (isset($params['startdate_Month'])) {
   $startdate = mktime($params['startdate_Hour'], $params['startdate_Minute'], $params['startdate_Second'], $params['startdate_Month'], $params['startdate_Day'], $params['startdate_Year']);
@@ -102,9 +105,9 @@ if( isset($params['submit']) || isset($params['apply']) ) {
     // 
     // database work
     //
-    $query = 'UPDATE '.cms_db_prefix().'module_news SET news_title=?, news_data=?, summary=?, status=?, news_date=?, news_category_id=?, start_time=?, end_time=?, modified_date=?, news_extra=?, news_url = ? WHERE news_id = ?';
+    $query = 'UPDATE '.cms_db_prefix().'module_news SET news_title=?, news_data=?, summary=?, status=?, news_date=?, news_category_id=?, start_time=?, end_time=?, modified_date=?, news_extra=?, news_url = ?, searchable = ? WHERE news_id = ?';
     if ($useexp == 1) {
-      $db->Execute($query, array($title, $content, $summary, $status, trim($db->DBTimeStamp($postdate), "'"), $usedcategory, trim($db->DBTimeStamp($startdate), "'"), trim($db->DBTimeStamp($enddate), "'"), trim($db->DBTimeStamp(time()), "'"), $extra, $news_url, $articleid));
+      $db->Execute($query, array($title, $content, $summary, $status, trim($db->DBTimeStamp($postdate), "'"), $usedcategory, trim($db->DBTimeStamp($startdate), "'"), trim($db->DBTimeStamp($enddate), "'"), trim($db->DBTimeStamp(time()), "'"), $extra, $news_url, $searchable, $articleid));
     }
     else {
       $db->Execute($query, 
@@ -117,6 +120,7 @@ if( isset($params['submit']) || isset($params['apply']) ) {
 			 trim($db->DBTimeStamp(time()), "'"), 
 			 $extra,
 			 $news_url,
+			 $searchable,
 			 $articleid)
 		   );
     }
@@ -200,7 +204,7 @@ if( isset($params['submit']) || isset($params['apply']) ) {
   if( !$error ) {
     $module = cms_utils::get_search_module();
     if (is_object($module) ) {
-      if( $status == 'draft' ) {
+      if( $status == 'draft' || !$searchable ) {
 	$module->DeleteWords($this->GetName(),$articleid,'article');
       }
       else {
@@ -306,6 +310,7 @@ else {
     $postdate = $db->UnixTimeStamp($row['news_date']);
     $startdate = $db->UnixTimeStamp($row['start_time']);
     $author_id = $row['author_id'];
+    $searchable = $row['searchable'];
     if (isset($row['end_time'])) {
       $useexp = 1;
       $enddate = $db->UnixTimeStamp($row['end_time']);
@@ -353,6 +358,7 @@ $smarty->assign('hide_summary_field',$this->GetPreference('hide_summary_field','
 $smarty->assign('authortext', $this->Lang('author'));
 $smarty->assign('articleid',$articleid);
 $smarty->assign('titletext', $this->Lang('title'));
+$smarty->assign('searchable',$searchable);
 
 $smarty->assign('extratext',$this->Lang('extra'));
 $smarty->assign('inputextra',$this->CreateInputText($id,'extra',$extra,30,255));

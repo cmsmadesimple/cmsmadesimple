@@ -155,11 +155,12 @@ if( isset( $params['submit'] ) ) {
 
   if( $error == false ) {
     // and generate the insert query
+    // note: there's no option for fesubmit wether it's searchable or not.
     $query = 'INSERT INTO '.cms_db_prefix().'module_news 
               (news_id, news_category_id, news_title, news_data, summary,
                news_extra, status, news_date, start_time, end_time, create_date, 
-               modified_date,author_id) 
-               VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)';
+               modified_date,author_id,searchable) 
+               VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
     $dbr = $db->Execute($query, 
 			array($articleid, $category_id, $title, 
 			      $content, $summary, $extra, $status, 
@@ -168,7 +169,7 @@ if( isset( $params['submit'] ) ) {
 			      trim($db->DBTimeStamp($enddate), "'"), 
 			      trim($db->DBTimeStamp(time()), "'"), 
 			      trim($db->DBTimeStamp(time()), "'"), 
-			      $userid));
+			      $userid,1));
     if( $dbr ) {
       // handle the custom fields
       $now = $db->DbTimeStamp(time());

@@ -90,6 +90,16 @@ $(document).ready(function(){
 	{$status}
 {/if}
 	<div class="pageoverflow">
+		<p class="pagetext"><label for="searchable">{$mod->Lang('searchable')}:</label></p>
+		<p class="pageinput">
+			<select name="{$actionid}searchable" id="searchable">
+			{cms_yesno selected=$searchable}
+			</select>
+			<br/>{$mod->Lang('info_searchable')}
+		</p>
+	</div>
+
+	<div class="pageoverflow">
 		<p class="pagetext">{$useexpirationtext}:</p>
 		<p class="pageinput"><input type="checkbox" name="{$actionid}useexp" {if $useexp == 1}checked="checked"{/if} onclick="togglecollapse('expiryinfo');" class="pagecheckbox"/></p>
 	</div>

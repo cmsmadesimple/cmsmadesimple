@@ -304,6 +304,13 @@ if( version_compare($oldversion,'2.13') < 0 ) {
   $sqlarray = $dict->AddColumnSQL(cms_db_prefix().'module_news_categories', 'item_order I');
   $dict->ExecuteSQLArray($sqlarray);
 
+  $dict = NewDataDictionary($db);
+  $sqlarray = $dict->AddColumnSQL(cms_db_prefix().'module_news', 'searchable I1');
+  $dict->ExecuteSQLArray($sqlarray);
+
+  $query = 'UPDATE '.cms_db_prefix().'module_news SET searchable = 1';
+  $db->Execute($query);
+
   $query = 'SELECT * FROM '.cms_db_prefix().'module_news_categories';
   $allcats = $db->GetArray($query);
 

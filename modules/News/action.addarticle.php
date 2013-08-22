@@ -28,6 +28,9 @@ if (isset($params['postdate_Month'])) {
 $useexp = 0;
 if (isset($params['useexp'])) $useexp = 1;
 
+$searchable = 1;
+if( isset($params['searchable']) ) $searchable = (int)$params['searchable'];
+
 $news_url = '';
 if (isset($params['news_url'])) $news_url = trim($params['news_url']);
 
@@ -96,12 +99,12 @@ if( isset($params['submit']) ) {
   }
   else {
     $articleid = $db->GenID(cms_db_prefix()."module_news_seq");
-    $query = 'INSERT INTO '.cms_db_prefix().'module_news (news_id, news_category_id, news_title, news_data, summary, status, news_date, start_time, end_time, create_date, modified_date,author_id,news_extra,news_url) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
+    $query = 'INSERT INTO '.cms_db_prefix().'module_news (news_id, news_category_id, news_title, news_data, summary, status, news_date, start_time, end_time, create_date, modified_date,author_id,news_extra,news_url,searchable) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
     if ($useexp == 1) {
-      $dbr = $db->Execute($query, array($articleid, $usedcategory, $title, $content, $summary, $status, trim($db->DBTimeStamp($postdate), "'"), trim($db->DBTimeStamp($startdate), "'"), trim($db->DBTimeStamp($enddate), "'"), trim($db->DBTimeStamp(time()), "'"), trim($db->DBTimeStamp(time()), "'"), $userid, $extra, $news_url));
+      $dbr = $db->Execute($query, array($articleid, $usedcategory, $title, $content, $summary, $status, trim($db->DBTimeStamp($postdate), "'"), trim($db->DBTimeStamp($startdate), "'"), trim($db->DBTimeStamp($enddate), "'"), trim($db->DBTimeStamp(time()), "'"), trim($db->DBTimeStamp(time()), "'"), $userid, $extra, $news_url, $searchable));
     }
     else {
-      $dbr = $db->Execute($query, array($articleid, $usedcategory, $title, $content, $summary, $status, trim($db->DBTimeStamp($postdate), "'"), NULL, NULL, trim($db->DBTimeStamp(time()), "'"), trim($db->DBTimeStamp(time()), "'"), $userid, $extra, $news_url));
+      $dbr = $db->Execute($query, array($articleid, $usedcategory, $title, $content, $summary, $status, trim($db->DBTimeStamp($postdate), "'"), NULL, NULL, trim($db->DBTimeStamp(time()), "'"), trim($db->DBTimeStamp(time()), "'"), $userid, $extra, $news_url, $searchable));
     }
     
     if( !$dbr ) {
@@ -156,7 +159,7 @@ if( isset($params['submit']) ) {
       news_admin_ops::register_static_route($news_url,$articleid);
     }
 
-    if( !$error && $status == 'published' ) {
+    if( !$error && $status == 'published' && $searchable ) {
       //Update search index
       $module = cms_utils::get_search_module();
       if (is_object($module) ) {
@@ -286,6 +289,7 @@ $smarty->assign('postdatetext', $this->Lang('postdate'));
 $smarty->assign('useexpirationtext', $this->Lang('useexpiration'));
 $smarty->assign('startdatetext', $this->Lang('startdate'));
 $smarty->assign('enddatetext', $this->Lang('enddate'));
+$smarty->assign('searchable',$searchable);
 
 // Display custom fields
 $query = 'SELECT * FROM '.cms_db_prefix().'module_news_fielddefs ORDER BY item_order';

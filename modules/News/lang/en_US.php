@@ -234,6 +234,7 @@ $lang['info_expired_viewable'] = 'If enabled, expired articles can be viewed in 
 $lang['info_maxlength'] = 'The maximum length only applies to text input fields.';
 $lang['info_public'] = 'Public fields are not available for frontend editing, or for display in summary or detail views.  They are useful for data that is associated with the news article but is not for public use.';
 $lang['info_reorder_categories'] = 'Drag and drop each item into the correct order to change category relationships';
+$lang['info_searchable'] = 'This field indicates wether this article should be indexed by the search module';
 $lang['info_sysdefault'] = '(the content used by default when a new template is created)';
 $lang['info_sysdefault2'] = '<strong>Note:</strong> This tab contains text areas to allow you to edit a set of templates that are displayed when you create a \'new\' summary, detail, or form template.  Changing content in this tab, and clicking \'submit\' will <strong>not effect any current displays</strong>.';
 
@@ -308,6 +309,7 @@ $lang['restoretodefaultsmsg'] = 'This operation will restore the template conten
 $lang['revert'] = 'Set Status to \'Draft\'';
 
 // S
+$lang['searchable'] = 'Searchable';
 $lang['select'] = 'Select';
 $lang['selectall'] = 'Select All';
 $lang['selectcategory'] = 'Select Category';

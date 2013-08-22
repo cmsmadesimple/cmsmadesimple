@@ -212,8 +212,9 @@ class News extends CMSModule
   {
     $db = $this->GetDb();
 		
-    $query = 'SELECT * FROM '.cms_db_prefix().'module_news ORDER BY news_date';
-    $result = $db->Execute($query);
+    $query = 'SELECT * FROM '.cms_db_prefix().'module_news 
+              WHERE searchable = 1 AND status = ? ORDER BY news_date';
+    $result = $db->Execute($query,array('published'));
 
     while ($result && !$result->EOF) {
       if ($result->fields['status'] == 'published') {

@@ -31,7 +31,8 @@ $flds = "
 	modified_date " . CMS_ADODB_DT . ",
 	author_id I,
         news_extra C(255),
-        news_url C(255)
+        news_url C(255),
+        searchable I1
 "; // icon is no longer used.
 
 $taboptarray = array('mysql' => 'TYPE=MyISAM');
