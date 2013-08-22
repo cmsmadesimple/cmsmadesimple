@@ -45,11 +45,6 @@ function smarty_function_created_date($params, &$template)
 	}
 }
 
-function smarty_cms_help_function_created_date()
-{
-	echo lang('help_function_created_date');
-}
-
 function smarty_cms_about_function_created_date() {
 	?>
 	<p>Author: Ted Kulp&lt;tedkulp@users.sf.net&gt;</p>

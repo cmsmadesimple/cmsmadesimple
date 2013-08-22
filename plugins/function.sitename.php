@@ -29,11 +29,6 @@ function smarty_function_sitename($params, &$template)
 	return $result;
 }
 
-function smarty_cms_help_function_sitename()
-{
-	echo lang('help_function_sitename');
-}
-
 function smarty_cms_about_function_sitename()
 {
 ?>

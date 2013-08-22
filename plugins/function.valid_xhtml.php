@@ -97,11 +97,6 @@ function smarty_function_valid_xhtml($params, &$template)
     return $html;
 }
 
-function smarty_cms_help_function_valid_xhtml() 
-{
-	echo lang('help_function_valid_xhtml');
-}
-
 function smarty_cms_about_function_valid_xhtml() 
 {
 ?>

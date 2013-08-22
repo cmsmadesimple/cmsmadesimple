@@ -232,14 +232,15 @@ final class CmsLangOperations
    * This function uses the current language.
    *
    * @param string The language key
+   * @param string The language realm
    * @return boolean
    */
-  public static function key_exists($key)
+  public static function key_exists($key,$realm = null)
   {
-	  self::_load_realm(self::$_current_realm);
+	  if( $realm == null ) $realm = self::$_current_realm;
+	  self::_load_realm($realm);
 	  $curlang = CmsNlsOperations::get_current_language();
-
-	  if( isset(self::$_langdata[$curlang][self::$_current_realm][$key]) ) return TRUE;
+	  if( isset(self::$_langdata[$curlang][$realm][$key]) ) return TRUE;
 	  return FALSE;
   }
 

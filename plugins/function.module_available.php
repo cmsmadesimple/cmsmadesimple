@@ -44,10 +44,6 @@ function smarty_cms_function_module_available($params, &$template)
 	return $out;
 }
 
-function smarty_cms_help_function_module_available() {
-	echo lang('help_function_module_available');
-}
-
 function smarty_cms_about_function_module_available() {
 ?>
 	<p>Author: Robert Campbell&lt;calguy1000@cmsmadesimple.org&gt;</p>

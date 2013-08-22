@@ -28,7 +28,4 @@ function smarty_function_site_mapper($params, &$template)
 	return cms_module_plugin($params,$smarty);
 }
 
-function smarty_cms_help_function_site_mapper() {
-	echo lang('help_function_site_mapper');
-}
 ?>

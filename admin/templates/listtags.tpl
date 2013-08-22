@@ -18,11 +18,12 @@
     <table cellspacing="0" class="pagetable">
       <thead> 
        <tr>
-         <th>{'name'|lang}</th>
-         <th>{'type'|lang}</th>
-         <th class="pagew10">{'cachable'|lang}</th>
-         <th class="pagew10">{'help'|lang}</th>
-         <th class="pagew10">{'about'|lang}</th>
+         <th><span title="{lang_by_realm('tags','tag_name')}">{'name'|lang}</span></th>
+         <th><span title="{lang_by_realm('tags','tag_type')}">{'type'|lang}</span></th>
+	 <th class="pagew10"><span title="{lang_by_realm('tags','tag_adminplugin')}">{lang('adminplugin')}</span></th>
+         <th class="pagew10"><span title="{lang_by_realm('tags','tag_cachable')}">{'cachable'|lang}</span></th>
+         <th class="pagew10"><span title="{lang_by_realm('tags','tag_help')}">{'help'|lang}</span></th>
+         <th class="pagew10"><span title="{lang_by_realm('tags','tag_about')}">{'about'|lang}</span></th>
        </tr>
       </thead> 
       <tbody>
@@ -31,23 +32,24 @@
 	<tr class="{$rowclass}">
          <td>
            {if isset($one.help_url)}
-             <a href="{$one.help_url}">{$one.name}</a>
+             <a href="{$one.help_url}" title="{lang_by_realm('tags','viewhelp')}">{$one.name}</a>
            {else}
              {$one.name}
            {/if}
          </td>
          <td>
-            {$one.type}
+            <span title="{lang_by_realm('tags',$one.type)}">{$one.type}</span>
          </td>
+         <td>{if $one.admin}{lang('yes')}{else}{lang('no')}{/if}</td>
          <td>{if isset($one.cachable) && $one.cachable != ''}{$one.cachable|lang}{/if}</td>
          <td>
            {if isset($one.help_url)}
-             <a href="{$one.help_url}">{'help'|lang}</a>
+             <a href="{$one.help_url}" title="{lang_by_realm('tags','viewhelp')}">{'help'|lang}</a>
            {/if}
          </td>
          <td>
            {if isset($one.about_url)}
-             <a href="{$one.about_url}">{'about'|lang}</a>
+             <a href="{$one.about_url}" title="{lang_by_realm('tags','viewabout')}">{'about'|lang}</a>
            {/if}
          </td>
        </tr>

@@ -58,11 +58,8 @@ function smarty_function_anchor($params, &$template)
   echo $tmp;
 	
 }
-	#Ammended by Russ for class, tabindex and title for anchor 2006/07/19
-function smarty_cms_help_function_anchor() {
-  echo lang('help_function_anchor');
-}
-	#Amended by Russ for class, tabindex and title for anchor 2006/07/19
+
+#Amended by Russ for class, tabindex and title for anchor 2006/07/19
 function smarty_cms_about_function_anchor() {
   echo lang('about_function_anchor');
 }

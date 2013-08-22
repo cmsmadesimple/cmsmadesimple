@@ -263,10 +263,6 @@ function smarty_function_dump($params, &$template)
 	return $str;
 }
 
-function smarty_cms_help_function_dump() {
-	echo lang('help_function_dump');
-}
-
 function smarty_cms_about_function_dump() {
 ?>
 	<p>Author: Robert Campbell &lt;calguy1000@hotmail.com&gt;</p>

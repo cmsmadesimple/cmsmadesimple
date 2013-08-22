@@ -37,10 +37,6 @@ function smarty_function_root_url($params, &$template)
 	return $str;
 }
 
-function smarty_cms_help_function_root_url() {
-	echo lang('help_function_root_url');
-}
-
 function smarty_cms_about_function_root_url() {
 ?>
 	<p>Author: Ted Kulp&lt;ted@cmsmadesimple.org&gt;</p>

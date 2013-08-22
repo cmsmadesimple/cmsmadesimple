@@ -91,11 +91,6 @@ function smarty_function_browser_lang($params, &$template)
   return $res;
 }
 
-function smarty_cms_help_function_browser_lang()
-{
-	echo lang('help_function_browser_lang');
-}
-
 function smarty_cms_about_function_browser_lang()
 {
 ?>

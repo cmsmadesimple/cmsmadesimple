@@ -68,10 +68,6 @@ function smarty_function_metadata($params, &$template)
 	return $result;
 }
 
-function smarty_cms_help_function_metadata() {
-	echo lang('help_function_metadata');
-}
-
 function smarty_cms_about_function_metadata() {
 ?>
 	<p>Author: Ted Kulp&lt;ted@cmsmadesimple.org&gt;</p>

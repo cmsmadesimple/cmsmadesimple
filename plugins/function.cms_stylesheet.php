@@ -365,11 +365,6 @@ function cms_stylesheet_toString($filename, $media_query = '', $media_type = '',
 	Help functions
 **********************************************************/
 
-function smarty_cms_help_function_cms_stylesheet()
-{
-	echo lang('help_function_cms_stylesheet');
-} // end of help
-
 function smarty_cms_about_function_cms_stylesheet()
 {
 	?>

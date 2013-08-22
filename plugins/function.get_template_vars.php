@@ -44,10 +44,6 @@ function smarty_cms_function_get_template_vars($params, &$template)
 	return $str;
 }
 
-function smarty_cms_help_function_get_template_vars() {
-	echo lang('help_function_get_template_vars');
-}
-
 function smarty_cms_about_function_get_template_vars() {
 ?>
 	<p>Author: Robert Campbell&lt;calguy1000@hotmail.com&gt;</p>

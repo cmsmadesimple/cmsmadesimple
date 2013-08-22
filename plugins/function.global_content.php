@@ -29,7 +29,4 @@ function smarty_function_global_content($params, &$template)
 	return $txt;
 }
 
-function smarty_cms_help_function_global_content() {
-	echo lang('help_function_global_content');
-}
 ?>

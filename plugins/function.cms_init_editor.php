@@ -42,11 +42,6 @@ function smarty_function_cms_init_editor($params, &$template)
   return $output;
 }
 
-function smarty_cms_help_function_cms_init_editor()
-{
-  echo lang('help_function_cms_init_editor');
-}
-
 function smarty_cms_about_function_cms_init_editor()
 {
 ?>

@@ -2,6 +2,13 @@ Version 2.0 - NO NAME SET
 -----------------------------
 Core - General
   - default upload permission is now based on the umask.
+  - Removed the NCleanGrey admin theme
+  - Many tewaks to the admin theme
+  - Improvements to module loading.
+  - Many new smarty plugins for form building in modules.
+  - New ajaxy help
+  - UI Review trough many admin pages
+  - New jquery based page selector.
 
 Core - Bug Reports
   -
@@ -27,9 +34,14 @@ AdinSearch
 
 CMSContentManager
   - New module for content editing.
+  - Pagination and filtering in listcontent
+  - Implements content locking
+  - Implements dirty form checking 
 
 DesignManager
   - New module for managing templates, stylesheets
+  - Implements dirty form checking
+  - Implements locking for templates
  
 News 
   - Each article now has a searchable option
@@ -38,6 +50,7 @@ News
   - The ability to re-organize categories
   - Numerous UI improvements
   - Minor bug fixes
+  - Implements dirty form checking
 
 Search
   - No longer indexes templates, or GCB's

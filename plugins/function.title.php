@@ -45,10 +45,6 @@ function smarty_function_title($params, &$template)
     return $result;
 }
 
-function smarty_cms_help_function_title() {
-	echo lang('help_function_title');
-}
-
 function smarty_cms_about_function_title() {
 ?>
 	<p>Author: Ted Kulp&lt;tedkulp@users.sf.net&gt;</p>

@@ -72,11 +72,6 @@ function smarty_function_image($params, &$template)
 }
 
 
-function smarty_cms_help_function_image()
-{
-	echo lang('help_function_image');
-}
-
 function smarty_cms_about_function_image() 
 {
 ?>

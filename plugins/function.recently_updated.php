@@ -92,10 +92,6 @@ function smarty_function_recently_updated($params, &$template)
 	return $output;
 }
 
-function smarty_cms_help_function_recently_updated() {
-	echo lang('help_function_recently_updated');
-}
-
 function smarty_cms_about_function_recently_updated() {
 ?>
 	<p>Author: Elijah Lofgren &lt;elijahlofgren@elijahlofgren.com&gt; Olaf Noehring &lt;http://www.team-noehring.de&gt;</p>

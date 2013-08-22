@@ -42,10 +42,6 @@ function smarty_function_menu_text($params, &$template)
 	return $result;
 }
 
-function smarty_cms_help_function_menu_text() {
-	echo lang('help_function_menu_text');
-}
-
 function smarty_cms_about_function_menu_text() {
 ?>
 	<p>Author: Ted Kulp&lt;tedkulp@users.sf.net&gt;</p>

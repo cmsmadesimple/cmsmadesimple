@@ -42,10 +42,6 @@ function smarty_function_page_image($params, &$template)
 	return $result;
 }
 
-function smarty_cms_help_function_page_image() {
-	echo lang('help_function_page_image');
-}
-
 function smarty_cms_about_function_page_image() {
 ?>
 	<p>Author: Ted Kulp&lt;tedkulp@users.sf.net&gt;</p>

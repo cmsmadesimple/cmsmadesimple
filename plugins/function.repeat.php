@@ -28,8 +28,4 @@ function smarty_function_repeat($params, &$template)
 	return $out;
 }
 
-function smarty_cms_help_function_repeat()
-{
-	echo lang('help_function_repeat');
-}
 ?>

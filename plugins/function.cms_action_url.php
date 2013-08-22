@@ -89,7 +89,4 @@ function smarty_cms_function_cms_action_url($params, &$template)
   return $url;
 }
 
-function smarty_cms_help_function_cms_action_url() {
-  echo lang('help_function_cms_action_url');
-}
 ?>

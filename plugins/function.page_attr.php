@@ -41,10 +41,6 @@ function smarty_function_page_attr($params, &$template)
 	return $result;
 }
 
-function smarty_cms_help_function_page_attr() {
-	echo lang('help_function_page_attr');
-}
-
 function smarty_cms_about_function_page_attr() {
 ?>
 	<p>Author: Ted Kulp&lt;tedkulp@users.sf.net&gt;</p>

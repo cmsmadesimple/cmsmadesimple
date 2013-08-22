@@ -30,10 +30,6 @@ function smarty_function_uploads_url($params, &$template)
 	return $config->smart_uploads_url();
 }
 
-function smarty_cms_help_function_uploads_url() {
-	echo lang('help_function_uploads_url');
-}
-
 function smarty_cms_about_function_uploads_url() {
 ?>
 	<p>Author: Nuno Costa &ltnuno.mfcosta@sapo.pt&gt;</p>

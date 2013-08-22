@@ -79,7 +79,4 @@ function smarty_function_cms_textarea($params, &$smarty)
   return $res;
 }
 
-function smarty_cms_help_function_cms_textarea() {
-  echo lang('help_function_cms_textarea');
-}
 ?>

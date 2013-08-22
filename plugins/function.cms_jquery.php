@@ -36,11 +36,6 @@ function smarty_function_cms_jquery($params, &$template)
 	return $out;
 }
 
-function smarty_cms_help_function_cms_jquery()
-{
-	echo lang('help_function_cms_jquery');
-}
-
 function smarty_cms_about_function_cms_jquery()
 {
 ?>

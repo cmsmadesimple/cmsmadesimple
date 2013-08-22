@@ -43,10 +43,6 @@ function smarty_function_description($params, &$template)
 	return $out;
 }
 
-function smarty_cms_help_function_description() {
-	echo lang('help_function_description');
-}
-
 function smarty_cms_about_function_description() {
 ?>
 	<p>Author: Elijah Lofgren &lt;elijahlofgren@elijahlofgren.com&gt;</p>

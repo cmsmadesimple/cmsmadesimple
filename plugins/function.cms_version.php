@@ -30,10 +30,6 @@ function smarty_function_cms_version($params, $template) {
 	return $CMS_VERSION;
 }
 
-function smarty_cms_help_function_cms_version() {
-	echo lang('help_function_cms_version');
-}
-
 function smarty_cms_about_function_cms_version() {
 ?>
 	<p>Author: Ted Kulp&lt;tedkulp@users.sf.net&gt;</p>

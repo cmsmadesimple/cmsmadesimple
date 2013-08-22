@@ -29,10 +29,6 @@ function smarty_function_cms_versionname($params, $template) {
     return $CMS_VERSION_NAME;
 }
 
-function smarty_cms_help_function_cms_versionname() {
-	echo lang('help_function_cms_versionname');
-}
-
 function smarty_cms_about_function_cms_versionname() {
 ?>
 	<p>Author: Ted Kulp&lt;tedkulp@users.sf.net&gt;</p>

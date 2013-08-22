@@ -54,11 +54,6 @@ function smarty_function_last_modified_by($params, &$template)
 	return $output;
 }
 
-function smarty_cms_help_function_last_modified_by()
-{
-	echo lang('help_function_last_modified_by');
-}
-
 function smarty_cms_about_function_last_modified_by() {
 ?>
 	<p>Author: Ted Kulp&lt;tedkulp@users.sf.net&gt;</p>
