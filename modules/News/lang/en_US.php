@@ -349,6 +349,7 @@ $lang['title_notification_settings'] = 'Notification Settings';
 $lang['title_submission_settings'] = 'News Submission Settings';
 $lang['title_summary_sysdefault'] = 'Default Summary Template';
 $lang['title_summary_template'] = 'Summary Template Editor';
+$lang['toggle_bulk'] = 'Select this article for bulk processing';
 $lang['type'] = 'Type';
 $lang['type_browsecat'] = 'Browse Category';
 $lang['type_form'] = 'Frontend Form';

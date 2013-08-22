@@ -104,7 +104,7 @@ $(document).ready(function(){
 			<th class="pageicon">{$statustext}</th>
 			<th class="pageicon">&nbsp;</th>
 			<th class="pageicon">&nbsp;</th>
-			<th class="pageicon"><input type="checkbox" id="selall" value="1" title="{$mod->Lang('select_all')}"/></th>
+			<th class="pageicon"><input type="checkbox" id="selall" value="1" title="{$mod->Lang('selectall')}"/></th>
 		</tr>
 	</thead>
 	<tbody>
@@ -125,7 +125,7 @@ $(document).ready(function(){
 			<td>{if isset($entry->approve_link)}{$entry->approve_link}{/if}</td>
 			<td>{$entry->editlink|default:''}</td>
 			<td>{if isset($entry->deletelink)}{$entry->deletelink}{/if}</td>
-			<td>{$entry->select}</td>
+			<td><input type="checkbox" name="{$actionid}sel[]" value="$entry->id" title="{$mod->Lang('toggle_bulk')}"/></td>
 		</tr>
 	{/foreach}
 	</tbody>

@@ -87,6 +87,7 @@ else if( isset($params['resetfilter']) ) {
   $this->SetPreference('article_pagelimit',50);
   $this->SetPreference('article_sortby','news_date DESC');
   $this->SetPreference('allcategories','no');
+  unset($_SESSION['news_pagenumber']);
 }
 
 $curcategory = $this->GetPreference('article_category');
@@ -244,7 +245,6 @@ while ($dbresult && $row = $dbresult->FetchRow()) {
 
   $onerow->rowclass = $rowclass;
 
-  $onerow->select = $this->CreateInputCheckbox($id,'sel[]',$row['news_id']);
   if( $this->CheckPermission('Modify News') ) {
     $onerow->editlink = $this->CreateLink($id, 'editarticle', $returnid, $admintheme->DisplayImage('icons/system/edit.gif', $this->Lang('edit'),'','','systemicon'), array('articleid'=>$row['news_id']));
   }
