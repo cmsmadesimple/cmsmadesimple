@@ -64,7 +64,8 @@ $flds = "
 	create_date " . CMS_ADODB_DT . ",
 	modified_date " . CMS_ADODB_DT . ",
         item_order I,
-        public I
+        public I,
+        extra  X
 ";
 
 $taboptarray = array('mysql' => 'TYPE=MyISAM');

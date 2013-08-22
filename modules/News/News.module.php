@@ -25,7 +25,7 @@ class News extends CMSModule
   function GetFriendlyName() { return $this->Lang('news'); }
   function IsPluginModule() { return true; }
   function HasAdmin() { return true; }
-  function GetVersion() { return '2.13'; }
+  function GetVersion() { return '2.14'; }
   function MinimumCMSVersion() { return '1.12-alpha0'; }
   function GetAdminDescription() { return $this->Lang('description'); }
   function GetAdminSection() { return 'content'; }
@@ -227,15 +227,21 @@ class News extends CMSModule
   }
 
 
+  public function GetFieldTypes()
+  {
+    $items = array('textbox'=>$this->Lang('textbox'),
+		   'checkbox'=>$this->Lang('checkbox'),
+		   'textarea'=>$this->Lang('textarea'),
+		   'dropdown'=>$this->Lang('dropdown'),
+		   'file'=>$this->Lang('file'));
+    return $items;
+  }
+
   function GetTypesDropdown( $id, $name, $selected = '' )
   {
-    $items = array($this->Lang('textbox') => 'textbox', 
-		   $this->Lang('checkbox') => 'checkbox',
-		   $this->Lang('textarea') => 'textarea',
-		   $this->Lang('file') => 'file');
-    return $this->CreateInputDropdown($id, $name, $items, -1, $selected);
+    $items = $this->GetFieldTypes();
+    return $this->CreateInputDropdown($id, $name, array_flip($items), -1, $selected);
   }
-  
 
   function GetNotificationOutput($priority = 2)
   {

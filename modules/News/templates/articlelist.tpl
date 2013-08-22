@@ -1,37 +1,53 @@
 {literal}
 <script type="text/javascript">
 //<![CDATA[
-function selectAll()
-{
-  checkboxes = document.getElementsByTagName("input");
-  for (i=0; i<checkboxes.length ; i++)
-    {
-      if (checkboxes[i].type == "checkbox") checkboxes[i].checked=!checkboxes[i].checked;
-    }
-}
+$(document).ready(function(){
+  cms_checkAll('#selall');
+  $('#filter').hide();
+  $('#toggle_filter').click(function(){
+    $('#filter').toggle('slow');
+  });
+});
 //]]>
 </script>
 {/literal}
 
 {if isset($formstart) }
-<fieldset>
+<fieldset id="filter">
   <legend>{$filtertext}</legend>
   {$formstart}
   <div class="pageoverflow">
-    <p class="pagetext">{$prompt_category}:</p>
-    <p class="pageinput">{$input_category} {$prompt_showchildcategories}: {$input_allcategories}</p>
+    <p class="pagetext"><label for="filter_category">{$prompt_category}:</label></p>
+    <p class="pageinput">
+      <select id="filter_category" name="{$actionid}category">
+      {html_options options=$categorylist selected=$curcategory}
+      </select>
+      <label for="filter_allcategories">{$prompt_showchildcategories}:</label>
+      <input id="filter_allcategories" type="checkbox" name="{$actionid}allcategories" value="yes" {if $allcategories=="yes"}checked="checked"{/if}>
+    </p>
   </div>
   <div class="pageoverflow">
-    <p class="pagetext">{$prompt_sorting}:</p>
-    <p class="pageinput">{$input_sorting}</p>
+    <p class="pagetext"><label for="filter_sortby">{$prompt_sorting}:</label></p>
+    <p class="pageinput">
+      <select id="filter_sorting" name="{$actionid}sortby">
+      {html_options options=$sortlist selected=$sortby}
+      </select>
+    </p>
   </div>
   <div class="pageoverflow">
-    <p class="pagetext">{$prompt_pagelimit}:</p>
-    <p class="pageinput">{$input_pagelimit}</p>
+    <p class="pagetext"><label for="filter_pagelimit">{$prompt_pagelimit}:</label></p>
+    <p class="pageinput">
+      <select id="filter_pagelimit" name="{$actionid}pagelimit">
+      {html_options options=$pagelimits selected=$pagelimit}
+      </select>
+    </p>
   </div>
   <div class="pageoverflow">
     <p class="pagetext">&nbsp;</p>
-    <p class="pageinput">{$submitfilter}{$hidden|default:''}</p>
+    <p class="pageinput">
+      <input type="submit" name="{$actionid}submitfilter" value="{$mod->Lang('submit')}"/>
+      <input type="submit" name="{$actionid}resetfilter" value="{$mod->Lang('reset')}"/>
+    </p>
   </div>
   {$formend}
 </fieldset>
@@ -39,7 +55,9 @@ function selectAll()
 
 {if $itemcount > 0}
 <div class="pageoptions">
-{if isset($addlink)}<p class="pageoptions">{$addlink}</p>{/if}
+<input type="checkbox" id="toggle_filter" value="1"/>
+<label for="toggle_filter">{$mod->Lang('viewfilter')}</label>
+{if isset($addlink)}&nbsp;{$addlink}{/if}
 </div>
 
 {if $pagecount > 1}
@@ -55,7 +73,7 @@ function selectAll()
 {/if}
 
 {$form2start}
-<table cellspacing="0" class="pagetable">
+<table cellspacing="0" class="pagetable" id="articlelist">
 	<thead>
 		<tr>
 			<th>{$titletext}</th>
@@ -66,7 +84,7 @@ function selectAll()
 			<th class="pageicon">{$statustext}</th>
 			<th class="pageicon">&nbsp;</th>
 			<th class="pageicon">&nbsp;</th>
-			<th class="pageicon"><a href="javascript:selectAll();">{$selecttext}</a></th>
+			<th class="pageicon"><input type="checkbox" id="selall" value="1" title="{$mod->Lang('select_all')}"/></th>
 		</tr>
 	</thead>
 	<tbody>
@@ -94,14 +112,14 @@ function selectAll()
 </table>
 {/if}
 
-<div style="width: 97%;">
+<div style="width: 99%;">
 {if isset($addlink)}
   <div class="pageoptions" style="float: left;">
     <p class="pageoptions">{$addlink}</p>
   </div>
 {/if}
 {if $itemcount > 0}
-  <div class="pageoptions" style="float: right;">
+  <div class="pageoptions" style="float: right; text-align: right;" id="bulkactions">
     {$reassigntext}:&nbsp;{$categoryinput}{$submit_reassign}{if isset($submit_massdelete)}<br/>{$submit_massdelete}{/if}
   </div>
 {/if}

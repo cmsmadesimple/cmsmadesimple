@@ -177,7 +177,7 @@ if( isset($params['submit']) ) {
       @$this->SendEvent('NewsArticleAdded', array('news_id' => $articleid, 'category_id' => $usedcategory, 'title' => $title, 'content' => $content, 'summary' => $summary, 'status' => $status, 'start_time' => $startdate, 'end_time' => $enddate, 'useexp' => $useexp, 'extra' => $extra));
       // put mention into the admin log
       audit($articleid, 'News: '.$articleid, 'Article added');
-      $params = array('tab_message'=> 'articleadded', 'active_tab' => 'articles');
+      $params = array('tab_message'=> $this->Lang('articleadded'), 'active_tab' => 'articles');
       $this->Redirect($id, 'defaultadmin', $returnid, $params);
     } // if !$error
   } // outer if !$error
@@ -293,6 +293,10 @@ $dbr = $db->Execute($query);
 $custom_flds = array();
 
 while( $dbr && ($row = $dbr->FetchRow()) ) {
+  if( isset($row['extra']) && $row['extra'] ) $row['extra'] = unserialize($row['extra']);
+  $options = null;
+  if( isset($row['extra']['options']) ) $options = $row['extra']['options'];
+
   $obj = new StdClass();
   $name = "customfield[".$row['id']."]";
   $value = isset($params['customfield'][$row['id']])&&in_array($params['customfield'][$row['id']],$params['customfield']) ? $params['customfield'][$row['id']]:'';
@@ -311,6 +315,9 @@ while( $dbr && ($row = $dbr->FetchRow()) ) {
   case 'file':
     $name = "customfield_".$row['id'];
     $obj->field = $this->CreateFileUploadInput($id,$name);
+    break;
+  case 'dropdown':
+    $obj->field = $this->CreateInputDropdown($id,$name,array_flip($options));
     break;
   }
 

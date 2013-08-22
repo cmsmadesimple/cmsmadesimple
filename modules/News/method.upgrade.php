@@ -296,4 +296,10 @@ if( version_compare($oldversion,'2.12.7') < 0 )
     }
   }
 
+if( version_compare($oldversion,'2.13') < 0 ) {
+  $dict = NewDataDictionary($db);
+  $sqlarray = $dict->AddColumnSQL(cms_db_prefix().'module_news_fielddefs', 'extra X');
+  $dict->ExecuteSQLArray($sqlarray);
+}
+
 ?>

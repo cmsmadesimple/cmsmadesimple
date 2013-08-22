@@ -182,8 +182,7 @@ if( isset($params['submit']) || isset($params['apply']) ) {
     }
   }
     
-  if( isset($params['delete_customfield']) && 
-      is_array($params['delete_customfield']) && !$error ) {
+  if( isset($params['delete_customfield']) && is_array($params['delete_customfield']) && !$error ) {
     foreach( $params['delete_customfield'] as $k => $v ) {
       if( $v != 'delete' ) continue;
       $query = 'DELETE FROM '.cms_db_prefix().'module_news_fieldvals 
@@ -205,8 +204,7 @@ if( isset($params['submit']) || isset($params['apply']) ) {
 	$module->DeleteWords($this->GetName(),$articleid,'article');
       }
       else {
-	if( !$useexp || ($enddate > time()) ||
-	    $this->GetPreference('expired_searchable',1) == 1 ) {
+	if( !$useexp || ($enddate > time()) || $this->GetPreference('expired_searchable',1) == 1 ) {
 	  $text = '';
 	}
 	if( isset($params['customfield']) ) {
@@ -242,14 +240,12 @@ if( isset($params['submit']) || isset($params['apply']) ) {
 
   if( !isset($params['apply']) && !$error ) {
     // redirect out o here.
-    $params = array('tab_message'=> 'articleupdated', 'active_tab' => 'articles');
+    $params = array('tab_message'=> $this->Lang('articleupdated'), 'active_tab' => 'articles');
     $this->Redirect($id, 'defaultadmin', $returnid, $params);
     return;
   }
 
-  if( $error ) {
-    echo $this->ShowErrors($error);
-  }
+  if( $error ) echo $this->ShowErrors($error);
 } // submit or apply
 else if( isset($params['preview']) ) {
   // save data for preview.
@@ -417,6 +413,10 @@ $query = 'SELECT * FROM '.cms_db_prefix().'module_news_fielddefs ORDER BY item_o
 $dbr = $db->Execute($query);
 $custom_flds = array();
 while( $dbr && ($row = $dbr->FetchRow()) ) {
+  if( isset($row['extra']) && $row['extra'] ) $row['extra'] = unserialize($row['extra']);
+  $options = null;
+  if( isset($row['extra']['options']) ) $options = $row['extra']['options'];
+
   $value = '';
   if( isset($fieldvals[$row['id']]) ) $value = $fieldvals[$row['id']]['value'];
   $value = isset($params['customfield'][$row['id']])&&in_array($params['customfield'][$row['id']],$params['customfield']) ? $params['customfield'][$row['id']]:$value;
@@ -442,6 +442,9 @@ while( $dbr && ($row = $dbr->FetchRow()) ) {
       $del = '&nbsp;'.$this->Lang('delete').$this->CreateInputCheckbox($id,$deln,'delete');
     }
     $obj->field =  $value.'&nbsp;'.$this->CreateFileUploadInput($id,$name).$del;;
+    break;
+  case 'dropdown':
+    $obj->field = $this->CreateInputDropdown($id,$name,array_flip($options),-1,$value);
     break;
   }
     

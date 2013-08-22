@@ -52,6 +52,7 @@ $lang['detail_template'] = 'Detail Template';
 $lang['displaytemplate'] = 'Display Template';
 $lang['down'] = 'Down';
 $lang['draft'] = 'Draft';
+$lang['dropdown'] = 'Dropdown';
 
 // E
 $lang['edit'] = 'Edit';
@@ -70,6 +71,7 @@ $lang['error_invalidurl'] = 'Invalid URL <em>(maybe it is already used, or there
 $lang['error_mkdir'] = 'Could not create directory: %s';
 $lang['error_movefile'] = 'Could not create file: %s';
 $lang['error_noarticlesselected'] = 'No Articles Were Selected';
+$lang['error_nooptions'] = 'No options specified for field definition';
 $lang['error_templatenamexists'] = 'A template by that name already exists';
 $lang['error_upload'] = 'Problem occurred uploading a file';
 $lang['eventdesc-NewsArticleAdded'] = 'Sent when an article is added.';
@@ -220,6 +222,7 @@ $lang['hide_summary_field'] = 'Hide the summary field when adding or editing art
 $lang['info_detail_returnid'] = 'This preference is used to determine a page (and therefore a template) to use to view detail pages.  Individualized News Detail URLS will not work if this parameter is not set to a valid page.  Additionally, if this preference is set, and no detailpage parameter is provided on the news tag, then this value will be used for detail links';
 $lang['info_expired_viewable'] = 'If enabled, expired articles can be viewed in detail mode (this is reproducing older functionality).  the showall parameter can be used on the URL (when not using pretty urls) to also indicate that expired articles can be viewed';
 $lang['info_maxlength'] = 'The maximum length only applies to text input fields.';
+$lang['info_public'] = 'Public fields are not available for frontend editing, or for display in summary or detail views.  They are useful for data that is associated with the news article but is not for public use.';
 $lang['info_sysdefault'] = '(the content used by default when a new template is created)';
 $lang['info_sysdefault2'] = '<strong>Note:</strong> This tab contains text areas to allow you to edit a set of templates that are displayed when you create a \'new\' summary, detail, or form template.  Changing content in this tab, and clicking \'submit\' will <strong>not effect any current displays</strong>.';
 
@@ -283,12 +286,14 @@ $lang['published'] = 'Published';
 // R
 $lang['reassign_category'] = 'Change Category To';
 $lang['removed'] = 'Removed';
+$lang['reset'] = 'Reset';
 $lang['resettodefault'] = 'Reset to Factory Defaults';
 $lang['restoretodefaultsmsg'] = 'This operation will restore the template contents to their system defaults.  Are you sure you want to proceed?';
 $lang['revert'] = 'Set Status to \'Draft\'';
 
 // S
 $lang['select'] = 'Select';
+$lang['selectall'] = 'Select All';
 $lang['selectcategory'] = 'Select Category';
 $lang['showchildcategories'] = 'Show Child Categories';
 $lang['sortascending'] = 'Sort Ascending';
@@ -343,6 +348,9 @@ $lang['up'] = 'Up';
 $lang['uploadscategory'] = 'Uploads Category';
 $lang['url'] = 'URL';
 $lang['useexpiration'] = 'Use Expiration Date';
+
+// V
+$lang['viewfilter'] = 'View Filter';
 
 // W
 $lang['warning_preview'] = 'Warning: This preview panel behaves much like a browser window allowing you to navigate away from the initially previewed page. However, if you do that, you may experience unexpected behaviour.  Navigating away from the initial page and returning will not give the expected results.<br/><strong>Note:</strong> The preview does not upload files you may have selected for upload.';

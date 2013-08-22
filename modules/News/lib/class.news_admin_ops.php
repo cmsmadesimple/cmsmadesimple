@@ -163,6 +163,36 @@ final class news_admin_ops
     $route = CmsRoute::new_builder($news_url,'News',$news_article_id,$parms,TRUE);
     return cms_route_manager::add_static($route);
   }
+
+  public static function optionstext_to_array($txt)
+  {
+    $txt = trim($txt);
+    if( !$txt ) return;
+
+    $arr_options = array();
+    $tmp1 = explode("\n",$txt);
+    foreach( $tmp1 as $tmp2 ) {
+      $tmp2 = trim($tmp2);
+      if( $tmp2 == '' ) continue;
+      $tmp2_k = $tmp2_v = $tmp2;
+      if( strpos($tmp2,'=') !== FALSE ) {
+	list($tmp2_k,$tmp2_v) = explode('=',$tmp2,2);
+      }
+      if( $tmp2_k == '' || $tmp2_v == '' ) continue;
+      $arr_options[$tmp2_k] = $tmp2_v;
+    }
+    if( count($arr_options) == 0 ) return;
+    return $arr_options;
+  }
+
+  public static function array_to_optionstext($arr)
+  {
+    $txt = '';
+    foreach( $arr as $key => $val ) {
+      $txt .= "$key=$val\n";
+    }
+    return trim($txt);
+  }
 } // end of class
 
 #

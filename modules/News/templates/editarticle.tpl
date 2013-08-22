@@ -18,7 +18,7 @@ $(document).ready(function(){
 {$startform}
 <div class="pageoverflow">
   <p class="pagetext">&nbsp;</p>
-  <p class="pageinput">{$hidden}{$submit}{$cancel}{if isset($apply)}{$apply}{/if}</p>
+  <p class="pageinput">{$hidden|default:''}{$submit}{$cancel}{if isset($apply)}{$apply}{/if}</p>
 </div>
 
 {if isset($start_tab_headers)}
@@ -92,7 +92,7 @@ $(document).ready(function(){
 	</div>
 	</div>
 {if isset($custom_fields)}
-{foreach from=$custom_fields item='field'}
+{foreach $custom_fields as $field}
         <div class="pageoverflow">
            <p class="pagetext">{$field->prompt}</p>
            <p class="pageinput">{$field->field}</p>
@@ -196,7 +196,7 @@ jQuery(document).ready(function(){
 
 <div class="pageoverflow">
   <p class="pagetext">&nbsp;</p>
-  <p class="pageinput">{$hidden}{$submit}{$cancel}{if isset($apply)}{$apply}{/if}</p>
+  <p class="pageinput">{$hidden|default:''}{$submit}{$cancel}{if isset($apply)}{$apply}{/if}</p>
 </div>
 {$endform}
 </div>{* #edit_news *}
