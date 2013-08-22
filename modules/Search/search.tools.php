@@ -173,6 +173,19 @@ function search_Reindex(&$module)
       cms_content_cache::unload($one);
     }
   }
+
+  $modules = ModuleOperations::get_instance()->GetInstalledModules();
+  foreach( $modules as $name )
+    {
+      if( !$name || $name == 'Search' ) continue;
+      $object = ModuleOperations::get_instance()->get_module_instance($name);
+      if( !is_object($object) ) continue;
+
+      if (method_exists($object, 'SearchReindex'))
+	{
+	  $object->SearchReindex($module);
+	}
+    }
 }
 
 
