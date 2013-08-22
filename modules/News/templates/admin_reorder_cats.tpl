@@ -1,5 +1,4 @@
 <script type="text/javascript">
-{*
 function parseTree(ul)
 {
   var tags = [];
@@ -13,21 +12,13 @@ function parseTree(ul)
   });
   return tags;
 }
-*}
+
 $(document).ready(function(){
-{*
-  $('form#reorder_form').on('submit',function(){
-     alert('on form submit... this works');
-     return false;
-  });
-*}
-
-  $('[name$=submit]').on('click',function(){
-    alert('on submit button... does not work');
-    return false;
+  $(document).on('click','[name={$actionid}submit]',function(){
+    var tree = $.toJSON(parseTree($('ul.sortable')));
+    $('#submit_data').val(tree);
   });
 
-{*
   $('ul.sortable').nestedSortable({	
     disableNesting: 'no-nest',
     forcePlaceholderSize: true,
@@ -40,7 +31,6 @@ $(document).ready(function(){
     listType: 'ul',
     toleranceElement: '> div'
   })
-*}
 });
 </script>
 
@@ -62,11 +52,15 @@ $(document).ready(function(){
 {category_tree}
 
 {form_start id="reorder_form"}
+<input type="hidden" name="{$actionid}submit_type" id="submit_type" value=""/>
+<input type="hidden" name="{$actionid}data" id="submit_data" value=""/>
 <div class="pageoverflow">
   <p class="pagetext"></p>
   <p class="pageinput">
-    <input type="submit" id="submit" name="{$actionid}submit" value="{$mod->Lang('submit')}"/>
-    <input type="submit" id="cancel" name="{$actionid}cancel" value="{$mod->Lang('cancel')}"/>
+    <a href="javascript:void(0)" id="submit2">{admin_icon icon='true.gif'} {$mod->Lang('submit')}</a>
+    <a href="javascript:void(0)" id="cancel2">{admin_icon icon='back.gif'} {$mod->Lang('cancel')}</a>
+    <input type="submit" name="{$actionid}submit" value="{$mod->Lang('submit')}"/>
+    <input type="submit" name="{$actionid}cancel" value="{$mod->Lang('cancel')}"/>
   </p>
 </div>
 {form_end}
