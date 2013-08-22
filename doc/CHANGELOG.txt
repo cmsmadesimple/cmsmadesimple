@@ -10,16 +10,37 @@ Core - Feature Requests:
   - #4178 Improve behavior of cms_selflink
   
 FileManager
-  -
+  - Numerous UI improvements
+  - Adds ajaxy image cropping/resizing/rotation
   
 MenuManager
-  -
+  - Deprecated
+
+Navigator
+  - New module to replace MenuManager
   
 MicroTiny
   -
-  
+ 
+AdinSearch
+  - New module for searching for tags.
+
+CMSContentManager
+  - New module for content editing.
+
+DesignManager
+  - New module for managing templates, stylesheets
+ 
 News 
-  -
+  - Each article now has a searchable option
+  - More bulk actions
+  - A dropdown field type
+  - The ability to re-organize categories
+  - Numerous UI improvements
+  - Minor bug fixes
+
+Search
+  - No longer indexes templates, or GCB's
 
   
 Version 1.11.7 - Genovesa
