@@ -61,7 +61,13 @@ $pagelimit = $this->GetPreference('article_pagelimit',50);
 $allcategories = $this->GetPreference('allcategories','no');
 
 $pagenumber = 1;
-if( isset( $params['pagenumber'] ) )  $pagenumber = (int)$params['pagenumber'];
+if( isset($_SESSION['news_pagenumber']) ) {
+  $pagenumber = (int)$_SESSION['news_pagenumber'];
+}
+if( isset( $params['pagenumber'] ) ) {
+  $pagenumber = (int)$params['pagenumber'];
+  $_SESSION['news_pagenumber'] = $pagenumber;
+}
 $startelement = ($pagenumber-1) * $pagelimit;
 $sortby = $this->GetPreference('article_sortby','news_date DESC');
 $sortlist = array();
@@ -115,18 +121,22 @@ $query1 .= ' ORDER by '.$sortby;
 // if is done to help adodb.
 $numrows = -1;
 if( count($parms) ) {
-  $dbresult = $db->SelectLimit( $query1, $pagelimit, $startelement, $parms);
   $row = $db->GetRow($query2,$parms);
   $numrows = $row['count'];
+  $startelement = min($startelement,$numrows);
+  $dbresult = $db->SelectLimit( $query1, $pagelimit, $startelement, $parms);
 }
 else {
-  $dbresult = $db->SelectLimit( $query1, $pagelimit, $startelement);
   $row = $db->GetRow($query2);
   $numrows = $row['count'];
+  $startelement = min($startelement,$numrows);
+  $dbresult = $db->SelectLimit( $query1, $pagelimit, $startelement);
 }
 
 $pagecount = (int)($numrows/$pagelimit);
 if( ($numrows % $pagelimit) != 0 ) $pagecount++;
+$pagenumber = min($pagecount,$pagenumber);
+
 // some pagination variables to smarty.
 if( $pagenumber == 1 ) {
   $smarty->assign('prevpage','<');

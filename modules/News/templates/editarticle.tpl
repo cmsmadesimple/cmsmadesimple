@@ -1,5 +1,7 @@
 <script type="text/javascript">
 $(document).ready(function(){
+  $('[name$=apply],[name$=submit]').hide();
+
   $('#edit_news').dirtyForm({
     onDirty: function(){
       $('[name$=apply],[name$=submit]').show('slow');
@@ -9,6 +11,10 @@ $(document).ready(function(){
     // editor textchange, set the form dirty.
     $('#edit_news').dirtyForm('option','dirty',true);
   });
+  $(document).on('click','[name$=submit],[name$=apply],[name$=cancel]',function(){
+    $('#edit_news').dirtyForm('option','dirty',false);
+  });
+
 });
 </script>
 
