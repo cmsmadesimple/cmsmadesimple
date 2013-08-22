@@ -30,5 +30,5 @@ $(document).ready(function(){
 <div class="pageoptions"><p class="pageoptions">
   <a href="{cms_action_url action='addcategory'}" title="{$mod->Lang('addcategory')}">{admin_icon icon='newobject.gif'} {$mod->Lang('addcategory')}</a>
   &nbsp;
-  <a href="{cms_action_url action='reorder_cats'}">{admin_icon icon='reorder.gif'} {$mod->Lang('reorder')}</a>
+  <a href="{cms_action_url action='admin_reorder_cats'}">{admin_icon icon='reorder.gif'} {$mod->Lang('reorder')}</a>
 </p></div>
