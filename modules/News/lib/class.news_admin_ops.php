@@ -43,7 +43,7 @@ final class news_admin_ops
     
     //Update search index
     $mod = cms_utils::get_module('News');
-    $module = cms_utils::get_module('Search');
+    $module = cms_utils::get_search_module();
     if ($module != FALSE) $module->DeleteWords($mod->GetName(), $articleid, 'article');
     
     @$mod->SendEvent('NewsArticleDeleted', array('news_id' => $articleid));
