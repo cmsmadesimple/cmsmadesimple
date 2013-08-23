@@ -35,6 +35,14 @@
 #END_LICENSE
 
 /**
+ * A set of convenience utilities for working with CMSMS based applications and modules.
+ *
+ * This file provides the cms_utils class.  Which is a singleton, utility class providing
+ * convenience methods.
+ *
+ * @author  Robert Campbell
+ * @copyright Copyright (c) 2010, Robert Campbell <calguy1000@cmsmadesimple.org>
+ * @since 1.9
  * @package CMS
  */
 
@@ -46,7 +54,7 @@
  * @copyright Copyright (c) 2010, Robert Campbell <calguy1000@cmsmadesimple.org>
  * @since 1.9
  */
-class cms_utils
+final class cms_utils
 {
   /**
    * @ignore 

@@ -84,7 +84,7 @@ final class cms_route_manager
 
 		// do a binary search on the absolute routes
 		if( count($absolute) ) {
-			$res = self::route_binarySearch($needle,$absolute,'__internal_cmp_routes');
+			$res = (int)self::route_binarySearch($needle,$absolute,'strcmp');
 			if( $res !== FALSE ) return $absolute[$res];
 		}
 
@@ -93,6 +93,7 @@ final class cms_route_manager
 			$rec = $regex[$i];
 			if( $rec->matches($needle) ) return $rec;
 		}
+
 		return FALSE;
 	}
 
@@ -105,10 +106,9 @@ final class cms_route_manager
 		// reference: http://php.net/manual/en/function.array-search.php
 		$high = Count( $haystack ) -1;
 		$low = 0;
-
 		while ( $high >= $low ) {
-			$probe = Floor( ( $high + $low ) / 2 );
-			$comparison = $comparator( $haystack[$probe], $needle );
+			$probe = (int)Floor( ( $high + $low ) / 2 );
+			$comparison = $comparator( $haystack[$probe]['term'], $needle );
 			if ( $comparison < 0 ) {
 				$low = $probe +1;
 			}
@@ -170,7 +170,7 @@ final class cms_route_manager
 		if( $static_only ) return;
 
 		if( is_array(self::$_dynamic_routes) ) {
-			$res = self::_find_match($str,self::$_routes,$exact);
+			$res = self::_find_match($str,self::$_dynamic_routes,$exact);
 			if( is_object($res) ) return $res;
 		}
 	}
