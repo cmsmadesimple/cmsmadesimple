@@ -59,13 +59,22 @@ AddOutputFilterByType DEFLATE text/css text/plain text/xml image/gif image/jpeg 
 </IfModule>
 
 <IfModule mod_expires.c>
-<FilesMatch "\.(ico|pdf|flv|jpg|jpeg|png|gif|js|css|swf)$">
-# Set expires tags on various files... so that the browser wont attempt to reload them.
 ExpiresActive On
-ExpiresDefault "access plus 1 year"
+ExpiresDefault "access plus 1 month"
+# Set expires tags on various file types... so that the browser wont attempt to reload them.
+ExpiresByType image/jpg "access plus 1 year"
+ExpiresByType image/gif "access plus 1 year"
+ExpiresByType image/gif "access plus 1 year"
+ExpiresByType image/ico "access plus 1 year"
+ExpiresByType image/png "access plus 1 year"
+ExpiresByType video/x-flv "access plus 1 year"
+ExpiresByType application/pdf "access plus 1 year"
+ExpiresByType application/x-shockwave-flash "access plus 1 year"
+ExpiresByType application/javascript "access plus 1 month"
+ExpiresByType text/javascript "access plus 1 month"
+ExpiresByType text/css "access plug 1 month"
 <IfModule mod_headers.c>
   # Setting cache control to public allows proxy servers to cache the items too.
   Header set Cache-Control "public"
 </IfModule>
-</FilesMatch>
 </IfModule>

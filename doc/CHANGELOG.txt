@@ -12,6 +12,8 @@ Core - General
   - Improve the help for content_image
   - Performance improvements for listcontent and add/editcontent.
   - Search Tweaks
+  - Improved and better documented sample htaccess.txt file
+  - Adds a dropdown field type to News
 
 Version 1.11.7 - Genovesa
 -----------------------------
