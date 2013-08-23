@@ -109,6 +109,20 @@ $lang['help_function_cms_get_language'] = <<<EOT
 </ul>
 EOT;
 
+$lang['help_function_cms_help'] = <<<EOT
+<h3>What does this do?</h3>
+<p>This is an admin only plugin to use to generate a link that when clicked will generate popup help for a particular item.</p>
+<p>This plugin is typically used from modudule admin templates to display end user help in a popup window for an input field, column, or other important information.</p>
+<h3>What parameters does it take?</h3>
+<ul>
+<li>key1 - <em>(optional string)</em> - The first part in a unique key to identify the help string.  If this parameter is not specified, and this plugin is called from within a module action then the current module name is used.  If no module name can be found then &quot;help&quot; is used as the lang realm.</li>
+<li>key2 - <strong>required string</strong> - The second part in a unique key to identify the help string to display.  This is usually the key from the appropriate realms lang file.</li>
+<li>assign - <em>(optional string)</em> - Assign the output to the named smarty variable.</li>
+</ul>
+<h3>Example:</h3>
+<pre><code>{cms_help key2-help_field_username}</code></pre>
+EOT;
+
 $lang['help_function_cms_init_editor'] = <<<EOT
 <h3>What does this do?</h3>
   <p>This plugin is used to initialize the selected WYSIWYG editor for display when WYSIWYG functionalities are required for frontend data submission.  This module will find the selected frontend WYSIWYG, determine if it has been requested, and if so generate the appropriate html code <em>(usually javascript links)</em> so that the WYSIWYG will initialize properly when the page is loaded.  If no WYSIWYG editors have been requested for the frontend request this plugin will produce no output.</p>
@@ -134,6 +148,20 @@ $lang['help_function_cms_lang_info'] = <<<EOT
 <pre>{cms_lang_info assign='nls'}{\$nls->locale()}</pre>
 <h3>See Also:</h3>
 <p>the CmsNls class documentation.</p>
+EOT;
+
+$lang['help_function_cms_pageoptions'] = <<<EOT
+<h3>What does this do?</h3>
+ <p>This is an admin only plugin used to generate a sequence of &lt;option&gt; tags for a dropdown list that represent page numbers in a pagination.</p>
+ <p>Given the number of pages, and the current page this plugin will generate a list of page numbers that allow quick navigation to a subset of the pages.</p>
+<h3>What parameters does it take?</h3>
+  <ul>
+    <li>numpages - <strong>required integer</strong> - The total number of available pages to display.</li>
+    <li>curpage - <strong>required integer</strong> - The current page number (must be greater than 0 and less than or equal to &quot;numpages&quot;</li>
+    <li>surround - <em>(optional integer)</em> - The number of items to surround the current page by.  The default value for this parameter is 3.</li>
+  </ul>
+<h3>Example:</h3>
+<pre><code>&lt;select name="{$actionid}pagenum"&gt;{cms_pageoptions numpages=50 curpage=14}&lt;/select&gt;</code></pre>
 EOT;
 
 $lang['help_function_module_available'] = <<<EOT
