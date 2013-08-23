@@ -30,7 +30,7 @@ MicroTiny
   -
  
 AdinSearch
-  - New module for searching for tags.
+  - New module for searching for tags and any content in templates.
 
 CMSContentManager
   - New module for content editing.
@@ -51,9 +51,11 @@ News
   - Numerous UI improvements
   - Minor bug fixes
   - Implements dirty form checking
+  - Query rework (post date is now used as a start date if expiry is not specified)
 
 Search
   - No longer indexes templates, or GCB's
+  - rewrite the reindex stuff to hopefully use a bit less memory (at least for content pages)
 
   
 Version 1.11.7 - Genovesa
