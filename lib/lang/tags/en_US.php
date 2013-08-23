@@ -164,6 +164,19 @@ $lang['help_function_cms_pageoptions'] = <<<EOT
 <pre><code>&lt;select name="{$actionid}pagenum"&gt;{cms_pageoptions numpages=50 curpage=14}&lt;/select&gt;</code></pre>
 EOT;
 
+$lang['help_function_cms_yesno'] = <<<EOT
+<h3>What does this do?</h3>
+<p>This is a simple plugin used in form generation to create a set of options for a &lt;select&gt; representing a yes/no choice.</p>
+<p>This plugin will generate translated yes/no options, with the proper selected value.</p>
+<h3>What parameters does it take?</h3>
+<ul>
+  <li>selected - <em>(optional integer)</em> - either 0 <em>(no)</em> or 1 <em>(yes)</em></li>
+  <li>assign - <em>(optional string)</em> - Assign the output to the named smarty variable.</li>
+</ul>
+<h3>Example:</h3>
+<pre><code>&lt;select name=&quot;{\$actionid}opt&quot;&gt;{cge_yesno selected=\$opt}&lt;/select&gt;</code></pre>
+EOT;
+
 $lang['help_function_module_available'] = <<<EOT
 <h3>What does this do?</h3>
 <p>A plugin to test wether a given module (by name) is installed, and available for use.</p>
