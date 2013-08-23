@@ -44,7 +44,7 @@ class SectionHeader extends ContentBase
       parent::SetProperties();
       $this->RemoveProperty('secure',0);
       $this->RemoveProperty('accesskey','');
-      $this->RemoveProperty('title','');
+      //$this->RemoveProperty('title','');
       //$this->RemoveProperty('showinmenu',true);
       $this->RemoveProperty('cachable',true);
       $this->RemoveProperty('target','');

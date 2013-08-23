@@ -11,9 +11,15 @@ Core - General
   - Fixes issues when max_upload_filesize is specified in Gigabytes (G) #9415
   - Improve the help for content_image
   - Performance improvements for listcontent and add/editcontent.
-  - Search Tweaks
+  - Search
+    - No longer index templates and GCB's
+    - Now can stop individual content blocks from being indexed.
   - Improved and better documented sample htaccess.txt file
-  - Adds a dropdown field type to News
+  - News
+    - Adds a dropdown field type to News
+  - Fixes #9391 - bug in get_template_vars
+  - Fixes #9324 - Title is now available when editing a section header.  
+  - Fixes #8807 - Section headers are accessible through changing URL
 
 Version 1.11.7 - Genovesa
 -----------------------------

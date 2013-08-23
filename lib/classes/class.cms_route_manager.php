@@ -84,7 +84,7 @@ final class cms_route_manager
 
 		// do a binary search on the absolute routes
 		if( count($absolute) ) {
-			$res = (int)self::route_binarySearch($needle,$absolute,'strcmp');
+			$res = self::route_binarySearch($needle,$absolute,'strcmp');
 			if( $res !== FALSE ) return $absolute[$res];
 		}
 
@@ -122,7 +122,9 @@ final class cms_route_manager
 
 		//The loop ended without a match 
 		//Compensate for needle greater than highest haystack element
-		if($comparator($haystack[count($haystack)-1], $needle) < 0) $probe = count($haystack);
+		if($comparator($haystack[count($haystack)-1]['term'], $needle) < 0) {
+			$probe = count($haystack);
+		}
 		return FALSE;
 	}
 
@@ -267,9 +269,6 @@ final class cms_route_manager
 	public static function add_dynamic(CmsRoute& $route)
 	{
 		if( self::route_exists($route) ) return FALSE;
-		if( cms_utils::get_app_data('trace1') ) {
-			debug_display(self::$_dynamic_routes);
-		}
 		if( !is_array(self::$_dynamic_routes) ) self::$_dynamic_routes = array();
 		self::$_dynamic_routes[$route->signature()] = $route;
 		return TRUE;
