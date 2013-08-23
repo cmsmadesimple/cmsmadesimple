@@ -824,6 +824,25 @@ $lang['help_function_cms_module'] = <<<EOT
 	</ul>
 EOT;
 
+$lang['help_function_cms_module_hint'] = <<<EOT
+<h3>What does this do?</h3>
+<p>This function plugin can be used to provide hints for module behavior if various parameters cannot be specified on the URL.  I.e: In a situation when a site is configured to use pretty urls for SEO purposes it is often impossible to provide additional module parameters like a detailtemplate or sort order on a URL.  This plugin can be used in page templates, GCBs or in a page specific way to give hints as to how modules should behave.</p>
+<p><strong>Note:</strong> Any parameters that are specified on the URL will override matching module hints.   i.e:  When using News and a detailtemplate parameter is specified on a News detail url, any detailtemplate hints will have no effect.</p>
+<p><strong>Note:</strong> In order to ensure proper behavior, module hints must be created before the {content} tag is executed in the CMSMS page template.  Therefore they should (normally) be created very early in the page template process.  An ideal location for page specifc hints is in the &quot;Smarty data or logic that is specific to this page:&quot; textarea on the editcontent form.</p>
+<h3>Parameters:</h3>
+<ul>
+  <li>module - <strong>required string</strong> - The module name that you are adding a hint for.</i>
+</ul>
+<p>Any further parameters to this tag are stored as hints.</p>
+<h3>Example:</h3>
+<p>When using the News module, and pretty urls are configured.  You wish to display news articles for a specific category on one page, and would like to use a non standard detail template to display the individual articles on a differernt page.  I.e: perhaps on your &quot;Sports&quot; page you are calling News like: <code>{News category=sports detailpage=sports_detail}</code>.  However, using pretty urls it may be impossible to specify a detailtemplate on the links that will generate the detail views.  The solution is to use the {cms_module_hint} tag on the <u>sports_detail</u> page to provide some hints as to how News should behave on that page.</p>
+<p>When editing the <u>sports_detail</u> page on the options tab, in the textarea entitled &quot;Smarty data or logic that is specific to this page:&quot; you could enter a tag such as: <code>{cms_module_hint module=News detailtemplate=sports}</code>.  Now when a user clicks on a link from the News summary display on your &quot;sports&quot; page he will be directed to the <u>sports_detail</u> page, and the News detail template entitled &quot;sports&quot; will be used to display the article.</p>
+<h3>Usage:</h3>
+<p><code>{cms_module_hint module=ModuleName paramname=value ...}</code></p>
+<p><strong>Note:</strong> It is possible to specify multiple parameter hints to a single module in one call to this plugin.</p>
+<p><strong>Note:</strong> It is possible to call this module multiple times to provide hints to different modules.</p>
+EOT;
+
 $lang['help_function_breadcrumbs'] = <<<EOT
 <h3 style="font-weight:bold;color:#f00;">DEPRECATED Use &#123;cms_breadcrumbs&#125; now!</h3>
 <h3>What does this do?</h3>

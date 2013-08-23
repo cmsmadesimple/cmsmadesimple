@@ -1637,6 +1637,16 @@ abstract class CMSModule
 			  // put mention into the admin log
 			  audit('',$this->GetName(),'Module is not properly cleaning input params');
 		  }
+
+		  // merge in params from module hints.
+		  $hints = cms_utils::get_app_data('__CMS_MODULE_HINT__'.$this->GetName());
+		  if( is_array($hints) ) {
+			  foreach( $hints as $key => $value ) {
+				  if( isset($params[$key]) ) continue;
+				  $params[$key] = $value;
+			  }
+		  }
+
 		  // used to try to avert XSS flaws, this will
 		  // clean as many parameters as possible according
 		  // to a map specified with the SetParameterType metods.
