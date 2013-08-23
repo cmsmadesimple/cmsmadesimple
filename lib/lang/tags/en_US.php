@@ -896,6 +896,7 @@ $lang['help_function_redirect_url'] = <<<EOT
 <h3>How do I use it?</h3>
 <p>Simply insert this tage into your page or template: <code>{redirect_url to='http://www.cmsmadesimple.org'}</code></p>
 EOT;
+
 $lang['help_function_redirect_page'] = <<<EOT
 <h3>What does this do?</h3>
  <p>This plugin allows you to easily redirect to another page.  It is handy inside of smarty conditional logic (for example, redirect to a login page if the user is not logged in.)</p>
@@ -936,6 +937,100 @@ $lang['help_function_cms_jquery'] = <<<EOT
 	<li><em>(optional) </em><tt>custom_root</tt> - use to set any base path wished.<code>custom_root='http://test.domain.com/'</code> <br/>NOTE: overwrites ssl option and works with the cdn option</li>
 	<li><em>(optional)</em> <tt>assign</tt> - Assign the results to the named smarty variable.</li>
 	</ul>
+EOT;
+
+$lang['help_function_form_end'] = <<<EOT
+<h3>What does this do?</h3>
+<p>This tag creates an end form tag.</p>
+<h3>What parameters does it take?</p>
+<ul>
+  <li>assign - <em>(optional)</em> - Assign the results of this tag to the named smarty variable.</li>
+</ul>
+<h3>Usage:</h3>
+<pre><code>{form_end}</code></pre>
+<h3>See Also:</h3>
+<p>See the {form_start} tag which is the complement to this tag.</p>
+EOT;
+
+$lang['help_function_form_start'] = <<<EOT
+<h3>What does this do?</h3>
+  <p>Thie tag creates a &lt;form&gt; tag for a module action.  It is useful in module templates and is part of the separation of design from logic principle that is at the heart of CMSMS.</p>
+  <p>This tag accepts numerous parameters that can accept the &lt;form&gt; tag, and effect its styling.</p>
+<h3>What parameters does it take?</h3>
+<ul>
+  <li>module - <em>(optional string)</em>
+    <p>The module that is the destination for the form data.  If this parameter is not specified then an attempt is made to determine the current module.<p>
+  </li>
+  <li>action - <em>(optional string)</em>
+    <p>The module action that is the destination for the form data.  If not specified, &quot;default&quot; is assumed for a frontend request, and &quot;defaultadmin&quot; for an admin side request.</p>
+  </li>
+  <li>mid = <em>(optional string)</em>
+    <p>The module actionid that is the destination for the form data.  If not specified, a value is automaticaly calculated.</p>
+  </li>
+  <li>returnid = <em>(optional integer)</em>
+    <p>The content page id that the form should be submitted to.  If not specified, the current page id is used for frontend requests.   For admin requests this attribute is not required.</p>
+  </li>
+  <li>inline = <em>(optional integer)</em>
+    <p>A boolean value that indicates that the form should be submitted inline (form processing output replaces the original tag) or not (form processing output replaces the {content} tag).  This parameter is only applicable to frontend requests, and defaults to false for frontend requests.</p>
+  </li>
+  <li>method = <em>(optional string)</em>
+    <p>Possible values for this field are GET and POST.  The default value is POST.</p>
+  </li>
+  <li>url = <em>(optional string)</em>
+    <p>Allows specifying the action attribute for the form tag.  This is useful for building forms that are not destined to a module action.  A complete URL is required.</p>
+  </li>
+  <li>enctype = <em>(optional string)</em>
+    <p>Allows specifying the encoding type for the form tag.  The default value for this field is multipart/form-data.</p>
+  </li>
+  <li>id = <em>(optional string)</em>
+    <p>Allows specifying the id attribute for the form tag.</p>
+  </li>
+  <li>class = <em>(optional string)</em>
+    <p>Allows specifying the class attribute for the form tag.</p>
+  </li>
+  <li>extraparms = <em>(optional associative array)</em>
+    <p>Allows specifying an associative (key/value) array with extra parameters for the form tag.
+  </li>
+  <li>assign = <em>(optional string)</em>
+    <p>Assign the output of the tag to the named smarty variable.</p>
+  </li>
+</ul>
+<h3>Usage:</h3>
+<p>In a module template the following code will generate a form tag to the current action.</p>
+<pre><code>{form_start}</code></pre>
+<p>This code, in a module template will generate a form tag to the named action.</p>
+<pre><code>{form_start action=myaction}</code></pre>
+<p>This code will generate a form tag to the named action in the named module.</p>
+<pre><code>{form_start module=News action=default}</code></pre>
+<p>This code will generate a form tag to the same action, but set an id, and class.</p>
+<pre><code>{form_start id="myform" class="form-inline"}</code></pre>
+<p>This code will generate a form tag to the named url, and set an id, and class.</p>
+<pre><code>{form_start url="/products" class="form-inline"}</code></pre>
+<h3>See Also:</h3>
+<p>See the {form_end} tag that complements this tag.</p>
+<h3>Example 1:</h3>
+<p>The following is a sample form for use in a module.  This hypothetical form will submit to the action that generated the form, and allow the user to specify an integer pagelimit.</p>
+<pre><code>{form_start}
+&lt;select name="{\$actionid}pagelimit"&gt;
+&lt;option value="10"&gt;10&lt;/option&gt;
+&lt;option value="25"&gt;25&lt;/option&gt;
+&lt;option value="50"&gt;50&lt;/option&gt;
+&lt;select&gt;
+&lt;input type="submit" name="{\$actionid}submit" value="Submit"/&gt;
+{form_end}</code></pre>
+<h3>Example 2:</h3>
+<p>The following is a sample form for use in the frontend of a website.  Entered into page content, this hypothetical form will gather a pagelimit, and submit it to the News module.</p>
+<pre><code>{form_start method="GET" class="form-inline"}
+&lt;select name="pagelimit"&gt;
+&lt;option value="10"&gt;10&lt;/option&gt;
+&lt;option value="25"&gt;25&lt;/option&gt;
+&lt;option value="50"&gt;50&lt;/option&gt;
+&lt;select&gt;
+&lt;input type="submit" name="submit" value="Submit"/&gt;
+{form_end}
+{\$pagelimit=25}
+{if isset(\$smarty.get.pagelimit)}{\$pagelimit=\$smarty.get.pagelimit}{/if}
+{News pagelimit=\$pagelimit}</code></pre>
 EOT;
 
 $lang['function'] = 'Functions may perform a task, or query the database, and typically display output.  They can be called like {tagname [attribute=value...]}';
