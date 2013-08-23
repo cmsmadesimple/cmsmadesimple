@@ -170,7 +170,7 @@ $lang['help_function_cms_pageoptions'] = <<<EOT
     <li>surround - <em>(optional integer)</em> - The number of items to surround the current page by.  The default value for this parameter is 3.</li>
   </ul>
 <h3>Example:</h3>
-<pre><code>&lt;select name="{$actionid}pagenum"&gt;{cms_pageoptions numpages=50 curpage=14}&lt;/select&gt;</code></pre>
+<pre><code>&lt;select name="{\$actionid}pagenum"&gt;{cms_pageoptions numpages=50 curpage=14}&lt;/select&gt;</code></pre>
 EOT;
 
 $lang['help_function_cms_yesno'] = <<<EOT

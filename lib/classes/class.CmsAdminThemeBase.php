@@ -390,19 +390,6 @@ abstract class CmsAdminThemeBase
 								 'title'=>$this->_FixSpaces(lang('content')),
 								 'description'=>lang('contentdescription'),
 								 'show_in_menu'=>$this->HasPerm('contentPerms'));
-		/*
-		$items['pages'] = array('url'=>'listcontent.php','parent'=>'content',
-								'title'=>$this->_FixSpaces(lang('pages')),
-								'description'=>lang('pagesdescription'),
-								'show_in_menu'=>$this->HasPerm('pagePerms'));
-		$items['editpage'] = array('url'=>'editcontent.php','parent'=>'pages',
-								   'title'=>$this->_FixSpaces(lang('editpage')),
-								   'description'=>lang('editpage'),'show_in_menu'=>false);
-		$items['images'] = array('url'=>'imagefiles.php','parent'=>'content',
-								 'title'=>$this->_FixSpaces(lang('imagemanager')),
-								 'description'=>lang('imagemanagerdescription'),
-								 'show_in_menu'=>$this->HasPerm('filePerms'));
-		*/
 		// base layout menu ---------------------------------------------------------
 		$items['layout'] = array('url'=>'index.php?section=layout','parent'=>-1,'priority'=>3,
 								 'title'=>$this->_FixSpaces(lang('layout')),
@@ -479,12 +466,6 @@ abstract class CmsAdminThemeBase
 									'title'=>$this->_FixSpaces(lang('globalconfig')),
 									'description'=>lang('preferencesdescription'),
 									'show_in_menu'=>$this->HasPerm('sitePrefPerms'));
-		/*
-		$items['pagedefaults'] = array('url'=>'pagedefaults.php','parent'=>'siteadmin',
-									   'title'=>$this->_FixSpaces(lang('pagedefaults')),
-									   'description'=>lang('pagedefaultsdescription'),
-									   'show_in_menu'=>$this->HasPerm('sitePrefPerms'));
-		*/
 		$items['systeminfo'] = array('url' => 'systeminfo.php', 'parent' => 'siteadmin',
 									 'title' => $this->_FixSpaces(lang('systeminfo')),
 									 'description' => lang('systeminfodescription'),
