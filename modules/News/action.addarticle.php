@@ -251,15 +251,15 @@ $smarty->assign('inputauthor', '');
 $smarty->assign('startform', $this->CreateFormStart($id, 'addarticle', $returnid,'post','multipart/form-data'));
 $smarty->assign('endform', $this->CreateFormEnd());
 $smarty->assign('titletext', $this->Lang('title'));
-$smarty->assign('inputtitle', $this->CreateInputText($id, 'title', $title, 30, 255));
+$smarty->assign('title',$title);
 $smarty->assign('inputcontent', $this->CreateTextArea(true, $id, $content, 'content'));
+$smarty->assign('allow_summary_wysiwyg',$this->GetPreference('allow_summary_wysiwyg'));
 $smarty->assign('inputsummary', $this->CreateTextArea($this->GetPreference('allow_summary_wysiwyg',1), $id, $summary, 'summary', '', '', '', '', '80', '3'));
 
 $smarty->assign('extratext',$this->Lang('extra'));
-$smarty->assign('inputextra',$this->CreateInputText($id,'extra',$extra,30,255));
-$smarty->assign('extravalue',$extra);
+$smarty->assign('extra',$extra);
 $smarty->assign('urltext',$this->Lang('url'));
-$smarty->assign('inputurl',$this->CreateInputText($id,'news_url',$news_url,50,255));
+$smarty->assign('news_url',$news_url);
 
 $smarty->assign('postdate', $postdate);
 $smarty->assign('postdateprefix', $id.'postdate_');
@@ -270,14 +270,13 @@ $smarty->assign('startdate', $startdate);
 $smarty->assign('startdateprefix', $id.'startdate_');
 $smarty->assign('enddate', $enddate);
 $smarty->assign('enddateprefix', $id.'enddate_');
+$smarty->assign('status',$status);
 if( $this->CheckPermission('Approve News') ) {
   $smarty->assign('statustext', lang('status'));
-  $smarty->assign('status', $this->CreateInputDropdown($id, 'status', $statusdropdown, -1, $status));
+  $smarty->assign('statuses',array_flip($statusdropdown));
 }
-else {
-  $smarty->assign('status',$this->CreateInputHidden($id,'status',$status));
-}
-$smarty->assign('inputcategory', $this->CreateInputDropdown($id, 'category', $categorylist, -1, $usedcategory, $onchangetext));
+$smarty->assign('categorylist',array_flip($categorylist));
+$smarty->assign('category',$usedcategory);
 $smarty->assign('submit', $this->CreateInputSubmit($id, 'submit', lang('submit')));
 $smarty->assign('cancel', $this->CreateInputSubmit($id, 'cancel', lang('cancel')));
 

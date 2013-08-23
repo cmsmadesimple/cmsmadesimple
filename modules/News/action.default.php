@@ -103,19 +103,21 @@ if( !$smarty->isCached($this->GetDatabaseResource($template),$cache_id) ) {
     $query2 .= ") AND ";
   }
   
-  $now = $db->DbTimeStamp(time());
-  $query1 .= "(".$db->IfNull('start_time',$db->DBTimeStamp(1))." < ".$now.") ";
-  $query2 .= "(".$db->IfNull('start_time',$db->DBTimeStamp(1))." < ".$now.") ";
-  if( !isset($params['showall']) || $params['showall'] == 0 ) {
-    if (isset($params['showarchive']) && $params['showarchive'] != 0) {
-      // get articles that are expired
-      $query1 .= " AND (end_time < ".$now.") ";
-      $query2 .= " AND (end_time < ".$now.") ";
+  if( isset($params['showall']) ) {
+    // show everything irrespective of end date.
+    $query1 .= 'IF(start_time IS NULL,news_date <= NOW(),start_time <= NOW())';
+    $query2 .= 'IF(start_time IS NULL,news_date <= NOW(),start_time <= NOW())';
+  }
+  else {
+    // we're concerned about start time, end time, and news_date
+    if( isset($params['showarchive']) ) {
+      // show only expired entries.
+      $query1 .= 'IF(end_time IS NULL,0,end_time < NOw())';
+      $query2 .= 'IF(end_time IS NULL,0,end_time < NOw())';
     }
     else {
-      // get articles with either no expiry, or an end time greater than now
-      $query1 .= " AND ((".$db->IfNull('end_time',$db->DBTimeStamp(1))." = ".$db->DBTimeStamp(1).") OR (end_time > ".$now.")) ";
-      $query2 .= " AND ((".$db->IfNull('end_time',$db->DBTimeStamp(1))." = ".$db->DBTimeStamp(1).") OR (end_time > ".$now.")) ";
+      $query1 .= 'IF(start_time IS NULL AND end_time IS NULL,news_date <= NOW(),NOw() BETWEEN start_time AND end_time)';
+      $query2 .= 'IF(start_time IS NULL AND end_time IS NULL,news_date <= NOW(),NOw() BETWEEN start_time AND end_time)';
     }
   }
 
@@ -221,6 +223,7 @@ if( !$smarty->isCached($this->GetDatabaseResource($template),$cache_id) ) {
   else {
     $dbresult = $db->Execute($query1);
   }
+  //debug_display($db->sql);
   
   {
     // build a list of news id's so we can preload stuff from other tables.

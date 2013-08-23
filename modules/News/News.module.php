@@ -256,8 +256,7 @@ class News extends CMSModule
 	$db = $this->GetDb();
 	$query = 'SELECT count(news_id) FROM '.cms_db_prefix().'module_news n
                   WHERE status != \'published\'
-                  AND (('.$db->IfNull('end_time',$db->DbTimeStamp(1)).' = '.$db->DbTimeStamp(1).') 
-                  OR (end_time > '.$db->DbTimeStamp(time()).')) ';
+                  AND (end_time IS NULL OR end_time > NOw())';
 	$count = $db->GetOne($query);
 	if( $count ) {
 	  $obj = new StdClass;

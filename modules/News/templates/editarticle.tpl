@@ -15,6 +15,9 @@ $(document).ready(function(){
     $('#edit_news').dirtyForm('option','dirty',false);
   });
 
+  $('#fld11').click(function(){
+    $('#expiryinfo').toggle('slow');	
+  });
 });
 </script>
 
@@ -50,12 +53,18 @@ $(document).ready(function(){
 	</div>
 {/if}
 	<div class="pageoverflow">
-		<p class="pagetext">*{$titletext}:</p>
-		<p class="pageinput">{$inputtitle}</p>
+		<p class="pagetext"><label for="fld1">*{$titletext}:</label></p>
+		<p class="pageinput">
+                  <input type="text" id="fld1" name="{$actionid}title" value="{$title}" size="80" maxlength="255"/>
+                </p>
 	</div>
 	<div class="pageoverflow">
-		<p class="pagetext">*{$categorytext}:</p>
-		<p class="pageinput">{$inputcategory}</p>
+		<p class="pagetext"><label for="fld2">*{$categorytext}:</label></p>
+		<p class="pageinput">{$inputcategory}
+                  <select name="{$actionid}category" id="fld2">
+                  {html_options options=$categorylist selected=$category}
+                  </select>
+                </p>
 	</div>
 {if !isset($hide_summary_field) or $hide_summary_field == '0'}
 	<div class="pageoverflow">
@@ -68,13 +77,17 @@ $(document).ready(function(){
 		<p class="pageinput">{$inputcontent}</p>
 	</div>
 	<div class="pageoverflow">
-		<p class="pagetext">{$extratext}:</p>
-		<p class="pageinput">{$inputextra}</p>
+		<p class="pagetext"><label for="fld5">{$extratext}:</label></p>
+		<p class="pageinput">
+                  <input type="text" id="fld5" name="{$actionid}extra" value="{$extra}" size="50" maxlength="255"/>
+                </p>
 		
 	</div>
         <div class="pageoverflow">
-                <p class="pagetext">{$urltext}:</p>
-                <p class="pageinput">{$inputurl}</p>
+                <p class="pagetext"><label for="fld7">{$urltext}:</label></p>
+                <p class="pageinput">
+                  <input type="text" id="fld7" name="{$actionid}news_url" value="{$news_url}" size="50" maxlength="255"/>
+                </p>
         </div>
 
 	<div class="pageoverflow">
@@ -83,11 +96,15 @@ $(document).ready(function(){
 	</div>
 {if isset($statustext)}
 	<div class="pageoverflow">
-		<p class="pagetext">*{$statustext}:</p>
-		<p class="pageinput">{$status}</p>
+		<p class="pagetext"><label for="fld9">*{$statustext}:</label></p>
+		<p class="pageinput">
+                   <select id="fld9" name="{$actionid}status">
+                     {html_options options=$statuses selected=$status}
+		   </select>
+                </p>
 	</div>
 {else}
-	{$status}
+	<input type="hidden" name="{$actionid}status" value="{$status}"/>
 {/if}
 	<div class="pageoverflow">
 		<p class="pagetext"><label for="searchable">{$mod->Lang('searchable')}:</label></p>
@@ -100,8 +117,8 @@ $(document).ready(function(){
 	</div>
 
 	<div class="pageoverflow">
-		<p class="pagetext">{$useexpirationtext}:</p>
-		<p class="pageinput"><input type="checkbox" name="{$actionid}useexp" {if $useexp == 1}checked="checked"{/if} onclick="togglecollapse('expiryinfo');" class="pagecheckbox"/></p>
+		<p class="pagetext"><label for="fld11">{$useexpirationtext}:</label></p>
+		<p class="pageinput"><input id="fld11" type="checkbox" name="{$actionid}useexp" {if $useexp == 1}checked="checked"{/if} class="pagecheckbox"/></p>
 	</div>
 	<div id="expiryinfo" {if $useexp != 1}style="display: none;"{/if}>
 	<div class="pageoverflow">
