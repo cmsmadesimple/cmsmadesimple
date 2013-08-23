@@ -679,7 +679,6 @@ class CmsLayoutTemplate
 		if( !$t2 ) throw new CmsInvalidDataException('Invalid data passed to CmsLayoutTemplate::create_by_type()');
     
 		$tpl = new CmsLayoutTemplate;
-		$tpl->set_name('New Template');
 		$tpl->set_type($t2);
 		$tpl->set_content($t2->get_dflt_contents());
 		return $tpl;

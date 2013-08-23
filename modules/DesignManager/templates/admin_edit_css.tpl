@@ -35,7 +35,7 @@ $(document).ready(function(){
     <div class="pageoverflow">
       <p class="pagetext"><label for="css_name">*{$mod->Lang('prompt_name')}:</label>&nbsp;{cms_help key2=help_stylesheet_name}</p>
       <p class="pageinput">
-        <input id="css_name" type="text" name="{$actionid}name" size="50" maxlength="50" value="{$css->get_name()}"/>
+        <input id="css_name" type="text" name="{$actionid}name" size="50" maxlength="50" value="{$css->get_name()}" placeholder="{$mod->Lang('new_stylesheet')}"/>
       </p>
     </div>
   </div>{* column *}

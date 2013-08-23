@@ -26,7 +26,7 @@ $(document).ready(function(){
 <div class="pageoverflow">
   <p class="pagetext"><label for="cat_name">*{$mod->Lang('prompt_name')}:&nbsp;{admin_icon icon='info.gif' name='help_category_name' class='helpicon'}</label></p>
   <p class="pageinput">
-    <input type="text" id="cat_name" name="{$actionid}name" value="{$category->get_name()}" size="50" maxlength="50"/>
+    <input type="text" id="cat_name" name="{$actionid}name" value="{$category->get_name()}" size="50" maxlength="50" placeholder="{$mod->Lang('create_category')}"/>
   </p>
 </div>
 <div class="pageoverflow">

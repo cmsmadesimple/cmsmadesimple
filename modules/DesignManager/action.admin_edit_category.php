@@ -31,7 +31,7 @@ try {
   $category = null;
   if( !isset($params['cat']) ) {
     $category = new CmsLayoutTemplateCategory();
-    $category->set_name('New Category');
+    //$category->set_name('New Category');
   }
   else {
     $category = CmsLayoutTemplateCategory::load(trim($params['cat']));

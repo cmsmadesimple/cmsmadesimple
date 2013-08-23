@@ -46,7 +46,7 @@ $(document).ready(function(){
             return confirm('{$mod->Lang('confirm_bulk_tmplop')}');
         });
 
-    $('#editfilter').on('click', function () {
+    $('#edittplfilter').on('click', function () {
       $('#filterdialog').dialog({
         buttons: {
           '{$mod->Lang('submit')}': function () {
@@ -123,7 +123,7 @@ $(document).ready(function(){
   <div class="pageoptions options-menu half">
     <ul class="options-menu">
       <li class="parent">{admin_icon icon='run.gif' alt=$mod->Lang('prompt_options')}&nbsp;{$mod->lang('prompt_options')}
-        <ul id="popupmenucontents">
+        <ul id="popuptplcontents">
           {if $has_add_right}
             <li><a id="addtemplate" accesskey="a" title="{$mod->Lang('create_template')}">{admin_icon icon='newobject.gif' alt=$mod->Lang('create_template')}&nbsp;{$mod->Lang('create_template')}</a></li>
           {/if}
@@ -135,21 +135,21 @@ $(document).ready(function(){
       {/if}
     </ul>
   </div>
-</div>
 
-{if isset($templates)}
   {if isset($tpl_nav) && $tpl_nav.numpages > 1}
     <div class="pageoptions" style="text-align: right;">
       {form_start}
-        {$mod->Lang('prompt_page')}&nbsp;
-        <select name="{$actionid}tpl_page">
+        <label for="tpl_page">{$mod->Lang('prompt_page')}:</label>&nbsp;
+        <select id="tpl_page" name="{$actionid}tpl_page">
           {cms_pageoptions numpages=$tpl_nav.numpages curpage=$tpl_nav.curpage}
         </select>
-        &nbsp;{$mod->Lang('prompt_of')}&nbsp;{$tpl_nav.numpages}&nbsp;<input type="submit" value="{$mod->Lang('go')}"/>
+        &nbsp;<input type="submit" value="{$mod->Lang('go')}"/>
       {form_end}
     </div>
   {/if}
+</div>
 
+{if isset($templates)}
   <table class="pagetable">
     <thead>
       <tr>
@@ -278,7 +278,7 @@ $(document).ready(function(){
       <select name="{$actionid}bulk_action" id="tpl_bulk_action" class="tpl_bulk_action" title="{$mod->Lang('title_tpl_bulkaction')}">
         <option value="delete" title="{$mod->Lang('title_delete')}">{$mod->lang('prompt_delete')}</option>
       </select>
-      <input id="tpl_bulk_submit" class="tpl_bulk_action" type="submit" name="{$actionid}submit_bulk" value="{$mod->Lang('submit')}"/>&nbsp;{admin_icon class="viewhelp" icon='info.gif' title=$mod->Lang('prompt_help')}
+      <input id="tpl_bulk_submit" class="tpl_bulk_action" type="submit" name="{$actionid}submit_bulk" value="{$mod->Lang('submit')}"/>&nbsp;{cms_help key2='help_bulk_templates'}
     </p>
   </div>
   <div class="clearb"></div>

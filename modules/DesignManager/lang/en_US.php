@@ -108,10 +108,12 @@ $lang['friendlyname'] = 'Design Manager';
 $lang['go'] = 'Go';
 
 #H
+$lang['help_bulk_templates'] = 'This option allows performing actions on many templates at one time.  Only the templates selected will be operated upon.';
 $lang['help_category_desc'] = 'A description for a template category is optional, but may help when organizing templates';
 $lang['help_category_name'] = 'A category name is required, and must be unique';
 $lang['help_create'] = 'This option will allow you to create a new template of the selected type';
 $lang['help_create_template'] = 'This function allows creating a new template of the selected template type.  The default contents from the template type will be used';
+$lang['help_css_bulk'] = 'This option allows performing actions on multiple stylesheets at one time.';
 $lang['help_css_description'] = 'You may (optionally) include a description for this stylesheet.  This may be useful to describe the items that are in the stylesheet and aide in organization';
 $lang['help_css_designs'] = 'You may associate one or more desings with a stylesheet.  Stylesheets associated with a design are automatically output by the {cms_stylesheet} tag, and when exporting a design for sharing';
 $lang['help_css_mediaquery'] = <<<EOT
@@ -219,6 +221,8 @@ $lang['msg_type_saved'] = 'Template Type Saved';
 
 #N
 $lang['next'] = 'Next';
+$lang['new_stylesheet'] = 'New Stylesheet';
+$lang['new_template'] = 'New Template';
 $lang['no'] = 'No';
 
 #O
