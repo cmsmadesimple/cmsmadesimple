@@ -43,7 +43,61 @@ $lang['help_modifier_summarize'] = <<<EOT
 EOT;
 
 $lang['help_function_admin_icon'] = <<<EOT
-TODO
+<h3>What does this do?</h3>
+<p>This is an admin side only plugin to allow modules to easily display icons from the current admin theme.  These icons are useful in link building or in displaying status information.</p>
+<h3>What parameters does it take?</h3>
+<ul>
+  <li>icon - <strong>(required)</strong> - The filename of the icon. i.e: run.gif</li>
+  <li>height - <em>(optional)</em> - The height (in pixels) of the icon.</li>
+  <li>width - <em>(optional)</em> - The width (in pixels) of the icon.</li>
+  <li>alt - <em>(optional)</em> - Optional text for the img tag if the filename specified is not available.</li>
+  <li>rel - <em>(optional)</em> - An optional rel attribute for the img tag.</li>
+  <li>class - <em>(optional)</em> - An optional class attribute for the img tag.</li>
+  <li>id - <em>(optional)</em> - An optional id attribute for the img tag.</li>
+  <li>title - <em>(optional)</em> - An optional title attribute for the img tag.</li>
+  <li>accesskey - <em>(optional)</em> - An optional access key character for the img tag.</li>
+  <li>assign - <em>(optional)</em> - Assign the tag output to the named smarty variable.</li>
+</ul>
+<h3>Example:</h3>
+<pre><code>{admin_icon icon='edit.gif' class='editicon'}</code></pre>
+EOT;
+
+$lang['help_function_cms_action_url'] = <<<EOT
+<h3>What does this do?</h3>
+<p>This is a smart plugin useful for generating a URL to a module action. This plugin is useful for module developers who are generating links (either for ajax or or in the admin interface) to perform different functionality or display different data.</p>
+<h3>What parameters does it take?</h3>
+<ul>
+  <li>module - <em>(optional)</em> - The module name to generate a URL for.  This parameter is not necessary if generating a URL from within a module action to an action within the same module.</li>
+  <li>action - <strong>(required)</strong> - The action name to generate a URL to.</li>
+  <li>returnid - <em>(optional)</em> - The integer pageid to display the results of the action in.  This parameter is not necessary if the action is to be displayed on the current page, or if the URL is to an admin action from within an admin action.</li>
+  <li>mid - <em>(optional)</em> - The module action id.  This defaults to &quot;m1_&quot; for admin actions, and &quot;cntnt01&quot; for frontend actions.</li>
+  <li>forjs - <em>(optional)</em> - An optional integer indicating that the generated URL should be suitable for use in javascript.</li>
+  <li>assign - <em>(optional)</em> - Assign the output URL to the named smarty variable.</li>
+</ul>
+<p><strong>Note:</strong> Any other parameters not accepted by this plugin are automatically passed to the called module action on the generated URL.</p>
+<h3>Example:</h3>
+<pre><code>{cms_action_url module=News action=defaultadmin}</code><pre>
+EOT;
+
+$lang['help_function_cms_admin_user'] = <<<EOT
+<h3>What does this do?</h3>
+<p>This admin only plugin outputs information about the specified admin user id.</p>
+<h3>What parameters does it take?</h3>
+<ul>
+  <li>uid - <strong>required</strong> - An integer user id representing a valid admin account.</li>
+  <li>mode - <em>(optional)</em> - The operating mode.  Possible values are:
+    <ul>
+      <li>username <strong>default</strong> - output the username for the specified uid.</li>
+      <li>email - output the email address for the specified uid.</li>
+      <li>firstname - output the first name for the specified uid.</li>
+      <li>lastname - output the surname name for the specified uid.</li>
+      <li>fullname - output the full name for the specified uid.</li>
+    </ul>
+  </li>
+  <li>assign - <em>(optional)</em> - Assign the output to the named smarty variable.</li>
+</ul>
+<h3>Example:</h3>
+<pre><code>{cms_admin_user uid=1 mode=email}</code></pre>
 EOT;
 
 $lang['help_function_cms_get_language'] = <<<EOT
