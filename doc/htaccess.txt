@@ -1,21 +1,29 @@
+#
+# This file is specific to apache configurations.  It attempts to optimize traffic
+# and configuration for your CMSMS website.  Many options are disabled by default as some providers do not allow
+# you to override some of these settings in the .htaccess file.
+#
+
+#
 # Attempt to override some php settings, these settings may be helpful on some hosts if your
 # default configuration does not meet CMS's minimum requirements, and your host
 # has given your account appropriate permissions
+#
 #php_value upload_max_filesize "10M"
 #php_value session_save_path "tmp/cache"
+
 #php_value session.cookie_httponly true
 #php_flag magic_quotes_gpc Off
 #php_flag register_globals Off
-
-#php_flag magic_quotes_gpc Off
-#php_flag register_globals Off
 #php_flag session.use_trans_sid Off
-	#php_flag session.use_trans_sid Off
 
-# (this is important, so uncomment if your host permit)
+# Disallow directory indexes. This can be an important security enhancement.
 #Options -Indexes
+
+# Don't allow the browser to know the type of signature.
 #ServerSignature Off
 
+# Allow the apache server to follow symbolic links.  This is usually not necessary
 #Options +FollowSymLinks
 
 # To prevent E_STRICT problems with PHP 5.3+ you can uncomment the following lines
@@ -26,12 +34,16 @@
 #php_value docref_root 0
 #php_value docref_ext 0
 
+#
+# The following is to enable pretty URLS, only applicable if url_rewriting is set to 'mod_rewrite' in the config.php
+#
 <IfModule mod_rewrite.c>
 RewriteEngine on
-#
-#Sub-dir e.g: /cmsms
+# If your CMSMS installation is in a subdirectory of your domain, you may need to specify the relative path (from the root of the doain) here.
+# i.e: RewriteBase /cmsms
 RewriteBase /
 
+# The following is only applicable if you want to use a / as your page extension (not recommended)
 # 301 Redirect all requests that don't contain a dot or trailing slash to
 # include a trailing slash
 # but ignore POST requests.
@@ -40,14 +52,16 @@ RewriteBase /
 #RewriteCond %{REQUEST_METHOD} !POST$
 #RewriteRule ^(.*) %{REQUEST_URI}/ [R=301,L]
 
-# Rewrites urls in the form of /parent/child/
+# Rewrites urls in the form of /parent/child/grandchild
 # but only rewrites if the requested URL is not a file or directory
-#
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^(.+)$ index.php?page=$1 [QSA]
 </IfModule>
 
+#
+# The follwong are performance optimizations and security enhancements for content that is served by your CMSMS installation
+#
 <IfModule mod_headers.c>
 # Disable ETags
 Header unset ETag
@@ -56,19 +70,33 @@ FileEtag None
 Header set X-Frame-Options "SAMEORIGIN"
 </IfModule>
 
+#
+# The following setups compression for content, if compression is enabled on the server.
+#
 <IfModule mod_deflate.c>
-# Compress css, plaintext, xml, gif, and images in transport.
 AddOutputFilterByType DEFLATE text/css text/plain text/xml image/gif image/jpeg image/png
 </IfModule>
 
+#
+# The following allows the browser to cache images, scripts, stylesheets and videos.  If the expires module is enabled on the server.
+#
 <IfModule mod_expires.c>
-<FilesMatch "\.(ico|pdf|flv|jpg|jpeg|png|gif|js|css|swf)$">
-# Set expires tags on various files... so that the browser wont attempt to reload them.
 ExpiresActive On
-ExpiresDefault "access plus 1 year"
+ExpiresDefault "access plus 1 month"
+# Set expires tags on various file types... so that the browser wont attempt to reload them.
+ExpiresByType image/jpg "access plus 1 year"
+ExpiresByType image/gif "access plus 1 year"
+ExpiresByType image/gif "access plus 1 year"
+ExpiresByType image/ico "access plus 1 year"
+ExpiresByType image/png "access plus 1 year"
+ExpiresByType video/x-flv "access plus 1 year"
+ExpiresByType application/pdf "access plus 1 year"
+ExpiresByType application/x-shockwave-flash "access plus 1 year"
+ExpiresByType application/javascript "access plus 1 month"
+ExpiresByType text/javascript "access plus 1 month"
+ExpiresByType text/css "access plug 1 month"
 <IfModule mod_headers.c>
   # Setting cache control to public allows proxy servers to cache the items too.
   Header set Cache-Control "public"
 </IfModule>
-</FilesMatch>
 </IfModule>

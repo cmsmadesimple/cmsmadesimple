@@ -36,7 +36,7 @@ function smarty_cms_function_get_template_vars($params, &$template)
 	       $str .= "$key = ".cms_htmlentities(trim($value))."<br/>";
              }
 	}
-	$str.'</pre>';
+	$str .= '</pre>';
 	if( isset($params['assign']) ){
 	    $smarty->assign(trim($params['assign']),$str);
 	    return;
