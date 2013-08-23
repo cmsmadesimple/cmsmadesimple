@@ -32,6 +32,15 @@ $lang['help_modifier_cms_escape'] = <<<EOT
 <p>If the character set is not specified, utf-8 is assumed. The character set is only applicable to the &quot;html&quot; and &quot;htmlall&quot; escape types.</p>
 EOT;
 
+$lang['help_modifier_relative_time'] = <<<EOT
+<h3>What does this do?</h3>
+  <p>This modifier converts an integer timestamp, or time/date string into a human readable amount of time from, or to now.  i.e:  &quot;3 hours ago.&quot;</p>
+<h3>What parameters does it take?</h3>
+ <p>This modifier does not accept any optional parameters.</p>
+<h3>Example:</h3>
+  <code><pre>{\$some_timestamp|relative_time}</code></pre>
+EOT;
+
 $lang['help_modifier_summarize'] = <<<EOT
 <h3>What does this do?</h3>
 <p>This modifier is used to truncate a long sequence of text to a limited number of &quot;words&quot;.</p>
@@ -621,6 +630,30 @@ $lang['help_function_get_template_vars'] = <<<EOT
 	<p>Just insert the tag into your template/page like: <code>{get_template_vars}</code></p>
 	<h3>What parameters does it take?</h3>
 	<p><em>(optional)</em> assign (string) - Assign the results to a smarty variable with that name.</p>
+EOT;
+
+$lang['help_function_page_error'] = <<<EOT
+<h3>What does this do?</h3>
+<p>This is an admin plugin that displays an error in a CMSMS admin page.</p>
+<h3>What parameters does it take?</h3>
+<ul>
+  <li>msg - <strong>required string</strong> - The error message to display.</li>
+  <li>assign - <em>(optional)</em> - Assign the output to the named smarty variable.</li>
+</ul>
+<h3>Example:</h3>
+<pre><code>{page_error msg='Error Encountered'}</code></pre>
+EOT;
+
+$lang['help_function_page_warning'] = <<<EOT
+<h3>What does this do?</h3>
+<p>This is an admin plugin that displays a warning in a CMSMS admin page.</p>
+<h3>What parameters does it take?</h3>
+<ul>
+  <li>msg - <strong>required string</strong> - The warning message to display.</li>
+  <li>assign - <em>(optional)</em> - Assign the output to the named smarty variable.</li>
+</ul>
+<h3>Example:</h3>
+<pre><code>{page_warning msg='Something smells fishy'}</code></pre>
 EOT;
 
 $lang['help_function_uploads_url'] = <<<EOT

@@ -24,8 +24,7 @@ function smarty_function_page_error($params,&$template)
 	if( !isset($params['msg']) ) return;
 
 	$out = '<div class="pageerror">'.trim($params['msg']).'</div>';
-	if( isset($params['assign']) )
-	{
+	if( isset($params['assign']) ) {
 		$smarty->assign(trim($params['assign']),$out);
 		return;
 	}
