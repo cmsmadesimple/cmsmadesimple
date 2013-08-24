@@ -894,6 +894,7 @@ $lang['admin']['help_content_image'] = 'This field allows you to associate an im
 $lang['admin']['help_content_menutext'] = 'The menu text is the text that represents this page in the navigation';
 $lang['admin']['help_content_owner'] = 'This field allows you to adjust the owner of this content item.  It is useful when giving access to this page to an editor with less access privileges';
 $lang['admin']['help_content_pagedata'] = 'This is a field where you can enter smarty tags or logic that are specific to this content page, will probably not generate any direct output, and must be processed before anything else on the page';
+$lang['admin']['help_content_pagemeta'] = 'In this field you can enter HTML metatags.  They will be merged with the default meta tags and inserted in the head section of the generated HTML page.';
 $lang['admin']['help_content_parent'] = 'Select an existing page in the content hierarchy which will be the parent page for this content page.  This relationship is used when building a navigation';
 $lang['admin']['help_content_secure'] = 'Specify wether this page should be accessed via a secure (encrypted) connection.  i.e: via HTTPS';
 $lang['admin']['help_content_showinmenu'] = 'Select wether this page will be visible (by default) in the navigation.';
