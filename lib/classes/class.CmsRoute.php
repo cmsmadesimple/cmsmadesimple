@@ -88,6 +88,13 @@ class CmsRoute implements ArrayAccess
 	  return $obj;
   }
 
+  public function signature()
+  {
+	  $tmp = serialize($this->_data);
+	  $tmp = md5($tmp);
+	  return $tmp;
+  }
+
   public function OffsetGet($key)
   {
 	  if( in_array($key,self::$_keys) && isset($this->_data[$key]) ) {
@@ -222,8 +229,6 @@ class CmsRoute implements ArrayAccess
 
 
 } // end of class
-
-
 
 # vim:ts=4 sw=4 noet
 ?>
