@@ -2142,7 +2142,7 @@ abstract class ContentBase
 			break;
 
 		case 'showinmenu':
-			$help = '&nbsp;'.cms_admin_utils::get_help_tag('core','help_content_active');
+			$help = '&nbsp;'.cms_admin_utils::get_help_tag('core','help_content_showinmenu');
 			return array('<label for="showinmenu">'.lang('showinmenu').':</label>'.$help,
 						 '<input type="hidden" name="showinmenu" value="0"/><input class="pagecheckbox" type="checkbox" value="1" name="showinmenu" id="showinmenu"'.($this->mShowInMenu?' checked="checked"':'').' />');
 

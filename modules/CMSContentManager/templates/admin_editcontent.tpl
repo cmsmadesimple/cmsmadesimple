@@ -22,8 +22,12 @@ $(document).ready(function(){
 
   // hide sumit and apply buttons, till something changes
   $('[name$=apply],[name$=submit]').hide();
+  $('#Edit_Content').on('click','[name$=apply],[name$=submit],[name$=cancel]',function(event){
+    $('#Edit_Content').dirtyForm('option','dirty',false);
+  });
 
   // initialize lock manager
+  {if $content_id > 0}
   $('#Edit_Content').lockManager({
     type: 'content',
     oid: {$content_id},
@@ -42,6 +46,7 @@ $(document).ready(function(){
       alert('{$mod->Lang('msg_lostlock')}');
     }
   });
+  {/if}
 
   {if $content_obj->HasPreview()}
   $('#_preview_').click(function(){
@@ -58,6 +63,7 @@ $(document).ready(function(){
   // here we want to disable the dirtyform stuff when these fields are changed
   $('#content_type').change(function(){
     $('#Edit_Content').dirtyForm('disable');
+    $(this).closest('form').submit();
   });
   $('#id_disablewysiwyg').change(function(){
     $('#Edit_Content').dirtyForm('disable');
@@ -76,7 +82,7 @@ $(document).ready(function(){
       return true;
     }
     else {
-      return confirm('{$mod->Lang('cancel')}');
+      return confirm('{$mod->Lang('editcontent_confirm_cancel')}');
     }
   });
 

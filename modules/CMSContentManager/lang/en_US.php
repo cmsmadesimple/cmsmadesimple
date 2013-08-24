@@ -66,6 +66,7 @@ $lang['contractall'] = 'Collapse All';
 $lang['desc_contentmanager_settings'] = 'Adjust settings related to listing, or editing content pages';
 
 #E
+$lang['editcontent_confirm_cancel'] = 'Are you sure you want to cancel this operation?  Some changes may be lost.';
 $lang['error_bulk_permission'] = 'You do not have permission to perform this bulk action';
 $lang['error_contentlocked'] = 'It appears that this content is already locked.  Try to refresh this page to see information about the current editor';
 $lang['error_contenttype_disallowed'] = 'Default Content Type is also set to Disallowed';
