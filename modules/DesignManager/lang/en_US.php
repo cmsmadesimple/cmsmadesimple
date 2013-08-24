@@ -120,6 +120,7 @@ $lang['help_css_mediaquery'] = <<<EOT
 <p>A media query consists of a media type and at least one expression that limits the style sheets' scope by using media features, such as width, height, and color. Added in CSS3, media queries let the presentation of content be tailored to a specific range of output devices without having to change the content itself. For a simple reference see this page on the <a href="https://developer.mozilla.org/en/docs/CSS/Media_queries">mozzilla developer network</a></p><br/>
 <p>CMSMS Allows associating a media query with a stylesheet.  When <code>{cms_stylesheet}</code> renders its output the media query will be automatically placed in the stylesheet tag.</p>
 EOT;
+$lang['help_design_name'] = 'This field contains the unique, logican name for the collection of templates and stylesheets';
 $lang['help_design_created'] = 'This is the date the design was originally crated';
 $lang['help_design_description'] = 'Specify a description for this design (text only).  This may be useful for your future reference, or when sharing this design with others';
 $lang['help_design_modified'] = 'The date the design was last modified';
@@ -318,9 +319,13 @@ $lang['submit'] = 'Submit';
 $lang['submitandedit'] = 'Submit And Edit';
 
 #T
-$lang['title_css_desings'] = 'This column list the design<em>(s)</em> that a stylesheet is attached to';
-$lang['title_css_modified'] = 'Displays the date the stylesheet was last modified';
-$lang['title_css_selectall'] = 'Select <em>(or deselect)</em> all visible stylesheets';
+$lang['title_cat_id'] = 'This column displays the unique integer id for the category.';
+$lang['title_cat_name'] = 'This column displays the unique name for the category.';
+$lang['title_css_desings'] = 'This column lists the design<em>(s)</em> that a stylesheet is attached to';
+$lang['title_css_id'] = 'This column displays the unique integer id for the stylesheet.';
+$lang['title_css_modified'] = 'Displays the date the stylesheet was last modified.';
+$lang['title_css_name'] = 'This column displays the unique name for the styleshet.';
+$lang['title_css_selectall'] = 'Select <em>(or deselect)</em> all visible stylesheets.';
 $lang['title_delete'] = 'TODO';
 $lang['title_designmanager_settings'] = 'Design Manager Settings';
 $lang['title_designs_default'] = 'The default design is automatically selected when creating new content pages.';

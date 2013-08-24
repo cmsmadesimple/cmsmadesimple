@@ -68,10 +68,10 @@ $(document).ready(function(){
   <table class="pagetable">
     <thead>
       <tr>
- 	<th>{$mod->Lang('prompt_id')}</th>
- 	<th>{$mod->Lang('prompt_name')}</th>
-  	<th><span class="tooltip" title="{$mod->Lang('title_css_desings')}">{$mod->Lang('prompt_design')}</span></th>
-	<th><span class="tooltip" title="{$mod->Lang('title_css_modified')}">{$mod->Lang('prompt_modified')}</span></th>
+ 	<th title="{$mod->Lang('title_css_id')}">{$mod->Lang('prompt_id')}</th>
+ 	<th title="{$mod->Lang('title_css_name')}">{$mod->Lang('prompt_name')}</th>
+  	<th title="{$mod->Lang('title_css_designs')}">{$mod->Lang('prompt_design')}</th>
+	<th title="{$mod->Lang('title_css_modified')}">{$mod->Lang('prompt_modified')}</th>
 	<th class="pageicon"></th>{* edit *}
 	<th class="pageicon"></th>{* delete *}
 	<th class="pageicon"><label for="css_selectall" style="display: none;">{$mod->Lang('title_css_selectall')}</label><input id="css_selectall" type="checkbox" value="1" title="{$mod->Lang('title_css_selectall')}"/></th>{* multiple *}

@@ -40,7 +40,7 @@
          <td>
             <span title="{lang_by_realm('tags',$one.type)}">{$one.type}</span>
          </td>
-         <td>{if $one.admin}{lang('yes')}{else}{lang('no')}{/if}</td>
+         <td>{if isset($one.admin) && $one.admin}{lang('yes')}{else}{lang('no')}{/if}</td>
          <td>{if isset($one.cachable) && $one.cachable != ''}{$one.cachable|lang}{/if}</td>
          <td>
            {if isset($one.help_url)}

@@ -10,6 +10,8 @@ Core - General
   - UI Review trough many admin pages
   - New jquery based page selector.
   - Improved and documented htaccess.txt file
+  - Many new smarty plugins to aid in module development and separation of logic from display
+  - adds the {cms_module_hint} plugin
 
 Core - Bug Reports
   -

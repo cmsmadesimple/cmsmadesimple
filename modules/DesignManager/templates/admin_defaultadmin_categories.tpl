@@ -10,8 +10,8 @@ $(document).ready(function () {
 <table id="categorylist" class="pagetable">
 	<thead>
 		<tr>
-			<th width="5%">{$mod->Lang('prompt_id')}</th>
-			<th>{$mod->Lang('prompt_name')}</th>
+			<th width="5%" title="{$mod->Lang('title_cat_id')}">{$mod->Lang('prompt_id')}</th>
+			<th title="{$mod->Lang('title_cat_name')}">{$mod->Lang('prompt_name')}</th>
 			<th class="pageicon"></th>
 			<th class="pageicon"></th>
 		</tr>
