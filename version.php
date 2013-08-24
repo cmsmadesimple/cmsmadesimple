@@ -19,7 +19,7 @@
 #$Id$
 
 $CMS_VERSION = "1.11.8-alpha0";
-$CMS_VERSION_NAME = "Genovesa";
+$CMS_VERSION_NAME = "Fioreana";
 $CMS_SCHEMA_VERSION = "36";
 
 define('CMS_VERSION', $CMS_VERSION);

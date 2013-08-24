@@ -1,4 +1,4 @@
-Version 1.11.8 -
+Version 1.11.8 - Fioreana
 -----------------------------
 Core - General
   - Updated config reference
