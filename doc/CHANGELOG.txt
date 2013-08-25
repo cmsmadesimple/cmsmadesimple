@@ -2,24 +2,29 @@ Version 1.11.8 - Fioreana
 -----------------------------
 Core - General
   - Updated config reference
-  - Fixes to module loading order stuff.
-  - fixes so that a modules create_url method is called from module_support CreateLink function.
+  - Fixes to module loading order stuff
+  - Fixes so that a modules create_url method is called from module_support CreateLink function
   - Adds the TemplatePrefetch event
   - Minor fixes to module XML export
   - Adds the LoadAllContent method and optimizes loading of content list dropdoowns and Listcontent
-  - Performance optimizations for static and dynamic URL handling.
-  - Fixes issues when max_upload_filesize is specified in Gigabytes (G) #9415
+  - Performance optimizations for static and dynamic URL handling
   - Improve the help for content_image
-  - Performance improvements for listcontent and add/editcontent.
-  - Search
-    - No longer index templates and GCB's
-    - Now can stop individual content blocks from being indexed.
+  - Performance improvements for listcontent and add/editcontent
   - Improved and better documented sample htaccess.txt file
-  - News
-    - Adds a dropdown field type to News
-  - Fixes #9391 - bug in get_template_vars
-  - Fixes #9324 - Title is now available when editing a section header.  
-  - Fixes #8807 - Section headers are accessible through changing URL
+
+Core - Bug Reports
+  - #8807 Section headers are accessible through changing URL
+  - #9324 Title is now available when editing a section header
+  - #9391 Bug in get_template_vars
+  - #9415 Function get_upload_size on class.cms_config.php doesn't handle upload_max_filesize correct when it is 1G
+
+Core - News
+  - Adds a dropdown field type to News
+
+Core - Search
+  - No longer index templates and GCB's
+  - Now can stop individual content blocks from being indexed
+
 
 Version 1.11.7 - Genovesa
 -----------------------------
@@ -1397,9 +1402,9 @@ Version 1.3 "Cuba" -- June 7, 2008
 - Listcontent is now cleaned-up and has better security checks
 - Minor improvements to listmodules
 - Admin templates are now override-able by creating a matching file in 
-  module_custom/<module name>/templates/<template filename>.tpl
+  module_custom/[module name]/templates/[template filename].tpl
 - All language files are now override-able by creating a matching file in
-  module_custom/<module name>/lang/<language name>.php
+  module_custom/[module name]/lang/[language name].php
 - Adds a new PageLink content type to allow linking to an internal page
   easily
 - The {sitemap} plugin is deprecated, and replaced by {site_mapper} which
