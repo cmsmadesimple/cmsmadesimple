@@ -92,8 +92,8 @@ class Content extends ContentBase
     function SetProperties()
     {
       parent::SetProperties();
-	  $this->AddProperty('design_id',2,self::TAB_OPTIONS);
-      $this->AddProperty('template',2,self::TAB_OPTIONS);
+	  $this->AddProperty('design_id',0,self::TAB_OPTIONS);
+      $this->AddProperty('template',0,self::TAB_OPTIONS);
       $this->AddProperty('searchable',20,self::TAB_OPTIONS);
       $this->AddProperty('disable_wysiwyg',60,self::TAB_OPTIONS);
 
@@ -135,13 +135,14 @@ class Content extends ContentBase
 			$blocks = $this->get_content_blocks();
 			if( is_array($blocks) && count($blocks) ) {
 				foreach($blocks as $blockName => $blockInfo) {
-					$parameters[] = $blockInfo['id'];
+					$name = $blockInfo['id'];
+					$parameters[] = $name;
 					if( isset($blockInfo['type']) && $blockInfo['type'] == 'module' ) {
 						$module = cms_utils::get_module($blockInfo['module']);
 						if( !is_object($module) ) continue;
 						if( !$module->HasCapability('contentblocks') ) continue;
 						$tmp = $module->GetContentBlockValue($blockName,$blockInfo['params'],$params);
-						if( $tmp != null ) $params[$blockInfo['id']] = $tmp;
+						if( $tmp != null ) $params[$name] = $tmp;
 					}
 				}
 			}
@@ -340,12 +341,16 @@ class Content extends ContentBase
 
 		case 'pagemetadata':
 			$help = '&nbsp;'.cms_admin_utils::get_help_tag('core','help_content_pagemeta');
-			return array('<label for="id_pagemetadata">'.lang('page_metadata').':</label>'.$help,create_textarea(false, $this->Metadata(), 'metadata', 'pagesmalltextarea', 'metadata', '', '', '80', '6'));
+			return array('<label for="id_pagemetadata">'.lang('page_metadata').':</label>'.$help,
+						 CmsFormUtils::create_textarea(array('name'=>'metadata','value'=>$this->MetaData(),
+															 'classname'=>'pagesmalltextarea',
+															 'id'=>'metadata')));
 
 		case 'pagedata':
 			$help = '&nbsp;'.cms_admin_utils::get_help_tag('core','help_content_pagedata');
 			return array('<label for="id_pagedata">'.lang('pagedata_codeblock').':</label>'.$help,
-						 create_textarea(false,$this->GetPropertyValue('pagedata'),'pagedata','pagesmalltextarea','id_pagedata','','','80','6'));
+						 CmsFormUtils::create_textarea(array('name'=>'pagedata','value'=>$this->GetPropertyValue('pagedata'),
+															 'classname'=>'pagesmalltextarea','id'=>'id_pagedata')));
 
 		case 'searchable':
 			$searchable = $this->GetPropertyValue('searchable');
@@ -385,13 +390,18 @@ class Content extends ContentBase
 	* does not include a label.
 	*/
 	private function _display_text_block($blockInfo,$value,$adding)
-	{
+	{											
 		$ret = '';
-		$oneline = isset($blockInfo['oneline']) && cms_to_bool($blockInfo['oneline']);
+		$oneline = cms_to_bool(get_parameter_value($blockInfo,'oneline'));
+		$required = cms_to_bool(get_parameter_value($blockInfo,'required'));
+		$placeholder = get_parameter_value($blockInfo,'placeholder');
+		$maxlength = get_parameter_value($blockInfo,'maxlength',255);
 		if ($oneline) {
-			$size = (isset($blockInfo['size']))?$blockInfo['size']:50;
-			$maxlength = (isset($blockInfo['maxlength']))?$blockInfo['maxlength']:255;
-			$ret = '<input type="text" size="'.$size.'" maxlength="'.$maxlength.'" name="'.$blockInfo['id'].'" value="'.cms_htmlentities($value, ENT_NOQUOTES, get_encoding('')).'" />';
+			$size = get_parameter_value($blockInfo,'size',50);
+			$ret = '<input type="text" size="'.$size.'" maxlength="'.$maxlength.'" name="'.$blockInfo['id'].'" value="'.cms_htmlentities($value, ENT_NOQUOTES, get_encoding('')).'"';
+			if( $required ) $ret .= " required=\"required\"";
+			if( $placeholder ) $ret .= " placeholder=\"{$placeholder}\"";
+			$ret .= '/>';
 		}
 		else {
 			$block_wysiwyg = true;
@@ -404,7 +414,13 @@ class Content extends ContentBase
 				$block_wysiwyg = $blockInfo['usewysiwyg'] == 'false'?false:true;
 			}
 
-			$ret = create_textarea($block_wysiwyg, $value, $blockInfo['id'], '', $blockInfo['id']);
+			$parms = array('name'=>$blockInfo['id'],'enablewysiwyg'=>$block_wysiwyg,
+						   'value'=>$value,'id'=>$blockInfo['id']);
+			if( $required ) $parms['required'] = 'required';
+			if( $placeholder ) $parms['placeholder'] = $placeholder;
+			$parms['width'] = 80;
+			$parms['height'] = 2;
+			$ret = CmsFormUtils::create_textarea($parms);
 		}
 		return $ret;
 	}
@@ -472,16 +488,21 @@ class Content extends ContentBase
 		// it'd be nice if the content block was an object..
 		// but I don't have the time to do it at the moment.
 		$field = '';
-		$label = '';
-		if( isset($blockInfo['label']) && $blockInfo['label'] != '') {
-			$label = '<label for="'.$blockInfo['id'].'">'.$blockInfo['label'].':</label>';
+		$help = '';
+		$label = trim(get_parameter_value($blockInfo,'label'));
+		$required = cms_to_bool(get_parameter_value($blockInfo,'required','false'));
+		if( $blockName == 'content_en' && $label == '' ) {
+			$help = '&nbsp;'.cms_admin_utils::get_help_tag('core','help_content_content_en');
+			$label = lang('content');
+			$blockInfo['required'] = true;
+			$required = true;
 		}
+		if( $required ) $label = '*'.$label;
+		
 		switch( $blockInfo['type'] ) {
 		case 'text':
-			if( $blockName == 'content_en' && $label == '' ) {
-				$help = '&nbsp;'.cms_admin_utils::get_help_tag('core','help_content_content_en');
-				$label = '<label for="content_en">*'.lang('content').':</label>&nbsp;'.$help;
-			}
+			$label = '<label for="'.$blockName.'">'.$label.':</label>';
+			if( $help ) $label .= '&nbsp;'.$help;
 			$field = $this->_display_text_block($blockInfo,$value,$adding);
 			break;
 

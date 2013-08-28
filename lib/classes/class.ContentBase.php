@@ -2118,12 +2118,12 @@ abstract class ContentBase
 		case 'title':
 			$help = '&nbsp;'.cms_admin_utils::get_help_tag('core','help_content_title');
 			return array('<label for="in_title">*'.lang('title').':</label>'.$help,
-						 '<input type="text" id="in_title" name="title" value="'.cms_htmlentities($this->mName).'" />');
+						 '<input type="text" id="in_title" name="title" required="required" value="'.cms_htmlentities($this->mName).'" />');
 	      
 		case 'menutext':
 			$help = '&nbsp;'.cms_admin_utils::get_help_tag('core','help_content_menutext');
 			return array('<label for="in_menutext">*'.lang('menutext').':</label>'.$help,
-						 '<input type="text" name="menutext" id="in_menutext" value="'.cms_htmlentities($this->mMenuText).'" />');
+						 '<input type="text" name="menutext" id="in_menutext" required="required" value="'.cms_htmlentities($this->mMenuText).'" />');
 
 		case 'parent':
 			$contentops = $gCms->GetContentOperations();

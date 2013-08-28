@@ -97,9 +97,7 @@ final class CmsFormUtils
   private static function _add_syntax($module_name)
   {
     if( !is_array(self::$_activated_syntax) ) self::$_activated_syntax = array();
-    if( !in_array($module_name,self::$_activated_syntax) ) {
-      self::$_activated_syntax[] = $module_name;
-    }
+    if( !in_array($module_name,self::$_activated_syntax) ) self::$_activated_syntax[] = $module_name;
   }
 
   public static function get_syntax_modules()
@@ -110,9 +108,7 @@ final class CmsFormUtils
   private static function _add_wysiwyg($module_name)
   {
     if( !is_array(self::$_activated_wysiwyg) ) self::$_activated_wysiwyg = array();
-    if( !in_array($module_name,self::$_activated_wysiwyg) ) {
-      self::$_activated_wysiwyg[] = $module_name;
-    }
+    if( !in_array($module_name,self::$_activated_wysiwyg) ) self::$_activated_wysiwyg[] = $module_name;
   }
 
   public static function get_wysiwyg_modules()
@@ -141,40 +137,65 @@ final class CmsFormUtils
    * @return string
    * @deprecated
    */
-  public static function create_textarea($enablewysiwyg, $text, $name, $classname = '', $id = '', 
-			   $encoding = '', $stylesheet = '', $width = '80', $height = '15', 
-			   $forcewysiwyg = '', $wantedsyntax = '', $addtext = '')
+//   public static function create_textarea($enablewysiwyg, $text, $name, $classname = '', $id = '', 
+// 			   $encoding = '', $stylesheet = '', $width = '80', $height = '15', 
+// 			   $forcewysiwyg = '', $wantedsyntax = '', $addtext = '')
+  public static function create_textarea($parms)
   {
     // todo: rewrite me with var args... to accept a numeric array of arguments, or a hash.
     $gCms = cmsms();
     $haveit = FALSE;
     $result = '';
     $uid = get_userid(false);
-    if( !$classname ) $classname = "cms_textarea";
-    if( !$id ) $id = $name;
-    
+    $attribs = array();
+    $attribs['name'] = get_parameter_value($parms,'name');
+    if( !$attribs['name'] ) throw new CmsInvalidDataException('"name" is a required parameter"');
+    $attribs['id'] = get_parameter_value($parms,'id',$attribs['name']);
+    $attribs['class'] = get_parameter_value($parms,'class','cms_textarea');
+    $attribs['class'] = get_parameter_value($parms,'classname',$attribs['class']);
+
+    $enablewysiwyg = cms_to_bool(get_parameter_value($parms,'enablewysiwyg','false'));
+    $forcewysiwyg = cms_to_bool(get_parameter_value($parms,'forcewysiwyg'));
     if ($enablewysiwyg == true || $forcewysiwyg) {
       $haveit = TRUE;
       $module = cms_utils::get_wysiwyg_module($forcewysiwyg);
       if( $module ) {
 	self::_add_wysiwyg($module->GetName());
-	$classname .= " cms_wysiwyg ".$module->GetName();
+	$attribs['class'] .= " cms_wysiwyg ".$module->GetName();
       }
     }
 
+    $wantedsyntax = get_parameter_value($parms,'wantedsyntax');
     if( !$haveit && $wantedsyntax ) {
       // here we should get a list of installed/available modules.
       $haveit = TRUE;
       $module = cmsms()->GetModuleOperations()->GetSyntaxHighlighter($wantedsyntax);
       if( $module ) {
 	self::_add_syntax($module->GetName());
-	$classname .= " cms_syntaxarea ".$module->GetName();
+	$attribs['class'] .= " cms_syntaxarea ".$module->GetName();
       }
     }
 
-    $result = '<textarea name="'.$name.'" cols="'.$width.'" rows="'.$height.'"';
-    if ($classname != '') $result .= ' class="'.$classname.'"';
-    if ($id != '') $result .= ' id="'.$id.'"';
+    $attribs['cols'] = get_parameter_value($parms,'cols');
+    $attribs['cols'] = get_parameter_value($parms,'width',$attribs['cols']);
+    if( $attribs['cols'] < 0 ) $attribs['cols'] = '';
+    $attribs['rows'] = get_parameter_value($parms,'rows');
+    $attribs['rows'] = get_parameter_value($parms,'height',$attribs['rows']);
+    if( $attribs['rows'] < 0 ) $attribs['rows'] = '';
+    $attribs['maxlength'] = get_parameter_value($parms,'maxlength');
+    if( $attribs['maxlength'] < 0 ) $attribs['maxlength'] = '';
+    $attribs['placeholder'] = get_parameter_value($parms,'placeholder');
+    $attribs['required'] = get_parameter_value($parms,'required');
+
+    $addtext = get_parameter_value($parms,'addtext');
+    $text = get_parameter_value($parms,'value');
+    $text = get_parameter_value($parms,'text',$text);
+    $encoding = get_parameter_value($parms,'encoding');
+
+    $result = '<textarea';
+    foreach( $attribs as $key => $val ) {
+      if( $val != '' ) $result .= " {$key}=\"{$val}\"";
+    }
     if( !empty( $addtext ) ) $result .= ' '.$addtext;
     $result .= '>'.cms_htmlentities($text,ENT_NOQUOTES,get_encoding($encoding)).'</textarea>';
     return $result;

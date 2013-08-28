@@ -235,6 +235,7 @@ $lang['help_function_content_module'] = <<<EOT
  <li><strong>(required)</strong>module - The name of the module that will provide this content block. This module must be installed and available</li>
  <li><strong>(required)</strong>block  - The name of the content block.</li>
  <li><em>(optional)</em>label - A label for the content block for use when editing the page.</li>
+ <li><em>(optional)</em> required - Allows specifying that the content block must contain some text.</em></li>
  <li><em>(optional)</em> tab - The desired tab to display this field on in the edit form..</li>
  <li><em>(optional)</em> assign (string) - Assign the results to a smarty variable with that name.</li>
  </ul>
@@ -455,6 +456,12 @@ $lang['help_function_search'] = <<<EOT
 	</p>
 	<h3>How do I use it?</h3>
 	<p>Just put <code>{search}</code> in a template where you want the search input box to appear. For help about the Search module, please refer to the Search module help.</p>
+EOT;
+
+$lang['help_function_syntax_area'] = <<<EOT
+  <h3>What does this do?</h3>
+  <h3>How do I use it?</h3>
+  <h3>What parameters does it take?</h3>
 EOT;
 
 $lang['help_function_root_url'] = <<<EOT
@@ -724,12 +731,13 @@ $lang['help_function_content'] = <<<EOT
 <p>Now, when you edit a page there will a textarea called "Second Content Block".</p></li>
 		<li><em>(optional) </em>wysiwyg (true/false) - If set to false, then a WYSIWYG will never be used while editing this block. If true, then it acts as normal.  Only works when block parameter is used.</li>
 		<li><em>(optional) </em>oneline (true/false) - If set to true, then only one edit line will be shown while editing this block. If false, then it acts as normal.  Only works when block parameter is used.</li>
-<li><em>(optional) </em>size - Applicable only when the oneline option is used this optional parameter allows you to specify the size of the edit field.  The default value is 50.</li>
-<li><em>(optional) </em>maxlength - Applicable only when the oneline option is used this optional parameter allows you to specify the maximum length of input for the edit field.  The default value is 255.</li>
-		<li><em>(optional) </em>default - Allows you to specify default content for this content blocks (additional content blocks only).</li>
-		<li><em>(optional) </em>label - Allows specifying a label for display in the edit content page.</li>
-	        <li><em>(optional)</em> required - Allows specifying that the content block must contain some text.</em>
-                <li><em>(optional)</em> tab - The desired tab to display this field on in the edit form..</li>
+	        <li><em>(optional) </em>size (positive integer) - Applicable only when the oneline option is used this optional parameter allows you to specify the size of the edit field.  The default value is 50.</li>
+		<li><em>(optional) </em>maxlength (positive integer) - Applicable only when the oneline option is used this optional parameter allows you to specify the maximum length of input for the edit field.  The default value is 255.</li>
+	        <li><em>(optional) </em>default (string) - Allows you to specify default content for this content blocks (additional content blocks only).</li>
+		<li><em>(optional) </em>label (string) - Allows specifying a label for display in the edit content page.</li>
+	        <li><em>(optional)</em> required (true/false) - Allows specifying that the content block must contain some text.</em></li>
+	        <li><em>(optional)</em> placeholder (string) - Allows specifying placeholder text.</li>
+	        <li><em>(optional)</em> tab (string) - The desired tab to display this field on in the edit form..</li>
 		<li><em>(optional) </em>assign - Assigns the content to a smarty parameter, which you can then use in other areas of the page, or use to test whether content exists in it or not.
 <p>Example of passing page content to a User Defined Tag as a parameter:</p></li>
 <pre>
@@ -1043,6 +1051,10 @@ $lang['tag_cachable'] = 'Indicates wether the output of the plugin can be cached
 $lang['tag_help'] = 'Display the help (if any exists) for this tag';
 $lang['tag_name'] = 'This is the name of the tag';
 $lang['tag_type'] = 'The tag type (function, modifier, or a pre or post filter)';
+$lang['title_admin'] = 'This plugin is only available from the CMSMS admin console..';
+$lang['title_notadmin'] = 'This plugin is usable in both the admin console and on the website frontent.';
+$lang['title_cachable'] = 'This plugin is cachable';
+$lang['title_notcachable'] = 'This plugin is not cachable';
 $lang['viewabout'] = 'Display history and author information for this module';
 $lang['viewhelp'] = 'Display help for this module';
 ?>

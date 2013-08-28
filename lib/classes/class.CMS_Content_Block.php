@@ -58,29 +58,20 @@ final class CMS_Content_Block
   {
     // {content} tag encountered.
     $rec = array('type'=>'text','id'=>'','name'=>'','usewysiwyg'=>'true','oneline'=>'false','default'=>'','label'=>'',
-		 'size'=>'50','tab'=>'','maxlength'=>'255','required'=>0);
+		 'size'=>'50','tab'=>'','maxlength'=>'255','required'=>0,'placeholder'=>'');
     foreach( $params as $key => $value ) {
       $value = trim($value,'"\'');
       if( $key == 'type' ) continue;
-      if( $key == 'block' ) {
-	$key = 'name';
-      }
-      if( $key == 'wysiwyg' ) {
-	$key = 'usewysiwyg';
-      }
-
-      if( isset($rec[$key]) ) {
-	$rec[$key] = $value;
-      }
+      if( $key == 'block' ) $key = 'name';
+      if( $key == 'wysiwyg' ) $key = 'usewysiwyg';
+      if( isset($rec[$key]) ) $rec[$key] = $value;
     }
 
     if( !$rec['name'] ) {
       $rec['name'] = 'content_en';
       $rec['id'] = 'content_en';
     }
-    if( !$rec['id'] ) {
-      $rec['id'] = str_replace(' ','_',$rec['name']);
-    }
+    if( !$rec['id'] ) $rec['id'] = str_replace(' ','_',$rec['name']);
 
     // check for duplicate.
     if( isset(self::$_contentBlocks[$rec['name']]) ) {
@@ -98,8 +89,7 @@ final class CMS_Content_Block
       throw new CmsEditContentException('{content_image} tag requires block parameter');
     }
 
-    $rec = array('type'=>'image','id'=>'','name'=>'','label'=>'',
-		 'upload'=>true,'dir'=>'','default'=>'','tab'=>'',
+    $rec = array('type'=>'image','id'=>'','name'=>'','label'=>'','upload'=>true,'dir'=>'','default'=>'','tab'=>'',
 		 'exclude'=>'','sort'=>0);
     foreach( $params as $key => $value ) {
       if( $key == 'type' ) continue;
@@ -133,9 +123,7 @@ final class CMS_Content_Block
 		 'blocktype'=>'','tab'=>'');
     $parms = array();
     foreach( $params as $key => $value ) {
-      if( $key == 'block' ) {
-	$key = 'name';
-      }
+      if( $key == 'block' ) $key = 'name';
 
       $value = trim(trim($value,'"\''));
       if( isset($rec[$key]) ) {
@@ -150,9 +138,7 @@ final class CMS_Content_Block
       $n = count(self::$_contentBlocks)+1;
       $rec['id'] = $rec['name'] = 'module_'+$n;
     }
-    if( !$rec['id'] ) {
-      $rec['id'] = str_replace(' ','_',$rec['name']);
-    }
+    if( !$rec['id'] ) $rec['id'] = str_replace(' ','_',$rec['name']);
     $rec['params'] = $parms;
     if( $rec['module'] == '' ) {
       throw new CmsEditContentException('Missing module param for content_module tag');
@@ -217,9 +203,7 @@ final class CMS_Content_Block
 	if( count($installedmodules) ) {
 	  // case insensitive module match.
 	  foreach( $installedmodules  as $key ) {
-	    if (strtolower($modulename) == strtolower($key)) {
-	      $modulename = $key;
-	    }
+	    if (strtolower($modulename) == strtolower($key)) $modulename = $key;
 	  }
 		      
 	  if (!isset($modulename) || empty($modulename) ) {
@@ -245,6 +229,7 @@ final class CMS_Content_Block
 	    unset($params['size']);
 	    unset($params['tab']);
 	    unset($params['required']);
+	    unset($params['placeholder']);
 	    $params = array_merge($params, ModuleOperations::get_instance()->GetModuleParameters($id));
 	    $returnid = '';
 	    if (isset($params['returnid'])) {
@@ -259,9 +244,7 @@ final class CMS_Content_Block
 	    $result = $modobj->DoActionBase($action, $id, $params, $returnid);
 	    $smarty->caching = $oldcache;
 
-	    if ($result !== FALSE) {
-	      echo $result;
-	    }
+	    if ($result !== FALSE) echo $result;
 	    $modresult = @ob_get_contents();
 	    @ob_end_clean();
 	    return self::content_return($modresult, $params, $smarty);
@@ -301,9 +284,7 @@ final class CMS_Content_Block
     $gCms = cmsms();
 
     $contentobj = cmsms()->get_content_object();
-    if( !is_object($contentobj) || $contentobj->Id() <= 0 ) {
-      return self::content_return('', $params, $smarty);
-    }
+    if( !is_object($contentobj) || $contentobj->Id() <= 0 ) return self::content_return('', $params, $smarty);
 
     $result = $smarty->fetch('content:pagedata','',$contentobj->Id());
     if( isset($params['assign']) ){
@@ -320,14 +301,10 @@ final class CMS_Content_Block
     $config = $gCms->GetConfig();
 
     $contentobj = $gCms->get_content_object();
-    if( !is_object($contentobj) || $contentobj->Id() <= 0 ) {
-      return self::content_return('', $params, $smarty);
-    }
+    if( !is_object($contentobj) || $contentobj->Id() <= 0 ) return self::content_return('', $params, $smarty);
 
     $adddir = get_site_preference('contentimage_path');
-    if( isset($params['dir']) && $params['dir'] != '' ) {
-      $adddir = $params['dir'];
-    }
+    if( isset($params['dir']) && $params['dir'] != '' ) $adddir = $params['dir'];
     $dir = cms_join_path($config['uploads_path'],$adddir);
     $basename = basename($config['uploads_path']);
 
@@ -339,8 +316,7 @@ final class CMS_Content_Block
       $smarty->caching = $oldvalue;
     }
     $img = $result;
-    if( $img == -1 || empty($img) )
-      return;
+    if( $img == -1 || empty($img) ) return;
 
     // create the absolute url.
     if( startswith($img,$basename) ) {
@@ -375,24 +351,11 @@ final class CMS_Content_Block
     }
     else {
       $out = '<img src="'.$img.'" ';
-//       if( !empty($name) ) {
-// 	$out .= 'name="'.$name.'" ';
-//       }
-      if( !empty($class) ) {
-	$out .= 'class="'.$class.'" ';
-      }
-      if( !empty($xid) ) {
-	$out .= 'id="'.$xid.'" ';
-      }
-      if( !empty($width) ) {
-	$out .= 'width="'.$width.'" ';
-      }
-      if( !empty($height) ) {
-	$out .= 'height="'.$height.'" ';
-      }
-      if( !empty($alt) ) {
-	$out .= 'alt="'.$alt.'" ';
-      }
+      if( !empty($class) ) $out .= 'class="'.$class.'" ';
+      if( !empty($xid) ) $out .= 'id="'.$xid.'" ';
+      if( !empty($width) ) $out .= 'width="'.$width.'" ';
+      if( !empty($height) ) $out .= 'height="'.$height.'" ';
+      if( !empty($alt) ) $out .= 'alt="'.$alt.'" ';
       $out .= '/>';
     }
     if( isset($params['assign']) ){
@@ -408,9 +371,7 @@ final class CMS_Content_Block
     $result = '';
     $key = '';
 
-    if( !isset($params['block']) ) {
-      return;
-    }
+    if( !isset($params['block']) ) return;
     $block = $params['block'];
 
     $gCms = cmsms();

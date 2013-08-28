@@ -2321,10 +2321,29 @@ abstract class CMSModule
    * @param string The language the content should be syntaxhightlighted as
    * @param string Any additional text to include with the textarea field.
    * @return string
+   * @deprecated
    */
   function CreateTextArea($enablewysiwyg, $id, $text, $name, $classname='', $htmlid='', $encoding='', $stylesheet='', $cols='80', $rows='15',$forcewysiwyg='',$wantedsyntax='',$addtext='')
   {
-	  return CmsFormUtils::create_textarea($enablewysiwyg, $text, $id.$name, $classname, $htmlid, $encoding, $stylesheet, $cols, $rows,$forcewysiwyg,$wantedsyntax,$addtext);
+	  $parms = array();
+	  $parms['enablewysiwyg'] = $enablewysiwyg;
+	  $parms['name'] = $id.$name;
+	  if( $classname ) $parms['classname'] = $classname;
+	  if( $htmlid ) $parms['id'] = $htmlid;
+	  if( $encoding ) $parms['encoding'] = $encoding;
+	  if( $stylesheet ) $parms['stylesheet'] = $stylesheet;
+	  if( $cols ) $parms['width'] = $cols;
+	  if( $rows ) $parms['height'] = $rows;
+	  if( $forcewysiwyg ) $parms['forcewysiwyg'] = $forcewysiwyg;
+	  if( $wantedsyntax ) $parms['wantedsyntax'] = $wantedsyntax;
+	  if( $addtext ) $parms['addtext'] = $addtext;
+
+	  try {
+		  return CmsFormUtils::create_textarea($parms);
+	  }
+	  catch( CmsException $e ) {
+		  return '';
+	  }
   }
 
 

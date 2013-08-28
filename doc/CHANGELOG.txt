@@ -12,6 +12,8 @@ Core - General
   - Improved and documented htaccess.txt file
   - Many new smarty plugins to aid in module development and separation of logic from display
   - adds the {cms_module_hint} plugin
+  - {content},{content_image},and {content_module} plugins all receive the required attribute
+  - {content} tag now has the placeholder attribute.
 
 Core - Bug Reports
   -

@@ -232,7 +232,7 @@ for( $currenttab = 0; $currenttab < $numberoftabs; $currenttab++ ) {
   if( $currenttab == 0 ) {
     // first tab... add the content type selector.
     $help = '&nbsp;'.cms_admin_utils::get_help_tag('help_content_type');
-    $tmp = array('<label for="content_type">'.$this->Lang('prompt_editpage_contenttype').'</label>'.$help);
+    $tmp = array('<label for="content_type">*'.$this->Lang('prompt_editpage_contenttype').':</label>'.$help);
     $tmp2 = "<select id=\"content_type\" name=\"{$id}content_type\">";
     foreach( $existingtypes as $k => $v ) {
       if( $k == 'errorpage' && !$this->CheckPermission('Manage All Content') ) {

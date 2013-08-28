@@ -40,8 +40,20 @@
          <td>
             <span title="{lang_by_realm('tags',$one.type)}">{$one.type}</span>
          </td>
-         <td>{if isset($one.admin) && $one.admin}{lang('yes')}{else}{lang('no')}{/if}</td>
-         <td>{if isset($one.cachable) && $one.cachable != ''}{$one.cachable|lang}{/if}</td>
+         <td>
+            {if isset($one.admin) && $one.admin}
+              <span title="{lang_by_realm('tags','title_admin')}">{lang('yes')}</span>
+            {else}
+              <span title="{lang_by_realm('tags','title_notadmin')}">{lang('no')}</span>
+            {/if}
+         </td>
+         <td>
+            {if isset($one.cachable) && $one.cachable == 'yes'}
+              <span title="{lang_by_realm('tags','title_cachable')}">{lang('yes')}</span>
+            {else}
+              <span title="{lang_by_realm('tags','title_notcachable')}">{lang('no')}</span>
+            {/if}
+         </td>
          <td>
            {if isset($one.help_url)}
              <a href="{$one.help_url}" title="{lang_by_realm('tags','viewhelp')}">{'help'|lang}</a>

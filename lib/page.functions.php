@@ -453,9 +453,27 @@ function & stripslashes_deep(&$value)
  */
 function create_textarea($enablewysiwyg, $text, $name, $classname = '', $id = '', $encoding = '', $stylesheet = '', $width = '80', $height = '15', $forcewysiwyg = '', $wantedsyntax = '', $addtext = '')
 {
-  return CmsFormUtils::create_textarea($enablewysiwyg,$text,$name,$classname,$id,
-				       $encoding,$stylesheet,$width,$height,$forcewysiwyg,
-				       $wantedsyntax,$addtext);
+  $parms = array();
+  $parms['enablewysiwyg'] = $enablewysiwyg;
+  $parms['text'] = $text;
+  $parms['name'] = $name;
+  if( $classname ) $parms['classname'] = $classname;
+  if( $id ) $parms['id'] = $id;
+  if( $encoding ) $parms['encoding'] = $encoding;
+  //  if( $stylesheet ) $parms['stylesheet'] = $stylesheet; // ignored
+  if( $width ) $parms['width'] = $width;
+  if( $height ) $parms['height'] = $height;
+  if( $forcewysiwyg ) $parms['forcewysiwyg'] = $forcewysiwyg;
+  if( $wantedsyntax ) $parms['wantedsyntax'] = $wantedsyntax;
+  if( $addtext ) $parms['addtext'] = $addtext;
+
+  try {
+    return CmsFormUtils::create_textarea($parms);
+  }
+  catch( CmsException $e ) {
+    // do nothing.
+    return '';
+  }
 }
 
 

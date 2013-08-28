@@ -60,7 +60,7 @@ $(document).ready(function(){
   $('#searchbtn').on('click',function(e){
     $('#searchresults').html('');
   });
-  $('li.section').on('click',function(){
+  $('#searchresults').on('click','li.section',function(){
     $('.section_children').hide();
     $(this).children('ul').show();
   });
