@@ -31,7 +31,7 @@ function smarty_function_tab_header($params,&$template)
 	    $active = TRUE;
 	  }
 	  else {
-	    $active = (int)$tmp;
+	    $active = cms_to_bool($tmp);
 	  }
 	}
 
