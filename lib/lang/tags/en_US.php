@@ -416,6 +416,81 @@ $lang['help_function_valid_css'] = <<<EOT
     </ul>
 EOT;
 
+$lang['help_function_tab_end'] = <<<EOT
+<h3>What does this do?</h3>
+  <p>This plugin outputs the HTML code to denote the end of a content area.</p>
+<h3>How do I use it?</h3>
+<p>The following code creates a tabbed content area with two tabs.</p>
+<pre><code>{tab_header name='tab1' label='Tab One'}
+{tab_header name='tab2' label='Tab Two'}
+{tab_start name='tab1'}
+&lt;p&gt;This is tab One&lt;/p&gt;
+{tab_start name='tab2'}
+&lt;p&gt;This is tab Two&lt;/p&gt;
+<span style="color: blue;">{tab_end}</span></code></pre>
+<h3>What parameters does it take?</h3>
+<ul>
+   <li>assign - <em>(optional)</em> - Assign the output to the named smarty variable.</li>
+</ul>
+<h3>See Also:</h3>
+  <ul>
+    <li>{tab_header}</li>
+    <li>{tab_start}</li>
+  </ul>
+EOT;
+
+$lang['help_function_tab_header'] = <<<EOT
+<h3>What does this do?</h3>
+  <p>This tag generates the HTML code to delimit the header for a single tab in a tabbed content area.</p>
+<h3>How do I use it?</h3>
+<p>The following code creates a tabbed content area with two tabs.</p>
+<pre><code><span style="color: blue;">{tab_header name='tab1' label='Tab One'}</span>
+<span style="color: blue;">{tab_header name='tab2' label='Tab Two'}</span>
+{tab_start name='tab1'}
+&lt;p&gt;This is tab One&lt;/p&gt;
+{tab_start name='tab2'}
+&lt;p&gt;This is tab Two&lt;/p&gt;
+{tab_end}</code></pre>
+<p><strong>Note:</strong> <code>{tab_start}</code> must be called with the names in the same order that they were provided to <code>{tab_header}</code></p>
+<h3>What parameters does it take?</h3>
+<ul>
+   <li><strong>name - required string</strong> - The name of the tab.  Must match the name of a tab passed to {tab_header}</li>
+   <li>label - <em>optional string</em> - The human readable label for the tab.  If not specified, the tab name will be used.</li>
+   <li>active - <em>optional mixed./em> - Indicates wether this is the active tab or not.  You may pass in the name (string) of the active tab in a sequance of tab headers, or a boolean value.</li>
+   <li>assign - <em>(optional)</em> - Assign the output to the named smarty variable.</li>
+</ul>
+<h3>See Also:</h3>
+  <ul>
+    <li>{tab_start}</li>
+    <li>{tab_end}</li>
+  </ul>
+EOT;
+
+$lang['help_function_tab_start'] = <<<EOT
+<h3>What does this do?</h3>
+  <p>This plugin provides the html code to delimit the start of content for a specific tab in a tabbed content area.</p>
+<h3>How do I use it?</h3>
+<p>The following code creates a tabbed content area with two tabs.</p>
+<pre><code>{tab_header name='tab1' label='Tab One'}
+{tab_header name='tab2' label='Tab Two'}
+<span style="color: blue;">{tab_start name='tab1'}</span>
+&lt;p&gt;This is tab One&lt;/p&gt;
+<span style="color: blue;">{tab_start name='tab2'}</span>
+&lt;p&gt;This is tab Two&lt;/p&gt;
+{tab_end}</code></pre>
+<p><strong>Note:</strong> <code>{tab_start}</code> must be called with the names in the same order that they were provided to <code>{tab_header}</code></p>
+<h3>What parameters does it take?</h3>
+<ul>
+   <li><strong>name - required</strong> - The name of the tab.  Must match the name of a tab passed to {tab_header}</li>
+   <li>assign - <em>(optional)</em> - Assign the output to the named smarty variable.</li>
+</ul>
+<h3>See Also:</h3>
+  <ul>
+    <li>{tab_header}</li>
+    <li>{tab_end}</li>
+  </ul>
+EOT;
+
 $lang['help_function_title'] = <<<EOT
 	<h3>What does this do?</h3>
 	<p>Prints the title of the page.</p>
