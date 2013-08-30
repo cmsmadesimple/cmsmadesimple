@@ -2,14 +2,14 @@
 $(document).ready(function(){
     cms_checkAll('#tpl_selall');
 
-    $('a.steal_lock').on('click',function(e) {
+    $('a.steal_tpl_lock').on('click',function(e) {
       // we're gonna confirm stealing this lock.
       var v = confirm('{$mod->Lang('confirm_steal_lock')}');
       return v;
     });
 
     $('a.edit_tpl').on('click',function() {
-      if( $(this).hasClass('steal_lock') ) return true;
+      if( $(this).hasClass('steal_tpl_lock') ) return true;
 
       // do a double check to see if this page is locked or not.
       var tpl_id = $(this).attr('data-tpl-id');
@@ -240,7 +240,7 @@ $(document).ready(function(){
   	    <td>
 	      {$lock=$template->get_lock()}
 	      {if $lock.expires < $smarty.now}
-	        <a href="{$edit_tpl}" data-tpl-id="{$template->get_id()}" accesskey="e" class="steal_lock">{admin_icon icon='permissions.gif' class='edit_tpl steal_lock' title=$mod->Lang('prompt_steal_lock')}</a>
+	        <a href="{$edit_tpl}" data-tpl-id="{$template->get_id()}" accesskey="e" class="steal_tpl_lock">{admin_icon icon='permissions.gif' class='edit_tpl steal_tpl_lock' title=$mod->Lang('prompt_steal_lock')}</a>
 	      {/if}
 	    </td>
 	    <td></td>
@@ -248,7 +248,7 @@ $(document).ready(function(){
 
 	  {* delete column *}
 	  <td>
- 	    {if !$template->get_type_dflt()}
+ 	    {if !$template->get_type_dflt() && !$template->locked()}
 	      {if $template->get_owner_id() == get_userid() || $manage_templates}
 		<a href="{$delete_tpl}" title="{$mod->Lang('delete_template')}">{admin_icon icon='delete.gif' title=$mod->Lang('delete_template')}</a>
 	      {/if}

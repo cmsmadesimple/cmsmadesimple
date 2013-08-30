@@ -9,6 +9,7 @@ $(document).ready(function(){
       $('#form_edittemplate').lockManager('unlock');
     }
   });
+
   $(document).on('cmsms_textchange',function(event){
     // editor textchange, set the form dirty.
     $('#form_edittemplate').dirtyForm('option','dirty',true);

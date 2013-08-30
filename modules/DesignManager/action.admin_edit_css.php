@@ -75,7 +75,24 @@ try {
     echo $this->ShowErrors($e->GetMessage());
   }
 
+	//
   // prepare to display.
+	//
+	if( $css_ob && $css_ob->get_id() && dm_utils::locking_enabled() ) {
+		$smarty->assign('lock_timeout',$this->GetPreference('lock_timeout'));
+		$smarty->assign('lock_refresh',$this->GetPreference('lock_refresh'));
+		try {
+			$lock_id = CmsLockOperations::is_locked('template',$css_ob->get_id());
+			if( $lock_id > 0 ) CmsLockOperations::unlock($lock_id,'template',$css_ob->get_id());
+			$lock = new CmsLock('stylesheet',$css_ob->get_id());
+			$smarty->assign('lock',$lock);
+		}
+		catch( CmsException $e ) {
+			$this->SetMessage($e->GetMessage());
+			$this->RedirectToAdminTab();
+		}
+	}
+
   $designs = CmsLayoutCollection::get_all();
   if( is_array($designs) && count($designs) ) {
     $out = array();
@@ -88,7 +105,8 @@ try {
   $smarty->assign('has_designs_right',$this->CheckPermission('Manage Designs'));
   $smarty->assign('extraparms',$extraparms);
   $smarty->assign('css',$css_ob);
-  
+	if( $css_ob && $css_ob->get_id() ) $smarty->assign('css_id',$css_ob->get_id());
+
   echo $this->ProcessTemplate('admin_edit_css.tpl');
 }
 catch( CmsException $e ) {

@@ -1,5 +1,45 @@
 <script type="text/javascript">
 $(document).ready(function(){
+  $('[name$=apply],[name$=submit]').hide();
+  $('#form_editcss').dirtyForm({
+    onDirty: function(){
+      $('[name$=apply],[name$=submit]').show('slow');
+    },
+    beforeUnload: function() {
+      $('#form_editcss').lockManager('unlock');
+    }
+  });
+
+  $(document).on('cmsms_textchange',function(event){
+    // editor textchange, set the form dirty.
+    $('#form_edittemplate').dirtyForm('option','dirty',true);
+  });
+
+  {if isset($css_id) && isset($lock_timeout)}
+  $('#form_editcss').lockManager({
+    type: 'stylesheet',
+    oid:  {$css_id},
+    uid:  {get_userid(FALSE)},
+    lock_timeout: {$lock_timeout},
+    lock_refresh: {$lock_refresh},
+    error_handler: function(err) {
+      alert('got error '+err.type+' // '+err.msg);
+    },
+    lostlock_handler: function(err) {
+      // we lost the lock on this stylesheet... make sure we can't save anything.
+      // and display a nice message.
+      $('[name$=apply],[name$=submit]').hide('slow');
+      $('[name$=cancel]').fadeOut().attr('value','{$mod->Lang('close')}').fadeIn();
+      $('#form_editcss').dirtyForm('option','dirty',false);
+      alert('{$mod->Lang('msg_lostlock')}');
+    }
+  });
+  {/if}
+
+  $('#form_edittemplate').on('click','[name$=apply],[name$=submit],[name$=cancel]',function(){
+    $('#form_edittemplate').dirtyForm('option','dirty',false);
+  });
+
   $(document).on('click', '#applybtn', function(e){
     // serialize the form
     e.preventDefault();
