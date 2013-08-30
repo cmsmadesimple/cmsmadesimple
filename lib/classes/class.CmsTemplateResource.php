@@ -48,7 +48,11 @@ class CmsTemplateResource extends CMS_Fixed_Resource_Custom
 
 	private function &get_template($name)
 	{
-		return CmsLayoutTemplate::load($name);
+		$obj = CmsLayoutTemplate::load($name);
+		$ret = new StdClass;
+		$ret->modified = $obj->get_template();
+		$ret->content = $obj->get_content();
+		return $ret;
 	}
 
 	protected function fetch($name,&$source,&$mtime)
@@ -84,36 +88,36 @@ class CmsTemplateResource extends CMS_Fixed_Resource_Custom
 
 		switch( $this->_section ) {
 		case 'top':
-			$mtime = $tpl->get_modified();
-			$pos1 = stripos($tpl->get_content(),'<head');
-			$pos2 = stripos($tpl->get_content(),'<header');
+			$mtime = $tpl->modified;
+			$pos1 = stripos($tpl->content,'<head');
+			$pos2 = stripos($tpl->content,'<header');
 			if( $pos1 === FALSE || $pos1 == $pos2 ) return;
-			$source = substr($tpl->get_content(),0,$pos1);
+			$source = substr($tpl->content,0,$pos1);
 			return;
 
 		case 'head':
-			$mtime = $tpl->get_modified();
-			$pos1 = stripos($tpl->get_content(),'<head');
-			$pos1a = stripos($tpl->get_content(),'<header');
-			$pos2 = stripos($tpl->get_content(),'</head>');
+			$mtime = $tpl->modified;
+			$pos1 = stripos($tpl->content,'<head');
+			$pos1a = stripos($tpl->content,'<header');
+			$pos2 = stripos($tpl->content,'</head>');
 			if( $pos1 === FALSE || $pos1 == $pos1a || $pos2 === FALSE ) return;
-			$source = substr($tpl->get_content(),$pos1,$pos2-$pos1+7);
+			$source = substr($tpl->content,$pos1,$pos2-$pos1+7);
 			return;
 
 		case 'body':
-			$mtime = $tpl->get_modified();
-			$pos = stripos($tpl->get_content(),'</head>');
+			$mtime = $tpl->modified;
+			$pos = stripos($tpl->content,'</head>');
 			if( $pos !== FALSE ) {
-				$source = substr($tpl->get_content(),$pos+7);
+				$source = substr($tpl->content,$pos+7);
 			}
 			else {
-				$source = $tpl->get_content();
+				$source = $tpl->content;
 			}
 			return;
 
 		default:
-			$source = $tpl->get_content();
-			$mtime = $tpl->get_modified();
+			$source = $tpl->content;
+			$mtime = $tpl->modified;
 			return;
 		}
 	}

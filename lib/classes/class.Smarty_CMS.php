@@ -102,7 +102,7 @@ class Smarty_CMS extends SmartyBC
       $this->registerResource('tpl_head',new CmsTemplateResource('head'));
       $this->registerResource('tpl_body',new CmsTemplateResource('body'));
       $this->registerResource('content',new CMSContentTemplateResource());
-      $this->registerResource('globalcontent',new CMSGlobalContentTemplateResource());
+      //$this->registerResource('globalcontent',new CMSGlobalContentTemplateResource());
 
       // just for frontend actions.
       $this->registerPlugin('compiler','content',array('CMS_Content_Block','smarty_compile_fecontentblock'),false);

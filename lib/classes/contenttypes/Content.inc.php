@@ -190,7 +190,12 @@ class Content extends ContentBase
 				$prop->extra = $block;
 				if( !isset($block['tab']) || $block['tab'] == '' ) $block['tab'] = self::TAB_MAIN;
 				$prop->tab = $block['tab'];
-				$prop->priority = $priority++;
+				if( isset($block['priority']) ) {
+					$prop->priority = $block['priority'];
+				}
+				else {
+					$prop->priority = $priority++;
+				}
 				$props[] = $prop;
 			}
 		}

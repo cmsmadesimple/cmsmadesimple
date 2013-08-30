@@ -33,6 +33,7 @@
  */
 final class CMS_Content_Block
 {
+  private static $_priority;
   private static $_contentBlocks;
   private function __construct() {}
 
@@ -58,7 +59,7 @@ final class CMS_Content_Block
   {
     // {content} tag encountered.
     $rec = array('type'=>'text','id'=>'','name'=>'','usewysiwyg'=>'true','oneline'=>'false','default'=>'','label'=>'',
-		 'size'=>'50','tab'=>'','maxlength'=>'255','required'=>0,'placeholder'=>'');
+		 'size'=>'50','tab'=>'','maxlength'=>'255','required'=>0,'placeholder'=>'','priority'=>'');
     foreach( $params as $key => $value ) {
       $value = trim($value,'"\'');
       if( $key == 'type' ) continue;
@@ -72,6 +73,10 @@ final class CMS_Content_Block
       $rec['id'] = 'content_en';
     }
     if( !$rec['id'] ) $rec['id'] = str_replace(' ','_',$rec['name']);
+    if( !$rec['priority'] ) {
+      if( !self::$_priority ) self::$_priority = 100;
+      $rec['priority'] = self::$_priority++;
+    }
 
     // check for duplicate.
     if( isset(self::$_contentBlocks[$rec['name']]) ) {
@@ -229,6 +234,7 @@ final class CMS_Content_Block
 	    unset($params['size']);
 	    unset($params['tab']);
 	    unset($params['required']);
+	    unset($params['priority']);
 	    unset($params['placeholder']);
 	    $params = array_merge($params, ModuleOperations::get_instance()->GetModuleParameters($id));
 	    $returnid = '';
