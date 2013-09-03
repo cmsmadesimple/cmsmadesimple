@@ -30,6 +30,9 @@
  */
 class CmsLayoutTemplateQuery extends CmsDbQueryBase
 {
+	private $_sortby = 'name';
+	private $_sortorder = 'asc';
+
   public function execute()
   {
     if( !is_null($this->_rs) ) return;
@@ -46,8 +49,11 @@ class CmsLayoutTemplateQuery extends CmsDbQueryBase
 
       switch( strtolower($key) ) {
 			case 'o': // orginator
+			case 'originator':
 				break;
+
 			case 'i': // id list
+			case 'idlist':
 				$second = trim($second);
 				$tmp = explode(',',$second);
 				$tmp2 = array();
@@ -61,16 +67,19 @@ class CmsLayoutTemplateQuery extends CmsDbQueryBase
 				break;
 
       case 't': // type
+			case 'type':
 				$second = (int)$second;
 				$where['type'][] = 'type_id = '.$db->qstr($second);
 				break;
 
       case 'c': // category
+			case 'category':
 				$second = (int)$second;
 				$where['category'][] = 'category_id = '.$db->qstr($second);
 				break;
 
       case 'd': // design
+			case 'design':
 				// find all the templates in design: d
 				$q2 = 'SELECT tpl_id FROM '.cms_db_prefix().CmsLayoutCollection::TPLTABLE.'
                WHERE design_id = ?';
@@ -79,11 +88,13 @@ class CmsLayoutTemplateQuery extends CmsDbQueryBase
 				break;
 
       case 'u': // user
+			case 'user':
 				$second = (int)$second;
 				$where['user'][] = 'owner_id = '.$db->qstr($second);
 				break;
 
       case 'e': // editable
+			case 'editable':
 				$second = (int)$second;
 				$q2 = 'SELECT DISTINCT tpl_id FROM (
                  SELECT tpl_id FROM '.cms_db_prefix().CmsLayoutTemplate::ADDUSERSTABLE.'
@@ -103,6 +114,34 @@ class CmsLayoutTemplateQuery extends CmsDbQueryBase
       case 'offset':
 				$this->_offset = max(0,$val);
 				break;
+
+			case 'sortby':
+				$val = strtolower($val);
+				switch( $val ) {
+				case 'id':
+				case 'name':
+				case 'created':
+				case 'modified':
+					$this->_sortby = $val;
+					break;
+
+				default:
+					throw new CmsInvalidDataException($val.' is an invalid sortby for '.__CLASS__);
+				}
+				break;
+
+			case 'sortorder':
+				$val = strtolower($val);
+				switch( $val ) {
+				case 'asc':
+				case 'desc':
+					$this->_sortorder = $val;
+					break;
+
+				default:
+					throw new CmsInvalidDataException($val.' is an invalid sortorder for '.__CLASS__);
+				}
+				break;
       }
     }
 
@@ -111,7 +150,7 @@ class CmsLayoutTemplateQuery extends CmsDbQueryBase
       if( count($exprs) ) $tmp[] = '('.implode(' OR ',$exprs).')';
     }
     if( count($tmp) ) $query .= ' WHERE ' . implode(' AND ',$tmp);
-    $query .= ' ORDER BY name ASC';
+    $query .= ' ORDER BY '.$this->_sortby.' '.$this->_sortorder;
     
     // execute the query
     $this->_rs = $db->SelectLimit($query,$this->_limit,$this->_offset);

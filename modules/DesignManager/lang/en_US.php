@@ -3,6 +3,7 @@ $lang[''] = 'TODO';
 
 #A
 $lang['apply'] = 'Apply';
+$lang['asc'] = 'Ascending';
 $lang['attached_stylesheets'] = 'Attached Stylesheets';
 $lang['attached_templates'] = 'Attached Templates';
 $lang['available_stylesheets'] = 'Available Stylesheets';
@@ -34,14 +35,16 @@ $lang['confirm_reset_type'] = 'Reset the default content of this type to the ver
 $lang['confirm_setall_1'] = 'Please confirm that you wish to set all content pages to use this template';
 $lang['confirm_setall_2'] = 'Yes, I am sure';
 $lang['confirm_setall_3'] = 'Yes, I am <strong>really</strong> sure';
+$lang['confirm_template_setall'] = 'Setting all pages to use this template may cause problems with a working site.  Use extreme caution!';
 $lang['copy_template'] = 'Copy Template';
 $lang['close'] = 'Close';
 $lang['create'] = 'Create';
+$lang['created'] = 'Created';
 $lang['create_category'] = 'Create a new Category';
 $lang['create_design'] = 'Create a new Design';
 $lang['create_stylesheet'] = 'Create a new Stylesheet';
 $lang['create_template'] = 'Create a new Template';
-$lang['confirm_template_setall'] = 'Setting all pages to use this template may cause problems with a working site.  Use extreme caution!';
+$lang['css_filter'] = 'Filter Stylesheets';
 
 #D
 $lang['delete_attached_stylesheets'] = 'Delete attached and orphaned stylesheets';
@@ -49,6 +52,7 @@ $lang['delete_attached_templates'] = 'Delete attached and orphaned templates';
 $lang['delete_design'] = 'Delete Design';
 $lang['delete_stylesheet'] = 'Delete Stylesheet';
 $lang['delete_template'] = 'Delete Template';
+$lang['desc'] = 'Descending';
 $lang['desc_designmanager_settings'] = 'Adjust settings related to managing designs (templates and stylesheets)';
 
 #E
@@ -202,6 +206,7 @@ $lang['media_type_screen'] = 'Screen';
 $lang['media_type_tty'] = 'TTY';
 $lang['media_type_tv'] = 'TV';
 $lang['moddescription'] = 'A module for managing layout templates';
+$lang['modified'] = 'Modified';
 $lang['msg_allpagesupdated'] = 'All content pages were updated';
 $lang['msg_bulkop_complete'] = 'Bulk operation completed';
 $lang['msg_cancelled'] = 'Operation Cancelled';
@@ -221,6 +226,7 @@ $lang['msg_design_saved'] = 'Design Saved';
 $lang['msg_type_saved'] = 'Template Type Saved';
 
 #N
+$lang['name'] = 'Name';
 $lang['next'] = 'Next';
 $lang['new_stylesheet'] = 'New Stylesheet';
 $lang['new_template'] = 'New Template';
@@ -290,6 +296,8 @@ $lang['prompt_return'] = 'Return';
 $lang['prompt_select'] = 'TODO';
 $lang['prompt_select_all'] = 'Select all';
 $lang['prompt_source_template'] = 'Source Template';
+$lang['prompt_sortby'] = 'Sort By';
+$lang['prompt_sortorder'] = 'Order';
 $lang['prompt_steal_lock'] = 'Steal this lock';
 $lang['prompt_stylesheet'] = 'Stylesheet';
 $lang['prompt_stylesheets'] = 'Stylesheets';
@@ -332,6 +340,8 @@ $lang['title_designs_default'] = 'The default design is automatically selected w
 $lang['title_filter'] = 'Select an item in this list to reduce the number of visible templates';
 $lang['title_filterapplied'] = 'A filter has been selected which limits the number of templates listed';
 $lang['title_filterlimit'] = 'Select the number of items to view on each page';
+$lang['title_sortby'] = 'Select a way to sort the matching templates';
+$lang['title_sortorder'] = 'Modify the way the matching templates are ordered';
 $lang['title_template_setallpages'] = 'Set all pages to use this template';
 $lang['title_tpl_bulk'] = 'Select this template for bulk actions';
 $lang['title_tpl_design'] = 'This column displays the name of the design (if any) that a template is associated with.  A template can be associated with multiple designs';
@@ -340,6 +350,7 @@ $lang['title_tpl_id'] = 'This column displays the unique numeric template ID';
 $lang['title_tpl_modified'] = 'This column displays the name date the template was last modified';
 $lang['title_tpl_name'] = 'This column displays the unique template name';
 $lang['title_tpl_type'] = 'This column displays the type of each template';
+$lang['tpl_filter'] = 'Filter Templates';
 $lang['tpl_originators'] = 'Originators';
 $lang['tpl_type'] = 'Template Type';
 $lang['tpl_types'] = 'Template Types';

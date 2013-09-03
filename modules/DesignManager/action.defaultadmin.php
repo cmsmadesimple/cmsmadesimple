@@ -21,10 +21,12 @@
 if( !isset($gCms) ) exit;
 if( !$this->VisibleToAdminUser() ) return;
 
-$filter_tpl_rec = array('tpl'=>'','limit'=>100,'offset'=>0);
-$filter_css_rec = array('limit'=>100,'offset'=>0);
+$filter_tpl_rec = array('tpl'=>'','limit'=>100,'offset'=>0,'sortby'=>'name','sortorder'=>'asc');
+$filter_css_rec = array('limit'=>100,'offset'=>0,'sortby'=>'name','sortorder'=>'desc');
 if( isset($params['submit_filter_tpl']) ) {
 	$filter_tpl_rec['tpl'] = $params['filter_tpl'];
+	$filter_tpl_rec['sortby'] = trim($params['filter_sortby']);
+	$filter_tpl_rec['sortorder'] = trim($params['filter_sortorder']);
 	$filter_tpl_rec['limit'] = (int)$params['filter_limit_tpl'];
 	$filter_tpl_rec['limit'] = max(2,min(100,$filter_tpl_rec['limit']));
 	unset($_SESSION[$this->GetName().'tpl_page']);
@@ -32,6 +34,8 @@ if( isset($params['submit_filter_tpl']) ) {
 }
 else if( isset($params['submit_filter_css']) ) {
 	$this->SetCurrentTab('stylesheets');
+	$filter_css_rec['sortby'] = trim($params['filter_css_sortby']);
+	$filter_css_rec['sortorder'] = trim($params['filter_css_sortorder']);
 	$filter_css_rec['limit'] = max(2,min(100,(int)$params['filter_limit_css']));
 	unset($_SESSION[$this->GetName().'tpl_page']);
   cms_userprefs::set($this->GetName().'css_filter',serialize($filter_css_rec));
@@ -162,6 +166,7 @@ if( $this->CheckPermission('Manage Stylesheets') ) {
 // give everything to smarty that we can.
 $smarty->assign('filter_tpl_options',$opts);
 $smarty->assign('tpl_filter',$filter_tpl_rec);
+$smarty->assign('css_filter',$filter_css_rec);
 
 $tmp = ($this->CheckPermission('Modify Templates') || count($templates))?1:0;
 $smarty->assign('has_templates',$tmp);

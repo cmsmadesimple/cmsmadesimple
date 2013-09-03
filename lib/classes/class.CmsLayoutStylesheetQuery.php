@@ -30,6 +30,9 @@
  */
 class CmsLayoutStylesheetQuery extends CmsDbQueryBase
 {
+	protected $_sortby = 'name';
+	protected $_sortorder = 'ASC';
+
   public function execute()
   {
     if( !is_null($this->_rs) ) return;
@@ -62,27 +65,36 @@ class CmsLayoutStylesheetQuery extends CmsDbQueryBase
       case 'offset':
 				$this->_offset = max(0,$val);
 				break;
+			case 'sortby':
+				break;
+			case 'sortorder':
+				$val = strtoupper($val);
+				switch( $val ) {
+				case 'DESC':
+					$this->_sortorder = 'DESC';
+					break;
+
+				case 'ASC':
+				default:
+					$this->_sortorder = 'ASC';
+					break;
+				}
+				break;
       }
     }
     
-    if( count($where) ) {
-      $query .= ' WHERE '.implode(' AND ',$where);
-    }
-    $query .= ' ORDER BY name ASC';
+    if( count($where) ) $query .= ' WHERE '.implode(' AND ',$where);
+    $query .= ' ORDER BY '.$this->_sortby.' '.$this->_sortorder;
 
     $this->_rs = $db->SelectLimit($query,$this->_limit,$this->_offset);
-    if( !$this->_rs ) {
-      throw new CmsSQLErrorException($db->sql.' -- '.$db->ErrorMsg());
-    }
+    if( !$this->_rs ) throw new CmsSQLErrorException($db->sql.' -- '.$db->ErrorMsg());
     $this->_totalmatchingrows = $db->GetOne('SELECT FOUND_ROWS()');
   }
 
   public function GetMatches()
   {
     $this->execute();
-    if( !$this->_rs ) {
-      throw new CmsLogicException('Cannot get template from invalid template query object');
-    }
+    if( !$this->_rs ) throw new CmsLogicException('Cannot get template from invalid template query object');
 
     $tmp = array();
     while( !$this->EOF() ) {

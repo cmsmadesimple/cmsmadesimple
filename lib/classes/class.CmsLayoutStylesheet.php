@@ -35,6 +35,8 @@ class CmsLayoutStylesheet
   private $_dirty;
   private $_data = array();
   private $_design_assoc;
+	private static $_lock_cache;
+	private static $_lock_cache_loaded;
 
 	public function __clone()
 	{
@@ -366,6 +368,41 @@ class CmsLayoutStylesheet
     $this->_dirty = TRUE;
   }
 
+	private static function get_locks()
+	{
+		if( !self::$_lock_cache_loaded ) {
+			$tmp = CmsLockOperations::get_locks('stylesheet');
+			if( is_array($tmp) && count($tmp) ) {
+				self::$_lock_cache = array();
+				foreach( $tmp as $one ) {
+					self::$_lock_cache[$one['oid']] = $one;
+				}
+			}
+			self::$_lock_cache_loaded = TRUE;
+		}
+		return self::$_lock_cache;
+	}
+
+	public function get_lock()
+	{
+		$locks = self::get_locks();
+		if( isset($locks[$this->get_id()]) ) return $locks[$this->get_id()];
+	}
+
+	public function locked()
+	{
+		$lock = $this->get_lock();
+		if( is_object($lock) ) return TRUE;
+		return FALSE;
+	}
+
+	public function lock_expired()
+	{
+		$lock = $this->get_lock();
+		if( !is_object($lock) ) return FALSE;
+		return $lock->expired();
+	}
+
   private static function &_load_from_data($row)
   {
     $ob = new CmsLayoutStylesheet();
@@ -408,10 +445,13 @@ class CmsLayoutStylesheet
 		$dbr = $db->GetArray($query);
 		$out = array();
 		if( is_array($dbr) && count($dbr) ) {
-			foreach( $dbr as $row ) {
-				$tmp = self::_load_from_data($row);
-				if( is_object($tmp) ) {
-					$out[] = self::_load_from_data($row);
+			foreach( $ids as $id ) {
+				foreach( $dbr as $row ) {
+					if( $row['id'] != $id ) continue;
+					$tmp = self::_load_from_data($row);
+					if( is_object($tmp) ) {
+						$out[] = self::_load_from_data($row);
+					}
 				}
 			}
 		}

@@ -75,8 +75,9 @@ $(document).ready(function(){
 });
 </script>
 
-<div id="filterdialog" style="display: none;" title="{$mod->Lang('filter')}">
+<div id="filterdialog" style="display: none;" title="{$mod->Lang('tpl_filter')}">
   {form_start action='defaultadmin' id='filterdialog_form'}
+    <input type="hidden" name="{$actionid}submit_filter_tpl" value="1"/>
     <div class="pageoverflow">
       <p class="pagetext"><label for="filter_tpl">{$mod->Lang('prompt_options')}:</label></p>
       <p class="pageinput">
@@ -86,12 +87,28 @@ $(document).ready(function(){
       </p>
     </div>
     <div class="pageoverflow">
-      <input type="hidden" name="{$actionid}submit_filter_tpl" value="1"/>
+      <p class="pagetext"><label for="filter_sortby">{$mod->Lang('prompt_sortby')}:</label></p>
+      <p class="pageinput">
+        <select id="filter_sortby" name="{$actionid}filter_sortby" title="{$mod->Lang('title_sortby')}">
+          <option value="name"{if $tpl_filter.sortby == 'name'} selected="selected"{/if}>{$mod->Lang('name')}</option>
+          <option value="created"{if $tpl_filter.sortby == 'created'} selected="selected"{/if}>{$mod->Lang('created')}</option>
+          <option value="modified"{if $tpl_filter.sortby == 'modified'} selected="selected"{/if}>{$mod->Lang('modified')}</option>
+        </select>
+      </p>
+    </div>
+    <div class="pageoverflow">
+      <p class="pagetext"><label for="filter_sortorder">{$mod->Lang('prompt_sortorder')}:</label></p>
+      <p class="pageinput">
+        <select id="filter_sortorder" name="{$actionid}filter_sortorder" title="{$mod->Lang('title_sortorder')}">
+          <option value="asc"{if $tpl_filter.sortorder == 'asc'} selected="selected"{/if}>{$mod->Lang('asc')}</option>
+          <option value="desc"{if $tpl_filter.sortorder == 'desc'} selected="selected"{/if}>{$mod->Lang('desc')}</option>
+        </select>
+      </p>
+    </div>
+    <div class="pageoverflow">
       <p class="pagetext"><label for="filter_limit">{$mod->Lang('prompt_limit')}:</label></p>
       <p class="pageinput">
         <select id="filter_limit" name="{$actionid}filter_limit_tpl" title="{$mod->Lang('title_filterlimit')}">
- 	  <option value="2"{if $tpl_filter.limit == 2} selected="selected"{/if}>2</option>
-	  <option value="5"{if $tpl_filter.limit == 5} selected="selected"{/if}>5</option>
 	  <option value="10"{if $tpl_filter.limit == 10} selected="selected"{/if}>10</option>
 	  <option value="25"{if $tpl_filter.limit == 25} selected="selected"{/if}>25</option>
 	  <option value="50"{if $tpl_filter.limit == 50} selected="selected"{/if}>50</option>
@@ -127,7 +144,7 @@ $(document).ready(function(){
           {if $has_add_right}
             <li><a id="addtemplate" accesskey="a" title="{$mod->Lang('create_template')}">{admin_icon icon='newobject.gif' alt=$mod->Lang('create_template')}&nbsp;{$mod->Lang('create_template')}</a></li>
           {/if}
-          <li><a id="editfilter" accesskey="f" title="{$mod->Lang('prompt_editfilter')}">{admin_icon icon='edit.gif' alt=$mod->Lang('prompt_editfilter')}&nbsp;{$mod->Lang('filter')}</a></li>
+          <li><a id="edittplfilter" accesskey="f" title="{$mod->Lang('prompt_editfilter')}">{admin_icon icon='edit.gif' alt=$mod->Lang('prompt_editfilter')}&nbsp;{$mod->Lang('filter')}</a></li>
         </ul>
       </li>
       {if $tpl_filter.tpl != '' && $tpl_filter != -1}

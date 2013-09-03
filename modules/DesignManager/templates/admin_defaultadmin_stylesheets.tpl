@@ -17,9 +17,28 @@ $(document).ready(function(){
 });
 </script>
 
-<div id="filtercssdlg" style="display: none;" title="{$mod->Lang('filter')}">
+<div id="filtercssdlg" style="display: none;" title="{$mod->Lang('css_filter')}">
   {form_start id='filtercssdlg_form'}{*strip*}
     <input type="hidden" name="{$actionid}submit_filter_css" value="1"/>
+    <div class="pageoverflow">
+      <p class="pagetext"><label for="filter_css_sortby">{$mod->Lang('prompt_sortby')}:</label></p>
+      <p class="pageinput">
+        <select id="filter_css_sortby" name="{$actionid}filter_css_sortby" title="{$mod->Lang('title_sortby')}">
+          <option value="name"{if $css_filter.sortby == 'name'} selected="selected"{/if}>{$mod->Lang('name')}</option>
+          <option value="created"{if $css_filter.sortby == 'created'} selected="selected"{/if}>{$mod->Lang('created')}</option>
+          <option value="modified"{if $css_filter.sortby == 'modified'} selected="selected"{/if}>{$mod->Lang('modified')}</option>
+        </select>
+      </p>
+    </div>
+    <div class="pageoverflow">
+      <p class="pagetext"><label for="filter_css_sortorder">{$mod->Lang('prompt_sortorder')}:</label></p>
+      <p class="pageinput">
+        <select id="filter_css_sortorder" name="{$actionid}filter_css_sortorder" title="{$mod->Lang('title_sortorder')}">
+          <option value="asc"{if $css_filter.sortorder == 'asc'} selected="selected"{/if}>{$mod->Lang('asc')}</option>
+          <option value="desc"{if $css_filter.sortorder == 'desc'} selected="selected"{/if}>{$mod->Lang('desc')}</option>
+        </select>
+      </p>
+    </div>
     <div class="pageoverflow">
       <p class="pagetext">
         <label for="filter_limit_css">{$mod->Lang('prompt_limit')}:</label>

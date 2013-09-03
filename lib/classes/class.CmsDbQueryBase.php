@@ -99,24 +99,12 @@ abstract class CmsDbQueryBase
   public function __get($key)
   {
     $this->execute();
-    if( $key == 'fields' && $this->_rs && !$this->_rs->EOF() ) {
-      return $this->_rs->fields;
-    }
-    if( $key == 'EOF' ) {
-      return $this->_rs->EOF();
-    }
-    if( $key == 'limit' ) {
-      return $this->_limit;
-    }
-    if( $key == 'offset' ) {
-      return $this->_offset;
-    }
-    if( $key == 'totalrows' ) {
-      return $this->_totalmatchingrows;
-    }
-    if( $key == 'numpages' ) {
-      return ceil($this->_totalmatchingrows / $this->_limit);
-    }
+    if( $key == 'fields' && $this->_rs && !$this->_rs->EOF() ) return $this->_rs->fields;
+    if( $key == 'EOF' ) return $this->_rs->EOF();
+    if( $key == 'limit' ) return $this->_limit;
+    if( $key == 'offset' ) return $this->_offset;
+    if( $key == 'totalrows' ) return $this->_totalmatchingrows;
+    if( $key == 'numpages' ) return ceil($this->_totalmatchingrows / $this->_limit);
   }
 
 } // end of class
