@@ -121,6 +121,11 @@ $(document).ready(function () {
             event.preventDefault();
         }
     });
+    
+    // go to page on option change
+    $(document).on('change', '#{$actionid}curpage', function () {
+        $(this).closest('form').submit();
+    })
 
     $(document).ajaxComplete(function () {
         $('tr.selected').css('background', 'yellow');
@@ -147,12 +152,29 @@ $(document).ready(function () {
 {/if}{* ajax *}
 
 {if isset($content_list)}
-<div class="row">
-	<div class="pageoptions options-menu half">
+<div class="row c_full">
+	<div class="pageoptions grid_6">
 		<ul class="options-menu">
+			<li>
+			{if $npages > 1}
+				{form_start action='defaultadmin'}
+					<span>{$mod->Lang('page')}:&nbsp;
+					<select name="{$actionid}curpage" id="{$actionid}curpage">
+						{html_options options=$pagelist selected=$curpage}
+					</select>
+					<button name="{$actionid}submitpage" class="invisible ui-button ui-widget ui-corner-all ui-state-default ui-button-text-icon-primary">
+						<span class="ui-button-icon-primary ui-icon ui-icon-circle-check"></span>
+						<span class="ui-button-text">{$mod->Lang('submit')}</span>
+					</button>
+					</span>
+				{form_end}
+			{/if}
+			</li>
+			
 			{if $can_add_content}
 			<li><a  href="{cms_action_url action=admin_editcontent}" accesskey="n" title="{$mod->Lang('addcontent')}" class="pageoptions">{admin_icon icon='newobject.gif' alt=$mod->Lang('addcontent')}&nbsp;{$mod->Lang('addcontent')}</a></li>
 			{/if}
+			
 			<li class="parent">{admin_icon icon='run.gif' alt=$mod->Lang('prompt_options')}&nbsp;{$mod->Lang('prompt_options')}
 				<ul id="popupmenucontents">
 					<li><a class="expandall" href="{cms_action_url action='defaultadmin' expandall=1}" accesskey="e" title="{$mod->Lang('prompt_expandall')}">{admin_icon icon='expandall.gif' alt=$mod->Lang('expandall')}&nbsp;{$mod->Lang('expandall')}</a></li>
@@ -162,21 +184,12 @@ $(document).ready(function () {
 					{/if}
 					<li><a id="myoptions" accesskey="o" title="{$mod->Lang('prompt_settings')}">{admin_icon icon='edit.gif' alt=$mod->Lang('prompt_settings')}&nbsp;{$mod->lang('prompt_settings')}</a></li>
 				</ul>
+			</li>
 		</ul>
 	</div>
 
-	<div class="pageoptions options-form half">
+	<div class="pageoptions options-form grid_6">
 		<span><label for="ajax_find">{$mod->Lang('find')}:</label>&nbsp;<input type="text" id="ajax_find" name="ajax_find" title="{$mod->Lang('title_listcontent_find')}" value="" size="25"/></span>
-		{if $npages > 1}
-			{form_start action='defaultadmin'}
-				<span>{$mod->Lang('page')}:&nbsp;
-				<select name="{$actionid}curpage">
-					{html_options options=$pagelist selected=$curpage}
-				</select>
-				<button name="{$actionid}submitpage">GO</button>
-				</span>
-			{form_end}
-		{/if}	
 	</div>
 </div>
 
