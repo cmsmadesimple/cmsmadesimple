@@ -146,6 +146,42 @@ $(document).ready(function () {
 <div class="clearb"></div>
 {/if}{* ajax *}
 
+{if isset($content_list)}
+<div class="row">
+	<div class="pageoptions options-menu half">
+		<ul class="options-menu">
+			{if $can_add_content}
+			<li><a  href="{cms_action_url action=admin_editcontent}" accesskey="n" title="{$mod->Lang('addcontent')}" class="pageoptions">{admin_icon icon='newobject.gif' alt=$mod->Lang('addcontent')}&nbsp;{$mod->Lang('addcontent')}</a></li>
+			{/if}
+			<li class="parent">{admin_icon icon='run.gif' alt=$mod->Lang('prompt_options')}&nbsp;{$mod->Lang('prompt_options')}
+				<ul id="popupmenucontents">
+					<li><a class="expandall" href="{cms_action_url action='defaultadmin' expandall=1}" accesskey="e" title="{$mod->Lang('prompt_expandall')}">{admin_icon icon='expandall.gif' alt=$mod->Lang('expandall')}&nbsp;{$mod->Lang('expandall')}</a></li>
+					<li><a class="collapseall" href="{cms_action_url action='defaultadmin' collapseall=1}" accesskey="c" title="{$mod->Lang('prompt_collapseall')}">{admin_icon icon='contractall.gif' alt=$mod->Lang('contractall')}&nbsp;{$mod->Lang('contractall')}</a></li>
+					{if $can_reorder_content}
+					<li><a id="ordercontent" href="{cms_action_url action=admin_ordercontent}" accesskey="r" title="{$mod->Lang('prompt_ordercontent')}">{admin_icon icon='reorder.gif' alt=$mod->Lang('reorderpages')}&nbsp;{$mod->Lang('reorderpages')}</a></li>
+					{/if}
+					<li><a id="myoptions" accesskey="o" title="{$mod->Lang('prompt_settings')}">{admin_icon icon='edit.gif' alt=$mod->Lang('prompt_settings')}&nbsp;{$mod->lang('prompt_settings')}</a></li>
+				</ul>
+		</ul>
+	</div>
+
+	<div class="pageoptions options-form half">
+		<span><label for="ajax_find">{$mod->Lang('find')}:</label>&nbsp;<input type="text" id="ajax_find" name="ajax_find" title="{$mod->Lang('title_listcontent_find')}" value="" size="25"/></span>
+		{if $npages > 1}
+			{form_start action='defaultadmin'}
+				<span>{$mod->Lang('page')}:&nbsp;
+				<select name="{$actionid}curpage">
+					{html_options options=$pagelist selected=$curpage}
+				</select>
+				<button name="{$actionid}submitpage">GO</button>
+				</span>
+			{form_end}
+		{/if}	
+	</div>
+</div>
+
+{/if}
+
 {form_start action='defaultadmin' id='listform'}
 <div id="contentlist">{* everything from here down is part of the ajax stuff *}
 {if isset($content_list)}
@@ -193,7 +229,7 @@ $(document).ready(function () {
 							{if $row.lock.expires < $smarty.now}<span style="color: red;"><strong>{$mod->Lang('lock_expired')}:</strong> {$row.lock.expires|relative_time}</span>{else}<strong>{$mod->Lang('lock_expires')}:</strong> {$row.lock.expires|relative_time}{/if}<br/>
 							{/strip}{/capture}
 							{if !$row.can_steal}
-   								<span class="tooltip" data-cms-description='{$tooltip_lockinfo|htmlentities}'>{$row.page}</span>
+								<span class="tooltip" data-cms-description='{$tooltip_lockinfo|htmlentities}'>{$row.page}</span>
 							{else}
 								<a href="{cms_action_url action='admin_editcontent' content_id=$row.id}" class="page_edit tooltip steal_lock" accesskey="e" data-cms-content='{$row.id}' data-cms-description='{$tooltip_lockinfo|htmlentities}'>{$row.page}</a>
 							{/if}
@@ -282,7 +318,7 @@ $(document).ready(function () {
 								{admin_icon icon='edit.gif' class='page_edit' title=$mod->Lang('prompt_page_edit')}
 							</a>
 						{else}
-                                                	{if isset($row.lock) && $row.can_steal}
+							{if isset($row.lock) && $row.can_steal}
 							<a href="{cms_action_url action=admin_editcontent content_id=$row.id}" accesskey="e" class="page_edit" title="{$mod->Lang('addcontent')}" data-cms-content="{$row.id}" class="steal_lock">
 								{admin_icon icon='permissions.gif' class='page_edit steal_lock' title=$mod->Lang('prompt_steal_lock_edit')}
 							</a>
@@ -308,39 +344,6 @@ $(document).ready(function () {
 
 <div id="error_cont" class="error" style="color-red: text-align: center; vertical-align: middle; display: none;">
 {$error|default:''}
-</div>
-
-<div class="row">
-	<div class="pageoptions options-menu half">
-		<ul class="options-menu">
-			{if $can_add_content}
-			<li><a  href="{cms_action_url action=admin_editcontent}" accesskey="n" title="{$mod->Lang('addcontent')}" class="pageoptions">{admin_icon icon='newobject.gif' alt=$mod->Lang('addcontent')}&nbsp;{$mod->Lang('addcontent')}</a></li>
-			{/if}
-			<li class="parent">{admin_icon icon='run.gif' alt=$mod->Lang('prompt_options')}&nbsp;{$mod->Lang('prompt_options')}
-				<ul id="popupmenucontents">
-					<li><a class="expandall" href="{cms_action_url action='defaultadmin' expandall=1}" accesskey="e" title="{$mod->Lang('prompt_expandall')}">{admin_icon icon='expandall.gif' alt=$mod->Lang('expandall')}&nbsp;{$mod->Lang('expandall')}</a></li>
-					<li><a class="collapseall" href="{cms_action_url action='defaultadmin' collapseall=1}" accesskey="c" title="{$mod->Lang('prompt_collapseall')}">{admin_icon icon='contractall.gif' alt=$mod->Lang('contractall')}&nbsp;{$mod->Lang('contractall')}</a></li>
-					{if $can_reorder_content}
-					<li><a id="ordercontent" href="{cms_action_url action=admin_ordercontent}" accesskey="r" title="{$mod->Lang('prompt_ordercontent')}">{admin_icon icon='reorder.gif' alt=$mod->Lang('reorderpages')}&nbsp;{$mod->Lang('reorderpages')}</a></li>
-					{/if}
-					<li><a id="myoptions" accesskey="o" title="{$mod->Lang('prompt_settings')}">{admin_icon icon='edit.gif' alt=$mod->Lang('prompt_settings')}&nbsp;{$mod->lang('prompt_settings')}</a></li>
-				</ul>
-		</ul>
-	</div>
-
-	<div class="pageoptions options-form half">
-		<span><label for="ajax_find">{$mod->Lang('find')}:</label>&nbsp;<input type="text" id="ajax_find" name="ajax_find" title="{$mod->Lang('title_listcontent_find')}" value="" size="25"/></span>
-		{if $npages > 1}
-			{form_start action='defaultadmin'}
-				<span>{$mod->Lang('page')}:&nbsp;
-				<select name="{$actionid}curpage">
-					{html_options options=$pagelist selected=$curpage}
-				</select>
-				<button name="{$actionid}submitpage">GO</button>
-				</span>
-			{form_end}
-		{/if}	
-	</div>
 </div>
 
 {strip}
