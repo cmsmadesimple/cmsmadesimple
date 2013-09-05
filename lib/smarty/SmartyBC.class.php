@@ -32,7 +32,7 @@
 /**
  * @ignore
  */
-require(dirname(__FILE__) . '/Smarty.class.php');
+require(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'Smarty.class.php');
 
 /**
  * Smarty Backward Compatability Wrapper Class
