@@ -1262,7 +1262,7 @@ function cms_get_jquery($exclude = '',$ssl = null,$cdn = false,$append = '',$cus
   
   // Scripts to include
   $scripts['jquery'] = array('cdn'=>'https://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js',
-			     'local'=>$basePath.'/lib/jquery/js/jquery-1.10.1.min.js',
+			     'local'=>$basePath.'/lib/jquery/js/jquery-1.10.2.min.js',
 			     'aliases'=>array('jquery.min.js'));
   $scripts['jquery-ui'] = array('cdn'=>'https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js',
 				'local'=>$basePath.'/lib/jquery/js/jquery-ui-1.10.3.custom.min.js',
