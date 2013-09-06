@@ -50,7 +50,7 @@ class CmsTemplateResource extends CMS_Fixed_Resource_Custom
 	{
 		$obj = CmsLayoutTemplate::load($name);
 		$ret = new StdClass;
-		$ret->modified = $obj->get_template();
+		$ret->modified = $obj->get_modified();
 		$ret->content = $obj->get_content();
 		return $ret;
 	}

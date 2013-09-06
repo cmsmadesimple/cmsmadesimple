@@ -7,6 +7,7 @@
   liclass: is used to build a string containing class names given to the li tag.
 *}
 {if !isset($depth)}{$depth=0}{/if}
+{strip}
 
 {if $depth == 0}
 <div id="menuwrapper">
@@ -18,34 +19,34 @@
 {$depth=$depth+1}
 {foreach $nodes as $node}
   {* setup classes for the anchor and list item *}
-  {assign var='liclass' value=''}
-  {assign var='aclass' value=''}
+  {$liclass=[]}
+  {$aclass=[]}
 
   {* the first child gets a special class *}
-  {if $node@first && $node@total > 1}{assign var='liclass' value=$liclass|cat:' first_child'}{/if}
+  {if $node@first && $node@total > 1}{$liclass[]='first_child'}{/if}
 
   {* the last child gets a special class *}
-  {if $node@last && $node@total > 1}{assign var='liclass' value=$liclass|cat:' last_child'}{/if}
+  {if $node@last && $node@total > 1}{$liclass[]='last_child'}{/if}
 
   {if $node->current}
     {* this is the current page *}
-    {assign var='liclass' value=$liclass|cat:' menuactive'}
-    {assign var='aclass' value=$liclass|cat:' menuactive'}
+    {$liclass[]='menuactive'}
+    {$aclass[]='menuactive'}
   {/if}
   {if $node->has_children}
-    {* this is the current page *}
-    {assign var='liclass' value=$liclass|cat:' menuparent'}
-    {assign var='aclass' value=$aclass|cat:' menuparent'}
+    {* this is a parent page *}
+    {$liclass[]='menuparent'}
+    {$aclass[]='menuparent'}
   {/if}
   {if $node->parent}
     {* this is a parent of the current page *}
-    {assign var='liclass' value=$liclass|cat:' parent'}
-    {assign var='aclass' value=$aclass|cat:' parent'}
+    {$liclass[]='menuactive'}
+    {$aclass[]='menuactive'}
   {/if}
 
-  {* build the menu item node *}
+  {* build the menu item from the node *}
   {if $node->type == 'sectionheader'}
-    <li class='{$liclass}'><a{if $aclass != ''} class="{$aclass}"{/if}><span class="sectionheader">{$node->menutext}</span></a>
+    <li class='{implode(' ',$liclass)}'><a{if count($aclass) > 0} class="{implode(' ',$aclass)}"{/if}><span class="sectionheader">{$node->menutext}</span></a>
       {if isset($node->children)}
         {include file=$smarty.template nodes=$node->children}
       {/if}
@@ -53,13 +54,13 @@
   {else if $node->type == 'separator'}
     <li style="list-style-type: none;"><hr class="menu_separator"/></li>
   {else}
-    {* regular item *}{strip}
-    <li class="menuitem{$liclass}">
-      <a{if $aclass != ''} class="{$aclass}"{/if} href="{$node->url}"{if $node->target ne ""} target="{$node->target}"{/if}><span>{$node->menutext}</span></a>
+    {* regular item *}
+    <li class="{implode(' ',$liclass)}">
+      <a{if count($aclass) > 0} class="{implode(' ',$aclass)}"{/if} href="{$node->url}"{if $node->target ne ""} target="{$node->target}"{/if}><span>{$node->menutext}</span></a>
       {if isset($node->children)}
         {include file=$smarty.template nodes=$node->children}
       {/if}
-    </li>{/strip}
+    </li>
   {/if}
 {/foreach}
 {$depth=$depth-1}
@@ -69,3 +70,4 @@
 <div class="clearb"></div>
 </div>{* menuwrapper *}
 {/if}
+{/strip}

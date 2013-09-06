@@ -308,6 +308,7 @@ function cms_stylesheet_writeCache($filename, $string, $trimbackground, &$smarty
 	}
 	catch (SmartyException $e)
 	{
+	  die($e->GetMessage());
 	  debug_to_log('Error Processing Stylesheet');
 	  debug_to_log($e->GetMessage());
 	  audit('','Plugin: cms_stylesheet', 'Smarty Compile process failed, unable to write cache file');
