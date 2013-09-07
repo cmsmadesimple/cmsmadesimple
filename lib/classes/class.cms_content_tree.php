@@ -353,6 +353,9 @@ class cms_content_tree extends cms_tree
    * A function to build an array of cms_tree nodes, containing this node and all of the
    * children.
    *
+   * This method changed in CMSMS 1.11.8 to return a hash instead of a flat array.  The keys of the hash
+   * are the content ids.
+   *
    * @return Array of cms_tree nodes.
    */
   public function &getFlatList()
