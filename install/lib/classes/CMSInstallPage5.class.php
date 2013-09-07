@@ -23,7 +23,8 @@ class CMSInstallerPage5 extends CMSInstallerPage
 	function assignVariables()
 	{
 		$values = array();
-		$values['sitename'] = isset($_POST['sitename'])? htmlentities($_POST['sitename'], ENT_QUOTES, 'UTF-8'):'CMS Made Simple Site';
+		//$values['sitename'] = isset($_POST['sitename'])? htmlentities($_POST['sitename'], ENT_QUOTES, 'UTF-8'):'CMS Made Simple Site';
+		$values['sitename'] = isset($_POST['sitename'])? trim($_POST['sitename']) : 'CMS Made Simple Site';
  		$values['db']['dbms'] = isset($_POST['dbms']) ? $_POST['dbms'] : 'mysqli';
  		$values['db']['host'] = isset($_POST['host']) ? $_POST['host'] : 'localhost';
 		$values['db']['database'] = isset($_POST['database']) ? $_POST['database'] : 'cms';

@@ -56,7 +56,6 @@ class CMSInstallerPage6 extends CMSInstallerPage
   function preContent(&$db)
   {
     $db_prefix = $_POST['prefix'];
-
     if(isset($_POST['createtables']))
       {
 	$db->SetFetchMode(ADODB_FETCH_ASSOC);
@@ -132,7 +131,8 @@ class CMSInstallerPage6 extends CMSInstallerPage
 	echo "<p>" . ilang('install_admin_set_sitename');
 
 	$query = "INSERT INTO ". $db_prefix ."siteprefs (sitepref_name, sitepref_value) VALUES (?,?)";
-	$dbresult = $db->Execute($query, array('sitename', htmlentities($_POST['sitename'], ENT_QUOTES, 'UTF-8')));
+	//$dbresult = $db->Execute($query, array('sitename', htmlentities($_POST['sitename'], ENT_QUOTES, 'UTF-8')));
+	$dbresult = $db->Execute($query, array('sitename', cms_htmlentities(trim($_POST['sitename']))) );
 	if (!$dbresult)
 	  {
 	    echo ilang('invalid_query', $db->sql) ."</p>";

@@ -235,6 +235,7 @@ class CMSInstaller
 						return;
 					}
 
+					$db->Execute("SET NAMES 'utf8'");
 					//Try to create and drop a dummy table (with appropriate prefix)
 					$db_prefix = $_POST['prefix'];
 					@$db->Execute('DROP TABLE ' . $db_prefix . 'dummyinstall');
