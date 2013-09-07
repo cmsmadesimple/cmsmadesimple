@@ -11,6 +11,7 @@ Core - General
   - Improve the help for content_image
   - Performance improvements for listcontent and add/editcontent
   - Improved and better documented sample htaccess.txt file
+  - Smarty template engine upgraded to version 3.1.14
 
 Core - Bug Reports
   - #8807 Section headers are accessible through changing URL
