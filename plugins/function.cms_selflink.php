@@ -152,12 +152,13 @@ function smarty_function_cms_selflink($params, &$template)
 	  $flatcontent = array();
 	  if ($condition != '|') // uplink (we don't need the flatcontent for an uplink)
 	    {
-	      $flatcontent = $hm->getFlatList();
+	      $flatcontent = array_values($hm->getFlatList());
 	      $contentops = $gCms->GetContentOperations();
 	      $defaultid = $contentops->GetDefaultPageID();
 	      $number = 0;
 	      for ($i = 0; $i < count($flatcontent); $i++)
 		{
+		  if( !is_object($flatcontent[$i]) ) break;
 		  if ($condition == '-')
 		    {
 		      // start link...
