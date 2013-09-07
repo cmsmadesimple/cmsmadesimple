@@ -359,8 +359,13 @@ class cms_content_tree extends cms_tree
 		if( $this->has_children() ) {
 			$children = $this->get_children();
 			for( $i = 0; $i < count($children); $i++ ) {
-				$result[] =& $children[$i];
-				if( $children[$i]->has_children() ) $result = array_merge($result,$children[$i]->getFlatList());
+				$result[$children[$i]->get_tag('id')] =& $children[$i];
+				if( $children[$i]->has_children() ) {
+					$tmp = $children[$i]->getFlatList();
+					foreach( $tmp as $key => &$node ) {
+						$result[$key] = $node;
+					}
+				}
 			}
 		}
 
