@@ -584,11 +584,9 @@ else
 	      $versioncol = $dbm[$key]['Version'];
 	      $statuscol[]  = '<span class="important">'.lang('needupgrade').'</span>';
 	      $activecol  = ($dbm[$key]['Active']==true?"<a href='{$thisurl}&amp;action=setfalse&amp;module=".$key."'>".$image_true."</a>":"<a href='{$thisurl}&amp;action=settrue&amp;module=".$key."'>".$image_false."</a>");
-	      if( $maxverok == 1)
-		{
-		  $actioncol[]  = "<a href=\"{$thisurl}&amp;action=upgrade&amp;module=".$key."\" onclick=\"return confirm('".cms_html_entity_decode_utf8(lang('upgradeconfirm'),true)."');\">".lang('upgrade')."</a>";
-		}
-	      $xmlcol = '&nbsp;';
+	      if( $maxverok == 1 && $dbm[$key]['Active'] == true) {
+		$actioncol[]  = "<a href=\"{$thisurl}&amp;action=upgrade&amp;module=".$key."\" onclick=\"return confirm('".cms_html_entity_decode_utf8(lang('upgradeconfirm'),true)."');\">".lang('upgrade')."</a>";
+	      }
 	    }
 	  else // Must be installed
 	    {
