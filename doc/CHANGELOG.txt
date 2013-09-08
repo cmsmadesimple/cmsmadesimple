@@ -16,11 +16,11 @@ Core - General
   - Adds a check to the installer and systeminfo page to test wether the filesystem has a significant time difference from the php process
 
 Core - Bug Reports
+  - #8272 Sitename in Russian becomes unreadable
   - #8807 Section headers are accessible through changing URL
   - #9324 Title is now available when editing a section header
   - #9391 Bug in get_template_vars
   - #9415 Function get_upload_size on class.cms_config.php doesn't handle upload_max_filesize correct when it is 1G
-  - #8272 Sitename in Russian becomes unreadable
 
 Core - News
   - Adds a dropdown field type to News
@@ -28,8 +28,10 @@ Core - News
 Core - Search
   - No longer index templates and GCB's
   - Now can stop individual content blocks from being indexed
+  - #7538 Search Module removes valid words when indexing
+  - #8169 Search Module indexing partial smarty tags and failing to index words with dash
 
-
+  
 Version 1.11.7 - Genovesa
 -----------------------------
 Core - General
