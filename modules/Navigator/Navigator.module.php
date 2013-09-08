@@ -56,6 +56,7 @@ final class Navigator extends CMSModule
   {
     $this->RestrictUnknownParams();
     $this->SetParameterType('items',CLEAN_STRING);
+    $this->SetParameterType('nlevels',CLEAN_INT);
     $this->SetParameterType('number_of_levels',CLEAN_INT);
     $this->SetParameterType('show_all',CLEAN_INT);
     $this->SetParameterType('show_root_siblings',CLEAN_INT);
@@ -68,11 +69,14 @@ final class Navigator extends CMSModule
     $this->SetParameterType('loadprops',CLEAN_INT);
     $this->SetParameterType('collapse',CLEAN_INT);
     $this->SetParameterType('root',CLEAN_STRING);
+    $this->SetParameterType('excludeprefix',CLEAN_STRING);
+    $this->SetParameterType('includeprefix',CLEAN_STRING);
   }
 
   public function InitializeAdmin()
   {
     $this->CreateParameter('items', 'contact,home', $this->lang('help_items'));
+    $this->CreateParameter('nlevels', '1', $this->lang('help_nlevels'));
     $this->CreateParameter('number_of_levels', '1', $this->lang('help_number_of_levels'));
     $this->CreateParameter('show_all', '0', $this->lang('help_show_all'));
     $this->CreateParameter('show_root_siblings', '1', $this->lang('help_show_root_siblings'));
@@ -86,6 +90,8 @@ final class Navigator extends CMSModule
     $this->CreateParameter('loadprops','',$this->Lang('help_loadprops'));
     $this->CreateParameter('collapse','',$this->Lang('help_collapse'));
     $this->CreateParameter('root','',$this->Lang('help_root'));
+    $this->CreateParameter('includeprefix','',$this->Lang('help_includeprefix'));
+    $this->CreateParameter('excludeprefix','',$this->Lang('help_excludeprefix'));
   }
 
   final static public function nav_breadcrumbs($params,&$smarty)

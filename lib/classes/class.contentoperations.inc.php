@@ -1130,10 +1130,12 @@ class ContentOperations
 			$hm = cmsms()->GetHierarchyManager();
 			$tmp = $hm->getFlatList();
 			$this->_quickfind = array();
-			for( $i = 0; $i < count($tmp); $i++ ) {
-				$this->_quickfind[$tmp[$i]->get_tag('id')] = $tmp[$i];
+			if( is_array($tmp) && count($tmp) ) {
+				foreach( $tmp as $key => $node ) {
+					$this->_quickfind[$key] = $node;
+				}
+				ksort($this->_quickfind);
 			}
-			ksort($this->_quickfind);
 		}
 
 		if( isset($this->_quickfind[$id]) ) return $this->_quickfind[$id];

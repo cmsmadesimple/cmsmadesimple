@@ -514,8 +514,8 @@ $contentobj = new Content;
 $contentobj->SetName('Home');
 $contentobj->SetAlias();
 $contentobj->SetMenuText('Home');
-$contentobj->SetPropertyValue('design_id',$ncleanblue_theme->get_id());
-$contentobj->SetTemplateId($template_list['NCleanBlue']);
+$contentobj->SetPropertyValue('design_id',$simplex_theme->get_id());
+$contentobj->SetTemplateId($template_list['Simplex']);
 $contentobj->SetDefaultContent(TRUE); // this is the default page.
 $contentobj->SetOwner($admin_user->id);
 $contentobj->SetParentId(-1);
@@ -885,7 +885,7 @@ $contentobj->SetPropertyValue('content_en',
       '<p>Again using the same menu template as the two previous themes. We changed the child ul CSS to use a different top image. This involves changing some of the margin and padding as the images are a different shape. Note the second level and third level ul are now using the same image that has an arrow left.</p><h3>Filler Text</h3><p>Curabitur ornare velit molestie nulla. Fusce fermentum facilisis mi. Maecenas volutpat, eros ac pellentesque mollis, urna elit rutrum turpis, congue convallis nibh erat nec purus. Sed malesuada consectetuer turpis. Nulla sollicitudin placerat augue. Vestibulum ut sem eget turpis laoreet cursus. Vestibulum ante urna, mollis eget, cursus eget, viverra non, lectus. Aliquam erat volutpat. Aenean gravida tempor nulla. Sed sem lorem, pulvinar non, placerat non, vestibulum sed, tellus. Phasellus fermentum velit id dui. Praesent vulputate. Nam in dui.</p><p>Maecenas tristique, tortor nec eleifend luctus, nibh leo imperdiet wisi, et accumsan est lectus in orci. Proin facilisis, odio auctor feugiat accumsan, sapien purus iaculis dui, a volutpat augue pede ut sem. Nulla facilisi. Aliquam suscipit elementum ipsum. Morbi urna. Nam eros justo, varius sit amet, euismod eu, dictum nec, neque. Nullam id mi eu odio tempor adipiscing. Quisque hendrerit euismod nunc. Ut erat nulla, pellentesque nec, luctus eu, dictum nec, augue. Aliquam tincidunt sodales arcu. Nam porta sagittis quam. Vivamus eget purus egestas velit congue consectetuer.</p>');
 
 
-// Welcome to Simplex / Default Templates Explained / Simplex
+// Welcome to Simplex / Default Templates Explained / Higher End / Simplex
 $contentobj = new Content;
 $contentobj->SetName('Welcome to Simplex');
 $contentobj->SetAlias();
@@ -893,7 +893,7 @@ $contentobj->SetMenuText('Simplex Theme');
 $contentobj->SetPropertyValue('design_id',$simplex_theme->get_id());
 $contentobj->SetTemplateId($template_list['Simplex']);
 $contentobj->SetOwner($admin_user->id);
-$contentobj->SetParentId($content_list['Default Templates Explained']);
+$contentobj->SetParentId($content_list['Higher End']);
 $contentobj->SetActive(TRUE);
 $contentobj->SetShowInMenu(TRUE);
 $contentobj->SetCachable(TRUE);

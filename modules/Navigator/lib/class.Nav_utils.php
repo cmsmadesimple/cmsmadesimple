@@ -37,7 +37,34 @@
 
 final class Nav_utils 
 {
+  private static $_excludes;
   private function __construct() {}
+
+  public static function set_excludes($data)
+  {
+    if( is_string($data) ) $data = explode(',',$data);
+    if( is_array($data) && count($data) ) {
+      foreach( $data as &$one ) {
+	$one = trim($one);
+      }
+      $data = array_unique($data);
+      if( count($data) ) self::$_excludes = $data;
+    }
+  }
+
+  public static function clear_excludes()
+  {
+    self::$_excludes = null;
+  }
+
+  public static function is_excluded($alias)
+  {
+    if( !is_array(self::$_excludes) || count(self::$_excludes) == 0 ) return FALSE;
+    foreach( self::$_excludes as $one ) {
+      if( startswith($alias,$one) ) return TRUE;
+    }
+    return FALSE;
+  }
 
   public static function fill_node(cms_content_tree $node,$deep,$nlevels,$show_all,$collapse = FALSE,$depth = 0)
   {
@@ -83,9 +110,7 @@ final class Nav_utils
 	}
       }
 
-      if( $content->DefaultContent() ) {
-	$obj->default = 1;
-      }
+      if( $content->DefaultContent() ) $obj->default = 1;
       if( $deep ) {
 	if ($content->HasProperty('target')) $obj->target = $content->GetPropertyValue('target');
 	$config = cmsms()->GetConfig();
@@ -130,14 +155,11 @@ final class Nav_utils
 	$obj->has_children = TRUE;
 	$child_nodes = array();
 	for( $i = 0; $i < count($children); $i++ ) {
+	  if( self::is_excluded($children[$i]->get_tag('alias')) ) continue;
 	  $tmp = self::fill_node($children[$i],$deep,$nlevels,$show_all,$collapse,$depth+1);
-	  if( is_object($tmp) ) {
-	    $child_nodes[] = $tmp;
-	  }
+	  if( is_object($tmp) ) $child_nodes[] = $tmp;
 	}
-	if( count($child_nodes) ) {
-	  $obj->children = $child_nodes;
-	}
+	if( count($child_nodes) ) $obj->children = $child_nodes;
       }
 
       return $obj;

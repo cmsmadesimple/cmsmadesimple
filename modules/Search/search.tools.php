@@ -147,7 +147,7 @@ function search_Reindex(&$module)
   $module->DeleteAllWords();
 
   // have to load all the content, and properties, (in chunks)
-  $full_list = cmsms()->GetHierarchyManager()->getFlatList();
+  $full_list = array_keys( cmsms()->GetHierarchyManager()->getFlatList());
   $nperloop = min(200,count($full_list));
   $contentops = cmsms()->GetContentOperations();
   $offset = 0;
@@ -156,8 +156,7 @@ function search_Reindex(&$module)
     // figure out the content to load.
     $idlist = array();
     for( $i = 0; $i < $nperloop && $offset+$i < count($full_list); $i++ ) {
-      $node = $full_list[$offset+$i];
-      $idlist[] = (int)$node->get_tag('id');
+      $idlist[] = $full_list[$offset+$i];
     }
     $offset += $i;
     $idlist = array_unique($idlist);

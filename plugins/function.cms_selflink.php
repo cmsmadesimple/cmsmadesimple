@@ -83,12 +83,8 @@ function smarty_function_cms_selflink($params, &$template)
 		case 'next':
 			// next visible page.
 			$flatcontent = $manager->getFlatList();
-			for( $i = 0; $i < count($flatcontent); $i++ ) {
-				if( $flatcontent[$i]->getTag() == $startpage ) {
-					// found it.
-					break;
-				}
-			}
+			$indexes = array_keys($flatcontent);
+			$i = array_search($startpage,$indexes);
 			if( $i < count($flatcontent) ) {
 				for( $j = $i + 1; $j < count($flatcontent); $j++ ) {
 					$content = $flatcontent[$j]->getContent();
@@ -127,12 +123,8 @@ function smarty_function_cms_selflink($params, &$template)
 		case 'previous':
 			// previous visible page.
 			$flatcontent = $manager->getFlatList();
-			for( $i = 0; $i < count($flatcontent); $i++ ) {
-				if( $flatcontent[$i]->getTag() == $startpage ) {
-					// found it.
-					break;
-				}
-			}
+			$indexes = array_keys($flatcontent);
+			$i = array_search($startpage,$indexes);
 			if( $i < count($flatcontent) ) {
 				for( $j = $i - 1; $j >= 0; $j-- ) {
 					$content = $flatcontent[$j]->getContent();

@@ -309,6 +309,19 @@ switch($config['dbms']) { //workaround: ServerInfo() is unsupported in adodblite
    }
    break;
 }
+
+{
+  $fn = TMP_CACHE_LOCATION.'/test_time.dat';
+  @touch($fn);
+  $mtime = filemtime($fn);
+  @unlink($fn);
+  if( abs($mtime - time()) > 3 ) {
+    $tmp[0]['server_time_diff'] = testDummy('time_diff',lang('error_timedifference'),'red');
+  } else {
+    $tmp[0]['server_time_diff'] = testDummy('time_diff',lang('msg_notimedifference'),'green');
+  }
+}
+
 $smarty->assign('count_server_info', count($tmp[0]));
 $smarty->assign('server_info', $tmp);
 
@@ -336,7 +349,12 @@ $smarty->assign('permission_info', $tmp);
 
 
 
-if(isset($_GET['cleanreport']) && $_GET['cleanreport'] == 1) echo $smarty->fetch('systeminfo.txt.tpl');
+if(isset($_GET['cleanreport']) && $_GET['cleanreport'] == 1) {
+  $orig_lang = CmsNlsOperations::get_current_language();
+  CmsNlsOperations::set_language('en_US');
+  echo $smarty->fetch('systeminfo.txt.tpl');
+  CmsNlsOperations::set_language($orig_lang);
+}
 else echo $smarty->fetch('systeminfo.tpl');
 
 

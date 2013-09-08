@@ -60,6 +60,7 @@ else {
   $template = $tpl->get_name();
 }
 
+$hm = cmsms()->GetHierarchyManager();
 $cache_id = '|nav'.md5(serialize($params));
 $compile_id = '';
 
@@ -72,9 +73,50 @@ if( !$smarty->isCached($this->GetTemplateResource($template),$cache_id,$compile_
 
     case 'items':
       // hardcoded list of items (and their children)
+      Nav_utils::clear_excludes();
       $items = trim($value);
+      $nlevels = 1;
+      $start_element = null;
+      $start_page = null;
+      $start_level = null;
+      $childrenof = null;
       break;
 
+    case 'includeprefix':
+      Nav_utils::clear_excludes();
+      $list = explode(',',$value);
+      if( is_array($list) && count($list) ) {
+	foreach( $list as &$one ) {
+	  $one = trim($one);
+	}
+	$list = array_unique($list);
+	if( count($list) ) {
+	  $flatlist = $hm->getFlatList();
+	  if( is_array($flatlist) && count($flatlist) ) {
+	    $tmp = array();
+	    foreach( $flatlist as $id => &$node ) {
+	      $alias = $node->get_tag('alias');
+	      foreach( $list as $one ) {
+		if( startswith( $alias, $one ) ) $tmp[] = $alias;
+	      }
+	    }
+	    if( is_array($tmp) && count($tmp) ) $items = implode(',',$tmp);
+	  }
+	}
+      }
+      $nlevels = 1;
+      $start_element = null;
+      $start_page = null;
+      $start_level = null;
+      $childrenof = null;
+      break;
+
+    case 'excludeprefix':
+      Nav_utils::set_excludes($value);
+      $items = null;
+      break;
+
+    case 'nlevels':
     case 'number_of_levels':
       // a maximum number of levels;
       if( (int)$value > 0 ) $nlevels = (int)$value;
@@ -95,6 +137,7 @@ if( !$smarty->isCached($this->GetTemplateResource($template),$cache_id,$compile_
       $start_page = null;
       $start_level = null;
       $childrenof = null;
+      $items = null;
       break;
 
     case 'start_page':
@@ -102,6 +145,7 @@ if( !$smarty->isCached($this->GetTemplateResource($template),$cache_id,$compile_
       $start_page = trim($value);
       $start_level = null;
       $childrenof = null;
+      $items = null;
       break;
 
     case 'start_level':
@@ -109,6 +153,7 @@ if( !$smarty->isCached($this->GetTemplateResource($template),$cache_id,$compile_
       $start_page = null;
       $value = (int)$value;
       $start_level = (int)$value;
+      $items = null;
       break;
 
     case 'childrenof':
@@ -116,17 +161,17 @@ if( !$smarty->isCached($this->GetTemplateResource($template),$cache_id,$compile_
       $start_element = null;
       $start_level = null;
       $childrenof = trim($value);
+      $items = null;
       break;
 
     case 'collapse':
       $collapse = (int)$value;
       break;
     }
-  }
+  } // params
 
   if( $items ) $collapse = FALSE;
 
-  $hm = cmsms()->GetHierarchyManager();
   $rootnodes = array();
   if( $start_element ) {
     // get an alias... from a hierarchy level.
@@ -213,10 +258,12 @@ if( !$smarty->isCached($this->GetTemplateResource($template),$cache_id,$compile_
   // ready to fill the nodes
   $outtree = array();
   foreach( $rootnodes as $node ) {
+    if( Nav_utils::is_excluded($node->get_tag('alias')) ) continue;
     $tmp = Nav_utils::fill_node($node,$deep,$nlevels,$show_all,$collapse);
     if( $tmp ) $outtree[] = $tmp;
   }
 
+  Nav_utils::clear_excludes();
   $smarty->assign('nodes',$outtree);
 }
 echo $smarty->fetch($this->GetTemplateResource($template),$cache_id,$compile_id);
