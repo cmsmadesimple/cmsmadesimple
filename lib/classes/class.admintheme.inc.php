@@ -32,6 +32,7 @@
  * @version $Revision$
  * @license GPL
  * @deprecated
+ * @see CmsAdminThemeBase
  */
 class AdminTheme extends CmsAdminThemeBase
 {
@@ -78,12 +79,10 @@ class AdminTheme extends CmsAdminThemeBase
 
 	public function __get($key)
 	{
-		if( $key == 'menuItems' )
-		{
+		if( $key == 'menuItems' ) {
 			return $this->get_admin_navigation();
 		}
-		elseif ( $key == 'breadcrumbs' )
-		{
+		elseif ( $key == 'breadcrumbs' ) {
 			return $this->get_breadcrumbs();
 		}
 		return parent::__get($key);
@@ -107,19 +106,19 @@ class AdminTheme extends CmsAdminThemeBase
     function DoBookmarks()
     {
 		$gCms = cmsms();
-      $bookops = $gCms->GetBookmarkOperations();
-      $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
-      $marks = array_reverse($bookops->LoadBookmarks($this->userid));
-      $tmpMark = new Bookmark();
-      $tmpMark->title = lang('addbookmark');
-      $tmpMark->url = 'makebookmark.php'.$urlext.'&amp;title='. urlencode($this->title);
-      $marks[] = $tmpMark;
-      $marks = array_reverse($marks);
-      $tmpMark = new Bookmark();
-      $tmpMark->title = lang('managebookmarks');
-      $tmpMark->url = 'listbookmarks.php'.$urlext;
-      $marks[] = $tmpMark;
-      $this->DisplayBookmarks($marks);
+		$bookops = $gCms->GetBookmarkOperations();
+		$urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
+		$marks = array_reverse($bookops->LoadBookmarks($this->userid));
+		$tmpMark = new Bookmark();
+		$tmpMark->title = lang('addbookmark');
+		$tmpMark->url = 'makebookmark.php'.$urlext.'&amp;title='. urlencode($this->title);
+		$marks[] = $tmpMark;
+		$marks = array_reverse($marks);
+		$tmpMark = new Bookmark();
+		$tmpMark->title = lang('managebookmarks');
+		$tmpMark->url = 'listbookmarks.php'.$urlext;
+		$marks[] = $tmpMark;
+		$this->DisplayBookmarks($marks);
     }
 
 
@@ -130,34 +129,32 @@ class AdminTheme extends CmsAdminThemeBase
     function ShowShortcuts()
     {
       if (get_preference($this->userid, 'bookmarks')) {
-	$urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
-	echo "<div class=\"sections\">\n";
-	echo '<div class="itemmenucontainer shortcuts" style="float:left;">';
-	echo '<div class="itemoverflow">';
-	echo '<h2>'.lang('bookmarks').'</h2>';
-	echo '<p><a href="listbookmarks.php'.$urlext.'">'.lang('managebookmarks').'</a></p>';
-	$gCms = cmsms();
-	$bookops = $gCms->GetBookmarkOperations();
-	$marks = array_reverse($bookops->LoadBookmarks($this->userid));
-	$marks = array_reverse($marks);
-	if (FALSE == empty($marks))
-	  {
-	    echo '<h3 style="margin:0">'.lang('user_created').'</h3>';
-	    echo '<ul style="margin:0">';
-	    foreach($marks as $mark)
-	      {
-		echo "<li><a href=\"". $mark->url."\">".$mark->title."</a></li>\n";
-	      }
-	    echo "</ul>\n";
-	  }
-	echo '<h3 style="margin:0;">'.lang('help').'</h3>';
-	echo '<ul style="margin:0;">';
-	echo '<li><a rel="external" href="http://forum.cmsmadesimple.org/">'.lang('forums').'</a></li>';
-	echo '<li><a rel="external" href="http://docs.cmsmadesimple.org/">'.lang('documentation').'</a></li>';
-	echo '<li><a rel="external" href="http://www.cmsmadesimple.org/main/support/IRC">'.lang('irc').'</a></li>';
-		echo '</ul>';
-	echo '</div>';
-	echo '</div>';
+		  $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
+		  echo "<div class=\"sections\">\n";
+		  echo '<div class="itemmenucontainer shortcuts" style="float:left;">';
+		  echo '<div class="itemoverflow">';
+		  echo '<h2>'.lang('bookmarks').'</h2>';
+		  echo '<p><a href="listbookmarks.php'.$urlext.'">'.lang('managebookmarks').'</a></p>';
+		  $gCms = cmsms();
+		  $bookops = $gCms->GetBookmarkOperations();
+		  $marks = array_reverse($bookops->LoadBookmarks($this->userid));
+		  $marks = array_reverse($marks);
+		  if (FALSE == empty($marks)) {
+			  echo '<h3 style="margin:0">'.lang('user_created').'</h3>';
+			  echo '<ul style="margin:0">';
+			  foreach($marks as $mark) {
+				  echo "<li><a href=\"". $mark->url."\">".$mark->title."</a></li>\n";
+			  }
+			  echo "</ul>\n";
+		  }
+		  echo '<h3 style="margin:0;">'.lang('help').'</h3>';
+		  echo '<ul style="margin:0;">';
+		  echo '<li><a rel="external" href="http://forum.cmsmadesimple.org/">'.lang('forums').'</a></li>';
+		  echo '<li><a rel="external" href="http://docs.cmsmadesimple.org/">'.lang('documentation').'</a></li>';
+		  echo '<li><a rel="external" href="http://www.cmsmadesimple.org/main/support/IRC">'.lang('irc').'</a></li>';
+		  echo '</ul>';
+		  echo '</div>';
+		  echo '</div>';
       }
     }
     
@@ -179,10 +176,9 @@ class AdminTheme extends CmsAdminThemeBase
         echo "</p>\n";
 
         echo "<ul>";
-        foreach($marks as $mark)
-            {
+        foreach($marks as $mark) {
             echo "<li><a href=\"". $mark->url."\">".$mark->title."</a></li>\n";
-            }
+		}
         echo "</ul>\n";
         echo "</div>\n";
     }
@@ -256,40 +252,28 @@ class AdminTheme extends CmsAdminThemeBase
      */
     public function DisplaySectionPages($section)
     {
-      if (count($this->menuItems) < 1)
-	{
-	  // menu should be initialized before this gets called.
-	  // TODO: try to do initialization.
-	  // Problem: current page selection, url, etc?
-	  return -1;
-	}
+		if (count($this->menuItems) < 1) {
+			// menu should be initialized before this gets called.
+			// TODO: try to do initialization.
+			// Problem: current page selection, url, etc?
+			return -1;
+		}
 
-      foreach ($this->menuItems[$section]['children'] as $thisChild)
-	{
-	  $thisItem = $this->menuItems[$thisChild];
-	  if (! $thisItem['show_in_menu'] || strlen($thisItem['url']) < 1)
-	    {
-	      continue;
-	    }
+		foreach ($this->menuItems[$section]['children'] as $thisChild) {
+			$thisItem = $this->menuItems[$thisChild];
+			if (! $thisItem['show_in_menu'] || strlen($thisItem['url']) < 1) continue;
 
-	  echo "<div class=\"MainMenuItem\">\n";
-	  echo "<a href=\"".$thisItem['url']."\"";
-	  if (array_key_exists('target', $thisItem))
-	    {
-	      echo " target=" . $thisItem['target'];
-	    }
-	  if ($thisItem['selected'])
-	    {
-	      echo " class=\"selected\"";
-	    }
-	  echo ">".$thisItem['title']."</a>\n";
-	  if (isset($thisItem['description']) && strlen($thisItem['description']) > 0)
-	    {
-	      echo "<span class=\"description\">";
-	      echo $thisItem['description'];
-	      echo "</span>\n";
-	    }
-	  echo "</div>\n";
+			echo "<div class=\"MainMenuItem\">\n";
+			echo "<a href=\"".$thisItem['url']."\"";
+			if (array_key_exists('target', $thisItem)) echo " target=" . $thisItem['target'];
+			if ($thisItem['selected']) echo " class=\"selected\"";
+			echo ">".$thisItem['title']."</a>\n";
+			if (isset($thisItem['description']) && strlen($thisItem['description']) > 0) {
+				echo "<span class=\"description\">";
+				echo $thisItem['description'];
+				echo "</span>\n";
+			}
+			echo "</div>\n";
         }
     }
 
@@ -304,11 +288,10 @@ class AdminTheme extends CmsAdminThemeBase
      {
      	$next = $section;
 		$node = $this->menuItems[$next];
-        while ($node['parent'] != -1)
-        	{
+        while ($node['parent'] != -1) {
         	$next = $node['parent'];
         	$node = $this->menuItems[$next];
-        	}
+		}
         return $next;
      }
 
@@ -323,30 +306,19 @@ class AdminTheme extends CmsAdminThemeBase
      */
     function ListSectionPages($section)
     {
-        if (! isset($this->menuItems[$section]['children']) || count($this->menuItems[$section]['children']) < 1)
-            {
-            return;
-            }
+        if (! isset($this->menuItems[$section]['children']) || count($this->menuItems[$section]['children']) < 1) return;
 
-        if ($this->HasDisplayableChildren($section))
-            {
+        if ($this->HasDisplayableChildren($section)) {
             echo " ".lang('subitems').": ";
             $count = 0;
-            foreach($this->menuItems[$section]['children'] as $thisChild)
-                {
+            foreach($this->menuItems[$section]['children'] as $thisChild) {
                 $thisItem = $this->menuItems[$thisChild];
-                if (! $thisItem['show_in_menu']  || strlen($thisItem['url']) < 1)
-                    {
-                    continue;
-                    }
-                if ($count++ > 0)
-                    {
-                    echo ", ";
-                    }
+                if (! $thisItem['show_in_menu']  || strlen($thisItem['url']) < 1) continue;
+                if ($count++ > 0) echo ', ';
                 echo "<a href=\"".$thisItem['url'];
                 echo "\">".$thisItem['title']."</a>";
-                }
-            }
+			}
+		}
     }
 
 
@@ -360,43 +332,28 @@ class AdminTheme extends CmsAdminThemeBase
      */
     public function DisplayAllSectionPages()
     {
-    	if (count($this->menuItems) < 1)
-            {
+    	if (count($this->menuItems) < 1) {
             // menu should be initialized before this gets called.
             // TODO: try to do initialization.
             // Problem: current page selection, url, etc?
             return -1;
-            }
-        foreach ($this->menuItems as $thisSection=>$menuItem)
-            {
-            if ($menuItem['parent'] != -1)
-            	{
-            	continue;
-            	}
-            if (! $menuItem['show_in_menu'])
-                {
-                continue;
-                }
+		}
+        foreach ($this->menuItems as $thisSection=>$menuItem) {
+            if ($menuItem['parent'] != -1) continue;
+            if (! $menuItem['show_in_menu']) continue;
             echo "<div class=\"MainMenuItem\">\n";
             echo "<a href=\"".$menuItem['url']."\"";
-			if (array_key_exists('target', $menuItem))
-				{
-				echo " target=" . $menuItem['target'];
-				}
-			if ($menuItem['selected'])
-				{
-				echo " class=\"selected\"";
-				}
+			if (array_key_exists('target', $menuItem)) echo " target=" . $menuItem['target'];
+			if ($menuItem['selected']) echo " class=\"selected\"";
             echo ">".$menuItem['title']."</a>\n";
             echo "<span class=\"description\">";
-            if (isset($menuItem['description']) && strlen($menuItem['description']) > 0)
-                {
+            if (isset($menuItem['description']) && strlen($menuItem['description']) > 0) {
                 echo $menuItem['description'];
-                }
+			}
             $this->ListSectionPages($thisSection);
             echo "</span>\n";
             echo "</div>\n";
-            }
+		}
     }
 
 
@@ -404,42 +361,28 @@ class AdminTheme extends CmsAdminThemeBase
 	function renderMenuSection($section, $depth, $maxdepth)
 	{
 		$menuitems = $this->get_admin_navigation();
-		if ($maxdepth > 0 && $depth> $maxdepth)
-			{
-			return;
-			}
-		if (! $menuitems[$section]['show_in_menu'])
-			{
-			return;
-			}
-		if (strlen($menuitems[$section]['url']) < 1)
-		    {
+		if ($maxdepth > 0 && $depth> $maxdepth) return;
+		if (! $menuitems[$section]['show_in_menu']) return;
+		if (strlen($menuitems[$section]['url']) < 1) {
             echo "<li>".$menuitems[$section]['title']."</li>";
             return;
-            }
+		}
 		echo "<li><a href=\"";
 		echo $menuitems[$section]['url'];
 		echo "\"";
-		if (array_key_exists('target', $menuitems[$section]))
-			{
-			echo " target=" . $menuitems[$section]['target'];
-			}
-		if ($menuitems[$section]['selected'])
-			{
-			echo " class=\"selected\"";
-			}
+		if (array_key_exists('target', $menuitems[$section])) echo " target=" . $menuitems[$section]['target'];
+		if ($menuitems[$section]['selected']) echo " class=\"selected\"";
+
 		echo ">";
 		echo $menuitems[$section]['title'];
 		echo "</a>";
-		if ($this->HasDisplayableChildren($section))
-			{
+		if ($this->HasDisplayableChildren($section)) {
 			echo "<ul>";
-			foreach ($menuitems[$section]['children'] as $child)
-				{
+			foreach ($menuitems[$section]['children'] as $child) {
 				$this->renderMenuSection($child, $depth+1, $maxdepth);
-				}
-			echo "</ul>";
 			}
+			echo "</ul>";
+		}
 		echo "</li>";
 		return;
 	}
@@ -461,13 +404,9 @@ class AdminTheme extends CmsAdminThemeBase
     {
         echo "<div id=\"TopMenu\"><ul id=\"nav\">\n";
 		$menuitems = $this->get_admin_navigation();
-        foreach ( $menuitems as $key=>$menuItem)
-        	{
-				if ($menuItem['parent'] == -1)
-					{
-						$this->renderMenuSection($key, 0, -1);
-					}
-        	}
+        foreach ( $menuitems as $key=>$menuItem) {
+			if ($menuItem['parent'] == -1) $this->renderMenuSection($key, 0, -1);
+		}
         echo "</ul></div>\n";
     }
 
@@ -554,13 +493,11 @@ EOT;
 		$tmp1 = $this->ThemeHeader();
 		$tmp2 = ob_get_contents();
 		ob_end_clean();
-		if( $tmp1 )
-		{
+		if( $tmp1 ) {
 			// data is returned
 			$str .= $tmp1;
 		}
-		else
-		{
+		else {
 			// assume data is echoed
 			$str .= $tmp2;
 		}
@@ -639,50 +576,46 @@ EOT;
 		if( count($tnotifications) == 0 ) return;
 		// count the total number of notifications
 		$count=0;
-		for( $i = 0; $i < count($tnotifications); $i++ )
-			{
-				if( $tnotifications[$i]->priority <= $priority ) $count++;
-			}
+		for( $i = 0; $i < count($tnotifications); $i++ ) {
+			if( $tnotifications[$i]->priority <= $priority ) $count++;
+		}
 	  
-	  // Define that is singular or plural
-	  $singular_or_plural = $count;
+		// Define that is singular or plural
+		$singular_or_plural = $count;
 	  
-	  if($singular_or_plural > 1)
-		  {
-			  $tmp = lang('notifications_to_handle',$count);
-		  }
-	  else
-		  {
-			  $tmp = lang('notification_to_handle',$count);
-		  } 
+		if($singular_or_plural > 1) {
+			$tmp = lang('notifications_to_handle',$count);
+		}
+		else {
+			$tmp = lang('notification_to_handle',$count);
+		}
 
-	  // remove html tags like <b>2</b>
-	  $no_html_tags = preg_replace('/(<\/?)(\w+)([^>]*>)/e','',$tmp);
+		// remove html tags like <b>2</b>
+		$no_html_tags = preg_replace('/(<\/?)(\w+)([^>]*>)/e','',$tmp);
 	  
-      echo '<div class="full-Notifications clear">'."\n";
-      echo '<div class="Notifications-title">' . $tmp . '</div>'."\n";
-	  echo '<div title="'.$no_html_tags.'" id="notifications-display" class="notifications-show" onclick="change(\'notifications-display\', \'notifications-hide\', \'notifications-show\'); change(\'notifications-container\', \'invisible\', \'visible\');"></div>'."\n";
-	  echo '<div id="notifications-container" class="invisible">'."\n";
-	  
-      echo "<ul id=\"Notifications-area\">\n";
-      for( $i = 0; $i < count($tnotifications); $i++ )
-		  {
-			  $data = $tnotifications[$i];
-			  if( $data->priority > $priority ) continue;
+		echo '<div class="full-Notifications clear">'."\n";
+		echo '<div class="Notifications-title">' . $tmp . '</div>'."\n";
+		echo '<div title="'.$no_html_tags.'" id="notifications-display" class="notifications-show" onclick="change(\'notifications-display\', \'notifications-hide\', \'notifications-show\'); change(\'notifications-container\', \'invisible\', \'visible\');"></div>'."\n";
+		echo '<div id="notifications-container" class="invisible">'."\n";
 
-              echo '<li class="NotificationsItem NotificationsPriority'.$data->priority.'">';
-			  echo '<span class="NotificationsItemModuleName">'."\n";
-			  echo $data->module."\n";
-			  echo "</span>\n";
-			  echo '<span class="NotificationsItemData">'."\n";
-			  echo $data->html."\n";
-			  echo "</span>\n";
-			  echo '</li>';		  
-		  }
-      echo "</ul>";
-	  echo "</div><!-- notifications-container -->\n";
-      echo "</div><!-- full-Notifications -->\n";
-	  echo "<div class=\"clearb\">&nbsp;</div>\n";
+		echo "<ul id=\"Notifications-area\">\n";
+		for( $i = 0; $i < count($tnotifications); $i++ ) {
+			$data = $tnotifications[$i];
+			if( $data->priority > $priority ) continue;
+
+			echo '<li class="NotificationsItem NotificationsPriority'.$data->priority.'">';
+			echo '<span class="NotificationsItemModuleName">'."\n";
+			echo $data->module."\n";
+			echo "</span>\n";
+			echo '<span class="NotificationsItemData">'."\n";
+			echo $data->html."\n";
+			echo "</span>\n";
+			echo '</li>';		  
+		}
+		echo "</ul>";
+		echo "</div><!-- notifications-container -->\n";
+		echo "</div><!-- full-Notifications -->\n";
+		echo "<div class=\"clearb\">&nbsp;</div>\n";
     }
 
 
@@ -698,70 +631,66 @@ EOT;
 	*/
     public function ShowHeader($title_name, $extra_lang_param=array(), $link_text = '', $module_help_type = FALSE)
     {
-      $cms = cmsms();
-      $config = $cms->GetConfig();             
-      $header  = '<div class="pageheader">';
-      if (FALSE != $module_help_type) {
-		  $module = '';
-		  if( isset($_REQUEST['module']) ) {
-			  $module = $_REQUEST['module'];
-		  }
-		  else if( isset($_REQUEST['mact']) ) {
-			  $tmp = explode(',',$_REQUEST['mact']);
-			  $module = $tmp[0];
-		  }
-		  $icon = "modules/{$module}/images/icon.gif";
-		  $path = cms_join_path(cmsms()->config['root_path'],$icon);
-		  if( file_exists($path) ) {
-			  $url = $config->smart_root_url().'/'.$icon;
-			  $header .= "<img src=\"{$url}\" class=\"itemicon\" alt=\"{$icon}\" />&nbsp;";
-		  }
-		  $header .= $title_name;
-	  }
-      else {
-		  $header .= lang($title_name, $extra_lang_param);
-	  }
-      if (count($this->breadcrumbs)) {
-		  foreach ($this->breadcrumbs AS $key => $value) {
-			  $title = $value['title'];
-			  // If this is a module and the last part of the breadcrumbs
-			  if (FALSE != $module_help_type && TRUE == empty($this->breadcrumbs[$key + 1])) {
-				  if (FALSE == empty($_GET['module'])) {
-					  $module_name = $_GET['module'];
-				  }
-				  else {
-					  $module_name = substr($_REQUEST['mact'], 0, strpos($_REQUEST['mact'], ','));
-				  }
-				  // Turn ModuleName into _Module_Name
-				  $moduleName =  preg_replace('/([A-Z])/', "_$1", $module_name);
-				  $moduleName =  preg_replace('/_([A-Z])_/', "$1", $moduleName);
-				  if ($moduleName{0} == '_') {
-					  $moduleName = substr($moduleName, 1);
-				  }
-			  } else {
-				  // Remove colon and following (I.E. Turn "Edit Page: Title" into "Edit Page")
-				  $colonLocation = strrchr($title, ':');
-				  if ($colonLocation !== false) {
-					  $title = substr($title,0,strpos($title,':'));
-				  }
-				  // Get the key of the title so we can use the en_US version for the URL
-				  $title_key = $this->_ArraySearchRecursive($title, $this->menuItems);
-			  }
-		  }
+		$cms = cmsms();
+		$config = $cms->GetConfig();             
+		$header  = '<div class="pageheader">';
+		if (FALSE != $module_help_type) {
+			$module = '';
+			if( isset($_REQUEST['module']) ) {
+				$module = $_REQUEST['module'];
+			}
+			else if( isset($_REQUEST['mact']) ) {
+				$tmp = explode(',',$_REQUEST['mact']);
+				$module = $tmp[0];
+			}
+			$icon = "modules/{$module}/images/icon.gif";
+			$path = cms_join_path(cmsms()->config['root_path'],$icon);
+			if( file_exists($path) ) {
+				$url = $config->smart_root_url().'/'.$icon;
+				$header .= "<img src=\"{$url}\" class=\"itemicon\" alt=\"{$icon}\" />&nbsp;";
+			}
+			$header .= $title_name;
+		}
+		else {
+			$header .= lang($title_name, $extra_lang_param);
+		}
+		if (count($this->breadcrumbs)) {
+			foreach ($this->breadcrumbs AS $key => $value) {
+				$title = $value['title'];
+				// If this is a module and the last part of the breadcrumbs
+				if (FALSE != $module_help_type && TRUE == empty($this->breadcrumbs[$key + 1])) {
+					if (FALSE == empty($_GET['module'])) {
+						$module_name = $_GET['module'];
+					}
+					else {
+						$module_name = substr($_REQUEST['mact'], 0, strpos($_REQUEST['mact'], ','));
+					}
+					// Turn ModuleName into _Module_Name
+					$moduleName =  preg_replace('/([A-Z])/', "_$1", $module_name);
+					$moduleName =  preg_replace('/_([A-Z])_/', "$1", $moduleName);
+					if ($moduleName{0} == '_') $moduleName = substr($moduleName, 1);
+				} else {
+					// Remove colon and following (I.E. Turn "Edit Page: Title" into "Edit Page")
+					$colonLocation = strrchr($title, ':');
+					if ($colonLocation !== false) $title = substr($title,0,strpos($title,':'));
+					// Get the key of the title so we can use the en_US version for the URL
+					$title_key = $this->_ArraySearchRecursive($title, $this->menuItems);
+				}
+			}
 
-		  if (FALSE == get_preference($this->userid, 'hide_help_links', 0)) {
-				  
-			  $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
-			  $image_help = $this->DisplayImage('icons/system/info.gif', lang('module_help'),'','','systemicon');
-			  //$image_help_external = $this->DisplayImage('icons/system/info-external.gif', lang('wikihelp'),'','','systemicon');		
-			  if ('both' == $module_help_type) {
-				  $module_help_link = $config['admin_url'].'/listmodules.php'.$urlext.'&amp;action=showmodulehelp&amp;module='.$module_name;
-				  $header .= '<span class="helptext"><a href="'.$module_help_link.'" title="'.lang('module_help').'">'.$image_help.'</a> <a href="'.$module_help_link.'">'.lang('module_help').'</a></span>';
-			  }
-		  }
-	  }
-	  $header .= '</div>';
-      return $header;     
+			if (FALSE == get_preference($this->userid, 'hide_help_links', 0)) {
+
+				$urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
+				$image_help = $this->DisplayImage('icons/system/info.gif', lang('module_help'),'','','systemicon');
+				//$image_help_external = $this->DisplayImage('icons/system/info-external.gif', lang('wikihelp'),'','','systemicon');		
+				if ('both' == $module_help_type) {
+					$module_help_link = $config['admin_url'].'/listmodules.php'.$urlext.'&amp;action=showmodulehelp&amp;module='.$module_name;
+					$header .= '<span class="helptext"><a href="'.$module_help_link.'" title="'.lang('module_help').'">'.$image_help.'</a> <a href="'.$module_help_link.'">'.lang('module_help').'</a></span>';
+				}
+			}
+		}
+		$header .= '</div>';
+		return $header;     
     }
 
 
@@ -776,21 +705,17 @@ EOT;
      */
     private function _ArraySearchRecursive($needle, $haystack)
     {
-       $path = NULL;
-       $keys = array_keys($haystack);
-       while (!$path && (list($toss,$k)=each($keys))) {
-         $v = $haystack[$k];
-         if (is_scalar($v)) {
-             if ($v===$needle) {
-               $path = array($k);
-             }
-         } elseif (is_array($v)) {
-             if ($path=$this->_ArraySearchRecursive( $needle, $v )) {
-               array_unshift($path,$k);
-             }
-         }
-       }
-       return $path;
+		$path = NULL;
+		$keys = array_keys($haystack);
+		while (!$path && (list($toss,$k)=each($keys))) {
+			$v = $haystack[$k];
+			if (is_scalar($v)) {
+				if ($v===$needle) $path = array($k);
+			} elseif (is_array($v)) {
+				if ($path=$this->_ArraySearchRecursive( $needle, $v )) array_unshift($path,$k);
+			}
+		}
+		return $path;
     }
 
 
@@ -805,36 +730,30 @@ EOT;
     public function ShowErrors($errors, $get_var = '')
     {
 		$config = cmsms()->GetConfig();
-      $image_error = $this->DisplayImage('icons/system/stop.gif', lang('error'),'','','systemicon');
-      $output  = '<div class="pageerrorcontainer"';
-      if (FALSE == empty($get_var))
-	{
-	  if (FALSE == empty($_GET[$get_var]))
-	    {
-	      $errors = cleanValue(lang(cleanValue($_GET[$get_var])));
-	    }
-	  else
-	    {
-	      $errors = '';
-	      $output .= ' style="display:none;"';
-	    }
-	}
-      $output .= '><div class="pageoverflow">';
-      if (FALSE != is_array($errors))
-	{
-	  $output .= '<ul class="pageerror">';
-	  foreach ($errors as $oneerror)
-	    {
-	      $output .= '<li>'.$oneerror.'</li>';
-	    }
-	  $output .= '</ul>';
-	}
-      else
-	{
-	  $output  .= $image_error.' '.$errors;
-	}
-      $output .= '</div></div>';
-      return $output;
+		$image_error = $this->DisplayImage('icons/system/stop.gif', lang('error'),'','','systemicon');
+		$output  = '<div class="pageerrorcontainer"';
+		if (FALSE == empty($get_var)) {
+			if (FALSE == empty($_GET[$get_var])) {
+				$errors = cleanValue(lang(cleanValue($_GET[$get_var])));
+			}
+			else {
+				$errors = '';
+				$output .= ' style="display:none;"';
+			}
+		}
+		$output .= '><div class="pageoverflow">';
+		if (FALSE != is_array($errors)) {
+			$output .= '<ul class="pageerror">';
+			foreach ($errors as $oneerror) {
+				$output .= '<li>'.$oneerror.'</li>';
+			}
+			$output .= '</ul>';
+		}
+		else {
+			$output  .= $image_error.' '.$errors;
+		}
+		$output .= '</div></div>';
+		return $output;
     }
     
     /**
@@ -849,18 +768,15 @@ EOT;
     {
       $image_done = $this->DisplayImage('icons/system/accept.gif', lang('success'), '','','systemicon');
       $output = '<div class="pagemcontainer"';
-      if (FALSE == empty($get_var))
-	{
-	  if (FALSE == empty($_GET[$get_var]))
-	    {
-	      $message = lang(cleanValue($_GET[$get_var]));
-	    }
-	  else
-	    {
-	      $message = '';
-	      $output .= ' style="display:none;"';
-	    }
-	}
+      if (FALSE == empty($get_var)) {
+		  if (FALSE == empty($_GET[$get_var])) {
+			  $message = lang(cleanValue($_GET[$get_var]));
+		  }
+		  else {
+			  $message = '';
+			  $output .= ' style="display:none;"';
+		  }
+	  }
       $output .= '><p class="pagemessage">'.$image_done.' '.$message.'</p></div>';
       return $output;
     }
@@ -878,16 +794,11 @@ EOT;
 		$this->DisplayNotifications(3); // todo, a preference.
 
 		$marks = get_preference(get_userid(), 'bookmarks');
-		if ($marks)
-			{
-				$this->StartRighthandColumn();
-				if ($marks)
-					{
-						$this->DoBookmarks();
-					}
-
-				$this->EndRighthandColumn();
-			}
+		if ($marks) {
+			$this->StartRighthandColumn();
+			if ($marks) $this->DoBookmarks();
+			$this->EndRighthandColumn();
+		}
 	}
 
 	public function do_footer()
@@ -901,12 +812,10 @@ EOT;
 	{
 		$this->ShowShortcuts();
 		$this->DisplaySectionMenuDivStart();
-		if( $section_name )
-		{
+		if( $section_name ) {
 			$this->DisplaySectionPages( $section_name );
 		}
-		else
-		{
+		else {
 			$this->DisplayAllSectionPages();
 		}
 		$this->DisplaySectionMenuDivEnd();
@@ -915,8 +824,7 @@ EOT;
 	public function do_login($params)
 	{
 		// by default we're gonna grab the theme name
-		foreach( $params as $key => $val )
-		{
+		foreach( $params as $key => $val ) {
 			$$key = $val;
 		}
 		$config = cmsms()->GetConfig();

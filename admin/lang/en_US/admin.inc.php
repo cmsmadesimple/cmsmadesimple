@@ -1,4 +1,7 @@
 <?php
+$lang['admin']['msg_notimedifference'] = 'No filesystem time difference found';
+$lang['admin']['error_timedifference'] = 'Filesystem time is different than server time';
+$lang['admin']['server_time_diff'] = 'Check for filesystem time differences';
 $lang['admin']['tz_offset'] = 'Timezone Offset';
 $lang['admin']['gcb_name_help'] = '(can only contain letters and numbers)';
 $lang['admin']['pagedefaultsupdated'] = 'Page default settings updated';

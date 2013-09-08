@@ -1,4 +1,6 @@
 <?php
+$lang['error_timedifference'] = 'The filesystem where CMSMS is installed has a significantly different time than the actual server time';
+$lang['test_timedifference'] = 'Testing if filesystem time is different than server time';
 $lang['detected'] = 'Detected';
 $lang['docroot_leaveblank'] = 'Leave this blank to use the system default';
 $lang['test_xmlreader_class'] = 'Checking if the XMLReader class exists';
