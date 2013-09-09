@@ -32,6 +32,9 @@ Core - Search
   - #7538 Search Module removes valid words when indexing
   - #8169 Search Module indexing partial smarty tags and failing to index words with dash
 
+Core - Printing
+  - minor fixes.
+
   
 Version 1.11.7 - Genovesa
 -----------------------------
