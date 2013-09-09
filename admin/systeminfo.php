@@ -347,7 +347,12 @@ $smarty->assign('count_permission_info', count($tmp[0]));
 $smarty->assign('permission_info', $tmp);
 
 
-if(isset($_GET['cleanreport']) && $_GET['cleanreport'] == 1) echo $smarty->fetch('systeminfo.txt.tpl');
+if(isset($_GET['cleanreport']) && $_GET['cleanreport'] == 1) {
+  $orig_lang = CmsNlsOperations::get_current_language();
+  CmsNlsOperations::set_language('en_US');
+  echo $smarty->fetch('systeminfo.txt.tpl');
+  CmsNlsOperations::set_language($orig_lang);
+}
 else echo $smarty->fetch('systeminfo.tpl');
 
 

@@ -14,6 +14,7 @@ Core - General
   - Smarty template engine upgraded to version 3.1.14
   - Optimization to Menumanager to load all pages when no parameters limit the amount of pages to display.
   - Adds a check to the installer and systeminfo page to test wether the filesystem has a significant time difference from the php process
+  - The bbcode compatible system info report is now forced to english for posting in the forum.
 
 Core - Bug Reports
   - #8272 Sitename in Russian becomes unreadable
