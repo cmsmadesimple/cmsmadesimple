@@ -31,11 +31,6 @@
 </div>
 
 <div class="pageoverflow">
-  <p class="pagetext">{$thousanddelimitertext}:</p>
-  <p class="pageinput">{$thousanddelimiterinput}</p>
-</div>
-
-<div class="pageoverflow">
   <p class="pagetext">{$permissionstyletext}:</p>
   <p class="pageinput">{$permissionstyleinput}</p>
 </div>

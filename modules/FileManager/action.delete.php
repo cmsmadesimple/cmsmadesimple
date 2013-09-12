@@ -1,18 +1,12 @@
 <?php
 if (!function_exists("cmsms")) exit;
 if (!$this->CheckPermission("Modify Files") && !$this->AdvancedAccessAllowed()) exit;
-
-if (isset($params["cancel"])) {
-  $this->Redirect($id,"defaultadmin",$returnid,$params);
-}
+if (isset($params["cancel"])) $this->Redirect($id,"defaultadmin",$returnid,$params);
 
 $selall = $params['selall'];
-if( !is_array($selall) ) {
-  $selall = unserialize($selall);
-}
-if( !is_array($selall) ) {
-  $selall = unserialize($selall);
-}
+if( !is_array($selall) ) $selall = unserialize($selall);
+if( !is_array($selall) ) $selall = unserialize($selall);
+
 if (count($selall)==0) {
   $params["fmerror"]="nofilesselected";
   $this->Redirect($id,"defaultadmin",$returnid,$params);
@@ -22,7 +16,6 @@ if (count($selall)==0) {
 foreach( $selall as &$one ) {
   $one = $this->decodefilename($one);
 }
-
 
 // process form
 $errors = array();
@@ -54,9 +47,7 @@ if( isset($params['submit']) ) {
     if( filemanager_utils::is_image_file($file) ) {
       // check for thumb, make sure it's writable.
       $thumb = filemanager_utils::join_path($basedir,filemanager_utils::get_cwd(),'thumb_'.basename($file));
-      if( file_exists($fn) && !is_writable($fn) ) {
-	$errors[] = $this->Lang('error_thumbnotwritable',$file);
-      }
+      if( file_exists($fn) && !is_writable($fn) ) $errors[] = $this->Lang('error_thumbnotwritable',$file);
     }
 
     // at this point, we should be good to delete.
@@ -80,9 +71,7 @@ if( count($errors) ) {
   echo $this->ShowErrors($errors);
   $smarty->assign('errors',$errors);
 }
-if( is_array($params['selall']) ) {
-  $params['selall'] = serialize($params['selall']);
-}
+if( is_array($params['selall']) ) $params['selall'] = serialize($params['selall']);
 $smarty->assign('selall',$selall);
 $smarty->assign('mod',$this);
 $smarty->assign('startform', $this->CreateFormStart($id, 'fileaction', $returnid,"post","",false,"",$params));

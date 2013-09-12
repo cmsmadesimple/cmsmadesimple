@@ -43,18 +43,9 @@ final class FileManager extends CMSModule {
   function UninstallPreMessage() { return $this->Lang('really_uninstall'); }
   function GetEventDescription($name) { return $this->Lang('eventdesc_'.$name);	}
   function GetEventHelp($name) { return $this->Lang('eventhelp_'.$name); }
-
-  function VisibleToAdminUser() {
-    return $this->AccessAllowed();
-  }
-	
-  function AccessAllowed() {
-    return $this->CheckPermission("Modify Files");
-  }
-
-  public function AdvancedAccessAllowed() {
-    return $this->CheckPermission('Use FileManager Advanced',0);
-  }
+  function VisibleToAdminUser() { return $this->AccessAllowed(); }
+  function AccessAllowed() { return $this->CheckPermission("Modify Files"); }
+  public function AdvancedAccessAllowed() { return $this->CheckPermission('Use FileManager Advanced',0); }
 
   function GetFileIcon($extension,$isdir=false) {
     if (empty($extension)) $extension = '---'; // hardcode extension to something.
@@ -106,64 +97,6 @@ final class FileManager extends CMSModule {
     return "Error in Slash-function. Please report";
   }
 
-  protected function FormatFileSize($_size) {
-    $unit=$this->Lang("bytes");
-    $size=$_size;
-
-    if ($size>10000 && $size<(1024*1024)) {
-      $size=round($size/1024);
-      $unit=$this->Lang("kb");
-    }
-
-    if ($size>(1024*1024)) {
-      $size=round($size/(1024*1024),1);
-      $unit=$this->Lang("mb");
-    }
-
-    if ($this->GetPreference("thousanddelimiter")!="") {
-      $size=number_format($size,0,"",$this->GetPreference("thousanddelimiter"));  	  
-    }
-
-    $result=array();
-    $result["size"]=$size;
-    $result["unit"]=$unit;
-    return $result;
-  }
-
-  public function FormatPermissions($mode,$style="xxx") {
-    switch ($style) {
-    case 'xxx':
-      $owner=0;
-      if ($mode & 0400) $owner+=4;
-      if ($mode & 0200) $owner+=2;
-      if ($mode & 0100) $owner+=1;
-      $group=0;
-      if ($mode & 0040) $group+=4;
-      if ($mode & 0020) $group+=2;
-      if ($mode & 0010) $group+=1;
-      $others=0;
-      if ($mode & 0004) $others+=4;
-      if ($mode & 0002) $others+=2;
-      if ($mode & 0001) $others+=1;
-      return $owner.$group.$others;
-
-    case 'xxxxxxxxx':
-      $owner="";					
-      if ($mode & 0400) $owner.="r"; else $owner.="-";
-      if ($mode & 0200) $owner.="w"; else $owner.="-";
-      if ($mode & 0100) $owner.="x"; else $owner.="-";					
-      $group="";
-      if ($mode & 0040) $group.="r"; else $group.="-";
-      if ($mode & 0020) $group.="w"; else $group.="-";
-      if ($mode & 0010) $group.="x"; else $group.="-";					
-      $others="";
-      if ($mode & 0004) $others.="r"; else $others.="-";
-      if ($mode & 0002) $others.="w"; else $others.="-";
-      if ($mode & 0001) $others.="x"; else $others.="-";
-      return $owner.$group.$others;
-    }
-  }
-
   function GetPermissions($path,$file) {
     $config = cmsms()->GetConfig();
     $realpath=$this->Slash($config["root_path"],$path);
@@ -175,7 +108,7 @@ final class FileManager extends CMSModule {
     $config = cmsms()->GetConfig();
     $realpath=$this->Slash($config["root_path"],$path);
     $statinfo=stat($this->Slash($realpath,$file));
-    return $this->FormatPermissions($statinfo["mode"]);
+    return filemanager_util::format_permissions($statinfo["mode"]);
   }
 	
   function GetModeWin($path,$file) {	  

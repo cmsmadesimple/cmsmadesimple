@@ -3,12 +3,11 @@
 var refresh_url = '{$refresh_url}'+'&showtemplate=false';
 refresh_url = refresh_url.replace(/amp;/g,'');
 // <![CDATA[
-function initButton(buttonid) {
-
-    $(buttonid).attr('disabled', false);
-    if (jQuery.ui) {
-        $(buttonid).button('option', 'disabled', false);
-    }
+function enable_button(idlist) {
+  $(idlist).removeAttr('disabled').removeClass('ui-state-disabled ui-button-disabled');
+}
+function disable_button(idlist) {
+  $(idlist).attr('disabled','disabled').addClass('ui-state-disabled ui-button-disabled');
 }
 
 function enable_action_buttons() {
@@ -19,53 +18,31 @@ function enable_action_buttons() {
         text = $("#filesarea input[type='checkbox'].text").filter(':checked').length,
         imgs = $("#filesarea input[type='checkbox'].image").filter(':checked').length;
 
-
-    $('.filebtn').attr('disabled', true);
-    if (jQuery.ui) {
-        $('.filebtn').button();
-        $('.filebtn').button('option', 'disabled', true);
-    }
-
+    disable_button('button.filebtn');
+    $('button.filebtn').attr('disabled','disabled');
     if (files == 0 && dirs == 0) {
-        // nothing selected, enable anything with select_none        
-        initButton('#btn_newdir');
-
+        // nothing selected, enable anything with select_none
+        enable_button('#btn_newdir');
     } else if (files == 1) {
         // 1 selected, enable anything with select_one
-        initButton('#btn_rename');
-        initButton('#btn_move');
-        initButton('#btn_delete');
+        enable_button('#btn_rename');
+        enable_button('#btn_move');
+        enable_button('#btn_delete');
 
-        if (dirs == 0) {
-            // one selected, it's not a directory
-            initButton('#btn_copy');
-        }
-        if (arch == 1) {
-            // one selected, it's an archive.
-            initButton('#btn_unpack');
-        }
-        if (imgs == 1) {
-            initButton('#btn_thumb');
-            initButton('#btn_resizecrop');
-            initButton('#btn_rotate');
-        }
-        if (text == 1) {
-            initButton('#btn_view');
-        }
+        if (dirs == 0) enable_button('#btn_copy');
+        if (arch == 1) enable_button('#btn_unpack');
+        if (imgs == 1) enable_button('#btn_view,#btn_thumb,#btn_resizecrop,#btn_rotate');
+        if (text == 1) enable_button('#btn_view');
     } else if (files > 1 && dirs == 0) {
         // multiple files selected
-        initButton('#btn_delete');
-        initButton('#btn_copy');
-        initButton('#btn_move');
+        enable_button('#btn_delete,#btn_copy,#btn_move');
     } else if (files > 1 && dirs > 0) {
         // multiple selected, at least one dir.
-        initButton('#btn_delete');
-        initButton('#btn_move');
+        enable_button('#btn_delete,#btn_move');
     }
 }
 
 $(document).ready(function () {
-
     enable_action_buttons();
 
     $('#refresh').unbind('click');
@@ -107,8 +84,8 @@ $(document).ready(function () {
         url = url.replace(/amp;/g, '');
         $('#popup_contents').load(url);
         $('#popup').dialog({
-        	minWidth: 380,
-        	maxHeight: 600
+       	  minWidth: 380,
+          maxHeight: 600
         });
         return false;
     });
@@ -125,6 +102,17 @@ $(document).ready(function () {
 // ]]>
 </script>
 
+{function filebtn icon='ui-icon-circle-check'}
+{$addclass='ui-button-icon-primary'}
+{if isset($text) && $text != ''}
+  {$addclass='ui-button-text-icon-primary'}
+  {if !isset($title) || $title == ''}{$title=$text}{/if}
+{/if}
+<button type="submit" name="{$iname}" id="{$id}" title="{$title|default:''}" class="filebtn ui-button ui-widget ui-state-default ui-corner-all {$addclass}">
+  <span class="ui-icon ui-button-icon-primary {$icon}"></span>
+  {if isset($text) && $text != ''}<span class="ui-button-text">{$text}</span>{/if}
+</button>
+{/function}
 <h3>{$currentpath} {$path}</h3>
 
 <div id="popup" style="display: none;">
@@ -136,16 +124,16 @@ $(document).ready(function () {
 
 <div>
 	<fieldset>
-		<input type="submit" id="btn_newdir" name="{$actionid}fileactionnewdir" value="{$mod->Lang('newdir')}" class="filebtn"/>
-		<input type="submit" id="btn_view"   value="{$mod->Lang('view')}" class="filebtn"/> 
-		<input type="submit" id="btn_rename" name="{$actionid}fileactionrename" value="{$mod->Lang('rename')}" class="filebtn"/>
-		<input type="submit" id="btn_delete" name="{$actionid}fileactiondelete" value="{$mod->Lang('delete')}" class="filebtn"/> 
-		<input type="submit" id="btn_move" name="{$actionid}fileactionmove" value="{$mod->Lang('move')}" class="filebtn"/> 
-		<input type="submit" id="btn_copy" name="{$actionid}fileactioncopy" value="{$mod->Lang('copy')}" class="filebtn"/> 
-		<input type="submit" id="btn_unpack" name="{$actionid}fileactionunpack" value="{$mod->Lang('unpack')}" class="filebtn" onclick="return confirm('{$confirm_unpack}');"/>
-		<input type="submit" id="btn_thumb" name="{$actionid}fileactionthumb" value="{$mod->Lang('thumbnail')}" class="filebtn"/>
-		<input type="submit" id="btn_resizecrop" name="{$actionid}fileactionresizecrop" value="{$mod->Lang('resizecrop')}" class="filebtn"/>
-		<input type="submit" id="btn_rotate" name="{$actionid}fileactionrotate" value="{$mod->Lang('rotate')}" class="filebtn"/>
+                {filebtn id='btn_newdir' iname="{$actionid}fileactionnewdir" icon='ui-icon-circle-plus' text=$mod->Lang('newdir') title=$mod->Lang('title_newdir')}
+                {filebtn id='btn_view' iname="{$actionid}fileactionview" icon='ui-icon-circle-zoomin' text=$mod->Lang('view') title=$mod->Lang('title_view')}
+		{filebtn id='btn_rename' iname="{$actionid}fileactionrename" text=$mod->Lang('rename') title=$mod->Lang('title_rename')}
+		{filebtn id='btn_delete' iname="{$actionid}fileactiondelete" icon='ui-icon-trash' text=$mod->Lang('delete') title=$mod->Lang('title_delete')}
+		{filebtn id='btn_move' iname="{$actionid}fileactionmove" icon='ui-icon-arrow-4-diag' text=$mod->Lang('move') title=$mod->Lang('title_move')}
+		{filebtn id='btn_copy' iname="{$actionid}fileactioncopy" icon='ui-icon-copy' text=$mod->Lang('copy') title=$mod->Lang('title_copy')}
+		{filebtn id='btn_unpack' iname="{$actionid}fileactionunpack" icon='ui-icon-suitcase' text=$mod->Lang('unpack') title=$mod->Lang('title_unpack')}
+		{filebtn id='btn_thumb' iname="{$actionid}fileactionthumb" icon='ui-icon-star' text=$mod->Lang('thumbnail') title=$mod->Lang('title_thumbnail')}
+		{filebtn id='btn_resizecrop' iname="{$actionid}fileactionresizecrop" icon='ui-icon-image' text=$mod->Lang('resizecrop') title=$mod->Lang('title_resizecrop')}
+		{filebtn id='btn_rotate' iname="{$actionid}fileactionrotate" icon='ui-icon-image' text=$mod->Lang('rotate') title=$mod->Lang('title_rotate')}
 	</fieldset>
 </div>
 {$hiddenpath}
@@ -159,14 +147,13 @@ $(document).ready(function () {
 				<th>{$filenametext}</th>
 				<th class="pageicon">{$mod->Lang('mimetype')}</th>
 				<th class="pageicon">{$fileinfotext}</th>
-				<th class="pageicon">{$fileownertext}</th>
-				<th class="pageicon">{$filepermstext}</th>
-				<th class="pageicon" style="text-align:right;">{$filesizetext}</th>
+				<th class="pageicon" title="{$mod->Lang('title_col_fileowner')}">{$fileownertext}</th>
+				<th class="pageicon" title="{$mod->Lang('title_col_fileperms')}">{$filepermstext}</th>
+				<th class="pageicon" title="{$mod->Lang('title_col_filesize')}"style="text-align:right;">{$filesizetext}</th>
 				<th class="pageicon">&nbsp;</th>
-				<th class="pageicon">{$filedatetext}</th>
-				{*<th class="pageicon">{$actionstext}</th>*}
+				<th class="pageicon" title="{$mod->Lang('title_col_filedate')}">{$filedatetext}</th>
 				<th class="pageicon">
-					<input type="checkbox" name="tagall" value="tagall" id="tagall"/>
+					<input type="checkbox" name="tagall" value="tagall" id="tagall" title="{$mod->Lang('title_tagall')}"/>
 				</th>
 			</tr>
 		</thead>

@@ -3,12 +3,6 @@ if (!function_exists("cmsms")) exit;
 
 if (!$this->CheckPermission("Modify Files") && !$this->AdvancedAccessAllowed()) exit;
 
-//print_r($params);
-//die();
-
-/*$message=""; $messagecount=0;
-$error=""; $errorcount=0;*/
-//if(!isset($params["selectedaction"]) || !isset($params["path"])) {
 if(!isset($params["path"])) {
   $this->Redirect($id, 'defaultadmin');
 }
@@ -66,10 +60,6 @@ foreach ($filerec as $key => $value) {
   //not hidden, add to list
   $dirlist[$this->Slashes($value1)] = $this->Slashes($value1);
 }
-
-/*if (!count($selfiles)==0) {
-  $this->Redirect($id,"defaultadmin",$returnid,array("path"=>$params["path"],"fmerror"=>"nofilesselected"));
-} */
 
 if (isset($params["fileactionnewdir"]) || $fileaction=="newdir") {
   include_once(__DIR__."/action.newdir.php");

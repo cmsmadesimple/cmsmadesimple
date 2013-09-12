@@ -29,10 +29,6 @@ $permstyles=array($this->Lang("rwxstyle")=>"xxxxxxxxx",$this->Lang("755style")=>
 $smarty->assign('permissionstyletext',$this->Lang("permissionstyle"));
 $smarty->assign('permissionstyleinput',$this->CreateInputDropDown($id,"permissionstyle",$permstyles,"",$permissionstyle));
 
-$delimiters=array("."=>".",","=>",",$this->Lang("space")=>" ",$this->Lang("none")=>"");
-$smarty->assign('thousanddelimitertext',$this->Lang("thousanddelimiter"));
-$smarty->assign('thousanddelimiterinput',$this->CreateInputDropDown($id,"thousanddelimiter",$delimiters,"",$thousanddelimiter));
-
 $smarty->assign('submit',  $this->CreateInputSubmit($id,"save",$this->Lang("savesettings")));
 $smarty->assign('formend',$this->CreateFormEnd());
 

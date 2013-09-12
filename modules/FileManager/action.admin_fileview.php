@@ -9,10 +9,10 @@ $path=filemanager_utils::get_cwd();
 $filelist=filemanager_utils::get_file_list($path);
 
 $config = $gCms->GetConfig();
-$this->smarty->assign('currentpath', $this->Lang("currentpath"));
-$this->smarty->assign('path', $path);
-$this->smarty->assign('hiddenpath', $this->CreateInputHidden($id, "path", $path));
-$this->smarty->assign('formstart', $this->CreateFormStart($id, 'fileaction', $returnid));
+$smarty->assign('currentpath', $this->Lang("currentpath"));
+$smarty->assign('path', $path);
+$smarty->assign('hiddenpath', $this->CreateInputHidden($id, "path", $path));
+$smarty->assign('formstart', $this->CreateFormStart($id, 'fileaction', $returnid));
 
 $themeObject = cms_utils::get_theme_object();
 $titlelink = $this->Lang("filename");
@@ -26,7 +26,7 @@ if ($sortby == "nameasc") {
 }
 $params["newsort"] = $newsort;
 $titlelink = $this->CreateLink($id, "defaultadmin", $returnid, $titlelink, $params);
-$this->smarty->assign('filenametext', $titlelink);
+$smarty->assign('filenametext', $titlelink);
 
 $titlelink = $this->Lang("filesize");
 $newsort = "";
@@ -40,13 +40,13 @@ if ($sortby == "sizeasc") {
 $params["newsort"] = $newsort;
 //}
 $titlelink = $this->CreateLink($id, "defaultadmin", $returnid, $titlelink, $params);
-$this->smarty->assign('filesizetext', $titlelink);
-$this->smarty->assign('fileownertext', $this->Lang("fileowner"));
-$this->smarty->assign('filepermstext', $this->Lang("fileperms"));
-$this->smarty->assign('fileinfotext', $this->Lang("fileinfo"));
+$smarty->assign('filesizetext', $titlelink);
+$smarty->assign('fileownertext', $this->Lang("fileowner"));
+$smarty->assign('filepermstext', $this->Lang("fileperms"));
+$smarty->assign('fileinfotext', $this->Lang("fileinfo"));
 
-$this->smarty->assign('filedatetext', $this->Lang("filedate"));
-$this->smarty->assign('actionstext', $this->Lang("actions"));
+$smarty->assign('filedatetext', $this->Lang("filedate"));
+$smarty->assign('actionstext', $this->Lang("actions"));
 
 $countdirs = 0;
 $countfiles = 0;
@@ -105,15 +105,12 @@ for ($i = 0; $i < count($filelist); $i++) {
     } else {
       $onerow->noCheckbox = 1;
     }
-    $onerow->txtlink = $this->CreateLink($id,
-					 "changedir",
-					 "",
-					 $link,
-					 array("newdir" => $filelist[$i]["name"], "path" => $path, "sortby" => $sortby));
+    $url = $this->create_url($id,'changedir','',array("newdir" => $filelist[$i]["name"], "path" => $path, "sortby" => $sortby));
+    $onerow->txtlink = "<a href=\"{$url}\" title=\"{$this->Lang('title_changedir')}\">{$link}</a>";
   } else {
     $countfiles++;
     $countfilesize+=$filelist[$i]["size"];
-    $onerow->txtlink = "<a href='" . $filelist[$i]["url"] . "' target='_blank'>" . $link . "</a>";
+    $onerow->txtlink = "<a href='" . $filelist[$i]["url"] . "' target='_blank' title=\"".$this->Lang('title_view_newwindow')."\">" . $link . "</a>";
   }
   if( $filelist[$i]['archive']  ) {
     $onerow->type[] = 'archive';
@@ -130,7 +127,7 @@ for ($i = 0; $i < count($filelist); $i++) {
   if ($filelist[$i]["dir"]) {
     $onerow->filesize = "&nbsp;";
   } else {
-    $filesize = $this->FormatFileSize($filelist[$i]["size"]);
+    $filesize = filemanager_utils::format_filesize($filelist[$i]["size"]);
     $onerow->filesize = $filesize["size"];
     $onerow->filesizeunit = $filesize["unit"];
   }
@@ -160,17 +157,15 @@ if( isset($params['viewfile']) && $params['viewfile'] ) {
 }
 
 // build display
-$this->smarty->assign('files', $files);
-$this->smarty->assign('itemcount', count($files));
-$totalsize = $this->FormatFileSize($countfilesize);
+$smarty->assign('files', $files);
+$smarty->assign('itemcount', count($files));
+$totalsize = filemanager_utils::format_filesize($countfilesize);
 $counts = $totalsize["size"] . " " . $totalsize["unit"] . " " . $this->Lang("in") . " " . $countfiles . " ";
 if ($countfiles == 1) $counts.=$this->Lang("file"); else $counts.=$this->Lang("files");
 $counts.=" " . $this->Lang("and") . " " . $countdirs . " ";
-if ($countdirs == 1) $counts.=$this->Lang("subdir"); else
-    $counts.=$this->Lang("subdirs");
-$this->smarty->assign('countstext', $counts);
-
-$this->smarty->assign('formend', $this->CreateFormEnd());
+if ($countdirs == 1) $counts.=$this->Lang("subdir"); else $counts.=$this->Lang("subdirs");
+$smarty->assign('countstext', $counts);
+$smarty->assign('formend', $this->CreateFormEnd());
 
 if( isset($params['noform']) ) $smarty->assign('noform',1);
 $smarty->assign('refresh_url',$this->Create_url($id,'admin_fileview','',array('noform'=>1)));

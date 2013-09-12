@@ -34,9 +34,6 @@ if (isset($params["permissionstyle"])) {
   $this->SetPreference("permissionstyle",$params["permissionstyle"]);
 }
 
-if (isset($params["thousanddelimiter"])) {
-  $this->SetPreference("thousanddelimiter",$params["thousanddelimiter"]);
-}
 if (isset($params["create_thumbnails"])) {
   $this->SetPreference('create_thumbnails',(int)$params['create_thumbnails']);
 }

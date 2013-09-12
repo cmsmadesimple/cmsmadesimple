@@ -61,6 +61,7 @@ if( is_array($params['selall']) ) {
 $this->smarty->assign('startform', $this->CreateFormStart($id, 'fileaction', $returnid,"post","",false,"",$params));
 //$this->CreateInputHidden($id,"fileaction","rename");
 $this->smarty->assign('newnametext',$this->lang("newname"));
+$smarty->assign('newname',$newname);
 $this->smarty->assign('newnameinput',$this->CreateInputText($id,"newname",$newname,40));
 
 $this->smarty->assign('endform', $this->CreateFormEnd());
