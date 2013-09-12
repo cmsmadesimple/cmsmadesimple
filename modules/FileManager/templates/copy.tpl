@@ -12,18 +12,18 @@
   </p>
 </div>
 <div class="pageoverflow">
-  <p class="pagetext">{$mod->Lang('copy_destdir')}:</p>
+  <p class="pagetext"><label for="destdir">{$mod->Lang('copy_destdir')}:</label></p>
   <p class="pageinput">
-    <select name="{$actionid}destdir">
+    <select id="destdir" name="{$actionid}destdir">
     {html_options options=$dirlist selected=$cwd}
     </select>
   </p>
 </div>
 {if count($selall) == 1}
 <div class="pageoverflow">
-  <p class="pagetext">{$mod->Lang('copy_destname')}:</p>
+  <p class="pagetext"><label for="destname">{$mod->Lang('copy_destname')}:</label></p>
   <p class="pageinput">
-    <input type="text" name="{$actionid}destname" size="50" maxlength="255"/>
+    <input type="text" id="destname" name="{$actionid}destname" size="50" maxlength="255"/>
   </p>
 </div>
 {/if}

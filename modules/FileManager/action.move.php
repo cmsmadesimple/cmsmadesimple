@@ -1,20 +1,14 @@
 <?php
 if (!function_exists("cmsms")) exit;
 if (!$this->CheckPermission("Modify Files") && !$this->AdvancedAccessAllowed()) exit;
-
-if (isset($params["cancel"])) {
-  $this->Redirect($id,"defaultadmin",$returnid,$params);
-}
+if (isset($params["cancel"])) $this->Redirect($id,"defaultadmin",$returnid,$params);
 
 $selall = $params['selall'];
-if( !is_array($selall) ) {
-  $selall = unserialize($selall);
-}
+if( !is_array($selall) ) $selall = unserialize($selall);
 if (count($selall)==0) {
   $params["fmerror"]="nofilesselected";
   $this->Redirect($id,"defaultadmin",$returnid,$params);
 }
-
 
 foreach( $selall as &$one ) {
   $one = $this->decodefilename($one);
@@ -32,9 +26,7 @@ $errors = array();
 $destloc = '';
 if( isset($params['submit']) ) {
   $destdir = trim($params['destdir']);
-  if( $destdir == $cwd ) {
-    $errors[] = $this->Lang('movedestdirsame');
-  }
+  if( $destdir == $cwd ) $errors[] = $this->Lang('movedestdirsame');
 
   $advancedmode = filemanager_utils::check_advanced_mode();
   $basedir = $config['root_path'];
@@ -109,12 +101,8 @@ if( isset($params['submit']) ) {
   }
 } // submit
 
-if( count($errors) ) {
-  echo $this->ShowErrors($errors);
-}
-if( is_array($params['selall']) ) {
-  $params['selall'] = serialize($params['selall']);
-}
+if( count($errors) ) echo $this->ShowErrors($errors);
+if( is_array($params['selall']) ) $params['selall'] = serialize($params['selall']);
 $smarty->assign('startform', $this->CreateFormStart($id, 'fileaction', $returnid,"post","",false,"",$params));
 $smarty->assign('endform', $this->CreateFormEnd());
 $smarty->assign('cwd','/'.$cwd);

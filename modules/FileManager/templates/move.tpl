@@ -13,9 +13,9 @@
   </p>
 </div>
 <div class="pageoverflow">
-  <p class="pagetext">{$mod->Lang('move_destdir')}:</p>
+  <p class="pagetext"><label for="destdir">{$mod->Lang('move_destdir')}:</label></p>
   <p class="pageinput">
-    <select name="{$actionid}destdir">
+    <select id="destdir" name="{$actionid}destdir">
     {html_options options=$dirlist selected=$cwd}
     </select>
   </p>

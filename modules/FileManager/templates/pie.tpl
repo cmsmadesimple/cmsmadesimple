@@ -29,9 +29,7 @@ $(document).ready(function(){
           $viewport.observator.set_property(event_name,$(this).val());
         });
       }
-      $viewport.$container.append('<div>{$mod->Lang("pie_image_natural_size")}: '
-        +$viewport.$image.originalWidth+' x '
-        +$viewport.$image.originalHeight+'</div>')
+      $('#natsize').html($viewport.$image.originalWidth+' x '+$viewport.$image.originalHeight);
    }
  })
  // React on all viewport events.
@@ -65,14 +63,15 @@ input.invalid { background-color: salmon; }
   <div style="width: 24%; float: left;">
     <div style="pageoverflow">
       <p class="pagetext">{$mod->Lang('image')}:&nbsp;{$filename}</p>
+      <p class="pagetext">{$mod->Lang('pie_image_natural_size')}: <span id="natsize"></span></p>
     </div>
     <table id="coords" class="coords">
-      <tr><td>{$mod->Lang("pie_crop_x")}</td><td><input type="text" id='{$id}cx' name='{$id}cx' /></td></tr>
-      <tr><td>{$mod->Lang("pie_crop_y")}</td><td><input type="text" id='{$id}cy' name='{$id}cy' /></td></tr>
-      <tr><td>{$mod->Lang("pie_crop_w")}</td><td><input type="text" id='{$id}cw' name='{$id}cw' /></td></tr>
-      <tr><td>{$mod->Lang("pie_crop_h")}</td><td><input type="text" id='{$id}ch' name='{$id}ch' /></td></tr>
-      <tr><td>{$mod->Lang("pie_image_w")}</td><td><input type="text" id='{$id}iw' name='{$id}iw' /></td></tr>
-      <tr><td>{$mod->Lang("pie_image_h")}</td><td><input type="text" id='{$id}ih' name='{$id}ih' /></td></tr>
+      <tr><td>{$mod->Lang("pie_crop_x")}</td><td><input type="text" id='{$actionid}cx' name='{$actionid}cx' /></td></tr>
+      <tr><td>{$mod->Lang("pie_crop_y")}</td><td><input type="text" id='{$actionid}cy' name='{$actionid}cy' /></td></tr>
+      <tr><td>{$mod->Lang("pie_crop_w")}</td><td><input type="text" id='{$actionid}cw' name='{$actionid}cw' /></td></tr>
+      <tr><td>{$mod->Lang("pie_crop_h")}</td><td><input type="text" id='{$actionid}ch' name='{$actionid}ch' /></td></tr>
+      <tr><td>{$mod->Lang("pie_image_w")}</td><td><input type="text" id='{$actionid}iw' name='{$actionid}iw' /></td></tr>
+      <tr><td>{$mod->Lang("pie_image_h")}</td><td><input type="text" id='{$actionid}ih' name='{$actionid}ih' /></td></tr>
       <tr><td>{$mod->Lang("pie_lock_proportion")}</td><td><input type="checkbox" checked="checked" /></td></tr>
     </table>
     <div style="pageoverflow">
