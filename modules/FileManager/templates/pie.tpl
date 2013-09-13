@@ -66,13 +66,13 @@ input.invalid { background-color: salmon; }
       <p class="pagetext">{$mod->Lang('pie_image_natural_size')}: <span id="natsize"></span></p>
     </div>
     <table id="coords" class="coords">
-      <tr><td>{$mod->Lang("pie_crop_x")}</td><td><input type="text" id='{$actionid}cx' name='{$actionid}cx' /></td></tr>
-      <tr><td>{$mod->Lang("pie_crop_y")}</td><td><input type="text" id='{$actionid}cy' name='{$actionid}cy' /></td></tr>
-      <tr><td>{$mod->Lang("pie_crop_w")}</td><td><input type="text" id='{$actionid}cw' name='{$actionid}cw' /></td></tr>
-      <tr><td>{$mod->Lang("pie_crop_h")}</td><td><input type="text" id='{$actionid}ch' name='{$actionid}ch' /></td></tr>
-      <tr><td>{$mod->Lang("pie_image_w")}</td><td><input type="text" id='{$actionid}iw' name='{$actionid}iw' /></td></tr>
-      <tr><td>{$mod->Lang("pie_image_h")}</td><td><input type="text" id='{$actionid}ih' name='{$actionid}ih' /></td></tr>
-      <tr><td>{$mod->Lang("pie_lock_proportion")}</td><td><input type="checkbox" checked="checked" /></td></tr>
+      <tr><td><label for="cx">{$mod->Lang("pie_crop_x")}:</label></td><td><input type="text" id='cx' size="6" name='{$actionid}cx' /></td></tr>
+      <tr><td><label for="cy">{$mod->Lang("pie_crop_y")}:</label></td><td><input type="text" id='cy' size="6" name='{$actionid}cy' /></td></tr>
+      <tr><td><label for="cw">{$mod->Lang("pie_crop_w")}:</label></td><td><input type="text" id='cw' size="6" name='{$actionid}cw' /></td></tr>
+      <tr><td><label for="ch">{$mod->Lang("pie_crop_h")}:</label></td><td><input type="text" id='ch' size="6" name='{$actionid}ch' /></td></tr>
+      <tr><td><label for="iw">{$mod->Lang("pie_image_w")}:</label></td><td><input type="text" id='iw' size="6" name='{$actionid}iw' /></td></tr>
+      <tr><td><label for="ih">{$mod->Lang("pie_image_h")}:</label></td><td><input type="text" id='ih' size="6" name='{$actionid}ih' /></td></tr>
+      <tr><td><label for="lp">{$mod->Lang("pie_lock_proportion")}:</label></td><td><input type="checkbox" id="lp" checked="checked" /></td></tr>
     </table>
     <div style="pageoverflow">
       <button id="submit" name="{$actionid}save">{$mod->Lang('save')}</p>

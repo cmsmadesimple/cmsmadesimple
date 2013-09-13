@@ -55,6 +55,9 @@ $files = array();
 
 for ($i = 0; $i < count($filelist); $i++) {
   $onerow = new stdClass();
+  if( isset($filelist[$i]['url']) ) {
+    $onerow->url = $filelist[$i]['url'];
+  }
   $onerow->name = $filelist[$i]['name'];
   $onerow->urlname = $this->encodefilename($filelist[$i]['name']);
   $onerow->type = array('file');
@@ -84,7 +87,9 @@ for ($i = 0; $i < count($filelist); $i++) {
   if ($filelist[$i]["image"]) {
     $onerow->type[] = 'image';
     $params['imagesrc'] = $path.'/'.$filelist[$i]['name'];
-    if($this->GetPreference("showthumbnails", 0) == 1) $onerow->thumbnail = $this->GetThumbnailLink($filelist[$i], $path);
+    if($this->GetPreference("showthumbnails", 0) == 1) {
+      $onerow->thumbnail = $this->GetThumbnailLink($filelist[$i], $path);
+    }
   }
 
   if ($filelist[$i]["dir"]) {
@@ -145,10 +150,17 @@ if( isset($params['viewfile']) && $params['viewfile'] ) {
   foreach( $files as $file ) {
     if( $file->urlname == $params['viewfile'] ) {
       $fn = cms_join_path(filemanager_utils::get_full_cwd(),$file->name);
-      if( file_exists($fn) ) $data = @file_get_contents($fn);
-      if( $data ) {
-	$data = cms_htmlentities($data);
-	$data = nl2br($data);
+      if( in_array('text',$file->type) ) {
+	if( file_exists($fn) ) $data = @file_get_contents($fn);
+	if( $data ) {
+	  $data = cms_htmlentities($data);
+	  $data = nl2br($data);
+	  echo $data;
+	  exit;
+	}
+      }
+      else if( in_array('image',$file->type) ) {
+	$data = '<img src="'.$file->url.'" alt="'.$file->name.'"/>';
 	echo $data;
 	exit;
       }

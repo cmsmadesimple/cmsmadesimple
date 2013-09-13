@@ -173,6 +173,29 @@ final class FileManager extends CMSModule {
     return $owner.$group.$others;
   }
 
+  function GetThumbnailLink($file,$path) {
+    $gCms = cmsms();
+
+    $config = $gCms->GetConfig();
+    $advancedmode = filemanager_utils::check_advanced_mode();
+    $basedir = $config['root_path'];
+    $baseurl = $config->smart_root_url();
+
+    $filepath=$basedir.'/'.$path;
+    $url=$baseurl.'/'.$path;
+    $image="";
+    $imagepath=$this->Slashes($filepath."/thumb_".$file["name"]);
+
+    if (file_exists($imagepath)) {
+      $imageurl=$url.'/thumb_'.$file["name"];
+      $image="<img src=\"".$imageurl."\" alt=\"".$file["name"]."\" title=\"".$file["name"]."\" />";
+      $result="<a href=\"".$file["url"]."\" target=\"_blank\">";
+      $result.=$image;
+      $result.="</a>";
+      return $result;
+    }
+  }
+
   function WinSlashes($url) {
     return str_replace("/","\\",$url);
   }

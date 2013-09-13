@@ -104,6 +104,12 @@ $lang['friendlyname'] = 'File Manager';
 $lang['group'] = 'Group';
 
 // H
+$lang['help_advancedmode'] = '<p>Advanced mode allows users to browse and manage all of the files in the CMSMS installation (including system files).</p><br/><p><strong>Use Caution</strong> as it is possible to corrupt a working installation when using advanced mode.</p>';
+$lang['help_create_thumbnails'] = 'If enabled, FileManager will automatically create a new thumbnail for each newly uploaded image';
+$lang['help_iconsize'] = 'This option allows specifying the size of the icons displayed in the file list.';
+$lang['help_permissionstyle'] = '<p>This option allows changing the way that permissions are displayed in the file list.  Options include somewhat human readable <em>(rwx)</em> style, or octal <em>(755)</em> format.</p>';
+$lang['help_showhiddenfiles'] = '<p>When enabled files and directories whose name beginns with a . <em>(dot)</em> or _ <em>(underscore)</em> will be displayed in the ilst.  CMSMS <em>(and other applications)</em> occasionally stores important configuration information, or cache information in these directories.</p><p><strong>Note:</strong> This option has no effect unless advanced mode is also enabled.</p>';
+$lang['help_showthumbnails'] = 'If enabled, the file list will display a thumbnail <em>(if one exists)</em> for all images.  If disabled, the system will attempt to display an icon representing the file type.';
 $lang['help']=<<<EOF
 		<h3>What does this do?</h3>
 		<p>This module provides file management functions.</p>

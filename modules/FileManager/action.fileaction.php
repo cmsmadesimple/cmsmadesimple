@@ -1,12 +1,7 @@
 <?php
 if (!function_exists("cmsms")) exit;
-
 if (!$this->CheckPermission("Modify Files") && !$this->AdvancedAccessAllowed()) exit;
-
-if(!isset($params["path"])) {
-  $this->Redirect($id, 'defaultadmin');
-}
-
+if (!isset($params["path"])) $this->Redirect($id, 'defaultadmin');
 if( filemanager_utils::test_invalid_path($params['path']) ) {
   $this->Redirect($id, 'defaultadmin',$returnid,array("fmerror"=>"fileoutsideuploads"));
 }
@@ -31,12 +26,6 @@ foreach ($params as $key=>$value) {
 }
 
 $selall=array_merge($seldirs,$selfiles);
-
-//print_r($selfiles);
-//print_r($seldirs);
-//print_r($selall);
-//print_r($params);
-//die();
 
 // get the dirs from uploadspath
 $dirlist=array();
