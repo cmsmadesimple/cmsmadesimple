@@ -87,7 +87,8 @@ function smarty_function_cms_selflink($params, &$template)
 			$i = array_search($startpage,$indexes);
 			if( $i < count($flatcontent) ) {
 				for( $j = $i + 1; $j < count($flatcontent); $j++ ) {
-					$content = $flatcontent[$j]->getContent();
+					$k = $indexes[$j];
+					$content = $flatcontent[$k]->getContent();
 					if( !$content->Active() || !$content->HasUsableLink() || !$content->ShowInMenu() ) continue;
 					$pageid = $content->Id();
 					$label = CmsLangOperations::lang_from_realm('cms_selflink','next_label');
@@ -125,9 +126,10 @@ function smarty_function_cms_selflink($params, &$template)
 			$flatcontent = $manager->getFlatList();
 			$indexes = array_keys($flatcontent);
 			$i = array_search($startpage,$indexes);
-			if( $i < count($flatcontent) ) {
+			if( $i !== FALSE ) {
 				for( $j = $i - 1; $j >= 0; $j-- ) {
-					$content = $flatcontent[$j]->getContent();
+					$k = $indexes[$j];
+					$content = $flatcontent[$k]->getContent();
 					if( !$content->Active() || !$content->HasUsableLink() || !$content->ShowInMenu() ) continue;
 					$pageid = $content->Id();
 					$label = CmsLangOperations::lang_from_realm('cms_selflink','prev_label');
