@@ -55,6 +55,7 @@ $lang['colhdr_url'] = 'URL';
 $lang['coltitle_url'] = 'The unique URL (relative to the root url) that can be used to browse to the page';
 $lang['colhdr_view'] = 'View';
 $lang['coltitle_view'] = 'The icon in this column allows viewing the page in a new browser tab.';
+$lang['confirm_delete_page'] = 'Are you sure you want to delete this content item?';
 $lang['confirm_expandall'] = 'Are you sure you want to expand all content?  On large sites this may cause problems.  Please use caution';
 $lang['confirm_setdefault'] = 'Are you sure you want to change the default content page for this website?';
 $lang['confirm_setinactive'] = 'Are you sure you want to set this page inactive?\nThis page will not be viewable, and may affect the behavior of a working website?';

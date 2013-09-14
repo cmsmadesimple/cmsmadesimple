@@ -22,7 +22,6 @@ final class AdminSearch_content_slave extends AdminSearch_slave
   public function get_matches()
   {
     $userid = get_userid();
-    $mypages = author_pages($userid);
 
     $db = cmsms()->GetDb();
     $query = 'SELECT DISTINCT content_id FROM '.cms_db_prefix().'content_props WHERE content LIKE ?';
@@ -32,9 +31,9 @@ final class AdminSearch_content_slave extends AdminSearch_slave
       $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 
       foreach( $dbr as $one ) {
-	if( !check_ownership($userid,$one) && !quick_check_authorship($one,$mypages) &&
-	    !check_permission($userid,'Manage All Content') && 
-	    !check_permission('Modify Any Page') ) {
+	if( !check_permission($userid,'Manage All Content') && 
+	    !check_permission($userid,'Modify Any Page') &&
+	    !cmsms()->GetContentOperations()->CheckPageAuthorship($userid,$one) ) {
 	  // no access to this content page.
 	  continue;
 	}

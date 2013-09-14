@@ -29,17 +29,10 @@ $showthumbnails=$this->GetPreference("showthumbnails",1);
 $iconsize=$this->GetPreference("iconsize",0);
 $uploadboxes=$this->GetPreference("uploadboxes",5);
 $permissionstyle=$this->GetPreference("permissionstyle","xxx");
-$thousanddelimiter=$this->GetPreference("thousanddelimiter",".");
-
-
-
 
 $tab="";
 if (isset($params["tab"])) $tab=$params["tab"];
-
-if (isset($params["newsort"])) {
-	$this->SetPreference("sortby",$params["newsort"]);
-}
+if (isset($params["newsort"])) $this->SetPreference("sortby",$params["newsort"]);
 
 echo $this->StartTabHeaders();
 $filestitle="";

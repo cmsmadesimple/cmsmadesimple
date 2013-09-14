@@ -4,7 +4,7 @@
 function cms_CMloadUrl(link, lang) {
     $(document).on('click', link, function (e) {
         var url = $(this).attr('href') + '&showtemplate=false&{$actionid}ajax=1';
-        if (lang !== 0) {
+        if (typeof lang == 'string' && lang.length > 0) {
             if (!confirm(lang)) return false;
         }
         $('#contenttable').load(url + ' #contenttable > *');
@@ -31,16 +31,16 @@ $(document).ready(function () {
     cms_CMtoggleState('#multiaction'),
     cms_CMtoggleState('#multisubmit'),
     cms_checkAll('#selectall'),
-    cms_CMloadUrl('a.expandall', 0),
-    cms_CMloadUrl('a.collapseall', 0),
-    cms_CMloadUrl('a.page_collapse', 0),
+    cms_CMloadUrl('a.expandall'),
+    cms_CMloadUrl('a.collapseall'),
+    cms_CMloadUrl('a.page_collapse'),
     cms_CMloadUrl('a.page_setinactive', '{$mod->Lang('confirm_setinactive')}'),
-    cms_CMloadUrl('a.page_setactive', 0),
+    cms_CMloadUrl('a.page_setactive'),
     cms_CMloadUrl('a.page_setdefault', '{$mod->Lang('confirm_setdefault')}'),
     cms_CMloadUrl('a.page_view', '{$mod->Lang('confirm_viewpage')}'),
-    cms_CMloadUrl('a.page_sortup', 0),
-    cms_CMloadUrl('a.page_sortdown', 0),
-    cms_CMloadUrl('a.page_delete', 0);
+    cms_CMloadUrl('a.page_sortup'),
+    cms_CMloadUrl('a.page_sortdown'),
+    cms_CMloadUrl('a.page_delete', '{$mod->Lang('confirm_delete_page')}');
 
     $('a.steal_lock').on('click',function(e) {
       // we're gonna confirm stealing this lock.

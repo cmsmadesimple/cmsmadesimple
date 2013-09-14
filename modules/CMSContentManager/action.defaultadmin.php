@@ -75,6 +75,7 @@ $smarty->assign('can_reorder_content',$this->CheckPermission('Manage All Content
 // load all the content that this user can display... 
 // organize it into a tree
 $builder = new ContentListBuilder($this);
+$builder->column_state('url',cm_prettyurls_ok());
 $curpage = 1;
 if( isset($params['curpage']) ) $curpage = (int)$params['curpage'];
 
@@ -121,6 +122,7 @@ if( isset($params['movedown']) ) {
   if( !$res ) $error = $this->Lang('error_movecontent');
 }
 if( isset($params['delete']) ) {
+  debug_to_log('got delete');
   $res = $builder->delete_content($params['delete']);
   if( $res ) $error = $res;
 }
@@ -192,7 +194,9 @@ if( $this->CheckPermission('Manage All Content')) {
 $opts = bulkcontentoperations::get_operation_list();
 $smarty->assign('bulk_options',$opts);
 
-echo $this->ProcessTemplate('defaultadmin.tpl');
+$res = $this->ProcessTemplate('defaultadmin.tpl');
+if( $ajax ) debug_to_log($res);
+echo $res;
 
 #
 # EOF

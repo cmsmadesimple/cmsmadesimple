@@ -1,4 +1,88 @@
 <?php
+$lang['help_cmscontentmanager_help'] = <<<EOT
+<h3>Introduction</h3>
+<h3>The Content List</h3>
+<p>The content list is the primary interface to the module.  This form provides the main management interface for your content pages.  From here you can create, edit, delete, copy, deactivate, and re-arrange your content pages.  This page is heavily optimized for larger websites providing pagination and search mechanisms to display only a small amount of pages at a time, but to quickly find the item you would like to edit.</p>
+ <h4>Columns</h4>
+<p>Each content item is displayed as a row in a table.  There are a number of columns to quickly display various attributes of the content page, and some convenient action icons.  The visibility of certainc columns depends on a number of factors:</p>
+  <ul>
+    <li>Your Access Permissions and Page Ownership:
+      <p>If your account is restricted to certain permissions some columns may not be displayed, or disabled.</p>
+    </li>
+    <li>System Preferences and Site Configuration
+      <p>Some system preferences, and site configuration options will result in some columns from being disabled.</p>
+    </li>
+    <li>The content type
+      <p>Depending on the content type certain columns may become irrelevent.  For example, it is not possible for &quot;Section Headers&quot; or &quot;Separators&quot; to become the default page, so nothing will be displayed in the &quot;default&quot; column for those content items.</p>
+    </li>
+    <li>Wether the content item is being edited
+      <p>When other editors <em>(or even yourself) are editing a content page, then some columns will be hidden in the row for each content type to prevent modifying, deleting or copying the content page.</p>
+    </li>
+  </ul>
+  <h5>Column List</h5>
+      <p>Each column in the content list display has a special purpose:</p>
+   <ul>
+     <li>Expand/Collapse Column
+      <p>When a content page has children this column will be filled with an icon that allows expanding the list to show the pages children, or collapsing the list to hide them.  The state of which pages are expanded, and which are collapsed is saved on a per-user basis.  So that when you revisit the content manager the expanded/collapsed state of your pages will remain the same.</p>
+     </li>
+
+     <li>Hierarchy Column
+       <p>The hierarchy column displays the organization of each content page in a numeric state.</p>
+     </li>
+     
+     <li>Page Title / Menu Text Column
+      <p>This column can either display the page title, or the page menutext, depending on a setting in the &quot;Content Manager Settings&quot; page.</p>
+      <p>This column will contain a link to allow editing the content item <em>(unless the content item is locked)</em>.  Hovering over the text in this column will display additional information about the content item such as the unique numeric content id, and wether the page is cachable or not.</p>
+      <p>If the content item is locked, hovering over the text in the column will display information about who locked the item, and when thelock expires.</p>
+     </li>
+     <li>Page Alias Column</li>
+       <p>This column displays the unique alias associated with each page <em>(note: some content types do not have aliases).</p>
+     <li>Template Column</li>
+       <p>This column displays the design and template that is used to display the content for the page.</p>
+     <li>Type Column
+       <p>This column lists the content type (i.e: content, section header, separator, etc.).  CMSMS is distributed with a number of content types, and third party modules can provide more.  Each content type has different features and functionality.</p>
+     </li>
+     <li>Owner Column
+       <p>The owner column displays the username of the owner of the content item.  Hovering over the text in this column will display information as to when the content item was created and last edited.</p>
+     </li>
+     <li>Active Column.
+       <p>This column displays icons to show the current active state of the content item.  Active items can be navigated to, and will appear in navigation menus on the frontend.  If your user account has sufficient privilege you can click on the icon to toggle its active state.</p>
+     </li>
+     <li>Default Column.
+       <p>This column displays wether the content type is the defaul page or not.  The default content item is the home page for your website.  Only some content types allow the content type to be the default.</p>
+       <p>If your user account has sufficient privilege, and the content type supports being the default content for the website you can click on the icon to change the default flag to a different page.</p>
+     </li>
+     <li>The &quot;Move&quot; Column.
+       <p>Depending upon your access privileges, you may see icons that allow changing the order of the content items with respect to its immediate peers.</p>
+     </li>
+     <li>Action Icons.
+     <p>Depending on your access privileges, the content type and its current lock state you may see different icons on each content row allowing different functionality:</p>
+       <ul>
+         <li>View - Open up a new browser window <em>(or tab)</em> and view the content item as your visitors will see it.</li>
+         <li>Copy - Copy the content item to a new content item.
+           <p>A new content item will be created with a new page title, and alias and you will be presented with the ability to edit the new page.</p>
+         </li>
+         <li>Delete - Delete the content item.
+           <p>Depending upon your access privileges, and wether or not the content item has children, the option to delete the content item may be hidden or disabled.</p>
+         </li>
+         <li>Bulk operations checkbox.
+           <p>The bulk operations checkbox allows selecting multiple content items to operate on en-mass.</p>
+         </li>
+       </ul> 
+     </li>
+   </ul>
+ <h4>Access Levels</h4>
+ <h4>Content Locking</h4>
+ <h4>Pagination</h4>
+ <h4>Expand/Collapse All</h4>
+ <h4>Searching</h4>
+ <h4>Bulk Actions</h4>
+ <h4>Reordering</h4>
+<h3>Adding Content Pages</h3>
+  <h4>Content Types</h4>
+  <h4>
+<h3>Editing Content Pages</h3>
+EOT;
 $lang['help_myaccount_admincallout'] = 'If enabled administrative bookmarks <em>(shortcuts)</em> will be enabled allowing you to manage a list of frequently used actions in the admin console.';
 $lang['help_myaccount_admintheme'] = 'Select an adminstration theme to use.  Different administration themes have different menu layouts, work better for mobile displays, and have varous additional features.';
 $lang['help_myaccount_ce_navdisplay'] = 'Select which content field should be displayed in content lists.  Options include the page title, or menu text.  If &quot;None&quot; is selected, then the site preference will be used';

@@ -60,6 +60,7 @@ final class ContentListBuilder
   private $_pagelist;
   private $_seek_to;
   private $_locks;
+  private $_display_columns = array();
 
   /**
    * Constructor
@@ -68,14 +69,17 @@ final class ContentListBuilder
    */
   public function __construct(CMSModule $mod)
   {
-    if( get_class($mod) != 'CMSContentManager' ) {
-      throw new CmsInvalidDataException('Expected ContentEditor object, got: '.get_class($mod));
-    }
+    if( get_class($mod) != 'CMSContentManager' ) throw new CmsInvalidDataException('Expected ContentEditor object, got: '.get_class($mod));
 
     $this->_module = $mod;
     $this->_userid = get_userid();
     $tmp = cms_userprefs::get('opened_pages');
     if( $tmp ) $this->_opened_array = explode(',',$tmp);
+  }
+
+  public function column_state($column,$state = TRUE)
+  {
+    $this->_display_columns[$column] = $state;
   }
 
   /**
@@ -321,7 +325,6 @@ final class ContentListBuilder
     $content1->ChangeItemOrder($direction);
     $contentops = ContentOperations::get_instance();
     $contentops->SetAllHierarchyPositions();
-    $contentops->ClearCache();
     return TRUE;
   }
 
@@ -360,14 +363,11 @@ final class ContentListBuilder
     if( $content->DefaultContent() ) return $this->_module->Lang('error_delete_defaultcontent');
 
     $content->Delete();
-    $contentops->SetAllHierarchyPositions();
 
-    if( $childcount == 1 && $parent_id > -1 ) {
-      $this->collapse_section($parent_id);
-    }
+    if( $childcount == 1 && $parent_id > -1 ) $this->collapse_section($parent_id);
     $this->collapse_section($page_id);
 
-    $contentops->ClearCache();
+    $contentops->SetAllHierarchyPositions();
   }
 
   /**
@@ -383,8 +383,8 @@ final class ContentListBuilder
     $columnstodisplay['expand'] = in_array('expand',$cols);
     $columnstodisplay['hier'] = in_array('hier',$cols);
     $columnstodisplay['page'] = in_array('page',$cols);
-    $columnstodisplay['alias'] = in_array('alias',$cols) && get_site_preference('listcontent_showalias',1);
-    $columnstodisplay['url'] = in_array('url',$cols) && get_site_preference('listcontent_showurl',1);
+    $columnstodisplay['alias'] = in_array('alias',$cols);
+    $columnstodisplay['url'] = in_array('url',$cols);
     $columnstodisplay['template'] = in_array('template',$cols);
     $columnstodisplay['friendlyname'] = in_array('friendlyname',$cols);
     $columnstodisplay['owner'] = in_array('owner',$cols);
@@ -396,6 +396,13 @@ final class ContentListBuilder
     $columnstodisplay['edit'] = in_array('edit',$cols);
     $columnstodisplay['delete'] = in_array('delete',$cols) && ($mod->CheckPermission('Remove Pages') || $mod->CheckPermission('Manage All Content'));
     $columnstodisplay['multiselect'] = in_array('multiselect',$cols) && ($mod->CheckPermission('Remove Pages') || $mod->CheckPermission('Manage All Content'));
+
+    foreach( $columnstodisplay as $key => $val ) {
+      if( isset($this->_display_columns[$key]) ) {
+	$columnstodisplay[$key] = $val && $this->_display_columns[$key];
+      }
+    }
+
     return $columnstodisplay;
   }
 
@@ -433,49 +440,45 @@ final class ContentListBuilder
     // 3.  reduce list by items we are able to view (author pages)
     
     $contentops = cmsms()->GetContentOperations();
-    $display = array();
-
-    // add in top level items.
     $hm = cmsms()->GetHierarchyManager();
-    {
-      $children = $hm->get_children();
-      foreach( $children as $child ) {
-	$display[] = $child->get_tag('id');
-      }
-    }
-
-    // add children of opened_array items to the list.
-    $list = array();
-    foreach( $this->_opened_array as $one ) {
-      $node = $contentops->quickfind_node_by_id($one);
-      while( $node ) {
-	$children = $node->get_children();
-	if( $children && count($children) ) {
-	  foreach( $children as $child ) {
-	    $list[] = $child->get_tag('id');
-	  }
-	}
-	$node = $node->get_parent();
-	if( $node && $node->get_tag('id') > 0 && !in_array($node->get_tag('id'),$this->_opened_array) ) {
-	  $list = null;
-	  break;
-	}
-      }
-    }
-    if( is_array($list) && count($list) ) $display = array_merge($display,$list);
-    $display = array_unique($display);
+    $display = array();
 
     // filter the display list by what we're authorized to view.
     if( $this->_use_perms && ($this->_module->CheckPermission('Manage All Content') || $this->_module->CheckPermission('Modify Any Page')) ) {
-      // we can view anything.
+      // we can display anything
+
+      // add in top level items.
+      {
+	$children = $hm->get_children();
+	foreach( $children as $child ) {
+	  $display[] = $child->get_tag('id');
+	}
+      }
+
+      // add children of opened_array items to the list.
+      $list = array();
+      foreach( $this->_opened_array as $one ) {
+	$node = $contentops->quickfind_node_by_id($one);
+	while( $node ) {
+	  $children = $node->get_children();
+	  if( $children && count($children) ) {
+	    foreach( $children as $child ) {
+	      $list[] = $child->get_tag('id');
+	    }
+	  }
+	  $node = $node->get_parent();
+	  if( $node && $node->get_tag('id') > 0 && !in_array($node->get_tag('id'),$this->_opened_array) ) {
+	    $list = null;
+	    break;
+	  }
+	}
+      }
+      if( is_array($list) && count($list) ) $display = array_merge($display,$list);
+      $display = array_unique($display);
     }
     else {
-      $valid = author_pages($this->_userid);
-      $tmp = array();
-      foreach( $valid as $one ) {
-	if( in_array($one,$display) ) $tmp[] = $one;
-      }
-      $display = $tmp;
+      // we can only edit some pages.
+      $display = $contentops->GetPageAccessForUser($this->_userid);
     }
 
     // now order the page id list by hierarchy.
@@ -527,11 +530,12 @@ final class ContentListBuilder
     $children = $parent->get_children();
     if( !$children ) return FALSE;
 
+    $contentops = cmsms()->GetContentOperations();
     if( $userid <= 0 ) $userid = $this->_userid;
-    $mypages = author_pages($userid);
+
     for( $i = 0; $i < count($children); $i++ ) {
-      $the_id = $chidren[$i]->get_tag('id');
-      if( !quick_check_authorship($the_id,$mypages) ) return FALSE;
+      $the_id = $children[$i]->get_tag('id');
+      if( !$contentops->CheckPageAuthorship($userid,$the_id) ) return FALSE;
     }
     return TRUE;
   }
@@ -542,8 +546,7 @@ final class ContentListBuilder
   private function _check_authorship($content_id,$userid = null)
   {
     if( $userid <= 0 ) $userid = $this->_userid;
-    $mypages = author_pages($userid);
-    return quick_check_authorship($content_id,$mypages);
+    return cmsms()->GetContentOperations()->CheckPageAuthorship($userid,$content_id);
   }
 
   /**
@@ -673,15 +676,16 @@ final class ContentListBuilder
 	$rec['lastmodifiedby'] = $users[$content->LastModifiedBy()]->username;
       }
       $rec['can_edit'] = ($mod->CheckPermission('Modify Any Page') || $mod->CheckPermission('Manage All Content') ||
-			  $this->_check_authorship()) && !$this->_is_locked($page_id);
+			  $this->_check_authorship($rec['id'])) && !$this->_is_locked($page_id);
       $rec['can_steal'] = ($mod->CheckPermission('Modify Any Page') || $mod->CheckPermission('Manage All Content') ||
-			   $this->_check_authorship()) && $this->_is_locked($page_id) && $this->_is_lock_expired($page_id);
+			   $this->_check_authorship($rec['id'])) && $this->_is_locked($page_id) && $this->_is_lock_expired($page_id);
 
       foreach( array_keys($columns) as $column ) {
 	switch( $column ) {
 	case 'expand':
 	  $rec[$column] = 'none';
 	  if( $node->has_children() ) {
+	    debug_to_log('page id '.$node->get_tag('alias').' has children');
 	    if( in_array($page_id,$this->_opened_array) ) {
 	      $rec[$column] = 'open';
 	    } else {
@@ -802,7 +806,7 @@ final class ContentListBuilder
 	case 'multiselect':
 	  $rec[$column] = '';
 	  if( !$content->IsSystemPage() && !$this->_is_locked($content->Id()) ) {
-	    if( $mod->CheckPermission('Manage All Content') || $this->CheckPermission('Modify Any Page') ) {
+	    if( $mod->CheckPermission('Manage All Content') || $mod->CheckPermission('Modify Any Page') ) {
 	      $rec[$column] = 'yes';
 	    }
 	    else if( $mod->CheckPermission('Remove Pages') && $this->_check_authorship($content->Id()) ) {

@@ -208,10 +208,9 @@ function check_permission($userid, $permname)
  * @since 0.1
  * @param   integer  The User ID
  * @param   integer  The content id
- * @param   boolean  use strict checking (ignored)
  * @return  boolean 
  */
-function check_ownership($userid, $contentid = '', $strict = false)
+function check_ownership($userid, $contentid = '')
 {
   $check = false;
   $gCms = cmsms();
@@ -220,31 +219,7 @@ function check_ownership($userid, $contentid = '', $strict = false)
   $adminuser = $userops->UserInGroup($userid,1);
   if( $adminuser ) return true;
 
-  if (!isset($gCms->variables['ownerpages'])) {
-    $db = $gCms->GetDb();
-
-    $variables = &$gCms->variables;
-    $tmpa = array();
-
-    $query = "SELECT content_id FROM ".cms_db_prefix()."content WHERE owner_id = ?";
-    $result = &$db->Execute($query, array($userid));
-
-    while ($result && !$result->EOF) {
-      $tmpa[] = $result->fields['content_id'];
-      $result->MoveNext();
-    }
-    $gCms->variables['ownerpages'] = $tmpa;
-
-    if ($result) $result->Close();
-  }
-
-  if (isset($gCms->variables['ownerpages'])) {
-    if (in_array($contentid, $gCms->variables['ownerpages'])) {
-      $check = true;
-    }
-  }
-
-  return $check;
+  return cmsms()->GetContentOperations()->CheckPageOwnership($userid,$contentid);
 }
 
 /**
@@ -275,26 +250,6 @@ function author_pages($userid)
 {
   return ContentOperations::get_instance()->GetPageAccessForUser($userid);
 }
-
-/**
- * Quickly checks that the given userid has access to modify the given
- * pageid.  This would mean that they were set as additional
- * authors/editors by the owner.
- *
- * @since 0.11
- * @internal
- * @param   integer The content id to test with
- * @param   array   A list of the authors pages.
- * @return  boolean
- */
-function quick_check_authorship($contentid, $hispages)
-{
-  $check = false;
-  if (in_array($contentid, $hispages)) $check = true;
-
-  return $check;
-}
-
 
 /**
  * Put an event into the audit (admin) log.  This should be

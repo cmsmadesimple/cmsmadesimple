@@ -1458,6 +1458,7 @@ abstract class ContentBase
 		$errors = array();
 
 		if ($this->mParentId < -1) {
+			die('parent id is '.$this->mParentId);
 			$errors[] = lang('invalidparent');
 			$result = false;
 		}
@@ -1608,6 +1609,8 @@ abstract class ContentBase
 	public function FillParams($params,$editing = false)
 	{
 		// content property parameters
+		stack_trace();
+		debug_display($editing,'fillparams');
 		$parameters = array('extra1','extra2','extra3','image','thumbnail');
 		foreach ($parameters as $oneparam) {
 			if (isset($params[$oneparam])) $this->SetPropertyValue($oneparam, $params[$oneparam]);
@@ -1624,6 +1627,7 @@ abstract class ContentBase
 
 		// parent id
 		if( isset($params['parent_id']) ) {
+			if( $params['parent_id'] == -2 && !$editing ) $params['parent_id'] = -1;
 			if ($this->mParentId != $params['parent_id']) {
 				$this->mHierarchy = '';
 				$this->mItemOrder = -1;
@@ -1978,13 +1982,14 @@ abstract class ContentBase
 		$allusers = $userops->LoadUsers();
 		$allgroups = $groupops->LoadGroups();
 		foreach ($allusers as $oneuser) {
-			$opt[$oneuser->id] = $oneuser->username;
+			$opts[$oneuser->id] = $oneuser->username;
 		}
 		foreach ($allgroups as $onegroup) {
 			if( $onegroup->id == 1 ) continue; // exclude admin group (they have all privileges anyways)
 			$val = $onegroup->id*-1;
 			$opts[$val] = lang('group').': '.$onegroup->name;
 		}
+
 		return $opts;
 	}
 
@@ -2226,9 +2231,9 @@ abstract class ContentBase
 						 '<input type="text" name="extra3" id="extra3" maxlength="255" size="80" value="'.cms_htmlentities($this->GetPropertyValue('extra3')).'" />');
 
 		case 'owner':
-			$showadmin = check_ownership(get_userid(), $this->Id());
+			$showadmin = cmsms()->GetContentOperations()->CheckPageOwnership(get_userid(), $this->Id());
 			$userops = $gCms->GetUserOperations();
-			if (!$adding && ($showadmin || check_permission(get_userid(),'Manage All Content')) ) {
+			if (!$adding && (check_permission(get_userid(),'Manage All Content') || $showadmin) ) {
 				$help = '&nbsp;'.cms_admin_utils::get_help_tag('core','help_content_owner');
 				return array('<label for="owner">'.lang('owner').':</label>'.$help, $userops->GenerateDropdown($this->Owner()));
 			}
@@ -2236,8 +2241,8 @@ abstract class ContentBase
 
 		case 'additionaleditors':
 			// do owner/additional-editor stuff
-			if( $adding || check_ownership(get_userid(),$this->Id()) || 
-				check_permission(get_userid(),'Manage All Content')) {
+			if( $adding || check_permission(get_userid(),'Manage All Content') ||
+				cmsms()->GetContentOperations()->CheckPageOwnership(get_userid(),$this->Id()) ) {
 				return $this->ShowAdditionalEditors();
 			}
 			break;

@@ -74,12 +74,15 @@ $designer_group->description = 'Members of this group can manage stylesheets, te
 $designer_group->active = 1;
 $designer_group->Save();
 $designer_group->GrantPermission('Add Templates');
+$designer_group->GrantPermission('Manage Designs');
 $designer_group->GrantPermission('Modify Templates');
 $designer_group->GrantPermission('Manage Stylesheets');
 $designer_group->GrantPermission('Manage All Content');
 $designer_group->GrantPermission('Manage My Account');
 $designer_group->GrantPermission('Manage My Settings');
 $designer_group->GrantPermission('Manage My Bookmarks');
+$designer_group->GrantPermission('Modify Files');
+$designer_group->GrantPermission('Modify User-defined Tags');
 
 //
 // initial users

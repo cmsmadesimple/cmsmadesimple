@@ -34,6 +34,10 @@ function microTiny_init(idlist_string) {
    setup: function(ed) {
      ed.onChange.add(function(ed,l) {
        if(typeof(jQuery) != 'undefined') {
+	 $(ed.getElement()).trigger('cmsms_formchange',{
+           'elem': ed.getElement(),
+           'value': l.content
+         });
 	 $(ed.getElement()).trigger('cmsms_textchange',{
            'elem': ed.getElement(),
 	   'module': 'MicroTiny',

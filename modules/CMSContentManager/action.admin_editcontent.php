@@ -148,7 +148,7 @@ try {
   if( strtoupper($_SERVER['REQUEST_METHOD']) == 'POST' ) {
     // if we're in a POST action, another item may have changed that requires reloading the page
     // filling the params will make sure that no edited content was lost.
-    $content_obj->FillParams($_POST,($content_id < 1));
+    $content_obj->FillParams($_POST,($content_id > 0));
   }
   
   if( isset($params['submit']) || isset($params['apply']) || isset($params['preview']) ) {

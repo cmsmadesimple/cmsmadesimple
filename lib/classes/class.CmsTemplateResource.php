@@ -92,7 +92,7 @@ class CmsTemplateResource extends CMS_Fixed_Resource_Custom
 			$pos1 = stripos($tpl->content,'<head');
 			$pos2 = stripos($tpl->content,'<header');
 			if( $pos1 === FALSE || $pos1 == $pos2 ) return;
-			$source = substr($tpl->content,0,$pos1);
+			$source = trim(substr($tpl->content,0,$pos1));
 			return;
 
 		case 'head':
@@ -101,14 +101,14 @@ class CmsTemplateResource extends CMS_Fixed_Resource_Custom
 			$pos1a = stripos($tpl->content,'<header');
 			$pos2 = stripos($tpl->content,'</head>');
 			if( $pos1 === FALSE || $pos1 == $pos1a || $pos2 === FALSE ) return;
-			$source = substr($tpl->content,$pos1,$pos2-$pos1+7);
+			$source = trim(substr($tpl->content,$pos1,$pos2-$pos1+7));
 			return;
 
 		case 'body':
 			$mtime = $tpl->modified;
 			$pos = stripos($tpl->content,'</head>');
 			if( $pos !== FALSE ) {
-				$source = substr($tpl->content,$pos+7);
+				$source = trim(substr($tpl->content,$pos+7));
 			}
 			else {
 				$source = $tpl->content;
@@ -116,7 +116,7 @@ class CmsTemplateResource extends CMS_Fixed_Resource_Custom
 			return;
 
 		default:
-			$source = $tpl->content;
+			$source = trim($tpl->content);
 			$mtime = $tpl->modified;
 			return;
 		}

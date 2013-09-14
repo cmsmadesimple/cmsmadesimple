@@ -45,6 +45,8 @@ class ContentOperations
 	private $_default_content_id;
 	private static $_instance;
 	private $_authorpages;
+	private $_ownedpages;
+	private $_last_modified;
 
 	public static function &get_instance()
 	{
@@ -446,7 +448,7 @@ class ContentOperations
 		    $this->_SetHierarchyPosition($one);
 		}
 
-		$this->ClearCache();
+		$this->_ClearCache();
 	}
 
 
@@ -458,15 +460,14 @@ class ContentOperations
 	 */
 	function GetLastContentModification()
 	{
-		static $last_modified = -1;
-		if( $last_modified <= 0 ) {
+		if( $this->_last_modified <= 0 ) {
 			$db = cmsms()->GetDb();
 			$query = 'SELECT modified_date FROM '.cms_db_prefix().'content ORDER BY modified_date DESC';
 			$val = $db->GetOne($query);
-			$last_modified = $db->UnixTimeStamp($val);
+			$this->_last_modified = $db->UnixTimeStamp($val);
 		}
 		$last_modified_b = cms_cache_handler::get_instance()->get('lastmodified');
-		return max($last_modified,$last_modified_b);
+		return max($this->_last_modified,$last_modified_b);
 	}
 
 	function SetContentModified()
@@ -493,6 +494,7 @@ class ContentOperations
 		if( ($tmp = cms_cache_handler::get_instance()->get('contentcache')) ) {
 			list($mtime,$data) = unserialize($tmp);
 			if( $mtime > $this->GetLastContentModification() ) {
+				debug_to_log('loading tree from cache');
 				if( get_class($data) == 'cms_content_tree' ) {
 					$tree = $data;
 					$loadedcache = true;
@@ -501,6 +503,7 @@ class ContentOperations
 		}
 
 		if (!$loadedcache) {
+			debug_to_log('loading tree from database');
 			debug_buffer('', 'Start loading content tree from database and serializing');
 			$query = 'SELECT content_id,parent_id,content_alias FROM '.cms_db_prefix().'content ORDER BY parent_id,item_order';
 			$nodes = $db->GetArray($query);
@@ -781,10 +784,12 @@ class ContentOperations
 		$count++;
 		$id = 'cms_hierdropdown'.$count;
 		$value = $parent;
-		
+
 		$out = "<input type=\"text\" title=\"".lang('title_hierselect')."\" name=\"{$name}\" id=\"{$id}\" class=\"cms_hierdropdown\" value=\"{$value}\" size=\"50\" maxlength=\"50\"/>";
 		$opts = array();
 		//$opts['value'] = $parent;
+		$opts['current'] = $current;
+		$opts['parent'] = $parent;
 		$opts['allowcurrent'] = ($allowcurrent)?'true':'false';
 		$opts['use_perms'] = ($use_perms)?'true':'false';
 		$opts['ignore_current'] = ($ignore_current)?'true':'false';
@@ -985,16 +990,18 @@ class ContentOperations
 	 * @access private
 	 * @return void
 	 */
-	function ClearCache()
+	private function _ClearCache()
 	{
 		$gCms = cmsms();
 		$smarty = $gCms->GetSmarty();
 
 		cms_content_cache::clear();
+		$this->_quickfind = null;
 		unset($gCms->hrinstance);
-		$smarty->clear_all_cache();
-		$smarty->clear_compiled_tpl();
-		$gCms->clear_cached_files();
+		debug_to_log($gCms->hrinstance);
+// 		$smarty->clear_all_cache();
+// 		$smarty->clear_compiled_tpl();
+// 		$gCms->clear_cached_files();
 	}
 
 	/**
@@ -1086,34 +1093,65 @@ class ContentOperations
 		}
 	}
 
+	/**
+	 * Return a list of pages that the user is owner of.
+	 *
+	 * @since 2.0
+	 * @author Robert Campbell <calguy1000@hotmail.com>
+	 * @param int The userid
+	 * @return Array of page id's
+	 */
+	public function GetOwnedPages($userid)
+	{
+		if( !is_array($this->_ownedpages) ) {
+			$this->_ownedpages = array();
+
+			$db = cmsms()->GetDb();
+			$query = 'SELECT content_id'.cms_db_prefix().'content WHERE owner_id = ? ORDER BY hierarchy';
+			$tmp = $db->GetCol($query,array($userid));
+			$data = array();
+			for( $i = 0; $i < count($tmp); $i++ ) {
+				if( $tmp[$i] > 0 ) $data[] = $tmp[$i];
+			}
+
+			if( count($data) ) $this->_ownedpages = $data;
+		}
+		return $this->_ownedpages;
+	}
+
+	public function CheckPageOwnership($userid,$pageid)
+	{
+		$pagelist = $this->GetOwnedPages($userid);
+		return in_array($pageid,$pagelist);
+	}
+
+	/**
+	 * Return a list of pages that the user has edit access to.
+	 *
+	 * @since 2.0
+	 * @author Robert Campbell <calguy1000@hotmail.com>
+	 * @param int The userid
+	 * @return Array of page id's
+	 */
 	public function GetPageAccessForUser($userid)
 	{
 		if( !is_array($this->_authorpages) ) {
 			$this->_authorpages = array();
-
-			$db = cmsms()->GetDb();
-			$query = 'SELECT content_id,hierarchy FROM '.cms_db_prefix().'content WHERE owner_id = ? ORDER BY hierarchy';
-			$tmp = $db->GetArray($query,array($userid));
-			$data = array();
-			for( $i = 0; $i < count($tmp); $i++ ) {
-				$data[$tmp[$i]['content_id']] = $tmp[$i]['hierarchy'];
-			}
+			$data = $this->GetOwnedPages($userid);
 
 			// Get all of the pages this user has access to.
-			$query = "SELECT A.content_id,B.hierarchy FROM ".cms_db_prefix()."additional_users A 
+			$db = cmsms()->GetDb();
+			$query = "SELECT A.content_id FROM ".cms_db_prefix()."additional_users A 
                       LEFT JOIN ".cms_db_prefix().'content B ON A.content_id = B.content_id
                       WHERE A.user_id = ?
                       ORDER BY B.hierarchy';
-			$tmp = $db->GetArray($query, array($userid));
+			$tmp = $db->GetCol($query, array($userid));
 			for( $i = 0; $i < count($tmp); $i++ ) {
-				$content_id = $tmp[$i]['content_id'];
-				if( isset($data['content_id']) ) continue;
-				$data[$content_id] = $tmp[$i]['hierarchy'];
+				if( $tmp[$i] > 0 && !in_array($tmp[$i],$data) ) $data[] = $tmp[$i];
 			}
 
 			if( count($data) ) asort($data);
-
-			$this->_authorpages = array_keys($data);
+			$this->_authorpages = $data;
 		}
 		return $this->_authorpages;
 	}

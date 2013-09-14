@@ -221,7 +221,7 @@ class GroupOperations
 		$query = 'INSERT INTO '.cms_db_prefix()."group_perms
                   (group_perm_id,group_id,permission_id,create_date,modified_date)
                   VALUES (?,?,?,$now,$now)";
- 		$dbr = $db->Execute($query,array($new_id,$groupid,$perm));
+ 		$dbr = $db->Execute($query,array($new_id,$groupid,$permid));
 		unset($this->_perm_cache);
 	}
 

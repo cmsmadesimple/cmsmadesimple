@@ -44,11 +44,10 @@ class CMSContentTemplateResource extends CMS_Fixed_Resource_Custom
       // We've a custom error message...  return it here
       header("HTTP/1.0 404 Not Found");
       header("Status: 404 Not Found");
-      if ($name == 'content_en')
-	$source = get_site_preference('custom404');
-      else
-	$source = null;
+      $source = null;
+      if ($name == 'content_en') $source = get_site_preference('custom404');
       $mtime = time();
+      $source = trim($source);
       return;
     }
     else if( isset($_SESSION['__preview_content_']) && 
@@ -57,12 +56,14 @@ class CMSContentTemplateResource extends CMS_Fixed_Resource_Custom
       $source = $contentobj->Show($name);
       $mtime = $contentobj->GetModifiedDate();
       $source = preg_replace("/\{\/?php\}/", "", $source);
+      $source = trim($source);
       return;
     }
     else if (isset($contentobj) && $contentobj !== FALSE) {
       $source = $contentobj->Show($name);
       $source = preg_replace("/\{\/?php\}/", "", $source);
       $mtime = $contentobj->GetModifiedDate();
+      $source = trim($source);
       return;
     }
     $source = null;

@@ -45,7 +45,7 @@ final class AdminSearch extends CMSModule
   protected function can_search()
   {
     $perms = array('Modify Templates','Modify Stylesheets','Modify Global Content Blocks','Manage All Content','Modify Any Page',
-		   'Modify User defined Tags','Modify Site Preferences');
+		   'Modify User-defined Tags','Modify Site Preferences');
     foreach( $perms as $perm ) {
       if( $this->CheckPermission($perm) ) return TRUE;
     }

@@ -153,6 +153,7 @@ jQuery(document).ready(function() {
     $(function() {
         $('body').off('cms_ajax_apply');
         $('input[type="submit"], input[type="button"]').each(function() {
+            if( $(this).hasClass('noautobtn') ) return;
             if ($(this).attr('name') == 'apply' || $(this).attr('name') == 'm1_apply') {
                 var icon = 'ui-icon-disk';
             } else if ($(this).attr('name') == 'cancel' || $(this).attr('name') == 'm1_cancel') {
