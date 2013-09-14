@@ -112,7 +112,7 @@ class CMSInstallerPage7 extends CMSInstallerPage
       echo "</ul>[" . ilang('done') . "]</p>";
 
       echo '<p>' . ilang('install_admin_clear_cache');
-      $contentops->ClearCache();
+      $gCms->clear_cached_files();
       echo " [" . ilang('done') . "]</p>";
 
       // Insert new site preferences
