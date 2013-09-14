@@ -164,7 +164,7 @@ $columns  = $builder->get_display_columns();
 $smarty->assign('columns',$columns);
 if( CmsContentManagerUtils::get_pagenav_display() == 'title' ) {
   $smarty->assign('colhdr_page',$this->Lang('colhdr_name'));
-  $smarty->assign('coltitle_page',$this->Lang('coltitle__name'));
+  $smarty->assign('coltitle_page',$this->Lang('coltitle_name'));
 }
 else {
   $smarty->assign('colhdr_page',$this->Lang('colhdr_menutext'));

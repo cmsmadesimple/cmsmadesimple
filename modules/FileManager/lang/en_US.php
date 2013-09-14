@@ -267,17 +267,20 @@ $lang['subdirs'] = 'subdirectories';
 $lang['switchtofileview'] = 'Switch to file view';
 
 // T
+$lang['title_changedir'] = 'TODO';
 $lang['title_col_filedate'] = 'This column displays the last modification date of the file';
 $lang['title_col_fileperms'] = 'This column displays the permissions of the file';
 $lang['title_col_filesize'] = 'This column displays the size of the file';
 $lang['title_col_fileowner'] = 'This column displays the username of the owner of the file';
 $lang['title_copy'] = 'Copy the selected item';
 $lang['title_delete'] = 'Delete the selected item';
+$lang['title_move'] = 'TODO';
 $lang['title_newdir'] = 'Create a new directory';
 $lang['title_rename'] = 'Rename the selected file, or folder';
 $lang['title_resizecrop'] = 'Resize and/or Crop the selected image';
 $lang['title_rotate'] = 'Rotate the selected image';
 $lang['title_tagall'] = 'Select all of the visible items';
+$lang['title_thumbnail'] = 'TODO';
 $lang['title_unpack'] = 'Unpack the selected archive';
 $lang['title_view'] = 'View the selected item';
 $lang['title_view_newwindow'] = 'View the selected item in a new window';

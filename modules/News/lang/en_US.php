@@ -12,6 +12,7 @@ $lang['anonymous'] = 'Anonymous';
 $lang['apply'] = 'Apply';
 $lang['approve'] = 'Set Status to \'Published\'';
 $lang['areyousure'] = 'Are you sure you want to delete?';
+$lang['areyousure_deletemultiple'] = 'TODO';
 $lang['areyousure_multiple'] = 'Are you sure you want to perform this action on multiple articles?';
 $lang['article'] = 'Article';
 $lang['articleadded'] = 'The article was successfully added.';
