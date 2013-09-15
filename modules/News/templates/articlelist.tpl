@@ -80,7 +80,9 @@ $(document).ready(function(){
     <label for="toggle_filter">{$mod->Lang('viewfilter')}</label>
     {if isset($addlink)}&nbsp;{$addlink}{/if}
   </div>
-
+  
+  <div style="clear:both"></div>
+  
   {if $pagecount > 1}
     <div class="pageoptions" style="text-align: right;">
       {form_start}

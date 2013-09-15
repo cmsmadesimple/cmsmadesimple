@@ -31,7 +31,7 @@ $(document).ready(function(){
 	<input type="submit" name="submit" value="{lang('submit')}" class="pagebutton"  />
 	<input type="submit" name="cancel" value="{lang('cancel')}" class="pagebutton"  />
       </p>
-      <div style="border-top: 1px dashed black;"></div>
+      <br />
     </div>
 
     <div class="pageoverflow">
@@ -127,7 +127,7 @@ $(document).ready(function(){
 	<input type="submit" name="submit" value="{lang('submit')}" class="pagebutton"  />
 	<input type="submit" name="cancel" value="{lang('cancel')}" class="pagebutton"  />
       </p>
-      <div style="border-top: 1px dashed black;"></div>
+      <br />
     </div>
 
     <div class="pageoverflow">
@@ -205,7 +205,7 @@ $(document).ready(function(){
 	<input type="submit" name="submit" value="{lang('submit')}" class="pagebutton"  />
 	<input type="submit" name="cancel" value="{lang('cancel')}" class="pagebutton"  />
       </p>
-      <div style="border-top: 1px dashed black;"></div>
+      <br />
     </div>
 
     <div class="pageoverflow">
@@ -322,7 +322,7 @@ $(document).ready(function(){
 	<input id="mailertest" type="submit" name="testemail" value="{lang('test')}" class="pagebutton"  />
 	<input type="submit" name="cancel" value="{lang('cancel')}" class="pagebutton"  />
       </p>
-      <div style="border-top: 1px dashed black;"></div>
+      <br />
     </div>
 
     <fieldset id="set_general">
@@ -439,8 +439,8 @@ $(document).ready(function(){
 	<input type="submit" name="submit" value="{lang('submit')}" class="pagebutton"  />
 	<input type="submit" name="cancel" value="{lang('cancel')}" class="pagebutton"  />
       </p>
-      <div style="border-top: 1px dashed black;"></div>
-    </div>
+      <br />
+	</div>
 
     <fieldset>
       <legend>{'browser_cache_settings'|lang}:&nbsp;</legend>
@@ -542,7 +542,7 @@ $(document).ready(function(){
 	<input type="submit" name="submit" value="{lang('submit')}" class="pagebutton"  />
 	<input type="submit" name="cancel" value="{lang('cancel')}" class="pagebutton"  />
       </p>
-      <div style="border-top: 1px dashed black;"></div>
+      <br />
     </div>
 
     <div class="pageoverflow">

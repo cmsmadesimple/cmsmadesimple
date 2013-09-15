@@ -60,7 +60,7 @@ $(document).ready(function(){
 	</div>
 	<div class="pageoverflow">
 		<p class="pagetext"><label for="fld2">*{$categorytext}:</label></p>
-		<p class="pageinput">{$inputcategory}
+		<p class="pageinput">{$inputcategory|default:''}
                   <select name="{$actionid}category" id="fld2">
                   {html_options options=$categorylist selected=$category}
                   </select>
