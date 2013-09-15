@@ -29,7 +29,7 @@ $(document).ready(function(){
       oid: {$content_id},
       uid: {get_userid(FALSE)},
       {if !empty($lock_timeout)}lock_timeout: {$lock_timeout},{/if}
-      {if !empty($lock_refresh)},lock_refresh: {$lock_refresh},{/if}
+      {if !empty($lock_refresh)}lock_refresh: {$lock_refresh},{/if}
       error_handler: function (err) {
           alert('got error ' + err.type + ' // ' + err.msg);
       },
