@@ -372,6 +372,7 @@ final class ContentListBuilder
    */
   public function get_display_columns()
   {
+    $config = cmsms()->GetConfig();
     $dflt = 'expand,hier,page,alias,url,template,friendlyname,owner,active,default,move,view,copy,edit,delete,multiselect';
     $mod = $this->_module;
     $cols = explode(',',$mod->GetPreference('list_visiblecolumns',$dflt));
@@ -381,7 +382,7 @@ final class ContentListBuilder
     $columnstodisplay['hier'] = in_array('hier',$cols);
     $columnstodisplay['page'] = in_array('page',$cols);
     $columnstodisplay['alias'] = in_array('alias',$cols);
-    $columnstodisplay['url'] = in_array('url',$cols);
+    $columnstodisplay['url'] = in_array('url',$cols) && $config['url_rewriting'] != 'none';
     $columnstodisplay['template'] = in_array('template',$cols);
     $columnstodisplay['friendlyname'] = in_array('friendlyname',$cols);
     $columnstodisplay['owner'] = in_array('owner',$cols);

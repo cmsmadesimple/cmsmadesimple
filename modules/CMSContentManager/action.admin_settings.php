@@ -39,7 +39,6 @@ if( !$this->CheckPermission('Modify Site Preferences') ) return;
 echo $this->StartTabHeaders();
 echo $this->SetTabHeader('general',$this->Lang('prompt_general'));
 echo $this->SetTabHeader('listsettings',$this->Lang('prompt_listsettings'));
-echo $this->SetTabHeader('editsettings',$this->Lang('prompt_editsettings'));
 echo $this->SetTabHeader('pagedefaults',$this->Lang('prompt_pagedefaults'));
 echo $this->EndTabHeaders();
 
@@ -51,10 +50,6 @@ echo $this->EndTab();
 
 echo $this->StartTab('listsettings',$params);
 include(__DIR__.'/function.admin_listsettings_tab.php');
-echo $this->EndTab();
-
-echo $this->StartTab('editsettings',$params);
-include(__DIR__.'/function.admin_editsettings_tab.php');
 echo $this->EndTab();
 
 echo $this->StartTab('pagedefaults',$params);
