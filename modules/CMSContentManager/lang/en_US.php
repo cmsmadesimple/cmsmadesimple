@@ -169,6 +169,7 @@ $lang['prompt_design'] = 'Design';
 $lang['prompt_editpage_addcontent']= 'Add Content Page';
 $lang['prompt_editpage_contenttype'] = 'Content Type';
 $lang['prompt_editpage_editcontent']= 'Edit Content Page';
+$lang['prompt_editsettings']= 'Edit Settings';
 $lang['prompt_expandall'] = 'Expand all content pages';
 $lang['prompt_general'] = 'General';
 $lang['prompt_locktimeout'] = 'Locking Timeout (minutes)';
