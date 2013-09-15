@@ -7,33 +7,30 @@ final class CmsFormUtils
 
   private function __construct() {}
 
-  public static function create_option($key,$value,$selected = '',$title = '') 
+  public static function create_option($data,$selected = null)
   {
     $out = '';
-    if( is_array($value) ) {
-      if( isset($value['key']) && isset($value['value']) ) {
-	// hash with key, value, and optional title.
-	$title2 = '';
-	if( isset($value['title']) ) $title2 = $value['title'];
-	return self::create_option($value['key'],$value['value'],$selected,$title2);
+    if( !is_array($data) ) return;
+
+    if( isset($data['label']) && isset($data['value']) ) {
+      if( !is_array($data['value']) ) {
+	$out .= '<option value="'.trim($data['value']).'"';
+	if( $selected == $data['value'] || is_array($selected) && in_array($data['value'],$selected) ) $out .= ' selected="selected"';
+	if( isset($data['title']) && $data['title'] ) $out .= ' title="'.trim($data['title']).'"';
+	if( isset($data['class']) && $data['class'] ) $out .= ' class="'.trim($data['class']).'"';
+	$out .= '">'.$data['label'].'</option>';
       }
       else {
-	// array of options
-	$out .= "<optgroup value=\"$value\">\n";
-	foreach( $value as $key => $value ) {
-	  $out .= self::create_option($key,$value,$selected);
+	$out .= '<optgroup label="'.$data['label'].'">';
+	foreach( $data['value'] as $one ) {
+	  $out .= self::create_option($one,$selected);
 	}
+	$out .= '</optgroup>';
       }
-      $out .= "</optgroup>\n";
     }
     else {
-      $addtext = '';
-      if( $title != '' ) $addtext=" title=\"{$title}\"";
-      if( (is_array($selected) && in_array($key,$selected)) || $selected == $key ) {
-	$out .= "<option value=\"$key\" selected=\"selected\"{$addtext}>$value</option>\n";
-      }
-      else {
-	$out .= "<option value=\"$key\"{$addtext}>$value</option>\n";
+      foreach( $data as $rec ) {
+	$out .= self::create_option($rec,$selected);
       }
     }
     return $out;

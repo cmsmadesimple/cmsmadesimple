@@ -62,7 +62,15 @@ if( isset($params['cancel']) ) {
   $this->RedirectToAdminTab();
 }
 
-if( !$this->CanEditContent($content_id) ) {
+if( $content_id < 1 ) {
+  // adding.
+  if( !$this->CheckPermission('Add Pages') ) {
+    // no permission to add pages.
+    $this->SetError($this->Lang('error_editpage_permission'));
+    $this->RedirectToAdminTab();
+  }
+}
+else if( !$this->CanEditContent($content_id) ) {
   // nope, can't edit this page anyways.
   $this->SetError($this->Lang('error_editpage_permission'));
   $this->RedirectToAdminTab();
@@ -234,12 +242,12 @@ for( $currenttab = 0; $currenttab < $numberoftabs; $currenttab++ ) {
     $help = '&nbsp;'.cms_admin_utils::get_help_tag('help_content_type');
     $tmp = array('<label for="content_type">*'.$this->Lang('prompt_editpage_contenttype').':</label>'.$help);
     $tmp2 = "<select id=\"content_type\" name=\"{$id}content_type\">";
-    foreach( $existingtypes as $k => $v ) {
-      if( $k == 'errorpage' && !$this->CheckPermission('Manage All Content') ) {
+    foreach( $existingtypes as $type => $label ) {
+      if( $type == 'errorpage' && !$this->CheckPermission('Manage All Content') ) {
 	// this is ugly... we should know if the type is a system type.
 	continue;
       }
-      $tmp2 .= CmsFormUtils::create_option($k,$v,$content_type);  // todo: add title here.
+      $tmp2 .= CmsFormUtils::create_option(array('value'=>$type,'label'=>$label,'title'=>lang($label.'todo')),$content_type);  // todo: add title here.
     }
     $tmp2 .= '</select>';
     $tmp[] = $tmp2;

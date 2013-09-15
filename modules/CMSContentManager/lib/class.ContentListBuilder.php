@@ -114,9 +114,7 @@ final class ContentListBuilder
         $children = $node->get_children();
 	for( $i = 0; $i < count($children); $i++ ) {
 	  $tmp = $func($children[$i]);
-          if( is_array($tmp) && count($tmp) ) {
-	    $out = array_merge($out,$tmp);
-	  }
+          if( is_array($tmp) && count($tmp) ) $out = array_merge($out,$tmp);
 	}
 	$out = array_unique($out);
       }
@@ -305,18 +303,18 @@ final class ContentListBuilder
     if( $page_id < 1 ) return FALSE;
     $direction = (int)$direction;
     if( $direction == 0 ) return FALSE;
+    $contentops = cmsms()->GetContentOperations();
 
     $test = FALSE;
     if( $this->_module->CheckPermission('Manage All Content') ) {
       $test = TRUE;
     }
-    else if( $this->_module->CheckPermission('Reorder Content') && check_peer_authorship($this->_userid,$page_id) ) {
+    else if( $this->_module->CheckPermission('Reorder Content') && $contentops->CheckPeerAuthorship($this->_userid,$page_id) ) {
       $test = TRUE;
     }
 
     if( !$test ) return FALSE;
-    
-    $contentops = cmsms()->GetContentOperations();
+
     $node = $contentops->quickfind_node_by_id($page_id);
     if( !$node ) return FALSE;
     $content1 = $node->GetContent(FALSE,FALSE,FALSE);
@@ -351,7 +349,6 @@ final class ContentListBuilder
     $contentops = cmsms()->GetContentOperations();
     $node = $contentops->quickfind_node_by_id($page_id);
     if( !$node ) return $this->_module->Lang('error_invalidpageid');
-
     if( $node->has_children() ) return $this->_module->Lang('error_delete_haschildren');
 
     $parent = $node->get_parent();
@@ -398,9 +395,7 @@ final class ContentListBuilder
     $columnstodisplay['multiselect'] = in_array('multiselect',$cols) && ($mod->CheckPermission('Remove Pages') || $mod->CheckPermission('Manage All Content'));
 
     foreach( $columnstodisplay as $key => $val ) {
-      if( isset($this->_display_columns[$key]) ) {
-	$columnstodisplay[$key] = $val && $this->_display_columns[$key];
-      }
+      if( isset($this->_display_columns[$key]) ) $columnstodisplay[$key] = $val && $this->_display_columns[$key];
     }
 
     return $columnstodisplay;
@@ -418,9 +413,7 @@ final class ContentListBuilder
       for( $i = 0; $i < count($children); $i++ ) {
 	$child = $children[$i];
 	$tmp = $this->_get_all_pages($child);
-	if( is_array($tmp) && count($tmp) ) {
-	  $out = array_merge($out,$tmp);
-	}
+	if( is_array($tmp) && count($tmp) ) $out = array_merge($out,$tmp);
       }
     }
     return $out;
@@ -477,18 +470,49 @@ final class ContentListBuilder
       $display = array_unique($display);
     }
     else {
+      //
       // we can only edit some pages.
-      $display = $contentops->GetPageAccessForUser($this->_userid);
+      //
+
+      /*      
+      for each item
+	if in opened array or has no parent add item
+	if all parents are opened add item
+      */
+      $tmplist = $contentops->GetPageAccessForUser($this->_userid);
+      $display = array();
+      foreach( $tmplist as $item ) {
+	// get all the parents
+	$parents = array();
+	$startnode = $node = $contentops->quickfind_node_by_id($item);
+	while( $node && $node->get_tag('id') > 0 ) {
+	  $parents[] = $node->get_tag('id');
+	  $node = $node->getParent();
+	}
+	// start at root
+	// push items from list on the stack if they are root, or the previous item is in the opened array.
+	$parents = array_reverse($parents);
+	for( $i = 0; $i < count($parents); $i++ ) {
+	  if( $i == 0 ) {
+	    $display[] = $parents[$i];
+	    continue;
+	  }
+	  if( $i > 0 && in_array($parents[$i-1],$this->_opened_array) && in_array($parents[$i-1],$display) ) {
+	    $display[] = $parents[$i];
+	  }
+	}
+      }
     }
 
-    // now order the page id list by hierarchy.
+    // now order the page id list by hierarchy. and make sure they are unique.
+    $display = array_unique($display);
     usort($display,function($a,$b) use ($hm,$contentops) {
-      $node_a = $contentops->quickfind_node_by_id($a);
-      $hier_a = $node_a->getHierarchy();
-      $node_b = $contentops->quickfind_node_by_id($b);
-      $hier_b = $node_b->getHierarchy();
-      return strcmp($hier_a,$hier_b);
-    });
+	    $node_a = $contentops->quickfind_node_by_id($a);
+	    $hier_a = $node_a->getHierarchy();
+	    $node_b = $contentops->quickfind_node_by_id($b);
+	    $hier_b = $node_b->getHierarchy();
+	    return strcmp($hier_a,$hier_b);
+	  });
 
     $this->_pagelist = $display;
 
@@ -515,29 +539,9 @@ final class ContentListBuilder
   private function _check_peer_authorship($content_id,$userid = null)
   {
     if( $content_id < 1 ) return FALSE;
-    if( $this->_module->CheckPermission('Modify Any Page') ) return TRUE;
-
-    $hm = cmsms()->GetHierarchyManager();
-    $node = $hm->getNodeById($content_id);
-    if( !$node ) return FALSE;
-
-    $parent = $node->getParentNode();
-    if( !$node ) {
-      // no parent means that $contentid is at the root level
-      $parent = $hm;
-    }
-    
-    $children = $parent->get_children();
-    if( !$children ) return FALSE;
-
-    $contentops = cmsms()->GetContentOperations();
     if( $userid <= 0 ) $userid = $this->_userid;
-
-    for( $i = 0; $i < count($children); $i++ ) {
-      $the_id = $children[$i]->get_tag('id');
-      if( !$contentops->CheckPageAuthorship($userid,$the_id) ) return FALSE;
-    }
-    return TRUE;
+    $contentops = cmsms()->GetContentOperations();
+    return $contentops->CheckPeerAuthorship($userid,$content_id);
   }
 
   /**
@@ -680,12 +684,11 @@ final class ContentListBuilder
       $rec['can_steal'] = ($mod->CheckPermission('Modify Any Page') || $mod->CheckPermission('Manage All Content') ||
 			   $this->_check_authorship($rec['id'])) && $this->_is_locked($page_id) && $this->_is_lock_expired($page_id);
 
-      foreach( array_keys($columns) as $column ) {
+      foreach( $columns as $column => $displayable ) {
 	switch( $column ) {
 	case 'expand':
 	  $rec[$column] = 'none';
 	  if( $node->has_children() ) {
-	    debug_to_log('page id '.$node->get_tag('alias').' has children');
 	    if( in_array($page_id,$this->_opened_array) ) {
 	      $rec[$column] = 'open';
 	    } else {
@@ -833,6 +836,15 @@ final class ContentListBuilder
   {
     $pagelist = $this->_load_editable_content();
     if( is_array($pagelist) && count($pagelist) ) return $this->_get_display_data($pagelist);
+  }
+
+  /**
+   * Test if this content list supports multiselect
+   */
+  public function supports_multiselect()
+  {
+    $cols = $this->get_display_columns();
+    return (isset($cols['multiselect']) && $cols['multiselect']);
   }
 
 } // end of class

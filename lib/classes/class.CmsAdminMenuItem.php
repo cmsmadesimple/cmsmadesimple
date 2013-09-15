@@ -69,9 +69,7 @@ final class CmsAdminMenuItem
   {
     foreach( self::$_keys as $ok ) {
       if( $ok == 'icon'  || $ok == 'system' || $ok == 'priority' ) continue;  // we don't care if this is set.
-      if( !isset($this->_data[$ok]) ) {
-	return FALSE;
-      }
+      if( !isset($this->_data[$ok]) ) return FALSE;
     }
     return TRUE;
   }

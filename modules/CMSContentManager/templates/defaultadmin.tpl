@@ -8,6 +8,7 @@ function cms_CMloadUrl(link, lang) {
             if (!confirm(lang)) return false;
         }
         $('#contenttable').load(url + ' #contenttable > *');
+	$('#ajax_find').val('');
         e.preventDefault();
     });
 }
@@ -34,6 +35,7 @@ $(document).ready(function () {
     cms_CMloadUrl('a.expandall'),
     cms_CMloadUrl('a.collapseall'),
     cms_CMloadUrl('a.page_collapse'),
+    cms_CMloadUrl('a.page_expand'),
     cms_CMloadUrl('a.page_setinactive', '{$mod->Lang('confirm_setinactive')}'),
     cms_CMloadUrl('a.page_setactive'),
     cms_CMloadUrl('a.page_setdefault', '{$mod->Lang('confirm_setdefault')}'),
@@ -101,9 +103,7 @@ $(document).ready(function () {
     });
     
     $('#ajax_find').keypress(function (e) {
-        if (e.which == 13) {
-            e.preventDefault();
-        }
+        if (e.which == 13) e.preventDefault();
     });
     
     $('#ajax_find').autocomplete({
@@ -117,7 +117,6 @@ $(document).ready(function () {
             $(this).val(ui.item.label);
             var url = '{cms_action_url action=defaultadmin forjs=1}&showtemplate=false&{$actionid}ajax=1&{$actionid}seek=' + ui.item.value;
             $('#contenttable').load(url + ' #contenttable > *');
-
             event.preventDefault();
         }
     });
@@ -151,7 +150,6 @@ $(document).ready(function () {
 <div class="clearb"></div>
 {/if}{* ajax *}
 
-{if isset($content_list)}
 <div class="row c_full">
 	<div class="pageoptions grid_6">
 		<ul class="options-menu">
@@ -177,8 +175,11 @@ $(document).ready(function () {
 			
 			<li class="parent">{admin_icon icon='run.gif' alt=$mod->Lang('prompt_options')}&nbsp;{$mod->Lang('prompt_options')}
 				<ul id="popupmenucontents">
-					<li><a class="expandall" href="{cms_action_url action='defaultadmin' expandall=1}" accesskey="e" title="{$mod->Lang('prompt_expandall')}">{admin_icon icon='expandall.gif' alt=$mod->Lang('expandall')}&nbsp;{$mod->Lang('expandall')}</a></li>
-					<li><a class="collapseall" href="{cms_action_url action='defaultadmin' collapseall=1}" accesskey="c" title="{$mod->Lang('prompt_collapseall')}">{admin_icon icon='contractall.gif' alt=$mod->Lang('contractall')}&nbsp;{$mod->Lang('contractall')}</a></li>
+					{if isset($content_list)}
+						<li><a class="expandall" href="{cms_action_url action='defaultadmin' expandall=1}" accesskey="e" title="{$mod->Lang('prompt_expandall')}">{admin_icon icon='expandall.gif' alt=$mod->Lang('expandall')}&nbsp;{$mod->Lang('expandall')}</a></li>
+						<li><a class="collapseall" href="{cms_action_url action='defaultadmin' collapseall=1}" accesskey="c" title="{$mod->Lang('prompt_collapseall')}">{admin_icon icon='contractall.gif' alt=$mod->Lang('contractall')}&nbsp;{$mod->Lang('contractall')}</a></li>
+					{/if}
+
 					{if $can_reorder_content}
 					<li><a id="ordercontent" href="{cms_action_url action=admin_ordercontent}" accesskey="r" title="{$mod->Lang('prompt_ordercontent')}">{admin_icon icon='reorder.gif' alt=$mod->Lang('reorderpages')}&nbsp;{$mod->Lang('reorderpages')}</a></li>
 					{/if}
@@ -188,12 +189,12 @@ $(document).ready(function () {
 		</ul>
 	</div>
 
+	{if isset($content_list)}
 	<div class="pageoptions options-form grid_6">
 		<span><label for="ajax_find">{$mod->Lang('find')}:</label>&nbsp;<input type="text" id="ajax_find" name="ajax_find" title="{$mod->Lang('title_listcontent_find')}" value="" size="25"/></span>
 	</div>
+	{/if}
 </div>
-
-{/if}
 
 {form_start action='defaultadmin' id='listform'}
 <div id="contentlist">{* everything from here down is part of the ajax stuff *}
@@ -262,7 +263,7 @@ $(document).ready(function () {
 					{if isset($row.template) && $row.template != ''}
 						{if $row.can_edit_tpl}
 							<a href="{cms_action_url module='DesignManager' action='admin_edit_template' tpl=$row.template_id}" class="page_template" title="{$mod->Lang('prompt_page_template')}">
-								{$row.template}
+							{$row.template}
 							</a>
 						{else}
 							{$row.template}
@@ -283,11 +284,11 @@ $(document).ready(function () {
 				{elseif $column == 'active'}
 					{if $row.active == 'inactive'}
 						<a href="{cms_action_url action='defaultadmin' setactive=$row.id}" class="page_setactive" accesskey="a">
-							{admin_icon icon='false.gif' title=$mod->Lang('prompt_page_setactive')}
+						{admin_icon icon='false.gif' title=$mod->Lang('prompt_page_setactive')}
 						</a>
 					{else if $row.active != 'default' && $row.active != ''}
 						<a href="{cms_action_url action='defaultadmin' setinactive=$row.id}" class="page_setinactive" accesskey="a">
-							{admin_icon icon='true.gif' title=$mod->Lang('prompt_page_setinactive')}
+						{admin_icon icon='true.gif' title=$mod->Lang('prompt_page_setinactive')}
 						</a>
 					{/if}
 				{elseif $column == 'default'}
@@ -295,62 +296,62 @@ $(document).ready(function () {
 						{admin_icon icon='true.gif' class='page_default' title=$mod->Lang('prompt_page_default')}
 					{else if $row.default == 'no'}
 						<a href="{cms_action_url action='defaultadmin' setdefault=$row.id}" class="page_setdefault" accesskey="d">
-							{admin_icon icon='false.gif' class='page_setdefault' title=$mod->Lang('prompt_page_setdefault')}
+						{admin_icon icon='false.gif' class='page_setdefault' title=$mod->Lang('prompt_page_setdefault')}
 						</a>
 					{/if}
 				{elseif $column == 'move'}
 					{if isset($row.move)}
-							{if $row.move == 'up'}
-								<a href="{cms_action_url action='defaultadmin' moveup=$row.id}" class="page_sortup" accesskey="m">
-									{admin_icon icon='sort_up.gif' title=$mod->Lang('prompt_page_sortup')}
-								</a>
-							{elseif $row.move == 'down'}
-								<a href="{cms_action_url action='defaultadmin' movedown=$row.id}" class="page_sortdown" accesskey="m">
-									{admin_icon icon='sort_down.gif' title=$mod->Lang('prompt_page_sortdown')}
-								</a>
-							{elseif $row.move == 'both'}
-								<a href="{cms_action_url action='defaultadmin' moveup=$row.id}" class="page_sortup" accesskey="m">{admin_icon icon='sort_up.gif' title=$mod->Lang('prompt_page_sortup')}</a>
-								<a href="{cms_action_url action='defaultadmin' movedown=$row.id}" class="page_sortdown" accesskey="m">{admin_icon icon='sort_down.gif' title=$mod->Lang('prompt_page_sortdown')}</a>
-							{/if}
-						{/if}
-					{elseif $column == 'view'}
-						{if $row.view != ''}
-							<a class="page_view" target="_blank" href="{$row.view}" accesskey="v">
-								{admin_icon icon='view.gif' title=$mod->Lang('prompt_page_view')}
+						{if $row.move == 'up'}
+							<a href="{cms_action_url action='defaultadmin' moveup=$row.id}" class="page_sortup" accesskey="m">
+							{admin_icon icon='sort_up.gif' title=$mod->Lang('prompt_page_sortup')}
 							</a>
-						{/if}
-					{elseif $column == 'copy'}
-						{if $row.copy != ''}
-							<a href="{cms_action_url action='admin_copycontent' page=$row.id}" accesskey="o">
-								{admin_icon icon='copy.gif' class='page_copy' title=$mod->Lang('prompt_page_copy')}
+						{elseif $row.move == 'down'}
+							<a href="{cms_action_url action='defaultadmin' movedown=$row.id}" class="page_sortdown" accesskey="m">
+							{admin_icon icon='sort_down.gif' title=$mod->Lang('prompt_page_sortdown')}
 							</a>
+						{elseif $row.move == 'both'}
+							<a href="{cms_action_url action='defaultadmin' moveup=$row.id}" class="page_sortup" accesskey="m">{admin_icon icon='sort_up.gif' title=$mod->Lang('prompt_page_sortup')}</a>
+							<a href="{cms_action_url action='defaultadmin' movedown=$row.id}" class="page_sortdown" accesskey="m">{admin_icon icon='sort_down.gif' title=$mod->Lang('prompt_page_sortdown')}</a>
 						{/if}
-					{elseif $column == 'edit'}
-						{if $row.can_edit}
-							<a href="{cms_action_url action=admin_editcontent content_id=$row.id}" accesskey="e" class="page_edit" title="{$mod->Lang('addcontent')}" data-cms-content="{$row.id}">
-								{admin_icon icon='edit.gif' class='page_edit' title=$mod->Lang('prompt_page_edit')}
-							</a>
-						{else}
-							{if isset($row.lock) && $row.can_steal}
-							<a href="{cms_action_url action=admin_editcontent content_id=$row.id}" accesskey="e" class="page_edit" title="{$mod->Lang('addcontent')}" data-cms-content="{$row.id}" class="steal_lock">
-								{admin_icon icon='permissions.gif' class='page_edit steal_lock' title=$mod->Lang('prompt_steal_lock_edit')}
-							</a>
-							{/if}
-						{/if}
-					{elseif $column == 'delete'}
-						{if $row.delete != ''}
-							<a href="{cms_action_url action='defaultadmin' delete=$row.id}" class="page_delete" accesskey="r">
-								{admin_icon icon='delete.gif' class='page_delete' title=$mod->Lang('prompt_page_delete')}
-							</a>
-						{/if}
-					{elseif $column == 'multiselect'}
-						{if $row.multiselect != ''}
-							<label class="invisible" for="multicontent-{$row.id}">{$mod->Lang('prompt_multiselect_toggle')}</label>
-							<input type="checkbox" class="multicontent" name="{$actionid}multicontent[]" value="{$row.id}" title="{$mod->Lang('prompt_multiselect_toggle')}"/>
-						{/if}
-					{else}
-						{* unknown column *}
 					{/if}
+				{elseif $column == 'view'}
+					{if $row.view != ''}
+						<a class="page_view" target="_blank" href="{$row.view}" accesskey="v">
+						{admin_icon icon='view.gif' title=$mod->Lang('prompt_page_view')}
+						</a>
+					{/if}
+				{elseif $column == 'copy'}
+					{if $row.copy != ''}
+						<a href="{cms_action_url action='admin_copycontent' page=$row.id}" accesskey="o">
+						{admin_icon icon='copy.gif' class='page_copy' title=$mod->Lang('prompt_page_copy')}
+						</a>
+					{/if}
+				{elseif $column == 'edit'}
+					{if $row.can_edit}
+						<a href="{cms_action_url action=admin_editcontent content_id=$row.id}" accesskey="e" class="page_edit" title="{$mod->Lang('addcontent')}" data-cms-content="{$row.id}">
+						{admin_icon icon='edit.gif' class='page_edit' title=$mod->Lang('prompt_page_edit')}
+						</a>
+					{else}
+						{if isset($row.lock) && $row.can_steal}
+							<a href="{cms_action_url action=admin_editcontent content_id=$row.id}" accesskey="e" class="page_edit" title="{$mod->Lang('addcontent')}" data-cms-content="{$row.id}" class="steal_lock">
+							{admin_icon icon='permissions.gif' class='page_edit steal_lock' title=$mod->Lang('prompt_steal_lock_edit')}
+							</a>
+						{/if}
+					{/if}
+				{elseif $column == 'delete'}
+					{if $row.delete != ''}
+						<a href="{cms_action_url action='defaultadmin' delete=$row.id}" class="page_delete" accesskey="r">
+						{admin_icon icon='delete.gif' class='page_delete' title=$mod->Lang('prompt_page_delete')}
+						</a>
+					{/if}
+				{elseif $column == 'multiselect'}
+					{if $row.multiselect != ''}
+						<label class="invisible" for="multicontent-{$row.id}">{$mod->Lang('prompt_multiselect_toggle')}</label>
+						<input type="checkbox" class="multicontent" name="{$actionid}multicontent[]" value="{$row.id}" title="{$mod->Lang('prompt_multiselect_toggle')}"/>
+					{/if}
+				{else}
+					{* unknown column *}
+				{/if}
 			</td>
 		{/foreach}
 	{/function}
@@ -394,6 +395,7 @@ $(document).ready(function () {
 {/if}
 </div>{* #contentlist *}
 
+{if isset($content_list) && $multiselect}
 <div class="pageoptions" style="float: right">
 	<label for="multiaction">{$mod->Lang('prompt_withselected')}:</label>&nbsp;&nbsp;
 	<select name="{$actionid}multiaction" id="multiaction">
@@ -401,5 +403,7 @@ $(document).ready(function () {
 	</select>
 	<input type="submit" id="multisubmit" name="{$actionid}multisubmit" accesskey="s" value="{$mod->Lang('submit')}"/>
 </div>
+{/if}
+
 {form_end}
 <div class="clearb"></div>

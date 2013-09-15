@@ -174,6 +174,7 @@ abstract class CmsAdminThemeBase
 			$tmp = serialize($data);
 			cms_cache_handler::get_instance()->set('themeinfo'.$uid,base64_encode($tmp));
 		}
+
 		return $data;
 	}
 
@@ -255,32 +256,15 @@ abstract class CmsAdminThemeBase
 
 		$this->_perms = array();
 		$this->_breadcrumbs = array();
-
-        $this->_perms['pagePerms'] = (
-									 check_permission($this->userid, 'Modify Any Page') ||
-									 check_permission($this->userid, 'Add Pages') ||
-									 check_permission($this->userid, 'Remove Pages') ||
-									 check_permission($this->userid, 'Manage All Content')
-									 );
-		if( $this->_perms['pagePerms'] == FALSE ) {
-			$thisUserPages = author_pages($this->userid);
-			if (count($thisUserPages) > 0) {
-				$this->_perms['pagePerms'] = true;
-			}
-		}
-        $this->_perms['contentPerms'] = $this->_perms['pagePerms'] | 
-			(isset($this->_sectionCount['content']) && $this->_sectionCount['content'] > 0);
+		
+		// content section.
+		$this->_perms['contentPerms'] = (isset($this->_sectionCount['content']) && $this->_sectionCount['content'] > 0);
 
 		// layout        
-        $this->_perms['templatePerms'] = check_permission($this->userid, 'Modify Templates');
-        $this->_perms['cssPerms'] = check_permission($this->userid, 'Modify Stylesheets');
-        $this->_perms['layoutPerms'] = $this->_perms['templatePerms'] |
-			$this->_perms['cssPerms'] | 
-			(isset($this->_sectionCount['layout']) && $this->_sectionCount['layout'] > 0);
+        $this->_perms['layoutPerms'] = (isset($this->_sectionCount['layout']) && $this->_sectionCount['layout'] > 0);
 
-		// file / image
-        $this->_perms['filePerms'] = check_permission($this->userid, 'Modify Files') |
-			(isset($this->_sectionCount['files']) && $this->_sectionCount['files'] > 0);
+		// file
+        $this->_perms['filePerms'] = (isset($this->_sectionCount['files']) && $this->_sectionCount['files'] > 0);
     
 		// user/group
         $this->_perms['userPerms'] = check_permission($this->userid, 'Manage Users');

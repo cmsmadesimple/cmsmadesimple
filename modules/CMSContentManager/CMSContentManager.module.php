@@ -68,21 +68,24 @@ final class CMSContentManager extends CMSModule
     return TRUE;
   }
 
-  public function VisibleToAdminUser() 
-  {
-    $x = $this->CheckPermission('Add Pages') ||
-      $this->CheckPermission('Remove Pages') ||
-      $this->CheckPermission('Modify Site Preferences');
-    if( $x ) return TRUE;
+//   public function VisibleToAdminUser() 
+//   {
+//     $x = $this->CheckPermission('Add Pages') ||
+//       $this->CheckPermission('Remove Pages') ||
+//       $this->CheckPermission('Modify Site Preferences');
+//     if( $x ) return TRUE;
     
-    return $this->CanEditContent();
-  }
+//     return $this->CanEditContent();
+//   }
 
   public function GetAdminMenuItems()
   {
     $out = array();
-    if( $this->CheckPermission('Add Pages') ||	$this->CheckPermission('Remove Pages') || $this->CanEditContent() ) {
-      $out[] = CmsAdminMenuItem::from_module($this);
+
+    // user is entitled to see the main page in the navigation.
+    if( $this->CheckPermission('Add Pages') || $this->CheckPermission('Remove Pages') || $this->CanEditContent() ) {
+      $obj = CmsAdminMenuItem::from_module($this);
+      $out[] = $obj;
     }
 
     if( $this->CheckPermission('Modify Site Preferences') ) {

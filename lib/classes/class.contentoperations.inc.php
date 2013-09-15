@@ -1107,7 +1107,7 @@ class ContentOperations
 			$this->_ownedpages = array();
 
 			$db = cmsms()->GetDb();
-			$query = 'SELECT content_id'.cms_db_prefix().'content WHERE owner_id = ? ORDER BY hierarchy';
+			$query = 'SELECT content_id FROM '.cms_db_prefix().'content WHERE owner_id = ? ORDER BY hierarchy';
 			$tmp = $db->GetCol($query,array($userid));
 			$data = array();
 			for( $i = 0; $i < count($tmp); $i++ ) {
@@ -1160,6 +1160,27 @@ class ContentOperations
 	{
 		$author_pages = $this->GetPageAccessForUser($userid);
 		return in_array($contentid,$author_pages);
+	}
+
+	public function CheckPeerAuthorship($userid,$contentid)
+	{
+		if( check_permission($userid,'Manage All Content') ) return TRUE;
+
+		$access = $this->GetPageAccessForUser($userid);
+		if( !is_array($access) || count($access) == 0 ) return FALSE;
+
+		$node = $this->quickfind_node_by_id($contentid);
+		if( !$node ) return FALSE;
+		$parent = $node->get_parent();
+		if( !$parent ) return FALSE;
+
+		$peers = $parent->get_children();
+		if( is_array($peers) && count($peers) ) {
+			for( $i = 0; $i < count($peers); $i++ ) {
+				if( !in_array($peers[$i]->get_tag('id'),$access) ) return FALSE;
+			}
+		}
+		return TRUE;
 	}
 
 	public function quickfind_node_by_id($id)

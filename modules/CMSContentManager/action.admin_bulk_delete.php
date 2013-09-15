@@ -36,7 +36,8 @@
 if( !isset($gCms) ) exit;
 
 $this->SetCurrentTab('pages');
-if( !isset($params['multicontent']) && !isset($params['deletecontent']) ) {
+
+if( !isset($params['multicontent']) || !isset($params['action']) || $params['action'] != 'admin_bulk_delete' ) {
   $this->SetError($this->Lang('error_missingparam'));
   $this->RedirectToAdminTab();
 }
@@ -64,16 +65,16 @@ if( isset($params['cancel']) ) {
   $this->RedirectToAdminTab();
 }
 if( isset($params['submit']) ) {
-  if( !isset($params['deletecontent']) ) {
-    $this->SetError($this->Lang('error_missingparam'));
-    $this->RedirectToAdminTab();
-  }
+//   if( !isset($params['deletecontent']) ) {
+//     $this->SetError($this->Lang('error_missingparam'));
+//     $this->RedirectToAdminTab();
+//   }
 
   if( isset($params['confirm1']) && isset($params['confirm2']) && $params['confirm1'] == 1  && $params['confirm2'] == 1 ) {
     //
     // do the real work
     //
-    $pagelist = unserialize(base64_decode($params['deletecontent']));
+    $pagelist = unserialize(base64_decode($params['multicontent']));
 
     try {
       $contentops = ContentOperations::get_instance();
@@ -113,11 +114,12 @@ if( $this->CheckPermission('Manage All Content') || $this->CheckPermission('Modi
   $multicontent = unserialize(base64_decode($params['multicontent']));
 }
 else {
-  foreach( unserialize($params['multicontent']) as $pid ) {
+  foreach( unserialize(base64_decode($params['multicontent'])) as $pid ) {
     if( !check_authorship(get_userid(),$pid) ) continue;
     $multicontent[] = $pid;
   }
 }
+
 if( count($multicontent) == 0 ) {
   $this->SetError($this->Lang('error_missingparam'));
   $this->RedirectToAdminTab();
@@ -163,7 +165,7 @@ if( count($displaydata) == 0 ) {
   $this->RedirectToAdminTab();
 }
 
-$smarty->assign('pagelist',base64_encode(serialize($pagelist)));
+$smarty->assign('multicontent',base64_encode(serialize($pagelist)));
 $smarty->assign('displaydata',$displaydata);
 echo $this->ProcessTemplate('admin_bulk_delete.tpl');
 #

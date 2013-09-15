@@ -166,7 +166,7 @@ $(document).ready(function(){
       <p class="pagetext"><label for="basic_attributes">{lang('basic_attributes')}:</label>&nbsp;{cms_help key2='settings_basicattribs'}</p>
       <p class="pageinput">
 	<select id="basic_attributes" class="multicolumn" name="basic_attributes[]" multiple="multiple" size="5">
-	  {html_options options=$all_attributes selected=$basic_attributes}
+	  {cms_html_options options=$all_attributes selected=$basic_attributes}
 	</select>
       </p>
     </div>

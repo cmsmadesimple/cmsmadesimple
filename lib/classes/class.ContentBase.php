@@ -1579,8 +1579,6 @@ abstract class ContentBase
 			$query = "UPDATE ".cms_db_prefix()."content SET item_order = item_order - 1 WHERE parent_id = ? AND item_order > ?";
 			$result = $db->Execute($query,array($this->ParentId(),$this->ItemOrder()));
 
-			cms_cache_handler::get_instance()->erase('contentcache');
-
 			// DELETE properties
 			$query = 'DELETE FROM '.cms_db_prefix().'content_props WHERE content_id = ?';
 			$result = $db->Execute($query,array($this->mId));
@@ -1783,6 +1781,8 @@ abstract class ContentBase
                   WHERE content_id = ?';
 			$db->Execute($query,array($this->Id()));
 		}
+		cms_cache_handler::get_instance()->erase('contentcache');
+
 	}
 
 	/**
@@ -1804,17 +1804,28 @@ abstract class ContentBase
 	 */
 	public function GetEditableProperties()
 	{
+		if( !check_permission(get_userid(),'Manage All Content') ) {
+			$basic_attributes = array('title','parent');
+			$tmp_basic_attributes = cms_siteprefs::get('basic_attributes');
+			if( $tmp_basic_attributes ) {
+				$tmp_basic_attributes = explode(',',$tmp_basic_attributes);
+				$basic_attributes = array_merge($tmp_basic_attributes,$basic_attributes);
+			}
+
+			$out = array();
+			foreach( $this->_attributes as $one ) {
+				if( in_array($one->name,$basic_attributes) ) {
+					$out[] = $one;
+				}
+			}
+			return $out;
+		}
 		return $this->_attributes;
 		// todo: filter out the elements that this user isn't allowed to see.
 	}
 
-	private function _GetEditableProperties()
+	private function _SortProperties($props)
 	{
-		if( isset($this->_editable_properties) ) return $this->_editable_properties;
-		$props = $this->GetEditableProperties();
-
-		// remove properties based on permissions
-
 		// sort the properties.
 		// sort the attributes by tab, priority, name...
 		usort($props,function($a,$b) {
@@ -1833,6 +1844,14 @@ abstract class ContentBase
 				  return $res;
 			  });
 
+		return $props;
+	}
+
+	private function _GetEditableProperties()
+	{
+		if( isset($this->_editable_properties) ) return $this->_editable_properties;
+
+		$props = $this->_SortProperties($this->GetEditableProperties());
 		$this->_editable_properties = $props;
 		return $props;
 	}
@@ -2003,7 +2022,7 @@ abstract class ContentBase
 		$topts = self::GetAdditionalEditorOptions();
 		foreach( $topts as $k => $v ) {
 			if( $k == $owner_id ) continue;
-			$text .= CmsFormUtils::create_option($k,$v,$addteditors);
+			$text .= CmsFormUtils::create_option(array('label'=>$v,'value'=>$k),$addteditors);
 		}
       
       
@@ -2046,6 +2065,7 @@ abstract class ContentBase
 	 *
 	 * @param string The property name
 	 * @param string The default value.
+	 * @return void
 	 */
 	protected function RemoveProperty($name,$dflt)
 	{
@@ -2063,6 +2083,11 @@ abstract class ContentBase
 	 * Add a property
 	 *
 	 * @since 1.11
+	 * @param string The property name
+	 * @param integer The property priority
+	 * @param string The tab for the property (see tab constants)
+	 * @param boolean required (wether the property is required)
+	 * @return void
 	 */
 	protected function AddProperty($name,$priority,$tab,$required = FALSE)
 	{
@@ -2077,8 +2102,20 @@ abstract class ContentBase
 		$this->_attributes[] = $ob;
 	}
 
+	/**
+	 * Get all of the properties for this content object.  independent of wether the user is entitled to view them, or not.
+	 *
+	 * @since 2.0
+	 * @return array of stdclass objects
+	 */
+	public function GetProperties()
+	{
+		return $this->_SortProperties($this->_attributes);
+	}
+
 	/*
 	 * Add a property that is directly associtated with a field in the content table.
+	 * @alias for AddProperty
 	 *
 	 * @param string The property name
 	 * @param integer The priority

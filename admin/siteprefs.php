@@ -96,7 +96,7 @@ $enablenotifications = 1;
 $sitedownexcludes = '';
 $sitedownexcludeadmins = '';
 $disallowed_contenttypes = '';
-$basic_attributes = '';
+$basic_attributes = null;
 $xmlmodulerepository = "";
 $checkversion = 1;
 $defaultdateformat = "";
@@ -306,7 +306,7 @@ if (isset($_POST["editsiteprefs"])) {
 		  $basic_attributes = implode(',',($_POST['basic_attributes']));
       }
       else {
-		  $basic_attributes = '';
+		  $basic_attributes = null;
       }
       cms_siteprefs::set('basic_attributes',$basic_attributes);
       $disallowed_contenttypes = '';
@@ -584,30 +584,23 @@ $smarty->assign('lang_date_format_string_help',lang('date_format_string_help'));
 $smarty->assign('lang_info_sitedownexcludes',lang('info_sitedownexcludes'));
 $smarty->assign('lang_info_basic_attributes',lang('info_basic_attributes'));
 
-$all_attributes = array();
-$all_attributes['design_id'] = lang('design_id');
-$all_attributes['template'] = lang('template');
-$all_attributes['active'] = lang('active');
-$all_attributes['secure'] = lang('secure_page');
-$all_attributes['showinmenu'] = lang('showinmenu');
-$all_attributes['cachable'] = lang('cachable');
-$all_attributes['target'] = lang('target');
-$all_attributes['alias'] = lang('pagealias');
-$all_attributes['image'] = lang('image');
-$all_attributes['thumbnail'] = lang('thumbnail');
-$all_attributes['pagemetadata'] = lang('page_metadata');
-$all_attributes['titleattribute'] = lang('titleattribute');
-$all_attributes['tabindex'] = lang('tabindex');
-$all_attributes['accesskey'] = lang('accesskey');
-$all_attributes['pagedata'] = lang('pagedata_codeblock');
-$all_attributes['searchable'] = lang('searchable');
-$all_attributes['extra1'] = lang('extra1');
-$all_attributes['extra2'] = lang('extra2');
-$all_attributes['extra3'] = lang('extra3');
-$all_attributes['additionaleditors'] = lang('additionaleditors');
-$all_attributes['page_url'] = lang('page_url');
+$all_attributes = null;
+{
+	$content_obj = new Content; // should this be the default type?
+	$list = $content_obj->GetProperties();
+	if( is_array($list) && count($list) ) {
+		// pre-remove some items.
+		$all_attributes = array();
+		for( $i = 0; $i < count($list); $i++ ) {
+			$obj = $list[$i];
+			if( $obj->tab == $content_obj::TAB_PERMS ) continue;
+			if( !isset($all_attributes[$obj->tab]) ) $all_attributes[$obj->tab] = array('label'=>lang($obj->tab),'value'=>array());
+			$all_attributes[$obj->tab]['value'][] = array('value'=>$obj->name,'label'=>lang($obj->name));
+		}
+	}
+	$txt = CmsFormUtils::create_option($all_attributes);
+}
 $smarty->assign('all_attributes',$all_attributes);
-
 $smarty->assign('smarty_cacheoptions',array('always'=>lang('always'),'never'=>lang('never'),'moduledecides'=>lang('moduledecides')));
 $smarty->assign('smarty_cacheoptions2',array('always'=>lang('always'),'never'=>lang('never')));
 

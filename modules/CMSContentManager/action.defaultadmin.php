@@ -34,7 +34,7 @@
 #-------------------------------------------------------------------------
 #END_LICENSE
 if( !isset($gCms) ) exit;
-if( !$this->CanEditContent() ) return;
+// no permissions checks here.
 
 echo '<noscript><h3 style="color: red; text-align: center;">'.$this->Lang('info_javascript_required').'</h3></noscript>'."\n";
 
@@ -122,7 +122,6 @@ if( isset($params['movedown']) ) {
   if( !$res ) $error = $this->Lang('error_movecontent');
 }
 if( isset($params['delete']) ) {
-  debug_to_log('got delete');
   $res = $builder->delete_content($params['delete']);
   if( $res ) $error = $res;
 }
@@ -160,6 +159,7 @@ $smarty->assign('pagelist',$pagelist);
 $smarty->assign('curpage',$builder->get_page());
 $smarty->assign('npages',$npages);
 $smarty->assign('admin_url',$config['admin_url']);
+$smarty->assign('multiselect',$builder->supports_multiselect());
 $columns  = $builder->get_display_columns();
 $smarty->assign('columns',$columns);
 if( CmsContentManagerUtils::get_pagenav_display() == 'title' ) {
@@ -195,7 +195,6 @@ $opts = bulkcontentoperations::get_operation_list();
 $smarty->assign('bulk_options',$opts);
 
 $res = $this->ProcessTemplate('defaultadmin.tpl');
-if( $ajax ) debug_to_log($res);
 echo $res;
 
 #

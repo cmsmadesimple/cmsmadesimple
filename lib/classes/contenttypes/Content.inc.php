@@ -96,7 +96,6 @@ class Content extends ContentBase
       $this->AddProperty('template',0,self::TAB_OPTIONS);
       $this->AddProperty('searchable',20,self::TAB_OPTIONS);
       $this->AddProperty('disable_wysiwyg',60,self::TAB_OPTIONS);
-
       $this->AddProperty('pagemetadata',1,self::TAB_LOGIC);
       $this->AddProperty('pagedata',2,self::TAB_LOGIC);
     }
@@ -455,8 +454,7 @@ class Content extends ContentBase
 		if( isset($blockInfo['sort']) ) {
 			$sort = (int)$blockInfo['sort'];
 		}
-		$dropdown = create_file_dropdown($inputname,$dir,$value,'jpg,jpeg,png,gif',$optprefix,true,'',
-										 $prefix,1,$sort);
+		$dropdown = create_file_dropdown($inputname,$dir,$value,'jpg,jpeg,png,gif',$optprefix,true,'',$prefix,1,$sort);
 		if( $dropdown === false ) {
 			$dropdown = lang('error_retrieving_file_list');
 		}
