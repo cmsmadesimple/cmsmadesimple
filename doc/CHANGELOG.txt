@@ -1,3 +1,9 @@
+Version 1.11.8.1 
+-----------------------------
+Core - General
+  - Fixes version.php to represent new schema
+  - Users with 'Modify Any Page' and 'Remove Content' can delete almost any page.
+
 Version 1.11.8 - Fioreana
 -----------------------------
 Core - General

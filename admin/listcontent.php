@@ -367,8 +367,9 @@ function deletecontent($contentid)
 	$access = (check_permission($userid, 'Remove Pages') &&
 	  (check_ownership($userid,$contentid) ||
 	   quick_check_authorship($contentid,$mypages)))
-	  || check_permission($userid, 'Manage All Content');
-	
+	  || check_permission($userid, 'Manage All Content') 
+	  || check_permission($userid, 'Modify Any Page');
+
 	$gCms = cmsms();
 	$hierManager = $gCms->GetHierarchyManager();
 
@@ -837,9 +838,7 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$users, &$menupos, &$o
 	    {
 	      if ($root->getChildrenCount() == 0 && 
 		  ((check_permission($userid, 'Remove Pages') &&
-		    (check_ownership($userid,$one->Id()) || 
-		     quick_check_authorship($one->Id(),$mypages)))
-		   || check_permission($userid,'Manage All Content')) 
+		    (check_ownership($userid,$one->Id()) || quick_check_authorship($one->Id(),$mypages))) || check_permission($userid,'Manage All Content') || check_permission($userid,'Modify Any Page'))
 		 )
 		{
 		  //$txt .= "<a href=\"{$thisurl}&amp;deletecontent=".$one->Id()."\" onclick=\"confirm('".cms_html_entity_decode_utf8(lang('deleteconfirm', $one->mName), true)."');\">";
