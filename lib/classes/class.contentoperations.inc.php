@@ -788,7 +788,6 @@ class ContentOperations
 
 		// build the content objects
 		for( $i = 0; $i < count($contentrows); $i++ ) {
-			if( $i > 4000 ) { continue; } // debug
 		    $row = $contentrows[$i];
 		    $id = $row['content_id'];
 			
