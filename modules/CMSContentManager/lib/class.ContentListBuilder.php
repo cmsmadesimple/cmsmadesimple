@@ -684,6 +684,7 @@ final class ContentListBuilder
 			  $this->_check_authorship($rec['id'])) && !$this->_is_locked($page_id);
       $rec['can_steal'] = ($mod->CheckPermission('Modify Any Page') || $mod->CheckPermission('Manage All Content') ||
 			   $this->_check_authorship($rec['id'])) && $this->_is_locked($page_id) && $this->_is_lock_expired($page_id);
+      $rec['can_delete'] = $rec['can_edit'] && $mod->CheckPermission('Remove Pages');
 
       foreach( $columns as $column => $displayable ) {
 	switch( $column ) {
@@ -774,10 +775,7 @@ final class ContentListBuilder
 	case 'copy':
 	  $rec[$column] = '';
 	  if( $content->IsCopyable() && !$this->_is_locked($content->Id()) ) {
-	    if( $mod->CheckPermission('Manage All Content') ) {
-	      $rec[$column] = 'yes';
-	    }
-	    else if( $mod->CheckPermission('Add Pages') && $this->_check_authorship($content->Id()) ) {
+	    if( $rec['can_edit'] && ($mod->CheckPermission('Add Pages') || $mod->CheckPermission('Manage All Content')) ) {
 	      $rec[$column] = 'yes';
 	    }
 	  }
@@ -795,15 +793,8 @@ final class ContentListBuilder
 
 	case 'delete':
 	  $rec[$column] = '';
-	  if( !$content->DefaultContent() && !$this->_is_locked($content->Id()) ) {
-	    if( !$node->has_children() ) {
-	      if( $mod->CheckPermission('Manage All Content') ) {
-		$rec[$column] = 'yes';
-	      }
-	      else if( $mod->CheckPermission('Remove Pages') && $this->_check_authorship($content->Id()) ) {
-		$rec[$column] = 'yes';
-	      }
-	    }
+	  if( $rec['can_delete'] && !$content->DefaultContent() && !$node->has_children() && !$this->_is_locked($content->Id()) ) {
+	    $rec[$column] = 'yes';
 	  }
 	  break;
 
