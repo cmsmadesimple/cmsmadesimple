@@ -2,55 +2,87 @@
 /* H */
 $lang['help_cmscontentmanager_help'] = <<<EOT
 <h3>Introduction</h3>
-<h3>The Content List</h3>
-<p>The content list is the primary interface to the module.  This form provides the main management interface for your content pages.  From here you can create, edit, delete, copy, deactivate, and re-arrange your content pages.  This page is heavily optimized for larger websites providing pagination and search mechanisms to display only a small amount of pages at a time, but to quickly find the item you would like to edit.</p>
+<p>This document describes the CMS Content Manager module.  It is aimed primarily at the website designer or developer and describes in broad terms how content items work in CMS Made Simple.</p>
+<p>The primary interface of the Content Manager module is the content list.  It displays content items in a tabular format and provides the ability to quickly search, navigate, and manage multiple content items.</p>
+<h3>Content Items</h3>
+<p>TODO: Describe content items here broadly, the different types, and how they relate to building a navigation.</p>
+<ul>
+  <li>Content Page
+    <p>This content item type is most similar to an HTML page.  When editors create content page items they select a design and template which controls the appearance of the page, specify a title, and specify content for the page.</p>
+    <p>Content items may also contain forms, logic, or display dynamic data from modules, or user defined tags (UDTs).  Thiis flexibility allows creating specialized applications, or extremely flexible and dynamic websites.</p>
+  </li>
+  <li>Link
+    <p>This content item type is only displayed in navigations.  It generates a link to a page on an external website.</p>
+  </li>
+  <li>Page Link
+    <p>This content item type is also only displayed in navigations.  It generates an additional link to an existing content page.</p>
+  </li>
+  <li>Separator
+    <p>This content item type is also used in navigations.  In some types of navigations it will generate a horizontal (or vertical) devider between navigation items.  Some types of navigations may not display separators at all.</p>
+  </li>
+  <li>Section Header
+    <p>The section header is also only displayed in navigations.  It is used to organize content items.  It provides a textual header above, or between other content items.</p>
+  </li>
+  <li>Error Page
+    <p>The Error Page is a special type of content item type.  It is used when a user attempts to navigate to a content item that is either not navigable or does not exist.</p>
+  </li>
+</ul>
+<p>Many third party modules provide more content types to serve different purposes.  Such as displaying catalogs of products, or restricting the content to authorized users.</p>
+<h3>The Content Item List</h3>
+<p>The content list is the primary interface to the module.  This form provides the main management interface for your content. From here you can create, edit, delete, copy, deactivate, and organize your content items.  This screen is heavily optimized for larger websites providing pagination and search mechanisms to display only a small amount of pages at a time, but to quickly find the item you would like to edit.</p>
  <h4>Columns</h4>
-<p>Each content item is displayed as a row in a table.  There are a number of columns to quickly display various attributes of the content page, and some convenient action icons.  The visibility of certainc columns depends on a number of factors:</p>
+<p>Each content item is displayed as a row in a table.  There are a number of columns to quickly display various attributes of each content item, and some convenient action icons.  Some columns may be hidden from view entirely, or only for some rows depending upon a number of factors:</p>
   <ul>
     <li>Your Access Permissions and Page Ownership:
-      <p>If your account is restricted to certain permissions some columns may not be displayed, or disabled.</p>
+      <p>If your account is restricted to certain permissions some columns may not be displayed, or may be disabled.</p>
     </li>
     <li>System Preferences and Site Configuration
-      <p>Some system preferences, and site configuration options will result in some columns from being disabled.</p>
+      <p>Some system preferences, and site configuration options will result in some columns from being disabled.  For example, the &quot;url&quot; column </p>
     </li>
     <li>The content type
-      <p>Depending on the content type certain columns may become irrelevent.  For example, it is not possible for &quot;Section Headers&quot; or &quot;Separators&quot; to become the default page, so nothing will be displayed in the &quot;default&quot; column for those content items.</p>
+      <p>Depending on the content type, certain columns may become irrelevent.  For example, it is not possible for &quot;Section Headers&quot; or &quot;Separators&quot; to become the default page, so nothing will be displayed in the &quot;default&quot; column for those content items.</p>
     </li>
-    <li>Wether the content item is being edited
-      <p>When other editors <em>(or even yourself) are editing a content page, then some columns will be hidden in the row for each content type to prevent modifying, deleting or copying the content page.</p>
+    <li>Whether the content item is being edited
+      <p>When other users <em>(or even yourself) are editing a content item, some columns will be hidden in the row for each content type to prevent modifying, deleting or copying the content page.</p>
     </li>
   </ul>
   <h5>Column List</h5>
+      <p>The Content Manager module provides a flexible mechanism for hiding and showing different columns in the content list.  Additionally, some columns may be hidden based on the site configuration.  For example, the URL column is hidden if pretty <em>(Search Enging Friendly)</em> URLS are not configured.</p>
       <p>Each column in the content list display has a special purpose:</p>
    <ul>
      <li>Expand/Collapse Column
-      <p>When a content page has children this column will be filled with an icon that allows expanding the list to show the pages children, or collapsing the list to hide them.  The state of which pages are expanded, and which are collapsed is saved on a per-user basis.  So that when you revisit the content manager the expanded/collapsed state of your pages will remain the same.</p>
+      <p>When a content item has children this column will be filled with an icon that allows expanding the list to show the item children, or collapsing the list to hide them.  The state of which items are expanded, and which are collapsed is saved on a per-user basis.  So that when you revisit the content manager the expanded/collapsed state of your pages will remain the same.</p>
      </li>
 
      <li>Hierarchy Column
-       <p>The hierarchy column displays the organization of each content page in a numeric state.</p>
+      <p>The hierarchy column displays the organization of each content page in a numeric state.  The hierarchy of the first root level page begins with 1 and increases incrementally for each peer. Each child begins with the 1, and its peers increment incrementally.   Therefore, the second grandchild of the third child of the first page in the content list would have a hierarchy of 1.3.2.</p>
+      <p>The hierarchy mechanism is a significant portion of what provides the ability of CMS Content Manager to organize content items, and then build navigations from them.</p>
      </li>
      
      <li>Page Title / Menu Text Column
-      <p>This column can either display the page title, or the page menutext, depending on a setting in the &quot;Content Manager Settings&quot; page.</p>
+      <p>This column can either display the page title, or the page menutext.  This depends on a setting in the &quot;Site Admin &raquo; Content Manager Settings&quot; page.</p>
       <p>This column will contain a link to allow editing the content item <em>(unless the content item is locked)</em>.  Hovering over the text in this column will display additional information about the content item such as the unique numeric content id, and wether the page is cachable or not.</p>
       <p>If the content item is locked, hovering over the text in the column will display information about who locked the item, and when thelock expires.</p>
      </li>
-     <li>Page Alias Column</li>
-       <p>This column displays the unique alias associated with each page <em>(note: some content types do not have aliases).</p>
+     <li>URL Column
+      <p>If enabled, this column will display any alternate URL for this content item.  <em>(Note: Only certain content item types support alternate an alternate URL).</em></p>
+     </li>
+     <li>Page Alias Column
+      <p>This column displays the unique alias associated with each page.  Aliases are text strings that uniquely identify the content item.  You use the content items alias (or numeric id) when you need to refer to a page within the system.<em>(Note: Some content types do not have aliases).</em></p>
+     </li>
      <li>Template Column</li>
-       <p>This column displays the design and template that is used to display the content for the page.</p>
+      <p>This column displays the design and template that is used to display the content for the item.  See the help for the &quot;Design Manager&quot; module for an explanation of how CMSMS manages designs, including stylesheets and templates.  <em>(Note: Some content item types do not use a design, or a template.)</em></p>
      <li>Type Column
-       <p>This column lists the content type (i.e: content, section header, separator, etc.).  CMSMS is distributed with a number of content types, and third party modules can provide more.  Each content type has different features and functionality.</p>
+       <p>This column indicates the content type (i.e: Content, Section header, Separator, etc.).<p>
      </li>
      <li>Owner Column
        <p>The owner column displays the username of the owner of the content item.  Hovering over the text in this column will display information as to when the content item was created and last edited.</p>
      </li>
      <li>Active Column.
-       <p>This column displays icons to show the current active state of the content item.  Active items can be navigated to, and will appear in navigation menus on the frontend.  If your user account has sufficient privilege you can click on the icon to toggle its active state.</p>
+       <p>This column displays icons to show the current active state of the content item.  Active items can be navigated to, and will appear in navigation menus on the frontend.  If your user account has sufficient privilege to the content item you can click on the icon to toggle its active state.</p>
      </li>
      <li>Default Column.
-       <p>This column displays wether the content type is the defaul page or not.  The default content item is the home page for your website.  Only some content types allow the content type to be the default.</p>
+       <p>This column displays whether the content item is the default page or not.  The default content item is the home page for your website.  Only some content types allow the content type to be the default.</p>
        <p>If your user account has sufficient privilege, and the content type supports being the default content for the website you can click on the icon to change the default flag to a different page.</p>
      </li>
      <li>The &quot;Move&quot; Column.
@@ -66,19 +98,67 @@ $lang['help_cmscontentmanager_help'] = <<<EOT
          <li>Delete - Delete the content item.
            <p>Depending upon your access privileges, and wether or not the content item has children, the option to delete the content item may be hidden or disabled.</p>
          </li>
+         <li>Steal Lock
+           <p>For content items that are currently being edited, but for which the lock has expired <em>(the editor has not made a change to the form for a while)</em> this option will allow you to steal the lock.</p>
+         </li>
          <li>Bulk operations checkbox.
            <p>The bulk operations checkbox allows selecting multiple content items to operate on en-mass.</p>
          </li>
        </ul> 
      </li>
    </ul>
- <h4>Access Levels</h4>
+
+ <h4>Edit Ability</h4>
+   <p>The ability to edit a content item is determined either by permission <em>(see the Manage All Content, and Modify Any Page permissions below)</em>, or by being the owner, or additional editor of a content item.</p>
+ <h4>Owners</h4>
+   <p>By default, the owner of a content item is the user that initially created it.  Owners, or users with &quot;Manage All Content&quot; permission can give ownership of a page to another user.</p>
+ <h4>Additional Editors</h4>
+    <p>When editing a content item as an owner or as a user with &quot;Manage All Content&quot; permission, the user can select other administrative users, or admin groups that are also allowed to edit that content item.</p>
+ <h4>Relevent Permissions.</h4>
+    <p>There are a few permissions that effect what columns are displayed in the content list and the ability to interact with the content list:</p>
+    <ul>
+      <li>Add Pages
+    <p>This permission allows users to create new content items. Additionally, users with this permission are able to copy content items that they have edit ability on.</p>
+      </li>
+      <li>Modify Any Page 
+        <p>Users with this position will have the ability to edit any content item.  It is similar to being an &quot;Additional Editor&quot; on all content items.</p>
+      </li>
+      <li>Remove Pages
+        <p>This permission allows users to remove pages that they have edit ability on.  Without this permission, the delete icon on each content item row in the content list will be hidden.</p>
+      </li>
+      <li>Reorder Pages
+        <p>This permission allows users who have edit ability to all siblings of a page to re-arrange pages amongst those siblings.</p>
+        <p>i.e: A user in a group who has edit ability to the page with hierarchy 1.3 and all of its direct siblings <em>(1.1, 1.2, 1.3, 1.4, etc).</em> will be able to re-arrange those pages in the navigation.</p>
+        <p>Users without this permission will not see the move up/down icons in listcontent.</p>
+      </li>
+      <li>Manage All Content
+        <p>This permission provides super-user capability on all content items.  Users with this permission can add, edit, delete, and re-order any content item.  They also have the ability to set the default content item, and perform bulk actions like change ownership that may or may not be available to users with other permissions.</p>
+      </li>
+    </ul>
+   <p>It is possible for an admin user account to not be a member of any groups, and for that admin user account still have the ability <em>(as an owner or additional editor)</p> to edit some content items.</p>
  <h4>Content Locking</h4>
- <h4>Pagination</h4>
- <h4>Expand/Collapse All</h4>
- <h4>Searching</h4>
- <h4>Bulk Actions</h4>
- <h4>Reordering</h4>
+   <p>Content locking is a mechanism that prevents two editors from editing the same item at the same time, and therefore destroying each others work.  Admin users are given exclusive access to a content item until such time as they submit the changes.</p>
+   <p>If a content item is locked, you will not be able to edit it until the lock has expired.  See below for information on lock expiring.  Once a lock has expired, a user will have the option of stealing the lock from the original editor and beginning a new edit session.</p>
+   <p>A special icon is displayed on the content item row to indicate that the lock can be stolen.</p>
+ <h4>Configuration</h4>
+   <p>Some configuration items effect the visibility of certain items in the content list:</p>
+ <h4>Other functionality</h4>
+   <ul>
+     <li>Pagination
+       <p>The content list can be paginated.  This is a performance feature for large sites with a great deal of content items.  The default limit is 500 items, however this limit can be lowered by adjusting the value in the options dialog.</p>
+     </li>
+     <li>Expand/Collapse All
+       <p>These options allow expanding all content items with children so that the children are visible.  Or, conversely collapsing all content items with children so that the children are not visible.  It is useful to easily find a content item, or to get an overview of the website structure.  Each content item with children can still be expanded, or collapsed individually.</p>
+     </li>
+     <li>Searching
+       <p>The &quot;Find&quot; textbox in the top left corner of the content list allows users to quickly and easily find a content item by its title, or menu text.  This form element uses ajax and autocomplete to display a dropdown list of all items matching the string entered (a minimum of three characters is required).</p>
+     </li>
+     <li>Bulk Actions
+     </li>
+     <li>Reordering
+     </li>
+   </ul>
+
 <h3>Adding Content Pages</h3>
   <h4>Content Types</h4>
   <h4>
