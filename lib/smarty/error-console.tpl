@@ -3,6 +3,7 @@
     <head>
         <meta charset="utf-8" />
         <title>CMS Made Simple - Error console</title>
+		<meta name="robots" content="noindex, nofollow" />
         <style>
 			body {
 				min-width: 900px;
