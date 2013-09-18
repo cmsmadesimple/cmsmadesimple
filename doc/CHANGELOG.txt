@@ -3,6 +3,8 @@ Version 1.11.8.1
 Core - General
   - Fixes version.php to represent new schema
   - Users with 'Modify Any Page' and 'Remove Content' can delete almost any page.
+  - Fixes minor issue with event handlers
+  - Removes a debug limit on caching in contentoperations.
 
 Version 1.11.8 - Fioreana
 -----------------------------
