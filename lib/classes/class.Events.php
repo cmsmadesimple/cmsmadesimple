@@ -106,7 +106,6 @@ final class Events
 	{
 		global $CMS_INSTALL_PAGE;
 		if( isset($CMS_INSTALL_PAGE) ) return;
-
 		$gCms = cmsms();
 
 		$results = Events::ListEventHandlers($modulename, $eventname);
@@ -153,7 +152,6 @@ final class Events
 
 		$params['module'] = $modulename;
 		$params['event'] = $eventname;
-
 		$handlers = array();
 
 		if( !is_array(self::$_handlercache) ) {
@@ -164,16 +162,14 @@ final class Events
 			self::$_handlercache = $db->GetArray( $q );
 		}
 
-		foreach (self::$_handlercache as $row) {
-			if ($row['originator'] == $modulename && $row['event_name'] == $eventname) {
-				$handlers[] = $row;
+		if( is_array(self::$_handlercache) && count(self::$_handlercache) ) {
+			foreach (self::$_handlercache as $row) {
+				if ($row['originator'] == $modulename && $row['event_name'] == $eventname) $handlers[] = $row;
 			}
 		}
 
-		if (count($handlers) > 0)
-			return $handlers;
-		else
-			return false;
+		if (count($handlers) > 0) return $handlers;
+		return false;
 	}
 
 
@@ -193,18 +189,12 @@ final class Events
 			'event_handlers eh on e.event_id=eh.event_id GROUP BY e.event_id ORDER BY originator,event_name';
 
 		$dbresult = $db->Execute( $q );
-		if( $dbresult == false ) {
-			return false;
-		}
+		if( $dbresult == false ) return false;
 
 		$result = array();
 		while( $row = $dbresult->FetchRow() ) {
-			if(!cms_utils::module_available($row['originator']) && $row['originator'] !== 'Core')
-				continue;
-				
-			if(!cms_utils::module_available($row['originator']) && $row['originator'] !== 'Core')
-				continue;
-				
+			if(!cms_utils::module_available($row['originator']) && $row['originator'] !== 'Core') continue;
+			if(!cms_utils::module_available($row['originator']) && $row['originator'] !== 'Core') continue;
 			$result[] = $row;
 		}
 		return $result;
@@ -223,12 +213,8 @@ final class Events
 	 */
 	static public function AddEventHandler( $modulename, $eventname, $tag_name = false, $module_handler = false, $removable = true)
 	{
-		if( $tag_name == false && $module_handler == false ) {
-			return false;
-		}
-		if( $tag_name != false && $module_handler != false ) {
-			return false;
-		}
+		if( $tag_name == false && $module_handler == false ) return false;
+		if( $tag_name != false && $module_handler != false ) return false;
 
 		$gCms = cmsms();
 		$db = $gCms->GetDb();
@@ -293,9 +279,7 @@ final class Events
 		$params[] = $order;
 		$params[] = $handler_id;
 		$dbresult = $db->Execute( $q, $params );
-		if( $dbresult != false ) {
-			return true;
-		}
+		if( $dbresult != false ) return true;
 		return false;
 	}
 
@@ -311,13 +295,9 @@ final class Events
 	 */
 	static public function RemoveEventHandler( $modulename, $eventname, $tag_name = false, $module_handler = false )
 	{
-		if( $tag_name != false && $module_handler != false ) {
-			return false;
-		}
+		if( $tag_name != false && $module_handler != false ) return false;
 		$field = 'handler_name';
-		if( $module_handler != false ) {
-			$field = 'module_handler';
-		}
+		if( $module_handler != false ) $field = 'module_handler';
 
 		$gCms = cmsms();
 		$db = $gCms->GetDb();
@@ -346,9 +326,7 @@ final class Events
 			$params[] = $tag_name;
 		}
 		$dbresult = $db->Execute( $query, $params );
-		if( $dbresult == false ) {
-			return true;
-		}
+		if( $dbresult == false ) return true;
 		return false;
 	}
 
@@ -380,9 +358,7 @@ final class Events
 		$q = "DELETE FROM ".cms_db_prefix()."event_handlers 
 		WHERE event_id = ?";
 		$dbresult = $db->Execute( $q, array( $id ) );
-		if( $dbresult == false ) {
-			return true;
-		}
+		if( $dbresult == false ) return true;
 		return false;
 	}
 
