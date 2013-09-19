@@ -1,10 +1,12 @@
-Version 1.11.8.1 
+﻿Version 1.11.8.1 
 -----------------------------
 Core - General
   - Fixes version.php to represent new schema
-  - Users with 'Modify Any Page' and 'Remove Content' can delete almost any page.
+  - Users with 'Modify Any Page' and 'Remove Content' can delete almost any page
   - Fixes minor issue with event handlers
-  - Removes a debug limit on caching in contentoperations.
+  - Removes a debug limit on caching in contentoperations
+  - Robots don't index Error Console pages
+  - Only show technical details on the Error Console page to logged in administrators
 
 Version 1.11.8 - Fioreana
 -----------------------------

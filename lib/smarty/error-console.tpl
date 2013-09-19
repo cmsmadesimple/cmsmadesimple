@@ -127,17 +127,19 @@
                 Don’t worry, it can happen to any of us.
             </p>
             <div class="clear"></div>
-            <div class="error">
-                <h2 class="error-message"><span class="important">Error:</span> at line {$e_line} in file {$e_file}:</h2>
-                <p class="message">
-                    <strong>Message:</strong>
-                </p>
-                <pre>{$e_message}</pre>
-                <p class="message btn">
-                    <a id="open" href="javascript:toggle();">View Full Trace &darr;</a>
-                </p>
-                <pre id="show" style="display: none;">{$e_trace}</pre>
-            </div>
+			{if isset($smarty.cookies.cms_admin_user_id)}
+				<div class="error">
+					<h2 class="error-message"><span class="important">Error:</span> at line {$e_line} in file {$e_file}:</h2>
+					<p class="message">
+						<strong>Message:</strong>
+					</p>
+					<pre>{$e_message}</pre>
+					<p class="message btn">
+						<a id="open" href="javascript:toggle();">View Full Trace &darr;</a>
+					</p>
+					<pre id="show" style="display: none;">{$e_trace}</pre>
+				</div>
+			{/if}
         </div>
     </body>
 </html>
