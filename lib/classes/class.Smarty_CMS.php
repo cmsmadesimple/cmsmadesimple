@@ -410,7 +410,10 @@ class Smarty_CMS extends SmartyBC
 		$this->assign('e_line', $e->getLine());
 		$this->assign('e_file', $e->getFile());
 		$this->assign('e_message', $e->getMessage());
-		$this->assign('e_trace', htmlentities($e->getTraceAsString()));	
+		$this->assign('e_trace', htmlentities($e->getTraceAsString()));
+		
+		// put mention into the admin log
+		audit('', 'Error: '.substr( $e->getMessage(),0 ,50 ), 'has occured');
 
 		$output = $this->fetch('error-console.tpl');
 
