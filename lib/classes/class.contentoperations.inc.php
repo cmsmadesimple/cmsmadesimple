@@ -661,10 +661,11 @@ class ContentOperations
 				for( $i = 0; $i < count($tmp); $i++ ) {
 					$content_id = $tmp[$i]['content_id'];
 					if( in_array($content_id,$child_ids) ) {
-						if( !is_array($contentprops[$content_id]) ) $contentprops[$conent_id] = array();
+						if( !is_array($contentprops[$content_id]) ) $contentprops[$content_id] = array();
 						$contentprops[$content_id] = $tmp[$i];
 					}
 				}
+				unset($tmp);
 			}
 		}
 		
@@ -764,10 +765,11 @@ class ContentOperations
 				for( $i = 0; $i < count($tmp); $i++ ) {
 					$content_id = $tmp[$i]['content_id'];
 					if( in_array($content_id,$child_ids) ) {
-						if( !is_array($contentprops[$content_id]) ) $contentprops[$conent_id] = array();
+						if( !is_array($contentprops[$content_id]) ) $contentprops[$content_id] = array();
 						$contentprops[$content_id] = $tmp[$i];
 					}
 				}
+				unset($tmp);
 			}
 		}
 
