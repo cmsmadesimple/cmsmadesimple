@@ -8,6 +8,9 @@ Core - General
   - Robots don't index Error Console pages
   - Only show technical details on the Error Console page to logged in administrators
 
+Core - Search
+  - Fixes PHP 5.3 dependency
+
 Core - Bug Reports
   - #9549 CMSMS 1.11.8 performance regression
 
