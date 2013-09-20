@@ -396,7 +396,7 @@ $(document).ready(function () {
 {/if}
 </div>{* #contentlist *}
 
-{if isset($content_list) && $multiselect}
+{if isset($content_list) && $multiselect && isset($bulk_options)}
 <div class="pageoptions" style="float: right">
 	<label for="multiaction">{$mod->Lang('prompt_withselected')}:</label>&nbsp;&nbsp;
 	<select name="{$actionid}multiaction" id="multiaction">

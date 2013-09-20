@@ -34,7 +34,6 @@
 #-------------------------------------------------------------------------
 #END_LICENSE
 if( !isset($gCms) ) exit;
-
 $this->SetCurrentTab('pages');
 
 if( !isset($params['multicontent']) || !isset($params['action']) || $params['action'] != 'admin_bulk_delete' ) {
@@ -42,21 +41,41 @@ if( !isset($params['multicontent']) || !isset($params['action']) || $params['act
   $this->RedirectToAdminTab();
 }
 
-function cmscm_admin_bulk_delete_get_children($node)
+function cmscm_admin_bulk_delete_can_delete($node)
+{
+  // test if can delete this node (not its children)
+  $mod = cms_utils::get_module('CMSContentManager');
+  if( $mod->CheckPermission('Manage All Content') ) return TRUE;
+  if( $mod->CheckPermission('Modify Any Page') && $mod->CheckPermission('Remove Pages') ) return true;
+  if( !$mod->CheckPermission('Remove Pages') ) return FALSE;
+
+  $id = (int)$node->get_tag('id');
+  if( $id < 1 ) return FALSE;
+
+  return ContentOperations::get_instance()->CheckPageAuthorship(get_userid(),$id);
+}
+
+function cmscm_get_deletable_pages($node)
 {
   $out = array();
-
-  if( $node->has_children() ) {
-    $children = $node->get_children();
-    foreach( $children as $child_node ) {
-      $out[] = $child_node->get_tag('id');
-      if( $child_node->has_children() ) {
-	$out2 = cmscm_admin_bulk_delete_get_children($child_node);
-	$out = array_merge($out,$out2);
+  if( cmscm_admin_bulk_delete_can_delete($node) ) {
+    // we can delete the parent node.
+    $tmp = array();
+    if( $node->has_children() ) {
+      // it has children.
+      $children = $node->get_children();
+      foreach( $children as $child_node ) {
+	// check access to this node, and it's children
+	if( !cmscm_admin_bulk_delete_can_delete($child_node) ) {
+	  $out = array();
+	  return $out;
+	}
+	$tmp[] = $child_node->get_tag('id');
       }
     }
+    $out[] = $node->get_tag('id');
+    if( count($tmp) ) $out = array_merge($out,$tmp);
   }
-
   return $out;
 }
 
@@ -109,17 +128,7 @@ if( isset($params['submit']) ) {
 //
 // expand $params['multicontent'] to also include children, place it in $pagelist
 //
-$multicontent = array();
-if( $this->CheckPermission('Manage All Content') || $this->CheckPermission('Modify Any Page') ) {
-  $multicontent = unserialize(base64_decode($params['multicontent']));
-}
-else {
-  foreach( unserialize(base64_decode($params['multicontent'])) as $pid ) {
-    if( !check_authorship(get_userid(),$pid) ) continue;
-    $multicontent[] = $pid;
-  }
-}
-
+$multicontent = unserialize(base64_decode($params['multicontent']));
 if( count($multicontent) == 0 ) {
   $this->SetError($this->Lang('error_missingparam'));
   $this->RedirectToAdminTab();
@@ -130,8 +139,7 @@ $pagelist = array();
 foreach( $multicontent as $pid ) {
   $node = $contentops->quickfind_node_by_id($pid);
   if( !$node ) continue;
-  $pagelist[] = $pid;
-  $tmp = cmscm_admin_bulk_delete_get_children($node);
+  $tmp = cmscm_get_deletable_pages($node);
   $pagelist = array_merge($pagelist,$tmp);
 }
 

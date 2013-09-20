@@ -374,9 +374,7 @@ class UserOperations
 	function UserInGroup($uid,$gid)
 	{
 		$groups = $this->GetMemberGroups($uid);
-		if( in_array($gid,$groups) ) {
-			return TRUE;
-		}
+		if( in_array($gid,$groups) ) return TRUE;
 		return FALSE;
 	}
 
@@ -394,8 +392,7 @@ class UserOperations
 	{
 		if( !is_array(self::$_user_groups) || !isset(self::$_user_groups[$uid]) ) {
 			$db = cmsms()->GetDb();
-			$query = 'SELECT group_id FROM '.cms_db_prefix().'user_groups
-                  WHERE user_id = ?';
+			$query = 'SELECT group_id FROM '.cms_db_prefix().'user_groups WHERE user_id = ?';
 			$col = $db->GetCol($query,array((int)$uid));
 			if( !is_array(self::$_user_groups) ) self::$_user_groups = array();
 			self::$_user_groups[$uid] = $col;

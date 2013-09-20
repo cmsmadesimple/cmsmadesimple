@@ -36,6 +36,10 @@
 if( !isset($gCms) ) exit;
 
 $this->SetCurrentTab('pages');
+if( !$this->CheckPermission('Manage All Content') ) {
+  $this->SetError($this->Lang('error_bulk_permission'));
+  $this->RedirectToAdminTab();
+}
 if( !isset($params['multicontent']) ) {
   $this->SetError($this->Lang('error_missingparam'));
   $this->RedirectToAdminTab();
@@ -44,16 +48,7 @@ if( !isset($params['multicontent']) ) {
 $cachable = 1;
 if( isset($params['cachable']) ) $cachable = (int)$params['cachable'];
 
-$multicontent = array();
-if( $this->CheckPermission('Manage All Content') || $this->CheckPermission('Modify Any Page') ) {
-  $multicontent = unserialize(base64_decode($params['multicontent']));
-}
-else {
-  foreach( unserialize($params['multicontent']) as $pid ) {
-    if( !check_authorship(get_userid(),$pid) ) continue;
-    $multicontent[] = $pid;
-  }
-}
+$multicontent = unserialize(base64_decode($params['multicontent']));
 if( count($multicontent) == 0 ) {
   $this->SetError($this->Lang('error_missingparam'));
   $this->RedirectToAdminTab();

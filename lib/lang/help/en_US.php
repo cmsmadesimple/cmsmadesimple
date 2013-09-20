@@ -151,11 +151,64 @@ $lang['help_cmscontentmanager_help'] = <<<EOT
        <p>These options allow expanding all content items with children so that the children are visible.  Or, conversely collapsing all content items with children so that the children are not visible.  It is useful to easily find a content item, or to get an overview of the website structure.  Each content item with children can still be expanded, or collapsed individually.</p>
      </li>
      <li>Searching
-       <p>The &quot;Find&quot; textbox in the top left corner of the content list allows users to quickly and easily find a content item by its title, or menu text.  This form element uses ajax and autocomplete to display a dropdown list of all items matching the string entered (a minimum of three characters is required).</p>
+       <p>The &quot;Find&quot; textbox in the top left corner of the content list allows users to quickly and easily find a content item by its title, or menu text.  This form uses ajax and autocomplete to display a dropdown list of all items matching the string entered (a minimum of three characters is required).</p>
      </li>
      <li>Bulk Actions
+       <p>The &quot;With Selected&quot; form at the bottom right of the content list allows users with appropriate access to modify, or interact with content items en-masse.  Numerous options are available (depending both on the selected items, and the users access permission):</p>
+       <ul>
+         <li>Delete
+           <p>This option allows deleting multiple content items (and their children) in few steps.  All of the selected content items and their descendants will be analyzed for the their eligibility to be deleted.  Users will then be prompted with a list of the content items that passed the analysis <em>(if any)</em> and to confirm the action.</p>
+	   <p>Only users with the permission to remove pages and modify any page, or Manage All Content can use this option.</p>
+           <p><strong>Note:</strong> When selecting many content items, or content items with many descendants, this can be a very memory, database and time intensive operation.</p>
+         </li>
+         <li>Set Active
+           <p>This option will ensure that the content items selected are marked as &quot;Active&quot;.  Users will be asked to confirm the operation. This operation does not work on descendents of the selected pages.</p>
+	   <p>Only users with the &quot;Manage All Content&quot; permission can use this option.</p>
+         </li>
+         <li>Set Inactive
+           <p>this option analyzes the selected items for eligibility, and will set all of the eligible content items to inactive.  Inactive pages cannot be navigated to, and may break a working website.  The default page cannot be set to inactive.</p>
+	   <p>Only users with the &quot;Manage All Content&quot; permission can use this option.</p>
+         </li>
+         <li>Set Cachable
+           <p>This option sets the selected content items to &quoc;cachable&quot;.  This may have different effects based on the site configuration:<p>
+           <p>If enabled in &quot;Site Admin >> Global Settings&quot; then content items marked as &quot;cachable&quot; can be cached by the browser <em>(this reduces load on your webserver for users visiting the same page frequently).</em>
+           <p>Also in &quot;Site Admin >> Global Settings&quot; Smarty caching effects cachable pages.  This is an advanced tool that will cache the generated html code of a for repeated use, and can dramatically reduce server load and improve performace.  However, it is an advanced topic and may negatively the dynamic nature of some content items.</p>
+	   <p>Only users with the &quot;Manage All Content&quot; permission can use this option.</p>
+         </li>
+         <li>Set Not Cachable
+           <p>This option ensures that the selected content items are not cachable.<p>
+         </li>
+         <li>Show In Menu
+           <p>This option ensures that the selected content items are visible in frontend navigation menus.</p>
+	   <p>Only users with the &quot;Manage All Content&quot; permission can use this option.</p>
+         </li>
+         <li>Hide From Menu
+           <p>This option ensures that the selected content items will not be visible (by default) in frontend navigation menus.  Various options of navigation generation modules may override the &quot;Show In Menu&quot; setting.</p>
+	   <p>Only users with the &quot;Manage All Content&quot; permission can use this option.</p>
+         </li>
+         <li>Set Secure (HTTPS)
+           <p>This option will ensure that HTTPS will be used when the selected content items are displayed.</p>
+           <p><strong>Note:</strong> You may need to adjust the secure URL settings in the CMSMS config.php file, and to contact your host about proper SSL configuration.</p>
+	   <p>Only users with the &quot;Manage All Content&quot; permission can use this option.</p>
+         </li>
+         <li>Set Insecure (HTTP)
+           <p>This option removes the HTTPS flag from the selected content items.</p>
+           <p><strong>Note:</strong> Content items without the secure <em>(HTTPS)</em> may still be accessed via the HTTPS protocol.</p>
+	   <p>Only users with the &quot;Manage All Content&quot; permission can use this option.</p>
+         </li>
+         <li>Set Design & Template
+           <p>This option will display a form to set the design and template that are associated with the selected content items.  Only some content item types have a design and template association. i.e: the &quot;content&quot; item type, and those provided by other modules that provide similar functionality.</p>
+	   <p>Only users with the &quot;Manage All Content&quot; permission can use this option.</p>
+         </li>
+         <li>Set Owner
+           <p>This option displays a form that allows changing the ownership of the selected content items.</p>
+	   <p>Only users with the &quot;Manage All Content&quot; permission can use this option.</p>
+         </li>
+       </ul>
      </li>
      <li>Reordering
+       <p>Users with the &quot;Manage All Content&quot; permission have the ability to re-organize content items en-masse by selecting the &quot;Reorder Pages&quot; item from the options menu on the content list display.   This provides a form where content items can be re-ordered with simple drag and drop operations.</p>
+       <p><strong>Note:</strong> This can be a very memory and database intensive operation, and we do not suggest using this option on websites with more than a few hundred content items.</p>
      </li>
    </ul>
 

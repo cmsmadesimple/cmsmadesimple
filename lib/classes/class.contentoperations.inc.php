@@ -1140,12 +1140,20 @@ class ContentOperations
 			$data = $this->GetOwnedPages($userid);
 
 			// Get all of the pages this user has access to.
+			$groups = UserOperations::get_instance()->GetMemberGroups($userid);
+			$list = array($userid);
+			if( is_array($groups) && count($groups) ) {
+				foreach( $groups as $group ) {
+					$list[] = $group * -1;
+				}
+			}
+
 			$db = cmsms()->GetDb();
 			$query = "SELECT A.content_id FROM ".cms_db_prefix()."additional_users A 
                       LEFT JOIN ".cms_db_prefix().'content B ON A.content_id = B.content_id
-                      WHERE A.user_id = ?
+                      WHERE A.user_id IN ('.implode(',',$list).')
                       ORDER BY B.hierarchy';
-			$tmp = $db->GetCol($query, array($userid));
+			$tmp = $db->GetCol($query);
 			for( $i = 0; $i < count($tmp); $i++ ) {
 				if( $tmp[$i] > 0 && !in_array($tmp[$i],$data) ) $data[] = $tmp[$i];
 			}

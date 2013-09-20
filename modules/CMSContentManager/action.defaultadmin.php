@@ -175,8 +175,7 @@ $smarty->assign('ajax',$ajax);
 if( $error ) $smarty->assign('error',$error);
 
 $opts = array();
-if( $this->CheckPermission('Remove Pages') || 
-    $this->CheckPermission('Manage All Content') ) {
+if( $this->CheckPermission('Remove Pages') && $this->CheckPermission('Modify Any Page') ) {
   bulkcontentoperations::register_function($this->Lang('bulk_delete'),'delete');
 }
 if( $this->CheckPermission('Manage All Content')) {
@@ -192,7 +191,7 @@ if( $this->CheckPermission('Manage All Content')) {
   bulkcontentoperations::register_function($this->Lang('bulk_changeowner'),'changeowner');
 }
 $opts = bulkcontentoperations::get_operation_list();
-$smarty->assign('bulk_options',$opts);
+if( is_array($opts) && count($opts) ) $smarty->assign('bulk_options',$opts);
 
 $res = $this->ProcessTemplate('defaultadmin.tpl');
 echo $res;
