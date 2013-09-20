@@ -1,4 +1,4 @@
-﻿Version 1.11.8.1 
+﻿Version 1.11.8.1
 -----------------------------
 Core - General
   - Fixes version.php to represent new schema
@@ -7,6 +7,10 @@ Core - General
   - Removes a debug limit on caching in contentoperations
   - Robots don't index Error Console pages
   - Only show technical details on the Error Console page to logged in administrators
+
+Core - Bug Reports
+  - #9549 CMSMS 1.11.8 performance regression
+
 
 Version 1.11.8 - Fioreana
 -----------------------------
