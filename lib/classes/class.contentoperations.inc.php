@@ -638,16 +638,15 @@ class ContentOperations
 			if( $all ) $query = "SELECT * FROM ".cms_db_prefix()."content WHERE parent_id = ? ORDER BY hierarchy";
 			$contentrows = $db->GetArray($query, array($id));
 		}
-		$contentprops = '';
+
+		$contentprops = null;
 
 		// get the content ids from the returned data
-		if( $loadprops )
-		  {
+		if( $loadprops ) {
 		    $child_ids = array();
-		    for( $i = 0; $i < count($contentrows); $i++ )
-		      {
-				  $child_ids[] = $contentrows[$i]['content_id'];
-		      }
+		    for( $i = 0; $i < count($contentrows); $i++ ) {
+				$child_ids[] = $contentrows[$i]['content_id'];
+			}
 
 			$tmp = null;
 			if( count($child_ids) ) {
@@ -657,51 +656,40 @@ class ContentOperations
 			}
 				
 		    // re-organize the tmp data into a hash of arrays of properties for each content id.
-		    if( $tmp )
-		      {
-				  $contentprops = array();
-				  for( $i = 0; $i < count($contentrows); $i++ )
-					  {
-						  $content_id = $contentrows[$i]['content_id'];
-						  $t2 = array();
-						  for( $j = 0; $j < count($tmp); $j++ )
-							  {
-								  if( $tmp[$j]['content_id'] == $content_id )
-									  {
-										  $t2[] = $tmp[$j];
-									  }
-							  }
-						  $contentprops[$content_id] = $t2;
-					  }
-		      }
-		  }
+		    if( $tmp ) {
+				$contentprops = array();
+				for( $i = 0; $i < count($tmp); $i++ ) {
+					$content_id = $tmp[$i]['content_id'];
+					if( in_array($content_id,$child_ids) ) {
+						if( !is_array($contentprops[$content_id]) ) $contentprops[$conent_id] = array();
+						$contentprops[$content_id] = $tmp[$i];
+					}
+				}
+			}
+		}
 		
 		// build the content objects
-		for( $i = 0; $i < count($contentrows); $i++ )
-		  {
+		for( $i = 0; $i < count($contentrows); $i++ ) {
 		    $row = $contentrows[$i];
 		    $id = $row['content_id'];
 
 		    if (!in_array($row['type'], array_keys($this->ListContentTypes()))) continue;
 		    $contentobj = $this->CreateNewContent($row['type']);
 
-		    if ($contentobj)
-		      {
-				  $contentobj->LoadFromData($row, false);
-				  if( $loadprops && $contentprops && isset($contentprops[$id]) )
-					  {
-						  // load the properties from local cache.
-						  $props = $contentprops[$id];
-						  foreach( $props as $oneprop )
-							  {
-								  $contentobj->SetPropertyValueNoLoad($oneprop['prop_name'],$oneprop['content']);
-							  }
-					  }
-				  
-				  // cache the content objects
-				  cms_content_cache::add_content($id,$contentobj->Alias(),$contentobj);
-		      }
-		  }
+		    if ($contentobj) {
+				$contentobj->LoadFromData($row, false);
+				if( $loadprops && $contentprops && isset($contentprops[$id]) ) {
+					// load the properties from local cache.
+					$props = $contentprops[$id];
+					foreach( $props as $oneprop ) {
+						$contentobj->SetPropertyValueNoLoad($oneprop['prop_name'],$oneprop['content']);
+					}
+				}
+
+				// cache the content objects
+				cms_content_cache::add_content($id,$contentobj->Alias(),$contentobj);
+			}
+		}
 	}
 
 	/**
@@ -773,15 +761,12 @@ class ContentOperations
 		    // re-organize the tmp data into a hash of arrays of properties for each content id.
 		    if( $tmp ) {
 				$contentprops = array();
-				for( $i = 0; $i < count($contentrows); $i++ ) {
-					$content_id = $contentrows[$i]['content_id'];
-					$t2 = array();
-					for( $j = 0; $j < count($tmp); $j++ ) {
-						if( $tmp[$j]['content_id'] == $content_id ) {
-							$t2[] = $tmp[$j];
-						}
+				for( $i = 0; $i < count($tmp); $i++ ) {
+					$content_id = $tmp[$i]['content_id'];
+					if( in_array($content_id,$child_ids) ) {
+						if( !is_array($contentprops[$content_id]) ) $contentprops[$conent_id] = array();
+						$contentprops[$content_id] = $tmp[$i];
 					}
-					$contentprops[$content_id] = $t2;
 				}
 			}
 		}
