@@ -566,16 +566,14 @@ class ContentOperations
 		    // re-organize the tmp data into a hash of arrays of properties for each content id.
 		    if( $tmp ) {
 				$contentprops = array();
-				while( !$dbr->EOF() ) {
-					$content_id = $dbr->fields['content_id'];
-					$t2 = array();
-					for( $j = 0; $j < count($tmp); $j++ ) {
-						if( $tmp[$j]['content_id'] == $content_id ) $t2[] = $tmp[$j];
+				for( $i = 0; $i < count($tmp); $i++ ) {
+					$content_id = $tmp[$i]['content_id'];
+					if( in_array($content_id,$child_ids) ) {
+						if( !is_array($contentprops[$content_id]) ) $contentprops[$content_id] = array();
+						$contentprops[$content_id] = $tmp[$i];
 					}
-					$contentprops[$content_id] = $t2;
-					$dbr->MoveNext();
 				}
-				$dbr->MoveFirst();
+				unset($tmp);
 			}
 		}
 
@@ -666,13 +664,12 @@ class ContentOperations
 		    // re-organize the tmp data into a hash of arrays of properties for each content id.
 		    if( $tmp ) {
 				$contentprops = array();
-				for( $i = 0; $i < count($contentrows); $i++ ) {
-					$content_id = $contentrows[$i]['content_id'];
-					$t2 = array();
-					for( $j = 0; $j < count($tmp); $j++ ) {
-						if( $tmp[$j]['content_id'] == $content_id ) $t2[] = $tmp[$j];
+				for( $i = 0; $i < count($tmp); $i++ ) {
+					$content_id = $tmp[$i]['content_id'];
+					if( in_array($content_id,$child_ids) ) {
+						if( !is_array($contentprops[$content_id]) ) $contentprops[$content_id] = array();
+						$contentprops[$content_id] = $tmp[$i];
 					}
-					$contentprops[$content_id] = $t2;
 				}
 				unset($tmp);
 			}

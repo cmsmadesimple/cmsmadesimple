@@ -681,6 +681,7 @@ function cms_module_create_url(&$modinstance,$id,$action,$returnid='',$params=ar
 		$secureparam = '';
 		if( $returnid == '' ) $secureparam='&amp;'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 		$text .= '/'.$goto.'?mact='.$modinstance->GetName().','.$id.','.$action.','.($inline == true?1:0).$secureparam;
+		if( isset($params['returnid']) && $returnid != '' ) unset($params['returnid']);
 		foreach ($params as $key=>$value) {
 			if( $key == 'assign' ) continue;
 			$key = cms_htmlentities($key);

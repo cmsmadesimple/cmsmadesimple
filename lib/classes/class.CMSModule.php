@@ -2439,8 +2439,7 @@ abstract class CMSModule
 			     $inline=false,$targetcontentonly=false,$prettyurl='')
   {
     $this->LoadFormMethods();
-    return cms_module_create_url($this,$id,$action,$returnid,$params,
-				 $inline,$targetcontentonly,$prettyurl);
+    return cms_module_create_url($this,$id,$action,$returnid,$params,$inline,$targetcontentonly,$prettyurl);
   }
 
   /**

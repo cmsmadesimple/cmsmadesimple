@@ -1234,11 +1234,9 @@ final class ModuleOperations
 
 	  if ($id != '') {
 		  foreach ($_REQUEST as $key=>$value) {
-			  if (strpos($key, (string)$id) !== FALSE && strpos($key, (string)$id) == 0) {
-				  $key = str_replace($id, '', $key);
-				  if( $key == 'id' || $key == 'returnid' ) {
-					  $value = (int)$value;
-				  }
+			  if( startswith($key,$id) ) {
+				  $key = substr($key,strlen($id));
+				  if( $key == 'id' || $key == 'returnid' ) $value = (int)$value;
 				  $params[$key] = $value;
 			  }
 		  }
