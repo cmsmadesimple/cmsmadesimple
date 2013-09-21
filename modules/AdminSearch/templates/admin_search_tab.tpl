@@ -14,9 +14,18 @@
 <script type="text/javascript">
  var ajax_url = '{$ajax_url}';
  var clickthru_msg = '{$mod->Lang('warn_clickthru')}';
- {if isset($saved_search) && in_array(-1,$saved_search.slaves)}
+ {if isset($saved_search.slaves) && in_array(-1,$saved_search.slaves)}
  var sel_all = 1;
  {/if}
+
+ $(document).on('click','#searchbtn',function(){
+   var l = $('#filter_box :checkbox.filter_toggle:checked').length;
+   if( l == 0 ) {
+     alert('{$mod->Lang('error_select_slave')}');
+     return false;
+   }
+   $('#searchresults').html('');
+ });
 </script>	
 <script type="text/javascript" src="{$js_url}"></script>
 

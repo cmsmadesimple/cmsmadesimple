@@ -53,6 +53,7 @@ final class AdminSearch_template_slave extends AdminSearch_slave
 	  $text = substr($row['content'],$start,$end-$start);
 	  $text = cms_htmlentities($text);
 	  $text = str_replace($this->get_text(),'<span class="search_oneresult">'.$this->get_text().'</span>',$text);
+	  $text = str_replace("\r",'',$text);
 	  $text = str_replace("\n",'',$text);
 	}
 	$url = $mod->create_url('m1_','admin_edit_template','',array('tpl'=>$one));

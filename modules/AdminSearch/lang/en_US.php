@@ -9,7 +9,8 @@ $lang['desc_filter_all'] = 'Toggle all filters';
 $lang['desc_template_search'] = 'TODO';
 
 // E
-$lang['error_nosearchtext'] = 'Please enter a search text';
+$lang['error_nosearchtext'] = 'Please enter a search term';
+$lang['error_select_salve'] = 'You must select at least one filter type';
 
 // F
 $lang['filter'] = 'Filter';
@@ -45,6 +46,7 @@ $lang['moddescription'] = 'A utility to search the database tables for rows cont
 // P
 $lang['param_formtemplate'] = 'TODO';
 $lang['param_resulttemplate'] = 'TODO';
+$lang['placeholder_search_text'] = 'Enter Search Text';
 $lang['postinstall'] = 'Admin Search module installed';
 $lang['postuninstall'] = 'Admin Search module uninstalled';
 

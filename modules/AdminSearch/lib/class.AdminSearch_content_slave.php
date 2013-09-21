@@ -24,27 +24,39 @@ final class AdminSearch_content_slave extends AdminSearch_slave
     $userid = get_userid();
 
     $db = cmsms()->GetDb();
-    $query = 'SELECT DISTINCT content_id FROM '.cms_db_prefix().'content_props WHERE content LIKE ?';
-    $dbr = $db->GetCol($query,array('%'.$this->get_text().'%'));
+    $query = 'SELECT DISTINCT content_id,prop_name,content FROM '.cms_db_prefix().'content_props WHERE content LIKE ?';
+    $dbr = $db->GetArray($query,array('%'.$this->get_text().'%'));
     if( is_array($dbr) && count($dbr) ) {
       $output = array();
       $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 
-      foreach( $dbr as $one ) {
-	if( !check_permission($userid,'Manage All Content') && 
-	    !check_permission($userid,'Modify Any Page') &&
-	    !cmsms()->GetContentOperations()->CheckPageAuthorship($userid,$one) ) {
+      foreach( $dbr as $row ) {
+	$content_id = $row['content_id'];
+	if( !check_permission($userid,'Manage All Content') && !check_permission($userid,'Modify Any Page') &&
+	    !cmsms()->GetContentOperations()->CheckPageAuthorship($userid,$content_id) ) {
 	  // no access to this content page.
 	  continue;
 	}
 
-	$content_obj = cmsms()->GetContentOperations()->LoadContentFromId($one);
+	$content_obj = cmsms()->GetContentOperations()->LoadContentFromId($content_id);
 	if( !is_object($content_obj) ) continue;
 
 	// here we could actually have a smarty template to build the description.
+	$pos = strpos($row['content'],$this->get_text());
+	if( $pos !== FALSE ) {
+	  $start = max(0,$pos - 50);
+	  $end = min(strlen($row['content']),$pos+50);
+	  $text = substr($row['content'],$start,$end-$start);
+	  $text = cms_htmlentities($text);
+	  $text = str_replace($this->get_text(),'<span class="search_oneresult">'.$this->get_text().'</span>',$text);
+	  $text = str_replace("\r",'',$text);
+	  $text = str_replace("\n",'',$text);
+	}
+
 	$tmp = array('title'=>$content_obj->Name(),
 		     'description'=>$content_obj->Name(),
-		     'edit_url'=>"editcontent.php{$urlext}&amp;content_id=$one");
+		     'edit_url'=>"editcontent.php{$urlext}&amp;content_id=$content_id",
+		     'text'=>$text);
 
 	$output[] = $tmp;
       }

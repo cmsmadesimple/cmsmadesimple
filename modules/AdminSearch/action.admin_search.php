@@ -38,7 +38,7 @@ function begin_section($id,$txt)
 
 function add_result($listid,$content,$title,$url,$text = '')
 {
-  $tmp = "parent.add_result('{$listid}','{$content}','{$title}','{$url}','{$text}')";
+  $tmp = "parent.add_result('{$listid}','{$content}','{$title}','{$url}','{$text}');";
   echo '<script type="text/javascript">'.$tmp.'</script>';
 }
 

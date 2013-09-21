@@ -21,28 +21,18 @@
 if( !isset($gCms) ) exit;
 if( !$this->VisibleToAdminUser() ) exit;
 
-echo $this->StartTabHeaders();
-if( $this->can_search() ) {
-  echo $this->SetTabHeader('search',$this->Lang('search'));
- }
-if( $this->CheckPermission('Modify Site Preferences') ) {
-  echo $this->SetTabHeader('settings',$this->Lang('settings'));
-}
-echo $this->EndTabHeaders();
+// echo $this->StartTabHeaders();
+// if( $this->can_search() ) echo $this->SetTabHeader('search',$this->Lang('search'));
+// echo $this->EndTabHeaders();
 
-echo $this->StartTabContent();
+//echo $this->StartTabContent();
 if( $this->can_search() ) {
-  echo $this->StartTab('search', $params);
+  //echo $this->StartTab('search', $params);
   include(dirname(__FILE__).'/function.admin_search_tab.php');
-  echo $this->EndTab();
+  //echo $this->EndTab();
 }
 
-if( $this->CheckPermission('Modify Site Preferences') ) {
-  echo $this->StartTab('settings', $params);
-  include(dirname(__FILE__).'/function.admin_settings_tab.php');
-  echo $this->EndTab();
-}
-echo $this->EndTabContent();
+//echo $this->EndTabContent();
 #
 # EOF
 #

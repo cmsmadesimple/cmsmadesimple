@@ -57,9 +57,6 @@ $(document).ready(function(){
       $('#filter_all').removeAttr('checked');
     }
   });
-  $('#searchbtn').on('click',function(e){
-    $('#searchresults').html('');
-  });
   $('#searchresults').on('click','li.section',function(){
     $('.section_children').hide();
     $(this).children('ul').show();
