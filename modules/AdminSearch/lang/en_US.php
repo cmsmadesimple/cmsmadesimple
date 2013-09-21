@@ -11,7 +11,7 @@ $lang['desc_template_search'] = 'Search for matching text in templates';
 
 // E
 $lang['error_nosearchtext'] = 'Please enter a search term';
-$lang['error_select_salve'] = 'You must select at least one filter type';
+$lang['error_select_slave'] = 'You must select at least one filter type';
 
 // F
 $lang['filter'] = 'Filter';
