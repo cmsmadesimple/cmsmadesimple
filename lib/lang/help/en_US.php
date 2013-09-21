@@ -212,9 +212,129 @@ $lang['help_cmscontentmanager_help'] = <<<EOT
      </li>
    </ul>
 
-<h3>Adding Content Pages</h3>
-  <h4>Content Types</h4>
-  <h4>
+<h3>Adding Content Items</h3>
+ <p>The ability to add content items depends on having either the &quot;Manage All Content&quot; permittion, or the &quot;Add Pages&quot; permission.  Users with &quot;Manage All Content&quot;  permission will be able to manage all aspects  of the content item.  Users without this permission will have considerably less abilities.</p>
+ <p>The add (or edit) content page form is devided into numerous tabs; numerous properties of the content item will eppear on different tabs.  The list of tabs that are visible, and the &quot;properties&quot; on those tabs is influenced by numerous factors:</p>
+   <ul>
+     <li>The content item type
+ <p>Some content item types (such as separators, and section headers) do not require much information, therefore very few tabs and properties will be displayed.</p>
+     </li>
+     <li>Your permission level
+       <p>If your user account does not have the &quot;Manage All Content&quot; permission level, then you are only permitted to manage <em>(by default)</em> the basic properties of the content item.  Enough to edit content, and pick a page in its navigation.  You may also be restricted as to where new content items can be placed in the content hierarchy.</p>
+     </li>
+     <li>Site settings <em>(i.e: the &quot;Basic Properties&quot; field in the &quot;Global Settings&quot; window, and others)</em>.
+       <p>Some site settings <em>(and even config settings)</em> can influence what properties are displayed on what tab.  The &quot;Basic Properties&quot; setting in the &quot;Site Admin >> Global Settings&quot; page extends the list of content item properties that users with restricted permissions can edit.</p>
+     </li>
+     <li>The template that has been selected.
+       <p>Tags in templates define additional properties <em>(called content blocks)</em> that authorized users can edit when editing a content item that uses that templates.   These content blocks can be plain text areas, wysiwyg test areas, image selectors, or other items.  Template developers can specify the tab that the edit field for each content block appears on.</p>
+     </li>
+   </ul>
+  <h4>Properties</h4>
+    <p>Here we will briefly describe the common properties for the &quot;Content&quot; content item type.  Some content item types use significantly fewer properties, and some content item types supplied by third party modules may behave completely differently.</p>
+  <ul>
+    <li>Title
+      <p>This field describes the title for the content item (if applicable).  The title is usually displayed in the &lt;title&gt; tag in the HTML page head, and somewhere in a prominent place in the HTML page content.  The site developer has complete control over how this data is used or displayed.</p>
+    </li>
+
+    <li>Alias
+      <p>The page alias is a string that uniquely identifies this content item, and is usually easier to remember than the integer page id.  The alias is used in numerous locations when building CMSMS website.  It can be used to create links to content items, to build specialized navigations, or as behavioral hints to other modules indicating on what content item they should display data.</p>
+      <p>By default the page alias is uniquely generated from the title when adding a new content item, however users can specify their own page alias when adding or editing the content item so long as it is unique amongst all other content items.  Some content item types do not require a page alias.</p>
+      <p>Users with restricted permissions may not have the ability to specify the alias when adding or editing a content item.</p>
+    </li>
+
+    <li>Parent
+      <p>The parent property specifies the content item that is the immiediate parent of the content item being edited in the content hierarchy.  Users with restricted permissions may not have the ability to edit this property, or may have a restricted list of options for this property.</p>
+    </li>
+
+    <li>Content
+      <p>Each page template is requireed to include at least the default content property <em>(a.k.a block)</em>.  However they can define many more, and different types of content blocks.  The default block usually appears in the edit content form as a wysiwyg enabled text area allowing the editor to specify some default content for the page.</p>
+      <p>Site developers have significant control over the tab that this is displayed in, the label, maxlength, required, and other attributes to control the behavior of this property in the edit form, and when it is displayed.</p>
+      <p>If the WYSIWYG editor is enabled for this content block and content item <em>(see below)</em>, and one or more WYSIWYG editor modules are enabled, and the user has selected a WYSIWYG editor in his preferences then a WYSIWYG editor will be displayed.  Different WYSIWYG editors have different abilities, but most provide the ability to format text in different ways.  Additionally, most WYSIWYG editors allow inserting images and creating links to other content items in your website.</p>
+    </li>
+
+    <li>Menu Text
+      <p>This property is used when building navigations.  The contents of this field are used as the text to display for this content item in the navigation.</p>
+    </li>
+
+    <li>Show in Menu
+      <p>Often, it is useful to have content items for special purposes (such as to display sitemaps, search results, login forms, etc) that are not displayed <em>(by default)</em> in navigation menus.  This property allows each content item to be hidden from navigation items unless overridden elsewhere.</p>
+      <p>Users with restricted permissions may not have the ability to adjust or specify this property.</p>
+    </li>
+
+    <li>Title Attribute
+      <p>This property defines an optional text string that can be used to display additional information for the content item in the navigation.  It is typically used in the &quot;title&quot; attribute for the link that is generated in navigation menus.</p>
+      <p>The site developer has the ability to display this data differently, or ignore it completely by modifying the approppriate navigation menu template.  Additionally, this data can be displayed in the page content by modifying the appropriate page template.  This property may not be important for content items in your website.</p>
+      <p>Users with restricted permissions may not have the ability to adjust or specify this property.</p>
+    </li>
+
+    <li>Access Key
+      <p>This property defines an optional access key character <em>usually only one or two characters</em> that can be used in navigation menus to quickly access this content item in the navigation.  This is a useful feature when building accessible navigations.</p>
+      <p>The site developer has complete ability to include, or exclude the use of this property in his navigation templates.  And it may not be required for your website.</p>
+      <p>Users with restricted permissions may not have the ability to adjust or specify this property.</p>
+    </li>
+
+    <li>Tab Index
+      <p>This property is used to specify an integer index to aide in navigation to this content item in menus.  It is useful when creating accessible websites.</p>
+      <p>The site developer has complete ability to include, or exclude the use of this property in his navigation templates.  And it may not be required for your website.</p>
+      <p>Users with restricted permissions may not have the ability to adjust or specify this property.</p>
+    </li>
+
+    <li>Target
+      <p>This property is used to specify the &quot;target&quot; attribute in links to content items.  It allows creating navigations that can open content pages in different browser windows or tabs.</p>
+      <p>The site developer has complete ability to include, or exclude the use of this property in his navigation templates.  And it may not be required for your website.</p>
+      <p>Users with restricted permissions may not have the ability to adjust or specify this property.</p>
+    </li>
+
+    <li>Url
+      <p>This property is used to specify a primary URL to this content item. Users can specify a complete path or a simple flat string.  <em>(i.e.: path/to/mypage or keywordstuffedpageurl)</em>.  This property (if specified) is used when building navigations and other links to this content item, when &quot;pretty urls&quot; are enabled in the config.php.  If not specified, then the page alias and other settings control the primary route to the content item.</p>
+      <p>It is important to note for SEO purposes that this is only a primary URL <em>(route)</em> to the content items.  Site visitors can still navigate to this content item via other means, i.e:  mysite.com/index.php?page=alias or mysite.com/random/random/alias or mysite.com/alias.  Sites that are concerned with search engine rankings should ensure that the &lt;link rel=&quot;canonical&quot;&gt; tag is properly configured in their page templates.</p>
+      <p>Users with restricted permissions may not have the ability to adjust or specify this property.</p>
+    </li>
+
+    <li>Active <em>(i.e: disabled)</em>
+      <p>This property is used to indicate wether this content item can be navigated to at all.</p>
+      <p>Users with restricted permissions may not have the ability to adjust or specify this property.</p>
+    </li>
+
+    <li>Secure (HTTPS)
+	<p>This property is used to indicate wether this content item should be accessed using the HTTPS protocol.  In a site configured properly for HTTPS, if this attribute is set for a content item, and an attempt is made to access this page via the insecure HTTP protocol, the user will be redirected to the same page using the more secure HTTPS protocol.  Additionally, if this flag is set then any links to this content item will specify the HTTPS protocol.</p>
+        <p>It is important to know that content items without the secure flag set can still be navigated to using the HTTPS protocol, and no redirection will take place.  Therefore, for search engine ranking purposes the canoncal link should be configured properly in each page template.</p>
+    </li>
+
+    <li>Cachable
+	<p>This property specifies wether the compiled form of this content item can be cached on the server to reduce server load <em>(if smarty caching is enabled in global settings)</em> AND wether the browser can cache this page <em>(if browser caching is enabled in global settings)</em>.  For largely static websites enabling smarty caching and browser caching can significantly reduce server load and improve overall website performance.</p>
+        <p>Users with restricted permissions may not have the ability to adjust or specify this property.</p>
+    </li>
+
+    <li>Image
+	<p>This property allows associating a previously uploaded image with your this content item.  Editors can select an image file from the uploads/images directory.  This image may be displayed on the generated HTML page (if applicable), or used when building the navigation.</p>     
+        <p>Users with restricted permissions may not have the ability to adjust or specify this property.</p>
+    </li>
+
+    <li>Thumbnail
+        <p>This property allows assodciating a previously created thumbnail image with this content item.  Editors can select a thumbnail file from the uploads/images directory.  This thumbnail may be displayed on the generated HTMLO page, or used when building the navigation.</p>
+        <p>Users with restricted permissions may not have the ability to adjust or specify this property.</p>
+    </li>
+
+    <li>Owner
+        <p>The owner property is a dropdown field that indicates which admin user account has primary responsibility for the content item.  By default the owner of the content item is the user who first created it.  Users with significant permission can assign the ownership of an item to another user.</p>
+    </li>
+
+    <li>Additional Editors
+        <p>This property specifies a list of other admin users or admin groups that are allowed to edit this content item.  It is implemented as a multi-select field.  Again, users with restricted permissions may not have the ability to adjust this field.</p>
+    </li>
+
+    <li>Design</li> 
+    <li>Template</li>
+
+    <li>Searchable</li>
+    <li>Disable Wysiwyg</li>
+    <li>Page Metadata</li>
+    <li>Page Data</li>
+    <li>extra1</li>
+    <li>extra2</li>
+    <li>extra3</li>
+  </ul>
 <h3>Editing Content Pages</h3>
 EOT;
 $lang['help_myaccount_admincallout'] = 'If enabled administrative bookmarks <em>(shortcuts)</em> will be enabled allowing you to manage a list of frequently used actions in the admin console.';
