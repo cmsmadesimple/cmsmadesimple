@@ -58,22 +58,22 @@ class CmsTemplateCache
 
   public function __construct()
   {
-    if( !cmsms()->is_frontend_request() ) {
-      throw new CmsLogicException('This class can only be instantiated on a frontend request');
-    }
-    if( self::$_instance ) {
-      throw new CmsLogicException('Only one instance of this class is permitted');
-    }
-    self::$_instance = TRUE;
+	  if( !cmsms()->is_frontend_request() ) {
+		  throw new CmsLogicException('This class can only be instantiated on a frontend request');
+	  }
+	  if( self::$_instance ) {
+		  throw new CmsLogicException('Only one instance of this class is permitted');
+	  }
+	  self::$_instance = TRUE;
 
-    $this->_key = md5($_SERVER['REQUEST_URI'].serialize($_GET));
-    if( ($tmp = cms_cache_handler::get_instance()->get('template_cache')) ) {
-      $this->_cache = unserialize($tmp);
-      if( isset($this->_cache[$this->_key]) ) {
-	CmsLayoutTemplate::load_bulk($this->_cache[$this->_key]['templates']);
-	CmsLayoutTemplateType::load_bulk($this->_cache[$this->_key]['types']);
-      }
-    }
+	  $this->_key = md5($_SERVER['REQUEST_URI'].serialize($_GET));
+	  if( ($tmp = cms_cache_handler::get_instance()->get('template_cache')) ) {
+		  $this->_cache = unserialize($tmp);
+		  if( isset($this->_cache[$this->_key]) ) {
+			  CmsLayoutTemplate::load_bulk($this->_cache[$this->_key]['templates']);
+			  //CmsLayoutTemplateType::load_bulk($this->_cache[$this->_key]['types']); todo
+		  }
+	  }
   }
 
   public function __destruct()

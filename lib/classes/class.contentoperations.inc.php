@@ -570,7 +570,7 @@ class ContentOperations
 					$content_id = $tmp[$i]['content_id'];
 					if( in_array($content_id,$child_ids) ) {
 						if( !isset($contentprops[$content_id]) ) $contentprops[$content_id] = array();
-						$contentprops[$content_id] = $tmp[$i];
+						$contentprops[$content_id][] = $tmp[$i];
 					}
 				}
 				unset($tmp);
@@ -668,7 +668,7 @@ class ContentOperations
 					$content_id = $tmp[$i]['content_id'];
 					if( in_array($content_id,$child_ids) ) {
 						if( !isset($contentprops[$content_id]) ) $contentprops[$content_id] = array();
-						$contentprops[$content_id] = $tmp[$i];
+						$contentprops[$content_id][] = $tmp[$i];
 					}
 				}
 				unset($tmp);
