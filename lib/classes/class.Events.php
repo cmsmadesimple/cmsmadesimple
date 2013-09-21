@@ -108,32 +108,25 @@ final class Events
 		if( isset($CMS_INSTALL_PAGE) ) return;
 
 		$gCms = cmsms();
-
 		$results = Events::ListEventHandlers($modulename, $eventname);
 		
-		if ($results != false)
-		{		
-			foreach( $results as $row )
-			{
-				if( isset( $row['tag_name'] ) && $row['tag_name'] != '' )
-				{
+		if ($results != false) {
+			foreach( $results as $row ) {
+				if( isset( $row['tag_name'] ) && $row['tag_name'] != '' ) {
 					debug_buffer('calling user tag ' . $row['tag_name'] . ' from event ' . $eventname);
 					$usertagops = $gCms->GetUserTagOperations();
 					$usertagops->CallUserTag( $row['tag_name'], $params );
 				}
-				else if( isset( $row['module_name'] ) && $row['module_name'] != '' )
-				{
+				else if( isset( $row['module_name'] ) && $row['module_name'] != '' ) {
 					// here's a quick check to make sure that we're not calling the module
 					// DoEvent function for an event originated by the same module.
-					if( $row['module_name'] == $modulename )
-					{
+					if( $row['module_name'] == $modulename ) {
 						continue;
 					}
 
 					// and call the module event handler.
 					$obj =& CMSModule::GetModuleInstance($row['module_name']);
-					if( $obj )
-					{
+					if( $obj ) {
 						debug_buffer('calling module ' . $row['module_name'] . ' from event ' . $eventname);
 						$obj->DoEvent( $modulename, $eventname, $params );
 					}
@@ -158,12 +151,10 @@ final class Events
 		$db = $gCms->GetDb();
 		
 		$params['module'] = $modulename;
-		$params['event'] = $eventname;
-		
+		$params['event'] = $eventname;	
 		$handlers = array();
 		
-		if( !is_array(self::$_handlercache) )
-		{
+		if( !is_array(self::$_handlercache) ) {
 			$q = "SELECT eh.tag_name, eh.module_name, e.originator, e.event_name, eh.handler_order, eh.handler_id, eh.removable FROM ".cms_db_prefix()."event_handlers eh
 				INNER JOIN ".cms_db_prefix()."events e ON e.event_id = eh.event_id
 				ORDER BY eh.handler_order ASC";
@@ -171,18 +162,18 @@ final class Events
 			self::$_handlercache = $db->GetArray( $q );
 		}
 
-		foreach (self::$_handlercache as $row)
-		{
-			if ($row['originator'] == $modulename && $row['event_name'] == $eventname)
-			{
-				$handlers[] = $row;
+		if( is_array(self::$_handlercache) && count(self::$_handlercache) ) {
+			foreach (self::$_handlercache as $row) {
+				if ($row['originator'] == $modulename && $row['event_name'] == $eventname) $handlers[] = $row;
 			}
 		}
 		
-		if (count($handlers) > 0)
+		if (count($handlers) > 0) {
 			return $handlers;
-		else
+		}
+		else {
 			return false;
+		}
 	}
 
 

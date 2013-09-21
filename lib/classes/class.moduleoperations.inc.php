@@ -204,12 +204,12 @@ final class ModuleOperations
   function ExpandXMLPackage( $xmluri, $overwrite = 0, $brief = 0 )
   {
 	$gCms = cmsms();
+	$this->SetError('');
 
 	// first make sure that we can actually write to the module directory
 	$dir = dirname(dirname(dirname(__FILE__))).DIRECTORY_SEPARATOR."modules";
 
-	if( !is_writable( $dir ) && $brief == 0 )
-	{
+	if( !is_writable( $dir ) && $brief == 0 ) {
 		// directory not writable
 		$this->SetError( lang( 'errordirectorynotwritable' ) );
 		return false;
@@ -217,8 +217,7 @@ final class ModuleOperations
 
 	$reader = new XMLReader();
 	$ret = $reader->open($xmluri);
-	if( $ret == 0 )
-	{
+	if( $ret == 0 ) {
 		$this->SetError( lang( 'errorcouldnotparsexml' ) );
 		return false;
 	}
@@ -226,177 +225,138 @@ final class ModuleOperations
 	$this->SetError('');
 	$havedtdversion = false;
 	$moduledetails = array();
-	if( is_file($xmluri) )
-		$moduledetails['size'] = filesize($xmluri);
+	if( is_file($xmluri) ) $moduledetails['size'] = filesize($xmluri);
 	$required = array();
-	while( $reader->read() )
-	{
-		switch($reader->nodeType)
-		{
-			case XMLREADER::ELEMENT:
-			{
-				switch( strtoupper($reader->localName) )
-				{
-					case 'NAME':
-					{
-						$reader->read();
-						$moduledetails['name'] = $reader->value;
-						// check if this module is already installed
-						if( isset( $this->_modules[$moduledetails['name']] ) && $overwrite == 0 && $brief == 0 )
-						{
-							$this->SetError( lang( 'moduleinstalled' ) );
-							return TRUE;
-						}
-						break;
-					}
-					case 'DTDVERSION':
-					{
-						$reader->read();
-						if( $reader->value != MODULE_DTD_VERSION )
-						{
-							$this->SetError( lang( 'errordtdmismatch' ) );
-							return false;
-						}
-						$havedtdversion = true;
-						break;
-					}
+	while( $reader->read() ) {
+		switch($reader->nodeType) {
+		case XMLREADER::ELEMENT:
+			switch( strtoupper($reader->localName) ) {
+			case 'NAME':
+				$reader->read();
+				$moduledetails['name'] = $reader->value;
+				// check if this module is already installed
+				if( isset( $this->_modules[$moduledetails['name']] ) && $overwrite == 0 && $brief == 0 ) {
+					$this->SetError( lang( 'moduleinstalled' ) );
+					return TRUE;
+				}
+				break;
 
-					case 'VERSION':
-					{
-						$reader->read();
-						$moduledetails['version'] = $reader->value;
-						$tmpinst = $this->get_module_instance($moduledetails['name']);
-						if( $tmpinst && $brief == 0 )
-						{
-							$version = $tmpinst->GetVersion();
-							if( version_compare($moduledetails['version'],$version) < 0 )
-							{
-								$this->SetError( lang('errorattempteddowngrade') );
-								return false;
-							}
-							else if (version_compare($moduledetails['version'],$version) == 0 )
-							{
-								$this->SetError( lang('moduleinstalled') );
-								return TRUE;
-							}
-						}
-						break;
+			case 'DTDVERSION':
+				$reader->read();
+				if( $reader->value != MODULE_DTD_VERSION ) {
+					$this->SetError( lang( 'errordtdmismatch' ) );
+					return false;
+				}
+				$havedtdversion = true;
+				break;
+
+			case 'VERSION':
+				$reader->read();
+				$moduledetails['version'] = $reader->value;
+				$tmpinst = $this->get_module_instance($moduledetails['name']);
+				if( $tmpinst && $brief == 0 ) {
+					$version = $tmpinst->GetVersion();
+					if( version_compare($moduledetails['version'],$version) < 0 ) {
+						$this->SetError( lang('errorattempteddowngrade') );
+						return false;
 					}
-		
-					case 'MINCMSVERSION':
-					case 'MAXCMSVERSION':
-					case 'DESCRIPTION':
-					case 'FILENAME':
-					case 'ISDIR':
-					{
-					    $name = $reader->localName;
-						$reader->read();
-						$moduledetails[$name] = $reader->value;
-						break;
-					}
-					case 'HELP':
-					case 'ABOUT':
-					{
-					    $name = $reader->localName;
-						$reader->read();
-						$moduledetails[$name] = base64_decode($reader->value);
-						break;
-					}
-					case 'REQUIREDNAME':
-					{
-						$reader->read();
-						$requires['name'] = $reader->value;
-						break;
-					}
-					case 'REQUIREDVERSION':
-					{
-						$reader->read();
-						$requires['version'] = $reader->value;
-						break;
-					}
-					case 'DATA':
-					{
-						$reader->read();
-						$moduledetails['filedata'] = $reader->value;
-						break;
+					else if (version_compare($moduledetails['version'],$version) == 0 ) {
+						$this->SetError( lang('moduleinstalled') );
+						return TRUE;
 					}
 				}
 				break;
-			}	
-			case XMLReader::END_ELEMENT:
-			{
-				switch( strtoupper($reader->localName) )
-				{
-					case 'REQUIRES':
-					{
-						if( count($requires) != 2 )
-						{
-						  continue;
-						}
-						if( !isset( $moduledetails['requires'] ) )
-						{
-						  $moduledetails['requires'] = array();
-						}
-						$moduledetails['requires'][] = $requires;
-						$requires = array();
-						break;
-					}
-					case 'FILE':
-					{
-						if( $brief != 0 ) continue;
+		
+			case 'MINCMSVERSION':
+			case 'MAXCMSVERSION':
+			case 'DESCRIPTION':
+			case 'FILENAME':
+			case 'ISDIR':
+				$name = $reader->localName;
+				$reader->read();
+				$moduledetails[$name] = $reader->value;
+				break;
 
-						// finished a first file
-						if( !isset( $moduledetails['name'] )	   || !isset( $moduledetails['version'] ) ||
-							!isset( $moduledetails['filename'] ) || !isset( $moduledetails['isdir'] ) )
-						{
-							$this->SetError( lang('errorincompletexml') );
-							return false;
-						}
+			case 'HELP':
+			case 'ABOUT':
+				$name = $reader->localName;
+				$reader->read();
+				$moduledetails[$name] = base64_decode($reader->value);
+				break;
 
-						// ready to go
-						$moduledir=$dir.DIRECTORY_SEPARATOR.$moduledetails['name'];
-						$filename=$moduledir.$moduledetails['filename'];
-						if( !file_exists( $moduledir ) )
-						{
-							if( !@mkdir( $moduledir ) && !is_dir( $moduledir ) )
-							{
-								$this->SetError(lang('errorcantcreatefile').' '.$moduledir);
-								break;
-							}
-						}
-						else if( $moduledetails['isdir'] )
-						{
-							if( !@mkdir( $filename ) && !is_dir( $filename ) )
-							{
-								$this->SetError(lang('errorcantcreatefile').' '.$filename);
-								break;
-							}
-						}
-						else
-						{
-							$data = $moduledetails['filedata'];
-							if( strlen( $data ) ) $data = base64_decode( $data );
-							$fp = @fopen( $filename, "w" );
-							if( !$fp ) $this->SetError(lang('errorcantcreatefile').' '.$filename);
-							if( strlen( $data ) )
-							{
-								@fwrite( $fp, $data );
-							}
-								@fclose( $fp );
-						}
-						unset( $moduledetails['filedata'] );
-						unset( $moduledetails['filename'] );
-						unset( $moduledetails['isdir'] );
-						break;
-					}
-				}
+			case 'REQUIREDNAME':
+				$reader->read();
+				$requires['name'] = $reader->value;
+				break;
+
+			case 'REQUIREDVERSION':
+				$reader->read();
+				$requires['version'] = $reader->value;
+				break;
+
+			case 'DATA':
+				$reader->read();
+				$moduledetails['filedata'] = $reader->value;
 				break;
 			}
-	      }
+			break;
+
+		case XMLReader::END_ELEMENT:
+			switch( strtoupper($reader->localName) ) {
+			case 'REQUIRES':
+				if( count($requires) != 2 ) continue;
+				if( !isset( $moduledetails['requires'] ) ) $moduledetails['requires'] = array();
+				$moduledetails['requires'][] = $requires;
+				$requires = array();
+				break;
+
+			case 'FILE':
+				if( $brief != 0 ) continue;
+
+				// finished a first file
+				if( !isset( $moduledetails['name'] )	   || !isset( $moduledetails['version'] ) ||
+					!isset( $moduledetails['filename'] ) || !isset( $moduledetails['isdir'] ) ) {
+					$this->SetError( lang('errorincompletexml') );
+					return false;
+				}
+
+				// ready to go
+				$moduledir=$dir.DIRECTORY_SEPARATOR.$moduledetails['name'];
+				$filename=$moduledir.$moduledetails['filename'];
+				if( !file_exists( $moduledir ) ) {
+					if( !@mkdir( $moduledir ) && !is_dir( $moduledir ) ) {
+						$this->SetError(lang('errorcantcreatefile').' '.$moduledir);
+						break;
+					}
+				}
+				else if( $moduledetails['isdir'] ) {
+					if( !@mkdir( $filename ) && !is_dir( $filename ) ) {
+						$this->SetError(lang('errorcantcreatefile').' '.$filename);
+						break;
+					}
+				}
+				else {
+					$data = $moduledetails['filedata'];
+					if( strlen( $data ) ) $data = base64_decode( $data );
+					$fp = @fopen( $filename, "w" );
+					if( !$fp ) $this->SetError(lang('errorcantcreatefile').' '.$filename);
+					if( strlen( $data ) ) @fwrite( $fp, $data );
+					@fclose( $fp );
+				}
+				unset( $moduledetails['filedata'] );
+				unset( $moduledetails['filename'] );
+				unset( $moduledetails['isdir'] );
+				break;
+			}
+			break;
+		}
 	} // while
 
 	$reader->close();
-	if( $havedtdversion == false ) $this->SetError( lang( 'errordtdmismatch' ) );
+	if( $havedtdversion == false ) {
+		$this->SetError( lang( 'errordtdmismatch' ) );
+		return false;
+	}
 
 	// we've created the module's directory
 	unset( $moduledetails['filedata'] );
@@ -404,12 +364,10 @@ final class ModuleOperations
 	unset( $moduledetails['isdir'] );
 
 	if( $this->GetLastError() != "" ) return false;
-
 	if( !$brief ) audit('','Module', 'Expanded module: '.$moduledetails['name'].' version '.$moduledetails['version']);
 
 	return $moduledetails;
-
-}
+  }
 
 
  private function _install_module(CmsModule& $module_obj)
