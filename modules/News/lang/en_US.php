@@ -51,6 +51,7 @@ $lang['delete_article'] = 'Delete Article';
 $lang['delete_selected'] = 'Delete Selected Articles';
 $lang['deprecated'] = 'unsupported';
 $lang['description'] = 'Add, edit and remove News entries';
+$lang['desc_adminsearch'] = 'Search all news articles (regardless of status or expiry)';
 $lang['detailtemplate'] = 'Detail Templates';
 $lang['detailtemplateupdated'] = 'The updated Detail Template was successfully saved to the database.';
 $lang['detail_page'] = 'Detail Page';
@@ -241,6 +242,7 @@ $lang['info_sysdefault2'] = '<strong>Note:</strong> This tab contains text areas
 
 // L
 $lang['lastpage'] = '&gt;&gt;';
+$lang['lbl_adminsearch'] = 'Search News Articles';
 
 // M
 $lang['maxlength'] = 'Maximum Length';

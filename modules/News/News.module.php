@@ -315,9 +315,7 @@ class News extends CMSModule
 
   public static function reset_page_type_defaults(CmsLayoutTemplateType $type)
   {
-    if( $type->get_originator() != 'News' ) {
-      throw new CmsLogicException('Cannot reset contents for this template type');
-    }
+    if( $type->get_originator() != 'News' ) throw new CmsLogicException('Cannot reset contents for this template type');
 
     $fn = null;
     switch( $type->get_name() ) {
@@ -341,6 +339,17 @@ class News extends CMSModule
     if( file_exists($fn) ) {
       return @file_get_contents($fn);
     }
+  }
+
+  public function HasCapability($capability, $params = array())
+  {
+    if( $capability == 'AdminSearch' ) return TRUE;
+    return FALSE;
+  }
+
+  public function get_adminsearch_slaves()
+  {
+    return array('News_AdminSearch_slave');
   }
 }
 

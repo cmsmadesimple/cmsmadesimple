@@ -36,8 +36,7 @@ $flds = "
 "; // icon is no longer used.
 
 $taboptarray = array('mysql' => 'TYPE=MyISAM');
-$sqlarray = $dict->CreateTableSQL(cms_db_prefix()."module_news", 
-		$flds, $taboptarray);
+$sqlarray = $dict->CreateTableSQL(cms_db_prefix()."module_news", $flds, $taboptarray);
 $dict->ExecuteSQLArray($sqlarray);
 $db->CreateSequence(cms_db_prefix()."module_news_seq");
 
@@ -53,8 +52,7 @@ $flds = "
 ";
 
 $taboptarray = array('mysql' => 'TYPE=MyISAM');
-$sqlarray = $dict->CreateTableSQL(cms_db_prefix()."module_news_categories", 
-		$flds, $taboptarray);
+$sqlarray = $dict->CreateTableSQL(cms_db_prefix()."module_news_categories",$flds, $taboptarray);
 $dict->ExecuteSQLArray($sqlarray);
 $db->CreateSequence(cms_db_prefix()."module_news_categories_seq");
 
@@ -71,8 +69,7 @@ $flds = "
 ";
 
 $taboptarray = array('mysql' => 'TYPE=MyISAM');
-$sqlarray = $dict->CreateTableSQL(cms_db_prefix()."module_news_fielddefs", 
-		$flds, $taboptarray);
+$sqlarray = $dict->CreateTableSQL(cms_db_prefix()."module_news_fielddefs", $flds, $taboptarray);
 $dict->ExecuteSQLArray($sqlarray);
 
 $flds = "
@@ -84,8 +81,7 @@ $flds = "
 ";
 
 $taboptarray = array('mysql' => 'TYPE=MyISAM');
-$sqlarray = $dict->CreateTableSQL(cms_db_prefix()."module_news_fieldvals", 
-		$flds, $taboptarray);
+$sqlarray = $dict->CreateTableSQL(cms_db_prefix()."module_news_fieldvals", $flds, $taboptarray);
 $dict->ExecuteSQLArray($sqlarray);
 
 #Set Permission
@@ -111,8 +107,7 @@ catch( CmsException $e ) {
 }
 
 try {
-  $fn = dirname(__FILE__).DIRECTORY_SEPARATOR.
-    'templates'.DIRECTORY_SEPARATOR.'orig_summary_template.tpl';
+  $fn = dirname(__FILE__).DIRECTORY_SEPARATOR.'templates'.DIRECTORY_SEPARATOR.'orig_summary_template.tpl';
   if( file_exists( $fn ) ) {
     $template = @file_get_contents($fn);
     $tpl = new CmsLayoutTemplate();
@@ -132,8 +127,7 @@ catch( CmsException $e ) {
 
 try {
   // Setup Simplex Theme HTML5 sample summary template
-  $fn = dirname(__FILE__).DIRECTORY_SEPARATOR.
-    'templates'.DIRECTORY_SEPARATOR.'Summary_Simplex_template.tpl';
+  $fn = dirname(__FILE__).DIRECTORY_SEPARATOR.'templates'.DIRECTORY_SEPARATOR.'Summary_Simplex_template.tpl';
   if( file_exists( $fn ) ) {
     $template = @file_get_contents($fn);
     $tpl = new CmsLayoutTemplate();
@@ -168,8 +162,7 @@ catch( CmsException $e ) {
 }
 
 try {
-  $fn = dirname(__FILE__).DIRECTORY_SEPARATOR.
-    'templates'.DIRECTORY_SEPARATOR.'orig_detail_template.tpl';
+  $fn = dirname(__FILE__).DIRECTORY_SEPARATOR.'templates'.DIRECTORY_SEPARATOR.'orig_detail_template.tpl';
   if( file_exists( $fn ) ) {
     $template = @file_get_contents($fn);
     $tpl = new CmsLayoutTemplate();
@@ -189,8 +182,7 @@ catch( CmsException $e ) {
 
 try {
   // Setup Simplex Theme HTML5 sample detail template
-  $fn = dirname(__FILE__).DIRECTORY_SEPARATOR.
-    'templates'.DIRECTORY_SEPARATOR.'Simplex_Detail_template.tpl';
+  $fn = dirname(__FILE__).DIRECTORY_SEPARATOR.'templates'.DIRECTORY_SEPARATOR.'Simplex_Detail_template.tpl';
   if( file_exists( $fn ) ) {
     $template = @file_get_contents($fn);
     $tpl = new CmsLayoutTemplate();
@@ -225,8 +217,7 @@ catch( CmsException $e ) {
 }
 
 try {
-  $fn = dirname(__FILE__).DIRECTORY_SEPARATOR.
-    'templates'.DIRECTORY_SEPARATOR.'orig_form_template.tpl';
+  $fn = dirname(__FILE__).DIRECTORY_SEPARATOR.'templates'.DIRECTORY_SEPARATOR.'orig_form_template.tpl';
   if( file_exists( $fn ) ) {
     $template = @file_get_contents($fn);
     $template = @file_get_contents($fn);
@@ -263,8 +254,7 @@ catch( CmsException $e ) {
 }
 
 try {
-  $fn = dirname(__FILE__).DIRECTORY_SEPARATOR.
-    'templates'.DIRECTORY_SEPARATOR.'browsecat.tpl';
+  $fn = dirname(__FILE__).DIRECTORY_SEPARATOR.'templates'.DIRECTORY_SEPARATOR.'browsecat.tpl';
   if( file_exists( $fn ) ) {
     $template = @file_get_contents($fn);
     $tpl = new CmsLayoutTemplate();
