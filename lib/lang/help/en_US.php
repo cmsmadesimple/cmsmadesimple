@@ -3,25 +3,29 @@
 $lang['help_cmscontentmanager_help'] = <<<EOT
 <h3>Introduction</h3>
 <p>This document describes the CMS Content Manager module.  It is aimed primarily at the website designer or developer and describes in broad terms how content items work in CMS Made Simple.</p>
-<p>The primary interface of the Content Manager module is the content list.  It displays content items in a tabular format and provides the ability to quickly search, navigate, and manage multiple content items.</p>
-<h3>Content Items</h3>
-<p>TODO: Describe content items here broadly, the different types, and how they relate to building a navigation.</p>
+<p>The primary interface of the Content Manager module is the content list.  It displays content items in a tabular format and provides the ability to quickly search, navigate, and manage multiple content items.  This is a dynamic list.  The display is adjusted depending on some site configuration items, some global settings, user permissions and the individual content items.   The following text describes what content items are, and how the content list behaves with them.</p>
+<h3>Content Hierarchy and Navigations</h3>
+<p>CMS Made Simple builds frontend navigations dynamically from the content list, the individual types of content items, the content in those content items, and the navigation template.  The organization of navigations is primarily controlled by the parent-child/hierarchy relationship of your content items.  Starting from the top <em>(root)</em> level, downards.</p>
+<p>Adding a new item to the navigation menu is as simple as creating a new content item, placing it in the desired location in the hierarchy, and <em>(depending upon the content item type)</em> specifying the different properties that that content item type provides.</p>
+<h3>Content Item Types:</h3>
+  <p>CMSMS is distributed with several different content item types <em>(and more are available via third party addon modules)</em>.  These content item types derve different purposes when a navigation is generated.  Some do not contain content, but are only used for managing navigations.  For example, the separator content item type has no content of its own, and exists solely to organize content items and provide a visible separator in the generated navigation.</p>
+  <p>Below is a brief descriptionof each content item type that is distribted with CMS Made Simple</p>
 <ul>
   <li>Content Page
-    <p>This content item type is most similar to an HTML page.  When editors create content page items they select a design and template which controls the appearance of the page, specify a title, and specify content for the page.</p>
-    <p>Content items may also contain forms, logic, or display dynamic data from modules, or user defined tags (UDTs).  Thiis flexibility allows creating specialized applications, or extremely flexible and dynamic websites.</p>
+  <p>This content item type is most similar to an HTML page, and is usually used for that purpose.  When editors create content page items they select a design and template which controls the appearance of the page, specify a title, and enter the content for the page.</p>
+    <p>Content items may also contain forms, logic, display dynamic data from modules, or user defined tags (UDTs).  Thiis flexibility allows creating specialized applications, or extremely flexible and dynamic websites.</p>
   </li>
   <li>Link
-    <p>This content item type is only displayed in navigations.  It generates a link to a page on an external website.</p>
+    <p>This content item type is used in navigations to generate a link to a page on an external website.</p>
   </li>
   <li>Page Link
-    <p>This content item type is also only displayed in navigations.  It generates an additional link to an existing content page.</p>
+  <p>This content item type is also used in navigations.  It generates a secondary link to an existing content page.  This content item type can be used if a content item can be accessed from multiple places in the navigation.</p>
   </li>
   <li>Separator
-    <p>This content item type is also used in navigations.  In some types of navigations it will generate a horizontal (or vertical) devider between navigation items.  Some types of navigations may not display separators at all.</p>
+  <p>This content item type is also used in navigations.  It is usually used to generate a horizontal (or vertical) devider between navigation items.  Some types of navigations <em>(determined by the navigation template)</em> may not display separators at all.</p>
   </li>
   <li>Section Header
-    <p>The section header is also only displayed in navigations.  It is used to organize content items.  It provides a textual header above, or between other content items.</p>
+    <p>The section header is also only displayed in navigations.  It is used to organize content items.  It provides a textual header above, or between other content items.  Section headers do not have URLS and cannot usually be clicked on.  Sone navigation templates may style section headers differently than other content items.</p>
   </li>
   <li>Error Page
     <p>The Error Page is a special type of content item type.  It is used when a user attempts to navigate to a content item that is either not navigable or does not exist.</p>
@@ -29,7 +33,7 @@ $lang['help_cmscontentmanager_help'] = <<<EOT
 </ul>
 <p>Many third party modules provide more content types to serve different purposes.  Such as displaying catalogs of products, or restricting the content to authorized users.</p>
 <h3>The Content Item List</h3>
-<p>The content list is the primary interface to the module.  This form provides the main management interface for your content. From here you can create, edit, delete, copy, deactivate, and organize your content items.  This screen is heavily optimized for larger websites providing pagination and search mechanisms to display only a small amount of pages at a time, but to quickly find the item you would like to edit.</p>
+<p>The content list is the primary interface to the module.  This form provides the main management interface for your content. From here you can create, edit, delete, copy, deactivate, and organize your content items.  This screen is heavily optimized for larger websites providing pagination and search mechanisms to display only a small amount of pages at a time, but to quickly find items to manage.</p>
  <h4>Columns</h4>
 <p>Each content item is displayed as a row in a table.  There are a number of columns to quickly display various attributes of each content item, and some convenient action icons.  Some columns may be hidden from view entirely, or only for some rows depending upon a number of factors:</p>
   <ul>
@@ -39,8 +43,8 @@ $lang['help_cmscontentmanager_help'] = <<<EOT
     <li>System Preferences and Site Configuration
       <p>Some system preferences, and site configuration options will result in some columns from being disabled.  For example, the &quot;url&quot; column </p>
     </li>
-    <li>The content type
-      <p>Depending on the content type, certain columns may become irrelevent.  For example, it is not possible for &quot;Section Headers&quot; or &quot;Separators&quot; to become the default page, so nothing will be displayed in the &quot;default&quot; column for those content items.</p>
+    <li>The content item type
+      <p>Depending on the content item type, certain columns may become irrelevent.  For example, it is not possible for &quot;Section Headers&quot; or &quot;Separators&quot; to become the default page, so nothing will be displayed in the &quot;default&quot; column for those content items.</p>
     </li>
     <li>Whether the content item is being edited
       <p>When other users <em>(or even yourself) are editing a content item, some columns will be hidden in the row for each content type to prevent modifying, deleting or copying the content page.</p>
@@ -55,7 +59,7 @@ $lang['help_cmscontentmanager_help'] = <<<EOT
      </li>
 
      <li>Hierarchy Column
-      <p>The hierarchy column displays the organization of each content page in a numeric state.  The hierarchy of the first root level page begins with 1 and increases incrementally for each peer. Each child begins with the 1, and its peers increment incrementally.   Therefore, the second grandchild of the third child of the first page in the content list would have a hierarchy of 1.3.2.</p>
+      <p>The hierarchy column displays the location of each content item in the hierarchy in a numeric fashion.  The hierarchy of the first root level page begins with 1 and increases incrementally for each peer. Each child begins with the 1, and its peers increment incrementally.   Therefore, the second grandchild of the third child of the first item in the content list would have a hierarchy of 1.3.2.</p>
       <p>The hierarchy mechanism is a significant portion of what provides the ability of CMS Content Manager to organize content items, and then build navigations from them.</p>
      </li>
      
@@ -64,32 +68,42 @@ $lang['help_cmscontentmanager_help'] = <<<EOT
       <p>This column will contain a link to allow editing the content item <em>(unless the content item is locked)</em>.  Hovering over the text in this column will display additional information about the content item such as the unique numeric content id, and wether the page is cachable or not.</p>
       <p>If the content item is locked, hovering over the text in the column will display information about who locked the item, and when thelock expires.</p>
      </li>
+
      <li>URL Column
       <p>If enabled, this column will display any alternate URL for this content item.  <em>(Note: Only certain content item types support alternate an alternate URL).</em></p>
      </li>
+
      <li>Page Alias Column
       <p>This column displays the unique alias associated with each page.  Aliases are text strings that uniquely identify the content item.  You use the content items alias (or numeric id) when you need to refer to a page within the system.<em>(Note: Some content types do not have aliases).</em></p>
      </li>
+
      <li>Template Column</li>
       <p>This column displays the design and template that is used to display the content for the item.  See the help for the &quot;Design Manager&quot; module for an explanation of how CMSMS manages designs, including stylesheets and templates.  <em>(Note: Some content item types do not use a design, or a template.)</em></p>
+     </li>
+
      <li>Type Column
        <p>This column indicates the content type (i.e: Content, Section header, Separator, etc.).<p>
      </li>
+
      <li>Owner Column
        <p>The owner column displays the username of the owner of the content item.  Hovering over the text in this column will display information as to when the content item was created and last edited.</p>
      </li>
+
      <li>Active Column.
        <p>This column displays icons to show the current active state of the content item.  Active items can be navigated to, and will appear in navigation menus on the frontend.  If your user account has sufficient privilege to the content item you can click on the icon to toggle its active state.</p>
      </li>
+
      <li>Default Column.
        <p>This column displays whether the content item is the default page or not.  The default content item is the home page for your website.  Only some content types allow the content type to be the default.</p>
        <p>If your user account has sufficient privilege, and the content type supports being the default content for the website you can click on the icon to change the default flag to a different page.</p>
      </li>
+
      <li>The &quot;Move&quot; Column.
-       <p>Depending upon your access privileges, you may see icons that allow changing the order of the content items with respect to its immediate peers.</p>
+       <p>Depending upon your access privileges, you may see icons that allow changing the order of the content items with respect to its immediate peers.  This is a simple mechanism of quickly re-ordering content items amongst its peeers.  The &quot;Re-order Pages&quot; option allows reorganizing pages en-mass, and when editing a content item you can quickly assign the item to a different parent.</p>
      </li>
+
      <li>Action Icons.
-     <p>Depending on your access privileges, the content type and its current lock state you may see different icons on each content row allowing different functionality:</p>
+       <p>Depending on your access privileges, the content type and its current lock state you may see different icons on each content row allowing different functionality:</p>
        <ul>
          <li>View - Open up a new browser window <em>(or tab)</em> and view the content item as your visitors will see it.</li>
          <li>Copy - Copy the content item to a new content item.
@@ -110,10 +124,13 @@ $lang['help_cmscontentmanager_help'] = <<<EOT
 
  <h4>Edit Ability</h4>
    <p>The ability to edit a content item is determined either by permission <em>(see the Manage All Content, and Modify Any Page permissions below)</em>, or by being the owner, or additional editor of a content item.</p>
+
  <h4>Owners</h4>
    <p>By default, the owner of a content item is the user that initially created it.  Owners, or users with &quot;Manage All Content&quot; permission can give ownership of a page to another user.</p>
+
  <h4>Additional Editors</h4>
     <p>When editing a content item as an owner or as a user with &quot;Manage All Content&quot; permission, the user can select other administrative users, or admin groups that are also allowed to edit that content item.</p>
+
  <h4>Relevent Permissions.</h4>
     <p>There are a few permissions that effect what columns are displayed in the content list and the ability to interact with the content list:</p>
     <ul>
@@ -124,24 +141,26 @@ $lang['help_cmscontentmanager_help'] = <<<EOT
         <p>Users with this position will have the ability to edit any content item.  It is similar to being an &quot;Additional Editor&quot; on all content items.</p>
       </li>
       <li>Remove Pages
-        <p>This permission allows users to remove pages that they have edit ability on.  Without this permission, the delete icon on each content item row in the content list will be hidden.</p>
+        <p>This permission allows users to remove content items that they have edit ability on.  Without this permission, the delete icon on each content item row in the content list will be hidden.</p>
       </li>
       <li>Reorder Pages
-        <p>This permission allows users who have edit ability to all siblings of a page to re-arrange pages amongst those siblings.</p>
-        <p>i.e: A user in a group who has edit ability to the page with hierarchy 1.3 and all of its direct siblings <em>(1.1, 1.2, 1.3, 1.4, etc).</em> will be able to re-arrange those pages in the navigation.</p>
-        <p>Users without this permission will not see the move up/down icons in listcontent.</p>
+        <p>This permission allows users who have edit ability to all siblings of a content item to re-arrange content items amongst their peers.</p>
+        <p>i.e: A user in a group who has edit ability to the content item with hierarchy 1.3 and all of its direct siblings <em>(1.1, 1.2, 1.3, 1.4, etc).</em> will be able to re-arrange those items in the navigation.  Users without this permission will not see the move up/down icons in listcontent.</p>
       </li>
       <li>Manage All Content
         <p>This permission provides super-user capability on all content items.  Users with this permission can add, edit, delete, and re-order any content item.  They also have the ability to set the default content item, and perform bulk actions like change ownership that may or may not be available to users with other permissions.</p>
       </li>
     </ul>
    <p>It is possible for an admin user account to not be a member of any groups, and for that admin user account still have the ability <em>(as an owner or additional editor)</p> to edit some content items.</p>
+
  <h4>Content Locking</h4>
    <p>Content locking is a mechanism that prevents two editors from editing the same item at the same time, and therefore destroying each others work.  Admin users are given exclusive access to a content item until such time as they submit the changes.</p>
    <p>If a content item is locked, you will not be able to edit it until the lock has expired.  See below for information on lock expiring.  Once a lock has expired, a user will have the option of stealing the lock from the original editor and beginning a new edit session.</p>
    <p>A special icon is displayed on the content item row to indicate that the lock can be stolen.</p>
+
  <h4>Configuration</h4>
    <p>Some configuration items effect the visibility of certain items in the content list:</p>
+
  <h4>Other functionality</h4>
    <ul>
      <li>Pagination
@@ -212,7 +231,7 @@ $lang['help_cmscontentmanager_help'] = <<<EOT
      </li>
    </ul>
 
-<h3>Adding Content Items</h3>
+<h3>Adding and Editing Content Items</h3>
  <p>The ability to add content items depends on having either the &quot;Manage All Content&quot; permittion, or the &quot;Add Pages&quot; permission.  Users with &quot;Manage All Content&quot;  permission will be able to manage all aspects  of the content item.  Users without this permission will have considerably less abilities.</p>
  <p>The add (or edit) content page form is devided into numerous tabs; numerous properties of the content item will eppear on different tabs.  The list of tabs that are visible, and the &quot;properties&quot; on those tabs is influenced by numerous factors:</p>
    <ul>
@@ -307,7 +326,7 @@ $lang['help_cmscontentmanager_help'] = <<<EOT
     </li>
 
     <li>Image
-	<p>This property allows associating a previously uploaded image with your this content item.  Editors can select an image file from the uploads/images directory.  This image may be displayed on the generated HTML page (if applicable), or used when building the navigation.</p>     
+	<p>This property allows associating a previously uploaded image with your this content item.  Editors can select an image file from the uploads/images directory.  This image may be displayed on the generated HTML page (if applicable), or used when building the navigation.</p>
         <p>Users with restricted permissions may not have the ability to adjust or specify this property.</p>
     </li>
 
@@ -321,21 +340,42 @@ $lang['help_cmscontentmanager_help'] = <<<EOT
     </li>
 
     <li>Additional Editors
-        <p>This property specifies a list of other admin users or admin groups that are allowed to edit this content item.  It is implemented as a multi-select field.  Again, users with restricted permissions may not have the ability to adjust this field.</p>
+        <p>This property specifies a list of other admin users or admin groups that are allowed to edit this content item.  It is implemented as a multi-select field.  Again, users with restricted permissions may not have the ability to adjust this property.</p>
     </li>
 
-    <li>Design</li> 
-    <li>Template</li>
+    <li>Design
+        <p>The property allows associating a design with the content item.  A design is used to determine the stylesheets and other items that contribute to the appearance of content items.  The design is associated with different templates.  Changing the design property may result in the template property automatically changing.  By default the &quot;default design&quot; selected in the Design Manager is selected here.  Some restricted editors may not have the ability to adjust this property.</p>
+    </li>
 
-    <li>Searchable</li>
-    <li>Disable Wysiwyg</li>
-    <li>Page Metadata</li>
-    <li>Page Data</li>
-    <li>extra1</li>
-    <li>extra2</li>
-    <li>extra3</li>
+    <li>Template
+        <p>The page template property is used to determine the overall layout of the content item (for those content items that generate HTML).  It also determines the use of meta tags and content blocks.  Changing this template will refresh the page and display the appropriate content properties (blocks) that are specified  in the newly selected template.</p>
+        <p>Users with restricted permissions may not have the ability to adjust or specify this property.</p>
+    </li>
+
+    <li>Searchable
+        <p>This property controls wether the content properties on this content item can be indexed by the search module.</p>
+        <p>Users with restricted permissions may not have the ability to adjust or specify this property.</p>
+    </li>
+
+    <li>Disable WYSIWYG
+        <p>This property will disable the WYSIWYG editor for all content blocks on this content item.  This overrides all settings on the content blocks, and any user setting.  This is useful for content items that contain pure logic in the content blocks, or strictly call other modules.  This prevents the logic or output from the modules from being effected by the styling injected by the WYSIWYG.</p>
+        <p>Users with restricted permissions may not have the ability to adjust or specify this property.</p>
+    </li>
+
+    <li>Page Metadata
+        <p>The primary purpose of this property is for injecting meta properties into the &lt;head&gt; section of the rendered HTML page.  Typically it is useful for injecting a meta description tag.</p>      
+        <p>Users with restricted permissions may not have the ability to adjust or specify this property.</p>
+    </li>
+
+    <li>Page Data
+        <p>This property is primarily used for inserting data, or logic into the smarty process for use by the page template.  It is an advanced field for usage in flexible layouts that change their behavior dynamically.</p>
+        <p>Users with restricted permissions may not have the ability to adjust or specify this property.</p>
+    </li>
+
+    <li>extra1, extra2, and extra3</li>
+        <p>Additional properties for use in either displaying data, or influencing the behavior of the page template.</p>
+    </li>
   </ul>
-<h3>Editing Content Pages</h3>
 EOT;
 $lang['help_myaccount_admincallout'] = 'If enabled administrative bookmarks <em>(shortcuts)</em> will be enabled allowing you to manage a list of frequently used actions in the admin console.';
 $lang['help_myaccount_admintheme'] = 'Select an adminstration theme to use.  Different administration themes have different menu layouts, work better for mobile displays, and have varous additional features.';
