@@ -12,19 +12,32 @@ function _update_status(html) {
   $('#status_area').html(html);
   $('#status_area').show();
 }
-function begin_section(id,lbl) {
+function begin_section(id,lbl,desc) {
   cur_section = lbl;
-  $('#searchresults').append('<li class="section">'+lbl+'&nbsp;(<span class="section_count">0</span>)<ul class="section_children" id="'+id+'" style="display: none;"><ul>');
+  var txt = '<li class="section" id="sec_'+id+'">'+lbl+'&nbsp;(<span class="section_count">0</span>)';
+  txt = txt + '<div class="section_children" style="display: none;">';
+  if( typeof desc == 'string' ) {
+    txt += '<p>'+desc+'</p>';
+  }
+  txt += '<ul id="'+id+'"><ul>';
+  txt += '</div>';
+  $('#searchresults').append(txt);
 }
 function add_result(listid,content,title,url,text) {
   $('#searchresults_cont').show();
-  var html = '<li><a href="'+url+'" target="_blank" title="'+title+'">'+content+'</a>';
+  var html = '';
+  if( url.length == 0 ) {
+    html = '<li>'+content+'</a>';
+  }
+  else {
+    html = '<li><a href="'+url+'" target="_blank" title="'+title+'">'+content+'</a>';
+  }
   if( text.length > 0 ) html = html + '<p>'+text+'</p>';
   html = html + '</li>';
   var c = $('ul#'+listid).children().length + 1;
-  $('ul#'+listid).prev('.section_count').html(c);
+  $('ul#'+listid).closest('li.section').find('span.section_count').html(c);
   $('ul#'+listid).append(html);
-   
+
   $('#searchresults').find('a').each(function(){
     var t = $(this).data('events');
     if( t == undefined || t.length == 0 ) {
@@ -59,6 +72,6 @@ $(document).ready(function(){
   });
   $('#searchresults').on('click','li.section',function(){
     $('.section_children').hide();
-    $(this).children('ul').show();
+    $(this).children('.section_children').show();
   });
 });

@@ -31,9 +31,9 @@ function status_msg($msg)
   echo '<script type="text/javascript">parent.status_msg(\''.$msg.'\')</script>';
 }
 
-function begin_section($id,$txt)
+function begin_section($id,$txt,$desc = '')
 {
-  echo "<script type=\"text/javascript\">parent.begin_section('{$id}','{$txt}')</script>";
+  echo "<script type=\"text/javascript\">parent.begin_section('{$id}','{$txt}','{$desc}')</script>";
 }
 
 function add_result($listid,$content,$title,$url,$text = '')
@@ -77,10 +77,11 @@ if( is_array($slaves) && count($slaves) ) {
     $obj->set_params($searchparams);
     $results = $obj->get_matches();
     if( is_array($results) && count($results) ) {
-      begin_section($one_slave['class'],$obj->get_name());
+      begin_section($one_slave['class'],$obj->get_name(),$obj->get_section_description());
       foreach( $results as $one ) {
 	$text = isset($one['text'])?$one['text']:'';
-	add_result($one_slave['class'],$one['title'],$one['description'],$one['edit_url'],$text);
+	add_result($one_slave['class'],$one['title'],$one['description'],
+		   isset($one['edit_url'])?$one['edit_url']:'',$text);
       }
     }
     end_section();

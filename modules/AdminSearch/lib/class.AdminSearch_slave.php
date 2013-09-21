@@ -9,8 +9,7 @@ abstract class AdminSearch_slave
   }
 
   protected function get_text() {
-    if( isset($this->_params['search_text']) )
-      return $this->_params['search_text'];
+    if( isset($this->_params['search_text']) ) return $this->_params['search_text'];
   }
 
   public function set_params($params)
@@ -32,8 +31,7 @@ abstract class AdminSearch_slave
 
   protected function search_descriptions()
   {
-    if( isset($this->_params['search_descriptions']) )
-      return cms_to_bool($this->_params['search_descriptions']);
+    if( isset($this->_params['search_descriptions']) ) return cms_to_bool($this->_params['search_descriptions']);
     return FALSE;
   }
 
@@ -41,6 +39,7 @@ abstract class AdminSearch_slave
   abstract public function get_name();
   abstract public function get_description();
   abstract public function get_matches();
+  public function get_section_description() {}
 }
 
 ?>

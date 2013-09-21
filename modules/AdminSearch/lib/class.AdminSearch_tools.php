@@ -6,7 +6,7 @@ final class AdminSearch_tools
 
   public static function get_slave_classes()
   {
-    $key = __CLASS__.'slaves';
+    $key = __CLASS__.'slaves'.get_userid(FALSE);
     $results = null;
     $data =  cms_cache_handler::get_instance()->get($key);
     if( !$data ) {
@@ -35,6 +35,7 @@ final class AdminSearch_tools
 	      $tmp['class'] = $class_name;
 	      $name = $tmp['name'] = $obj->get_name();
 	      $tmp['description'] = $obj->get_description();
+	      $tmp['section_description'] = $obj->get_section_description();
 	      if( !$name ) continue;
 	      if( isset($results[$name]) ) continue;
 

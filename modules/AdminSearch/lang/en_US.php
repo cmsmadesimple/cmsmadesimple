@@ -3,10 +3,11 @@
 $lang['all'] = 'All';
 
 // D
-$lang['desc_css_search'] = 'TODO';
-$lang['desc_content_search'] = 'TODO';
+$lang['desc_css_search'] = 'Search for matching text in stylesheets';
+$lang['desc_content_search'] = 'Search for matching text in content pages';
 $lang['desc_filter_all'] = 'Toggle all filters';
-$lang['desc_template_search'] = 'TODO';
+$lang['desc_oldmodtemplate_search'] = 'Search old module templates.';
+$lang['desc_template_search'] = 'Search for matching text in templates';
 
 // E
 $lang['error_nosearchtext'] = 'Please enter a search term';
@@ -37,6 +38,7 @@ EOT;
 $lang['lbl_content_search'] = 'Search Content Pages';
 $lang['lbl_css_search'] = 'Search Stylesheets';
 $lang['lbl_gcb_search'] = 'Search Global Content Blocks';
+$lang['lbl_oldmodtemplate_search'] = 'Search module templates';
 $lang['lbl_search_desc'] = 'Search Descriptions <em>(where applicable)</em>';
 $lang['lbl_template_search'] = 'Search Templates';
 
@@ -54,6 +56,7 @@ $lang['postuninstall'] = 'Admin Search module uninstalled';
 $lang['search'] = 'Search';
 $lang['search_text'] = 'Search Text';
 $lang['search_results'] = 'Search Results';
+$lang['sectiondesc_oldmodtemplates'] = 'Results in this section are not clickable, as each module provides its own admin panel interface for editing templates';
 $lang['settings'] = 'Settings';
 $lang['starting'] = 'Starting';
 
