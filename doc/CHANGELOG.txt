@@ -1,4 +1,4 @@
-﻿Version 1.11.8.1
+﻿Version 1.11.9 - Bartolome
 -----------------------------
 Core - General
   - Fixes version.php to represent new schema

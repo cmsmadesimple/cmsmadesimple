@@ -18,8 +18,8 @@
 #
 #$Id$
 
-$CMS_VERSION = "1.11.8.1";
-$CMS_VERSION_NAME = "Fioreana";
+$CMS_VERSION = "1.11.9";
+$CMS_VERSION_NAME = "Bartolome";
 $CMS_SCHEMA_VERSION = "37";
 
 define('CMS_VERSION', $CMS_VERSION);
