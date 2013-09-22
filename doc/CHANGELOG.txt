@@ -1,4 +1,4 @@
-﻿Version 1.11.9 - Bartolome
+Version 1.11.9 - Bartolome
 -----------------------------
 Core - General
   - Fixes version.php to represent new schema
@@ -690,7 +690,7 @@ Core:
   - #5633 Impossible to create a section header
   - #5653 ADD NEW CONTENT with unique permission ADD PAGE
   - #5659 error with https and redirect function 
-  - #5677 Extensions » User Defined Tags - "Apply" button issue
+  - #5677 Extensions Â» User Defined Tags - "Apply" button issue
   - Permission issue for non-admins
   - HasChildren() on a non-object error in listcontent
   - function Id() on a non-object in re-order pages
@@ -830,7 +830,7 @@ Fixes:
   - Backend is slower then previous release
   - Core modules/tabs in the backend aren't translated
   - Internet Explorer doesnt show specific backend-pages nicely (f.e. News)
-  - Theme �default� gives message �Undefined index: direction� on top in backend
+  - Theme ï¿½defaultï¿½ gives message ï¿½Undefined index: directionï¿½ on top in backend
   - The content tag isn't allowing underscore in name of block anymore
   - Default content has News categories in summary-template
   - Added expand-collapse buttons on top of listcontent as well

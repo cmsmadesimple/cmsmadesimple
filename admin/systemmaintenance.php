@@ -269,7 +269,7 @@ $ch_filename = cms_join_path(CMS_BASE, 'doc', 'CHANGELOG.txt');
 $changelog = file($ch_filename);
 
 for ($i = 0; $i < count($changelog); $i++) {
-  if (substr($changelog[$i], 0, 7) == "Version") {
+  if (strstr($changelog[$i], 'Version')) {
       if ($i == 0) {
           $changelog[$i] = "<div class=\"version\"><h3>" . $changelog[$i] . "</h3>";
       } else {
@@ -280,7 +280,7 @@ for ($i = 0; $i < count($changelog); $i++) {
 }
 
 
-$changelog = implode("<br/>", $changelog);
+$changelog = implode("<br />", $changelog);
 
 $smarty->assign("changelog", $changelog);
 $smarty->assign("changelogfilename", $ch_filename);
