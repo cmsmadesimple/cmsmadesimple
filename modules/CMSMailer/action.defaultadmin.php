@@ -113,9 +113,7 @@ if( !isset($gCms) ) exit;
 
     $this->smarty->assign('prompt_password', $this->Lang('password'));
     $this->smarty->assign('info_password', $this->Lang('info_password'));
-    $this->smarty->assign('input_password',
-			  $this->CreateInputPassword( $id, 'input_password',
-						      $this->GetPreference('password'), 30, 30));
+    $this->smarty->assign('input_password', $this->CreateInputPassword( $id, 'input_password', '', 30, 30));
 
     $this->smarty->assign('prompt_testaddress', 
 			  $this->Lang('prompt_testaddress'));

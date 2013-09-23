@@ -65,7 +65,7 @@ class CMSMailer extends CMSModule
    ---------------------------------------------------------*/
   function GetVersion()
   {
-    return '5.2.1';
+    return '5.2.2';
   }
 
 
@@ -246,7 +246,7 @@ class CMSMailer extends CMSModule
   function DoAction($action, $id, $params, $returnid=-1)
   {
     $gCms = cmsms();
-    $smarty =& $gCms->GetSmarty();
+    $smarty = $gCms->GetSmarty();
     $smarty->assign_by_ref('mod',$this);
 
     switch ($action)
