@@ -339,96 +339,52 @@ class CMSMailer extends CMSModule
    ---------------------------------------------------------*/
   function _SetAdminPrefs($id, &$params, $returnid )
   {
-    if( !$this->CheckPermission('Modify Site Preferences') )
-      return;
+    if( !$this->CheckPermission('Modify Site Preferences') ) return;
 
     set_site_preference('mail_is_set',1);
 
-    if( isset( $params['input_mailer'] ) )
-      {
-	$this->SetPreference('mailer',$params['input_mailer']);
-      }
+    if( isset( $params['input_mailer'] ) ) $this->SetPreference('mailer',$params['input_mailer']);
+    if( isset( $params['input_host'] ) ) $this->SetPreference('host',$params['input_host']);
+    if( isset( $params['input_secure'] ) ) $this->SetPreference('secure',$params['input_secure']);
+    if( isset( $params['input_port'] ) ) $this->SetPreference('port',$params['input_port']);
+    if( isset( $params['input_from'] ) ) $this->SetPreference('from',$params['input_from']);
+    if( isset( $params['input_fromuser'] ) ) $this->SetPreference('fromuser',$params['input_fromuser']);
+    if( isset( $params['input_sendmail'] ) ) $this->SetPreference('sendmail',$params['input_sendmail']);
+    if( isset( $params['input_timeout'] ) ) $this->SetPreference('timeout',$params['input_timeout']);
+    if( isset( $params['input_charset'] ) ) $this->SetPreference('charset',trim($params['input_charset']));
 
-    if( isset( $params['input_host'] ) )
-      {
-	$this->SetPreference('host',$params['input_host']);
-      }
+    if( isset( $params['input_smtpauth'] ) ) {
+      $this->SetPreference('smtpauth',$params['input_smtpauth']);
+    }
+    else {
+      $this->SetPreference('smtpauth',0);
+    }
 
-    if( isset( $params['input_secure'] ) )
-      {
-	$this->SetPreference('secure',$params['input_secure']);
-      }
+    if( isset( $params['input_username'] ) && $params['input_username'] != '' ) {
+      $this->SetPreference('username',$params['input_username']);
+    }
 
-    if( isset( $params['input_port'] ) )
-      {
-	$this->SetPreference('port',$params['input_port']);
-      }
-
-    if( isset( $params['input_from'] ) )
-      {
-	$this->SetPreference('from',$params['input_from']);
-      }
-
-    if( isset( $params['input_fromuser'] ) )
-      {
-	$this->SetPreference('fromuser',$params['input_fromuser']);
-      }
-
-    if( isset( $params['input_sendmail'] ) )
-      {
-	$this->SetPreference('sendmail',$params['input_sendmail']);
-      }
-
-    if( isset( $params['input_timeout'] ) )
-      {
-	$this->SetPreference('timeout',$params['input_timeout']);
-      }
-
-    if( isset( $params['input_smtpauth'] ) )
-      {
-	$this->SetPreference('smtpauth',$params['input_smtpauth']);
-      }
-    else
-      {
-	$this->SetPreference('smtpauth',0);
-      }
-
-    if( isset( $params['input_username'] ) )
-      {
-	$this->SetPreference('username',$params['input_username']);
-      }
-
-    if( isset( $params['input_password'] ) )
-      {
-	$this->SetPreference('password',$params['input_password']);
-      }
-
-    if( isset( $params['input_charset'] ) )
-      {
-	$this->SetPreference('charset',trim($params['input_charset']));
-      }
+    if( isset( $params['input_password'] ) && $params['input_password'] != '' ) {
+      $this->SetPreference('password',$params['input_password']);
+    }
 
     $this->reset();
 
-    if( isset( $params['sendtest'] ) )
-      {
-	// here we're gonna send a nice, hard coded test message
-	if( !isset( $params['input_testaddress'] ) || trim($params['input_testaddress']) == '' )
-	  {
-	    $this->_DisplayErrorPage( $id, $params, $returnid, 
-				      $this->Lang('error_notestaddress'));
-	    return;
-	  }
-	else
-	  {
-	    $this->AddAddress( $params['input_testaddress'] );
-	    $this->IsHTML(true);
-	    $this->SetBody( $this->Lang('testbody'));
-	    $this->SetSubject( $this->Lang('testsubject'));
-	    $this->Send();
-	    $this->reset(); // yes, another reset
-	  }
+    if( isset( $params['sendtest'] ) ) {
+      // here we're gonna send a nice, hard coded test message
+      if( !isset( $params['input_testaddress'] ) || trim($params['input_testaddress']) == '' ) {
+	$this->_DisplayErrorPage( $id, $params, $returnid, $this->Lang('error_notestaddress'));
+	return;
       }
+      else {
+	$this->AddAddress( $params['input_testaddress'] );
+	$this->IsHTML(true);
+	$this->SetBody( $this->Lang('testbody'));
+	$this->SetSubject( $this->Lang('testsubject'));
+	$this->Send();
+	$this->reset(); // yes, another reset
+      }
+    }
 
     $this->Redirect( $id, 'defaultadmin', $returnid, $params );
   }
