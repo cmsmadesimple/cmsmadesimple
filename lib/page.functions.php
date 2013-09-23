@@ -173,7 +173,9 @@ function check_passhash($userid, $checksum)
 	$userops = $gCms->GetUserOperations();
 	$oneuser = $userops->LoadUserByID($userid);
 
-	if ($oneuser && (string)$checksum != '' && $checksum == md5(md5($config['root_path'] . '--' . $oneuser->password)))
+	$tmp = array(md5(__FILE__),$oneuser->password,cms_utils::get_real_ip(),$_SERVER['HTTP_USER_AGENT']);
+	$tmp = md5(serialize($tmp));
+	if ($oneuser && (string)$checksum != '' && $checksum == $tmp )
 	{
 		$check = true;
 	}
@@ -198,15 +200,17 @@ function generate_user_object($userid)
   $gCms = cmsms();
 	$config = $gCms->GetConfig();
 
-	$userops =& $gCms->GetUserOperations();
-	$oneuser =& $userops->LoadUserByID($userid);
+	$userops = $gCms->GetUserOperations();
+	$oneuser = $userops->LoadUserByID($userid);
 
 	if ($oneuser)
 	{
 		$_SESSION['cms_admin_user_id'] = $userid;
 		$_SESSION['cms_admin_username'] = $oneuser->username;
 		cms_cookies::set('cms_admin_user_id', $oneuser->id);
-		cms_cookies::set('cms_passhash', md5(md5($config['root_path'] . '--' . $oneuser->password)));
+		$tmp = array(md5(__FILE__),$oneuser->password,cms_utils::get_real_ip(),$_SERVER['HTTP_USER_AGENT']);
+		$tmp = md5(serialize($tmp));
+		cms_cookies::set('cms_passhash', $tmp);
 	}
 }
 
