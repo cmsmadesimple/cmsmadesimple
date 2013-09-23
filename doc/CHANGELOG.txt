@@ -7,12 +7,16 @@ Core - General
   - Removes a debug limit on caching in contentoperations
   - Robots don't index Error Console pages
   - Only show technical details on the Error Console page to logged in administrators
+  - Entropy improvement in the cookie used to stay loggedin.
 
 Core - Search
   - Fixes PHP 5.3 dependency
 
 Core - Bug Reports
   - #9549 CMSMS 1.11.8 performance regression
+
+Core - CMSMailer
+  - No longer send SMTP password in plain text.
 
 
 Version 1.11.8 - Fioreana
