@@ -53,11 +53,9 @@ function check_login($no_redirect = false)
 
   if (!isset($_SESSION["cms_admin_user_id"])) {
     debug_buffer('No session found.  Now check for cookies');
-    if( cms_cookies::exists('cms_admin_user_id') && 
-	cms_cookies::exists('cms_passhash') ) {
+    if( cms_cookies::exists('cms_admin_user_id') && cms_cookies::exists('cms_passhash') ) {
       debug_buffer('Cookies found, do a passhash check');
-      if (check_passhash(cms_cookies::get('cms_admin_user_id'), 
-			 cms_cookies::get('cms_passhash'))) {
+      if (check_passhash(cms_cookies::get('cms_admin_user_id'), cms_cookies::get('cms_passhash'))) {
 	debug_buffer('passhash check succeeded...  creating session object');
 	generate_user_object(cms_cookies::get('cms_admin_user_id'));
       }
@@ -128,6 +126,7 @@ function get_userid($check = true)
   return false;
 }
 
+
 /**
  * A function to check if the checksum provided can be used to validate the user to this site
  *
@@ -139,21 +138,18 @@ function get_userid($check = true)
  */
 function check_passhash($userid, $checksum)
 {
-  $check = false;
-
   $gCms = cmsms();
   $config = $gCms->GetConfig();
 
   $userops = $gCms->GetUserOperations();
   $oneuser = $userops->LoadUserByID($userid);
 
-  if ($oneuser && (string)$checksum != '' && 
-      $checksum == md5(md5($config['root_path'] . '--' . $oneuser->password))) {
-    $check = true;
-  }
-
-  return $check;
+  $tmp = array(md5(__FILE__),$oneuser->password,cms_utils::get_real_ip(),$_SERVER['HTTP_USER_AGENT']);
+  $tmp = md5(serialize($tmp));
+  if ($oneuser && (string)$checksum != '' && $checksum == $tmp ) return TRUE;
+  return FALSE;
 }
+
 
 /**
  * Regenerates the user session information from a userid.  This is basically used
@@ -180,7 +176,9 @@ function generate_user_object($userid)
     $_SESSION['cms_admin_user_id'] = $userid;
     $_SESSION['cms_admin_username'] = $oneuser->username;
     cms_cookies::set('cms_admin_user_id', $oneuser->id);
-    cms_cookies::set('cms_passhash', md5(md5($config['root_path'] . '--' . $oneuser->password)));
+    $tmp = array(md5(__FILE__),$oneuser->password,cms_utils::get_real_ip(),$_SERVER['HTTP_USER_AGENT']);
+    $tmp = md5(serialize($tmp));
+    cms_cookies::set('cms_passhash', $tmp);
   }
 }
 
@@ -222,6 +220,7 @@ function check_ownership($userid, $contentid = '')
   return cmsms()->GetContentOperations()->CheckPageOwnership($userid,$contentid);
 }
 
+
 /**
  * Checks that the given userid has access to modify the given
  * pageid.  This would mean that they were set as additional
@@ -238,6 +237,7 @@ function check_authorship($userid, $contentid = '')
   return ContentOperations::get_instance()->CheckPageAuthorship($userid,$contentid);
 }
 
+
 /**
  * Prepares an array with the list of the pages $userid is an author of
  *
@@ -250,6 +250,7 @@ function author_pages($userid)
 {
   return ContentOperations::get_instance()->GetPageAccessForUser($userid);
 }
+
 
 /**
  * Put an event into the audit (admin) log.  This should be
@@ -289,8 +290,6 @@ function audit($itemid, $itemname, $action)
   $query = "INSERT INTO ".cms_db_prefix()."adminlog (timestamp, user_id, username, item_id, item_name, action, ip_addr) VALUES (?,?,?,?,?,?,?)";
   $db->Execute($query,array(time(),$userid,$username,$itemid,$itemname,$action,$ip_addr));
 }
-
-
 
 
 /**
@@ -352,6 +351,7 @@ function get_preference($userid, $prefname, $default='')
   return cms_userprefs::get_for_user($userid,$prefname,$default);
 }
 
+
 /**
  * Sets the given perference for the given userid with the given value.
  *
@@ -385,6 +385,7 @@ function & stripslashes_deep(&$value)
   } 
   return $value;
 }
+
 
 /**
  * A method to create a text area control
@@ -473,7 +474,6 @@ function pagination($page, $totalrows, $limit)
    }
    return $page_string;
  }
-
 
 
 /**

@@ -38,13 +38,12 @@ final class AdminSearch extends CMSModule
   
   function VisibleToAdminUser()
   {
-    if( $this->can_search() || $this->CheckPermission('Modify Site Preferences') ) return TRUE;
-    return FALSE;
+    return $this->can_search();
   }
 
   protected function can_search()
   {
-    $perms = array('Modify Templates','Modify Stylesheets','Modify Global Content Blocks','Manage All Content','Modify Any Page',
+    $perms = array('Modify Templates','Modify Stylesheets','Manage All Content','Modify Any Page',
 		   'Modify User-defined Tags','Modify Site Preferences');
     foreach( $perms as $perm ) {
       if( $this->CheckPermission($perm) ) return TRUE;

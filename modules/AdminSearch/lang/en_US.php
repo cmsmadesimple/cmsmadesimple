@@ -21,9 +21,13 @@ $lang['friendlyname'] = 'Admin Search';
 // H
 $lang['help'] = <<<EOT
 <h3>What does this do?</h3>
-<p>TODO</p>
+  <p>This module provides the ability to quickly find places in templates, content pages, and other database where a text string occurs.  It is particularly useful for finding smarty tags, classnames, ids or other bits of HTML code that may be hard to find in a large website.</p>
+  <p>This module has no frontend interaction it is designed for use by CMSMS site developers or editors to find substrings of text or code.  Not for use in finding text on the frontend of websites.</p>
 
 <h3>How Do I Use It</h3>
+  <p>This module is visible to most administrators of the website with at least some permissions to edit templates, stylesheets, or some content   Though the list of what can be searched may be reduced.</p>
+  <p>The module provides a text field where a single string can be entered (the string is not devided into words or otherwise parsed).  It also provides the ability to only search certain subsections of the website.</p>
+  <p>Searching will generate a nested, expandable list of sections where matches were found.  Under each section a description of the match is displayed.  Usually with a link that will direct you to a form to edit the item.</p>
 <p>TODO</p>
 
 <h3>Support</h3>
