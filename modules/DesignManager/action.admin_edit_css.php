@@ -23,9 +23,7 @@ if( !$this->CheckPermission('Manage Stylesheets') ) return;
 
 $this->SetCurrentTab('stylesheets');
 if( isset($params['cancel']) ) {
-	if( $params['cancel'] == $this->Lang('cancel') ) {
-		$this->SetMessage($this->Lang('msg_cancelled'));
-	}
+	if( $params['cancel'] == $this->Lang('cancel') ) $this->SetMessage($this->Lang('msg_cancelled'));
   $this->RedirectToAdminTab();
 }
 
@@ -47,16 +45,12 @@ try {
       if( isset($params['description']) ) $css_ob->set_description($params['description']);
       if( isset($params['content']) ) $css_ob->set_content($params['content']);
       $typ = array();
-      if( isset($params['media_type']) ) {
-				$typ = $params['media_type'];
-      }
+      if( isset($params['media_type']) ) $typ = $params['media_type'];
       $css_ob->set_media_types($typ);
       if( isset($params['media_query']) ) $css_ob->set_media_query($params['media_query']);
       if( $this->CheckPermission('Manage Designs') ) {
 				$design_list = array();
-				if( isset($params['design_list']) ) {
-					$design_list = $params['design_list'];
-				}
+				if( isset($params['design_list']) ) $design_list = $params['design_list'];
 				$css_ob->set_designs($design_list);
       }
 

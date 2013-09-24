@@ -2,6 +2,20 @@
 $(document).ready(function(){
     cms_checkAll('#tpl_selall');
 
+    $('#tpl_bulk_action,#tpl_bulk_submit').attr('disabled','disabled');
+    $('#tpl_bulk_submit').button({ 'disabled' : true });
+    $('#tpl_selall,.tpl_select').on('click',function(){
+      if( !$(this).is(':checked') ) {
+        $('#tpl_bulk_action').attr('disabled','disabled');
+        $('#tpl_bulk_submit').attr('disabled','disabled');
+        $('#tpl_bulk_submit').button({ 'disabled' : true });
+      } else {
+        $('#tpl_bulk_action').removeAttr('disabled');
+        $('#tpl_bulk_submit').removeAttr('disabled');
+        $('#tpl_bulk_submit').button({ 'disabled' : false });
+      }
+    });
+
     $('a.steal_tpl_lock').on('click',function(e) {
       // we're gonna confirm stealing this lock.
       var v = confirm('{$mod->Lang('confirm_steal_lock')}');
@@ -37,7 +51,7 @@ $(document).ready(function(){
       return ok;
     });
 
-    $('#tpl_bulk_submit').on('click', function(e){
+    $(document).on('click','#tpl_bulk_submit',function() {
         var n = $('input:checkbox:checked.tpl_select').length
             if( n == 0 ) {
                 cms_alert('{$mod->Lang('error_nothingselected')}');
@@ -155,13 +169,11 @@ $(document).ready(function(){
 
   {if isset($tpl_nav) && $tpl_nav.numpages > 1}
     <div class="pageoptions" style="text-align: right;">
-      {form_start}
         <label for="tpl_page">{$mod->Lang('prompt_page')}:</label>&nbsp;
         <select id="tpl_page" name="{$actionid}tpl_page">
           {cms_pageoptions numpages=$tpl_nav.numpages curpage=$tpl_nav.curpage}
         </select>
         &nbsp;<input type="submit" value="{$mod->Lang('go')}"/>
-      {form_end}
     </div>
   {/if}
 </div>

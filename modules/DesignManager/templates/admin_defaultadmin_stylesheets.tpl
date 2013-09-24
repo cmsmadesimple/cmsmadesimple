@@ -1,6 +1,21 @@
 <script type="text/javascript">
 $(document).ready(function(){
     cms_checkAll('#css_selall');
+
+    $('#css_bulk_action,#css_bulk_submit').attr('disabled','disabled');
+    $('#css_bulk_submit').button({ 'disabled' : true });
+    $('#css_selall,.css_select').on('click',function(){
+      if( !$(this).is(':checked') ) {
+        $('#css_bulk_action').attr('disabled','disabled');
+        $('#css_bulk_submit').attr('disabled','disabled');
+        $('#css_bulk_submit').button({ 'disabled' : true });
+      } else {
+        $('#css_bulk_action').removeAttr('disabled');
+        $('#css_bulk_submit').removeAttr('disabled');
+        $('#css_bulk_submit').button({ 'disabled' : false });
+      }
+    });
+
     $('#editcssfilter').on('click',function(){
       $('#filtercssdlg').dialog({
         buttons: {
@@ -161,7 +176,7 @@ $(document).ready(function(){
 
   {capture assign='stylesheet_dropdown_options'}
   {form_start}
-    <div class="pageoptions" style="text-align: right;">
+    <div class="pageoptions" id="bulkoptions" style="text-align: right;">
       <label for="css_bulk_action">{$mod->Lang('prompt_with_selected')}:</label>&nbsp;
       <select name="{$actionid}css_bulk_action" id="css_bulk_action" class="cssx_bulk_action">
         <option value="delete" title="{$mod->Lang('title_delete')}">{$mod->lang('prompt_delete')}</option>
