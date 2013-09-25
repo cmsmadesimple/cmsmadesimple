@@ -42,7 +42,12 @@ final class CmsFormUtils
 
     $out = '';
     foreach( $options as $key => $value ) {
-      $out .= self::create_option($key,$value,$selected);
+      if( !is_array($value) ) {
+	$out .= self::create_option(array('label'=>$value,'value'=>$key),$selected);
+      }
+      else {
+	$out .= self::create_option($value,$selected);
+      }
     }
     return $out;
   }

@@ -70,7 +70,7 @@
 <input type="hidden" name="{$actionid}type" value="{$type->get_id()}"/>
 
 {if $type->get_content_callback() != ''}
-{tab_header name='content' label=$mod->Lang('prompt_dflt_template')}
+{tab_header name='content' label=$mod->Lang('prompt_proto_template')}
 {/if}
 
 {tab_header name='description' label=$mod->Lang('prompt_description')}
@@ -79,7 +79,7 @@
 {tab_start name='content'}
 <div class="pageoverflow">
   <p class="pagetext">
-    <label for="type_dflt_contents">{$mod->Lang('prompt_dflt_template')}:</label>&nbsp;{cms_help key2='help_dflt_template'}
+    <label for="type_dflt_contents">{$mod->Lang('prompt_proto_template')}:</label>&nbsp;{cms_help key2='help_proto_template'}
   </p>
   <p class="pageinput">
     {syntax_area id=type_dflt_contents prefix=$actionid name=dflt_contents value=$type->get_dflt_contents()}

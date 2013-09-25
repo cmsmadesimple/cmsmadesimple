@@ -377,6 +377,75 @@ $lang['help_cmscontentmanager_help'] = <<<EOT
     </li>
   </ul>
 EOT;
+
+$lang['help_designmanager_help'] = <<<EOT
+<h3>What is this module?</h3>
+<p>This module unifies the functionality for managing the layout of CMSMS web pages.  It provides a complete solution for managing and editing any type of smarty template, and for organizing those templates.  Also you can create, edit, delete and manage stylesheets, and organize them into &quot;Designs&quot;.</p>
+
+<h3>What is a &quot;Design&quot; ?</h3>
+<p>A design is a container of sorts.  It contains a loose association of stylesheets and templates.  It allows managing all of the stylesheets and templates required to implement a look and feel.  Designs can be exported to a single file be shared, and imported from a single file.</p>
+<p>Each content page that renders HTML is associated with a design to determine which stylesheets are to be used, and thier order.  Additionally, each content page that renders HTML is associated with a template... though the template does not need to be associated with the specified design.</p>
+<p>Templates and stylesheets do not need to be associated with a design, however, only the templates and stylesheets that are associated with a design are exported with the design.</p>
+
+<h3>What are Template Types ?</h3>
+  <p>Template types are a way of loosly organizing templates.  Some functionality may display lists of templates that are of a certain type to make selection easier.  For example, the edit content page displays a list of &quot;Page&quot; templates.</p>
+  <p>The core creates a few standard template types on installation.  Third party modules will probably create more.  Template type definitions normally have two parts, the Originator <em>(the module or functionality that created them)</em>, and the type name itself.  i.e:  Core::Page indicates a page template type created by the core.  News::Summary is the name of the template type for news summary templates.  Although site developers cannot create new template types they can specify the type for a template when adding or editing a template.</p>
+  <p>Each template type has a &quot;prototype&quot; template that is used to provide some prototype contents when creating a new template of that type.</p>
+  <p>Some template types (such as the &quot;Core::Page&quot; template type support the notion of a &quot;default template&quot;.  The default template of a type is typically used by modules so that a template of a certain type can be used in the event that a specific template is not named.  Additionally, the default template of type &quot;Core::Page&quot; is used as the default template when creating a new content item of type &quot;Content&quot;</p>
+  <p>The Design Manager admin interface allows filtering templates by originator, or thier type to easily find templates to edit or manage.</p>
+
+  <h4>Generic Templates <em>(formerly Global Content Blocks</h4>
+    <p>A standard template type is called &quot;Core::generic&quot;.  This is a generic template that could be used for anything.  It replaces &quot;Global Content Blocks&quot; <em>(GCB)</em> from prior versions of CMSMS.</p>
+
+<h3>What are &quot;Categories&quot; for ?</h3>
+  <p>Categories are a method site developers can use to further organize templates.  Site developers can create, rename and delete categories and associate different templates with them.   When managing templates site developers can filter templates by their category.</p>
+
+<h3>The Primary Interface</h3>
+  <p>The Design Manager admin panel is located the CMSMS admin navigation as &quot;Design Manager&quot; under the &quot;Layout&quot; section.</p>
+  <p>The modules admin panel has numerous tabs.  Each tab serves a particular purpose, and may require special privileges.  Only a user with one of the required permissions <em>(or ownership/additional editor status on one or more templates)</em> will be able to see the design manager in the CMSMS admin console.</p>
+  <ul>
+    <li>The Templates Tab
+      <p>The templates tab provides all of the functionality to conveniently and easily create and manage templates.  It is visible to admin users with the &quot;Modify Templates&quot; permmission, or who are owners or additional editors of one or more templates.</p>
+      <p>Some of the features of this tab include:</p>
+      <ul>
+        <li>A tabular format which displays summary information about each template, and provides convenient actions for working on templates individually, or en-masse.</li>
+        <li>The ability to steal a locked template</li>
+        <li>Advanced filtering</li>
+        <li>Pagination</li>
+      </ul>
+    </li>
+
+    <li>The Categories Tab
+      <p>The categories tab is visible to all admin users with the &quot;Modify Templates&quot; permission.  It provides the ability to add, edit, delete, rename and re-order categories.</p>
+      <p>When adding or editing a category it is possible to provide a description of the use of the category for reference purposes.</p>
+    </li>
+
+    <li>The Template Types Tab
+      <p>This tab is visible to all admin users with the &quot;Modify Templates&quot; permission.  It provides the ability to edit information about the template type including the prototype template.  And to create a new template of each type.</p>
+    </li>
+      
+    <li>The Stylesheets Tab
+      <p>This tab is visible to all admin users with the &quot;Manage Stylesheets&quot; permission.  It provides the ability to create, delete, edit, and manage stylesheets.<p>
+    </li>
+
+    <li>The Designs Tab
+      <p>This admin panel tab is visible to all admin users with the &quot;Manage Designs&quot; permission.  <em>(Note: users with that permission and no others may not have access to the full functionality of this tab)</em>.
+      <p>This tab provides the ability to import, export, create, edit, and delete designs.</p>
+    </li>
+  </ul>
+<h3>Maaging Templates</h3>
+  
+  <h4>Specifing Templates on Tags</h4>
+<h3>Managing Categories</h3>
+<h3>Managing Template Types</h3>
+<h3>Managing Stylesheets</h3>
+<h3>Managing Designs</h3>
+  <h4>Importing Designs</h4>
+  <h4>Exporting Desings</h4>
+<h3>Options and Preferences</h3>
+<h3>Upgrade Notes</h3>
+EOT;
+
 $lang['help_myaccount_admincallout'] = 'If enabled administrative bookmarks <em>(shortcuts)</em> will be enabled allowing you to manage a list of frequently used actions in the admin console.';
 $lang['help_myaccount_admintheme'] = 'Select an adminstration theme to use.  Different administration themes have different menu layouts, work better for mobile displays, and have varous additional features.';
 $lang['help_myaccount_ce_navdisplay'] = 'Select which content field should be displayed in content lists.  Options include the page title, or menu text.  If &quot;None&quot; is selected, then the site preference will be used';

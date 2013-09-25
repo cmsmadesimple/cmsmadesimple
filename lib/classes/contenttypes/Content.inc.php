@@ -300,7 +300,7 @@ class Content extends ContentBase
 			if( is_array($_tpl) && count($_tpl) > 0 ) {
 				$_templates = array();
 				foreach( $_tpl as $tpl_id => $tpl_name ) {
-					$_templates[] = array('key'=>$tpl_id,'value'=>$tpl_name);
+					$_templates[] = array('value'=>$tpl_id,'label'=>$tpl_name);
 				}
 			}
 			$_designlist = CmsLayoutCollection::get_list();
