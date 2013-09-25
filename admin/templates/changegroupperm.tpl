@@ -2,6 +2,7 @@
 <p class="pageheader">{$message}</p>
 {/if}
 
+<div class="information">{lang('info_changegroupperms')}{cms_help key2='help_group_permissions'}</div>
 
 <div class="pageoverflow">
 <form method="post" action="{$filter_action}">

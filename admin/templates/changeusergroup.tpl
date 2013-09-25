@@ -1,3 +1,5 @@
+<div class="information">{lang('info_changeusergroup')}&nbsp;{cms_help key2='help_group_permissions'}</div>
+
 {*
 <div id="admin_group_warning" style="display:none">
 {$admin_group_warning}
