@@ -538,15 +538,16 @@ class CmsLayoutTemplate
 			$list2[] = $one;
 		}
 		$list2 = array_unique($list2);
-		if( !count($list2) ) return;
 
-		// get the data and populate the cache.
-		$query = 'SELECT * FROM '.cms_db_prefix().self::TABLENAME.' WHERE id IN ('.implode(',',$list2).')';
-		$db = cmsms()->GetDb();
-		$dbr = $db->GetArray($query);
-		if( is_array($dbr) && count($dbr) ) {
-			foreach( $dbr as $row ) {
-				$ob = self::_load_from_data($row);
+		if( count($list2) ) {
+			// get the data and populate the cache.
+			$query = 'SELECT * FROM '.cms_db_prefix().self::TABLENAME.' WHERE id IN ('.implode(',',$list2).')';
+			$db = cmsms()->GetDb();
+			$dbr = $db->GetArray($query);
+			if( is_array($dbr) && count($dbr) ) {
+				foreach( $dbr as $row ) {
+					$ob = self::_load_from_data($row);
+				}
 			}
 		}
 

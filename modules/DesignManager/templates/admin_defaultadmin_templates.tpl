@@ -186,7 +186,6 @@ $(document).ready(function(){
 	<th title="{$mod->Lang('title_tpl_name')}">{$mod->Lang('prompt_name')}</th>
 	<th title="{$mod->Lang('title_tpl_type')}">{$mod->Lang('prompt_type')}</th>
 	<th title="{$mod->Lang('title_tpl_design')}">{$mod->Lang('prompt_design')}</th>
-	<th title="{$mod->Lang('title_tpl_modified')}">{$mod->Lang('prompt_modified')}</th>
 	<th title="{$mod->Lang('title_tpl_dflt')}" class="pageicon">{$mod->Lang('prompt_dflt')}</th>{* dflt *}
 	<th class="pageicon"></th>{* edit *}
 	{if $has_add_right}
@@ -242,15 +241,12 @@ $(document).ready(function(){
 	    {/if}
 	  </td>
 
-	  {* modified date column *}
-	  <td>{$template->get_modified()|date_format:'%x %X'}</td>
-
 	  {* default column *}
 	  <td>
 	    {assign var='the_type' value=$list_all_types.$type_id}
 	    {if $the_type->get_dflt_flag()}
 	      {if $template->get_type_dflt()}
-		{admin_icon icon='true.gif' title=$mod->Lang('prompt_dflt')}
+		{admin_icon icon='true.gif' title=$mod->Lang('prompt_dflt_tpl')}
 	      {else}
 		{admin_icon icon='false.gif' title=$mod->Lang('prompt_notdflt_tpl')}
 	      {/if}

@@ -43,20 +43,14 @@ final class modulerep_client
   {
     $mod = cms_utils::get_module('ModuleManager');
     $url = $mod->GetPreference('module_repository');
-    if( !$url )
-      {
-	return array(false,$mod->Lang('error_norepositoryurl'));
-      }
+    if( !$url )	return array(false,$mod->Lang('error_norepositoryurl'));
     $url .= '/version';
 
     $req = new modmgr_cached_request();
     $req->execute($url);
     $status = $req->getStatus();
     $result = $req->getResult();
-    if( $status != 200 || $result == '' )
-      {
-	return array(FALSE,$mod->Lang('error_request_problem'));
-      }
+    if( $status != 200 || $result == '' ) return array(FALSE,$mod->Lang('error_request_problem'));
 
     $data = json_decode($result,true);
     return array(true,$data);
@@ -67,36 +61,25 @@ final class modulerep_client
   {
     $mod = cms_utils::get_module('ModuleManager');
     $url = $mod->GetPreference('module_repository');
-    if( !$url )
-      {
-	return array(false,$mod->Lang('error_norepositoryurl'));
-      }
+    if( !$url )	return array(false,$mod->Lang('error_norepositoryurl'));
     $url .= '/moduledetailsgetall';
 
     global $CMS_VERSION;
     $data = array('newest'=>$newest);
-    if( $prefix )
-      {
-	$data['prefix'] = ltrim($prefix);
-      }
-    if( $exact )
-      {
-	$data['exact'] = 1;
-      }
+    if( $prefix ) $data['prefix'] = ltrim($prefix);
+    if( $exact ) $data['exact'] = 1;
     $data['clientcmsversion'] = $CMS_VERSION;
 
     $req = new modmgr_cached_request();
     $req->execute($url,$data);
     $status = $req->getStatus();
     $result = $req->getResult();
-    if( $status == 400 )
-      {
-	return array(true,array());
-      }
-    else if( $status != 200 || $result == '' )
-      {
-	return array(FALSE,$mod->Lang('error_request_problem'));
-      }
+    if( $status == 400 ) {
+      return array(true,array());
+    }
+    else if( $status != 200 || $result == '' ) {
+      return array(FALSE,$mod->Lang('error_request_problem'));
+    }
 
     $data = json_decode($result,true);
     return array(true,$data);
@@ -108,20 +91,14 @@ final class modulerep_client
     $mod = cms_utils::get_module('ModuleManager');
     if( !$xmlfile ) return array(FALSE,$mod->Lang('error_nofilename'));
     $url = $mod->GetPreference('module_repository');
-    if( $url == '' )
-      {
-	return array(FALSE,$mod->Lang('error_norepositoryurl'));
-      }
+    if( $url == '' ) return array(FALSE,$mod->Lang('error_norepositoryurl'));
     $url .= '/moduledepends';
 
     $req = new modmgr_cached_request();
     $req->execute($url,array('name'=>$xmlfile));
     $status = $req->getStatus();
     $result = $req->getResult();
-    if( $status != 200 || $result == '' )
-      {
-	return array(FALSE,$mod->Lang('error_request_problem'));
-      }
+    if( $status != 200 || $result == '' ) return array(FALSE,$mod->Lang('error_request_problem'));
 
     $data = json_decode($result,true);
     return $data;
@@ -138,26 +115,22 @@ final class modulerep_client
     $url = $mod->GetPreference('module_repository');
     if( $url == '' ) return FALSE;
 
-
-    if( $size <= $chunksize )
-    {
+    if( $size <= $chunksize ) {
       // downloading the whole file at one shot.
       $url .= '/modulexml';
       $req = new cms_http_request();
       $req->execute($url,'','POST',array('name'=>$xmlfile));
       $status = $req->GetStatus();
       $result = $req->GetResult();
-      if( $status != 200 || $result == '' )
-	{
-	  $req->clear();
-	  return FALSE;
-	}
+      if( $status != 200 || $result == '' ) {
+	$req->clear();
+	return FALSE;
+      }
       $tmpname = tempnam(TMP_CACHE_LOCATION,'modmgr_');
-      if( !$tmpname ) 
-	{
-	  $req->clear();
-	  return FALSE;
-	}
+      if( !$tmpname ) {
+	$req->clear();
+	return FALSE;
+      }
       $fh = fopen($tmpname,'w');
       fwrite($fh,$result);
       fclose($fh);
@@ -166,32 +139,26 @@ final class modulerep_client
 
     // download in chunks
     $tmpname = tempnam(TMP_CACHE_LOCATION,'modmgr_');
-    if( !$tmpname ) 
-      {
-	return FALSE;
-      }
+    if( !$tmpname ) return FALSE;
     $url .= '/modulegetpart';
     $nchunks = (int)($size / $chunksize);
     if( $size % $chunksize ) $nchunks++;
     $req = new cms_http_request();
-    for( $i = 0; $i < $nchunks; $i++ )
-      {
-	$req->execute($url,'','POST',
-		      array('name'=>$xmlfile,'partnum'=>$i,'sizekb'=>$orig_chunksize));
-	$status = $req->GetStatus();
-	$result = $req->GetResult();
-	if( $status != 200 || $result == '' )
-	  {
-	    unlink($tmpname);
-	    $req->clear();
-	    return FALSE;
-	  }
-
-	$fh = fopen($tmpname,'a');
-	fwrite($fh,base64_decode($result));
-	fclose($fh);
+    for( $i = 0; $i < $nchunks; $i++ ) {
+      $req->execute($url,'','POST', array('name'=>$xmlfile,'partnum'=>$i,'sizekb'=>$orig_chunksize));
+      $status = $req->GetStatus();
+      $result = $req->GetResult();
+      if( $status != 200 || $result == '' ) {
+	unlink($tmpname);
 	$req->clear();
+	return FALSE;
       }
+
+      $fh = fopen($tmpname,'a');
+      fwrite($fh,base64_decode($result));
+      fclose($fh);
+      $req->clear();
+    }
 
     return $tmpname;
   }
@@ -202,20 +169,14 @@ final class modulerep_client
     $mod = cms_utils::get_module('ModuleManager');
     if( !$xmlfile ) return array(FALSE,$mod->Lang('error_nofilename'));
     $url = $mod->GetPreference('module_repository');
-    if( $url == '' )
-      {
-	return array(FALSE,$mod->Lang('error_norepositoryurl'));
-      }
+    if( $url == '' ) return array(FALSE,$mod->Lang('error_norepositoryurl'));
     $url .= '/modulemd5sum';
 
     $req = new cms_http_request();
     $req->execute($url,'','POST',array('name'=>$xmlfile));
     $status = $req->getStatus();
     $result = $req->getResult();
-    if( $status != 200 || $result == '' )
-      {
-	return array(FALSE,$mod->Lang('error_request_problem'));
-      }
+    if( $status != 200 || $result == '' ) return array(FALSE,$mod->Lang('error_request_problem'));
 
     $data = json_decode($result,true);
     return $data;
@@ -235,20 +196,14 @@ final class modulerep_client
 
     $mod = cms_utils::get_module('ModuleManager');
     $url = $mod->GetPreference('module_repository');
-    if( $url == '' )
-      {
-	return array(FALSE,$mod->Lang('error_norepositoryurl'));
-      }
+    if( $url == '' ) return array(FALSE,$mod->Lang('error_norepositoryurl'));
     $url .= '/modulesearch';
 
     $req = new modmgr_cached_request();
     $req->execute($url,array('json'=>json_encode($qparms)));
     $status = $req->getStatus();
     $result = $req->getResult();
-    if( $status != 200 || $result == '' )
-      {
-	return array(FALSE,$mod->Lang('error_request_problem'));
-      }
+    if( $status != 200 || $result == '' ) return array(FALSE,$mod->Lang('error_request_problem'));
 
     $data = json_decode($result,true);
     return array(TRUE,$data);

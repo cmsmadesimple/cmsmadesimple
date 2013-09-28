@@ -256,6 +256,7 @@ $lang['prompt_description'] = 'Description';
 $lang['prompt_descriptive_name'] = 'Descriptive Name';
 $lang['prompt_dest_template'] = 'Destination Template';
 $lang['prompt_dflt'] = 'Default';
+$lang['prompt_dflt_tpl'] = 'This is the default template for its type';
 $lang['prompt_edit'] = 'Edit';
 $lang['prompt_editfilter'] = 'Edit Template Filter';
 $lang['prompt_filter'] = 'Filter';

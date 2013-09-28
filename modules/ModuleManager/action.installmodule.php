@@ -37,83 +37,67 @@
 if (!isset($gCms)) exit;
 
 $active_tab = 'modules';
-if( isset($params['active_tab']) )
-  {
-    $active_tab = $params['active_tab'];
-  }
+if( isset($params['active_tab']) ) $active_tab = $params['active_tab'];
 $_SESSION[$this->GetName()]['active_tab'] = $active_tab;
 
 $allmods = modulerep_client::get_repository_modules('',0);
 $deps = array(array('name'=>$params['name'],'version'=>$params['version'],'filename'=>$params['filename'],
 		    'by'=>'','size'=>$params['size']));
-if (! $allmods[0])
-  {
-    $this->_DisplayErrorPage( $id, $params, $returnid, $allmods[1] );
-    return;
-  }
+if (! $allmods[0]) {
+  $this->_DisplayErrorPage( $id, $params, $returnid, $allmods[1] );
+  return;
+}
 $ret = modmgr_utils::add_dependencies_to_list($params['filename'],$allmods,$deps);
-if (!$ret[0])
-  {
-    $this->_DisplayErrorPage( $id, $params, $returnid, $ret[1]);
-    return;
-  }
+if (!$ret[0] ) {
+  $this->_DisplayErrorPage( $id, $params, $returnid, $ret[1]);
+  return;
+}
 // de-dupe list
 $deps = modmgr_utils::remove_duplicate_dependencies($deps);
 modmgr_utils::find_unfulfilled_dependencies($deps);
 $tmp = array();
-foreach( $deps as $onedep )
-{
-  if ($onedep['status'] != 's') 
-    {
-      $tmp[] = $onedep;
-    }
+foreach( $deps as $onedep ) {
+  if ($onedep['status'] != 's') $tmp[] = $onedep;
 }
 $deps = $tmp;
 
 $smarty->assign('link_back',$this->CreateLink($id,'defaultadmin',$returnid, $this->Lang('back_to_module_manager')));	
 		
-if( count($deps) == 0 )
-  {
-    // nothing to upgrade?
-    $_SESSION[$this->GetName()]['tab_message'] = $this->Lang('error_noupgrade');
-    $this->Redirect($id,'defaultadmin');
-  }
+if( count($deps) == 0 ) {
+  // nothing to upgrade?
+  $_SESSION[$this->GetName()]['tab_message'] = $this->Lang('error_noupgrade');
+  $this->Redirect($id,'defaultadmin');
+}
 
 $smarty->assign('time_warning',$this->Lang('time_warning'));
-if (count($deps) > 1)
-  {
-    $smarty->assign('installmodule',modmgr_utils::file_to_module_name($allmods[1],$params['filename']));
-    $smarty->assign('dependencies',$deps);
+if (count($deps) > 1) {
+  $smarty->assign('installmodule',modmgr_utils::file_to_module_name($allmods[1],$params['filename']));
+  $smarty->assign('dependencies',$deps);
 
-    $smarty->assign('mod',$this);
-    $smarty->assign('form_start',$this->CreateFormStart($id, 'doinstall', $returnid).
-			  $this->CreateInputHidden($id,'modlist',base64_encode(serialize($deps))));
-    $smarty->assign('submit', $this->CreateInputSubmit($id, 'submit', $this->Lang('install_submit')));
-    $smarty->assign('cancel', $this->CreateInputSubmit($id, 'cancel', lang('cancel')));
-    $smarty->assign('formend',$this->CreateFormEnd());
-    echo $this->ProcessTemplate('installinfo.tpl');
-    return;
-  }
+  $smarty->assign('mod',$this);
+  $smarty->assign('form_start',$this->CreateFormStart($id, 'doinstall', $returnid).
+		  $this->CreateInputHidden($id,'modlist',base64_encode(serialize($deps))));
+  $smarty->assign('submit', $this->CreateInputSubmit($id, 'submit', $this->Lang('install_submit')));
+  $smarty->assign('cancel', $this->CreateInputSubmit($id, 'cancel', lang('cancel')));
+  $smarty->assign('formend',$this->CreateFormEnd());
+  echo $this->ProcessTemplate('installinfo.tpl');
+  return;
+}
 
 // only one module.
 $keys = array_keys($deps);
 $key = $keys[0];
 $smarty->assign('mod',$this);
 $res = modmgr_utils::install_module($deps[$key],($deps[$key]['status'] == 'u')?1:0);
-if( is_array($res) && $res[0] == TRUE )
-  {
-    $this->Redirect($id,'display_install_results');
-  }
+if( is_array($res) && $res[0] == TRUE ) $this->Redirect($id,'display_install_results');
 
 // some kind of error occurred.
-if( !is_array($res) )
-  {
-    $smarty->assign('message',$this->ShowErrors($this->Lang('error_internal')));
-  }
-else if( $res[0] == FALSE )
-  {
-    $smarty->assign('message',$this->ShowErrors($res[1]));
-  }
+if( !is_array($res) ) {
+  $smarty->assign('message',$this->ShowErrors($this->Lang('error_internal')));
+}
+else if( $res[0] == FALSE ) {
+  $smarty->assign('message',$this->ShowErrors($res[1]));
+}
 echo $this->ProcessTemplate('installinfo.tpl');
 
 #
