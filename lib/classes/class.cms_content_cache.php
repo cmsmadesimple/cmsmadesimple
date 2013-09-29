@@ -70,7 +70,6 @@ final class cms_content_cache
 		if( is_array($content_ids) && count($content_ids) ) {
 			$this->_preload_cache = $content_ids;
 			$contentops = ContentOperations::get_instance();
-			$deep = false;
 			$tmp = $contentops->LoadChildren(null,$deep,false,$content_ids);
 		}
 	}
