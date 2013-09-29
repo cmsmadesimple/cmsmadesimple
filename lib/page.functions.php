@@ -406,6 +406,7 @@ function & stripslashes_deep(&$value)
  * @param string  Optional additional text to include in the textarea tag
  * @return string
  * @deprecated
+ * @see CmsFormUtils::create_textarea
  */
 function create_textarea($enablewysiwyg, $text, $name, $classname = '', $id = '', $encoding = '', $stylesheet = '', $width = '80', $height = '15', $forcewysiwyg = '', $wantedsyntax = '', $addtext = '')
 {
@@ -413,13 +414,13 @@ function create_textarea($enablewysiwyg, $text, $name, $classname = '', $id = ''
   $parms['enablewysiwyg'] = $enablewysiwyg;
   $parms['text'] = $text;
   $parms['name'] = $name;
-  if( $classname ) $parms['classname'] = $classname;
+  if( $classname ) $parms['class'] = $classname;
   if( $id ) $parms['id'] = $id;
   if( $encoding ) $parms['encoding'] = $encoding;
   //  if( $stylesheet ) $parms['stylesheet'] = $stylesheet; // ignored
-  if( $width ) $parms['width'] = $width;
-  if( $height ) $parms['height'] = $height;
-  if( $forcewysiwyg ) $parms['forcewysiwyg'] = $forcewysiwyg;
+  if( $width ) $parms['rows'] = $width;
+  if( $height ) $parms['cols'] = $height;
+  if( $forcewysiwyg ) $parms['forcemodule'] = $forcewysiwyg;
   if( $wantedsyntax ) $parms['wantedsyntax'] = $wantedsyntax;
   if( $addtext ) $parms['addtext'] = $addtext;
 

@@ -2322,19 +2322,20 @@ abstract class CMSModule
    * @param string Any additional text to include with the textarea field.
    * @return string
    * @deprecated
+   * @see CmsFormUtils::create_textarea
    */
   function CreateTextArea($enablewysiwyg, $id, $text, $name, $classname='', $htmlid='', $encoding='', $stylesheet='', $cols='80', $rows='15',$forcewysiwyg='',$wantedsyntax='',$addtext='')
   {
 	  $parms = array();
 	  $parms['enablewysiwyg'] = $enablewysiwyg;
 	  $parms['name'] = $id.$name;
-	  if( $classname ) $parms['classname'] = $classname;
+	  if( $classname ) $parms['class'] = $classname;
 	  if( $htmlid ) $parms['id'] = $htmlid;
 	  if( $encoding ) $parms['encoding'] = $encoding;
 	  if( $stylesheet ) $parms['stylesheet'] = $stylesheet;
-	  if( $cols ) $parms['width'] = $cols;
-	  if( $rows ) $parms['height'] = $rows;
-	  if( $forcewysiwyg ) $parms['forcewysiwyg'] = $forcewysiwyg;
+	  if( $cols ) $parms['rows'] = $cols;
+	  if( $rows ) $parms['cols'] = $rows;
+	  if( $forcewysiwyg ) $parms['forcemodule'] = $forcewysiwyg;
 	  if( $wantedsyntax ) $parms['wantedsyntax'] = $wantedsyntax;
 	  if( $addtext ) $parms['addtext'] = $addtext;
 

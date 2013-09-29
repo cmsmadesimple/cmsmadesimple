@@ -34,6 +34,7 @@ if( isset($params['submit_filter_tpl']) ) {
 }
 else if( isset($params['submit_filter_css']) ) {
 	$this->SetCurrentTab('stylesheets');
+	$filter_css_rec['design'] = trim($params['filter_css_design']);
 	$filter_css_rec['sortby'] = trim($params['filter_css_sortby']);
 	$filter_css_rec['sortorder'] = trim($params['filter_css_sortorder']);
 	$filter_css_rec['limit'] = max(2,min(100,(int)$params['filter_limit_css']));

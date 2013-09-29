@@ -118,30 +118,32 @@ final class CmsFormUtils
     return self::$_activated_wysiwyg;
   }
 
-
   /**
    * A method to create a text area control
+   * parameters:
+   *   name          = (required string) name attribute for the text area element.
+   *   id            = (optional string) id attribute for the text area element.  If not specified, name is used.
+   *   class/classname = (optional string) class attribute for the text area element.  Some values will be added to this string.  
+   *                   default is cms_textarea
+   *   forcemodule   = (optional string) used to specify the module to enable.  If specified, the module name will be added to the 
+   *                   class attribute.
+   *   enablewysiwyg = (optional boolan) used to specify wether a wysiwyg textarea is required.  sets the language to html.
+   *   wantedsyntax  = (optional string) used to specify the language (html,css,php,smarty) to use.  If non empty indicates that a 
+   *                   syntax hilighter module is requested.
+   *   cols/width    = (optional integer) columns of the text area (css or the syntax/wysiwyg module may override this)
+   *   rows/height   = (optional integer) rows of the text area (css or the syntax/wysiwyg module may override this)
+   *   maxlength     = (optional integer) maxlength attribute of the text area (syntax/wysiwyg module may ignore this)
+   *   required      = (optional boolean) indicates a required field.
+   *   placeholder   = (optional string) placeholder attribute of the text area (syntax/wysiwyg module may ignore this)
+   *   value/text    = (optional string) default text for the placeholder, will undergo entity conversion before returning.
+   *   encoding      = (optional string) default utf-8 encoding for entity conversion.
+   *   addtext       = (optional string) additional text to add to the textarea tag.
    *
-   * @internal
-   * @access private
-   * @param boolean Wether or not we are enabling a wysiwyg.  If false, and forcewysiwyg is not empty then a syntax area is used.
-   * @param string  The contents of the text area
-   * @param string  The name of the text area
-   * @param string  An optional class name
-   * @param string  An optional ID (HTML ID) value
-   * @param string  The optional encoding
-   * @param string  Optional style information
-   * @param integer Width (the number of columns) (CSS can and will override this)
-   * @param integer Hieght (the number of rows) (CSS can and will override this)
-   * @param string  Optional name of the syntax hilighter or wysiwyg to use.  If empty, preferences indicate which a syntax editor or wysiwyg should be used.
-   * @param string  Optional name of the language used.  If non empty it indicates that a syntax highlihter will be used.
-   * @param string  Optional additional text to include in the textarea tag
+   * note: if wantedsyntax is empty, AND enablewysiwyg is false, then just a plain text area is creeated.
+   *
+   * @param array   an associative array with parameters.
    * @return string
-   * @deprecated
    */
-//   public static function create_textarea($enablewysiwyg, $text, $name, $classname = '', $id = '', 
-// 			   $encoding = '', $stylesheet = '', $width = '80', $height = '15', 
-// 			   $forcewysiwyg = '', $wantedsyntax = '', $addtext = '')
   public static function create_textarea($parms)
   {
     // todo: rewrite me with var args... to accept a numeric array of arguments, or a hash.
@@ -150,34 +152,54 @@ final class CmsFormUtils
     $result = '';
     $uid = get_userid(false);
     $attribs = array();
+    $module = null;
     $attribs['name'] = get_parameter_value($parms,'name');
     if( !$attribs['name'] ) throw new CmsInvalidDataException('"name" is a required parameter"');
     $attribs['id'] = get_parameter_value($parms,'id',$attribs['name']);
     $attribs['class'] = get_parameter_value($parms,'class','cms_textarea');
     $attribs['class'] = get_parameter_value($parms,'classname',$attribs['class']);
 
-    $enablewysiwyg = cms_to_bool(get_parameter_value($parms,'enablewysiwyg','false'));
-    $forcewysiwyg = cms_to_bool(get_parameter_value($parms,'forcewysiwyg'));
-    if ($enablewysiwyg == true || $forcewysiwyg) {
-      $haveit = TRUE;
-      $module = cms_utils::get_wysiwyg_module($forcewysiwyg);
-      if( $module ) {
+    $forcemodule = get_parameter_value($parms,'forcemodule');
+    $enablewysiwyg = cms_to_bool(get_parameter_value($parms,'enablewysiwyg','false')); // if not false, we want a wysiwyg area
+    $wantedsyntax = get_parameter_value($parms,'wantedsyntax'); // if not null, and no wysiwyg found, use a syntax area.
+
+    if( $enablewysiwyg ) {
+      $module = cmsms()->GetModuleOperations()->GetWYSIWYGModule($forcemodule);
+      if( $module && $module->HasCapability('wysiwyg') ) {
+	if( $forcemodule ) {
+	  $attribs['class'] .= ' '.$module->GetName();
+	}
+	else {
+	  $attribs['class'] .= ' cms_wysiwyg';
+	}
+	$attribs['data-cms-lang'] = 'html';
 	self::_add_wysiwyg($module->GetName());
-	$attribs['class'] .= " cms_wysiwyg ".$module->GetName();
+      } else {
+	// just incase forced module is not a wysiwyg module.
+	$module = null;
       }
     }
 
-    $wantedsyntax = get_parameter_value($parms,'wantedsyntax');
-    if( !$haveit && $wantedsyntax ) {
-      // here we should get a list of installed/available modules.
-      $haveit = TRUE;
-      $module = cmsms()->GetModuleOperations()->GetSyntaxHighlighter($wantedsyntax);
-      if( $module ) {
+    if( !$module && $wantedsyntax ) {
+      $attribs['data-cms-lang'] = 'smarty';
+      $module = cmsms()->GetModuleOperations()->GetSyntaxHighlighter($forcemodule);
+      if( $module && $module->HasCapability('syntaxhighlighting') ) {
+	if( $forcemodule ) {
+	  $attribs['class'] .= ' '.$module->GetName();
+	}
+	else {
+	  $attribs['class'] .= ' cms_syntaxarea';
+	}
+	$attribs['data-cms-lang'] = trim($wantedsyntax);
 	self::_add_syntax($module->GetName());
-	$attribs['class'] .= " cms_syntaxarea ".$module->GetName();
+      } else {
+	// wanted a syntax module, but couldn't find one... 
+	$module = null;
       }
     }
-
+    
+    $required = cms_to_bool(get_parameter_value($parms,'required','false'));
+    if( $required ) $attribs['required'] = 'required';
     $attribs['cols'] = get_parameter_value($parms,'cols');
     $attribs['cols'] = get_parameter_value($parms,'width',$attribs['cols']);
     if( $attribs['cols'] < 0 ) $attribs['cols'] = '';
@@ -187,7 +209,6 @@ final class CmsFormUtils
     $attribs['maxlength'] = get_parameter_value($parms,'maxlength');
     if( $attribs['maxlength'] < 0 ) $attribs['maxlength'] = '';
     $attribs['placeholder'] = get_parameter_value($parms,'placeholder');
-    $attribs['required'] = get_parameter_value($parms,'required');
 
     $addtext = get_parameter_value($parms,'addtext');
     $text = get_parameter_value($parms,'value');
@@ -196,7 +217,11 @@ final class CmsFormUtils
 
     $result = '<textarea';
     foreach( $attribs as $key => $val ) {
-      if( $val != '' ) $result .= " {$key}=\"{$val}\"";
+      if( $val != '' && $key != '' ) {
+	$key = trim($key);
+	$val = trim($val);
+	$result .= " {$key}=\"{$val}\"";
+      }
     }
     if( !empty( $addtext ) ) $result .= ' '.$addtext;
     $result .= '>'.cms_htmlentities($text,ENT_NOQUOTES,get_encoding($encoding)).'</textarea>';

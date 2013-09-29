@@ -36,6 +36,15 @@ $(document).ready(function(){
   {form_start id='filtercssdlg_form'}{*strip*}
     <input type="hidden" name="{$actionid}submit_filter_css" value="1"/>
     <div class="pageoverflow">
+      <p class="pagetext"><label for="filter_css_design">{$mod->Lang('prompt_design')}:</label></p>
+      <p class="pageinput">
+        <select id="filter_css_design" name="{$actionid}filter_css_design" title="{$mod->Lang('title_sortby_design')}">
+          <option value="">{$mod->Lang('any')}</option>
+	  {html_options options=$design_names selected=$css_filter.design}
+        </select>
+      </p>
+    </div>
+    <div class="pageoverflow">
       <p class="pagetext"><label for="filter_css_sortby">{$mod->Lang('prompt_sortby')}:</label></p>
       <p class="pageinput">
         <select id="filter_css_sortby" name="{$actionid}filter_css_sortby" title="{$mod->Lang('title_sortby')}">
@@ -76,11 +85,12 @@ $(document).ready(function(){
       <li class="parent">{admin_icon icon='run.gif' alt=$mod->Lang('prompt_options')}&nbsp;{$mod->lang('prompt_options')}
         <ul id="popupcsscontents">
            <li><a id="addcss" accesskey="a" href="{cms_action_url action='admin_edit_css'}" title="{$mod->Lang('create_stylesheet')}">{admin_icon icon='newobject.gif'} {$mod->Lang('create_stylesheet')}</a></li>
-	   {if isset($stylesheets)}
            <li><a id="editcssfilter" accesskey="f" title="{$mod->Lang('prompt_editfilter')}">{admin_icon icon='edit.gif' alt=$mod->Lang('prompt_editfilter')} {$mod->Lang('filter')}</a></li>
-	   {/if}
         </ul>
       </li>
+      {if $css_filter != '' && $css_filter.design != ''}
+      <li><span style="color: green;" title="{$mod->Lang('title_filterapplied')}">{$mod->Lang('filterapplied')}</span></li>
+      {/if}
     </ul>
   </div>
 
@@ -187,6 +197,8 @@ $(document).ready(function(){
   {/capture}
 
   <div class="clearb"></div>
+{else}
+  <div class="warning">{$mod->Lang('warning_no_stylesheets')}</div>
 {/if}
 
 <div class="row">

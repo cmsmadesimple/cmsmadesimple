@@ -45,19 +45,23 @@ class CmsLayoutStylesheetQuery extends CmsDbQueryBase
     $where = array();
     foreach( $this->_args as $key => $val ) {
       if( empty($val) ) continue;
-      if( is_numeric($key) && $val[1] == ':' ) {
-				list($key,$second) = explode(':',$val,2);
-      }
+      if( is_numeric($key) && $val[1] == ':' ) list($key,$val) = explode(':',$val,2);
       switch( strtolower($key) ) {
       case 'n': // name (prefix)
-				$second = trim($second);
-				$where[] = 'name LIKE '.$db->qstr($second.'%');
+      case 'name': // name (prefix)
+				$val = trim($val);
+				$where[] = 'name LIKE '.$db->qstr($val.'%');
 				break;
       case 'd': // design
-				$q2 = 'SELECT css_id FROM '.cms_db_prefix().CmsLayoutCollection::CSSTABLE.'
-               WHERE design_id = ?';
-				$tpls = $db->GetCol($q2,array((int)$second));
-				$where[] = 'id IN ('.implode(',',$tpls).')';
+			case 'design':
+				$q2 = 'SELECT css_id FROM '.cms_db_prefix().CmsLayoutCollection::CSSTABLE.' WHERE design_id = ?';
+				$tpls = $db->GetCol($q2,array((int)$val));
+				if( is_array($tpls) && count($tpls) ) {
+					$where[] = 'id IN ('.implode(',',$tpls).')';
+				}
+				else {
+					$where[] = 'id IN (-1)';
+				}
 				break;
       case 'limit':
 				$this->_limit = max(1,min(1000,$val));
@@ -87,7 +91,7 @@ class CmsLayoutStylesheetQuery extends CmsDbQueryBase
     $query .= ' ORDER BY '.$this->_sortby.' '.$this->_sortorder;
 
     $this->_rs = $db->SelectLimit($query,$this->_limit,$this->_offset);
-    if( !$this->_rs ) throw new CmsSQLErrorException($db->sql.' -- '.$db->ErrorMsg());
+    if( $db->ErrorMsg() != '' ) throw new CmsSQLErrorException($db->sql.' -- '.$db->ErrorMsg());
     $this->_totalmatchingrows = $db->GetOne('SELECT FOUND_ROWS()');
   }
 
