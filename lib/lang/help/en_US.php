@@ -507,7 +507,9 @@ $lang['help_designmanager_help'] = <<<EOT
   <p>The categories tab is a simple interface that allows creating, editing, removing and re-ordering categories.  Categories can be re-ordered by dragging and dropping them into the desired order.</p>
   <p>Editing a category allows specifying a description for the category.  The description is useful for keeping a note as to the purpose of the category.</p>
 <h3>Managing Template Types</h3>
+  <p>Users with sufficient privilege can adjust the prototype template, and description for each template type.  The prototype template will be used as the default contents for the template when creating a new template of that type.</p>
 <h3>Managing Stylesheets</h3>
+  <p>The stylesheets tab
 <h3>Managing Designs</h3>
   <h4>Importing Designs</h4>
   <h4>Exporting Desings</h4>

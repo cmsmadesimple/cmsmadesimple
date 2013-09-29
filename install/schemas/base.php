@@ -4,7 +4,7 @@ global $admin_user;
 $db = CmsInstaller::get_db();
 $dir = dirname(dirname(__FILE__)).time();
 
-$query = 'INSERT INTO '.$db_prefix.'version VALUES (37)';
+$query = 'INSERT INTO '.$db_prefix.'version VALUES (200)';
 $db->Execute($query);
 
 //
