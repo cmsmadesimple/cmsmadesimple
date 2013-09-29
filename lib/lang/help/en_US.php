@@ -441,27 +441,27 @@ $lang['help_designmanager_help'] = <<<EOT
     </li>
   </ul>
 <h3>Maaging Templates</h3>
- <p>The templates tab displays a list of templates matching the current filter <em>(if applied)</em> in a tabular format, with pagination.  Each row ofthe table represents a single template.  The columns of the table displays summary information about the template, and provides some ability to interact with them.</p>
- <p>A dropdown providing the ability to switch between pages of templates that match the current filter will appear if more than one page of templates exists.</p>
- <p>An options menu exists providing the ability to adjust the current filter, or to create a new template <em>(depending upon permissions).  The filter dialog allows filtering the displayed templates by a number of critera, as well as changing the page limit, and sorting of displayed templates.</p>
- <h4>Columns</h4>
+ <p>The templates tab displays a list of templates matching the current filter <em>(if applied)</em> in a tabular format, with pagination.  Each row of the table represents a single template.  The columns of the table displays summary information about the template, and provides some ability to interact with it.</p>
+ <p>A dropdown providing the ability to switch between pages of templates that match the current filter will appear if more than one page of templates match the current filter.</p>
+ <p>An options menu exists providing the ability to adjust the current filter, or to create a new template <em>(depending upon permissions)</em>.  The filter dialog allows filtering the displayed templates by a number of critera, as well as changing the page limit, and sorting of displayed templates.</p>
+   <h4>Table Columns:</h4>
    <ul>
-     <li>Id
+     <li>Id:
        <p>This displays the unique numeric id for the template.  Clicking on the link in this column will bring up the edit template form.  Hovering over the link will display a tooltip with further information about the template.</p>
      </li>
-     <li>Name
+     <li>Name:
        <p>This displays a unique textual name for the template.  Clicking on the link in this column will bring up the edit template form.  Hovering over the link will display a tooltip with further information about the template.</p>
      </li>
-     <li>Type
+     <li>Type:
        <p>This displays the template type.  Hovering over the type name will display a tooltip with further information about the template type.</p>
      </li>
-     <li>Design
+     <li>Design:
        <p>This column displays the design(s) that this template is associated with (if any).  If the template is associated with multiple designs a tooltip will display a list of the first few designs that this template is associated with.</p>
      </li>
-     <li>Default
+     <li>Default:
        <p>This column displays an icon indicating if the template is the default for its type.</p>
      </li>
-     <li>Actions
+     <li>Actions:
        <p>Depending upon user privileges there will be one or more icons displayed in this column to perform various actions on, or with the template:</p>
        <ul>
           <li>Edit - Display a form to edit the contents and attributes of the template.</li>
@@ -470,25 +470,25 @@ $lang['help_designmanager_help'] = <<<EOT
        </ul>
        
      </li>
-     <li>Multiselect
+     <li>Multiselect:
 	  <p>This column (depending upon permissions) will display a checkbox allowing the selection of multiple templates to perform actions on all of them simultaneously.</p>
      </li>
    </ul>
-  <h4>Bulk Actions</h4>
-    <p>This is a dropdown with options <em>(currently only delete)</em> to perform on multiple templates at one time.  Use extreme caution when performing bulk actions, as doing so could severely effect a working website.</p>
+   <h4>Bulk Actions:</h4>
+    <p>This is a dropdown with options <em>(currently only delete)</em> to perform on multiple templates at one time.  Use extreme caution when performing bulk actions as doing so could severely effect a working website.</p>
   <h4>Editing Templates</h4>
     <p>The edit template form is a complex form that allows management of all of the attributes of a template.  For convenience the form is devided into numerous tabs.</p>
     <p>This form supports the &quot;dirtyform&quot; functionality to reduce the chances of accidentally losing unsaved changes.  Users will be notified if attempting to navigate away from this page if the template has not been saved.</p>
     <p>This form locks the selected template so that other authorized editors will not have the ability to edit the template at the same time.  This prevents somebody else from accidentally overwriting changes of another editor.</p>
     <ul>
       <li>Name:
-         <p>This text string uniquely identifies the template.  The system will genrate an error when saving the template if the name is already used.</p>
+         <p>This text string uniquely identifies the template.  The system will genrate an error when saving the template if the name is already used on another template.</p>
       </li>
       <li>Template Content:
         <p>This text area displays the actual smarty template.  If a syntax hilighter module is installed, and enabled, and the user has enabled it in his settings, then it will be enabled in this area to provide advanced editing capabilities.</p>
       </li>
       <li>Description:
-        <p>This text area provides the ability to describe the purpose of the templates, and any useful notes about the template.</p>
+        <p>This text area provides the ability to describe the purpose of the templates, and notes that may be useful to editors in the future.</p>
       </li>
       <li>Designs:
         <p>Depending upon permission levels, this tab will allow associating the template with zero or more desings.</p>
@@ -504,12 +504,65 @@ $lang['help_designmanager_help'] = <<<EOT
       </li>
     </ul>
 <h3>Managing Categories</h3>
+  <p>The &quot;Modify Templates&quot; permission is required to see this tab, and its associated actions.</p>
   <p>The categories tab is a simple interface that allows creating, editing, removing and re-ordering categories.  Categories can be re-ordered by dragging and dropping them into the desired order.</p>
   <p>Editing a category allows specifying a description for the category.  The description is useful for keeping a note as to the purpose of the category.</p>
 <h3>Managing Template Types</h3>
+  <p>The &quot;Modify Templates&quot; permission is required to see this tab, and its associated actions.</p>
   <p>Users with sufficient privilege can adjust the prototype template, and description for each template type.  The prototype template will be used as the default contents for the template when creating a new template of that type.</p>
 <h3>Managing Stylesheets</h3>
-  <p>The stylesheets tab
+    <p>The stylesheets tab is available to users with the &quot;Manage Stylesheets&quot; permission. It displays a paginated list of all stylesheets matching the current filter <em>(if applied)</em> in a tabular format.  Each row of the table represents a single stylesheet.  The columns of the table displays summary information about the stylesheet and provides some ability to interact with it.</p>
+  <p>A dropdown providing the ability to switch between pages of stylesheets that match the current filter will appear if more than one page of stylesheets match the current filter.</p>
+  <p>An options menu exists providing the ability to adjust the current filter, or to create a new stylesheet <em>(depending upon permissions).</em>  The filter dialog allows filtering, sorting, and paginating the displayed stylesheets by a number of critera.</p>
+  <h4>Table Columns:</h4>
+  <ul>
+    <li>Id:
+     <p>This displays a link containing unique numeric id for the stylesheet.   Clicking on this link will display the edit stylesheet form.  Hovering over the link will display a tooltip with further information about the stylesheet.</p>
+    </li>
+    <li>Name:
+     <p>This displays the unique textual name for the stylesheet as a link.  Clicking on this link will display the edit stylesheet form.  Hoevering over the link will display a tooltip with further information about the stylesheet.</p>
+    </li>
+    <li>Design:
+      <p>This column displays the design(s) that this stylesheet is associated with (if any).  If the stylesheet is associated with multiple designs a tooltip will display a list of the first fiew designs.</p>
+    </li>
+    <li>Modified Date:
+      <p>This column displays the date that the stylesheet was last modified.</p>
+    </li>
+    <li>Actions:
+      <ul>
+        <li>Edit - Clicking on this icon will display the edit stylesheet form.</li>
+        <li>Delete - Clicking on this icon will display a form to allow deleting thestylesheet.  Extra confirmation is required for this action.</li>
+      </ul>
+    </li>
+    <li>Multiselect:
+      <p>This column displays a checkbox allowing the selection of multiple stylesheets to perform bulk actions on all of them simultaneously.</p>
+    </li>
+  </ul>
+  <h4>Bulk Actions:</h4>
+    <p>This mini form contains a dropdown with options <em>(currently only delete)</em> to perform on the selected stylesheets.  Use extreme caution when performing bulk actions as doing so could severely effect a working website.</p>
+  <h4>Editing Stylesheets</h4>
+    <p>The edit stylesheet form is a complex form that allows management of all of the attributes of a stylesheet.  for convenience the form is devided into numerous tabs.  It supports the &quot;dirtyform&quot; functionality to reduce the chances of accidentally losing unsaved changes, and supports locking to prevent other authorized editors from accidentally overwriting changes.</p>
+    <p>Here are some of the attributes of a stylesheet that can be edited:</p>
+    <ul>
+      <li>Name:
+        <p>This text string uniquely identifies the stylesheet.  The system will generate an error when saving the stylesheet if the name is already used by another stylesheet.</p>
+      </li>
+      <li>Stylesheet Content:
+        <p>This text area displays the actual CSS code.  If a syntax hilighter module is installed, supports hiliting CSS code, is enabled, and the user has enabled it in his settings, then it will be enabled in this area to provide advanced editing capabilities.</p>
+      </li>
+      <li>Media Types <em style="color: red;">(deprecated)</em>:
+        <p>This tab provides numerous checkboxes allowing you to select media types to associate with the stylesheet.  It is preferred to use media queries instead, and this functionality may be removed at a later date.</p>
+      </li>
+      <li>Media Query:
+        <p>This tab provides a text area where a media query can be associated with the stylesheet.</p>
+      </li>
+      <li>Description:
+        <p>The text area in this tab provides the ability to describe the purpose of the stylesheets, and any notes that may be useful to editors in the future..</p>
+      </li>
+      <li>Designs:
+        <p>This tab provides the ability to associate the stylesheet with one or more designs.  If any new design associations are detected this stylesheet will be placed at the end of the stylesheet list for that design.</p>
+      </li>
+    </ul>
 <h3>Managing Designs</h3>
   <h4>Importing Designs</h4>
   <h4>Exporting Desings</h4>
