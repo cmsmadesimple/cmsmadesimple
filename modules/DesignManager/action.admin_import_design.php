@@ -24,16 +24,12 @@ if( !$this->CheckPermission('Manage Designs') ) return;
 $this->SetCurrentTab('designs');
 
 if( isset($params['cancel']) ) {
-  if( $params['cancel'] == $this->Lang('cancel') ) {
-    $this->SetMessage($this->Lang('msg_cancelled'));
-  }
+  if( $params['cancel'] == $this->Lang('cancel') ) $this->SetMessage($this->Lang('msg_cancelled'));
   $this->RedirectToAdminTab();
 }
 
 $step = 1;
-if( isset($params['step']) ) {
-  $step = (int)$params['step'];
-}
+if( isset($params['step']) ) $step = (int)$params['step'];
 
 try {
   switch( $step ) {
@@ -42,29 +38,22 @@ try {
       if( isset($params['next1']) ) {
 				// check for uploaded file
 				$key = $id.'import_xml_file';
-				if( !isset($_FILES[$key]) || $_FILES[$key]['name'] == '' ) {
-					throw new CmsException($this->Lang('error_nofileuploaded'));
-				}
+				if( !isset($_FILES[$key]) || $_FILES[$key]['name'] == '' ) throw new CmsException($this->Lang('error_nofileuploaded'));
 				if( $_FILES[$key]['error'] != 0 || $_FILES[$key]['tmp_name'] == '' || $_FILES[$key]['type'] == '') {
 					throw new CmsException($this->Lang('error_uploading','xml'));
 				}
-				if( $_FILES[$key]['type'] != 'text/xml' ) {
-					throw new CmsException($this->Lang('error_upload_filetype'));
-				}
+				if( $_FILES[$key]['type'] != 'text/xml' ) throw new CmsException($this->Lang('error_upload_filetype'));
 
 				$reader = dm_reader_factory::get_reader($_FILES[$key]['tmp_name']);
 				$reader->validate();
 
 				// copy uploaded file to temporary location
 				$tmpfile = tempnam(TMP_CACHE_LOCATION,'dm_');
-				if( $tmpfile === FALSE ) {
-					throw new CmsException($this->Lang('error_create_tempfile'));
-				}
+				if( $tmpfile === FALSE ) throw new CmsException($this->Lang('error_create_tempfile'));
 				@copy($_FILES[$key]['tmp_name'],$tmpfile);
 
 				// redirect to this action, with step2.
-				$this->Redirect($id,'admin_import_design',$returnid,
-												array('step'=>2,'tmpfile'=>$tmpfile));
+				$this->Redirect($id,'admin_import_design',$returnid,array('step'=>2,'tmpfile'=>$tmpfile));
       }
     }
     catch( CmsException $e ) {

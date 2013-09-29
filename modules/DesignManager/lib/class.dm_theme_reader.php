@@ -42,9 +42,7 @@ class dm_theme_reader extends dm_reader_base
 
     $__get_in = function() use ($in) {
       global $in;
-      if( ($n = count($in)) ) {
-				return $in[$n-1];
-      }
+      if( ($n = count($in)) ) return $in[$n-1];
     };
 
 		if( $this->_scanned ) return;
@@ -181,6 +179,17 @@ class dm_theme_reader extends dm_reader_base
 						$this->_xml->read();
 						$this->_ref_map[$cur_key]['location'] = $this->_xml->value;
 						break;
+
+// 					case 'assoc_tname':
+// 					case 'assoc_cssname':
+// 						if( $__get_in() != 'assoc' ) {
+// 							// validity error.
+// 						}
+// 						$this->_xml->read();
+// 						$tmp = $this->_xml->value;
+// 						list($a,$cur_key) = explode(':',$tmp);
+// 						if( $cur_key ) $cur_key = trim($cur_key);
+// 						if( !isset($this->_ref_map[$cur_key]) ) $this->_ref_map[$cur_key] = array();
 					}
 					break;
 
@@ -216,9 +225,9 @@ class dm_theme_reader extends dm_reader_base
 		if( count($this->_css_info) == 0 ) {
 			throw new CmsException('Invalid XML FILE (test3)');
 		}
-		if( count($this->_ref_map) == 0 ) {
-			throw new CmsException('Invalid XML FILE (test3)');
-		}
+// 		if( count($this->_ref_map) == 0 ) {
+// 			throw new CmsException('Invalid XML FILE (test4)');
+// 		}
     // it validates.
   }
 
@@ -391,9 +400,7 @@ class dm_theme_reader extends dm_reader_base
 														 }
 														 return $matches[0];
 													 },$css_rec['data']);
-			if( isset($css_rec['media_type']) ) {
-				$stylesheet->add_media_type($css_rec['mediatype']);
-			}
+			if( isset($css_rec['media_type']) ) $stylesheet->add_media_type($css_rec['mediatype']);
 			$stylesheet->set_content($css_rec['data']);
 			$stylesheet->save();
 			$design->add_stylesheet($stylesheet);
@@ -417,8 +424,7 @@ class dm_theme_reader extends dm_reader_base
 		$fn2 = function($matches) use ($ob,&$type,$ref_map,$destdir) {
 			$config = cmsms()->GetConfig();
 			$url = $matches[2];
-			if( !startswith($url,'http') || startswith($url,$config['root_url']) || 
-					startswith($url,'{root_url}') ) {
+			if( !startswith($url,'http') || startswith($url,$config['root_url']) || startswith($url,'{root_url}') ) {
 				$bn = basename($url);
 				if( isset($ref_map[$bn]) ) {
 					$out = $ref_map[$bn]['tpl_url'];
@@ -439,8 +445,7 @@ class dm_theme_reader extends dm_reader_base
 			foreach( $types as $type ) {
 				$tmp_type = $type;
         $innerT = '[a-z0-9:?=&@/._-]+?';
-        $content = preg_replace_callback("|$type\=([\"'`])(".$innerT.")\\1|i", 
-																					$fn2,$content);
+        $content = preg_replace_callback("|$type\=([\"'`])(".$innerT.")\\1|i", $fn2,$content);
 			}
 			
 			$content = preg_replace('/\{stylesheet/','{cms_stylesheet',$content);

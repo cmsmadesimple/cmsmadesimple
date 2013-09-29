@@ -343,6 +343,7 @@ $lang['title_designs_default'] = 'The default design is automatically selected w
 $lang['title_filter'] = 'Select an item in this list to reduce the number of visible templates';
 $lang['title_filterapplied'] = 'A filter has been selected which limits the number of templates listed';
 $lang['title_filterlimit'] = 'Select the number of items to view on each page';
+$lang['title_import_design'] = 'Import a design from XML';
 $lang['title_sortby'] = 'Select a way to sort the matching templates';
 $lang['title_sortorder'] = 'Modify the way the matching templates are ordered';
 $lang['title_template_setallpages'] = 'Set all pages to use this template';
