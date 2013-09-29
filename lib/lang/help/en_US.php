@@ -564,8 +564,56 @@ $lang['help_designmanager_help'] = <<<EOT
       </li>
     </ul>
 <h3>Managing Designs</h3>
+  <p>The designs tab is available to users with the &quot;Manage Designs&quot; permission.  It displays a list of all of the known designs in a tabular format.  Each row of the table represents a single design.  The columns of the table displays summary information about the design and provides some ability to interact with it.</p>
+  <p>This tab does not provide filtering, pagination, or bulk actions as it is intended that the number of designs associated with a website should normally be kept small and managable.</p>
+  <p>An options menu exists providing the ability to create a new design, or to import a design from XML format.</p>
+  <h4>Table Columns</h4>
+  <ul>
+    <li>Id:
+      <p>This column displays a link containing the unique numeric id for the design.  Clicking on this link will display the edit design form.</p>
+    </li>
+    <li>Name:
+      <p>This column displays a link containing the name for the design.  Clicking on this link will display the edit design form.</p>
+    </li>
+    <li>Default:
+      <p>This column an icon represent wether or not this design is the &quot;default&quot; design.  The default design is selected first when creating a new content item of type &quot;Content Page&quot; and may be used for other purposes.  Only one design can be the default.</p>
+    </li>
+    <li>Actions:
+      <p>This column displays various links and icons representing actions that can be performed with designs:</p>
+      <ul>
+        <li>Edit - Display a form to allow editing the design.</li>
+        <li>Export - Export the design to an XML file that can be imported into other websites.</li>
+        <li>Delete - Display a form that asks for confirmation about deleting the design.</li>
+      </ul>
+    </li>
+  </ul>
+  <h4>Editing Designs:</h4>
+    <p>The edit design form is a complex form that allows management of all of the attributes of a design.  The form is devidied into numerous tabs.  Unlike editing stylesheets and templates, this form does not support &quot;dirtyform&quot; or locking functionality.</p>
+    <p>Some of the attributes of a design that can be edited are:</p>
+    <ul>
+      <li>Name:
+      </li>
+      <li>Templates:
+        <p>This tab allows selecting different templates to associate with the design.  Four buttons are provided to add templates to the &quot;Attached List&quot; and to order templates within the attached list.  At this time, ordering of templates within the attached template list is not significant.</p>
+      </li>
+      <li>Stylesheets:
+	  <p>This tab allows selecting different stylesheets to associate with the design.  Four buttons are provided to add templates to the &quot;Attached List&quot; and to order stylesheets within the attached list.  The order of stylesheets within the attached list determines the order that they will be included in the rendered page content for content items of type &quot;Content Page&quot;.</p>
+      </li>
+      <li>Description:
+        <p>This tab provides a free form text area where a description of the design, and additional notes can be entered.  the description is also useful to other users when deciding to share a design.</p>
+      </li>
+    </ul>
   <h4>Importing Designs</h4>
-  <h4>Exporting Desings</h4>
+     <p>The Design Manager module is capable of importing XML themes that were exported from CMSMS Design Manager, or from the older CMSMS theme manager.  It expands the uploaded XML file, and extracts templates, stylesheets, and other useful information from the file.  It also performs some minor transformation on the extraced data to try to adjust for overlapping names, etc.</p>
+     <p>The import process is devided into a few steps:</p>
+     <ul>
+      <li>Step 1: Upload the file:
+        <p>This step manages uploading the user selected XML file and validating its contents.  This step is vulnerable to PHP limits for file size, memory limits, and time limits for form processing.  You may need to increase those limits on overly restricted sites when uploading larger theme files.</p>
+        <p>Once the XML file has passed the validation process, it is copied to a temporary location for processing in step 2.</p>
+      </li>
+      <li>Step 2: Verification:
+     </ul>
+  <h4>Deleting Desings</h4>
 <h3>Using Templates</h3>
 <h3>Options and Preferences</h3>
 <h3>Upgrade Notes</h3>
