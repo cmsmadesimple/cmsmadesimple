@@ -94,9 +94,7 @@ class CmsLayoutTemplateCategory
 
   protected function validate()
   {
-    if( !$this->get_name() ) {
-      throw new CmsInvalidDataException('A Template Categoy must have a name');
-    }
+    if( !$this->get_name() ) throw new CmsInvalidDataException('A Template Categoy must have a name');
 
 		if( !preg_match('<^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$>', $this->get_name()) ) {
 			throw new CmsInvalidDataException('Name must contain only numbers letters, spaces and underscores.');
@@ -105,13 +103,11 @@ class CmsLayoutTemplateCategory
     $db = cmsms()->GetDb();
     $tmp = null;
     if( !$this->get_id() ) {
-      $query = 'SELECT id FROM '.cms_db_prefix().self::TABLENAME.'
-                WHERE name = ?';
+      $query = 'SELECT id FROM '.cms_db_prefix().self::TABLENAME.' WHERE name = ?';
       $tmp = $db->GetOne($query,array($this->get_name()));
     }
     else {
-      $query = 'SELECT id FROM '.cms_db_prefix().self::TABLENAME.'
-                WHERE name = ? AND id != ?';
+      $query = 'SELECT id FROM '.cms_db_prefix().self::TABLENAME.' WHERE name = ? AND id != ?';
       $tmp = $db->GetOne($query,array($this->get_name(),$this->get_id()));
     }
     if( $tmp ) {
@@ -131,13 +127,10 @@ class CmsLayoutTemplateCategory
 		$item_order++;
 		$this->_data['item_order'] = $item_order;
 
-    $query = 'INSERT INTO '.cms_db_prefix().self::TABLENAME.'
-              (name,description,item_order,modified) VALUES (?,?,?,?)';
+    $query = 'INSERT INTO '.cms_db_prefix().self::TABLENAME.' (name,description,item_order,modified) VALUES (?,?,?,?)';
     $dbr = $db->Execute($query,array($this->get_name(),$this->get_description(),
 									 $this->get_item_order(),time()));
-    if( !$dbr ) {
-      throw new CmsSQLErrorException($db->sql.' -- '.$db->ErrorMsg());
-    }
+    if( !$dbr ) throw new CmsSQLErrorException($db->sql.' -- '.$db->ErrorMsg());
     $this->_data['id'] = $db->Insert_ID();
     $this->_dirty = FALSE;
 		audit($this->get_id(),'CMSMS','Template Category Created');
@@ -149,24 +142,19 @@ class CmsLayoutTemplateCategory
     $this->validate();
 
     $db = cmsms()->GetDb();
-    $query = 'UPDATE '.cms_db_prefix().self::TABLENAME.'
-              SET name = ?, description = ?, item_order = ?, modified = ? WHERE id = ?';
+    $query = 'UPDATE '.cms_db_prefix().self::TABLENAME.' SET name = ?, description = ?, item_order = ?, modified = ? WHERE id = ?';
     $dbr = $db->Execute($query,array($this->get_name(),
 																		 $this->get_description(),
 																		 $this->get_item_order(),
 																		 time(),$this->get_id()));
-    if( !$dbr ) {
-      throw new CmsSQLErrorException($db->sql.' -- '.$db->ErrorMsg());
-    }
+    if( !$dbr ) throw new CmsSQLErrorException($db->sql.' -- '.$db->ErrorMsg());
     $this->_dirty = FALSE;
 		audit($this->get_id(),'CMSMS','Template Category Updated');
   }
 
   public function save()
   {
-    if( !$this->get_id() ) {
-      return $this->_insert();
-    }
+    if( !$this->get_id() ) return $this->_insert();
     return $this->_update();
   }
 
@@ -175,16 +163,11 @@ class CmsLayoutTemplateCategory
     if( !$this->get_id() ) return;
 
     $db = cmsms()->GetDb();
-    $query = 'DELETE FROM '.cms_db_prefix().self::TABLENAME.'
-              WHERE id = ?';
+    $query = 'DELETE FROM '.cms_db_prefix().self::TABLENAME.' WHERE id = ?';
     $dbr = $db->Execute($query,array($this->get_id()));
-    if( !$dbr ) {
-      throw new CmsSQLErrorException($db->sql.' -- '.$db->ErrorMsg());
-    }
+    if( !$dbr ) throw new CmsSQLErrorException($db->sql.' -- '.$db->ErrorMsg());
 
-		$query = 'UPDATE '.cms_db_prefix().self::TABLENAME.'
-              SET item_order = item_order - 1
-              WHERE item_order > ?';
+		$query = 'UPDATE '.cms_db_prefix().self::TABLENAME.' SET item_order = item_order - 1 WHERE item_order > ?';
 		$dbr = $db->GetOne($query,array($this->_data['item_order']));
 
 		audit($this->get_id(),'CMSMS','Template Category Deleted');
@@ -212,9 +195,7 @@ class CmsLayoutTemplateCategory
       $query = 'SELECT * FROM '.cms_db_prefix().self::TABLENAME.' WHERE name = ?';
       $row = $db->GetRow($query,array($val));
     }
-    if( !is_array($row) || count($row) == 0 ) {
-      throw new CmsDataNotFoundException('Could not find template category identified by '.$val);
-    }
+    if( !is_array($row) || count($row) == 0 ) throw new CmsDataNotFoundException('Could not find template category identified by '.$val);
 
     return self::_load_from_data($row);
   }
@@ -224,20 +205,17 @@ class CmsLayoutTemplateCategory
   {
     $db = cmsms()->GetDb();
     if( $prefix ) {
-      $query = 'SELECT * FROM '.cms_db_prefix().self::TABLENAME.'
-                WHERE name LIKE ?
-                ORDER BY item_order ASC';
+      $query = 'SELECT * FROM '.cms_db_prefix().self::TABLENAME.' WHERE name LIKE ? ORDER BY item_order ASC';
       $res = $db->GetArray($query,array($prefix.'%'));
     }
     else {
-      $query = 'SELECT * FROM '.cms_db_prefix().self::TABLENAME.' 
-                ORDER BY item_order ASC';
+      $query = 'SELECT * FROM '.cms_db_prefix().self::TABLENAME.' ORDER BY item_order ASC';
       $res = $db->GetArray($query);
     }
     if( is_array($res) && count($res) ) {
       $out = array();
       foreach( $res as $row ) {
-	$out[] = self::_load_from_data($row);
+				$out[] = self::_load_from_data($row);
       }
       return $out;
     }

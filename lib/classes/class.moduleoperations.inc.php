@@ -935,6 +935,8 @@ final class ModuleOperations
    * @param string module name
    * @param boolean flag indicating wether to activate or deactivate the module
    * @return boolean
+   * @access private
+   * @internal
    */
   public function ActivateModule($module_name,$activate = true)
   {
@@ -942,17 +944,17 @@ final class ModuleOperations
 	  $info = $this->_get_module_info();
 	  if( !isset($info[$module_name]) ) return FALSE;
 
-	  $o_state = $info['module_name']['active'];
+	  $o_state = $info[$module_name]['active'];
 	  if( $activate ) {
-		  $info['module_name']['active'] = 1;
+		  $info[$module_name]['active'] = 1;
 	  }
 	  else {
-		  $info['module_name']['active'] = 0;
+		  $info[$module_name]['active'] = 0;
 	  }
-	  if( $info['module_name']['active'] != $o_state ) {
+	  if( $info[$module_name]['active'] != $o_state ) {
 		  $db = cmsms()->GetDb();
-		  $query = 'UPDATE '.cms_db_prefix.' SET active = ? WHERE module_name = ?';
-		  $dbr = $db->Execute($query,array($info['module_name']['active'],$module_name));
+		  $query = 'UPDATE '.cms_db_prefix().'modules SET active = ? WHERE module_name = ?';
+		  $dbr = $db->Execute($query,array($info[$module_name]['active'],$module_name));
 	  }
 	  return TRUE;
   }

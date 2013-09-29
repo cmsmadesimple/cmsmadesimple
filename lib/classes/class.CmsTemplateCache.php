@@ -58,12 +58,8 @@ class CmsTemplateCache
 
   public function __construct()
   {
-	  if( !cmsms()->is_frontend_request() ) {
-		  throw new CmsLogicException('This class can only be instantiated on a frontend request');
-	  }
-	  if( self::$_instance ) {
-		  throw new CmsLogicException('Only one instance of this class is permitted');
-	  }
+	  if( !cmsms()->is_frontend_request() ) throw new CmsLogicException('This class can only be instantiated on a frontend request');
+	  if( self::$_instance ) throw new CmsLogicException('Only one instance of this class is permitted');
 	  self::$_instance = TRUE;
 
 	  $this->_key = md5($_SERVER['REQUEST_URI'].serialize($_GET));
@@ -71,7 +67,7 @@ class CmsTemplateCache
 		  $this->_cache = unserialize($tmp);
 		  if( isset($this->_cache[$this->_key]) ) {
 			  CmsLayoutTemplate::load_bulk($this->_cache[$this->_key]['templates']);
-			  //CmsLayoutTemplateType::load_bulk($this->_cache[$this->_key]['types']); todo
+			  if( isset($this->_cache[$this->_key]['types']) ) CmsLayoutTemplateType::load_bulk($this->_cache[$this->_key]['types']);
 		  }
 	  }
   }
@@ -82,28 +78,28 @@ class CmsTemplateCache
     $dirty = FALSE;
     $t1 = CmsLayoutTemplate::get_loaded_templates();
     if( is_array($t1) ) {
-      $t2 = array();
-      if( isset($this->_cache[$this->_key]['templates']) ) {
-	$t2 = $this->_cache[$this->_key]['templates'];
-      }
-      $x = array_diff($t1,$t2);
-      if( is_array($x) && count($x) ) {
-	$this->_cache[$this->_key]['templates'] = $t1;
-	$dirty = TRUE;
-      }
+		$t2 = array();
+		if( isset($this->_cache[$this->_key]['templates']) ) {
+			$t2 = $this->_cache[$this->_key]['templates'];
+		}
+		$x = array_diff($t1,$t2);
+		if( is_array($x) && count($x) ) {
+			$this->_cache[$this->_key]['templates'] = $t1;
+			$dirty = TRUE;
+		}
     }
 
     $t1 = CmsLayoutTemplateType::get_loaded_types();
     if( is_array($t1) ) {
-      $t2 = array();
-      if( isset($this->_cache[$this->_key]['types']) ) {
-	$t2 = $this->_cache[$this->_key]['types'];
-      }
-      $x = array_diff($t1,$t2);
-      if( is_array($x) && count($x) ) {
-	$this->_cache[$this->_key]['types'] = $t1;
-	$dirty = TRUE;
-      }
+		$t2 = array();
+		if( isset($this->_cache[$this->_key]['types']) ) {
+			$t2 = $this->_cache[$this->_key]['types'];
+		}
+		$x = array_diff($t1,$t2);
+		if( is_array($x) && count($x) ) {
+			$this->_cache[$this->_key]['types'] = $t1;
+			$dirty = TRUE;
+		}
     }
 
     if( $dirty ) cms_cache_handler::get_instance()->set('template_cache',serialize($this->_cache));

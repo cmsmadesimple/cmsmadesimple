@@ -251,9 +251,7 @@ if( !$smarty->isCached($this->GetTemplateResource($template),$cache_id,$compile_
   if( count($rootnodes) == 0 ) return; // nothing to do.
 
   // preload all active content
-  if( !cms_content_cache::have_preloaded() ) {
-    ContentOperations::get_instance()->LoadAllContent($deep,$show_all);
-  }
+  if( !cms_content_cache::have_preloaded() ) ContentOperations::get_instance()->LoadAllContent($deep,$show_all);
 
   // ready to fill the nodes
   $outtree = array();

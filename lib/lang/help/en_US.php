@@ -612,6 +612,7 @@ $lang['help_designmanager_help'] = <<<EOT
         <p>Once the XML file has passed the validation process, it is copied to a temporary location for processing in step 2.</p>
       </li>
       <li>Step 2: Verification:
+        <p>The second step is for veryfing and previewing the new design that will be created from the XML file.  From here you can display, and edit various aspects of the design or theme.</p>
      </ul>
   <h4>Deleting Desings</h4>
 <h3>Using Templates</h3>

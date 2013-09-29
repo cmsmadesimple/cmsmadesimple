@@ -47,4 +47,5 @@ catch( CmsException $e ) {
 $this->RegisterModulePlugin(true);
 $this->RegisterSmartyPlugin('menu','function','function_plugin');
 $this->RegisterSmartyPlugin('cms_breadcrumbs','function','smarty_cms_breadcrumbs');
+
 ?>

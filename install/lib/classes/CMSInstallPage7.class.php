@@ -96,9 +96,7 @@ class CMSInstallerPage7 extends CMSInstallerPage
       $contentops = cmsms()->GetContentOperations();
       $contentops->SetAllHierarchyPositions();
       echo " [" . ilang('done') . "]</p>";
-      echo '<p>' . ilang('install_admin_set_core_event');
 
-      echo " [" . ilang('done') . "]</p>";
       echo '<p>' . ilang('install_admin_install_modules').'<ul>';;
       $modops = $gCms->GetModuleOperations();
       $modops->LoadModules(TRUE);

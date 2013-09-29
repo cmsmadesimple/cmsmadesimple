@@ -25,7 +25,7 @@ final class MenuManager extends CMSModule
   function GetFriendlyName() { return $this->Lang('menumanager'); }
   function IsPluginModule() { return true; }
   function HasAdmin() { return false; }
-  function GetVersion() { return '1.9'; }
+  function GetVersion() { return '1.10'; }
   function MinimumCMSVersion() { return '1.12-alpha0'; }
   function GetAdminDescription() { return $this->Lang('description'); }
   function GetAdminSection() { return 'layout'; }
@@ -35,6 +35,12 @@ final class MenuManager extends CMSModule
   function GetAuthor() { return 'Ted Kulp'; }
   function GetAuthorEmail() { return 'ted@cmsmadesimple.org'; }
   function GetChangeLog() { return file_get_contents(dirname(__FILE__).'/changelog.inc'); } 
+
+  function InstallPostMessage()
+  {
+    // a little 'post installation' trick, to deactivate this module on install.
+    ModuleOperations::get_instance()->ActivateModule($this->GetName(),false);
+  }
 
   public function InitializeFrontend()
   {
