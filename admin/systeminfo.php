@@ -270,7 +270,7 @@ $tmp[1]['server_os'] = testDummy('', PHP_OS . ' ' . php_uname('r') .' '. lang('o
   else {
     $test->res = 'red';
   }
-  getTestReturn($test,1,lang('foo1'));
+  getTestReturn($test,1,'');
   $tmp[1]['tz_offset'] = $test;
 }
 
