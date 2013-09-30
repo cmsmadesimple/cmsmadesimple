@@ -4,15 +4,15 @@ $(document).ready(function(){
     var x = $(this).attr('name');
     $('#'+x).dialog();
   });
-  $('#template_list').accordion({ldelim}autoHeight: false{rdelim});
   $('.template_view').click(function(){
     var x = $(this).attr('rel');
     $('#'+x).dialog();
+    return false;
   });
-  $('#stylesheet_list').accordion({ldelim}autoHeight: false{rdelim});
   $('.stylesheet_view').click(function(){
     var x = $(this).attr('rel');
     $('#'+x).dialog();
+    return false;
   });
 });
 </script>
@@ -37,7 +37,8 @@ $(document).ready(function(){
     <div class="pageoverflow">
       <p class="pagetext">{$mod->Lang('prompt_created')}:</p>
       <p class="pageinput">
-        {$design_info.generated|date_format:'%x %X'}
+        {$tmp=$design_info.generated|date_format:'%x %X'}{if $tmp == ''}{$tmp=$mod->Lang('unknown')}{/if}
+        <span style="color: red;">{$tmp}</span>&nbsp;{cms_help key2='help_import_created'}
       </p>
     </div>
   </div>

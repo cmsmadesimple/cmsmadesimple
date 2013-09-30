@@ -348,12 +348,14 @@ class Content extends ContentBase
 			return array('<label for="id_pagemetadata">'.lang('page_metadata').':</label>'.$help,
 						 CmsFormUtils::create_textarea(array('name'=>'metadata','value'=>$this->MetaData(),
 															 'classname'=>'pagesmalltextarea',
+															 'width'=>80,'height'=>3,
 															 'id'=>'metadata')));
 
 		case 'pagedata':
 			$help = '&nbsp;'.cms_admin_utils::get_help_tag('core','help_content_pagedata');
 			return array('<label for="id_pagedata">'.lang('pagedata_codeblock').':</label>'.$help,
 						 CmsFormUtils::create_textarea(array('name'=>'pagedata','value'=>$this->GetPropertyValue('pagedata'),
+															 'width'=>80,'height'=>3,
 															 'classname'=>'pagesmalltextarea','id'=>'id_pagedata')));
 
 		case 'searchable':
@@ -422,8 +424,8 @@ class Content extends ContentBase
 						   'value'=>$value,'id'=>$blockInfo['id']);
 			if( $required ) $parms['required'] = 'required';
 			if( $placeholder ) $parms['placeholder'] = $placeholder;
-			$parms['width'] = 80;
-			$parms['height'] = 2;
+			$parms['width'] = get_parameter_value($blockInfo,'width',80);
+			$parms['height'] = get_parameter_value($blockInfo,'height',10);
 			$ret = CmsFormUtils::create_textarea($parms);
 		}
 		return $ret;

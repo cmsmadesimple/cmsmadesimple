@@ -44,9 +44,6 @@ class microtiny_utils
     // Check if we are in object instance
     if(!is_object($mod)) return false; // TODO: some error message?
 
-    // Init
-    $config = cms_utils::get_config();
-
     $frontend = FALSE;
     global $CMS_ADMIN_PAGE;
     if( !isset($CMS_ADMIN_PAGE) ) $frontend = TRUE;
@@ -54,6 +51,7 @@ class microtiny_utils
     $languageid = self::GetLanguageId($frontend);
     $fn = self::SaveStaticConfig($frontend,'',$languageid);
 
+    $config = cms_utils::get_config();
     $output='<script type="text/javascript" src="'.$config->smart_root_url().'/modules/MicroTiny/tinymce/tiny_mce.js"></script>';
     $configurl = $config->smart_root_url().'/tmp/cache/'.$fn.'?t='.time();
     $output.='<script type="text/javascript" src="'.$configurl.'" defer="defer"></script>';
@@ -70,30 +68,28 @@ class microtiny_utils
    * @param string A2 Languageid
    * @return string
    */	
-  static public function GenerateConfig($frontend=false, $themeid="", $languageid="en") 
+  static private function GenerateConfig($frontend=false, $themeid="", $languageid="en") 
   {
     $mod = cms_utils::get_module('MicroTiny');
-    // Check if we are in object instance
-    if(!is_object($mod)) return false; // TODO: return static file if this fails, or something
+    if(!is_object($mod)) return false;
 
     // Init
     $config = cms_utils::get_config();	
-    $result="";		
-    $linker="";		
+    $result="";
+    $linker="";
 
+    $smarty = cmsms()->GetSmarty();
     if ($frontend) {  
-      $mod->smarty->assign("isfrontend",true);
+      $smarty->assign("isfrontend",true);
     } else {
-      $mod->smarty->assign("isfrontend",false);
-      $mod->smarty->assign('allow_viewsource',$mod->CheckPermission('MicroTiny View HTML Source'));
-      $mod->smarty->assign('view_source',$mod->Lang('view_source'));
+      $smarty->assign("isfrontend",false);
+      $smarty->assign('allow_viewsource',$mod->CheckPermission('MicroTiny View HTML Source'));
+      $smarty->assign('view_source',$mod->Lang('view_source'));
       $result .= self::GetCMSLinker();
       $linker="cmslinker,";
     }
 
-    if( $themeid <= 0 ) {
-      $themeid = self::$_theme_id;
-    }
+    if( $themeid <= 0 ) $themeid = self::$_theme_id;
     if( $themeid <= 0 ) {
       // for the frontend
       $contentobj = null;
@@ -104,30 +100,20 @@ class microtiny_utils
 	$contentobj = cms_utils::get_app_data('editing_content');
       }
 
-      if( is_object($contentobj) ) {
-	$themeid = $contentobj->GetPropertyValue('theme_id');
-      }
+      if( is_object($contentobj) ) $themeid = $contentobj->GetPropertyValue('design_id');
     }
     if( $themeid <= 0 ) {
       $collection = CmsLayoutCollection::load_default();
-      if( is_object($collection) ) {
-	$themeid = $collection->get_id();
-      }
+      if( is_object($collection) ) $themeid = $collection->get_id();
     }
-    if( $themeid > 0 ) {
-      $mod->smarty->assign('themeid',$themeid);
-    }
+    if( $themeid > 0 ) $smarty->assign('themeid',$themeid);
 
     $urlext="";
-    if (isset($_SESSION[CMS_USER_KEY])) {
-      $urlext=CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
-    }
+    if (isset($_SESSION[CMS_USER_KEY])) $urlext=CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
     $mod->smarty->assign("urlext",$urlext);
     //,pasteword,,|,undo,redo
     $image="";
-    if ($mod->GetPreference("allowimages",0) && !$frontend ) {
-      $image=",image,|";
-    }
+    if ($mod->GetPreference("allowimages",0) && !$frontend ) $image=",image,|";
     $toolbar="undo,|,bold,italic,underline,|,cut,copy,paste,pastetext,removeformat,|,justifyleft,justifycenter,justifyright,justifyfull,|,bullist,numlist,|,".$linker."link,unlink,|".$image.",formatselect"; //,separator,styleselect
 
     // handle css styles... newline OR comma separated (why, kinda dumb?)
@@ -163,25 +149,25 @@ class microtiny_utils
     $css_styles = substr($css_styles,0,-1);
     if ($css_styles!='') {
       $toolbar.=",separator,styleselect";
-      $mod->smarty->assign("css_styles",$css_styles);
+      $smarty->assign("css_styles",$css_styles);
     }
 
     // give the rest to smarty.
-    $mod->smarty->assign('show_statusbar',$mod->GetPreference('show_statusbar',0));
-    $mod->smarty->assign('allow_resize',$mod->GetPreference('allow_resize',0));
-    $mod->smarty->assign('strip_background',$mod->GetPreference('strip_background',1));
-    $mod->smarty->assign('force_blackonwhite',$mod->GetPreference('force_blackonwhite',0));
-    $mod->smarty->assign("toolbar",$toolbar);				
-    $mod->smarty->assign("language",$languageid);			
-    $mod->smarty->assign("filepickertitle",$mod->Lang("filepickertitle"));
+    $smarty->assign('show_statusbar',$mod->GetPreference('show_statusbar',0));
+    $smarty->assign('allow_resize',$mod->GetPreference('allow_resize',0));
+    $smarty->assign('strip_background',$mod->GetPreference('strip_background',1));
+    $smarty->assign('force_blackonwhite',$mod->GetPreference('force_blackonwhite',0));
+    $smarty->assign("toolbar",$toolbar);				
+    $smarty->assign("language",$languageid);			
+    $smarty->assign("filepickertitle",$mod->Lang("filepickertitle"));
     $fpurl=$mod->create_url("","filepicker");
     $fpurl=str_replace("&amp;","&",$fpurl);
-    $mod->smarty->assign("filepickerurl", $fpurl);
+    $smarty->assign("filepickerurl", $fpurl);
 
     $result .= $mod->ProcessTemplate('microtinyconfig.tpl');
     return $result;
-  }	
-	
+  }
+
   /**
    * Generates TinyMCE Entry object
    *
@@ -214,7 +200,7 @@ class microtiny_utils
     $result.="tinyMCE.activeEditor.execCommand('mceInsertContent', false, \"<a href=\\\"{cms_selflink href=".$href."}\\\">\"+sel+\"</a>\");";
     $result.="}});";
     return $result;
-  }	
+  }
 
   /**
    * Generates TinyMCE sub object
@@ -241,7 +227,7 @@ class microtiny_utils
     }
     return $newmenu;
   }
-	
+
   /**
    * Get CMSLinker for TinyMCE
    *
@@ -272,9 +258,7 @@ class microtiny_utils
     $menu="m";
     foreach ($content_array as $one) {
       if ($one->Active()!=1) continue;
-      if ($one->FriendlyName() == 'Separator') {
-	continue;
-      }
+      if ($one->FriendlyName() == 'Separator') continue;
       $thislevel=substr_count($one->Hierarchy(),".");
       if ($thislevel<$level) {
 	$menu=substr($menu,($level-$thislevel));
@@ -298,7 +282,7 @@ class microtiny_utils
     // Register plugin with a short name
     tinymce.PluginManager.add('cmslinker', tinymce.plugins.CMSLinkerPlugin);";
     return $result;
-  }	
+  }
 
   /**
    * Get Language ID
@@ -316,7 +300,6 @@ class microtiny_utils
     default : return $mylang;
     }
   }
-
 
   /**
    * Save Static configuration
@@ -358,7 +341,7 @@ class microtiny_utils
     }
     return $image;
   }
-  
+
   /**
    * Fix Slashes
    *
@@ -370,7 +353,6 @@ class microtiny_utils
     $result=str_replace("\\","/",$url);
     return $result;
   }	
-	
 
 } // end of class
 ?>

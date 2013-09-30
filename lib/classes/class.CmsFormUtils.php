@@ -166,12 +166,7 @@ final class CmsFormUtils
     if( $enablewysiwyg ) {
       $module = cmsms()->GetModuleOperations()->GetWYSIWYGModule($forcemodule);
       if( $module && $module->HasCapability('wysiwyg') ) {
-	if( $forcemodule ) {
-	  $attribs['class'] .= ' '.$module->GetName();
-	}
-	else {
-	  $attribs['class'] .= ' cms_wysiwyg';
-	}
+	$attribs['class'] .= ' '.$module->GetName();
 	$attribs['data-cms-lang'] = 'html';
 	self::_add_wysiwyg($module->GetName());
       } else {
@@ -184,12 +179,7 @@ final class CmsFormUtils
       $attribs['data-cms-lang'] = 'smarty';
       $module = cmsms()->GetModuleOperations()->GetSyntaxHighlighter($forcemodule);
       if( $module && $module->HasCapability('syntaxhighlighting') ) {
-	if( $forcemodule ) {
-	  $attribs['class'] .= ' '.$module->GetName();
-	}
-	else {
-	  $attribs['class'] .= ' cms_syntaxarea';
-	}
+	$attribs['class'] .= ' '.$module->GetName();
 	$attribs['data-cms-lang'] = trim($wantedsyntax);
 	self::_add_syntax($module->GetName());
       } else {

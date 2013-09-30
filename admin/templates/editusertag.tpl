@@ -126,7 +126,7 @@ $(document).ready(function(){
 {tab_start name='description'}
 <label for="description">{lang('description')}:</label>&nbsp;{cms_help key1=h_udtdesc}
 <br/>
-<textarea id="description" name="description">{$record.description}</textarea>
+<textarea id="description" name="description" rows="3" cols="50">{$record.description}</textarea>
 {tab_end}
 {form_end}
 

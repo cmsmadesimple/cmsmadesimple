@@ -49,10 +49,5 @@ class MicroTiny extends CMSModule
     return false;
   }
 
-  public function WYSIWYGActive()
-  {
-    return $this->wysiwygactive;
-  }
-
 } // end of module class
 ?>

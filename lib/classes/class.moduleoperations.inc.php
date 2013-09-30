@@ -1095,7 +1095,9 @@ final class ModuleOperations
 	  if( !$module_name ) return $obj;
 	  $obj = $this->get_module_instance($module_name);
 	  if( !$obj ) return $obj;
-	  if( !$obj->IsSyntaxHighlighter() ) return $obj;
+	  if( $obj->HasCapability('syntaxhighlighting') ) return $obj;
+
+	  $obj = null;
 	  return $obj;
   }
 

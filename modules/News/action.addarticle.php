@@ -252,9 +252,12 @@ $smarty->assign('startform', $this->CreateFormStart($id, 'addarticle', $returnid
 $smarty->assign('endform', $this->CreateFormEnd());
 $smarty->assign('titletext', $this->Lang('title'));
 $smarty->assign('title',$title);
-$smarty->assign('inputcontent', $this->CreateTextArea(true, $id, $content, 'content'));
+$parms = array('enablewysiwyg'=>1,'name'=>$id.'content','text'=>$content,'rows'=>10,'cols'=>80);
+$smarty->assign('inputcontent', CmsFormUtils::create_textarea($parms));
 $smarty->assign('allow_summary_wysiwyg',$this->GetPreference('allow_summary_wysiwyg'));
-$smarty->assign('inputsummary', $this->CreateTextArea($this->GetPreference('allow_summary_wysiwyg',1), $id, $summary, 'summary', '', '', '', '', '80', '3'));
+$parms = array('enablewysiwyg'=>$this->GetPreference('allow_summary_wysiwyg',1),
+	       'name'=>$id.'summary','text'=>$summary,'rows'=>3,'cols'=>80);
+$smarty->assign('inputsummary', CmsFormutils::create_textarea($parms));
 
 $smarty->assign('extratext',$this->Lang('extra'));
 $smarty->assign('extra',$extra);
