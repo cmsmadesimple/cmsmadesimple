@@ -198,7 +198,11 @@ EOT;
 
   public function HasCapability($capability,$params = array())
   {
-    if( strtolower($capability) == 'search' ) return TRUE;
+    switch( $capability ) {
+    case CmsCoreCapabilities::SEARCH_MODULE:
+    case CmsCoreCapabilities::PLUGIN_MODULE:
+      return true;
+    }
     return FALSE;
   }
 

@@ -4,7 +4,6 @@ $(document).ready(function(){
   $(document).on('click', '#runbtn', function(){
     // get the data
     if( !confirm('{lang('confirm_runusertag')}') ) return false;
-    {$syntax_module_submit_js|default:''}
 
     var code = $('#udtcode').val();
     if( code.length == 0 ) {
@@ -37,7 +36,6 @@ $(document).ready(function(){
   });
 
   $(document).on('click', '#applybtn', function(){
-    {$syntax_module_submit_js|default:''}
 
     var data = $('#edit_userplugin').find('input:not([type=submit]), select, textarea').serializeArray();
     data.push({ 'name': 'ajax', 'value': 1 });
@@ -121,7 +119,7 @@ $(document).ready(function(){
 
 {tab_start name='code'}
 <label for="code">{lang('code')}:</label>&nbsp;{cms_help key1=h_udtcode}<br/>
-{syntax_area id='udtcode' name='code' value=$record.code type=php}
+{cms_textarea id='udtcode' name='code' value=$record.code wantedsyntax=php rows=10 cols=80}
 
 {tab_start name='description'}
 <label for="description">{lang('description')}:</label>&nbsp;{cms_help key1=h_udtdesc}

@@ -1095,7 +1095,7 @@ final class ModuleOperations
 	  if( !$module_name ) return $obj;
 	  $obj = $this->get_module_instance($module_name);
 	  if( !$obj ) return $obj;
-	  if( $obj->HasCapability('syntaxhighlighting') ) return $obj;
+	  if( $obj->HasCapability(CmsCoreCapabilities::SYNTAX_MODULE) ) return $obj;
 
 	  $obj = null;
 	  return $obj;
@@ -1129,7 +1129,7 @@ final class ModuleOperations
 	  if( !$module_name || $module_name == -1 ) return $obj;
 	  $obj = $this->get_module_instance($module_name);
 	  if( !$obj ) return $obj;
-	  if( $obj->HasCapability('wysiwyg') ) return $obj;
+	  if( $obj->HasCapability(CmsCoreCapabilities::WYSIWYG_MODULE) ) return $obj;
 
 	  $obj = null;
 	  return $obj;

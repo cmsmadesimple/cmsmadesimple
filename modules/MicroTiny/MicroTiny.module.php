@@ -45,7 +45,7 @@ class MicroTiny extends CMSModule
   }
 	
   public function HasCapability($capability, $params=array()) {
-    if ($capability=="wysiwyg") return true;
+    if ($capability==CmsCoreCapabilities::WYSIWYG_MODULE) return true;
     return false;
   }
 

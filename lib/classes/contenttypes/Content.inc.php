@@ -139,7 +139,7 @@ class Content extends ContentBase
 					if( isset($blockInfo['type']) && $blockInfo['type'] == 'module' ) {
 						$module = cms_utils::get_module($blockInfo['module']);
 						if( !is_object($module) ) continue;
-						if( !$module->HasCapability('contentblocks') ) continue;
+						if( !$module->HasCapability(CmsCoreCapabilities::CONTENT_BLOCKS) ) continue;
 						$tmp = $module->GetContentBlockValue($blockName,$blockInfo['params'],$params);
 						if( $tmp != null ) $params[$name] = $tmp;
 					}
@@ -242,7 +242,7 @@ class Content extends ContentBase
 			if( isset($blockInfo['type']) && $blockInfo['type'] == 'module' ) {
 				$module = cms_utils::get_module($blockInfo['module']);
 				if( !is_object($module) ) continue;
-				if( !$module->HasCapability('contentblocks') ) continue;
+				if( !$module->HasCapability(CmsCoreCapabilities::CONTENT_BLOCKS) ) continue;
 				$value = $this->GetPropertyValue($blockInfo['id']);
 				$tmp = $module->ValidateContentBlockValue($blockName,$value,$blockInfo['params']);
 				if( !empty($tmp) ) {
@@ -474,7 +474,7 @@ class Content extends ContentBase
 		if( !isset($blockInfo['module']) ) return FALSE;
 		$module = cms_utils::get_module($blockInfo['module']);
 		if( !is_object($module) ) return FALSE;
-		if( !$module->HasCapability('contentblocks') ) return FALSE;
+		if( !$module->HasCapability(CmsCoreCapabilities::CONTENT_BLOCKS) ) return FALSE;
 		if( isset($blockInfo['inputname']) && !empty($blockInfo['inputname']) ) {
 			// a hack to allow overriding the input field name.
 			$blockName = $blockInfo['inputname'];

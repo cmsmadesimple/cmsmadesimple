@@ -86,7 +86,7 @@ final class CmsNlsOperations
 				  if( !is_file($files[$i]) ) continue;
 				  $fn = basename($files[$i]);
 				  $tlang = substr($fn,0,strpos($fn,'.'));
-				  if( $tlang != 'en_US' && !file_exists(cms_join_path($langdir,'ext',$tlang,'admin.inc.php')) ) continue;
+				  if( $tlang != 'en_US' && !file_exists(cms_join_path($langdir,'ext',$tlang.'.php')) ) continue;
 
 				  unset($nls);
 				  include($files[$i]);

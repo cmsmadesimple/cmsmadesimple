@@ -343,7 +343,11 @@ class News extends CMSModule
 
   public function HasCapability($capability, $params = array())
   {
-    if( $capability == 'AdminSearch' ) return TRUE;
+    switch( $capability ) {
+    case CmsCoreCapabilities::PLUGIN_MODULE:
+    case CmsCoreCapabilities::ADMINSEARCH:
+      return TRUE;
+    }
     return FALSE;
   }
 

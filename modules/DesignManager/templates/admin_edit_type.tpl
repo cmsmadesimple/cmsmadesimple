@@ -82,7 +82,7 @@
     <label for="type_dflt_contents">{$mod->Lang('prompt_proto_template')}:</label>&nbsp;{cms_help key2='help_proto_template'}
   </p>
   <p class="pageinput">
-    {syntax_area id=type_dflt_contents prefix=$actionid name=dflt_contents value=$type->get_dflt_contents()}
+    {cms_textarea id=type_dflt_contents prefix=$actionid name=dflt_contents value=$type->get_dflt_contents() type='smarty' rows=20 cols=80}
   </p>
 
   <div class="pagecontainer">

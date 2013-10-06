@@ -102,7 +102,7 @@ final class CmsFormUtils
     if( !in_array($module_name,self::$_activated_syntax) ) self::$_activated_syntax[] = $module_name;
   }
 
-  public static function get_syntax_modules()
+  public static function get_requested_syntax_modules()
   {
     return self::$_activated_syntax;
   }
@@ -113,7 +113,7 @@ final class CmsFormUtils
     if( !in_array($module_name,self::$_activated_wysiwyg) ) self::$_activated_wysiwyg[] = $module_name;
   }
 
-  public static function get_wysiwyg_modules()
+  public static function get_requested_wysiwyg_modules()
   {
     return self::$_activated_wysiwyg;
   }
@@ -135,7 +135,7 @@ final class CmsFormUtils
    *   maxlength     = (optional integer) maxlength attribute of the text area (syntax/wysiwyg module may ignore this)
    *   required      = (optional boolean) indicates a required field.
    *   placeholder   = (optional string) placeholder attribute of the text area (syntax/wysiwyg module may ignore this)
-   *   value/text    = (optional string) default text for the placeholder, will undergo entity conversion before returning.
+   *   value/text    = (optional string) default text for the text area, will undergo entity conversion.
    *   encoding      = (optional string) default utf-8 encoding for entity conversion.
    *   addtext       = (optional string) additional text to add to the textarea tag.
    *
@@ -162,10 +162,11 @@ final class CmsFormUtils
     $forcemodule = get_parameter_value($parms,'forcemodule');
     $enablewysiwyg = cms_to_bool(get_parameter_value($parms,'enablewysiwyg','false')); // if not false, we want a wysiwyg area
     $wantedsyntax = get_parameter_value($parms,'wantedsyntax'); // if not null, and no wysiwyg found, use a syntax area.
+    $wantedsyntax = get_parameter_value($parms,'type',$wantedsyntax);
 
     if( $enablewysiwyg ) {
       $module = cmsms()->GetModuleOperations()->GetWYSIWYGModule($forcemodule);
-      if( $module && $module->HasCapability('wysiwyg') ) {
+      if( $module && $module->HasCapability(CmsCoreCapabilities::WYSIWYG_MODULE) ) {
 	$attribs['class'] .= ' '.$module->GetName();
 	$attribs['data-cms-lang'] = 'html';
 	self::_add_wysiwyg($module->GetName());
@@ -178,7 +179,7 @@ final class CmsFormUtils
     if( !$module && $wantedsyntax ) {
       $attribs['data-cms-lang'] = 'smarty';
       $module = cmsms()->GetModuleOperations()->GetSyntaxHighlighter($forcemodule);
-      if( $module && $module->HasCapability('syntaxhighlighting') ) {
+      if( $module && $module->HasCapability(CmsCoreCapabilities::SYNTAX_MODULE) ) {
 	$attribs['class'] .= ' '.$module->GetName();
 	$attribs['data-cms-lang'] = trim($wantedsyntax);
 	self::_add_syntax($module->GetName());

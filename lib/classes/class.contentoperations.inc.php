@@ -100,9 +100,7 @@ class ContentOperations
 	 */
 	final public function LoadContentType($type)
 	{
-		if( is_object($type) && $type instanceof CmsContentTypePlaceHolder ) {
-			$type = $type->type;
-		}
+		if( is_object($type) && $type instanceof CmsContentTypePlaceHolder ) $type = $type->type;
 
 		$ctph = $this->_get_content_type($type);
 		if( is_object($ctph) ) {
@@ -289,7 +287,7 @@ class ContentOperations
 			// get the list of modules that have content types.
 			// and load them.  content types from modules are
 			// registered in the constructor.
-			$module_list = module_meta::get_instance()->module_list_by_method('HasContentType');
+			$module_list = ModuleOperations::get_instance()->get_modules_with_capability(CmsCoreCapabilities::CONTENT_TYPES);
 			if( is_array($module_list) && count($module_list) ) {
 				foreach( $module_list as $module_name ) {
 					cms_utils::get_module($module_name);

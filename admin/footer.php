@@ -36,14 +36,14 @@ $bodytext = '';
 $userid = get_userid();
 
 // get the active wysiwyg and syntax modules initialized.
-$list = CmsFormUtils::get_wysiwyg_modules();
+$list = CmsFormUtils::get_requested_wysiwyg_modules();
 if( is_array($list) && count($list) ) {
   foreach( $list as $one ) {
     $obj = cms_utils::get_module($one);
     if( is_object($obj) ) $headertext .= $obj->WYSIWYGGenerateHeader($htmlresult);
   }
 }
-$list = CmsFormUtils::get_syntax_modules();
+$list = CmsFormUtils::get_requested_syntax_modules();
 if( is_array($list) && count($list) ) {
   foreach( $list as $one ) {
     $obj = cms_utils::get_module($one);

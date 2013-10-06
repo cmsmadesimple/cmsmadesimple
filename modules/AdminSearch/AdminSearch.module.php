@@ -69,8 +69,7 @@ final class AdminSearch extends CMSModule
 
   public function HasCapability($capability,$params=array())
   {
-    debug_to_log('HasCapability');
-    if( $capability == 'AdminSearch' ) return TRUE;
+    if( $capability == CmsCoreCapabilities::ADMINSEARCH ) return TRUE; 
     return FALSE;
   }
 

@@ -533,10 +533,34 @@ $lang['help_function_search'] = <<<EOT
 	<p>Just put <code>{search}</code> in a template where you want the search input box to appear. For help about the Search module, please refer to the Search module help.</p>
 EOT;
 
-$lang['help_function_syntax_area'] = <<<EOT
+$lang['help_function_cms_textarea'] = <<<EOT
   <h3>What does this do?</h3>
+  <p>This smarty plugin is used when building admin forms to generate a textarea field.  It has various parameter which allow controlling wether a WYSIWYG plugin is used <em>(if available)</em> or a syntax highlighter, and for influencing the behavior of those modules, and the size and appearance of the textarea.</p>
   <h3>How do I use it?</h3>
+    <p>The simplest way to use this plugin is by specifying <code>{cms_textarea name=&quot;something&quot;}</code>.  This will create a simple text area without wysiwyg or syntax hilighter modules enabled, with the specified name.</p>
+    <p>Next you can specify the default value for the text area by using the &quot;text&quot; or &quot;value&quot; parameters.</p>
   <h3>What parameters does it take?</h3>
+  <ul>
+    <li>name - required string : name attribute for the text area element.</li>
+    <li>prefix - optional string : optional prefix for the name attribute.</li>
+    <li>class - optional string : class attribute for the text area element.  Additional classes may be added automatically.</li> 
+    <li>classname - alias for the class parameter.</li>
+    <li>forcemodule - optional string : used to specify the WYSIWYG or syntax hilighter module to enable.  If specified, and available, the module name will be added o the class attribute.</li>
+    <li>enablewysiwyg - optional boolean : used to specifh whether a WYSIWYG textarea is required.  Sets the language to &quot;html&quot;</li>
+    <li>wantedsyntax - optional string used to specify the language (html,css,php,smarty...) to use.  If non empty indicates that a syntax hilighter module is requested.</li>
+    <li>type - alias for the wantedsyntax parameter.</li>
+    <li>cols - optional integer : columns of the text area (admin theme css or the syntax/WYSIWYG module may override this).</li>
+    <li>width - alias for the cols parameter.</li>
+    <li>rows - optional integer : rows of the text area (admin theme css or the syntax/WYSIWYG module may override this).</li>
+    <li>height - alias for the rows parameter.</li>
+    <li>maxlength - optional integer : maxlength attribute of the text area (syntax/WYSIWYG module may ignore this).</li>
+    <li>required  - optional boolean : indicates a required field.</li>
+    <li>placeholder - optional string : placeholder attribute of the text area (syntax/wysiwyg module may ignore this).</li>
+    <li>value - optional string : default text for the text area, will undergo entity conversion.</li>
+    <li>text - alias for the value parameter</li>
+    <li>addtext - optional string : additional text to add to the textarea tag.</li>
+    <li>assign - optional string : assign the output html to the named smarty variable.</li>
+  </ul>
 EOT;
 
 $lang['help_function_root_url'] = <<<EOT

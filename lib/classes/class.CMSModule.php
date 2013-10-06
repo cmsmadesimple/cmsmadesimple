@@ -188,7 +188,7 @@ abstract class CMSModule
    *
    * @ignore
    */
-  public function LoadTemplateMethods()
+  private function _loadTemplateMethods()
   {
     if (!$this->modtemplates) {
       require_once(cms_join_path(dirname(__FILE__), 'module_support', 'modtemplates.inc.php'));
@@ -201,7 +201,7 @@ abstract class CMSModule
    *
    * @ignore
    */
-  public function LoadFormMethods()
+  private function _loadFormMethods()
   {
     if (!$this->modform) {
       require_once(cms_join_path(dirname(__FILE__), 'module_support', 'modform.inc.php'));
@@ -214,7 +214,7 @@ abstract class CMSModule
    *
    * @ignore
    */
-  public function LoadRedirectMethods()
+  private function _loadRedirectMethods()
   {
     if (!$this->modredirect) {
       require_once(cms_join_path(dirname(__FILE__), 'module_support', 'modredirect.inc.php'));
@@ -227,7 +227,7 @@ abstract class CMSModule
    *
    * @ignore
    */
-  public function LoadMiscMethods()
+  private function _loadMiscMethods()
   {
     if (!$this->modmisc) {
       require_once(cms_join_path(dirname(__FILE__), 'module_support', 'modmisc.inc.php'));
@@ -385,7 +385,7 @@ abstract class CMSModule
    */
   public function GetAbout()
   {
-    $this->LoadMiscMethods();
+    $this->_loadMiscMethods();
     return cms_module_GetAbout($this);
   }
 
@@ -398,7 +398,7 @@ abstract class CMSModule
    */
   final public function GetHelpPage()
   {
-    $this->LoadMiscMethods();
+    $this->_loadMiscMethods();
     return cms_module_GetHelpPage($this);
   }
 
@@ -979,21 +979,6 @@ abstract class CMSModule
    */
 
   /**
-   * Does this module support a custom content type?
-   *
-   * This method can be overridden if the module is defining one or more
-   * custom content types (note this is different than content block 
-   * types)
-   *
-   * @abstract
-   * @return boolean
-   */
-  public function HasContentType()
-  {
-    return FALSE;
-  }
-	
-  /**
    * Register a new content type
    *
    * @deprecated
@@ -1014,21 +999,6 @@ abstract class CMSModule
     $obj->loaded = false;
     $obj->friendlyname = ($friendlyname != '' ? $friendlyname : $name);
     $contentops->register_content_type($obj);
-  }
-
-  /**
-   * Return an instance of the new content type
-   *
-   * This method must be overridden if this object is providing
-   * a content type.
-   *
-   * @abstract
-   * @deprecated
-   * @return object
-   */
-  public function GetContentTypeInstance()
-  {
-    return FALSE;
   }
 
   /**
@@ -1627,7 +1597,7 @@ abstract class CMSModule
    */
   final function CreateFieldsetStart( $id, $name, $legend_text='', $addtext='', $addtext_legend='' )
   {
-    $this->LoadFormMethods();
+    $this->_loadFormMethods();
     return cms_module_CreateFieldsetStart($this, $id, $name, $legend_text, $addtext, $addtext_legend);
   }
 
@@ -1680,7 +1650,7 @@ abstract class CMSModule
    */
   function CreateFormStart($id, $action='default', $returnid='', $method='post', $enctype='', $inline=false, $idsuffix='', $params = array(), $extra='')
   {
-    $this->LoadFormMethods();
+    $this->_loadFormMethods();
     return cms_module_CreateFormStart($this, $id, $action, $returnid, $method, $enctype, $inline, $idsuffix, $params, $extra);
   }
 
@@ -1710,7 +1680,7 @@ abstract class CMSModule
    */
   function CreateInputText($id, $name, $value='', $size='10', $maxlength='255', $addttext='')
   {
-    $this->LoadFormMethods();
+    $this->_loadFormMethods();
     return cms_module_CreateInputText($this, $id, $name, $value, $size, $maxlength, $addttext);
   }
 
@@ -1727,7 +1697,7 @@ abstract class CMSModule
    */
   function CreateLabelForInput($id, $name, $labeltext='', $addttext='')
   {
-    $this->LoadFormMethods();
+    $this->_loadFormMethods();
     return cms_module_CreateLabelForInput($this, $id, $name, $labeltext, $addttext);
   }
 
@@ -1748,7 +1718,7 @@ abstract class CMSModule
    */
   function CreateInputTextWithLabel($id, $name, $value='', $size='10', $maxlength='255', $addttext='', $label='', $labeladdtext='')
   {
-    $this->LoadFormMethods();
+    $this->_loadFormMethods();
     return cms_module_CreateInputTextWithLabel($this, $id, $name, $value, $size, $maxlength, $addttext, $label, $labeladdtext);
   }
 
@@ -1764,7 +1734,7 @@ abstract class CMSModule
    */
   function CreateInputColor($id, $name, $value='', $addttext='')
   {
-    $this->LoadFormMethods();
+    $this->_loadFormMethods();
     return cms_module_CreateInputColor($this, $id, $name, $value, $addttext);
   }	
 
@@ -1781,7 +1751,7 @@ abstract class CMSModule
    */
   function CreateInputDate($id, $name, $value='', $addttext='')
   {
-    $this->LoadFormMethods();
+    $this->_loadFormMethods();
     return cms_module_CreateInputDate($this, $id, $name, $value, $addttext);
   }
 	
@@ -1798,7 +1768,7 @@ abstract class CMSModule
    */	
   function CreateInputDatetime($id, $name, $value='', $addttext='')
   {
-    $this->LoadFormMethods();
+    $this->_loadFormMethods();
     return cms_module_CreateInputDatetime($this, $id, $name, $value, $addttext);
   }
 	
@@ -1815,7 +1785,7 @@ abstract class CMSModule
    */
   function CreateInputDatetimeLocal($id, $name, $value='', $addttext='')
   {
-    $this->LoadFormMethods();
+    $this->_loadFormMethods();
     return cms_module_CreateInputDatetimeLocal($this, $id, $name, $value, $addttext);
   }
 
@@ -1832,7 +1802,7 @@ abstract class CMSModule
    */
   function CreateInputMonth($id, $name, $value='', $addttext='')
   {
-    $this->LoadFormMethods();
+    $this->_loadFormMethods();
     return cms_module_CreateInputMonth($this, $id, $name, $value, $addttext);
   }		
 
@@ -1849,7 +1819,7 @@ abstract class CMSModule
    */
   function CreateInputWeek($id, $name, $value='', $addttext='')
   {
-    $this->LoadFormMethods();
+    $this->_loadFormMethods();
     return cms_module_CreateInputWeek($this, $id, $name, $value, $addttext);
   }
 	
@@ -1866,7 +1836,7 @@ abstract class CMSModule
    */
   function CreateInputTime($id, $name, $value='', $addttext='')
   {
-    $this->LoadFormMethods();
+    $this->_loadFormMethods();
     return cms_module_CreateInputTime($this, $id, $name, $value, $addttext);
   }	
 	
@@ -1882,7 +1852,7 @@ abstract class CMSModule
    */
   function CreateInputNumber($id, $name, $value='', $addttext='')
   {
-    $this->LoadFormMethods();
+    $this->_loadFormMethods();
     return cms_module_CreateInputNumber($this, $id, $name, $value, $addttext);
   }	
 	
@@ -1899,7 +1869,7 @@ abstract class CMSModule
    */
   function CreateInputRange($id, $name, $value='', $addttext='')
   {
-    $this->LoadFormMethods();
+    $this->_loadFormMethods();
     return cms_module_CreateInputRange($this, $id, $name, $value, $addttext);
   }				
 
@@ -1918,7 +1888,7 @@ abstract class CMSModule
    */	
   function CreateInputEmail($id, $name, $value='', $size='10', $maxlength='255', $addttext='')
   {
-    $this->LoadFormMethods();
+    $this->_loadFormMethods();
     return cms_module_CreateInputEmail($this, $id, $name, $value, $size, $maxlength, $addttext);
   }
 
@@ -1937,7 +1907,7 @@ abstract class CMSModule
    */	
   function CreateInputTel($id, $name, $value='', $size='10', $maxlength='255', $addttext='')
   {
-    $this->LoadFormMethods();
+    $this->_loadFormMethods();
     return cms_module_CreateInputTel($this, $id, $name, $value, $size, $maxlength, $addttext);
   }	
 	
@@ -1956,7 +1926,7 @@ abstract class CMSModule
    */
   function CreateInputSearch($id, $name, $value='', $size='10', $maxlength='255', $addttext='')
   {
-    $this->LoadFormMethods();
+    $this->_loadFormMethods();
     return cms_module_CreateInputSearch($this, $id, $name, $value, $size, $maxlength, $addttext);
   }
 	
@@ -1975,7 +1945,7 @@ abstract class CMSModule
    */
   function CreateInputUrl($id, $name, $value='', $size='10', $maxlength='255', $addttext='')
   {
-    $this->LoadFormMethods();
+    $this->_loadFormMethods();
     return cms_module_CreateInputUrl($this, $id, $name, $value, $size, $maxlength, $addttext);
   }							
 			
@@ -1994,7 +1964,7 @@ abstract class CMSModule
    */
   function CreateInputFile($id, $name, $accept='', $size='10',$addttext='')
   {
-    $this->LoadFormMethods();
+    $this->_loadFormMethods();
     return cms_module_CreateInputFile($this, $id, $name, $accept, $size, $addttext);
   }
 
@@ -2013,7 +1983,7 @@ abstract class CMSModule
    */
   function CreateInputPassword($id, $name, $value='', $size='10', $maxlength='255', $addttext='')
   {
-    $this->LoadFormMethods();
+    $this->_loadFormMethods();
     return cms_module_CreateInputPassword($this, $id, $name, $value, $size, $maxlength, $addttext);
   }
 
@@ -2030,7 +2000,7 @@ abstract class CMSModule
    */
   function CreateInputHidden($id, $name, $value='', $addttext='')
   {
-    $this->LoadFormMethods();
+    $this->_loadFormMethods();
     return cms_module_CreateInputHidden($this, $id, $name, $value, $addttext);
   }
 
@@ -2048,7 +2018,7 @@ abstract class CMSModule
    */
   function CreateInputCheckbox($id, $name, $value='', $selectedvalue='', $addttext='')
   {
-    $this->LoadFormMethods();
+    $this->_loadFormMethods();
     return cms_module_CreateInputCheckbox($this, $id, $name, $value, $selectedvalue, $addttext);
   }
 	
@@ -2067,7 +2037,7 @@ abstract class CMSModule
    */
   function CreateInputSubmit($id, $name, $value='', $addttext='', $image='', $confirmtext='')
   {
-    $this->LoadFormMethods();
+    $this->_loadFormMethods();
     return cms_module_CreateInputSubmit($this, $id, $name, $value, $addttext, $image, $confirmtext);
   }
 
@@ -2084,7 +2054,7 @@ abstract class CMSModule
    */
   function CreateInputReset($id, $name, $value='Reset', $addttext='')
   {
-    $this->LoadFormMethods();
+    $this->_loadFormMethods();
     return cms_module_CreateInputReset($this, $id, $name, $value, $addttext);
   }
 
@@ -2102,7 +2072,7 @@ abstract class CMSModule
    */
   function CreateFileUploadInput($id, $name, $addttext='',$size='10', $maxlength='255')
   {
-    $this->LoadFormMethods();
+    $this->_loadFormMethods();
     return cms_module_CreateFileUploadInput($this, $id, $name, $addttext, $size, $maxlength);
   }
 
@@ -2121,7 +2091,7 @@ abstract class CMSModule
    */
   function CreateInputDropdown($id, $name, $items, $selectedindex=-1, $selectedvalue='', $addttext='')
   {
-    $this->LoadFormMethods();
+    $this->_loadFormMethods();
     return cms_module_CreateInputDropdown($this, $id, $name, $items, $selectedindex, $selectedvalue, $addttext);
   }
 	
@@ -2141,7 +2111,7 @@ abstract class CMSModule
    */
   function CreateInputDataList($id, $name, $value='', $items, $size='10', $maxlength='255', $addttext='')
   {
-    $this->LoadFormMethods();
+    $this->_loadFormMethods();
     return cms_module_CreateInputDataList($this, $id, $name, $value, $items, $size, $maxlength, $addttext);
   }	
 
@@ -2161,7 +2131,7 @@ abstract class CMSModule
    */
   function CreateInputSelectList($id, $name, $items, $selecteditems=array(), $size=3, $addttext='', $multiple = true)
   {
-    $this->LoadFormMethods();
+    $this->_loadFormMethods();
     return cms_module_CreateInputSelectList($this, $id, $name, $items, $selecteditems, $size, $addttext, $multiple);
   }
 
@@ -2179,7 +2149,7 @@ abstract class CMSModule
    */
   function CreateInputRadioGroup($id, $name, $items, $selectedvalue='', $addttext='', $delimiter='')
   {
-    $this->LoadFormMethods();
+    $this->_loadFormMethods();
     return cms_module_CreateInputRadioGroup($this, $id, $name, $items, $selectedvalue, $addttext, $delimiter);
   }
 
@@ -2297,7 +2267,7 @@ abstract class CMSModule
 		      $warn_message='', $onlyhref=false, $inline=false, $addttext='', 
 		      $targetcontentonly=false, $prettyurl='')
   {
-    $this->LoadFormMethods();
+    $this->_loadFormMethods();
     return cms_module_CreateLink($this, $id, $action, $returnid, $contents, $params, $warn_message, $onlyhref, $inline, $addttext, $targetcontentonly, $prettyurl);
   }
 
@@ -2319,7 +2289,7 @@ abstract class CMSModule
   public function create_url($id,$action,$returnid='',$params=array(),
 			     $inline=false,$targetcontentonly=false,$prettyurl='')
   {
-    $this->LoadFormMethods();
+    $this->_loadFormMethods();
     return cms_module_create_url($this,$id,$action,$returnid,$params,$inline,$targetcontentonly,$prettyurl);
   }
 
@@ -2352,7 +2322,7 @@ abstract class CMSModule
    */
   public function CreateContentLink($pageid, $contents='')
   {
-    $this->LoadFormMethods();
+    $this->_loadFormMethods();
     return cms_module_CreateContentLink($this, $pageid, $contents);
   }
 
@@ -2370,7 +2340,7 @@ abstract class CMSModule
    */
   public function CreateReturnLink($id, $returnid, $contents='', $params=array(), $onlyhref=false)
   {
-    $this->LoadFormMethods();
+    $this->_loadFormMethods();
     return cms_module_CreateReturnLink($this, $id, $returnid, $contents, $params, $onlyhref);
   }
 
@@ -2431,7 +2401,7 @@ abstract class CMSModule
       if( is_array($this->__messages) && count($this->__messages) ) $params['__messages'] = implode('::msg::',$this->__messages);
     }
 
-    $this->LoadRedirectMethods();
+    $this->_loadRedirectMethods();
     return cms_module_Redirect($this, $id, $action, $returnid, $params, $inline);
   }
 	
@@ -2442,7 +2412,7 @@ abstract class CMSModule
    */
   public function RedirectToAdmin($page,$params = array())
   {
-    $this->LoadRedirectMethods();
+    $this->_loadRedirectMethods();
     return cms_module_RedirectToAdmin($this,$page,$params);
   }
 
@@ -2585,7 +2555,7 @@ abstract class CMSModule
    */
   final public function ListTemplates($modulename = '')
   {
-    $this->LoadTemplateMethods();
+    $this->_loadTemplateMethods();
     return cms_module_ListTemplates($this, $modulename);
   }
 
@@ -2600,7 +2570,7 @@ abstract class CMSModule
    */
   final public function GetTemplate($tpl_name, $modulename = '')
   {
-    $this->LoadTemplateMethods();
+    $this->_loadTemplateMethods();
     return cms_module_GetTemplate($this, $tpl_name, $modulename);
   }
 
@@ -2614,7 +2584,7 @@ abstract class CMSModule
    */
   final public function GetTemplateFromFile($template_name)
   {
-    $this->LoadTemplateMethods();
+    $this->_loadTemplateMethods();
     return cms_module_GetTemplateFromFile($this, $template_name);
   }
 
@@ -2630,7 +2600,7 @@ abstract class CMSModule
    */
   final public function SetTemplate($tpl_name, $content, $modulename = '')
   {
-    $this->LoadTemplateMethods();
+    $this->_loadTemplateMethods();
     return cms_module_SetTemplate($this, $tpl_name, $content, $modulename);
   }
 
@@ -2644,7 +2614,7 @@ abstract class CMSModule
    */
   final public function DeleteTemplate($tpl_name = '', $modulename = '')
   {
-    $this->LoadTemplateMethods();
+    $this->_loadTemplateMethods();
     return cms_module_DeleteTemplate($this, $tpl_name, $modulename);
   }
 
@@ -2661,7 +2631,7 @@ abstract class CMSModule
    */
   final public function ProcessTemplate($tpl_name, $designation = '', $cache = false, $cacheid = '')
   {
-    $this->LoadTemplateMethods();
+    $this->_loadTemplateMethods();
     return cms_module_ProcessTemplate($this, $tpl_name, $designation, $cache = false, $cacheid);
   }
 
@@ -2678,7 +2648,7 @@ abstract class CMSModule
    */
   final public function ProcessTemplateFromData( $data )
   {
-    $this->LoadTemplateMethods();
+    $this->_loadTemplateMethods();
     return cms_module_ProcessTemplateFromData($this, $data);
   }
 
@@ -2694,7 +2664,7 @@ abstract class CMSModule
    */ 
   final public function ProcessTemplateFromDatabase($tpl_name, $designation = '', $cache = false, $modulename = '')
   {
-    $this->LoadTemplateMethods();
+    $this->_loadTemplateMethods();
     return cms_module_ProcessTemplateFromDatabase($this, $tpl_name, $designation, $cache, $modulename);
   }
 

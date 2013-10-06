@@ -128,7 +128,7 @@ $(document).ready(function(){
 <div class="pageoverflow">
   <p class="pagetext"><label for="contents">{$mod->Lang('prompt_template')}:</label>&nbsp;{cms_help key2=help_template_contents}</p>
   <p class="pageinput">
-    {syntax_area id="content" prefix=$actionid name=contents value=$template->get_content()}&nbsp;
+    {cms_textarea id='content' prefix=$actionid name=contents value=$template->get_content() type='smarty' rows=20 cols=80}
   </p>
 </div>
 

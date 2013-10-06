@@ -110,7 +110,7 @@ $(document).ready(function(){
 <div class="pageoverflow">
   <p class="pagetext"><label for="stylesheet">{$mod->Lang('prompt_stylesheet')}:</label>&nbsp;{cms_help key2=help_stylesheet_content}</p>
   <p class="pageinput">
-    {syntax_area id='stylesheet' prefix=$actionid name=content value=$css->get_content() type=css}
+    {cms_textarea id='stylesheet' prefix=$actionid name=content value=$css->get_content() type=css rows=20 cols=80}
   </p>
 </div>
 
