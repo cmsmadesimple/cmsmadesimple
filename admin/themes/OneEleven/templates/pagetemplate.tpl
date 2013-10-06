@@ -15,7 +15,6 @@
 		<link rel='apple-touch-icon' sizes='144x144' href='{$config.admin_url}/themes/OneEleven/images/favicon/apple-touch-icon-ipad3.png' />		
 		<meta name='msapplication-TileImage' content='{$config.admin_url}/themes/OneEleven/images/favicon/ms-application-icon.png' />
 		<meta name='msapplication-TileColor' content='#f89938'>
-		<link rel="stylesheet" href="style.php?{$secureparam}" />
 		<!-- learn IE html5 -->
 		<!--[if lt IE 9]>
 		<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -24,11 +23,12 @@
 		<!-- THIS IS WHERE HEADER STUFF SHOULD GO -->
 	 	{$headertext|default:''}
 		<!-- custom jQueryUI Theme 1.8.21 see style.css or link in UI Stylesheet for color reference //-->
-		<link href="{$config.admin_url}/themes/OneEleven/css/default-cmsms/jquery-ui-1.8.21.custom.css" rel="stylesheet" />
-        {module_available name='FileManager' assign='fmgood'}
-        {if isset($fmgood) && $fmgood}{cms_module module=FileManager action='javascript'}{/if}
+		<link rel="stylesheet" href="style.php?{$secureparam}" />
+		<link href="{$config.admin_url}/themes/OneEleven/css/default-cmsms/jquery-ui-1.10.3.custom.min.css" rel="stylesheet" />
+		{module_available name='FileManager' assign='fmgood'}
+		{if (isset($fmgood) && $fmgood && $pagealias != 'File-nbsp-Manager')}{cms_module module=FileManager action='javascript'}{/if}
 	</head>
-	<body##BODYSUBMITSTUFFGOESHERE## lang="{$lang|truncate:'2':''}" id="{$pagetitle|md5}" class="oe_{$pagealias}">
+	<body lang="{$lang|truncate:'2':''}" id="{$pagetitle|md5}" class="oe_{$pagealias}">
 		<!-- start container -->
 		<div id="oe_container" class="sidebar-on">
 			<!-- start header -->

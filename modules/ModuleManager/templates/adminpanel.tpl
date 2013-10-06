@@ -11,7 +11,7 @@
 {/if}
 
 {if $itemcount > 0}
-<table cellspacing="0" class="pagetable">
+<table cellspacing="0" class="pagetable scrollable">
 	<thead>
 		<tr>
 			<th width="20%">{$nametext}</th>

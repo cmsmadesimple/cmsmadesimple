@@ -34,7 +34,7 @@ _this=`basename $0`
 _svn=http://svn.cmsmadesimple.org/svn/cmsmadesimple/branches/1.6.x
 _workdir=/tmp/$_this.$$
 _owd=`pwd`
-_rmfiles='CHECKLIST scripts build config.php autogen.sh mpd.sql mysql.sql makedoc.sh cleardb.sh generatedump.php images/cms/*.svg svn-propset* find-mime admin/lang/*sh admin/lang/*.bat admin/lang/*pl admin/editconfig.php lib/adodb lib/preview.functions.php plugins/cache release-cleanup.sh blank.htm .gitignore';
+_rmfiles='CHECKLIST apidoc scripts tools build config.php autogen.sh mpd.sql mysql.sql makedoc.sh cleardb.sh generatedump.php images/cms/*.svg svn-propset* find-mime admin/lang/*sh admin/lang/*.bat admin/lang/*pl admin/editconfig.php lib/adodb lib/preview.functions.php plugins/cache release-cleanup.sh blank.htm .gitignore';
 _cmsurl='http://svn.cmsmadesimple.org/svn/cmsmadesimple';
 # basedir    (if set, specify the base directory to put generated releases).
 # nohtaccess (if set, disable htaccess generation)

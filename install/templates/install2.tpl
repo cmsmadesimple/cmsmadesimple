@@ -63,12 +63,12 @@
 	{/if}
 	{if isset($test->opt)}
 		{foreach from=$test->opt key='key' item='opt'}
-				<p><img src="images/{$opt.res}.gif" alt="{$opt.res_text}" title="{$opt.res_text}" /> {$key}: {$opt.message}</p>
+				<p><img src="images/{$opt.res}.gif" alt="{$opt.res_text|default:''}" title="{$opt.res_text|default:''}" /> {$key}: {$opt.message}</p>
 		{/foreach}
 	{/if}
 			</td>
 			<td class="col2">
-				<img class="{$test->res}" src="images/{$test->res}.gif" alt="{$test->res_text}" title="{$test->res_text}" />
+				<img class="{$test->res}" src="images/{$test->res}.gif" alt="{$test->res_text|default:''}" title="{$test->res_text|default:''}" />
 	{if isset($test->error_fragment)}
 				<a class="external" rel="external" href="{$cms_install_help_url}#{$test->error_fragment}">?</a>
 	{/if}
@@ -114,12 +114,12 @@
 	{/if}
 	{if isset($test->opt)}
 		{foreach from=$test->opt key='key' item='opt'}
-				<p><img src="images/{$opt.res}.gif" alt="{$opt.res_text}" title="{$opt.res_text}" /> {$key}: {$opt.message}</p>
+				<p><img src="images/{$opt.res}.gif" alt="{$opt.res_text|default:''}" title="{$opt.res_text|default:''}" /> {$key}: {$opt.message}</p>
 		{/foreach}
 	{/if}
 			</td>
 			<td class="col2">
-				<img class="{$test->res}" src="images/{$test->res}.gif" alt="{$test->res_text}" title="{$test->res_text}" />
+				<img class="{$test->res}" src="images/{$test->res}.gif" alt="{$test->res_text|default:''}" title="{$test->res_text|default:''}" />
 	{if isset($test->error_fragment)}
 				<a class="external" rel="external" href="{$cms_install_help_url}#{$test->error_fragment}">?</a>
 	{/if}
@@ -193,7 +193,7 @@ function toggle(obj) {
 //-->
 </script>
 {/literal}
-<form action="{$smarty.server.PHP_SELF|htmlspecialchars}?sessiontest=1" method="post" name="page2form" id="page2form">
+<form action="{$smarty.server.PHP_SELF|strip_tags}?sessiontest=1" method="post" name="page2form" id="page2form">
 	<div class="continue">
 		<input type="reset" name="togglephpinfo" value="{lang_install a=phpinfo}" onclick="toggle('phpinfo');return false;" />
 		<input type="hidden" name="page" value="3" />

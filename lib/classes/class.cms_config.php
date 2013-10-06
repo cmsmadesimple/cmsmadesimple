@@ -29,7 +29,7 @@
  * @package CMS
  * @author Robert Campbell (calguy1000@cmsmadesimple.org)
  */
-class cms_config implements ArrayAccess
+final class cms_config implements ArrayAccess
 {
   const TYPE_STRING = 'STRING';
   const TYPE_INT = 'INT';
@@ -61,7 +61,7 @@ class cms_config implements ArrayAccess
 			$i ++;
 		}
 		$maxFileSize=$ss;
-		if ($x > 0) $maxFileSize = $ss * $x;
+		if ($x >0) $maxFileSize = $ss * $x;
 	}
     else {
 		$maxFileSize = 1000000;
@@ -90,9 +90,9 @@ class cms_config implements ArrayAccess
     $this->_types['image_uploads_url'] = self::TYPE_STRING;
     $this->_types['ssl_image_uploads_url'] = self::TYPE_STRING;
     $this->_types['debug'] = self::TYPE_BOOL;
+    $this->_types['debug_to_log'] = self::TYPE_BOOL;
     $this->_types['timezone'] = self::TYPE_STRING;
     $this->_types['persist_db_conn'] = self::TYPE_BOOL;
-    $this->_types['previews_path'] = self::TYPE_STRING;
     $this->_types['max_upload_size'] = self::TYPE_INT;
     $this->_types['default_upload_permission'] = self::TYPE_STRING;
     $this->_types['auto_alias_content'] = self::TYPE_BOOL;
@@ -108,10 +108,30 @@ class cms_config implements ArrayAccess
     $this->_types['set_db_timezone'] = self::TYPE_BOOL;
     $this->_types['admin_url'] = self::TYPE_STRING;
     $this->_types['ignore_lazy_load'] = self::TYPE_BOOL;
+	$this->_types['tmp_cache_location'] = self::TYPE_STRING;
+	$this->_types['tmp_templates_c_location'] = self::TYPE_STRING;
+	$this->_types['public_cache_location'] = self::TYPE_STRING;
 
     $config = array();
-    if (file_exists(CONFIG_FILE_LOCATION)) {
+    if (defined('CONFIG_FILE_LOCATION') && file_exists(CONFIG_FILE_LOCATION)) {
 		include(CONFIG_FILE_LOCATION);
+		foreach( $config as $key => &$value ) {
+			if( isset($this->_types[$key]) ) {
+				switch( $this->_types[$key] ) {
+				case self::TYPE_BOOL:
+					$value = cms_to_bool($value);
+					break;
+
+				case self::TYPE_STRING:
+					$value = trim($value);
+					break;
+
+				case self::TYPE_INT:
+					$value = (int)$value;
+					break;
+				}
+			}
+		}
 		unset($config['max_upload_size']);
 		unset($config['upload_max_filesize']);
 	}
@@ -149,6 +169,13 @@ class cms_config implements ArrayAccess
 
       // now load the config
       self::$_instance->load_config();
+
+	  global $CMS_INSTALL_PAGE;
+	  if( !isset($CMS_INSTALL_PAGE) ) {
+		  define('TMP_CACHE_LOCATION',self::$_instance['tmp_cache_location']);
+		  define('PUBLIC_CACHE_LOCATION',self::$_instance['public_cache_location']);
+		  define('TMP_TEMPLATES_C_LOCATION',self::$_instance['tmp_templates_c_location']);
+	  }
     }
 
     return self::$_instance;
@@ -177,8 +204,8 @@ class cms_config implements ArrayAccess
 		  return FALSE;
 
 	  case 'default_upload_permission':
-		  // deprecated, backwards compat only
-		  return '664';
+		  $mask = get_site_preference('global_umask',022);
+		  return 0666 & ~$mask;
 
 	  case 'assume_mod_rewrite':
 		  // deprecated, backwards compat only
@@ -190,7 +217,9 @@ class cms_config implements ArrayAccess
 	  }
 
 	  // from the config file.
-	  if( isset($this->_data[$key]) ) return $this->_data[$key];
+	  if( isset($this->_data[$key]) ) {
+		  return $this->_data[$key];
+	  }
 
 	  // cached, calculated values.
 	  if( isset($this->_cache[$key]) ) {
@@ -198,7 +227,8 @@ class cms_config implements ArrayAccess
 		  return $this->_cache[$key];
 	  }
 
-	  // it's not explicitly specified in the config file, or cached.
+	  // it's not explicitly specified in the config file.
+	  //$calculated_root_path = dirname(dirname(dirname(__FILE__)));
 	  switch( $key ) {
 	  case 'dbms':
 	  case 'db_hostname':
@@ -217,7 +247,7 @@ class cms_config implements ArrayAccess
 		  return true;
 
 	  case 'set_db_timezone':
-		  return FALSE;
+		  return true;
 
 	  case 'root_path':
 		  $out = dirname(dirname(dirname(__FILE__)));
@@ -243,19 +273,17 @@ class cms_config implements ArrayAccess
 			  while(endswith($path, DIRECTORY_SEPARATOR)) {
 				  $path = substr($path,0,strlen($path)-1);
 			  }
-			  if( ($pos = strpos($path,'/index.php')) !== FALSE ) {
-				  $path = substr($path,0,$pos);
-			  }
+			  if( ($pos = strpos($path,'/index.php')) !== FALSE ) $path = substr($path,0,$pos);
 		  }
 		  $str = 'http://'.$_SERVER['HTTP_HOST'].$path;
 		  $this->_cache[$key] = $str;
 		  return $str;
 		  break;
-		  
+
 	  case 'ssl_url':
 		  $this->_cache[$key] = str_replace('http://','https://',$this->offsetGet('root_url'));
 		  return $this->_cache[$key];
-		  
+
 	  case 'uploads_path':
 		  $this->_cache[$key] = cms_join_path($this->offsetGet('root_path'),'uploads');
 		  return $this->_cache[$key];
@@ -263,11 +291,11 @@ class cms_config implements ArrayAccess
 	  case 'uploads_url':
 		  $this->_cache[$key] = $this->offsetGet('root_url').'/uploads';
 		  return $this->_cache[$key];
-		  
+
 	  case 'ssl_uploads_url':
 		  $this->_cache[$key] = str_replace('http://','https://',$this->offsetGet('uploads_url'));
 		  return $this->_cache[$key];
-		  
+
 	  case 'image_uploads_path':
 		  $this->_cache[$key] = cms_join_path($this->offsetGet('uploads_path'),'images');
 		  return $this->_cache[$key];
@@ -279,7 +307,7 @@ class cms_config implements ArrayAccess
 	  case 'ssl_image_uploads_url':
 		  $this->_cache[$key] = str_replace('http://','https://',$this->offsetGet('image_uploads_url'));
 		  return $this->_cache[$key];
-		  
+
 	  case 'previews_path':
 		  return TMP_CACHE_LOCATION;
 
@@ -334,13 +362,20 @@ class cms_config implements ArrayAccess
 		  return false;
 
 	  case 'css_path':
-		  return TMP_CACHE_LOCATION.'/';
+		  return PUBLIC_CACHE_LOCATION.'/';
 
 	  case 'css_url':
 		  return $this->offsetGet('root_url').'/tmp/cache/';
 
 	  case 'ssl_css_url':
 		  return $this->offsetGet('ssl_url').'/tmp/cache/';
+
+	  case 'tmp_cache_location':
+	  case 'public_cache_location':
+		  return cms_join_path($this->offsetGet('root_path'),'tmp','cache');
+
+	  case 'tmp_templates_c_location':
+		  return cms_join_path($this->offsetGet('root_path'),'tmp','templates_c');
 
 	  default:
 		  // not a mandatory key for the config.php file... and one we don't understand.
@@ -373,7 +408,6 @@ class cms_config implements ArrayAccess
   private function _printable_value($key,$value)
   {
 	  $type = self::TYPE_STRING;
-
 	  if( isset($this->_types[$key]) ) $type = $this->_types[$key];
 
 	  $str = '';
@@ -404,27 +438,27 @@ class cms_config implements ArrayAccess
    */
   public function save($verbose = true,$filename = '')
   {
-    if( !$filename ) $filename = CONFIG_FILE_LOCATION;
+	  if( !$filename ) $filename = CONFIG_FILE_LOCATION;
 
-    // backup the original config.php file (just in case)
-    if( file_exists($filename) ) @copy($filename,cms_join_path(TMP_CACHE_LOCATION,basename($filename).time().'.bak'));
+	  // backup the original config.php file (just in case)
+	  if( file_exists($filename) ) @copy($filename,cms_join_path(TMP_CACHE_LOCATION,basename($filename).time().'.bak'));
 
-    $output = "<?php\n# CMS Made Simple Configuration File\n# Documentation: /doc/CMSMS_config_reference.pdf\n#\n";
-    // output header to the config file.
+	  $output = "<?php\n# CMS Made Simple Configuration File\n# Documentation: /doc/CMSMS_config_reference.pdf\n#\n";
+	  // output header to the config file.
 
-    foreach( $this->_data as $key => $value ) {
-		$outvalue = $this->_printable_value($key,$value);
-		$output .= "\$config['{$key}'] = $outvalue;\n";
-    }
+	  foreach( $this->_data as $key => $value ) {
+		  $outvalue = $this->_printable_value($key,$value);
+		  $output .= "\$config['{$key}'] = $outvalue;\n";
+	  }
 
-    $output .= "?>\n";
+	  $output .= "?>\n";
 
-    // and write it.
-    $fh = fopen($filename,'w');
-    if( $fh ) {
-		fwrite($fh,$output);
-		fclose($fh);
-	}
+	  // and write it.
+	  $fh = fopen($filename,'w');
+	  if( $fh ) {
+		  fwrite($fh,$output);
+		  fclose($fh);
+      }
   }
 
   public function smart_root_url()
@@ -446,4 +480,8 @@ class cms_config implements ArrayAccess
   }
 } // end of class
 
+#
+# EOF
+#
+# vim:ts=4 sw=4 noet
 ?>

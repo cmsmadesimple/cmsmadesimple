@@ -84,17 +84,8 @@ class CMSInstallerPage2 extends CMSInstallerPage
 			$settings['required'][] = testCreateDirAndFile(1, ilang('test_create_dir_and_file'), ilang('info_create_dir_and_file'), $this->debug);
 		}
 
-		{
-		  $fn = TMP_CACHE_LOCATION.'/install_test_time.dat';
-		  @touch($fn);
-		  $mtime = filemtime($fn);
-		  @unlink($fn);
-		  if( ($val = abs($mtime - time())) > 3 ) {
-		    $settings['required'][] = testDummy(ilang('test_timedifference'),$val,'red',ilang('error_timedifference'),'');
-		  } else {
-		    $settings['required'][] = testDummy(ilang('test_timedifference'),$val,'green');
-		  }
-		}
+		$settings['required'][] = _testTimeSettings1();
+		//$settings['required'][] = _testTimeSettings2();
 
 		/*
 		 * Recommended Settings

@@ -1,6 +1,6 @@
 <?php
 #CMS - CMS Made Simple
-#(c)2004 by Ted Kulp (wishy@users.sf.net)
+#(c)2004-2012 by Ted Kulp (wishy@users.sf.net)
 #This project's homepage is: http://www.cmsmadesimple.org
 #
 #This program is free software; you can redistribute it and/or modify
@@ -67,7 +67,6 @@ echo "<th>".lang('name')."</th>\n";
 echo "<th>".lang('description')."</th>\n";
 echo "<th class=\"pageicon\">&nbsp;</th>\n";
 echo "<th class=\"pageicon\">&nbsp;</th>\n";
-echo "<th class=\"pageicon\">&nbsp;</th>\n";
 echo "</tr>\n";
 echo '</thead>';
 echo '<tbody>';
@@ -82,11 +81,9 @@ if( count($tags) )
 	$tag = UserTagOperations::get_instance()->GetUserTag($oneplugin);
 
 	echo "<tr class=\"".$curclass."\">\n";
-	echo "<td><a href=\"edituserplugin.php".$urlext."&amp;userplugin_id=".$oneplugin."\">$label</a></td>\n";
+	echo "<td><a href=\"editusertag.php".$urlext."&amp;userplugin_id=".$oneplugin."\">$label</a></td>\n";
 	echo "<td>".listudt_summarize($tag['description'],20)."</td>\n";
-	echo "<td class=\"icons_wide\"><a href=\"runuserplugin.php".$urlext."&amp;userplugin_id=".$oneplugin."\">";
-	echo $themeObject->DisplayImage('icons/system/run.gif', lang('run_udt'), '', '', 'systemicon')."</a></td>\n";
-	echo "<td class=\"icons_wide\"><a href=\"edituserplugin.php".$urlext."&amp;userplugin_id=".$oneplugin."\">";
+	echo "<td class=\"icons_wide\"><a href=\"editusertag.php".$urlext."&amp;userplugin_id=".$oneplugin."\">";
 	echo $themeObject->DisplayImage('icons/system/edit.gif', lang('edit'),'','','systemicon');
 	echo "</a></td>\n";
 	echo "<td class=\"icons_wide\"><a href=\"deleteuserplugin.php".$urlext."&amp;userplugin_id=".$oneplugin."\" onclick=\"return confirm('".cms_html_entity_decode_utf8(lang('deleteconfirm', $oneplugin),true)."');\">";
@@ -103,10 +100,10 @@ if( count($tags) )
 </table>
 	<div class="pageoptions">
 		<p class="pageoptions">
-			<a href="adduserplugin.php<?php echo $urlext; ?>">
+			<a href="editusertag.php<?php echo $urlext; ?>">
 				<?php
 					echo $themeObject->DisplayImage('icons/system/newobject.gif', lang('addusertag'),'','','systemicon').'</a>';
-					echo ' <a class="pageoptions" href="adduserplugin.php'.$urlext.'">'.lang("addusertag");
+					echo ' <a class="pageoptions" href="editusertag.php'.$urlext.'">'.lang("addusertag");
 				?>
 			</a>
 		</p>

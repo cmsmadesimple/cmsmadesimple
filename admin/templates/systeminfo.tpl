@@ -52,7 +52,7 @@
   		{foreach from=$tmp key='key' item='test'}
 		<tr class="{cycle values='row1,row2'}">
     		<td width="45%">{$test->title}</td>
-			<td width="5%">{if isset($test->res)}<img class="systemicon" src="themes/{$themename}/images/icons/extra/{$test->res}.gif" title="{$test->res_text}" alt="{$test->res_text}" />{/if}</td>
+			<td width="5%">{if isset($test->res)}<img class="systemicon" src="themes/{$themename}/images/icons/extra/{$test->res}.gif" title="{$test->res_text|default:''}" alt="{$test->res_text|default:''}" />{/if}</td>
 			<td width="50%">
 	{if isset($test->value)}{$test->value|default:"&nbsp;"}{/if}
 	{if isset($test->secondvalue)}({$test->secondvalue|default:"&nbsp;"}){/if}
@@ -65,6 +65,33 @@
 	</tbody>
 </table>
 <br /><br />
+
+
+<table class="pagetable" cellspacing="0" summary="{lang('performance_information')}">
+    <thead> 
+       <tr>
+         <th colspan="3">{lang('performance_information')}</th>
+       </tr>
+    </thead> 
+	<tbody>
+  	{foreach from=$performance_info key='view' item='tmp'}
+  		{foreach from=$tmp key='key' item='test'}
+		<tr class="{cycle values='row1,row2'}">
+    		<td width="45%">{$test->title}</td>
+			<td width="5%">{if isset($test->res)}<img class="systemicon" src="themes/{$themename}/images/icons/extra/{$test->res}.gif" title="{$test->res_text|default:''}" alt="{$test->res_text|default:''}" />{/if}</td>
+			<td width="50%">
+	{if isset($test->value)}{$test->value|default:"&nbsp;"}{/if}
+	{if isset($test->secondvalue)}({$test->secondvalue|default:"&nbsp;"}){/if}
+	{if isset($test->error_fragment)}<a class="external" rel="external" href="{$cms_install_help_url}#{$test->error_fragment}"><img src="themes/{$themename}/images/icons/system/info-external.gif" title="?" alt="?" /></a>{/if}
+	{if isset($test->message)}<br />{$test->message}{/if}
+			</td>
+		</tr>
+  		{/foreach}
+	{/foreach}
+	</tbody>
+</table>
+<br /><br />
+
 <table class="pagetable" cellspacing="0" summary="{si_lang a=php_information}">
     <thead> 
        <tr>
@@ -76,7 +103,7 @@
   		{foreach from=$tmp key='key' item='test'}
 		<tr class="{cycle values='row1,row2'}">
     		<td width="45%">{si_lang a=$key} ({$key})</td>
-			<td width="5%">{if isset($test->res)}<img class="systemicon" src="themes/{$themename}/images/icons/extra/{$test->res}.gif" title="{$test->res_text}" alt="{$test->res_text}" />{/if}</td>
+			<td width="5%">{if isset($test->res)}<img class="systemicon" src="themes/{$themename}/images/icons/extra/{$test->res}.gif" title="{$test->res_text|default:''}" alt="{$test->res_text|default:''}" />{/if}</td>
 			<td width="50%">
 	{if isset($test->value) && $test->display_value != 0}&nbsp;{$test->value}{/if}
 	{if isset($test->secondvalue)}({$test->secondvalue}){/if}
@@ -84,7 +111,7 @@
 	{if isset($test->message)}{$test->message}{/if}
 	{if isset($test->opt)}
 		{foreach from=$test->opt key='key' item='opt'}
-			<br />{$key}: {$opt.message} <img class="systemicon" src="themes/{$themename}/images/icons/extra/{$opt.res}.gif" alt="{$opt.res_text}" title="{$opt.res_text}" />
+			<br />{$key}: {$opt.message} <img class="systemicon" src="themes/{$themename}/images/icons/extra/{$opt.res}.gif" alt="{$opt.res_text|default:''}" title="{$opt.res_text|default:''}" />
 		{/foreach}
 	{/if}
 			</td>
@@ -105,7 +132,7 @@
   		{foreach from=$tmp key='key' item='test'}
 		<tr class="{cycle values='row1,row2'}">
 			<td width="45%">{si_lang a=$key} ({$key})</td>
-			<td width="5%">{if isset($test->res)}<img class="systemicon" src="themes/{$themename}/images/icons/extra/{$test->res|default:"space"}.gif" title="{$test->res_text|default:""}" alt="{$test->res_text|default:""}" />{/if}</td>
+			<td width="5%">{if isset($test->res)}<img class="systemicon" src="themes/{$themename}/images/icons/extra/{$test->res|default:"space"}.gif" title="{$test->res_text|default:''}" alt="{$test->res_text|default:''}" />{/if}</td>
 			<td width="50%">
 			{if isset($test->value)}{$test->value|lower}{/if}
 			{if isset($test->secondvalue)}({$test->secondvalue}){/if}
@@ -128,7 +155,7 @@
   		{foreach from=$tmp key='key' item='test'}
 	<tr class="{cycle values='row1,row2'}">
 		<td width="45%">{$key}</td>
-		<td width="5%">{if isset($test->res)}<img class="systemicon" src="themes/{$themename}/images/icons/extra/{$test->res}.gif" title="{$test->res_text}" alt="{$test->res_text}" />{/if}</td>
+		<td width="5%">{if isset($test->res)}<img class="systemicon" src="themes/{$themename}/images/icons/extra/{$test->res}.gif" title="{$test->res_text|default:''}" alt="{$test->res_text|default:''}" />{/if}</td>
 		<td width="50%">
 		{if isset($test->value)}{$test->value}{/if}
 		{if isset($test->secondvalue)}({$test->secondvalue}){/if}

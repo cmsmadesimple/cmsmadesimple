@@ -2,8 +2,8 @@
 #BEGIN_LICENSE
 #-------------------------------------------------------------------------
 # CmsException (c) 2012 by Robert Campbell 
-#         (calguy1000@cmsmadesimple.org)
-#  A collection of CMSMS Exception classes
+# (calguy1000@cmsmadesimple.org)
+# A collection of CMSMS Exception classes
 # 
 #-------------------------------------------------------------------------
 # CMS - CMS Made Simple is (c) 2005 by Ted Kulp (wishy@cmsmadesimple.org)
@@ -39,13 +39,84 @@
  */
 
 /**
+ * A basic exception class that holds on to extended information.
+ */
+abstract class CmsExtraDataException extends Exception
+{
+  private $_extra;
+
+  public function __construct(/* var args */)
+  {
+    $args = $msg = $prev = NULL;
+    $code = 0;
+    $args = func_get_args();
+    if( is_array($args) && count($args) == 1 ) $args = $args[0];
+    for( $i = 0; $i < count($args); $i++ ) {
+      switch( $i ) {
+      case 0:
+	$msg = $args[$i];
+	break;
+
+      case 1:
+        $code = (int)$args[$i];
+	break;
+
+      case 2:
+	if( is_object($args[$i]) ) {
+	  $prev = $args[$i];
+	}
+	else {
+	  $this->_extra = $args[$i];
+	}
+	break;
+
+      case 3:
+	if( $prev == null && is_object($args[$i]) ) $prev = $args[$i];
+	break;
+      }
+    }
+    parent::__construct($msg,$code,$prev);
+  }
+
+  public function GetExtraData()
+  {
+    return $this->_extra;
+  }
+}
+
+/**
  * A base CMSMS Exception
+ *
+ * This exception can accept an integer 'code' for an exception or a language key.
+ * if the string passed in contains a space it is not translated.
  * 
  * @package CMS
  * @author Robert Campbell (calguy1000@cmsmadesimple.org)
  * @since 1.10
  */
-class CmsException extends Exception {}
+class CmsException extends CmsExtraDataException 
+{
+  public function __construct(/* var args */) {
+    $args = func_get_args();
+    parent::__construct($args);
+    if( is_int($this->message) ) $this->messsage = 'CMSEX_'.$msg;
+    if( startswith($this->message,'CMSEX_') && !CmsLangOperations::key_exists($this->message) ) {
+      $this->message = 'MISSING TRANSLATION FOR '.$this->message;
+    }
+    else if( strpos($this->message,' ') === FALSE && CmsLangOperations::key_exists($this->message) ) {
+      $this->message = CmsLangOperations::lang($this->message);
+    }
+  }
+}
+
+/**
+ * A base CMSMS Logic Exception
+ * 
+ * @package CMS
+ * @author Robert Campbell (calguy1000@cmsmadesimple.org)
+ * @since 1.10
+ */
+class CmsLogicException extends CmsException {}
 
 /**
  * A base CMSMS Privacy Exception
@@ -75,6 +146,15 @@ class CmsSingletonException extends CmsException {}
 class CmsInvalidDataException extends CmsException {}
 
 /**
+ * An exception indicating that the requested data could not be found.
+ * 
+ * @package CMS
+ * @author Robert Campbell (calguy1000@cmsmadesimple.org)
+ * @since 1.10
+ */
+class CmsDataNotFoundException extends CmsException {}
+
+/**
  * A special exception indicating that a 404 error should be supplied.
  *
  * @package CMS
@@ -84,12 +164,40 @@ class CmsInvalidDataException extends CmsException {}
 class CmsError404Exception extends CmsException {}
 
 /**
- * A special exception indicating that a 404 error should be supplied.
+ * A special exception indicating an error when editing content.
  *
  * @package CMS
  * @author Robert Campbell (calguy1000@cmsmadesimple.org)
  * @since 1.11
  */
 class CmsEditContentException extends CmsException {}
+
+/**
+ * A special exception indicating an SQL Error.
+ *
+ * @package CMS
+ * @author Robert Campbell (calguy1000@cmsmadesimple.org)
+ * @since 1.12
+ */
+class CmsSQLErrorException extends CmsException {}
+
+
+/**
+ * A special exception indicating an XML Error.
+ *
+ * @package CMS
+ * @author Robert Campbell (calguy1000@cmsmadesimple.org)
+ * @since 1.12
+ */
+class CmsXMLErrorException extends CmsException {}
+
+/**
+ * A special exception indicating a problem with a file, directory, or filesystem
+ *
+ * @package CMS
+ * @author Robert Campbell (calguy1000@cmsmadesimple.org)
+ * @since 1.12
+ */
+class CmsFileSystemException extends CmsException {}
 
 ?>

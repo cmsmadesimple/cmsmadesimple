@@ -318,4 +318,5 @@ class mysqli_date_ResultSet extends mysqli_date_resultset_EXTENDER
 		return mysqli_date_ADOConnection::UnixTimeStamp($v);
 	}
 }
+
 ?>

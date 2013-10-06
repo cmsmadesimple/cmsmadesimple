@@ -38,57 +38,34 @@ class CMSContentTemplateResource extends CMS_Fixed_Resource_Custom
   {
     $gCms = cmsms();
     $config = $gCms->GetConfig();
-    $contentobj = $gCms->variables['content_obj'];
+    $contentobj = $gCms->get_content_object();
 
-    if (!is_object($contentobj))
-      {
-	// We've a custom error message...  return it here
-	header("HTTP/1.0 404 Not Found");
-	header("Status: 404 Not Found");
-	if ($name == 'content_en')
-	  $source = get_site_preference('custom404');
-	else
-	  $source = null;
-	$mtime = time();
-	return;
-      }
-    else if( isset($_SESSION['cms_preview_data']) && $contentobj->Id() == '__CMS_PREVIEW_PAGE__' )
-      {
-	if( !isset($_SESSION['cms_preview_data']['content_obj']) )
-	  {
-	    $contentops = $gCms->GetContentOperations();
-	    $_SESSION['cms_preview_data']['content_obj'] = $contentops->LoadContentFromSerializedData($_SESSION['cms_preview_data']);
-	    $contentobj =& $_SESSION['cms_preview_data']['content_obj'];
-	  }
-	$contentobj =& $_SESSION['cms_preview_data']['content_obj'];
-	$source = $contentobj->Show($name);
-	$mtime = $contentobj->GetModifiedDate();
-
-	// So no one can do anything nasty, take out the php smarty tags.  Use a user
-	// defined plugin instead.
-	if (!(isset($config["use_smarty_php_tags"]) && $config["use_smarty_php_tags"] == true))
-	  {
-	    $source = preg_replace("/\{\/?php\}/", "", $source);
-	  }
-	return;
-      }
-    else
-      {
-	if (isset($contentobj) && $contentobj !== FALSE)
-	  {
-	    $source = $contentobj->Show($name);
-	    $mtime = $contentobj->GetModifiedDate();
-
-	    // So no one can do anything nasty, take out the php smarty tags.  Use a user
-	    // defined plugin instead.
-	    if (!(isset($config["use_smarty_php_tags"]) && $config["use_smarty_php_tags"] == true))
-	      {
-		$source = preg_replace("/\{\/?php\}/", "", $source);
-	      }
-					
-	    return;
-	  }
-      }
+    if (!is_object($contentobj)) {
+      // We've a custom error message...  return it here
+      header("HTTP/1.0 404 Not Found");
+      header("Status: 404 Not Found");
+      $source = null;
+      if ($name == 'content_en') $source = get_site_preference('custom404');
+      $mtime = time();
+      $source = trim($source);
+      return;
+    }
+    else if( isset($_SESSION['__preview_content_']) && 
+	     $contentobj->Id() == '__CMS_PREVIEW_PAGE__' ) {
+      $contentobj =& $_SESSION['__preview_content__'];
+      $source = $contentobj->Show($name);
+      $mtime = $contentobj->GetModifiedDate();
+      $source = preg_replace("/\{\/?php\}/", "", $source);
+      $source = trim($source);
+      return;
+    }
+    else if (isset($contentobj) && $contentobj !== FALSE) {
+      $source = $contentobj->Show($name);
+      $source = preg_replace("/\{\/?php\}/", "", $source);
+      $mtime = $contentobj->GetModifiedDate();
+      $source = trim($source);
+      return;
+    }
     $source = null;
     $mtime = null;
     return;

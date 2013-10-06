@@ -68,14 +68,15 @@ class cms_url
    * 
    * @param string the url to work with
    */
-  public function __construct($url)
+  public function __construct($url = '')
   {
-    $this->_orig = $url;
-    $this->_parts = parse_url($url);
-    if( ($str = $this->get_query()) )
-      {
-	$this->_query = parse_str($str);
-      }
+	  if( $url ) {
+		  $this->_orig = $url;
+		  $this->_parts = parse_url($url);
+		  if( ($str = $this->get_query()) ) {
+			  parse_str($str,$this->_query);
+		  }
+	  }
   }
 
   /**
@@ -83,9 +84,8 @@ class cms_url
    */
   private function _get_part($key)
   {
-    if( isset($this->_parts[$key]) ) 
-      {
-	return $this->_parts[$key];
+	  if( isset($this->_parts[$key]) ) {
+		  return $this->_parts[$key];
       }
   }
 
@@ -94,13 +94,11 @@ class cms_url
    */
   private function _set_part($key,$value)
   {
-    if( !$value && isset($this->_parts[$key]) )
-      {
-	unset($this->_parts[$key]);
+	  if( !$value && isset($this->_parts[$key]) ) {
+		  unset($this->_parts[$key]);
       }
-    else
-      {
-	$this->_parts[$key] = $value;
+	  else {
+		  $this->_parts[$key] = $value;
       }
   }
 
@@ -260,11 +258,10 @@ class cms_url
    */
   public function set_query($val)
   {
+    if( $val ) {
+		parse_str($val,$this->_query);
+	}
     return $this->_set_part('query',$val);
-    if( $val )
-      {
-	$this->_query = parse_str($val);
-      }
   }
 
   public function get_fragment()
@@ -287,17 +284,15 @@ class cms_url
 
   public function get_queryvar($key)
   {
-    if( $key && isset($this->_query[$key]) )
-      {
-	return $this->_query[$key];
+	  if( $this->queryvar_exists($key) ) {
+		  return $this->_query[$key];
       }
   }
 
   public function set_queryvar($key,$value)
   {
-    if( $key && $value )
-      {
-	$this->_query[$key] = $value;
+	  if( $key && $value ) {
+		  $this->_query[$key] = (string)$value;
       }
   }
 
@@ -305,28 +300,33 @@ class cms_url
   public function __toString()
   {
     // build the query array back into a string.
-    if( count($this->_query) )
-      {
-	$tmp = array();
-	foreach( $this->_query as $key => $val )
-	  {
-	    $tmp[] = $key.'='.$val;
-	  }
+	  if( count($this->_query) ) {
+		  $this->_parts['query'] = http_build_query($this->_query);
+		  /*
+		  $tmp = array();
+		  foreach( $this->_query as $key => $val ) {
+			  $tmp[] = $key.'='.$val;
+		  }
 
-	$str = '?';
-	$str = implode('&',$tmp);
-	$this->_parts['query'] = $str;
+		  $str = '?';
+		  $str = implode('&',$tmp);
+		  $this->_parts['query'] = $str;
+		  */
       }
 
-    $parts = $this->_parts;
-    $url = ((isset($parts['scheme'])) ? $parts['scheme'] . '://' : '')
-      .((isset($parts['user'])) ? $parts['user'] . ((isset($parts['pass'])) ? ':' . $parts['pass'] : '') .'@' : '')
-      .((isset($parts['host'])) ? $parts['host'] : '')
-      .((isset($parts['port'])) ? ':' . $parts['port'] : '')
-      .((isset($parts['path'])) ? $parts['path'] : '')
-      .((isset($parts['query'])) ? '?' . $parts['query'] : '')
-      .((isset($parts['fragment'])) ? '#' . $parts['fragment'] : '');
-    return $url;
+	  $parts = $this->_parts;
+
+	  $path = (isset($parts['path'])) ?$parts['path'] : '';
+	  if( $path && $path[0] != '/' ) $path = '/'.$path;
+
+	  $url = ((isset($parts['scheme'])) ? $parts['scheme'] . '://' : '')
+		  .((isset($parts['user'])) ? $parts['user'] . ((isset($parts['pass'])) ? ':' . $parts['pass'] : '') .'@' : '')
+		  .((isset($parts['host'])) ? $parts['host'] : '')
+		  .((isset($parts['port'])) ? ':' . $parts['port'] : '')
+		  .$path
+		  .((isset($parts['query'])) ? '?' . $parts['query'] : '')
+		  .((isset($parts['fragment'])) ? '#' . $parts['fragment'] : '');
+	  return $url;
   }
 } // end of class
 

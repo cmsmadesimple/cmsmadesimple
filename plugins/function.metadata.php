@@ -18,20 +18,19 @@
 
 function smarty_function_metadata($params, &$template)
 {
-  $smarty = $template->smarty;
-	$gCms = cmsms();
-	$config = $gCms->GetConfig();
-	$content_obj = $gCms->variables['content_obj'];
+	$smarty = $template->smarty;
+	$config = cmsms()->GetConfig();
+	$content_obj = cmsms()->get_content_object();
 
 	$result = '';	
 
 	$showbase = true;
 	
-	#Show a base tag unless showbase is false in config.php
-	#It really can't hinder, only help.
+	# Show a base tag unless showbase is false in config.php
+	# It really can't hinder, only help
 	if( isset($config['showbase']))  $showbase = $config['showbase'];
 
-        # but allow a parameter to override it.
+    # But allow a parameter to override it
 	if (isset($params['showbase']))
 	{
 		if ($params['showbase'] == 'false')
@@ -42,13 +41,12 @@ function smarty_function_metadata($params, &$template)
 
 	if ($showbase)
 	{
-	  $base = $config['root_url'];
-	  if (isset($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) != 'off')
-	  {
-	    $base = $config['ssl_url'];
-	  }
-
-	  $result .= "\n<base href=\"".$base."/\" />\n";
+		$base = $config['root_url'];
+		if (isset($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) != 'off')
+		{
+			$base = $config['ssl_url'];
+		}
+		$result .= "\n<base href=\"".$base."/\" />\n";
 	}
 
 	$result .= get_site_preference('metadata', '');
@@ -62,25 +60,22 @@ function smarty_function_metadata($params, &$template)
 	{
 	  $result = $smarty->fetch('string:'.$result);
 	}
-	if( isset($params['assign']) ){
+	if( isset($params['assign']) )
+	{
 		$smarty->assign(trim($params['assign']),$result);
 		return;
 	}
 	return $result;
 }
 
-function smarty_cms_help_function_metadata() {
-  echo lang('help_function_metadata');
-}
-
 function smarty_cms_about_function_metadata() {
-	?>
+?>
 	<p>Author: Ted Kulp&lt;ted@cmsmadesimple.org&gt;</p>
-	<p>Version: 1.0</p>
-	<p>
-	Change History:<br/>
-	None
-	</p>
-	<?php
+
+	<p>Change History:</p>
+	<ul>
+		<li>None</li>
+	</ul>
+<?php
 }
 ?>

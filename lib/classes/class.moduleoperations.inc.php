@@ -42,12 +42,11 @@ final class ModuleOperations
 	 * @internal
 	 * @ignore
 	 */
-	protected $cmssystemmodules =  array( 'FileManager','MenuManager','ModuleManager','Search','CMSMailer','News','MicroTiny','CMSPrinting','ThemeManager' );
+	protected $cmssystemmodules =  array( 'AdminSearch', 'CMSContentManager', 'DesignManager', 'FileManager','MenuManager','ModuleManager','Search','News','MicroTiny','CMSPrinting','ThemeManager' );
 
 	static private $_instance = null;
 	private $_modules = null;
 	private $_moduleinfo;
-	private $_moduledeps;
 	private $_errors = null;
 	
 	private $xml_exclude_files = array('^\.svn' , '^CVS$' , '^\#.*\#$' , '~$', '\.bak$', '^\.git');
@@ -204,12 +203,12 @@ final class ModuleOperations
   function ExpandXMLPackage( $xmluri, $overwrite = 0, $brief = 0 )
   {
 	$gCms = cmsms();
-	$this->SetError('');
 
 	// first make sure that we can actually write to the module directory
 	$dir = dirname(dirname(dirname(__FILE__))).DIRECTORY_SEPARATOR."modules";
 
-	if( !is_writable( $dir ) && $brief == 0 ) {
+	if( !is_writable( $dir ) && $brief == 0 )
+	{
 		// directory not writable
 		$this->SetError( lang( 'errordirectorynotwritable' ) );
 		return false;
@@ -217,7 +216,8 @@ final class ModuleOperations
 
 	$reader = new XMLReader();
 	$ret = $reader->open($xmluri);
-	if( $ret == 0 ) {
+	if( $ret == 0 )
+	{
 		$this->SetError( lang( 'errorcouldnotparsexml' ) );
 		return false;
 	}
@@ -225,137 +225,185 @@ final class ModuleOperations
 	$this->SetError('');
 	$havedtdversion = false;
 	$moduledetails = array();
-	if( is_file($xmluri) ) $moduledetails['size'] = filesize($xmluri);
+	if( is_file($xmluri) )
+		$moduledetails['size'] = filesize($xmluri);
 	$required = array();
-	while( $reader->read() ) {
-		switch($reader->nodeType) {
-		case XMLREADER::ELEMENT:
-			switch( strtoupper($reader->localName) ) {
-			case 'NAME':
-				$reader->read();
-				$moduledetails['name'] = $reader->value;
-				// check if this module is already installed
-				if( isset( $this->_modules[$moduledetails['name']] ) && $overwrite == 0 && $brief == 0 ) {
-					$this->SetError( lang( 'moduleinstalled' ) );
-					return TRUE;
-				}
-				break;
-
-			case 'DTDVERSION':
-				$reader->read();
-				if( $reader->value != MODULE_DTD_VERSION ) {
-					$this->SetError( lang( 'errordtdmismatch' ) );
-					return false;
-				}
-				$havedtdversion = true;
-				break;
-
-			case 'VERSION':
-				$reader->read();
-				$moduledetails['version'] = $reader->value;
-				$tmpinst = $this->get_module_instance($moduledetails['name']);
-				if( $tmpinst && $brief == 0 ) {
-					$version = $tmpinst->GetVersion();
-					if( version_compare($moduledetails['version'],$version) < 0 ) {
-						$this->SetError( lang('errorattempteddowngrade') );
-						return false;
+	while( $reader->read() )
+	{
+		switch($reader->nodeType)
+		{
+			case XMLREADER::ELEMENT:
+			{
+				switch( strtoupper($reader->localName) )
+				{
+					case 'NAME':
+					{
+						$reader->read();
+						$moduledetails['name'] = $reader->value;
+						// check if this module is already installed
+						if( isset( $this->_modules[$moduledetails['name']] ) && $overwrite == 0 && $brief == 0 )
+						{
+							$this->SetError( lang( 'moduleinstalled' ) );
+							return TRUE;
+						}
+						break;
 					}
-					else if (version_compare($moduledetails['version'],$version) == 0 ) {
-						$this->SetError( lang('moduleinstalled') );
-						return TRUE;
+					case 'DTDVERSION':
+					{
+						$reader->read();
+						if( $reader->value != MODULE_DTD_VERSION )
+						{
+							$this->SetError( lang( 'errordtdmismatch' ) );
+							return false;
+						}
+						$havedtdversion = true;
+						break;
 					}
-				}
-				break;
+
+					case 'VERSION':
+					{
+						$reader->read();
+						$moduledetails['version'] = $reader->value;
+						$tmpinst = $this->get_module_instance($moduledetails['name']);
+						if( $tmpinst && $brief == 0 )
+						{
+							$version = $tmpinst->GetVersion();
+							if( version_compare($moduledetails['version'],$version) < 0 )
+							{
+								$this->SetError( lang('errorattempteddowngrade') );
+								return false;
+							}
+							else if (version_compare($moduledetails['version'],$version) == 0 )
+							{
+								$this->SetError( lang('moduleinstalled') );
+								return TRUE;
+							}
+						}
+						break;
+					}
 		
-			case 'MINCMSVERSION':
-			case 'MAXCMSVERSION':
-			case 'DESCRIPTION':
-			case 'FILENAME':
-			case 'ISDIR':
-				$name = $reader->localName;
-				$reader->read();
-				$moduledetails[$name] = $reader->value;
-				break;
-
-			case 'HELP':
-			case 'ABOUT':
-				$name = $reader->localName;
-				$reader->read();
-				$moduledetails[$name] = base64_decode($reader->value);
-				break;
-
-			case 'REQUIREDNAME':
-				$reader->read();
-				$requires['name'] = $reader->value;
-				break;
-
-			case 'REQUIREDVERSION':
-				$reader->read();
-				$requires['version'] = $reader->value;
-				break;
-
-			case 'DATA':
-				$reader->read();
-				$moduledetails['filedata'] = $reader->value;
-				break;
-			}
-			break;
-
-		case XMLReader::END_ELEMENT:
-			switch( strtoupper($reader->localName) ) {
-			case 'REQUIRES':
-				if( count($requires) != 2 ) continue;
-				if( !isset( $moduledetails['requires'] ) ) $moduledetails['requires'] = array();
-				$moduledetails['requires'][] = $requires;
-				$requires = array();
-				break;
-
-			case 'FILE':
-				if( $brief != 0 ) continue;
-
-				// finished a first file
-				if( !isset( $moduledetails['name'] )	   || !isset( $moduledetails['version'] ) ||
-					!isset( $moduledetails['filename'] ) || !isset( $moduledetails['isdir'] ) ) {
-					$this->SetError( lang('errorincompletexml') );
-					return false;
-				}
-
-				// ready to go
-				$moduledir=$dir.DIRECTORY_SEPARATOR.$moduledetails['name'];
-				$filename=$moduledir.$moduledetails['filename'];
-				if( !file_exists( $moduledir ) ) {
-					if( !@mkdir( $moduledir ) && !is_dir( $moduledir ) ) {
-						$this->SetError(lang('errorcantcreatefile').' '.$moduledir);
+					case 'MINCMSVERSION':
+					case 'MAXCMSVERSION':
+					case 'DESCRIPTION':
+					case 'FILENAME':
+					case 'ISDIR':
+					{
+					    $name = $reader->localName;
+						$reader->read();
+						$moduledetails[$name] = $reader->value;
+						break;
+					}
+					case 'HELP':
+					case 'ABOUT':
+					{
+					    $name = $reader->localName;
+						$reader->read();
+						$moduledetails[$name] = base64_decode($reader->value);
+						break;
+					}
+					case 'REQUIREDNAME':
+					{
+						$reader->read();
+						$requires['name'] = $reader->value;
+						break;
+					}
+					case 'REQUIREDVERSION':
+					{
+						$reader->read();
+						$requires['version'] = $reader->value;
+						break;
+					}
+					case 'DATA':
+					{
+						$reader->read();
+						$moduledetails['filedata'] = $reader->value;
 						break;
 					}
 				}
-				else if( $moduledetails['isdir'] ) {
-					if( !@mkdir( $filename ) && !is_dir( $filename ) ) {
-						$this->SetError(lang('errorcantcreatefile').' '.$filename);
+				break;
+			}	
+			case XMLReader::END_ELEMENT:
+			{
+				switch( strtoupper($reader->localName) )
+				{
+					case 'REQUIRES':
+					{
+						if( count($requires) != 2 )
+						{
+						  continue;
+						}
+						if( !isset( $moduledetails['requires'] ) )
+						{
+						  $moduledetails['requires'] = array();
+						}
+						$moduledetails['requires'][] = $requires;
+						$requires = array();
+						break;
+					}
+					case 'FILE':
+					{
+						if( $brief != 0 ) continue;
+
+						// finished a first file
+						if( !isset( $moduledetails['name'] )	   || !isset( $moduledetails['version'] ) ||
+							!isset( $moduledetails['filename'] ) || !isset( $moduledetails['isdir'] ) )
+						{
+							$this->SetError( lang('errorincompletexml') );
+							return false;
+						}
+
+						// ready to go
+						$moduledir=$dir.DIRECTORY_SEPARATOR.$moduledetails['name'];
+						$filename=$moduledir.$moduledetails['filename'];
+						if( !file_exists( $moduledir ) )
+						{
+							if( !@mkdir( $moduledir ) && !is_dir( $moduledir ) )
+							{
+								$this->SetError(lang('errorcantcreatefile').' '.$moduledir);
+								break;
+							}
+						}
+						else if( $moduledetails['isdir'] )
+						{
+							if( !@mkdir( $filename ) && !is_dir( $filename ) )
+							{
+								$this->SetError(lang('errorcantcreatefile').' '.$filename);
+								break;
+							}
+						}
+						else
+						{
+							$data = $moduledetails['filedata'];
+							if( strlen( $data ) )
+							{
+								$data = base64_decode( $data );
+							}
+							$fp = @fopen( $filename, "w" );
+							if( !$fp )
+							{
+								$this->SetError(lang('errorcantcreatefile').' '.$filename);
+							}
+							if( strlen( $data ) )
+							{
+								@fwrite( $fp, $data );
+							}
+								@fclose( $fp );
+						}
+						unset( $moduledetails['filedata'] );
+						unset( $moduledetails['filename'] );
+						unset( $moduledetails['isdir'] );
 						break;
 					}
 				}
-				else {
-					$data = $moduledetails['filedata'];
-					if( strlen( $data ) ) $data = base64_decode( $data );
-					$fp = @fopen( $filename, "w" );
-					if( !$fp ) $this->SetError(lang('errorcantcreatefile').' '.$filename);
-					if( strlen( $data ) ) @fwrite( $fp, $data );
-					@fclose( $fp );
-				}
-				unset( $moduledetails['filedata'] );
-				unset( $moduledetails['filename'] );
-				unset( $moduledetails['isdir'] );
 				break;
 			}
-			break;
-		}
+	      }
 	} // while
 
 	$reader->close();
-	if( $havedtdversion == false ) {
+	if( $havedtdversion == false )
+	{
 		$this->SetError( lang( 'errordtdmismatch' ) );
-		return false;
 	}
 
 	// we've created the module's directory
@@ -363,11 +411,19 @@ final class ModuleOperations
 	unset( $moduledetails['filename'] );
 	unset( $moduledetails['isdir'] );
 
-	if( $this->GetLastError() != "" ) return false;
-	if( !$brief ) audit('','Module', 'Expanded module: '.$moduledetails['name'].' version '.$moduledetails['version']);
+	if( $this->GetLastError() != "" )
+	{
+		return false;
+	}
+
+	if( !$brief )
+	{
+		audit('','Module', 'Expanded module: '.$moduledetails['name'].' version '.$moduledetails['version']);
+	}
 
 	return $moduledetails;
-  }
+
+}
 
 
  private function _install_module(CmsModule& $module_obj)
@@ -380,7 +436,8 @@ final class ModuleOperations
 	 // todo, check to make sure the module isn't already installed.
 
 	 $result = $module_obj->Install();
-	 if( !isset($result) || $result === FALSE) {
+	 if( !isset($result) || $result === FALSE)
+	 {
 		 // install returned nothing, or FALSE
 		 $query = 'DELETE FROM '.cms_db_prefix().'modules WHERE module_name = ?';
 		 $dbr = $db->Execute($query,array($module_obj->GetName()));
@@ -395,15 +452,17 @@ final class ModuleOperations
 										  1,$lazyload_fe,$lazyload_admin));
 
 		 $deps = $module_obj->GetDependencies();
-		 if( is_array($deps) && count($deps) ) {
-			 $query = 'INSERT INTO '.cms_db_prefix().'module_deps
-                       (parent_module,child_module,minimum_version,create_date,modified_date)
-                       VALUES (?,?,?,NOW(),NOW())';
-			 foreach( $deps as $depname => $depversion ) {
-				 if( !$depname || !$depversion ) continue;
-				 $dbr = $db->Execute($query,array($depname,$module_obj->GetName(),$depversion));
+		 if( is_array($deps) && count($deps) )
+			 {
+				 $query = 'INSERT INTO '.cms_db_prefix().'module_deps
+                           (parent_module,child_module,minimum_version,create_date,modified_date)
+                           VALUES (?,?,?,NOW(),NOW())';
+				 foreach( $deps as $depname => $depversion )
+					 {
+						 if( !$depname || !$depversion ) continue;
+						 $dbr = $db->Execute($query,array($depname,$module_obj->GetName(),$depversion));
+					 }
 			 }
-		 }
 
 		 $this->_moduleinfo[$module_obj->GetName()] = array('module_name'=>$module_obj->GetName(),
 															'version'=>$module_obj->GetVersion(),
@@ -436,7 +495,9 @@ final class ModuleOperations
   {
 	  // get an instance of the object (force it).
 	  $modinstance = $this->get_module_instance($module,'',TRUE);
-	  if( !$modinstance ) return array(false,lang('errormodulenotloaded'));
+	  if( !$modinstance ) {
+		  return array(false,lang('errormodulenotloaded'));
+      }
 
 	  // check for dependencies
 	  $deps = $modinstance->GetDependencies();
@@ -452,7 +513,9 @@ final class ModuleOperations
 
 	  // do the actual installation stuff.
 	  $res = $this->_install_module($modinstance);
-	  if( $res[0] == FALSE && $res[1] == '') $res[1] = lang('errorinstallfailed');
+	  if( $res[0] == FALSE && $res[1] == '') {
+		  $res[1] = lang('errorinstallfailed');
+	  }
 	  return $res;
   }
 
@@ -470,7 +533,9 @@ final class ModuleOperations
 			  for( $i = 0; $i < count($tmp); $i++ ) {
 				  $name = $tmp[$i]['module_name'];
 				  if( is_file($dir."/$name/$name.module.php") ) {
-					  if( !isset($this->_moduleinfo[$name]) ) $this->_moduleinfo[$name] = $tmp[$i];
+					  if( !isset($this->_moduleinfo[$name]) ) {
+						  $this->_moduleinfo[$name] = $tmp[$i];
+					  }
 				  }
 			  }
 		  }
@@ -481,7 +546,7 @@ final class ModuleOperations
 
 
 
-  private function _load_module($module_name,$force_load = FALSE,$dependents = TRUE)
+  private function _load_module($module_name,$force_load = FALSE)
   {
 	  $config = cmsms()->GetConfig();
 	  $dir = $config['root_path'].'/modules';
@@ -491,7 +556,8 @@ final class ModuleOperations
 		  debug_buffer("Nothing is known about $module_name... cant load it");
 		  return FALSE;
 	  }
-	  if( (!isset($info[$module_name]['active']) || $info[$module_name]['active'] == 0) && !$force_load ) {
+	  if( (!isset($info[$module_name]['active']) || 
+		   $info[$module_name]['active'] == 0) && !$force_load ) {
 		  debug_buffer('Requested deactivated module '.$module_name);
 		  return FALSE;
 	  }
@@ -514,29 +580,6 @@ final class ModuleOperations
 		  require_once($fname); 
 	  }
 
-	  // load dependencies.
-	  if( !isset($config['modules_noloaddependants']) && $dependents == TRUE ) {
-		  $deps = $this->get_module_dependencies($module_name);
-		  if( is_array($deps) && count($deps) ) {
-			  $res = true;
-			  foreach( $deps as $name => $ver ) {
-				  // this is the start of a recursive routine.
-				  // get_module_instance may call _load_module.
-				  $obj2 = $this->get_module_instance($name,$ver);
-				  if( !is_object($obj2) ) {
-					  $res = false;
-					  break;
-				  }
-			  }
-			  if( !$res && !isset($CMS_FORCE_MODULE_LOAD)) {
-				  audit('','Core',"Cannot load module $module_name ... Problem loading dependent module $name version $ver");
-				  debug_buffer("Cannot load $module_name... cannot load it's dependants.");
-				  unset($obj);
-				  return FALSE;
-			  }
-		  }
-	  }
-
 	  $obj = new $module_name;
 	  if( !is_object($obj) ) {
 		  // oops, some problem loading.
@@ -553,13 +596,36 @@ final class ModuleOperations
 		  return FALSE;
 	  }
 
+	  // okay, lessee if we can load the dependants
+	  if( !isset($config['modules_noloaddependants']) ) {
+		  $deps = $obj->GetDependencies();
+		  if( is_array($deps) && count($deps) ) {
+			  $res = true;
+			  foreach( $deps as $name => $ver ) {
+				  $obj2 = $this->get_module_instance($name);
+				  if( !is_object($obj2) ) {
+					  $res = false;
+					  break;
+				  }
+			  }
+			  if( !$res && !isset($CMS_FORCE_MODULE_LOAD)) {
+				  audit('','Core',"Cannot load module $module_name ... Problem loading dependent module $name");
+				  debug_buffer("Cannot load $module_name... cannot load it's dependants.");
+				  unset($obj);
+				  return FALSE;
+			  }
+		  }
+	  }
+
 	  if( isset($info[$module_name]) && $info[$module_name]['status'] != 'installed' && 
 		  (isset($CMS_INSTALL_PAGE) || $this->_is_queued_for_install($module_name)) ) {
 		  // not installed, can we auto-install it?
 		  if( (in_array($module_name,$this->cmssystemmodules) || $obj->AllowAutoInstall() == true ||
 			   $this->_is_queued_for_install($module_name)) && $allow_auto ) {
 			  $res = $this->_install_module($obj);
-			  if( !isset($_SESSION['moduleoperations_result']) )  $_SESSION['moduleoperations_result'] = array();
+			  if( !isset($_SESSION['moduleoperations_result']) ) {
+				  $_SESSION['moduleoperations_result'] = array();
+			  }
 			  $_SESSION['moduleoperations_result'][$module_name] = $res;
 		  }
 		  else if( !isset($CMS_FORCE_MODULE_LOAD) ) {
@@ -569,39 +635,46 @@ final class ModuleOperations
 		  }
 	  }
 
-	  // check to see if an upgrade is needed.
-	  allow_admin_lang(TRUE); // isn't this ugly.
-	  if( isset($info[$module_name]) && $info[$module_name]['status'] == 'installed' ) {
-		  $dbversion = $info[$module_name]['version'];
-		  if( version_compare($dbversion, $obj->GetVersion()) == -1 ) {
-			  // upgrade is needed
-			  if( ($obj->AllowAutoUpgrade() == TRUE || $this->_is_queued_for_install($module_name)) && $allow_auto ) {
-				  // we're allowed to upgrade
-				  $res = $this->_upgrade_module($obj);
-				  if( !isset($_SESSION['moduleoperations_result']) ) $_SESSION['moduleoperations_result'] = array();
-				  if( $res ) {
-					  $res2 = array(TRUE,lang('moduleupgraded'));
-					  $_SESSION['moduleoperations_result'][$module_name] = $res2;
-					  return TRUE;
+	  $tmp = cmsms()->get_installed_schema_version();
+	  if( $tmp == CMS_SCHEMA_VERSION ) {
+		  // can't auto upgrade modules if cmsms schema versions don't match.
+		  // check to see if an upgrade is needed.
+		  allow_admin_lang(TRUE); // isn't this ugly.
+		  if( isset($info[$module_name]) && $info[$module_name]['status'] == 'installed' ) {
+			  $dbversion = $info[$module_name]['version'];
+			  if( version_compare($dbversion, $obj->GetVersion()) == -1 ) {
+				  // upgrade is needed
+				  if( ($obj->AllowAutoUpgrade() == TRUE || 
+					   $this->_is_queued_for_install($module_name)) && $allow_auto ) {
+					  // we're allowed to upgrade
+					  $res = $this->_upgrade_module($obj);
+					  if( !isset($_SESSION['moduleoperations_result']) ) {
+						  $_SESSION['moduleoperations_result'] = array();
+					  }
+					  if( $res ) {
+						  $res2 = array(TRUE,lang('moduleupgraded'));
+						  $_SESSION['moduleoperations_result'][$module_name] = $res2;
+						  return TRUE;
+					  }
+					  else {
+						  $res2 = array(FALSE,lang('moduleupgradeerror'));
+						  $_SESSION['moduleoperations_result'][$module_name] = $res2;
+						  return FALSE;
+					  }
+					  if( !$res ) {
+						  // upgrade failed
+						  allow_admin_lang(FALSE); // isn't this ugly.
+						  debug_buffer("Automatic upgrade of $module_name failed");
+						  unset($obj);
+						  return FALSE;
+					  }
 				  }
-				  else {
-					  $res2 = array(FALSE,lang('moduleupgradeerror'));
-					  $_SESSION['moduleoperations_result'][$module_name] = $res2;
-					  return FALSE;
-				  }
-				  if( !$res ) {
-					  // upgrade failed
+				  else if( !isset($CMS_FORCE_MODULE_LOAD) ) {
+					  // nope, can't auto upgrade either
 					  allow_admin_lang(FALSE); // isn't this ugly.
-					  debug_buffer("Automatic upgrade of $module_name failed");
 					  unset($obj);
 					  return FALSE;
 				  }
-			  }
-			  else if( !isset($CMS_FORCE_MODULE_LOAD) ) {
-				  // nope, can't auto upgrade either
-				  allow_admin_lang(FALSE); // isn't this ugly.
-				  unset($obj);
-				  return FALSE;
 			  }
 		  }
 	  }
@@ -630,7 +703,9 @@ final class ModuleOperations
 	if( $handle = @opendir($dir) ) {
 		while( ($file = readdir($handle)) !== false ) {
 			$fn = "$dir/$file/$file.module.php";
-			if( @is_file($fn) )	$result[] = $file;
+			if( @is_file($fn) ) {
+				$result[] = $file;
+			}
 		}
 	}
 	
@@ -716,8 +791,7 @@ final class ModuleOperations
   private function _upgrade_module( &$module_obj, $to_version = '' )
   {
 	  // we can't upgrade a module if the schema is not up to date.
-	  $db = cmsms()->GetDb();
-	  $tmp = $db->GetOne('SELECT version FROM '.cms_db_prefix().'version');
+	  $tmp = cmsms()->get_installed_schema_version();
 	  if( $tmp && $tmp < CMS_SCHEMA_VERSION ) return FALSE;
 
 	  $info = $this->_get_module_info();
@@ -726,9 +800,9 @@ final class ModuleOperations
 
 	  if( $to_version == '' ) $to_version = $module_obj->GetVersion();
 
+	  $db = cmsms()->GetDb();
 	  $result = $module_obj->Upgrade($dbversion,$to_version);
 	  if( $result !== FALSE ) {
-		  $db = cmsms()->GetDb();
 		  $lazyload_fe    = (method_exists($module_obj,'LazyLoadFrontend') && $module_obj->LazyLoadFrontend())?1:0;
 		  $lazyload_admin = (method_exists($module_obj,'LazyLoadAdmin') && $module_obj->LazyLoadAdmin())?1:0;
 
@@ -792,16 +866,37 @@ final class ModuleOperations
 
 		  // clean up, if permitted
 		  if ($cleanup) {
+			  // deprecated
 			  $db->Execute('DELETE FROM '.cms_db_prefix().'module_templates where module_name=?',array($module));
-			  $db->Execute('DELETE FROM '.cms_db_prefix().'event_handlers where module_name=?',array($module));
-			  $db->Execute('DELETE FROM '.cms_db_prefix().'events where originator=?',array($module));
-			  $db->Execute('DELETE FROM '.cms_db_prefix().'module_smarty_plugins where module=?',array($module));
+
+			  $db->Execute('DELETE FROM '.cms_db_prefix().
+						   'event_handlers where module_name=?',array($module));
+			  $db->Execute('DELETE FROM '.cms_db_prefix().
+						   'events where originator=?',array($module));
+
+			  $types = CmsLayoutTemplateType::load_all_by_originator($module);
+			  if( is_array($types) && count($types) ) {
+				  foreach( $types as $type ) {
+					  $tpls = CmsLayoutTemplate::template_query(array('t:'.$type->get_id()));
+					  if( is_array($tpls) && count($tpls) ) {
+						  foreach( $tpls as $tpl ) {
+							  $tpl->delete();
+						  }
+					  }
+					  $type->delete();
+				  }
+			  }
+
+			  $db->Execute('DELETE FROM '.cms_db_prefix().
+						   'module_smarty_plugins where module=?',array($module));
 			  $db->Execute('DELETE FROM '.cms_db_prefix().
 						   "siteprefs WHERE sitepref_name LIKE '".
 						   str_replace("'",'',$db->qstr($module)).
 						   "_mapi_pref%'");
-			  $db->Execute('DELETE FROM '.cms_db_prefix().'routes WHERE dest = ?',array($module));
-			  $db->Execute('DELETE FROM '.cms_db_prefix().'module_smarty_plugins WHERE module = ?',array($module));
+			  $db->Execute('DELETE FROM '.cms_db_prefix().
+						   'routes WHERE dest = ?',array($module));
+			  $db->Execute('DELETE FROM '.cms_db_prefix().
+						   'module_smarty_plugins WHERE module = ?',array($module));
 		  }
 
 		  // clear the cache.
@@ -840,6 +935,8 @@ final class ModuleOperations
    * @param string module name
    * @param boolean flag indicating wether to activate or deactivate the module
    * @return boolean
+   * @access private
+   * @internal
    */
   public function ActivateModule($module_name,$activate = true)
   {
@@ -847,17 +944,17 @@ final class ModuleOperations
 	  $info = $this->_get_module_info();
 	  if( !isset($info[$module_name]) ) return FALSE;
 
-	  $o_state = $info['module_name']['active'];
+	  $o_state = $info[$module_name]['active'];
 	  if( $activate ) {
-		  $info['module_name']['active'] = 1;
+		  $info[$module_name]['active'] = 1;
 	  }
 	  else {
-		  $info['module_name']['active'] = 0;
+		  $info[$module_name]['active'] = 0;
 	  }
-	  if( $info['module_name']['active'] != $o_state ) {
+	  if( $info[$module_name]['active'] != $o_state ) {
 		  $db = cmsms()->GetDb();
-		  $query = 'UPDATE '.cms_db_prefix.' SET active = ? WHERE module_name = ?';
-		  $dbr = $db->Execute($query,array($info['module_name']['active'],$module_name));
+		  $query = 'UPDATE '.cms_db_prefix().'modules SET active = ? WHERE module_name = ?';
+		  $dbr = $db->Execute($query,array($info[$module_name]['active'],$module_name));
 	  }
 	  return TRUE;
   }
@@ -924,42 +1021,6 @@ final class ModuleOperations
 	  return module_meta::get_instance()->module_list_by_capability($capability,$args);
   }
 
-  /**
-   * A function to return a list of dependencies from a module.
-   * this method works by reading the dependencies from the database.
-   *
-   * @since 1.11.8
-   * @author Robert Campbell
-   * @param string The module name
-   * @return mixed.  Null if there are no dependencies.  Otherwise, a hash of dependent module names, and their versions.
-   */
-  public function get_module_dependencies($module_name)
-  {
-	  if( !$module_name ) return;
-
-	  if( !is_array($this->_moduledeps) ) {
-		  $fn = TMP_CACHE_LOCATION.'/f'.md5(__FILE__.'deps').'.dat';
-		  if( file_exists($fn) ) {
-			  $data = file_get_contents($fn);
-			  $this->_moduledeps = unserialize($data);
-		  }
-		  else {
-			  $this->_moduledeps = array();
-			  $db = cmsms()->GetDb();
-			  $query = 'SELECT parent_module,child_module,minimum_version FROM '.cms_db_prefix().'module_deps';
-			  $dbr = $db->GetArray($query);
-			  if( is_array($dbr) && count($dbr) ) {
-				  foreach( $dbr as $row ) {
-					  if( !isset($this->_moduledeps[$row['child_module']]) ) $this->_moduledeps[$row['child_module']] = array();
-					  $this->_moduledeps[$row['child_module']][$row['parent_module']] = $row['minimum_version'];
-				  }
-			  }
-			  file_put_contents($fn,serialize($this->_moduledeps));
-		  }
-	  }
-
-	  if( isset($this->_moduledeps[$module_name]) ) return $this->_moduledeps[$module_name];
-  }
 
   /**
    * A function to return the object reference to the module object
@@ -1026,15 +1087,17 @@ final class ModuleOperations
 	  $obj = null;
 	  if( !$module_name ) {
 		  global $CMS_ADMIN_PAGE;
-		  if( isset($CMS_ADMIN_PAGE) ) $module_name = get_preference(get_userid(FALSE),'syntaxhighlighter');
+		  if( isset($CMS_ADMIN_PAGE) ) {
+			  $module_name = get_preference(get_userid(FALSE),'syntaxhighlighter');
+		  }
 	  }
 
 	  if( !$module_name ) return $obj;
-
 	  $obj = $this->get_module_instance($module_name);
 	  if( !$obj ) return $obj;
-	  if( !$obj->IsSyntaxHighlighter() ) return $obj;
+	  if( $obj->HasCapability(CmsCoreCapabilities::SYNTAX_MODULE) ) return $obj;
 
+	  $obj = null;
 	  return $obj;
   }
 
@@ -1064,10 +1127,9 @@ final class ModuleOperations
 	  }
 
 	  if( !$module_name || $module_name == -1 ) return $obj;
-
 	  $obj = $this->get_module_instance($module_name);
 	  if( !$obj ) return $obj;
-	  if( $obj->IsWYSIWYG() ) return $obj;
+	  if( $obj->HasCapability(CmsCoreCapabilities::WYSIWYG_MODULE) ) return $obj;
 
 	  $obj = null;
 	  return $obj;
@@ -1125,9 +1187,13 @@ final class ModuleOperations
   public function QueueForInstall($module_name)
   {
 	  if( !$module_name ) return;
-	  if( !isset($_SESSION['moduleoperations']) ) $_SESSION['moduleoperations'] = array();
+	  if( !isset($_SESSION['moduleoperations']) ) {
+		  $_SESSION['moduleoperations'] = array();
+	  }
 
-	  if( !isset($_SESSION['moduleoperations'][$module_name]) ) $_SESSION['moduleoperations'][$module_name] = 1;
+	  if( !isset($_SESSION['moduleoperations'][$module_name]) ) {
+		  $_SESSION['moduleoperations'][$module_name] = 1;
+	  }
   }
 
 
@@ -1159,10 +1225,29 @@ final class ModuleOperations
    */
   public function unload_module($module_name)
   {
-	  if( !isset($this->_modules[$module_name]) || !is_object($this->_modules[$module_name]) )  return;
+	  if( !isset($this->_modules[$module_name]) || 
+		  !is_object($this->_modules[$module_name]) )  return;
+	  
 	  unset($this->_modules[$module_name]);
   }
 
+
+  public function GetModuleParameters($id)
+  {
+	  $params = array();
+
+	  if ($id != '') {
+		  foreach ($_REQUEST as $key=>$value) {
+			  if( startswith($key,$id) ) {
+				  $key = substr($key,strlen($id));
+				  if( $key == 'id' || $key == 'returnid' ) $value = (int)$value;
+				  $params[$key] = $value;
+			  }
+		  }
+	  }
+
+	  return $params;
+  }
 } // end of class
 
 # vim:ts=4 sw=4 noet

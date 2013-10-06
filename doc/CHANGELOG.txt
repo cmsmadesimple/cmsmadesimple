@@ -1,60 +1,67 @@
-Version 1.11.9 - Bartolome
+Version 2.0 - NO NAME SET
 -----------------------------
 Core - General
-  - Fixes version.php to represent new schema
-  - Users with 'Modify Any Page' and 'Remove Content' can delete almost any page
-  - Fixes minor issue with event handlers
-  - Removes a debug limit on caching in contentoperations
-  - Robots don't index Error Console pages
-  - Only show technical details on the Error Console page to logged in administrators
-  - Entropy improvement in the cookie used to stay loggedin.
-
-Core - Search
-  - Fixes PHP 5.3 dependency
-
-Core - Bug Reports
-  - #9549 CMSMS 1.11.8 performance regression
-
-Core - CMSMailer
-  - No longer send SMTP password in plain text.
-
-
-Version 1.11.8 - Fioreana
------------------------------
-Core - General
-  - Updated config reference
-  - Fixes to module loading order stuff
-  - Fixes so that a modules create_url method is called from module_support CreateLink function
-  - Adds the TemplatePrefetch event
-  - Minor fixes to module XML export
-  - Adds the LoadAllContent method and optimizes loading of content list dropdowns and Listcontent
-  - Performance optimizations for static and dynamic URL handling
-  - Improve the help for content_image
-  - Performance improvements for listcontent and add/editcontent
-  - Improved and better documented sample htaccess.txt file
-  - Smarty template engine upgraded to version 3.1.14
-  - Optimization to Menumanager to load all pages when no parameters limit the amount of pages to display.
-  - Adds a check to the installer and systeminfo page to test wether the filesystem has a significant time difference from the php process
-  - The bbcode compatible system info report is now forced to english for posting in the forum
+  - default upload permission is now based on the umask.
+  - Removed the NCleanGrey admin theme
+  - Many tewaks to the admin theme
+  - Improvements to module loading.
+  - Many new smarty plugins for form building in modules.
+  - New ajaxy help
+  - UI Review trough many admin pages
+  - New jquery based page selector.
+  - Improved and documented htaccess.txt file
+  - Many new smarty plugins to aid in module development and separation of logic from display
+  - adds the {cms_module_hint} plugin
+  - {content},{content_image},and {content_module} plugins all receive the required attribute
+  - {content} tag now has the placeholder attribute.
+  - major accessibility review throughout admin interface.
 
 Core - Bug Reports
-  - #8272 Sitename in Russian becomes unreadable
-  - #8807 Section headers are accessible through changing URL
-  - #9324 Title is now available when editing a section header
-  - #9391 Bug in get_template_vars
-  - #9415 Function get_upload_size on class.cms_config.php doesn't handle upload_max_filesize correct when it is 1G
+  -
 
-Core - News
-  - Adds a dropdown field type to News
+Core - Feature Requests:
+  - #4178 Improve behavior of cms_selflink
+  
+FileManager
+  - Numerous UI improvements
+  - Adds ajaxy image cropping/resizing/rotation
+  
+MenuManager
+  - Deprecated
 
-Core - Search
-  - No longer index templates and GCB's
-  - Now can stop individual content blocks from being indexed
-  - #7538 Search Module removes valid words when indexing
-  - #8169 Search Module indexing partial smarty tags and failing to index words with dash
+Navigator
+  - New module to replace MenuManager
+  
+MicroTiny
+  -
+ 
+AdinSearch
+  - New module for searching for tags and any content in templates.
 
-Core - Printing
-  - minor fixes.
+CMSContentManager
+  - New module for content editing.
+  - Pagination and filtering in listcontent
+  - Implements content locking
+  - Implements dirty form checking 
+
+DesignManager
+  - New module for managing templates, stylesheets
+  - Implements dirty form checking
+  - Implements locking for templates
+ 
+News 
+  - Each article now has a searchable option
+  - More bulk actions
+  - A dropdown field type
+  - The ability to re-organize categories
+  - Numerous UI improvements
+  - Minor bug fixes
+  - Implements dirty form checking
+  - Query rework (post date is now used as a start date if expiry is not specified)
+
+Search
+  - No longer indexes templates, or GCB's
+  - rewrite the reindex stuff to hopefully use a bit less memory (at least for content pages)
 
   
 Version 1.11.7 - Genovesa
@@ -81,19 +88,18 @@ Core - General
   - Global Content Blocks (GCB's) can now only have letters and numbers in the name!!
   - Fixes to caching issues in MenuManager and module templates
   - Admin module actions now catch an exception
+  - Erase the alias of a sectionheader on save
   - Fixes problem with error_reporting, takes error_reporting correctly from php.ini
   - Fixes problem with contentprecompile not being fired
   - Significant performance improvement in admin theme calculations (fixes silly error)
   - Fix typo in /lib/classes/module_support/modtemplates.inc.php
+  - Fixes issues wrt the News module being upgraded before the cms_routes table is created.
   - Fixes issue with compilation process of stylesheets when using smarty tags
   - Fixes issue with showtemplate=false causing ajax stuff to be called twice
   - Fixes issue with aliases on sectionheaders being navigable. (Now throws 404 error)
   - Modules can no longer be upgraded if the schema version in the database does not match the version.php file
      (this solves the problem of the modules being upgraded too early in the upgrade process)
   - Fixes problem with module_help links in the OneEleven admin theme
-  - Fixes problem where CMSMS internal parser mixed <head to <header
-  - Module API method Lang(), no longer final
-  - Minor fix to cms_selflink
 
 Core - News
   - Fixes issue with wildcard category arguments in the browsecat action
@@ -102,9 +108,6 @@ Core - News
 
 Core - Search
   - Fixes issue with detailpage parameter
-
-Core - ThemeManager
-  - On Import, now use // as a delimiter between theme name and item name, cuz smarty treets a : as a delimiter for a resource.
 
   
 Version 1.11.4 - Fernandina
@@ -173,7 +176,6 @@ Version 1.11.2.1
 -----------------------------
   - Fixes security vulnerability in image manager
 
-  
 Version 1.11.2 - Isabela 
 -----------------------------
 Core - General:
@@ -694,7 +696,7 @@ Core:
   - #5633 Impossible to create a section header
   - #5653 ADD NEW CONTENT with unique permission ADD PAGE
   - #5659 error with https and redirect function 
-  - #5677 Extensions Â» User Defined Tags - "Apply" button issue
+  - #5677 Extensions » User Defined Tags - "Apply" button issue
   - Permission issue for non-admins
   - HasChildren() on a non-object error in listcontent
   - function Id() on a non-object in re-order pages
@@ -834,7 +836,7 @@ Fixes:
   - Backend is slower then previous release
   - Core modules/tabs in the backend aren't translated
   - Internet Explorer doesnt show specific backend-pages nicely (f.e. News)
-  - Theme ï¿½defaultï¿½ gives message ï¿½Undefined index: directionï¿½ on top in backend
+  - Theme �default� gives message �Undefined index: direction� on top in backend
   - The content tag isn't allowing underscore in name of block anymore
   - Default content has News categories in summary-template
   - Added expand-collapse buttons on top of listcontent as well

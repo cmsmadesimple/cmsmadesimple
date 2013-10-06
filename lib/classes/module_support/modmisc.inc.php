@@ -32,19 +32,14 @@
 function cms_module_GetAbout(&$modinstance)
 {
 	$str = '';
-	if ($modinstance->GetAuthor() != '')
-	{
+	if ($modinstance->GetAuthor() != '') {
 		$str .= "<br />".lang('author').": " . $modinstance->GetAuthor();
-		if ($modinstance->GetAuthorEmail() != '')
-		{
-			$str .= ' &lt;' . $modinstance->GetAuthorEmail() . '&gt;';
-		}
+		if ($modinstance->GetAuthorEmail() != '') $str .= ' &lt;' . $modinstance->GetAuthorEmail() . '&gt;';
 		$str .= "<br />";
 	}
 	$str .= "<br />".lang('version').": " .$modinstance->GetVersion() . "<br />";
 
-	if ($modinstance->GetChangeLog() != '')
-	{
+	if ($modinstance->GetChangeLog() != '') {
 		$str .= "<br />".lang('changehistory').":<br />";
 		$str .= $modinstance->GetChangeLog() . '<br />';
 	}
@@ -62,12 +57,10 @@ function cms_module_GetHelpPage(&$modinstance)
 	$str .= @ob_get_contents();
 	@ob_end_clean();
 	$dependencies = $modinstance->GetDependencies();
-	if (count($dependencies) > 0 )
-	{
+	if (count($dependencies) > 0 ) {
 		$str .= '<h3>'.lang('dependencies').'</h3>';
 		$str .= '<ul>';
-		foreach( $dependencies as $dep => $ver )
-		{
+		foreach( $dependencies as $dep => $ver ) {
 			$str .= '<li>';
 			$str .= $dep.' =&gt; '.$ver;
 			$str .= '</li>';
@@ -75,92 +68,19 @@ function cms_module_GetHelpPage(&$modinstance)
 		$str .= '</ul>';
 	}
 	$paramarray = $modinstance->GetParameters();
-	if (count($paramarray) > 0)
-	{
+	if (count($paramarray) > 0) {
 		$str .= '<h3>'.lang('parameters').'</h3>';
 		$str .= '<ul>';
-		foreach ($paramarray as $oneparam)
-		{
+		foreach ($paramarray as $oneparam) {
 			$str .= '<li>';
-			if ($oneparam['optional'] == true)
-			{
-				$str .= '<em>(optional)</em> ';
-			}
 			$help = '';
-			if( isset($oneparam['help']) ) {
-				$help = $oneparam['help'];
-			} else if( $oneparam['name'] == 'lang' ) {
-				$help = lang('module_param_lang');
-			}
+			if ($oneparam['optional'] == true) $str .= '<em>(optional)</em> ';
+			if( isset($oneparam['help']) ) $help = $oneparam['help'];
 			$str .= $oneparam['name'].'="'.$oneparam['default'].'" - '.$help.'</li>';
 		}
 		$str .= '</ul>';
 	}
 	return $str;
-}
-
-/**
- * @access private
- */
-function cms_module_CreatePagination(&$modinstance, $id, $action, $returnid, $page, $totalrows, $limit, $inline=false)
-{
-	$config = cmsms()->GetConfig();
-
-	$goto = 'index.php';
-	if ($returnid == '')
-	{
-	  $urlext = '?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
-	  $goto = 'moduleinterface.php'.$urlext;
-	}
-	$link = '<a href="'.$goto.'&amp;module='.$modinstance->GetName().'&amp;'.$id.'returnid='.$id.$returnid.'&amp;'.$id.'action=' . $action .'&amp;'.$id.'page=';
-	if ($inline)
-	{
-		$link .= '&amp;'.$config['query_var'].'='.$returnid;
-	}
-	$page_string = "";
-	$from = ($page * $limit) - $limit;
-	$numofpages = floor($totalrows / $limit);
-	if ($numofpages * $limit < $totalrows)
-	{
-		$numofpages++;
-	}
-
-	if ($numofpages > 1)
-	{
-		if($page != 1)
-		{
-			$pageprev = $page-1;
-			$page_string .= $link.$pageprev."\">".lang('previous')."</a>&nbsp;";
-		}
-		else
-		{
-			$page_string .= lang('previous')." ";
-		}
-
-		for($i = 1; $i <= $numofpages; $i++)
-		{
-			if($i == $page)
-			{
-				 $page_string .= $i."&nbsp;";
-			}
-			else
-			{
-				 $page_string .= $link.$i."\">$i</a>&nbsp;";
-			}
-		}
-
-		if (($totalrows - ($limit * $page)) > 0)
-		{
-			$pagenext = $page+1;
-			$page_string .= $link.$pagenext."\">".lang('next')."</a>";
-		}
-		else
-		{
-			$page_string .= lang('next')." ";
-		}
-	}
-
-	return $page_string;
 }
 
 ?>

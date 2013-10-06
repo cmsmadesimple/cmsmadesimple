@@ -63,16 +63,13 @@ final class UserTagOperations
 	 */
 	public function LoadUserTags()
 	{
-		if( count($this->_cache) == 0 )
-		{
+		if( count($this->_cache) == 0 ) {
 			$db = cmsms()->GetDb();
-				
+
 			$query = 'SELECT * FROM '.cms_db_prefix().'userplugins'.' ORDER BY userplugin_name';
 			$data = $db->GetArray($query);
-			if( is_array($data) )
-			{
-				foreach( $data as $row )
-				{
+			if( is_array($data) ) {
+				foreach( $data as $row ) {
 					$this->_cache[$row['userplugin_name']] = $row;
 				}
 			}
@@ -108,7 +105,6 @@ final class UserTagOperations
 		$row = $this->_get_from_cache($name);
 		return $row;
 	}
-
 
 	/**
 	 * Test if a user defined tag with a specific name exists
@@ -159,7 +155,6 @@ final class UserTagOperations
 		return FALSE;
 	}
 
-
 	/**
 	 * Add or update a named user defined tag into the database
 	 *
@@ -168,31 +163,34 @@ final class UserTagOperations
 	 *
 	 * @return mixed If successful, true.  If it fails, false.
 	 */
-	function SetUserTag( $name, $text )
+	function SetUserTag( $name, $text, $description )
 	{
 		$db = cmsms()->GetDb();
 
 		$existing = $this->GetUserTag($name);
-		if (!$existing)
-		{
+		if (!$existing) {
 			$this->_cache = array(); // reset the cache.
 			$new_usertag_id = $db->GenID(cms_db_prefix()."userplugins_seq");
-			$query = "INSERT INTO ".cms_db_prefix()."userplugins (userplugin_id, userplugin_name, code, create_date, modified_date) VALUES (?,?,?,".$db->DBTimeStamp(time()).",".$db->DBTimeStamp(time()).")";
-			$result = $db->Execute($query, array($new_usertag_id, $name, $text));
+			$query = "INSERT INTO ".cms_db_prefix()."userplugins (userplugin_id, userplugin_name, code, description, create_date, modified_date) VALUES (?,?,?,?,".$db->DBTimeStamp(time()).",".$db->DBTimeStamp(time()).")";
+			$result = $db->Execute($query, array($new_usertag_id, $name, $text, $description));
 			if ($result)
 				return true;
 			else
 				return false;
 		}
-		else
-		{
+		else {
 			$this->_cache = array(); // reset the cache.
-			$query = 'UPDATE '.cms_db_prefix().'userplugins SET code = ?, modified_date = '.$db->DBTimeStamp(time()).' WHERE userplugin_name = ?';
-			$result = $db->Execute($query, array($text, $name));
-			if ($result)
-				return true;
-			else
-				return false;
+			$query = 'UPDATE '.cms_db_prefix().'userplugins SET code = ?';
+            $parms = array($text);
+			if( $description ) {
+				$query .= ', description = ?';
+				$parms[] = $description;
+			}
+			$query .= ', modified_date = '.$db->DBTimeStamp(time()).' WHERE userplugin_name = ?';
+			$parms[] = $name;
+			$result = $db->Execute($query, $parms);
+			if ($result) return true;
+			return false;
 		}
 	}
 
@@ -261,6 +259,8 @@ final class UserTagOperations
 		$functionname = 'cms_user_tag_'.$name;
 		if( !function_exists($functionname) )
 		{
+			if( startswith($row['code'],'<?php') ) $row['code'] = substr($row['code'],5);
+			if( endswith($row['code'],'?>') ) $row['code'] = substr($row['code'],0,-2);
 			$code = 'function '.$functionname.'($params,&$smarty) {'.$row['code']."\n}";
 			@eval($code);
 		}

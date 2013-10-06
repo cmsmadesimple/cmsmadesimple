@@ -96,9 +96,7 @@ $tmp = array(0=>array(), 1=>array());
 $tmp[0]['php_memory_limit'] = testConfig('php_memory_limit', 'php_memory_limit');
 $tmp[0]['process_whole_template'] = testConfig('process_whole_template', 'process_whole_template');
 $tmp[1]['debug'] = testConfig('debug', 'debug');
-$tmp[1]['timezone'] = testConfig('timezone','timezone');
-$tmp[1]['set_names'] = testConfig('set_names','set_names');
-$tmp[1]['set_timezone'] = testConfig('set_names','set_timezone');
+$tmp[0]['output_compression'] = testConfig('output_compression', 'output_compression');
 
 $tmp[0]['max_upload_size'] = testConfig('max_upload_size', 'max_upload_size');
 $tmp[0]['url_rewriting'] = testConfig('url_rewriting', 'url_rewriting');
@@ -108,13 +106,11 @@ $tmp[0]['query_var'] = testConfig('query_var', 'query_var');
 $tmp[1]['root_url'] = testConfig('root_url', 'root_url');
 $tmp[1]['ssl_url'] = testConfig('ssl_url', 'ssl_url');
 $tmp[1]['root_path'] = testConfig('root_path', 'root_path', 'testDirWrite');
-$tmp[1]['previews_path'] = testConfig('previews_path', 'previews_path', 'testDirWrite');
 $tmp[1]['uploads_path'] = testConfig('uploads_path', 'uploads_path', 'testDirWrite');
 $tmp[1]['uploads_url'] = testConfig('uploads_url', 'uploads_url');
 $tmp[1]['image_uploads_path'] = testConfig('image_uploads_path', 'image_uploads_path', 'testDirWrite');
 $tmp[1]['image_uploads_url'] = testConfig('image_uploads_url', 'image_uploads_url');
 $tmp[1]['ssl_uploads_url'] = testConfig('ssl_uploads_url', 'ssl_uploads_url');
-$tmp[1]['use_smarty_php_tags'] = testConfig('use_smarty_php_tags', 'use_smarty_php_tags');
 $tmp[0]['image_manipulation_prog'] = testConfig('image_manipulation_prog', 'image_manipulation_prog');
 $tmp[0]['auto_alias_content'] = testConfig('auto_alias_content', 'auto_alias_content');
 $tmp[0]['locale'] = testConfig('locale', 'locale');
@@ -125,7 +121,24 @@ $tmp[0]['set_names'] = testConfig('set_names', 'set_names');
 $smarty->assign('count_config_info', count($tmp[0]));
 $smarty->assign('config_info', $tmp);
 
+/* Performance Information */
+$tmp = array(0=>array(), 1=>array());
 
+$res = get_site_preference('allow_browser_cache',60);
+$tmp[0]['allow_browser_cache'] = testBoolean(0, lang('allow_browser_cache'),$res,lang('test_allow_browser_cache'));
+$res = get_site_preference('browser_cache_expiry',60);
+$tmp[0]['browser_cache_expiry'] = testRange(0, lang('browser_cache_expiry'),$res,lang('test_browser_cache_expiry'),1,60,FALSE);
+
+$res = get_site_preference('use_smartycache', FALSE);
+$tmp[0]['smarty_cache'] = testBoolean(0, lang('prompt_use_smartycaching'),$res,lang('test_smarty_caching'));
+$res = get_site_preference('use_smarty_compilecheck', FALSE);
+$tmp[0]['smarty_compilecheck'] = testBoolean(0, lang('prompt_smarty_compilecheck'),$res,lang('test_smarty_caching'),FALSE,TRUE);
+$res = get_site_preference('use_smartycache', FALSE);
+$tmp[0]['smarty_cache_udt'] = testBoolean(0, lang('prompt_smarty_cacheudt'),$res,lang('test_smarty_cacheudt'));
+$res = get_site_preference('auto_clear_cache_age', 0);
+$tmp[0]['auto_clear_cache_age'] = testBoolean(0, lang('autoclearcache2'),$res,lang('test_auto_clear_cache_age'));
+
+$smarty->assign('performance_info', $tmp);
 
 
 /* PHP Information */
@@ -152,6 +165,9 @@ if( defined('E_DEPRECATED') )
   {
     $tmp[0]['E_DEPRECATED'] =  testIntegerMask(0,lang('test_error_edeprecated'), 'error_reporting',E_DEPRECATED,lang('test_edeprecated_failed'),true,true,false);
   }
+
+$tmp[0]['test_file_timedifference'] = _testTimeSettings1();
+$tmp[0]['test_db_timedifference'] = _testTimeSettings2();
 
 $tmp[1]['create_dir_and_file'] = testCreateDirAndFile(0, '', '');
 
@@ -254,60 +270,44 @@ $smarty->assign('php_information', $tmp);
 /* Server Information */
 
 $tmp = array(0=>array(), 1=>array());
+
 $tmp[1]['server_software'] = testDummy('', $_SERVER['SERVER_SOFTWARE'], '');
 $tmp[0]['server_api'] = testDummy('', PHP_SAPI, '');
 $tmp[1]['server_os'] = testDummy('', PHP_OS . ' ' . php_uname('r') .' '. lang('on') .' '. php_uname('m'), '');
-{
-  $n = abs(time() - $db->GetOne('SELECT UNIX_TIMESTAMP(NOW())'));
-  $test = new CmsInstallTest();
-  $test->title = lang('foo');
-  $test->ini_val = FALSE;
-  $test->value = $n;
-  $test->res = 'green';
-  if( $n < 5) {
-    $test->res = 'green';
-  }
-  else {
-    $test->res = 'red';
-  }
-  getTestReturn($test,1,'');
-  $tmp[1]['tz_offset'] = $test;
-}
 
-switch($config['dbms']) //workaround: ServerInfo() is unsupported in adodblite
-{
-        case 'mysqli':	
-	case 'mysql':
-	  $v = $db->GetOne('SELECT version()');
-	  $tmp[0]['server_db_type'] = testDummy('', 'MySQL ('.$config['dbms'].')', '');
-	  $_server_db = (false === strpos($v, "-")) ? $v : substr($v, 0, strpos($v, "-"));
-	  list($minimum, $recommended) = getTestValues('mysql_version');
-	  $tmp[0]['server_db_version'] = testVersionRange(0, 'server_db_version', $_server_db, '', $minimum, $recommended, false);
+switch($config['dbms']) { //workaround: ServerInfo() is unsupported in adodblite
+ case 'mysqli':	
+ case 'mysql':
+   $v = $db->GetOne('SELECT version()');
+   $tmp[0]['server_db_type'] = testDummy('', 'MySQL ('.$config['dbms'].')', '');
+   $_server_db = (false === strpos($v, "-")) ? $v : substr($v, 0, strpos($v, "-"));
+   list($minimum, $recommended) = getTestValues('mysql_version');
+   $tmp[0]['server_db_version'] = testVersionRange(0, 'server_db_version', $_server_db, '', $minimum, $recommended, false);
 
-	  $grants = $db->GetArray('SHOW GRANTS FOR CURRENT_USER');
-	  if( !is_array($grants) || count($grants) == 0 ) {
-	    $tmp[0]['server_db_grants'] = testDummy('db_grants',lang('os_db_grants'),'yellow','','error_no_grantall_info');
-	  }
-	  else {
-	    $found_grantall = 0;
-	    function __check_grant_all($item,$key) 
-	    {
-	      $item = strtoupper($item);
-	      if( strstr($item,'GRANT ALL PRIVILEGES') !== FALSE )
-		{
-		  global $found_grantall;
-		  $found_grantall = 1;
-		}
-	    }
-	    array_walk_recursive($grants,'__check_grant_all');
-	    if( !$found_grantall ) {
-	      $tmp[0]['server_db_grants'] = testDummy('db_grants',lang('error_nograntall_found'),'yellow');
-	    }
-	    else {
-	      $tmp[0]['server_db_grants'] = testDummy('db_grants',lang('msg_grantall_found'),'green');
-	    }
-	  }
-	  break;
+   $grants = $db->GetArray('SHOW GRANTS FOR CURRENT_USER');
+   if( !is_array($grants) || count($grants) == 0 ) {
+     $tmp[0]['server_db_grants'] = testDummy('db_grants',lang('os_db_grants'),'yellow','','error_no_grantall_info');
+   }
+   else {
+     $found_grantall = 0;
+     function __check_grant_all($item,$key) 
+     {
+       $item = strtoupper($item);
+       if( strstr($item,'GRANT ALL PRIVILEGES') !== FALSE )
+	 {
+	   global $found_grantall;
+	   $found_grantall = 1;
+	 }
+     }
+     array_walk_recursive($grants,'__check_grant_all');
+     if( !$found_grantall ) {
+       $tmp[0]['server_db_grants'] = testDummy('db_grants',lang('error_nograntall_found'),'yellow');
+     }
+     else {
+       $tmp[0]['server_db_grants'] = testDummy('db_grants',lang('msg_grantall_found'),'green');
+     }
+   }
+   break;
 }
 
 {
@@ -324,6 +324,7 @@ switch($config['dbms']) //workaround: ServerInfo() is unsupported in adodblite
 
 $smarty->assign('count_server_info', count($tmp[0]));
 $smarty->assign('server_info', $tmp);
+
 
 $tmp = array(0=>array(), 1=>array());
 
@@ -345,6 +346,7 @@ $tmp[1]['config_file'] = testDummy('', substr(sprintf('%o', fileperms(CONFIG_FIL
 
 $smarty->assign('count_permission_info', count($tmp[0]));
 $smarty->assign('permission_info', $tmp);
+
 
 
 if(isset($_GET['cleanreport']) && $_GET['cleanreport'] == 1) {

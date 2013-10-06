@@ -243,15 +243,17 @@ $allcontent = $db->Execute($query);
 $pages = array();
 $withoutalias = array();
 $invalidtypes = array();
-while ($contentpiece = $allcontent->FetchRow()) {
-  $pages[] = $contentpiece["content_name"];
-  if (trim($contentpiece["content_alias"]) == "" && $contentpiece['type'] != 'separator') {
-    $withoutalias[] = $contentpiece;
+if( is_object($allcontent) ) {
+  while ($contentpiece = $allcontent->FetchRow()) {
+    $pages[] = $contentpiece["content_name"];
+    if (trim($contentpiece["content_alias"]) == "" && $contentpiece['type'] != 'separator') {
+      $withoutalias[] = $contentpiece;
+    }
+    if (!in_array($contentpiece["type"], $simpletypes)) {
+      $invalidtypes[] = $contentpiece;
+    }
+    //print_r($contentpiece);
   }
-  if (!in_array($contentpiece["type"], $simpletypes)) {
-    $invalidtypes[] = $contentpiece;
-  }
-  //print_r($contentpiece);
 }
 $smarty->assign_by_ref("pagesmissingalias", $withoutalias);
 $smarty->assign_by_ref("pageswithinvalidtype", $invalidtypes);
@@ -269,7 +271,7 @@ $ch_filename = cms_join_path(CMS_BASE, 'doc', 'CHANGELOG.txt');
 $changelog = file($ch_filename);
 
 for ($i = 0; $i < count($changelog); $i++) {
-  if (strstr($changelog[$i], 'Version')) {
+  if (substr($changelog[$i], 0, 7) == "Version") {
       if ($i == 0) {
           $changelog[$i] = "<div class=\"version\"><h3>" . $changelog[$i] . "</h3>";
       } else {
@@ -280,7 +282,7 @@ for ($i = 0; $i < count($changelog); $i++) {
 }
 
 
-$changelog = implode("<br />", $changelog);
+$changelog = implode("<br/>", $changelog);
 
 $smarty->assign("changelog", $changelog);
 $smarty->assign("changelogfilename", $ch_filename);

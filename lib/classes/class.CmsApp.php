@@ -24,8 +24,6 @@
  * @package CMS
  */
 
-require_once(dirname(__FILE__).'/class.cms_variables.php');
-
 /**
  * Simple global object to hold references to other objects
  *
@@ -48,6 +46,20 @@ final class CmsApp {
 	private static $_instance;
 
 	/**
+	 * The current content object
+	 *
+	 * @since 2.0
+	 */
+	private $_current_content_page;
+
+	/**
+	 * The request content type
+	 *
+	 * @since 2.0
+	 */
+	private $_content_type;
+
+	/**
 	 * List of currrent states.
 	 * @ignore
 	 */
@@ -65,30 +77,16 @@ final class CmsApp {
 	 * Internal error array - So functions/modules can store up debug info and spit it all out at once
 	 * @ignore
 	 */
-	var $errors = array();
-
-	/**
-	 * content types array - List of available content types
-	 *
-	 * @internal
-	 * @ignore
-	 */
-	private $contenttypes = array();
-
+	private $errors = array();
 
 	public function __get($key)
 	{
-		switch($key)
-			{
-			case 'config':
-				return cms_config::get_instance();
-				break;
-			case 'variables':
-				return cms_variables::get_instance();
-				break;
-			}
+		switch($key) {
+		case 'config':
+			return cms_config::get_instance();
+			break;
+		}
 	}
-
 
 	/**
 	 * Constructor
@@ -98,7 +96,6 @@ final class CmsApp {
 		register_shutdown_function(array(&$this, 'dbshutdown'));
 	}
 
-
 	/**
 	 * Retrieve the single app instancce.
 	 *
@@ -106,13 +103,25 @@ final class CmsApp {
 	 */
 	public static function &get_instance()
 	{
-		if( !self::$_instance  )
-		{
-			self::$_instance = new CmsApp();
-		}
+		if( !self::$_instance  ) self::$_instance = new CmsApp();
 		return self::$_instance;
 	}
 
+
+	/**
+	 * Retrieve the installed schema version.
+	 *
+	 * @since 2.0
+	 */
+	public function get_installed_schema_version()
+	{
+		static $_schema = -1;
+		if( $_schema == -1 ) {
+			$db = $this->GetDb();
+			$_schema = $db->GetOne('SELECT version FROM '.cms_db_prefix().'version');
+		}
+		return $_schema;
+	}
 
 	/**
 	 * Retrieve the list of errors
@@ -144,35 +153,61 @@ final class CmsApp {
 
 
 	/**
-	 * Retrieve the value of an internal variable.
+	 * Retrieve the request content type
 	 *
-	 * @internal
-	 * @access private
-	 * @since 1.9
-	 * @param string The variable name to get
-	 * @return mixed The value of the internal variable, or null.
+	 * If no content type is explicity set, text/html is assumed.
+	 *
+	 * @since 2.0
 	 */
-	public function get_variable($key)
+	public function get_content_type()
 	{
-		if( $key != '' && isset($this->variables[$key]) )
-		{
-			return $this->variables[$key];
-		}
+		if( $this->_content_type ) return $this->_content_type;
+		return 'text/html';
 	}
 
-	
 	/**
-	 * Set the value of an internal variable
+	 * Set the request content type to a valid mime type.
 	 *
+	 * @since 2.0
+	 */
+	public function set_content_type($txt = '')
+	{
+		$this->_content_type = null;
+		if( $txt ) 	$this->_content_type = $txt;
+	}
+
+	/**
+	 * Set the current content page
+	 *
+	 * @since 2.0
 	 * @internal
 	 * @access private
-	 * @since 1.9
-	 * @param string The variable name to set
-	 * @param mixed  The value
+	 * @ignore
 	 */
-	public function set_variable($key,$value)
+	public function set_content_object(ContentBase &$content)
 	{
-		$this->variables[$key] = $value;
+		$this->_current_content_page = $content;
+	}
+
+	/**
+	 * Get the current content page
+	 *
+	 * @since 2.0
+	 */
+	public function get_content_object()
+	{
+		return $this->_current_content_page;
+	}
+
+	/**
+	 * Get the ID of the current content page
+	 *
+	 * @since 2.0
+	 */
+	public function get_content_id()
+	{
+		$obj = $this->get_content_object();
+		if( is_object($obj) ) return $obj->Id();
 	}
 
 
@@ -205,7 +240,7 @@ final class CmsApp {
 	 * @return object Reference to the module object, or null.
 	 * @deprecated
 	 */
-	public function & GetModuleInstance($module_name,$version = '')
+	public function &GetModuleInstance($module_name,$version = '')
 	{
 		return ModuleOperations::get_instance()->get_module_instance($module_name,$version);
 	}
@@ -219,14 +254,27 @@ final class CmsApp {
 	* @final
 	* @return ADOConnection a handle to the ADODB database object
 	*/
-	public function & GetDb()
+	public function &GetDb()
 	{
 		global $DONT_LOAD_DB;
 		/* Check to see if we have a valid instance.
 		 * If not, build the connection */
-		if (!isset($this->db) && (!isset($DONT_LOAD_DB) || $DONT_LOAD_DB == 'force'))
-		{
-			$this->db = adodb_connect();
+		if (!isset($this->db)) {
+			global $CMS_INSTALL_PAGE;
+
+			if( isset($CMS_INSTALL_PAGE) && class_exists('CmsInstaller') &&
+				CmsInstaller::get_ext() ) {
+				$ob = CmsInstaller::get_db();
+
+				if( is_object($ob) ) {
+					$this->db = $ob;
+					return $this->db;
+				}
+			}
+
+			if (!isset($this->db) && (!isset($DONT_LOAD_DB) || $DONT_LOAD_DB == 'force')) {
+				$this->db = adodb_connect();
+			}
 		}
 		
 		return $this->db;
@@ -297,40 +345,10 @@ final class CmsApp {
 	*/	
 	public function & GetBookmarkOperations()
 	{
-        if (!isset($this->bookmarkoperations))
-		{
-			$this->bookmarkoperations = new BookmarkOperations();
-		}
-
+        if (!isset($this->bookmarkoperations)) $this->bookmarkoperations = new BookmarkOperations();
 		return $this->bookmarkoperations;
 	}
-	
-	/**
-	* Get a handle to the CMS TemplateOperations object. If it does not yet
-	* exist, this method will instantiate it.
-	*
-	* @final
-	* @see TemplateOperations
-	* @return TemplateOperations handle to the TemplateOperations object
-	*/
-	public function & GetTemplateOperations()
-	{
-		return TemplateOperations::get_instance();
-	}
 
-
-	/**
-	* Get a handle to the CMS StylesheetOperations object. If it does not yet
-	* exist, this method will instantiate it.
-	*
-	* @final
-	* @see StylesheetOperations
-	* @return StylesheetOperations handle to the StylesheetOperations object
-	*/	
-	public function & GetStylesheetOperations()
-	{
-		return StylesheetOperations::get_instance();
-	}
 	
 	/**
 	* Get a handle to the CMS GroupOperations object. If it does not yet
@@ -342,29 +360,8 @@ final class CmsApp {
 	*/
 	public function & GetGroupOperations()
 	{
-        if (!isset($this->groupoperations))
-		{
-			$this->groupoperations = new GroupOperations();
-		}
-
-		return $this->groupoperations;
+		return GroupOperations::get_instance();
 	}
-	
-	/**
-	* Get a handle to the CMS GlobalContentOperations object. If it does not yet
-	* exist, this method will instantiate it. To disambiguate, this object has methods
-	* for dealing with "Global Content Blocks," not to be confused with the ContentOperations
-	* object available on a global basis from this class.
-	*
-	* @final
-	* @see GlobalContentOperations
-	* @return GlobalContentOperations handle to the GlobalContentOperations object
-	*/
-	public function & GetGlobalContentOperations()
-	{
-		return GlobalContentOperations::get_instance();
-	}
-
 	
 	/**
 	* Get a handle to the CMS UserTagOperations object. If it does not yet
@@ -406,10 +403,9 @@ final class CmsApp {
 	{
 		/* Check to see if a HierarchyManager has been instantiated yet,
 		  and, if not, go ahead an create the instance. */
-        if (!isset($this->hrinstance))
-		{
+        if (!isset($this->hrinstance)) {
 			debug_buffer('', 'Start Loading Hierarchy Manager');
-			$contentops =& $this->GetContentOperations();
+			$contentops = $this->GetContentOperations();
 			$this->hrinstance = $contentops->GetAllContentAsHierarchy(false);
 			debug_buffer('', 'End Loading Hierarchy Manager');
 		}
@@ -426,11 +422,9 @@ final class CmsApp {
 	*/
 	public function dbshutdown()
 	{
-		if (isset($this->db))
-		{
+		if (isset($this->db)) {
 			$db = $this->db;
-			if ($db->IsConnected())
-				$db->Close();
+			if ($db->IsConnected())	$db->Close();
 		}
 	}
 
@@ -449,21 +443,16 @@ final class CmsApp {
 	  $the_time = time() - $age_days * 24*60*60;
 
 	  $dirs = array(TMP_CACHE_LOCATION,TMP_TEMPLATES_C_LOCATION);
-	  foreach( $dirs as $start_dir )
-	    {
+	  foreach( $dirs as $start_dir ) {
 	      $dirIterator = new RecursiveDirectoryIterator($start_dir);
  	      $dirContents = new RecursiveIteratorIterator($dirIterator);
-	      foreach( $dirContents as $one )
-			  {
-				  if( $one->isFile() && $one->getMTime() <= $the_time )
-					  {
-						  @unlink($one->getPathname());
-					  }
-			  }
-	    }
+	      foreach( $dirContents as $one ) {
+			  if( $one->isFile() && $one->getMTime() <= $the_time ) @unlink($one->getPathname());
+		  }
+	  }
 
-		@touch(cms_join_path(TMP_CACHE_LOCATION,'index.html'));
-		@touch(cms_join_path(TMP_TEMPLATES_C_LOCATION,'index.html'));
+	  @touch(cms_join_path(TMP_CACHE_LOCATION,'index.html'));
+	  @touch(cms_join_path(TMP_TEMPLATES_C_LOCATION,'index.html'));
 	}
 
 	/**
@@ -498,15 +487,9 @@ final class CmsApp {
 
 			$this->_states = array();
 			
-			if( isset($CMS_ADMIN_PAGE) ) 
-				$this->_states[] = self::STATE_ADMIN_PAGE;
-						
-			if( isset($CMS_INSTALL_PAGE) ) 
-				$this->_states[] = self::STATE_INSTALL;
-			
-			if( isset($CMS_STYLESHEET) )
-				$this->_states[] = self::STATE_STYLESHEET;
-			
+			if( isset($CMS_ADMIN_PAGE) ) $this->_states[] = self::STATE_ADMIN_PAGE;
+			if( isset($CMS_INSTALL_PAGE) ) $this->_states[] = self::STATE_INSTALL;
+			if( isset($CMS_STYLESHEET) ) $this->_states[] = self::STATE_STYLESHEET;
 		}
 	}
 
@@ -522,9 +505,7 @@ final class CmsApp {
 	 */
 	public function test_state($state)
 	{
-		if( !in_array($state,self::$_statelist) ) {
-			throw new CmsInvalidDataException($state.' is an invalid CMSMS state');
-		}
+		if( !in_array($state,self::$_statelist) ) throw new CmsInvalidDataException($state.' is an invalid CMSMS state');
 		$this->set_states();
 		if( is_array($this->_states) && in_array($state,$this->_states) ) return TRUE;
 		return FALSE;
@@ -557,9 +538,7 @@ final class CmsApp {
 	 */
     public function add_state($state)
     {
-		if( !in_array($state,self::$_statelist) ) {
-			throw new CmsInvalidDataException($state.' is an invalid CMSMS state');
-		}
+		if( !in_array($state,self::$_statelist) ) throw new CmsInvalidDataException($state.' is an invalid CMSMS state');
 		$this->set_states();
 		$this->_states[] = $state;
     }
@@ -578,9 +557,7 @@ final class CmsApp {
 	 */
     public function remove_state($state)
     {
-		if( !in_array($state,self::$_statelist) ) {
-			throw new CmsInvalidDataException($state.' is an invalid CMSMS state');
-		}
+		if( !in_array($state,self::$_statelist) ) throw new CmsInvalidDataException($state.' is an invalid CMSMS state');
 		$this->set_states();
 		if( !is_array($this->_states) || !in_array($state,$this->_states) ) {
 			$key = array_search($state,$this->_states);

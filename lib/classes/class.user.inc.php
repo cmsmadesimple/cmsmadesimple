@@ -122,23 +122,19 @@ class User
 	{
 		$result = false;
 		
-		if ($this->id > -1)
-		{
+		if ($this->id > -1) {
 			$gCms = cmsms();
 			$userops = $gCms->GetUserOperations();
 			$result = $userops->UpdateUser($this);
 		}
-		else
-		{
+		else {
 			$gCms = cmsms();
 			$userops = $gCms->GetUserOperations();
 			$newid = $userops->InsertUser($this);
-			if ($newid > -1)
-			{
+			if ($newid > -1) {
 				$this->id = $newid;
 				$result = true;
 			}
-
 		}
 
 		return $result;
@@ -155,13 +151,11 @@ class User
 	{
 		$result = false;
 
-		if ($this->id > -1)
-		{
+		if ($this->id > -1) {
 			$gCms = cmsms();
 			$userops = $gCms->GetUserOperations();
 			$result = $userops->DeleteUserByID($this->id);
-			if ($result)
-			{
+			if ($result) {
 				$this->SetInitialValues();
 			}
 		}

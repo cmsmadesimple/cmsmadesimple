@@ -76,10 +76,9 @@ class OneElevenTheme extends CmsAdminThemeBase {
 	}
 
 	public function ShowHeader($title_name, $extra_lang_params = array(), $link_text = '', $module_help_type = FALSE) {
-		if ($title_name)
-			$this->set_value('pagetitle', $title_name);
+		if ($title_name) $this->set_value('pagetitle', $title_name);
 		if (is_array($extra_lang_params) && count($extra_lang_params))
-			$this->set_value('extra_lang_params', $extra_lang_params);
+		  $this->set_value('extra_lang_params', $extra_lang_params);
 		$this->set_value('module_help_type', $module_help_type);
 
 		// get the image url.
@@ -101,7 +100,6 @@ class OneElevenTheme extends CmsAdminThemeBase {
 			}
 		}
 
-		// get the wiki URL and a title for that link.
 		$bc = $this->get_breadcrumbs();
 		if ($bc) {
 			for ($i = 0; $i < count($bc); $i++) {
@@ -188,7 +186,7 @@ class OneElevenTheme extends CmsAdminThemeBase {
 
 		// get a page title
 		$title = $this->get_value('pagetitle');
-        $alias = $this->get_value('pagetitle');
+		$alias = $this->get_value('pagetitle');
 		if ($title) {
 			if (!$module_help_type) {
 				// if not doing module help, translate the string.
@@ -198,11 +196,16 @@ class OneElevenTheme extends CmsAdminThemeBase {
 				$title = lang($title, $extra);
 			}
 		} else {
-			// no title, get one from the breadcrumbs.
-			$bc = $this->get_breadcrumbs();
-			if (is_array($bc) && count($bc)) {
-				$title = $bc[count($bc) - 1]['title'];
-			}
+		  if( $this->title ) {
+		    $title = $this->title;
+		  }
+		  else {
+		    // no title, get one from the breadcrumbs.
+		    $bc = $this->get_breadcrumbs();
+		    if (is_array($bc) && count($bc)) {
+		      $title = $bc[count($bc) - 1]['title'];
+		    }
+		  }
 		}
         // page title and alias
 		$smarty->assign('pagetitle', $title);
@@ -225,8 +228,13 @@ class OneElevenTheme extends CmsAdminThemeBase {
 		  }
 		}
 
+		// my preferences
+		if (check_permission(get_userid(),'Manage My Settings')) {
+		  $smarty->assign('myaccount',1);
+		}
+
 		// if bookmarks
-		if (get_preference(get_userid(), 'bookmarks')) {
+		if (get_preference(get_userid(), 'bookmarks') && check_permission(get_userid(),'Manage My Bookmarks')) {
 			$marks = $this->get_bookmarks();
 			$smarty->assign('marks', $marks);
 		}

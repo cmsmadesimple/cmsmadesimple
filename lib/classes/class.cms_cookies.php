@@ -52,6 +52,7 @@ final class cms_cookies
    * @ignore
    */
   private static $_parts;
+
   /**
    * @ignore
    */
@@ -62,16 +63,14 @@ final class cms_cookies
    */
   private static function __path()
   {
-    if( !is_array(self::$_parts) )
-      {
+	  if( !is_array(self::$_parts) ) {
 		  $config = cmsms()->GetConfig();
 		  self::$_parts = parse_url($config['root_url']);
       }
-    if( !isset(self::$_parts['path']) || self::$_parts['path'] == '' )
-		{
-			self::$_parts['path'] = '/';
-		}
-    return self::$_parts['path'];
+	  if( !isset(self::$_parts['path']) || self::$_parts['path'] == '' ) {
+		  self::$_parts['path'] = '/';
+	  }
+	  return self::$_parts['path'];
   }
 
   /**
@@ -79,17 +78,16 @@ final class cms_cookies
    */
   private static function __domain()
   {
-    if( !is_array(self::$_parts) )
-      {
+	  if( !is_array(self::$_parts) ) {
 		  $config = cmsms()->GetConfig();
 		  self::$_parts = parse_url($config['root_url']);
       }
-    if( !isset(self::$_parts['host']) || self::$_parts['host'] == '' )
-		{
-			self::$_parts['host'] = $config['root_url'];
-		}
-    return self::$_parts['host'];
+	  if( !isset(self::$_parts['host']) || self::$_parts['host'] == '' ) {
+		  self::$_parts['host'] = $config['root_url'];
+	  }
+	  return self::$_parts['host'];
   }
+
 
   /**
    * @ignore
@@ -99,6 +97,7 @@ final class cms_cookies
     if( !isset($_SERVER['HTTPS']) || empty($_SERVER['HTTPS']) || $_SERVER['HTTPS'] == 'off' ) return FALSE;
     return TRUE;
   }
+
 
   /**
    * @ignore
@@ -150,6 +149,7 @@ final class cms_cookies
   {
 	  return isset($_COOKIE[$key]);
   }
+
 
   /**
    * Erase a cookie

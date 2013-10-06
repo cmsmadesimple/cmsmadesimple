@@ -2,23 +2,19 @@
 
 if (isset($CMS_INSTALL_DROP_TABLES)) {
 
-	$db->DropSequence($db_prefix."additional_htmlblob_users_seq");
 	$db->DropSequence($db_prefix."additional_users_seq");
 	$db->DropSequence($db_prefix."admin_bookmarks_seq");
 	$db->DropSequence($db_prefix."admin_recent_pages_seq");
 	$db->DropSequence($db_prefix."additional_users_seq");
 	$db->DropSequence($db_prefix."content_seq");
 	$db->DropSequence($db_prefix."content_props_seq");
-	$db->DropSequence($db_prefix."css_seq");
 	$db->DropSequence($db_prefix."events_seq");
 	$db->DropSequence($db_prefix."event_handler_seq");
 	$db->DropSequence($db_prefix."group_perms_seq");
 	$db->DropSequence($db_prefix."groups_seq");
-	$db->DropSequence($db_prefix."htmlblobs_seq");
 	$db->DropSequence($db_prefix."module_deps_seq");
 	$db->DropSequence($db_prefix."module_templates_seq");
 	$db->DropSequence($db_prefix."permissions_seq");
-	$db->DropSequence($db_prefix."templates_seq");
 	$db->DropSequence($db_prefix."users_seq");
 	$db->DropSequence($db_prefix."userplugins_seq");
 
@@ -31,8 +27,6 @@ if (isset($CMS_INSTALL_DROP_TABLES)) {
 
 	$sqlarray = $dbdict->DropTableSQL($db_prefix."additional_users");
 	$dbdict->ExecuteSQLArray($sqlarray);
-	$sqlarray = $dbdict->DropTableSQL($db_prefix."additional_htmlblob_users");
-	$dbdict->ExecuteSQLArray($sqlarray);
 	$sqlarray = $dbdict->DropTableSQL($db_prefix."adminlog");
 	$dbdict->ExecuteSQLArray($sqlarray);
 	$sqlarray = $dbdict->DropTableSQL($db_prefix."admin_bookmarks");
@@ -43,12 +37,6 @@ if (isset($CMS_INSTALL_DROP_TABLES)) {
 	$dbdict->ExecuteSQLArray($sqlarray);
 	$sqlarray = $dbdict->DropTableSQL($db_prefix."content_props");
 	$dbdict->ExecuteSQLArray($sqlarray);
-	$sqlarray = $dbdict->DropTableSQL($db_prefix."crossref");
-	$dbdict->ExecuteSQLArray($sqlarray);
-	$sqlarray = $dbdict->DropTableSQL($db_prefix."css");
-	$dbdict->ExecuteSQLArray($sqlarray);
-	$sqlarray = $dbdict->DropTableSQL($db_prefix."css_assoc");
-	$dbdict->ExecuteSQLArray($sqlarray);
 	$sqlarray = $dbdict->DropTableSQL($db_prefix."events");
 	$dbdict->ExecuteSQLArray($sqlarray);
 	$sqlarray = $dbdict->DropTableSQL($db_prefix."event_handlers");
@@ -56,8 +44,6 @@ if (isset($CMS_INSTALL_DROP_TABLES)) {
 	$sqlarray = $dbdict->DropTableSQL($db_prefix."group_perms");
 	$dbdict->ExecuteSQLArray($sqlarray);
 	$sqlarray = $dbdict->DropTableSQL($db_prefix."groups");
-	$dbdict->ExecuteSQLArray($sqlarray);
-	$sqlarray = $dbdict->DropTableSQL($db_prefix."htmlblobs");
 	$dbdict->ExecuteSQLArray($sqlarray);
 	$sqlarray = $dbdict->DropTableSQL($db_prefix."modules");
 	$dbdict->ExecuteSQLArray($sqlarray);
@@ -69,10 +55,6 @@ if (isset($CMS_INSTALL_DROP_TABLES)) {
 	$dbdict->ExecuteSQLArray($sqlarray);
 	$sqlarray = $dbdict->DropTableSQL($db_prefix."siteprefs");
 	$dbdict->ExecuteSQLArray($sqlarray);
-	$sqlarray = $dbdict->DropTableSQL($db_prefix."templates");
-	$dbdict->ExecuteSQLArray($sqlarray);
-	#$sqlarray = $dbdict->DropTableSQL($db_prefix."sequence");
-	#$dbdict->ExecuteSQLArray($sqlarray);
 	$sqlarray = $dbdict->DropTableSQL($db_prefix."user_groups");
 	$dbdict->ExecuteSQLArray($sqlarray);
 	$sqlarray = $dbdict->DropTableSQL($db_prefix."userprefs");
@@ -129,7 +111,6 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 	echo ilang('install_creating_index', 'admin_bookmarks', $ado_ret);
 
 
-
 	$flds = "
 		timestamp I,
 		user_id I,
@@ -178,8 +159,6 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 		menu_text C(255),
 		content_alias C(255),
 		show_in_menu I1,
-		collapsed I1,
-		markup C(25),
 		active I1,
 		cachable I1,
 		id_hierarchy C(255),
@@ -225,6 +204,11 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 	$ado_ret = ($return == 2) ? ilang('done') : ilang('failed');
 	echo ilang('install_creating_index', 'content', $ado_ret);
 
+	$sqlarray = $dbdict->CreateIndexSQL($db_prefix.'idx_content_by_modified', $db_prefix."content", 'modified_date');
+	$return = $dbdict->ExecuteSQLArray($sqlarray);
+	$ado_ret = ($return == 2) ? ilang('done') : ilang('failed');
+	echo ilang('install_creating_index', 'content', $ado_ret);
+
 	$flds = "
 		content_id I,
 		type C(25),
@@ -232,7 +216,7 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 		param1 C(255),
 		param2 C(255),
 		param3 C(255),
-		content X,
+		content X2,
 		create_date DT,
 		modified_date DT
 	";
@@ -245,80 +229,6 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 	$return = $dbdict->ExecuteSQLArray($sqlarray);
 	$ado_ret = ($return == 2) ? ilang('done') : ilang('failed');
 	echo ilang('install_creating_index', 'content', $ado_ret);
-
-
-
-	$flds = '
-		child_type C(100),
-		child_id I,
-		parent_type C(100),
-		parent_id I,
-		create_date DT,
-		modified_date DT
-	';
-
-	$sqlarray = $dbdict->CreateTableSQL($db_prefix."crossref", $flds, $taboptarray);
-	$return = $dbdict->ExecuteSQLArray($sqlarray);
-	$ado_ret = ($return == 2) ? ilang('done') : ilang('failed');
-	echo ilang('install_creating_table', 'crossref', $ado_ret);
-
-	$sqlarray = $dbdict->CreateIndexSQL($db_prefix.'index_crossref_by_child_type_child_id', $db_prefix."crossref", 'child_type, child_id');
-	$return = $dbdict->ExecuteSQLArray($sqlarray);
-	$ado_ret = ($return == 2) ? ilang('done') : ilang('failed');
-	echo ilang('install_creating_index', 'content', $ado_ret);
-
-	$sqlarray = $dbdict->CreateIndexSQL($db_prefix.'index_crossref_by_parent_type_parent_id', $db_prefix."crossref", 'parent_type, parent_id');
-	$return = $dbdict->ExecuteSQLArray($sqlarray);
-	$ado_ret = ($return == 2) ? ilang('done') : ilang('failed');
-	echo ilang('install_creating_index', 'content', $ado_ret);
-
-
-
-	$flds = "
-		css_id I KEY,
-		css_name C(255),
-		css_text X,
-		media_type C(255),
-		media_query X,
-		create_date DT,
-		modified_date DT
-	";
-	$sqlarray = $dbdict->CreateTableSQL($db_prefix."css", $flds, $taboptarray);
-	$return = $dbdict->ExecuteSQLArray($sqlarray);
-	$ado_ret = ($return == 2) ? ilang('done') : ilang('failed');
-	echo ilang('install_creating_table', 'css', $ado_ret);
-
-	$sqlarray = $dbdict->CreateIndexSQL($db_prefix.'index_css_by_css_name', $db_prefix."css", 'css_name');
-	$return = $dbdict->ExecuteSQLArray($sqlarray);
-	$ado_ret = ($return == 2) ? ilang('done') : ilang('failed');
-	echo ilang('install_creating_index', 'content', $ado_ret);
-
-
-
-	$flds = "
-		assoc_to_id I,
-		assoc_css_id I,
-		assoc_type C(80),
-		create_date DT,
-		modified_date DT,
-		assoc_order I
-	";
-	$sqlarray = $dbdict->CreateTableSQL($db_prefix."css_assoc", $flds, $taboptarray);
-	$return = $dbdict->ExecuteSQLArray($sqlarray);
-	$ado_ret = ($return == 2) ? ilang('done') : ilang('failed');
-	echo ilang('install_creating_table', 'css_assoc', $ado_ret);
-
-	$sqlarray = $dbdict->CreateIndexSQL($db_prefix.'index_css_assoc_by_assoc_to_id', $db_prefix."css_assoc", 'assoc_to_id');
-	$return = $dbdict->ExecuteSQLArray($sqlarray);
-	$ado_ret = ($return == 2) ? ilang('done') : ilang('failed');
-	echo ilang('install_creating_index', 'content', $ado_ret);
-
-	$sqlarray = $dbdict->CreateIndexSQL($db_prefix.'index_css_assoc_by_assoc_css_id', $db_prefix."css_assoc", 'assoc_css_id');
-	$return = $dbdict->ExecuteSQLArray($sqlarray);
-	$ado_ret = ($return == 2) ? ilang('done') : ilang('failed');
-	echo ilang('install_creating_index', 'content', $ado_ret);
-
-	
 
 	$flds = "
 		event_id I,
@@ -384,6 +294,7 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 	$flds = "
 		group_id I KEY,
 		group_name C(25),
+                group_desc C(255),
 		active I1,
 		create_date DT,
 		modified_date DT
@@ -392,40 +303,6 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 	$return = $dbdict->ExecuteSQLArray($sqlarray);
 	$ado_ret = ($return == 2) ? ilang('done') : ilang('failed');
 	echo ilang('install_creating_table', 'groups', $ado_ret);
-
-
-
-	$flds = "
-		htmlblob_id I KEY,
-		htmlblob_name C(255),
-		html X,
-                description X,
-                use_wysiwyg I1,
-		owner I,
-		create_date DT,
-		modified_date DT
-	";
-	$sqlarray = $dbdict->CreateTableSQL($db_prefix."htmlblobs", $flds, $taboptarray);
-	$return = $dbdict->ExecuteSQLArray($sqlarray);
-	$ado_ret = ($return == 2) ? ilang('done') : ilang('failed');
-	echo ilang('install_creating_table', 'htmlblobs', $ado_ret);
-
-	$sqlarray = $dbdict->CreateIndexSQL($db_prefix.'index_htmlblobs_by_htmlblob_name', $db_prefix."htmlblobs", 'htmlblob_name');
-	$return = $dbdict->ExecuteSQLArray($sqlarray);
-	$ado_ret = ($return == 2) ? ilang('done') : ilang('failed');
-	echo ilang('install_creating_index', 'content', $ado_ret);
-
-
-
-	$flds = "
-		additional_htmlblob_users_id I KEY,
-		user_id I,
-		htmlblob_id I
-	";
-	$sqlarray = $dbdict->CreateTableSQL($db_prefix."additional_htmlblob_users", $flds, $taboptarray);
-	$return = $dbdict->ExecuteSQLArray($sqlarray);
-	$ado_ret = ($return == 2) ? ilang('done') : ilang('failed');
-	echo ilang('install_creating_table', 'additional_htmlblob_users', $ado_ret);
 
 
 
@@ -463,7 +340,7 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 	echo ilang('install_creating_table', 'module_deps', $ado_ret);
 
 
-
+	// deprecated
 	$flds = "
 		module_name C(160),
 		template_name C(160),
@@ -487,6 +364,7 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 		permission_id I KEY,
 		permission_name C(255),
 		permission_text C(255),
+                permission_source C(255),
 		create_date DT,
 		modified_date DT
 	";
@@ -494,7 +372,6 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 	$return = $dbdict->ExecuteSQLArray($sqlarray);
 	$ado_ret = ($return == 2) ? ilang('done') : ilang('failed');
 	echo ilang('install_creating_table', 'permissions', $ado_ret);
-
 
 
 	$flds = "
@@ -511,31 +388,8 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 
 
 	$flds = "
-		template_id I KEY,
-		template_name C(160),
-		template_content X,
-		stylesheet X,
-		encoding C(25),
-		active I1,
-		default_template I1,
-		create_date DT,
-		modified_date DT
-	";
-	$sqlarray = $dbdict->CreateTableSQL($db_prefix."templates", $flds, $taboptarray);
-	$return = $dbdict->ExecuteSQLArray($sqlarray);
-	$ado_ret = ($return == 2) ? ilang('done') : ilang('failed');
-	echo ilang('install_creating_table', 'templates', $ado_ret);
-
-	$sqlarray = $dbdict->CreateIndexSQL($db_prefix.'index_templates_by_template_name', $db_prefix."templates", 'template_name');
-	$return = $dbdict->ExecuteSQLArray($sqlarray);
-	$ado_ret = ($return == 2) ? ilang('done') : ilang('failed');
-	echo ilang('install_creating_index', 'content', $ado_ret);
-
-
-
-	$flds = "
-		group_id I,
-		user_id I,
+		group_id I KEY,
+		user_id I KEY,
 		create_date DT,
 		modified_date DT
 	";
@@ -622,6 +476,10 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 	$ado_ret = ($return == 2) ? ilang('done') : ilang('failed');
 	echo ilang('install_creating_table', 'module_smarty_plugins', $ado_ret);
 
+	$sqlarray = $dbdict->CreateIndexSQL($db_prefix.'idx_smp_module', $db_prefix."module_smarty_plugins", 'module');
+	$return = $dbdict->ExecuteSQLArray($sqlarray);
+	$ado_ret = ($return == 2) ? ilang('done') : ilang('failed');
+	echo ilang('install_creating_index', 'idx_smp_module', $ado_ret);
 
 
 	$flds = "
@@ -635,6 +493,150 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 	$return = $dbdict->ExecuteSQLArray($sqlarray);
 	$ado_ret = ($return == 2) ? ilang('done') : ilang('failed');
 	echo ilang('install_creating_table', 'routes', $ado_ret);
+
+	$flds = "
+         id I KEY AUTO,
+         originator C(50) NOT NULL,
+         name C(50) NOT NULL,
+         has_dflt I1,
+         dflt_contents X2,
+         description X,
+         lang_cb     C(255),
+         dflt_content_cb C(255),
+         requires_contentblocks I1,
+         owner   I,
+         created I,
+         modified I";
+	$sqlarray = $dbdict->CreateTableSQL($db_prefix.CmsLayoutTemplateType::TABLENAME, $flds, 
+					  $taboptarray);
+	$return = $dbdict->ExecuteSQLArray($sqlarray);
+	$ado_ret = ($return == 2) ? ilang('done') : ilang('failed');
+	echo ilang('install_creating_table', CmsLayoutTemplateType::TABLENAME, $ado_ret);
+
+	$sqlarray = $dbdict->CreateIndexSQL($db_prefix.'idx_layout_tpl_type_1', $db_prefix.CmsLayoutTemplateType::TABLENAME, 
+					    'originator,name');
+	$return = $dbdict->ExecuteSQLArray($sqlarray);
+	$ado_ret = ($return == 2) ? ilang('done') : ilang('failed');
+	echo ilang('install_creating_index', 'idx_layout_tpl_type_1', $ado_ret);
+
+
+	$flds = "
+         id I KEY AUTO,
+         name C(50) NOT NULL,
+         description X,
+         item_order X,
+         modified I";
+	$sqlarray = $dbdict->CreateTableSQL($db_prefix.CmsLayoutTemplateCategory::TABLENAME, $flds, 
+					  $taboptarray);
+	$return = $dbdict->ExecuteSQLArray($sqlarray);
+	echo ilang('install_creating_table', CmsLayoutTemplateCategory::TABLENAME, $ado_ret);
+
+	$flds = "
+         id I KEY AUTO,
+         name C(50) NOT NULL,
+         content X2,
+         description X,
+         type_id I,
+         type_dflt I1,
+         category_id I,
+         owner_id I,
+         created I,
+         modified I";
+	$sqlarray = $dbdict->CreateTableSQL($db_prefix.CmsLayoutTemplate::TABLENAME, $flds, 
+					  $taboptarray);
+	$return = $dbdict->ExecuteSQLArray($sqlarray);
+	$ado_ret = ($return == 2) ? ilang('done') : ilang('failed');
+	echo ilang('install_creating_table', CmsLayoutTemplate::TABLENAME, $ado_ret);
+
+	$sqlarray = $dbdict->CreateIndexSQL($db_prefix.'idx_layout_tpl_1', $db_prefix.CmsLayoutTemplate::TABLENAME, 'name');
+	$return = $dbdict->ExecuteSQLArray($sqlarray);
+	$ado_ret = ($return == 2) ? ilang('done') : ilang('failed');
+	echo ilang('install_creating_index', 'idx_layout_tpl_1', $ado_ret);
+
+	$sqlarray = $dbdict->CreateIndexSQL($db_prefix.'idx_layout_tpl_2', $db_prefix.CmsLayoutTemplate::TABLENAME, 'type_id,type_dflt');
+	$return = $dbdict->ExecuteSQLArray($sqlarray);
+	$ado_ret = ($return == 2) ? ilang('done') : ilang('failed');
+	echo ilang('install_creating_index', 'idx_layout_tpl_2', $ado_ret);
+
+	$flds = "
+         id I KEY AUTO,
+         name C(50) NOT NULL,
+         content X2,
+         description X,
+	 media_type C(255),
+	 media_query X,
+         created I,
+         modified I";
+	$sqlarray = $dbdict->CreateTableSQL($db_prefix.CmsLayoutStylesheet::TABLENAME, $flds, 
+					  $taboptarray);
+	$return = $dbdict->ExecuteSQLArray($sqlarray);
+	echo ilang('install_creating_table', CmsLayoutStylesheet::TABLENAME, $ado_ret);
+
+	$flds = "
+         tpl_id I KEY,
+         user_id I KEY
+        ";
+	$sqlarray = $dbdict->CreateTableSQL($db_prefix.CmsLayoutTemplate::ADDUSERSTABLE, $flds, 
+					  $taboptarray);
+	$return = $dbdict->ExecuteSQLArray($sqlarray);
+	echo ilang('install_creating_table', CmsLayoutTemplate::ADDUSERSTABLE, $ado_ret);
+
+
+	$flds = "
+         id   I KEY AUTO,
+         name C(50) NOT NULL,
+         description X,
+         dflt I1,
+         created I,
+         modified I
+        ";
+	$sqlarray = $dbdict->CreateTableSQL($db_prefix.CmsLayoutCollection::TABLENAME, $flds, $taboptarray);
+	$return = $dbdict->ExecuteSQLArray($sqlarray);
+	echo ilang('install_creating_table', CmsLayoutCollection::TABLENAME, $ado_ret);
+
+
+	$flds = "
+         design_id I KEY NOT NULL,
+         tpl_id   I KEY NOT NULL
+        ";
+	$sqlarray = $dbdict->CreateTableSQL($db_prefix.CmsLayoutCollection::TPLTABLE, $flds, $taboptarray);
+	$return = $dbdict->ExecuteSQLArray($sqlarray);
+	echo ilang('install_creating_table', CmsLayoutCollection::TPLTABLE, $ado_ret);
+
+	$flds = "
+         design_id I KEY NOT NULL,
+         css_id   I KEY NOT NULL,
+         item_order I NOT NULL
+        ";
+	$sqlarray = $dbdict->CreateTableSQL($db_prefix.CmsLayoutCollection::CSSTABLE, $flds, $taboptarray);
+	$return = $dbdict->ExecuteSQLArray($sqlarray);
+	echo ilang('install_creating_table', CmsLayoutCollection::CSSTABLE, $ado_ret);
+
+	$flds = "
+                 id I AUTO KEY NOT NULL,
+                 type C(20) NOT NULL,
+                 oid  I NOT NULL,
+                 uid  I NOT NULL,
+                 created I NOT NULL,
+                 modified I NOT NULL,
+                 lifetime I NOT NULL,
+                 expires  I NOT NULL
+                ";
+	$sqlarray = $dbdict->CreateTableSQL($db_prefix.CmsLock::LOCK_TABLE, $flds, $taboptarray);
+	$return = $dbdict->ExecuteSQLArray($sqlarray);
+	$ado_ret = ($return == 2) ? ilang('done') : ilang('failed');
+
+	$sqlarray = $dbdict->CreateIndexSQL($db_prefix.'index_locks1', $db_prefix."locks", 'type,oid', array('UNIQUE'));
+	$return = $dbdict->ExecuteSQLArray($sqlarray);
+
+	$sqlarray = $dbdict->CreateIndexSQL($db_prefix.'index_locks1', $db_prefix."locks", 'expires');
+	$return = $dbdict->ExecuteSQLArray($sqlarray);
+
+	$sqlarray = $dbdict->CreateIndexSQL($db_prefix.'index_locks1', $db_prefix."locks", 'uid');
+	$return = $dbdict->ExecuteSQLArray($sqlarray);
+
+	echo ilang('install_creating_table', CmsLock::LOCK_TABLE, $ado_ret);
+
 }
 
 # vim:ts=4 sw=4 noet

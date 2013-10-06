@@ -39,7 +39,7 @@ if (isset($_GET["group_id"]))
 
 	$group_name = "";
 	$userid = get_userid();
-	$access = check_permission($userid, 'Remove Groups');
+	$access = check_permission($userid, 'Manage Groups');
 
 	# you can't delete admin group (also admin group it's the first group)
 	if (!$access)

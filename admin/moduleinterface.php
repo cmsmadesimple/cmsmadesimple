@@ -21,119 +21,104 @@
 $CMS_ADMIN_PAGE=1;
 $CMS_MODULE_PAGE=1;
 
+$orig_memory = (function_exists('memory_get_usage')?memory_get_usage():0);
+$starttime = microtime();
+
 require_once("../include.php");
+debug_buffer("original memory is ".$orig_memory);
 $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 
 check_login();
 $userid = get_userid();
-if( isset($_SESSION['cms_passthru']) )
-  {
-    $_REQUEST = array_merge($_REQUEST,$_SESSION['cms_passthru']);
-    unset($_SESSION['cms_passthru']);
-  }
+if( isset($_SESSION['cms_passthru']) ) {
+  $_REQUEST = array_merge($_REQUEST,$_SESSION['cms_passthru']);
+  unset($_SESSION['cms_passthru']);
+}
 
-$gCms = cmsms();
-$smarty = $gCms->GetSmarty();
+$smarty = cmsms()->GetSmarty();
 $smarty->assign('date_format_string',get_preference($userid,'date_format_string','%x %X'));
 
-try {
-  $id = 'm1_';
-  $module = '';
-  $action = 'defaultadmin';
-  $suppressOutput = false;
-  if (isset($_REQUEST['module'])) $module = $_REQUEST['module'];
-  if (isset($_REQUEST['action'])) $action = $_REQUEST['action'];
-  if (isset($_REQUEST['id'])) {
-    $id = $_REQUEST['id'];
-  }
-  elseif (isset($_REQUEST['mact'])) {
-    $ary = explode(',', cms_htmlentities($_REQUEST['mact']), 4);
-    $module = (isset($ary[0])?$ary[0]:'');
-    $id = (isset($ary[1])?$ary[1]:'m1_');
-    $action = (isset($ary[2])?$ary[2]:'');
-  }
-
-  $modinst = ModuleOperations::get_instance()->get_module_instance($module);
-  if( !$modinst ) {
-    trigger_error('Module '.$module.' not found in memory. This could indicate that the module is in need of upgrade or that there are other problems');
-    redirect("index.php".$urlext);
-  }
-
-  if( get_preference($userid,'use_wysiwyg') == '1' && $modinst->IsWYSIWYG() ) {
-    $htmlarea_flag = "true";
-    $htmlarea_replaceall = true;
-  }
-
-  $USE_THEME = true;
-  $USE_OUTPUT_BUFFERING = true;
-  if (isset($_REQUEST[$id . 'disable_buffer']) || isset($_REQUEST['disable_buffer']) ) {
-    $USE_OUTPUT_BUFFERING = false;
-    $USE_THEME = false;
-  }
-  else if( isset($_REQUEST[$id . 'disable_theme']) || isset($_REQUEST['disable_theme']) ) {
-    $USE_THEME = false;
-  }
-
-  if( isset($_REQUEST['showtemplate']) && ($_REQUEST['showtemplate'] == 'false')) {
-    // for simplicity and compatibility with the frontend.
-    $USE_THEME = false;
-    $USE_OUTPUT_BUFFERING = false;
-  }
-
-  cms_admin_sendheaders();
-
-  $txt = $modinst->GetHeaderHTML();
-  if( $txt !== false ) {
-    $headtext = $txt;
-  }
-
-  if( $modinst->SuppressAdminOutput($_REQUEST) != false || isset($_REQUEST['suppressoutput']) ) {
-    $suppressOutput = true;
-  }
-  else {
-    include_once("header.php");
-  }
-
-  if( !isset($USE_THEME) || $USE_THEME != false ) {
-    $params = GetModuleParameters($id);
-    if (FALSE == empty($params['module_message'])) {
-      echo $themeObject->ShowMessage($params['module_message']);
-    }
-    if (FALSE == empty($params['module_error'])) {
-      echo $themeObject->ShowErrors($params['module_error']);
-    }
-    if (!$suppressOutput) {
-      echo '<div class="pagecontainer">';
-      echo '<div class="pageoverflow">';
-      echo $themeObject->ShowHeader($modinst->GetFriendlyName(), '', '', 'both').'</div>';
-    }
-  }  
-  if( $USE_OUTPUT_BUFFERING ) {
-    @ob_start();
-  }
-
-  $params = GetModuleParameters($id);
-  echo $modinst->DoActionBase($action, $id, $params);
-
-  if( $USE_OUTPUT_BUFFERING ) {
-    $content = @ob_get_contents();
-    @ob_end_clean();
-    echo $content;
-  }
-  if( !isset($USE_THEME) || $USE_THEME != false ) {
-    if (!$suppressOutput) {
-      echo '</div>';
-      echo '<p class="pageback"><a class="pageback" href="'.$themeObject->BackUrl().'">&#171; '.lang('back').'</a></p>';
-      include_once("footer.php");
-    }
-  }
+$id = 'm1_';
+$module = '';
+$action = 'defaultadmin';
+$suppressOutput = false;
+if (isset($_REQUEST['module'])) $module = $_REQUEST['module'];
+if (isset($_REQUEST['action'])) $action = $_REQUEST['action'];
+elseif (isset($_REQUEST['mact'])) {
+  $ary = explode(',', cms_htmlentities($_REQUEST['mact']), 4);
+  $module = (isset($ary[0])?$ary[0]:'');
+  $id = (isset($ary[1])?$ary[1]:'m1_');
+  $action = (isset($ary[2])?$ary[2]:'');
 }
-catch( Exception $e ) {
-  // handle uncaught exception
-  $handlers = ob_list_handlers(); 
-  for ($cnt = 0; $cnt < sizeof($handlers); $cnt++) { ob_end_clean(); }
-  echo $smarty->errorConsole($e);
-  return;
+
+$modinst = ModuleOperations::get_instance()->get_module_instance($module);
+if( !$modinst ) {
+  trigger_error('Module '.$module.' not found in memory. This could indicate that the module is in need of upgrade or that there are other problems');
+  redirect("index.php".$urlext);
 }
+
+$USE_THEME = true;
+$USE_OUTPUT_BUFFERING = true;
+if (isset($_REQUEST[$id . 'disable_buffer']) || isset($_REQUEST['disable_buffer']) ) {
+  $USE_OUTPUT_BUFFERING = false;
+  $USE_THEME = false;
+}
+else if( isset($_REQUEST[$id . 'disable_theme']) || isset($_REQUEST['disable_theme']) ) {
+  $USE_THEME = false;
+}
+
+if( isset($_REQUEST['showtemplate']) && ($_REQUEST['showtemplate'] == 'false')) {
+  // for simplicity and compatibility with the frontend.
+  $USE_THEME = false;
+  $USE_OUTPUT_BUFFERING = false;
+}
+
+cms_admin_sendheaders();
+$txt = $modinst->GetHeaderHTML();
+if( $txt !== false ) {
+  $headtext = $txt;
+}
+
+if( $modinst->SuppressAdminOutput($_REQUEST) != false || isset($_REQUEST['suppressoutput']) ) {
+  $suppressOutput = true;
+}
+else {
+  include_once("header.php");
+}
+
+$params = ModuleOperations::get_instance()->GetModuleParameters($id);
+if( !isset($USE_THEME) || $USE_THEME != false ) {
+  if (FALSE == empty($params['module_message'])) {
+    echo $themeObject->ShowMessage($params['module_message']);
+  }
+  if (FALSE == empty($params['module_error'])) {
+    echo $themeObject->ShowErrors($params['module_error']);
+  }
+  if (!$suppressOutput) {
+    echo '<div class="pagecontainer">';
+    echo '<div class="pageoverflow">';
+    $title = $themeObject->get_active_title();
+    if( !$title ) $title = $modinst->GetFriendlyName();
+    echo $themeObject->ShowHeader($title, '', '', 'both').'</div>';
+  }
+}  
+if( $USE_OUTPUT_BUFFERING ) {
+  @ob_start();
+}
+
+echo $modinst->DoActionBase($action, $id, $params);
+
+if( $USE_OUTPUT_BUFFERING ) {
+  $content = @ob_get_contents();
+  @ob_end_clean();
+  echo $content;
+}
+if( !isset($USE_THEME) || $USE_THEME != false ) {
+  if (!$suppressOutput) {
+    echo '<p class="pageback"><a class="pageback" href="'.$themeObject->BackUrl().'">&#171; '.lang('back').'</a></p>';
+	echo '</div>';
+    include_once("footer.php");
+  }
+ }
 # vim:ts=4 sw=4 noet
 ?>

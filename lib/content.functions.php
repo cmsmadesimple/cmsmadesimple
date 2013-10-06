@@ -34,23 +34,6 @@
 
 
 /**
- * A function to generate cross references between content types
- * This function can be used to generate which global content blocks are used by which content object
- *
- * @ignore
- * @access private
- * @param int the parent object id (usually a page template id or a page id.
- * @param string The parent object type
- * @param string The test content
- * @return void
- */
-function do_cross_reference($parent_id, $parent_type, $content)
-{
-  // functionality removed in 1.11
-}
-
-
-/**
  * A convenience function to test if the site is marked as down according to the config panel.
  * This method includes handling the preference that indicates that site-down behaviour should
  * be disabled for certain IP address ranges.
@@ -65,11 +48,10 @@ function is_sitedown()
 
   if( get_site_preference('enablesitedownmessage') !== '1' ) return FALSE;
 
-  if( get_site_preference('sitedownexcludeadmins') )
-    {
-      $uid = get_userid(FALSE);
-      if( $uid ) return FALSE;
-    }
+  if( get_site_preference('sitedownexcludeadmins') ) {
+    $uid = get_userid(FALSE);
+    if( $uid ) return FALSE;
+  }
 
   if( !isset($_SERVER['REMOTE_ADDR']) ) return TRUE;
   $excludes = get_site_preference('sitedownexcludes','');

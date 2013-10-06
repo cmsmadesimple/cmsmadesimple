@@ -83,24 +83,39 @@ class cms_tree_operations
    * @param cms_content_tree (optional) The cms_content_tree node to add generated objects to.
    * @return cms_content_tree
    */
-  public static function load_from_list($data,$parent_id = -1,cms_content_tree &$tree = null)
+  public static function load_from_list($data)
   {
-    for( $i = 0; $i < count($data); $i++ )
-      {
-	$row = $data[$i];
-	if( $row['parent_id'] < $parent_id ) continue;
-	if( $row['parent_id'] > $parent_id ) break;
+    // create a tree object
+    $tree = new cms_content_tree();
+    $sorted = array();
+    $contentops = cmsms()->GetContentOperations();
 
-	// create a tree object
-	if( !is_object($tree) ) 
-	  {
-	    $tree = new cms_content_tree();
-	  }
+    for( $i = 0; $i < count($data); $i++ ) {
+      $row = $data[$i];
 
-	$node = new cms_content_tree(array('id'=>$row['content_id'],'alias'=>$row['content_alias']));
-	self::load_from_list($data,$row['content_id'],$node);
-	$tree->add_node($node);
+      // create new node.
+      $node = new cms_content_tree(array('id'=>$row['content_id'],'alias'=>$row['content_alias']));
+
+      // find where to insert it.
+      $parent_node = null;
+      if( $row['parent_id'] < 1 ) {
+	$parent_node = $tree;
       }
+      else {
+	if( !isset($sorted[$row['parent_id']]) ) {
+	  // ruh-roh
+	  debug_display($row); flush();
+          die('foo');
+	}
+	else {
+	  $parent_node = $sorted[$row['parent_id']];
+	}
+      }
+
+      // add it.
+      $parent_node->add_node($node);
+      $sorted[$row['content_id']] = $node;
+    }
     return $tree;
   }
 }

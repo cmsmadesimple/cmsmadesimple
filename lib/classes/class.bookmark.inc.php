@@ -83,15 +83,19 @@ class Bookmark
 		$result = false;
 		$bookops = cmsms()->GetBookmarkOperations();
 		
-		if ($this->bookmark_id > -1) {
+		if ($this->bookmark_id > -1)
+		{
 			$result = $bookops->UpdateBookmark($this);
 		}
-		else {
+		else
+		{
 			$newid = $bookops->InsertBookmark($this);
-			if ($newid > -1) {
+			if ($newid > -1)
+			{
 				$this->bookmark_id = $newid;
 				$result = true;
 			}
+
 		}
 
 		return $result;
@@ -108,9 +112,13 @@ class Bookmark
 		$result = false;
 		$bookops = cmsms()->GetBookmarkOperations();
 
-		if ($this->bookmark_id > -1) {
+		if ($this->bookmark_id > -1)
+		{
 			$result = $bookops->DeleteBookmarkByID($this->bookmark_id);
-			if ($result) $this->SetInitialValues();
+			if ($result)
+			{
+				$this->SetInitialValues();
+			}
 		}
 
 		return $result;

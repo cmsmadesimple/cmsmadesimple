@@ -46,7 +46,7 @@ function showhide_advanced()
 <br/>
 <fieldset>
 <legend>{$mod->Lang('search_results')}:</legend>
-<table class="pagetable" cellspacing="0">
+<table class="pagetable sortable" cellspacing="0">
  <thead>
   <tr>
    <th width="20%">{$mod->Lang('nametext')}</th>

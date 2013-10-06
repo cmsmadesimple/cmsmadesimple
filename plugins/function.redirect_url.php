@@ -18,12 +18,7 @@
 
 function smarty_function_redirect_url($params, &$template)
 {
-  if( isset($params['to']) ) redirect(trim($params['to']));
-}
-
-function smarty_cms_help_function_redirect_url()
-{
-  echo lang('help_function_redirect_url');
+	if( isset($params['to']) ) redirect(trim($params['to']));
 }
 
 ?>

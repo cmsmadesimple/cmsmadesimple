@@ -1,6 +1,6 @@
 <?php
 #CMS - CMS Made Simple
-#(c)2004-2011 by Ted Kulp (wishy@users.sf.net)
+#(c)2004 by Ted Kulp (wishy@users.sf.net)
 #This project's homepage is: http://www.cmsmadesimple.org
 #
 #This program is free software; you can redistribute it and/or modify
@@ -21,63 +21,36 @@ function smarty_function_cms_init_editor($params, &$template)
   $smarty = $template->smarty;
   // if the editor is not specified.
   $wysiwyg = '';
-  if( isset($params['wysiwyg']) )
-    {
-      $wysiwyg = trim($params['wysiwyg']);
-    }
+  if( isset($params['wysiwyg']) ) $wysiwyg = trim($params['wysiwyg']);
 
   // get the frontend editor preference
-  if( !$wysiwyg )
-    {
-      $wysiwyg = get_site_preference('frontendwysiwyg');
-    }
-  
+  if( !$wysiwyg ) $wysiwyg = get_site_preference('frontendwysiwyg');
+
   if( !$wysiwyg || (int)$wysiwyg < 0 ) return;
-  
   $mod = cms_utils::get_module($wysiwyg);
   if( !is_object($mod) ) return;
-  if( !$mod->IsWYSIWYG() ) return;
+  if( !$mod->has_capability('wysiwyg') ) return;
 
-  // check to see if it is active
-  if( !isset($params['force']) || $params['force'] != 0 )
-    {
-      if( !$mod->WYSIWYGActive() ) return;
-    }
-  
   // get the output
   $output = $mod->WYSIWYGGenerateHeader();
-
   if( !$output ) return;
 
-  // assign it or echo it.
-  if( isset($params['assign']) )
-    {
-      $smarty->assign(trim($params['assign']).$output);
-      return;
-    }
+  if( isset($params['assign']) ) {
+    $smarty->assign(trim($params['assign']).$output);
+    return;
+  }
   return $output;
 }
 
-
-function smarty_cms_help_function_cms_init_editor()
-{
-  echo lang('help_function_cms_init_editor');
-}
-
-
 function smarty_cms_about_function_cms_init_editor()
 {
-	?>
+?>
 	<p>Author: Robert Campbell&lt;calguy1000@cmsmadesimple.org&gt;</p>
-	<p>Version: 1.0</p>
-	<p>
-	Change History:<br/>
-	None
-	</p>
-	<?php
+	
+	<p>Change History:</p>
+	<ul>
+		<li>None</li>
+	</ul>
+<?php
 }
-
-#
-# EOF
-#
 ?>

@@ -2,6 +2,7 @@
 <p class="pageheader">{$message}</p>
 {/if}
 
+<div class="information">{lang('info_changegroupperms')}{cms_help key2='help_group_permissions'}</div>
 
 <div class="pageoverflow">
 <form method="post" action="{$filter_action}">
@@ -32,7 +33,7 @@
     {$submit} {$cancel}
   </p>
 </div>
-<table cellspacing="0" class="pagetable" id="permtable">
+<table cellspacing="0" class="pagetable scrollable" id="permtable">
   <thead>
   <tr>
     <th>{$title_permission}</th>

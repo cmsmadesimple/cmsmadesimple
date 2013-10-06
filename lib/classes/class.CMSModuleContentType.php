@@ -29,37 +29,32 @@
  * @since		0.9
  * @package		CMS
  */
-class CMSModuleContentType extends ContentBase
+abstract class CMSModuleContentType extends ContentBase
 {
-	//What module do I belong to?  (needed for things like Lang to work right)
-	function ModuleName()
-	{
-		return '';
-	}
+  //What module do I belong to?  (needed for things like Lang to work right)
+  abstract public function ModuleName();
 
-	function Lang($name, $params=array())
-	{
-	  $obj = cms_utils::get_module($this->ModuleName());
-	  if( $obj )
-	    {
-	      return $obj->Lang($name, $params);
-	    }
-	  else
-	    {
-	      return 'ModuleName() not defined properly';
-	    }
-	}
+  public function Lang($name, $params=array())
+  {
+    $obj = cms_utils::get_module($this->ModuleName());
+    if( $obj ) {
+      return $obj->Lang($name, $params);
+    }
+    else {
+      return 'ModuleName() not defined properly';
+    }
+  }
 
-	/*
-	* Returns the instance of the module this content type belongs to
-	*
-	*/
-	function GetModuleInstance() 
-	{
-	  $mod = cms_utils::get_module($this->ModuleName());
-	  if( $mod ) return $mod;
-	  return 'ModuleName() not defined properly';
-	}
+  /*
+   * Returns the instance of the module this content type belongs to
+   *
+   */
+  final public function GetModuleInstance() 
+  {
+    $mod = cms_utils::get_module($this->ModuleName());
+    if( $mod ) return $mod;
+    return 'ModuleName() not defined properly';
+  }
 } // end of class.
 
 #

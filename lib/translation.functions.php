@@ -107,23 +107,16 @@ function get_encoding($charset='', $defaultoverrides=true)
 function get_language_list($allow_none = true)
 {
   $tmp = array();
-  if( $allow_none )
-    {
-      $tmp = array(''=>lang('nodefault'));
-    }
+  if( $allow_none ) $tmp = array(''=>lang('nodefault'));
 
   $langs = CmsNlsOperations::get_installed_languages();
   asort($langs);
-  foreach( $langs as $key  )
-    {
-      $obj = CmsNlsOperations::get_language_info($key);
-      $value = $obj->display();
-      if( $obj->fullname() )
-	{
-	  $value .= ' ('.$obj->fullname().')';
-	}
-      $tmp[$key] = $value;
-    }
+  foreach( $langs as $key  ) {
+    $obj = CmsNlsOperations::get_language_info($key);
+    $value = $obj->display();
+    if( $obj->fullname() ) $value .= ' ('.$obj->fullname().')';
+    $tmp[$key] = $value;
+  }
 
   return $tmp;
 }

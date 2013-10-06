@@ -46,26 +46,88 @@
  */
 final class cms_content_cache
 {
-  private static $_alias_map;
-  private static $_id_map;
-  private static $_content_cache;
+	private static $_instance;
+	private static $_alias_map;
+	private static $_id_map;
+	private static $_content_cache;
+	private $_preload_cache;
+	private $_key;
+
+	private function __construct() 
+	{
+		if( !cmsms()->is_frontend_request() ) return;
+
+		$content_ids = null;
+		$deep = FALSE;
+		$this->_key = 'pc'.md5($_SERVER['REQUEST_URI'].serialize($_GET));
+		if( ($data = cms_cache_handler::get_instance()->get($this->_key,__CLASS__)) ) {
+			list($lastmtime,$deep,$content_ids) = unserialize($data);
+			if( $lastmtime < ContentOperations::get_instance()->GetLastContentModification() ) {
+				$deep = null;
+				$content_ids = null;
+			}
+		}
+		if( is_array($content_ids) && count($content_ids) ) {
+			$this->_preload_cache = $content_ids;
+			$contentops = ContentOperations::get_instance();
+			$tmp = $contentops->LoadChildren(null,$deep,false,$content_ids);
+		}
+	}
 
 
-  /**
-   * @ignore
-   */
-  private static function &get_content_obj($hash)
-  {
-    $res = null;
-    if( self::$_content_cache ) 
-      {
-	if( isset(self::$_content_cache[$hash]) )
-	  {
-	    $res = self::$_content_cache[$hash];
-	  }
-      }
-    return $res;
-  }
+	public static function &get_instance() 
+	{
+		if( !is_object(self::$_instance) ) self::$_instance = new cms_content_cache();
+		return self::$_instance;
+	}
+
+	/**
+	 * @ignore
+	 */
+	public function __destruct()
+	{
+		if( !cmsms()->is_frontend_request() ) return;
+		if( !$this->_key ) return;
+
+		$list = self::get_instance()->get_loaded_page_ids();
+		if( is_array($list) && count($list) ) {
+			$dirty = false;
+			if( !is_array($this->_preload_cache) || count($this->_preload_cache) == 0 ) {
+				$dirty = true;
+			}
+			else {
+				$t2 = array_diff($list,$this->_preload_cache);
+				if( is_array($t2) && count($t2) ) $dirty = true;
+			}
+			
+			if( $dirty ) {
+				$deep = FALSE;
+				foreach( $list as $one ) {
+					$obj = self::get_content($one);
+					if( !is_object($obj) ) continue;
+					$tmp = $obj->Properties();
+					if( is_array($tmp) && count($tmp) ) {
+						$deep = TRUE;
+						break;
+					}
+				}
+				$tmp = array(time(),$deep,$list);
+				cms_cache_handler::get_instance()->set($this->_key,serialize($tmp),__CLASS__);
+			}
+		}
+	}
+
+	/**
+	 * @ignore
+	 */
+	private static function &get_content_obj($hash)
+	{
+		$res = null;
+		if( self::$_content_cache ) {
+			if( isset(self::$_content_cache[$hash]) ) $res = self::$_content_cache[$hash];
+		}
+		return $res;
+	}
 
 
   /**
@@ -79,20 +141,18 @@ final class cms_content_cache
    */
   public static function &get_content($identifier)
   {
-    $res = null;
-    $hash = self::content_exists($identifier);
-    if( $hash === FALSE )
-      {
+	  $res = null;
+	  $hash = self::content_exists($identifier);
+	  if( $hash === FALSE ) {
 		  // content doesn't exist...
-		  if( is_numeric($identifier) )
-		  {
+		  if( is_numeric($identifier) ) {
 			  // so add a null object, so we don't request it from the database again.
 			  self::_add_content($identifier,'',$res);
 			  return $res;
 		  }
-      }
+	  }
 
-    return self::get_content_obj($hash);
+	  return self::get_content_obj($hash);
   }
 
 
@@ -107,19 +167,19 @@ final class cms_content_cache
    */
   public static function content_exists($identifier)
   {
-    if( !self::$_content_cache ) return FALSE;
+	  if( !self::$_content_cache ) return FALSE;
 
-    if( is_numeric($identifier) ) {
-		if( !self::$_id_map ) return FALSE;
-		if( !isset(self::$_id_map[$identifier]) ) return FALSE;
-		return self::$_id_map[$identifier];
-	}
-    else if( is_string($identifier) ) {
-		if( !self::$_alias_map ) return FALSE;
-		if( !isset(self::$_alias_map[$identifier]) ) return FALSE;
-		return self::$_alias_map[$identifier];
-	}
-    return FALSE;
+	  if( is_numeric($identifier) ) {
+		  if( !self::$_id_map ) return FALSE;
+		  if( !isset(self::$_id_map[$identifier]) ) return FALSE;
+		  return self::$_id_map[$identifier];
+	  }
+	  else if( is_string($identifier) ) {
+		  if( !self::$_alias_map ) return FALSE;
+		  if( !isset(self::$_alias_map[$identifier]) ) return FALSE;
+		  return self::$_alias_map[$identifier];
+	  }
+	  return FALSE;
   }
 
 
@@ -167,9 +227,9 @@ final class cms_content_cache
    */
   public static function clear()
   {
-    self::$_content_cache = null;
-    self::$_alias_map = null;
-    self::$_id_map = null;
+	  self::$_content_cache = null;
+	  self::$_alias_map = null;
+	  self::$_id_map = null;
   }
 
 
@@ -180,7 +240,7 @@ final class cms_content_cache
    */
   public static function get_loaded_page_ids()
   {
-	  if( is_array(self::$_id_map) )  return array_keys(self::$_id_map);
+	  if( is_array(self::$_id_map) && count(self::$_id_map) )  return array_keys(self::$_id_map);
   }
 
 
@@ -192,10 +252,10 @@ final class cms_content_cache
    */
   public static function get_id_from_alias($alias)
   {
-    if( !isset(self::$_alias_map) ) return FALSE;
-    if( !isset(self::$_alias_map[$alias]) ) return FALSE;
-    $hash = self::$_alias_map[$alias];
-    return array_search($hash,self::$_id_map);
+	  if( !isset(self::$_alias_map) ) return FALSE;
+	  if( !isset(self::$_alias_map[$alias]) ) return FALSE;
+	  $hash = self::$_alias_map[$alias];
+	  return array_search($hash,self::$_id_map);
   }
 
 
@@ -207,10 +267,48 @@ final class cms_content_cache
    */
   public static function get_alias_from_id($id)
   {
-    if( !isset(self::$_id_map) ) return FALSE;
-    if( !isset(self::$_id_map[$id]) ) return FALSE;
-    $hash = self::$_id_map[$id];
-    return array_search($hash,self::$_alias_map);
+	  if( !isset(self::$_id_map) ) return FALSE;
+	  if( !isset(self::$_id_map[$id]) ) return FALSE;
+	  $hash = self::$_id_map[$id];
+	  return array_search($hash,self::$_alias_map);
+  }
+
+  /**
+   * Indicates wether we have preloaded cached data
+   *
+   * @return boolean
+   */
+  public static function have_preloaded()
+  {
+	  if( is_array(self::get_instance()->_preload_cache) ) return TRUE;
+	  return FALSE;
+  }
+
+  /**
+   * Unload the specified content id (numeric id or alias) if loaded.
+   * Note, this should be used with caution, as the next time this page is requested it will be loaded from the database again.n
+   *
+   * If the identifier is an integer, an id search is performed.
+   * If the identifier is a string, an alias search is performed.
+   *
+   * @author Robert Campbell
+   * @since  2.0
+   * @param mixed Unique identifier
+   * @return void
+   */
+  public static function unload($identifier)
+  {
+	  $hash = self::content_exists($identifier);
+	  if( $hash ) {
+		  $id = array_search($identifier,self::$_id_map);
+		  $alias = array_search($identifier,self::$_alias_map);
+		  if( $alias !== FALSE && $id != FALSE ) {
+			  unset(self::$_id_map[$id]);
+			  unset(self::$_alias_map[$alias]);
+			  self::$_content_cache[$hash] = null;
+			  unset(self::$_content_cache[$hash]);
+		  }
+	  }
   }
 }
 

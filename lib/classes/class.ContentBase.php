@@ -1,4 +1,4 @@
-<?php
+<?php // -*- mode:php; tab-width:4; indent-tabs-mode:t; c-basic-offset:4; -*-
 # CMS - CMS Made Simple
 # (c)2004 by Ted Kulp (tedkulp@users.sf.net)
 # This project's homepage is: http://www.cmsmadesimple.org
@@ -39,2647 +39,2256 @@ define('CMS_CONTENT_HIDDEN_NAME','--------');
  */
 abstract class ContentBase
 {
-  /**
-   * The unique ID identifier of the element
-   * Integer
-   *
-   * @internal
-   */
-  protected $mId = -1;
-
-  /**
-   * The name of the element (like a filename)
-   * String
-   */
-  protected $mName = '';
-
-  /**
-   * The type of content (page, url, etc..)
-   * String
-   *
-   * @internal
-   */
-  protected $mType = '';
-
-  /**
-   * The owner of the content
-   * Integer
-   *
-   * @internal
-   */
-  protected $mOwner = -1;
-
-  /**
-   * The properties part of the content. This is an object of the good type.
-   * It should contain all treatments specific to this type of content
-   *
-   * @internal
-   */
-  protected $_props;
-
-  /**
-   * The ID of the parent, 0 if none
-   * Integer
-   */
-  protected $mParentId = -2;
-
-  /**
-   * The old parent id... only used on update
-   *
-   * @internal
-   */
-  protected $mOldParentId = -1;
-
-  /**
-   * This is used too often to not be part of the base class
-   *
-   * @internal
-   */
-  protected $mTemplateId = -1;
-
-  /**
-   * The item order of the content in his level
-   * Integer
-   */
-  protected $mItemOrder = -1;
-
-  /**
-   * The old item order... only used on update
-   *
-   * @internal
-   */
-  protected $mOldItemOrder = -1;
-
-  /**
-   * The metadata (head tags) fir this content
-   *
-   * @internal
-   */
-  protected $mMetadata = '';
-
-  /**
-   * @internal
-   */
-  protected $mTitleAttribute = '';
-
-  /**
-   * @internal
-   */
-  protected $mAccessKey = '';
-
-  /**
-   * @internal
-   */
-  protected $mTabIndex = '';
-
-  /**
-   * The full hierarchy of the content
-   * String of the form : 1.4.3
-   */
-  protected $mHierarchy = '';
-
-  /**
-   * The full hierarchy of the content ids
-   * String of the form : 1.4.3
-   */
-  protected $mIdHierarchy = '';
-
-  /**
-   * The full path through the hierarchy
-   * String of the form : parent/parent/child
-   *
-   * @internal
-   */
-  protected $mHierarchyPath = '';
-
-  /**
-   * What should be displayed in a menu
-   *
-   * @internal
-   */
-  protected $mMenuText = '';
-
-  /**
-   * Is the content active ?
-   * Integer : 0 / 1
-   *
-   * @internal
-   */
-  protected $mActive = false;
-
-  /**
-   * Alias of the content
-   *
-   * @internal
-   */
-  protected $mAlias;
-
-  /**
-   * Old Alias of the content
-   *
-   * @internal
-   */
-  protected $mOldAlias;
-
-  /**
-   * Cachable?
-   *
-   * @internal
-   */
-  protected $mCachable;
-
-  /**
-   * Secure?
-   *
-   * @internal
-   */
-  protected $mSecure = 0;
-
-  /**
-   * URL
-   *
-   * @internal
-   */
-  protected $mURL = '';
-
-  /**
-   * Does this content have a preview function?
-   *
-   * @internal
-   */
-  protected $mPreview = '';
-
-  /**
-   * Should it show up in the menu?
-   *
-   * @internal
-   */
-  protected $mShowInMenu = false;
-
-  /**
-   * Is this page the default?
-   *
-   * @internal
-   */
-  protected $mDefaultContent = false;
-	
-  /**
-   * What type of markup is ths?  HTML is the default
-   */
-  protected $mMarkup = 'html';
-
-  /**
-   * Last user to modify this content
-   *
-   * @internal
-   */
-  protected $mLastModifiedBy = -1;
-
-  /**
-   * Creation date
-   * Date
-   *
-   * @internal
-   */
-  protected $mCreationDate = '';
-
-  /**
-   * Modification date
-   * Date
-   *
-   * @internal
-   */
-  protected $mModifiedDate = '';
-    
-  /**
-   * Additional Editors Array
-   *
-   * @internal
-   */
-  protected $mAdditionalEditors;
-	
-  /*
-   * state or meta information
-   *
-   * @internal
-   */
-  protected $mReadyForEdit;
-
-  private $_attributes;
-  private $_prop_defaults;
-  private $_add_mode;
-  private $_error;
-
-  /************************************************************************/
-  /* Constructor related													*/
-  /************************************************************************/
-
-  /**
-   * Generic constructor. Runs the SetInitialValues fuction.
-   */
-  public function __construct()
-  {
-    $this->SetInitialValues();
-    $this->SetProperties();
-    $this->mReadyForEdit = false;
-  }
-
-  /**
-   * Sets object to some sane initial values
-   *
-   * @internal
-   */
-  protected function SetInitialValues()
-  {
-    $this->mType = strtolower(get_class($this)) ;
-  }
-
-  /**
-   * Subclasses should override this to set their property types using a lot
-   * of mProperties.Add statements
-   */
-  protected function SetProperties()
-  {
-    $this->AddBaseProperty('title',1,1);
-    $this->AddBaseProperty('menutext',2,1);
-    $this->AddBaseProperty('alias',5);
-    $this->AddBaseProperty('page_url',6);
-    $this->AddBaseProperty('parent',7,1);
-    $this->AddBaseProperty('active',8);
-    $this->AddBaseProperty('showinmenu',9);
-    $this->AddBaseProperty('secure',10);
-    $this->AddBaseProperty('cachable',11);
-    $this->AddContentProperty('target',12);
-      
-    $this->AddContentProperty('image',50);
-    $this->AddContentProperty('thumbnail',50);
-    $this->AddBaseProperty('titleattribute',55);
-    $this->AddBaseProperty('accesskey',56);
-    $this->AddBaseProperty('tabindex',57);
-	  
-    $this->AddContentProperty('extra1',80);
-    $this->AddContentProperty('extra2',81);
-    $this->AddContentProperty('extra3',82);
-	  
-    $this->AddBaseProperty('owner',90);
-    $this->AddBaseProperty('additionaleditors',91);
-  }
-
-    
-  /************************************************************************/
-  /* Functions giving access to needed elements of the content			*/
-  /************************************************************************/
+	const TAB_MAIN = 'aa_main_tab__';
+	const TAB_NAV = 'zz_1nav_tab__';
+	const TAB_LOGIC = 'zz_2logic_tab__';
+	const TAB_OPTIONS = 'zz_3options_tab__';
+	const TAB_PERMS = 'zz_4perms_tab__';
   
-  public function __clone()
-  {
-    $this->mId = -1;
-    $this->mItemOrder = -1;
-    $this->mOldItemOrder = -1;
-    $this->mURL = '';
-    $this->mAlias = '';
-  }
+	/**
+	 * The unique ID identifier of the element
+	 * Integer
+	 *
+	 * @internal
+	 */
+	protected $mId = -1;
 
-  /**
-   * Returns the ID
-   */
-  public function Id()
-  {
-    return $this->mId;
-  }
+	/**
+	 * The name of the element (like a filename)
+	 * String
+	 */
+	protected $mName = '';
 
-  /**
-   * Set the numeric id of the content item
-   *
-   * @param integer Integer id
-   * @access private
-   * @internal
-   */
-  public function SetId($id)
-  {
-    if( $id <= 0 ) return;
-    $this->mId = $id;
-    $this->DoReadyForEdit();
-  }
+	/**
+	 * The owner of the content
+	 * Integer
+	 *
+	 * @internal
+	 */
+	protected $mOwner = -1;
 
-  /**
-   * Returns a friendly name for this content type
-   *
-   * @abstract
-   * @return string
-   */
-  public function FriendlyName()
-  {
-    return '';
-  }
+	/**
+	 * The properties part of the content. This is an object of the good type.
+	 * It should contain all treatments specific to this type of content
+	 *
+	 * @internal
+	 */
+	protected $_props;
 
-  /**
-   * Returns the Name
-   *
-   * @return string
-   */
-  public function Name()
-  {
-    return $this->mName;
-  }
+	/**
+	 * The ID of the parent, 0 if none
+	 * Integer
+	 */
+	protected $mParentId = -2;
 
-  /**
-   * Set the the page name
-   *
-   * @param string The name.
-   */
-  public function SetName($name)
-  {
-    $this->DoReadyForEdit();
-    $this->mName = $name;
-  }
+	/**
+	 * The old parent id... only used on update
+	 *
+	 * @internal
+	 */
+	protected $mOldParentId = -1;
 
-  /**
-   * Returns the Alias
-   *
-   * @return string
-   */
-  public function Alias()
-  {
-    return $this->mAlias;
-  }
+	/**
+	 * This is used too often to not be part of the base class
+	 *
+	 * @internal
+	 */
+	protected $mTemplateId = -1;
 
-  /**
-   * Returns the Type
-   *
-   * @return string
-   */
-  public function Type()
-  {
-    return strtolower($this->mType);
-  }
+	/**
+	 * The item order of the content in his level
+	 * Integer
+	 */
+	protected $mItemOrder = -1;
 
-  /**
-   * Set the page type
-   *
-   * @param string type
-   * @abstract
-   * @internal
-   */
-  protected function SetType($type)
-  {
-    $this->DoReadyForEdit();
-    $this->mType = strtolower($type);
-  }
+	/**
+	 * The old item order... only used on update
+	 *
+	 * @internal
+	 */
+	protected $mOldItemOrder = -1;
 
-  /**
-   * Returns the Owner
-   *
-   * @return integer
-   */
-  public function Owner()
-  {
-    return $this->mOwner;
-  }
+	/**
+	 * The metadata (head tags) for this content
+	 *
+	 * @internal
+	 */
+	protected $mMetadata = '';
 
-  /**
-   * Set the page owner.
-   * No validation is performed.
-   *
-   * @param integer Owner's user id
-   */
-  public function SetOwner($owner)
-  {
-    if( $owner <= 0 ) return;
-    $this->DoReadyForEdit();
-    $this->mOwner = $owner;
-  }
+	/**
+	 * @internal
+	 */
+	protected $mTitleAttribute = '';
 
-  /**
-   * Returns the Metadata
-   *
-   * @return string
-   */
-  public function Metadata()
-  {
-    return $this->mMetadata;
-  }
+	/**
+	 * @internal
+	 */
+	protected $mAccessKey = '';
 
-  /**
-   * Content object handles the alias
-   *
-   * @return boolean
-   */
-  public function HandlesAlias()
-  {
-    return false;
-  }
+	/**
+	 * @internal
+	 */
+	protected $mTabIndex = '';
 
-  /**
-   * Set the page metadata
-   * 
-   * @param string The metadata
-   */
-  public function SetMetadata($metadata)
-  {
-    $this->DoReadyForEdit();
-    $this->mMetadata = $metadata;
-  }
+	/**
+	 * The full hierarchy of the content
+	 * String of the form : 1.4.3
+	 */
+	protected $mHierarchy = '';
 
-  /**
-   * Return the page tabindex value
-   *
-   * @return integer
-   */
-  public function TabIndex()
-  {
-    return $this->mTabIndex;
-  }
+	/**
+	 * The full hierarchy of the content ids
+	 * String of the form : 1.4.3
+	 */
+	protected $mIdHierarchy = '';
 
-  /**
-   * Set the page tabindex value
-   *
-   * @param integer tabindex
-   */
-  public function SetTabIndex($tabindex)
-  {
-    $this->DoReadyForEdit();
-    $this->mTabIndex = $tabindex;
-  }
+	/**
+	 * The full path through the hierarchy
+	 * String of the form : parent/parent/child
+	 *
+	 * @internal
+	 */
+	protected $mHierarchyPath = '';
 
-  /**
-   * Return the page title attribute
-   *
-   * @return string
-   */
-  public function TitleAttribute()
-  {
-    return $this->mTitleAttribute;
-  }
+	/**
+	 * What should be displayed in a menu
+	 *
+	 * @internal
+	 */
+	protected $mMenuText = '';
 
-  /**
-   * Retrieve the creation date of this content object.
-   *
-   * @return int Unix Timestamp of the creation date
-   */
-  public function GetCreationDate()
-  {
-    return strtotime($this->mCreationDate);
-  }
+	/**
+	 * Is the content active ?
+	 * Integer : 0 / 1
+	 *
+	 * @internal
+	 */
+	protected $mActive = false;
 
-  /**
-   * Retrieve the date of the last modification of this content object.
-   *
-   * @return int Unix Timestamp of the modification date.
-   */
-  public function GetModifiedDate()
-  {
-    return strtotime($this->mModifiedDate);
-  }
+	/**
+	 * Alias of the content
+	 *
+	 * @internal
+	 */
+	protected $mAlias;
 
+	/**
+	 * Old Alias of the content
+	 *
+	 * @internal
+	 */
+	protected $mOldAlias;
 
-  /**
-   * Set the title attribute of the page
-   *
-   * @param string The title attribute
-   */
-  public function SetTitleAttribute($titleattribute)
-  {
-    $this->DoReadyForEdit();
-    $this->mTitleAttribute = $titleattribute;
-  }
+	/**
+	 * Cachable?
+	 *
+	 * @internal
+	 */
+	protected $mCachable;
 
-  /**
-   * Get the access key (for accessibility) for this page.
-   *
-   * @return string
-   */
-  public function AccessKey()
-  {
-    return $this->mAccessKey;
-  }
+	/**
+	 * Secure?
+	 *
+	 * @internal
+	 */
+	protected $mSecure = 0;
 
-  /**
-   * Set the access key (for accessibility) for this page
-   *
-   * @param string Access Key
-   */
-  public function SetAccessKey($accesskey)
-  {
-    $this->DoReadyForEdit();
-    $this->mAccessKey = $accesskey;
-  }
+	/**
+	 * URL
+	 *
+	 * @internal
+	 */
+	protected $mURL = '';
 
-  /**
-   * Returns the id of this pages parent.
-   *
-   * @return int -1 if this page has no parent.  Positive integer otherwise.
-   */
-  public function ParentId()
-  {
-    return $this->mParentId;
-  }
+	/**
+	 * Should it show up in the menu?
+	 *
+	 * @internal
+	 */
+	protected $mShowInMenu = false;
 
-  /**
-   * Sets the parent of this page.
-   *
-   * @param int The numeric page parent id.  Use -1 for no parent.
-   */
-  public function SetParentId($parentid)
-  {
-    $this->DoReadyForEdit();
-    $this->mParentId = $parentid;
-  }
-
-  /**
-   * Retrieve the 'old parent id' for this page.
-   * This may return a value if the page's parent has changed or the page has been copied.
-   *
-   * @deprecated
-   * @internal
-   * @return integer
-   */
-   public function OldParentId()
-   {
-     return $this->mOldParentId;
-   }
-
-   /**
-    * Sets the OldParentId value for this page
-    * This may be necessary when changin page ownership or copying a page
-    *
-    * @deprecated
-    * @internal
-    * @param int ParentID ... -1 indicates no parent.
-    */
-   public function SetOldParentId($parentid)
-   {
-     $this->DoReadyForEdit();
-     $this->mOldParentId = $parentid;
-   }
-
-   /**
-    * Return the id of the page template associated with this content page.
-    *
-    * @return integer.
-    */
-   public function TemplateId()
-   {
-     return $this->mTemplateId;
-   }
-
-   /**
-    * Set the id of the page template associated with this content page.
-    *
-    * @param integer
-    */
-   public function SetTemplateId($templateid)
-   {
-     $this->DoReadyForEdit();
-     $this->mTemplateId = $templateid;
-   }
-
-   /**
-    * Returns the ItemOrder
-    * The ItemOrder is used to specify the order of this page within the parent.
-    *
-    * @return int
-    */
-   public function ItemOrder()
-   {
-     return $this->mItemOrder;
-   }
-
-   /**
-    * Sets the ItemOrder
-    * The ItemOrder is used to specify the order of this page within the parent.
-    *
-    * @internal
-    * @param int the itemorder.
-    */
-   public function SetItemOrder($itemorder)
-   {
-     $this->DoReadyForEdit();
-     $this->mItemOrder = $itemorder;
-   }
-
-   /**
-    * Return the old item order.
-    *
-    * @deprecated
-    * @internal
-    * @return int
-    */
-   public function OldItemOrder()
-   {
-     return $this->mOldItemOrder;
-   }
-
-   /**
-    * Sets the old item order.
-    *
-    * @deprecated
-    * @internal
-    * @param int The item order.
-    */
-   public function SetOldItemOrder($itemorder)
-   {
-     $this->DoReadyForEdit();
-     $this->mOldItemOrder = $itemorder;
-   }
-
-   /**
-    * Returns the Hierarchy
-    *
-    * @return string
-    */
-   public function Hierarchy()
-   {
-      $gCms = cmsms();
-      $contentops = $gCms->GetContentOperations();
-      return $contentops->CreateFriendlyHierarchyPosition($this->mHierarchy);
-   }
-
-   /**
-    * Sets the Hierarchy
-    *
-    * @internal
-    * @param string
-    */
-   public function SetHierarchy($hierarchy)
-   {
-     $this->DoReadyForEdit();
-     $this->mHierarchy = $hierarchy;
-   }
-
-   /**
-    * Returns the Id Hierarchy
-    *
-    * @return string
-    */
-   public function IdHierarchy()
-   {
-     return $this->mIdHierarchy;
-   }
-
-
-   /**
-    * Sets the Id Hierarchy
-    *
-    * @internal
-    * @param string
-    */
-   public function SetIdHierarchy($idhierarchy)
-   {
-     $this->DoReadyForEdit();
-     $this->mIdHierarchy = $idhierarchy;
-   }
-
-
-   /**
-    * Returns the Hierarchy Path
-    *
-    * @return string
-    */
-   public function HierarchyPath()
-   {
-     return $this->mHierarchyPath;
-   }
-
-
-   /**
-    * Sets the Hierarchy Path
-    *
-    * @internal
-    * @param string
-    */
-   public function SetHierarchyPath($hierarchypath)
-   {
-     $this->DoReadyForEdit();
-     $this->mHierarchyPath = $hierarchypath;
-   }
-   
-
-   /**
-    * Returns the Active state
-    *
-    * @return boolean
-    */
-   public function Active()
-   {
-     return $this->mActive;
-   }
-
-
-   /**
-    * Sets this page as active
-    *
-    * @param boolean
-    */
-   public function SetActive($active)
-   {
-     $this->DoReadyForEdit();
-     $this->mActive = $active;
-   }
-
-
-   /**
-    * Returns whether preview should be available for this content type
-    *
-    * @abstract
-    * @return boolean
-    */
-   public function HasPreview()
-   {
-     return (bool) $this->mPreview;
-   }
-
-
-   /**
-    * Returns whether it should show in the menu
-    *
-    * @return boolean
-    */
-   public function ShowInMenu()
-   {
-     return $this->mShowInMenu;
-   }
-
-
-   /**
-    * Sets whether this page should be shown in menus
-    *
-    * @param boolean
-    */
-   public function SetShowInMenu($showinmenu)
-   {
-     $this->DoReadyForEdit();
-     $this->mShowInMenu = $showinmenu;
-   }
-
-
-   /**
-    * Returns if the page is the default
-    *
-    * @return boolean
-    */
-   public function DefaultContent()
-   {
-     return $this->mDefaultContent;
-   }
-
-   /**
-    * Sets if this page should be considered the default
-    * Note: does not modify the flags for any other content page.
-    *
-    * @param boolean
-    */
-   public function SetDefaultContent($defaultcontent)
-   {
-     $this->DoReadyForEdit();
-     $this->mDefaultContent = $defaultcontent;
-   }
-
-
-   /**
-    * Return wether this page is cachable
-    *
-    * @return boolean
-    */
-   public function Cachable()
-   {
-     return $this->mCachable;
-   }
-
-
-   /**
-    * Set wether this page is cachable
-    *
-    * @param boolean
-    */
-    public function SetCachable($cachable)
-    {
-	$this->DoReadyForEdit();
-	$this->mCachable = $cachable;
-    }
-
-
-   /**
-    * Return wether this page should be accessed via a secure protocol.
-    * The secure flag effectsw wether the ssl protocol and appropriate config entries are used when generating urls to this page.
-    *
-    * @return boolean
-    */
-    public function Secure()
-    {
-      return $this->mSecure;
-    }
-
-
-   /**
-    * Set wether this page should be accessed via a secure protocol.
-    * The secure flag effectsw wether the ssl protocol and appropriate config entries are used when generating urls to this page.
-    *
-    * @return boolean
-    */
-    public function SetSecure($secure)
-    {
-	$this->DoReadyForEdit();
-	$this->mSecure = $secure;
-    }
+	/**
+	 * Is this page the default?
+	 *
+	 * @internal
+	 */
+	protected $mDefaultContent = false;
 	
+	/**
+	 * Last user to modify this content
+	 *
+	 * @internal
+	 */
+	protected $mLastModifiedBy = -1;
+
+	/**
+	 * Creation date
+	 * Date
+	 *
+	 * @internal
+	 */
+	protected $mCreationDate = '';
+
+	/**
+	 * Modification date
+	 * Date
+	 *
+	 * @internal
+	 */
+	protected $mModifiedDate = '';
     
-    /**
-     * Return the page url (if any) associated with this content page.
-     * Note: some content types do not support page urls.
-     *
-     * @return string
-     */
-    public function URL()
-    {
-      return $this->mURL;
-    }
-
-    /**
-     * Set the page url (if any) associated with this content page.
-     * Note: some content types do not support page urls.
-     * The url should be relative to the root url.  i.e: /some/path/to/the/page
-     *
-     * @param string
-     */
-    public function SetURL($url)
-    {
-      $this->DoReadyForEdit();
-      $this->mURL = $url;
-    }
-
-    /**
-     * Return the markup for this page. usually xhtml or html.
-     * 
-     * @deprecated
-     * @return string
-     */
-    public function Markup()
-    {
-      return $this->mMarkup;
-    }
-
-    /**
-     * Set the markup for this page. usually xhtml or html.
-     * 
-     * @deprecated
-     * @param string
-     */
-    public function SetMarkup($markup)
-    {
-      $this->DoReadyForEdit();
-      $this->mMarkup = $markup;
-    }
-
-    /**
-     * Return the last modified date for this item
-     * This is usually set on save.
-     * 
-     * @return Date
-     */
-    public function LastModifiedBy()
-    {
-      return $this->mLastModifiedBy;
-    }
-
-    /**
-     * Set the last modified date for this item
-     * This is usually set on save.
-     * 
-     * @param Date
-     */
-    public function SetLastModifiedBy($lastmodifiedby)
-    {
-      $this->DoReadyForEdit();
-      $this->mLastModifiedBy = $lastmodifiedby;
-    }
-
-    /**
-     * Indicates wether this content type requires an alias
-     *
-     * @abstract
-     * @return boolean
-     */
-    public function RequiresAlias()
-    {
-      return TRUE;
-    }
-
-    /**
-     * Indicates wether this content type is viewable (i.e: can be rendered)
-     * some content types (like redirection links) are not viewable.
-     *
-     * @abstract
-     * @return boolean
-     */
-    public function IsViewable()
-    {
-      return TRUE;
-    }
-
-
-    /**
-     * Set the page alias for this content page.  
-     * If an empty alias is supplied, and depending upon the doAutoAliasIfEnabled flag, and config entries
-     * a suitable alias may be calculated from other data in the page object
-     * This method relies on the menutext and the name of the content page already being set.
-     *
-     * @param string The alias
-     * @param boolean Wether an alias should be calculated or not.
-     */
-    public function SetAlias($alias, $doAutoAliasIfEnabled = true)
-    {
-      $this->DoReadyForEdit();
-      $gCms = cmsms();
-      $config = $gCms->GetConfig();
-
-      $tolower = false;
-
-      if ($alias == '' && $doAutoAliasIfEnabled && $config['auto_alias_content'] == true)
-	{
-	  $alias = trim($this->mMenuText);
-	  if ($alias == '')
-	    {
-	      $alias = trim($this->mName);
-	    }
-			
-	  $tolower = true;
-	  $alias = munge_string_to_url($alias, $tolower);
-	  // Make sure auto-generated new alias is not already in use on a different page, if it does, add "-2" to the alias
-	  $contentops = $gCms->GetContentOperations();
-	  $error = $contentops->CheckAliasError($alias, $this->Id());
-	  if ($error !== FALSE)
-	    {
-	      if (FALSE == empty($alias))
-		{
-		  $alias_num_add = 2;
-		  // If a '-2' version of the alias already exists
-		  // Check the '-3' version etc.
-		  while ($contentops->CheckAliasError($alias.'-'.$alias_num_add) !== FALSE)
-		    {
-		      $alias_num_add++;
-		    }
-		  $alias .= '-'.$alias_num_add;
-		}
-	      else
-		{
-		  $alias = '';
-		}
-	    }
-	}
-
-      $this->mAlias = munge_string_to_url($alias, $tolower);
-    } 
-
+	/**
+	 * Additional Editors Array
+	 *
+	 * @internal
+	 */
+	protected $mAdditionalEditors;
 	
-    /**
-     * Returns the menu text for this content page
-     *
-     * @return string
-     */
-    public function MenuText()
-    {
-      return $this->mMenuText;
-    }
+	/*
+	 * state or meta information
+	 *
+	 * @internal
+	 */
+	private $_attributes;
+	private $_prop_defaults;
+	private $_editable_properties;
 
-    /**
-     * Sets the menu text for this content page
-     *
-     * @param string
-     */
-    public function SetMenuText($menutext)
-    {
-      $this->DoReadyForEdit();
-      $this->mMenuText = $menutext;
-    }
+	/************************************************************************/
+	/* Constructor related													*/
+	/************************************************************************/
 
-    /**
-     * Returns number of immediate child-content items of this content
-     *
-     * @return integer
-     */
-    public function ChildCount()
-    {
-      $hm = cmsms()->GetHierarchyManager();
-      $node = $hm->getNodeById($this->mId);
-      if( $node )
+	/**
+	 * Generic constructor. Runs the SetInitialValues fuction.
+	 */
+	public function __construct()
 	{
-	  return $node->count_children();
+		$this->SetInitialValues();
+		$this->SetProperties();
 	}
-    }
 
-    /**
-     * Returns the properties
-     *
-     * @return array
-     */
-    public function Properties()
-    {
-      return $this->_props;
-    }
+	/**
+	 * Sets object to some sane initial values
+	 *
+	 * @abstract
+	 * @internal
+	 */
+	protected function SetInitialValues()
+	{
+	}
 
-    /**
-     * Test wether this content page has the named property
-     * Properties will be loaded from the database if necessary.
-     *
-     * @return boolean
-     */
-    public function HasProperty($name)
-    {
-      if( !is_array($this->_props) ) {
-	$this->_load_properties();
-      }
-      if( !is_array($this->_props) ) {
-	return FALSE;
-      }
-      return in_array($name,array_keys($this->_props));
-    }
+	/**
+	 * Subclasses should override this to set their property types using a lot
+	 * of mProperties.Add statements
+	 *
+	 * @abstract
+	 */
+	protected function SetProperties()
+	{
+		$this->AddProperty('title',1,self::TAB_MAIN,1);
+
+		$this->AddProperty('parent',2,self::TAB_NAV,1);
+		$this->AddProperty('menutext',1,self::TAB_NAV,1);
+		$this->AddProperty('page_url',3,self::TAB_NAV);
+		$this->AddProperty('showinmenu',4,self::TAB_NAV);
+		$this->AddProperty('titleattribute',5,self::TAB_NAV);
+		$this->AddProperty('accesskey',6,self::TAB_NAV);
+		$this->AddProperty('tabindex',7,self::TAB_NAV);	  
+		$this->AddProperty('target',8,self::TAB_NAV);      
+
+		$this->AddProperty('alias',1,self::TAB_OPTIONS);
+		$this->AddProperty('active',2,self::TAB_OPTIONS);
+		$this->AddProperty('secure',3,self::TAB_OPTIONS);
+		$this->AddProperty('cachable',4,self::TAB_OPTIONS);
+		$this->AddProperty('image',5,self::TAB_OPTIONS);
+		$this->AddProperty('thumbnail',6,self::TAB_OPTIONS);
+		$this->AddProperty('extra1',7,self::TAB_OPTIONS);
+		$this->AddProperty('extra2',8,self::TAB_OPTIONS);
+		$this->AddProperty('extra3',9,self::TAB_OPTIONS);
+	  
+		$this->AddProperty('owner',1,self::TAB_PERMS);
+		$this->AddProperty('additionaleditors',2,self::TAB_PERMS);
+	}
 
     
-    /**
-     * Get the value for the named property
-     *
-     * @return mixed String value, or null if the property does not exist.
-     */
-    public function GetPropertyValue($name)
-    {
-      if( $this->HasProperty($name) )
+	/************************************************************************/
+	/* Functions giving access to needed elements of the content			*/
+	/************************************************************************/
+  
+	public function __clone()
 	{
-	  return $this->_props[$name];
+		$this->mId = -1;
+		$this->mItemOrder = -1;
+		$this->mOldItemOrder = -1;
+		$this->mURL = '';
+		$this->mAlias = '';
 	}
-    }
-    
-    
-    private function _load_properties()
-    {
-      if( $this->mId <= 0 ) return FALSE;
 
-      $this->_props = array();
-      $db = cmsms()->GetDb();
-      $query = 'SELECT * FROM '.cms_db_prefix().'content_props WHERE content_id = ?';
-      $dbr = $db->Execute($query,array($this->mId));
-      while( $dbr && !$dbr->EOF )
+	/**
+	 * Returns the ID
+	 */
+	public function Id()
 	{
-	  $row = $dbr->fields;
-	  $this->_props[$row['prop_name']] = $row['content'];
-	  $dbr->MoveNext();
+		return $this->mId;
 	}
-      return TRUE;
-    }
 
-    private function _save_properties()
-    {
-      if( $this->mId <= 0 ) return FALSE;
-      if( !is_array($this->_props) || count($this->_props) == 0 ) return FALSE;
+	/**
+	 * Set the numeric id of the content item
+	 *
+	 * @param integer Integer id
+	 * @access private
+	 * @internal
+	 */
+	public function SetId($id)
+	{
+		$this->mId = $id;
+	}
+
+	/**
+	 * Returns a friendly name for this content type
+	 *
+	 * @abstract
+	 * @return string
+	 */
+	abstract public function FriendlyName();
+
+	/**
+	 * Returns the Name
+	 *
+	 * @return string
+	 */
+	public function Name()
+	{
+		return $this->mName;
+	}
+
+	/**
+	 * Set the the page name
+	 *
+	 * @param string The name.
+	 */
+	public function SetName($name)
+	{
+		$this->mName = $name;
+	}
+
+	/**
+	 * Returns the Alias
+	 *
+	 * @return string
+	 */
+	public function Alias()
+	{
+		return $this->mAlias;
+	}
+
+	/**
+	 * Returns the OldAlias
+	 * The old alias is used when editing pages
+	 *
+	 * @internal
+	 * @deprecated
+	 * @return string
+	 */
+	public function OldAlias()
+	{
+		return $this->mOldAlias;
+	}
+
+	/**
+	 * Returns the Type
+	 *
+	 * @return string
+	 */
+	public function Type()
+	{
+		return strtolower(get_class($this));
+	}
+
+	/**
+	 * Returns the Owner
+	 *
+	 * @return integer
+	 */
+	public function Owner()
+	{
+		return $this->mOwner;
+	}
+
+	/**
+	 * Set the page owner.
+	 * No validation is performed.
+	 *
+	 * @param integer Owner's user id
+	 */
+	public function SetOwner($owner)
+	{
+		$owner = (int)$owner;
+		if( $owner <= 0 ) return;
+		$this->mOwner = $owner;
+	}
+
+	/**
+	 * Returns the Metadata
+	 *
+	 * @return string
+	 */
+	public function Metadata()
+	{
+		return $this->mMetadata;
+	}
+
+	/**
+	 * Content object handles the alias
+	 *
+	 * @abstract
+	 * @return boolean default is false.
+	 */
+	public function HandlesAlias()
+	{
+		return false;
+	}
+
+	/**
+	 * Set the page metadata
+	 * 
+	 * @param string The metadata
+	 */
+	public function SetMetadata($metadata)
+	{
+		$this->mMetadata = $metadata;
+	}
+
+	/**
+	 * Return the page tabindex value
+	 *
+	 * @return integer
+	 */
+	public function TabIndex()
+	{
+		return $this->mTabIndex;
+	}
+
+	/**
+	 * Set the page tabindex value
+	 *
+	 * @param integer tabindex
+	 */
+	public function SetTabIndex($tabindex)
+	{
+		$this->mTabIndex = $tabindex;
+	}
+
+	/**
+	 * Return the page title attribute
+	 *
+	 * @return string
+	 */
+	public function TitleAttribute()
+	{
+		return $this->mTitleAttribute;
+	}
+
+	/**
+	 * Retrieve the creation date of this content object.
+	 *
+	 * @return int Unix Timestamp of the creation date
+	 */
+	public function GetCreationDate()
+	{
+		return strtotime($this->mCreationDate);
+	}
+
+	/**
+	 * Retrieve the date of the last modification of this content object.
+	 *
+	 * @return int Unix Timestamp of the modification date.
+	 */
+	public function GetModifiedDate()
+	{
+		return strtotime($this->mModifiedDate);
+	}
+
+	/**
+	 * Set the title attribute of the page
+	 *
+	 * @param string The title attribute
+	 */
+	public function SetTitleAttribute($titleattribute)
+	{
+		$this->mTitleAttribute = $titleattribute;
+	}
+
+	/**
+	 * Get the access key (for accessibility) for this page.
+	 *
+	 * @return string
+	 */
+	public function AccessKey()
+	{
+		return $this->mAccessKey;
+	}
+
+	/**
+	 * Set the access key (for accessibility) for this page
+	 *
+	 * @param string Access Key
+	 */
+	public function SetAccessKey($accesskey)
+	{
+		$this->mAccessKey = $accesskey;
+	}
+
+	/**
+	 * Returns the id of this pages parent.
+	 *
+	 * @return int -1 if this page has no parent.  Positive integer otherwise.
+	 */
+	public function ParentId()
+	{
+		return $this->mParentId;
+	}
+
+	/**
+	 * Sets the parent of this page.
+	 *
+	 * @param int The numeric page parent id.  Use -1 for no parent.
+	 */
+	public function SetParentId($parentid)
+	{
+		$this->mParentId = $parentid;
+	}
+
+	/**
+	 * Return the id of the page template associated with this content page.
+	 *
+	 * @return integer.
+	 */
+	public function TemplateId()
+	{
+		return $this->mTemplateId;
+	}
+
+	/**
+	 * Set the id of the page template associated with this content page.
+	 *
+	 * @param integer
+	 */
+	public function SetTemplateId($templateid)
+	{
+		$this->mTemplateId = $templateid;
+	}
+
+	/**
+	 * Returns the ItemOrder
+	 * The ItemOrder is used to specify the order of this page within the parent.
+	 *
+	 * @return int
+	 */
+	public function ItemOrder()
+	{
+		return $this->mItemOrder;
+	}
+
+	/**
+	 * Sets the ItemOrder
+	 * The ItemOrder is used to specify the order of this page within the parent.
+	 *
+	 * @internal
+	 * @param int the itemorder.
+	 */
+	public function SetItemOrder($itemorder)
+	{
+		$this->mItemOrder = $itemorder;
+	}
+
+
+	/**
+	 * Returns the OldItemOrder
+	 * The OldItemOrder is used to specify the item order before changes were done
+	 *
+	 * @deprecated
+	 * @return int
+	 */
+	public function OldItemOrder()
+	{
+		return $this->mItemOrder;
+	}
+
+	/**
+	 * Sets the ItemOrder
+	 * The ItemOrder is used to specify the order of this page within the parent.
+	 * The OldItemOrder is used when editing pages.
+	 *
+	 * @internal
+	 * @deprecated
+	 * @param int the itemorder.
+	 */
+	public function SetOldItemOrder($itemorder)
+	{
+		$this->mOldItemOrder = $itemorder;
+	}
+
+	/**
+	 * Returns the Hierarchy
+	 *
+	 * @return string
+	 */
+	public function Hierarchy()
+	{
+		$gCms = cmsms();
+		$contentops = $gCms->GetContentOperations();
+		return $contentops->CreateFriendlyHierarchyPosition($this->mHierarchy);
+	}
+
+	/**
+	 * Sets the Hierarchy
+	 *
+	 * @internal
+	 * @param string
+	 */
+	public function SetHierarchy($hierarchy)
+	{
+		$this->mHierarchy = $hierarchy;
+	}
+
+	/**
+	 * Returns the Id Hierarchy
+	 *
+	 * @return string
+	 */
+	final public function IdHierarchy()
+	{
+		return $this->mIdHierarchy;
+	}
+
+
+	/**
+	 * Returns the Hierarchy Path
+	 *
+	 * @return string
+	 */
+	final public function HierarchyPath()
+	{
+		return $this->mHierarchyPath;
+	}
+
+	/**
+	 * Returns the Active state
+	 *
+	 * @return boolean
+	 */
+	public function Active()
+	{
+		return $this->mActive;
+	}
+
+	/**
+	 * Sets this page as active
+	 *
+	 * @param boolean
+	 */
+	public function SetActive($active)
+	{
+		$this->mActive = $active;
+	}
+
+	/**
+	 * Returns whether preview should be available for this content type
+	 *
+	 * @abstract
+	 * @return boolean
+	 */
+	public function HasPreview()
+	{
+		return FALSE;
+	}
+
+	/**
+	 * Returns whether it should show in the menu
+	 *
+	 * @return boolean
+	 */
+	public function ShowInMenu()
+	{
+		return $this->mShowInMenu;
+	}
+
+	/**
+	 * Sets whether this page should be shown in menus
+	 *
+	 * @param boolean
+	 */
+	public function SetShowInMenu($showinmenu)
+	{
+		$this->mShowInMenu = $showinmenu;
+	}
+
+	/**
+	 * Returns if the page is the default
+	 *
+	 * @return boolean
+	 */
+	final public function DefaultContent()
+	{
+		if( !$this->IsDefaultPossible() ) return FALSE;
+		return $this->mDefaultContent;
+	}
+
+	/**
+	 * Sets if this page should be considered the default
+	 * Note: does not modify the flags for any other content page.
+	 *
+	 * @param boolean
+	 */
+	public function SetDefaultContent($defaultcontent)
+	{
+		$this->mDefaultContent = $defaultcontent;
+	}
+
+	/**
+	 * Return wether this page is cachable
+	 *
+	 * @return boolean
+	 */
+	public function Cachable()
+	{
+		return $this->mCachable;
+	}
+
+	/**
+	 * Set wether this page is cachable
+	 *
+	 * @param boolean
+	 */
+	public function SetCachable($cachable)
+	{
+		$this->mCachable = $cachable;
+	}
+
+	/**
+	 * Return wether this page should be accessed via a secure protocol.
+	 * The secure flag effectsw wether the ssl protocol and appropriate config entries are used when generating urls to this page.
+	 *
+	 * @return boolean
+	 */
+	public function Secure()
+	{
+		return $this->mSecure;
+	}
+
+	/**
+	 * Set wether this page should be accessed via a secure protocol.
+	 * The secure flag effectsw wether the ssl protocol and appropriate config entries are used when generating urls to this page.
+	 *
+	 * @return boolean
+	 */
+	public function SetSecure($secure)
+	{
+		$this->mSecure = $secure;
+	}
+
+	/**
+	 * Return the page url (if any) associated with this content page.
+	 * Note: some content types do not support page urls.
+	 *
+	 * @return string
+	 */
+	public function URL()
+	{
+		return $this->mURL;
+	}
+
+	/**
+	 * Set the page url (if any) associated with this content page.
+	 * Note: some content types do not support page urls.
+	 * The url should be relative to the root url.  i.e: /some/path/to/the/page
+	 *
+	 * @param string
+	 */
+	public function SetURL($url)
+	{
+		$this->mURL = $url;
+	}
+
+	/**
+	 * Return the last modified user for this item
+	 * This is usually set on save.
+	 * 
+	 * @return Integer admin user id.
+	 */
+	public function LastModifiedBy()
+	{
+		return $this->mLastModifiedBy;
+	}
+
+	/**
+	 * Set the last modified date for this item
+	 * This is usually set on save.
+	 * 
+	 * @param Date
+	 */
+	public function SetLastModifiedBy($lastmodifiedby)
+	{
+		$this->mLastModifiedBy = $lastmodifiedby;
+	}
+
+	/**
+	 * Indicates wether this content type requires an alias
+	 *
+	 * @abstract
+	 * @return boolean
+	 */
+	public function RequiresAlias()
+	{
+		return TRUE;
+	}
+
+	/**
+	 * Indicates wether this content type is viewable (i.e: can be rendered)
+	 * some content types (like redirection links) are not viewable.
+	 *
+	 * @abstract
+	 * @return boolean Default is True
+	 */
+	public function IsViewable()
+	{
+		return TRUE;
+	}
+
+	/**
+	 * Indicates wether this content type is searchable.
+	 *
+	 * @since 2.0
+	 * @return boolean
+	 */
+	final public function IsSearchable()
+	{
+		if( !$content->IsViewable() || !$content->HasTemplate() || $content->IsSystemPage() ) return FALSE;
+		return $this->HasSearchableContent();
+	}
+
+	/**
+	 * Indicates wether this content type may have content that can be used by a search module.
+	 *
+	 * Content types should override this method if they are special purpose content types and they cannot support searchable content 
+	 * in any way.  Content types such as ErrorPage, Section Header, and Separator are examples.
+	 *
+	 * @since 2.0
+	 * @abstract
+	 * @return boolean
+	 */
+	protected function HasSearchableContent()
+	{
+		return TRUE;
+	}
+
+	/**
+	 * Indicates wether this content type can be the default page for a CMSMS website
+	 *
+	 * @abstract
+	 * @returns boolean Default is false
+	 */
+	public function IsDefaultPossible()
+	{
+		return FALSE;
+	}
+
+	/**
+	 * Set the page alias for this content page.  
+	 * If an empty alias is supplied, and depending upon the doAutoAliasIfEnabled flag, and config entries
+	 * a suitable alias may be calculated from other data in the page object
+	 * This method relies on the menutext and the name of the content page already being set.
+	 *
+	 * @param string The alias
+	 * @param boolean Wether an alias should be calculated or not.
+	 */
+	public function SetAlias($alias = '', $doAutoAliasIfEnabled = true)
+	{
+		$gCms = cmsms();
+		$config = $gCms->GetConfig();
+
+		$tolower = false;
+
+		if ($alias == '' && $doAutoAliasIfEnabled && $config['auto_alias_content'] == true) {
+			$alias = trim($this->mMenuText);
+			if ($alias == '') $alias = trim($this->mName);
+
+			$tolower = true;
+			$alias = munge_string_to_url($alias, $tolower);
+			// Make sure auto-generated new alias is not already in use on a different page, if it does, add "-2" to the alias
+			$contentops = $gCms->GetContentOperations();
+			$error = $contentops->CheckAliasError($alias, $this->Id());
+			if ($error !== FALSE) {
+				if (FALSE == empty($alias)) {
+					$alias_num_add = 2;
+					// If a '-2' version of the alias already exists
+					// Check the '-3' version etc.
+					while ($contentops->CheckAliasError($alias.'-'.$alias_num_add) !== FALSE) {
+						$alias_num_add++;
+					}
+					$alias .= '-'.$alias_num_add;
+				}
+				else {
+					$alias = '';
+				}
+			}
+		}
+
+		$this->mAlias = munge_string_to_url($alias, $tolower);
+	} 
+	
+	/**
+	 * Returns the menu text for this content page
+	 *
+	 * @return string
+	 */
+	public function MenuText()
+	{
+		return $this->mMenuText;
+	}
+
+	/**
+	 * Sets the menu text for this content page
+	 *
+	 * @param string
+	 */
+	public function SetMenuText($menutext)
+	{
+		$this->mMenuText = $menutext;
+	}
+
+	/**
+	 * Returns number of immediate child-content items of this content
+	 *
+	 * @return integer
+	 */
+	public function ChildCount()
+	{
+		$hm = cmsms()->GetHierarchyManager();
+		$node = $hm->getNodeById($this->mId);
+		if( $node ) return $node->count_children();
+	}
+
+	/**
+	 * Returns the properties
+	 *
+	 * @return array
+	 */
+	public function Properties()
+	{
+		return $this->_props;
+	}
+
+	/**
+	 * Test wether this content page has the named property
+	 * Properties will be loaded from the database if necessary.
+	 *
+	 * @return boolean
+	 */
+	public function HasProperty($name)
+	{
+		if( !is_array($this->_props) ) $this->_load_properties();
+		if( !is_array($this->_props) ) return FALSE;
+		return in_array($name,array_keys($this->_props));
+	}
+    
+	/**
+	 * Get the value for the named property
+	 *
+	 * @return mixed String value, or null if the property does not exist.
+	 */
+	public function GetPropertyValue($name)
+	{
+		if( $this->HasProperty($name) ) return $this->_props[$name];
+	}
+
+	private function _load_properties()
+	{
+		if( $this->mId <= 0 ) return FALSE;
+
+		$this->_props = array();
+		$db = cmsms()->GetDb();
+		$query = 'SELECT * FROM '.cms_db_prefix().'content_props WHERE content_id = ?';
+		$dbr = $db->GetArray($query,array($this->mId));
+
+		foreach( $dbr as $row ) {
+			$this->_props[$row['prop_name']] = $row['content'];
+		}
+		return TRUE;
+	}
+
+	private function _save_properties()
+	{
+		if( $this->mId <= 0 ) return FALSE;
+		if( !is_array($this->_props) || count($this->_props) == 0 ) return FALSE;
 	    
-      $db = cmsms()->GetDb();
-      $query = 'SELECT prop_name FROM '.cms_db_prefix().'content_props WHERE content_id = ?';
-      $gotprops = $db->GetCol($query,array($this->mId));
+		$db = cmsms()->GetDb();
+		$query = 'SELECT prop_name FROM '.cms_db_prefix().'content_props WHERE content_id = ?';
+		$gotprops = $db->GetCol($query,array($this->mId));
 
-      $now = $db->DbTimeStamp(time());
-      $iquery = 'INSERT INTO '.cms_db_prefix()."content_props
+		$now = $db->DbTimeStamp(time());
+		$iquery = 'INSERT INTO '.cms_db_prefix()."content_props
                     (content_id,type,prop_name,content,modified_date)
                     VALUES (?,?,?,?,$now)";
-      $uquery = 'UPDATE '.cms_db_prefix()."content_props SET content = ?, modified_date = $now WHERE content_id = ? AND prop_name = ?";
+		$uquery = 'UPDATE '.cms_db_prefix()."content_props SET content = ?, modified_date = $now WHERE content_id = ? AND prop_name = ?";
 	  
-      foreach( $this->_props as $key => $value )
-	{
-	  if( in_array($key,$gotprops) )
-	    {
-	      // update
-	      $dbr = $db->Execute($uquery,array($value,$this->mId,$key));
-	    }
-	  else
-	    {
-	      // insert
-	      $dbr = $db->Execute($iquery,array($this->mId,'string',$key,$value));
-	    }
+		foreach( $this->_props as $key => $value ) {
+			if( in_array($key,$gotprops) ) {
+				// update
+				$dbr = $db->Execute($uquery,array($value,$this->mId,$key));
+			}
+			else {
+				// insert
+				$dbr = $db->Execute($iquery,array($this->mId,'string',$key,$value));
+			}
+		}
+		return TRUE;
 	}
-      return TRUE;
-    }
 
-    /**
-     * Set the value of a the named property.
-     * This method will load properties for this content page if necessary.
-     *
-     * @param string The property name
-     * @param string  The property value.
-     */
-    public function SetPropertyValue($name, $value)
-    {
-      if( !is_array($this->_props) ) $this->_props = array();
-	  
-      $this->_props[$name] = $value;
-      if( !is_array($this->_props) ) $this->_load_properties();
-      $this->_props[$name] = $value;
-    }
+	/**
+	 * Set the value of a the named property.
+	 * This method will load properties for this content page if necessary.
+	 *
+	 * @param string The property name
+	 * @param string  The property value.
+	 */
+	public function SetPropertyValue($name, $value)
+	{
+		if( !is_array($this->_props) ) $this->_load_properties();
+		$this->_props[$name] = $value;
+	}
 	
-    /**
-     * Set the value of a the named property.
-     * This method will not load properties
-     *
-     * @param string The property name
-     * @param string  The property value.
-     */
-    public function SetPropertyValueNoLoad($name,$value)
-    {
-      if( !is_array($this->_props) ) $this->_props = array();
-      $this->_props[$name] = $value;
-    }
-
-    /**
-     * Function content types to use to say whether or not they should show
-     * up in lists where parents of content are set.  This will default to true,
-     * but should be used in cases like Separator where you don't want it to 
-     * have any children.
-     * 
-     * @since 0.11
-     * @return boolean
-     */
-    public function WantsChildren()
-    {
-      return true;
-    }
-
-    /**
-     * Should this link be used in various places where a link is the only
-     * useful output?  (Like next/previous links in cms_selflink, for example)
-     *
-     * @abstract
-     * @return boolean
-     */
-    public function HasUsableLink()
-    {
-      return true;
-    }
-
-    /**
-     * Is this content type copyable ?
-     *
-     * @abstract
-     * @return boolean
-     */
-    public function IsCopyable()
-    {
-      return FALSE;
-    }
-
-    /**
-     * Indicates wether this is a system page type.
-     *
-     * @return boolean
-     */
-    public function IsSystemPage()
-    {
-      return FALSE;
-    }
-
-    /************************************************************************/
-    /* The rest																*/
-    /************************************************************************/
-
-    /**
-     * This is a callback function to handle any things that might need to be done before the content page is edited.
-     * edited.
-     *
-     * @abstract
-     * @return void
-     */
-    public function ReadyForEdit()
-    {
-    }
-
-    /**
-     * A method that sets the content page into a 'ready for edit stage';
-     *
-     * @return void
-     */
-    protected function DoReadyForEdit()
-    {
-      if ($this->mReadyForEdit == false)
+	/**
+	 * Set the value of a the named property.
+	 * This method will not load properties
+	 *
+	 * @param string The property name
+	 * @param string  The property value.
+	 */
+	public function SetPropertyValueNoLoad($name,$value)
 	{
-	  $this->ReadyForEdit();
-	  $this->mReadyForEdit = true;
+		if( !is_array($this->_props) ) $this->_props = array();
+		$this->_props[$name] = $value;
 	}
-    }
-    
-    /**
-     * Load the content of the object from an ID
-     * This method modifies the current object.
-     *
-     * @param $id		the ID of the element
-     * @param $loadProperties	whether to load or not the properties
-     *
-     * @returns bool		If it fails, the object comes back to initial values and returns FALSE
-     *				If everything goes well, it returns TRUE
-     */
-    public function LoadFromId($id, $loadProperties = false)
-    {
-      $gCms = cmsms();
-      global $debug_errors;
-      $db = $gCms->GetDb();
-      $config = $gCms->GetConfig();
+
+	/**
+	 * Function content types to use to say whether or not they should show
+	 * up in lists where parents of content are set.  This will default to true,
+	 * but should be used in cases like Separator where you don't want it to 
+	 * have any children.
+	 * 
+	 * @since 0.11
+	 * @abstract
+	 * @return boolean Default TRUE
+	 */
+	public function WantsChildren()
+	{
+		return true;
+	}
+
+	/**
+	 * Should this link be used in various places where a link is the only
+	 * useful output?  (Like next/previous links in cms_selflink, for example)
+	 *
+	 * @abstract
+	 * @return boolean Default TRUE
+	 */
+	public function HasUsableLink()
+	{
+		return true;
+	}
+
+	/**
+	 * Is this content type copyable ?
+	 *
+	 * @abstract
+	 * @return boolean default FALSE
+	 */
+	public function IsCopyable()
+	{
+		return FALSE;
+	}
+
+	/**
+	 * Indicates wether this is a system page type.
+	 *
+	 * @abstract
+	 * @return boolean default FALSE
+	 */
+	public function IsSystemPage()
+	{
+		return FALSE;
+	}
+
+	/**
+	 * Indicates wether ths page type uses a template.
+	 * i.e: some content types like sectionheader and separator do not.
+	 *
+	 * @since 2.0
+	 * @abstract
+	 * @return boolean default FALSE
+	 */
+	public function HasTemplate()
+	{
+		return FALSE;
+	}
+
+	/************************************************************************/
+	/* The rest																*/
+	/************************************************************************/
+
+	/**
+	 * Load the content of the object from an array
+	 * This method modifies the current object.
+	 *
+	 * There is no check on the data provided, because this is the job of
+	 * ValidateData
+	 *
+	 * @returns	bool		If it fails, the object comes back to initial values and returns FALSE
+	 *				If everything goes well, it returns TRUE
+	 */
+	function LoadFromData(&$data, $loadProperties = false)
+	{
+		$result = true;
+		$this->mId                         = $data["content_id"];
+		$this->mName                       = $data["content_name"];
+		$this->mAlias                      = $data["content_alias"];
+		$this->mOldAlias                   = $data["content_alias"];
+		$this->mOwner                      = $data["owner_id"];
+		$this->mParentId                   = $data["parent_id"];
+		$this->mOldParentId                = $data["parent_id"];
+		$this->mTemplateId                 = $data["template_id"];
+		$this->mItemOrder                  = $data["item_order"];
+		$this->mOldItemOrder               = $data["item_order"];
+		$this->mMetadata                   = $data['metadata'];
+		$this->mHierarchy                  = $data["hierarchy"];
+		$this->mIdHierarchy                = $data["id_hierarchy"];
+		$this->mHierarchyPath              = $data["hierarchy_path"];
+		$this->mMenuText                   = $data['menu_text'];
+		$this->mTitleAttribute             = $data['titleattribute'];
+		$this->mAccessKey                  = $data['accesskey'];
+		$this->mTabIndex                   = $data['tabindex'];
+		$this->mDefaultContent             = ($data["default_content"] == 1 ? true : false);
+		$this->mActive                     = ($data["active"] == 1          ? true : false);
+		$this->mShowInMenu                 = ($data["show_in_menu"] == 1    ? true : false);
+		$this->mCachable                   = ($data["cachable"] == 1        ? true : false);
+		if( isset($data['secure']) )
+			$this->mSecure                   = $data["secure"];
+		if( isset($data['page_url']) )
+			$this->mURL                      = $data["page_url"];
+		$this->mLastModifiedBy             = $data["last_modified_by"];
+		$this->mCreationDate               = $data["create_date"];
+		$this->mModifiedDate               = $data["modified_date"];
+
+		if ($loadProperties == true) {
+			$this->_load_properties();
+
+			if (!is_array($this->_props) ) $result = false;
+		}
+
+		if (false == $result) $this->SetInitialValues();
+
+		$this->Load();
+		return $result;
+	}
+
+	/**
+	 * Convert the current object to an array
+	 *
+	 * @since 2.0
+	 * @author Robert Campbell
+	 * @return array
+	 */
+	public function ToData()
+	{
+		$out = array();
+		$out['content_id'] = $this->mId;
+		$out['content_name'] = $this->mName;
+		$out['content_alias'] = $this->mAlias;
+		$out['owner_id'] = $this->mOwner;
+		$out['parent_id'] = $this->mParentId;
+		$out['template_id'] = $this->mTemplateId;
+		$out['item_order'] = $this->mItemOrder;
+		$out['metadata'] = $this->mMetadata;
+		$out['hierarchy'] = $this->mHierarchy;
+		$out['id_hierarchy'] = $this->mIdHierarchy;
+		$out['hierarchy_path'] = $this->mHierarchyPath;
+		$out['menu_text'] = $this->mMenuText;
+		$out['titleattribute'] = $this->mTitleAttribute;
+		$out['accesskey'] = $this->mAccessKey;
+		$out['tabindex'] = $this->mTabIndex;
+		$out['default_content'] = ($this->mActive)?1:0;
+		$out['active'] = ($this->mActive)?1:0;
+		$out['show_in_menu'] = ($this->mShowInMenu)?1:0;
+		$out['cachable'] = ($this->mCachable)?1:0;
+		$out['secure'] = ($this->mSecure)?1:0;
+		$out['page_url'] = ($this->mURL)?1:0;
+		$out['last_modified_by'] = $this->mLastModifiedBy;
+		$out['create_date'] = $this->mCreationDate;
+		$out['modified_date'] = $this->mModifiedDate;
+		return $out;
+	}
+
+	/**
+	 * Callback function for content types to use to preload content or other things if necessary.  This
+	 * is called right after the content is loaded from the database.
+	 *
+	 * @abstract
+	 */
+	protected function Load()
+	{
+	}
+
+	/**
+	 * Save or update the content
+	 *
+	 * @todo This function should return something (or throw an exception)
+	 */
+	public function Save()
+	{
+		Events::SendEvent('Core', 'ContentEditPre', array('content' => &$this));
+
+		if( !is_array($this->_props) ) {
+			debug_buffer('save is loading properties');
+			$this->_load_properties();
+		}
+
+		if (-1 < $this->mId) {
+			$this->Update();
+		}
+		else {
+			$this->Insert();
+		}
+
+		Events::SendEvent('Core', 'ContentEditPost', array('content' => &$this));
+	}
+
+	/**
+	 * Update the content
+	 * We can notice, that only a few things are updated
+	 * We do not care about hierarchy for example. This is because hierarchy,
+	 * order or parents management is the job of the content manager.
+	 * Remember that a content is like a file, and a file don't know where it is
+	 * on the disk, it only knows its own content. It's the same here.
+	 *
+	 * @todo this function should return something, or throw an exception.
+	 */
+	protected function Update()
+	{
+		$gCms = cmsms();
+		$db = $gCms->GetDb();
+		$config = $gCms->GetConfig();
+		$result = false;
+
+		// Figure out the item_order (if necessary)
+		if ($this->mItemOrder < 1) {
+			$query = "SELECT ".$db->IfNull('max(item_order)','0')." as new_order FROM ".cms_db_prefix()."content WHERE parent_id = ?";
+			$row = $db->GetRow($query,array($this->mParentId));
+
+			if ($row) {
+				if ($row['new_order'] < 1) {
+					$this->mItemOrder = 1;
+				}
+				else {
+					$this->mItemOrder = $row['new_order'] + 1;
+				}
+			}
+		}
+
+		$this->mModifiedDate = trim($db->DBTimeStamp(time()), "'");
+
+		$query = "UPDATE ".cms_db_prefix()."content SET content_name = ?, owner_id = ?, type = ?, template_id = ?, parent_id = ?, active = ?, default_content = ?, show_in_menu = ?, cachable = ?, secure = ?, page_url = ?, menu_text = ?, content_alias = ?, metadata = ?, titleattribute = ?, accesskey = ?, tabindex = ?, modified_date = ?, item_order = ?, last_modified_by = ? WHERE content_id = ?";
+		$dbresult = $db->Execute($query, array(
+											   $this->mName,
+											   $this->mOwner,
+											   $this->Type(),
+											   $this->mTemplateId,
+											   $this->mParentId,
+											   ($this->mActive == true         ? 1 : 0),
+											   ($this->mDefaultContent == true ? 1 : 0),
+											   ($this->mShowInMenu == true     ? 1 : 0),
+											   ($this->mCachable == true       ? 1 : 0),
+											   $this->mSecure,
+											   $this->mURL,
+											   $this->mMenuText,
+											   $this->mAlias,
+											   $this->mMetadata,
+											   $this->mTitleAttribute,
+											   $this->mAccessKey,
+											   $this->mTabIndex,
+											   $this->mModifiedDate,
+											   $this->mItemOrder,
+											   $this->mLastModifiedBy,
+											   $this->mId
+											   ));
+
+		if ($this->mOldParentId != $this->mParentId) {
+			// Fix the item_order if necessary
+			$query = "UPDATE ".cms_db_prefix()."content SET item_order = item_order - 1 WHERE parent_id = ? AND item_order > ?";
+			$result = $db->Execute($query, array($this->mOldParentId,$this->mOldItemOrder));
+
+			$this->mOldParentId = $this->mParentId;
+			$this->mOldItemOrder = $this->mItemOrder;
+		}
+
+		if (isset($this->mAdditionalEditors)) {
+			$query = "DELETE FROM ".cms_db_prefix()."additional_users WHERE content_id = ?";
+			$db->Execute($query, array($this->Id()));
+
+			foreach ($this->mAdditionalEditors as $oneeditor) {
+				$new_addt_id = $db->GenID(cms_db_prefix()."additional_users_seq");
+				$query = "INSERT INTO ".cms_db_prefix()."additional_users (additional_users_id, user_id, content_id) VALUES (?,?,?)";
+				$db->Execute($query, array($new_addt_id, $oneeditor, $this->Id()));
+			}
+		}
+
+		if( is_array($this->_props) && count($this->_props) ) {
+			// :TODO: There might be some error checking there
+			$this->_save_properties();
+		}
+
+		cms_route_manager::del_static('','__CONTENT__',$this->mId);
+		if( $this->mURL != '' ) {
+			$route = CmsRoute::new_builder($this->mURL,'__CONTENT__',$this->mId,null,TRUE);;
+			cms_route_manager::add_static($route);
+		}
+	}
+
+	/**
+	 * Insert the content in the db
+	 *
+	 * @todo this function should return something
+	 */
+	# :TODO: This function should return something
+	# :TODO: Take care bout hierarchy here, it has no value !
+	# :TODO: Figure out proper item_order
+	protected function Insert()
+	{
+		$gCms = cmsms();
+		$db = $gCms->GetDb();
+		$config = $gCms->GetConfig();
+
+		$result = false;
+
+		// Figure out the item_order
+		if ($this->mItemOrder < 1) {
+			$query = "SELECT max(item_order) as new_order FROM ".cms_db_prefix()."content WHERE parent_id = ?";
+			$row = $db->Getrow($query, array($this->mParentId));
+
+			if ($row) {
+				if ($row['new_order'] < 1) {
+					$this->mItemOrder = 1;
+				}
+				else {
+					$this->mItemOrder = $row['new_order'] + 1;
+				}
+			}
+		}
+
+		$newid = $db->GenID(cms_db_prefix()."content_seq");
+		$this->mId = $newid;
+
+		$this->mModifiedDate = $this->mCreationDate = trim($db->DBTimeStamp(time()), "'");
+
+		$query = "INSERT INTO ".cms_db_prefix()."content (content_id, content_name, content_alias, type, owner_id, parent_id, template_id, item_order, hierarchy, id_hierarchy, active, default_content, show_in_menu, cachable, secure, page_url, menu_text, metadata, titleattribute, accesskey, tabindex, last_modified_by, create_date, modified_date) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+
+		$dbresult = $db->Execute($query, array(
+											   $newid,
+											   $this->mName,
+											   $this->mAlias,
+											   $this->Type(),
+											   $this->mOwner,
+											   $this->mParentId,
+											   $this->mTemplateId,
+											   $this->mItemOrder,
+											   $this->mHierarchy,
+											   $this->mIdHierarchy,
+											   ($this->mActive == true         ? 1 : 0),
+											   ($this->mDefaultContent == true ? 1 : 0),
+											   ($this->mShowInMenu == true     ? 1 : 0),
+											   ($this->mCachable == true       ? 1 : 0),
+											   $this->mSecure,
+											   $this->mURL,
+											   $this->mMenuText,
+											   $this->mMetadata,
+											   $this->mTitleAttribute,
+											   $this->mAccessKey,
+											   $this->mTabIndex,
+											   $this->mLastModifiedBy,
+											   $this->mModifiedDate,
+											   $this->mCreationDate
+											   ));
+
+		if (! $dbresult) {
+			die($db->sql.'<br/>'.$db->ErrorMsg());
+		}
+
+		if (is_array($this->_props) && count($this->_props)) {
+			// :TODO: There might be some error checking there
+			debug_buffer('save from ' . __LINE__);
+			$this->_save_properties();
+		}
+		if (isset($this->mAdditionalEditors)) {
+			foreach ($this->mAdditionalEditors as $oneeditor) {
+				$new_addt_id = $db->GenID(cms_db_prefix()."additional_users_seq");
+				$query = "INSERT INTO ".cms_db_prefix()."additional_users (additional_users_id, user_id, content_id) VALUES (?,?,?)";
+				$db->Execute($query, array($new_addt_id, $oneeditor, $this->Id()));
+			}
+		}
+
+		if( $this->mURL != '' ) {
+			$route = CmsRoute::new_builder($this->mURL,'__CONTENT__',$this->mId,'',TRUE);
+			cms_route_manager::add_static($route);
+		}
+	}
+
+	/**
+	 * Test if the array given contains valid data for the object
+	 * This function is used to check that no compulsory argument
+	 * has been forgotten by the user
+	 *
+	 * We do not check the Id because there can be no Id (new content)
+	 * That's up to Save to check this.
+	 *
+	 * @abstract
+	 * @returns	FALSE if data is ok, and an array of invalid parameters else
+	 */
+	public function ValidateData()
+	{
+		$errors = array();
+
+		if ($this->mParentId < -1) {
+			die('parent id is '.$this->mParentId);
+			$errors[] = lang('invalidparent');
+			$result = false;
+		}
 	  
-      $result = false;
-
-      if (-1 < $id)
-	{
-	  $query = "SELECT * FROM ".cms_db_prefix()."content WHERE content_id = ?";
-	  $row = $db->Execute($query, array($id));
-
-	  if ($row && !$row->EOF)
-	    {
-	      $this->mId                         = $row->fields["content_id"];
-	      $this->mName                       = $row->fields["content_name"];
-	      $this->mAlias                      = $row->fields["content_alias"];
-	      $this->mOldAlias                   = $row->fields["content_alias"];
-	      $this->mType                       = strtolower($row->fields["type"]);
-	      $this->mOwner                      = $row->fields["owner_id"];
-	      $this->mParentId                   = $row->fields["parent_id"];
-	      $this->mOldParentId                = $row->fields["parent_id"];
-	      $this->mTemplateId                 = $row->fields["template_id"];
-	      $this->mItemOrder                  = $row->fields["item_order"];
-	      $this->mOldItemOrder               = $row->fields["item_order"];
-	      $this->mMetadata                   = $row->fields['metadata'];
-	      $this->mHierarchy                  = $row->fields["hierarchy"];
-	      $this->mIdHierarchy                = $row->fields["id_hierarchy"];
-	      $this->mHierarchyPath              = $row->fields["hierarchy_path"];
-	      $this->mMenuText                   = $row->fields['menu_text'];
-	      $this->mMarkup                     = $row->fields['markup'];
-	      $this->mTitleAttribute             = $row->fields['titleattribute'];
-	      $this->mAccessKey                  = $row->fields['accesskey'];
-	      $this->mTabIndex                   = $row->fields['tabindex'];
-	      $this->mActive                     = ($row->fields["active"] == 1          ? true : false);
-	      $this->mDefaultContent             = ($row->fields["default_content"] == 1 ? true : false);
-	      $this->mShowInMenu                 = ($row->fields["show_in_menu"] == 1    ? true : false);
-	      $this->mCachable                   = ($row->fields["cachable"] == 1        ? true : false);
-	      $this->mSecure                     = $row->fields['secure'];
-	      $this->mURL                        = $row->fields['page_url'];
-	      $this->mLastModifiedBy             = $row->fields["last_modified_by"];
-	      $this->mCreationDate               = $row->fields["create_date"];
-	      $this->mModifiedDate               = $row->fields["modified_date"];
-
-	      $result = true;
-	    }
-	  else
-	    {
-	      if (true == $config["debug"])
-		{
-		  # :TODO: Translate the error message
-		  $debug_errors .= "<p>Could not retrieve content from db</p>\n";
+		if ($this->mName == '') {
+			if ($this->mMenuText != '') {
+				$this->mName = $this->mMenuText;
+			}
+			else {
+				$errors[]= lang('nofieldgiven',array(lang('title')));
+				$result = false;
+			}
 		}
-	    }
-
-	  if ($row) $row->Close();
-
-	  if ($result && $loadProperties)
-	    {
-	      if( !is_array($this->_props) ) $this->_load_properties();
-
-	      if (!is_array($this->_props) )
-		{
-		  $result = false;
-			      
-		  // debug mode
-		  if (true == $config["debug"])
-		    {
-		      # :TODO: Translate the error message
-		      $debug_errors .= "<p>Could not load properties for content</p>\n";
-		    }
-		}
-	    }
-
-	  if (false == $result)
-	    {
-	      $this->SetInitialValues();
-	    }
-	}
-      else
-	{
-	  // debug mode
-	  if ($config["debug"] == true)
-	    {
-	      # :TODO: Translate the error message
-	      $debug_errors .= "<p>The id wasn't valid : $id</p>\n";
-	    }
-	}
-
-      $this->Load();
-
-      return $result;
-    }
-
-    /**
-     * Load the content of the object from an array
-     * This method modifies the current object.
-     *
-     * There is no check on the data provided, because this is the job of
-     * ValidateData
-     *
-     * @returns	bool		If it fails, the object comes back to initial values and returns FALSE
-     *				If everything goes well, it returns TRUE
-     */
-    function LoadFromData(&$data, $loadProperties = false)
-    {
-      $result = true;
-      $this->mId                         = $data["content_id"];
-      $this->mName                       = $data["content_name"];
-      $this->mAlias                      = $data["content_alias"];
-      $this->mOldAlias                   = $data["content_alias"];
-      $this->mType                       = strtolower($data["type"]);
-      $this->mOwner                      = $data["owner_id"];
-      $this->mParentId                   = $data["parent_id"];
-      $this->mOldParentId                = $data["parent_id"];
-      $this->mTemplateId                 = $data["template_id"];
-      $this->mItemOrder                  = $data["item_order"];
-      $this->mOldItemOrder               = $data["item_order"];
-      $this->mMetadata                   = $data['metadata'];
-      $this->mHierarchy                  = $data["hierarchy"];
-      $this->mIdHierarchy                = $data["id_hierarchy"];
-      $this->mHierarchyPath              = $data["hierarchy_path"];
-      $this->mMenuText                   = $data['menu_text'];
-      $this->mMarkup                     = $data['markup'];
-      $this->mTitleAttribute             = $data['titleattribute'];
-      $this->mAccessKey                  = $data['accesskey'];
-      $this->mTabIndex                   = $data['tabindex'];
-      $this->mDefaultContent             = ($data["default_content"] == 1 ? true : false);
-      $this->mActive                     = ($data["active"] == 1          ? true : false);
-      $this->mShowInMenu                 = ($data["show_in_menu"] == 1    ? true : false);
-      $this->mCachable                   = ($data["cachable"] == 1        ? true : false);
-      if( isset($data['secure']) )
-	$this->mSecure                   = $data["secure"];
-      if( isset($data['page_url']) )
-	$this->mURL                      = $data["page_url"];
-      $this->mLastModifiedBy             = $data["last_modified_by"];
-      $this->mCreationDate               = $data["create_date"];
-      $this->mModifiedDate               = $data["modified_date"];
-
-      if ($loadProperties == true)
-	{
-	  $this->_load_properties();
-
-	  if (!is_array($this->_props) )
-	    {
-	      $result = false;
-		      
-	      global $debug_errors;
-	      $gCms = cmsms();
-	      $config = $gCms->GetConfig();
-	      // debug mode
-	      if (true == $config["debug"])
-		{
-		  # :TODO: Translate the error message
-		  $debug_errors .= "<p>Could not load properties for content</p>\n";
-		}
-	    }
-	}
-
-      if (false == $result)
-	{
-	  $this->SetInitialValues();
-	}
-
-      $this->Load();
-
-      return $result;
-    }
-
-    /**
-     * Callback function for content types to use to preload content or other things if necessary.  This
-     * is called right after the content is loaded from the database.
-     *
-     */
-    protected function Load()
-    {
-    }
-
-    /**
-     * Save or update the content
-     *
-     * @todo This function should return something (or throw an exception)
-     */
-    function Save()
-    {
-      Events::SendEvent('Core', 'ContentEditPre', array('content' => &$this));
-
-      if( !is_array($this->_props) )
-	{
-	  debug_buffer('save is loading properties');
-	  $this->_load_properties();
-	}
-
-      if (-1 < $this->mId)
-	{
-	  $this->Update();
-	}
-      else
-	{
-	  $this->Insert();
-	}
-
-      Events::SendEvent('Core', 'ContentEditPost', array('content' => &$this));
-    }
-
-    /**
-     * Update the content
-     * We can notice, that only a few things are updated
-     * We do not care about hierarchy for example. This is because hierarchy,
-     * order or parents management is the job of the content manager.
-     * Remember that a content is like a file, and a file don't know where it is
-     * on the disk, it only knows its own content. It's the same here.
-     *
-     * @todo this function should return something, or throw an exception.
-     */
-    protected function Update()
-    {
-      $gCms = cmsms();
-      global $debug_errors;
-      $db = $gCms->GetDb();
-      $config = $gCms->GetConfig();
-
-      $result = false;
-
-#Figure out the item_order (if necessary)
-      if ($this->mItemOrder < 1)
-	{
-	  $query = "SELECT ".$db->IfNull('max(item_order)','0')." as new_order FROM ".cms_db_prefix()."content WHERE parent_id = ?";
-	  $row = $db->GetRow($query,array($this->mParentId));
-
-	  if ($row)
-	    {
-	      if ($row['new_order'] < 1)
-		{
-		  $this->mItemOrder = 1;
-		}
-	      else
-		{
-		  $this->mItemOrder = $row['new_order'] + 1;
-		}
-	    }
-	}
-
-      $this->mModifiedDate = trim($db->DBTimeStamp(time()), "'");
-
-      $query = "UPDATE ".cms_db_prefix()."content SET content_name = ?, owner_id = ?, type = ?, template_id = ?, parent_id = ?, active = ?, default_content = ?, show_in_menu = ?, cachable = ?, secure = ?, page_url = ?, menu_text = ?, content_alias = ?, metadata = ?, titleattribute = ?, accesskey = ?, tabindex = ?, modified_date = ?, item_order = ?, markup = ?, last_modified_by = ? WHERE content_id = ?";
-      $dbresult = $db->Execute($query, array(
-					     $this->mName,
-					     $this->mOwner,
-					     strtolower($this->mType),
-					     $this->mTemplateId,
-					     $this->mParentId,
-					     ($this->mActive == true         ? 1 : 0),
-					     ($this->mDefaultContent == true ? 1 : 0),
-					     ($this->mShowInMenu == true     ? 1 : 0),
-					     ($this->mCachable == true       ? 1 : 0),
-					     $this->mSecure,
-					     $this->mURL,
-					     $this->mMenuText,
-					     $this->mAlias,
-					     $this->mMetadata,
-					     $this->mTitleAttribute,
-					     $this->mAccessKey,
-					     $this->mTabIndex,
-					     $this->mModifiedDate,
-					     $this->mItemOrder,
-					     $this->mMarkup,
-					     $this->mLastModifiedBy,
-					     $this->mId
-					     ));
-
-      if (!$dbresult)
-	{
-	  if (true == $config["debug"])
-	    {
-	      # :TODO: Translate the error message
-	      $debug_errors .= "<p>Error updating content</p>\n";
-	    }
-	}
-
-      if ($this->mOldParentId != $this->mParentId)
-	{
-#Fix the item_order if necessary
-	  $query = "UPDATE ".cms_db_prefix()."content SET item_order = item_order - 1 WHERE parent_id = ? AND item_order > ?";
-	  $result = $db->Execute($query, array($this->mOldParentId,$this->mOldItemOrder));
-
-	  $this->mOldParentId = $this->mParentId;
-	  $this->mOldItemOrder = $this->mItemOrder;
-	}
-
-      if (isset($this->mAdditionalEditors))
-	{
-	  $query = "DELETE FROM ".cms_db_prefix()."additional_users WHERE content_id = ?";
-	  $db->Execute($query, array($this->Id()));
-
-	  foreach ($this->mAdditionalEditors as $oneeditor)
-	    {
-	      $new_addt_id = $db->GenID(cms_db_prefix()."additional_users_seq");
-	      $query = "INSERT INTO ".cms_db_prefix()."additional_users (additional_users_id, user_id, content_id) VALUES (?,?,?)";
-	      $db->Execute($query, array($new_addt_id, $oneeditor, $this->Id()));
-	    }
-	}
-
-      if( is_array($this->_props) && count($this->_props) )
-	{
-	  // :TODO: There might be some error checking there
-	  $this->_save_properties();
-	}
-      else
-	{
-	  if (true == $config["debug"])
-	    {
-	      # :TODO: Translate the error message
-	      $debug_errors .= "<p>Error updating : the content has no properties</p>\n";
-	    }
-	}
-
-      cms_route_manager::del_static('','__CONTENT__',$this->mId);
-      if( $this->mURL != '' )
-	{
-	  $route = CmsRoute::new_builder($this->mURL,'__CONTENT__',$this->mId,null,TRUE);;
-	  cms_route_manager::add_static($route);
-	}
-    }
-
-    /**
-     * Insert the content in the db
-     *
-     * @todo this function should return something
-     */
-    # :TODO: This function should return something
-    # :TODO: Take care bout hierarchy here, it has no value !
-    # :TODO: Figure out proper item_order
-    protected function Insert()
-    {
-      $gCms = cmsms();
-      global $debug_errors;
-      $db = $gCms->GetDb();
-      $config = $gCms->GetConfig();
-
-      $result = false;
-
-#Figure out the item_order
-      if ($this->mItemOrder < 1)
-	{
-	  $query = "SELECT max(item_order) as new_order FROM ".cms_db_prefix()."content WHERE parent_id = ?";
-	  $row = $db->Getrow($query, array($this->mParentId));
-
-	  if ($row)
-	    {
-	      if ($row['new_order'] < 1)
-		{
-		  $this->mItemOrder = 1;
-		}
-	      else
-		{
-		  $this->mItemOrder = $row['new_order'] + 1;
-		}
-	    }
-	}
-
-      $newid = $db->GenID(cms_db_prefix()."content_seq");
-      $this->mId = $newid;
-
-      $this->mModifiedDate = $this->mCreationDate = trim($db->DBTimeStamp(time()), "'");
-
-      $query = "INSERT INTO ".$config["db_prefix"]."content (content_id, content_name, content_alias, type, owner_id, parent_id, template_id, item_order, hierarchy, id_hierarchy, active, default_content, show_in_menu, cachable, secure, page_url, menu_text, markup, metadata, titleattribute, accesskey, tabindex, last_modified_by, create_date, modified_date) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
-
-      $dbresult = $db->Execute($query, array(
-					     $newid,
-					     $this->mName,
-					     $this->mAlias,
-					     strtolower($this->mType),
-					     $this->mOwner,
-					     $this->mParentId,
-					     $this->mTemplateId,
-					     $this->mItemOrder,
-					     $this->mHierarchy,
-					     $this->mIdHierarchy,
-					     ($this->mActive == true         ? 1 : 0),
-					     ($this->mDefaultContent == true ? 1 : 0),
-					     ($this->mShowInMenu == true     ? 1 : 0),
-					     ($this->mCachable == true       ? 1 : 0),
-					     $this->mSecure,
-					     $this->mURL,
-					     $this->mMenuText,
-					     $this->mMarkup,
-					     $this->mMetadata,
-					     $this->mTitleAttribute,
-					     $this->mAccessKey,
-					     $this->mTabIndex,
-					     $this->mLastModifiedBy,
-					     $this->mModifiedDate,
-					     $this->mCreationDate
-					     ));
-
-      if (! $dbresult)
-	{
-	  die($db->sql.'<br/>'.$db->ErrorMsg());
-	  if ($config["debug"] == true)
-	    {
-	      # :TODO: Translate the error message
-	      $debug_errors .= "<p>Error inserting content</p>\n";
-	    }
-	}
-
-      if (is_array($this->_props) && count($this->_props))
-	{
-	  // :TODO: There might be some error checking there
-	  debug_buffer('save from ' . __LINE__);
-	  $this->_save_properties();
-	}
-      else
-	{
-	  if (true == $config["debug"])
-	    {
-	      # :TODO: Translate the error message
-	      $debug_errors .= "<p>Error inserting : the content has no properties</p>\n";
-	    }
-	}
-      if (isset($this->mAdditionalEditors))
-	{
-	  foreach ($this->mAdditionalEditors as $oneeditor)
-	    {
-	      $new_addt_id = $db->GenID(cms_db_prefix()."additional_users_seq");
-	      $query = "INSERT INTO ".cms_db_prefix()."additional_users (additional_users_id, user_id, content_id) VALUES (?,?,?)";
-	      $db->Execute($query, array($new_addt_id, $oneeditor, $this->Id()));
-	    }
-	}
-
-      if( $this->mURL != '' )
-	{
-	  $route = CmsRoute::new_builder($this->mURL,'__CONTENT__',$this->mId,'',TRUE);
-	  cms_route_manager::add_static($route);
-	}
-    }
-
-    /**
-     * Test if the array given contains valid data for the object
-     * This function is used to check that no compulsory argument
-     * has been forgotten by the user
-     *
-     * We do not check the Id because there can be no Id (new content)
-     * That's up to Save to check this.
-     *
-     * @returns	FALSE if data is ok, and an array of invalid parameters else
-     */
-    public function ValidateData()
-    {
-      $errors = array();
-
-      if ($this->mParentId < -1) {
-	$errors[] = lang('invalidparent');
-	$result = false;
-      }
 	  
-      if ($this->mName == '') {
-	if ($this->mMenuText != '') {
-	  $this->mName = $this->mMenuText;
-	}
-	else {
-	  $errors[]= lang('nofieldgiven',array(lang('title')));
-	  $result = false;
-	}
-      }
-	  
-      if ($this->mMenuText == '') {
-	if ($this->mName != '') {
-	  $this->mMenuText = $this->mName;
-	}
-	else {
-	  $errors[]=lang('nofieldgiven',array(lang('menutext')));
-	  $result = false;
-	}
-      }
+		if ($this->mMenuText == '') {
+			if ($this->mName != '') {
+				$this->mMenuText = $this->mName;
+			}
+			else {
+				$errors[]=lang('nofieldgiven',array(lang('menutext')));
+				$result = false;
+			}
+		}
 		
-      if (!$this->HandlesAlias()) {
-	if ($this->mAlias != $this->mOldAlias || ($this->mAlias == '' && $this->RequiresAlias()) ) {
-	  $gCms = cmsms();
-	  $contentops = $gCms->GetContentOperations();
-	  $error = $contentops->CheckAliasError($this->mAlias, $this->mId);
-	  if ($error !== FALSE) {
-	    $errors[]= $error;
-	    $result = false;
-	  }
-	}
-      }
-
-      $auto_type = content_assistant::auto_create_url();
-      if( $this->mURL == '' && get_site_preference('content_autocreate_urls') ) {
-	// create a valid url.
-	if( !$this->DefaultContent() ) {
-	  if( get_site_preference('content_autocreate_flaturls',0) ) {
-	    // the default url is the alias... but not synced to the alias.
-	    $this->mURL = $this->mAlias;
-	  }
-	  else {
-	    // if it don't explicitly say 'flat' we're creating a hierarchical url.
-	    $gCms = cmsms();
-	    $tree = $gCms->GetHierarchyManager();
-	    $node = $tree->find_by_tag('id',$this->ParentId());
-	    $stack = array($this->mAlias);
-	    $parent_url = '';
-	    $count = 0;
-	    while( $node ) {
-	      $tmp_content = $node->GetContent();
-	      if( $tmp_content ) {
-		$tmp = $tmp_content->URL();
-		if( $tmp != '' && $count == 0 ) {
-		  // try to build the url out of the parent url.
-		  $parent_url = $tmp;
-		  break;
+		if (!$this->HandlesAlias()) {
+			if ($this->mAlias != $this->mOldAlias || ($this->mAlias == '' && $this->RequiresAlias()) ) {
+				$gCms = cmsms();
+				$contentops = $gCms->GetContentOperations();
+				$error = $contentops->CheckAliasError($this->mAlias, $this->mId);
+				if ($error !== FALSE) {
+					$errors[]= $error;
+					$result = false;
+				}
+			}
 		}
-		array_unshift($stack,$tmp_content->Alias());
-	      }
-	      $node = $node->GetParent();
-	      $count++;
-	    }
 
-	    if( $parent_url != '' ) {
-	      // woot, we got a prent url.
-	      $this->mURL = $parent_url.'/'.$this->mAlias;
-	    }
-	    else {
-	      $this->mURL = implode('/',$stack);
-	    }
-	  }
-	}
-      }
-      if( $this->mURL == '' && 
-	  get_site_preference('content_mandatory_urls') && 
-	  !$this->mDefaultContent &&
-	  $this->HasUsableLink() ) {
-	// page url is empty and mandatory
-	$errors[] = lang('content_mandatory_urls');
-      }
-      else if( $this->mURL != '' ) {
-	// page url is not empty, check for validity.
-	$this->mURL = strtolower(trim($this->mURL," /\t\r\n\0\x08")); // silently delete bad chars. and convert to lowercase.
-	if( $this->mURL != '' && !content_assistant::is_valid_url($this->mURL,$this->mId) ) {
-	  // and validate the URL.
-	  $errors[] = lang('invalid_url2');
-	}
-      }
+		$auto_type = content_assistant::auto_create_url();
+		if( $this->mURL == '' && get_site_preference('content_autocreate_urls') ) {
+			// create a valid url.
+			if( !$this->DefaultContent() ) {
+				if( get_site_preference('content_autocreate_flaturls',0) ) {
+					// the default url is the alias... but not synced to the alias.
+					$this->mURL = $this->mAlias;
+				}
+				else {
+					// if it don't explicitly say 'flat' we're creating a hierarchical url.
+					$gCms = cmsms();
+					$tree = $gCms->GetHierarchyManager();
+					$node = $tree->find_by_tag('id',$this->ParentId());
+					$stack = array($this->mAlias);
+					$parent_url = '';
+					$count = 0;
+					while( $node ) {
+						$tmp_content = $node->GetContent();
+						if( $tmp_content ) {
+							$tmp = $tmp_content->URL();
+							if( $tmp != '' && $count == 0 ) {
+								// try to build the url out of the parent url.
+								$parent_url = $tmp;
+								break;
+							}
+							array_unshift($stack,$tmp_content->Alias());
+						}
+						$node = $node->GetParent();
+						$count++;
+					}
 
-      return (count($errors) > 0?$errors:FALSE);
-    }
-
-    /**
-     * Delete the current content object from the database.
-     *
-     * @todo this function should return something, or throw an exception
-     */
-    function Delete()
-    {
-      $gCms = cmsms();
-      global $debug_errors;
-      $config = $gCms->GetConfig();
-      Events::SendEvent('Core', 'ContentDeletePre', array('content' => &$this));
-      $db = $gCms->GetDb();
-      $result = false;
-
-      if (-1 > $this->mId)
-	{
-	  if (true == $config["debug"])
-	    {
-	      # :TODO: Translate the error message
-	      $debug_errors .= "<p>Could not delete content : invalid Id</p>\n";
-	    }
-	}
-      else
-	{
-	  $query = "DELETE FROM ".cms_db_prefix()."content WHERE content_id = ?";
-	  $dbresult = $db->Execute($query, array($this->mId));
-
-	  if (! $dbresult)
-	    {
-	      if (true == $config["debug"])
-		{
-		  # :TODO: Translate the error message
-		  $debug_errors .= "<p>Error deleting content</p>\n";
+					if( $parent_url != '' ) {
+						// woot, we got a prent url.
+						$this->mURL = $parent_url.'/'.$this->mAlias;
+					}
+					else {
+						$this->mURL = implode('/',$stack);
+					}
+				}
+			}
 		}
-	    }
+		if( $this->mURL == '' && 
+			get_site_preference('content_mandatory_urls') && 
+			!$this->mDefaultContent &&
+			$this->HasUsableLink() ) {
+			// page url is empty and mandatory
+			$errors[] = lang('content_mandatory_urls');
+		}
+		else if( $this->mURL != '' ) {
+			// page url is not empty, check for validity.
+			$this->mURL = strtolower(trim($this->mURL," /\t\r\n\0\x08")); // silently delete bad chars. and convert to lowercase.
+			if( $this->mURL != '' && !content_assistant::is_valid_url($this->mURL,$this->mId) ) {
+				// and validate the URL.
+				$errors[] = lang('invalid_url2');
+			}
+		}
 
-	  // Fix the item_order if necessary
-	  $query = "UPDATE ".cms_db_prefix()."content SET item_order = item_order - 1 WHERE parent_id = ? AND item_order > ?";
-	  $result = $db->Execute($query,array($this->ParentId(),$this->ItemOrder()));
-
-	  $cachefilename = TMP_CACHE_LOCATION . '/contentcache.php';
-	  @unlink($cachefilename);
-
-	  // DELETE properties
-	  $query = 'DELETE FROM '.cms_db_prefix().'content_props WHERE content_id = ?';
-	  $result = $db->Execute($query,array($this->mId));
-	  $this->_props = null;
-
-	  // Delete additional editors.
-	  $query = 'DELETE FROM '.cms_db_prefix().'additional_users WHERE content_id = ?';
-	  $result = $db->Execute($query,array($this->mId));
-	  $this->mAdditionalEditors = null;
-
-	  // Delete route
-	  if( $this->mURL != '' )
-	    {
-	      cms_route_manager::del_static($this->mURL);
-	    }
+		return (count($errors) > 0?$errors:FALSE);
 	}
 
-      Events::SendEvent('Core', 'ContentDeletePost', array('content' => &$this));
-    }
-
-    /**
-     * Function for the subclass to parse out data for it's parameters (usually from $_POST)
-     * This method is typically called from an editor form to allow modifying the content object from 
-     * form input fields.
-     *
-     * @abstract
-     * @return void
-     */
-    public function FillParams($params,$editing = false)
-    {
-      // content property parameters
-      $parameters = array('extra1','extra2','extra3','image','thumbnail');
-      foreach ($parameters as $oneparam)
+	/**
+	 * Delete the current content object from the database.
+	 *
+	 * @todo this function should return something, or throw an exception
+	 */
+	function Delete()
 	{
-	  if (isset($params[$oneparam]))
-	    {
-	      $this->SetPropertyValue($oneparam, $params[$oneparam]);
-	    }
+		$gCms = cmsms();
+		$config = $gCms->GetConfig();
+		Events::SendEvent('Core', 'ContentDeletePre', array('content' => &$this));
+		$db = $gCms->GetDb();
+		$result = false;
+
+		if (-1 > $this->mId) {
+			// invalid content id.
+		}
+		else {
+			$query = "DELETE FROM ".cms_db_prefix()."content WHERE content_id = ?";
+			$dbresult = $db->Execute($query, array($this->mId));
+
+			// Fix the item_order if necessary
+			$query = "UPDATE ".cms_db_prefix()."content SET item_order = item_order - 1 WHERE parent_id = ? AND item_order > ?";
+			$result = $db->Execute($query,array($this->ParentId(),$this->ItemOrder()));
+
+			// DELETE properties
+			$query = 'DELETE FROM '.cms_db_prefix().'content_props WHERE content_id = ?';
+			$result = $db->Execute($query,array($this->mId));
+			$this->_props = null;
+
+			// Delete additional editors.
+			$query = 'DELETE FROM '.cms_db_prefix().'additional_users WHERE content_id = ?';
+			$result = $db->Execute($query,array($this->mId));
+			$this->mAdditionalEditors = null;
+
+			// Delete route
+			if( $this->mURL != '' ) cms_route_manager::del_static($this->mURL);
+		}
+
+		Events::SendEvent('Core', 'ContentDeletePost', array('content' => &$this));
 	}
 
-      // go through the list of base parameters
-      // setting them from params
+	/**
+	 * Function for the subclass to parse out data for it's parameters (usually from $_POST)
+	 * This method is typically called from an editor form to allow modifying the content object from 
+	 * form input fields.
+	 *
+	 * @abstract
+	 * @return void
+	 */
+	public function FillParams($params,$editing = false)
+	{
+		// content property parameters
+		stack_trace();
+		debug_display($editing,'fillparams');
+		$parameters = array('extra1','extra2','extra3','image','thumbnail');
+		foreach ($parameters as $oneparam) {
+			if (isset($params[$oneparam])) $this->SetPropertyValue($oneparam, $params[$oneparam]);
+		}
+
+		// go through the list of base parameters
+		// setting them from params
+
+		// title
+		if (isset($params['title'])) $this->mName = $params['title'];
+
+		// menu text
+		if (isset($params['menutext'])) $this->mMenuText = $params['menutext'];
+
+		// parent id
+		if( isset($params['parent_id']) ) {
+			if( $params['parent_id'] == -2 && !$editing ) $params['parent_id'] = -1;
+			if ($this->mParentId != $params['parent_id']) {
+				$this->mHierarchy = '';
+				$this->mItemOrder = -1;
+			}
+			$this->mParentId = $params['parent_id'];
+		}
+
+		// active
+		if (isset($params['active'])) {
+			$this->mActive = $params['active'];
+			if( $this->DefaultContent() ) $this->mActive = 1;
+		}
+
+		// show in menu
+		if (isset($params['showinmenu'])) $this->mShowInMenu = $params['showinmenu'];
+
+		// alias
+		$tmp = '';
+		if( isset($params['alias']) ) $tmp = trim($params['alias']);
+		if( !$editing || isset($params['alias']) ) {
+			// the alias param may not exist (depending upon permissions)
+			// this method will set the alias to the supplied value if it is set
+			// or auto-generate one, when adding a new page.
+			$this->SetAlias($tmp);
+		}
+
+		// target
+		if (isset($params['target'])) {
+			$val = $params['target'];
+			if( $val == '---' ) $val = '';
+			$this->SetPropertyValue('target', $val);
+		} 
+
+		// title attribute
+		if (isset($params['titleattribute'])) $this->mTitleAttribute = $params['titleattribute'];
+
+		// accesskey
+		if (isset($params['accesskey'])) {
+			$this->mAccessKey = $params['accesskey'];
+		}
+
+		// tab index
+		if (isset($params['tabindex'])) $this->mTabIndex = $params['tabindex'];
+
+		// cachable
+		if (isset($params['cachable'])) {
+			$this->mCachable = $params['cachable'];
+		}
+		else {
+			$this->_handleRemovedBaseProperty('cachable','mCachable');
+		}
+
+		// secure
+		if (isset($params['secure'])) {
+			$this->mSecure = $params['secure'];
+		}
+		else {
+			$this->_handleRemovedBaseProperty('secure','mSecure');
+		}
+
+		// url
+		if (isset($params['page_url'])) {
+			$this->mURL = $params['page_url'];
+		}
+		else {
+			$this->_handleRemovedBaseProperty('page_url','mURL');
+		}
+
+		// owner
+		if (isset($params["ownerid"])) $this->SetOwner($params["ownerid"]);
+
+		// additional editors
+		if (isset($params["additional_editors"])) {
+			$addtarray = array();
+			if( is_array($params['additional_editors']) ) {
+				foreach ($params["additional_editors"] as $addt_user_id) {
+					$addtarray[] = $addt_user_id;
+				}
+			}
+			$this->SetAdditionalEditors($addtarray);
+		}
+	}
+
+	/**
+	 * A function to get the internally generated URL for this content type.
+	 * This method may be overridden by content types.
+	 *
+	 * @param boolean if true, and mod_rewrite is enabled, build a URL suitable for mod_rewrite.
+	 * @return string
+	 */
+	public function GetURL($rewrite = true)
+	{
+		$gCms = cmsms();
+		$config = $gCms->GetConfig();
+		$url = "";
+		$alias = ($this->mAlias != ''?$this->mAlias:$this->mId);
+
+		$base_url = $config['root_url'];
+		if( $this->Secure() ) $base_url = $config['ssl_url'];
+
+		/* use root_url for default content */
+		if($this->mDefaultContent) {
+			$url =  $base_url . '/';
+			return $url;
+		}
+
+		if ($config["url_rewriting"] == 'mod_rewrite' && $rewrite == true) {
+			$str = $this->HierarchyPath();
+			if( $this->mURL != '') $str = $this->mURL;	// we have a url path
+			$url = $base_url. '/' . $str . (isset($config['page_extension'])?$config['page_extension']:'.html');
+		}
+		else if (isset($_SERVER['PHP_SELF']) && $config['url_rewriting'] == 'internal' && $rewrite == true) {
+			$str = $this->HierarchyPath();
+			if( $this->mURL != '') $str = $this->mURL; // we have a url path
+			$url = $base_url . '/index.php/' . $str . (isset($config['page_extension'])?$config['page_extension']:'.html');
+		}
+		else {
+			$url = $base_url . '/index.php?' . $config['query_var'] . '=' . $alias;
+		}
+		return $url;
+	}
+
+	/**
+	 * Move this content up, or down with respect to its peers.
+	 *
+	 * Note: This method modifies two content objects.
+	 *
+	 * @since 2.0
+	 * @param integer direction. negative value indicates up, positive value indicates down.
+	 * @return void
+	 */
+	public function ChangeItemOrder($direction)
+	{
+		$db = cmsms()->GetDb();
+		$time = $db->DBTimeStamp(time());
+		$parentid = $this->ParentId();
+		$order = $this->ItemOrder();
+		if( $direction < 0 && $this->ItemOrder() > 1 ) {
+			// up
+			$query = 'UPDATE '.cms_db_prefix().'content SET item_order = (item_order + 1), modified_date = '.$time.' 
+                  WHERE item_order = ? AND parent_id = ?';
+			$db->Execute($query,array($order-1,$parentid));
+			$query = 'UPDATE '.cms_db_prefix().'content SET item_order = (item_order - 1), modified_date = '.$time.'
+                  WHERE content_id = ?';
+			$db->Execute($query,array($this->Id()));
+		}
+		else if( $direction > 0 ) {
+			// down.
+			$query = 'UPDATE '.cms_db_prefix().'content SET item_order = (item_order - 1), modified_date = '.$time.'
+                  WHERE item_order = ? AND parent_id = ?';
+			$db->Execute($query,array($order+1,$parentid));
+			$query = 'UPDATE '.cms_db_prefix().'content SET item_order = (item_order + 1), modified_date = '.$time.'
+                  WHERE content_id = ?';
+			$db->Execute($query,array($this->Id()));
+		}
+		cms_cache_handler::get_instance()->erase('contentcache');
+
+	}
+
+	/**
+	 * Show the content
+	 *
+	 * @abstract
+	 * @param string An optional property name to display.
+	 */
+	public function Show($param = '')
+	{
+	}
+
+	/**
+	 * Used to get the list of all editable properties for this content page.
+	 * Other content types may override this method, but should call the base method at the start.
+	 *
+	 * @abstract
+	 * @return an array of stdclass objects containing name (string), tab (string), priority (integer), required (boolean) members
+	 */
+	public function GetEditableProperties()
+	{
+		if( !check_permission(get_userid(),'Manage All Content') ) {
+			$basic_attributes = array('title','parent');
+			$tmp_basic_attributes = cms_siteprefs::get('basic_attributes');
+			if( $tmp_basic_attributes ) {
+				$tmp_basic_attributes = explode(',',$tmp_basic_attributes);
+				$basic_attributes = array_merge($tmp_basic_attributes,$basic_attributes);
+			}
+
+			$out = array();
+			foreach( $this->_attributes as $one ) {
+				if( in_array($one->name,$basic_attributes) ) {
+					$out[] = $one;
+				}
+			}
+			return $out;
+		}
+		return $this->_attributes;
+		// todo: filter out the elements that this user isn't allowed to see.
+	}
+
+	private function _SortProperties($props)
+	{
+		// sort the properties.
+		// sort the attributes by tab, priority, name...
+		usort($props,function($a,$b) {
+				  if( !isset($a->tab) || $a->tab == '' ) $a->tab = ContentBase::TAB_MAIN;
+				  if( !isset($b->tab) || $b->tab == '' ) $b->tab = ContentBase::TAB_MAIN;
+
+				  // sort elements by tabname, and then priority
+				  $atab = $a->tab;
+				  $btab = $b->tab;
+
+				  $res = null;
+				  if( ($r = strcmp($atab,$btab)) != 0 ) $res = $r;
+				  else if( $a->priority < $b->priority ) $res = -1;
+				  else if( $a->priority > $b->priority ) $res = 1;
+				  else $res = strcmp($a->name,$b->name);
+				  return $res;
+			  });
+
+		return $props;
+	}
+
+	private function _GetEditableProperties()
+	{
+		if( isset($this->_editable_properties) ) return $this->_editable_properties;
+
+		$props = $this->_SortProperties($this->GetEditableProperties());
+		$this->_editable_properties = $props;
+		return $props;
+	}
+
+	/**
+	 * Used from a page that allows content editing. This method the list of distinct sections
+	 * that devides up the various logical sections that this content type supports for editing.
+	 *
+	 * @abstract
+	 * @return array List of tab name strings.
+	 */
+	public function GetTabNames($keys = FALSE)
+	{
+		$props = $this->_GetEditableProperties();
+		$arr = array();
+		foreach( $props as $one ) {
+			if( !isset($one->tab) || $one->tab == '' ) $one->tab = self::TAB_MAIN;
+			if( !isset($arr[$one->tab]) ) $arr[$one->tab] = 0;
+			$arr[$one->tab]++;
+		}
       
-      // title
-      if (isset($params['title']))
-	{
-	  $this->mName = $params['title'];
+		$arr = array_keys($arr);
+		if( !$keys ) {
+			for( $i = 0; $i < count($arr); $i++ ) {
+				$one =& $arr[$i];
+				if( endswith($one,'_tab__') ) $one = lang($one);
+			}
+		}
+		return $arr;
 	}
 
-      // menu text
-      if (isset($params['menutext']))
+	/**
+	 * Get an optional message for each tab.
+	 *
+	 * @abstract
+	 * @since 2.0
+	 * @param mixed either a tab name (untranslated) or an integer index
+	 * @return string html text to display at the top of the tab.
+	 */
+	public function GetTabMessage($key)
 	{
-	  $this->mMenuText = $params['menutext'];
+		if( (int)$key >= 0 ) {
+			$tabs = $this->GetTabNames(TRUE);
+			if( $key >= count($tabs) ) $key = 0;
+			$key = $tabs[$key];
+		}
+
+		switch( $key ) {
+		case self::TAB_PERMS:
+			return '<div class="information">'.lang('msg_permstab').'</div>';
+			break;
+		}
 	}
 
-      // parent id
-      if( isset($params['parent_id']) )
+	/**
+	 * Get the attributes for a specific tab
+	 *
+	 * @param mixed either a tab name (untranslated) or an integer index
+	 * @return An array of arrays.  Index 0 of each element should be a prompt field, and index 1 should be the input field for the prompt.
+	 */
+	public function GetTabElements($key,$adding = FALSE)
 	{
-	  if ($this->mParentId != $params['parent_id'])
-	    {
-	      $this->mHierarchy = '';
-	      $this->mItemOrder = -1;
-	    }
-	  $this->mParentId = $params['parent_id'];
+		if( (int)$key >= 0 ) {
+			$tabs = $this->GetTabNames(TRUE);
+			if( $key >= count($tabs) ) $key = 0;
+			$key = $tabs[$key];
+		}
+
+		$props = $this->_GetEditableProperties();
+
+		$out = array();
+		foreach( $props as $one ) {
+			if( !isset($one->tab) || $one->tab == '' ) $one->tab = self::TAB_MAIN;
+			if( $key != $one->tab ) continue;
+			$out[] = $this->display_single_element($one->name,$adding);
+		}
+		return $out;
 	}
 
-      // active
-      if (isset($params['active']))
+	/**
+	 * Method to indicate wether the current page has children.
+	 *
+	 * @param boolean should we test only for active children.
+	 * @return booelan
+	 */
+	public function HasChildren($activeonly = false)
 	{
-	  $this->mActive = $params['active'];
-	  if( $this->DefaultContent() )
-	    {
-	      $this->mActive = 1;
-	    }
+		$hm = cmsms()->GetHierarchyManager();
+		$node = $hm->getNodeById($this->mId);
+		if( !$node->has_children() ) return false;
+		if( $activeonly == false) return true;
+
+		$children = $node->get_children();
+		if( $children ) {
+			for( $i = 0; $i < count($children); $i++ ) {
+				$content = $children[$i]->getContent();
+				if( $content->Active() ) return true;
+			}
+		}
+
+		return false;
 	}
+
+	/**
+	 * Return a list of additional editors
+	 * Note: in the returned array, group id's are specified as negative integers.
+	 *
+	 * @return mixed  Array of uids and group ids, or null
+	 */
+	public function GetAdditionalEditors()
+	{
+		if (!isset($this->mAdditionalEditors)) {
+			$gCms = cmsms();
+			$db = $gCms->GetDb();
+			$this->mAdditionalEditors = array();
+
+			$query = "SELECT user_id FROM ".cms_db_prefix()."additional_users WHERE content_id = ?";
+			$dbresult = $db->Execute($query,array($this->mId));
+
+			while ($dbresult && !$dbresult->EOF) {
+				$this->mAdditionalEditors[] = $dbresult->fields['user_id'];
+				$dbresult->MoveNext();
+			}
+
+			if ($dbresult) $dbresult->Close();
+		}
+		return $this->mAdditionalEditors;
+	}
+
+	/**
+	 * Set the list of additional editors
+	 * Note: in the provided array, group id's are specified as negative integers.
+	 *
+	 * @param mixed  Array of uids and group ids, or null
+	 */
+	public function SetAdditionalEditors($editorarray)
+	{
+		$this->mAdditionalEditors = $editorarray;
+	}
+
+	static public function GetAdditionalEditorOptions()
+	{
+		$opts = array();
+		$gCms = cmsms();
+		$userops = $gCms->GetUserOperations();
+		$groupops = $gCms->GetGroupOperations();
+		$allusers = $userops->LoadUsers();
+		$allgroups = $groupops->LoadGroups();
+		foreach ($allusers as $oneuser) {
+			$opts[$oneuser->id] = $oneuser->username;
+		}
+		foreach ($allgroups as $onegroup) {
+			if( $onegroup->id == 1 ) continue; // exclude admin group (they have all privileges anyways)
+			$val = $onegroup->id*-1;
+			$opts[$val] = lang('group').': '.$onegroup->name;
+		}
+
+		return $opts;
+	}
+
+	static public function GetAdditionalEditorInput($addteditors,$owner_id = -1)
+	{
+		$help = '&nbsp;'.cms_admin_utils::get_help_tag('core','help_content_addteditor');
+		$ret[] = '<label for="addteditors">'.lang('additionaleditors').':</label>'.$help;
+		$text = '<input name="additional_editors" type="hidden" value=""/>';
+		$text .= '<select id="addteditors" name="additional_editors[]" multiple="multiple" size="5">';
+
+		$topts = self::GetAdditionalEditorOptions();
+		foreach( $topts as $k => $v ) {
+			if( $k == $owner_id ) continue;
+			$text .= CmsFormUtils::create_option(array('label'=>$v,'value'=>$k),$addteditors);
+		}
       
-      // show in menu
-      if (isset($params['showinmenu']))
-	{
-	  $this->mShowInMenu = $params['showinmenu'];
+      
+		$text .= '</select>';
+		$ret[] = $text;
+		return $ret;
 	}
 
-      // alias
-      $tmp = '';
-      if( isset($params['alias']) )
+
+	/**
+	 * Provides an input element to display the list of additional editors.
+	 * This method is usually called from within this object.
+	 *
+	 * @param mixed An optional array of additional editor id's (group ids specified with negative values)
+	 * @return string The input element.
+	 */
+	public function ShowAdditionalEditors($addteditors = '')
 	{
-	  $tmp = trim($params['alias']);
-	}
-      if( !$editing || isset($params['alias']) )
-	{
-	  // the alias param may not exist (depending upon permissions)
-	  // this method will set the alias to the supplied value if it is set
-	  // or auto-generate one, when adding a new page.
-	  $this->SetAlias($tmp);
+		$ret = array();
+		if( $addteditors == '' ) $addteditors = $this->GetAdditionalEditors();
+		return self::GetAdditionalEditorInput($addteditors,$this->Owner());
 	}
 
-      // target
-      if (isset($params['target']))
+	/* private */
+	private function _handleRemovedBaseProperty($name,$member)
 	{
-	  $val = $params['target'];
-	  if( $val == '---' )
-	    {
-	      $val = '';
-	    }
-	  $this->SetPropertyValue('target', $val);
-	} 
-
-      // title attribute
-      if (isset($params['titleattribute']))
-	{
-	  $this->mTitleAttribute = $params['titleattribute'];
-	}
-
-      // accesskey
-      if (isset($params['accesskey']))
-	{
-	  $this->mAccessKey = $params['accesskey'];
-	}
-
-      // tab index
-      if (isset($params['tabindex']))
-	{
-	  $this->mTabIndex = $params['tabindex'];
-	}
-
-      // cachable
-      if (isset($params['cachable']))
-	{
-	  $this->mCachable = $params['cachable'];
-	}
-      else
-	{
-	  $this->_handleRemovedBaseProperty('cachable','mCachable');
-	}
-
-      // secure
-      if (isset($params['secure']))
-	{
-	  $this->mSecure = $params['secure'];
-	}
-      else
-	{
-	  $this->_handleRemovedBaseProperty('secure','mSecure');
-	}
-
-      // url
-      if (isset($params['page_url']))
-	{
-	  $this->mURL = $params['page_url'];
-	}
-      else
-	{
-	  $this->_handleRemovedBaseProperty('page_url','mURL');
-	}
-
-      // owner
-      if (isset($params["ownerid"]))
-	{
-	  $this->SetOwner($params["ownerid"]);
-	}
-	 
-      // additional editors
-      if (isset($params["additional_editors"]))
-	{
-	  $addtarray = array();
-	  if( is_array($params['additional_editors']) )
-	    {
-	      foreach ($params["additional_editors"] as $addt_user_id)
-		{
-		  $addtarray[] = $addt_user_id;
+		if( !is_array($this->_attributes) ) return FALSE;
+		if( !in_array($name,$this->_attributes) ) {
+			if( isset($this->_prop_defaults[$name]) ) {
+				$this->$member = $this->_prop_defaults[$name];
+				return TRUE;
+			}
 		}
-	    }
-	  $this->SetAdditionalEditors($addtarray);
-	}
-    }
-
-    /**
-     * A function to get the internally generated URL for this content type.
-     * This method may be overridden by content types.
-     *
-     * @param boolean if true, and mod_rewrite is enabled, build a URL suitable for mod_rewrite.
-     * @return string
-     */
-    public function GetURL($rewrite = true)
-    {
-      $gCms = cmsms();
-      $config = $gCms->GetConfig();
-      $url = "";
-      $alias = ($this->mAlias != ''?$this->mAlias:$this->mId);
-
-      $base_url = $config['root_url'];
-      if( $this->Secure() )
-	{
-	  if( isset($config['ssl_url']) )
-	    {
-	      $base_url = $config['ssl_url'];
-	    }
-	  else
-	    {
-	      $base_url = str_replace('http://','https://',$base_url);
-	    }
+		return FALSE;
 	}
 
-      /* use root_url for default content */
-      if($this->mDefaultContent) {
-	$url =  $base_url . '/';
-	return $url;
-      }
-
-      if ($config["url_rewriting"] == 'mod_rewrite' && $rewrite == true)
+	/**
+	 * Remove a property from the known property list.
+	 * Specify a default value to use if the property is called.
+	 *
+	 * @param string The property name
+	 * @param string The default value.
+	 * @return void
+	 */
+	protected function RemoveProperty($name,$dflt)
 	{
-	  $str = $this->HierarchyPath();
-	  if( $this->mURL != '')
-	    {
-	      // we have a url path
-	      $str = $this->mURL;
-	    }
-	  $url = $base_url. '/' . $str . (isset($config['page_extension'])?$config['page_extension']:'.html');
-	}
-      else if (isset($_SERVER['PHP_SELF']) && $config['url_rewriting'] == 'internal' && $rewrite == true)
-	{
-	  $str = $this->HierarchyPath();
-	  if( $this->mURL != '')
-	    {
-	      // we have a url path
-	      $str = $this->mURL;
-	    }
-	  $url = $base_url . '/index.php/' . $str . (isset($config['page_extension'])?$config['page_extension']:'.html');
-	}
-      else
-	{
-	  $url = $base_url . '/index.php?' . $config['query_var'] . '=' . $alias;
-	}
-      return $url;
-    }
-
-
-    /**
-     * Show the content
-     *
-     * @abstract
-     * @param string An optional property name to display.
-     */
-    public function Show($param = '')
-    {
-    }
-	
-    /**
-     * Used from a page that allows content editing. This method the list of distinct sections
-     * that devides up the various logical sections that this content type supports for editing.
-     *
-     * @abstract
-     * @return array List of tab name strings.
-     */
-    public function TabNames()
-    {
-        return array();
-    }
-
-    /** 
-     * Used from within a page that allows editing content this method returns the input fields for
-     * the various fields that can be edited.
-     *
-     * @abstract
-     * @param boolean Wether we are adding a new content page, or editing an existing content page.
-     * @param int     The tab index.
-     * @param boolean unused??
-     */
-    public function EditAsArray($adding = false, $tab = 0, $showadmin = false)
-    {
-	# :TODO:
-	return array(array('Error','Edit Not Defined!'));
-    }
-
-
-    /**
-     * Show Help
-# disabled to see if its used.
-    public function Help()
-    {
-    	# :TODO:
-    	return "<tr><td>Help Not Defined</td></tr>";
-    }
-     */
-
-    /**
-     * Method to indicate wether the current page has children.
-     *
-     * @param boolean should we test only for active children.
-     * @return booelan
-     */
-    public function HasChildren($activeonly = false)
-    {
-      $hm = cmsms()->GetHierarchyManager();
-      $node = $hm->getNodeById($this->mId);
-      if( !$node->has_children() ) return false;
-      if( $activeonly == false) return true;
-
-      $children = $node->get_children();
-      if( $children )
-	{
-	  for( $i = 0; $i < count($children); $i++ )
-	    {
-	      $content = $children[$i]->getContent();
-	      if( $content->Active() ) return true;
-	    }
-	}
-
-      return false;
-    }
-
-    /**
-     * Return a list of additional editors
-     * Note: in the returned array, group id's are specified as negative integers.
-     *
-     * @return mixed  Array of uids and group ids, or null
-     */
-    public function GetAdditionalEditors()
-    {
-      if (!isset($this->mAdditionalEditors))
-	{
-	  $gCms = cmsms();
-	  $db = $gCms->GetDb();
-
-	  $this->mAdditionalEditors = array();
-
-	  $query = "SELECT user_id FROM ".cms_db_prefix()."additional_users WHERE content_id = ?";
-	  $dbresult = $db->Execute($query,array($this->mId));
-
-	  while ($dbresult && !$dbresult->EOF)
-	    {
-	      $this->mAdditionalEditors[] = $dbresult->fields['user_id'];
-	      $dbresult->MoveNext();
-	    }
-
-	  if ($dbresult) $dbresult->Close();
-	}
-      return $this->mAdditionalEditors;
-    }
-
-    /**
-     * Set the list of additional editors
-     * Note: in the provided array, group id's are specified as negative integers.
-     *
-     * @param mixed  Array of uids and group ids, or null
-     */
-    public function SetAdditionalEditors($editorarray)
-    {
-      $this->mAdditionalEditors = $editorarray;
-    }
-
-    static public function GetAdditionalEditorInput($addteditors,$owner_id = -1)
-    {
-      $ret[] = lang('additionaleditors');
-      $text = '<input name="additional_editors" type="hidden" value=""/>';
-      $text .= '<select name="additional_editors[]" multiple="multiple" size="5">';
-
-      $gCms = cmsms();
-      $userops = $gCms->GetUserOperations();
-      $groupops = $gCms->GetGroupOperations();
-      $allusers = $userops->LoadUsers();
-      $allgroups = $groupops->LoadGroups();
-      foreach ($allgroups as $onegroup)
-	{
-	  if( $onegroup->id == 1 ) continue;
-	  $val = $onegroup->id*-1;
-	  $text .= '<option value="'.$val.'"';
-	  if( in_array($val,$addteditors) )
-	    {
-	      $text .= ' selected="selected"';
-	    }
-	  $text .= '>'.lang('group').': '.$onegroup->name."</option>";
-		   
-	}
-
-      foreach ($allusers as $oneuser)
-	{
-	  if ($oneuser->id != $owner_id && $oneuser->id != 1)
-	    {
-	      $text .= '<option value="'.$oneuser->id.'"';
-	      if (in_array($oneuser->id, $addteditors))
-		{
-		  $text .= ' selected="selected"';
+		if( !is_array($this->_attributes) ) return;
+		$tmp = array();
+		for( $i = 0; $i < count($this->_attributes); $i++ ) {
+			if( is_object($this->_attributes[$i]) && $this->_attributes[$i]->name == $name ) continue;
+			$tmp[] = $this->_attributes[$i];
 		}
-	      $text .= '>'.$oneuser->username.'</option>';
-	    }
+		$this->_attributes = $tmp;
+		$this->_prop_defaults[$name] = $dflt;
 	}
 
-      $text .= '</select>';
-      $ret[] = $text;
-      return $ret;
-    }
-
-
-    /**
-     * Provides an input element to display the list of additional editors.
-     * This method is usually called from within this object.
-     *
-     * @param mixed An optional array of additional editor id's (group ids specified with negative values)
-     * @return string The input element.
-     */
-    public function ShowAdditionalEditors($addteditors = '')
-    {
-      $ret = array();
-      if( $addteditors == '' )
+	/**
+	 * Add a property
+	 *
+	 * @since 1.11
+	 * @param string The property name
+	 * @param integer The property priority
+	 * @param string The tab for the property (see tab constants)
+	 * @param boolean required (wether the property is required)
+	 * @return void
+	 */
+	protected function AddProperty($name,$priority,$tab,$required = FALSE)
 	{
-	  $addteditors = $this->GetAdditionalEditors();
-	}
-      return self::GetAdditionalEditorInput($addteditors,$this->Owner());
-    }
+		$ob = new StdClass;
+		$ob->name = $name;
+		$ob->priority = $priority;
+		$ob->tab = $tab;
+		$ob->required = $required;
 
-    /**
-     * Indicates wether this content type can be the default page for a CMSMS website
-     *
-     * @abstract
-     * @returns boolean
-     */
-    public function IsDefaultPossible()
-    {
-      return FALSE;
-    }
+		if( !is_array($this->_attributes) ) $this->_attributes = array();
 
-    /**
-     * Set a flag indicating that we are adding a new content object and not editing an existing one
-     * This is usually called from a script that provides the ability to add content objects.
-     */
-    public function SetAddMode($flag = true)
-    {
-      $this->_add_mode = $flag;
-    }
-
-    /* private */
-    private function _handleRemovedBaseProperty($name,$member)
-    {
-      if( !is_array($this->_attributes) ) return FALSE;
-      if( !in_array($name,$this->_attributes) )
-	{
-	  if( isset($this->_prop_defaults[$name]) )
-	    {
-	      $this->$member = $this->_prop_defaults[$name];
-	      return TRUE;
-	    }
-	}
-      return FALSE;
-    }
-
-    /**
-     * @deprecated 
-     */
-    public function AddExtraProperty($name,$type = 'string')
-    {
-      return; // debug
-    }
-
-    /**
-     * Remove a property from the known property list.
-     * Specify a default value to use if the property is called.
-     *
-     * @param string The property name
-     * @param string The default value.
-     */
-    protected function RemoveProperty($name,$dflt)
-    {
-      if( !is_array($this->_attributes) ) return;
-      $tmp = array();
-      for( $i = 0; $i < count($this->_attributes); $i++ )
-	{
-	  if( is_array($this->_attributes[$i]) && $this->_attributes[$i][0] == $name )
-	    {
-	      continue;
-	    }
-	  $tmp[] = $this->_attributes[$i];
-	}
-      $this->_attributes = $tmp;
-      $this->_prop_defaults[$name] = $dflt;
-    }
-
-    /*
-     * Add a property that is directly associtated with a field in the content table.
-     *
-     * @param string The property name
-     * @param integer The priority
-     * @param boolean Whether this field is required for this content type
-     * @param string  (optional) unused.
-     */
-    protected function AddBaseProperty($name,$priority,$is_required = 0,$type = 'string')
-    {
-      if( !is_array($this->_attributes) )
-	{
-	  $this->_attributes = array();
+		$this->_attributes[] = $ob;
 	}
 
-      $this->_attributes[] = array($name,$priority,$is_required);
-    }
-
-    /*
-     * Alias for AddBaseProperty
-     */
-    protected function AddContentProperty($name,$priority,$is_required = 0,$type = 'string')
-    {
-      return $this->AddBaseProperty($name,$priority,$is_required,$type);
-    }
-
-
-    /*
-     * Given a string, see if it's a known property name.
-     *
-     * @param string The property name
-     * @return boolean
-     */
-    protected function is_known_property($str)
-    {
-      $tmp = array();
-      foreach( $this->_attributes as $one )
+	/**
+	 * Get all of the properties for this content object.  independent of wether the user is entitled to view them, or not.
+	 *
+	 * @since 2.0
+	 * @return array of stdclass objects
+	 */
+	public function GetProperties()
 	{
-	  $tmp[] = $one[0];
-	}
-	  
-      return in_array($str,$tmp);
-    }
-
-    /*
-     * Given the list of registered properties, cross reference with our
-     * basic attributes list, and figure out which ones should be displayed
-     *
-     * @return array of input elements of attributes that can be edited for this form.
-     */
-    protected function display_attributes($adding,$negative = 0)
-    {
-      // get our required attributes
-      $basic_attributes = array();
-      foreach( $this->_attributes as $one )
-	{
-	  if( $one[2] == 1 ) $basic_attributes[] = $one;
+		return $this->_SortProperties($this->_attributes);
 	}
 
-      // merge in preferred basic attributes
-      $tmp = get_site_preference('basic_attributes');
-      if( !empty($tmp) )
+	/*
+	 * Add a property that is directly associtated with a field in the content table.
+	 * @alias for AddProperty
+	 *
+	 * @param string The property name
+	 * @param integer The priority
+	 * @param boolean Whether this field is required for this content type
+	 * @param string  (optional) unused.
+	 * @deprecated
+	 */
+	protected function AddBaseProperty($name,$priority,$is_required = 0)
 	{
-	  $tmp = explode(',',$tmp);
-	  foreach( $tmp as $basic )
-	    {
-	      $found = NULL;
-	      foreach( $this->_attributes as $one )
-		{
-		  if( $one[0] == $basic ) {
-		    $found = $one;
-		    break;
-		  }
+		$this->AddProperty($name,$priority,self::TAB_OPTIONS,$is_required);
+	}
+
+	/*
+	 * Alias for AddBaseProperty
+	 *
+	 * @deprecated
+	 */
+	protected function AddContentProperty($name,$priority,$is_required = 0)
+	{
+		return $this->AddProperty($name,$priority,self::TAB_OPTIONS,$is_required);
+	}
+
+	/**
+	 * A method to display a single input element for an object basic, or extended property.
+	 *
+	 * @abstract
+	 * @param string The property name
+	 * @param boolean Wether or not we are in add or edit mode.
+	 * @return array consisting of two elements.  A label, and the input element.
+	 */
+	protected function display_single_element($one,$adding)
+	{
+		$gCms = cmsms();
+		$config = $gCms->GetConfig();
+
+		switch( $one ) {
+		case 'cachable':
+			$help = '&nbsp;'.cms_admin_utils::get_help_tag('core','help_content_cachable');
+			return array('<label for="in_cachable">'.lang('cachable').':</label>'.$help,
+						 '<input type="hidden" name="cachable" value="0"/><input id="in_cachable" class="pagecheckbox" type="checkbox" value="1" name="cachable"'.($this->mCachable?' checked="checked"':'').' />');
+
+		case 'title':
+			$help = '&nbsp;'.cms_admin_utils::get_help_tag('core','help_content_title');
+			return array('<label for="in_title">*'.lang('title').':</label>'.$help,
+						 '<input type="text" id="in_title" name="title" required="required" value="'.cms_htmlentities($this->mName).'" />');
+	      
+		case 'menutext':
+			$help = '&nbsp;'.cms_admin_utils::get_help_tag('core','help_content_menutext');
+			return array('<label for="in_menutext">*'.lang('menutext').':</label>'.$help,
+						 '<input type="text" name="menutext" id="in_menutext" required="required" value="'.cms_htmlentities($this->mMenuText).'" />');
+
+		case 'parent':
+			$contentops = $gCms->GetContentOperations();
+			$tmp = $contentops->CreateHierarchyDropdown($this->mId, $this->mParentId, 'parent_id', 0, 1, 0, 1,get_site_preference('listcontent_showtitle',true) );
+			if( empty($tmp) && !check_permission(get_userid(),'Manage All Content') )
+				return array('','<input type="hidden" name="parent_id" value="'.$this->mParentId.'" />');
+			$help = '&nbsp;'.cms_admin_utils::get_help_tag('core','help_content_parent');
+			if( !empty($tmp) ) return array('<label for="parent_id">*'.lang('parent').':</label>'.$help,$tmp);
+			break;
+
+		case 'active':
+			if( !$this->DefaultContent() ) {
+				$help = '&nbsp;'.cms_admin_utils::get_help_tag('core','help_content_active');
+				return array('<label for="id_active">'.lang('active').':</label>'.$help,'<input type="hidden" name="active" value="0"/><input class="pagecheckbox" type="checkbox" name="active" id="id_active" value="1"'.($this->mActive?' checked="checked"':'').' />');
+			}
+			break;
+
+		case 'showinmenu':
+			$help = '&nbsp;'.cms_admin_utils::get_help_tag('core','help_content_showinmenu');
+			return array('<label for="showinmenu">'.lang('showinmenu').':</label>'.$help,
+						 '<input type="hidden" name="showinmenu" value="0"/><input class="pagecheckbox" type="checkbox" value="1" name="showinmenu" id="showinmenu"'.($this->mShowInMenu?' checked="checked"':'').' />');
+
+		case 'target':
+			$text = '<option value="---">'.lang('none').'</option>';
+			$text .= '<option value="_blank"'.($this->GetPropertyValue('target')=='_blank'?' selected="selected"':'').'>_blank</option>';
+			$text .= '<option value="_parent"'.($this->GetPropertyValue('target')=='_parent'?' selected="selected"':'').'>_parent</option>';
+			$text .= '<option value="_self"'.($this->GetPropertyValue('target')=='_self'?' selected="selected"':'').'>_self</option>';
+			$text .= '<option value="_top"'.($this->GetPropertyValue('target')=='_top'?' selected="selected"':'').'>_top</option>';
+			$help = '&nbsp;'.cms_admin_utils::get_help_tag('core','help_content_target');
+			return array('<label for="target">'.lang('target').':</label>'.$help,
+						 '<select name="target" id="target">'.$text.'</select>');
+
+		case 'alias':
+			$help = '&nbsp;'.cms_admin_utils::get_help_tag('core','help_page_alias');
+			return array('<label for="alias">'.lang('pagealias').':</label>'.$help,
+						 '<input type="text" name="alias" id="alias" value="'.$this->mAlias.'" />');
+
+		case 'secure':
+			$opt = '';
+			if( $this->mSecure ) $opt = ' checked="checked"';
+			$str  = '<input type="hidden" name="secure" value="0"/>';
+			$str .= '<input type="checkbox" name="secure" id="secure" value="1"'.$opt.'/>';
+			$help = '&nbsp;'.cms_admin_utils::get_help_tag('core','help_content_secure');
+			return array('<label for="secure">'.lang('secure_page').':</label>'.$help,$str);
+
+		case 'page_url':
+			if( !$this->DefaultContent() ) {
+				$str = '<input type="text" name="page_url" id="page_url" value="'.$this->mURL.'" size="50" maxlength="255"/>';
+				$prompt = '<label for="page_url">'.lang('page_url').':</label>';
+				if( get_site_preference('content_mandatory_urls',0) ) $prompt = '*'.$prompt;
+				$help = '&nbsp;'.cms_admin_utils::get_help_tag('core','help_page_url');
+				return array($prompt.$help,$str);
+			}
+			break;
+
+		case 'image':
+			$dir = cms_join_path($config['image_uploads_path'],get_site_preference('content_imagefield_path'));
+			$data = $this->GetPropertyValue('image');
+			$dropdown = create_file_dropdown('image',$dir,$data,'jpg,jpeg,png,gif','',true,'','thumb_',1,1);
+			if( !$dropdown ) return;
+			$help = '&nbsp;'.cms_admin_utils::get_help_tag('core','help_content_image');
+			return array('<label for="image">'.lang('image').':</label>'.$help,$dropdown);
+
+		case 'thumbnail':
+			$dir = cms_join_path($config['image_uploads_path'],get_site_preference('content_thumbnailfield_path'));
+			$data = $this->GetPropertyValue('thumbnail');
+			$dropdown = create_file_dropdown('thumbnail',$dir,$data,'jpg,jpeg,png,gif','',true,'','thumb_',0,1);
+			if( !$dropdown ) return FALSE;
+			$help = '&nbsp;'.cms_admin_utils::get_help_tag('core','help_content_thumbnail');
+			return array('<label for="thumbnail">'.lang('thumbnail').':</label>'.$help,$dropdown);
+
+		case 'titleattribute':
+			$help = '&nbsp;'.cms_admin_utils::get_help_tag('core','help_content_titleattribute');
+			return array('<label for="titleattribute">'.lang('titleattribute').':</label>'.$help,
+						 '<input type="text" name="titleattribute" id="titleattribute" maxlength="255" size="80" value="'.cms_htmlentities($this->mTitleAttribute).'" />');
+
+		case 'accesskey':
+			$help = '&nbsp;'.cms_admin_utils::get_help_tag('core','help_content_accesskey');
+			return array('<label for="accesskey">'.lang('accesskey').':</label>'.$help,
+						 '<input type="text" name="accesskey" id="accesskey" maxlength="5" value="'.cms_htmlentities($this->mAccessKey).'" />');
+
+		case 'tabindex':
+			$help = '&nbsp;'.cms_admin_utils::get_help_tag('core','help_content_tabindex');
+			return array('<label for="tabindex">'.lang('tabindex').':</label>'.$help,
+						 '<input type="text" name="tabindex" id="tabindex" maxlength="5" value="'.cms_htmlentities($this->mTabIndex).'" />');
+
+		case 'extra1':
+			$help = '&nbsp;'.cms_admin_utils::get_help_tag('core','help_content_extra1');
+			return array('<label for="extra1">'.lang('extra1').':</label>'.$help,
+						 '<input type="text" name="extra1" id="extra1" maxlength="255" size="80" value="'.cms_htmlentities($this->GetPropertyValue('extra1')).'" />');
+
+		case 'extra2':
+			$help = '&nbsp;'.cms_admin_utils::get_help_tag('core','help_content_extra2');
+			return array('<label for="extra2">'.lang('extra2').':</label>'.$help,
+						 '<input type="text" name="extra2" id="extra2" maxlength="255" size="80" value="'.cms_htmlentities($this->GetPropertyValue('extra2')).'" />');
+	      
+		case 'extra3':
+			$help = '&nbsp;'.cms_admin_utils::get_help_tag('core','help_content_extra3');
+			return array('<label for="extra3">'.lang('extra3').':</label>'.$help,
+						 '<input type="text" name="extra3" id="extra3" maxlength="255" size="80" value="'.cms_htmlentities($this->GetPropertyValue('extra3')).'" />');
+
+		case 'owner':
+			$showadmin = cmsms()->GetContentOperations()->CheckPageOwnership(get_userid(), $this->Id());
+			$userops = $gCms->GetUserOperations();
+			if (!$adding && (check_permission(get_userid(),'Manage All Content') || $showadmin) ) {
+				$help = '&nbsp;'.cms_admin_utils::get_help_tag('core','help_content_owner');
+				return array('<label for="owner">'.lang('owner').':</label>'.$help, $userops->GenerateDropdown($this->Owner()));
+			}
+			break;
+
+		case 'additionaleditors':
+			// do owner/additional-editor stuff
+			if( $adding || check_permission(get_userid(),'Manage All Content') ||
+				cmsms()->GetContentOperations()->CheckPageOwnership(get_userid(),$this->Id()) ) {
+				return $this->ShowAdditionalEditors();
+			}
+			break;
+
+		default:
+			throw new CmsInvalidDataException('Attempt to display invalid property '.$one);
 		}
-	      if( $found )
-		{
-		  $basic_attributes[] = $found;
-		}
-	    }
 	}
+} // end of class
 
-      $attrs = $basic_attributes;
-      if( $negative )
-	{
-	  // build a new list of all properties... except those in the basic_attributes
-	  $attrs = array();
-	  foreach( $this->_attributes as $one )
-	    {
-	      $found = 0;
-	      foreach( $basic_attributes as $basic )
-		{
-		  if( $basic[0] == $one[0] )
-		    {
-		      $found = 1;
-		    }
-		}
-
-	      if( !$found )
-		{
-		  $attrs[] = $one;
-		}
-	    }
-	}
-
-      // remove any duplicates
-      $tmp = array();
-      foreach( $attrs as $one )
-	{
-	  $found = 0;
-	  foreach( $tmp as $t1 )
-	    {
-	      if( $one[0] == $t1[0] )
-		{
-		  $found = 1;
-		  break;
-		}
-	    }
-	  if( !$found )
-	    {
-	      $tmp[] = $one;
-	    }
-	}
-      $attrs = $tmp;
-
-      // sort the attributes on the 2nd element...
-      $fn = create_function('$a,$b','if( $a[1] < $b[1] ) return -1; else if( $a[1] == $b[1] ) return 0; else return $b;');
-      usort($attrs,$fn);
-
-      $tmp = $this->display_admin_attributes($attrs,$adding);
-      return $tmp;
-    }
-
-    /* private */
-    private function display_admin_attributes($attributelist,$adding)
-    {
-      // sort the attributes
-
-      $ret = array();
-      foreach( $attributelist as $one )
-	{
-	  $tmp = $this->display_single_element($one[0],$adding);
-	  if( is_array($tmp) )
-	    {
-	      $ret[] = $tmp;
-	    }
-	}
-      return $ret;
-    }
-
-    /**
-     * A method to display a single input element for an object basic, or extended property.
-     *
-     * @abstract
-     * @param string The property name
-     * @param boolean Wether or not we are in add or edit mode.
-     * @return array consisting of two elements.  A label, and the input element.
-     */
-    protected function display_single_element($one,$adding)
-    {
-      $gCms = cmsms();
-      $config = $gCms->GetConfig();
-
-      switch( $one )
-	{
-	case 'cachable':
-	  return array('<label for="in_cachable">'.lang('cachable').':</label>',
-		       '<input type="hidden" name="cachable" value="0"/><input id="in_cachable" class="pagecheckbox" type="checkbox" value="1" name="cachable"'.($this->mCachable?' checked="checked"':'').' />',lang('help_page_cachable'));
-	  break;
-	
-	case 'title':
-	  {
-	    return array('<label for="in_title">*'.lang('title').'</label>:','<input type="text" id="in_title" name="title" value="'.cms_htmlentities($this->mName).'" />');
-	  }
-	  break;
-	      
-	case 'menutext':
-	  {
-	    return array('<label for="in_menutext">*'.lang('menutext').'</label>:','<input type="text" name="menutext" id="in_menutext" value="'.cms_htmlentities($this->mMenuText).'" />');
-	  }
-	  break;
-	      
-	case 'parent':
-	  {
-	    $contentops = $gCms->GetContentOperations();
-	    $tmp = $contentops->CreateHierarchyDropdown($this->mId, $this->mParentId, 'parent_id', 0, 1, 0, 1,get_site_preference('listcontent_showtitle',true) );
-	    if( empty($tmp) && !check_permission(get_userid(),'Manage All Content') )
-	      return array('','<input type="hidden" name="parent_id" value="'.$this->mParentId.'" />');
-	    if( !empty($tmp) ) return array('<label for="parent_id">'.lang('parent').'</label>:',$tmp);
-	  }
-	  break;
-
-	case 'active':
-	  if( !$this->DefaultContent() )
-	    {
-	      return array('<label for="id_active">'.lang('active').'</label>:','<input type="hidden" name="active" value="0"/><input class="pagecheckbox" type="checkbox" name="active" id="id_active" value="1"'.($this->mActive?' checked="checked"':'').' />');
-	    }
-	  break;
-	      
-	case 'showinmenu':
-	  return array('<label for="showinmenu">'.lang('showinmenu').'</label>:','<input type="hidden" name="showinmenu" value="0"/><input class="pagecheckbox" type="checkbox" value="1" name="showinmenu" id="showinmenu"'.($this->mShowInMenu?' checked="checked"':'').' />');
-	  break;
-	      
-	case 'target':
-	  {
-	    $text = '<option value="---">'.lang('none').'</option>';
-	    $text .= '<option value="_blank"'.($this->GetPropertyValue('target')=='_blank'?' selected="selected"':'').'>_blank</option>';
-	    $text .= '<option value="_parent"'.($this->GetPropertyValue('target')=='_parent'?' selected="selected"':'').'>_parent</option>';
-	    $text .= '<option value="_self"'.($this->GetPropertyValue('target')=='_self'?' selected="selected"':'').'>_self</option>';
-	    $text .= '<option value="_top"'.($this->GetPropertyValue('target')=='_top'?' selected="selected"':'').'>_top</option>';
-	    return array('<label for="target">'.lang('target').'</label>:','<select name="target" id="target">'.$text.'</select>',
-			 lang('info_target'));
-		
-	  }
-	  break;
-	      
-	case 'alias':
-	  return array('<label for="alias">'.lang('pagealias').'</label>:','<input type="text" name="alias" id="alias" value="'.$this->mAlias.'" />',lang('help_page_alias'));
-	  break;
-	      
-	case 'secure':
-	  {
-	    $opt = '';
-	    if( $this->mSecure )
-	      {
-		$opt = ' checked="checked"';
-	      }
-	    $str  = '<input type="hidden" name="secure" value="0"/>';
-	    $str .= '<input type="checkbox" name="secure" id="secure" value="1"'.$opt.'/>';
-	    return array('<label for="secure">'.lang('secure_page').'</label>:',$str);
-	  }
-	  break;
-
-	case 'page_url':
-	  if( !$this->DefaultContent() )
-	    {
-	      $str = '<input type="text" name="page_url" id="page_url" value="'.$this->mURL.'" size="50" maxlength="255"/>';
-	      $prompt = '<label for="page_url">'.lang('page_url').'</label>:';
-	      if( get_site_preference('content_mandatory_urls',0) )
-		{
-		  $prompt = '*'.$prompt;
-		}
-	      return array($prompt,$str,lang('help_page_url'));
-	    }
-	  break;
-
-	case 'image':
-	  {
-	    $dir = cms_join_path($config['image_uploads_path'],get_site_preference('content_imagefield_path'));
-	    $data = $this->GetPropertyValue('image');
-	    $dropdown = create_file_dropdown('image',$dir,$data,'jpg,jpeg,png,gif','',true,'','thumb_',1,1);
-	    if( !$dropdown ) return;
-	    return array('<label for="image">'.lang('image').'</label>:',$dropdown);
-	  }
-	  break;
-	      
-	case 'thumbnail':
-	  {
-	    $dir = cms_join_path($config['image_uploads_path'],get_site_preference('content_thumbnailfield_path'));
-	    $data = $this->GetPropertyValue('thumbnail');
-	    $dropdown = create_file_dropdown('thumbnail',$dir,$data,'jpg,jpeg,png,gif','',true,'','thumb_',0,1);
-	    if( !$dropdown ) return FALSE;
-	    return array('<label for="thumbnail">'.lang('thumbnail').'</label>:',$dropdown);
-	  }
-	  break;
-	      
-	case 'titleattribute':
-	  {
-	    return array('<label for="titleattribute">'.lang('titleattribute').'</label>:','<input type="text" name="titleattribute" id="titleattribute" maxlength="255" size="80" value="'.cms_htmlentities($this->mTitleAttribute).'" />');
-	  }
-	  break;
-	      
-	case 'accesskey':
-	  {
-	    return array('<label for="accesskey">'.lang('accesskey').'</label>:','<input type="text" name="accesskey" id="accesskey" maxlength="5" value="'.cms_htmlentities($this->mAccessKey).'" />');
-	  }
-	  break;
-
-	case 'tabindex':
-	  {
-	    return array('<label for="tabindex">'.lang('tabindex').'</label>:','<input type="text" name="tabindex" id="tabindex" maxlength="5" value="'.cms_htmlentities($this->mTabIndex).'" />');
-	  }
-	  break;
-	      
-	case 'extra1':
-	  {
-	    return array('<label for="extra1">'.lang('extra1').'</label>:','<input type="text" name="extra1" id="extra1" maxlength="255" size="80" value="'.cms_htmlentities($this->GetPropertyValue('extra1')).'" />');
-	  }
-	  break;
-	      
-	case 'extra2':
-	  {
-	    return array('<label for="extra2">'.lang('extra2').'</label>:','<input type="text" name="extra2" id="extra2" maxlength="255" size="80" value="'.cms_htmlentities($this->GetPropertyValue('extra2')).'" />');
-	  }
-	  break;
-	      
-	case 'extra3':
-	  {
-	    return array('<label for="extra3">'.lang('extra3').'</label>:','<input type="text" name="extra3" id="extra3" maxlength="255" size="80" value="'.cms_htmlentities($this->GetPropertyValue('extra3')).'" />');
-	  }
-	  break;
-
-	case 'owner':
-	  {
-	    $showadmin = check_ownership(get_userid(), $this->Id());
-	    $userops = $gCms->GetUserOperations();
-	    if (!$adding && ($showadmin || check_permission(get_userid(),'Manage All Content')) )
-	      {
-		return array('<label for="owner">'.lang('owner').'</label>:', $userops->GenerateDropdown($this->Owner()));
-	      }
-	  }
-	  break;
-
-	case 'additionaleditors':
-	  {
-	    // do owner/additional-editor stuff
-	    if( $adding || check_ownership(get_userid(),$this->Id()) || check_permission(get_userid(),'Manage All Content'))
-	      {
-		return $this->ShowAdditionalEditors();
-	      }
-	  }
-	  break;
-
-	default:
-	  stack_trace();
-	  die('unknown property '.$one);
-	}
-    }
-
-    protected function SetError($str)
-    {
-      // we don't need this being serialized.
-      cms_utils::set_app_data('content_error',$str);
-    }
-
-    public function GetError()
-    {
-      $str = cms_utils::get_app_data('content_error');
-      return $str;
-    }
-}
+# vim:ts=4 sw=4 noet
 ?>

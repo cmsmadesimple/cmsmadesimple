@@ -34,12 +34,13 @@ class Group
 {
 	var $id;
 	var $name;
+	var $description;
 	var $active;
 
 	/**
 	 * Constructor
 	 */
-	function Group()
+	function __construct()
 	{
 		$this->SetInitialValues();
 	}
@@ -54,6 +55,7 @@ class Group
 	{
 		$this->id = -1;
 		$this->name = '';
+		$this->description = '';
 		$this->active = false;
 	}
 
@@ -68,15 +70,12 @@ class Group
 		
 		$groupops = cmsms()->GetGroupOperations();
 		
-		if ($this->id > -1)
-		{
+		if ($this->id > -1) {
 			$result = $groupops->UpdateGroup($this);
 		}
-		else
-		{
+		else {
 			$newid = $groupops->InsertGroup($this);
-			if ($newid > -1)
-			{
+			if ($newid > -1) {
 				$this->id = $newid;
 				$result = true;
 			}
@@ -95,18 +94,71 @@ class Group
 	{
 		$result = false;
 
-		if ($this->id > -1)
-		{
+		if ($this->id > -1) {
 			$groupops = cmsms()->GetGroupOperations();
 			$result = $groupops->DeleteGroupByID($this->id);
-			if ($result)
-			{
+			if ($result) {
 				$this->SetInitialValues();
 			}
 		}
 
 		return $result;
 	}
+
+	/**
+	 * Check if the group has the specified permission.
+	 *
+	 * @since 1.11
+	 * @author Robert Campbell
+	 * @internal
+	 * @access private
+	 * @ignore
+	 * @param mixed Either the permission id, or permission name to test.
+	 * @return boolean True if the group has the specified permission, false otherwise.
+	 */
+	public function HasPermission($perm)
+	{
+		if( $this->id <= 0 ) return FALSE;
+		$groupops = cmsms()->GetGroupOperations();
+		return $groupops->CheckPermission($this->id,$perm);
+	}
+
+	/**
+	 * Ensure this group has the specified permission.
+	 *
+	 * @since 1.11
+	 * @author Robert Campbell
+	 * @internal
+	 * @access private
+	 * @ignore
+	 * @param mixed Either the permission id, or permission name to test.
+	 */
+	public function GrantPermission($perm)
+	{
+		if( $this->id <= 0 ) return;
+		if( $this->HasPermission($perm) ) return;
+		$groupops = cmsms()->GetGroupOperations();
+		return $groupops->GrantPermission($this->id,$perm);
+	}
+
+	/**
+	 * Ensure this group does not have the specified permission.
+	 *
+	 * @since 1.11
+	 * @author Robert Campbell
+	 * @internal
+	 * @access private
+	 * @ignore
+	 * @param mixed Either the permission id, or permission name to test.
+	 */
+	public function RemovePermission($perm)
+	{
+		if( $this->id <= 0 ) return;
+		if( !$this->HasPermission($perm) ) return;
+		$groupops = cmsms()->GetGroupOperations();
+		return $groupops->RemovPermission($this->id,$perm);
+	}
+
 }
 
 # vim:ts=4 sw=4 noet
