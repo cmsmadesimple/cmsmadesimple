@@ -108,12 +108,47 @@ abstract class CMSModule
   private $__current_tab;
 
   /**
+   * ------------------------------------------------------------------
+   * Magic methods
+   * ------------------------------------------------------------------
+   */   
+  
+  /**
+   * Constructor
+   *
+   */
+  public function __construct()
+  {
+    global $CMS_STYLESHEET;
+    global $CMS_ADMIN_PAGE;
+    global $CMS_MODULE_PAGE;
+    global $CMS_INSTALL_PAGE;
+
+    if( !isset($CMS_ADMIN_PAGE) && !isset($CMS_STYLESHEET) && !isset($CMS_INSTALL_PAGE)) {
+	
+      $this->SetParameterType('assign',CLEAN_STRING);
+      $this->SetParameterType('module',CLEAN_STRING);
+      $this->SetParameterType('lang',CLEAN_STRING); // this will be ignored.
+      $this->SetParameterType('returnid',CLEAN_INT);
+      $this->SetParameterType('action',CLEAN_STRING);
+      $this->SetParameterType('showtemplate',CLEAN_STRING);
+      $this->SetParameterType('inline',CLEAN_INT);
+
+      $this->InitializeFrontend();
+    }
+    else if( isset($CMS_ADMIN_PAGE) && !isset($CMS_STYLESHEET) && !isset($CMS_INSTALL_PAGE) ) {
+	
+      $this->InitializeAdmin();
+    }
+  }
+  
+  /**
    * Magic methods. This handles the deprecated. $this->db etc, syntax.
    *
    * @param string The key to get.  possible values are cms,db,smarty.config
    * @deprecated
    */
-  public function &__get($key)
+  public function __get($key)
   {
     switch( $key ) {
     case 'cms':
@@ -129,45 +164,31 @@ abstract class CMSModule
       return cmsms()->GetDb();
     }
 
-    $tmp = null;
-    return $tmp;
+    return null;
   }
 
   /**
-   * Constructor
+   * @since 2.0
    *
-   */
-  public function __construct()
+   * @ignore   
+   */  
+  public function __call($name, $args)
   {
-    global $CMS_STYLESHEET;
-    global $CMS_ADMIN_PAGE;
-    global $CMS_MODULE_PAGE;
-    global $CMS_INSTALL_PAGE;
-
-    if( !isset($CMS_ADMIN_PAGE) && !isset($CMS_STYLESHEET) 
-	&& !isset($CMS_INSTALL_PAGE)) {
-      $this->SetParameterType('assign',CLEAN_STRING);
-      $this->SetParameterType('module',CLEAN_STRING);
-      $this->SetParameterType('lang',CLEAN_STRING); // this will be ignored.
-      $this->SetParameterType('returnid',CLEAN_INT);
-      $this->SetParameterType('action',CLEAN_STRING);
-      $this->SetParameterType('showtemplate',CLEAN_STRING);
-      $this->SetParameterType('inline',CLEAN_INT);
-
-      $this->InitializeFrontend();
-    }
-    else if( isset($CMS_ADMIN_PAGE) && !isset($CMS_STYLESHEET) && !isset($CMS_INSTALL_PAGE) ) {
-      $this->InitializeAdmin();
-    }
-  }
-
-
+    return FALSE;
+  }  
+  
+  /**
+   * ------------------------------------------------------------------
+   * Load internals.
+   * ------------------------------------------------------------------
+   */  
+  
   /**
    * Private
    *
    * @ignore
    */
-  function LoadTemplateMethods()
+  public function LoadTemplateMethods()
   {
     if (!$this->modtemplates) {
       require_once(cms_join_path(dirname(__FILE__), 'module_support', 'modtemplates.inc.php'));
@@ -175,13 +196,12 @@ abstract class CMSModule
     }
   }
 
-	
   /**
    * Private
    *
    * @ignore
    */
-  function LoadFormMethods()
+  public function LoadFormMethods()
   {
     if (!$this->modform) {
       require_once(cms_join_path(dirname(__FILE__), 'module_support', 'modform.inc.php'));
@@ -194,7 +214,7 @@ abstract class CMSModule
    *
    * @ignore
    */
-  function LoadRedirectMethods()
+  public function LoadRedirectMethods()
   {
     if (!$this->modredirect) {
       require_once(cms_join_path(dirname(__FILE__), 'module_support', 'modredirect.inc.php'));
@@ -207,7 +227,7 @@ abstract class CMSModule
    *
    * @ignore
    */
-  function LoadMiscMethods()
+  public function LoadMiscMethods()
   {
     if (!$this->modmisc) {
       require_once(cms_join_path(dirname(__FILE__), 'module_support', 'modmisc.inc.php'));
@@ -363,7 +383,7 @@ abstract class CMSModule
    * @abstract
    * @return string The about page HTML text.
    */
-  function GetAbout()
+  public function GetAbout()
   {
     $this->LoadMiscMethods();
     return cms_module_GetAbout($this);
@@ -388,7 +408,7 @@ abstract class CMSModule
    * @abstract
    * @return string The name of the module.
    */
-  function GetName()
+  public function GetName()
   {
     return get_class($this);
   }
@@ -428,7 +448,7 @@ abstract class CMSModule
    * @abstract
    * @return string
    */
-  function GetFriendlyName()
+  public function GetFriendlyName()
   {
     return $this->GetName();
   }
@@ -439,10 +459,7 @@ abstract class CMSModule
    * @abstract
    * @return string
    */
-  function GetVersion()
-  {
-    return '0.0.0.1';
-  }
+  abstract public function GetVersion();
 
   /**
    * Returns the minimum version necessary to run this version of the module.
@@ -450,7 +467,7 @@ abstract class CMSModule
    * @abstract
    * @return string
    */
-  function MinimumCMSVersion()
+  public function MinimumCMSVersion()
   {
     global $CMS_VERSION;
     return $CMS_VERSION;
@@ -463,7 +480,7 @@ abstract class CMSModule
    * @deprecated
    * @return string
    */
-  function MaximumCMSVersion()
+  public function MaximumCMSVersion()
   {
     global $CMS_VERSION;
     return $CMS_VERSION;
@@ -478,7 +495,7 @@ abstract class CMSModule
    * @abstract
    * @return string Help HTML Text.
    */
-  function GetHelp()
+  public function GetHelp()
   {
     return '';
   }
@@ -490,7 +507,7 @@ abstract class CMSModule
    *
    * @return string XHTML text
    */
-  function GetHeaderHTML()
+  public function GetHeaderHTML()
   {
     return '';
   }
@@ -503,7 +520,7 @@ abstract class CMSModule
    * @param  array The input request.  This can be used to test conditions wether or not admin output should be suppressed.
    * @return boolean
    */
-  function SuppressAdminOutput(&$request)
+  public function SuppressAdminOutput(&$request)
   {
     return false;
   }
@@ -675,9 +692,7 @@ abstract class CMSModule
    * @deprecated
    * @return void
    */
-  function SetParameters()
-  {
-  }
+  function SetParameters() {}
 
   /**
    * Called from within the constructor, ONLY for frontend module 
@@ -792,7 +807,7 @@ abstract class CMSModule
    * is not defined, use en_US.
    * @return string
    */
-  function GetDescription($lang = 'en_US')
+  public function GetDescription($lang = 'en_US')
   {
     return '';
   }
@@ -803,7 +818,7 @@ abstract class CMSModule
    * @abstract
    * @return string
    */
-  function GetAdminDescription()
+  public function GetAdminDescription()
   {
     return '';
   }
@@ -814,7 +829,7 @@ abstract class CMSModule
    * @abstract
    * @return boolean
    */
-  function IsAdminOnly()
+  public function IsAdminOnly()
   {
     return false;
   }
@@ -824,7 +839,7 @@ abstract class CMSModule
    *
    * @return string HTML text of the changelog.
    */
-  function GetChangeLog()
+  public function GetChangeLog()
   {
     return '';
   }
@@ -835,7 +850,7 @@ abstract class CMSModule
    * @abstract
    * @return string The name of the author.
    */
-  function GetAuthor()
+  public function GetAuthor()
   {
     return '';
   }
@@ -846,7 +861,7 @@ abstract class CMSModule
    * @abstract
    * @return string The email address of the author.
    */
-  function GetAuthorEmail()
+  public function GetAuthorEmail()
   {
     return '';
   }
@@ -973,7 +988,7 @@ abstract class CMSModule
    * @abstract
    * @return boolean
    */
-  function HasContentType()
+  public function HasContentType()
   {
     return FALSE;
   }
@@ -1011,7 +1026,7 @@ abstract class CMSModule
    * @deprecated
    * @return object
    */
-  function GetContentTypeInstance()
+  public function GetContentTypeInstance()
   {
     return FALSE;
   }
@@ -1035,7 +1050,7 @@ abstract class CMSModule
    * @abstract
    * @return mixed FALSE indicates no error.  Any other value will be used as an error message.
    */
-  function Install()
+  public function Install()
   {
     $filename = dirname(dirname(dirname(__FILE__))) . '/modules/'.$this->GetName().'/method.install.php';
     if (@is_file($filename)) {
@@ -1060,7 +1075,7 @@ abstract class CMSModule
    * @abstract
    * @return XHTML Text
    */
-  function InstallPostMessage()
+  public function InstallPostMessage()
   {
     return FALSE;
   }
@@ -1077,7 +1092,7 @@ abstract class CMSModule
    * @abstract
    * @return mixed FALSE indicates that the module uninstalled correctly, any other value indicates an error message.
    */
-  function Uninstall()
+  public function Uninstall()
   {
     $filename = dirname(dirname(dirname(__FILE__))) . '/modules/'.$this->GetName().'/method.uninstall.php';
     if (@is_file($filename)) {
@@ -1106,7 +1121,7 @@ abstract class CMSModule
    * @abstract
    * @return boolean whether the core may remove all module events, event handles, module templates, and preferences on uninstall (defaults to true)
    */
-  function AllowUninstallCleanup()
+  public function AllowUninstallCleanup()
   {
     return true;
   }
@@ -1118,7 +1133,7 @@ abstract class CMSModule
    * @abstract
    * @return XHTML Text, or FALSE.
    */
-  function UninstallPreMessage()
+  public function UninstallPreMessage()
   {
     return FALSE;
   }
@@ -1129,7 +1144,7 @@ abstract class CMSModule
    * @abstract
    * @return XHTML Text, or FALSE
    */
-  function UninstallPostMessage()
+  public function UninstallPostMessage()
   {
     return FALSE;
   }
@@ -1149,7 +1164,7 @@ abstract class CMSModule
    * @param string The version we are upgrading to
    * @return boolean
    */
-  function Upgrade($oldversion, $newversion)
+  public function Upgrade($oldversion, $newversion)
   {
     $filename = dirname(dirname(dirname(__FILE__))) . '/modules/'.$this->GetName().'/method.upgrade.php';
     if (@is_file($filename)) {
@@ -1175,7 +1190,7 @@ abstract class CMSModule
    * @abstract
    * @return boolean
    */
-  function AllowAutoInstall()
+  public function AllowAutoInstall()
   {
     return TRUE;
   }
@@ -1190,7 +1205,7 @@ abstract class CMSModule
    * @abstract
    * @return boolean
    */
-  function AllowAutoUpgrade()
+  public function AllowAutoUpgrade()
   {
     return TRUE;
   }
@@ -1203,7 +1218,7 @@ abstract class CMSModule
    * @abstract
    * @return array
    */
-  function GetDependencies()
+  public function GetDependencies()
   {
     return array();
   }
@@ -1252,7 +1267,7 @@ abstract class CMSModule
    * @abstract
    * @return boolean
    */
-  function HasAdmin()
+  public function HasAdmin()
   {
     return false;
   }
@@ -1267,7 +1282,7 @@ abstract class CMSModule
    * @abstract
    * @return string
    */
-  function GetAdminSection()
+  public function GetAdminSection()
   {
     return 'extensions';
   }
@@ -1287,6 +1302,7 @@ abstract class CMSModule
 
     $out = array();
     $out[] = CmsAdminMenuItem::from_module($this);
+	
     return $out;
   }
 
@@ -1302,21 +1318,9 @@ abstract class CMSModule
    * @abstract
    * @return boolean
    */
-  function VisibleToAdminUser()
+  public function VisibleToAdminUser()
   {
     return true;
-  }
-
-  /**
-   * Returns true if the module should be treated as a content module.
-   * Returns false by default.
-   *
-   * @abstract
-   * @return boolean
-   */
-  function IsContentModule()
-  {
-    return false;
   }
 
   /**
@@ -1326,18 +1330,7 @@ abstract class CMSModule
    * @abstract
    * @return boolean
    */
-  function IsPluginModule()
-  {
-    return false;
-  }
-
-  /**
-   * Returns true if the module acts as a soap server
-   *
-   * @abstract
-   * @return boolean
-   */
-  function IsSoapModule()
+  public function IsPluginModule()
   {
     return false;
   }
@@ -1380,12 +1373,6 @@ abstract class CMSModule
 
   /**
    * ------------------------------------------------------------------
-   * HTML Blob / GCB Related Functions
-   * ------------------------------------------------------------------
-   */
-
-  /**
-   * ------------------------------------------------------------------
    * Module capabilities, a new way of checking what a module can do
    * ------------------------------------------------------------------
    */
@@ -1398,7 +1385,7 @@ abstract class CMSModule
    * @param associative array further params to get more detailed info about the capabilities. Should be syncronized with other modules of same type
    * @return boolean
    */
-  function HasCapability($capability, $params=array())
+  public function HasCapability($capability, $params = array())
   {
     return false;
   }
@@ -1410,7 +1397,7 @@ abstract class CMSModule
    * @abstract
    * @return array of CmsRegularTask objects, or one object.  NULL if not handled.
    */
-  function get_tasks()
+  public function get_tasks()
   {
     return FALSE;
   }
@@ -1431,7 +1418,7 @@ abstract class CMSModule
    * @param string The html-code of the page before replacing SyntaxHighlighter-stuff
    * @return string
    */
-  function SyntaxGenerateHeader($htmlresult='')
+  public function SyntaxGenerateHeader($htmlresult='')
   {
     return '';
   }
@@ -1451,7 +1438,7 @@ abstract class CMSModule
    * @param string The html-code of the page before replacing WYSIWYG-stuff
    * @return string
    */
-  function WYSIWYGGenerateHeader($htmlresult='')
+  public function WYSIWYGGenerateHeader($htmlresult='')
   {
     return '';
   }
@@ -1481,7 +1468,7 @@ abstract class CMSModule
    * @param integer The current page id that is being displayed.
    * @return string output XHTML.
    */
-  function DoAction($name, $id, $params, $returnid='')
+  public function DoAction($name, $id, $params, $returnid='')
   {
 	  if( $returnid == '' ) {
 		  if( isset($params['__activetab']) ) $this->SetCurrentTab(trim($params['__activetab']));
@@ -2363,7 +2350,7 @@ abstract class CMSModule
    * @param string The optional text or XHTML contents of the generated link
    * @return string
    */
-  function CreateContentLink($pageid, $contents='')
+  public function CreateContentLink($pageid, $contents='')
   {
     $this->LoadFormMethods();
     return cms_module_CreateContentLink($this, $pageid, $contents);
@@ -2381,7 +2368,7 @@ abstract class CMSModule
    * @param boolean A flag to determine if only the href section should be returned
    * @return string
    */
-  function CreateReturnLink($id, $returnid, $contents='', $params=array(), $onlyhref=false)
+  public function CreateReturnLink($id, $returnid, $contents='', $params=array(), $onlyhref=false)
   {
     $this->LoadFormMethods();
     return cms_module_CreateReturnLink($this, $id, $returnid, $contents, $params, $onlyhref);
@@ -2404,7 +2391,7 @@ abstract class CMSModule
    * @param mixed  An assoiciative array of params, or null
    * @param string The action name (if not specified, defaultadmin is assumed)
    */
-  function RedirectToAdminTab($tab = '',$params = '',$action = '')
+  public function RedirectToAdminTab($tab = '',$params = '',$action = '')
   {
     if( $tab == '' ) if( $this->__current_tab ) $tab = $this->__current_tab;
     if( $params == '' ) $params = array();
@@ -2423,7 +2410,7 @@ abstract class CMSModule
    * @param string An array of params that should be inlucded in the URL of the link.	 These should be in a $key=>$value format.
    * @param boolean A flag to determine if actions should be handled inline (no moduleinterface.php -- only works for frontend)
    */
-  function RedirectForFrontEnd($id, $returnid, $action, $params = array(), $inline = true )
+  public function RedirectForFrontEnd($id, $returnid, $action, $params = array(), $inline = true )
   {
     return $this->Redirect($id, $action, $returnid, $params, $inline );
   }
@@ -2437,7 +2424,7 @@ abstract class CMSModule
    * @param string An array of params that should be inlucded in the URL of the link.	 These should be in a $key=>$value format.
    * @param boolean A flag to determine if actions should be handled inline (no moduleinterface.php -- only works for frontend)
    */
-  function Redirect($id, $action, $returnid='', $params=array(), $inline=false)
+  public function Redirect($id, $action, $returnid='', $params=array(), $inline=false)
   {
     if( $returnid == '' ) {
       if( is_array($this->__errors) && count($this->__errors) ) $params['__errors'] = implode('::err::',$this->__errors);
@@ -2453,7 +2440,7 @@ abstract class CMSModule
    * @param string php script to redirect to
    * @param array  optional array of url parameters
    */
-  function RedirectToAdmin($page,$params = array())
+  public function RedirectToAdmin($page,$params = array())
   {
     $this->LoadRedirectMethods();
     return cms_module_RedirectToAdmin($this,$page,$params);
@@ -2467,7 +2454,7 @@ abstract class CMSModule
    * @param string Content id to redirect to.
    * @return void
    */
-  function RedirectContent($id)
+  public function RedirectContent($id)
   {
     redirect_to_alias($id);
   }
@@ -2723,6 +2710,7 @@ abstract class CMSModule
    *
    * @final
    * @return array
+   * @deprecated
    */
   final public function ListUserTags()
   {
@@ -2738,6 +2726,7 @@ abstract class CMSModule
    * @param string Name of the user defined tag
    * @param array  Parameters for the user defined tag.
    * @return array
+   * @deprecated
    */
   final public function CallUserTag($name, $params = array())
   {
@@ -2870,7 +2859,7 @@ abstract class CMSModule
    * @abstract
    * @returns string css text.
    */
-  function AdminStyle()
+  public function AdminStyle()
   {
     return '';
   }
@@ -2882,7 +2871,7 @@ abstract class CMSModule
    * @param string Value to set the content-type header too
    * @return void
    */
-  function SetContentType($contenttype)
+  public function SetContentType($contenttype)
   {
     cmsms()->set_content_type($contenttype);
   }
@@ -2910,7 +2899,7 @@ abstract class CMSModule
    * @param message - Message to be shown
    * @return string
    */
-  function ShowMessage($message)
+  public function ShowMessage($message)
   {
     $theme = cms_utils::get_theme_object();
     if( is_object($theme) ) return $theme->ShowMessage($message);
@@ -2939,7 +2928,7 @@ abstract class CMSModule
    * @param errors - array or string of errors to be shown
    * @return string
    */
-  function ShowErrors($errors)
+  public function ShowErrors($errors)
   {
     $theme = cms_utils::get_theme_object();
     if( is_object($theme) ) return $theme->ShowErrors($errors);
@@ -3117,7 +3106,7 @@ abstract class CMSModule
    * @param array  Array of parameters provided with the event.
    * @return boolean
    */
-  function DoEvent( $originator, $eventname, &$params )
+  public function DoEvent( $originator, $eventname, &$params )
   {
     if ($originator != '' && $eventname != '') {
 		$filename = dirname(dirname(dirname(__FILE__))) . '/modules/'.$this->GetName().'/event.' 
@@ -3143,7 +3132,7 @@ abstract class CMSModule
    * @param string The name of the event
    * @return string
    */
-  function GetEventDescription( $eventname )
+  public function GetEventDescription( $eventname )
   {
     return "";
   }
@@ -3158,7 +3147,7 @@ abstract class CMSModule
    * @param string The name of the event
    * @return string 
    */
-  function GetEventHelp( $eventname )
+  public function GetEventHelp( $eventname )
   {
     return "";
   }
@@ -3171,7 +3160,7 @@ abstract class CMSModule
    * @abstract
    * @return boolean
    */
-  function HandlesEvents()
+  public function HandlesEvents()
   {
     return false;
   }
@@ -3225,18 +3214,6 @@ abstract class CMSModule
   }
 	
   /**
-   * Returns the output the module wants displayed in the dashboard
-   * 
-   * @abstract
-   * @return string dashboard-content
-   */
-  function GetDashboardOutput() 
-  {
-    return '';
-  }
-
-
-  /**
    * Returns the output the module wants displayed in the notification area
    * 
    * @abstract
@@ -3245,7 +3222,7 @@ abstract class CMSModule
    * html, which indicates the text to display for the Notification.  
    * Also supports returning an array of stdclass objects.
    */
-  function GetNotificationOutput($priority=2) 
+  public function GetNotificationOutput($priority=2) 
   {
     return '';
   }
