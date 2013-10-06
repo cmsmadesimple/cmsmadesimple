@@ -42,7 +42,7 @@ final class cms_mailer
 
   public function __construct()
   {
-    $dir = dirname(__DIR__).'/phpmailer';
+    $dir = dirname(__DIR__).'/phpmailer/';
     require_once($dir.'/class.phpmailer.php');
 
     $this->_mailer = new PHPMailer;
