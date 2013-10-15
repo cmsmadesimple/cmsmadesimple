@@ -494,7 +494,7 @@ $(document).ready(function(){
 	<p class="pageinput">
           <select id="safemodewarn" name="disablesafemodewarning">
           {cms_yesno selected=$disablesafemodewarning}
-          </select>&nbsp;{cms_help key2='settings_disablesafemodewarn'}n
+          </select>&nbsp;{cms_help key2='settings_disablesafemodewarn'}
       </div>
       <div class="pageoverflow">
 	<p class="pagetext"><label for="notifications">{lang('admin_enablenotifications')}:</label></p>

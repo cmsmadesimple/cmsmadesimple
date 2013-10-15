@@ -211,7 +211,3 @@ jQuery(document).ready(function(){
     <a class="pageback" href="{$backurl}">&#171; {'back'|lang}</a>
   </p>
 </div>
-
-<div style="display: none;">{strip}
-  <div id="help_username" title="{'help'|lang}">{'help_myaccount_username'|lang}</div>
-{/strip}</div>

@@ -853,12 +853,6 @@ $lang['help_function_contact_form'] = <<<EOT
   <p>You can use the module FormBuilder instead.</p>
 EOT;
 
-$lang['help_function_cms_action_url'] = <<<EOT
-
-	TODO
-
-EOT;
-
 $lang['help_function_cms_versionname'] = <<<EOT
 	<h3>What does this do?</h3>
 	<p>This tag is used to insert the current version name of CMS into your template or page.  It doesn't display any extra besides the version name.</p>
@@ -911,12 +905,6 @@ $lang['help_function_cms_selflink'] = <<<EOT
 		<li><em>(optional)</em> <tt>imageonly</tt> - If using an image, whether to suppress display of text links. If you want no text in the link at all, also set lang=0 to suppress the label. <strong>Example:</strong> {cms_selflink dir=&quot;next&quot; image=&quot;next.png&quot; text=&quot;Next&quot; imageonly=1}</li>
         <li><em>(optional)</em> <tt>assign</tt> - Assign the results to the named smarty variable.</li>
 		</ul>
-EOT;
-
-$lang['help_function_cms_textarea'] = <<<EOT
-
-	TODO
-
 EOT;
 
 $lang['help_function_cms_module'] = <<<EOT

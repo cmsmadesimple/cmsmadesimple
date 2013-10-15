@@ -90,7 +90,7 @@ TODO
 <div id="stylesheet_list">
   {foreach from=$stylesheets item='one' name='css'}
   <h3><a href="#" rel="css_{$smarty.foreach.css.index}" class="stylesheet_view">{$one.name}</a></h3>
-  <div><p>{$one.desc|default:$mod->Lang('info_nodescription')}}</p>
+  <div><p>{$one.desc|default:$mod->Lang('info_nodescription')}</p>
     <div id="css_{$smarty.foreach.css.index}" title="{$one.name}" style="display: none;"><textarea>{$one.data|cms_escape}</textarea></div>
   </div>
   {/foreach}

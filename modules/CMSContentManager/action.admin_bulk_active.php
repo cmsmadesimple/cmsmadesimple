@@ -40,7 +40,7 @@ if( !$this->CheckPermission('Manage All Content') ) {
   $this->SetError($this->Lang('error_bulk_permission'));
   $this->RedirectToAdminTab();
 }
-wif( !isset($params['multicontent']) ) {
+if( !isset($params['multicontent']) ) {
   $this->SetError($this->Lang('error_missingparam'));
   $this->RedirectToAdminTab();
 }
