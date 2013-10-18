@@ -46,16 +46,24 @@ function smarty_function_cms_pageoptions($params,&$template)
 
   $list = array_unique($list);
   sort($list);
+
+  $bare = false;
+  if( isset($params['bare']) ) $bare = cms_to_bool($params['bare']);
   
-  $out = '';
-  $fmt = '<option value="%d">%s</option>';
-  $fmt2 = '<option value="%d" selected="selected">%s</option>';
-  foreach( $list as $pagenum ) {
-    if( $pagenum == $curpage ) {
-      $out .= sprintf($fmt2,$pagenum,$pagenum);
-    }
-    else {
-      $out .= sprintf($fmt,$pagenum,$pagenum);
+  if ( $bare ) {
+    $out = $list;
+  }
+  else {
+    $out = '';
+    $fmt = '<option value="%d">%s</option>';
+    $fmt2 = '<option value="%d" selected="selected">%s</option>';
+    foreach( $list as $pagenum ) {
+      if( $pagenum == $curpage ) {
+	$out .= sprintf($fmt2,$pagenum,$pagenum);
+      }
+      else {
+	$out .= sprintf($fmt,$pagenum,$pagenum);
+      }
     }
   }
 

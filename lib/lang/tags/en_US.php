@@ -161,13 +161,14 @@ EOT;
 
 $lang['help_function_cms_pageoptions'] = <<<EOT
 <h3>What does this do?</h3>
- <p>This is an admin only plugin used to generate a sequence of &lt;option&gt; tags for a dropdown list that represent page numbers in a pagination.</p>
+ <p>This is a simple plugin to generate a sequence of &lt;option&gt; tags for a dropdown list that represent page numbers in a pagination.</p>
  <p>Given the number of pages, and the current page this plugin will generate a list of page numbers that allow quick navigation to a subset of the pages.</p>
 <h3>What parameters does it take?</h3>
   <ul>
     <li>numpages - <strong>required integer</strong> - The total number of available pages to display.</li>
     <li>curpage - <strong>required integer</strong> - The current page number (must be greater than 0 and less than or equal to &quot;numpages&quot;</li>
     <li>surround - <em>(optional integer)</em> - The number of items to surround the current page by.  The default value for this parameter is 3.</li>
+    <li>bare - <em>(optional boolean)</em> - Do not output &lt;option&gt; tags,  Instead output just a simple array suitable for further manipulation in smarty.</li>
   </ul>
 <h3>Example:</h3>
 <pre><code>&lt;select name="{\$actionid}pagenum"&gt;{cms_pageoptions numpages=50 curpage=14}&lt;/select&gt;</code></pre>
@@ -253,9 +254,9 @@ $lang['help_function_cms_stylesheet'] = <<<EOT
   <h3>What parameters does it take?</h3>
   <ul>
   <li><em>(optional)</em> name - Instead of getting all stylesheets for the given page, it will only get one specifically named one, whether it's attached to the current template or not.</li>
-  <li><em>(optional)</em> nocombine - If set to a non zero value, and there are multiple stylesheets associated with the template, the stylesheets will be output as separate tags rather than combined into a single tag.</li>
-  <li><em>(optional)</em> nolinks - If set to a non zero value, the stylesheets will be output as a URL without &lt;link&gt; tag.</li>
-  <li><em>(optional)</em> https - (boolean) indicates wether the ssl_url config entry should be used to prefix stylesheet urls.  If not specified, the system will attempt to determine the proper root url based on the secure flag of the page being displayed.</li>
+  <li><em>(optional)</em> nocombine - (boolean, default false) If enabled, and there are multiple stylesheets associated with the template, the stylesheets will be output as separate tags rather than combined into a single tag.</li>
+  <li><em>(optional)</em> nolinks - (boolean, default false) If enabled, the stylesheets will be output as a URL without &lt;link&gt; tag.</li>
+  <li><em>(optional)</em> https - (boolean, default false) indicates wether the ssl_url config entry should be used to prefix stylesheet urls.  If not specified, the system will attempt to determine the proper root url based on the secure flag of the page being displayed.</li>
   <li><em>(optional)</em> templateid - If templateid is defined, this will return stylesheets associated with that template instead of the current one.</li>
   <li><em>(optional)</em> media - <strong>[deprecated]</strong> - When used in conjunction with the name parameter this parameter will allow you to override the media type for that stylesheet.  When used in conjunction with the templateid parameter, the media parameter will only output stylesheet tags for those stylesheets that are marked as compatible with the specified media type.</li>
   </ul>

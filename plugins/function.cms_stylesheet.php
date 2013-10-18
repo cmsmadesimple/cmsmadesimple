@@ -64,9 +64,7 @@ function smarty_cms_function_cms_stylesheet($params, &$template)
 		$auto_https = 0;
 	}
 
-	if(isset($params['https'])) {
-		$use_https = (int)$params['https'];
-	}
+	if( isset($params['https']) ) $use_https = cms_to_bool($params['https']);
 	
 	if( $auto_https ) {
 		if (isset($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) != 'off') {
@@ -78,17 +76,17 @@ function smarty_cms_function_cms_stylesheet($params, &$template)
 		$root_url = $config['ssl_css_url'];
 	}
 
-	if(isset($params['nocombine']) && $params['nocombine'] == 1) {
-		$combine_stylesheets = FALSE;
+	if( isset($params['nocombine']) ) {
+	   $combine_stylesheets = cms_to_bool($params['nocombine']);
 	}	
 
 	if( isset($params['stripbackground']) )
 	{
-		$trimbackground = (int)$params['stripbackground'];
+	  $trimbackground = cms_to_bool($params['stripbackground']);
 	}
 	if( isset($params['forceblackonwhite']) )
 	{
-		$forceblackandwhite = (int)$params['forceblackonwhite'];
+	  $forceblackandwhite = cms_to_bool($params['forceblackonwhite']);
 	}
 	if( $trimbackground || $forceblackandwhite )
 	{
@@ -271,7 +269,7 @@ function smarty_cms_function_cms_stylesheet($params, &$template)
 	$stylesheet = preg_replace("/\{\/?php\}/", "", $stylesheet);
 
 	// Remove last comma at the end when $params['nolinks'] is set
-	if( isset($params['nolinks']) && endswith($stylesheet,',') ) {
+	if( isset($params['nolinks']) && cms_to_bool($params['nolinks']) && endswith($stylesheet,',') ) {
 	
 		$stylesheet = substr($stylesheet,0,strlen($stylesheet)-1);
 	}
