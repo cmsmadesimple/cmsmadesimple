@@ -56,6 +56,8 @@ abstract class ContentBase
 	/**
 	 * The name of the element (like a filename)
 	 * String
+	 *
+	 * @internal
 	 */
 	protected $mName = '';
 
@@ -133,12 +135,16 @@ abstract class ContentBase
 	/**
 	 * The full hierarchy of the content
 	 * String of the form : 1.4.3
+	 *
+	 * @internal
 	 */
 	protected $mHierarchy = '';
 
 	/**
 	 * The full hierarchy of the content ids
 	 * String of the form : 1.4.3
+	 *
+	 * @internal
 	 */
 	protected $mIdHierarchy = '';
 
@@ -244,13 +250,21 @@ abstract class ContentBase
 	 */
 	protected $mAdditionalEditors;
 	
-	/*
+	/**
 	 * state or meta information
 	 *
 	 * @internal
 	 */
 	private $_attributes;
+
+	/**
+	 * @internal
+	 */
 	private $_prop_defaults;
+
+	/**
+	 * @internal
+	 */
 	private $_editable_properties;
 
 	/************************************************************************/

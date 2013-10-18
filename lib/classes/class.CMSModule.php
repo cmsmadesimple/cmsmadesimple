@@ -974,35 +974,6 @@ abstract class CMSModule
 
   /**
    * ------------------------------------------------------------------
-   * Content Type Related Functions
-   * ------------------------------------------------------------------
-   */
-
-  /**
-   * Register a new content type
-   *
-   * @deprecated
-   * @final
-   * @param string A name for the new content type
-   * @param string A filename containing the content type definition.
-   * @param string A friendly name for this content type.
-   * @return void
-   */
-  final public function RegisterContentType($name, $file, $friendlyname = '')
-  {
-    $contentops = cmsms()->GetContentOperations();
-
-    $obj = new CmsContentTypePlaceholder();
-    $obj->class = $name;
-    $obj->type  = strtolower($name);
-    $obj->filename = $file;
-    $obj->loaded = false;
-    $obj->friendlyname = ($friendlyname != '' ? $friendlyname : $name);
-    $contentops->register_content_type($obj);
-  }
-
-  /**
-   * ------------------------------------------------------------------
    * Installation Related Functions
    * ------------------------------------------------------------------
    */
