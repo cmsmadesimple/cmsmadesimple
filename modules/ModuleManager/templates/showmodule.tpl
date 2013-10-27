@@ -16,8 +16,10 @@
 		<tr>
 			<th width="20%">{$nametext}</th>
 			<th>{$vertext}</th>
-			<th>{$mod->Lang('releasedate')}</th>
-			<th>{$mod->Lang('downloads')}</th>
+                        <th>{$mod->Lang('releasedate')}</th>
+                        <th>{$mod->Lang('downloads')}</th>
+			<th>{$sizetext}</th>
+			<th>{$statustext}</th>
 			<th>&nbsp;</th>
 			<th>&nbsp;</th>
 			<th>&nbsp;</th>
@@ -30,6 +32,8 @@
 			<td>{$entry->version}</td>
 			<td>{$entry->date|date_format:'%x'}</td>
 			<td>{$entry->downloads}</td>
+			<td>{$entry->size}</td>
+			<td>{$entry->status}</td>
 			<td>{$entry->dependslink}</td>
 			<td>{$entry->helplink}</td>
 			<td>{$entry->aboutlink}</td>

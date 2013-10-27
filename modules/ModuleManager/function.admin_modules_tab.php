@@ -123,6 +123,8 @@ if( count( $data ) ) {
     $onerow->aboutlink = $this->CreateLink( $id, 'moduleabout', $returnid,
 					    $this->Lang('abouttxt'), 
 					    array('name' => $row['name'],'version' => $row['version'],'filename' => $row['filename']));
+    $onerow->date = $row['date'];
+    $onerow->downloads = $row['downloads'];
 
     switch( $row['status'] ) {
     case 'incompatible':

@@ -26,6 +26,7 @@ $lang['depend_activate'] = 'Module %s will be activated.';
 $lang['depend_install'] = 'Module %s (version %s) will be installed.';
 $lang['depend_upgrade'] = 'Module %s will be upgraded to version %s.';
 $lang['download'] = 'Download &amp; Install';
+$lang['downloads'] = 'Downloads';
 
 // E
 $lang['error'] = 'Error!';
@@ -115,6 +116,7 @@ $lang['prompt_settings'] = 'Settings';
 
 // R
 $lang['really_uninstall'] = 'Are you sure you want to uninstall? You will be missing a lot of nice functionality.';
+$lang['releasedate'] = 'Date';
 $lang['repositorycount'] = 'Modules found in the repository';
 $lang['reset'] = 'Reset';
 
