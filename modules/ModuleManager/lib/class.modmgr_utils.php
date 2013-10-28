@@ -395,7 +395,17 @@ final class modmgr_utils
     $ok = FALSE;
     return FALSE;
   }
-    
+  
+  public static function get_status($date)
+  {
+    $ts = strtotime($date);
+    $stale_ts = strtotime('-2 years');
+    $warn_ts = strtotime('-18 months');
+    $new_ts = strtotime('-1 month');
+    if( $ts <= $stale_ts ) return 'stale';
+    if( $ts <= $warn_ts ) return 'warn';
+    if( $ts >= $new_ts ) return 'new';
+  }
 } // end of class
 
 #

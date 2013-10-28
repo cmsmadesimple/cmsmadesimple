@@ -1,35 +1,34 @@
 <script type="text/javascript">
-{literal}
-function showhide_advanced()
-{
-  if( document.getElementById('advanced').checked )
-  {
-    document.getElementById('advhelp').style.display = 'inline';
-  }
-  else
-  {
-    document.getElementById('advhelp').style.display = 'none';
-  }
-}
-{/literal}
+$(document).ready(function(){
+  {if !$advanced}$('#advhelp').hide();{/if}
+  $('#advanced').click(function(){
+    $('#advhelp').toggle();
+  });
+});
 </script>
+
+{function get_module_status_icon}
+{strip}
+{if $status == 'stale'}
+{$stale_img}
+{elseif $status == 'warn'}
+{$warn_img}
+{elseif $status == 'new'}
+{$new_img}
+{/if}
+{/strip}
+{/function}
 
 {$formstart}
 <fieldset>
 <legend>{$mod->Lang('search_input')}:</legend>
 <div class="pageoverflow">
-  <p class="pagetext">{$mod->Lang('searchterm')}</p>
+  <p class="pagetext"><label for="searchterm">{$mod->Lang('searchterm')}:</label></p>
   <p class="pageinput">
-    <input type="text" name="{$actionid}term" size="50" value="{$term}"/>
-  </p>
-</div>
-
-<div class="pageoverflow">
-  <p class="pagetext">{$mod->Lang('prompt_advancedsearch')}</p>
-  <p class="pageinput">
+    <input id="searchterm" type="text" name="{$actionid}term" size="50" value="{$term}" placeholder="{$mod->Lang('entersearchterm')}"/>&nbsp;
     <input type="hidden" name="{$actionid}advanced" value="0"/>
-    <input type="checkbox" id="advanced" name="{$actionid}advanced" value="1" onclick="showhide_advanced();" {if $advanced}checked="checked"{/if}/>
-    <span id="advhelp" {if !$advanced}style="display: none;{/if}"><br/>{$mod->Lang('advancedsearch_help')}</span>
+    <input type="checkbox" id="advanced" name="{$actionid}advanced" value="1" {if $advanced}checked="checked"{/if} title="{$mod->Lang('title_advancedsearch')}"/>&nbsp;<label for="advanced">{$mod->Lang('prompt_advancedsearch')}</label>
+    <span id="advhelp" style="display: none;"><br/>{$mod->Lang('advancedsearch_help')}</span>
   </p>
 </div>
 
@@ -49,8 +48,11 @@ function showhide_advanced()
 <table class="pagetable sortable" cellspacing="0">
  <thead>
   <tr>
-   <th width="20%">{$mod->Lang('nametext')}</th>
+   <th></th>
+   <th>{$mod->Lang('nametext')}</th>
    <th>{$mod->Lang('vertext')}</th>
+   <th>{$mod->Lang('releasedate')}</th>
+   <th>{$mod->Lang('downloads')}</th>
    <th>{$mod->Lang('sizetext')}</th>
    <th>{$statustext}</th>
    <th>&nbsp;</th>
@@ -61,9 +63,12 @@ function showhide_advanced()
  <tbody>
  {foreach from=$search_data item=entry}
    {cycle values='row1,row2' assign='rowclass'}
-   <tr class="{$rowclass}">
-     <td>{$entry->name}</td>
+   <tr class="{$rowclass}" {if $entry->age=='new'}style="font-weight: bold;"{/if}>
+     <td>{get_module_status_icon status=$entry->age}</td>
+     <td>{$entry->name} <em>({$entry->age})</em></td>
      <td>{$entry->version}</td>
+     <td>{$entry->date|date_format:'%x'}</td>
+     <td>{$entry->downloads}</td>
      <td>{$entry->size}</td>
      <td>{if isset($entry->status)}{$entry->status}{/if}</td>
      <td>{if isset($entry->dependslink)}{$entry->dependslink}{/if}</td>
@@ -73,7 +78,7 @@ function showhide_advanced()
    {if isset($entry->description)}
    <tr class="{$rowclass}">
      <td>&nbsp;</td>
-     <td colspan="6">{$entry->description}</td>
+     <td colspan="9">{$entry->description}</td>
    </tr>
    {/if}
  {/foreach}

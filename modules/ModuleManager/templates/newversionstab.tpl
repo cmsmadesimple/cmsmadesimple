@@ -13,6 +13,8 @@
 			<th width="20%">{$nametext}</th>
 			<th>{$vertext}</th>
 			<th>{$haveversion}</th>
+                        <th>{$mod->Lang('releasedate')}</th>
+                        <th>{$mod->Lang('downloads')}</th>
 			<th>{$sizetext}</th>
 			<th>{$statustext}</th>
 			<th>&nbsp;</th>
@@ -26,6 +28,8 @@
 			<td>{$entry->name|default:''}</td>
 			<td>{$entry->version|default:''}</td>
 			<td>{if isset($entry->haveversion)}{$entry->haveversion}{/if}</td>
+			<td>{$entry->date|date_format:'%x'}</td>
+			<td>{$entry->downloads}</td>
 			<td>{$entry->size|default:''}</td>
 			<td>{$entry->status|default:''}</td>
 			<td>{$entry->dependslink|default:''}</td>

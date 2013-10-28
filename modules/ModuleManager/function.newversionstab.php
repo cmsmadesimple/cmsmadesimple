@@ -101,6 +101,10 @@ else {
 	  $modinst = cms_utils::get_module($row['name']);
 	  if( is_object($modinst) ) $onerow->haveversion = $modinst->GetVersion();
 
+	  $onerow->age = modmgr_utils::get_status($row['date']);
+	  $onerow->downloads = $row['downloads'];
+	  $onerow->date = $row['date'];
+
 	  $onerow->name = $this->CreateLink( $id, 'modulelist', $returnid, $row['name'], array('name'=>$row['name']));
 	  //$onerow->name = $row['name'];
 	  $onerow->version = $row['version'];

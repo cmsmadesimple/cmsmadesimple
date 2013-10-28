@@ -29,6 +29,7 @@ $lang['download'] = 'Download &amp; Install';
 $lang['downloads'] = 'Downloads';
 
 // E
+$lang['entersearchterm'] = 'Enter search term';
 $lang['error'] = 'Error!';
 $lang['error_checksum'] = 'Checksum error.  This probably indicates a corrupt file, either when it was uploaded to the repository, or a problem in transit down to your machine. (expected %s and got %s)';
 $lang['error_connectnomodules'] = 'Although a connection was successfully made to the specified module repository.  It appears that this repository is not yet sharing any modules';
@@ -134,8 +135,12 @@ $lang['submit'] = 'Submit';
 $lang['text_dl_chunksize'] = 'The maximum amount of data to download from the server in one chunk (when installing a module)';
 $lang['text_repository_url'] = 'The URL should be in the form http://www.mycmsmssite.com/ModuleRepository/request/v2 (assuming pretty urls are enabled on the repository server)<br />Note: opening this link in your webbrowser will return an Error404!';
 $lang['time_warning'] = 'Two or more actions need to be performed. Be aware that the install could take a few minutes. Please be patient!';
+$lang['title_advancedsearch'] = 'Enable advanced search functionality';
 $lang['title_installation'] = 'Installation';
 $lang['title_installation_complete'] = 'Installation Process Complete!';
+$lang['title_new'] = 'This module was released within the last month';
+$lang['title_stale'] = 'This module is stale (released over two years ago).';
+$lang['title_warning'] = 'This module was released some time ago.  Use caution.';
 
 // U
 $lang['uninstalled'] = 'Module Uninstalled.';

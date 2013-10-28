@@ -66,6 +66,17 @@ if( !isset($gCms) ) exit;
     $active_tab = $_SESSION[$this->GetName()]['active_tab'];
     unset($_SESSION[$this->GetName()]['active_tab']);
   }
+
+  // this is a bit ugly.
+  $stale_img=$this->GetModuleURLPath().'/images/error.png';
+  $stale_img = '<img src="'.$stale_img.'" title="'.$this->Lang('title_stale').'" alt="stale" height="16"/>';
+  $smarty->assign('stale_img',$stale_img);
+  $warn_img=$this->GetModuleURLPath().'/images/warn.png';
+  $warn_img = '<img src="'.$warn_img.'" title="'.$this->Lang('title_warning').'" alt="warning" height="16"/>';
+  $smarty->assign('warn_img',$warn_img);
+  $new_img=$this->GetModuleURLPath().'/images/new.png';
+  $new_img = '<img src="'.$new_img.'" title="'.$this->Lang('title_new').'" alt="new" height="16"/>';
+  $smarty->assign('new_img',$new_img);
   
   echo $this->StartTabHeaders();
   if( $this->CheckPermission('Modify Modules') ) {

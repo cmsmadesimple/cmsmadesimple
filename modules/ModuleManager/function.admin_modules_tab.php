@@ -123,6 +123,7 @@ if( count( $data ) ) {
     $onerow->aboutlink = $this->CreateLink( $id, 'moduleabout', $returnid,
 					    $this->Lang('abouttxt'), 
 					    array('name' => $row['name'],'version' => $row['version'],'filename' => $row['filename']));
+    $onerow->age = modmgr_utils::get_status($row['date']);
     $onerow->date = $row['date'];
     $onerow->downloads = $row['downloads'];
 
@@ -167,7 +168,7 @@ if( count( $data ) ) {
 	break;
       }
     }
-	    
+
     $onerow->size = (int)((float) $row['size'] / 1024.0 + 0.5);
     $onerow->rowclass = $rowclass;
     if( isset( $row['description'] ) ) $onerow->description=$row['description'];

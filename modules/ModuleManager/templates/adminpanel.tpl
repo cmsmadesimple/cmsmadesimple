@@ -10,11 +10,24 @@
 <p class="pageerror">{$message}</p>
 {/if}
 
+{function get_module_status_icon}
+{strip}
+{if $status == 'stale'}
+{$stale_img}
+{elseif $status == 'warn'}
+{$warn_img}
+{elseif $status == 'new'}
+{$new_img}
+{/if}
+{/strip}
+{/function}
+
 {if $itemcount > 0}
 <table cellspacing="0" class="pagetable scrollable">
 	<thead>
 		<tr>
-			<th width="20%">{$nametext}</th>
+			<th></th>
+			<th>{$nametext}</th>
 			<th>{$vertext}</th>
 			<th>{$mod->Lang('releasedate')}</th>
 			<th>{$mod->Lang('downloads')}</th>
@@ -25,7 +38,8 @@
 	</thead>
 	<tbody>
 {foreach from=$items item=entry}
-		<tr class="{$entry->rowclass}">
+	        <tr class="{$rowclass}" {if $entry->age=='new'}style="font-weight: bold;"{/if}>
+		        <td>{get_module_status_icon status=$entry->age}</td>
 			<td>{$entry->name}</td>
 			<td>{$entry->version}</td>
 			<td>{$entry->date|date_format:'%x'}</td>
