@@ -122,7 +122,7 @@ $lang['help_create'] = 'This option will allow you to create a new template of t
 $lang['help_create_template'] = 'This function allows creating a new template of the selected template type.  The default contents from the template type will be used';
 $lang['help_css_bulk'] = 'This option allows performing actions on multiple stylesheets at one time.';
 $lang['help_css_description'] = 'You may (optionally) include a description for this stylesheet.  This may be useful to describe the items that are in the stylesheet and aide in organization';
-$lang['help_css_designs'] = 'You may associate one or more desings with a stylesheet.  Stylesheets associated with a design are automatically output by the {cms_stylesheet} tag, and when exporting a design for sharing';
+$lang['help_css_designs'] = 'You may associate one or more designs with a stylesheet.  Stylesheets associated with a design are automatically output by the {cms_stylesheet} tag, and when exporting a design for sharing';
 $lang['help_css_mediaquery'] = <<<EOT
 <p>A media query consists of a media type and at least one expression that limits the style sheets' scope by using media features, such as width, height, and color. Added in CSS3, media queries let the presentation of content be tailored to a specific range of output devices without having to change the content itself. For a simple reference see this page on the <a href="https://developer.mozilla.org/en/docs/CSS/Media_queries">mozzilla developer network</a></p><br/>
 <p>CMSMS Allows associating a media query with a stylesheet.  When <code>{cms_stylesheet}</code> renders its output the media query will be automatically placed in the stylesheet tag.</p>

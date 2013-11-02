@@ -440,7 +440,7 @@ $lang['help_designmanager_help'] = <<<EOT
       <p>This tab provides the ability to import, export, create, edit, and delete designs.</p>
     </li>
   </ul>
-<h3>Maaging Templates</h3>
+<h3>Managing Templates</h3>
  <p>The templates tab displays a list of templates matching the current filter <em>(if applied)</em> in a tabular format, with pagination.  Each row of the table represents a single template.  The columns of the table displays summary information about the template, and provides some ability to interact with it.</p>
  <p>A dropdown providing the ability to switch between pages of templates that match the current filter will appear if more than one page of templates match the current filter.</p>
  <p>An options menu exists providing the ability to adjust the current filter, or to create a new template <em>(depending upon permissions)</em>.  The filter dialog allows filtering the displayed templates by a number of critera, as well as changing the page limit, and sorting of displayed templates.</p>
@@ -491,7 +491,7 @@ $lang['help_designmanager_help'] = <<<EOT
         <p>This text area provides the ability to describe the purpose of the templates, and notes that may be useful to editors in the future.</p>
       </li>
       <li>Designs:
-        <p>Depending upon permission levels, this tab will allow associating the template with zero or more desings.</p>
+        <p>Depending upon permission levels, this tab will allow associating the template with zero or more designs.</p>
       </li>
       <li>Advanced:
         <p>This tab displays fields that allow specifying the template category, its type, and wether it is the default template for the type.  This tab is only available with the appropriate permissions.</p>
@@ -614,7 +614,7 @@ $lang['help_designmanager_help'] = <<<EOT
       <li>Step 2: Verification:
         <p>The second step is for veryfing and previewing the new design that will be created from the XML file.  From here you can display, and edit various aspects of the design or theme.</p>
      </ul>
-  <h4>Deleting Desings</h4>
+  <h4>Deleting Designs</h4>
 <h3>Using Templates</h3>
 <h3>Options and Preferences</h3>
 <h3>Upgrade Notes</h3>
