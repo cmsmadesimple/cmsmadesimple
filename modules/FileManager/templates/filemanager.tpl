@@ -149,7 +149,7 @@ $(document).ready(function () {
 				<th class="pageicon">{$fileinfotext}</th>
 				<th class="pageicon" title="{$mod->Lang('title_col_fileowner')}">{$fileownertext}</th>
 				<th class="pageicon" title="{$mod->Lang('title_col_fileperms')}">{$filepermstext}</th>
-				<th class="pageicon" title="{$mod->Lang('title_col_filesize')}"style="text-align:right;">{$filesizetext}</th>
+				<th class="pageicon" title="{$mod->Lang('title_col_filesize')}" style="text-align:right;">{$filesizetext}</th>
 				<th class="pageicon">&nbsp;</th>
 				<th class="pageicon" title="{$mod->Lang('title_col_filedate')}">{$filedatetext}</th>
 				<th class="pageicon">
