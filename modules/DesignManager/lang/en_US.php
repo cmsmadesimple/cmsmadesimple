@@ -347,6 +347,7 @@ $lang['title_filterapplied'] = 'A filter has been selected which limits the numb
 $lang['title_filterlimit'] = 'Select the number of items to view on each page';
 $lang['title_import_design'] = 'Import a design from XML';
 $lang['title_sortby'] = 'Select a way to sort the matching templates';
+$lang['title_sortby_design'] = 'TODO';
 $lang['title_sortorder'] = 'Modify the way the matching templates are ordered';
 $lang['title_template_setallpages'] = 'Set all pages to use this template';
 $lang['title_tpl_bulk'] = 'Select this template for bulk actions';
