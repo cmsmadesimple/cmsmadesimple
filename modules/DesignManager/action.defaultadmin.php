@@ -22,7 +22,7 @@ if( !isset($gCms) ) exit;
 if( !$this->VisibleToAdminUser() ) return;
 
 $filter_tpl_rec = array('tpl'=>'','limit'=>100,'offset'=>0,'sortby'=>'name','sortorder'=>'asc');
-$filter_css_rec = array('limit'=>100,'offset'=>0,'sortby'=>'name','sortorder'=>'desc');
+$filter_css_rec = array('limit'=>100,'offset'=>0,'sortby'=>'name','sortorder'=>'desc','design'=>'');
 if( isset($params['submit_filter_tpl']) ) {
 	$filter_tpl_rec['tpl'] = $params['filter_tpl'];
 	$filter_tpl_rec['sortby'] = trim($params['filter_sortby']);
