@@ -1,5 +1,6 @@
 <?php
 
+// a class representing a field definition
 final class news_field
 {
   private $_data = array();
@@ -33,18 +34,14 @@ final class news_field
 
     case 'extra':
       if( isset($this->_data['extra']) ) {
-	if( !is_array($this->_data['extra']) ) {
-	  $this->_data['extra'] = unserialize($this->_data['extra']);
-	}
+	if( !is_array($this->_data['extra']) ) $this->_data['extra'] = unserialize($this->_data['extra']);
 	return $this->_data['extra'];
       }
       break;
 
     case 'options':
       $extra = $this->extra;
-      if( is_array($extra) && isset($extra['options']) ) {
-	return $extra['options'];
-      }
+      if( is_array($extra) && isset($extra['options']) ) return $extra['options'];
       break;
 
     case 'displayvalue':
@@ -54,9 +51,7 @@ final class news_field
 	  $this->_displayvalue = $value;
 	  if( $this->type == 'dropdown' ) {
 	    // dropdowns may have a different displayvalue than actual value.
-	    if( is_array($this->options) && isset($this->options[$value]) ) {
-	      $this->_displayvalue = $this->options[$value];
-	    }
+	    if( is_array($this->options) && isset($this->options[$value]) ) $this->_displayvalue = $this->options[$value];
 	  }
 	}
       }
@@ -91,7 +86,6 @@ final class news_field
     }
   }
 
-
   public function __set($key,$value)
   {
     switch( $key ) {
@@ -117,6 +111,79 @@ final class news_field
     default:
       throw new Exception('Attempt to set invalid data into field object: '.$key);
     }
+  }
+
+  private function _validate()
+  {
+    if( $this->name == '' ) throw new CmsException('Invalid field definition name');
+    if( $this->type == 'dropdown' && count($this->options) == 0 ) throw new CmsException('No options for dropdown field');
+    if( $this->id > 0 && $this->item_order < 1 ) throw new CmsException('Invalid item order');
+  }
+
+  private function _insert()
+  {
+    $db = cmsms()->GetDb();
+    if( $this->item_order < 1 ) {
+      $query = 'SELECT MAX(item_order) FROM '.cms_db_prefix().'module_news_fielddefs';
+      $num = (int)$db->GetOne($query);
+      $this->item_order = $num+1;
+    }
+    $query = 'INSERT INTO '.cms_db_prefix()."module_news_fielddefs 
+              (name,type,max_length,create_date,modified_date,item_order,public,extra) 
+              VALUES (?,?,?,NOW(),NOW(),?,?,?)";
+    $dbr = $db->Execute($query,array($this->name,$this->type,$this->max_length,$this->item_order,$this->public,
+				     serialize($this->extra)));
+    $this->_data['id'] = $db->Insert_ID();
+    $this->create_date = $this->modified_date = $db->DbTimeStamp(time());
+  }
+
+  private function _update()
+  {
+    $db = cmsms()->GetDb();
+    $query = 'UPDATE '.cms_db_prefix().'module_news_fielddefs SET name = ?, type = ?, max_length = ?, modified_date = NOW(),
+              item_orderr = ?, public = ?, extra = ? WHERE id = ?';
+    $dbr = $db->Execute($query,array($this->name,$this->type,$this->max_length,$this->item_order,$this->public,
+				     serialize($this->extra),$this->id));
+    $this->modified_date = $db->DbTimeStamp(time());
+  }
+
+  public function save()
+  {
+    $this->_validate();
+    if( $this->_data['id'] ) {
+      $this->_insert();
+    }
+    else {
+      $this->_update();
+    }
+  }
+
+  public static function &load_by_id($id)
+  {
+    $id = (int)$id;
+    if( $id < 1 ) return;
+
+    $db = cmsms()->GetDb();
+    $query = 'SELECT * FROM '.cms_db_prefix().'module_news_fielddefs WHERE id = ?';
+    $row = $db->GetRow($query,array($id));
+    if( $row['extra'] ) $row['extra'] = unserialize($row['extra']);
+    $obj = new news_field;
+    $obj->_data = $row;
+    return $obj;
+  }
+
+  public static function &load_by_name($name)
+  {
+    $name = trim($name);
+    if( !$name ) return;
+
+    $db = cmsms()->GetDb();
+    $query = 'SELECT * FROM '.cms_db_prefix().'module_news_fielddefs WHERE name = ?';
+    $row = $db->GetRow($query,array($name));
+    if( $row['extra'] ) $row['extra'] = unserialize($row['extra']);
+    $obj = new news_field;
+    $obj->_data = $row;
+    return $obj;
   }
 } // end of class
 

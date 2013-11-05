@@ -200,4 +200,10 @@
     <li>Added the showall preference to prevent throwing an exception when viewing expired articles in detail view and the showall param</li>
   </ul>
 </li>
+<li>Version 2.14
+  <ul>
+    <li>Enhancements to the news_field class.</li>
+    <li>Adds the idlist parameter.</li>
+  </ul>
+</li>
 </ul>

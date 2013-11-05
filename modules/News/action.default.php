@@ -71,7 +71,20 @@ if( !$smarty->isCached($this->GetDatabaseResource($template),$cache_id) ) {
             AND
         ";
 
-            
+  if( isset($params['idlist']) ) {
+    $idlist = $params['idlist'];
+    if( is_string($idlist) ) {
+      $tmp = explode(',',$idlist);
+      for( $i = 0; $i < count($tmp); $i++ ) {
+	$tmp[$i] = (int)$tmp[$i];
+	if( $tmp[$i] < 1 ) unset($tmp[$i]);
+      }
+      $idlist = array_unique($tmp);
+      $query1 .= ' (mn.news_id IN ('.implode(',',$idlist).')) AND ';
+      $query2 .= ' (mn.news_id IN ('.implode(',',$idlist).')) AND ';
+    }
+  }
+
   if( isset($params['category_id']) ) {
     $query1 .= " ( mnc.news_category_id = '".(int)$params['category_id']."' ) AND ";
     $query2 .= " ( mnc.news_category_id = '".(int)$params['category_id']."' ) AND ";

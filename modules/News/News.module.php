@@ -25,7 +25,7 @@ class News extends CMSModule
   function GetFriendlyName() { return $this->Lang('news'); }
   function IsPluginModule() { return true; }
   function HasAdmin() { return true; }
-  function GetVersion() { return '2.14'; }
+  function GetVersion() { return '2.50'; }
   function MinimumCMSVersion() { return '1.12-alpha0'; }
   function GetAdminDescription() { return $this->Lang('description'); }
   function GetAdminSection() { return 'content'; }
@@ -67,6 +67,7 @@ class News extends CMSModule
     $this->SetParameterType('assign',CLEAN_STRING);
     $this->SetParameterType('inline',CLEAN_STRING);
     $this->SetParameterType('preview',CLEAN_STRING);
+	  $this->SetParameterType('idlist',CLEAN_STRING);
 		
     // form parameters
     $this->SetParameterType('submit',CLEAN_STRING);
@@ -125,6 +126,7 @@ class News extends CMSModule
     $this->CreateParameter('start', 0, $this->lang('helpstart'));
     $this->CreateParameter('action','default',$this->Lang('helpaction'));
     $this->CreateParameter('articleid','',$this->Lang('help_articleid'));
+    $this->CreateParameter('idlist','',$this->Lang('help_idlist'));
   }
 
   function VisibleToAdminUser()

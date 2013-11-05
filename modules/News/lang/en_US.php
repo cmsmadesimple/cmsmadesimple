@@ -226,6 +226,7 @@ $lang['helpsortby'] = 'Field to sort by.  Options are: "news_date", "summary", "
 $lang['helpstart'] = 'Start at the nth item -- leaving empty will start at the first item.';
 $lang['helpsummarytemplate'] = 'Use a separate database template for displaying the article summary.  This template must exist and be visible in the summary template tab of the News admin, though it does not need to be the default.  If this parameter is not specified, then the current template marked as default will be used.';
 $lang['help_articleid'] = 'This parameter is only applicable to the detail view.  It allows specifying which news article to display in detail mode.  If the special value -1 is used, the system will display the newest, published, non expired article.';
+$lang['help_idlist'] = 'Applicable only to the default action (summary view).  This parameter accepts a comma separated list of numeric article ids and allows further filtering articles to only the article ids specified.  The actual list of articles output is still subject to article status, expiry date, and other parameters.';
 $lang['help_pagelimit'] = 'Maximum number of items to display (per page).  If this parameter is not supplied all matching items will be displayed.  If it is, and there are more items available than specified in the parameter, text and links will be supplied to allow scrolling through the results';
 $lang['hide_summary_field'] = 'Hide the summary field when adding or editing articles';
 
