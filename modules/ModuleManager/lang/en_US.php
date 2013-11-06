@@ -41,6 +41,7 @@ $lang['error_internal'] = 'Internal Error... Please report this to your system a
 $lang['error_minimumrepository'] = 'The repository version is not compatible with this module manager';
 $lang['error_moduleinstallfailed'] = 'Module installation failed';
 $lang['error_module_object'] = 'Error: could not get an instance of the %s module';
+$lang['error_nodata'] = 'No data retrieved';
 $lang['error_nofilename'] = 'No filename parameter supplied';
 $lang['error_nofilesize'] = 'No filesize parameter supplied';
 $lang['error_nomatchingmodules'] = 'Error: could not find any matching modules in the repository';

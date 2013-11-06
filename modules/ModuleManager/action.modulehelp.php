@@ -36,74 +36,64 @@
 #END_LICENSE
 if (!isset($gCms)) exit;
 
-if( !isset( $params['name'] ) )
-  {
-    $this->_DisplayErrorPage( $id, $params, $returnid,
-			      $this->Lang('error_insufficientparams'));
-    return;
-  }
-$name = $params['name'];
+$this->SetCurrentTab('modules');
 
-if( !isset( $params['version'] ) )
-  {
-    $this->_DisplayErrorPage( $id, $params, $returnid,
-			      $this->Lang('error_insufficientparams'));
-    return;
-  }
-$version = $params['version'];
+$name = get_parameter_value($params,'name');
+if( !$name ) {
+  $this->SetError($this->Lang('error_insufficientparams'));
+  $this->RedirectToAdminTab();
+  return;
+}
 
-$url = $this->GetPreference('module_repository');
-if( $url == '' )
-  {
-    $this->_DisplayErrorPage( $id, $params, $returnid,
-			      $this->Lang('error_norepositoryurl'));
-    return;
-  }
-
-if( !isset($params['filename'] ) )
-  {
-    $this->_DisplayErrorPage( $id, $params, $returnid,
-			      $this->Lang('error_nofilename'));
-    return;
-  }
-$xmlfile = $params['filename'];
+$version = get_parameter_value($params,'version');
+if( !$version ) {
+  $this->SetError($this->Lang('error_insufficientparams'));
+  $this->RedirectToAdminTab();
+  return;
+}
 
 $url = $this->GetPreference('module_repository');
-if( $url == '' )
-  {
-    $this->_DisplayErrorPage( $id, $params, $returnid,
-			      $this->Lang('error_norepositoryurl'));
-    return;
-  }
+if( !$url ) {
+  $this->SetError($this->Lang('error_norepositoryurl'));
+  $this->RedirectToAdminTab();
+  return;
+}
 $url .= '/modulehelp';
 
-$qparms = array('name'=>$xmlfile);
-$req = new cms_http_request();
-$req->execute($url,'','POST',$qparms);
+$xmlfile = get_parameter_value($params,'filename');
+if( !$xmlfile ) {
+  $this->SetError($this->Lang('error_nofilename'));
+  $this->RedirectToAdminTab();
+  return;
+}
+
+
+$req = new modmgr_cached_request();
+$req->execute($url,array('name'=>$xmlfile));
 $status = $req->getStatus();
 $result = $req->getResult();
-if( $status != 200 || $result == '' )
-  {
-    $this->_DisplayErrorPage( $id, $params, $returnid, $this->Lang('error_request_problem'));
-    return;
-  }
-
+if( $status != 200 || $result == '' ) {
+  $this->SetError($this->Lang('error_request_problem'));
+  $this->RedirectToAdminTab();
+  return;
+}
 $help = json_decode($result,true);
-if( $help[0] == false )
-  {
-    $this->_DisplayErrorPage( $id, $params, $returnid,
-			      $help[1] );
-    return;
-  }
-$this->smarty->assign('title',$this->Lang('helptxt'));
-$this->smarty->assign('moduletext',$this->Lang('nametext'));
-$this->smarty->assign('vertext',$this->Lang('vertext'));
-$this->smarty->assign('xmltext',$this->Lang('xmltext'));
-$this->smarty->assign('modulename',$name);
-$this->smarty->assign('moduleversion',$version);
-$this->smarty->assign('xmlfile',$xmlfile);
-$this->smarty->assign('content',$help[1]);
-$this->smarty->assign('link_back',$this->CreateLink($id,'defaultadmin',$returnid, $this->Lang('back_to_module_manager')));	
+if( !$help ) {
+  $this->SetError($this->Lang('error_nodata'));
+  $this->RedirectToAdminTab();
+  return;
+}
+
+$smarty->assign('title',$this->Lang('helptxt'));
+$smarty->assign('moduletext',$this->Lang('nametext'));
+$smarty->assign('vertext',$this->Lang('vertext'));
+$smarty->assign('xmltext',$this->Lang('xmltext'));
+$smarty->assign('modulename',$name);
+$smarty->assign('moduleversion',$version);
+$smarty->assign('xmlfile',$xmlfile);
+$smarty->assign('content',$help);
+$smarty->assign('back_url',$this->create_url($id,'defaultadmin',$returnid));
+$smarty->assign('link_back',$this->CreateLink($id,'defaultadmin',$returnid, $this->Lang('back_to_module_manager')));	
 
 echo $this->ProcessTemplate('remotecontent.tpl');
 

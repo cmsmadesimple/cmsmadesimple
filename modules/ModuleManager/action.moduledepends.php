@@ -36,70 +36,67 @@
 #END_LICENSE
 if (!isset($gCms)) exit;
 
-if( !isset( $params['name'] ) )
-  {
-    $this->_DisplayErrorPage( $id, $params, $returnid,
-			      $this->Lang('error_insufficientparams'));
-    return;
-  }
-$name = $params['name'];
+$this->SetCurrentTab('modules');
 
-if( !isset( $params['version'] ) )
-  {
-    $this->_DisplayErrorPage( $id, $params, $returnid,
-			      $this->Lang('error_insufficientparams'));
-    return;
-  }
-$version = $params['version'];
+$name = get_parameter_value($params,'name');
+if( !$name ) {
+  $this->SetError($this->Lang('error_insufficientparams'));
+  $this->RedirectToAdminTab();
+  return;
+}
+
+$version = get_parameter_value($params,'version');
+if( !$version ) {
+  $this->SetError($this->Lang('error_insufficientparams'));
+  $this->RedirectToAdminTab();
+  return;
+}
 
 $url = $this->GetPreference('module_repository');
-if( $url == '' )
-  {
-    $this->_DisplayErrorPage( $id, $params, $returnid,
-			      $this->Lang('error_norepositoryurl'));
-    return;
-  }
+if( !$url ) {
+  $this->SetError($this->Lang('error_norepositoryurl'));
+  $this->RedirectToAdminTab();
+  return;
+}
+$url .= '/modulehelp';
 
-if( !isset($params['filename'] ) )
-  {
-    $this->_DisplayErrorPage( $id, $params, $returnid,
-			      $this->Lang('error_nofilename'));
-    return;
-  }
-$xmlfile = $params['filename'];
+$xmlfile = get_parameter_value($params,'filename');
+if( !$xmlfile ) {
+  $this->SetError($this->Lang('error_nofilename'));
+  $this->RedirectToAdminTab();
+  return;
+}
 
 $depends = modulerep_client::get_module_depends($xmlfile);
-if( $depends[0] == false )
-  {
-    $this->_DisplayErrorPage( $id, $params, $returnid,
-			      $depends[1] );
-    return;
-  }
+if( !is_array($depends) || count($depends) != 2 || $depends[0] == false ) {
+  $this->SetError($depends[1]);
+  $this->RedirectToAdminTab();
+  return;
+}
 
-$this->smarty->assign('title',$this->Lang('dependstxt'));
-$this->smarty->assign('moduletext',$this->Lang('nametext'));
-$this->smarty->assign('vertext',$this->Lang('vertext'));
-$this->smarty->assign('xmltext',$this->Lang('xmltext'));
-$this->smarty->assign('modulename',$name);
-$this->smarty->assign('moduleversion',$version);
-$this->smarty->assign('xmlfile',$xmlfile);
-$this->smarty->assign('link_back',$this->CreateLink($id,'defaultadmin',$returnid, $this->Lang('back_to_module_manager')));	
+$smarty->assign('title',$this->Lang('dependstxt'));
+$smarty->assign('moduletext',$this->Lang('nametext'));
+$smarty->assign('vertext',$this->Lang('vertext'));
+$smarty->assign('xmltext',$this->Lang('xmltext'));
+$smarty->assign('modulename',$name);
+$smarty->assign('moduleversion',$version);
+$smarty->assign('xmlfile',$xmlfile);
+$smarty->assign('back_url',$this->create_url($id,'defaultadmin',$returnid));
+$smarty->assign('link_back',$this->CreateLink($id,'defaultadmin',$returnid, $this->Lang('back_to_module_manager')));	
 
+$depends = $depends[1];
 $txt = '';
-if( is_array($depends[1]) )
-  {
-    $txt = '<ul>';
-    foreach( $depends[1] as $one )
-      {
-	$txt .= '<li>'.$one['name'].' => '.$one['version'].'</li>';
-      }
-    $txt .= '</ul>';
+if( is_array($depends) ) {
+  $txt = '<ul>';
+  foreach( $depends as $one ) {
+    $txt .= '<li>'.$one['name'].' => '.$one['version'].'</li>';
   }
- else
-   {
-     $txt = $this->Lang('msg_nodependencies');
-   }
-$this->smarty->assign('content',$txt);
+  $txt .= '</ul>';
+}
+else {
+  $txt = $this->Lang('msg_nodependencies');
+}
+$smarty->assign('content',$txt);
 echo $this->ProcessTemplate('remotecontent.tpl');
 
 #

@@ -11,9 +11,9 @@
   {/if}
 {/foreach}
 </p>
-<div style="clear:both;">&nbsp;</div>
-{if isset($message)}
-<p class="pageerror">{$message}</p>
+
+{if isset($message) && $message != ''}
+<div class="warning"><p>{$message}</p></div>
 {/if}
 
 {function get_module_status_icon}
@@ -28,7 +28,7 @@
 {/strip}
 {/function}
 
-{if $itemcount > 0}
+{if isset($itemcount) && $itemcount > 0}
 <table cellspacing="0" class="pagetable scrollable">
 	<thead>
 		<tr>

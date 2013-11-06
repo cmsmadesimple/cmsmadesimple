@@ -36,13 +36,11 @@
 #END_LICENSE
 if (!isset($gCms)) exit;
 
-$active_tab = 'modules';
-if( isset($params['active_tab']) ) $active_tab = $params['active_tab'];
-$_SESSION[$this->GetName()]['active_tab'] = $active_tab;
+$this->SetCurrentTab('modules');
 
 $allmods = modulerep_client::get_repository_modules('',0);
-$deps = array(array('name'=>$params['name'],'version'=>$params['version'],'filename'=>$params['filename'],
-		    'by'=>'','size'=>$params['size']));
+$deps = array(array('name'=>$params['name'],'version'=>$params['version'],
+		    'filename'=>$params['filename'],'by'=>'','size'=>$params['size']));
 if (! $allmods[0]) {
   $this->_DisplayErrorPage( $id, $params, $returnid, $allmods[1] );
   return;

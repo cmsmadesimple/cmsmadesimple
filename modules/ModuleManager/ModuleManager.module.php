@@ -53,7 +53,7 @@ class ModuleManager extends CMSModule
   function IsPluginModule() { return false; }
   function HasAdmin() { return true; }
   function IsAdminOnly() { return true; }
-  function GetAdminSection() { return 'extensions'; }
+  function GetAdminSection() { return 'siteadmin'; }
   function GetAdminDescription() { return $this->Lang('admindescription'); }
   function LazyLoadAdmin() { return TRUE; }
   function MinimumCMSVersion() { return "1.10-beta0"; }

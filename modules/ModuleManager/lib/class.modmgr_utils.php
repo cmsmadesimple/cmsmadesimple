@@ -287,9 +287,12 @@ final class modmgr_utils
 
     // get the md5sum of the data from the server.
     $server_md5 = modulerep_client::get_module_md5($module_meta['filename']);
+    debug_display($module_meta);
+    debug_display($server_md5);
 
     // verify the md5
     $dl_md5 = md5_file($xml_filename);
+
     if( $server_md5 != $dl_md5 ) {
       @unlink($xml_filename);
       return array(FALSE,$mod->Lang('error_checksum',array($server_md5,$dl_md5)));
@@ -297,10 +300,7 @@ final class modmgr_utils
 
     // expand the xml
     $ops = cmsms()->GetModuleOperations();
-    if( !$ops->ExpandXMLPackage( $xml_filename, 1 ) ) {
-      debug_display('error:'); die($ops->GetLastError());
-      return array(FALSE,$ops->GetLastError());
-    }
+    if( !$ops->ExpandXMLPackage( $xml_filename, 1 ) ) return array(FALSE,$ops->GetLastError());
 
     @unlink($xml_filename);
 
@@ -405,6 +405,23 @@ final class modmgr_utils
     if( $ts <= $stale_ts ) return 'stale';
     if( $ts <= $warn_ts ) return 'warn';
     if( $ts >= $new_ts ) return 'new';
+  }
+
+  public static function get_images()
+  {
+    // this is a bit ugly.
+    $mod = cms_utils::get_module('ModuleManager');
+    $smarty = cmsms()->GetSmarty();
+
+    $stale_img=$mod->GetModuleURLPath().'/images/error.png';
+    $stale_img = '<img src="'.$stale_img.'" title="'.$mod->Lang('title_stale').'" alt="stale" height="16"/>';
+    $smarty->assign('stale_img',$stale_img);
+    $warn_img=$mod->GetModuleURLPath().'/images/warn.png';
+    $warn_img = '<img src="'.$warn_img.'" title="'.$mod->Lang('title_warning').'" alt="warning" height="16"/>';
+    $smarty->assign('warn_img',$warn_img);
+    $new_img=$mod->GetModuleURLPath().'/images/new.png';
+    $new_img = '<img src="'.$new_img.'" title="'.$mod->Lang('title_new').'" alt="new" height="16"/>';
+    $smarty->assign('new_img',$new_img);
   }
 } // end of class
 

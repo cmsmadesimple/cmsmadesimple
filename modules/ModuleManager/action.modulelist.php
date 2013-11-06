@@ -72,11 +72,11 @@ if( count( $data ) ) {
 
   // build the table
   $rowarray = array();
-  $rowclass = 'row1';
   $newestdisplayed="";
   foreach( $data as $row ) {
     $onerow = new stdClass();
     $onerow->date = $row['date'];
+    $onerow->age = modmgr_utils::get_status($row['date']);
     $onerow->downloads = $row['downloads'];
     $onerow->name = $row['name'];
     $onerow->version = $row['version'];
@@ -144,16 +144,15 @@ if( count( $data ) ) {
     }
 	    
     $onerow->size = (int)((float) $row['size'] / 1024.0 + 0.5);
-    $onerow->rowclass = $rowclass;
     if( isset( $row['description'] ) ) $onerow->description=$row['description'];
     $rowarray[] = $onerow;
-    ($rowclass == "row1" ? $rowclass = "row2" : $rowclass = "row1");
   } // for
 
   $smarty->assign('items', $rowarray);
   $smarty->assign('itemcount', count($rowarray));
 }
 
+modmgr_utils::get_images();
 $smarty->assign('nametext',$this->Lang('nametext'));
 $smarty->assign('vertext',$this->Lang('vertext'));
 $smarty->assign('sizetext',$this->Lang('sizetext'));

@@ -10,10 +10,23 @@
 <p class="pageerror">{$message}</p>
 {/if}
 
+{function get_module_status_icon}
+{strip}
+{if $status == 'stale'}
+{$stale_img}
+{elseif $status == 'warn'}
+{$warn_img}
+{elseif $status == 'new'}
+{$new_img}
+{/if}
+{/strip}
+{/function}
+
 {if $itemcount > 0}
 <table cellspacing="0" class="pagetable scrollable">
 	<thead>
 		<tr>
+                        <th></th>
 			<th>{$nametext}</th>
 			<th><span title="{$mod->Lang('title_modulelastversion')}">{$vertext}</span></th>
                         <th><span title="{$mod->Lang('title_modulereleasedate')}">{$mod->Lang('releasedate')}</span></th>
@@ -27,7 +40,9 @@
 	</thead>
 	<tbody>
 {foreach from=$items item=entry}
-		<tr class="{$entry->rowclass}">
+		{cycle values="row1,row2" assign='rowclass'}
+	        <tr class="{$rowclass}" {if $entry->age=='new'}style="font-weight: bold;"{/if}>
+		        <td>{get_module_status_icon status=$entry->age}</td>
 			<td><span title="{$entry->description|strip_tags|cms_escape}">{$entry->name}</span></td>
 			<td>{$entry->version}</td>
 			<td>{$entry->date|date_format:'%x'}</td>
