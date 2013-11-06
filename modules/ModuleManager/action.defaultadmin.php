@@ -35,79 +35,58 @@
 #-------------------------------------------------------------------------
 #END_LICENSE
 if( !isset($gCms) ) exit;
-{
-  echo '<div class="pagewarning">'."\n";
-  echo '<h3>'.$this->Lang('notice')."</h3>\n";
-  $link = '<a target="_blank" href="http://dev.cmsmadesimple.org">forge</a>';
-  echo '<p>'.$this->Lang('general_notice',$link,$link)."</p>\n";
-  echo '<h3>'.$this->Lang('use_at_your_own_risk')."</h3>\n";
-  echo '<p>'.$this->Lang('compatibility_disclaimer')."</p></div>\n";
 
-  if( isset($_SESSION[$this->GetName()]['tab_error']) ) {
-    echo $this->ShowErrors($_SESSION[$this->GetName()]['tab_error']);
-    unset($_SESSION[$this->GetName()]['tab_message']);
-    unset($_SESSION[$this->GetName()]['tab_error']);
-  }
-  else if( isset($_SESSION[$this->GetName()]['tab_message']) ) {
-    echo $this->ShowMessage($_SESSION[$this->GetName()]['tab_message']);
-    unset($_SESSION[$this->GetName()]['tab_message']);
-    unset($_SESSION[$this->GetName()]['tab_error']);
-  }
+echo '<div class="pagewarning">'."\n";
+echo '<h3>'.$this->Lang('notice')."</h3>\n";
+$link = '<a target="_blank" href="http://dev.cmsmadesimple.org">forge</a>';
+echo '<p>'.$this->Lang('general_notice',$link,$link)."</p>\n";
+echo '<h3>'.$this->Lang('use_at_your_own_risk')."</h3>\n";
+echo '<p>'.$this->Lang('compatibility_disclaimer')."</p></div>\n";
 
-  if( !modmgr_utils::is_connection_ok() ) {
-    echo $this->_DisplayErrorPage($id,$params,$returnid,$this->Lang('error_request_problem'));
-  }
-
-  $active_tab = 'newversions';
-  if( isset($params['active_tab'])) {
-    $active_tab = $params['active_tab'];
-  }
-  else if( isset($_SESSION[$this->GetName()]['active_tab']) ) {
-    $active_tab = $_SESSION[$this->GetName()]['active_tab'];
-    unset($_SESSION[$this->GetName()]['active_tab']);
-  }
-
-  // this is a bit ugly.
-  $stale_img=$this->GetModuleURLPath().'/images/error.png';
-  $stale_img = '<img src="'.$stale_img.'" title="'.$this->Lang('title_stale').'" alt="stale" height="16"/>';
-  $smarty->assign('stale_img',$stale_img);
-  $warn_img=$this->GetModuleURLPath().'/images/warn.png';
-  $warn_img = '<img src="'.$warn_img.'" title="'.$this->Lang('title_warning').'" alt="warning" height="16"/>';
-  $smarty->assign('warn_img',$warn_img);
-  $new_img=$this->GetModuleURLPath().'/images/new.png';
-  $new_img = '<img src="'.$new_img.'" title="'.$this->Lang('title_new').'" alt="new" height="16"/>';
-  $smarty->assign('new_img',$new_img);
-  
-  echo $this->StartTabHeaders();
-  if( $this->CheckPermission('Modify Modules') ) {
-    echo $this->SetTabHeader('newversions',$this->Lang('newversions'),$active_tab == 'newversions' );
-    echo $this->SetTabHeader('search',$this->Lang('search'),$active_tab == 'search');
-    echo $this->SetTabHeader('modules',$this->Lang('availmodules'),$active_tab == 'modules' );
-  }
-  if( $this->CheckPermission('Modify Site Preferences') ) {
-    echo $this->SetTabHeader('prefs',$this->Lang('preferences'),$active_tab == 'prefs' );
-  }
-  echo $this->EndTabHeaders();
-
-  echo $this->StartTabContent();
-  if( $this->CheckPermission('Modify Modules') ) {
-    echo $this->StartTab('newversions');
-    include(dirname(__FILE__).'/function.newversionstab.php');
-    echo $this->EndTab();
-
-    echo $this->StartTab('search');
-    include(dirname(__FILE__).'/function.search.php');
-    echo $this->EndTab();
-
-    echo $this->StartTab('modules');
-    include(dirname(__FILE__).'/function.admin_modules_tab.php');
-    echo $this->EndTab();
-  }
-  if( $this->CheckPermission('Modify Site Preferences') ) {
-    echo $this->StartTab('prefs');
-    include(dirname(__FILE__).'/function.admin_prefs_tab.php');
-    echo $this->EndTab();
-  }
-  echo $this->EndTabContent();
+if( !modmgr_utils::is_connection_ok() ) {
+  echo $this->ShowErrors($this->Lang('error_request_problem'));
 }
+
+// this is a bit ugly.
+$stale_img=$this->GetModuleURLPath().'/images/error.png';
+$stale_img = '<img src="'.$stale_img.'" title="'.$this->Lang('title_stale').'" alt="stale" height="16"/>';
+$smarty->assign('stale_img',$stale_img);
+$warn_img=$this->GetModuleURLPath().'/images/warn.png';
+$warn_img = '<img src="'.$warn_img.'" title="'.$this->Lang('title_warning').'" alt="warning" height="16"/>';
+$smarty->assign('warn_img',$warn_img);
+$new_img=$this->GetModuleURLPath().'/images/new.png';
+$new_img = '<img src="'.$new_img.'" title="'.$this->Lang('title_new').'" alt="new" height="16"/>';
+$smarty->assign('new_img',$new_img);
+  
+echo $this->StartTabHeaders();
+if( $this->CheckPermission('Modify Modules') ) {
+  echo $this->SetTabHeader('newversions',$this->Lang('newversions'));
+  echo $this->SetTabHeader('search',$this->Lang('search'));
+  echo $this->SetTabHeader('modules',$this->Lang('availmodules'));
+}
+if( $this->CheckPermission('Modify Site Preferences') ) {
+  echo $this->SetTabHeader('prefs',$this->Lang('prompt_settings'));
+}
+echo $this->EndTabHeaders();
+
+echo $this->StartTabContent();
+if( $this->CheckPermission('Modify Modules') ) {
+  echo $this->StartTab('newversions',$params);
+  include(dirname(__FILE__).'/function.newversionstab.php');
+  echo $this->EndTab();
+
+  echo $this->StartTab('search',$params);
+  include(dirname(__FILE__).'/function.search.php');
+  echo $this->EndTab();
+
+  echo $this->StartTab('modules',$params);
+  include(dirname(__FILE__).'/function.admin_modules_tab.php');
+  echo $this->EndTab();
+}
+if( $this->CheckPermission('Modify Site Preferences') ) {
+  echo $this->StartTab('prefs',$params);
+  include(dirname(__FILE__).'/function.admin_prefs_tab.php');
+  echo $this->EndTab();
+}
+echo $this->EndTabContent();
 ?>

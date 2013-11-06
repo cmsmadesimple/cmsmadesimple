@@ -43,146 +43,32 @@ class ModuleManager extends CMSModule
 {
   const _dflt_request_url = 'http://www.cmsmadesimple.org/ModuleRepository/request/v2/';
 
-  function GetName()
-  {
-    return 'ModuleManager';
-  }
-
-
-  /*---------------------------------------------------------
-   GetFriendlyName()
-   ---------------------------------------------------------*/
-  function GetFriendlyName()
-  {
-    return $this->Lang('friendlyname');
-  }
-
-	
-  /*---------------------------------------------------------
-   GetVersion()
-   ---------------------------------------------------------*/
-  function GetVersion()
-  {
-    return '1.5.5';
-  }
-
-
-  /*---------------------------------------------------------
-   GetHelp()
-   ---------------------------------------------------------*/
-  function GetHelp()
-  {
-    return $this->Lang('help');
-  }
-
-
-  /*---------------------------------------------------------
-   GetAuthor()
-   ---------------------------------------------------------*/
-  function GetAuthor()
-  {
-    return 'calguy1000';
-  }
-
-
-  /*---------------------------------------------------------
-   GetAuthorEmail()
-   ---------------------------------------------------------*/
-  function GetAuthorEmail()
-  {
-    return 'calguy1000@hotmail.com';
-  }
-
-
-  /*---------------------------------------------------------
-   GetChangeLog()
-   ---------------------------------------------------------*/
-  function GetChangeLog()
-  {
-    return file_get_contents(dirname(__FILE__).'/changelog.inc');
-  }
-
-
-  /*---------------------------------------------------------
-   IsPluginModule()
-   ---------------------------------------------------------*/
-  function IsPluginModule()
-  {
-    return false;
-  }
-
-
-  /*---------------------------------------------------------
-   HasAdmin()
-   ---------------------------------------------------------*/
-  function HasAdmin()
-  {
-    return true;
-  }
-
-
-  /*---------------------------------------------------------
-   IsAdminOnly()
-   ---------------------------------------------------------*/
-  function IsAdminOnly()
-  {
-    return true;
-  }
-
-
-  /*---------------------------------------------------------
-   GetAdminSection()
-   ---------------------------------------------------------*/
-  function GetAdminSection()
-  {
-    return 'extensions';
-  }
-
-
-  /*---------------------------------------------------------
-   GetAdminDescription()
-   ---------------------------------------------------------*/
-  function GetAdminDescription()
-  {
-    return $this->Lang('admindescription');
-  }
-
-
+  function GetName() { return 'ModuleManager'; }
+  function GetFriendlyName() { return $this->Lang('friendlyname'); }
+  function GetVersion() { return '1.5.5'; }
+  function GetHelp() { return $this->Lang('help'); }
+  function GetAuthor() { return 'calguy1000'; }
+  function GetAuthorEmail() { return 'calguy1000@hotmail.com'; }
+  function GetChangeLog() { return file_get_contents(dirname(__FILE__).'/changelog.inc'); }
+  function IsPluginModule() { return false; }
+  function HasAdmin() { return true; }
+  function IsAdminOnly() { return true; }
+  function GetAdminSection() { return 'extensions'; }
+  function GetAdminDescription() { return $this->Lang('admindescription'); }
   function LazyLoadAdmin() { return TRUE; }
+  function MinimumCMSVersion() { return "1.10-beta0"; }
+  function InstallPostMessage() { return $this->Lang('postinstall'); }
+  function UninstallPostMessage() { return $this->Lang('postuninstall'); }
+  function UninstallPreMessage() { return $this->Lang('really_uninstall'); }
+  function VisibleToAdminUser() { return ($this->CheckPermission('Modify Site Preferences') || $this->CheckPermission('Modify Modules')); }
 
-  /*---------------------------------------------------------
-   VisibleToAdminUser()
-   ---------------------------------------------------------*/
-  function VisibleToAdminUser()
+  function Install()
   {
-    if( $this->CheckPermission('Modify Site Preferences') ||
-	$this->CheckPermission('Modify Modules') )
-      {
-	return true;
-      }
-    return false;
+    $this->SetPreference('module_repository',ModuleManager::_dflt_request_url);
   }
-	
 
-  /*---------------------------------------------------------
-   CheckAccess()
-   ---------------------------------------------------------*/
-  function CheckAccess($id, $params, $returnid,$perm = 'Modify Modules')
-  {
-    if (! $this->CheckPermission($perm))
-      {
-	$this->_DisplayErrorPage($id, $params, $returnid,
-				$this->Lang('accessdenied'));
-	return false;
-      }
-    return true;
-  }
-	
-  /*---------------------------------------------------------
-   _DisplayErrorPage()
-   This is a simple function for generating error pages.
-   ---------------------------------------------------------*/
-  function _DisplayErrorPage($id, &$params, $returnid, $message='')
+
+  protected function _DisplayErrorPage($id, &$params, $returnid, $message='')
   {
     $this->smarty->assign('title_error', $this->Lang('error'));
     $this->smarty->assign_by_ref('message', $message);
@@ -194,97 +80,37 @@ class ModuleManager extends CMSModule
 	
 
   /*---------------------------------------------------------
-   MinimumCMSVersion()
-   ---------------------------------------------------------*/
-  function MinimumCMSVersion()
-  {
-    return "1.10-beta0";
-  }
-
-
-  /*---------------------------------------------------------
-   Install()
-   ---------------------------------------------------------*/
-  function Install()
-  {
-    $this->SetPreference('module_repository',ModuleManager::_dflt_request_url);
-  }
-
-  /*---------------------------------------------------------
-   InstallPostMessage()
-   ---------------------------------------------------------*/
-  function InstallPostMessage()
-  {
-    return $this->Lang('postinstall');
-  }
-
-
-  /*---------------------------------------------------------
-   UninstallPostMessage()
-   ---------------------------------------------------------*/
-  function UninstallPostMessage()
-  {
-    return $this->Lang('postuninstall');
-  }
-
-
-  /*---------------------------------------------------------
    Upgrade()
    ---------------------------------------------------------*/
   function Upgrade($oldversion, $newversion)
   {
     $current_version = $oldversion;
-    switch($current_version)
-      {
-      case "1.0":
-	$this->SetPreference('module_repository','http://modules.cmsmadesimple.org/soap.php?module=ModuleRepository');
-	break;
-      }
+    switch($current_version) {
+    case "1.0":
+      $this->SetPreference('module_repository','http://modules.cmsmadesimple.org/soap.php?module=ModuleRepository');
+      break;
+    }
 
-    if( version_compare($oldversion,'1.5') < 0 )
-      {
-	$this->SetPreference('module_repository',ModuleManager::_dflt_request_url);
-      }
-
-  }
-
-
-  /**
-   * UninstallPreMessage()
-   */
-  function UninstallPreMessage()
-  {
-    return $this->Lang('really_uninstall');
+    if( version_compare($oldversion,'1.5') < 0 ) $this->SetPreference('module_repository',ModuleManager::_dflt_request_url);
   }
 
 	
-  /*---------------------------------------------------------
-   Uninstall()
-   ---------------------------------------------------------*/
-  function Uninstall()
-  {
-    $this->RemovePreference();
-  }
-  
-
   /*---------------------------------------------------------
    DoAction($action, $id, $params, $returnid)
    ---------------------------------------------------------*/
   function DoAction($action, $id, $params, $returnid=-1)
   {
     @set_time_limit(9999);
-    switch ($action)
-      {
-      case 'recurseinstall':
-	{
-	  die('call installmodule action');
-	}
+    switch ($action) {
+    case 'recurseinstall':
+      die('call installmodule action');
+      break;
 
-      // fallback through to call the action.xxxx.php file
-      default:
-	parent::DoAction( $action, $id, $params, $returnid );
-	break;
-      }
+    // fallback through to call the action.xxxx.php file
+    default:
+      parent::DoAction( $action, $id, $params, $returnid );
+      break;
+    }
   }
 
 } // end of class

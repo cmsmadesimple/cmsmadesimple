@@ -35,47 +35,26 @@
 #-------------------------------------------------------------------------
 #END_LICENSE
 if( !isset($gCms) ) exit;
+if( !$this->CheckPermission('Modify Site Preferences' ) ) return;
 
-{
-  global $_SESSION;
+$this->SetCurrentTab('prefs');
 
-  if( !$this->CheckPermission('Modify Site Preferences' ) )
-    {
-	$this->_DisplayErrorPage( $id, $params, $returnid,
-				  $this->Lang('accessdenied'));
-	return;
-    }
+if( isset($config['modulemanager_debug']) && isset($params['reseturl']) ) {
+  $this->SetPreference('module_repository',ModuleManager::_dflt_request_url);
+  $this->SetMessage($this->Lang('msg_urlreset'));
+  $this->RedirectToAdminTab();
+}
 
-  if( isset($params['resetcache']) )
-    {
-      unset($_SESSION['modulemanager_cache']);
-      $this->Redirect($id,'defaultadmin',$returnid,array('active_tab'=>'prefs'));
-    }
-  else if( isset($params['reseturl']) )
-    {
-      $this->SetPreference('module_repository',ModuleManager::_dflt_request_url);
-      $this->Redirect($id,'defaultadmin',$returnid,array('active_tab'=>'prefs'));
-    }
+if( isset($params['input_dl_chunksize']) ) $this->SetPreference('dl_chunksize',trim($params['input_dl_chunksize']));
+$latestdepends = (isset($params['latestdepends']))?1:0;
+$this->SetPreference('latestdepends',$latestdepends);
 
-  if( !isset( $params['url'] ) )
-    {
-	$this->_DisplayErrorPage( $id, $params, $returnid,
-				  $this->Lang('error_insufficientparams'));
-	return;
-    }
-
-  if( isset($params['input_dl_chunksize']) )
-    {
-      $this->SetPreference('dl_chunksize',trim($params['input_dl_chunksize']));
-    }
-
-  $latestdepends = (isset($params['latestdepends']))?1:0;
-  $this->SetPreference('latestdepends',$latestdepends);
-
+if( isset($config['modulemanager_debug']) ) {
+  if( isset($params['url']) ) $this->SetPreference('module_repository',trim($params['url']));
   $disable_caching = (isset($params['disable_caching']))?1:0;
   $this->SetPreference('disable_caching',$disable_caching);
-
-  $this->SetPreference('module_repository',trim($params['url']));
-  $this->Redirect($id,'defaultadmin',$returnid,array('active_tab'=>'prefs',"module_message"=>$this->Lang("preferencessaved")));
 }
+
+$this->SetMessage($this->Lang('msg_prefssaved'));
+$this->RedirectToAdminTab();
 ?>

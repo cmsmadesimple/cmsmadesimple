@@ -14,10 +14,10 @@
 <table cellspacing="0" class="pagetable scrollable">
 	<thead>
 		<tr>
-			<th width="20%">{$nametext}</th>
-			<th>{$vertext}</th>
-                        <th>{$mod->Lang('releasedate')}</th>
-                        <th>{$mod->Lang('downloads')}</th>
+			<th>{$nametext}</th>
+			<th><span title="{$mod->Lang('title_modulelastversion')}">{$vertext}</span></th>
+                        <th><span title="{$mod->Lang('title_modulereleasedate')}">{$mod->Lang('releasedate')}</span></th>
+                        <th><span title="{$mod->Lang('title_moduledownloads')}">{$mod->Lang('downloads')}</span></th>
 			<th>{$sizetext}</th>
 			<th>{$statustext}</th>
 			<th>&nbsp;</th>
@@ -28,23 +28,16 @@
 	<tbody>
 {foreach from=$items item=entry}
 		<tr class="{$entry->rowclass}">
-			<td>{$entry->name}</td>
+			<td><span title="{$entry->description|strip_tags|cms_escape}">{$entry->name}</span></td>
 			<td>{$entry->version}</td>
 			<td>{$entry->date|date_format:'%x'}</td>
 			<td>{$entry->downloads}</td>
 			<td>{$entry->size}</td>
 			<td>{$entry->status}</td>
-			<td>{$entry->dependslink}</td>
-			<td>{$entry->helplink}</td>
-			<td>{$entry->aboutlink}</td>
-		</tr>
-	{if $entry->description}
-		<tr class="{$entry->rowclass}">
-                	<td>&nbsp;</td>
-                	<td colspan="6">{$entry->description}</td>
-	        </tr>
-	{/if}
-	 
+			<td><span title="{$mod->Lang('title_modulereleasedepends')}">{$entry->dependslink}</span></td>
+			<td><span title="{$mod->Lang('title_modulereleasehelp')}">{$entry->helplink}</span></td>
+			<td><span title="{$mod->Lang('title_modulereleaseabout')}">{$entry->aboutlink}</span></td>
+		</tr> 
 {/foreach}
 	</tbody>
 </table>

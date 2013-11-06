@@ -85,12 +85,7 @@ $instmodules = '';
 $letters = array();
 $tmp = explode(',','A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z');
 foreach( $tmp as $i ) {
-  if( $i == $curletter ) {
-    $letters[] = "<strong>$i</strong>";
-  }
-  else {
-    $letters[] = $this->CreateLink($id,'defaultadmin',$returnid, $i, array('curletter'=>$i,'active_tab'=>'modules'));
-  }
+  $letters[$i] = $this->create_url($id,'defaultadmin',$returnid,array('curletter'=>$i,'__activetab'=>'modules'));
 }
 
 // cross reference them
@@ -105,7 +100,6 @@ if( count( $data ) ) {
 
   // build the table
   $rowarray = array();
-  $rowclass = 'row1';
   $newestdisplayed="";
   foreach( $data as $row ) {
     $onerow = new stdClass();
@@ -114,18 +108,30 @@ if( count( $data ) ) {
     }
     $onerow->name = $this->CreateLink( $id, 'modulelist', $returnid, $row['name'], array('name'=>$row['name']));
     $onerow->version = $row['version'];
+    $onerow->help_url = $this->create_url( $id, 'modulehelp', $returnid,
+					   array('name' => $row['name'],'version' => $row['version'],'filename' => $row['filename']));
+
     $onerow->helplink = $this->CreateLink( $id, 'modulehelp', $returnid,
 					   $this->Lang('helptxt'), 
 					   array('name' => $row['name'],'version' => $row['version'],'filename' => $row['filename']));
+
+    $onerow->depends_url = $this->create_url( $id, 'moduledepends', $returnid,
+					      array('name' => $row['name'],'version' => $row['version'],'filename' => $row['filename']));
+					      
     $onerow->dependslink = $this->CreateLink( $id, 'moduledepends', $returnid,
 					      $this->Lang('dependstxt'), 
 					      array('name' => $row['name'],'version' => $row['version'],'filename' => $row['filename']));
+
+    $onerow->about_url = $this->create_url( $id, 'moduleabout', $returnid,
+					    array('name' => $row['name'],'version' => $row['version'],'filename' => $row['filename']));
+
     $onerow->aboutlink = $this->CreateLink( $id, 'moduleabout', $returnid,
 					    $this->Lang('abouttxt'), 
 					    array('name' => $row['name'],'version' => $row['version'],'filename' => $row['filename']));
     $onerow->age = modmgr_utils::get_status($row['date']);
     $onerow->date = $row['date'];
     $onerow->downloads = $row['downloads'];
+    $onerow->candownload = FALSE;
 
     switch( $row['status'] ) {
     case 'incompatible':
@@ -142,6 +148,7 @@ if( count( $data ) ) {
 	$mod = $moduledir.DIRECTORY_SEPARATOR.$row['name'];
 	if( (($writable && is_dir($mod) && is_directory_writable( $mod )) ||
 	     ($writable && !file_exists( $mod ) )) && $caninstall ) {
+	  $onerow->candownload = TRUE;
 	  $onerow->status = $this->CreateLink( $id, 'installmodule', $returnid,
 					       $this->Lang('download'), 
 					       array('name' => $row['name'],'version' => $row['version'],'filename' => $row['filename'],
@@ -157,6 +164,7 @@ if( count( $data ) ) {
 	$mod = $moduledir.DIRECTORY_SEPARATOR.$row['name'];
 	if( (($writable && is_dir($mod) && is_directory_writable( $mod )) ||
 	     ($writable && !file_exists( $mod ) )) && $caninstall ) {
+	  $onerow->candownload = TRUE;
 	  $onerow->status = $this->CreateLink( $id, 'upgrademodule', $returnid,
 					       $this->Lang('upgrade'), 
 					       array('name' => $row['name'],'version' => $row['version'],'filename' => $row['filename'],
@@ -170,10 +178,8 @@ if( count( $data ) ) {
     }
 
     $onerow->size = (int)((float) $row['size'] / 1024.0 + 0.5);
-    $onerow->rowclass = $rowclass;
     if( isset( $row['description'] ) ) $onerow->description=$row['description'];
     $rowarray[] = $onerow;
-    ($rowclass == "row1" ? $rowclass = "row2" : $rowclass = "row1");
   } // for
 
   $smarty->assign('items', $rowarray);
@@ -191,7 +197,8 @@ $searchsubmit = $this->CreateInputSubmit( $id, 'submit', 'Search'); // todo -- $
 $smarty->assign('search',$searchstart.$searchfield.$searchsubmit.$searchend);
 
 // and display our page
-$smarty->assign('letters', implode('&nbsp;',array_values($letters)));
+$smarty->assign('letter_urls',$letters);
+$smarty->assign('curletter',$curletter);
 $smarty->assign('nametext',$this->Lang('nametext'));
 $smarty->assign('vertext',$this->Lang('vertext'));
 $smarty->assign('sizetext',$this->Lang('sizetext'));

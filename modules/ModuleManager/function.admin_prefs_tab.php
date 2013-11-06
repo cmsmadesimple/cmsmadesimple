@@ -37,38 +37,13 @@
 if (!isset($gCms)) exit;
 if( !$this->CheckPermission('Modify Site Preferences') ) exit;
 
-$smarty->assign('formstart',$this->CreateFormStart( $id, 'setprefs', $returnid ));
-$smarty->assign('formend',$this->CreateFormEnd());
-$smarty->assign('prompt_url',$this->Lang('prompt_repository_url'));
-$smarty->assign('input_url',$this->CreateInputText($id, 'url', 
-							 $this->GetPreference('module_repository'),
-							 80, 255 ));
-$smarty->assign('extratext_url',$this->Lang('text_repository_url'));
+if( isset($config['modulemanager_debug']) ) {
+  $smarty->assign('module_repository',$this->GetPreference('module_repository'));
+  $smarty->assign('disable_caching',$this->GetPreference('disable_caching',0));
+}
+$smarty->assign('dl_chunksize',$this->GetPreference('dl_chunksize'));
+$smarty->assign('latestdepends',$this->GetPreference('latestdepends',1));
     
-$smarty->assign('prompt_latestdepends',$this->Lang('latestdepends'));
-$smarty->assign('input_latestdepends',$this->CreateInputCheckbox($id,'latestdepends','1',$this->GetPreference('latestdepends',1)));
-$smarty->assign('info_latestdepends',$this->Lang('info_latestdepends'));
-    
-$smarty->assign('prompt_reseturl',$this->Lang('prompt_reseturl'));
-$smarty->assign('input_reseturl',$this->CreateInputSubmit($id,'reseturl',$this->Lang('reset')));
-    
-
-$smarty->assign('prompt_chunksize',$this->Lang('prompt_dl_chunksize'));
-$smarty->assign('input_chunksize',$this->CreateInputText($id, 'input_dl_chunksize',
-							       $this->GetPreference('dl_chunksize',256),3,3));
-$smarty->assign('extratext_chunksize',$this->Lang('text_dl_chunksize'));
-
-$smarty->assign('prompt_disable_caching',$this->Lang('prompt_disable_caching'));
-$smarty->assign('input_disable_caching',
-		$this->CreateInputCheckbox($id,'disable_caching',1,$this->GetPreference('disable_caching',0)));
-$smarty->assign('info_disable_caching',$this->Lang('info_disable_caching'));
-
-$smarty->assign('prompt_resetcache',$this->Lang('prompt_resetcache'));
-$smarty->assign('input_resetcache',$this->CreateInputSubmit($id,'resetcache',$this->Lang('reset')));
-			  
-$smarty->assign('submit',$this->CreateInputSubmit( $id, 'submit', $this->Lang('submit')));
-$smarty->assign('prompt_otheroptions',$this->Lang('prompt_otheroptions'));
-$smarty->assign('prompt_settings',$this->Lang('prompt_settings'));
 echo $this->ProcessTemplate('adminprefs.tpl');
 
 #

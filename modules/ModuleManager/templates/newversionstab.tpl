@@ -1,3 +1,4 @@
+<div class="information" style="width: 95%;">{$mod->Lang('info_searchtab')}</div>
 {if !empty($updatestxt)}
 <div class="information"><p>{$updatestxt}</p></div>
 {/if}
@@ -10,7 +11,7 @@
 <table cellspacing="0" class="pagetable scrollable">
 	<thead>
 		<tr>
-			<th width="20%">{$nametext}</th>
+			<th>{$nametext}</th>
 			<th>{$vertext}</th>
 			<th>{$haveversion}</th>
                         <th>{$mod->Lang('releasedate')}</th>
@@ -24,7 +25,7 @@
 	</thead>
 	<tbody>
 {foreach from=$items item=entry}
-		<tr class="{$entry->rowclass}">
+	<tr class="{$entry->rowclass}">
 			<td>{$entry->name|default:''}</td>
 			<td>{$entry->version|default:''}</td>
 			<td>{if isset($entry->haveversion)}{$entry->haveversion}{/if}</td>

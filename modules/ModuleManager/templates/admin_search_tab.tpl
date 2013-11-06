@@ -25,7 +25,7 @@ $(document).ready(function(){
 <div class="pageoverflow">
   <p class="pagetext"><label for="searchterm">{$mod->Lang('searchterm')}:</label></p>
   <p class="pageinput">
-    <input id="searchterm" type="text" name="{$actionid}term" size="50" value="{$term}" placeholder="{$mod->Lang('entersearchterm')}"/>&nbsp;
+    <input id="searchterm" type="text" name="{$actionid}term" size="50" value="{$term}" title="{$mod->Lang('title_searchterm')}" placeholder="{$mod->Lang('entersearchterm')}"/>&nbsp;
     <input type="hidden" name="{$actionid}advanced" value="0"/>
     <input type="checkbox" id="advanced" name="{$actionid}advanced" value="1" {if $advanced}checked="checked"{/if} title="{$mod->Lang('title_advancedsearch')}"/>&nbsp;<label for="advanced">{$mod->Lang('prompt_advancedsearch')}</label>
     <span id="advhelp" style="display: none;"><br/>{$mod->Lang('advancedsearch_help')}</span>

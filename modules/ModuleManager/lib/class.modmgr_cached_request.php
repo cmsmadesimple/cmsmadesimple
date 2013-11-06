@@ -54,6 +54,7 @@ final class modmgr_cached_request
   public function execute($target = '',$data = array(), $age = '')
   {
     $mod = cms_utils::get_module('ModuleManager');
+    $config = cmsms()->GetConfig();
     if( !$age ) $age = get_site_preference('browser_cache_expiry',60);
     if( $age ) $age = max(1,(int)$age);
 
@@ -66,8 +67,8 @@ final class modmgr_cached_request
     $atime = time() - ($age * 60);
     $status = '';
     $resutl = '';
-    if( $mod->GetPreference('disable_caching',0) || !file_exists($fn) || filemtime($fn) <= $atime )
-    {
+    if( (isset($config['modulemanager_debug']) && $mod->GetPreference('disable_caching',0)) || 
+	!file_exists($fn) || filemtime($fn) <= $atime ) {
       // execute the request
       $req = new cms_http_request();
       if( $this->_timeout ) $req->setTimeout($this->_timeout);

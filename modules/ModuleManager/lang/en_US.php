@@ -18,6 +18,9 @@ $lang['back_to_module_manager'] = '&#171; Return to Module Manager';
 
 // C
 $lang['cantdownload'] = 'Cannot Download';
+$lang['confirm_resetcache'] = 'Are you sure you want to clear the local cache?';
+$lang['confirm_reseturl'] = 'Are you sure you want to reset the repository URL?';
+$lang['confirm_settings'] = 'Are you sure you want to save these settings?';
 $lang['compatibility_disclaimer'] = 'The modules displayed here are contributed by both the CMS Developers, and independent third parties.  We make no guarantees that the modules available here are functional, tested, or compatible with your system.  You are encouraged to read the information found in the help and about links for each module before attempting the installation.';
 
 // D
@@ -71,11 +74,14 @@ $lang['help'] = '<h3>What Does This Do?</h3>
 <p>Copyright &copy; 2006, calguy1000 <a href="mailto:calguy1000@hotmail.com">&lt;calguy1000@hotmail.com&gt;</a>. All Rights Are Reserved.</p>
 <p>This module has been released under the <a href="http://www.gnu.org/licenses/licenses.html#GPL">GNU Public License</a>. You must agree to this license before using the module.</p>';
 $lang['helptxt'] = 'Help';
+$lang['help_dl_chunksize'] = 'This parameter specifies the size <em>(in kilobytes)</em> of each chunk of data that will be downloaded from the repository when requesting a module.';
+$lang['help_latestdepends'] = 'When installing a module with dependencies, this will ensure that the newest version of a dependent module is installed';
 
 // I
 $lang['incompatible'] = 'Incompatible';
-$lang['info_disable_caching'] = '<strong>Not Recommended</strong>.  For performance reasons, ModuleManager will cache for (by default one hour) much of the information retrieved from the remote server';
-$lang['info_latestdepends'] = 'When installing a module with dependencies, this option will make sure that the latest version of the dependency will be installed';
+//$lang['info_disable_caching'] = '<strong>Not Recommended</strong>.  For performance reasons, ModuleManager will cache for (by default one hour) much of the information retrieved from the remote server';
+//$lang['info_latestdepends'] = 'When installing a module with dependencies, this option will make sure that the latest version of the dependency will be installed';
+$lang['info_searchtab'] = 'This tab displays a list of installed modules for which there is a newer version available <em>(if any)</em>';
 $lang['install'] = 'install';
 $lang['installed'] = 'Module version %s installed.';
 $lang['install_submit'] = 'Install';
@@ -88,7 +94,10 @@ $lang['latestdepends'] = 'Always install the newest modules';
 // M
 $lang['moddescription'] = 'A client for the ModuleRepository, this module allows previewing, and installing modules from remote sites without the need for ftping, or unzipping archives.  Module XML files are downloaded using a REST API, integrity verified, and then expanded automatically.';
 $lang['mod_name_ver'] = '%s version %s';
+$lang['msg_cachecleared'] = 'Cache cleared';
 $lang['msg_nodependencies'] = 'This file has not listed any dependencies';
+$lang['msg_prefssaved'] = 'Preferences Updated';
+$lang['msg_urlreset'] = 'Module Repository URL reset to factory settings';
 
 // N
 $lang['nametext'] = 'Module Name';
@@ -111,8 +120,8 @@ $lang['prompt_disable_caching'] = 'Disable caching of requests from the server';
 $lang['prompt_dl_chunksize'] = 'Download Chunk Size (Kb)';
 $lang['prompt_otheroptions'] = 'Other Options';
 $lang['prompt_repository_url'] = 'ModuleRepository URL';
-$lang['prompt_resetcache'] = 'Reset the local cache of repository data';
-$lang['prompt_reseturl'] = 'Reset URL to preset default';
+//$lang['prompt_resetcache'] = 'Reset the local cache of repository data';
+//$lang['prompt_reseturl'] = 'Reset URL to preset default';
 $lang['prompt_settings'] = 'Settings';
 
 // R
@@ -120,6 +129,7 @@ $lang['really_uninstall'] = 'Are you sure you want to uninstall? You will be mis
 $lang['releasedate'] = 'Date';
 $lang['repositorycount'] = 'Modules found in the repository';
 $lang['reset'] = 'Reset';
+$lang['reset_cache'] = 'Reset Cache';
 
 // S
 $lang['search'] = 'Search';
@@ -132,13 +142,29 @@ $lang['statustext'] = 'Status/Action';
 $lang['submit'] = 'Submit';
 
 // T
-$lang['text_dl_chunksize'] = 'The maximum amount of data to download from the server in one chunk (when installing a module)';
-$lang['text_repository_url'] = 'The URL should be in the form http://www.mycmsmssite.com/ModuleRepository/request/v2 (assuming pretty urls are enabled on the repository server)<br />Note: opening this link in your webbrowser will return an Error404!';
+//$lang['text_dl_chunksize'] = 'The maximum amount of data to download from the server in one chunk (when installing a module)';
+//$lang['text_repository_url'] = 'The URL should be in the form http://www.mycmsmssite.com/ModuleRepository/request/v2 (assuming pretty urls are enabled on the repository server)<br />Note: opening this link in your webbrowser will return an Error404!';
 $lang['time_warning'] = 'Two or more actions need to be performed. Be aware that the install could take a few minutes. Please be patient!';
 $lang['title_advancedsearch'] = 'Enable advanced search functionality';
 $lang['title_installation'] = 'Installation';
 $lang['title_installation_complete'] = 'Installation Process Complete!';
+$lang['title_letter'] = 'Show modules whos name starts with %s';
+$lang['title_moduleabout'] = 'View the author and changelog information for this module';
+$lang['title_moduledepends'] = 'View the dependencies for this module';
+$lang['title_moduledownloads'] = 'This column displays the approximate number of downloads for each release of the module';
+$lang['title_modulehelp'] = 'View basic documentation for this module';
+$lang['title_moduleinstallupgrade'] = 'Install or Upgrade this module';
+$lang['title_modulelastreleasedate'] = 'This column displays the date of the last release for the module';
+$lang['title_modulelastversion'] = 'This column displays the version number of the last release for the module';
+$lang['title_moduletotaldownloads'] = 'This column displays the approximate total downloads for all released versions of the module';
+$lang['title_modulereleaseabout'] = 'View the author and changelog information for this release';
+$lang['title_modulereleasedate'] = 'This column displays the release date of the module';
+$lang['title_modulereleasedepends'] = 'View the dependencies for this release';
+$lang['title_modulereleasehelp'] = 'View the documentation supplied with this release';
+$lang['title_modulestatus'] = 'This column displays the status or actions available for a particular module';
+$lang['title_moduleversion'] = 'This column displays the module version';
 $lang['title_new'] = 'This module was released within the last month';
+$lang['title_searchterm'] = 'Enter a natural language search term.  If advanced mode is enabled, then boolean operations similar to google can be used';
 $lang['title_stale'] = 'This module is stale (released over two years ago).';
 $lang['title_warning'] = 'This module was released some time ago.  Use caution.';
 
