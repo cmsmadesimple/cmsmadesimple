@@ -100,10 +100,11 @@ $(document).ready(function(){
 <table cellspacing="0" class="pagetable" id="articlelist">
 	<thead>
 		<tr>
+			<th>#</th>
 			<th>{$titletext}</th>
 			<th>{$postdatetext}</th>
-                        <th>{$startdatetext}</th>
-                        <th>{$enddatetext}</th>
+            <th>{$startdatetext}</th>
+            <th>{$enddatetext}</th>
 			<th>{$categorytext}</th>
 			<th class="pageicon">{$statustext}</th>
 			<th class="pageicon">&nbsp;</th>
@@ -113,6 +114,7 @@ $(document).ready(function(){
 	</thead>
 	<tbody>
 	{foreach from=$items item=entry}
+		<td>{$entry->id}</td>
 		<tr class="{$entry->rowclass}">
 			<td>
                         {if isset($entry->edit_url)}
