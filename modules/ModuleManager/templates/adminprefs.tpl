@@ -22,7 +22,7 @@ $(document).ready(function(){
 {/if}
 
   <div class="pageoverflow">
-    <p class="pagetext"><label for="dl_chucksize">{$mod->Lang('prompt_dl_chunksize')}}:</label>&nbsp;{cms_help key2='help_dl_chunksize'}</p>
+    <p class="pagetext"><label for="dl_chucksize">{$mod->Lang('prompt_dl_chunksize')}:</label>&nbsp;{cms_help key2='help_dl_chunksize'}</p>
     <p class="pageinput">
       <input type="text" name="{$actionid}dl_chunksize" value="{$dl_chunksize}" size="3" maxlength="3"/>
     </p>
