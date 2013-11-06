@@ -26,7 +26,7 @@
 	<tbody>
 {foreach from=$items item=entry}
 	<tr class="{$entry->rowclass}">
-			<td>{$entry->name|default:''}</td>
+			<td><span title="{$entry->description|strip_tags|cms_escape}">{$entry->name|default:''}</span></td>
 			<td>{$entry->version|default:''}</td>
 			<td>{if isset($entry->haveversion)}{$entry->haveversion}{/if}</td>
 			<td>{$entry->date|date_format:'%x'}</td>
@@ -37,13 +37,6 @@
 			<td>{$entry->helplink|default:''}</td>
 			<td>{$entry->aboutlink|default:''}</td>
 		</tr>
-	{if isset($entry->description) && $entry->description != ''}
-		<tr class="{$entry->rowclass}">
-                	<td>&nbsp;</td>
-                	<td colspan="7">{$entry->description}</td>
-	        </tr>
-	{/if}
-	 
 {/foreach}
 	</tbody>
 </table>
