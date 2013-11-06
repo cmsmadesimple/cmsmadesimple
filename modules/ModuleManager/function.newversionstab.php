@@ -104,19 +104,31 @@ else {
 	  $onerow->age = modmgr_utils::get_status($row['date']);
 	  $onerow->downloads = $row['downloads'];
 	  $onerow->date = $row['date'];
+	  $onerow->age = modmgr_utils::get_status($row['date']);
 
 	  $onerow->name = $this->CreateLink( $id, 'modulelist', $returnid, $row['name'], array('name'=>$row['name']));
-	  //$onerow->name = $row['name'];
 	  $onerow->version = $row['version'];
+
+	  $onerow->help_url = $this->create_url($id,'modulehelp',$returnid,
+						 array('name' => $row['name'],'version' => $row['version'],'filename' => $row['filename']));
 	  $onerow->helplink = $this->CreateLink( $id, 'modulehelp', $returnid,
 						 $this->Lang('helptxt'), 
 						 array('name' => $row['name'],'version' => $row['version'],'filename' => $row['filename']));
+
+	  $onerow->depends_url = $this->create_url( $id, 'moduledepends', $returnid,
+						    array('name' => $row['name'],'version' => $row['version'],'filename' => $row['filename']));
+
 	  $onerow->dependslink = $this->CreateLink( $id, 'moduledepends', $returnid,
 						    $this->Lang('dependstxt'), 
 						    array('name' => $row['name'],'version' => $row['version'],'filename' => $row['filename']));
+
+	  $onerow->about_url = $this->create_url( $id, 'moduleabout', $returnid,
+						  array('name' => $row['name'],'version' => $row['version'],'filename' => $row['filename']));
+
 	  $onerow->aboutlink = $this->CreateLink( $id, 'moduleabout', $returnid,
 						  $this->Lang('abouttxt'),
 						  array('name' => $row['name'],'version' => $row['version'],'filename' => $row['filename']));
+
 	  $onerow->size = (int)((float) $row['size'] / 1024.0 + 0.5);
 	  if( isset( $row['description'] ) ) $onerow->description=$row['description'];
 	  $onerow->txt= $this->Lang('upgrade_available',$row['version'],$mver);

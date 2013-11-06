@@ -10,7 +10,7 @@ $lang['admindescription'] = 'A tool for retrieving and installing modules from r
 $lang['advancedsearch_help'] = 'Specify words to include or exclude from the search using a + or -, surround exact phrases with quotes.  i.e:  +red -apple +"some text"';
 $lang['all_modules_up_to_date'] = 'There are no newer modules available in the repository';
 $lang['availablemodules'] = 'The current status of modules available from the current repository';
-$lang['available_updates'] = 'Modules Available for Update; Before upgrading, please read the releasenotes in the Forge and create a backup of the website.';
+$lang['available_updates'] = 'One or more modules are available for upgrade; Before upgrading, please read the about information for the release and make sure you have a current backup of your website.';
 $lang['availmodules'] = 'Available Modules'; 
 
 // B
@@ -153,6 +153,7 @@ $lang['title_letter'] = 'Show modules whos name starts with %s';
 $lang['title_moduleabout'] = 'View the author and changelog information for this module';
 $lang['title_moduledepends'] = 'View the dependencies for this module';
 $lang['title_moduledownloads'] = 'This column displays the approximate number of downloads for each release of the module';
+$lang['title_moduledownloads2'] = 'This column displays the approximate number of downloads for the newest version of the module';
 $lang['title_modulehelp'] = 'View basic documentation for this module';
 $lang['title_moduleinstallupgrade'] = 'Install or Upgrade this module';
 $lang['title_modulelastreleasedate'] = 'This column displays the date of the last release for the module';
@@ -162,12 +163,16 @@ $lang['title_modulereleaseabout'] = 'View the author and changelog information f
 $lang['title_modulereleasedate'] = 'This column displays the release date of the module';
 $lang['title_modulereleasedepends'] = 'View the dependencies for this release';
 $lang['title_modulereleasehelp'] = 'View the documentation supplied with this release';
+$lang['title_modulesize2'] = 'This column displays the size of the module XML file to be downloaded (in kilobytes)';
 $lang['title_modulestatus'] = 'This column displays the status or actions available for a particular module';
 $lang['title_moduleversion'] = 'This column displays the module version';
 $lang['title_new'] = 'This module was released within the last month';
+$lang['title_newmoduleversion'] = 'This column displays the version number of the most recent release of the module';
 $lang['title_searchterm'] = 'Enter a natural language search term.  If advanced mode is enabled, then boolean operations similar to google can be used';
 $lang['title_stale'] = 'This module is stale (released over two years ago).';
 $lang['title_warning'] = 'This module was released some time ago.  Use caution.';
+$lang['title_yourmoduledate'] = 'This column displays the date of the latest release for this module';
+$lang['title_yourmoduleversion'] = 'This column displays the version number of module that is currently installed';
 
 // U
 $lang['uninstalled'] = 'Module Uninstalled.';
