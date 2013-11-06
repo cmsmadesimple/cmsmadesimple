@@ -1,20 +1,20 @@
 Version 2.0 - NO NAME SET
 -----------------------------
 Core - General
-  - default upload permission is now based on the umask.
+  - Default upload permission is now based on the umask
   - Removed the NCleanGrey admin theme
-  - Many tewaks to the admin theme
-  - Improvements to module loading.
-  - Many new smarty plugins for form building in modules.
+  - Many tweaks to the admin theme
+  - Improvements to module loading
+  - Many new smarty plugins for form building in modules
   - New ajaxy help
   - UI Review trough many admin pages
-  - New jquery based page selector.
+  - New jquery based page selector
   - Improved and documented htaccess.txt file
   - Many new smarty plugins to aid in module development and separation of logic from display
-  - adds the {cms_module_hint} plugin
-  - {content},{content_image},and {content_module} plugins all receive the required attribute
-  - {content} tag now has the placeholder attribute.
-  - major accessibility review throughout admin interface.
+  - Adds the {cms_module_hint} plugin
+  - {content}, {content_image} and {content_module} plugins all receive the required attribute
+  - {content} tag now has the placeholder attribute
+  - Major accessibility review throughout admin interface
 
 Core - Bug Reports
   -
@@ -35,8 +35,8 @@ Navigator
 MicroTiny
   -
  
-AdinSearch
-  - New module for searching for tags and any content in templates.
+AdminSearch
+  - New module for searching for tags and any content in templates
 
 CMSContentManager
   - New module for content editing.
@@ -62,8 +62,67 @@ News
 Search
   - No longer indexes templates, or GCB's
   - rewrite the reindex stuff to hopefully use a bit less memory (at least for content pages)
-
   
+
+Version 1.11.9 - Bartolome
+-----------------------------
+Core - General
+  - Fixes version.php to represent new schema
+  - Users with 'Modify Any Page' and 'Remove Content' can delete almost any page
+  - Fixes minor issue with event handlers
+  - Removes a debug limit on caching in contentoperations
+  - Robots don't index Error Console pages
+  - Only show technical details on the Error Console page to logged in administrators
+  - Entropy improvement in the cookie used to stay loggedin
+
+Core - Search
+  - Fixes PHP 5.3 dependency
+
+Core - Bug Reports
+  - #9549 CMSMS 1.11.8 performance regression
+
+Core - CMSMailer
+  - No longer send SMTP password in plain text
+
+
+Version 1.11.8 - Fioreana
+-----------------------------
+Core - General
+  - Updated config reference
+  - Fixes to module loading order stuff
+  - Fixes so that a modules create_url method is called from module_support CreateLink function
+  - Adds the TemplatePrefetch event
+  - Minor fixes to module XML export
+  - Adds the LoadAllContent method and optimizes loading of content list dropdowns and Listcontent
+  - Performance optimizations for static and dynamic URL handling
+  - Improve the help for content_image
+  - Performance improvements for listcontent and add/editcontent
+  - Improved and better documented sample htaccess.txt file
+  - Smarty template engine upgraded to version 3.1.14
+  - Optimization to Menumanager to load all pages when no parameters limit the amount of pages to display.
+  - Adds a check to the installer and systeminfo page to test wether the filesystem has a significant time difference from the php process
+  - The bbcode compatible system info report is now forced to english for posting in the forum
+
+Core - Bug Reports
+  - #8272 Sitename in Russian becomes unreadable
+  - #8807 Section headers are accessible through changing URL
+  - #9324 Title is now available when editing a section header
+  - #9391 Bug in get_template_vars
+  - #9415 Function get_upload_size on class.cms_config.php doesn't handle upload_max_filesize correct when it is 1G
+
+Core - News
+  - Adds a dropdown field type to News
+
+Core - Search
+  - No longer index templates and GCB's
+  - Now can stop individual content blocks from being indexed
+  - #7538 Search Module removes valid words when indexing
+  - #8169 Search Module indexing partial smarty tags and failing to index words with dash
+
+Core - Printing
+  - Minor fixes
+
+
 Version 1.11.7 - Genovesa
 -----------------------------
 Core - General
