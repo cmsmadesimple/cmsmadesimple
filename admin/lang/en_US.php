@@ -1045,6 +1045,7 @@ $lang['itsbeensincelogin'] = 'It has been %s since you last logged in';
 // JJJJ
 
 $lang['jsdisabled'] = 'Sorry, this function requires that you have Javascript enabled.';
+$lang['json_function'] = 'JSON functions';
 
 
 // K  K
