@@ -114,8 +114,8 @@ $(document).ready(function(){
 	</thead>
 	<tbody>
 	{foreach from=$items item=entry}
-		<td>{$entry->id}</td>
 		<tr class="{$entry->rowclass}">
+			<td>{$entry->id}</td>
 			<td>
                         {if isset($entry->edit_url)}
                           <a href="{$entry->edit_url}" title="{$mod->Lang('editarticle')}">{$entry->news_title|cms_escape}</a>
