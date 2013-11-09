@@ -168,7 +168,7 @@ final class CmsLangOperations
 	  if( !isset(self::$_langdata[$curlang][$realm][$key]) ) {
 		  // put mention into the admin log
 		  debug_bt_to_log();
-		  audit('', 'Languagestring: "' . $key . '"', 'Is missing in the languagefile...');
+		  audit('', 'Languagestring: "' . $key . '"', 'Is missing in the languagefile: '.  $realm);
 		  return "-- Missing Languagestring: $key --";
 	  }
 
