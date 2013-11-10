@@ -419,6 +419,8 @@ $lang['eventhandler'] = 'Event Handlers';
 $lang['eventhandlerdescription'] = 'Associate user tags with events';
 $lang['eventhandlers'] = 'Event Manager';
 $lang['event_description'] = 'Event Description';
+$lang['event_desc_adddesignpost'] = 'TODO';
+$lang['event_desc_adddesignpre'] = 'TODO';
 $lang['event_desc_addglobalcontentpost'] = 'Sent after a new global content block is created';
 $lang['event_desc_addglobalcontentpre'] = 'Sent before a new global content block is created';
 $lang['event_desc_addgrouppost'] = 'Sent after a new group is created';
@@ -427,6 +429,8 @@ $lang['event_desc_addstylesheetpost'] = 'Sent after a new stylesheet is created'
 $lang['event_desc_addstylesheetpre'] = 'Sent before a new stylesheet is created';
 $lang['event_desc_addtemplatepost'] = 'Sent after a new template is created';
 $lang['event_desc_addtemplatepre'] = 'Sent before a new template is created';
+$lang['event_desc_addtemplatetypepost'] = 'TODO';
+$lang['event_desc_addtemplatetypepre'] = 'TODO';
 $lang['event_desc_adduserdefinedtagpost'] = 'Sent after a user defined tag is inserted';
 $lang['event_desc_adduserdefinedtagpre'] = 'Sent prior to a user defined tag insert';
 $lang['event_desc_adduserpost'] = 'Sent after a new user is created';
@@ -441,6 +445,8 @@ $lang['event_desc_contentpostcompile'] = 'Sent after content has been processed 
 $lang['event_desc_contentpostrender'] = 'Sent before the combined html is sent to the browser';
 $lang['event_desc_contentprecompile'] = 'Sent before content is sent to smarty for processing';
 $lang['event_desc_contentstylesheet'] = 'Sent before the stylesheet is sent to the browser';
+$lang['event_desc_deletedesignpost'] = 'TODO';
+$lang['event_desc_deletedesignpre'] = 'TODO';
 $lang['event_desc_deleteglobalcontentpost'] = 'Sent after a global content block is deleted from the system';
 $lang['event_desc_deleteglobalcontentpre'] = 'Sent before a global content block is deleted from the system';
 $lang['event_desc_deletegrouppost'] = 'Sent after a group is deleted from the system';
@@ -449,10 +455,14 @@ $lang['event_desc_deletestylesheetpost'] = 'Sent after a stylesheet is deleted f
 $lang['event_desc_deletestylesheetpre'] = 'Sent before a stylesheet is deleted from the system';
 $lang['event_desc_deletetemplatepost'] = 'Sent after a template is deleted from the system';
 $lang['event_desc_deletetemplatepre'] = 'Sent before a template is deleted from the system';
+$lang['event_desc_deletetemplatetypepost'] = 'TODO';
+$lang['event_desc_deletetemplatetypepre'] = 'TODO';
 $lang['event_desc_deleteuserdefinedtagpost'] = 'Sent after a user defined tag is deleted';
 $lang['event_desc_deleteuserdefinedtagpre'] = 'Sent prior to deleting a user defined tag';
 $lang['event_desc_deleteuserpost'] = 'Sent after a user is deleted from the system';
 $lang['event_desc_deleteuserpre'] = 'Sent before a user is deleted from the system';
+$lang['event_desc_editdesignpost'] = 'TODO';
+$lang['event_desc_editdesignpre'] = 'TODO';
 $lang['event_desc_editglobalcontentpost'] = 'Sent after edits to a global content block are saved';
 $lang['event_desc_editglobalcontentpre'] = 'Sent before edits to a global content block are saved';
 $lang['event_desc_editgrouppost'] = 'Sent after edits to a group are saved';
@@ -461,6 +471,8 @@ $lang['event_desc_editstylesheetpost'] = 'Sent after edits to a stylesheet are s
 $lang['event_desc_editstylesheetpre'] = 'Sent before edits to a stylesheet are saved';
 $lang['event_desc_edittemplatepost'] = 'Sent after edits to a template are saved';
 $lang['event_desc_edittemplatepre'] = 'Sent before edits to a template are saved';
+$lang['event_desc_edittemplatetypepost'] = 'TODO';
+$lang['event_desc_edittemplatetypepre'] = 'TODO';
 $lang['event_desc_edituserdefinedtagpost'] = 'Sent after a user defined tag is updated';
 $lang['event_desc_edituserdefinedtagpre'] = 'Sent prior to a user defined tag update';
 $lang['event_desc_edituserpost'] = 'Sent after edits to a user are saved';
@@ -480,6 +492,9 @@ $lang['event_desc_stylesheetprecompile'] = 'Sent before a stylesheet is compiled
 $lang['event_desc_templatepostcompile'] = 'Sent after a template has been processed by smarty';
 $lang['event_desc_templateprecompile'] = 'Sent before a template is sent to smarty for processing';
 $lang['event_desc_templateprefetch'] = 'Sent before a template is fetched from smarty';
+
+$lang['event_help_adddesignpost'] = '<p>TODO</p>';
+$lang['event_help_adddesignpre'] = '<p>TODO</p>';
 $lang['event_help_addglobalcontentpost'] = '<p>Sent after a new global content block is created.</p>
 <h4>Parameters</h4>
 <ul>
@@ -528,6 +543,8 @@ $lang['event_help_addtemplatepre'] = '<p>Sent before a new template is created.<
 <li>\'template\' - Reference to the affected template object.</li>
 </ul>
 ';
+$lang['event_help_addtemplatetypepost'] = '<p>TODO</p>';
+$lang['event_help_addtemplatetypepre'] = '<p>TODO</p>';
 $lang['event_help_adduserdefinedtagpost'] = '<p>Sent prior to a user defined tag insert.</p>';
 $lang['event_help_adduserdefinedtagpre'] = '<p>Sent after a user defined tag is inserted.</p>';
 $lang['event_help_adduserpost'] = '<p>Sent after a new user is created.</p>
@@ -604,6 +621,8 @@ $lang['event_help_contentstylesheet'] = '<p>Sent before the sytlesheet is sent t
 <li>\'content\' - Reference to the affected stylesheet text.</li>
 </ul>
 ';
+$lang['event_help_deletedesignpost'] = '<p>TODO</p>';
+$lang['event_help_deletedesignpre'] = '<p>TODO</p>';
 $lang['event_help_deleteglobalcontentpost'] = '<p>Sent after a global content block is deleted from the system.</p>
 <h4>Parameters</h4>
 <ul>
@@ -652,6 +671,8 @@ $lang['event_help_deletetemplatepre'] = '<p>Sent before a template is deleted fr
 <li>\'template\' - Reference to the affected template object.</li>
 </ul>
 ';
+$lang['event_help_deletetemplatetypepost'] = '<p>TODO</p>';
+$lang['event_help_deletetemplatetypepre'] = '<p>TODO</p>';
 $lang['event_help_deleteuserdefinedtagpost'] = '<p>Sent after a user defined tag is deleted.</p>';
 $lang['event_help_deleteuserdefinedtagpre'] = '<p>Sent prior to deleting a user defined tag.</p>';
 $lang['event_help_deleteuserpost'] = '<p>Sent after a user is deleted from the system.</p>
@@ -666,6 +687,8 @@ $lang['event_help_deleteuserpre'] = '<p>Sent before a user is deleted from the s
 <li>\'user\' - Reference to the affected user object.</li>
 </ul>
 ';
+$lang['event_help_editdesignpost'] = '<p>TODO</p>';
+$lang['event_help_editdesignpre'] = '<p>TODO</p>';
 $lang['event_help_editglobalcontentpost'] = '<p>Sent after edits to a global content block are saved.</p>
 <h4>Parameters</h4>
 <ul>
@@ -714,6 +737,8 @@ $lang['event_help_edittemplatepre'] = '<p>Sent before edits to a template are sa
 <li>\'template\' - Reference to the affected template object.</li>
 </ul>
 ';
+$lang['event_help_edittemplatetypepost'] = '<p>TODO</p>';
+$lang['event_help_edittemplatetypepre'] = '<p>TODO</p>';
 $lang['event_help_edituserdefinedtagpost'] = '<p>Sent after a user defined tag is updated.</p>';
 $lang['event_help_edituserdefinedtagpre'] = '<p>Sent prior to a user defined tag update.</p>';
 $lang['event_help_edituserpost'] = '<p>Sent after edits to a user are saved.</p>
