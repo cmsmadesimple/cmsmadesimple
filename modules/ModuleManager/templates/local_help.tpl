@@ -11,9 +11,9 @@
 </div>
 
 {if isset($friendly_name) && $friendly_name != ''}
-<h1>{$friendly_name} <em>({$module_name})</em></h1>
+<p class="pageheader">{$friendly_name} <em>({$module_name})</em></p>
 {else}
-<h1>{$module_name}</h1>
+<p class="pageheader">{$module_name}</p>
 {/if}
 
 {$help_page}

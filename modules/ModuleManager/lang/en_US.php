@@ -1,6 +1,7 @@
 <?php
 // A
 $lang['abouttxt'] = 'About';
+$lang['about_title'] = 'About the %s module';
 $lang['admin_title'] = 'Module Manager Admin Panel';
 $lang['abouttxt'] = 'About';
 $lang['accessdenied'] = 'Access Denied. Please check your permissions';
