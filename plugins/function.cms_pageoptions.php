@@ -28,6 +28,8 @@ function smarty_function_cms_pageoptions($params,&$template)
   $surround = 3;
   if( isset($params['surround']) ) $surround = (int)$params['surround'];
   $surrund = max(1,min(20,$surround));
+  $elipsis = get_parameter_value($params,'elipsis','');
+  $bare = cms_to_bool(get_parameter_value($params,'bare',0));
   
   $list = array();
   for( $i = 1; $i <= min($surround,$numpages); $i++ ) {
@@ -47,11 +49,15 @@ function smarty_function_cms_pageoptions($params,&$template)
   $list = array_unique($list);
   sort($list);
 
-  $bare = false;
-  if( isset($params['bare']) ) $bare = cms_to_bool($params['bare']);
-  
   if ( $bare ) {
     $out = $list;
+    if( $elipsis ) {
+      $out = array();
+      for( $i = 1; $i < count($list); $i++ ) {
+	if( $list[$i-1] != $list[$i] - 1 ) $out[] = $elipsis;
+	$out[] = $list[$i];
+      }
+    }
   }
   else {
     $out = '';

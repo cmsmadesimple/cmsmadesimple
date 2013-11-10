@@ -3,7 +3,8 @@
 class CmsExtendedModuleInfo extends CmsModuleInfo
 {
   private static $_ekeys = array('installed','status','active','system_module','installed_version','admin_only',
-				 'active','allow_fe_lazyload','allow_admin_lazyload','dependants');
+				 'active','allow_fe_lazyload','allow_admin_lazyload','dependants','can_deactivate',
+				 'can_uninstall');
   private $_edata = array();
 
   public function __construct($module_name,$can_load = false)
@@ -22,6 +23,10 @@ class CmsExtendedModuleInfo extends CmsModuleInfo
       $this['active'] = $minfo[$module_name]['active'];
       $this['allow_fe_lazyload'] = $minfo[$module_name]['allow_fe_lazyload'];
       $this['allow_admin_lazyload'] = $minfo[$module_name]['allow_admin_lazyload'];
+
+      $this->_edata['can_deactivate'] = ($this['name'] == 'ModuleManager') ? FALSE : TRUE;
+      $this->_edata['can_uninstall'] = ($this['name'] == 'ModuleManager') ? FALSE : TRUE;
+
       if( isset($minfo[$module_name]['dependants']) ) $this['dependants'] = $minfo[$module_name]['dependants'];
     }
   }
@@ -35,6 +40,8 @@ class CmsExtendedModuleInfo extends CmsModuleInfo
   public function OffsetSet($key,$value)
   {
     if( !in_array($key,self::$_ekeys) ) parent::OffsetSet($key,$value);
+    if( $key == 'can_deactivate' ) return;
+    if( $key == 'can_uninstall' ) return;
     $this->_edata[$key] = $value;
   }
 

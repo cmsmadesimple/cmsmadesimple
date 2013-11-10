@@ -56,9 +56,7 @@ function smarty_cms_function_cms_action_url($params, &$template)
   }
 
   // validate params
-  if( $module == '' ) {
-    return;
-  }
+  if( $module == '' ) return;
   if( cmsms()->test_state(CmsApp::STATE_ADMIN_PAGE) ) {
     if( $mid == '' ) $mid = 'm1_';
     if( $action == '' ) $action = 'defaultadmin';
