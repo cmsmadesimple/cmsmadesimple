@@ -1,30 +1,25 @@
 {process_pagedata}<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" >
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+
 <head>
-<title>{sitename} - {title}</title>
-{metadata}
-{cms_stylesheet}
+	<title>{title} - {sitename}</title>
+	{metadata}
+	{cms_stylesheet}
 </head>
+
 <body>
+	<div id="header">
+		<h1>{sitename}</h1>
+	</div>
 
-<!-- start header -->
-<div id="header">
-  <h1>{sitename}</h1>
-</div>
-<!-- end header -->
+	<div id="menu">
+		{menu}
+	</div>
 
-<!-- start menu -->
-<div id="menu">
-  {menu}
-</div>
-<!-- end menu -->
-
-<!-- start content -->
-<div id="content">
-  <h1>{title}</h1>
-  {content}
-</div>
-<!-- end content -->
-
+	<div id="content">
+		<h2>{title}</h2>
+		{content}
+	</div>
 </body>
+
 </html>
