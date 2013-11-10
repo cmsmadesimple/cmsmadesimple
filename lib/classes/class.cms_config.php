@@ -246,9 +246,6 @@ final class cms_config implements ArrayAccess
 	  case 'set_names':
 		  return true;
 
-	  case 'set_db_timezone':
-		  return true;
-
 	  case 'root_path':
 		  $out = dirname(dirname(dirname(__FILE__)));
 		  $this->_cache[$key] = $out;
