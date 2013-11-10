@@ -88,14 +88,19 @@ switch( $action )
 	case 'showeventhelp':
 	{
 	  $text = '';
+	  $desctext = '';
 		if ($module == 'Core')
+		{
 		  $text = Events::GetEventHelp($event);
+		  $desctext = Events::GetEventDescription($event);
+		}
 		else
 		  {
 		    $moduleobj = cms_utils::get_module($module);
 		    if( is_object($moduleobj) )
 		      {
-			$text = $moduleobj->GetEventHelp( $event );
+				$text = $moduleobj->GetEventHelp( $event );
+				$desctext = $moduleobj->GetEventDescription( $event );
 		      }
 		  }
 		echo "<h3>$event</h3>";
@@ -105,6 +110,7 @@ switch( $action )
 		}
 		else
 		{
+			echo "<p>" . $desctext . "</p>";
 			echo $text;
 		}
 		echo "<h4>".lang('eventhandler')."</h4>";
