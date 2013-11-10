@@ -16,6 +16,7 @@ $lang['available_updates'] = 'One or more modules are available for upgrade; Bef
 $lang['availmodules'] = 'Available Modules'; 
 
 // B
+$lang['back'] = 'Back';
 $lang['back_to_module_manager'] = 'Return to Module Manager';
 
 // C
@@ -30,17 +31,22 @@ $lang['dependstxt'] = 'Dependencies';
 $lang['depend_activate'] = 'Module %s will be activated.';
 $lang['depend_install'] = 'Module %s (version %s) will be installed.';
 $lang['depend_upgrade'] = 'Module %s will be upgraded to version %s.';
+$lang['display_in_english'] = 'Display in English';
+$lang['display_in_mylanguage'] = 'Display in NAME LANGUAGE HERE';
 $lang['download'] = 'Download &amp; Install';
 $lang['downloads'] = 'Downloads';
 
 // E
 $lang['entersearchterm'] = 'Enter search term';
 $lang['error'] = 'Error!';
+$lang['error_active_failed'] = 'The operation to toggle the active state of a module failed';
 $lang['error_checksum'] = 'Checksum error.  This probably indicates a corrupt file, either when it was uploaded to the repository, or a problem in transit down to your machine. (expected %s and got %s)';
 $lang['error_connectnomodules'] = 'Although a connection was successfully made to the specified module repository.  It appears that this repository is not yet sharing any modules';
 $lang['error_downloadxml'] = 'A problem occurred downloading the XML FILE: %s';
+$lang['error_getmodule'] = 'A problem occurred instantiating %s';
 $lang['error_internal'] = 'Internal Error... Please report this to your system administrator';
 $lang['error_minimumrepository'] = 'The repository version is not compatible with this module manager';
+$lang['error_missingparams'] = 'A required parameter was missing';
 $lang['error_moduleinstallfailed'] = 'Module installation failed';
 $lang['error_module_object'] = 'Error: could not get an instance of the %s module';
 $lang['error_nodata'] = 'No data retrieved';
@@ -98,6 +104,8 @@ $lang['latestdepends'] = 'Always install the newest modules';
 // M
 $lang['moddescription'] = 'A client for the CMS Made Simple Module Repository. This module allows previewing and installing modules from the CMSMS Forge without the need for ftp-ing, or unzipping archives.  Module XML files are downloaded using REST, integrity verified, and then expanded automatically.';
 $lang['mod_name_ver'] = '%s version %s';
+$lang['msg_module_activated'] = 'Module %s activated';
+$lang['msg_module_deactivated'] = 'Module %s deactivated';
 $lang['msg_cachecleared'] = 'Cache cleared';
 $lang['msg_nodependencies'] = 'This file has not listed any dependencies';
 $lang['msg_prefssaved'] = 'Preferences Updated';
@@ -159,6 +167,7 @@ $lang['title_moduleabout'] = 'View the author and changelog information for this
 $lang['title_moduledepends'] = 'View the dependencies for this module';
 $lang['title_moduledownloads'] = 'This column displays the approximate number of downloads for each release of the module';
 $lang['title_moduledownloads2'] = 'This column displays the approximate number of downloads for the newest version of the module';
+$lang['title_moduleexport'] = 'Export this module to XML for sharing';
 $lang['title_modulehelp'] = 'View basic documentation for this module';
 $lang['title_moduleinstallupgrade'] = 'Install or Upgrade this module';
 $lang['title_modulelastreleasedate'] = 'This column displays the date of the last release for the module';

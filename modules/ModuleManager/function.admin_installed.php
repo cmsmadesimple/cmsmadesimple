@@ -1,5 +1,6 @@
 <?php
 if( !isset($gCms) ) exit;
+if( !$this->CheckPermission('Modify Modules') ) return;
 
 function get_all_module_info()
 {

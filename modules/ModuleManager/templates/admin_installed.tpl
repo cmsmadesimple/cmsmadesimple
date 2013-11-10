@@ -21,17 +21,21 @@
           {if isset($item.dependants)}<br/>{$mod->Lang('has_dependants')}: (<strong>{implode(',',$item.dependants)}</strong>){/if}
       </td>
       <td>
-           {if !isset($item.dependants)}
+           {if !isset($item.dependants) && $item.can_deactivate}
              {if $item.active}
-               <a href="{cms_action_url action='module_active' module=$item.name}" title="{$mod->Lang('toggle_inactive')}">{admin_icon icon='true.gif'}</a>
+               <a href="{cms_action_url action='local_active' mod=$item.name state=0}" title="{$mod->Lang('toggle_inactive')}">{admin_icon icon='true.gif'}</a>
              {else}
-               <a href="{cms_action_url action='module_active' module=$item.name}" title="{$mod->Lang('toggle_active')}">{admin_icon icon='false.gif'}</a>
+               <a href="{cms_action_url action='local_active' mod=$item.name state=1}" title="{$mod->Lang('toggle_active')}">{admin_icon icon='false.gif'}</a>
              {/if}
            {/if}
       </td>
-      <td>{$mod->Lang('helptxt')}</td>
-      <td>{$mod->Lang('abouttxt')}</td>
-      {if $allow_export}<td>{if $item.active}<img src="../modules/ModuleManager/images/xml_rss.gif" alt="{$mod->Lang('export')}" />{/if}</td>{/if}
+      <td><a href="{cms_action_url action='local_help' mod=$item.name}" title="{$mod->Lang('title_modulehelp')}">{$mod->Lang('helptxt')}</a></td>k
+      <td><a href="{cms_action_url action='local_about' mod=$item.name}" title="{$mod->Lang('title_moduleabout')}">{$mod->Lang('abouttxt')}</a></td>
+      {if $allow_export}<td>
+        {if $item.active}
+          <a href="{cms_action_url action='local_export' mod=$item.name}" title="{$mod->Lang('title_moduleexport')}">{admin_icon icon='xml_rss.gif'}</a>
+        {/if}
+      </td>{/if}
     </tr>
     {/foreach}
   </tbody>  
