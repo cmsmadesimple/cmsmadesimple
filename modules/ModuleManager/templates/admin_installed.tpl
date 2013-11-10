@@ -31,7 +31,7 @@
       </td>
       <td>{$mod->Lang('helptxt')}</td>
       <td>{$mod->Lang('abouttxt')}</td>
-      {if $allow_export}<td>{if $item.active}EXPORT{/if}</td>{/if}
+      {if $allow_export}<td>{if $item.active}<img src="../modules/ModuleManager/images/xml_rss.gif" alt="{$mod->Lang('export')}" />{/if}</td>{/if}
     </tr>
     {/foreach}
   </tbody>  
