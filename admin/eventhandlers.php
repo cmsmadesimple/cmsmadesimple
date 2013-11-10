@@ -40,13 +40,14 @@ $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 //   $text .= '</select>';
 //   return $text;
 // }
+
 check_login();
 $userid = get_userid();
 $access = check_permission($userid, "Modify Events");
 
 if (!$access) {
 	die('Permission Denied');
-return;
+	return;
 }
 
 
@@ -81,38 +82,40 @@ $infoImg = $themeObject->DisplayImage('icons/system/info.gif', lang('help'),'','
 echo '<div class="pagecontainer">';
 echo '<div class="pageoverflow">';
 echo $themeObject->ShowHeader('eventhandlers');
-$gCms = cmsms();
+//$gCms = cmsms();
 
 switch( $action )
 {
 	case 'showeventhelp':
 	{
-	  $text = '';
-	  $desctext = '';
+		$text = '';
+		$desctext = '';
 		if ($module == 'Core')
 		{
-		  $text = Events::GetEventHelp($event);
-		  $desctext = Events::GetEventDescription($event);
+			$text = Events::GetEventHelp($event);
+			$desctext = Events::GetEventDescription($event);
 		}
 		else
-		  {
+		{
 		    $moduleobj = cms_utils::get_module($module);
 		    if( is_object($moduleobj) )
-		      {
-				$text = $moduleobj->GetEventHelp( $event );
-				$desctext = $moduleobj->GetEventDescription( $event );
-		      }
-		  }
+		    {
+				$text = $moduleobj->GetEventHelp($event);
+				$desctext = $moduleobj->GetEventDescription($event);
+		    }
+		}
+		
 		echo "<h3>$event</h3>";
+		if( $desctext != "" ) echo "<p><b>" . lang('description') . "</b>: " . $desctext . "</p>";
 		if( $text == "" )
 		{
-			echo "No text returned";
+			echo "No helptext available...";
 		}
 		else
 		{
-			echo "<p>" . $desctext . "</p>";
 			echo $text;
 		}
+
 		echo "<h4>".lang('eventhandler')."</h4>";
 		$hlist = Events::ListEventHandlers( $module, $event );
 		if ($hlist === false)
@@ -124,16 +127,16 @@ switch( $action )
 			echo '<ul>';
 			foreach ($hlist as $te)
 				{
-				echo '<li>'.$te['handler_order'].'. ';
-				if (!empty($te['tag_name']))
+					echo '<li>'.$te['handler_order'].'. ';
+					if (!empty($te['tag_name']))
 					{
-					echo lang('user_tag').': '.$te['tag_name'];
+						echo lang('user_tag').': '.$te['tag_name'];
 					}
-				else if (!empty($te['module_name']))
+					else if (!empty($te['module_name']))
 					{
-					echo lang('module').': '.$te['module_name'];
+						echo lang('module').': '.$te['module_name'];
 					}
-				echo '</li>';
+					echo '</li>';
 				}
 			echo '</ul>';
 			}
