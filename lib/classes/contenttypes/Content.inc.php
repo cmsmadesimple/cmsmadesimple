@@ -124,9 +124,7 @@ class Content extends ContentBase
 
 			//pick up the template id before we do parameters
 			if (isset($params['template_id'])) {
-				if ($this->mTemplateId != $params['template_id']) {
-					$this->_contentBlocks = null;
-				}
+				if ($this->mTemplateId != $params['template_id']) $this->_contentBlocks = null;
 				$this->mTemplateId = $params['template_id'];
 			}
 
@@ -148,15 +146,11 @@ class Content extends ContentBase
 
 			// do the content property parameters
 			foreach ($parameters as $oneparam) {
-				if (isset($params[$oneparam])) {
-					$this->SetPropertyValue($oneparam, $params[$oneparam]);
-				}
+				if (isset($params[$oneparam])) $this->SetPropertyValue($oneparam, $params[$oneparam]);
 			}
 
 			// metadata
-			if (isset($params['metadata'])) {
-				$this->mMetadata = $params['metadata'];
-			}
+			if (isset($params['metadata'])) $this->mMetadata = $params['metadata'];
 		}
 		parent::FillParams($params,$editing);
     }
@@ -211,9 +205,7 @@ class Content extends ContentBase
 	{
 		$errors = parent::ValidateData();
 		$gCms = cmsms();
-		if( $errors === FALSE ) {
-			$errors = array();
-		}
+		if( $errors === FALSE ) $errors = array();
 
 		if ($this->mTemplateId <= 0 ) {
 			$errors[] = lang('nofieldgiven',array(lang('template')));
@@ -233,9 +225,7 @@ class Content extends ContentBase
 
 		$have_content_en = FALSE;
 		foreach($blocks as $blockName => $blockInfo) {
-			if( $blockInfo['id'] == 'content_en' ) {
-				$have_content_en = TRUE;
-		    }
+			if( $blockInfo['id'] == 'content_en' ) $have_content_en = TRUE;
 			if( $blockInfo['required'] && ($val = $this->GetPropertyValue($blockName)) == '' ) {
 				$errors[] = lang('emptyblock',array($blockName));
 			}
@@ -317,8 +307,7 @@ class Content extends ContentBase
 
 				$out = '';
 				if( is_array($_designlist) && count($_designlist) ) {
-					$out = CmsFormUtils::create_dropdown('design_id',$_designlist,
-														 $this->GetPropertyValue('design_id'),
+					$out = CmsFormUtils::create_dropdown('design_id',$_designlist,$this->GetPropertyValue('design_id'),
 														 array('id'=>'design_id'));
 					$help = '&nbsp;'.cms_admin_utils::get_help_tag('core','info_editcontent_design');
 					return array('<label for="design_id">*'.lang('design').':</label>'.$help,$out);
@@ -440,26 +429,16 @@ class Content extends ContentBase
 		$gCms = cmsms();
 		$config = $gCms->GetConfig();
 		$adddir = get_site_preference('contentimage_path');
-		if( $blockInfo['dir'] != '' ) {
-			$adddir = $blockInfo['dir'];
-		}
+		if( $blockInfo['dir'] != '' ) $adddir = $blockInfo['dir'];
 		$dir = cms_join_path($config['uploads_path'],$adddir);
 		$optprefix = '';
 		$inputname = $blockInfo['id'];
-		if( isset($blockInfo['inputname']) ) {
-			$inputname = $blockInfo['inputname'];
-		}
+		if( isset($blockInfo['inputname']) ) $inputname = $blockInfo['inputname'];
 		$prefix = '';
-		if( isset($blockInfo['exclude']) ) {
-			$prefix = $blockInfo['exclude'];
-		}
-		if( isset($blockInfo['sort']) ) {
-			$sort = (int)$blockInfo['sort'];
-		}
+		if( isset($blockInfo['exclude']) ) $prefix = $blockInfo['exclude'];
+		if( isset($blockInfo['sort']) ) $sort = (int)$blockInfo['sort'];
 		$dropdown = create_file_dropdown($inputname,$dir,$value,'jpg,jpeg,png,gif',$optprefix,true,'',$prefix,1,$sort);
-		if( $dropdown === false ) {
-			$dropdown = lang('error_retrieving_file_list');
-		}
+		if( $dropdown === false ) $dropdown = lang('error_retrieving_file_list');
 		return $dropdown;
 	}
 

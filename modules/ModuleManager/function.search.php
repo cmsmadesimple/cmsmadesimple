@@ -189,7 +189,7 @@ if( isset($params['submit']) ) {
 if( is_array($search_data) ) $smarty->assign('search_data',$search_data);
 $smarty->assign('term',$term);
 $smarty->assign('advanced',$advanced);
-$smarty->assign('formstart',$this->CreateFormStart($id,'defaultadmin','','post','',false,'',array('active_tab'=>'search')));
+$smarty->assign('formstart',$this->CreateFormStart($id,'defaultadmin','','post','',false,'',array('__activetab'=>'search')));
 $smarty->assign('formend',$this->CreateFormEnd());
 $smarty->assign('actionid',$id);
 $smarty->assign('mod',$this);

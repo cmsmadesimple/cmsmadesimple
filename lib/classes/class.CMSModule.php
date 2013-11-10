@@ -497,7 +497,7 @@ abstract class CMSModule
    */
   public function GetHelp()
   {
-    return '';
+	  return ModuleOperations::get_instance()->GetModuleHelp($this->GetName());
   }
 
   /**
@@ -841,7 +841,7 @@ abstract class CMSModule
    */
   public function GetChangeLog()
   {
-    return '';
+	  return ModuleOperations::get_instance()->GetModuleChangelog($this->GetName());
   }
 
   /**

@@ -52,6 +52,7 @@ modmgr_utils::get_images();
   
 echo $this->StartTabHeaders();
 if( $this->CheckPermission('Modify Modules') ) {
+  echo $this->SetTabHeader('installed',$this->Lang('installed'));
   echo $this->SetTabHeader('newversions',$this->Lang('newversions'));
   echo $this->SetTabHeader('search',$this->Lang('search'));
   echo $this->SetTabHeader('modules',$this->Lang('availmodules'));
@@ -63,6 +64,10 @@ echo $this->EndTabHeaders();
 
 echo $this->StartTabContent();
 if( $this->CheckPermission('Modify Modules') ) {
+  echo $this->StartTab('installed',$params);
+  include(dirname(__FILE__).'/function.admin_installed.php');
+  echo $this->EndTab();
+
   echo $this->StartTab('newversions',$params);
   include(dirname(__FILE__).'/function.newversionstab.php');
   echo $this->EndTab();

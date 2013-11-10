@@ -1,11 +1,13 @@
 <?php
 // A
+$lang['abouttxt'] = 'About';
 $lang['admin_title'] = 'Module Manager Admin Panel';
 $lang['abouttxt'] = 'About';
 $lang['accessdenied'] = 'Access Denied. Please check your permissions.';
 $lang['action_activated'] = 'Module %s has been activated.';
 $lang['action_installed'] = 'Module %s has been installed with the following message(s): %s';
 $lang['action_upgraded'] = 'Module %s has been upgraded';
+$lang['active'] = 'Active';
 $lang['admindescription'] = 'A tool for retrieving and installing modules from remote servers.';
 $lang['advancedsearch_help'] = 'Specify words to include or exclude from the search using a + or -, surround exact phrases with quotes.  i.e:  +red -apple +"some text"';
 $lang['all_modules_up_to_date'] = 'There are no newer modules available in the repository';
@@ -56,6 +58,7 @@ $lang['error_searchterm']='Please specify something valid to search for';
 $lang['error_skipping'] = 'Skipping install/upgrade of %s due to errors in setting up dependencies. Please see message above, and try again.';
 $lang['error_unsatisfiable_dependency'] = 'Cannot find the required module "%s" (version %s or later) in the repository. It is directly required by %s; this could indicate a problem with the version of this module in the repository. Please contact the module\'s author. Aborting.';
 $lang['error_upgrade'] = 'Upgrade of module %s failed!';
+$lang['export'] = 'Export';
 
 // F
 $lang['friendlyname'] = 'Module Manager';
@@ -64,6 +67,7 @@ $lang['friendlyname'] = 'Module Manager';
 $lang['general_notice'] = 'The versions displayed here represent the latest XML files uploaded to your selected repository (usually the CMS %s).  They may or may not represent the latest available versions.'; 
 
 // H
+$lang['has_dependants'] = 'Has dependants';
 $lang['help'] = '<h3>What Does This Do?</h3>
 <p>A client for the ModuleRepository, this module allows previewing, and installing modules from remote sites without the need for ftping, or unzipping archives.  Module XML files are downloaded using REST, integrity verified, and then expanded automatically.</p>
 <h3>How Do I Use It</h3>
@@ -84,7 +88,7 @@ $lang['incompatible'] = 'Incompatible';
 //$lang['info_latestdepends'] = 'When installing a module with dependencies, this option will make sure that the latest version of the dependency will be installed';
 $lang['info_searchtab'] = 'This tab displays a list of installed modules for which there is a newer version available <em>(if any)</em>';
 $lang['install'] = 'install';
-$lang['installed'] = 'Module version %s installed.';
+$lang['installed'] = 'Installed';
 $lang['install_submit'] = 'Install';
 $lang['install_with_deps'] = 'Evaluate all Dependencies and Install';
 $lang['instcount'] = 'Modules currently installed';
@@ -139,7 +143,9 @@ $lang['search_input'] = 'Search Input';
 $lang['search_noresults'] = 'Search succeeded but no results matched the expresssion';
 $lang['search_results'] = 'Search Results';
 $lang['sizetext'] = 'Size (Kilobytes)';
+$lang['status'] = 'Status';
 $lang['statustext'] = 'Status/Action';
+$lang['status_installed'] = 'This module is currently installed';
 $lang['submit'] = 'Submit';
 
 // T
@@ -173,6 +179,8 @@ $lang['title_stale'] = 'This module is stale (released over two years ago).';
 $lang['title_warning'] = 'This module was released some time ago.  Use caution.';
 $lang['title_yourmoduledate'] = 'This column displays the date of the latest release for this module';
 $lang['title_yourmoduleversion'] = 'This column displays the version number of module that is currently installed';
+$lang['toggle_active'] = 'Set this module as active and usable';
+$lang['toggle_inactive'] = 'Set this module as inactive and unused.  No module data will be destroyed.';
 
 // U
 $lang['uninstalled'] = 'Module Uninstalled.';

@@ -65,7 +65,7 @@ $(document).ready(function(){
    {cycle values='row1,row2' assign='rowclass'}
    <tr class="{$rowclass}" {if $entry->age=='new'}style="font-weight: bold;"{/if}>
      <td>{get_module_status_icon status=$entry->age}</td>
-     <td>{$entry->name} <em>({$entry->age})</em></td>
+     <td><span title="{$entry->description|strip_tags|cms_escape}">{$entry->name}</span></td>
      <td>{$entry->version}</td>
      <td>{$entry->date|date_format:'%x'}</td>
      <td>{$entry->downloads}</td>
@@ -75,12 +75,6 @@ $(document).ready(function(){
      <td>{$entry->helplink}</td>
      <td>{if isset($entry->aboutlink)}{$entry->aboutlink}{/if}</td>
    </tr>
-   {if isset($entry->description)}
-   <tr class="{$rowclass}">
-     <td>&nbsp;</td>
-     <td colspan="9">{$entry->description}</td>
-   </tr>
-   {/if}
  {/foreach}
  </tbody>
 </table>

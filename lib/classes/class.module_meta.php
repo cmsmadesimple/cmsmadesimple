@@ -92,9 +92,7 @@ final class module_meta
     $sig = md5($capability.serialize($params));
     if( !isset($this->_data['capability']) || !isset($this->_data['capability'][$sig]) ) {
 		debug_buffer('start building module capability list');
-		if( !isset($this->_data['capability']) ) {
-			$this->_data['capability'] = array();
-		}
+		if( !isset($this->_data['capability']) ) $this->_data['capability'] = array();
 
 		$installed_modules = ModuleOperations::get_instance()->GetInstalledModules();
 		$loaded_modules = ModuleOperations::get_instance()->GetLoadedModules();
