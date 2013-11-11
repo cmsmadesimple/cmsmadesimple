@@ -1,33 +1,38 @@
-#
-# This file is specific to apache configurations.  It attempts to optimize traffic
-# and configuration for your CMSMS website.  Many options are disabled by default as some providers do not allow
-# you to override some of these settings in the .htaccess file.
-#
+# This file is specific to Apache configurations.  
+# It attempts to optimize traffic and configuration for your CMS Made Simple website.
+# Many options are disabled by default as some providers do not allow you to override some of these settings in the .htaccess file.
 
 #
-# Attempt to override some php settings, these settings may be helpful on some hosts if your
-# default configuration does not meet CMS's minimum requirements, and your host
-# has given your account appropriate permissions
+# Attempt to override some PHP settings.
+# These settings may be helpful on some hosts if your default configuration does not meet CMSMS's minimum requirements,
+# and your host has given your account appropriate permissions.
 #
 #php_value upload_max_filesize "10M"
 #php_value session_save_path "tmp/cache"
-
 #php_value session.cookie_httponly true
 #php_flag magic_quotes_gpc Off
 #php_flag register_globals Off
 #php_flag session.use_trans_sid Off
 
-# Disallow directory indexes. This can be an important security enhancement.
+#
+# Disallow directory indexes. This can be an important security enhancement
+#
 #Options -Indexes
 
+#
 # Don't allow the browser to know the type of signature.
+#
 #ServerSignature Off
 
-# Allow the apache server to follow symbolic links.  This is usually not necessary
+#
+# Allow the Apache server to follow symbolic links.  This is usually not necessary.
+#
 #Options +FollowSymLinks
 
+#
 # To prevent E_STRICT problems with PHP 5.3+ you can uncomment the following lines
 # Note: These settings should only be enabled for production sites!
+#
 #php_flag display_startup_errors 0
 #php_flag display_errors 0
 #php_flag html_errors 0
@@ -39,33 +44,34 @@
 #
 <IfModule mod_rewrite.c>
 RewriteEngine on
-# If your CMSMS installation is in a subdirectory of your domain, you may need to specify the relative path (from the root of the doain) here.
+# If your CMSMS installation is in a subdirectory of your domain, you may need to specify the relative path (from the root of the domain) here.
 # i.e: RewriteBase /cmsms
 RewriteBase /
 
-# Rewrites urls in the form of /parent/child/grandchild
-# but only rewrites if the requested URL is not a file or directory
+#
+# Rewrites urls in the form of /parent/child/grandchild but only rewrites if the requested URL is not a file or directory.
+#
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^(.+)$ index.php?page=$1 [QSA]
 </IfModule>
 
 #
-# The follwong are performance optimizations and security enhancements for content that is served by your CMSMS installation
+# The following are performance optimizations and security enhancements for content that is served by your CMSMS installation.
 #
 <IfModule mod_headers.c>
-# Disable ETags
-Header unset ETag
-FileEtag None
-# For Security
-Header set X-Frame-Options "SAMEORIGIN"
+	# Disable ETags
+	Header unset ETag
+	FileEtag None
+	# For Security
+	Header set X-Frame-Options "SAMEORIGIN"
 </IfModule>
 
 #
 # The following setups compression for content, if compression is enabled on the server.
 #
 <IfModule mod_deflate.c>
-AddOutputFilterByType DEFLATE text/css text/plain text/xml image/gif image/jpeg image/png
+	AddOutputFilterByType DEFLATE text/css text/plain text/xml image/gif image/jpeg image/png
 </IfModule>
 
 #
@@ -86,8 +92,8 @@ ExpiresByType application/x-shockwave-flash "access plus 1 year"
 ExpiresByType application/javascript "access plus 1 month"
 ExpiresByType text/javascript "access plus 1 month"
 ExpiresByType text/css "access plug 1 month"
-<IfModule mod_headers.c>
-  # Setting cache control to public allows proxy servers to cache the items too.
-  Header set Cache-Control "public"
-</IfModule>
+	<IfModule mod_headers.c>
+		# Setting cache control to public allows proxy servers to cache the items too.
+		Header set Cache-Control "public"
+	</IfModule>
 </IfModule>

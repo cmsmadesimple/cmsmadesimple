@@ -1,13 +1,14 @@
+More detailed information at http://docs.cmsmadesimple.org/installation/requirements
+
 Requirements:
-    PHP 5.2.4+ 
+    PHP 5.3.3+ 
     MySQL
-    Apache webserver (or another php enabled webserver)
+    Apache webserver (or another PHP enabled webserver)
 
 1.  Untar the source package to document root dir or your webserver
     * Your web host may not grant shell access, and you may be required
       to untar the source package to your local desktop and use another
-      method (such as FTP) to transfer the files to your web servers
-      document root.
+      method (such as FTP) to transfer the files to your web servers document root.
     - cd DOCUMENT_ROOT
     - tar zxvf cms-VERSION.tar.gz
 
@@ -26,29 +27,21 @@ Requirements:
             - ALTER DATABASE cms DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
     - quit
 
-4.  Fix the permissions on the cache and template compilation directories so the web 
-    server has access to them.
-    - chmod -R 777 tmp
-    - chmod -R 777 uploads
-      optionally, if you would like to be able to install modules via the admin panel:
-      - chmod -R 777 modules
-
-5.  Open up your new CMS site in your webbrowser and you will be guided through a short install.
+4.  Open up your new CMSMS site in your webbrowser and you will be guided through a short install.
     - Be sure to run the file creation mask tests
     - Be sure to check the uploaded files for errors using the checksum file matching
-      the package you downloaded.  The checksum file is available from the same location as the
-      software package.
+      the package you downloaded.  The checksum file is available from the same location as the software package.
 
-6.  After install, for security sake, you should set your config.php back to a read-only state.
+5.  After install, for security sake, you should set your config.php back to a read-only state.
     - chmod 444 config.php
 
-7.  To reach your sites administration console, point your browser to: http://yoursiteurl/admin/
+6.  To reach your sites administration console, point your browser to: http://yoursiteurl/admin/
 
 Admin features including user management, template management, section management, and of course content management can all be accessed at your CMSROOT/admin.
 
 Optional: 
 
-8.  Some setup parameters are set to a default value and are not editable through the webinterface.
+7.  Some setup parameters are set to a default value and are not editable through the webinterface.
     Although CMS works out-of-the-box, you might still want to edit these parameters
     - open the config.php file with you favorite editor (this file has been created by the installer)
   
