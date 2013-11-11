@@ -24,23 +24,6 @@ $CMS_LOAD_ALL_PLUGINS=1;
 require_once("../include.php");
 $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 
-// function eventhandler_usertag_dropdown( $name, $selitem, $usertags )
-// {
-//   $text  = '<select name="'.$name.'">';
-//   foreach( $usertags as $key => $value )
-//     {
-//       $text .= '<option value="'.$value.'"';
-//       if( $selitem == $value )
-// 	{
-// 	  $text .= ' selected="selected"';
-// 	}
-//       $text .= '>'.$key;
-//       $text .= '</option>';
-//     }
-//   $text .= '</select>';
-//   return $text;
-// }
-
 check_login();
 $userid = get_userid();
 $access = check_permission($userid, "Modify Events");
@@ -52,9 +35,9 @@ if (!$access) {
 
 
 // here we'll handle setting $action based on _POST['action']
-$action = "";
-$module = "";
-$event = "";
+$action = '';
+$module = '';
+$event = '';
 $modulefilter = '';
 if( isset( $_GET['action'] ) && $_GET['action'] != '' )
   {
@@ -82,26 +65,25 @@ $infoImg = $themeObject->DisplayImage('icons/system/info.gif', lang('help'),'','
 echo '<div class="pagecontainer">';
 echo '<div class="pageoverflow">';
 echo $themeObject->ShowHeader('eventhandlers');
-//$gCms = cmsms();
 
 switch( $action )
 {
 	case 'showeventhelp':
 	{
-		$text = '';
 		$desctext = '';
+		$text = '';
 		if ($module == 'Core')
 		{
-			$text = Events::GetEventHelp($event);
 			$desctext = Events::GetEventDescription($event);
+			$text = Events::GetEventHelp($event);
 		}
 		else
 		{
 		    $moduleobj = cms_utils::get_module($module);
 		    if( is_object($moduleobj) )
 		    {
-				$text = $moduleobj->GetEventHelp($event);
 				$desctext = $moduleobj->GetEventDescription($event);
+				$text = $moduleobj->GetEventHelp($event);
 		    }
 		}
 		
