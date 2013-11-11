@@ -29,7 +29,7 @@
              {/if}
            {/if}
       </td>
-      <td><a href="{cms_action_url action='local_help' mod=$item.name}" title="{$mod->Lang('title_modulehelp')}">{$mod->Lang('helptxt')}</a></td>k
+      <td><a href="{cms_action_url action='local_help' mod=$item.name}" title="{$mod->Lang('title_modulehelp')}">{$mod->Lang('helptxt')}</a></td>
       <td><a href="{cms_action_url action='local_about' mod=$item.name}" title="{$mod->Lang('title_moduleabout')}">{$mod->Lang('abouttxt')}</a></td>
       {if $allow_export}<td>
         {if $item.active}
