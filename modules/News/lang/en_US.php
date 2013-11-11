@@ -197,7 +197,7 @@ $lang['help'] = <<<EOF
 <p>Following these steps should solve the problem of your news templates not being found and other similar smarty errors when you upgrade to a version of CMS that has News 2.3 or greater.</p>
 EOF;
 $lang['helpaction'] = <<<EOT
-'Override the default action.  Possible values are:
+Override the default action.  Possible values are:
 <ul>
 <li>&quot;detail&quot; - to display a specified articleid in detail mode.</li>
 <li>&quot;default&quot; - to display the summary view</li>
