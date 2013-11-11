@@ -1,4 +1,9 @@
 <?php
+
+//$lang['siteadmin'] = $lang['admin'];
+//$lang['groupmembers'] = $lang['groupassignments'];
+//$lang['images'] = $lang['imagemanager'];
+
 $lang['404description'] = 'Page Not Found';
 
 //  AA
@@ -7,6 +12,7 @@ $lang['404description'] = 'Page Not Found';
 // A  A
 // A  A
 
+$lang['aa_main_tab__'] = 'Main';
 $lang['about'] = 'About';
 $lang['accesskey'] = 'Access Key';
 $lang['accountupdated'] = 'User account has been updated.';
@@ -39,12 +45,12 @@ $lang['addusertag'] = 'Add User Defined Tag';
 $lang['admin'] = 'Site Admin';
 $lang['adminaccess'] = 'Access to login to admin';
 $lang['admincallout'] = 'Administration Shortcuts';
-$lang['admindescription'] = 'Site Administration functions.';
+$lang['admindescription'] = 'Site Administration functions';
 $lang['adminhome'] = 'Administration Home';
 $lang['adminindent'] = 'Content Display';
 $lang['adminlog'] = 'Admin Log';
 $lang['adminlogcleared'] = 'The Admin Log was successfully cleared';
-$lang['adminlogdescription'] = 'Shows a log of who did what in the admin.';
+$lang['adminlogdescription'] = 'This logs admin activity and shows i.e. content changes, user information, and time of access.';
 $lang['adminlogempty'] = 'The Admin Log is empty';
 $lang['adminlog_1day'] = '1 day';
 $lang['adminlog_1month'] = '1 month';
@@ -54,20 +60,20 @@ $lang['adminlog_3months'] = '3 months';
 $lang['adminlog_6months'] = '6 months';
 $lang['adminlog_lifetime']='Lifetime of log-entries';
 $lang['adminlog_manual'] = 'Manual deletion';
-$lang['adminpaging'] = 'Number of Content Items to show per/page in Page List';
+$lang['adminpaging'] = 'Number of Content Items to show per page in Page List';
 $lang['adminpaneltitle'] = 'CMS Made Simple&trade; Admin Console';
 $lang['adminplugin'] = 'Admin Plugin';
 $lang['adminprefs'] = 'User Preferences';
-$lang['adminprefsdescription'] = 'This is where you set your specific preferences for site administration.';
+$lang['adminprefsdescription'] = 'Here you set your specific preferences for site administration';
 $lang['adminspecialgroup'] = 'Warning: Members of this group automatically have all permissions';
-$lang['adminsystemtitle'] = 'CMS Admin System';
+$lang['adminsystemtitle'] = 'CMSMS Admin System';
 $lang['admintheme'] = 'Administration Theme';
-$lang['admin_enablenotifications'] = 'Allow users to view notifications<br/><em>(notifications will be displayed on all admin pages)</em>';
+$lang['admin_enablenotifications'] = 'Allow users to view notifications<br /><em>(notifications will be displayed on all admin pages)</em>';
 $lang['admin_layout_legend'] = 'Admin lay-out settings';
 $lang['advanced'] = 'Advanced';
 $lang['alert'] = 'Alert';
 $lang['alias'] = 'Alias';
-$lang['aliasalreadyused'] = 'The supplied "Page Alias" is already in use on another page.  Change the "Page Alias" to something else.';
+$lang['aliasalreadyused'] = 'The supplied "Page Alias" is already in use on another page. Change the "Page Alias" to something else.';
 $lang['aliasmustbelettersandnumbers'] = 'Alias must be all letters and numbers';
 $lang['aliasnotaninteger'] = 'Alias cannot be an integer';
 $lang['allow_browser_cache'] = 'Allow Browser to Cache Pages';
@@ -84,7 +90,7 @@ $lang['attachstylesheets'] = 'Attach Stylesheets';
 $lang['attachtemplate'] = 'Attach to this Template';
 $lang['attachtotemplate'] = 'Attach Stylesheet to Template';
 $lang['author'] = 'Author';
-$lang['autoclearcache'] = 'Automatically clear the cache every N days';
+$lang['autoclearcache'] = 'Automatically clear the cache every <em>N</em> days';
 $lang['autoclearcache2'] = 'Remove cache files that are older than the specified number of days';
 $lang['autoinstallupgrade'] = 'Automatically install or upgrade';
 $lang['automatedtask_success'] = 'Automated task performed';
@@ -106,7 +112,7 @@ $lang['blobs'] = 'Global Content Blocks';
 $lang['bookmarks'] = 'Shortcuts';
 $lang['browser_cache_expiry'] = 'Browser Cache Expiry Period <em>(minutes)</em>';
 $lang['browser_cache_settings'] = 'Browser Cache Settings';
-$lang['bulk_success'] = 'Bulk operation was successfully updated.';
+$lang['bulk_success'] = 'Bulk operation was successfully performed';
 
 
 //  CCC
@@ -142,8 +148,8 @@ $lang['clearcache_taskname'] = 'Clear Cached Files';
 $lang['clearusersettings'] = 'Clear all settings';
 $lang['clear_version_check_cache'] = 'TODO';
 $lang['close'] = 'Close';
-$lang['cms_install_information'] = 'CMS Install Information';
-$lang['cms_version'] = 'CMS Version';
+$lang['cms_install_information'] = 'CMS Made Simple Install Information';
+$lang['cms_version'] = 'CMSMS Version';
 $lang['CMSEX_L001'] = 'Attempt to delete a non expired lock owned by another user';
 $lang['CMSEX_L002'] = 'Attempt to delete a lock when it has yet to be saved';
 $lang['CMSEX_L003'] = 'Lock type empty';
@@ -154,9 +160,9 @@ $lang['CMSEX_L007'] = 'Other/unknown locking error';
 $lang['CMSEX_L008'] = 'Locking exception';
 $lang['CMSEX_L009'] = 'Problem removing lock';
 $lang['CMSEX_G001'] = 'Attempt to set invalid property into object';
-$lang['CMSEX_SQL001'] = 'Problem creeating/updating lock record';
+$lang['CMSEX_SQL001'] = 'Problem creating/updating lock record';
 $lang['code'] = 'Code';
-$lang['config_information'] = 'CMS Config Settings';
+$lang['config_information'] = 'CMS Made Simple Config Settings';
 $lang['config_writable'] = 'config.php writable. It is more safe if you change permission to read-only';
 $lang['confirm'] = 'Confirm';
 $lang['confirmcancel'] = 'Are you sure you want to discard your changes? Click OK to discard all changes. Click Cancel to continue editing.';
@@ -293,7 +299,7 @@ $lang['disallowed_contenttypes'] = 'Content Types that are NOT allowed';
 $lang['documentation'] = 'Documentation';
 $lang['down'] = 'Down';
 $lang['download'] = 'Download';
-$lang['download_cksum_file'] = 'Download Checksum File';
+$lang['download_cksum_file'] = 'Create a new checksum file';
 
 
 // EEEE
@@ -349,7 +355,7 @@ $lang['errorcssinuse'] = 'This Stylesheet is still used by template or pages. Pl
 $lang['errordefaultpage'] = 'Can not delete the current default page. Please set a different one first.';
 $lang['errordeletingassociation'] = 'Error deleting association';
 $lang['errordeletingcontent'] = 'Error deleting content (either this page has children or is the default content)';
-$lang['errordeletingcss'] = 'Error deleting css';
+$lang['errordeletingcss'] = 'Error deleting CSS';
 $lang['errordeletingdirectory'] = 'Could not delete directory. Permissions problem?';
 $lang['errordeletingfile'] = 'Could not delete file. Permissions Problem?';
 $lang['errordirectorynotwritable'] = 'No permission to write in directory.  This could be caused by file permissions and ownership.  Safe mode may also be in effect.';
@@ -361,20 +367,20 @@ $lang['errorincompletexml'] = 'XML File is incomplete or invalid';
 $lang['errorinsertingblob'] = 'There was an error inserting the Global Content Block';
 $lang['errorinsertingcss'] = 'Error inserting Stylesheet';
 $lang['errorinsertinggroup'] = 'Error inserting group';
-$lang['errorinsertingtag'] = 'Error inserting user tag';
+$lang['errorinsertingtag'] = 'Error inserting User Defined Tag';
 $lang['errorinsertingtemplate'] = 'Error inserting template';
 $lang['errorinsertinguser'] = 'Error inserting user';
 $lang['errorinstallfailed'] = 'Module installation failed';
 $lang['errormodulenotfound'] = 'Internal error, could not find the instance of a module';
 $lang['errormodulenotloaded'] = 'Internal error, the module has not been instantiated';
-$lang['errormoduleversionincompatible'] = 'Module is incompatible with this version of CMS';
+$lang['errormoduleversionincompatible'] = 'Module is incompatible with this version of CMSMS';
 $lang['errormodulewontload'] = 'Problem instantiating an available module';
-$lang['errornofilesexported'] = 'Error exporting files to xml';
+$lang['errornofilesexported'] = 'Error exporting files to XML';
 $lang['errorpagealreadyinuse'] = 'Error Code Already in Use';
 $lang['errorretrievingcss'] = 'Error retrieving Stylesheet';
 $lang['errorretrievingtemplate'] = 'Error retrieving template';
 $lang['errorsendingemail'] = 'There was an error sending the email.  Contact your administrator.';
-$lang['errortemplateinuse'] = 'This template is still in use by a page. Please remove it first.';
+$lang['errortemplateinuse'] = 'This template is still in use by one or more pages. Please remove it first.';
 $lang['errorupdatetemplateallpages'] = 'Template is not active';
 $lang['errorupdatingcss'] = 'Error updating Stylesheet';
 $lang['errorupdatinggroup'] = 'Error updating group';
@@ -396,10 +402,10 @@ $lang['error_mailtest_notemail'] = 'Value specified is not a valid email address
 $lang['error_module_mincmsversion'] = 'This module requires a newer version of CMS Made Simple';
 $lang['error_multiusersettings'] = 'Cannot set multiple user settings options at the same time';
 $lang['error_nofileuploaded'] = 'No File has been uploaded';
-$lang['error_nograntall_found'] = 'Could not find a suitable &quot;GRANT ALL&quot; permission. This may mean you could have problems installing or removing modules.  Or even adding and deleting items, including pages';
-$lang['error_nomodules'] = 'No modules installed! Check Extensions > Modules';
+$lang['error_nograntall_found'] = 'Could not find a suitable &quot;GRANT ALL&quot; permission, this does not necessarily lead to problems... But if you have problems installing/removing modules or adding and deleting items/pages this could be the cause!';
+$lang['error_nomodules'] = 'No modules installed! Check Site Admin > Module Manager';
 $lang['error_notconfirmed'] = 'Operation not confirmed';
-$lang['error_timedifference'] = 'Filesystem time is different than server time';
+$lang['error_timedifference'] = 'Filesystem time is different than server time. This may cause problems when publising i.e. news articles.';
 $lang['error_no_default_content_block'] = 'No default content block was detected in this template. Please ensure that you have a {content} tag in the page template.';
 $lang['error_no_content_blocks'] = 'No content blocks were detected in this template.  Please ensure that you have at least the default {content} block defined in this template';
 $lang['error_objectcantsetthis'] = 'You cannot adjust the %s property of this object';
@@ -412,11 +418,11 @@ $lang['error_type'] = 'Error Type';
 $lang['error_udt_name_chars'] = 'A valid UDT name starts with a letter or underscore, followed by any number of letters, numbers, or underscores.';
 $lang['error_udt_name_whitespace'] = 'Error: User Defined Tags cannot have spaces in their name.';
 $lang['error_uploadproblem'] = 'An error occurred in the upload';
-$lang['error_usernamerequired'] = 'A username is required for SMTP authentication';
-$lang['error_passwordrequired'] = 'A password is required for SMTP authentication';
+$lang['error_usernamerequired'] = 'A <b>username</b> is required for SMTP authentication';
+$lang['error_passwordrequired'] = 'A <b>password</b> is required for SMTP authentication';
 $lang['event'] = 'Event';
 $lang['eventhandler'] = 'Event Handlers';
-$lang['eventhandlerdescription'] = 'Associate user tags with events';
+$lang['eventhandlerdescription'] = 'Associate User Defined Tags with Events';
 $lang['eventhandlers'] = 'Event Manager';
 $lang['event_description'] = 'Event Description';
 
@@ -889,7 +895,7 @@ $lang['expandall'] = 'Expand All Sections';
 $lang['expanded_xml'] = 'Expanded XML file consisting of %s %s';
 $lang['export'] = 'Export';
 $lang['extensions'] = 'Extensions';
-$lang['extensionsdescription'] = 'Modules, tags, and other assorted fun.';
+$lang['extensionsdescription'] = 'Modules, plugin tags and other features to expand CMSMS';
 $lang['extra1'] = 'Extra Page Attribute 1';
 $lang['extra2'] = 'Extra Page Attribute 2';
 $lang['extra3'] = 'Extra Page Attribute 3';
@@ -913,7 +919,7 @@ $lang['filemanagement'] = 'File Management';
 $lang['filemanager'] = 'File Manager';
 $lang['filemanagerdescription'] = 'Upload and manage files.';
 $lang['filename'] = 'Filename';
-$lang['filenotuploaded'] = 'File could not be uploaded. This could be a permissions or Safe mode problem?';
+$lang['filenotuploaded'] = 'File could not be uploaded. This could be a Permission or Safe Mode problem?';
 $lang['files'] = 'Files';
 $lang['filesize'] = 'File Size';
 $lang['files_checksum_failed'] = 'Files could not be checksummed';
@@ -936,7 +942,7 @@ $lang['forge'] = 'Forge';
 $lang['forgotpwprompt'] = 'Enter your admin username.  An email will then be sent to the email address associated with that username with new login information';
 $lang['forums'] = 'Forums';
 $lang['frontendlang'] = 'Default language for the frontend';
-$lang['frontendwysiwygtouse'] = 'Frontend wysiwyg';
+$lang['frontendwysiwygtouse'] = 'Frontend WYSIWYG';
 
 
 //  GGG
@@ -959,13 +965,12 @@ $lang['group'] = 'Group';
 $lang['groupassignmentdescription'] = 'Here you can assign users to groups.';
 $lang['groupassignments'] = 'Group Assignments';
 $lang['groupmanagement'] = 'Group Management';
-$lang['groupmembers'] = $lang['groupassignments'];
 $lang['groupname'] = 'Group Name';
 $lang['grouppermissions'] = 'Group Permissions';
 $lang['groupperms'] = 'Group Permissions';
-$lang['grouppermsdescription'] = 'Set permissions and access levels for groups';
+$lang['grouppermsdescription'] = 'Set permissions and access levels for Admin groups';
 $lang['groups'] = 'Groups';
-$lang['groupsdescription'] = 'This is where you manage groups.';
+$lang['groupsdescription'] = 'This is where you manage Admin groups.';
 
 
 // H  H
@@ -1060,10 +1065,9 @@ $lang['idnotvalid'] = 'The given id is not valid';
 $lang['ignorenotificationsfrommodules'] = 'Ignore notifications from these modules';
 $lang['illegalcharacters'] = 'Invalid characters in field %s.';
 $lang['image'] = 'Image';
-$lang['imagemanagement'] = 'Image Manager';
+$lang['imagemanagement'] = 'Image Management';
 $lang['imagemanager'] = 'Image Manager';
 $lang['imagemanagerdescription'] = 'Upload/edit and remove images.';
-$lang['images'] = $lang['imagemanager'];
 $lang['inactive'] = 'Inactive';
 $lang['indent'] = 'Indent Pagelist to Emphasize Hierarchy';
 $lang['informationmissing'] = 'Information missing';
@@ -1119,7 +1123,7 @@ This function will compare the checksums found in the uploaded file with the fil
 EOT;
 $lang['insecure'] = 'Insecure (HTTP)';
 $lang['install'] = 'Install';
-$lang['installdirwarning'] = '<em><strong>Warning:</strong></em> install directory still exists. Please remove it completely.';
+$lang['installdirwarning'] = '<em><strong>Warning:</strong></em> the install directory still exists. Please remove it completely!';
 $lang['installed'] = 'Installed';
 $lang['installed_mod'] = 'Installed version %s';
 $lang['installed_modules'] = 'Installed Modules';
@@ -1337,7 +1341,7 @@ $lang['notifications'] = 'Notifications';
 $lang['notifications_to_handle'] = 'You have <b>%d</b> unhandled notifications';
 $lang['notification_to_handle'] = 'You have <b>%d</b> unhandled notification';
 $lang['notinstalled'] = 'Not Installed';
-$lang['noudtcode'] = 'No code specified for user defined tag';
+$lang['noudtcode'] = 'No code specified for the User Defined Tag';
 $lang['noxmlfileuploaded'] = 'No file was uploaded. To install a module via XML you must choose and upload an module .xml file from your computer.';
 $lang['no_bulk_performed'] = 'No bulk operation performed.';
 $lang['no_files_scanned'] = 'No files were scanned during the verification process (maybe the file is invalid)';
@@ -1540,7 +1544,6 @@ $lang['showinmenu'] = 'Show in Menu';
 $lang['showrecent'] = 'Show Recently Used Pages';
 $lang['showsite'] = 'Show Site';
 $lang['sibling_duplicate_order'] = 'Two sibling pages can not have the same order. Pages were not reordered.';
-$lang['siteadmin'] = $lang['admin'];
 $lang['sitedownexcludeadmins'] = 'Exclude users logged in to the CMSMS admin console';
 $lang['sitedownexcludes'] = 'Exclude these IP addresses from the &quot;Site Down&quot; status';
 $lang['sitedownmessage'] = 'Site Down Message';
@@ -1614,13 +1617,8 @@ $lang['system_verification'] = 'System Verification';
 //   S
 //   S
 
-$lang['aa_main_tab__'] = 'Main';
-$lang['zz_1nav_tab__'] = 'Navigation';
-$lang['zz_2logic_tab__'] = 'Logic';
-$lang['zz_3options_tab__'] = 'Options';
-$lang['zz_4perms_tab__'] = 'Permissions';
 $lang['tabindex'] = 'Tab Index';
-$lang['tagdescription'] = 'Tags are little bits of functionality that can be added to your content and/or templates.';
+$lang['tagdescription'] = 'Tags are little bits of PHP functionality that can be added to your content and/or templates.';
 $lang['tags'] = 'Tags';
 $lang['tagtousegcb'] = 'Tag to Use this Block';
 $lang['target'] = 'Target';
@@ -1664,7 +1662,7 @@ $lang['thumbnail_height'] = 'Thumbnail Height';
 $lang['thumbnail_width'] = 'Thumbnail Width';
 $lang['title'] = 'Title';
 $lang['titleattribute'] = 'Description (title attribute)';
-$lang['title_applyusertag'] = 'Save this user defined tag, and continue editing';
+$lang['title_applyusertag'] = 'Save this User Defined Tag, and continue editing';
 $lang['title_hierselect'] = 'This field displays the selected content page.  The actual string displayed (page title or menu text) is dependent on user and site preference.';
 $lang['title_hierselect_select'] = 'Select a content page.\n\nIf the selected page has children a new dropdown will appear.  Selecting "None" indicates that the selection stops with the value of the previous select if any.';
 $lang['title_mailtest'] = 'Mail Test';
@@ -1710,13 +1708,13 @@ $lang['usernotfound'] = 'User Not Found.';
 $lang['userprefs'] = 'User Preferences';
 $lang['users'] = 'Users';
 $lang['usersassignedtogroup'] = 'Users Assigned to Group %s';
-$lang['usersdescription'] = 'This is where you manage users.';
+$lang['usersdescription'] = 'Here you can manage Admin users.';
 $lang['usersgroups'] = 'Users &amp; Groups';
 $lang['usersgroupsdescription'] = 'User and Group related items.';
 $lang['usertagadded'] = 'The User Defined Tag was successfully added.';
 $lang['usertagdeleted'] = 'The User Defined Tag was successfully removed.';
 $lang['usertagdescription'] = 'Tags that you can create and modify yourself to perform specific tasks, right from your browser.';
-$lang['usertagexists'] = 'A tag with this name already exists. Please choose another.';
+$lang['usertagexists'] = 'A User Defined Tag with this name already exists. Please choose another.';
 $lang['usertags'] = 'User Defined Tags';
 $lang['usertagupdated'] = 'The User Defined Tag was successfully updated.';
 $lang['usersettings'] = 'User Settings';
@@ -1751,10 +1749,10 @@ $lang['warn_addgroup'] = 'Creating a new group does not assign any permissions. 
 $lang['warning_mail_settings'] = <<<EOT
 Your mail settings have not been configured.  This could interfere with the ability of your website to send email messages.  You should go to <a href="%s">Extensions >> CMSMailer</a> and configure the mail settings with the information provided by your host.
 EOT;
-$lang['warn_nosefurl'] = 'SEO Friendly or <em>Pretty</em> URLs have not been configured, some of these settings are irrelevant';
+$lang['warn_nosefurl'] = 'SEO Friendly or Pretty URLs have not been configured, some of these settings are irrelevant';
 $lang['warning_safe_mode'] = '<strong><em>WARNING:</em></strong> PHP Safe mode is enabled. This will cause difficulty with files uploaded via the web browser interface, including images, theme and module XML packages.  You are advised to contact your site administrator to see about disabling safe mode.';
-$lang['warning_upgrade'] = '<em><strong>Warning:</strong></em> CMSMS is in need of an upgrade.';
-$lang['warning_upgrade_info1'] = 'You are now running schema version %s. and you need to be upgraded to version %s';
+$lang['warning_upgrade'] = '<em><strong>Warning:</strong></em> CMSMS is in need of an upgrade!';
+$lang['warning_upgrade_info1'] = 'The website is now running schema version %s and needs to be upgraded to version %s';
 $lang['warning_upgrade_info2'] = 'Please click the following link: %s.';
 $lang['warn_admin_ipandcookies'] = 'Warning: Admin activities use cookies and tracks your IP address';
 $lang['warn_bulk_settemplate'] = '<strong>Warning:</strong> This is potentially a destructive operation, and may break an existing website.  <span style="color: red;">Use caution!</span>';
@@ -1794,5 +1792,10 @@ $lang['your_ipaddress'] = 'Your IP Address is';
 //   Z
 //  Z
 // ZZZZZ
+
+$lang['zz_1nav_tab__'] = 'Navigation';
+$lang['zz_2logic_tab__'] = 'Logic';
+$lang['zz_3options_tab__'] = 'Options';
+$lang['zz_4perms_tab__'] = 'Permissions';
 
 ?>
