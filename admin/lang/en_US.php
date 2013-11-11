@@ -846,6 +846,13 @@ $lang['event_help_smartyprecompile'] = '<h4>Parameters</h4>
 </ul>
 ';
 
+$lang['event_desc_stylesheetpostcompile'] = 'Sent after a stylesheet is compiled through smarty';
+$lang['event_help_stylesheetpostcompile'] = '<h4>Parameters</h4>
+<ul>
+<li>None</li>
+</ul>
+';
+
 $lang['event_desc_stylesheetprecompile'] = 'Sent before a stylesheet is compiled through smarty';
 $lang['event_help_stylesheetprecompile'] = '<h4>Parameters</h4>
 <ul>
