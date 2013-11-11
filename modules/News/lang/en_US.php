@@ -91,8 +91,7 @@ $lang['eventdesc-NewsArticleEdited'] = 'Sent when an article is edited.';
 $lang['eventdesc-NewsCategoryAdded'] = 'Sent when a category is added.';
 $lang['eventdesc-NewsCategoryDeleted'] = 'Sent when a category is deleted.';
 $lang['eventdesc-NewsCategoryEdited'] = 'Sent when a category is edited.';
-$lang['eventhelp-NewsArticleAdded'] = '<p>Sent when an article is added.</p>
-<h4>Parameters</h4>
+$lang['eventhelp-NewsArticleAdded'] = '<h4>Parameters</h4>
 <ul>
 <li>"news_id" - Id of the news article</li>
 <li>"category_id" - Id of the category for this article</li>
@@ -105,14 +104,12 @@ $lang['eventhelp-NewsArticleAdded'] = '<p>Sent when an article is added.</p>
 <li>"useexp" - Whether the expiration date should be ignored or not</li>
 </ul>
 ';
-$lang['eventhelp-NewsArticleDeleted'] = '<p>Sent when an article is deleted.</p>
-<h4>Parameters</h4>
+$lang['eventhelp-NewsArticleDeleted'] = '<h4>Parameters</h4>
 <ul>
 <li>"news_id" - Id of the news article</li>
 </ul>
 ';
-$lang['eventhelp-NewsArticleEdited'] = '<p>Sent when an article is edited.</p>
-<h4>Parameters</h4>
+$lang['eventhelp-NewsArticleEdited'] = '<h4>Parameters</h4>
 <ul>
 <li>"news_id" - Id of the news article</li>
 <li>"category_id" - Id of the category for this article</li>
@@ -126,22 +123,19 @@ $lang['eventhelp-NewsArticleEdited'] = '<p>Sent when an article is edited.</p>
 </ul>
 <p><strong>Note:</strong> Not all parameters may be present when this event is sent.</p>
 ';
-$lang['eventhelp-NewsCategoryAdded'] = '<p>Sent when a category is added.</p>
-<h4>Parameters</h4>
+$lang['eventhelp-NewsCategoryAdded'] = '<h4>Parameters</h4>
 <ul>
 <li>"category_id" - Id of the news category</li>
 <li>"name" - Name of the news category</li>
 </ul>
 ';
-$lang['eventhelp-NewsCategoryDeleted'] = '<p>Sent when a category is deleted.</p>
-<h4>Parameters</h4>
+$lang['eventhelp-NewsCategoryDeleted'] = '<h4>Parameters</h4>
 <ul>
 <li>"category_id" - Id of the deleted category </li>
 <li>"name" - Name of the deleted category</li>
 </ul>
 ';
-$lang['eventhelp-NewsCategoryEdited'] = '<p>Sent when a category is edited.</p>
-<h4>Parameters</h4>
+$lang['eventhelp-NewsCategoryEdited'] = '<h4>Parameters</h4>
 <ul>
 <li>"category_id" - Id of the news category</li>
 <li>"name" - Name of the news category</li>
