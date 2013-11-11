@@ -85,12 +85,8 @@ $lang['error_noarticlesselected'] = 'No Articles Were Selected';
 $lang['error_nooptions'] = 'No options specified for field definition';
 $lang['error_templatenamexists'] = 'A template by that name already exists';
 $lang['error_upload'] = 'Problem occurred uploading a file';
+
 $lang['eventdesc-NewsArticleAdded'] = 'Sent when an article is added.';
-$lang['eventdesc-NewsArticleDeleted'] = 'Sent when an article is deleted.';
-$lang['eventdesc-NewsArticleEdited'] = 'Sent when an article is edited.';
-$lang['eventdesc-NewsCategoryAdded'] = 'Sent when a category is added.';
-$lang['eventdesc-NewsCategoryDeleted'] = 'Sent when a category is deleted.';
-$lang['eventdesc-NewsCategoryEdited'] = 'Sent when a category is edited.';
 $lang['eventhelp-NewsArticleAdded'] = '<h4>Parameters</h4>
 <ul>
 <li>"news_id" - Id of the news article</li>
@@ -104,11 +100,15 @@ $lang['eventhelp-NewsArticleAdded'] = '<h4>Parameters</h4>
 <li>"useexp" - Whether the expiration date should be ignored or not</li>
 </ul>
 ';
+
+$lang['eventdesc-NewsArticleDeleted'] = 'Sent when an article is deleted.';
 $lang['eventhelp-NewsArticleDeleted'] = '<h4>Parameters</h4>
 <ul>
 <li>"news_id" - Id of the news article</li>
 </ul>
 ';
+
+$lang['eventdesc-NewsArticleEdited'] = 'Sent when an article is edited.';
 $lang['eventhelp-NewsArticleEdited'] = '<h4>Parameters</h4>
 <ul>
 <li>"news_id" - Id of the news article</li>
@@ -123,18 +123,24 @@ $lang['eventhelp-NewsArticleEdited'] = '<h4>Parameters</h4>
 </ul>
 <p><strong>Note:</strong> Not all parameters may be present when this event is sent.</p>
 ';
+
+$lang['eventdesc-NewsCategoryAdded'] = 'Sent when a category is added.';
 $lang['eventhelp-NewsCategoryAdded'] = '<h4>Parameters</h4>
 <ul>
 <li>"category_id" - Id of the news category</li>
 <li>"name" - Name of the news category</li>
 </ul>
 ';
+
+$lang['eventdesc-NewsCategoryDeleted'] = 'Sent when a category is deleted.';
 $lang['eventhelp-NewsCategoryDeleted'] = '<h4>Parameters</h4>
 <ul>
 <li>"category_id" - Id of the deleted category </li>
 <li>"name" - Name of the deleted category</li>
 </ul>
 ';
+
+$lang['eventdesc-NewsCategoryEdited'] = 'Sent when a category is edited.';
 $lang['eventhelp-NewsCategoryEdited'] = '<h4>Parameters</h4>
 <ul>
 <li>"category_id" - Id of the news category</li>
@@ -142,6 +148,7 @@ $lang['eventhelp-NewsCategoryEdited'] = '<h4>Parameters</h4>
 <li>"origname" - The original name of the news category</li>
 </ul>
 ';
+
 $lang['expired'] = 'Expired';
 $lang['expired_searchable'] = 'Expired articles can appear in search results';
 $lang['expired_viewable'] = 'Expired articles can be viewed in the detail view';

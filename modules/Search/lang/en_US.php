@@ -11,26 +11,28 @@ $lang['description'] = 'Module for search site and other module\'s contents.';
 
 // E
 $lang['eventdesc-SearchAllItemsDeleted'] = 'Sent when all items are deleted from the index.';
-$lang['eventdesc-SearchCompleted'] = 'Sent when a search is completed.';
-$lang['eventdesc-SearchInitiated'] = 'Sent when a search is started.';
-$lang['eventdesc-SearchItemAdded'] = 'Sent when a new item is indexed.';
-$lang['eventdesc-SearchItemDeleted'] = 'Sent when an item is deleted from the index.';
 $lang['eventhelp-SearchAllItemsDeleted'] = '<h4>Parameters</h4>
 <ul>
 <li>None</li>
 </ul>
 ';
+
+$lang['eventdesc-SearchCompleted'] = 'Sent when a search is completed.';
 $lang['eventhelp-SearchCompleted'] = '<h4>Parameters</h4>
 <ol>
 <li>Text that was searched for.</li>
 <li>Array of the completed results.</li>
 </ol>
 ';
+
+$lang['eventdesc-SearchInitiated'] = 'Sent when a search is started.';
 $lang['eventhelp-SearchInitiated'] = '<h4>Parameters</h4>
 <ol>
 <li>Text that was searched for.</li>
 </ol>
 ';
+
+$lang['eventdesc-SearchItemAdded'] = 'Sent when a new item is indexed.';
 $lang['eventhelp-SearchItemAdded'] = '<h4>Parameters</h4>
 <ol>
 <li>Module name.</li>
@@ -39,6 +41,8 @@ $lang['eventhelp-SearchItemAdded'] = '<h4>Parameters</h4>
 <li>Content to index and add.</li>
 </ol>
 ';
+
+$lang['eventdesc-SearchItemDeleted'] = 'Sent when an item is deleted from the index.';
 $lang['eventhelp-SearchItemDeleted'] = '<h4>Parameters</h4>
 <ol>
 <li>Module name.</li>
