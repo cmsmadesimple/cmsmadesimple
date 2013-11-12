@@ -4,7 +4,7 @@
 		<meta charset="utf-8" />
 		<title>{if !empty($pagetitle)}{$pagetitle} - {/if}{sitename}</title>
 		<base href="{$config.admin_url}/" />
-		<meta name="generator" content="CMS Made Simple - Copyright (C) 2004-12 Ted Kulp. All rights reserved." />
+		<meta name="generator" content="CMS Made Simple - Copyright (C) 2004-13 Ted Kulp. All rights reserved." />
 		<meta name="robots" content="noindex, nofollow" />
 		<meta name="viewport" content="initial-scale=1.0 maximum-scale=1.0 user-scalable=no" />
 		<meta name="HandheldFriendly" content="True"/>
@@ -19,7 +19,7 @@
 		<!--[if lt IE 9]>
 		<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
 		<![endif]-->
-		{cms_jquery append="`$config.admin_url`/themes/OneEleven/includes/jquery.cookie.min.js,`$config.admin_url`/themes/OneEleven/includes/standard.js"}
+		{cms_jquery append="`$config.admin_url`/themes/OneEleven/includes/standard.js"}
 		<!-- THIS IS WHERE HEADER STUFF SHOULD GO -->
 	 	{$headertext|default:''}
 		<!-- custom jQueryUI Theme 1.8.21 see style.css or link in UI Stylesheet for color reference //-->

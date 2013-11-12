@@ -15,6 +15,7 @@ function cms_CMloadUrl(link, lang) {
 
 function cms_CMtoggleState(el) {
     $(el).attr('disabled', true);
+    $('button' + el).button({ 'disabled' : true });
 
     $(document).on('click', 'input:checkbox', function () {
         if ($(this).is(':checked')) {
