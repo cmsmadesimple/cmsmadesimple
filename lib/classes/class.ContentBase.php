@@ -1621,8 +1621,6 @@ abstract class ContentBase
 	public function FillParams($params,$editing = false)
 	{
 		// content property parameters
-		stack_trace();
-		debug_display($editing,'fillparams');
 		$parameters = array('extra1','extra2','extra3','image','thumbnail');
 		foreach ($parameters as $oneparam) {
 			if (isset($params[$oneparam])) $this->SetPropertyValue($oneparam, $params[$oneparam]);
