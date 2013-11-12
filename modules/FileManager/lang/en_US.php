@@ -6,7 +6,7 @@ $lang['actiondelete'] = 'Delete one or more items';
 $lang['actions']= 'Actions';
 $lang['advancedhelp'] = 'Lets you gain access to whole CMSMS filesystem, not just /uploads/ (if allowed)';
 $lang['afilecontainsillegalchars'] = 'A filename contains one or more illegal characters (\',",+,*,\\,/,&,$). Upload cancelled.';
-$lang['afileistoobig'] = 'A file is too big. Upload cancelled.';
+$lang['afileistoobig'] = 'A file is too big. The upload is cancelled.';
 $lang['and'] = 'and';
 $lang['angle'] = 'Angle';
 
@@ -53,10 +53,10 @@ $lang['dirchmodfailure'] = 'Changing permissions of the directory failed';
 $lang['dirchmodsuccess'] = 'The directory successfully got new permissions';
 $lang['dirchmodsuccessmulti'] = 'Changing permissions on the directory and it\'s content was successful';
 $lang['direxists'] = 'The directory already exists';
-$lang['dirnotemptyconfirm'] = 'This dir is not empty. Do you really want to delete it and all content, including subdirs?';
-$lang['dirtreedeletecancelled'] = 'Deletion of dir cancelled';
-$lang['dirtreedeletefail'] = 'An error occured when deleting this dir. Some of the contents may have been deleted, however.';
-$lang['dirtreedeletesuccess'] = 'The dir including content was successfully deleted.';
+$lang['dirnotemptyconfirm'] = 'This dir is not empty. Do you really want to delete it, including all content and subdirs?';
+$lang['dirtreedeletecancelled'] = 'Deletion of directory cancelled';
+$lang['dirtreedeletefail'] = 'An error occured when deleting this directory. Some of the contents may have been deleted, however.';
+$lang['dirtreedeletesuccess'] = 'The directory including content was successfully deleted.';
 
 // E
 $lang['enableadvanced'] = 'Enable advanced mode?';
@@ -112,13 +112,14 @@ $lang['help_permissionstyle'] = '<p>This option allows changing the way that per
 $lang['help_showhiddenfiles'] = '<p>When enabled files and directories whose name beginns with a . <em>(dot)</em> or _ <em>(underscore)</em> will be displayed in the ilst.  CMSMS <em>(and other applications)</em> occasionally stores important configuration information, or cache information in these directories.</p><p><strong>Note:</strong> This option has no effect unless advanced mode is also enabled.</p>';
 $lang['help_showthumbnails'] = 'If enabled, the file list will display a thumbnail <em>(if one exists)</em> for all images.  If disabled, the system will attempt to display an icon representing the file type.';
 $lang['help']=<<<EOF
-		<h3>What does this do?</h3>
-		<p>This module provides file management functions.</p>
-		<h3>How do I use it?</h3>
-		<p>Select it from the content-menu from in the admin.</p>
+<h3>What does this do?</h3>
+<p>This module provides file management functions.</p>
+<h3>How do I use it?</h3>
+<p>Select it from the content-menu from in the admin.</p>
 EOF;
 $lang['help_postrotate'] = <<<EOT
-<p>Options:</p><br/>
+<p>Options:</p>
+<br />
 <ul>
   <li><strong>None</strong> - No postrotate action will be taken.  The rotated image could be larger than the original image.</li>
   <li><strong>Crop</strong> - The rotated image will be cropped to the size of the original source image.  This may result in some of the image being clipped.</li>
@@ -155,7 +156,7 @@ $lang['largeicons'] = 'Large icons';
 // M
 $lang['mb'] = 'mb';
 $lang['mimetype'] = 'Mime Type';
-$lang['moddescription'] = 'Handling of files and directories in the upload-filesection of cmsms';
+$lang['moddescription'] = 'Handling of files and directories in the upload-filesection of CMSMS';
 $lang['morethanonefiledirselected'] = 'Only one file or directory should be marked for this action.';
 $lang['move'] = 'Move';
 $lang['movedestdirsame'] = 'The destination directory specified is the same as the source';
@@ -173,7 +174,6 @@ $lang['newdirname'] = 'Create new directory:';
 $lang['newdirsuccess'] = 'The directory was created successfully';
 $lang['newname'] = 'New name:';
 $lang['newpermissions'] = 'New permissions';
-$lang['newpermissions'] = 'New permissions:';
 $lang['newunsupportedarchive'] = '%s is an unsupported archive format';
 $lang['newuploadfailed'] = '%s file(s) failed to upload (or possibly unpack) successfully';
 $lang['newuploadsuccess'] = '%s file(s) was successfully uploaded (and unpacked if chosen)';
@@ -194,7 +194,7 @@ $lang['packfilewritefail'] = 'Could not open the file %s for writing';
 $lang['permission'] = 'Usage of the File Manager module';
 $lang['permissionadvanced'] = 'Advanced usage of the File Manager module';
 $lang['permissionstyle'] = 'Permission style';
-$lang['pie_image_natural_size'] = 'Image natual size';
+$lang['pie_image_natural_size'] = 'Image natural size';
 $lang['pie_lock_proportion'] = 'lock proportion';
 $lang['pie_resize'] = 'resize';
 $lang['pie_crop'] = 'crop';
@@ -220,8 +220,8 @@ $lang['prompt_move'] = 'Move Items to Another Directory';
 $lang['quickmode'] = 'Quick chmod (like 777)';
 
 // R
-$lang['really_uninstall'] = 'Are you sure the FileManager module should be uninstalled?';
-$lang['recursetext'] = 'Recurse into subdirs';
+$lang['really_uninstall'] = 'Are you sure the File Manager module should be uninstalled?';
+$lang['recursetext'] = 'Recurse into subdirectories';
 $lang['refresh'] = 'refresh';
 $lang['rename'] = 'Rename';
 $lang['renamecancelled'] = 'Renaming cancelled';
@@ -292,21 +292,21 @@ $lang['thumbsuccess'] = 'Thumbnail successfully created';
 $lang['toggle'] = 'TODO';
 
 // U
-$lang['uninstalled'] = 'FileManager module uninstalled';
+$lang['uninstalled'] = 'The FileManager module is uninstalled';
 $lang['unknown'] = 'Unknown';
 $lang['unknownfileaction'] = 'Internal error: unknown file action';
 $lang['unpack'] = 'Unpack';
 $lang['unpackafterupload'] = 'Try to unpack file after upload (only tgz and most zip-files)?';
 $lang['unpackfail'] = ' failed with this error: ';
-$lang['unpacksuccess'] = 'was successfully unpacked';
-$lang['upgraded'] = 'FileManager module was upgraded to version %s';
+$lang['unpacksuccess'] = 'is successfully unpacked';
+$lang['upgraded'] = 'The FileManager module is upgraded to version %s';
 $lang['uploadboxes'] = 'Number of uploadboxes';
 $lang['uploaderstandard'] = 'Standard html input-method (allows unpacking)';
 $lang['uploadfail'] = 'failed to upload successfully';
 $lang['uploadfilesto'] = 'Uploading files to:';
 $lang['uploadmethod'] = 'Upload method';
 $lang['uploadnewfile'] = 'Upload new file(s):';
-$lang['uploadsuccess'] = 'was uploaded successfully';
+$lang['uploadsuccess'] = 'is uploaded successfully';
 $lang['uploadview'] = 'Upload files';
 
 // V
