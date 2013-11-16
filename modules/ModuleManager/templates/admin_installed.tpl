@@ -41,7 +41,7 @@
             <a href="{cms_action_url action='local_uninstall' mod=$item.name}" title="{$mod->Lang('title_uninstall')}">{$mod->Lang('uninstall')}</a>
 	  {/if}
 
-          {if $item.status == 'need_upgrade'}
+          {if $item.e_status == 'need_upgrade'}
             <a href="{cms_action_url action='local_upgrade' mod=$item.name}" title="{$mod->Lang('title_upgrade')}">{$mod->Lang('upgrade')}</a>
           {/if}
         {/if}

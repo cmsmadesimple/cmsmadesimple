@@ -2,7 +2,7 @@
 
 class ModuleManagerModuleInfo extends CmsExtendedModuleInfo
 {
-  private static $_mmkeys = array('newer_available','e_status');
+  private static $_mmkeys = array('e_status');
   private $_mmdata = array();
 
   public function __construct($module_name,$can_load = TRUE)
