@@ -792,6 +792,7 @@ class ContentOperations
 		$opts['use_name'] = ($use_name)?'true':'false';
 		$str = '{';
 		foreach($opts as $key => $val) {
+			if( $val == '' ) continue;
 			$str .= $key.': '.$val.',';
 		}
 		$str = substr($str,0,-1).'}';
