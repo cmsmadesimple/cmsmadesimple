@@ -133,9 +133,7 @@ function redirect_to_alias($alias)
     audit('','Core','Attempt to redirect to invalid alias: '.$alias);
     return;
   }
-  if ($content->GetURL() != '') {
-    redirect($content->GetURL());
-  }
+  if ($content->GetURL() != '') redirect($content->GetURL());
 }
 
 
@@ -233,9 +231,7 @@ function cms_htmlentities($val, $param=ENT_QUOTES, $charset="UTF-8", $convert_si
  */
 function cms_utf8entities($val)
 {
-  if ($val == "") {
-    return "";
-  }
+  if ($val == "") return "";
   $val = str_replace( "&#032;", " ", $val );
   $val = str_replace( "&"  , "\u0026" , $val );
   $val = str_replace( ">"  , "\u003E" , $val );
@@ -279,9 +275,7 @@ function debug_bt_to_log()
       }
       $function = $trace['function'];
       $str = "$function";
-      if( $file ) {
-	$str .= " at $file:$line";
-      }
+      if( $file ) $str .= " at $file:$line";
       $out[] = $str;
     }
 
@@ -336,9 +330,7 @@ function debug_bt()
 function debug_display($var, $title="", $echo_to_screen = true, $use_html = true,$showtitle = TRUE)
 {
   global $starttime;
-  if( !$starttime ) {
-    $starttime = microtime();
-  }
+  if( !$starttime ) $starttime = microtime();
 
   ob_start();
 
@@ -403,10 +395,7 @@ function debug_display($var, $title="", $echo_to_screen = true, $use_html = true
  */
 function debug_output($var, $title="")
 {
-  if(cmsms()->config["debug"] == true) {
-    debug_display($var, $title, true);
-  }
-
+  if(cmsms()->config["debug"] == true) debug_display($var, $title, true);
 }
 
 
@@ -460,11 +449,8 @@ function debug_buffer($var, $title="")
 function debug_sql($str, $newline = false)
 {
   $config = cmsms()->GetConfig();
-  if($config["debug"] == true) {
-    cmsms()->add_error(debug_display($str, '', false, true));
-  }
+  if($config["debug"] == true) cmsms()->add_error(debug_display($str, '', false, true));
 }
-
 
 
 
@@ -482,9 +468,7 @@ function debug_sql($str, $newline = false)
 function _get_value_with_default($value, $default_value = '', $session_key = '')
 {
   if($session_key != '') {
-    if(isset($_SESSION['default_values'][$session_key])) {
-      $default_value = $_SESSION['default_values'][$session_key];
-    }
+    if(isset($_SESSION['default_values'][$session_key])) $default_value = $_SESSION['default_values'][$session_key];
   }
 
   // set our return value to the default initially and overwrite with $value if we like it.
@@ -510,10 +494,7 @@ function _get_value_with_default($value, $default_value = '', $session_key = '')
     }
   }
 
-  if($session_key != '') {
-    $_SESSION['default_values'][$session_key] = $return_value;
-  }
-
+  if($session_key != '') $_SESSION['default_values'][$session_key] = $return_value;
   return $return_value;
 }
 
@@ -535,9 +516,7 @@ function _get_value_with_default($value, $default_value = '', $session_key = '')
 function get_parameter_value($parameters, $value, $default_value = '', $session_key = '')
 {
   if($session_key != '') {
-    if(isset($_SESSION['parameter_values'][$session_key])) {
-      $default_value = $_SESSION['parameter_values'][$session_key];
-    }
+    if(isset($_SESSION['parameter_values'][$session_key])) $default_value = $_SESSION['parameter_values'][$session_key];
   }
 
   // set our return value to the default initially and overwrite with $value if we like it.
@@ -545,16 +524,12 @@ function get_parameter_value($parameters, $value, $default_value = '', $session_
   if(isset($parameters[$value])) {
     if(is_bool($default_value)) {
       // want a boolean return_value
-      if(isset($parameters[$value])) {
-	$return_value = (boolean)$parameters[$value];
-      }
+      if(isset($parameters[$value])) $return_value = (boolean)$parameters[$value];
     }
     else {
       // is $default_value a number?
       $is_number = false;
-      if(is_numeric($default_value)) {
-	$is_number = true;
-      }
+      if(is_numeric($default_value)) $is_number = true;
 
       if(is_array($parameters[$value])) {
 	// $parameters[$value] is an array - validate each element.
@@ -566,9 +541,7 @@ function get_parameter_value($parameters, $value, $default_value = '', $session_
       else {
 	if(is_numeric($default_value)) {
 	  // default value is a number, we only like $parameters[$value] if it's a number too.
-	  if(is_numeric($parameters[$value])) {
-	    $return_value = $parameters[$value];
-	  }
+	  if(is_numeric($parameters[$value])) $return_value = $parameters[$value];
 	}
 	elseif(is_string($default_value)) {
 	  $return_value = trim($parameters[$value]);
@@ -580,10 +553,7 @@ function get_parameter_value($parameters, $value, $default_value = '', $session_
     }
   }
 
-  if($session_key != '') {
-    $_SESSION['parameter_values'][$session_key] = $return_value;
-  }
-
+  if($session_key != '') $_SESSION['parameter_values'][$session_key] = $return_value;
   return $return_value;
 }
 
@@ -645,37 +615,28 @@ function cms_mapi_create_permission($cms, $permission_name, $permission_text)
  */
 function is_directory_writable( $path )
 {
-  if ( substr ( $path , strlen ( $path ) - 1 ) != '/' ) {
-    $path .= '/' ;
-  }
+  if ( substr ( $path , strlen ( $path ) - 1 ) != '/' ) $path .= '/' ;
 
-  $result = true;
+  $result = TRUE;
   if( $handle = @opendir( $path ) ) {
     while( false !== ( $file = readdir( $handle ) ) ) {
-      if( $file == '.' || $file == '..' ) {
-	continue;
-      }
+      if( $file == '.' || $file == '..' ) continue;
 
       $p = $path.$file;
-
-      if( !@is_writable( $p ) ) {
-	return false;
-      }
+      if( !@is_writable( $p ) ) return FALSE;
 
       if( @is_dir( $p ) ) {
 	$result = is_directory_writable( $p );
-	if( !$result ) {
-	  return false;
-	}
+	if( !$result ) return FALSE;
       }
     }
     @closedir( $handle );
   }
   else {
-    return false;
+    return FALSE;
   }
 
-  return true;
+  return TRUE;
 }
 
 
@@ -694,27 +655,22 @@ function get_matching_files($dir,$extensions = '',$excludedot = true,$excludedir
   $dh = @opendir($dir);
   if( !$dh ) return false;
 
-  if( !empty($extensions) )
-    {
-      $extensions = explode(',',strtolower($extensions));
-    }
+  if( !empty($extensions) ) $extensions = explode(',',strtolower($extensions));
   $results = array();
-  while( false !== ($file = readdir($dh)) )
-    {
-      if( $file == '.' || $file == '..' ) continue;
-      if( startswith($file,'.') && $excludedot ) continue;
-      if( is_dir(cms_join_path($dir,$file)) && $excludedir ) continue;
-      if( !empty($fileprefix) )
-	{
-	  if( $excludefiles == 1 && startswith($file,$fileprefix) ) continue;
-	  if( $excludefiles == 0 && !startswith($file,$fileprefix) ) continue;
-	}
-
-      $ext = strtolower(substr($file,strrpos($file,'.')+1));
-      if( is_array($extensions) && count($extensions) && !in_array($ext,$extensions) ) continue;
-
-      $results[] = $file;
+  while( false !== ($file = readdir($dh)) ) {
+    if( $file == '.' || $file == '..' ) continue;
+    if( startswith($file,'.') && $excludedot ) continue;
+    if( is_dir(cms_join_path($dir,$file)) && $excludedir ) continue;
+    if( !empty($fileprefix) ) {
+      if( $excludefiles == 1 && startswith($file,$fileprefix) ) continue;
+      if( $excludefiles == 0 && !startswith($file,$fileprefix) ) continue;
     }
+
+    $ext = strtolower(substr($file,strrpos($file,'.')+1));
+    if( is_array($extensions) && count($extensions) && !in_array($ext,$extensions) ) continue;
+
+    $results[] = $file;
+  }
   closedir($dh);
   if( !count($results) ) return false;
   return $results;
@@ -739,9 +695,7 @@ function get_recursive_file_list ( $path , $excludes, $maxdepth = -1 , $mode = "
     // strip the path from the file
     if( empty($excludes) ) return false;
     foreach( $excludes as $excl ) {
-      if( @preg_match( "/".$excl."/i", basename($file) ) ) {
-	return true;
-      }
+      if( @preg_match( "/".$excl."/i", basename($file) ) ) return true;
     }
     return false;
   };
@@ -793,9 +747,7 @@ function recursive_delete( $dirname )
     }
   }
   closedir($dir_handle);
-  if( ! @rmdir($dirname) ) {
-    return false;
-  }
+  if( ! @rmdir($dirname) ) return false;
   return true;
 }
 
@@ -888,14 +840,10 @@ function munge_string_to_url($alias, $tolower = false, $withslash = false)
   $alias = str_replace($toreplace, $replacement, $alias);
 
   // lowercase only on empty aliases
-  if ($tolower == true) {
-    $alias = strtolower($alias);
-  }
+  if ($tolower == true) $alias = strtolower($alias);
 
   $expr = '/[^a-z0-9-_]+/i';
-  if( $withslash ) {
-    $expr = '/[^a-z0-9-_\/]+/i';
-  }
+  if( $withslash ) $expr = '/[^a-z0-9-_\/]+/i';
   $alias = preg_replace($expr,'-',$alias);
 
   for( $i = 0; $i < 5; $i++ ) {
@@ -920,9 +868,7 @@ function munge_string_to_url($alias, $tolower = false, $withslash = false)
  * @return string
  */
 function cleanValue($val) {
-  if ($val == "") {
-    return $val;
-  }
+  if ($val == "") return $val;
   //Replace odd spaces with safe ones
   $val = str_replace(" ", " ", $val);
   $val = str_replace(chr(0xCA), "", $val);
@@ -1023,12 +969,8 @@ function can_admin_upload()
   }
 
   // now check to see if we can write to the directories
-  if( !is_writable( $dir_modules ) ) {
-    return FALSE;
-  }
-  if( !is_writable( $dir_uploads ) ) {
-    return FALSE;
-  }
+  if( !is_writable( $dir_modules ) ) return FALSE;
+  if( !is_writable( $dir_uploads ) ) return FALSE;
 
   // It all worked.
   return TRUE;
@@ -1048,8 +990,7 @@ function ini_get_boolean($str)
   $val2 = strtolower($val1);
 
   $ret = 0;
-  if( $val2 == 1 || $val2 == '1' || $val2 == 'yes' || $val2 == 'true' || $val2 == 'on' )
-     $ret = 1;
+  if( $val2 == 1 || $val2 == '1' || $val2 == 'yes' || $val2 == 'true' || $val2 == 'on' ) $ret = 1;
   return $ret;
 }
 
@@ -1086,11 +1027,7 @@ function cms_move_uploaded_file( $tmpfile, $destination )
 {
    $config = cmsms()->GetConfig();
 
-   if( !@move_uploaded_file( $tmpfile, $destination ) )
-   {
-      return false;
-   }
-
+   if( !@move_uploaded_file( $tmpfile, $destination ) ) return false;
    @chmod($destination,octdec($config['default_upload_permission']));
    return true;
 }
@@ -1113,72 +1050,60 @@ function cms_move_uploaded_file( $tmpfile, $destination )
 function cms_ipmatches($ip,$checklist)
 {
   if( !function_exists('__testip') ) {
-  function __testip($range,$ip)
-  {
-    $result = 1;
+    function __testip($range,$ip) {
+      $result = 1;
 
-    // IP Pattern Matcher
-    // J.Adams <jna@retina.net>
-    //
-    // Matches:
-    //
-    // xxx.xxx.xxx.xxx        (exact)
-    // xxx.xxx.xxx.[yyy-zzz]  (range)
-    // xxx.xxx.xxx.xxx/nn    (nn = # bits, cisco style -- i.e. /24 = class C)
-    //
-    // Does not match:
-    // xxx.xxx.xxx.xx[yyy-zzz]  (range, partial octets not supported)
+      // IP Pattern Matcher
+      // J.Adams <jna@retina.net>
+      //
+      // Matches:
+      //
+      // xxx.xxx.xxx.xxx        (exact)
+      // xxx.xxx.xxx.[yyy-zzz]  (range)
+      // xxx.xxx.xxx.xxx/nn    (nn = # bits, cisco style -- i.e. /24 = class C)
+      //
+      // Does not match:
+      // xxx.xxx.xxx.xx[yyy-zzz]  (range, partial octets not supported)
 
-    $regs = array();
-    if (preg_match("/([0-9]+)\.([0-9]+)\.([0-9]+)\.([0-9]+)\/([0-9]+)/",$range,$regs)) {
-      // perform a mask match
-      $ipl = ip2long($ip);
-      $rangel = ip2long($regs[1] . "." . $regs[2] . "." . $regs[3] . "." . $regs[4]);
+      $regs = array();
+      if (preg_match("/([0-9]+)\.([0-9]+)\.([0-9]+)\.([0-9]+)\/([0-9]+)/",$range,$regs)) {
+	// perform a mask match
+	$ipl = ip2long($ip);
+	$rangel = ip2long($regs[1] . "." . $regs[2] . "." . $regs[3] . "." . $regs[4]);
 
-      $maskl = 0;
+	$maskl = 0;
 
-      for ($i = 0; $i< 31; $i++) {
-	if ($i < $regs[5]-1) {
-	  $maskl = $maskl + pow(2,(30-$i));
+	for ($i = 0; $i< 31; $i++) {
+	  if ($i < $regs[5]-1) $maskl = $maskl + pow(2,(30-$i));
 	}
-      }
 
-      if (($maskl & $rangel) == ($maskl & $ipl)) {
-	return 1;
+	if (($maskl & $rangel) == ($maskl & $ipl)) {
+	  return 1;
+	} else {
+	  return 0;
+	}
       } else {
-	return 0;
-      }
-    } else {
-      // range based
-      $maskocts = explode('.',$range);
-      $ipocts = explode('.',$ip);
+	// range based
+	$maskocts = explode('.',$range);
+	$ipocts = explode('.',$ip);
 
-      if( count($maskocts) != count($ipocts) && count($maskocts) != 4 ) {
-	return 0;
-      }
+	if( count($maskocts) != count($ipocts) && count($maskocts) != 4 ) return 0;
 
-      // perform a range match
-      for ($i=0; $i<4; $i++) {
-	if (preg_match("/\[([0-9]+)\-([0-9]+)\]/",$maskocts[$i],$regs)) {
-	  if ( ($ipocts[$i] > $regs[2]) || ($ipocts[$i] < $regs[1])) {
-	    $result = 0;
+	// perform a range match
+	for ($i=0; $i<4; $i++) {
+	  if (preg_match("/\[([0-9]+)\-([0-9]+)\]/",$maskocts[$i],$regs)) {
+	    if ( ($ipocts[$i] > $regs[2]) || ($ipocts[$i] < $regs[1])) $result = 0;
+	  }
+	  else {
+	    if ($maskocts[$i] <> $ipocts[$i]) $result = 0;
 	  }
 	}
-	else
-	  {
-	    if ($maskocts[$i] <> $ipocts[$i]) {
-	      $result = 0;
-	    }
-	  }
       }
-    }
-    return $result;
-  } // __testip
+      return $result;
+    } // __testip
   } // if
 
-  if( !is_array($checklist) ) {
-    $checklist = explode(',',$checklist);
-  }
+  if( !is_array($checklist) ) $checklist = explode(',',$checklist);
   foreach( $checklist as $one ) {
     if( __testip(trim($one),$ip) ) return TRUE;
   }
@@ -1196,11 +1121,8 @@ function cms_ipmatches($ip,$checklist)
 function is_email( $email, $checkDNS=false ) 
 {
   if( !filter_var($email,FILTER_VALIDATE_EMAIL) ) return FALSE;
-
   if ($checkDNS && function_exists('checkdnsrr')) {
-    if (!(checkdnsrr($domain, 'A') || checkdnsrr($domain, 'MX'))) {
-      return FALSE;	// Domain doesn't actually exist
-    }
+    if (!(checkdnsrr($domain, 'A') || checkdnsrr($domain, 'MX'))) return FALSE;	// Domain doesn't actually exist
   }
 
   return TRUE;
@@ -1220,9 +1142,7 @@ function get_secure_param()
 {
   $urlext = '?';
   $str = strtolower(ini_get('session.use_cookies'));
-  if( $str == '0' || $str == 'off' ) {
-    $urlext .= htmlspecialchars(SID).'&';
-  }
+  if( $str == '0' || $str == 'off' ) $urlext .= htmlspecialchars(SID).'&';
   $urlext .= CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
   return $urlext;
 }
@@ -1238,9 +1158,7 @@ function get_secure_param()
  */
 function cms_to_bool($str)
 {
-  if( is_numeric($str) ) {
-    return ((int)$str != 0)?TRUE:FALSE;
-  }
+  if( is_numeric($str) ) return ((int)$str != 0)?TRUE:FALSE;
 
   $str = strtolower($str);
   if( $str == '1' || $str == 'y' || $str == 'yes' || $str == 'true' ) return TRUE;

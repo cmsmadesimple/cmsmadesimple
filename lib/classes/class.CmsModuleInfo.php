@@ -3,7 +3,7 @@
 class CmsModuleInfo implements ArrayAccess 
 {
   private static $_keys = array('name','version','depends','mincmsversion', 'author', 'authoremail', 'help', 'about', 
-				'lazyloadadmin', 'lazyloadfrontend', 'changelog','ver_compatible');
+				'lazyloadadmin', 'lazyloadfrontend', 'changelog','ver_compatible','dir','writable');
   private $_data = array();
 
   public function OffsetGet($key)
@@ -16,6 +16,13 @@ class CmsModuleInfo implements ArrayAccess
     case 'ver_compatible':
       return version_compare($this['mincmsversion'],CMS_VERSION,'<=');
 
+    case 'dir':
+      $config = cmsms()->GetConfig();
+      return cms_join_path($config['root_path'],'modules',$this['name']);
+
+    case 'writable':
+      return is_directory_writable($this['dir']);
+
     default:
       if( isset($this->_data[$key]) ) return $this->_data[$key];
       break;
@@ -26,7 +33,9 @@ class CmsModuleInfo implements ArrayAccess
   {
     if( !in_array($key,self::$_keys) ) throw new CmsLogicException('CMSEX_INVALIDMEMBER',null,$key);
     if( $key == 'about' ) throw new CmsLogicException('CMSEX_INVALIDMEMBERSET',$key);
-    if( $key == 'compatible' ) throw new CmsLogicException('CMSEX_INVALIDMEMBERSET',$key);
+    if( $key == 'ver_compatible' ) throw new CmsLogicException('CMSEX_INVALIDMEMBERSET',$key);
+    if( $key == 'dir' ) throw new CmsLogicException('CMSEX_INVALIDMEMBERSET',$key);
+    if( $key == 'writable' ) throw new CmsLogicException('CMSEX_INVALIDMEMBERSET',$key);
     $this->_data[$key] = $value;
   }
 

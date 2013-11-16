@@ -4,7 +4,7 @@ class CmsExtendedModuleInfo extends CmsModuleInfo
 {
   private static $_ekeys = array('installed','status','active','system_module','installed_version','admin_only',
 				 'active','allow_fe_lazyload','allow_admin_lazyload','dependants','can_deactivate',
-				 'can_uninstall');
+				 'can_uninstall','missingdeps');
   private $_edata = array();
 
   public function __construct($module_name,$can_load = false)
@@ -35,13 +35,24 @@ class CmsExtendedModuleInfo extends CmsModuleInfo
   {
     if( !in_array($key,self::$_ekeys) ) return parent::OffsetGet($key);
     if( isset($this->_edata[$key]) ) return $this->_edata[$key];
+    if( $key == 'missingdeps' ) {
+      $out = array();
+      $deps = $this['depends'];
+      if( is_array($deps) && count($deps) ) {
+	foreach( $deps as $onedepname => $onedepversion ) {
+	  $depinfo = new CmsExtendedModuleInfo($onedepkey);
+	  if( !$depinfo['installed'] || version_compare($depinfo['version'],$onedepversion) < 0 ) $out[$onedepname] = $onedepversion;
+	}
+      }
+    }
   }
 
   public function OffsetSet($key,$value)
   {
     if( !in_array($key,self::$_ekeys) ) parent::OffsetSet($key,$value);
-    if( $key == 'can_deactivate' ) return;
-    if( $key == 'can_uninstall' ) return;
+    if( $key == 'can_deactivate' ) throw new CmsLogicException('CMSEX_INVALIDMEMBER',null,$key);
+    if( $key == 'can_uninstall' ) throw new CmsLogicException('CMSEX_INVALIDMEMBER',null,$key);
+    if( $key == 'missingdeps' ) throw new CmsLogicException('CMSEX_INVALIDMEMBER',null,$key);
     $this->_edata[$key] = $value;
   }
 

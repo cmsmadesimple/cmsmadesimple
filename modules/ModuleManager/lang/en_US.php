@@ -1,6 +1,5 @@
 <?php
 // A
-$lang['abouttxt'] = 'About';
 $lang['about_title'] = 'About the %s module';
 $lang['admin_title'] = 'Module Manager Admin Panel';
 $lang['abouttxt'] = 'About';
@@ -8,6 +7,7 @@ $lang['accessdenied'] = 'Access Denied. Please check your permissions';
 $lang['action_activated'] = 'Module %s has been activated';
 $lang['action_installed'] = 'Module %s has been installed with the following message(s): %s';
 $lang['action_upgraded'] = 'Module %s has been upgraded';
+$lang['action'] = 'Action';
 $lang['active'] = 'Active';
 $lang['admindescription'] = 'Modules extend CMS Made Simple&trade; to provide all kinds of custom functionality';
 $lang['advancedsearch_help'] = 'Specify words to include or exclude from the search using a + or -, surround exact phrases with quotes.  i.e:  +red -apple +"some text"';
@@ -22,6 +22,8 @@ $lang['back_to_module_manager'] = 'Return to Module Manager';
 
 // C
 $lang['cantdownload'] = 'Cannot Download';
+$lang['cantremove'] = 'Cannot Remove';
+$lang['changeperms'] = 'Change Permissions';
 $lang['confirm_resetcache'] = 'Are you sure you want to clear the local cache?';
 $lang['confirm_reseturl'] = 'Are you sure you want to reset the repository URL?';
 $lang['confirm_settings'] = 'Are you sure you want to save these settings?';
@@ -165,11 +167,13 @@ $lang['title_installation'] = 'Installation';
 $lang['title_installation_complete'] = 'Installation Process Complete!';
 $lang['title_letter'] = 'Show modules whos name starts with %s';
 $lang['title_moduleabout'] = 'View the author and changelog information for this module';
+$lang['title_moduleactive'] = 'Toggle the active state of the module. Inactive modules are not loaded, and cannot be called, however data remains intact';
+$lang['title_moduleaction'] = 'This column displays the actions available for each module';
 $lang['title_moduledepends'] = 'View the dependencies for this module';
 $lang['title_moduledownloads'] = 'This column displays the approximate number of downloads for each release of the module';
 $lang['title_moduledownloads2'] = 'This column displays the approximate number of downloads for the newest version of the module';
 $lang['title_moduleexport'] = 'Export this module to XML for sharing';
-$lang['title_modulehelp'] = 'View basic documentation for this module';
+$lang['title_modulehelp'] = 'View basic usage instructions for this module';
 $lang['title_moduleinstallupgrade'] = 'Install or Upgrade this module';
 $lang['title_modulelastreleasedate'] = 'This column displays the date of the last release for the module';
 $lang['title_modulelastversion'] = 'This column displays the version number of the last release for the module';
@@ -192,6 +196,7 @@ $lang['toggle_active'] = 'Set this module as active and usable';
 $lang['toggle_inactive'] = 'Set this module as inactive and unused.  No module data will be destroyed';
 
 // U
+$lang['uninstall'] = 'Uninstall';
 $lang['uninstalled'] = 'Module Uninstalled';
 $lang['unknown'] = 'Unknown';
 $lang['upgrade'] = 'Upgrade';

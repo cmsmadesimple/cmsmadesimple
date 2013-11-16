@@ -18,7 +18,7 @@
 #
 #$Id$
 
-$dirname = dirname(__FILE__);
+$dirname = __DIR__;
 
 define('CMS_DEFAULT_VERSIONCHECK_URL','http://www.cmsmadesimple.org/latest_version.php');
 define('CMS_SECURE_PARAM_NAME','_sk_');
@@ -54,16 +54,10 @@ if(!@session_id()) session_start();
  *
  * @package CMS
  */
-#magic_quotes_runtime is a nuisance...  turn it off before it messes something up
-if (version_compare(phpversion(),"5.3.0","<")) {
-  set_magic_quotes_runtime(false);
-}
 
 // minimum stuff to get started (autoloader needs the cmsms() and the config stuff.
-// require_once($dirname.DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR.'classes'.DIRECTORY_SEPARATOR.'class.cms_variables.php');
-if( !defined('CONFIG_FILE_LOCATION') ) {
-  define('CONFIG_FILE_LOCATION',dirname(__FILE__).'/config.php');
-}
+if( !defined('CONFIG_FILE_LOCATION') ) define('CONFIG_FILE_LOCATION',dirname(__FILE__).'/config.php');
+
 require_once($dirname.DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR.'classes'.DIRECTORY_SEPARATOR.'class.CmsException.php');
 require_once($dirname.DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR.'classes'.DIRECTORY_SEPARATOR.'class.cms_config.php');
 require_once($dirname.DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR.'classes'.DIRECTORY_SEPARATOR.'class.CmsApp.php');
@@ -123,14 +117,10 @@ if( isset($CMS_ADMIN_PAGE) ) {
 $config = cmsms()->GetConfig();
 
 #Set the timezone
-if( $config['timezone'] != '' ) {
-  @date_default_timezone_set(trim($config['timezone']));
-}
+if( $config['timezone'] != '' ) @date_default_timezone_set(trim($config['timezone']));
 
 #Attempt to override the php memory limit
-if( isset($config['php_memory_limit']) && !empty($config['php_memory_limit'])  ) {
-  ini_set('memory_limit',trim($config['php_memory_limit']));
-}
+if( isset($config['php_memory_limit']) && !empty($config['php_memory_limit'])  ) ini_set('memory_limit',trim($config['php_memory_limit']));
 
 if ($config["debug"] == true) {
   @ini_set('display_errors',1);
@@ -165,9 +155,7 @@ if (!isset($DONT_LOAD_DB))
 
   if( isset($CMS_ADMIN_PAGE) && !isset($CMS_LOGIN_PAGE) ) {
     $current_version = cmsms()->get_installed_schema_version();
-    if ($current_version < $CMS_SCHEMA_VERSION) {
-      redirect($config['root_url'] . "/install/upgrade.php");
-    }
+    if ($current_version < $CMS_SCHEMA_VERSION) redirect($config['root_url'] . "/install/upgrade.php");
   }
 }
 
@@ -187,16 +175,12 @@ if(get_magic_quotes_gpc()) {
 #Fix for IIS (and others) to make sure REQUEST_URI is filled in
 if (!isset($_SERVER['REQUEST_URI'])) {
   $_SERVER['REQUEST_URI'] = $_SERVER['SCRIPT_NAME'];
-  if(isset($_SERVER['QUERY_STRING'])) {
-    $_SERVER['REQUEST_URI'] .= '?'.$_SERVER['QUERY_STRING'];
-  }
+  if(isset($_SERVER['QUERY_STRING'])) $_SERVER['REQUEST_URI'] .= '?'.$_SERVER['QUERY_STRING'];
 }
 
 #Set a umask
 $global_umask = get_site_preference('global_umask','');
-if( $global_umask != '' ) {
-  @umask( octdec($global_umask) );
-}
+if( $global_umask != '' ) @umask( octdec($global_umask) );
 
 if ($config['debug'] == true) {
   $smarty->debugging = true;
@@ -214,10 +198,9 @@ if (! isset($CMS_INSTALL_PAGE)) {
 #Setup language stuff.... will auto-detect languages (Launch only to admin at this point)
 if(isset($CMS_ADMIN_PAGE)) CmsNlsOperations::set_language();
 
-#Do auto task stuff.
-if (! isset($CMS_INSTALL_PAGE)) {
-  CmsRegularTaskHandler::handle_tasks();
-}
-
 $smarty->assign('sitename', get_site_preference('sitename', 'CMSMS Site'));
+
+#Do auto task stuff.
+if (! isset($CMS_INSTALL_PAGE)) CmsRegularTaskHandler::handle_tasks();
+
 ?>
