@@ -58,7 +58,7 @@ class CmsExtendedModuleInfo extends CmsModuleInfo
 
   public function OffsetExists($key)
   {
-    if( !in_array($key,self::$_ekeys) ) return parent::OffsetExists($key,$value);
+    if( !in_array($key,self::$_ekeys) ) return parent::OffsetExists($key);
     return isset($this->_edata[$key]);
   }
 } // end of class

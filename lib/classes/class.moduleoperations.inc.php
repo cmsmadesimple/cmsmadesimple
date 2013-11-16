@@ -42,7 +42,7 @@ final class ModuleOperations
 	 * @internal
 	 * @ignore
 	 */
-	protected $cmssystemmodules =  array( 'AdminSearch', 'CMSContentManager', 'DesignManager', 'FileManager','MenuManager','ModuleManager','Search','News','MicroTiny','CMSPrinting','ThemeManager' );
+	protected $cmssystemmodules =  array( 'AdminSearch', 'CMSContentManager', 'DesignManager', 'FileManager','MenuManager','ModuleManager','Search','News','MicroTiny','CMSPrinting','Navigator' );
 
 	static private $_instance = null;
 	private $_modules = null;

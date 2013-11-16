@@ -37,6 +37,8 @@
 
 final class modulerep_client
 {
+  private static $_latest_installed_modules;
+
   protected function __construct() {}
 
   public static function get_repository_version()
@@ -209,6 +211,72 @@ final class modulerep_client
     return array(TRUE,$data);
   }
 
+  /**
+   * returns the latest info about installed modules.
+   * on success returns associative array of info about modules
+   * on error return array(FALSE,errormsg)
+   * @return array 
+   */
+  public static function get_allmoduleversions()
+  {
+    if( is_array(self::$_latest_installed_modules) ) return self::$_latest_installed_modules;
+
+    $modules = ModuleOperations::get_instance()->GetInstalledModules();
+    if( !is_array($modules) || count($modules) == 0 ) return;
+
+    $mod = cms_utils::get_module('ModuleManager');
+    $url = $mod->GetPreference('module_repository');
+    if( $url == '' ) return array(FALSE,$mod->Lang('error_norepositoryurl'));
+    $qparms = array();
+    $qparms['names'] =  implode(',',$modules);
+    $qparms['newest'] = '1';
+    $qparms['clientcmsversion'] = CMS_VERSION;
+    $url .= '/upgradelistgetall';
+
+    $req = new cms_http_request();
+    $req->execute($url,'','POST',$qparms);
+    $status = $req->getStatus();
+    $result = $req->getResult();
+    if( $status != 200 ) return array(FALSE,$mod->Lang('error_request_problem'));
+
+    $data = json_decode($result,true);
+    if( !$data || !is_array($data) ) return array(FALSE,$mod->Lang('error_nomatchingmodules'));
+
+    self::$_latest_installed_modules = $data;
+    return $data;
+  }
+
+  /**
+   * Return info about installed modules that have newer versions available.
+   * return mixed (FALSE on error, NULL or associative array on success 
+   */
+  public static function get_newmoduleversions()
+  {
+    $versions = self::get_allmoduleversions();
+    if( !is_array($versions) ) return FALSE;
+    if( count($versions) == 2 && $versions[0] === FALSE ) return FALSE;
+
+    $out = array();
+    foreach( $versions as $row ) {
+      $info = new CmsExtendedModuleInfo($row['name']);
+      if( version_compare($row['version'],$info['version']) > 0 ) {
+	$data = array();
+	$out[$row['name']] = $row;
+      }
+    }
+    if( count($out) ) return $out;
+  }
+
+  public static function get_upgrade_module_info($module_name)
+  {
+    $versions = self::get_allmoduleversions();
+    if( !is_array($versions) ) return FALSE;
+    if( count($versions) == 2 && $versions[0] === FALSE ) return FALSE;
+
+    foreach( $versions as $row ) {
+      if( $row['name'] == $module_name ) return $row;
+    }
+  }
 } // end of class
 
 # 

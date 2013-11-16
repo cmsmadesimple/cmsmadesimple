@@ -30,6 +30,7 @@ $lang['confirm_settings'] = 'Are you sure you want to save these settings?';
 $lang['compatibility_disclaimer'] = 'The modules displayed here are contributed by both the CMSMS Developers and independent third parties.  We make no guarantees that the modules available here are functional, tested, or compatible with your system.  You are encouraged to read the information found in the help and about links for each module before attempting the installation.';
 
 // D
+$lang['db_newer'] = 'Database Version Newer';
 $lang['dependstxt'] = 'Dependencies';
 $lang['depend_activate'] = 'Module %s will be activated.';
 $lang['depend_install'] = 'Module %s (version %s) will be installed.';
@@ -116,8 +117,11 @@ $lang['msg_prefssaved'] = 'Preferences Updated';
 
 // N
 $lang['nametext'] = 'Module Name';
+$lang['need_upgrade'] = 'This module is awaiting upgrade';
 $lang['newerversion'] = 'Newer version installed';
 $lang['newversions'] = 'Available Upgrades';
+$lang['newer_available'] = 'New version available';
+$lang['notcompatibile'] = 'This module is not compatible with this version of CMSMS';
 $lang['notice'] = 'Notice';
 $lang['notice_depends'] = '%s has unresolved dependencies. In order to install this module the following actions must occur';
 
@@ -154,8 +158,11 @@ $lang['search_noresults'] = 'Search succeeded but no results matched the express
 $lang['search_results'] = 'Search Results';
 $lang['sizetext'] = 'Size (Kilobytes)';
 $lang['status'] = 'Status';
+$lang['status_db_newer'] = 'The version number stored in the database is greater than the one in the module.';
+$lang['status_need_upgrade'] = 'The upgrade routine needs to be run on this module';
+$lang['status_newer_available'] = 'A newer version of this module is available in the repository';
 $lang['statustext'] = 'Status/Action';
-$lang['status_installed'] = 'This module is currently installed';
+$lang['status_installed'] = 'This module is currently installed and available for use.';
 $lang['submit'] = 'Submit';
 
 // T
@@ -163,6 +170,7 @@ $lang['submit'] = 'Submit';
 //$lang['text_repository_url'] = 'The URL should be in the form http://www.mycmsmssite.com/ModuleRepository/request/v2 (assuming pretty urls are enabled on the repository server)<br />Note: opening this link in your webbrowser will return an Error404!';
 $lang['time_warning'] = 'Two or more actions need to be performed. Be aware that the install could take a few minutes. Please be patient!';
 $lang['title_advancedsearch'] = 'Enable advanced search functionality';
+$lang['title_has_dependants'] = 'This module is required and useed by other installed modules, and therefore cannot be uninstalled';
 $lang['title_installation'] = 'Installation';
 $lang['title_installation_complete'] = 'Installation Process Complete!';
 $lang['title_letter'] = 'Show modules whos name starts with %s';
@@ -187,8 +195,12 @@ $lang['title_modulestatus'] = 'This column displays the status or actions availa
 $lang['title_moduleversion'] = 'This column displays the module version';
 $lang['title_new'] = 'This module was released within the last month';
 $lang['title_newmoduleversion'] = 'This column displays the version number of the most recent release of the module';
+$lang['title_notcompatible'] = 'This module has not passed compatibility tests';
 $lang['title_searchterm'] = 'Enter a natural language search term.  If advanced mode is enabled, then boolean operations similar to google can be used';
 $lang['title_stale'] = 'This module is stale (released over two years ago)';
+$lang['title_star'] = 'A new version of this module is available in the repository';
+$lang['title_system'] = 'This icon identifies a system module (module distributed with CMSMS)';
+$lang['title_uninstall'] = 'Uninstall this module.  This action may destroy data and templates associated with the module';
 $lang['title_warning'] = 'This module was released some time ago.  Use caution!';
 $lang['title_yourmoduledate'] = 'This column displays the date of the latest release for this module';
 $lang['title_yourmoduleversion'] = 'This column displays the version number of module that is currently installed';

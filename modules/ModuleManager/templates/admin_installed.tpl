@@ -1,6 +1,7 @@
 <table class="pagetable">
   <thead>
     <tr>
+      <th></th>
       <th>{$mod->Lang('nametext')}</th>
       <th><span title="{$mod->Lang('title_moduleversion')}">{$mod->Lang('vertext')}</span></th>
       <th><span title="{$mod->Lang('title_modulestatus')}">{$mod->Lang('status')}</span></th>
@@ -15,13 +16,17 @@
     {foreach $module_info as $item}
     {cycle values="row1,row2" assign='rowclass'}
     <tr class="{$rowclass}" {if !$item.ver_compatible}style="background-color: yellow;"{/if}>
-      <td>{$item.name}</td>
+      <td>{if $item.system_module}{$system_img}{/if}
+           {if $item.e_status == 'newer_available'}{$star_img}{/if}
+      </td>
+      <td><span title="{$item.description}"{if $item.system_module} style="color: red;"{/if}>{$item.name}</span></td>
       <td>{$item.installed_version}</td>
       <td>
           {$tmp='status_'|cat:$item.status}<span title="{$mod->Lang($tmp)}">{$mod->Lang($item.status)}</span>
-	  {if !$item.ver_compatible}<br/><span class="important">{$mod->Lang('notcompatible')}</span>{/if}
+          {if isset($item.e_status)}{$tmp='status_'|cat:$item.e_status}<br/><span {if $item.e_status == 'db_newer'}class="important"{/if} title="{$mod->Lang($tmp)}">{$mod->Lang($item.e_status)}</span>{/if}
+	  {if !$item.ver_compatible}<br/><span class="important" title="{$mod->Lang('title_notcompatible')}">{$mod->Lang('notcompatible')}</span>{/if}
           {if !$item.writable}<br/>{$mod->Lang('cantremove')}{/if}
-          {if isset($item.dependants)}<br/>{$mod->Lang('has_dependants')}: (<strong>{implode(',',$item.dependants)}</strong>){/if}
+          {if isset($item.dependants)}<br/><span title="{$mod->Lang('title_has_dependants')}">{$mod->Lang('has_dependants')}</span>: (<strong>{implode(',',$item.dependants)}</strong>){/if}
       </td>
       <td>
         {if !$item.installed}
@@ -53,7 +58,7 @@
       <td><a href="{cms_action_url action='local_help' mod=$item.name}" title="{$mod->Lang('title_modulehelp')}">{$mod->Lang('helptxt')}</a></td>
       <td><a href="{cms_action_url action='local_about' mod=$item.name}" title="{$mod->Lang('title_moduleabout')}">{$mod->Lang('abouttxt')}</a></td>
       {if $allow_export}<td>
-        {if $item.active}
+        {if $item.active && $item.writable}
           <a href="{cms_action_url action='local_export' mod=$item.name}" title="{$mod->Lang('title_moduleexport')}">{admin_icon icon='xml_rss.gif'}</a>
         {/if}
       </td>{/if}

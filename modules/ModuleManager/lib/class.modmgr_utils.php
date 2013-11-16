@@ -416,12 +416,22 @@ final class modmgr_utils
     $stale_img=$mod->GetModuleURLPath().'/images/error.png';
     $stale_img = '<img src="'.$stale_img.'" title="'.$mod->Lang('title_stale').'" alt="stale" height="16"/>';
     $smarty->assign('stale_img',$stale_img);
+
     $warn_img=$mod->GetModuleURLPath().'/images/warn.png';
     $warn_img = '<img src="'.$warn_img.'" title="'.$mod->Lang('title_warning').'" alt="warning" height="16"/>';
     $smarty->assign('warn_img',$warn_img);
+
     $new_img=$mod->GetModuleURLPath().'/images/new.png';
     $new_img = '<img src="'.$new_img.'" title="'.$mod->Lang('title_new').'" alt="new" height="16"/>';
     $smarty->assign('new_img',$new_img);
+
+    $star_img=$mod->GetModuleURLPath().'/images/star.png';
+    $star_img = '<img src="'.$star_img.'" title="'.$mod->Lang('title_star').'" alt="star" height="16"/>';
+    $smarty->assign('star_img',$star_img);
+
+    $system_img=$mod->GetModuleURLPath().'/images/system.png';
+    $system_img = '<img src="'.$system_img.'" title="'.$mod->Lang('title_system').'" alt="system" height="16"/>';
+    $smarty->assign('system_img',$system_img);
   }
 } // end of class
 
