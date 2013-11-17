@@ -3,6 +3,8 @@
 #B
 #C
 #D
+$lang['description'] = 'Description';
+
 #E
 #F
 $lang['friendlyname'] = 'CMSMS Navigation Builder';

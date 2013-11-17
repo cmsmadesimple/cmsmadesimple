@@ -57,7 +57,7 @@
 {tab_end}
 {form_end}
 <div style="display: none;">{strip}
-  <div id="help_design_name" title="{$mod->Lang('help')}">{$mod->Lang('help_design_name')}</div>
+  <div id="help_design_name" title="{$mod->Lang('help_design_name')}">{$mod->Lang('help_design_name')}</div>
 {/strip}</div>
 
 <script type="text/javascript">
