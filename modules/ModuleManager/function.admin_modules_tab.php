@@ -130,7 +130,7 @@ if( count( $data ) ) {
 					    array('name' => $row['name'],'version' => $row['version'],'filename' => $row['filename']));
     $onerow->age = modmgr_utils::get_status($row['date']);
     $onerow->date = $row['date'];
-    $onerow->downloads = isset($row['downloads'])?$row['downloads']:$mod->Lang('unknown');
+    $onerow->downloads = isset($row['downloads'])?$row['downloads']:$this->Lang('unknown');
     $onerow->candownload = FALSE;
 
     switch( $row['status'] ) {
