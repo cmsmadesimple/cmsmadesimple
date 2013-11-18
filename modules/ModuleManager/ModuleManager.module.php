@@ -38,7 +38,6 @@ if (!isset($gCms)) exit;
 
 define('MINIMUM_REPOSITORY_VERSION','1.5');
 
-
 class ModuleManager extends CMSModule
 {
   const _dflt_request_url = 'http://www.cmsmadesimple.org/ModuleRepository/request/v2/';
@@ -62,36 +61,29 @@ class ModuleManager extends CMSModule
   function UninstallPreMessage() { return $this->Lang('really_uninstall'); }
   function VisibleToAdminUser() { return ($this->CheckPermission('Modify Site Preferences') || $this->CheckPermission('Modify Modules')); }
 
+  protected function _DisplayErrorPage($id, &$params, $returnid, $message='')
+  {
+    $this->smarty->assign('title_error', $this->Lang('error'));
+    $this->smarty->assign_by_ref('message', $message);
+    $this->smarty->assign('link_back',$this->CreateLink($id,'defaultadmin',$returnid, $this->Lang('back_to_module_manager')));	
+
+    // Display the populated template
+    echo $this->ProcessTemplate('error.tpl');
+  }
+	
+
   function Install()
   {
     $this->SetPreference('module_repository',ModuleManager::_dflt_request_url);
   }
 
 
-  protected function _DisplayErrorPage($id, &$params, $returnid, $message='')
-  {
-    $this->smarty->assign('title_error', $this->Lang('error'));
-    $this->smarty->assign_by_ref('message', $message);
-	$this->smarty->assign('link_back',$this->CreateLink($id,'defaultadmin',$returnid, $this->Lang('back_to_module_manager')));	
-	  
-    // Display the populated template
-    echo $this->ProcessTemplate('error.tpl');
-  }
-	
-
   /*---------------------------------------------------------
    Upgrade()
    ---------------------------------------------------------*/
   function Upgrade($oldversion, $newversion)
   {
-    $current_version = $oldversion;
-    switch($current_version) {
-    case "1.0":
-      $this->SetPreference('module_repository','http://modules.cmsmadesimple.org/soap.php?module=ModuleRepository');
-      break;
-    }
-
-    if( version_compare($oldversion,'1.5') < 0 ) $this->SetPreference('module_repository',ModuleManager::_dflt_request_url);
+    $this->SetPreference('module_repository',ModuleManager::_dflt_request_url);
   }
 
 	

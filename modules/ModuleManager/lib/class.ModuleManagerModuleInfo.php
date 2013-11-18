@@ -28,7 +28,7 @@ class ModuleManagerModuleInfo extends CmsExtendedModuleInfo
     }
   }
 
-  private function _get_missing_dependants()
+  private function _get_missing_dependencies()
   {
     $depends = $this['depends'];
     if( is_array($depends) && count($depends) ) {
@@ -50,10 +50,10 @@ class ModuleManagerModuleInfo extends CmsExtendedModuleInfo
     }
   }
 
-  private function _check_dependants()
+  private function _check_dependencies()
   {
     // check if all module dependants are installed and are of sufficient version.
-    $missing = $this->_get_missing_dependants();
+    $missing = $this->_get_missing_dependencies();
     if( is_array($missing) && count($missing) ) return FALSE;
     return TRUE;
   }
@@ -66,10 +66,12 @@ class ModuleManagerModuleInfo extends CmsExtendedModuleInfo
     if( $key == 'can_install' ) {
       if( $this['installed'] ) return FALSE;
       if( !$this['ver_compatible'] ) return FALSE;
-      return $this->_check_dependants();
+      return $this->_check_dependencies();
     }
 
-    if( $key == 'can_upgrade' ) return $this->_check_dependants();
+    if( $key == 'can_upgrade' ) {
+      return $this->_check_dependencies();
+    }
 
     if( $key == 'can_uninstall' ) {
       if( !$this['installed'] ) return FALSE;
@@ -79,7 +81,7 @@ class ModuleManagerModuleInfo extends CmsExtendedModuleInfo
     }
 
     if( $key == 'missing_deps' ) {
-      $out = $this->_get_missing_dependants();
+      $out = $this->_get_missing_dependencies();
       return $out;
     }
   }

@@ -1004,9 +1004,7 @@ abstract class CMSModule
       if( $res == 1 || $res == '' ) return FALSE;
       return $res;
     }
-    else {
-      return FALSE;
-    }
+	return FALSE;
   }
 
 
@@ -1115,10 +1113,10 @@ abstract class CMSModule
       $smarty = $gCms->GetSmarty();
 
       $res = include($filename);
-      if( $res == 1 || $res == '' ) return TRUE;
-      $modops = $gCms->GetModuleOperations();
-      return FALSE;
+      if( $res == 1 || $res == '' ) return FALSE;
+	  return $res;
     }
+	return FALSE;
   }
 
   /**

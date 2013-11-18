@@ -391,6 +391,7 @@ $lang['errorupdatingusertag'] = 'Error updating user tag';
 $lang['erroruserinuse'] = 'This user still owns content pages. Please change ownership to another user before deleting.';
 $lang['error_contenttype'] = 'The content type associated with this page is invalid or not permitted';
 $lang['error_copyusersettings_self'] = 'This user account is the template user.  You cannot copy user settings here';
+$lang['error_coreupgradeneeded'] = 'The CMSMS core must be upgraded before this operation can succeed';
 $lang['error_delete_default_parent'] = 'You cannot delete the default page, or a parent of the default page.';
 $lang['error_frominvalid'] = 'The from address specified is not a valid email address';
 $lang['error_fromrequired'] = 'A from address is required';

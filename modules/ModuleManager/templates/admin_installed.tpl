@@ -1,3 +1,20 @@
+<script type="text/javascript">
+$(document).ready(function(){
+  $('a.mod_upgrade').click(function(){
+    return confirm('{$mod->Lang('confirm_upgrade')}');
+  });
+  $('a.mod_remove').click(function(){
+    return confirm('{$mod->Lang('confirm_remove')}');
+  });
+  $('a.mod_chmod').click(function(){
+    return confirm('{$mod->Lang('confirm_chmod')}');
+  });
+  $('a.mod_uninstall').click(function(){
+    return confirm('{$mod->Lang('confirm_uninstall')}');
+  });
+});
+</script>
+
 <table class="pagetable">
   <thead>
     <tr>
@@ -70,14 +87,16 @@
           {/if}
         {else}
 	  {if !isset($item.dependants) & $item.can_uninstall}
-            {capture assign='op'}<a class="modop mod_install" href="{cms_action_url action='local_uninstall' mod=$item.name}" title="{$mod->Lang('title_uninstall')}">{$mod->Lang('uninstall')}</a>{/capture}{$ops[]=$op}
-          {else if $item.e_status == 'need_upgrade' && $item.can_upgrade}
+            {capture assign='op'}<a class="modop mod_uninstall" href="{cms_action_url action='local_uninstall' mod=$item.name}" title="{$mod->Lang('title_uninstall')}">{$mod->Lang('uninstall')}</a>{/capture}{$ops[]=$op}
+	  {/if}
+          {if $item.e_status == 'need_upgrade' && $item.can_upgrade}
             {capture assign='op'}<a class="modop mod_upgrade" href="{cms_action_url action='local_upgrade' mod=$item.name}" title="{$mod->Lang('title_upgrade')}">{$mod->Lang('upgrade')}</a>{/capture}{$ops[]=$op}
           {/if}
         {/if}
         {'<br/>'|implode:$ops}
       </td>
       <td>
+	{* active column *}
         {if !isset($item.dependants) && $item.can_deactivate}
           {if $item.active}
             <a class="modop mod_inactive" href="{cms_action_url action='local_active' mod=$item.name state=0}" title="{$mod->Lang('toggle_inactive')}">{admin_icon icon='true.gif'}</a>

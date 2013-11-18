@@ -337,8 +337,6 @@ final class ModuleOperations
 	 $gCms = cmsms(); // preserve the global.
 	 $db = $gCms->GetDb();
 
-	 // todo, check to make sure the module isn't already installed.
-
 	 $result = $module_obj->Install();
 	 if( !isset($result) || $result === FALSE) {
 		 // install returned nothing, or FALSE
@@ -570,7 +568,7 @@ final class ModuleOperations
 						  return FALSE;
 					  }
 				  }
-				  else if( !isset($CMS_FORCE_MODULE_LOAD) ) {
+				  else if( !isset($CMS_FORCE_MODULE_LOAD) && !$force_load ) {
 					  // nope, can't auto upgrade either
 					  allow_admin_lang(FALSE); // isn't this ugly.
 					  unset($obj);
@@ -580,7 +578,7 @@ final class ModuleOperations
 		  }
 	  }
 
-	  if( (isset($info[$module_name]) && $info[$module_name]['status'] == 'installed') ||  $force_load ) {
+	  if( (isset($info[$module_name]) && $info[$module_name]['status'] == 'installed') || $force_load ) {
 		  if( is_object($obj) ) $this->_modules[$module_name] = $obj;
 		  return TRUE;
 	  }
@@ -703,7 +701,7 @@ final class ModuleOperations
   {
 	  // we can't upgrade a module if the schema is not up to date.
 	  $tmp = cmsms()->get_installed_schema_version();
-	  if( $tmp && $tmp < CMS_SCHEMA_VERSION ) return FALSE;
+	  if( $tmp && $tmp < CMS_SCHEMA_VERSION ) return array(FALSE,lang('error_coreupgradeneeded'));
 
 	  $info = $this->_get_module_info();
 	  $module_name = $module_obj->GetName();
@@ -713,7 +711,7 @@ final class ModuleOperations
 
 	  $db = cmsms()->GetDb();
 	  $result = $module_obj->Upgrade($dbversion,$to_version);
-	  if( $result !== FALSE ) {
+	  if( !isset($result) || $result === FALSE ) {
 		  $lazyload_fe    = (method_exists($module_obj,'LazyLoadFrontend') && $module_obj->LazyLoadFrontend())?1:0;
 		  $lazyload_admin = (method_exists($module_obj,'LazyLoadAdmin') && $module_obj->LazyLoadAdmin())?1:0;
 
@@ -724,9 +722,10 @@ final class ModuleOperations
 		  audit('','Module', 'Upgraded module '.$module_obj->GetName().' to version '.$module_obj->GetVersion());
 		  Events::SendEvent('Core', 'ModuleUpgraded', array('name' => $module_obj->GetName(), 'oldversion' => $dbversion, 'newversion' => $module_obj->GetVersion()));
 		  cmsms()->clear_cached_files();
-		  return TRUE;
+		  return array(TRUE);
 	  }
-	  return FALSE;
+	  audit('','Module','Upgrade failed for module '.$module_obj->GetName());
+	  return array(FALSE,$result);
   }
 
 
@@ -742,8 +741,8 @@ final class ModuleOperations
    */
   public function UpgradeModule( $module_name, $to_version = '')
   {
-	  $module_obj = $this->get_module_instance($module_name);
-	  if( !is_object($module_obj) ) return FALSE;
+	  $module_obj = $this->get_module_instance($module_name,'',TRUE);
+	  if( !is_object($module_obj) ) return array(FALSE,lang('errormodulenotloaded'));
 	  return $this->_upgrade_module($module_obj,$to_version);
   }
 
