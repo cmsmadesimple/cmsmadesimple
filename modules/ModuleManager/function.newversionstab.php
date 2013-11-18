@@ -43,58 +43,17 @@ if( FALSE == can_admin_upload() ) {
   $caninstall = false;
 }
 
-$modules = ModuleOperations::get_instance()->GetInstalledModules();
-if( !count($modules ) ) {
-  $smarty->assign('nvmessage',$this->Lang('error_nomodules'));
-}
-elseif( !modmgr_utils::is_connection_ok() ) {
-  echo $this->ShowErrors($this->lang('error_request_problem'));
-  return;
-}
-else {
-  $url = $this->GetPreference('module_repository');
-  if( $url == '' ) {
-    $this->_DisplayErrorPage( $id, $params, $returnid,$this->Lang('error_norepositoryurl'));
-    return;
+foreach( $newversions as $row ) {
+  $txt = '';
+  $onerow = new stdClass();
+  foreach( $row as $key => $val ) {
+    $onerow->$key = $val;
   }
 
-  $qparms = array();
-  $qparms['names'] =  implode(',',$modules);
-  $qparms['newest'] = '1';
-  $qparms['clientcmsversion'] = $CMS_VERSION;
-  $url .= '/upgradelistgetall';
-
-  $req = new cms_http_request();
-  $req->execute($url,'','POST',$qparms);
-  $status = $req->getStatus();
-  $result = $req->getResult();
-  if( $status != 200 ) {
-    $this->_DisplayErrorPage( $id, $params, $returnid, $this->Lang('error_request_problem'));
-    return;
+  $mod = $this->GetModuleInstance($row['name']);
+  if( !is_object($mod) ) {
+    $onerow->txt = $this->Lang('error_module_object',$row['name']);
   }
-
-  $results = array();
-  if( !empty($result) ) {
-    $versions = json_decode($result,true);
-    if( !$versions || !is_array($versions) ) {
-      $this->_DisplayErrorPage( $id, $params, $returnid,$this->Lang('error_nomatchingmodules') );
-      return;
-    }
-
-    $moduledir = dirname(dirname(dirname(__FILE__))).DIRECTORY_SEPARATOR."modules";
-    $writable = is_writable( $moduledir );	
-    $rowclass = 'row1';
-    foreach( $versions as $row ) {
-      $txt = '';
-      $onerow = new stdClass();
-      foreach( $row as $key => $val ) {
-	$onerow->$key = $val;
-      }
-
-      $mod = $this->GetModuleInstance($row['name']);
-      if( !is_object($mod) ) {
-	$onerow->txt = $this->Lang('error_module_object',$row['name']);
-      }
       else {
 	$mver = $mod->GetVersion();
 	if( version_compare($row['version'],$mver) > 0 ) {

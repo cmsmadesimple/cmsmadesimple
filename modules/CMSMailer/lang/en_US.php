@@ -263,7 +263,7 @@ of the license for the full disclaimer.</p>
 <p>This module has been released under the <a href=\'http://www.gnu.org/licenses/licenses.html#GPL\'>GNU Public License</a>. You must agree to this license before using the module.</p>
 ';
 
-$lang['moddescription'] = 'This is a simple wrapper around PHPMailer, it has an equivalent API (function for function) and a simple interface for some defaults.';
+$lang['moddescription'] = 'This is a simple wrapper around PHPMailer, it has an equivalent API (function for function) and a simple interface for some defaults.  This module is deprecated as of CMSMS 2.0';
 
 $lang['postinstall'] = 'CMSMailer module has been successfully installed';
 $lang['postuninstall'] = 'CMSMailer module uninstalled... sorry to see you leave';

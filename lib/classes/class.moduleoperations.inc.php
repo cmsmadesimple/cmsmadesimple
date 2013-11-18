@@ -47,7 +47,6 @@ final class ModuleOperations
 	static private $_instance = null;
 	private $_modules = null;
 	private $_moduleinfo;
-	private $_errors = null;
 	
 	private $xml_exclude_files = array('^\.svn' , '^CVS$' , '^\#.*\#$' , '~$', '\.bak$', '^\.git');
 	private $xmldtd = '
@@ -89,35 +88,6 @@ final class ModuleOperations
 		  self::$_instance = new $c;
 	  }
 	  return self::$_instance;
-  }
-
-
-  /**
-   * Set an error condition
-   *
-   * @ignore
-   * @internal
-   * @deprecated
-   * @param string $str The string to set for the error
-   * @return void
-   */
-  protected function SetError($str = '')
-  {
-	  $this->_errors = $str;
-  }
-
-
-  /**
-   * Return the last error
-   *
-   * @ignore
-   * @internal
-   * @deprecated
-   * @return string The last error, if any
-   */
-  public function GetLastError()
-  {
-	  return $this->_errors;
   }
 
 
@@ -423,11 +393,11 @@ final class ModuleOperations
    * @param boolean $loadifnecessary If true, loads the module before trying to install it
    * @return array Returns a tuple of whether the install was successful and a message if applicable
    */
-  public function InstallModule($module, $loadifnecessary = false)
+   public function InstallModule($module)
   {
 	  // get an instance of the object (force it).
 	  $modinstance = $this->get_module_instance($module,'',TRUE);
-	  if( !$modinstance ) return array(false,lang('errormodulenotloaded'));
+	  if( !$modinstance ) return array(FALSE,lang('errormodulenotloaded'));
 
 	  // check for dependencies
 	  $deps = $modinstance->GetDependencies();
@@ -436,13 +406,14 @@ final class ModuleOperations
 			  if( $mname == '' || $mversion == '' ) continue; // invalid entry.
 			  $newmod = $this->get_module_instance($mname);
 			  if( !is_object($newmod) || version_compare($newmod->GetVersion(),$mversion) < 0 ) {
-				  return array(false,lang('missingdependency').': '.$mname);
+				  return array(FALSE,lang('missingdependency').': '.$mname);
 			  }
 		  }
 	  }
 
 	  // do the actual installation stuff.
 	  $res = $this->_install_module($modinstance);
+	  audit('','Module','Install failed: '.$module);
 	  if( $res[0] == FALSE && $res[1] == '') $res[1] = lang('errorinstallfailed');
 	  return $res;
   }
@@ -586,15 +557,13 @@ final class ModuleOperations
 					  if( $res ) {
 						  $res2 = array(TRUE,lang('moduleupgraded'));
 						  $_SESSION['moduleoperations_result'][$module_name] = $res2;
-						  return TRUE;
 					  }
 					  else {
+						  // upgrade failed
 						  $res2 = array(FALSE,lang('moduleupgradeerror'));
 						  $_SESSION['moduleoperations_result'][$module_name] = $res2;
 						  return FALSE;
-					  }
-					  if( !$res ) {
-						  // upgrade failed
+
 						  allow_admin_lang(FALSE); // isn't this ugly.
 						  debug_buffer("Automatic upgrade of $module_name failed");
 						  unset($obj);
@@ -611,8 +580,7 @@ final class ModuleOperations
 		  }
 	  }
 
-	  if( (isset($info[$module_name]) && $info[$module_name]['status'] == 'installed') || 
-		  $force_load ) {
+	  if( (isset($info[$module_name]) && $info[$module_name]['status'] == 'installed') ||  $force_load ) {
 		  if( is_object($obj) ) $this->_modules[$module_name] = $obj;
 		  return TRUE;
 	  }
@@ -783,9 +751,10 @@ final class ModuleOperations
   /**
    * Uninstall a module
    *
-   * @param string $module The name of the module to upgrade
-   * @return boolean Whether or not the upgrade was successful
    * @internal
+   * @ignore
+   * @param string $module The name of the module to upgrade
+   * @return array Returns a tuple of whether the install was successful and a message if applicable
    */
   public function UninstallModule( $module)
   {
@@ -793,7 +762,7 @@ final class ModuleOperations
 	  $db = $gCms->GetDb();
 
 	  $modinstance = cms_utils::get_module($module);
-	  if( !$modinstance ) return FALSE;
+	  if( !$modinstance ) return array(FALSE,lang('errormodulenotloaded'));
 
 	  $cleanup = $modinstance->AllowUninstallCleanup();
 	  $result = $modinstance->Uninstall();
@@ -842,12 +811,11 @@ final class ModuleOperations
 
 		  Events::SendEvent('Core', 'ModuleUninstalled', array('name' => $module));
 		  audit('','Module','Uninstalled module '.$module);
+		  return TRUE;
 	  }
-	  else {
-		  $this->setError($result);
-		  return false;
-	  }
-	  return true;
+
+	  audit('','Module','Uninstall failed: '.$module);
+	  return array(FALSE,$result);
   }
 
 
@@ -992,6 +960,7 @@ final class ModuleOperations
 		  $res = version_compare($obj->GetVersion(),$version);
 		  if( $res < 0 OR $res === FALSE ) $obj = null;
 	  }
+	  
 	  return $obj;
   }
 

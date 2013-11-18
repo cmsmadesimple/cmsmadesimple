@@ -66,17 +66,22 @@ class CmsModuleInfo implements ArrayAccess
     $dir = dirname(dirname(dirname(__FILE__)))."/modules/$module_name";
     $fn = cms_join_path($dir,'moduleinfo.ini');
     if( !file_exists($fn) ) return FALSE;
-    $data = parse_ini_file($fn);
-    if( $data === FALSE || count($data) == 0 ) return FALSE;
+    $inidata = parse_ini_file($fn,TRUE);
 
+    if( $inidata === FALSE || count($inidata) == 0 ) return FALSE;
+    if( !isset($inidata['module']) ) return FALSE;
+
+    $data = $inidata['module'];
     $this['name'] = isset($data['name'])?trim($data['name']):$module_name;
     $this['version'] = isset($data['version'])?trim($data['version']):'0.0.1';
     $this['description'] = isset($data['description'])?trim($data['description']):'';
-    $this['author'] = trim($data['author']);
-    $this['authoremail'] = trim($data['authoremail']);
+    $this['author'] = trim(get_parameter_value($data,'author',lang('notspecified')));
+    $this['authoremail'] = trim(get_parameter_value($data,'authoremail',lang('notspecified')));
     $this['mincmsversion'] = isset($data['mincmsversion'])?trim($data['mincmsversion']):CMS_VERSION;
-    $this['lazyloadadmin'] = cms_to_bool($data['lazyloadadmin']);
-    $this['lazyloadfrontend'] = cms_to_bool($data['lazyloadfrontend']);
+    $this['lazyloadadmin'] = cms_to_bool(get_parameter_value($data,'lazyloadadmin',FALSE));
+    $this['lazyloadfrontend'] = cms_to_bool(get_parameter_value($data,'lazyloadfrontend',FALSE));
+
+    if( isset($inidata['depends']) ) $this['depends'] = $inidata['depends'];
 
     $fn = cms_join_path($dir,'changelog.inc');
     if( file_exists($fn) ) $this['changelog'] = file_get_contents($fn);
@@ -97,6 +102,7 @@ class CmsModuleInfo implements ArrayAccess
     $this['description'] = $mod->GetDescription();
     if( $this['description'] == '' ) $this['description'] = $mod->GetAdminDescription();
     $this['version'] = $mod->GetVersion();
+    $this['depends'] = $mod->GetDependencies();
     $this['mincmsversion'] = $mod->MinimumCMSVersion();
     $this['author'] = $mod->GetAuthor();
     $this['authoremail'] = $mod->GetAuthor();
@@ -104,6 +110,7 @@ class CmsModuleInfo implements ArrayAccess
     $this['lazyloadfrontend'] = $mod->LazyLoadAdmin();
     $this['help'] = $mod->GetHelp();
     $this['changelog'] = $mod->GetChangelog();
+
     return TRUE;
   }
 

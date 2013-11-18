@@ -148,7 +148,7 @@ if ($access) {
 
   if ($action == "install") {
     $modops = $gCms->GetModuleOperations();
-    $result = $modops->InstallModule($module,false);
+    $result = $modops->InstallModule($module);
     if( $result[0] == false ) {
       echo '<div class="pagecontainer">';
       echo '<p class="pageheader">'.lang('moduleerrormessage', $module).'</p>';					

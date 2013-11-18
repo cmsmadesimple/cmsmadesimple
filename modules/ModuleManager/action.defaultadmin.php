@@ -49,11 +49,12 @@ if( !modmgr_utils::is_connection_ok() ) {
 
 // this is a bit ugly.
 modmgr_utils::get_images();
-  
+
+$newversions = modulerep_client::get_newmoduleversions();
 echo $this->StartTabHeaders();
 if( $this->CheckPermission('Modify Modules') ) {
   echo $this->SetTabHeader('installed',$this->Lang('installed'));
-  echo $this->SetTabHeader('newversions',$this->Lang('newversions'));
+  if( is_array($newversions) && count($newversions) ) echo $this->SetTabHeader('newversions',$this->Lang('tab_newversions'));
   echo $this->SetTabHeader('search',$this->Lang('search'));
   echo $this->SetTabHeader('modules',$this->Lang('availmodules'));
 }
@@ -68,9 +69,11 @@ if( $this->CheckPermission('Modify Modules') ) {
   include(dirname(__FILE__).'/function.admin_installed.php');
   echo $this->EndTab();
 
-  echo $this->StartTab('newversions',$params);
-  include(dirname(__FILE__).'/function.newversionstab.php');
-  echo $this->EndTab();
+  if( is_array($newversions) && count($newversions) ) {
+    echo $this->StartTab('newversions',$params);
+    include(dirname(__FILE__).'/function.newversionstab.php');
+    echo $this->EndTab();
+  }
 
   echo $this->StartTab('search',$params);
   include(dirname(__FILE__).'/function.search.php');
