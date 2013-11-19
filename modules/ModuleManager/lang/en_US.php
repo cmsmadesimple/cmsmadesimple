@@ -102,24 +102,24 @@ $lang['incompatible'] = 'Incompatible';
 //$lang['info_disable_caching'] = '<strong>Not Recommended</strong>.  For performance reasons, ModuleManager will cache for (by default one hour) much of the information retrieved from the remote server';
 //$lang['info_latestdepends'] = 'When installing a module with dependencies, this option will make sure that the latest version of the dependency will be installed';
 $lang['info_searchtab'] = 'This tab displays a list of installed modules for which there is a newer version available';
-$lang['install'] = 'install';
+$lang['install'] = 'Install';
 $lang['installed'] = 'Installed';
 $lang['install_submit'] = 'Install';
 $lang['install_with_deps'] = 'Evaluate all Dependencies and Install';
 $lang['instcount'] = 'Modules currently installed';
 
 // L
-$lang['latestdepends'] = 'Always install the newest modules';
+$lang['latestdepends'] = 'Always install the newest dependency module';
 
 // M
 $lang['missingdeps'] = 'Missing dependencies';
-$lang['moddescription'] = 'A client for the CMS Made Simple Module Repository. This module allows previewing and installing modules from the CMSMS Forge without the need for ftp-ing, or unzipping archives.  Module XML files are downloaded using REST, integrity verified, and then expanded automatically.';
+$lang['moddescription'] = 'A client for the CMS Made Simple™ Module Repository. This module allows previewing and installing modules from the CMSMS Forge without the need for ftp-ing, or unzipping archives.  Module XML files are downloaded using REST, integrity verified, and then expanded automatically.';
 $lang['mod_name_ver'] = '%s version %s';
 $lang['msg_module_activated'] = 'Module %s activated';
 $lang['msg_module_deactivated'] = 'Module %s deactivated';
 $lang['msg_module_installed'] = 'Module %s successfully installed';
-$lang['msg_module_uninstalled'] = 'Module %s successfully uninstalled.  Data associated with this module may have been deleted';
-$lang['msg_module_upgraded'] = 'Module %s successfully upgraded.';
+$lang['msg_module_uninstalled'] = 'Module %s successfully uninstalled. Templates and data associated with this module has been deleted';
+$lang['msg_module_upgraded'] = 'Module %s successfully upgraded';
 $lang['msg_cachecleared'] = 'Cache cleared';
 $lang['msg_nodependencies'] = 'This file has not listed any dependencies';
 $lang['msg_prefssaved'] = 'Preferences Updated';
