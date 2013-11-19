@@ -411,8 +411,11 @@ final class ModuleOperations
 
 	  // do the actual installation stuff.
 	  $res = $this->_install_module($modinstance);
-	  audit('','Module','Install failed: '.$module);
-	  if( $res[0] == FALSE && $res[1] == '') $res[1] = lang('errorinstallfailed');
+	  if( $res[0] == FALSE && $res[1] == '') {
+			$res[1] = lang('errorinstallfailed');
+			// put mention into the admin log
+			audit('', $module . ' module','Install failed');
+			}
 	  return $res;
   }
 
