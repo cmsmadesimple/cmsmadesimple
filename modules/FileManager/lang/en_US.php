@@ -4,8 +4,8 @@ $lang['755style'] = '755 style';
 // A
 $lang['actiondelete'] = 'Delete one or more items';
 $lang['actions']= 'Actions';
-$lang['advancedhelp'] = 'Lets you gain access to whole CMSMS filesystem, not just /uploads/ (if allowed)';
-$lang['afilecontainsillegalchars'] = 'A filename contains one or more illegal characters (\',",+,*,\\,/,&,$). Upload cancelled.';
+$lang['advancedhelp'] = 'Lets you gain access to whole CMSMS file system, not just /uploads/ (if allowed)';
+$lang['afilecontainsillegalchars'] = 'A file name contains one or more illegal characters (\',",+,*,\\,/,&,$). Upload cancelled.';
 $lang['afileistoobig'] = 'A file is too big. The upload is cancelled.';
 $lang['and'] = 'and';
 $lang['angle'] = 'Angle';
@@ -33,7 +33,7 @@ $lang['copyfailed'] = 'Copy operation failed on %s';
 $lang['copyselected'] = 'Copy the selected files';
 $lang['copysuccess'] = 'Items successfully copied';
 $lang['copy_destdir'] = 'Target Directory';
-$lang['copy_destname'] = 'Target Filename';
+$lang['copy_destname'] = 'Target File name';
 $lang['couldnotcopy'] = 'could not copied';
 $lang['couldnotmove'] = 'could not be moved';
 $lang['create'] = 'Create';
@@ -53,9 +53,9 @@ $lang['dirchmodfailure'] = 'Changing permissions of the directory failed';
 $lang['dirchmodsuccess'] = 'The directory successfully got new permissions';
 $lang['dirchmodsuccessmulti'] = 'Changing permissions on the directory and it\'s content was successful';
 $lang['direxists'] = 'The directory already exists';
-$lang['dirnotemptyconfirm'] = 'This dir is not empty. Do you really want to delete it, including all content and subdirs?';
+$lang['dirnotemptyconfirm'] = 'The directory isn\'t empty! Do you really want to delete it, including all content and subdirectories?';
 $lang['dirtreedeletecancelled'] = 'Deletion of directory cancelled';
-$lang['dirtreedeletefail'] = 'An error occured when deleting this directory. Some of the contents may have been deleted, however.';
+$lang['dirtreedeletefail'] = 'An error occurred when deleting this directory. Some of the contents may have been deleted, however.';
 $lang['dirtreedeletesuccess'] = 'The directory including content was successfully deleted.';
 
 // E
@@ -82,7 +82,7 @@ $lang['filedeletesuccess'] = 'was successfully deleted';
 $lang['fileexistsdest'] = '%s already exists at the destination';
 $lang['fileimagetype'] = 'Cannot perform this action on this type of image';
 $lang['fileinfo'] = 'File info';
-$lang['filename'] = 'Filename';
+$lang['filename'] = 'File name';
 $lang['fileno'] = 'File no.';
 $lang['filenotfound'] = 'File not found';
 $lang['filenotimage'] = 'File specified is not an image (or there is some error with the file)';
@@ -105,17 +105,15 @@ $lang['friendlyname'] = 'File Manager';
 $lang['group'] = 'Group';
 
 // H
-$lang['help_advancedmode'] = '<p>Advanced mode allows users to browse and manage all of the files in the CMSMS installation (including system files).</p><br/><p><strong>Use Caution</strong> as it is possible to corrupt a working installation when using advanced mode.</p>';
+$lang['help_advancedmode'] = '<p>Advanced mode allows users to browse and manage all of the files in the CMSMS installation (including system files).</p><br /><p><strong>Use Caution</strong> as it is possible to corrupt a working installation when using advanced mode.</p>';
 $lang['help_create_thumbnails'] = 'If enabled, FileManager will automatically create a new thumbnail for each newly uploaded image';
 $lang['help_iconsize'] = 'This option allows specifying the size of the icons displayed in the file list.';
 $lang['help_permissionstyle'] = '<p>This option allows changing the way that permissions are displayed in the file list.  Options include somewhat human readable <em>(rwx)</em> style, or octal <em>(755)</em> format.</p>';
-$lang['help_showhiddenfiles'] = '<p>When enabled files and directories whose name beginns with a . <em>(dot)</em> or _ <em>(underscore)</em> will be displayed in the ilst.  CMSMS <em>(and other applications)</em> occasionally stores important configuration information, or cache information in these directories.</p><p><strong>Note:</strong> This option has no effect unless advanced mode is also enabled.</p>';
+$lang['help_showhiddenfiles'] = '<p>When enabled files and directories whose name begins with a . <em>(dot)</em> or _ <em>(underscore)</em> will be displayed in the list.  CMSMS <em>(and other applications)</em> occasionally stores important configuration information, or cache information in these directories.</p><p><strong>Note:</strong> This option has no effect unless advanced mode is also enabled.</p>';
 $lang['help_showthumbnails'] = 'If enabled, the file list will display a thumbnail <em>(if one exists)</em> for all images.  If disabled, the system will attempt to display an icon representing the file type.';
 $lang['help']=<<<EOF
 <h3>What does this do?</h3>
-<p>This module provides file management functions.</p>
-<h3>How do I use it?</h3>
-<p>Select it from the content-menu from in the admin.</p>
+<p>This module provides your CMS Made Simple website with file management functions.</p>
 EOF;
 $lang['help_postrotate'] = <<<EOT
 <p>Options:</p>
@@ -123,13 +121,13 @@ $lang['help_postrotate'] = <<<EOT
 <ul>
   <li><strong>None</strong> - No postrotate action will be taken.  The rotated image could be larger than the original image.</li>
   <li><strong>Crop</strong> - The rotated image will be cropped to the size of the original source image.  This may result in some of the image being clipped.</li>
-<li><strong>Resize</strong> - The rotated image will be resized to fit inside the largest dimension of the rotated image.  The result will most likely be larger than the original image, but nothing should be clipped.';
+  <li><strong>Resize</strong> - The rotated image will be resized to fit inside the largest dimension of the rotated image.  The result will most likely be larger than the original image, but nothing should be clipped.';
 </ul>
 EOT;
 
 // I
 $lang['iconsize'] = 'Icon size';
-$lang['ie_upload_message'] = 'Drag and Drop, or multiple file upload is not available in Internet Explorer.  To enable these features use a more capable browser such as Firefox or Chrome';
+$lang['ie_upload_message'] = 'Drag and Drop, or multiple file upload is not available in Internet Explorer. To enable these features use a more capable browser such as Firefox or Chrome';
 $lang['image'] = 'Image';
 $lang['imsure'] = 'I\'m sure';
 $lang['in'] = 'in';
@@ -156,7 +154,7 @@ $lang['largeicons'] = 'Large icons';
 // M
 $lang['mb'] = 'mb';
 $lang['mimetype'] = 'Mime Type';
-$lang['moddescription'] = 'Handling of files and directories in the upload-filesection of CMSMS';
+$lang['moddescription'] = 'Handling of files and directories in the upload-file section of CMSMS';
 $lang['morethanonefiledirselected'] = 'Only one file or directory should be marked for this action.';
 $lang['move'] = 'Move';
 $lang['movedestdirsame'] = 'The destination directory specified is the same as the source';
@@ -181,7 +179,7 @@ $lang['nodestinationdirs'] = 'Could not find any valid destination directories f
 $lang['nofilesselected'] = 'No files selected';
 $lang['none'] = 'None';
 $lang['nothinguploaded'] = 'Nothing uploaded';
-$lang['notwritable'] = 'Not writable';
+$lang['notwritable'] = 'Not writeable';
 
 // O
 $lang['ok'] = 'OK';
@@ -272,7 +270,7 @@ $lang['title_changedir'] = 'TODO';
 $lang['title_col_filedate'] = 'This column displays the last modification date of the file';
 $lang['title_col_fileperms'] = 'This column displays the permissions of the file';
 $lang['title_col_filesize'] = 'This column displays the size of the file';
-$lang['title_col_fileowner'] = 'This column displays the username of the owner of the file';
+$lang['title_col_fileowner'] = 'This column displays the user name of the owner of the file';
 $lang['title_copy'] = 'Copy the selected item';
 $lang['title_delete'] = 'Delete the selected item';
 $lang['title_move'] = 'TODO';
@@ -300,7 +298,7 @@ $lang['unpackafterupload'] = 'Try to unpack file after upload (only tgz and most
 $lang['unpackfail'] = ' failed with this error: ';
 $lang['unpacksuccess'] = 'is successfully unpacked';
 $lang['upgraded'] = 'The FileManager module is upgraded to version %s';
-$lang['uploadboxes'] = 'Number of uploadboxes';
+$lang['uploadboxes'] = 'Number of upload boxes';
 $lang['uploaderstandard'] = 'Standard html input-method (allows unpacking)';
 $lang['uploadfail'] = 'failed to upload successfully';
 $lang['uploadfilesto'] = 'Uploading files to:';
@@ -312,7 +310,7 @@ $lang['uploadsuccess'] = 'is uploaded successfully';
 $lang['view'] = 'View';
 
 // W
-$lang['writable'] = 'Writable';
+$lang['writable'] = 'Writeable';
 $lang['writeprotected'] = 'Write protected';
 
 ?>
