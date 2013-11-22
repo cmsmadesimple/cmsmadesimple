@@ -307,7 +307,6 @@ $lang['uploadfilesto'] = 'Uploading files to:';
 $lang['uploadmethod'] = 'Upload method';
 $lang['uploadnewfile'] = 'Upload new file(s):';
 $lang['uploadsuccess'] = 'is uploaded successfully';
-$lang['uploadview'] = 'Upload files';
 
 // V
 $lang['view'] = 'View';

@@ -3,6 +3,7 @@ if (!function_exists("cmsms")) exit;
 
 if (!$this->CheckPermission('Modify Files')) exit;
 
+$path=filemanager_utils::get_cwd();
 $smarty->assign('path',$path);
 $smarty->assign('prompt_path',$this->Lang('uploadfilesto'));
 $smarty->assign('formstart',$this->CreateFormStart($id, 'upload', $returnid,"post","multipart/form-data"));

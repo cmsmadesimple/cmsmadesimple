@@ -35,35 +35,27 @@ if (isset($params["tab"])) $tab=$params["tab"];
 if (isset($params["newsort"])) $this->SetPreference("sortby",$params["newsort"]);
 
 echo $this->StartTabHeaders();
-$filestitle="";
-
-if ($this->CheckPermission('Modify Files')) {
-  echo $this->SetTabHeader("files",$this->Lang("fileview"),($tab=="files"));
-  echo $this->SetTabHeader("upload",$this->Lang("uploadview"),($tab=="upload"));
-}
-
-if($this->CheckPermission('Modify Site Preferences')) {
-  echo $this->SetTabHeader("settings",$this->Lang("settings"),($tab=="settings"));
-}
-
+	$filestitle="";
+	if ($this->CheckPermission('Modify Files')) {
+		echo $this->SetTabHeader("files",$this->Lang("fileview"),($tab=="files"));
+	}
+	if($this->CheckPermission('Modify Site Preferences')) {
+		echo $this->SetTabHeader("settings",$this->Lang("settings"),($tab=="settings"));
+	}
 echo $this->EndTabHeaders();
+
 echo $this->StartTabContent();
-if ($this->CheckPermission('Modify Files')) {
-  echo $this->StartTab("files");
-  include(dirname(__FILE__)."/action.admin_fileview.php"); // this is also an action.
-  echo $this->EndTab();
-
-  echo $this->StartTab("upload");
-  include(dirname(__FILE__)."/uploadview.php");
-  echo $this->EndTab();
-}
-if($this->CheckPermission('Modify Site Preferences')) {
-  echo $this->StartTab("settings");
-  include(dirname(__FILE__)."/settings.php");
-  echo $this->EndTab();
-
-}
+	if ($this->CheckPermission('Modify Files')) {
+		echo $this->StartTab("files");
+			include(dirname(__FILE__)."/uploadview.php");
+			include(dirname(__FILE__)."/action.admin_fileview.php"); // this is also an action.
+		echo $this->EndTab();
+	}
+	if($this->CheckPermission('Modify Site Preferences')) {
+		echo $this->StartTab("settings");
+			include(dirname(__FILE__)."/settings.php");
+		echo $this->EndTab();
+	}
 echo $this->EndTabContent();
 
 ?>
-
