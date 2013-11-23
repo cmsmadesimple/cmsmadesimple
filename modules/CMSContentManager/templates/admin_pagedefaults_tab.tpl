@@ -97,4 +97,10 @@
 		<input id="extra3" type="text" name="{$actionid}extra3" value="{$page_prefs.extra3}" size="80" maxlength="255"/>
 	</p>
 </div>
+<div class="pageoverflow">
+	<p class="pagetext"></p>
+	<p class="pageinput">
+		<input type="submit" name="{$actionid}submit" value="{$mod->Lang('submit')}"/>
+	</p>
+</div>
 {form_end}
