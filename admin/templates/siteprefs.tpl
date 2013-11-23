@@ -135,30 +135,36 @@ $(document).ready(function(){
 			</p>
 			<br />
 		</div>
-		<div class="pageoverflow">
-			<p class="pagetext"><label for="content_autocreate_urls">{lang('content_autocreate_urls')}:</label></p>
-			<p class="pageinput">
-				<select id="content_autocreate_urls" name="content_autocreate_urls">
-					{html_options options=$yesno selected=$content_autocreate_urls}
-				</select>&nbsp;{cms_help key2='settings_autocreate_url'}
-			</p>
-		</div>
-		<div class="pageoverflow">
-			<p class="pagetext"><label for="content_autocreate_flaturls">{lang('content_autocreate_flaturls')}:</label></p>
-			<p class="pageinput">
-				<select id="content_autocreate_flaturls" name="content_autocreate_flaturls">
-					{html_options options=$yesno selected=$content_autocreate_flaturls}
-				</select>&nbsp;{cms_help key2='settings_autocreate_flaturls'}
-			</p>
-		</div>
-		<div class="pageoverflow">
-			<p class="pagetext"><label for="content_mandatory_urls">{lang('content_mandatory_urls')}:</label></p>
-			<p class="pageinput">
-				<select id="content_mandatory_urls" name="content_mandatory_urls">
-					{html_options options=$yesno selected=$content_mandatory_urls}
-				</select>&nbsp;{cms_help key2='settings_mandatory_urls'}
-			</p>
-		</div>
+		{if $pretty_urls}
+			<div class="pageoverflow">
+				<p class="pagetext"><label for="content_autocreate_urls">{lang('content_autocreate_urls')}:</label></p>
+				<p class="pageinput">
+					<select id="content_autocreate_urls" name="content_autocreate_urls">
+						{html_options options=$yesno selected=$content_autocreate_urls}
+					</select>&nbsp;{cms_help key2='settings_autocreate_url'}
+				</p>
+			</div>
+		{/if}
+		{if $pretty_urls}
+			<div class="pageoverflow">
+				<p class="pagetext"><label for="content_autocreate_flaturls">{lang('content_autocreate_flaturls')}:</label></p>
+				<p class="pageinput">
+					<select id="content_autocreate_flaturls" name="content_autocreate_flaturls">
+						{html_options options=$yesno selected=$content_autocreate_flaturls}
+					</select>&nbsp;{cms_help key2='settings_autocreate_flaturls'}
+				</p>
+			</div>
+		{/if}
+		{if $pretty_urls}
+			<div class="pageoverflow">
+				<p class="pagetext"><label for="content_mandatory_urls">{lang('content_mandatory_urls')}:</label></p>
+				<p class="pageinput">
+					<select id="content_mandatory_urls" name="content_mandatory_urls">
+						{html_options options=$yesno selected=$content_mandatory_urls}
+					</select>&nbsp;{cms_help key2='settings_mandatory_urls'}
+				</p>
+			</div>
+		{/if}
 		<div class="pageoverflow">
 			<p class="pagetext"><label for="disallowed_contenttypes">{lang('disallowed_contenttypes')}:</label>&nbsp;{cms_help key2='settings_badtypes'}</p>
 			<p class="pageinput">

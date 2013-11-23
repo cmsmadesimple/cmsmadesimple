@@ -1747,11 +1747,11 @@ $lang['view_page'] = 'View this page in a new window';
 //  W W W W
 //   W   W
 
-$lang['warn_addgroup'] = 'Creating a new group does not assign any permissions. You will need to assign permissons to the new group in a separate step.';
+$lang['warn_addgroup'] = 'Creating a new group does not assign any permissions. You will need to assign permissions to the new group in a separate step.';
 $lang['warning_mail_settings'] = <<<EOT
-Your mail settings have not been configured.  This could interfere with the ability of your website to send email messages.  You should go to <a href="%s">Extensions >> CMSMailer</a> and configure the mail settings with the information provided by your host.
+Your mail settings have not been configured.  This could interfere with the ability of your website to send email messages. You should go to <a href="%s">Extensions >> CMSMailer</a> and configure the mail settings with the information provided by your host.
 EOT;
-$lang['warn_nosefurl'] = 'SEO Friendly or Pretty URLs have not been configured, some of these settings are irrelevant';
+$lang['warn_nosefurl'] = 'SEO Friendly or Pretty URLs have not been configured. Its settings are not visible here';
 $lang['warning_safe_mode'] = '<strong><em>WARNING:</em></strong> PHP Safe mode is enabled. This will cause difficulty with files uploaded via the web browser interface, including images, theme and module XML packages.  You are advised to contact your site administrator to see about disabling safe mode.';
 $lang['warning_upgrade'] = '<em><strong>Warning:</strong></em> CMSMS is in need of an upgrade!';
 $lang['warning_upgrade_info1'] = 'The website is now running schema version %s and needs to be upgraded to version %s';
