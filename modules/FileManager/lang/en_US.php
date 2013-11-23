@@ -298,7 +298,6 @@ $lang['unpackafterupload'] = 'Try to unpack file after upload (only tgz and most
 $lang['unpackfail'] = ' failed with this error: ';
 $lang['unpacksuccess'] = 'is successfully unpacked';
 $lang['upgraded'] = 'The FileManager module is upgraded to version %s';
-$lang['uploadboxes'] = 'Number of upload boxes';
 $lang['uploaderstandard'] = 'Standard html input-method (allows unpacking)';
 $lang['uploadfail'] = 'failed to upload successfully';
 $lang['uploadmethod'] = 'Upload method';

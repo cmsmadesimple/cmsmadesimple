@@ -4,7 +4,6 @@ $this->CreatePermission('Use FileManager Advanced',$this->Lang("permissionadvanc
 
 $this->SetPreference('advancedmode',0);
 $this->SetPreference("iconsize","32px");
-$this->SetPreference("uploadboxes","5");
 $this->SetPreference("showhiddenfiles",0);
 $this->SetPreference('showthumbnails',1);
 $this->SetPreference('permissionstyle','xxx');

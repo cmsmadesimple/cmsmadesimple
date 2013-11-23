@@ -19,4 +19,7 @@ $this->SetPreference('advancedmode',0);
 $this->RemovePermission('Use Filemanager');
 $this->RegisterModulePlugin(true);
 
+// TODO Rolf remove preference uploadboxes
+
+
 ?>

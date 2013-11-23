@@ -27,7 +27,6 @@ if (!$this->AdvancedAccessAllowed()) $advancedmode=0;
 $showhiddenfiles=$this->GetPreference("showhiddenfiles",0);
 $showthumbnails=$this->GetPreference("showthumbnails",1);
 $iconsize=$this->GetPreference("iconsize",0);
-$uploadboxes=$this->GetPreference("uploadboxes",5);
 $permissionstyle=$this->GetPreference("permissionstyle","xxx");
 
 $tab="";
