@@ -113,7 +113,6 @@ $(document).ready(function () {
   {if isset($text) && $text != ''}<span class="ui-button-text">{$text}</span>{/if}
 </button>
 {/function}
-<h3>{$currentpath} {$path}</h3>
 
 <div id="popup" style="display: none;">
 	<div id="popup_contents" style="min-width: 500px; max-height: 600px;"></div>
@@ -124,8 +123,8 @@ $(document).ready(function () {
 
 <div>
 	<fieldset>
-                {filebtn id='btn_newdir' iname="{$actionid}fileactionnewdir" icon='ui-icon-circle-plus' text=$mod->Lang('newdir') title=$mod->Lang('title_newdir')}
-                {filebtn id='btn_view' iname="{$actionid}fileactionview" icon='ui-icon-circle-zoomin' text=$mod->Lang('view') title=$mod->Lang('title_view')}
+        {filebtn id='btn_newdir' iname="{$actionid}fileactionnewdir" icon='ui-icon-circle-plus' text=$mod->Lang('newdir') title=$mod->Lang('title_newdir')}
+        {filebtn id='btn_view' iname="{$actionid}fileactionview" icon='ui-icon-circle-zoomin' text=$mod->Lang('view') title=$mod->Lang('title_view')}
 		{filebtn id='btn_rename' iname="{$actionid}fileactionrename" text=$mod->Lang('rename') title=$mod->Lang('title_rename')}
 		{filebtn id='btn_delete' iname="{$actionid}fileactiondelete" icon='ui-icon-trash' text=$mod->Lang('delete') title=$mod->Lang('title_delete')}
 		{filebtn id='btn_move' iname="{$actionid}fileactionmove" icon='ui-icon-arrow-4-diag' text=$mod->Lang('move') title=$mod->Lang('title_move')}

@@ -117,7 +117,8 @@ $(function() {
 	display: none
 	}
 {/literal}</style>
-<h3>{$prompt_path}&nbsp;{$path}</h3>
+
+<h3>{$currentpath} {$path}</h3>
 
 {$formstart}
 <input type="hidden" name="disable_buffer" value="1"/>

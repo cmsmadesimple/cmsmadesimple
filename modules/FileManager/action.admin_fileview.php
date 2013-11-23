@@ -9,7 +9,6 @@ $path=filemanager_utils::get_cwd();
 $filelist=filemanager_utils::get_file_list($path);
 
 $config = $gCms->GetConfig();
-$smarty->assign('currentpath', $this->Lang("currentpath"));
 $smarty->assign('path', $path);
 $smarty->assign('hiddenpath', $this->CreateInputHidden($id, "path", $path));
 $smarty->assign('formstart', $this->CreateFormStart($id, 'fileaction', $returnid));

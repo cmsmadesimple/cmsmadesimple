@@ -5,7 +5,7 @@ if (!$this->CheckPermission('Modify Files')) exit;
 
 $path=filemanager_utils::get_cwd();
 $smarty->assign('path',$path);
-$smarty->assign('prompt_path',$this->Lang('uploadfilesto'));
+$smarty->assign('currentpath', $this->Lang("currentpath"));
 $smarty->assign('formstart',$this->CreateFormStart($id, 'upload', $returnid,"post","multipart/form-data"));
 $smarty->assign('actionid',$id);
 $smarty->assign('maxfilesize',$config["max_upload_size"]);
