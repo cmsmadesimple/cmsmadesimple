@@ -1,7 +1,9 @@
 {if isset($list_categories)}
 <script type="text/javascript">
 $(document).ready(function () {
-    cms_initSortable('#categorylist', '{cms_action_url action='ajax_order_cats' forjs=1}&showtemplate=false')
+    $('#categorylist tbody').cmsms_sortable_table({
+    	actionurl: '{cms_action_url action='ajax_order_cats' forjs=1}&showtemplate=false'
+    });
 });
 </script>
 

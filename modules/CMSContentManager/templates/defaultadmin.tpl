@@ -1,6 +1,7 @@
 {if $ajax == 0}
 <script type="text/javascript">
 //<![CDATA[
+
 function cms_CMloadUrl(link, lang) {
     $(document).on('click', link, function (e) {
         var url = $(this).attr('href') + '&showtemplate=false&{$actionid}ajax=1';
@@ -13,12 +14,13 @@ function cms_CMloadUrl(link, lang) {
     });
 }
 
+
 function cms_CMtoggleState(el) {
     $(el).attr('disabled', true);
     $('button' + el).button({ 'disabled' : true });
 
     $(document).on('click', 'input:checkbox', function () {
-        if ($(this).is(':checked')) {
+        if ($('input:checkbox').is(':checked')) {
             $(el).attr('disabled', false);
             $('button' + el).button({ 'disabled' : false });
         } else {
@@ -29,15 +31,18 @@ function cms_CMtoggleState(el) {
 }
 
 $(document).ready(function () {
-
+	$('#selectall').cmsms_checkall({
+		target: '#contenttable'
+	});
     cms_CMtoggleState('#multiaction'),
     cms_CMtoggleState('#multisubmit'),
-    cms_checkAll('#selectall'),
+
     // these links can't use ajax as they effect pagination.
     //cms_CMloadUrl('a.expandall'),
     //cms_CMloadUrl('a.collapseall'),
     //cms_CMloadUrl('a.page_collapse'),
     //cms_CMloadUrl('a.page_expand'),
+
     cms_CMloadUrl('a.page_setinactive', '{$mod->Lang('confirm_setinactive')}'),
     cms_CMloadUrl('a.page_setactive'),
     cms_CMloadUrl('a.page_setdefault', '{$mod->Lang('confirm_setdefault')}'),
@@ -129,6 +134,7 @@ $(document).ready(function () {
     })
 
     $(document).ajaxComplete(function () {
+    	$('#selectall').cmsms_checkall();
         $('tr.selected').css('background', 'yellow');
     });
 

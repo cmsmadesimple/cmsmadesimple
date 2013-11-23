@@ -208,6 +208,19 @@
          */
         _isLocalStorage : function() {
             return typeof (Storage) !== 'undefined';
+        },
+        
+        /**
+         * @description Basic check for common mobile devices and touch capability
+         * @function _isMobileDevice()
+         * @private 
+         */
+        _isMobileDevice : function() {
+            var devices = /(Android|iPhone|iPad|iPod|Blackberry|Dolphin|IEMobile|WPhone|Windows Mobile|IEMobile9||IEMobile10||IEMobile11|Kindle|Mobile|MMP|MIDP|Pocket|PSP|Symbian|Smartphone|Sreo|Up.Browser|Up.Link|Vodafone|WAP|Opera Mini|Opera Tablet|Mobile|Fennec)/i;
+            
+            if (devices.test(navigator.userAgent) && (document.documentElement.hasOwnProperty('ontouchstart') || (window.DocumentTouch && document instanceof DocumentTouch))) {
+                return true;
+            }
         }
         
     };
@@ -370,6 +383,7 @@
          */
         // TODO Rethink this in next versions, define a object based on type or something (maybe use plugin http://akquinet.github.io/jquery-toastmessage-plugin/demo/demo.html)
         showNotifications : function() {
+            
             $('.pagewarning, .message, .pageerrorcontainer, .pagemcontainer').prepend('<span class="close-warning"></span>');
             $('.close-warning').click(function() {
                 $(this).parent().hide();
@@ -401,20 +415,22 @@
             // TODO needs work, cms_ajax_apply event doesn't exist, seems like trigger inside post fails in ContentManager 
             $('body').on('cms_ajax_apply', function(e) {
                 $('button[name=cancel], button[name=m1_cancel]').fadeOut();
-                $('button[name=cancel], button[name=m1_cancel]').button('option', 'label', event.close);
+                $('button[name=cancel], button[name=m1_cancel]').button('option', 'label', e.close);
                 $('button[name=cancel], button[name=m1_cancel]').fadeIn();
                 
                 var htmlShow = '';
                 
-                if (event.response === 'Success') {
-                    htmlShow = '<aside class="message pagemcontainer" role="status"><span class="close-warning">Close</span><p class="pagemessage">' + event.details + '<\/p><\/aside>';
+                console.log(event);
+                
+                if (e.response === 'Success') {
+                    htmlShow = '<aside class="message pagemcontainer" role="status"><span class="close-warning">Close</span><p class="pagemessage">' + e.details + '<\/p><\/aside>';
                 } else {
                     htmlShow = '<aside class="message pageerrorcontainer" role="alert"><span class="close-warning">Close</span><ul class="pageerror">';
-                    htmlShow += event.details;
+                    htmlShow += e.details;
                     htmlShow += '<\/ul><\/aside>';
                 }
                 
-                $('#oe_mainarea').append(htmlShow).slideDown(1000, function() {
+                $('body').append(htmlShow).slideDown(1000, function() {
                     window.setTimeout(function() {
                         $('.message').slideUp();
                     }, 10000);
@@ -423,6 +439,7 @@
                 $('.message').click(function() {
                     $('.message').slideUp();
                 });
+                $('body').off('cms_ajax_apply');
             });
         },
         
@@ -486,7 +503,7 @@
                 // handle equal height blocks
                 OE.helper.equalHeight($group);
                 // handle sticky menu if it's not mobile device
-                if (!_this._isMobileDevice()) {
+                if (!OE.helper._isMobileDevice()) {
                     _this.stickyMenu($menu_container);
                 }
         },
@@ -520,19 +537,6 @@
             
             OE.helper.setStorageValue('sidebar-pref', 'sidebar-off', 60);
         },
-        
-        /**
-         * @description Basic check for common mobile devices and touch capability
-         * @function _isMobileDevice()
-         * @private 
-         */
-        _isMobileDevice : function() {
-            var devices = /(Android|iPhone|iPad|iPod|Blackberry|Dolphin|IEMobile|WPhone|Windows Mobile|IEMobile9||IEMobile10||IEMobile11|Kindle|Mobile|MMP|MIDP|Pocket|PSP|Symbian|Smartphone|Sreo|Up.Browser|Up.Link|Vodafone|WAP|Opera Mini|Opera Tablet|Mobile|Fennec)/i;
-            
-            if (devices.test(navigator.userAgent) && (document.documentElement.hasOwnProperty('ontouchstart') || (window.DocumentTouch && document instanceof DocumentTouch))) {
-                return true;
-            }
-        }
         
     };
 } )(this, jQuery);

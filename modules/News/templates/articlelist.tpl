@@ -1,33 +1,37 @@
 <script type="text/javascript">
 //<![CDATA[
 $(document).ready(function(){
-  cms_checkAll('#selall');
-  $('#filter').hide();
-  $('#toggle_filter').click(function(){
-    $('#filter').toggle('slow');
-  });
-  $('#bulkactions').hide();
-  $('#articlelist').on('cms_checkall_toggle','[type=checkbox]',function(){
-    var l = $('#articlelist :checked').length;
-    if( l == 0 ) {
-      $('#bulkactions').hide('slow');
-    } else {
-      $('#bulkactions').show('slow');
-    }
-  });
-  $('#bulk_category').hide();
-  $('#bulk_action').on('change',function(){
-    var v = $(this).val();
-    if( v == 'setcategory' ) {
-      $('#bulk_category').show('slow');
-    }
-    else {
-      $('#bulk_category').hide('slow');
-    }
-  });
-  $('#bulkactions').on('click','#submit_bulkaction',function(){
-    return confirm('{$mod->Lang('areyousure_multiple')}');
-  });
+	$('#selall').cmsms_checkall();
+	$('#filter').hide();
+	$('#bulkactions').hide();
+	$('#bulk_category').hide();
+	$('#toggle_filter').click(function(){
+		$('#filter').toggle(50);
+	});
+	
+	$('#articlelist').on('cms_checkall_toggle','[type=checkbox]',function(){
+		var l = $('#articlelist :checked').length;
+		
+		if( l == 0 ) {
+			$('#bulkactions').hide(50);
+		} else {
+			$('#bulkactions').show(50);
+		}
+	});
+
+	$('#bulk_action').on('change',function(){
+		var v = $(this).val();
+		
+		if( v == 'setcategory' ) {
+			$('#bulk_category').show(50);
+		} else {
+			$('#bulk_category').hide(50);
+		}
+	});
+	
+	$('#bulkactions').on('click','#submit_bulkaction',function(){
+		return confirm('{$mod->Lang('areyousure_multiple')}');
+	});
 });
 //]]>
 </script>

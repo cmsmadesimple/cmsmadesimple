@@ -1,6 +1,6 @@
 <script type="text/javascript">
 $(document).ready(function(){
-    cms_checkAll('#tpl_selall');
+    $('#tpl_selall').cmsms_checkall();
 
     $('#tpl_bulk_action,#tpl_bulk_submit').attr('disabled','disabled');
     $('#tpl_bulk_submit').button({ 'disabled' : true });
