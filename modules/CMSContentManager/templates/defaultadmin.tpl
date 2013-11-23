@@ -364,7 +364,7 @@ $(document).ready(function () {
 		{/foreach}
 	{/function}
 
-<div id="error_cont" class="error" style="color-red: text-align: center; vertical-align: middle; display: none;">
+<div id="error_cont" class="error" style="color: red; text-align: center; vertical-align: middle; display: none;">
 {$error|default:''}
 </div>
 
