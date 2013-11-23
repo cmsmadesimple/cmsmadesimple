@@ -1,7 +1,7 @@
 <?php // -*- mode:php; tab-width:4; indent-tabs-mode:t; c-basic-offset:4; -*-
 #CMS - CMS Made Simple
-#(c)2004-2010 by Ted Kulp (ted@cmsmadesimple.org)
-#This project's homepage is: http://cmsmadesimple.org
+#(c)2004-2013 by Ted Kulp (ted@cmsmadesimple.org)
+#This project's homepage is: http://www.cmsmadesimple.org
 #
 #This program is free software; you can redistribute it and/or modify
 #it under the terms of the GNU General Public License as published by
@@ -430,7 +430,7 @@ final class cms_config implements ArrayAccess
    * before overwriting.
    *
    *
-   * @param boolean indicates wether comments should be stored in the config.php file. 
+   * @param boolean indicates whether comments should be stored in the config.php file. 
    * @param string  An optional complete file specification.  If not specified the standard config file location will be used.
    */
   public function save($verbose = true,$filename = '')
@@ -448,7 +448,7 @@ final class cms_config implements ArrayAccess
 		  $output .= "\$config['{$key}'] = $outvalue;\n";
 	  }
 
-	  $output .= "?>\n";
+	  $output .= "?>";
 
 	  // and write it.
 	  $fh = fopen($filename,'w');
