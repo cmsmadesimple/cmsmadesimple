@@ -67,8 +67,8 @@ final class CmsContentManagerUtils
 			'cachable'=>1, // boolean
 			'active'=>1, // boolean
 			'showinmenu'=>1, // boolean
-			'metadata'=>'{* Add code here that should appear in the metadata section of all new pages *}', // string
-			'content'=>'<!-- Add code here that should appear in the content block of all new pages -->', // string
+			'metadata'=>'', // string
+			'content'=>'', // string
 			'searchable'=>1, // boolean
 			'addteditors'=>array(), // array of ints.
 			'extra1'=>'', // string
