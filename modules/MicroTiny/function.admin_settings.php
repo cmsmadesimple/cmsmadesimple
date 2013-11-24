@@ -1,4 +1,22 @@
 <?php
+#CMS - CMS Made Simple
+#(c)2004 by Ted Kulp (ted@cmsmadesimple.org)
+#This project's homepage is: http://www.cmsmadesimple.org
+#
+#This program is free software; you can redistribute it and/or modify
+#it under the terms of the GNU General Public License as published by
+#the Free Software Foundation; either version 2 of the License, or
+#(at your option) any later version.
+#
+#This program is distributed in the hope that it will be useful,
+#but WITHOUT ANY WARRANTY; without even the implied warranty of
+#MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#GNU General Public License for more details.
+#You should have received a copy of the GNU General Public License
+#along with this program; if not, write to the Free Software
+#Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+#
+
 if( !cmsms() ) exit();
 
 if (!$this->VisibleToAdminUser()) {
@@ -7,6 +25,8 @@ if (!$this->VisibleToAdminUser()) {
 }
 $allowimages = $this->GetPreference('allowimages',"0");
 $css_styles = $this->GetPreference('css_styles',"");
+$show_statusbar = $this->GetPreference('show_statusbar',"1");
+$allow_resize = $this->GetPreference('allow_resize',"1");
 
 $smarty->assign('css_styles_text', $this->Lang('css_styles_text'));
 $smarty->assign('css_styles_help', $this->Lang('css_styles_help'));
@@ -22,11 +42,11 @@ $smarty->assign('endform', $this->CreateFormEnd());
 
 $smarty->assign('show_statusbar',$this->Lang('show_statusbar'));
 $smarty->assign('help_show_statusbar',$this->Lang('help_show_statusbar'));
-$smarty->assign('input_show_statusbar',$this->CreateInputCheckbox($id,'show_statusbar', 1, $this->GetPreference('show_statusbar')));
+$smarty->assign('input_show_statusbar',$this->CreateInputCheckbox($id,'show_statusbar', 1, $show_statusbar));
 
 $smarty->assign('allow_resize',$this->Lang('allow_resize'));
 $smarty->assign('help_allow_resize',$this->Lang('help_allow_resize'));
-$smarty->assign('input_allow_resize',$this->CreateInputCheckbox($id,'allow_resize',1,$this->GetPreference('allow_resize')));
+$smarty->assign('input_allow_resize',$this->CreateInputCheckbox($id,'allow_resize',1,$allow_resize));
 
 $smarty->assign('strip_background',$this->Lang('strip_background'));
 $smarty->assign('help_strip_background',$this->Lang('help_strip_background'));
