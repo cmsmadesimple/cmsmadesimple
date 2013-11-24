@@ -110,7 +110,7 @@ class microtiny_utils
     $mod->smarty->assign("urlext",$urlext);
     //,pasteword,,|,undo,redo
     $image="";
-    if ($mod->GetPreference("allowimages",0) && !$frontend ) $image=",image,|";
+    if ($mod->GetPreference("allowimages",1) && !$frontend ) $image=",image,|";
     $toolbar="undo,|,bold,italic,underline,|,cut,copy,paste,pastetext,removeformat,|,justifyleft,justifycenter,justifyright,justifyfull,|,bullist,numlist,|,".$linker."link,unlink,|".$image.",formatselect"; //,separator,styleselect
 
     // handle css styles... newline OR comma separated (why, kinda dumb?)

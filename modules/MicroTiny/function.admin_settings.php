@@ -23,7 +23,7 @@ if (!$this->VisibleToAdminUser()) {
   $this->ShowErrors($this->Lang("accessdenied"));
   return;
 }
-$allowimages = $this->GetPreference('allowimages',"0");
+$allowimages = $this->GetPreference('allowimages',"1");
 $css_styles = $this->GetPreference('css_styles',"");
 $show_statusbar = $this->GetPreference('show_statusbar',"1");
 $allow_resize = $this->GetPreference('allow_resize',"1");
