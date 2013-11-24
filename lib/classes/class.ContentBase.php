@@ -2225,11 +2225,14 @@ abstract class ContentBase
 
 		case 'page_url':
 			if( !$this->DefaultContent() ) {
-				$str = '<input type="text" name="page_url" id="page_url" value="'.$this->mURL.'" size="50" maxlength="255"/>';
-				$prompt = '<label for="page_url">'.lang('page_url').':</label>';
-				if( get_site_preference('content_mandatory_urls',0) ) $prompt = '*'.$prompt;
-				$help = '&nbsp;'.cms_admin_utils::get_help_tag('core','help_page_url');
-				return array($prompt.$help,$str);
+				$pretty_urls = $config['url_rewriting'] == 'none' ? 0 : 1;
+				if ($pretty_urls != 0) {
+					$str = '<input type="text" name="page_url" id="page_url" value="'.$this->mURL.'" size="50" maxlength="255"/>';
+					$prompt = '<label for="page_url">'.lang('page_url').':</label>';
+					if( get_site_preference('content_mandatory_urls',0) ) $prompt = '*'.$prompt;
+					$help = '&nbsp;'.cms_admin_utils::get_help_tag('core','help_page_url');
+					return array($prompt.$help,$str);
+				}
 			}
 			break;
 
