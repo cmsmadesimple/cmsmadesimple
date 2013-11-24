@@ -352,4 +352,8 @@ class microtiny_utils
   }	
 
 } // end of class
+
+#
+# EOF
+#
 ?>

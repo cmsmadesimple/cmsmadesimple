@@ -60,5 +60,7 @@ $smarty->assign('submit', $this->CreateInputSubmit($id, "savesettings", $this->L
 
 echo $this->ProcessTemplate('settings.tpl');
 
+#
+# EOF
+#
 ?>
-
