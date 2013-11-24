@@ -184,7 +184,7 @@ $lang['help_function_cms_yesno'] = <<<EOT
   <li>assign - <em>(optional string)</em> - Assign the output to the named smarty variable.</li>
 </ul>
 <h3>Example:</h3>
-<pre><code>&lt;select name=&quot;{\$actionid}opt&quot;&gt;{cge_yesno selected=\$opt}&lt;/select&gt;</code></pre>
+<pre><code>&lt;select name=&quot;{\$actionid}opt&quot;&gt;{cms_yesno selected=\$opt}&lt;/select&gt;</code></pre>
 EOT;
 
 $lang['help_function_module_available'] = <<<EOT
