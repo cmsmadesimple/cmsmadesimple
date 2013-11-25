@@ -153,6 +153,9 @@ class OneElevenTheme extends CmsAdminThemeBase {
 			$nodes = $this->get_navigation_tree(-1, -1, FALSE);
 			$smarty->assign('nodes', $nodes);
 		}
+		
+		// is the website set down for maintenance?
+		if( is_sitedown() ) { $smarty->assign('is_sitedown', 'true'); }
 
 		$smarty->assign('config', cmsms()->GetConfig());
 		$smarty->assign('theme', $this);
@@ -262,7 +265,6 @@ class OneElevenTheme extends CmsAdminThemeBase {
 		if (is_array($this->_messages) && count($this->_messages))
 			$smarty->assign('messages', $this->_messages);
 
-		if( is_sitedown() ) { $smarty->assign('is_sitedown', 'true'); }
 		$_contents = $smarty->fetch('pagetemplate.tpl');
 		$smarty->template_dir = $otd;
 		return $_contents;
