@@ -22,7 +22,7 @@
 			<a href="{root_url}/index.php" rel="external" target="_blank" title="{'viewsite'|lang}">{'viewsite'|lang}</a>
 		</li>		
 		<li class="logout">
-			<a href="logout.php?{$secureparam}" title="{'logout'|lang}">{'logout'|lang}</a>
+			<a href="logout.php?{$secureparam}" title="{'logout'|lang}" {if isset($is_sitedown)}onclick="return confirm('{'maintenance_warning'|lang}')"{/if}>{'logout'|lang}</a>
 		</li>
 	</ul>
 </div>
