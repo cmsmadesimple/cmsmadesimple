@@ -1578,6 +1578,7 @@ $lang['sysmaintab_content'] = 'Cache and content';
 $lang['sysmaintab_database'] = 'Database';
 $lang['sysmain_aliasesfixed'] = 'aliases fixed';
 $lang['sysmain_cache_status'] = 'Cache status';
+$lang['sysmain_confirmclearlog'] = 'Are you sure you want to clear the admin log?';
 $lang['sysmain_confirmclearcache'] = 'Are you sure you want to clear the cache?';
 $lang['sysmain_confirmfixaliases'] = 'Are you sure you want to add aliases to pages missing it?';
 $lang['sysmain_confirmfixtypes'] = 'Are you sure you want to convert all with invalid content into standard content pages?';

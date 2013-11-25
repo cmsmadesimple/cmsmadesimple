@@ -53,7 +53,7 @@
     {if $clearicon != ''}
       &nbsp;
       <a href="adminlog.php{$urlext}&amp;clear=true">{$clearicon}</a>
-      <a href="adminlog.php{$urlext}&amp;clear=true">{$langclear}</a>
+      <a href="adminlog.php{$urlext}&amp;clear=true" onclick="return confirm('{$sysmain_confirmclearlog}')">{$langclear}</a>
     {/if}
     </div>
     <div style="text-align: right;">{$pagestring}</div>
@@ -110,7 +110,7 @@
       <div class="pageoptions">
         <p class="pageoptions">
           <a href="adminlog.php{$urlext}&amp;clear=true">{$clearicon}</a>
-          <a class="pageoptions" href="adminlog.php{$urlext}&amp;clear=true">{$langclear}</a>
+          <a class="pageoptions" href="adminlog.php{$urlext}&amp;clear=true" onclick="return confirm('{$sysmain_confirmclearlog}')">{$langclear}</a>
         </p>
       </div>
     </td></tr>

@@ -145,6 +145,7 @@ if (check_permission($userid, 'Modify Site Preferences'))
   if ($access && $result && $result->RecordCount() > 0) {
     $smarty->assign("clearicon",$themeObject->DisplayImage('icons/system/delete.gif', lang('delete'),'','','systemicon'));
     $smarty->assign("langclear",lang('clearadminlog'));
+	$smarty->assign("sysmain_confirmclearlog",lang('sysmain_confirmclearlog'));
   }
 
   $smarty->assign('filteruser',get_site_preference('adminlog_filteruser',''));
