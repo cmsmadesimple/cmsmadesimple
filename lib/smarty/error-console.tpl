@@ -117,7 +117,7 @@
     </head>
     <body>
         <div class="logo">
-            <img src="/lib/smarty/img/cmsms-logo.png" alt="CMS Made Simple" />
+            <img src="{root_url}/lib/smarty/img/cmsms-logo.png" alt="CMS Made Simple" />
         </div>
         <div id="wrapper">
             <h1>Oops!</h1>
