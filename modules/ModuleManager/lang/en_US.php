@@ -21,16 +21,17 @@ $lang['back'] = 'Back';
 $lang['back_to_module_manager'] = 'Return to Module Manager';
 
 // C
+$lang['cancel'] = 'Cancel';
 $lang['cantdownload'] = 'Cannot Download';
 $lang['cantremove'] = 'Cannot Remove';
 $lang['changeperms'] = 'Change Permissions';
-$lang['confirm_chmod'] = 'TODO';
-$lang['confirm_uninstall'] = 'TODO';
-$lang['confirm_upgrade'] = 'TODO';
-$lang['confirm_remove'] = 'TODO';
+$lang['confirm_chmod'] = 'Continuing will attempt to change the permissions on this modules files.  Are you sure you want to continue?';
 $lang['confirm_resetcache'] = 'Are you sure you want to clear the local cache?';
 $lang['confirm_reseturl'] = 'Are you sure you want to reset the repository URL?';
 $lang['confirm_settings'] = 'Are you sure you want to save these settings?';
+$lang['confirm_remove'] = 'Are you sure you want to remove this modules files from the filesystem';
+$lang['confirm_uninstall'] = 'Continuing will remove all data associated with this module, but not remove the module files from the filesystem.  Are you sure you want to continue?';
+$lang['confirm_upgrade'] = 'Are you sure you want to upgrade this module?';
 $lang['compatibility_disclaimer'] = 'The modules displayed here are contributed by both the CMSMS Developers and independent third parties.  We make no guarantees that the modules available here are functional, tested, or compatible with your system.  You are encouraged to read the information found in the help and about links for each module before attempting the installation.';
 
 // D
@@ -49,23 +50,31 @@ $lang['entersearchterm'] = 'Enter search term';
 $lang['error'] = 'Error!';
 $lang['error_active_failed'] = 'The operation to toggle the active state of a module failed';
 $lang['error_checksum'] = 'Checksum error.  This probably indicates a corrupt file, either when it was uploaded to the repository, or a problem in transit down to your machine. (expected %s and got %s)';
+$lang['error_chmodfailed'] = 'One or more problems encountered when changing permissions of files';
 $lang['error_connectnomodules'] = 'Although a connection was successfully made to the specified module repository.  It appears that this repository is not yet sharing any modules';
 $lang['error_downloadxml'] = 'A problem occurred downloading the XML FILE: %s';
+$lang['error_dependencynotfound'] = 'One or more dependencies could not be found in the forge';
+$lang['error_fileupload'] = 'A problem occurred uploading the file';
 $lang['error_getmodule'] = 'A problem occurred instantiating %s';
 $lang['error_internal'] = 'Internal Error... Please report this to your system administrator';
+$lang['error_invaliduploadtype'] = 'The file uploaded is not valid for this field';
 $lang['error_minimumrepository'] = 'The repository version is not compatible with this module manager';
-$lang['error_missingparams'] = 'A required parameter was missing';
+$lang['error_missingparams'] = 'A required parameter was missing or invalid';
+$lang['error_moduleexport'] = 'Module export failed';
 $lang['error_moduleinstallfailed'] = 'Module installation failed';
+$lang['error_moduleremovefailed'] = 'Failed to remove module';
 $lang['error_moduleuninstallfailed'] = 'Module uninstallation failed';
 $lang['error_moduleupgradefailed'] = 'Module upgrade failed';
 $lang['error_module_object'] = 'Error: could not get an instance of the %s module';
 $lang['error_nodata'] = 'No data retrieved';
 $lang['error_nofilename'] = 'No filename parameter supplied';
 $lang['error_nofilesize'] = 'No filesize parameter supplied';
+$lang['error_nofileuploaded'] = 'Please upload a module XML file';
 $lang['error_nomatchingmodules'] = 'Error: could not find any matching modules in the repository';
 $lang['error_nomodules'] = 'Error: could not retrieve list of installed modules';
 $lang['error_norepositoryurl'] = 'The URL for the Module Repository has not been specified';
 $lang['error_noresults'] = 'We expected some results to be available from queued operations, but none were found. Please try to reproduce this experience, and provide sufficient information to support personnel for diagnoses.';
+$lang['error_notxmlfile'] = 'The file uploaded was not an xml file';
 $lang['error_permissions'] = '<strong><em>WARNING:</em></strong> Insufficient directory permissions to install modules.  You may also be experiencing problems with PHP Safe mode.  Please ensure that safe mode is disabled, and that file system permissions are sufficient.';
 $lang['error_request_problem'] = 'A problem occurred communicating with the module server';
 $lang['error_search'] = 'Search Error';
@@ -98,12 +107,14 @@ $lang['help_dl_chunksize'] = 'This parameter specifies the size <em>(in kilobyte
 $lang['help_latestdepends'] = 'When installing a module with dependencies, this will ensure that the newest version of a dependent module is installed';
 
 // I
+$lang['importxml'] = 'Import Module';
 $lang['incompatible'] = 'Incompatible';
 //$lang['info_disable_caching'] = '<strong>Not Recommended</strong>.  For performance reasons, ModuleManager will cache for (by default one hour) much of the information retrieved from the remote server';
 //$lang['info_latestdepends'] = 'When installing a module with dependencies, this option will make sure that the latest version of the dependency will be installed';
 $lang['info_searchtab'] = 'This tab displays a list of installed modules for which there is a newer version available';
 $lang['install'] = 'Install';
 $lang['installed'] = 'Installed';
+$lang['install_module'] = 'Install Module';
 $lang['install_submit'] = 'Install';
 $lang['install_with_deps'] = 'Evaluate all Dependencies and Install';
 $lang['instcount'] = 'Modules currently installed';
@@ -112,11 +123,16 @@ $lang['instcount'] = 'Modules currently installed';
 $lang['latestdepends'] = 'Always install the newest dependency module';
 
 // M
+$lang['minversion'] = 'Minimum Version';
 $lang['missingdeps'] = 'Missing dependencies';
 $lang['moddescription'] = 'A client for the CMS Made Simple™ Module Repository. This module allows previewing and installing modules from the CMSMS Forge without the need for ftp-ing, or unzipping archives.  Module XML files are downloaded using REST, integrity verified, and then expanded automatically.';
 $lang['mod_name_ver'] = '%s version %s';
+$lang['msg_cancelled'] = 'Operation cancelled';
 $lang['msg_module_activated'] = 'Module %s activated';
+$lang['msg_module_chmod'] = 'Permissions changed';
 $lang['msg_module_deactivated'] = 'Module %s deactivated';
+$lang['msg_module_exported'] = 'Module %s exported to XML';
+$lang['msg_module_imported'] = 'Module imported';
 $lang['msg_module_installed'] = 'Module %s successfully installed';
 $lang['msg_module_uninstalled'] = 'Module %s successfully uninstalled. Templates and data associated with this module has been deleted';
 $lang['msg_module_upgraded'] = 'Module %s successfully upgraded';
@@ -132,7 +148,6 @@ $lang['newerversion'] = 'Newer version installed';
 $lang['newer_available'] = 'New version available';
 $lang['notcompatibile'] = 'This module is not compatible with this version of CMSMS';
 $lang['notice'] = 'Notice';
-$lang['notice_depends'] = '%s has unresolved dependencies. In order to install this module the following actions must occur';
 $lang['notinstalled'] = 'Not installed';
 
 // O
@@ -183,12 +198,13 @@ $lang['tab_newversions'] = 'Upgrades Available';
 $lang['time_warning'] = 'Two or more actions need to be performed. Be aware that the install could take a few minutes. Please be patient!';
 $lang['title_advancedsearch'] = 'Enable advanced search functionality';
 $lang['title_cantremove'] = 'The file system permissions on this module directory do not permit deleting the files';
+$lang['title_chmod'] = 'Attempt to recursively change permissions on this directory';
 $lang['title_has_dependants'] = 'This module is required and useed by other installed modules, and therefore cannot be uninstalled';
 $lang['title_install'] = 'Install this module for use in your website';
-$lang['title_installation'] = 'Installation';
 $lang['title_installation_complete'] = 'Installation Process Complete!';
 $lang['title_letter'] = 'Show modules whos name starts with %s';
 $lang['title_missingdeps'] = 'This module cannot be installed due to missing dependencies';
+$lang['title_missingdeps2'] = 'Missing Dependencies';
 $lang['title_moduleabout'] = 'View the author and changelog information for this module';
 $lang['title_moduleactive'] = 'Toggle the active state of the module. Inactive modules are not loaded, and cannot be called, however data remains intact';
 $lang['title_moduleaction'] = 'This column displays the actions available for each module';
@@ -233,6 +249,7 @@ $lang['upgrade'] = 'Upgrade';
 $lang['upgraded'] = 'Module upgraded to version %s';
 $lang['upgrade_available'] = 'Newer version available (%s), you have (%s)';
 $lang['upgrade_module'] = 'Upgrade module';
+$lang['uploadfile'] = 'Upload XML File';
 $lang['uptodate'] = 'Installed';
 $lang['use_at_your_own_risk'] = 'Use at Your Own Risk';
 

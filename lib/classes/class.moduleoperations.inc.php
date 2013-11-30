@@ -170,20 +170,12 @@ final class ModuleOperations
 	// first make sure that we can actually write to the module directory
 	$dir = dirname(dirname(dirname(__FILE__))).DIRECTORY_SEPARATOR."modules";
 
-	if( !is_writable( $dir ) && $brief == 0 ) {
-		// directory not writable
-		$this->SetError( lang( 'errordirectorynotwritable' ) );
-		return false;
-	}
+	if( !is_writable( $dir ) && $brief == 0 ) throw new CmsFileSystemException(lang('errordirectorynotwritable'));
 
 	$reader = new XMLReader();
 	$ret = $reader->open($xmluri);
-	if( $ret == 0 ) {
-		$this->SetError( lang( 'errorcouldnotparsexml' ) );
-		return false;
-	}
+	if( $ret == 0 ) throw new CmsInvalidDataException('CMSEX_XML001');
 
-	$this->SetError('');
 	$havedtdversion = false;
 	$moduledetails = array();
 	if( is_file($xmluri) )	$moduledetails['size'] = filesize($xmluri);
@@ -197,17 +189,13 @@ final class ModuleOperations
 						$moduledetails['name'] = $reader->value;
 						// check if this module is already installed
 						if( isset( $this->_modules[$moduledetails['name']] ) && $overwrite == 0 && $brief == 0 ) {
-							$this->SetError( lang( 'moduleinstalled' ) );
-							return TRUE;
+							throw new CmsLogicException('CMSEX_M001');
 						}
 						break;
 
 					case 'DTDVERSION':
 						$reader->read();
-						if( $reader->value != MODULE_DTD_VERSION ) {
-							$this->SetError( lang( 'errordtdmismatch' ) );
-							return false;
-						}
+						if( $reader->value != MODULE_DTD_VERSION ) throw new CmsInvalidDataException('CMSEX_XML002');
 						$havedtdversion = true;
 						break;
 
@@ -218,17 +206,23 @@ final class ModuleOperations
 						if( $tmpinst && $brief == 0 ) {
 							$version = $tmpinst->GetVersion();
 							if( version_compare($moduledetails['version'],$version) < 0 ) {
-								$this->SetError( lang('errorattempteddowngrade') );
-								return false;
+								throw new CmsLogicException('CMSEX_M002');
 							}
 							else if (version_compare($moduledetails['version'],$version) == 0 ) {
-								$this->SetError( lang('moduleinstalled') );
-								return TRUE;
+								throw new CmsLogicException('CMSEX_M001');
 							}
 						}
 						break;
 		
 					case 'MINCMSVERSION':
+					    $name = $reader->localName;
+						$reader->read();
+						if( version_compare(CMS_VERSION,$reader->value) > 0 ) {
+							throw new CmsLogicException(lang('errormoduleversionincompatible'));
+						}
+						$moduledetails[$name] = $reader->value;
+						break;
+						
 					case 'MAXCMSVERSION':
 					case 'DESCRIPTION':
 					case 'FILENAME':
@@ -278,7 +272,7 @@ final class ModuleOperations
 						// finished a first file
 						if( !isset( $moduledetails['name'] )	   || !isset( $moduledetails['version'] ) ||
 							!isset( $moduledetails['filename'] ) || !isset( $moduledetails['isdir'] ) ) {
-							$this->SetError( lang('errorincompletexml') );
+							throw new CmsInvalidDataException('CMSEX_XML003');
 							return false;
 						}
 
@@ -287,13 +281,13 @@ final class ModuleOperations
 						$filename=$moduledir.$moduledetails['filename'];
 						if( !file_exists( $moduledir ) ) {
 							if( !@mkdir( $moduledir ) && !is_dir( $moduledir ) ) {
-								$this->SetError(lang('errorcantcreatefile').' '.$moduledir);
+								throw new CmsFileSystemException(lang('errorcantcreatefile').': '.$moduledir);
 								break;
 							}
 						}
 						else if( $moduledetails['isdir'] ) {
 							if( !@mkdir( $filename ) && !is_dir( $filename ) ) {
-								$this->SetError(lang('errorcantcreatefile').' '.$filename);
+								throw new CmsFileSystemException(lang('errorcantcreatefile').': '.$filename);
 								break;
 							}
 						}
@@ -301,7 +295,7 @@ final class ModuleOperations
 							$data = $moduledetails['filedata'];
 							if( strlen( $data ) ) $data = base64_decode( $data );
 							$fp = @fopen( $filename, "w" );
-							if( !$fp ) $this->SetError(lang('errorcantcreatefile').' '.$filename);
+							if( !$fp ) throw new CmsFileSystemException(lang('errorcantcreatefile').' '.$filename);
 							if( strlen( $data ) ) @fwrite( $fp, $data );
 							@fclose( $fp );
 						}
@@ -316,7 +310,7 @@ final class ModuleOperations
 	} // while
 
 	$reader->close();
-	if( $havedtdversion == false ) $this->SetError( lang( 'errordtdmismatch' ) );
+	if( $havedtdversion == false ) throw new CmsInvalidDataException('CMSEX_XML002');
 
 	// we've created the module's directory
 	unset( $moduledetails['filedata'] );
@@ -354,8 +348,7 @@ final class ModuleOperations
 
 		 $deps = $module_obj->GetDependencies();
 		 if( is_array($deps) && count($deps) ) {
-			 $query = 'INSERT INTO '.cms_db_prefix().'module_deps
-                       (parent_module,child_module,minimum_version,create_date,modified_date)
+			 $query = 'INSERT INTO '.cms_db_prefix().'module_deps (parent_module,child_module,minimum_version,create_date,modified_date)
                        VALUES (?,?,?,NOW(),NOW())';
 			 foreach( $deps as $depname => $depversion ) {
 				 if( !$depname || !$depversion ) continue;
@@ -364,15 +357,13 @@ final class ModuleOperations
 		 }
 
 		 $this->_moduleinfo[$module_obj->GetName()] = array('module_name'=>$module_obj->GetName(),
-															'version'=>$module_obj->GetVersion(),
-															'status'=>'installed',
-															'active'=>1,
+															'version'=>$module_obj->GetVersion(),'status'=>'installed','active'=>1,
 															'admn_only'=>($module_obj->IsAdminOnly()==true)?1:0,
 															'allow_fe_lazyload'=>($module_obj->LazyLoadFrontend()==TRUE)?1:0,
 															'allow_admin_lazyload'=>($module_obj->LazyLoadAdmin()==TRUE)?1:0);
 
 		 Events::SendEvent('Core', 'ModuleInstalled', array('name' => $module_obj->GetName(), 'version' => $module_obj->GetVersion()));
-		 audit('',$module_obj->GetName(), 'Installed version '.$module_obj->GetVersion());
+		 audit('', 'Module', 'Installed version '.$module_obj->GetVersion());
 		 $gCms->clear_cached_files();
 
 		 return array(TRUE,$module_obj->InstallPostMessage());
@@ -491,14 +482,14 @@ final class ModuleOperations
 	  $obj = new $module_name;
 	  if( !is_object($obj) ) {
 		  // oops, some problem loading.
-		  audit('','Core',"Cannot load module $module_name ... some problem instantiating the class");
+		  audit('','Module',"Cannot load module $module_name ... some problem instantiating the class");
 		  debug_buffer("Cannot load $module_name ... some problem instantiating the class");
 		  return FALSE;
 	  }
 
 	  if (version_compare($obj->MinimumCMSVersion(),$CMS_VERSION) == 1 ) {
 		  // oops, not compatible.... can't load.
-		  audit('','Core','Cannot load module '.$module_name.' it is not compatible wth this version of CMSMS');
+		  audit('','Module','Cannot load module '.$module_name.' it is not compatible wth this version of CMSMS');
 		  debug_buffer("Cannot load $module_name... It is not compatible with this version of CMSMS");
 		  unset($obj);
 		  return FALSE;
@@ -517,7 +508,7 @@ final class ModuleOperations
 				  }
 			  }
 			  if( !$res && !isset($CMS_FORCE_MODULE_LOAD)) {
-				  audit('','Core',"Cannot load module $module_name ... Problem loading dependent module $name");
+				  audit('','Module',"Cannot load module $module_name ... Problem loading dependent module $name");
 				  debug_buffer("Cannot load $module_name... cannot load it's dependants.");
 				  unset($obj);
 				  return FALSE;

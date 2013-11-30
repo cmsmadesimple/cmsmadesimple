@@ -176,126 +176,22 @@ final class modmgr_utils
   }
 
 
-  public static function add_dependencies_to_list($startspec, $allmods, &$deplist)
-  {
-    list($res, $this_file_deps) = modulerep_client::get_module_depends($startspec);
-    if (! $res) return array(false, $this_file_deps);				
-
-    $mod = cms_utils::get_module('ModuleManager');
-    if (is_array($this_file_deps)) {
-      foreach($this_file_deps as $this_dep) {
-	$found = false;
-	foreach ($allmods[1] as $tm) {
-	  if ($tm['name'] == $this_dep['name'] && version_compare($tm['version'], $this_dep['version']) >= 0) {
-	    // found the module - add to list; we'll de-dupe later
-	    $found = true;
-	    $newDep = array('filename'=>$tm['filename'],'name'=>$tm['name'],'version'=>$tm['version'],'by'=>$startspec,'size'=>$tm['size']);
-	    $deplist[] = $newDep;
-	    self::add_dependencies_to_list($tm['filename'], $allmods, $deplist);
-
-	    if( !$mod->GetPreference('latestdepends',1) ) break;
-	  }
-	}
-	if (! $found) {
-	  // check if it's an installed module (maybe it's a core module that isn't distributed)
-	  $tmp = array($this_dep);
-	  $res = self::find_unfulfilled_dependencies($tmp);
-	  if( !$res ) {
-	    return array(false, $mod->Lang('error_unsatisfiable_dependency', 
-					   array($this_dep['name'],$this_dep['version'], self::file_to_module_name($allmods[1],$startspec) )));
-	  }
-	}
-      }
-    }
-    return array(true,'');
-  }
-
-
-  public static function remove_duplicate_dependencies($deps)
-  {
-    $output = array();
-    for( $i = 0; $i < count($deps); $i++ ) {
-      $name = $deps[$i]['name'];
-      if( isset($output[$name]) ) {
-	if( version_compare($output[$name]['version'],$deps[$i]['version'],'<') ) $output[$name] = $deps[$i];
-      }
-      else {
-	$output[$name] = $deps[$i];
-      }
-    }
-    return $output;
-  }
-
-
-  /* Given an array of module dependencies (as returned from _DoRecursiveInstall),
-	 this returns a boolean indicating whether they're all satisfied.
-	 It also modified the incoming array to add a status for each dependency, indicating
-	 what, if anything, needs to be done:
-		s - satisfied
-		a - needs to be activated
-		i - needs to be installed
-		u - needs to be upgraded
-  */
-  public static function find_unfulfilled_dependencies(&$depends)
-  {
-    $satisfied = true;
-    if( is_array($depends) ) {
-      $installed = self::get_installed_modules(true,true);
-      if (is_array($installed[1])) {
-	// check dependencies against what is installed.
-	foreach( $depends as $depkey=>$onedep ) {
-	  if (isset($installed[1][$onedep['name']]) ) {
-	    $mod = $installed[1][$onedep['name']];
-	    if ($mod['active']) {
-	      if (version_compare($mod['version'],$onedep['version']) >= 0 ) {
-		$depends[$depkey]['status'] = 's';
-		continue;
-	      }
-	      else {
-		$depends[$depkey]['status'] = 'u';
-	      }							
-	    }
-	    else {
-	      $depends[$depkey]['status'] = 'a';
-	    }
-	  }
-	  if (! isset($depends[$depkey]['status'])) $depends[$depkey]['status'] = 'i';
-	  $satisfied = false;
-	}
-      }
-    }
-    return $satisfied;
-  }
-
-
-  public static function file_to_module_name(&$allmods,$filename)
-  {
-    $mod = cms_utils::get_module('ModuleManager');
-    foreach ($allmods as $tm) {
-      if ($tm['filename'] == $filename) return $mod->Lang('mod_name_ver',array($tm['name'],$tm['version']));
-    }
-    return $mod->Lang('unknown');
-  }
-		
-
   public static function install_module($module_meta,$is_upgrade = FALSE)
   {
     // get the module xml to a temporary location
     $mod = cms_utils::get_module('ModuleManager');
     $xml_filename = modulerep_client::get_repository_xml($module_meta['filename'],$module_meta['size']);
-    if( !$xml_filename ) return array(FALSE,$mod->Lang('error_downloadxml',$module_meta['filename']));
+    if( !$xml_filename ) throw new CmsCommunicationException($mod->Lang('error_downloadxml',$module_meta['filename']));
 
     // get the md5sum of the data from the server.
     $server_md5 = modulerep_client::get_module_md5($module_meta['filename']);
-    debug_display($module_meta);
-    debug_display($server_md5);
 
     // verify the md5
     $dl_md5 = md5_file($xml_filename);
 
     if( $server_md5 != $dl_md5 ) {
       @unlink($xml_filename);
-      return array(FALSE,$mod->Lang('error_checksum',array($server_md5,$dl_md5)));
+      throw new CmsInvalidDataException($mod->Lang('error_checksum',array($server_md5,$dl_md5)));
     }
 
     // expand the xml
@@ -306,7 +202,6 @@ final class modmgr_utils
 
     // update the database.
     ModuleOperations::get_instance()->QueueForInstall($module_meta['name']);
-    return array(true,'');
   }
 
 

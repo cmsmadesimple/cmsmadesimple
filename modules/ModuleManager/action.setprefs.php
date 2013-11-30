@@ -39,7 +39,7 @@ if( !$this->CheckPermission('Modify Site Preferences' ) ) return;
 
 $this->SetCurrentTab('prefs');
 
-if( isset($config['modulemanager_debug']) && isset($params['reseturl']) ) {
+if( isset($config['developer_mode']) && isset($params['reseturl']) ) {
   $this->SetPreference('module_repository',ModuleManager::_dflt_request_url);
   $this->SetMessage($this->Lang('msg_urlreset'));
   $this->RedirectToAdminTab();
@@ -49,7 +49,7 @@ if( isset($params['input_dl_chunksize']) ) $this->SetPreference('dl_chunksize',t
 $latestdepends = (isset($params['latestdepends']))?1:0;
 $this->SetPreference('latestdepends',$latestdepends);
 
-if( isset($config['modulemanager_debug']) ) {
+if( isset($config['developer_mode']) ) {
   if( isset($params['url']) ) $this->SetPreference('module_repository',trim($params['url']));
   $disable_caching = (isset($params['disable_caching']))?1:0;
   $this->SetPreference('disable_caching',$disable_caching);

@@ -1,27 +1,19 @@
-<h3>{$mod->Lang('title_installation')}:</h3>
+<h3>{$mod->Lang('install_module')} {$module_name} <em>({$mod->Lang('vertext')} {$module_version})</em></h3>
 <div class="pagewarning"><h3>{$mod->Lang('notice')}:</h3>
-  <p>{$time_warning}</p>
+  <p>{$mod->Lang('time_warning')}</p>
 </div>
 
-{if isset($message)}
-  <div class="pagemessage"><p>{$message}</p></div>
-{else}
-<div class="pageoverflow">
-<p class="pagetext">{$mod->Lang('notice_depends',$installmodule)}:</p>
-<ul class="pageinput">
-{foreach from=$dependencies item='one'}
-  {if $one.status == 'i'}
-    <li>{$mod->Lang('depend_install',$one.name,$one.version)}</li>
-  {/if}
-  {if $one.status == 'u'}
-    <li>{$mod->Lang('depend_upgrade',$one.name,$one.version)}</li>
-  {/if}
-  {if $one.status == 'a'}
-    <li>{$mod->Lang('depend_activate',$one.name)}</li>
-  {/if}
-{/foreach}
-</ul>
-</div>
+{if isset($dependencies)}
+  <div class="warning">{$mod->Lang('warn_dependencies')}</div>
+  <ul>
+  {foreach $dependencies as $name => $rec}
+    <li>
+    {if $rec.action == 'i'}{$mod->Lang('depend_install',$rec.name,$rec.version)}
+    {elseif $rec.action == 'u'}{$mod->Lang('depend_upgrade',$rec.name,$rec.version)}
+    {elseif $rec.action == 'a'}{$mod->Lang('depend_activate',$rec.name)}{/if}
+    </li>
+  {/foreach}
+  </ul>
 {/if}
 
 {if isset($form_start)}
@@ -29,9 +21,10 @@
 {$form_start}
 <div class="pageoverflow">
   <p class="pagetext"></p>
-  <p class="pageinput">{$cancel} {$submit}</p>
+  <p class="pageinput">
+    <input type="submit" name="{$actionid}submit" value="{$mod->Lang('install_submit')}"/>
+    <input type="submit" name="{$actionid}cancel" value="{$mod->Lang('cancel')}"/>
+  </p>
 </div>
-<br /><br />
 {$formend}
 {/if}
-<p class="pageoptions">{$link_back}</p>

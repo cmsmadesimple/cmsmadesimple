@@ -37,7 +37,7 @@
 if (!isset($gCms)) exit;
 if( !$this->CheckPermission('Modify Site Preferences') ) exit;
 
-if( isset($config['modulemanager_debug']) ) {
+if( isset($config['developer_mode']) ) {
   $smarty->assign('module_repository',$this->GetPreference('module_repository'));
   $smarty->assign('disable_caching',$this->GetPreference('disable_caching',0));
 }

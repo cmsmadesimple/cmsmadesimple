@@ -119,6 +119,15 @@ class CmsException extends CmsExtraDataException
 class CmsLogicException extends CmsException {}
 
 /**
+ * A base CMSMS Communications Exception
+ * 
+ * @package CMS
+ * @author Robert Campbell (calguy1000@cmsmadesimple.org)
+ * @since 1.10
+ */
+class CmsCommunicationException extends CmsException {}
+
+/**
  * A base CMSMS Privacy Exception
  * 
  * @package CMS
@@ -143,7 +152,7 @@ class CmsSingletonException extends CmsException {}
  * @author Robert Campbell (calguy1000@cmsmadesimple.org)
  * @since 1.10
  */
-class CmsInvalidDataException extends CmsException {}
+class CmsInvalidDataException extends CmsLogicException {}
 
 /**
  * An exception indicating that the requested data could not be found.

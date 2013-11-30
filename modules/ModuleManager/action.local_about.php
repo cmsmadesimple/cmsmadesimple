@@ -20,5 +20,4 @@ $smarty->assign('about_page',$modinstance->GetAbout());
 $smarty->assign('about_title',$this->Lang('about_title',$modinstance->GetName()));
 
 echo $this->ProcessTemplate('local_about.tpl');
-
 ?>

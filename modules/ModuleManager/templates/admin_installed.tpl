@@ -12,8 +12,48 @@ $(document).ready(function(){
   $('a.mod_uninstall').click(function(){
     return confirm('{$mod->Lang('confirm_uninstall')}');
   });
+
+  $('#importbtn').click(function(){
+    $('#importdlg').dialog({
+      modal: true,
+      buttons: {
+        {$mod->Lang('submit')}: function() {
+          var file = $('#xml_upload').val();
+          if( file.length == 0 ) {
+            alert('{$mod->Lang('error_nofileuploaded')}');
+            return;
+          }
+          var ext  = file.split('.').pop().toLowerCase();
+          if($.inArray(ext, ['xml','cmsmod']) == -1) {
+            alert('{$mod->Lang('error_invaliduploadtype')}');
+            return;
+          }
+          $(this).dialog('close');
+          $('#local_import').submit();
+        },
+        {$mod->Lang('cancel')}: function() {
+          $(this).dialog('close');
+        }
+      }
+    });
+  });
 });
 </script>
+
+<div id="importdlg" title="{$mod->Lang('importxml')}" style="display: none;">
+  {form_start id='local_import' action='local_import'}
+  <div class="pageoverflow">
+    <p class="pagetext"><label for="xml_upload">{$mod->Lang('uploadfile')}:</label></p>
+    <p class="pageinput">
+      <input id="xml_upload" type="file" name="{$actionid}upload" accept="text/xml"/>
+    </p>
+  </div>
+  {form_end}
+</div>
+
+<div class="pageoptions">
+  <a id="importbtn">{admin_icon icon='import.gif'} {$mod->Lang('importxml')}</a>
+</div>
 
 <table class="pagetable">
   <thead>

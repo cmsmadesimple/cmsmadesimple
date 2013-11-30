@@ -6,7 +6,7 @@ class ModuleManagerModuleInfo extends CmsExtendedModuleInfo
   private static $_mmkeys = array('e_status','can_install','can_upgrade','can_uninstall','missing_deps');
   private $_mmdata = array();
 
-  public function __construct($module_name,$can_load = TRUE)
+  public function __construct($module_name,$can_load = TRUE,$can_check_forge = TRUE)
   {
     parent::__construct($module_name,$can_load);
 
@@ -20,7 +20,7 @@ class ModuleManagerModuleInfo extends CmsExtendedModuleInfo
     else if( $tmp > 0 ) {
       $this['e_status'] = 'db_newer';
     }
-    else {
+    else if( $can_check_forge ) {
       $rep_info = modulerep_client::get_upgrade_module_info($module_name);
       if( is_array($rep_info) ) {
 	if( ($res = version_compare($this['version'],$rep_info['version'])) < 0 ) $this['e_status'] = 'newer_available';
@@ -100,7 +100,7 @@ class ModuleManagerModuleInfo extends CmsExtendedModuleInfo
     return isset($this->_mmdata[$key]);
   }
 
-  public static function get_all_module_info()
+  public static function get_all_module_info($can_check_forge = TRUE)
   {
     if( is_array(self::$_minfo) ) return self::$_minfo;
 
@@ -109,7 +109,7 @@ class ModuleManagerModuleInfo extends CmsExtendedModuleInfo
 
     $out = array();
     foreach( $allknownmodules as $module_name ) {
-      $info = new ModuleManagerModuleInfo($module_name,TRUE);
+      $info = new ModuleManagerModuleInfo($module_name,TRUE,$can_check_forge);
       $out[$module_name] = $info;
     }
     self::$_minfo = $out;
