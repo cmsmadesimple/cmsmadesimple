@@ -242,7 +242,7 @@ class OneElevenTheme extends CmsAdminThemeBase {
 		$headtext = $this->get_value('headertext');
 		$smarty->assign('headertext',$headtext);
 
-		// and some other common variables,.
+		// and some other common variables
 		$smarty->assign('content', str_replace('</body></html>', '', $html));
 		$smarty->assign('config', cmsms()->GetConfig());
 		$smarty->assign('theme', $this);
@@ -261,9 +261,9 @@ class OneElevenTheme extends CmsAdminThemeBase {
 			$smarty->assign('errors', $this->_errors);
 		if (is_array($this->_messages) && count($this->_messages))
 			$smarty->assign('messages', $this->_messages);
-			
+
 		// is the website set down for maintenance?
-		if( is_sitedown() ) { $smarty->assign('is_sitedown', 'true'); }
+		if( get_site_preference('enablesitedownmessage') == '1' )  { $smarty->assign('is_sitedown', 'true'); }
 
 		$_contents = $smarty->fetch('pagetemplate.tpl');
 		$smarty->template_dir = $otd;
