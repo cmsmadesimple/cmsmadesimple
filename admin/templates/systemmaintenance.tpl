@@ -3,7 +3,9 @@
 {$theme->StartTabHeaders()}
 	{$theme->SetTabHeader('database',lang('sysmaintab_database'),isset($active_database))}
 	{$theme->SetTabHeader('content',lang('sysmaintab_content'),isset($active_content))}
-	{$theme->SetTabHeader('changelog',lang('sysmaintab_changelog'),isset($active_changelog))}
+	{if isset($changelog)}
+		{$theme->SetTabHeader('changelog',lang('sysmaintab_changelog'),isset($active_changelog))}
+	{/if}
 {$theme->EndTabHeaders()}
 
 {$theme->StartTabContent()}
@@ -110,10 +112,12 @@
 	{$theme->EndTab()}
 
 
-	{$theme->StartTab('changelog')}
-		<p class='file'>{$changelogfilename}</p>
-		<div class="changelog">{$changelog}</div>
-	{$theme->EndTab()}
+	{if isset($changelog)}
+		{$theme->StartTab('changelog')}
+			<p class='file'>{$changelogfilename}</p>
+			<div class="changelog">{$changelog}</div>
+		{$theme->EndTab()}
+	{/if}
 
 {$theme->EndTabContent()}
 

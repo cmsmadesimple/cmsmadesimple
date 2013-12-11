@@ -17,7 +17,7 @@ Core - General
   - Major accessibility review throughout admin interface
 
 Core - Bug Reports
-  -
+  - #9721 There's no check if changelog.txt exists
 
 Core - Feature Requests:
   - #4178 Improve behavior of cms_selflink
