@@ -20,7 +20,8 @@ Core - Bug Reports
   - #9721 There's no check if changelog.txt exists
 
 Core - Feature Requests:
-  - #4178 Improve behavior of cms_selflink
+  - #4178 Improve behaviour of cms_selflink
+  - #9270 More visible indication of "Site Down" status
   
 FileManager
   - Numerous UI improvements
@@ -61,7 +62,7 @@ News
 
 Search
   - No longer indexes templates, or GCB's
-  - rewrite the reindex stuff to hopefully use a bit less memory (at least for content pages)
+  - rewrite the re-index stuff to hopefully use a bit less memory (at least for content pages)
   
 
 Version 1.11.9 - Bartolome
