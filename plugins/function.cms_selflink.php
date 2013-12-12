@@ -309,8 +309,8 @@ function smarty_function_cms_selflink($params, &$template)
 	return $result;
 }
 
-function smarty_cms_about_function_cms_selflink() {
-	echo lang('about_function_cms_selflink');
+function smarty_cms_help_function_cms_selflink() {
+		echo lang_by_realm('tags','help_function_cms_selflink');
 }
 
 # vim:ts=4 sw=4 noet
