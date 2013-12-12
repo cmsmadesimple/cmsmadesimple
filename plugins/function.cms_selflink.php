@@ -67,8 +67,14 @@ function smarty_function_cms_selflink($params, &$template)
 
 		if( $page ) {
 			$node = $manager->find_by_tag('alias',$page);
-			if( !$node ) $node = $manager->find_by_tag('id',$page);
-			if( !$node ) return;
+			if( !$node ) {
+				$node = $manager->find_by_tag('id',$page);
+				
+				$title = lang_by_realm('cms_selflink','page_not_exist');
+                echo '<a href="#" title="'.$title.'"><span class="page_not_exist">' . $params['text'] . '</span></a>';
+				
+				return;
+				}
 			$pageid = $node->get_tag('id');
 		}
 	}
