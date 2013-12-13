@@ -105,7 +105,7 @@ if( isset($CMS_ADMIN_PAGE) ) {
     }
     else {
       // maybe change this algorithm.
-      $key = substr(str_shuffle(md5($dirname.time().session_id())),-8);
+      $key = substr(str_shuffle(sha1($dirname.time().session_id())),-16);
       $_SESSION[CMS_USER_KEY] = $key;
       cms_cookies::set(CMS_SECURE_PARAM_NAME,$key);
     }
