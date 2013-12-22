@@ -44,11 +44,10 @@ final class modmgr_cached_request
 
   private function _getCacheFile()
   {
-    if( $this->_signature )
-      {
-	$fn = TMP_CACHE_LOCATION.'/modmgr_'.$this->_signature.'.dat';
-	return $fn;
-      }
+    if( $this->_signature ) {
+      $fn = TMP_CACHE_LOCATION.'/modmgr_'.$this->_signature.'.dat';
+      return $fn;
+    }
   }
 
   public function execute($target = '',$data = array(), $age = '')
@@ -77,23 +76,20 @@ final class modmgr_cached_request
       $this->_result = $req->getResult();
 
       @unlink($fn);
-      if( $this->_status == 200 )
-	{
-	  // create a cache file
-	  $fh = fopen($fn,'w');
-	  fwrite($fh,serialize(array($this->_status,$this->_result)));
-	  fclose($fh);
-	}
+      if( $this->_status == 200 ) {
+	// create a cache file
+	$fh = fopen($fn,'w');
+	fwrite($fh,serialize(array($this->_status,$this->_result)));
+	fclose($fh);
+      }
     }
-    else
-    {
+    else {
       // get data from the cache.
       $data = unserialize(file_get_contents($fn));
       $this->_status = $data[0];
       $this->_result = $data[1];
     }
   }
-
 
   public function setTimeout($val)
   {
@@ -113,10 +109,7 @@ final class modmgr_cached_request
   public function clearCache()
   {
     $fn = $this->_getCacheFile();
-    if( $fn )
-      {
-	@unlink($fn);
-      }
+    if( $fn ) @unlink($fn);
   }
 } // end of class.
 

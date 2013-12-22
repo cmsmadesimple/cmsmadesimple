@@ -165,7 +165,7 @@ if( count( $data ) ) {
 	if( (($writable && is_dir($mod) && is_directory_writable( $mod )) ||
 	     ($writable && !file_exists( $mod ) )) && $caninstall ) {
 	  $onerow->candownload = TRUE;
-	  $onerow->status = $this->CreateLink( $id, 'upgrademodule', $returnid,
+	  $onerow->status = $this->CreateLink( $id, 'installmodule', $returnid,
 					       $this->Lang('upgrade'), 
 					       array('name' => $row['name'],'version' => $row['version'],'filename' => $row['filename'],
 						     'size' => $row['size']));

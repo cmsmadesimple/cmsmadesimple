@@ -175,35 +175,82 @@ final class modmgr_utils
     return $results;
   }
 
-
-  public static function install_module($module_meta,$is_upgrade = FALSE)
+  public static function get_module_xml($filename,$size,$md5sum = null)
   {
-    // get the module xml to a temporary location
     $mod = cms_utils::get_module('ModuleManager');
-    $xml_filename = modulerep_client::get_repository_xml($module_meta['filename'],$module_meta['size']);
+    $xml_filename = modulerep_client::get_repository_xml($filename,$size);
     if( !$xml_filename ) throw new CmsCommunicationException($mod->Lang('error_downloadxml',$module_meta['filename']));
 
-    // get the md5sum of the data from the server.
-    $server_md5 = modulerep_client::get_module_md5($module_meta['filename']);
+    if( !$md5sum ) {
+      $md5sum = modulerep_client::get_module_md5($filename);
+    }
 
-    // verify the md5
     $dl_md5 = md5_file($xml_filename);
-
-    if( $server_md5 != $dl_md5 ) {
+    
+    if( $md5sum != $dl_md5 ) {
       @unlink($xml_filename);
       throw new CmsInvalidDataException($mod->Lang('error_checksum',array($server_md5,$dl_md5)));
     }
 
-    // expand the xml
-    $ops = cmsms()->GetModuleOperations();
-    if( !$ops->ExpandXMLPackage( $xml_filename, 1 ) ) return array(FALSE,$ops->GetLastError());
-
-    @unlink($xml_filename);
-
-    // update the database.
-    ModuleOperations::get_instance()->QueueForInstall($module_meta['name']);
+    return $xml_filename;
   }
 
+  public static function install_module($module_meta)
+  {
+    try {
+      $mod = cms_utils::get_module('ModuleManager');
+      if( !isset($module_meta['filename']) || !isset($module_meta['size']) ||
+	  $module_meta['filename'] == '' || $module_meta['size'] <= 0 ) {
+	throw new CmsInvalidDataException($mod->Lang('error_missingparams'));
+      }
+
+      $xml_filename = self::get_module_xml($module_meta['filename'],$module_meta['size'],
+					   (isset($module_meta['md5sum']))?$module_meta['md5sum']:'');
+
+      // expand the xml
+      $ops = cmsms()->GetModuleOperations();
+      $res = $ops->ExpandXMLPackage( $xml_filename, 1 );
+      @unlink($xml_filename);
+
+      // install the module
+      $res = $ops->InstallModule($module_meta['name']);
+      if( !is_array($res) || $res[0] != TRUE ) throw new CmsInvalidDataException($rec[1]);
+      return $res[1];
+    }
+    catch( Exception $e ) {
+      // here, maybe we should clean up the expanded package?
+      throw $e;
+    }
+  }
+
+
+  public static function upgrade_module($module_meta)
+  {
+    try {
+      $mod = cms_utils::get_module('ModuleManager');
+      if( !isset($module_meta['filename']) || !isset($module_meta['size']) ||
+	  $module_meta['filename'] == '' || $module_meta['size'] <= 0 ) {
+	throw new CmsInvalidDataException($mod->Lang('error_missingparams'));
+      }
+
+      $xml_filename = self::get_module_xml($module_meta['filename'],$module_meta['size'],
+					   (isset($module_meta['md5sum']))?$module_meta['md5sum']:'');
+
+      // expand the xml
+      $ops = cmsms()->GetModuleOperations();
+      $res = $ops->ExpandXMLPackage( $xml_filename, 1 );
+      @unlink($xml_filename);
+
+      // install the module
+      $res = $ops->UpgradeModule($module_meta['name']);
+      if( !is_array($res) ) throw new CmsLogicException($this->Lang('error_moduleupgradefailed'));
+      if( $res[0] == FALSE) throw new CmsInvalidDataException($rec[1]);
+    }
+    catch( Exception $e ) {
+      // here, maybe we should clean up the expanded package?
+      throw $e;
+    }
+  }
 
   public static function install_module_list($installs)
   {

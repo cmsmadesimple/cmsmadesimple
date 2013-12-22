@@ -139,7 +139,7 @@ if( isset($params['submit']) ) {
 	$mod = $moduledir.DIRECTORY_SEPARATOR.$row['name'];
 	if( (($writable && is_dir($mod) && is_directory_writable( $mod )) ||
 	     ($writable && !file_exists( $mod ) )) && $caninstall ) {
-	  $obj->status = $this->CreateLink( $id, 'upgrademodule', $returnid,
+	  $obj->status = $this->CreateLink( $id, 'installmodule', $returnid,
 					    $this->Lang('upgrade'), 
 					    array('name' => $row['name'], 'version' => $row['version'],
 						  'filename' => $row['filename'], 'size' => $row['size']));

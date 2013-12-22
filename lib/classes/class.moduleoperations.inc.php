@@ -217,7 +217,7 @@ final class ModuleOperations
 					case 'MINCMSVERSION':
 					    $name = $reader->localName;
 						$reader->read();
-						if( version_compare(CMS_VERSION,$reader->value) > 0 ) {
+						if( version_compare(CMS_VERSION,$reader->value) < 0 ) {
 							throw new CmsLogicException(lang('errormoduleversionincompatible'));
 						}
 						$moduledetails[$name] = $reader->value;
@@ -270,7 +270,7 @@ final class ModuleOperations
 						if( $brief != 0 ) continue;
 
 						// finished a first file
-						if( !isset( $moduledetails['name'] )	   || !isset( $moduledetails['version'] ) ||
+						if( !isset( $moduledetails['name'] ) || !isset( $moduledetails['version'] ) ||
 							!isset( $moduledetails['filename'] ) || !isset( $moduledetails['isdir'] ) ) {
 							throw new CmsInvalidDataException('CMSEX_XML003');
 							return false;
@@ -317,7 +317,6 @@ final class ModuleOperations
 	unset( $moduledetails['filename'] );
 	unset( $moduledetails['isdir'] );
 
-	if( $this->GetLastError() != "" ) return false;
 	if( !$brief ) audit('','Module', 'Expanded module: '.$moduledetails['name'].' version '.$moduledetails['version']);
 
 	return $moduledetails;
@@ -358,12 +357,12 @@ final class ModuleOperations
 
 		 $this->_moduleinfo[$module_obj->GetName()] = array('module_name'=>$module_obj->GetName(),
 															'version'=>$module_obj->GetVersion(),'status'=>'installed','active'=>1,
-															'admn_only'=>($module_obj->IsAdminOnly()==true)?1:0,
+															'admin_only'=>($module_obj->IsAdminOnly()==true)?1:0,
 															'allow_fe_lazyload'=>($module_obj->LazyLoadFrontend()==TRUE)?1:0,
 															'allow_admin_lazyload'=>($module_obj->LazyLoadAdmin()==TRUE)?1:0);
 
 		 Events::SendEvent('Core', 'ModuleInstalled', array('name' => $module_obj->GetName(), 'version' => $module_obj->GetVersion()));
-		 audit('', 'Module', 'Installed version '.$module_obj->GetVersion());
+		 audit('', 'Module', 'Installed '.$module_obj->GetName().' version '.$module_obj->GetVersion());
 		 $gCms->clear_cached_files();
 
 		 return array(TRUE,$module_obj->InstallPostMessage());
@@ -383,7 +382,7 @@ final class ModuleOperations
    * @return array Returns a tuple of whether the install was successful and a message if applicable
    */
    public function InstallModule($module)
-  {
+   {
 	  // get an instance of the object (force it).
 	  $modinstance = $this->get_module_instance($module,'',TRUE);
 	  if( !$modinstance ) return array(FALSE,lang('errormodulenotloaded'));

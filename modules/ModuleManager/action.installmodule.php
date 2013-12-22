@@ -37,13 +37,6 @@
 if (!isset($gCms)) exit;
 if( !$this->CheckPermission('Modify Modules') ) return;
 $this->SetCurrentTab('modules');
-$module_name = get_parameter_value($params,'name');
-$module_version  = get_parameter_value($params,'version');
-$module_filename  = get_parameter_value($params,'filename');
-if( $module_name == '' || $module_version == '' || $module_filename == '' ) {
-  $this->SetError($this->Lang('error_missingparams'));
-  $this->RedirectToAdminTab();
-}
 
 if( isset($params['cancel']) ) {
   $this->SetMessage($this->Lang('msg_cancelled'));
@@ -51,8 +44,49 @@ if( isset($params['cancel']) ) {
 }
 
 try {
-  $ops = ModuleOperations::get_instance();
-  $alldeps = array();
+  $module_name = get_parameter_value($params,'name');
+  $module_version  = get_parameter_value($params,'version');
+  $module_filename  = get_parameter_value($params,'filename');
+  $module_size = get_parameter_value($params,'size');
+  if( $module_name == '' || $module_version == '' || $module_filename == '' || $module_size < 100 ) {
+    throw new CmsInvalidDataException( $this->Lang('error_missingparams') );
+  }
+
+  if( isset($params['submit']) ) {
+    set_time_limit(9999);
+    if( isset($params['modlist']) && $params['modlist'] != '' ) {
+      $modlist = unserialize(base64_decode($params['modlist']));
+      if( !is_array($modlist) || count($modlist) == 0 ) {
+	throw new CmsInvalidDataException( $this->Lang('error_missingparams') );
+      }
+
+      // cache all of the xml files first... make sure we can download everything, and that it gets cached.
+      foreach( $modlist as $key => $rec ) {
+	if( $rec['action'] != 'i' && $rec['action'] != 'u' ) continue;
+	if( !isset($rec['filename']) ) throw new CmsInvalidDataException( $this->Lang('error_missingparams') );
+	if( !isset($rec['size']) ) throw new CmsInvalidDataException( $this->Lang('error_missingparams') );
+	$filename = modmgr_utils::get_module_xml($rec['filename'],$rec['size']);
+      }
+
+      foreach( $modlist as $name => $rec ) {
+	switch( $rec['action'] ) {
+	case 'i': // install
+	  modmgr_utils::install_module($rec);
+	  break;
+
+	case 'u': // uninstall
+	  modmgr_utils::upgrade_module($rec);
+	  break;
+
+	case 'a': // activate
+	  stack_trace();
+	  die('incomplete');
+	  break;
+	}
+      }
+    }
+  }
+
   $resolve_deps = function($module_name,$module_version,&$alldeps,$depth = 0) use (&$resolve_deps) {
     list($res,$deps) = modulerep_client::get_module_dependencies($module_name,$module_version);
 
@@ -62,88 +96,88 @@ try {
 
 	// filter out the duplicates (by greater version number)
 	if( !isset($alldeps[$row['name']]) ) {
-	  $alldeps[$row['name']] = $row['version'];
+	  $alldeps[$row['name']] = $row;
 	}
 	else {
-	  if( version_compare($alldeps[$row['name']],$row['version']) < 0 ) {
-	    $alldeps[$row['name']] = $row['version'];
-	  }
+	  if( version_compare($alldeps[$row['name']]['version'],$row['version']) < 0 ) $alldeps[$row['name']] = $row;
 	}
       }
     }
   };
 
   // recursively (depth first) get the dependencies for the module+version we specified.
+  $alldeps = array();
   $resolve_deps($module_name,$module_version,$alldeps);
 
-  $needmodules = array();
+  // get information for all dependencies, and make sure that they are all there.
   if( is_array($alldeps) && count($alldeps) ) {
+    $res = null;
     if( $this->GetPreference('latestdepends') ) {
       // get the latest version of dependency (but not necessarily of the module we're installing)
-      $newest = modulerep_client::get_modulelatest(array_keys($alldeps));
-      if( is_array($newest) && count($newest) ) {
-	$newinfo = array();
-	foreach( $alldeps as $name => &$ver ) {
-	  $fnd = FALSE;
-	  foreach( $newest as $rec ) {
-	    if( $rec['name'] == $name && version_compare($ver,$rec['version']) < 0 ) {
-	      $fnd = TRUE;
-	      $needmodules[$name] = $rec;
-	      break;
-	    }
-	  }
-	  if( !$fnd && $ops->IsSystemModule($name) ) throw new CmsLogicException($this->Lang('error_dependencynotfound').': '.$name);
+      $res = modulerep_client::get_modulelatest(array_keys($alldeps));
+    }
+    else {
+      // get the info for all dependencies
+      $res = modulerep_client::get_multiple_moduleinfo($alldeps);
+    }
+
+    foreach( $alldeps as $name => $row ) {
+      $fnd = FALSE;
+      $tmp = null;
+      foreach( $res as $rec ) {
+	if( $rec['name'] != $name ) continue;
+	$tmp = version_compare($row['version'],$rec['version']);
+	if( $tmp <= 0 ) {
+	  $fnd = TRUE;
+	  $alldeps[$name] = $rec;
+	  break;
 	}
       }
     }
   }
 
+  // add our current item into alldeps.
+  $alldeps[$module_name] = array('name'=>$module_name,'version'=>$module_version,'filename'=>$module_filename,'size'=>$module_size);
+
   // remove items that are already installed (where installed version is greater or equal)
-  $allmoduleinfo = ModuleManagerModuleInfo::get_all_module_info(FALSE);
-  $installmods = array();
-  foreach( $alldeps as $name => $ver ) {
-    if( !isset($allmoduleinfo[$name]) ) {
-      // install
-      $installmods[$name] = array('name'=>$name,'version'=>$ver,'action'=>'i');
-    }
-    else if( version_compare($allmoduleinfo[$name]['version'],$ver) < 0 ) {
-      // upgrade
-      $installmods[$name] = array('name'=>$name,'version'=>$ver,'action'=>'u');
-    }
-    else if( !$allmoduleinfo[$name]['active'] ) {
-      $installmods[$name] = array('name'=>$name,'version'=>$ver,'action'=>'a');
+  // and create actions as to what we're going to do.
+  if( count($alldeps) ) {
+    $allmoduleinfo = ModuleManagerModuleInfo::get_all_module_info(FALSE);
+    foreach( $alldeps as $name => &$rec ) {
+      if( !isset($allmoduleinfo[$name]) ) {
+	// install
+	$rec['action']='i';
+      }
+      else if( version_compare($allmoduleinfo[$name]['version'],$rec['version']) < 0 ) {
+	// upgrade
+	$rec['action']='u';
+      }
+      else if( !$allmoduleinfo[$name]['active'] ) {
+	// activate
+	$rec['action']='a';
+      }
+      else {
+	// already installed, do nothing.
+	unset($alldeps[$name]);
+      }
     }
   }
 
-  // get info (filename, version, size, description, and md5sum for all modules we need to install)
-  //  $res = modulerep_client::get_multiple_moduleinfo($installmods);
-  //  debug_display($res);
-  //  die('test1');
-
+  // here, if alldeps is empty... we have nothing to do.
   $smarty->assign('return_url',$this->create_url($id,'defaultadmin',$returnid, array('__activetab'=>'modules')));
-  $smarty->assign('form_start',$this->CreateFormStart($id, 'installmodule', $returnid).
-		  $this->CreateInputHidden($id,'modlist',base64_encode(serialize($installmods))));
+  $parms = array('name'=>$module_name,'version'=>$module_version,'filename'=>$module_filename,'size'=>$module_size);
+  $smarty->assign('form_start',$this->CreateFormStart($id, 'installmodule', $returnid, 'post', '', FALSE, '', $parms).
+		  $this->CreateInputHidden($id,'modlist',base64_encode(serialize($alldeps))));
   $smarty->assign('formend',$this->CreateFormEnd());
   $smarty->assign('module_name',$module_name);
   $smarty->assign('module_version',$module_version);
 
-  if (count($installmods) > 0) {
-    $smarty->assign('dependencies',$installmods);
-
-    echo $this->ProcessTemplate('installinfo.tpl');
-    return;
-  }
-
-  // only one module.
-  $keys = array_keys($deps);
-  $key = $keys[0];
-  modmgr_utils::install_module($deps[$key],($deps[$key]['status'] == 'u')?1:0);
-
-  // todo, display install results.
+  if( count($alldeps) ) $smarty->assign('dependencies',$alldeps);
+  echo $this->ProcessTemplate('installinfo.tpl');
+  return;
 }
 catch( Exception $e ) {
   $this->SetError($e->GetMessage());
-  die($e->GetMessage());
   $this->RedirectToAdminTab();
 }
 #

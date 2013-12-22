@@ -56,8 +56,7 @@ class CmsModuleInfo implements ArrayAccess
     $res = $this->_read_from_module_meta($module_name);
     if( !$res ) {
       $res = $this->_read_from_module($module_name);
-      if( !$res ) throw new CmsLogicException('CMSEX_MODULENOTFOUND','',$module_name);
-      $config = cmsms()->GetConfig();
+      if( !$res ) throw new CmsLogicException('CMSEX_MODULENOTFOUND',$module_name);
     }
   }
 
@@ -96,7 +95,10 @@ class CmsModuleInfo implements ArrayAccess
   private function _read_from_module($module_name)
   {
     $mod = ModuleOperations::get_instance()->get_module_instance($module_name,'',TRUE);
-    if( !is_object($mod) ) return FALSE;
+    if( !is_object($mod) ) {
+      $this['name'] = $module_name;
+      return TRUE;
+    }
 
     $this['name'] = $mod->GetName();
     $this['description'] = $mod->GetDescription();

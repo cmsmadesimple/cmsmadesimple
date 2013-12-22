@@ -1,10 +1,14 @@
 <h3>{$mod->Lang('install_module')} {$module_name} <em>({$mod->Lang('vertext')} {$module_version})</em></h3>
-<div class="pagewarning"><h3>{$mod->Lang('notice')}:</h3>
+<div class="pagewarning">
+  <h3>{$mod->Lang('notice')}:</h3>
   <p>{$mod->Lang('time_warning')}</p>
 </div>
 
 {if isset($dependencies)}
-  <div class="warning">{$mod->Lang('warn_dependencies')}</div>
+  <div class="warning">
+    <h3>{$mod->Lang('warning')}</h3>
+    <p>{$mod->Lang('warn_dependencies')}</p>
+  </div>
   <ul>
   {foreach $dependencies as $name => $rec}
     <li>

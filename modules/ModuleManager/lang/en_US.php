@@ -5,7 +5,7 @@ $lang['admin_title'] = 'Module Manager Admin Panel';
 $lang['abouttxt'] = 'About';
 $lang['accessdenied'] = 'Access Denied. Please check your permissions';
 $lang['action_activated'] = 'Module %s has been activated';
-$lang['action_installed'] = 'Module %s has been installed with the following message(s): %s';
+$lang['action_installed'] = 'Module %s has been installed with the following message(s):<br/><br/>%s';
 $lang['action_upgraded'] = 'Module %s has been upgraded';
 $lang['action'] = 'Action';
 $lang['active'] = 'Active';
@@ -74,6 +74,7 @@ $lang['error_nomatchingmodules'] = 'Error: could not find any matching modules i
 $lang['error_nomodules'] = 'Error: could not retrieve list of installed modules';
 $lang['error_norepositoryurl'] = 'The URL for the Module Repository has not been specified';
 $lang['error_noresults'] = 'We expected some results to be available from queued operations, but none were found. Please try to reproduce this experience, and provide sufficient information to support personnel for diagnoses.';
+$lang['error_nothingtodo'] = 'Oops.  You requested an action, but we didnt calculate anything to do.  This probably means some kind of bug.';
 $lang['error_notxmlfile'] = 'The file uploaded was not an xml file';
 $lang['error_permissions'] = '<strong><em>WARNING:</em></strong> Insufficient directory permissions to install modules.  You may also be experiencing problems with PHP Safe mode.  Please ensure that safe mode is disabled, and that file system permissions are sufficient.';
 $lang['error_request_problem'] = 'A problem occurred communicating with the module server';
@@ -134,6 +135,7 @@ $lang['msg_module_deactivated'] = 'Module %s deactivated';
 $lang['msg_module_exported'] = 'Module %s exported to XML';
 $lang['msg_module_imported'] = 'Module imported';
 $lang['msg_module_installed'] = 'Module %s successfully installed';
+$lang['msg_module_removed'] = 'Module files permanently removed';
 $lang['msg_module_uninstalled'] = 'Module %s successfully uninstalled. Templates and data associated with this module has been deleted';
 $lang['msg_module_upgraded'] = 'Module %s successfully upgraded';
 $lang['msg_cachecleared'] = 'Cache cleared';
@@ -195,7 +197,7 @@ $lang['submit'] = 'Submit';
 //$lang['text_dl_chunksize'] = 'The maximum amount of data to download from the server in one chunk (when installing a module)';
 //$lang['text_repository_url'] = 'The URL should be in the form http://www.mycmsmssite.com/ModuleRepository/request/v2 (assuming pretty urls are enabled on the repository server)<br />Note: opening this link in your webbrowser will return an Error404!';
 $lang['tab_newversions'] = 'Upgrades Available';
-$lang['time_warning'] = 'Two or more actions need to be performed. Be aware that the install could take a few minutes. Please be patient!';
+$lang['time_warning'] = 'Installing modules is a data and memory intensive operation. Depending upon the network bandwidth, server load, and installation tasks that need to be performed this could take several minutes.';
 $lang['title_advancedsearch'] = 'Enable advanced search functionality';
 $lang['title_cantremove'] = 'The file system permissions on this module directory do not permit deleting the files';
 $lang['title_chmod'] = 'Attempt to recursively change permissions on this directory';
@@ -257,6 +259,9 @@ $lang['use_at_your_own_risk'] = 'Use at Your Own Risk';
 $lang['versionsformodule'] = 'Available versions of the module %s';
 $lang['vertext'] = 'Version';
 
+// W
+$lang['warning'] = 'Warning';
+$lang['warn_dependencies'] = 'The module you selected to install or upgrade depends on one or more additional modules that must also be installed or upgraded.';
 // X
 $lang['xmltext'] = 'XML File';
 

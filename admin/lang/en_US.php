@@ -163,6 +163,7 @@ $lang['CMSEX_L008'] = 'Locking exception';
 $lang['CMSEX_L009'] = 'Problem removing lock';
 $lang['CMSEX_M001'] = 'Module already installed';
 $lang['CMSEX_M002'] = 'Installing this package would result in a downgrade. Operation aborted';
+$lang['CMSEX_MODULENOTFOUND'] = 'Module %s not found';
 $lang['CMSEX_SQL001'] = 'Problem creating/updating lock record';
 $lang['CMSEX_XML001'] = 'Problem opening XML file';
 $lang['CMSEX_XML002'] = 'DTD Version missing or incompatible in the XML file';

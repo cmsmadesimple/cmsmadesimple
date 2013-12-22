@@ -684,12 +684,14 @@ table.pagetable a.text-red  {
 .message:hover {
 	cursor: help
 }
+.warning p,
 .pagewarning p,
 .message p {
 	color: #232323;
 	margin: 0;	
 	font-size: 11px
 }
+.warning h3,
 .pagewarning h3 {
 	margin: 2px 0;
 	font-size: 14px;

@@ -317,9 +317,16 @@ if (isset($_POST["editsiteprefs"])) {
     case 'sitedown':
       if( isset($_POST['sitedownexcludes']) ) $sitedownexcludes = trim($_POST['sitedownexcludes']);
       $sitedownexcludeadmins = (int)$_POST['sitedownexcludeadmins'];
+	  $prevsitedown = $enablesitedownmessage;
       if (isset($_POST["enablesitedownmessage"])) $enablesitedownmessage=$_POST['enablesitedownmessage'];
       if (isset($_POST["sitedownmessage"])) $sitedownmessage = $_POST["sitedownmessage"];
       if (isset($_POST["use_wysiwyg"])) $use_wysiwyg = $_POST["use_wysiwyg"];
+	  if( !$prevsitedown && $enablesitedownmessage ) {
+		  audit('','Global Settings','Sitedown enabled');
+	  }
+	  else if( $prevsitedown && !$enablesitedownmessage ) {
+		  audit('','Global Settings','Sitedown disabled');
+	  }
       cms_siteprefs::set('enablesitedownmessage', $enablesitedownmessage);
       cms_siteprefs::set('sitedown_use_wysiwyg', $use_wysiwyg);
       cms_siteprefs::set('sitedownmessage', $sitedownmessage);
