@@ -65,7 +65,6 @@ final class modmgr_utils
     return array(true,$results);
   }
 
-
   private static function uasort_cmp_details( $e1, $e2 )
   {
     $n1 = $n2 = '';
@@ -95,7 +94,6 @@ final class modmgr_utils
     }
     return version_compare( $e2['version'], $e1['version'] );
   }
-
 
   public static function build_module_data( &$xmldetails, &$installdetails, $newest = true )
   {
@@ -191,115 +189,6 @@ final class modmgr_utils
 
     return $xml_filename;
   }
-
-  public static function install_module($module_meta)
-  {
-    try {
-      $mod = cms_utils::get_module('ModuleManager');
-      if( !isset($module_meta['filename']) || !isset($module_meta['size']) ||
-	  $module_meta['filename'] == '' || $module_meta['size'] <= 0 ) {
-	throw new CmsInvalidDataException($mod->Lang('error_missingparams'));
-      }
-
-      $xml_filename = self::get_module_xml($module_meta['filename'],$module_meta['size'],
-					   (isset($module_meta['md5sum']))?$module_meta['md5sum']:'');
-
-      // expand the xml
-      $ops = cmsms()->GetModuleOperations();
-      $res = $ops->ExpandXMLPackage( $xml_filename, 1 );
-      @unlink($xml_filename);
-
-      // install the module
-      $res = $ops->InstallModule($module_meta['name']);
-      if( !is_array($res) || $res[0] != TRUE ) throw new CmsInvalidDataException($res[1]);
-      return $res[1];
-    }
-    catch( Exception $e ) {
-      // here, maybe we should clean up the expanded package?
-      throw $e;
-    }
-  }
-
-
-  public static function upgrade_module($module_meta)
-  {
-    try {
-      $mod = cms_utils::get_module('ModuleManager');
-      if( !isset($module_meta['filename']) || !isset($module_meta['size']) ||
-	  $module_meta['filename'] == '' || $module_meta['size'] <= 0 ) {
-	throw new CmsInvalidDataException($mod->Lang('error_missingparams'));
-      }
-
-      $xml_filename = self::get_module_xml($module_meta['filename'],$module_meta['size'],
-					   (isset($module_meta['md5sum']))?$module_meta['md5sum']:'');
-
-      // expand the xml
-      $ops = cmsms()->GetModuleOperations();
-      $res = $ops->ExpandXMLPackage( $xml_filename, 1 );
-
-      // install the module
-      $res = $ops->UpgradeModule($module_meta['name']);
-      if( !is_array($res) ) throw new CmsLogicException($this->Lang('error_moduleupgradefailed'));
-      if( $res[0] == FALSE) throw new CmsInvalidDataException($rec[1]);
-      @unlink($xml_filename);
-    }
-    catch( Exception $e ) {
-      // here, maybe we should clean up the expanded package?
-      throw $e;
-    }
-  }
-
-  public static function install_module_list($installs)
-  {
-    if( !is_array($installs) || count($installs) == 0 ) return FALSE;
-
-    $mod = cms_utils::get_module('ModuleManager');
-    $messages = array();
-    $ok = true;
-    $modops = cmsms()->GetModuleOperations();
-    foreach($installs as $this_inst) {
-      $thisRes = new stdClass();
-      $thisRes->success = false;
-      $thisRes->module_name = $this_inst['name'];
-      if ($ok) {
-	if ($this_inst['status'] == 'a') {
-	  // activating
-	  $modops->ActivateModule($this_inst['name']);
-	  $thisRes->message = $mod->Lang('action_activated',$this_inst['name']);
-	  $thisRes->success = true;
-	}
-	else if ($this_inst['status'] == 'u') {
-	  // upgrading	
-	  list($success, $msgs) = self::install_module($this_inst, true);
-	  if (!$success) {
-	    $ok = false;
-	  }
-	  else {
-	    $thisRes->success = true;
-	  }
-	  $thisRes->message = $msgs;
-	}
-	else if ($this_inst['status'] == 'i') {
-	  // installing
-	  list($success, $msgs) = self::install_module($this_inst, false);
-	  if (!$success) {
-	    $ok=false;
-	  }
-	  else {
-	    $thisRes->success = true;
-	  }
-	  $thisRes->message = $msgs;
-	}
-      }
-      else {
-	$thisRes->message = $mod->Lang('error_skipping',$this_inst['name']);
-      }
-      if ($this_inst['status'] != 's') $messages[] = $thisRes;
-    }
-
-    return $messages;
-  }
-
 
   public static function is_connection_ok()
   {

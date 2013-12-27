@@ -1,7 +1,7 @@
 <?php
 #BEGIN_LICENSE
 #-------------------------------------------------------------------------
-# Module: ModuleManager (c) 2008 by Robert Campbell 
+# Module: ModuleManager (c) 2013 by Robert Campbell 
 #         (calguy1000@cmsmadesimple.org)
 #  An addon module for CMS Made Simple to allow browsing remotely stored
 #  modules, viewing information about them, and downloading or upgrading
@@ -44,14 +44,14 @@ class ModuleManager extends CMSModule
 
   function GetName() { return 'ModuleManager'; }
   function GetFriendlyName() { return $this->Lang('friendlyname'); }
-  function GetVersion() { return '1.10'; }
+  function GetVersion() { return '2.0'; }
   function GetHelp() { return $this->Lang('help'); }
   function GetAuthor() { return 'calguy1000'; }
   function GetAuthorEmail() { return 'calguy1000@hotmail.com'; }
   function GetChangeLog() { return file_get_contents(dirname(__FILE__).'/changelog.inc'); }
-  function IsPluginModule() { return false; }
-  function HasAdmin() { return true; }
-  function IsAdminOnly() { return true; }
+  function IsPluginModule() { return FALSE; }
+  function HasAdmin() { return TRUE; }
+  function IsAdminOnly() { return TRUE; }
   function GetAdminSection() { return 'siteadmin'; }
   function GetAdminDescription() { return $this->Lang('admindescription'); }
   function LazyLoadAdmin() { return TRUE; }
@@ -71,38 +71,20 @@ class ModuleManager extends CMSModule
     echo $this->ProcessTemplate('error.tpl');
   }
 	
-
   function Install()
   {
     $this->SetPreference('module_repository',ModuleManager::_dflt_request_url);
   }
 
-
-  /*---------------------------------------------------------
-   Upgrade()
-   ---------------------------------------------------------*/
   function Upgrade($oldversion, $newversion)
   {
     $this->SetPreference('module_repository',ModuleManager::_dflt_request_url);
   }
 
-	
-  /*---------------------------------------------------------
-   DoAction($action, $id, $params, $returnid)
-   ---------------------------------------------------------*/
   function DoAction($action, $id, $params, $returnid=-1)
   {
     @set_time_limit(9999);
-    switch ($action) {
-    case 'recurseinstall':
-      die('call installmodule action');
-      break;
-
-    // fallback through to call the action.xxxx.php file
-    default:
-      parent::DoAction( $action, $id, $params, $returnid );
-      break;
-    }
+    parent::DoAction( $action, $id, $params, $returnid );
   }
 
 } // end of class
