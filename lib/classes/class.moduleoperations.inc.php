@@ -47,6 +47,7 @@ final class ModuleOperations
 	static private $_instance = null;
 	private $_modules = null;
 	private $_moduleinfo;
+	private $_moduledeps;
 	
 	private $xml_exclude_files = array('^\.svn' , '^CVS$' , '^\#.*\#$' , '~$', '\.bak$', '^\.git');
 	private $xmldtd = '
@@ -434,29 +435,24 @@ final class ModuleOperations
 				  }
 			  }
 		  }
-
-		  debug_to_log('get module info','','/tmp/debug.out');
-		  debug_to_log($this->_moduleinfo,'','/tmp/debug.out');
 	  }
 
 	  return $this->_moduleinfo;
   }
 
 
-  private function _load_module($module_name,$force_load = FALSE)
+  private function _load_module($module_name,$force_load = FALSE,$dependents = TRUE)
   {
 	  $config = cmsms()->GetConfig();
 	  $dir = $config['root_path'].'/modules';
 
 	  $info = $this->_get_module_info();
 	  if( !isset($info[$module_name]) && !$force_load ) {
-		  debug_to_log("_load_module $module_name 1",'','/tmp/debug.out');
 		  debug_buffer("Nothing is known about $module_name... cant load it");
 		  return FALSE;
 	  }
 	  if( (!isset($info[$module_name]['active']) || 
 		   $info[$module_name]['active'] == 0) && !$force_load ) {
-		  debug_to_log("_load_module $module_name 2",'','/tmp/debug.out');
 		  debug_buffer('Requested deactivated module '.$module_name);
 		  return FALSE;
 	  }
@@ -471,7 +467,6 @@ final class ModuleOperations
 	  if( !class_exists($module_name) ) {
 		  $fname = $dir."/$module_name/$module_name.module.php";
 		  if( !is_file($fname) ) {
-			  debug_to_log("_load_module $module_name 3",'','/tmp/debug.out');
 			  debug_buffer("Cannot load $module_name because the module file does not exist");
 			  return FALSE;
 		  }
@@ -480,10 +475,32 @@ final class ModuleOperations
 		  require_once($fname); 
 	  }
 
+	  // okay, lessee if we can load the dependants
+	  if( !isset($config['modules_noloaddependants']) && $dependents == TRUE ) {
+		  $deps = $this->get_module_dependencies($module_name);
+		  if( is_array($deps) && count($deps) ) {
+			  $res = true;
+			  foreach( $deps as $name => $ver ) {
+				  // this is the start of a recursive routine.
+				  // get_module_instance may call _load_module.
+				  $obj2 = $this->get_module_instance($name,$ver);
+				  if( !is_object($obj2) ) {
+					  $res = false;
+					  break;
+				  }
+			  }
+			  if( !$res && !isset($CMS_FORCE_MODULE_LOAD)) {
+				  audit('','Core',"Cannot load module $module_name ... Problem loading dependent module $name version $ver");
+				  debug_buffer("Cannot load $module_name... cannot load it's dependants.");
+				  unset($obj);
+				  return FALSE;
+			  }
+		  }
+	  }
+
 	  $obj = new $module_name;
 	  if( !is_object($obj) ) {
 		  // oops, some problem loading.
-		  debug_to_log("_load_module $module_name 4",'','/tmp/debug.out');
 		  audit('','Module',"Cannot load module $module_name ... some problem instantiating the class");
 		  debug_buffer("Cannot load $module_name ... some problem instantiating the class");
 		  return FALSE;
@@ -491,33 +508,10 @@ final class ModuleOperations
 
 	  if (version_compare($obj->MinimumCMSVersion(),$CMS_VERSION) == 1 ) {
 		  // oops, not compatible.... can't load.
-		  debug_to_log("_load_module $module_name 5",'','/tmp/debug.out');
 		  audit('','Module','Cannot load module '.$module_name.' it is not compatible wth this version of CMSMS');
 		  debug_buffer("Cannot load $module_name... It is not compatible with this version of CMSMS");
 		  unset($obj);
 		  return FALSE;
-	  }
-
-	  // okay, lessee if we can load the dependants
-	  if( !isset($config['modules_noloaddependants']) ) {
-		  $deps = $obj->GetDependencies();
-		  if( is_array($deps) && count($deps) ) {
-			  $res = true;
-			  foreach( $deps as $name => $ver ) {
-				  $obj2 = $this->get_module_instance($name);
-				  if( !is_object($obj2) ) {
-					  $res = false;
-					  break;
-				  }
-			  }
-			  if( !$res && !isset($CMS_FORCE_MODULE_LOAD)) {
-				  debug_to_log("_load_module $module_name 6 - attempt to load dependant $name",'','/tmp/debug.out');
-				  audit('','Module',"Cannot load module $module_name ... Problem loading dependent module $name");
-				  debug_buffer("Cannot load $module_name... cannot load it's dependants.");
-				  unset($obj);
-				  return FALSE;
-			  }
-		  }
 	  }
 
 	  if( isset($info[$module_name]) && $info[$module_name]['status'] != 'installed' && 
@@ -545,8 +539,7 @@ final class ModuleOperations
 			  $dbversion = $info[$module_name]['version'];
 			  if( version_compare($dbversion, $obj->GetVersion()) == -1 ) {
 				  // upgrade is needed
-				  if( ($obj->AllowAutoUpgrade() == TRUE || 
-					   $this->_is_queued_for_install($module_name)) && $allow_auto ) {
+				  if( ($obj->AllowAutoUpgrade() == TRUE || $this->_is_queued_for_install($module_name)) && $allow_auto ) {
 					  // we're allowed to upgrade
 					  $res = $this->_upgrade_module($obj);
 					  if( !isset($_SESSION['moduleoperations_result']) ) $_SESSION['moduleoperations_result'] = array();
@@ -558,10 +551,8 @@ final class ModuleOperations
 						  // upgrade failed
 						  $res2 = array(FALSE,lang('moduleupgradeerror'));
 						  $_SESSION['moduleoperations_result'][$module_name] = $res2;
-						  return FALSE;
 
 						  allow_admin_lang(FALSE); // isn't this ugly.
-						  debug_to_log("_load_module $module_name 7",'','/tmp/debug.out');
 						  debug_buffer("Automatic upgrade of $module_name failed");
 						  unset($obj);
 						  return FALSE;
@@ -569,7 +560,6 @@ final class ModuleOperations
 				  }
 				  else if( !isset($CMS_FORCE_MODULE_LOAD) && !$force_load ) {
 					  // nope, can't auto upgrade either
-					  debug_to_log("_load_module $module_name 8",'','/tmp/debug.out');
 					  allow_admin_lang(FALSE); // isn't this ugly.
 					  unset($obj);
 					  return FALSE;
@@ -666,9 +656,24 @@ final class ModuleOperations
 	  global $CMS_ADMIN_PAGE;
 	  global $CMS_STYLESHEET;
 	  $config = cmsms()->GetConfig();
-
 	  $allinfo = $this->_get_module_info();
 	  if( !is_array($allinfo) ) return; // no modules installed, probably an empty database... edge case.
+
+	  if( isset($_SESSION['moduleoperations']) ) {
+		  foreach( $_SESSION['moduleoperations'] as $module_name => $info ) {
+			  if( !isset($allinfo[$module_name]) ) {
+				  // no info about this module in the database yet.
+				  // make up some dummy info.
+				  $rec = array('module_name'=>$module_name,'status'=>'not installed','version'=>'0.0',
+							   'admin_only'=>0,'active'=>0,'allow_fe_lazyload'=>0,'allow_admin_lazyload'=>0);
+				  $this->_moduleinfo[$module_name] = $rec;
+			  }
+			  // get the module instance, this will trigger the install, or the upgrade
+			  $this->get_module_instance($module_name,'',TRUE);
+		  }
+		  unset($_SESSION['moduleoperations']);
+	  }
+
 	  foreach( $allinfo as $module_name => $info ) {
 		  if( $info['status'] != 'installed' ) continue;
 		  if( !$info['active'] ) continue;
@@ -678,22 +683,6 @@ final class ModuleOperations
 		  if( isset($CMS_STYLESHEET) && !isset($CMS_STYLESHEET) ) continue;
 		  $this->get_module_instance($module_name);
 	  }
-	  if( isset($_SESSION['moduleoperations']) && is_array($_SESSION['moduleoperations']) && count($_SESSION['moduleoperations']) ) {
-		  // there are modules queued for install/upgrade that may not have been loaded.
-		  foreach($_SESSION['moduleoperations'] as $module_name => $info ) {
-			  if( !isset($allinfo[$module_name]) ) {
-				  // we don't know about this module yet...
-				  $rec = array('module_name'=>$module_name,'status'=>'not installed','version'=>'0.0',
-							   'admin_only'=>0,'active'=>0,'allow_fe_lazyload'=>0,'allow_admin_lazyload'=>0);
-				  $this->_moduleinfo[$module_name] = $rec;
-			  }
-			  $this->get_module_instance($module_name,'',TRUE);
-			  unset($_SESSION['moduleiperations'][$module_name]);
-		  }
-		  // by here... we should not have anything left queued
-		  unset($_SESSION['moduleoperations']);
-	  }
-	  return;
   }
 
 
@@ -715,7 +704,8 @@ final class ModuleOperations
 		  $lazyload_fe    = (method_exists($module_obj,'LazyLoadFrontend') && $module_obj->LazyLoadFrontend())?1:0;
 		  $lazyload_admin = (method_exists($module_obj,'LazyLoadAdmin') && $module_obj->LazyLoadAdmin())?1:0;
 
-		  $query = 'UPDATE '.cms_db_prefix().'modules SET version = ?, active = 1, allow_fe_lazyload = ?,allow_admin_lazyload = ? WHERE module_name = ?';
+		  $query = 'UPDATE '.cms_db_prefix().'modules SET version = ?, active = 1, allow_fe_lazyload = ?, allow_admin_lazyload = ? 
+                    WHERE module_name = ?';
 		  $dbr = $db->Execute($query,array($module_obj->GetVersion(),$lazyload_fe,$lazyload_admin,$module_obj->GetName()));
 
 		  $this->_moduleinfo = array();
@@ -742,10 +732,8 @@ final class ModuleOperations
    */
   public function UpgradeModule( $module_name, $to_version = '')
   {
-	  $this->unload_module($module_name);
 	  $module_obj = $this->get_module_instance($module_name,'',TRUE);
 	  if( !is_object($module_obj) ) return array(FALSE,lang('errormodulenotloaded'));
-	  debug_display($module_obj->GetVersion().' '.$to_version);
 	  return $this->_upgrade_module($module_obj,$to_version);
   }
 
@@ -847,10 +835,7 @@ final class ModuleOperations
   {
 	  if( !$module_name ) return FALSE;
 	  $info = $this->_get_module_info();
-	  if( !isset($info[$module_name]) ) {
-		  debug_to_log('no module info for '.$module_name,'','/tmp/debug.out');
-		  return FALSE;
-	  }
+	  if( !isset($info[$module_name]) ) return FALSE;
 
 	  $o_state = $info[$module_name]['active'];
 	  if( $activate ) {
@@ -864,7 +849,6 @@ final class ModuleOperations
 		  $query = 'UPDATE '.cms_db_prefix().'modules SET active = ? WHERE module_name = ?';
 		  $dbr = $db->Execute($query,array($info[$module_name]['active'],$module_name));
 		  $this->_moduleinfo = array();
-		  debug_to_log('updated module active state for '.$module_name,'','/tmp/debug.out');
 		  audit('','Module','Activated '.$module_name);
 	  }
 	  return TRUE;
@@ -942,6 +926,43 @@ final class ModuleOperations
 
 
   /**
+   * A function to return a list of dependencies from a module.
+   * this method works by reading the dependencies from the database.
+   *
+   * @since 1.11.8
+   * @author Robert Campbell
+   * @param string The module name
+   * @return mixed.  Null if there are no dependencies.  Otherwise, a hash of dependent module names, and their versions.
+   */
+  public function get_module_dependencies($module_name)
+  {
+	  if( !$module_name ) return;
+
+	  if( !is_array($this->_moduledeps) ) {
+		  $fn = TMP_CACHE_LOCATION.'/f'.md5(__FILE__.'deps').'.dat';
+		  if( file_exists($fn) ) {
+			  $data = file_get_contents($fn);
+			  $this->_moduledeps = unserialize($data);
+		  }
+		  else {
+			  $this->_moduledeps = array();
+			  $db = cmsms()->GetDb();
+			  $query = 'SELECT parent_module,child_module,minimum_version FROM '.cms_db_prefix().'module_deps';
+			  $dbr = $db->GetArray($query);
+			  if( is_array($dbr) && count($dbr) ) {
+				  foreach( $dbr as $row ) {
+					  if( !isset($this->_moduledeps[$row['child_module']]) ) $this->_moduledeps[$row['child_module']] = array();
+					  $this->_moduledeps[$row['child_module']][$row['parent_module']] = $row['minimum_version'];
+				  }
+			  }
+			  file_put_contents($fn,serialize($this->_moduledeps));
+		  }
+	  }
+
+	  if( isset($this->_moduledeps[$module_name]) ) return $this->_moduledeps[$module_name];
+  }
+
+  /**
    * A function to return the object reference to the module object
    * if the module is not already loaded, it will be loaded.  Version checks are done
    * with the module to allow only loading versions of modules that are greater than the 
@@ -956,10 +977,6 @@ final class ModuleOperations
   {
 	  if( empty($module_name) && isset($this->variables['module'])) $module_name = $this->variables['module'];
 
-// 	  if( $module_name == 'JQueryTools' && $force ) {
-// 		  stack_trace();
-// 		  die('foo');
-// 	  }
 	  $obj = null;
 	  if( isset($this->_modules[$module_name]) ) {
 		  if( $force ) {

@@ -66,30 +66,24 @@ try {
 	$filename = modmgr_utils::get_module_xml($rec['filename'],$rec['size']);
       }
 
+      // expand all of the xml files.
+      $ops = cmsms()->GetModuleOperations();
+      foreach( $modlist as $key => $rec ) {
+	if( $rec['action'] != 'i' && $rec['action'] != 'u' ) continue;
+	$xml_filename = modmgr_utils::get_module_xml($rec['filename'],$rec['size'],(isset($rec['md5sum']))?$rec['md5sum']:'');
+	$res = $ops->ExpandXMLPackage( $xml_filename, 1 );
+	$ops->QueueForInstall($key);
+      }
+
       foreach( $modlist as $name => $rec ) {
 	switch( $rec['action'] ) {
-	case 'i': // install
-	  debug_to_log('action install module '.$name,'','/tmp/debug.out');
-	  modmgr_utils::install_module($rec);
-	  $this->SetMessage($this->Lang('msg_module_installed',$name));
-	  break;
-
-	case 'u': // upgrade
-	  debug_to_log('action upgrade module '.$name,'','/tmp/debug.out');
-	  modmgr_utils::upgrade_module($rec);
-	  $this->SetMessage($this->Lang('msg_module_upgraded',$name));
-	  break;
-
 	case 'a': // activate
-	  debug_to_log('action activate module '.$name,'','/tmp/debug.out');
-	  $modops = cmsms()->GetModuleOperations();
-	  $modops->ActivateModule($name);
-	  $this->SetMessage($this->Lang('msg_module_activated',$name));
+	  $ops->ActivateModule($name);
 	  break;
 	}
       }
 
-      if( count($modlist) > 1 ) $this->SetMessage($this->Lang('msg_batch_completed',count($modlist)));;
+      // done, rest will be done when the module is loaded.
       $this->RedirectToAdminTab();
     }
   }

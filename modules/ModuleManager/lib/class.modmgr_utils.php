@@ -204,22 +204,18 @@ final class modmgr_utils
       $xml_filename = self::get_module_xml($module_meta['filename'],$module_meta['size'],
 					   (isset($module_meta['md5sum']))?$module_meta['md5sum']:'');
 
-      debug_to_log('install module 1 '.$module_meta['filename'],'','/tmp/debug.out');
       // expand the xml
       $ops = cmsms()->GetModuleOperations();
       $res = $ops->ExpandXMLPackage( $xml_filename, 1 );
       @unlink($xml_filename);
 
       // install the module
-      debug_to_log('install module 2 '.$module_meta['filename'],'','/tmp/debug.out');
       $res = $ops->InstallModule($module_meta['name']);
-      debug_to_log($res,'install module 3','/tmp/debug.out');
       if( !is_array($res) || $res[0] != TRUE ) throw new CmsInvalidDataException($res[1]);
       return $res[1];
     }
     catch( Exception $e ) {
       // here, maybe we should clean up the expanded package?
-      debug_to_log($e);
       throw $e;
     }
   }
