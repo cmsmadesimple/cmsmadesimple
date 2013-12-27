@@ -195,6 +195,7 @@ $lang['status_newer_available'] = 'A newer version of this module is available i
 $lang['statustext'] = 'Status/Action';
 $lang['status_installed'] = 'This module is currently installed and available for use.';
 $lang['submit'] = 'Submit';
+$lang['success'] = 'Success';
 
 // T
 //$lang['text_dl_chunksize'] = 'The maximum amount of data to download from the server in one chunk (when installing a module)';

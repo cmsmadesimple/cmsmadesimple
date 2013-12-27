@@ -1,4 +1,9 @@
-<h3>{$mod->Lang('install_module')} {$module_name} <em>({$mod->Lang('vertext')} {$module_version})</em></h3>
+{if $is_upgrade}
+  <h3>{$mod->Lang('upgrade_module')} {$module_name} <em>({$mod->Lang('vertext')} {$module_version})</em></h3>
+{else}
+  <h3>{$mod->Lang('install_module')} {$module_name} <em>({$mod->Lang('vertext')} {$module_version})</em></h3>
+{/if}
+
 <div class="pagewarning">
   <h3>{$mod->Lang('notice')}:</h3>
   <p>{$mod->Lang('time_warning')}</p>
@@ -30,7 +35,7 @@
   <p class="pagetext"></p>
   <p class="pageinput">
     {if count($dependencies) > 1}
-      <input type="submit" name="{$actionid}submit" value="{$mod->Lang('install_proceed')}"/>
+      <input type="submit" name="{$actionid}submit" value="{$mod->Lang('install_procede')}"/>
     {else}
       <input type="submit" name="{$actionid}submit" value="{$mod->Lang('install_submit')}"/>
     {/if}

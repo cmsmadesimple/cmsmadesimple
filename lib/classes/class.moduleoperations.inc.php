@@ -566,6 +566,7 @@ final class ModuleOperations
 				  }
 			  }
 		  }
+		  allow_admin_lang(FALSE); // isn't this ugly.
 	  }
 
 	  if( (isset($info[$module_name]) && $info[$module_name]['status'] == 'installed') || $force_load ) {
@@ -660,6 +661,7 @@ final class ModuleOperations
 	  if( !is_array($allinfo) ) return; // no modules installed, probably an empty database... edge case.
 
 	  if( isset($_SESSION['moduleoperations']) ) {
+		  set_time_limit(9999);
 		  foreach( $_SESSION['moduleoperations'] as $module_name => $info ) {
 			  if( !isset($allinfo[$module_name]) ) {
 				  // no info about this module in the database yet.

@@ -76,6 +76,7 @@ try {
       }
 
       foreach( $modlist as $name => $rec ) {
+
 	switch( $rec['action'] ) {
 	case 'a': // activate
 	  $ops->ActivateModule($name);
@@ -180,8 +181,13 @@ try {
   $smarty->assign('formend',$this->CreateFormEnd());
   $smarty->assign('module_name',$module_name);
   $smarty->assign('module_version',$module_version);
+  $tmp = array_keys($alldeps);
+  $n = count($tmp) - 1;
+  $key = $tmp[$n];
+  $action = $alldeps[$key]['action'];
+  $smarty->assign('is_upgrade',($action == 'u')?1:0);
 
-  if( count($alldeps) ) $smarty->assign('dependencies',$alldeps);
+  $smarty->assign('dependencies',$alldeps);
   echo $this->ProcessTemplate('installinfo.tpl');
   return;
 }
