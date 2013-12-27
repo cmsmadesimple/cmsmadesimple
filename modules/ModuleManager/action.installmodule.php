@@ -56,9 +56,7 @@ try {
     set_time_limit(9999);
     if( isset($params['modlist']) && $params['modlist'] != '' ) {
       $modlist = unserialize(base64_decode($params['modlist']));
-      if( !is_array($modlist) || count($modlist) == 0 ) {
-	throw new CmsInvalidDataException( $this->Lang('error_missingparams') );
-      }
+      if( !is_array($modlist) || count($modlist) == 0 ) throw new CmsInvalidDataException( $this->Lang('error_missingparams') );
 
       // cache all of the xml files first... make sure we can download everything, and that it gets cached.
       foreach( $modlist as $key => $rec ) {
@@ -71,19 +69,28 @@ try {
       foreach( $modlist as $name => $rec ) {
 	switch( $rec['action'] ) {
 	case 'i': // install
+	  debug_to_log('action install module '.$name,'','/tmp/debug.out');
 	  modmgr_utils::install_module($rec);
+	  $this->SetMessage($this->Lang('msg_module_installed',$name));
 	  break;
 
-	case 'u': // uninstall
+	case 'u': // upgrade
+	  debug_to_log('action upgrade module '.$name,'','/tmp/debug.out');
 	  modmgr_utils::upgrade_module($rec);
+	  $this->SetMessage($this->Lang('msg_module_upgraded',$name));
 	  break;
 
 	case 'a': // activate
-	  stack_trace();
-	  die('incomplete');
+	  debug_to_log('action activate module '.$name,'','/tmp/debug.out');
+	  $modops = cmsms()->GetModuleOperations();
+	  $modops->ActivateModule($name);
+	  $this->SetMessage($this->Lang('msg_module_activated',$name));
 	  break;
 	}
       }
+
+      if( count($modlist) > 1 ) $this->SetMessage($this->Lang('msg_batch_completed',count($modlist)));;
+      $this->RedirectToAdminTab();
     }
   }
 
@@ -163,6 +170,14 @@ try {
     }
   }
 
+  // test to make sure we have the required info for each record.
+  foreach( $alldeps as $mname => &$rec ) {
+    if( $rec['action'] == 'a' ) continue; // if just activating we don't have to worry.
+    if( !isset($rec['filename']) ) throw new CmsInvalidDataException( $this->Lang('error_missingmoduleinfo',$mname) );
+    if( !isset($rec['version']) ) throw new CmsInvalidDataException( $this->Lang('error_missingmoduleinfo',$mname) );
+    if( !isset($rec['size']) ) throw new CmsInvalidDataException( $this->Lang('error_missingmoduleinfo',$mname.' '.$rec['version']) );
+  }
+  
   // here, if alldeps is empty... we have nothing to do.
   $smarty->assign('return_url',$this->create_url($id,'defaultadmin',$returnid, array('__activetab'=>'modules')));
   $parms = array('name'=>$module_name,'version'=>$module_version,'filename'=>$module_filename,'size'=>$module_size);

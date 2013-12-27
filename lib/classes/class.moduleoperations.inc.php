@@ -355,15 +355,11 @@ final class ModuleOperations
 			 }
 		 }
 
-		 $this->_moduleinfo[$module_obj->GetName()] = array('module_name'=>$module_obj->GetName(),
-															'version'=>$module_obj->GetVersion(),'status'=>'installed','active'=>1,
-															'admin_only'=>($module_obj->IsAdminOnly()==true)?1:0,
-															'allow_fe_lazyload'=>($module_obj->LazyLoadFrontend()==TRUE)?1:0,
-															'allow_admin_lazyload'=>($module_obj->LazyLoadAdmin()==TRUE)?1:0);
+		 $this->_moduleinfo = array();
+		 $gCms->clear_cached_files();
 
 		 Events::SendEvent('Core', 'ModuleInstalled', array('name' => $module_obj->GetName(), 'version' => $module_obj->GetVersion()));
 		 audit('', 'Module', 'Installed '.$module_obj->GetName().' version '.$module_obj->GetVersion());
-		 $gCms->clear_cached_files();
 
 		 return array(TRUE,$module_obj->InstallPostMessage());
 	 }
@@ -402,10 +398,10 @@ final class ModuleOperations
 	  // do the actual installation stuff.
 	  $res = $this->_install_module($modinstance);
 	  if( $res[0] == FALSE && $res[1] == '') {
-			$res[1] = lang('errorinstallfailed');
-			// put mention into the admin log
-			audit('', $module . ' module','Install failed');
-			}
+		  $res[1] = lang('errorinstallfailed');
+		  // put mention into the admin log
+		  audit('', $module . ' module','Install failed');
+	  }
 	  return $res;
   }
 
@@ -438,6 +434,9 @@ final class ModuleOperations
 				  }
 			  }
 		  }
+
+		  debug_to_log('get module info','','/tmp/debug.out');
+		  debug_to_log($this->_moduleinfo,'','/tmp/debug.out');
 	  }
 
 	  return $this->_moduleinfo;
@@ -451,11 +450,13 @@ final class ModuleOperations
 
 	  $info = $this->_get_module_info();
 	  if( !isset($info[$module_name]) && !$force_load ) {
+		  debug_to_log("_load_module $module_name 1",'','/tmp/debug.out');
 		  debug_buffer("Nothing is known about $module_name... cant load it");
 		  return FALSE;
 	  }
 	  if( (!isset($info[$module_name]['active']) || 
 		   $info[$module_name]['active'] == 0) && !$force_load ) {
+		  debug_to_log("_load_module $module_name 2",'','/tmp/debug.out');
 		  debug_buffer('Requested deactivated module '.$module_name);
 		  return FALSE;
 	  }
@@ -470,6 +471,7 @@ final class ModuleOperations
 	  if( !class_exists($module_name) ) {
 		  $fname = $dir."/$module_name/$module_name.module.php";
 		  if( !is_file($fname) ) {
+			  debug_to_log("_load_module $module_name 3",'','/tmp/debug.out');
 			  debug_buffer("Cannot load $module_name because the module file does not exist");
 			  return FALSE;
 		  }
@@ -481,6 +483,7 @@ final class ModuleOperations
 	  $obj = new $module_name;
 	  if( !is_object($obj) ) {
 		  // oops, some problem loading.
+		  debug_to_log("_load_module $module_name 4",'','/tmp/debug.out');
 		  audit('','Module',"Cannot load module $module_name ... some problem instantiating the class");
 		  debug_buffer("Cannot load $module_name ... some problem instantiating the class");
 		  return FALSE;
@@ -488,6 +491,7 @@ final class ModuleOperations
 
 	  if (version_compare($obj->MinimumCMSVersion(),$CMS_VERSION) == 1 ) {
 		  // oops, not compatible.... can't load.
+		  debug_to_log("_load_module $module_name 5",'','/tmp/debug.out');
 		  audit('','Module','Cannot load module '.$module_name.' it is not compatible wth this version of CMSMS');
 		  debug_buffer("Cannot load $module_name... It is not compatible with this version of CMSMS");
 		  unset($obj);
@@ -507,6 +511,7 @@ final class ModuleOperations
 				  }
 			  }
 			  if( !$res && !isset($CMS_FORCE_MODULE_LOAD)) {
+				  debug_to_log("_load_module $module_name 6 - attempt to load dependant $name",'','/tmp/debug.out');
 				  audit('','Module',"Cannot load module $module_name ... Problem loading dependent module $name");
 				  debug_buffer("Cannot load $module_name... cannot load it's dependants.");
 				  unset($obj);
@@ -556,6 +561,7 @@ final class ModuleOperations
 						  return FALSE;
 
 						  allow_admin_lang(FALSE); // isn't this ugly.
+						  debug_to_log("_load_module $module_name 7",'','/tmp/debug.out');
 						  debug_buffer("Automatic upgrade of $module_name failed");
 						  unset($obj);
 						  return FALSE;
@@ -563,6 +569,7 @@ final class ModuleOperations
 				  }
 				  else if( !isset($CMS_FORCE_MODULE_LOAD) && !$force_load ) {
 					  // nope, can't auto upgrade either
+					  debug_to_log("_load_module $module_name 8",'','/tmp/debug.out');
 					  allow_admin_lang(FALSE); // isn't this ugly.
 					  unset($obj);
 					  return FALSE;
@@ -708,15 +715,16 @@ final class ModuleOperations
 		  $lazyload_fe    = (method_exists($module_obj,'LazyLoadFrontend') && $module_obj->LazyLoadFrontend())?1:0;
 		  $lazyload_admin = (method_exists($module_obj,'LazyLoadAdmin') && $module_obj->LazyLoadAdmin())?1:0;
 
-		  $query = 'UPDATE '.cms_db_prefix().'modules SET version = ?, allow_fe_lazyload = ?,allow_admin_lazyload = ? WHERE module_name = ?';
+		  $query = 'UPDATE '.cms_db_prefix().'modules SET version = ?, active = 1, allow_fe_lazyload = ?,allow_admin_lazyload = ? WHERE module_name = ?';
 		  $dbr = $db->Execute($query,array($module_obj->GetVersion(),$lazyload_fe,$lazyload_admin,$module_obj->GetName()));
 
-		  $info[$module_obj->GetName()]['version'] = $module_obj->GetVersion();
+		  $this->_moduleinfo = array();
+		  cmsms()->clear_cached_files();
 		  audit('','Module', 'Upgraded module '.$module_obj->GetName().' to version '.$module_obj->GetVersion());
 		  Events::SendEvent('Core', 'ModuleUpgraded', array('name' => $module_obj->GetName(), 'oldversion' => $dbversion, 'newversion' => $module_obj->GetVersion()));
-		  cmsms()->clear_cached_files();
 		  return array(TRUE);
 	  }
+
 	  audit('','Module','Upgrade failed for module '.$module_obj->GetName());
 	  return array(FALSE,$result);
   }
@@ -734,8 +742,10 @@ final class ModuleOperations
    */
   public function UpgradeModule( $module_name, $to_version = '')
   {
+	  $this->unload_module($module_name);
 	  $module_obj = $this->get_module_instance($module_name,'',TRUE);
 	  if( !is_object($module_obj) ) return array(FALSE,lang('errormodulenotloaded'));
+	  debug_display($module_obj->GetVersion().' '.$to_version);
 	  return $this->_upgrade_module($module_obj,$to_version);
   }
 
@@ -799,7 +809,7 @@ final class ModuleOperations
 		  $gCms->clear_cached_files();
 
 		  // Removing module from info
-		  unset($this->_moduleinfo[$module]);
+		  $this->_moduleinfo = array();
 
 		  Events::SendEvent('Core', 'ModuleUninstalled', array('name' => $module));
 		  audit('','Module','Uninstalled module '.$module);
@@ -837,7 +847,10 @@ final class ModuleOperations
   {
 	  if( !$module_name ) return FALSE;
 	  $info = $this->_get_module_info();
-	  if( !isset($info[$module_name]) ) return FALSE;
+	  if( !isset($info[$module_name]) ) {
+		  debug_to_log('no module info for '.$module_name,'','/tmp/debug.out');
+		  return FALSE;
+	  }
 
 	  $o_state = $info[$module_name]['active'];
 	  if( $activate ) {
@@ -850,6 +863,9 @@ final class ModuleOperations
 		  $db = cmsms()->GetDb();
 		  $query = 'UPDATE '.cms_db_prefix().'modules SET active = ? WHERE module_name = ?';
 		  $dbr = $db->Execute($query,array($info[$module_name]['active'],$module_name));
+		  $this->_moduleinfo = array();
+		  debug_to_log('updated module active state for '.$module_name,'','/tmp/debug.out');
+		  audit('','Module','Activated '.$module_name);
 	  }
 	  return TRUE;
   }
@@ -940,8 +956,19 @@ final class ModuleOperations
   {
 	  if( empty($module_name) && isset($this->variables['module'])) $module_name = $this->variables['module'];
 
+// 	  if( $module_name == 'JQueryTools' && $force ) {
+// 		  stack_trace();
+// 		  die('foo');
+// 	  }
 	  $obj = null;
-	  if( isset($this->_modules[$module_name]) ) $obj =& $this->_modules[$module_name];
+	  if( isset($this->_modules[$module_name]) ) {
+		  if( $force ) {
+			  unset($this->_modules[$module_name]);
+		  }
+		  else {
+			  $obj =& $this->_modules[$module_name];
+		  }
+	  }
 	  if( !is_object($obj) ) {
 		  // gotta load it.
 		  $res = $this->_load_module($module_name,$force);

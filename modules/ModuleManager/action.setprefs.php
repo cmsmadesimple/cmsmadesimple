@@ -46,12 +46,12 @@ if( isset($config['developer_mode']) && isset($params['reseturl']) ) {
 }
 
 if( isset($params['input_dl_chunksize']) ) $this->SetPreference('dl_chunksize',trim($params['input_dl_chunksize']));
-$latestdepends = (isset($params['latestdepends']))?1:0;
+$latestdepends = (int)get_parameter_value($params,'latestdepends');
 $this->SetPreference('latestdepends',$latestdepends);
 
 if( isset($config['developer_mode']) ) {
   if( isset($params['url']) ) $this->SetPreference('module_repository',trim($params['url']));
-  $disable_caching = (isset($params['disable_caching']))?1:0;
+  $disable_caching = (int)get_parameter_value($params,'disable_caching');
   $this->SetPreference('disable_caching',$disable_caching);
 }
 

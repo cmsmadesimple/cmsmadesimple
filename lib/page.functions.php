@@ -101,9 +101,7 @@ function check_login($no_redirect = false)
       }
 
       if( $v != $_SESSION[CMS_USER_KEY] && !isset($config['stupidly_ignore_xss_vulnerability']) ) {
-	if (false == $no_redirect) {
-	  redirect($config['admin_url'].'/login.php');
-	}
+	if (false == $no_redirect) redirect($config['admin_url'].'/login.php');
 	return false;
       }
     }

@@ -122,7 +122,7 @@ abstract class CmsAdminThemeBase
 
 	private function _fix_url_userkey($url)
 	{
-		$from = '/'.CMS_SECURE_PARAM_NAME.'=[a-zA-Z0-9]{8}/i';
+		$from = '/'.CMS_SECURE_PARAM_NAME.'=[a-zA-Z0-9]{16}/i';
 		$to = CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 		$newurl = preg_replace($from,$to,$url);
 		return $newurl;
@@ -160,7 +160,6 @@ abstract class CmsAdminThemeBase
 					if( is_array($recs) && count($recs) ) {
 						foreach( $recs as $one ) {
 							if( !$one->valid() ) continue;
-							//$one->url = str_replace('&amp;','&',$one->url);
 							if( ModuleOperations::Get_instance()->IsSystemModule($object->GetName()) ) $one->system = TRUE;
 							$key = $one->module.$suffix++;
 							$usermoduleinfo[$key] = $one;
@@ -208,9 +207,7 @@ abstract class CmsAdminThemeBase
 				if( $obj->section == '' ) $obj->section = 'extensions';
 
 				$section = $obj->section;
-				if (! isset($this->_sectionCount[$section])) {
-					$this->_sectionCount[$section] = 0;
-				}
+				if (! isset($this->_sectionCount[$section])) $this->_sectionCount[$section] = 0;
 
 				// fix up the session key stuff.
 				$obj->url = $this->_fix_url_userkey($obj->url);
@@ -270,9 +267,7 @@ abstract class CmsAdminThemeBase
         $this->_perms['userPerms'] = check_permission($this->userid, 'Manage Users');
         $this->_perms['groupPerms'] = check_permission($this->userid, 'Manage Groups');
         $this->_perms['usersGroupsPerms'] = $this->_perms['userPerms'] |
-			$this->_perms['groupPerms'] |
-			(isset($this->_sectionCount['usersgroups']) &&
-			 $this->_sectionCount['usersgroups'] > 0);
+			$this->_perms['groupPerms'] | (isset($this->_sectionCount['usersgroups']) && $this->_sectionCount['usersgroups'] > 0);
 
 		// admin
         $this->_perms['sitePrefPerms'] = check_permission($this->userid, 'Modify Site Preferences') |
@@ -280,9 +275,7 @@ abstract class CmsAdminThemeBase
         $this->_perms['adminPerms'] = $this->_perms['sitePrefPerms'] |
             (isset($this->_sectionCount['admin']) && $this->_sectionCount['admin'] > 0);
         $this->_perms['siteAdminPerms'] = $this->_perms['sitePrefPerms'] |
-			$this->_perms['adminPerms'] |
-			(isset($this->_sectionCount['admin']) &&
-			 $this->_sectionCount['admin'] > 0);
+			$this->_perms['adminPerms'] | (isset($this->_sectionCount['admin']) && $this->_sectionCount['admin'] > 0);
 
 		// extensions
         $this->_perms['codeBlockPerms'] = check_permission($this->userid, 'Modify User-defined Tags');
@@ -290,9 +283,7 @@ abstract class CmsAdminThemeBase
         $this->_perms['eventPerms'] = check_permission($this->userid, 'Modify Events');
 		$this->_perms['taghelpPerms'] = check_permission($this->userid, 'View Tag Help');
         $this->_perms['extensionsPerms'] = $this->_perms['codeBlockPerms'] |
-            $this->_perms['modulePerms'] |
-			$this->_perms['eventPerms'] |
-			$this->_perms['taghelpPerms'] |
+            $this->_perms['modulePerms'] | $this->_perms['eventPerms'] | $this->_perms['taghelpPerms'] |
             (isset($this->_sectionCount['extensions']) && $this->_sectionCount['extensions'] > 0);
 
 		$this->_perms['myaccount'] = check_permission($this->userid,'Manage My Settings') |
@@ -342,10 +333,7 @@ abstract class CmsAdminThemeBase
      */
     private function _populate_admin_navigation($subtitle='')
     {
-        if (count($this->_menuItems) > 0) {
-			// we have already created the list
-			return;
-		}
+        if (count($this->_menuItems) > 0) return;
 
 		$config = cmsms()->GetConfig();
 		debug_buffer('before populate admin navigation');	
@@ -355,38 +343,28 @@ abstract class CmsAdminThemeBase
 		$this->_menuItems = array();
 		$items =& $this->_menuItems;
 		// base main menu ---------------------------------------------------------
-		$items['main'] = array('url'=>'index.php','parent'=>-1,
-							   'title'=>'CMS','priority'=>1,
-							   'description'=>'','show_in_menu'=>true);
-		$items['home'] = array('url'=>'index.php','parent'=>'main','priority'=>1,
-							   'title'=>$this->_FixSpaces(lang('home')),
+		$items['main'] = array('url'=>'index.php','parent'=>-1,'title'=>'CMS','priority'=>1,'description'=>'','show_in_menu'=>true);
+		$items['home'] = array('url'=>'index.php','parent'=>'main','priority'=>1,'title'=>$this->_FixSpaces(lang('home')),
 							   'description'=>'','show_in_menu'=>true);
 		$items['viewsite'] = array('url'=>$config['root_url'].'/index.php','parent'=>'main',
-								   'title'=>$this->_FixSpaces(lang('viewsite')),
-								   'type'=>'external','priority'=>2,
+								   'title'=>$this->_FixSpaces(lang('viewsite')),'type'=>'external','priority'=>2,
 								   'description'=>'','show_in_menu'=>true, 'target'=>'_blank');
-		$items['logout'] = array('url'=>'logout.php','parent'=>'main',
-								 'title'=>$this->_FixSpaces(lang('logout')),'priority'=>3,
+		$items['logout'] = array('url'=>'logout.php','parent'=>'main','title'=>$this->_FixSpaces(lang('logout')),'priority'=>3,
 								 'description'=>'','show_in_menu'=>true);
 		// base content menu ---------------------------------------------------------
-		$items['content'] = array('url'=>'index.php?section=content','parent'=>-1,
-								  'priority'=>2,
-								 'title'=>$this->_FixSpaces(lang('content')),
-								 'description'=>lang('contentdescription'),
+		$items['content'] = array('url'=>'index.php?section=content','parent'=>-1,'priority'=>2,
+								 'title'=>$this->_FixSpaces(lang('content')),'description'=>lang('contentdescription'),
 								 'show_in_menu'=>$this->HasPerm('contentPerms'));
 		// base layout menu ---------------------------------------------------------
 		$items['layout'] = array('url'=>'index.php?section=layout','parent'=>-1,'priority'=>3,
-								 'title'=>$this->_FixSpaces(lang('layout')),
-								 'description'=>lang('layoutdescription'),
+								 'title'=>$this->_FixSpaces(lang('layout')),'description'=>lang('layoutdescription'),
 								 'show_in_menu'=>$this->HasPerm('layoutPerms'));
 		// base user/groups menu ---------------------------------------------------------
 		$items['usersgroups'] = array('url'=>'index.php?section=usersgroups','parent'=>-1,
 									  'title'=>$this->_FixSpaces(lang('usersgroups')),'priority'=>4,
-									  'description'=>lang('usersgroupsdescription'),
-									  'show_in_menu'=>$this->HasPerm('usersGroupsPerms'));
+									  'description'=>lang('usersgroupsdescription'),'show_in_menu'=>$this->HasPerm('usersGroupsPerms'));
 		$items['users'] = array('url'=>'listusers.php','parent'=>'usersgroups',
-								'title'=>$this->_FixSpaces(lang('users')),
-								'description'=>lang('usersdescription'),
+								'title'=>$this->_FixSpaces(lang('users')),'description'=>lang('usersdescription'),
 								'show_in_menu'=>$this->HasPerm('userPerms'));
 		$items['adduser'] = array('url'=>'adduser.php','parent'=>'users',
 								  'title'=>$this->_FixSpaces(lang('adduser')),
@@ -535,12 +513,8 @@ abstract class CmsAdminThemeBase
 					}
 				}
 
-				$this->_menuItems[$key]=array('url'=>$menuItem->url,
-											  'parent'=>$sectionKey,
-											  'title'=>$this->_FixSpaces($menuItem->title),
-											  'description'=>$menuItem->description,
-											  'show_in_menu'=>true,
-											  'system'=>1,
+				$this->_menuItems[$key]=array('url'=>$menuItem->url,'parent'=>$sectionKey,'title'=>$this->_FixSpaces($menuItem->title),
+											  'description'=>$menuItem->description,'show_in_menu'=>true,'system'=>1,
 											  'module'=>$menuItem->module);
 			}
 		}
@@ -565,12 +539,9 @@ abstract class CmsAdminThemeBase
 					}
 				}
 
-				$this->_menuItems[$key]=array('url'=>$menuItem->url,
-											  'parent'=>$sectionKey,
-											  'title'=>$this->_FixSpaces($menuItem->title),
-											  'description'=>$menuItem->description,
-											  'show_in_menu'=>true,
-											  'module'=>$menuItem->module);
+				$this->_menuItems[$key]=array('url'=>$menuItem->url,'parent'=>$sectionKey,
+											  'title'=>$this->_FixSpaces($menuItem->title),'description'=>$menuItem->description,
+											  'show_in_menu'=>true,'module'=>$menuItem->module);
 			}
 		}
 	
@@ -579,9 +550,7 @@ abstract class CmsAdminThemeBase
 		// remove any top level items that don't have children
 		$parents = array();
 		foreach ($this->_menuItems as $sectionKey=>$sectionArray) {
-			if( $this->_menuItems[$sectionKey]['parent'] == -1 ) {
-				$parents[] = $sectionKey;
-			}
+			if( $this->_menuItems[$sectionKey]['parent'] == -1 ) $parents[] = $sectionKey;
 		}
 		foreach( $parents as $oneparent ) {
 			$found = 0;
@@ -643,10 +612,6 @@ abstract class CmsAdminThemeBase
 				if( $u1->get_path() == $u2->get_path() && 
 					isset($v1['mact']) && isset($v2['mact']) && 
 					$v1['mact'] == $v2['mact'] ) {
-//				$tmp = explode(',',$_REQUEST['mact']);
-// 				debug_display($sectionArray['url'],$_SERVER['REQUEST_URI']);
-//				if( startswith($sectionArray['url'],$_SERVER['REQUEST_URI']) ) {
-// 				if( strstr($_SERVER['REQUEST_URI'],$sectionArray['url']) !== FALSE ) {
 					$this->_menuItems[$sectionKey]['selected'] = TRUE;
 					$this->_active_item = $sectionKey;
 					$this->_breadcrumbs[] = array('title'=>$this->_menuItems[$sectionKey]['title'], 
@@ -661,10 +626,6 @@ abstract class CmsAdminThemeBase
 						}
 					}
 				}
-// 				else if( $tmp[0] == $sectionArray['module'] && !$this->_active_item ) {
-// 					// this will ensure we get to the right module, but not necessarily the right parent action.
-// 					$this->_active_item = $sectionKey;
-// 				}
 			}
 			else if (strstr($_SERVER['REQUEST_URI'],$sectionArray['url']) !== FALSE &&
 					 (!isset($sectionArray['type']) || $sectionArray['type'] != 'external')) {
@@ -688,25 +649,7 @@ abstract class CmsAdminThemeBase
 
 		// fix subtitle, if any
 		if ($subtitle != '') $this->_title .= ': '.$subtitle;
-		
 
-		/*
-		$count = 0;
-		if ($count > 0) {
-			// and fix up the last breadcrumb...
-			if ($this->_query != '' && 
-				strpos($this->_breadcrumbs[$count-1]['url'],'&amp;') === false) {
-				$this->_query = preg_replace('/\&/','&amp;',$this->_query);
-				$pos = strpos($this->_breadcrumbs[$count-1]['url'],'?');
-				$tmp = substr($this->_breadcrumbs[$count-1]['url'],0,$pos).'?'.$this->_query;
-				$this->_breadcrumbs[$count-1]['url'] = $tmp;
-			}
-			unset($this->_breadcrumbs[$count-1]['url']);
-			if ($this->_subtitle != '') {
-				$this->_breadcrumbs[$count-1]['title'] .=  ': '.$this->_subtitle;
-			}
-		}
-		*/
 		debug_buffer('after populate admin navigation');
     }
     
@@ -756,9 +699,7 @@ abstract class CmsAdminThemeBase
     {
 		$this->_SetAggregatePermissions();
 
-    	if (isset($this->_perms[$permission]) && $this->_perms[$permission]) {
-    	   	return true;
-		}
+    	if (isset($this->_perms[$permission]) && $this->_perms[$permission]) return true;
 		return false;
     }
 
@@ -792,15 +733,11 @@ abstract class CmsAdminThemeBase
 			if( !$one['show_in_menu'] ) continue;
 			if( (!isset($one['parent']) && $parent == -1) || 
 				(isset($one['parent']) && $one['parent'] == $parent) ) {
-				if( isset($one['children']) ) {
-					unset($one['children']);
-				}
+				if( isset($one['children']) ) unset($one['children']);
 
 				if( $maxdepth < 0 || $depth + 1 < $maxdepth ) {
 					$children = $this->_get_navigation_tree_sub($key,$maxdepth,$depth+1);
-					if( is_array($children) && count($children) ) {
-						$one['children'] = $children;
-					}
+					if( is_array($children) && count($children) ) $one['children'] = $children;
 				}
 				$one['name'] = $key;
 				$result[] = $one;
@@ -841,9 +778,7 @@ abstract class CmsAdminThemeBase
 	{
 		$nav = $this->get_admin_navigation();
 		foreach( $nav as $key => $rec ) {
-			if( isset($rec['title']) && $rec['title'] == $title ) {
-				return $key;
-			}
+			if( isset($rec['title']) && $rec['title'] == $title ) return $key;
 		}
 	}
 
@@ -966,12 +901,10 @@ abstract class CmsAdminThemeBase
 		// @todo: fix me...
 		if( !is_array($this->_imageLink) ) $this->_imageLink = array();
 		if (! isset($this->_imageLink[$imageName])) {
+			$imagePath = '';
 			if (strpos($imageName,'/') !== false) {
 				$imagePath = substr($imageName,0,strrpos($imageName,'/')+1);
 				$imageName = substr($imageName,strrpos($imageName,'/')+1);
-			}
-			else {
-				$imagePath = '';
 			}
     	   	
 			$config = cmsms()->GetConfig();
@@ -987,18 +920,10 @@ abstract class CmsAdminThemeBase
 		}
 
 		$retStr = '<img src="'.$this->_imageLink[$imageName].'"';
-		if ($class != '') {
-			$retStr .= ' class="'.$class.'"';
-		}
-		if ($width != '') {
-			$retStr .= ' width="'.$width.'"';
-		}
-		if ($height != '') {
-			$retStr .= ' height="'.$height.'"';
-		}
-		if ($alt != '') {
-			$retStr .= ' alt="'.$alt.'" title="'.$alt.'"';
-		}
+		if ($class != '') $retStr .= ' class="'.$class.'"';
+		if ($width != '') $retStr .= ' width="'.$width.'"';
+		if ($height != '') $retStr .= ' height="'.$height.'"';
+		if ($alt != '') $retStr .= ' alt="'.$alt.'" title="'.$alt.'"';
 		$retStr .= ' />';
 		return $retStr;
 	}
@@ -1127,9 +1052,7 @@ abstract class CmsAdminThemeBase
 	 */
 	public function add_notification(CmsAdminThemeNotification& $notification)
 	{
-		if( !is_array($this->_notifications) ) {
-			$this->_notifications = array();
-		}
+		if( !is_array($this->_notifications) ) $this->_notifications = array();
 		$this->_notifications[] = $notification;
 	}
 
@@ -1180,12 +1103,8 @@ abstract class CmsAdminThemeBase
 		$depth = 0;
 		$menuItems = $this->get_admin_navigation();
 		foreach( $menuItems as $sectionKey=>$menuItem ) {
-			if( $menuItem['parent'] != -1 ) {
-				continue;
-			}
-			if( !$menuItem['show_in_menu'] || strlen($menuItem['url']) < 1 ) {
-				continue;
-			}
+			if( $menuItem['parent'] != -1 ) continue;
+			if( !$menuItem['show_in_menu'] || strlen($menuItem['url']) < 1 ) continue;
 	     
 			$opts[$menuItem['title']] = $menuItem['url'];
 
@@ -1198,9 +1117,7 @@ abstract class CmsAdminThemeBase
 					}
 
 					$menuChild = $menuItems[$thisChild];
-					if( !$menuChild['show_in_menu'] || strlen($menuChild['url']) < 1 ) {
-						continue;
-					}
+					if( !$menuChild['show_in_menu'] || strlen($menuChild['url']) < 1 ) continue;
 
 					//$opts['&nbsp;&nbsp;'.$menuChild['title']] = cms_htmlentities($menuChild['url']);
 					$opts['&nbsp;&nbsp;'.$menuChild['title']] = $menuChild['url'];
@@ -1209,18 +1126,14 @@ abstract class CmsAdminThemeBase
 		}
 
 		$atext = '';
-		if( $id != '' ) {
-			$atext = ' id="'.trim($id).'"';
-		}
+		if( $id != '' ) $atext = ' id="'.trim($id).'"';
 		$output = '<select'.$atext.' name="'.$name.'">'."\n";
 		foreach( $opts as $key => $value ) {
 			if( $value == $selected ) {
-				$output .= sprintf("<option selected=\"selected\" value=\"%s\">%s</option>\n",
-								   $value,$key);
+				$output .= sprintf("<option selected=\"selected\" value=\"%s\">%s</option>\n",$value,$key);
 			}
 			else {
-				$output .= sprintf("<option value=\"%s\">%s</option>\n",
-								   $value,$key);
+				$output .= sprintf("<option value=\"%s\">%s</option>\n",$value,$key);
 			}
 		}
 		$output .= '</select>'."\n";
@@ -1241,11 +1154,9 @@ abstract class CmsAdminThemeBase
 			$txt = $this->_breadcrumbs[$count]['url'];
 			return $txt;
 		}
-		else {
-			// rely on base href to redirect back to the
-			// admin home page
-			return 'index.php'.$urlext;
-		}
+		// rely on base href to redirect back to the
+		// admin home page
+		return 'index.php'.$urlext;
 	}
 
 	/**
@@ -1376,10 +1287,9 @@ abstract class CmsAdminThemeBase
 	 */
 	public final function StartTab($tabid, $params = array())
 	{
+		$message = '';
 		if (FALSE == empty($this->_activetab) && $tabid == $this->_activetab && FALSE == empty($params['tab_message'])) {
 			$message = $this->ShowMessage($this->Lang($params['tab_message']));
-		} else {
-			$message = '';
 		}
 		
 		return '<div id="' . strtolower(str_replace(' ', '_', $tabid)) . '_c">'.$message;

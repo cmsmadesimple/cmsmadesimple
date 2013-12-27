@@ -179,12 +179,9 @@ final class modmgr_utils
   {
     $mod = cms_utils::get_module('ModuleManager');
     $xml_filename = modulerep_client::get_repository_xml($filename,$size);
-    if( !$xml_filename ) throw new CmsCommunicationException($mod->Lang('error_downloadxml',$module_meta['filename']));
+    if( !$xml_filename ) throw new CmsCommunicationException($mod->Lang('error_downloadxml',$filename));
 
-    if( !$md5sum ) {
-      $md5sum = modulerep_client::get_module_md5($filename);
-    }
-
+    if( !$md5sum ) $md5sum = modulerep_client::get_module_md5($filename);
     $dl_md5 = md5_file($xml_filename);
     
     if( $md5sum != $dl_md5 ) {
@@ -207,18 +204,22 @@ final class modmgr_utils
       $xml_filename = self::get_module_xml($module_meta['filename'],$module_meta['size'],
 					   (isset($module_meta['md5sum']))?$module_meta['md5sum']:'');
 
+      debug_to_log('install module 1 '.$module_meta['filename'],'','/tmp/debug.out');
       // expand the xml
       $ops = cmsms()->GetModuleOperations();
       $res = $ops->ExpandXMLPackage( $xml_filename, 1 );
       @unlink($xml_filename);
 
       // install the module
+      debug_to_log('install module 2 '.$module_meta['filename'],'','/tmp/debug.out');
       $res = $ops->InstallModule($module_meta['name']);
-      if( !is_array($res) || $res[0] != TRUE ) throw new CmsInvalidDataException($rec[1]);
+      debug_to_log($res,'install module 3','/tmp/debug.out');
+      if( !is_array($res) || $res[0] != TRUE ) throw new CmsInvalidDataException($res[1]);
       return $res[1];
     }
     catch( Exception $e ) {
       // here, maybe we should clean up the expanded package?
+      debug_to_log($e);
       throw $e;
     }
   }
@@ -239,12 +240,12 @@ final class modmgr_utils
       // expand the xml
       $ops = cmsms()->GetModuleOperations();
       $res = $ops->ExpandXMLPackage( $xml_filename, 1 );
-      @unlink($xml_filename);
 
       // install the module
       $res = $ops->UpgradeModule($module_meta['name']);
       if( !is_array($res) ) throw new CmsLogicException($this->Lang('error_moduleupgradefailed'));
       if( $res[0] == FALSE) throw new CmsInvalidDataException($rec[1]);
+      @unlink($xml_filename);
     }
     catch( Exception $e ) {
       // here, maybe we should clean up the expanded package?
