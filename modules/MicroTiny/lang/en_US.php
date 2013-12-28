@@ -5,7 +5,12 @@ $lang['allowimages_help'] = 'This enables an image button on the toolbar, allowi
 $lang['allowimages_text'] = 'Allow images';
 $lang['allow_resize'] = 'Allow Resize';
 
+// B
+$lang['browse'] = 'Browse';
+
 // C
+$lang['cancel'] = 'Cancel';
+$lang['class'] = 'Class';
 $lang['cmsmslinker'] = 'CMSMS Linker';
 $lang['css_styles_help'] = 'CSS-stylenames specified here are added to a dropdownbox in the editor. Leaving the input field empty will keep the dropdown-box hidden (default behavior).';
 $lang['css_styles_help2'] = 'The styles can either be just the class name, or a classname with a new name to show.<br />
@@ -16,17 +21,20 @@ Note: No checking for the actual existence of the stylenames is done. They are u
 $lang['css_styles_text'] = 'CSS Styles';
 
 // D
+$lang['description'] = 'Description';
 $lang['dimensions'] = 'WxH';
 
 // E
+$lang['edit_image'] = 'Edit Image';
 $lang['example'] = 'MicroTiny example';
 
 // F
-$lang['filepickertitle'] = 'File picker';
+$lang['filepickertitle'] = 'CMSMS File picker';
 $lang['force_blackonwhite'] = 'Force black text on white background';
 $lang['friendlyname'] = 'MicroTiny WYSIWYG editor';
 
 // H
+$lang['height'] = 'Height';
 $lang['help'] = <<<EOT
 <h3>What Does This Do?</h3>
 <p>MicroTiny is a small, restricted version of the TinyMCE-editor, formerly the wysiwyg-default of CMS Made Simple. This provides nothing more than the basics of editing, but is still a powerful tool allowing easy changes to content pages.</p>
@@ -54,6 +62,12 @@ $lang['help_force_blackonwhite'] = 'Force the MicroTiny editor to have black tex
 $lang['help_show_statusbar'] = 'Enable a status bar on the bottom of the wysiwyg area. This is applicable only in an admin view.';
 $lang['help_strip_background'] = 'Strip background effects from effected stylesheets. This may assist in displaying text in the wysiwyg editor in environments with dark backgrounds and light foregrounds';
 
+// I
+$lang['image'] = 'Image';
+
+// O
+$lang['ok'] = 'Ok';
+
 // S
 $lang['savesettings'] = 'Save settings';
 $lang['settings'] = 'Settings';
@@ -69,10 +83,13 @@ $lang['tmpnotwritable'] = 'The configuration could not be written to the tmp-dir
 $lang['usestaticconfig_help'] = 'This generates a static configuration file instead of the dynamic one. Works better on some servers (for instance when running PHP as CGI)';
 $lang['usestaticconfig_text'] = 'Use static config';
 
+// W
+$lang['width'] = 'Width';
+
 // V
 $lang['view_source'] = 'View Source';
 
 // Y
-$lang['youareintext'] = 'You are in';
+$lang['youareintext'] = 'Current Directory';
 
 ?>

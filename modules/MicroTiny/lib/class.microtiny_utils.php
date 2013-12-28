@@ -37,27 +37,47 @@ class microtiny_utils
    */		
   static public function WYSIWYGGenerateHeader($htmlresult='', $junk=false) 
   {
-    $mod = cms_utils::get_module('MicroTiny');
     // Check if we are in object instance
-    if(!is_object($mod)) return false; // TODO: some error message?
+    $mod = cms_utils::get_module('MicroTiny');
+    if(!is_object($mod)) throw new CmsLogicException('Could not find the microtiny module...');
 
-    $frontend = FALSE;
-    global $CMS_ADMIN_PAGE;
-    if( !isset($CMS_ADMIN_PAGE) ) $frontend = TRUE;
-
+    $frontend = cmsms()->is_frontend_request();
     $languageid = self::GetLanguageId($frontend);
+
     $fn = self::SaveStaticConfig($frontend,'',$languageid);
 
     $config = cms_utils::get_config();
-    $output='<script type="text/javascript" src="'.$config->smart_root_url().'/modules/MicroTiny/tinymce/tiny_mce.js"></script>';
+    $output = '';
+    $output .= '<script type="text/javascript" src="'.$config->smart_root_url().'/modules/MicroTiny/tinymce/tinymce.min.js"></script>';
     $configurl = $config->smart_root_url().'/tmp/cache/'.$fn.'?t='.time();
     $output.='<script type="text/javascript" src="'.$configurl.'" defer="defer"></script>';
 
     return $output;
   }	
+
+  /**
+   * Save Static configuration
+   *
+   * This function generates the microtiny initialization js file and returns its filename.
+   *
+   * @since 1.0
+   * @param boolean $frontend	
+   * @param string $templateid	
+   * @param string $languageid	
+   * @return string
+   * @deleteme
+   */		
+  private static function SaveStaticConfig($frontend=false, $themeid='', $languageid='') 
+  { 
+    $configcontent = self::GenerateConfig($frontend, $themeid, $languageid);
+    $fn = cms_join_path(PUBLIC_CACHE_LOCATION,'mt_'.md5(session_id().$frontend.$themeid.$languageid).'.js');
+    $res = file_put_contents($fn,$configcontent);
+    if( !$res ) return;
+    return basename($fn);
+  }
 	
   /**
-   * Generate dynamic config file
+   * Generate a tinymce initialization file.
    *
    * @since 1.0
    * @param boolean Frontend true/false
@@ -68,100 +88,18 @@ class microtiny_utils
   static private function GenerateConfig($frontend=false, $themeid="", $languageid="en") 
   {
     $mod = cms_utils::get_module('MicroTiny');
-    if(!is_object($mod)) return false;
 
     // Init
     $config = cms_utils::get_config();	
-    $result="";
-    $linker="";
 
     $smarty = cmsms()->GetSmarty();
-    if ($frontend) {  
-      $smarty->assign("isfrontend",true);
-    } else {
-      $smarty->assign("isfrontend",false);
-      $smarty->assign('allow_viewsource',$mod->CheckPermission('MicroTiny View HTML Source'));
-      $smarty->assign('view_source',$mod->Lang('view_source'));
-      $result .= self::GetCMSLinker();
-      $linker="cmslinker,";
-    }
+    $smarty->assign('resize',($mod->GetPreference('allow_resize',1))?'true':'false');
+    $smarty->assign('statusbar',($mod->GetPreference('show_statusbar',1))?'true':'false');
+    $smarty->assign('isfrontend',$frontend);
+    $smarty->assign('themeid',$themeid);
+    $smarty->assign('languageid',$languageid);
 
-    if( $themeid <= 0 ) $themeid = self::$_theme_id;
-    if( $themeid <= 0 ) {
-      // for the frontend
-      $contentobj = null;
-      if( cmsms()->is_frontend_request() ) {
-	$contentobj = cmsms()->get_content_object();
-      }
-      else {
-	$contentobj = cms_utils::get_app_data('editing_content');
-      }
-
-      if( is_object($contentobj) ) $themeid = $contentobj->GetPropertyValue('design_id');
-    }
-    if( $themeid <= 0 ) {
-      $collection = CmsLayoutCollection::load_default();
-      if( is_object($collection) ) $themeid = $collection->get_id();
-    }
-    if( $themeid > 0 ) $smarty->assign('themeid',$themeid);
-
-    $urlext="";
-    if (isset($_SESSION[CMS_USER_KEY])) $urlext=CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
-    $mod->smarty->assign("urlext",$urlext);
-    //,pasteword,,|,undo,redo
-    $image="";
-    if ($mod->GetPreference("allowimages",1) && !$frontend ) $image=",image,|";
-    $toolbar="undo,|,bold,italic,underline,|,cut,copy,paste,pastetext,removeformat,|,justifyleft,justifycenter,justifyright,justifyfull,|,bullist,numlist,|,".$linker."link,unlink,|".$image.",formatselect"; //,separator,styleselect
-
-    // handle css styles... newline OR comma separated (why, kinda dumb?)
-    $tmp = $mod->GetPreference('css_styles');
-    $tmp = str_replace("\r\n","\n",$tmp);
-    $tmp = explode("\n",$tmp);
-    $tmp2 = array();
-    foreach( $tmp as $one ) {
-      $one = trim($one);
-      if( empty($one) ) continue;
-
-      $tmp3 = explode(',',$one);
-      foreach( $tmp3 as $one2 ) {
-	$tmp2[] = trim($one2);
-      }
-    }
-
-    $tmp3 = array();
-    foreach( $tmp2 as $one ) {
-      $tmp4 = explode('=',trim($one),2);
-      if( count($tmp4) == 1 ) {
-	$tmp3[$tmp4[0]] = $tmp4[0];
-      }
-      else {
-	$tmp3[$tmp4[0]] = $tmp4[1];
-      }
-    }
-
-    $css_styles = '';
-    foreach( $tmp3 as $key => $value ) {
-      $css_styles .= $key.'='.$value.';';
-    }
-    $css_styles = substr($css_styles,0,-1);
-    if ($css_styles!='') {
-      $toolbar.=",separator,styleselect";
-      $smarty->assign("css_styles",$css_styles);
-    }
-
-    // give the rest to smarty.
-    $smarty->assign('show_statusbar',$mod->GetPreference('show_statusbar',1));
-    $smarty->assign('allow_resize',$mod->GetPreference('allow_resize',1));
-    $smarty->assign('strip_background',$mod->GetPreference('strip_background',1));
-    $smarty->assign('force_blackonwhite',$mod->GetPreference('force_blackonwhite',0));
-    $smarty->assign("toolbar",$toolbar);				
-    $smarty->assign("language",$languageid);			
-    $smarty->assign("filepickertitle",$mod->Lang("filepickertitle"));
-    $fpurl=$mod->create_url("","filepicker");
-    $fpurl=str_replace("&amp;","&",$fpurl);
-    $smarty->assign("filepickerurl", $fpurl);
-
-    $result .= $mod->ProcessTemplate('microtinyconfig.tpl');
+    $result = $mod->ProcessTemplate('tinymce_config.tpl');
     return $result;
   }
 
@@ -282,13 +220,13 @@ class microtiny_utils
   }
 
   /**
-   * Get Language ID
+   * Convert users current language to something tinymce can prolly understand (hopefully).
    *
    * @since 1.0
    * @return string
    */			
   private static function GetLanguageId() {
-    $mylang = get_preference(get_userid(FALSE),'default_cms_language');
+    $mylang = CmsNlsOperations::get_current_language();
     if ($mylang=="") return "en"; //Lang setting "No default selected"
     $mylang = substr($mylang,0,2);
 		
@@ -298,25 +236,6 @@ class microtiny_utils
     }
   }
 
-  /**
-   * Save Static configuration
-   *
-   * @since 1.0
-   * @param boolean $frontend	
-   * @param string $templateid	
-   * @param string $languageid	
-   * @return string
-   * @deleteme
-   */		
-  private static function SaveStaticConfig($frontend=false, $themeid='', $languageid='') 
-  { 
-    $configcontent = self::GenerateConfig($frontend, $themeid, $languageid);
-    $fn = cms_join_path(PUBLIC_CACHE_LOCATION,'mt_'.md5(session_id()).'.js');
-    $res = file_put_contents($fn,$configcontent);
-    if( !$res ) return;
-    return basename($fn);
-  }
-	
   /**
    * Get Thumbnail File
    *
