@@ -1170,7 +1170,7 @@ function cms_to_bool($str)
 /**
  *
  */
-function cms_get_jquery($exclude = '',$ssl = null,$cdn = false,$append = '',$custom_root='')
+function cms_get_jquery($exclude = '',$ssl = null,$cdn = false,$append = '',$custom_root='',$include_css = TRUE)
 {
   $config = cms_config::get_instance();
   $scripts = array();
@@ -1181,10 +1181,11 @@ function cms_get_jquery($exclude = '',$ssl = null,$cdn = false,$append = '',$cus
   // Scripts to include
   $scripts['jquery'] = array('cdn'=>'https://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js',
 			     'local'=>$basePath.'/lib/jquery/js/jquery-1.10.2.min.js',
-			     'aliases'=>array('jquery.min.js'));
+			     'aliases'=>array('jquery.min.js','jquery',));
   $scripts['jquery-ui'] = array('cdn'=>'https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js',
 				'local'=>$basePath.'/lib/jquery/js/jquery-ui-1.10.3.custom.min.js',
-				'aliases'=>array('jquery-ui.min.js','ui'));
+				'aliases'=>array('jquery-ui.min.js','ui'),
+				'css'=>$basePath.'/lib/jquery/css/smoothness/jquery-ui-1.10.3.custom.min.css');
   $scripts['nestedSortable'] = array('local'=>$basePath.'/lib/jquery/js/jquery.mjs.nestedSortable.js');
   $scripts['json'] = array('local'=>$basePath.'/lib/jquery/js/jquery.json-2.4.min.js');
   $scripts['migrate'] = array('local'=>$basePath.'/lib/jquery/js/jquery-migrate-1.2.1.min.js');
@@ -1203,7 +1204,6 @@ function cms_get_jquery($exclude = '',$ssl = null,$cdn = false,$append = '',$cus
 
   // Check if we need to exclude some script
   if(!empty($exclude)) {
-    
     $exclude_list = explode(",", trim(str_replace(' ','',$exclude)));
     foreach($exclude_list as $one) {
       // find a match
@@ -1238,11 +1238,17 @@ function cms_get_jquery($exclude = '',$ssl = null,$cdn = false,$append = '',$cus
 
   // Output
   $output = '';
-  $fmt = '<script type="text/javascript" src="%s"></script>';
+  $fmt_js = '<script type="text/javascript" src="%s"></script>';
+  $fmt_css = '<link rel="stylesheet" type="text/css" href="%s"/>';
   foreach($scripts as $script) {
-    $url = $script['local'];
-    if( $cdn && isset($script['cdn']) ) $url = $script['cdn'];
-    $output .= sprintf($fmt,$url)."\n";
+    $url_js = $script['local'];
+    if( $cdn && isset($script['cdn']) ) $url_js = $script['cdn'];
+    $output .= sprintf($fmt_js,$url_js)."\n";
+    if( isset($script['css']) && $script['css'] != '' ) {
+      $url_css = $script['css'];
+      if( $cdn && isset($script['css_cdn']) ) $url_css = $script['css_cdn'];
+      if( $include_css ) $output .= sprintf($fmt_css,$url_css)."\n";
+    }
   }
   return $output;
 }

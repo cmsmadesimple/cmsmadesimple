@@ -18,7 +18,7 @@
 
 function smarty_function_cms_textarea($params, &$template)
 {
-  if( !isset($params['name']) ) throw new CmsInvalidDataExtension('syntax_area misssing parameter: name');
+  if( !isset($params['name']) ) throw new CmsInvalidDataException('syntax_area misssing parameter: name');
   if( isset($params['prefix']) ) $params['name'] = $params['prefix'].$params['name'];
 
   $out = CmsFormUtils::create_textarea($params);

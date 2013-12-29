@@ -1008,7 +1008,7 @@ $lang['help_function_cms_jquery'] = <<<EOT
 <p>Simply insert this tag into your page or template: <code>{cms_jquery}</code></p>
 
 <h3>Sample</h3>
-<pre><code>{cms_jquery cdn='true' exclude='jquery.ui.nestedSortable.js' append='uploads/NCleanBlue/js/ie6fix.js'}</code></pre>
+<pre><code>{cms_jquery cdn='true' exclude='jquery.ui.nestedSortable.js' append='uploads/NCleanBlue/js/ie6fix.js' include_css=0}</code></pre>
 <h4><em>Outputs</em></h4>
 <pre><code>&lt;script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"&gt;&lt;/script&gt;
 &lt;script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.21/jquery-ui.min.js"&gt;&lt;/script&gt;
@@ -1031,6 +1031,7 @@ $lang['help_function_cms_jquery'] = <<<EOT
 	<li><em>(optional) </em><tt>cdn</tt> - cdn='true' will insert jQuery and jQueryUI Frameworks using Google's Content Delivery Netwok. Default is false.</li>
 	<li><em>(optional) </em><tt>ssl</tt> - use to use the ssl_url as the base path.</li>
 	<li><em>(optional) </em><tt>custom_root</tt> - use to set any base path wished.<code>custom_root='http://test.domain.com/'</code> <br/>NOTE: overwrites ssl option and works with the cdn option</li>
+	<li><em>(optional) </em><tt>include_css <em>(boolean)</em></tt> - use to prevent css from being included with the output.  Default value is true.</li>
 	<li><em>(optional)</em> <tt>assign</tt> - Assign the results to the named smarty variable.</li>
 	</ul>
 EOT;

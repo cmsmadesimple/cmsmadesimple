@@ -19,12 +19,12 @@
 		<!--[if lt IE 9]>
 		<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
 		<![endif]-->
-		{cms_jquery append="`$config.admin_url`/themes/OneEleven/includes/standard.js"}
-		<!-- THIS IS WHERE HEADER STUFF SHOULD GO -->
-	 	{$headertext|default:''}
 		<!-- custom jQueryUI Theme 1.8.21 see style.css or link in UI Stylesheet for color reference //-->
 		<link rel="stylesheet" href="style.php?{$secureparam}" />
+		{cms_jquery append="`$config.admin_url`/themes/OneEleven/includes/standard.js" include_css=0}
 		<link href="{$config.admin_url}/themes/OneEleven/css/default-cmsms/jquery-ui-1.10.3.custom.min.css" rel="stylesheet" />
+		<!-- THIS IS WHERE HEADER STUFF SHOULD GO -->
+	 	{$headertext|default:''}
 		{module_available name='FileManager' assign='fmgood'}
 		{if (isset($fmgood) && $fmgood && $pagealias != 'File-nbsp-Manager')}{cms_module module=FileManager action='javascript'}{/if}
 	</head>

@@ -212,11 +212,6 @@ class Content extends ContentBase
 			$result = false;
 		}
 
-// 		if ($this->GetPropertyValue('content_en') == '') {
-// 			$errors[]= lang('nofieldgiven',array(lang('content')));
-// 			$result = false;
-// 		}
-
 		$blocks = $this->get_content_blocks();
 		if( !$blocks ) {
 		    $errors[] = lang('error_parsing_content_blocks');

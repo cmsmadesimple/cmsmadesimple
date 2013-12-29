@@ -19,14 +19,15 @@
 function smarty_function_cms_jquery($params, &$template)
 {
 	$smarty = $template->smarty;
-	$exclude = isset($params['exclude']) && !empty($params['exclude']) ? $params['exclude'] : '';
-	$cdn = isset($params['cdn']) && ($params['cdn'])=='true' ? true : false;
-	$append = isset($params['append']) && !empty($params['append']) ? $params['append'] : '';
-	$ssl = isset($params['ssl']) && ($params['ssl'])=='true' ? true : null;
-	$custom_root = isset($params['custom_root']) && !empty($params['custom_root']) ? $params['custom_root'] : '';
+	$exclude = trim(get_parameter_value($params,'exclude'));
+	$cdn = cms_to_bool(get_parameter_value($params,'cdn'));
+	$append = trim(get_parameter_value($params,'append'));
+	$ssl = cms_to_bool(get_parameter_value($params,'ssl'));
+	$custom_root = trim(get_parameter_value($params,'custom_root'));
+	$include_css = cms_to_bool(get_parameter_value($params,'include_css',1));
 
 	// get the output
-	$out = cms_get_jquery($exclude,$ssl,$cdn,$append,$custom_root);
+	$out = cms_get_jquery($exclude,$ssl,$cdn,$append,$custom_root,$include_css);
 	if( isset($params['assign']) )
 	{
 		$smarty->assign(trim($params['assign']),$out);
