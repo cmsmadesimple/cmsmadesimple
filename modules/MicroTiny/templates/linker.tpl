@@ -56,20 +56,30 @@
 
     $('#linker_submit').click(function(){
       var alias = $('#linker_val').val();
-      var lbl = $('#linker_page').val();
+      var lbl = $('#linker_text').val();
+      if( lbl.length == 0 ) lbl = $('#linker_page').val();
       if( alias.length == 0 ) {
 	// nothing submitted.
 	alert('{$mod->Lang('error_nopage')}');
       }
       else {
        {literal}
+        var attribs = {
+          href: '{cms_selflink href='+alias+'}',
+          class: '',
+          rel: '',
+          'data-alias': alias
+        }
+        var elem = dom.create('a',attribs,lbl);
         var sel = top.tinymce.activeEditor.selection.getContent();
+        var txt = '<a href="{cms_selflink href=' + alias + '}" data-alias="'+alias+'">' + lbl + '</a>';
         if( sel.length > 0 ) {
-          var txt = '<a href="{cms_selflink href=' + alias + '}">' + sel + '</a>';
           top.tinymce.activeEditor.selection.setContent(txt);
         }
-        else {
-          var txt = '<a href="{cms_selflink href=' + alias + '}">' + lbl + '</a>';
+        else if( selE && parE && dom ) {
+	  dom.replace(elem,parE);
+	}
+	else {
 	  top.tinymce.activeEditor.execCommand( 'mceInsertContent', false, txt );
         }
         top.tinymce.activeEditor.windowManager.close();
