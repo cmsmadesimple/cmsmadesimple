@@ -67,12 +67,20 @@ $lang['help_strip_background'] = 'Strip background effects from effected stylesh
 $lang['image'] = 'Image';
 $lang['info_linker_autocomplete'] = 'This is an autocomplete field.  Begin by typing a few characters of the desired page alias, menutext, or title.  Any matching items will be displayed in a list.';
 
+// M
+
+// N
+$lang['newwindow'] = 'New window';
+$lang['none'] = 'None';
+
 // O
 $lang['ok'] = 'Ok';
 
 // P
 $lang['prompt_linker'] = 'Enter Page title <em>(autocomplete)</em>';
 $lang['prompt_selectedalias'] = 'Selected page alias <em>(read only)</em>';
+$lang['prompt_target'] = 'Target';
+$lang['prompt_texttodisplay'] = 'Text to display';
 
 // S
 $lang['savesettings'] = 'Save settings';

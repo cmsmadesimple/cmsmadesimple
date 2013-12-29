@@ -4,7 +4,8 @@ tinymce.PluginManager.add('cmsms_linker',function(editor,url) {
     editor.windowManager.open({
       title: '{$mod->Lang('cmsms_linker')}',
       url: '{cms_action_url action=linker forjs=1}&showtemplate=false',
-      height: 240
+      inline: true,
+      height: 330
     });
   }
 

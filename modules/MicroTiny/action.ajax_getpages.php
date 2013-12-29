@@ -20,18 +20,26 @@ if( !isset($gCms) ) exit;
 check_login(); // admin only.... but any admin
 
 $out = null;
-$term = trim(get_parameter_value($_REQUEST,'term'));
-debug_to_log('ajax_getpages');
-debug_to_log('term is '.$term);
-if( $term ) {
+$term = trim(strip_tags(get_parameter_value($_REQUEST,'term')));
+$alias = trim(strip_tags(get_parameter_value($_REQUEST,'alias')));
+
+if( $alias ) {
+  $query = 'SELECT content_id,content_name,menu_text,content_alias FROM '.cms_db_prefix().'content
+            WHERE content_alias = ? AND active = 1';
+  $dbr = $db->GetRow($query,array($alias));
+  debug_to_log('got alias '.$alias);
+  if( is_array($dbr) && count($dbr) ) {
+    $out = array('label'=>$dbr['content_name'], 'value'=>$dbr['content_alias']);
+    echo json_encode($out);
+  }
+}
+else if( $term ) {
   $term = "%{$term}%";
   $query = 'SELECT content_id,content_name,menu_text,content_alias FROM '.cms_db_prefix().'content 
             WHERE (content_name LIKE ? OR menu_text LIKE ? OR content_alias LIKE ?)
               AND active = 1
             ORDER BY default_content DESC, hierarchy ASC';
   $dbr = $db->GetArray($query,array($term,$term,$term));
-  debug_to_log($db->sql);
-  debug_to_log($dbr);
   if( is_array($dbr) && count($dbr) ) {
     // found some pages to match
     $out = array();
@@ -39,7 +47,6 @@ if( $term ) {
     foreach( $dbr as $row ) {
       $out[] = array('label'=>$row['content_name'], 'value'=>$row['content_alias']);
     }
-    debug_to_log($out);
     echo json_encode($out);
   }
 }
