@@ -11,7 +11,7 @@ $lang['browse'] = 'Browse';
 // C
 $lang['cancel'] = 'Cancel';
 $lang['class'] = 'Class';
-$lang['cmsmslinker'] = 'CMSMS Linker';
+$lang['cmsms_linker'] = 'Link to CMSMS Page';
 $lang['css_styles_help'] = 'CSS-stylenames specified here are added to a dropdownbox in the editor. Leaving the input field empty will keep the dropdown-box hidden (default behavior).';
 $lang['css_styles_help2'] = 'The styles can either be just the class name, or a classname with a new name to show.<br />
 Must be sepereated by either commas or newlines.<br />
@@ -26,6 +26,7 @@ $lang['dimensions'] = 'WxH';
 
 // E
 $lang['edit_image'] = 'Edit Image';
+$lang['error_nopage'] = 'No page alias selected';
 $lang['example'] = 'MicroTiny example';
 
 // F
@@ -64,9 +65,14 @@ $lang['help_strip_background'] = 'Strip background effects from effected stylesh
 
 // I
 $lang['image'] = 'Image';
+$lang['info_linker_autocomplete'] = 'This is an autocomplete field.  Begin by typing a few characters of the desired page alias, menutext, or title.  Any matching items will be displayed in a list.';
 
 // O
 $lang['ok'] = 'Ok';
+
+// P
+$lang['prompt_linker'] = 'Enter Page title <em>(autocomplete)</em>';
+$lang['prompt_selectedalias'] = 'Selected page alias <em>(read only)</em>';
 
 // S
 $lang['savesettings'] = 'Save settings';
@@ -77,6 +83,7 @@ $lang['size'] = 'Size';
 $lang['strip_background'] = 'Strip Background CSS Effects';
 
 // T
+$lang['title_cmsms_linker'] = 'Create a link to a CMSMS content page';
 $lang['tmpnotwritable'] = 'The configuration could not be written to the tmp-dir! Please fix that!';
 
 // U

@@ -10,7 +10,9 @@
     $('a.file_action').click(function(e){
       e.preventDefault();
       var win = top.tinymce.activeEditor.windowManager.getParams().window;
-      win.document.getElementById('{$field}').value = $(this).attr('href');
+      var el = win.document.getElementById('{$field}');
+      el.value = $(this).attr('href');
+      el.selectionStart = el.selectionEnd = el.value.length
       top.tinymce.activeEditor.windowManager.close();
     });
   });
