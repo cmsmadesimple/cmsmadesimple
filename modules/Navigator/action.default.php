@@ -207,9 +207,9 @@ if( !$smarty->isCached($this->GetTemplateResource($template),$cache_id,$compile_
       $arr2[] = $id;
       $tmp = $tmp->get_parent();
     }
-    if( $start_level - 1 < count($arr) ) {
+    if( $start_level - 2 < count($arr) ) {
       // now do a childrenof the last element.
-      $tmp = $arr[$start_level-1];
+      $tmp = $arr[$start_level-2];
       if( $tmp->has_children() ) {
 	$children = $tmp->get_children();
 	foreach( $children as $one ) {

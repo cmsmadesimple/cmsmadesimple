@@ -46,6 +46,9 @@ tinymce.init({
   selector: 'textarea.MicroTiny',
   document_base_url: '{root_url}/',
   relative_urls: true,
+  {if isset($designid)}
+  content_css : "{cms_stylesheet designid=$designid nolinks=1 stripbackground=$strip_background forceblackonwhite=$force_blackonwhite}",
+  {/if}
   removed_menuitems: 'newdocument',
   urlconverter_callback: function(url,elm,onsave,name) {
     var self = this; var settings = self.settings;

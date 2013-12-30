@@ -46,7 +46,9 @@ $(document).ready(function(){
     var url = $('#form_editcss').attr('action')+'?showtemplate=false&m1_apply=1';
     var data = $('#form_editcss').serializeArray();
     $.post(url,data,function(data,textStatus,jqXHR){
-      $('#cancelbtn').attr('value','{$mod->Lang('close')}');
+      $('#cancelbtn').button('option','label','{$mod->Lang('close')}');
+      $('#css_modified_cont').hide();
+      $('#content').focus();
     });
   });
 });

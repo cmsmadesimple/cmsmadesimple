@@ -42,12 +42,13 @@ $(document).ready(function(){
   });
 
   $(document).on('click', '#applybtn', function(e){
-    // serialize the form
     e.preventDefault();
     var url = $('#form_edittemplate').attr('action')+'?showtemplate=false&m1_apply=1';
     var data = $('#form_edittemplate').serializeArray();
     $.post(url,data,function(data,textStatus,jqXHR){
-      $('#cancelbtn').attr('value','{$mod->Lang('close')}');
+      $('#cancelbtn').button('option','label','{$mod->Lang('close')}');
+      $('#tpl_modified_cont').hide();
+      $('#content').focus();
     });
   });
 });
@@ -91,7 +92,7 @@ $(document).ready(function(){
         <input type="text" id="tpl_created" value="{$template->get_created()|date_format:'%x %X'}" readonly="readonly"/>
       </p>
     </div>
-    <div class="pageoverflow">
+    <div class="pageoverflow" id="tpl_modified_cont">
       <p class="pagetext"><label for="tpl_modified">{$mod->Lang('prompt_modified')}:</label>&nbsp;{cms_help key2='help_tpl_modified'}</p>
       <p class="pageinput">
         <input type="text" id="tpl_modified" value="{$template->get_modified()|date_format:'%x %X'}" readonly="readonly"/>
