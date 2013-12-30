@@ -469,6 +469,7 @@ class Content extends ContentBase
 		$field = '';
 		$help = '';
 		$label = trim(get_parameter_value($blockInfo,'label'));
+		if( $label == '' ) $label = $blockName;
 		$required = cms_to_bool(get_parameter_value($blockInfo,'required','false'));
 		if( $blockName == 'content_en' && $label == '' ) {
 			$help = '&nbsp;'.cms_admin_utils::get_help_tag('core','help_content_content_en');
