@@ -128,6 +128,22 @@ final class cms_siteprefs
     $db->Execute($query,array($key));
     self::_reset();
   }
+
+  /**
+   * List preferences by prefix.
+   *
+   * @param string The prefix.
+   * @return mixed list of preferences name that match the prefix, or null
+   * @since 2.0
+   */
+  public static function list_by_prefix($prefix)
+  {
+	  if( !$prefix ) return;
+	  $query = 'SELECT sitepref_name FROM '.cms_db_prefix().'siteprefs WHERE sitepref_name LIKE ?';
+	  $db = cmsms()->GetDb();
+	  $dbr = $db->GetCol($query,array($prefix.'%'));
+	  if( is_array($dbr) && count($dbr) ) return $dbr;
+  }
 }
 
 #

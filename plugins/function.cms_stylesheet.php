@@ -106,7 +106,6 @@ function smarty_cms_function_cms_stylesheet($params, &$template)
 	#---------------------------------------------
 	# Build query
 	#---------------------------------------------	
-	debug_to_log('cms_stylesheet4 '.$name);
 
 	$qparms = array();
 	$where = array();
@@ -115,11 +114,16 @@ function smarty_cms_function_cms_stylesheet($params, &$template)
 
 	if (isset($params['name']) && $params['name'] != '') {
 	
-	  debug_to_log('cms_stylesheet got name of '.$params['name']);
 		$query = 'SELECT DISTINCT A.id,A.name,A.content,A.modified,A.media_type,A.media_query 
 					FROM '.cms_db_prefix().'layout_stylesheets A';
-		$where[] = 'A.name = ?';
-		$qparms[] = trim($params['name']);
+		if( (int)$params['name'] > 0 ) {
+		  $where[] = 'A.id = ?';
+		  $qparms[] = (int)$params['name'];
+		}
+		else {
+		  $where[] = 'A.name = ?';
+		  $qparms[] = trim($params['name']);
+		}
 	
 	} else {
 

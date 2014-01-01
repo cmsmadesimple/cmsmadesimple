@@ -3001,6 +3001,31 @@ abstract class CMSModule
   }
 
   /**
+   * List all preferences for a specific module by prefix.
+   *
+   * @final
+   * @param string the desifed preference name prefix.
+   * @return mixed array of preference names, or null.
+   * @since 2.0
+   */
+  final public function ListPreferencesByPrefix($prefix)
+  {
+	  if( !$prefix ) return;
+	  $prefix = $this->GetName().'_mapi_pref_'.$prefix;
+	  $tmp = cms_siteprefs::list_by_prefix($prefix);
+	  if( is_array($tmp) && count($tmp) ) {
+		  for( $i = 0; $i < count($tmp); $i++ ) {
+			  if( !startswith($tmp[$i],$prefix) ) {
+				  throw new CmsInvalidDataException(__CLASS__.'::'.__METHOD__.' invalid prefix for preference');
+			  }
+			  $tmp[$i] = substr($tmp[$i],strlen($prefix));
+		  }
+		  return $tmp;
+	  }
+  }
+
+
+  /**
    * ------------------------------------------------------------------
    * Event Handler Related functions
    * ------------------------------------------------------------------
