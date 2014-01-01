@@ -33,8 +33,11 @@ class microtiny_utils
    * @since 1.0
    * @return string
    */		
-  public static function WYSIWYGGenerateHeader($htmlresult='', $junk=false) 
+  public static function WYSIWYGGenerateHeader($htmlresult='', $elementid=null, $cssname='')
   {
+    debug_to_log(__FUNCTION__." $elementid $cssname");
+    static $first_time = true;
+
     // Check if we are in object instance
     $mod = cms_utils::get_module('MicroTiny');
     if(!is_object($mod)) throw new CmsLogicException('Could not find the microtiny module...');
@@ -42,36 +45,50 @@ class microtiny_utils
     $frontend = cmsms()->is_frontend_request();
     $languageid = self::GetLanguageId($frontend);
 
-    $fn = self::SaveStaticConfig($frontend,'',$languageid);
+    // get the latest modification time of this cssname
+    // if fn does not exist or is older than the modification time, save the config.
+    $mtime = time()-60; // by defaul cache for 1 minute ??
+    if( $cssname ) {
+      try {
+	$css = CmsLayoutStylesheet::load($cssname);
+	$mtime = $css->get_modified();
+      }
+      catch( Exception $e ) {
+	// couldn't load the stylesheet for some reason.
+	$cssname = null;
+      }
+    }
 
     $config = cms_utils::get_config();
     $output = '';
-    $output .= '<script type="text/javascript" src="'.$config->smart_root_url().'/modules/MicroTiny/tinymce/tinymce.min.js"></script>';
-    $configurl = $config->smart_root_url().'/tmp/cache/'.$fn.'?t='.time();
+    if( $first_time ) {
+      // only once per request.
+      $output .= '<script type="text/javascript" src="'.$config->smart_root_url().'/modules/MicroTiny/tinymce/tinymce.min.js"></script>';
+
+      // generate css for the plugins
+
+      $first_time = FALSE;
+    }
+
+    $fn = cms_join_path(PUBLIC_CACHE_LOCATION,'mt_'.md5(__DIR__.session_id().$frontend.$elementid.$cssname.$languageid).'.js');
+    if( !file_exists($fn) || filemtime($fn) < $mtime ) {
+      // we have to generate an mt config js file.
+      self::_save_static_config($fn,$frontend,$elementid,$cssname,$languageid);
+    }
+
+    //$configurl = $config->smart_root_url().'/tmp/cache/'.$fn.'?t='.time();
+    $configurl = $config->smart_root_url().'/tmp/cache/'.basename($fn);
     $output.='<script type="text/javascript" src="'.$configurl.'" defer="defer"></script>';
 
     return $output;
   }	
 
-  /**
-   * Save Static configuration
-   *
-   * This function generates the microtiny initialization js file and returns its filename.
-   *
-   * @since 1.0
-   * @param boolean $frontend	
-   * @param string $templateid	
-   * @param string $languageid	
-   * @return string
-   * @deleteme
-   */		
-  private static function SaveStaticConfig($frontend=false, $designid='', $languageid='') 
-  { 
-    $configcontent = self::GenerateConfig($frontend, $designid, $languageid);
-    $fn = cms_join_path(PUBLIC_CACHE_LOCATION,'mt_'.md5(session_id().$frontend.$designid.$languageid).'.js');
+  private static function _save_static_config($fn, $frontend=false, $elementid, $css_name = '', $languageid='') 
+  {
+    if( !$fn ) return;
+    $configcontent = self::_generate_config($frontend, $elementid, $css_name, $languageid);
     $res = file_put_contents($fn,$configcontent);
-    if( !$res ) return;
-    return basename($fn);
+    if( !$res ) throw new CmsFileSystemException('Problem writing data to '.$fn);
   }
 	
   /**
@@ -83,16 +100,22 @@ class microtiny_utils
    * @param string A2 Languageid
    * @return string
    */	
-  private static function GenerateConfig($frontend=false, $designid="", $languageid="en") 
+  private static function _generate_config($frontend=false, $elementid = null, $css_name = null, $languageid="en") 
   {
     $mod = cms_utils::get_module('MicroTiny');
     $config = cms_utils::get_config();	
 
     $smarty = cmsms()->GetSmarty();
+    $smarty->assign('MicroTiny',$mod);
+    $smarty->assign('mt_actionid','m1_');
+    $smarty->clear_assign('mt_cssname');
+    $smarty->clear_assign('mt_elementid');
     $smarty->assign('resize',($mod->GetPreference('allow_resize',1))?'true':'false');
     $smarty->assign('statusbar',($mod->GetPreference('show_statusbar',1))?'true':'false');
     $smarty->assign('isfrontend',$frontend);
-    $smarty->assign('designid',$designid);
+    if( $elementid ) $smarty->assign('mt_elementid',$elementid);
+    if( $css_name ) $smarty->assign('mt_cssname',$css_name);
+    debug_to_log('mt_cssname is '.$css_name);
     $smarty->assign('languageid',$languageid);
     $smarty->assign('strip_background',$mod->GetPreference('strip_background',0));
     $smarty->assign('force_blackonwhite',$mod->GetPreference('force_blackonwhite',0));

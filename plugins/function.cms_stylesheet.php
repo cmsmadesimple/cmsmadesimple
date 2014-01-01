@@ -30,6 +30,7 @@ function smarty_cms_function_cms_stylesheet($params, &$template)
 	global $CMS_LOGIN_PAGE;
 	global $CMS_STYLESHEET;
 	$CMS_STYLESHEET = 1;
+	$name = null;
 	$design_id = -1;
 	$use_https = 0;
 	$cache_dir = $config['css_path'];
@@ -45,16 +46,25 @@ function smarty_cms_function_cms_stylesheet($params, &$template)
 	# Trivial Exclusion
 	#---------------------------------------------	
 	
+	debug_to_log('cms_stylesheet');
+	debug_to_log($params);
+
 	if( isset($CMS_LOGIN_PAGE) ) return;
+
+	debug_to_log('cms_stylesheet2');
 
 	#---------------------------------------------
 	# Read parameters
 	#---------------------------------------------	
 
-	if (isset($params['designid']) && $params['designid']!='') {
+	if (isset($params['name']) && $params['name'] != '' ) {
+  	        $name = trim($params['name']);
+		debug_to_log('cms_stylesheet3 '.$name);
+	}
+	else if (isset($params['designid']) && $params['designid']!='') {
 		$design_id = (int)$params['designid'];
 	} else {
-	  $content_obj = cmsms()->get_content_object();
+	        $content_obj = cmsms()->get_content_object();
 		if( !is_object($content_obj) ) return;
 		$design_id = $content_obj->GetPropertyValue('design_id');
 		$use_https = (int)$content_obj->Secure();
@@ -96,6 +106,7 @@ function smarty_cms_function_cms_stylesheet($params, &$template)
 	#---------------------------------------------
 	# Build query
 	#---------------------------------------------	
+	debug_to_log('cms_stylesheet4 '.$name);
 
 	$qparms = array();
 	$where = array();
@@ -104,6 +115,7 @@ function smarty_cms_function_cms_stylesheet($params, &$template)
 
 	if (isset($params['name']) && $params['name'] != '') {
 	
+	  debug_to_log('cms_stylesheet got name of '.$params['name']);
 		$query = 'SELECT DISTINCT A.id,A.name,A.content,A.modified,A.media_type,A.media_query 
 					FROM '.cms_db_prefix().'layout_stylesheets A';
 		$where[] = 'A.name = ?';

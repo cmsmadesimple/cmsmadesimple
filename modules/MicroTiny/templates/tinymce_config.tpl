@@ -2,8 +2,8 @@
 tinymce.PluginManager.add('cmsms_linker',function(editor,url) {
   function cmsms_linker_open() {
     editor.windowManager.open({
-      title: '{$mod->Lang('cmsms_linker')}',
-      url: '{cms_action_url action=linker forjs=1}&showtemplate=false',
+      title: '{$MicroTiny->Lang('cmsms_linker')}',
+      url: '{cms_action_url module=MicroTiny action=linker forjs=1}&showtemplate=false',
       inline: true,
       height: 330
     });
@@ -11,9 +11,9 @@ tinymce.PluginManager.add('cmsms_linker',function(editor,url) {
 
   // add a button
   editor.addButton('cmsms_linker', {
-    title: '{$mod->Lang('title_cmsms_linker')}',
+    title: '{$MicroTiny->Lang('title_cmsms_linker')}',
     icon: 'link',
-    image: '{$mod->GetModuleURLPath()}/images/cmsmslink.gif',
+    image: '{$MicroTiny->GetModuleURLPath()}/images/cmsmslink.gif',
     onclick: cmsms_linker_open,
     onPostRender: function() {
         var ctrl = this;
@@ -32,9 +32,9 @@ tinymce.PluginManager.add('cmsms_linker',function(editor,url) {
 
   // and a menu item
   editor.addMenuItem('cmsms_linker', {
-    text: '{$mod->Lang('cmsms_linker')}',
-    title: '{$mod->Lang('title_cmsms_linker')}',
-    image: '{$mod->GetModuleURLPath()}/images/cmsmslink.gif',
+    text: '{$MicroTiny->Lang('cmsms_linker')}',
+    title: '{$MicroTiny->Lang('title_cmsms_linker')}',
+    image: '{$MicroTiny->GetModuleURLPath()}/images/cmsmslink.gif',
     context: 'insert',
     onclick: cmsms_linker_open
   });
@@ -42,12 +42,15 @@ tinymce.PluginManager.add('cmsms_linker',function(editor,url) {
 
 
 // this is the actual tinymce initialization
-tinymce.init({
-  selector: 'textarea.MicroTiny',
+var mt_selector = 'textarea.MicroTiny';
+{if isset($mt_elementid) && $mt_elementid != ''}mt_selector='textarea#{$mt_elementid}';{/if}
+
+// DEBUG: css name is: {$mt_cssname|default:'__NOT SET__'}
+$(mt_selector).tinymce({
   document_base_url: '{root_url}/',
   relative_urls: true,
-  {if isset($designid)}
-  content_css : "{cms_stylesheet designid=$designid nolinks=1 stripbackground=$strip_background forceblackonwhite=$force_blackonwhite}",
+  {if isset($mt_cssname) && $mt_cssname != ''}
+  content_css : '{cms_stylesheet name=$mt_cssname nolinks=1}',
   {/if}
   removed_menuitems: 'newdocument',
   urlconverter_callback: function(url,elm,onsave,name) {
@@ -71,8 +74,8 @@ tinymce.init({
   },
   file_browser_callback: function(field_name, url, type, win) {
     tinymce.activeEditor.windowManager.open({
-      title: '{$mod->Lang('filepickertitle')}',
-      url: '{cms_action_url action='filepicker' forjs=1}&showtemplate=false&field='+field_name,
+      title: '{$MicroTiny->Lang('filepickertitle')}',
+      url: '{cms_action_url module=MicroTiny action='filepicker' forjs=1}&showtemplate=false&field='+field_name,
       height: Math.max(window.innerHeight * .8,250)
     }, {
       window: win

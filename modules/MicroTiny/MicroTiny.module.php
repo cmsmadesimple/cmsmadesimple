@@ -36,8 +36,8 @@ class MicroTiny extends CMSModule
   public function VisibleToAdminUser() { return $this->CheckPermission('Modify Site Preferences'); }
   public function GetAdminDescription() { return $this->Lang('admindescription'); }
 
-  public function WYSIWYGGenerateHeader($htmlresult='', $frontend=false) {	
-    return microtiny_utils::WYSIWYGGenerateHeader($htmlresult, $frontend);
+  public function WYSIWYGGenerateHeader($htmlresult='', $elementid = null,$cssname = null) {
+    return microtiny_utils::WYSIWYGGenerateHeader($htmlresult, $elementid, $cssname);
   }
 	
   public function HasCapability($capability, $params=array()) {

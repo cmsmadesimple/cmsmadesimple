@@ -59,7 +59,7 @@ final class CMS_Content_Block
   {
     // {content} tag encountered.
     $rec = array('type'=>'text','id'=>'','name'=>'','usewysiwyg'=>'true','oneline'=>'false','default'=>'','label'=>'',
-		 'size'=>'50','tab'=>'','maxlength'=>'255','required'=>0,'placeholder'=>'','priority'=>'');
+		 'size'=>'50','tab'=>'','maxlength'=>'255','required'=>0,'placeholder'=>'','priority'=>'','cssname'=>'');
     foreach( $params as $key => $value ) {
       $value = trim($value,'"\'');
       if( $key == 'type' ) continue;

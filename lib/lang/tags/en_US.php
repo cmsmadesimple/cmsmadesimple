@@ -834,11 +834,13 @@ $lang['help_function_content'] = <<<EOT
 	        <li><em>(optional) </em>size (positive integer) - Applicable only when the oneline option is used this optional parameter allows you to specify the size of the edit field.  The default value is 50.</li>
 		<li><em>(optional) </em>maxlength (positive integer) - Applicable only when the oneline option is used this optional parameter allows you to specify the maximum length of input for the edit field.  The default value is 255.</li>
 	        <li><em>(optional) </em>default (string) - Allows you to specify default content for this content blocks (additional content blocks only).</li>
-		<li><em>(optional) </em>label (string) - Allows specifying a label for display in the edit content page.</li>
-	        <li><em>(optional)</em> required (true/false) - Allows specifying that the content block must contain some text.</em></li>
+		<li><em>(optional)</em> label (string) - Allows specifying a label for display in the edit content page.</li>
+	        <li><em>(optional)</em> required (true/false) - Allows specifying that the content block must contain some text.</li>
 	        <li><em>(optional)</em> placeholder (string) - Allows specifying placeholder text.</li>
+                <li><em>(optional)</em> priority (integer) - Allows specifying an integer priority for the block within the tab.</li>
 	        <li><em>(optional)</em> tab (string) - The desired tab to display this field on in the edit form..</li>
-		<li><em>(optional) </em>assign - Assigns the content to a smarty parameter, which you can then use in other areas of the page, or use to test whether content exists in it or not.
+                <li><em>(optional)</em> cssname (string) - A hint to the WYSIWYG editor module to use the specified stylesheet name for extended styles.</li>
+		<li><em>(optional)</em> assign - Assigns the content to a smarty parameter, which you can then use in other areas of the page, or use to test whether content exists in it or not.
 <p>Example of passing page content to a User Defined Tag as a parameter:</p></li>
 <pre>
          {content assign=pagecontent}

@@ -2,8 +2,9 @@
 
 final class CmsFormUtils 
 {
-  private static $_activated_wysiwyg;
+  private static $_activated_wysiwyg = array();
   private static $_activated_syntax;
+  const NONE = '__none__';
 
   private function __construct() {}
 
@@ -107,10 +108,22 @@ final class CmsFormUtils
     return self::$_activated_syntax;
   }
 
-  private static function _add_wysiwyg($module_name)
+  /**
+   * Method to activate a wysiwyg module (which will ensure that the headers and initialization is done
+   * In the frontend the {cms_init_editor} plugin must be included in the head part of the page template.
+   *
+   * @internal
+   * @ignore
+   * @param string module_name (required)
+   * @param string id (optional) the id of the textarea element)
+   * @param string stylesheet_name (optional) the name of a stylesheet to include with this area (some WYSIWYG editors may not support this)
+   * @return void
+   */
+  private static function _add_wysiwyg($module_name,$id = self::NONE,$stylesheet_name = self::NONE)
   {
-    if( !is_array(self::$_activated_wysiwyg) ) self::$_activated_wysiwyg = array();
-    if( !in_array($module_name,self::$_activated_wysiwyg) ) self::$_activated_wysiwyg[] = $module_name;
+    if( !$module_name ) return;
+    if( !isset(self::$_activated_wysiwyg[$module_name]) ) self::$_activated_wysiwyg[$module_name] = array();
+    self::$_activated_wysiwyg[$module_name][] = array('id'=>$id,'stylesheet'=>$stylesheet_name);
   }
 
   public static function get_requested_wysiwyg_modules()
@@ -157,19 +170,22 @@ final class CmsFormUtils
     if( !$attribs['name'] ) throw new CmsInvalidDataException('"name" is a required parameter"');
     $attribs['id'] = get_parameter_value($parms,'id',$attribs['name']);
     $attribs['class'] = get_parameter_value($parms,'class','cms_textarea');
-    $attribs['class'] = get_parameter_value($parms,'classname',$attribs['class']);
+    $attribs['class'] = get_parameter_value($parms,'classname',$attribs['class']); // classname param can override class.
 
     $forcemodule = get_parameter_value($parms,'forcemodule');
     $enablewysiwyg = cms_to_bool(get_parameter_value($parms,'enablewysiwyg','false')); // if not false, we want a wysiwyg area
     $wantedsyntax = get_parameter_value($parms,'wantedsyntax'); // if not null, and no wysiwyg found, use a syntax area.
     $wantedsyntax = get_parameter_value($parms,'type',$wantedsyntax);
 
+    $attribs['class'] .= ' '.$attribs['name']; // make sure the name is one of the classes.
+
     if( $enablewysiwyg ) {
       $module = cmsms()->GetModuleOperations()->GetWYSIWYGModule($forcemodule);
       if( $module && $module->HasCapability(CmsCoreCapabilities::WYSIWYG_MODULE) ) {
 	$attribs['class'] .= ' '.$module->GetName();
 	$attribs['data-cms-lang'] = 'html';
-	self::_add_wysiwyg($module->GetName());
+	$css_name = get_parameter_value($parms,'cssname',self::NONE);
+	self::_add_wysiwyg($module->GetName(),$attribs['id'],$css_name);
       } else {
 	// just incase forced module is not a wysiwyg module.
 	$module = null;

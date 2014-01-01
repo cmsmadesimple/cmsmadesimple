@@ -35,6 +35,8 @@ class CmsLayoutStylesheet
   private $_dirty;
   private $_data = array();
   private $_design_assoc;
+	private static $_name_cache = array();
+	private static $_css_cache = array();
 	private static $_lock_cache;
 	private static $_lock_cache_loaded;
 
@@ -154,12 +156,9 @@ class CmsLayoutStylesheet
     if( is_null($this->_design_assoc) ) {
       $this->_design_assoc = null;
       $db = cmsms()->GetDb();
-      $query = 'SELECT design_id FROM '.cms_db_prefix().CmsLayoutCollection::CSSTABLE.'
-                WHERE css_id = ?';
+      $query = 'SELECT design_id FROM '.cms_db_prefix().CmsLayoutCollection::CSSTABLE.' WHERE css_id = ?';
       $tmp = $db->GetCol($query,array($this->get_id()));
-      if( is_array($tmp) && count($tmp) ) {
-				$this->_design_assoc = $tmp;
-      }
+      if( is_array($tmp) && count($tmp) ) $this->_design_assoc = $tmp;
     }
     return $this->_design_assoc;
   }
@@ -169,8 +168,7 @@ class CmsLayoutStylesheet
     if( !is_array($x) ) return;
 
     foreach( $x as $y ) {
-      if( !is_numeric($y) )
-				throw new CmsInvalidDatException('Invalid data in design list.  Expect array of integers');
+      if( !is_numeric($y) ) throw new CmsInvalidDatException('Invalid data in design list.  Expect array of integers');
     }
 
     $this->_design_assoc = $x;
@@ -190,9 +188,7 @@ class CmsLayoutStylesheet
       $n = $design->get_id();
     }
 
-    if( !is_array($this->_design_assoc) ) {
-      $this->_design_assoc = array();
-    }
+    if( !is_array($this->_design_assoc) ) $this->_design_assoc = array();
     $this->_design_assoc[] = $n;
     $this->_dirty = TRUE;
   }
@@ -226,27 +222,19 @@ class CmsLayoutStylesheet
 
   protected function validate()
   {
-    if( !$this->get_name() ) {
-      throw new CmsInvalidDataException('Each stylesheet must have a name');
-    }
-    if( !$this->get_content() ) {
-      throw new CmsInvalidDataException('Each stylesheet must have some content');
-    }
-		if( endswith($this->get_name(),'.css') ) {
-			throw new CmsInvalidDataException('Invalid name for a database stylesheet');
-		}
+    if( !$this->get_name() ) throw new CmsInvalidDataException('Each stylesheet must have a name');
+    if( !$this->get_content() ) throw new CmsInvalidDataException('Each stylesheet must have some content');
+		if( endswith($this->get_name(),'.css') ) throw new CmsInvalidDataException('Invalid name for a database stylesheet');
 
     $db = cmsms()->GetDb();
     $tmp = null;
     if( $this->get_id() ) {
       // double check the name.
-      $query = 'SELECT id FROM '.cms_db_prefix().self::TABLENAME.'
-                WHERE name = ? AND id != ?';
+      $query = 'SELECT id FROM '.cms_db_prefix().self::TABLENAME.' WHERE name = ? AND id != ?';
       $tmp = $db->GetOne($query,array($this->get_name(),$this->get_id()));
     } else {
       // double check the name.
-      $query = 'SELECT id FROM '.cms_db_prefix().self::TABLENAME.'
-                WHERE name = ?';
+      $query = 'SELECT id FROM '.cms_db_prefix().self::TABLENAME.' WHERE name = ?';
       $tmp = $db->GetOne($query,array($this->get_name()));
     }
     if( $tmp ) {
@@ -264,27 +252,20 @@ class CmsLayoutStylesheet
                   modified = ?
               WHERE id = ?';
 		$tmp = '';
-		if( isset($this->_data['media_type']) ) {
-			$tmp = implode(',',$this->_data['media_type']);
-		}
+		if( isset($this->_data['media_type']) ) $tmp = implode(',',$this->_data['media_type']);
     $db = cmsms()->GetDb();
     $dbr = $db->Execute($query,
 												array($this->get_name(),$this->get_content(),$this->get_description(),
-															$tmp,$this->get_media_query(),time(),
-															$this->get_id()));
-    if( !$dbr ) {
-      throw new CmsSQLErrorException($db->sql.' -- '.$db->ErrorMsg());
-    }
+															$tmp,$this->get_media_query(),time(), $this->get_id()));
+    if( !$dbr ) throw new CmsSQLErrorException($db->sql.' -- '.$db->ErrorMsg());
 
     $query = 'DELETE FROM '.cms_db_prefix().CmsLayoutCollection::CSSTABLE.' WHERE css_id = ?';
     $dbr = $db->Execute($query,array($this->get_id()));
-    if( !$dbr ) {
-      throw new CmsSQLErrorException($db->sql.' -- '.$db->ErrorMsg());
-    }
+    if( !$dbr ) throw new CmsSQLErrorException($db->sql.' -- '.$db->ErrorMsg());
+
     $t = $this->get_designs();
     if( is_array($t) && count($t) ) {
-      $query = 'INSERT INTO '.cms_db_prefix().CmsLayoutCollection::CSSTABLE.' (css_id,design_id)
-                VALUES(?,?)';
+      $query = 'INSERT INTO '.cms_db_prefix().CmsLayoutCollection::CSSTABLE.' (css_id,design_id) VALUES(?,?)';
       foreach( $t as $one ) {
 				$dbr = $db->Execute($query,array($this->get_id(),(int)$one));
       }
@@ -302,30 +283,21 @@ class CmsLayoutStylesheet
 
     // insert the record
 		$tmp = '';
-		if( isset($this->_data['media_type']) ) {
-			$tmp = implode(',',$this->_data['media_type']);
-		}
-    $query = 'INSERT INTO '.cms_db_prefix().self::TABLENAME.'
-              (name,content,description,media_type,media_query,
-               created,modified) VALUES (?,?,?,?,?,?,?)';
+		if( isset($this->_data['media_type']) ) $tmp = implode(',',$this->_data['media_type']);
+    $query = 'INSERT INTO '.cms_db_prefix().self::TABLENAME.' (name,content,description,media_type,media_query, created,modified) 
+              VALUES (?,?,?,?,?,?,?)';
     $db = cmsms()->GetDb();
     $dbr = $db->Execute($query,
 			array($this->get_name(),$this->get_content(),$this->get_description(),
-			      $tmp,$this->get_media_query(),
-			      time(),time()));
-    if( !$dbr ) {
-      throw new CmsSQLErrorException($db->sql.' -- '.$db->ErrorMsg());
-    }
+			      $tmp,$this->get_media_query(), time(),time()));
+    if( !$dbr ) throw new CmsSQLErrorException($db->sql.' -- '.$db->ErrorMsg());
     $this->_data['id'] = $db->Insert_ID();
 
     $t = $this->get_designs();
     if( is_array($t) && count($t) ) {
-      $query = 'INSERT INTO '.cms_db_prefix().CmsLayoutCollection::CSSTABLE.' 
-                (css_id,design_id)
-                VALUES(?,?)';
+      $query = 'INSERT INTO '.cms_db_prefix().CmsLayoutCollection::CSSTABLE.' (css_id,design_id) VALUES(?,?)';
       foreach( $t as $one ) {
 				$dbr = $db->Execute($query,array($this->get_id(),(int)$one));
-				debug_display($db->sql.' -- '.$db->ErrorMsg());
       }
     }
 
@@ -353,12 +325,10 @@ class CmsLayoutStylesheet
 
 		Events::SendEvent('Core','DeleteStylesheetPre',array(get_class($this)=>&$this));
     $db = cmsms()->GetDb();
-    $query = 'DELETE FROM '.cms_db_prefix().CmsLayoutCollection::CSSTABLE.'
-              WHERE css_id = ?';
+    $query = 'DELETE FROM '.cms_db_prefix().CmsLayoutCollection::CSSTABLE.' WHERE css_id = ?';
     $dbr = $db->Execute($query,array($this->get_id()));
 
-    $query = 'DELETE FROM '.cms_db_prefix().self::TABLENAME.'
-              WHERE id = ?';
+    $query = 'DELETE FROM '.cms_db_prefix().self::TABLENAME.' WHERE id = ?';
     $dbr = $db->Execute($query,array($this->get_id()));
 
     CmsTemplateCache::clear_cache();
@@ -408,49 +378,76 @@ class CmsLayoutStylesheet
     $ob = new CmsLayoutStylesheet();
 		$row['media_type'] = explode(',',$row['media_type']);;
     $ob->_data = $row;
+		self::$_css_cache[$row['id']] = $ob;
+		self::$_name_cache[$row['name']] = $row['id'];
     return $ob;
   }
 
   public static function &load($a)
   {
+		// check the cache first..
     $db = cmsms()->GetDb();
     $row = null;
     if( (int)$a > 0 ) {
-      $query = 'SELECT * FROM '.cms_db_prefix().self::TABLENAME.'
-                WHERE id = ?';
-      $row = $db->GetRow($query,array((int)$a));
-    }
-    else if( is_string($a) && strlen($a) > 0 ) {
-      $query = 'SELECT * FROM '.cms_db_prefix().self::TABLENAME.'
-                WHERE name = ?';
+			$a = (int)$a;
+			if( isset(self::$_css_cache[$a]) ) return self::$_css_cache[$a];
+			// not in cache
+      $query = 'SELECT * FROM '.cms_db_prefix().self::TABLENAME.' WHERE id = ?';
       $row = $db->GetRow($query,array($a));
     }
-    if( !is_array($row) || count($row) == 0 ) {
-      throw new CmsDataNotFoundException('Could not find template identified by '.$a);
+    else if( is_string($a) && strlen($a) > 0 ) {
+			if( isset(self::$_name_cache[$a]) ) {
+				$b = (int)self::$_name_cache[$a];
+				if( isset(self::$_css_cache[$b]) ) return self::$_css_cache[$b];
+			}
+			// not in cache
+      $query = 'SELECT * FROM '.cms_db_prefix().self::TABLENAME.' WHERE name = ?';
+      $row = $db->GetRow($query,array($a));
     }
+    if( !is_array($row) || count($row) == 0 ) throw new CmsDataNotFoundException('Could not find template identified by '.$a);
 
     return self::_load_from_data($row);
   }
 
 	public static function load_bulk($ids)
 	{
-		for( $i = 0; $i < count($ids); $i++ ) {
-			$ids[$i] = (int)$ids[$i];
+		if( !is_array($ids) || count($ids) == 0 ) return;
+
+		$is_ints = FALSE;
+		if( (int)$ids[0] > 0 ) {
+			$is_ints = TRUE;
+			for( $i = 0; $i < count($ids); $i++ ) {
+				$ids[$i] = (int)$ids[$i];
+			}
 		}
+		else if( is_string($ids[0]) && strlen($ids[0]) > 0 ) {
+			for( $i = 0; $i < count($ids); $i++ ) {
+				$ids[$i] = trim($ids[$i]);
+			}
+		}
+		else {
+			// what the fuck
+			throw new CmsInvalidDataException('Invalid data passed to '.__CLASS__.'::'.__METHOD__);
+		}
+
 		$ids = array_unique($ids);
 
 		$db = cmsms()->GetDb();
-		$query = 'SELECT * FROM '.cms_db_prefix().self::TABLENAME.' WHERE id IN ('
-			.implode(',',$ids).')';
+		$query = 'SELECT * FROM '.cms_db_prefix().self::TABLENAME.' WHERE id IN ('.implode(',',$ids).')';
+		if( !$is_ints ) $query = 'SELECT * FROM '.cms_db_prefix().self::TABLENAME.' WHERE name IN ('.implode(',',$ids).')';
+
 		$dbr = $db->GetArray($query);
 		$out = array();
 		if( is_array($dbr) && count($dbr) ) {
 			foreach( $ids as $id ) {
 				foreach( $dbr as $row ) {
 					if( $row['id'] != $id ) continue;
-					$tmp = self::_load_from_data($row);
-					if( is_object($tmp) ) {
-						$out[] = self::_load_from_data($row);
+					if( isset(self::$_css_cache[$id]) ) {
+						$out[] = self::$_css_cache[$id];
+					}
+					else {
+						$tmp = self::_load_from_data($row);
+						if( is_object($tmp) ) $out[] = self::_load_from_data($row);
 					}
 				}
 			}

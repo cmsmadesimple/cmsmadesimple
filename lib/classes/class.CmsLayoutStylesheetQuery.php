@@ -36,7 +36,6 @@ class CmsLayoutStylesheetQuery extends CmsDbQueryBase
   public function execute()
   {
     if( !is_null($this->_rs) ) return;
-
     $query = 'SELECT SQL_CALC_FOUND_ROWS id FROM '.cms_db_prefix().CmsLayoutStylesheet::TABLENAME;
 
     $this->_limit = 1000;
