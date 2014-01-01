@@ -46,7 +46,7 @@ try {
     }
 
     // check if name changed, and if object is a system objec, puke
-    if( $profile['system'] && $profile['name'] != $name ) {
+    if( isset($profile['system']) && $profile['system'] && $profile['name'] != $name ) {
       throw new CmsInvalidDataException($this->lang('error_cantchangesysprofilename'));
     }
 
