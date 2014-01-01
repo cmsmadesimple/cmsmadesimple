@@ -46,13 +46,14 @@ $(mt_selector).tinymce({
   statusbar: {mt_jsbool($mt_profile.showstatusbar)},
   resize: {mt_jsbool($mt_profile.allowresize)},
   theme_advanced_styles: 'Foo=foo;Bar=bar',
+  importcss_selector_filter: ".microtiny-",
 {if $isfrontend}
-  toolbar: 'undo | styleselect | bold italic underline | alignleft aligncenter alignright alignjustify | bullist numlist | link{if $mt_profile.allowimages} | image{/if}',
+  toolbar: 'undo | bold italic underline | alignleft aligncenter alignright alignjustify | bullist numlist | link{if $mt_profile.allowimages} | image{/if}',
   plugins:  [
     "autolink link anchor wordcount {if $mt_profile.allowimages} media image{/if}"
   ],
 {else}
-  toolbar: 'undo redo | styleselect | bold italic underline | alignleft aligncenter alignright alignjustify | bullist numlist | link unlink{if $mt_profile.allowimages} |{/if} image cmsms_linker',
+  toolbar: 'undo redo | cut copy paste | styleselect | bold italic underline | alignleft aligncenter alignright alignjustify | bullist numlist | link unlink{if $mt_profile.allowimages} |{/if} image cmsms_linker',
   plugins:  [
     "autolink link charmap anchor searchreplace wordcount code fullscreen insertdatetime {if $mt_profile.allowimages}media image{/if} cmsms_linker"
   ],
