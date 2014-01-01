@@ -151,6 +151,8 @@ $(document).ready(function(){
 <div id="Edit_Content_Result"></div>
 <div id="Edit_Content">
 {form_start content_id=$content_id}
+  {submit_buttons}
+
   {* tab headers *}
   {foreach from=$tab_names item='tabname' name='tabs'}
     {assign var='tmp' value='tab_'|cat:$smarty.foreach.tabs.index}
@@ -165,7 +167,6 @@ $(document).ready(function(){
     {assign var='idx' value=$smarty.foreach.tabs.index}
     {assign var='tmp' value='tab_'|cat:$idx}
     {tab_start name=$tmp}
-      {if $idx == 0}{submit_buttons}{/if}
       {if isset($tab_message_array[$idx])}{$tab_message_array[$idx]}{/if}
 
       {if isset($tab_contents_array[$idx])}
@@ -176,7 +177,6 @@ $(document).ready(function(){
         </div>
         {/foreach}
       {/if}
-      {submit_buttons}
   {/foreach}
   {if $content_obj->HasPreview()}
     {tab_start name='_preview_'}

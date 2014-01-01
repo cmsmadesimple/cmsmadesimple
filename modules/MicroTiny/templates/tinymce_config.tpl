@@ -9,6 +9,11 @@ $(mt_selector).tinymce({
   content_css : '{cms_stylesheet name=$mt_cssname nolinks=1}',
   {/if}
   removed_menuitems: 'newdocument',
+  setup: function(editor) {
+    editor.on('change', function(e) {
+      $(document).trigger('cmsms_formchange');
+    });
+  },
   urlconverter_callback: function(url,elm,onsave,name) {
     var self = this; var settings = self.settings;
     if (!settings.convert_urls || (elm && elm.nodeName == 'LINK') || url.indexOf('file:') === 0 || url.length === 0) return url;

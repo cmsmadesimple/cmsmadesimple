@@ -2157,7 +2157,7 @@ abstract class CMSModule
 	  if( $stylesheet ) $parms['stylesheet'] = $stylesheet;
 	  if( $cols ) $parms['cols'] = $cols;
 	  if( $rows ) $parms['rows'] = $rows;
-	  if( $rows ) $parms['text'] = $text;
+	  if( $text ) $parms['text'] = $text;
 	  if( $forcewysiwyg ) $parms['forcemodule'] = $forcewysiwyg;
 	  if( $wantedsyntax ) $parms['wantedsyntax'] = $wantedsyntax;
 	  if( $addtext ) $parms['addtext'] = $addtext;

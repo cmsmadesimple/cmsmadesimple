@@ -31,8 +31,7 @@ $(document).ready(function(){
 
 <div id="edit_news">
 {$startform}
-<div class="pageoverflow">
-  <p class="pagetext">&nbsp;</p>
+<div class="pageoptions">
   <p class="pageinput">{$hidden|default:''}{$submit}{$cancel}{if isset($apply)}{$apply}{/if}</p>
 </div>
 
@@ -143,25 +142,25 @@ $(document).ready(function(){
 
 {if isset($start_tab_preview)}
 {$start_tab_preview}
-<script type="text/javascript">{literal}
+<script type="text/javascript">
 jQuery(document).ready(function(){
   jQuery(document).on('click', '[name=m1_apply]', function(){
     if( typeof tinyMCE != 'undefined') tinyMCE.triggerSave();
     var data = jQuery('form').find('input:not([type=submit]), select, textarea').serializeArray();
-    data.push({'name': 'm1_ajax', 'value': 1});
-    data.push({'name': 'm1_apply', 'value': 1});
-    data.push({'name': 'showtemplate', 'value': 'false'});
+    data.push({ 'name': 'm1_ajax', 'value': 1 });
+    data.push({ 'name': 'm1_apply', 'value': 1 });
+    data.push({ 'name': 'showtemplate', 'value': 'false' });
     var url = jQuery('form').attr('action');
     jQuery.post(url,data,function(resultdata,text){
       var resp = jQuery(resultdata).find('Response').text();
       var details = jQuery(resultdata).find('Details').text();
       var htmlShow = '';
-      if( resp == 'Success' && details != '' )
-      {
+      if( resp == 'Success' && details != '' ) {
+         $('[name$=cancel]').button('option','label','{$mod->Lang('close')}');
+	 $('[name$=cancel]').val('{$mod->Lang('close')}');
 	 htmlShow = '<div class="pagemcontainer"><p class="pagemessage">'+details+'<\/p><\/div>';
       }
-      else
-      {
+      else {
 	 htmlShow = '<div class="pageerrorcontainer"><ul class="pageerror">';
 	 htmlShow += details;
 	 htmlShow += '<\/ul><\/div>';
@@ -175,24 +174,22 @@ jQuery(document).ready(function(){
   {
     if( typeof tinyMCE != 'undefined') tinyMCE.triggerSave();
     var data = jQuery('form').find('input:not([type=submit]), select, textarea').serializeArray();
-    data.push({'name': 'm1_ajax', 'value': 1});
-    data.push({'name': 'm1_preview', 'value': 1});
-    data.push({'name': 'showtemplate', 'value': 'false'});
-    data.push({'name': 'm1_previewpage', 'value': jQuery('#preview_returnid').val()});
-    data.push({'name': 'm1_detailtemplate', 'value': jQuery('#preview_template').val()});
+    data.push({ 'name': 'm1_ajax', 'value': 1 });
+    data.push({ 'name': 'm1_preview', 'value': 1 });
+    data.push({ 'name': 'showtemplate', 'value': 'false' });
+    data.push({ 'name': 'm1_previewpage', 'value': jQuery('#preview_returnid').val() });
+    data.push({ 'name': 'm1_detailtemplate', 'value': jQuery('#preview_template').val() });
     var url = jQuery('form').attr('action');
     jQuery.post(url,data,function(resultdata,text){
       var resp = jQuery(resultdata).find('Response').text();
       var details = jQuery(resultdata).find('Details').text();
       var htmlShow = '';
-      if( resp == 'Success' && details != '' )
-      {
+      if( resp == 'Success' && details != '' ) {
 	 // preview worked... now the details should contain the url
          details = details.replace(/amp;/g,'');
          jQuery('#previewframe').attr('src',details);
       }
-      else
-      {
+      else {
 	 if( details == '' ) details = 'An unknown error occurred';
 
 	 // preview save did not work.
@@ -214,7 +211,7 @@ jQuery(document).ready(function(){
     return false;
   });
 });
-{/literal}</script>
+</script>
 
 {* display a warning *}
 <div class="pagewarning">{$warning_preview}</div>

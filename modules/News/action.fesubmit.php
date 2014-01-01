@@ -170,6 +170,7 @@ if( isset( $params['submit'] ) ) {
 			      trim($db->DBTimeStamp(time()), "'"), 
 			      trim($db->DBTimeStamp(time()), "'"), 
 			      $userid,1));
+
     if( $dbr ) {
       // handle the custom fields
       $now = $db->DbTimeStamp(time());

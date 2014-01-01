@@ -212,10 +212,10 @@ final class CmsFormUtils
     if( $required ) $attribs['required'] = 'required';
     $attribs['cols'] = get_parameter_value($parms,'cols');
     $attribs['cols'] = get_parameter_value($parms,'width',$attribs['cols']);
-    if( $attribs['cols'] < 0 ) $attribs['cols'] = '';
+    if( $attribs['cols'] < 0 || $attribs['cols'] == '') $attribs['cols'] = 20;
     $attribs['rows'] = get_parameter_value($parms,'rows');
     $attribs['rows'] = get_parameter_value($parms,'height',$attribs['rows']);
-    if( $attribs['rows'] < 0 ) $attribs['rows'] = '';
+    if( $attribs['rows'] < 0 || $attribs['cols'] == '' ) $attribs['rows'] = 5;
     $attribs['maxlength'] = get_parameter_value($parms,'maxlength');
     if( $attribs['maxlength'] < 0 ) $attribs['maxlength'] = '';
     $attribs['placeholder'] = get_parameter_value($parms,'placeholder');

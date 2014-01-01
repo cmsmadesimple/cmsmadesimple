@@ -39,6 +39,7 @@ $lang['categorydeleted'] = 'The category was successfully deleted.';
 $lang['categoryupdated'] = 'The category was successfully updated.';
 $lang['category_label'] = 'Category:';
 $lang['checkbox'] = 'Checkbox';
+$lang['close'] = 'Close';
 $lang['content'] = 'Content';
 $lang['customfields'] = 'Field Definitions';
 
