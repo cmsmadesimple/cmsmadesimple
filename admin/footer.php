@@ -58,7 +58,7 @@ if( is_array($list) && count($list) ) {
       CmsLayoutStylesheet::load_bulk($cssnames);
     }
     
-    if( !is_array($cssnames) || (count($rec) > 0 && count($cssnames) != count($rec)) ) {
+    if( !is_array($cssnames) || (count($rec) > 0 && count($cssnames) != count($info)) ) {
       // there are some textareas with no cssname specified, so do a default initialization
       $headertext .= $obj->WYSIWYGGenerateHeader($htmlresult);
     }
