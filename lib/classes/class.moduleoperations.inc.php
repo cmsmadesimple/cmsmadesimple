@@ -514,7 +514,8 @@ final class ModuleOperations
 		  return FALSE;
 	  }
 
-	  if( isset($info[$module_name]) && $info[$module_name]['status'] != 'installed' && 
+	  if( is_object($obj) ) $this->_modules[$module_name] = $obj;
+	  if( (!isset($info[$module_name]) || $info[$module_name]['status'] != 'installed') &&
 		  (isset($CMS_INSTALL_PAGE) || $this->_is_queued_for_install($module_name)) ) {
 		  // not installed, can we auto-install it?
 		  if( (in_array($module_name,$this->cmssystemmodules) || $obj->AllowAutoInstall() == true ||
@@ -525,7 +526,7 @@ final class ModuleOperations
 		  }
 		  else if( !isset($CMS_FORCE_MODULE_LOAD) ) {
 			  // nope, can't auto install...
-			  unset($obj);
+			  unset($obj,$this->_modules[$module_name]);
 			  return FALSE;
 		  }
 	  }
@@ -554,14 +555,14 @@ final class ModuleOperations
 
 						  allow_admin_lang(FALSE); // isn't this ugly.
 						  debug_buffer("Automatic upgrade of $module_name failed");
-						  unset($obj);
+						  unset($obj,$this->_modules[$module_name]);
 						  return FALSE;
 					  }
 				  }
 				  else if( !isset($CMS_FORCE_MODULE_LOAD) && !$force_load ) {
 					  // nope, can't auto upgrade either
 					  allow_admin_lang(FALSE); // isn't this ugly.
-					  unset($obj);
+					  unset($obj,$this->_modules[$module_name]);
 					  return FALSE;
 				  }
 			  }
@@ -574,6 +575,7 @@ final class ModuleOperations
 		  return TRUE;
 	  }
 
+	  unset($obj,$this->_modules[$module_name]);
 	  return FALSE;
   }
 
@@ -1057,10 +1059,9 @@ final class ModuleOperations
    */
   public function &GetWYSIWYGModule($module_name = '')
   {
-	  global $CMS_ADMIN_PAGE;
 	  $obj = null;
 	  if( !$module_name ) {
-		  if( !isset($CMS_ADMIN_PAGE) ) {
+		  if( cmsms()->is_frontend_request() ) {
 			  $module_name = get_site_preference('frontendwysiwyg');
 		  }
 		  else {

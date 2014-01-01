@@ -577,9 +577,7 @@ final class CmsApp {
     public function is_frontend_request()
     {
 		$tmp = $this->get_states();
-		if( !is_array($tmp) || count($tmp) == 0 ) {
-			return TRUE;
-		}
+		if( !is_array($tmp) || count($tmp) == 0 ) return TRUE;
 		return FALSE;
 	}
 }

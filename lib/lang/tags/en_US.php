@@ -139,8 +139,6 @@ $lang['help_function_cms_init_editor'] = <<<EOT
 <p>The first thing you must do is select the frontend WYSIWYG editor to use in the global settings page of the admin console.  Next If you use frontend WYSIWYG editors on numerous pages, it may be best to place the {cms_init_editor} plugin directly into your page template.  If you only require the WYSIWYG editor to be enabled on a limited amount of pages you may just place it into the &quot;Page Specific Metadata&quot; field in each page.</p>
 <h3>What parameters does it take?</h3>
 <ul>
-<li><em>(optional)wysiwyg</em> - Specify the name of the WYSIWYG editor module to initialize.  Use with caution.  If you have a different WYSIWYG editor selected in the global settings, this will force the specified  editor to be initialized.</li>
-<li><em>(optional)force=0</em> - Normally this plugin will not initialize the specified (or detected) editor if it has not been marked as &quot;active&quot;.  This parameter will override that behavior.</li>
 <li><em>(optional)assign</em> - Assign the output of the plugin to the named smarty variable.</li>
 </ul>
 EOT;

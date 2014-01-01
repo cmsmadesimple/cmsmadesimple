@@ -19,17 +19,13 @@
 function smarty_function_cms_init_editor($params, &$template)
 {
   $smarty = $template->smarty;
-  // if the editor is not specified.
-  $wysiwyg = '';
-  if( isset($params['wysiwyg']) ) $wysiwyg = trim($params['wysiwyg']);
 
-  // get the frontend editor preference
-  if( !$wysiwyg ) $wysiwyg = get_site_preference('frontendwysiwyg');
+  $wysiwygs = CmsFormUtils::get_requested_wysiwyg_modules();
+  if( !is_array($wysiwygs) || count($wysiwygs) == 0 ) return;
 
-  if( !$wysiwyg || (int)$wysiwyg < 0 ) return;
-  $mod = cms_utils::get_module($wysiwyg);
+  
+  $mod = ModuleOperations::get_instance()->GetWYSIWYGModule();
   if( !is_object($mod) ) return;
-  if( !$mod->has_capability('wysiwyg') ) return;
 
   // get the output
   $output = $mod->WYSIWYGGenerateHeader();

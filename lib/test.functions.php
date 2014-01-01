@@ -70,7 +70,8 @@ function getSupportedDBDriver()
 function getTestValues( $property )
 {
 	$range = array(
-		'php_version'			=> array('minimum'=>'5.4.9', 'recommended'=>'5.5.5'),
+				   //		'php_version'			=> array('minimum'=>'5.4.9', 'recommended'=>'5.5.5'),
+		'php_version'			=> array('minimum'=>'5.3.9', 'recommended'=>'5.5.5'),
 		'gd_version'			=> array('minimum'=>2),
 		'memory_limit'			=> array('minimum'=>'16M', 'recommended'=>'24M'),
 		'max_execution_time'	=> array('minimum'=>30, 'recommended'=>60),

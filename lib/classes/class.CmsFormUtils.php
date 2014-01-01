@@ -180,9 +180,11 @@ final class CmsFormUtils
     $attribs['class'] .= ' '.$attribs['name']; // make sure the name is one of the classes.
 
     if( $enablewysiwyg ) {
+      // we want a wysiwyg
+      $appendclass = 'cmsms_wysiwyg';
       $module = cmsms()->GetModuleOperations()->GetWYSIWYGModule($forcemodule);
       if( $module && $module->HasCapability(CmsCoreCapabilities::WYSIWYG_MODULE) ) {
-	$attribs['class'] .= ' '.$module->GetName();
+	$appendclass = $module->GetName();
 	$attribs['data-cms-lang'] = 'html';
 	$css_name = get_parameter_value($parms,'cssname',self::NONE);
 	self::_add_wysiwyg($module->GetName(),$attribs['id'],$css_name);
@@ -190,6 +192,7 @@ final class CmsFormUtils
 	// just incase forced module is not a wysiwyg module.
 	$module = null;
       }
+      $attribs['class'] .= ' '.$appendclass;
     }
 
     if( !$module && $wantedsyntax ) {
