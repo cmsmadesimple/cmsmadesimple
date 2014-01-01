@@ -16,13 +16,8 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
-
-if( !cmsms() ) exit();
-
-if (!$this->VisibleToAdminUser()) {
-	$this->ShowErrors($this->Lang("accessdenied"));
-	return;
-}
+if( !cmsms() ) exit;
+if(!$this->VisibleToAdminUser() ) return;
 
 echo $this->StartTabHeaders();
 echo $this->SetTabHeader("example",$this->Lang("example"));

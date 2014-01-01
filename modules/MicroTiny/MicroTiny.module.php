@@ -19,6 +19,9 @@
 
 class MicroTiny extends CMSModule 
 {
+  const PROFILE_FRONTEND = '__frontend__';
+  const PROFILE_ADMIN = '__admin__';
+
   public function __construct() { parent::__construct(); }
   public function GetName() { return 'MicroTiny'; }
   public function GetFriendlyName() { return $this->Lang("friendlyname"); }
@@ -47,6 +50,12 @@ class MicroTiny extends CMSModule
   
 } // end of module class
 
+function mt_jsbool($val)
+{
+  $val = cms_to_bool($val);
+  if( $val ) return 'true';
+  return 'false';
+}
 #
 # EOF
 #

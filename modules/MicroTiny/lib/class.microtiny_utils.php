@@ -32,10 +32,9 @@ class microtiny_utils
    *
    * @since 1.0
    * @return string
-   */		
+   */
   public static function WYSIWYGGenerateHeader($htmlresult='', $elementid=null, $cssname='')
   {
-    debug_to_log(__FUNCTION__." $elementid $cssname");
     static $first_time = true;
 
     // Check if we are in object instance
@@ -45,9 +44,10 @@ class microtiny_utils
     $frontend = cmsms()->is_frontend_request();
     $languageid = self::GetLanguageId($frontend);
 
+    $mtime = time()-60; // by defaul cache for 1 minute ??
+
     // get the latest modification time of this cssname
     // if fn does not exist or is older than the modification time, save the config.
-    $mtime = time()-60; // by defaul cache for 1 minute ??
     if( $cssname ) {
       try {
 	$css = CmsLayoutStylesheet::load($cssname);
@@ -59,15 +59,26 @@ class microtiny_utils
       }
     }
 
+    // if this is an action for MicroTiny disable caching.
+    $smarty = cmsms()->GetSmarty();
+    $module = $smarty->get_template_vars('actionmodule');
+    if( $module == $mod->GetName() ) $mtime = time() + 60;
+
     $config = cms_utils::get_config();
     $output = '';
     if( $first_time ) {
       // only once per request.
+      $first_time = FALSE;
       $output .= '<script type="text/javascript" src="'.$config->smart_root_url().'/modules/MicroTiny/tinymce/tinymce.min.js"></script>';
 
-      // generate css for the plugins
+      if( !$frontend ) {
+	// generate js for the linker
+	$linker_fn = cms_join_path(PUBLIC_CACHE_LOCATION,'mt_'.md5(__DIR__.$languageid.'linker').'.js');
+	if( !file_exists($linker_fn) ) self::_save_linker_plugin($linker_fn,$languageid);
+	$configurl = $config->smart_root_url().'/tmp/cache/'.basename($linker_fn);
+	$output.='<script type="text/javascript" src="'.$configurl.'" defer="defer"></script>';
+      }
 
-      $first_time = FALSE;
     }
 
     $fn = cms_join_path(PUBLIC_CACHE_LOCATION,'mt_'.md5(__DIR__.session_id().$frontend.$elementid.$cssname.$languageid).'.js');
@@ -82,6 +93,17 @@ class microtiny_utils
 
     return $output;
   }	
+
+  private static function _save_linker_plugin($fn,$languageid = 'en')
+  {
+    if( !$fn ) return;
+    $mod = cms_utils::get_module('MicroTiny');
+    $smarty = cmsms()->GetSmarty();
+    $smarty->assign('MicroTiny',$mod);
+    $content = $mod->ProcessTemplate('linker_plugin.tpl');
+    $res = file_put_contents($fn,$content);
+    if( !$res ) throw new CmsFileSystemException('Problem writing data to '.$fn);
+  }
 
   private static function _save_static_config($fn, $frontend=false, $elementid, $css_name = '', $languageid='') 
   {
@@ -104,21 +126,36 @@ class microtiny_utils
   {
     $mod = cms_utils::get_module('MicroTiny');
     $config = cms_utils::get_config();	
-
     $smarty = cmsms()->GetSmarty();
     $smarty->assign('MicroTiny',$mod);
-    $smarty->assign('mt_actionid','m1_');
-    $smarty->clear_assign('mt_cssname');
+    $smarty->clear_assign('mt_profile');
     $smarty->clear_assign('mt_elementid');
-    $smarty->assign('resize',($mod->GetPreference('allow_resize',1))?'true':'false');
-    $smarty->assign('statusbar',($mod->GetPreference('show_statusbar',1))?'true':'false');
+    $smarty->assign('mt_actionid','m1_');
     $smarty->assign('isfrontend',$frontend);
-    if( $elementid ) $smarty->assign('mt_elementid',$elementid);
-    if( $css_name ) $smarty->assign('mt_cssname',$css_name);
-    debug_to_log('mt_cssname is '.$css_name);
     $smarty->assign('languageid',$languageid);
-    $smarty->assign('strip_background',$mod->GetPreference('strip_background',0));
-    $smarty->assign('force_blackonwhite',$mod->GetPreference('force_blackonwhite',0));
+    if( $elementid ) $smarty->assign('mt_elementid',$elementid);
+
+    try {
+      $profile = null;
+      if( $frontend ) {
+	$profile = microtiny_profile::load(MicroTiny::PROFILE_FRONTEND);
+      }
+      else {
+	$profile = microtiny_profile::load(MicroTiny::PROFILE_ADMIN);
+      }
+
+      // todo: use profile to adjust css name (maybe)
+      
+      $smarty->assign('mt_profile',$profile);
+      $stylesheet = (int)$profile['dfltstylesheet'];
+      if( $stylesheet < 1 ) $stylesheet = null;
+      if( $profile['allowcssoverride'] && $css_name ) $stylesheet = $css_name;
+      if( $stylesheet ) $smarty->assign('mt_cssname',$stylesheet);
+    }
+    catch( Exception $e ) {
+      // oops, we gots a propblem.
+      die($e->Getmessage());
+    }
 
     $result = $mod->ProcessTemplate('tinymce_config.tpl');
     return $result;

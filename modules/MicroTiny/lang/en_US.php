@@ -1,9 +1,6 @@
 <?php
 // A
 $lang['admindescription'] = 'A stripped down, but still powerfull implementation of the TinyMCE WYSIWYG editor';
-$lang['allowimages_help'] = 'This enables an image button on the toolbar, allowing inserting an image into the content';
-$lang['allowimages_text'] = 'Allow images';
-$lang['allow_resize'] = 'Allow Resize';
 
 // B
 $lang['browse'] = 'Browse';
@@ -26,12 +23,14 @@ $lang['dimensions'] = 'WxH';
 
 // E
 $lang['edit_image'] = 'Edit Image';
+$lang['edit_profile'] = 'Edit Profile';
+$lang['error_cantchangesysprofilename'] = 'You cannot change the name of a system profile';
+$lang['error_missingparam'] = 'A required parameter was missing';
 $lang['error_nopage'] = 'No page alias selected';
 $lang['example'] = 'MicroTiny example';
 
 // F
 $lang['filepickertitle'] = 'CMSMS File picker';
-$lang['force_blackonwhite'] = 'Force black text on white background';
 $lang['friendlyname'] = 'MicroTiny WYSIWYG editor';
 
 // H
@@ -58,16 +57,13 @@ $lang['help'] = <<<EOT
 </ul>
 </p>
 EOT;
-$lang['help_allow_resize'] = 'Allow resizing of the wysiwyg area. Requires that the statusbar be enabled';
-$lang['help_force_blackonwhite'] = 'Force the MicroTiny editor to have black text on a white background. This may assist in displaying text in the wysiwyg editor in environments with dark backgrounds and light foregrounds.';
-$lang['help_show_statusbar'] = 'Enable a status bar on the bottom of the wysiwyg area. This is applicable only in an admin view.';
-$lang['help_strip_background'] = 'Strip background effects from effected stylesheets. This may assist in displaying text in the wysiwyg editor in environments with dark backgrounds and light foregrounds';
 
 // I
 $lang['image'] = 'Image';
 $lang['info_linker_autocomplete'] = 'This is an autocomplete field.  Begin by typing a few characters of the desired page alias, menutext, or title.  Any matching items will be displayed in a list.';
 
 // M
+$lang['msg_cancelled'] = 'Operation cancelled';
 
 // N
 $lang['newwindow'] = 'New window';
@@ -77,7 +73,21 @@ $lang['none'] = 'None';
 $lang['ok'] = 'Ok';
 
 // P
+$lang['profiledesc___admin__'] = 'This profile is used by all users who are authorized to use this editor, and have chosen this editor as their WYSIWYG editr';
+$lang['profiledesc___frontend__'] = 'This profile is used for all frontend requests where this WYSIWYG editor is allowed';
+$lang['profile_admin'] = 'Admin Editors';
+$lang['profile_allowcssoverride'] = 'Allow blocks to override the selected stylesheet';
+$lang['profile_allowimages'] = 'Allow images';
+$lang['profile_allowresize'] = 'Allow resize';
+$lang['profile_dfltstylesheet'] = 'Stylesheet for editor';
+$lang['profile_frontend'] = 'Frontend Editors';
+$lang['profile_label'] = 'Label';
+$lang['profile_name'] = 'Profile name';
+$lang['profile_menubar'] = 'Show menubar';
+$lang['profile_showstatusbar'] = 'Show statusbar';
 $lang['prompt_linker'] = 'Enter Page title <em>(autocomplete)</em>';
+$lang['prompt_name'] = 'Name';
+$lang['prompt_profiles'] = 'Profiles';
 $lang['prompt_selectedalias'] = 'Selected page alias <em>(read only)</em>';
 $lang['prompt_target'] = 'Target';
 $lang['prompt_texttodisplay'] = 'Text to display';
@@ -86,12 +96,12 @@ $lang['prompt_texttodisplay'] = 'Text to display';
 $lang['savesettings'] = 'Save settings';
 $lang['settings'] = 'Settings';
 $lang['settingssaved'] = 'Settings saved';
-$lang['show_statusbar'] = 'Show Statusbar';
 $lang['size'] = 'Size';
-$lang['strip_background'] = 'Strip Background CSS Effects';
+$lang['submit'] = 'Submit';
 
 // T
 $lang['title_cmsms_linker'] = 'Create a link to a CMSMS content page';
+$lang['title_edit_profile'] = 'Edit profile';
 $lang['tmpnotwritable'] = 'The configuration could not be written to the tmp-dir! Please fix that!';
 
 // U

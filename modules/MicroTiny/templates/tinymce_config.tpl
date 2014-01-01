@@ -1,51 +1,7 @@
-// cmsms linker plugin
-tinymce.PluginManager.add('cmsms_linker',function(editor,url) {
-  function cmsms_linker_open() {
-    editor.windowManager.open({
-      title: '{$MicroTiny->Lang('cmsms_linker')}',
-      url: '{cms_action_url module=MicroTiny action=linker forjs=1}&showtemplate=false',
-      inline: true,
-      height: 330
-    });
-  }
-
-  // add a button
-  editor.addButton('cmsms_linker', {
-    title: '{$MicroTiny->Lang('title_cmsms_linker')}',
-    icon: 'link',
-    image: '{$MicroTiny->GetModuleURLPath()}/images/cmsmslink.gif',
-    onclick: cmsms_linker_open,
-    onPostRender: function() {
-        var ctrl = this;
- 
-        editor.on('NodeChange', function(e) {
-            var active = false;
-            dom = editor.dom;
-            if( e.element.nodeName == 'A' ) {
-              var href = dom.getAttrib(e.element,'href');
-	      if( href.indexOf('cms_selflink') != -1 ) active = true;
-            }
-            ctrl.active(active);
-        });
-    }
-  });
-
-  // and a menu item
-  editor.addMenuItem('cmsms_linker', {
-    text: '{$MicroTiny->Lang('cmsms_linker')}',
-    title: '{$MicroTiny->Lang('title_cmsms_linker')}',
-    image: '{$MicroTiny->GetModuleURLPath()}/images/cmsmslink.gif',
-    context: 'insert',
-    onclick: cmsms_linker_open
-  });
-});
-
-
 // this is the actual tinymce initialization
 var mt_selector = 'textarea.MicroTiny';
 {if isset($mt_elementid) && $mt_elementid != ''}mt_selector='textarea#{$mt_elementid}';{/if}
 
-// DEBUG: css name is: {$mt_cssname|default:'__NOT SET__'}
 $(mt_selector).tinymce({
   document_base_url: '{root_url}/',
   relative_urls: true,
@@ -72,6 +28,7 @@ $(mt_selector).tinymce({
 
     return url;
   },
+{if !$isfrontend}
   file_browser_callback: function(field_name, url, type, win) {
     tinymce.activeEditor.windowManager.open({
       title: '{$MicroTiny->Lang('filepickertitle')}',
@@ -81,16 +38,24 @@ $(mt_selector).tinymce({
       window: win
     });
   },
-  statusbar: {$statusbar},
   image_advtab: true,
-{if $resize == 'false'}
-  resize: false,
 {/if}
-  toolbar: 'undo redo | formatselect styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link unlink | image cmsms_linker ',
+{if !$mt_profile.menubar}
+  menubar: false,
+{/if}
+  statusbar: {mt_jsbool($mt_profile.showstatusbar)},
+  resize: {mt_jsbool($mt_profile.allowresize)},
+  theme_advanced_styles: 'Foo=foo;Bar=bar',
+{if $isfrontend}
+  toolbar: 'undo | styleselect | bold italic underline | alignleft aligncenter alignright alignjustify | bullist numlist | link{if $mt_profile.allowimages} | image{/if}',
   plugins:  [
-    "autolink link charmap anchor searchreplace wordcount code fullscreen insertdatetime media image cmsms_linker"
+    "autolink link anchor wordcount {if $mt_profile.allowimages} media image{/if}"
   ],
-  setup: function(ed) {
-  }
+{else}
+  toolbar: 'undo redo | styleselect | bold italic underline | alignleft aligncenter alignright alignjustify | bullist numlist | link unlink{if $mt_profile.allowimages} |{/if} image cmsms_linker',
+  plugins:  [
+    "autolink link charmap anchor searchreplace wordcount code fullscreen insertdatetime {if $mt_profile.allowimages}media image{/if} cmsms_linker"
+  ],
+{/if}
 });
 

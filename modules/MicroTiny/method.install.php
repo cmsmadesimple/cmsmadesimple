@@ -17,8 +17,16 @@
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 
-$this->CreatePermission('MicroTiny View HTML Source','MicroTiny View HTML Source');
+$obj = new microtiny_profile(array('name'=>MicroTiny::PROFILE_FRONTEND,'label'=>$this->Lang('profile_frontend'),
+				   'menubar'=>false,'allowimages'=>false,'showstatusbar'=>false,
+				   'allowresize'=>false,'system'=>true));
+$obj->save();
 
+
+$obj = new microtiny_profile(array('name'=>MicroTiny::PROFILE_ADMIN,'label'=>$this->Lang('profile_admin'),
+				   'menubar'=>true,'allowimages'=>true,'showstatusbar'=>true,
+				   'allowresize'=>true,'system'=>true));
+$obj->save();
 #
 # EOF
 #
