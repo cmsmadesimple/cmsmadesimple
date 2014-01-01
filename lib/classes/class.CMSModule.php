@@ -2146,7 +2146,7 @@ abstract class CMSModule
    * @deprecated
    * @see CmsFormUtils::create_textarea
    */
-  function CreateTextArea($enablewysiwyg, $id, $text, $name, $classname='', $htmlid='', $encoding='', $stylesheet='', $cols='80', $rows='15',$forcewysiwyg='',$wantedsyntax='',$addtext='')
+  function CreateTextArea($enablewysiwyg, $id, $text, $name, $classname='', $htmlid='', $encoding='', $stylesheet='', $cols='', $rows='',$forcewysiwyg='',$wantedsyntax='',$addtext='')
   {
 	  $parms = array();
 	  $parms['enablewysiwyg'] = $enablewysiwyg;

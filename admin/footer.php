@@ -67,12 +67,18 @@ if( is_array($list) && count($list) ) {
     $obj = cms_utils::get_module($module_name);
     if( is_object($obj) ) {
       foreach( $info as $rec ) {
-	$id = $rec['id'];
+	$selector = $rec['id'];
 	$cssname = $rec['stylesheet'];
-	if( $id == CmsFormUtils::NONE ) $id = null;
+	if( $selector == CmsFormUtils::NONE ) {
+	  $selector = null;
+	}
+	else {
+	  // convert the element id into a jquery selector.
+	  $selector = 'textarea#'.$selector;
+	}
 	if( $cssname == CmsFormUtils::NONE ) $cssname = null;
 	if( !$cssname ) continue;
-	$headertext .= $obj->WYSIWYGGenerateHeader($htmlresult,$id,$cssname);
+	$headertext .= $obj->WYSIWYGGenerateHeader($htmlresult,$selector,$cssname);
       }
     }
   }

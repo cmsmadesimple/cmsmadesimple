@@ -33,7 +33,7 @@ class microtiny_utils
    * @since 1.0
    * @return string
    */
-  public static function WYSIWYGGenerateHeader($htmlresult='', $elementid=null, $cssname='')
+  public static function WYSIWYGGenerateHeader($htmlresult='', $selector=null, $cssname='')
   {
     static $first_time = true;
 
@@ -81,10 +81,10 @@ class microtiny_utils
 
     }
 
-    $fn = cms_join_path(PUBLIC_CACHE_LOCATION,'mt_'.md5(__DIR__.session_id().$frontend.$elementid.$cssname.$languageid).'.js');
+    $fn = cms_join_path(PUBLIC_CACHE_LOCATION,'mt_'.md5(__DIR__.session_id().$frontend.$selector.$cssname.$languageid).'.js');
     if( !file_exists($fn) || filemtime($fn) < $mtime ) {
       // we have to generate an mt config js file.
-      self::_save_static_config($fn,$frontend,$elementid,$cssname,$languageid);
+      self::_save_static_config($fn,$frontend,$selector,$cssname,$languageid);
     }
 
     //$configurl = $config->smart_root_url().'/tmp/cache/'.$fn.'?t='.time();
@@ -105,10 +105,10 @@ class microtiny_utils
     if( !$res ) throw new CmsFileSystemException('Problem writing data to '.$fn);
   }
 
-  private static function _save_static_config($fn, $frontend=false, $elementid, $css_name = '', $languageid='') 
+  private static function _save_static_config($fn, $frontend=false, $selector, $css_name = '', $languageid='') 
   {
     if( !$fn ) return;
-    $configcontent = self::_generate_config($frontend, $elementid, $css_name, $languageid);
+    $configcontent = self::_generate_config($frontend, $selector, $css_name, $languageid);
     $res = file_put_contents($fn,$configcontent);
     if( !$res ) throw new CmsFileSystemException('Problem writing data to '.$fn);
   }
@@ -122,18 +122,18 @@ class microtiny_utils
    * @param string A2 Languageid
    * @return string
    */	
-  private static function _generate_config($frontend=false, $elementid = null, $css_name = null, $languageid="en") 
+  private static function _generate_config($frontend=false, $selector = null, $css_name = null, $languageid="en") 
   {
     $mod = cms_utils::get_module('MicroTiny');
     $config = cms_utils::get_config();	
     $smarty = cmsms()->GetSmarty();
     $smarty->assign('MicroTiny',$mod);
     $smarty->clear_assign('mt_profile');
-    $smarty->clear_assign('mt_elementid');
+    $smarty->clear_assign('mt_selector');
     $smarty->assign('mt_actionid','m1_');
     $smarty->assign('isfrontend',$frontend);
     $smarty->assign('languageid',$languageid);
-    if( $elementid ) $smarty->assign('mt_elementid',$elementid);
+    if( $selector ) $smarty->assign('mt_selector',$selector);
 
     try {
       $profile = null;
@@ -144,8 +144,6 @@ class microtiny_utils
 	$profile = microtiny_profile::load(MicroTiny::PROFILE_ADMIN);
       }
 
-      // todo: use profile to adjust css name (maybe)
-      
       $smarty->assign('mt_profile',$profile);
       $stylesheet = (int)$profile['dfltstylesheet'];
       if( $stylesheet < 1 ) $stylesheet = null;
@@ -153,7 +151,7 @@ class microtiny_utils
       if( $stylesheet ) $smarty->assign('mt_cssname',$stylesheet);
     }
     catch( Exception $e ) {
-      // oops, we gots a propblem.
+      // oops, we gots a problem.
       die($e->Getmessage());
     }
 

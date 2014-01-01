@@ -1,6 +1,6 @@
 // this is the actual tinymce initialization
 var mt_selector = 'textarea.MicroTiny';
-{if isset($mt_elementid) && $mt_elementid != ''}mt_selector='textarea#{$mt_elementid}';{/if}
+{if isset($mt_selector) && $mt_selector != ''}mt_selector='{$mt_selector}';{/if}
 
 $(mt_selector).tinymce({
   document_base_url: '{root_url}/',
