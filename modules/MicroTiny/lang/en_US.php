@@ -62,6 +62,9 @@ EOT;
 $lang['image'] = 'Image';
 $lang['info_linker_autocomplete'] = 'This is an autocomplete field.  Begin by typing a few characters of the desired page alias, menutext, or title.  Any matching items will be displayed in a list.';
 
+// L
+$lang['loading_info'] = 'Loading...';
+
 // M
 $lang['msg_cancelled'] = 'Operation cancelled';
 $lang['mthelp_allowcssoverride'] = 'If enabled, then any code that initializes a MicroTiny WYSIWYG area will be able to specify the name of a stylesheet to use instead of the default stylesheet specified above.';
@@ -81,6 +84,8 @@ $lang['none'] = 'None';
 $lang['ok'] = 'Ok';
 
 // P
+$lang['prompt_linker'] = 'Enter Page title';
+$lang['prompt_selectedalias'] = 'Selected Page alias';
 $lang['profiledesc___admin__'] = 'This profile is used by all users who are authorized to use this editor, and have chosen this editor as their WYSIWYG editr';
 $lang['profiledesc___frontend__'] = 'This profile is used for all frontend requests where this WYSIWYG editor is allowed';
 $lang['profile_admin'] = 'Admin Editors';
@@ -93,11 +98,10 @@ $lang['profile_label'] = 'Label';
 $lang['profile_name'] = 'Profile name';
 $lang['profile_menubar'] = 'Show menubar';
 $lang['profile_showstatusbar'] = 'Show statusbar';
-$lang['prompt_linker'] = 'Enter Page title <em>(autocomplete)</em>';
 $lang['prompt_name'] = 'Name';
-$lang['prompt_profiles'] = 'Profiles';
-$lang['prompt_selectedalias'] = 'Selected page alias <em>(read only)</em>';
 $lang['prompt_target'] = 'Target';
+$lang['prompt_class'] = 'Class attribute';
+$lang['prompt_rel'] = 'Rel attribute';
 $lang['prompt_texttodisplay'] = 'Text to display';
 
 // S
@@ -108,9 +112,12 @@ $lang['size'] = 'Size';
 $lang['submit'] = 'Submit';
 
 // T
+$lang['tooltip_selectedalias'] = 'This field is read only';
 $lang['title_cmsms_linker'] = 'Create a link to a CMSMS content page';
 $lang['title_edit_profile'] = 'Edit profile';
 $lang['tmpnotwritable'] = 'The configuration could not be written to the tmp-dir! Please fix that!';
+$lang['tab_general_title'] = 'General';
+$lang['tab_advanced_title'] = 'Advanced';
 
 // U
 $lang['usestaticconfig_help'] = 'This generates a static configuration file instead of the dynamic one. Works better on some servers (for instance when running PHP as CGI)';

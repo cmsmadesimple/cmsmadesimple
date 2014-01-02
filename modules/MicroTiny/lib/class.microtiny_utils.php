@@ -69,15 +69,6 @@ class microtiny_utils
       // only once per request.
       $first_time = FALSE;
       $output .= '<script type="text/javascript" src="'.$config->smart_root_url().'/modules/MicroTiny/tinymce/tinymce.min.js"></script>';
-
-      if( !$frontend ) {
-	// generate js for the linker
-	$linker_fn = cms_join_path(PUBLIC_CACHE_LOCATION,'mt_'.md5(__DIR__.$languageid.'linker').'.js');
-	if( !file_exists($linker_fn) ) self::_save_linker_plugin($linker_fn,$languageid);
-	$configurl = $config->smart_root_url().'/tmp/cache/'.basename($linker_fn);
-	$output.='<script type="text/javascript" src="'.$configurl.'" defer="defer"></script>';
-      }
-
     }
 
     $fn = cms_join_path(PUBLIC_CACHE_LOCATION,'mt_'.md5(__DIR__.session_id().$frontend.$selector.$cssname.$languageid).'.js');
@@ -92,17 +83,6 @@ class microtiny_utils
 
     return $output;
   }	
-
-  private static function _save_linker_plugin($fn,$languageid = 'en')
-  {
-    if( !$fn ) return;
-    $mod = cms_utils::get_module('MicroTiny');
-    $smarty = cmsms()->GetSmarty();
-    $smarty->assign('MicroTiny',$mod);
-    $content = $mod->ProcessTemplate('linker_plugin.tpl');
-    $res = file_put_contents($fn,$content);
-    if( !$res ) throw new CmsFileSystemException('Problem writing data to '.$fn);
-  }
 
   private static function _save_static_config($fn, $frontend=false, $selector, $css_name = '', $languageid='') 
   {
@@ -154,7 +134,7 @@ class microtiny_utils
       die($e->Getmessage());
     }
 
-    $result = $mod->ProcessTemplate('tinymce_config.tpl');
+    $result = $mod->ProcessTemplate('tinymce_config.js');
     return $result;
   }
 
