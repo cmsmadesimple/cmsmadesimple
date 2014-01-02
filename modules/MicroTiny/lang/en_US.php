@@ -121,14 +121,14 @@ h2 {
 
 <h3>FAQ:</h3>
   <dl>
-    <dt>Q: Where is the support for <em style="color: red;">(some functionality)</em> in the editor, and how do I activate it ?</dt>
+   <dt>Q: Where is the support for <em style="color: red;">&quot;some functionality&quot;</em> in the editor, and how do I activate it ?</dt>
       <dd>A: You dont.  The version of tinymce distributed with MicroTiny is a trimmed down, custom package.  We have added our own custom plugins, but do not support the addition of custom plugins or the ability to customize the configuration in any way other than the edit profile form.  If you require additional functionality in a WYSIWYG editor you may have some success in a third party module.</dd>
     <br/>
     <dt>Q: Which HTML/HTML5 tags are supported by this module, and how do I change that ?</dt>
       <dd>A: The list of supported elements in the default tinymce editor can be found on the tinymce website <em>(though we dont have a correct link at the moment)</em>.  There is no mechanism in the MicroTiny module to extend that.</dd>
     <br/>
     <dt>Q: I cannot get the MicroTiny editor to work in the admin interface, what can I do</dt>
-      <dd>There are a few steps you can follow to diagnose this issue:
+      <dd>A: There are a few steps you can follow to diagnose this issue:
         <ol>
           <li>Check the CMSMS admin log, your PHP error log, and the javascript console for indications of a problem.</li>
           <li>Ensure that the example WYSIWYG area works in the Microtiny admin panel under &quot;Extensions >> MicroTiny WYSIWYG Editor&quot;.  If this does not work, recheck your PHP error log and javascript console.</li>
@@ -138,7 +138,10 @@ h2 {
         </ol>
       </dd>
     <dt>Q: How do I insert a &lt;br/&gt; instead of create new paragraphs?</dt>
-      <dd>Press [shift]+Enter instead of just the Enter key.</dd>
+      <dd>A: Press [shift]+Enter instead of just the Enter key.</dd>
+    <br/>
+    <dt>Q: Why is <em style="color: red;">&quot;some functionality&quot;</em> available in the menubar, and not the toolbar?</dt>
+      <dd>A: For this most part this is done intentionally to allow web developers the ability to further restrict the functionality of certain editor profiles.  The menubar can be toggled off in different profiles thus denying the user the functionality only available in the menubar.</dd>
   </dl>
 <h3>Caching:</h3>
   <p>In an effort to improve performance, MicroTiny will attempt to cache the generated javascript files unless something has changed.  This functionality can be disabled by setting the special config entry <code>mt_disable_cache</code> to true. i.e: adding <code>\$config[&quot;mt_disable_cache&quot;] = true;</code> to the config.php file.</p>

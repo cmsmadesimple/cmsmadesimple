@@ -557,6 +557,7 @@ $lang['help_function_cms_textarea'] = <<<EOT
     <li>placeholder - optional string : placeholder attribute of the text area (syntax/wysiwyg module may ignore this).</li>
     <li>value - optional string : default text for the text area, will undergo entity conversion.</li>
     <li>text - alias for the value parameter</li>
+    <li>cssname - optional string : pass this stylesheet name to the WYSIWYG module if a WYSIWYG module is enabled.</li>
     <li>addtext - optional string : additional text to add to the textarea tag.</li>
     <li>assign - optional string : assign the output html to the named smarty variable.</li>
   </ul>

@@ -151,6 +151,7 @@ final class CmsFormUtils
    *   value/text    = (optional string) default text for the text area, will undergo entity conversion.
    *   encoding      = (optional string) default utf-8 encoding for entity conversion.
    *   addtext       = (optional string) additional text to add to the textarea tag.
+   *   cssname       = (optional string) Pass this stylesheet name to the WYSIWYG area if any.
    *
    * note: if wantedsyntax is empty, AND enablewysiwyg is false, then just a plain text area is creeated.
    *
