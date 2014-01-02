@@ -202,6 +202,15 @@ $(document).ready(function(){
 			</p>
 		</div>
 		<div class="pageoverflow">
+			<p class="pagetext"><label for="cssnameisblockname">{lang('cssnameisblockname')}:</label></p>
+			<p class="pageinput">
+                                <select id="cssnameisblockname" name="content_cssnameisblockname">
+                                {cms_yesno selected=$content_cssnameisblockname}
+				</select>
+				&nbsp;{cms_help key2='settings_cssnameisblockname'}
+			</p>
+		</div>
+		<div class="pageoverflow">
 			<br />
 			<p class="pageinput">
 				<input type="submit" name="submit" value="{lang('submit')}" class="pagebutton" />

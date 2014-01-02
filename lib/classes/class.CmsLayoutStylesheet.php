@@ -422,7 +422,7 @@ class CmsLayoutStylesheet
 		}
 		else if( is_string($ids[0]) && strlen($ids[0]) > 0 ) {
 			for( $i = 0; $i < count($ids); $i++ ) {
-				$ids[$i] = trim($ids[$i]);
+				$ids[$i] = "'".trim($ids[$i])."'";
 			}
 		}
 		else {
@@ -439,16 +439,14 @@ class CmsLayoutStylesheet
 		$dbr = $db->GetArray($query);
 		$out = array();
 		if( is_array($dbr) && count($dbr) ) {
-			foreach( $ids as $id ) {
-				foreach( $dbr as $row ) {
-					if( $row['id'] != $id ) continue;
-					if( isset(self::$_css_cache[$id]) ) {
-						$out[] = self::$_css_cache[$id];
-					}
-					else {
-						$tmp = self::_load_from_data($row);
-						if( is_object($tmp) ) $out[] = self::_load_from_data($row);
-					}
+			foreach( $dbr as $row ) {
+				$id = $row['id'];
+				if( isset(self::$_css_cache[$id]) ) {
+					$out[] = self::$_css_cache[$id];
+				}
+				else {
+					$tmp = self::_load_from_data($row);
+					if( is_object($tmp) ) $out[] = self::_load_from_data($row);
 				}
 			}
 		}

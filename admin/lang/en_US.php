@@ -237,6 +237,7 @@ $lang['cron_request'] = 'Each Request';
 $lang['CSS'] = 'CSS';
 $lang['cssalreadyused'] = 'CSS name already in use';
 $lang['cssmanagement'] = 'CSS Management';
+$lang['cssnameisblockname'] = 'Use the block id as the default value for the cssname parameter in content blocks';
 $lang['css_max_age'] = 'Maximum amount of time (seconds) stylesheets can be cached in the browser';
 $lang['curl'] = 'Test for the curl library';
 $lang['curlversion'] = 'Test curl version';

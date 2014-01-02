@@ -122,6 +122,7 @@ $content_mandatory_urls = 0;
 $contentimage_useimagepath = 0;
 $content_imagefield_path = '';
 $content_thumbnailfield_path = '';
+$content_cssnameisblockname = 1;
 $contentimage_path = '';
 $adminlog_lifetime = (60*60*24*31);
 $search_module = 'Search';
@@ -179,6 +180,7 @@ $content_autocreate_flaturls = cms_siteprefs::get('content_autocreate_flaturls',
 $content_mandatory_urls = cms_siteprefs::get('content_mandatory_urls',$content_mandatory_urls);
 $content_imagefield_path = cms_siteprefs::get('content_imagefield_path',$content_imagefield_path);
 $content_thumbnailfield_path = cms_siteprefs::get('content_thumbnailfield_path',$content_thumbnailfield_path);
+$content_cssnameisblockname = cms_siteprefs::get('content_cssnameisblockname',$content_cssnameisblockname);
 $contentimage_path = cms_siteprefs::get('contentimage_path',$contentimage_path);
 $adminlog_lifetime = cms_siteprefs::get('adminlog_lifetime',$adminlog_lifetime);
 $search_module = cms_siteprefs::get('searchmodule',$search_module);
@@ -302,6 +304,8 @@ if (isset($_POST["editsiteprefs"])) {
       cms_siteprefs::set('content_thumbnailfield_path',$content_thumbnailfield_path);
       $contentimage_path = trim($_POST['contentimage_path']);
       cms_siteprefs::set('contentimage_path',$contentimage_path);
+	  $content_cssnameisblockname = (int)$_POST['content_cssnameisblockname'];
+	  cms_siteprefs::set('content_cssnameisblockname',$content_cssnameisblockname);
       if( isset($_POST['basic_attributes']) ) {
 		  $basic_attributes = implode(',',($_POST['basic_attributes']));
       }
@@ -550,6 +554,7 @@ $smarty->assign('content_autocreate_flaturls',$content_autocreate_flaturls);
 $smarty->assign('content_mandatory_urls',$content_mandatory_urls);
 $smarty->assign('content_imagefield_path',$content_imagefield_path);
 $smarty->assign('content_thumbnailfield_path',$content_thumbnailfield_path);
+$smarty->assign('content_cssnameisblockname',$content_cssnameisblockname);
 $smarty->assign('contentimage_path',$contentimage_path);
 $smarty->assign('adminlog_lifetime',$adminlog_lifetime);
 $smarty->assign('search_module',$search_module);

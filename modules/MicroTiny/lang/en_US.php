@@ -64,6 +64,13 @@ $lang['info_linker_autocomplete'] = 'This is an autocomplete field.  Begin by ty
 
 // M
 $lang['msg_cancelled'] = 'Operation cancelled';
+$lang['mthelp_dfltstylesheet'] = 'Associate a stylesheet with editors using this profile.  This allows the WYSIWYG editor to appear similar to the webiste appearance.';
+$lang['mthelp_profileallowimages'] = 'Allow the editor to embed images and videos into the text area.  For very tightly controlled designs the content editors may only be able to select images, or vidoes for specific areas of a web page.';
+$lang['mthelp_profilelabel'] = 'A description for this profile.  The description cannot be edited for system profiles.';
+$lang['mthelp_profilename'] = 'The name for this profile.  The name of system profiles cannot be edited.';
+$lang['mthelp_profilemenubar'] = 'Indicates if the menubar should be enabled in the viewable profiles.  The menubar typically has more options than the toolbar';
+$lang['mthelp_profilestatusbar'] = 'This flag indicates if the statusbar at the bottom of the WYSIWYG area should be enabled.  The status bar displays some useful scope information for advanced editors, and other useful information';
+$lang['mthelp_profileresize'] = 'This flag indicates if the WYSIWYG area can be resized.  In order for resize abilities to work the statusbar must be enabled';
 
 // N
 $lang['newwindow'] = 'New window';

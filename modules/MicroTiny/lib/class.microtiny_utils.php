@@ -30,10 +30,9 @@ class microtiny_utils
   /**
    * Module API wrapper function
    *
-   * @since 1.0
-   * @return string
+   * @internal
    */
-  public static function WYSIWYGGenerateHeader($htmlresult='', $selector=null, $cssname='')
+  public static function WYSIWYGGenerateHeader($selector=null, $cssname='')
   {
     static $first_time = true;
 

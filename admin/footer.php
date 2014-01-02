@@ -42,25 +42,24 @@ if( is_array($list) && count($list) ) {
 
     $obj = cms_utils::get_module($module_name);
     if( !is_object($obj) ) {
-      // todo: audit here
+      audit('','Core','WYSIWYG module '.$module_name.' requested, but could not be instantiated');
       continue;
     }
 
     // parse the list once and get all of the stylesheet names (if any)
     // preload all of the named stylesheets.  to minimize queries.
+    $css = null;
     $cssnames = array();
     foreach( $info as $rec ) {
       if( $rec['stylesheet'] == '' || $rec['stylesheet'] == CmsFormUtils::NONE ) continue;
       $cssnames[] = $rec['stylesheet'];
     }
     $cssnames = array_unique($cssnames);
-    if( is_array($cssnames) && count($cssnames) ) {
-      CmsLayoutStylesheet::load_bulk($cssnames);
-    }
+    if( is_array($cssnames) && count($cssnames) ) $css = CmsLayoutStylesheet::load_bulk($cssnames);
 
-    if( !is_array($cssnames) || (count($rec) > 0 && count($cssnames) != count($info)) ) {
+    if( !is_array($cssnames) || !is_array($css) || count($cssnames) != count($css) || count($cssnames) != count($info) ) {
       // there are some textareas with no cssname specified, so do a default initialization
-      $headertext .= $obj->WYSIWYGGenerateHeader($htmlresult);
+      $headertext .= $obj->WYSIWYGGenerateHeader();
     }
 
     // initialize each 'specialized' textarea.
@@ -78,7 +77,7 @@ if( is_array($list) && count($list) ) {
 	}
 	if( $cssname == CmsFormUtils::NONE ) $cssname = null;
 	if( !$cssname ) continue;
-	$headertext .= $obj->WYSIWYGGenerateHeader($htmlresult,$selector,$cssname);
+	$headertext .= $obj->WYSIWYGGenerateHeader($selector,$cssname);
       }
     }
   }

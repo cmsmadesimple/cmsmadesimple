@@ -311,29 +311,20 @@ class CmsLayoutTemplateType
    */
   protected function validate($is_insert = TRUE)
   {
-	  if( !$this->get_originator() ) {
-		  throw new CmsInvalidDataException('Invalid Type Originator');
-	  }
-	  if( !$this->get_name() ) {
-		  throw new CmsInvalidDataException('Invalid Type Name');
-	  }
+	  if( !$this->get_originator() ) throw new CmsInvalidDataException('Invalid Type Originator');
+	  if( !$this->get_name() ) throw new CmsInvalidDataException('Invalid Type Name');
 		if( !preg_match('/[A-Za-z0-9_\,\.\ ]/',$this->get_name()) ) {
 			throw new CmsInvalidDataException('Name must contain only numbers letters, spaces and underscores.');
 		}
 
 	  if( !$is_insert ) {
-		  if( !isset($this->_data['id']) || (int)$this->_data['id'] <= 0 ) {
-			  throw new CmsInvalidDataException('id is not set');
-		  }
+		  if( !isset($this->_data['id']) || (int)$this->_data['id'] <= 0 ) throw new CmsInvalidDataException('id is not set');
 
 		  // check for item with the same name
 		  $db = cmsms()->GetDb();
-		  $query = 'SELECT id FROM '.cms_db_prefix().self::TABLENAME.'
-                WHERE originator = ? AND name = ? AND id != ?';
+		  $query = 'SELECT id FROM '.cms_db_prefix().self::TABLENAME.' WHERE originator = ? AND name = ? AND id != ?';
 		  $dbr = $db->GetOne($query,array($this->get_originator(),$this->get_name(),$this->get_id()));
-		  if( $dbr ) {
-			  throw new CmsInvalidDataException('Template Type with the same name already exists.');
-		  }
+		  if( $dbr ) throw new CmsInvalidDataException('Template Type with the same name already exists.');
 	  }
 	  else {
 		  // check for item with the same name
@@ -341,9 +332,7 @@ class CmsLayoutTemplateType
 		  $query = 'SELECT id FROM '.cms_db_prefix().self::TABLENAME.'
                 WHERE originator = ? AND name = ?';
 		  $dbr = $db->GetOne($query,array($this->get_originator(),$this->get_name()));
-		  if( $dbr ) {
-			  throw new CmsInvalidDataException('Template Type with the same name already exists.');
-		  }
+		  if( $dbr ) throw new CmsInvalidDataException('Template Type with the same name already exists.');
 	  }
   }
 
@@ -363,19 +352,11 @@ class CmsLayoutTemplateType
                 (originator,name,has_dflt,dflt_contents,description,
                  lang_cb,dflt_content_cb,requires_contentblocks,owner,created,modified)
                 VALUES (?,?,?,?,?,?,?,?,?,?,?)';
-	  $dbr = $db->Execute($query,array($this->get_originator(),
-									   $this->get_name(),
-									   $this->get_dflt_flag(),
-									   $this->get_dflt_contents(),
-									   $this->get_description(),
-									   serialize($this->get_lang_callback()),
-									   serialize($this->get_content_callback()),
- 									   $this->get_content_block_flag() ? 1 : 0,
-									   $this->get_owner(),
-									   $now,$now));
-	  if( !$dbr ) {
-		  throw new CmsSQLErrorException($db->sql.' -- '.$db->ErrorMsg());
-	  }
+	  $dbr = $db->Execute($query,array($this->get_originator(), $this->get_name(), $this->get_dflt_flag(),
+																		 $this->get_dflt_contents(), $this->get_description(), serialize($this->get_lang_callback()),
+																		 serialize($this->get_content_callback()), $this->get_content_block_flag() ? 1 : 0,
+																		 $this->get_owner(), $now,$now));
+	  if( !$dbr ) throw new CmsSQLErrorException($db->sql.' -- '.$db->ErrorMsg());
 
 	  $this->_data['id'] = $db->Insert_ID();
 		CmsTemplateCache::clear_cache();
@@ -398,24 +379,14 @@ class CmsLayoutTemplateType
 	  $now = time();
 
 	  $query = 'UPDATE '.cms_db_prefix().self::TABLENAME.'
-                SET originator = ?, name = ?, has_dflt = ?, 
-                    dflt_contents = ?, description = ?,
-                    lang_cb = ?, dflt_content_cb = ?, requires_content_blocks = ?, owner = ?, modified = ?
+                SET originator = ?, name = ?, has_dflt = ?, dflt_contents = ?, description = ?,
+                    lang_cb = ?, dflt_content_cb = ?, requires_contentblocks = ?, owner = ?, modified = ?
                 WHERE id = ?';
-	  $dbr = $db->Execute($query,array($this->get_originator(),
-									   $this->get_name(),
-									   $this->get_dflt_flag(),
-									   $this->get_dflt_contents(),
-									   $this->get_description(),
-									   serialize($this->get_lang_callback()),
-									   serialize($this->get_content_callback()),
- 									   $this->get_content_block_flag() ? 1 : 0,
-									   $this->get_owner(),
-									   $now,
-									   $this->get_id()));
-	  if( !$dbr ) {
-		  throw new CmsSQLErrorException($db->sql.' -- '.$db->ErrorMsg());
-	  }
+	  $dbr = $db->Execute($query,array($this->get_originator(),$this->get_name(),$this->get_dflt_flag(),
+																		 $this->get_dflt_contents(),$this->get_description(),serialize($this->get_lang_callback()),
+																		 serialize($this->get_content_callback()),$this->get_content_block_flag() ? 1 : 0,
+																		 $this->get_owner(), $now, $this->get_id()));
+	  if( !$dbr ) throw new CmsSQLErrorException($db->ErrorMsg());
 
 		CmsTemplateCache::clear_cache();
 	  $this->_dirty = null;
@@ -462,16 +433,11 @@ class CmsLayoutTemplateType
 
 		Events::SendEvent('Core','DeleteTemplateTypePre',array(get_class($this)=>&$this));
 		$tmp = CmsLayoutTemplate::template_query(array('t:'.$this->get_id()));
-	  if( is_array($tmp) && count($tmp) ) {
-		  throw new CmsInvalidDataException('Cannot delete a template type with existing templates');
-	  }
+	  if( is_array($tmp) && count($tmp) ) throw new CmsInvalidDataException('Cannot delete a template type with existing templates');
 	  $db = cmsms()->GetDb();
-	  $query = 'DELETE FROM '.cms_db_prefix().self::TABLENAME.'
-              WHERE id = ?';
+	  $query = 'DELETE FROM '.cms_db_prefix().self::TABLENAME.' WHERE id = ?';
 	  $dbr = $db->Execute($query,array($this->_data['id']));
-	  if( !$dbr ) {
-		  throw new CmsSQLErrorException($db->sql.' -- '.$db->ErrorMsg());
-	  }
+	  if( !$dbr ) throw new CmsSQLErrorException($db->sql.' -- '.$db->ErrorMsg());
 
 	  $this->_dirty = TRUE;
 		CmsTemplateCache::clear_cache();
@@ -524,14 +490,10 @@ class CmsLayoutTemplateType
 
   public function reset_content_to_factory()
   {
-	  if( !$this->get_dflt_flag() ) {
-		  throw new CmsException('This template type does not have default contents');
-	  }
+	  if( !$this->get_dflt_flag() ) throw new CmsException('This template type does not have default contents');
 	  $cb = $this->get_content_callback();
-	  if( !$cb ) 
-		  throw new CmsDataNotFoundException('No callback information to reset content');
-	  if( !is_callable($cb) ) 
-		  throw new CmsDataNotFoundException('No callback information to reset content');
+	  if( !$cb ) throw new CmsDataNotFoundException('No callback information to reset content');
+	  if( !is_callable($cb) ) throw new CmsDataNotFoundException('No callback information to reset content');
 	  
 	  $content = call_user_func($cb,$this);
 	  $this->set_dflt_contents($content);
@@ -584,9 +546,7 @@ class CmsLayoutTemplateType
 			  $row = $db->GetRow($query,array(trim($tmp[0]),trim($tmp[1])));
 		  }
 	  }
-	  if( !is_array($row) || count($row) == 0 ) {
-		  throw new CmsDataNotFoundException('Could not find template type identified by '.$val);
-	  }
+	  if( !is_array($row) || count($row) == 0 ) throw new CmsDataNotFoundException('Could not find template type identified by '.$val);
 
 	  return self::_load_from_data($row);
   }
@@ -601,21 +561,14 @@ class CmsLayoutTemplateType
    */
   public static function load_all_by_originator($originator)
   {
-	  if( !$originator ) {
-		  throw new CmsInvalidDataException('Orignator is empty');
-	  }
+	  if( !$originator ) throw new CmsInvalidDataException('Orignator is empty');
 
 	  $db = cmsms()->GetDb();
-	  $query = 'SELECT * FROM '.cms_db_prefix().self::TABLENAME.'
-              WHERE originator = ?';
-		if( count(self::$_cache) ) {
-			$query .= ' AND id NOT IN ('.implode(',',array_keys(self::$_cache)).')';
-		}
+	  $query = 'SELECT * FROM '.cms_db_prefix().self::TABLENAME.' WHERE originator = ?';
+		if( count(self::$_cache) ) $query .= ' AND id NOT IN ('.implode(',',array_keys(self::$_cache)).')';
     $query .= ' ORDER BY modified DESC';
 	  $list = $db->GetArray($query,array($originator));
-	  if( !is_array($list) || count($list) == 0 ) {
-		  return;
-	  }
+	  if( !is_array($list) || count($list) == 0 ) return;
 
 	  foreach( $list as $row ) {
 		  self::_load_from_data($row);
@@ -623,9 +576,7 @@ class CmsLayoutTemplateType
 
 		$out = array();
 		foreach( self::$_cache as $id => $one ) {
-			if( $one->get_originator() == $originator ) {
-				$out[] = $one;
-			}
+			if( $one->get_originator() == $originator ) $out[] = $one;
 		}
 		return $out;
   }
@@ -635,14 +586,10 @@ class CmsLayoutTemplateType
   {
 	  $db = cmsms()->GetDb();
 	  $query = 'SELECT * FROM '.cms_db_prefix().self::TABLENAME;
-		if( count(self::$_cache) ) {
- 			$query .= ' WHERE id NOT IN ('.implode(',',array_keys(self::$_cache)).')';
-		}
+		if( count(self::$_cache) ) $query .= ' WHERE id NOT IN ('.implode(',',array_keys(self::$_cache)).')';
 		$query .= '	ORDER BY modified DESC';
 	  $list = $db->GetArray($query);
-	  if( !is_array($list) || count($list) == 0 ) {
-		  return;
-	  }
+	  if( !is_array($list) || count($list) == 0 ) return;
 
 	  foreach( $list as $row ) {
 		  self::_load_from_data($row);
@@ -664,12 +611,9 @@ class CmsLayoutTemplateType
 		}
 		
 	  $db = cmsms()->GetDb();
-	  $query = 'SELECT * FROM '.cms_db_prefix().self::TABLENAME.'
-              WHERE id IN ('.implode(',',$list).')';
+	  $query = 'SELECT * FROM '.cms_db_prefix().self::TABLENAME.' WHERE id IN ('.implode(',',$list).')';
 	  $list = $db->GetArray($query);
-	  if( !is_array($list) || count($list2) == 0 ) {
-		  return;
-	  }
+	  if( !is_array($list) || count($list2) == 0 ) return;
 
 	  $out = array();
 	  foreach( $list as $row ) {
@@ -680,9 +624,7 @@ class CmsLayoutTemplateType
 
 	public static function get_loaded_types()
 	{
-		if( is_array(self::$_cache) )	{
-			return array_keys(self::$_cache);
-		}
+		if( is_array(self::$_cache) )	return array_keys(self::$_cache);
 	}
 } // end of class
 

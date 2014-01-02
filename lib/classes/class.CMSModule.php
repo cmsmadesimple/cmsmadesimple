@@ -1374,14 +1374,14 @@ abstract class CMSModule
    * Returns header code specific to this WYSIWYG
    *
    * @abstract
-   * @param string The html-code of the page before replacing WYSIWYG-stuff
-   * @param string (optional) The id of the element that is being initialized, if null it is assumed that the WYSIWYG will be initialized
-   *   for all text areas that have a classname matching the module name.
+   * @param string (optional) The id of the element that is being initialized, if null the WYSIWYG module should assume the selector
+   *   to be textarea.<ModuleName>.
    * @param string (optional) The name of the CMSMS stylesheet to associate with the wysiwyg editor for additional styling.
-   *   if elementid is not null then the cssname is only used for the specific element.
+   *   if elementid is not null then the cssname is only used for the specific element.  WYSIWYG modules may not obey the cssname paramter
+   *   depending on their settings and capabilities.
    * @return string
    */
-  public function WYSIWYGGenerateHeader($htmlresult='',$elementid = null,$cssname = null)
+  public function WYSIWYGGenerateHeader($selector = null,$cssname = null)
   {
     return '';
   }

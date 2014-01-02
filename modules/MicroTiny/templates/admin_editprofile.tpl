@@ -16,7 +16,7 @@
 
   <div class="pageoverflow">
     <p class="pagetext">
-      <label for="profile_name">*{$mod->Lang('profile_name')}:</label>
+      <label for="profile_name">*{$mod->Lang('profile_name')}:</label>&nbsp;{cms_help key2='mthelp_profilename'}
     </p>
     <p class="pageinput">
       <input type="text" size="40" id="profile_name" name="{$actionid}profile_name" value="{$data.name}" {if $data.system}readonly disabled{/if}/>
@@ -25,7 +25,7 @@
 
   <div class="pageoverflow">
     <p class="pagetext">
-      <label for="profile_label">*{$mod->Lang('profile_label')}:</label>
+      <label for="profile_label">*{$mod->Lang('profile_label')}:</label>&nbsp;{cms_help key2='mthelp_profilelabel'}
     </p>
     <p class="pageinput">
       <input type="text" size="80" id="profile_label" name="{$actionid}profile_label" value="{$data.label}" {if $data.system}readonly disabled{/if}/>
@@ -34,7 +34,7 @@
 
   <div class="pageoverflow">
     <p class="pagetext">
-      <label for="profile_label">{$mod->Lang('profile_menubar')}:</label>
+      <label for="profile_label">{$mod->Lang('profile_menubar')}:</label>&nbsp;{cms_help key2='mthelp_profilemenubar'}
     </p>
     <p class="pageinput">
       <select id="profile_menubar" name="{$actionid}profile_menubar">{cms_yesno selected=$data.menubar}</select>
@@ -43,7 +43,7 @@
 
   <div class="pageoverflow">
     <p class="pagetext">
-      <label for="profile_label">{$mod->Lang('profile_allowimages')}:</label>
+      <label for="profile_label">{$mod->Lang('profile_allowimages')}:</label>&nbsp;{cms_help key2='mthelp_profileallowimages'}
     </p>
     <p class="pageinput">
       <select id="profile_allowimages" name="{$actionid}profile_allowimages">{cms_yesno selected=$data.allowimages}</select>
@@ -52,7 +52,7 @@
 
   <div class="pageoverflow">
     <p class="pagetext">
-      <label for="profile_label">{$mod->Lang('profile_showstatusbar')}:</label>
+      <label for="profile_label">{$mod->Lang('profile_showstatusbar')}:</label>&nbsp;{cms_help key2='mthelp_profilestatusbar'}
     </p>
     <p class="pageinput">
       <select id="profile_showstatusbar" name="{$actionid}profile_showstatusbar">{cms_yesno selected=$data.showstatusbar}</select>
@@ -61,7 +61,7 @@
 
   <div class="pageoverflow">
     <p class="pagetext">
-      <label for="profile_label">{$mod->Lang('profile_allowresize')}:</label>
+      <label for="profile_label">{$mod->Lang('profile_allowresize')}:</label>&nbsp;{cms_help key2='mthelp_profileresize'}
     </p>
     <p class="pageinput">
       <select id="profile_allowresize" name="{$actionid}profile_allowresize">{cms_yesno selected=$data.allowresize}</select>
