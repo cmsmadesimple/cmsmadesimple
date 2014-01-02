@@ -35,6 +35,13 @@ $(document).ready(function(){
     </p>
   </div>
 
+  <div class="pageoverflow">
+    <p class="pagetext"><label for="allowuninstall">{$mod->Lang('allowuninstall')}:</label>&nbsp;{cms_help key2='help_allowuninstall'}</p>
+    <p class="pageinput">
+      <select id="allowuninstall" name="{$actionid}allowuninstall">{cms_yesno selected=$allowuninstall}</select>
+    </p>
+  </div>
+
 {if isset($disable_caching)}	
   <div class="pageoverflow">
     <p class="pagetext"><label for="disable_caching">{$mod->Lang('prompt_disable_caching')}:</label></p>

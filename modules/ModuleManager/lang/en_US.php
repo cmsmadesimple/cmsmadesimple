@@ -11,6 +11,7 @@ $lang['action'] = 'Action';
 $lang['active'] = 'Active';
 $lang['admindescription'] = 'Modules extend CMS Made Simple&trade; to provide all kinds of custom functionality';
 $lang['advancedsearch_help'] = 'Specify words to include or exclude from the search using a + or -, surround exact phrases with quotes.  i.e:  +red -apple +"some text"';
+$lang['allowuninstall'] = 'Allow this module to be uninstalled?';
 $lang['all_modules_up_to_date'] = 'There are no newer modules available in the repository';
 $lang['availablemodules'] = 'The current status of modules available from the current repository';
 $lang['available_updates'] = 'One or more modules are available for upgrade; Before upgrading, please read the about information for the release and make sure you have a current backup of your website.';
@@ -105,6 +106,7 @@ $lang['help'] = '<h3>What Does This Do?</h3>
 <p>Copyright &copy; 2006, calguy1000 <a href="mailto:calguy1000@hotmail.com">&lt;calguy1000@hotmail.com&gt;</a>. All Rights Are Reserved.</p>
 <p>This module has been released under the <a href="http://www.gnu.org/licenses/licenses.html#GPL">GNU Public License</a>. You must agree to this license before using the module.</p>';
 $lang['helptxt'] = 'Help';
+$lang['help_allowuninstall'] = 'If enabled, then this module can be uninstalled.  This is to prevent the accidental removal of this module which would result in an unrecoverable error';
 $lang['help_dl_chunksize'] = 'This parameter specifies the size <em>(in kilobytes)</em> of each chunk of data that will be downloaded from the repository when requesting a module.';
 $lang['help_latestdepends'] = 'When installing a module with dependencies, this will ensure that the newest version of a dependent module is installed';
 

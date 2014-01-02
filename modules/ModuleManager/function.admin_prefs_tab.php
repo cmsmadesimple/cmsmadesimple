@@ -43,6 +43,7 @@ if( isset($config['developer_mode']) ) {
 }
 $smarty->assign('dl_chunksize',$this->GetPreference('dl_chunksize'));
 $smarty->assign('latestdepends',$this->GetPreference('latestdepends',1));
+$smarty->assign('allowuninstall',$this->GetPreference('allowuninstall',0));
     
 echo $this->ProcessTemplate('adminprefs.tpl');
 

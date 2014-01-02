@@ -127,7 +127,9 @@ $(document).ready(function(){
           {/if}
         {else}
 	  {if !isset($item.dependants) & $item.can_uninstall}
-            {capture assign='op'}<a class="modop mod_uninstall" href="{cms_action_url action='local_uninstall' mod=$item.name}" title="{$mod->Lang('title_uninstall')}">{$mod->Lang('uninstall')}</a>{/capture}{$ops[]=$op}
+            {if $item.name != 'ModuleManager' || $allow_modman_uninstall}
+              {capture assign='op'}<a class="modop mod_uninstall" href="{cms_action_url action='local_uninstall' mod=$item.name}" title="{$mod->Lang('title_uninstall')}">{$mod->Lang('uninstall')}</a>{/capture}{$ops[]=$op}
+	    {/if}
 	  {/if}
           {if $item.e_status == 'need_upgrade' && $item.can_upgrade}
             {capture assign='op'}<a class="modop mod_upgrade" href="{cms_action_url action='local_upgrade' mod=$item.name}" title="{$mod->Lang('title_upgrade')}">{$mod->Lang('upgrade')}</a>{/capture}{$ops[]=$op}

@@ -48,6 +48,7 @@ if( isset($config['developer_mode']) && isset($params['reseturl']) ) {
 if( isset($params['input_dl_chunksize']) ) $this->SetPreference('dl_chunksize',trim($params['input_dl_chunksize']));
 $latestdepends = (int)get_parameter_value($params,'latestdepends');
 $this->SetPreference('latestdepends',$latestdepends);
+$this->SetPreference('allowuninstall',(int)get_parameter_value($params,'allowuninstall'));
 
 if( isset($config['developer_mode']) ) {
   if( isset($params['url']) ) $this->SetPreference('module_repository',trim($params['url']));
