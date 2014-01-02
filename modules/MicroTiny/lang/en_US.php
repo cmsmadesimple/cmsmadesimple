@@ -37,25 +37,116 @@ $lang['friendlyname'] = 'MicroTiny WYSIWYG editor';
 $lang['height'] = 'Height';
 $lang['help'] = <<<EOT
 <h3>What Does This Do?</h3>
-<p>MicroTiny is a small, restricted version of the TinyMCE-editor, formerly the wysiwyg-default of CMS Made Simple. This provides nothing more than the basics of editing, but is still a powerful tool allowing easy changes to content pages.</p>
-<p>This module provides very few options and is designed to allow limited functionality to content editors with no knowledge of HTML.  The intent is that they will have very few options to be able to mess with the layout of a page, or the look and feel of a site.</p>
-<h3>How Do I Use It?</h3>
-<p>The MicroTiny test area should appear automatically (for users with sufficient permission) under the &quot;Extensions &gt;&gt; MicroTiny WYSIWYG Editor&quot; option in the CMSMS admin console.</p>
-</p>In order for MicroTiny to be used as the wysiwyg editor when editing pages, the MicroTiny Wysiwyg Editor needs to be selected in the users preferences.  Please select &quot;MicroTiny&quot; in the &quot;Select WYSIWYG to Use&quot; option under &quot;My Preferences &gt;&gt; User Preferences&quot; in the CMSMS Admin panel.  Additional options in various modules or in content page templates, and content pages themselves  can control wether a text area or a wysiwyg field is provided in various edit forms.</p>
-<h3>About Styles and Colors</h3>
-<p>MicroTiny will read the stylesheets attached to the appropriate template <em>(if no template can be easily determined the default template and its stylesheets are used)</em>. and strip out background images in order to allow visualizing your text in an environment as close as possible to what will appear on the web page.  If your theme uses a dark background, along with background images on your styles you may experience problems.   We suggest that you always include a color on your background specifications.  i.e:
-<pre><code>body {
- color: #eee;
- background: <span style="color: blue;">#ddd</span> url(path/to/an/image.jpg);
-} 
-</pre></code>
-<h3>What about Frontend Wysiwygs</h3>
-<p>From time to time it may be necessary to provide a wysiwyg text area with limited functionality to frontend editors. To do this, you will need to follow two steps <em>(subject to change in future versions of CMSMS).</em>:
+<p>MicroTiny is a small, restricted version of the <a href="http://www.tinymce.com">tinymce</a> editor. allowing content editors a near WYSIWYG appearance for editing content.  It works with content blocks in CMSMS content pages (when a WYSIWYG has been allowed), in module admin forms where WYSIWYG editors are allowed, and allows restricted capabilities for editing html blocks on frontend pages.</p>
+</p>In order for MicroTiny to be used as the WYSIWYG editor in the admin console the MicroTiny Wysiwyg Editor needs to be selected in the users preferences.  Please select &quot;MicroTiny&quot; in the &quot;Select WYSIWYG to Use&quot; option under &quot;My Preferences &gt;&gt; User Preferences&quot; in the CMSMS Admin panel.  Additional options in various modules or in content page templates, and content pages themselves can control wether a text area or a wysiwyg field is provided in various edit forms.</p>
+<p>For Frontend editing capabilities MicroTiny must be selected as the &quot;Frontend WYSIWYG&quot; in the global settings page of the CMSMS admin console.</p>
+<h3>Features:</h3>
 <ul>
-  <li>Set MicroTiny as the Frontend Wysiwyg in the &quot;Site Admin &gt;&gt; Gobal Settings&quot; page on the &quot;General Settings&quot; tab.</li>
-  <li>Add the tag {MicroTiny action=enablewysiwg} call to the pages where the wysiwhg editor will be used.  This can either be done in the head section of the page template, in the global metadata, or in the page specific metadata sections.  This tag takes no additional parameters.</li>
+  <li>Supports a subset of HTML5 block and inline elements.</li>
+  <li>Separate profiles for admin editors and frontend editors.</li>
+  <li>A custom file picker for selecting previously uploaded media.</li>
+  <li>Custom plugin for creating links to CMSMS content pages <em>(admin only)</em>.</li>
+  <li>Customizable (somewhat) profiles for admin behavior and frontend behavior.</li>
+  <li>Customizable appearance by specifying a stylesheet to use for the editor.</li>
 </ul>
-</p>
+<h3>How do I use it</h3>
+  <ul>
+    <li>Install and configure the module</li>
+    <li>Set MicroTiny as your WYSIWYG editor of choice in &quot;My Preferences&quot;</li>
+  </ul>
+<h3>About HTML, tinymce, and content editing:</h3>
+  <ul>
+    <li>WYSIWYG-like editor:
+       <p>This editor provides the ability to edit content in an environment that is similar <em>(but not necessaarily identical to)</em> to the intended output on the website frontend.  Numerous factors can influence differences, including:</p>
+       <ul>
+         <li>Incomplete or incorrect stylesheets</li>
+         <li>Use of advanced styling that the editor cannot understand</li>
+         <li>Use of html elements that the WYSIWYG does not understand.</li>
+       </ul>
+    </li>
+
+    <li>Subset of HTML elements:
+      <p>As a simple content editor this editor does not support all of the HTML elements (particularly the new HTML5 block level elements.  Any elements that the editor does not understand or support will be stripped from the content upon save.  As a general rule of thumb <em>(not including &lt;div&gt;)</em> you can assume that the editor supports only the elements that are directly available via the various menu and toolbar options.<p>
+    </li>
+
+    <li>Edit blocks of content, not the entire page:
+      <p>As CMSMS is a heavily templated environment using the Smarty template element, it is intended that the WYSIWYG editor is used only for specific blocks of content or data elements (i.e: the main content area of a page, or the description for a News or blog article).   This module <em>(and CMSMS)</em> do not support full page editing.</p>
+    </li>
+
+    <li>Intended for simple content editing not design:
+      <p>The intent and purpose of this module is to provide a WYSIWYG-like environment where editors can insert and edit content within specific blocks with limited formatting capabilities that will not interere with, or override the styling of the page template.  It is not intended and for will not be supported as a general HTML editor or layout manipulator.</p>
+      <p>Website developers should understand the points above, assume that content editors can and WILL be editing within a WYSIWYG area and ensure that only simple content is there.  If advanced layout techniques are needed for a specific area, then developers should modify the appropriate templates so that the restricted functionality editor will work properly.</p>
+    </li>
+  
+    <li>Separation of Logic, Functionality and Design from Content.
+      <p>This editor is built with the assumption that content for a specific area of a page (or a blog article, news article, or product description, ...) is data.  The data is styled by the appropriate templates, and should not be mixed with design elements, or functionality of the website.</p>
+      <p>As a simple example.  If you are insisting that editors use certain classes for images, layout their images in a certain manner, or insert block elements such as &lt;div&gt; or &lt;section&gt; into their content for proper styling then this is not the editor module for you.  Such styling concerns should be taken care of in stylesheets and templates, such that your editor can enter text without having to remember rules.</p>
+      <p>This module is not designed to handle special caces where advanced HTML is required.  In such pages the WYSIWYG editor should be disabled, and editing access to the page restricted to those with the ability to understand and edit HTML code manually.</p>
+      <p>As this module is intended to provide a restricted editor for specific blocks, for use by editors without HTML knowledge. Since the WYSIWYG editor does not understand the smarty logic, you should NOT (as a general rule) mix smarty logic or module calls within WYSIWYG enabled areas.  It is best to disable the wysiwyg for these areas/pages and restrict edit access to those pages.</p>
+    </li>
+  </ul>
+<h3>About Images and Media:</h3>
+  <p>Each profile has the ability to enable, and disable the ability for the editor to graphically insert image or media elements into the edited content.  This is useful in highly structured environments where images and other media can be included in final output via other means.  Particularly on frontend editing forms, where the identify of the user cannot necessarily be trusted it is recommended that users not have the ability to insert images or other media.</p>
+  <p><strong>Note:</strong> This module does not provide the ability to upload or otherwise manipulate files, images or media.  That functionality is handled elsewhere in CMSMS.</p>
+
+<h3>About Frontend Editing:</h3>
+  <p>This module provides a unique &quot;profile&quot; for configuring the WYSIWYG editor on frontend requests.  By default the frontend profile is highly limited.</p>
+  <p>To enable frontend WYSIWYG editors, the <code>{cms_init_editor}</code> tag must be included in the head part of the template.  Additionally, this module must be set as the &quot;Frontend WYSIWYG&quot; in the global settings page of the CMSMS admin console.</p>
+
+<h3>About Styles and Colors:</h3>
+  <p>This module provides the <em>(optional)</em> ability to associate a stylesheet with the profile.  This provides the ability to style the edit portion WYSIWYG editor in a manner similar to the website style.  Providing a more WYSIWYG like experience for the content editor.</p>
+  <p>Additionally, in conjunction with the <code>classname</code> parameter of the <code>{cms_textarea}</code> and <code>{content}</code> tags this module allows the content editor module to override the specified stylesheet differently for each content block.  This allows the ability to style each WYSIWYG area differently, if there are multiple WYSIWYG areas on the page.  This functionality is restricted to the admin interface only.</p>
+  <p>For example, in a page template adding the cssname parameter to the {content} tag allows specifying a CMSMS stylesheet to use to customize the appearance of that content block.  i.e: <code>{content block='second block' cssname='whiteonblack'}</code>
+  <p>Additionally, a setting in the content editing section of the &quot;Global Settings&quot; page allows automatically supplying the cssname parameter with the name of the content block.</p>
+
+  <h4>Styles for the WYSIWYG editor</h4>
+    <p>The stylesheet for the WYSIWYG editor area should style everything from the body element downwards. It is only necessary to style the elements available to, and used by the content editor.  Here is a simple example of a stylesheet for a white-on-black theme:</p>
+<pre><code>
+body {
+ background: black;
+ color: white;
+}
+p {
+ margin-bottom: 0.5em;
+}
+h1 {
+ color: yellow;
+ margin-bottom: 1em;
+}
+h2 {
+ color: cyan;
+ margin-bottom: 0.75em;
+}
+</code></pre>
+
+<h3>FAQ:</h3>
+  <dl>
+    <dt>Q: Where is the support for <em style="color: red;">(some functionality)</em> in the editor, and how do I activate it ?</dt>
+      <dd>A: You dont.  The version of tinymce distributed with MicroTiny is a trimmed down, custom package.  We have added our own custom plugins, but do not support the addition of custom plugins or the ability to customize the configuration in any way other than the edit profile form.  If you require additional functionality in a WYSIWYG editor you may have some success in a third party module.</dd>
+    <br/>
+    <dt>Q: Which HTML/HTML5 tags are supported by this module, and how do I change that ?</dt>
+      <dd>A: The list of supported elements in the default tinymce editor can be found on the tinymce website <em>(though we dont have a correct link at the moment)</em>.  There is no mechanism in the MicroTiny module to extend that.</dd>
+    <br/>
+    <dt>Q: I cannot get the MicroTiny editor to work in the admin interface, what can I do</dt>
+      <dd>There are a few steps you can follow to diagnose this issue:
+        <ol>
+          <li>Check the CMSMS admin log, your PHP error log, and the javascript console for indications of a problem.</li>
+          <li>Ensure that the example WYSIWYG area works in the Microtiny admin panel under &quot;Extensions >> MicroTiny WYSIWYG Editor&quot;.  If this does not work, recheck your PHP error log and javascript console.</li>
+          <li>Ensure that MicroTiny is selected as the &quot;WYSIWYG to use&quot; in your user preferences.</li>
+          <li>Check other content pages.  If MicroTiny works on one or more of those then that indicates that a flag to disable WYSIWYG editors on all content blocks may be set on some content pages.</li>
+          <li>Check the page template(s).  The wysiwyg=false parameter may be specified on one or more content blocks in the page template(s) which will disable the WYSIWYG editor.</li>
+        </ol>
+      </dd>
+    <dt>Q: How do I insert a &lt;br/&gt; instead of create new paragraphs?</dt>
+      <dd>Press [shift]+Enter instead of just the Enter key.</dd>
+  </dl>
+<h3>See Also:</h3>
+<ul>
+  <li><code>{content}</code> tag in &quot;Extensions >> Tags&quot;</li>
+  <li><code>{cms_textarea}</code> tag in &quot;Extensions >> Tags&quot;</li>
+  <li><code>{cms_init_editor}</code> tag in &quot;Extensions >> Tags&quot;</li>
+  <li>The <a href="http://www.tinymce.com">tinymce</a> editor itself.</li>
+</ul>
 EOT;
 
 // I
