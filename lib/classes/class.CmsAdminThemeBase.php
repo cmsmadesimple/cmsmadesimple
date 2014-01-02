@@ -396,10 +396,6 @@ abstract class CmsAdminThemeBase
 									 'title'=>$this->_FixSpaces(lang('extensions')),
 									 'description'=>lang('extensionsdescription'),
 									 'show_in_menu'=>$this->HasPerm('extensionsPerms'));
-		$items['modules'] = array('url'=>'listmodules.php','parent'=>'extensions',
-								  'title'=>$this->_FixSpaces(lang('modules')),
-								  'description'=>lang('moduledescription'),
-								  'show_in_menu'=>$this->HasPerm('modulePerms'));
 		$items['tags'] = array('url'=>'listtags.php','parent'=>'extensions',
 							   'title'=>$this->_FixSpaces(lang('tags')),
 							   'description'=>lang('tagdescription'),

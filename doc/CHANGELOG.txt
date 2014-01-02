@@ -12,9 +12,10 @@ Core - General
   - Improved and documented htaccess.txt file
   - Many new smarty plugins to aid in module development and separation of logic from display
   - Adds the {cms_module_hint} plugin
-  - {content}, {content_image} and {content_module} plugins all receive the required attribute
+  - {content}, {content_image} and {content_module} plugins all receive the required and priority parameters
   - {content} tag now has the placeholder attribute
   - Major accessibility review throughout admin interface
+  - Removed many static admin pages, and replaced with new modules
 
 Core - Bug Reports
   - #9721 There's no check if changelog.txt exists
@@ -34,8 +35,9 @@ Navigator
   - New module to replace MenuManager
   
 MicroTiny
-  -
- 
+  - Complete rewrite
+  - Now uses tinymce 4.0.12
+
 AdminSearch
   - New module for searching for tags and any content in templates
 
@@ -59,11 +61,18 @@ News
   - Minor bug fixes
   - Implements dirty form checking
   - Query rework (post date is now used as a start date if expiry is not specified)
+  - Rewrote fesubmit action to show new 2.0 form functionality (fesubmit action is still deprecated)
 
 Search
   - No longer indexes templates, or GCB's
   - rewrite the re-index stuff to hopefully use a bit less memory (at least for content pages)
-  
+
+ModuleManager
+  - Compete rewrite
+  - Includes functionality to interact with local modules
+  - Now shows release dates and approximate download counts for each module
+  - Now shows summary of releases for a specific module
+  - Visual indicators for stale and new modules
 
 Version 1.11.9 - Bartolome
 -----------------------------
