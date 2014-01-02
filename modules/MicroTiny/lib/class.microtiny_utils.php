@@ -37,13 +37,14 @@ class microtiny_utils
     static $first_time = true;
 
     // Check if we are in object instance
+    $config = cms_utils::get_config();
     $mod = cms_utils::get_module('MicroTiny');
     if(!is_object($mod)) throw new CmsLogicException('Could not find the microtiny module...');
 
     $frontend = cmsms()->is_frontend_request();
     $languageid = self::GetLanguageId($frontend);
 
-    $mtime = time()-60; // by defaul cache for 1 minute ??
+    $mtime = time() - 300; // by defaul cache for 5 minutes ??
 
     // get the latest modification time of this cssname
     // if fn does not exist or is older than the modification time, save the config.
@@ -63,7 +64,9 @@ class microtiny_utils
     $module = $smarty->get_template_vars('actionmodule');
     if( $module == $mod->GetName() ) $mtime = time() + 60;
 
-    $config = cms_utils::get_config();
+    // also disable caching if told to by the config.php
+    if( isset($config['mt_disable_cache']) && cms_to_bool($config['mt_disable_cache']) ) $mtime = time()+60;
+
     $output = '';
     if( $first_time ) {
       // only once per request.

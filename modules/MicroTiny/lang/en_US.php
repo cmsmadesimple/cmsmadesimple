@@ -140,6 +140,8 @@ h2 {
     <dt>Q: How do I insert a &lt;br/&gt; instead of create new paragraphs?</dt>
       <dd>Press [shift]+Enter instead of just the Enter key.</dd>
   </dl>
+<h3>Caching:</h3>
+  <p>In an effort to improve performance, MicroTiny will attempt to cache the generated javascript files unless something has changed.  This functionality can be disabled by setting the special config entry <code>mt_disable_cache</code> to true. i.e: adding <code>\$config[&quot;mt_disable_cache&quot;] = true;</code> to the config.php file.</p>
 <h3>See Also:</h3>
 <ul>
   <li><code>{content}</code> tag in &quot;Extensions >> Tags&quot;</li>
