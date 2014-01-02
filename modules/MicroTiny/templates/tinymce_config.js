@@ -9,7 +9,7 @@ var cmsms_tiny = {
         filepicker_url : '{cms_action_url module='MicroTiny' action='filepicker' forjs=1}&showtemplate=false&field=',
         linker_text : '{$MT->Lang('cmsms_linker')}',
         linker_title : '{$MT->Lang('title_cmsms_linker')}',
-        linker_image : '{$MT->GetModuleURLPath()}/images/cmsmslink.gif',
+        linker_image : '{$MT->GetModuleURLPath()}/lib/images/cmsmslink.gif',
         linker_url : '{cms_action_url module='MicroTiny' action=linker forjs=1}&showtemplate=false',
         linker_autocomplete_url : '{cms_action_url action='ajax_getpages' module='MicroTiny' forjs=1}&showtemplate=false',
         prompt_page : '{$MT->Lang('prompt_linker')}',
@@ -52,7 +52,11 @@ tinymce.init({
         tinymce.activeEditor.windowManager.open({
             title: cmsms_tiny.filepicker_title,
             url: cmsms_tiny.filepicker_url + field_name,
-            height: Math.max(window.innerHeight * 0.8, 250)
+            classes: 'filepicker',
+            width: 900,
+            height: 600,
+            inline: 1
+            //height: Math.max(window.innerHeight * 0.8, 250)
         }, { 
             window : win
         });

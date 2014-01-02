@@ -71,7 +71,7 @@ class microtiny_utils
     if( $first_time ) {
       // only once per request.
       $first_time = FALSE;
-      $output .= '<script type="text/javascript" src="'.$config->smart_root_url().'/modules/MicroTiny/tinymce/tinymce.min.js"></script>';
+      $output .= '<script type="text/javascript" src="'.$config->smart_root_url().'/modules/MicroTiny/lib/js/tinymce/tinymce.min.js"></script>';
     }
 
     $fn = cms_join_path(PUBLIC_CACHE_LOCATION,'mt_'.md5(__DIR__.session_id().$frontend.$selector.$cssname.$languageid).'.js');
