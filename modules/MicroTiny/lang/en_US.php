@@ -64,6 +64,7 @@ $lang['info_linker_autocomplete'] = 'This is an autocomplete field.  Begin by ty
 
 // M
 $lang['msg_cancelled'] = 'Operation cancelled';
+$lang['mthelp_allowcssoverride'] = 'If enabled, then any code that initializes a MicroTiny WYSIWYG area will be able to specify the name of a stylesheet to use instead of the default stylesheet specified above.';
 $lang['mthelp_dfltstylesheet'] = 'Associate a stylesheet with editors using this profile.  This allows the WYSIWYG editor to appear similar to the webiste appearance.';
 $lang['mthelp_profileallowimages'] = 'Allow the editor to embed images and videos into the text area.  For very tightly controlled designs the content editors may only be able to select images, or vidoes for specific areas of a web page.';
 $lang['mthelp_profilelabel'] = 'A description for this profile.  The description cannot be edited for system profiles.';

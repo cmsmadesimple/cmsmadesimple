@@ -70,7 +70,7 @@
 
   <div class="pageoverflow">
     <p class="pagetext">
-      <label for="profile_label">{$mod->Lang('profile_dfltstylesheet')}:</label>
+      <label for="profile_label">{$mod->Lang('profile_dfltstylesheet')}:</label>&nbsp;{cms_help key2='mthelp_dfltstylesheet'}
     </p>
     <p class="pageinput">
       <select id="profile_dfltstylesheet" name="{$actionid}profile_dfltstylesheet">
@@ -81,7 +81,7 @@
 
   <div class="pageoverflow">
     <p class="pagetext">
-      <label for="profile_label">{$mod->Lang('profile_allowcssoverride')}:</label>
+      <label for="profile_label">{$mod->Lang('profile_allowcssoverride')}:</label>&nbsp;{cms_help key2='mthelp_allowcssoverride'}
     </p>
     <p class="pageinput">
       <select id="profile_allowcssoverride" name="{$actionid}profile_allowcssoverride">{cms_yesno selected=$data.allowcssoverride}</select>
