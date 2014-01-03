@@ -41,30 +41,14 @@ tinymce.init({
     content_css : '{cms_stylesheet name=$mt_cssname nolinks=1}',
     {/if}
     {if $isfrontend}
-    toolbar: 'undo | bold italic underline | alignleft aligncenter alignright alignjustify | bullist numlist | link{if $mt_profile.allowimages} | image cmsms_filebrowser{/if}',
-    plugins: ['autolink link anchor wordcount {if $mt_profile.allowimages} media image cmsms_filepicker cmsms_filebrowser{/if}'],
+    toolbar: 'undo | bold italic underline | alignleft aligncenter alignright alignjustify | bullist numlist | link{if $mt_profile.allowimages} | image{/if}',
+    plugins: ['autolink link anchor wordcount {if $mt_profile.allowimages} media image{/if}'],
     {else}
+    image_advtab: true,
     toolbar: 'undo redo | cut copy paste | styleselect | bold italic underline | alignleft aligncenter alignright alignjustify | bullist numlist | link unlink cmsms_linker{if $mt_profile.allowimages} | image cmsms_filebrowser{/if}',
     plugins: ['autolink link cmsms_linker charmap anchor searchreplace wordcount code fullscreen insertdatetime {if $mt_profile.allowimages}media image cmsms_filepicker cmsms_filebrowser{/if}'],
     {/if}
     // callback functions
-    {if !$isfrontend}
-    /*file_browser_callback: function(field_name, url, type, win) {
-        tinymce.activeEditor.windowManager.open({
-            title: cmsms_tiny.filepicker_title,
-            url: cmsms_tiny.filepicker_url + field_name,
-            classes: 'filepicker',
-            width: 900,
-            height: 600,
-            inline: 1
-            //height: Math.max(window.innerHeight * 0.8, 250)
-        }, { 
-            window : win
-        });
-    },
-    */
-    image_advtab: true,
-    {/if}
     urlconverter_callback: function(url, elm, onsave, name) {
         var self = this;
         var settings = self.settings;
