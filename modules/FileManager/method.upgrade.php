@@ -18,8 +18,6 @@ if( version_compare($oldversion,'1.3.1') < 0 ) {
 $this->SetPreference('advancedmode',0);
 $this->RemovePermission('Use Filemanager');
 $this->RegisterModulePlugin(true);
-
-// TODO Rolf remove preference uploadboxes
-
+$this->RemovePreference('uploadboxes');
 
 ?>
