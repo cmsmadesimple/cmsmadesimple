@@ -3,12 +3,13 @@
 	<head>
 		<meta charset="utf-8">
 		<title>{$mod->Lang('filepickertitle')}</title>
+		<!-- tinymce stylesheet will be replaced with custom styles //-->
 		<link rel="stylesheet" type="text/css" href="{$mod->GetModuleURLPath()}/lib/js/tinymce/skins/lightgray/content.min.css" />
-		<link rel="stylesheet" type="text/css" href="{$mod->GetModuleURLPath()}/lib/js/tinymce/skins/lightgray/content.inline.min.css" />
 		<link rel="stylesheet" type="text/css" href="{$mod->GetModuleURLPath()}/lib/js/tinymce/skins/lightgray/skin.min.css" />
 		<link rel="stylesheet" type="text/css" href="{$mod->GetModuleURLPath()}/lib/css/filepicker.css" />
 		<script type="text/javascript" src="{root_url}/lib/jquery/js/jquery-1.10.2.min.js"></script>
 		<script type="text/javascript" src="{root_url}/admin/cms_js_setup.php?_sk_=8ba24bf9ca02a992"></script>
+		<!-- this part will change and will be moved to app.js or so //-->
 		<script language="javascript" type="text/javascript">
             $(document).ready(function() {
                 $('a.file_action').click(function(e) {
@@ -31,6 +32,7 @@
 				<div class="filepicker-breadcrumb">
 					<p><i class="mce-ico mce-i-browse filepicker-icon"></i>{$mod->Lang('youareintext')}: {$startpath}</p>
 				</div>
+				<!-- this stuff will change, creating optional views, like grid or list //-->
 				<div id="filelist" class="mce-container-body mce-abs-layout">
 					<table class="filepicker-table">
 						<thead>

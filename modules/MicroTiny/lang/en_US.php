@@ -210,6 +210,7 @@ $lang['submit'] = 'Submit';
 // T
 $lang['tooltip_selectedalias'] = 'This field is read only';
 $lang['title_cmsms_linker'] = 'Create a link to a CMSMS content page';
+$lang['title_cmsms_filebrowser'] = 'Select a file';
 $lang['title_edit_profile'] = 'Edit profile';
 $lang['tmpnotwritable'] = 'The configuration could not be written to the tmp-dir! Please fix that!';
 $lang['tab_general_title'] = 'General';

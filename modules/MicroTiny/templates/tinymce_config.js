@@ -7,6 +7,7 @@ var cmsms_tiny = {
         statusbar : '{mt_jsbool($mt_profile.showstatusbar)}',
         filepicker_title : '{$MT->Lang('filepickertitle')}',
         filepicker_url : '{cms_action_url module='MicroTiny' action='filepicker' forjs=1}&showtemplate=false&field=',
+        filepicker_title : '{$MT->Lang('title_cmsms_filebrowser')}',
         linker_text : '{$MT->Lang('cmsms_linker')}',
         linker_title : '{$MT->Lang('title_cmsms_linker')}',
         linker_image : '{$MT->GetModuleURLPath()}/lib/images/cmsmslink.gif',
@@ -25,7 +26,7 @@ var cmsms_tiny = {
         target_none : '{$MT->Lang('none')}',
         target_new_window : '{$MT->Lang('newwindow')}',
         loading_info : '{$MT->Lang('loading_info')}',
-        mt_selector : '{if isset($mt_selector) && $mt_selector != ''}{$mt_selector}{else}textarea.MicroTiny{/if}'
+        mt_selector : '{if isset($mt_selector) && $mt_selector != ''}{$mt_selector}{else}textarea.MicroTiny{/if}',
 };
 // this is the actual tinymce initialization
 tinymce.init({
@@ -40,15 +41,15 @@ tinymce.init({
     content_css : '{cms_stylesheet name=$mt_cssname nolinks=1}',
     {/if}
     {if $isfrontend}
-    toolbar: 'undo | bold italic underline | alignleft aligncenter alignright alignjustify | bullist numlist | link{if $mt_profile.allowimages} | image{/if}',
-    plugins: ['autolink link anchor wordcount {if $mt_profile.allowimages} media image{/if}'],
+    toolbar: 'undo | bold italic underline | alignleft aligncenter alignright alignjustify | bullist numlist | link{if $mt_profile.allowimages} | image cmsms_filebrowser{/if}',
+    plugins: ['autolink link anchor wordcount {if $mt_profile.allowimages} media image cmsms_filepicker cmsms_filebrowser{/if}'],
     {else}
-    toolbar: 'undo redo | cut copy paste | styleselect | bold italic underline | alignleft aligncenter alignright alignjustify | bullist numlist | link unlink cmsms_linker{if $mt_profile.allowimages} | image{/if}',
-    plugins: ['autolink link cmsms_linker charmap anchor searchreplace wordcount code fullscreen insertdatetime {if $mt_profile.allowimages}media image{/if}'],
+    toolbar: 'undo redo | cut copy paste | styleselect | bold italic underline | alignleft aligncenter alignright alignjustify | bullist numlist | link unlink cmsms_linker{if $mt_profile.allowimages} | image cmsms_filebrowser{/if}',
+    plugins: ['autolink link cmsms_linker charmap anchor searchreplace wordcount code fullscreen insertdatetime {if $mt_profile.allowimages}media image cmsms_filepicker cmsms_filebrowser{/if}'],
     {/if}
     // callback functions
     {if !$isfrontend}
-    file_browser_callback: function(field_name, url, type, win) {
+    /*file_browser_callback: function(field_name, url, type, win) {
         tinymce.activeEditor.windowManager.open({
             title: cmsms_tiny.filepicker_title,
             url: cmsms_tiny.filepicker_url + field_name,
@@ -61,6 +62,7 @@ tinymce.init({
             window : win
         });
     },
+    */
     image_advtab: true,
     {/if}
     urlconverter_callback: function(url, elm, onsave, name) {
