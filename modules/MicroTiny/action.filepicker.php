@@ -28,6 +28,7 @@ $filemanager = cms_utils::get_module('FileManager');
 if( isset($_GET['type']) ) {
   $tmp = strtolower(trim($_GET['type']));
   if( $tmp == 'image' ) $type = 'image';
+  if( $tmp == 'media' ) $type = 'media';
 }
 
 $cwd = filemanager_utils::get_cwd();
@@ -47,10 +48,44 @@ $is_image = function($filename) {
   return FALSE;
 };
 
+$is_media = function($filename) {
+  $ext = strtolower(substr($filename,strrpos($filename,'.')+1));
+  if( in_array($ext,array('swf','dcr','mov','qt','mpg','mp3','mp4','ogg','mpeg','wmp','avi','wmv',
+			  'wm','asf','asx','wmx','rm','ra','ram')) ) {
+    return TRUE;
+  }
+  return FALSE;
+};
+
 $sortfiles = function($file1,$file2) {
   if ($file1["isdir"] && !$file2["isdir"]) return -1;
   if (!$file1["isdir"] && $file2["isdir"]) return 1;
   return strnatcasecmp($file1["name"],$file2["name"]);
+};
+
+$accept_file = function($type,$cwd,$path,$filename) use (&$filemanager,&$is_image,&$is_media) {
+  if( $filename == '.' ) return FALSE;
+  if( $filename == '..' ) {
+    if( $cwd == filemanager_utils::get_default_cwd() ) return FALSE;
+    return TRUE;
+  }
+  if( is_dir(cms_join_path($path,$filename)) ) return TRUE;
+  if( (startswith($filename,'.') || startswith($filename,'_')) && !$filemanager->GetPreference('showhiddenfiles') ) return FALSE;
+
+  switch( $type ) {
+    case 'image':
+      if( $is_image($filename) ) return TRUE;
+      return FALSE;
+
+    case 'media':
+      if( $is_media($filename) ) return TRUE;
+      return TRUE;
+
+    case 'file':
+    case 'any':
+    default:
+      return TRUE;
+  }
 };
 
 //
@@ -59,12 +94,7 @@ $sortfiles = function($file1,$file2) {
 $files = array();
 $dh = dir($startdir);
 while( false !== ($filename = $dh->read()) ) {
-  if( $filename == '.' ) continue;
-  if( $filename != '..' && (startswith($filename,'.') || startswith($filename,'_')) && !$filemanager->GetPreference('showhiddenfiles') ) {
-    continue;
-  }
-  if( startswith($filename,'thumb_') ) continue; // ignore thumbs for now.
-
+  if( !$accept_file( $type, $cwd, $startdir, $filename ) ) continue;  
   $fullname = cms_join_path($startdir,$filename);
 
   $file = array();
