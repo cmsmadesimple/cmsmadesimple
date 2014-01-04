@@ -1,4 +1,4 @@
-<h3>{$mod->Lang('edit_profile')}: <em>{$data.name}</em></h3>
+<h3>{$mod->Lang('edit_profile')}: <em>{$data.label}</em></h3>
 
 {form_start}
 <input type="hidden" name="{$actionid}profile" value="{$profile}"/>
@@ -13,7 +13,8 @@
       <input type="submit" name="{$actionid}cancel" value="{$mod->Lang('cancel')}"/>
     </p>
   </div>
-
+  
+{* TODO Redundant??
   <div class="pageoverflow">
     <p class="pagetext">
       <label for="profile_name">*{$mod->Lang('profile_name')}:</label>&nbsp;{cms_help key2='mthelp_profilename'}
@@ -31,6 +32,7 @@
       <input type="text" size="80" id="profile_label" name="{$actionid}profile_label" value="{$data.label}" {if $data.system}readonly disabled{/if}/>
     </p>
   </div>
+*}
 
   <div class="pageoverflow">
     <p class="pagetext">
@@ -85,6 +87,14 @@
     </p>
     <p class="pageinput">
       <select id="profile_allowcssoverride" name="{$actionid}profile_allowcssoverride">{cms_yesno selected=$data.allowcssoverride}</select>
+    </p>
+  </div>
+  
+  <div class="pageoverflow">
+    <p class="pagetext"></p>
+    <p class="pageinput">
+      <input type="submit" name="{$actionid}submit" value="{$mod->Lang('submit')}"/>
+      <input type="submit" name="{$actionid}cancel" value="{$mod->Lang('cancel')}"/>
     </p>
   </div>
 
