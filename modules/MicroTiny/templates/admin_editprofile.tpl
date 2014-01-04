@@ -2,9 +2,9 @@
 
 {form_start}
 <input type="hidden" name="{$actionid}profile" value="{$profile}"/>
-<input type="hidden" name="{$actionid}origname" value="{$profile.name}"/>
+<input type="hidden" name="{$actionid}origname" value="{$data.name}"/>
 
-  {if $profile.system}<div class="information">{$tmp='profiledesc_'|cat:$data.name}{$mod->Lang($tmp)}</div>{/if}
+  {if $data.system}<div class="information">{$tmp='profiledesc_'|cat:$data.name}{$mod->Lang($tmp)}</div>{/if}
 
   <div class="pageoverflow">
     <p class="pagetext"></p>
