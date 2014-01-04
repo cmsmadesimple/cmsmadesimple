@@ -19,15 +19,15 @@ tinymce.PluginManager.add('cmsms_filebrowser', function(editor) {
 
     editor.addButton('cmsms_filebrowser', {
         icon : 'browse',
-        tooltip : cmsms_tiny.filepicker_title,
+        tooltip : cmsms_tiny.filebrowser_title,
         onclick : cmsmsFileBrowser
     });
 
     editor.addMenuItem('cmsms_filebrowser', {
         icon : 'browse',
-        text : cmsms_tiny.filepicker_title,
+        text : cmsms_tiny.filebrowser_title,
         onclick : cmsmsFileBrowser,
         context : 'insert',
-        prependToContext: true,
+        prependToContext: true
     });
 });

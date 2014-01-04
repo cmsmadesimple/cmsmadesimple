@@ -7,7 +7,7 @@ var cmsms_tiny = {
         statusbar : '{mt_jsbool($mt_profile.showstatusbar)}',
         filepicker_title : '{$MT->Lang('filepickertitle')}',
         filepicker_url : '{cms_action_url module='MicroTiny' action='filepicker' forjs=1}&showtemplate=false&field=',
-        filepicker_title : '{$MT->Lang('title_cmsms_filebrowser')}',
+        filebrowser_title : '{$MT->Lang('title_cmsms_filebrowser')}',
         linker_text : '{$MT->Lang('cmsms_linker')}',
         linker_title : '{$MT->Lang('title_cmsms_linker')}',
         linker_image : '{$MT->GetModuleURLPath()}/lib/images/cmsmslink.gif',

@@ -79,7 +79,7 @@ $accept_file = function($type,$cwd,$path,$filename) use (&$filemanager,&$is_imag
 
     case 'media':
       if( $is_media($filename) ) return TRUE;
-      return TRUE;
+      return FALSE;
 
     case 'file':
     case 'any':
@@ -87,6 +87,33 @@ $accept_file = function($type,$cwd,$path,$filename) use (&$filemanager,&$is_imag
       return TRUE;
   }
 };
+
+/*
+ * A quick check for a file type based on extension
+ * @String $ext
+ */
+function set_filetype($ext) {
+	
+	$ext = strtolower($ext);
+	$filetype = 'file'; // default to all file
+	$imgext = array('jpg', 'jpeg', 'png', 'gif', 'bmp', 'tiff', 'svg'); // images
+	$videoext = array('mov', 'mpeg', 'mp4', 'avi', 'mpg','wma',"flv","webm"); // videos
+	$audioext = array('mp3', 'm4a', 'ac3', 'aiff', 'mid','ogg','wav'); // audio
+	$archiveext = array('zip', 'rar','gz','tar','iso','dmg'); // archives
+	
+	if(in_array($ext, $imgext)) {
+		$filetype = 'image';
+	} elseif(in_array($ext, $videoext)) {
+		$filetype = 'video';
+	} elseif(in_array($ext, $audioext)) {
+		$filetype = 'audio';
+	} elseif(in_array($ext, $archiveext)) {
+		$filetype = 'archive';
+	}
+
+	return $filetype;
+}
+
 
 //
 // get our file list
@@ -105,6 +132,7 @@ while( false !== ($filename = $dh->read()) ) {
   $file['ext'] = strtolower(substr($filename,strrpos($filename,".")+1));
   $file['is_image'] = $is_image($filename);
   $file['icon'] = $filemanager->GetFileIcon('.'.$file['ext'],$file['isdir']);
+  $file['filetype'] = set_filetype($file['ext']);
   $file['dimensions'] = '';
   if( $file['is_image'] ) {
     $file['thumbnail'] = microtiny_utils::GetThumbnailFile($filename,$startdir,$starturl);
@@ -127,6 +155,7 @@ $smarty->assign('showthumbnails',(int)$filemanager->GetPreference('showthumbnail
 $smarty->assign('startpath',$cwd);
 $smarty->assign('field',$field);
 $smarty->assign('files',$files);
+$smarty->assign('type', $type);
 
 echo $this->ProcessTemplate('filepicker.tpl');
 
