@@ -45,7 +45,7 @@ try {
       }
     }
 
-    // check if name changed, and if object is a system objec, puke
+    // check if name changed, and if object is a system object, puke
     if( isset($profile['system']) && $profile['system'] && $profile['name'] != $name ) {
       throw new CmsInvalidDataException($this->lang('error_cantchangesysprofilename'));
     }
@@ -54,7 +54,7 @@ try {
     $this->RedirectToAdminTab();
   }
 
-  // display data
+  // display data, strange formatting but it works...
   $smarty->assign('profile',$name);
   $smarty->assign('data',$profile);
 
