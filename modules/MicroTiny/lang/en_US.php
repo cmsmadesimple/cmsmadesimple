@@ -1,6 +1,6 @@
 <?php
 // A
-$lang['admindescription'] = 'A stripped down, but still powerfull implementation of the TinyMCE WYSIWYG editor';
+$lang['admindescription'] = 'A stripped down, but still powerful implementation of the TinyMCE WYSIWYG editor';
 
 // B
 $lang['browse'] = 'Browse';
@@ -9,9 +9,9 @@ $lang['browse'] = 'Browse';
 $lang['cancel'] = 'Cancel';
 $lang['class'] = 'Class';
 $lang['cmsms_linker'] = 'Link to CMSMS Page';
-$lang['css_styles_help'] = 'CSS-stylenames specified here are added to a dropdownbox in the editor. Leaving the input field empty will keep the dropdown-box hidden (default behavior).';
+$lang['css_styles_help'] = 'CSS-stylenames specified here are added to a dropdown box in the editor. Leaving the input field empty will keep the dropdown box hidden (default behaviour).';
 $lang['css_styles_help2'] = 'The styles can either be just the class name, or a classname with a new name to show.<br />
-Must be sepereated by either commas or newlines.<br />
+Must be separated by either commas or newlines.<br />
 Example: mystyle1, My style name=mystyle2<br />
 Result: a dropdown containing 2 entries, \'mystyle1\' and \'My style name\' resulting in the insertion of mystyle1, and mystyle2 respectively.<br />
 Note: No checking for the actual existence of the stylenames is done. They are used blindly.';
@@ -37,7 +37,7 @@ $lang['friendlyname'] = 'MicroTiny WYSIWYG editor';
 $lang['height'] = 'Height';
 $lang['help'] = <<<EOT
 <h3>What Does This Do?</h3>
-<p>MicroTiny is a small, restricted version of the <a href="http://www.tinymce.com">tinymce</a> editor. allowing content editors a near WYSIWYG appearance for editing content.  It works with content blocks in CMSMS content pages (when a WYSIWYG has been allowed), in module admin forms where WYSIWYG editors are allowed, and allows restricted capabilities for editing html blocks on frontend pages.</p>
+<p>MicroTiny is a small, restricted version of the <a href="http://www.tinymce.com" target="_blank">TinyMCE</a> editor. allowing content editors a near WYSIWYG appearance for editing content.  It works with content blocks in CMSMS content pages (when a WYSIWYG has been allowed), in module admin forms where WYSIWYG editors are allowed, and allows restricted capabilities for editing html blocks on frontend pages.</p>
 </p>In order for MicroTiny to be used as the WYSIWYG editor in the admin console the MicroTiny Wysiwyg Editor needs to be selected in the users preferences.  Please select &quot;MicroTiny&quot; in the &quot;Select WYSIWYG to Use&quot; option under &quot;My Preferences &gt;&gt; User Preferences&quot; in the CMSMS Admin panel.  Additional options in various modules or in content page templates, and content pages themselves can control wether a text area or a wysiwyg field is provided in various edit forms.</p>
 <p>For Frontend editing capabilities MicroTiny must be selected as the &quot;Frontend WYSIWYG&quot; in the global settings page of the CMSMS admin console.</p>
 <h3>Features:</h3>
@@ -81,7 +81,7 @@ $lang['help'] = <<<EOT
     <li>Separation of Logic, Functionality and Design from Content.
       <p>This editor is built with the assumption that content for a specific area of a page (or a blog article, news article, or product description, ...) is data.  The data is styled by the appropriate templates, and should not be mixed with design elements, or functionality of the website.</p>
       <p>As a simple example.  If you are insisting that editors use certain classes for images, layout their images in a certain manner, or insert block elements such as &lt;div&gt; or &lt;section&gt; into their content for proper styling then this is not the editor module for you.  Such styling concerns should be taken care of in stylesheets and templates, such that your editor can enter text without having to remember rules.</p>
-      <p>This module is not designed to handle special caces where advanced HTML is required.  In such pages the WYSIWYG editor should be disabled, and editing access to the page restricted to those with the ability to understand and edit HTML code manually.</p>
+      <p>This module is not designed to handle special cases where advanced HTML is required.  In such pages the WYSIWYG editor should be disabled, and editing access to the page restricted to those with the ability to understand and edit HTML code manually.</p>
       <p>As this module is intended to provide a restricted editor for specific blocks, for use by editors without HTML knowledge. Since the WYSIWYG editor does not understand the smarty logic, you should NOT (as a general rule) mix smarty logic or module calls within WYSIWYG enabled areas.  It is best to disable the wysiwyg for these areas/pages and restrict edit access to those pages.</p>
     </li>
   </ul>
@@ -97,7 +97,7 @@ $lang['help'] = <<<EOT
   <p>This module provides the <em>(optional)</em> ability to associate a stylesheet with the profile.  This provides the ability to style the edit portion WYSIWYG editor in a manner similar to the website style.  Providing a more WYSIWYG like experience for the content editor.</p>
   <p>Additionally, in conjunction with the <code>classname</code> parameter of the <code>{cms_textarea}</code> and <code>{content}</code> tags this module allows the content editor module to override the specified stylesheet differently for each content block.  This allows the ability to style each WYSIWYG area differently, if there are multiple WYSIWYG areas on the page.  This functionality is restricted to the admin interface only.</p>
   <p>For example, in a page template adding the cssname parameter to the {content} tag allows specifying a CMSMS stylesheet to use to customize the appearance of that content block.  i.e: <code>{content block='second block' cssname='whiteonblack'}</code>
-  <p>Additionally, a setting in the content editing section of the &quot;Global Settings&quot; page allows automatically supplying the cssname parameter with the name of the content block.</p>
+  <p>Additionally, a setting in the content editing section of the &quot;Global Settings&quot; page allows automatically supplying the css name parameter with the name of the content block.</p>
 
   <h4>Styles for the WYSIWYG editor</h4>
     <p>The stylesheet for the WYSIWYG editor area should style everything from the body element downwards. It is only necessary to style the elements available to, and used by the content editor.  Here is a simple example of a stylesheet for a white-on-black theme:</p>
@@ -121,20 +121,20 @@ h2 {
 
 <h3>FAQ:</h3>
   <dl>
-   <dt>Q: Where is the support for <em style="color: red;">&quot;some functionality&quot;</em> in the editor, and how do I activate it ?</dt>
-      <dd>A: You dont.  The version of tinymce distributed with MicroTiny is a trimmed down, custom package.  We have added our own custom plugins, but do not support the addition of custom plugins or the ability to customize the configuration in any way other than the edit profile form.  If you require additional functionality in a WYSIWYG editor you may have some success in a third party module.</dd>
+   <dt>Q: Where is the support for <em style="color: red;">&quot;some functionality&quot;</em> in the editor, and how do I activate it?</dt>
+      <dd>A: You don't.  The version of TinyMCE distributed with MicroTiny is a trimmed down, custom package.  We have added our own custom plugins, but don't support the addition of custom plugins or the ability to customize the configuration in any way other than the edit profile form.  If you require additional functionality in a WYSIWYG editor you may have some success in a third party module.</dd>
     <br/>
-    <dt>Q: Which HTML/HTML5 tags are supported by this module, and how do I change that ?</dt>
-      <dd>A: The list of supported elements in the default tinymce editor can be found on the tinymce website <em>(though we dont have a correct link at the moment)</em>.  There is no mechanism in the MicroTiny module to extend that.</dd>
+    <dt>Q: Which HTML/HTML5 tags are supported by this module, and how do I change that?</dt>
+      <dd>A: The list of supported elements in the default TinyMCE editor can be found on the TinyMCE website <em>(though we don't have a correct link at the moment)</em>.  There is no mechanism in the MicroTiny module to extend that.</dd>
     <br/>
     <dt>Q: I cannot get the MicroTiny editor to work in the admin interface, what can I do</dt>
       <dd>A: There are a few steps you can follow to diagnose this issue:
         <ol>
           <li>Check the CMSMS admin log, your PHP error log, and the javascript console for indications of a problem.</li>
-          <li>Ensure that the example WYSIWYG area works in the Microtiny admin panel under &quot;Extensions >> MicroTiny WYSIWYG Editor&quot;.  If this does not work, recheck your PHP error log and javascript console.</li>
+          <li>Ensure that the example WYSIWYG area works in the MicroTiny admin panel under &quot;Extensions >> MicroTiny WYSIWYG Editor&quot;.  If this does not work, recheck your PHP error log and javascript console.</li>
           <li>Ensure that MicroTiny is selected as the &quot;WYSIWYG to use&quot; in your user preferences.</li>
-          <li>Check other content pages.  If MicroTiny works on one or more of those then that indicates that a flag to disable WYSIWYG editors on all content blocks may be set on some content pages.</li>
-          <li>Check the page template(s).  The wysiwyg=false parameter may be specified on one or more content blocks in the page template(s) which will disable the WYSIWYG editor.</li>
+          <li>Check other content pages. If MicroTiny works on one or more of those then that indicates that a flag to disable WYSIWYG editors on all content blocks may be set on some content pages.</li>
+          <li>Check the page template(s). The wysiwyg=false parameter may be specified on one or more content blocks in the page template(s) which will disable the WYSIWYG editor.</li>
         </ol>
       </dd>
     <dt>Q: How do I insert a &lt;br/&gt; instead of create new paragraphs?</dt>
@@ -144,19 +144,19 @@ h2 {
       <dd>A: For this most part this is done intentionally to allow web developers the ability to further restrict the functionality of certain editor profiles.  The menubar can be toggled off in different profiles thus denying the user the functionality only available in the menubar.</dd>
   </dl>
 <h3>Caching:</h3>
-  <p>In an effort to improve performance, MicroTiny will attempt to cache the generated javascript files unless something has changed.  This functionality can be disabled by setting the special config entry <code>mt_disable_cache</code> to true. i.e: adding <code>\$config[&quot;mt_disable_cache&quot;] = true;</code> to the config.php file.</p>
+  <p>In an effort to improve performance, MicroTiny will attempt to cache the generated javascript files unless something has changed. This functionality can be disabled by setting the special config entry <code>mt_disable_cache</code> to true. i.e: adding <code>\$config[&quot;mt_disable_cache&quot;] = true;</code> to the config.php file.</p>
 <h3>See Also:</h3>
 <ul>
   <li><code>{content}</code> tag in &quot;Extensions >> Tags&quot;</li>
   <li><code>{cms_textarea}</code> tag in &quot;Extensions >> Tags&quot;</li>
   <li><code>{cms_init_editor}</code> tag in &quot;Extensions >> Tags&quot;</li>
-  <li>The <a href="http://www.tinymce.com">tinymce</a> editor itself.</li>
+  <li>The <a href="http://www.tinymce.com" target="_blank">TinyMCE</a> editor itself.</li>
 </ul>
 EOT;
 
 // I
 $lang['image'] = 'Image';
-$lang['info_linker_autocomplete'] = 'This is an autocomplete field.  Begin by typing a few characters of the desired page alias, menutext, or title.  Any matching items will be displayed in a list.';
+$lang['info_linker_autocomplete'] = 'This is an auto complete field. Begin by typing a few characters of the desired page alias, menu text, or title. Any matching items will be displayed in a list.';
 
 // L
 $lang['loading_info'] = 'Loading...';
@@ -164,7 +164,7 @@ $lang['loading_info'] = 'Loading...';
 // M
 $lang['msg_cancelled'] = 'Operation cancelled';
 $lang['mthelp_allowcssoverride'] = 'If enabled, then any code that initializes a MicroTiny WYSIWYG area will be able to specify the name of a stylesheet to use instead of the default stylesheet specified above.';
-$lang['mthelp_dfltstylesheet'] = 'Associate a stylesheet with editors using this profile.  This allows the WYSIWYG editor to appear similar to the webiste appearance.';
+$lang['mthelp_dfltstylesheet'] = 'Associate a stylesheet with editors using this profile.  This allows the WYSIWYG editor to appear similar to the website appearance.';
 $lang['mthelp_profileallowimages'] = 'Allow the editor to embed images and videos into the text area.  For very tightly controlled designs the content editors may only be able to select images, or vidoes for specific areas of a web page.';
 $lang['mthelp_profilelabel'] = 'A description for this profile.  The description cannot be edited for system profiles.';
 $lang['mthelp_profilename'] = 'The name for this profile.  The name of system profiles cannot be edited.';
@@ -183,7 +183,7 @@ $lang['ok'] = 'Ok';
 $lang['prompt_linker'] = 'Enter Page title';
 $lang['prompt_profiles'] = 'Profiles';
 $lang['prompt_selectedalias'] = 'Selected Page alias';
-$lang['profiledesc___admin__'] = 'This profile is used by all users who are authorized to use this editor, and have chosen this editor as their WYSIWYG editr';
+$lang['profiledesc___admin__'] = 'This profile is used by all users who are authorized to use this editor, and have chosen this editor as their WYSIWYG editor';
 $lang['profiledesc___frontend__'] = 'This profile is used for all frontend requests where this WYSIWYG editor is allowed';
 $lang['profile_admin'] = 'Admin Editors';
 $lang['profile_allowcssoverride'] = 'Allow blocks to override the selected stylesheet';
@@ -213,7 +213,7 @@ $lang['tooltip_selectedalias'] = 'This field is read only';
 $lang['title_cmsms_linker'] = 'Create a link to a CMSMS content page';
 $lang['title_cmsms_filebrowser'] = 'Select a file';
 $lang['title_edit_profile'] = 'Edit profile';
-$lang['tmpnotwritable'] = 'The configuration could not be written to the tmp-dir! Please fix that!';
+$lang['tmpnotwritable'] = 'The configuration could not be written to the tmp-dir! Please fix this...';
 $lang['tab_general_title'] = 'General';
 $lang['tab_advanced_title'] = 'Advanced';
 
