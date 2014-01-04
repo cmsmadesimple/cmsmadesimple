@@ -2443,3 +2443,8 @@ a.toggle-dropzone:focus {
 		display: none
 	}
 }
+
+/* TinyMCE override for filepicker iframe*/
+.mce-container-body iframe {
+	max-width: none !important;
+}
