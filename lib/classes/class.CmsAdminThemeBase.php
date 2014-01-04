@@ -49,6 +49,7 @@ abstract class CmsAdminThemeBase
 	private $_url;
 	private $_query;
 	private $_data;
+	private $_action_module;
 
 	// meta information
 	private $_sectionCount;
@@ -763,7 +764,49 @@ abstract class CmsAdminThemeBase
 	}
 
 	/**
-	 * A functon to return the name (key) of a menu item given it's title
+	 * Set the current action module
+	 *
+	 * @since 2.0
+	 * @param string the module name.
+	 * @return void
+	 */
+	public function set_action_module($module_name)
+	{
+		if( !$module_name ) return;
+		$this->_action_module = $module_name;
+	}
+
+	/**
+	 * Determine the module name (if any) associated with the current request.
+	 *
+	 * @since 2.0
+	 * @access protected
+	 * @return string the module name for the current request, if any.
+	 */
+	protected function get_action_module()
+	{
+		if( $this->_action_module ) return $this->_action_module;
+		// todo: if this is empty, get it from the mact in the request.
+	}
+
+	/**
+	 * Get the help URL for a module.
+	 *
+	 * @since 2.0
+	 * @access protected
+	 */
+	protected function get_module_help_url($module_name = null)
+	{
+		if( !$module_name ) $module_name = $this->get_action_module();
+		if( !$module_name ) return;
+
+		$modman = cms_utils::get_module('ModuleManager');
+		if( !is_object($modman) ) return;
+		return $modman->create_url('m1_','defaultadmin','',array('modulehelp'=>$module_name));
+	}
+
+	/**
+	 * A function to return the name (key) of a menu item given it's title
 	 * returns the first match.
 	 *
 	 * @access protected

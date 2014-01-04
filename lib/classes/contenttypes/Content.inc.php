@@ -411,7 +411,7 @@ class Content extends ContentBase
 			$parms['width'] = get_parameter_value($blockInfo,'width',80);
 			$parms['height'] = get_parameter_value($blockInfo,'height',10);
 			if( isset($blockInfo['cssname']) && $blockInfo['cssname'] ) $parms['cssname'] = $blockInfo['cssname'];
-			if( !isset($parms['cssname']) || $parms['cssname'] == '' && cms_siteprefs::get('content_cssnameisblockname,1') ) {
+			if( (!isset($parms['cssname']) || $parms['cssname'] == '') && cms_siteprefs::get('content_cssnameisblockname',1) ) {
 				$parms['cssname'] = $blockInfo['id'];
 			}
 			$ret = CmsFormUtils::create_textarea($parms);

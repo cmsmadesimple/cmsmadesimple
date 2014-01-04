@@ -98,7 +98,6 @@ final class filemanager_utils
     return false;
   }
 
-
   public static function get_cwd()
   {
     // check the path

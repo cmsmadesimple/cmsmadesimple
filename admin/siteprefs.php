@@ -292,12 +292,14 @@ if (isset($_POST["editsiteprefs"])) {
       break;
 
     case 'editcontent':
-      $content_autocreate_urls = (int)$_POST['content_autocreate_urls'];
-      cms_siteprefs::set('content_autocreate_urls',$content_autocreate_urls);
-      $content_autocreate_flaturls = (int)$_POST['content_autocreate_flaturls'];
-      cms_siteprefs::set('content_autocreate_flaturls',$content_autocreate_flaturls);
-      $content_mandatory_urls = (int)$_POST['content_mandatory_urls'];
-      cms_siteprefs::set('content_mandatory_urls',$content_mandatory_urls);
+  	  if( $pretty_urls ) {
+		  $content_autocreate_urls = (int)$_POST['content_autocreate_urls'];
+		  cms_siteprefs::set('content_autocreate_urls',$content_autocreate_urls);
+		  $content_autocreate_flaturls = (int)$_POST['content_autocreate_flaturls'];
+		  cms_siteprefs::set('content_autocreate_flaturls',$content_autocreate_flaturls);
+		  $content_mandatory_urls = (int)$_POST['content_mandatory_urls'];
+		  cms_siteprefs::set('content_mandatory_urls',$content_mandatory_urls);
+	  }
       $content_imagefield_path = trim($_POST['content_imagefield_path']);
       cms_siteprefs::set('content_imagefield_path',$content_imagefield_path);
       $content_thumbnailfield_path = trim($_POST['content_thumbnailfield_path']);

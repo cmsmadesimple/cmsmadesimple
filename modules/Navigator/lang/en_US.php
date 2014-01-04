@@ -13,7 +13,7 @@ $lang['friendlyname'] = 'CMSMS Navigation Builder';
 #H
 $lang['help'] = <<<EOT
 <h3>What does this do?</h3>
-  <p>The &quot;Nav&quot; module is an engine for generating navigations from the CMSMS content tree and a smarty template.  This module provides flexible filtering capabilities to allow building numerous navigations based on different criteria, and a simple to use hierarchical data format for generating navigations with complete flexibility.</p>
+  <p>The &quot;Navigator&quot; module is an engine for generating navigations from the CMSMS content tree and a smarty template.  This module provides flexible filtering capabilities to allow building numerous navigations based on different criteria, and a simple to use hierarchical data format for generating navigations with complete flexibility.</p>
   <p>This module has no admin interface of its own, insted it uses the DesignManager to manage menu templates.</p>
 <h3>How do I use it?</h3>
 <p>The simplest way to use this module is to insert the <code>{Navigator}</code> tag into a template.  The module accepts numerous parameters to alter its behavior and filter the data.</p>

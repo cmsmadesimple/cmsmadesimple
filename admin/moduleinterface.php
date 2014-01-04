@@ -42,9 +42,7 @@ $id = 'm1_';
 $module = '';
 $action = 'defaultadmin';
 $suppressOutput = false;
-if (isset($_REQUEST['module'])) $module = $_REQUEST['module'];
-if (isset($_REQUEST['action'])) $action = $_REQUEST['action'];
-elseif (isset($_REQUEST['mact'])) {
+if (isset($_REQUEST['mact'])) {
   $ary = explode(',', cms_htmlentities($_REQUEST['mact']), 4);
   $module = (isset($ary[0])?$ary[0]:'');
   $id = (isset($ary[1])?$ary[1]:'m1_');
@@ -54,8 +52,11 @@ elseif (isset($_REQUEST['mact'])) {
 $modinst = ModuleOperations::get_instance()->get_module_instance($module);
 if( !$modinst ) {
   trigger_error('Module '.$module.' not found in memory. This could indicate that the module is in need of upgrade or that there are other problems');
-  redirect("index.php".$urlext);
+  redirect('index.php'.$urlext);
 }
+
+$themeObject = cms_utils::get_theme_object();
+$themeObject->set_action_module($module);
 
 $USE_THEME = true;
 $USE_OUTPUT_BUFFERING = true;
@@ -75,9 +76,7 @@ if( isset($_REQUEST['showtemplate']) && ($_REQUEST['showtemplate'] == 'false')) 
 
 cms_admin_sendheaders();
 $txt = $modinst->GetHeaderHTML();
-if( $txt !== false ) {
-  $headtext = $txt;
-}
+if( $txt !== false ) $headtext = $txt;
 
 if( $modinst->SuppressAdminOutput($_REQUEST) != false || isset($_REQUEST['suppressoutput']) ) {
   $suppressOutput = true;
@@ -88,12 +87,8 @@ else {
 
 $params = ModuleOperations::get_instance()->GetModuleParameters($id);
 if( !isset($USE_THEME) || $USE_THEME != false ) {
-  if (FALSE == empty($params['module_message'])) {
-    echo $themeObject->ShowMessage($params['module_message']);
-  }
-  if (FALSE == empty($params['module_error'])) {
-    echo $themeObject->ShowErrors($params['module_error']);
-  }
+  if (FALSE == empty($params['module_message'])) echo $themeObject->ShowMessage($params['module_message']);
+  if (FALSE == empty($params['module_error'])) echo $themeObject->ShowErrors($params['module_error']);
   if (!$suppressOutput) {
     echo '<div class="pagecontainer">';
     echo '<div class="pageoverflow">';
@@ -102,9 +97,7 @@ if( !isset($USE_THEME) || $USE_THEME != false ) {
     echo $themeObject->ShowHeader($title, '', '', 'both').'</div>';
   }
 }  
-if( $USE_OUTPUT_BUFFERING ) {
-  @ob_start();
-}
+if( $USE_OUTPUT_BUFFERING ) @ob_start();
 
 echo $modinst->DoActionBase($action, $id, $params);
 
@@ -113,10 +106,11 @@ if( $USE_OUTPUT_BUFFERING ) {
   @ob_end_clean();
   echo $content;
 }
+
 if( !isset($USE_THEME) || $USE_THEME != false ) {
   if (!$suppressOutput) {
     echo '<p class="pageback"><a class="pageback" href="'.$themeObject->BackUrl().'">&#171; '.lang('back').'</a></p>';
-	echo '</div>';
+    echo '</div>';
     include_once("footer.php");
   }
  }

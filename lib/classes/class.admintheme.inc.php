@@ -97,19 +97,19 @@ class AdminTheme extends CmsAdminThemeBase
     function DoBookmarks()
     {
 		$gCms = cmsms();
-      $bookops = $gCms->GetBookmarkOperations();
-      $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
-      $marks = array_reverse($bookops->LoadBookmarks($this->userid));
-      $tmpMark = new Bookmark();
-      $tmpMark->title = lang('addbookmark');
-      $tmpMark->url = 'makebookmark.php'.$urlext.'&amp;title='. urlencode($this->title);
-      $marks[] = $tmpMark;
-      $marks = array_reverse($marks);
-      $tmpMark = new Bookmark();
-      $tmpMark->title = lang('managebookmarks');
-      $tmpMark->url = 'listbookmarks.php'.$urlext;
-      $marks[] = $tmpMark;
-      $this->DisplayBookmarks($marks);
+		$bookops = $gCms->GetBookmarkOperations();
+		$urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
+		$marks = array_reverse($bookops->LoadBookmarks($this->userid));
+		$tmpMark = new Bookmark();
+		$tmpMark->title = lang('addbookmark');
+		$tmpMark->url = 'makebookmark.php'.$urlext.'&amp;title='. urlencode($this->title);
+		$marks[] = $tmpMark;
+		$marks = array_reverse($marks);
+		$tmpMark = new Bookmark();
+		$tmpMark->title = lang('managebookmarks');
+		$tmpMark->url = 'listbookmarks.php'.$urlext;
+		$marks[] = $tmpMark;
+		$this->DisplayBookmarks($marks);
     }
 
 
@@ -119,36 +119,34 @@ class AdminTheme extends CmsAdminThemeBase
      */
     function ShowShortcuts()
     {
-      if (get_preference($this->userid, 'bookmarks')) {
-	$urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
-	echo "<div class=\"sections\">\n";
-	echo '<div class="itemmenucontainer shortcuts" style="float:left;">';
-	echo '<div class="itemoverflow">';
-	echo '<h2>'.lang('bookmarks').'</h2>';
-	echo '<p><a href="listbookmarks.php'.$urlext.'">'.lang('managebookmarks').'</a></p>';
-	$gCms = cmsms();
-	$bookops = $gCms->GetBookmarkOperations();
-	$marks = array_reverse($bookops->LoadBookmarks($this->userid));
-	$marks = array_reverse($marks);
-	if (FALSE == empty($marks))
-	  {
-	    echo '<h3 style="margin:0">'.lang('user_created').'</h3>';
-	    echo '<ul style="margin:0">';
-	    foreach($marks as $mark)
-	      {
-		echo "<li><a href=\"". $mark->url."\">".$mark->title."</a></li>\n";
-	      }
-	    echo "</ul>\n";
-	  }
-	echo '<h3 style="margin:0;">'.lang('help').'</h3>';
-	echo '<ul style="margin:0;">';
-	echo '<li><a rel="external" href="http://forum.cmsmadesimple.org/">'.lang('forums').'</a></li>';
-	echo '<li><a rel="external" href="http://docs.cmsmadesimple.org/">'.lang('documentation').'</a></li>';
-	echo '<li><a rel="external" href="http://www.cmsmadesimple.org/main/support/IRC">'.lang('irc').'</a></li>';
-	echo '</ul>';
-	echo '</div>';
-	echo '</div>';
-      }
+		if (get_preference($this->userid, 'bookmarks')) {
+			$urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
+			echo "<div class=\"sections\">\n";
+			echo '<div class="itemmenucontainer shortcuts" style="float:left;">';
+			echo '<div class="itemoverflow">';
+			echo '<h2>'.lang('bookmarks').'</h2>';
+			echo '<p><a href="listbookmarks.php'.$urlext.'">'.lang('managebookmarks').'</a></p>';
+			$gCms = cmsms();
+			$bookops = $gCms->GetBookmarkOperations();
+			$marks = array_reverse($bookops->LoadBookmarks($this->userid));
+			$marks = array_reverse($marks);
+			if (FALSE == empty($marks)) {
+				echo '<h3 style="margin:0">'.lang('user_created').'</h3>';
+				echo '<ul style="margin:0">';
+				foreach($marks as $mark) {
+					echo "<li><a href=\"". $mark->url."\">".$mark->title."</a></li>\n";
+				}
+				echo "</ul>\n";
+			}
+			echo '<h3 style="margin:0;">'.lang('help').'</h3>';
+			echo '<ul style="margin:0;">';
+			echo '<li><a rel="external" href="http://forum.cmsmadesimple.org/">'.lang('forums').'</a></li>';
+			echo '<li><a rel="external" href="http://docs.cmsmadesimple.org/">'.lang('documentation').'</a></li>';
+			echo '<li><a rel="external" href="http://www.cmsmadesimple.org/main/support/IRC">'.lang('irc').'</a></li>';
+			echo '</ul>';
+			echo '</div>';
+			echo '</div>';
+		}
     }
     
 
@@ -169,10 +167,9 @@ class AdminTheme extends CmsAdminThemeBase
         echo "</p>\n";
 
         echo "<ul>";
-        foreach($marks as $mark)
-            {
+        foreach($marks as $mark) {
             echo "<li><a href=\"". $mark->url."\">".$mark->title."</a></li>\n";
-            }
+		}
         echo "</ul>\n";
         echo "</div>\n";
     }
@@ -255,18 +252,12 @@ class AdminTheme extends CmsAdminThemeBase
 
 		foreach ($this->menuItems[$section]['children'] as $thisChild) {
 			$thisItem = $this->menuItems[$thisChild];
-			if (! $thisItem['show_in_menu'] || strlen($thisItem['url']) < 1) {
-				continue;
-			}
+			if (! $thisItem['show_in_menu'] || strlen($thisItem['url']) < 1) continue;
 
 			echo "<div class=\"MainMenuItem\">\n";
 			echo "<a href=\"".$thisItem['url']."\"";
-			if (array_key_exists('target', $thisItem)) {
-				echo " target=" . $thisItem['target'];
-			}
-			if ($thisItem['selected']) {
-				echo " class=\"selected\"";
-			}
+			if (array_key_exists('target', $thisItem)) echo " target=" . $thisItem['target'];
+			if ($thisItem['selected']) echo " class=\"selected\"";
 			echo ">".$thisItem['title']."</a>\n";
 			if (isset($thisItem['description']) && strlen($thisItem['description']) > 0) {
 				echo "<span class=\"description\">";
@@ -315,12 +306,8 @@ class AdminTheme extends CmsAdminThemeBase
             $count = 0;
             foreach($this->menuItems[$section]['children'] as $thisChild) {
                 $thisItem = $this->menuItems[$thisChild];
-                if (! $thisItem['show_in_menu']  || strlen($thisItem['url']) < 1) {
-                    continue;
-				}
-                if ($count++ > 0) {
-                    echo ", ";
-				}
+                if (! $thisItem['show_in_menu']  || strlen($thisItem['url']) < 1) continue;
+                if ($count++ > 0) echo ", ";
                 echo "<a href=\"".$thisItem['url'];
                 echo "\">".$thisItem['title']."</a>";
 			}
@@ -345,25 +332,15 @@ class AdminTheme extends CmsAdminThemeBase
             return -1;
 		}
         foreach ($this->menuItems as $thisSection=>$menuItem) {
-            if ($menuItem['parent'] != -1) {
-            	continue;
-			}
-            if (! $menuItem['show_in_menu']) {
-                continue;
-			}
+            if ($menuItem['parent'] != -1) continue;
+            if (! $menuItem['show_in_menu']) continue;
             echo "<div class=\"MainMenuItem\">\n";
             echo "<a href=\"".$menuItem['url']."\"";
-			if (array_key_exists('target', $menuItem)) {
-				echo " target=" . $menuItem['target'];
-			}
-			if ($menuItem['selected']) {
-				echo " class=\"selected\"";
-			}
+			if (array_key_exists('target', $menuItem)) echo " target=" . $menuItem['target'];
+			if ($menuItem['selected']) echo " class=\"selected\"";
             echo ">".$menuItem['title']."</a>\n";
             echo "<span class=\"description\">";
-            if (isset($menuItem['description']) && strlen($menuItem['description']) > 0) {
-                echo $menuItem['description'];
-			}
+            if (isset($menuItem['description']) && strlen($menuItem['description']) > 0) echo $menuItem['description'];
             $this->ListSectionPages($thisSection);
             echo "</span>\n";
             echo "</div>\n";
@@ -375,12 +352,8 @@ class AdminTheme extends CmsAdminThemeBase
 	function renderMenuSection($section, $depth, $maxdepth)
 	{
 		$menuitems = $this->get_admin_navigation();
-		if ($maxdepth > 0 && $depth> $maxdepth) {
-			return;
-		}
-		if (! $menuitems[$section]['show_in_menu']) {
-			return;
-		}
+		if ($maxdepth > 0 && $depth> $maxdepth) return;
+		if (! $menuitems[$section]['show_in_menu']) return;
 		if (strlen($menuitems[$section]['url']) < 1) {
             echo "<li>".$menuitems[$section]['title']."</li>";
             return;
@@ -388,12 +361,8 @@ class AdminTheme extends CmsAdminThemeBase
 		echo "<li><a href=\"";
 		echo $menuitems[$section]['url'];
 		echo "\"";
-		if (array_key_exists('target', $menuitems[$section])) {
-			echo " target=" . $menuitems[$section]['target'];
-		}
-		if ($menuitems[$section]['selected']) {
-			echo " class=\"selected\"";
-		}
+		if (array_key_exists('target', $menuitems[$section])) echo " target=" . $menuitems[$section]['target'];
+		if ($menuitems[$section]['selected']) echo " class=\"selected\"";
 		echo ">";
 		echo $menuitems[$section]['title'];
 		echo "</a>";
@@ -426,9 +395,7 @@ class AdminTheme extends CmsAdminThemeBase
         echo "<div id=\"TopMenu\"><ul id=\"nav\">\n";
 		$menuitems = $this->get_admin_navigation();
         foreach ( $menuitems as $key=>$menuItem) {
-			if ($menuItem['parent'] == -1) {
-				$this->renderMenuSection($key, 0, -1);
-			}
+			if ($menuItem['parent'] == -1) $this->renderMenuSection($key, 0, -1);
 		}
         echo "</ul></div>\n";
     }
@@ -581,9 +548,7 @@ EOT;
     public function DisplaySectionMenuDivEnd()
     {
         echo "</div><!-- END .MainMenu-->\n";
-		if (get_preference($this->userid, 'bookmarks')) {
-			echo "</div><!-- END .sections-->\n";
-		}
+		if (get_preference($this->userid, 'bookmarks')) echo "</div><!-- END .sections-->\n";
     }
 
 
@@ -606,11 +571,9 @@ EOT;
 		// Define that is singular or plural
 		$singular_or_plural = $count;
 	  
+		$tmp = lang('notification_to_handle',$count);
 		if($singular_or_plural > 1) {
 			$tmp = lang('notifications_to_handle',$count);
-		}
-		else {
-			$tmp = lang('notification_to_handle',$count);
 		}
 
 		// remove html tags like <b>2</b>
@@ -649,8 +612,7 @@ EOT;
 	* @param title_name - page heading title
 	* @param extra_lang_param - extra parameters to pass to lang() (I don't think this parm is needed)
 	* @param link_text - Override the text to use for the help link.
-	* @param module_help_type - FALSE if this is not a module, 'both' if link to
-	*                           both the wiki and module help and 'builtin' if link to to the builtin help
+	* @param module_help_type - FALSE if this is not a module or to disable help, any string value to link to the builtin help
 	*/
     public function ShowHeader($title_name, $extra_lang_param=array(), $link_text = '', $module_help_type = FALSE)
     {
@@ -678,7 +640,7 @@ EOT;
 		  $header .= lang($title_name, $extra_lang_param);
 	  }
       if (count($this->breadcrumbs)) {
-		  foreach ($this->breadcrumbs AS $key => $value) {
+		  foreach ($this->breadcrumbs as $key => $value) {
 			  $title = $value['title'];
 			  // If this is a module and the last part of the breadcrumbs
 			  if (FALSE != $module_help_type && TRUE == empty($this->breadcrumbs[$key + 1])) {
@@ -689,28 +651,23 @@ EOT;
 					  $module_name = substr($_REQUEST['mact'], 0, strpos($_REQUEST['mact'], ','));
 				  }
 				  // Turn ModuleName into _Module_Name
-				  $moduleName =  preg_replace('/([A-Z])/', "_$1", $module_name);
-				  $moduleName =  preg_replace('/_([A-Z])_/', "$1", $moduleName);
-				  if ($moduleName{0} == '_') {
-					  $moduleName = substr($moduleName, 1);
-				  }
+				  // $moduleName =  preg_replace('/([A-Z])/', "_$1", $module_name);
+				  // $moduleName =  preg_replace('/_([A-Z])_/', "$1", $moduleName);
+				  // if ($moduleName{0} == '_') $moduleName = substr($moduleName, 1);
 			  } else {
 				  // Remove colon and following (I.E. Turn "Edit Page: Title" into "Edit Page")
 				  $colonLocation = strrchr($title, ':');
-				  if ($colonLocation !== false) {
-					  $title = substr($title,0,strpos($title,':'));
-				  }
+				  if ($colonLocation !== false) $title = substr($title,0,$colonLocation);
 			  }
 		  }
 
 		  if (FALSE == get_preference($this->userid, 'hide_help_links', 0)) {
-				  
 			  $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 			  $image_help = $this->DisplayImage('icons/system/info.gif', lang('module_help'),'','','systemicon');
 			  //$image_help_external = $this->DisplayImage('icons/system/info-external.gif', lang('wikihelp'),'','','systemicon');		
-			  if ('both' == $module_help_type) {
-				  $module_help_link = $config['admin_url'].'/listmodules.php'.$urlext.'&amp;action=showmodulehelp&amp;module='.$module_name;
-				  $header .= '<span class="helptext"><a href="'.$module_help_link.'" title="'.lang('module_help').'">'.$image_help.'</a> <a href="'.$module_help_link.'">'.lang('module_help').'</a></span>';
+			  if ( $module_help_type ) {
+				  $module_help_url = $this->get_module_help_url($module_name);
+				  $header .= '<span class="helptext"><a href="'.$module_help_url.'" title="'.lang('module_help').'">'.$image_help.'</a> <a href="'.$module_help_url.'">'.lang('module_help').'</a></span>';
 			  }
 		  }
 	  }
@@ -735,13 +692,9 @@ EOT;
        while (!$path && (list($toss,$k)=each($keys))) {
          $v = $haystack[$k];
          if (is_scalar($v)) {
-             if ($v===$needle) {
-               $path = array($k);
-             }
+             if ($v===$needle) $path = array($k);
          } elseif (is_array($v)) {
-             if ($path=$this->_ArraySearchRecursive( $needle, $v )) {
-               array_unshift($path,$k);
-             }
+             if ($path=$this->_ArraySearchRecursive( $needle, $v )) array_unshift($path,$k);
          }
        }
        return $path;
@@ -825,9 +778,7 @@ EOT;
 		$marks = get_preference(get_userid(), 'bookmarks');
 		if ($marks) {
 			$this->StartRighthandColumn();
-			if ($marks) {
-				$this->DoBookmarks();
-			}
+			if ($marks) $this->DoBookmarks();
 
 			$this->EndRighthandColumn();
 		}

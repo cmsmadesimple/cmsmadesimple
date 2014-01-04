@@ -77,8 +77,7 @@ class OneElevenTheme extends CmsAdminThemeBase {
 
 	public function ShowHeader($title_name, $extra_lang_params = array(), $link_text = '', $module_help_type = FALSE) {
 		if ($title_name) $this->set_value('pagetitle', $title_name);
-		if (is_array($extra_lang_params) && count($extra_lang_params))
-		  $this->set_value('extra_lang_params', $extra_lang_params);
+		if (is_array($extra_lang_params) && count($extra_lang_params)) $this->set_value('extra_lang_params', $extra_lang_params);
 		$this->set_value('module_help_type', $module_help_type);
 
 		// get the image url.
@@ -128,11 +127,8 @@ class OneElevenTheme extends CmsAdminThemeBase {
 			}// for loop.
 
 			// set the module help url (this should be supplied TO the theme)
-			if ($module_help_type == 'both') {
-				$urlext = '?' . CMS_SECURE_PARAM_NAME . '=' . $_SESSION[CMS_USER_KEY];
-				$module_help_url = $config['admin_url'] . '/listmodules.php' . $urlext . '&amp;action=showmodulehelp&amp;module=' . $orig_module_name;
-				$this->set_value('module_help_url', $module_help_url);
-			}
+			$module_help_url = $this->get_module_help_url();
+			$this->set_value('module_help_url', $module_help_url);
 		}
 	}
 

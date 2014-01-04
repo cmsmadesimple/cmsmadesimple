@@ -36,6 +36,13 @@
 #END_LICENSE
 if( !isset($gCms) ) exit;
 
+if( isset($params['modulehelp']) ) {
+  $params['mod'] = $params['modulehelp'];
+  unset($params['modulehelp']);
+  include(__DIR__.'/action.local_help.php');
+  return;
+}
+
 $tmp = ModuleOperations::get_instance()->GetQueueResults();
 if( is_array($tmp) && count($tmp) ) {
   $tmp2 = array();
@@ -57,9 +64,7 @@ echo '<p>'.$this->Lang('general_notice',$link,$link)."</p>\n";
 echo '<h3>'.$this->Lang('use_at_your_own_risk')."</h3>\n";
 echo '<p>'.$this->Lang('compatibility_disclaimer')."</p></div>\n";
 
-if( !modmgr_utils::is_connection_ok() ) {
-  echo $this->ShowErrors($this->Lang('error_request_problem'));
-}
+if( !modmgr_utils::is_connection_ok() ) echo $this->ShowErrors($this->Lang('error_request_problem'));
 
 // this is a bit ugly.
 modmgr_utils::get_images();
@@ -72,9 +77,7 @@ if( $this->CheckPermission('Modify Modules') ) {
   echo $this->SetTabHeader('search',$this->Lang('search'));
   echo $this->SetTabHeader('modules',$this->Lang('availmodules'));
 }
-if( $this->CheckPermission('Modify Site Preferences') ) {
-  echo $this->SetTabHeader('prefs',$this->Lang('prompt_settings'));
-}
+if( $this->CheckPermission('Modify Site Preferences') ) echo $this->SetTabHeader('prefs',$this->Lang('prompt_settings'));
 echo $this->EndTabHeaders();
 
 echo $this->StartTabContent();
