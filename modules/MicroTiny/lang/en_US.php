@@ -181,6 +181,7 @@ $lang['ok'] = 'Ok';
 
 // P
 $lang['prompt_linker'] = 'Enter Page title';
+$lang['prompt_profiles'] = 'Profiles';
 $lang['prompt_selectedalias'] = 'Selected Page alias';
 $lang['profiledesc___admin__'] = 'This profile is used by all users who are authorized to use this editor, and have chosen this editor as their WYSIWYG editr';
 $lang['profiledesc___frontend__'] = 'This profile is used for all frontend requests where this WYSIWYG editor is allowed';
