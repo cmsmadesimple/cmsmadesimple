@@ -61,7 +61,7 @@
 							{elseif $file.isdir}
 								<a class="icon-no-thumb" href="{$file.chdir_url}"><i class="cmsms-fp-folder-close"></i></a>
 							{else}
-								<a class="filepicker-file-action icon-no-thumb" href="{$file.fullurl}">
+								<a class="filepicker-file-action js-trigger-insert icon-no-thumb" href="{$file.fullurl}">
 									{if $file.filetype == 'image'}
 										<i class="cmsms-fp-picture"></i>
 									{elseif $file.filetype == 'video'}
@@ -81,7 +81,7 @@
 								{if $file.isdir}
 									<a class="filepicker-dir-action" href="{$file.chdir_url}">{$file.name}</a>
 								{else}
-									<a class="filepicker-file-action" href="{$file.fullurl}" data-fb-filetype='{$file.filetype}'>{$file.name}</a>
+									<a class="filepicker-file-action js-trigger-insert" href="{$file.fullurl}" data-fb-filetype='{$file.filetype}'>{$file.name}</a>
 								{/if}
 								</h4>
 							</div>
