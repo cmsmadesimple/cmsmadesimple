@@ -69,8 +69,8 @@ $accept_file = function($type,$cwd,$path,$filename) use (&$filemanager,&$is_imag
     if( $cwd == filemanager_utils::get_default_cwd() ) return FALSE;
     return TRUE;
   }
-  if( is_dir(cms_join_path($path,$filename)) ) return TRUE;
   if( (startswith($filename,'.') || startswith($filename,'_')) && !$filemanager->GetPreference('showhiddenfiles') ) return FALSE;
+  if( is_dir(cms_join_path($path,$filename)) ) return TRUE;
 
   switch( $type ) {
     case 'image':
