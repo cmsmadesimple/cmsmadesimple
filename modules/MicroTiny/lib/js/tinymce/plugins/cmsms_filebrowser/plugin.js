@@ -1,20 +1,34 @@
-// minify when this is working, need this file as we use tinymce.min.js and plugins load based on tinymce core file either min or regular
 tinymce.PluginManager.add('cmsms_filebrowser', function(editor) {
 
     function cmsmsFileBrowser() {
         
         editor.focus(true);
         
+        var height, 
+            width;
+
+        ( function(window) {
+            height = '600';
+            width = '900';
+            if (window.innerHeight < 650) {
+                height = Math.max(window.innerHeight * 0.8, 250);
+            }
+            if (window.innerWidth < 950) {
+                width = Math.max(window.innerWidth * 0.8, 250);
+            }
+        } )(window);
+        
         win = editor.windowManager.open({
             title : cmsms_tiny.filepicker_title,
             file : cmsms_tiny.filepicker_url,
             classes : 'filepicker',
-            width : 900,
-            height : 600,
+            width : width,
+            height : height,
             inline : 1,
             resizable : true,
             maximizable : true
         });
+        
     }
 
     editor.addButton('cmsms_filebrowser', {

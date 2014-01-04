@@ -25,29 +25,28 @@ var cmsms_tiny = {
         tab_advanced : '{$MT->Lang('tab_advanced_title')}',
         target_none : '{$MT->Lang('none')}',
         target_new_window : '{$MT->Lang('newwindow')}',
-        loading_info : '{$MT->Lang('loading_info')}',
-        mt_selector : '{if isset($mt_selector) && $mt_selector != ''}{$mt_selector}{else}textarea.MicroTiny{/if}',
+        loading_info : '{$MT->Lang('loading_info')}'
 };
 // this is the actual tinymce initialization
 tinymce.init({
-    selector: cmsms_tiny.mt_selector,
+    selector: '{if isset($mt_selector) && $mt_selector != ''}{$mt_selector}{else}textarea.MicroTiny{/if}',
     document_base_url: cmsms_tiny.base_url,
     relative_urls: true,
     statusbar: cmsms_tiny.statusbar,
     resize: cmsms_tiny.resize,
     removed_menuitems: 'newdocument',
     // smarty logic stuff
-    {if isset($mt_cssname) && $mt_cssname != ''}
+{if isset($mt_cssname) && $mt_cssname != ''}
     content_css : '{cms_stylesheet name=$mt_cssname nolinks=1}',
-    {/if}
-    {if $isfrontend}
+{/if}
+{if $isfrontend}
     toolbar: 'undo | bold italic underline | alignleft aligncenter alignright alignjustify | bullist numlist | link{if $mt_profile.allowimages} | image{/if}',
     plugins: ['autolink link anchor wordcount {if $mt_profile.allowimages} media image{/if}'],
-    {else}
+{else}
     image_advtab: true,
     toolbar: 'undo redo | cut copy paste | styleselect | bold italic underline | alignleft aligncenter alignright alignjustify | bullist numlist | link unlink cmsms_linker{if $mt_profile.allowimages} | image cmsms_filebrowser{/if}',
     plugins: ['autolink link cmsms_linker charmap anchor searchreplace wordcount code fullscreen insertdatetime {if $mt_profile.allowimages}media image cmsms_filepicker cmsms_filebrowser{/if}'],
-    {/if}
+{/if}
     // callback functions
     urlconverter_callback: function(url, elm, onsave, name) {
         var self = this;

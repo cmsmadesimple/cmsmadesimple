@@ -96,10 +96,10 @@ function set_filetype($ext) {
 	
 	$ext = strtolower($ext);
 	$filetype = 'file'; // default to all file
-	$imgext = array('jpg', 'jpeg', 'png', 'gif', 'bmp', 'tiff', 'svg'); // images
-	$videoext = array('mov', 'mpeg', 'mp4', 'avi', 'mpg','wma',"flv","webm"); // videos
-	$audioext = array('mp3', 'm4a', 'ac3', 'aiff', 'mid','ogg','wav'); // audio
-	$archiveext = array('zip', 'rar','gz','tar','iso','dmg'); // archives
+	$imgext = array('jpg', 'jpeg', 'png', 'gif', 'bmp', 'tiff', 'svg', 'wbmp', 'webp'); // images
+	$videoext = array('mov', 'mpeg', 'mp4', 'avi', 'mpg','wma', 'flv', 'webm', 'wmv', 'qt'); // videos
+	$audioext = array('mp3', 'm4a', 'ac3', 'aiff', 'mid', 'ogg', 'wav'); // audio
+	$archiveext = array('zip', 'rar', 'gz', 'tar', 'iso', 'dmg'); // archives
 	
 	if(in_array($ext, $imgext)) {
 		$filetype = 'image';
@@ -140,7 +140,12 @@ while( false !== ($filename = $dh->read()) ) {
     if( $imgsize ) $file['dimensions'] = $imgsize[0].' x '.$imgsize[1];
   }
   $info = @stat($fullname);
-  if( $info ) $file['size'] = $info['size'];
+  $filesizename = array(" Bytes", " KB", " MB");
+  if( $info && $info['size'] > 0) {
+  	$file['size'] = round($info['size']/pow(1024, ($i = floor(log($info['size'], 1024)))), 2) . $filesizename[$i];
+  } else {
+  	$file['size'] = null;
+  }
   if( $file['isdir'] ) {
     $url = $this->create_url($id,'filepicker',$returnid)."&showtemplate=false&subdir=$filename&type=$type&field=$field";
     $file['chdir_url'] = str_replace('&amp;','&',$url);

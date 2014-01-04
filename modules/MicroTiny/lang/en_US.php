@@ -20,6 +20,7 @@ $lang['css_styles_text'] = 'CSS Styles';
 // D
 $lang['description'] = 'Description';
 $lang['dimensions'] = 'WxH';
+$lang['dimension'] = 'Dimension';
 
 // E
 $lang['edit_image'] = 'Edit Image';
@@ -32,6 +33,9 @@ $lang['example'] = 'MicroTiny example';
 // F
 $lang['filepickertitle'] = 'CMSMS File picker';
 $lang['friendlyname'] = 'MicroTiny WYSIWYG editor';
+$lang['fileview'] = 'File View';
+$lang['filename'] = 'Filename';
+$lang['filterby'] = 'Filter by';
 
 // H
 $lang['height'] = 'Height';
@@ -207,6 +211,14 @@ $lang['settings'] = 'Settings';
 $lang['settingssaved'] = 'Settings saved';
 $lang['size'] = 'Size';
 $lang['submit'] = 'Submit';
+$lang['switchgrid'] = 'Switch to grid view';
+$lang['switchlist'] = 'Switch to list view';
+$lang['switchimage'] = 'Show image files';
+$lang['switchvideo'] = 'Show video files';
+$lang['switchaudio'] = 'Show audio files';
+$lang['switcharchive'] = 'Show archive files';
+$lang['switchfiles'] = 'Show files';
+$lang['switchreset'] = 'Show all';
 
 // T
 $lang['tooltip_selectedalias'] = 'This field is read only';
@@ -216,6 +228,7 @@ $lang['title_edit_profile'] = 'Edit profile';
 $lang['tmpnotwritable'] = 'The configuration could not be written to the tmp-dir! Please fix this...';
 $lang['tab_general_title'] = 'General';
 $lang['tab_advanced_title'] = 'Advanced';
+$lang['type'] = 'Type';
 
 // U
 $lang['usestaticconfig_help'] = 'This generates a static configuration file instead of the dynamic one. Works better on some servers (for instance when running PHP as CGI)';
