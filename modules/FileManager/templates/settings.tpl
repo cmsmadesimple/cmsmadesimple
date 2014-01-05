@@ -26,7 +26,7 @@
 </div>
 
 <div class="pageoverflow">
-  <p class="pagetext"><label for="createthumbs">{$mod->Lang('create_thumbnails')}:</label>&nbsp;{cms_help key2='help_create_thumbs'}</p>
+  <p class="pagetext"><label for="createthumbs">{$mod->Lang('create_thumbnails')}:</label>&nbsp;{cms_help key2='help_create_thumbnails'}</p>
   <p class="pageinput">
     <select id="createthumbs" name="{$actionid}create_thumbnails">
       {cms_yesno selected=$create_thumbnails}

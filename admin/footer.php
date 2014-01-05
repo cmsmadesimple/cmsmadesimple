@@ -77,7 +77,7 @@ if( is_array($list) && count($list) ) {
       $cssname = $rec['stylesheet'];
 
       if( $cssname == CmsFormUtils::NONE ) $cssname = null;
-      if( !$cssname || !in_array($cssname,$cssnames) || $selector == CmsFormUtils::NONE ) {
+      if( !$cssname || !is_array($cssnames) || !in_array($cssname,$cssnames) || $selector == CmsFormUtils::NONE ) {
 	$need_generic = TRUE;
 	continue;
       }

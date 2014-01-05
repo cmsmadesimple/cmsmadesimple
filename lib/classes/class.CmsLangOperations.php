@@ -77,7 +77,7 @@ final class CmsLangOperations
 				  $files[] = cms_join_path($config['root_path'],'modules',$realm,'lang','ext',$curlang.'.php');
 			  }
 			  else {
-				  $files[] = cms_join_path($config['root_path'],'lib','lang',$realm,$curlang.'.php');
+				  $files[] = cms_join_path($config['root_path'],'lib','lang',$realm,'ext',$curlang.'.php');
 			  }
 		  }
 	  }
@@ -167,7 +167,6 @@ final class CmsLangOperations
 	  self::_load_realm($realm);
 	  if( !isset(self::$_langdata[$curlang][$realm][$key]) ) {
 		  // put mention into the admin log
-		  debug_bt_to_log();
 		  audit('', 'Languagestring: "' . $key . '"', 'Is missing in the languagefile: '.  $realm);
 		  return "-- Missing Languagestring: $key --";
 	  }

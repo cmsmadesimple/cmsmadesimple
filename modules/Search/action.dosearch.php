@@ -247,6 +247,18 @@ $smarty->assign('searchresultsfor', $this->Lang('searchresultsfor'));
 $smarty->assign('noresultsfound', $this->Lang('noresultsfound'));
 $smarty->assign('timetaken', $this->Lang('timetaken'));
 
-echo $this->ProcessTemplateFromDatabase('displayresult');
+$template = null;
+if( isset($params['resulttemplate']) ) {
+  $template = trim($params['resulttemplate']);
+}
+else {
+  $tpl = CmsLayoutTemplate::load_dflt_by_type('Search::searchresults');
+  if( !is_object($tpl) ) {
+    audit('',$this->GetName(),'No default summary template found');
+    return;
+  }
+  $template = $tpl->get_name();
+}
+echo $smarty->fetch($this->GetDatabaseResource($template));
 
 ?>

@@ -107,7 +107,9 @@ if ($submitted == 1) {
       if ($keyparts[2] != '1' && $value == '1') {
 	$new_id = $db->GenID(cms_db_prefix()."group_perms_seq");
 	$result = $db->Execute($iquery, array($new_id,$keyparts[2],$keyparts[1]));
-	if( !$result ) echo "FATAL: ".$db->ErrorMsg().'<br/>'.$db->sql; exit();
+	if( !$result ) {
+	  echo "FATAL: ".$db->ErrorMsg().'<br/>'.$db->sql; exit();
+	}
       }
     }
   }
