@@ -1,4 +1,5 @@
 ;( function(global, $) {'use strict';
+/*jslint nomen: true , devel: true*/
 
     var MTFB = global.MTFB || {},
         win,
@@ -29,8 +30,6 @@
                 file = $this.attr('href');
                 
             e.preventDefault();
-            
-            MTFB._setFileType($ext);
 
             if (filebrowser_global.field_id.length > 0) {
                 
@@ -84,14 +83,13 @@
     
     MTFB._createMarkup = function(ext, file) {
         
+        MTFB._setFileType(ext);
+        
         var type = info.type,
             mime = info.mime,
             html = '',
             text,
             selection = parent.tinymce.activeEditor.selection.getContent();
-                
-        
-        MTFB._setFileType(ext);
         
         if (selection.length > 0) {
             text = selection;
@@ -181,4 +179,4 @@
         });
     };
 
-} )(this, jQuery);
+}(this, jQuery));
