@@ -1,6 +1,9 @@
 ;( function(global, $) {'use strict';
 
-    var MTFB = global.MTFB || {};
+    var MTFB = global.MTFB || {},
+        win,
+        el,
+        info = {};
 
     $(document).ready(function() {
         MTFB.load();
@@ -19,10 +22,15 @@
 
         $('a.js-trigger-insert').click(function(e) {
             
-            var file = $(this).attr('href'), 
-                win,
-                el;
+            var $this = $(this),
+                $elm = $this.closest('li'),
+                $data = $elm.data(),
+                $ext = $data.fbExt,
+                file = $this.attr('href');
+                
             e.preventDefault();
+            
+            MTFB._setFileType($ext);
 
             if (filebrowser_global.field_id.length > 0) {
                 
@@ -33,11 +41,101 @@
 
                 parent.tinymce.activeEditor.windowManager.close();
             } else {
-                // TODO create logic for inserting content like <img> <video> <audio> and other stuff
-                parent.tinymce.activeEditor.selection.setContent(file);
-                parent.tinymce.activeEditor.windowManager.close();
+                
+                MTFB.saveFile($ext, file);
             }
         });
+    };
+    
+    MTFB._setFileType = function(ext) {
+        
+        var images = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'tiff', 'svg', 'wbmp', 'webp'], // image extension array
+            videos = ['mp4', 'webm', 'ogg'], // video extension array
+            flash = ['flv', 'swf'], // video extension array
+            sounds = ['mp3', 'wav']; // music extension array (how to defer between sound and video ogg??)
+            
+            info.type = 'file';
+            info.mime = '';
+            
+            if ($.inArray(ext, images) > -1) {
+                info.type = 'image';
+            }
+            
+            if ($.inArray(ext, videos) > -1) {
+                info.type = 'video';
+                info.mime = 'video/' + ext;
+            }
+            
+            if ($.inArray(ext, flash) > -1) {
+                info.type = 'flash';
+                info.mime = 'application/x-shockwave-flash';
+            }
+            
+            if ($.inArray(ext, sounds) > -1) {
+                info.type = 'sound';
+                info.mime = 'audio/' + ext;
+            }
+            
+            if (ext === 'js') {
+                info.type = 'file';
+                info.mime = 'text/javascript';
+            }
+    };
+    
+    MTFB._createMarkup = function(ext, file) {
+        
+        var type = info.type,
+            mime = info.mime,
+            html = '',
+            text,
+            selection = parent.tinymce.activeEditor.selection.getContent();
+                
+        
+        MTFB._setFileType(ext);
+        
+        if (selection.length > 0) {
+            text = selection;
+        } else {
+            text = file.split('/').pop();
+        }
+        
+
+        if (type === 'video') {
+            html = '<video controls="controls">\n' +
+                       '<source src="' + file + '"' + ' type="' + mime + '" />\n' +
+                   '</video>';
+        }
+        
+        if (type === 'flash') {
+            html = '<object src="' + file + '"' + ' controls="controls" type="' + mime + '"></object>';
+        }
+        
+        else if (type === 'sound') {
+            html = '<audio src="' + file + '"' + ' controls="controls" type="' + mime + '"></audio>';
+        }
+        
+        else if (type === 'image') {
+            html = '<img src="' + file + '"' + ' alt="' + text + '" />';
+        }
+        
+        else if (type === 'file' && mime === 'text/javascript') {
+            html = '<script src="' + file + '"' + ' type="' + mime + '"></script>';
+        }
+        
+        else {
+            html = '<a href="' + file + '">' + text + '</a>';
+        }
+        
+        return html;
+    };
+    
+    MTFB.saveFile = function(ext, file) {
+        
+        var markup = MTFB._createMarkup(ext, file);
+        
+        //parent.tinymce.activeEditor.selection.setContent(markup);
+        parent.tinymce.activeEditor.insertContent(markup);
+        parent.tinymce.activeEditor.windowManager.close();
     };
     
     MTFB.toggleGrid = function(){

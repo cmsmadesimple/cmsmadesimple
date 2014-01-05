@@ -97,8 +97,8 @@ function set_filetype($ext) {
 	$ext = strtolower($ext);
 	$filetype = 'file'; // default to all file
 	$imgext = array('jpg', 'jpeg', 'png', 'gif', 'bmp', 'tiff', 'svg', 'wbmp', 'webp'); // images
-	$videoext = array('mov', 'mpeg', 'mp4', 'avi', 'mpg','wma', 'flv', 'webm', 'wmv', 'qt'); // videos
-	$audioext = array('mp3', 'm4a', 'ac3', 'aiff', 'mid', 'ogg', 'wav'); // audio
+	$videoext = array('mov', 'mpeg', 'mp4', 'avi', 'mpg','wma', 'flv', 'webm', 'wmv', 'qt', 'ogg'); // videos
+	$audioext = array('mp3', 'm4a', 'ac3', 'aiff', 'mid', 'wav'); // audio
 	$archiveext = array('zip', 'rar', 'gz', 'tar', 'iso', 'dmg'); // archives
 	
 	if(in_array($ext, $imgext)) {
