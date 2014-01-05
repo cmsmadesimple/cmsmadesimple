@@ -57,28 +57,38 @@ if( is_array($list) && count($list) ) {
     $cssnames = array_unique($cssnames);
     if( is_array($cssnames) && count($cssnames) ) $css = CmsLayoutStylesheet::load_bulk($cssnames);
 
-    if( !is_array($cssnames) || !is_array($css) || count($cssnames) != count($css) || count($cssnames) != count($info) ) {
-      // there are some textareas with no cssname specified, so do a default initialization
-      $headertext .= $obj->WYSIWYGGenerateHeader();
+    // adjust the cssnames array to only contain the list of the stylesheets we actually found.
+    if( is_array($css) && count($css) ) {
+      $tmpnames = array();
+      foreach( $css as $stylesheet ) {
+	$name = $stylesheet->get_name();
+	if( !in_array($name,$tmpnames) ) $tmpnames[] = $name;
+      }
+      $cssnames = $tmpnames;
+    }
+    else {
+      $cssnames = null;
     }
 
     // initialize each 'specialized' textarea.
-    $obj = cms_utils::get_module($module_name);
-    if( is_object($obj) ) {
-      foreach( $info as $rec ) {
-	$selector = $rec['id'];
-	$cssname = $rec['stylesheet'];
-	if( $selector == CmsFormUtils::NONE ) {
-	  $selector = null;
-	}
-	else {
-	  // convert the element id into a jquery selector.
-	  $selector = 'textarea#'.$selector;
-	}
-	if( $cssname == CmsFormUtils::NONE ) $cssname = null;
-	if( !$cssname ) continue;
-	$headertext .= $obj->WYSIWYGGenerateHeader($selector,$cssname);
+    $need_generic = FALSE;
+    foreach( $info as $rec ) {
+      $selector = $rec['id'];
+      $cssname = $rec['stylesheet'];
+
+      if( $cssname == CmsFormUtils::NONE ) $cssname = null;
+      if( !$cssname || !in_array($cssname,$cssnames) || $selector == CmsFormUtils::NONE ) {
+	$need_generic = TRUE;
+	continue;
       }
+
+      $selector = 'textarea#'.$selector;
+      $headertext .= $obj->WYSIWYGGenerateHeader($selector,$cssname);
+    }
+
+    // now, do we need a generic iniitialization?
+    if( $need_generic ) {
+      $headertext .= $obj->WYSIWYGGenerateHeader();
     }
   }
 }

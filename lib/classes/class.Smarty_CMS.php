@@ -57,8 +57,8 @@ class Smarty_CMS extends SmartyBC
     $this->assign('app_name','CMSMS');
 
     if ($config["debug"] == true) {
-      //$this->force_compile = true;
       $this->debugging = false;
+      $this->error_reporting = 'E_ALL';
     }
 
     // Set plugins dirs
@@ -114,16 +114,12 @@ class Smarty_CMS extends SmartyBC
       $this->autoloadFilters();
 
       // compile check can only be enabled, if using smarty cache... just for safety.
-      if( get_site_preference('use_smartycache',0) )
-	$this->setCompileCheck(get_site_preference('use_smartycompilecheck',1));
+      if( get_site_preference('use_smartycache',0) ) $this->setCompileCheck(get_site_preference('use_smartycompilecheck',1));
     }
     else if(cmsms()->test_state(CmsApp::STATE_ADMIN_PAGE)) {
-      $this->addPluginsDir(cms_join_path($config['root_path'],
-					 $config['admin_dir'],
-					 'plugins'));
+      $this->addPluginsDir(cms_join_path($config['root_path'], $config['admin_dir'],'plugins'));
 
       $this->setCaching(false);
-      //$this->force_compile = true;
       $this->setTemplateDir(cms_join_path($config['root_path'],$config['admin_dir'],'templates'));
       $this->setConfigDir(cms_join_path($config['root_path'],$config['admin_dir'],'configs'));;
       $this->registerResource('globalcontent',new CMSNullTemplateResource());
@@ -141,10 +137,7 @@ class Smarty_CMS extends SmartyBC
    */
   public static function &get_instance()
   {
-    if( !is_object(self::$_instance) ) {
-      self::$_instance = new self;
-    }
-		
+    if( !is_object(self::$_instance) ) self::$_instance = new self;
     return self::$_instance;
   }	
 
@@ -305,8 +298,7 @@ class Smarty_CMS extends SmartyBC
 
     // send an event before fetching...this allows us to change template stuff.
     if( cmsms()->is_frontend_request() ) {
-      $parms = array('template'=>&$template,'cache_id'=>&$cache_id,'compile_id'=>&$compile_id,
-		     'display'=>&$display);
+      $parms = array('template'=>&$template,'cache_id'=>&$cache_id,'compile_id'=>&$compile_id,'display'=>&$display);
       Events::SendEvent('Core','TemplatePreFetch',$parms);
     }
 
@@ -395,9 +387,9 @@ class Smarty_CMS extends SmartyBC
     $this->assign('e_message', $e->getMessage());
     $this->assign('e_trace', htmlentities($e->getTraceAsString()));
 
-	// put mention into the admin log
-	audit('', 'Error: '.substr( $e->getMessage(),0 ,50 ), 'has occured');
-		
+    // put mention into the admin log
+    audit('', 'Error: '.substr( $e->getMessage(),0 ,50 ), 'has occured');
+
     $output = $this->fetch('error-console.tpl');
 
     $this->force_compile = false;
@@ -422,9 +414,7 @@ class Smarty_CMS extends SmartyBC
   public function loadPlugin($plugin_name, $check = true)
   {
     // if function or class exists, exit silently (already loaded)
-    if ($check && (is_callable($plugin_name) || class_exists($plugin_name, false))) {
-      return true;
-    }
+    if ($check && (is_callable($plugin_name) || class_exists($plugin_name, false))) return true;
 		
     // Plugin name is expected to be: Smarty_[Type]_[Name]
     $_name_parts = explode('_', $plugin_name, 3);
@@ -454,16 +444,14 @@ class Smarty_CMS extends SmartyBC
 
     // loop through plugin dirs and find the plugin
     foreach($this->getPluginsDir() as $_plugin_dir) {
-      $names = array(
-		     $_plugin_dir . $_plugin_filename,
+      $names = array($_plugin_dir . $_plugin_filename,
 		     $_plugin_dir . strtolower($_plugin_filename)
 		     );
 			
       foreach ($names as $file) {
 	if (file_exists($file)) {
 	  require_once($file);
-	  if( is_callable($plugin_name) || class_exists($plugin_name, false) )
-	    return $file;
+	  if( is_callable($plugin_name) || class_exists($plugin_name, false) ) return $file;
 	}
 				
 	if ($this->use_include_path && 
@@ -477,8 +465,7 @@ class Smarty_CMS extends SmartyBC
 
 	  if ($file !== false) {
 	    require_once($file);
-	    if( is_callable($plugin_name) || class_exists($plugin_name, false) )
-	      return $file;
+	    if( is_callable($plugin_name) || class_exists($plugin_name, false) ) return $file;
 	  }
 	}
       }

@@ -126,10 +126,11 @@ if (isset($_POST["submit"])) {
       }
 
       if ($assign_group_perm && is_array($sel_groups) && count($sel_groups) ) {
-	$iquery = "insert into ".cms_db_prefix()."user_groups (user_id,group_id) VALUES (?,?)";
-	foreach( $sel_grouops as $gid ) {
+	$iquery = "INSERT INTO ".cms_db_prefix()."user_groups (user_id,group_id) VALUES (?,?)";
+	foreach( $sel_groups as $gid ) {
 	  $gid = (int)$gid;
-	  $db->Execute($iquery,array($userid,$thisGroup->id));
+	  if( $gid < 1 ) continue;
+	  $db->Execute($iquery,array($userid,$gid));
 	}
       }
 
