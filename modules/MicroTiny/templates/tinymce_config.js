@@ -1,9 +1,37 @@
 {* first get MicroTiny module, we don't need wrong variables and strings *}
 {$MT = cms_utils::get_module('MicroTiny')}
-// global variables for cmsms tinymce plugins
+// local variables for cmsms tinymce plugins
+var cmsms_tiny = {
+        base_url : '{root_url}/',
+        resize : '{mt_jsbool($mt_profile.allowresize)}',
+        statusbar : '{mt_jsbool($mt_profile.showstatusbar)}',
+        filepicker_title : '{$MT->Lang('filepickertitle')}',
+        filepicker_url : '{cms_action_url module='MicroTiny' action='filepicker' forjs=1}&showtemplate=false&field=',
+        filebrowser_title : '{$MT->Lang('title_cmsms_filebrowser')}',
+        linker_text : '{$MT->Lang('cmsms_linker')}',
+        linker_title : '{$MT->Lang('title_cmsms_linker')}',
+        linker_image : '{$MT->GetModuleURLPath()}/lib/images/cmsmslink.gif',
+        linker_url : '{cms_action_url module='MicroTiny' action=linker forjs=1}&showtemplate=false',
+        linker_autocomplete_url : '{cms_action_url action='ajax_getpages' module='MicroTiny' forjs=1}&showtemplate=false',
+        prompt_page : '{$MT->Lang('prompt_linker')}',
+        prompt_page_info : '{$MT->Lang('info_linker_autocomplete')}',
+        prompt_alias : '{$MT->Lang('prompt_selectedalias')}',
+        prompt_alias_info : '{$MT->Lang('tooltip_selectedalias')}',
+        prompt_text : '{$MT->Lang('prompt_texttodisplay')}',
+        prompt_class : '{$MT->Lang('prompt_class')}',
+        prompt_rel : '{$MT->Lang('prompt_rel')}',
+        prompt_target : '{$MT->Lang('prompt_target')}',
+        tab_general : '{$MT->Lang('tab_general_title')}',
+        tab_advanced : '{$MT->Lang('tab_advanced_title')}',
+        target_none : '{$MT->Lang('none')}',
+        target_new_window : '{$MT->Lang('newwindow')}',
+        loading_info : '{$MT->Lang('loading_info')}'
+};
+
 // this is the actual tinymce initialization
 tinymce.init({
     selector: '{if isset($mt_selector) && $mt_selector != ''}{$mt_selector}{else}textarea.MicroTiny{/if}',
+    cmsms_tiny: cmsms_tiny,
     document_base_url: cmsms_tiny.base_url,
     relative_urls: true,
     mysamplesetting: 'foobar',
@@ -23,7 +51,7 @@ tinymce.init({
     plugins: ['autolink link cmsms_linker charmap anchor searchreplace wordcount code fullscreen insertdatetime {if $mt_profile.allowimages}media image cmsms_filepicker cmsms_filebrowser{/if}'],
 {/if}
     // callback functions
-    urlconverter_callback: function(url, elm, onsave, name) {
+    urlconverter_callback: function(url, elm, onsave, name) { 
         var self = this;
         var settings = self.settings;
         
@@ -50,31 +78,5 @@ tinymce.init({
         editor.on('change', function(e) {
             $(document).trigger('cmsms_formchange');
         });
-    },
-    cmsms_tiny = {
-        base_url : '{root_url}/',
-        resize : '{mt_jsbool($mt_profile.allowresize)}',
-        statusbar : '{mt_jsbool($mt_profile.showstatusbar)}',
-        filepicker_title : '{$MT->Lang('filepickertitle')}',
-        filepicker_url : '{cms_action_url module='MicroTiny' action='filepicker' forjs=1}&showtemplate=false&field=',
-        filebrowser_title : '{$MT->Lang('title_cmsms_filebrowser')}',
-        linker_text : '{$MT->Lang('cmsms_linker')}',
-        linker_title : '{$MT->Lang('title_cmsms_linker')}',
-        linker_image : '{$MT->GetModuleURLPath()}/lib/images/cmsmslink.gif',
-        linker_url : '{cms_action_url module='MicroTiny' action=linker forjs=1}&showtemplate=false',
-        linker_autocomplete_url : '{cms_action_url action='ajax_getpages' module='MicroTiny' forjs=1}&showtemplate=false',
-        prompt_page : '{$MT->Lang('prompt_linker')}',
-        prompt_page_info : '{$MT->Lang('info_linker_autocomplete')}',
-        prompt_alias : '{$MT->Lang('prompt_selectedalias')}',
-        prompt_alias_info : '{$MT->Lang('tooltip_selectedalias')}',
-        prompt_text : '{$MT->Lang('prompt_texttodisplay')}',
-        prompt_class : '{$MT->Lang('prompt_class')}',
-        prompt_rel : '{$MT->Lang('prompt_rel')}',
-        prompt_target : '{$MT->Lang('prompt_target')}',
-        tab_general : '{$MT->Lang('tab_general_title')}',
-        tab_advanced : '{$MT->Lang('tab_advanced_title')}',
-        target_none : '{$MT->Lang('none')}',
-        target_new_window : '{$MT->Lang('newwindow')}',
-        loading_info : '{$MT->Lang('loading_info')}'
     }
 });
