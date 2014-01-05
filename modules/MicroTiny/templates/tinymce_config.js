@@ -1,7 +1,12 @@
 {* first get MicroTiny module, we don't need wrong variables and strings *}
 {$MT = cms_utils::get_module('MicroTiny')}
-// local variables for cmsms tinymce plugins
-var cmsms_tiny = {
+// define cmsms_tiny object
+var cmsms_tiny = {};
+
+// this is the actual tinymce initialization
+tinymce.init({
+    selector: '{if isset($mt_selector) && $mt_selector != ''}{$mt_selector}{else}textarea.MicroTiny{/if}',
+    cmsms_tiny: cmsms_tiny = {
         base_url : '{root_url}/',
         resize : '{mt_jsbool($mt_profile.allowresize)}',
         statusbar : '{mt_jsbool($mt_profile.showstatusbar)}',
@@ -26,12 +31,7 @@ var cmsms_tiny = {
         target_none : '{$MT->Lang('none')}',
         target_new_window : '{$MT->Lang('newwindow')}',
         loading_info : '{$MT->Lang('loading_info')}'
-};
-
-// this is the actual tinymce initialization
-tinymce.init({
-    selector: '{if isset($mt_selector) && $mt_selector != ''}{$mt_selector}{else}textarea.MicroTiny{/if}',
-    cmsms_tiny: cmsms_tiny,
+    },
     document_base_url: cmsms_tiny.base_url,
     relative_urls: true,
     mysamplesetting: 'foobar',
