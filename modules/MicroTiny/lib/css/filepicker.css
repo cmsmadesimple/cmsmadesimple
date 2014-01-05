@@ -121,14 +121,14 @@ img {
 }
 
 .filepicker-view-option {
-	width: 250px;
+	max-width: 35%;
 	display: inline-block;
-	padding-right: 255px;
+	padding-right: 50px;
 }
 
 .filepicker-type-filter {
 	display: inline-block;
-	width: 350px;
+	max-width: 65%;
 	position: absolute;
 	right: 15px;
 	text-align: right;

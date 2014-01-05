@@ -62,7 +62,7 @@
     
     MTFB.filetypeFilter = function() {
         
-        var $items = $('#filepicker-items > li:not(.filepicker-item-heading)'),
+        var $items = $('#filepicker-items > li:not(.filepicker-item-heading):not(.dir)'),
             $container = $('#filepicker-items'),
             $trigger,
             $data;

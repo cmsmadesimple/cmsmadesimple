@@ -54,14 +54,14 @@
 							</div>
 						</li>
 						{foreach $files as $file}
-						<li class="filepicker-item {$file.filetype}" data-fb-ext='{$file.ext}'>
+						<li class="filepicker-item{if $file.isdir} dir{else} {$file.filetype}{/if}" title="{if $file.isdir}{$mod->Lang('dirinfo')}: {/if}{$file.name}" data-fb-ext='{$file.ext}'>
 							<div class="filepicker-thumb{if (isset($file.thumbnail) && $file.thumbnail != '') || $file.isdir} no-background{/if}">
 							{if $showthumbnails && isset($file.thumbnail) && $file.thumbnail != ''}
-								<a class="filepicker-file-action js-trigger-insert" href="{$file.fullurl}">{$file.thumbnail}</a>
+								<a class="filepicker-file-action js-trigger-insert" href="{$file.fullurl}" title="{if $file.isdir}{$mod->Lang('dirinfo')}: {/if}{$file.name}">{$file.thumbnail}</a>
 							{elseif $file.isdir}
-								<a class="icon-no-thumb" href="{$file.chdir_url}"><i class="cmsms-fp-folder-close"></i></a>
+								<a class="icon-no-thumb" href="{$file.chdir_url}" title="{if $file.isdir}{$mod->Lang('dirinfo')}: {/if}{$file.name}"><i class="cmsms-fp-folder-close"></i></a>
 							{else}
-								<a class="filepicker-file-action js-trigger-insert icon-no-thumb" href="{$file.fullurl}">
+								<a class="filepicker-file-action js-trigger-insert icon-no-thumb" title="{if $file.isdir}{$mod->Lang('dirinfo')}: {/if}{$file.name}" href="{$file.fullurl}">
 									{if $file.filetype == 'image'}
 										<i class="cmsms-fp-picture"></i>
 									{elseif $file.filetype == 'video'}
@@ -79,9 +79,9 @@
 							<div class="filepicker-file-information">
 								<h4 class="filepicker-file-title">
 								{if $file.isdir}
-									<a class="filepicker-dir-action" href="{$file.chdir_url}">{$file.name}</a>
+									<a class="filepicker-dir-action" href="{$file.chdir_url}" title="{if $file.isdir}{$mod->Lang('dirinfo')}: {/if}{$file.name}">{$file.name}</a>
 								{else}
-									<a class="filepicker-file-action js-trigger-insert" href="{$file.fullurl}" data-fb-filetype='{$file.filetype}'>{$file.name}</a>
+									<a class="filepicker-file-action js-trigger-insert" href="{$file.fullurl}" title="{if $file.isdir}{$mod->Lang('dirinfo')}: {/if}{$file.name}" data-fb-filetype='{$file.filetype}'>{$file.name}</a>
 								{/if}
 								</h4>
 							</div>

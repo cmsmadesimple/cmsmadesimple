@@ -21,6 +21,7 @@ $lang['css_styles_text'] = 'CSS Styles';
 $lang['description'] = 'Description';
 $lang['dimensions'] = 'WxH';
 $lang['dimension'] = 'Dimension';
+$lang['dirinfo'] = 'Change working directory to';
 
 // E
 $lang['edit_image'] = 'Edit Image';
