@@ -29,19 +29,17 @@ if( isset($params['submit']) ) {
   if( $destdir == $cwd ) $errors[] = $this->Lang('movedestdirsame');
 
   $advancedmode = filemanager_utils::check_advanced_mode();
-  $basedir = $config['root_path'];
+  $basedir = $config['uploads_path'];
+  if( $advancedmode ) $basedir = $config['root_path'];
 
   if( count($errors) == 0 ) {
     $destloc = filemanager_utils::join_path($basedir,$destdir);
-    if( !is_dir($destloc) || ! is_writable($destloc) ) {
-      die($destloc);
-      $errors[] = $this->Lang('invalidmovedir');
-    }
+    if( !is_dir($destloc) || ! is_writable($destloc) ) $errors[] = $this->Lang('invalidmovedir');
   }
 
   if( count($errors) == 0 ) {
     foreach( $selall as $file ) {
-      $src = filemanager_utils::join_path($basedir,$cwd,$file);
+      $src = filemanager_utils::join_path($config['root_path'],$cwd,$file);
       $dest = filemanager_utils::join_path($basedir,$destdir,$file);
       
       if( !file_exists($src) ) {
@@ -62,7 +60,7 @@ if( isset($params['submit']) ) {
       $dest_thumb = '';
       if( filemanager_utils::is_image_file($file) ) {
 	$tmp = 'thumb_'.$file;
-	$src_thumb = filemanager_utils::join_path($basedir,$cwd,$tmp);
+	$src_thumb = filemanager_utils::join_path($config['root_path'],$cwd,$tmp);
 	$dest_thumb = filemanager_utils::join_path($basedir,$destdir,$tmp);
 
 	if( file_exists($src_thumb) ) {

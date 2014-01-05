@@ -7,14 +7,11 @@ if (isset($params["cancel"])) {
 }
 
 $selall = $params['selall'];
-if( !is_array($selall) ) {
-  $selall = unserialize($selall);
-}
+if( !is_array($selall) ) $selall = unserialize($selall);
 if (count($selall)==0) {
   $params["fmerror"]="nofilesselected";
   $this->Redirect($id,"defaultadmin",$returnid,$params);
 }
-
 
 foreach( $selall as &$one ) {
   $one = $this->decodefilename($one);
@@ -32,38 +29,29 @@ $errors = array();
 $destloc = '';
 if( isset($params['submit']) ) {
   $advancedmode = filemanager_utils::check_advanced_mode();
-  $basedir = $config['root_path'];
+  $basedir = $config['uploads_path'];
+  if( $advancedmode ) $basedir = $config['root_path'];
 
   $destname = '';
   $destdir = trim($params['destdir']);
-  if( $destdir == $cwd && count($selall) > 1 ) {
-    $errors[] = $this->Lang('movedestdirsame');
-  }
+  if( $destdir == $cwd && count($selall) > 1 ) $errors[] = $this->Lang('movedestdirsame');
 
   if( count($errors) == 0 ) {
     $destloc = filemanager_utils::join_path($basedir,$destdir);
-    if( !is_dir($destloc) || ! is_writable($destloc) ) {
-      $errors[] = $this->Lang('invalidmovedir');
-    }
+    if( !is_dir($destloc) || ! is_writable($destloc) ) $errors[] = $this->Lang('invalidmovedir');
   }
 
   if( count($errors) == 0 ) {
     if( isset($params['destname']) && count($selall) == 1 ) {
       $destname = trim($params['destname']);
-      if( $destname == '' ) {
-	$errors[] = $this->Lang('invaliddestname');
-      }
+      if( $destname == '' ) $errors[] = $this->Lang('invaliddestname');
     }
 
     if( count($errors) == 0 ) {
       foreach( $selall as $file ) {
 	$src = filemanager_utils::join_path(filemanager_utils::get_full_cwd(),$file);
-	if( $destname ) {
-	  $dest = filemanager_utils::join_path($basedir,$destdir,$destname);
-	}
-	else {
-	  $dest = filemanager_utils::join_path($basedir,$destdir,$file);
-	}
+	$dest = filemanager_utils::join_path($basedir,$destdir,$file);
+	if( $destname ) $dest = filemanager_utils::join_path($basedir,$destdir,$destname);
       
 	if( !file_exists($src) ) {
 	  $errors[] = $this->Lang('filenotfound')." $file";
@@ -85,9 +73,7 @@ if( isset($params['submit']) ) {
 	  $tmp = 'thumb_'.$file;
 	  $src_thumb = filemanager_utils::join_path($basedir,$cwd,$tmp);
 	  $dest_thumb = filemanager_utils::join_path($basedir,$destdir,$tmp);
-	  if( $destname ) {
-	    $dest_thumb = filemanager_utils::join_path($basedir,$destdir,'thumb_'.$destname);
-	  }
+	  if( $destname ) $dest_thumb = filemanager_utils::join_path($basedir,$destdir,'thumb_'.$destname);
 
 	  if( file_exists($src_thumb) ) {
 	    $thumb = $tmp;
@@ -126,12 +112,8 @@ if( isset($params['submit']) ) {
   }
 } // submit
 
-if( count($errors) ) {
-  echo $this->ShowErrors($errors);
-}
-if( is_array($params['selall']) ) {
-  $params['selall'] = serialize($params['selall']);
-}
+if( count($errors) ) echo $this->ShowErrors($errors);
+if( is_array($params['selall']) ) $params['selall'] = serialize($params['selall']);
 $smarty->assign('startform', $this->CreateFormStart($id, 'fileaction', $returnid,"post","",false,"",$params));
 $smarty->assign('endform', $this->CreateFormEnd());
 $smarty->assign('cwd','/'.$cwd);
