@@ -50,13 +50,10 @@ try {
     }
     $type->delete();
   }
-  CmsLayoutTemplateType::load('Navigator::navigation');
 }
 catch( CmsException $e ) {
   // log it
-  debug_to_log(__FILE__.':'.__LINE__.' '.$e->GetMessage());
   audit('',$this->GetName(),'Uninstall Error: '.$e->GetMessage());
-  return FALSE;
 }
 
 #

@@ -51,6 +51,7 @@ $(document).ready(function(){
   {form_end}
 </div>
 
+{if isset($module_info)}
 <div class="pageoptions">
   <a id="importbtn">{admin_icon icon='import.gif'} {$mod->Lang('importxml')}</a>
 </div>
@@ -162,3 +163,6 @@ $(document).ready(function(){
     {/foreach}
   </tbody>  
 </table>
+{else}
+  <div class="warning">{$mod->Lang('error_nomodules')}</div>
+{/if}

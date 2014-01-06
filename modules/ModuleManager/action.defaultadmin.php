@@ -64,18 +64,28 @@ echo '<p>'.$this->Lang('general_notice',$link,$link)."</p>\n";
 echo '<h3>'.$this->Lang('use_at_your_own_risk')."</h3>\n";
 echo '<p>'.$this->Lang('compatibility_disclaimer')."</p></div>\n";
 
-if( !modmgr_utils::is_connection_ok() ) echo $this->ShowErrors($this->Lang('error_request_problem'));
+$connection_ok = modmgr_utils::is_connection_ok();
+if( !$connection_ok ) echo $this->ShowErrors($this->Lang('error_request_problem'));
 
 // this is a bit ugly.
 modmgr_utils::get_images();
 
-$newversions = modulerep_client::get_newmoduleversions();
+$newversions = null;
+try {
+  $newversions = modulerep_client::get_newmoduleversions();
+}
+catch( Exception $e ) {
+  echo $this->ShowError($e->GetMessage());
+}
+
 echo $this->StartTabHeaders();
 if( $this->CheckPermission('Modify Modules') ) {
   echo $this->SetTabHeader('installed',$this->Lang('installed'));
-  if( is_array($newversions) && count($newversions) ) echo $this->SetTabHeader('newversions',$this->Lang('tab_newversions'));
-  echo $this->SetTabHeader('search',$this->Lang('search'));
-  echo $this->SetTabHeader('modules',$this->Lang('availmodules'));
+  if( $connection_ok ) {
+    if( is_array($newversions) && count($newversions) ) echo $this->SetTabHeader('newversions',$this->Lang('tab_newversions'));
+    echo $this->SetTabHeader('search',$this->Lang('search'));
+    echo $this->SetTabHeader('modules',$this->Lang('availmodules'));
+  }
 }
 if( $this->CheckPermission('Modify Site Preferences') ) echo $this->SetTabHeader('prefs',$this->Lang('prompt_settings'));
 echo $this->EndTabHeaders();
@@ -86,19 +96,21 @@ if( $this->CheckPermission('Modify Modules') ) {
   include(dirname(__FILE__).'/function.admin_installed.php');
   echo $this->EndTab();
 
-  if( is_array($newversions) && count($newversions) ) {
-    echo $this->StartTab('newversions',$params);
-    include(dirname(__FILE__).'/function.newversionstab.php');
+  if( $connection_ok ) {
+    if( is_array($newversions) && count($newversions) ) {
+      echo $this->StartTab('newversions',$params);
+      include(dirname(__FILE__).'/function.newversionstab.php');
+      echo $this->EndTab();
+    }
+
+    echo $this->StartTab('search',$params);
+    include(dirname(__FILE__).'/function.search.php');
+    echo $this->EndTab();
+
+    echo $this->StartTab('modules',$params);
+    include(dirname(__FILE__).'/function.admin_modules_tab.php');
     echo $this->EndTab();
   }
-
-  echo $this->StartTab('search',$params);
-  include(dirname(__FILE__).'/function.search.php');
-  echo $this->EndTab();
-
-  echo $this->StartTab('modules',$params);
-  include(dirname(__FILE__).'/function.admin_modules_tab.php');
-  echo $this->EndTab();
 }
 if( $this->CheckPermission('Modify Site Preferences') ) {
   echo $this->StartTab('prefs',$params);
@@ -106,5 +118,6 @@ if( $this->CheckPermission('Modify Site Preferences') ) {
   echo $this->EndTab();
 }
 echo $this->EndTabContent();
+
 
 ?>

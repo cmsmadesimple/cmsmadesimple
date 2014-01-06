@@ -21,9 +21,14 @@ class ModuleManagerModuleInfo extends CmsExtendedModuleInfo
       $this['e_status'] = 'db_newer';
     }
     else if( $can_check_forge ) {
-      $rep_info = modulerep_client::get_upgrade_module_info($module_name);
-      if( is_array($rep_info) ) {
-	if( ($res = version_compare($this['version'],$rep_info['version'])) < 0 ) $this['e_status'] = 'newer_available';
+      try {
+	$rep_info = modulerep_client::get_upgrade_module_info($module_name);
+	if( is_array($rep_info) ) {
+	  if( ($res = version_compare($this['version'],$rep_info['version'])) < 0 ) $this['e_status'] = 'newer_available';
+	}
+      }
+      catch( Exception $e ) {
+	// nothing here.
       }
     }
   }
