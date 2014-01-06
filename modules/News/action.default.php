@@ -27,9 +27,7 @@ if( !$smarty->isCached($this->GetDatabaseResource($template),$cache_id) ) {
     }
     else {
       $node = $manager->sureGetNodeById($params['detailpage']);
-      if (isset($node)) {
-	$detailpage = $params['detailpage'];
-      }
+      if (isset($node)) $detailpage = $params['detailpage'];
     }
     $params['detailpage'] = $detailpage;
   }
@@ -60,7 +58,7 @@ if( !$smarty->isCached($this->GetDatabaseResource($template),$cache_id) ) {
 
   $query2 = "
             SELECT count(mn.news_id) as count
-            FROM " . 
+            FROM " .
     cms_db_prefix() . "module_news mn
             LEFT OUTER JOIN " . cms_db_prefix() . "module_news_categories mnc 
             ON mnc.news_category_id = mn.news_category_id 
@@ -154,10 +152,9 @@ if( !$smarty->isCached($this->GetDatabaseResource($template),$cache_id) ) {
     $query1 .= "ORDER BY news_date "; 
   }
   if( $sortrandom == false ) {
-    if (isset($params['sortasc']) && 
-	(strtolower($params['sortasc']) == 'true')) {
+    if (isset($params['sortasc']) && (strtolower($params['sortasc']) == 'true')) {
       $query1 .= "asc"; 
-    } 
+    }
     else {
       $query1 .= "desc"; 
     }
@@ -181,14 +178,11 @@ if( !$smarty->isCached($this->GetDatabaseResource($template),$cache_id) ) {
     // and determine a number of pages
     $row2 = $db->GetRow($query2);
     $count = intval($row2['count']);
-    if( isset( $params['start'] ) ) {
-      $count -= (int)$params['start'];
-    }
+    if( isset( $params['start'] ) ) $count -= (int)$params['start'];
     $pagecount = (int)($count / $pagelimit);
     if( ($count % $pagelimit) != 0 ) $pagecount++;
   }
-  if( isset( $params['pagenumber'] ) && 
-      $params['pagenumber'] != '' ) {
+  if( isset( $params['pagenumber'] ) && $params['pagenumber'] != '' ) {
     // if given a page number, determine a start element
     $pagenumber = (int)$params['pagenumber'];
     $startelement = ($pagenumber-1) * $pagelimit;
@@ -236,7 +230,6 @@ if( !$smarty->isCached($this->GetDatabaseResource($template),$cache_id) ) {
   else {
     $dbresult = $db->Execute($query1);
   }
-  //debug_display($db->sql);
   
   {
     // build a list of news id's so we can preload stuff from other tables.
@@ -266,9 +259,7 @@ if( !$smarty->isCached($this->GetDatabaseResource($template),$cache_id) ) {
       $feu = $this->GetModuleInstance('FrontEndUsers');
       if( $feu ) {
 	$uinfo = $feu->GetUserInfo($onerow->author_id * -1);
-	if( $uinfo[0] ) {
-	  $onerow->author = $uinfo[1]['username'];
-	}
+	if( $uinfo[0] ) $onerow->author = $uinfo[1]['username'];
       }
     }
     $onerow->id = $row['news_id'];
@@ -276,9 +267,7 @@ if( !$smarty->isCached($this->GetDatabaseResource($template),$cache_id) ) {
     $onerow->content = $row['news_data'];
     $onerow->summary = (trim($row['summary'])!='<br/>'?$row['summary']:'');
     $onerow->postdate = $row['news_date'];
-    if( FALSE == empty($row['news_extra']) ) {
-      $onerow->extra = $row['news_extra'];
-    }
+    if( FALSE == empty($row['news_extra']) ) $onerow->extra = $row['news_extra'];
     $onerow->postdate = $row['news_date'];
     $onerow->startdate = $row['start_time'];
     $onerow->enddate = $row['end_time'];
@@ -295,41 +284,29 @@ if( !$smarty->isCached($this->GetDatabaseResource($template),$cache_id) ) {
     
     $moretext = isset($params['moretext'])?$params['moretext']:$this->Lang('more');
     $sendtodetail = array('articleid'=>$row['news_id']);
-    if (isset($params['showall'])) {
-      $sendtodetail['showall'] = $params['showall'];
-    }
-    if (isset($params['detailpage'])) {
-      $sendtodetail['origid'] = $returnid;
-    }
-    if (isset($params['detailtemplate'])) {
-      $sendtodetail['detailtemplate'] = $params['detailtemplate'];
-    }
+    if (isset($params['showall'])) $sendtodetail['showall'] = $params['showall'];
+    if (isset($params['detailpage'])) $sendtodetail['origid'] = $returnid;
+    if (isset($params['detailtemplate'])) $sendtodetail['detailtemplate'] = $params['detailtemplate'];
     
     $prettyurl = $row['news_url'];
     if( $prettyurl == '' ) {
       $aliased_title = munge_string_to_url($row['news_title']);
       $prettyurl = 'news/'.$row['news_id'].'/'.($detailpage!=''?$detailpage:$returnid)."/$aliased_title";
-      if (isset($sendtodetail['detailtemplate'])) {
-	$prettyurl .= '/d,' . $sendtodetail['detailtemplate'];
-      }
+      if (isset($sendtodetail['detailtemplate'])) $prettyurl .= '/d,' . $sendtodetail['detailtemplate'];
     }
 
-    if (isset($params['lang'])) {
-      $sendtodetail['lang'] = $params['lang'];
-    }
+    if (isset($params['lang'])) $sendtodetail['lang'] = $params['lang'];
+    if (isset($params['category_id'])) $sendtodetail['category_id'] = $params['category_id'];
+    if (isset($params['pagelimit'])) $sendtodetail['pagelimit'] = $params['pagelimit'];
 
-    if (isset($params['category_id'])) {
-      $sendtodetail['category_id'] = $params['category_id'];
-    }
-
-    if (isset($params['pagelimit'])) {
-      $sendtodetail['pagelimit'] = $params['pagelimit'];
-    }
-
-    $onerow->link = $this->CreateLink($id, 'detail', $detailpage!=''?$detailpage:$returnid, '', $sendtodetail,'', true, false, '', true, $prettyurl);
-    $onerow->titlelink = $this->CreateLink($id, 'detail', $detailpage!=''?$detailpage:$returnid, $row['news_title'], $sendtodetail, '', false, false, '', true, $prettyurl);
-    $onerow->morelink = $this->CreateLink($id, 'detail', $detailpage!=''?$detailpage:$returnid, $moretext, $sendtodetail, '', false, false, '', true, $prettyurl);
-    $onerow->moreurl = $this->CreateLink($id, 'detail', $detailpage!=''?$detailpage:$returnid, $moretext, $sendtodetail, '', true, false, '', true, $prettyurl);
+    $onerow->link = $this->CreateLink($id, 'detail', $detailpage!=''?$detailpage:$returnid, '', $sendtodetail,'', true, false, '', true, 
+				      $prettyurl);
+    $onerow->titlelink = $this->CreateLink($id, 'detail', $detailpage!=''?$detailpage:$returnid, $row['news_title'], $sendtodetail, '', 
+					   false, false, '', true, $prettyurl);
+    $onerow->morelink = $this->CreateLink($id, 'detail', $detailpage!=''?$detailpage:$returnid, $moretext, $sendtodetail, '', false, 
+					  false, '', true, $prettyurl);
+    $onerow->moreurl = $this->CreateLink($id, 'detail', $detailpage!=''?$detailpage:$returnid, $moretext, $sendtodetail, '', true, false, '', 
+					 true, $prettyurl);
 
     $entryarray[]= $onerow;
     $dbresult->MoveNext();
@@ -342,7 +319,7 @@ if( !$smarty->isCached($this->GetDatabaseResource($template),$cache_id) ) {
 
   foreach( $params as $key => $value ) {
     if( $key == 'mact' || $key == 'action' ) continue;
-    
+
     $smarty->assign('param_'.$key,$value);
   }
 
@@ -354,7 +331,7 @@ if( !$smarty->isCached($this->GetDatabaseResource($template),$cache_id) ) {
     $catName = $db->GetOne('SELECT news_category_name FROM '.cms_db_prefix() . 'module_news_categories where news_category_id=?',array($params['category_id']));		
   }
   $smarty->assign('category_name',$catName);
- 
+
   unset($params['pagenumber']);
   $items = news_ops::get_categories($id,$params,$returnid);
   $smarty->assign('count', count($items));

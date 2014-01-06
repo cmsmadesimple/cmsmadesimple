@@ -877,7 +877,7 @@ abstract class ContentBase
 	 */
 	final public function IsSearchable()
 	{
-		if( !$content->IsViewable() || !$content->HasTemplate() || $content->IsSystemPage() ) return FALSE;
+		if( !$this->IsViewable() || !$this->HasTemplate() || $this->IsSystemPage() ) return FALSE;
 		return $this->HasSearchableContent();
 	}
 

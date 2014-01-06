@@ -33,9 +33,12 @@ function search_StemPhrase(&$module,$phrase)
   
   // split into words
   // strtolower isn't friendly to other charsets
-  $phrase = preg_replace("/([A-Z]+)/e","strtolower('\\1')",$phrase);
+  $phrase = preg_replace_callback("/([A-Z]+)/",
+				  function($matches) {
+				    return strtolower($matches[1]);
+				  },
+				  $phrase);
 
-  //$words = preg_split('/[\s,!.()+-\/\\\\]+/', $phrase);
   $words = preg_split('/[\s,!.;:\?()+-\/\\\\]+/', $phrase);
 
   // strip off anything 3 chars or less
@@ -195,57 +198,37 @@ function search_DoEvent(&$module, $originator, $eventname, &$params )
   switch ($eventname) {
   case 'ContentEditPost':
     $content = $params['content'];					
-    if (!isset($content)) return;
     if (!is_object($content)) return;
 
     $db = $module->GetDb();
-    $q = "SELECT id FROM ".cms_db_prefix()."module_search_items WHERE extra_attr = ? AND content_id = ?";
-    $template_indexed = $db->GetOne( $q, array( 'template', $content->TemplateId() ));
-    if( !$template_indexed ) {
-      $module->DeleteWords($module->GetName(), $content->Id(), 'content');
-      break;
-    }
-
-
-    if( !$content->IsSearchable() ) return;
+    $module->DeleteWords($module->GetName(), $content->Id(), 'content');
+    if( !$content->Active() || !$content->IsSearchable() ) return;
 
     //Only index content if it's active
     // and searchable.
     // assume by default that it is searchable
-    $tmp = $content->GetPropertyValue('searchable');
-    if( $tmp == '' ) $tmp = 1;
-    if ($content->Active() && $tmp ) {
-      //Weight the title and menu text higher
-      $text = str_repeat(' '.$content->Name(), 2) . ' ';
-      $text .= str_repeat(' '.$content->MenuText(), 2) . ' ';
+    //Weight the title and menu text higher
+    $text = str_repeat(' '.$content->Name(), 2) . ' ';
+    $text .= str_repeat(' '.$content->MenuText(), 2) . ' ';
 
-      $props = $content->Properties();
-      if( is_object($props) && isset($props->mPropertyValues) ) {
-	// old (pre 1.11 code)
-	foreach ($props->mPropertyValues as $k=>$v) {
-	  $text .= $v.' ';
-	}
-      }
-      else if( is_array($props) && count($props) ) {
-	foreach( $props as $k => $v ) {
-	  $text .= $v.' ';
-	}
-      }
-
-      // here check for a string to see
-      // if module content is indexable at all
-      $non_indexable = strpos($text, NON_INDEXABLE_CONTENT);
-      if (! $non_indexable) {
-	$module->AddWords($module->GetName(), $content->Id(), 'content', $text);
-      }
-      else {
-	$module->DeleteWords($module->GetName(), $content->Id(), 'content');
+    $props = $content->Properties();
+    if( is_object($props) && isset($props->mPropertyValues) ) {
+      // old (pre 1.11 code)
+      foreach ($props->mPropertyValues as $k=>$v) {
+	$text .= $v.' ';
       }
     }
-    else {
-      //Just in case the active flag was turned off
-      $module->DeleteWords($module->GetName(), $content->Id(), 'content');
+    else if( is_array($props) && count($props) ) {
+      foreach( $props as $k => $v ) {
+	$text .= $v.' ';
+      }
     }
+
+    // here check for a string to see
+    // if module content is indexable at all
+    $non_indexable = (strpos($text, NON_INDEXABLE_CONTENT) !== FALSE)?1:FALSE;
+    $text = strip_tags($text);
+    if( !$non_indexable ) $module->AddWords($module->GetName(), $content->Id(), 'content', $text);
     break;
 
   case 'ContentDeletePost':

@@ -129,9 +129,7 @@ if ($params['searchinput'] != '') {
   $query .= " ORDER BY nb DESC, total_weight DESC";
 
   $result = $db->Execute($query);
-
   $hm = $gCms->GetHierarchyManager();
-
   $col = new SearchItemCollection();
 
   while ($result && !$result->EOF) {
@@ -202,10 +200,7 @@ if ($params['searchinput'] != '') {
   }
 
   $col->CalculateWeights();
-
-  if ($this->GetPreference('alpharesults', 'false') == 'true') {
-    $col->Sort();
-  }
+  if ($this->GetPreference('alpharesults', 'false') == 'true') $col->Sort();
 
   // now we're gonna do some post processing on the results
   // and replace the search terms with <span class="searchhilite">term</span>

@@ -67,8 +67,8 @@ class News extends CMSModule
     $this->SetParameterType('assign',CLEAN_STRING);
     $this->SetParameterType('inline',CLEAN_STRING);
     $this->SetParameterType('preview',CLEAN_STRING);
-	  $this->SetParameterType('idlist',CLEAN_STRING);
-		
+    $this->SetParameterType('idlist',CLEAN_STRING);
+
     // form parameters
     $this->SetParameterType('submit',CLEAN_STRING);
     $this->SetParameterType('cancel',CLEAN_STRING);
@@ -101,7 +101,7 @@ class News extends CMSModule
     $this->SetParameterType('useexp',CLEAN_INT);
     $this->SetParameterType('input_category',CLEAN_STRING);
     $this->SetParameterType('category_id',CLEAN_INT);
-		
+
     $this->SetParameterType(CLEAN_REGEXP.'/news_customfield_.*/',CLEAN_STRING);
     $this->SetParameterType('junk',CLEAN_STRING);
   }
@@ -131,8 +131,7 @@ class News extends CMSModule
 
   function VisibleToAdminUser()
   {
-    return $this->CheckPermission('Modify News') || 
-      $this->CheckPermission('Modify Site Preferences') || 
+    return $this->CheckPermission('Modify News') || $this->CheckPermission('Modify Site Preferences') || 
       $this->CheckPermission('Approve News');
   }
 	
@@ -152,7 +151,7 @@ class News extends CMSModule
   {
     $gCms = cmsms();
     $result = array();
-      
+
     if ($attr == 'article') {
       $db = $this->GetDb();
       $q = "SELECT news_title,news_url FROM ".cms_db_prefix()."module_news WHERE news_id = ?";
@@ -175,9 +174,7 @@ class News extends CMSModule
 	  }
 	  else {
 	    $node = $manager->sureGetNodeById($params['detailpage']);
-	    if (isset($node)) {
-	      $detailpage = $params['detailpage'];
-	    }
+	    if (isset($node)) $detailpage = $params['detailpage'];
 	  }
 	}
 	if( $detailpage == '' ) $detailpage = $returnid;
@@ -186,17 +183,13 @@ class News extends CMSModule
 	if( isset($params['detailtemplate']) ) {
 	  $manager = $gCms->GetHierarchyManager();
 	  $node = $manager->sureGetNodeByAlias($params['detailtemplate']);
-	  if (isset($node)) {
-	    $detailtemplate = '/d,' . $params['detailtemplate'];
-	  }
+	  if (isset($node)) $detailtemplate = '/d,' . $params['detailtemplate'];
 	}
 
+	$prettyurl = $row['news_url'];
 	if( $row['news_url'] != '' ) {
 	  $aliased_title = munge_string_to_url($row['news_title']);
 	  $prettyurl = 'news/' . $articleid.'/'.$detailpage."/$aliased_title".$detailtemplate;
-	}
-	else {
-	  $prettyurl = $row['news_url'];
 	}
 
 	$parms = array();
@@ -208,14 +201,12 @@ class News extends CMSModule
 
     return $result;
   }
-	
 
   function SearchReindex(&$module)
   {
     $db = $this->GetDb();
-		
-    $query = 'SELECT * FROM '.cms_db_prefix().'module_news 
-              WHERE searchable = 1 AND status = ? ORDER BY news_date';
+
+    $query = 'SELECT * FROM '.cms_db_prefix().'module_news WHERE searchable = 1 AND status = ? ORDER BY news_date';
     $result = $db->Execute($query,array('published'));
 
     while ($result && !$result->EOF) {
@@ -232,11 +223,8 @@ class News extends CMSModule
 
   public function GetFieldTypes()
   {
-    $items = array('textbox'=>$this->Lang('textbox'),
-		   'checkbox'=>$this->Lang('checkbox'),
-		   'textarea'=>$this->Lang('textarea'),
-		   'dropdown'=>$this->Lang('dropdown'),
-		   'file'=>$this->Lang('file'));
+    $items = array('textbox'=>$this->Lang('textbox'), 'checkbox'=>$this->Lang('checkbox'), 'textarea'=>$this->Lang('textarea'),
+		   'dropdown'=>$this->Lang('dropdown'), 'file'=>$this->Lang('file'));
     return $items;
   }
 
@@ -256,15 +244,13 @@ class News extends CMSModule
       $output = array();
       if( $this->CheckPermission('Approve News') ) {
 	$db = $this->GetDb();
-	$query = 'SELECT count(news_id) FROM '.cms_db_prefix().'module_news n
-                  WHERE status != \'published\'
+	$query = 'SELECT count(news_id) FROM '.cms_db_prefix().'module_news n WHERE status != \'published\'
                   AND (end_time IS NULL OR end_time > NOw())';
 	$count = $db->GetOne($query);
 	if( $count ) {
 	  $obj = new StdClass;
 	  $obj->priority = 2;
-	  $link = $this->CreateLink('m1_','defaultadmin','',
-				    $this->Lang('notify_n_draft_items_sub',$count));
+	  $link = $this->CreateLink('m1_','defaultadmin','', $this->Lang('notify_n_draft_items_sub',$count));
 	  $obj->html = $this->Lang('notify_n_draft_items',$link);
 	  $output[] = $obj;
 	}
@@ -273,7 +259,6 @@ class News extends CMSModule
     return $output;
   }
 
-  
   public function CreateStaticRoutes()
   {
     cms_route_manager::del_static('',$this->GetName());
@@ -295,8 +280,7 @@ class News extends CMSModule
 			  array('returnid'=>$this->GetPreference('detail_returnid',-1)));
     cms_route_manager::add_static($route);
 
-    $query = 'SELECT news_id,news_url FROM '.cms_db_prefix().'module_news
-              WHERE status = ? AND news_url != ? AND '
+    $query = 'SELECT news_id,news_url FROM '.cms_db_prefix().'module_news WHERE status = ? AND news_url != ? AND '
       . '('.$db->ifNull('start_time',$db->DbTimeStamp(1)).' < NOW()) AND '
       . '(('.$db->IfNull('end_time',$db->DbTimeStamp(1)).' = '.$db->DbTimeStamp(1).') OR (end_time > NOW()))';
     $query .= ' ORDER BY news_date DESC';
@@ -338,9 +322,7 @@ class News extends CMSModule
     }
 
     $fn = cms_join_path(dirname(__FILE__),'templates',$fn);
-    if( file_exists($fn) ) {
-      return @file_get_contents($fn);
-    }
+    if( file_exists($fn) ) return @file_get_contents($fn);
   }
 
   public function HasCapability($capability, $params = array())
