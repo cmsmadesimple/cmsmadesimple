@@ -89,7 +89,18 @@
             mime = info.mime,
             html = '',
             text,
-            selection = parent.tinymce.activeEditor.selection.getContent();
+            data,
+            src,
+            alt,
+            title,
+            width,
+            height,
+            cssclass,
+            id,
+            selection = parent.tinymce.activeEditor.selection.getNode();
+        
+        // check selected file attributes
+        data = MTFB._selectionToData(selection);
         
         if (selection.length > 0) {
             text = selection;
@@ -97,23 +108,51 @@
             text = file.split('/').pop();
         }
         
-
-        if (type === 'video') {
-            html = '<video controls="controls">\n' +
-                       '<source src="' + file + '"' + ' type="' + mime + '" />\n' +
-                   '</video>';
+        if (data.alt !== undefined) {
+            alt = ' alt="' + data.alt + '" ';
+        } else {
+            alt = file.split('/').pop();
         }
         
-        if (type === 'flash') {
-            html = '<object src="' + file + '"' + ' controls="controls" type="' + mime + '"></object>';
+        if (data.title !== undefined) {
+            title = ' title="' + data.title + '" ';
+        } else {
+            title = file.split('/').pop();
+        }
+        
+        if (data.width !== undefined) {
+            width = ' width="' + data.width + '" ';
+        }
+        
+        if (data.height !== undefined) {
+            height = ' height="' + data.height + '" ';
+        }
+        
+        if (data.class !== undefined) {
+            cssclass = ' class="' + data.class + '" ';
+        }
+        
+        if (data.id !== undefined) {
+            id = ' id="' + data.id + '" ';
+        }
+
+        // create html markup
+        if (type === 'video') {
+            html = '<video controls="controls"' + width + height + title + cssclass + id +'>\n' +
+                       '<source src="' + file + '"' + ' type="' + mime + '" />\n' +
+                   '</video>';
+        } 
+        
+        else if (type === 'flash') {
+            html = '<object src="' + file + '"' + ' type="' + mime + '"' + width + height + cssclass + id + '></object>';
         }
         
         else if (type === 'sound') {
-            html = '<audio src="' + file + '"' + ' controls="controls" type="' + mime + '"></audio>';
+            html = '<audio src="' + file + '"' + ' controls="controls" type="' + mime + '"' + width + height + title + cssclass + id +'></audio>';
         }
         
         else if (type === 'image') {
-            html = '<img src="' + file + '"' + ' alt="' + text + '" />';
+            html = '<img src="' + file + '"' + alt + height + width + title + cssclass + id + ' />';
         }
         
         else if (type === 'file' && mime === 'text/javascript') {
@@ -121,10 +160,35 @@
         }
         
         else {
-            html = '<a href="' + file + '">' + text + '</a>';
+            html = '<a href="' + file + '"' + cssclass + id + title + '>' + text + '</a>';
         }
         
         return html;
+    };
+    
+    MTFB._selectionToData = function(elm) {
+
+        var content = parent.tinymce.activeEditor.selection.serializer.serialize(elm, {selection: true}),
+            data = {};
+       
+        new parent.tinymce.html.SaxParser({
+            validate: false,
+            allow_conditional_comments: true,
+            special: 'script,noscript',
+            start: function(name, attrs) {
+                data = {
+                    source: attrs.map.src,
+                    alt: attrs.map.alt,
+                    title: attrs.map.title,
+                    width: attrs.map.width,
+                    height: attrs.map.height,
+                    class: attrs.map.class,
+                    id: attrs.map.id 
+                };
+            }
+        }).parse(content);
+        
+        return data;
     };
     
     MTFB.saveFile = function(ext, file) {
