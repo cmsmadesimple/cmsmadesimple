@@ -1636,24 +1636,24 @@ input.pagecheckbox {
 /*
 textarea.pagebigtextarea {
 	height: 40em;
-	width: 55em
+	width: 90%
 }
 */
 .pageinput textarea {
+	width: 90%;
 	font-family: Consolas, 'Andale Mono WT', 'Andale Mono', 'Lucida Console', 'Lucida Sans Typewriter', 'Courier New', monospace;
 	font-size: 12px;
 	line-height: 1.6
 }
-/*
 textarea.pagesmalltextarea {
 	height: 15em;
-	width: 48em
+	width: 90%
 }
 textarea.pageextrasmalltextarea {
 	height: 8em;
-	width: 28em;
+	width: 90%
 }
-*/
+
 /*** tabs ***/
 #page_tabs {
 	overflow: hidden;
