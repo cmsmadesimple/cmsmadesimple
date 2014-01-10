@@ -730,7 +730,7 @@ aside .no-slide,
 	height: 16px;
 	overflow: hidden;
 	text-indent: -9999em;
-	background: transparent url(themes/OneEleven/images/icons/extra/red.gif) no-repeat;
+	background: transparent url(themes/OneEleven/images/icons/extra/close.gif) no-repeat;
 	cursor: pointer;
 	margin:5px
 }

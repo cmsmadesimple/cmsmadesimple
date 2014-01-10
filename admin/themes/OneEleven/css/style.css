@@ -748,7 +748,7 @@ aside .no-slide,
 	width: 16px;
 	height: 16px;
 	text-indent: -9999em;
-	background: transparent url(themes/OneEleven/images/icons/extra/red.gif) no-repeat;
+	background: transparent url(themes/OneEleven/images/icons/extra/close.png) no-repeat;
 	cursor: pointer;
 	margin:5px
 }
