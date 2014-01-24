@@ -1,6 +1,5 @@
 <?php
 
-//$lang['siteadmin'] = $lang['admin'];
 //$lang['groupmembers'] = $lang['groupassignments'];
 //$lang['images'] = $lang['imagemanager'];
 
@@ -1553,6 +1552,7 @@ $lang['showinmenu'] = 'Show in Menu';
 $lang['showrecent'] = 'Show Recently Used Pages';
 $lang['showsite'] = 'Show Site';
 $lang['sibling_duplicate_order'] = 'Two sibling pages can not have the same order. Pages were not reordered.';
+$lang['siteadmin'] = $lang['admin']; // backward compatibility
 $lang['sitedownexcludeadmins'] = 'Exclude users logged in to the CMSMS Admin console';
 $lang['sitedownexcludes'] = 'Exclude these IP addresses from the &quot;Site Down&quot; status';
 $lang['sitedownmessage'] = 'Site Down Message';
