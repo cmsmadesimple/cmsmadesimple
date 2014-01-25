@@ -173,7 +173,7 @@ $lang['config_writable'] = 'config.php writeable. It is more safe if you change 
 $lang['confirm'] = 'Confirm';
 $lang['confirmcancel'] = 'Are you sure you want to discard your changes? Click OK to discard all changes. Click Cancel to continue editing.';
 $lang['confirmdefault'] = 'Are you sure you want to set - %s - as site default page?';
-$lang['confirmdeletedir'] = 'Are you sure you want to delete this dir and all of its contents?';
+$lang['confirmdeletedir'] = 'Are you sure you want to delete this directory and all of its contents?';
 $lang['confirm_bulkuserop'] = 'Use caution when performing options on multiple users simultaneously.\nAre you sure that you want to continue?';
 $lang['confirm_edituser'] = 'Are you sure you want to apply changes to this user account';
 $lang['confirm_runusertag'] = 'Running a UDT may have adverse effects on your website.  Please use caution!\n\nAre you sure you want to continue?';
@@ -1008,7 +1008,7 @@ $lang['help_content_image'] = 'This field allows you to associate an image with 
 $lang['help_content_menutext'] = 'The menu text is the text that represents this page in the navigation';
 $lang['help_content_owner'] = 'This field allows you to adjust the owner of this content item.  It is useful when giving access to this page to an editor with less access privileges';
 $lang['help_content_pagedata'] = 'This is a field where you can enter smarty tags or logic that are specific to this content page, will probably not generate any direct output, and must be processed before anything else on the page';
-$lang['help_content_pagemeta'] = 'In this field you can enter HTML metatags. They will be merged with the default meta tags and inserted in the head section of the generated HTML page.';
+$lang['help_content_pagemeta'] = 'In this field you can enter HTML meta tags. They will be merged with the default meta tags and inserted in the head section of the generated HTML page.';
 $lang['help_content_parent'] = 'Select an existing page in the content hierarchy which will be the parent page for this content page.  This relationship is used when building a navigation';
 $lang['help_content_secure'] = 'Specify whether this page should be accessed via a secure (encrypted) connection.  i.e: via HTTPS';
 $lang['help_content_showinmenu'] = 'Select whether this page will be visible (by default) in the navigation.';
@@ -1018,7 +1018,7 @@ $lang['help_content_target'] = 'Specify a target attribute to use when including
 $lang['help_content_title'] = 'The title of the page is displayed in the title bar of the browser, is used in search engine optimization, and is usually displayed prominently on the website';
 $lang['help_content_titleattribute'] = 'Specify a brief description for this content page.  This data can be used for search engine optimization, or in the navigation';
 $lang['help_content_type'] = <<<EOT
-<p>The content type is the overall control of the behaviour of the page.  Numerous types of content are included with CMSMS and addon modules may provide even more.</p><br/>
+<p>The content type is the overall control of the behaviour of the page.  Numerous types of content are included with CMSMS and add-on modules may provide even more.</p><br/>
 <ul>
   <li>Content
     <p>The Content page provides standard HTML layout.  Styling is provided by associating a design with the content page, and the layout of a page is provided by associating a page template.</p>
@@ -1216,7 +1216,7 @@ $lang['login_info_title'] = 'Information';
 $lang['logout'] = 'Logout';
 $lang['lostpw'] = 'Forgot your password?';
 $lang['lostpwemail'] = <<<EOT
-You are recieving this e-mail because a request has been made to change the (%s) password associated with this user account (%s).  If you would like to reset the password for this account simply click on the link below or paste it into the url field on your favorite browser:
+You are recieving this e-mail because a request has been made to change the (%s) password associated with this user account (%s).  If you would like to reset the password for this account simply click on the link below or paste it into the URL field on your favourite browser:
 %s
 
 If you feel this is incorrect or made in error, simply ignore the email and nothing will change.
@@ -1251,14 +1251,14 @@ $lang['mediatype'] = 'Media Type';
 $lang['mediatype_'] = 'None set : will affect everywhere ';
 $lang['mediatype_all'] = 'all : Suitable for all devices.';
 $lang['mediatype_aural'] = 'aural : Intended for speech synthesizers.';
-$lang['mediatype_braille'] = 'braille : Intended for braille tactile feedback devices.';
-$lang['mediatype_embossed'] = 'embossed : Intended for paged braille printers.';
+$lang['mediatype_braille'] = 'braille : Intended for Braille tactile feedback devices.';
+$lang['mediatype_embossed'] = 'embossed : Intended for paged Braille printers.';
 $lang['mediatype_handheld'] = 'handheld : Intended for handheld devices';
 $lang['mediatype_print'] = 'print : Intended for paged, opaque material and for documents viewed on screen in print preview mode.';
 $lang['mediatype_projection'] = 'projection : Intended for projected presentations, for example projectors or print to transparencies.';
 $lang['mediatype_screen'] = 'screen : Intended primarily for color computer screens.';
 $lang['mediatype_speech'] = 'speech : Intended for speech synthesizers.';
-$lang['mediatype_tty'] = 'tty : Intended for media using a fixed-pitch character grid, such as teletypes and terminals.';
+$lang['mediatype_tty'] = 'tty : Intended for media using a fixed-pitch character grid, such as Teletypes and terminals.';
 $lang['mediatype_tv'] = 'tv : Intended for television-type devices.';
 $lang['media_query'] = 'Media Query';
 $lang['media_query_description'] = '<strong>Notice:</strong> When Media Query is used, Media Type selection will be ignored.<br /> Use any valid expression as recommended by <a href="http://www.w3.org/TR/css3-mediaqueries/" rel="external" title="W3C">W3C</a>.';
@@ -1649,7 +1649,7 @@ $lang['test_allow_browser_cache'] = 'Allowing browsers to cache pages will impro
 $lang['test_allow_url_fopen_failed'] = 'When allow URL fopen is disabled you will not be able to accessing URL object like file using the ftp or http protocol.';
 $lang['test_auto_clear_cache_age'] = 'The system should be configured to destroy old temporary files after a reasonable time to improve performance and minimize disk space requirements';
 $lang['test_browser_cache_expiry'] = 'A longer value will have increased performance benefits';
-$lang['test_check_open_basedir_failed'] = 'Open basedir restrictions are in effect. You may have difficulty with some addon functionality with this restriction';
+$lang['test_check_open_basedir_failed'] = 'Open basedir restrictions are in effect. You may have difficulty with some add-on functionality with this restriction';
 $lang['test_curl'] = 'Test for curl availability';
 $lang['test_curlversion'] = 'Test Curl Version';
 $lang['test_edeprecated_failed'] = 'E_DEPRECATED is enabled';
