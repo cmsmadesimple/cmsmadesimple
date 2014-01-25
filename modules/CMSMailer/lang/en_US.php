@@ -4,7 +4,7 @@ $lang['friendlyname'] = 'CMSMailer';
 // H
 $lang['help'] = '<h3>What Does This Do?</h3>
 <p><strong>NOTE:</strong> This module is deprecated and will be removed in later versions of CMSMS.</p>
-<p>This module provides no end user functionality.  It is designed to be integrated into other modules to provide email capabilities.  Thats it, nothing more.</p>
+<p>This module provides no end user functionality.  It is designed to be integrated into other modules to provide email capabilities.  That\'s it, nothing more.</p>
 <h3>How Do I Use It</h3>
 <p>This module provides a simple wrapper around all of the methods and variables of phpmailer.  It is designed for use by other module developers, below is an example, and a brief API reference.  Please read the PHPMailer documentation included for more information.</p>
 <h3>An Example</h3>
@@ -19,7 +19,7 @@ $lang['help'] = '<h3>What Does This Do?</h3>
 <h3>API</h3>
 <ul>
 <li><p><b>void reset()</b></p>
-<p>Reset the object back to the values specified in the admin panel</p>
+<p>Reset the object back to the values specified in the Admin panel</p>
 </li>
 <li><p><b>string GetAltBody()</b></p>
 <p>Return the alternate body of the email</p>
@@ -226,16 +226,16 @@ $lang['help'] = '<h3>What Does This Do?</h3>
 <p><i>Note</i> possibly this should be a get and set method</p>
 </li>
 <li><p><b>bool IsMail()</b></p>
-<p>Check wether we are using mail</p>
+<p>Check whether we are using mail</p>
 </li>
 <li><p><b>bool IsQmail()</b></p>
-<p>Check wether we are using qmail</p>
+<p>Check whether we are using qmail</p>
 </li>
 <li><p><b>IsSendmail()</b></p>
-<p>Check wether we are using sendmail</p>
+<p>Check whether we are using sendmail</p>
 </li>
 <li><p><b>IsSMTP()</b></p>
-<p>Check wether we are using smtp</p>
+<p>Check whether we are using smtp</p>
 </li>
 <li><p><b>Send()</b></p>
 <p>Send the currently prepared email</p>

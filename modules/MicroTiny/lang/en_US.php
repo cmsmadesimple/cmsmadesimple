@@ -43,7 +43,7 @@ $lang['height'] = 'Height';
 $lang['help'] = <<<EOT
 <h3>What Does This Do?</h3>
 <p>MicroTiny is a small, restricted version of the <a href="http://www.tinymce.com" target="_blank">TinyMCE</a> editor. allowing content editors a near WYSIWYG appearance for editing content.  It works with content blocks in CMSMS content pages (when a WYSIWYG has been allowed), in module admin forms where WYSIWYG editors are allowed, and allows restricted capabilities for editing html blocks on frontend pages.</p>
-</p>In order for MicroTiny to be used as the WYSIWYG editor in the admin console the MicroTiny Wysiwyg Editor needs to be selected in the users preferences.  Please select &quot;MicroTiny&quot; in the &quot;Select WYSIWYG to Use&quot; option under &quot;My Preferences &gt;&gt; User Preferences&quot; in the CMSMS Admin panel.  Additional options in various modules or in content page templates, and content pages themselves can control wether a text area or a wysiwyg field is provided in various edit forms.</p>
+</p>In order for MicroTiny to be used as the WYSIWYG editor in the admin console the MicroTiny WYSIWYG Editor needs to be selected in the users preferences.  Please select &quot;MicroTiny&quot; in the &quot;Select WYSIWYG to Use&quot; option under &quot;My Preferences &gt;&gt; User Preferences&quot; in the CMSMS Admin panel.  Additional options in various modules or in content page templates, and content pages themselves can control whether a text area or a WYSIWYG field is provided in various edit forms.</p>
 <p>For Frontend editing capabilities MicroTiny must be selected as the &quot;Frontend WYSIWYG&quot; in the global settings page of the CMSMS admin console.</p>
 <h3>Features:</h3>
 <ul>
@@ -59,10 +59,10 @@ $lang['help'] = <<<EOT
     <li>Install and configure the module</li>
     <li>Set MicroTiny as your WYSIWYG editor of choice in &quot;My Preferences&quot;</li>
   </ul>
-<h3>About HTML, tinymce, and content editing:</h3>
+<h3>About HTML, TinyMCE, and content editing:</h3>
   <ul>
     <li>WYSIWYG-like editor:
-       <p>This editor provides the ability to edit content in an environment that is similar <em>(but not necessaarily identical to)</em> to the intended output on the website frontend.  Numerous factors can influence differences, including:</p>
+       <p>This editor provides the ability to edit content in an environment that is similar <em>(but not necessarily identical to)</em> to the intended output on the website frontend.  Numerous factors can influence differences, including:</p>
        <ul>
          <li>Incomplete or incorrect stylesheets</li>
          <li>Use of advanced styling that the editor cannot understand</li>
@@ -75,11 +75,11 @@ $lang['help'] = <<<EOT
     </li>
 
     <li>Edit blocks of content, not the entire page:
-      <p>As CMSMS is a heavily templated environment using the Smarty template element, it is intended that the WYSIWYG editor is used only for specific blocks of content or data elements (i.e: the main content area of a page, or the description for a News or blog article).   This module <em>(and CMSMS)</em> do not support full page editing.</p>
+      <p>As CMSMS is a heavily templated environment using the Smarty template element, it is intended that the WYSIWYG editor is used only for specific blocks of content or data elements (i.e: the main content area of a page, or the description for a News or Blog article).   This module <em>(and CMSMS)</em> do not support full page editing.</p>
     </li>
 
     <li>Intended for simple content editing not design:
-      <p>The intent and purpose of this module is to provide a WYSIWYG-like environment where editors can insert and edit content within specific blocks with limited formatting capabilities that will not interere with, or override the styling of the page template.  It is not intended and for will not be supported as a general HTML editor or layout manipulator.</p>
+      <p>The intent and purpose of this module is to provide a WYSIWYG-like environment where editors can insert and edit content within specific blocks with limited formatting capabilities that will not interfere with, or override the styling of the page template.  It is not intended and for will not be supported as a general HTML editor or layout manipulator.</p>
       <p>Website developers should understand the points above, assume that content editors can and WILL be editing within a WYSIWYG area and ensure that only simple content is there.  If advanced layout techniques are needed for a specific area, then developers should modify the appropriate templates so that the restricted functionality editor will work properly.</p>
     </li>
   
@@ -87,7 +87,7 @@ $lang['help'] = <<<EOT
       <p>This editor is built with the assumption that content for a specific area of a page (or a blog article, news article, or product description, ...) is data.  The data is styled by the appropriate templates, and should not be mixed with design elements, or functionality of the website.</p>
       <p>As a simple example.  If you are insisting that editors use certain classes for images, layout their images in a certain manner, or insert block elements such as &lt;div&gt; or &lt;section&gt; into their content for proper styling then this is not the editor module for you.  Such styling concerns should be taken care of in stylesheets and templates, such that your editor can enter text without having to remember rules.</p>
       <p>This module is not designed to handle special cases where advanced HTML is required.  In such pages the WYSIWYG editor should be disabled, and editing access to the page restricted to those with the ability to understand and edit HTML code manually.</p>
-      <p>As this module is intended to provide a restricted editor for specific blocks, for use by editors without HTML knowledge. Since the WYSIWYG editor does not understand the smarty logic, you should NOT (as a general rule) mix smarty logic or module calls within WYSIWYG enabled areas.  It is best to disable the wysiwyg for these areas/pages and restrict edit access to those pages.</p>
+      <p>As this module is intended to provide a restricted editor for specific blocks, for use by editors without HTML knowledge. Since the WYSIWYG editor does not understand the smarty logic, you should NOT (as a general rule) mix smarty logic or module calls within WYSIWYG enabled areas.  It is best to disable the WYSIWYG for these areas/pages and restrict edit access to those pages.</p>
     </li>
   </ul>
 <h3>About Images and Media:</h3>
@@ -135,8 +135,8 @@ h2 {
     <dt>Q: I cannot get the MicroTiny editor to work in the admin interface, what can I do</dt>
       <dd>A: There are a few steps you can follow to diagnose this issue:
         <ol>
-          <li>Check the CMSMS admin log, your PHP error log, and the javascript console for indications of a problem.</li>
-          <li>Ensure that the example WYSIWYG area works in the MicroTiny admin panel under &quot;Extensions >> MicroTiny WYSIWYG Editor&quot;.  If this does not work, recheck your PHP error log and javascript console.</li>
+          <li>Check the CMSMS admin log, your PHP error log, and the JavaScript console for indications of a problem.</li>
+          <li>Ensure that the example WYSIWYG area works in the MicroTiny admin panel under &quot;Extensions >> MicroTiny WYSIWYG Editor&quot;.  If this does not work, recheck your PHP error log and JavaScript console.</li>
           <li>Ensure that MicroTiny is selected as the &quot;WYSIWYG to use&quot; in your user preferences.</li>
           <li>Check other content pages. If MicroTiny works on one or more of those then that indicates that a flag to disable WYSIWYG editors on all content blocks may be set on some content pages.</li>
           <li>Check the page template(s). The wysiwyg=false parameter may be specified on one or more content blocks in the page template(s) which will disable the WYSIWYG editor.</li>
@@ -149,7 +149,7 @@ h2 {
       <dd>A: For this most part this is done intentionally to allow web developers the ability to further restrict the functionality of certain editor profiles.  The menubar can be toggled off in different profiles thus denying the user the functionality only available in the menubar.</dd>
   </dl>
 <h3>Caching:</h3>
-  <p>In an effort to improve performance, MicroTiny will attempt to cache the generated javascript files unless something has changed. This functionality can be disabled by setting the special config entry <code>mt_disable_cache</code> to true. i.e: adding <code>\$config[&quot;mt_disable_cache&quot;] = true;</code> to the config.php file.</p>
+  <p>In an effort to improve performance, MicroTiny will attempt to cache the generated JavaScript files unless something has changed. This functionality can be disabled by setting the special config entry <code>mt_disable_cache</code> to true. i.e: adding <code>\$config[&quot;mt_disable_cache&quot;] = true;</code> to the config.php file.</p>
 <h3>See Also:</h3>
 <ul>
   <li><code>{content}</code> tag in &quot;Extensions >> Tags&quot;</li>
@@ -170,7 +170,7 @@ $lang['loading_info'] = 'Loading...';
 $lang['msg_cancelled'] = 'Operation cancelled';
 $lang['mthelp_allowcssoverride'] = 'If enabled, then any code that initializes a MicroTiny WYSIWYG area will be able to specify the name of a stylesheet to use instead of the default stylesheet specified above.';
 $lang['mthelp_dfltstylesheet'] = 'Associate a stylesheet with editors using this profile.  This allows the WYSIWYG editor to appear similar to the website appearance.';
-$lang['mthelp_profileallowimages'] = 'Allow the editor to embed images and videos into the text area.  For very tightly controlled designs the content editors may only be able to select images, or vidoes for specific areas of a web page.';
+$lang['mthelp_profileallowimages'] = 'Allow the editor to embed images and videos into the text area.  For very tightly controlled designs the content editors may only be able to select images, or videos for specific areas of a web page.';
 $lang['mthelp_profilelabel'] = 'A description for this profile.  The description cannot be edited for system profiles.';
 $lang['mthelp_profilename'] = 'The name for this profile.  The name of system profiles cannot be edited.';
 $lang['mthelp_profilemenubar'] = 'Indicates if the menubar should be enabled in the viewable profiles.  The menubar typically has more options than the toolbar';
@@ -226,7 +226,7 @@ $lang['tooltip_selectedalias'] = 'This field is read only';
 $lang['title_cmsms_linker'] = 'Create a link to a CMSMS content page';
 $lang['title_cmsms_filebrowser'] = 'Select a file';
 $lang['title_edit_profile'] = 'Edit profile';
-$lang['tmpnotwritable'] = 'The configuration could not be written to the tmp-dir! Please fix this...';
+$lang['tmpnotwritable'] = 'The configuration could not be written to the tmp directory! Please fix this...';
 $lang['tab_general_title'] = 'General';
 $lang['tab_advanced_title'] = 'Advanced';
 $lang['type'] = 'Type';

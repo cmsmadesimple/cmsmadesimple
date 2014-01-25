@@ -182,7 +182,7 @@ $lang['help'] = <<<EOF
 <h4>Numerous display methods</h4>
 <p>The parameters supported by the news module, and support for numerous templates of each time mean that your options for displaying news articles are limitless.</p>
 <h4>Custom Fields</h4>
-<p>The News module allows defining numerous custom fields (including files and images) that will allow you to attach pdf files or numerous images to your articles.</p>
+<p>The News module allows defining numerous custom fields (including files and images) that will allow you to attach PDF files or numerous images to your articles.</p>
         <h4>Categories</h4>
 	<p>News supplies a hierarchical category mechanism for organizing your articles.  A news article can only be in one place in the hierarchy.</p>
 	<h4>Expiry and Status</h4>
@@ -209,11 +209,11 @@ Override the default action.  Possible values are:
 <ul>
 <li>&quot;detail&quot; - to display a specified articleid in detail mode.</li>
 <li>&quot;default&quot; - to display the summary view</li>
-<li>&quot;fesubmit&quot; - <strong>Deprecated</strong> to display the frontend form for allowing users to submit news articles on the front end. Add the <code>{cms_init_editor}</code> tag in the metadata section to initialize the selected wysiwyg editor. (Site Admin >> Global Settings)</li>
-<li>&quot;browsecat&quot; - to display a browseable category list.</li>
+<li>&quot;fesubmit&quot; - <strong>Deprecated</strong> to display the frontend form for allowing users to submit news articles on the front end. Add the <code>{cms_init_editor}</code> tag in the metadata section to initialize the selected WYSIWYG editor. (Site Admin >> Global Settings)</li>
+<li>&quot;browsecat&quot; - to display a browsable category list.</li>
 </ul>
 EOT;
-$lang['helpbrowsecat'] = 'Shows a browseable category list.';
+$lang['helpbrowsecat'] = 'Shows a browsable category list.';
 $lang['helpbrowsecattemplate'] = 'Use a database template for displaying the category browser. This template must exist and be visible in the Browse Category Templates tab of the News admin, though it does not need to be the default.  If this parameter is not specified, then the current template marked as default will be used.';
 $lang['helpcategory'] = 'Used in the summary view to display only items for the specified categories. <b>Use * after the name to show children.</b>  Multiple categories can be used if separated with a comma. Leaving empty, will show all categories.  This parameter also works for the frontend submit action, however only a single category name is supported.';
 $lang['helpdetailpage'] = 'Page to display News details in.  This can either be a page alias or an id. Used to allow details to be displayed in a different template from the summary.';
@@ -224,7 +224,7 @@ $lang['helpnumber'] = 'Maximum number of items to display (per page) -- leaving 
 $lang['helpshowall'] = 'Show all articles, irrespective of end date';
 $lang['helpshowarchive'] = 'Show only expired news articles.';
 $lang['helpsortasc'] = 'Sort news items in ascending date order rather than descending.';
-$lang['helpsortby'] = 'Field to sort by.  Options are: "news_date", "summary", "news_data", "news_category", "news_title", "news_extra", "end_time", "start_time", "random".  Defaults to "news_date". If "random" is specified, the sortasc param is ignored.';
+$lang['helpsortby'] = 'Field to sort by.  Options are: "news_date", "summary", "news_data", "news_category", "news_title", "news_extra", "end_time", "start_time", "random".  Defaults to "news_date". If "random" is specified, the sortasc parameter is ignored.';
 $lang['helpstart'] = 'Start at the nth item -- leaving empty will start at the first item.';
 $lang['helpsummarytemplate'] = 'Use a separate database template for displaying the article summary.  This template must exist and be visible in the summary template tab of the News admin, though it does not need to be the default.  If this parameter is not specified, then the current template marked as default will be used.';
 $lang['help_articleid'] = 'This parameter is only applicable to the detail view.  It allows specifying which news article to display in detail mode.  If the special value -1 is used, the system will display the newest, published, non expired article.';
@@ -239,7 +239,7 @@ $lang['info_expired_viewable'] = 'If enabled, expired articles can be viewed in 
 $lang['info_maxlength'] = 'The maximum length only applies to text input fields.';
 $lang['info_public'] = 'Only Public fields are available for frontend editing, and/or for display in summary or detail views.';
 $lang['info_reorder_categories'] = 'Drag and drop each item into the correct order to change category relationships';
-$lang['info_searchable'] = 'This field indicates wether this article should be indexed by the search module';
+$lang['info_searchable'] = 'This field indicates whether this article should be indexed by the search module';
 $lang['info_sysdefault'] = '(the content used by default when a new template is created)';
 $lang['info_sysdefault2'] = '<strong>Note:</strong> This tab contains text areas to allow you to edit a set of templates that are displayed when you create a \'new\' summary, detail, or form template.  Changing content in this tab, and clicking \'submit\' will <strong>not effect any current displays</strong>.';
 
