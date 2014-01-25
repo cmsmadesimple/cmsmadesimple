@@ -73,14 +73,14 @@ EOT;
 
 $lang['help_function_cms_action_url'] = <<<EOT
 <h3>What does this do?</h3>
-<p>This is a smart plugin useful for generating a URL to a module action. This plugin is useful for module developers who are generating links (either for ajax or or in the admin interface) to perform different functionality or display different data.</p>
+<p>This is a smart plugin useful for generating a URL to a module action. This plugin is useful for module developers who are generating links (either for Ajax or or in the admin interface) to perform different functionality or display different data.</p>
 <h3>What parameters does it take?</h3>
 <ul>
   <li>module - <em>(optional)</em> - The module name to generate a URL for.  This parameter is not necessary if generating a URL from within a module action to an action within the same module.</li>
   <li>action - <strong>(required)</strong> - The action name to generate a URL to.</li>
   <li>returnid - <em>(optional)</em> - The integer pageid to display the results of the action in.  This parameter is not necessary if the action is to be displayed on the current page, or if the URL is to an admin action from within an admin action.</li>
   <li>mid - <em>(optional)</em> - The module action id.  This defaults to &quot;m1_&quot; for admin actions, and &quot;cntnt01&quot; for frontend actions.</li>
-  <li>forjs - <em>(optional)</em> - An optional integer indicating that the generated URL should be suitable for use in javascript.</li>
+  <li>forjs - <em>(optional)</em> - An optional integer indicating that the generated URL should be suitable for use in JavaScript.</li>
   <li>assign - <em>(optional)</em> - Assign the output URL to the named smarty variable.</li>
 </ul>
 <p><strong>Note:</strong> Any other parameters not accepted by this plugin are automatically passed to the called module action on the generated URL.</p>
@@ -121,7 +121,7 @@ EOT;
 $lang['help_function_cms_help'] = <<<EOT
 <h3>What does this do?</h3>
 <p>This is an admin only plugin to use to generate a link that when clicked will generate popup help for a particular item.</p>
-<p>This plugin is typically used from modudule admin templates to display end user help in a popup window for an input field, column, or other important information.</p>
+<p>This plugin is typically used from module admin templates to display end user help in a popup window for an input field, column, or other important information.</p>
 <h3>What parameters does it take?</h3>
 <ul>
 <li>key1 - <em>(optional string)</em> - The first part in a unique key to identify the help string.  If this parameter is not specified, and this plugin is called from within a module action then the current module name is used.  If no module name can be found then &quot;help&quot; is used as the lang realm.</li>
@@ -134,7 +134,7 @@ EOT;
 
 $lang['help_function_cms_init_editor'] = <<<EOT
 <h3>What does this do?</h3>
-  <p>This plugin is used to initialize the selected WYSIWYG editor for display when WYSIWYG functionalities are required for frontend data submission.  This module will find the selected frontend WYSIWYG <em>(see global settings).</em>, determine if it has been requested, and if so generate the appropriate html code <em>(usually javascript links)</em> so that the WYSIWYG will initialize properly when the page is loaded.  If no WYSIWYG editors have been requested for the frontend request this plugin will produce no output.</p>
+  <p>This plugin is used to initialize the selected WYSIWYG editor for display when WYSIWYG functionalities are required for frontend data submission.  This module will find the selected frontend WYSIWYG <em>(see global settings).</em>, determine if it has been requested, and if so generate the appropriate html code <em>(usually JavaScript links)</em> so that the WYSIWYG will initialize properly when the page is loaded.  If no WYSIWYG editors have been requested for the frontend request this plugin will produce no output.</p>
 <h3>How do I use it?</h3>
 <p>The first thing you must do is select the frontend WYSIWYG editor to use in the global settings page of the admin console.  Next If you use frontend WYSIWYG editors on numerous pages, it may be best to place the {cms_init_editor} plugin directly into your page template.  If you only require the WYSIWYG editor to be enabled on a limited amount of pages you may just place it into the &quot;Page Specific Metadata&quot; field in each page.</p>
 <h3>What parameters does it take?</h3>
@@ -187,7 +187,7 @@ EOT;
 
 $lang['help_function_module_available'] = <<<EOT
 <h3>What does this do?</h3>
-<p>A plugin to test wether a given module (by name) is installed, and available for use.</p>
+<p>A plugin to test whether a given module (by name) is installed, and available for use.</p>
 <h3>What parameters does it take?</h3>
 <ul>
 <li><strong>(required)module</strong> - (string) The name of the module.</li>
@@ -227,8 +227,8 @@ $lang['help_function_content_module'] = <<<EOT
 <h3>What does this do?</h3>
 <p>This content block type allows interfacing with different modules to create different content block types.</p>
 <p>Some modules can define content block types for use in module templates.  i.e: The FrontEndUsers module may define a group list content block type.  It will then indicate how you can use the content_module tag to utilize that block type within your templates.</p>
-<p><strong>Note:</strong> This block type must be used only with compatible modules.  You should not use this in any way except for as guided by addon modules.</p>
-<p>This tag accepts a few parameters, and passes all other paramters to the module for processing.</p>
+<p><strong>Note:</strong> This block type must be used only with compatible modules.  You should not use this in any way except for as guided by add-on modules.</p>
+<p>This tag accepts a few parameters, and passes all other parameters to the module for processing.</p>
 <p>Parameters:
  <ul>
  <li><strong>(required)</strong>module - The name of the module that will provide this content block. This module must be installed and available</li>
@@ -455,7 +455,7 @@ $lang['help_function_tab_header'] = <<<EOT
 <ul>
    <li><strong>name - required string</strong> - The name of the tab.  Must match the name of a tab passed to {tab_header}</li>
    <li>label - <em>optional string</em> - The human readable label for the tab.  If not specified, the tab name will be used.</li>
-   <li>active - <em>optional mixed./em> - Indicates wether this is the active tab or not.  You may pass in the name (string) of the active tab in a sequance of tab headers, or a boolean value.</li>
+   <li>active - <em>optional mixed./em> - Indicates whether this is the active tab or not.  You may pass in the name (string) of the active tab in a sequence of tab headers, or a boolean value.</li>
    <li>assign - <em>(optional)</em> - Assign the output to the named smarty variable.</li>
 </ul>
 <h3>See Also:</h3>
@@ -507,7 +507,7 @@ $lang['help_function_stylesheet'] = <<<EOT
 	<p>Just insert the tag into your template/page's head section like: <code>{stylesheet}</code></p>
 	<h3>What parameters does it take?</h3>
 	<ul>
-		<li><em>(optional)</em>name - Instead of getting all stylesheets for the given page, it will only get one spefically named one, whether it's attached to the current template or not.</li>
+		<li><em>(optional)</em>name - Instead of getting all stylesheets for the given page, it will only get one specifically named one, whether it's attached to the current template or not.</li>
 		<li><em>(optional)</em>media - If name is defined, this allows you set a different media type for that stylesheet.</li>
     <li><em>(optional)</em>templateid - If templateid is defined, this will return stylesheets associated with that template instead of the current one.</li>
 	<li><em>(optional)</em> <tt>assign</tt> - Assign the results to the named smarty variable.</li>
@@ -534,9 +534,9 @@ EOT;
 
 $lang['help_function_cms_textarea'] = <<<EOT
   <h3>What does this do?</h3>
-  <p>This smarty plugin is used when building admin forms to generate a textarea field.  It has various parameter which allow controlling wether a WYSIWYG plugin is used <em>(if available)</em> or a syntax highlighter, and for influencing the behavior of those modules, and the size and appearance of the textarea.</p>
+  <p>This smarty plugin is used when building admin forms to generate a textarea field.  It has various parameter which allow controlling whether a WYSIWYG plugin is used <em>(if available)</em> or a syntax highlighter, and for influencing the behavior of those modules, and the size and appearance of the textarea.</p>
   <h3>How do I use it?</h3>
-    <p>The simplest way to use this plugin is by specifying <code>{cms_textarea name=&quot;something&quot;}</code>.  This will create a simple text area without wysiwyg or syntax hilighter modules enabled, with the specified name.</p>
+    <p>The simplest way to use this plugin is by specifying <code>{cms_textarea name=&quot;something&quot;}</code>.  This will create a simple text area without WYSIWYG or syntax highlighter modules enabled, with the specified name.</p>
     <p>Next you can specify the default value for the text area by using the &quot;text&quot; or &quot;value&quot; parameters.</p>
   <h3>What parameters does it take?</h3>
   <ul>
@@ -544,9 +544,9 @@ $lang['help_function_cms_textarea'] = <<<EOT
     <li>prefix - optional string : optional prefix for the name attribute.</li>
     <li>class - optional string : class attribute for the text area element.  Additional classes may be added automatically.</li> 
     <li>classname - alias for the class parameter.</li>
-    <li>forcemodule - optional string : used to specify the WYSIWYG or syntax hilighter module to enable.  If specified, and available, the module name will be added o the class attribute.</li>
-    <li>enablewysiwyg - optional boolean : used to specifh whether a WYSIWYG textarea is required.  Sets the language to &quot;html&quot;</li>
-    <li>wantedsyntax - optional string used to specify the language (html,css,php,smarty...) to use.  If non empty indicates that a syntax hilighter module is requested.</li>
+    <li>forcemodule - optional string : used to specify the WYSIWYG or syntax highlighter module to enable.  If specified, and available, the module name will be added o the class attribute.</li>
+    <li>enablewysiwyg - optional boolean : used to specify whether a WYSIWYG textarea is required.  Sets the language to &quot;html&quot;</li>
+    <li>wantedsyntax - optional string used to specify the language (html,css,php,smarty...) to use.  If non empty indicates that a syntax highlighter module is requested.</li>
     <li>type - alias for the wantedsyntax parameter.</li>
     <li>cols - optional integer : columns of the text area (admin theme css or the syntax/WYSIWYG module may override this).</li>
     <li>width - alias for the cols parameter.</li>
@@ -554,7 +554,7 @@ $lang['help_function_cms_textarea'] = <<<EOT
     <li>height - alias for the rows parameter.</li>
     <li>maxlength - optional integer : maxlength attribute of the text area (syntax/WYSIWYG module may ignore this).</li>
     <li>required  - optional boolean : indicates a required field.</li>
-    <li>placeholder - optional string : placeholder attribute of the text area (syntax/wysiwyg module may ignore this).</li>
+    <li>placeholder - optional string : placeholder attribute of the text area (syntax/WYSIWYG module may ignore this).</li>
     <li>value - optional string : default text for the text area, will undergo entity conversion.</li>
     <li>text - alias for the value parameter</li>
     <li>cssname - optional string : pass this stylesheet name to the WYSIWYG module if a WYSIWYG module is enabled.</li>
@@ -595,7 +595,7 @@ $lang['help_function_recently_updated'] = <<<EOT
 	<ul>
 	 <li><p><em>(optional)</em> number='10' - Number of updated pages to show.</p><p>Example: {recently_updated number='15'}</p></li>
  	 <li><p><em>(optional)</em> leadin='Last changed' - Text to show left of the modified date.</p><p>Example: {recently_updated leadin='Last Changed'}</p></li>
- 	 <li><p><em>(optional)</em> showtitle='true' - Shows the titleattribute if it exists as well (true|false).</p><p>Example: {recently_updated showtitle='true'}</p></li>											 	
+ 	 <li><p><em>(optional)</em> showtitle='true' - Shows the title attribute if it exists as well (true|false).</p><p>Example: {recently_updated showtitle='true'}</p></li>											 	
 	 <li><p><em>(optional)</em> css_class='some_name' - Warp a div tag with this class around the list.</p><p>Example: {recently_updated css_class='some_name'}</p></li>											 	
 	 <li><p><em>(optional)</em> dateformat='d.m.y h:m' - default is d.m.y h:m , use the format you whish (php -date- format)</p><p>Example: {recently_updated dateformat='D M j G:i:s T Y'}</p></li>	
 	 <li><em>(optional)</em> <tt>assign</tt> - Assign the results to the named smarty variable.</li>
@@ -636,7 +636,7 @@ EOT;
 
 $lang['help_function_metadata'] = <<<EOT
 	<h3>What does this do?</h3>
-	<p>Displays the metadata for this page. Both global metdata from the global settings page and metadata for each page will be shown.</p>
+	<p>Displays the metadata for this page. Both global metadata from the global settings page and metadata for each page will be shown.</p>
 	<h3>How do I use it?</h3>
 	<p>Just insert the tag into your template like: <code>{metadata}</code></p>
 	<h3>What parameters does it take?</h3>
@@ -705,7 +705,7 @@ $lang['help_function_google_search'] = <<<EOT
 	<h3>How do I use it?</h3>
 	<p>Just insert the tag into your template/page like: <code>{google_search}</code><br />
 	<br />
-	Note: Google needs to have your website indexed for this to work. You can submit your website to google <a href="http://www.google.com/addurl.html">here</a>.</p>
+	Note: Google needs to have your website indexed for this to work. You can submit your website to Google <a href="http://www.google.com/addurl.html">here</a>.</p>
 	<h3>What if I want to change the look of the textbox or button?</h3>
 	<p>The look of the textbox and button can be changed via css. The textbox is given an id of textSearch and the button is given an id of buttonSearch.</p>
 
@@ -721,7 +721,7 @@ $lang['help_function_global_content'] = <<<EOT
 	<h3>What does this do?</h3>
 	<p>Inserts a global content block into your template or page.</p>
 	<h3>How do I use it?</h3>
-	<p>Just insert the tag into your template/page like: <code>{global_content name='myblob'}</code>, where name is the name given to the block when it was created.</p>
+	<p>Just insert the tag into your template/page like: <code>{global_content name='myblock'}</code>, where name is the name given to the block when it was created.</p>
 	<h3>What parameters does it take?</h3>
 	<ul>
   	  <li>name - The name of the global content block to display.</li>
@@ -775,10 +775,10 @@ $lang['help_function_embed'] = <<<EOT
 	<h3>What does this do?</h3>
 	<p>Enable inclusion (embedding) of any other application into the CMS. The most usual use could be a forum. 
 	This implementation is using IFRAMES so older browsers can have problems. Sorry bu this is the only known way 
-	that works without modifing the embedded application.</p>
+	that works without modifying the embedded application.</p>
 	<h3>How do I use it?</h3>
         <ul>
-        <li>a) Add <code>{embed header=true}</code> into the head section of your page template, or into the metadata section in the options tab of a content page.  This will ensure that the required javascript gets included.   If you insert this tag into the metadata section in the options tab of a content page you must ensure that <code>{metadata}</code> is in your page template.</li>
+        <li>a) Add <code>{embed header=true}</code> into the head section of your page template, or into the metadata section in the options tab of a content page.  This will ensure that the required JavaScript gets included.   If you insert this tag into the metadata section in the options tab of a content page you must ensure that <code>{metadata}</code> is in your page template.</li>
         <li>b) Add <code>{embed url="http://www.google.com"}</code> into your page content or in the body of your page template.</li>
         </ul>
         <br/>
@@ -884,16 +884,16 @@ $lang['help_function_cms_selflink'] = <<<EOT
 		<li><em>(optional)</em> <tt>anchorlink</tt> - Specifies an anchor to add to the generated URL.</li>
 		<li><em>(optional)</em> <tt>urlparam</tt> - Specify additional parameters to the URL.  <strong>Do not use this in conjunction with the <em>anchorlink</em> parameter</strong></li>
 		<li><em>(optional)</em> <tt>tabindex =&quot;a value&quot;</tt> - Set a tabindex for the link.</li> <!-- Russ - 22-06-2005 -->
-		<li><em>(optional)</em> <tt>dir start/next/prev/up (previous)</tt> - Links to the default start page or the next or previous page, or the parent page (up). If this is used <tt>page</tt> should not be set.</li> <!-- mbv - 21-06-2005 -->
+		<li><em>(optional)</em> <tt>dir start/next/prev/up (previous)</tt> - Links to the default start page or the next or previous page, or the parent page (up). If this is used <tt>page</tt> should not be set.</li>
 		</ul>
 		<strong>Note!</strong> Only one of the above may be used in the same cms_selflink statement!!
 		<ul>
 		<li><em>(optional)</em> <tt>text</tt> - Text to show for the link.  If not given, the Page Name is used instead.</li>
-		<li><em>(optional)</em> <tt>menu 1/0</tt> - If 1 the Menu Text is used for the link text instead of the Page Name</li> <!-- mbv - 21-06-2005 -->
-		<li><em>(optional)</em> <tt>target</tt> - Optional target for the a link to point to.  Useful for frame and javascript situations.</li>
-		<li><em>(optional)</em> <tt>class</tt> - Class for the &lt;a&gt; link. Useful for styling the link.</li> <!-- mbv - 21-06-2005 -->
-		<li><em>(optional)</em> <tt>id</tt> - Optional css_id for the &lt;a&gt; link.</li> <!-- mbv - 29-06-2005 -->
-		<li><em>(optional)</em> <tt>more</tt> - place additional options inside the &lt;a&gt; link.</li> <!-- mbv - 29-06-2005 -->
+		<li><em>(optional)</em> <tt>menu 1/0</tt> - If 1 the Menu Text is used for the link text instead of the Page Name</li>
+		<li><em>(optional)</em> <tt>target</tt> - Optional target for the a link to point to.  Useful for frame and JavaScript situations.</li>
+		<li><em>(optional)</em> <tt>class</tt> - Class for the &lt;a&gt; link. Useful for styling the link.</li>
+		<li><em>(optional)</em> <tt>id</tt> - Optional css_id for the &lt;a&gt; link.</li>
+		<li><em>(optional)</em> <tt>more</tt> - place additional options inside the &lt;a&gt; link.</li>
 		<li><em>(optional)</em> <tt>label</tt> - Label to use in with the link if applicable.</li>
 		<li><em>(optional)</em> <tt>label_side left/right</tt> - Side of link to place the label (defaults to "left").</li>
 		<li><em>(optional)</em> <tt>title</tt> - Text to use in the title attribute.  If none is given, then the title of the page will be used for the title.</li>
@@ -925,14 +925,14 @@ $lang['help_function_cms_module_hint'] = <<<EOT
 <h3>What does this do?</h3>
 <p>This function plugin can be used to provide hints for module behavior if various parameters cannot be specified on the URL.  I.e: In a situation when a site is configured to use pretty urls for SEO purposes it is often impossible to provide additional module parameters like a detailtemplate or sort order on a URL.  This plugin can be used in page templates, GCBs or in a page specific way to give hints as to how modules should behave.</p>
 <p><strong>Note:</strong> Any parameters that are specified on the URL will override matching module hints.   i.e:  When using News and a detailtemplate parameter is specified on a News detail url, any detailtemplate hints will have no effect.</p>
-<p><strong>Note:</strong> In order to ensure proper behavior, module hints must be created before the {content} tag is executed in the CMSMS page template.  Therefore they should (normally) be created very early in the page template process.  An ideal location for page specifc hints is in the &quot;Smarty data or logic that is specific to this page:&quot; textarea on the editcontent form.</p>
+<p><strong>Note:</strong> In order to ensure proper behavior, module hints must be created before the {content} tag is executed in the CMSMS page template.  Therefore they should (normally) be created very early in the page template process.  An ideal location for page specific hints is in the &quot;Smarty data or logic that is specific to this page:&quot; textarea on the editcontent form.</p>
 <h3>Parameters:</h3>
 <ul>
   <li>module - <strong>required string</strong> - The module name that you are adding a hint for.</i>
 </ul>
 <p>Any further parameters to this tag are stored as hints.</p>
 <h3>Example:</h3>
-<p>When using the News module, and pretty urls are configured.  You wish to display news articles for a specific category on one page, and would like to use a non standard detail template to display the individual articles on a differernt page.  I.e: perhaps on your &quot;Sports&quot; page you are calling News like: <code>{News category=sports detailpage=sports_detail}</code>.  However, using pretty urls it may be impossible to specify a detailtemplate on the links that will generate the detail views.  The solution is to use the {cms_module_hint} tag on the <u>sports_detail</u> page to provide some hints as to how News should behave on that page.</p>
+<p>When using the News module, and pretty urls are configured.  You wish to display news articles for a specific category on one page, and would like to use a non standard detail template to display the individual articles on a different page.  I.e: perhaps on your &quot;Sports&quot; page you are calling News like: <code>{News category=sports detailpage=sports_detail}</code>.  However, using pretty urls it may be impossible to specify a detailtemplate on the links that will generate the detail views.  The solution is to use the {cms_module_hint} tag on the <u>sports_detail</u> page to provide some hints as to how News should behave on that page.</p>
 <p>When editing the <u>sports_detail</u> page on the options tab, in the textarea entitled &quot;Smarty data or logic that is specific to this page:&quot; you could enter a tag such as: <code>{cms_module_hint module=News detailtemplate=sports}</code>.  Now when a user clicks on a link from the News summary display on your &quot;sports&quot; page he will be directed to the <u>sports_detail</u> page, and the News detail template entitled &quot;sports&quot; will be used to display the article.</p>
 <h3>Usage:</h3>
 <p><code>{cms_module_hint module=ModuleName paramname=value ...}</code></p>
@@ -948,7 +948,7 @@ $lang['help_function_breadcrumbs'] = <<<EOT
 <p>Just insert the tag into your template/page like: <code>{breadcrumbs}</code></p>
 <h3>What parameters does it take?</h3>
 <ul>
-<li><em>(optional)</em> <tt>delimiter</tt> - Text to seperate entries in the list (default "&gt;&gt;").</li>
+<li><em>(optional)</em> <tt>delimiter</tt> - Text to separate entries in the list (default "&gt;&gt;").</li>
 <li><em>(optional)</em> <tt>initial</tt> - 1/0 If set to 1 start the breadcrumbs with a delimiter (default 0).</li>
 <li><em>(optional)</em> <tt>root</tt> - Page alias of a page you want to always appear as the first page in
     the list. Can be used to make a page (e.g. the front page) appear to be the root of everything even though it is not.</li>
@@ -1004,7 +1004,7 @@ EOT;
 
 $lang['help_function_cms_jquery'] = <<<EOT
 <h3>What does this do?</h3>
- <p>This plugin allows you output the javascript libraries and plugins used from the admin.</p>
+ <p>This plugin allows you output the JavaScript libraries and plugins used from the admin.</p>
 <h3>How do I use it?</h3>
 <p>Simply insert this tag into your page or template: <code>{cms_jquery}</code></p>
 
@@ -1063,7 +1063,7 @@ $lang['help_function_form_start'] = <<<EOT
     <p>The module action that is the destination for the form data.  If not specified, &quot;default&quot; is assumed for a frontend request, and &quot;defaultadmin&quot; for an admin side request.</p>
   </li>
   <li>mid = <em>(optional string)</em>
-    <p>The module actionid that is the destination for the form data.  If not specified, a value is automaticaly calculated.</p>
+    <p>The module actionid that is the destination for the form data.  If not specified, a value is automatically calculated.</p>
   </li>
   <li>returnid = <em>(optional integer)</em>
     <p>The content page id that the form should be submitted to.  If not specified, the current page id is used for frontend requests.   For admin requests this attribute is not required.</p>
@@ -1117,7 +1117,7 @@ $lang['help_function_form_start'] = <<<EOT
 &lt;input type="submit" name="{\$actionid}submit" value="Submit"/&gt;
 {form_end}</code></pre>
 <h3>Example 2:</h3>
-<p>The following is a sample form for use in the frontend of a website.  Entered into page content, this hypothetical form will gather a pagelimit, and submit it to the News module.</p>
+<p>The following is a sample form for use in the frontend of a website.  Entered into page content, this hypothetical form will gather a page limit, and submit it to the News module.</p>
 <pre><code>{form_start method="GET" class="form-inline"}
 &lt;select name="pagelimit"&gt;
 &lt;option value="10"&gt;10&lt;/option&gt;
@@ -1137,12 +1137,12 @@ $lang['postfilter'] = 'Postfilters are called automatically by smarty after the 
 $lang['prefilter'] = 'Prefilters are called automatically by smarty before the compilation of every template.  They canot be called manually.';
 $lang['tag_about'] = 'Display the history and author information for this plugin, if available';
 $lang['tag_adminplugin'] = 'Indicates that the tag is available in the admin interface only, and is usually used in module templates';
-$lang['tag_cachable'] = 'Indicates wether the output of the plugin can be cached (when smarty caching is enabled).  Admin plugins, and modifiers cannot be cached.';
+$lang['tag_cachable'] = 'Indicates whether the output of the plugin can be cached (when smarty caching is enabled).  Admin plugins, and modifiers cannot be cached.';
 $lang['tag_help'] = 'Display the help (if any exists) for this tag';
 $lang['tag_name'] = 'This is the name of the tag';
 $lang['tag_type'] = 'The tag type (function, modifier, or a pre or post filter)';
 $lang['title_admin'] = 'This plugin is only available from the CMSMS admin console..';
-$lang['title_notadmin'] = 'This plugin is usable in both the admin console and on the website frontent.';
+$lang['title_notadmin'] = 'This plugin is usable in both the admin console and on the website frontend.';
 $lang['title_cachable'] = 'This plugin is cachable';
 $lang['title_notcachable'] = 'This plugin is not cachable';
 $lang['viewabout'] = 'Display history and author information for this module';
