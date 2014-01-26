@@ -23,6 +23,7 @@ final class AdminSearch_content_slave extends AdminSearch_slave
   {
     $userid = get_userid();
 
+    $content_manager = cms_utils::get_module('CMSContentManager');
     $db = cmsms()->GetDb();
     $query = 'SELECT DISTINCT content_id,prop_name,content FROM '.cms_db_prefix().'content_props WHERE content LIKE ?';
     $dbr = $db->GetArray($query,array('%'.$this->get_text().'%'));
@@ -55,7 +56,7 @@ final class AdminSearch_content_slave extends AdminSearch_slave
 
 	$tmp = array('title'=>$content_obj->Name(),
 		     'description'=>$content_obj->Name(),
-		     'edit_url'=>"editcontent.php{$urlext}&amp;content_id=$content_id",
+		     'edit_url'=>$content_manager->create_url('m1_','admin_editcontent','',array('content_id'=>$content_id)),
 		     'text'=>$text);
 
 	$output[] = $tmp;

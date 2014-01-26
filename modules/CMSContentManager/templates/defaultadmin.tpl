@@ -46,10 +46,13 @@ $(document).ready(function () {
     cms_CMloadUrl('a.page_setinactive', '{$mod->Lang('confirm_setinactive')}'),
     cms_CMloadUrl('a.page_setactive'),
     cms_CMloadUrl('a.page_setdefault', '{$mod->Lang('confirm_setdefault')}'),
-    cms_CMloadUrl('a.page_view', '{$mod->Lang('confirm_viewpage')}'),
     cms_CMloadUrl('a.page_sortup'),
     cms_CMloadUrl('a.page_sortdown'),
     cms_CMloadUrl('a.page_delete', '{$mod->Lang('confirm_delete_page')}');
+
+    $('a.page_view').on('click',function(e) {
+      return confirm('{$mod->Lang('confirm_viewpage')}');
+    })
 
     $('a.steal_lock').on('click',function(e) {
       // we're gonna confirm stealing this lock.

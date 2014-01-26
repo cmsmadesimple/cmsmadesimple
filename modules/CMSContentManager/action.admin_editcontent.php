@@ -232,9 +232,7 @@ $tab_message_array = array();
 
 for( $currenttab = 0; $currenttab < $numberoftabs; $currenttab++ ) {
   $tmp = $content_obj->GetTabMessage($currenttab);
-  if( $tmp ) {
-    $tab_message_array[$currenttab] = $tmp;
-  }
+  if( $tmp ) $tab_message_array[$currenttab] = $tmp;
   
   $contentarray = $content_obj->GetTabElements($currenttab);
   if( $currenttab == 0 ) {
