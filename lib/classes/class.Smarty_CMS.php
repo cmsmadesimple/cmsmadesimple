@@ -388,7 +388,7 @@ class Smarty_CMS extends SmartyBC
     $this->assign('e_trace', htmlentities($e->getTraceAsString()));
 
     // put mention into the admin log
-    audit('', 'Error: '.substr( $e->getMessage(),0 ,50 ), 'has occured');
+    audit('', 'An error has occurred', substr( $e->getMessage(),0 ,100 ) );
 
     $output = $this->fetch('error-console.tpl');
 
