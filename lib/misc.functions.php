@@ -1179,13 +1179,13 @@ function cms_get_jquery($exclude = '',$ssl = null,$cdn = false,$append = '',$cus
   $basePath=$custom_root!=''?trim($custom_root,'/'):$base_url;
   
   // Scripts to include
-  $scripts['jquery'] = array('cdn'=>'https://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js',
-			     'local'=>$basePath.'/lib/jquery/js/jquery-1.10.2.min.js',
+  $scripts['jquery'] = array('cdn'=>'https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js',
+			     'local'=>$basePath.'/lib/jquery/js/jquery-1.11.0.min.js',
 			     'aliases'=>array('jquery.min.js','jquery',));
-  $scripts['jquery-ui'] = array('cdn'=>'https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js',
-				'local'=>$basePath.'/lib/jquery/js/jquery-ui-1.10.3.custom.min.js',
+  $scripts['jquery-ui'] = array('cdn'=>'https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js',
+				'local'=>$basePath.'/lib/jquery/js/jquery-ui-1.10.4.custom.min.js',
 				'aliases'=>array('jquery-ui.min.js','ui'),
-				'css'=>$basePath.'/lib/jquery/css/smoothness/jquery-ui-1.10.3.custom.min.css');
+				'css'=>$basePath.'/lib/jquery/css/smoothness/jquery-ui-1.10.4.custom.min.css');
   $scripts['nestedSortable'] = array('local'=>$basePath.'/lib/jquery/js/jquery.mjs.nestedSortable.js');
   $scripts['json'] = array('local'=>$basePath.'/lib/jquery/js/jquery.json-2.4.min.js');
   $scripts['migrate'] = array('local'=>$basePath.'/lib/jquery/js/jquery-migrate-1.2.1.min.js');

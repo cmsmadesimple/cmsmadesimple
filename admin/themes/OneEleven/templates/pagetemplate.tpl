@@ -4,7 +4,7 @@
 		<meta charset="utf-8" />
 		<title>{if !empty($pagetitle)}{$pagetitle} - {/if}{sitename}</title>
 		<base href="{$config.admin_url}/" />
-		<meta name="generator" content="CMS Made Simple - Copyright (C) 2004-13 Ted Kulp. All rights reserved." />
+		<meta name="generator" content="CMS Made Simple - Copyright (C) 2004-14 Ted Kulp. All rights reserved." />
 		<meta name="robots" content="noindex, nofollow" />
 		<meta name="viewport" content="initial-scale=1.0 maximum-scale=1.0 user-scalable=no" />
 		<meta name="HandheldFriendly" content="True"/>
@@ -19,10 +19,10 @@
 		<!--[if lt IE 9]>
 		<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
 		<![endif]-->
-		<!-- custom jQueryUI Theme 1.8.21 see style.css or link in UI Stylesheet for color reference //-->
+		<!-- custom jQueryUI Theme 1.10.04 see link in UI Stylesheet for color reference //-->
 		<link rel="stylesheet" href="style.php?{$secureparam}" />
 		{cms_jquery append="`$config.admin_url`/themes/OneEleven/includes/standard.js" include_css=0}
-		<link href="{$config.admin_url}/themes/OneEleven/css/default-cmsms/jquery-ui-1.10.3.custom.min.css" rel="stylesheet" />
+		<link href="{$config.admin_url}/themes/OneEleven/css/default-cmsms/jquery-ui-1.10.4.custom.min.css" rel="stylesheet" />
 		<!-- THIS IS WHERE HEADER STUFF SHOULD GO -->
 	 	{$headertext|default:''}
 		{module_available name='FileManager' assign='fmgood'}
