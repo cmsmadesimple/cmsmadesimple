@@ -66,7 +66,7 @@ if( $preview ||
   
   $catName = '';
   if (isset($params['category_id'])) {
-    $catName = $db->GetOne('SELECT news_category_name FROM '.cms_db_prefix() . 'module_news_categories where news_category_id=?',array($params['category_id']));		
+    $catName = $db->GetOne('SELECT news_category_name FROM '.cms_db_prefix() . 'module_news_categories where news_category_id=?',array((int)$params['category_id']));		
   }
   $smarty->assign('category_name',$catName);
   unset($params['article_id']);
