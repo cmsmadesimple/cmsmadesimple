@@ -204,6 +204,7 @@
   <ul>
     <li>Enhancements to the news_field class.</li>
     <li>Adds the idlist parameter.</li>
+    <li>Security fix.</li>
   </ul>
 </li>
 </ul>

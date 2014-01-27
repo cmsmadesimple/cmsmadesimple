@@ -132,25 +132,33 @@ if( !$smarty->isCached($this->GetDatabaseResource($template),$cache_id) ) {
     }
   }
 
-  $sortrandom = false;        
-  if (isset($params['sortby'])) {
-    if ($params['sortby'] == 'news_category') {
+  $sortrandom = false;
+  $sortby = trim(get_parameter_value($params,'sortby','news_date'));
+  switch( $sortby ) {
+    case 'news_category':
       $query1 .= "ORDER BY 'long_name', 'news_date' ";
-    } 
-    else if ($params['sortby'] == 'random') {
+      break;
+
+    case 'random':
       $query1 .= "ORDER BY RAND() ";
       $sortrandom = true;
-    }
-    else if( $params['sortby'] == 'news_extra') {
-      $query1 .= "ORDER BY mn.news_extra ";
-    }
-    else {
-      $query1 .= "ORDER BY mn." . str_replace("'", '', str_replace(';', '', $db->qstr($params['sortby']))) . " ";
-    }
-  } 
-  else {
-    $query1 .= "ORDER BY news_date "; 
+      break;
+
+    case 'summary':
+    case 'news_data':
+    case 'news_category':
+    case 'news_title':
+    case 'end_time':
+    case 'start_time':
+    case 'news_extra':
+      $query1 .= "ORDER BY mn.".trim($params['sortby']);
+      break;
+
+    default:
+      $query1 .= "ORDER BY mn.news_date ";
+      break;
   }
+
   if( $sortrandom == false ) {
     if (isset($params['sortasc']) && (strtolower($params['sortasc']) == 'true')) {
       $query1 .= "asc"; 
