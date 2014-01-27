@@ -332,16 +332,12 @@ abstract class CMSModule
 		  // no lazy loading.
 		  $gCms = cmsms();
 		  $smarty = $gCms->GetSmarty();
-		  $smarty->register_function($this->GetName(),
-									 array($this->GetName(),'function_plugin'),
-									 $cachable
-									 );
+		  $smarty->register_function($this->GetName(), array($this->GetName(),'function_plugin'), $cachable );
 		  return TRUE;
 	  }
 	  else {
-		  return cms_module_smarty_plugin_manager::addStatic($this->GetName(),$this->GetName(),
-															 'function',
-															 'function_plugin',$cachable);
+		  return cms_module_smarty_plugin_manager::addStatic($this->GetName(),$this->GetName(), 'function', 'function_plugin',$cachable);
+		  return TRUE;
 	  }
   }
 

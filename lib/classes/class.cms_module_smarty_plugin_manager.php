@@ -76,16 +76,14 @@ final class cms_module_smarty_plugin_manager
     $db = cmsms()->GetDb();
     $query = 'SELECT * FROM '.cms_db_prefix().'module_smarty_plugins ORDER BY module';
     $tmp = $db->GetArray($query);
-    if( is_array($tmp) )
-      {
-		  for( $i = 0; $i < count($tmp); $i++ )
-			  {
-				  $row = $tmp[$i];
-				  $row['callback'] = unserialize($row['callback']);
-				  // todo, verify signature
-				  $this->_data[$row['sig']] = $row;
-			  }
-      }
+    if( is_array($tmp) ) {
+		for( $i = 0; $i < count($tmp); $i++ ) {
+			$row = $tmp[$i];
+			$row['callback'] = unserialize($row['callback']);
+			// todo, verify signature
+			$this->_data[$row['sig']] = $row;
+		}
+	}
   }
 
   private function _save()
@@ -99,15 +97,12 @@ final class cms_module_smarty_plugin_manager
 
     $query = 'INSERT INTO '.cms_db_prefix().'module_smarty_plugins (sig,name,module,type,callback,cachable,available) VALUES';
     $fmt = " ('%s','%s','%s','%s','%s',%d,%d),";
-    foreach( $this->_data as $key => $row )
-      {
-		  $query .= sprintf($fmt,$row['sig'],$row['name'],$row['module'],$row['type'],serialize($row['callback']),$row['cachable'],$row['available']);
-      }
+    foreach( $this->_data as $key => $row ) {
+		$query .= sprintf($fmt,$row['sig'],$row['name'],$row['module'],$row['type'],serialize($row['callback']),$row['cachable'],$row['available']);
+	}
 	if( endswith($query,',') ) $query = substr($query,0,-1);
     $dbr = $db->Execute($query);
-	if( !$dbr ) {
-		return FALSE;
-	}
+	if( !$dbr ) return FALSE;
 	$this->_modified = FALSE;
 	return TRUE;
   }
@@ -119,40 +114,30 @@ final class cms_module_smarty_plugin_manager
 
 	  // load the module
 	  $module = cms_utils::get_module($row['module']);
-	  if( $module )
-	  {
+	  if( $module ) {
 		  // fix the callback, incase somebody used 'this' in the string.
-		  if( is_array($row['callback']) )
-		  {
+		  if( is_array($row['callback']) ) {
 			  // its an array
-			  if( count($row['callback']) == 2 )
-			  {
+			  if( count($row['callback']) == 2 ) {
 				  // first element is some kind of string... do some magic to point to the module object
-				  if( !is_string($row['callback'][0]) || strtolower($row['callback'][0]) == 'this')
-				  {
-					  $row['callback'][0] = $row['module'];
-				  }
+				  if( !is_string($row['callback'][0]) || strtolower($row['callback'][0]) == 'this') $row['callback'][0] = $row['module'];
 			  }
-			  else
-			  {
+			  else {
 				  // an array with only one item?
 				  audit('','cms_module_smarty_plugin_manager','Cannot load plugin '.$row['name'].' from module '.$row['module'].' because of errors in the callback');
 				  return;
 			  }
 		  }
-		  else if( startswith($row['callback'],'::') )
-		  {
+		  else if( startswith($row['callback'],'::') ) {
 			  // ::method syntax (implies module name)
 			  $row['callback'] = array($row['module'],substr($row['callback'],2));
 		  }
-		  else 
-		  {
+		  else {
 			  // assume it's just a method name
 			  $row['callback'] = array($row['module'],$row['callback']);
 		  }
 	  }
-	  if( !is_callable($row['callback']) ) 
-	  {
+	  if( !is_callable($row['callback']) ) {
 		  // it's in the db... but not callable.
 		  audit('','cms_module_smarty_plugin_manager','Cannot load plugin '.$row['name'].' from module '.$row['module'].' because callback not callable (module disabled?)');
 		  $row['callback'] = array('Smarty_CMS','_dflt_plugin');
@@ -165,22 +150,17 @@ final class cms_module_smarty_plugin_manager
   public function find($name,$type)
   {
     $this->_load();
-    if( is_array($this->_data) && count($this->_data) )
-    {
-		foreach( $this->_data as $key => $row )
-		{
-			if( $row['name'] == $name && $row['type'] == $type )
-			{
-				return $row;
-		    }
+    if( is_array($this->_data) && count($this->_data) ) {
+		foreach( $this->_data as $key => $row ) {
+			if( $row['name'] == $name && $row['type'] == $type ) return $row;
 		}
 	}
   }
 
 
-  public static function addStatic($module_name,$type,$callback,$cachable = TRUE,$available = 0)
+  public static function addStatic($module_name,$name,$type,$callback,$cachable = TRUE,$available = 0)
   {
-	  return self::get_instance()->add($module_name,$type,$callback,$cachable,$available);
+	  return self::get_instance()->add($module_name,$name,$type,$callback,$cachable,$available);
   }
 
 
@@ -192,21 +172,19 @@ final class cms_module_smarty_plugin_manager
 	  
 	  // todo... check valid input
 
-	  $sig = md5($name.$module_name.$callback);
+	  $sig = md5($name.$module_name.serialize($callback));
 	  if( !isset($this->_data[$sig]) ) {
-		  {
-			  if( $available == 0 ) $available = self::AVAIL_FRONTEND;
-			  $this->_data[$name] =
-				  array('sig'=>$sig,
-						'module'=>$module_name,
-						'name'=>$name,
-						'type'=>$type,
-						'callback'=>$callback,
-						'cachable'=>(int)$cachable,
-						'available'=>$available);
-			  $this->_modified = TRUE;
-			  return $this->_save();
-		  }
+		  if( $available == 0 ) $available = self::AVAIL_FRONTEND;
+		  $this->_data[$name] =
+			  array('sig'=>$sig,
+					'module'=>$module_name,
+					'name'=>$name,
+					'type'=>$type,
+					'callback'=>$callback,
+					'cachable'=>(int)$cachable,
+					'available'=>$available);
+		  $this->_modified = TRUE;
+		  return $this->_save();
 	  }
 	  return TRUE;
   }
@@ -219,20 +197,15 @@ final class cms_module_smarty_plugin_manager
   public function _remove_by_module($module_name)
   {
     $this->_load();
-    if( is_array($this->_data) && count($this->_data) )
-      {
-		  $new = array();
-		  foreach( $this->_data as $key => $row )
-			  {
-				  if( $row['module'] != $module_name )
-					  {
-						  $new[$key] = $row;
-					  }
-			  }
-		  $this->_data = $new;
-		  $this->_modified = true;
-		  $this->_save();
-      }
+    if( is_array($this->_data) && count($this->_data) ) {
+		$new = array();
+		foreach( $this->_data as $key => $row ) {
+			if( $row['module'] != $module_name ) $new[$key] = $row;
+		}
+		$this->_data = $new;
+		$this->_modified = true;
+		$this->_save();
+	}
   }
 
   public static function remove_by_name($name,$type)
@@ -243,20 +216,15 @@ final class cms_module_smarty_plugin_manager
   public function _remove_by_name($name,$type)
   {
     $this->_load();
-    if( is_array($this->_data) && count($this->_data) )
-      {
-		  $new = array();
-		  foreach( $this->_data as $key => $row )
-			  {
-				  if( $name != $row['name'] )
-					  {
-						  $new[$key] = $row;
-					  }
-			  }
-		  $this->_data = $new;
-		  $this->_modified = true;
-		  $this->_save();
-      }
+    if( is_array($this->_data) && count($this->_data) ) {
+		$new = array();
+		foreach( $this->_data as $key => $row ) {
+			if( $name != $row['name'] ) $new[$key] = $row;
+		}
+		$this->_data = $new;
+		$this->_modified = true;
+		$this->_save();
+	}
   }
 
 } // end of class
