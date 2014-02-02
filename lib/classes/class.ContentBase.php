@@ -916,17 +916,16 @@ abstract class ContentBase
 	 * @param string The alias
 	 * @param boolean Wether an alias should be calculated or not.
 	 */
-	public function SetAlias($alias = '', $doAutoAliasIfEnabled = true)
+	public function SetAlias($alias = null, $doAutoAliasIfEnabled = true)
 	{
 		$gCms = cmsms();
 		$config = $gCms->GetConfig();
-
-		$tolower = false;
 
 		if ($alias == '' && $doAutoAliasIfEnabled && $config['auto_alias_content'] == true) {
 			$alias = trim($this->mMenuText);
 			if ($alias == '') $alias = trim($this->mName);
 
+			// auto generate an alias
 			$tolower = true;
 			$alias = munge_string_to_url($alias, $tolower);
 			// Make sure auto-generated new alias is not already in use on a different page, if it does, add "-2" to the alias
@@ -948,7 +947,7 @@ abstract class ContentBase
 			}
 		}
 
-		$this->mAlias = munge_string_to_url($alias, $tolower);
+		$this->mAlias = $alias;
 	} 
 	
 	/**
@@ -1186,10 +1185,8 @@ abstract class ContentBase
 		$this->mActive                     = ($data["active"] == 1          ? true : false);
 		$this->mShowInMenu                 = ($data["show_in_menu"] == 1    ? true : false);
 		$this->mCachable                   = ($data["cachable"] == 1        ? true : false);
-		if( isset($data['secure']) )
-			$this->mSecure                   = $data["secure"];
-		if( isset($data['page_url']) )
-			$this->mURL                      = $data["page_url"];
+		if( isset($data['secure']) ) $this->mSecure = $data["secure"];
+		if( isset($data['page_url']) ) $this->mURL  = $data["page_url"];
 		$this->mLastModifiedBy             = $data["last_modified_by"];
 		$this->mCreationDate               = $data["create_date"];
 		$this->mModifiedDate               = $data["modified_date"];
@@ -1496,7 +1493,7 @@ abstract class ContentBase
 				$result = false;
 			}
 		}
-		
+
 		if (!$this->HandlesAlias()) {
 			if ($this->mAlias != $this->mOldAlias || ($this->mAlias == '' && $this->RequiresAlias()) ) {
 				$gCms = cmsms();
@@ -1540,19 +1537,15 @@ abstract class ContentBase
 						$count++;
 					}
 
+					$this->mURL = implode('/',$stack);
 					if( $parent_url != '' ) {
 						// woot, we got a prent url.
 						$this->mURL = $parent_url.'/'.$this->mAlias;
 					}
-					else {
-						$this->mURL = implode('/',$stack);
-					}
 				}
 			}
 		}
-		if( $this->mURL == '' && 
-			get_site_preference('content_mandatory_urls') && 
-			!$this->mDefaultContent &&
+		if( $this->mURL == '' && get_site_preference('content_mandatory_urls') && !$this->mDefaultContent &&
 			$this->HasUsableLink() ) {
 			// page url is empty and mandatory
 			$errors[] = lang('content_mandatory_urls');
@@ -1655,9 +1648,9 @@ abstract class ContentBase
 		if (isset($params['showinmenu'])) $this->mShowInMenu = $params['showinmenu'];
 
 		// alias
-		$tmp = '';
+		$tmp = null;
 		if( isset($params['alias']) ) $tmp = trim($params['alias']);
-		if( !$editing || isset($params['alias']) ) {
+		if( !$editing || $tmp ) {
 			// the alias param may not exist (depending upon permissions)
 			// this method will set the alias to the supplied value if it is set
 			// or auto-generate one, when adding a new page.

@@ -17,6 +17,8 @@ Core - General
   - {content} tag now has the placeholder attribute
   - Major accessibility review throughout admin interface
   - Removed many static admin pages, and replaced with new modules
+  - accept UTF-8 chars in page alias and in custom URLS
+    (punctuation, whitespace, / and . are not allowed in the alias.  punctuation, whitespace and . are not allowed in URLS).
 
 Core - Bug Reports
   - #9721 There's no check if changelog.txt exists

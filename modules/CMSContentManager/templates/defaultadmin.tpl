@@ -212,8 +212,8 @@ $(document).ready(function () {
 {if isset($content_list)}
 	{function do_content_row}
 	<div id="content_{$row.id}" style="display: none;"></div>
-		{foreach from=$columns key='column' item='flag'}
-			{if $flag == 0}{continue}{/if}
+	{foreach $columns as $column => $flag}
+		{if $flag == 0}{continue}{/if}
 			<td>
 				{if $column == 'expand'}
 					{if $row.expand == 'open'}
@@ -240,7 +240,7 @@ $(document).ready(function () {
 								<strong>{$mod->Lang('prompt_cachable')}:</strong> {if $row.cachable}{$mod->Lang('yes')}{else}{$mod->Lang('no')}{/if}<br/>
 							{/strip}{/capture}
 	
-						<a href="{cms_action_url action='admin_editcontent' content_id=$row.id}" class="page_edit tooltip" accesskey="e" data-cms-content='{$row.id}' data-cms-description='{$tooltip_pageinfo|htmlentities}'>
+						<a href="{cms_action_url action='admin_editcontent' content_id=$row.id}" class="page_edit tooltip" accesskey="e" data-cms-content='{$row.id}' data-cms-description='{$tooltip_pageinfo|cms_htmlentities}'>
 							{$row.page}
 						</a>
 					{else}
@@ -393,10 +393,10 @@ $(document).ready(function () {
 		</tr>
 	</thead>
 	<tbody class="contentrows">
-	{foreach from=$content_list item='row'}
+	{foreach $content_list as $row}
 	{cycle values="row1,row2" assign='rowclass'}	
 		<tr id="row_{$row.id}" class="{$rowclass} {if isset($row.selected)}selected{/if}">
-			{do_content_row|strip row=$row columns=$columns}
+			{do_content_row row=$row columns=$columns}
 		</tr>
 	{/foreach}
 	</tbody>

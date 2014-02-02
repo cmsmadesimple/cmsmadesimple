@@ -86,7 +86,7 @@ if( count($tags) )
 	echo "<td class=\"icons_wide\"><a href=\"editusertag.php".$urlext."&amp;userplugin_id=".$oneplugin."\">";
 	echo $themeObject->DisplayImage('icons/system/edit.gif', lang('edit'),'','','systemicon');
 	echo "</a></td>\n";
-	echo "<td class=\"icons_wide\"><a href=\"deleteuserplugin.php".$urlext."&amp;userplugin_id=".$oneplugin."\" onclick=\"return confirm('".cms_html_entity_decode_utf8(lang('deleteconfirm', $oneplugin),true)."');\">";
+	echo "<td class=\"icons_wide\"><a href=\"deleteuserplugin.php".$urlext."&amp;userplugin_id=".$oneplugin."\" onclick=\"return confirm('".cms_html_entity_decode_utf8(lang('deleteconfirm', $label),true)."');\">";
 	echo $themeObject->DisplayImage('icons/system/delete.gif', lang('delete'),'','','systemicon');
 	echo "</a></td>\n";
 	echo "</tr>\n";

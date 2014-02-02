@@ -94,9 +94,7 @@ clearstatcache();
 $tmp = array(0=>array(), 1=>array());
 
 $tmp[0]['php_memory_limit'] = testConfig('php_memory_limit', 'php_memory_limit');
-$tmp[0]['process_whole_template'] = testConfig('process_whole_template', 'process_whole_template');
 $tmp[1]['debug'] = testConfig('debug', 'debug');
-$tmp[0]['output_compression'] = testConfig('output_compression', 'output_compression');
 
 $tmp[0]['max_upload_size'] = testConfig('max_upload_size', 'max_upload_size');
 $tmp[0]['url_rewriting'] = testConfig('url_rewriting', 'url_rewriting');
@@ -117,6 +115,7 @@ $tmp[0]['locale'] = testConfig('locale', 'locale');
 $tmp[0]['default_encoding'] = testConfig('default_encoding', 'default_encoding');
 $tmp[0]['admin_encoding'] = testConfig('admin_encoding', 'admin_encoding');
 $tmp[0]['set_names'] = testConfig('set_names', 'set_names');
+$tmp[0]['timezone'] = testConfig('timezone', 'timezone');
 
 $smarty->assign('count_config_info', count($tmp[0]));
 $smarty->assign('config_info', $tmp);
@@ -332,11 +331,17 @@ $tmp = array(0=>array(), 1=>array());
 $dir = $config['root_path'] . DIRECTORY_SEPARATOR . 'tmp';
 $tmp[1]['tmp'] = testDirWrite(0, $dir, $dir);
 
+$dir = TMP_CACHE_LOCATION;
+$tmp[1]['tmp_cache'] = testDirWrite(0, $dir, $dir);
+
 $dir = TMP_TEMPLATES_C_LOCATION;
 $tmp[1]['templates_c'] = testDirWrite(0, $dir, $dir);
 
 $dir = $config['root_path'] . DIRECTORY_SEPARATOR . 'modules';
 $tmp[1]['modules'] = testDirWrite(0, $dir, $dir);
+
+$dir = $config['uploads_path'];
+$tmp[1]['uploads'] = testDirWrite(0, $dir, $dir);
 
 $global_umask = get_site_preference('global_umask', '022');
 $tmp[1][lang('global_umask')] = testUmask(0, lang('global_umask'), $global_umask);

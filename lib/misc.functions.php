@@ -835,26 +835,13 @@ function endswith( $str, $sub )
  */
 function munge_string_to_url($alias, $tolower = false, $withslash = false)
 {
-  // replacement.php is encoded utf-8 and must be the first modification of alias
-  include(dirname(__FILE__) . '/replacement.php');
-  $alias = str_replace($toreplace, $replacement, $alias);
+  if ($tolower == true) $alias = mb_strtolower($alias);
 
-  // lowercase only on empty aliases
-  if ($tolower == true) $alias = strtolower($alias);
-
-  $expr = '/[^a-z0-9-_]+/i';
-  if( $withslash ) $expr = '/[^a-z0-9-_\/]+/i';
-  $alias = preg_replace($expr,'-',$alias);
-
-  for( $i = 0; $i < 5; $i++ ) {
-    $tmp = str_replace('--','-',$alias);
-    if( $tmp == $alias ) break;
-    $alias = $tmp;
-  }
-  $alias = trim($alias, '-');
-  $alias = trim($alias);
-
-  return $alias;
+  // check for invalid chars
+  $expr = '/[^\p{L}]/u';
+  if( $withslash ) $expr = '/[^\p{L}\/]/u';
+  $tmp = preg_replace($expr,'',$alias);
+  return trim($tmp);
 }
 
 

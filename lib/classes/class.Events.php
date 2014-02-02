@@ -220,23 +220,18 @@ final class Events
 		$db = $gCms->GetDb();
 
 		// find the id
-		$q = "SELECT event_id FROM ".cms_db_prefix()."events WHERE 
-		originator = ? AND event_name = ?";
+		$q = "SELECT event_id FROM ".cms_db_prefix()."events WHERE originator = ? AND event_name = ?";
 		$dbresult = $db->Execute( $q, array( $modulename, $eventname ) );
-		if( $dbresult == false || $dbresult->RecordCount() == 0 ) {
-			// query failed, event not found
-			return false;
-		}
+		if( $dbresult == false || $dbresult->RecordCount() == 0 ) return false; // query failed, event not found
 		$row = $dbresult->FetchRow();
 		$id = $row['event_id'];
 
 		// now see if there's nothing already existing for this
 		// tag or module and this id
-		$q = "SELECT * FROM ".cms_db_prefix()."event_handlers WHERE
-		event_id = ? AND ";
+		$q = "SELECT * FROM ".cms_db_prefix()."event_handlers WHERE	event_id = ? AND ";
 		$params = array();
 		$params[] = $id;
-		if( $tag_name != "" ) {
+		if( $tag_name != '' ) {
 			$q .= "tag_name = ?";
 			$params[] = $tag_name;
 		}
@@ -245,10 +240,7 @@ final class Events
 			$params[] = $module_handler;
 		}
 		$dbresult = $db->Execute( $q, $params );
-		if( $dbresult != false && $dbresult->RecordCount() > 0 ) {
-			// hmmm, something matches already
-			return false;
-		}
+		if( $dbresult != false && $dbresult->RecordCount() > 0 ) return false;	// hmmm, something matches already
 
 		// now see if we can get a new id
 		$order = 1;

@@ -74,26 +74,20 @@ if( isset($params['submit']) || isset($params['apply']) ) {
 
   if( empty($error) && $news_url != '' ) {
     // check for starting or ending slashes
-    if( startswith($news_url,'/') || endswith($news_url,'/') ) {
-      $error = $this->Lang('error_invalidurl');
-    }
+    if( startswith($news_url,'/') || endswith($news_url,'/') ) $error = $this->Lang('error_invalidurl');
     if( $error === FALSE ) {
       // check for invalid chars.
       $translated = munge_string_to_url($news_url,false,true);
-      if( strtolower($translated) != strtolower($news_url) ) {
-	$error = $this->Lang('error_invalidurl');
-      }
+      if( strtolower($translated) != strtolower($news_url) ) $error = $this->Lang('error_invalidurl');
     }
 
     if( $error === FALSE ) {
       // make sure this url isn't taken.
-      $news_url = trim($news_url," /\t\r\n\0\x08");
       cms_route_manager::load_routes();
       $route = cms_route_manager::find_match($news_url,TRUE);
       if( $route ) {
 	$dflts = $route->get_defaults();
-	if( $route['key1'] != $this->GetName() || !isset($dflts['articleid']) || 
-	    $dflts['articleid'] != $articleid ) {
+	if( $route['key1'] != $this->GetName() || !isset($dflts['articleid']) || $dflts['articleid'] != $articleid ) {
 	  // we're adding an article, not editing... any matching route is bad.
 	  $error = $this->Lang('error_invalidurl');
 	}
@@ -128,11 +122,11 @@ if( isset($params['submit']) || isset($params['apply']) ) {
     //
     //Update custom fields
     //
-    
+
     // get the field types
     $qu = "SELECT id,name,type FROM ".cms_db_prefix()."module_news_fielddefs WHERE type='file'";
     $types = $db->GetArray($qu);
-    
+
     $error = false;
     if( is_array($types) ) {
       foreach( $types as $onetype ) {
@@ -144,17 +138,12 @@ if( isset($params['submit']) || isset($params['apply']) ) {
 	  else {
 	    $error = '';
 	    $value = news_admin_ops::handle_upload($articleid,$elem,$error);
-	    if( $value === FALSE ) {
-	      true;
-	    }
-	    else {
-	      $params['customfield'][$onetype['id']] = $value;
-	    }
+	    if( $value !== FALSE ) $params['customfield'][$onetype['id']] = $value;
 	  }
 	}
       } // foreach
     } // if
-    
+
     if( isset($params['customfield']) && !$error ) {
       $now = $db->DbTimeStamp(time());
       foreach( $params['customfield'] as $fldid => $value ) {
@@ -170,14 +159,12 @@ if( isset($params['submit']) || isset($params['apply']) ) {
 	}
 	else {
 	  if( empty($value) ) {
-	    $query = 'DELETE FROM '.cms_db_prefix().'module_news_fieldvals
-                      WHERE news_id = ? AND fielddef_id = ?';
+	    $query = 'DELETE FROM '.cms_db_prefix().'module_news_fieldvals WHERE news_id = ? AND fielddef_id = ?';
 	    $dbr = $db->Execute( $query, array($articleid,$fldid));
 	  }
 	  else {
 	    $query = "UPDATE ".cms_db_prefix()."module_news_fieldvals
-                      SET value = ?, modified_date = $now
-                      WHERE news_id = ? AND fielddef_id = ?";
+                      SET value = ?, modified_date = $now WHERE news_id = ? AND fielddef_id = ?";
 	    $dbr = $db->Execute( $query, array($value,$articleid,$fldid));
 	  }
 	}
@@ -185,12 +172,11 @@ if( isset($params['submit']) || isset($params['apply']) ) {
       }
     }
   }
-    
+
   if( isset($params['delete_customfield']) && is_array($params['delete_customfield']) && !$error ) {
     foreach( $params['delete_customfield'] as $k => $v ) {
       if( $v != 'delete' ) continue;
-      $query = 'DELETE FROM '.cms_db_prefix().'module_news_fieldvals 
-                WHERE news_id = ? AND fielddef_id = ?';
+      $query = 'DELETE FROM '.cms_db_prefix().'module_news_fieldvals WHERE news_id = ? AND fielddef_id = ?';
       $db->Execute( $query, array( $articleid, $k ) );
     }
   }
@@ -208,9 +194,7 @@ if( isset($params['submit']) || isset($params['apply']) ) {
 	$module->DeleteWords($this->GetName(),$articleid,'article');
       }
       else {
-	if( !$useexp || ($enddate > time()) || $this->GetPreference('expired_searchable',1) == 1 ) {
-	  $text = '';
-	}
+	if( !$useexp || ($enddate > time()) || $this->GetPreference('expired_searchable',1) == 1 ) $text = '';
 	if( isset($params['customfield']) ) {
 	  foreach( $params['customfield'] as $fldid => $value ) {
 	    if( strlen($value) > 1 ) $text .= $value.' ';
@@ -259,19 +243,12 @@ else if( isset($params['preview']) ) {
   file_put_contents($tmpfname,serialize($params));
 
   $detail_returnid = $this->GetPreference('detail_returnid',-1);
-  if( $detail_returnid <= 0 ) {
-    // now get the default content id.
-    $detail_returnid = ContentOperations::get_instance()->GetDefaultContent();
-  }
-  if( isset($params['previewpage']) && (int)$params['previewpage'] > 0 ) {
-    $detail_returnid = (int)$params['previewpage'];
-  }
-    
+  if( $detail_returnid <= 0 ) $detail_returnid = ContentOperations::get_instance()->GetDefaultContent();
+  if( isset($params['previewpage']) && (int)$params['previewpage'] > 0 ) $detail_returnid = (int)$params['previewpage'];
+
   $_SESSION['news_preview'] = array('fname'=>basename($tmpfname),'checksum'=>md5_file($tmpfname));
   $tparms = array('preview'=>md5(serialize($_SESSION['news_preview'])));
-  if( isset($params['detailtemplate']) ) {
-    $tparms['detailtemplate'] = trim($params['detailtemplate']);
-  }
+  if( isset($params['detailtemplate']) ) $tparms['detailtemplate'] = trim($params['detailtemplate']);
   $url = $this->create_url('_preview_','detail',$detail_returnid,$tparms,TRUE);
 
   $response = '<?xml version="1.0"?>';
@@ -311,12 +288,10 @@ else {
     $startdate = $db->UnixTimeStamp($row['start_time']);
     $author_id = $row['author_id'];
     $searchable = $row['searchable'];
+    $useexp = 0;
     if (isset($row['end_time'])) {
       $useexp = 1;
       $enddate = $db->UnixTimeStamp($row['end_time']);
-    }
-    else {
-      $useexp = 0;
     }
   }
 }
@@ -451,7 +426,7 @@ while( $dbr && ($row = $dbr->FetchRow()) ) {
     $obj->field = $this->CreateInputDropdown($id,$name,array_flip($options),-1,$value);
     break;
   }
-    
+
   $custom_flds[] = $obj;
 }
 if( count($custom_flds) > 0 ) $smarty->assign('custom_fields',$custom_flds);
@@ -472,8 +447,7 @@ $smarty->assign('end_tab_content',$this->EndTabContent());
 $smarty->assign('warning_preview',$this->Lang('warning_preview'));
 $contentops = cmsms()->GetContentOperations();
 $smarty->assign('preview_returnid',
-		$contentops->CreateHierarchyDropdown('',$this->GetPreference('detail_returnid',-1),
-						     'preview_returnid'));
+		$contentops->CreateHierarchyDropdown('',$this->GetPreference('detail_returnid',-1), 'preview_returnid'));
 {
   $tmp = $this->ListTemplates();
   $tmp2 = array();

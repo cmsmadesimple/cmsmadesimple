@@ -1133,6 +1133,7 @@ $lang['installdirwarning'] = '<em><strong>Warning:</strong></em> the install dir
 $lang['installed'] = 'Installed';
 $lang['installed_mod'] = 'Installed version %s';
 $lang['installed_modules'] = 'Installed Modules';
+$lang['invalidalias'] = 'The alias entered contains invalid characters.  whitespace, / . and other punctuation caracters are not permitted.';
 $lang['invalid'] = 'Invalid';
 $lang['invalidcode'] = 'Invalid code entered.';
 $lang['invalidcode_brace_missing'] = 'Uneven amount of braces';

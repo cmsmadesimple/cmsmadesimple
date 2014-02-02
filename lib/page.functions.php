@@ -554,7 +554,7 @@ function get_pageid_or_alias_from_url()
   $contentops = $gCms->GetContentOperations();
   $smarty = $gCms->GetSmarty();
 
-  $params =& $_REQUEST;
+  $params = $_REQUEST;
   if (isset($params['mact'])) {
     $ary = explode(',', cms_htmlentities($params['mact']), 4);
     $smarty->id = (isset($ary[1])?$ary[1]:'');
@@ -565,12 +565,12 @@ function get_pageid_or_alias_from_url()
     // get page from returnid parameter in module action
     $page = (int)$params[$smarty->id . 'returnid'];
   }
-  else if (isset($config["query_var"]) && $config["query_var"] != '' && 
-	   isset($_GET[$config["query_var"]])) {
+  else if (isset($config["query_var"]) && $config["query_var"] != '' && isset($_GET[$config["query_var"]])) {
     // using non friendly urls... get the page alias/id from the query var.
     $page = $_GET[$config["query_var"]];    
   }
   else {
+    $page = $_REQUEST['page'];
     // either we're using pretty urls
     // or this is the default page.
     if (isset($_SERVER["REQUEST_URI"]) && !endswith($_SERVER['REQUEST_URI'], 'index.php')) {

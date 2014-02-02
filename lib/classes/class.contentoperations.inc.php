@@ -952,16 +952,11 @@ class ContentOperations
 	 */
 	function CheckAliasError($alias, $content_id = -1)
 	{
-		$gCms = cmsms();
-		$db = $gCms->GetDb();
 
 		$error = FALSE;
-
-		if (preg_match('/^\d+$/', $alias)) {
-			$error = lang('aliasnotaninteger');
-		}
-		else if (!preg_match('/^[\-\_\w]+$/', $alias)) {
-			$error = lang('aliasmustbelettersandnumbers');
+		$tmp = munge_string_to_url($alias,TRUE);
+		if( $tmp != $alias ) {
+			$error = lang('invalidalias');
 		}
 		else {
 			$params = array($alias);
@@ -970,6 +965,7 @@ class ContentOperations
 				$query .= " AND content_id != ?";
 				$params[] = $content_id;
 			}
+			$db = cmsms()->GetDb();
 			$row = $db->GetRow($query, $params);
 
 			if ($row) $error = lang('aliasalreadyused');

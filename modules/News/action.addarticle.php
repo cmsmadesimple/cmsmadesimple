@@ -35,7 +35,7 @@ $news_url = '';
 if (isset($params['news_url'])) $news_url = trim($params['news_url']);
 
 $userid = get_userid();
-	
+
 $startdate = time();
 if (isset($params['startdate_Month'])) {
   $startdate = mktime($params['startdate_Hour'], $params['startdate_Minute'], $params['startdate_Second'], $params['startdate_Month'], $params['startdate_Day'], $params['startdate_Year']);
@@ -67,26 +67,21 @@ if( isset($params['submit']) ) {
 
   if( empty($error) && $news_url != '' ) {
     // check for starting or ending slashes
-    if( startswith($news_url,'/') || endswith($news_url,'/') ) {
-      $error = $this->ShowErrors($this->Lang('error_invalidurl'));
-    }
+    if( startswith($news_url,'/') || endswith($news_url,'/') ) $error = $this->ShowErrors($this->Lang('error_invalidurl'));
 
     if( $error === FALSE ) {
       // check for invalid chars.
       $translated = munge_string_to_url($news_url,false,true);
-      if( strtolower($translated) != strtolower($news_url) ) {
-	$error = $this->ShowErrors($this->Lang('error_invalidurl'));
-      }
+      if( strtolower($translated) != strtolower($news_url) ) $error = $this->ShowErrors($this->Lang('error_invalidurl'));
     }
 
     if( $error === FALSE ) {
       // make sure this url isn't taken.
-      $news_url = trim($news_url," /\t\r\n\0\x08");
       cms_route_manager::load_routes();
       $route = cms_route_manager::find_match($news_url);
       if( $route ) {
-	// we're adding an article, not editing... any matching route is bad.
 	$error = $this->ShowErrors($this->Lang('error_invalidurl'));
+	// we're adding an article, not editing... any matching route is bad.
       }
     }
   }
@@ -106,20 +101,19 @@ if( isset($params['submit']) ) {
     else {
       $dbr = $db->Execute($query, array($articleid, $usedcategory, $title, $content, $summary, $status, trim($db->DBTimeStamp($postdate), "'"), NULL, NULL, trim($db->DBTimeStamp(time()), "'"), trim($db->DBTimeStamp(time()), "'"), $userid, $extra, $news_url, $searchable));
     }
-    
+
     if( !$dbr ) {
       echo "DEBUG: SQL = ".$db->sql."<br/>";
       die($db->ErrorMsg());
     }
-    
+
     //
     //Handle submitting the 'custom' fields
     //
     // get the field types
-    $qu = "SELECT id,name,type FROM ".cms_db_prefix()."module_news_fielddefs 
-           WHERE type='file'";
+    $qu = "SELECT id,name,type FROM ".cms_db_prefix()."module_news_fielddefs WHERE type='file'";
     $types = $db->GetArray($qu);
-    
+
     foreach( $types as $onetype ) {
       $elem = $id.'customfield_'.$onetype['id'];
       if( isset($_FILES[$elem]) && $_FILES[$elem]['name'] != '' ) {
@@ -140,12 +134,12 @@ if( isset($params['submit']) ) {
 	}
       }
     }
-    
+
     if( isset($params['customfield']) && !$error ) {
       $now = trim($db->DBTimeStamp(time()), "'");
       foreach( $params['customfield'] as $fldid => $value ) {
 	if( $value == '' ) continue;
-	    
+
 	$query = "INSERT INTO ".cms_db_prefix()."module_news_fieldvals (news_id,fielddef_id,value,create_date,modified_date) VALUES (?,?,?,?,?)";
 	$dbr = $db->Execute($query,array($articleid,$fldid,$value,$now,$now));
 	if( !$dbr ) die('FATAL SQL ERROR: '.$db->ErrorMsg().'<br/>QUERY: '.$db->sql);
@@ -169,7 +163,7 @@ if( isset($params['submit']) ) {
 	    if( strlen($value) > 1 ) $text .= $value.' ';
 	  }
 	}
-	    
+
 	$text .= $content.' '.$summary.' '.$title.' '.$title;
 	$module->AddWords($this->GetName(), $articleid, 'article', $text, 
 			  ($useexp == 1 && $this->GetPreference('expired_searchable',0) == 0) ? $enddate : NULL);
@@ -197,17 +191,13 @@ else if( isset($params['preview']) ) {
     // now get the default content id.
     $detail_returnid = ContentOperations::get_instance()->GetDefaultContent();
   }
-  if( isset($params['previewpage']) && (int)$params['previewpage'] > 0 ) {
-    $detail_returnid = (int)$params['previewpage'];
-  }
+  if( isset($params['previewpage']) && (int)$params['previewpage'] > 0 ) $detail_returnid = (int)$params['previewpage'];
 
   $_SESSION['news_preview'] = array('fname'=>basename($tmpfname),'checksum'=>md5_file($tmpfname));
   $tparms = array('preview'=>md5(serialize($_SESSION['news_preview'])));
-  if( isset($params['detailtemplate']) ) {
-    $tparms['detailtemplate'] = trim($params['detailtemplate']);
-  }
+  if( isset($params['detailtemplate']) ) $tparms['detailtemplate'] = trim($params['detailtemplate']);
   $url = $this->create_url('_preview_','detail',$detail_returnid,$tparms,TRUE);
-  
+
   $response = '<?xml version="1.0"?>';
   $response .= '<EditArticle>';
   if( isset($error) && $error != '' ) {
@@ -234,11 +224,11 @@ else if( isset($params['preview']) ) {
 $statusdropdown = array();
 $statusdropdown[$this->Lang('draft')] = 'draft';
 $statusdropdown[$this->Lang('published')] = 'published';
-    
+
 $categorylist = array();
 $query = "SELECT * FROM ".cms_db_prefix()."module_news_categories ORDER BY hierarchy";
 $dbresult = $db->Execute($query);
-    
+
 while ($dbresult && $row = $dbresult->FetchRow()) {
   $categorylist[$row['long_name']] = $row['news_category_id'];
 }
@@ -255,8 +245,7 @@ $smarty->assign('title',$title);
 $parms = array('enablewysiwyg'=>1,'name'=>$id.'content','text'=>$content,'rows'=>10,'cols'=>80);
 $smarty->assign('inputcontent', CmsFormUtils::create_textarea($parms));
 $smarty->assign('allow_summary_wysiwyg',$this->GetPreference('allow_summary_wysiwyg'));
-$parms = array('enablewysiwyg'=>$this->GetPreference('allow_summary_wysiwyg',1),
-	       'name'=>$id.'summary','text'=>$summary,'rows'=>3,'cols'=>80);
+$parms = array('enablewysiwyg'=>$this->GetPreference('allow_summary_wysiwyg',1),'name'=>$id.'summary','text'=>$summary,'rows'=>3,'cols'=>80);
 $smarty->assign('inputsummary', CmsFormutils::create_textarea($parms));
 
 $smarty->assign('extratext',$this->Lang('extra'));
@@ -347,8 +336,7 @@ $smarty->assign('end_tab_content',$this->EndTabContent());
 $smarty->assign('warning_preview',$this->Lang('warning_preview'));
 $contentops = cmsms()->GetContentOperations();
 $smarty->assign('preview_returnid',
-		$contentops->CreateHierarchyDropdown('',$this->GetPreference('detail_returnid',-1),
-						     'preview_returnid'));
+		$contentops->CreateHierarchyDropdown('',$this->GetPreference('detail_returnid',-1),'preview_returnid'));
 {
   $tmp = $this->ListTemplates();
   $tmp2 = array();
