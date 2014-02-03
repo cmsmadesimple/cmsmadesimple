@@ -74,7 +74,7 @@ function smarty_function_cms_selflink($params, &$template)
                 echo '<a href="#" title="'.$title.'"><span class="page_not_exist">' . $params['text'] . '</span></a>';
 				
 				return;
-				}
+			}
 			$pageid = $node->get_tag('id');
 		}
 	}
@@ -208,14 +208,9 @@ function smarty_function_cms_selflink($params, &$template)
 	if (isset($params['anchorlink'])) $url .= '#' . ltrim($params['anchorlink'], '#');
 	if( $urlparam != '' ) $url .= $urlparam;
 
-	if( empty($url) ) {
-		// no url to link to, therefore nothing to do.
-		return;
-	}
+	if( empty($url) ) return; // no url to link to, therefore nothing to do.
 
-	if( isset($params['urlonly']) ) {
-		$urlonly = cms_to_bool($params['urlonly']);
-	}
+	if( isset($params['urlonly']) ) $urlonly = cms_to_bool($params['urlonly']);
 
 	if( $urlonly ) {
 		if( isset($params['assign']) ) {
@@ -273,12 +268,11 @@ function smarty_function_cms_selflink($params, &$template)
 		if (isset($params['more'])) $result .= ' '.$params['more'];
 		$result .= '>';
 
+		$linktext = $name; 
 		if (isset($params['text'])) {
 			$linktext = $params['text'];
 		} elseif (isset($params['menu']) && $params['menu'] == "1") {
 			$linktext = $menu_text;
-		} else {
-			$linktext = $name; 
 		}
 
 		if (isset($params['image']) && ! empty($params['image'])) {
@@ -291,9 +285,7 @@ function smarty_function_cms_selflink($params, &$template)
 			if( $height ) $height = max(1,$height);
 			if( $height ) $result .= " height=\"$height\"";
 			$result .= "/>";
-			if (! (isset($params['imageonly']) && $params['imageonly'])) {
-				$result .= " $linktext";
-			}
+			if (! (isset($params['imageonly']) && $params['imageonly'])) $result .= " $linktext";
 		} else {
 			$result .= $linktext;
 		}

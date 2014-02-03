@@ -123,9 +123,6 @@ if(! isset($_GET['sessiontest']) && (! isset($_POST['page'])) )
 
 	$smarty->assign('languages', $installer->dropdown_lang());
 	
-	if (file_exists(cms_join_path(CMS_INSTALL_BASE, 'releasenotes.txt')))
-		$smarty->assign('release_notes', get_file_contents(cms_join_path(CMS_INSTALL_BASE, 'releasenotes.txt')));
-	
 	$smarty->display('installer_start.tpl');
 	$smarty->display('pagestart.tpl');
 	$smarty->display('installer_end.tpl');

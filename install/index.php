@@ -27,7 +27,7 @@ $max_pages = 7;
 
 
 define('CMS_INSTALL_HELP_URL', 'http://docs.cmsmadesimple.org/installation/installing/permissions-and-php-settings');
-define('CMS_INSTALL_BASE', dirname(__FILE__));
+define('CMS_INSTALL_BASE', __DIR__);
 define('CMS_BASE', dirname(CMS_INSTALL_BASE));
 
 require_once CMS_BASE . DIRECTORY_SEPARATOR . 'lib' . DIRECTORY_SEPARATOR . 'misc.functions.php';

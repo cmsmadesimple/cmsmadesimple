@@ -19,6 +19,7 @@ Core - General
   - Removed many static admin pages, and replaced with new modules
   - accept UTF-8 chars in page alias and in custom URLS
     (punctuation, whitespace, / and . are not allowed in the alias.  punctuation, whitespace and . are not allowed in URLS).
+  - removed the 'ext' parameter from cms_selflink
 
 Core - Bug Reports
   - #9721 There's no check if changelog.txt exists

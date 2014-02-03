@@ -552,7 +552,9 @@ final class ModuleOperations
 						  // upgrade failed
 						  $res2 = array(FALSE,lang('moduleupgradeerror'));
 						  $_SESSION['moduleoperations_result'][$module_name] = $res2;
-
+					  }
+					  if( !$res ) {
+						  // upgrade failed
 						  allow_admin_lang(FALSE); // isn't this ugly.
 						  debug_buffer("Automatic upgrade of $module_name failed");
 						  unset($obj,$this->_modules[$module_name]);
@@ -567,10 +569,10 @@ final class ModuleOperations
 				  }
 			  }
 		  }
-		  allow_admin_lang(FALSE); // isn't this ugly.
 	  }
 
-	  if( (isset($info[$module_name]) && $info[$module_name]['status'] == 'installed') || $force_load ) {
+	  if( (isset($info[$module_name]) && $info[$module_name]['status'] == 'installed') || 
+		  $force_load ) {
 		  if( is_object($obj) ) $this->_modules[$module_name] = $obj;
 		  return TRUE;
 	  }

@@ -1,11 +1,9 @@
 <?php
 
 if (isset($CMS_INSTALL_CREATE_TABLES)) {
-
     $table_ids = array(
         'additional_users'          => array('id' => 'additional_users_id'),
         'admin_bookmarks'           => array('id' => 'bookmark_id'),
-        'admin_recent_pages'        => array('id' => 'id'),
         'content'                   => array('id' => 'content_id'),
         'content_props'             => array('id' => 'content_id'),
         'events'                    => array('id' => 'event_id'),
@@ -27,7 +25,6 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
         $db->CreateSequence($db_prefix.$tableinfo['seq'], $max);
         echo " [" . ilang('done') . "]</p>";
     }
-
 }
 
 # vim:ts=4 sw=4 noet

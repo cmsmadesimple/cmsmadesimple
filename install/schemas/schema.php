@@ -4,7 +4,6 @@ if (isset($CMS_INSTALL_DROP_TABLES)) {
 
 	$db->DropSequence($db_prefix."additional_users_seq");
 	$db->DropSequence($db_prefix."admin_bookmarks_seq");
-	$db->DropSequence($db_prefix."admin_recent_pages_seq");
 	$db->DropSequence($db_prefix."additional_users_seq");
 	$db->DropSequence($db_prefix."content_seq");
 	$db->DropSequence($db_prefix."content_props_seq");
@@ -30,8 +29,6 @@ if (isset($CMS_INSTALL_DROP_TABLES)) {
 	$sqlarray = $dbdict->DropTableSQL($db_prefix."adminlog");
 	$dbdict->ExecuteSQLArray($sqlarray);
 	$sqlarray = $dbdict->DropTableSQL($db_prefix."admin_bookmarks");
-	$dbdict->ExecuteSQLArray($sqlarray);
-	$sqlarray = $dbdict->DropTableSQL($db_prefix."admin_recent_pages");
 	$dbdict->ExecuteSQLArray($sqlarray);
 	$sqlarray = $dbdict->DropTableSQL($db_prefix."content");
 	$dbdict->ExecuteSQLArray($sqlarray);
@@ -68,6 +65,24 @@ if (isset($CMS_INSTALL_DROP_TABLES)) {
 	$sqlarray = $dbdict->DropTableSQL($db_prefix."module_smarty_plugins");
 	$dbdict->ExecuteSQLArray($sqlarray);
 	$sqlarray = $dbdict->DropTableSQL($db_prefix."routes");
+	$dbdict->ExecuteSQLArray($sqlarray);
+	$sqlarray = $dbdict->DropTableSQL($db_prefix.CmsLayoutTemplateType::TABLENAME);
+	$dbdict->ExecuteSQLArray($sqlarray);
+	$sqlarray = $dbdict->DropTableSQL($db_prefix.CmsLayoutTemplateCategory::TABLENAME);
+	$dbdict->ExecuteSQLArray($sqlarray);
+	$sqlarray = $dbdict->DropTableSQL($db_prefix.CmsLayoutTemplate::TABLENAME);
+	$dbdict->ExecuteSQLArray($sqlarray);
+	$sqlarray = $dbdict->DropTableSQL($db_prefix.CmsLayoutTemplate::ADDUSERSTABLE);
+	$dbdict->ExecuteSQLArray($sqlarray);
+	$sqlarray = $dbdict->DropTableSQL($db_prefix.CmsLayoutStylesheet::TABLENAME);
+	$dbdict->ExecuteSQLArray($sqlarray);
+	$sqlarray = $dbdict->DropTableSQL($db_prefix.CmsLayoutCollection::TABLENAME);
+	$dbdict->ExecuteSQLArray($sqlarray);
+	$sqlarray = $dbdict->DropTableSQL($db_prefix.CmsLayoutCollection::TPLTABLE);
+	$dbdict->ExecuteSQLArray($sqlarray);
+	$sqlarray = $dbdict->DropTableSQL($db_prefix.CmsLayoutCollection::CSSTABLE);
+	$dbdict->ExecuteSQLArray($sqlarray);
+	$sqlarray = $dbdict->DropTableSQL($db_prefix.CmsLock::LOCK_TABLE);o
 	$dbdict->ExecuteSQLArray($sqlarray);
 }
 
@@ -129,22 +144,6 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 	    $return = $dbdict->ExecuteSQLArray($sqlarray);
 	  }
 	echo ilang('install_creating_table', 'adminlog', $ado_ret);
-
-
-
-	$flds = "
-		id I KEY,
-		user_id I,
-		title C(255),
-		url C(255),
-		access_time DT
-	";
-	$sqlarray = $dbdict->CreateTableSQL($db_prefix."admin_recent_pages", $flds, $taboptarray);
-	$return = $dbdict->ExecuteSQLArray($sqlarray);
-	$ado_ret = ($return == 2) ? ilang('done') : ilang('failed');
-	echo ilang('install_creating_table', 'admin_recent_pages', $ado_ret);
-
-
 
 	$flds = "
 		content_id I KEY,
@@ -636,7 +635,6 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 	$return = $dbdict->ExecuteSQLArray($sqlarray);
 
 	echo ilang('install_creating_table', CmsLock::LOCK_TABLE, $ado_ret);
-
 }
 
 # vim:ts=4 sw=4 noet

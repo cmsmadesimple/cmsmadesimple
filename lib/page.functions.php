@@ -62,18 +62,14 @@ function check_login($no_redirect = false)
       else {
 	debug_buffer('passhash check failed...  redirect to login');
 	$_SESSION["redirect_url"] = $_SERVER["REQUEST_URI"];
-	if (false == $no_redirect) {
-	  redirect($config['admin_url']."/login.php");
-	}
+	if (false == $no_redirect) redirect($config['admin_url']."/login.php");
 	return false;
       }
     }
     else {
       debug_buffer('No cookies found.  Redirect to login.');
       $_SESSION["redirect_url"] = $_SERVER["REQUEST_URI"];
-      if (false == $no_redirect) {
-	redirect($config['admin_url']."/login.php");
-      }
+      if (false == $no_redirect) redirect($config['admin_url']."/login.php");
       return false;
     }
   }
@@ -82,9 +78,7 @@ function check_login($no_redirect = false)
   if( ($config['debug'] === false) && isset($CMS_ADMIN_PAGE) ) {
     if( !isset($_SESSION[CMS_USER_KEY]) ) {
       // it's not in the session, try to grab something from cookies
-      if( cms_cookies::exists(CMS_SECURE_PARAM_NAME) ) {
-	$_SESSION[CMS_USER_KEY] = cms_cookies::get(CMS_SECURE_PARAM_NAME);
-      }
+      if( cms_cookies::exists(CMS_SECURE_PARAM_NAME) ) $_SESSION[CMS_USER_KEY] = cms_cookies::get(CMS_SECURE_PARAM_NAME);
     }
 
     // now we've got to check the request
@@ -485,10 +479,7 @@ function cms_db_prefix() {
   global $CMS_INSTALL_PAGE;
   global $DONT_LOAD_DB;
 
-  if( isset($CMS_INSTALL_PAGE) && class_exists('CMSInstaller') &&
-      CmsInstaller::get_ext() ) {
-    return CmsInstaller::get_db_prefix();
-  }
+  if( isset($CMS_INSTALL_PAGE) && class_exists('CMSInstaller') && CmsInstaller::get_ext() ) return CmsInstaller::get_db_prefix();
 
   $config = cmsms()->GetConfig();
   return $config['db_prefix'];
@@ -561,16 +552,17 @@ function get_pageid_or_alias_from_url()
   }
 
   $page = '';
+  $query_var = get_parameter_value($config,'query_var');
+  if( !$query_var ) $query_var = 'page'; // safety.
   if (isset($smarty->id) && isset($params[$smarty->id . 'returnid'])) {
     // get page from returnid parameter in module action
     $page = (int)$params[$smarty->id . 'returnid'];
   }
-  else if (isset($config["query_var"]) && $config["query_var"] != '' && isset($_GET[$config["query_var"]])) {
+  else if( isset($_REQUEST[$query_var]) ) {
     // using non friendly urls... get the page alias/id from the query var.
-    $page = $_GET[$config["query_var"]];    
+    $page = trim($_REQUEST[$query_var]);
   }
   else {
-    $page = $_REQUEST['page'];
     // either we're using pretty urls
     // or this is the default page.
     if (isset($_SERVER["REQUEST_URI"]) && !endswith($_SERVER['REQUEST_URI'], 'index.php')) {

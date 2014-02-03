@@ -27,9 +27,11 @@ $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 $userid = get_userid();
 $access = check_permission($userid, "Modify Site Preferences");
 if (!$access) {
-	die('Permission Denied');
-return;
+  die('Permission Denied');
 }
+
+
+
 include_once("header.php");
 
 define('CMS_BASE', dirname(dirname(__FILE__)));
@@ -37,39 +39,30 @@ require_once cms_join_path(CMS_BASE, 'lib', 'test.functions.php');
 
 function checksum_lang($params,&$smarty)
 {
-  if( isset($params['key']) )
-    {
-      return lang($params['key']);
-    }
+  if( isset($params['key']) ) return lang($params['key']);
 }
-
-
 
 function check_checksum_data(&$report)
 {
-  if( (!isset($_FILES['cksumdat'])) || empty($_FILES['cksumdat']['name']) )
-    {
-        $report = lang('error_nofileuploaded');
-	return false;
-    }
-  else if( $_FILES['cksumdat']['error'] > 0 )
-    {
-        $report = lang('error_uploadproblem');
-	return false;
-    }
-  else if( $_FILES['cksumdat']['size'] == 0 )
-    {
-        $report = lang('error_uploadproblem');
-	return false;
-    }
+  if( (!isset($_FILES['cksumdat'])) || empty($_FILES['cksumdat']['name']) ) {
+    $report = lang('error_nofileuploaded');
+    return false;
+  }
+  else if( $_FILES['cksumdat']['error'] > 0 ) {
+    $report = lang('error_uploadproblem');
+    return false;
+  }
+  else if( $_FILES['cksumdat']['size'] == 0 ) {
+    $report = lang('error_uploadproblem');
+    return false;
+  }
   
   $fh = fopen($_FILES['cksumdat']['tmp_name'],'r');
-  if( !$fh )
-    {
-        $report = lang('error_uploadproblem');
-	return false;
-    }
-  
+  if( !$fh ) {
+    $report = lang('error_uploadproblem');
+    return false;
+  }
+
   $gCms = cmsms();
   $config = $gCms->GetConfig();
   $filenotfound = array();
@@ -78,117 +71,86 @@ function check_checksum_data(&$report)
   $filesfailed = array();
   $filespassed = 0;
   $errorlines = 0;
-  while( !feof($fh) )
-    {
-      // get a line
-      $line = fgets($fh,4096);
+  while( !feof($fh) ) {
+    // get a line
+    $line = fgets($fh,4096);
 
-      // strip out comments
-      $pos = strpos($line,'#');
-      if( $pos !== FALSE )
-	{
-	  $line = substr($line,0,$pos);
-	}
+    // strip out comments
+    $pos = strpos($line,'#');
+    if( $pos !== FALSE ) $line = substr($line,0,$pos);
 
-      // trim the line
-      $line = trim($line);
+    // trim the line
+    $line = trim($line);
 
-      // skip empty line
-      if( empty($line) ) continue;
+    // skip empty line
+    if( empty($line) ) continue;
 
-      // split it into fields
-      $md5sum = '';
-      $file = '';
-      if( strstr($line,' *.') !== FALSE )
-	{
-	  list($md5sum,$file) = explode(' *.',$line,2);
-	}
-      else if( strstr($line,'--:--') !== FALSE )
-	{
-	  list($md5sum,$file) = explode('--:--',$line,2);
-	}
-      if( !$md5sum || !$file )
-	{
-	  $errorlines++;
-	  continue;
-        }
-
-      $md5sum = trim($md5sum);
-      $file = trim($file);
-
-      $fn = cms_join_path($config['root_path'],$file);
-      if( !file_exists( $fn ) )
-	{
-	  $filenotfound[] = $file;
-	  continue;
-	}
-
-      if( is_dir( $fn ) ) continue;
-
-      if( !is_readable( $fn ) )
-	{
-	  $notreadable++;
-	  continue;
-	}
-
-      $md5 = md5_file($fn);
-      if( !$md5 )
-	{
-	  $md5failed++;
-	  continue;
-	}
-
-      if( $md5sum != $md5 )
-	{
-	  $filesfailed[] = $file;
-	}
-
-      // it passed.
-      $filespassed++;
+    // split it into fields
+    $md5sum = '';
+    $file = '';
+    if( strstr($line,' *.') !== FALSE ) {
+      list($md5sum,$file) = explode(' *.',$line,2);
     }
+    else if( strstr($line,'--:--') !== FALSE ) {
+      list($md5sum,$file) = explode('--:--',$line,2);
+    }
+    if( !$md5sum || !$file ) {
+      $errorlines++;
+      continue;
+    }
+
+    $md5sum = trim($md5sum);
+    $file = trim($file);
+
+    $fn = cms_join_path($config['root_path'],$file);
+    if( !file_exists( $fn ) ) {
+      $filenotfound[] = $file;
+      continue;
+    }
+
+    if( is_dir( $fn ) ) continue;
+
+    if( !is_readable( $fn ) ) {
+      $notreadable++;
+      continue;
+    }
+
+    $md5 = md5_file($fn);
+    if( !$md5 ) {
+      $md5failed++;
+      continue;
+    }
+
+    if( $md5sum != $md5 )  $filesfailed[] = $file;
+
+    // it passed.
+    $filespassed++;
+  }
   fclose($fh);
 
-  if( $filespassed == 0 || count($filenotfound) || $errorlines || $notreadable || $md5failed || count($filesfailed) )
-    {
-      // build the error report
-      $tmp2 = array();
-      if( $filespassed == 0 )
-	{
-	  $tmp2[] = lang('no_files_scanned');
-	}
-      if( $errorlines )
-	{
-	  $tmp2[] = lang('lines_in_error',$errorlines);
-	}
-      if( count($filenotfound) )
-	{
-	  $tmp2[] = sprintf("%d %s",count($filenotfound),lang('files_not_found'));
-	}
-      if( $notreadable )
-	{
-	  $tmp2[] = sprintf("%d %s",$notreadable,lang('files_not_readable'));
-	}
-      if( $md5failed )
-	{
-	  $tmp2[] = sprintf("%d %s",$md5failed,lang('files_checksum_failed'));
-	}
-      if( !empty($tmp) ) $tmp .= "<br/>";
+  if( $filespassed == 0 || count($filenotfound) || $errorlines || $notreadable || $md5failed || count($filesfailed) ) {
+    // build the error report
+    $tmp2 = array();
+    if( $filespassed == 0 )  $tmp2[] = lang('no_files_scanned');
+    if( $errorlines ) $tmp2[] = lang('lines_in_error',$errorlines);
+    if( count($filenotfound) ) $tmp2[] = sprintf("%d %s",count($filenotfound),lang('files_not_found'));
+    if( $notreadable ) $tmp2[] = sprintf("%d %s",$notreadable,lang('files_not_readable'));
+    if( $md5failed ) $tmp2[] = sprintf("%d %s",$md5failed,lang('files_checksum_failed'));
+    if( !empty($tmp) ) $tmp .= "<br/>";
 
-      $tmp = implode( "<br/>", $tmp2 );
-      if( count($filenotfound) )
-	{
-	  $tmp .= "<br/>".lang('files_not_found').':';
-	  $tmp .= "<br/>".implode("<br/>",$filenotfound)."<br/>";
-	}
-      if( count($filesfailed) )
-	{
-	  $tmp .= "<br/>".count($filesfailed).' '.lang('files_failed').':';
-	  $tmp .= "<br/>".implode("<br/>",$filesfailed)."<br/>";
-	}
-      
-      $report = $tmp;
-      return false;
+    $tmp = implode( "<br/>", $tmp2 );
+    if( count($filenotfound) ) {
+      $tmp .= "<br/>".lang('files_not_found').':';
+      $tmp .= "<br/>".implode("<br/>",$filenotfound)."<br/>";
     }
+    if( count($filesfailed) ) {
+      $tmp .= "<br/>".count($filesfailed).' '.lang('files_failed').':';
+      $tmp .= "<br/>".implode("<br/>",$filesfailed)."<br/>";
+    }
+
+    $report = $tmp;
+    return false;
+  }
 
   return true;
 }
@@ -200,22 +162,19 @@ function generate_checksum_file(&$report)
   $config = $gCms->GetConfig();
   $output = '';
 
-  $excludes = array('^\.svn' , '^CVS$' , '^\#.*\#$' , '~$', '\.bak$', '^uploads$', 
-                    '^tmp$', '^captchas$' );
+  $excludes = array('^\.svn' , '^CVS$' , '^\#.*\#$' , '~$', '\.bak$', '^uploads$', '^tmp$', '^captchas$' );
   $tmp = get_recursive_file_list( $config['root_path'], $excludes);
-  if( count($tmp) <= 1 )
-  {
+  if( count($tmp) <= 1 ) {
     $report = lang('error_retrieving_file_list');
     return false;
   }
   
-  foreach( $tmp as $file )
-    {
-      if( is_dir($file) ) continue;
-      $md5sum = md5_file($file);
-      $file = str_replace($config['root_path'],'',$file);
-      $output .= "{$md5sum}--:--{$file}\n";
-    }
+  foreach( $tmp as $file ) {
+    if( is_dir($file) ) continue;
+    $md5sum = md5_file($file);
+    $file = str_replace($config['root_path'],'',$file);
+    $output .= "{$md5sum}--:--{$file}\n";
+  }
 
   $handlers = ob_list_handlers(); 
   for ($cnt = 0; $cnt < sizeof($handlers); $cnt++) { ob_end_clean(); }
@@ -243,27 +202,20 @@ $db = &$gCms->GetDb();
 // Handle output
 $res = true;
 $report = '';
-if( isset($_POST['action']) )
-  {
-    switch($_POST['action'])
-      {
-      case 'upload':
-	$res = check_checksum_data($report);
-	if( $res === true )
-	  {
-	    $smarty->assign('message',lang('checksum_passed'));
-	  }
-	break;
-      case 'download':
-	$res = generate_checksum_file($report);
-	break;
-      }
+if( isset($_POST['action']) ) {
+  switch($_POST['action']) {
+  case 'upload':
+    $res = check_checksum_data($report);
+    if( $res === true )  $smarty->assign('message',lang('checksum_passed'));
+    break;
+  case 'download':
+    $res = generate_checksum_file($report);
+    break;
   }
+}
 
-if( !$res )
-  {
-    $smarty->assign('error',$report);
-  }
+if( !$res ) $smarty->assign('error',$report);
+
 // Display the output
 $smarty->assign('urlext',$urlext);
 $smarty->assign('cms_secure_param_name',CMS_SECURE_PARAM_NAME);

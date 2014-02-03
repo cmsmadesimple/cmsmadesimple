@@ -9,7 +9,16 @@ $tmp = array('AddGlobalContentPre','AddGlobalContentPost''EditGlobalContentPre',
 	     'ContentStylesheet');
 $query = 'DELETE FROM '.cms_db_prefix().'events WHERE originator = \'Core\' AND 
           event_name IN ('.implode(',',$tmp).')';
-$return = $db->Execute($query);
+$db->Execute($query);
+echo '[done]</p>';
+
+echo '<p>Creating new events...';
+$tmp = array('AddTemplateTypePre','EditTemplateTypePre','AddTemplateTypePost','EditTemplateTypePost','DeleteTemplateTypePre',
+	     'DeleteTemplateTypePost','AddDesignPre','AddDesignPost','EditDesignPre','EditDesignPost','DeleteDesignPre','DeleteDesignPost');
+foreach( $tmp as $one ) {
+  Events::CreateEvent('Core',$tmp);
+}
+echo '[done]</p>';
 
 // create new tables
 
