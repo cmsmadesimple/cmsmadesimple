@@ -6,6 +6,7 @@ global $admin_user;
 //
 
 // minimal theme has the minimal template, and no styesheets.
+echo "<br/>creating initial collections...\n";
 $minimal_theme = new CmsLayoutCollection();
 $minimal_theme->set_name('Minimal');  // id = 19
 $minimal_theme->set_description('Minimal templates and stylesheets');
@@ -56,6 +57,7 @@ $topsimple_leftsubnav_1col_theme->save();
 //
 // Types
 //
+echo "<br/>creating initial template types...\n";
 $page_template_type = new CmsLayoutTemplateType();
 $page_template_type->set_originator('__CORE__');
 $page_template_type->set_name('page');
@@ -82,11 +84,12 @@ $gcb_template_type->save();
 //
 $template_list = array();
 
+echo '<br/>Creating initial templates...'."\n";
 $gcb = new CmsLayoutTemplate();
 $gcb->set_name('footer');
 $gcb->set_type($gcb_template_type);
 $gcb->set_owner($admin_user->id);
-$gcb->set_content('<p>&copy; Copyright {custom_copyright} - CMS Made Simple<br />\r\nThis site is powered by <a href="http://www.cmsmadesimple.org">CMS Made Simple</a> version {cms_version}</p>');
+$gcb->set_content("<p>&copy; Copyright {custom_copyright} - CMS Made Simple<br />\r\nThis site is powered by <a class=\"external\" href=\"http://www.cmsmadesimple.org\">CMS Made Simple</a> version {cms_version}</p>");
 $gcb->save();
 $css_menuleft_1col_theme->add_template($gcb);
 $css_menutop_2col_theme->add_template($gcb);
@@ -220,6 +223,7 @@ $template_list[$template->get_name()] = $template->get_id();
 // Stylesheets
 //
 $css_list = array();
+echo "<br/>creating initial stylesheets...\n";
 
 $txt = <<<EOT
 /*********************************************\nSample stylesheet for mobile and small screen handheld devices\n\nJust a simple layout suitable for smaller screens with less \nstyling cabapilities and minimal css\n\nNote: If you dont want to support mobile devices you can\nsafely remove this stylesheet.\n*********************************************/\n/* remove all padding and margins and set width to 100%. This should be default for handheld devices but its good to set these explicitly */\nbody {\nmargin:0;\npadding:0;\nwidth:100%;\n}\n\n/* hide accessibility noprint and definition */\n.accessibility,\n.noprint,\ndfn {\ndisplay:none;\n}\n\n/* dont want to download image for header so just set bg color */\ndiv#header,\ndiv#footer {\nbackground-color: #385C72;  \ncolor: #fff;\ntext-align:center;\n}\n\n/* text colors for header and footer */\ndiv#header a,\ndiv#footer a {\ncolor: #fff;\n}\n\n/* this doesnt look as nice, but takes less space */\ndiv#menu_vert ul li,\ndiv#menu_horiz ul li {\ndisplay:inline;\n}\n\n/* small border at the bottom to have some indicator */\ndiv#menu_vert ul,\ndiv#menu_horiz ul {\nborder-bottom:1px solid #fff;\n}\n\n/* save some space */\ndiv.breadcrumbs {\ndisplay:none;\n}
@@ -441,6 +445,7 @@ $css->save();
 $css_list[$css->get_name()] = $css;
 
 // now attach stylesheets to the themes.
+echo "<br/>attaching stylesheets to collections...\n";
 $css_menuleft_1col_theme->add_stylesheet($css_list['Layout Left sidebar + 1 column']->get_id());
 $css_menuleft_1col_theme->add_stylesheet($css_list['Navigation CSSMenu - Vertical']->get_id());
 $css_menuleft_1col_theme->add_stylesheet($css_list['Accessibility and cross-browser tools']->get_id());
@@ -509,6 +514,7 @@ ContentOperations::get_instance()->LoadContentType('content');
 //  //  HOME PAGE  //  //
 /////////////////////////
 
+echo "<br/>creating content pages... 1\n"; flush();
 // Home / -1 / NCleanBlue  DEFAULT
 $contentobj = new Content;
 $contentobj->SetName('Home');
@@ -532,6 +538,7 @@ $content_list[$contentobj->Name()] = $contentobj->Id();
 ///////////////////////////////
 
 // How CMSMS Works / -1 / Left simple navigation + 1 column
+echo "<br/>creating content pages... 2\n"; flush();
 $contentobj = new Content;
 $contentobj->SetName('How CMSMS Works');
 $contentobj->SetAlias();
@@ -549,6 +556,7 @@ $contentobj->Save();
 $content_list[$contentobj->Name()] = $contentobj->Id();
 
 // Templates and stylesheets / How CMSMS Works / Left simple navigation + 1 column
+echo "<br/>creating content pages... 3\n"; flush();
 $contentobj = new Content;
 $contentobj->SetName('Templates and stylesheets');
 $contentobj->SetAlias();
@@ -566,6 +574,7 @@ $contentobj->Save();
 $content_list[$contentobj->Name()] = $contentobj->Id();
 
 // Pages and navigation / How CMSMS Works / Left simple navigation + 1 column
+echo "<br/>creating content pages... 4\n"; flush();
 $contentobj = new Content;
 $contentobj->SetName('Pages and navigation');
 $contentobj->SetAlias();
@@ -584,6 +593,7 @@ $content_list[$contentobj->Name()] = $contentobj->Id();
 
 // Content / How CMSMS Works / Left simple navigation + 1 column
 // Pages and navigation / How CMSMS Works / Left simple navigation + 1 column
+echo "<br/>creating content pages... 5\n"; flush();
 $contentobj = new Content;
 $contentobj->SetName('Content');
 $contentobj->SetAlias();
@@ -601,6 +611,7 @@ $contentobj->Save();
 $content_list[$contentobj->Name()] = $contentobj->Id();
 
 // Menu Manager / How CMSMS Works / Left simple navigation + 1 column17
+echo "<br/>creating content pages... 6\n"; flush();
 $contentobj = new Content;
 $contentobj->SetName('Menu Manager');
 $contentobj->SetAlias();
@@ -618,6 +629,7 @@ $contentobj->Save();
 $content_list[$contentobj->Name()] = $contentobj->Id();
 
 // Extensions / How CMSMS Works / Left simple navigation + 1 column
+echo "<br/>creating content pages... 7\n"; flush();
 $contentobj = new Content;
 $contentobj->SetName('Extensions');
 $contentobj->SetAlias();
@@ -635,6 +647,7 @@ $contentobj->Save();
 $content_list[$contentobj->Name()] = $contentobj->Id();
 
 // Event Manager / How CMSMS Works / Left simple navigation + 1 column
+echo "<br/>creating content pages... 8\n"; flush();
 $contentobj = new Content;
 $contentobj->SetName('Event Manager');
 $contentobj->SetAlias();
@@ -652,6 +665,7 @@ $contentobj->Save();
 $content_list[$contentobj->Name()] = $contentobj->Id();
 
 // Workflow / How CMSMS Works / Left simple navigation + 1 column
+echo "<br/>creating content pages... 9\n"; flush();
 $contentobj = new Content;
 $contentobj->SetName('Workflow');
 $contentobj->SetAlias();
@@ -669,6 +683,7 @@ $contentobj->Save();
 $content_list[$contentobj->Name()] = $contentobj->Id();
 
 // Where do I get Help / How CMSMS Works / Left simple navigation + 1 column
+echo "<br/>creating content pages... 10\n"; flush();
 $contentobj = new Content;
 $contentobj->SetName('Where do I get help?');
 $contentobj->SetAlias();
@@ -690,6 +705,7 @@ $content_list[$contentobj->Name()] = $contentobj->Id();
 ///////////////////////////////////////////
 
 // Default Templates Explained / -1 / Left simple navigation + 1 column
+echo "<br/>creating content pages... 11\n"; flush();
 $contentobj = new Content;
 $contentobj->SetName('Default Templates Explained');
 $contentobj->SetAlias();
@@ -708,6 +724,7 @@ $contentobj->Save();
 $content_list[$contentobj->Name()] = $contentobj->Id();
 
 // CMSMS tags in the templates / Default Templates Exlplained / Left simple navigation + 1 column
+echo "<br/>creating content pages... 12\n"; flush();
 $contentobj = new Content;
 $contentobj->SetName('CMSMS tags in the templates');
 $contentobj->SetAlias();
@@ -726,6 +743,7 @@ $contentobj->Save();
 $content_list[$contentobj->Name()] = $contentobj->Id();
 
 // Left simple navigation + 1 column / Default Templates Explained / Left simple navigation + 1 column
+echo "<br/>creating content pages... 13\n"; flush();
 $contentobj = new Content;
 $contentobj->SetName('Left simple navigation + 1 column');
 $contentobj->SetAlias();
@@ -744,6 +762,7 @@ $contentobj->Save();
 $content_list[$contentobj->Name()] = $contentobj->Id();
 
 // Top simple navigation + left subnavigation + 1 column / Default Templates Explained / Top simple navigation + left subnavigation + 1 column
+echo "<br/>creating content pages... 14\n"; flush();
 $contentobj = new Content;
 $contentobj->SetName('Top simple navigation + left subnavigation + 1 column');
 $contentobj->SetAlias();
@@ -762,6 +781,7 @@ $contentobj->Save();
 $content_list[$contentobj->Name()] = $contentobj->Id();
 
 // CSSMenu top + 2 columns / Default Templates Explained / CSSMenu top + 2 columns
+echo "<br/>creating content pages... 15\n"; flush();
 $contentobj = new Content;
 $contentobj->SetName('CSSMenu top + 2 columns');
 $contentobj->SetAlias();
@@ -782,6 +802,7 @@ $contentobj->Save();
 $content_list[$contentobj->Name()] = $contentobj->Id();
 
 // CSSMenu left + 1 column / Default Templates Explained / CSSMenu left + 1 column
+echo "<br/>creating content pages... 16\n"; flush();
 $contentobj = new Content;
 $contentobj->SetName('CSSMenu left + 1 column');
 $contentobj->SetAlias();
@@ -800,6 +821,7 @@ $contentobj->Save();
 $content_list[$contentobj->Name()] = $contentobj->Id();
 
 // Minimal template / Default Templates Explained / Minimal template
+echo "<br/>creating content pages... 17\n"; flush();
 $contentobj = new Content;
 $contentobj->SetName('Minimal template');
 $contentobj->SetAlias();
@@ -817,6 +839,7 @@ $contentobj->Save();
 $content_list[$contentobj->Name()] = $contentobj->Id();
 
 // Higher End / Default Templates Explained / Left simple navigation + 1 column
+echo "<br/>creating content pages... 18\n"; flush();
 $contentobj = new Content;
 $contentobj->SetName('Higher End');
 $contentobj->SetAlias();
@@ -834,6 +857,7 @@ $contentobj->Save();
 $content_list[$contentobj->Name()] = $contentobj->Id();
 
 // NCleanBlue / Higher End / NCleanBlue
+echo "<br/>creating content pages... 19\n"; flush();
 $contentobj = new Content;
 $contentobj->SetName('NCleanBlue');
 $contentobj->SetAlias();
@@ -851,6 +875,7 @@ $contentobj->Save();
 $content_list[$contentobj->Name()] = $contentobj->Id();
 
 // ShadowMenu Tab + 2 columns / Higher End / ShadowMenu Tab + 2 columns
+echo "<br/>creating content pages... 20\n"; flush();
 $contentobj = new Content;
 $contentobj->SetName('ShadowMenu Tab + 2 columns');
 $contentobj->SetAlias();
@@ -870,6 +895,7 @@ $contentobj->Save();
 $content_list[$contentobj->Name()] = $contentobj->Id();
 
 // ShadowMenu left + 1 column / Higher End / ShadowMenu left + 1 column
+echo "<br/>creating content pages... 21\n"; flush();
 $contentobj = new Content;
 $contentobj->SetName('ShadowMenu Left + 1 column');
 $contentobj->SetAlias();
@@ -886,6 +912,7 @@ $contentobj->SetPropertyValue('content_en',
 
 
 // Welcome to Simplex / Default Templates Explained / Higher End / Simplex
+echo "<br/>creating content pages... 22\n"; flush();
 $contentobj = new Content;
 $contentobj->SetName('Welcome to Simplex');
 $contentobj->SetAlias();
@@ -907,6 +934,7 @@ $content_list[$contentobj->Name()] = $contentobj->Id();
 //////////////////////////////////
 
 // Default Extensions / -1 / Left simple navigation + 1 column
+echo "<br/>creating content pages... 23\n"; flush();
 $contentobj = new Content;
 $contentobj->SetName('Default Extensions');
 $contentobj->SetAlias();
@@ -924,6 +952,7 @@ $contentobj->Save();
 $content_list[$contentobj->Name()] = $contentobj->Id();
 
 // Modules / 24 / Left simple navigation + 1 column
+echo "<br/>creating content pages... 24\n"; flush();
 $contentobj = new Content;
 $contentobj->SetName('Modules');
 $contentobj->SetAlias();
@@ -941,6 +970,7 @@ $contentobj->Save();
 $content_list[$contentobj->Name()] = $contentobj->Id();
 
 // News / Modules / Left simple navigation + 1 column
+echo "<br/>creating content pages... 26\n"; flush();
 $contentobj = new Content;
 $contentobj->SetName('News');
 $contentobj->SetAlias();
@@ -958,6 +988,7 @@ $contentobj->Save();
 $content_list[$contentobj->Name()] = $contentobj->Id();
 
 // Menu Manager / Modules / Left simple navigation + 1 column
+echo "<br/>creating content pages... 27\n"; flush();
 $contentobj = new Content;
 $contentobj->SetName('Menu Manager');
 $contentobj->SetAlias();
@@ -976,6 +1007,7 @@ $contentobj->Save();
 $content_list[$contentobj->Name()] = $contentobj->Id();
 
 // Theme Manager / Modules / Left simple navigation + 1 column
+echo "<br/>creating content pages... 28\n"; flush();
 $contentobj = new Content;
 $contentobj->SetName('Theme Manager');
 $contentobj->SetAlias();
@@ -993,6 +1025,7 @@ $contentobj->Save();
 $content_list[$contentobj->Name()] = $contentobj->Id();
 
 // MicroTiny / Modules / Left simple navigation + 1 column
+echo "<br/>creating content pages... 29\n"; flush();
 $contentobj = new Content;
 $contentobj->SetName('MicroTiny');
 $contentobj->SetAlias();
@@ -1011,6 +1044,7 @@ $content_list[$contentobj->Name()] = $contentobj->Id();
 
 
 // Search / Modules / Left simple navigation + 1 column
+echo "<br/>creating content pages... 30\n"; flush();
 $contentobj = new Content;
 $contentobj->SetName('Search');
 $contentobj->SetAlias();
@@ -1029,6 +1063,7 @@ $content_list[$contentobj->Name()] = $contentobj->Id();
 
 
 // Module Manager / Modules / Left simple navigation + 1 column
+echo "<br/>creating content pages... 31\n"; flush();
 $contentobj = new Content;
 $contentobj->SetName('Module Manager');
 $contentobj->SetAlias();
@@ -1047,6 +1082,7 @@ $content_list[$contentobj->Name()] = $contentobj->Id();
 
 
 // Tags / Default Extensions / Left simple navigation + 1 column
+echo "<br/>creating content pages... 32\n"; flush();
 $contentobj = new Content;
 $contentobj->SetName('Tags');
 $contentobj->SetAlias();
@@ -1064,6 +1100,7 @@ $contentobj->Save();
 $content_list[$contentobj->Name()] = $contentobj->Id();
 
 // Tags in the core / Tags / Left simple navigation + 1 column
+echo "<br/>creating content pages... 33\n"; flush();
 $contentobj = new Content;
 $contentobj->SetName('Tags in the core');
 $contentobj->SetAlias('cms_tags');
@@ -1081,6 +1118,7 @@ $contentobj->Save();
 $content_list[$contentobj->Name()] = $contentobj->Id();
 
 // User Defined Tags / Tags / Left simple navigation + 1 column
+echo "<br/>creating content pages... 34\n"; flush();
 $contentobj = new Content;
 $contentobj->SetName('User Defined Tags');
 $contentobj->SetAlias();

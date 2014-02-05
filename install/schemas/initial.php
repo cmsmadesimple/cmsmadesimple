@@ -92,7 +92,7 @@ $gcb = new CmsLayoutTemplate();
 $gcb->set_name('footer');
 $gcb->set_type($gcb_template_type);
 $gcb->add_design($design);
-$gcb->set_content('<p>&copy; Copyright {custom_copyright} - CMS Made Simple<br />\r\nThis site is powered by <a class="external" href="http://www.cmsmadesimple.org">CMS Made Simple</a> version {cms_version}</p>');
+$gcb->set_content("<p>&copy; Copyright {custom_copyright} - CMS Made Simple<br />\r\nThis site is powered by <a class=\"external\" href=\"http://www.cmsmadesimple.org\">CMS Made Simple</a> version {cms_version}</p>");
 $gcb->set_owner($admin_user->id);
 $gcb->save();
 
