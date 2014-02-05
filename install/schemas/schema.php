@@ -82,7 +82,7 @@ if (isset($CMS_INSTALL_DROP_TABLES)) {
 	$dbdict->ExecuteSQLArray($sqlarray);
 	$sqlarray = $dbdict->DropTableSQL($db_prefix.CmsLayoutCollection::CSSTABLE);
 	$dbdict->ExecuteSQLArray($sqlarray);
-	$sqlarray = $dbdict->DropTableSQL($db_prefix.CmsLock::LOCK_TABLE);o
+	$sqlarray = $dbdict->DropTableSQL($db_prefix.CmsLock::LOCK_TABLE);
 	$dbdict->ExecuteSQLArray($sqlarray);
 }
 
