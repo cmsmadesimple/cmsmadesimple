@@ -57,8 +57,6 @@ $(document).ready(function(){
 <div class="pageoverflow">
   <p class="pagetext"></p>
   <p class="pageinput">
-    <a href="javascript:void(0)" id="submit2">{admin_icon icon='true.gif'} {$mod->Lang('submit')}</a>
-    <a href="javascript:void(0)" id="cancel2">{admin_icon icon='back.gif'} {$mod->Lang('cancel')}</a>
     <input type="submit" name="{$actionid}submit" value="{$mod->Lang('submit')}"/>
     <input type="submit" name="{$actionid}cancel" value="{$mod->Lang('cancel')}"/>
   </p>
