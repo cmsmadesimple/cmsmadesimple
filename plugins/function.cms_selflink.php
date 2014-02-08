@@ -294,6 +294,7 @@ function smarty_function_cms_selflink($params, &$template)
 		if( $label_side == 'right' ) $result .= ' '.$label;
 	}
 
+	$result = trim($result);
 	if( isset($params['assign']) ){
 		$smarty->assign(trim($params['assign']),$result);
 		return;
