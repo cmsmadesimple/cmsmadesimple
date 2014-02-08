@@ -83,8 +83,14 @@ class CmsTemplateResource extends CMS_Fixed_Resource_Custom
 		$source = '';
 		$mtime = null;
 
-		$tpl = $this->get_template($name);
-		if( !is_object($tpl) ) return;
+		try {
+			$tpl = $this->get_template($name);
+			if( !is_object($tpl) ) return;
+		}
+		catch( Exception $e ) {
+			audit('','Core','Missing Template: '.$name);
+			return;
+		}
 
 		switch( $this->_section ) {
 		case 'top':

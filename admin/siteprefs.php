@@ -373,8 +373,8 @@ if (isset($_POST["editsiteprefs"])) {
 
       // save.
       if( !$error ) {
-	cms_siteprefs::set('mail_is_set',1);
-	cms_siteprefs::set('mailprefs',serialize($mailprefs));
+		  cms_siteprefs::set('mail_is_set',1);
+		  cms_siteprefs::set('mailprefs',serialize($mailprefs));
       }
       break;
 

@@ -1,9 +1,5 @@
 <div class="pagecontainer">
 
-{if !$mail_is_set}
-	<div class="warning">{lang('info_mail_notset')}</div>
-{/if}
-
 <script type="text/javascript">
 $(document).ready(function(){
   $(document).on('click','[name=submit]',function(){

@@ -200,7 +200,7 @@ $(document).ready(function(){
 {/if}
 {if isset($addt_editor_list)}
 <div class="pageoverflow">
-  <p class="pagetext"><label for="tpl_addeditor">{$mod->Lang('prompt_owner')}:</label>&nbsp;{cms_help key2=help_template_addteditors}</p>
+  <p class="pagetext"><label for="tpl_addeditor">{$mod->Lang('additional_editors')}:</label>&nbsp;{cms_help key2=help_template_addteditors}</p>
   <p class="pageinput">
     <select id="tpl_addeditor" name="{$actionid}addt_editors[]" multiple="multiple" size="5">
     {html_options options=$addt_editor_list selected=$template->get_additional_editors()}

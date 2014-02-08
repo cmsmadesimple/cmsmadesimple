@@ -81,7 +81,7 @@ $(document).ready(function(){
           {if !$item.installed}
             <span title="{$item.description}" class="important">{$item.name}</span>
           {else}
-            <span title="{$item.description}" {if $item.system_module} style="color: blue;"{/if}>{$item.name}</span>
+            <span title="{$item.description}" {if $item.system_module} style="color: green;"{/if}>{$item.name}</span>
           {/if}
       </td>
       <td>{if $item.e_status == 'newer_available'}

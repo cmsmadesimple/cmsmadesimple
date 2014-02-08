@@ -1,5 +1,6 @@
 <?php
 #A
+$lang['additional_editors'] = 'Additional Editors';
 $lang['apply'] = 'Apply';
 $lang['asc'] = 'Ascending';
 $lang['any'] = 'Any';

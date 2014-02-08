@@ -28,7 +28,7 @@ else {
       if( is_array($data) && count($data) ) {
 	foreach( $data as $item ) {
 	  $old = $item->html;
-	  $regex = '/'.CMS_SECURE_PARAM_NAME.'\=[0-9a-z]{8}/';
+	  $regex = '/'.CMS_SECURE_PARAM_NAME.'\=[0-9a-z]{16}/';
 	  $to = CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 	  $new = preg_replace($regex,$to,$old);
 
@@ -36,6 +36,8 @@ else {
 	}
       }
     }
+
+    if(  !cms_siteprefs::get('mail_is_set',0) ) $themeObject->AddNotification(1,'Core',lang('info_mail_notset'));
 
     // if the install directory still existsx
     // add a priority 1 dashboard item

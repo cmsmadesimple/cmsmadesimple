@@ -181,6 +181,7 @@ try {
     $allusers = $userops->LoadUsers();
     $tmp = array();
     foreach( $allusers as $one ) {
+			if( $one->id == 1 ) continue;
       $tmp[$one->id] = $one->username;
     }
     if( is_array($tmp) && count($tmp) ) $smarty->assign('user_list',$tmp);
@@ -188,6 +189,7 @@ try {
     $groupops = cmsms()->GetGroupOperations();
     $allgroups = $groupops->LoadGroups();
     foreach( $allgroups as $one ) {
+			if( $one->id == 1 ) continue;
       if( $one->active == 0 ) continue;
       $tmp[$one->id*-1] = $this->Lang('prompt_group').': '.$one->name; // appends to the tmp array.
     }
