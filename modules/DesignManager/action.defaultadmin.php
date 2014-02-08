@@ -170,6 +170,7 @@ $smarty->assign('tpl_filter',$filter_tpl_rec);
 $smarty->assign('css_filter',$filter_css_rec);
 
 $tmp = ($this->CheckPermission('Modify Templates') || count($templates))?1:0;
+$smarty->assign('coretypename',CmsLayoutTemplateType::CORE);
 $smarty->assign('has_templates',$tmp);
 $smarty->assign('manage_stylesheets',$this->CheckPermission('Manage Stylesheets'));
 $smarty->assign('manage_templates',$this->CheckPermission('Modify Templates'));

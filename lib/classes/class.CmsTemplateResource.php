@@ -130,7 +130,13 @@ class CmsTemplateResource extends CMS_Fixed_Resource_Custom
 
 	public static function page_type_lang_callback($key)
 	{
-		if( $key == '__CORE__' ) return 'Core';
+		if( $key == CmsLayoutTemplateType::CORE ) return 'Core';
+		return lang($key);
+	}
+
+	public static function generic_type_lang_callback($key)
+	{
+		if( $key == CmsLayoutTemplateType::CORE ) return 'Core';
 		return lang($key);
 	}
 

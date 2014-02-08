@@ -375,6 +375,7 @@ $lang['tpl_filter'] = 'Filter Templates';
 $lang['tpl_originators'] = 'Originators';
 $lang['tpl_type'] = 'Template Type';
 $lang['tpl_types'] = 'Template Types';
+$lang['type'] = 'Type';
 
 #U
 $lang['unknown'] = 'Unknown';

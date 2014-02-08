@@ -50,8 +50,6 @@
 					<div class="welcome">
 						<span><a class="welcome-user" href="myaccount.php?{$secureparam}" title="{'myaccount'|lang}">{'myaccount'|lang}</a> {'welcome_user'|lang}: <a href="myaccount.php?{$secureparam}">{$user->username}</a></span>
 					</div>
-					<!-- breadcrubms -->
-					{include file='breadcrumbs.tpl' items=$theme->get_breadcrumbs()} 
 					<!-- bookmarks -->
 					{include file='shortcuts.tpl'}
 				</div>

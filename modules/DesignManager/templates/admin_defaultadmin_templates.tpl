@@ -106,6 +106,7 @@ $(document).ready(function(){
       <p class="pageinput">
         <select id="filter_sortby" name="{$actionid}filter_sortby" title="{$mod->Lang('title_sortby')}">
           <option value="name"{if $tpl_filter.sortby == 'name'} selected="selected"{/if}>{$mod->Lang('name')}</option>
+          <option value="type"{if $tpl_filter.sortby == 'type'} selected="selected"{/if}>{$mod->Lang('type')}</option>
           <option value="created"{if $tpl_filter.sortby == 'created'} selected="selected"{/if}>{$mod->Lang('created')}</option>
           <option value="modified"{if $tpl_filter.sortby == 'modified'} selected="selected"{/if}>{$mod->Lang('modified')}</option>
         </select>

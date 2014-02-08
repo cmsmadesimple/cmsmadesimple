@@ -963,6 +963,7 @@ $lang['gcb_wysiwyg_help'] = 'Enable the WYSIWYG editor while editing Global Cont
 $lang['gd_version'] = 'GD version';
 $lang['general_operation_settings'] = 'General Operation Settings';
 $lang['general_settings'] = 'General Settings';
+$lang['generic'] = 'Generic';
 $lang['globalconfig'] = 'Settings - Global Settings';
 $lang['globalmetadata'] = 'Global Metadata';
 $lang['global_umask'] = 'File Creation Mask (umask)';

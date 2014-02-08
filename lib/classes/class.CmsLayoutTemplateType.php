@@ -46,6 +46,7 @@
  */
 class CmsLayoutTemplateType 
 {
+	const CORE = 'aa__CORE__';
 	const TABLENAME = 'layout_tpl_type';
   private $_dirty;
   private $_data = array();
@@ -72,7 +73,7 @@ class CmsLayoutTemplateType
   {
 	  $out = '';
 	  if( isset($this->_data['originator']) ) $out = $this->_data['originator'];
-	  if( $out == '__CORE__' && $viewable ) $out = 'Core';
+	  if( $out == self::CORE && $viewable ) $out = 'Core';
 	  return $out;
   }
 
@@ -483,7 +484,7 @@ class CmsLayoutTemplateType
 		  $tn = call_user_func($t,$this->get_name());
 	  }
 	  if( !$to ) $to = $this->get_originator();
-	  if( $to == '__CORE__' ) $to = 'Core';
+	  if( $to == self::CORE ) $to = 'Core';
 	  if( !$tn ) $tn = $this->get_name();
 	  return $to.'::'.$tn;
   }

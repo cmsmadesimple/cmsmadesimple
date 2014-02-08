@@ -415,7 +415,7 @@ class dm_design_reader extends dm_reader_base
 			}
 			catch( CmsException $e ) {
 				// should log something here.
-				$type_obj = CmsLayoutTemplateType::load('__CORE__::generic');
+				$type_obj = CmsLayoutTemplateType::load(CmsLayoutTemplateType::CORE.'::generic');
 				$template->set_type($type_obj);
 			}
 

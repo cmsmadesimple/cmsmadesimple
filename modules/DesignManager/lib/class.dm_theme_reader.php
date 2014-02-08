@@ -257,7 +257,7 @@ class dm_theme_reader extends dm_reader_base
 				$rec['type_name'] = 'navigation';
 			}
 			else {
-				$rec['type_originator'] = '__CORE__';
+				$rec['type_originator'] = CmsLayoutTemplateType::CORE;
 				$rec['type_name'] = 'page';
 			}
       $out[$key] = $rec;
@@ -458,7 +458,7 @@ class dm_theme_reader extends dm_reader_base
 
 			$tpl_rec['data'] = $content;
 			$template->set_content($content);
-			$template->set_type('__CORE__::page');
+			$template->set_type(CmsLayoutTemplateType::CORE.'::page');
  			$template->save();
  			$design->add_template($template);
 		}

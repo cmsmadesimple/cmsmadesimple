@@ -37,7 +37,8 @@ class CmsLayoutTemplateQuery extends CmsDbQueryBase
   {
     if( !is_null($this->_rs) ) return;
 
-    $query = 'SELECT SQL_CALC_FOUND_ROWS id FROM '.cms_db_prefix().CmsLayoutTemplate::TABLENAME;
+    $query = 'SELECT SQL_CALC_FOUND_ROWS tpl.id FROM '.cms_db_prefix().CmsLayoutTemplate::TABLENAME.' tpl
+              LEFT JOIN '.cms_db_prefix().CmsLayoutTemplateType::TABLENAME.' type ON tpl.type_id = type.id';
     $where = array('id'=>array(),'type'=>array(),'category'=>array(),'user'=>array(),'design'=>array());
 
     $this->_limit = 1000;
@@ -122,9 +123,13 @@ class CmsLayoutTemplateQuery extends CmsDbQueryBase
 				case 'name':
 				case 'created':
 				case 'modified':
-					$this->_sortby = $val;
+					$this->_sortby = "tpl.$val";
 					break;
 
+				case 'type':
+					$this->_sortby = 'CONCAT(type.originator,type.name)';
+					break;
+					
 				default:
 					throw new CmsInvalidDataException($val.' is an invalid sortby for '.__CLASS__);
 				}
