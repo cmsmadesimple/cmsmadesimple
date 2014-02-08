@@ -62,6 +62,7 @@ $(document).ready(function(){
 
     $('#edittplfilter').on('click', function () {
       $('#filterdialog').dialog({
+        width: 'auto',
         buttons: {
           '{$mod->Lang('submit')}': function () {
             $(this).dialog('close');
