@@ -89,9 +89,6 @@ function search_AddWords(&$obj, $module = 'Search', $id = -1, $attr = '', $conte
       //Clean up the content
       $stemmed_words = $obj->StemPhrase($content);
       $words = array_count_values($stemmed_words);
-      if( strstr($content,'test') !== FALSE ) {
-	debug_display($words); die('after stem');
-      }
 
       $q = "SELECT id FROM ".cms_db_prefix().'module_search_items WHERE module_name=?';
       $parms = array($module);
