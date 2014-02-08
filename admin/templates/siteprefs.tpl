@@ -55,10 +55,6 @@ $(document).ready(function(){
 			</p>
 		</div>
 		<div class="pageoverflow">
-			<p class="pagetext"><label for="nogcbwysiwyg">{lang('nogcbwysiwyg')}:</label></p>
-			<p class="pageinput"><input type="hidden" name="nogcbwysiwyg" value="0"/><input id="nogcbwysiwyg" class="pagenb" type="checkbox" value="1" name="nogcbwysiwyg" {if $nogcbwysiwyg == "1"}checked="checked"{/if} />&nbsp;{cms_help key2='siteprefs_nogcbwysiwyg'}</p>
-		</div>
-		<div class="pageoverflow">
 			<p class="pagetext"><label for="globalmetadata">{lang('globalmetadata')}:</label>&nbsp;{cms_help key2='siteprefs_globalmetadata'}</p>
 			<p class="pageinput"><textarea id="globalmetadata" class="pagesmalltextarea" name="metadata" cols="80" rows="20">{$metadata}</textarea></p>
 		</div>

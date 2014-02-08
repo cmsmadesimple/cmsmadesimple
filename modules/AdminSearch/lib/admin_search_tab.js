@@ -16,7 +16,7 @@ function begin_section(id,lbl,desc) {
   cur_section = lbl;
   var txt = '<li class="section" id="sec_'+id+'">'+lbl+'&nbsp;(<span class="section_count">0</span>)';
   txt = txt + '<div class="section_children" style="display: none;">';
-  if( typeof desc == 'string' ) {
+  if( typeof desc == 'string' && desc.length > 0 ) {
     txt += '<p>'+desc+'</p>';
   }
   txt += '<ul id="'+id+'"><ul>';
@@ -33,10 +33,11 @@ function add_result(listid,content,title,url,text) {
     html = '<li><a href="'+url+'" target="_blank" title="'+title+'">'+content+'</a>';
   }
   if( text.length > 0 ) html = html + '<p>'+text+'</p>';
+  alert(listid);
   html = html + '</li>';
-  var c = $('ul#'+listid).children().length + 1;
-  $('ul#'+listid).closest('li.section').find('span.section_count').html(c);
   $('ul#'+listid).append(html);
+  var c = $('ul#'+listid).children().length;
+  $('ul#'+listid).closest('li.section').find('span.section_count').html(c);
 
   $('#searchresults').find('a').each(function(){
     var t = $(this).data('events');

@@ -80,8 +80,7 @@ if( is_array($slaves) && count($slaves) ) {
       begin_section($one_slave['class'],$obj->get_name(),$obj->get_section_description());
       foreach( $results as $one ) {
 	$text = isset($one['text'])?$one['text']:'';
-	add_result($one_slave['class'],$one['title'],$one['description'],
-		   isset($one['edit_url'])?$one['edit_url']:'',$text);
+	add_result($one_slave['class'],$one['title'],$one['description'],isset($one['edit_url'])?$one['edit_url']:'',$text);
       }
     }
     end_section();

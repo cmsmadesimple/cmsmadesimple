@@ -120,6 +120,7 @@ if (isset($_POST["submit"])) {
       }
       else {
 	set_preference($userid, 'default_cms_language', get_preference($adminid, 'default_cms_language'));
+	set_preference($userid, 'wysiwyg' get_preference($adminid,'backendwysiwyg'));
 	set_preference($userid, 'admintheme', get_site_preference('logintheme',CmsAdminThemeBase::GetDefaultTheme()));
 	set_preference($userid, 'bookmarks', get_preference($adminid, 'bookmarks'));
 	set_preference($userid, 'recent', get_preference($adminid, 'recent'));

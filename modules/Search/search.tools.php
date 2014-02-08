@@ -85,41 +85,38 @@ function search_AddWords(&$obj, $module = 'Search', $id = -1, $attr = '', $conte
 
   @$obj->SendEvent('SearchItemAdded', array($module, $id, $attr, &$content, $expires));
 		
-  if ($content != "")
-    {		
+  if ($content != "") {
       //Clean up the content
       $stemmed_words = $obj->StemPhrase($content);
       $words = array_count_values($stemmed_words);
-		
+      if( strstr($content,'test') !== FALSE ) {
+	debug_display($words); die('after stem');
+      }
+
       $q = "SELECT id FROM ".cms_db_prefix().'module_search_items WHERE module_name=?';
       $parms = array($module);
 
-      if( $id != -1 )
-	{
-	  $q .= " AND content_id=?";
-	  $parms[] = $id;
-	}
-      if( $attr != '' )
-	{
-	  $q .= " AND extra_attr=?";
-	  $parms[] = $attr;
-	}
+      if( $id != -1 ) {
+	$q .= " AND content_id=?";
+	$parms[] = $id;
+      }
+      if( $attr != '' ) {
+	$q .= " AND extra_attr=?";
+	$parms[] = $attr;
+      }
       $dbresult = $db->Execute($q, $parms);
 		
-      if ($dbresult && $dbresult->RecordCount() > 0 && $row = $dbresult->FetchRow())
-	{
-	  $itemid = $row['id'];
-	}
-      else
-	{
-	  $itemid = $db->GenID(cms_db_prefix()."module_search_items_seq");
-	  $db->Execute('INSERT INTO '.cms_db_prefix().'module_search_items (id, module_name, content_id, extra_attr, expires) VALUES (?,?,?,?,?)', array($itemid, $module, $id, $attr, ($expires != NULL ? trim($db->DBTimeStamp($expires), "'") : NULL) ));
-	}
+      if ($dbresult && $dbresult->RecordCount() > 0 && $row = $dbresult->FetchRow()) {
+	$itemid = $row['id'];
+      }
+      else {
+	$itemid = $db->GenID(cms_db_prefix()."module_search_items_seq");
+	$db->Execute('INSERT INTO '.cms_db_prefix().'module_search_items (id, module_name, content_id, extra_attr, expires) VALUES (?,?,?,?,?)', array($itemid, $module, $id, $attr, ($expires != NULL ? trim($db->DBTimeStamp($expires), "'") : NULL) ));
+      }
 		
-      foreach ($words as $word=>$count)
-	{
-	  $db->Execute('INSERT INTO '.cms_db_prefix().'module_search_index (item_id, word, count) VALUES (?,?,?)', array($itemid, $word, $count));
-	}
+      foreach ($words as $word=>$count) {
+	$db->Execute('INSERT INTO '.cms_db_prefix().'module_search_index (item_id, word, count) VALUES (?,?,?)', array($itemid, $word, $count));
+      }
     }
 }
 
@@ -212,13 +209,7 @@ function search_DoEvent(&$module, $originator, $eventname, &$params )
     $text .= str_repeat(' '.$content->MenuText(), 2) . ' ';
 
     $props = $content->Properties();
-    if( is_object($props) && isset($props->mPropertyValues) ) {
-      // old (pre 1.11 code)
-      foreach ($props->mPropertyValues as $k=>$v) {
-	$text .= $v.' ';
-      }
-    }
-    else if( is_array($props) && count($props) ) {
+    if( is_array($props) && count($props) ) {
       foreach( $props as $k => $v ) {
 	$text .= $v.' ';
       }
