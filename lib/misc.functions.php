@@ -837,8 +837,13 @@ function munge_string_to_url($alias, $tolower = false, $withslash = false)
 {
   if ($tolower == true) $alias = mb_strtolower($alias);
 
-  // check for invalid chars
-  $expr = '/[^\p{L}-\d]/u';
+  // remove extra dashes and spaces.
+  $alias = str_replace(' ','-',$alias);
+  $alias = str_replace('---','-',$alias);
+  $alias = str_replace('--','-',$alias);
+
+  // remove invalid chars
+  $expr = '/[^\p{L}\-\d]/u';
   if( $withslash ) $expr = '/[^\p{L}\/]/u';
   $tmp = preg_replace($expr,'',$alias);
   return trim($tmp);
