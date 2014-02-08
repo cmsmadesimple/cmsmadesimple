@@ -14,7 +14,7 @@
 
     $(document).ready(function() {
         $(document).on('click', '#btn_submit', function() {
-            if (confirm('')) {
+            if (confirm('{$mod->Lang('confirm_reorder')}')) {
                 var tree = $.toJSON(parseTree($('#masterlist')));
                 var ajax_res = false;
 

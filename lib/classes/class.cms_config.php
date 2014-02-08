@@ -217,15 +217,10 @@ final class cms_config implements ArrayAccess
 	  }
 
 	  // from the config file.
-	  if( isset($this->_data[$key]) ) {
-		  return $this->_data[$key];
-	  }
+	  if( isset($this->_data[$key]) ) return $this->_data[$key];
 
 	  // cached, calculated values.
-	  if( isset($this->_cache[$key]) ) {
-		  // this saves recursion and dynamic calculations all the time.
-		  return $this->_cache[$key];
-	  }
+	  if( isset($this->_cache[$key]) ) return $this->_cache[$key]; // this saves recursion and dynamic calculations all the time.
 
 	  // it's not explicitly specified in the config file.
 	  //$calculated_root_path = dirname(dirname(dirname(__FILE__)));

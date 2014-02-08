@@ -153,6 +153,7 @@ for( $i = 0; $i < $npages; $i++ ) {
   $pagelist[$i+1] = $i+1;
 }
 
+$smarty->assign('indent',cms_userprefs::get('indent',1));
 $smarty->assign('locks',$builder->get_locks());
 $smarty->assign('pagelimit',$pagelimit);
 $smarty->assign('pagelist',$pagelist);

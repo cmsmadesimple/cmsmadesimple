@@ -19,7 +19,7 @@ function begin_section(id,lbl,desc) {
   if( typeof desc == 'string' && desc.length > 0 ) {
     txt += '<p>'+desc+'</p>';
   }
-  txt += '<ul id="'+id+'"><ul>';
+  txt += '<ul id="'+id+'"></ul>';
   txt += '</div>';
   $('#searchresults').append(txt);
 }
@@ -33,7 +33,6 @@ function add_result(listid,content,title,url,text) {
     html = '<li><a href="'+url+'" target="_blank" title="'+title+'">'+content+'</a>';
   }
   if( text.length > 0 ) html = html + '<p>'+text+'</p>';
-  alert(listid);
   html = html + '</li>';
   $('ul#'+listid).append(html);
   var c = $('ul#'+listid).children().length;

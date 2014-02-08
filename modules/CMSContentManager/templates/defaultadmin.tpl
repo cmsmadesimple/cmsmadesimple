@@ -227,7 +227,7 @@ $(document).ready(function () {
 						{$row.hier}
 				{elseif $column == 'page'}
 					{if $row.can_edit}
-						{repeat string='-&nbsp;&nbsp;' times=$row.depth-2}	
+						{if $indent}{repeat string='-&nbsp;&nbsp;' times=$row.depth-2}{/if}
 							{* the tooltip *}
 							{capture assign='tooltip_pageinfo'}{strip}
 								<strong>{$mod->Lang('prompt_content_id')}:</strong> {$row.id}<br/>

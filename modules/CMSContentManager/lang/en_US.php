@@ -57,6 +57,7 @@ $lang['colhdr_view'] = 'View';
 $lang['coltitle_view'] = 'The icon in this column allows viewing the page in a new browser tab.';
 $lang['confirm_delete_page'] = 'Are you sure you want to delete this content item?';
 $lang['confirm_expandall'] = 'Are you sure you want to expand all content?  On large sites this may cause problems.  Please use caution';
+$lang['confirm_reorder'] = 'Are you sure you want to save the content in this order';
 $lang['confirm_setdefault'] = 'Are you sure you want to change the default content page for this website?';
 $lang['confirm_setinactive'] = 'Are you sure you want to set this page inactive?\nThis page will not be viewable, and may affect the behaviour of a working website?';
 $lang['confirm_steal_lock'] = 'This page is locked.  Although you may steal this lock it is not always a nice thing to do.  The other party may lose valuable content edits.\n\n Are you sure you want to continue?';
