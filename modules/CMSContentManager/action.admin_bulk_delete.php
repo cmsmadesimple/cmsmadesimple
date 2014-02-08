@@ -61,21 +61,15 @@ function cmscm_get_deletable_pages($node)
   $out = array();
   if( cmscm_admin_bulk_delete_can_delete($node) ) {
     // we can delete the parent node.
-    $tmp = array();
+    $out[] = $node->get_tag('id');
     if( $node->has_children() ) {
       // it has children.
       $children = $node->get_children();
       foreach( $children as $child_node ) {
-	// check access to this node, and it's children
-	if( !cmscm_admin_bulk_delete_can_delete($child_node) ) {
-	  $out = array();
-	  return $out;
-	}
-	$tmp[] = $child_node->get_tag('id');
+	$tmp = cmscm_get_deletable_pages($child_node);
+	$out = array_merge($out,$tmp);
       }
     }
-    $out[] = $node->get_tag('id');
-    if( count($tmp) ) $out = array_merge($out,$tmp);
   }
   return $out;
 }
@@ -85,10 +79,6 @@ if( isset($params['cancel']) ) {
   $this->RedirectToAdminTab();
 }
 if( isset($params['submit']) ) {
-//   if( !isset($params['deletecontent']) ) {
-//     $this->SetError($this->Lang('error_missingparam'));
-//     $this->RedirectToAdminTab();
-//   }
 
   if( isset($params['confirm1']) && isset($params['confirm2']) && $params['confirm1'] == 1  && $params['confirm2'] == 1 ) {
     //
@@ -155,7 +145,7 @@ foreach( $pagelist as $pid ) {
   if( !$node ) continue;  // this should not happen, but hey.
   $content = $node->getContent(FALSE,FALSE,FALSE);
   if( !is_object($content) ) continue; // this should never happen either
-  
+
   if( $content->DefaultContent() ) {
     echo $this->ShowErrors($this->Lang('error_delete_defaultcontent'));
     continue;
