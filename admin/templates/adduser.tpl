@@ -1,5 +1,4 @@
 <div class="pagecontainer">
-<h3>{lang('adduser')}</h3>
 
 {form_start url='adduser.php'}
 {tab_header name='user' label=lang('profile')}
