@@ -51,6 +51,7 @@ function cmscm_admin_bulk_delete_can_delete($node)
 
   $id = (int)$node->get_tag('id');
   if( $id < 1 ) return FALSE;
+  if( $id == ContentOperations::get_instance()->GetDefaultContent() ) return FALSE;
 
   return ContentOperations::get_instance()->CheckPageAuthorship(get_userid(),$id);
 }
@@ -103,6 +104,7 @@ if( isset($params['submit']) ) {
 	if( !$node ) continue;
 	$content = $node->getContent(FALSE,FALSE,TRUE);
 	if( !is_object($content) ) continue;
+	if( $content->DefaultContent() ) continue;
 	$content->Delete();
 	$i++;
       }

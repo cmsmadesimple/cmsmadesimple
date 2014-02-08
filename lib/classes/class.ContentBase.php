@@ -939,6 +939,10 @@ abstract class ContentBase
 					// If a '-2' version of the alias already exists
 					// Check the '-3' version etc.
 					while ($contentops->CheckAliasError($alias.'-'.$alias_num_add) !== FALSE) {
+						if( $alias_num_add > 100 ) {
+							$tmp = $contentops->CheckAliasError($alias.'-'.$alias_num_add);
+							die('foobar '.$alias.' '.$tmp);
+						}
 						$alias_num_add++;
 					}
 					$alias .= '-'.$alias_num_add;
