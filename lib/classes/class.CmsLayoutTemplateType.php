@@ -587,7 +587,7 @@ class CmsLayoutTemplateType
 	  $db = cmsms()->GetDb();
 	  $query = 'SELECT * FROM '.cms_db_prefix().self::TABLENAME;
 		if( count(self::$_cache) ) $query .= ' WHERE id NOT IN ('.implode(',',array_keys(self::$_cache)).')';
-		$query .= '	ORDER BY modified DESC';
+		$query .= '	ORDER BY modified ASC';
 	  $list = $db->GetArray($query);
 	  if( !is_array($list) || count($list) == 0 ) return;
 
