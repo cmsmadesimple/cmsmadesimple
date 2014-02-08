@@ -24,7 +24,6 @@ function smarty_function_anchor($params, &$template)
   $content = cms_utils::get_current_content();
   if( !is_object($content) ) return;
 
-  // Added by Russ for class, tabindex and title for anchor 2006/07/19
   $class="";
   $title="";
   $tabindex="";
@@ -33,22 +32,16 @@ function smarty_function_anchor($params, &$template)
   if (isset($params['title'])) $title = ' title="'.$params['title'].'"';
   if (isset($params['tabindex'])) $tabindex = ' tabindex="'.$params['tabindex'].'"';
   if (isset($params['accesskey'])) $accesskey = ' accesskey="'.$params['accesskey'].'"';
-  // End of first part added by Russ 2006/07/19
 
   $url = $content->GetURL().'#'.trim($params['anchor']);
   $url = str_replace('&amp;','***',$url);
   $url = str_replace('&', '&amp;', $url);
   $url = str_replace('***','&amp;',$url);
   if (isset($params['onlyhref']) && ($params['onlyhref'] == '1' || $params['onlyhref'] == 'true')) {
-    // Note if you set 'onlyheref' that is what you get - no class or title or tabindex or text
     $tmp =  $url;
   }
   else {
-    // Line replaced by Russ
-    //	echo '<a href="'.$url.'">'.$params['text'].'</a>';
-    // Line replaced with -  by Russ to reflect class and title for anchor 2006/07/19
     $tmp = '<a href="'.$url.'"'.$class.$title.$tabindex.$accesskey.'>'.$params['text'].'</a>';
-    // End of second part added by Russ 2006/07/19
   }
 
   if( isset($params['assign']) ){
@@ -56,11 +49,5 @@ function smarty_function_anchor($params, &$template)
     return;
   }
   echo $tmp;
-	
-}
-
-#Amended by Russ for class, tabindex and title for anchor 2006/07/19
-function smarty_cms_about_function_anchor() {
-  echo lang('about_function_anchor');
 }
 ?>
