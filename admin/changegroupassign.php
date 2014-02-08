@@ -197,7 +197,6 @@ echo '<div class="pagecontainer">';
 echo $themeObject->ShowHeader('groupassignments',array($group_name));
 echo $smarty->fetch('changeusergroup.tpl');
 echo '</div>';
-echo '<p class="pageback"><a class="pageback" href="'.$themeObject->BackUrl().'">&#171; '.lang('back').'</a></p>';
 
 
 include_once("footer.php");

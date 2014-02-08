@@ -106,7 +106,6 @@ if ($error != "")
 			</form>
 	</div>
 </div>
-<p class="pageback"><a class="pageback" href="<?php echo $themeObject->BackUrl(); ?>">&#171; <?php echo lang('back')?></a></p>
 
 <?php
 include_once("footer.php");

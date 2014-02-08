@@ -223,8 +223,6 @@ if ($access)
 } // switch
 
 
-echo "<p class=\"pageback\"><a class=\"pageback\" href=\"".$themeObject->BackUrl()."\">&#171; ".lang('back')."</a></p>\n";
-
 echo "</div>\n";
 echo "</div>\n";
 

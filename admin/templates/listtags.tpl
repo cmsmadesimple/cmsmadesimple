@@ -70,4 +70,3 @@
     </table>
   {/if}
 </div>
-<p class="pageback"><a class="pageback" href="{$back_url}">&#171; {'back'|lang}</a></p>

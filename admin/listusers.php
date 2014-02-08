@@ -226,7 +226,7 @@ echo '<div class="pagecontainer">';
 echo '<div class="pageoverflow">'.$themeObject->ShowHeader('currentusers').'</div>';
 $smarty->display('listusers.tpl');
 ?>
-<p class="pageback"><a class="pageback" href="<?php echo $themeObject->BackUrl(); ?>">&#171; <?php echo lang('back')?></a></p>
+
 <?php
 echo '</div>';
 include_once("footer.php");

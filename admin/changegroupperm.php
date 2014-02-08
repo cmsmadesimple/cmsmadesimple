@@ -162,7 +162,7 @@ if( !empty($message) ) echo $themeObject->ShowMessage($message);
 echo '<div class="pagecontainer">'.$themeObject->ShowHeader('grouppermissions',array($group_name));
 echo $smarty->fetch('changegroupperm.tpl');
 echo '</div>';
-echo '<p class="pageback"><a class="pageback" href="'.$themeObject->BackUrl().'">&#171; '.lang('back').'</a></p>';
+
 include_once("footer.php");
 
 # vim:ts=4 sw=4 noet

@@ -207,7 +207,4 @@ jQuery(document).ready(function(){
 {/if}
 
 {$tabs_end}
-  <p class="pageback">
-    <a class="pageback" href="{$backurl}">&#171; {'back'|lang}</a>
-  </p>
 </div>

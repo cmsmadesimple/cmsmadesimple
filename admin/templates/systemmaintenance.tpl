@@ -121,6 +121,4 @@
 
 {$theme->EndTabContent()}
 
-<p class="pageback"><a class="pageback" href="{$backurl}">&#171; {lang('back')}</a></p>
-
 </div>

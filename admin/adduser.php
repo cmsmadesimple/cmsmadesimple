@@ -177,7 +177,6 @@ foreach( $userlist as $one ) {
 $smarty->assign('users',$out);
 
 $smarty->display('adduser.tpl');
-echo '<p class="pageback"><a class="pageback" href="'.$themeObject->BackUrl().'">&#171; '.lang('back').'</a></p>';
 
 include_once("footer.php");
 

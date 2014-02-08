@@ -48,7 +48,6 @@ $config = cmsms()->GetConfig();
 include_once("header.php");
 $smarty = cmsms()->GetSmarty();
 $smarty->assign('header',$themeObject->ShowHeader('tags'));
-$smarty->assign('back_url'.$themeObject->BackURL());
 
 if ($action == "showpluginhelp") {
   $content = '';
@@ -180,7 +179,6 @@ else {
   $smarty->assign('plugins',$file_array);
 }
 
-$smarty->assign('back_url',$themeObject->BackURL());
 echo $smarty->fetch('listtags.tpl');
 include_once("footer.php");
 

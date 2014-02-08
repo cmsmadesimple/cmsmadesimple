@@ -274,7 +274,6 @@ if ($access) {
   echo "<input type=\"hidden\" name=\"event\" value=\"$event\" />\n";
   echo "<input type=\"submit\" name=\"add\" value=\"".lang('add')."\" />";
   echo "</form>\n";
-  echo "<p class=\"pageback\"><a class=\"pageback\" href=\"".$themeObject->BackUrl()."\">&#171; ".lang('back')."</a></p>\n";
   echo "</div>\n";
 }
 else

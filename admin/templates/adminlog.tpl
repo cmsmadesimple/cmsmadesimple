@@ -119,5 +119,3 @@
 
 
 </div>
-
-<p class="pageback"><a class="pageback" href="{$backurl}">&#171;{$langback}</a></p>

@@ -118,7 +118,5 @@
 </script>
 {/literal}
 
-<p class="pageback"><a class="pageback" href="{$backurl}">&#171; {si_lang a=back}</a></p>
-
 </div>
 </div>

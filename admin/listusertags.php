@@ -111,7 +111,7 @@ if( count($tags) )
 </div>
 </div>
 <?php
-echo '<p class="pageback"><a class="pageback" href="'.$themeObject->BackUrl().'">&#171; '.lang('back').'</a></p>';
+
 include_once("footer.php");
 
 # vim:ts=4 sw=4 noet

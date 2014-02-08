@@ -109,7 +109,6 @@ if( $USE_OUTPUT_BUFFERING ) {
 
 if( !isset($USE_THEME) || $USE_THEME != false ) {
   if (!$suppressOutput) {
-    echo '<p class="pageback"><a class="pageback" href="'.$themeObject->BackUrl().'">&#171; '.lang('back').'</a></p>';
     echo '</div>';
     include_once("footer.php");
   }

@@ -128,7 +128,4 @@ $(document).ready(function(){
 {tab_end}
 {form_end}
 
-<p class="pageback">
-  <a class="pageback" href="{$back_url}">&#171; {lang('back')}</a>
-</p>
 </div>
