@@ -263,22 +263,26 @@ if (isset($_POST["username"]) && isset($_POST["password"])) {
       }
       else {
 	$homepage = get_preference($oneuser->id,'homepage');
+	if( $homepage ) {
+	  // quick hacks to remove old secure param name from homepage url
+	  // and replace with the correct one.
+	  $homepage = str_replace('&amp;','&',$homepage);
+	  $tmp = explode('?',$homepage);
+	  @parse_str($tmp[1],$tmp2);
+	  if( in_array('_s_',array_keys($tmp2)) ) unset($tmp2['_s_']);
+	  if( in_array('sp_',array_keys($tmp2)) ) unset($tmp2['sp_']);
+	  $tmp2[CMS_SECURE_PARAM_NAME] = $_SESSION[CMS_USER_KEY];
+	  foreach( $tmp2 as $k => $v ) {
+	    $tmp3[] = $k.'='.$v;
+	  }
+	  $homepage = $tmp[0].'?'.implode('&amp;',$tmp3);
 
-	// quick hacks to remove old secure param name from homepage url
-	// and replace with the correct one.
-	$homepage = str_replace('&amp;','&',$homepage);
-	$tmp = explode('?',$homepage);
-	@parse_str($tmp[1],$tmp2);
-	if( in_array('_s_',array_keys($tmp2)) ) unset($tmp2['_s_']);
-	if( in_array('sp_',array_keys($tmp2)) ) unset($tmp2['sp_']);
-	$tmp2[CMS_SECURE_PARAM_NAME] = $_SESSION[CMS_USER_KEY];
-	foreach( $tmp2 as $k => $v ) {
-	  $tmp3[] = $k.'='.$v;
+	  // and redirect.
+	  $homepage = html_entity_decode($homepage);
 	}
-	$homepage = $tmp[0].'?'.implode('&amp;',$tmp3);
-
-	// and redirect.
-	$homepage = html_entity_decode($homepage);
+	else {
+	  $homepage = $config['admin_url'];
+	}
 	redirect($homepage);
       }
     }
