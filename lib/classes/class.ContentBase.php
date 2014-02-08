@@ -929,6 +929,7 @@ abstract class ContentBase
 			// auto generate an alias
 			$tolower = true;
 			$alias = munge_string_to_url($alias, $tolower);
+
 			// Make sure auto-generated new alias is not already in use on a different page, if it does, add "-2" to the alias
 			$contentops = $gCms->GetContentOperations();
 			$error = $contentops->CheckAliasError($alias, $this->Id());
@@ -1651,7 +1652,7 @@ abstract class ContentBase
 		// alias
 		$tmp = null;
 		if( isset($params['alias']) ) $tmp = trim($params['alias']);
-		if( !$editing || $tmp ) {
+		if( !$editing || $tmp || ($this->Alias() && !$tmp) ) {
 			// the alias param may not exist (depending upon permissions)
 			// this method will set the alias to the supplied value if it is set
 			// or auto-generate one, when adding a new page.
