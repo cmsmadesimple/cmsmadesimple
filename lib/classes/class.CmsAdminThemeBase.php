@@ -411,7 +411,7 @@ abstract class CmsAdminThemeBase
 										'show_in_menu'=>$this->HasPerm('eventPerms'));
 		$items['editeventhandler'] = array('url'=>'editevent.php','parent'=>'eventhandlers',
 										   'title'=>$this->_FixSpaces(lang('editeventhandler')),
-										   'description'=>lang('editeventshandler'),
+										   'description'=>lang('editeventhandlerdescription'),
 										   'show_in_menu'=>false);
 		$items['editusertag'] = array('url'=>'editusertag.php','parent'=>'usertags',
 									  'title'=>$this->_FixSpaces(lang('editusertag')),
