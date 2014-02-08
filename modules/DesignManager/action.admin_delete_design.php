@@ -63,13 +63,15 @@ try {
       $css_id_list = $design->get_stylesheets();
       if( is_array($css_id_list) && count($css_id_list) ) {
 				// get the designs that are attached to these stylesheets
-				$query = 'SELECT design_id FROM '.cms_db_prefix().CmsLayoutCollection::CSSTABLE.'
-                  WHERE css_id != ?';
-				foreach( $css_id_list as $css_id ) {
-					$dbr = $db->GetOne($query,array($css_id));
-					if( $dbr ) continue; // not orphaned
-					// here it's orphaned, we'll nuke it.
-					$ops = StylesheetOperations::get_instance()->DeleteStylesheetByID($css_id);
+				$css_list = CmsLayoutTemplate::load_bulk($tpl_id_list);
+				if( is_array($css_list) && count($css_list) ) {
+					foreach( $css_list as &$css ) {
+						$x = $css->get_designs();
+						if( is_array($x) && count($x) == 1 && $x[0] == $design->get_id() ) {
+							// its orphaned
+							$css->delete();
+						}
+					}
 				}
       }
     }

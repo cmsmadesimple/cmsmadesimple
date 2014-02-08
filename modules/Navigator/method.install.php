@@ -101,6 +101,67 @@ try {
     $tpl->set_type_dflt(TRUE);
     $tpl->save();
   }
+
+  $fn = cms_join_path(dirname(__FILE__),'templates','cssmenu.tpl');
+  if( file_exists( $fn ) ) {
+    $template = @file_get_contents($fn);
+    $tpl = new CmsLayoutTemplate();
+    $tpl->set_name('cssmenu');
+    $tpl->set_owner($uid);
+    $tpl->set_content($template);
+    $tpl->set_type($menu_template_type);
+    $tpl->set_type_dflt(TRUE);
+    $tpl->save();
+  }
+
+  $fn = cms_join_path(dirname(__FILE__),'templates','cssmenu_ulshadow.tpl');
+  if( file_exists( $fn ) ) {
+    $template = @file_get_contents($fn);
+    $tpl = new CmsLayoutTemplate();
+    $tpl->set_name('cssmenu_ulshadow');
+    $tpl->set_owner($uid);
+    $tpl->set_content($template);
+    $tpl->set_type($menu_template_type);
+    $tpl->set_type_dflt(TRUE);
+    $tpl->save();
+  }
+
+  $fn = cms_join_path(dirname(__FILE__),'templates','minimal_menu.tpl');
+  if( file_exists( $fn ) ) {
+    $template = @file_get_contents($fn);
+    $tpl = new CmsLayoutTemplate();
+    $tpl->set_name('minimal_menu');
+    $tpl->set_owner($uid);
+    $tpl->set_content($template);
+    $tpl->set_type($menu_template_type);
+    $tpl->set_type_dflt(TRUE);
+    $tpl->save();
+  }
+
+  $fn = cms_join_path(dirname(__FILE__),'templates','simple_navigation.tpl');
+  if( file_exists( $fn ) ) {
+    $template = @file_get_contents($fn);
+    $tpl = new CmsLayoutTemplate();
+    $tpl->set_name('simple_navigation');
+    $tpl->set_owner($uid);
+    $tpl->set_content($template);
+    $tpl->set_type($menu_template_type);
+    $tpl->set_type_dflt(TRUE);
+    $tpl->save();
+  }
+
+  $fn = cms_join_path(dirname(__FILE__),'templates','Simplex_Navigation.tpl');
+  if( file_exists( $fn ) ) {
+    $template = @file_get_contents($fn);
+    $tpl = new CmsLayoutTemplate();
+    $tpl->set_name('simplex_navigation');
+    $tpl->set_owner($uid);
+    $tpl->set_content($template);
+    $tpl->set_type($menu_template_type);
+    $tpl->set_type_dflt(TRUE);
+    $tpl->save();
+  }
+
 }
 catch( CmsException $e ) {
   debug_to_log(__FILE__.':'.__LINE__.' '.$e->GetMessage());
