@@ -79,15 +79,14 @@ $tpl_cache = new CmsTemplateCache();
 while( $trycount < 2 ) {
   $trycount++;
   try {
-    if( $page == '__CMS_PREVIEW_PAGE__' ) {
-      if( !isset($_SESSION['__cms_preview__']) ) {
-	throw new CmsException('preview selected, but temp data not found');
-      }
+    if( $page == -100) {
+      if( !isset($_SESSION['__cms_preview__']) ) throw new CmsException('preview selected, but temp data not found');
 
       // todo: get the content type, and load it.
       $contentops->LoadContentType($_SESSION['__cms_preview_type__']);
       $contentobj = unserialize($_SESSION['__cms_preview__']);
-      $contentobj->SetId('__CMS_PREVIEW_PAGE__');
+      $contentobj->SetCachable(FALSE);
+      $contentobj->SetId(__CMS_PREVIEW_PAGE__);
     }
     else {
       $contentobj = $contentops->LoadContentFromAlias($page,true);
@@ -114,15 +113,17 @@ while( $trycount < 2 ) {
     $allow_cache = (int)get_site_preference('allow_browser_cache',0);
     $expiry = (int)max(0,get_site_preference('browser_cache_expiry',60));
     $expiry *= $allow_cache;
-    if( $_SERVER['REQUEST_METHOD'] == 'POST' || !$contentobj->Cachable() || $page == '__CMS_PREVIEW_PAGE__' || $expiry == 0 ) {
+    if( $_SERVER['REQUEST_METHOD'] == 'POST' || !$contentobj->Cachable() || $page == __CMS_PREVIEW_PAGE__ || $expiry == 0 ) {
       // Here we adjust headers for non cachable pages
       header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
       header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
       header("Cache-Control: no-store, no-cache, must-revalidate");
       header("Cache-Control: post-check=0, pre-check=0", false);
       header("Pragma: no-cache");
+      debug_to_log('donotcache '.$page);
     }
     else {
+      debug_to_log('caching '.$page);
       // as far as we know, the output is cachable at this point... 
       // so we mark it so that the output can be cached
       header('Expires: '.gmdate("D, d M Y H:i:s",time() + $expiry * 60).' GMT');
@@ -246,10 +247,11 @@ echo $html;
 
 @ob_flush();
 
-$endtime = microtime();
-$db = cmsms()->GetDb();
+if( $page == __CMS_PREVIEW_PAGE__ && isset($_SESSION['__cms_preview__']) ) unset($_SESSION['__cms_preview__']);
 
 if( $config['debug'] == TRUE || (isset($config['show_performance_info']) && ($showtemplate == true)) ) {
+  $endtime = microtime();
+  $db = cmsms()->GetDb();
   $memory = (function_exists('memory_get_usage')?memory_get_usage():0);
   $memory = $memory - $orig_memory;
   $memory_peak = (function_exists('memory_get_peak_usage')?memory_get_peak_usage():0);

@@ -200,7 +200,7 @@ final class CMS_Content_Block
       //b. then
       //   1. $id is cntnt01
       //   2. or inline is false
-      
+
       if (!isset($params['block']) && 
 	  ($id == 'cntnt01' || $id == '_preview_' || ($id != '' && $inline == false))) {
 	// todo, would be neat here if we could get a list of only frontend modules.
@@ -268,7 +268,7 @@ final class CMS_Content_Block
 
 	$oldvalue = $smarty->caching;
 	$smarty->caching = false;
-	if( isset($_SESSION['__cms_preview__']) && $contentobj->Id() == '__CMS_PREVIEW_PAGE__' ) {
+	if( isset($_SESSION['__cms_preview__']) && $contentobj->Id() == __CMS_PREVIEW_PAGE__ ) {
 	  // note: content precompile/postcompile events will not be triggererd in preview.
 	  $val = $contentobj->Show($block);
 	  $result = $smarty->fetch('eval:'.$val);

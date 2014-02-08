@@ -56,9 +56,22 @@ $(document).ready(function(){
             'name': '{$actionid}ajax',
             'value': 1
         });
-        $.post('{$smarty.server.REQUEST_URI}&showtemplate=false', data, function (resultdata, text) {
-            $('#previewframe').attr('src', '{$preview_url}');
-        });
+        $.post('{$preview_ajax_url}&showtemplate=false', data, function (resultdata, text) {
+            if( resultdata != null && resultdata.response == 'Error' ) {
+	        $('#previewframe').attr('src','').hide();
+                $('#preview_errors').html('<ul></ul>');
+	        for( var i = 0; i < resultdata.details.length; i++ ) {
+                  $('#preview_errors').append('<li>'+resultdata.details[i]+'</li>');
+                }
+                $('#previewerror').show();
+            }
+            else {
+		var x = new Date().getTime();
+	        var url = '{$preview_url}&junk='+x;
+	        $('#previewerror').hide();
+                $('#previewframe').attr('src', url).show();
+            }
+        },'json');
     }); 
 {/if}
 
@@ -182,6 +195,12 @@ $(document).ready(function(){
     {tab_start name='_preview_'}
       <div class="pagewarning">{$mod->Lang('info_preview_notice')}</div>
       <iframe name="_previewframe_" class="preview" id="previewframe"></iframe>
+      <div id="previewerror" class="red" style="display: none; color: #000;">
+        <fieldset>
+          <legend>LEGEND</legend>
+          <ul id="preview_errors"></ul>
+        </fieldset>
+      </div>
   {/if}
   {tab_end}
 {form_end}

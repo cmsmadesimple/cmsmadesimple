@@ -158,7 +158,7 @@ try {
     // filling the params will make sure that no edited content was lost.
     $content_obj->FillParams($_POST,($content_id > 0));
   }
-  
+
   if( isset($params['submit']) || isset($params['apply']) || isset($params['preview']) ) {
     $error = $content_obj->ValidateData();
 
@@ -194,9 +194,9 @@ try {
       }
     }
     else if( isset($params['preview']) && $content_obj->HasPreview() ) {
-      debug_to_log($content_obj->GetPropertyValue('content_en','content_en'));
       $_SESSION['__cms_preview__'] = serialize($content_obj);
       $_SESSION['__cms_preview_type__'] = $content_type;
+      debug_to_log('preview1');
       exit;
     }
   }
@@ -259,8 +259,9 @@ for( $currenttab = 0; $currenttab < $numberoftabs; $currenttab++ ) {
 if( $content_obj->HasPreview() ) {
   $config = cmsms()->GetConfig();
   $smarty->assign('has_preview',1);
-  $smarty->assign('preview_url',"{$config['root_url']}/index.php?{$config['query_var']}=__CMS_PREVIEW_PAGE__");
+  $smarty->assign('preview_url',"{$config['root_url']}/index.php?{$config['query_var']}=".__CMS_PREVIEW_PAGE__);
 }
+$smarty->assign('preview_ajax_url',$this->create_url($id,'admin_editcontent',$returnid,array('preview'=>1)));
 $smarty->assign('lock_timeout',$this->GetPreference('locktimeout'));
 $smarty->assign('lock_refresh',$this->GetPreference('lockrefresh'));
 $smarty->assign('content_id',$content_id);

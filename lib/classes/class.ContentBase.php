@@ -26,6 +26,7 @@
  * @ignore
  */
 define('CMS_CONTENT_HIDDEN_NAME','--------');
+define('__CMS_PREVIEW_PAGE__',-100);
 
 /**
  * Generic content class.
