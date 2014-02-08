@@ -1,10 +1,6 @@
 <script type="text/javascript">
 $(document).ready(function(){
-  $('[name$=apply],[name$=submit]').hide();
   $('#form_edittemplate').dirtyForm({
-    onDirty: function(){
-      $('[name$=apply],[name$=submit]').show('slow');
-    },
     beforeUnload: function() {
       $('#form_edittemplate').lockManager('unlock');
     }
@@ -29,7 +25,6 @@ $(document).ready(function(){
     lostlock_handler: function(err) {
       // we lost the lock on this content... make sure we can't save anything.
       // and display a nice message.
-      $('[name$=apply],[name$=submit]').hide('slow');
       $('[name$=cancel]').fadeOut().attr('value','{$mod->Lang('close')}').fadeIn();
       $('#form_edittemplate').dirtyForm('option','dirty',false);
       alert('{$mod->Lang('msg_lostlock')}');

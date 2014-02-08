@@ -7,16 +7,11 @@ form.dirtyForm { color: salmon; }
 $(document).ready(function(){
   // initialize the dirtyform stuff.
   $('#Edit_Content').dirtyForm({
-    onDirty: function(){
-      $('[name$=apply],[name$=submit]').show('slow');
-    },
     beforeUnload: function() {
       $('#Edit_Content').lockManager('unlock');
     }
   });
 
-  // hide sumit and apply buttons, till something changes
-  $('[name$=apply],[name$=submit]').hide();
   $('#Edit_Content').on('click','[name$=apply],[name$=submit],[name$=cancel]',function(event){
     $('#Edit_Content :hidden').removeAttr('required');
     $('#Edit_Content').dirtyForm('option','dirty',false);
@@ -36,7 +31,6 @@ $(document).ready(function(){
       lostlock_handler: function (err) {
           // we lost the lock on this content... make sure we can't save anything.
           // and display a nice message.
-          $('[name$=apply],[name$=submit]').hide('slow');
           $('[name$=cancel]').fadeOut().attr('value', '{$mod->Lang('close')}').fadeIn();
           $('#Edit_Content').dirtyForm('option', 'dirty', false);
           alert('{$mod->Lang('msg_lostlock')}');
@@ -81,6 +75,9 @@ $(document).ready(function(){
         $(this).closest('form').submit();
     });
     $('#id_disablewysiwyg').change(function () {
+        $('#Edit_Content').dirtyForm('disable');
+    });
+    $('#template_id').change(function(event){
         $('#Edit_Content').dirtyForm('disable');
     });
 
