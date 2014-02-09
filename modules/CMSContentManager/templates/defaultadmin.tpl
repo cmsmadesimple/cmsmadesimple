@@ -223,6 +223,10 @@ $(document).ready(function () {
 					{elseif $row.expand == 'closed'}
 						<a href="{cms_action_url action='defaultadmin' expand=$row.id}" class="page_expand" accesskey="c" title="{$mod->Lang('prompt_page_expand')}">{admin_icon icon='expand.gif' class="hier_expand"}</a>
 					{/if}
+				{elseif $column == 'icon1'}
+					{if isset($row.lock)}
+						{admin_icon icon='warning.gif' title=$mod->Lang('title_locked')}
+					{/if}
 				{elseif $column == 'hier'}
 						{$row.hier}
 				{elseif $column == 'page'}
@@ -378,8 +382,9 @@ $(document).ready(function () {
 			{foreach from=$columns key='column' item='flag'}
 				{if $flag}
 				<th>
-					{if $column == 'expand' or $column == 'hier' or $column == 'view' or $column == 'copy' or $column == 'edit' or $column == 'delete'}
-					<span title="{$mod->Lang("coltitle_{$column}")}">&nbsp;</span>{* no colum header *}
+					{if $column == 'expand' or $column == 'hier' or $column == 'icon1' or $column == 'view' or $column == 'copy' 
+                                            or $column == 'edit' or $column == 'delete'}
+					        <span title="{$mod->Lang("coltitle_{$column}")}">&nbsp;</span>{* no colum header *}
 					{elseif $column == 'multiselect'}
 						<input type="checkbox" id="selectall" value="1" title="{$mod->Lang('select_all')}"/>
 					{elseif $column == 'page'}

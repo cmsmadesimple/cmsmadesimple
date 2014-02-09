@@ -39,6 +39,8 @@ $lang['colhdr_friendlyname'] = 'Type';
 $lang['coltitle_friendlyname'] = 'This is the type of content page';
 $lang['colhdr_hier'] = 'Hierarchy';
 $lang['coltitle_hier'] = 'A string used to indicate the place of this page within the page hierarchy.';
+$lang['colhdr_icon1'] = 'Status Icon';
+$lang['coltitle_icon1'] = 'This column contains one or more icons to quickly see the status of content items';
 $lang['colhdr_menutext'] = 'Menu Text';
 $lang['coltitle_menutext'] = 'The string used to identify this page in navigations.';
 $lang['colhdr_move'] = 'Move';
@@ -242,6 +244,7 @@ $lang['title_editpage_cancel'] = 'Abandon all unsaved changes to this page, and 
 $lang['title_editpage_submit'] = 'Save the changes to this content page, and return to the content list';
 $lang['title_editpage_view'] = 'View the current content page (saved changes only)';
 $lang['title_listcontent_find'] = 'Enter a portion of a page title or menu text and select a matching page';
+$lang['title_locked'] = 'This page is currently being edited by another user';
 $lang['title_userpageoptions'] = 'Page List Options';
 $lang['toggle'] = 'Toggle Selected';
 

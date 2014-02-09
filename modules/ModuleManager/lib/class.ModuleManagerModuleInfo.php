@@ -3,7 +3,8 @@
 class ModuleManagerModuleInfo extends CmsExtendedModuleInfo
 {
   private static $_minfo;
-  private static $_mmkeys = array('e_status','can_install','can_upgrade','can_uninstall','missing_deps');
+  private static $_deprecated = array('CMSMailer','MenuManager');
+  private static $_mmkeys = array('e_status','can_install','can_upgrade','can_uninstall','missing_deps','deprecated');
   private $_mmdata = array();
 
   public function __construct($module_name,$can_load = TRUE,$can_check_forge = TRUE)
@@ -89,19 +90,24 @@ class ModuleManagerModuleInfo extends CmsExtendedModuleInfo
       $out = $this->_get_missing_dependencies();
       return $out;
     }
+
+    if( $key == 'deprecated' ) {
+      if( in_array($this['name'],self::$_deprecated) ) return TRUE;
+      return FALSE;
+    }
   }
 
   public function OffsetSet($key,$value)
   {
     if( !in_array($key,self::$_mmkeys) ) parent::OffsetSet($key,$value);
-    if( $key != 'e_status' ) return; // dynamic
+    if( $key != 'e_status' && $key != 'deprecated' ) return; // dynamic
     $this->_mmdata[$key] = $value;
   }
 
   public function OffsetExists($key)
   {
     if( !in_array($key,self::$_mmkeys) ) return parent::OffsetExists($key);
-    if( $key != 'e_status' ) return; // dynamic
+    if( $key != 'e_status' && $key != 'deprecated' ) return; // dynamic
     return isset($this->_mmdata[$key]);
   }
 

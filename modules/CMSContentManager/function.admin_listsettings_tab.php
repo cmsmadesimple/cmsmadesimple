@@ -41,7 +41,7 @@ $opts = array('title'=>$this->Lang('prompt_page_title'),
 $smarty->assign('namecolumnopts',$opts);
 $smarty->assign('list_namecolumn',$this->GetPreference('list_namecolumn','title'));
 
-$dflts = 'expand,hier,page,alias,url,template,friendlyname,owner,active,default,move,view,copy,edit,delete,multiselect';
+$dflts = 'expand,icon1,hier,page,alias,url,template,friendlyname,owner,active,default,move,view,copy,edit,delete,multiselect';
 $tmp = explode(',',$dflts);
 $opts = array();
 foreach( $tmp as $one ) {

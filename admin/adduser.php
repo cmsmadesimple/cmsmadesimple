@@ -55,7 +55,7 @@ if (isset($_POST["email"])) $email = trim(strip_tags($_POST["email"]));
 if (!isset($_POST["active"]) && isset($_POST["adduser"])) $active = 0;
 if (isset($_POST['copyusersettings'])) $copyusersettings = (int)$_POST['copyusersettings'];
 if (!isset($_POST["adminaccess"]) && isset($_POST["submit"])) $adminaccess = 0;
-if ( isset($_POST['sel_groups']) && is_array($_POST['sel_groups']) ) $sel_groups = $_POST['sel_groups'];
+if (isset($_POST['sel_groups']) && is_array($_POST['sel_groups']) ) $sel_groups = $_POST['sel_groups'];
 
 if( isset($_POST["cancel"]) ) {
   redirect("listusers.php".$urlext);
@@ -72,7 +72,7 @@ if (isset($_POST["submit"])) {
   else if ( !preg_match("/^[a-zA-Z0-9\._ ]+$/", $user) ) {
     $validinfo = false;
     $error .= "<li>".lang('illegalcharacters', array(lang('username')))."</li>";
-  } 
+  }
 
   if ($password == "") {
     $validinfo = false;

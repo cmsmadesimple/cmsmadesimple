@@ -260,6 +260,10 @@ final class modmgr_utils
     $system_img=$mod->GetModuleURLPath().'/images/system.png';
     $system_img = '<img src="'.$system_img.'" title="'.$mod->Lang('title_system').'" alt="system" height="16"/>';
     $smarty->assign('system_img',$system_img);
+
+    $deprecated_img=$mod->GetModuleURLPath().'/images/deprecate.png';
+    $deprecated_img = '<img src="'.$deprecated_img.'" title="'.$mod->Lang('title_deprecated').'" alt="deprecated" height="16"/>';
+    $smarty->assign('deprecated_img',$deprecated_img);
   }
 } // end of class
 

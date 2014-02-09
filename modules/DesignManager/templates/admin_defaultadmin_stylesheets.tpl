@@ -18,6 +18,7 @@ $(document).ready(function(){
 
     $('#editcssfilter').on('click',function(){
       $('#filtercssdlg').dialog({
+        width: 'auto',
         buttons: {
           '{$mod->Lang('submit')}': function () {
             $(this).dialog('close');

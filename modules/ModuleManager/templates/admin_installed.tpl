@@ -76,10 +76,13 @@ $(document).ready(function(){
     <tr class="{$rowclass}">
       <td>{if $item.system_module}{$system_img}{/if}
            {if $item.e_status == 'newer_available'}{$star_img}{/if}
+           {if $item.deprecated}{$deprecated_img}{/if}
       </td>
       <td>
           {if !$item.installed}
             <span title="{$item.description}" class="important">{$item.name}</span>
+          {elseif $item.deprecated}
+            <span title="{$item.description}" style="color: red;">{$item.name}</span>
           {else}
             <span title="{$item.description}" {if $item.system_module} style="color: green;"{/if}>{$item.name}</span>
           {/if}

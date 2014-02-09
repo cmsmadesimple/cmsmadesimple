@@ -30,7 +30,7 @@
  */
 class CmsLayoutTemplateQuery extends CmsDbQueryBase
 {
-	private $_sortby = 'name';
+	private $_sortby = 'tpl.name';
 	private $_sortorder = 'asc';
 
   public function execute()

@@ -55,7 +55,7 @@ final class CmsContentManagerUtils
 
   public static function get_pagedefaults()
   {
-    $tpl = CmsLayoutTemplate::load_dflt_by_type('__CORE__::page');
+    $tpl = CmsLayoutTemplate::load_dflt_by_type(CmsLayoutTemplateType::CORE.'::page');
     $tpl_id = -1;
     if( $tpl ) $tpl_id = $tpl->get_id();
     $page_prefs = array('contenttype'=>'content', // string

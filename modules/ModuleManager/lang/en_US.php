@@ -207,6 +207,7 @@ $lang['time_warning'] = 'Installing modules is a data and memory intensive opera
 $lang['title_advancedsearch'] = 'Enable advanced search functionality';
 $lang['title_cantremove'] = 'The file system permissions on this module directory do not permit deleting the files';
 $lang['title_chmod'] = 'Attempt to recursively change permissions on this directory';
+$lang['title_deprecated'] = 'This module is deprecated <em>(in the future development will stop and this module will no longer be distribted)</em>.';
 $lang['title_has_dependants'] = 'This module is required and used by other installed modules, and therefore cannot be uninstalled';
 $lang['title_install'] = 'Install this module for use in your website';
 $lang['title_installation_complete'] = 'Installation Process Complete!';

@@ -24,9 +24,7 @@ $urlext=CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 
 check_login();
 $userid = get_userid();
-if( !check_permission($userid, 'Manage Users') ) {
-  die('Permission Denied');
-}
+if( !check_permission($userid, 'Manage Users') ) die('Permission Denied');
 
 if (isset($_POST["cancel"])) {
   redirect("listusers.php?".$urlext);
@@ -176,20 +174,18 @@ if (isset($_POST["submit"])) {
     }
   }
 }
- else if ($user_id != -1) {
-   $user = $thisuser->username;
-   $firstname = $thisuser->firstname;
-   $lastname = $thisuser->lastname;
-   $email = $thisuser->email;
-   $adminaccess = $thisuser->adminaccess;
-   $active = $thisuser->active;
+else if ($user_id != -1) {
+  $user = $thisuser->username;
+  $firstname = $thisuser->firstname;
+  $lastname = $thisuser->lastname;
+  $email = $thisuser->email;
+  $adminaccess = $thisuser->adminaccess;
+  $active = $thisuser->active;
 }
 
 include_once("header.php");
 
-if (FALSE == empty($error)) {
-  echo $themeObject->ShowErrors('<ul class="error">'.$error.'</ul>');
-}
+if (FALSE == empty($error)) echo $themeObject->ShowErrors('<ul class="error">'.$error.'</ul>');
 
 $smarty = cmsms()->GetSmarty();
 $smarty->assign('user_id',$user_id);
