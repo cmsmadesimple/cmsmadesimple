@@ -118,6 +118,20 @@ function get_userid($check = true)
   return false;
 }
 
+/**
+ * Gets the username of the currently logged in user.
+ *
+ * @since 2.0
+ * @param  boolean Redirect to the admin login page if the user is not logged in.
+ * @return integer The UID of the logged in administrator, otherwise FALSE
+ */
+function get_username($check = true)
+{
+  if ($check) check_login(); //It'll redirect out to login if it fails
+  if (isset($_SESSION["cms_admin_user_name"])) return $_SESSION["cms_admin_user_name"];
+  return false;
+}
+
 
 /**
  * A function to check if the checksum provided can be used to validate the user to this site
