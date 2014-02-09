@@ -77,6 +77,24 @@ ModuleManager
   - Now shows release dates and approximate download counts for each module
   - Now shows summary of releases for a specific module
   - Visual indicators for stale and new modules
+  
+  
+Version 1.11.10 - Pinzon
+------------------------
+Core - General
+  - New versions of jquery, jquery-ui, blueimp-uploader
+  - Makes security key 16 characters long
+  - Smarty template engine upgraded to version 3.1.16
+  - Fixes to function signatures, and fix a notice in cms_module_smarty_plugin_manager
+  
+Core - MicroTiny
+  - Minor fix to MicroTiny
+  
+Core - FileManager
+  - Fix and cleanup filemanager templates
+
+Core - News
+ - Fix potential SQL injection vulnerability wrt the sortby parameter
 
 Version 1.11.9 - Bartolome
 -----------------------------
@@ -114,7 +132,7 @@ Core - General
   - Improved and better documented sample htaccess.txt file
   - Smarty template engine upgraded to version 3.1.14
   - Optimization to Menumanager to load all pages when no parameters limit the amount of pages to display.
-  - Adds a check to the installer and systeminfo page to test wether the filesystem has a significant time difference from the php process
+  - Adds a check to the installer and system info page to test whether the file system has a significant time difference from the php process
   - The bbcode compatible system info report is now forced to english for posting in the forum
 
 Core - Bug Reports

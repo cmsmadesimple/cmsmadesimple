@@ -1,17 +1,19 @@
 Developers Past and Present
 ---------------------------
-- Ted Kulp <wishy [AT] cmsmadesimple [DOT] org>
 - Robert Campbell <calguy1000 [AT] cmsmadesimple [DOT] org>
+- Tapio Löytty - stikki [AT] cmsmadesimple [AT] org
+- Goran Ilic - g [DOT] ilic [AT] i-arts [DOT] eu
+- Rolf - <rolf [AT] cmsmadesimple [DOT] org>
+- Mark Reed <drcss [AT] cmsmadesimple [DOT] org>
 - Morten Poulsen <morten [AT] poulsen [DOT] org>
+- Ronny Krijt - <ronnyk [AT] cmsmadesimple [DOT] org>
+- Ted Kulp <wishy [AT] cmsmadesimple [DOT] org>
+
 - Nuno Costa <nuno [AT] criacaoweb [DOT] net>
 - Alberto Benati <alberto [DOT] benati [AT] gmail [DOT] com>
 - Samuel Goldstein <cmsmadesimple [AT] fogbound [DOT] net>
 - Jeff Bosch <ajprog [AT] cmsmadesimple [DOT] org>
-- Ronny Krijt - <ronnyk [AT] cmsmadesimple [DOT] org>
-- Mark Reed <drcss [AT] cmsmadesimple [DOT] org>
-- Rolf - <rolf [AT] cmsmadesimple [DOT] org>
 - Jeremy Bass <jeremy.bass [AT] cmsmadesimple [DOT] org>
-
 - Tatu Wikman <tsw [AT] cmsmadesimple [DOT] org>
 - Alexander Endresen <alexander [AT] endresen [DOT] org>
 - Patricia Brun <cmsms [AT] virtuaza [DOT] net>
@@ -56,31 +58,29 @@ If we have missed anybody please contact us and we will add your name for future
 - Piotras Cimmperman -- vilkis [AT] gmail [DOT] com
 - Vedat Karaduman -- vedatkaraduman [AT] gmail [DOT] com
 - Sofia Hauschildt -- sofia [AT] hauschildt [DOT] net
-- Michael Kenis -- michael [AT] k-id [DOT] nl
 - Franck Lafay -- franck.lafay [AT] orange [DOT] fr
-- Joost de Bruijn -- joostdebruijn [AT] planet [DOT] nl
 - Morten Poulsen -- morten [AT] poulsen [DOT] org
 - Gour D. -- gour [AT] atmarama [DOT] net
 - Jonas Rydén -- cold.man [AT] live [DOT] se
 - Sinus Iks -- jaka99 [AT] gmail [DOT] com
 - Gion-Andri Cantieni -- gion-andri [AT] gmx [DOT] ch
 - Alberto Benati -- cms [AT] xme [DOT] it
-- Robert Campbell -- calguy1000 [AT] cmsmadesimple [DOT] org
+- Fernando Morgado -- fjmorgado {AT] gmail {DOT] com
 - Nuno Costa -- nuno.mfcosta [AT] sapo [DOT] pt
 - Eduardo Martinez -- edmartgt [AT] yahoo [DOT] com
 - Square -- benjamin_cantele [AT] yahoo [DOT] fr
 - Andreas Just -- wilfried44g [AT] googlemail [DOT] com
 - René Helminsen -- cmsms [AT] helminsen [DOT] no
-- Anne-Mieke Bovelett -- anne [AT] cmsmadesimple [DOT] org
 - Stephan -- vipstephan [AT] gmail [DOT] com
 - Kaupo Vana -- kaupov3 [AT] hot [DOT] ee
 - Christoffer L -- christoffer.la [AT] hotmail [DOT] com
 - Christophe Lherieau -- skimpax [AT] gmail [DOT] com
+- Joost de Bruijn -- joostdebruijn [AT] planet [DOT] nl
 - Rolf -- rolf [AT] cmsmadesimple [DOT] org
+- Jos -- josvd [AT] live [DOT] nl
 - Anton Evseichev -- jn0izzze [AT] gmail [DOT] com
 - Oskar Rough -- oskar [AT] lyf [DOT] dk
 - RichardD -- richard [DOT] desiatnik [AT] ume [DOT] se
-- Hendrie Bosch -- boschie [AT] tegramsbergen [DOT] nl
 - Tapio Löytty -- tapsa [AT] blackmilk [DOT] fi
 - yulik -- 4x6hp [AT] 4x6hp [DOT] net
 - Cosmin Hutanu -- urecheatu007 [AT] gmail [DOT] com
