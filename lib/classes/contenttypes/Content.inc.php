@@ -315,7 +315,7 @@ class Content extends ContentBase
 
 		case 'template':
 			try {
-				$dflt_tpl = CmsLayoutTemplate::load_dflt_by_type('__CORE__::page');
+				$dflt_tpl = CmsLayoutTemplate::load_dflt_by_type(CmsLayoutTemplateType::CORE.'::page');
 				$template_id = $this->TemplateId();
 				if( $template_id < 1 ) $template_id = $dflt_tpl->get_id();
 				$out = CmsFormUtils::create_dropdown('template_id',$_templates,$template_id,array('id'=>'template_id'));
