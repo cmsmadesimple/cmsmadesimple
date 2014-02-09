@@ -19,6 +19,13 @@ $(document).ready(function(){
       <input type="submit" id="reseturl" name="{$actionid}reseturl" value="{$mod->Lang('reset')}"/>
     </p>
   </div>
+ 
+   <div class="pageoverflow">
+    <p class="pagetext"><label for="allowuninstall">{$mod->Lang('allowuninstall')}:</label>&nbsp;{cms_help key2='help_allowuninstall'}</p>
+    <p class="pageinput">
+      <select id="allowuninstall" name="{$actionid}allowuninstall">{cms_yesno selected=$allowuninstall}</select>
+    </p>
+  </div>
 {/if}
 
   <div class="pageoverflow">
@@ -32,13 +39,6 @@ $(document).ready(function(){
     <p class="pagetext"><label for="latestdepends">{$mod->Lang('latestdepends')}:</label>&nbsp;{cms_help key2='help_latestdepends'}</p>
     <p class="pageinput">
       <select id="latestdepends" name="{$actionid}latestdepends">{cms_yesno selected=$latestdepends}</select>
-    </p>
-  </div>
-
-  <div class="pageoverflow">
-    <p class="pagetext"><label for="allowuninstall">{$mod->Lang('allowuninstall')}:</label>&nbsp;{cms_help key2='help_allowuninstall'}</p>
-    <p class="pageinput">
-      <select id="allowuninstall" name="{$actionid}allowuninstall">{cms_yesno selected=$allowuninstall}</select>
     </p>
   </div>
 
