@@ -43,7 +43,7 @@
 		{assign var='obj' value=$node->getContent(false,true,false)}
 		<li id="page_{$obj->Id()}" {if !$obj->WantsChildren()}class="no-nest"{/if}>
 			<div class="label" {if !$obj->Active()}style="color: red;"{/if}>
-				<span>&nbsp;</span>{$obj->Hierarchy()}:&nbsp;{$obj->Name()}{if !$obj->Active()}&nbsp;({$mod->Lang('prompt_inactive')}){/if} <em>({$obj->MenuText()}</em></span>
+				<span>&nbsp;</span>{$obj->Hierarchy()}:&nbsp;{$obj->Name()}{if !$obj->Active()}&nbsp;({$mod->Lang('prompt_inactive')}){/if} <em>({$obj->MenuText()})</em>
 			</div>
 			{if $node->has_children()}
 			<ul>
