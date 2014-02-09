@@ -43,7 +43,9 @@ require_once cms_join_path(CMS_INSTALL_BASE, 'lib', 'classes', 'CMSInstaller.cla
 /* Check for the presence of a filled CMSMS Config file */
 if ( (file_exists(CMS_BASE.'/config.php')) && (file_get_contents(CMS_BASE.'/config.php') != '') ) {
 	installerShowErrorPage('CAUTION! You are doing a new install of CMS Made Simple, but it looks like it is already installed!<br />
-	The install process finds a filled config.php file at your server...');
+	The install process finds a filled config.php file at your server...<br />
+	<br />
+	<a href="upgrade.php">Proceed with upgrading your CMS by clicking here</a>!');
 }
 
 
