@@ -3,7 +3,7 @@
 #B
 #C
 #D
-$lang['description'] = 'Description';
+$lang['description'] = 'TODO module description';
 
 #E
 #F
@@ -74,7 +74,7 @@ $lang['help_childrenof'] = 'This option will have the menu only display items th
 $lang['help_excludeprefix'] = 'Exclude all items (and their children) who\'s page alias matches one of the specified (comma separated) prefixes.  This parameter must not be used in conjunction with the includeprefix parameter.';
 $lang['help_includeprefix'] = 'Include only those items who\'s page alias matches one of the specified (comma separated) prefixes.  This parameter cannot be combined with the excludeprefix parameter.';
 $lang['help_items'] = 'Specify a comma separated list of page aliases that this menu should display.';
-$lang['help_loadprops'] = 'Use this parameter when NOT using advanced properties in your menu manager template.  This will disable the loading of all of the content properties for each node (such as extra1, image, thumbnail, etc).  This will dramatically decrease the number of queries required to build a menu, and increase memory requirements, but will remove the possibility for much more advanced menus';
+$lang['help_loadprops'] = 'Use this parameter when NOT using advanced properties in your menu manager template.  This will disable the loading of all of the content properties for each node (such as extra1, image, thumbnail, etc.).  This will dramatically decrease the number of queries required to build a menu, and increase memory requirements, but will remove the possibility for much more advanced menus';
 $lang['help_nlevels'] = 'Alias for number_of_levels';
 $lang['help_number_of_levels'] = 'This setting will limit the depth of the generated menu to the specified number of levels.  By default the value for this parameter is implied to be unlimited, except when using the items parameter, in which case the number_of_levels parameter is implied to be 1';
 $lang['help_root'] = 'TODO';

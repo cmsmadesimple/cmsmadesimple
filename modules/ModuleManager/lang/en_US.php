@@ -5,7 +5,7 @@ $lang['admin_title'] = 'Module Manager Admin Panel';
 $lang['abouttxt'] = 'About';
 $lang['accessdenied'] = 'Access Denied. Please check your permissions';
 $lang['action_activated'] = 'Module %s has been activated';
-$lang['action_installed'] = 'Module %s has been installed with the following message(s):<br/><br/>%s';
+$lang['action_installed'] = 'Module %s has been installed with the following message(s):<br /><br />%s';
 $lang['action_upgraded'] = 'Module %s has been upgraded';
 $lang['action'] = 'Action';
 $lang['active'] = 'Active';
@@ -30,8 +30,8 @@ $lang['confirm_chmod'] = 'Continuing will attempt to change the permissions on t
 $lang['confirm_resetcache'] = 'Are you sure you want to clear the local cache?';
 $lang['confirm_reseturl'] = 'Are you sure you want to reset the repository URL?';
 $lang['confirm_settings'] = 'Are you sure you want to save these settings?';
-$lang['confirm_remove'] = 'Are you sure you want to remove this modules files from the filesystem';
-$lang['confirm_uninstall'] = 'Continuing will remove all data associated with this module, but not remove the module files from the filesystem.  Are you sure you want to continue?';
+$lang['confirm_remove'] = 'Are you sure you want to remove this modules files from the file system';
+$lang['confirm_uninstall'] = 'Continuing will remove all data associated with this module, but not remove the module files from the file system.  Are you sure you want to continue?';
 $lang['confirm_upgrade'] = 'Are you sure you want to upgrade this module?';
 $lang['compatibility_disclaimer'] = 'The modules displayed here are contributed by both the CMSMS Developers and independent third parties.  We make no guarantees that the modules available here are functional, tested, or compatible with your system.  You are encouraged to read the information found in the help and about links for each module before attempting the installation.';
 
@@ -52,7 +52,7 @@ $lang['error'] = 'Error!';
 $lang['error_active_failed'] = 'The operation to toggle the active state of a module failed';
 $lang['error_checksum'] = 'Checksum error.  This probably indicates a corrupt file, either when it was uploaded to the repository, or a problem in transit down to your machine. (expected %s and got %s)';
 $lang['error_chmodfailed'] = 'One or more problems encountered when changing permissions of files';
-$lang['error_connectnomodules'] = 'Although a connection was successfully made to the specified module repository.  It appears that this repository is not yet sharing any modules';
+$lang['error_connectnomodules'] = 'Although a connection was successfully made to the specified module repository. It appears that this repository is not yet sharing any modules';
 $lang['error_downloadxml'] = 'A problem occurred downloading the XML FILE: %s';
 $lang['error_dependencynotfound'] = 'One or more dependencies could not be found in the forge';
 $lang['error_fileupload'] = 'A problem occurred uploading the file';
@@ -98,7 +98,8 @@ $lang['has_dependants'] = 'Has dependants';
 $lang['help'] = '<h3>What Does This Do?</h3>
 <p>A client for the CMS Made Simple Module Repository. This module allows previewing and installing modules from the CMSMS Forge without the need for ftp-ing, or unzipping archives.  Module XML files are downloaded using REST, integrity verified, and then expanded automatically.</p>
 <h3>How Do I Use It</h3>
-<p>In order to use this module you will need the \'Modify Modules\' permission.</p><br/>
+<p>In order to use this module you will need the \'Modify Modules\' permission.</p>
+<br />
 <p>You can find the interface for this module under the \'Site Admin\' menu.  When you select this module, the \'Module Repository\' installation will automatically be queried for a list of it\'s available XML modules.  This list will be cross referenced with the list of currently installed modules, and a summary page displayed.  From here, you can view the descriptive information, the Help, and the About information for a module without physically installing it.  You can also choose to upgrade or install modules.</p>
 <h3>Support</h3>
 <p>As per the GPL, this software is provided as-is. Please read the text of the license for the full disclaimer.</p>
@@ -113,8 +114,6 @@ $lang['help_latestdepends'] = 'When installing a module with dependencies, this 
 // I
 $lang['importxml'] = 'Import Module';
 $lang['incompatible'] = 'Incompatible';
-//$lang['info_disable_caching'] = '<strong>Not Recommended</strong>.  For performance reasons, ModuleManager will cache for (by default one hour) much of the information retrieved from the remote server';
-//$lang['info_latestdepends'] = 'When installing a module with dependencies, this option will make sure that the latest version of the dependency will be installed';
 $lang['info_searchtab'] = 'This tab displays a list of installed modules for which there is a newer version available';
 $lang['install'] = 'Install';
 $lang['installed'] = 'Installed';
@@ -146,7 +145,6 @@ $lang['msg_module_upgraded'] = 'Module %s successfully upgraded';
 $lang['msg_cachecleared'] = 'Cache cleared';
 $lang['msg_nodependencies'] = 'This file has not listed any dependencies';
 $lang['msg_prefssaved'] = 'Preferences Updated';
-//$lang['msg_urlreset'] = 'Module Repository URL reset to factory settings';
 
 // N
 $lang['nametext'] = 'Module Name';
@@ -163,7 +161,7 @@ $lang['operation_results'] = 'Operation Results';
 
 // P
 $lang['postinstall'] = 'Module Manager has been successfully installed.';
-$lang['postuninstall'] = 'Module Manager has been uninstalled.  Users will no longer have the ability to install modules from the remote repositorie.  However, local installation is still possible.';
+$lang['postuninstall'] = 'Module Manager has been uninstalled.  Users will no longer have the ability to install modules from the remote repository.  However, local installation is still possible.';
 $lang['preferences'] = 'Preferences';
 $lang['preferencessaved'] = 'Preferences saved';
 $lang['prompt_advancedsearch'] = 'Advanced Search';
@@ -171,8 +169,6 @@ $lang['prompt_disable_caching'] = 'Disable caching of requests from the server';
 $lang['prompt_dl_chunksize'] = 'Download Chunk Size (Kb)';
 $lang['prompt_otheroptions'] = 'Other Options';
 $lang['prompt_repository_url'] = 'ModuleRepository URL';
-//$lang['prompt_resetcache'] = 'Reset the local cache of repository data';
-//$lang['prompt_reseturl'] = 'Reset URL to preset default';
 $lang['prompt_settings'] = 'Settings';
 
 // R
@@ -200,15 +196,13 @@ $lang['submit'] = 'Submit';
 $lang['success'] = 'Success';
 
 // T
-//$lang['text_dl_chunksize'] = 'The maximum amount of data to download from the server in one chunk (when installing a module)';
-//$lang['text_repository_url'] = 'The URL should be in the form http://www.mycmsmssite.com/ModuleRepository/request/v2 (assuming pretty urls are enabled on the repository server)<br />Note: opening this link in your webbrowser will return an Error404!';
 $lang['tab_newversions'] = 'Upgrades Available';
 $lang['time_warning'] = 'Installing modules is a data and memory intensive operation. Depending upon the network bandwidth, server load, and installation tasks that need to be performed this could take several minutes.';
 $lang['title_advancedsearch'] = 'Enable advanced search functionality';
 $lang['title_cantremove'] = 'The file system permissions on this module directory do not permit deleting the files';
 $lang['title_chmod'] = 'Attempt to recursively change permissions on this directory';
-$lang['title_deprecated'] = 'This module is deprecated <em>(in the future development will stop and this module will no longer be distribted)</em>.';
-$lang['title_has_dependants'] = 'This module is required and used by other installed modules, and therefore cannot be uninstalled';
+$lang['title_deprecated'] = 'This module is deprecated (the development is stopped and there will be no new releases).';
+$lang['title_has_dependants'] = 'This module is required because it used by other installed modules, and therefore cannot be uninstalled';
 $lang['title_install'] = 'Install this module for use in your website';
 $lang['title_installation_complete'] = 'Installation Process Complete!';
 $lang['title_letter'] = 'Show modules whose name starts with %s';
@@ -239,16 +233,16 @@ $lang['title_notcompatible'] = 'This module has not passed compatibility tests';
 $lang['title_notinstalled'] = 'This module exists in the modules subdirectory but has not been installed for use';
 $lang['title_remove'] = 'Remove this modules files from the module directory';
 $lang['title_searchterm'] = 'Enter a natural language search term.  If advanced mode is enabled, then boolean operations similar to Google can be used';
-$lang['title_stale'] = 'This module is stale (released over two years ago)';
+$lang['title_stale'] = 'This module is marked &quot;Stale&quot; (Last release over two years ago) This means it may work fine, but it does not had any recent development. Use your own discretion when using this module!';
 $lang['title_star'] = 'This icon indicates that a newer version of this module is available in the repository';
-$lang['title_system'] = 'This icon identifies a system module (module distributed with CMSMS)';
-$lang['title_uninstall'] = 'Uninstall this module.  This action may destroy data and templates associated with the module';
-$lang['title_upgrade'] = 'Upgrade this module.';
-$lang['title_warning'] = 'This module was released some time ago.  Use caution!';
+$lang['title_system'] = 'This icon identifies a CMS Made Simple&trade; system module (module distributed with the CMSMS core)';
+$lang['title_uninstall'] = 'Uninstall this module. This action may destroy data and templates associated with the module';
+$lang['title_upgrade'] = 'Upgrade this module';
+$lang['title_warning'] = 'This module was released some time ago. Use caution!';
 $lang['title_yourmoduledate'] = 'This column displays the date of the latest release for this module';
 $lang['title_yourmoduleversion'] = 'This column displays the version number of module that is currently installed';
 $lang['toggle_active'] = 'Set this module as active and usable';
-$lang['toggle_inactive'] = 'Set this module as inactive and unused.  No module data will be destroyed';
+$lang['toggle_inactive'] = 'Set this module as inactive and unused. No module data will be destroyed';
 
 // U
 $lang['uninstall'] = 'Uninstall';
