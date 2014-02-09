@@ -101,7 +101,10 @@ class CmsLayoutStylesheet
 	public function has_media_type($str)
 	{
     $str = trim($str);
-		if( isset($this->_data['media_type']) && in_array($str,$this->_data['media_type']) ) return TRUE;
+		if( isset($this->_data['media_type']) )
+		{
+			if( in_array($str,$this->_data['media_type']) ) return TRUE;
+		}
 		return FALSE;
 	}
 
