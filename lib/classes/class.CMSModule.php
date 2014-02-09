@@ -994,7 +994,8 @@ abstract class CMSModule
       $gCms = cmsms();
       $db = $gCms->GetDb();
       $config = $gCms->GetConfig();
-      $smarty = $gCms->GetSmarty();
+	  global $CMS_INSTALL_PAGE;
+	  if( !isset($CMS_INSTALL_PAGE) ) $smarty = $gCms->GetSmarty();
 
       $res = include($filename);
       if( $res == 1 || $res == '' ) return FALSE;

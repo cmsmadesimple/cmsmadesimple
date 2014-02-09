@@ -446,7 +446,7 @@ class ContentOperations
 		    $this->_SetHierarchyPosition($one);
 		}
 
-		$this->_ClearCache();
+		cmsms()->clear_cached_files();
 	}
 
 
@@ -974,28 +974,6 @@ class ContentOperations
 		return $error;
 	}
 	
-	/**
-	 * Clears the content cache
-	 *
-	 * @ignore
-	 * @internal
-	 * @access private
-	 * @return void
-	 */
-	private function _ClearCache()
-	{
-		$gCms = cmsms();
-		$smarty = $gCms->GetSmarty();
-
-		cms_content_cache::clear();
-		$this->_quickfind = null;
-		unset($gCms->hrinstance);
-		debug_to_log($gCms->hrinstance);
-// 		$smarty->clear_all_cache();
-// 		$smarty->clear_compiled_tpl();
-// 		$gCms->clear_cached_files();
-	}
-
 	/**
 	 * Converts a friendly hierarchy (1.1.1) to an unfriendly hierarchy (00001.00001.00001) for
 	 * use in the database.

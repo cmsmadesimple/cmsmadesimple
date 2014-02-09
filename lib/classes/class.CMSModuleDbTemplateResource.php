@@ -22,30 +22,6 @@
  * @package CMS
  */
 
-/**
- * A simple class to resolve an issue with smarty
- * 
- * @since 1.11
- * @package CMS
- */
-abstract class CMS_Fixed_Resource_Custom extends Smarty_Resource_Custom
-{
-  public function populate(Smarty_Template_Source $source, Smarty_Internal_Template $_template = null)
-  {
-        $source->filepath = $source->type . ':' . $source->name;
-        $source->uid = sha1($source->type . ':' . $source->name);
-
-        $mtime = $this->fetchTimestamp($source->name);
-        if ($mtime !== null) {
-            $source->timestamp = $mtime;
-        } else {
-            $this->fetch($source->name, $content, $timestamp);
-            $source->timestamp = isset($timestamp) ? $timestamp : false;
-            if( isset($content) ) $source->content = $content;
-        }
-        $source->exists = !!$source->timestamp;
-  }
-}
 
 /**
  * A simple class to handle a module database template.

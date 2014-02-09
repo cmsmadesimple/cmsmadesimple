@@ -18,11 +18,35 @@
 #
 #$Id$
 
+/**
+ * This file is included in every page.  It does all setup functions including
+ * importing additional functions/classes, setting up sessions and nls, and
+ * construction of various important variables like $gCms.
+ *
+ * This function cannot be included by third party applications to create access to CMSMS API's.  It is intended for
+ * and supported for use in CMSMS applications only.
+ *
+ * @package CMS
+ */
+
+/**
+ * Special vairables that may be set before this file is included which will influence its behavior.
+ *
+ * DONT_LOAD_DB = Indicates that the database should not be initialized and any database related functions should not be called
+ * DONT_LOAD_SMARTY = Indicates that smarty should not be initialized, and no smarty related variables assigned.
+ * CMS_INSTALL_PAGE - Indicates that the file was included from the CMSMS Installation/Upgrade process
+ * CMS_ADMIN_PAGE - Indicates that the file was included from an admin side request.
+ * CMS_LOGIN_PAGE - Indicates that the file was included from the admin login form.
+ * LOAD_ALL_MODULES - Indicates that all available modules should be loaded (deprecated)
+ */
+
 $dirname = __DIR__;
 
 define('CMS_DEFAULT_VERSIONCHECK_URL','http://www.cmsmadesimple.org/latest_version.php');
 define('CMS_SECURE_PARAM_NAME','_sk_');
 define('CMS_USER_KEY','_userkey_');
+
+global $CMS_INSTALL_PAGE,$CMS_ADMIN_PAGE,$CMS_LOGIN_PAGE,$DONT_LOAD_DB,$DONT_LOAD_SMARTY;
 
 $session_key = substr(md5($dirname), 0, 8);
 if( !isset($CMS_INSTALL_PAGE) ) {
@@ -47,14 +71,6 @@ else {
 
 if(!@session_id()) session_start();
 
-/**
- * This file is included in every page.  It does all seutp functions including
- * importing additional functions/classes, setting up sessions and nls, and
- * construction of various important variables like $gCms.
- *
- * @package CMS
- */
-
 // minimum stuff to get started (autoloader needs the cmsms() and the config stuff.
 if( !defined('CONFIG_FILE_LOCATION') ) define('CONFIG_FILE_LOCATION',dirname(__FILE__).'/config.php');
 
@@ -67,7 +83,7 @@ require_once($dirname.DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR.'module.func
 require_once($dirname.DIRECTORY_SEPARATOR.'version.php');
 debug_buffer('done loading required files');
 
-# sanitize $_GET and $_SERVER
+// sanitize $_GET and $_SERVER
 {
   $sanitize = function(&$value,$key) {
     $value = preg_replace('/\<\/?script[^\>]*\>/i', '', $value);
@@ -127,10 +143,6 @@ if ($config["debug"] == true) {
   @error_reporting(E_ALL);
 }
 
-debug_buffer('loading adodb');
-require(cms_join_path($dirname,'lib','adodb.functions.php'));
-load_adodb();
-
 debug_buffer('loading page functions');
 require_once(cms_join_path($dirname,'lib','page.functions.php'));
 
@@ -146,9 +158,7 @@ require_once($dirname.DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR.'html_entity
 debug_buffer('done loading files');
 
 #Load them into the usual variables.  This'll go away a little later on.
-global $DONT_LOAD_DB;
-if (!isset($DONT_LOAD_DB)) 
-{
+if (!isset($DONT_LOAD_DB)) {
   debug_buffer('Initialize Database');
   cmsms()->GetDb();
   debug_buffer('Done Initializing Database');
@@ -157,34 +167,16 @@ if (!isset($DONT_LOAD_DB))
     $current_version = cmsms()->get_installed_schema_version();
     if ($current_version < $CMS_SCHEMA_VERSION) redirect($config['root_url'] . "/install/upgrade.php");
   }
-}
 
-debug_buffer('Initialize Smarty');
-$smarty = cmsms()->GetSmarty();
-debug_buffer('Done Initialiing Smarty');
-
-#Stupid magic quotes...
-if(get_magic_quotes_gpc()) {
-  stripslashes_deep($_GET);
-  stripslashes_deep($_POST);
-  stripslashes_deep($_REQUEST);
-  stripslashes_deep($_COOKIE);
-  stripslashes_deep($_SESSION);
+  // Set a umask
+  $global_umask = get_site_preference('global_umask','');
+  if( $global_umask != '' ) @umask( octdec($global_umask) );
 }
 
 #Fix for IIS (and others) to make sure REQUEST_URI is filled in
 if (!isset($_SERVER['REQUEST_URI'])) {
   $_SERVER['REQUEST_URI'] = $_SERVER['SCRIPT_NAME'];
   if(isset($_SERVER['QUERY_STRING'])) $_SERVER['REQUEST_URI'] .= '?'.$_SERVER['QUERY_STRING'];
-}
-
-#Set a umask
-$global_umask = get_site_preference('global_umask','');
-if( $global_umask != '' ) @umask( octdec($global_umask) );
-
-if ($config['debug'] == true) {
-  $smarty->debugging = true;
-  $smarty->error_reporting = 'E_ALL';
 }
 
 #Load all installed module code
@@ -198,9 +190,19 @@ if (! isset($CMS_INSTALL_PAGE)) {
 #Setup language stuff.... will auto-detect languages (Launch only to admin at this point)
 if(isset($CMS_ADMIN_PAGE)) CmsNlsOperations::set_language();
 
-$smarty->assign('sitename', get_site_preference('sitename', 'CMSMS Site'));
+if( !isset($DONT_LOAD_SMARTY) ) {
+  debug_buffer('Initialize Smarty');
+  $smarty = cmsms()->GetSmarty();
+  debug_buffer('Done Initialiing Smarty');
+  if ($config['debug'] == true) {
+    $smarty->debugging = true;
+    $smarty->error_reporting = 'E_ALL';
+  }
+  $smarty->assign('sitename', get_site_preference('sitename', 'CMSMS Site'));
+}
+  
 
 #Do auto task stuff.
-if (! isset($CMS_INSTALL_PAGE)) CmsRegularTaskHandler::handle_tasks();
+if (!isset($CMS_INSTALL_PAGE) && !isset($CMS_LOGIN_PAGE)) CmsRegularTaskHandler::handle_tasks();
 
 ?>

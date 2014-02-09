@@ -39,7 +39,6 @@ final class cms_config implements ArrayAccess
   private $_types;
   private $_data = array();
   private $_cache = array();
-  private $_friends = array('CMSInstallerPage7','CMSUpgradePage3');
 
   // this is a singleton.
   private function __construct()  {}
@@ -148,10 +147,9 @@ final class cms_config implements ArrayAccess
   public function merge($newconfig)
   {
     if( !is_array($newconfig) ) return;
-    $trace = debug_backtrace(FALSE);
-    $class = '';
-    if( isset($trace[1]['class']) ) $class = $trace[1]['class'];
-    if( $class && in_array($class,$this->_friends) ) $this->_data = array_merge($this->_data,$newconfig);
+	global $CMS_INSTALL_PAGE;
+
+	if( isset($CMS_INSTALL_PAGE) ) $this->_data = array_merge($this->_data,$newconfig);
   }
 
 
@@ -377,13 +375,8 @@ final class cms_config implements ArrayAccess
 
   public function offsetSet($key,$value)
   {
-    $tmp = debug_backtrace();
-    $parent = '';
-    if( isset($tmp[1]) && isset($tmp[1]['class']) ) {
-		$class = $tmp[1]['class'];
-		$parent = get_parent_class($class);
-	}
-    if( $parent != 'CMSInstallerPage' ) {
+	global $CMS_INSTALL_PAGE;
+	if( !isset($CMS_INSTALL_PAGE) ) {
 		trigger_error('Modification of config variables is deprecated',E_USER_ERROR);
 		return;
 	}

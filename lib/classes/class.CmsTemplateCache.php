@@ -107,8 +107,9 @@ class CmsTemplateCache
 
   public static function clear_cache()
   {
-    $fn = cms_join_path(TMP_CACHE_LOCATION,'template_cache');
-    @unlink($fn);
+	  if( !defined('TMP_CACHE_LOCATION') ) return;
+	  $fn = cms_join_path(TMP_CACHE_LOCATION,'template_cache');
+	  @unlink($fn);
   }
 } // end of class
 

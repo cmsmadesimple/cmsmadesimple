@@ -490,13 +490,7 @@ function pagination($page, $totalrows, $limit)
  * @return string
  */
 function cms_db_prefix() {
-  global $CMS_INSTALL_PAGE;
-  global $DONT_LOAD_DB;
-
-  if( isset($CMS_INSTALL_PAGE) && class_exists('CMSInstaller') && CmsInstaller::get_ext() ) return CmsInstaller::get_db_prefix();
-
-  $config = cmsms()->GetConfig();
-  return $config['db_prefix'];
+  return cmsms()->GetDbPrefix();
 }
 
 

@@ -59,19 +59,23 @@ final class module_meta
 
   private function _load_cache()
   {
+	  global $CMS_INSTALL_PAGE;
+	  if( isset($CMS_INSTALL_PAGE) ) return;
+
 	  $config = cmsms()->GetConfig();
 	  //if( count($this->_data) == 0 && (!isset($config['debug']) || !$config['debug']))
 	  if( count($this->_data) == 0 ) {
 		  $this->_data = array();
-		  if( ($data = cms_cache_handler::get_instance()->get(__CLASS__)) ) {
-			  $this->_data = unserialize($data);
-		  }
+		  if( ($data = cms_cache_handler::get_instance()->get(__CLASS__)) ) $this->_data = unserialize($data);
 	  }
   }
 
 
   private function _save_cache()
   {
+	  global $CMS_INSTALL_PAGE;
+	  if( isset($CMS_INSTALL_PAGE) ) return;
+
 	  cms_cache_handler::get_instance()->set(__CLASS__,serialize($this->_data));
   }
 

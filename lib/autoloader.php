@@ -71,26 +71,12 @@ function cms_autoloader($classname)
     return;
   }
 
-//   global $CMS_INSTALL_PAGE;
-//   if( isset($CMS_INSTALL_PAGE) ) return;
-
   // standard content types
   $fn = cms_join_path($config['root_path'],'lib','classes','contenttypes',"{$classname}.inc.php");
   if( file_exists($fn) ) {
     __cms_load($fn);
     return;
   }
-
-//   // module loaded content types
-//   $contentops = ContentOperations::get_instance();
-//   if( $contentops ) {
-//     // why would this ever NOT be true.. dunno, but hey.
-//     $types = $contentops->ListContentTypes();
-//     if( in_array(strtolower($classname),array_keys($types)) ) {
-//       $contentops->LoadContentType(strtolower($classname));
-//       return;
-//     }
-//   }
 
   $fn = $config['root_path']."/modules/{$classname}/{$classname}.module.php";
   if( file_exists($fn) ) {

@@ -74,6 +74,12 @@ final class CmsApp {
 	private $db;
 
 	/**
+	 * An override for the database prefix.  If specified, this will be used instead of config value.
+	 * @ignore
+	 */
+	private $dbprefix;
+
+	/**
 	 * Internal error array - So functions/modules can store up debug info and spit it all out at once
 	 * @ignore
 	 */
@@ -247,6 +253,36 @@ final class CmsApp {
 
 
 	/**
+	 * Set the database connection object.
+	 *
+	 * @final
+	 * @internal
+	 * @ignore
+	 * @return void
+	 * @param ADOConnection $connection
+	 */
+	final public function _setDb(ADOConnection $conn,$dbprefix = null)
+	{
+		$this->db = $conn;
+		$this->_setDbPrefix($dbprefix);
+	}
+
+	/**
+	 * Override the database prefix.
+	 *
+	 * @final
+	 * @internal
+	 * @ignore
+	 * @return void
+	 * @param string database prefix.
+	 */
+	final public function _setDbPrefix($str = null)
+	{
+		$str = trim($str);
+		if( $str ) $this->dbprefix = $str;
+	}
+
+	/**
 	* Get a handle to the ADODB database object. You can then use this
 	* to perform all kinds of database operations.
 	*
@@ -254,30 +290,34 @@ final class CmsApp {
 	* @final
 	* @return ADOConnection a handle to the ADODB database object
 	*/
-	public function &GetDb()
+	final public function &GetDb()
 	{
-		global $DONT_LOAD_DB;
 		/* Check to see if we have a valid instance.
 		 * If not, build the connection */
-		if (!isset($this->db)) {
-			global $CMS_INSTALL_PAGE;
+		if (isset($this->db)) return $this->db;
 
-			if( isset($CMS_INSTALL_PAGE) && class_exists('CmsInstaller') &&
-				CmsInstaller::get_ext() ) {
-				$ob = CmsInstaller::get_db();
+		global $DONT_LOAD_DB;
+		global $CMS_INSTALL_PAGE;
 
-				if( is_object($ob) ) {
-					$this->db = $ob;
-					return $this->db;
-				}
-			}
-
-			if (!isset($this->db) && (!isset($DONT_LOAD_DB) || $DONT_LOAD_DB == 'force')) {
-				$this->db = adodb_connect();
-			}
+		if( !isset($DONT_LOAD_DB) && !function_exists('load_adodb') ) {
+			require(dirname(__DIR__).'/adodb.functions.php');
+			load_adodb();
+			$this->db = adodb_connect();
 		}
-		
+
 		return $this->db;
+	}
+
+	/**
+	 * Get the database prefix.
+	 *
+	 * @return string
+	 */
+	public function GetDbPrefix()
+	{
+		if( $this->dbprefix ) return $this->dbprefix;
+		$config = $this->GetConfig();
+		return $config['db_prefix'];
 	}
 
 	/**
@@ -440,19 +480,22 @@ final class CmsApp {
 	*/
 	final public function clear_cached_files($age_days = -100)
 	{
-	  $the_time = time() - $age_days * 24*60*60;
+		global $CMS_LOGIN_PAGE, $CMS_INSTALL_PAGE;
+		if( isset($CMS_LOGIN_PAGE) || isset($CMS_INSTALL_PAGE) ) return;
+		if( !defined(TMP_CACHE_LOCATION) ) return;
+		$the_time = time() - $age_days * 24*60*60;
 
-	  $dirs = array(TMP_CACHE_LOCATION,TMP_TEMPLATES_C_LOCATION);
-	  foreach( $dirs as $start_dir ) {
-	      $dirIterator = new RecursiveDirectoryIterator($start_dir);
- 	      $dirContents = new RecursiveIteratorIterator($dirIterator);
-	      foreach( $dirContents as $one ) {
-			  if( $one->isFile() && $one->getMTime() <= $the_time ) @unlink($one->getPathname());
-		  }
-	  }
+		$dirs = array(TMP_CACHE_LOCATION,TMP_TEMPLATES_C_LOCATION);
+		foreach( $dirs as $start_dir ) {
+			$dirIterator = new RecursiveDirectoryIterator($start_dir);
+			$dirContents = new RecursiveIteratorIterator($dirIterator);
+			foreach( $dirContents as $one ) {
+				if( $one->isFile() && $one->getMTime() <= $the_time ) @unlink($one->getPathname());
+			}
+		}
 
-	  @touch(cms_join_path(TMP_CACHE_LOCATION,'index.html'));
-	  @touch(cms_join_path(TMP_TEMPLATES_C_LOCATION,'index.html'));
+		@touch(cms_join_path(TMP_CACHE_LOCATION,'index.html'));
+		@touch(cms_join_path(TMP_TEMPLATES_C_LOCATION,'index.html'));
 	}
 
 	/**

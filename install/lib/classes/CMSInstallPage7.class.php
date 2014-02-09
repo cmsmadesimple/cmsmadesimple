@@ -45,12 +45,15 @@ class CMSInstallerPage7 extends CMSInstallerPage
   {
     // check if db info is correct as it should at this point to prevent an undeleted installation dir
     // to be used for sending spam by messing up $_POST variables
+    if( !defined('CMS_ADODB_DT') ) define('CMS_ADODB_DT','DT');
+    require_once(CMS_BASE.'/lib/adodb_lite/adodb.inc.php');
     $db = ADONewConnection($_POST['dbms'], 'pear:date:extend:transaction');
     if (! empty($_POST['db_port'])) $db->port = $_POST['db_port'];
     if (! $db->Connect($_POST['host'],$_POST['username'],$_POST['password'],$_POST['database'])) {
       $this->errors[] = ilang('could_not_connect_db');
       return;
     }
+    cmsms()->_setDb($db,trim($_POST['prefix']));
 
     $newconfig = cmsms()->GetConfig();
     $newconfig['dbms'] = trim($_POST['dbms']);

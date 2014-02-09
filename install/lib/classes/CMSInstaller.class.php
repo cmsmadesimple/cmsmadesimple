@@ -203,6 +203,8 @@ class CMSInstaller
 	  return;
 	}
 
+	if( !defined('CMS_ADODB_DT') ) define('CMS_ADODB_DT','DT');
+	require_once(CMS_BASE.'/lib/adodb_lite/adodb.inc.php');
 	$db = ADONewConnection($_POST['dbms'], 'pear:date:extend:transaction');
 	if(! empty($_POST['db_port'])) {
 	  $db->port = $_POST['db_port'];
@@ -217,6 +219,7 @@ class CMSInstaller
 	  $this->currentPage = 5;
 	  return;
 	}
+	cmsms()->_setDB($db,trim($_POST['prefix']));
 
 	self::set_db($db);
 	//Try to create and drop a dummy table (with appropriate prefix)

@@ -46,9 +46,7 @@ class GroupOperations
 
 	public static function &get_instance()
 	{
-		if( !is_object(self::$_instance) ) {
-			self::$_instance = new GroupOperations();
-		}
+		if( !is_object(self::$_instance) ) self::$_instance = new GroupOperations();
 		return self::$_instance;
 	}
 
@@ -114,19 +112,14 @@ class GroupOperations
 
 		$query = 'SELECT group_id FROM '.cms_db_prefix().'groups WHERE group_name = ?';
 		$tmp = $db->GetOne($query,array($group->name));
-		if( $tmp ) {
-		    return $result;
-		}
+		if( $tmp ) return $result;
 
 		$new_group_id = $db->GenID(cms_db_prefix()."groups_seq");
 		$time = $db->DBTimeStamp(time());
-		$query = "INSERT INTO ".cms_db_prefix()."groups
-                  (group_id, group_name, group_desc, active, create_date, modified_date) 
+		$query = "INSERT INTO ".cms_db_prefix()."groups (group_id, group_name, group_desc, active, create_date, modified_date) 
                   VALUES (?,?,?,?,".$time.", ".$time.")";
 		$dbresult = $db->Execute($query, array($new_group_id, $group->name, $group->description, $group->active));
-		if ($dbresult !== false) {
-			$result = $new_group_id;
-		}
+		if ($dbresult !== false) $result = $new_group_id;
 
 		return $result;
 	}
@@ -144,17 +137,12 @@ class GroupOperations
 
 		$query = 'SELECT group_id FROM '.cms_db_prefix().'groups WHERE group_name = ? AND group_id != ?';
 		$tmp = $db->GetOne($query,array($group->name,$group->id));
-		if( $tmp ) {
-		    return $result;
-		}
+		if( $tmp ) return $result;
 
 		$time = $db->DBTimeStamp(time());
-		$query = "UPDATE ".cms_db_prefix()."groups SET group_name = ?, group_desc = ?,
-           active = ?, modified_date = ".$time." WHERE group_id = ?";
+		$query = "UPDATE ".cms_db_prefix()."groups SET group_name = ?, group_desc = ?, active = ?, modified_date = ".$time." WHERE group_id = ?";
 		$dbresult = $db->Execute($query, array($group->name, $group->description, $group->active, $group->id));
-		if ($dbresult !== false) {
-			$result = true;
-		}
+		if ($dbresult !== false) $result = true;
 
 		return $result;
 	}
@@ -179,9 +167,7 @@ class GroupOperations
 		$query = "DELETE FROM ".cms_db_prefix()."groups where group_id = ?";
 		$dbresult = $db->Execute($query, array($id));
 
-		if ($dbresult !== false) {
-			$result = true;
-		}
+		if ($dbresult !== false) $result = true;
 
 		unset($this->_perm_cache);
 		return $result;
@@ -195,12 +181,9 @@ class GroupOperations
 
 		if( !isset($this->_perm_cache) || !is_array($this->_perm_cache) || !isset($this->_perm_cache[$groupid]) ) {
 			$db = cmsms()->GetDb();
-			$query = 'SELECT permission_id FROM '.cms_db_prefix().'group_perms 
-                      WHERE group_id = ?';
+			$query = 'SELECT permission_id FROM '.cms_db_prefix().'group_perms WHERE group_id = ?';
 			$dbr = $db->GetCol($query,array((int)$groupid));
-			if( is_array($dbr) && count($dbr) ) {
-				$this->_perm_cache[$groupid] = $dbr;
-			}
+			if( is_array($dbr) && count($dbr) ) $this->_perm_cache[$groupid] = $dbr;
 		}
 
 		return isset($this->_perm_cache[$groupid]) && in_array($permid,$this->_perm_cache[$groupid]);
@@ -214,12 +197,11 @@ class GroupOperations
 
 		$db = cmsms()->GetDb();
 
-		$new_id = $db->GenId(cms_db_prefix().'group_perm');
+		$new_id = $db->GenId(cms_db_prefix().'group_perms_seq');
 		if( !$new_id ) return;
 
 		$now = $db->DbTimeStamp(time());
-		$query = 'INSERT INTO '.cms_db_prefix()."group_perms
-                  (group_perm_id,group_id,permission_id,create_date,modified_date)
+		$query = 'INSERT INTO '.cms_db_prefix()."group_perms (group_perm_id,group_id,permission_id,create_date,modified_date)
                   VALUES (?,?,?,$now,$now)";
  		$dbr = $db->Execute($query,array($new_id,$groupid,$permid));
 		unset($this->_perm_cache);
@@ -231,8 +213,7 @@ class GroupOperations
 		if( $permid < 1 ) return;
 		if( $groupid <= 1 ) return;
 
-		$query = 'DELETE FROM '.cms_db_prefix().'group_perms
-                  WHERE group_id = ? AND perm_id = ?';
+		$query = 'DELETE FROM '.cms_db_prefix().'group_perms WHERE group_id = ? AND perm_id = ?';
 		$dbr = $db->Execute($query,array($groupid,$permid));
 		unset($this->_perm_cache);
 	}
