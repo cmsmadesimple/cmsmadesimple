@@ -40,7 +40,7 @@
 
 
 	{$theme->StartTab('content')}
-		<form action="{$formurl}" method="post" onsubmit="return confirm('{'sysmain_confirmclearcache'|lang}')" >
+		<form action="{$formurl}" method="post">
 			<fieldset>
 				<legend>{'sysmain_cache_status'|lang}&nbsp;</legend>
 				<div class="pageoverflow">
