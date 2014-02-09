@@ -35,9 +35,7 @@ function _ref_map_get_sig($fn,$type = 'URL')
   global $ref_map;
   if( count($ref_map) > 0 ) {
     foreach( $ref_map as $key => $val ) {
-      if( $fn == $val ) {
-	return $key;
-      }
+      if( $fn == $val ) return $key;
     }
   }
   $sig = '__'.$type.'::'.md5($fn).'__';

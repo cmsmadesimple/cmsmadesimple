@@ -8,6 +8,7 @@ class dm_design_exporter
   private $_image = null;
   private $_description;
   static  $_mm_types;
+  static  $_nav_types;
 
   private static $_dtd = <<<EOT
 <!DOCTYPE design [
@@ -40,7 +41,8 @@ EOT;
     $this->_design = $design;
     if( !is_array(self::$_mm_types ) ) {
       self::$_mm_types = CmsLayoutTemplateType::load_all_by_originator('MenuManager');
-      if( !is_array(self::$_mm_types) || count(self::$_mm_types) == 0 ) {
+      self::$_nav_types = CmsLayoutTemplateType::load_all_by_originator('Navigator');
+      if( !is_array(self::$_mm_types) || count(self::$_mm_types) == 0 || !is_array(self::$_nav_types) || count(self::$_nav_types) == 0 ) {
 	throw new CmsException('Cannot find any MenuManager template types (is MenuManager installed and enabled?');
       }
     }
@@ -48,9 +50,7 @@ EOT;
 
   public function get_description()
   {
-    if( is_null($this->_description) ) {
-      return $this->_design->get_description();
-    }
+    if( is_null($this->_description) ) return $this->_design->get_description();
   }
 
   public function set_description($text)
@@ -65,9 +65,7 @@ EOT;
   {
     if( is_array($this->_files) ) {
       foreach( $this->_files as $key => $data ) {
-	if( $fn == $data ) {
-	  return $key;
-	}
+	if( $fn == $data ) return $key;
       }
     }
     $sig = '__'.$type.'::'.md5($fn).'__';
@@ -84,8 +82,7 @@ EOT;
 				     function($matches) use ($ob) {
 				       $config = cmsms()->GetConfig();
 				       $url = $matches[1];
-				       if( !startswith($url,'http') || startswith($url,$config['root_url']) || 
-					   startswith($url,'[[root_url]]') ) {
+				       if( !startswith($url,'http') || startswith($url,$config['root_url']) || startswith($url,'[[root_url]]') ) {
 					 $sig = $ob->_get_signature($url);
 					 $sig = "url(".$sig.")";
 					 return $sig;
@@ -107,8 +104,7 @@ EOT;
 				       function($matches) use ($ob,$type) {
 					 $config = cmsms()->GetConfig();
 					 $url = $matches[2];
-					 if( !startswith($url,'http') || startswith($url,$config['root_url']) || 
-					     startswith($url,'{root_url}') ) {
+					 if( !startswith($url,'http') || startswith($url,$config['root_url']) || startswith($url,'{root_url}') ) {
 					   $sig = $ob->_get_signature($url);
 					   //return $sig;
 					   return " $type=\"$sig\"";
@@ -251,6 +247,9 @@ EOT;
     $regex='/\{.*MenuManager.*\}/';
     $template = preg_replace_callback( $regex, $replace_fn, $template );
 
+    $regex='/\{.*Navigator.*\}/';
+    $template = preg_replace_callback( $regex, $replace_fn2, $template );
+
     $regex='/\{global_content.*\}/';
     $template = preg_replace_callback( $regex, $replace_fn2, $template );
 
@@ -290,9 +289,7 @@ EOT;
   {
     $this->parse_stylesheets();
     $this->parse_templates();
-    if( is_array($this->_files) && count($this->_files) ) {
-      return $this->_files;
-    }
+    if( is_array($this->_files) && count($this->_files) ) return $this->_files;
   }
 
   private function _open_tag($elem,$lvl = 1)
@@ -318,16 +315,13 @@ EOT;
 
   private function _xml_output_template(CmsLayoutTemplate $tpl,$lvl = 0)
   {
-    if( $tpl->get_content() == '' ) {
-      throw new CmsException('Cannot export empty template');
-    }
+    if( $tpl->get_content() == '' ) throw new CmsException('Cannot export empty template');
     $output = $this->_open_tag('template',$lvl);
     $output .= $this->_output('tkey',$tpl->get_name(),$lvl+1);
     $output .= $this->_output_data('tdesc',$tpl->get_description(),$lvl+1);
     $output .= $this->_output_data('tdata',$tpl->get_content(),$lvl+1);
-    if( !$tpl->get_type_id() ) {
-      die('test123');
-    }
+    if( !$tpl->get_type_id() ) die('test123');
+
     $type = CmsLayoutTemplateType::load($tpl->get_type_id());
     $output .= $this->_output_data('ttype_originator',$type->get_originator(),$lvl+1);
     $output .= $this->_output_data('ttype_name',$type->get_name(),$lvl+1);
@@ -337,9 +331,7 @@ EOT;
 
   private function _xml_output_stylesheet(CmsLayoutStylesheet $css,$lvl = 0)
   {
-    if( $css->get_content() == '' ) {
-      throw new CmsException('Cannot export empty stylesheet');
-    }
+    if( $css->get_content() == '' ) throw new CmsException('Cannot export empty stylesheet');
     $output = $this->_open_tag('stylesheet',$lvl);
     $output .= $this->_output('csskey',$css->get_name(),$lvl+1);
     $output .= $this->_output_data('cssdesc',$css->get_description(),$lvl+1);
@@ -381,24 +373,18 @@ EOT;
       // now, it should be a full URL, or start at /
       // gotta convert it to a file.
       $config = cmsms()->GetConfig();
-      $fn = '';
+      // assumes it's a filename relative to root.
+      $fn = cms_join_path($config['root_path'],$nvalue);
       if( startswith($nvalue,'/') ) {
 	$fn = cms_join_path($config['root_path'],$nvalue);
       } elseif( startswith($nvalue,$config['root_url']) ) {
 	$fn = str_replace($config['root_url'],$config['root_path'],$nvalue);
-      } else {
-	// assumes it's a filename relative to root.
-	$fn = cms_join_path($config['root_path'],$nvalue);
       }
       
-      if( !file_exists($fn) ) {
-	throw new CmsException('Could not find a physical file for '.$value);
-      }
+      if( !file_exists($fn) ) throw new CmsException('Could not find a physical file for '.$value);
 
       $data = file_get_contents($fn);
-      if( strlen($data) == 0 ) {
-	throw new CmsException('No data found for '.$value);
-      }
+      if( strlen($data) == 0 ) throw new CmsException('No data found for '.$value);
 
       $nvalue = basename($nvalue);
       $output .= $this->_output('fvalue',$nvalue,$lvl+1);
