@@ -3,6 +3,7 @@
 //$lang['groupmembers'] = $lang['groupassignments'];
 //$lang['images'] = $lang['imagemanager'];
 
+$lang['__CORE__'] = 'CMSMS Core';
 $lang['404description'] = 'Page Not Found';
 
 //  AA
