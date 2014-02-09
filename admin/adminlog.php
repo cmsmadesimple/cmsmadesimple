@@ -163,11 +163,6 @@ if (check_permission($userid, 'Modify Site Preferences'))
   $smarty->assign('CMS_USER_KEY',$_SESSION[CMS_USER_KEY]);
 }
 
-
-$smarty->assign("backurl",$themeObject->BackUrl());
-$smarty->assign("langback",lang('back'));
-
-
 echo $smarty->fetch('adminlog.tpl');
 
 include_once("footer.php");
