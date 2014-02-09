@@ -1019,6 +1019,7 @@ $lang['help_content_thumbnail'] = 'This field allows you to associate a thumbnai
 $lang['help_content_target'] = 'Specify a target attribute to use when including this item in the navigation.  A target of _blank will open this page in a new navigator window, or tab.';
 $lang['help_content_title'] = 'The title of the page is displayed in the title bar of the browser, is used in search engine optimization, and is usually displayed prominently on the website';
 $lang['help_content_titleattribute'] = 'Specify a brief description for this content page.  This data can be used for search engine optimization, or in the navigation';
+/*
 $lang['help_content_type'] = <<<EOT
 <p>The content type is the overall control of the behaviour of the page.  Numerous types of content are included with CMSMS and add-on modules may provide even more.</p><br/>
 <ul>
@@ -1042,6 +1043,7 @@ $lang['help_content_type'] = <<<EOT
   </li>
 </ul>
 EOT;
+*/
 $lang['help_css_max_age'] = 'This parameter should be set relatively high for static sites, and should be set to 0 for site development';
 $lang['help_page_alias'] = 'The alias is used as an alternate to the page id to uniquely identify a page. It must be unique across all pages.  The alias is also used to assist in building the URL for the page';
 $lang['help_page_cachable'] = 'Performance can be increased by setting as many pages as possible to cachable.  However this cannot be used for pages where content may change on a per request basis';
