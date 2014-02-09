@@ -128,7 +128,7 @@ function get_userid($check = true)
 function get_username($check = true)
 {
   if ($check) check_login(); //It'll redirect out to login if it fails
-  if (isset($_SESSION["cms_admin_user_name"])) return $_SESSION["cms_admin_user_name"];
+  if (isset($_SESSION["cms_admin_username"])) return $_SESSION["cms_admin_username"];
   return false;
 }
 
