@@ -95,6 +95,7 @@ try {
     $tpl->set_owner($uid);
     $tpl->set_content($template);
     $tpl->set_type($searchform_type);
+	$tpl->add_design('Simplex');
     $tpl->save();
   }
   

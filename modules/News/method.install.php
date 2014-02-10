@@ -135,6 +135,7 @@ try {
     $tpl->set_owner($uid);
     $tpl->set_content($template);
     $tpl->set_type($summary_template_type);
+	$tpl->add_design('Simplex');
     $tpl->save();
   }
 }
@@ -190,6 +191,7 @@ try {
     $tpl->set_owner($uid);
     $tpl->set_content($template);
     $tpl->set_type($detail_template_type);
+	$tpl->add_design('Simplex');
     $tpl->save();
   }
 }

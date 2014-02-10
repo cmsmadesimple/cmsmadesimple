@@ -159,6 +159,7 @@ try {
     $tpl->set_content($template);
     $tpl->set_type($menu_template_type);
     $tpl->set_type_dflt(TRUE);
+    $tpl->add_design('Simplex');
     $tpl->save();
   }
   
@@ -171,6 +172,7 @@ try {
     $tpl->set_content($template);
     $tpl->set_type($menu_template_type);
     $tpl->set_type_dflt(TRUE);
+    $tpl->add_design('Simplex');
     $tpl->save();
   }
 
