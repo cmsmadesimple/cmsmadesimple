@@ -185,7 +185,7 @@ while( $trycount < 2 ) {
       $trycount = 99; // no more iterations
     }
   }
-
+/*
   catch (SmartyCompilerException $e) {
     // <- Catch Smarty compile errors 
     $handlers = ob_list_handlers(); 
@@ -201,7 +201,7 @@ while( $trycount < 2 ) {
     echo $smarty->errorConsole($e);
     return;
   }	
-
+*/
   catch (CmsError404Exception $e) {
     // <- Catch CMSMS 404 error
     // 404 error thrown... gotta do this process all over again
@@ -235,6 +235,14 @@ while( $trycount < 2 ) {
       exit();
     }
   }
+  
+  catch (Exception $e) {
+    // <- Catch rest of Smarty errors
+    $handlers = ob_list_handlers(); 
+    for ($cnt = 0; $cnt < sizeof($handlers); $cnt++) { ob_end_clean(); }
+    echo $smarty->errorConsole($e);
+    return;
+  }	  
 } // end while trycount
 
 Events::SendEvent('Core', 'ContentPostRender', array('content' => &$html));
