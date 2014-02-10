@@ -14,7 +14,7 @@
 {/if}
 {if $return_url != ""}
     <br />
-        <span class='back'>← {$return_url}{if $category_name != ''} - {$category_link}{/if}</span>
+        <span class='back'>&#8592; {$return_url}{if $category_name != ''} - {$category_link}{/if}</span>
 {/if}
 
 {if isset($entry->fields)}
