@@ -473,6 +473,9 @@ final class CmsApp {
 	* Clear out cached files from the CMS tmp/cache and tmp/templates_c
 	* directories.
 	*
+	* NOTE: This function is for use by CMSMS only.  No third party application, UDT or code
+	*   can use this method and still exist in the CMSMS forge or be supported in any way.
+	*
 	* @final
     * @internal
     * @ignore
@@ -482,7 +485,7 @@ final class CmsApp {
 	{
 		global $CMS_LOGIN_PAGE, $CMS_INSTALL_PAGE;
 		if( isset($CMS_LOGIN_PAGE) || isset($CMS_INSTALL_PAGE) ) return;
-		if( !defined(TMP_CACHE_LOCATION) ) return;
+		if( !defined('TMP_CACHE_LOCATION') ) return;
 		$the_time = time() - $age_days * 24*60*60;
 
 		$dirs = array(TMP_CACHE_LOCATION,TMP_TEMPLATES_C_LOCATION);
