@@ -22,6 +22,9 @@ Core - General
   - removed the 'ext' parameter from cms_selflink
   - removed the old compatibility admintheme class (admintheme.inc.php) was deprecated in 1.11
   - admin interface now assumes HTML5.  Porting admin themes must include porting them to HTML5
+  - Simplex Theme gets some love: updated Grid system, removed all images and replaced with icon fonts, extended JS functions with 
+    hopefully better Mobile support, Theme JS includes now helper variables like SX.isTouch, SX.isMobile, SX.viewportWidth and SX.UA,
+    for more information refer to uploads/simplex/js/ functions.js (note: Theme is using functions.min.js), dropped IE7 support, NOT!! tested in Windows Mobile
   
 Core - Bug Reports
   - #9721 There's no check if changelog.txt exists
