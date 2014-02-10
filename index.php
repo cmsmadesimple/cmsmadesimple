@@ -203,7 +203,7 @@ while( $trycount < 2 ) {
   }	
 */
   catch (CmsError404Exception $e) {
-    // <- Catch CMSMS 404 error
+    // Catch CMSMS 404 error
     // 404 error thrown... gotta do this process all over again
     $page = 'error404';
     $showtemplate = true;
@@ -237,11 +237,11 @@ while( $trycount < 2 ) {
   }
   
   catch (Exception $e) {
-    // <- Catch rest of Smarty errors
+    // Catch rest of exceptions
     $handlers = ob_list_handlers(); 
     for ($cnt = 0; $cnt < sizeof($handlers); $cnt++) { ob_end_clean(); }
     echo $smarty->errorConsole($e);
-    return;
+    exit();
   }	  
 } // end while trycount
 
