@@ -104,8 +104,7 @@
 		</div>
 	</body>
 	{/strip}
-	<script type="text/javascript" src="{root_url}/lib/jquery/js/jquery-1.11.0.min.js"></script>
-	<script type="text/javascript" src="{$mod->GetModuleURLPath()}/lib/js/tinymce/plugins/cmsms_filebrowser/filebrowser.js"></script>
+	{cms_jquery exclude='ui,nestedSortable,json,migrate,cms_admin,cms_dirtyform,cms_hiersel,cms_lock' append="`$mod->GetModuleURLPath()`/lib/js/tinymce/plugins/cmsms_filebrowser/filebrowser.js"}
 	<script type="text/javascript">
 		var filebrowser_global = {
 			field_id : '{$field}'
