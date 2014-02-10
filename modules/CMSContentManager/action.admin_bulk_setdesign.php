@@ -116,7 +116,7 @@ $smarty->assign('alldesigns',CmsLayoutCollection::get_list());
 $dflt_design = CmsLayoutCollection::load_default();
 $smarty->assign('dflt_design_id',$dflt_design->get_id());
 
-$dflt_tpl = CmsLayoutTemplate::load_dflt_by_type('__CORE__::page');
+$dflt_tpl = CmsLayoutTemplate::load_dflt_by_type(CmsLayoutTemplateType::CORE.'::page');
 $smarty->assign('dflt_tpl_id',$dflt_tpl->get_id());
 $_tpl = CmsLayoutTemplate::template_query(array('as_list'=>1));
 $smarty->assign('alltemplates',$_tpl);
