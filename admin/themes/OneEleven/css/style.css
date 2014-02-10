@@ -771,7 +771,7 @@ aside .no-slide,
 }
 #oe_admin-content .shadow {
 	background: transparent url(themes/OneEleven/images/layout/sprite_repeatx.png) 831px -148px repeat-x;
-	z-index: 900;
+	z-index: 50;
 	position: absolute;
 	top: 100px;
 	left: 0;
@@ -950,7 +950,7 @@ header .shortcuts li.favorites a {
 /* toggle sidebar */
 #oe_sidebar .toggle-button {
 	text-indent: -9999em;
-	z-index: 900;
+	z-index: 60;
 	display: block;
 	cursor: pointer;
 	width: 24px;
@@ -1207,7 +1207,7 @@ nav ul#oe_pagemenu li.current li a:active  {
 /*** footer ***/
 footer#oe_footer {
 	width: 100%;
-	z-index: 100;
+	z-index: 50;
 	height: 30px;
 	background: transparent url(themes/OneEleven/images/layout/sprite_repeatx.png) 829px -259px repeat-x;
 	padding-top: 5px;
