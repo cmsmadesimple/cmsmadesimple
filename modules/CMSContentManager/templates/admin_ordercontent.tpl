@@ -69,7 +69,7 @@
 		<input id="btn_revert" type="submit" name="revert" value="{$mod->Lang('revert')}"/>
 	</p>
 </div>
-<div class="pageoverflow" style="overflow: auto; height: 500px;">
+<div class="pageoverflow">
 	{assign var='list' value=$tree->getChildren(false,true)}
 	<ul id="masterlist" class="sortableList sortable">
 		{display_tree list=$list}
