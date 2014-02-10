@@ -42,15 +42,11 @@ try {
 			$design->set_name($params['name']);
 			$design->set_description($params['description']);
 			$tpl_assoc = array();
-			if( isset($params['assoc_tpl']) ) {
-				$tpl_assoc = $params['assoc_tpl'];
-			}
+			if( isset($params['assoc_tpl']) ) $tpl_assoc = $params['assoc_tpl'];
 			$design->set_templates($tpl_assoc);
 
 			$css_assoc = array();
-			if( isset($params['assoc_css']) ) {
-				$css_assoc = $params['assoc_css'];
-			}
+			if( isset($params['assoc_css']) ) $css_assoc = $params['assoc_css'];
 			$design->set_stylesheets($css_assoc);
 			$design->save();
 			$this->SetMessage($this->Lang('msg_design_saved'));
@@ -62,9 +58,7 @@ try {
 	}
 
   $templates = CmsLayoutTemplate::get_editable_templates(get_userid());
-  if( count($templates) ) {
-    $smarty->assign('all_templates',$templates);
-	}
+  if( count($templates) ) $smarty->assign('all_templates',$templates);
 
 	$stylesheets = CmsLayoutStylesheet::get_all();
 	if( is_array($stylesheets) && count($stylesheets) ) {

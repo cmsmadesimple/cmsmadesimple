@@ -13,8 +13,8 @@ $cache_id = 'nd'.md5(serialize($params));
 $compile_id = 'nd'.$articleid;
 
 $template = null;
-if (isset($params['summarytemplate'])) {
-  $template = trim($params['summarytemplate']);
+if (isset($params['detailtemplate'])) {
+  $template = trim($params['detailtemplate']);
 }
 else {
   $tpl = CmsLayoutTemplate::load_dflt_by_type('News::detail');

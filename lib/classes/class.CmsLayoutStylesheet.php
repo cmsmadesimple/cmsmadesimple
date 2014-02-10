@@ -262,15 +262,25 @@ class CmsLayoutStylesheet
 															$tmp,$this->get_media_query(),time(), $this->get_id()));
     if( !$dbr ) throw new CmsSQLErrorException($db->sql.' -- '.$db->ErrorMsg());
 
-    $query = 'DELETE FROM '.cms_db_prefix().CmsLayoutCollection::CSSTABLE.' WHERE css_id = ?';
-    $dbr = $db->Execute($query,array($this->get_id()));
-    if( !$dbr ) throw new CmsSQLErrorException($db->sql.' -- '.$db->ErrorMsg());
+		// todo: query the designs that have this stylesheet
+		$query = 'SELECT design_id FROM '.cms_db_prefix().CmsLayoutCollection::CSSTABLE.' WhERE css_id = ?';
+		$design_list = $db->GetCol();
+		if( !is_array($design_list) ) $design_list = array();
 
-    $t = $this->get_designs();
-    if( is_array($t) && count($t) ) {
-      $query = 'INSERT INTO '.cms_db_prefix().CmsLayoutCollection::CSSTABLE.' (css_id,design_id) VALUES(?,?)';
-      foreach( $t as $one ) {
-				$dbr = $db->Execute($query,array($this->get_id(),(int)$one));
+		// cross reference design_list with $dl ... find designs in this object that aren't already known.
+		$dl = $this->get_designs();
+		$new_dl = array();
+		foreach( $dl as $one ) {
+			if( !in_array($one,$design_list) ) $new_dl[] = $one;
+		}
+
+    if( is_array($new_dl) && count($new_dl) ) {
+			$query1 = 'SELECT MAX(COALESCE(item_order,0))+1 FROM '.cms_db_prefix().CmsLayoutCollection::CSSTABLE.' WHERE design_id = ?';
+      $query2 = 'INSERT INTO '.cms_db_prefix().CmsLayoutCollection::CSSTABLE.' (css_id,design_id,item_order) VALUES(?,?,?)';
+      foreach( $new_dl as $one ) {
+				$one = (int)$one;
+				$num = $db->GetOne($query1,array($one));
+				$dbr = $db->Execute($query,array($this->get_id(),$one,$num));
       }
     }
 

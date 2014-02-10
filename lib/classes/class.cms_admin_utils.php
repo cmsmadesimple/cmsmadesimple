@@ -115,6 +115,7 @@ final class cms_admin_utils
 			  break;
 		  case 'key':
 		  case 'key2':
+		  case 'key':
 			  $key2 = trim($value);
 			  break;
 		  case 'title':

@@ -41,14 +41,13 @@ if( isset($params['cancel']) ) {
   $this->RedirectToAdminTab('pages');
 }
 if( isset($params['orderlist']) && $params['orderlist'] != '' ) {
+
   function ordercontent_get_node_rec($str,$prefix = 'page_')
   {
     $gCms = cmsms();
     $tree = $gCms->GetHierarchyManager();
 
-    if( !is_numeric($str) && startswith($str,$prefix) ) {
-      $str = substr($str,strlen($prefix));
-    }
+    if( !is_numeric($str) && startswith($str,$prefix) ) $str = substr($str,strlen($prefix));
 
     $id = (int)$str;
     $tmp = $tree->find_by_tag('id',$id);
@@ -95,9 +94,7 @@ if( isset($params['orderlist']) && $params['orderlist'] != '' ) {
       $rec['old_parent'] = $content->ParentId();
       $rec['old_order'] = $content->ItemOrder();
 	
-      if( $rec['old_parent'] != $rec['parent_id'] || $rec['old_order']  != $rec['order'] ) {
-	$changelist[] = $rec;
-      }
+      if( $rec['old_parent'] != $rec['parent_id'] || $rec['old_order'] != $rec['order'] ) $changelist[] = $rec;
     }
   }
 

@@ -22,7 +22,7 @@ if ($this->CheckPermission('Modify Stylesheets')) {
   $this->smarty->assign('templatetype', $this->CreateInputHidden($id, 'templatetype','overridestyle'));
 
   $this->smarty->assign('templatetext', $this->Lang('stylesheet'));
-  $this->smarty->assign('templateinput', $this->CreateTextArea(false,$id,$this->GetPreference("overridestyle"),"newstyle"));
+  $this->smarty->assign('templateinput', $this->CreateTextArea(false,$id,$this->GetPreference('overridestyle'),'newstyle','','','','','',20));
 
   $this->smarty->assign('submit', $this->CreateInputSubmit ($id, 'saveoverridestylebutton', $this->Lang('save')));
   $this->smarty->assign('reset', $this->CreateInputSubmit ($id, 'resetoverridestylebutton', $this->Lang('reset'),"","",$this->Lang("confirmresetstyle")));
