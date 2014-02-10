@@ -2,11 +2,14 @@
 /* H */
 $lang['help_group_permissions'] = <<<EOT
 <h4>CMSMS Admin Permission Model</h4>
-<p>- CMSMS Uses a system of named permissions.  Access to these permissions determines a users ability to perform different functions in the CMSMS admin console.</p>
-<p>- The CMSMS core creates several permissions on installation <em>(occasionally permissions are added or deleted during an upgrade process)</em>.  Third party modules may create additional permissions.</p>
-<p>- Permissions are associated with user groups.  An authorized user can adjust the permissions that are associated with certain member groups <em>(including the permission to change a group permissions)</em>.  The <strong>Admin</strong> group is a special group.  Members of this group will have all permissions.</p>
-<p>- Admin user accounts can be members of zero or more groups.  It may be possible for a user account that is not a member of any groups to still perform various functionality <em>(please read about ownership and additional-editors in the Content Manager help, and Design Manager help).</em>.  The first user account <em>(uid == 1)</em>, which is typically named &quot;Admin&quot; is a special user account and will have all permissions.</p>
+<ul>
+<li>CMSMS Uses a system of named permissions.  Access to these permissions determines a users ability to perform different functions in the CMSMS admin console.</li>
+<li>The CMSMS core creates several permissions on installation <em>(occasionally permissions are added or deleted during an upgrade process)</em>.  Third party modules may create additional permissions.</li>
+<li>Permissions are associated with user groups.  An authorized user can adjust the permissions that are associated with certain member groups <em>(including the permission to change a group permissions)</em>.  The <strong>Admin</strong> group is a special group.  Members of this group will have all permissions.</li>
+<li>Admin user accounts can be members of zero or more groups.  It may be possible for a user account that is not a member of any groups to still perform various functionality <em>(please read about ownership and additional-editors in the Content Manager help, and Design Manager help).</em>.  The first user account <em>(uid == 1)</em>, which is typically named &quot;Admin&quot; is a special user account and will have all permissions.</li>
+</ul>
 EOT;
+
 $lang['help_cmscontentmanager_help'] = <<<EOT
 <h3>Introduction</h3>
 <p>This document describes the CMS Content Manager module.  It is aimed primarily at the website designer or developer and describes in broad terms how content items work in CMS Made Simple.</p>

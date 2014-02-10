@@ -2133,6 +2133,19 @@ a.toggle-dropzone:focus {
 	cursor: pointer;
 }
 
+/* --- CMS_HELP --- */
+
+.cms_helptext ul{
+
+	padding: 0 10px;
+	list-style: disc;
+}
+
+.cms_helptext ul li{
+
+	margin-bottom: 8px;
+}
+
 /* --- SCREEN UP TO 1024px --- */
 @media screen and (max-width: 1024px) {
 	@-ms-viewport {
