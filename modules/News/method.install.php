@@ -131,7 +131,7 @@ try {
   if( file_exists( $fn ) ) {
     $template = @file_get_contents($fn);
     $tpl = new CmsLayoutTemplate();
-    $tpl->set_name('News Summary Simplex');
+    $tpl->set_name('Simplex News Summary');
     $tpl->set_owner($uid);
     $tpl->set_content($template);
     $tpl->set_type($summary_template_type);
@@ -186,7 +186,7 @@ try {
   if( file_exists( $fn ) ) {
     $template = @file_get_contents($fn);
     $tpl = new CmsLayoutTemplate();
-    $tpl->set_name('News Detail Simplex');
+    $tpl->set_name('Simplex News Detail');
     $tpl->set_owner($uid);
     $tpl->set_content($template);
     $tpl->set_type($detail_template_type);

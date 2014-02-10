@@ -150,11 +150,23 @@ try {
     $tpl->save();
   }
 
-  $fn = cms_join_path(dirname(__FILE__),'templates','Simplex_Navigation.tpl');
+  $fn = cms_join_path(dirname(__FILE__),'templates','Simplex_Main_Navigation.tpl');
   if( file_exists( $fn ) ) {
     $template = @file_get_contents($fn);
     $tpl = new CmsLayoutTemplate();
-    $tpl->set_name('simplex_navigation');
+    $tpl->set_name('Simplex Main Navigation');
+    $tpl->set_owner($uid);
+    $tpl->set_content($template);
+    $tpl->set_type($menu_template_type);
+    $tpl->set_type_dflt(TRUE);
+    $tpl->save();
+  }
+  
+  $fn = cms_join_path(dirname(__FILE__),'templates','Simplex_Footer_Navigation.tpl');
+  if( file_exists( $fn ) ) {
+    $template = @file_get_contents($fn);
+    $tpl = new CmsLayoutTemplate();
+    $tpl->set_name('Simplex Footer Navigation');
     $tpl->set_owner($uid);
     $tpl->set_content($template);
     $tpl->set_type($menu_template_type);

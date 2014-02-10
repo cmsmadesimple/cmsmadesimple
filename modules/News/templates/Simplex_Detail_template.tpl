@@ -1,15 +1,16 @@
 {* set a canonical variable that can be used in the head section if process_whole_template is false in the config.php *}
 {if isset($entry->canonical)}
   {assign var='canonical' value=$entry->canonical}
+  {assign var='main_title' value=$entry->title}
 {/if}
 
-<h2>{$entry->title|cms_escape:htmlall}</h2>
+{* <h2>{$entry->title|cms_escape:htmlall}</h2> *}
 {if $entry->summary}
     {eval var=$entry->summary}
 {/if}
     {eval var=$entry->content}
 {if $entry->extra}
-		{$extra_label} {$entry->extra}
+        {$extra_label} {$entry->extra}
 {/if}
 {if $return_url != ""}
     <br />
@@ -20,7 +21,7 @@
   {foreach from=$entry->fields item='field'}
      <div>
         {if $field->type == 'file'}
-	  {* this template assumes that every file uploaded is an image of some sort, because News doesn't distinguish *}
+      {* this template assumes that every file uploaded is an image of some sort, because News doesn't distinguish *}
           <img src='{$entry->file_location}/{$field->value}' alt='' />
         {else}
           {$field->name}: {eval var=$field->value}

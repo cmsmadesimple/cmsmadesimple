@@ -85,6 +85,19 @@ try {
   $tpl->set_type($searchform_type);
   $tpl->set_type_dflt(TRUE);
   $tpl->save();
+  
+  // Setup Simplex Theme search form template
+  $fn = dirname(__FILE__).DIRECTORY_SEPARATOR.'templates'.DIRECTORY_SEPARATOR.'Simplex_Search_template.tpl';
+  if( file_exists( $fn ) ) {
+    $template = @file_get_contents($fn);
+    $tpl = new CmsLayoutTemplate();
+    $tpl->set_name('Simplex Search');
+    $tpl->set_owner($uid);
+    $tpl->set_content($template);
+    $tpl->set_type($searchform_type);
+    $tpl->save();
+  }
+  
 
   $searchresults_type = new CmsLayoutTemplateType();
   $searchresults_type->set_originator($this->GetName());
