@@ -85,7 +85,7 @@ class CmsLayoutTemplateQuery extends CmsDbQueryBase
 				$q2 = 'SELECT tpl_id FROM '.cms_db_prefix().CmsLayoutCollection::TPLTABLE.'
                WHERE design_id = ?';
 				$tpls = $db->GetCol($q2,array((int)$second));
-				$where['design'][] = 'id IN ('.implode(',',$tpls).')';
+				$where['design'][] = 'tpl.id IN ('.implode(',',$tpls).')';
 				break;
 
       case 'u': // user
