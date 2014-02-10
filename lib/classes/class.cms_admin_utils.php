@@ -106,17 +106,19 @@ final class cms_admin_utils
 
 	  $key1 = '';
 	  $key2 = '';
-	  $helptext = '';
+	  $title = '';
 	  foreach( $params as $key => $value ) {
 		  switch( $key ) {
 		  case 'key1':
+		  case 'realm':
 			  $key1 = trim($value);
 			  break;
+		  case 'key':
 		  case 'key2':
 			  $key2 = trim($value);
 			  break;
-		  case 'value':
-			  $helptext = $value;
+		  case 'title':
+			  $title = $value;
 		  }
 	  }
 
@@ -130,20 +132,23 @@ final class cms_admin_utils
 			  $key1 = 'help';
 		  }
 	  }
-	  if( !$key1 ) return;
+	  
+	  if( !$key1 ) 
+		return;
+	  
 	  $key = $key1;
-	  if( $key2 !== '' ) $key .= '__'.$key2;
-
+	  if( $key2 !== '' ) 
+		$key .= '__'.$key2;
+		
+	  if( $title === '' )
+		$title = $key2;
+	  
 	  $icon = self::get_icon('info.gif');
-	  if( !$icon ) return;
+	  if( !$icon ) 
+		return;
+	  
+	  return '<span class="cms_help" data-cmshelp-key="'.$key.'" data-cmshelp-title="'.$title.'"><img class="cms_helpicon" src="'.$icon.'" alt="'.$icon.'" /></span>';
 
-	  if( !$helptext ) {
-		  $out = '<span class="cms_help"><img class="cms_helpicon" src="'.$icon.'" alt="'.$icon.'"/><span class="cms_helpkey" style="display: none;">'.$key.'</span></span>';
-	  }
-	  else {
-		  $out = '<div class="cms_helptext title="'.lang('help').': '.$key.'" id="cmshelp_'.$key.'" style="display: none;">'.$helptext.'</div>';
-	  }
-	  return $out;
   }
 } // end of class
 

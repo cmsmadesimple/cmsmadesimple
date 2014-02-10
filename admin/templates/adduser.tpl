@@ -7,7 +7,7 @@
 
 {tab_start name='user'}
 <div class="pageoverflow">
-  <p class="pagetext"><label for="username">*{lang('name')}:</label></p>
+  <p class="pagetext"><label for="username">*{lang('name')}:</label>{cms_help realm='admin' key='info_adduser_username' title=lang('name')}</p>
   <p class="pageinput">
     <input id="username" type="text" name="user" maxlength="255" value="{$user}" class="standard"/>
     <br/>{lang('info_adduser_username')}

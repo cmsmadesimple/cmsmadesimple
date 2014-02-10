@@ -124,12 +124,13 @@ $lang['help_function_cms_help'] = <<<EOT
 <p>This plugin is typically used from module admin templates to display end user help in a popup window for an input field, column, or other important information.</p>
 <h3>What parameters does it take?</h3>
 <ul>
-<li>key1 - <em>(optional string)</em> - The first part in a unique key to identify the help string.  If this parameter is not specified, and this plugin is called from within a module action then the current module name is used.  If no module name can be found then &quot;help&quot; is used as the lang realm.</li>
-<li>key2 - <strong>required string</strong> - The second part in a unique key to identify the help string to display.  This is usually the key from the appropriate realms lang file.</li>
+<li>key - <strong>(required string)</strong> - The second part in a unique key to identify the help string to display.  This is usually the key from the appropriate realms lang file.</li>
+<li>realm - <em>(optional string)</em> - The first part in a unique key to identify the help string.  If this parameter is not specified, and this plugin is called from within a module action then the current module name is used.  If no module name can be found then &quot;help&quot; is used as the lang realm.</li>
+<li>title - <em>(optional string)</em> - Help box title</li>
 <li>assign - <em>(optional string)</em> - Assign the output to the named smarty variable.</li>
 </ul>
 <h3>Example:</h3>
-<pre><code>{cms_help key2-help_field_username}</code></pre>
+<pre><code>{cms_help key2='help_field_username'}</code></pre>
 EOT;
 
 $lang['help_function_cms_init_editor'] = <<<EOT
