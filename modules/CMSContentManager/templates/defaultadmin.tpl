@@ -211,7 +211,6 @@ $(document).ready(function () {
 <div id="contentlist">{* everything from here down is part of the ajax stuff *}
 {if isset($content_list)}
 	{function do_content_row}
-	<div id="content_{$row.id}" style="display: none;"></div>
 	{foreach $columns as $column => $flag}
 		{if $flag == 0}{continue}{/if}
 			<td>
@@ -362,7 +361,7 @@ $(document).ready(function () {
 				{elseif $column == 'multiselect'}
 					{if $row.multiselect != ''}
 						<label class="invisible" for="multicontent-{$row.id}">{$mod->Lang('prompt_multiselect_toggle')}</label>
-						<input type="checkbox" class="multicontent" name="{$actionid}multicontent[]" value="{$row.id}" title="{$mod->Lang('prompt_multiselect_toggle')}"/>
+						<input type="checkbox" id="multicontent-{$row.id}" class="multicontent" name="{$actionid}multicontent[]" value="{$row.id}" title="{$mod->Lang('prompt_multiselect_toggle')}"/>
 					{/if}
 				{else}
 					{* unknown column *}
