@@ -151,7 +151,7 @@ if( !$smarty->isCached($this->GetDatabaseResource($template),$cache_id) ) {
     case 'end_time':
     case 'start_time':
     case 'news_extra':
-      $query1 .= "ORDER BY mn.".$sortby;
+      $query1 .= "ORDER BY mn.$sortby ";
       break;
 
     default:
