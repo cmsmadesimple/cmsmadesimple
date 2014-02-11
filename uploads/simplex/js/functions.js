@@ -218,7 +218,7 @@
             if ($('#main').length > 0) {
                 trigger.click(function (event) {
                     
-                    if (SX.UA.match(/android|ipod|ipad|ipad/i)) {
+                    if (SX.UA.match(/android|ipod|ipad|iphone/i)) {
                         window.scrollTo(0);
                     } else {
                         $(doc).stop().animate({
