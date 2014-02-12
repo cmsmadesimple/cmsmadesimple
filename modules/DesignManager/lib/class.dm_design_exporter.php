@@ -263,7 +263,7 @@ EOT;
   {
     if( is_null($this->_tpl_list) ) {
       $this->_tpl_list = array();
-      
+
       $tpllist = $this->_design->get_templates();
       if( is_array($tpllist) && count($tpllist) > 0 ) {
 	foreach( $tpllist as $tpl_id ) {

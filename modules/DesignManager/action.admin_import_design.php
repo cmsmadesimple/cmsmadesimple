@@ -42,7 +42,7 @@ try {
 				if( $_FILES[$key]['error'] != 0 || $_FILES[$key]['tmp_name'] == '' || $_FILES[$key]['type'] == '') {
 					throw new CmsException($this->Lang('error_uploading','xml'));
 				}
-				if( $_FILES[$key]['type'] != 'text/xml' ) throw new CmsException($this->Lang('error_upload_filetype'));
+				if( $_FILES[$key]['type'] != 'text/xml' ) throw new CmsException($this->Lang('error_upload_filetype',$_FILES[$key]['type']));
 
 				$reader = dm_reader_factory::get_reader($_FILES[$key]['tmp_name']);
 				$reader->validate();

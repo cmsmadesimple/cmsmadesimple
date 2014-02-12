@@ -51,7 +51,7 @@
   <div class="pageoverflow">
     <p class="pagetext"><label for="description">{$mod->Lang('prompt_description')}:</label>&nbsp;{cms_help key2=help_design_description}</p>
     <p class="pageinput">
-      <textarea id="description" name="{$actionid}description">{$design->get_description()}</textarea>
+      <textarea id="description" name="{$actionid}description" rows="5">{$design->get_description()}</textarea>
     </p>
   </div>
 {tab_end}

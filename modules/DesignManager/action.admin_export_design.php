@@ -114,7 +114,6 @@ function _get_sub_templates( $template )
   $regex='/\{include.*\}/';
   $template = preg_replace_callback( $regex, $replace_fn3, $template );
 
-  debug_display($template);
   return $template;
 }
 

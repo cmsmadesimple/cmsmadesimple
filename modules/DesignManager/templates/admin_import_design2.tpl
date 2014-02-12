@@ -2,16 +2,16 @@
 $(document).ready(function(){
   $('.helpicon').click(function(){
     var x = $(this).attr('name');
-    $('#'+x).dialog();
+    $('#'+x).dialog({ width: 'auto' });
   });
   $('.template_view').click(function(){
     var x = $(this).attr('rel');
-    $('#'+x).dialog();
+    $('#'+x).dialog({ width: 'auto' });
     return false;
   });
   $('.stylesheet_view').click(function(){
     var x = $(this).attr('rel');
-    $('#'+x).dialog();
+    $('#'+x).dialog({ width: 'auto' });
     return false;
   });
 });
@@ -62,7 +62,8 @@ $(document).ready(function(){
 {tab_header name='templates' label=$mod->Lang('prompt_templates')}
 {tab_header name='stylesheets' label=$mod->Lang('prompt_stylesheets')}
 {tab_start name='description'}
-<textarea>{$design_info.description}</textarea>
+{* no name set on this field... *}
+<textarea rows="5" cols="80">{$design_info.description}</textarea>
 {tab_start name='copyright'}
 TODO
 {tab_start name='templates'}
@@ -82,7 +83,7 @@ TODO
          <td>{$one.desc|default:$mod->Lang('info_nodescription')}}</td>
       </tr>
     </table>
-    <div id="tpl_{$smarty.foreach.tpl.index}" title="{$one.name}" style="display: none;"><textarea>{$one.data}</textarea></div>
+    <div id="tpl_{$smarty.foreach.tpl.index}" title="{$one.name}" style="display: none;"><textarea rows="10" cols="80">{$one.data}</textarea></div>
   </div>
   {/foreach}
 </div>
@@ -91,7 +92,7 @@ TODO
   {foreach from=$stylesheets item='one' name='css'}
   <h3><a href="#" rel="css_{$smarty.foreach.css.index}" class="stylesheet_view">{$one.name}</a></h3>
   <div><p>{$one.desc|default:$mod->Lang('info_nodescription')}</p>
-    <div id="css_{$smarty.foreach.css.index}" title="{$one.name}" style="display: none;"><textarea>{$one.data|cms_escape}</textarea></div>
+    <div id="css_{$smarty.foreach.css.index}" title="{$one.name}" style="display: none;"><textarea rows="10" cols="80">{$one.data|cms_escape}</textarea></div>
   </div>
   {/foreach}
 </div>
