@@ -118,6 +118,7 @@ $(document).ready(function(){
   	<th title="{$mod->Lang('title_css_designs')}">{$mod->Lang('prompt_design')}</th>
 	<th title="{$mod->Lang('title_css_modified')}">{$mod->Lang('prompt_modified')}</th>
 	<th class="pageicon"></th>{* edit *}
+	<th class="pageicon"></th>{* copy *}
 	<th class="pageicon"></th>{* delete *}
 	<th class="pageicon"><label for="css_selall" style="display: none;">{$mod->Lang('title_css_selectall')}</label><input type="checkbox" value="1" id="css_selall" title="{$mod->Lang('title_css_selectall')}"/></th>{* multiple *}
       </tr>
@@ -127,6 +128,7 @@ $(document).ready(function(){
         {cycle values="row1,row2" assign='rowclass'}
         {include file='module_file_tpl:DesignManager;admin_defaultadmin_csstooltip.tpl' assign='css_tooltip'}
         {cms_action_url action='admin_edit_css' css=$css->get_id() assign='edit_css'}
+        {cms_action_url action='admin_copy_css' css=$css->get_id() assign='copy_css'}
         {cms_action_url action='admin_delete_css' css=$css->get_id() assign='delete_css'}
 
 	<tr class="{$rowclass}">
@@ -153,8 +155,9 @@ $(document).ready(function(){
 	    <span title="{$mod->Lang('help_stylesheet_no_designs')}">{$mod->Lang('prompt_none')}</span>
 	  {else}
 	    {capture assign='tooltip_designs'}{strip}
+            <u>{$mod->Lang('prompt_attached_designs')}</u>:<br />
 	    {foreach $t1 as $dsn_id}
-	      {$mod->Lang('prompt_name')}: {$design_names.$dsn_id}<br />
+	      {$design_names.$dsn_id}<br />
 	    {/foreach}
 	    {/strip}{/capture}
 	    <a class="tooltip text-red" data-cms-description='{$tooltip_designs|htmlentities}' title="{$mod->Lang('help_stylesheet_multiple_designs')}">{$mod->Lang('prompt_multiple')} ({count($t1)})
@@ -164,6 +167,7 @@ $(document).ready(function(){
 
 	{if !$css->locked()}
           <td><a href="{$edit_css}" data-css-id="{$css->get_id()}" class="edit_css" title="{$mod->Lang('edit_stylesheet')}">{admin_icon icon='edit.gif' title=$mod->Lang('edit_stylesheet')}</a></td>
+	  <td><a href="{$copy_css}" title="{$mod->Lang('copy_stylesheet')}">{admin_icon icon='copy.gif' title=$mod->Lang('copy_stylesheet')}</a></td>
   	  <td><a href="{$delete_css}" title="{$mod->Lang('delete_stylesheet')}">{admin_icon icon='delete.gif' title=$mod->Lang('delete_stylesheet')}</a></td>
   	  <td>
 	    <label for="css_select{$css@index}" style="display: none;">{$mod->Lang('prompt_select')}:</label>
@@ -176,6 +180,7 @@ $(document).ready(function(){
 	      <a href="{$edit_css}" data-css-id="{$css->get_id()}" accesskey="e" class="steal_css_lock">{admin_icon icon='permissions.gif' class='edit_css steal_css_lock' title=$mod->Lang('prompt_steal_lock')}</a>
             {/if}
           </td>
+          <td></td>
           <td></td>
           <td></td>
         {/if}

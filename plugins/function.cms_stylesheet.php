@@ -87,7 +87,7 @@ function smarty_cms_function_cms_stylesheet($params, &$template)
 	}
 
 	if( isset($params['nocombine']) ) {
-	   $combine_stylesheets = cms_to_bool($params['nocombine']);
+	   $combine_stylesheets = !cms_to_bool($params['nocombine']);
 	}	
 
 	if( isset($params['stripbackground']) )
@@ -157,7 +157,7 @@ function smarty_cms_function_cms_stylesheet($params, &$template)
 	#---------------------------------------------
 	# Execute
 	#---------------------------------------------		
-	
+
 	$res = $db->GetArray($query, $qparms);
 	if($res) {
 	
@@ -252,7 +252,6 @@ function smarty_cms_function_cms_stylesheet($params, &$template)
 			
 		// Do not combine stylesheets	
 		} else {
-
 			foreach ($res as $one) {
 			
 			    if (isset($params['media'])) {

@@ -92,9 +92,7 @@ try {
 				}
 				else {
 					// redirect to this action, with step3.
-					$this->Redirect($id,'admin_import_design',$returnid,
-													array('step'=>3,'tmpfile'=>$tmpfile,
-																'newname'=>$params['newname']));
+					$this->Redirect($id,'admin_import_design',$returnid,array('step'=>3,'tmpfile'=>$tmpfile,'newname'=>$params['newname']));
 				}
 			}
 
@@ -133,42 +131,8 @@ try {
 		$reader = dm_reader_factory::get_reader($tmpfile);
 		$reader->set_suggested_name($newname);
 		$reader->import();
-		/*
-		$config = cmsms()->GetConfig();
-		$dirname = munge_string_to_url($newname);
-		if( !is_dir($destdir) ) @mkdir($destdir);
-		if( !is_writable($destdir) ) {
-			throw new CmsException($this->Lang('error_notwritable',$destdir));
-		}
-		$destdir = "$destdir/$dirname";
-		if( is_dir($destdir) ) {
-			throw new CmsException($this->Lang('error_direxists',$destdir));
-		}
-		*/
-
-
-		//@mkdir($destdir);
-		// create URL's ... 
-    //  foreach FILE
-    //    if URL
-    //      build dest path
-    //      decode file
-    //    if TPL
-    //      build a new name
-    //    if CSS
-    //      build a new name
-		// create stylesheets
-    //  foreach stylesheet
-		//    foreach FILE
-		//      if URL
- 		//        replace <KEY> with '[[uploads_url]]/designmanager_import/$dirname/$filename';
-    //    save stylesheet
-		// create templates
-    //  foreach template
-		//    foreach FILE
-    //      if NOT CSS
-    //        replace <KEY> with new name
-		//  save template
+		$this->SetMessage($this->Lang('msg_design_imported'));
+		$this->RedirectToAdminTab();
 		break;
 
   default:
