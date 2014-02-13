@@ -38,7 +38,7 @@ try {
   }
 
 	try {
-		if( isset($params['submit']) ) {
+		if( isset($params['submit']) || isset($params['apply']) ) {
 			$design->set_name($params['name']);
 			$design->set_description($params['description']);
 			$tpl_assoc = array();
@@ -49,8 +49,14 @@ try {
 			if( isset($params['assoc_css']) ) $css_assoc = $params['assoc_css'];
 			$design->set_stylesheets($css_assoc);
 			$design->save();
-			$this->SetMessage($this->Lang('msg_design_saved'));
-			$this->RedirectToAdminTab();
+
+			if( isset($params['submit']) ) {
+				$this->SetMessage($this->Lang('msg_design_saved'));
+				$this->RedirectToAdminTab();
+			}
+			else {
+				echo $this->ShowMessage($this->Lang('msg_design_saved'));
+			}
 		}
 	}
 	catch( Exception $e ) {

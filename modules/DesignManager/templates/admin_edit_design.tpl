@@ -13,6 +13,7 @@
       <p class="pageinput">
         <input id="submitme" type="submit" name="{$actionid}submit" value="{$mod->Lang('submit')}"/>
         <input type="submit" name="{$actionid}cancel" value="{$mod->Lang('cancel')}"/>
+        <input id="applyme" type="submit" name="{$actionid}apply" value="{$mod->Lang('apply')}"/>
       </p>
     </div>
 
