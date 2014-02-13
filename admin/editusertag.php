@@ -29,7 +29,6 @@ $themeObject = null;
 if( !isset($_POST['ajax']) ) {
   include_once('header.php');
   $themeObject->set_value('pagetitle','userdefinedtags'); // generic header for oneeleven
-  debug_display('no ajax');
 }
 
 $record = array('userplugin_id'=>'',
