@@ -24,10 +24,12 @@ $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 $userid = get_userid();
 if( !check_permission($userid, 'Modify User-defined Tags') ) return;
 $tagops = cmsms()->GetUserTagOperations();
+$themeObject = null;
 
 if( !isset($_POST['ajax']) ) {
   include_once('header.php');
   $themeObject->set_value('pagetitle','userdefinedtags'); // generic header for oneeleven
+  debug_display('no ajax');
 }
 
 $record = array('userplugin_id'=>'',
@@ -40,9 +42,7 @@ if( isset($_REQUEST['userplugin_id']) && $_REQUEST['userplugin_id'] != '' ) {
   $record = $tagops->GetUserTag((int)$_REQUEST['userplugin_id']);
 }
 
-if( isset($_POST['cancel']) ) {
-  redirect('listusertags.php'.$urlext);
-}
+if( isset($_POST['cancel']) ) redirect('listusertags.php'.$urlext);
 
 $error = array();
 if( isset($_POST['submit']) || isset($_POST['apply']) ) {
@@ -129,18 +129,23 @@ if( isset($_POST['submit']) || isset($_POST['apply']) ) {
     if( isset($_POST['submit']) ) {
       redirect('listusertags.php'.$urlext);
     }
-    // got here via ajax.
-    $out = array('response'=>'Success','details'=>$details);
-    echo json_encode($out);
-    exit;
+    else {
+      // got here via ajax.
+      $out = array('response'=>'Success','details'=>$details);
+      echo json_encode($out);
+      exit;
+    }
   }
   else {
     if( isset($_POST['submit']) ) {
       echo $themeObject->ShowErrors($error);
     }
-    $out = array('response'=>'Error','details'=>$error);
-    echo json_encode($out);
-    exit;
+    else {
+      // ajaxy.
+      $out = array('response'=>'Error','details'=>$error);
+      echo json_encode($out);
+      exit;
+    }
   }
 }
 

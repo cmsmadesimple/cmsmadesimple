@@ -36,7 +36,6 @@ $(document).ready(function(){
   });
 
   $(document).on('click', '#applybtn', function(){
-
     var data = $('#edit_userplugin').find('input:not([type=submit]), select, textarea').serializeArray();
     data.push({ 'name': 'ajax', 'value': 1 });
     data.push({ 'name': 'apply', 'value': 1 });
