@@ -179,17 +179,6 @@ class dm_theme_reader extends dm_reader_base
 						$this->_xml->read();
 						$this->_ref_map[$cur_key]['location'] = $this->_xml->value;
 						break;
-
-// 					case 'assoc_tname':
-// 					case 'assoc_cssname':
-// 						if( $__get_in() != 'assoc' ) {
-// 							// validity error.
-// 						}
-// 						$this->_xml->read();
-// 						$tmp = $this->_xml->value;
-// 						list($a,$cur_key) = explode(':',$tmp);
-// 						if( $cur_key ) $cur_key = trim($cur_key);
-// 						if( !isset($this->_ref_map[$cur_key]) ) $this->_ref_map[$cur_key] = array();
 					}
 					break;
 
@@ -225,9 +214,6 @@ class dm_theme_reader extends dm_reader_base
 		if( count($this->_css_info) == 0 ) {
 			throw new CmsException('Invalid XML FILE (test3)');
 		}
-// 		if( count($this->_ref_map) == 0 ) {
-// 			throw new CmsException('Invalid XML FILE (test4)');
-// 		}
     // it validates.
   }
 
@@ -436,7 +422,10 @@ class dm_theme_reader extends dm_reader_base
 		};
 
 		$tpl_info = $this->get_template_list();
+		$have_mm_template = FALSE;
 		foreach( $tpl_info as $name => &$tpl_rec ) {
+			if( $tpl_rec['type_originator'] == 'MenuManager' ) $have_mm_template = TRUE;
+
 			$template = new CmsLayoutTemplate();
 			$template->set_name($tpl_rec['name']);
 
@@ -458,13 +447,19 @@ class dm_theme_reader extends dm_reader_base
 
 			$tpl_rec['data'] = $content;
 			$template->set_content($content);
-			$template->set_type(CmsLayoutTemplateType::CORE.'::page');
+			$template->set_type($tpl_rec['type_originator'].'::'.$tpl_rec['type_name']);
  			$template->save();
  			$design->add_template($template);
 		}
 
-		// part5 .. save design
+		// part5 ... save design
 		$design->save();
+
+		// part6 ... Make sure MenuManager is activated.
+		if( $have_mm_template ) {
+			$modops = ModuleOperations::get_instance();
+			$modops->Activate('MenuManager',1);
+		}
 	}
 } // end of class
 
