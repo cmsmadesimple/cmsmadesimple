@@ -80,11 +80,11 @@ $(document).ready(function(){
       <p class="pagetext"></p>
       <p class="pageinput">
         <input id="submitme" type="submit" name="submit" value="{lang('submit')}"/>
+		<input type="submit" name="cancel" value="{lang('cancel')}"/>
         {if $record.userplugin_id != ''}
         <input id="applybtn" type="submit" name="apply" value="{lang('apply')}" title="{lang('title_applyusertag')}"/>
         <input id="runbtn" type="submit" name="run" value="{lang('run')}" title="{lang('runuserplugin')}"/>
         {/if}
-        <input type="submit" name="cancel" value="{lang('cancel')}"/>
       </p>
     </div>
 
