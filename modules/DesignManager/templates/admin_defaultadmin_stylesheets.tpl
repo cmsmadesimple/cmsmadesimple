@@ -110,6 +110,7 @@ $(document).ready(function(){
 
 {if isset($stylesheets)}
   {strip}
+  {form_start action=admin_bulk_css}
   <table class="pagetable">
     <thead>
       <tr>
@@ -203,11 +204,12 @@ $(document).ready(function(){
   {/capture}
 
   <div class="clearb"></div>
+  <div class="row">
+    <div class="half"></div>
+    {if isset($stylesheet_dropdown_options)}{$stylesheet_dropdown_options}{/if}
+  </div>
+  {form_end}
 {else}
   <div class="warning">{$mod->Lang('warning_no_stylesheets')}</div>
 {/if}
 
-<div class="row">
-  <div class="half"></div>
-  {if isset($stylesheet_dropdown_options)}{$stylesheet_dropdown_options}{/if}
-</div>

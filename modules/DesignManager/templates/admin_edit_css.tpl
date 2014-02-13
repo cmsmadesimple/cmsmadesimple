@@ -62,10 +62,10 @@ $(document).ready(function(){
       <p class="pagetext"></p>
       <p class="pageinput">
         <input type="submit" name="{$actionid}submit" value="{$mod->Lang('submit')}"/>
+        <input type="submit" id="cancelbtn" name="{$actionid}cancel" value="{$mod->Lang('cancel')}"/>
         {if $css->get_id()}
         <input type="submit" id="applybtn" name="{$actionid}apply" value="{$mod->Lang('apply')}"/>
         {/if}
-        <input type="submit" id="cancelbtn" name="{$actionid}cancel" value="{$mod->Lang('cancel')}"/>
       </p>
     </div>
 
