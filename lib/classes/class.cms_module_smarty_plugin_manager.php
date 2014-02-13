@@ -140,7 +140,7 @@ final class cms_module_smarty_plugin_manager
 	  if( !is_callable($row['callback']) ) {
 		  // it's in the db... but not callable.
 		  audit('','cms_module_smarty_plugin_manager','Cannot load plugin '.$row['name'].' from module '.$row['module'].' because callback not callable (module disabled?)');
-		  $row['callback'] = array('Smarty_CMS','_dflt_plugin');
+		  $row['callback'] = array($row['module'],'function_plugin');
 		  return $row;
 	  }
 	  return $row;
