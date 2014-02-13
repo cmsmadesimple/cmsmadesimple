@@ -25,6 +25,8 @@ Core - General
   - Simplex Theme gets some love: updated Grid system, removed all images and replaced with icon fonts, extended JS functions with 
     hopefully better Mobile support, Theme JS includes now helper variables like SX.isTouch, SX.isMobile, SX.viewportWidth and SX.UA,
     for more information refer to uploads/simplex/js/ functions.js (note: Theme is using functions.min.js), dropped IE7 support, NOT!! tested in Windows Mobile
+  - removed deprecated {breadcrumbs} tag
+  - deprecate template functions in the module API
   
 Core - Bug Reports
   - #9721 There's no check if changelog.txt exists

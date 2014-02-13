@@ -255,7 +255,7 @@ abstract class CMSModule
   final static public function function_plugin($params,&$template)
   {
     $class = get_called_class();
-    $params['module'] = $class;
+	if( $class != 'CMSModule' && !isset($params['module']) ) $params['module'] = $class;
     return cms_module_plugin($params,$template);
   }
 
@@ -277,9 +277,7 @@ abstract class CMSModule
    */
   public function RegisterSmartyPlugin($name,$type,$callback,$cachable = TRUE,$usage = 0)
   {
-    if( !$name || !$type || !$callback ) {
-      throw new CmsException('Invalid data passed to RegisterSmartyPlugin');
-    }
+    if( !$name || !$type || !$callback ) throw new CmsException('Invalid data passed to RegisterSmartyPlugin');
 
     // todo: check name, and type
     if( $usage == 0 ) $usage = cms_module_smarty_plugin_manager::AVAIL_FRONTEND;
@@ -2520,6 +2518,7 @@ abstract class CMSModule
    * List Templates associated with a module
    *
    * @final
+   * @deprecated
    * @param string module name.  If empty the current module name is used.
    * @return array
    */
@@ -2534,6 +2533,7 @@ abstract class CMSModule
    * follow any smarty caching rules.
    *
    * @final
+   * @deprecated
    * @param string template name
    * @param string module name.  If empty the current module name is used.
    * @return string
@@ -2563,6 +2563,7 @@ abstract class CMSModule
    * Sets a smarty template into the database and associates it with a module.
    *
    * @final
+   * @deprecated
    * @param string The template name
    * @param string The template content
    * @param string The module name, if empty the current module name is used.
@@ -2578,6 +2579,7 @@ abstract class CMSModule
    * Delete a module template from the database
    *
    * @final
+   * @deprecated
    * @param string the Template name, if empty all templates associated with the module are deleted.
    * @param string The module name, if empty the current module name is used.
    * @return boolean
@@ -2626,6 +2628,7 @@ abstract class CMSModule
    * Process a smarty template associated with a module through smarty and return the results
    *
    * @final
+   * @deprecated
    * @param string Template name
    * @param string (optional) Designation
    * @param boolean (optional) Cachable flag
