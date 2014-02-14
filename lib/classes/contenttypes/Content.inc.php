@@ -221,7 +221,7 @@ class Content extends ContentBase
 		$have_content_en = FALSE;
 		foreach($blocks as $blockName => $blockInfo) {
 			if( $blockInfo['id'] == 'content_en' ) $have_content_en = TRUE;
-			if( $blockInfo['required'] && ($val = $this->GetPropertyValue($blockName)) == '' ) {
+			if( isset($blockInfo['required']) && $blockInfo['required'] && ($val = $this->GetPropertyValue($blockName)) == '' ) {
 				$errors[] = lang('emptyblock',array($blockName));
 			}
 			if( isset($blockInfo['type']) && $blockInfo['type'] == 'module' ) {
@@ -257,6 +257,7 @@ class Content extends ContentBase
     {
 		if( is_array($this->_contentBlocks) ) return $this->_contentBlocks;
 
+		CMS_Content_Block::reset();
 		$parser = cmsms()->get_template_parser();
 		$parser->fetch('cms_template:'.$this->TemplateId()); // do the magic.
 

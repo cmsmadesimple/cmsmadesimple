@@ -78,7 +78,9 @@ if( $module != 'core' ) {
     $this->SetError('error_invalidbulkaction');
     $this->RedirectToAdminTab();
   }
-  die('got here ... need to call module for bulk content');
+  $url = $modobj->create_url($id,$bulkaction,$returnid,array('contentlist'=>implode(',',$multicontent)));
+  $url = str_replace('&amp;','&',$url);
+  redirect($url);
 }
 
 $parms = array('multicontent'=>$params['multicontent']);

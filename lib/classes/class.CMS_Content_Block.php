@@ -55,6 +55,12 @@ final class CMS_Content_Block
     return self::$_contentBlocks;
   }
 
+  public static function reset()
+  {
+    self::$_priority = 100;
+    self::$_contentBlocks = null;
+  }
+
   public static function smarty_compiler_contentblock($params,$smarty)
   {
     // {content} tag encountered.
@@ -79,9 +85,7 @@ final class CMS_Content_Block
     }
 
     // check for duplicate.
-    if( isset(self::$_contentBlocks[$rec['name']]) ) {
-      throw new CmsEditContentException('Duplicate content block: '.$rec['name']);
-    }
+    if( isset(self::$_contentBlocks[$rec['name']]) ) throw new CmsEditContentException('Duplicate content block: '.$rec['name']);
 
     if( !is_array(self::$_contentBlocks) ) self::$_contentBlocks = array();
     self::$_contentBlocks[$rec['name']] = $rec;
