@@ -281,8 +281,7 @@ class ContentOperations
 	{
 		if( !is_array($this->_content_types) ) {
 			// get the standard ones.
-			$content_types = $this->_get_std_content_types();
-			$this->_content_types = $content_types;
+			$this->_content_types = $this->_get_std_content_types();
 
 			// get the list of modules that have content types.
 			// and load them.  content types from modules are

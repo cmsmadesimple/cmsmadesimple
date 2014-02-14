@@ -43,7 +43,7 @@ $(document).ready(function(){
     $.post(url,data,function(data,textStatus,jqXHR){
       $('#cancelbtn').button('option','label','{$mod->Lang('close')}');
       $('#css_modified_cont').hide();
-      $('#content').focus();
+      return false;
     });
   });
 });
@@ -133,15 +133,15 @@ $(document).ready(function(){
 <div class="pageoverflow">
   <p class="pagetext"><label for="mediaquery">{$mod->Lang('prompt_media_query')}:</label>&nbsp;{cms_help key2=help_css_mediaquery}</p>
   <p class="pageinput">
-    <textarea id="mediaquery" name="{$actionid}media_query" rows="10" columns="80">{$css->get_media_query()}</textarea>
+    <textarea id="mediaquery" name="{$actionid}media_query" rows="10" cols="80">{$css->get_media_query()}</textarea>
   </p>
 </div>
 
 {tab_start name='description'}
 <div class="pageoverflow">
-  <p class="pagetext"><label for="description">{$mod->Lang('prompt_description')}:</label>&nbsp;{cms_help key2=help_css_description}</p>
+  <p class="pagetext"><label for="txt_description">{$mod->Lang('prompt_description')}:</label>&nbsp;{cms_help key2=help_css_description}</p>
   <p class="pageinput">
-    <textarea id="description" name="{$actionid}description" rows="10" columns="80">{$css->get_description()}</textarea>
+    <textarea id="txt_description" name="{$actionid}description" rows="10" cols="80">{$css->get_description()}</textarea>
   </p>
 </div>
 
@@ -150,7 +150,7 @@ $(document).ready(function(){
 <div class="pageoverflow">
   <p class="pagetext"><label for="designlist">{$mod->Lang('prompt_designs')}:</label>&nbsp;{cms_help key2=help_css_designs}</p>
   <p class="pageinput">
-    <select name="{$actionid}design_list[]" multiple="multiple" size="5">
+    <select id="designlist" name="{$actionid}design_list[]" multiple="multiple" size="5">
     {html_options options=$design_list selected=$css->get_designs()}
     </select>
   </p>
