@@ -164,23 +164,20 @@ $(document).ready(function(){
   {submit_buttons}
 
   {* tab headers *}
-  {foreach from=$tab_names item='tabname' name='tabs'}
-    {assign var='tmp' value='tab_'|cat:$smarty.foreach.tabs.index}
-    {tab_header name=$tmp label=$tabname}
+  {foreach $tab_names as $key => $tabname}
+    {tab_header name=$key label=$tabname}
   {/foreach}
   {if $content_obj->HasPreview()}
     {tab_header name='_preview_' label=$mod->Lang('prompt_preview')}
   {/if}
 
   {* tab content *}
-  {foreach from=$tab_names item='tabname' name='tabs'}
-    {assign var='idx' value=$smarty.foreach.tabs.index}
-    {assign var='tmp' value='tab_'|cat:$idx}
-    {tab_start name=$tmp}
-      {if isset($tab_message_array[$idx])}{$tab_message_array[$idx]}{/if}
+  {foreach $tab_names as $key => $tabname}
+    {tab_start name=$key}
+      {if isset($tab_message_array[$key])}{$tab_message_array[$key]}{/if}
 
-      {if isset($tab_contents_array[$idx])}
-        {foreach from=$tab_contents_array[$idx] item='fld'}
+      {if isset($tab_contents_array[$key])}
+        {foreach $tab_contents_array.$key as $fld}
         <div class="pageoverflow">
           <p class="pagetext">{$fld[0]}</p>
           <p class="pageinput">{$fld[1]}{if count($fld) == 3}<br/>{$fld[2]}{/if}</p>

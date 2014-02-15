@@ -941,7 +941,6 @@ abstract class ContentBase
 					while ($contentops->CheckAliasError($alias.'-'.$alias_num_add) !== FALSE) {
 						if( $alias_num_add > 100 ) {
 							$tmp = $contentops->CheckAliasError($alias.'-'.$alias_num_add);
-							die('foobar '.$alias.' '.$tmp);
 						}
 						$alias_num_add++;
 					}
@@ -1868,29 +1867,22 @@ abstract class ContentBase
 	}
 
 	/**
-	 * Used from a page that allows content editing. This method the list of distinct sections
+	 * Used from a page that allows content editing. This method provides a list of distinct sections
 	 * that devides up the various logical sections that this content type supports for editing.
 	 *
 	 * @abstract
-	 * @return array List of tab name strings.
+	 * @return associative array List of tab keys, and values.
 	 */
-	public function GetTabNames($keys = FALSE)
+	public function GetTabNames()
 	{
 		$props = $this->_GetEditableProperties();
 		$arr = array();
 		foreach( $props as $one ) {
 			if( !isset($one->tab) || $one->tab == '' ) $one->tab = self::TAB_MAIN;
-			if( !isset($arr[$one->tab]) ) $arr[$one->tab] = 0;
-			$arr[$one->tab]++;
-		}
-      
-		$arr = array_keys($arr);
-		if( !$keys ) {
-			for( $i = 0; $i < count($arr); $i++ ) {
-				$one =& $arr[$i];
-				if( endswith($one,'_tab__') ) $one = lang($one);
-			}
-		}
+			$key = $lbl = $one->tab;
+			if( endswith($key,'_tab__') ) $lbl = lang($key);
+			$arr[$key] = $lbl;
+		}      
 		return $arr;
 	}
 
@@ -1899,17 +1891,11 @@ abstract class ContentBase
 	 *
 	 * @abstract
 	 * @since 2.0
-	 * @param mixed either a tab name (untranslated) or an integer index
+	 * @param string the tab key (as returned with GetTabNames)
 	 * @return string html text to display at the top of the tab.
 	 */
 	public function GetTabMessage($key)
 	{
-		if( (int)$key >= 0 ) {
-			$tabs = $this->GetTabNames(TRUE);
-			if( $key >= count($tabs) ) $key = 0;
-			$key = $tabs[$key];
-		}
-
 		switch( $key ) {
 		case self::TAB_PERMS:
 			return '<div class="information">'.lang('msg_permstab').'</div>';
@@ -1920,19 +1906,12 @@ abstract class ContentBase
 	/**
 	 * Get the attributes for a specific tab
 	 *
-	 * @param mixed either a tab name (untranslated) or an integer index
+	 * @param string tab key
 	 * @return An array of arrays.  Index 0 of each element should be a prompt field, and index 1 should be the input field for the prompt.
 	 */
 	public function GetTabElements($key,$adding = FALSE)
 	{
-		if( (int)$key >= 0 ) {
-			$tabs = $this->GetTabNames(TRUE);
-			if( $key >= count($tabs) ) $key = 0;
-			$key = $tabs[$key];
-		}
-
 		$props = $this->_GetEditableProperties();
-
 		$out = array();
 		foreach( $props as $one ) {
 			if( !isset($one->tab) || $one->tab == '' ) $one->tab = self::TAB_MAIN;
@@ -2100,7 +2079,7 @@ abstract class ContentBase
 	 * @param boolean required (wether the property is required)
 	 * @return void
 	 */
-	protected function AddProperty($name,$priority,$tab,$required = FALSE)
+	protected function AddProperty($name,$priority,$tab = self::TAB_MAIN,$required = FALSE)
 	{
 		$ob = new StdClass;
 		$ob->name = $name;
@@ -2109,7 +2088,6 @@ abstract class ContentBase
 		$ob->required = $required;
 
 		if( !is_array($this->_attributes) ) $this->_attributes = array();
-
 		$this->_attributes[] = $ob;
 	}
 

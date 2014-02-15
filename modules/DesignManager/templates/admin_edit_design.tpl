@@ -43,12 +43,12 @@
 
 {tab_header name='templates' label=$mod->Lang('prompt_templates')}
 {tab_header name='stylesheets' label=$mod->Lang('prompt_stylesheets')}
-{tab_header name='description' label=$mod->Lang('prompt_description')}
+{tab_header name='tab_description' label=$mod->Lang('prompt_description')}
 {tab_start name='templates'}
-{include file='module_file_tpl:DesignManager;admin_edit_design_templates.tpl' scope='root'}
+  {include file='module_file_tpl:DesignManager;admin_edit_design_templates.tpl' scope='root'}
 {tab_start name='stylesheets'}
-{include file='module_file_tpl:DesignManager;admin_edit_design_stylesheets.tpl' scope='root'}
-{tab_start name='description'}
+  {include file='module_file_tpl:DesignManager;admin_edit_design_stylesheets.tpl' scope='root'}
+{tab_start name='tab_description'}
   <div class="pageoverflow">
     <p class="pagetext"><label for="description">{$mod->Lang('prompt_description')}:</label>&nbsp;{cms_help key2=help_design_description}</p>
     <p class="pageinput">
@@ -63,9 +63,10 @@
 
 <script type="text/javascript">
 $(document).ready(function(){
-  $(document).on('click', '#submitme', function(){
+  $(document).on('click', '#submitme,#applyme', function(){
     $('select.selall').attr('multiple','multiple');	
     $('select.selall option').attr('selected','selected');
   });
 });
+
 </script>

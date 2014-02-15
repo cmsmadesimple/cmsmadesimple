@@ -7,8 +7,8 @@
 {assign var='cssl' value=$design->get_stylesheets()}
 <div>
   <table class="pagetable" style="border: none;">
-  <tr valign="center">
-    <td valign="top">
+  <tr>
+    <td>
       <fieldset>
         <legend><label for="avail_css">{$mod->Lang('available_stylesheets')}:</label></legend>
         <select id="avail_css" multiple="multiple" size="10">
@@ -20,18 +20,17 @@
         </select>
       </fieldset>
     </td>
-    <td style="text-align: center;" valign="center">
+    <td style="text-align: center;">
       <div>{admin_icon icon='up.gif' id='css_up' title=$mod->Lang('help_move_up')}</div>
       <div>{admin_icon icon='left.gif' id='css_left' title=$mod->Lang('help_move_left')}</div>
       <div>{admin_icon icon='right.gif' id='css_right' title=$mod->Lang('help_move_right')}</div>
       <div>{admin_icon icon='down.gif' id='css_down' title=$mod->Lang('help_move_down')}</div>
     </td>
-    <td valign="top">
+    <td>
       <fieldset>
         <legend><label for="assoc_css">{$mod->Lang('attached_stylesheets')}:</label></legend>
         <select class="selall" id="assoc_css" name="{$actionid}assoc_css[]" multiple="multiple" size="10">
           {foreach from=$design->get_stylesheets() item='one'}
-          <pre>{$one|@print_r}</pre>
           <option value="{$one}">{$list_stylesheets.$one}</option>
           {/foreach}
         </select>

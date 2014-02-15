@@ -225,17 +225,16 @@ if( $content_id && CmsContentManagerUtils::locking_enabled() ) {
 
 if( $error ) echo $this->ShowErrors($error);
 
-$tabnames = $content_obj->GetTabNames();
-$numberoftabs = count($tabnames);
+$tab_names = $content_obj->GetTabNames();
 $tab_contents_array = array();
 $tab_message_array = array();
 
-for( $currenttab = 0; $currenttab < $numberoftabs; $currenttab++ ) {
+foreach( $tab_names as $currenttab => $label ) {
   $tmp = $content_obj->GetTabMessage($currenttab);
   if( $tmp ) $tab_message_array[$currenttab] = $tmp;
   
   $contentarray = $content_obj->GetTabElements($currenttab);
-  if( $currenttab == 0 ) {
+  if( $currenttab == $content_obj::TAB_MAIN ) {
     // first tab... add the content type selector.
     $help = '&nbsp;'.cms_admin_utils::get_help_tag('help_content_type');
     $tmp = array('<label for="content_type">*'.$this->Lang('prompt_editpage_contenttype').':</label>'.$help);
@@ -266,14 +265,12 @@ $smarty->assign('lock_timeout',$this->GetPreference('locktimeout'));
 $smarty->assign('lock_refresh',$this->GetPreference('lockrefresh'));
 $smarty->assign('content_id',$content_id);
 $smarty->assign('content_obj',$content_obj);
-$smarty->assign('tab_names',$tabnames);
+$smarty->assign('tab_names',$tab_names);
 $smarty->assign('tab_contents_array',$tab_contents_array);
 $smarty->assign('tab_message_array',$tab_message_array);
 $factory = new ContentAssistantFactory($content_obj);
 $assistant = $factory->getEditContentAssistant();
-if( is_object($assistant) ) {
-  $smarty->assign('extra_content',$assistant->getExtraCode());
-}
+if( is_object($assistant) ) $smarty->assign('extra_content',$assistant->getExtraCode());
 
 echo $this->ProcessTemplate('admin_editcontent.tpl');
 

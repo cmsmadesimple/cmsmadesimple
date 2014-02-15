@@ -244,6 +244,7 @@ class CmsLayoutCollection
       }
     }
 
+		$this->_dirty = FALSE;
 		audit($this->get_id(),'CMSMS','Design '.$this->get_name().' created');
   }
 
@@ -262,7 +263,7 @@ class CmsLayoutCollection
 			$dbr = $db->Execute($query,array($this->get_id()));
 			if( !$dbr ) throw new CmsSQLErrorException($db->sql.' -- '.$db->ErrorMsg());
 		}
-		
+
     $query = 'DELETE FROM '.cms_db_prefix().self::CSSTABLE.' WHERE design_id = ?';
     $db->Execute($query,array($this->get_id()));
 
@@ -285,6 +286,7 @@ class CmsLayoutCollection
       }
     }
 
+		$this->_dirty = FALSE;
 		audit($this->get_id(),'CMSMS','Design '.$this->get_name().' updated');
   }
 
