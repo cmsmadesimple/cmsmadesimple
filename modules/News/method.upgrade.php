@@ -9,6 +9,7 @@ if( cmsms()->test_state(CmsApp::STATE_INSTALL) ) {
   $uid = get_userid();
 }
 
+echo "DEBUG: upgrading news from $oldversion to ".$this->GetVersion()."\n";
 if( version_compare($oldversion,'2.50') < 0 ) {
   // create template types.
   $upgrade_template = function($type,$prefix,$tplname,$currentdflt) use (&$mod,$uid) {
@@ -40,6 +41,7 @@ if( version_compare($oldversion,'2.50') < 0 ) {
     $summary_template_type->set_content_callback('News::reset_page_type_defaults');
     $summary_template_type->reset_content_to_factory();
     $summary_template_type->save();
+    echo "DEBUG: create summary template type\n";
     foreach( $alltemplates as $tplname ) {
       $upgrade_template($summary_template_type,'summary',$tplname,'current_summary_template');
     }

@@ -427,7 +427,13 @@ final class CmsApp {
 	* @return Smarty_CMS handle to the Smarty object
 	*/
 	public function & GetSmarty()
-	{	
+	{
+		global $CMS_INSTALL_PAGE;
+		if( isset($CMS_INSTALL_PAGE) ) {
+			// we can't load the CMSMS version of smarty during the installation.
+			$out = null;
+			return $out;
+		}
 		return Smarty_CMS::get_instance();	
 	}
 

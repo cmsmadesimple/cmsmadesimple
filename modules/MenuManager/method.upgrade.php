@@ -1,5 +1,6 @@
 <?php
 if (!isset($gCms)) exit;
+$uid = 1;
 
 $db = cmsms()->GetDb();
 if( version_compare($oldversion,'1.50') < 0 ) {

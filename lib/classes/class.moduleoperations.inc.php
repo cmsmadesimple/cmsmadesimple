@@ -707,7 +707,7 @@ final class ModuleOperations
 
 		  // upgrade dependencies
 		  $query = 'DELETE FROM '.cms_db_prefix().'module_deps WHERE child_module = ?';
-		  $dbr = $db->Execute($query,array($this->GetName()));
+		  $dbr = $db->Execute($query,array($module_obj->GetName()));
 
 		  $deps = $module_obj->GetDependencies();
 		  if( is_array($deps) && count($deps) ) {

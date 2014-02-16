@@ -748,7 +748,7 @@ class CmsLayoutTemplate
 
 	public static function generate_unique_name($prototype,$prefix = null)
 	{
-		if( !$name ) throw new CmsInvalidDataException('Prototype name cannot be empty');
+		if( !$prototype ) throw new CmsInvalidDataException('Prototype name cannot be empty');
 		$query = 'SELECT id FROM '.cms_db_prefix().self::TABLENAME.' WHERE name = ?';
 		for( $i = 1; $i < 25; $i++ ) {
 			$name = $prefix.$prototype;
