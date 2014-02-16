@@ -65,7 +65,10 @@ DesignManager
   - New module for managing templates, stylesheets
   - Implements dirty form checking
   - Implements locking for templates
- 
+
+CMSPrinting
+  - Uses new CmsLayout API's for template management
+
 News 
   - Each article now has a searchable option
   - More bulk actions
@@ -82,6 +85,7 @@ Search
   - No longer indexes templates, or GCB's
   - rewrite the re-index stuff to hopefully use a bit less memory (at least for content pages)
   - Uses new CmsLayout API's for template management
+  - Now supports multiple form and result templates
 
 ModuleManager
   - Compete rewrite
