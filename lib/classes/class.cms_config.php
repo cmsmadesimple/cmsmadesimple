@@ -228,7 +228,7 @@ final class cms_config implements ArrayAccess
 	  case 'db_name':
 		  // these guys have to be set
 		  stack_trace();
-		  die('FATAL ERROR: Could not find database connection key '.$key.' in the config file');
+		  die('FATAL ERROR: Could not find database connection key "'.$key.'" in the config file');
 		  break;
 
 	  case 'persist_db_conn':

@@ -28,6 +28,7 @@ Core - General
   - Removed deprecated {breadcrumbs} tag
   - Deprecate template functions in the module API
   - Remove direct ImageMagick support (no more config entries)
+  - Removed AllowAutoUpgrade and AllowAutoInstall from module API
   
 Core - Bug Reports
   - #9721 There's no check if changelog.txt exists

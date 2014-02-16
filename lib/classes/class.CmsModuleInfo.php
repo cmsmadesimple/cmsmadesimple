@@ -94,7 +94,7 @@ class CmsModuleInfo implements ArrayAccess
 
   private function _read_from_module($module_name)
   {
-    $mod = ModuleOperations::get_instance()->get_module_instance($module_name,'',TRUE);
+    $mod = ModuleOperations::get_instance()->get_module_instance($module_name);
     if( !is_object($mod) ) {
       $this['name'] = $module_name;
       return TRUE;

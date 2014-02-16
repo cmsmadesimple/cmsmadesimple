@@ -451,19 +451,33 @@ final class ModuleOperations
 		  debug_buffer("Nothing is known about $module_name... cant load it");
 		  return FALSE;
 	  }
-	  if( (!isset($info[$module_name]['active']) || 
-		   $info[$module_name]['active'] == 0) && !$force_load ) {
+	  if( (!isset($info[$module_name]['active']) || $info[$module_name]['active'] == 0) && !$force_load ) {
 		  debug_buffer('Requested deactivated module '.$module_name);
 		  return FALSE;
 	  }
 
 	  global $CMS_INSTALL_PAGE;
-	  global $CMS_VERSION;
-	  global $CMS_PREVENT_AUTOINSTALL;
-	  global $CMS_FORCE_MODULE_LOAD;
-	  $allow_auto = (isset($CMS_PREVENT_AUTOINSTALL) && $CMS_PREVENT_AUTOINSTALL)?0:1;
-
 	  $gCms = cmsms(); // backwards compatibility... set the global.
+
+	  // okay, lessee if we can load the dependants
+	  if( $dependents ) {
+		  $deps = $this->get_module_dependencies($module_name);
+		  if( is_array($deps) && count($deps) ) {
+			  foreach( $deps as $name => $ver ) {
+				  // this is the start of a recursive routine.
+				  // get_module_instance may call _load_module.
+				  $obj2 = $this->get_module_instance($name,$ver);
+				  if( !is_object($obj2) ) {
+					  audit('','Core',"Cannot load module $module_name ... Problem loading dependent module $name version $ver");
+					  debug_buffer("Cannot load $module_name... cannot load it's dependants.");
+					  unset($obj);
+					  return FALSE;
+				  }
+			  }
+		  }
+	  }
+
+	  // now load the module itself.
 	  if( !class_exists($module_name) ) {
 		  $fname = $dir."/$module_name/$module_name.module.php";
 		  if( !is_file($fname) ) {
@@ -475,29 +489,6 @@ final class ModuleOperations
 		  require_once($fname); 
 	  }
 
-	  // okay, lessee if we can load the dependants
-	  if( !isset($config['modules_noloaddependants']) && $dependents == TRUE ) {
-		  $deps = $this->get_module_dependencies($module_name);
-		  if( is_array($deps) && count($deps) ) {
-			  $res = true;
-			  foreach( $deps as $name => $ver ) {
-				  // this is the start of a recursive routine.
-				  // get_module_instance may call _load_module.
-				  $obj2 = $this->get_module_instance($name,$ver);
-				  if( !is_object($obj2) ) {
-					  $res = false;
-					  break;
-				  }
-			  }
-			  if( !$res && !isset($CMS_FORCE_MODULE_LOAD)) {
-				  audit('','Core',"Cannot load module $module_name ... Problem loading dependent module $name version $ver");
-				  debug_buffer("Cannot load $module_name... cannot load it's dependants.");
-				  unset($obj);
-				  return FALSE;
-			  }
-		  }
-	  }
-
 	  $obj = new $module_name;
 	  if( !is_object($obj) ) {
 		  // oops, some problem loading.
@@ -506,7 +497,7 @@ final class ModuleOperations
 		  return FALSE;
 	  }
 
-	  if (version_compare($obj->MinimumCMSVersion(),$CMS_VERSION) == 1 ) {
+	  if (version_compare($obj->MinimumCMSVersion(),CMS_VERSION) == 1 ) {
 		  // oops, not compatible.... can't load.
 		  audit('','Module','Cannot load module '.$module_name.' it is not compatible wth this version of CMSMS');
 		  debug_buffer("Cannot load $module_name... It is not compatible with this version of CMSMS");
@@ -515,16 +506,16 @@ final class ModuleOperations
 	  }
 
 	  if( is_object($obj) ) $this->_modules[$module_name] = $obj;
+
 	  if( (!isset($info[$module_name]) || $info[$module_name]['status'] != 'installed') &&
 		  (isset($CMS_INSTALL_PAGE) || $this->_is_queued_for_install($module_name)) ) {
 		  // not installed, can we auto-install it?
-		  if( (in_array($module_name,$this->cmssystemmodules) || $obj->AllowAutoInstall() == true ||
-			   $this->_is_queued_for_install($module_name)) && $allow_auto ) {
+		  if( in_array($module_name,$this->cmssystemmodules) || $this->_is_queued_for_install($module_name) ) {
 			  $res = $this->_install_module($obj);
 			  if( !isset($_SESSION['moduleoperations_result']) ) $_SESSION['moduleoperations_result'] = array();
 			  $_SESSION['moduleoperations_result'][$module_name] = $res;
 		  }
-		  else if( !isset($CMS_FORCE_MODULE_LOAD) ) {
+		  else {
 			  // nope, can't auto install...
 			  unset($obj,$this->_modules[$module_name]);
 			  return FALSE;
@@ -540,7 +531,7 @@ final class ModuleOperations
 			  $dbversion = $info[$module_name]['version'];
 			  if( version_compare($dbversion, $obj->GetVersion()) == -1 ) {
 				  // upgrade is needed
-				  if( ($obj->AllowAutoUpgrade() == TRUE || $this->_is_queued_for_install($module_name)) && $allow_auto ) {
+				  if( $this->_is_queued_for_install($module_name) ) {
 					  // we're allowed to upgrade
 					  $res = $this->_upgrade_module($obj);
 					  if( !isset($_SESSION['moduleoperations_result']) ) $_SESSION['moduleoperations_result'] = array();
@@ -561,7 +552,7 @@ final class ModuleOperations
 						  return FALSE;
 					  }
 				  }
-				  else if( !isset($CMS_FORCE_MODULE_LOAD) && !$force_load ) {
+				  else if( !$force_load ) {
 					  // nope, can't auto upgrade either
 					  allow_admin_lang(FALSE); // isn't this ugly.
 					  unset($obj,$this->_modules[$module_name]);
@@ -665,6 +656,7 @@ final class ModuleOperations
 	  if( !is_array($allinfo) ) return; // no modules installed, probably an empty database... edge case.
 
 	  if( isset($_SESSION['moduleoperations']) ) {
+		  // this will load (and thereby install/upgrade all modules that the ModuleManager queued up)
 		  set_time_limit(9999);
 		  foreach( $_SESSION['moduleoperations'] as $module_name => $info ) {
 			  if( !isset($allinfo[$module_name]) ) {
@@ -701,7 +693,6 @@ final class ModuleOperations
 	  $info = $this->_get_module_info();
 	  $module_name = $module_obj->GetName();
 	  $dbversion = $info[$module_name]['version'];
-
 	  if( $to_version == '' ) $to_version = $module_obj->GetVersion();
 
 	  $db = cmsms()->GetDb();
@@ -714,10 +705,25 @@ final class ModuleOperations
                     WHERE module_name = ?';
 		  $dbr = $db->Execute($query,array($module_obj->GetVersion(),$lazyload_fe,$lazyload_admin,$module_obj->GetName()));
 
+		  // upgrade dependencies
+		  $query = 'DELETE FROM '.cms_db_prefix().'module_deps WHERE child_module = ?';
+		  $dbr = $db->Execute($query,array($this->GetName()));
+
+		  $deps = $module_obj->GetDependencies();
+		  if( is_array($deps) && count($deps) ) {
+			  $query = 'INSERT INTO '.cms_db_prefix().'module_deps (parent_module,child_module,minimum_version,create_date,modified_date)
+                       VALUES (?,?,?,NOW(),NOW())';
+			  foreach( $deps as $depname => $depversion ) {
+				  if( !$depname || !$depversion ) continue;
+				  $dbr = $db->Execute($query,array($depname,$module_obj->GetName(),$depversion));
+			  }
+		  }
+
 		  $this->_moduleinfo = array();
 		  cmsms()->clear_cached_files();
 		  audit('','Module', 'Upgraded module '.$module_obj->GetName().' to version '.$module_obj->GetVersion());
 		  Events::SendEvent('Core', 'ModuleUpgraded', array('name' => $module_obj->GetName(), 'oldversion' => $dbversion, 'newversion' => $module_obj->GetVersion()));
+
 		  return array(TRUE);
 	  }
 

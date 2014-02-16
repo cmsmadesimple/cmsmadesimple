@@ -610,7 +610,6 @@ class CmsLayoutTemplate
 		return $out;
 	}
 
-
 	public static function get_editable_templates($a)
 	{
 		$n = self::_resolve_user($a);
@@ -747,6 +746,18 @@ class CmsLayoutTemplate
 		if( count(self::$_obj_cache) ) return array_keys(self::$_obj_cache);
 	}
 
+	public static function generate_unique_name($prototype,$prefix = null)
+	{
+		if( !$name ) throw new CmsInvalidDataException('Prototype name cannot be empty');
+		$query = 'SELECT id FROM '.cms_db_prefix().self::TABLENAME.' WHERE name = ?';
+		for( $i = 1; $i < 25; $i++ ) {
+			$name = $prefix.$prototype;
+			if( $i > 1 ) $name .= ' '.$name;
+			$tmp = $db->GetOne($query,array($name));
+			if( !$tmp ) return $name;
+		}
+		throw new CmsLogicException('Could not generate a template name for '.$prototype);
+	}
 } // end of class
 
 #
