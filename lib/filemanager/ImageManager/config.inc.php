@@ -50,7 +50,7 @@ $IMConfig['safe_mode'] = false;
  If you have safe mode ON, or don't have the binaries to other packages, 
  your choice is 'GD' only. Other packages require Safe Mode to be off.
 */
-define('IMAGE_CLASS', $config["image_manipulation_prog"]);
+define('IMAGE_CLASS', 'GD');
 
 
 /*
@@ -59,7 +59,7 @@ define('IMAGE_CLASS', $config["image_manipulation_prog"]);
  your server and PHP must be able to execute them (i.e. safe mode is OFF).
  GD does not require the following definition.
 */
-define('IMAGE_TRANSFORM_LIB_PATH', $config["image_transform_lib_path"]);
+define('IMAGE_TRANSFORM_LIB_PATH', '');
 
 
 /* ==============  OPTIONAL SETTINGS ============== */

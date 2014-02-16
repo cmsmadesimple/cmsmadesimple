@@ -17,16 +17,17 @@ Core - General
   - {content} tag now has the placeholder attribute
   - Major accessibility review throughout admin interface
   - Removed many static admin pages, and replaced with new modules
-  - accept UTF-8 chars in page alias and in custom URLS
+  - Accept UTF-8 chars in page alias and in custom URLS
     (punctuation, whitespace, / and . are not allowed in the alias.  punctuation, whitespace and . are not allowed in URLS).
-  - removed the 'ext' parameter from cms_selflink
-  - removed the old compatibility admintheme class (admintheme.inc.php) was deprecated in 1.11
-  - admin interface now assumes HTML5.  Porting admin themes must include porting them to HTML5
+  - Removed the 'ext' parameter from cms_selflink
+  - Removed the old compatibility admintheme class (admintheme.inc.php) was deprecated in 1.11
+  - Admin interface now assumes HTML5.  Porting admin themes must include porting them to HTML5
   - Simplex Theme gets some love: updated Grid system, removed all images and replaced with icon fonts, extended JS functions with 
     hopefully better Mobile support, Theme JS includes now helper variables like SX.isTouch, SX.isMobile, SX.viewportWidth and SX.UA,
     for more information refer to uploads/simplex/js/ functions.js (note: Theme is using functions.min.js), dropped IE7 support, NOT!! tested in Windows Mobile
-  - removed deprecated {breadcrumbs} tag
-  - deprecate template functions in the module API
+  - Removed deprecated {breadcrumbs} tag
+  - Deprecate template functions in the module API
+  - Remove direct ImageMagick support (no more config entries)
   
 Core - Bug Reports
   - #9721 There's no check if changelog.txt exists
@@ -40,6 +41,7 @@ FileManager
   - Adds ajaxy image cropping/resizing/rotation
   
 MenuManager
+  - Transformed to use new CmsLayout classes
   - Deprecated
 
 Navigator
@@ -73,10 +75,12 @@ News
   - Implements dirty form checking
   - Query rework (post date is now used as a start date if expiry is not specified)
   - Rewrote fesubmit action to show new 2.0 form functionality (fesubmit action is still deprecated)
+  - Uses new CmsLayout API's for template management
 
 Search
   - No longer indexes templates, or GCB's
   - rewrite the re-index stuff to hopefully use a bit less memory (at least for content pages)
+  - Uses new CmsLayout API's for template management
 
 ModuleManager
   - Compete rewrite

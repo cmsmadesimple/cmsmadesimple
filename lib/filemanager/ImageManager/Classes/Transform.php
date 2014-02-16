@@ -121,17 +121,13 @@ Class Image_Transform
      */
     public static function &factory($driver)
     {
-        if ('' == $driver) {
-            die("No image library specified... aborting.  You must call ::factory() with one parameter, the library to load.");
+      $driver = 'GD';  // 2.0, hardcode this.
+      include_once (dirname(__FILE__)."/$driver.php");
 
-        }
-
-        include_once (dirname(__FILE__)."/$driver.php");
-
-        $classname = "Image_Transform_Driver_{$driver}";
-        $obj = new $classname;
-        $obj->uid = md5($_SERVER['REMOTE_ADDR']);
-        return $obj;
+      $classname = "Image_Transform_Driver_{$driver}";
+      $obj = new $classname;
+      $obj->uid = md5($_SERVER['REMOTE_ADDR']);
+      return $obj;
     }
 
 
@@ -293,14 +289,6 @@ Class Image_Transform
             echo("Cannot fetch image or images details.");
             return null;
         }
-        /*
-        $output = array(
-                        'width' => $data[0],
-                        'height' => $data[1],
-                        'type' => $type
-                        );
-        return $output;
-        */
     }
 
 

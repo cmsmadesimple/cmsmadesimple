@@ -1,50 +1,47 @@
 <?php
 if (!isset($gCms)) exit;
 
-$current_version = $oldversion;
 $db = cmsms()->GetDb();
-switch($current_version)
-{
-	case "1.0":
-	case "1.1":
-		$this->CreatePermission('Manage Menu', 'Manage Menu');
+if( version_compare($oldversion,'1.50') < 0 ) {
+  $upgrade_template = function($type,$prefix,$tplname,$currentdflt) use (&$mod,$uid) {
+    if( !startswith($tplname,$prefix) ) return;
+    $contents = $mod->GetTemplate($tplname);
+    if( !$contents ) return;
+    $prototype = substr($tplname,strlen($prefix));
 
-		# Setup permissions
-		$perm_id = $db->GetOne("SELECT permission_id FROM ".cms_db_prefix()."permissions WHERE permission_name = 'Manage Menu'");
-		$group_id = $db->GetOne("SELECT group_id FROM ".cms_db_prefix()."groups WHERE group_name = 'Admin'");
+    $tpl = new CmsLayoutTemplate();
+    $tpl->set_name($tpl::generate_unique_name($prototype,'MM-'));
+    $tpl->set_owner($uid);
+    $tpl->set_content($contents);
+    $tpl->set_type($type);
+    $tpl->set_type_dflt($tplname == $mod->GetPreference($currentdflt));
+    $tpl->save();
 
-		$count = $db->GetOne("SELECT count(*) FROM " . cms_db_prefix() . "group_perms WHERE group_id = ? AND permission_id = ?", array($group_id, $perm_id));
-		if (isset($count) && intval($count) == 0)
-		{
-			$new_id = $db->GenID(cms_db_prefix()."group_perms_seq");
-			$query = "INSERT INTO " . cms_db_prefix() . "group_perms (group_perm_id, group_id, permission_id, create_date, modified_date) VALUES (".$new_id.", ".$group_id.", ".$perm_id.", ". $db->DBTimeStamp(time()) . ", " . $db->DBTimeStamp(time()) . ")";
-			$db->Execute($query);
-		}
+    $mod->DeleteTemplate($tplname);
+  };
 
-		$group_id = $db->GetOne("SELECT group_id FROM ".cms_db_prefix()."groups WHERE group_name = 'Designer'");
+  try {
+    $mod = $this;
+    $alltemplates = $this->ListTemplates();
 
-		$count = $db->GetOne("SELECT count(*) FROM " . cms_db_prefix() . "group_perms WHERE group_id = ? AND permission_id = ?", array($group_id, $perm_id));
-		if (isset($count) && intval($count) == 0)
-		{
-			$new_id = $db->GenID(cms_db_prefix()."group_perms_seq");
-			$query = "INSERT INTO " . cms_db_prefix() . "group_perms (group_perm_id, group_id, permission_id, create_date, modified_date) VALUES (".$new_id.", ".$group_id.", ".$perm_id.", ". $db->DBTimeStamp(time()) . ", " . $db->DBTimeStamp(time()) . ")";
-			$db->Execute($query);
-		}
+    $menu_template_type = new CmsLayoutTemplateType();
+    $menu_template_type->set_originator($this->GetName());
+    $menu_template_type->set_name('navigation');
+    $menu_template_type->set_dflt_flag(TRUE);
+    $menu_template_type->set_lang_callback('MenuManager::page_type_lang_callback');
+    $menu_template_type->set_content_callback('MenuManager::reset_page_type_defaults');
+    $menu_template_type->reset_content_to_factory();
+    $menu_template_type->save();
 
-		$current_version = '1.2';
-
-	case '1.6.3':
-	case '1.6.4':
-	case '1.6.5':
-		$this->AddEventHandler('Core','ContentEditPost',false);
-		$this->AddEventHandler('Core','ContentDeletePost',false);
-}
-
-if( version_compare($oldversion,'1.8.2') < 1 ) {
-
-    $this->RegisterModulePlugin(true);
-    $this->RegisterSmartyPlugin('menu','function','function_plugin');
-    $this->RegisterSmartyPlugin('cms_breadcrumbs','function','smarty_cms_breadcrumbs');
+    foreach( $alltemplates as $tplname ) {
+      $upgrade_template($detail_template_type,'detail',$tplname,'current_detail_template');
+    }
+  }
+  catch( CmsException $e ) {
+    debug_to_log(__FILE__.':'.__LINE__.' '.$e->GetMessage());
+    audit('',$this->GetName(),'Upgrade Error: '.$e->GetMessage());
+    return;
+  }
 }
 
 ?>

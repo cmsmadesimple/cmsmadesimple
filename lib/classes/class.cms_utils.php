@@ -343,7 +343,7 @@ final class cms_utils
 		$height = get_site_preference('thumbnail_height',96);
 
 		$transform = new Image_Transform;
-		$img = $transform->factory($config['image_manipulation_prog']);
+		$img = $transform->factory();
 		$img->load($srcfile);	  
 		$img->resize($width,$height);
 		$img->save($thumb);

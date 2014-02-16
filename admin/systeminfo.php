@@ -109,7 +109,6 @@ $tmp[1]['uploads_url'] = testConfig('uploads_url', 'uploads_url');
 $tmp[1]['image_uploads_path'] = testConfig('image_uploads_path', 'image_uploads_path', 'testDirWrite');
 $tmp[1]['image_uploads_url'] = testConfig('image_uploads_url', 'image_uploads_url');
 $tmp[1]['ssl_uploads_url'] = testConfig('ssl_uploads_url', 'ssl_uploads_url');
-$tmp[0]['image_manipulation_prog'] = testConfig('image_manipulation_prog', 'image_manipulation_prog');
 $tmp[0]['auto_alias_content'] = testConfig('auto_alias_content', 'auto_alias_content');
 $tmp[0]['locale'] = testConfig('locale', 'locale');
 $tmp[0]['default_encoding'] = testConfig('default_encoding', 'default_encoding');

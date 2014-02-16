@@ -25,8 +25,8 @@ final class MenuManager extends CMSModule
   function GetFriendlyName() { return $this->Lang('menumanager'); }
   function IsPluginModule() { return true; }
   function HasAdmin() { return false; }
-  function GetVersion() { return '1.10'; }
-  function MinimumCMSVersion() { return '1.12-alpha0'; }
+  function GetVersion() { return '1.50'; }
+  function MinimumCMSVersion() { return '1.99-alpha0'; }
   function GetAdminDescription() { return $this->Lang('description'); }
   function GetAdminSection() { return 'layout'; }
   function LazyLoadFrontend() { return TRUE; }

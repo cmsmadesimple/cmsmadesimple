@@ -98,8 +98,6 @@ final class cms_config implements ArrayAccess
     $this->_types['url_rewriting'] = self::TYPE_STRING;
     $this->_types['page_extension'] = self::TYPE_STRING;
     $this->_types['query_var'] = self::TYPE_STRING;
-    $this->_types['image_manipulation_prog'] = self::TYPE_STRING;
-    $this->_types['image_transform_lib_path'] = self::TYPE_STRING;
     $this->_types['locale'] = self::TYPE_STRING;
     $this->_types['default_encoding'] = self::TYPE_STRING;
     $this->_types['admin_encoding'] = self::TYPE_STRING;
@@ -328,12 +326,6 @@ final class cms_config implements ArrayAccess
 
 	  case 'query_var':
 		  return 'page';
-
-	  case 'image_manipulation_prog':
-		  return 'GD';
-
-	  case 'image_transform_lib_path':
-		  return ('WIN' === strtoupper(substr(PHP_OS, 0, 3))) ? 'C:/Program Files/VisualMagick/bin/' : '/usr/bin/ImageMagick/';
 
 	  case 'locale':
 		  return '';

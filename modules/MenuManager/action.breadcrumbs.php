@@ -3,9 +3,7 @@ if (!isset($gCms)) exit;
 debug_buffer('', 'Start of BreadCrumbs Display');
 
 $template = 'breadcrumbs.tpl';
-if( isset($params['template']) ) {
-  $template = trim($params['template']);
-}
+if( isset($params['template']) ) $template = trim($params['template']);
 
 $cache_id = '|nav'.md5(serialize($params));
 $compile_id = '';
