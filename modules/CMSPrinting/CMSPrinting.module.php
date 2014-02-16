@@ -20,49 +20,24 @@
 
 class CMSPrinting extends CMSModule 
 {
-  function GetName() {
-    return 'CMSPrinting';
-  }
-
-  function GetFriendlyName() {
-    return $this->Lang("friendlyname");    
-  }
-
-  function IsPluginModule() {
-    return true;
-  }
-
-  function HasAdmin() {
-    return true;
-  }
-
-  function GetVersion() {
-    return '1.0.1';
-  }
-
-  function MinimumCMSVersion() {
-    return '1.12-alpha0';
-  }
-
-  function GetAdminDescription() {
-    return $this->Lang('description');
-  }
-
-  function GetAdminSection() {
-    return 'extensions';
-  }
-
-  function InstallPostMessage() {
-    return $this->Lang('postinstall');
-  }
-
-  public function LazyLoadFrontend() {
-    return TRUE;
-  }  
-
-  public function LazyLoadAdmin() {
-    return TRUE;
-  }  
+  public function GetName() { return 'CMSPrinting'; }
+  public function GetFriendlyName() { return $this->Lang("friendlyname"); }
+  public function IsPluginModule() { return true; }
+  public function HasAdmin() { return true; }
+  public function GetVersion() { return '1.50'; }
+  public function MinimumCMSVersion() { return '1.12-alpha0'; }
+  public function GetAdminDescription() { return $this->Lang('description'); }
+  public function GetAdminSection() { return 'extensions'; }
+  public function InstallPostMessage() { return $this->Lang('postinstall'); }
+  public function LazyLoadFrontend() { return TRUE; }  
+  public function LazyLoadAdmin() { return TRUE; }  
+  public function VisibleToAdminUser() { return $this->CheckPermission('modifyprintingsettings') || $this->CheckPermission('Modify Templates'); }
+  public function UninstallPostMessage() { return $this->Lang('postuninstall'); }
+  public function SetOverrideStyle($stylesheet) { $this->SetPreference('overridestyle',$stylesheet); }
+  public function GetHelp($lang='en_US') { return $this->Lang('help'); }
+  public function GetAuthor() { return 'Morten Poulsen'; }
+  public function GetAuthorEmail() { return 'morten@poulsen.org'; }
+  public function GetChangeLog() { return $this->ProcessTemplate ('changelog.tpl'); }
 
   function relativeToAbsolute($prefix, $text) {
     // search for single quotes and replace them by double quotes
@@ -100,7 +75,7 @@ class CMSPrinting extends CMSModule
     return $url;
   }
 
-  function InitializeAdmin() {	  
+  public function InitializeAdmin() {	  
     $this->CreateParameter('text', $this->Lang("defaultlinktext"), $this->Lang('help_text'));
     $this->CreateParameter('popup', "false", $this->Lang('help_popup'));
     $this->CreateParameter('script', "false", $this->Lang('help_script'));
@@ -134,40 +109,12 @@ class CMSPrinting extends CMSModule
     $this->SetParameterType('printtemplate',CLEAN_STRING);
   }
 
-  function VisibleToAdminUser() {
-    return $this->CheckPermission('modifyprintingsettings') || $this->CheckPermission('Modify Templates');
-  }
-
-  function UninstallPostMessage() {
-    return $this->Lang('postuninstall');	
-  }
-
-  function SetOverrideStyle($stylesheet) {
-    $this->SetPreference('overridestyle',$stylesheet);    
-  }
-
   function ResetOverrideStyle() {
     $fn = dirname(__FILE__).DIRECTORY_SEPARATOR.'css'.DIRECTORY_SEPARATOR.'override.css';
     if( file_exists( $fn ) ) {
       $template = @file_get_contents($fn);
       $this->SetOverrideStyle($template);      
     }
-  }
-
-  function GetHelp($lang='en_US') {
-    return $this->Lang('help');
-  }
-
-  function GetAuthor() {
-    return 'Morten Poulsen';
-  }
-
-  function GetAuthorEmail() {
-    return 'morten@poulsen.org';
-  }
-
-  function GetChangeLog() {
-    return $this->ProcessTemplate ('changelog.tpl'); 
   }
 
   public static function page_type_lang_callback($str)

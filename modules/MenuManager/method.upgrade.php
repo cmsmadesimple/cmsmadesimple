@@ -1,6 +1,11 @@
 <?php
 if (!isset($gCms)) exit;
-$uid = 1;
+$uid = null;
+if( cmsms()->test_state(CmsApp::STATE_INSTALL) ) {
+  $uid = 1; // hardcode to first user
+} else {
+  $uid = get_userid();
+}
 
 $db = cmsms()->GetDb();
 if( version_compare($oldversion,'1.50') < 0 ) {
