@@ -22,7 +22,7 @@ if( version_compare($oldversion,'2.50') < 0 ) {
     $tpl->set_owner($uid);
     $tpl->set_content($contents);
     $tpl->set_type($type);
-    $tpl->set_type_dflt($tplname == $mod->GetPreference($currentdflt));
+    $tpl->set_type_dflt($prototype == $mod->GetPreference($currentdflt));
 
     echo "DEBUG: creating template ".$tpl->get_name()." from $tplname for News<br/>\n";
     $tpl->save();

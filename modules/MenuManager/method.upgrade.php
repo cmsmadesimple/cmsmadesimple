@@ -28,7 +28,6 @@ if( version_compare($oldversion,'1.50') < 0 ) {
 
   try {
     $mod = $this;
-    $alltemplates = $this->ListTemplates();
 
     $menu_template_type = new CmsLayoutTemplateType();
     $menu_template_type->set_originator($this->GetName());
@@ -39,8 +38,19 @@ if( version_compare($oldversion,'1.50') < 0 ) {
     $menu_template_type->reset_content_to_factory();
     $menu_template_type->save();
 
+    // convert a default file template to a database template (very temporarily... it's deleted below).
+    $default_template = $this->GetPreference('default_template');
+    echo "DEBUG: MenuManager default template is: $default_template<br/>\n";
+    if( $default_template && endswith($default_template,'.tpl') ) {
+      $tpl = $this->GetTemplateFromFile($default_template);
+      $this->SetTemplate('mm-default',$tpl);
+      $this->SetPreference('default_template','mm-default');
+      echo "DEBUG: MenuManager NEW default template is: ".$this->GetPreference('default_template')."<br/></n>";
+    }
+
+    $alltemplates = $this->ListTemplates();
     foreach( $alltemplates as $tplname ) {
-      $upgrade_template($detail_template_type,'detail',$tplname,'current_detail_template');
+      $upgrade_template($menu_template_type,'',$tplname,'default_template');
     }
   }
   catch( CmsException $e ) {

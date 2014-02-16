@@ -105,7 +105,7 @@ class cms_tree_operations
 	if( !isset($sorted[$row['parent_id']]) ) {
 	  // ruh-roh
 	  debug_display($row); flush();
-          die('foo');
+          die('foo2');
 	}
 	else {
 	  $parent_node = $sorted[$row['parent_id']];

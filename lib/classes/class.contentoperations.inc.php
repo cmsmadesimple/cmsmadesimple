@@ -502,7 +502,7 @@ class ContentOperations
 		if (!$loadedcache) {
 			debug_to_log('loading tree from database');
 			debug_buffer('', 'Start loading content tree from database and serializing');
-			$query = 'SELECT content_id,parent_id,content_alias FROM '.cms_db_prefix().'content ORDER BY parent_id,item_order';
+			$query = 'SELECT content_id,parent_id,item_order,content_alias FROM '.cms_db_prefix().'content ORDER BY hierarchy ASC';
 			$nodes = $db->GetArray($query);
 			$tree = cms_tree_operations::load_from_list($nodes);
 			$data = serialize(array(time(),$tree));
