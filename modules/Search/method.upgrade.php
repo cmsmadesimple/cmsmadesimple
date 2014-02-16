@@ -2,6 +2,13 @@
 if (!isset($gCms)) exit;
 $db = $this->GetDb();
 
+$uid = null;
+if( cmsms()->test_state(CmsApp::STATE_INSTALL) ) {
+  $uid = 1; // hardcode to first user
+} else {
+  $uid = get_userid();
+}
+
 if( version_compare($oldversion,'1.50') < 1 ) {
   $this->RegisterModulePlugin(true);
   $this->RegisterSmartyPlugin('search','function','function_plugin');

@@ -11,14 +11,14 @@ if( cmsms()->test_state(CmsApp::STATE_INSTALL) ) {
 
 if( version_compare($oldversion,'2.50') < 0 ) {
   // create template types.
-  $upgrade_template = function($type,$prefix,$tplname,$currentdflt) use (&$mod,$uid) {
+  $upgrade_template = function($type,$prefix,$tplname,$currentdflt,$prefix2) use (&$mod,$uid) {
     if( !startswith($tplname,$prefix) ) return;
     $contents = $mod->GetTemplate($tplname);
     if( !$contents ) return;
     $prototype = substr($tplname,strlen($prefix));
     
     $tpl = new CmsLayoutTemplate();
-    $tpl->set_name($tpl::generate_unique_name($prototype,'News-'));
+    $tpl->set_name($tpl::generate_unique_name($prototype,$prefix2));
     $tpl->set_owner($uid);
     $tpl->set_content($contents);
     $tpl->set_type($type);
@@ -45,7 +45,7 @@ if( version_compare($oldversion,'2.50') < 0 ) {
     $summary_template_type->save();
     echo "DEBUG: create summary template type<br/>\n";
     foreach( $alltemplates as $tplname ) {
-      $upgrade_template($summary_template_type,'summary',$tplname,'current_summary_template');
+      $upgrade_template($summary_template_type,'summary',$tplname,'current_summary_template','News-Summary-');
     }
 
     $detail_template_type = new CmsLayoutTemplateType();
@@ -58,7 +58,7 @@ if( version_compare($oldversion,'2.50') < 0 ) {
     $detail_template_type->save();
     echo "DEBUG: create detail template type<br/>\n";
     foreach( $alltemplates as $tplname ) {
-      $upgrade_template($detail_template_type,'detail',$tplname,'current_detail_template');
+      $upgrade_template($detail_template_type,'detail',$tplname,'current_detail_template','News-Detail-');
     }
 
     // Setup form template
@@ -72,7 +72,7 @@ if( version_compare($oldversion,'2.50') < 0 ) {
     $form_template_type->save();
     echo "DEBUG: create form template type<br/>\n";
     foreach( $alltemplates as $tplname ) {
-      $upgrade_template($form_template_type,'form',$tplname,'current_form_template');
+      $upgrade_template($form_template_type,'form',$tplname,'current_form_template','News-Form-');
     }
 
     $browsecat_template_type = new CmsLayoutTemplateType();
@@ -85,7 +85,7 @@ if( version_compare($oldversion,'2.50') < 0 ) {
     $browsecat_template_type->save();
     echo "DEBUG: create browsecat template type<br/>\n";
     foreach( $alltemplates as $tplname ) {
-      $upgrade_template($browsecat_template_type,'browsecat',$tplname,'current_browsecat_template');
+      $upgrade_template($browsecat_template_type,'browsecat',$tplname,'current_browsecat_template','News-Browsecat-');
     }
   }
   catch( CmsException $e ) {

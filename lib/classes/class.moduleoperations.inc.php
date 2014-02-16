@@ -214,7 +214,7 @@ final class ModuleOperations
 							}
 						}
 						break;
-		
+
 					case 'MINCMSVERSION':
 					    $name = $reader->localName;
 						$reader->read();
@@ -223,7 +223,7 @@ final class ModuleOperations
 						}
 						$moduledetails[$name] = $reader->value;
 						break;
-						
+
 					case 'MAXCMSVERSION':
 					case 'DESCRIPTION':
 					case 'FILENAME':
@@ -531,7 +531,7 @@ final class ModuleOperations
 			  $dbversion = $info[$module_name]['version'];
 			  if( version_compare($dbversion, $obj->GetVersion()) == -1 ) {
 				  // upgrade is needed
-				  if( $this->_is_queued_for_install($module_name) ) {
+				  if( in_array($module_name,$this->cmssystemmodules) || $this->_is_queued_for_install($module_name) ) {
 					  // we're allowed to upgrade
 					  $res = $this->_upgrade_module($obj);
 					  if( !isset($_SESSION['moduleoperations_result']) ) $_SESSION['moduleoperations_result'] = array();
@@ -577,6 +577,7 @@ final class ModuleOperations
    * A function to return a list of all modules that appear to exist properly in the modules directory.
    *
    * @internal
+   * @ignore
    * @return array of module names for all modules that exist in the module directory.
    */
   public function FindAllModules()
