@@ -14,22 +14,24 @@ class ModuleManagerModuleInfo extends CmsExtendedModuleInfo
     // add in some info that only module manager can tell us.
     // like: is there a newer version available
     // extended status (db version newer then file version) / needs upgrade
-    $tmp = version_compare($this['installed_version'],$this['version']);
-    if( $this['installed'] && $tmp < 0 ) {
-      $this['e_status'] = 'need_upgrade';
-    }
-    else if( $tmp > 0 ) {
-      $this['e_status'] = 'db_newer';
-    }
-    else if( $can_check_forge ) {
-      try {
-	$rep_info = modulerep_client::get_upgrade_module_info($module_name);
-	if( is_array($rep_info) ) {
-	  if( ($res = version_compare($this['version'],$rep_info['version'])) < 0 ) $this['e_status'] = 'newer_available';
-	}
+    if( $this['version'] && $this['installed_version'] ) {
+      $tmp = version_compare($this['installed_version'],$this['version']);
+      if( $this['installed'] && $tmp < 0 ) {
+	$this['e_status'] = 'need_upgrade';
       }
-      catch( Exception $e ) {
-	// nothing here.
+      else if( $tmp > 0 ) {
+	$this['e_status'] = 'db_newer';
+      }
+      else if( $can_check_forge ) {
+	try {
+	  $rep_info = modulerep_client::get_upgrade_module_info($module_name);
+	  if( is_array($rep_info) ) {
+	    if( ($res = version_compare($this['version'],$rep_info['version'])) < 0 ) $this['e_status'] = 'newer_available';
+	  }
+	}
+	catch( Exception $e ) {
+	  // nothing here.
+	}
       }
     }
   }
