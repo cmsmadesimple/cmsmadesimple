@@ -80,7 +80,7 @@ TODO
       </tr>
       <tr>
          <th>{$mod->Lang('prompt_description')}:</th>
-         <td>{$one.desc|default:$mod->Lang('info_nodescription')}}</td>
+         <td>{$one.desc|default:$mod->Lang('info_nodescription')}</td>
       </tr>
     </table>
     <div id="tpl_{$smarty.foreach.tpl.index}" title="{$one.name}" style="display: none;"><textarea rows="10" cols="80">{$one.data}</textarea></div>
