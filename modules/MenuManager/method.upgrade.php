@@ -20,7 +20,7 @@ if( version_compare($oldversion,'1.50') < 0 ) {
     $tpl->set_owner($uid);
     $tpl->set_content($contents);
     $tpl->set_type($type);
-    $tpl->set_type_dflt($tplname == $mod->GetPreference($currentdflt));
+    $tpl->set_type_dflt($tplname == $currentdflt);
     $tpl->save();
 
     $mod->DeleteTemplate($tplname);
@@ -46,13 +46,13 @@ if( version_compare($oldversion,'1.50') < 0 ) {
     if( $default_template && endswith($default_template,'.tpl') ) {
       $tpl = $this->GetTemplateFromFile($default_template);
       $this->SetTemplate('mm-default',$tpl);
-      $this->SetPreference('default_template','mm-default');
-      echo "DEBUG: MenuManager NEW default template is: ".$this->GetPreference('default_template')."<br/></n>";
+      $default_template = 'mm-default';
+      echo "DEBUG: MenuManager NEW default template is: $default_template<br/></n>";
     }
 
     $alltemplates = $this->ListTemplates();
     foreach( $alltemplates as $tplname ) {
-      $upgrade_template($menu_template_type,'',$tplname,'default_template');
+      $upgrade_template($menu_template_type,'',$tplname,$default_template);
     }
   }
   catch( CmsException $e ) {
