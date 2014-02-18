@@ -35,6 +35,7 @@
  * DONT_LOAD_DB = Indicates that the database should not be initialized and any database related functions should not be called
  * DONT_LOAD_SMARTY = Indicates that smarty should not be initialized, and no smarty related variables assigned.
  * CMS_INSTALL_PAGE - Indicates that the file was included from the CMSMS Installation/Upgrade process
+ * CMS_PHAR_INSTALLER - Indicates that the file was included from the CMSMS PHAR based installer (note: CMS_INSTALL_PAGE will also be set).
  * CMS_ADMIN_PAGE - Indicates that the file was included from an admin side request.
  * CMS_LOGIN_PAGE - Indicates that the file was included from the admin login form.
  * LOAD_ALL_MODULES - Indicates that all available modules should be loaded (deprecated)

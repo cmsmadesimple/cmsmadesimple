@@ -64,8 +64,7 @@ final class CmsApp {
 	 * @ignore
 	 */
 	private $_states;
-	private static $_statelist = array(self::STATE_ADMIN_PAGE,self::STATE_STYLESHEET,
-									   self::STATE_INSTALL,self::STATE_PARSE_TEMPLATE);
+	private static $_statelist = array(self::STATE_ADMIN_PAGE,self::STATE_STYLESHEET, self::STATE_INSTALL,self::STATE_PARSE_TEMPLATE);
 
 	/**
 	 * Database object - adodb reference to the current database
@@ -428,8 +427,8 @@ final class CmsApp {
 	*/
 	public function & GetSmarty()
 	{
-		global $CMS_INSTALL_PAGE;
-		if( isset($CMS_INSTALL_PAGE) ) {
+		global $CMS_PHAR_INSTALLER;
+		if( isset($CMS_PHAR_INSTALLER) ) {
 			// we can't load the CMSMS version of smarty during the installation.
 			$out = null;
 			return $out;
