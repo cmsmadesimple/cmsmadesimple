@@ -105,7 +105,6 @@ $lang['help_general_lockrefresh'] = 'Specify the number of seconds (at most) at 
 $lang['help_general_locktimeout'] = 'Specify the number of minutes after which a non-refreshed lock will expire.  Specifying a value of 0 will disable locking all together.  The minimum value for this field is 5 and the maximum value is 480.';
 $lang['help_listsettings_namecolumn'] = 'Specify what text should be displayed in the &quot;Name&quot; column of the content list view.  Choose either the page title, or menu text';
 $lang['help_listsettings_visiblecolumns'] = 'Select which columns to display in the content list view.  Use caution here as some functionality may not be available if the column is hidden';
-$lang['help_page_disablewysiwyg'] = 'This option will disable the WYSIWYG editor for all content areas on this page independent of settings in the {content} block or user settings';
 $lang['help_pagedflt_active'] = 'Indicate whether new pages will be active by default.  Site visitors cannot navigate to inactive pages';
 $lang['help_pagedflt_addteditors'] = 'Specify a default list of additional editors for each new page';
 $lang['help_pagedflt_cachable'] = 'Specify whether new pages should be cachable or not.';

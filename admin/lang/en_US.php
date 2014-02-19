@@ -1047,6 +1047,7 @@ EOT;
 $lang['help_css_max_age'] = 'This parameter should be set relatively high for static sites, and should be set to 0 for site development';
 $lang['help_page_alias'] = 'The alias is used as an alternate to the page id to uniquely identify a page. It must be unique across all pages.  The alias is also used to assist in building the URL for the page';
 $lang['help_page_cachable'] = 'Performance can be increased by setting as many pages as possible to cachable.  However this cannot be used for pages where content may change on a per request basis';
+$lang['help_page_disablewysiwyg'] = 'This option will disable the WYSIWYG editor for all content areas on this page independent of settings in the {content} block or user settings';
 $lang['help_page_searchable'] = 'This setting indicates whether the content of this page should be indexed by the Search module';
 $lang['help_page_url'] = 'Specify an alternate URL (relative to the root of your website) that can be used to uniquely identify this page.  i.e: path/to/mypage.  The page URL is only useful when pretty urls are enabled.';
 $lang['help_systeminformation'] = <<<EOT

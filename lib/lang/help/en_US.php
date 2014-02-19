@@ -623,6 +623,10 @@ $lang['help_designmanager_help'] = <<<EOT
 <h3>Upgrade Notes</h3>
 EOT;
 
+$lang['help_page_disablewysiwyg'] = '
+todo
+';
+
 $lang['help_myaccount_admincallout'] = 'If enabled administrative bookmarks <em>(shortcuts)</em> will be enabled allowing you to manage a list of frequently used actions in the admin console.';
 $lang['help_myaccount_admintheme'] = 'Select an administration theme to use.  Different administration themes have different menu layouts, work better for mobile displays, and have varous additional features.';
 $lang['help_myaccount_ce_navdisplay'] = 'Select which content field should be displayed in content lists.  Options include the page title, or menu text.  If &quot;None&quot; is selected, then the site preference will be used';

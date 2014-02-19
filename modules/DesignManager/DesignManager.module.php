@@ -33,7 +33,7 @@ final class DesignManager extends CMSModule
   function HasAdmin() { return true; }
   function GetAdminSection() { return 'layout'; }
   function AllowAutoInstall() { return TRUE; }
-  function GetHelp() { return @file_get_contents(__DIR__.'/help.inc'); }
+  function GetHelp() { return $this->Lang('help'); }
   function GetChangeLog() { return file_get_contents(__DIR__.'/changelog.inc'); }
   function GetAdminDescription() { return $this->Lang('moddescription'); }
   function InstallPostMessage() { return $this->Lang('postinstall'); }
