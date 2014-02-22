@@ -51,7 +51,7 @@ $(document).ready(function(){
 			</p>
 		</div>
 		<div class="pageoverflow">
-			<p class="pagetext"><label for="globalmetadata">{lang('globalmetadata')}:</label>&nbsp;{cms_help key2='siteprefs_globalmetadata'}</p>
+			<p class="pagetext"><label for="globalmetadata">{lang('globalmetadata')}:</label>&nbsp;{cms_help key2='siteprefs_globalmetadata' title=lang('globalmetadata')}</p>
 			<p class="pageinput"><textarea id="globalmetadata" class="pagesmalltextarea" name="metadata" cols="80" rows="20">{$metadata}</textarea></p>
 		</div>
 		{if isset($themes)}
@@ -360,7 +360,7 @@ $(document).ready(function(){
 					<p class="pageinput">
 						<select id="mailer" name="mailprefs_mailer">
 							{html_options options=$maileritems selected=$mailprefs.mailer}
-						</select>&nbsp;{cms_help key2='settings_mailprefs_mailer'}
+						</select>&nbsp;{cms_help key2='settings_mailprefs_mailer' title=lang('settings_mailer')}
 					</p>
 				</div>
 				<div class="pageoverflow">
