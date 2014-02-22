@@ -89,7 +89,7 @@ $(document).ready(function(){
     </div>
 
     <div class="pageoverflow">
-      <p class="pagetext"><label for="name">{lang('name')}</label>:&nbsp;{cms_help key1=h_udtname}</p>
+      <p class="pagetext"><label for="name">{lang('name')}</label>:&nbsp;{cms_help key1=h_udtname title=lang('name')}</p>
       <p class="pageinput">
         <input type="text" id="name" name="userplugin_name" value="{$record.userplugin_name}" size="50" maxlength="50"/>
       </p>
@@ -117,11 +117,11 @@ $(document).ready(function(){
 {tab_header name='description' label=lang('description')}
 
 {tab_start name='code'}
-<label for="code">{lang('code')}:</label>&nbsp;{cms_help key1=h_udtcode}<br/>
+<label for="code">{lang('code')}:</label>&nbsp;{cms_help key1=h_udtcode title=lang('code')}<br/>
 {cms_textarea id='udtcode' name='code' value=$record.code wantedsyntax=php rows=10 cols=80}
 
 {tab_start name='description'}
-<label for="description">{lang('description')}:</label>&nbsp;{cms_help key1=h_udtdesc}
+<label for="description">{lang('description')}:</label>&nbsp;{cms_help key1=h_udtdesc title=lang('description')}
 <br/>
 <textarea id="description" name="description" rows="3" cols="50">{$record.description}</textarea>
 {tab_end}

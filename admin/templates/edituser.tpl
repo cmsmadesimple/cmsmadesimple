@@ -15,46 +15,46 @@ $(document).ready(function(){
 {if $manage_users == true}{tab_header name='settings' label=lang('settings')}{/if}
 {tab_start name='user'}
 <div class="pageoverflow">
-  <p class="pagetext"><label for="username">{lang('name')}:</label></p>
+  <p class="pagetext"><label for="username">{lang('name')}:</label>&nbsp;{cms_help realm='admin' key='info_adduser_username' title=lang('name')}</p>
   <p class="pageinput">
     <input type="text" id="username" name="user" maxlength="25" value="{$user}" class="standard"/>
   </p>
 </div>
 <div class="pageoverflow">
-  <p class="pagetext"><label for="password">{lang('password')}:</label></p>
+  <p class="pagetext"><label for="password">{lang('password')}:</label>&nbsp;{cms_help realm='admin' key='info_edituser_password' title=lang('password')}</p>
   <p class="pageinput">
     <input type="password" id="password" name="password" maxlength="100" value="" class="standard"/>
     <br/>{lang('info_edituser_password')}
   </p>
 </div>
 <div class="pageoverflow">
-  <p class="pagetext"><label for="passwordagain">{lang('passwordagain')}:</label></p>
+  <p class="pagetext"><label for="passwordagain">{lang('passwordagain')}:</label>&nbsp;{cms_help realm='admin' key='info_edituser_passwordagain' title=lang('passwordagain')}</p>
   <p class="pageinput">
     <input id="passwordagain" type="password" name="passwordagain" maxlength="100" value="" class="standard"/>
     <br/>{lang('info_edituser_passwordagain')}
   </p>
 </div>
 <div class="pageoverflow">
-  <p class="pagetext"><label for="firstname">{lang('firstname')}:</label></p>
+  <p class="pagetext"><label for="firstname">{lang('firstname')}:</label>&nbsp;{cms_help key2='help_myaccount_firstname' title=lang('firstname')}</p>
   <p class="pageinput">
     <input id="firstname" type="text" name="firstname" maxlength="50" value="{$firstname}" class="standard"/>
   </p>
 </div>
 <div class="pageoverflow">
-  <p class="pagetext"><label for="lastname">{lang('lastname')}:</label></p>
+  <p class="pagetext"><label for="lastname">{lang('lastname')}:</label>&nbsp;{cms_help key2='help_myaccount_lastname' title=lang('lastname')}</p>
   <p class="pageinput">
     <input id="lastname" type="text" name="lastname" maxlength="50" value="{$lastname}" class="standard"/>
   </p>
 </div>
 <div class="pageoverflow">
-  <p class="pagetext"><label for="email">{lang('email')}:</label></p>
+  <p class="pagetext"><label for="email">{lang('email')}:</label>&nbsp;{cms_help key2='help_myaccount_email' title=lang('email')}</p>
   <p class="pageinput">
     <input id="email" type="text" name="email" maxlength="255" value="{$email}" class="standard"/>
   </p>
 </div>
 {if !$access_user && ($user_id != 1)}
 <div class="pageoverflow">
-  <p class="pagetext"><label for="active">{lang('active')}:</label></p>
+  <p class="pagetext"><label for="active">{lang('active')}:</label>&nbsp;{cms_help realm='admin' key='info_user_active' title=lang('active')}</p>
   <p class="pageinput">
     <input id="active" type="checkbox" class="pagecheckbox" name="active" value="1"{if $active == 1} checked="checked"{/if}/>
     <br/>{lang('info_user_active')}
@@ -122,7 +122,7 @@ $(document).ready(function(){
 });
 </script>
 <div class="pageoverflow">
-  <p class="pagetext"><label for="copyusersettings" title="{lang('info_copyusersettings')}">{lang('copyusersettings')}:</label></p>
+  <p class="pagetext"><label for="copyusersettings" title="{lang('info_copyusersettings')}">{lang('copyusersettings')}:</label>&nbsp;{cms_help realm='admin' key='info_copyusersettings' title=lang('copyusersettings')}</p>
   <p class="pageinput">
     <select id="copyusersettings" name="copyusersettings">
       {html_options options=$users}

@@ -32,14 +32,14 @@ $(document).ready(function(){
 		</div>
 		<div class="pageoverflow">
 			<p class="pagetext"><label for="sitename">{'sitename'|lang}:</label></p>
-			<p class="pageinput"><input type="text" id="sitename" class="pagesmalltextarea" name="sitename" size="30" value="{$sitename}" />&nbsp;{cms_help key2='siteprefs_sitename'}</p>
+			<p class="pageinput"><input type="text" id="sitename" class="pagesmalltextarea" name="sitename" size="30" value="{$sitename}" />&nbsp;{cms_help key2='siteprefs_sitename' title='sitename'|lang}</p>
 		</div>
 		<div class="pageoverflow">
 			<p class="pagetext"><label for="frontendlang">{lang('frontendlang')}:</label></p>
 			<p class="pageinput">
 				<select id="frontendlang" name="frontendlang" style="vertical-align: middle;">
 					{html_options options=$languages selected=$frontendlang}
-				</select>&nbsp;{cms_help key2='siteprefs_frontendlang'}
+				</select>&nbsp;{cms_help key2='siteprefs_frontendlang' title=lang('frontendlang')}
 			</p>
 		</div>
 		<div class="pageoverflow">
@@ -47,7 +47,7 @@ $(document).ready(function(){
 			<p class="pageinput">
 				<select id="frontendwysiwyg" name="frontendwysiwyg">
 					{html_options options=$wysiwyg selected=$frontendwysiwyg}
-				</select>&nbsp;{cms_help key2='siteprefs_frontendwysiwyg'}
+				</select>&nbsp;{cms_help key2='siteprefs_frontendwysiwyg' title=lang('frontendwysiwygtouse')}
 			</p>
 		</div>
 		<div class="pageoverflow">
@@ -60,7 +60,7 @@ $(document).ready(function(){
 				<p class="pageinput">
 					<select id="logintheme" name="logintheme">
 						{html_options options=$themes selected=$logintheme}
-					</select>&nbsp;{cms_help key2='siteprefs_logintheme'}
+					</select>&nbsp;{cms_help key2='siteprefs_logintheme' title=lang('master_admintheme')}
 				</p>
 			</div>
 		{/if}
@@ -69,27 +69,27 @@ $(document).ready(function(){
 			<p class="pageinput">
 				<select id="backendwysiwyg" name="backendwysiwyg">
 					{html_options options=$wysiwyg selected=$backendwysiwyg}
-				</select>&nbsp;{cms_help key2='siteprefs_backendwysiwyg'}
+				</select>&nbsp;{cms_help key2='siteprefs_backendwysiwyg' title=lang('backendwysiwygtouse')}
 			</p>
 		</div>
 		<div class="pageoverflow">
 			<p class="pagetext"><label for="defaultdateformat">{lang('date_format_string')}:</label></p>
 			<p class="pageinput">
-				<input class="pagenb" id="defaultdateformat" type="text" name="defaultdateformat" size="20" maxlength="255" value="{$defaultdateformat}"/>&nbsp;{cms_help key2='siteprefs_dateformat'}
+				<input class="pagenb" id="defaultdateformat" type="text" name="defaultdateformat" size="20" maxlength="255" value="{$defaultdateformat}"/>&nbsp;{cms_help key2='siteprefs_dateformat' title=lang('date_format_string')}
 			</p>
 		</div>
 		<div class="pageoverflow">
 			<p class="pagetext"><label for="thumbnail_width">{lang('thumbnail_width')}:</label></p>
 			<p class="pageinput">
 				<input class="pagenb" id="thumbnail_width" type="text" name="thumbnail_width" size="3" maxlength="3" value="{$thumbnail_width}"/>
-				&nbsp;{cms_help key2='siteprefs_thumbwidth'}
+				&nbsp;{cms_help key2='siteprefs_thumbwidth' title=lang('thumbnail_width')}
 			</p>
 		</div>
 		<div class="pageoverflow">
 			<p class="pagetext"><label for="thumbnail_height">{lang('thumbnail_height')}:</label></p>
 			<p class="pageinput">
 				<input id="thumbnail_height" class="pagenb" type="text" name="thumbnail_height" size="3" maxlength="3" value="{$thumbnail_height}"/>
-				&nbsp;{cms_help key2='siteprefs_thumbheight'}
+				&nbsp;{cms_help key2='siteprefs_thumbheight' title=lang('thumbnail_height')}
 			</p>
 		</div>
 		{if isset($search_modules)}
@@ -97,7 +97,7 @@ $(document).ready(function(){
 			<p class="pageinput">
 				<select id="search_module" name="search_module">
 					{html_options options=$search_modules selected=$search_module}
-				</select>&nbsp;{cms_help key2='settings_searchmodule'}
+				</select>&nbsp;{cms_help key2='settings_searchmodule' title=lang('search_module')}
 			</p>
 		{/if}
 		<div class="pageoverflow">
@@ -118,7 +118,7 @@ $(document).ready(function(){
 			<input type="hidden" name="editsiteprefs" value="true" />
 		</div>
 		{if !$pretty_urls}
-			<div class="warning">{lang('warn_nosefurl')}&nbsp;&nbsp;{cms_help key2='settings_nosefurl'}</div>
+			<div class="warning">{lang('warn_nosefurl')}&nbsp;&nbsp;{cms_help key2='settings_nosefurl' title=lang('warn_nosefurl')}</div>
 		{/if}
 		<div class="pageoverflow">
 			<p class="pageinput">
@@ -133,7 +133,7 @@ $(document).ready(function(){
 				<p class="pageinput">
 					<select id="content_autocreate_urls" name="content_autocreate_urls">
 						{html_options options=$yesno selected=$content_autocreate_urls}
-					</select>&nbsp;{cms_help key2='settings_autocreate_url'}
+					</select>&nbsp;{cms_help key2='settings_autocreate_url' title=lang('content_autocreate_urls')}
 				</p>
 			</div>
 		{/if}
@@ -143,7 +143,7 @@ $(document).ready(function(){
 				<p class="pageinput">
 					<select id="content_autocreate_flaturls" name="content_autocreate_flaturls">
 						{html_options options=$yesno selected=$content_autocreate_flaturls}
-					</select>&nbsp;{cms_help key2='settings_autocreate_flaturls'}
+					</select>&nbsp;{cms_help key2='settings_autocreate_flaturls' title=lang('content_autocreate_flaturls')}
 				</p>
 			</div>
 		{/if}
@@ -153,12 +153,12 @@ $(document).ready(function(){
 				<p class="pageinput">
 					<select id="content_mandatory_urls" name="content_mandatory_urls">
 						{html_options options=$yesno selected=$content_mandatory_urls}
-					</select>&nbsp;{cms_help key2='settings_mandatory_urls'}
+					</select>&nbsp;{cms_help key2='settings_mandatory_urls' title=lang('content_mandatory_urls')}
 				</p>
 			</div>
 		{/if}
 		<div class="pageoverflow">
-			<p class="pagetext"><label for="disallowed_contenttypes">{lang('disallowed_contenttypes')}:</label>&nbsp;{cms_help key2='settings_badtypes'}</p>
+			<p class="pagetext"><label for="disallowed_contenttypes">{lang('disallowed_contenttypes')}:</label>&nbsp;{cms_help key2='settings_badtypes' title=lang('disallowed_contenttypes')}</p>
 			<p class="pageinput">
 				<select id="disallowed_contenttypes" name="disallowed_contenttypes[]" multiple="multiple" size="5">
 					{html_options options=$all_contenttypes selected=$disallowed_contenttypes}
@@ -166,7 +166,7 @@ $(document).ready(function(){
 			</p>
 		</div>
 		<div class="pageoverflow">
-			<p class="pagetext"><label for="basic_attributes">{lang('basic_attributes')}:</label>&nbsp;{cms_help key2='settings_basicattribs'}</p>
+			<p class="pagetext"><label for="basic_attributes">{lang('basic_attributes')}:</label>&nbsp;{cms_help key2='settings_basicattribs' title=lang('basic_attributes')}</p>
 			<p class="pageinput">
 				<select id="basic_attributes" class="multicolumn" name="basic_attributes[]" multiple="multiple" size="5">
 					{cms_html_options options=$all_attributes selected=$basic_attributes}
@@ -177,20 +177,20 @@ $(document).ready(function(){
 			<p class="pagetext"><label for="imagefield_path">{lang('content_imagefield_path')}:</label></p>
 			<p class="pageinput">
 				<input id="imagefield_path" type="text" name="content_imagefield_path" size="50" maxlength="255" value="{$content_imagefield_path}"/>
-				&nbsp;{cms_help key2='settings_imagefield_path'}
+				&nbsp;{cms_help key2='settings_imagefield_path' title=lang('content_imagefield_path')}
 			</p>
 		</div>
 		<div class="pageoverflow">
 			<p class="pagetext"><label for="thumbfield_path">{lang('content_thumbnailfield_path')}:</label></p>
 			<p class="pageinput">
-				<input id="thumbfield_path" type="text" name="content_thumbnailfield_path" size="50" maxlength="255" value="{$content_thumbnailfield_path}"/>&nbsp;{cms_help key2='settings_thumbfield_path'}
+				<input id="thumbfield_path" type="text" name="content_thumbnailfield_path" size="50" maxlength="255" value="{$content_thumbnailfield_path}"/>&nbsp;{cms_help key2='settings_thumbfield_path' title=lang('content_thumbnailfield_path')}
 			</p>
 		</div>
 		<div class="pageoverflow">
 			<p class="pagetext"><label for="contentimage_path">{lang('contentimage_path')}:</label></p>
 			<p class="pageinput">
 				<input type="text" id="contentimage_path" name="contentimage_path" size="50" maxlength="255" value="{$contentimage_path}"/>
-				&nbsp;{cms_help key2='settings_contentimage_path'}
+				&nbsp;{cms_help key2='settings_contentimage_path' title=lang('contentimage_path')}
 			</p>
 		</div>
 		<div class="pageoverflow">
@@ -199,7 +199,7 @@ $(document).ready(function(){
                                 <select id="cssnameisblockname" name="content_cssnameisblockname">
                                 {cms_yesno selected=$content_cssnameisblockname}
 				</select>
-				&nbsp;{cms_help key2='settings_cssnameisblockname'}
+				&nbsp;{cms_help key2='settings_cssnameisblockname' title=lang('cssnameisblockname')}
 			</p>
 		</div>
 		<div class="pageoverflow">
@@ -325,7 +325,7 @@ $(document).ready(function(){
 				<p class="pagetext"><label for="testaddress">{lang('settings_testaddress')}:</label>&nbsp;</p>
 				<p class="pageinput">
 					<input type="text" id="testaddress" name="mailtest_testaddress" size="50" maxlength="255"/>
-					&nbsp;{cms_help key2='settings_mailtest_testaddress'}
+					&nbsp;{cms_help key2='settings_mailtest_testaddress' title=lang('settings_testaddress')}
 				</p>
 			</div>
 			<div class="pageoverflow">
@@ -367,14 +367,14 @@ $(document).ready(function(){
 					<p class="pagetext"><label for="from">{lang('settings_mailfrom')}:</label></p>
 					<p class="pageinput">
 						<input type="text" id="from" name="mailprefs_from" value="{$mailprefs.from}" size="50" maxlength="255"/>
-						&nbsp;{cms_help key2='settings_mailprefs_from'}
+						&nbsp;{cms_help key2='settings_mailprefs_from' title=lang('settings_mailfrom')}
 					</p>
 				</div>
 				<div class="pageoverflow">
 					<p class="pagetext"><label for="fromuser">{lang('settings_mailfromuser')}:</label></p>
 					<p class="pageinput">
 						<input type="text" id="fromuser" name="mailprefs_fromuser" value="{$mailprefs.fromuser}" size="50" maxlength="255"/>
-						&nbsp;{cms_help key2='settings_mailprefs_fromuser'}
+						&nbsp;{cms_help key2='settings_mailprefs_fromuser' title=lang('settings_mailfromuser')}
 					</p>
 				</div>
 		</fieldset>
@@ -385,7 +385,7 @@ $(document).ready(function(){
 					<p class="pagetext"><label for="host">{lang('settings_smtphost')}:</label></p>
 					<p class="pageinput">
 						<input type="text" id="host" name="mailprefs_host" value="{$mailprefs.host}" size="50" maxlength="255"/>
-						&nbsp;{cms_help key2='settings_mailprefs_smtphost'}
+						&nbsp;{cms_help key2='settings_mailprefs_smtphost' title=lang('settings_smtphost')}
 					</p>
 				</div>
 
@@ -393,7 +393,7 @@ $(document).ready(function(){
 					<p class="pagetext"><label for="port">{lang('settings_smtpport')}:</label></p>
 					<p class="pageinput">
 						<input type="text" id="port" name="mailprefs_port" value="{$mailprefs.port}" size="6" maxlength="8"/>
-						&nbsp;{cms_help key2='settings_mailprefs_smtpport'}
+						&nbsp;{cms_help key2='settings_mailprefs_smtpport' title=lang('settings_smtpport')}
 					</p>
 				</div>
 
@@ -401,7 +401,7 @@ $(document).ready(function(){
 					<p class="pagetext"><label for="timeout">{lang('settings_smtptimeout')}:</label></p>
 					<p class="pageinput">
 						<input type="text" id="timeout" name="mailprefs_timeout" value="{$mailprefs.timeout}" size="6" maxlength="8"/>
-						&nbsp;{cms_help key2='settings_mailprefs_smtptimeout'}
+						&nbsp;{cms_help key2='settings_mailprefs_smtptimeout' title=lang('settings_smtptimeout')}
 					</p>
 				</div>
 
@@ -412,7 +412,7 @@ $(document).ready(function(){
 						<p class="pageinput">
 							<select id="smtpauth" name="mailprefs_smtpauth">
 								{cms_yesno selected=$prefs.smtpauth}
-							</select>&nbsp;{cms_help key2='settings_mailprefs_smtpauth'}
+							</select>&nbsp;{cms_help key2='settings_mailprefs_smtpauth' title=lang('settings_smtpauth')}
 						</p>
 					</div>
 
@@ -421,7 +421,7 @@ $(document).ready(function(){
 						<p class="pageinput">
 							<select id="secure" name="mailprefs_secure">
 								{html_options options=$secure_opts selected=$prefs.secure}
-							</select>&nbsp;{cms_help key2='settings_mailprefs_smtpsecure'}
+							</select>&nbsp;{cms_help key2='settings_mailprefs_smtpsecure' title=lang('settings_authsecure')}
 						</p>
 					</div>
 
@@ -429,7 +429,7 @@ $(document).ready(function(){
 						<p class="pagetext"><label for="username">{lang('settings_authusername')}:</label></p>
 						<p class="pageinput">
 							<input type="text" id="username" name="mailprefs_username" value="{$mailprefs.username}" size="50" maxlength="255"/>
-							&nbsp;{cms_help key2='settings_mailprefs_smtpusername'}
+							&nbsp;{cms_help key2='settings_mailprefs_smtpusername' title=lang('settings_authusername')}
 						</p>
 					</div>
 
@@ -437,7 +437,7 @@ $(document).ready(function(){
 						<p class="pagetext"><label for="password">{lang('settings_authpassword')}:</label></p>
 						<p class="pageinput">
 							<input type="password" id="password" name="mailprefs_password" value="{$mailprefs.password}" size="30" maxlength="30"/>
-							&nbsp;{cms_help key2='settings_mailprefs_smtppassword'}
+							&nbsp;{cms_help key2='settings_mailprefs_smtppassword' title=lang('settings_authpassword')}
 						</p>
 					</div>
 				</fieldset>
@@ -449,7 +449,7 @@ $(document).ready(function(){
 					<p class="pagetext"><label for="sendmail">{lang('settings_sendmailpath')}:</label></p>
 					<p class="pageinput">
 						<input type="text" id="sendmail" name="mailprefs_sendmail" value="{$mailprefs.sendmail}" size="50" maxlength="255"/>
-						&nbsp;{cms_help key2='settings_mailprefs_sendmail'}
+						&nbsp;{cms_help key2='settings_mailprefs_sendmail' title=lang('settings_sendmailpath')}
 					</p>
 				</div>
 		</fieldset>
@@ -485,14 +485,14 @@ $(document).ready(function(){
 					<p class="pageinput">
 						<select name="allow_browser_cache">
 							{cms_yesno selected=$allow_browser_cache}
-						</select>&nbsp;{cms_help key2='settings_browsercache'}
+						</select>&nbsp;{cms_help key2='settings_browsercache' title=lang('allow_browser_cache')}
 					</p>
 				</div>  
 				<div class="pageoverflow">
 					<p class="pagetext"><label for="browser_expiry">{lang('browser_cache_expiry')}:</label></p>
 					<p class="pageinput">
 						<input type="text" id="browser_expiry" name="browser_cache_expiry" value="{$browser_cache_expiry}" size="6" maxlength="10"/>
-						&nbsp;{cms_help key2='settings_browsercache_expiry'}
+						&nbsp;{cms_help key2='settings_browsercache_expiry' title=lang('browser_cache_expiry')}
 					</p>
 				</div>  
 		</fieldset>
@@ -502,7 +502,7 @@ $(document).ready(function(){
 				<div class="pageoverflow">
 					<p class="pagetext"><label for="autoclearcache2">{'autoclearcache2'|lang}:</label></p>
 					<p class="pageinput">
-						<input id="autoclearcache2" type="text" name="auto_clear_cache_age" size="4" value="{$auto_clear_cache_age}" maxlength="4"/>&nbsp;{cms_help key2='settings_autoclearcache'}
+						<input id="autoclearcache2" type="text" name="auto_clear_cache_age" size="4" value="{$auto_clear_cache_age}" maxlength="4"/>&nbsp;{cms_help key2='settings_autoclearcache' title='autoclearcache2'|lang}
 					</p>
 				</div>
 		</fieldset>
@@ -512,7 +512,7 @@ $(document).ready(function(){
 					<p class="pagetext"><label for="umask">{lang('global_umask')}:</label></p>
 					<p class="pageinput">
 						<input id="umask" type="text" class="pagesmalltextarea" name="global_umask" size="4" value="{$global_umask}" />
-						&nbsp;{cms_help key2='settings_umask'}
+						&nbsp;{cms_help key2='settings_umask' title=lang('global_umask')}
 					</p>
 				</div>
 				{if isset($testresults)}
@@ -530,7 +530,7 @@ $(document).ready(function(){
 					<p class="pageinput">
 						<select id="safemodewarn" name="disablesafemodewarning">
 							{cms_yesno selected=$disablesafemodewarning}
-						</select>&nbsp;{cms_help key2='settings_disablesafemodewarn'}
+						</select>&nbsp;{cms_help key2='settings_disablesafemodewarn' title=lang('disablesafemodewarning')}
 					</p>
 				</div>
 				<div class="pageoverflow">
@@ -538,14 +538,14 @@ $(document).ready(function(){
 					<p class="pageinput">
 						<select id="notifications" name="enablenotifications">
 							{cms_yesno selected=$enablenotifications}
-						</select>&nbsp;{cms_help key2='settings_enablenotifications'}
+						</select>&nbsp;{cms_help key2='settings_enablenotifications' title=lang('admin_enablenotifications')}
 				</div>
 				<div class="pageoverflow">
 					<p class="pagetext"><label for="pseudocron">{lang('pseudocron_granularity')}:</label></p>
 					<p class="pageinput">
 						<select id="pseudocron" name="pseudocron_granularity">
 							{html_options options=$pseudocron_options selected=$pseudocron_granularity}
-						</select>&nbsp;{cms_help key2='settings_pseudocron_granularity'}
+						</select>&nbsp;{cms_help key2='settings_pseudocron_granularity' title=lang('pseudocron_granularity')}
 					</p>
 				</div>
 				<div class="pageoverflow">
@@ -553,7 +553,7 @@ $(document).ready(function(){
 					<p class="pageinput">
 						<select id="adminlog" name="adminlog_lifetime">
 							{html_options options=$adminlog_options selected=$adminlog_lifetime}
-						</select>&nbsp;{cms_help key2='settings_adminlog_lifetime'}
+						</select>&nbsp;{cms_help key2='settings_adminlog_lifetime' title=lang('adminlog_lifetime')}
 					</p>
 				</div>
 				<div class="pageoverflow">
@@ -561,7 +561,7 @@ $(document).ready(function(){
 					<p class="pageinput">
 						<select id="checkversion" name="checkversion">
 							{cms_yesno options=$checkversion}
-						<select>&nbsp;{cms_help key2='settings_checkversion'}	  
+						<select>&nbsp;{cms_help key2='settings_checkversion' title=lang('checkversion')}	  
 					</p>
 				</div>
 		</fieldset>
@@ -595,7 +595,7 @@ $(document).ready(function(){
 			<p class="pageinput">
 				<select id="smartycache" name="use_smartycache">
 					{html_options options=$yesno selected=$use_smartycache}
-				</select>&nbsp;{cms_help key2='settings_smartycaching'}
+				</select>&nbsp;{cms_help key2='settings_smartycaching' title=lang('prompt_use_smartycaching')}
 			</p>
 		</div>
 		<div class="pageoverflow">
@@ -603,7 +603,7 @@ $(document).ready(function(){
 			<p class="pageinput">
 				<select for="compilecheck" name="use_smartycompilecheck">
 					{html_options options=$yesno selected=$use_smartycompilecheck}
-				</select>&nbsp;{cms_help key2='settings_smartycompilecheck'}
+				</select>&nbsp;{cms_help key2='settings_smartycompilecheck' title=lang('prompt_smarty_compilecheck')}
 			</p>
 		</div>
 	</form>
