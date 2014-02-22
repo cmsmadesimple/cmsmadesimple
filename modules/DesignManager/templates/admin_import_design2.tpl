@@ -38,7 +38,7 @@ $(document).ready(function(){
       <p class="pagetext">{$mod->Lang('prompt_created')}:</p>
       <p class="pageinput">
         {$tmp=$design_info.generated|date_format:'%x %X'}{if $tmp == ''}{$tmp=$mod->Lang('unknown')}{/if}
-        <span style="color: red;">{$tmp}</span>&nbsp;{cms_help key2='help_import_created'}
+        <span style="color: red;">{$tmp}</span>&nbsp;{cms_help key2='help_import_created' title=''}
       </p>
     </div>
   </div>

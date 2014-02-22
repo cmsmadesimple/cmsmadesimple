@@ -130,7 +130,7 @@ $lang['help_function_cms_help'] = <<<EOT
 <li>assign - <em>(optional string)</em> - Assign the output to the named smarty variable.</li>
 </ul>
 <h3>Example:</h3>
-<pre><code>{cms_help key2='help_field_username'}</code></pre>
+<pre><code>{cms_help key2='help_field_username' title=&#36;foo}</code></pre>
 EOT;
 
 $lang['help_function_cms_init_editor'] = <<<EOT

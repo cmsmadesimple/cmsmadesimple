@@ -71,7 +71,7 @@ $(document).ready(function(){
   </div>
 
   <div class="pageoverflow">
-    <p class="pagetext"><label for="tpl_name">*{$mod->Lang('prompt_name')}:</label>&nbsp;{cms_help key2=help_template_name}</p>
+    <p class="pagetext"><label for="tpl_name">*{$mod->Lang('prompt_name')}:</label>&nbsp;{cms_help key2=help_template_name title=$mod->Lang('prompt_name')}</p>
     <p class="pageinput">
       <input id="tpl_name" type="text" name="{$actionid}name" size="50" maxlength="50" value="{$template->get_name()}" {if !$has_manage_right}readonly="readonly"{/if} placeholder="{$mod->Lang('new_template')}"/>
     </p>
@@ -82,13 +82,13 @@ $(document).ready(function(){
   <div style="width: 49%; float: right;">
   {if $template->get_id()}
     <div class="pageoverflow">
-      <p class="pagetext"><label for="tpl_created">{$mod->Lang('prompt_created')}:</label>&nbsp;{cms_help key2='help_tpl_created'}</p>
+      <p class="pagetext"><label for="tpl_created">{$mod->Lang('prompt_created')}:</label>&nbsp;{cms_help key2='help_tpl_created' title=$mod->Lang('prompt_created')}</p>
       <p class="pageinput">
         <input type="text" id="tpl_created" value="{$template->get_created()|date_format:'%x %X'}" readonly="readonly"/>
       </p>
     </div>
     <div class="pageoverflow" id="tpl_modified_cont">
-      <p class="pagetext"><label for="tpl_modified">{$mod->Lang('prompt_modified')}:</label>&nbsp;{cms_help key2='help_tpl_modified'}</p>
+      <p class="pagetext"><label for="tpl_modified">{$mod->Lang('prompt_modified')}:</label>&nbsp;{cms_help key2='help_tpl_modified' title=$mod->Lang('prompt_modified')}</p>
       <p class="pageinput">
         <input type="text" id="tpl_modified" value="{$template->get_modified()|date_format:'%x %X'}" readonly="readonly"/>
       </p>
@@ -122,7 +122,7 @@ $(document).ready(function(){
 
 {tab_start name='template'}
 <div class="pageoverflow">
-  <p class="pagetext"><label for="contents">{$mod->Lang('prompt_template')}:</label>&nbsp;{cms_help key2=help_template_contents}</p>
+  <p class="pagetext"><label for="contents">{$mod->Lang('prompt_template')}:</label>&nbsp;{cms_help key2=help_template_contents title=$mod->Lang('prompt_template')}</p>
   <p class="pageinput">
     {cms_textarea id='content' prefix=$actionid name=contents value=$template->get_content() type='smarty' rows=20 cols=80}
   </p>
@@ -130,7 +130,7 @@ $(document).ready(function(){
 
 {tab_start name='description'}
 <div class="pageoverflow">
-  <p class="pagetext"><label for="description">{$mod->Lang('prompt_description')}:</label>&nbsp;{cms_help key2=help_template_description}</p>
+  <p class="pagetext"><label for="description">{$mod->Lang('prompt_description')}:</label>&nbsp;{cms_help key2=help_template_description title=$mod->Lang('prompt_description')}</p>
   <p class="pageinput">
     <textarea id="description" name="{$actionid}description" {if !$has_manage_right}readonly="readonly"{/if}>{$template->get_description()}</textarea>
 </div>
@@ -138,7 +138,7 @@ $(document).ready(function(){
 {if $has_themes_right}
 {tab_start name='designs'}
 <div class="pageoverflow">
-  <p class="pagetext"><label for="designlist">{$mod->Lang('prompt_designs')}:</label>&nbsp;{cms_help key2=help_template_designlist}</p>
+  <p class="pagetext"><label for="designlist">{$mod->Lang('prompt_designs')}:</label>&nbsp;{cms_help key2=help_template_designlist title=$mod->Lang('prompt_designs')}</p>
   <p class="pageinput">
     <select id="designlist" name="{$actionid}design_list[]" multiple="multiple" size="5">
     {html_options options=$design_list selected=$template->get_designs()}
@@ -151,7 +151,7 @@ $(document).ready(function(){
 {tab_start name='advanced'}
   {if isset($type_list)}
     <div class="pageoverflow">
-      <p class="pagetext"><label for="tpl_type">{$mod->Lang('prompt_type')}:</label>&nbsp;{cms_help key2=help_template_type}</p>
+      <p class="pagetext"><label for="tpl_type">{$mod->Lang('prompt_type')}:</label>&nbsp;{cms_help key2=help_template_type title=$mod->Lang('prompt_type')}</p>
       <p class="pageinput">
         <select id="tpl_type" name="{$actionid}type"{if $type_is_readonly} readonly="readonly"{/if}>
           {html_options options=$type_list selected=$template->get_type_id()}
@@ -160,7 +160,7 @@ $(document).ready(function(){
     </div>
     {if $type_obj->get_dflt_flag()}
       <div class="pageoverflow">
-        <p class="pagetext"><label for="tpl_dflt">{$mod->Lang('prompt_default')}:</label>&nbsp;{cms_help key2=help_template_dflt}</p>
+        <p class="pagetext"><label for="tpl_dflt">{$mod->Lang('prompt_default')}:</label>&nbsp;{cms_help key2=help_template_dflt title=$mod->Lang('prompt_default')}</p>
         <p class="pageinput">
           <input type="hidden" name="{$actionid}default" value="{if $template->get_type_dflt()}1{else}0{/if}"/>
           <input id="tpl_dflt" type="checkbox" name="{$actionid}default" value="1" {if $template->get_type_dflt()}checked="checked" disabled="disabled"{/if}/>
@@ -171,7 +171,7 @@ $(document).ready(function(){
 
   {if isset($category_list)}
   <div class="pageoverflow">
-    <p class="pagetext"><label for="tpl_category">{$mod->Lang('prompt_category')}:</label>&nbsp;{cms_help key2=help_template_category}</p>
+    <p class="pagetext"><label for="tpl_category">{$mod->Lang('prompt_category')}:</label>&nbsp;{cms_help key2=help_template_category title=$mod->Lang('prompt_category')}</p>
     <p class="pageinput">
       <select id="tpl_category" name="{$actionid}category_id">
         {html_options options=$category_list selected=$template->get_category_id()}
@@ -185,7 +185,7 @@ $(document).ready(function(){
 {tab_start name='permissions'}
 {if isset($user_list)}
 <div class="pageoverflow">
-  <p class="pagetext"><label for="tpl_owner">{$mod->Lang('prompt_owner')}:</label>&nbsp;{cms_help key2=help_template_owner}</p>
+  <p class="pagetext"><label for="tpl_owner">{$mod->Lang('prompt_owner')}:</label>&nbsp;{cms_help key2=help_template_owner title=$mod->Lang('prompt_owner')}</p>
   <p class="pageinput">
     <select id="tpl_owner" name="{$actionid}owner_id">
     {html_options options=$user_list selected=$template->get_owner_id()}
@@ -195,7 +195,7 @@ $(document).ready(function(){
 {/if}
 {if isset($addt_editor_list)}
 <div class="pageoverflow">
-  <p class="pagetext"><label for="tpl_addeditor">{$mod->Lang('additional_editors')}:</label>&nbsp;{cms_help key2=help_template_addteditors}</p>
+  <p class="pagetext"><label for="tpl_addeditor">{$mod->Lang('additional_editors')}:</label>&nbsp;{cms_help key2=help_template_addteditors title=$mod->Lang('additional_editors')}</p>
   <p class="pageinput">
     <select id="tpl_addeditor" name="{$actionid}addt_editors[]" multiple="multiple" size="5">
     {html_options options=$addt_editor_list selected=$template->get_additional_editors()}

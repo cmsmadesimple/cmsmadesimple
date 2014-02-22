@@ -17,7 +17,7 @@
 	{if !$data.system}
 		<div class="pageoverflow">
 			<p class="pagetext">
-				<label for="profile_name">*{$mod->Lang('profile_name')}:</label>&nbsp;{cms_help key2='mthelp_profilename'}
+				<label for="profile_name">*{$mod->Lang('profile_name')}:</label>&nbsp;{cms_help key2='mthelp_profilename' title=$mod->Lang('profile_name')}
 			</p>
 			<p class="pageinput">
 				<input type="text" size="40" id="profile_name" name="{$actionid}profile_name" value="{$data.name}" />
@@ -26,7 +26,7 @@
 
 		<div class="pageoverflow">
 			<p class="pagetext">
-				<label for="profile_label">*{$mod->Lang('profile_label')}:</label>&nbsp;{cms_help key2='mthelp_profilelabel'}
+				<label for="profile_label">*{$mod->Lang('profile_label')}:</label>&nbsp;{cms_help key2='mthelp_profilelabel' title=$mod->Lang('profile_label')}
 			</p>
 			<p class="pageinput">
 				<input type="text" size="80" id="profile_label" name="{$actionid}profile_label" value="{$data.label}" />
@@ -36,7 +36,7 @@
 
 	<div class="pageoverflow">
 		<p class="pagetext">
-			<label for="profile_label">{$mod->Lang('profile_menubar')}:</label>&nbsp;{cms_help key2='mthelp_profilemenubar'}
+			<label for="profile_label">{$mod->Lang('profile_menubar')}:</label>&nbsp;{cms_help key2='mthelp_profilemenubar' title=$mod->Lang('profile_menubar')}
 		</p>
 		<p class="pageinput">
 			<select id="profile_menubar" name="{$actionid}profile_menubar">{cms_yesno selected=$data.menubar}</select>
@@ -45,7 +45,7 @@
 
 	<div class="pageoverflow">
 		<p class="pagetext">
-			<label for="profile_label">{$mod->Lang('profile_allowimages')}:</label>&nbsp;{cms_help key2='mthelp_profileallowimages'}
+			<label for="profile_label">{$mod->Lang('profile_allowimages')}:</label>&nbsp;{cms_help key2='mthelp_profileallowimages' title=$mod->Lang('profile_allowimages')}
 		</p>
 		<p class="pageinput">
 			<select id="profile_allowimages" name="{$actionid}profile_allowimages">{cms_yesno selected=$data.allowimages}</select>
@@ -54,7 +54,7 @@
 
 	<div class="pageoverflow">
 		<p class="pagetext">
-			<label for="profile_label">{$mod->Lang('profile_showstatusbar')}:</label>&nbsp;{cms_help key2='mthelp_profilestatusbar'}
+			<label for="profile_label">{$mod->Lang('profile_showstatusbar')}:</label>&nbsp;{cms_help key2='mthelp_profilestatusbar' title=$mod->Lang('profile_showstatusbar')}
 		</p>
 		<p class="pageinput">
 			<select id="profile_showstatusbar" name="{$actionid}profile_showstatusbar">{cms_yesno selected=$data.showstatusbar}</select>
@@ -63,7 +63,7 @@
 
 	<div class="pageoverflow">
 		<p class="pagetext">
-			<label for="profile_label">{$mod->Lang('profile_allowresize')}:</label>&nbsp;{cms_help key2='mthelp_profileresize'}
+			<label for="profile_label">{$mod->Lang('profile_allowresize')}:</label>&nbsp;{cms_help key2='mthelp_profileresize' title=$mod->Lang('profile_allowresize')}
 		</p>
 		<p class="pageinput">
 			<select id="profile_allowresize" name="{$actionid}profile_allowresize">{cms_yesno selected=$data.allowresize}</select>
@@ -72,7 +72,7 @@
 
 	<div class="pageoverflow">
 		<p class="pagetext">
-			<label for="profile_label">{$mod->Lang('profile_dfltstylesheet')}:</label>&nbsp;{cms_help key2='mthelp_dfltstylesheet'}
+			<label for="profile_label">{$mod->Lang('profile_dfltstylesheet')}:</label>&nbsp;{cms_help key2='mthelp_dfltstylesheet' title=$mod->Lang('profile_dfltstylesheet')}
 		</p>
 		<p class="pageinput">
 			<select id="profile_dfltstylesheet" name="{$actionid}profile_dfltstylesheet">
@@ -83,7 +83,7 @@
 
 	<div class="pageoverflow">
 		<p class="pagetext">
-			<label for="profile_label">{$mod->Lang('profile_allowcssoverride')}:</label>&nbsp;{cms_help key2='mthelp_allowcssoverride'}
+			<label for="profile_label">{$mod->Lang('profile_allowcssoverride')}:</label>&nbsp;{cms_help key2='mthelp_allowcssoverride' title=$mod->Lang('profile_allowcssoverride')}
 		</p>
 		<p class="pageinput">
 			<select id="profile_allowcssoverride" name="{$actionid}profile_allowcssoverride">{cms_yesno selected=$data.allowcssoverride}</select>

@@ -18,7 +18,7 @@
     </div>
 
     <div class="pageoverflow">
-      <p class="pagetext"><label for="design_name">{$mod->Lang('prompt_name')}</label>:&nbsp;{cms_help key2='help_design_name'}</p>
+      <p class="pagetext"><label for="design_name">{$mod->Lang('prompt_name')}</label>:&nbsp;{cms_help key2='help_design_name' title=$mod->Lang('prompt_name')}</p>
       <p class="pageinput">
         <input type="text" id="design_name" name="{$actionid}name" value="{$design->get_name()}" size="50" maxlength="50"/>
       </p>
@@ -26,14 +26,14 @@
   </div>
   <div style="width: 49%; float: right;">
     <div class="pageoverflow">
-      <p class="pagetext"><label for="created">{$mod->Lang('prompt_created')}:</label>&nbsp;{cms_help key2='help_design_created'}</p>
+      <p class="pagetext"><label for="created">{$mod->Lang('prompt_created')}:</label>&nbsp;{cms_help key2='help_design_created' title=$mod->Lang('prompt_created')}</p>
       <p class="pageinput">
         <input id="created" type="text" readonly="readonly" value="{$design->get_created()|date_format:'%x %X'}"/>
       </p>
     </div>
 
     <div class="pageoverflow">
-      <p class="pagetext"><label for="modified">{$mod->Lang('prompt_modified')}:</label>&nbsp;{cms_help key2='help_design_modified'}</p>
+      <p class="pagetext"><label for="modified">{$mod->Lang('prompt_modified')}:</label>&nbsp;{cms_help key2='help_design_modified' title=$mod->Lang('prompt_modified')}</p>
       <p class="pageinput">
         <input id="modified" type="text" readonly="readonly" value="{$design->get_modified()|date_format:'%x %X'}"/>
       </p>
@@ -50,7 +50,7 @@
   {include file='module_file_tpl:DesignManager;admin_edit_design_stylesheets.tpl' scope='root'}
 {tab_start name='tab_description'}
   <div class="pageoverflow">
-    <p class="pagetext"><label for="description">{$mod->Lang('prompt_description')}:</label>&nbsp;{cms_help key2=help_design_description}</p>
+    <p class="pagetext"><label for="description">{$mod->Lang('prompt_description')}:</label>&nbsp;{cms_help key2=help_design_description title=$mod->Lang('prompt_description')}</p>
     <p class="pageinput">
       <textarea id="description" name="{$actionid}description" rows="5">{$design->get_description()}</textarea>
     </p>

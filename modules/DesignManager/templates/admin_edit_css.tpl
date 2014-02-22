@@ -70,7 +70,7 @@ $(document).ready(function(){
     </div>
 
     <div class="pageoverflow">
-      <p class="pagetext"><label for="css_name">*{$mod->Lang('prompt_name')}:</label>&nbsp;{cms_help key2=help_stylesheet_name}</p>
+      <p class="pagetext"><label for="css_name">*{$mod->Lang('prompt_name')}:</label>&nbsp;{cms_help key2=help_stylesheet_name title=$mod->Lang('prompt_name')}</p>
       <p class="pageinput">
         <input id="css_name" type="text" name="{$actionid}name" size="50" maxlength="50" value="{$css->get_name()}" placeholder="{$mod->Lang('new_stylesheet')}"/>
       </p>
@@ -80,13 +80,13 @@ $(document).ready(function(){
   <div style="width: 49%; float: right;">
     {if $css->get_id()}
     <div class="pageoverflow">
-      <p class="pagetext"><label for="css_created">{$mod->Lang('prompt_created')}:</label>&nbsp;{cms_help key2=help_stylesheet_created}</p>
+      <p class="pagetext"><label for="css_created">{$mod->Lang('prompt_created')}:</label>&nbsp;{cms_help key2=help_stylesheet_created title=$mod->Lang('prompt_created')}</p>
       <p class="pageinput">
         <input type="text" id="css_created" value="{$css->get_created()|date_format:'%x %X'}" readonly="readonly"/>
       </p>
     </div>
     <div class="pageoverflow">
-      <p class="pagetext"><label for="css_modified">{$mod->Lang('prompt_modified')}:</label>&nbsp;{cms_help key2=help_stylesheet_modified}</p>
+      <p class="pagetext"><label for="css_modified">{$mod->Lang('prompt_modified')}:</label>&nbsp;{cms_help key2=help_stylesheet_modified title=$mod->Lang('prompt_modified')}</p>
       <p class="pageinput">
         <input type="text" id="css_modified" value="{$css->get_modified()|date_format:'%x %X'}" readonly="readonly"/>
       </p>
@@ -105,7 +105,7 @@ $(document).ready(function(){
 
 {tab_start name='content'}
 <div class="pageoverflow">
-  <p class="pagetext"><label for="stylesheet">{$mod->Lang('prompt_stylesheet')}:</label>&nbsp;{cms_help key2=help_stylesheet_content}</p>
+  <p class="pagetext"><label for="stylesheet">{$mod->Lang('prompt_stylesheet')}:</label>&nbsp;{cms_help key2=help_stylesheet_content title=$mod->Lang('prompt_stylesheet')}</p>
   <p class="pageinput">
     {cms_textarea id='stylesheet' prefix=$actionid name=content value=$css->get_content() type=css rows=20 cols=80}
   </p>
@@ -131,7 +131,7 @@ $(document).ready(function(){
 {tab_start name='media_query'}
 <div class="pagewarning">{$mod->Lang('info_editcss_mediaquery_tab')}</div>
 <div class="pageoverflow">
-  <p class="pagetext"><label for="mediaquery">{$mod->Lang('prompt_media_query')}:</label>&nbsp;{cms_help key2=help_css_mediaquery}</p>
+  <p class="pagetext"><label for="mediaquery">{$mod->Lang('prompt_media_query')}:</label>&nbsp;{cms_help key2=help_css_mediaquery title=$mod->Lang('prompt_media_query')}</p>
   <p class="pageinput">
     <textarea id="mediaquery" name="{$actionid}media_query" rows="10" cols="80">{$css->get_media_query()}</textarea>
   </p>
@@ -139,7 +139,7 @@ $(document).ready(function(){
 
 {tab_start name='description'}
 <div class="pageoverflow">
-  <p class="pagetext"><label for="txt_description">{$mod->Lang('prompt_description')}:</label>&nbsp;{cms_help key2=help_css_description}</p>
+  <p class="pagetext"><label for="txt_description">{$mod->Lang('prompt_description')}:</label>&nbsp;{cms_help key2=help_css_description title=$mod->Lang('prompt_description')}</p>
   <p class="pageinput">
     <textarea id="txt_description" name="{$actionid}description" rows="10" cols="80">{$css->get_description()}</textarea>
   </p>
@@ -148,7 +148,7 @@ $(document).ready(function(){
 {if $has_designs_right}
 {tab_start name='designs'}
 <div class="pageoverflow">
-  <p class="pagetext"><label for="designlist">{$mod->Lang('prompt_designs')}:</label>&nbsp;{cms_help key2=help_css_designs}</p>
+  <p class="pagetext"><label for="designlist">{$mod->Lang('prompt_designs')}:</label>&nbsp;{cms_help key2=help_css_designs title=$mod->Lang('prompt_designs')}</p>
   <p class="pageinput">
     <select id="designlist" name="{$actionid}design_list[]" multiple="multiple" size="5">
     {html_options options=$design_list selected=$css->get_designs()}

@@ -56,7 +56,7 @@ $(function(){
   </p>
 </div>
 <div class="pageoverflow">
-  <p class="pagetext"><label for="postrotate">{$mod->Lang('postrotate')}:</label>&nbsp;{cms_help key2='help_postrotate'}</p>
+  <p class="pagetext"><label for="postrotate">{$mod->Lang('postrotate')}:</label>&nbsp;{cms_help key2='help_postrotate' title=$mod->Lang('postrotate')}</p>
   <p class="pageinput">
     <select id="postrotate" name="{$actionid}postrotate">
     {html_options options=$opts selected=$postrotate}

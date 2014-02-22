@@ -16,13 +16,13 @@
   </p>
 </div>
 <div class="pageoverflow">
-  <p class="pagetext"><label for="cat_name">*{$mod->Lang('prompt_name')}:</label>&nbsp;{cms_help key='help_category_name'}</p>
+  <p class="pagetext"><label for="cat_name">*{$mod->Lang('prompt_name')}:</label>&nbsp;{cms_help key='help_category_name' title=$mod->Lang('prompt_name')}</p>
   <p class="pageinput">
     <input type="text" id="cat_name" name="{$actionid}name" value="{$category->get_name()}" size="50" maxlength="50" placeholder="{$mod->Lang('create_category')}"/>
   </p>
 </div>
 <div class="pageoverflow">
-  <p class="pagetext"><label for="cat_description">{$mod->Lang('prompt_description')}:</label>&nbsp;{cms_help key='help_category_desc'}</p>
+  <p class="pagetext"><label for="cat_description">{$mod->Lang('prompt_description')}:</label>&nbsp;{cms_help key='help_category_desc' title=$mod->Lang('prompt_description')}</p>
   <p class="pageinput">
     <textarea id="cat_description" name="{$actionid}description" rows="5" cols="80">{$category->get_description()}</textarea>
   </p>
