@@ -18,7 +18,7 @@ Core - General
   - Major accessibility review throughout admin interface
   - Removed many static admin pages, and replaced with new modules
   - Accept UTF-8 chars in page alias and in custom URLS
-    (punctuation, whitespace, / and . are not allowed in the alias.  punctuation, whitespace and . are not allowed in URLS).
+    (punctuation, whitespace, / and . are not allowed in the alias.  punctuation, whitespace and . are not allowed in URLS)
   - Removed the 'ext' parameter from cms_selflink
   - Removed the old compatibility admintheme class (admintheme.inc.php) was deprecated in 1.11
   - Admin interface now assumes HTML5.  Porting admin themes must include porting them to HTML5
@@ -29,28 +29,29 @@ Core - General
   - Deprecate template functions in the module API
   - Remove direct ImageMagick support (no more config entries)
   - Removed AllowAutoUpgrade and AllowAutoInstall from module API
-  
+  - Removed valid_css and valid_xhtml tags
+
 Core - Bug Reports
   - #9721 There's no check if changelog.txt exists
 
 Core - Feature Requests:
   - #4178 Improve behaviour of cms_selflink
   - #9270 More visible indication of "Site Down" status
-  
+
 FileManager
   - Numerous UI improvements
   - Adds ajaxy image cropping/resizing/rotation
-  
+
 MenuManager
   - Transformed to use new CmsLayout classes
   - Deprecated
 
 Navigator
   - New module to replace MenuManager
-  
+
 MicroTiny
   - Complete rewrite
-  - Now uses tinymce 4.0.12
+  - Now uses TinyMCE 4.0.12
 
 AdminSearch
   - New module for searching for tags and any content in templates
@@ -82,7 +83,7 @@ News
   - Uses new CmsLayout API's for template management
 
 Search
-  - No longer indexes templates, or GCB's
+  - No longer indexes templates or GCB's
   - rewrite the re-index stuff to hopefully use a bit less memory (at least for content pages)
   - Uses new CmsLayout API's for template management
   - Now supports multiple form and result templates
@@ -93,8 +94,8 @@ ModuleManager
   - Now shows release dates and approximate download counts for each module
   - Now shows summary of releases for a specific module
   - Visual indicators for stale and new modules
-  
-  
+
+
 Version 1.11.10 - Pinzon
 ------------------------
 Core - General
@@ -102,7 +103,7 @@ Core - General
   - Makes security key 16 characters long
   - Smarty template engine upgraded to version 3.1.16
   - Fixes to function signatures, and fix a notice in cms_module_smarty_plugin_manager
-  
+
 Core - MicroTiny
   - Minor fix to MicroTiny
   
@@ -112,6 +113,7 @@ Core - FileManager
 Core - News
  - Fix potential SQL injection vulnerability wrt the sortby parameter
 
+ 
 Version 1.11.9 - Bartolome
 -----------------------------
 Core - General
