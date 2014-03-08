@@ -154,7 +154,7 @@ $lang['help'] = <<<EOT
 <p>Templates can be associated with a single category merely as a method of organizing templates.  The DesignManager interface allows filtering types by category so that you can more easily find a template to edit.</p>
 
 <h3>Stylesheets Explained:</h3>
-<p>Stylesheets are text data that are stored in the database, and allow you to enter css data that is associated with zero or more designs.   Each stylesheet must have a unique name, has an optional description, and an optional media query.</p>
+<p>Stylesheets are text data that are stored in the database, and allow you to enter CSS data that is associated with zero or more designs.   Each stylesheet must have a unique name, has an optional description, and an optional media query.</p>
 <p>You can associate each stylesheet with one or more designs, and specify the order of the stylesheets within the design.  When a content page is rendered, all of the stylesheets associated with the design will be combined, and output to a file to allow cashing by the browser.</p>
 <p>Stylesheets can include smarty tags to allow doing logic within the stylesheet, or creating variables for reuse.  However instead of the normal { and } delimiters for smarty, the [[  and ]] delimiters are used.  For example:</p>
 <pre><code><span style="color: blue;">[[&#36;red='#f00']]</span>
@@ -241,7 +241,7 @@ $lang['help_css_mediaquery'] = <<<EOT
 <p>CMSMS Allows associating a media query with a stylesheet.  When <code>{cms_stylesheet}</code> renders its output the media query will be automatically placed in the stylesheet tag.</p>
 EOT;
 $lang['help_design_name'] = 'This field contains the unique, logician name for the collection of templates and stylesheets';
-$lang['help_design_created'] = 'This is the date the design was originally crated';
+$lang['help_design_created'] = 'This is the date the design was originally created';
 $lang['help_design_description'] = 'Specify a description for this design (text only).  This may be useful for your future reference, or when sharing this design with others';
 $lang['help_design_modified'] = 'The date the design was last modified';
 $lang['help_has_dflt'] = 'If &quot;Yes&quot;, this template type has some default content that is used as a sample when creating a new template of this type.  Of course you are able to change the contents of the template';
@@ -291,7 +291,7 @@ $lang['help_type_reqcontentblocks'] = 'This field indicates whether templates of
 $lang['import_design'] = 'Import Design';
 $lang['import_design_step1'] = 'Import Design Step 1';
 $lang['import_design_step2'] = 'Import Design Step 2';
-$lang['info_copy_css'] = '<strong>Note:</strong><br/>Copying a stylesheet will copy the stylesheet contents, as well as the description, media query, and media types.  However, the new stylesheet will not be associated with any designs';
+$lang['info_copy_css'] = '<strong>Note:</strong><br />Copying a stylesheet will copy the stylesheet contents, as well as the description, media query, and media types.  However, the new stylesheet will not be associated with any designs';
 $lang['info_editcss_mediatype_tab'] = '<strong>Warning:</strong> This functionality is deprecated and will be removed at a later date.  If both the media type and media query are specified, then the media query will take preference when rendering stylesheets';
 $lang['info_editcss_mediaquery_tab'] = '<strong>Warning:</strong> If both the media type and media query are specified, then the media query will take preference when rendering stylesheets';
 $lang['info_edittemplate_templates_tab'] = 'Select the templates that should be attached to the design.  Attaching a template to a design is used only for organizational and export purposes.  Order is not important.';
@@ -308,7 +308,7 @@ $lang['info_template_delete'] = 'This template may be used by a working system. 
 
 
 #L
-$lang['lock_timeout'] = 'Lock Timeout (minutes)';
+$lang['lock_timeout'] = 'Lock Time out (minutes)';
 $lang['lock_refresh'] = 'Lock Refresh Interval (seconds)';
 
 #M

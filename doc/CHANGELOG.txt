@@ -17,8 +17,8 @@ Core - General
   - {content} tag now has the placeholder attribute
   - Major accessibility review throughout admin interface
   - Removed many static admin pages, and replaced with new modules
-  - Accept UTF-8 chars in page alias and in custom URLS
-    (punctuation, whitespace, / and . are not allowed in the alias.  punctuation, whitespace and . are not allowed in URLS)
+  - Accept UTF-8 chars in page alias and in custom URLs
+    (punctuation, whitespace, / and . are not allowed in the alias. Punctuation, whitespace and . are not allowed in URLs)
   - Removed the 'ext' parameter from cms_selflink
   - Removed the old compatibility admintheme class (admintheme.inc.php) was deprecated in 1.11
   - Admin interface now assumes HTML5.  Porting admin themes must include porting them to HTML5
@@ -547,7 +547,7 @@ Core - Bug Reports:
   - #6278 NCleanGrey Admin Theme typo
   - #6284 CMSMailer system message 'mail not setup' link leads to login page (Translation problem)
   - #6322 wrong db query in SetUserTag method
-  - #6374 Page alias not re-crated if alias deleted - old is used
+  - #6374 Page alias not re-created if alias deleted - old is used
   - #6386 cms_htmlenities in created_date & modified_date
   - #6436 MenuManager: wrong assignment of $node->depth
   - #6444 Calls to UNIX_TIMESTAMP SQL function which does not exist in Postgresql
