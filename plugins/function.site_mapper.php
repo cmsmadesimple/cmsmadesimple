@@ -19,12 +19,13 @@
 function smarty_function_site_mapper($params, &$template)
 {
 	$smarty = $template->smarty;
-	$params['module'] = 'MenuManager';
+	$params['module'] = 'Navigator';
 	
 	if( !isset($params['template']) )
     {
 		$params['template'] = 'minimal_menu.tpl';
     }
+	
 	return cms_module_plugin($params,$smarty);
 }
 
