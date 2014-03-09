@@ -57,7 +57,7 @@ if( !isset($CMS_INSTALL_PAGE) ) {
 }
 
 #Setup session with different id and start it
-if( isset($CMS_ADMIN_PAGE) || isset($CMS_INSTALL_PAGE) ) {
+if( isset($CMS_ADMIN_PAGE) || isset($CMS_INSTALL_PAGE) && !headers_sent() ) {
   // admin pages can't be cached... period, at all.. never.
   @session_cache_limiter('private');
   header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");

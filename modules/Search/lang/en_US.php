@@ -85,6 +85,7 @@ $lang['param_resultpage'] = 'Page to display search results in.  This can either
 $lang['param_resulttemplate'] = 'TODO';
 $lang['param_searchtext'] = 'Text to place into the search box';
 $lang['param_submit'] = 'Text to place into the submit button';
+$lang['param_useor'] = 'Change the default relationship from an OR relationship to an AND relationship';
 $lang['prompt_alpharesults'] = 'Sort results alphabetically instead of by weight';
 $lang['prompt_resetstopwords'] = 'Load default Stop Words from language';
 $lang['prompt_resultpage'] = 'Page for individual module results <em>(Note modules may optionally override this)</em>';

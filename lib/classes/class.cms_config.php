@@ -145,9 +145,14 @@ final class cms_config implements ArrayAccess
   public function merge($newconfig)
   {
     if( !is_array($newconfig) ) return;
-	global $CMS_INSTALL_PAGE;
 
-	if( isset($CMS_INSTALL_PAGE) ) $this->_data = array_merge($this->_data,$newconfig);
+	global $CMS_INSTALL_PAGE;
+	if( !isset($CMS_INSTALL_PAGE) ) {
+		trigger_error('Modification of config variables is deprecated',E_USER_ERROR);
+		return;
+	}
+
+	$this->_data = array_merge($this->_data,$newconfig);
   }
 
 
@@ -166,8 +171,7 @@ final class cms_config implements ArrayAccess
       // now load the config
       self::$_instance->load_config();
 
-	  global $CMS_INSTALL_PAGE;
-	  if( !isset($CMS_INSTALL_PAGE) ) {
+	  if( !defined('TMP_CACHE_LOCATION') ) {
 		  define('TMP_CACHE_LOCATION',self::$_instance['tmp_cache_location']);
 		  define('PUBLIC_CACHE_LOCATION',self::$_instance['public_cache_location']);
 		  define('TMP_TEMPLATES_C_LOCATION',self::$_instance['tmp_templates_c_location']);
@@ -219,7 +223,6 @@ final class cms_config implements ArrayAccess
 	  if( isset($this->_cache[$key]) ) return $this->_cache[$key]; // this saves recursion and dynamic calculations all the time.
 
 	  // it's not explicitly specified in the config file.
-	  //$calculated_root_path = dirname(dirname(dirname(__FILE__)));
 	  switch( $key ) {
 	  case 'dbms':
 	  case 'db_hostname':
@@ -230,6 +233,12 @@ final class cms_config implements ArrayAccess
 		  stack_trace();
 		  die('FATAL ERROR: Could not find database connection key "'.$key.'" in the config file');
 		  break;
+
+	  case 'db_prefix':
+		  return 'cms_';
+
+	  case 'query_var':
+		  return 'page';
 
 	  case 'persist_db_conn':
 		  return false;
@@ -323,9 +332,6 @@ final class cms_config implements ArrayAccess
 
 	  case 'page_extension':
 		  return '';
-
-	  case 'query_var':
-		  return 'page';
 
 	  case 'locale':
 		  return '';

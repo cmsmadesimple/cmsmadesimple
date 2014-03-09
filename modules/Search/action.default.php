@@ -45,11 +45,9 @@ if( !$smarty->isCached($this->GetDatabaseResource($template),$cache_id,$compile_
   if( !$inline ) $id = 'cntnt01';
 
   // Variable named hogan in honor of moorezilla's Rhodesian Ridgeback :) http://forum.cmsmadesimple.org/index.php/topic,9580.0.html
-  $hogan = "onfocus=\"if(this.value==this.defaultValue) this.value='';\""." onblur=\"if(this.value=='') this.value=this.defaultValue;\"";
   $submittext = (isset($params['submit'])) ? $params['submit'] : $this->Lang('searchsubmit');
   $searchtext = (isset($params['searchtext'])) ? $params['searchtext'] : $this->GetPreference('searchtext','');
   $smarty->assign('search_actionid',$id);
-  $smarty->assign('hogan',$hogan);
   $smarty->assign('searchtext',$searchtext);
   $smarty->assign('startform', 
 		  $this->CreateFormStart($id, 'dosearch', $returnid, $is_method, '', $inline ));

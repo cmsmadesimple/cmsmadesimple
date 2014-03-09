@@ -71,6 +71,7 @@ class Search extends CMSModule
     $this->CreateParameter('action','default',$this->Lang('param_action'));
     $this->CreateParameter('pageid','null',$this->Lang('param_pageid'));
     $this->CreateParameter('count','null',$this->Lang('param_count'));
+    $this->CreateParameter('use_or','true',$this->Lang('param_useor'));
     $this->CreateParameter('search_method','get',$this->Lang('search_method'));
     $this->CreateParameter('formtemplate','',$this->Lang('param_formtemplate'));
     $this->CreateParameter('resulttemplate','',$this->Lang('param_resulttemplate'));
@@ -101,7 +102,7 @@ class Search extends CMSModule
   {
     return '
 {$startform}
-<label for="{$search_actionid}searchinput">{$searchprompt}:&nbsp;</label><input type="text" class="search-input" id="{$search_actionid}searchinput" name="{$search_actionid}searchinput" size="20" maxlength="50" value="{$searchtext}" {$hogan}/>
+<label for="{$search_actionid}searchinput">{$searchprompt}:&nbsp;</label><input type="text" class="search-input" id="{$search_actionid}searchinput" name="{$search_actionid}searchinput" size="20" maxlength="50" value="{$searchtext}" placeholder="{$searchtext}"/>
 {*
 <br/>
 <input type="checkbox" name="{$search_actionid}use_or" value="1"/>
