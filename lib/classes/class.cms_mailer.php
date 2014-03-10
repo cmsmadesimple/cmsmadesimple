@@ -40,12 +40,12 @@ final class cms_mailer
 {
   private $_mailer;
 
-  public function __construct()
+  public function __construct($exceptions = true)
   {
     $dir = dirname(__DIR__).'/phpmailer/';
     require_once($dir.'/class.phpmailer.php');
 
-    $this->_mailer = new PHPMailer;
+    $this->_mailer = new PHPMailer($exceptions);
     $this->_mailer->PluginDir = $dir;
     $this->reset();
   }

@@ -32,7 +32,7 @@ class CMSMailer extends CMSModule
 
   public function __construct()
   {
-    $this->the_mailer = new cms_mailer();
+    $this->the_mailer = new cms_mailer(FALSE);
   }
 
   function GetName() { return 'CMSMailer'; }
