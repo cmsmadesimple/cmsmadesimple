@@ -1,0 +1,68 @@
+{% extends 'layout.html.twig' %}
+
+{% import 'base/macros.html.twig' as macros %}
+
+{% block heroUnit %}
+<div class="jumbotron cmsms-header">
+    <div class="container">
+        <h1>{{ project.name|raw }} <small>Documenation</small></h1>
+        <p>We encourage all developers and collaborators of modules and tags, as well as translators of the CMS Made Simple admin and modules, to register a project.</p>
+        <p><a class="btn btn-success btn-lg" href="http://dev.cmsmadesimple.org">Register</a>&nbsp;<a class="btn btn-info btn-lg" href="http://www.cmsmadesimple.org/downloads/">Download</a></p>
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="row home-list">
+    <div class="col-lg-7">
+        {% if project.namespace.namespaces|length > 0 or not project.index.packages %}
+        <div class="well">
+            <ul class="nav nav-list">
+                <li class="nav-header">Namespaces</li>
+                {% block listRootNamespaces %}
+                <li><a href="{{ path(project.namespace) }}"><i class="glyphicon glyphicon-th"></i> Global ({{ project.namespace.name }})</a></li>
+                    {% for namespace in project.namespace.children %}
+                    <li><a href="{{ path(namespace) }}"><i class="glyphicon glyphicon-th"></i> {{ namespace.name }}</a></li>
+                    {% endfor %}
+                {% endblock %}
+            </ul>
+        </div>
+        {% endif %}
+
+        {% if project.indexes.packages|length > 0 %}
+        <div class="well">
+            <ul class="nav nav-list">
+                <li class="nav-header">Packages</li>
+                {% block listRootPackages %}
+                <li><a href="{{ path(project.indexes.packages|first) }}"><i class="glyphicon glyphicon-folder-open"></i> Global ({{ (project.indexes.packages|first).name }})</a></li>
+                    {% for package in (project.indexes.packages|first).children %}
+                    <li><a href="{{ path(package) }}"><i class="glyphicon glyphicon-folder-open"></i> {{ package.name }}</a></li>
+                    {% endfor %}
+                {% endblock %}
+            </ul>
+        </div>
+        {% endif %}
+
+    </div>
+    <div class="col-lg-5">
+        <div class="well">
+            <ul class="nav nav-list">
+                <li class="nav-header">Charts</li>
+                {% block listCharts %}
+                <li><a href="{{ path('graph_class.html') }}"><i class="glyphicon glyphicon-list-alt"></i> Class inheritance diagram</a></li>
+                {% endblock %}
+            </ul>
+        </div>
+        <div class="well">
+            <ul class="nav nav-list">
+                <li class="nav-header">Reports</li>
+                {% block listReports %}
+                <li><a href="{{ path('errors.html') }}"><i class="glyphicon glyphicon-warning-sign"></i> Errors {{ macros.renderErrorCounter(project.files) }} </a></li>
+                <li><a href="{{ path('markers.html') }}"><i class="glyphicon glyphicon-pushpin"></i> Markers {{ macros.renderMarkerCounter(project.files) }} </a></li>
+                <li><a href="{{ path('deprecated.html') }}"><i class="glyphicon glyphicon-flag"></i> Deprecated {{ macros.renderDeprecatedCounter(project.files) }}</a></li>
+                {% endblock %}
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,502 @@
+@import url(bootstrap.min.css);
+@import url(prettify.css);
+@import url(jquery.iviewer.css);
+@import url(http://fonts.googleapis.com/css?family=PT+Sans:400,700,400italic);
+
+body {
+	padding-top: 63px;
+	background: #3c3b3b url('../img/body-bg.gif') repeat;
+	color: #5C5A59;
+	font-size: 16px;
+	line-height: 1.5;
+	font-family: 'PT Sans', sans-serif;
+}
+
+a {
+	color: #66C7C7;
+}
+
+a:hover {
+	color: #f39c2c;
+}
+
+h1, h2, h3, h4, h5 {
+	font-family: 'PT Sans', sans-serif;
+	font-weight: 400;
+}
+
+td p:last-of-type {
+	margin: 0;
+}
+
+.navbar-brand {
+	padding-top: 0;
+	padding-bottom: 0;
+}
+
+.navbar-nav {
+	float: right;
+	margin-top: 5px;
+	margin-bottom: 5px;
+}
+
+.navbar-default .navbar-nav > li > a {
+	color: #5C5A59;
+	text-transform: uppercase;
+	font-size: 14px;
+}
+
+.namespace-contents hr, .package-contents hr {
+	border-top: 3px dotted silver;
+}
+
+.namespace-indent, .package-indent {
+	padding-left: 10px;
+	border-left: 1px dotted #f0f0f0;
+}
+
+.element h3 i, .namespace-contents h3 i, .package-contents h3 i {
+	margin-top: 2px;
+	margin-right: 5px;
+}
+
+.element h3, .namespace-contents h3, .package-contents h3 {
+	margin-top: 25px;
+	margin-bottom: 20px;
+	padding-bottom: 10px;
+	border-bottom: 1px solid silver;
+}
+
+.element h3:first-of-type, .namespace-contents h3:first-of-type, .package-contents h3:first-of-type {
+	margin-top: 30px;
+}
+
+.element h2 {
+	font-family: inherit;
+	font-size: 1.2em;
+	color: #5C5A59;
+}
+
+.element .type {
+	font-weight: bold;
+}
+
+.element .row {
+	margin: 0;
+}
+
+#search-query {
+	height: auto;
+}
+
+.hero-unit, div.element, .well {
+	border: 1px solid #e0e0e0;
+	background: white;
+}
+
+.dropdown-menu a {
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+h2 {
+	border-bottom: 1px dashed #55A72F;
+	padding-bottom: 10px;
+	padding-left: 5px;
+	color: #e9e9e9;
+	font-weight: normal;
+	padding-top: 40px;
+	margin: 0;
+	margin-bottom: 15px;
+}
+
+h2:first-of-type {
+	padding-top: 0;
+}
+
+.cmsms-header {
+	max-height: 515px;
+	background: #f69329 url(../img/teaser-background.jpg) no-repeat center;
+	border-bottom: 5px solid #d2d2d2;
+	border-top: 1px solid #e97601;
+	color: #fff;
+	margin-top: -19px;
+	margin-bottom: 0;
+}
+
+
+.cmsms-header h1 small {
+	color: #5C5A59
+}
+
+.container-wrapper {
+	padding-top: 25px;
+	padding-bottom: 25px;
+	background: #fff;
+}
+
+.home-list ul li {
+	font-size: 14px;
+}
+
+.home-list ul li a {
+	padding: 3px 2px;
+	background: none;
+}
+
+.home-list ul li i {
+	margin-right: 5px;
+	color: #5C5A59;
+}
+
+.namespace-contents h2, .package-contents h2 {
+	padding-left: 44px;
+	background: transparent url('../img/icons/glyphicon-th-big.png') no-repeat 0 50%;;
+}
+
+.package-contents h2 {
+	background: transparent url('../img/icons/glyphicon-folder-open-big.png') no-repeat 0 50%;
+}
+
+.namespace-contents .element h2, .package-contents .element h2 {
+	padding-left: 0;
+	background: none;
+}
+
+div.element {
+	border-left: 10px solid #55A72F;
+	border-radius: 5px;
+	padding: 7px 7px 10px 7px;
+	margin-bottom: 15px;
+	margin-left: 0;
+}
+
+div.element.protected {
+	border-left-color: orange;
+}
+
+div.element.private {
+	border-left-color: red;
+}
+
+div.element.class, div.element.interface {
+	border-left-color: #e0e0e0;
+}
+
+div.element.class.abstract h1, div.element.interface.abstract h1 {
+	font-style: italic;
+}
+
+div.element h1 {
+	font-size: 1.2em;
+	line-height: 1.5em;
+	margin-bottom: 10px;
+	padding-left: 22px;
+	background: transparent no-repeat 0 50%;
+	word-wrap: break-word;
+}
+
+div.element h1 a {
+	color: transparent;
+	margin-left: 10px;
+}
+
+div.element h1:hover a {
+	color: silver;
+}
+
+div.element h1 a:hover {
+	color: #f39c2c;
+	text-decoration: none;
+}
+
+div.element a.more:hover {
+	background: #f0f0f0;
+	color: #444;
+	text-decoration: none;
+}
+
+div.element a.more {
+	font-weight: bold;
+	text-align: center;
+	color: gray;
+	border-top: 1px dashed silver;
+	display: block;
+	margin-top: 5px;
+	padding: 5px 0;
+	border-bottom-left-radius: 5px;
+	border-bottom-right-radius: 5px;
+}
+
+div.element .table {
+	font-size: 0.9em;
+}
+
+div.element .table th {
+	text-transform: capitalize;
+}
+
+div.detail-description {
+	padding-left: 30px;
+}
+
+div.detail-description table th {
+	vertical-align: top;
+}
+
+body.invert {
+	background: white;
+}
+
+body.invert div.element {
+	background: #f9f9f9;
+}
+
+ul.side-nav {
+	clear: both;
+	list-style: none !important;
+}
+
+ul.side-nav li {
+	padding-top: 10px;
+	word-wrap: break-word;
+	padding-left: 10px;
+}
+
+ul.side-nav li a {
+	background: transparent no-repeat 5px 3px;
+	padding: 0;
+	font-style: italic;
+	text-decoration: none;
+	color: #5C5A59;
+	display: inline-block;
+}
+
+ul.side-nav li a:hover {
+	background-color: transparent;
+}
+
+ul.side-nav li pre {
+	font-size: 13px;
+	margin: 5px 15px 0 0;
+	padding: 2px 5px;
+	background-color: #f8f8f8;
+	color: gray;
+	font-style: normal;
+	word-wrap: break-word;
+	text-indent: 0;
+}
+
+ul.side-nav li li {
+	margin-bottom: 6px;
+}
+
+ul.side-nav li.view-simple span.description {
+	display: none;
+}
+
+ul.side-nav li.view-simple pre {
+	font-size: inherit;
+	margin: inherit;
+	padding: inherit;
+	background-color: inherit;
+	border: none;
+	color: inherit;
+	font-family: inherit;
+	font-style: inherit;
+	padding-bottom: 0;
+	padding-left: 5px;
+}
+
+ul.side-nav li.view-simple a {
+	padding-bottom: 0;
+}
+
+ul.side-nav ul {
+	list-style: none;
+	padding: 0;
+}
+
+i.glyphicon-custom {
+	width: 22px !important;
+	height: 17px;
+	background-position: 0 50%;
+	background-repeat: no-repeat;
+	margin-top: 2px;
+}
+
+.table.markers {
+	background: white;
+}
+
+/* JS only functionality; disable by default */
+.btn .visibility, .btn .view, .btn .type-filter {
+	display: none;
+}
+
+div.element.constant h1, i.glyphicon-constant, i.icon-constant {
+	background-image: url('../img/icons/constant.png');
+}
+
+div.element.function h1, i.glyphicon-function, i.icon-function {
+	background-image: url('../img/icons/function.png');
+}
+
+div.element.method h1, i.glyphicon-method, i.icon-method {
+	background-image: url('../img/icons/method.png');
+}
+
+div.element.class h1, i.glyphicon-class, i.icon-class {
+	background-image: url('../img/icons/class.png');
+}
+
+div.element.interface h1, i.glyphicon-interface, i.icon-interface {
+	background-image: url('../img/icons/interface.png');
+}
+
+div.element.property h1, i.glyphicon-property, i.icon-property  {
+	background-image: url('../img/icons/property.png');
+}
+
+div.element h1 a.btn {
+	color: #fff;
+}
+
+span.empty-namespace {
+	color: silver;
+}
+
+footer {
+	font-size: 0.8em;
+	color: #fff;
+}
+
+#mapHolder {
+	border: 4px solid #555;
+	padding: 0 !important;
+	overflow: hidden
+}
+
+div.element div.subelement {
+	margin-left: 10px;
+	padding-bottom: 5px;
+	clear: both;
+}
+
+pre code {
+	border: none;
+}
+
+div.element div.subelement > code {
+	font-size: 0.8em;
+	float: left;
+	margin-right: 10px;
+	padding: 0 5px;
+	line-height: 16px;
+}
+
+div.element div.subelement > p {
+	margin-left: 20px;
+	margin-right: 50px;
+}
+
+div.element div.subelement h4 {
+	color: #666;
+	margin-bottom: 5px;
+}
+
+div.element div.subelement.response {
+	padding-bottom: 15px;
+	margin-right: 50px;
+}
+
+div.labels {
+	text-align: right;
+}
+
+.nav-list .nav-header {
+	font-size: 13px;
+}
+
+.nav-list .nav-header .side-nav-header {
+	font-weight: bold;
+	line-height: 18px;
+	color: #999999;
+	text-transform: uppercase;
+}
+
+.detail-description code {
+	white-space: pre;
+	display: inline-block;
+	padding: 10px;
+}
+
+.go_to_top {
+	background: #2C2C2C;
+	color: #999;
+	padding: 3px 10px;
+	border-top-right-radius: 5px;
+	border-top-left-radius: 5px;
+	text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+	line-height: 19px;
+	position: fixed;
+	text-decoration: none;
+	bottom: 0;
+	right: 20px;
+}
+
+.visibility .btn {
+	text-transform: uppercase;
+	font-size: 0.7em;
+	font-weight: bold;
+}
+
+.visibility {
+	margin-top: 15px;
+}
+
+.iviewer_common {
+	z-index: 100;
+}
+
+.deprecated h2 {
+	text-decoration: line-through;
+}
+
+.container-footer {
+	background: #3c3b3b url('../img/body-bg.gif') repeat;
+	padding: 1em 0;
+	border-top: 2px solid #2c2c2c;
+}
+.container-footer footer a {
+	color: #f39c2c;
+}
+
+.container-footer small.dark_grey,
+.container-footer small.dark_grey a {
+	color: #5c5a59;
+	font-size: 11px;
+}
+
+body .modal-dialog {
+	width: 70%; 
+}
+
+body .modal-dialog pre {
+	background-color: #fff;
+	border: none;
+}
+
+body .modal-body ol.linenums > li { 
+	list-style-type: decimal;
+}
+
+li.L1, li.L3, li.L5, li.L7, li.L9 {
+	background: #fff;
+}
+
+@media screen and (max-width: 768px) {
+	.navbar-nav {
+		float: none;
+	}
+}
