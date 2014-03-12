@@ -856,7 +856,7 @@ function cleanValue($val) {
   $val = str_replace(" ", " ", $val);
   $val = str_replace(chr(0xCA), "", $val);
   //Encode any HTML to entities (including \n --> <br />)
-  $_cleanHtml = function($val) {
+  $_cleanHtml = function($string,$remove = false) {
     if ($remove) {
       $string = strip_tags($string);
     } else {
