@@ -31,10 +31,10 @@
  *
  * @author http://www.edoceo.com/
  * @since 0.1
- * @param string The url to redirect to
+ * @param string $to The url to redirect to
  * @return void
  */
-function redirect($to, $noappend=false)
+function redirect($to)
 {
   $_SERVER['PHP_SELF'] = null;
 
@@ -116,7 +116,7 @@ function redirect($to, $noappend=false)
  * Given a page ID or an alias, redirect to it
  * Retrieves the URL of the specified page, and performs a redirect
  *
- * @param mixed An integer page id or a string page alias.
+ * @param mixed $alias An integer page id or a string page alias.
  * @return void
  */
 function redirect_to_alias($alias)
@@ -142,8 +142,8 @@ function redirect_to_alias($alias)
  * Calculate the difference in seconds between two microtime() values
  *
  * @since 0.3
- * @param string Microtime value A
- * @param string Microtime value B
+ * @param string $a Earlier microtime value
+ * @param string $b Later microtime value
  * @return integer The difference.
  */
 function microtime_diff($a, $b) 
@@ -173,26 +173,13 @@ function cms_join_path()
 
 
 /**
- * Return the global cmsms() object
- *
- * @since 1.7
- * @return object
- */
-function &cmsms()
-{
-   return CmsApp::get_instance();
-}
-
-
-
-/**
  * A method to perform HTML entity conversion on a string
  *
  * @see htmlentities
- * @param string The input string
- * @param string A flag indicating how quotes should be handled (see htmlentities) (ignored)
- * @param string The input character set (ignored)
- * @param boolean A flag indicating wether single quotes should be converted to entities.
+ * @param string $val The input string
+ * @param string $param A flag indicating how quotes should be handled (see htmlentities) (ignored)
+ * @param string $charset $val The input character set (ignored)
+ * @param boolean $convert_single_quotes A flag indicating wether single quotes should be converted to entities.
  * @return string the converted string.
  */
 function cms_htmlentities($val, $param=ENT_QUOTES, $charset="UTF-8", $convert_single_quotes = false)
@@ -322,9 +309,11 @@ function debug_bt()
 /**
 * Debug function to display $var nicely in html.
 *
-* @param mixed $var
-* @param string $title (optional)
-* @param boolean $echo_to_screen (optional)
+* @param mixed $var The data to display
+* @param string $title (optional) title for the output.  If null memory information is output.
+* @param boolean $echo_to_screen (optional) Flag indicating wether the output should be echoed to the screen or returned.
+* @param boolean $use_html (optional) flag indicating wether html or text should be used in the output.
+* @param boolean $showtitle (optional) flag indicating wether the title field should be displayed in the output.
 * @return string
 */
 function debug_display($var, $title="", $echo_to_screen = true, $use_html = true,$showtitle = TRUE)
@@ -404,8 +393,9 @@ function debug_output($var, $title="")
  * Debug function to output debug information about a variable in a formatted matter
  * to a debug file.
  *
- * @param mixed data to display
- * @param string Optional title.
+ * @param mixed $var    data to display
+ * @param string $title optional title.
+ * @param string $filename optional output filename
  */
 function debug_to_log($var, $title='',$filename = '')
 {
@@ -461,6 +451,7 @@ function debug_sql($str, $newline = false)
 *
 * @param string $value
 * @param mixed $default_value
+* @param mixed $session_key
 * @deprecated
 * @return mixed
 * Rolf: only used in this file
@@ -563,6 +554,7 @@ function get_parameter_value($parameters, $value, $default_value = '', $session_
  * A method to remove a permission from the database.
  *
  * @internal
+ * @ignore
  * @access private
  * @param string The permission name
  * @deprecated
@@ -583,6 +575,7 @@ function cms_mapi_remove_permission($permission_name)
  * A method to add a permission to the CMSMS permissions table
  *
  * @internal
+ * @ignore
  * @access private
  * @param unknown (ignored)
  * @param string  The permission name
@@ -610,7 +603,7 @@ function cms_mapi_create_permission($cms, $permission_name, $permission_text)
  * Check the permissions of a directory recursively to make sure that
  * we have write permission to all files
  *
- * @param  string  Start directory.
+ * @param  string  $path Start directory.
  * @return boolean
  */
 function is_directory_writable( $path )
@@ -681,12 +674,11 @@ function get_matching_files($dir,$extensions = '',$excludedot = true,$excludedir
  * Return an array containing a list of files in a directory
  * performs a recursive search
  *
- * @internal
- * @param  string    Start Path.
- * @param  array     Array of regular expressions indicating files to exclude.
- * @param  int       How deep to browse (-1=unlimited)
- * @param  string    "FULL"|"DIRS"|"FILES"
- * @param  d         for internal use only
+ * @param  string  $path     Start Path.
+ * @param  array   $excludes Array of regular expressions indicating files to exclude.
+ * @param  int     $maxdepth How deep to browse (-1=unlimited)
+ * @param  string  $mode     "FULL"|"DIRS"|"FILES"
+ * @param  d       $d        for internal use only
  * @return  array
 **/
 function get_recursive_file_list ( $path , $excludes, $maxdepth = -1 , $mode = "FULL" , $d = 0 )
@@ -825,9 +817,7 @@ function endswith( $str, $sub )
 
 /**
  * convert a human readable string into something that is suitable for use in URLS
- * because many browsers don't support UTF-8 characters in URLS
  *
- * @internal
  * @param string String to convert
  * @param boolean indicates whether output string should be converted to lower case
  * @param boolean indicates wether slashes should be allowed in the input.
@@ -930,11 +920,12 @@ function can_admin_upload()
   # and the uploads and modules directory.  if they all match, then we
   # can upload files.
   # if safe mode is off, then we just have to check the permissions.
-  $file_index = cmsms()->config['root_path'].DIRECTORY_SEPARATOR.'index.php';
-  $file_moduleinterface = cmsms()->config['root_path'].DIRECTORY_SEPARATOR.
-    cmsms()->config['admin_dir'].DIRECTORY_SEPARATOR.'moduleinterface.php';
-  $dir_uploads = cmsms()->config['uploads_path'];
-  $dir_modules = cmsms()->config['root_path'].DIRECTORY_SEPARATOR.'modules';
+  $config = cmsms()->GetConfig();
+  $file_index = $config['root_path'].DIRECTORY_SEPARATOR.'index.php';
+  $file_moduleinterface = $config['root_path'].DIRECTORY_SEPARATOR.
+    $config['admin_dir'].DIRECTORY_SEPARATOR.'moduleinterface.php';
+  $dir_uploads = $config['uploads_path'];
+  $dir_modules = $config['root_path'].DIRECTORY_SEPARATOR.'modules';
 
   $stat_index = @stat($file_index);
   $stat_moduleinterface = @stat($file_moduleinterface);
@@ -1056,7 +1047,7 @@ function cms_ipmatches($ip,$checklist)
       // xxx.xxx.xxx.xxx/nn    (nn = # bits, cisco style -- i.e. /24 = class C)
       //
       // Does not match:
-      // xxx.xxx.xxx.xx[yyy-zzz]  (range, partial octets not supported)
+      // xxx.xxx.xxx.xx[yyy-zzz]  (range, partial octets nnnnnot supported)
 
       $regs = array();
       if (preg_match("/([0-9]+)\.([0-9]+)\.([0-9]+)\.([0-9]+)\/([0-9]+)/",$range,$regs)) {

@@ -35,6 +35,7 @@ if( isset($CMS_INSTALL_PAGE) ) {
  * A class for working with tests
  * 
  * @package CMS
+ * @ignore
  * @internal
  */
 class CmsInstallTest

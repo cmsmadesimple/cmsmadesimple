@@ -31,7 +31,7 @@
  * to the admin login.
  *
  * @since 0.1
- * @param string no_redirect - If true, then don't redirect if not logged in
+ * @param string $no_redirect If true, then don't redirect if not logged in
  * @return boolean
  */
 function check_login($no_redirect = false)
@@ -108,7 +108,7 @@ function check_login($no_redirect = false)
  * Gets the userid of the currently logged in user.
  *
  * @since 0.1
- * @param  boolean Redirect to the admin login page if the user is not logged in.
+ * @param  boolean $check Redirect to the admin login page if the user is not logged in.
  * @return integer The UID of the logged in administrator, otherwise FALSE
  */
 function get_userid($check = true)
@@ -122,7 +122,7 @@ function get_userid($check = true)
  * Gets the username of the currently logged in user.
  *
  * @since 2.0
- * @param  boolean Redirect to the admin login page if the user is not logged in.
+ * @param  boolean $check Redirect to the admin login page if the user is not logged in.
  * @return integer The UID of the logged in administrator, otherwise FALSE
  */
 function get_username($check = true)
@@ -194,8 +194,8 @@ function generate_user_object($userid)
  * Members of the admin group have all permissions.
  *
  * @since 0.1
- * @param int The user id
- * @param string The permission name
+ * @param int $userid The user id
+ * @param string $permname The permission name
  * @return boolean
  */
 function check_permission($userid, $permname)
@@ -263,9 +263,9 @@ function author_pages($userid)
  * done on most admin events for consistency.
  *
  * @since 0.3
- * @param integer The item id (perhaps a content id, or a record id from a module)
- * @param string  The item name (perhaps Content, or the module name)
- * @param string  The action that needs to be audited
+ * @param integer $itemid The item id (perhaps a content id, or a record id from a module)
+ * @param string  $itemname The item name (perhaps Content, or the module name)
+ * @param string  $action The action that needs to be audited
  * @return void
  */
 function audit($itemid, $itemname, $action)
@@ -303,8 +303,9 @@ function audit($itemid, $itemname, $action)
  *
  * @deprecated
  * @since 0.6
- * @param string The preference name
- * @param mixed  The default value if the preference does not exist
+ * @see cms_siteprefs::get
+ * @param string $prefname The preference name
+ * @param mixed  $defaultvalue The default value if the preference does not exist
  * @return mixed
  */
 function get_site_preference($prefname, $defaultvalue = '') 
@@ -317,8 +318,9 @@ function get_site_preference($prefname, $defaultvalue = '')
  * Removes the given site preference
  *
  * @deprecated
- * @param string Preference name to remove
- * @param boolean Wether or not to remove all preferences that are LIKE the supplied name
+ * @see cms_siteprefs::remove
+ * @param string $prefname Preference name to remove
+ * @param boolean $uselike Wether or not to remove all preferences that are LIKE the supplied name
  * @return void
  */
 function remove_site_preference($prefname,$uselike=false)
@@ -331,9 +333,10 @@ function remove_site_preference($prefname,$uselike=false)
  * Sets the given site perference with the given value.
  *
  * @deprecated
+ * @see cms_siteprefs::set
  * @since 0.6
- * @param string The preference name
- * @param mixed  The preference value (will be stored as a string)
+ * @param string $prefname The preference name
+ * @param mixed  $value The preference value (will be stored as a string)
  * @return void
  */
 function set_site_preference($prefname, $value)
@@ -343,13 +346,14 @@ function set_site_preference($prefname, $value)
 
 
 /**
- * Gets the given preference for the given userid.
+ * Retrieve the value of the named preference for the given userid.
  *
  * @deprecated
  * @since 0.3
- * @param integer The user id
- * @param string  The preference name
- * @param mixed   The default value if the preference is not set for the given user id.
+ * @see cms_siteprefs::get_for_user
+ * @param integer $userid The user id
+ * @param string  $prefname The preference name
+ * @param mixed   $default The default value if the preference is not set for the given user id.
  * @return mixed.
  */
 function get_preference($userid, $prefname, $default='')
@@ -363,9 +367,10 @@ function get_preference($userid, $prefname, $default='')
  *
  * @deprecated
  * @since 0.3
- * @param integer The user id
- * @param string  The preference name
- * @param mixed   The preference value (will be stored as a string)
+ * @see cms_siteprefs::set_for_user
+ * @param integer $userid The user id
+ * @param string  $prefname The preference name
+ * @param mixed   $value The preference value (will be stored as a string)
  * @return void
  */
 function set_preference($userid, $prefname, $value)
@@ -375,41 +380,22 @@ function set_preference($userid, $prefname, $value)
 
 
 /**
- * Strips slashes from an array of values.
- *
- * @internal
- * @param array A reference to an array of strings
- * @return reference to the cleaned values
- */
-function & stripslashes_deep(&$value)
-{ 
-  if (is_array($value)) {
-    $value = array_map('stripslashes_deep', $value); 
-  } 
-  elseif (!empty($value) && is_string($value)) {
-    $value = stripslashes($value); 
-  } 
-  return $value;
-}
-
-
-/**
  * A method to create a text area control
  *
  * @internal
  * @access private
- * @param boolean Wether or not we are enabling a wysiwyg.  If false, and forcewysiwyg is not empty then a syntax area is used.
- * @param string  The contents of the text area
- * @param string  The name of the text area
- * @param string  An optional class name
- * @param string  An optional ID (HTML ID) value
- * @param string  The optional encoding
- * @param string  Optional style information
- * @param integer Width (the number of columns) (CSS can and will override this)
- * @param integer Hieght (the number of rows) (CSS can and will override this)
- * @param string  Optional name of the syntax hilighter or wysiwyg to use.  If empty, preferences indicate which a syntax editor or wysiwyg should be used.
- * @param string  Optional name of the language used.  If non empty it indicates that a syntax highlihter will be used.
- * @param string  Optional additional text to include in the textarea tag
+ * @param boolean $enablewysiwyg Wether or not we are enabling a wysiwyg.  If false, and forcewysiwyg is not empty then a syntax area is used.
+ * @param string  $text The contents of the text area
+ * @param string  $name The name of the text area
+ * @param string  $classname An optional class name
+ * @param string  $id An optional ID (HTML ID) value
+ * @param string  $encoding The optional encoding
+ * @param string  $stylesheet Optional style information
+ * @param integer $width Width (the number of columns) (CSS can and will override this)
+ * @param integer $height Height (the number of rows) (CSS can and will override this)
+ * @param string  $forcewysiwyg Optional name of the syntax hilighter or wysiwyg to use.  If empty, preferences indicate which a syntax editor or wysiwyg should be used.
+ * @param string  $wantedsyntax Optional name of the language used.  If non empty it indicates that a syntax highlihter will be used.
+ * @param string  $addtext Optional additional text to include in the textarea tag
  * @return string
  * @deprecated
  * @see CmsFormUtils::create_textarea
@@ -444,6 +430,8 @@ function create_textarea($enablewysiwyg, $text, $name, $classname = '', $id = ''
  * Creates a string containing links to all the pages.
  *
  * @deprecated
+ * @internal
+ * @ignore
  * @param page - the current page to display
  * @param totalrows - the amount of items being listed
  * @param limit - the amount of items to list per page
@@ -481,17 +469,6 @@ function pagination($page, $totalrows, $limit)
    }
    return $page_string;
  }
-
-
-/**
- * Returns the currently configured database prefix.
- *
- * @since 0.4
- * @return string
- */
-function cms_db_prefix() {
-  return cmsms()->GetDbPrefix();
-}
 
 
 /**
@@ -537,7 +514,7 @@ function create_file_dropdown($name,$dir,$value,$allowed_extensions,$optprefix='
 
 
 /**
- * A function tat, given the current request information will return
+ * A function that, given the current request information will return
  * a pageid or an alias that should be used for the display
  * This method also handles matching routes and specifying which module
  * should be called with what parameters

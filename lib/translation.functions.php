@@ -74,6 +74,9 @@ function lang_by_realm()
 
 /**
  * Temporarily allow accessing admin realm from within a frontend action.
+ *
+ * @internal
+ * @ignore
  */
 function allow_admin_lang($flag = TRUE)
 {
@@ -98,12 +101,24 @@ function lang()
 }
 
 
-function get_encoding($charset='', $defaultoverrides=true)
+/**
+ * Get the encoding of the current language
+ *
+ * @return string
+ * @deprecated
+ * @see CmsNlsOperations::get_encoding();
+ */
+function get_encoding()
 {
   return CmsNlsOperations::get_encoding();
 }
 
-
+/**
+ * Retrieve a list of installed languages that is suitable for use in a dropdown
+ *
+ * @param boolean Optionally adds 'none' (translated to current language) to the top of the list.
+ * @return associative array of lang keys and display strings.
+ */
 function get_language_list($allow_none = true)
 {
   $tmp = array();

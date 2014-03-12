@@ -647,5 +647,28 @@ class CmsContentTypePlaceholder
 	var $loaded;
 }
 
+
+/**
+ * Return the global cmsms() object
+ *
+ * @since 1.7
+ * @return object
+ */
+function &cmsms()
+{
+   return CmsApp::get_instance();
+}
+
+
+/**
+ * Returns the currently configured database prefix.
+ *
+ * @since 0.4
+ * @return string
+ */
+function cms_db_prefix() {
+  return cmsms()->GetDbPrefix();
+}
+
 # vim:ts=4 sw=4 noet
 ?>

@@ -185,7 +185,6 @@ while( $trycount < 2 ) {
       $trycount = 99; // no more iterations
     }
   }
-/*
   catch (SmartyCompilerException $e) {
     // <- Catch Smarty compile errors 
     $handlers = ob_list_handlers(); 
@@ -201,7 +200,7 @@ while( $trycount < 2 ) {
     echo $smarty->errorConsole($e);
     return;
   }	
-*/
+
   catch (CmsError404Exception $e) {
     // Catch CMSMS 404 error
     // 404 error thrown... gotta do this process all over again
@@ -249,7 +248,7 @@ Events::SendEvent('Core', 'ContentPostRender', array('content' => &$html));
 
 if( !headers_sent() ) {
   $ct = cmsms()->get_content_type();
-  header("Content-Type: $ct; charset=" . get_encoding());
+  header("Content-Type: $ct; charset=" . CmsNlsOperations::get_encoding());
 }
 echo $html;
 

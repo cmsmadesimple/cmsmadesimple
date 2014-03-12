@@ -389,7 +389,7 @@ class Content extends ContentBase
 		$maxlength = get_parameter_value($blockInfo,'maxlength',255);
 		if ($oneline) {
 			$size = get_parameter_value($blockInfo,'size',50);
-			$ret = '<input type="text" size="'.$size.'" maxlength="'.$maxlength.'" name="'.$blockInfo['id'].'" value="'.cms_htmlentities($value, ENT_NOQUOTES, get_encoding('')).'"';
+			$ret = '<input type="text" size="'.$size.'" maxlength="'.$maxlength.'" name="'.$blockInfo['id'].'" value="'.cms_htmlentities($value, ENT_NOQUOTES, CmsNlsOperations::get_encoding('')).'"';
 			if( $required ) $ret .= " required=\"required\"";
 			if( $placeholder ) $ret .= " placeholder=\"{$placeholder}\"";
 			$ret .= '/>';

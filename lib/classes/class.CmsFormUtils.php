@@ -224,7 +224,6 @@ final class CmsFormUtils
     $addtext = get_parameter_value($parms,'addtext');
     $text = get_parameter_value($parms,'value');
     $text = get_parameter_value($parms,'text',$text);
-    $encoding = get_parameter_value($parms,'encoding');
 
     $result = '<textarea';
     foreach( $attribs as $key => $val ) {
@@ -235,7 +234,7 @@ final class CmsFormUtils
       }
     }
     if( !empty( $addtext ) ) $result .= ' '.$addtext;
-    $result .= '>'.cms_htmlentities($text,ENT_NOQUOTES,get_encoding($encoding)).'</textarea>';
+    $result .= '>'.cms_htmlentities($text,ENT_NOQUOTES,CmsNlsOperations::get_encoding()).'</textarea>';
     return $result;
   }
 

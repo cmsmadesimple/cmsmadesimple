@@ -8,6 +8,7 @@
  * A method to initialize the connection with the CMSMS configured database.
  *
  * @internal
+ * @ignore
  * @access private
  */
 function load_adodb() 
@@ -76,6 +77,8 @@ function &adodb_connect()
 
 
 /**
+ * @internal
+ * @access private
  * @ignore
  */
 function adodb_error($dbtype, $function_performed, $error_number, $error_message, $host, $database, &$connection_obj)

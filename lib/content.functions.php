@@ -25,15 +25,6 @@
  */
 
 /**
- * Loads all plugins into the system
- *
- * @since 0.5
- * @param object The smarty object
- * @return void
- */
-
-
-/**
  * A convenience function to test if the site is marked as down according to the config panel.
  * This method includes handling the preference that indicates that site-down behaviour should
  * be disabled for certain IP address ranges.
@@ -43,7 +34,6 @@
 function is_sitedown()
 {
   global $CMS_INSTALL_PAGE;
-
   if( isset($CMS_INSTALL_PAGE) ) return TRUE;
 
   if( get_site_preference('enablesitedownmessage') !== '1' ) return FALSE;
@@ -64,14 +54,5 @@ function is_sitedown()
 }
 
 
-function cms_call_udt($params,&$smarty)
-{
-  if( !isset($params['udt']) ) return;
-
-  $udt = $params['udt'];
-  unset($params['udt']);
-
-  return UserTagOperations::get_instance()->CallUserTag($udt,$params);
-}
 # vim:ts=4 sw=4 noet
 ?>

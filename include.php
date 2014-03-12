@@ -49,7 +49,7 @@ define('CMS_USER_KEY','_userkey_');
 
 global $CMS_INSTALL_PAGE,$CMS_ADMIN_PAGE,$CMS_LOGIN_PAGE,$DONT_LOAD_DB,$DONT_LOAD_SMARTY;
 
-$session_key = substr(md5($dirname), 0, 8);
+$session_key = substr(md5($dirname), 0, 12);
 if( !isset($CMS_INSTALL_PAGE) ) {
   @session_name('CMSSESSID' . $session_key);
   @ini_set('url_rewriter.tags', '');

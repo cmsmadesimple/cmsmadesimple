@@ -22,11 +22,12 @@
 /**
  * Returns the UTF-8 string corresponding to unicode value.
  *
+ * @access private
  * @ignore
  * @param $num unicode value to convert.
  * @return string converted
  */
-function code_to_utf8($num) {
+function __code_to_utf8($num) {
   if ($num <= 0x7F) {
     return chr($num);
   } elseif ($num <= 0x7FF) {
@@ -46,7 +47,6 @@ function code_to_utf8($num) {
  * @param $text_to_convert Text to convert.
  * @return string converted
  */
-//function html_entity_decode_php4($text_to_convert) {
 function cms_html_entity_decode($text_to_convert) {
 	$htmlentities_table = array (
 		"&Aacute;" => "".chr(195).chr(129)."",
@@ -305,11 +305,11 @@ function cms_html_entity_decode($text_to_convert) {
 	$return_text = strtr($text_to_convert, $htmlentities_table);
 	$return_text = preg_replace_callback('~&#x([0-9a-f]+);~i',
 					     function($matches) {
-					       code_to_utf8($matches[1]);
+					       __code_to_utf8($matches[1]);
 					     }, $return_text);
 	$return_text = preg_replace_callback('~&#([0-9]+);~', 
 					     function($matches) {
-					       code_to_utf8($matches[1]);
+					       __code_to_utf8($matches[1]);
 					     }, $return_text);
 	return $return_text;
 }

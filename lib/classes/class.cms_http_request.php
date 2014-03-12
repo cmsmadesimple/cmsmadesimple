@@ -11,17 +11,16 @@
  * harvest resources from web. This can be used with scripts that need 
  * a way to communicate with various APIs who support REST.
  *
- * @author      Md Emran Hasan <phpfour@gmail.com>
- * @package     HTTP Library
- * @copyright   2007-2008 Md Emran Hasan
- * @link        http://www.phpfour.com/lib/http
- * @since       Version 0.1
- *
  * Modified by Robert Campbell (calguy1000@cmsmadesimple.org)
  * Renamed the class to cms_http_request
  * Fixed some bugs.
+ *
+ * @author      Md Emran Hasan <phpfour@gmail.com>
+ * @package     @CMS
+ * @copyright   2007-2008 Md Emran Hasan
+ * @link        http://www.phpfour.com/lib/http
+ * @since       Version 0.1
  */
-
 class cms_http_request
 {
     /**
