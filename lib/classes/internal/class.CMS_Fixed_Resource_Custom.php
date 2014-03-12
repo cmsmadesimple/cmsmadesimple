@@ -19,7 +19,9 @@
 #$Id: content.functions.php 6863 2011-01-18 02:34:48Z calguy1000 $
 
 /**
- * @package CMS
+ * This file contains a class that fixes a problem with the Smarty_Resource_Custom class
+ *
+ * @ignore
  */
 
 /**

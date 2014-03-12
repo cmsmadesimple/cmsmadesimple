@@ -35,6 +35,10 @@
 #END_LICENSE
 
 /**
+ * This file contains a static singleton class to manage caching content objects
+ *
+ * @ignore
+ * @internal
  * @package CMS
  */
 
@@ -43,16 +47,45 @@
  *
  * @package CMS
  * @since 1.9
+ * @internal
+ * @ignore
  */
 final class cms_content_cache
 {
+	/**
+	 * @ignore
+	 */
 	private static $_instance;
+
+	/**
+	 * @ignore
+	 */
 	private static $_alias_map;
+
+	/**
+	 * @ignore
+	 */
 	private static $_id_map;
+
+	/**
+	 * @ignore
+	 */
 	private static $_content_cache;
+
+	/**
+	 * @ignore
+	 */
 	private $_preload_cache;
+
+	/**
+	 * @ignore
+	 */
 	private $_key;
 
+
+	/**
+	 * @ignore
+	 */
 	private function __construct() 
 	{
 		if( !cmsms()->is_frontend_request() ) return;
@@ -74,7 +107,9 @@ final class cms_content_cache
 		}
 	}
 
-
+	/**
+	 * @ignore
+	 */
 	public static function &get_instance() 
 	{
 		if( !is_object(self::$_instance) ) self::$_instance = new cms_content_cache();

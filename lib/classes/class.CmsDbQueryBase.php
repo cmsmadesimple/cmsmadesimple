@@ -19,23 +19,60 @@
 #$Id: class.global.inc.php 6939 2011-03-06 00:12:54Z calguy1000 $
 
 /**
+ * An abstract class for building database queries and managing results.
+ *
+ * @since 2.0
  * @package CMS
  */
 
 /**
  * An abstract class for building queries and managing results 
  *
- * @since 1.12
+ * @since 2.0
  * @author Robert Campbell <calguy1000@gmail.com>
+ * @property-read array $fields Associative array of the current row of the resultset (read only)
+ * @property-read boolean $EOF  Indicates wether the resultset is past the last element (read only)
+ * @property-read int $limit The maximum number of rows to return in one resultset (read only)
+ * @property-read int $offset The start offset of rows to return when executing the query (read only)
+ * @property-read int $totalrows The total number of rows in the database that match the query (read only)
+ * @property-read int $numpages The total number of pages of rows that match the query (read only)
  */
 abstract class CmsDbQueryBase
 {
+	/**
+	 * The total number of rows matching the query.  
+	 * This value is populated after execute() is called.
+	 *
+	 * @see execute()
+	 */
   protected $_totalmatchingrows = null;
+
+	/**
+	 * The current (integer) offset in the list of results
+	 */
   protected $_offset = 0;
+
+	/**
+	 * The (integer) page limit.
+	 */
   protected $_limit = 1000;
+
+	/**
+	 * This member stores the raw database resultset object.
+	 */
   protected $_rs = null;
+
+	/**
+	 * This member stores the original arguments passed to the constructor and used when generating
+	 * the query.
+	 */
   protected $_args = array();
 
+	/**
+	 * Constructor
+	 *
+	 * @param mixed $args Accepts an associative array (key=>value) with arguments for the query, or a comma separarated string of arguments.
+	 */
   public function __construct($args = '')
   {
     if( empty($args) ) return;
@@ -48,38 +85,83 @@ abstract class CmsDbQueryBase
     }
   }
 
+	/**
+	 * Execute the query.
+	 *
+	 * This method should read the parameters, build and execute the database query and populate
+	 * the $_totalmatchingrows and $_rs members.
+	 *
+	 * This method should be smart enough to not execute the database query more than once
+	 * independent of how many times it is called.
+	 */
   abstract public function execute();
 
+	/**
+	 * Return the number of records that match the the current query
+	 * subject to page limits, this method will return either the pagelimit or a lesser value.
+	 *
+	 * If execute has not already been called, this method will call it.
+	 *
+	 * @return integer
+	 */
   public function RecordCount()
   {
     $this->execute();
     if( $this->_rs ) return $this->_rs->RecordCount();
   }
 
+	/**
+	 * Modify the resultset object and point to the next record of the matched rows.
+	 *
+	 * If execute has not been called yet, this method will call it.
+	 */
   public function MoveNext()
   {
     $this->execute();
     if( $this->_rs ) return $this->_rs->MoveNext();
   }
 
+	/**
+	 * Modify the resultset object and point to the first record of the matched rows.
+	 *
+	 * If execute has not been called yet, this method will call it.
+	 */
   public function MoveFirst()
   {
     $this->execute();
     if( $this->_rs ) return $this->_rs->MoveFirst();
   }
 
+	/**
+	 * Modify the resultset object and point to the first record of the matched rows.
+	 * This is a synonym for MoveFirst()
+	 *
+	 * If execute has not been called yet, this method will call it.
+	 *
+	 * @see MoveFirst()
+	 */
   public function Rewind()
   {
     $this->execute();
     if( $this->_rs ) return $this->_rs->MoveFirst();
   }
 
+	/**
+	 * Modify the resultset object and point to the last record of the matched rows.
+	 *
+	 * If execute has not been called yet, this method will call it.
+	 */
   public function MoveLast()
   {
     $this->execute();
     if( $this->_rs ) return $this->_rs->MoveLast();
   }
 
+	/**
+	 * Test if the resultset is pointing past the last record in the returned set
+	 *
+	 * @return boolean
+	 */
   public function EOF()
   {
     $this->execute();
@@ -87,6 +169,9 @@ abstract class CmsDbQueryBase
     return TRUE;
   }
 
+	/**
+	 * Close the resultset and free any resources it may have claimed.
+	 */
   public function Close()
   {
     $this->execute();
@@ -94,8 +179,18 @@ abstract class CmsDbQueryBase
     return TRUE;
   }
 
+	/**
+	 * Return an array of matched objects
+	 *
+	 * The output of this method depends on the derived class.
+	 *
+	 * @return mixed.
+	 */
   abstract public function GetMatches();
 
+	/**
+	 * @ignore
+	 */
   public function __get($key)
   {
     $this->execute();

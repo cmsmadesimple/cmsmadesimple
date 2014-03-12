@@ -43,19 +43,18 @@ final class CmsApp {
 	const STATE_STYLESHEET = 'stylesheet_request';
     const STATE_PARSE_TEMPLATE = 'parse_page_template';
 
+	/**
+	 * @ignore
+	 */
 	private static $_instance;
 
 	/**
-	 * The current content object
-	 *
-	 * @since 2.0
+	 * @ignore
 	 */
 	private $_current_content_page;
 
 	/**
-	 * The request content type
-	 *
-	 * @since 2.0
+	 * @ignore
 	 */
 	private $_content_type;
 
@@ -84,6 +83,9 @@ final class CmsApp {
 	 */
 	private $errors = array();
 
+	/**
+	 * @ignore
+	 */
 	public function __get($key)
 	{
 		switch($key) {
@@ -173,12 +175,13 @@ final class CmsApp {
 	/**
 	 * Set the request content type to a valid mime type.
 	 *
+	 * @param string $mime_type
 	 * @since 2.0
 	 */
-	public function set_content_type($txt = '')
+	public function set_content_type($mime_type = '')
 	{
 		$this->_content_type = null;
-		if( $txt ) 	$this->_content_type = $txt;
+		if( $txt ) 	$this->_content_type = $mime_type;
 	}
 
 	/**
@@ -240,8 +243,8 @@ final class CmsApp {
 	 * that specified.
 	 *
 	 * @since 1.9
-	 * @param string Module Name.
-	 * @param string (optional) version number for a check.  
+	 * @param string $module_name The module name.
+	 * @param string $version (optional) version number for a check.  
 	 * @return object Reference to the module object, or null.
 	 * @deprecated
 	 */
@@ -516,8 +519,8 @@ final class CmsApp {
 	 * @return Smarty_Parser handle to the Smarty object	 
 	 * @ignore
 	 */
-	final public function & get_template_parser()
-	{	
+	final public function &get_template_parser()
+	{
 		return Smarty_Parser::get_instance();
 	}
 	
@@ -546,12 +549,11 @@ final class CmsApp {
 
     /** 
 	 * Test if the current application state matches the requested value.
-
 	 * This method will throw an exception if invalid data is passed in.
 	 *
 	 * @since 1.11.2
 	 * @author Robert Campbell
-	 * @param string A valid state name (see the state list above).  It is recommended that the class constants be used.
+	 * @param string $state A valid state name (see the state list above).  It is recommended that the class constants be used.
 	 * @return boolean
 	 */
 	public function test_state($state)
@@ -641,10 +643,10 @@ final class CmsApp {
  */
 class CmsContentTypePlaceholder
 {
-	var $type;
-	var $filename;
-	var $friendlyname;
-	var $loaded;
+	public $type;
+	public $filename;
+	public $friendlyname;
+	public $loaded;
 }
 
 

@@ -35,6 +35,10 @@
 #END_LICENSE
 
 /**
+ * A convenience class for CMS Made Simple.
+ *
+ * The methods in this class provide simple wrappers over other class methods.
+ *
  * @package CMS
  */
 
@@ -60,10 +64,10 @@ final class cms_utils
 
 
 	/**
-	 * Get stored data
+	 * Get data that was stored elsewhere in the application.  
 	 *
 	 * @since 1.9
-	 * @param string The key to get.
+	 * @param string $key The key to get.
 	 * @return mixed The stored data, or null
 	 */
 	public static function get_app_data($key)
@@ -79,8 +83,8 @@ final class cms_utils
 	 * This data is not stored in the session, so it only exists for one request.
 	 *
 	 * @since 1.9
-	 * @param string The name of this data.
-	 * @param mixed  The data to store.
+	 * @param string $key The name of this data.
+	 * @param mixed  $value The data to store.
 	 */
 	public static function set_app_data($key,$value)
 	{
@@ -97,15 +101,16 @@ final class cms_utils
 	 * the installed version is greater than or equal to the supplied version.
 	 *
 	 * @see version_compare()
+	 * @see ModuleOperations::get_module_instance
 	 * @final
 	 * @since 1.9
-	 * @param string The module name
-	 * @param string A version string
+	 * @param string $name The module name
+	 * @param string $version An optional version string
 	 * @return CmsModule The matching module object or null
 	 */
-	final public static function & get_module($name,$version = '')
+	public static function &get_module($name,$version = '')
 	{
-		return cmsms()->GetModuleInstance($name,$version);
+		return ModuleOperations::get_instance()->get_module_instance($name,$version);
 	}
 
 
@@ -116,7 +121,7 @@ final class cms_utils
 	 * @final
 	 * @author calguy1000
 	 * @since 1.11
-	 * @param string The module name
+	 * @param string $name The module name
 	 * @return boolean
 	 */
 	final public static function module_available($name)
@@ -236,7 +241,7 @@ final class cms_utils
 	 * For admin requests this method will return the users currently selected wysiwyg module, or null.
 	 *
 	 * @since 1.10
-	 * @param string The module name.
+	 * @param string $module_name The module name.
 	 * @return object or null
 	 */
 	public static function &get_wysiwyg_module($module_name = '')
@@ -312,7 +317,7 @@ final class cms_utils
 	 * This is a fairly smart routine that first detects if a thumbnail already exists, or if one can be written anyways, and then uses the system preferences
 	 * to generate the thumbnail file.
 	 *
-	 * @param string complete file specification to a source image
+	 * @param string $srcfile complete file specification to a source image
 	 * @author calguy1000
 	 * @since 1.11
 	 * @returns string complete file specification to a thumbnail for an image.  Or null.

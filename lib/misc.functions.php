@@ -19,7 +19,7 @@
 #$Id$
 
 /**
- * Misc functions
+ * Miscellaneous support functions
  *
  * @package CMS
  */
@@ -718,7 +718,7 @@ function get_recursive_file_list ( $path , $excludes, $maxdepth = -1 , $mode = "
  * A function to recursively delete all files and folders in a directory
  * synonymous with rm -r
  *
- * @param string The directory name
+ * @param string $dirname The directory name
  * @return boolean
  */
 function recursive_delete( $dirname )
@@ -749,8 +749,8 @@ function recursive_delete( $dirname )
  * A function to recursively chmod all files and folders in a directory
  *
  * @see chmod
- * @param string The start location
- * @param integer The mode
+ * @param string $path The start location
+ * @param integer $mode The octal mode
  * Rolf: only used in admin/listmodules.php
  */
 function chmod_r( $path, $mode )
@@ -788,8 +788,8 @@ function chmod_r( $path, $mode )
  *
  * i.e:  startswith('The Quick Brown Fox','The');
  *
- * @param string The string to test against
- * @param string The search string
+ * @param string $str The string to test against
+ * @param string $sub The search string
  * @return boolean
  */
 function startswith( $str, $sub )
@@ -804,8 +804,8 @@ function startswith( $str, $sub )
  *
  * i.e: endswith('The Quick Brown Fox','Fox');
  *
- * @param string The string to test against
- * @param string The search string
+ * @param string $str The string to test against
+ * @param string $sub The search string
  * @return boolean
  */
 function endswith( $str, $sub )
@@ -818,9 +818,9 @@ function endswith( $str, $sub )
 /**
  * convert a human readable string into something that is suitable for use in URLS
  *
- * @param string String to convert
- * @param boolean indicates whether output string should be converted to lower case
- * @param boolean indicates wether slashes should be allowed in the input.
+ * @param string $alias String to convert
+ * @param boolean $tolower Indicates whether output string should be converted to lower case
+ * @param boolean $withslash Indicates wether slashes should be allowed in the input.
  * @return string
  */
 function munge_string_to_url($alias, $tolower = false, $withslash = false)
@@ -841,13 +841,13 @@ function munge_string_to_url($alias, $tolower = false, $withslash = false)
 }
 
 
-/*
+/**
  * Sanitize input to prevent against XSS and other nasty stuff.
  * Taken from cakephp (http://cakephp.org)
  * Licensed under the MIT License
  * 
  * @internal
- * @param string input
+ * @param string $val input value
  * @return string
  */
 function cleanValue($val) {
@@ -856,7 +856,17 @@ function cleanValue($val) {
   $val = str_replace(" ", " ", $val);
   $val = str_replace(chr(0xCA), "", $val);
   //Encode any HTML to entities (including \n --> <br />)
-  $val = _cleanHtml($val);
+  $_cleanHtml = function($val) {
+    if ($remove) {
+      $string = strip_tags($string);
+    } else {
+      $patterns = array("/\&/", "/%/", "/</", "/>/", '/"/', "/'/", "/\(/", "/\)/", "/\+/", "/-/");
+      $replacements = array("&amp;", "&#37;", "&lt;", "&gt;", "&quot;", "&#39;", "&#40;", "&#41;", "&#43;", "&#45;");
+      $string = preg_replace($patterns, $replacements, $string);
+    }
+    return $string;
+  };
+  $val = $_cleanHtml($val);
   //Double-check special chars and remove carriage returns
   //For increased SQL security
   $val = preg_replace("/\\\$/", "$", $val);
@@ -873,29 +883,6 @@ function cleanValue($val) {
 }
 
 
-
-/*
- * Method to sanitize incoming html.
- * Take from cakephp (http://cakephp.org)
- * Licensed under the MIT License
- *
- * @ignore
- * @internal
- * @param string Input HTML code.
- * @param boolean Wether HTML tags should be removed.
- * @return string
- * Rolf: only used in this file
- */
-function _cleanHtml($string, $remove = false) {
-  if ($remove) {
-    $string = strip_tags($string);
-  } else {
-    $patterns = array("/\&/", "/%/", "/</", "/>/", '/"/', "/'/", "/\(/", "/\)/", "/\+/", "/-/");
-    $replacements = array("&amp;", "&#37;", "&lt;", "&gt;", "&quot;", "&#39;", "&#40;", "&#41;", "&#43;", "&#45;");
-    $string = preg_replace($patterns, $replacements, $string);
-  }
-  return $string;
-}
 
 define('CLEAN_INT','CLEAN_INT');
 define('CLEAN_FLOAT','CLEAN_FLOAT');
@@ -964,9 +951,8 @@ function can_admin_upload()
 /**
  * A convenience function to return a boolean variable given a php ini key that represents a boolean
  *
- * @param string  The php ini key
+ * @param string $str The php ini key
  * @return integer
- * Rolf: only used in admin/header.php
  */
 function ini_get_boolean($str)
 {
@@ -1003,8 +989,8 @@ function stack_trace()
  * A wrapper around move_uploaded_file that attempts to ensure permissions on uploaded
  * files are set correctly.
  *
- * @param string The temporary file specification
- * @param string The destination file specification
+ * @param string $tmpfile The temporary file specification
+ * @param string $destination The destination file specification
  * @return boolean.
  */
 function cms_move_uploaded_file( $tmpfile, $destination )
@@ -1026,70 +1012,68 @@ function cms_move_uploaded_file( $tmpfile, $destination )
  *   xxx.xxx.xxx.[yyy-zzz]  (range)
  *   xxx.xxx.xxx.xxx/nn    (nn = # bits, cisco style -- i.e. /24 = class C)
  *
- * @param string IP address to test
- * @param array  Array of match expressions
+ * @param string $ip IP address to test
+ * @param array  $checklist Array of match expressions
  * @return boolean
  * Rolf: only used in lib/content.functions.php
  */
 function cms_ipmatches($ip,$checklist)
 {
-  if( !function_exists('__testip') ) {
-    function __testip($range,$ip) {
-      $result = 1;
+  $_testip = function($range,$ip) {
+    $result = 1;
 
-      // IP Pattern Matcher
-      // J.Adams <jna@retina.net>
-      //
-      // Matches:
-      //
-      // xxx.xxx.xxx.xxx        (exact)
-      // xxx.xxx.xxx.[yyy-zzz]  (range)
-      // xxx.xxx.xxx.xxx/nn    (nn = # bits, cisco style -- i.e. /24 = class C)
-      //
-      // Does not match:
-      // xxx.xxx.xxx.xx[yyy-zzz]  (range, partial octets nnnnnot supported)
+    // IP Pattern Matcher
+    // J.Adams <jna@retina.net>
+    //
+    // Matches:
+    //
+    // xxx.xxx.xxx.xxx        (exact)
+    // xxx.xxx.xxx.[yyy-zzz]  (range)
+    // xxx.xxx.xxx.xxx/nn    (nn = # bits, cisco style -- i.e. /24 = class C)
+    //
+    // Does not match:
+    // xxx.xxx.xxx.xx[yyy-zzz]  (range, partial octets nnnnnot supported)
 
-      $regs = array();
-      if (preg_match("/([0-9]+)\.([0-9]+)\.([0-9]+)\.([0-9]+)\/([0-9]+)/",$range,$regs)) {
-	// perform a mask match
-	$ipl = ip2long($ip);
-	$rangel = ip2long($regs[1] . "." . $regs[2] . "." . $regs[3] . "." . $regs[4]);
+    $regs = array();
+    if (preg_match("/([0-9]+)\.([0-9]+)\.([0-9]+)\.([0-9]+)\/([0-9]+)/",$range,$regs)) {
+      // perform a mask match
+      $ipl = ip2long($ip);
+      $rangel = ip2long($regs[1] . "." . $regs[2] . "." . $regs[3] . "." . $regs[4]);
 
-	$maskl = 0;
+      $maskl = 0;
 
-	for ($i = 0; $i< 31; $i++) {
-	  if ($i < $regs[5]-1) $maskl = $maskl + pow(2,(30-$i));
-	}
+      for ($i = 0; $i< 31; $i++) {
+	if ($i < $regs[5]-1) $maskl = $maskl + pow(2,(30-$i));
+      }
 
-	if (($maskl & $rangel) == ($maskl & $ipl)) {
-	  return 1;
-	} else {
-	  return 0;
-	}
+      if (($maskl & $rangel) == ($maskl & $ipl)) {
+	return 1;
       } else {
-	// range based
-	$maskocts = explode('.',$range);
-	$ipocts = explode('.',$ip);
+	return 0;
+      }
+    } else {
+      // range based
+      $maskocts = explode('.',$range);
+      $ipocts = explode('.',$ip);
 
-	if( count($maskocts) != count($ipocts) && count($maskocts) != 4 ) return 0;
+      if( count($maskocts) != count($ipocts) && count($maskocts) != 4 ) return 0;
 
-	// perform a range match
-	for ($i=0; $i<4; $i++) {
-	  if (preg_match("/\[([0-9]+)\-([0-9]+)\]/",$maskocts[$i],$regs)) {
-	    if ( ($ipocts[$i] > $regs[2]) || ($ipocts[$i] < $regs[1])) $result = 0;
-	  }
-	  else {
-	    if ($maskocts[$i] <> $ipocts[$i]) $result = 0;
-	  }
+      // perform a range match
+      for ($i=0; $i<4; $i++) {
+	if (preg_match("/\[([0-9]+)\-([0-9]+)\]/",$maskocts[$i],$regs)) {
+	  if ( ($ipocts[$i] > $regs[2]) || ($ipocts[$i] < $regs[1])) $result = 0;
+	}
+	else {
+	  if ($maskocts[$i] <> $ipocts[$i]) $result = 0;
 	}
       }
-      return $result;
-    } // __testip
-  } // if
+    }
+    return $result;
+  }; // _testip
 
   if( !is_array($checklist) ) $checklist = explode(',',$checklist);
   foreach( $checklist as $one ) {
-    if( __testip(trim($one),$ip) ) return TRUE;
+    if( $_testip(trim($one),$ip) ) return TRUE;
   }
   return FALSE;
 }
@@ -1137,7 +1121,7 @@ function get_secure_param()
  * A simple function to convert a string to a boolean
  * accepts, 'y','yes','true',1 as TRUE (case insensitive) all other values represent FALSE.
  *
- * @param string
+ * @param string $str Input string to test.
  * Rolf: only used in lib/classes/contenttypes/Content.inc.php
  */
 function cms_to_bool($str)
@@ -1152,7 +1136,28 @@ function cms_to_bool($str)
 
 
 /**
+ * A function to return the appropriate HTML tags to include the CMSMS included jquery in a web page
+ * 
+ * CMSMS is distributed with a recent version of jQuery, jQueryUI and various other jquery based 
+ * libraries.  This function generates the HTML code that will include these scripts.
+ * 
+ * See the {cms_jquery} smarty plugin for a convenient way of including the CMSMS provided jquery
+ * libraries from within a smarty template.
  *
+ * Known libraries:
+ *   jquery
+ *   jquery-ui
+ *   nestedSortable
+ *   json
+ *   migrate
+ *
+ * @since 1.10
+ * @param string $exclude A comma separated list of script names or aliases to exclude.
+ * @param boolean $ssl Force use of the ssl_url for the root url to necessary scripts.
+ * @param boolean $cdn Force the use of a CDN url for the libraries if one is known
+ * @param string  $append A comma separated list of library URLS to the output
+ * @param string  $custom_root A custom root URL for all scripts (when using local mode).  If this is spefied the $ssl param will be ignored.
+ * @param boolean $include_css Optionally output stylesheet tags for the included javascript libraries.
  */
 function cms_get_jquery($exclude = '',$ssl = null,$cdn = false,$append = '',$custom_root='',$include_css = TRUE)
 {

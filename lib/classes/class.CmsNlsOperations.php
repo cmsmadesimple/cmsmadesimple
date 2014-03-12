@@ -115,7 +115,7 @@ final class CmsNlsOperations
   /**
    * Get language info about a particular language.
    *
-   * @param string language name.
+   * @param string $lang language name.
    * @return CmsNls object repesenting the named language.  or null.
    */
   public static function get_language_info($lang)
@@ -337,7 +337,7 @@ final class CmsNlsOperations
   /**
    * Set the current encoding
    *
-   * @param mixed The encoding (comma separated encodings is acceptable.
+   * @param mixed $str The encoding (comma separated encodings is acceptable.
    * @return void
    */
   public static function set_encoding($str)
@@ -403,7 +403,7 @@ final class CmsNlsOperations
    * Find a match for a specific language
    * This method will try to find the NLS information closest to the language specified.
    *
-   * @param string An approximate language specification (an alias matchis done if possible).
+   * @param string $str An approximate language specification (an alias matchis done if possible).
    * @return hash containing NLS information.
    */
   protected static function find_nls_match($str)

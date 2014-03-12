@@ -19,7 +19,9 @@
 #$Id: class.module.inc.php 7061 2011-05-28 18:48:04Z calguy1000 $
 
 /**
- * @package             CMS
+ * This file contains the base module class for all CMSMS modules.
+ *
+ * @package CMS
  */
 
 /**
@@ -28,8 +30,12 @@
  * All modules should inherit and extend this class with their functionality.
  *
  * @since		0.9
- * @version             1.8
+ * @version     2.0
  * @package		CMS
+ * @property    CmsApp $cms A reference to the application object (deprecated)
+ * @property    Smarty_CMS $smarty A reference to the global smarty object
+ * @property    cms_config $config A reference to the global app configuration object (deprecated)
+ * @property    ADOConnection $db  A reference to the global database configuration object
  */
 abstract class CMSModule
 {
@@ -190,10 +196,10 @@ abstract class CMSModule
    */
   private function _loadTemplateMethods()
   {
-    if (!$this->modtemplates) {
-      require_once(cms_join_path(dirname(__FILE__), 'module_support', 'modtemplates.inc.php'));
-      $this->modtemplates = true;
-    }
+	  if (!$this->modtemplates) {
+		  require_once(cms_join_path(__DIR__,'internal','module_support','modtemplates.inc.php'));
+		  $this->modtemplates = true;
+	  }
   }
 
   /**
@@ -203,10 +209,10 @@ abstract class CMSModule
    */
   private function _loadFormMethods()
   {
-    if (!$this->modform) {
-      require_once(cms_join_path(dirname(__FILE__), 'module_support', 'modform.inc.php'));
-      $this->modform = true;
-    }
+	  if (!$this->modform) {
+		  require_once(cms_join_path(__DIR__, 'internal', 'module_support', 'modform.inc.php'));
+		  $this->modform = true;
+	  }
   }
 	
   /**
@@ -216,10 +222,10 @@ abstract class CMSModule
    */
   private function _loadRedirectMethods()
   {
-    if (!$this->modredirect) {
-      require_once(cms_join_path(dirname(__FILE__), 'module_support', 'modredirect.inc.php'));
-      $this->modredirect = true;
-    }
+	  if (!$this->modredirect) {
+		  require_once(cms_join_path(__DIR__,'internal', 'module_support', 'modredirect.inc.php'));
+		  $this->modredirect = true;
+	  }
   }
 	
   /**
@@ -229,10 +235,10 @@ abstract class CMSModule
    */
   private function _loadMiscMethods()
   {
-    if (!$this->modmisc) {
-      require_once(cms_join_path(dirname(__FILE__), 'module_support', 'modmisc.inc.php'));
-      $this->modmisc = true;
-    }
+	  if (!$this->modmisc) {
+		  require_once(cms_join_path(__DIR__,'internal', 'module_support', 'modmisc.inc.php'));
+		  $this->modmisc = true;
+	  }
   }
 
   /**
@@ -268,11 +274,11 @@ abstract class CMSModule
    * @see smarty documentation.
    * @author calguy1000
    * @since 1.11
-   * @param string The plugin name
-   * @param string The plugin type (function,compiler,block, etc)
-   * @param mixed  The function callback (must be a static function)
-   * @param boolean Wether this function is cachable.
-   * @param integer Indicates frontend (0), or frontend and backend (1) availability.
+   * @param string  $name The plugin name
+   * @param string  $type The plugin type (function,compiler,block, etc)
+   * @param mixed   $callback The function callback (must be a static function)
+   * @param boolean $cachable Wether this function is cachable.
+   * @param integer $usage Indicates frontend (0), or frontend and backend (1) availability.
    * @return void
    */
   public function RegisterSmartyPlugin($name,$type,$callback,$cachable = TRUE,$usage = 0)
@@ -290,7 +296,7 @@ abstract class CMSModule
    * 
    * @author calguy1000
    * @since 1.11
-   * @param string The smarty plugin name.  If no name is specified all smarty plugins registered to this module will be removed.
+   * @param string $name The smarty plugin name.  If no name is specified all smarty plugins registered to this module will be removed.
    * @return void
    */
   public function RemoveSmartyPlugin($name = '')
@@ -312,10 +318,10 @@ abstract class CMSModule
    * Note: 
    * @final
    * @return void
-   * @see SetParameters
+   * @see CMSModule::SetParameters
    * @see can_cache_output
-   * @param boolean Indicate wether this registration should be forced to be entered in the database. Default value is false (for compatibility)
-   * @param mixed Indicate wether this plugins output should be cachable.  If null, use the site preferences, and the can_cache_output method.  Otherwise a boolean is expected.
+   * @param boolean $forcedb Indicate wether this registration should be forced to be entered in the database. Default value is false (for compatibility)
+   * @param mixed $cachable Indicate wether this plugins output should be cachable.  If null, use the site preferences, and the can_cache_output method.  Otherwise a boolean is expected.
    * @deprecated
    */
   final public function RegisterModulePlugin($forcedb = FALSE,$cachable = false)
@@ -419,7 +425,7 @@ abstract class CMSModule
       return cms_join_path($this->config['root_path'], 'modules' , $this->GetName());
     }
     else {
-      return dirname(__FILE__);
+      return __DIR__;
     }
   }
 
@@ -427,7 +433,7 @@ abstract class CMSModule
    * Returns the URL path to the module directory.
    *
    * @final
-   * @param boolean Optional generate an URL using HTTPS path
+   * @param boolean $use_ssl Optional generate an URL using HTTPS path
    * @return string The full path to the module directory.
    */
   final public function GetModuleURLPath($use_ssl=false)
@@ -511,7 +517,7 @@ abstract class CMSModule
    * theme, etc, so your module can output files directly to the administrator.
    * Do this by returning true.
    *
-   * @param  array The input request.  This can be used to test conditions wether or not admin output should be suppressed.
+   * @param  array $request The input request.  This can be used to test conditions wether or not admin output should be suppressed.
    * @return boolean
    */
   public function SuppressAdminOutput(&$request)
@@ -520,14 +526,14 @@ abstract class CMSModule
   }
 
   /**
-   * Register a route to use for pretty url parsing
+   * Register a dynamic route to use for pretty url parsing
    *
    * Note: This method is not compatible wih lazy loading in the front end.
    *
    * @final
    * @see SetParameters
-   * @param string Regular Expression Route to register
-   * @param array Defaults for parameters that might not be included in the url
+   * @param string $routeregex Regular Expression Route to register
+   * @param array $defaults Associative array containing defaults for parameters that might not be included in the url
    * @return void
    */
   final public function RegisterRoute($routeregex, $defaults = array())
@@ -728,7 +734,7 @@ abstract class CMSModule
    * @see SetParameterType
    * @see CreateParameter
    * @final
-   * @param boolean Flag indicating wether unknown params should be restricted.
+   * @param boolean $flag Indicaties wether unknown params should be restricted.
    * @return void
    */
   final public function RestrictUnknownParams($flag = true)
@@ -749,8 +755,8 @@ abstract class CMSModule
    * @see CreateParameter
    * @see SetParameters
    * @final
-   * @param string Parameter name;
-   * @param define Parameter type;
+   * @param string $param Parameter name;
+   * @param define $type  Parameter type;
    * @return void;
    */
   final public function SetParameterType($param, $type)
@@ -778,10 +784,10 @@ abstract class CMSModule
    * @see SetParameters
    * @see SetParameterType
    * @final
-   * @param string Parameter name;
-   * @param string Default parameter value
-   * @param string Help String
-   * @param boolean Flag indicating wether this parameter is optional or required.
+   * @param string $param Parameter name;
+   * @param string $defaultval Default parameter value
+   * @param string $helpstring Help String
+   * @param boolean $optional Flag indicating wether this parameter is optional or required.
    * @return void;
    */
   final public function CreateParameter($param, $defaultval='', $helpstring='', $optional=true)
@@ -797,11 +803,9 @@ abstract class CMSModule
    * Returns a short description of the module
    *
    * @abstract
-   * @param string Optional language that the admin is using.	 If that language
-   * is not defined, use en_US.
    * @return string
    */
-  public function GetDescription($lang = 'en_US')
+  public function GetDescription()
   {
     return '';
   }
@@ -903,10 +907,10 @@ abstract class CMSModule
    * block types to the CMSMS content objects.
    *
    * @abstract
-   * @param string Content block name
-   * @param mixed  Content block value
-   * @param array  Content block parameters
-   * @param boolean A flag indicating wether the content editor is in create mode (adding) vs. edit mod.
+   * @param string $blockName Content block name
+   * @param mixed  $value     Content block value
+   * @param array  $params    Associative array containing content block parameters
+   * @param boolean $adding   A flag indicating wether the content editor is in create mode (adding) vs. edit mod.
    * @return mixed Either an array with two elements (prompt, and xhtml element) or a string containing only the xhtml input element.
    */
   function GetContentBlockInput($blockName,$value,$params,$adding = false)
@@ -940,9 +944,9 @@ abstract class CMSModule
    * block types to the CMSMS content objects.
    *
    * @abstract
-   * @param string Content block name
-   * @param mixed  Content block value
-   * @param arrray Content block parameters.
+   * @param string $blockName Content block name
+   * @param mixed  $value     Content block value
+   * @param arrray $blockparams Content block parameters.
    * @return string An error message if the value is invalid, empty otherwise.
    */
   function ValidateContentBlockValue($blockName,$value,$blockparams)
@@ -957,8 +961,8 @@ abstract class CMSModule
    * register a bulk content action.
    *
    * @final
-   * @param string A label for the action
-   * @param string A module action name.
+   * @param string $label A label for the action
+   * @param string $action A module action name.
    * @return void
    */
   final public function RegisterBulkContentFunction($label,$action)
@@ -987,7 +991,7 @@ abstract class CMSModule
    */
   public function Install()
   {
-    $filename = dirname(dirname(dirname(__FILE__))) . '/modules/'.$this->GetName().'/method.install.php';
+    $filename = dirname(dirname(__DIR__)) . '/modules/'.$this->GetName().'/method.install.php';
     if (@is_file($filename)) {
       $gCms = cmsms();
       $db = $gCms->GetDb();
@@ -1028,7 +1032,7 @@ abstract class CMSModule
    */
   public function Uninstall()
   {
-    $filename = dirname(dirname(dirname(__FILE__))) . '/modules/'.$this->GetName().'/method.uninstall.php';
+    $filename = dirname(dirname(__DIR__)) . '/modules/'.$this->GetName().'/method.uninstall.php';
     if (@is_file($filename)) {
       $gCms = cmsms();
       $db = $gCms->GetDb();
@@ -1094,13 +1098,13 @@ abstract class CMSModule
    * The default behavior of this method is to call a function called method.upgrade.php
    * in your module directory, if it exists.
    *
-   * @param string The version we are upgrading from
-   * @param string The version we are upgrading to
+   * @param string $oldversion The version we are upgrading from
+   * @param string $newversion The version we are upgrading to
    * @return boolean
    */
   public function Upgrade($oldversion, $newversion)
   {
-    $filename = dirname(dirname(dirname(__FILE__))) . '/modules/'.$this->GetName().'/method.upgrade.php';
+    $filename = dirname(dirname(__DIR__)) . '/modules/'.$this->GetName().'/method.upgrade.php';
     if (@is_file($filename)) {
       $gCms = cmsms();
       $db = $gCms->GetDb();
@@ -1154,8 +1158,8 @@ abstract class CMSModule
    *
    * @final
    * @return string XML Text
-   * @param string reference to returned message.
-   * @param integer reference to returned file count.
+   * @param string $message reference to returned message.
+   * @param integer $filecount reference to returned file count.
    */
   final public function CreateXMLPackage( &$message, &$filecount )
   {
@@ -1285,8 +1289,8 @@ abstract class CMSModule
    * Returns true if the modules thinks it has the capability specified
    *
    * @abstract
-   * @param an id specifying which capability to check for, could be "wysiwyg" etc.
-   * @param associative array further params to get more detailed info about the capabilities. Should be syncronized with other modules of same type
+   * @param string $capability an id specifying which capability to check for, could be "wysiwyg" etc.
+   * @param array  $params An associative array further params to get more detailed info about the capabilities. Should be syncronized with other modules of same type
    * @return boolean
    */
   public function HasCapability($capability, $params = array())
@@ -1319,7 +1323,7 @@ abstract class CMSModule
    *
    *
    * @abstract
-   * @param string The html-code of the page before replacing SyntaxHighlighter-stuff
+   * @param string $htmlresult The html-code of the page before replacing SyntaxHighlighter-stuff
    * @return string
    */
   public function SyntaxGenerateHeader($htmlresult='')
@@ -1339,9 +1343,9 @@ abstract class CMSModule
    * Returns header code specific to this WYSIWYG
    *
    * @abstract
-   * @param string (optional) The id of the element that is being initialized, if null the WYSIWYG module should assume the selector
+   * @param string $selector (optional) The id of the element that is being initialized, if null the WYSIWYG module should assume the selector
    *   to be textarea.<ModuleName>.
-   * @param string (optional) The name of the CMSMS stylesheet to associate with the wysiwyg editor for additional styling.
+   * @param string $cssname (optional) The name of the CMSMS stylesheet to associate with the wysiwyg editor for additional styling.
    *   if elementid is not null then the cssname is only used for the specific element.  WYSIWYG modules may not obey the cssname paramter
    *   depending on their settings and capabilities.
    * @return string
@@ -1370,10 +1374,10 @@ abstract class CMSModule
    * in the modules directory, and if it exists include it.
    *
    * @abstract
-   * @param string Name of the action to perform
-   * @param string The ID of the module
-   * @param string The parameters targeted for this module
-   * @param integer The current page id that is being displayed.
+   * @param string $name The Name of the action to perform
+   * @param string $id The ID of the module
+   * @param string $params The parameters targeted for this module
+   * @param integer $returnid The current page id that is being displayed.
    * @return string output XHTML.
    */
   public function DoAction($name, $id, $params, $returnid='')
@@ -1391,7 +1395,7 @@ abstract class CMSModule
 		  //See: http://0x6a616d6573.blogspot.com/2010/02/cms-made-simple-166-file-inclusion.html
 		  $name = preg_replace('/[^A-Za-z0-9\-_+]/', '', $name);
 
-		  $filename = dirname(dirname(dirname(__FILE__))) . '/modules/'.$this->GetName().'/action.' . $name . '.php';
+		  $filename = dirname(dirname(__DIR__)) . '/modules/'.$this->GetName().'/action.' . $name . '.php';
 		  if (@is_file($filename)) {
 			  $gCms = cmsms();
 			  $db = $gCms->GetDb();
@@ -1483,11 +1487,11 @@ abstract class CMSModule
    * Returns the xhtml equivalent of a tooltip help link.
    *
    * @final
-   * @param string The help text to be shown on mouse over
-   * @param string The text to be shown as the link, default to a simple question mark
-   * @param string Forces another width of the popupbox than the one set in admin css
-   * @param string An alternative classname for the a-link of the tooltip
-   * @param string The URL or url portion to use in the href portion of the generated link.
+   * @param string $helptext The help text to be shown on mouse over
+   * @param string $linktext The text to be shown as the link, default to a simple question mark
+   * @param string $forcewidth Forces another width of the popupbox than the one set in admin css
+   * @param string $classname An alternative classname for the a-link of the tooltip
+   * @param string $href The URL or url portion to use in the href portion of the generated link.
    * @deprecated
    * @return string
    */
@@ -1506,12 +1510,12 @@ abstract class CMSModule
    * to make sure that id's are placed in names and also that it's xhtml compliant.
    *
    * @final
-   * @param string The id given to the module on execution
-   * @param string The action that this form should do when the link is clicked
-   * @param string The id to eventually return to when the module is finished it's task
-   * @param string The text that will have to be clicked to follow the link
-   * @param string The helptext to be shown as tooltip-popup
-   * @param string An array of params that should be inlucded in the URL of the link.	 These should be in a $key=>$value format.
+   * @param string $id The id given to the module on execution
+   * @param string $action The action that this form should do when the link is clicked
+   * @param string $returnid The id to eventually return to when the module is finished it's task
+   * @param string $contents The text that will have to be clicked to follow the link
+   * @param string $tooltiptext The helptext to be shown as tooltip-popup
+   * @param string $params An array of params that should be inlucded in the URL of the link.	 These should be in a $key=>$value format.
    * @deprecated
    * @return string
    */
@@ -1525,11 +1529,11 @@ abstract class CMSModule
    * to make sure that id's are placed in names and also that it's xhtml compliant.
    *
    * @final
-   * @param string The id given to the module on execution (not really used yet, but might be later)
-   * @param string The html name of the textbox (not really used yet, but might be later on)
-   * @param string The legend_text for this fieldset, if applicaple
-   * @param string Any additional text that should be added into the tag when rendered
-   * @param string Any additional text that should be added into the legend tag when rendered
+   * @param string $id The id given to the module on execution (not really used yet, but might be later)
+   * @param string $name The html name of the textbox (not really used yet, but might be later on)
+   * @param string $legend_text The legend_text for this fieldset, if applicaple
+   * @param string $addtext Any additional text that should be added into the tag when rendered
+   * @param string $addtext_legend Any additional text that should be added into the legend tag when rendered
    * @deprecated
    * @return string
    */
@@ -1555,14 +1559,14 @@ abstract class CMSModule
   /**
    * Returns the start of a module form, optimized for frontend use
    *
-   * @param string The id given to the module on execution
-   * @param string The id to eventually return to when the module is finished it's task
-   * @param string The action that this form should do when the form is submitted
-   * @param string Method to use for the form tag.  Defaults to 'post'
-   * @param string Optional enctype to use, Good for situations where files are being uploaded
-   * @param boolean A flag to determine if actions should be handled inline (no moduleinterface.php -- only works for frontend)
-   * @param string Text to append to the end of the id and name of the form
-   * @param array Extra parameters to pass along when the form is submitted
+   * @param string $id The id given to the module on execution
+   * @param string $returnid The page id to eventually return to when the module is finished it's task
+   * @param string $action The name of the action that this form should do when the form is submitted
+   * @param string $method Method to use for the form tag.  Defaults to 'post'
+   * @param string $enctype Optional enctype to use, Good for situations where files are being uploaded
+   * @param boolean $inline A flag to determine if actions should be handled inline (no moduleinterface.php -- only works for frontend)
+   * @param string $idsuffix Text to append to the end of the id and name of the form
+   * @param array $params Extra parameters to pass along when the form is submitted
    * @deprecated
    * @return string
    */
@@ -1575,15 +1579,15 @@ abstract class CMSModule
   /**
    * Returns the start of a module form
    *
-   * @param string The id given to the module on execution
-   * @param string The action that this form should do when the form is submitted
-   * @param string The id to eventually return to when the module is finished it's task
-   * @param string Method to use for the form tag.  Defaults to 'post'
-   * @param string Optional enctype to use, Good for situations where files are being uploaded
-   * @param boolean A flag to determine if actions should be handled inline (no moduleinterface.php -- only works for frontend)
-   * @param string Text to append to the end of the id and name of the form
-   * @param array Extra parameters to pass along when the form is submitted
-   * @param string Text to append to the <form>-statement, for instanse for javascript-validation code
+   * @param string $id The id given to the module on execution
+   * @param string $action The action that this form should do when the form is submitted
+   * @param string $returnid The page id to eventually return to when the module is finished it's task
+   * @param string $method Method to use for the form tag.  Defaults to 'post'
+   * @param string $enctype Optional enctype to use, Good for situations where files are being uploaded
+   * @param boolean $inline A flag to determine if actions should be handled inline (no moduleinterface.php -- only works for frontend)
+   * @param string $idsuffix Text to append to the end of the id and name of the form
+   * @param array $params Extra parameters to pass along when the form is submitted
+   * @param string $extra Text to append to the <form>-statement, for instanse for javascript-validation code
    * @return string
    */
   function CreateFormStart($id, $action='default', $returnid='', $method='post', $enctype='', $inline=false, $idsuffix='', $params = array(), $extra='')
@@ -1607,12 +1611,12 @@ abstract class CMSModule
    * Returns the xhtml equivalent of an input textbox.  This is basically a nice little wrapper
    * to make sure that id's are placed in names and also that it's xhtml compliant.
    *
-   * @param string The id given to the module on execution
-   * @param string The html name of the textbox
-   * @param string The predefined value of the textbox, if any
-   * @param string The number of columns wide the textbox should be displayed
-   * @param string The maximum number of characters that should be allowed to be entered
-   * @param string Any additional text that should be added into the tag when rendered
+   * @param string $id The id given to the module on execution
+   * @param string $name The html name of the textbox
+   * @param string $value The predefined value of the textbox, if any
+   * @param string $size The number of columns wide the textbox should be displayed
+   * @param string $maxlength The maximum number of characters that should be allowed to be entered
+   * @param string $addtext Any additional text that should be added into the tag when rendered
    * @deprecated
    * @return string
    */
@@ -1626,10 +1630,10 @@ abstract class CMSModule
    * Returns the xhtml equivalent of an label for input field.  This is basically a nice little wrapper
    * to make sure that id's are placed in names and also that it's xhtml compliant.
    *
-   * @param string The id given to the module on execution
-   * @param string The html name of the input field this label is associated to
-   * @param string The text in the label
-   * @param string Any additional text that should be added into the tag when rendered
+   * @param string $id The id given to the module on execution
+   * @param string $name The html name of the input field this label is associated to
+   * @param string $labeltext The text in the label
+   * @param string $addtext Any additional text that should be added into the tag when rendered
    * @deprecated
    * @return string
    */
@@ -1643,14 +1647,14 @@ abstract class CMSModule
    * Returns the xhtml equivalent of an input textbox with label.  This is basically a nice little wrapper
    * to make sure that id's are placed in names and also that it's xhtml compliant.
    *
-   * @param string The id given to the module on execution
-   * @param string The html name of the textbox
-   * @param string The predefined value of the textbox, if any
-   * @param string The number of columns wide the textbox should be displayed
-   * @param string The maximum number of characters that should be allowed to be entered
-   * @param string Any additional text that should be added into the tag when rendered
-   * @param string The text for label 
-   * @param string Any additional text that should be added into the tag when rendered
+   * @param string $id The id given to the module on execution
+   * @param string $name The html name of the textbox
+   * @param string $value The predefined value of the textbox, if any
+   * @param string $size The number of columns wide the textbox should be displayed
+   * @param string $maxlength The maximum number of characters that should be allowed to be entered
+   * @param string $addttext Any additional text that should be added into the tag when rendered
+   * @param string $label The text for label 
+   * @param string $labeladdtext Any additional text that should be added into the tag when rendered
    * @deprecated
    * @return string
    */
@@ -1664,10 +1668,10 @@ abstract class CMSModule
    * Returns the html5 equivalent of an input of type color.  This is basically a nice little wrapper
    * to make sure that id's are placed in names and also that it's html5 compliant.
    *
-   * @param string The id given to the module on execution
-   * @param string The html name of the input field
-   * @param string The predefined value of the textbox, if any
-   * @param string Any additional text that should be added into the tag when rendered
+   * @param string $id The id given to the module on execution
+   * @param string $name The html name of the input field
+   * @param string $value The predefined value of the textbox, if any
+   * @param string $addttext Any additional text that should be added into the tag when rendered
    * @return string
    */
   function CreateInputColor($id, $name, $value='', $addttext='')
@@ -1680,10 +1684,10 @@ abstract class CMSModule
    * Returns the html5 equivalent of an input of type date.  This is basically a nice little wrapper
    * to make sure that id's are placed in names and also that it's html5 compliant.
    *
-   * @param string The id given to the module on execution
-   * @param string The html name of the input field
-   * @param string The predefined value of the textbox, if any
-   * @param string Any additional text that should be added into the tag when rendered
+   * @param string $id The id given to the module on execution
+   * @param string $name The html name of the input field
+   * @param string $value The predefined value of the textbox, if any
+   * @param string $addttext Any additional text that should be added into the tag when rendered
    * @deprecated
    * @return string
    */
@@ -1697,10 +1701,10 @@ abstract class CMSModule
    * Returns the html5 equivalent of an input of type datetime.  This is basically a nice little wrapper
    * to make sure that id's are placed in names and also that it's html5 compliant.
    *
-   * @param string The id given to the module on execution
-   * @param string The html name of the input field
-   * @param string The predefined value of the textbox, if any
-   * @param string Any additional text that should be added into the tag when rendered
+   * @param string $id The id given to the module on execution
+   * @param string $name The html name of the input field
+   * @param string $value The predefined value of the textbox, if any
+   * @param string $addttext Any additional text that should be added into the tag when rendered
    * @deprecated
    * @return string
    */	
@@ -1714,10 +1718,10 @@ abstract class CMSModule
    * Returns the html5 equivalent of an input of type datetime-local.  This is basically a nice little wrapper
    * to make sure that id's are placed in names and also that it's html5 compliant.
    *
-   * @param string The id given to the module on execution
-   * @param string The html name of the input field
-   * @param string The predefined value of the textbox, if any
-   * @param string Any additional text that should be added into the tag when rendered
+   * @param string $id The id given to the module on execution
+   * @param string $name The html name of the input field
+   * @param string $value The predefined value of the textbox, if any
+   * @param string $addttext Any additional text that should be added into the tag when rendered
    * @deprecated
    * @return string
    */
@@ -1731,10 +1735,10 @@ abstract class CMSModule
    * Returns the html5 equivalent of an input of type month.  This is basically a nice little wrapper
    * to make sure that id's are placed in names and also that it's html5 compliant.
    *
-   * @param string The id given to the module on execution
-   * @param string The html name of the input field
-   * @param string The predefined value of the textbox, if any
-   * @param string Any additional text that should be added into the tag when rendered
+   * @param string $id The id given to the module on execution
+   * @param string $name The html name of the input field
+   * @param string $value The predefined value of the textbox, if any
+   * @param string $addttext Any additional text that should be added into the tag when rendered
    * @deprecated
    * @return string
    */
@@ -1748,10 +1752,10 @@ abstract class CMSModule
    * Returns the html5 equivalent of an input of type week.  This is basically a nice little wrapper
    * to make sure that id's are placed in names and also that it's html5 compliant.
    *
-   * @param string The id given to the module on execution
-   * @param string The html name of the input field
-   * @param string The predefined value of the textbox, if any
-   * @param string Any additional text that should be added into the tag when rendered
+   * @param string $id The id given to the module on execution
+   * @param string $name The html name of the input field
+   * @param string $value The predefined value of the textbox, if any
+   * @param string $addttext Any additional text that should be added into the tag when rendered
    * @deprecated
    * @return string
    */
@@ -1765,10 +1769,10 @@ abstract class CMSModule
    * Returns the html5 equivalent of an input of type time.  This is basically a nice little wrapper
    * to make sure that id's are placed in names and also that it's html5 compliant.
    *
-   * @param string The id given to the module on execution
-   * @param string The html name of the input field
-   * @param string The predefined value of the textbox, if any
-   * @param string Any additional text that should be added into the tag when rendered
+   * @param string $id The id given to the module on execution
+   * @param string $name The html name of the input field
+   * @param string $value The predefined value of the textbox, if any
+   * @param string $addttext Any additional text that should be added into the tag when rendered
    * @deprecated
    * @return string
    */
@@ -1782,10 +1786,10 @@ abstract class CMSModule
    * Returns the html5 equivalent of an input of type number.  This is basically a nice little wrapper
    * to make sure that id's are placed in names and also that it's html5 compliant.
    *
-   * @param string The id given to the module on execution
-   * @param string The html name of the input field
-   * @param string The predefined value of the textbox, if any
-   * @param string Any additional text that should be added into the tag when rendered
+   * @param string $id The id given to the module on execution
+   * @param string $name The html name of the input field
+   * @param string $value The predefined value of the textbox, if any
+   * @param string $addttext Any additional text that should be added into the tag when rendered
    * @return string
    */
   function CreateInputNumber($id, $name, $value='', $addttext='')
@@ -1798,10 +1802,10 @@ abstract class CMSModule
    * Returns the html5 equivalent of an input of type range.  This is basically a nice little wrapper
    * to make sure that id's are placed in names and also that it's html5 compliant.
    *
-   * @param string The id given to the module on execution
-   * @param string The html name of the input field
-   * @param string The predefined value of the textbox, if any
-   * @param string Any additional text that should be added into the tag when rendered
+   * @param string $id The id given to the module on execution
+   * @param string $name The html name of the input field
+   * @param string $value The predefined value of the textbox, if any
+   * @param string $addttext Any additional text that should be added into the tag when rendered
    * @deprecated
    * @return string
    */
@@ -1815,12 +1819,12 @@ abstract class CMSModule
    * Returns the html5 equivalent of an input textbox of type email.  This is basically a nice little wrapper
    * to make sure that id's are placed in names and also that it's html5 compliant.
    *
-   * @param string The id given to the module on execution
-   * @param string The html name of the textbox
-   * @param string The predefined value of the textbox, if any
-   * @param string The number of columns wide the textbox should be displayed
-   * @param string The maximum number of characters that should be allowed to be entered
-   * @param string Any additional text that should be added into the tag when rendered
+   * @param string $id The id given to the module on execution
+   * @param string $name The html name of the textbox
+   * @param string $value The predefined value of the textbox, if any
+   * @param string $size The number of columns wide the textbox should be displayed
+   * @param string $maxlength The maximum number of characters that should be allowed to be entered
+   * @param string $addttext Any additional text that should be added into the tag when rendered
    * @deprecated
    * @return string
    */	
@@ -1834,12 +1838,12 @@ abstract class CMSModule
    * Returns the html5 equivalent of an input textbox of type tel.  This is basically a nice little wrapper
    * to make sure that id's are placed in names and also that it's html5 compliant.
    *
-   * @param string The id given to the module on execution
-   * @param string The html name of the textbox
-   * @param string The predefined value of the textbox, if any
-   * @param string The number of columns wide the textbox should be displayed
-   * @param string The maximum number of characters that should be allowed to be entered
-   * @param string Any additional text that should be added into the tag when rendered
+   * @param string $id The id given to the module on execution
+   * @param string $name The html name of the textbox
+   * @param string $value The predefined value of the textbox, if any
+   * @param string $size The number of columns wide the textbox should be displayed
+   * @param string $maxlength The maximum number of characters that should be allowed to be entered
+   * @param string $addttext Any additional text that should be added into the tag when rendered
    * @deprecated
    * @return string
    */	
@@ -1853,12 +1857,12 @@ abstract class CMSModule
    * Returns the html5 equivalent of an input of type search.  This is basically a nice little wrapper
    * to make sure that id's are placed in names and also that it's html5 compliant.
    *
-   * @param string The id given to the module on execution
-   * @param string The html name of the textbox
-   * @param string The predefined value of the textbox, if any
-   * @param string The number of columns wide the textbox should be displayed
-   * @param string The maximum number of characters that should be allowed to be entered
-   * @param string Any additional text that should be added into the tag when rendered
+   * @param string $id The id given to the module on execution
+   * @param string $name The html name of the textbox
+   * @param string $value The predefined value of the textbox, if any
+   * @param string $size The number of columns wide the textbox should be displayed
+   * @param string $maxlength The maximum number of characters that should be allowed to be entered
+   * @param string $addttext Any additional text that should be added into the tag when rendered
    * @deprecated
    * @return string
    */
@@ -1872,12 +1876,12 @@ abstract class CMSModule
    * Returns the html5 equivalent of an input of type url.  This is basically a nice little wrapper
    * to make sure that id's are placed in names and also that it's xhtml compliant.
    *
-   * @param string The id given to the module on execution
-   * @param string The html name of the textbox
-   * @param string The predefined value of the textbox, if any
-   * @param string The number of columns wide the textbox should be displayed
-   * @param string The maximum number of characters that should be allowed to be entered
-   * @param string Any additional text that should be added into the tag when rendered
+   * @param string $id The id given to the module on execution
+   * @param string $name The html name of the textbox
+   * @param string $value The predefined value of the textbox, if any
+   * @param string $size The number of columns wide the textbox should be displayed
+   * @param string $maxlength The maximum number of characters that should be allowed to be entered
+   * @param string $addttext Any additional text that should be added into the tag when rendered
    * @deprecated
    * @return string
    */
@@ -1892,11 +1896,11 @@ abstract class CMSModule
    * Returns the xhtml equivalent of a file-selector field.  This is basically a nice little wrapper
    * to make sure that id's are placed in names and also that it's xhtml compliant.
    *
-   * @param string The id given to the module on execution
-   * @param string The html name of the textbox
-   * @param string The MIME-type to be accepted, default is all
-   * @param string The number of columns wide the textbox should be displayed
-   * @param string Any additional text that should be added into the tag when rendered
+   * @param string $id The id given to the module on execution
+   * @param string $name The html name of the textbox
+   * @param string $accept The MIME-type to be accepted, default is all
+   * @param string $size The number of columns wide the textbox should be displayed
+   * @param string $addttext Any additional text that should be added into the tag when rendered
    * @deprecated
    * @return string
    */
@@ -3047,7 +3051,7 @@ abstract class CMSModule
   public function DoEvent( $originator, $eventname, &$params )
   {
     if ($originator != '' && $eventname != '') {
-		$filename = dirname(dirname(dirname(__FILE__))) . '/modules/'.$this->GetName().'/event.' 
+		$filename = dirname(dirname(__DIR__)) . '/modules/'.$this->GetName().'/event.' 
 			. $originator . "." . $eventname . '.php';
 
 		if (@is_file($filename)) {

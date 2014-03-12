@@ -19,11 +19,17 @@
 #$Id: content.functions.php 6863 2011-01-18 02:34:48Z calguy1000 $
 
 /**
+ * This file contains a smarty resource handler for content pages.
+ *
+ * @internal
+ * @ignore
  * @package CMS
+ * @copyright Copyright (c) 2012, Robert Campbell <calguy1000@cmsmadesimple.org>
+ * @since 1.11
  */
 
 /**
- * A simple class for handling content templates (page template) smarty resources.
+ * A simple class for handling the content smarty resource.
  *
  * @package CMS
  * @author Robert Campbell

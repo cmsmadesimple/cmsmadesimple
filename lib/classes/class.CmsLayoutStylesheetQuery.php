@@ -19,20 +19,38 @@
 #$Id: class.global.inc.php 6939 2011-03-06 00:12:54Z calguy1000 $
 
 /**
+ * A class to perform advanced queries on the layout stylesheets.
+ *
+ * @since   2.0
  * @package CMS
  */
 
 /**
  * A class to represent a template query, and its results.
  *
- * @since 1.12
+ * @since 2.0
  * @author Robert Campbell <calguy1000@gmail.com>
+ * @see CmsDbQueryBase
+ *
  */
 class CmsLayoutStylesheetQuery extends CmsDbQueryBase
 {
+	/**
+	 * The default sort field.
+	 */
 	protected $_sortby = 'name';
+
+	/**
+	 * The default sort order
+	 */
 	protected $_sortorder = 'ASC';
 
+	/**
+	 * Execute the query in this object.
+	 *
+	 * @throws CmsSQLErrorException
+	 * @return void
+	 */
   public function execute()
   {
     if( !is_null($this->_rs) ) return;
@@ -94,6 +112,12 @@ class CmsLayoutStylesheetQuery extends CmsDbQueryBase
     $this->_totalmatchingrows = $db->GetOne('SELECT FOUND_ROWS()');
   }
 
+	/**
+	 * Return all of the matches for this query
+	 *
+	 * @throws CmsLogicExceptin
+	 * @return array Array of CmsLayoutStylesheet object
+	 */
   public function GetMatches()
   {
     $this->execute();

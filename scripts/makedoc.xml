@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<phpdoc>
+    <title>CMS Made Simple</title>
+    <parser>
+        <target>tmp/APIDOC-cache</target>
+        <extensions>
+            <extension>php</extension>
+            <extension>php3</extension>
+            <extension>phtml</extension>
+        </extensions>
+        <visibility></visibility>
+    </parser>
+    <transformer>
+        <target>APIDOC</target>
+    </transformer>
+    <logging>
+        <level>warn</level>
+        <paths>
+            <default>tmp/phpdoc-{DATE}.log</default>
+            <errors>tmp/phpdoc-errors-{DATE}.log</errors>
+        </paths>
+    </logging>
+    <transformations>
+        <template name="cmsms" />
+    </transformations>
+    <files>
+        <directory>lib</directory>
+        <ignore>adodb_lite/*</ignore>
+        <ignore>filemanager/*</ignore>
+        <ignore>jquery/*</ignore>
+        <ignore>lang/*</ignore>
+        <ignore>nls/*</ignore>
+        <ignore>phpmailer/*</ignore>
+        <ignore>smarty/*</ignore>
+        <ignore>lib/tasks/*</ignore>
+        <ignore>lib/classes/internal/*</ignore>
+        <ignore>xajax/*</ignore>
+        <ignore>html_entity_decode_php4.php</ignore>
+        <ignore>html_entity_decode_utf8.php</ignore>
+        <ignore>test.functions.php</ignore>
+        <ignore>autoloader.php</ignore>
+    </files>
+</phpdoc>

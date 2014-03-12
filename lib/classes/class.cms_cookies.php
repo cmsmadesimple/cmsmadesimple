@@ -35,6 +35,11 @@
 #END_LICENSE
 
 /**
+ * This file contains a class that makes working with cookies in CMSMS simple.
+ *
+ * @author Robert Campbell
+ * @copyright Copyright (c) 2010, Robert Campbell <calguy1000@cmsmadesimple.org>
+ * @since 1.10
  * @package CMS
  */
 
@@ -115,9 +120,9 @@ final class cms_cookies
   /**
    * Set a cookie
    *
-   * @param string The cookie name
-   * @param string The cookie value
-   * @param int    Unix timestamp of the time the cookie will expire.   By default cookies that expire when the browser closes will be created.
+   * @param string $key The cookie name
+   * @param string $value The cookie value
+   * @param int    $expire Unix timestamp of the time the cookie will expire.   By default cookies that expire when the browser closes will be created.
    * @return boolean
    */
   public static function set($key,$value,$expire = 0)
@@ -129,7 +134,7 @@ final class cms_cookies
   /**
    * Get the value of a cookie
    *
-   * @param string The cookie name
+   * @param string $key The cookie name
    * @return mixed.  Null if the cookie does not exist, otherwise a string containing the cookie value.
    */
   public static function get($key)
@@ -142,7 +147,7 @@ final class cms_cookies
    * Test if a cookie exists.
    *
    * @since 1.11
-   * @param string The cookie name.
+   * @param string $key The cookie name.
    * @return boolean
    */
   public static function exists($key)
@@ -154,7 +159,7 @@ final class cms_cookies
   /**
    * Erase a cookie
    *
-   * @param string The cookie name
+   * @param string $key The cookie name
    * @return void
    */
   public static function erase($key)

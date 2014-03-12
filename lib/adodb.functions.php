@@ -1,6 +1,8 @@
 <?php // -*- mode:php; tab-width:4; indent-tabs-mode:t; c-basic-offset:4; -*-
 
 /**
+ * A group of CMSMS related utility functions for accessing the adodb library.
+ *
  * @package CMS
  */
 

@@ -57,8 +57,24 @@ function cms_autoloader($classname)
     return;
   }
 
+  // standard internal classes
+  $fn = cms_join_path($config['root_path'],'lib','classes','internal',"class.{$classname}.php");
+  if( file_exists($fn) ) {
+    __cms_load($fn);
+    return;
+  }
+
+  // lowercase classes
   $lowercase = strtolower($classname);
   $fn = cms_join_path($config['root_path'],'lib','classes',"class.{$lowercase}.inc.php");
+  if( file_exists($fn) && $classname != 'Content' ) {
+    __cms_load($fn);
+    return;
+  }
+
+  // lowercase internal classes
+  $lowercase = strtolower($classname);
+  $fn = cms_join_path($config['root_path'],'lib','classes','interna',"class.{$lowercase}.inc.php");
   if( file_exists($fn) && $classname != 'Content' ) {
     __cms_load($fn);
     return;

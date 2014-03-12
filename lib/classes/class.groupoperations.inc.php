@@ -30,20 +30,35 @@
 include_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'class.group.inc.php');
 
 /**
- * Class for doing group related functions.  Maybe of the Group object functions are just wrappers around these.
+ * A singleton Class for doing group related functions.  
+ * Many of the Group object functions are just wrappers around these.
  *
  * @since 0.6
  * @package CMS
- * @version $Revision$
  * @license GPL
  */
-class GroupOperations
+final class GroupOperations
 {
+	/**
+	 * @ignore
+	 */
 	protected function __construct() {}
 
+	/**
+	 * @ignore
+	 */
 	private static $_instance;
+
+	/**
+	 * @ignore
+	 */
 	private $_perm_cache;
 
+	/**
+	 * Retrieve the single instance of this class
+	 *
+	 * @return GroupOperations
+	 */
 	public static function &get_instance()
 	{
 		if( !is_object(self::$_instance) ) self::$_instance = new GroupOperations();
@@ -173,6 +188,13 @@ class GroupOperations
 		return $result;
 	}
 
+	/**
+	 * Test if a group has the specified permission
+	 *
+	 * @param int $groupid The group id
+	 * @param string $perm The permission name
+	 * @return boolean
+	 */
 	public function CheckPermission($groupid,$perm)
 	{
 		$permid = CmsPermission::get_perm_id($perm);
@@ -189,6 +211,12 @@ class GroupOperations
 		return isset($this->_perm_cache[$groupid]) && in_array($permid,$this->_perm_cache[$groupid]);
 	}
 
+	/**
+	 * Grant a permission to a group
+	 *
+	 * @param int $groupid The group id
+	 * @param string $perm The permission name
+	 */
 	public function GrantPermission($groupid,$perm)
 	{
 		$permid = CmsPermission::get_perm_id($perm);
@@ -207,6 +235,12 @@ class GroupOperations
 		unset($this->_perm_cache);
 	}
 
+	/**
+	 * De-associate the specified permission with the group
+	 *
+	 * @param int $groupid The group id
+	 * @param string $perm The permission name
+	 */
 	public function RemovePermission($groupid,$perm)
 	{
 		$permid = CmsPermission::get_perm_id($perm);

@@ -52,7 +52,7 @@ interface CmsRegularTask
   /**
    * Test if a function should be executed given the supplied time argument
    *
-   * @param   int The time at which any comparisons for execution should be performed.  If empty the current time is assumed.
+   * @param   int $time The time at which any comparisons for execution should be performed.  If empty the current time is assumed.
    * @returns boolean TRUE IF the task should be executed, FALSE otherwise.
    */
   public function test($time = '');
@@ -61,7 +61,7 @@ interface CmsRegularTask
   /**
    * Execute a given task
    *
-   * @param  int The time at which the task should consider the execution occurred at.  Assume the current time if empty.
+   * @param  int $time The time at which the task should consider the execution occurred at.  Assume the current time if empty.
    * @return boolean TRUE on success, FALSE otherwise.
    */
   public function execute($time = '');
@@ -71,7 +71,7 @@ interface CmsRegularTask
    * Execute steps that should be taken on success of this task.
    * This method is called after the execute step if the execute step returned TRUE.
    *
-   * @param  int The time at which the task should consider the execution occurred at.  Assume the current time if empty.
+   * @param  int $time The time at which the task should consider the execution occurred at.  Assume the current time if empty.
    * @return void
    */
   public function on_success($time = '');
@@ -81,7 +81,7 @@ interface CmsRegularTask
    * Execute steps that should be taken on failure of this task.
    * This method is called after the execute step if the execute step returned FALSE.
    *
-   * @param  int The time at which the task should consider the execution occurred at.  Assume the current time if empty.
+   * @param  int $time The time at which the task should consider the execution occurred at.  Assume the current time if empty.
    * @return void
    */
   public function on_failure($time = '');

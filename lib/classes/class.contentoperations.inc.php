@@ -32,6 +32,7 @@
 /**
  * Class for static methods related to content
  *
+ * @abstract
  * @since 0.8
  * @package CMS
  * @version $Revision$
@@ -39,13 +40,44 @@
  */
 class ContentOperations
 {
+	/**
+	 * @ignore
+	 */
 	protected function __construct() {}
+
+	/**
+	 * @ignore
+	 */
 	private $_quickfind;
+
+	/**
+	 * @ignore
+	 */
 	private $_content_types;
+
+	/**
+	 * @ignore
+	 */
 	private $_default_content_id;
+
+	/**
+	 * @ignore
+	 */
 	private static $_instance;
+
+	/**
+	 * @ignore
+	 */
 	private $_authorpages;
+
+	/**
+	 * @ignore
+	 */
 	private $_ownedpages;
+
+	/**
+	 * @ignore
+	 */
 	private $_last_modified;
 
 	public static function &get_instance()

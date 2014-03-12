@@ -28,7 +28,7 @@
 /**
  * Temporarily override the current frontend language
  *
- * @string lang, the language to set.  If empty, the system will be restored to the default frontend language.
+ * @param string $lang The language to set.  If empty, the system will be restored to the default frontend language.
  * @deprecated
  */
 function cms_set_frontend_language($lang = '')
@@ -116,7 +116,7 @@ function get_encoding()
 /**
  * Retrieve a list of installed languages that is suitable for use in a dropdown
  *
- * @param boolean Optionally adds 'none' (translated to current language) to the top of the list.
+ * @param boolean $allow_none Optionally adds 'none' (translated to current language) to the top of the list.
  * @return associative array of lang keys and display strings.
  */
 function get_language_list($allow_none = true)

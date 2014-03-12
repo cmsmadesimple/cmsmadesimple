@@ -19,11 +19,14 @@
 #$Id: content.functions.php 6863 2011-01-18 02:34:48Z calguy1000 $
 
 /**
+ * File contains a custom resource class for smarty
+ *
+ * @ignore
  * @package CMS
  */
 
 
-/**
+/**o
  * A simple class to handle a module database template.
  * 
  * @ignore

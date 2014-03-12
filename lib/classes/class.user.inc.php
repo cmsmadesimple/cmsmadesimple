@@ -103,7 +103,7 @@ class User
 	 * Encrypts and sets password for the User
 	 *
 	 * @since 0.6.1
-	 * @param string The plaintext password.
+	 * @param string $password The plaintext password.
 	 */
 	function SetPassword($password)
 	{
