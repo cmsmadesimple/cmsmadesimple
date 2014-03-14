@@ -19,6 +19,7 @@
 #$Id: class.global.inc.php 6939 2011-03-06 00:12:54Z calguy1000 $
 
 /**
+ * A class and utilities for working with site preferences.
  * @package CMS
  */
 
@@ -31,120 +32,130 @@
  */
 final class cms_siteprefs
 {
-  private static $_prefs;
+	/**
+	 * @ignore
+	 */
+	private static $_prefs;
 
-  private function __construct() {}
+	/**
+	 * @ignore
+	 */
+	private function __construct() {}
 
-  private static function _read()
-  {
-    if( is_array(self::$_prefs) ) return;
-    $db = cmsms()->GetDb();
+	/**
+	 * @ignore
+	 */
+	private static function _read()
+	{
+		if( is_array(self::$_prefs) ) return;
+		$db = cmsms()->GetDb();
 
-	if( !$db ) return;
-    $query = 'SELECT sitepref_name,sitepref_value FROM '.cms_db_prefix().'siteprefs';
-    $dbr = $db->GetArray($query);
-    if( is_array($dbr) ) {
-		self::$_prefs = array();
-		for( $i = 0; $i < count($dbr); $i++ ) {
-			$row = $dbr[$i];
-			self::$_prefs[$row['sitepref_name']] = $row['sitepref_value'];
+		if( !$db ) return;
+		$query = 'SELECT sitepref_name,sitepref_value FROM '.cms_db_prefix().'siteprefs';
+		$dbr = $db->GetArray($query);
+		if( is_array($dbr) ) {
+			self::$_prefs = array();
+			for( $i = 0; $i < count($dbr); $i++ ) {
+				$row = $dbr[$i];
+				self::$_prefs[$row['sitepref_name']] = $row['sitepref_value'];
+			}
 		}
 	}
-  }
 
-  private static function _reset()
-  {
-    self::$_prefs = null;
-  }
-
-  /**
-   * Retrieve a site preference
-   *
-   * @param string The preference name
-   * @param string Optional default value
-   * @return string
-   */
-  public static function get($key,$dflt = '')
-  {
-    self::_read();
-    if( isset(self::$_prefs[$key]) )  return self::$_prefs[$key];
-    return $dflt;
-  }
-
-
-  /**
-   * Test if a site preference exists
-   *
-   * @param string The preference name
-   * @return boolean
-   */
-  public static function exists($key)
-  {
-    self::_read();
-    if( is_array(self::$_prefs) && in_array($key,array_keys(self::$_prefs)) ) {
-		return TRUE;
+	/**
+	 * @ignore
+	 */
+	private static function _reset()
+	{
+		self::$_prefs = null;
 	}
-    return FALSE;
-  }
 
-
-  /**
-   * Set a site preference
-   * 
-   * @param string The preference name
-   * @param string The preference value
-   * @return void
-   */
-  public static function set($key,$value)
-  {
-    $db = cmsms()->GetDb();
-    if( !self::exists($key) ) {
-		$query = 'INSERT INTO '.cms_db_prefix().'siteprefs (sitepref_name, sitepref_value) VALUES (?,?)';
-		$dbr = $db->Execute($query,array($key,$value));
+	/**
+	 * Retrieve a site preference
+	 *
+	 * @param string $key The preference name
+	 * @param string $dflt Optional default value
+	 * @return string
+	 */
+	public static function get($key,$dflt = '')
+	{
+		self::_read();
+		if( isset(self::$_prefs[$key]) )  return self::$_prefs[$key];
+		return $dflt;
 	}
-    else {
-		$query = 'UPDATE '.cms_db_prefix().'siteprefs SET sitepref_value = ? WHERE sitepref_name = ?';
-		$dbr = $db->Execute($query,array($value,$key));
+
+
+	/**
+	 * Test if a site preference exists
+	 *
+	 * @param string $key The preference name
+	 * @return boolean
+	 */
+	public static function exists($key)
+	{
+		self::_read();
+		if( is_array(self::$_prefs) && in_array($key,array_keys(self::$_prefs)) ) return TRUE;
+		return FALSE;
 	}
-    self::$_prefs[$key] = $value;
-  }
 
 
-  /**
-   * Remove a site preference
-   *
-   * @param string The preference name
-   * @param boolean Wether to use preference name approximation
-   * @return void
-   */
-  public static function remove($key,$like = FALSE)
-  {
-    $query = 'DELETE FROM '.cms_db_prefix().'siteprefs WHERE sitepref_name = ?';
-    if( $like ) {
-		$query = 'DELETE FROM '.cms_db_prefix().'siteprefs WHERE sitepref_name LIKE ?';
-		$key .= '%';
+	/**
+	 * Set a site preference
+	 * 
+	 * @param string $key The preference name
+	 * @param string $value The preference value
+	 * @return void
+	 */
+	public static function set($key,$value)
+	{
+		$db = cmsms()->GetDb();
+		if( !self::exists($key) ) {
+			$query = 'INSERT INTO '.cms_db_prefix().'siteprefs (sitepref_name, sitepref_value) VALUES (?,?)';
+			$dbr = $db->Execute($query,array($key,$value));
+		}
+		else {
+			$query = 'UPDATE '.cms_db_prefix().'siteprefs SET sitepref_value = ? WHERE sitepref_name = ?';
+			$dbr = $db->Execute($query,array($value,$key));
+		}
+		self::$_prefs[$key] = $value;
 	}
-    $db = cmsms()->GetDb();
-    $db->Execute($query,array($key));
-    self::_reset();
-  }
 
-  /**
-   * List preferences by prefix.
-   *
-   * @param string The prefix.
-   * @return mixed list of preferences name that match the prefix, or null
-   * @since 2.0
-   */
-  public static function list_by_prefix($prefix)
-  {
-	  if( !$prefix ) return;
-	  $query = 'SELECT sitepref_name FROM '.cms_db_prefix().'siteprefs WHERE sitepref_name LIKE ?';
-	  $db = cmsms()->GetDb();
-	  $dbr = $db->GetCol($query,array($prefix.'%'));
-	  if( is_array($dbr) && count($dbr) ) return $dbr;
-  }
-}
+
+	/**
+	 * Remove a site preference
+	 *
+	 * @param string $key The preference name
+	 * @param boolean $like Whether to use preference name approximation
+	 * @return void
+	 */
+	public static function remove($key,$like = FALSE)
+	{
+		$query = 'DELETE FROM '.cms_db_prefix().'siteprefs WHERE sitepref_name = ?';
+		if( $like ) {
+			$query = 'DELETE FROM '.cms_db_prefix().'siteprefs WHERE sitepref_name LIKE ?';
+			$key .= '%';
+		}
+		$db = cmsms()->GetDb();
+		$db->Execute($query,array($key));
+		self::_reset();
+	}
+
+	/**
+	 * List preferences by prefix.
+	 *
+	 * @param string $prefix
+	 * @return mixed list of preferences name that match the prefix, or null
+	 * @since 2.0
+	 */
+	public static function list_by_prefix($prefix)
+	{
+		if( !$prefix ) return;
+		$query = 'SELECT sitepref_name FROM '.cms_db_prefix().'siteprefs WHERE sitepref_name LIKE ?';
+		$db = cmsms()->GetDb();
+		$dbr = $db->GetCol($query,array($prefix.'%'));
+		if( is_array($dbr) && count($dbr) ) return $dbr;
+	}
+} // end of class
 
 #
 # EOF

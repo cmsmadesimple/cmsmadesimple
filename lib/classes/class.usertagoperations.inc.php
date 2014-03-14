@@ -34,21 +34,35 @@
  */
 final class UserTagOperations
 {
+	/**
+	 * @ignore
+	 */
 	private static $_instance;
+
+	/**
+	 * @ignore
+	 */
 	private $_cache = array();
 
+	/**
+	 * @ignore
+	 */
 	protected function __construct() {}
 
+	/**
+	 * Get a reference to thie only allowed instance of this class
+	 * @return UserTagOperations
+	 */
 	public static function &get_instance()
 	{
-		if( !isset(self::$_instance) )
-		{
-			self::$_instance = new UserTagOperations();
-		}
+		if( !isset(self::$_instance) ) self::$_instance = new UserTagOperations();
 		return self::$_instance;
 	}
 
 
+	/**
+	 * @ignore
+	 */
 	public function __call($name,$arguments)
 	{
 		$this->LoadUserTags();
@@ -58,7 +72,7 @@ final class UserTagOperations
 		$this->CallUserTag($name,$arguments);
 	}
 
-	/*
+	/**
 	 * Load all the information about user tags
 	 */
 	public function LoadUserTags()
@@ -79,16 +93,13 @@ final class UserTagOperations
 	
 	/**
 	 * Get a user tag record (by name) from the cache 
+	 * @internal
 	 */
 	private function _get_from_cache($name)
 	{
 		$this->LoadUserTags();
-		if( isset($this->_cache[$name]) )
-		{
-			return $this->_cache[$name];
-		}
-		foreach( $this->_cache as $tagname => $row )
-		{
+		if( isset($this->_cache[$name]) ) return $this->_cache[$name];
+		foreach( $this->_cache as $tagname => $row ) {
 			if( $name == $row['userplugin_id'] ) return $row;
 		}
 	}
@@ -97,7 +108,6 @@ final class UserTagOperations
 	 * Retrieve the body of a user defined tag
 	 *
 	 * @param string $name User defined tag name
-	 *
 	 * @return mixed If successfull, the body of the user tag (string).  If it fails, false
 	 */
 	function GetUserTag( $name )
@@ -110,7 +120,6 @@ final class UserTagOperations
 	 * Test if a user defined tag with a specific name exists
 	 *
 	 * @param string $name User defined tag name
-	 *
 	 * @return mixed If successfull the name of the user defined tag.  false otherwise
 	 * @since 1.10
 	 */
@@ -124,16 +133,17 @@ final class UserTagOperations
 
 	/**
 	 * Test if a plugin function by this name exists...
+	 *
+	 * @param string $name The name of the plugin to test
+	 * @param bool   $check_functions Test if already registered to smarty.
 	 */
 	function SmartyTagExists($name,$check_functions = true)
 	{
 		// get the list of smarty plugins that are known.
 		$config = cmsms()->GetConfig();
 		$phpfiles = glob($config['root_path'].'/plugins/function.*.php');
-		if( is_array($phpfiles) && count($phpfiles) )
-		{
-			for( $i = 0; $i < count($phpfiles); $i++ )
-			{
+		if( is_array($phpfiles) && count($phpfiles) ) {
+			for( $i = 0; $i < count($phpfiles); $i++ ) {
 				$fn = basename($phpfiles[$i]);
 				$parts = explode('.',$fn);
 				if( count($parts) < 3 ) continue;
@@ -143,15 +153,13 @@ final class UserTagOperations
 			}
 		}
 		
-		if( $check_functions )
-		{
+		if( $check_functions ) {
 			// registered by something else... maybe a module.
 			$smarty = cmsms()->GetSmarty();
 			if( $smarty->is_registered($name) ) return TRUE;
 		}
 
 		if( $this->UserTagExists($name) ) return TRUE;
-
 		return FALSE;
 	}
 
@@ -160,7 +168,7 @@ final class UserTagOperations
 	 *
 	 * @param string $name User defined tag name
 	 * @param string $text Body of user defined tag
-	 *
+	 * @param string $description Description for the user defined tag.
 	 * @return mixed If successful, true.  If it fails, false.
 	 */
 	function SetUserTag( $name, $text, $description )
@@ -199,7 +207,6 @@ final class UserTagOperations
 	 * Remove a named user defined tag from the database
 	 *
 	 * @param string $name User defined tag name
-	 *
 	 * @return mixed If successful, true.  If it fails, false.
 	 */
 	function RemoveUserTag( $name )
@@ -211,10 +218,7 @@ final class UserTagOperations
 		$result = &$db->Execute($query, array($name));
 
 		$this->_cache = array();
-		if ($result)
-		{
-			return true;
-		}
+		if ($result) return true;
 		
 		return false;
 	}
@@ -229,21 +233,26 @@ final class UserTagOperations
 	{
 		$this->LoadUserTags();
 		$plugins = array();
-		foreach( $this->_cache as $key => $row )
-		{
+		foreach( $this->_cache as $key => $row ) {
 			$plugins[$row['userplugin_id']] = $row['userplugin_name'];
 		}
 		asort($plugins);
 		return $plugins;
 	}
 	
-
+	
+	/**
+	 * Execute a user defined tag
+	 *
+	 * @param string $name The name of the user defined tag
+	 * @param array  $params Optional parameters.
+	 * @return mixed Output from the UDT, or FALSE.
+	 */
 	function CallUserTag($name, &$params)
 	{
 		$row = $this->_get_from_cache($name);
 		$result = FALSE;
-		if( $row )
-		{
+		if( $row ) {
 			$smarty = cmsms()->GetSmarty();
 			$functionname = $this->CreateTagFunction($name);
 			$result = call_user_func_array($functionname, array(&$params, &$smarty));
@@ -251,14 +260,18 @@ final class UserTagOperations
 		return $result;
 	}
 
-
+	/**
+	 * Given a UDT name create an executable function from it
+	 *
+	 * @internal
+	 * @param string $name The name of the user defined tag to operate with.
+	 */
 	function CreateTagFunction($name)
 	{
 		$row = $this->_get_from_cache($name);
 		if( !$row ) return;
 		$functionname = 'cms_user_tag_'.$name;
-		if( !function_exists($functionname) )
-		{
+		if( !function_exists($functionname) ) {
 			if( startswith($row['code'],'<?php') ) $row['code'] = substr($row['code'],5);
 			if( endswith($row['code'],'?>') ) $row['code'] = substr($row['code'],0,-2);
 			$code = 'function '.$functionname.'($params,&$smarty) {'.$row['code']."\n}";

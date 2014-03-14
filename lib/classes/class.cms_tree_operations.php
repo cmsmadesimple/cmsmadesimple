@@ -35,6 +35,7 @@
 #END_LICENSE
 
 /**
+ * A utility class to provide functions to populate a tree
  * @package CMS
  */
 
@@ -48,8 +49,10 @@
  */
 class cms_tree_operations
 {
+  /**
+   * @ignore
+   */
   private static $_keys;
-
 
   /**
    * Add a unique key to the key index

@@ -35,6 +35,7 @@
 #END_LICENSE
 
 /**
+ * Static classes providing convenience functions for admin console requests.
  * @package CMS
  */
 
@@ -42,7 +43,7 @@ if( !cmsms()->test_state(CmsApp::STATE_ADMIN_PAGE) )
   throw new CmsLogicException('Attempt to use cms_admin_utils class from an invalid request');
 
 /**
- * A Simple Static class providing various convenience utilities for admin requests.
+ * A Simple static class providing various convenience utilities for admin requests.
  *
  * @package CMS
  * @author  Robert Campbell
@@ -51,106 +52,122 @@ if( !cmsms()->test_state(CmsApp::STATE_ADMIN_PAGE) )
  */
 final class cms_admin_utils
 {
-  private function __construct() {}
+	/**
+	 * @ignore
+	 */
+	private function __construct() {}
 
-  public static function get_icon($icon)
-  {
-	  $theme = cms_utils::get_theme_object();
-	  if( !is_object($theme) ) return;
+	/**
+	 * Get the complete URL to an admin icon
+	 *
+	 * @param string $icon the basename of the desired icon
+	 * @return string
+	 */
+	public static function get_icon($icon)
+	{
+		$theme = cms_utils::get_theme_object();
+		if( !is_object($theme) ) return;
 
-	  $smarty = cmsms()->GetSmarty();
-	  $module = $smarty->get_template_vars('actionmodule');
+		$smarty = cmsms()->GetSmarty();
+		$module = $smarty->get_template_vars('actionmodule');
 
-	  $dirs = array();
-	  if( $module ) {
-		  $obj = cms_utils::get_module($module);
-		  if( is_object($obj) ) {
-			  $img = basename($icon);
-			  $dirs[] = array(cms_join_path($obj->GetModulePath(),'icons',"{$img}"),
-							  $obj->GetModuleURLPath()."/icons/{$img}");
-			  $dirs[] = array(cms_join_path($obj->GetModulePath(),'images',"{$img}"),
-							  $obj->GetModuleURLPath()."/images/{$img}");
-		  }
-	  }
-	  if( basename($icon) == $icon ) $icon = "icons/system/{$icon}";
-	  $config = cmsms()->GetConfig();
-	  $dirs[] = array(cms_join_path($config['root_path'],$config['admin_dir'],"themes/{$theme->themeName}/images/{$icon}"),
-					  $config['admin_url']."/themes/{$theme->themeName}/images/{$icon}");
+		$dirs = array();
+		if( $module ) {
+			$obj = cms_utils::get_module($module);
+			if( is_object($obj) ) {
+				$img = basename($icon);
+				$dirs[] = array(cms_join_path($obj->GetModulePath(),'icons',"{$img}"),
+								$obj->GetModuleURLPath()."/icons/{$img}");
+				$dirs[] = array(cms_join_path($obj->GetModulePath(),'images',"{$img}"),
+								$obj->GetModuleURLPath()."/images/{$img}");
+			}
+		}
+		if( basename($icon) == $icon ) $icon = "icons/system/{$icon}";
+		$config = cmsms()->GetConfig();
+		$dirs[] = array(cms_join_path($config['root_path'],$config['admin_dir'],"themes/{$theme->themeName}/images/{$icon}"),
+						$config['admin_url']."/themes/{$theme->themeName}/images/{$icon}");
 
-	  $fnd = null;
-	  foreach( $dirs as $one ) {
-		  if( file_exists($one[0]) ) $fnd = $one[1];
-	  }
-	  return $fnd;
-  }
+		$fnd = null;
+		foreach( $dirs as $one ) {
+			if( file_exists($one[0]) ) {
+				$fnd = $one[1];
+				break;
+			}
+		}
+		return $fnd;
+	}
 
-  public static function get_help_tag()
-  {
-	  if( !cmsms()->test_state(CmsApp::STATE_ADMIN_PAGE) ) return;
+	/**
+	 * Get a help tag for displaying inlne, popup help.
+	 *
+	 * This method accepts variable arguments.  If only one argument is passed it is assumed to be
+	 * the second key for the help tag and the first key is assumed to be the current module name.
+	 * If two arguments are passed the first argument is assumed to be key1 and the second to be key2.
+	 * 
+	 * @param string $keys,... [$key2|$key1,$key2]
+	 * @return string HTML content of the help tag
+	 */
+	public static function get_help_tag()
+	{
+		if( !cmsms()->test_state(CmsApp::STATE_ADMIN_PAGE) ) return;
 
-	  $params = array();
-	  $args = func_get_args();
-	  if( count($args) == 2 && is_string($args[0]) && is_string($args[1]) ) {
-		  $params['key1'] = $args[0];
-		  $params['key2'] = $args[1];
-	  }
-	  else if( count($args) == 1 && is_string($args[0]) ) {
-		  $params['key2'] = $args[0];
-	  }
-	  else {
-		  $params = $args[0];
-	  }
+		$params = array();
+		$args = func_get_args();
+		if( count($args) == 2 && is_string($args[0]) && is_string($args[1]) ) {
+			$params['key1'] = $args[0];
+			$params['key2'] = $args[1];
+		}
+		else if( count($args) == 1 && is_string($args[0]) ) {
+			$params['key2'] = $args[0];
+		}
+		else {
+			$params = $args[0];
+		}
 
-	  $theme = cms_utils::get_theme_object();
-	  if( !is_object($theme) ) return;
+		$theme = cms_utils::get_theme_object();
+		if( !is_object($theme) ) return;
 
-	  $key1 = '';
-	  $key2 = '';
-	  $title = '';
-	  foreach( $params as $key => $value ) {
-		  switch( $key ) {
-		  case 'key1':
-		  case 'realm':
-			  $key1 = trim($value);
-			  break;
-		  case 'key':
-		  case 'key2':
-		  case 'key':
-			  $key2 = trim($value);
-			  break;
-		  case 'title':
-			  $title = $value;
-		  }
-	  }
+		$key1 = '';
+		$key2 = '';
+		$title = '';
+		foreach( $params as $key => $value ) {
+			switch( $key ) {
+			case 'key1':
+			case 'realm':
+				$key1 = trim($value);
+				break;
+			case 'key':
+			case 'key2':
+			case 'key':
+				$key2 = trim($value);
+				break;
+			case 'title':
+				$title = $value;
+			}
+		}
 
-	  if( !$key1 ) {
-		  $smarty = cmsms()->GetSmarty();
-		  $module = $smarty->get_template_vars('actionmodule');
-		  if( $module ) {
-			  $key1 = $module;
-		  }
-		  else {
-			  $key1 = 'help';
-		  }
-	  }
-	  
-	  if( !$key1 ) 
-		return;
-	  
-	  $key = $key1;
-	  if( $key2 !== '' ) 
-		$key .= '__'.$key2;
-		
-	  if( $title === '' )
-		$title = $key2;
-	  
-	  $icon = self::get_icon('info.gif');
-	  if( !$icon ) 
-		return;
-	  
-	  return '<span class="cms_help" data-cmshelp-key="'.$key.'" data-cmshelp-title="'.$title.'"><img class="cms_helpicon" src="'.$icon.'" alt="'.$icon.'" /></span>';
+		if( !$key1 ) {
+			$smarty = cmsms()->GetSmarty();
+			$module = $smarty->get_template_vars('actionmodule');
+			if( $module ) {
+				$key1 = $module;
+			}
+			else {
+				$key1 = 'help';
+			}
+		}
 
-  }
+		if( !$key1 ) 	return;
+
+		$key = $key1;
+		if( $key2 !== '' ) $key .= '__'.$key2;
+		if( $title === '' ) $title = $key2;
+
+		$icon = self::get_icon('info.gif');
+		if( !$icon ) return;
+
+		return '<span class="cms_help" data-cmshelp-key="'.$key.'" data-cmshelp-title="'.$title.'"><img class="cms_helpicon" src="'.$icon.'" alt="'.$icon.'" /></span>';
+	}
 } // end of class
 
 #

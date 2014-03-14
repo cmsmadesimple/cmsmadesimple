@@ -35,6 +35,7 @@
 #END_LICENSE
 
 /**
+ * Contains definitions for the various CMSMS exception classes.
  * @package CMS
  */
 
@@ -43,8 +44,18 @@
  */
 abstract class CmsExtraDataException extends Exception
 {
+  /**
+   * @ignore
+   */
   private $_extra;
 
+  /**
+   * Constructor
+   * This method accepts variable arguments
+   *
+   * @param mixed $var,... msg[,code[,prev]]
+   * @param mixed $var,... msg[,code[,extra[,prev]]]
+   */
   public function __construct(/* var args */)
   {
     $args = $msg = $prev = NULL;
@@ -78,6 +89,10 @@ abstract class CmsExtraDataException extends Exception
     parent::__construct($msg,$code,$prev);
   }
 
+  /**
+   * Return extra data associated with the exception
+   * @return mixed
+   */
   public function GetExtraData()
   {
     return $this->_extra;
@@ -89,13 +104,17 @@ abstract class CmsExtraDataException extends Exception
  *
  * This exception can accept an integer 'code' for an exception or a language key.
  * if the string passed in contains a space it is not translated.
- * 
+ *
  * @package CMS
  * @author Robert Campbell (calguy1000@cmsmadesimple.org)
  * @since 1.10
  */
 class CmsException extends CmsExtraDataException 
 {
+  /**
+   * Constructor
+   * This method accepts variable arguments.
+   */
   public function __construct(/* var args */) {
     $args = func_get_args();
     parent::__construct($args);

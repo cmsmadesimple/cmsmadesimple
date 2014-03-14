@@ -20,13 +20,13 @@
 #$Id: class.user.inc.php 8109 2012-06-24 20:14:56Z calguy1000 $
 
 /**
- * User class definition
+ * Class and utilities for working with permissions.
  * @package CMS
  * @license GPL
  */
 
 /**
- * Generic permission class for dealing with a permission row.
+ * Simple class for dealing with a permission.
  *
  * @since 1.12
  * @package CMS
@@ -35,10 +35,24 @@
  */
 final class CmsPermission
 {
-	public static $_keys = array('id','source','name','text','create_date','modified_date');
+	/**
+	 * @ignore
+	 */
+	private static $_keys = array('id','source','name','text','create_date','modified_date');
+
+	/**
+	 * @ignore
+	 */
 	private $_data = array();
+
+	/**
+	 * @ignore
+	 */
 	private static $_perm_map;
 
+	/**
+	 * Constructor
+	 */
 	public function __construct()
 	{
 		$this->_data['source'] = '';
@@ -48,12 +62,18 @@ final class CmsPermission
 		$this->_data['modified_date'] = '';
 	}
 
+	/**
+	 * @ignore
+	 */
 	public function __get($key)
 	{
 		if( !in_array($key,self::$_keys) ) throw new CmsInvalidDataException($key.' is not a valid key for a CmsPermission Object');
 		if( isset($this->_data[$key]) ) return $this->_data[$key];
 	}
 
+	/**
+	 * @ignore
+	 */
 	public function __set($key,$value)
 	{
 		if( !in_array($key,self::$_keys) ) throw new CmsInvalidDataException($key.' is not a valid key for a CmsPermission Object');
@@ -115,15 +135,11 @@ final class CmsPermission
     
 		$query = 'DELETE FROM '.cms_db_prefix().'group_perms WHERE permission_id = ?';
 		$dbr = $db->Execute($query,array($this->_data['id']));
-		if( !$dbr ) {
-			throw new CmsSQLErrorException($db->sql.' -- '.$db->ErrorMsg());
-		}
+		if( !$dbr ) throw new CmsSQLErrorException($db->sql.' -- '.$db->ErrorMsg());
 
 		$query = 'DELETE FROM '.cms_db_prefix().'permissions WHERE permission_id = ?';
 		$dbr = $db->Execute($query,array($this->_data['id']));
-		if( !$dbr ) {
-			throw new CmsSQLErrorException($db->sql.' -- '.$db->ErrorMsg());
-		}
+		if( !$dbr ) throw new CmsSQLErrorException($db->sql.' -- '.$db->ErrorMsg());
 		unset($this->_data['id']);
 	}
 
@@ -172,13 +188,7 @@ final class CmsPermission
 		catch( CmsException $e ) {
 		}
 	}
-
-	public static function get_displayname($permname)
-	{
-		stack_trace();
-		die('not implemented');
-	}
-}
+} // end of class
 
 #
 # EOF

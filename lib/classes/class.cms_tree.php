@@ -35,6 +35,8 @@
 #END_LICENSE
 
 /**
+ * This file contains the definition for a simple PHP tree class
+ *
  * @package CMS
  */
 
@@ -49,22 +51,16 @@
 class cms_tree
 {
   /**
-   * A reference to the parent tree.
-   *
    * @ignore
    */
   private $_parent;
 
   /**
-   * A hash of the tags for this node in the tree.
-   *
    * @ignore
    */
   private $_tags;
 
   /**
-   * An array of children nodes.
-   *
    * @ignore
    */
   private $_children;
@@ -73,8 +69,8 @@ class cms_tree
   /**
    * Construct a new tree, or node of a tree.
    *
-   * @param string An optional key for a tag
-   * @param mixed  An optional value for the tag.
+   * @param string $key An optional key for a tag
+   * @param mixed  $value An optional value for the tag.
    */
   public function __construct($key = '',$value = '')
   {
@@ -94,9 +90,9 @@ class cms_tree
   /**
    * Find a tree node given a specfied tag and value.
    *
-   * @param string The tag name to search for
-   * @param mixed  The tag value to search for
-   * @param boolean Wether the value should be treated as case insensitive.
+   * @param string $tag_name The tag name to search for
+   * @param mixed  $value The tag value to search for
+   * @param boolean $case_insensitive Wether the value should be treated as case insensitive.
    * @return cms_tree or null on failure.
    */
   public function &find_by_tag($tag_name,$value,$case_insensitive = FALSE)
@@ -123,9 +119,7 @@ class cms_tree
 	  if( $this->has_children() ) {
 		  for( $i = 0; $i < count($this->_children); $i++ ) {
 			  $tmp = $this->_children[$i]->find_by_tag($tag_name,$value);
-			  if( $tmp ) {
-				  return $tmp;
-			  }
+			  if( $tmp ) return $tmp;
 		  }
 	  }
 
@@ -140,9 +134,7 @@ class cms_tree
    */
   public function has_children()
   {
-	  if( !is_array($this->_children) ) {
-		  return FALSE;
-      }
+	  if( !is_array($this->_children) ) return FALSE;
 	  return TRUE;
   }
 
@@ -150,14 +142,12 @@ class cms_tree
   /**
    * Set a tag value into this node
    *
-   * @param string Tag name
-   * @param mixed  Tag value
+   * @param string $key Tag name
+   * @param mixed  $value Tag value
    */
   public function set_tag($key,$value)
   {
-	  if( !$this->_tags ) {
-		  $this->_tags = array();
-      }
+	  if( !$this->_tags ) $this->_tags = array();
 	  $this->_tags[$key] = $value;
   }
 
@@ -165,7 +155,7 @@ class cms_tree
   /**
    * Retrieve a tag for this node.
    *
-   * @param string The tag name
+   * @param string $key The tag name
    * @return mixed The tag value, or null
    */
   public function &get_tag($key)
@@ -187,8 +177,8 @@ class cms_tree
    * Use this method with caution, as it is very easy to break your tree, corrupt memory
    * and have tree nodes hanging out there with no parents.
    *
-   * @param cms_tree Reference to the node to be removed.
-   * @param boolean  Wether to recursively search children.
+   * @param cms_tree $node Reference to the node to be removed.
+   * @param boolean  $search_children Wether to recursively search children.
    * @return boolean
    */
   protected function remove_node(cms_tree &$node, $search_children = false)
@@ -222,7 +212,6 @@ class cms_tree
   public function remove()
   {
 	  if( is_null($this->_parent) ) return FALSE;
-
 	  return $this->_parent->remove_node($this);
   }
 
@@ -252,14 +241,12 @@ class cms_tree
   /**
    * Add the specified node as a child to this node.
    *
-   * @param cms_tree The node to add
+   * @param cms_tree $node The node to add
    * @return void
    */
   public function add_node(cms_tree &$node)
   {
-	  if( !is_array($this->_children) ) {
-		  $this->_children = array();
-      }
+	  if( !is_array($this->_children) ) $this->_children = array();
 
 	  for( $i = 0; $i < count($this->_children); $i++ ) {
 		  if( $this->_children[$i] == $node ) return FALSE;
@@ -276,9 +263,7 @@ class cms_tree
    */
   public function count_children()
   {
-	  if( $this->has_children() ) {
-		  return count($this->_children);
-      }
+	  if( $this->has_children() ) return count($this->_children);
 	  return 0;
   }
 
@@ -290,9 +275,7 @@ class cms_tree
    */
   public function count_siblings()
   {
-	  if( $this->_parent ) {
-		  return $this->_parent->count_children();
-      }
+	  if( $this->_parent ) return $this->_parent->count_children();
 	  return 1;
   }
 

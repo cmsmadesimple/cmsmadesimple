@@ -41,17 +41,34 @@ require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'class.user.inc.php');
  */
 class UserOperations
 {
+	/**
+	 * @ignore
+	 */
 	protected function __construct() {}
 
+	/**
+	 * @ignore
+	 */
 	private static $_instance;
+
+	/**
+	 * @ignore
+	 */
 	private static $_user_groups;
+
+	/**
+	 * @ignore
+	 */
 	private $_users;
 
+	/**
+	 * Get the reference to the only instance of this object
+	 *
+	 * @return UserOperations
+	 */
 	public static function &get_instance()
 	{
-		if( !is_object(self::$_instance) ) {
-			self::$_instance = new UserOperations();
-		}
+		if( !is_object(self::$_instance) ) self::$_instance = new UserOperations();
 		return self::$_instance;
 	}
 
@@ -59,6 +76,8 @@ class UserOperations
 	/**
 	 * Gets a list of all users
 	 *
+	 * @param int $limit The maximum number of users to return
+	 * @param int $offset The offset
 	 * @returns array An array of User objects
 	 * @since 0.6.1
 	 */
@@ -99,7 +118,7 @@ class UserOperations
 	 * Gets a list of all users in a given group
 	 *
 	 * @param mixed $groupid Group for the loaded users
-	 * @returns array An array of User objects
+	 * @return array An array of User objects
 	 */
 	function &LoadUsersInGroup($groupid)
 	{
@@ -133,14 +152,12 @@ class UserOperations
 	 * @param mixed $password Password to check against
 	 * @param mixed $activeonly Only load the user if they are active
 	 * @param mixed $adminaccessonly Only load the user if they have admin access
-	 *
-	 * @returns mixed If successful, the filled User object.  If it fails, it returns false.
+	 * @return mixed If successful, the filled User object.  If it fails, it returns false.
 	 * @since 0.6.1
 	 */
 	function &LoadUserByUsername($username, $password = '', $activeonly = true, $adminaccessonly = false)
 	{
 		$result = false;
-
 		$gCms = cmsms();
 		$db = $gCms->GetDb();
 
@@ -166,17 +183,11 @@ class UserOperations
 			$where[] = "admin_access = 1";
 		}
 
-		if( !empty($joins) ) {
-		    $query .= ' LEFT JOIN '.implode(' LEFT JOIN ',$joins);
-		}
-		if( !empty($where) ) {
-		    $query .= ' WHERE '.implode(' AND ',$where);
-		}
+		if( !empty($joins) ) $query .= ' LEFT JOIN '.implode(' LEFT JOIN ',$joins);
+		if( !empty($where) ) $query .= ' WHERE '.implode(' AND ',$where);
 
 		$id = $db->GetOne($query,$params);
-		if( $id ) {
-			return self::LoadUserByID($id);
-		}
+		if( $id ) return self::LoadUserByID($id);
 
 		return $result;
 	}
@@ -185,8 +196,7 @@ class UserOperations
 	 * Loads a user by user id.
 	 *
 	 * @param mixed $id User id to load
-	 *
-	 * @returns mixed If successful, the filled User object.  If it fails, it returns false.
+	 * @return mixed If successful, the filled User object.  If it fails, it returns false.
 	 * @since 0.6.1
 	 */
 	function &LoadUserByID($id)
@@ -218,9 +228,8 @@ class UserOperations
 	/**
 	 * Saves a new user to the database.
 	 *
-	 * @param mixed $usre User object to save
-	 *
-	 * @returns mixed The new user id.  If it fails, it returns -1.
+	 * @param mixed $user User object to save
+	 * @return mixed The new user id.  If it fails, it returns -1.
 	 * @since 0.6.1
 	 */
 	function InsertUser($user)
@@ -239,9 +248,7 @@ class UserOperations
 		$new_user_id = $db->GenID(cms_db_prefix()."users_seq");
 		$query = "INSERT INTO ".cms_db_prefix()."users (user_id, username, password, active, first_name, last_name, email, admin_access, create_date, modified_date) VALUES (?,?,?,?,?,?,?,?,".$time.",".$time.")";
 		$dbresult = $db->Execute($query, array($new_user_id, $user->username, $user->password, $user->active, $user->firstname, $user->lastname, $user->email, 1)); //Force admin access on
-		if ($dbresult !== false) {
-			$result = $new_user_id;
-		}
+		if ($dbresult !== false) $result = $new_user_id;
 
 		return $result;
 	}
@@ -249,15 +256,13 @@ class UserOperations
 	/**
 	 * Updates an existing user in the database.
 	 *
-	 * @param mixed $user User object to save
-	 *
-	 * @returns mixed If successful, true.  If it fails, false.
 	 * @since 0.6.1
+	 * @param mixed $user User object to save
+	 * @return mixed If successful, true.  If it fails, false.
 	 */
 	function UpdateUser($user)
 	{
 		$result = false; 
-
 		$gCms = cmsms();
 		$db = $gCms->GetDb();
 
@@ -270,9 +275,7 @@ class UserOperations
 		$query = "UPDATE ".cms_db_prefix()."users SET username = ?, password = ?, active = ?, modified_date = ".$time.", first_name = ?, last_name = ?, email = ?, admin_access = ? WHERE user_id = ?";
 		#$dbresult = $db->Execute($query, array($user->username, $user->password, $user->active, $user->firstname, $user->lastname, $user->email, $user->adminaccess, $user->id));
 		$dbresult = $db->Execute($query, array($user->username, $user->password, $user->active, $user->firstname, $user->lastname, $user->email, 1, $user->id));
-		if ($dbresult !== false) {
-			$result = true;
-		}
+		if ($dbresult !== false) $result = true;
 
 		return $result;
 	}
@@ -280,10 +283,9 @@ class UserOperations
 	/**
 	 * Deletes an existing user from the database.
 	 *
-	 * @param mixed $id Id of the user to delete
-	 *
-	 * @returns mixed If successful, true.  If it fails, false.
 	 * @since 0.6.1
+	 * @param mixed $id Id of the user to delete
+	 * @returns mixed If successful, true.  If it fails, false.
 	 */
 	function DeleteUserByID($id)
 	{
@@ -291,7 +293,6 @@ class UserOperations
  		if( !check_permission(get_userid(),'Manage Users') ) return false;
 	
 		$result = false;
-
 		$gCms = cmsms();
 		$db = $gCms->GetDb();
 
@@ -307,25 +308,20 @@ class UserOperations
 		$query = "DELETE FROM ".cms_db_prefix()."userprefs where user_id = ?";
 		$dbresult = $db->Execute($query, array($id));
 
-		if ($dbresult !== false) {
-			$result = true;
-		}
-
+		if ($dbresult !== false) $result = true;
 		return $result;
 	}
 
 	/**
 	 * Show the number of pages the given user's id owns.
 	 *
-	 * @param mixed $id Id of the user to count
-	 *
-	 * @returns mixed Number of pages they own.  0 if any problems.
 	 * @since 0.6.1
+	 * @param mixed $id Id of the user to count
+	 * @return mixed Number of pages they own.  0 if any problems.
 	 */
 	function CountPageOwnershipByID($id)
 	{
 		$result = 0;
-
 		$gCms = cmsms();
 		$db = $gCms->GetDb();
 
@@ -334,27 +330,29 @@ class UserOperations
 
 		if ($dbresult && $dbresult->RecordCount() > 0) {
 			$row = $dbresult->FetchRow();
-			if (isset($row["count"])) {
-				$result = $row["count"];
-			}
+			if (isset($row["count"])) $result = $row["count"];
 		}
 
 		return $result;
 	}
 
-	function GenerateDropdown($currentuserid='', $name='ownerid')
+	/**
+	 * Generate an HTML select element containing a user list
+	 *
+	 * @deprecated
+	 * @param int $currentuserid
+	 * @param string $name The HTML element name.
+	 */
+	function GenerateDropdown($currentuserid=null, $name='ownerid')
 	{
 		$result = '';
-
 		$allusers = $this->LoadUsers();
 
 		if (count($allusers) > 0) {
 			$result .= '<select name="'.$name.'">';
 			foreach ($allusers as $oneuser) {
 				$result .= '<option value="'.$oneuser->id.'"';
-				if ($oneuser->id == $currentuserid) {
-					$result .= ' selected="selected"';
-				}
+				if ($oneuser->id == $currentuserid) $result .= ' selected="selected"';
 				$result .= '>'.$oneuser->username.'</option>';
 			}
 			$result .= '</select>';
@@ -369,7 +367,7 @@ class UserOperations
 	 *
 	 * @param int $uid User ID to test
 	 * @param int $gid Group ID to test
-	 * @returns true if test passes, false otherwise
+	 * @return true if test passes, false otherwise
 	 */
 	function UserInGroup($uid,$gid)
 	{
@@ -378,6 +376,12 @@ class UserOperations
 		return FALSE;
 	}
 
+	/**
+	 * Test if the specified user is a member of the admin group, or is the first user account
+	 *
+	 * @param int $uid
+	 * @return bool
+	 */
 	public function IsSuperuser($uid)
 	{
 		if( $uid == 1 ) return TRUE;
@@ -388,6 +392,12 @@ class UserOperations
 		return FALSE;
 	}
 
+	/**
+	 * Get the ids of all groups to which the user belongs.
+	 *
+	 * @param int $uid
+	 * @return array
+	 */
 	function GetMemberGroups($uid)
 	{
 		if( !is_array(self::$_user_groups) || !isset(self::$_user_groups[$uid]) ) {
@@ -400,6 +410,12 @@ class UserOperations
 		return self::$_user_groups[$uid];
 	}
 
+	/**
+	 * Add the user to the specified group
+	 *
+	 * @param int $uid
+	 * @param int $gid
+	 */
 	function AddMemberGroup($uid,$gid)
 	{
 		$uid = (int)$uid;
@@ -415,6 +431,15 @@ class UserOperations
 		if( isset(self::$_user_groups[$uid]) ) unset(self::$_user_groups[$uid]);
 	}
 
+	/**
+	 * Test if the user has the specified permission
+	 *
+	 * Given the users member groups, test if any of those groups have the specified permission.
+	 * 
+	 * @param int $userid
+	 * @param string $permname
+	 * @return bool
+	 */
 	public function CheckPermission($userid,$permname)
 	{
 		if( $userid <= 0 ) return FALSE;

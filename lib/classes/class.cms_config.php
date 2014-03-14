@@ -19,11 +19,16 @@
 #$Id$
 
 /**
+ * This file contains the class that manages the CMSMS config.php file
+ *
  * @package CMS
+ * @author Robert Campbell (calguy1000@cmsmadesimple.org)
  */
 
 /**
- * A singleton class for interacting with the CMSMS config.php file
+ * A singleton class for interacting with the CMSMS config.php file.
+ *
+ * This class usses the ArrayAccess interface to behave like a PHP array.
  *
  * @since 1.9
  * @package CMS
@@ -34,15 +39,36 @@ final class cms_config implements ArrayAccess
   const TYPE_STRING = 'STRING';
   const TYPE_INT = 'INT';
   const TYPE_BOOL = 'BOOL';
-  
+
+  /**
+   * ignore
+   */
   private static $_instance;
+
+  /**
+   * ignore
+   */
   private $_types;
+
+  /**
+   * ignore
+   */
   private $_data = array();
+
+  /**
+   * ignore
+   */
   private $_cache = array();
 
-  // this is a singleton.
+
+  /**
+   * ignore
+   */
   private function __construct()  {}
 
+  /**
+   * Retrieve the maximum file upload size (in bytes)
+   */
   private function get_upload_size()
   {
     $maxFileSize = ini_get('upload_max_filesize');
@@ -68,6 +94,9 @@ final class cms_config implements ArrayAccess
     return $maxFileSize;
   }
 
+  /**
+   * @ignore
+   */
   private function load_config()
   {
     $this->_types = array();
@@ -181,13 +210,17 @@ final class cms_config implements ArrayAccess
     return self::$_instance;
   }
 
-
+  /**
+   * @ignore
+   */
   public function offsetExists($key)
   {
     return isset($this->_types[$key]) || isset($this->_data[$key]);
   }
 
-
+  /**
+   * @ignore
+   */
   public function offsetGet($key)
   {
 	  // hardcoded config vars
@@ -371,6 +404,9 @@ final class cms_config implements ArrayAccess
 	  }
   }
 
+  /**
+   * @ignore
+   */
   public function offsetSet($key,$value)
   {
 	global $CMS_INSTALL_PAGE;
@@ -381,13 +417,17 @@ final class cms_config implements ArrayAccess
     $this->_data[$key] = $value;
   }
 
-
+  /**
+   * @ignore
+   */
   public function offsetUnset($key)
   {
     trigger_error('Unsetting config variable '.$key.' is invalid',E_USER_ERROR);
   }
 
-
+  /**
+   * @ignore
+   */
   private function _printable_value($key,$value)
   {
 	  $type = self::TYPE_STRING;
@@ -416,8 +456,8 @@ final class cms_config implements ArrayAccess
    * before overwriting.
    *
    *
-   * @param boolean indicates whether comments should be stored in the config.php file. 
-   * @param string  An optional complete file specification.  If not specified the standard config file location will be used.
+   * @param boolean $verbose indicates whether comments should be stored in the config.php file. 
+   * @param string  $filename An optional complete file specification.  If not specified the standard config file location will be used.
    */
   public function save($verbose = true,$filename = '')
   {
@@ -444,18 +484,27 @@ final class cms_config implements ArrayAccess
       }
   }
 
+  /**
+   * Returns either the http root url or the https root url depending upon the request mode.
+   */
   public function smart_root_url()
   {
 	  if( isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' ) return $this->offsetGet('ssl_url');
 	  return $this->offsetGet('root_url');
   }
 
+  /**
+   * Returns either the http uploads url or the https uploads url depending upon the request mode.
+   */
   public function smart_uploads_url()
   {
 	  if( isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' ) return $this->offsetGet('ssl_uploads_url');
 	  return $this->offsetGet('uploads_url');
   }
 
+  /**
+   * Returns either the http image uploads url or the https image uploads url depending upon the request mode.
+   */
   public function smart_image_uploads_url()
   {
 	  if( isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' ) return $this->offsetGet('ssl_image_uploads_url');

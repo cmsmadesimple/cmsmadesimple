@@ -36,7 +36,14 @@
  */
 class CmsRegularTaskHandler
 {
+	/**
+	 * @ignore
+	 */
 	private function __construct() {}
+
+	/**
+	 * @ignore
+	 */
 	private static $_tasks;
 
 	/**
@@ -44,6 +51,7 @@ class CmsRegularTaskHandler
 	 * for tack files, and also ask modules for tasks that they support.  Modules exporting tasks
 	 * should create and return a task object.
 	 *
+	 * @internal
 	 * @return void
 	 */
 	private static function get_tasks()
@@ -101,6 +109,7 @@ class CmsRegularTaskHandler
 	 *
 	 * @param integer $time The time that should be considered for all tests, if not specified the current time is used.
 	 * @return void.
+	 * @internal
 	 */
   private static function execute($time = '')
   {
@@ -127,6 +136,8 @@ class CmsRegularTaskHandler
 
   /**
    * Cleanup in memory tasks
+   *
+   * @internal
    */
   private static function cleanup()
   {
@@ -141,7 +152,6 @@ class CmsRegularTaskHandler
    * This method checks to see if the last time that tasks were handled was
    * outside of its granularity window.  If it is, then the tasks are queried
    * and executed.
-   *
    */
   public static function handle_tasks()
   {

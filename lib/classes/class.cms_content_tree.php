@@ -35,6 +35,8 @@
 #END_LICENSE
 
 /**
+ * Classes and utilities for managing the CMSMS content tree.
+ *
  * @package CMS
  */
 
@@ -50,14 +52,14 @@
  */
 class cms_content_tree extends cms_tree
 {
-  /**
-   * Find a tree node given a specfied tag and value.
-   *
-   * @param string The tag name to search for
-   * @param mixed  The tag value to search for
-   * @param boolean Wether the value should be treated as case insensitive.
-   * @return cms_tree or null on failure.
-   */
+	/**
+	 * Find a tree node given a specfied tag and value.
+	 *
+	 * @param string $tag_name The tag name to search for
+	 * @param mixed  $value The tag value to search for
+	 * @param boolean $case_insensitive Wether the value should be treated as case insensitive.
+	 * @return cms_tree
+	 */
 	public function &find_by_tag($tag_name,$value,$case_insensitive = FALSE)
 	{
 		if( $tag_name == 'id' && $case_insensitive == FALSE && ($this->get_parent() == null || $this->get_tag('id') == '') ) {
@@ -69,10 +71,10 @@ class cms_content_tree extends cms_tree
 
 	/**
 	 * Retrieve a node by it's id.
-	 *
 	 * A backwards compatibility method.
 	 *
 	 * @deprecated
+	 * @param int $id
 	 * @return cms_content_tree
 	 */
 	public function sureGetNodeById($id)
@@ -87,6 +89,7 @@ class cms_content_tree extends cms_tree
 	 * A backwards compatibility method.
 	 *
 	 * @deprecated
+	 * @param int $id
 	 * @return cms_content_tree
 	 */
 	public function getNodeById($id)
@@ -101,6 +104,7 @@ class cms_content_tree extends cms_tree
 	 * A backwards compatibility method.
 	 *
 	 * @deprecated
+	 * @param string $alias
 	 * @return cms_content_tree
 	 */
 	public function sureGetNodeByAlias($alias)
@@ -117,6 +121,7 @@ class cms_content_tree extends cms_tree
 	 * A backwards compatibility method.
 	 *
 	 * @deprecated
+	 * @param string $alias
 	 * @return cms_content_tree
 	 */
 	public function getNodeByAlias($alias)
@@ -128,6 +133,7 @@ class cms_content_tree extends cms_tree
 	/**
 	 * Retrieve a node by hierarchy position.
 	 *
+	 * @param string $position
 	 * @return cms_content_tree or null.
 	 */
 	function getNodeByHierarchy($position)
@@ -163,8 +169,8 @@ class cms_content_tree extends cms_tree
 	 *
 	 * @deprecated
 	 * @see cms_tree::set_tag
-	 * @param string The tag name/key
-	 * @param mixed  The tag value
+	 * @param string $key The tag name/key
+	 * @param mixed  $value The tag value
 	 */
 	public function setTag($key,$value)
 	{
@@ -194,7 +200,7 @@ class cms_content_tree extends cms_tree
 	 *
 	 * @deprecated
 	 * @see cms_tree::get_tag('id')
-	 * @param  string Tag name/key
+	 * @param  string $key Tag name/key
 	 * @return mixed Node value.
 	 */
 	public function &getTag($key = 'id')
@@ -240,9 +246,9 @@ class cms_content_tree extends cms_tree
 	 * This method will return the content object associated with this node, loading it
 	 * if necessary, and placing it in the cache for subsequent requests.
 	 *
-	 * @param bool Optionally load all child proeprties for the content object if loading is required.
-	 * @param bool Optionally load all the siblings for the selected content object at the same time (a preformance optimization)
-	 * @param bool If loading siblings, include inactive/disabled pages.
+	 * @param bool $deep load all child proeprties for the content object if loading is required.
+	 * @param bool $loadsiblings load all the siblings for the selected content object at the same time (a preformance optimization)
+	 * @param bool $loadall If loading siblings, include inactive/disabled pages.
 	 */
 	public function &getContent($deep = false,$loadsiblings = true,$loadall = false)
 	{
@@ -319,9 +325,9 @@ class cms_content_tree extends cms_tree
 	 *
 	 * This method takes advantage of the content cache.
 	 *
-	 * @param boolean Optionally load the properties of the children (only used when loadcontent is true)
-	 * @param boolean Load all children, including inactive/disabled ones (only used when loadcontent is true)
-	 * @param boolean Load content objects for children
+	 * @param boolean $deep Optionally load the properties of the children (only used when loadcontent is true)
+	 * @param boolean $all Load all children, including inactive/disabled ones (only used when loadcontent is true)
+	 * @param boolean $loadcontent Load content objects for children
 	 * @return Array of cms_tree objects.
 	 */
 	public function &getChildren($deep = false,$all = false,$loadcontent = true)
@@ -402,6 +408,9 @@ class cms_content_tree extends cms_tree
 		}
 	}
 
+	/**
+	 * @ignore
+	 */
 	private function _getHierarchyArray()
 	{
 		$list = array();
@@ -414,6 +423,11 @@ class cms_content_tree extends cms_tree
 		return $list;
 	}
 
+	/**
+	 * Get the hierarchy position of this node
+	 *
+	 * @return string
+	 */
 	public function getHierarchy()
 	{
 		if( ($hier = $this->get_tag('hierarchy')) != '' ) return $hier;

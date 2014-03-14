@@ -19,11 +19,12 @@
 #$Id$
 
 /**
+ * This file contains a class that defines a bookmark in the CMSMS admin console.
  * @package CMS 
  */
 
 /**
- * Bookmark class for admin
+ * Bookmark class for the CMSMS admin console.
  *
  * @package CMS
  * @version $Revision$

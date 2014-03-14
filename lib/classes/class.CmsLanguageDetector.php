@@ -36,8 +36,6 @@
  */
 abstract class CmsLanguageDetector
 {
-  public function __construct() {}
-
   /**
    * Abstract function to determine a language.
    * This method may use cookies, session data, user preferences, values from the url

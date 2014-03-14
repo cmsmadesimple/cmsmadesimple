@@ -34,18 +34,60 @@
  */
 class CmsNls
 {
+
+  /**
+   * @ignore
+   */
   protected $_isocode;
+
+  /**
+   * @ignore
+   */
   protected $_locale;
+
+  /**
+   * @ignore
+   */
   protected $_fullname;
+
+  /**
+   * @ignore
+   */
   protected $_encoding;
+
+  /**
+   * @ignore
+   */
   protected $_aliases;
+
+  /**
+   * @ignore
+   */
   protected $_display;
+
+  /**
+   * @ignore
+   */
   protected $_key;
+
+  /**
+   * @ignore
+   */
   protected $_direction;
+
+  /**
+   * @ignore
+   */
   protected $_htmlarea;
 
-  public function __construct() {}
-
+  /**
+   * Test if this NLS object matches the passed in string
+   *
+   * Matches are achieved by checking name, isocode, fullname, and then aliases
+   * 
+   * @param string $str The test string
+   * @return boolean
+   */
   public function matches($str)
   {
     if( $str == $this->name() ) return TRUE;
@@ -61,38 +103,66 @@ class CmsNls
     return FALSE;
   }
 
+  /**
+   * Return the name of this Nls object
+   * @return string
+   */
   public function name()
   {
     return $this->_key;
   }
 
+  /**
+   * Return this isocode of this Nls object
+   * @return string
+   */
   public function isocode()
   {
     if( !$this->_isocode ) return substr($this->_fullname,0,2);
     return $this->_isocode;
   }
 
+  /**
+   * Return the display string for this Nls object
+   * @return string
+   */
   public function display()
   {
     if( $this->_display ) return $this->_display;
   }
 
+  /**
+   * Return the locale string for this Nls object
+   * @return string
+   */
   public function locale()
   {
     return $this->_locale;
   }
 
+  /**
+   * Return the encoding for this Nls object (or UTF-8)
+   * @return string
+   */
   public function encoding()
   {
     if( !$this->_encoding ) return 'UTF-8';
     return $this->_encoding;
   }
 
+  /**
+   * Return the full name of this Nls object
+   * @return string
+   */
   public function fullname()
   {
     if( $this->_fullname ) return $this->_fullname;
   }
 
+  /**
+   * Return the aliases associated with this Nls object
+   * @return mixed array of aliases, or null
+   */
   public function aliases()
   {
     if( $this->_aliases ) {
@@ -101,23 +171,44 @@ class CmsNls
     }
   }
 
+  /**
+   * Return the key associated with this Nls object
+   * @return string
+   */
   public function key()
   {
     return $this->_key;
   }
 
+  /**
+   * Return the direction of this Nls object (ltr or rtl)
+   * @return string
+   */
   public function direction()
   {
     if( $this->_direction ) return $this->_direction;
     return 'ltr';
   }
 
+  /**
+   * Return the first two characters of the isocode for this Nls Object
+   * This is used typically for WYSIWYG text editors.
+   *
+   * @return string
+   */
   public function htmlarea()
   {
     if( $this->_htmlarea ) return $this->_htmlarea;
     return substr($this->_fullname,0,2);
   }
 
+  /**
+   * Create an Nls object from a compatible array.
+   *
+   * @internal
+   * @ignore
+   * @param array $data
+   */
   public static function &from_array($data)
   {
     $obj = new CmsNls();
@@ -132,9 +223,7 @@ class CmsNls
     }
 
     // get the display value
-    if( isset($data['language'][$obj->_key]) ) {
-      $obj->_display = $data['language'][$obj->_key];
-    }
+    if( isset($data['language'][$obj->_key]) ) $obj->_display = $data['language'][$obj->_key];
 
     // get the isocode?
     if( isset($data['isocode'][$obj->_key]) ) {

@@ -35,7 +35,6 @@ include_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'class.bookmark.inc.php')
  * are just wrappers around these.
  *
  * @package CMS
- * @version $Revision$
  * @license GPL
  */
 class BookmarkOperations
@@ -87,6 +86,7 @@ class BookmarkOperations
 	/**
 	 * Gets a list of all bookmarks for a given user
 	 *
+	 * @param int $user_id The desired user id.
 	 * @return array An array of Bookmark objects
 	 */
 	function LoadBookmarks($user_id)

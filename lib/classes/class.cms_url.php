@@ -35,6 +35,8 @@
 #END_LICENSE
 
 /**
+ * This file contains the cms_url class.
+ *
  * @package CMS
  */
 
@@ -66,7 +68,7 @@ class cms_url
   /**
    * Constructor
    * 
-   * @param string the url to work with
+   * @param string $url the url to work with
    */
   public function __construct($url = '')
   {
@@ -126,7 +128,7 @@ class cms_url
   /**
    * Set the URL scheme
    *
-   * @param string The url scheme.
+   * @param string $val The url scheme.
    */
   public function set_scheme($val)
   {
@@ -148,7 +150,7 @@ class cms_url
   /**
    * Set the URL host
    *
-   * @param string The url hostname.
+   * @param string $val The url hostname.
    */
   public function set_host($val)
   {
@@ -170,7 +172,7 @@ class cms_url
   /**
    * Set the URL port
    *
-   * @param integer the URL port number.
+   * @param integer $val the URL port number.
    */
   public function set_port($val)
   {
@@ -192,7 +194,7 @@ class cms_url
    * Set the user portion of the URL. An empty string is accepted
    * Note: usually one must set the password if setting the username.
    *
-   * @param string The username
+   * @param string $val The username
    */
   public function set_user($val)
   {
@@ -214,7 +216,7 @@ class cms_url
    * Set the password portion of the URL.  Empty string is accepted
    * Usually when setting the password, the username portion is also required on a URL.
    *
-   * @param string The password
+   * @param string $val The password
    */
   public function set_pass($val)
   {
@@ -234,7 +236,7 @@ class cms_url
   /**
    * Set the path portion of the URL.  An empty string is accepted.
    *
-   * @param string (may be empty)
+   * @param string $val (may be empty)
    */
   public function set_path($val)
   {
@@ -254,7 +256,7 @@ class cms_url
   /**
    * Set the query portion of the URL.  An empty string is accepted
    *
-   * @param string (may be empty)
+   * @param string $val (may be empty)
    */
   public function set_query($val)
   {
@@ -264,24 +266,43 @@ class cms_url
     return $this->_set_part('query',$val);
   }
 
+  /**
+   * Return the fragement portion of the URL
+   *
+   * @return string
+   */
   public function get_fragment()
   {
     return $this->_get_part('fragment');
   }
 
 
+  /**
+   * Set the fragment portion of the url.
+   *
+   * @param string $val
+   */
   public function set_fragment($val)
   {
     return $this->_set_part('fragment',$val);
   }
 
 
+  /**
+   * Test if the named query variable exists in the URL
+   *
+   * @param string $key
+   */
   public function queryvar_exists($key)
   {
     return ($key && isset($this->_query[$key]));
   }
 
-
+  /**
+   * Retrieve a query var from the url.
+   *
+   * @param string $key
+   */
   public function get_queryvar($key)
   {
 	  if( $this->queryvar_exists($key) ) {
@@ -289,6 +310,12 @@ class cms_url
       }
   }
 
+  /**
+   * Set a query var into the url
+   *
+   * @param string $key
+   * @param string $value
+   */
   public function set_queryvar($key,$value)
   {
 	  if( $key && $value ) {
@@ -296,7 +323,9 @@ class cms_url
       }
   }
 
-
+  /**
+   * @ignore
+   */
   public function __toString()
   {
     // build the query array back into a string.

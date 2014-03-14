@@ -19,6 +19,7 @@
 #$Id$
 
 /**
+ * Classes and functions related to CMSMS admin groups.
  * @package CMS 
  */
 
@@ -32,9 +33,24 @@
  */
 class Group
 {
+	/**
+	 * @var integer $id The group id
+	 */
 	var $id;
+
+	/**
+	 * @var string $name The group name
+	 */
 	var $name;
+
+	/**
+	 * @var string $description optional group description.
+	 */
 	var $description;
+
+	/**
+	 * @var bool $active Indicates active status of this group.
+	 */
 	var $active;
 
 	/**
@@ -49,7 +65,6 @@ class Group
 	 * Sets up some default values
 	 *
 	 * @access private
-	 * @return void
 	 */
 	function SetInitialValues()
 	{
@@ -67,7 +82,6 @@ class Group
 	function Save()
 	{
 		$result = false;
-		
 		$groupops = cmsms()->GetGroupOperations();
 		
 		if ($this->id > -1) {
@@ -113,7 +127,7 @@ class Group
 	 * @internal
 	 * @access private
 	 * @ignore
-	 * @param mixed Either the permission id, or permission name to test.
+	 * @param mixed $perm Either the permission id, or permission name to test.
 	 * @return boolean True if the group has the specified permission, false otherwise.
 	 */
 	public function HasPermission($perm)
@@ -131,7 +145,7 @@ class Group
 	 * @internal
 	 * @access private
 	 * @ignore
-	 * @param mixed Either the permission id, or permission name to test.
+	 * @param mixed $perm Either the permission id, or permission name to test.
 	 */
 	public function GrantPermission($perm)
 	{
@@ -149,7 +163,7 @@ class Group
 	 * @internal
 	 * @access private
 	 * @ignore
-	 * @param mixed Either the permission id, or permission name to test.
+	 * @param mixed $perm Either the permission id, or permission name to test.
 	 */
 	public function RemovePermission($perm)
 	{

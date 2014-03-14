@@ -19,6 +19,8 @@
 #$Id: class.bookmark.inc.php 2746 2006-05-09 01:18:15Z wishy $
 
 /**
+ * This file contains classes and constants for working with system and user defined events.
+ *
  * @package CMS 
  */
 
@@ -31,8 +33,14 @@
  */
 final class Events
 { 
+	/**
+	 * @ignore
+	 */
 	static private $_handlercache;
 
+	/**
+	 * @ignore
+	 */
 	private function __construct() {}
 
 	/**

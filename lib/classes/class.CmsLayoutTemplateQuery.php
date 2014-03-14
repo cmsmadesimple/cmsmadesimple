@@ -19,20 +19,36 @@
 #$Id: class.global.inc.php 6939 2011-03-06 00:12:54Z calguy1000 $
 
 /**
+ * Contains classes to represent a template query and its results.
  * @package CMS
  */
 
 /**
  * A class to represent a template query, and its results.
  *
- * @since 1.12
+ * @since 2.0
  * @author Robert Campbell <calguy1000@gmail.com>
+ * @see CmsDbQueryBase
  */
 class CmsLayoutTemplateQuery extends CmsDbQueryBase
 {
+	/**
+	 * @ignore
+	 */
 	private $_sortby = 'tpl.name';
+
+	/**
+	 * @ignore
+	 */
 	private $_sortorder = 'asc';
 
+	/**
+	 * Execute the query given the parameters saved in the query
+	 *
+	 * @throws CmsInvalidDataException
+	 * @throws CmsSQLErrorException
+	 * Though this method can be called directly, it is also called by other members automatically.
+	 */
   public function execute()
   {
     if( !is_null($this->_rs) ) return;
@@ -163,6 +179,14 @@ class CmsLayoutTemplateQuery extends CmsDbQueryBase
     $this->_totalmatchingrows = $db->GetOne('SELECT FOUND_ROWS()');
   }
 
+	/**
+	 * Get the template object for the current member of the resultset (if any)
+	 *
+	 * This method calls the execute method.
+	 *
+	 * @throws CmsLogicException
+	 * @return CmsLayoutTemplate
+	 */
   public function &GetTemplate()
   {
     $this->execute();
@@ -170,6 +194,14 @@ class CmsLayoutTemplateQuery extends CmsDbQueryBase
     return CmsLayoutTemplate::load($this->_rs->_fields['id']);
   }
 
+	/**
+	 * Get the list of matched template ids
+	 *
+	 * This method calls the execute method.
+	 *
+	 * @throws CmsLogicException
+	 * @return array Array of integers
+	 */
   public function GetMatchedTemplateIds()
   {
     $this->execute();
@@ -184,6 +216,13 @@ class CmsLayoutTemplateQuery extends CmsDbQueryBase
     return $out;
   }
 
+	/**
+	 * Get all matches
+	 *
+	 * This method calls the execute method
+	 *
+	 * @return array Array of CmsLayoutTemplate objects
+	 */
   public function GetMatches()
   {
     return CmsLayoutTemplate::load_bulk($this->GetMatchedTemplateIds());
