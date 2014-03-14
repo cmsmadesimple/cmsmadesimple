@@ -87,6 +87,13 @@ function cms_autoloader($classname)
     return;
   }
 
+  // internal interfaces
+  $fn = cms_join_path($config['root_path'],'lib','classes','internal',"interface.{$classname}.php");
+  if( file_exists($fn) ) {
+    __cms_load($fn);
+    return;
+  }
+
   // standard content types
   $fn = cms_join_path($config['root_path'],'lib','classes','contenttypes',"{$classname}.inc.php");
   if( file_exists($fn) ) {
