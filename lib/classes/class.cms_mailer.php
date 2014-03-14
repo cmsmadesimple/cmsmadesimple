@@ -806,9 +806,9 @@ class cms_mailer
    * Set the language for all error messages
    * @param string $lang_type
    */
-  function SetLanguage( $lang_type )
+  function SetLanguage($lang_type)
   {
-    return $this->_mailer->SetLanguage( $lang_type )
+    return $this->_mailer->SetLanguage($lang_type);
   }
 
   /**
