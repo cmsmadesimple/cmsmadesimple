@@ -884,7 +884,7 @@ abstract class CMSModule
    *
    * @final
    * @deprecated
-   * @return object Adodb Database object.
+   * @return ADOConnection Adodb Database object.
    */
   final public function &GetDb()
   {
@@ -2381,7 +2381,7 @@ abstract class CMSModule
    *
    * @final
    * @param string $module The required module name.
-   * @return object The module object, or FALSE
+   * @return CMSModule The module object, or FALSE
    */
   static public function &GetModuleInstance($module)
   {

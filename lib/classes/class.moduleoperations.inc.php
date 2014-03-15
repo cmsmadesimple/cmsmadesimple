@@ -19,6 +19,8 @@
 #$Id$
 
 /**
+ * Classes and utilities for operationg on and with modules
+ *
  * @package CMS 
  */
 
@@ -40,16 +42,38 @@ final class ModuleOperations
 	 *
 	 * @access private
 	 * @internal
-	 * @ignore
 	 */
 	protected $cmssystemmodules =  array( 'AdminSearch', 'CMSContentManager', 'DesignManager', 'FileManager','MenuManager','ModuleManager','Search','News','MicroTiny','CMSPrinting','Navigator' );
 
+	/**
+	 * @ignore
+	 */
 	static private $_instance = null;
+
+	/**
+	 * @ignore
+	 */
 	private $_modules = null;
+
+	/**
+	 * @ignore
+	 */
 	private $_moduleinfo;
+
+	/**
+	 * @ignore
+	 */
 	private $_moduledeps;
 	
+
+	/**
+	 * @ignore
+	 */
 	private $xml_exclude_files = array('^\.svn' , '^CVS$' , '^\#.*\#$' , '~$', '\.bak$', '^\.git');
+
+	/**
+	 * @ignore
+	 */
 	private $xmldtd = '
 <!DOCTYPE module [
   <!ELEMENT module (dtdversion,name,version,description*,help*,about*,requires*,file+)>
@@ -70,9 +94,7 @@ final class ModuleOperations
 ]>';
 
   /**
-   * ------------------------------------------------------------------
-   * Error Functions
-   * ------------------------------------------------------------------
+   * @ignore
    */
   private function __construct() {}
 
@@ -80,7 +102,7 @@ final class ModuleOperations
   /**
    * Get the only permitted instance of this object.  It will be created if necessary
    *
-   * @return object
+   * @return ModuleOperations
    */
   public static function &get_instance()
   {
@@ -95,7 +117,7 @@ final class ModuleOperations
   /**
    * Creates an xml data package from the module directory.
    *
-   * @param mixed $modinstance The instance of the module object
+   * @param CMSModule $modinstance The instance of the module object
    * @param string $message Reference to a string which will be filled with the message 
    *                        created by the run of the method
    * @param integer $filecount Reference to an interger which will be filled with the 
@@ -159,7 +181,8 @@ final class ModuleOperations
    * Unpackage a module from an xml string
    * does not touch the database
    *
-   * @param string $xml The xml data for the package
+   * @internal
+   * @param string $xmlurl The xml data for the package
    * @param boolean $overwrite Should we overwrite files if they exist?
    * @param boolean $brief If set to true, less checking is done and no errors are returned
    * @return array A hash of details about the installed module
@@ -321,11 +344,14 @@ final class ModuleOperations
 	if( !$brief ) audit('','Module', 'Expanded module: '.$moduledetails['name'].' version '.$moduledetails['version']);
 
 	return $moduledetails;
-}
+  }
 
 
- private function _install_module(CmsModule& $module_obj)
- {
+  /**
+   * @ignore
+   */
+  private function _install_module(CmsModule& $module_obj)
+  {
 	 debug_buffer('install_module '.$module_obj->GetName());
 
 	 $gCms = cmsms(); // preserve the global.
@@ -373,7 +399,6 @@ final class ModuleOperations
    * Install a module into the database
    *
    * @internal
-   * @ignore
    * @param string $module The name of the module to install
    * @param boolean $loadifnecessary If true, loads the module before trying to install it
    * @return array Returns a tuple of whether the install was successful and a message if applicable
@@ -404,11 +429,14 @@ final class ModuleOperations
 		  audit('', $module . ' module','Install failed');
 	  }
 	  return $res;
-  }
+   }
 
 
-  private function &_get_module_info()
-  {
+   /**
+	* @ignore
+	*/
+   private function &_get_module_info()
+   {
 	  if( !is_array($this->_moduleinfo) || count($this->_moduleinfo) == 0 ) {
 		  $db = cmsms()->GetDb();
 		  $query = 'SELECT * FROM '.cms_db_prefix().'modules ORDER BY module_name';
@@ -438,11 +466,14 @@ final class ModuleOperations
 	  }
 
 	  return $this->_moduleinfo;
-  }
+   }
 
 
-  private function _load_module($module_name,$force_load = FALSE,$dependents = TRUE)
-  {
+   /**
+	* @ignore
+	*/
+   private function _load_module($module_name,$force_load = FALSE,$dependents = TRUE)
+   {
 	  $config = cmsms()->GetConfig();
 	  $dir = $config['root_path'].'/modules';
 
@@ -576,8 +607,6 @@ final class ModuleOperations
   /**
    * A function to return a list of all modules that appear to exist properly in the modules directory.
    *
-   * @internal
-   * @ignore
    * @return array of module names for all modules that exist in the module directory.
    */
   public function FindAllModules()
@@ -613,8 +642,6 @@ final class ModuleOperations
    * Finds all modules in the filesystem, and builds a database about them
    * 
    * @since 1.10
-   * @access private
-   * @internal
    * @ignore
    */
   private function _load_all_modules()
@@ -684,7 +711,9 @@ final class ModuleOperations
 	  }
   }
 
-
+  /**
+   * @ignore
+   */
   private function _upgrade_module( &$module_obj, $to_version = '' )
   {
 	  // we can't upgrade a module if the schema is not up to date.
@@ -740,7 +769,9 @@ final class ModuleOperations
    * Any use of this function by third party code will not be supported.  Use at your own risk and do not report bugs or issues
    * related to your use of this module.
    *
-   * @param string $module The name of the module to upgrade
+   * @internal
+   * @param string $module_name The name of the module to upgrade
+   * @param string $to_version The destination version
    * @return boolean Whether or not the upgrade was successful
    */
   public function UpgradeModule( $module_name, $to_version = '')
@@ -755,7 +786,6 @@ final class ModuleOperations
    * Uninstall a module
    *
    * @internal
-   * @ignore
    * @param string $module The name of the module to upgrade
    * @return array Returns a tuple of whether the install was successful and a message if applicable
    */
@@ -824,6 +854,9 @@ final class ModuleOperations
 
   /**
    * Test if a module is active
+   *
+   * @param string $module_name
+   * @return bool
    */
   public function IsModuleActive($module_name)
   {
@@ -838,11 +871,9 @@ final class ModuleOperations
   /**
    * Activate a module
    *
-   * @param string module name
-   * @param boolean flag indicating wether to activate or deactivate the module
-   * @return boolean
-   * @access private
-   * @internal
+   * @param string $module_name
+   * @param boolean $activate flag indicating wether to activate or deactivate the module
+   * @return bool
    */
   public function ActivateModule($module_name,$activate = true)
   {
@@ -874,7 +905,7 @@ final class ModuleOperations
    *
    * @return array The hash of all loaded modules
    */
-  public function &GetLoadedModules()
+  public function GetLoadedModules()
   {
 	  return $this->_modules;
   }
@@ -882,6 +913,8 @@ final class ModuleOperations
 
   /**
    * Return an array of the names of all modules that we currently know about
+   *
+   * @return array
    */
   public function GetAllModuleNames()
   {
@@ -890,6 +923,8 @@ final class ModuleOperations
 
   /**
    * Return all of the information we know about modules.
+   *
+   * @return array
    */
   public function GetAllModuleInfo()
   {
@@ -899,7 +934,8 @@ final class ModuleOperations
   /**
    * Returns an array of the names of all installed modules.
    *
-   * @return array of strings
+   * @param bool $include_all Include even inactive modules
+   * @return array
    */
   public function GetInstalledModules($include_all = FALSE)
   {
@@ -944,8 +980,8 @@ final class ModuleOperations
    *
    * @since 1.11.8
    * @author Robert Campbell
-   * @param string The module name
-   * @return mixed.  Null if there are no dependencies.  Otherwise, a hash of dependent module names, and their versions.
+   * @param string $module_name The module name
+   * @return array Hash of module names and array of dependencies
    */
   public function get_module_dependencies($module_name)
   {
@@ -981,10 +1017,10 @@ final class ModuleOperations
    * with the module to allow only loading versions of modules that are greater than the 
    * specified value.
    *
-   * @param string The module name
-   * @param string an optional version string.
-   * @param boolean an optional flag to indicate wether the module should be force loaded if necesary.
-   * @return mixed  Null on failure, or an object of type CmsModule on success.
+   * @param string $module_name The module name
+   * @param string $version an optional version string.
+   * @param boolean $force an optional flag to indicate wether the module should be force loaded if necesary.
+   * @return CMSModule
    */
   public function &get_module_instance($module_name,$version = '',$force = FALSE)
   {
@@ -1017,7 +1053,7 @@ final class ModuleOperations
   /**
    * Test if the specified module name is a system module
    *
-   * @param string The module name
+   * @param string $module_name The module name
    * @return boolean
    */
   public function IsSystemModule($module_name)
@@ -1026,15 +1062,14 @@ final class ModuleOperations
   }
 
 
-
   /**
    * Return the current syntax highlighter module object
    * 
    * This method retrieves the specified syntax highlighter module, or uses the current current user preference for the syntax hightlighter module
    * for a name.
    *
-   * @param string allows bypassing the automatic detection process and specifying a wysiwyg module.
-   * @return null on failure, an object of type CmsModule On success.
+   * @param string $module_name allows bypassing the automatic detection process and specifying a wysiwyg module.
+   * @return CMSModule
    * @since 1.10
    */
   public function &GetSyntaxHighlighter($module_name = '')
@@ -1061,8 +1096,8 @@ final class ModuleOperations
    * This method makes an attempt to find the appropriate wysiwyg module given the current request context
    * and admin user preference.
    *
-   * @param string allows bypassing the automatic detection process and specifying a wysiwyg module.
-   * @return null on failure, an object of type CmsModule On success.
+   * @param string $module_name allows bypassing the automatic detection process and specifying a wysiwyg module.
+   * @return CMSModule
    * @since 1.10
    * @deprecated
    */
@@ -1093,7 +1128,7 @@ final class ModuleOperations
    *
    * This method returns module object for the currently selected search module.  
    *
-   * @return null on failure, an object of type CmsModule on success
+   * @return CMSModule
    * @since 1.10
    */
   public function &GetSearchModule()
@@ -1108,9 +1143,11 @@ final class ModuleOperations
   /**
    * Alias for the GetSyntaxHiglighter method.
    * 
-   * @see GetSyntaxHighlighter
+   * @see ModuleOperations::GetSyntaxHighlighter
    * @deprecated
    * @since 1.10
+   * @param string $module_name
+   * @return CMSModule
    */
   public function &GetSyntaxModule($module_name = '')
   {
@@ -1118,6 +1155,9 @@ final class ModuleOperations
   }
 
 
+  /**
+   * @ignore
+   */
   private function _is_queued_for_install($module_name)
   {
 	  if( !isset($_SESSION['moduleoperations']) ) return FALSE;
@@ -1131,8 +1171,7 @@ final class ModuleOperations
    * 
    * @internal
    * @since 1.10
-   * @param string module name
-   * @return void
+   * @param string $module_name
    */
   public function QueueForInstall($module_name)
   {
@@ -1147,8 +1186,7 @@ final class ModuleOperations
    * 
    * @internal
    * @since 1.10
-   * @param string module name
-   * @return void
+   * @param string $module_name
    */
   public function GetQueueResults()
   {
@@ -1165,8 +1203,7 @@ final class ModuleOperations
    *
    * @internal
    * @since 1.10
-   * @param string module name
-   * @return void
+   * @param string $module_name
    */
   public function unload_module($module_name)
   {
@@ -1174,7 +1211,13 @@ final class ModuleOperations
 	  unset($this->_modules[$module_name]);
   }
 
-
+  /**
+   * Given a request and an 'id' return the parameters for the module call
+   *
+   * @internal
+   * @param string $id
+   * @return array
+   */
   public function GetModuleParameters($id)
   {
 	  $params = array();

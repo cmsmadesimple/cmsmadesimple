@@ -1,26 +1,83 @@
 <?php
+/**
+ * This file contains a class to aide in creating a tabbed interface in the CMSMS admin console
+ * @package CMS
+ */
 
-class cms_admin_tabs 
+/**
+ * A simple convenience class for creating a tabbed interface in the CMSMS admin console
+ *
+ * @since 2.0
+ * @author Robert Campbell
+ * @license GPL
+ */
+final class cms_admin_tabs 
 {
+
+  /**
+   * @ignore
+   */
   private function __construct() {}
+
+  /**
+   * @ignore
+   */
   private static $_current_tab;
+
+  /**
+   * @ignore
+   */
   private static $_start_headers_sent = null;
+
+  /**
+   * @ignore
+   */
   private static $_end_headers_sent = null;
+
+  /**
+   * @ignore
+   */
   private static $_start_content_sent = null;
+
+  /**
+   * @ignore
+   */
   private static $_in_tab = null;
+
+  /**
+   * @ignore
+   */
   private static $_tab_idx = 0;
 
+  /**
+   * Set the current active tab
+   *
+   * @param string $tab The param key
+   */
   public static function set_current_tab($tab)
   {
     self::$_current_tab = $tab;
   }
 
+  /**
+   * Begin output of tab headers
+   *
+   * @return string
+   */
   public static function start_tab_headers()
   {
     self::$_start_headers_sent = 1;
     return '<div id="page_tabs">';
   }
 
+  /**
+   * Create a tab header
+   *
+   * @param string $tabid The tab key
+   * @param string $title The title to display in the tab
+   * @param bool   $active Wether the tab is active or not.  If the current active tag matches the $tabid then the tab will be marked as active.
+   * @return string
+   */
   public static function set_tab_header($tabid,$title,$active = FALSE)
   {
     if( $active == FALSE ) {
@@ -41,12 +98,22 @@ class cms_admin_tabs
     return $out;
   }
 
+  /**
+   * Finish outputting tab headers
+   *
+   * @return string
+   */
   public static function end_tab_headers()
   {
     self::$_end_headers_sent = 1;
     return "</div><!-- EndTabHeaders -->";
   }
 
+  /**
+   * Start the content portion of the tabbed layout
+   *
+   * @return string
+   */
   public static function start_tab_content()
   {
     $out = '';
@@ -56,6 +123,11 @@ class cms_admin_tabs
     return $out;
   }
 
+  /**
+   * Finish the content portion of the tabbed layout
+   *
+   * @return string
+   */
   public static function end_tab_content()
   {
     $out = '';
@@ -64,6 +136,13 @@ class cms_admin_tabs
     return $out;
   }
 
+  /**
+   * Start the content portion of a specific tab
+   *
+   * @param string $tabid The tab key
+   * @param array  $params Array of parameters for the tab
+   * @return string
+   */
   public static function start_tab($tabid,$params = array())
   {
     $message = '';
@@ -71,7 +150,7 @@ class cms_admin_tabs
       $theme = cms_utils::get_theme_object();
       if( is_object($theme) ) $message = $theme->ShowMessage($params['tab_message']);
     }
-    
+
     $out = '';
     if( !self::$_start_content_sent ) $out .= self::start_tab_content();
     if( self::$_in_tab ) $out .= self::end_tab();
@@ -80,6 +159,11 @@ class cms_admin_tabs
     return $out;
   }
 
+  /**
+   * End the content portion of a single tab
+   *
+   * @return string
+   */
   public static function end_tab()
   {
     if( !self::$_in_tab ) return;

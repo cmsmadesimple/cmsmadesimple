@@ -1045,7 +1045,7 @@ abstract class CmsAdminThemeBase
 	 * This method will create the admin theme object if has not yet been created.  It will read the cms preferences and cross reference with available themes.
 	 *
 	 * @param  String optional theme name.
-	 * @return object Reference to the initialized admin theme.
+	 * @return CmsAdminThemeBase Reference to the initialized admin theme.
 	 */
 	static public function &GetThemeObject($name = '')
 	{

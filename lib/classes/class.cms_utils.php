@@ -242,7 +242,7 @@ final class cms_utils
 	 *
 	 * @since 1.10
 	 * @param string $module_name The module name.
-	 * @return object or null
+	 * @return CMSModule
 	 */
 	public static function &get_wysiwyg_module($module_name = '')
 	{
@@ -256,7 +256,7 @@ final class cms_utils
 	 *
 	 * @since 1.10
 	 * @author calguy1000
-	 * @return object or null
+	 * @return CMSModule
 	 */
 	public static function &get_syntax_highlighter_module()
 	{
@@ -269,7 +269,7 @@ final class cms_utils
 	 *
 	 * @since 1.10
 	 * @author calguy1000
-	 * @return object or null
+	 * @return CMSModule
 	 */
 	public static function &get_search_module()
 	{

@@ -189,7 +189,7 @@ final class cms_config implements ArrayAccess
    * Retrieve the global instance of the cms_config class
    * This method will instantiate the object if necessary
    *
-   * @return object
+   * @return cms_config
    */
   public static function &get_instance()
   {

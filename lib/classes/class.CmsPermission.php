@@ -82,6 +82,11 @@ final class CmsPermission
 		$this->_data[$key] = $value;
 	}
 
+	/**
+	 * Insert a new permission
+	 *
+	 * @throws CmsSQLErrorException
+	 */
 	protected function _insert()
 	{
 		$this->validate();
@@ -100,6 +105,12 @@ final class CmsPermission
 		$this->_data['id'] = $new_id;
 	}
 
+	/**
+	 * Validate the exception
+	 *
+	 * @throws CmsInvalidDataException
+	 * @throws CmsLogicException
+	 */
 	public function validate()
 	{
 		if( $this->_data['source'] == '' ) 
@@ -119,12 +130,22 @@ final class CmsPermission
 		}
 	}
 
+	/**
+	 * Save the permission to the database
+	 *
+	 * @throws CmsLogicException
+	 */
 	public function save()
 	{
 		if( !isset($this->_data['id']) || $this->_data['id'] < 1 ) return $this->_insert();
 		throw new CmsLogicException('Cannot update an existing CmsPermission object');
 	}
 
+	/**
+	 * Delete this permission
+	 *
+	 * @throws CmsLogicExceptin
+	 */
 	public function delete()
 	{
 		if( !isset($this->_data['id']) || $this->_data['id'] < 1 ) {
@@ -132,7 +153,6 @@ final class CmsPermission
 		}
 
 		$db = cmsms()->GetDb();
-    
 		$query = 'DELETE FROM '.cms_db_prefix().'group_perms WHERE permission_id = ?';
 		$dbr = $db->Execute($query,array($this->_data['id']));
 		if( !$dbr ) throw new CmsSQLErrorException($db->sql.' -- '.$db->ErrorMsg());
@@ -143,6 +163,12 @@ final class CmsPermission
 		unset($this->_data['id']);
 	}
 
+	/**
+	 * Load a permission with the specified name
+	 *
+	 * @param string $name
+	 * @return CmsPermission
+	 */
 	public static function &load($name)
 	{
 		if( is_array(self::$_perm_map) ) {
@@ -179,6 +205,12 @@ final class CmsPermission
 		return $obj;
 	}
 
+	/**
+	 * Given a permission name, get it's id
+	 *
+	 * @param string $permname
+	 * @return int
+	 */
 	public static function get_perm_id($permname)
 	{
 		try {

@@ -34,16 +34,43 @@
  */
 final class CmsLangOperations
 {
-  private static $_langdata;
-  private static $_do_conversions;
-  private static $_allow_nonadmin_lang;
-  const   CMSMS_ADMIN_REALM = 'admin';
-  private static $_current_realm = self::CMSMS_ADMIN_REALM;
 
-  private function __construc() {}
+	/**
+	 * @ignore
+	 */
+	private static $_langdata;
 
-  private static function _load_realm($realm)
-  {
+
+	/**
+	 * @ignore
+	 */
+	private static $_do_conversions;
+
+	/**
+	 * @ignore
+	 */
+	private static $_allow_nonadmin_lang;
+
+	/**
+	 * A constant for the core admin realm.
+	 */
+	const CMSMS_ADMIN_REALM = 'admin';
+
+	/**
+	 * @ignore
+	 */
+	private static $_current_realm = self::CMSMS_ADMIN_REALM;
+
+	/**
+	 * @ignore
+	 */
+	private function __construct() {}
+
+	/**
+	 * @ignore
+	 */
+	private static function _load_realm($realm)
+	{
 	  $curlang = CmsNlsOperations::get_current_language();
 	  if( !$realm ) $realm = self::$_curent_realm;
 
@@ -102,10 +129,13 @@ final class CmsLangOperations
 		  self::$_langdata[$curlang][$realm] = array_merge(self::$_langdata[$curlang][$realm],$lang);
 		  unset($lang);
 	  }
-  }
+	}
 
-  private static function _convert_encoding($str)
-  {
+	/**
+	 * @ignore
+	 */
+	private static function _convert_encoding($str)
+	{
     /*
     if( is_null(self::$_do_conversions) )
       {
@@ -221,8 +251,8 @@ final class CmsLangOperations
    * Test to see if a language key exists in the current lang file.
    * This function uses the current language.
    *
-   * @param string The language key
-   * @param string The language realm
+   * @param string $key The language key
+   * @param string $realm The language realm
    * @return boolean
    */
   public static function key_exists($key,$realm = null)
@@ -239,7 +269,7 @@ final class CmsLangOperations
    *
    * @since 2.0
    * @author Robert Campbell
-   * @param string (optional) realm name.  If no name specified, self::CMSMS_ADMIN_REALM is assumed'
+   * @param string $realm The realm name.  If no name specified, self::CMSMS_ADMIN_REALM is assumed'
    * @return string the old realm name.
    */
   public static function set_realm($realm = self::CMSMS_ADMIN_REALM)

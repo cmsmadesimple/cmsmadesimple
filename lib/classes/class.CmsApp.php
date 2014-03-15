@@ -63,6 +63,10 @@ final class CmsApp {
 	 * @ignore
 	 */
 	private $_states;
+
+	/**
+	 * @ignore
+	 */
 	private static $_statelist = array(self::STATE_ADMIN_PAGE,self::STATE_STYLESHEET, self::STATE_INSTALL,self::STATE_PARSE_TEMPLATE);
 
 	/**
@@ -245,7 +249,7 @@ final class CmsApp {
 	 * @since 1.9
 	 * @param string $module_name The module name.
 	 * @param string $version (optional) version number for a check.  
-	 * @return object Reference to the module object, or null.
+	 * @return CMSModule Reference to the module object, or null.
 	 * @deprecated
 	 */
 	public function &GetModuleInstance($module_name,$version = '')
@@ -478,17 +482,17 @@ final class CmsApp {
 
 
 	/**
-	* Clear out cached files from the CMS tmp/cache and tmp/templates_c
-	* directories.
-	*
-	* NOTE: This function is for use by CMSMS only.  No third party application, UDT or code
-	*   can use this method and still exist in the CMSMS forge or be supported in any way.
-	*
-	* @final
-    * @internal
-    * @ignore
-	* @access private
-	*/
+	 * Clear out cached files from the CMS tmp/cache and tmp/templates_c
+	 * directories.
+	 *
+	 * NOTE: This function is for use by CMSMS only.  No third party application, UDT or code
+	 *   can use this method and still exist in the CMSMS forge or be supported in any way.
+	 *
+	 * @final
+	 * @internal
+	 * @ignore
+	 * @access private
+	 */
 	final public function clear_cached_files($age_days = -100)
 	{
 		global $CMS_LOGIN_PAGE, $CMS_INSTALL_PAGE;
@@ -509,15 +513,14 @@ final class CmsApp {
 		@touch(cms_join_path(TMP_TEMPLATES_C_LOCATION,'index.html'));
 	}
 
+
 	/**
-	 * Get handle to Smarty parser object, ment for template parsing
+	 * Get handle to the Smarty parser object, meant for template parsing
 	 *
-	 * @final
 	 * @internal
 	 * @since 1.11.3
 	 * @author Tapio Löytty
 	 * @return Smarty_Parser handle to the Smarty object	 
-	 * @ignore
 	 */
 	final public function &get_template_parser()
 	{
@@ -643,9 +646,24 @@ final class CmsApp {
  */
 class CmsContentTypePlaceholder
 {
+	/** 
+	 * @var string The type name
+	 */
 	public $type;
+
+	/**
+	 * @var string The filename containing the type class
+	 */
 	public $filename;
+
+	/**
+	 * @var string A friendly name for the type
+	 */
 	public $friendlyname;
+
+	/**
+	 * @var Wether the type has been loaded
+	 */
 	public $loaded;
 }
 
@@ -654,7 +672,7 @@ class CmsContentTypePlaceholder
  * Return the global cmsms() object
  *
  * @since 1.7
- * @return object
+ * @return CmsApp
  */
 function &cmsms()
 {

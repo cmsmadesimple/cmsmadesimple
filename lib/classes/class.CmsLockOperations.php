@@ -34,12 +34,31 @@
 #-------------------------------------------------------------------------
 #END_LICENSE
 
+/**
+ * Classes and utilities for managing locks.
+ * @package CMS
+ */
+
+/**
+ * A singleton class providing utilities for interacting with locks.
+ *
+ * @since 2.0
+ * @licsense GPL
+ */
 final class CmsLockOperations
 {
+  /**
+   * @ignore
+   */
   private function __construct($type,$id) {}
 
   /**
    * Touch any lock of the specified type, and id that matches the currently logged in UID
+   *
+   * @param int $lock_id The lock identifier
+   * @param string $type The type of object being locked
+   * @param int $oid The object identifier
+   * @return int The expiry timestamp of the lock.
    */
   public static function touch($lock_id,$type,$oid)
   {
@@ -51,14 +70,22 @@ final class CmsLockOperations
 
   /**
    * Delete any lock of the specified type, and id that matches the currently logged in UID
+   *
+   * @param int $lock_id The lock identifier
+   * @param string $type The type of object being locked
+   * @param int $oid The object identifier
    */
   public static function delete($lock_id,$type,$oid)
   {
-    return self::unlock($lock_id,$type,$oid);
+    self::unlock($lock_id,$type,$oid);
   }
 
   /**
    * Delete any lock of the specified type, and id that matches the currently logged in UID
+   *
+   * @param int $lock_id The lock identifier
+   * @param string $type The type of object being locked
+   * @param int $oid The object identifier
    */
   public static function unlock($lock_id,$type,$oid)
   {
@@ -69,6 +96,10 @@ final class CmsLockOperations
 
   /**
    * test for any lock of the specified type, and id
+   *
+   * @param string $type The type of object being locked
+   * @param int $oid The object identifier
+   * @return bool
    */
   public static function is_locked($type,$oid)
   {
@@ -83,6 +114,9 @@ final class CmsLockOperations
   
   /**
    * Delete any locks that have expired.
+   *
+   * @param int $expires Delete locks older than this date (if not specified current time will be used).
+   * @param string $type The type of locks to delete.  If not specified any locks can be deleted.
    */
   private static function delete_expired($expires = null,$type = null)
   {
@@ -99,6 +133,8 @@ final class CmsLockOperations
 
   /**
    * Get all locks of a specific type
+   *
+   * @param string $type The lock type
    */
   public static function get_locks($type)
   {
@@ -115,6 +151,9 @@ final class CmsLockOperations
     return $locks;
   }
 
+  /**
+   * Delete all the locks for the current user
+   */
   public static function delete_for_user()
   {
     $uid = get_userid(FALSE);

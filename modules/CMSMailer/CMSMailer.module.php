@@ -57,11 +57,72 @@ class CMSMailer extends CMSModule
   //// BEGIN API SECTION
   //////////////////////////////////////////////////////////////////////
 
+  public function GetHost()
+  {
+    return $this->GetSMTPHost();
+  }
+
+  public function SetHost($txt)
+  {
+    return $this->SetSMTPHost($txt);
+  }
+
+  public function GetPort()
+  {
+    return $this->GetSMTPPort();
+  }
+
+  public function SetPort($txt)
+  {
+    return $this->SetSMTPPort($txt);
+  }
+
+  public function GetTimeout()
+  {
+    return $this->GetSMTPTimeout();
+  }
+
+  public function SetTimeout($txt)
+  {
+    return $this->SetSMTPTimeout($txt);
+  }
+
+  public function GetUsername()
+  {
+    return $this->GetSMTPUsername();
+  }
+
+  public function SetUsername($txt)
+  {
+    return $this->SetSMTPUsername($txt);
+  }
+
+  public function GetPassword()
+  {
+    return $this->GetSMTPPassword();
+  }
+
+  public function SetPassword($txt)
+  {
+    return $this->SetSMTPPassword($txt);
+  }
+
+  public function GetSecure()
+  {
+    return $this->GetSMTPSecure();
+  }
+
+  public function SetSecure($txt)
+  {
+    return $this->SetSMTPSecure($txt);
+  }
+
   public function __call($method,$args)
   {
     if( method_exists($this->the_mailer,$method) ) {
       return call_user_func_array(array($this->the_mailer,$method),$args);
     }
+    throw new CmsException('Call to invalid method '.$method.' on '.get_class($this->the_mailer).' object');
     // todo, throw exception here.
   }
 } // class CMSMailer

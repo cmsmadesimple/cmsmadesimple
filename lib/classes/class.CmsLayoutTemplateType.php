@@ -35,28 +35,53 @@
 #END_LICENSE
 
 /**
+ * This class contains classes and functions that define a template type.
  * @package CMS
  */
 
 /**
  * A class to manage template types 
  *
- * @since 1.12
+ * @since 2.0
+ * @license 2.0
  * @author Robert Campbell <calguy1000@gmail.com>
  */
 class CmsLayoutTemplateType 
 {
+	/**
+	 * This constant indicates a core template type
+	 */
 	const CORE = 'aa__CORE__';
+
+	/**
+	 * @ignore
+	 */
 	const TABLENAME = 'layout_tpl_type';
+
+	/**
+	 * @ignore
+	 */
   private $_dirty;
+
+	/**
+	 * @ignore
+	 */
   private $_data = array();
+
+	/**
+	 * @ignore
+	 */
 	private static $_cache;
+
+	/**
+	 * @ignore
+	 */
 	private static $_name_cache;
 
   /**
    * Get the template type id
    *
-   * @return integer type id, or null if this record has no id.
+   * @return int type id, or null if this record has no id.
    */
   public function get_id()
   {
@@ -67,6 +92,7 @@ class CmsLayoutTemplateType
   /**
    * Get the template originator (this is usually a module name)
    *
+	 * @param  bool $viewable Should the originator name be the viewable (friendly) string?
    * @return string
    */
   public function get_originator($viewable = FALSE)
@@ -81,7 +107,7 @@ class CmsLayoutTemplateType
   /**
    * Set the template originator string.
    *
-   * @param string The originator string, usually a module name.
+   * @param string $str The originator string, usually a module name.
    */
   public function set_originator($str)
   {
@@ -95,7 +121,7 @@ class CmsLayoutTemplateType
   /**
    * Return the template type name.
    *
-   * @return String the template type
+   * @return string the template type
    */
   public function get_name()
   {
@@ -106,7 +132,7 @@ class CmsLayoutTemplateType
   /**
    * Set the template type name
    *
-   * @param sting The template type name.
+   * @param sting $str The template type name.
    */
   public function set_name($str)
   {
@@ -131,12 +157,12 @@ class CmsLayoutTemplateType
   /**
    * Set the flag indicating if this template type can have a 'default'
    *
-   * @param boolean
+   * @param boolean $flag
    */
-  public function set_dflt_flag($val = TRUE)
+  public function set_dflt_flag($flag = TRUE)
   {
-	  if( !is_bool($val) ) throw new CmsInvalidDataException('value is invalid for set_dflt_flag');
-	  $this->_data['has_dflt'] = $val;
+	  if( !is_bool($flag) ) throw new CmsInvalidDataException('value is invalid for set_dflt_flag');
+	  $this->_data['has_dflt'] = $flag;
 	  $this->_dirty = TRUE;
   }
 
@@ -155,7 +181,7 @@ class CmsLayoutTemplateType
   /**
    * Set the default content used when creating a new templateof this  type.
    *
-   * @param string The default template contents.
+   * @param string $str The default template contents.
    */
   public function set_dflt_contents($str)
   {
@@ -178,7 +204,7 @@ class CmsLayoutTemplateType
   /**
    * Set the description for this template.
    *
-   * @param string The default template contents.
+   * @param string $str The default template contents.
    */
   public function set_description($str)
   {
@@ -201,7 +227,7 @@ class CmsLayoutTemplateType
   /**
    * Set the owner of this template type
    *
-   * @param integer owner
+   * @param integer $owner
    */
   public function set_owner($owner)
   {
@@ -238,7 +264,7 @@ class CmsLayoutTemplateType
    * representing a class name and method name.  This callback (if set) will be used to translate
    * the originator string, and the name string to something suitable to users language.
    *
-   * @param mixed A static function name string, or an array of class name and member name.
+   * @param callable $data A static function name string, or an array of class name and member name.
    */
   public function set_lang_callback($data)
   {
@@ -262,7 +288,7 @@ class CmsLayoutTemplateType
    * Modules typically distribut sample templates.  This callback function is used when the 
    * user clicks on a button to reset the selected template type to it's factory default values.
    *
-   * @param mixed A static function name string, or an array of class name and member name.
+   * @param callable $data A static function name string, or an array of class name and member name.
    */
   public function set_content_callback($data)
   {
@@ -293,6 +319,8 @@ class CmsLayoutTemplateType
 
 	/**
 	 * Set the content block flag to indicate that this template type requires content blocks
+	 *
+	 * @param bool $flag
 	 */
 	public function set_content_block_flag($flag)
 	{
@@ -308,7 +336,7 @@ class CmsLayoutTemplateType
    *
    * This method throws an exception if an error is found in the integrity of the object.
    *
-   * @param boolean Wether this is a new insert, or an update.
+   * @param bool $is_insert Wether this is a new insert, or an update.
    */
   protected function validate($is_insert = TRUE)
   {
@@ -452,7 +480,7 @@ class CmsLayoutTemplateType
    *
    * This method will throw an exception if the template cannot be created.
    *
-   * @param string The template name
+   * @param string $name The template name
    * @return CmsLayoutTemplate object, or null.
    */
   public function &create_new_template($name = '')
@@ -475,6 +503,10 @@ class CmsLayoutTemplateType
 	  return CmsLayoutTemplate::load_dflt_by_type($this);
   }
 
+	/**
+	 * Get a translated/pretty displayable name for this template type
+	 * including the originator.
+	 */
   public function get_langified_display_value()
   {
 	  $t = $this->get_lang_callback();
@@ -489,6 +521,9 @@ class CmsLayoutTemplateType
 	  return $to.'::'.$tn;
   }
 
+	/**
+	 * Reset the default contens of this template type back to factory defaults
+	 */
   public function reset_content_to_factory()
   {
 	  if( !$this->get_dflt_flag() ) throw new CmsException('This template type does not have default contents');
@@ -500,6 +535,12 @@ class CmsLayoutTemplateType
 	  $this->set_dflt_contents($content);
   }
 
+	/**
+	 * Given an array (typically read from the database) create a CmsLayoutTemplateType object
+	 *
+	 * @internal
+	 * @return CmsLayoutTemplateType
+	 */
   private static function &_load_from_data($row)
   {
 	  $row['lang_callback'] = unserialize($row['lang_cb']);
@@ -522,8 +563,8 @@ class CmsLayoutTemplateType
    *
    * This method throws an exception when the requested object cannot be found.
    *  
-   * @param mixed An integer template type id, or a string in the form of Originator::Name
-   * @return CmsLayoutTemplateType object.
+   * @param mixed $val An integer template type id, or a string in the form of Originator::Name
+   * @return CmsLayoutTemplateType
   */
   public static function &load($val)
   {
@@ -557,8 +598,8 @@ class CmsLayoutTemplateType
    *
    * This method will throw exceptions if an error is encounted.
    *
-   * @param string The origiator name
-   * @return An array of CmsLayoutTemplateType objects, or null if no matches are found.
+   * @param string $originator The origiator name
+   * @return array An array of CmsLayoutTemplateType objects, or null if no matches are found.
    */
   public static function load_all_by_originator($originator)
   {
@@ -582,7 +623,11 @@ class CmsLayoutTemplateType
 		return $out;
   }
 
-
+	/**
+	 * Load all template types
+	 *
+	 * @return array Array of CmsLayoutTemplateType objects
+	 */
   public static function get_all()
   {
 	  $db = cmsms()->GetDb();
@@ -599,6 +644,9 @@ class CmsLayoutTemplateType
 	  return array_values(self::$_cache);
   }
 
+	/**
+	 * Load template type objects by specifying an array of ids
+	 */
 	public static function load_bulk($list)
 	{
 		if( !is_array($list) || count($list) == 0 ) return;
@@ -623,6 +671,11 @@ class CmsLayoutTemplateType
 	  return $out;
 	}
 
+	/**
+	 * Return the names of all loaded template types
+	 *
+	 * @return array Array of loaded type names
+	 */
 	public static function get_loaded_types()
 	{
 		if( is_array(self::$_cache) )	return array_keys(self::$_cache);
