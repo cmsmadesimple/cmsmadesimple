@@ -34,20 +34,87 @@
 #-------------------------------------------------------------------------
 #END_LICENSE
 
+/**
+ * A class to cache data into the TMP_CACHE directory.
+ * @package CMS
+ */
+
+/**
+ * A cache driver to cache files using the filesystem.
+ *
+ * This driver stores files in the CMSMS TMP_CACHE location.  Supports read, and write locking
+ * a settable cache lifetime, md5 encoded keys and groups so that filenames cannot be easily
+ * determined, and automatic cleaning.
+ *
+ * @since 2.0
+ * @author Robert Campbell
+ * @license GPL
+ */
 class cms_filecache_driver extends cms_cache_driver
 {
+
+  /**
+   * @ignore
+   */
   const LOCK_READ   = '_read';
+
+  /**
+   * @ignore
+   */
   const LOCK_WRITE  = '_write';
+
+  /**
+   * @ignore
+   */
   const LOCK_UNLOCK = '_unlock';
+
+  /**
+   * @ignore
+   */
   const KEY_SERIALIZED = '__SERIALIZED__';
 
+
+  /**
+   * @ignore
+   */
   private $_lifetime = 3600;
+
+  /**
+   * @ignore
+   */
   private $_locking = false;
+
+  /**
+   * @ignore
+   */
   private $_blocking = false;
+
+  /**
+   * @ignore
+   */
   private $_cache_dir = TMP_CACHE_LOCATION;
+
+  /**
+   * @ignore
+   */
   private $_auto_cleaning = 0;
+
+  /**
+   * @ignore
+   */
   private $_group = 'default';
 
+  /**
+   * Constructor
+   *
+   * Accepts an associative array of options as follows:
+   *   lifetime  => seconds (default 3600)
+   *   locking   => boolean (default false)
+   *   cache_dir => string (default TMP_CACHE_LOCATION)
+   *   auto_cleaning => boolean (default false)
+   *   blocking => boolean (default false)
+   *   grouop => string (no default)
+   */
   public function __construct($opts)
   {
     $_keys = array('lifetime','locking','cache_dir','auto_cleaning','blocking','group');
@@ -61,6 +128,15 @@ class cms_filecache_driver extends cms_cache_driver
     }
   }
 
+
+  /**
+   * Get a cached value
+   * if the $group parameter is not specified the current group will be used
+   *
+   * @see cms_filecache_driver::set_group
+   * @param string $key
+   * @param string $group
+   */
   public function get($key,$group = '')
   {
     if( !$group ) $group = $this->_group;
@@ -72,12 +148,27 @@ class cms_filecache_driver extends cms_cache_driver
   }
 
 
+  /**
+   * Clear all cached values from a group
+   * if the $group parameter is not specified the current group will be used
+   *
+   * @see cms_filecache_driver::set_group
+   * @param string $group
+   */
   public function clear($group = '')
   {
     return $this->_clean_dir($this->_cache_dir,$group,false);
   }
 
 
+  /**
+   * Test if a cached value exists.
+   * if the $group parameter is not specified the current group will be used
+   *
+   * @see cms_filecache_driver::set_group
+   * @param string $key
+   * @param string $group
+   */
   public function exists($key,$group = '')
   {
     if( !$group ) $group = $this->_group;
@@ -90,6 +181,14 @@ class cms_filecache_driver extends cms_cache_driver
   }
 
 
+  /**
+   * Erase a cached value
+   * if the $group parameter is not specified the current group will be used
+   *
+   * @see cms_filecache_driver::set_group
+   * @param string $key
+   * @param string $group
+   */
   public function erase($key,$group = '')
   {
     if( !$group ) $group = $this->_group;
@@ -103,6 +202,14 @@ class cms_filecache_driver extends cms_cache_driver
   }
 
 
+  /**
+   * Set a cached value
+   * if the $group parameter is not specified the current group will be used
+   *
+   * @see cms_filecache_driver::set_group
+   * @param string $key
+   * @param string $group
+   */
   public function set($key,$value,$group = '')
   {
     if( !$group ) $group = $this->_group;
@@ -113,11 +220,20 @@ class cms_filecache_driver extends cms_cache_driver
   }
 
 
+  /**
+   * Set the current group
+   *
+   * @param string $group
+   */
   public function set_group($group)
   {
     if( $group ) $this->_group = trim($group);
   }
 
+
+  /**
+   * @ignore
+   */
   private function _get_filename($key,$group)
   {
     $fn = $this->_cache_dir . '/cache_'.md5(__DIR__.$group).'_'.md5($key.__DIR__).'.cms';
@@ -125,6 +241,9 @@ class cms_filecache_driver extends cms_cache_driver
   }
 
 
+  /**
+   * @ignore
+   */
   private function _flock($res,$flag)
   {
     if( !$this->_locking ) return TRUE;
@@ -158,6 +277,10 @@ class cms_filecache_driver extends cms_cache_driver
     return FALSE;
   }
 
+
+  /**
+   * @ignore
+   */
   private function _read_cache_file($fn)
   {
     $this->_cleanup($fn);
@@ -182,6 +305,9 @@ class cms_filecache_driver extends cms_cache_driver
   }
 
 
+  /**
+   * @ignore
+   */
   private function _cleanup($fn)
   {
     if( is_null($this->_lifetime) ) return;
@@ -193,6 +319,9 @@ class cms_filecache_driver extends cms_cache_driver
   }
 
 
+  /**
+   * @ignore
+   */
   private function _write_cache_file($fn,$data)
   {
     @touch($fn);
@@ -217,6 +346,9 @@ class cms_filecache_driver extends cms_cache_driver
   }
 
 
+  /**
+   * @ignore
+   */
   private function _auto_clean_files()
   {
     if( $this->_auto_cleaning > 0 ) {
@@ -232,6 +364,9 @@ class cms_filecache_driver extends cms_cache_driver
   }
 
 
+  /**
+   * @ignore
+   */
   private function _clean_dir($dir,$group = '',$old = true)
   {
     if( !$group ) $group = $this->_group;

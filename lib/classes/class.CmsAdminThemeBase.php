@@ -19,6 +19,7 @@
 #$Id: class.admintheme.inc.php 7596 2011-12-24 22:50:52Z calguy1000 $
 
 /**
+ * Classes and utilities for the base CMS Admin theme
  * @package CMS 
  */
 
@@ -33,36 +34,116 @@
  * @license GPL
  * @since   1.11
  * @author  Robert Campbell
+ * @property-read string $themeName Return the theme name
+ * @property-read int $userid Return the current logged in userid (deprecated)
+ * @property-read string $title The current page title
+ * @property-read string $subtitle The current page subtitle
  */
 abstract class CmsAdminThemeBase 
 {
+
+	/**
+	 * @ignore
+	 */
 	private static $_instance;
+
+	/**
+	 * @ignore
+	 */
 	private $_perms;
+
+	/**
+	 * @ignore
+	 */
 	private $_menuItems;
+
+	/**
+	 * @ignore
+	 */
 	private $_nav_tree;
+
+	/**
+	 * @ignore
+	 */
 	private $_notifications;
+
+	/**
+	 * @ignore
+	 */
 	private $_breadcrumbs;
+
+	/**
+	 * @ignore
+	 */
 	private $_errors;
+
+	/**
+	 * @ignore
+	 */
 	private $_messages;
+
+	/**
+	 * @ignore
+	 */
 	private $_imageLink;
+
+	/**
+	 * @ignore
+	 */
 	private $_script;
+
+	/**
+	 * @ignore
+	 */
 	private $_url;
+
+	/**
+	 * @ignore
+	 */
 	private $_query;
+
+	/**
+	 * @ignore
+	 */
 	private $_data;
+
+	/**
+	 * @ignore
+	 */
 	private $_action_module;
 
 	// meta information
+
+	/**
+	 * @ignore
+	 */
 	private $_sectionCount;
+
+	/**
+	 * @ignore
+	 */
 	private $_modulesBySection;
+
+	/**
+	 * @ignore
+	 */
 	private $_active_item;
 	
 	// tab variables
 	private $_activetab;
+
+	/**
+	 * @ignore
+	 */
 	private $_title;
+
+	/**
+	 * @ignore
+	 */
 	private $_subtitle;
 	
 	/**
-	 * Constructor
+	 * @ignore
 	 */
 	protected function __construct()
 	{
@@ -86,16 +167,10 @@ abstract class CmsAdminThemeBase
 	}
 
 	/**
-	 * __get()
-	 * A magic function that is used for backwards compatibility only
-	 *
-	 * @deprecated
-	 * @param string key - possible values are 'cms','themeName',and 'userid'
-	 * @return mixed
+	 * @ignore
 	 */
 	public function __get($key)
 	{
-		if( $key == 'cms' ) return cmsms();
 		if( $key == 'themeName' ) {
 			$class = get_class($this); 
 			if( endswith($class,'Theme') ) $class = substr($class,0,strlen($class)-5);
@@ -121,6 +196,9 @@ abstract class CmsAdminThemeBase
 		else return preg_replace('/\s+/',"&nbsp;",$str); // bad UTF8
     }
 
+	/**
+	 * @ignore
+	 */
 	private function _fix_url_userkey($url)
 	{
 		$from = '/'.CMS_SECURE_PARAM_NAME.'=[a-zA-Z0-9]{16}/i';
@@ -657,7 +735,7 @@ abstract class CmsAdminThemeBase
 	 * Note: if no title is specified, the theme will try to calculate one automatically.
 	 *
 	 * @since 2.0
-	 * @param string The page title.
+	 * @param string $str The page title.
 	 * @return void
 	 */
 	public function SetTitle($str)
@@ -673,7 +751,7 @@ abstract class CmsAdminThemeBase
 	 * Note: if no title is specified, the theme will try to calculate one automatically.
 	 *
 	 * @since 2.0
-	 * @param string The page subtitle.
+	 * @param string $str The page subtitle.
 	 * @return void
 	 */
 	public function SetSubTitle($str)
@@ -688,8 +766,7 @@ abstract class CmsAdminThemeBase
      *
      * Check if the user has one of the aggregate permissions
      * 
-	 * @access private
-     * @param permission the permission to check.
+     * @param string $permission the permission to check.
 	 * @return boolean
      */
     protected function HasPerm($permission)
@@ -748,9 +825,9 @@ abstract class CmsAdminThemeBase
 	 * Retrieve the admin navigation tree
 	 *
 	 * @since 1.11
-	 * @param string Indicates the parent to start at.  use a value of -1 to indicate the top node.
-	 * @param int    The maximum depth of the tree.  -1 indicates no maximum depth
-	 * @param bool   Indicates wether the cache should be used.  This should be FALSE when not retrieving the whole tree.
+	 * @param string $parent Indicates the parent to start at.  use a value of -1 to indicate the top node.
+	 * @param int $maxdepth The maximum depth of the tree.  -1 indicates no maximum depth
+	 * @param bool $usecache Indicates wether the cache should be used.  This should be FALSE when not retrieving the whole tree.
 	 * @return array A nested array of menu nodes.  The children member represents the nesting.
 	 */
 	public function get_navigation_tree($parent = -1,$maxdepth = -1,$usecache = TRUE)
@@ -767,7 +844,7 @@ abstract class CmsAdminThemeBase
 	 * Set the current action module
 	 *
 	 * @since 2.0
-	 * @param string the module name.
+	 * @param string $module_name the module name.
 	 * @return void
 	 */
 	public function set_action_module($module_name)
@@ -794,6 +871,7 @@ abstract class CmsAdminThemeBase
 	 *
 	 * @since 2.0
 	 * @access protected
+	 * @param string $module_name
 	 */
 	protected function get_module_help_url($module_name = null)
 	{
@@ -810,7 +888,7 @@ abstract class CmsAdminThemeBase
 	 * returns the first match.
 	 *
 	 * @access protected
-	 * @param string The title to search for
+	 * @param string $title The title to search for
 	 * @return string The matching key, or null
 	 */
 	protected function find_menuitem_by_title($title)
@@ -825,7 +903,7 @@ abstract class CmsAdminThemeBase
 	/**
 	 * Return the list of bookmarks
 	 *
-	 * @param bool if False the shortcuts for adding and managing bookmarks are added to the list.
+	 * @param bool $pure if False the shortcuts for adding and managing bookmarks are added to the list.
 	 * @return array of Bookmark objects
 	 */
 	public function get_bookmarks($pure = FALSE)
@@ -874,8 +952,8 @@ abstract class CmsAdminThemeBase
 	/**
 	 * Attach some data to the admin theme.
 	 *
-	 * @param string key
-	 * @param mixed value
+	 * @param string $key
+	 * @param mixed $value
 	 * @returns void
 	 */
 	public function set_value($key,$value)
@@ -894,8 +972,7 @@ abstract class CmsAdminThemeBase
 	/**
 	 * Return attached data
 	 *
-	 * @param string key
-	 * @param mixed value
+	 * @param string $key
 	 * @returns void
 	 */
 	public function get_value($key)
@@ -910,7 +987,7 @@ abstract class CmsAdminThemeBase
 	 * has displayable children.
 	 *
 	 * @deprecated
-	 * @param section - section to test
+	 * @param string $section section to test
 	 * @return boolean
 	 */
 	public function HasDisplayableChildren($section)
@@ -929,11 +1006,11 @@ abstract class CmsAdminThemeBase
 
 	/**
 	 * DisplayImage will display the themed version of an image (if it exists),
-	 * @param imageName - name of image
-	 * @param alt - alt text
-	 * @param width
-	 * @param height
-	 * @param class
+	 * @param string $imageName name of image
+	 * @param string $alt alt text
+	 * @param int width
+	 * @param int height
+	 * @param string class
 	 */
 	public function DisplayImage($imageName, $alt='', $width='', $height='', $class='')
 	{
@@ -972,8 +1049,8 @@ abstract class CmsAdminThemeBase
 	 * Abstrct function for showing errors in the admin theme.
 	 *
 	 * @abstract
-	 * @param mixed The errors, either a string, or an array of stri9ngs
-	 * @param string An optional get variable name that can contain an error string key.  If specified, errors is ignored.
+	 * @param mixed $errors The errors, either a string, or an array of strings
+	 * @param string $get_var An optional get variable name that can contain an error string key.  If specified, errors is ignored.
 	 */
 	abstract public function ShowErrors($errors,$get_var='');
 
@@ -981,8 +1058,8 @@ abstract class CmsAdminThemeBase
 	 * Abstrct function for showing messages in the admin theme.
 	 *
 	 * @abstract
-	 * @param mixed The message, either a string, or an array of stri9ngs
-	 * @param string An optional get variable name that can contain an error string key.  If specified, message param is ignored.
+	 * @param mixed $message The message, either a string, or an array of stri9ngs
+	 * @param string $get_var An optional get variable name that can contain an error string key.  If specified, message param is ignored.
 	 */
 	abstract public function ShowMessage($message,$get_var='');
 
@@ -992,10 +1069,10 @@ abstract class CmsAdminThemeBase
 	 *
 	 * @abstract
 	 * @deprecated
-	 * @param string The name to show on the header.  This will not be passed through the lang process if module_help_type is not FALSE.
-	 * @param array  Extra language parameters to pass to the title_name.  Ignored if module_help_type is not FALSE
-	 * @param string Text to show in the module help link (depends on the module_help_type param)
-	 * @param mixed  Flag for how to display module help types.   Possible values are TRUE to display a simple link, FALSE for no help, and 'both' for both types of links
+	 * @param string $title The name to show on the header.  This will not be passed through the lang process if module_help_type is not FALSE.
+	 * @param array  $extra_lang_params Extra language parameters to pass to the title_name.  Ignored if module_help_type is not FALSE
+	 * @param string $link_text Text to show in the module help link (depends on the module_help_type param)
+	 * @param mixed  $module_help_type Flag for how to display module help types.   Possible values are TRUE to display a simple link, FALSE for no help, and 'both' for both types of links
 	 */
 	abstract public function ShowHeader($title_name,$extra_lang_params = array(),$link_text = '',$module_help_type = FALSE);
 
@@ -1044,7 +1121,7 @@ abstract class CmsAdminThemeBase
 	 * A function to retrieve the global admin theme object.
 	 * This method will create the admin theme object if has not yet been created.  It will read the cms preferences and cross reference with available themes.
 	 *
-	 * @param  String optional theme name.
+	 * @param string $name optional theme name.
 	 * @return CmsAdminThemeBase Reference to the initialized admin theme.
 	 */
 	static public function &GetThemeObject($name = '')
@@ -1087,7 +1164,7 @@ abstract class CmsAdminThemeBase
 	/**
 	 * A public function to add a notification for display in the theme.
 	 *
-	 * @param CmsAdminThemeNotification A reference to the new notification
+	 * @param CmsAdminThemeNotification $notification A reference to the new notification
 	 */
 	public function add_notification(CmsAdminThemeNotification& $notification)
 	{
@@ -1100,9 +1177,9 @@ abstract class CmsAdminThemeBase
 	 * This is simply a compatibility wrapper around the add_notification method.
 	 *
 	 * @deprecated
-	 * @param int Priority level between 1 and 3
-	 * @param string The module name.
-	 * @param html The contents of the notification
+	 * @param int $priority priority level between 1 and 3
+	 * @param string $module The module name.
+	 * @param string $html The contents of the notification
 	 */
 	public function AddNotification($priority,$module,$html)
 	{
@@ -1230,15 +1307,16 @@ abstract class CmsAdminThemeBase
 	/**
 	 * An abstract function for processing the login form.
 	 *
+	 * @param  array $params
 	 * @return string html contents for the login page.
 	 */
-
 	abstract public function do_login($params);
+
 	/**
 	 * An abstract function for processing the content area of the page.
 	 * Many admin themes will do most of their work in this method (passing the html contents through a smarty template etc).
 	 *
-	 * @param string html contents
+	 * @param string $html HTML contents
 	 * @return string the HTML contents of the entire page.
 	 */
 	abstract public function postprocess($html);
@@ -1266,9 +1344,9 @@ abstract class CmsAdminThemeBase
 	 * i.e:  echo $this->SetTabHeader('preferences',$this->Lang('preferences'));
 	 *
 	 * @final
-	 * @param string The tab id
-	 * @param string The tab title
-	 * @param boolean A flag indicating wether this tab is active.
+	 * @param string $tabid The tab id
+	 * @param string $title The tab title
+	 * @param boolean $active A flag indicating wether this tab is active.
 	 * @return string
 	 */ 
 	public final function SetTabHeader($tabid,$title,$active=false)
@@ -1320,8 +1398,8 @@ abstract class CmsAdminThemeBase
 	 * Output a string to indicate the start of the output for a specific tab
 	 *
 	 * @final
-	 * @param string tabid (see SetTabHeader)
-	 * @param arrray Parameters
+	 * @param string $tabid The tabid (see SetTabHeader)
+	 * @param array $params Parameters
 	 * @return string
 	 */
 	public final function StartTab($tabid, $params = array())
@@ -1355,13 +1433,32 @@ abstract class CmsAdminThemeBase
  * @license GPL
  * @since   1.11
  * @author  Robert Campbell
+ * @property string $module Module name
+ * @property int $priority Priority between 1 and 3
+ * @property string $html HTML contents of the notification
  */
 class CmsAdminThemeNotification
 {
+
+	/**
+	 * @ignore
+	 */
 	private $_module;
+
+	/**
+	 * @ignore
+	 */
 	private $_priority;
+
+	/**
+	 * @ignore
+	 */
 	private $_html;
 
+
+	/**
+	 * @ignore
+	 */
 	public function __get($key)
 	{
 		switch( $key ) {
@@ -1374,6 +1471,10 @@ class CmsAdminThemeNotification
 		throw new Exception('Attempt to retrieve invalid property from CmsAdminThemeNotification');
 	}
 
+
+	/**
+	 * @ignore
+	 */
 	public function __set($key,$value)
 	{
 		switch( $key ) {

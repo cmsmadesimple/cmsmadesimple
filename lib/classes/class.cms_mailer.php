@@ -653,7 +653,7 @@ class cms_mailer
 
   /**
    * Adds a "Reply-to" address.
-   * @param string $address
+   * @param string $addr
    * @param string $name
    * @return boolean
    */

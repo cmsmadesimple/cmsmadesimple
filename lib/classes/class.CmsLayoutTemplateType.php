@@ -646,6 +646,8 @@ class CmsLayoutTemplateType
 
 	/**
 	 * Load template type objects by specifying an array of ids
+	 *
+	 * @param array $list Array of template typd ids
 	 */
 	public static function load_bulk($list)
 	{
