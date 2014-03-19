@@ -1,7 +1,7 @@
 <?php // -*- mode:php; tab-width:4; indent-tabs-mode:t; c-basic-offset:4; -*-
 #CMS - CMS Made Simple
 #(c)2004-2010 by Ted Kulp (ted@cmsmadesimple.org)
-#This project's homepage is: http://cmsmadesimple.org
+#Visit our homepage at: http://cmsmadesimple.org
 #
 #This program is free software; you can redistribute it and/or modify
 #it under the terms of the GNU General Public License as published by
@@ -88,7 +88,7 @@ class UserOperations
 			$db = $gCms->GetDb();
 			$result = array();
 
-			$query = "SELECT user_id, username, password, first_name, last_name, email, active, admin_access 
+			$query = "SELECT user_id, username, password, first_name, last_name, email, active, admin_access
                       FROM ".cms_db_prefix()."users ORDER BY username";
 			$dbresult = $db->SelectLimit($query,$limit,$offset);
 
@@ -176,7 +176,7 @@ class UserOperations
 
 		if ($activeonly == true) {
 			$joins[] = cms_db_prefix()."user_groups ug ON u.user_id = ug.user_id";
-			$where[] = "u.active = 1";	
+			$where[] = "u.active = 1";
 		}
 
 		if ($adminaccessonly == true) {
@@ -234,7 +234,7 @@ class UserOperations
 	 */
 	function InsertUser($user)
 	{
-		$result = -1; 
+		$result = -1;
 
 		$gCms = cmsms();
 		$db = $gCms->GetDb();
@@ -243,7 +243,7 @@ class UserOperations
 		$query = 'SELECT user_id FROM '.cms_db_prefix().'users WHERE username = ?';
 		$tmp = $db->GetOne($query,array($user->username));
 		if( $tmp ) return $result;
-		  
+
 		$time = $db->DBTimeStamp(time());
 		$new_user_id = $db->GenID(cms_db_prefix()."users_seq");
 		$query = "INSERT INTO ".cms_db_prefix()."users (user_id, username, password, active, first_name, last_name, email, admin_access, create_date, modified_date) VALUES (?,?,?,?,?,?,?,?,".$time.",".$time.")";
@@ -262,7 +262,7 @@ class UserOperations
 	 */
 	function UpdateUser($user)
 	{
-		$result = false; 
+		$result = false;
 		$gCms = cmsms();
 		$db = $gCms->GetDb();
 
@@ -291,7 +291,7 @@ class UserOperations
 	{
  		if( $id <= 1 ) return false;
  		if( !check_permission(get_userid(),'Manage Users') ) return false;
-	
+
 		$result = false;
 		$gCms = cmsms();
 		$db = $gCms->GetDb();
@@ -435,7 +435,7 @@ class UserOperations
 	 * Test if the user has the specified permission
 	 *
 	 * Given the users member groups, test if any of those groups have the specified permission.
-	 * 
+	 *
 	 * @param int $userid
 	 * @param string $permname
 	 * @return bool
@@ -461,4 +461,5 @@ class UserOperations
 	}
 }
 
+# vim:ts=4 sw=4 noet
 ?>

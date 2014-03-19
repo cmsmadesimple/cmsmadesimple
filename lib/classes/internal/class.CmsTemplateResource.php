@@ -1,7 +1,7 @@
 <?php // -*- mode:php; tab-width:4; indent-tabs-mode:t; c-basic-offset:4; -*-
 #CMS - CMS Made Simple
 #(c)2004-2012 by Ted Kulp (wishy@users.sf.net)
-#This project's homepage is: http://www.cmsmadesimple.org
+#Visit our homepage at: http://www.cmsmadesimple.org
 #
 #This program is free software; you can redistribute it and/or modify
 #it under the terms of the GNU General Public License as published by
@@ -41,9 +41,9 @@ class CmsTemplateResource extends CMS_Fixed_Resource_Custom
 		if( in_array($section,array('top','head','body')) ) $this->_section = $section;
 	}
 
-	protected function buildUniqueResourceName(Smarty $smarty,$resource_name)
+	protected function buildUniqueResourceName(Smarty $smarty,$resource_name, $is_config = false)
 	{
-		return parent::buildUniqueResourceName($smarty,$resource_name).'--'.$this->_section;
+		return parent::buildUniqueResourceName($smarty,$resource_name,$is_config).'--'.$this->_section;
 	}
 
 	private function &get_template($name)

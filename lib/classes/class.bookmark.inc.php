@@ -1,7 +1,7 @@
 <?php // -*- mode:php; tab-width:4; indent-tabs-mode:t; c-basic-offset:4; -*-
 #CMS - CMS Made Simple
 #(c)2004-2010 by Ted Kulp (ted@cmsmadesimple.org)
-#This project's homepage is: http://cmsmadesimple.org
+#Visit our homepage at: http://cmsmadesimple.org
 #
 #This program is free software; you can redistribute it and/or modify
 #it under the terms of the GNU General Public License as published by
@@ -20,7 +20,7 @@
 
 /**
  * This file contains a class that defines a bookmark in the CMSMS admin console.
- * @package CMS 
+ * @package CMS
  */
 
 /**
@@ -83,7 +83,7 @@ class Bookmark
 	{
 		$result = false;
 		$bookops = cmsms()->GetBookmarkOperations();
-		
+
 		if ($this->bookmark_id > -1)
 		{
 			$result = $bookops->UpdateBookmark($this);

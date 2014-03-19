@@ -1,7 +1,9 @@
 <?php
+#BEGIN_LICENSE CMSMS
 #CMS - CMS Made Simple
-#(c)2004-2013 by Ted Kulp (wishy@users.sf.net)
-#This project's homepage is: http://www.cmsmadesimple.org
+#(c)2004-2011 by Ted Kulp (wishy@users.sf.net)
+#(c)2011-2014 by The CMSMS Dev Team
+#Visit our homepage at: http://www.cmsmadesimple.org
 #
 #This program is free software; you can redistribute it and/or modify
 #it under the terms of the GNU General Public License as published by
@@ -15,7 +17,7 @@
 #You should have received a copy of the GNU General Public License
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-#
+#END_LICENSE
 #$Id$
 
 $starttime = microtime();

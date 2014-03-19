@@ -1,7 +1,7 @@
 <?php
 #CMS - CMS Made Simple
 #(c)2013 by Robert Campbell (calguy1000@cmsmadesimple.org)
-#This project's homepage is: http://www.cmsmadesimple.org
+#Visit our homepage at: http://www.cmsmadesimple.org
 #
 #This program is free software; you can redistribute it and/or modify
 #it under the terms of the GNU General Public License as published by

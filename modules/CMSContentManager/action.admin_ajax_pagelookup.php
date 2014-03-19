@@ -7,7 +7,7 @@
 # 
 #-------------------------------------------------------------------------
 # CMS - CMS Made Simple is (c) 2004 by Ted Kulp (wishy@cmsmadesimple.org)
-# This project's homepage is: http://www.cmsmadesimple.org
+# Visit our homepage at: http://www.cmsmadesimple.org
 #
 #-------------------------------------------------------------------------
 #

@@ -2,7 +2,7 @@
 
 # CMS - CMS Made Simple
 # (c)2004 by Ted Kulp (tedkulp@users.sf.net)
-# This project's homepage is: http://cmsmadesimple.org
+# Visit our homepage at: http://cmsmadesimple.org
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by

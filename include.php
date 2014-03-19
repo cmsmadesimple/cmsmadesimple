@@ -1,7 +1,7 @@
-<?php
+<?php // -*- mode:php; tab-width:4; indent-tabs-mode:t; c-basic-offset:4; -*-
 #CMS - CMS Made Simple
 #(c)2004-2013 by Ted Kulp (wishy@users.sf.net)
-#This project's homepage is: http://www.cmsmadesimple.org
+#Visit our homepage at: http://www.cmsmadesimple.org
 #
 #This program is free software; you can redistribute it and/or modify
 #it under the terms of the GNU General Public License as published by
@@ -201,9 +201,10 @@ if( !isset($DONT_LOAD_SMARTY) ) {
   }
   $smarty->assign('sitename', get_site_preference('sitename', 'CMSMS Site'));
 }
-  
+
 
 #Do auto task stuff.
 if (!isset($CMS_INSTALL_PAGE) && !isset($CMS_LOGIN_PAGE)) CmsRegularTaskHandler::handle_tasks();
 
+# vim:ts=4 sw=4 noet
 ?>

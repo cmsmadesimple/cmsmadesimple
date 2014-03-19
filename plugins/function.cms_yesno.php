@@ -1,6 +1,6 @@
 <?php
 #CMS - CMS Made Simple
-#This project's homepage is: http://www.cmsmadesimple.org
+#Visit our homepage at: http://www.cmsmadesimple.org
 #
 #This program is free software; you can redistribute it and/or modify
 #it under the terms of the GNU General Public License as published by

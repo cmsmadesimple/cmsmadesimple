@@ -1,22 +1,5 @@
 <?php // -*- mode:php; tab-width:2; indent-tabs-mode:t; c-basic-offset:2; -*-
-#CMS - CMS Made Simple
-#(c)2004-2012 by Ted Kulp (ted@cmsmadesimple.org)
-#This project's homepage is: http://cmsmadesimple.org
-#
-#This program is free software; you can redistribute it and/or modify
-#it under the terms of the GNU General Public License as published by
-#the Free Software Foundation; either version 2 of the License, or
-#(at your option) any later version.
-#
-#This program is distributed in the hope that it will be useful,
-#but WITHOUT ANY WARRANTY; without even the implied warranty of
-#MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#GNU General Public License for more details.
-#You should have received a copy of the GNU General Public License
-#along with this program; if not, write to the Free Software
-#Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-#
-#$Id: class.global.inc.php 6939 2011-03-06 00:12:54Z calguy1000 $
+#Visit our homepage at: http://cmsmadesimple.org
 
 /**
  * @package CMS
@@ -176,7 +159,7 @@ class CmsLayoutTemplate
 		$this->_design_assoc = $x;
 	}
 
-	public function add_design($a) 
+	public function add_design($a)
 	{
 		$n = null;
 		if( is_object($a) && is_a($a,'CmsLayoutCollection') ) {
@@ -376,7 +359,7 @@ class CmsLayoutTemplate
 		$query = 'DELETE FROM '.cms_db_prefix().self::ADDUSERSTABLE.' WHERE tpl_id = ?';
 		$dbr = $db->Execute($query,array($this->get_id()));
 		if( !$dbr ) throw new CmsSQLErrorException($db->sql.' -- '.$db->ErrorMsg());
-    
+
 		$t = $this->get_additional_editors();
 		if( is_array($t) && count($t) ) {
 			$query = 'INSERT INTO '.cms_db_prefix().self::ADDUSERSTABLE.' (tpl_id,user_id) VALUES(?,?)';
@@ -589,7 +572,7 @@ class CmsLayoutTemplate
 	{
 		$n = self::_resolve_user($a);
 		if( $n <= 0 ) throw new CmsInvalidDataException('Invalid user specified to get_owned_templates');
-    
+
 		$query = CmsLayoutTemplateQuery(array('u'=>$n));
 		$tmp = $query->GetMatchedTemplateIds();
 		return self::load_bulk($tmp);
@@ -649,7 +632,7 @@ class CmsLayoutTemplate
 		// scan owner/additional uers
 		$obj = self::load($tpl);
 		if( $obj->get_owner_id() == $userid ) return TRUE;
-		
+
 		// get the user groups
 		$addt_users = $obj->get_additional_editors();
 		if( is_array($addt_users) && count($addt_users) ) {
@@ -677,7 +660,7 @@ class CmsLayoutTemplate
 		}
 
 		if( !$t2 ) throw new CmsInvalidDataException('Invalid data passed to CmsLayoutTemplate::create_by_type()');
-    
+
 		$tpl = new CmsLayoutTemplate;
 		$tpl->set_type($t2);
 		$tpl->set_content($t2->get_dflt_contents());
@@ -702,7 +685,7 @@ class CmsLayoutTemplate
 				if( $tpl->get_type_id() == $t2->get_id() && $tpl->get_type_dflt() ) return $tpl;
 			}
 		}
-		
+
 		$db = cmsms()->GetDb();
 		$query = 'SELECT * FROM '.cms_db_prefix().self::TABLENAME.' WHERE type_id = ? AND type_dflt = ?';
 		$tmp = $db->GetRow($query,array($t2->get_id(),1));
@@ -721,7 +704,7 @@ class CmsLayoutTemplate
 		if( !is_array($tmp) || count($tmp) == 0 ) {
 			throw new CmsDataNotFoundException('Could not find CmsLayoutTemplate rows for type '.$type->get_id());
 		}
-		
+
 		$out = array();
 		foreach( $tmp as $row ) {
 			$out[] = self::_load_from_data($row);
