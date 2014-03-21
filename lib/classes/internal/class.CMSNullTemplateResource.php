@@ -1,7 +1,7 @@
 <?php
 #CMS - CMS Made Simple
 #(c)2004-2012 by Ted Kulp (wishy@users.sf.net)
-#Visit our homepage at: http://www.cmsmadesimple.org
+#This project's homepage is: http://www.cmsmadesimple.org
 #
 #This program is free software; you can redistribute it and/or modify
 #it under the terms of the GNU General Public License as published by
@@ -34,37 +34,28 @@
  */
 class CMSNullTemplateResource extends Smarty_Resource_Custom
 {
-  protected function fetch($name,&$source,&$mtime)
-  {
-    debug_buffer('start global_content_get_template');
-    $gCms = cmsms();
-    $config = $gCms->GetConfig();
-    $gcbops = $gCms->GetGlobalContentOperations();
+	protected function fetch($name,&$source,&$mtime)
+	{
+		debug_buffer('start global_content_get_template');
+		$config = cmsms()->GetConfig();
+		$gcbops = cmsms()->GetGlobalContentOperations();
 
-    $oneblob = $gcbops->LoadHtmlBlobByName($name);
-    if ($oneblob)
-      {
-	$text = $oneblob->content;
-	$source = $text;
-	$mtime = $oneblob->modified_date;
-
-	// So no one can do anything nasty, take out the php smarty tags.  Use a user
-	// defined plugin instead.
-	if (!(isset($config["use_smarty_php_tags"]) && $config["use_smarty_php_tags"] == true))
-	  {
-	    $source = preg_replace("/\{\/?php\}/", "", $source);
-	  }
-      }
-    else
-      {
-	$source = "<!-- Html blob '" . $name . "' does not exist  -->";
-		// put mention into the admin log
-		audit('', 'Global Content Block: '.$name , 'Can not open or does not exist!');
-	$mtime = time();
-      }
-    debug_buffer('end global_content_get_template');
-    return true;
-  }
+		$oneblob = $gcbops->LoadHtmlBlobByName($name);
+		if ($oneblob)
+		{
+			$source = $oneblob->content;
+			$mtime = $oneblob->modified_date;
+		}
+		else
+		{
+			$source = "<!-- Global Content Block '" . $name . "' does not exist  -->";
+			// put mention into the admin log
+			audit('', 'Global Content Block: '.$name , 'Can not open or does not exist!');
+			$mtime = time();
+		}
+		debug_buffer('end global_content_get_template');
+		return true;
+	}
 } // end of class
 
 #
