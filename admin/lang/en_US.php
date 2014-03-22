@@ -1046,7 +1046,7 @@ $lang['magic_quotes_gpc_on'] = "Single-quote, double quote and backslash are esc
 $lang['magic_quotes_runtime'] = "Magic quotes in runtime";
 $lang['magic_quotes_runtime_on'] = "Most functions that return data will have quotes escaped with a backslash. You can experience problems";
 $lang['mail_settings'] = "Mail Settings";
-$lang['mail_testbody'] = "<h2 style="color: green;">Greetings</h2><p>You are receiving this message from an installation of <strong>CMS Made Simple</strong>.  This message is proving the validity of the settings used for sending email messages.   If you are reading this message, then everything appears to be working fine.  However, if you did not solicit this email from a CMS Made Simple admin console, please contact the website administrator.</p>";
+$lang['mail_testbody'] = "<h2 style=&quot;color: green;&quot;>Greetings</h2><p>You are receiving this message from an installation of <strong>CMS Made Simple</strong>.  This message is proving the validity of the settings used for sending email messages.   If you are reading this message, then everything appears to be working fine.  However, if you did not solicit this email from a CMS Made Simple admin console, please contact the website administrator.</p>";
 $lang['mail_testsubject'] = "CMSMS Mail Test message";
 $lang['main'] = "Main";
 $lang['mainmenu'] = "Main Menu";
@@ -1072,7 +1072,7 @@ $lang['mediatype_speech'] = "speech : Intended for speech synthesizers.";
 $lang['mediatype_tty'] = "tty : Intended for media using a fixed-pitch character grid, such as Teletypes and terminals.";
 $lang['mediatype_tv'] = "tv : Intended for television-type devices.";
 $lang['media_query'] = "Media Query";
-$lang['media_query_description'] = "<strong>Notice:</strong> When Media Query is used, Media Type selection will be ignored.<br /> Use any valid expression as recommended by <a href="http://www.w3.org/TR/css3-mediaqueries/" rel="external" title="W3C">W3C</a>.";
+$lang['media_query_description'] = "<strong>Notice:</strong> When Media Query is used, Media Type selection will be ignored.<br /> Use any valid expression as recommended by <a href=&quot;http://www.w3.org/TR/css3-mediaqueries/&quot; rel=&quot;external&quot title=&quot;W3C&quot;>W3C</a>.";
 $lang['memory_limit'] = "PHP Effective Memory Limit";
 $lang['menutext'] = "Menu Text";
 $lang['menu_bookmarks'] = "[+]";
