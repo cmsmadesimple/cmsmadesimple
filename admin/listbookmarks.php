@@ -36,7 +36,7 @@ include_once("header.php");
 
 	$userid = get_userid();
 	
-$bookops = cmsms()->GetBookmarkOperations();
+	$bookops = cmsms()->GetBookmarkOperations();
 	$marklist = $bookops->LoadBookmarks($userid);
 
 	$page = 1;
@@ -50,12 +50,14 @@ $bookops = cmsms()->GetBookmarkOperations();
 	echo $themeObject->ShowHeader('bookmarks').'</div>';
 
 	if (count($marklist) > 0) {
+	
+		echo'<p class="pagewarning visible">' . lang('show_shortcuts_message') . '</p>';
 
 		echo "<table cellspacing=\"0\" class=\"pagetable\">\n";
 		echo '<thead>';
 		echo "<tr>\n";
 		echo "<th class=\"pagew60\">".lang('name')."</th>\n";
-		echo "<th class=\"pagepos\">".lang('url')."</th>\n";
+		echo "<th class=\"pagew60\">".lang('url')."</th>\n";
 		echo "<th class=\"pageicon\">&nbsp;</th>\n";
 		echo "<th class=\"pageicon\">&nbsp;</th>\n";
 		echo "</tr>\n";
@@ -89,6 +91,8 @@ $bookops = cmsms()->GetBookmarkOperations();
 		echo '</tbody>';
 		echo "</table>\n";
 
+	} else {
+		echo'<p class="information">' . lang('no_shortcuts') . '</p>';
 	}
 ?>
 	<div class="pageoptions">

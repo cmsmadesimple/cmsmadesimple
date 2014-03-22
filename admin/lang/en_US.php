@@ -1160,6 +1160,7 @@ $lang['no_files_scanned'] = "No files were scanned during the verification proce
 $lang['no_file_url'] = "None (Use URL Above)";
 $lang['no_orders_changed'] = "You chose to reorder pages, but you did not change the order of any of them. Pages were not reordered.";
 $lang['no_permission'] = "You have not permission to perform that function.";
+$lang['no_shortcuts'] = "No shortcuts defined yet. You can add them by clicking the button below.";
 $lang['n_a'] = "N/A";
 
 ## O
@@ -1324,6 +1325,7 @@ $lang['showfilters'] = "Edit filter";
 $lang['showinmenu'] = "Show in Menu";
 $lang['showrecent'] = "Show Recently Used Pages";
 $lang['showsite'] = "Show Site";
+$lang['show_shortcuts_message'] = "To show the shortcuts button in your admin theme, set My account >> User Preferences >> Administration Shortcuts";
 $lang['sibling_duplicate_order'] = "Two sibling pages can not have the same order. Pages were not reordered.";
 $lang['siteadmin'] = "Site Admin";
 $lang['sitedownexcludeadmins'] = "Exclude users logged in to the CMSMS Admin console";
