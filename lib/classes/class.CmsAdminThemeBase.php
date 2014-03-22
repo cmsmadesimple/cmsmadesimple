@@ -20,7 +20,7 @@
 
 /**
  * Classes and utilities for the base CMS Admin theme
- * @package CMS 
+ * @package CMS
  */
 
 
@@ -39,7 +39,7 @@
  * @property-read string $title The current page title
  * @property-read string $subtitle The current page subtitle
  */
-abstract class CmsAdminThemeBase 
+abstract class CmsAdminThemeBase
 {
 
 	/**
@@ -128,8 +128,10 @@ abstract class CmsAdminThemeBase
 	 * @ignore
 	 */
 	private $_active_item;
-	
-	// tab variables
+
+	/**
+	 * @ignore
+	 */
 	private $_activetab;
 
 	/**
@@ -141,7 +143,7 @@ abstract class CmsAdminThemeBase
 	 * @ignore
 	 */
 	private $_subtitle;
-	
+
 	/**
 	 * @ignore
 	 */
@@ -172,7 +174,7 @@ abstract class CmsAdminThemeBase
 	public function __get($key)
 	{
 		if( $key == 'themeName' ) {
-			$class = get_class($this); 
+			$class = get_class($this);
 			if( endswith($class,'Theme') ) $class = substr($class,0,strlen($class)-5);
 			return $class;
 		}
@@ -214,7 +216,7 @@ abstract class CmsAdminThemeBase
 	 * for that particular user.   If cache information is not available, then modules will be loaded and the information
 	 * will be gleaned from the module for that user.
 	 *
-	 * 
+	 *
 	 * @since 1.10
 	 * @access private
 	 * @ignore
@@ -332,16 +334,16 @@ abstract class CmsAdminThemeBase
 
 		$this->_perms = array();
 		$this->_breadcrumbs = array();
-		
+
 		// content section.
 		$this->_perms['contentPerms'] = (isset($this->_sectionCount['content']) && $this->_sectionCount['content'] > 0);
 
-		// layout        
+		// layout
         $this->_perms['layoutPerms'] = (isset($this->_sectionCount['layout']) && $this->_sectionCount['layout'] > 0);
 
 		// file
         $this->_perms['filePerms'] = (isset($this->_sectionCount['files']) && $this->_sectionCount['files'] > 0);
-    
+
 		// user/group
         $this->_perms['userPerms'] = check_permission($this->userid, 'Manage Users');
         $this->_perms['groupPerms'] = check_permission($this->userid, 'Manage Groups');
@@ -382,7 +384,7 @@ abstract class CmsAdminThemeBase
      *
      * @param section - section to display
 	 * @access private
-	 * @ignore 
+	 * @ignore
      */
     private function _MenuListSectionModules($section)
     {
@@ -408,14 +410,14 @@ abstract class CmsAdminThemeBase
      *
      * @param subtitle any info to add to the page title
 	 * @access private
-     * @ignore 
+     * @ignore
      */
     private function _populate_admin_navigation($subtitle='')
     {
         if (count($this->_menuItems) > 0) return;
 
 		$config = cmsms()->GetConfig();
-		debug_buffer('before populate admin navigation');	
+		debug_buffer('before populate admin navigation');
 		if( $subtitle ) $this->_subtitle = $subtitle;
 
 		debug_buffer('before menu items');
@@ -507,7 +509,7 @@ abstract class CmsAdminThemeBase
 									 'title' => $this->_FixSpaces(lang('systeminfo')),
 									 'description' => lang('systeminfodescription'),
 									 'show_in_menu' => $this->HasPerm('adminPerms'));
-		$items['systemmaintenance'] = array('url' => 'systemmaintenance.php', 
+		$items['systemmaintenance'] = array('url' => 'systemmaintenance.php',
 											'parent' => 'siteadmin',
 											'title' => $this->_FixSpaces(lang('systemmaintenance')),
 											'description' => lang('systemmaintenancedescription'),
@@ -550,7 +552,7 @@ abstract class CmsAdminThemeBase
 		// adjust all the urls to include the session key
 		// and set an icon if we can. also mark them as system items.
 		foreach( $this->_menuItems as $sectionKey => $sectionArray ) {
-			if( isset($sectionArray['url']) && 
+			if( isset($sectionArray['url']) &&
 				(!isset($sectionArray['type']) || $sectionArray['type'] != 'external' )) {
 				$url = $this->_menuItems[$sectionKey]['url'];
 				if( strpos($url,'?') !== FALSE ) {
@@ -619,7 +621,7 @@ abstract class CmsAdminThemeBase
 											  'show_in_menu'=>true,'module'=>$menuItem->module);
 			}
 		}
-	
+
 		debug_buffer('after non system module menu items');
 
 		// remove any top level items that don't have children
@@ -639,7 +641,7 @@ abstract class CmsAdminThemeBase
 		}
 
 		// fix up all of the menu items to have the correct user key.
-		
+
 		// sort the menu items by system, priority, and name (case insensitive)
 		$fn = function($a,$b) {
 			$sa = isset($a['system'])?$a['system']:0;
@@ -663,7 +665,7 @@ abstract class CmsAdminThemeBase
 		}
 
 		// resolve the tree to be doubly-linked,
-		// and make sure the selections are selected            
+		// and make sure the selections are selected
 		foreach ($this->_menuItems as $sectionKey=>$sectionArray) {
 			// link the children to the parents; a little clumsy since we can't
 			// assume php5-style references in a foreach.
@@ -674,7 +676,7 @@ abstract class CmsAdminThemeBase
 			}
 
 			// set selected
-			if( strstr($_SERVER['REQUEST_URI'],'moduleinterface.php') !== FALSE && 
+			if( strstr($_SERVER['REQUEST_URI'],'moduleinterface.php') !== FALSE &&
 				isset($_REQUEST['mact']) &&
 				isset($sectionArray['module']) && $sectionArray['module'] ) {
 
@@ -684,18 +686,18 @@ abstract class CmsAdminThemeBase
 				$u2 = new cms_url($_SERVER['REQUEST_URI']);
 				$v2 = array();
 				parse_str($u2->get_query(),$v2);
-				if( $u1->get_path() == $u2->get_path() && 
-					isset($v1['mact']) && isset($v2['mact']) && 
+				if( $u1->get_path() == $u2->get_path() &&
+					isset($v1['mact']) && isset($v2['mact']) &&
 					$v1['mact'] == $v2['mact'] ) {
 					$this->_menuItems[$sectionKey]['selected'] = TRUE;
 					$this->_active_item = $sectionKey;
-					$this->_breadcrumbs[] = array('title'=>$this->_menuItems[$sectionKey]['title'], 
+					$this->_breadcrumbs[] = array('title'=>$this->_menuItems[$sectionKey]['title'],
 												  'url'=>$this->_menuItems[$sectionKey]['url']);
 					if ($sectionArray['parent'] != -1) {
 						$parent = $sectionArray['parent'];
 						while ($parent != -1) {
 							$this->_menuItems[$parent]['selected'] = TRUE;
-							$this->_breadcrumbs[] = array('title'=>$this->_menuItems[$parent]['title'], 
+							$this->_breadcrumbs[] = array('title'=>$this->_menuItems[$parent]['title'],
 														  'url'=>$this->_menuItems[$parent]['url']);
 							$parent = $this->_menuItems[$parent]['parent'];
 						}
@@ -707,13 +709,13 @@ abstract class CmsAdminThemeBase
 				$this->_menuItems[$sectionKey]['selected'] = TRUE;
 				$this->_title .= $sectionArray['title'];
 				$this->_active_item = $sectionKey;
-				$this->_breadcrumbs[] = array('title'=>$this->_menuItems[$sectionKey]['title'], 
+				$this->_breadcrumbs[] = array('title'=>$this->_menuItems[$sectionKey]['title'],
 											  'url'=>$this->_menuItems[$sectionKey]['url']);
 				if ($sectionArray['parent'] != -1) {
 					$parent = $sectionArray['parent'];
 					while ($parent != -1) {
 						$this->_menuItems[$parent]['selected'] = TRUE;
-						$this->_breadcrumbs[] = array('title'=>$this->_menuItems[$parent]['title'], 
+						$this->_breadcrumbs[] = array('title'=>$this->_menuItems[$parent]['title'],
 													  'url'=>$this->_menuItems[$parent]['url']);
 						$parent = $this->_menuItems[$parent]['parent'];
 					}
@@ -727,7 +729,7 @@ abstract class CmsAdminThemeBase
 
 		debug_buffer('after populate admin navigation');
     }
-    
+
 
 	/**
 	 * Set the page title.
@@ -765,7 +767,7 @@ abstract class CmsAdminThemeBase
      * HasPerm
      *
      * Check if the user has one of the aggregate permissions
-     * 
+     *
      * @param string $permission the permission to check.
 	 * @return boolean
      */
@@ -793,7 +795,7 @@ abstract class CmsAdminThemeBase
 		return $this->_menuItems;
 	}
 
-	
+
 	/**
 	 * Return the menu items as a nested tree using recursion.
 	 *
@@ -805,7 +807,7 @@ abstract class CmsAdminThemeBase
 		$flatitems = $this->get_admin_navigation();
 		foreach( $flatitems as $key => $one ) {
 			if( !$one['show_in_menu'] ) continue;
-			if( (!isset($one['parent']) && $parent == -1) || 
+			if( (!isset($one['parent']) && $parent == -1) ||
 				(isset($one['parent']) && $one['parent'] == $parent) ) {
 				if( isset($one['children']) ) unset($one['children']);
 
@@ -833,10 +835,10 @@ abstract class CmsAdminThemeBase
 	public function get_navigation_tree($parent = -1,$maxdepth = -1,$usecache = TRUE)
 	{
 		if( is_array($this->_nav_tree) && $usecache) return $this->_nav_tree;
-		
+
 		$nodes = $this->_get_navigation_tree_sub($parent,$maxdepth);
 		if( $usecache ) $this->_nav_tree = $nodes;
-		
+
 		return $nodes;
 	}
 
@@ -936,7 +938,7 @@ abstract class CmsAdminThemeBase
 		$this->_populate_admin_navigation();
 		return $this->_breadcrumbs;
 	}
-	
+
 
 	/**
 	 * Return the title of the active item.
@@ -1008,9 +1010,9 @@ abstract class CmsAdminThemeBase
 	 * DisplayImage will display the themed version of an image (if it exists),
 	 * @param string $imageName name of image
 	 * @param string $alt alt text
-	 * @param int width
-	 * @param int height
-	 * @param string class
+	 * @param int $width width
+	 * @param int $height height
+	 * @param string $class class
 	 */
 	public function DisplayImage($imageName, $alt='', $width='', $height='', $class='')
 	{
@@ -1022,7 +1024,7 @@ abstract class CmsAdminThemeBase
 				$imagePath = substr($imageName,0,strrpos($imageName,'/')+1);
 				$imageName = substr($imageName,strrpos($imageName,'/')+1);
 			}
-    	   	
+
 			$config = cmsms()->GetConfig();
 			$str = dirname($config['root_path'].'/'.$config['admin_dir']."/themes/{$this->themeName}/images/{$imagePath}{$imageName}");
 			if (file_exists("{$str}/{$imageName}")) {
@@ -1069,7 +1071,7 @@ abstract class CmsAdminThemeBase
 	 *
 	 * @abstract
 	 * @deprecated
-	 * @param string $title The name to show on the header.  This will not be passed through the lang process if module_help_type is not FALSE.
+	 * @param string $title_name The name to show on the header.  This will not be passed through the lang process if module_help_type is not FALSE.
 	 * @param array  $extra_lang_params Extra language parameters to pass to the title_name.  Ignored if module_help_type is not FALSE
 	 * @param string $link_text Text to show in the module help link (depends on the module_help_type param)
 	 * @param mixed  $module_help_type Flag for how to display module help types.   Possible values are TRUE to display a simple link, FALSE for no help, and 'both' for both types of links
@@ -1093,7 +1095,7 @@ abstract class CmsAdminThemeBase
 		}
 	}
 
-	
+
 	/**
 	 * Retrieve a list of the available admin themes.
 	 *
@@ -1102,7 +1104,7 @@ abstract class CmsAdminThemeBase
 	static public function GetAvailableThemes()
 	{
 		$config = cmsms()->GetConfig();
-			
+
 		$files = glob(cms_join_path($config['admin_path'],'themes').'/*');
 		if( is_array($files) && count($files) ) {
 			$res = array();
@@ -1127,7 +1129,7 @@ abstract class CmsAdminThemeBase
 	static public function &GetThemeObject($name = '')
 	{
 		if( is_object(self::$_instance) ) return self::$_instance;
-		
+
 		if( !$name ) $name = get_preference(get_userid(FALSE),'admintheme',self::GetDefaultTheme());
 		if( class_exists($name) ) {
 			self::$_instance = new $name;
@@ -1207,8 +1209,8 @@ abstract class CmsAdminThemeBase
 	 * various admin pages.
 	 *
 	 * @param string $name - The html name of the select box
-	 * @param string $selected - If a matching id is found in the list, that item
-	 *                           is marked as selected.
+	 * @param string $selected - If a matching id is found in the list, that item is marked as selected.
+	 * @param string $id - The html id attribute for the select box.
 	 * @return string The select list of pages
 	 */
 	public function GetAdminPageDropdown($name,$selected,$id = '')
@@ -1221,10 +1223,10 @@ abstract class CmsAdminThemeBase
 		foreach( $menuItems as $sectionKey=>$menuItem ) {
 			if( $menuItem['parent'] != -1 ) continue;
 			if( !$menuItem['show_in_menu'] || strlen($menuItem['url']) < 1 ) continue;
-	     
+
 			$opts[$menuItem['title']] = $menuItem['url'];
 
-			if( is_array($menuItem['children']) && 
+			if( is_array($menuItem['children']) &&
 				count($menuItem['children']) ) {
 				foreach( $menuItem['children'] as $thisChild ) {
 					if( $thisChild == 'home' || $thisChild == 'logout' ||
@@ -1299,7 +1301,7 @@ abstract class CmsAdminThemeBase
 	 * An abstract function to output the content for a top level navigation page
 	 * This method is called when the user has browsed to the root of the admin site, or to any top level navigation item
 	 *
-	 * @param string The section name.  An empty string indicates that a navigation of all top level items should be created.
+	 * @param string $section_name The section name.  An empty string indicates that a navigation of all top level items should be created.
 	 * @return string html contents.
 	 */
 	abstract public function do_toppage($section_name);
@@ -1333,7 +1335,7 @@ abstract class CmsAdminThemeBase
 	 *
 	 * @final
 	 * @return string
-	 */ 
+	 */
 	public final function StartTabHeaders()
 	{
 		return '<div id="page_tabs">';
@@ -1348,7 +1350,7 @@ abstract class CmsAdminThemeBase
 	 * @param string $title The tab title
 	 * @param boolean $active A flag indicating wether this tab is active.
 	 * @return string
-	 */ 
+	 */
 	public final function SetTabHeader($tabid,$title,$active=false)
 	{
 		$a="";
@@ -1356,7 +1358,7 @@ abstract class CmsAdminThemeBase
 			$a=" class='active'";
 			$this->_activetab = $tabid;
 		}
-		
+
 		$tabid = strtolower(str_replace(' ','_',$tabid));
 		return '<div id="'.$tabid.'"'.$a.'>'.$title.'</div>';
 	}
@@ -1408,7 +1410,7 @@ abstract class CmsAdminThemeBase
 		if (FALSE == empty($this->_activetab) && $tabid == $this->_activetab && FALSE == empty($params['tab_message'])) {
 			$message = $this->ShowMessage($this->Lang($params['tab_message']));
 		}
-		
+
 		return '<div id="' . strtolower(str_replace(' ', '_', $tabid)) . '_c">'.$message;
 	}
 
