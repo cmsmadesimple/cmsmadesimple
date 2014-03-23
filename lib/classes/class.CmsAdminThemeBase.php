@@ -560,6 +560,7 @@ abstract class CmsAdminThemeBase
 		// add in all of the 'system' modules next
 		$gCms = cmsms();
 		$moduleops = ModuleOperations::get_instance();
+		// todo: cleanup
 		foreach ($this->_menuItems as $sectionKey=>$sectionArray) {
 			if( !isset($this->_modulesBySection[$sectionKey]) ) continue;
 			$tmpArray = $this->_modulesBySection[$sectionKey];
@@ -586,6 +587,7 @@ abstract class CmsAdminThemeBase
 
 		// add in all of the non system modules
 		// non system modules cannot have a priority less than 2
+		// todo: cleanup
         foreach ($this->_menuItems as $sectionKey=>$sectionArray) {
 			if( !isset($this->_modulesBySection[$sectionKey]) ) continue;
 			$tmpArray = $this->_modulesBySection[$sectionKey];
