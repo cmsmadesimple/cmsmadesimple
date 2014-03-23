@@ -23,6 +23,7 @@
  * related to content, but more to the underlying mechanisms of the system.
  *
  * @package CMS
+ * @license GPL
  */
 
 

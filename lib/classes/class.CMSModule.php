@@ -280,11 +280,11 @@ abstract class CMSModule
    */
   public function RegisterSmartyPlugin($name,$type,$callback,$cachable = TRUE,$usage = 0)
   {
-    if( !$name || !$type || !$callback ) throw new CmsException('Invalid data passed to RegisterSmartyPlugin');
+	  if( !$name || !$type || !$callback ) throw new CmsException('Invalid data passed to RegisterSmartyPlugin');
 
-    // todo: check name, and type
-    if( $usage == 0 ) $usage = cms_module_smarty_plugin_manager::AVAIL_FRONTEND;
-    cms_module_smarty_plugin_manager::addStatic($this->GetName(),$name,$type,$callback,$cachable,$usage);
+	  // todo: check name, and type
+	  if( $usage == 0 ) $usage = cms_module_smarty_plugin_manager::AVAIL_FRONTEND;
+	  cms_module_smarty_plugin_manager::addStatic($this->GetName(),$name,$type,$callback,$cachable,$usage);
   }
 
   /**
@@ -298,12 +298,11 @@ abstract class CMSModule
    */
   public function RemoveSmartyPlugin($name = '')
   {
-    if( $name == '' ) {
-      cms_module_smarty_plugin_manager::remove_by_module($this->GetName());
-    }
-    else {
-      cms_module_smarty_plugin_manager::remove_by_name($name);
-    }
+	  if( $name == '' ) {
+		  cms_module_smarty_plugin_manager::remove_by_module($this->GetName());
+		  return;
+	  }
+	  cms_module_smarty_plugin_manager::remove_by_name($name);
   }
 
   /**
@@ -351,9 +350,9 @@ abstract class CMSModule
    */
   final public function can_cache_output()
   {
-    global $CMS_ADMIN_PAGE, $CMS_INSTALL_PAGE, $CMS_STYLESHEET;
-    if( isset($CMS_ADMIN_PAGE) || isset($CMS_INSTALL_PAGE) || isset($CMS_STYLESHEET) ) return FALSE;
-    return $this->AllowSmartyCaching();
+	  global $CMS_ADMIN_PAGE, $CMS_INSTALL_PAGE, $CMS_STYLESHEET;
+	  if( isset($CMS_ADMIN_PAGE) || isset($CMS_INSTALL_PAGE) || isset($CMS_STYLESHEET) ) return FALSE;
+	  return $this->AllowSmartyCaching();
   }
 
   /**
@@ -365,7 +364,7 @@ abstract class CMSModule
    */
   public function AllowSmartyCaching()
   {
-    return FALSE;
+	  return FALSE;
   }
 
   /**
@@ -382,8 +381,8 @@ abstract class CMSModule
    */
   public function GetAbout()
   {
-    $this->_loadMiscMethods();
-    return cms_module_GetAbout($this);
+	  $this->_loadMiscMethods();
+	  return cms_module_GetAbout($this);
   }
 
   /**
@@ -395,8 +394,8 @@ abstract class CMSModule
    */
   final public function GetHelpPage()
   {
-    $this->_loadMiscMethods();
-    return cms_module_GetHelpPage($this);
+	  $this->_loadMiscMethods();
+	  return cms_module_GetHelpPage($this);
   }
 
   /**
@@ -407,7 +406,7 @@ abstract class CMSModule
    */
   public function GetName()
   {
-    return get_class($this);
+	  return get_class($this);
   }
 
   /**
@@ -418,12 +417,10 @@ abstract class CMSModule
    */
   final public function GetModulePath()
   {
-    if (is_subclass_of($this, 'CMSModule')) {
-      return cms_join_path($this->config['root_path'], 'modules' , $this->GetName());
-    }
-    else {
+	  if (is_subclass_of($this, 'CMSModule')) {
+		  return cms_join_path($this->config['root_path'], 'modules' , $this->GetName());
+	  }
       return __DIR__;
-    }
   }
 
   /**
@@ -435,7 +432,7 @@ abstract class CMSModule
    */
   final public function GetModuleURLPath($use_ssl=false)
   {
-    return ($use_ssl?$this->config['ssl_url']:$this->config['root_url']) . '/modules/' . $this->GetName();
+	  return ($use_ssl?$this->config['ssl_url']:$this->config['root_url']) . '/modules/' . $this->GetName();
   }
 
   /**
@@ -447,7 +444,7 @@ abstract class CMSModule
    */
   public function GetFriendlyName()
   {
-    return $this->GetName();
+	  return $this->GetName();
   }
 
   /**
@@ -465,19 +462,6 @@ abstract class CMSModule
    * @return string
    */
   public function MinimumCMSVersion()
-  {
-    global $CMS_VERSION;
-    return $CMS_VERSION;
-  }
-
-  /**
-   * Returns the maximum version necessary to run this version of the module.
-   *
-   * @abstract
-   * @deprecated
-   * @return string
-   */
-  public function MaximumCMSVersion()
   {
     global $CMS_VERSION;
     return $CMS_VERSION;
@@ -506,7 +490,7 @@ abstract class CMSModule
    */
   public function GetHeaderHTML()
   {
-    return '';
+	  return '';
   }
 
   /**
@@ -519,7 +503,7 @@ abstract class CMSModule
    */
   public function SuppressAdminOutput(&$request)
   {
-    return false;
+	  return false;
   }
 
   /**
@@ -535,13 +519,14 @@ abstract class CMSModule
    */
   final public function RegisterRoute($routeregex, $defaults = array())
   {
-    $route = new CmsRoute($routeregex,$this->GetName(),$defaults);
-    cms_route_manager::register($route);
+	  $route = new CmsRoute($routeregex,$this->GetName(),$defaults);
+	  cms_route_manager::register($route);
   }
 
   /**
    * Register all static routes for this module.
    *
+   * @abstract
    * @since 1.11
    * @author Robert Campbell
    * @return void
@@ -559,11 +544,8 @@ abstract class CMSModule
    */
   final public function GetParameters()
   {
-    if( count($this->params) == 0 ) {
-      // quick hack to load parameters if they are not already loaded.
-      $this->InitializeAdmin();
-    }
-    return $this->params;
+	  if( count($this->params) == 0 ) $this->InitializeAdmin(); // quick hack to load parameters if they are not already loaded.
+	  return $this->params;
   }
 
   /**
@@ -577,100 +559,98 @@ abstract class CMSModule
    * @param array  A map of param names and type information
    * @param boolean A flag indicating wether unknown keys in the input data should be allowed.
    * @param boolean A flag indicating wether keys should be treated as strings and cleaned.
-   * Rolf: only used in lib/classes/class.CMSModule.php
    */
-  private function _cleanParamHash($modulename,$data,$map = false,
-				   $allow_unknown = false,$clean_keys = true)
+  private function _cleanParamHash($modulename,$data,$map = false, $allow_unknown = false,$clean_keys = true)
   {
-    $mappedcount = 0;
-    $result = array();
-    foreach( $data as $key => $value ) {
-      $mapped = false;
-      $paramtype = '';
-      if( is_array($map) ) {
-	if( isset($map[$key]) ) {
-	  $paramtype = $map[$key];
-	}
-	else {
-	  // Key not found in the map
-	  // see if one matches via regular expressions
-	  foreach( $map as $mk => $mv ) {
-	    if(strstr($mk,CLEAN_REGEXP) === FALSE) continue;
+	  $mappedcount = 0;
+	  $result = array();
+	  foreach( $data as $key => $value ) {
+		  $mapped = false;
+		  $paramtype = '';
+		  if( is_array($map) ) {
+			  if( isset($map[$key]) ) {
+				  $paramtype = $map[$key];
+			  }
+			  else {
+				  // Key not found in the map
+				  // see if one matches via regular expressions
+				  foreach( $map as $mk => $mv ) {
+					  if(strstr($mk,CLEAN_REGEXP) === FALSE) continue;
 
-	    // mk is a regular expression
-	    $ss = substr($mk,strlen(CLEAN_REGEXP));
-	    if( $ss !== FALSE ) {
-	      if( preg_match($ss, $key) ) {
-		// it matches, we now know what type to use
-		$paramtype = $mv;
-		break;
-	      }
-	    }
+					  // mk is a regular expression
+					  $ss = substr($mk,strlen(CLEAN_REGEXP));
+					  if( $ss !== FALSE ) {
+						  if( preg_match($ss, $key) ) {
+							  // it matches, we now know what type to use
+							  $paramtype = $mv;
+							  break;
+						  }
+					  }
+				  }
+			  } // else
+
+			  if( $paramtype != '' ) {
+				  switch( $paramtype ) {
+				  case 'CLEAN_INT':
+					  $mappedcount++;
+					  $mapped = true;
+					  $value = (int) $value;
+					  break;
+				  case 'CLEAN_FLOAT':
+					  $mappedcount++;
+					  $mapped = true;
+					  $value = (float) $value;
+					  break;
+				  case 'CLEAN_NONE':
+					  // pass through without cleaning.
+					  $mappedcount++;
+					  $mapped = true;
+					  break;
+				  case 'CLEAN_STRING':
+					  $value = cms_htmlentities($value);
+					  $mappedcount++;
+					  $mapped = true;
+					  break;
+				  case 'CLEAN_FILE':
+					  $value = realpath($value);
+					  if( $realpath === FALSE ) {
+						  $value = CLEANED_FILENAME;
+					  }
+					  else {
+						  $config = cmsms()->GetConfig();
+						  if( strpos($realpath, $config['root_path']) !== 0 ) {
+							  $value = CLEANED_FILENAME;
+						  }
+					  }
+					  $mappedcount++;
+					  $mapped = true;
+					  break;
+				  default:
+					  $mappedcount++;
+					  $mapped = true;
+					  $value = cms_htmlentities($value);
+					  break;
+				  } // switch
+			  } // if $paramtype
+		  }
+
+		  // we didn't clean this yet
+		  if( $allow_unknown && !$mapped ) {
+			  // but we're allowing unknown stuff so we'll just clean it.
+			  $value = cms_htmlentities($value);
+			  $mappedcount++;
+			  $mapped = true;
+		  }
+
+		  if( $clean_keys ) $key = cms_htmlentities($key);
+
+		  if( !$mapped && !$allow_unknown ) {
+			  trigger_error('Parameter '.$key.' is not known by module '.$modulename.' dropped',E_USER_WARNING);
+			  continue;
+		  }
+		  $result[$key]=$value;
 	  }
-	} // else
-
-	if( $paramtype != '' ) {
-	  switch( $paramtype ) {
-	  case 'CLEAN_INT':
-	    $mappedcount++;
-	    $mapped = true;
-	    $value = (int) $value;
-	    break;
-	  case 'CLEAN_FLOAT':
-	    $mappedcount++;
-	    $mapped = true;
-	    $value = (float) $value;
-	    break;
-	  case 'CLEAN_NONE':
-	    // pass through without cleaning.
-	    $mappedcount++;
-	    $mapped = true;
-	    break;
-	  case 'CLEAN_STRING':
-	    $value = cms_htmlentities($value);
-	    $mappedcount++;
-	    $mapped = true;
-	    break;
-	  case 'CLEAN_FILE':
-	    $value = realpath($value);
-	    if( $realpath === FALSE ) {
-	      $value = CLEANED_FILENAME;
-	    }
-	    else {
-	      $config = cmsms()->GetConfig();
-	      if( strpos($realpath, $config['root_path']) !== 0 ) {
-		$value = CLEANED_FILENAME;
-	      }
-	    }
-	    $mappedcount++;
-	    $mapped = true;
-	    break;
-	  default:
-	    $mappedcount++;
-	    $mapped = true;
-	    $value = cms_htmlentities($value);
-	    break;
-	  } // switch
-	} // if $paramtype
-      }
-
-      // we didn't clean this yet
-      if( $allow_unknown && !$mapped ) {
-	// but we're allowing unknown stuff so we'll just clean it.
-	$value = cms_htmlentities($value);
-	$mappedcount++;
-	$mapped = true;
-      }
-
-      if( $clean_keys ) $key = cms_htmlentities($key);
-
-      if( !$mapped && !$allow_unknown ) {
-	trigger_error('Parameter '.$key.' is not known by module '.$modulename.' dropped',E_USER_WARNING);
-	continue;
-      }
-      $result[$key]=$value;
-    }
-    return $result;
+	  return $result;
   }
 
   /**
@@ -706,7 +686,7 @@ abstract class CMSModule
    */
   protected function InitializeFrontend()
   {
-    $this->SetParameters(); // for backwards compatibility purposes. may be removed.
+	  $this->SetParameters(); // for backwards compatibility purposes. may be removed.
   }
 
   /**
@@ -721,7 +701,7 @@ abstract class CMSModule
    */
   protected function InitializeAdmin()
   {
-    $this->SetParameters(); // for backwards compatibility purposes. may be removed.
+	  $this->SetParameters(); // for backwards compatibility purposes. may be removed.
   }
 
   /**
@@ -744,7 +724,7 @@ abstract class CMSModule
    * acceptable for frontend actions.
    *
    * possible values for type are:
-   * CLEAN_INT,CLEAN_FLOAT,CLEAN_NONE,CLEAN_STRING
+   * CLEAN_INT,CLEAN_FLOAT,CLEAN_NONE,CLEAN_STRING,CLEAN_REGEXP,CLEAN_FILE
    *
    * i.e:
    * $this->SetParameterType('numarticles',CLEAN_INT);
@@ -758,17 +738,18 @@ abstract class CMSModule
    */
   final public function SetParameterType($param, $type)
   {
-    switch($type) {
-    case CLEAN_INT:
-    case CLEAN_FLOAT:
-    case CLEAN_NONE:
-    case CLEAN_STRING:
-      $this->param_map[trim($param)] = $type;
-      break;
-    default:
-      trigger_error('Attempt to set invalid parameter type');
-      break;
-    }
+	  switch($type) {
+	  case CLEAN_INT:
+	  case CLEAN_FLOAT:
+	  case CLEAN_NONE:
+	  case CLEAN_STRING:
+	  case CLEAN_FILE:
+		  $this->param_map[trim($param)] = $type;
+		  break;
+	  default:
+		  trigger_error('Attempt to set invalid parameter type');
+		  break;
+	  }
   }
 
   /**
@@ -789,11 +770,8 @@ abstract class CMSModule
    */
   final public function CreateParameter($param, $defaultval='', $helpstring='', $optional=true)
   {
-    array_push($this->params, array('name' => $param,
-				    'default' => $defaultval,
-				    'help' => $helpstring,
-				    'optional' => $optional
-				    ));
+	  array_push($this->params, array('name' => $param,'default' => $defaultval,'help' => $helpstring,
+									  'optional' => $optional ));
   }
 
   /**
@@ -804,7 +782,7 @@ abstract class CMSModule
    */
   public function GetDescription()
   {
-    return '';
+	  return '';
   }
 
   /**
@@ -815,7 +793,7 @@ abstract class CMSModule
    */
   public function GetAdminDescription()
   {
-    return '';
+	  return '';
   }
 
   /**
@@ -826,7 +804,7 @@ abstract class CMSModule
    */
   public function IsAdminOnly()
   {
-    return false;
+	  return false;
   }
 
   /**
@@ -847,7 +825,7 @@ abstract class CMSModule
    */
   public function GetAuthor()
   {
-    return '';
+	  return '';
   }
 
   /**
@@ -858,7 +836,7 @@ abstract class CMSModule
    */
   public function GetAuthorEmail()
   {
-    return '';
+	  return '';
   }
 
   /**
@@ -1029,24 +1007,24 @@ abstract class CMSModule
    */
   public function Uninstall()
   {
-    $filename = dirname(dirname(__DIR__)) . '/modules/'.$this->GetName().'/method.uninstall.php';
-    if (@is_file($filename)) {
-      $gCms = cmsms();
-      $db = $gCms->GetDb();
-      $config = $gCms->GetConfig();
-      $smarty = $gCms->GetSmarty();
+	  $filename = dirname(dirname(__DIR__)) . '/modules/'.$this->GetName().'/method.uninstall.php';
+	  if (@is_file($filename)) {
+		  $gCms = cmsms();
+		  $db = $gCms->GetDb();
+		  $config = $gCms->GetConfig();
+		  $smarty = $gCms->GetSmarty();
 
-      $res = include($filename);
-      if( $res == 1 || $res == '') return FALSE;
-      if( is_string($res)) {
-	$modops = $gCms->GetModuleOperations();
-	$modops->SetError($res);
-      }
-      return $res;
-    }
-    else {
-      return FALSE;
-    }
+		  $res = include($filename);
+		  if( $res == 1 || $res == '') return FALSE;
+		  if( is_string($res)) {
+			  $modops = $gCms->GetModuleOperations();
+			  $modops->SetError($res);
+		  }
+		  return $res;
+	  }
+	  else {
+		  return FALSE;
+	  }
   }
 
   /**
@@ -3171,6 +3149,48 @@ abstract class CMSModule
   }
 
 } // end of class
+
+
+/**
+ * Indicates that the incoming parameter is expected to be an integer.
+ * This is used when cleaning input parameters for a module action or module call.
+ */
+define('CLEAN_INT','CLEAN_INT');
+
+/**
+ * Indicates that the incoming parameter is expected to be a float
+ * This is used when cleaning input parameters for a module action or module call.
+ */
+define('CLEAN_FLOAT','CLEAN_FLOAT');
+
+/**
+ * Indicates that the incoming parameter is not to be cleaned.
+ * This is used when cleaning input parameters for a module action or module call.
+ */
+define('CLEAN_NONE','CLEAN_NONE');
+
+/**
+ * Indicates that the incoming parameter is a string.
+ * This is used when cleaning input parameters for a module action or module call.
+ */
+define('CLEAN_STRING','CLEAN_STRING');
+
+/**
+ * Indicates that the incoming parameter is a regular expression.
+ * This is used when cleaning input parameters for a module action or module call.
+ */
+define('CLEAN_REGEXP','regexp:');
+
+/**
+ * Indicates that the incoming parameter is an uploaded file.
+ * This is used when cleaning input parameters for a module action or module call.
+ */
+define('CLEAN_FILE','CLEAN_FILE');
+
+/**
+ * @ignore
+ */
+define('CLEANED_FILENAME','BAD_FILE');
 
 # vim:ts=4 sw=4 noet
 ?>

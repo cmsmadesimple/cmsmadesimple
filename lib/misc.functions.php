@@ -22,12 +22,16 @@
  * Miscellaneous support functions
  *
  * @package CMS
+ * @license GPL
  */
 
 
- 
+
 /**
- * Redirects to relative URL on the current site
+ * Redirects to relative URL on the current site.
+ *
+ * If headers have not been sent this method will use header based redirection.
+ * Otherwise javascript redirection will be used.
  *
  * @author http://www.edoceo.com/
  * @since 0.1
@@ -113,7 +117,7 @@ function redirect($to)
 
 
 /**
- * Given a page ID or an alias, redirect to it
+ * Given a page ID or an alias, redirect to it.
  * Retrieves the URL of the specified page, and performs a redirect
  *
  * @param mixed $alias An integer page id or a string page alias.
@@ -139,14 +143,14 @@ function redirect_to_alias($alias)
 
 
 /**
- * Calculate the difference in seconds between two microtime() values
+ * Calculate the difference in seconds between two microtime() values.
  *
  * @since 0.3
  * @param string $a Earlier microtime value
  * @param string $b Later microtime value
- * @return integer The difference.
+ * @return int The difference.
  */
-function microtime_diff($a, $b) 
+function microtime_diff($a, $b)
 {
   list($a_dec, $a_sec) = explode(" ", $a);
   list($b_dec, $b_sec) = explode(" ", $b);
@@ -156,10 +160,14 @@ function microtime_diff($a, $b)
 
 
 /**
- * Joins a path together using proper directory separators
+ * Joins a path together using platform specific directory separators.
  * Taken from: http://www.php.net/manual/en/ref.dir.php
  *
+ * This method should NOT be used for building URLS.
+ *
  * This method accepts a variable number of string arguments.
+ * i.e: $out = cms_join_path($dir1,$dir2,$dir3,$filename);
+ * or $out = cms_join_path($dir1,$dir2,$filename);
  *
  * @since 0.14
  * @return string
@@ -173,13 +181,13 @@ function cms_join_path()
 
 
 /**
- * A method to perform HTML entity conversion on a string
+ * Perform HTML entity conversion on a string.
  *
  * @see htmlentities
  * @param string $val The input string
  * @param string $param A flag indicating how quotes should be handled (see htmlentities) (ignored)
  * @param string $charset $val The input character set (ignored)
- * @param boolean $convert_single_quotes A flag indicating wether single quotes should be converted to entities.
+ * @param bool $convert_single_quotes A flag indicating wether single quotes should be converted to entities.
  * @return string the converted string.
  */
 function cms_htmlentities($val, $param=ENT_QUOTES, $charset="UTF-8", $convert_single_quotes = false)
@@ -208,7 +216,7 @@ function cms_htmlentities($val, $param=ENT_QUOTES, $charset="UTF-8", $convert_si
 
 
 /**
- * A method to convert a string into UTF-8 entities
+ * Convert a string into UTF-8 entities.
  *
  * @internal
  * @deprecated
@@ -234,8 +242,8 @@ function cms_utf8entities($val)
 
 
 /**
- * A function to put a backtrace into the generated log file.
- * 
+ * A function to output a backtrace into the generated log file.
+ *
  * @see debug_to_log, debug_bt
  * @return void
  * Rolf: Looks like not used
@@ -311,9 +319,9 @@ function debug_bt()
 *
 * @param mixed $var The data to display
 * @param string $title (optional) title for the output.  If null memory information is output.
-* @param boolean $echo_to_screen (optional) Flag indicating wether the output should be echoed to the screen or returned.
-* @param boolean $use_html (optional) flag indicating wether html or text should be used in the output.
-* @param boolean $showtitle (optional) flag indicating wether the title field should be displayed in the output.
+* @param bool $echo_to_screen (optional) Flag indicating wether the output should be echoed to the screen or returned.
+* @param bool $use_html (optional) flag indicating wether html or text should be used in the output.
+* @param bool $showtitle (optional) flag indicating wether the title field should be displayed in the output.
 * @return string
 */
 function debug_display($var, $title="", $echo_to_screen = true, $use_html = true,$showtitle = TRUE)
@@ -377,7 +385,7 @@ function debug_display($var, $title="", $echo_to_screen = true, $use_html = true
 
 
 /**
- * Display $var nicely only if $config["debug"] is set
+ * Display $var nicely only if $config["debug"] is set.
  *
  * @param mixed $var
  * @param string $title
@@ -415,7 +423,7 @@ function debug_to_log($var, $title='',$filename = '')
 
 
 /**
- * Display $var nicely to the cmsms()->errors array if $config['debug'] is set
+ * Display $var nicely to the cmsms()->errors array if $config['debug'] is set.
  *
  * @param mixed $var
  * @param string $title
@@ -429,11 +437,11 @@ function debug_buffer($var, $title="")
 
 
 /**
- * Debug an sql command
+ * Debug an sql command.
  *
  * @internal
  * @param string SQL query
- * @param boolean (unused)
+ * @param bool (unused)
  * Rolf: only used in lib/adodb.functions.php
  */
 function debug_sql($str, $newline = false)
@@ -446,55 +454,54 @@ function debug_sql($str, $newline = false)
 
 /**
 * Return $value if it's set and same basic type as $default_value,
-*			otherwise return $default_value. Note. Also will trim($value)
-*			if $value is not numeric.
+* Otherwise return $default_value. Note. Also will trim($value)	if $value is not numeric.
 *
+* @ignore
 * @param string $value
 * @param mixed $default_value
 * @param mixed $session_key
 * @deprecated
 * @return mixed
-* Rolf: only used in this file
 */
 function _get_value_with_default($value, $default_value = '', $session_key = '')
 {
-  if($session_key != '') {
-    if(isset($_SESSION['default_values'][$session_key])) $default_value = $_SESSION['default_values'][$session_key];
-  }
-
-  // set our return value to the default initially and overwrite with $value if we like it.
-  $return_value = $default_value;
-
-  if(isset($value)) {
-    if(is_array($value)) {
-      // $value is an array - validate each element.
-      $return_value = array();
-      foreach($value as $element) {
-	$return_value[] = _get_value_with_default($element, $default_value);
-      }
+    if($session_key != '') {
+        if(isset($_SESSION['default_values'][$session_key])) $default_value = $_SESSION['default_values'][$session_key];
     }
-    else {
-      if(is_numeric($default_value)) {
-	if(is_numeric($value)) {
-	  $return_value = $value;
-	}
-      }
-      else {
-	$return_value = trim($value);
-      }
-    }
-  }
 
-  if($session_key != '') $_SESSION['default_values'][$session_key] = $return_value;
-  return $return_value;
+    // set our return value to the default initially and overwrite with $value if we like it.
+    $return_value = $default_value;
+
+    if(isset($value)) {
+        if(is_array($value)) {
+            // $value is an array - validate each element.
+            $return_value = array();
+            foreach($value as $element) {
+                $return_value[] = _get_value_with_default($element, $default_value);
+            }
+        }
+        else {
+            if(is_numeric($default_value)) {
+                if(is_numeric($value)) {
+                    $return_value = $value;
+                }
+            }
+            else {
+                $return_value = trim($value);
+            }
+        }
+    }
+
+    if($session_key != '') $_SESSION['default_values'][$session_key] = $return_value;
+    return $return_value;
 }
 
 
 
 /**
- * Retrieve the $value from the $parameters array checking for
- * $parameters[$value] and $params[$id.$value]. Returns $default
- * if $value is not in $params array.
+ * Retrieve the $value from the $parameters array checking for $parameters[$value] and
+ * $params[$id.$value].
+ * Returns $default if $value is not in $params array.
  * Note: This function will also trim() string values.
  *
  * @param array $parameters
@@ -502,50 +509,49 @@ function _get_value_with_default($value, $default_value = '', $session_key = '')
  * @param mixed $default_value
  * @param string $session_key
  * @return mixed
- * Rolf: looks like not used
  */
 function get_parameter_value($parameters, $value, $default_value = '', $session_key = '')
 {
-  if($session_key != '') {
-    if(isset($_SESSION['parameter_values'][$session_key])) $default_value = $_SESSION['parameter_values'][$session_key];
-  }
-
-  // set our return value to the default initially and overwrite with $value if we like it.
-  $return_value = $default_value;
-  if(isset($parameters[$value])) {
-    if(is_bool($default_value)) {
-      // want a boolean return_value
-      if(isset($parameters[$value])) $return_value = (boolean)$parameters[$value];
+    if($session_key != '') {
+        if(isset($_SESSION['parameter_values'][$session_key])) $default_value = $_SESSION['parameter_values'][$session_key];
     }
-    else {
-      // is $default_value a number?
-      $is_number = false;
-      if(is_numeric($default_value)) $is_number = true;
 
-      if(is_array($parameters[$value])) {
-	// $parameters[$value] is an array - validate each element.
-	$return_value = array();
-	foreach($parameters[$value] as $element) {
-	  $return_value[] = _get_value_with_default($element, $default_value);
-	}
-      }
-      else {
-	if(is_numeric($default_value)) {
-	  // default value is a number, we only like $parameters[$value] if it's a number too.
-	  if(is_numeric($parameters[$value])) $return_value = $parameters[$value];
-	}
-	elseif(is_string($default_value)) {
-	  $return_value = trim($parameters[$value]);
-	}
-	else {
-	  $return_value = $parameters[$value];
-	}
-      }
+    // set our return value to the default initially and overwrite with $value if we like it.
+    $return_value = $default_value;
+    if(isset($parameters[$value])) {
+        if(is_bool($default_value)) {
+            // want a bool return_value
+            if(isset($parameters[$value])) $return_value = (bool)$parameters[$value];
+        }
+        else {
+            // is $default_value a number?
+            $is_number = false;
+            if(is_numeric($default_value)) $is_number = true;
+
+            if(is_array($parameters[$value])) {
+                // $parameters[$value] is an array - validate each element.
+                $return_value = array();
+                foreach($parameters[$value] as $element) {
+                    $return_value[] = _get_value_with_default($element, $default_value);
+                }
+            }
+            else {
+                if(is_numeric($default_value)) {
+                    // default value is a number, we only like $parameters[$value] if it's a number too.
+                    if(is_numeric($parameters[$value])) $return_value = $parameters[$value];
+                }
+                elseif(is_string($default_value)) {
+                    $return_value = trim($parameters[$value]);
+                }
+                else {
+                    $return_value = $parameters[$value];
+                }
+            }
+        }
     }
-  }
 
-  if($session_key != '') $_SESSION['parameter_values'][$session_key] = $return_value;
-  return $return_value;
+    if($session_key != '') $_SESSION['parameter_values'][$session_key] = $return_value;
+    return $return_value;
 }
 
 
@@ -561,18 +567,18 @@ function get_parameter_value($parameters, $value, $default_value = '', $session_
  */
 function cms_mapi_remove_permission($permission_name)
 {
-  try {
-    $perm = CmsPermission::load($permission_name);
-    $perm->delete();
-  }
-  catch( Exception $e ) {
-  }
+    try {
+        $perm = CmsPermission::load($permission_name);
+        $perm->delete();
+    }
+    catch( Exception $e ) {
+    }
 }
 
 
 
 /**
- * A method to add a permission to the CMSMS permissions table
+ * A method to add a permission to the CMSMS permissions table.
  *
  * @internal
  * @ignore
@@ -584,58 +590,58 @@ function cms_mapi_remove_permission($permission_name)
  */
 function cms_mapi_create_permission($cms, $permission_name, $permission_text)
 {
-  try {
-    $perm = new CmsPermission();
-    $perm->originator = 'Other';
-    $perm->name = $permission_name;
-    $perm->text = $permission_text;
-    $perm->save();
-    return true;
-  }
-  catch( Exception $e ) {
-    return false;
-  }
+    try {
+        $perm = new CmsPermission();
+        $perm->originator = 'Other';
+        $perm->name = $permission_name;
+        $perm->text = $permission_text;
+        $perm->save();
+        return true;
+    }
+    catch( Exception $e ) {
+        return false;
+    }
 }
 
 
 
 /**
  * Check the permissions of a directory recursively to make sure that
- * we have write permission to all files
+ * we have write permission to all files.
  *
  * @param  string  $path Start directory.
- * @return boolean
+ * @return bool
  */
 function is_directory_writable( $path )
 {
-  if ( substr ( $path , strlen ( $path ) - 1 ) != '/' ) $path .= '/' ;
+    if ( substr ( $path , strlen ( $path ) - 1 ) != '/' ) $path .= '/' ;
 
-  $result = TRUE;
-  if( $handle = @opendir( $path ) ) {
-    while( false !== ( $file = readdir( $handle ) ) ) {
-      if( $file == '.' || $file == '..' ) continue;
+    $result = TRUE;
+    if( $handle = @opendir( $path ) ) {
+        while( false !== ( $file = readdir( $handle ) ) ) {
+            if( $file == '.' || $file == '..' ) continue;
 
-      $p = $path.$file;
-      if( !@is_writable( $p ) ) return FALSE;
+            $p = $path.$file;
+            if( !@is_writable( $p ) ) return FALSE;
 
-      if( @is_dir( $p ) ) {
-	$result = is_directory_writable( $p );
-	if( !$result ) return FALSE;
-      }
+            if( @is_dir( $p ) ) {
+                $result = is_directory_writable( $p );
+                if( !$result ) return FALSE;
+            }
+        }
+        @closedir( $handle );
     }
-    @closedir( $handle );
-  }
-  else {
-    return FALSE;
-  }
+    else {
+        return FALSE;
+    }
 
-  return TRUE;
+    return TRUE;
 }
 
 
 /**
  * Return an array containing a list of files in a directory
- * performs a non recursive search
+ * performs a non recursive search.
  *
  * @internal
  * @param path - path to search
@@ -671,8 +677,7 @@ function get_matching_files($dir,$extensions = '',$excludedot = true,$excludedir
 
 
 /**
- * Return an array containing a list of files in a directory
- * performs a recursive search
+ * Return an array containing a list of files in a directory performs a recursive search.
  *
  * @param  string  $path     Start Path.
  * @param  array   $excludes Array of regular expressions indicating files to exclude.
@@ -683,130 +688,129 @@ function get_matching_files($dir,$extensions = '',$excludedot = true,$excludedir
 **/
 function get_recursive_file_list ( $path , $excludes, $maxdepth = -1 , $mode = "FULL" , $d = 0 )
 {
-  $fn = function( $file, $excludes ) {
-    // strip the path from the file
-    if( empty($excludes) ) return false;
-    foreach( $excludes as $excl ) {
-      if( @preg_match( "/".$excl."/i", basename($file) ) ) return true;
-    }
-    return false;
-  };
+    $fn = function( $file, $excludes ) {
+        // strip the path from the file
+        if( empty($excludes) ) return false;
+        foreach( $excludes as $excl ) {
+            if( @preg_match( "/".$excl."/i", basename($file) ) ) return true;
+        }
+        return false;
+    };
 
-  if ( substr ( $path , strlen ( $path ) - 1 ) != '/' ) { $path .= '/' ; }
-  $dirlist = array () ;
-  if ( $mode != "FILES" ) { $dirlist[] = $path ; }
-  if ( $handle = opendir ( $path ) ) {
-    while ( false !== ( $file = readdir ( $handle ) ) ) {
-      if( $file == '.' || $file == '..' ) continue;
-      if( $fn( $file, $excludes ) ) continue;
+    if ( substr ( $path , strlen ( $path ) - 1 ) != '/' ) { $path .= '/' ; }
+    $dirlist = array () ;
+    if ( $mode != "FILES" ) { $dirlist[] = $path ; }
+    if ( $handle = opendir ( $path ) ) {
+        while ( false !== ( $file = readdir ( $handle ) ) ) {
+            if( $file == '.' || $file == '..' ) continue;
+            if( $fn( $file, $excludes ) ) continue;
 
-      $file = $path . $file ;
-      if ( ! @is_dir ( $file ) ) { if ( $mode != "DIRS" ) { $dirlist[] = $file ; } }
-      elseif ( $d >=0 && ($d < $maxdepth || $maxdepth < 0) ) {
-	$result = get_recursive_file_list ( $file . '/' , $excludes, $maxdepth , $mode , $d + 1 ) ;
-	$dirlist = array_merge ( $dirlist , $result ) ;
-      }
+            $file = $path . $file ;
+            if ( ! @is_dir ( $file ) ) { if ( $mode != "DIRS" ) { $dirlist[] = $file ; } }
+            elseif ( $d >=0 && ($d < $maxdepth || $maxdepth < 0) ) {
+                $result = get_recursive_file_list ( $file . '/' , $excludes, $maxdepth , $mode , $d + 1 ) ;
+                $dirlist = array_merge ( $dirlist , $result ) ;
+            }
+        }
+        closedir ( $handle ) ;
     }
-    closedir ( $handle ) ;
-  }
-  if ( $d == 0 ) { natcasesort ( $dirlist ) ; }
-  return ( $dirlist ) ;
+    if ( $d == 0 ) { natcasesort ( $dirlist ) ; }
+    return ( $dirlist ) ;
 }
 
 
 /**
- * A function to recursively delete all files and folders in a directory
- * synonymous with rm -r
+ * A function to recursively delete all files and folders in a directory; synonymous with rm -r.
  *
  * @param string $dirname The directory name
- * @return boolean
+ * @return bool
  */
 function recursive_delete( $dirname )
 {
-  // all subdirectories and contents:
-  if(is_dir($dirname))$dir_handle=opendir($dirname);
-  while($file=readdir($dir_handle)) {
-    if($file!="." && $file!="..") {
-      if(!is_dir($dirname."/".$file)) {
-	if( !@unlink ($dirname."/".$file) ) {
-	  closedir( $dir_handle );
-	  return false;
-	}
-      }
-      else {
-	recursive_delete($dirname."/".$file);
-      }
+    // all subdirectories and contents:
+    if(is_dir($dirname))$dir_handle=opendir($dirname);
+    while($file=readdir($dir_handle)) {
+        if($file!="." && $file!="..") {
+            if(!is_dir($dirname."/".$file)) {
+                if( !@unlink ($dirname."/".$file) ) {
+                    closedir( $dir_handle );
+                    return false;
+                }
+            }
+            else {
+                recursive_delete($dirname."/".$file);
+            }
+        }
     }
-  }
-  closedir($dir_handle);
-  if( ! @rmdir($dirname) ) return false;
-  return true;
+    closedir($dir_handle);
+    if( ! @rmdir($dirname) ) return false;
+    return true;
 }
 
 
 
 /**
- * A function to recursively chmod all files and folders in a directory
+ * A function to recursively chmod all files and folders in a directory.
  *
  * @see chmod
  * @param string $path The start location
- * @param integer $mode The octal mode
+ * @param int $mode The octal mode
  * Rolf: only used in admin/listmodules.php
  */
 function chmod_r( $path, $mode )
 {
-  if( !is_dir( $path ) ) return chmod( $path, $mode );
+    if( !is_dir( $path ) ) return chmod( $path, $mode );
 
-  $dh = @opendir( $path );
-  if( !$dh ) return FALSE;
+    $dh = @opendir( $path );
+    if( !$dh ) return FALSE;
 
-  while( $file = readdir( $dh ) ) {
-    if( $file == '.' || $file == '..' ) continue;
+    while( $file = readdir( $dh ) ) {
+        if( $file == '.' || $file == '..' ) continue;
 
-    $p = $path.DIRECTORY_SEPARATOR.$file;
-    if( is_dir( $p ) ) {
-      if( !@chmod_r( $p, $mode ) ) {
-	closedir( $dh );
-	return false;
-      }
+        $p = $path.DIRECTORY_SEPARATOR.$file;
+        if( is_dir( $p ) ) {
+            if( !@chmod_r( $p, $mode ) ) {
+                closedir( $dh );
+                return false;
+            }
+        }
+        else if( !is_link( $p ) ) {
+            if( !@chmod( $p, $mode ) ) {
+                closedir( $dh );
+                return false;
+            }
+        }
     }
-    else if( !is_link( $p ) ) {
-      if( !@chmod( $p, $mode ) ) {
-	closedir( $dh );
-	return false;
-      }
-    }
-  }
-  @closedir( $dh );
-  return @chmod( $path, $mode );
+    @closedir( $dh );
+    return @chmod( $path, $mode );
 }
 
 
 
 /**
- * A convenience function to test wether one string starts with another
+ * A convenience function to test wether one string starts with another.
  *
  * i.e:  startswith('The Quick Brown Fox','The');
  *
  * @param string $str The string to test against
  * @param string $sub The search string
- * @return boolean
+ * @return bool
  */
 function startswith( $str, $sub )
 {
-  return ( substr( $str, 0, strlen( $sub ) ) == $sub );
+    return ( substr( $str, 0, strlen( $sub ) ) == $sub );
 }
 
 
 
 /**
- * Similar to the startswith method, this function tests with string A ends with string B
+ * Similar to the startswith method, this function tests with string A ends with string B.
  *
  * i.e: endswith('The Quick Brown Fox','Fox');
  *
  * @param string $str The string to test against
  * @param string $sub The search string
- * @return boolean
+ * @return bool
  */
 function endswith( $str, $sub )
 {
@@ -816,11 +820,11 @@ function endswith( $str, $sub )
 
 
 /**
- * convert a human readable string into something that is suitable for use in URLS
+ * Convert a human readable string into something that is suitable for use in URLS.
  *
  * @param string $alias String to convert
- * @param boolean $tolower Indicates whether output string should be converted to lower case
- * @param boolean $withslash Indicates wether slashes should be allowed in the input.
+ * @param bool $tolower Indicates whether output string should be converted to lower case
+ * @param bool $withslash Indicates wether slashes should be allowed in the input.
  * @return string
  */
 function munge_string_to_url($alias, $tolower = false, $withslash = false)
@@ -845,7 +849,7 @@ function munge_string_to_url($alias, $tolower = false, $withslash = false)
  * Sanitize input to prevent against XSS and other nasty stuff.
  * Taken from cakephp (http://cakephp.org)
  * Licensed under the MIT License
- * 
+ *
  * @internal
  * @param string $val input value
  * @return string
@@ -884,21 +888,12 @@ function cleanValue($val) {
 
 
 
-define('CLEAN_INT','CLEAN_INT');
-define('CLEAN_FLOAT','CLEAN_FLOAT');
-define('CLEAN_NONE','CLEAN_NONE');
-define('CLEAN_STRING','CLEAN_STRING');
-define('CLEAN_REGEXP','regexp:');
-define('CLEAN_FILE','CLEAN_FILE');
-define('CLEANED_FILENAME','BAD_FILE');
-
-
 /**
  * A function to test if permissions, and php configuration is setup correctly
- * to allow an administrator to upload files to CMSMS
+ * to allow an administrator to upload files to CMSMS.
  *
  * @internal
- * @return boolean
+ * @return bool
  */
 function can_admin_upload()
 {
@@ -928,7 +923,7 @@ function can_admin_upload()
     return FALSE;
   }
 
-  $safe_mode = ini_get_boolean('safe_mode');
+  $safe_mode = ini_get_bool('safe_mode');
   if( $safe_mode ) {
     // we're in safe mode.
     if( ($stat_moduleinterface[4] != $stat_modules[4]) ||
@@ -949,10 +944,10 @@ function can_admin_upload()
 
 
 /**
- * A convenience function to return a boolean variable given a php ini key that represents a boolean
+ * A convenience function to return a bool variable given a php ini key that represents a bool.
  *
  * @param string $str The php ini key
- * @return integer
+ * @return int
  */
 function ini_get_boolean($str)
 {
@@ -966,7 +961,7 @@ function ini_get_boolean($str)
 
 
 /**
- * Another convenience function to output a human readable function stack trace
+ * Another convenience function to output a human readable function stack trace.
  *
  * @return void
  */
@@ -985,13 +980,13 @@ function stack_trace()
 }
 
 
-/** 
+/**
  * A wrapper around move_uploaded_file that attempts to ensure permissions on uploaded
  * files are set correctly.
  *
  * @param string $tmpfile The temporary file specification
  * @param string $destination The destination file specification
- * @return boolean.
+ * @return bool.
  */
 function cms_move_uploaded_file( $tmpfile, $destination )
 {
@@ -1004,7 +999,7 @@ function cms_move_uploaded_file( $tmpfile, $destination )
 
 
 /**
- * A function to test wether an IP address matches a list of expressions
+ * A function to test wether an IP address matches a list of expressions.
  * Credits to J.Adams <jna@retins.net>
  *
  * Expressions can be of the form
@@ -1014,7 +1009,7 @@ function cms_move_uploaded_file( $tmpfile, $destination )
  *
  * @param string $ip IP address to test
  * @param array  $checklist Array of match expressions
- * @return boolean
+ * @return bool
  * Rolf: only used in lib/content.functions.php
  */
 function cms_ipmatches($ip,$checklist)
@@ -1082,11 +1077,11 @@ function cms_ipmatches($ip,$checklist)
 /**
  * Test if the string provided is a valid email address.
  *
- * @return boolean
+ * @return bool
  * @param string  $email
- * @param boolean $checkDNS
+ * @param bool $checkDNS
 */
-function is_email( $email, $checkDNS=false ) 
+function is_email( $email, $checkDNS=false )
 {
   if( !filter_var($email,FILTER_VALIDATE_EMAIL) ) return FALSE;
   if ($checkDNS && function_exists('checkdnsrr')) {
@@ -1099,7 +1094,7 @@ function is_email( $email, $checkDNS=false )
 
 
 /**
- * A convenience method to output the secure param tag that is used on all admin links
+ * A convenience method to output the secure param tag that is used on all admin links.
  *
  * @internal
  * @access private
@@ -1118,7 +1113,7 @@ function get_secure_param()
 
 
 /**
- * A simple function to convert a string to a boolean
+ * A simple function to convert a string to a bool.
  * accepts, 'y','yes','true',1 as TRUE (case insensitive) all other values represent FALSE.
  *
  * @param string $str Input string to test.
@@ -1136,11 +1131,11 @@ function cms_to_bool($str)
 
 
 /**
- * A function to return the appropriate HTML tags to include the CMSMS included jquery in a web page
- * 
- * CMSMS is distributed with a recent version of jQuery, jQueryUI and various other jquery based 
+ * A function to return the appropriate HTML tags to include the CMSMS included jquery in a web page.
+ *
+ * CMSMS is distributed with a recent version of jQuery, jQueryUI and various other jquery based
  * libraries.  This function generates the HTML code that will include these scripts.
- * 
+ *
  * See the {cms_jquery} smarty plugin for a convenient way of including the CMSMS provided jquery
  * libraries from within a smarty template.
  *
@@ -1153,11 +1148,11 @@ function cms_to_bool($str)
  *
  * @since 1.10
  * @param string $exclude A comma separated list of script names or aliases to exclude.
- * @param boolean $ssl Force use of the ssl_url for the root url to necessary scripts.
- * @param boolean $cdn Force the use of a CDN url for the libraries if one is known
+ * @param bool $ssl Force use of the ssl_url for the root url to necessary scripts.
+ * @param bool $cdn Force the use of a CDN url for the libraries if one is known
  * @param string  $append A comma separated list of library URLS to the output
  * @param string  $custom_root A custom root URL for all scripts (when using local mode).  If this is spefied the $ssl param will be ignored.
- * @param boolean $include_css Optionally output stylesheet tags for the included javascript libraries.
+ * @param bool $include_css Optionally output stylesheet tags for the included javascript libraries.
  */
 function cms_get_jquery($exclude = '',$ssl = null,$cdn = false,$append = '',$custom_root='',$include_css = TRUE)
 {
@@ -1166,7 +1161,7 @@ function cms_get_jquery($exclude = '',$ssl = null,$cdn = false,$append = '',$cus
   $base_url = $config->smart_root_url();
   if( $ssl === true || $ssl === TRUE ) $base_url = $config['ssl_url'];
   $basePath=$custom_root!=''?trim($custom_root,'/'):$base_url;
-  
+
   // Scripts to include
   $scripts['jquery'] = array('cdn'=>'https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js',
 			     'local'=>$basePath.'/lib/jquery/js/jquery-1.11.0.min.js',
@@ -1241,6 +1236,6 @@ function cms_get_jquery($exclude = '',$ssl = null,$cdn = false,$append = '',$cus
   }
   return $output;
 }
-	
+
 # vim:ts=4 sw=4 noet
 ?>

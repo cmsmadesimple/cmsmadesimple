@@ -20,15 +20,20 @@
 
 /**
  * Translation functions/classes
- *
  * @package CMS
+ * @license GPL
  */
 
 
 /**
- * Temporarily override the current frontend language
+ * @package CMS
+ */
+
+/**
+ * Temporarily override the current frontend language.
  *
  * @param string $lang The language to set.  If empty, the system will be restored to the default frontend language.
+ * @see CmsNlsOperations::set_language()
  * @deprecated
  */
 function cms_set_frontend_language($lang = '')
@@ -38,7 +43,7 @@ function cms_set_frontend_language($lang = '')
 
 
 /**
- * A function to return the current language for the current request
+ * A function to return the current language for the current request.
  *
  * @internal
  * @deprecated
@@ -51,8 +56,8 @@ function cms_current_language()
 
 
 /**
- * A method to return a translation for a specific string in a specific realm.
- * called with the realm first, followed by the key, this method will attempt
+ * Retrieve a translation for a specific string in a specific realm.
+ * Called with the realm first, followed by the key, this method will attempt
  * to load the specific realm data if necessary before doing translation.
  *
  * This method accepts a variable number of arguments.  Any arguments after
@@ -61,11 +66,11 @@ function cms_current_language()
  * i.e: lang_by_realm('tasks','my_string');
  *
  * @since 1.8
- * @param string The realm
- * @param string The lang key
+ * @param string $realm The realm
+ * @param string $key   The lang key and any vspring arguments.
  * @return string
  */
-function lang_by_realm()
+function lang_by_realm($realm,$key)
 {
   $args = func_get_args();
   return CmsLangOperations::lang_from_realm($args);
@@ -91,10 +96,13 @@ function allow_admin_lang($flag = TRUE)
  *
  * This method will throw a notice if it is called from a frontend request
  *
- * @param string The key to translate
+ * i.e: lang('title');
+ *
+ * @param string $key The key to translate and then any vsprintf arguments for the key.
+ * @see lang_by_realm
  * @return string
  */
-function lang()
+function lang($key)
 {
   $args = func_get_args();
   return CmsLangOperations::lang($args);
@@ -102,7 +110,7 @@ function lang()
 
 
 /**
- * Get the encoding of the current language
+ * Get the encoding of the current language.
  *
  * @return string
  * @deprecated
@@ -114,7 +122,7 @@ function get_encoding()
 }
 
 /**
- * Retrieve a list of installed languages that is suitable for use in a dropdown
+ * Retrieve a list of installed languages that is suitable for use in a dropdown.
  *
  * @param boolean $allow_none Optionally adds 'none' (translated to current language) to the top of the list.
  * @return associative array of lang keys and display strings.

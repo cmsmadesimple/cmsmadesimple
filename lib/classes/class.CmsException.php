@@ -58,40 +58,42 @@ abstract class CmsExtraDataException extends Exception
    * Constructor
    * This method accepts variable arguments
    *
-   * @param mixed $var,... msg[,code[,prev]]
-   * @param mixed $var,... msg[,code[,extra[,prev]]]
+   * i.e:  throw new CmsExtraDataException($msg_str,$msg_code,$prev)
+   * i.e:  throw new CmsExtraDataException($msg_str,$msg_code,$extra,$prev)
+   *
+   * @see \Exception
    */
   public function __construct(/* var args */)
   {
-    $args = $msg = $prev = NULL;
-    $code = 0;
-    $args = func_get_args();
-    if( is_array($args) && count($args) == 1 ) $args = $args[0];
-    for( $i = 0; $i < count($args); $i++ ) {
-      switch( $i ) {
-      case 0:
-	$msg = $args[$i];
-	break;
+      $args = $msg = $prev = NULL;
+      $code = 0;
+      $args = func_get_args();
+      if( is_array($args) && count($args) == 1 ) $args = $args[0];
+      for( $i = 0; $i < count($args); $i++ ) {
+          switch( $i ) {
+          case 0:
+              $msg = $args[$i];
+              break;
 
-      case 1:
-        $code = (int)$args[$i];
-	break;
+          case 1:
+              $code = (int)$args[$i];
+              break;
 
-      case 2:
-	if( is_object($args[$i]) ) {
-	  $prev = $args[$i];
-	}
-	else {
-	  $this->_extra = $args[$i];
-	}
-	break;
+          case 2:
+              if( is_object($args[$i]) ) {
+                  $prev = $args[$i];
+              }
+              else {
+                  $this->_extra = $args[$i];
+              }
+              break;
 
-      case 3:
-	if( $prev == null && is_object($args[$i]) ) $prev = $args[$i];
-	break;
+          case 3:
+              if( $prev == null && is_object($args[$i]) ) $prev = $args[$i];
+              break;
+          }
       }
-    }
-    parent::__construct($msg,$code,$prev);
+      parent::__construct($msg,$code,$prev);
   }
 
   /**
@@ -100,7 +102,7 @@ abstract class CmsExtraDataException extends Exception
    */
   public function GetExtraData()
   {
-    return $this->_extra;
+      return $this->_extra;
   }
 }
 
@@ -117,21 +119,26 @@ abstract class CmsExtraDataException extends Exception
  */
 class CmsException extends CmsExtraDataException
 {
-  /**
-   * Constructor
-   * This method accepts variable arguments.
-   */
-  public function __construct(/* var args */) {
-    $args = func_get_args();
-    parent::__construct($args);
-    if( is_int($this->message) ) $this->messsage = 'CMSEX_'.$msg;
-    if( startswith($this->message,'CMSEX_') && !CmsLangOperations::key_exists($this->message) ) {
-      $this->message = 'MISSING TRANSLATION FOR '.$this->message;
+    /**
+     * Constructor
+     * This method accepts variable arguments.
+     *
+     * i.e:  throw new CmsExtraDataException($msg_str,$msg_code,$prev)
+     * i.e:  throw new CmsExtraDataException($msg_str,$msg_code,$extra,$prev)
+     *
+   * @see \Exception
+     */
+    public function __construct(/* var args */) {
+        $args = func_get_args();
+        parent::__construct($args);
+        if( is_int($this->message) ) $this->messsage = 'CMSEX_'.$msg;
+        if( startswith($this->message,'CMSEX_') && !CmsLangOperations::key_exists($this->message) ) {
+            $this->message = 'MISSING TRANSLATION FOR '.$this->message;
+        }
+        else if( strpos($this->message,' ') === FALSE && CmsLangOperations::key_exists($this->message) ) {
+            $this->message = CmsLangOperations::lang($this->message);
+        }
     }
-    else if( strpos($this->message,' ') === FALSE && CmsLangOperations::key_exists($this->message) ) {
-      $this->message = CmsLangOperations::lang($this->message);
-    }
-  }
 }
 
 /**

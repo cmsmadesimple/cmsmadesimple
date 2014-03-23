@@ -236,7 +236,7 @@ final class cms_userprefs
  * @param integer $userid The user id
  * @param string  $prefname The preference name
  * @param mixed   $default The default value if the preference is not set for the given user id.
- * @return mixed.
+ * @return mixed
  */
 function get_preference($userid, $prefname, $default='')
 {
