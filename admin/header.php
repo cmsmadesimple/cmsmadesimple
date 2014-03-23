@@ -20,8 +20,8 @@ else {
 
   // Display notification stuff from modules
   // should be controlled by preferences or something
-  $ignoredmodules = explode(',',get_preference($userid,'ignoredmodules'));
-  if( get_site_preference('enablenotifications',1) && get_preference($userid,'enablenotifications',1) ) {
+  $ignoredmodules = explode(',',cms_userprefs::get_for_user($userid,'ignoredmodules'));
+  if( get_site_preference('enablenotifications',1) && cms_userprefs::get_for_user($userid,'enablenotifications',1) ) {
     debug_buffer('before notifications');
     if( ($data = get_site_preference('__NOTIFICATIONS__')) ) {
       $data = unserialize($data);
@@ -53,11 +53,11 @@ else {
     $sitedown_file = TMP_CACHE_LOCATION . '/SITEDOWN';
     if (file_exists($sitedown_file)) $themeObject->AddNotification(1,'Core',$sitedown_message);
 
-    // Display an upgrade notification 
+    // Display an upgrade notification
     // but only do a check once per day
     {
       $timelastchecked = get_site_preference('lastcmsversioncheck',0);
-      if( (get_site_preference('checkversion',1) && (time() - $timelastchecked) > (24 * 60 * 60)) || 
+      if( (get_site_preference('checkversion',1) && (time() - $timelastchecked) > (24 * 60 * 60)) ||
 	  isset($_GET['forceversioncheck']) ) {
 	$req = new cms_http_request();
 	$req->setTimeout(10);

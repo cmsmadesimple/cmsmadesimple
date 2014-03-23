@@ -36,7 +36,7 @@ if( isset($_SESSION['cms_passthru']) ) {
 }
 
 $smarty = cmsms()->GetSmarty();
-$smarty->assign('date_format_string',get_preference($userid,'date_format_string','%x %X'));
+$smarty->assign('date_format_string',cms_userprefs::get_for_user($userid,'date_format_string','%x %X'));
 
 $id = 'm1_';
 $module = '';
@@ -96,7 +96,7 @@ if( !isset($USE_THEME) || $USE_THEME != false ) {
     if( !$title ) $title = $modinst->GetFriendlyName();
     echo $themeObject->ShowHeader($title, '', '', 'both').'</div>';
   }
-}  
+}
 if( $USE_OUTPUT_BUFFERING ) @ob_start();
 
 echo $modinst->DoActionBase($action, $id, $params);

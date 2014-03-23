@@ -80,6 +80,11 @@ class ContentOperations
 	 */
 	private $_last_modified;
 
+	/**
+	 * Return a reference to the only allowed instance of this singleton object
+	 *
+	 * @return ContentOperations
+	 */
 	public static function &get_instance()
 	{
 		if( !is_object( self::$_instance ) ) self::$_instance = new ContentOperations();
@@ -100,11 +105,17 @@ class ContentOperations
 
 
 	/**
-	 * Given an array of content_type and seralized_content, reconstructs a 
+	 * Given an array of content_type and seralized_content, reconstructs a
 	 * content object.  It will handled loading the content type if it hasn't
 	 * already been loaded.
 	 *
-	 * @return mixed The unserialized content object
+	 * Expects an associative array with 2 elements:
+	 *   content_type: string A content type name
+	 *   serialized_content: string Serialized form data
+	 *
+	 * @see ContentBase::ListContentTypes
+	 * @param  array $data
+	 * @return ContentBase A content object derived from ContentBase
 	 */
 	public function &LoadContentFromSerializedData(&$data)
 	{
@@ -150,8 +161,8 @@ class ContentOperations
 	 * and then, if possible a new object of the designated type will be
 	 * instantiated.
 	 *
-	 * @param mixed The type.  Either a string, or an instance of CmsContentTypePlaceHolder
-	 * @return mixed The new content object
+	 * @param mixed $type The type.  Either a string, or an instance of CmsContentTypePlaceHolder
+	 * @return ContentBase (A valid object derived from ContentBase)
 	 */
 	public function &CreateNewContent($type)
 	{
@@ -163,7 +174,7 @@ class ContentOperations
 		return $result;
 	}
 
-	
+
     /**
      * Given a content id, load and return the loaded content object.
      *
@@ -197,9 +208,9 @@ class ContentOperations
     /**
      * Given a content alias, load and return the loaded content object.
      *
-     * @param integer $id The id of the content object to load
+     * @param integer $alias The alias of the content object to load
      * @param boolean $only_active If true, only return the object if it's active flag is true. Defaults to false.
-     * @return mixed The loaded content object. If nothing is found, returns NULL.
+     * @return ContentBase The loaded content object. If nothing is found, returns NULL.
      */
 	function &LoadContentFromAlias($alias, $only_active = false)
 	{
@@ -309,6 +320,9 @@ class ContentOperations
 	}
 
 
+	/**
+	 * @ignore
+	 */
 	private function _get_content_types()
 	{
 		if( !is_array($this->_content_types) ) {
@@ -373,13 +387,14 @@ class ContentOperations
      * The key is the name of the class that would be saved into the database.  The
      * value would be the text returned by the type's FriendlyName() method.
 	 *
-	 * @param boolean optionally return keys as class names.
-	 * @param boolean optionally trim the list of content types that are allowed by the site preference.
+	 * @param bool $byclassname optionally return keys as class names.
+	 * @param bool $allowed optionally trim the list of content types that are allowed by the site preference.
+	 * @param bool $system return only system content types.
 	 * @return array List of content types registered in the system.
 	 */
 	function ListContentTypes($byclassname = false,$allowed = false,$system = FALSE)
 	{
-		$disallowed_a = array(); 
+		$disallowed_a = array();
 		$tmp = get_site_preference('disallowed_contenttypes');
 		if( $tmp ) $disallowed_a = explode(',',$tmp);
 
@@ -390,7 +405,7 @@ class ContentOperations
 			foreach( $types as $obj ) {
 				global $CMS_ADMIN_PAGE;
 				if( !isset($obj->friendlyname) && isset($obj->friendlyname_key) && isset($CMS_ADMIN_PAGE) ) {
-					$txt = lang($obj->friendlyname_key); 
+					$txt = lang($obj->friendlyname_key);
 					$obj->friendlyname = $txt;
 				}
 				if( !$allowed || count($disallowed_a) == 0 || !in_array($obj->type,$disallowed_a) ) {
@@ -462,7 +477,10 @@ class ContentOperations
 
 
 	/**
-	 * Updates the hierarchy position of all items
+	 * Updates the hierarchy position of all content items.
+	 * This is an expensive operation on the database, but must be called once
+	 * each time one or more content pages are updated if positions have changed in
+	 * the page structure.
 	 *
 	 * @return void
 	 */
@@ -499,7 +517,13 @@ class ContentOperations
 		return max($this->_last_modified,$last_modified_b);
 	}
 
-	function SetContentModified()
+	/**
+	 * Set the last modified date of content so that on the next request the content cache will be loaded from the database
+	 *
+	 * @internal
+	 * @access private
+	 */
+	public function SetContentModified()
 	{
 		cms_cache_handler::get_instance()->set('lastmodified',time());
 	}
@@ -507,9 +531,8 @@ class ContentOperations
 	/**
 	 * Loads a set of content objects into the cached tree.
 	 *
-	 * @param boolean $loadcontent If false, only create the nodes in the tree, 
-	 *                             don't load the content objects
-	 * @return mixed The cached tree of content
+	 * @param boolean $loadcontent If false, only create the nodes in the tree, don't load the content objects
+	 * @return cms_content_tree The cached tree of content
 	 */
 	function &GetAllContentAsHierarchy($loadcontent = false)
 	{
@@ -519,7 +542,6 @@ class ContentOperations
 		$db = $gCms->GetDb();
 		$tree = null;
 		$loadedcache = false;
-
 		if( ($tmp = cms_cache_handler::get_instance()->get('contentcache')) ) {
 			list($mtime,$data) = unserialize($tmp);
 			if( $mtime > $this->GetLastContentModification() ) {
@@ -549,6 +571,14 @@ class ContentOperations
 	}
 
 
+	/**
+	 * Load All content in thedatabase into memory
+	 * Use with caution this can chew up alot of memory on larger sites.
+	 *
+	 * @param bool $loadprops Load extended content properties or just the page structure and basic properties
+	 * @param bool $inactive  Load inactive pages as well
+	 * @param bool $showinmenu Load pages marked as show in menu
+	 */
 	public function LoadAllContent($loadprops = FALSE,$inactive = FALSE,$showinmenu = FALSE)
 	{
 		static $_loaded = 0;
@@ -591,7 +621,7 @@ class ContentOperations
 				$query = 'SELECT * FROM '.cms_db_prefix().'content_props WHERE content_id IN ('.implode(',',$child_ids).') ORDER BY content_id';
 				$tmp = $db->GetArray($query);
 			}
-				
+
 		    // re-organize the tmp data into a hash of arrays of properties for each content id.
 		    if( $tmp ) {
 				$contentprops = array();
@@ -638,12 +668,11 @@ class ContentOperations
 	 * @param integer $id The parent of the content objects to load into the tree
 	 * @param boolean $loadprops If true, load the properties of all loaded content objects
 	 * @param boolean $all If true, load all content objects, even inactive ones.
-	 * @param array   (optional) array of explicit content ids to load
-	 * @return void
+	 * @param array   $explicit_ids (optional) array of explicit content ids to load
 	 * @author Ted Kulp
 	 */
 	function LoadChildren($id, $loadprops = false, $all = false, $explicit_ids = array() )
-	{	
+	{
 		$gCms = cmsms();
 		$db = $gCms->GetDb();
 
@@ -689,7 +718,7 @@ class ContentOperations
 				$query = 'SELECT * FROM '.cms_db_prefix().'content_props WHERE content_id IN ('.implode(',',$child_ids).') ORDER BY content_id';
 				$tmp = $db->GetArray($query);
 			}
-				
+
 		    // re-organize the tmp data into a hash of arrays of properties for each content id.
 		    if( $tmp ) {
 				$contentprops = array();
@@ -703,7 +732,7 @@ class ContentOperations
 				unset($tmp);
 			}
 		}
-		
+
 		// build the content objects
 		for( $i = 0; $i < count($contentrows); $i++ ) {
 		    $row = $contentrows[$i];
@@ -711,7 +740,7 @@ class ContentOperations
 
 		    if (!in_array($row['type'], array_keys($this->ListContentTypes()))) continue;
 		    $contentobj = $this->CreateNewContent($row['type']);
-			
+
 		    if ($contentobj) {
 				$contentobj->LoadFromData($row, false);
 				if( $loadprops && $contentprops && isset($contentprops[$id]) ) {
@@ -740,7 +769,7 @@ class ContentOperations
 	 * @return void
 	 * @author Ted Kulp
 	 */
-	function SetDefaultContent($id) 
+	function SetDefaultContent($id)
 	{
 		$gCms = cmsms();
 		$db = $gCms->GetDb();
@@ -784,7 +813,7 @@ class ContentOperations
 		return $output;
 	}
 
-	
+
 	/**
 	 * Create a hierarchical ordered dropdown of all the content objects in the system for use
 	 * in the admin and various modules.  If $current or $parent variables are passed, care is taken
@@ -798,12 +827,12 @@ class ContentOperations
 	 * @param boolean $use_perms If true, checks authorship permissions on pages and only shows those the current
 	 *                user has access to.
 	 * @param boolean $ignore_current Ignores the value of $current totally by not marking any items as invalid.
-	 * @param boolean $allow_all If true, show all items, even if the content object 
+	 * @param boolean $allow_all If true, show all items, even if the content object
 	 *                           doesn't have a valid link. Defaults to false.
 	 * @param boolean $use_name if true use Name() else use MenuText() Defaults to using the system preference.
 	 * @return string The html dropdown of the hierarchy
 	 */
-	function CreateHierarchyDropdown($current = '', $parent = '', $name = 'parent_id', $allowcurrent = 0, 
+	function CreateHierarchyDropdown($current = '', $parent = '', $name = 'parent_id', $allowcurrent = 0,
 									 $use_perms = 0, $ignore_current = 0, $allow_all = false, $use_name = null)
 	{
 		static $count = 0;
@@ -830,7 +859,7 @@ class ContentOperations
 		$out .= '<script type="text/javascript">$(document).ready(function(){ $(\'#'.$id.'\').hierselector('.$str.'); });</script>';
 		return $out;
 	}
-// 	function CreateHierarchyDropdown($current = '', $parent = '', $name = 'parent_id', $allowcurrent = 0, 
+// 	function CreateHierarchyDropdown($current = '', $parent = '', $name = 'parent_id', $allowcurrent = 0,
 // 									 $use_perms = 0, $ignore_current = 0, $allow_all = false, $use_name = null)
 // 	{
 // 		$result = '';
@@ -845,7 +874,7 @@ class ContentOperations
 // 			if( $use_perms ) {
 // 			    $userid = get_userid();
 // 			}
-// 			if( ($userid > 0 && check_permission($userid,'Manage All Content')) || 
+// 			if( ($userid > 0 && check_permission($userid,'Manage All Content')) ||
 // 			    $userid == -1 || $parent == -1 ) {
 // 			    $result .= '<option value="-1">'.lang('none').'</option>';
 // 			}
@@ -885,12 +914,12 @@ class ContentOperations
 // 					if( !check_permission($userid,'Manage All Content') && !check_authorship($userid,$one->Id()) ) {
 // 						continue;
 // 					}
-// 			    }				
+// 			    }
 
 // 				// Don't include content types that do not want children either...
 // 				if (!$one->WantsChildren()) continue;
 // 			    $result .= '<option value="'.$value.'"';
-			    
+
 // 			    // Select current parent if it exists
 // 			    if ($one->Id() == $parent) {
 // 					$result .= ' selected="selected"';
@@ -936,7 +965,7 @@ class ContentOperations
 		return $hm->sureGetNodeByAlias($alias);
 	}
 
-	
+
 	/**
 	 * Returns the content id given a valid hierarchical position.
 	 *
@@ -1004,7 +1033,7 @@ class ContentOperations
 
 		return $error;
 	}
-	
+
 	/**
 	 * Converts a friendly hierarchy (1.1.1) to an unfriendly hierarchy (00001.00001.00001) for
 	 * use in the database.
@@ -1017,7 +1046,7 @@ class ContentOperations
 		#Change padded numbers back into user-friendly values
 		$tmp = '';
 		$levels = preg_split('/\./', $position);
-    
+
 		foreach ($levels as $onelevel) {
 			$tmp .= ltrim($onelevel, '0') . '.';
 		}
@@ -1037,7 +1066,7 @@ class ContentOperations
 		#Change user-friendly values into padded numbers
 		$tmp = '';
 		$levels = preg_split('/\./', $position);
-    
+
 		foreach ($levels as $onelevel) {
 			$tmp .= str_pad($onelevel, 5, '0', STR_PAD_LEFT) . '.';
 		}
@@ -1050,8 +1079,8 @@ class ContentOperations
 	 *
 	 * @since 2.0
 	 * @author Robert Campbell <calguy1000@hotmail.com>
-	 * @param integer Page ID to test
-	 * @param integer (optional) Page ID to act as the base page.  The current page is used if not specified.
+	 * @param integer $test_id Page ID to test
+	 * @param integer $base_id (optional) Page ID to act as the base page.  The current page is used if not specified.
 	 * @return boolean
 	 */
 	public function CheckParentage($test_id,$base_id = null)
@@ -1099,8 +1128,8 @@ class ContentOperations
 	 *
 	 * @since 2.0
 	 * @author Robert Campbell <calguy1000@hotmail.com>
-	 * @param int The userid
-	 * @return Array of page id's
+	 * @param int $userid The userid
+	 * @return array Array of integer page id's
 	 */
 	public function GetOwnedPages($userid)
 	{
@@ -1120,6 +1149,13 @@ class ContentOperations
 		return $this->_ownedpages;
 	}
 
+	/**
+	 * Test if the user specified owns the specified page
+	 *
+	 * @param int $userid
+	 * @param int $pageid
+	 * @return bool
+	 */
 	public function CheckPageOwnership($userid,$pageid)
 	{
 		$pagelist = $this->GetOwnedPages($userid);
@@ -1131,8 +1167,8 @@ class ContentOperations
 	 *
 	 * @since 2.0
 	 * @author Robert Campbell <calguy1000@hotmail.com>
-	 * @param int The userid
-	 * @return Array of page id's
+	 * @param int $userid The userid
+	 * @return array Array of page id's
 	 */
 	public function GetPageAccessForUser($userid)
 	{
@@ -1150,7 +1186,7 @@ class ContentOperations
 			}
 
 			$db = cmsms()->GetDb();
-			$query = "SELECT A.content_id FROM ".cms_db_prefix()."additional_users A 
+			$query = "SELECT A.content_id FROM ".cms_db_prefix()."additional_users A
                       LEFT JOIN ".cms_db_prefix().'content B ON A.content_id = B.content_id
                       WHERE A.user_id IN ('.implode(',',$list).')
                       ORDER BY B.hierarchy';
@@ -1165,12 +1201,26 @@ class ContentOperations
 		return $this->_authorpages;
 	}
 
+	/**
+	 * Check if the specified user has the ability to edit the specified page id
+	 *
+	 * @param int $userid
+	 * @param int $contentid
+	 * @return bool
+	 */
 	public function CheckPageAuthorship($userid,$contentid)
 	{
 		$author_pages = $this->GetPageAccessForUser($userid);
 		return in_array($contentid,$author_pages);
 	}
 
+	/**
+	 * Test if the specified user account has edit access to all of the peers of the specified page id
+	 *
+	 * @param int $userid
+	 * @param int $contentid
+	 * @return bool
+	 */
 	public function CheckPeerAuthorship($userid,$contentid)
 	{
 		if( check_permission($userid,'Manage All Content') ) return TRUE;
@@ -1192,6 +1242,12 @@ class ContentOperations
 		return TRUE;
 	}
 
+	/**
+	 * A convenience function to find a hierarchy node given the page id
+	 *
+	 * @param int $id The page id
+	 * @return cms_content_tree
+	 */
 	public function quickfind_node_by_id($id)
 	{
 		if( !is_array($this->_quickfind) ) {
@@ -1211,6 +1267,7 @@ class ContentOperations
 }
 
 /**
+ * A simple alias for the ContentOperations class
  * @package CMS
  * @ignore
  */

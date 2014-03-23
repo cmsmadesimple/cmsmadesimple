@@ -55,9 +55,9 @@ if (!$access) die('permission denied');
 
 if( isset($_POST['filter']) ) {
   $disp_group = $_POST['groupsel'];
-  set_preference($userid,'changegroupassign_group',$disp_group);
+  cms_userprefs::set_for_user($userid,'changegroupassign_group',$disp_group);
 }
-$disp_group = get_preference($userid,'changegroupassign_group',-1);
+$disp_group = cms_userprefs::get_for_user($userid,'changegroupassign_group',-1);
 
 // always display the group pull down
 $groupops = $gCms->GetGroupOperations();
@@ -84,7 +84,7 @@ if ($submitted == 1) {
   // we have group permissions
   $now = $db->DbTimeStamp(time());
   $iquery = "INSERT INTO ".cms_db_prefix().
-    "group_perms (group_perm_id, group_id, permission_id, create_date, modified_date) 
+    "group_perms (group_perm_id, group_id, permission_id, create_date, modified_date)
        VALUES (?,?,?,$now,$now)";
 
   $groups = array();
@@ -113,7 +113,7 @@ if ($submitted == 1) {
       }
     }
   }
-    
+
   // put mention into the admin log
   audit($userid, 'Permission Group ID: '.$userid, 'Changed');
   $message = lang('permissionschanged');
@@ -141,7 +141,7 @@ while($result && $row = $result->FetchRow()) {
     $perm_struct[$row['permission_id']] = $thisPerm;
   }
 }
-$smarty->assign_by_ref('perms',$perm_struct);		
+$smarty->assign_by_ref('perms',$perm_struct);
 $smarty->assign('cms_secure_param_name',CMS_SECURE_PARAM_NAME);
 $smarty->assign('cms_user_key',$_SESSION[CMS_USER_KEY]);
 $smarty->assign('form_start','<form id="groupname" method="post" action="changegroupperm.php">');

@@ -41,20 +41,20 @@ $message = '';
 /**
  * Get preferences
  */
-$ignoredmodules = explode(',', get_preference($userid, 'ignoredmodules'));
-$wysiwyg = get_preference($userid, 'wysiwyg');
-$ce_navdisplay = get_preference($userid,'ce_navdisplay');
-$syntaxhighlighter = get_preference($userid, 'syntaxhighlighter');
-$default_cms_language = get_preference($userid, 'default_cms_language');
+$ignoredmodules = explode(',', cms_userprefs::get_for_user($userid, 'ignoredmodules'));
+$wysiwyg = cms_userprefs::get_for_user($userid, 'wysiwyg');
+$ce_navdisplay = cms_userprefs::get_for_user($userid,'ce_navdisplay');
+$syntaxhighlighter = cms_userprefs::get_for_user($userid, 'syntaxhighlighter');
+$default_cms_language = cms_userprefs::get_for_user($userid, 'default_cms_language');
 $old_default_cms_lang = $default_cms_language;
-$admintheme = get_preference($userid, 'admintheme', CmsAdminThemeBase::GetDefaultTheme());
-$bookmarks = get_preference($userid, 'bookmarks', 0);
-$indent = get_preference($userid, 'indent', true);
-$enablenotifications = get_preference($userid, 'enablenotifications', 1);
-$paging = get_preference($userid, 'paging', 0);
-$date_format_string = get_preference($userid, 'date_format_string', '%x %X');
-$default_parent = get_preference($userid, 'default_parent', -2);
-$homepage = get_preference($userid, 'homepage');
+$admintheme = cms_userprefs::get_for_user($userid, 'admintheme', CmsAdminThemeBase::GetDefaultTheme());
+$bookmarks = cms_userprefs::get_for_user($userid, 'bookmarks', 0);
+$indent = cms_userprefs::get_for_user($userid, 'indent', true);
+$enablenotifications = cms_userprefs::get_for_user($userid, 'enablenotifications', 1);
+$paging = cms_userprefs::get_for_user($userid, 'paging', 0);
+$date_format_string = cms_userprefs::get_for_user($userid, 'date_format_string', '%x %X');
+$default_parent = cms_userprefs::get_for_user($userid, 'default_parent', -2);
+$homepage = cms_userprefs::get_for_user($userid, 'homepage');
 if( strpos($homepage,'&') !== FALSE && strpos($homepage,'&amp;') === FALSE ) {
   $homepage = str_replace('&','&amp;',$homepage);
 }
@@ -64,7 +64,7 @@ if( $pos !== FALSE )  {
   $from = substr($homepage, $pos, strlen($to));
   $homepage = str_replace($from, $to, $homepage);
 }
-$hide_help_links = get_preference($userid, 'hide_help_links', 0);
+$hide_help_links = cms_userprefs::get_for_user($userid, 'hide_help_links', 0);
 
 /**
  * Cancel
@@ -101,7 +101,7 @@ if (isset($_POST['submit_account']) && check_permission($userid,'Manage My Accou
   if (isset($_POST["lastname"])) $lastname = cleanValue($_POST["lastname"]);
 
   $email = '';
-  if (isset($_POST["email"])) $email = trim($_POST["email"]);	
+  if (isset($_POST["email"])) $email = trim($_POST["email"]);
 
   // Do validations
   $validinfo = true;
@@ -112,7 +112,7 @@ if (isset($_POST['submit_account']) && check_permission($userid,'Manage My Accou
   else if ( !preg_match("/^[a-zA-Z0-9\._ ]+$/", $username) ) {
     $validinfo = false;
     $error = lang('illegalcharacters', array(lang('username')));
-  } 
+  }
   else if ($password != $passwordagain) {
     $validinfo = false;
     $error = lang('nopasswordmatch');
@@ -129,24 +129,24 @@ if (isset($_POST['submit_account']) && check_permission($userid,'Manage My Accou
     $userobj->lastname = $lastname;
     $userobj->email = $email;
     if ($password != '') $userobj->SetPassword($password);
-		
+
     Events::SendEvent('Core', 'EditUserPre', array('user' => &$userobj));
     $result = $userobj->Save();
 
     if($result) {
       // put mention into the admin log
       audit($userid, 'Admin Username: '.$userobj->username, 'Edited');
-      Events::SendEvent('Core', 'EditUserPost', array('user' => &$userobj));	
-      $message = lang('accountupdated');			
+      Events::SendEvent('Core', 'EditUserPost', array('user' => &$userobj));
+      $message = lang('accountupdated');
     } else {
       // throw exception? update just failed.
     }
-  }	
+  }
 } // end of account submit
- 
+
 /**
  * Submit prefs
- */ 
+ */
 if (isset($_POST['submit_prefs']) && check_permission($userid,'Manage My Settings')) {
   // Get values from request and drive em to variables
   $wysiwyg = $_POST['wysiwyg'];
@@ -173,20 +173,20 @@ if (isset($_POST['submit_prefs']) && check_permission($userid,'Manage My Setting
   }
 
   // Set prefs
-  set_preference($userid, 'wysiwyg', $wysiwyg);
-  set_preference($userid, 'ce_navdisplay', $ce_navdisplay);
-  set_preference($userid, 'syntaxhighlighter', $syntaxhighlighter);
-  set_preference($userid, 'default_cms_language', $default_cms_language);
-  set_preference($userid, 'admintheme', $admintheme);
-  set_preference($userid, 'bookmarks', $bookmarks);
-  set_preference($userid, 'hide_help_links', $hide_help_links);
-  set_preference($userid, 'indent', $indent);
-  set_preference($userid, 'enablenotifications', $enablenotifications);
-  set_preference($userid, 'paging', $paging);
-  set_preference($userid, 'date_format_string', $date_format_string);
-  set_preference($userid, 'default_parent', $default_parent);
-  set_preference($userid, 'homepage', $homepage);
-  set_preference($userid, 'ignoredmodules', implode(',', $ignoredmodules));
+  cms_userprefs::set_for_user($userid, 'wysiwyg', $wysiwyg);
+  cms_userprefs::set_for_user($userid, 'ce_navdisplay', $ce_navdisplay);
+  cms_userprefs::set_for_user($userid, 'syntaxhighlighter', $syntaxhighlighter);
+  cms_userprefs::set_for_user($userid, 'default_cms_language', $default_cms_language);
+  cms_userprefs::set_for_user($userid, 'admintheme', $admintheme);
+  cms_userprefs::set_for_user($userid, 'bookmarks', $bookmarks);
+  cms_userprefs::set_for_user($userid, 'hide_help_links', $hide_help_links);
+  cms_userprefs::set_for_user($userid, 'indent', $indent);
+  cms_userprefs::set_for_user($userid, 'enablenotifications', $enablenotifications);
+  cms_userprefs::set_for_user($userid, 'paging', $paging);
+  cms_userprefs::set_for_user($userid, 'date_format_string', $date_format_string);
+  cms_userprefs::set_for_user($userid, 'default_parent', $default_parent);
+  cms_userprefs::set_for_user($userid, 'homepage', $homepage);
+  cms_userprefs::set_for_user($userid, 'ignoredmodules', implode(',', $ignoredmodules));
 
   // Audit, message, cleanup
   audit($userid, 'Admin Username: '.$userobj->username, 'Edited');

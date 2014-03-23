@@ -54,13 +54,11 @@ include_once("header.php");
 
 $db = $gCms->GetDb();
 
-
-if( isset($_POST['filter']) )
-  {
+if( isset($_POST['filter']) ) {
     $disp_group = $_POST['groupsel'];
-    set_preference($userid,'changegroupassign_group',$disp_group);
-  }
-$disp_group = get_preference($userid,'changegroupassign_group',-1);
+    cms_userprefs::set_for_user($userid,'changegroupassign_group',$disp_group);
+}
+$disp_group = cms_userprefs::get_for_user($userid,'changegroupassign_group',-1);
 
 // always display the group pulldown
 $gCms = cmsms();
@@ -98,7 +96,7 @@ $smarty->assign('groupidlist',implode(',',$groupidlist));
 
 if ($submitted == 1)
   {
-    
+
     foreach($groups as $thisGroup)
       {
 	if( $thisGroup->id <= 0 ) continue;
@@ -111,7 +109,7 @@ if ($submitted == 1)
 	$result = $db->Execute($query, array($thisGroup->id,$userid));
 	$iquery = "INSERT INTO ".cms_db_prefix().
 	  "user_groups (group_id, user_id, create_date, modified_date) VALUES (?,?,?,?)";
-	
+
 	foreach ($_POST as $key=>$value)
 	  {
 	    if (strpos($key,"ug") == 0 && strpos($key,"ug") !== false)
@@ -124,7 +122,7 @@ if ($submitted == 1)
 		  }
 	      }
 	  }
-	
+
 	Events::SendEvent('Core', 'ChangeGroupAssignPost',
 			  array('group' => $thisGroup,
 				'users' => $userops->LoadUsersInGroup($thisGroup->id)));
@@ -203,4 +201,3 @@ include_once("footer.php");
 
 # vim:ts=4 sw=4 noet
 ?>
-

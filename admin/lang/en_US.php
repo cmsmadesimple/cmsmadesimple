@@ -64,7 +64,7 @@ $lang['admin_layout_legend'] = "Admin lay-out settings";
 $lang['advanced'] = "Advanced";
 $lang['alert'] = "Alert";
 $lang['alias'] = "Alias";
-$lang['aliasalreadyused'] = "The supplied 'Page Alias' is already in use on another page. Change the 'Page Alias' to something else.";
+$lang['aliasalreadyused'] = 'The supplied "Page Alias" is already in use on another page. Change the "Page Alias" to something else.';
 $lang['aliasmustbelettersandnumbers'] = "Alias must be all letters and numbers";
 $lang['aliasnotaninteger'] = "Alias cannot be an integer";
 $lang['allow_browser_cache'] = "Allow Browser to Cache Pages";
@@ -815,6 +815,7 @@ $lang['filemanagerdescription'] = "Upload and manage files.";
 $lang['filename'] = "Filename";
 $lang['filenotuploaded'] = "File could not be uploaded. This could be a Permission or Safe Mode problem?";
 $lang['files'] = "Files";
+$lang['filesdescription'] = 'File and media management';
 $lang['filesize'] = "File Size";
 $lang['files_checksum_failed'] = "Files could not be checksummed";
 $lang['files_failed'] = "Files failed md5sum check";
@@ -1026,10 +1027,10 @@ $lang['loginprompt'] = "Enter a valid user credential to get access to the Admin
 $lang['logintitle'] = "Login to CMS Made Simple&trade;";
 $lang['login_failed'] = "User Login Failed";
 $lang['login_info'] = "For the Admin console to work properly";
-$lang['login_info_params'] = "<ol> 
-  <li>Cookies must be enabled in your browser</li> 
-  <li>Javascript must be enabled in your browser</li> 
-  <li>Popup windows must be allowed for the following address:</li> 
+$lang['login_info_params'] = "<ol>
+  <li>Cookies must be enabled in your browser</li>
+  <li>Javascript must be enabled in your browser</li>
+  <li>Popup windows must be allowed for the following address:</li>
 </ol>";
 $lang['login_info_title'] = "Information";
 $lang['logout'] = "Logout";

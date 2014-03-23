@@ -26,12 +26,8 @@ check_login();
 $gCms = cmsms();
 $db = $gCms->GetDb();
 
-$dateformat = trim(get_preference(get_userid(),'date_format_string','%x %X')); 
-		  if( empty($dateformat) )
-		   {
-			 $dateformat = '%x %X';
-		   }
-
+$dateformat = trim(cms_userprefs::get_for_user(get_userid(),'date_format_string','%x %X'));
+if( empty($dateformat) ) $dateformat = '%x %X';
 
 $result = $db->Execute("SELECT * FROM ".cms_db_prefix()."adminlog ORDER BY timestamp DESC");
 $totalrows = $result->RecordCount();
@@ -40,9 +36,9 @@ if (isset($_GET['download']))
 {
 	header('Content-type: text/plain');
 	header('Content-Disposition: attachment; filename="adminlog.txt"');
-	if ($result && $result->RecordCount() > 0) 
+	if ($result && $result->RecordCount() > 0)
 	{
-		while ($row = $result->FetchRow()) 
+		while ($row = $result->FetchRow())
 		{
 		  echo strftime($dateformat,$row['timestamp'])."|";
 		  echo $row['username'] . "|";
@@ -103,13 +99,13 @@ if (check_permission($userid, 'Modify Site Preferences'))
     $params=array_merge($params,array("%".get_site_preference('adminlog_filteraction')."%"));
     $filterdisplay="block";
   }
-  
+
   $result = $db->SelectLimit('SELECT * from '.cms_db_prefix().'adminlog '.$criteria.' ORDER BY timestamp DESC', $limit, $from, $params);
   $smarty->assign("header",$themeObject->ShowHeader('adminlog'));
 
-  if ($result && $result->RecordCount() > 0) 
+  if ($result && $result->RecordCount() > 0)
     {
-	
+
       $page_string = pagination($page, $totalrows, $limit);
       $smarty->assign("pagestring",$page_string);
 

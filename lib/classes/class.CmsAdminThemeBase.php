@@ -1126,7 +1126,7 @@ abstract class CmsAdminThemeBase
 	{
 		if( is_object(self::$_instance) ) return self::$_instance;
 
-		if( !$name ) $name = get_preference(get_userid(FALSE),'admintheme',self::GetDefaultTheme());
+		if( !$name ) $name = cms_userprefs::get_for_user(get_userid(FALSE),'admintheme',self::GetDefaultTheme());
 		if( class_exists($name) ) {
 			self::$_instance = new $name;
 		}

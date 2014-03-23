@@ -146,7 +146,7 @@ class OneElevenTheme extends CmsAdminThemeBase {
 			$smarty->assign('section_name', $section_name);
 			$smarty->assign('nodes', $this->get_navigation_tree($section_name, -1, FALSE));
 		} else {
-			$nodes = $this->get_navigation_tree(-1, -1, FALSE);
+			$nodes = $this->get_navigation_tree(-1, 1, FALSE);
 			$smarty->assign('nodes', $nodes);
 		}
 
@@ -162,7 +162,7 @@ class OneElevenTheme extends CmsAdminThemeBase {
 	}
 
 
-	public function do_login($params) 
+	public function do_login($params)
 	{
 	  // by default we're gonna grab the theme name
 	  $config = cmsms()->GetConfig();
@@ -172,7 +172,7 @@ class OneElevenTheme extends CmsAdminThemeBase {
 	  global $error,$warningLogin,$acceptLogin,$changepwhash;
 	  $fn = $config['admin_path']."/themes/".$this->themeName."/login.php";
 	  include($fn);
-	  
+
 	  $smarty->assign('lang', get_site_preference('frontendlang'));
 	  $_contents = $smarty->display('login.tpl');
 	  return $_contents;
@@ -222,7 +222,7 @@ class OneElevenTheme extends CmsAdminThemeBase {
 		}
 
 		// module_help_url
-		if( !get_preference(get_userid(),'hide_help_links',0) ) {
+		if( !cms_userprefs::get_for_user(get_userid(),'hide_help_links',0) ) {
 		  if (($module_help_url = $this->get_value('module_help_url'))) {
 		    $smarty->assign('module_help_url', $module_help_url);
 		  }
@@ -234,7 +234,7 @@ class OneElevenTheme extends CmsAdminThemeBase {
 		}
 
 		// if bookmarks
-		if (get_preference(get_userid(), 'bookmarks') && check_permission(get_userid(),'Manage My Bookmarks')) {
+		if (cms_userprefs::get_for_user(get_userid(), 'bookmarks') && check_permission(get_userid(),'Manage My Bookmarks')) {
 			$marks = $this->get_bookmarks();
 			$smarty->assign('marks', $marks);
 		}
@@ -250,10 +250,10 @@ class OneElevenTheme extends CmsAdminThemeBase {
 		$userops = cmsms()->GetUserOperations();
 		$smarty->assign('user', $userops->LoadUserByID(get_userid()));
 		// get user selected language
-		$smarty->assign('lang',get_preference(get_userid(), 'default_cms_language'));
+		$smarty->assign('lang',cms_userprefs::get_for_user(get_userid(), 'default_cms_language'));
 		// get language direction
-		$lang = CmsNlsOperations::get_current_language();  
-		$info = CmsNlsOperations::get_language_info($lang);  
+		$lang = CmsNlsOperations::get_current_language();
+		$info = CmsNlsOperations::get_language_info($lang);
 		$smarty->assign('lang_dir',$info->direction());
 
 

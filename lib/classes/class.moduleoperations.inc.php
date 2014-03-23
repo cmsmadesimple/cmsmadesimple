@@ -21,7 +21,7 @@
 /**
  * Classes and utilities for operationg on and with modules
  *
- * @package CMS 
+ * @package CMS
  */
 
 /**
@@ -64,7 +64,7 @@ final class ModuleOperations
 	 * @ignore
 	 */
 	private $_moduledeps;
-	
+
 
 	/**
 	 * @ignore
@@ -118,9 +118,9 @@ final class ModuleOperations
    * Creates an xml data package from the module directory.
    *
    * @param CMSModule $modinstance The instance of the module object
-   * @param string $message Reference to a string which will be filled with the message 
+   * @param string $message Reference to a string which will be filled with the message
    *                        created by the run of the method
-   * @param integer $filecount Reference to an interger which will be filled with the 
+   * @param integer $filecount Reference to an interger which will be filled with the
    *                           total # of files in the package
    * @return string an XML string comprising the module and its files
    */
@@ -365,7 +365,7 @@ final class ModuleOperations
 
 		 $lazyload_fe    = (method_exists($module_obj,'LazyLoadFrontend') && $module_obj->LazyLoadFrontend())?1:0;
 		 $lazyload_admin = (method_exists($module_obj,'LazyLoadAdmin') && $module_obj->LazyLoadAdmin())?1:0;
-		 $query = 'INSERT INTO '.cms_db_prefix().'modules 
+		 $query = 'INSERT INTO '.cms_db_prefix().'modules
                    (module_name,version,status,admin_only,active,allow_fe_lazyload,allow_admin_lazyload)
                    VALUES (?,?,?,?,?,?,?)';
 		 $dbr = $db->Execute($query,array($module_obj->GetName(),$module_obj->GetVersion(),'installed',
@@ -517,7 +517,7 @@ final class ModuleOperations
 		  }
 
 		  debug_buffer('loading module '.$module_name);
-		  require_once($fname); 
+		  require_once($fname);
 	  }
 
 	  $obj = new $module_name;
@@ -593,7 +593,7 @@ final class ModuleOperations
 		  }
 	  }
 
-	  if( (isset($info[$module_name]) && $info[$module_name]['status'] == 'installed') || 
+	  if( (isset($info[$module_name]) && $info[$module_name]['status'] == 'installed') ||
 		  $force_load ) {
 		  if( is_object($obj) ) $this->_modules[$module_name] = $obj;
 		  return TRUE;
@@ -612,7 +612,7 @@ final class ModuleOperations
   public function FindAllModules()
   {
 	$dir = dirname(dirname(dirname(__FILE__))).DIRECTORY_SEPARATOR."modules";
-	
+
 	$result = array();
 	if( $handle = @opendir($dir) ) {
 		while( ($file = readdir($handle)) !== false ) {
@@ -620,7 +620,7 @@ final class ModuleOperations
 			if( @is_file($fn) ) $result[] = $file;
 		}
 	}
-	
+
 	sort($result);
 	return $result;
   }
@@ -640,7 +640,7 @@ final class ModuleOperations
 
   /**
    * Finds all modules in the filesystem, and builds a database about them
-   * 
+   *
    * @since 1.10
    * @ignore
    */
@@ -664,7 +664,7 @@ final class ModuleOperations
   /**
    * Finds all modules that are available to be loaded...
    * this method uses the information in the database to load the modules that are necessary to load
-   * it also, will go through any queued installs/upgrades and force those modules to load, which 
+   * it also, will go through any queued installs/upgrades and force those modules to load, which
    * will in turn do the upgrading and installing if necessary.
    *
    * @access public
@@ -731,7 +731,7 @@ final class ModuleOperations
 		  $lazyload_fe    = (method_exists($module_obj,'LazyLoadFrontend') && $module_obj->LazyLoadFrontend())?1:0;
 		  $lazyload_admin = (method_exists($module_obj,'LazyLoadAdmin') && $module_obj->LazyLoadAdmin())?1:0;
 
-		  $query = 'UPDATE '.cms_db_prefix().'modules SET version = ?, active = 1, allow_fe_lazyload = ?, allow_admin_lazyload = ? 
+		  $query = 'UPDATE '.cms_db_prefix().'modules SET version = ?, active = 1, allow_fe_lazyload = ?, allow_admin_lazyload = ?
                     WHERE module_name = ?';
 		  $dbr = $db->Execute($query,array($module_obj->GetVersion(),$lazyload_fe,$lazyload_admin,$module_obj->GetName()));
 
@@ -955,7 +955,7 @@ final class ModuleOperations
   /**
    * Returns an array of installed modules that have a certain capabilies
    * This method will force the loading of all modules regardless of the module settings.
-   * 
+   *
    * @param string $capability The capability name
    * @param mixed $args Capability arguments
    * @return array List of all the module objects with that capability
@@ -1014,7 +1014,7 @@ final class ModuleOperations
   /**
    * A function to return the object reference to the module object
    * if the module is not already loaded, it will be loaded.  Version checks are done
-   * with the module to allow only loading versions of modules that are greater than the 
+   * with the module to allow only loading versions of modules that are greater than the
    * specified value.
    *
    * @param string $module_name The module name
@@ -1045,7 +1045,7 @@ final class ModuleOperations
 		  $res = version_compare($obj->GetVersion(),$version);
 		  if( $res < 0 OR $res === FALSE ) $obj = null;
 	  }
-	  
+
 	  return $obj;
   }
 
@@ -1064,7 +1064,7 @@ final class ModuleOperations
 
   /**
    * Return the current syntax highlighter module object
-   * 
+   *
    * This method retrieves the specified syntax highlighter module, or uses the current current user preference for the syntax hightlighter module
    * for a name.
    *
@@ -1077,7 +1077,7 @@ final class ModuleOperations
 	  $obj = null;
 	  if( !$module_name ) {
 		  global $CMS_ADMIN_PAGE;
-		  if( isset($CMS_ADMIN_PAGE) ) $module_name = get_preference(get_userid(FALSE),'syntaxhighlighter');
+		  if( isset($CMS_ADMIN_PAGE) ) $module_name = cms_userprefs::get_for_user(get_userid(FALSE),'syntaxhighlighter');
 	  }
 
 	  if( !$module_name ) return $obj;
@@ -1092,7 +1092,7 @@ final class ModuleOperations
 
   /**
    * Return the current wysiwyg module object
-   * 
+   *
    * This method makes an attempt to find the appropriate wysiwyg module given the current request context
    * and admin user preference.
    *
@@ -1109,7 +1109,7 @@ final class ModuleOperations
 			  $module_name = get_site_preference('frontendwysiwyg');
 		  }
 		  else {
-			  $module_name = get_preference(get_userid(FALSE),'wysiwyg');
+			  $module_name = cms_userprefs::get_for_user(get_userid(FALSE),'wysiwyg');
 		  }
 	  }
 
@@ -1126,7 +1126,7 @@ final class ModuleOperations
   /**
    * Return the current search module object
    *
-   * This method returns module object for the currently selected search module.  
+   * This method returns module object for the currently selected search module.
    *
    * @return CMSModule
    * @since 1.10
@@ -1142,7 +1142,7 @@ final class ModuleOperations
 
   /**
    * Alias for the GetSyntaxHiglighter method.
-   * 
+   *
    * @see ModuleOperations::GetSyntaxHighlighter
    * @deprecated
    * @since 1.10
@@ -1168,7 +1168,7 @@ final class ModuleOperations
 
   /**
    * Queue a module for install
-   * 
+   *
    * @internal
    * @since 1.10
    * @param string $module_name
@@ -1183,7 +1183,7 @@ final class ModuleOperations
 
   /**
    * Get list of modules queued for install.
-   * 
+   *
    * @internal
    * @since 1.10
    * @param string $module_name

@@ -19,6 +19,7 @@
 #$Id: class.content.inc.php 6905 2011-02-20 22:23:40Z calguy1000 $
 
 /**
+ * This file provides the basic abstract content class
  * @package CMS
  */
 
@@ -29,28 +30,46 @@ define('CMS_CONTENT_HIDDEN_NAME','--------');
 define('__CMS_PREVIEW_PAGE__',-100);
 
 /**
- * Generic content class.
+ * Base level content object.
  *
- * As for some treatment we don't need the extra properties of the content
- * we load them only when required. However, each function which makes use
- * of extra properties should first test if the properties object exist.
+ * This is the base level content class.  It is an abstract object and cannot be instantiated directly.
+ * All content pages in the database are required to be drived from this class.
  *
  * @since		0.8
  * @package		CMS
  */
 abstract class ContentBase
 {
+	/**
+	 * @ignore
+	 */
 	const TAB_MAIN = 'aa_main_tab__';
+
+	/**
+	 * @ignore
+	 */
 	const TAB_NAV = 'zz_1nav_tab__';
+
+	/**
+	 * @ignore
+	 */
 	const TAB_LOGIC = 'zz_2logic_tab__';
+
+	/**
+	 * @ignore
+	 */
 	const TAB_OPTIONS = 'zz_3options_tab__';
+
+	/**
+	 * @ignore
+	 */
 	const TAB_PERMS = 'zz_4perms_tab__';
-  
+
 	/**
 	 * The unique ID identifier of the element
 	 * Integer
 	 *
-	 * @internal
+	 * @ignore
 	 */
 	protected $mId = -1;
 
@@ -220,7 +239,7 @@ abstract class ContentBase
 	 * @internal
 	 */
 	protected $mDefaultContent = false;
-	
+
 	/**
 	 * Last user to modify this content
 	 *
@@ -243,14 +262,14 @@ abstract class ContentBase
 	 * @internal
 	 */
 	protected $mModifiedDate = '';
-    
+
 	/**
 	 * Additional Editors Array
 	 *
 	 * @internal
 	 */
 	protected $mAdditionalEditors;
-	
+
 	/**
 	 * state or meta information
 	 *
@@ -307,8 +326,8 @@ abstract class ContentBase
 		$this->AddProperty('showinmenu',4,self::TAB_NAV);
 		$this->AddProperty('titleattribute',5,self::TAB_NAV);
 		$this->AddProperty('accesskey',6,self::TAB_NAV);
-		$this->AddProperty('tabindex',7,self::TAB_NAV);	  
-		$this->AddProperty('target',8,self::TAB_NAV);      
+		$this->AddProperty('tabindex',7,self::TAB_NAV);
+		$this->AddProperty('target',8,self::TAB_NAV);
 
 		$this->AddProperty('alias',1,self::TAB_OPTIONS);
 		$this->AddProperty('active',2,self::TAB_OPTIONS);
@@ -319,16 +338,19 @@ abstract class ContentBase
 		$this->AddProperty('extra1',7,self::TAB_OPTIONS);
 		$this->AddProperty('extra2',8,self::TAB_OPTIONS);
 		$this->AddProperty('extra3',9,self::TAB_OPTIONS);
-	  
+
 		$this->AddProperty('owner',1,self::TAB_PERMS);
 		$this->AddProperty('additionaleditors',2,self::TAB_PERMS);
 	}
 
-    
+
 	/************************************************************************/
 	/* Functions giving access to needed elements of the content			*/
 	/************************************************************************/
-  
+
+	/**
+	 * @ignore
+	 */
 	public function __clone()
 	{
 		$this->mId = -1;
@@ -379,7 +401,7 @@ abstract class ContentBase
 	/**
 	 * Set the the page name
 	 *
-	 * @param string The name.
+	 * @param string $name The name.
 	 */
 	public function SetName($name)
 	{
@@ -398,7 +420,7 @@ abstract class ContentBase
 
 	/**
 	 * Returns the OldAlias
-	 * The old alias is used when editing pages
+	 * The old alias is used when editing pages to detect changes in page alias
 	 *
 	 * @internal
 	 * @deprecated
@@ -420,7 +442,7 @@ abstract class ContentBase
 	}
 
 	/**
-	 * Returns the Owner
+	 * Returns the Owners user id
 	 *
 	 * @return integer
 	 */
@@ -433,7 +455,7 @@ abstract class ContentBase
 	 * Set the page owner.
 	 * No validation is performed.
 	 *
-	 * @param integer Owner's user id
+	 * @param int $owner Owner's user id
 	 */
 	public function SetOwner($owner)
 	{
@@ -465,8 +487,8 @@ abstract class ContentBase
 
 	/**
 	 * Set the page metadata
-	 * 
-	 * @param string The metadata
+	 *
+	 * @param string $metadata The metadata
 	 */
 	public function SetMetadata($metadata)
 	{
@@ -486,7 +508,7 @@ abstract class ContentBase
 	/**
 	 * Set the page tabindex value
 	 *
-	 * @param integer tabindex
+	 * @param int $tabindex tabindex
 	 */
 	public function SetTabIndex($tabindex)
 	{
@@ -525,8 +547,10 @@ abstract class ContentBase
 
 	/**
 	 * Set the title attribute of the page
+	 * the title attribue can be used in navigations to set the "title=" attribute of a link
+	 * some menu templates may ignore this.
 	 *
-	 * @param string The title attribute
+	 * @param string $titleattribute The title attribute
 	 */
 	public function SetTitleAttribute($titleattribute)
 	{
@@ -536,6 +560,7 @@ abstract class ContentBase
 	/**
 	 * Get the access key (for accessibility) for this page.
 	 *
+	 * @see http://www.w3schools.com/tags/att_global_accesskey.asp
 	 * @return string
 	 */
 	public function AccessKey()
@@ -546,7 +571,8 @@ abstract class ContentBase
 	/**
 	 * Set the access key (for accessibility) for this page
 	 *
-	 * @param string Access Key
+	 * @see http://www.w3schools.com/tags/att_global_accesskey.asp
+	 * @param string $accesskey
 	 */
 	public function SetAccessKey($accesskey)
 	{
@@ -555,8 +581,11 @@ abstract class ContentBase
 
 	/**
 	 * Returns the id of this pages parent.
+	 * the parent id may be -2 to indicate a new page.
+	 * A parent id value of -1 indicates that the page has no parent.
+	 * oterwise a positive integer is returned.
 	 *
-	 * @return int -1 if this page has no parent.  Positive integer otherwise.
+	 * @return int
 	 */
 	public function ParentId()
 	{
@@ -566,15 +595,15 @@ abstract class ContentBase
 	/**
 	 * Sets the parent of this page.
 	 *
-	 * @param int The numeric page parent id.  Use -1 for no parent.
+	 * @param int $parentid The numeric page parent id.  Use -1 for no parent.
 	 */
 	public function SetParentId($parentid)
 	{
-		$this->mParentId = $parentid;
+		$this->mParentId = (int)$parentid;
 	}
 
 	/**
-	 * Return the id of the page template associated with this content page.
+	 * Return the id of the template associated with this content page.
 	 *
 	 * @return integer.
 	 */
@@ -584,18 +613,19 @@ abstract class ContentBase
 	}
 
 	/**
-	 * Set the id of the page template associated with this content page.
+	 * Set the id of the template associated with this content page.
 	 *
-	 * @param integer
+	 * @param int $templateid
 	 */
 	public function SetTemplateId($templateid)
 	{
-		$this->mTemplateId = $templateid;
+		$templateid = (int)$templateid;
+		if( $templateid > 0 ) $this->mTemplateId = $templateid;
 	}
 
 	/**
 	 * Returns the ItemOrder
-	 * The ItemOrder is used to specify the order of this page within the parent.
+	 * The ItemOrder is used to specify the order of this page amongst its peers
 	 *
 	 * @return int
 	 */
@@ -607,13 +637,16 @@ abstract class ContentBase
 	/**
 	 * Sets the ItemOrder
 	 * The ItemOrder is used to specify the order of this page within the parent.
+	 * A value of -1 indicates that a new item order will be calculated on save.
+	 * Otherwise a positive integer is expected.
 	 *
 	 * @internal
-	 * @param int the itemorder.
+	 * @param int $itemorder
 	 */
 	public function SetItemOrder($itemorder)
 	{
-		$this->mItemOrder = $itemorder;
+		$itemorder = (int)$itemorder;
+		if( $itemorder > 0 || $itemorder == -1 ) $this->mItemOrder = $itemorder;
 	}
 
 
@@ -644,7 +677,10 @@ abstract class ContentBase
 	}
 
 	/**
-	 * Returns the Hierarchy
+	 * Returns the Hierarchy of the current page
+	 * A string like #.##.## indicating the path to this page and it's order
+	 * this value uses the item order when calculating the output i.e:  3.3.3
+	 * to indicate the third grandghild of the third child of the third root page.
 	 *
 	 * @return string
 	 */
@@ -659,7 +695,7 @@ abstract class ContentBase
 	 * Sets the Hierarchy
 	 *
 	 * @internal
-	 * @param string
+	 * @param string $hierarchy
 	 */
 	public function SetHierarchy($hierarchy)
 	{
@@ -668,6 +704,10 @@ abstract class ContentBase
 
 	/**
 	 * Returns the Id Hierarchy
+	 * A string like #.##.## indicating the path to the page and it's order
+	 * this property uses the id's of pages when calculating the output i.e: 21.5.17
+	 * to indicate that page id 17 is the child of page with id 5 which is inturn the
+     * child of the page with id 21
 	 *
 	 * @return string
 	 */
@@ -679,6 +719,8 @@ abstract class ContentBase
 
 	/**
 	 * Returns the Hierarchy Path
+	 * Similar to the Hierarchy and IdHierarchy this string uses page aliases
+	 * and outputs a string like root_alias/parent_alias/page_alias
 	 *
 	 * @return string
 	 */
@@ -690,7 +732,7 @@ abstract class ContentBase
 	/**
 	 * Returns the Active state
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function Active()
 	{
@@ -700,11 +742,11 @@ abstract class ContentBase
 	/**
 	 * Sets this page as active
 	 *
-	 * @param boolean
+	 * @param bool $active
 	 */
 	public function SetActive($active)
 	{
-		$this->mActive = $active;
+		$this->mActive = (bool)$active;
 	}
 
 	/**
@@ -719,8 +761,9 @@ abstract class ContentBase
 	}
 
 	/**
-	 * Returns whether it should show in the menu
+	 * Returns whether this content item should (by default) be shown in navigation menus.
 	 *
+	 * @abstract
 	 * @return boolean
 	 */
 	public function ShowInMenu()
@@ -729,17 +772,19 @@ abstract class ContentBase
 	}
 
 	/**
-	 * Sets whether this page should be shown in menus
+	 * Sets whether this page should be (by default) shown in menus
 	 *
-	 * @param boolean
+	 * @param boolean $showinmenu
 	 */
 	public function SetShowInMenu($showinmenu)
 	{
-		$this->mShowInMenu = $showinmenu;
+		$this->mShowInMenu = (bool) $showinmenu;
 	}
 
 	/**
 	 * Returns if the page is the default
+	 * The default page is the one that is displayed when no alias or pageid is specified in the route
+	 * Only one content page can be the default.
 	 *
 	 * @return boolean
 	 */
@@ -753,15 +798,17 @@ abstract class ContentBase
 	 * Sets if this page should be considered the default
 	 * Note: does not modify the flags for any other content page.
 	 *
-	 * @param boolean
+	 * @param boolean $defaultcontent
 	 */
 	public function SetDefaultContent($defaultcontent)
 	{
-		$this->mDefaultContent = $defaultcontent;
+		$this->mDefaultContent = (bool) $defaultcontent;
 	}
 
 	/**
-	 * Return wether this page is cachable
+	 * Return whether this page is cachable.
+	 * Cachable pages (when enabled in global settings) are cached by the browser
+	 * (also server side caching of HTML output may be enabled)
 	 *
 	 * @return boolean
 	 */
@@ -771,18 +818,18 @@ abstract class ContentBase
 	}
 
 	/**
-	 * Set wether this page is cachable
+	 * Set whether this page is cachable
 	 *
-	 * @param boolean
+	 * @param boolean $cachable
 	 */
 	public function SetCachable($cachable)
 	{
-		$this->mCachable = $cachable;
+		$this->mCachable = (bool) $cachable;
 	}
 
 	/**
-	 * Return wether this page should be accessed via a secure protocol.
-	 * The secure flag effectsw wether the ssl protocol and appropriate config entries are used when generating urls to this page.
+	 * Return whether this page should be accessed via a secure protocol.
+	 * The secure flag effects whether the ssl protocol and appropriate config entries are used when generating urls to this page.
 	 *
 	 * @return boolean
 	 */
@@ -792,10 +839,10 @@ abstract class ContentBase
 	}
 
 	/**
-	 * Set wether this page should be accessed via a secure protocol.
-	 * The secure flag effectsw wether the ssl protocol and appropriate config entries are used when generating urls to this page.
+	 * Set whether this page should be accessed via a secure protocol.
+	 * The secure flag effectsw whether the ssl protocol and appropriate config entries are used when generating urls to this page.
 	 *
-	 * @return boolean
+	 * @param bool $secure
 	 */
 	public function SetSecure($secure)
 	{
@@ -804,7 +851,9 @@ abstract class ContentBase
 
 	/**
 	 * Return the page url (if any) associated with this content page.
-	 * Note: some content types do not support page urls.
+	 * The page url is not the complete URL to the content page, but merely the 'stub' or 'slug' appended after the root url when accessing the site
+	 * If the page is specified as the default page then the "page url" will be ignored.
+	 * Some content types do not support page urls.
 	 *
 	 * @return string
 	 */
@@ -818,7 +867,7 @@ abstract class ContentBase
 	 * Note: some content types do not support page urls.
 	 * The url should be relative to the root url.  i.e: /some/path/to/the/page
 	 *
-	 * @param string
+	 * @param string $url
 	 */
 	public function SetURL($url)
 	{
@@ -826,10 +875,9 @@ abstract class ContentBase
 	}
 
 	/**
-	 * Return the last modified user for this item
-	 * This is usually set on save.
-	 * 
-	 * @return Integer admin user id.
+	 * Return the integer id of the admin user that last modified this content item.
+	 *
+	 * @return int
 	 */
 	public function LastModifiedBy()
 	{
@@ -838,17 +886,18 @@ abstract class ContentBase
 
 	/**
 	 * Set the last modified date for this item
-	 * This is usually set on save.
-	 * 
-	 * @param Date
+	 *
+	 * @param int $lastmodifiedby
 	 */
 	public function SetLastModifiedBy($lastmodifiedby)
 	{
-		$this->mLastModifiedBy = $lastmodifiedby;
+		$lastmodifiedby = (int)$lastmodifiedby;
+		if( $lastmodifiedby > 0 ) $this->mLastModifiedBy = $lastmodifiedby;
 	}
 
 	/**
-	 * Indicates wether this content type requires an alias
+	 * Indicates whether this content type requires an alias.
+	 * Some content types that are not directly navigable do not require page aliases.
 	 *
 	 * @abstract
 	 * @return boolean
@@ -859,7 +908,7 @@ abstract class ContentBase
 	}
 
 	/**
-	 * Indicates wether this content type is viewable (i.e: can be rendered)
+	 * Indicates whether this content type is viewable (i.e: can be rendered)
 	 * some content types (like redirection links) are not viewable.
 	 *
 	 * @abstract
@@ -871,21 +920,26 @@ abstract class ContentBase
 	}
 
 	/**
-	 * Indicates wether this content type is searchable.
+	 * Indicates whether this content type is searchable.
+	 *
+	 * Searchable pages can be indexed by the search module.
+	 *
+	 * This function by default uses a combination of other abstract methods to determine if the page is searchable
+	 * but extended content types can override this.
 	 *
 	 * @since 2.0
 	 * @return boolean
 	 */
-	final public function IsSearchable()
+    public function IsSearchable()
 	{
 		if( !$this->IsViewable() || !$this->HasTemplate() || $this->IsSystemPage() ) return FALSE;
 		return $this->HasSearchableContent();
 	}
 
 	/**
-	 * Indicates wether this content type may have content that can be used by a search module.
+	 * Indicates whether this content type may have content that can be used by a search module.
 	 *
-	 * Content types should override this method if they are special purpose content types and they cannot support searchable content 
+	 * Content types should override this method if they are special purpose content types and they cannot support searchable content
 	 * in any way.  Content types such as ErrorPage, Section Header, and Separator are examples.
 	 *
 	 * @since 2.0
@@ -898,7 +952,9 @@ abstract class ContentBase
 	}
 
 	/**
-	 * Indicates wether this content type can be the default page for a CMSMS website
+	 * Indicates whether this content type can be the default page for a CMSMS website
+	 *
+	 * The content editor module may adjust it's user interface to not allow setting pages that return false for this method as the default page.
 	 *
 	 * @abstract
 	 * @returns boolean Default is false
@@ -909,13 +965,13 @@ abstract class ContentBase
 	}
 
 	/**
-	 * Set the page alias for this content page.  
+	 * Set the page alias for this content page.
 	 * If an empty alias is supplied, and depending upon the doAutoAliasIfEnabled flag, and config entries
 	 * a suitable alias may be calculated from other data in the page object
 	 * This method relies on the menutext and the name of the content page already being set.
 	 *
-	 * @param string The alias
-	 * @param boolean Wether an alias should be calculated or not.
+	 * @param string $alias The alias
+	 * @param boolean $doAutoAliasIfEnabled Whether an alias should be calculated or not.
 	 */
 	public function SetAlias($alias = null, $doAutoAliasIfEnabled = true)
 	{
@@ -953,10 +1009,11 @@ abstract class ContentBase
 		}
 
 		$this->mAlias = $alias;
-	} 
-	
+	}
+
 	/**
 	 * Returns the menu text for this content page
+	 * The MenuText is by default used as the text portion of a navigation link.
 	 *
 	 * @return string
 	 */
@@ -968,7 +1025,7 @@ abstract class ContentBase
 	/**
 	 * Sets the menu text for this content page
 	 *
-	 * @param string
+	 * @param string $menutext
 	 */
 	public function SetMenuText($menutext)
 	{
@@ -976,7 +1033,7 @@ abstract class ContentBase
 	}
 
 	/**
-	 * Returns number of immediate child-content items of this content
+	 * Returns number of immediate child content items of this content item.
 	 *
 	 * @return integer
 	 */
@@ -988,7 +1045,10 @@ abstract class ContentBase
 	}
 
 	/**
-	 * Returns the properties
+	 * Content page objects only directly store enough information to build a basic navigation from content objects.
+	 * This method will return all of the other parts of the content object.
+	 *
+	 * Note: this method does not directly load properties.
 	 *
 	 * @return array
 	 */
@@ -998,21 +1058,24 @@ abstract class ContentBase
 	}
 
 	/**
-	 * Test wether this content page has the named property
+	 * Test whether this content page has the named property
 	 * Properties will be loaded from the database if necessary.
 	 *
+	 * @param string $name
 	 * @return boolean
 	 */
 	public function HasProperty($name)
 	{
+		if( !$name ) return FALSE;
 		if( !is_array($this->_props) ) $this->_load_properties();
 		if( !is_array($this->_props) ) return FALSE;
 		return in_array($name,array_keys($this->_props));
 	}
-    
+
 	/**
 	 * Get the value for the named property
 	 *
+	 * @param string $name
 	 * @return mixed String value, or null if the property does not exist.
 	 */
 	public function GetPropertyValue($name)
@@ -1020,6 +1083,9 @@ abstract class ContentBase
 		if( $this->HasProperty($name) ) return $this->_props[$name];
 	}
 
+	/**
+	 * @ignore
+	 */
 	private function _load_properties()
 	{
 		if( $this->mId <= 0 ) return FALSE;
@@ -1035,11 +1101,14 @@ abstract class ContentBase
 		return TRUE;
 	}
 
+	/**
+	 * @ignore
+	 */
 	private function _save_properties()
 	{
 		if( $this->mId <= 0 ) return FALSE;
 		if( !is_array($this->_props) || count($this->_props) == 0 ) return FALSE;
-	    
+
 		$db = cmsms()->GetDb();
 		$query = 'SELECT prop_name FROM '.cms_db_prefix().'content_props WHERE content_id = ?';
 		$gotprops = $db->GetCol($query,array($this->mId));
@@ -1049,7 +1118,7 @@ abstract class ContentBase
                     (content_id,type,prop_name,content,modified_date)
                     VALUES (?,?,?,?,$now)";
 		$uquery = 'UPDATE '.cms_db_prefix()."content_props SET content = ?, modified_date = $now WHERE content_id = ? AND prop_name = ?";
-	  
+
 		foreach( $this->_props as $key => $value ) {
 			if( in_array($key,$gotprops) ) {
 				// update
@@ -1067,21 +1136,21 @@ abstract class ContentBase
 	 * Set the value of a the named property.
 	 * This method will load properties for this content page if necessary.
 	 *
-	 * @param string The property name
-	 * @param string  The property value.
+	 * @param string $name The property name
+	 * @param string $value The property value.
 	 */
 	public function SetPropertyValue($name, $value)
 	{
 		if( !is_array($this->_props) ) $this->_load_properties();
 		$this->_props[$name] = $value;
 	}
-	
+
 	/**
 	 * Set the value of a the named property.
 	 * This method will not load properties
 	 *
-	 * @param string The property name
-	 * @param string  The property value.
+	 * @param string $name The property name
+	 * @param string $value The property value.
 	 */
 	public function SetPropertyValueNoLoad($name,$value)
 	{
@@ -1090,11 +1159,9 @@ abstract class ContentBase
 	}
 
 	/**
-	 * Function content types to use to say whether or not they should show
-	 * up in lists where parents of content are set.  This will default to true,
-	 * but should be used in cases like Separator where you don't want it to 
-	 * have any children.
-	 * 
+	 * An abstract method that extended content types can use to indicate whether or not they want children.
+	 * Some content types, such as a separator do not want to have any children.
+	 *
 	 * @since 0.11
 	 * @abstract
 	 * @return boolean Default TRUE
@@ -1105,8 +1172,7 @@ abstract class ContentBase
 	}
 
 	/**
-	 * Should this link be used in various places where a link is the only
-	 * useful output?  (Like next/previous links in cms_selflink, for example)
+	 * An abstract method that indicates that this content type is navigable and generates a useful URL
 	 *
 	 * @abstract
 	 * @return boolean Default TRUE
@@ -1117,7 +1183,7 @@ abstract class ContentBase
 	}
 
 	/**
-	 * Is this content type copyable ?
+	 * An abstract method indicating whether the content type is copyable
 	 *
 	 * @abstract
 	 * @return boolean default FALSE
@@ -1128,7 +1194,8 @@ abstract class ContentBase
 	}
 
 	/**
-	 * Indicates wether this is a system page type.
+	 * An abstract method to indicate whether this content type generates a system page.
+	 * System pages are used to handle things like 404 errors etc.
 	 *
 	 * @abstract
 	 * @return boolean default FALSE
@@ -1139,7 +1206,7 @@ abstract class ContentBase
 	}
 
 	/**
-	 * Indicates wether ths page type uses a template.
+	 * Indicates whether ths page type uses a template.
 	 * i.e: some content types like sectionheader and separator do not.
 	 *
 	 * @since 2.0
@@ -1162,8 +1229,11 @@ abstract class ContentBase
 	 * There is no check on the data provided, because this is the job of
 	 * ValidateData
 	 *
-	 * @returns	bool		If it fails, the object comes back to initial values and returns FALSE
-	 *				If everything goes well, it returns TRUE
+	 * Upon failure the object comes back to initial values and returns FALSE
+	 *
+	 * @param array $data Data as loaded from the database
+	 * @param bool  $loadProperties Optionally load content properties at the same time.
+	 * @returns	bool
 	 */
 	function LoadFromData(&$data, $loadProperties = false)
 	{
@@ -1198,7 +1268,6 @@ abstract class ContentBase
 
 		if ($loadProperties == true) {
 			$this->_load_properties();
-
 			if (!is_array($this->_props) ) $result = false;
 		}
 
@@ -1280,13 +1349,17 @@ abstract class ContentBase
 	}
 
 	/**
-	 * Update the content
-	 * We can notice, that only a few things are updated
-	 * We do not care about hierarchy for example. This is because hierarchy,
-	 * order or parents management is the job of the content manager.
-	 * Remember that a content is like a file, and a file don't know where it is
-	 * on the disk, it only knows its own content. It's the same here.
+	 * Update the database with the contents of the content object.
 	 *
+	 * This method will calculate a new item order for the object if necessary and then
+	 * save the content record, the additional editors, and the properties.
+	 * Additionally, if a page url is specified a static route will be created
+	 *
+	 * Because multiple content objects may be modified in one batch
+	 * the calling function is responsible for ensuring that page hierarchies are
+	 * updated.
+	 *
+	 * @see ContentOperations::SetAllHierarchyPositions()
 	 * @todo this function should return something, or throw an exception.
 	 */
 	protected function Update()
@@ -1371,15 +1444,19 @@ abstract class ContentBase
 	}
 
 	/**
-	 * Insert the content in the db
+	 * Initially save a content object with no id to the database.
 	 *
-	 * @todo this function should return something
+	 * Like the Update method this method will determine a new item order
+	 * save the record, save properties and additional editors, but will not
+	 * update the hierarchy positions.
+	 *
+	 * @see ContentOperations::SetAllHierarchyPositions()
 	 */
+	protected function Insert()
+	{
 	# :TODO: This function should return something
 	# :TODO: Take care bout hierarchy here, it has no value !
 	# :TODO: Figure out proper item_order
-	protected function Insert()
-	{
 		$gCms = cmsms();
 		$db = $gCms->GetDb();
 		$config = $gCms->GetConfig();
@@ -1459,7 +1536,7 @@ abstract class ContentBase
 	}
 
 	/**
-	 * Test if the array given contains valid data for the object
+	 * Test if the content object is valid.
 	 * This function is used to check that no compulsory argument
 	 * has been forgotten by the user
 	 *
@@ -1467,7 +1544,7 @@ abstract class ContentBase
 	 * That's up to Save to check this.
 	 *
 	 * @abstract
-	 * @returns	FALSE if data is ok, and an array of invalid parameters else
+	 * @returns	mixed On error returns an array of strings, otherwise FALSE
 	 */
 	public function ValidateData()
 	{
@@ -1478,7 +1555,7 @@ abstract class ContentBase
 			$errors[] = lang('invalidparent');
 			$result = false;
 		}
-	  
+
 		if ($this->mName == '') {
 			if ($this->mMenuText != '') {
 				$this->mName = $this->mMenuText;
@@ -1488,7 +1565,7 @@ abstract class ContentBase
 				$result = false;
 			}
 		}
-	  
+
 		if ($this->mMenuText == '') {
 			if ($this->mName != '') {
 				$this->mMenuText = $this->mName;
@@ -1567,6 +1644,7 @@ abstract class ContentBase
 		return (count($errors) > 0?$errors:FALSE);
 	}
 
+
 	/**
 	 * Delete the current content object from the database.
 	 *
@@ -1580,10 +1658,7 @@ abstract class ContentBase
 		$db = $gCms->GetDb();
 		$result = false;
 
-		if (-1 > $this->mId) {
-			// invalid content id.
-		}
-		else {
+		if ($this->mId > 0) {
 			$query = "DELETE FROM ".cms_db_prefix()."content WHERE content_id = ?";
 			$dbresult = $db->Execute($query, array($this->mId));
 
@@ -1606,13 +1681,18 @@ abstract class ContentBase
 		}
 
 		Events::SendEvent('Core', 'ContentDeletePost', array('content' => &$this));
+		$this->mId = -1;
+		$this->mItemOrder = -1;
+		$this->mOldItemOrder = -1;
 	}
 
 	/**
 	 * Function for the subclass to parse out data for it's parameters (usually from $_POST)
-	 * This method is typically called from an editor form to allow modifying the content object from 
+	 * This method is typically called from an editor form to allow modifying the content object from
 	 * form input fields.
 	 *
+	 * @param array $params The input array (usually from $_POST)
+	 * @param bool  $editing Indicates wether this is an edit or add operation.
 	 * @abstract
 	 * @return void
 	 */
@@ -1667,15 +1747,13 @@ abstract class ContentBase
 			$val = $params['target'];
 			if( $val == '---' ) $val = '';
 			$this->SetPropertyValue('target', $val);
-		} 
+		}
 
 		// title attribute
 		if (isset($params['titleattribute'])) $this->mTitleAttribute = $params['titleattribute'];
 
 		// accesskey
-		if (isset($params['accesskey'])) {
-			$this->mAccessKey = $params['accesskey'];
-		}
+		if (isset($params['accesskey'])) $this->mAccessKey = $params['accesskey'];
 
 		// tab index
 		if (isset($params['tabindex'])) $this->mTabIndex = $params['tabindex'];
@@ -1723,7 +1801,7 @@ abstract class ContentBase
 	 * A function to get the internally generated URL for this content type.
 	 * This method may be overridden by content types.
 	 *
-	 * @param boolean if true, and mod_rewrite is enabled, build a URL suitable for mod_rewrite.
+	 * @param boolean $rewrite if true, and mod_rewrite is enabled, build a URL suitable for mod_rewrite.
 	 * @return string
 	 */
 	public function GetURL($rewrite = true)
@@ -1764,8 +1842,7 @@ abstract class ContentBase
 	 * Note: This method modifies two content objects.
 	 *
 	 * @since 2.0
-	 * @param integer direction. negative value indicates up, positive value indicates down.
-	 * @return void
+	 * @param int $direction direction. negative value indicates up, positive value indicates down.
 	 */
 	public function ChangeItemOrder($direction)
 	{
@@ -1775,7 +1852,7 @@ abstract class ContentBase
 		$order = $this->ItemOrder();
 		if( $direction < 0 && $this->ItemOrder() > 1 ) {
 			// up
-			$query = 'UPDATE '.cms_db_prefix().'content SET item_order = (item_order + 1), modified_date = '.$time.' 
+			$query = 'UPDATE '.cms_db_prefix().'content SET item_order = (item_order + 1), modified_date = '.$time.'
                   WHERE item_order = ? AND parent_id = ?';
 			$db->Execute($query,array($order-1,$parentid));
 			$query = 'UPDATE '.cms_db_prefix().'content SET item_order = (item_order - 1), modified_date = '.$time.'
@@ -1796,21 +1873,28 @@ abstract class ContentBase
 	}
 
 	/**
-	 * Show the content
+	 * Return the raw value for a content property.
+	 * If no proeprty name is specified 'content_en' is assumed
+	 *
+	 * Note: The content_en default value is not specified in the argument list
+	 * due to backwards compatibility concerns
 	 *
 	 * @abstract
-	 * @param string An optional property name to display.
+	 * @param string $propname An optional property name to display.
+	 * @return string
 	 */
-	public function Show($param = '')
+	public function Show($propname = '')
 	{
 	}
 
 	/**
-	 * Used to get the list of all editable properties for this content page.
+	 * Return a list of all of the properties that may be edited by the current user when editing this content item
+	 * in a content editor form.
+	 *
 	 * Other content types may override this method, but should call the base method at the start.
 	 *
 	 * @abstract
-	 * @return an array of stdclass objects containing name (string), tab (string), priority (integer), required (boolean) members
+	 * @return array Array of stdclass objects containing name (string), tab (string), priority (integer), required (boolean) members
 	 */
 	public function GetEditableProperties()
 	{
@@ -1834,6 +1918,9 @@ abstract class ContentBase
 		// todo: filter out the elements that this user isn't allowed to see.
 	}
 
+    /**
+     * @ignore
+     */
 	private function _SortProperties($props)
 	{
 		// sort the properties.
@@ -1857,6 +1944,9 @@ abstract class ContentBase
 		return $props;
 	}
 
+    /**
+     * @ignore
+     */
 	private function _GetEditableProperties()
 	{
 		if( isset($this->_editable_properties) ) return $this->_editable_properties;
@@ -1871,7 +1961,7 @@ abstract class ContentBase
 	 * that devides up the various logical sections that this content type supports for editing.
 	 *
 	 * @abstract
-	 * @return associative array List of tab keys, and values.
+	 * @return Array associative array list of tab keys and labels.
 	 */
 	public function GetTabNames()
 	{
@@ -1882,7 +1972,7 @@ abstract class ContentBase
 			$key = $lbl = $one->tab;
 			if( endswith($key,'_tab__') ) $lbl = lang($key);
 			$arr[$key] = $lbl;
-		}      
+		}
 		return $arr;
 	}
 
@@ -1891,7 +1981,7 @@ abstract class ContentBase
 	 *
 	 * @abstract
 	 * @since 2.0
-	 * @param string the tab key (as returned with GetTabNames)
+	 * @param string $key the tab key (as returned with GetTabNames)
 	 * @return string html text to display at the top of the tab.
 	 */
 	public function GetTabMessage($key)
@@ -1904,9 +1994,10 @@ abstract class ContentBase
 	}
 
 	/**
-	 * Get the attributes for a specific tab
+	 * Get the elements for a specific tab
 	 *
-	 * @param string tab key
+	 * @param string $key tab key
+	 * @param bool   $adding  Wether this is an add or edit operation.
 	 * @return An array of arrays.  Index 0 of each element should be a prompt field, and index 1 should be the input field for the prompt.
 	 */
 	public function GetTabElements($key,$adding = FALSE)
@@ -1922,9 +2013,9 @@ abstract class ContentBase
 	}
 
 	/**
-	 * Method to indicate wether the current page has children.
+	 * Method to indicate whether the current page has children.
 	 *
-	 * @param boolean should we test only for active children.
+	 * @param boolean $activeonly Should we test only for active children.
 	 * @return booelan
 	 */
 	public function HasChildren($activeonly = false)
@@ -1949,7 +2040,7 @@ abstract class ContentBase
 	 * Return a list of additional editors
 	 * Note: in the returned array, group id's are specified as negative integers.
 	 *
-	 * @return mixed  Array of uids and group ids, or null
+	 * @return mixed Array of uids and group ids, or null
 	 */
 	public function GetAdditionalEditors()
 	{
@@ -1975,13 +2066,20 @@ abstract class ContentBase
 	 * Set the list of additional editors
 	 * Note: in the provided array, group id's are specified as negative integers.
 	 *
-	 * @param mixed  Array of uids and group ids, or null
+	 * @param mixed $editorarray Array of uids and group ids, or null
 	 */
 	public function SetAdditionalEditors($editorarray)
 	{
 		$this->mAdditionalEditors = $editorarray;
 	}
 
+    /**
+	 * A utility method to return all of the userid and group ids in a format that is
+	 * suitable to be used in a select field.
+	 *
+	 * Note: group ids are expressed as negative integers in the keys
+	 * @return array
+	 */
 	static public function GetAdditionalEditorOptions()
 	{
 		$opts = array();
@@ -2002,6 +2100,16 @@ abstract class ContentBase
 		return $opts;
 	}
 
+    /**
+     * A utility method to generate a <select> field for selecting additional editors
+	 *
+	 * If a positive owner id is specified that user will be excluded from output select element.
+	 *
+	 * @see ContentBase::GetAdditionalEditorOptions
+	 * @param array $addteditors Array of additional editors
+	 * @param int  $owner_id  The current owner of the page.
+	 * @return string HTML output
+	 */
 	static public function GetAdditionalEditorInput($addteditors,$owner_id = -1)
 	{
 		$help = '&nbsp;'.cms_admin_utils::get_help_tag('core','help_content_addteditor');
@@ -2014,20 +2122,20 @@ abstract class ContentBase
 			if( $k == $owner_id ) continue;
 			$text .= CmsFormUtils::create_option(array('label'=>$v,'value'=>$k),$addteditors);
 		}
-      
-      
+
+
 		$text .= '</select>';
 		$ret[] = $text;
 		return $ret;
 	}
 
-
 	/**
 	 * Provides an input element to display the list of additional editors.
 	 * This method is usually called from within this object.
 	 *
-	 * @param mixed An optional array of additional editor id's (group ids specified with negative values)
+	 * @param array $addteditors An optional array of additional editor id's (group ids specified with negative values)
 	 * @return string The input element.
+	 * @see ContentBase::GetAdditionalEditorInput
 	 */
 	public function ShowAdditionalEditors($addteditors = '')
 	{
@@ -2036,7 +2144,9 @@ abstract class ContentBase
 		return self::GetAdditionalEditorInput($addteditors,$this->Owner());
 	}
 
-	/* private */
+    /**
+	 * @ignore
+	 */
 	private function _handleRemovedBaseProperty($name,$member)
 	{
 		if( !is_array($this->_attributes) ) return FALSE;
@@ -2053,8 +2163,8 @@ abstract class ContentBase
 	 * Remove a property from the known property list.
 	 * Specify a default value to use if the property is called.
 	 *
-	 * @param string The property name
-	 * @param string The default value.
+	 * @param string $name The property name
+	 * @param string $dflt The default value.
 	 * @return void
 	 */
 	protected function RemoveProperty($name,$dflt)
@@ -2070,14 +2180,13 @@ abstract class ContentBase
 	}
 
 	/**
-	 * Add a property
+	 * Add a property definition
 	 *
 	 * @since 1.11
-	 * @param string The property name
-	 * @param integer The property priority
-	 * @param string The tab for the property (see tab constants)
-	 * @param boolean required (wether the property is required)
-	 * @return void
+	 * @param string $name The property name
+	 * @param int $priority The property priority
+	 * @param string $tab The tab for the property (see tab constants)
+	 * @param bool $required (whether the property is required)
 	 */
 	protected function AddProperty($name,$priority,$tab = self::TAB_MAIN,$required = FALSE)
 	{
@@ -2092,7 +2201,7 @@ abstract class ContentBase
 	}
 
 	/**
-	 * Get all of the properties for this content object.  independent of wether the user is entitled to view them, or not.
+	 * Get all of the properties for this content object.  independent of whether the user is entitled to view them, or not.
 	 *
 	 * @since 2.0
 	 * @return array of stdclass objects
@@ -2102,13 +2211,13 @@ abstract class ContentBase
 		return $this->_SortProperties($this->_attributes);
 	}
 
-	/*
+    /**
 	 * Add a property that is directly associtated with a field in the content table.
 	 * @alias for AddProperty
 	 *
-	 * @param string The property name
-	 * @param integer The priority
-	 * @param boolean Whether this field is required for this content type
+	 * @param string $name The property name
+	 * @param int    $priority The priority
+	 * @param bool   $is_required Whether this field is required for this content type
 	 * @param string  (optional) unused.
 	 * @deprecated
 	 */
@@ -2117,9 +2226,12 @@ abstract class ContentBase
 		$this->AddProperty($name,$priority,self::TAB_OPTIONS,$is_required);
 	}
 
-	/*
+    /**
 	 * Alias for AddBaseProperty
 	 *
+	 * @param string $name
+	 * @param int    $priority
+	 * @param bool   $is_required
 	 * @deprecated
 	 */
 	protected function AddContentProperty($name,$priority,$is_required = 0)
@@ -2131,8 +2243,8 @@ abstract class ContentBase
 	 * A method to display a single input element for an object basic, or extended property.
 	 *
 	 * @abstract
-	 * @param string The property name
-	 * @param boolean Wether or not we are in add or edit mode.
+	 * @param string $one The property name
+	 * @param boolean $adding Whether or not we are in add or edit mode.
 	 * @return array consisting of two elements.  A label, and the input element.
 	 */
 	protected function display_single_element($one,$adding)
@@ -2150,7 +2262,7 @@ abstract class ContentBase
 			$help = '&nbsp;'.cms_admin_utils::get_help_tag('core','help_content_title');
 			return array('<label for="in_title">*'.lang('title').':</label>'.$help,
 						 '<input type="text" id="in_title" name="title" required="required" value="'.cms_htmlentities($this->mName).'" />');
-	      
+
 		case 'menutext':
 			$help = '&nbsp;'.cms_admin_utils::get_help_tag('core','help_content_menutext');
 			return array('<label for="in_menutext">*'.lang('menutext').':</label>'.$help,
@@ -2253,7 +2365,7 @@ abstract class ContentBase
 			$help = '&nbsp;'.cms_admin_utils::get_help_tag('core','help_content_extra2');
 			return array('<label for="extra2">'.lang('extra2').':</label>'.$help,
 						 '<input type="text" name="extra2" id="extra2" maxlength="255" size="80" value="'.cms_htmlentities($this->GetPropertyValue('extra2')).'" />');
-	      
+
 		case 'extra3':
 			$help = '&nbsp;'.cms_admin_utils::get_help_tag('core','help_content_extra3');
 			return array('<label for="extra3">'.lang('extra3').':</label>'.$help,

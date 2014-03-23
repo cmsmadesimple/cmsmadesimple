@@ -44,18 +44,18 @@ function send_recovery_email($username)
   $config = $gCms->GetConfig();
   $userops = $gCms->GetUserOperations();
   $user = $userops->LoadUserByUsername($username);
-  
+
   $obj = cms_utils::get_module('CMSMailer');
   if ($obj == null) return false;
-	
+
   $obj->AddAddress($user->email, html_entity_decode($user->firstname . ' ' . $user->lastname));
   $obj->SetSubject(lang('lostpwemailsubject',html_entity_decode(get_site_preference('sitename','CMSMS Site'))));
-  
+
   $url = $config['admin_url'] . '/login.php?recoverme=' . md5(md5($config['root_path'] . '--' . $user->username . md5($user->password)));
   $body = lang('lostpwemail',html_entity_decode(get_site_preference('sitename','CMSMS Site')), $user->username, $url);
-  
+
   $obj->SetBody($body);
-  
+
   audit('','Core','Sent Lost Password Email for '.$username);
   return $obj->Send();
 }
@@ -130,7 +130,7 @@ else if (isset($_REQUEST['forgotpwchangeform']) && $_REQUEST['forgotpwchangeform
 	$user->SetPassword($_REQUEST['password']);
 	$user->Save();
 	// put mention into the admin log
-	$ip_passw_recovery = cms_utils::get_real_ip(); 
+	$ip_passw_recovery = cms_utils::get_real_ip();
 	audit('','Core','Completed lost password recovery for: '.$user->username.' (IP: '.$ip_passw_recovery.')');
 	$acceptLogin = lang('passwordchangedlogin');
 	$changepwhash = '';
@@ -165,7 +165,7 @@ else if ( isset($_SESSION['redirect_url']) ) {
 
   if (true == $is_logged_in) {
     $userid = get_userid();
-    $homepage = get_preference($userid,'homepage'.'index.php');
+    $homepage = cms_userprefs::get_for_user($userid,'homepage'.'index.php');
 
     $homepage = str_replace('&amp;','&',$homepage);
     $tmp = explode('?',$homepage);
@@ -219,7 +219,7 @@ if (isset($_POST["username"]) && isset($_POST["password"])) {
     $current_version = $CMS_SCHEMA_VERSION;
 
     if( $gCms->get_installed_schema_version() < $CMS_SCHEMA_VERSION ) redirect($gCms->config['root_url'] . "/install/upgrade.php");
-		
+
     if (isset($_POST['redirect_url'])) $_SESSION['redirect_url'] = $_POST['redirect_url'];
     if (isset($_SESSION["redirect_url"])) {
       if (isset($gCms->config) and $gCms->config['debug'] == true) {
@@ -262,7 +262,7 @@ if (isset($_POST["username"]) && isset($_POST["password"])) {
 	}
       }
       else {
-	$homepage = get_preference($oneuser->id,'homepage');
+	$homepage = cms_userprefs::get_for_user($oneuser->id,'homepage');
 	if( $homepage ) {
 	  // quick hacks to remove old secure param name from homepage url
 	  // and replace with the correct one.
@@ -294,7 +294,7 @@ if (isset($_POST["username"]) && isset($_POST["password"])) {
 
     Events::SendEvent('Core','LoginFailed',array('user'=>$_POST['username']));;
     // put mention into the admin log
-    $ip_login_failed = cms_utils::get_real_ip(); 
+    $ip_login_failed = cms_utils::get_real_ip();
     audit('', '(IP: ' . $ip_login_failed . ') ' . "Admin Username: " . $username, 'Login Failed');
   }
   else {

@@ -49,7 +49,7 @@ final class FileManager extends CMSModule {
 
   function GetFileIcon($extension,$isdir=false) {
     if (empty($extension)) $extension = '---'; // hardcode extension to something.
-    if ($extension[0]==".") $extension=substr($extension,1);    
+    if ($extension[0]==".") $extension=substr($extension,1);
     $config = cmsms()->GetConfig();
     $iconsize=$this->GetPreference("iconsize","32px");
     //for valid xhtml
@@ -83,13 +83,13 @@ final class FileManager extends CMSModule {
     if ($str[strlen($str)-1]!="/") {
       if ($str2[0]!="/") {
 	return $str."/".$str2;
-      } else { 
+      } else {
 	return $str.$str2;
       }
     } else {
       if ($str2[0]!="/") {
 	return $str.$str2;
-      } else { 
+      } else {
 	return $str.substr($str2,1); //trim away one of the slashes
       }
     }
@@ -104,14 +104,14 @@ final class FileManager extends CMSModule {
     return $statinfo["mode"];
   }
 
-  function GetMode($path,$file) {	  
+  function GetMode($path,$file) {
     $config = cmsms()->GetConfig();
     $realpath=$this->Slash($config["root_path"],$path);
     $statinfo=stat($this->Slash($realpath,$file));
     return filemanager_util::format_permissions($statinfo["mode"]);
   }
-	
-  function GetModeWin($path,$file) {	  
+
+  function GetModeWin($path,$file) {
     $config = cmsms()->GetConfig();
     $realpath=$this->Slash($config["root_path"],$path);
     $realpath=$this->Slash($realpath,$file);
@@ -214,7 +214,7 @@ final class FileManager extends CMSModule {
     $jsfiles[] = 'jquery-file-upload/jquery.fileupload.js';
     $jsfiles[] = 'jqueryrotate/jQueryRotate-2.2.min.js';
     $jsfiles[] = 'jrac/jquery.jrac.js';
-    
+
     $fmt = '<script type="text/javascript" src="%s/%s"></script>';
     foreach( $jsfiles as $one ) {
       $out .= sprintf($fmt,$urlpath,$one)."\n";
