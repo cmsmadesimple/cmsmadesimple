@@ -35,7 +35,6 @@
  * @abstract
  * @since 0.8
  * @package CMS
- * @version $Revision$
  * @license GPL
  */
 class ContentOperations

@@ -20,12 +20,15 @@
 
 /**
  * @package CMS
+ * @license GPL
  */
 
 /**
- * A class to manage template types 
+ * A class to manage template types
  *
- * @since 1.12
+ * @package CMS
+ * @license GPL
+ * @since 2.0
  * @author Robert Campbell <calguy1000@gmail.com>
  */
 class CmsLayoutTemplateCategory

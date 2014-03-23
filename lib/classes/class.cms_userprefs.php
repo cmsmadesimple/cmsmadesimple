@@ -21,6 +21,7 @@
 /**
  * Classes and utilities for working with user preferences.
  * @package CMS
+ * @license GPL
  */
 
 
@@ -28,6 +29,7 @@
  * A static class for preferences stored with admin user accounts
  *
  * @package CMS
+ * @license GPL
  * @since 1.10
  * @author Robert Campbell (calguy1000@gmail.com)
  */

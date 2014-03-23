@@ -384,8 +384,10 @@ final class CmsNlsOperations
   }
 
   /**
-   * Used to allow third party software to override the language detection mechanism for frontend requests
-   * the module can provide an object derived from CmsLanguageDetector to this method.
+   * Used to allow third party modules to override the language detection mechanism for frontend requests.
+   * The module can provide an object derived from CmsLanguageDetector to this method.
+   *
+   * i.e:  CmsNlsOperations::set_language_detector(myLanguageDetector)
    *
    * Note, this module must return a language for which there is an available NLS file.
    *

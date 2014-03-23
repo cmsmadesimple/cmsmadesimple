@@ -34,43 +34,44 @@
  */
 class User
 {
+
 	/**
-	 * User ID
+	 * @var int $id User id
 	 */
 	var $id;
 
 	/**
-	 * Username
+	 * @var string Username
 	 */
 	var $username;
 
 	/**
-	 * Password (md5 encoded)
+	 * @var string $password Password (md5 encoded)
 	 */
 	var $password;
 
 	/**
-	 * First Name
+	 * @var string $firstname Users First Name
 	 */
 	var $firstname;
 
 	/**
-	 * Last Name
+	 * @var string $lastname Last Name
 	 */
 	var $lastname;
 
 	/**
-	 * Email
+	 * @var string $email Users Email Address
 	 */
 	var $email;
 
 	/**
-	 * Active Flag
+	 * @var bool $active Active Flag
 	 */
 	var $active;
 
 	/**
-	 * Flag to tell whether user can login to admin panel
+	 * @var bool $adminaccess Flag to tell whether user can login to admin panel
 	 */
 	var $adminaccess;
 
@@ -121,7 +122,7 @@ class User
 	function Save()
 	{
 		$result = false;
-		
+
 		if ($this->id > -1) {
 			$gCms = cmsms();
 			$userops = $gCms->GetUserOperations();

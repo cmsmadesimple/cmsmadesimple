@@ -1,10 +1,10 @@
 <?php // -*- mode:php; tab-width:4; indent-tabs-mode:t; c-basic-offset:4; -*-
 #BEGIN_LICENSE
 #-------------------------------------------------------------------------
-# Module: cms_tree (c) 2010 by Robert Campbell 
+# Module: cms_tree (c) 2010 by Robert Campbell
 #         (calguy1000@cmsmadesimple.org)
 #  A simple php tree class.
-# 
+#
 #-------------------------------------------------------------------------
 # CMS - CMS Made Simple is (c) 2005 by Ted Kulp (wishy@cmsmadesimple.org)
 # Visit our homepage at: http://www.cmsmadesimple.org
@@ -19,7 +19,7 @@
 # However, as a special exception to the GPL, this software is distributed
 # as an addon module to CMS Made Simple.  You may not use this software
 # in any Non GPL version of CMS Made simple, or in any version of CMS
-# Made simple that does not indicate clearly and obviously in its admin 
+# Made simple that does not indicate clearly and obviously in its admin
 # section that the site was built with CMS Made simple.
 #
 # This program is distributed in the hope that it will be useful,
@@ -40,12 +40,14 @@
  * The methods in this class provide simple wrappers over other class methods.
  *
  * @package CMS
+ * @license GPL
  */
 
 /**
  * A Simple Static class providing various convenience utilities.
  *
  * @package CMS
+ * @license GPL
  * @author  Robert Campbell
  * @copyright Copyright (c) 2010, Robert Campbell <calguy1000@cmsmadesimple.org>
  * @since 1.9
@@ -53,7 +55,7 @@
 final class cms_utils
 {
 	/**
-	 * @ignore 
+	 * @ignore
 	 */
 	private static $_vars;
 
@@ -64,7 +66,7 @@ final class cms_utils
 
 
 	/**
-	 * Get data that was stored elsewhere in the application.  
+	 * Get data that was stored elsewhere in the application.
 	 *
 	 * @since 1.9
 	 * @param string $key The key to get.
@@ -122,7 +124,7 @@ final class cms_utils
 	 * @author calguy1000
 	 * @since 1.11
 	 * @param string $name The module name
-	 * @return boolean
+	 * @return bool
 	 */
 	final public static function module_available($name)
 	{
@@ -149,7 +151,7 @@ final class cms_utils
 	 *
 	 * @final
 	 * @since 1.9
-	 * @return mixed An associative array of configuration values
+	 * @return cms_config The global configuration object.
 	 */
 	final public static function & get_config()
 	{
@@ -172,7 +174,7 @@ final class cms_utils
 
 
 	/**
-	 * A convenience functon to return a reference to the current content object
+	 * A convenience functon to return a reference to the current content object.
 	 *
 	 * This function will always return NULL if called from an admin action
 	 *
@@ -187,7 +189,7 @@ final class cms_utils
 
 
 	/**
-	 * A convenience function to return the alias of the current page
+	 * A convenience function to return the alias of the current page.
 	 *
 	 * This function will always return NULL if called from an admin action
 	 *
@@ -209,7 +211,7 @@ final class cms_utils
 	 *
 	 * @since 1.9
 	 * @final
-	 * @return integer
+	 * @return int
 	 */
 	final public static function get_current_pageid()
 	{
@@ -218,23 +220,7 @@ final class cms_utils
 
 
 	/**
-	 * A convenient method to get the class name of the calling function
-	 *
-	 *
-	 * @since 1.10
-	 * @author calguy1000
-	 * @final
-	 * @return string
-	 */
-	public static function get_caller_class()
-	{
-		$trace = debug_backtrace();
-		if( isset($trace[2]['class']) ) return $trace[2]['class'];
-	}
-
-
-	/**
-	 * A convenient method to get the object pointer to the appropriate wysiwyg module
+	 * A convenient method to get the object pointer to the appropriate wysiwyg module.
 	 * This is a wrapper around a similar function in the ModuleOperations class.
 	 *
 	 * This method will return the currently selected frontend wysiwyg for frontend requests (or null if none is selected)
@@ -251,7 +237,7 @@ final class cms_utils
 
 
 	/**
-	 * A convenient method to get the currently selected syntax highlighter
+	 * A convenient method to get the currently selected syntax highlighter.
 	 * This is a wrapper around a similar function in the ModuleOperations class.
 	 *
 	 * @since 1.10
@@ -293,7 +279,7 @@ final class cms_utils
 		elseif (empty($ip) && !empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
 			$ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
 		}
-	
+
 		if( filter_var($ip,FILTER_VALIDATE_IP) ) return $ip;
 
 		return null;
@@ -329,7 +315,7 @@ final class cms_utils
 		while( startswith($ext,'.') ) $ext = substr($ext,1);
 		if( !in_array($ext,array('jpg','jpeg','png','bmp','gif')) ) {
 			return; // not gonna create a thumb on anything but an image.
-		} 
+		}
 		$dn = dirname($srcfile);
 		$bn = basename($srcfile);
 		if( startswith($bn,'thumb_') ) return;
@@ -349,7 +335,7 @@ final class cms_utils
 
 		$transform = new Image_Transform;
 		$img = $transform->factory();
-		$img->load($srcfile);	  
+		$img->load($srcfile);
 		$img->resize($width,$height);
 		$img->save($thumb);
 		return $thumb;

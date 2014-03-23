@@ -478,7 +478,7 @@ abstract class ContentBase
 	 * Content object handles the alias
 	 *
 	 * @abstract
-	 * @return boolean default is false.
+	 * @return bool default is false.
 	 */
 	public function HandlesAlias()
 	{
@@ -547,7 +547,8 @@ abstract class ContentBase
 
 	/**
 	 * Set the title attribute of the page
-	 * the title attribue can be used in navigations to set the "title=" attribute of a link
+	 *
+	 * The title attribue can be used in navigations to set the "title=" attribute of a link
 	 * some menu templates may ignore this.
 	 *
 	 * @param string $titleattribute The title attribute
@@ -581,7 +582,7 @@ abstract class ContentBase
 
 	/**
 	 * Returns the id of this pages parent.
-	 * the parent id may be -2 to indicate a new page.
+	 * The parent id may be -2 to indicate a new page.
 	 * A parent id value of -1 indicates that the page has no parent.
 	 * oterwise a positive integer is returned.
 	 *
@@ -651,7 +652,7 @@ abstract class ContentBase
 
 
 	/**
-	 * Returns the OldItemOrder
+	 * Returns the OldItemOrder.
 	 * The OldItemOrder is used to specify the item order before changes were done
 	 *
 	 * @deprecated
@@ -677,7 +678,7 @@ abstract class ContentBase
 	}
 
 	/**
-	 * Returns the Hierarchy of the current page
+	 * Returns the Hierarchy of the current page.
 	 * A string like #.##.## indicating the path to this page and it's order
 	 * this value uses the item order when calculating the output i.e:  3.3.3
 	 * to indicate the third grandghild of the third child of the third root page.
@@ -703,7 +704,7 @@ abstract class ContentBase
 	}
 
 	/**
-	 * Returns the Id Hierarchy
+	 * Returns the Id Hierarchy.
 	 * A string like #.##.## indicating the path to the page and it's order
 	 * this property uses the id's of pages when calculating the output i.e: 21.5.17
 	 * to indicate that page id 17 is the child of page with id 5 which is inturn the
@@ -718,7 +719,7 @@ abstract class ContentBase
 
 
 	/**
-	 * Returns the Hierarchy Path
+	 * Returns the Hierarchy Path.
 	 * Similar to the Hierarchy and IdHierarchy this string uses page aliases
 	 * and outputs a string like root_alias/parent_alias/page_alias
 	 *
@@ -753,7 +754,7 @@ abstract class ContentBase
 	 * Returns whether preview should be available for this content type
 	 *
 	 * @abstract
-	 * @return boolean
+	 * @return bool
 	 */
 	public function HasPreview()
 	{
@@ -764,7 +765,7 @@ abstract class ContentBase
 	 * Returns whether this content item should (by default) be shown in navigation menus.
 	 *
 	 * @abstract
-	 * @return boolean
+	 * @return bool
 	 */
 	public function ShowInMenu()
 	{
@@ -774,7 +775,7 @@ abstract class ContentBase
 	/**
 	 * Sets whether this page should be (by default) shown in menus
 	 *
-	 * @param boolean $showinmenu
+	 * @param bool $showinmenu
 	 */
 	public function SetShowInMenu($showinmenu)
 	{
@@ -782,11 +783,11 @@ abstract class ContentBase
 	}
 
 	/**
-	 * Returns if the page is the default
+	 * Returns if the page is the default.
 	 * The default page is the one that is displayed when no alias or pageid is specified in the route
 	 * Only one content page can be the default.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	final public function DefaultContent()
 	{
@@ -795,10 +796,10 @@ abstract class ContentBase
 	}
 
 	/**
-	 * Sets if this page should be considered the default
+	 * Sets if this page should be considered the default.
 	 * Note: does not modify the flags for any other content page.
 	 *
-	 * @param boolean $defaultcontent
+	 * @param bool $defaultcontent
 	 */
 	public function SetDefaultContent($defaultcontent)
 	{
@@ -810,7 +811,7 @@ abstract class ContentBase
 	 * Cachable pages (when enabled in global settings) are cached by the browser
 	 * (also server side caching of HTML output may be enabled)
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function Cachable()
 	{
@@ -820,7 +821,7 @@ abstract class ContentBase
 	/**
 	 * Set whether this page is cachable
 	 *
-	 * @param boolean $cachable
+	 * @param bool $cachable
 	 */
 	public function SetCachable($cachable)
 	{
@@ -831,7 +832,7 @@ abstract class ContentBase
 	 * Return whether this page should be accessed via a secure protocol.
 	 * The secure flag effects whether the ssl protocol and appropriate config entries are used when generating urls to this page.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function Secure()
 	{
@@ -900,7 +901,7 @@ abstract class ContentBase
 	 * Some content types that are not directly navigable do not require page aliases.
 	 *
 	 * @abstract
-	 * @return boolean
+	 * @return bool
 	 */
 	public function RequiresAlias()
 	{
@@ -908,11 +909,11 @@ abstract class ContentBase
 	}
 
 	/**
-	 * Indicates whether this content type is viewable (i.e: can be rendered)
+	 * Indicates whether this content type is viewable (i.e: can be rendered).
 	 * some content types (like redirection links) are not viewable.
 	 *
 	 * @abstract
-	 * @return boolean Default is True
+	 * @return bool Default is True
 	 */
 	public function IsViewable()
 	{
@@ -928,7 +929,7 @@ abstract class ContentBase
 	 * but extended content types can override this.
 	 *
 	 * @since 2.0
-	 * @return boolean
+	 * @return bool
 	 */
     public function IsSearchable()
 	{
@@ -944,7 +945,7 @@ abstract class ContentBase
 	 *
 	 * @since 2.0
 	 * @abstract
-	 * @return boolean
+	 * @return bool
 	 */
 	protected function HasSearchableContent()
 	{
@@ -952,12 +953,12 @@ abstract class ContentBase
 	}
 
 	/**
-	 * Indicates whether this content type can be the default page for a CMSMS website
+	 * Indicates whether this content type can be the default page for a CMSMS website.
 	 *
 	 * The content editor module may adjust it's user interface to not allow setting pages that return false for this method as the default page.
 	 *
 	 * @abstract
-	 * @returns boolean Default is false
+	 * @returns bool Default is false
 	 */
 	public function IsDefaultPossible()
 	{
@@ -971,7 +972,7 @@ abstract class ContentBase
 	 * This method relies on the menutext and the name of the content page already being set.
 	 *
 	 * @param string $alias The alias
-	 * @param boolean $doAutoAliasIfEnabled Whether an alias should be calculated or not.
+	 * @param bool $doAutoAliasIfEnabled Whether an alias should be calculated or not.
 	 */
 	public function SetAlias($alias = null, $doAutoAliasIfEnabled = true)
 	{
@@ -1012,7 +1013,7 @@ abstract class ContentBase
 	}
 
 	/**
-	 * Returns the menu text for this content page
+	 * Returns the menu text for this content page.
 	 * The MenuText is by default used as the text portion of a navigation link.
 	 *
 	 * @return string
@@ -1058,11 +1059,11 @@ abstract class ContentBase
 	}
 
 	/**
-	 * Test whether this content page has the named property
+	 * Test whether this content page has the named property.
 	 * Properties will be loaded from the database if necessary.
 	 *
 	 * @param string $name
-	 * @return boolean
+	 * @return bool
 	 */
 	public function HasProperty($name)
 	{
@@ -1073,7 +1074,7 @@ abstract class ContentBase
 	}
 
 	/**
-	 * Get the value for the named property
+	 * Get the value for the named property.
 	 *
 	 * @param string $name
 	 * @return mixed String value, or null if the property does not exist.
@@ -1164,7 +1165,7 @@ abstract class ContentBase
 	 *
 	 * @since 0.11
 	 * @abstract
-	 * @return boolean Default TRUE
+	 * @return bool Default TRUE
 	 */
 	public function WantsChildren()
 	{
@@ -1172,10 +1173,10 @@ abstract class ContentBase
 	}
 
 	/**
-	 * An abstract method that indicates that this content type is navigable and generates a useful URL
+	 * An abstract method that indicates that this content type is navigable and generates a useful URL.
 	 *
 	 * @abstract
-	 * @return boolean Default TRUE
+	 * @return bool Default TRUE
 	 */
 	public function HasUsableLink()
 	{
@@ -1183,10 +1184,10 @@ abstract class ContentBase
 	}
 
 	/**
-	 * An abstract method indicating whether the content type is copyable
+	 * An abstract method indicating whether the content type is copyable.
 	 *
 	 * @abstract
-	 * @return boolean default FALSE
+	 * @return bool default FALSE
 	 */
 	public function IsCopyable()
 	{
@@ -1198,7 +1199,7 @@ abstract class ContentBase
 	 * System pages are used to handle things like 404 errors etc.
 	 *
 	 * @abstract
-	 * @return boolean default FALSE
+	 * @return bool default FALSE
 	 */
 	public function IsSystemPage()
 	{
@@ -1211,7 +1212,7 @@ abstract class ContentBase
 	 *
 	 * @since 2.0
 	 * @abstract
-	 * @return boolean default FALSE
+	 * @return bool default FALSE
 	 */
 	public function HasTemplate()
 	{
@@ -1223,7 +1224,7 @@ abstract class ContentBase
 	/************************************************************************/
 
 	/**
-	 * Load the content of the object from an array
+	 * Load the content of the object from an array.
 	 * This method modifies the current object.
 	 *
 	 * There is no check on the data provided, because this is the job of
@@ -1278,7 +1279,7 @@ abstract class ContentBase
 	}
 
 	/**
-	 * Convert the current object to an array
+	 * Convert the current object to an array.
 	 *
 	 * @since 2.0
 	 * @author Robert Campbell
@@ -1315,8 +1316,8 @@ abstract class ContentBase
 	}
 
 	/**
-	 * Callback function for content types to use to preload content or other things if necessary.  This
-	 * is called right after the content is loaded from the database.
+	 * Callback function for content types to use to preload content or other things if necessary.
+	 * This is called right after the content is loaded from the database.
 	 *
 	 * @abstract
 	 */
@@ -1325,7 +1326,7 @@ abstract class ContentBase
 	}
 
 	/**
-	 * Save or update the content
+	 * Save or update the content.
 	 *
 	 * @todo This function should return something (or throw an exception)
 	 */
@@ -1687,14 +1688,13 @@ abstract class ContentBase
 	}
 
 	/**
-	 * Function for the subclass to parse out data for it's parameters (usually from $_POST)
+	 * Function for the subclass to parse out data for it's parameters.
 	 * This method is typically called from an editor form to allow modifying the content object from
-	 * form input fields.
+	 * form input fields (usually $_POST)
 	 *
 	 * @param array $params The input array (usually from $_POST)
 	 * @param bool  $editing Indicates wether this is an edit or add operation.
 	 * @abstract
-	 * @return void
 	 */
 	public function FillParams($params,$editing = false)
 	{
@@ -1801,7 +1801,7 @@ abstract class ContentBase
 	 * A function to get the internally generated URL for this content type.
 	 * This method may be overridden by content types.
 	 *
-	 * @param boolean $rewrite if true, and mod_rewrite is enabled, build a URL suitable for mod_rewrite.
+	 * @param bool $rewrite if true, and mod_rewrite is enabled, build a URL suitable for mod_rewrite.
 	 * @return string
 	 */
 	public function GetURL($rewrite = true)
@@ -1891,7 +1891,7 @@ abstract class ContentBase
 	 * Other content types may override this method, but should call the base method at the start.
 	 *
 	 * @abstract
-	 * @return array Array of stdclass objects containing name (string), tab (string), priority (integer), required (boolean) members
+	 * @return array Array of stdclass objects containing name (string), tab (string), priority (integer), required (bool) members
 	 */
 	public function GetEditableProperties()
 	{
@@ -1954,8 +1954,9 @@ abstract class ContentBase
 	}
 
 	/**
-	 * Used from a page that allows content editing. This method provides a list of distinct sections
-	 * that devides up the various logical sections that this content type supports for editing.
+	 * Used from a page that allows content editing.
+	 * This method provides a list of distinct sections that devides up the various logical sections
+	 * that this content type supports for editing.
 	 *
 	 * @abstract
 	 * @return Array associative array list of tab keys and labels.
@@ -1991,11 +1992,11 @@ abstract class ContentBase
 	}
 
 	/**
-	 * Get the elements for a specific tab
+	 * Get the elements for a specific tab.
 	 *
 	 * @param string $key tab key
-	 * @param bool   $adding  Wether this is an add or edit operation.
-	 * @return An array of arrays.  Index 0 of each element should be a prompt field, and index 1 should be the input field for the prompt.
+	 * @param bool   $adding  Whether this is an add or edit operation.
+	 * @return array An array of arrays.  Index 0 of each element should be a prompt field, and index 1 should be the input field for the prompt.
 	 */
 	public function GetTabElements($key,$adding = FALSE)
 	{
@@ -2012,8 +2013,8 @@ abstract class ContentBase
 	/**
 	 * Method to indicate whether the current page has children.
 	 *
-	 * @param boolean $activeonly Should we test only for active children.
-	 * @return booelan
+	 * @param bool $activeonly Should we test only for active children.
+	 * @return bool
 	 */
 	public function HasChildren($activeonly = false)
 	{
@@ -2034,7 +2035,7 @@ abstract class ContentBase
 	}
 
 	/**
-	 * Return a list of additional editors
+	 * Return a list of additional editors.
 	 * Note: in the returned array, group id's are specified as negative integers.
 	 *
 	 * @return mixed Array of uids and group ids, or null
@@ -2060,7 +2061,7 @@ abstract class ContentBase
 	}
 
 	/**
-	 * Set the list of additional editors
+	 * Set the list of additional editors.
 	 * Note: in the provided array, group id's are specified as negative integers.
 	 *
 	 * @param mixed $editorarray Array of uids and group ids, or null
@@ -2073,8 +2074,7 @@ abstract class ContentBase
     /**
 	 * A utility method to return all of the userid and group ids in a format that is
 	 * suitable to be used in a select field.
-	 *
-	 * Note: group ids are expressed as negative integers in the keys
+	 * Note: group ids are expressed as negative integers in the keys.
 	 * @return array
 	 */
 	static public function GetAdditionalEditorOptions()
@@ -2098,8 +2098,7 @@ abstract class ContentBase
 	}
 
     /**
-     * A utility method to generate a <select> field for selecting additional editors
-	 *
+     * A utility method to generate a <select> field for selecting additional editors.
 	 * If a positive owner id is specified that user will be excluded from output select element.
 	 *
 	 * @see ContentBase::GetAdditionalEditorOptions
@@ -2177,7 +2176,7 @@ abstract class ContentBase
 	}
 
 	/**
-	 * Add a property definition
+	 * Add a property definition.
 	 *
 	 * @since 1.11
 	 * @param string $name The property name
@@ -2224,7 +2223,7 @@ abstract class ContentBase
 	}
 
     /**
-	 * Alias for AddBaseProperty
+	 * Alias for AddBaseProperty.
 	 *
 	 * @param string $name
 	 * @param int    $priority
@@ -2241,7 +2240,7 @@ abstract class ContentBase
 	 *
 	 * @abstract
 	 * @param string $one The property name
-	 * @param boolean $adding Whether or not we are in add or edit mode.
+	 * @param bool $adding Whether or not we are in add or edit mode.
 	 * @return array consisting of two elements.  A label, and the input element.
 	 */
 	protected function display_single_element($one,$adding)

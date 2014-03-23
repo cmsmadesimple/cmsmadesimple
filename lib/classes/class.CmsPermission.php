@@ -28,7 +28,7 @@
 /**
  * Simple class for dealing with a permission.
  *
- * @since 1.12
+ * @since 2.0
  * @package CMS
  * @license GPL
  * @author Robert Campbell <calguy1000@gmail.com>
@@ -96,7 +96,7 @@ final class CmsPermission
 		if( !$new_id ) throw new CmsSQLErrorException($db->sql.' -- '.$db->ErrorMsg());
 
 		$now = $db->DbTimeStamp(time());
-		$query = 'INSERT INTO '.cms_db_prefix()."permissions 
+		$query = 'INSERT INTO '.cms_db_prefix()."permissions
               (permission_id,permission_name,permission_text,permission_source,create_date,
                modified_date) VALUES (?,?,?,?,$now,$now)";
 		$dbr = $db->Execute($query,
@@ -113,11 +113,11 @@ final class CmsPermission
 	 */
 	public function validate()
 	{
-		if( $this->_data['source'] == '' ) 
+		if( $this->_data['source'] == '' )
 			throw new CmsInvalidDataException('Source cannot be empty in a CmsPermission object');
-		if( $this->_data['name'] == '' ) 
+		if( $this->_data['name'] == '' )
 			throw new CmsInvalidDataException('Name cannot be empty in a CmsPermission object');
-		if( $this->_data['text'] == '' ) 
+		if( $this->_data['text'] == '' )
 			throw new CmsInvalidDataException('Text cannot be empty in a CmsPermission object');
 
 		if( !isset($this->_data['id']) || $this->_data['id'] < 1 ) {

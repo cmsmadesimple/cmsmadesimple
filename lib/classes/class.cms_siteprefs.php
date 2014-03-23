@@ -89,7 +89,7 @@ final class cms_siteprefs
 	 * Test if a site preference exists
 	 *
 	 * @param string $key The preference name
-	 * @return boolean
+	 * @return bool
 	 */
 	public static function exists($key)
 	{
@@ -101,7 +101,7 @@ final class cms_siteprefs
 
 	/**
 	 * Set a site preference
-	 * 
+	 *
 	 * @param string $key The preference name
 	 * @param string $value The preference value
 	 * @return void
@@ -125,7 +125,7 @@ final class cms_siteprefs
 	 * Remove a site preference
 	 *
 	 * @param string $key The preference name
-	 * @param boolean $like Whether to use preference name approximation
+	 * @param bool $like Whether to use preference name approximation
 	 * @return void
 	 */
 	public static function remove($key,$like = FALSE)

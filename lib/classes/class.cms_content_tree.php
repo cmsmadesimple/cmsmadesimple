@@ -1,10 +1,10 @@
 <?php // -*- mode:php; tab-width:4; indent-tabs-mode:t; c-basic-offset:4; -*-
 #BEGIN_LICENSE
 #-------------------------------------------------------------------------
-# Module: cms_content_tree (c) 2010 by Robert Campbell 
+# Module: cms_content_tree (c) 2010 by Robert Campbell
 #         (calguy1000@cmsmadesimple.org)
 #  A caching tree for CMSMS content objects.
-# 
+#
 #-------------------------------------------------------------------------
 # CMS - CMS Made Simple is (c) 2005 by Ted Kulp (wishy@cmsmadesimple.org)
 # Visit our homepage at: http://www.cmsmadesimple.org
@@ -19,7 +19,7 @@
 # However, as a special exception to the GPL, this software is distributed
 # as an addon module to CMS Made Simple.  You may not use this software
 # in any Non GPL version of CMS Made simple, or in any version of CMS
-# Made simple that does not indicate clearly and obviously in its admin 
+# Made simple that does not indicate clearly and obviously in its admin
 # section that the site was built with CMS Made simple.
 #
 # This program is distributed in the hope that it will be useful,
@@ -57,7 +57,7 @@ class cms_content_tree extends cms_tree
 	 *
 	 * @param string $tag_name The tag name to search for
 	 * @param mixed  $value The tag value to search for
-	 * @param boolean $case_insensitive Wether the value should be treated as case insensitive.
+	 * @param bool $case_insensitive Wether the value should be treated as case insensitive.
 	 * @return cms_tree
 	 */
 	public function &find_by_tag($tag_name,$value,$case_insensitive = FALSE)
@@ -154,7 +154,7 @@ class cms_content_tree extends cms_tree
 	 *
 	 * @deprecated
 	 * @see cms_tree:has_children()
-	 * @return boolean.
+	 * @return bool
 	 */
 	public function hasChildren()
 	{
@@ -271,7 +271,7 @@ class cms_content_tree extends cms_tree
 		return cms_content_cache::get_content($this->get_tag('id'));
 	}
 
- 
+
 	/**
 	 * Count the number of children
 	 *
@@ -325,9 +325,9 @@ class cms_content_tree extends cms_tree
 	 *
 	 * This method takes advantage of the content cache.
 	 *
-	 * @param boolean $deep Optionally load the properties of the children (only used when loadcontent is true)
-	 * @param boolean $all Load all children, including inactive/disabled ones (only used when loadcontent is true)
-	 * @param boolean $loadcontent Load content objects for children
+	 * @param bool $deep Optionally load the properties of the children (only used when loadcontent is true)
+	 * @param bool $all Load all children, including inactive/disabled ones (only used when loadcontent is true)
+	 * @param bool $loadcontent Load content objects for children
 	 * @return Array of cms_tree objects.
 	 */
 	public function &getChildren($deep = false,$all = false,$loadcontent = true)
@@ -382,7 +382,7 @@ class cms_content_tree extends cms_tree
 	/**
 	 * A method to indicate wether the content object for this node is cached.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function isContentCached()
 	{

@@ -28,17 +28,18 @@
  *
  * All modules should inherit and extend this class with their functionality.
  *
- * @since		2.0
  * @package		CMS
+ * @since		2.0
+ * @license     GPL
  * @author      Robert Campbell <calguy1000@cmsmadesimple.org>
- * @see         CMSModule::GetAdminSection
- * @param string $module The module that hosts the destination action
- * @param string $section The admin section (from CMSModule::GetAdminSection)
- * @apram string $title The title of the menu item
- * @param string $action The module action
- * @param string $url The actual URL for the menu item link
- * @param string $icon The URL to the icon to associate with this action
- * @param int    $priority Priority for the menu item (minimum of 2)
+ * @see         CMSModule::GetAdminSection() FOO
+ * @property string $module The module that hosts the destination action
+ * @property string $section The admin section (from CMSModule::GetAdminSection)
+ * @property string $title The title of the menu item
+ * @property string $action The module action
+ * @property string $url The actual URL for the menu item link
+ * @property string $icon The URL to the icon to associate with this action
+ * @property int    $priority Priority for the menu item (minimum of 2)
  */
 final class CmsAdminMenuItem
 {

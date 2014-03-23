@@ -20,7 +20,6 @@
 
 /**
  * Translation functions/classes
- *
  * @package CMS
  */
 
@@ -42,7 +41,7 @@ abstract class CmsLanguageDetector
    * or from the browser to determine a language.  The returned language must exist
    * within the CMSMS Install.
    *
-   * @return language name string
+   * @return string language name
    */
   abstract public function find_language();
 

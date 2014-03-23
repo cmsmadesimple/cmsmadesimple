@@ -1,10 +1,10 @@
 <?php // -*- mode:php; tab-width:4; indent-tabs-mode:t; c-basic-offset:4; -*-
 #BEGIN_LICENSE
 #-------------------------------------------------------------------------
-# Module: cms_tree (c) 2010 by Robert Campbell 
+# Module: cms_tree (c) 2010 by Robert Campbell
 #         (calguy1000@cmsmadesimple.org)
 #  A simple php tree class.
-# 
+#
 #-------------------------------------------------------------------------
 # CMS - CMS Made Simple is (c) 2005 by Ted Kulp (wishy@cmsmadesimple.org)
 # Visit our homepage at: http://www.cmsmadesimple.org
@@ -19,7 +19,7 @@
 # However, as a special exception to the GPL, this software is distributed
 # as an addon module to CMS Made Simple.  You may not use this software
 # in any Non GPL version of CMS Made simple, or in any version of CMS
-# Made simple that does not indicate clearly and obviously in its admin 
+# Made simple that does not indicate clearly and obviously in its admin
 # section that the site was built with CMS Made simple.
 #
 # This program is distributed in the hope that it will be useful,
@@ -92,7 +92,7 @@ class cms_tree
    *
    * @param string $tag_name The tag name to search for
    * @param mixed  $value The tag value to search for
-   * @param boolean $case_insensitive Wether the value should be treated as case insensitive.
+   * @param bool $case_insensitive Wether the value should be treated as case insensitive.
    * @return cms_tree or null on failure.
    */
   public function &find_by_tag($tag_name,$value,$case_insensitive = FALSE)
@@ -115,7 +115,7 @@ class cms_tree
 			  }
 		  }
       }
-    
+
 	  if( $this->has_children() ) {
 		  for( $i = 0; $i < count($this->_children); $i++ ) {
 			  $tmp = $this->_children[$i]->find_by_tag($tag_name,$value);
@@ -130,7 +130,7 @@ class cms_tree
   /**
    * Test if this node has children.
    *
-   * @return boolean
+   * @return bool
    */
   public function has_children()
   {
@@ -178,8 +178,8 @@ class cms_tree
    * and have tree nodes hanging out there with no parents.
    *
    * @param cms_tree $node Reference to the node to be removed.
-   * @param boolean  $search_children Wether to recursively search children.
-   * @return boolean
+   * @param bool  $search_children Wether to recursively search children.
+   * @return bool
    */
   protected function remove_node(cms_tree &$node, $search_children = false)
   {
@@ -207,7 +207,7 @@ class cms_tree
    *
    * This is a convenience method that calls remove_node on the current object.
    *
-   * @return boolean
+   * @return bool
    */
   public function remove()
   {
@@ -215,7 +215,7 @@ class cms_tree
 	  return $this->_parent->remove_node($this);
   }
 
-  
+
   /**
    * Get a reference to the parent node.
    *
@@ -259,7 +259,7 @@ class cms_tree
   /**
    * Count the number of direct children to this node.
    *
-   * @return integer
+   * @return int
    */
   public function count_children()
   {
@@ -271,7 +271,7 @@ class cms_tree
   /**
    * Count the number of siblings that this node has.
    *
-   * @return integer
+   * @return int
    */
   public function count_siblings()
   {
@@ -283,7 +283,7 @@ class cms_tree
   /**
    * Count the total number of all nodes, including myself.
    *
-   * @return integer
+   * @return int
    */
   public function count_nodes()
   {
@@ -301,7 +301,7 @@ class cms_tree
    *
    * This method counts all of the parents in the tree until there are no more parents.
    *
-   * @return integer
+   * @return int
    */
   public function get_level()
   {

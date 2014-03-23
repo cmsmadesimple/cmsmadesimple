@@ -20,7 +20,7 @@
 
 /**
  * Classes and functions related to CMSMS admin groups.
- * @package CMS 
+ * @package CMS
  */
 
 /**
@@ -28,13 +28,12 @@
  *
  * @since 0.9
  * @package CMS
- * @version $Revision$
  * @license GPL
  */
 class Group
 {
 	/**
-	 * @var integer $id The group id
+	 * @var int $id The group id
 	 */
 	var $id;
 
@@ -77,13 +76,13 @@ class Group
 	/**
 	 * Persists the group to the database.
 	 *
-	 * @return boolean true if the save was successful, false if not.
+	 * @return bool true if the save was successful, false if not.
 	 */
 	function Save()
 	{
 		$result = false;
 		$groupops = cmsms()->GetGroupOperations();
-		
+
 		if ($this->id > -1) {
 			$result = $groupops->UpdateGroup($this);
 		}
@@ -102,7 +101,7 @@ class Group
 	/**
 	 * Deletes the group from the database
 	 *
-	 * @return boolean True if the delete was successful, false if not.
+	 * @return bool True if the delete was successful, false if not.
 	 */
 	function Delete()
 	{
@@ -128,7 +127,7 @@ class Group
 	 * @access private
 	 * @ignore
 	 * @param mixed $perm Either the permission id, or permission name to test.
-	 * @return boolean True if the group has the specified permission, false otherwise.
+	 * @return bool True if the group has the specified permission, false otherwise.
 	 */
 	public function HasPermission($perm)
 	{

@@ -90,9 +90,9 @@ final class UserTagOperations
 		}
 	}
 
-	
+
 	/**
-	 * Get a user tag record (by name) from the cache 
+	 * Get a user tag record (by name) from the cache
 	 * @internal
 	 */
 	private function _get_from_cache($name)
@@ -152,7 +152,7 @@ final class UserTagOperations
 				if( $name == $middle ) return TRUE;
 			}
 		}
-		
+
 		if( $check_functions ) {
 			// registered by something else... maybe a module.
 			$smarty = cmsms()->GetSmarty();
@@ -213,13 +213,13 @@ final class UserTagOperations
 	{
 		$gCms = cmsms();
 		$db = $gCms->GetDb();
-		
+
 		$query = 'DELETE FROM '.cms_db_prefix().'userplugins WHERE userplugin_name = ?';
 		$result = &$db->Execute($query, array($name));
 
 		$this->_cache = array();
 		if ($result) return true;
-		
+
 		return false;
 	}
 
@@ -239,8 +239,8 @@ final class UserTagOperations
 		asort($plugins);
 		return $plugins;
 	}
-	
-	
+
+
 	/**
 	 * Execute a user defined tag
 	 *
@@ -285,7 +285,6 @@ final class UserTagOperations
 /**
  * @ignore
  * @package CMS
- * @version $Revision$
  * @license GPL
  */
 //class_alias('UserTagOperations','UserTags');

@@ -25,22 +25,34 @@
  */
 
 /**
- * Simple global object to hold references to other objects
+ * Simple singleton class that contains various functions and states
+ * representing the application.
  *
- * Global object that holds references to various data structures
- * needed by classes/functions in CMS.  Initialized in include.php
- * as $gCms for use in every page.
- *
- * This class was named CmsObject before version 1.10
+ * Note: This class was named CmsObject before version 1.10
  *
  * @package CMS
  * @since 0.5
  */
 final class CmsApp {
 
+	/**
+	 * A constant indicating that the request is for a page in the CMSMS admin console
+	 */
 	const STATE_ADMIN_PAGE = 'admin_request';
+
+	/**
+	 * A constant indicating that the request is taking place during the installation process
+	 */
 	const STATE_INSTALL    = 'install_request';
+
+	/**
+	 * A constant indicating that the request is for a stylesheet
+	 */
 	const STATE_STYLESHEET = 'stylesheet_request';
+
+	/**
+	 * A constant indicating that we are currently parsing page templates
+	 */
     const STATE_PARSE_TEMPLATE = 'parse_page_template';
 
 	/**
@@ -248,7 +260,7 @@ final class CmsApp {
 	 *
 	 * @since 1.9
 	 * @param string $module_name The module name.
-	 * @param string $version (optional) version number for a check.  
+	 * @param string $version (optional) version number for a check.
 	 * @return CMSModule Reference to the module object, or null.
 	 * @deprecated
 	 */
@@ -327,21 +339,22 @@ final class CmsApp {
 	}
 
 	/**
-	* Get a handle to the global CMS config. This is mostly values that are
-	* defined in config.php
+	* Get a handle to the global CMS config.
+	*
+	* This object contains global paths and settings that do not belong in the database.
 	*
 	* @final
-	* @return mixed an associative array of configuration values
+	* @return cms_config The configuration object.
 	*/
 	public function &GetConfig()
 	{
 		return cms_config::get_instance();
 	}
 
-	
+
 	/**
-	* Get a handle to the CMS ModuleOperations object. If it does not yet
-	* exist, this method will instantiate it.
+	* Get a handle to the CMS ModuleOperations object.
+	* If it does not yet exist, this method will instantiate it.
 	*
 	* @final
 	* @see ModuleOperations
@@ -352,10 +365,10 @@ final class CmsApp {
 		return ModuleOperations::get_instance();
 	}
 
-	
+
 	/**
-	* Get a handle to the CMS UserOperations object. If it does not yet
-	* exist, this method will instantiate it.
+	* Get a handle to the CMS UserOperations object.
+	* If it does not yet exist, this method will instantiate it.
 	*
 	* @final
 	* @see UserOperations
@@ -365,15 +378,16 @@ final class CmsApp {
 	{
 		return UserOperations::get_instance();
 	}
-	
+
 	/**
-	* Get a handle to the CMS ContentOperations object. If it does not yet
-	* exist, this method will instantiate it. To disambiguate, this is a globally-available
+	* Get a handle to the CMS ContentOperations object.
+	* If it does not yet exist, this method will instantiate it.
+	* To disambiguate, this is a globally-available
 	* object with methods for dealing with Content -- it should not to be confused with
 	* the GlobalContentOperations object.
 	*
 	* @final
-	* @see ContentOperations
+	* @see ContentOperations::get_instance()
 	* @return ContentOperations handle to the ContentOperations object
 	*/
 	public function & GetContentOperations()
@@ -382,23 +396,23 @@ final class CmsApp {
 	}
 
 	/**
-	* Get a handle to the CMS Admin BookmarkOperations object. If it does not yet
-	* exist, this method will instantiate it.
+	* Get a handle to the CMS Admin BookmarkOperations object.
+	* If it does not yet exist, this method will instantiate it.
 	*
 	* @final
 	* @see BookmarkOperations
 	* @return BookmarkOperations handle to the BookmarkOperations object, useful only in the admin
-	*/	
+	*/
 	public function & GetBookmarkOperations()
 	{
         if (!isset($this->bookmarkoperations)) $this->bookmarkoperations = new BookmarkOperations();
 		return $this->bookmarkoperations;
 	}
 
-	
+
 	/**
-	* Get a handle to the CMS GroupOperations object. If it does not yet
-	* exist, this method will instantiate it.
+	* Get a handle to the CMS GroupOperations object.
+	* If it does not yet exist, this method will instantiate it.
 	*
 	* @final
 	* @see GroupOperations
@@ -408,10 +422,10 @@ final class CmsApp {
 	{
 		return GroupOperations::get_instance();
 	}
-	
+
 	/**
-	* Get a handle to the CMS UserTagOperations object. If it does not yet
-	* exist, this method will instantiate it.
+	* Get a handle to the CMS UserTagOperations object.
+	* If it does not yet exist, this method will instantiate it.
 	*
 	* @final
 	* @see UserTagOperations
@@ -423,9 +437,8 @@ final class CmsApp {
 	}
 
 	/**
-	* Get a handle to the CMS Smarty object. If it does not yet
-	* exist, this method will instantiate it. As of version 1.8,
-	* CMS Made Simple uses version 2.6.25 of Smarty.
+	* Get a handle to the CMS Smarty object.
+	* If it does not yet exist, this method will instantiate it.
 	*
 	* @final
 	* @see Smarty_CMS
@@ -440,12 +453,12 @@ final class CmsApp {
 			$out = null;
 			return $out;
 		}
-		return Smarty_CMS::get_instance();	
+		return Smarty_CMS::get_instance();
 	}
 
 	/**
-	* Get a handle to the CMS HierarchyManager object. If it does not yet
-	* exist, this method will instantiate it.
+	* Get a handle to the CMS HierarchyManager object.
+	* If it does not yet exist, this method will instantiate it.
 	*
 	* @final
 	* @see HierarchyManager
@@ -482,8 +495,7 @@ final class CmsApp {
 
 
 	/**
-	 * Clear out cached files from the CMS tmp/cache and tmp/templates_c
-	 * directories.
+	 * Clear out cached files from the CMS tmp/cache and tmp/templates_c directories.
 	 *
 	 * NOTE: This function is for use by CMSMS only.  No third party application, UDT or code
 	 *   can use this method and still exist in the CMSMS forge or be supported in any way.
@@ -515,18 +527,18 @@ final class CmsApp {
 
 
 	/**
-	 * Get handle to the Smarty parser object, meant for template parsing
+	 * Get handle to the Smarty parser object, meant for template parsing.
 	 *
 	 * @internal
 	 * @since 1.11.3
 	 * @author Tapio Löytty
-	 * @return Smarty_Parser handle to the Smarty object	 
+	 * @return Smarty_Parser handle to the Smarty object
 	 */
 	final public function &get_template_parser()
 	{
 		return Smarty_Parser::get_instance();
 	}
-	
+
 	/**
 	 * Set all known states from global variables.
 	 *
@@ -543,14 +555,14 @@ final class CmsApp {
 			global $CMS_STYLESHEET;
 
 			$this->_states = array();
-			
+
 			if( isset($CMS_ADMIN_PAGE) ) $this->_states[] = self::STATE_ADMIN_PAGE;
 			if( isset($CMS_INSTALL_PAGE) ) $this->_states[] = self::STATE_INSTALL;
 			if( isset($CMS_STYLESHEET) ) $this->_states[] = self::STATE_STYLESHEET;
 		}
 	}
 
-    /** 
+    /**
 	 * Test if the current application state matches the requested value.
 	 * This method will throw an exception if invalid data is passed in.
 	 *
@@ -646,7 +658,7 @@ final class CmsApp {
  */
 class CmsContentTypePlaceholder
 {
-	/** 
+	/**
 	 * @var string The type name
 	 */
 	public $type;

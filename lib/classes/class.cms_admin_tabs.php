@@ -2,6 +2,7 @@
 /**
  * This file contains a class to aide in creating a tabbed interface in the CMSMS admin console
  * @package CMS
+ * @license GPL
  */
 
 /**
@@ -9,9 +10,8 @@
  *
  * @since 2.0
  * @author Robert Campbell
- * @license GPL
  */
-final class cms_admin_tabs 
+final class cms_admin_tabs
 {
 
   /**
@@ -84,7 +84,7 @@ final class cms_admin_tabs
       if( (self::$_tab_idx == 0 && self::$_current_tab == '') || $tabid == self::$_current_tab ) $active = TRUE;
       self::$_tab_idx++;
     }
-	
+
     $a="";
     if (TRUE == $active) {
       $a=" class='active'";

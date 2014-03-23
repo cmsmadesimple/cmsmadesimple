@@ -21,6 +21,7 @@
 /**
  * Classes and utilities for the base CMS Admin theme
  * @package CMS
+ * @license GPL
  */
 
 
@@ -30,7 +31,6 @@
  * This is also a singleton object.
  *
  * @package CMS
- * @version $Revision$
  * @license GPL
  * @since   1.11
  * @author  Robert Campbell
@@ -1427,7 +1427,6 @@ abstract class CmsAdminThemeBase
  * A class representing a simple notification.
  *
  * @package CMS
- * @version $Revision$
  * @license GPL
  * @since   1.11
  * @author  Robert Campbell

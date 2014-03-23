@@ -21,18 +21,17 @@
 /**
  * This file contains classes and constants for working with system and user defined events.
  *
- * @package CMS 
+ * @package CMS
  */
 
 /**
  * Class for handling and dispatching system and user defined events.
  *
  * @package CMS
- * @version $Revision$
  * @license GPL
  */
 final class Events
-{ 
+{
 	/**
 	 * @ignore
 	 */
@@ -44,7 +43,7 @@ final class Events
 	private function __construct() {}
 
 	/**
-	 * Inform the system about a new event that can be generated
+	 * Inform the system about a new event that can be generated.
 	 *
 	 * @param string $modulename The name of the module that is sending the event
 	 * @param string $eventname The name of the event
@@ -63,7 +62,7 @@ final class Events
 
 
 	/**
-	 * Remove an event from the CMS system
+	 * Remove an event from the CMS system.
 	 * This function removes all handlers to the event, and completely removes
 	 * all references to this event from the database
 	 *
@@ -79,7 +78,7 @@ final class Events
 		$db = $gCms->GetDb();
 
 		// get the id
-		$q = "SELECT event_id FROM ".cms_db_prefix()."events WHERE 
+		$q = "SELECT event_id FROM ".cms_db_prefix()."events WHERE
 		originator = ? AND event_name = ?";
 		$dbresult = $db->Execute( $q, array( $modulename, $eventname ) );
 		if( $dbresult == false || $dbresult->RecordCount() == 0 ) {
@@ -142,10 +141,10 @@ final class Events
 			}
 		}
 	}
-	
-	
+
+
 	/**
-	 * Return the list of event handlers for a particular event
+	 * Return the list of event handlers for a particular event.
 	 *
 	 * @param string $modulename The name of the module sending the event
 	 * @param string $eventname The name of the event
@@ -182,7 +181,7 @@ final class Events
 
 
 	/**
-	 * Get a list of all of the known events
+	 * Get a list of all of the known events.
 	 *
 	 * @return mixed If successful, a list of all the known events.  If it fails, false
 	 */
@@ -210,7 +209,7 @@ final class Events
 
 
 	/**
-	 * Add an event handler for a module event
+	 * Add an event handler for a module event.
 	 *
 	 * @param string $modulename The name of the module sending the event
 	 * @param string $eventname The name of the event
@@ -285,7 +284,7 @@ final class Events
 
 
 	/**
-	 * Remove an event handler for a particular event
+	 * Remove an event handler for a particular event.
 	 *
 	 * @param string $modulename The name of the module sending the event
 	 * @param string $eventname The name of the event
@@ -303,7 +302,7 @@ final class Events
 		$db = $gCms->GetDb();
 
 		// find the id
-		$q = "SELECT event_id FROM ".cms_db_prefix()."events WHERE 
+		$q = "SELECT event_id FROM ".cms_db_prefix()."events WHERE
 		originator = ? AND event_name = ?";
 		$dbresult = $db->Execute( $q, array( $modulename, $eventname ) );
 		if( $dbresult == false || $dbresult->RecordCount() == 0 ) {
@@ -344,7 +343,7 @@ final class Events
 		$db = $gCms->GetDb();
 
 		// find the id
-		$q = "SELECT event_id FROM ".cms_db_prefix()."events WHERE 
+		$q = "SELECT event_id FROM ".cms_db_prefix()."events WHERE
 		originator = ? AND event_name = ?";
 		$dbresult = $db->Execute( $q, array( $modulename, $eventname ) );
 		if( $dbresult == false || $dbresult->RecordCount() == 0 ) {
@@ -355,7 +354,7 @@ final class Events
 		$id = $row['event_id'];
 
 		// and delete the handlers
-		$q = "DELETE FROM ".cms_db_prefix()."event_handlers 
+		$q = "DELETE FROM ".cms_db_prefix()."event_handlers
 		WHERE event_id = ?";
 		$dbresult = $db->Execute( $q, array( $id ) );
 		if( $dbresult == false ) return true;
@@ -388,7 +387,7 @@ final class Events
 	static public function GetEventDescription($eventname)
 	{
 		return lang('event_desc_'.strtolower($eventname));
-	}	
+	}
 } // class
 # vim:ts=4 sw=4 noet
 ?>
