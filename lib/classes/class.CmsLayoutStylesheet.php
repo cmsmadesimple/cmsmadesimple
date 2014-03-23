@@ -31,7 +31,7 @@
 class CmsLayoutStylesheet
 {
   const TABLENAME = 'layout_stylesheets';
-  
+
   private $_dirty;
   private $_data = array();
   private $_design_assoc;
@@ -156,7 +156,7 @@ class CmsLayoutStylesheet
   public function get_designs()
   {
     if( !$this->get_id() ) return;
-    if( is_null($this->_design_assoc) ) {
+    if( !is_array($this->_design_assoc) ) {
       $this->_design_assoc = null;
       $db = cmsms()->GetDb();
       $query = 'SELECT design_id FROM '.cms_db_prefix().CmsLayoutCollection::CSSTABLE.' WHERE css_id = ?';
@@ -177,7 +177,7 @@ class CmsLayoutStylesheet
     $this->_design_assoc = $x;
   }
 
-  public function add_design($a) 
+  public function add_design($a)
   {
     $n = null;
     if( is_object($a) && is_a($a,'CmsLayoutCollection') ) {
@@ -297,7 +297,7 @@ class CmsLayoutStylesheet
     // insert the record
 		$tmp = '';
 		if( isset($this->_data['media_type']) ) $tmp = implode(',',$this->_data['media_type']);
-    $query = 'INSERT INTO '.cms_db_prefix().self::TABLENAME.' (name,content,description,media_type,media_query, created,modified) 
+    $query = 'INSERT INTO '.cms_db_prefix().self::TABLENAME.' (name,content,description,media_type,media_query, created,modified)
               VALUES (?,?,?,?,?,?,?)';
     $db = cmsms()->GetDb();
     $dbr = $db->Execute($query,
@@ -386,11 +386,13 @@ class CmsLayoutStylesheet
 		return $lock->expired();
 	}
 
-  private static function &_load_from_data($row)
+  private static function &_load_from_data($row,$design_list = null)
   {
     $ob = new CmsLayoutStylesheet();
 		$row['media_type'] = explode(',',$row['media_type']);;
     $ob->_data = $row;
+		if( is_array($design_list) ) $ob->_design_assoc = $design_list;
+
 		self::$_css_cache[$row['id']] = $ob;
 		self::$_name_cache[$row['name']] = $row['id'];
     return $ob;
@@ -422,7 +424,7 @@ class CmsLayoutStylesheet
     return self::_load_from_data($row);
   }
 
-	public static function load_bulk($ids)
+	public static function load_bulk($ids,$deep = true)
 	{
 		if( !is_array($ids) || count($ids) == 0 ) return;
 
@@ -442,7 +444,6 @@ class CmsLayoutStylesheet
 			// what the fuck
 			throw new CmsInvalidDataException('Invalid data passed to '.__CLASS__.'::'.__METHOD__);
 		}
-
 		$ids = array_unique($ids);
 
 		$db = cmsms()->GetDb();
@@ -452,15 +453,24 @@ class CmsLayoutStylesheet
 		$dbr = $db->GetArray($query);
 		$out = array();
 		if( is_array($dbr) && count($dbr) ) {
+			$designs_by_css = array();
+			if( $deep ) {
+				$ids = array();
+				foreach( $dbr as $row ) {
+					$ids[] = $row['id'];
+					$designs_by_css[$row['id']] = array();
+				}
+				$dquery = 'SELECT design_id,css_id FROM '.cms_db_prefix().CmsLayoutCollection::CSSTABLE.' WHERE css_id IN ('.implode(',',$ids).') ORDER BY css_id';
+				$dbr2 = $db->GetArray($dquery);
+				foreach( $dbr2 as $row ) {
+					$designs_by_css[$row['css_id']][] = $row['design_id'];
+				}
+			}
+
 			foreach( $dbr as $row ) {
 				$id = $row['id'];
-				if( isset(self::$_css_cache[$id]) ) {
-					$out[] = self::$_css_cache[$id];
-				}
-				else {
-					$tmp = self::_load_from_data($row);
-					if( is_object($tmp) ) $out[] = self::_load_from_data($row);
-				}
+				$tmp = self::_load_from_data($row,(isset($designs_by_css[$id]))?$designs_by_css[$id]:null);
+				if( is_object($tmp) ) $out[] = $tmp;
 			}
 		}
 

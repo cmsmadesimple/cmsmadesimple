@@ -269,11 +269,11 @@ class CmsLayoutTemplate
 	public function get_designs()
 	{
 		if( !$this->get_id() ) return;
-		if( is_null($this->_design_assoc) ) {
-			$this->_design_assoc = null;
+		if( !is_array($this->_design_assoc) ) {
+			$this->_design_assoc = array();
 			$db = cmsms()->GetDb();
-			$query = 'SELECt design_id FROM '.cms_db_prefix().CmsLayoutCollection::TPLTABLE.' WHERE tpl_id = ?';
-			$tmp = $db->GetCol($query,array($this->get_id()));
+			$query = 'SELECT design_id FROM '.cms_db_prefix().CmsLayoutCollection::TPLTABLE.' WHERE tpl_id = ?';
+			$tmp = $db->GetCol($query,array((int)$this->get_id()));
 			if( is_array($tmp) && count($tmp) ) $this->_design_assoc = $tmp;
 		}
 		return $this->_design_assoc;
@@ -734,14 +734,14 @@ class CmsLayoutTemplate
 	/**
 	 * @ignore
 	 */
-	private static function &_load_from_data($row)
+	private static function &_load_from_data($row,$design_list = null)
 	{
 		$ob = new CmsLayoutTemplate();
 		$ob->_data = $row;
+		if( is_array($design_list) ) $ob->_design_assoc = $design_list;
 
 		self::$_obj_cache[$ob->get_id()] = $ob;
 		self::$_name_cache[$ob->get_name()] = $ob->get_id();
-
 		return $ob;
 	}
 
@@ -749,9 +749,10 @@ class CmsLayoutTemplate
 	 * Load a bulk list of templates
 	 *
 	 * @param array $list Array of integer template ids
+	 * @param bool Optionally load attached data.
 	 * @return array Array of CmsLayoutTemplate objects
 	 */
-	public static function load_bulk($list)
+	public static function load_bulk($list,$deep = true)
 	{
 		if( !is_array($list) || count($list) == 0 ) return;
 
@@ -766,12 +767,26 @@ class CmsLayoutTemplate
 
 		if( count($list2) ) {
 			// get the data and populate the cache.
-			$query = 'SELECT * FROM '.cms_db_prefix().self::TABLENAME.' WHERE id IN ('.implode(',',$list2).')';
 			$db = cmsms()->GetDb();
+			$designs_by_tpl = array();
+
+			if( $deep ) {
+				foreach( $list2 as $one ) {
+					$designs_by_tpl[$one] = array();
+				}
+  			$dquery = 'SELECT tpl_id,design_id FROM '.cms_db_prefix().CmsLayoutCollection::TPLTABLE.'
+                   WHERE tpl_id IN ('.implode(',',$list2).') ORDER BY tpl_id';
+				$designs_tmp1 = $db->GetArray($dquery);
+				foreach( $designs_tmp1 as $row ) {
+					$designs_by_tpl[$row['tpl_id']][] = $row['design_id'];
+				}
+			}
+
+			$query = 'SELECT * FROM '.cms_db_prefix().self::TABLENAME.' WHERE id IN ('.implode(',',$list2).')';
 			$dbr = $db->GetArray($query);
 			if( is_array($dbr) && count($dbr) ) {
 				foreach( $dbr as $row ) {
-					$ob = self::_load_from_data($row);
+					self::_load_from_data($row,(isset($designs_by_tpl[$row['id']]))?$designs_by_tpl[$row['id']]:null);
 				}
 			}
 		}
