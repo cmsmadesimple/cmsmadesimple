@@ -749,7 +749,7 @@ class CmsLayoutTemplate
 	 * Load a bulk list of templates
 	 *
 	 * @param array $list Array of integer template ids
-	 * @param bool Optionally load attached data.
+	 * @param bool $deep Optionally load attached data.
 	 * @return array Array of CmsLayoutTemplate objects
 	 */
 	public static function load_bulk($list,$deep = true)

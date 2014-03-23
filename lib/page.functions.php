@@ -35,7 +35,7 @@
  * @return boolean
  */
 function check_login($no_redirect = false)
-{  
+{
   $config = cmsms()->GetConfig();
 
   //Handle a current login if one is in queue in the SESSION
@@ -83,7 +83,7 @@ function check_login($no_redirect = false)
 
     // now we've got to check the request
     // and make sure it matches the session key
-    if( !isset($_SESSION[CMS_USER_KEY]) || 
+    if( !isset($_SESSION[CMS_USER_KEY]) ||
 	!isset($_GET[CMS_SECURE_PARAM_NAME]) ||
 	!isset($_POST[CMS_SECURE_PARAM_NAME]) ) {
       $v = '<no$!tgonna!$happen>';
@@ -212,7 +212,7 @@ function check_permission($userid, $permname)
  * @since 0.1
  * @param   integer  The User ID
  * @param   integer  The content id
- * @return  boolean 
+ * @return  boolean
  */
 function check_ownership($userid, $contentid = '')
 {
@@ -277,7 +277,7 @@ function audit($itemid, $itemname, $action)
   $username = '';
   $ip_addr = '';
   if( $itemid == '' ) $itemid = -1;
-  
+
   if (isset($_SESSION["cms_admin_user_id"])) {
     $userid = $_SESSION["cms_admin_user_id"];
     $ip_addr = cms_utils::get_real_ip();
@@ -288,9 +288,9 @@ function audit($itemid, $itemname, $action)
       $username = $_SESSION['login_user_username'];
     }
   }
-  
+
   if (isset($_SESSION["cms_admin_username"])) $username = $_SESSION["cms_admin_username"];
-  
+
   if (!isset($userid) || $userid == "") $userid = 0;
 
   $query = "INSERT INTO ".cms_db_prefix()."adminlog (timestamp, user_id, username, item_id, item_name, action, ip_addr) VALUES (?,?,?,?,?,?,?)";
@@ -308,7 +308,7 @@ function audit($itemid, $itemname, $action)
  * @param mixed  $defaultvalue The default value if the preference does not exist
  * @return mixed
  */
-function get_site_preference($prefname, $defaultvalue = '') 
+function get_site_preference($prefname, $defaultvalue = '')
 {
   return cms_siteprefs::get($prefname,$defaultvalue);
 }
@@ -345,38 +345,6 @@ function set_site_preference($prefname, $value)
 }
 
 
-/**
- * Retrieve the value of the named preference for the given userid.
- *
- * @deprecated
- * @since 0.3
- * @see cms_siteprefs::get_for_user
- * @param integer $userid The user id
- * @param string  $prefname The preference name
- * @param mixed   $default The default value if the preference is not set for the given user id.
- * @return mixed.
- */
-function get_preference($userid, $prefname, $default='')
-{
-  return cms_userprefs::get_for_user($userid,$prefname,$default);
-}
-
-
-/**
- * Sets the given perference for the given userid with the given value.
- *
- * @deprecated
- * @since 0.3
- * @see cms_siteprefs::set_for_user
- * @param integer $userid The user id
- * @param string  $prefname The preference name
- * @param mixed   $value The preference value (will be stored as a string)
- * @return void
- */
-function set_preference($userid, $prefname, $value)
-{
-  return cms_userprefs::set_for_user($userid, $prefname,$value);
-}
 
 
 /**
@@ -599,7 +567,7 @@ function get_pageid_or_alias_from_url()
       if (!isset($matches['inline'])) $matches['inline'] = 0;
       if (!isset($matches['returnid']))	$matches['returnid'] = ''; #Look for default page
       if (!isset($matches['module'])) $matches['module'] = $route->get_dest();
-      
+
       //Get rid of numeric matches
       foreach ($matches as $key=>$val) {
 	if (is_int($key)) {

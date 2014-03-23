@@ -73,6 +73,9 @@ final class CmsAdminMenuItem
         $this->_data[$k] = $v;
     }
 
+    /**
+     * @ignore
+     */
     public function __isset($k)
     {
         if( !in_array($k,self::$_keys) ) throw new CmsException('Invalid key: '.$k.' for '.__CLASS__.' object');

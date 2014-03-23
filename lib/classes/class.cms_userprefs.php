@@ -19,12 +19,13 @@
 #$Id: class.global.inc.php 6939 2011-03-06 00:12:54Z calguy1000 $
 
 /**
+ * Classes and utilities for working with user preferences.
  * @package CMS
  */
 
 
 /**
- * A class for user preferences
+ * A static class for preferences stored with admin user accounts
  *
  * @package CMS
  * @since 1.10
@@ -32,186 +33,229 @@
  */
 final class cms_userprefs
 {
-  private static $_prefs;
+	/**
+	 * @ignore
+	 */
+	private static $_prefs;
 
-  private function __construct() {}
+	/**
+	 * @ignore
+	 */
+	private function __construct() {}
 
-  private static function _read($userid)
-  {
-	  if( is_array(self::$_prefs) && isset(self::$_prefs[$userid]) && is_array(self::$_prefs[$userid]) ) return;
+	/**
+	 * @ignore
+	 */
+	private static function _read($userid)
+	{
+		if( is_array(self::$_prefs) && isset(self::$_prefs[$userid]) && is_array(self::$_prefs[$userid]) ) return;
 
-	  $db = cmsms()->GetDb();
-	  $query = 'SELECT preference,value FROM '.cms_db_prefix().'userprefs WHERE user_id = ?';
-	  $dbr = $db->GetArray($query,array($userid));
-	  if( is_array($dbr) ) {
-		  if( !is_array(self::$_prefs) ) self::$_prefs = array();
-		  self::$_prefs[$userid] = array();
-		  for( $i = 0; $i < count($dbr); $i++ ) {
-			  $row = $dbr[$i];
-			  self::$_prefs[$userid][$row['preference']] = $row['value'];
-		  }
-	  }
-  }
+		$db = cmsms()->GetDb();
+		$query = 'SELECT preference,value FROM '.cms_db_prefix().'userprefs WHERE user_id = ?';
+		$dbr = $db->GetArray($query,array($userid));
+		if( is_array($dbr) ) {
+			if( !is_array(self::$_prefs) ) self::$_prefs = array();
+			self::$_prefs[$userid] = array();
+			for( $i = 0; $i < count($dbr); $i++ ) {
+				$row = $dbr[$i];
+				self::$_prefs[$userid][$row['preference']] = $row['value'];
+			}
+		}
+	}
 
-  private static function _userid()
-  {
-	  return get_userid(false);
-  }
+	/**
+	 * @ignore
+	 */
+	private static function _userid()
+	{
+		return get_userid(false);
+	}
 
-  private static function _reset()
-  {
-	  self::$_prefs = null;
-  }
+	/**
+	 * @ignore
+	 */
+	private static function _reset()
+	{
+		self::$_prefs = null;
+	}
 
-  /**
-   * A method to get a preference for a specific user
-   *
-   * @param int The specified user id.
-   * @param string The preference name
-   * @param mixed The default value.
-   * @return string
-   */
-  public static function get_for_user($userid,$key,$dflt = '')
-  {
-	  self::_read($userid);
-	  if( isset(self::$_prefs[$userid][$key]) ) return self::$_prefs[$userid][$key];
-	  return $dflt;
-  }
-
-  
-  /**
-   * Get a user preference
-   *
-   * @param string The preference name
-   * @param string A default value if the preference could not be found
-   * @return strung
-   */
-  public static function get($key,$dflt = '')
-  {
-	  return self::get_for_user(self::_userid(),$key,$dflt);
-  }
-
-  /**
-   * Return an array of all user preferences
-   *
-   * @param integer user_id
-   * @return array Associative array of preferences and values.
-   */
-  public static function get_all_for_user($userid)
-  {
-	  $userid = (int)$userid;
-	  self::_read($userid);
-	  if( isset(self::$_prefs[$userid]) ) return self::$_prefs[$userid];
-  }
-
-  /**
-   * A method to test if a preference exists for a user
-   *
-   * @param int the user id
-   * @param string The preference name
-   * @return boolean
-   */
-  public static function exists_for_user($userid,$key)
-  {
-	  $userid = (int)$userid;
-	  self::_read($userid);
-	  if( in_array($key,array_keys(self::$_prefs[$userid])) ) return TRUE;
-	  return FALSE;
-  }
+	/**
+	 * A method to get a preference for a specific user
+	 *
+	 * @param int $userid The specified user id.
+	 * @param string $key The preference name
+	 * @param mixed $dflt The default value.
+	 * @return string
+	 */
+	public static function get_for_user($userid,$key,$dflt = '')
+	{
+		self::_read($userid);
+		if( isset(self::$_prefs[$userid][$key]) ) return self::$_prefs[$userid][$key];
+		return $dflt;
+	}
 
 
-  /**
-   * A method to test if a preference exists for the current user
-   *
-   * @param string The preference name
-   * @return boolean
-   */
-  public static function exists($key)
-  {
-	  return self::exists_for_user(self::_userid(),$key);
-  }
+	/**
+	 * Get a user preference
+	 *
+	 * @param string $key The preference name
+	 * @param string $dflt A default value if the preference could not be found
+	 * @return strung
+	 */
+	public static function get($key,$dflt = '')
+	{
+		return self::get_for_user(self::_userid(),$key,$dflt);
+	}
+
+	/**
+	 * Return an array of all user preferences
+	 *
+	 * @param integer $userid
+	 * @return array Associative array of preferences and values.
+	 */
+	public static function get_all_for_user($userid)
+	{
+		$userid = (int)$userid;
+		self::_read($userid);
+		if( isset(self::$_prefs[$userid]) ) return self::$_prefs[$userid];
+	}
+
+	/**
+	 * A method to test if a preference exists for a user
+	 *
+	 * @param int $userid the user id
+	 * @param string $key The preference name
+	 * @return bool
+	 */
+	public static function exists_for_user($userid,$key)
+	{
+		$userid = (int)$userid;
+		self::_read($userid);
+		if( in_array($key,array_keys(self::$_prefs[$userid])) ) return TRUE;
+		return FALSE;
+	}
 
 
-  /**
-   * A method to set a preference for a specific user
-   *
-   * @param int The user id
-   * @param string The preference name
-   * @param string The preference value
-   * @return void
-   */
-  public static function set_for_user($userid,$key,$value)
-  {
-	  $userid = (int)$userid;
-	  self::_read($userid);
-	  $db = cmsms()->GetDb();
-	  if( !self::exists_for_user($userid,$key) ) {
-		  $query = 'INSERT INTO '.cms_db_prefix().'userprefs (user_id,preference,value) VALUES (?,?,?)';
-		  $dbr = $db->Execute($query,array($userid,$key,$value));
-	  }
-	  else {
-		  $query = 'UPDATE '.cms_db_prefix().'userprefs SET value = ? WHERE user_id = ? AND preference = ?';
-		  $dbr = $db->Execute($query,array($value,$userid,$key));
-	  }
-	  self::$_prefs[$userid][$key] = $value;
-  }
+	/**
+	 * A method to test if a preference exists for the current user
+	 *
+	 * @param string $key The preference name
+	 * @return bool
+	 */
+	public static function exists($key)
+	{
+		return self::exists_for_user(self::_userid(),$key);
+	}
 
 
-  /**
-   * A method to set a preference for the current logged in user.
-   *
-   * @param string The preference name
-   * @param string The preference value
-   * @return void
-   */
-  public static function set($key,$value)
-  {
-	  return self::set_for_user(self::_userid(),$key,$value);
-  }
+	/**
+	 * A method to set a preference for a specific user
+	 *
+	 * @param int $userid The user id
+	 * @param string $key The preference name
+	 * @param string $value The preference value
+	 */
+	public static function set_for_user($userid,$key,$value)
+	{
+		$userid = (int)$userid;
+		self::_read($userid);
+		$db = cmsms()->GetDb();
+		if( !self::exists_for_user($userid,$key) ) {
+			$query = 'INSERT INTO '.cms_db_prefix().'userprefs (user_id,preference,value) VALUES (?,?,?)';
+			$dbr = $db->Execute($query,array($userid,$key,$value));
+		}
+		else {
+			$query = 'UPDATE '.cms_db_prefix().'userprefs SET value = ? WHERE user_id = ? AND preference = ?';
+			$dbr = $db->Execute($query,array($value,$userid,$key));
+		}
+		self::$_prefs[$userid][$key] = $value;
+	}
 
 
-  /**
-   * A method to remove a method for the user
-   *
-   * @param int The user id
-   * @param string (optional) The preference name.  If not specified, all preferences for this user will be removed.
-   * @param boolean (optional) wether or not to use approximation in the preference name
-   * @return void
-   */
-  public static function remove_for_user($userid,$key = '',$like = FALSE)
-  {
-	  $userid = (int)$userid;
-	  self::_read($userid);
-	  $parms = array();
-	  $query = 'DELETE FROM '.cms_db_prefix().'userprefs WHERE user_id = ?';
-	  $parms[] = $userid;
-	  if( $key ) {
-		  $query2 = ' AND preference = ?';
-		  if( $like ) {
-			  $query2 = ' AND preference LIKE ?';
-			  $key .= '%';
-		  }
-		  $query .= $query2;
-		  $parms[] = $key;
-	  }
-	  $db = cmsms()->GetDb();
-	  $db->Execute($query,$parms);
-	  self::_reset();
-  }
+	/**
+	 * A method to set a preference for the current logged in user.
+	 *
+	 * @param string $key The preference name
+	 * @param string $value The preference value
+	 */
+	public static function set($key,$value)
+	{
+		return self::set_for_user(self::_userid(),$key,$value);
+	}
 
 
-  /**
-   * A method to remove a preference for the current user
-   *
-   * @param string The preference name.
-   * @param boolean (optional) wether or not to use approximation in the preference name
-   * @return void
-   */
-  public static function remove($key,$like = FALSE)
-  {
-	  return self::remove_for_user(self::_userid(),$key,$like);
-  }
+	/**
+	 * A method to remove a method for the user
+	 *
+	 * @param int $userid The user id
+	 * @param string $key (optional) The preference name.  If not specified, all preferences for this user will be removed.
+	 * @param bool $like (optional) wether or not to use approximation in the preference name
+	 */
+	public static function remove_for_user($userid,$key = '',$like = FALSE)
+	{
+		$userid = (int)$userid;
+		self::_read($userid);
+		$parms = array();
+		$query = 'DELETE FROM '.cms_db_prefix().'userprefs WHERE user_id = ?';
+		$parms[] = $userid;
+		if( $key ) {
+			$query2 = ' AND preference = ?';
+			if( $like ) {
+				$query2 = ' AND preference LIKE ?';
+				$key .= '%';
+			}
+			$query .= $query2;
+			$parms[] = $key;
+		}
+		$db = cmsms()->GetDb();
+		$db->Execute($query,$parms);
+		self::_reset();
+	}
+
+
+	/**
+	 * A method to remove a preference for the current user
+	 *
+	 * @param string $key The preference name.
+	 * @param bool $like (optional) wether or not to use approximation in the preference name
+	 */
+	public static function remove($key,$like = FALSE)
+	{
+		return self::remove_for_user(self::_userid(),$key,$like);
+	}
 } // end of class
+
+/**
+ * Retrieve the value of the named preference for the given userid.
+ *
+ * @deprecated
+ * @since 0.3
+ * @see cms_siteprefs::get_for_user
+ * @param integer $userid The user id
+ * @param string  $prefname The preference name
+ * @param mixed   $default The default value if the preference is not set for the given user id.
+ * @return mixed.
+ */
+function get_preference($userid, $prefname, $default='')
+{
+  return cms_userprefs::get_for_user($userid,$prefname,$default);
+}
+
+/**
+ * Sets the given perference for the given userid with the given value.
+ *
+ * @deprecated
+ * @since 0.3
+ * @see cms_siteprefs::set_for_user
+ * @param integer $userid The user id
+ * @param string  $prefname The preference name
+ * @param mixed   $value The preference value (will be stored as a string)
+ * @return void
+ */
+function set_preference($userid, $prefname, $value)
+{
+  return cms_userprefs::set_for_user($userid, $prefname,$value);
+}
 
 #
 # EOF

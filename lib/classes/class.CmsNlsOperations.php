@@ -102,7 +102,7 @@ final class CmsNlsOperations
 
   /**
    * Get an array of all languages that are known
-   * (installed).  Udes the NLS files to handle this 
+   * (installed).  Udes the NLS files to handle this
    *
    * @return array Array of language names
    */
@@ -128,10 +128,10 @@ final class CmsNlsOperations
    * Set a current language.
    * The language specified may be an empty string, which will assume that the system
    * should try to detect an appropriate language.  If no default can be found for
-   * some reason, en_US will be assumed. 
+   * some reason, en_US will be assumed.
    *
    * When a language is found, the system will automatically set the locale for the request.
-   * 
+   *
    * Note: CMSMS 1.11 and above will not support multiple languages per request.
    * therefore, it should be assumed that this function can only be called once per request.
    *
@@ -177,7 +177,7 @@ final class CmsNlsOperations
    * Get a default language.
    * This method will behave differently for admin or frontend requests.
    *
-   * For admin requests first the preference is checked.  Secondly, 
+   * For admin requests first the preference is checked.  Secondly,
    * an attempt is made to find a language understood by the browser that is compatible
    * with what is avaialable.  If no match can be found, en_US is assumed.
    *
@@ -237,7 +237,7 @@ final class CmsNlsOperations
 	  $uid = get_userid(false);
 	  $lang = '';
 	  if( $uid ) {
-		  $lang = get_preference($uid,'default_cms_language');
+		  $lang = cms_userprefs::get_for_user($uid,'default_cms_language');
 		  if( $lang ) {
 			  self::_load_nls();
 			  if( !isset(self::$_nls[$lang]) ) $lang = '';
@@ -297,13 +297,13 @@ final class CmsNlsOperations
 	  if (count($lang_parse[1])) {
 		  // create a list like "en" => 0.8
 		  $langs = array_combine($lang_parse[1], $lang_parse[4]);
-    	
+
 		  // set default to 1 for any without q factor
 		  foreach ($langs as $lang => $val) {
 			  if ($val === '') $langs[$lang] = 1;
 		  }
 
-		  // sort list based on value	
+		  // sort list based on value
 		  arsort($langs, SORT_NUMERIC);
 	  }
 
