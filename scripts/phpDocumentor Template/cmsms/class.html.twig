@@ -93,11 +93,12 @@
                 {% set specialMethods = node.magicMethods ? node.inheritedMethods.merge(node.magicMethods) : node.inheritedMethods %}
                     {% for method in node.methods.merge(specialMethods) %}
                     <a id="method_{{ method.name }}"></a>
-                    <div class="element clickable method {{ method.visibility }} {{ method.deprecated ? 'deprecated' }} method_{{ method.name }}{{ method.parent.name != node.name ? ' inherited' : '' }}" data-toggle="collapse" data-target=".method_{{ method.name }} .collapse">
-                        <h2>{{ method.summary ?: method.name }}</h2>
+                    <div class="element clickable method {{ method.visibility }} method_{{ method.name }}{{ method.parent.name != node.name ? ' inherited' : '' }}" data-toggle="collapse" data-target=".method_{{ method.name }} .collapse">
                         <pre>{{ method.name }}({% for argument in method.arguments %}{{ argument.types ? argument.types|join('|')~' ' }}{{ argument.byReference ? '&' }}{{ argument.name }}{{ argument.default ? ' = '~argument.default }}{% if not loop.last %}, {% endif %}{% endfor %}) {{ method.response.types ? ': '~method.response.types|join('|') }}</pre>
+                        <h4>{{ method.summary ?: method.name }}</h4>
                         <div class="labels">
                             {% if method.parent.name != node.name %}<span class="label label-default">inherited</span>{% endif %}
+                            {% if method.tags.deprecated is defined %}<span class="label label-default">deprecated</span>{% endif %}
                             {% if method.static %}<span class="label label-default">static</span>{% endif %}
                             {% if method.final %}<span class="label label-default">final</span>{% endif %}
                             {% if method.abstract %}<span class="label label-default">abstract</span>{% endif %}
@@ -128,22 +129,20 @@
                                     {% endfor %}
                                 </table>
                                 {% endif %}
-    
+
                                 {% if method.arguments|length > 0 %}
-                                <h3>Arguments</h3>
+                                <h4>Arguments</h4>
                                 {% for argument in method.arguments %}
                                 <div class="subelement argument">
-                                    <h4>{{ argument.name }}</h4>
-                                    <code>{{ argument.types|route|join('|')|raw }}</code><br />
+                                    <h4><code>{{ argument.types|route|join('|')|raw }}</code> {{ argument.name }}</h4>
                                     <p>{{ argument.description|markdown|raw }}</p>
                                 </div>
                                 {% endfor %}
                                 {% endif %}
-    
+
                                 {% if method.response.types and method.response.types|join() != 'void' %}
-                                <h3>Response</h3>
-                                <code>{{ method.response.types|route|join('|')|raw }}</code><br />
-                                <p>{{ method.response.description|markdown|raw }}</p>
+                                <h4>Response</h4>
+                                <p> <code>{{ method.response.types|route|join('|')|raw }}</code> {{ method.response.description|markdown|raw }}</p>
                                 {% endif %}
                             </div>
                         </div>
@@ -155,7 +154,7 @@
                     {% for constant in node.constants.merge(node.inheritedConstants) %}
                     <a id="constant_{{ constant.name }}"> </a>
                     <div class="element clickable constant {{ constant.deprecated ? 'deprecated' }} constant_{{ constant.name }}{{ constant.parent.name != node.name ? ' inherited' : '' }}" data-toggle="collapse" data-target=".constant_{{ constant.name }} .collapse">
-                        <h2>{{ constant.summary ?: constant.name }}</h2>
+                        <h4>{{ constant.summary ?: constant.name }}</h4>
                         <pre>{{ constant.name }}</pre>
                         <div class="labels">
                             {% if constant.parent.name != node.name %}<span class="label label-default">inherited</span>{% endif %}
@@ -185,7 +184,7 @@
 
                 {% set specialProperties = node.magicProperties ? node.inheritedProperties.merge(node.magicProperties) : node.inheritedProperties %}
                 {% if node.properties.merge(specialProperties)|length > 0 %}
-                
+
                 <h3><i class="glyphicon glyphicon-custom icon-property"></i> Properties</h3>
                     {% for property in node.properties.merge(specialProperties) %}
                     <a id="property_{{ property.name }}"> </a>
@@ -213,7 +212,7 @@
                                     {% endfor %}
                                 </table>
                                 {% endif %}
-    
+
                                 {% if property.types and property.types|join() != 'void' %}
                                 <h3>Type(s)</h3>
                                 <code>{{ property.types|route|join('|')|raw }}</code>
