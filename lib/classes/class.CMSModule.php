@@ -97,19 +97,19 @@ abstract class CMSModule
 
   /**
    * @access private
-   * @ignore 
+   * @ignore
    */
   private $__errors;
 
   /**
    * @access private
-   * @ignore 
+   * @ignore
    */
   private $__messages;
 
   /**
    * @access private
-   * @ignore 
+   * @ignore
    */
   private $__current_tab;
 
@@ -117,8 +117,8 @@ abstract class CMSModule
    * ------------------------------------------------------------------
    * Magic methods
    * ------------------------------------------------------------------
-   */   
-  
+   */
+
   /**
    * Constructor
    *
@@ -131,7 +131,7 @@ abstract class CMSModule
     global $CMS_INSTALL_PAGE;
 
     if( !isset($CMS_ADMIN_PAGE) && !isset($CMS_STYLESHEET) && !isset($CMS_INSTALL_PAGE)) {
-	
+
       $this->SetParameterType('assign',CLEAN_STRING);
       $this->SetParameterType('module',CLEAN_STRING);
       $this->SetParameterType('lang',CLEAN_STRING); // this will be ignored.
@@ -143,11 +143,11 @@ abstract class CMSModule
       $this->InitializeFrontend();
     }
     else if( isset($CMS_ADMIN_PAGE) && !isset($CMS_STYLESHEET) && !isset($CMS_INSTALL_PAGE) ) {
-	
+
       $this->InitializeAdmin();
     }
   }
-  
+
   /**
    * @ignore
    */
@@ -173,19 +173,19 @@ abstract class CMSModule
   /**
    * @since 2.0
    *
-   * @ignore   
-   */  
+   * @ignore
+   */
   public function __call($name, $args)
   {
     return FALSE;
-  }  
-  
+  }
+
   /**
    * ------------------------------------------------------------------
    * Load internals.
    * ------------------------------------------------------------------
-   */  
-  
+   */
+
   /**
    * Private
    *
@@ -211,7 +211,7 @@ abstract class CMSModule
 		  $this->modform = true;
 	  }
   }
-	
+
   /**
    * Private
    *
@@ -224,7 +224,7 @@ abstract class CMSModule
 		  $this->modredirect = true;
 	  }
   }
-	
+
   /**
    * Private
    *
@@ -290,7 +290,7 @@ abstract class CMSModule
   /**
    * Unregister a smarty plugin from the system.
    * This method removes any matching rows from the database, and should only be used in a modules uninstall or upgrade routine.
-   * 
+   *
    * @author calguy1000
    * @since 1.11
    * @param string $name The smarty plugin name.  If no name is specified all smarty plugins registered to this module will be removed.
@@ -312,7 +312,7 @@ abstract class CMSModule
    * from the module constructor, or from the SetParameters
    * method.
    *
-   * Note: 
+   * Note:
    * @final
    * @return void
    * @see CMSModule::SetParameters
@@ -343,7 +343,7 @@ abstract class CMSModule
   }
 
   /**
-   * Callback to determine if the output from a call to the module can be cached by smarty. 
+   * Callback to determine if the output from a call to the module can be cached by smarty.
    *
    * @since 1.11
    * @author Robert Campbell
@@ -460,7 +460,7 @@ abstract class CMSModule
 
   /**
    * Returns the minimum version necessary to run this version of the module.
-   * 
+   *
    * @abstract
    * @return string
    */
@@ -681,7 +681,7 @@ abstract class CMSModule
    * register routes, and create parameters, and register a module plugin, etc.  As of version 1.10
    * this method is deprecated, and the appropriate functions are InitializeFrontend() and InitializeAdmin()
    * This method is scheduled for removal in version 1.11
-   * 
+   *
    * @abstract
    * @see CreateParameter
    * @see InitializeFrontend()
@@ -692,11 +692,11 @@ abstract class CMSModule
   function SetParameters() {}
 
   /**
-   * Called from within the constructor, ONLY for frontend module 
+   * Called from within the constructor, ONLY for frontend module
    * actions.  This method should be overridden to create routes, and
    * set handled parameters, and perform other initialization tasks
    * that need to be setup for all frontend actions.
-   * 
+   *
    * @abstract
    * @see SetParameterType
    * @see RegisterRoute
@@ -710,11 +710,11 @@ abstract class CMSModule
   }
 
   /**
-   * Called from within the constructor, ONLY for admin module 
+   * Called from within the constructor, ONLY for admin module
    * actions.  This method should be overridden to create routes, and
    * set handled parameters, and perform other initialization tasks
    * that need to be setup for all frontend actions.
-   * 
+   *
    * @abstract
    * @see CreateParameter
    * @return void
@@ -723,11 +723,11 @@ abstract class CMSModule
   {
     $this->SetParameters(); // for backwards compatibility purposes. may be removed.
   }
-	
+
   /**
    * A method to indicate that the system should drop and optionally
    * generate an error about unknown parameters on frontend actions.
-   * 
+   *
    * @see SetParameterType
    * @see CreateParameter
    * @final
@@ -740,12 +740,12 @@ abstract class CMSModule
   }
 
   /**
-   * Indicate the name of, and type of a parameter that is 
+   * Indicate the name of, and type of a parameter that is
    * acceptable for frontend actions.
    *
    * possible values for type are:
    * CLEAN_INT,CLEAN_FLOAT,CLEAN_NONE,CLEAN_STRING
-   * 
+   *
    * i.e:
    * $this->SetParameterType('numarticles',CLEAN_INT);
    *
@@ -869,7 +869,7 @@ abstract class CMSModule
 
   /**
    * Returns the cms->config object as a reference
-   * 
+   *
    * @final
    * @deprecated
    * @return array The config hash.
@@ -896,7 +896,7 @@ abstract class CMSModule
    * Content Block Related Functions
    * ------------------------------------------------------------------
    */
-	
+
   /**
    * Get an input field for a module generated content block type.
    *
@@ -954,7 +954,7 @@ abstract class CMSModule
   /**
    * Register a bulk content action
    *
-   * For use in the CMSMS content list this method allows a module to 
+   * For use in the CMSMS content list this method allows a module to
    * register a bulk content action.
    *
    * @final
@@ -1048,7 +1048,7 @@ abstract class CMSModule
       return FALSE;
     }
   }
-	
+
   /**
    * Function that gets called upon module uninstall, and returns a boolean to indicate whether or
    * not the core should remove all module events, event handlers, module templates, and preferences.
@@ -1195,11 +1195,11 @@ abstract class CMSModule
   /**
    * Return a array of CmsAdminMenuItem objects representing menu items for the admin nav for this module.
    *
-   * This method should do all permissions checking when building the array of objects. 
+   * This method should do all permissions checking when building the array of objects.
    *
    * @since 2.0
    * @abstract
-   * @return array of objects.
+   * @return array of CmsAdminMenuItem objects
    */
   public function GetAdminMenuItems()
   {
@@ -1207,7 +1207,7 @@ abstract class CMSModule
 
     $out = array();
     $out[] = CmsAdminMenuItem::from_module($this);
-	
+
     return $out;
   }
 
@@ -1281,7 +1281,7 @@ abstract class CMSModule
    * Module capabilities, a new way of checking what a module can do
    * ------------------------------------------------------------------
    */
-	
+
   /**
    * Returns true if the modules thinks it has the capability specified
    *
@@ -1306,7 +1306,7 @@ abstract class CMSModule
   {
     return FALSE;
   }
-	
+
   /**
    * ------------------------------------------------------------------
    * Syntax Highlighter Related Functions
@@ -1543,7 +1543,7 @@ abstract class CMSModule
   /**
    * Returns the end of the fieldset in a  form.  This is basically just a wrapper around </form>, but
    * could be extended later on down the road.  It's here mainly for consistency.
-   * 
+   *
    * @final
    * @deprecated
    * @return string
@@ -1650,7 +1650,7 @@ abstract class CMSModule
    * @param string $size The number of columns wide the textbox should be displayed
    * @param string $maxlength The maximum number of characters that should be allowed to be entered
    * @param string $addttext Any additional text that should be added into the tag when rendered
-   * @param string $label The text for label 
+   * @param string $label The text for label
    * @param string $labeladdtext Any additional text that should be added into the tag when rendered
    * @deprecated
    * @return string
@@ -1675,7 +1675,7 @@ abstract class CMSModule
   {
     $this->_loadFormMethods();
     return cms_module_CreateInputColor($this, $id, $name, $value, $addttext);
-  }	
+  }
 
   /**
    * Returns the html5 equivalent of an input of type date.  This is basically a nice little wrapper
@@ -1693,7 +1693,7 @@ abstract class CMSModule
     $this->_loadFormMethods();
     return cms_module_CreateInputDate($this, $id, $name, $value, $addttext);
   }
-	
+
   /**
    * Returns the html5 equivalent of an input of type datetime.  This is basically a nice little wrapper
    * to make sure that id's are placed in names and also that it's html5 compliant.
@@ -1704,13 +1704,13 @@ abstract class CMSModule
    * @param string $addttext Any additional text that should be added into the tag when rendered
    * @deprecated
    * @return string
-   */	
+   */
   function CreateInputDatetime($id, $name, $value='', $addttext='')
   {
     $this->_loadFormMethods();
     return cms_module_CreateInputDatetime($this, $id, $name, $value, $addttext);
   }
-	
+
   /**
    * Returns the html5 equivalent of an input of type datetime-local.  This is basically a nice little wrapper
    * to make sure that id's are placed in names and also that it's html5 compliant.
@@ -1743,7 +1743,7 @@ abstract class CMSModule
   {
     $this->_loadFormMethods();
     return cms_module_CreateInputMonth($this, $id, $name, $value, $addttext);
-  }		
+  }
 
   /**
    * Returns the html5 equivalent of an input of type week.  This is basically a nice little wrapper
@@ -1761,7 +1761,7 @@ abstract class CMSModule
     $this->_loadFormMethods();
     return cms_module_CreateInputWeek($this, $id, $name, $value, $addttext);
   }
-	
+
   /**
    * Returns the html5 equivalent of an input of type time.  This is basically a nice little wrapper
    * to make sure that id's are placed in names and also that it's html5 compliant.
@@ -1777,8 +1777,8 @@ abstract class CMSModule
   {
     $this->_loadFormMethods();
     return cms_module_CreateInputTime($this, $id, $name, $value, $addttext);
-  }	
-	
+  }
+
   /**
    * Returns the html5 equivalent of an input of type number.  This is basically a nice little wrapper
    * to make sure that id's are placed in names and also that it's html5 compliant.
@@ -1793,8 +1793,8 @@ abstract class CMSModule
   {
     $this->_loadFormMethods();
     return cms_module_CreateInputNumber($this, $id, $name, $value, $addttext);
-  }	
-	
+  }
+
   /**
    * Returns the html5 equivalent of an input of type range.  This is basically a nice little wrapper
    * to make sure that id's are placed in names and also that it's html5 compliant.
@@ -1810,7 +1810,7 @@ abstract class CMSModule
   {
     $this->_loadFormMethods();
     return cms_module_CreateInputRange($this, $id, $name, $value, $addttext);
-  }				
+  }
 
   /**
    * Returns the html5 equivalent of an input textbox of type email.  This is basically a nice little wrapper
@@ -1824,7 +1824,7 @@ abstract class CMSModule
    * @param string $addttext Any additional text that should be added into the tag when rendered
    * @deprecated
    * @return string
-   */	
+   */
   function CreateInputEmail($id, $name, $value='', $size='10', $maxlength='255', $addttext='')
   {
     $this->_loadFormMethods();
@@ -1843,13 +1843,13 @@ abstract class CMSModule
    * @param string $addttext Any additional text that should be added into the tag when rendered
    * @deprecated
    * @return string
-   */	
+   */
   function CreateInputTel($id, $name, $value='', $size='10', $maxlength='255', $addttext='')
   {
     $this->_loadFormMethods();
     return cms_module_CreateInputTel($this, $id, $name, $value, $size, $maxlength, $addttext);
-  }	
-	
+  }
+
   /**
    * Returns the html5 equivalent of an input of type search.  This is basically a nice little wrapper
    * to make sure that id's are placed in names and also that it's html5 compliant.
@@ -1868,7 +1868,7 @@ abstract class CMSModule
     $this->_loadFormMethods();
     return cms_module_CreateInputSearch($this, $id, $name, $value, $size, $maxlength, $addttext);
   }
-	
+
   /**
    * Returns the html5 equivalent of an input of type url.  This is basically a nice little wrapper
    * to make sure that id's are placed in names and also that it's xhtml compliant.
@@ -1886,8 +1886,8 @@ abstract class CMSModule
   {
     $this->_loadFormMethods();
     return cms_module_CreateInputUrl($this, $id, $name, $value, $size, $maxlength, $addttext);
-  }							
-			
+  }
+
 
   /**
    * Returns the xhtml equivalent of a file-selector field.  This is basically a nice little wrapper
@@ -1950,7 +1950,7 @@ abstract class CMSModule
    * @param string $id The id given to the module on execution
    * @param string $name The html name of the checkbox
    * @param string $value The value returned from the input if selected
-   * @param string $selectedvalue The current value. If equal to $value the checkbox is selected 
+   * @param string $selectedvalue The current value. If equal to $value the checkbox is selected
    * @param string $addttext Any additional text that should be added into the tag when rendered
    * @deprecated
    * @return string
@@ -1960,7 +1960,7 @@ abstract class CMSModule
     $this->_loadFormMethods();
     return cms_module_CreateInputCheckbox($this, $id, $name, $value, $selectedvalue, $addttext);
   }
-	
+
   /**
    * Returns the xhtml equivalent of a submit button.	 This is basically a nice little wrapper
    * to make sure that id's are placed in names and also that it's xhtml compliant.
@@ -2033,7 +2033,7 @@ abstract class CMSModule
     $this->_loadFormMethods();
     return cms_module_CreateInputDropdown($this, $id, $name, $items, $selectedindex, $selectedvalue, $addttext);
   }
-	
+
   /**
    * Returns the html5 equivalent input field with datalist options.  This is basically a nice little wrapper
    * to make sure that id's are placed in names and also that it's html5 compliant.
@@ -2052,7 +2052,7 @@ abstract class CMSModule
   {
     $this->_loadFormMethods();
     return cms_module_CreateInputDataList($this, $id, $name, $value, $items, $size, $maxlength, $addttext);
-  }	
+  }
 
   /**
    * Returns the xhtml equivalent of a multi-select list.	 This is basically a nice little wrapper
@@ -2138,7 +2138,7 @@ abstract class CMSModule
 
 
   /**
-   * Returns the xhtml equivalent of a textarea.	Also takes Syntax hilighter preference 
+   * Returns the xhtml equivalent of a textarea.	Also takes Syntax hilighter preference
    * into consideration if it's called from the admin side.
    *
    * @param string $id The id given to the module on execution
@@ -2177,8 +2177,8 @@ abstract class CMSModule
    * @param string $prettyurl An optional pretty url segment (relative to the root of the site) to use when generating the link.
    * @return string
    */
-  function CreateFrontendLink( $id, $returnid, $action, $contents='', $params=array(), 
-			       $warn_message='', $onlyhref=false, $inline=true, $addtext='', 
+  function CreateFrontendLink( $id, $returnid, $action, $contents='', $params=array(),
+			       $warn_message='', $onlyhref=false, $inline=true, $addtext='',
 			       $targetcontentonly=false, $prettyurl='' )
   {
     return $this->CreateLink( $id, $action, $returnid, $contents, $params, $warn_message, $onlyhref,
@@ -2202,8 +2202,8 @@ abstract class CMSModule
    * @param string $prettyurl An optional pretty url segment (related to the root of the website) for a pretty url.
    * @return string
    */
-  function CreateLink($id, $action, $returnid='', $contents='', $params=array(), 
-		      $warn_message='', $onlyhref=false, $inline=false, $addttext='', 
+  function CreateLink($id, $action, $returnid='', $contents='', $params=array(),
+		      $warn_message='', $onlyhref=false, $inline=false, $addttext='',
 		      $targetcontentonly=false, $prettyurl='')
   {
     $this->_loadFormMethods();
@@ -2236,7 +2236,7 @@ abstract class CMSModule
    * Return a pretty url string for a module action
    * This method is called by the create_url and the CreateLink methods if the pretty url argument is not specified in order
    * to attempt automating a pretty url for an action.
-   * 
+   *
    * @since 1.10
    * @abstract
    * @param string $id The module action id (cntnt01 indicates that the defaul content block of the destination page should be used).
@@ -2344,7 +2344,7 @@ abstract class CMSModule
     $this->_loadRedirectMethods();
     return cms_module_Redirect($this, $id, $action, $returnid, $params, $inline);
   }
-	
+
   /**
    * Redirects to an admin page
    * @param string $page php script to redirect to
@@ -2548,7 +2548,7 @@ abstract class CMSModule
     return cms_module_SetTemplate($this, $tpl_name, $content, $modulename);
   }
 
-  /** 
+  /**
    * Delete a module template from the database
    *
    * @final
@@ -2607,7 +2607,7 @@ abstract class CMSModule
    * @param boolean $cache (optional) Cachable flag
    * @param string $modulename (optional) module name, if empty the current module is used.
    * @return string
-   */ 
+   */
   final public function ProcessTemplateFromDatabase($tpl_name, $designation = '', $cache = false, $modulename = '')
   {
     $this->_loadTemplateMethods();
@@ -2682,7 +2682,7 @@ abstract class CMSModule
    *
    * @final
    * @return string
-   */ 
+   */
   public function StartTabHeaders()
   {
     return cms_admin_tabs::start_tab_headers();
@@ -3052,7 +3052,7 @@ abstract class CMSModule
   public function DoEvent( $originator, $eventname, &$params )
   {
     if ($originator != '' && $eventname != '') {
-		$filename = dirname(dirname(__DIR__)) . '/modules/'.$this->GetName().'/event.' 
+		$filename = dirname(dirname(__DIR__)) . '/modules/'.$this->GetName().'/event.'
 			. $originator . "." . $eventname . '.php';
 
 		if (@is_file($filename)) {
@@ -3088,7 +3088,7 @@ abstract class CMSModule
    *
    * @abstract
    * @param string $eventname The name of the event
-   * @return string 
+   * @return string
    */
   public function GetEventHelp( $eventname )
   {
@@ -3155,17 +3155,17 @@ abstract class CMSModule
   {
     Events::SendEvent($this->GetName(), $eventname, $params);
   }
-	
+
   /**
    * Returns the output the module wants displayed in the notification area
-   * 
+   *
    * @abstract
    * @param int $priority Notification priority between 1 and 3
    * @return mixed.  A stdClass object with two properties.... priority (1->3)... and
-   * html, which indicates the text to display for the Notification.  
+   * html, which indicates the text to display for the Notification.
    * Also supports returning an array of stdclass objects.
    */
-  public function GetNotificationOutput($priority=2) 
+  public function GetNotificationOutput($priority=2)
   {
     return '';
   }

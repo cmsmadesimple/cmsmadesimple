@@ -19,7 +19,8 @@
 #$Id:$
 
 /**
- * @package             CMS
+ * Classes and utilities to provide menu items in the CMSMS admin navigation
+ * @package CMS
  */
 
 /**
@@ -29,65 +30,97 @@
  *
  * @since		2.0
  * @package		CMS
- * @author              Robert Campbell <calguy1000@cmsmadesimple.org>
+ * @author      Robert Campbell <calguy1000@cmsmadesimple.org>
+ * @see         CMSModule::GetAdminSection
+ * @param string $module The module that hosts the destination action
+ * @param string $section The admin section (from CMSModule::GetAdminSection)
+ * @apram string $title The title of the menu item
+ * @param string $action The module action
+ * @param string $url The actual URL for the menu item link
+ * @param string $icon The URL to the icon to associate with this action
+ * @param int    $priority Priority for the menu item (minimum of 2)
  */
-
-final class CmsAdminMenuItem 
+final class CmsAdminMenuItem
 {
-  private static $_keys = array('module','section','title','description','action','url','icon','system','priority');
-  private $_data = array();
+    /**
+     * @ignore
+     * 'system' is for internal use only.
+     */
+    private static $_keys = array('module','section','title','description','action','url','icon','priority','system');
 
-  public function __construct()
-  {
-  }
+    /**
+     * @ignore
+     */
+    private $_data = array();
 
-  public function __get($k)
-  {
-    if( !in_array($k,self::$_keys) ) throw new CmsException('Invalid key: '.$k.' for '.__CLASS__.' object');
-    if( isset($this->_data[$k]) ) return $this->_data[$k];
-  }
 
-  public function __set($k,$v)
-  {
-    if( !in_array($k,self::$_keys) ) throw new CmsException('Invalid key: '.$k.' for '.__CLASS__.' object');
-    $this->_data[$k] = $v;
-  }
-
-  public function __isset($k)
-  {
-    if( !in_array($k,self::$_keys) ) throw new CmsException('Invalid key: '.$k.' for '.__CLASS__.' object');
-    return isset($this->_data[$k]);
-  }
-
-  public function __unset($k)
-  {
-    if( !in_array($k,self::$_keys) ) throw new CmsException('Invalid key: '.$k.' for '.__CLASS__.' object');
-    throw new CmsException('Cannot unset data from a CmsAdminMenuItem object');
-  }
-
-  public function valid()
-  {
-    foreach( self::$_keys as $ok ) {
-      if( $ok == 'icon'  || $ok == 'system' || $ok == 'priority' ) continue;  // we don't care if this is set.
-      if( !isset($this->_data[$ok]) ) return FALSE;
+    /**
+     * @ignore
+     */
+    public function __get($k)
+    {
+        if( !in_array($k,self::$_keys) ) throw new CmsException('Invalid key: '.$k.' for '.__CLASS__.' object');
+        if( isset($this->_data[$k]) ) return $this->_data[$k];
     }
-    return TRUE;
-  }
 
-  public static function &from_module(CMSModule $mod)
-  {
-    $obj = null;
-    if( $mod->HasAdmin() ) {
-      $obj = new CmsAdminMenuItem;
-      $obj->module = $mod->GetName();
-      $obj->section = $mod->GetAdminSection();
-      $obj->title   = $mod->GetFriendlyName();
-      $obj->description = $mod->GetAdminDescription();
-      $obj->action = 'defaultadmin';
-      $obj->url = $mod->create_url('m1_',$obj->action);
+
+    /**
+     * @ignore
+     */
+    public function __set($k,$v)
+    {
+        if( !in_array($k,self::$_keys) ) throw new CmsException('Invalid key: '.$k.' for '.__CLASS__.' object');
+        $this->_data[$k] = $v;
     }
-    return $obj;
-  }
+
+    public function __isset($k)
+    {
+        if( !in_array($k,self::$_keys) ) throw new CmsException('Invalid key: '.$k.' for '.__CLASS__.' object');
+        return isset($this->_data[$k]);
+    }
+
+
+    /**
+     * @ignore
+     */
+    public function __unset($k)
+    {
+        if( !in_array($k,self::$_keys) ) throw new CmsException('Invalid key: '.$k.' for '.__CLASS__.' object');
+        throw new CmsException('Cannot unset data from a CmsAdminMenuItem object');
+    }
+
+    /**
+     * Test if the object is valid
+     */
+    public function valid()
+    {
+        foreach( self::$_keys as $ok ) {
+            if( $ok == 'icon' || $ok == 'priority' ) continue;  // we don't care if this is set.
+            if( !isset($this->_data[$ok]) ) return FALSE;
+        }
+        return TRUE;
+    }
+
+    /**
+     * A convenience method to build a standard admin menu item from module methods.
+     *
+     * @internal
+     * @param CMSModule $mod
+     */
+    public static function &from_module(CMSModule $mod)
+    {
+        $obj = null;
+        if( $mod->HasAdmin() ) {
+            $obj = new CmsAdminMenuItem;
+            $obj->module = $mod->GetName();
+            $obj->section = $mod->GetAdminSection();
+            $obj->title   = $mod->GetFriendlyName();
+            $obj->description = $mod->GetAdminDescription();
+            $obj->action = 'defaultadmin';
+            $obj->url = $mod->create_url('m1_',$obj->action);
+        }
+        return $obj;
+    }
 } // end of class
 
 #

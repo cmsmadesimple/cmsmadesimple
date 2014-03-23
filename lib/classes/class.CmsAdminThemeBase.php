@@ -41,7 +41,6 @@
  */
 abstract class CmsAdminThemeBase
 {
-
 	/**
 	 * @ignore
 	 */
@@ -56,11 +55,6 @@ abstract class CmsAdminThemeBase
 	 * @ignore
 	 */
 	private $_menuItems;
-
-	/**
-	 * @ignore
-	 */
-	private $_nav_tree;
 
 	/**
 	 * @ignore
@@ -147,6 +141,11 @@ abstract class CmsAdminThemeBase
 	/**
 	 * @ignore
 	 */
+	private $_valid_sections = array('content','layout','files','usersgroups','extensions','preferences','siteadmin','ecommerce');
+
+	/**
+	 * @ignore
+	 */
 	protected function __construct()
 	{
 		if( is_object(self::$_instance) ) throw new CmsLogicExceptin('Only one instance of a theme object is permitted');
@@ -203,9 +202,18 @@ abstract class CmsAdminThemeBase
 	 */
 	private function _fix_url_userkey($url)
 	{
-		$from = '/'.CMS_SECURE_PARAM_NAME.'=[a-zA-Z0-9]{16}/i';
-		$to = CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
-		$newurl = preg_replace($from,$to,$url);
+		$newurl = $url;
+		$config = cmsms()->GetConfig();
+		if( strpos($url,CMS_SECURE_PARAM_NAME) !== FALSE ) {
+			$from = '/'.CMS_SECURE_PARAM_NAME.'=[a-zA-Z0-9]{16}/i';
+			$to = CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
+			$newurl = preg_replace($from,$to,$url);
+		}
+		elseif( startswith($url,$config['root_url']) ) {
+			$prefix = '?';
+			if( strpos($url,'?') !== FALSE ) $prefix = '&amp;';
+			$newurl .= $prefix.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
+		}
 		return $newurl;
 	}
 
@@ -241,7 +249,12 @@ abstract class CmsAdminThemeBase
 					if( is_array($recs) && count($recs) ) {
 						foreach( $recs as $one ) {
 							if( !$one->valid() ) continue;
-							if( ModuleOperations::Get_instance()->IsSystemModule($object->GetName()) ) $one->system = TRUE;
+							if( ModuleOperations::Get_instance()->IsSystemModule($object->GetName()) ) {
+								$one->system = TRUE;
+							}
+							else {
+								$one->system = FALSE;
+							}
 							$key = $one->module.$suffix++;
 							$usermoduleinfo[$key] = $one;
 						}
@@ -329,7 +342,6 @@ abstract class CmsAdminThemeBase
      */
 	private function _SetAggregatePermissions($force = FALSE)
 	{
-		$this->_SetModuleAdminInterfaces();
 		if( is_array($this->_perms) && !$force ) return;
 
 		$this->_perms = array();
@@ -375,32 +387,6 @@ abstract class CmsAdminThemeBase
 
 
     /**
-     * _MenuListSectionModules
-     * This method reformats module information for display in menus. When passed the
-     * name of the admin section, it returns an array of associations:
-     * array['module-name']['url'] is the link to that module, and
-     * array['module-name']['description'] is the language-specific short description of
-     *   the module.
-     *
-     * @param section - section to display
-	 * @access private
-	 * @ignore
-     */
-    private function _MenuListSectionModules($section)
-    {
-		die('this function is dead');
-        if (isset($this->_sectionCount[$section]) && $this->_sectionCount[$section] > 0) {
-			// Sort modules by name
-            $names = array();
-            foreach($this->_modulesBySection[$section] as $key => $row) {
-            	$names[$key] = $this->_modulesBySection[$section][$key]['name'];
-            }
-            array_multisort($names, SORT_ASC, $this->_modulesBySection[$section]);
-			return $this->_modulesBySection[$section];
-		}
-    }
-
-    /**
      * PopulateAdminNavigation
      * This method populates a big array containing the Navigation Taxonomy
      * for the admin section. This array is then used to create menus and
@@ -415,10 +401,14 @@ abstract class CmsAdminThemeBase
     private function _populate_admin_navigation($subtitle='')
     {
         if (count($this->_menuItems) > 0) return;
+		// note: it would be interesting if we could cache these menuItems in the session
+		// then clear this data when the cache is cleared (for when modules become available)
 
 		$config = cmsms()->GetConfig();
 		debug_buffer('before populate admin navigation');
 		if( $subtitle ) $this->_subtitle = $subtitle;
+
+		$this->_SetModuleAdminInterfaces();
 
 		debug_buffer('before menu items');
 		$this->_menuItems = array();
@@ -435,14 +425,21 @@ abstract class CmsAdminThemeBase
 		// base content menu ---------------------------------------------------------
 		$items['content'] = array('url'=>'index.php?section=content','parent'=>-1,'priority'=>2,
 								 'title'=>$this->_FixSpaces(lang('content')),'description'=>lang('contentdescription'),
-								 'show_in_menu'=>$this->HasPerm('contentPerms'));
+								  'show_in_menu'=>$this->HasPerm('contentPerms'));
+
 		// base layout menu ---------------------------------------------------------
 		$items['layout'] = array('url'=>'index.php?section=layout','parent'=>-1,'priority'=>3,
 								 'title'=>$this->_FixSpaces(lang('layout')),'description'=>lang('layoutdescription'),
 								 'show_in_menu'=>$this->HasPerm('layoutPerms'));
+
+		// base filest menu --------------------------------------------------------------
+		$items['files'] = array('url'=>'index.php?section=files','parent'=>-1,'priority'=>4,
+							     'title'=>$this->_FixSpaces(lang('files')),'description'=>lang('filesdescription'),
+								 'show_in_menu'=>$this->HasPerm('filePerms'));
+
 		// base user/groups menu ---------------------------------------------------------
 		$items['usersgroups'] = array('url'=>'index.php?section=usersgroups','parent'=>-1,
-									  'title'=>$this->_FixSpaces(lang('usersgroups')),'priority'=>4,
+									  'title'=>$this->_FixSpaces(lang('usersgroups')),'priority'=>5,
 									  'description'=>lang('usersgroupsdescription'),'show_in_menu'=>$this->HasPerm('usersGroupsPerms'));
 		$items['users'] = array('url'=>'listusers.php','parent'=>'usersgroups',
 								'title'=>$this->_FixSpaces(lang('users')),'description'=>lang('usersdescription'),
@@ -473,7 +470,7 @@ abstract class CmsAdminThemeBase
 									 'description'=>lang('grouppermsdescription'),
 									 'show_in_menu'=>$this->HasPerm('groupPerms'));
 		// base extensions menu ---------------------------------------------------------
-		$items['extensions'] = array('url'=>'index.php?section=extensions','parent'=>-1,
+		$items['extensions'] = array('url'=>'index.php?section=extensions','parent'=>-1,'priority'=>6,
 									 'title'=>$this->_FixSpaces(lang('extensions')),
 									 'description'=>lang('extensionsdescription'),
 									 'show_in_menu'=>$this->HasPerm('extensionsPerms'));
@@ -498,7 +495,7 @@ abstract class CmsAdminThemeBase
 									  'description'=>lang('editusertag'),'show_in_menu'=>false);
 		// base admin menu ---------------------------------------------------------
 		$items['siteadmin'] = array('url'=>'index.php?section=siteadmin','parent'=>-1,
-									'title'=>$this->_FixSpaces(lang('admin')),'priority'=>5,
+									'title'=>$this->_FixSpaces(lang('admin')),'priority'=>7,
 									'description'=>lang('admindescription'),
 									'show_in_menu'=>$this->HasPerm('siteAdminPerms'));
 		$items['siteprefs'] = array('url'=>'siteprefs.php','parent'=>'siteadmin',
@@ -523,7 +520,7 @@ abstract class CmsAdminThemeBase
 								   'description'=>lang('adminlogdescription'),
 								   'show_in_menu'=>$this->HasPerm('adminPerms'));
 		// base my prefs menu ---------------------------------------------------------
-		$items['myprefs'] = array('url'=>'index.php?section=myprefs','parent'=>-1,
+		$items['myprefs'] = array('url'=>'index.php?section=myprefs','parent'=>-1,'priority'=>8,
 								  'title'=>$this->_FixSpaces(lang('myprefs')),
 								  'description'=>lang('myprefsdescription'),'show_in_menu'=>$this->_perms['myprefs']);
 		$items['myaccount'] = array('url'=>'myaccount.php','parent'=>'myprefs',
@@ -544,7 +541,7 @@ abstract class CmsAdminThemeBase
 		debug_buffer('after menu items');
 
 		// slightly cleaner syntax
-		$items['ecommerce'] = array('url'=>'index.php?section=ecommerce','parent'=>-1,
+		$items['ecommerce'] = array('url'=>'index.php?section=ecommerce','parent'=>-1,'priority'=>9,
 									'title'=>$this->_FixSpaces(lang('ecommerce')),
 									'description'=>lang('ecommerce_desc'),
 									'show_in_menu'=>true);
@@ -552,34 +549,23 @@ abstract class CmsAdminThemeBase
 		// adjust all the urls to include the session key
 		// and set an icon if we can. also mark them as system items.
 		foreach( $this->_menuItems as $sectionKey => $sectionArray ) {
-			if( isset($sectionArray['url']) &&
-				(!isset($sectionArray['type']) || $sectionArray['type'] != 'external' )) {
-				$url = $this->_menuItems[$sectionKey]['url'];
-				if( strpos($url,'?') !== FALSE ) {
-					$url .= '&amp;';
-				}
-				else {
-					$url .= '?';
-				}
-				$before = $url;
-				$url .= CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
-
-				$this->_menuItems[$sectionKey]['url'] = $url;
+			if( isset($sectionArray['url']) && (!isset($sectionArray['type']) || $sectionArray['type'] != 'external' )) {
+				$this->_menuItems[$sectionKey]['url'] = $this->_fix_url_userkey($this->_menuItems[$sectionKey]['url']);
 			}
 			$this->_menuItems[$sectionKey]['system'] = 1;
 		}
 
 		debug_buffer('before system modules');
 
-		// add in all of the 'system' modules too
+		// add in all of the 'system' modules next
 		$gCms = cmsms();
+		$moduleops = ModuleOperations::get_instance();
 		foreach ($this->_menuItems as $sectionKey=>$sectionArray) {
 			if( !isset($this->_modulesBySection[$sectionKey]) ) continue;
 			$tmpArray = $this->_modulesBySection[$sectionKey];
 
 			foreach ($tmpArray as $menuItem) {
 				if( !$menuItem->system ) continue;
-
 				// don't clobber existing keys
 				$key = $menuItem->module;
 				if (array_key_exists($key,$this->_menuItems)) {
@@ -592,13 +578,14 @@ abstract class CmsAdminThemeBase
 
 				$this->_menuItems[$key]=array('url'=>$menuItem->url,'parent'=>$sectionKey,'title'=>$this->_FixSpaces($menuItem->title),
 											  'description'=>$menuItem->description,'show_in_menu'=>true,'system'=>1,
-											  'module'=>$menuItem->module);
+											  'module'=>$menuItem->module,'priority'=>1);
 			}
 		}
 
 		debug_buffer('before non system module menu items');
 
 		// add in all of the non system modules
+		// non system modules cannot have a priority less than 2
         foreach ($this->_menuItems as $sectionKey=>$sectionArray) {
 			if( !isset($this->_modulesBySection[$sectionKey]) ) continue;
 			$tmpArray = $this->_modulesBySection[$sectionKey];
@@ -616,13 +603,21 @@ abstract class CmsAdminThemeBase
 					}
 				}
 
-				$this->_menuItems[$key]=array('url'=>$menuItem->url,'parent'=>$sectionKey,
-											  'title'=>$this->_FixSpaces($menuItem->title),'description'=>$menuItem->description,
-											  'show_in_menu'=>true,'module'=>$menuItem->module);
+				$this->_menuItems[$key]=array('url'=>$menuItem->url,'parent'=>$sectionKey,'title'=>$this->_FixSpaces($menuItem->title),
+											  'description'=>$menuItem->description, 'show_in_menu'=>true,'module'=>$menuItem->module,
+											  'priority'=>($menuitem->priority > 0)?max(2,$menuItem->priority):999);
 			}
 		}
 
 		debug_buffer('after non system module menu items');
+
+		// remove any menu items that don't fit into our valid sections
+		foreach ($this->_menuItems as $sectionKey=>$sectionArray) {
+			if( isset($sectionArray['system']) && $sectionArray['system'] ) continue;
+			if( $sectionArray['parent'] == -1 && in_array($sectionKey,$this->_valid_sections) ) continue;
+			if( isset($sectionArray['parent']) && in_array($sectionArray['parent'],$this->_valid_sections) ) continue;
+			unset($this->_menuItems[$sectionKey]);
+		}
 
 		// remove any top level items that don't have children
 		$parents = array();
@@ -632,7 +627,7 @@ abstract class CmsAdminThemeBase
 		foreach( $parents as $oneparent ) {
 			$found = 0;
 			foreach ($this->_menuItems as $sectionKey=>$sectionArray) {
-				if( $sectionArray['parent'] == $oneparent ) {
+				if( $sectionArray['parent'] == $oneparent) {
 					$found = 1;
 					break;
 				}
@@ -640,10 +635,13 @@ abstract class CmsAdminThemeBase
 			if( !$found ) unset($this->_menuItems[$oneparent]);
 		}
 
-		// fix up all of the menu items to have the correct user key.
-
-		// sort the menu items by system, priority, and name (case insensitive)
+		// sort the menu items by root level, system, priority, and then name (case insensitive)
 		$fn = function($a,$b) {
+			$a1 = (int)$a['parent'];
+			$a2 = (int)$b['parent'];
+			if( $a1 < $a2 ) return -1;
+			if( $a1 > $a2 ) return 1;
+
 			$sa = isset($a['system'])?$a['system']:0;
 			$sb = isset($b['system'])?$b['system']:0;
 			if( $sa && !$sb ) return -1;
@@ -834,11 +832,7 @@ abstract class CmsAdminThemeBase
 	 */
 	public function get_navigation_tree($parent = -1,$maxdepth = -1,$usecache = TRUE)
 	{
-		if( is_array($this->_nav_tree) && $usecache) return $this->_nav_tree;
-
 		$nodes = $this->_get_navigation_tree_sub($parent,$maxdepth);
-		if( $usecache ) $this->_nav_tree = $nodes;
-
 		return $nodes;
 	}
 
@@ -1470,7 +1464,7 @@ class CmsAdminThemeNotification
 			return $this->$key;
 		}
 
-		throw new Exception('Attempt to retrieve invalid property from CmsAdminThemeNotification');
+		throw new CmsInvalidDataException('Attempt to retrieve invalid property from CmsAdminThemeNotification');
 	}
 
 
@@ -1487,7 +1481,7 @@ class CmsAdminThemeNotification
 			return;
 		}
 
-		throw new Exception('Attempt to set invalid property from CmsAdminThemeNotification');
+		throw new CmsInvalidDataException('Attempt to set invalid property from CmsAdminThemeNotification');
 	}
 } // end of class
 

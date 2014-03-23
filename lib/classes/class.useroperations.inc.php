@@ -62,6 +62,11 @@ class UserOperations
 	private $_users;
 
 	/**
+	 * @ignore
+	 */
+	private $_saved_users = array();
+
+	/**
 	 * Get the reference to the only instance of this object
 	 *
 	 * @return UserOperations
@@ -147,6 +152,7 @@ class UserOperations
 
 	/**
 	 * Loads a user by username.
+	 * Does not use a cache, so use sparingly.
 	 *
 	 * @param mixed $username Username to load
 	 * @param mixed $password Password to check against
@@ -157,6 +163,7 @@ class UserOperations
 	 */
 	function &LoadUserByUsername($username, $password = '', $activeonly = true, $adminaccessonly = false)
 	{
+		// note: does not use cache
 		$result = false;
 		$gCms = cmsms();
 		$db = $gCms->GetDb();
@@ -201,8 +208,11 @@ class UserOperations
 	 */
 	function &LoadUserByID($id)
 	{
-		$result = false;
+		$id = (int)$id;
+		if( $id < 1 ) return false;
+		if( isset($this->_saved_users[$id]) ) return $this->_saved_users[$id];
 
+		$result = false;
 		$gCms = cmsms();
 		$db = $gCms->GetDb();
 
@@ -222,6 +232,7 @@ class UserOperations
 			$result = $oneuser;
 		}
 
+		$this->_saved_users[$id] = $result;
 		return $result;
 	}
 
