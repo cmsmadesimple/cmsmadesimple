@@ -36,15 +36,15 @@
 class Content extends ContentBase
 {
 	/**
-	 * @access private
-	 * @var array
+	 * @ignore
 	 */
     private $_contentBlocks = null;
 
 	/**
-	 * Indicate whether or not this content type may be copied
+	 * Indicates whether or not this content type may be copied
+	 * Content pages are copyable (for those with sufficient permission)
 	 *
-	 * @return boolean whether or not it's copyable
+	 * @return bool TRUE
 	 */
     function IsCopyable()
     {
@@ -53,11 +53,10 @@ class Content extends ContentBase
 
     /**
      * Indicates wether ths page type uses a template.
-     * i.e: some content types like sectionheader and separator do not.
+     * Content pages do use a template.
      *
      * @since 2.0
-     * @abstract
-     * @return boolean default FALSE
+     * @return bool TRUE
      */
 	public function HasTemplate()
 	{
@@ -65,9 +64,10 @@ class Content extends ContentBase
 	}
 
 	/**
-	 * Get the friendly (e.g., human-readable) name for this content type
+	 * Returns a translated string for the name of this content type
+	 * "Content" in english
 	 *
-	 * @return string a human-readable name for this type of content
+	 * @return string
 	 */
     function FriendlyName()
     {
@@ -75,9 +75,10 @@ class Content extends ContentBase
     }
 
 	/**
-	 * test whether or not content may be made the default content
+	 * Indicates whether or not objects of this type may be made the default content object.
+	 * "Content" pages can become default.
 	 *
-	 * @return boolean whether or not content may be made the default content
+	 * @return bool
 	 */
     function IsDefaultPossible()
     {
@@ -87,7 +88,7 @@ class Content extends ContentBase
 	/**
 	 * Set up base property attributes for this content type
 	 *
-	 * @return void
+	 * This property type adds these properties: design_id, template, searchable, disable_wysiwyg, pagemetadata, pagedata
 	 */
     function SetProperties()
     {
@@ -101,7 +102,10 @@ class Content extends ContentBase
     }
 
 	/**
-	 * Has Preview
+	 * Indicates wether pages of this type can be previewed.
+	 * "Content" pages can be previewed in the editor.
+	 *
+	 * @return bool TRUE
 	 */
 	public function HasPreview()
 	{
@@ -109,10 +113,10 @@ class Content extends ContentBase
 	}
 
 	/**
-	 * Set content attribute values (from parameters received from admin add/edit form) 
+	 * Set content attribute values (from parameters received from admin add/edit form)
 	 *
-	 * @param array $params hash of parameters to load into content attributes
-	 * @return void
+	 * @param array $params Hash of parameters to load into content attributes
+	 * @param bool  $editing Whether we in an add or edit operation.
 	 */
     function FillParams($params,$editing = false)
     {
@@ -158,15 +162,27 @@ class Content extends ContentBase
 	/**
 	 * Gets the main content
 	 *
-	 * @param string $param which attribute to return
+	 * @param string $param which attribute to return (content_en is assumed)
 	 * @return string the specified content
 	 */
     function Show($param = 'content_en')
     {
+		$param = trim($param);
+		if( !$param ) $param = 'content_en';
 		$param = str_replace(' ','_',$param);
 		return $this->GetPropertyValue($param);
     }
 
+	/**
+	 * Return a list of all of the properties that may be edited by the current user when editing this content item
+	 * in a content editor form.
+	 *
+	 * This method calls the same method in the base class, then parses the content blocks in the templates and adds
+	 * the appropriate information for all detected content blocks.
+	 *
+	 * @see ContentBase::GetEditableProperties()
+	 * @return array Array of stdclass objects containing name (string), tab (string), priority (integer), required (boolean) members
+	 */
 	public function GetEditableProperties()
 	{
 		$props = parent::GetEditableProperties();
@@ -198,6 +214,8 @@ class Content extends ContentBase
 
 	/**
 	 * Validate the user's entries in the content add/edit form
+	 *
+	 * This method also calls the parent method to validate the standard properties
 	 *
 	 * @return mixed either an array of validation error strings, or false to indicate no errors
 	 */
@@ -246,7 +264,7 @@ class Content extends ContentBase
 	}
 
 	/**
-	 * Parse content blocks in the current page's templates.
+	 * Return content blocks in the current page's templates.
 	 *
 	 * This method can only be called once per request.
 	 *
@@ -264,13 +282,13 @@ class Content extends ContentBase
 		$this->_contentBlocks = CMS_Content_Block::get_content_blocks();
 		return $this->_contentBlocks;
     }
-	
+
 	/**
-	 * undocumented function
+	 * Given information about a single property this method returns that property
 	 *
-	 * @param string $one 
-	 * @param string $adding 
-	 * @return void
+	 * @param string $one The property name
+	 * @param string $adding A flag indicating whether or not we are in add or edit mode
+	 * @return array consisting of two elements: A label, and the input element
 	 * @internal
 	 */
     protected function display_single_element($one,$adding)
@@ -291,7 +309,7 @@ class Content extends ContentBase
 			}
 			$_designlist = CmsLayoutCollection::get_list();
 		}
-		
+
 		switch($one) {
 		case 'design_id':
 			// get the dflt/current design id.
@@ -376,12 +394,11 @@ class Content extends ContentBase
 		}
     }
 
-	/*
-	* return the HTML to create the text area in the admin console.
-	* does not include a label.
-	*/
+	/**
+	 * @ignore
+	 */
 	private function _display_text_block($blockInfo,$value,$adding)
-	{											
+	{
 		$ret = '';
 		$oneline = cms_to_bool(get_parameter_value($blockInfo,'oneline'));
 		$required = cms_to_bool(get_parameter_value($blockInfo,'required'));
@@ -420,10 +437,9 @@ class Content extends ContentBase
 		return $ret;
 	}
 
-	/*
-	* return the HTML to create an image dropdown in the admin console.
-	* does not include a label.
-	*/
+	/**
+	 * @ignore
+	 */
 	private function _display_image_block($blockInfo,$value,$adding)
 	{
 		$gCms = cmsms();
@@ -442,10 +458,9 @@ class Content extends ContentBase
 		return $dropdown;
 	}
 
-   /*
-	* return the HTML to create the text area in the admin console.
-	* may include a label.
-    */
+	/**
+	 * @ignore
+	 */
 	private function _display_module_block($blockName,$blockInfo,$value,$adding)
 	{
 		$gCms = cmsms();
@@ -463,10 +478,8 @@ class Content extends ContentBase
 	}
 
 	/**
-	* Return an array of two elements
-	* the first is the string for the label for the field
-	* the second is the html for the input field
-	*/
+	 * @ignore
+	 */
 	private function display_content_block($blockName,$blockInfo,$value,$adding = false)
 	{
 		// it'd be nice if the content block was an object..
@@ -483,7 +496,7 @@ class Content extends ContentBase
 			$required = true;
 		}
 		if( $required ) $label = '*'.$label;
-		
+
 		switch( $blockInfo['type'] ) {
 		case 'text':
 			$label = '<label for="'.$blockName.'">'.$label.':</label>';

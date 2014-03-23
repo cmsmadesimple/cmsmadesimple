@@ -1876,14 +1876,11 @@ abstract class ContentBase
 	 * Return the raw value for a content property.
 	 * If no proeprty name is specified 'content_en' is assumed
 	 *
-	 * Note: The content_en default value is not specified in the argument list
-	 * due to backwards compatibility concerns
-	 *
 	 * @abstract
 	 * @param string $propname An optional property name to display.
 	 * @return string
 	 */
-	public function Show($propname = '')
+	public function Show($propname = 'content_en')
 	{
 	}
 

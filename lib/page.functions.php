@@ -84,20 +84,20 @@ function check_login($no_redirect = false)
     // now we've got to check the request
     // and make sure it matches the session key
     if( !isset($_SESSION[CMS_USER_KEY]) ||
-	!isset($_GET[CMS_SECURE_PARAM_NAME]) ||
-	!isset($_POST[CMS_SECURE_PARAM_NAME]) ) {
-      $v = '<no$!tgonna!$happen>';
-      if( isset($_GET[CMS_SECURE_PARAM_NAME]) ) {
-	$v = $_GET[CMS_SECURE_PARAM_NAME];
-      }
-      else if( isset($_POST[CMS_SECURE_PARAM_NAME]) ) {
-	$v = $_POST[CMS_SECURE_PARAM_NAME];
-      }
+        !isset($_GET[CMS_SECURE_PARAM_NAME]) ||
+        !isset($_POST[CMS_SECURE_PARAM_NAME]) ) {
+        $v = '<no$!tgonna!$happen>';
+        if( isset($_GET[CMS_SECURE_PARAM_NAME]) ) {
+            $v = $_GET[CMS_SECURE_PARAM_NAME];
+        }
+        else if( isset($_POST[CMS_SECURE_PARAM_NAME]) ) {
+            $v = $_POST[CMS_SECURE_PARAM_NAME];
+        }
 
-      if( $v != $_SESSION[CMS_USER_KEY] && !isset($config['stupidly_ignore_xss_vulnerability']) ) {
-	if (false == $no_redirect) redirect($config['admin_url'].'/login.php');
-	return false;
-      }
+        if( $v != $_SESSION[CMS_USER_KEY] && !isset($config['stupidly_ignore_xss_vulnerability']) ) {
+            if (false == $no_redirect) redirect($config['admin_url'].'/login.php');
+            return false;
+        }
     }
   }
   return true;

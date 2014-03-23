@@ -38,6 +38,7 @@ $db = cmsms()->GetDb();
 $error = '';
 $message = '';
 
+
 /**
  * Get preferences
  */
