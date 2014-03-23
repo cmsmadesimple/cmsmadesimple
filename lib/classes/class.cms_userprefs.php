@@ -112,7 +112,7 @@ final class cms_userprefs
 	/**
 	 * Return an array of all user preferences
 	 *
-	 * @param integer $userid
+	 * @param int $userid
 	 * @return array Associative array of preferences and values.
 	 */
 	public static function get_all_for_user($userid)
@@ -233,7 +233,7 @@ final class cms_userprefs
  * @deprecated
  * @since 0.3
  * @see cms_siteprefs::get_for_user
- * @param integer $userid The user id
+ * @param int $userid The user id
  * @param string  $prefname The preference name
  * @param mixed   $default The default value if the preference is not set for the given user id.
  * @return mixed
@@ -249,10 +249,9 @@ function get_preference($userid, $prefname, $default='')
  * @deprecated
  * @since 0.3
  * @see cms_siteprefs::set_for_user
- * @param integer $userid The user id
+ * @param int $userid The user id
  * @param string  $prefname The preference name
  * @param mixed   $value The preference value (will be stored as a string)
- * @return void
  */
 function set_preference($userid, $prefname, $value)
 {

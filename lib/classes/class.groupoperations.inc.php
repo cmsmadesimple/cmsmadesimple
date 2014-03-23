@@ -91,7 +91,7 @@ final class GroupOperations
 	/**
 	 * Load a group from the database by its id
 	 *
-	 * @param integer $id The id of the group to load
+	 * @param int $id The id of the group to load
 	 * @return mixed The group if found. If it's not found, then false
 	 */
 	public function &LoadGroupByID($id)
@@ -118,7 +118,7 @@ final class GroupOperations
 	 * Given a group object, inserts it into the database.
 	 *
 	 * @param mixed $group The group object to save to the database
-	 * @return integer The id of the newly created group. If none is created, -1
+	 * @return int The id of the newly created group. If none is created, -1
 	 */
 	public function InsertGroup($group)
 	{
@@ -143,7 +143,7 @@ final class GroupOperations
 	 * Given a group object, update its attributes in the database.
 	 *
 	 * @param mixed $group The group to update
-	 * @return boolean True if the update was successful, false if not
+	 * @return bool True if the update was successful, false if not
 	 */
 	public function UpdateGroup($group)
 	{
@@ -165,8 +165,8 @@ final class GroupOperations
 	/**
 	 * Given a group id, delete it from the database along with all its associations.
 	 *
-	 * @param integer $id The group's id to delete
-	 * @return boolean True if the delete was successful. False if not.
+	 * @param int $id The group's id to delete
+	 * @return bool True if the delete was successful. False if not.
 	 */
 	public function DeleteGroupByID($id)
 	{
@@ -193,7 +193,7 @@ final class GroupOperations
 	 *
 	 * @param int $groupid The group id
 	 * @param string $perm The permission name
-	 * @return boolean
+	 * @return bool
 	 */
 	public function CheckPermission($groupid,$perm)
 	{

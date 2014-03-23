@@ -177,8 +177,8 @@ class ContentOperations
     /**
      * Given a content id, load and return the loaded content object.
      *
-     * @param integer $id The id of the content object to load
-     * @param boolean $loadprops Also load the properties of that content object. Defaults to false.
+     * @param int $id The id of the content object to load
+     * @param bool $loadprops Also load the properties of that content object. Defaults to false.
      * @return mixed The loaded content object. If nothing is found, returns FALSE.
      */
 	function &LoadContentFromId($id,$loadprops=false)
@@ -207,8 +207,8 @@ class ContentOperations
     /**
      * Given a content alias, load and return the loaded content object.
      *
-     * @param integer $alias The alias of the content object to load
-     * @param boolean $only_active If true, only return the object if it's active flag is true. Defaults to false.
+     * @param int $alias The alias of the content object to load
+     * @param bool $only_active If true, only return the object if it's active flag is true. Defaults to false.
      * @return ContentBase The loaded content object. If nothing is found, returns NULL.
      */
 	function &LoadContentFromAlias($alias, $only_active = false)
@@ -252,7 +252,7 @@ class ContentOperations
 	/**
 	 * Returns the id of the content marked as default.
 	 *
-	 * @return integer The id of the default content page
+	 * @return int The id of the default content page
 	 */
 	function GetDefaultContent()
 	{
@@ -424,8 +424,7 @@ class ContentOperations
     /**
      * Updates the hierarchy position of one item
 	 *
-	 * @param integer $contentid The content id to update
-	 * @return void
+	 * @param int $contentid The content id to update
      */
 	private function _SetHierarchyPosition($contentid)
 	{
@@ -480,8 +479,6 @@ class ContentOperations
 	 * This is an expensive operation on the database, but must be called once
 	 * each time one or more content pages are updated if positions have changed in
 	 * the page structure.
-	 *
-	 * @return void
 	 */
 	function SetAllHierarchyPositions()
 	{
@@ -530,7 +527,7 @@ class ContentOperations
 	/**
 	 * Loads a set of content objects into the cached tree.
 	 *
-	 * @param boolean $loadcontent If false, only create the nodes in the tree, don't load the content objects
+	 * @param bool $loadcontent If false, only create the nodes in the tree, don't load the content objects
 	 * @return cms_content_tree The cached tree of content
 	 */
 	function &GetAllContentAsHierarchy($loadcontent = false)
@@ -664,9 +661,9 @@ class ContentOperations
 	/**
 	 * Loads additional, active children into a given tree object
 	 *
-	 * @param integer $id The parent of the content objects to load into the tree
-	 * @param boolean $loadprops If true, load the properties of all loaded content objects
-	 * @param boolean $all If true, load all content objects, even inactive ones.
+	 * @param int $id The parent of the content objects to load into the tree
+	 * @param bool $loadprops If true, load the properties of all loaded content objects
+	 * @param bool $all If true, load all content objects, even inactive ones.
 	 * @param array   $explicit_ids (optional) array of explicit content ids to load
 	 * @author Ted Kulp
 	 */
@@ -764,8 +761,7 @@ class ContentOperations
 	/**
 	 * Sets the default content to the given id
 	 *
-	 * @param integer $id The id to set as default
-	 * @return void
+	 * @param int $id The id to set as default
 	 * @author Ted Kulp
 	 */
 	function SetDefaultContent($id)
@@ -791,7 +787,7 @@ class ContentOperations
 	 * Caution:  it is entirely possible that this method (and other similar methods of loading content) will result in a memory outage
 	 * if there are large amounts of content objects AND/OR large amounts of content properties.  Use with caution.
 	 *
-	 * @param boolean $loadprops Not implemented
+	 * @param bool $loadprops Not implemented
 	 * @return array The array of content objects
 	 */
 	function &GetAllContent($loadprops=true)
@@ -822,13 +818,13 @@ class ContentOperations
 	 * @param string $current The currently selected content object.  If none is given, we show all items.
 	 * @param string $parent The parent of the currently selected content object. If none is given, we show all items.
 	 * @param string $name The html name of the dropdown
-	 * @param boolean $allowcurrent Overrides the logic if $current and/or $parent are passed. Defaults to false.
-	 * @param boolean $use_perms If true, checks authorship permissions on pages and only shows those the current
+	 * @param bool $allowcurrent Overrides the logic if $current and/or $parent are passed. Defaults to false.
+	 * @param bool $use_perms If true, checks authorship permissions on pages and only shows those the current
 	 *                user has access to.
-	 * @param boolean $ignore_current Ignores the value of $current totally by not marking any items as invalid.
-	 * @param boolean $allow_all If true, show all items, even if the content object
+	 * @param bool $ignore_current Ignores the value of $current totally by not marking any items as invalid.
+	 * @param bool $allow_all If true, show all items, even if the content object
 	 *                           doesn't have a valid link. Defaults to false.
-	 * @param boolean $use_name if true use Name() else use MenuText() Defaults to using the system preference.
+	 * @param bool $use_name if true use Name() else use MenuText() Defaults to using the system preference.
 	 * @return string The html dropdown of the hierarchy
 	 */
 	function CreateHierarchyDropdown($current = '', $parent = '', $name = 'parent_id', $allowcurrent = 0,
@@ -944,7 +940,7 @@ class ContentOperations
 	/**
 	 * Gets the content id of the page marked as default
 	 *
-	 * @return integer The id of the default page. false if not found.
+	 * @return int The id of the default page. false if not found.
 	 */
 	function GetDefaultPageID()
 	{
@@ -956,7 +952,7 @@ class ContentOperations
 	 * Returns the content id given a valid content alias.
 	 *
 	 * @param string $alias The alias to query
-	 * @return integer The resulting id.  null if not found.
+	 * @return int The resulting id.  null if not found.
 	 */
 	function GetPageIDFromAlias( $alias )
 	{
@@ -969,7 +965,7 @@ class ContentOperations
 	 * Returns the content id given a valid hierarchical position.
 	 *
 	 * @param string $position The position to query
-	 * @return integer The resulting id.  false if not found.
+	 * @return int The resulting id.  false if not found.
 	 */
 	function GetPageIDFromHierarchy($position)
 	{
@@ -989,7 +985,7 @@ class ContentOperations
 	/**
 	 * Returns the content alias given a valid content id.
 	 *
-	 * @param integer $id The content id to query
+	 * @param int $id The content id to query
 	 * @return string The resulting content alias.  false if not found.
 	 */
 	function GetPageAliasFromID( $id )
@@ -1078,9 +1074,9 @@ class ContentOperations
 	 *
 	 * @since 2.0
 	 * @author Robert Campbell <calguy1000@hotmail.com>
-	 * @param integer $test_id Page ID to test
-	 * @param integer $base_id (optional) Page ID to act as the base page.  The current page is used if not specified.
-	 * @return boolean
+	 * @param int $test_id Page ID to test
+	 * @param int $base_id (optional) Page ID to act as the base page.  The current page is used if not specified.
+	 * @return bool
 	 */
 	public function CheckParentage($test_id,$base_id = null)
 	{

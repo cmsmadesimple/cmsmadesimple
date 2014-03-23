@@ -22,14 +22,17 @@
  * Class definition and methods for Section Header content type
  *
  * @package CMS
+ * @subpackage Content Types
  * @license GPL
  */
 
 /**
- * Class for CMS Made Simple Section Header content type
+ * Implements the CMS Made Simple Section Header content type
+ *
+ * Section headers are logical ways to organize content.  They usually appear in navigations, but are not navigable.
  *
  * @package CMS
- * @version $Revision$
+ * @subpackage Content Types
  * @license GPL
  */
 class SectionHeader extends ContentBase
@@ -46,7 +49,7 @@ class SectionHeader extends ContentBase
 		$this->RemoveProperty('page_url','');
 		$this->SetURL(''); // url will be lost when going back to a content page.
 
-#Turn off caching
+        // Turn off caching
 		$this->mCachable = false;
     }
 

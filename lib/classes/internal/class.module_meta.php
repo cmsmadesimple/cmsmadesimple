@@ -85,7 +85,7 @@ final class module_meta
    *
    * @param string capability name
    * @param array optional capability parameters
-   * @param boolean optional test value.
+   * @param bool optional test value.
    * @return array of matching module names
    */
   public function module_list_by_capability($capability,$params = array(),$returnvalue = TRUE)

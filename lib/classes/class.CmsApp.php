@@ -243,7 +243,7 @@ final class CmsApp {
 	 *
 	 * @see CmsApp::GetModuleInstance()
 	 * @since 1.9
-	 * @return array
+	 * @return string[]
 	 */
 	public function GetAvailableModules()
 	{
@@ -276,7 +276,6 @@ final class CmsApp {
 	 * @final
 	 * @internal
 	 * @ignore
-	 * @return void
 	 * @param ADOConnection $connection
 	 */
 	final public function _setDb(ADOConnection $conn,$dbprefix = null)
@@ -291,7 +290,6 @@ final class CmsApp {
 	 * @final
 	 * @internal
 	 * @ignore
-	 * @return void
 	 * @param string database prefix.
 	 */
 	final public function _setDbPrefix($str = null)
@@ -569,7 +567,7 @@ final class CmsApp {
 	 * @since 1.11.2
 	 * @author Robert Campbell
 	 * @param string $state A valid state name (see the state list above).  It is recommended that the class constants be used.
-	 * @return boolean
+	 * @return bool
 	 */
 	public function test_state($state)
 	{
@@ -602,7 +600,6 @@ final class CmsApp {
 	 * @since 1.11.2
 	 * @author Robert Campbell
 	 * @param string The state.  We recommend you use the class constants for this.
-	 * @return void
 	 */
     public function add_state($state)
     {
@@ -621,7 +618,6 @@ final class CmsApp {
 	 * @since 1.11.2
 	 * @author Robert Campbell
 	 * @param string The state.  We recommend you use the class constants for this.
-	 * @return void
 	 */
     public function remove_state($state)
     {
@@ -640,7 +636,7 @@ final class CmsApp {
 	 *
 	 * @since 1.11.2
 	 * @author Robert Campbell
-	 * @return boolean
+	 * @return bool
 	 */
     public function is_frontend_request()
     {

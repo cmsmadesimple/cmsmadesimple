@@ -49,7 +49,6 @@ class CmsLayoutStylesheetQuery extends CmsDbQueryBase
 	 * Execute the query in this object.
 	 *
 	 * @throws CmsSQLErrorException
-	 * @return void
 	 */
   public function execute()
   {
@@ -103,7 +102,7 @@ class CmsLayoutStylesheetQuery extends CmsDbQueryBase
 				break;
       }
     }
-    
+
     if( count($where) ) $query .= ' WHERE '.implode(' AND ',$where);
     $query .= ' ORDER BY '.$this->_sortby.' '.$this->_sortorder;
 

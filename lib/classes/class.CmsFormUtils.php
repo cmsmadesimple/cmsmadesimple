@@ -1,6 +1,6 @@
 <?php
 
-final class CmsFormUtils 
+final class CmsFormUtils
 {
   private static $_activated_wysiwyg = array();
   private static $_activated_syntax;
@@ -57,7 +57,7 @@ final class CmsFormUtils
   {
     if( $name == '' ) return;
     if( !is_array($list_options) || count($list_options) == 0 ) return;
-    
+
     $options = self::create_options($list_options,$selected);
     $elem_id = $name;
 
@@ -117,7 +117,6 @@ final class CmsFormUtils
    * @param string module_name (required)
    * @param string id (optional) the id of the textarea element)
    * @param string stylesheet_name (optional) the name of a stylesheet to include with this area (some WYSIWYG editors may not support this)
-   * @return void
    */
   private static function _add_wysiwyg($module_name,$id = self::NONE,$stylesheet_name = self::NONE)
   {
@@ -136,12 +135,12 @@ final class CmsFormUtils
    * parameters:
    *   name          = (required string) name attribute for the text area element.
    *   id            = (optional string) id attribute for the text area element.  If not specified, name is used.
-   *   class/classname = (optional string) class attribute for the text area element.  Some values will be added to this string.  
+   *   class/classname = (optional string) class attribute for the text area element.  Some values will be added to this string.
    *                   default is cms_textarea
-   *   forcemodule   = (optional string) used to specify the module to enable.  If specified, the module name will be added to the 
+   *   forcemodule   = (optional string) used to specify the module to enable.  If specified, the module name will be added to the
    *                   class attribute.
    *   enablewysiwyg = (optional boolan) used to specify wether a wysiwyg textarea is required.  sets the language to html.
-   *   wantedsyntax  = (optional string) used to specify the language (html,css,php,smarty) to use.  If non empty indicates that a 
+   *   wantedsyntax  = (optional string) used to specify the language (html,css,php,smarty) to use.  If non empty indicates that a
    *                   syntax hilighter module is requested.
    *   cols/width    = (optional integer) columns of the text area (css or the syntax/wysiwyg module may override this)
    *   rows/height   = (optional integer) rows of the text area (css or the syntax/wysiwyg module may override this)
@@ -204,11 +203,11 @@ final class CmsFormUtils
 	$attribs['data-cms-lang'] = trim($wantedsyntax);
 	self::_add_syntax($module->GetName());
       } else {
-	// wanted a syntax module, but couldn't find one... 
+	// wanted a syntax module, but couldn't find one...
 	$module = null;
       }
     }
-    
+
     $required = cms_to_bool(get_parameter_value($parms,'required','false'));
     if( $required ) $attribs['required'] = 'required';
     $attribs['cols'] = get_parameter_value($parms,'cols');

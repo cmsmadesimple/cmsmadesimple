@@ -119,7 +119,7 @@ class CmsModuleInfo implements ArrayAccess
   /**
    * @internal
    * @ignore
-   * @return boolean
+   * @return bool
    */
   public function write_meta()
   {

@@ -56,7 +56,7 @@ final class bulkcontentoperations
 	/**
 	 * Gets a list of the registered bulk operations.
 	 *
-	 * @param boolean $separate_modules Split out the actions from various modules
+	 * @param bool $separate_modules Split out the actions from various modules
 	 *                                  with a horizontal line.
 	 * @return array The list of operations
 	 */

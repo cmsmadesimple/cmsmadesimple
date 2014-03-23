@@ -82,7 +82,7 @@ class cms_tree_operations
    * @internal
    * @access private
    * @param array The data to import
-   * @param integer (optional) The parent id to load the tree from (default is -1)
+   * @param int (optional) The parent id to load the tree from (default is -1)
    * @param cms_content_tree (optional) The cms_content_tree node to add generated objects to.
    * @return cms_content_tree
    */

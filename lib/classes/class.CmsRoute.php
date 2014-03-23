@@ -76,7 +76,7 @@ class CmsRoute implements ArrayAccess
 	 * @param string $term The route string (or regular expression)
 	 * @param string $key1 The first key. Usually a module name.
 	 * @param array  $defaults An array of parameter defaults for this module.  Only applicable when the destination is a module.
-	 * @param boolean $is_absolute Flag indicating wether the term is a regular expression or an absolute string.
+	 * @param bool $is_absolute Flag indicating wether the term is a regular expression or an absolute string.
 	 * @param string $key2 The second key.
 	 * @param string $key3 The second key.
 	 */
@@ -103,7 +103,7 @@ class CmsRoute implements ArrayAccess
 	 * @param string $term The route string (or regular expression)
 	 * @param string $key1 The first key. Usually a module name.
 	 * @param array  $defaults An array of parameter defaults for this module.  Only applicable when the destination is a module.
-	 * @param boolean $is_absolute Flag indicating wether the term is a regular expression or an absolute string.
+	 * @param bool $is_absolute Flag indicating wether the term is a regular expression or an absolute string.
 	 * @param string $key2 The second key.
 	 * @param string $key3 The second key.
 	 */
@@ -183,7 +183,7 @@ class CmsRoute implements ArrayAccess
 	 * Retrieve the page id, if the destination is a content page.
 	 *
 	 * @deprecated
-	 * @return integer Page id, or null.
+	 * @return int Page id, or null.
 	 */
 	public function get_content()
 	{
@@ -205,7 +205,7 @@ class CmsRoute implements ArrayAccess
 	 * Test wether this route is for a page.
 	 *
 	 * @deprecated
-	 * @return boolean
+	 * @return bool
 	 */
 	public function is_content()
 	{
@@ -229,8 +229,8 @@ class CmsRoute implements ArrayAccess
 	 * is performed.
 	 *
 	 * @param string $str The input string
-	 * @param boolean $exact Perform an exact string match rather than depending on the route values.
-	 * @return boolean
+	 * @param bool $exact Perform an exact string match rather than depending on the route values.
+	 * @return bool
 	 */
 	public function matches($str,$exact = false)
 	{

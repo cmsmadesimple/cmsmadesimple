@@ -86,7 +86,7 @@ class CmsNls
    * Matches are achieved by checking name, isocode, fullname, and then aliases
    * 
    * @param string $str The test string
-   * @return boolean
+   * @return bool
    */
   public function matches($str)
   {

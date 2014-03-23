@@ -22,13 +22,18 @@
  * Class definition and methods for Page Link content type
  *
  * @package CMS
+ * @subpackage Content Types
  * @license GPL
  */
 
 /**
- * Class for CMS Made Simple Page Link content type
+ * Implements the PageLink content type.
+ *
+ * This content type simply provides a way to manage additional links to internal content pages
+ * that may be in another place in the page hierarchy.
  *
  * @package CMS
+ * @subpackage Content Types
  * @version $Revision$
  * @license GPL
  */
@@ -55,7 +60,7 @@ class PageLink extends ContentBase
 		$this->RemoveProperty('secure',0);
 		$this->AddProperty('page',3,self::TAB_MAIN);
 		$this->AddProperty('params',4,self::TAB_OPTIONS);
-		
+
 		//Turn off caching
 		$this->mCachable = false;
     }
@@ -121,7 +126,7 @@ class PageLink extends ContentBase
 			$tmp = $contentops->CreateHierarchyDropdown($this->mId, $this->GetPropertyValue('page'), 'page', 1, 0, 0, 0);
 			if( !empty($tmp) ) return array(lang('destination_page').':',$tmp);
 			break;
-	
+
 		case 'params':
 			$val = cms_htmlentities($this->GetPropertyValue('params'));
 			return array(lang('additional_params').':','<input type="text" name="params" value="'.$val.'" />');
@@ -148,7 +153,7 @@ class PageLink extends ContentBase
     {
 		$page = $this->GetPropertyValue('page');
 		$params = $this->GetPropertyValue('params');
-      
+
 		$gCms = cmsms();
 		$contentops = $gCms->GetContentOperations();
 		$destcontent = $contentops->LoadContentFromId($page);
@@ -157,7 +162,7 @@ class PageLink extends ContentBase
 			$url .= $params;
 			return $url;
 		}
-    } 
+    }
 }
 
 # vim:ts=4 sw=4 noet

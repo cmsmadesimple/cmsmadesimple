@@ -188,7 +188,7 @@ class Smarty_CMS extends SmartyBC
    * @param string   $type       plugin type
    * @param string   $tag        name of template tag
    * @param callback $callback   PHP callback to register
-   * @param boolean  $cacheable  if true (default) this fuction is cachable
+   * @param bool  $cacheable  if true (default) this fuction is cachable
    * @param array    $cache_attr caching attributes if any
    * @return Smarty_Internal_Templatebase current Smarty_Internal_Templatebase (or Smarty or Smarty_Internal_Template) instance for chaining
    * @throws SmartyException when the plugin tag is invalid
@@ -211,7 +211,7 @@ class Smarty_CMS extends SmartyBC
    * @param string $template
    * @param string $callback
    * @param string $script
-   * @return boolean true on success, false on failure
+   * @return bool true on success, false on failure
    */	
   public function defaultPluginHandler($name, $type, $template, &$callback, &$script, &$cachable)
   {
@@ -250,7 +250,7 @@ class Smarty_CMS extends SmartyBC
    * Test if a smarty plugin with the specified name already exists.
    *
    * @param string the plugin name
-   * @return boolean
+   * @return bool
    */
   public function is_registered($name)
   {
@@ -280,9 +280,9 @@ class Smarty_CMS extends SmartyBC
    * @param mixed $template
    * @param int $cache_id
    * @param mixed $parent
-   * @param boolean $display
-   * @param boolean $merge_tpl_vars
-   * @param boolean $no_output_filter
+   * @param bool $display
+   * @param bool $merge_tpl_vars
+   * @param bool $no_output_filter
    * @return mixed
    */	
   public function fetch($template = null,$cache_id = null, $compile_id = null, $parent = null, $display = false, $merge_tpl_vars = true, $no_output_filter = false)

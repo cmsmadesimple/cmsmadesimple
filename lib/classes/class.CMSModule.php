@@ -252,8 +252,8 @@ abstract class CMSModule
    * This function should not be overridden
    *
    * @final
+   * @internal
    * @return mixed module call output.
-   * @ignore
    */
   final static public function function_plugin($params,&$template)
   {
@@ -273,10 +273,9 @@ abstract class CMSModule
    * @since 1.11
    * @param string  $name The plugin name
    * @param string  $type The plugin type (function,compiler,block, etc)
-   * @param mixed   $callback The function callback (must be a static function)
-   * @param boolean $cachable Wether this function is cachable.
-   * @param integer $usage Indicates frontend (0), or frontend and backend (1) availability.
-   * @return void
+   * @param callback $callback The function callback (must be a static function)
+   * @param bool $cachable Wether this function is cachable.
+   * @param int $usage Indicates frontend (0), or frontend and backend (1) availability.
    */
   public function RegisterSmartyPlugin($name,$type,$callback,$cachable = TRUE,$usage = 0)
   {
@@ -294,7 +293,6 @@ abstract class CMSModule
    * @author calguy1000
    * @since 1.11
    * @param string $name The smarty plugin name.  If no name is specified all smarty plugins registered to this module will be removed.
-   * @return void
    */
   public function RemoveSmartyPlugin($name = '')
   {
@@ -313,11 +311,10 @@ abstract class CMSModule
    *
    * Note:
    * @final
-   * @return void
    * @see CMSModule::SetParameters
    * @see can_cache_output
-   * @param boolean $forcedb Indicate wether this registration should be forced to be entered in the database. Default value is false (for compatibility)
-   * @param mixed $cachable Indicate wether this plugins output should be cachable.  If null, use the site preferences, and the can_cache_output method.  Otherwise a boolean is expected.
+   * @param bool $forcedb Indicate wether this registration should be forced to be entered in the database. Default value is false (for compatibility)
+   * @param bool|null $cachable Indicate wether this plugins output should be cachable.  If null, use the site preferences, and the can_cache_output method.  Otherwise a bool is expected.
    * @deprecated
    */
   final public function RegisterModulePlugin($forcedb = FALSE,$cachable = false)
@@ -346,7 +343,7 @@ abstract class CMSModule
    *
    * @since 1.11
    * @author Robert Campbell
-   * @return boolean
+   * @return bool
    */
   final public function can_cache_output()
   {
@@ -360,7 +357,7 @@ abstract class CMSModule
    *
    * @since 1.11
    * @author Robert Campbell
-   * @return boolean
+   * @return bool
    */
   public function AllowSmartyCaching()
   {
@@ -427,7 +424,7 @@ abstract class CMSModule
    * Returns the URL path to the module directory.
    *
    * @final
-   * @param boolean $use_ssl Optional generate an URL using HTTPS path
+   * @param bool $use_ssl Optional generate an URL using HTTPS path
    * @return string The full path to the module directory.
    */
   final public function GetModuleURLPath($use_ssl=false)
@@ -499,7 +496,7 @@ abstract class CMSModule
    * Do this by returning true.
    *
    * @param  array $request The input request.  This can be used to test conditions wether or not admin output should be suppressed.
-   * @return boolean
+   * @return bool
    */
   public function SuppressAdminOutput(&$request)
   {
@@ -515,7 +512,6 @@ abstract class CMSModule
    * @see SetParameters
    * @param string $routeregex Regular Expression Route to register
    * @param array $defaults Associative array containing defaults for parameters that might not be included in the url
-   * @return void
    */
   final public function RegisterRoute($routeregex, $defaults = array())
   {
@@ -529,7 +525,6 @@ abstract class CMSModule
    * @abstract
    * @since 1.11
    * @author Robert Campbell
-   * @return void
    */
   public function CreateStaticRoutes() {}
 
@@ -557,8 +552,8 @@ abstract class CMSModule
    * @param string Module Name
    * @param array  Hash data
    * @param array  A map of param names and type information
-   * @param boolean A flag indicating wether unknown keys in the input data should be allowed.
-   * @param boolean A flag indicating wether keys should be treated as strings and cleaned.
+   * @param bool A flag indicating wether unknown keys in the input data should be allowed.
+   * @param bool A flag indicating wether keys should be treated as strings and cleaned.
    */
   private function _cleanParamHash($modulename,$data,$map = false, $allow_unknown = false,$clean_keys = true)
   {
@@ -667,7 +662,6 @@ abstract class CMSModule
    * @see InitializeFrontend()
    * @see InitializeAdmin()
    * @deprecated
-   * @return void
    */
   function SetParameters() {}
 
@@ -682,7 +676,6 @@ abstract class CMSModule
    * @see RegisterRoute
    * @see RestrictUnknownParams
    * @see RegisterModulePlugin
-   * @return void
    */
   protected function InitializeFrontend()
   {
@@ -697,7 +690,6 @@ abstract class CMSModule
    *
    * @abstract
    * @see CreateParameter
-   * @return void
    */
   protected function InitializeAdmin()
   {
@@ -711,8 +703,7 @@ abstract class CMSModule
    * @see SetParameterType
    * @see CreateParameter
    * @final
-   * @param boolean $flag Indicaties wether unknown params should be restricted.
-   * @return void
+   * @param bool $flag Indicaties wether unknown params should be restricted.
    */
   final public function RestrictUnknownParams($flag = true)
   {
@@ -734,7 +725,6 @@ abstract class CMSModule
    * @final
    * @param string $param Parameter name;
    * @param define $type  Parameter type;
-   * @return void;
    */
   final public function SetParameterType($param, $type)
   {
@@ -765,8 +755,7 @@ abstract class CMSModule
    * @param string $param Parameter name;
    * @param string $defaultval Default parameter value
    * @param string $helpstring Help String
-   * @param boolean $optional Flag indicating wether this parameter is optional or required.
-   * @return void;
+   * @param bool $optional Flag indicating wether this parameter is optional or required.
    */
   final public function CreateParameter($param, $defaultval='', $helpstring='', $optional=true)
   {
@@ -800,7 +789,7 @@ abstract class CMSModule
    * Returns whether this module should only be loaded from the admin
    *
    * @abstract
-   * @return boolean
+   * @return bool
    */
   public function IsAdminOnly()
   {
@@ -885,7 +874,7 @@ abstract class CMSModule
    * @param string $blockName Content block name
    * @param mixed  $value     Content block value
    * @param array  $params    Associative array containing content block parameters
-   * @param boolean $adding   A flag indicating wether the content editor is in create mode (adding) vs. edit mod.
+   * @param bool $adding   A flag indicating wether the content editor is in create mode (adding) vs. edit mod.
    * @return mixed Either an array with two elements (prompt, and xhtml element) or a string containing only the xhtml input element.
    */
   function GetContentBlockInput($blockName,$value,$params,$adding = false)
@@ -905,7 +894,7 @@ abstract class CMSModule
    * @param string $blockName Content block name
    * @param array  $blockParams Content block parameters
    * @param array  $inputParams input parameters
-   * @return mixed The content block value if possible.
+   * @return mixed|false The content block value if possible.
    */
   function GetContentBlockValue($blockName,$blockParams,$inputParams)
   {
@@ -938,7 +927,6 @@ abstract class CMSModule
    * @final
    * @param string $label A label for the action
    * @param string $action A module action name.
-   * @return void
    */
   final public function RegisterBulkContentFunction($label,$action)
   {
@@ -962,7 +950,7 @@ abstract class CMSModule
    * secondary functions into other files.
    *
    * @abstract
-   * @return mixed FALSE indicates no error.  Any other value will be used as an error message.
+   * @return string|false A value of FALSE indicates no error.  Any other value will be used as an error message.
    */
   public function Install()
   {
@@ -1003,7 +991,7 @@ abstract class CMSModule
    * in your module directory to do uninstall operations.
    *
    * @abstract
-   * @return mixed FALSE indicates that the module uninstalled correctly, any other value indicates an error message.
+   * @return string|false A result of FALSE indicates that the module uninstalled correctly, any other value indicates an error message.
    */
   public function Uninstall()
   {
@@ -1028,11 +1016,11 @@ abstract class CMSModule
   }
 
   /**
-   * Function that gets called upon module uninstall, and returns a boolean to indicate whether or
+   * Function that gets called upon module uninstall, and returns a bool to indicate whether or
    * not the core should remove all module events, event handlers, module templates, and preferences.
    * The module must still remove its own database tables and permissions
    * @abstract
-   * @return boolean whether the core may remove all module events, event handles, module templates, and preferences on uninstall (defaults to true)
+   * @return bool Whether the core may remove all module events, event handles, module templates, and preferences on uninstall (defaults to true)
    */
   public function AllowUninstallCleanup()
   {
@@ -1075,7 +1063,7 @@ abstract class CMSModule
    *
    * @param string $oldversion The version we are upgrading from
    * @param string $newversion The version we are upgrading to
-   * @return boolean
+   * @return bool
    */
   public function Upgrade($oldversion, $newversion)
   {
@@ -1114,7 +1102,7 @@ abstract class CMSModule
    * @internal
    * @access private
    * @final
-   * @return boolean
+   * @return bool
    */
   final public function CheckForDependents()
   {
@@ -1134,7 +1122,7 @@ abstract class CMSModule
    * @final
    * @return string XML Text
    * @param string $message reference to returned message.
-   * @param integer $filecount reference to returned file count.
+   * @param int $filecount reference to returned file count.
    */
   final public function CreateXMLPackage( &$message, &$filecount )
   {
@@ -1148,7 +1136,7 @@ abstract class CMSModule
    * default.
    *
    * @abstract
-   * @return boolean
+   * @return bool
    */
   public function HasAdmin()
   {
@@ -1199,7 +1187,7 @@ abstract class CMSModule
    * Defaults to true.
    *
    * @abstract
-   * @return boolean
+   * @return bool
    */
   public function VisibleToAdminUser()
   {
@@ -1211,7 +1199,7 @@ abstract class CMSModule
    * {cms_module module='name'}.	Returns false by default.
    *
    * @abstract
-   * @return boolean
+   * @return bool
    */
   public function IsPluginModule()
   {
@@ -1229,7 +1217,7 @@ abstract class CMSModule
    *
    * @since 1.10
    * @abstract
-   * @return boolean
+   * @return bool
    */
   public function LazyLoadFrontend()
   {
@@ -1247,7 +1235,7 @@ abstract class CMSModule
    *
    * @since 1.10
    * @abstract
-   * @return boolean
+   * @return bool
    */
   public function LazyLoadAdmin()
   {
@@ -1266,7 +1254,7 @@ abstract class CMSModule
    * @abstract
    * @param string $capability an id specifying which capability to check for, could be "wysiwyg" etc.
    * @param array  $params An associative array further params to get more detailed info about the capabilities. Should be syncronized with other modules of same type
-   * @return boolean
+   * @return bool
    */
   public function HasCapability($capability, $params = array())
   {
@@ -1352,7 +1340,7 @@ abstract class CMSModule
    * @param string $name The Name of the action to perform
    * @param string $id The ID of the module
    * @param string $params The parameters targeted for this module
-   * @param integer $returnid The current page id that is being displayed.
+   * @param int $returnid The current page id that is being displayed.
    * @return string output XHTML.
    */
   public function DoAction($name, $id, $params, $returnid='')
@@ -1392,7 +1380,7 @@ abstract class CMSModule
    * @param string The action name
    * @param string The action identifier
    * @param array  The action params
-   * @param integer The current page id.
+   * @param int The current page id.
    * @return string The action output.
    */
   final public function DoActionBase($name, $id, $params, $returnid='')
@@ -1539,7 +1527,7 @@ abstract class CMSModule
    * @param string $action The name of the action that this form should do when the form is submitted
    * @param string $method Method to use for the form tag.  Defaults to 'post'
    * @param string $enctype Optional enctype to use, Good for situations where files are being uploaded
-   * @param boolean $inline A flag to determine if actions should be handled inline (no moduleinterface.php -- only works for frontend)
+   * @param bool $inline A flag to determine if actions should be handled inline (no moduleinterface.php -- only works for frontend)
    * @param string $idsuffix Text to append to the end of the id and name of the form
    * @param array $params Extra parameters to pass along when the form is submitted
    * @deprecated
@@ -1559,7 +1547,7 @@ abstract class CMSModule
    * @param string $returnid The page id to eventually return to when the module is finished it's task
    * @param string $method Method to use for the form tag.  Defaults to 'post'
    * @param string $enctype Optional enctype to use, Good for situations where files are being uploaded
-   * @param boolean $inline A flag to determine if actions should be handled inline (no moduleinterface.php -- only works for frontend)
+   * @param bool $inline A flag to determine if actions should be handled inline (no moduleinterface.php -- only works for frontend)
    * @param string $idsuffix Text to append to the end of the id and name of the form
    * @param array $params Extra parameters to pass along when the form is submitted
    * @param string $extra Text to append to the <form>-statement, for instanse for javascript-validation code
@@ -1982,8 +1970,8 @@ abstract class CMSModule
    * @param string $id The id given to the module on execution
    * @param string $name The html name of the input
    * @param string $addttext Any additional text that should be added into the tag when rendered
-   * @param integer $size The size of the text field associated with the file upload field.  Some browsers may not respect this value.
-   * @param integer $maxlength The maximim length of the content of the text field associated with the file upload field.  Some browsers may not respect this value.
+   * @param int $size The size of the text field associated with the file upload field.  Some browsers may not respect this value.
+   * @param int $maxlength The maximim length of the content of the text field associated with the file upload field.  Some browsers may not respect this value.
    * @deprecated
    * @return string
    */
@@ -2042,7 +2030,7 @@ abstract class CMSModule
    * @param string $selecteditems An array of items in the list that should default to selected.
    * @param string $size The number of rows to be visible in the list (before scrolling).
    * @param string $addttext Any additional text that should be added into the tag when rendered
-   * @param boolean $multiple indicates wether multiple selections are allowed (defaults to true)
+   * @param bool $multiple indicates wether multiple selections are allowed (defaults to true)
    * @return string
    * @deprecated
    */
@@ -2148,10 +2136,10 @@ abstract class CMSModule
    * @param string $contents The text that will have to be clicked to follow the link
    * @param string $params An array of params that should be inlucded in the URL of the link.	 These should be in a $key=>$value format.
    * @param string $warn_message Text to display in a javascript warning box.  If they click no, the link is not followed by the browser.
-   * @param boolean $onlyhref A flag to determine if only the href section should be returned
-   * @param boolean $inline A flag to determine if actions should be handled inline (no moduleinterface.php -- only works for frontend)
+   * @param bool $onlyhref A flag to determine if only the href section should be returned
+   * @param bool $inline A flag to determine if actions should be handled inline (no moduleinterface.php -- only works for frontend)
    * @param string $addtext Any additional text that should be added into the tag when rendered
-   * @param boolean $targetcontentonly A flag indicating that the output of this link should target the content area of the destination page.
+   * @param bool $targetcontentonly A flag indicating that the output of this link should target the content area of the destination page.
    * @param string $prettyurl An optional pretty url segment (relative to the root of the site) to use when generating the link.
    * @return string
    */
@@ -2173,10 +2161,10 @@ abstract class CMSModule
    * @param string $contents The text that will have to be clicked to follow the link
    * @param string $params An array of params that should be inlucded in the URL of the link.	 These should be in a $key=>$value format.
    * @param string $warn_message Text to display in a javascript warning box.  If they click no, the link is not followed by the browser.
-   * @param boolean $onlyhref A flag to determine if only the href section should be returned
-   * @param boolean $inline A flag to determine if actions should be handled inline (no moduleinterface.php -- only works for frontend)
+   * @param bool $onlyhref A flag to determine if only the href section should be returned
+   * @param bool $inline A flag to determine if actions should be handled inline (no moduleinterface.php -- only works for frontend)
    * @param string $addttext Any additional text that should be added into the tag when rendered
-   * @param boolean $targetcontentonly A flag to determine if the link should target the default content are of the destination page.
+   * @param bool $targetcontentonly A flag to determine if the link should target the default content are of the destination page.
    * @param string $prettyurl An optional pretty url segment (related to the root of the website) for a pretty url.
    * @return string
    */
@@ -2196,10 +2184,10 @@ abstract class CMSModule
    * @since 1.10
    * @param string  $id The module action id (cntnt01 indicates that the defaul content block of the destination page should be used).
    * @param string  $action The module action name
-   * @param integer $returnid The destination page.
+   * @param int $returnid The destination page.
    * @param hash    $params Areay of parameters for the URL.  These will be ignored if the prettyurl argument is specified.
-   * @param boolean $inline Wether the target of the output link is the same tag on the same page.
-   * @param boolean $targetcontentonly Wether the target of the output link targets the content area of the destination page.
+   * @param bool $inline Wether the target of the output link is the same tag on the same page.
+   * @param bool $targetcontentonly Wether the target of the output link targets the content area of the destination page.
    * @param string  $prettyurl An optional url segment related to the root of the page for pretty url purposes.
    * @return string.
    */
@@ -2219,9 +2207,9 @@ abstract class CMSModule
    * @abstract
    * @param string $id The module action id (cntnt01 indicates that the defaul content block of the destination page should be used).
    * @param string $action The module action name
-   * @param integer $returnid The destination page.
+   * @param int $returnid The destination page.
    * @param array   $params Areay of parameters for the URL.  These will be ignored if the prettyurl argument is specified.
-   * @param boolean $inline Wether the target of the output link is the same tag on the same page.
+   * @param bool $inline Wether the target of the output link is the same tag on the same page.
    * @return string
    */
   public function get_pretty_url($id,$action,$returnid='',$params=array(),$inline=false)
@@ -2233,7 +2221,7 @@ abstract class CMSModule
    * Returns the xhtml equivalent of an href link for content links.	This is basically a nice
    * little wrapper to make sure that we go back to where we want and that it's xhtml complient
    *
-   * @param integer $pageid the page id of the page we want to direct to
+   * @param int $pageid the page id of the page we want to direct to
    * @param string $contents The optional text or XHTML contents of the generated link
    * @return string
    * @deprecated
@@ -2253,7 +2241,7 @@ abstract class CMSModule
    * @param string $returnid The id to return to when the module is finished it's task
    * @param string $contents The text that will have to be clicked to follow the link
    * @param string $params An array of params that should be inlucded in the URL of the link.	 These should be in a $key=>$value format.
-   * @param boolean $onlyhref A flag to determine if only the href section should be returned
+   * @param bool $onlyhref A flag to determine if only the href section should be returned
    * @return string
    */
   public function CreateReturnLink($id, $returnid, $contents='', $params=array(), $onlyhref=false)
@@ -2276,7 +2264,7 @@ abstract class CMSModule
    * @since 1.11
    * @author Robert Campbell
    * @param string $tab The tab name.  If empty, the current tab is used.
-   * @param mixed  $params An assoiciative array of params, or null
+   * @param mixed|null  $params An assoiciative array of params, or null
    * @param string $action The action name (if not specified, defaultadmin is assumed)
    */
   public function RedirectToAdminTab($tab = '',$params = '',$action = '')
@@ -2296,7 +2284,7 @@ abstract class CMSModule
    * @param string $returnid The action that this form should do when the form is submitted
    * @param string $action The id to eventually return to when the module is finished it's task
    * @param string $params An array of params that should be inlucded in the URL of the link.	 These should be in a $key=>$value format.
-   * @param boolean $inline A flag to determine if actions should be handled inline (no moduleinterface.php -- only works for frontend)
+   * @param bool $inline A flag to determine if actions should be handled inline (no moduleinterface.php -- only works for frontend)
    */
   public function RedirectForFrontEnd($id, $returnid, $action, $params = array(), $inline = true )
   {
@@ -2310,7 +2298,7 @@ abstract class CMSModule
    * @param string $action The action that this form should do when the form is submitted
    * @param string $returnid The id to eventually return to when the module is finished it's task
    * @param string $params An array of params that should be inlucded in the URL of the link.	 These should be in a $key=>$value format.
-   * @param boolean $inline A flag to determine if actions should be handled inline (no moduleinterface.php -- only works for frontend)
+   * @param bool $inline A flag to determine if actions should be handled inline (no moduleinterface.php -- only works for frontend)
    */
   public function Redirect($id, $action, $returnid='', $params=array(), $inline=false)
   {
@@ -2340,8 +2328,7 @@ abstract class CMSModule
    * frequently used for this so that the user will return back to the page from which they first
    * entered the module.
    *
-   * @param integer $id Content id to redirect to.
-   * @return void
+   * @param int $id Content id to redirect to.
    */
   public function RedirectContent($id)
   {
@@ -2518,7 +2505,7 @@ abstract class CMSModule
    * @param string $tpl_name The template name
    * @param string $content The template content
    * @param string $modulename The module name, if empty the current module name is used.
-   * @return boolean
+   * @return bool
    */
   final public function SetTemplate($tpl_name, $content, $modulename = '')
   {
@@ -2533,7 +2520,7 @@ abstract class CMSModule
    * @deprecated
    * @param string $tpl_name The Template name, if empty all templates associated with the module are deleted.
    * @param string $modulename The module name, if empty the current module name is used.
-   * @return boolean
+   * @return bool
    */
   final public function DeleteTemplate($tpl_name = '', $modulename = '')
   {
@@ -2548,7 +2535,7 @@ abstract class CMSModule
    * @deprecated
    * @param string  $tpl_name    Template name
    * @param string  $designation Cache Designation
-   * @param boolean $cache       Cache flag
+   * @param bool $cache       Cache flag
    * @param string  $cacheid     Unique cache flag
    * @return string
    */
@@ -2582,7 +2569,7 @@ abstract class CMSModule
    * @deprecated
    * @param string $tpl_name Template name
    * @param string $designation (optional) Designation
-   * @param boolean $cache (optional) Cachable flag
+   * @param bool $cache (optional) Cachable flag
    * @param string $modulename (optional) module name, if empty the current module is used.
    * @return string
    */
@@ -2645,7 +2632,6 @@ abstract class CMSModule
    * @since 1.11
    * @author calguy1000
    * @param string $tab The tab name
-   * @return void
    */
   public function SetCurrentTab($tab)
   {
@@ -2673,7 +2659,7 @@ abstract class CMSModule
    * @final
    * @param string $tabid The tab id
    * @param string $title The tab title
-   * @param boolean $active wether the tab is active or not.
+   * @param bool $active wether the tab is active or not.
    * @param booleban A flag indicating wether this tab is active.
    * @return string
    */
@@ -2764,7 +2750,6 @@ abstract class CMSModule
    *
    * @abstract
    * @param string $contenttype Value to set the content-type header too
-   * @return void
    */
   public function SetContentType($contenttype)
   {
@@ -2779,7 +2764,6 @@ abstract class CMSModule
    * @param string $itemid   useful for working on a specific record (i.e article or user)
    * @param string $itemname item name
    * @param string $action   action name
-   * @return void
    */
   final public function Audit($itemid = '', $itemname, $action)
   {
@@ -2806,7 +2790,7 @@ abstract class CMSModule
    *
    * @since 1.11
    * @author Robert Campbell
-   * @param mixed $str The message.  Accepts either an array of messages or a single string.
+   * @param string|string[] $str The message.  Accepts either an array of messages or a single string.
    */
   public function SetMessage($str)
   {
@@ -2820,7 +2804,7 @@ abstract class CMSModule
    * Outputs errors in a nice error box with a troubleshooting link to the wiki
    *
    * @final
-   * @param mixed $errors array or string of errors to be shown
+   * @param string|string[] $errors array or string of errors to be shown
    * @return string
    */
   public function ShowErrors($errors)
@@ -2835,7 +2819,7 @@ abstract class CMSModule
    *
    * @since 1.11
    * @author Robert Campbell
-   * @param mixed $str The message.  Accepts either an array of messages or a single string.
+   * @param string|string[] $str The message.  Accepts either an array of messages or a single string.
    */
   public function SetError($str)
   {
@@ -2858,7 +2842,6 @@ abstract class CMSModule
    * @final
    * @param string $permission_name Name of the permission to create
    * @param string $permission_text Description of the permission
-   * @return void
    */
   final public function CreatePermission($permission_name, $permission_text = null)
   {
@@ -2879,7 +2862,7 @@ abstract class CMSModule
    *
    * @final
    * @param string $permission_name The name of the permission to check against the current user
-   * @return boolean
+   * @return bool
    */
   final public function CheckPermission($permission_name)
   {
@@ -2893,7 +2876,6 @@ abstract class CMSModule
    *
    * @final
    * @param string $permission_name The name of the permission to remove
-   * @return void
    */
   final public function RemovePermission($permission_name)
   {
@@ -2932,7 +2914,6 @@ abstract class CMSModule
    * @final
    * @param string $preference_name The name of the preference to set
    * @param string $value The value to set it to
-   * @return void
    */
   final public function SetPreference($preference_name, $value)
   {
@@ -2945,7 +2926,7 @@ abstract class CMSModule
    *
    * @final
    * @param string $preference_name The name of the preference to remove.  If empty all preferences associated with the module are removed.
-   * @return boolean
+   * @return bool
    */
   final public function RemovePreference($preference_name='')
   {
@@ -2958,7 +2939,7 @@ abstract class CMSModule
    *
    * @final
    * @param string $prefix
-   * @return mixed array of preference names, or null.
+   * @return string[]|null An array of preference names, or null.
    * @since 2.0
    */
   final public function ListPreferencesByPrefix($prefix)
@@ -2991,8 +2972,8 @@ abstract class CMSModule
    * @final
    * @param string $modulename       The name of the module sending the event, or 'Core'
    * @param string $eventname       The name of the event
-   * @param boolean $removable      Can this event be removed from the list?
-   * @returns mixed If successful, true.  If it fails, false.
+   * @param bool $removable      Can this event be removed from the list?
+   * @returns bool
    */
   final public function AddEventHandler( $modulename, $eventname, $removable = true )
   {
@@ -3025,7 +3006,7 @@ abstract class CMSModule
    * @param string $originator The name of the originating module
    * @param string $eventname The name of the event
    * @param array  $params Array of parameters provided with the event.
-   * @return boolean
+   * @return bool
    */
   public function DoEvent( $originator, $eventname, &$params )
   {
@@ -3079,7 +3060,7 @@ abstract class CMSModule
    * handle incoming events.
    *
    * @abstract
-   * @return boolean
+   * @return bool
    */
   public function HandlesEvents()
   {
@@ -3095,7 +3076,6 @@ abstract class CMSModule
    *
    * @final
    * @param string $eventname The name of the event
-   * @return void
    */
   final public function RemoveEvent( $eventname )
   {
@@ -3112,7 +3092,6 @@ abstract class CMSModule
    * @final
    * @param string $modulename The module name (or Core)
    * @param string $eventname  The name of the event
-   * @return void
    */
   final public function RemoveEventHandler( $modulename, $eventname )
   {
@@ -3127,7 +3106,6 @@ abstract class CMSModule
    * @final
    * @param string $eventname The name of the event
    * @param array  $params The parameters associated with this event.
-   * @return void
    */
   final public function SendEvent( $eventname, $params )
   {
@@ -3139,7 +3117,7 @@ abstract class CMSModule
    *
    * @abstract
    * @param int $priority Notification priority between 1 and 3
-   * @return mixed.  A stdClass object with two properties.... priority (1->3)... and
+   * @return mixed  A stdClass object with two properties.... priority (1->3)... and
    * html, which indicates the text to display for the Notification.
    * Also supports returning an array of stdclass objects.
    */

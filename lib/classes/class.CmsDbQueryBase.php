@@ -102,7 +102,7 @@ abstract class CmsDbQueryBase
 	 *
 	 * If execute has not already been called, this method will call it.
 	 *
-	 * @return integer
+	 * @return int
 	 */
   public function RecordCount()
   {
@@ -160,7 +160,7 @@ abstract class CmsDbQueryBase
 	/**
 	 * Test if the resultset is pointing past the last record in the returned set
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
   public function EOF()
   {

@@ -198,7 +198,7 @@ final class cms_content_cache
    * If the identifier is a string, an alias search is performed.
    *
    * @param mixed Unique identifier
-   * @return boolean
+   * @return bool
    */
   public static function content_exists($identifier)
   {
@@ -224,10 +224,10 @@ final class cms_content_cache
    * @access private
    * @internal
    * @since 1.10.1
-   * @param integer The content Id.
+   * @param int The content Id.
    * @param string  The content alias
    * @param ContentBase The content object.
-   * @return boolean
+   * @return bool
    */
   private static function _add_content($id,$alias,&$obj)
   {
@@ -246,10 +246,10 @@ final class cms_content_cache
   /**
    * Add the content object to the cache
    *
-   * @param integer The content Id.
+   * @param int The content Id.
    * @param string  The content alias
    * @param ContentBase The content object.
-   * @return boolean
+   * @return bool
    */
   public static function add_content($id,$alias,ContentBase& $obj)
   {
@@ -283,7 +283,7 @@ final class cms_content_cache
    * Retrieve a pageid given an alias.
    *
    * @param string Page alias
-   * @return integer id, or FALSE if alias cannot be found in cache.
+   * @return int id, or FALSE if alias cannot be found in cache.
    */
   public static function get_id_from_alias($alias)
   {
@@ -297,7 +297,7 @@ final class cms_content_cache
   /**
    * Retrieve a page alias given an id.
    *
-   * @param integer page id.
+   * @param int page id.
    * @return string alias, or FALSE if id cannot be found in cache.
    */
   public static function get_alias_from_id($id)
@@ -311,7 +311,7 @@ final class cms_content_cache
   /**
    * Indicates wether we have preloaded cached data
    *
-   * @return boolean
+   * @return bool
    */
   public static function have_preloaded()
   {

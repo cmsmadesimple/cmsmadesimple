@@ -104,7 +104,6 @@ final class cms_siteprefs
 	 *
 	 * @param string $key The preference name
 	 * @param string $value The preference value
-	 * @return void
 	 */
 	public static function set($key,$value)
 	{
@@ -126,7 +125,6 @@ final class cms_siteprefs
 	 *
 	 * @param string $key The preference name
 	 * @param bool $like Whether to use preference name approximation
-	 * @return void
 	 */
 	public static function remove($key,$like = FALSE)
 	{

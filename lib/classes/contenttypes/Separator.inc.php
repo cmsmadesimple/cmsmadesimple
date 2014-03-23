@@ -19,17 +19,21 @@
 #$Id$
 
 /**
- * Class definition and methods for Separator content type
+ * Class definition and methods for the Separator content type
  *
  * @package CMS
+ * @subpackage Content Types
  * @license GPL
  */
 
 /**
- * Class for CMS Made Simple Separator content type
+ * Implements the CMS Made Simple Separator content type
+ *
+ * A separator is used simply for navigations to provide a visual separation between menu items.  Typically
+ * as a horizontal or vertical bar.
  *
  * @package CMS
- * @version $Revision$
+ * @subpackage Content Types
  * @license GPL
  */
 class Separator extends ContentBase

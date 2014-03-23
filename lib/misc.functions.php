@@ -36,7 +36,6 @@
  * @author http://www.edoceo.com/
  * @since 0.1
  * @param string $to The url to redirect to
- * @return void
  */
 function redirect($to)
 {
@@ -121,7 +120,6 @@ function redirect($to)
  * Retrieves the URL of the specified page, and performs a redirect
  *
  * @param mixed $alias An integer page id or a string page alias.
- * @return void
  */
 function redirect_to_alias($alias)
 {
@@ -245,7 +243,6 @@ function cms_utf8entities($val)
  * A function to output a backtrace into the generated log file.
  *
  * @see debug_to_log, debug_bt
- * @return void
  * Rolf: Looks like not used
  */
 function debug_bt_to_log()
@@ -286,8 +283,7 @@ function debug_bt_to_log()
 /**
  * A function to generate a backtrace in a readable format.
  *
- * @return void
- * Rolf: looks like not used
+ * This function does not return but echoes output.
  */
 function debug_bt()
 {
@@ -684,7 +680,7 @@ function get_matching_files($dir,$extensions = '',$excludedot = true,$excludedir
  * @param  int     $maxdepth How deep to browse (-1=unlimited)
  * @param  string  $mode     "FULL"|"DIRS"|"FILES"
  * @param  d       $d        for internal use only
- * @return  array
+ * @return string[]
 **/
 function get_recursive_file_list ( $path , $excludes, $maxdepth = -1 , $mode = "FULL" , $d = 0 )
 {
@@ -963,7 +959,7 @@ function ini_get_boolean($str)
 /**
  * Another convenience function to output a human readable function stack trace.
  *
- * @return void
+ * This method uses echo.
  */
 function stack_trace()
 {

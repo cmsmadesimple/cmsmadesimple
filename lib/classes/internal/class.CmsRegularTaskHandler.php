@@ -107,7 +107,7 @@ class CmsRegularTaskHandler
 	 * at the specified time, if it is, then it is executed.
 	 * An audit log is created for each succeeded or failed task
 	 *
-	 * @param integer $time The time that should be considered for all tests, if not specified the current time is used.
+	 * @param int $time The time that should be considered for all tests, if not specified the current time is used.
 	 * @return void.
 	 * @internal
 	 */

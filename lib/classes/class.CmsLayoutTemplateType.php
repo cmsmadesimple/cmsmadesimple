@@ -146,7 +146,7 @@ class CmsLayoutTemplateType
   /**
    * Get the flag indicating if this template type can have a 'default'
    *
-   * @return boolean
+   * @return bool
    */
   public function get_dflt_flag()
   {
@@ -157,7 +157,7 @@ class CmsLayoutTemplateType
   /**
    * Set the flag indicating if this template type can have a 'default'
    *
-   * @param boolean $flag
+   * @param bool $flag
    */
   public function set_dflt_flag($flag = TRUE)
   {
@@ -216,7 +216,7 @@ class CmsLayoutTemplateType
   /**
    * Get the owner of this template type.
    *
-   * @return integer
+   * @return int
    */
   public function get_owner()
   {
@@ -227,7 +227,7 @@ class CmsLayoutTemplateType
   /**
    * Set the owner of this template type
    *
-   * @param integer $owner
+   * @param int $owner
    */
   public function set_owner($owner)
   {
@@ -240,7 +240,7 @@ class CmsLayoutTemplateType
   /**
    * Get the date that this object was created.
    *
-   * @return integerUnix timestamp representing the creation date.  or null if this object has not been saved.
+   * @return intUnix timestamp representing the creation date.  or null if this object has not been saved.
    */
   public function get_create_date()
   {
@@ -250,7 +250,7 @@ class CmsLayoutTemplateType
   /**
    * Get the date that this object was last modified
    *
-   * @return integerUnix timestamp representing the modification date.  or null if this object has not been saved.
+   * @return intUnix timestamp representing the modification date.  or null if this object has not been saved.
    */
   public function get_modified_date()
   {
@@ -310,7 +310,7 @@ class CmsLayoutTemplateType
 	 * Get the content block flag
 	 * The content block flag indicates that this template type requires content blocks
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function get_content_block_flag()
 	{

@@ -50,7 +50,7 @@ class cms_mailer
   /**
    * Constructor
    *
-   * @param boolean $exceptions Optionally disable exceptions, and rely on error strings.
+   * @param bool $exceptions Optionally disable exceptions, and rely on error strings.
    */
   public function __construct($exceptions = true)
   {
@@ -178,7 +178,7 @@ class cms_mailer
   }
 
   /**
-   * Sets the encoding of the message. 
+   * Sets the encoding of the message.
    *
    * Possible values are: 8bit, 7bit, binary, base64, and quoted-printable
    * @param string $encoding
@@ -225,7 +225,7 @@ class cms_mailer
   function SetFrom( $email )
   {
     $this->_mailer->From = $email;
-  } 
+  }
 
   /**
    * Get the real name that the email will be sent from
@@ -247,7 +247,7 @@ class cms_mailer
   }
 
   /**
-   * Gets the SMTP HELO of the message 
+   * Gets the SMTP HELO of the message
    * @return string
    */
   function GetHelo()
@@ -517,7 +517,7 @@ class cms_mailer
 
   /**
    * Get the SMTP server timeout (in seconds).
-   * @return int 
+   * @return int
    */
   function GetSMTPTimeout()
   {
@@ -580,7 +580,7 @@ class cms_mailer
    * Add a "To" address.
    * @param string $address The email address
    * @param string $name    The real name
-   * @return boolean true on success, false if address already used
+   * @return bool true on success, false if address already used
    */
   function AddAddress( $address, $name = '' )
   {
@@ -593,7 +593,7 @@ class cms_mailer
    * @param string $name Set the attachment name
    * @param string $encoding File encoding (see $encoding)
    * @param string $type (mime type for the attachment)
-   * @return boolean true on success, false on failure.
+   * @return bool true on success, false on failure.
    */
   function AddAttachment( $path, $name = '', $encoding = 'base64', $type = 'application/octet-stream' )
   {
@@ -604,7 +604,7 @@ class cms_mailer
    * Add a "BCC" (Blind Carbon Copy) address
    * @param string $addr The email address
    * @param string $name The real name.
-   * @return boolean true on success, false on failure.
+   * @return bool true on success, false on failure.
    */
   function AddBCC( $addr, $name = '' )
   {
@@ -615,7 +615,7 @@ class cms_mailer
    * Add a "CC" (Carbon Copy) address
    * @param string $addr The email address
    * @param string $name The real name.
-   * @return boolean true on success, false on failure.
+   * @return bool true on success, false on failure.
    */
   function AddCC( $addr, $name = '' )
   {
@@ -655,7 +655,7 @@ class cms_mailer
    * Adds a "Reply-to" address.
    * @param string $addr
    * @param string $name
-   * @return boolean
+   * @return bool
    */
   function AddReplyTo( $addr, $name = '' )
   {
@@ -670,7 +670,6 @@ class cms_mailer
    * @param string $filename Name of the attachment.
    * @param string $encoding File encoding (see $Encoding).
    * @param string $type File extension (MIME) type.
-   * @return void
    */
   function AddStringAttachment( $string, $filename, $encoding = 'base64', $type = 'application/octet-stream' )
   {
@@ -717,7 +716,7 @@ class cms_mailer
     $this->_mailer->ClearBCCs();
   }
 
-  /** 
+  /**
    * Clear all recipients on the CC list
    * @see cms_mailer::AddCC
    */
@@ -743,7 +742,7 @@ class cms_mailer
   {
     $this->_mailer->ClearReplyTos();
   }
-  
+
   /**
    * Test if there was an error on the last message send
    * @return bool

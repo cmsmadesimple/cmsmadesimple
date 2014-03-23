@@ -79,7 +79,7 @@ class CmsLayoutCollection
 	/**
 	 * Get the theme id
 	 * Only themes that have been saved to the database have an id.
-	 * @return integer
+	 * @return int
 	 */
   public function get_id()
   {
@@ -114,7 +114,7 @@ class CmsLayoutCollection
 	 * Get the default flag
 	 * Note, only one theme can be the default.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
   public function get_default()
   {
@@ -127,7 +127,7 @@ class CmsLayoutCollection
 	 * Sets the dirty flag.
 	 * Note, only one theme can be the default.
 	 *
-	 * @param boolean $str
+	 * @param bool $str
 	 */
   public function set_default($str)
   {
@@ -182,7 +182,7 @@ class CmsLayoutCollection
 	/**
 	 * Test if this theme has stylesheets attached to it
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function has_stylesheets()
 	{

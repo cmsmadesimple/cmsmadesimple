@@ -181,14 +181,14 @@ final class CmsLangOperations
 
 	  global $CMS_ADMIN_PAGE;
 	  global $CMS_STYLESHEET;
-	  global $CMS_INSTALL_PAGE;    
-	  if (self::CMSMS_ADMIN_REALM == $realm && !isset($CMS_ADMIN_PAGE) && 
-		  !isset($CMS_STYLESHEET) && !isset($CMS_INSTALL_PAGE) && 
+	  global $CMS_INSTALL_PAGE;
+	  if (self::CMSMS_ADMIN_REALM == $realm && !isset($CMS_ADMIN_PAGE) &&
+		  !isset($CMS_STYLESHEET) && !isset($CMS_INSTALL_PAGE) &&
 		  !self::$_allow_nonadmin_lang ) {
 		  trigger_error('Attempt to load admin realm from non admin action');
 		  return '';
 	  }
-  
+
 	  $params = array();
 	  if( count($args) > 2 ) $params = array_slice($args,2);
 	  if( count($params) == 1 && is_array($params[0]) ) $params = $params[0];
@@ -238,22 +238,21 @@ final class CmsLangOperations
    * this method will disable or enable that check.
    *
    * @internal
-   * @param boolean flag
-   * @return void.
+   * @param bool flag
    */
   public static function allow_nonadmin_lang($flag = TRUE)
   {
 	  self::$_allow_nonadmin_lang = $flag;
   }
 
-  
+
   /**
    * Test to see if a language key exists in the current lang file.
    * This function uses the current language.
    *
    * @param string $key The language key
    * @param string $realm The language realm
-   * @return boolean
+   * @return bool
    */
   public static function key_exists($key,$realm = null)
   {

@@ -120,7 +120,7 @@ final class ModuleOperations
    * @param CMSModule $modinstance The instance of the module object
    * @param string $message Reference to a string which will be filled with the message
    *                        created by the run of the method
-   * @param integer $filecount Reference to an interger which will be filled with the
+   * @param int $filecount Reference to an interger which will be filled with the
    *                           total # of files in the package
    * @return string an XML string comprising the module and its files
    */
@@ -183,8 +183,8 @@ final class ModuleOperations
    *
    * @internal
    * @param string $xmlurl The xml data for the package
-   * @param boolean $overwrite Should we overwrite files if they exist?
-   * @param boolean $brief If set to true, less checking is done and no errors are returned
+   * @param bool $overwrite Should we overwrite files if they exist?
+   * @param bool $brief If set to true, less checking is done and no errors are returned
    * @return array A hash of details about the installed module
    */
   function ExpandXMLPackage( $xmluri, $overwrite = 0, $brief = 0 )
@@ -400,7 +400,7 @@ final class ModuleOperations
    *
    * @internal
    * @param string $module The name of the module to install
-   * @param boolean $loadifnecessary If true, loads the module before trying to install it
+   * @param bool $loadifnecessary If true, loads the module before trying to install it
    * @return array Returns a tuple of whether the install was successful and a message if applicable
    */
    public function InstallModule($module)
@@ -672,7 +672,6 @@ final class ModuleOperations
    * @param loadall boolean indicates wether ALL modules in the filesystem should be loaded, default is false
    * @param noadmin boolean indicates that modules marked as admin_only in the database should not be loaded, default is false
    * @param no_lazyload boolean indicates that modules marked as lazy_loadable should be loaded anywayz, default is falze
-   * @return void
    */
   public function LoadModules($loadall = false,$noadmin = false, $no_lazyload = false)
   {
@@ -772,7 +771,7 @@ final class ModuleOperations
    * @internal
    * @param string $module_name The name of the module to upgrade
    * @param string $to_version The destination version
-   * @return boolean Whether or not the upgrade was successful
+   * @return bool Whether or not the upgrade was successful
    */
   public function UpgradeModule( $module_name, $to_version = '')
   {
@@ -872,7 +871,7 @@ final class ModuleOperations
    * Activate a module
    *
    * @param string $module_name
-   * @param boolean $activate flag indicating wether to activate or deactivate the module
+   * @param bool $activate flag indicating wether to activate or deactivate the module
    * @return bool
    */
   public function ActivateModule($module_name,$activate = true)
@@ -1019,7 +1018,7 @@ final class ModuleOperations
    *
    * @param string $module_name The module name
    * @param string $version an optional version string.
-   * @param boolean $force an optional flag to indicate wether the module should be force loaded if necesary.
+   * @param bool $force an optional flag to indicate wether the module should be force loaded if necesary.
    * @return CMSModule
    */
   public function &get_module_instance($module_name,$version = '',$force = FALSE)
@@ -1054,7 +1053,7 @@ final class ModuleOperations
    * Test if the specified module name is a system module
    *
    * @param string $module_name The module name
-   * @return boolean
+   * @return bool
    */
   public function IsSystemModule($module_name)
   {

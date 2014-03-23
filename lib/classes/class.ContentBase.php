@@ -371,7 +371,7 @@ abstract class ContentBase
 	/**
 	 * Set the numeric id of the content item
 	 *
-	 * @param integer Integer id
+	 * @param int Integer id
 	 * @access private
 	 * @internal
 	 */
@@ -444,7 +444,7 @@ abstract class ContentBase
 	/**
 	 * Returns the Owners user id
 	 *
-	 * @return integer
+	 * @return int
 	 */
 	public function Owner()
 	{
@@ -498,7 +498,7 @@ abstract class ContentBase
 	/**
 	 * Return the page tabindex value
 	 *
-	 * @return integer
+	 * @return int
 	 */
 	public function TabIndex()
 	{
@@ -606,7 +606,7 @@ abstract class ContentBase
 	/**
 	 * Return the id of the template associated with this content page.
 	 *
-	 * @return integer.
+	 * @return int.
 	 */
 	public function TemplateId()
 	{
@@ -1036,7 +1036,7 @@ abstract class ContentBase
 	/**
 	 * Returns number of immediate child content items of this content item.
 	 *
-	 * @return integer
+	 * @return int
 	 */
 	public function ChildCount()
 	{
@@ -2161,7 +2161,6 @@ abstract class ContentBase
 	 *
 	 * @param string $name The property name
 	 * @param string $dflt The default value.
-	 * @return void
 	 */
 	protected function RemoveProperty($name,$dflt)
 	{

@@ -21,14 +21,18 @@
 /**
  * Define the link content type
  * @package CMS
+ * @subpackage Content Types
  * @license GPL
  */
 
 /**
- * Class for CMS Made Simple link content type
+ * Implementation of the CMS Made Simple link content type
+ *
+ * Links are content objects that appear in navigations and implement a link to an externl
+ * page or site.
  *
  * @package CMS
- * @version $Revision$
+ * @subpackage Content Types
  * @license GPL
  */
 class Link extends ContentBase

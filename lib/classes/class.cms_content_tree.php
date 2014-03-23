@@ -185,7 +185,7 @@ class cms_content_tree extends cms_tree
 	 *
 	 * @deprecated
 	 * @see cms_tree::get_tag('id')
-	 * @return integer The node id.
+	 * @return int The node id.
 	 */
 	public function getId()
 	{
@@ -279,7 +279,7 @@ class cms_content_tree extends cms_tree
 	 *
 	 * @deprecated
 	 * @see cms_tree::count_children()
-	 * @return integer
+	 * @return int
 	 */
 	public function getChildrenCount()
 	{
@@ -294,7 +294,7 @@ class cms_content_tree extends cms_tree
 	 *
 	 * @deprecated
 	 * @see cms_tree::count_siblings()
-	 * @return integer
+	 * @return int
 	 */
 	public function getSiblingCount()
 	{
@@ -309,7 +309,7 @@ class cms_content_tree extends cms_tree
 	 *
 	 * @deprecated
 	 * @see cms_tree::get_level()
-	 * @return integer
+	 * @return int
 	 */
 	public function getLevel()
 	{

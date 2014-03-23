@@ -21,13 +21,18 @@
 /**
  * Define the error page content type
  * @package CMS
+ * @subpackage Content Types
  * @license GPL
  */
 
 /**
- * Main class for CMS Made Simple ErrorPage content type
+ * Implement the ErrorPage content type
+ *
+ * Error pages are not navigble, do not have their own URLS and typically do not appear in navigations.
+ * They are used for handling different types of errors.
  *
  * @package CMS
+ * @subpackage Content Types
  * @version $Revision$
  * @license GPL
  */
@@ -35,11 +40,11 @@ class ErrorPage extends Content
 {
 	var $doAliasCheck;
 	var $error_types;
-	
+
 	public function __construct()
 	{
 		parent::__construct();
-    
+
 		global $CMS_ADMIN_PAGE;
 		if( isset($CMS_ADMIN_PAGE) ) $this->error_types = array('404' => lang('404description'));
 		$this->doAliasCheck = false;
@@ -56,7 +61,7 @@ class ErrorPage extends Content
 	public function WantsChildren() { return false; }
 	public function IsSystemPage() { return true; }
 	public function HasSearchableContent() { return FALSE; }
-	
+
 	function SetProperties()
 	{
 		parent::SetProperties();
@@ -88,7 +93,7 @@ class ErrorPage extends Content
 		$this->mCachable = false;
 		$this->mActive = true;
 	}
-	
+
     function display_single_element($one,$adding)
     {
 		switch($one) {
@@ -114,7 +119,7 @@ class ErrorPage extends Content
 		// force not searchable.
 		$errors = parent::ValidateData();
 		if ($errors == FALSE) $errors = array();
-    
+
 		//Do our own alias check
 		if ($this->mAlias == '') {
 			$errors[] = lang('nofieldgiven', array(lang('error_type')));

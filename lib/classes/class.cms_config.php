@@ -456,7 +456,7 @@ final class cms_config implements ArrayAccess
    * before overwriting.
    *
    *
-   * @param boolean $verbose indicates whether comments should be stored in the config.php file. 
+   * @param bool $verbose indicates whether comments should be stored in the config.php file. 
    * @param string  $filename An optional complete file specification.  If not specified the standard config file location will be used.
    */
   public function save($verbose = true,$filename = '')

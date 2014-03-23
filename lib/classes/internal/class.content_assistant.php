@@ -52,7 +52,7 @@ class content_assistant
   /**
    * A utility function to test if we are allowed to auto create url paths
    *
-   * @return boolean
+   * @return bool
    */
   public static function auto_create_url()
   {
@@ -64,7 +64,7 @@ class content_assistant
    * A utility function to test if the supplied url path is valid for the supplied content id
    *
    * @param string The partial url path to test
-   * @return boolean
+   * @return bool
    */ 
   public static function is_valid_url($url,$content_id = '')
   {

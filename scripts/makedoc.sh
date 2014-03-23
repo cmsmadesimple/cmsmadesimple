@@ -20,7 +20,6 @@ if [ ! -r config.php -o ! -r version.php ]; then
   echo "FATAL: This script must be executed from the CMSMS root path";
   exit 1
 fi
-
 if [ ! -r ${_config} ]; then
   echo "FATAL: phpdoc configuration file not found";
   exit 1
@@ -31,6 +30,18 @@ trap cleanup INT
 cleanup() {
   rm phpdoc.dist.xml
 }
+
+_recompile=0
+while [ $# -gt 0 ]; do
+  if [ $1 = '-r' ]; then 
+    _recompile=1; 
+    shift; 
+  fi
+done
+
+if [ $_recompile ]; then
+  rm -rf /tmp/phpdoc-twig-cache 2>/dev/null
+fi
 
 # temporarily copy the makedoc.xml file to the root directory
 cp ${_config} phpdoc.dist.xml

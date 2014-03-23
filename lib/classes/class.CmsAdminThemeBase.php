@@ -738,7 +738,6 @@ abstract class CmsAdminThemeBase
 	 *
 	 * @since 2.0
 	 * @param string $str The page title.
-	 * @return void
 	 */
 	public function SetTitle($str)
 	{
@@ -754,7 +753,6 @@ abstract class CmsAdminThemeBase
 	 *
 	 * @since 2.0
 	 * @param string $str The page subtitle.
-	 * @return void
 	 */
 	public function SetSubTitle($str)
 	{
@@ -769,7 +767,7 @@ abstract class CmsAdminThemeBase
      * Check if the user has one of the aggregate permissions
      *
      * @param string $permission the permission to check.
-	 * @return boolean
+	 * @return bool
      */
     protected function HasPerm($permission)
     {
@@ -843,7 +841,6 @@ abstract class CmsAdminThemeBase
 	 *
 	 * @since 2.0
 	 * @param string $module_name the module name.
-	 * @return void
 	 */
 	public function set_action_module($module_name)
 	{
@@ -902,7 +899,7 @@ abstract class CmsAdminThemeBase
 	 * Return the list of bookmarks
 	 *
 	 * @param bool $pure if False the shortcuts for adding and managing bookmarks are added to the list.
-	 * @return array of Bookmark objects
+	 * @return array Array of Bookmark objects
 	 */
 	public function get_bookmarks($pure = FALSE)
 	{
@@ -927,7 +924,7 @@ abstract class CmsAdminThemeBase
 	/**
 	 * Return list of breadcrumbs
 	 *
-	 * @return array of menu nodes representing the breadcrumb trail.
+	 * @return array Array of menu nodes representing the breadcrumb trail.
 	 */
 	public function get_breadcrumbs()
 	{
@@ -986,7 +983,7 @@ abstract class CmsAdminThemeBase
 	 *
 	 * @deprecated
 	 * @param string $section section to test
-	 * @return boolean
+	 * @return bool
 	 */
 	public function HasDisplayableChildren($section)
 	{
@@ -1095,7 +1092,7 @@ abstract class CmsAdminThemeBase
 	/**
 	 * Retrieve a list of the available admin themes.
 	 *
-	 * @return array a hash of strings.
+	 * @return array A hash of strings.
 	 */
 	static public function GetAvailableThemes()
 	{
@@ -1192,7 +1189,7 @@ abstract class CmsAdminThemeBase
 	/**
 	 * Retrieve the current list of notifications.
 	 *
-	 * @return Array of CmsAdminThemeNotification objects
+	 * @return Array Array of CmsAdminThemeNotification objects
 	 */
 	public function get_notifications()
 	{
@@ -1344,7 +1341,7 @@ abstract class CmsAdminThemeBase
 	 * @final
 	 * @param string $tabid The tab id
 	 * @param string $title The tab title
-	 * @param boolean $active A flag indicating wether this tab is active.
+	 * @param bool $active A flag indicating wether this tab is active.
 	 * @return string
 	 */
 	public final function SetTabHeader($tabid,$title,$active=false)

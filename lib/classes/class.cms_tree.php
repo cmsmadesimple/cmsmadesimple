@@ -242,7 +242,6 @@ class cms_tree
    * Add the specified node as a child to this node.
    *
    * @param cms_tree $node The node to add
-   * @return void
    */
   public function add_node(cms_tree &$node)
   {

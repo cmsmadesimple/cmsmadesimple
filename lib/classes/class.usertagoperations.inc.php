@@ -108,7 +108,7 @@ final class UserTagOperations
 	 * Retrieve the body of a user defined tag
 	 *
 	 * @param string $name User defined tag name
-	 * @return mixed If successfull, the body of the user tag (string).  If it fails, false
+	 * @return string|false
 	 */
 	function GetUserTag( $name )
 	{
@@ -120,7 +120,7 @@ final class UserTagOperations
 	 * Test if a user defined tag with a specific name exists
 	 *
 	 * @param string $name User defined tag name
-	 * @return mixed If successfull the name of the user defined tag.  false otherwise
+	 * @return string|false
 	 * @since 1.10
 	 */
 	function UserTagExists($name)
@@ -169,7 +169,7 @@ final class UserTagOperations
 	 * @param string $name User defined tag name
 	 * @param string $text Body of user defined tag
 	 * @param string $description Description for the user defined tag.
-	 * @return mixed If successful, true.  If it fails, false.
+	 * @return bool
 	 */
 	function SetUserTag( $name, $text, $description )
 	{
@@ -207,7 +207,7 @@ final class UserTagOperations
 	 * Remove a named user defined tag from the database
 	 *
 	 * @param string $name User defined tag name
-	 * @return mixed If successful, true.  If it fails, false.
+	 * @return bool
 	 */
 	function RemoveUserTag( $name )
 	{
@@ -227,7 +227,7 @@ final class UserTagOperations
  	/**
 	 * Return a list (suitable for use in a pulldown) of user tags.
 	 *
-	 * @return mixed If successful, an array.  If it fails, false.
+	 * @return array|false
 	 */
 	function ListUserTags()
 	{
@@ -246,7 +246,7 @@ final class UserTagOperations
 	 *
 	 * @param string $name The name of the user defined tag
 	 * @param array  $params Optional parameters.
-	 * @return mixed Output from the UDT, or FALSE.
+	 * @return string|false
 	 */
 	function CallUserTag($name, &$params)
 	{

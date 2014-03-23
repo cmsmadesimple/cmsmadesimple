@@ -1,10 +1,10 @@
 <?php // -*- mode:php; tab-width:4; indent-tabs-mode:t; c-basic-offset:4; -*-
 #BEGIN_LICENSE
 #-------------------------------------------------------------------------
-# Module: cms_tree (c) 2010 by Robert Campbell 
+# Module: cms_tree (c) 2010 by Robert Campbell
 #         (calguy1000@cmsmadesimple.org)
 #  A simple php tree class.
-# 
+#
 #-------------------------------------------------------------------------
 # CMS - CMS Made Simple is (c) 2005 by Ted Kulp (wishy@cmsmadesimple.org)
 # Visit our homepage at: http://www.cmsmadesimple.org
@@ -19,7 +19,7 @@
 # However, as a special exception to the GPL, this software is distributed
 # as an addon module to CMS Made Simple.  You may not use this software
 # in any Non GPL version of CMS Made simple, or in any version of CMS
-# Made simple that does not indicate clearly and obviously in its admin 
+# Made simple that does not indicate clearly and obviously in its admin
 # section that the site was built with CMS Made simple.
 #
 # This program is distributed in the hope that it will be useful,
@@ -123,7 +123,7 @@ final class cms_cookies
    * @param string $key The cookie name
    * @param string $value The cookie value
    * @param int    $expire Unix timestamp of the time the cookie will expire.   By default cookies that expire when the browser closes will be created.
-   * @return boolean
+   * @return bool
    */
   public static function set($key,$value,$expire = 0)
   {
@@ -148,7 +148,7 @@ final class cms_cookies
    *
    * @since 1.11
    * @param string $key The cookie name.
-   * @return boolean
+   * @return bool
    */
   public static function exists($key)
   {
@@ -160,7 +160,6 @@ final class cms_cookies
    * Erase a cookie
    *
    * @param string $key The cookie name
-   * @return void
    */
   public static function erase($key)
   {

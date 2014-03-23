@@ -592,7 +592,7 @@ class CMSMS_Dummy_Smarty_Variable {
      * create Smarty variable object
      *
      * @param mixed   $value   the value to assign
-     * @param boolean $nocache if true any output of this variable will be not cached
+     * @param bool $nocache if true any output of this variable will be not cached
      * @param int     $scope   the scope the variable will have  (local,parent or root)
      */
     public function __construct()

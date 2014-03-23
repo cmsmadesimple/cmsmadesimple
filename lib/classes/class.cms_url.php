@@ -162,7 +162,7 @@ class cms_url
    * Return the port part of the URL
    * may return an empty string if the input url does not have a port portion.
    *
-   * @return integer (may be empty)
+   * @return int (may be empty)
    */
   public function get_port()
   {
@@ -172,7 +172,7 @@ class cms_url
   /**
    * Set the URL port
    *
-   * @param integer $val the URL port number.
+   * @param int $val the URL port number.
    */
   public function set_port($val)
   {

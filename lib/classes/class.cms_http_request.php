@@ -252,8 +252,6 @@ o     * @var string
 
     /**
      * Constructor for initializing the class with default values.
-     *
-     * @return void
      */
     public function __construct()
     {
@@ -281,7 +279,6 @@ o     * @var string
      * </pre>
      *
      * @param array $config Config values as associative array
-     * @return void
      */
     function initialize($config = array())
     {
@@ -310,8 +307,6 @@ o     * @var string
      * Clears all the properties of the class and sets the object to
      * the beginning state. Very handy if you are doing subsequent calls
      * with different data.
-     *
-     * @return void
      */
     function clear()
     {
@@ -355,7 +350,6 @@ o     * @var string
     /**
      * Clear all cookies
      *
-     * @return void
      * @author Robert Campbell (calguy1000@gmail.com)
      */
     function resetCookies()
@@ -367,7 +361,6 @@ o     * @var string
      * Set target URL
      *
      * @param string $url URL of target resource
-     * @return void
      */
     function setTarget($url)
     {
@@ -378,7 +371,6 @@ o     * @var string
      * Set http method
      *
      * @param string $method HTTP method to use (GET or POST)
-     * @return void
      */
     function setMethod($method)
     {
@@ -390,7 +382,6 @@ o     * @var string
      * Set referrer URL
      *
      * @param string $referrer URL of referrer page
-     * @return void
      */
     function setReferrer($referrer)
     {
@@ -401,7 +392,6 @@ o     * @var string
      * Set User agent string
      *
      * @param string $agent Full user agent string
-     * @return void
      */
     function setUseragent($agent)
     {
@@ -411,8 +401,7 @@ o     * @var string
     /**
      * Set timeout of execution
      *
-     * @param integer $seconds Timeout delay in seconds
-     * @return void
+     * @param int $seconds Timeout delay in seconds
      */
     function setTimeout($seconds)
     {
@@ -423,7 +412,6 @@ o     * @var string
      * Set cookie path (cURL only)
      *
      * @param string $path File location of cookiejar
-     * @return void
      */
     function setCookiepath($path)
     {
@@ -448,12 +436,12 @@ o     * @var string
      */
     function setParams($dataArray)
     {
-      if( !is_array($dataArray) ) {
-	$this->setRawPostData($dataArray);
-      }
-      else if (is_array($dataArray)) {
-	$this->params = array_merge($this->params, $dataArray);
-      }
+        if( !is_array($dataArray) ) {
+            $this->setRawPostData($dataArray);
+        }
+        else if (is_array($dataArray)) {
+            $this->params = array_merge($this->params, $dataArray);
+        }
     }
 
     /**
@@ -461,21 +449,19 @@ o     * @var string
      *
      * @param string $username Username for authentication
      * @param string $password Password for authentication
-     * @return void
      */
     function setAuth($username, $password)
     {
-      if (!empty($username) && !empty($password)) {
-	$this->username = $username;
-	$this->password = $password;
-      }
+        if (!empty($username) && !empty($password)) {
+            $this->username = $username;
+            $this->password = $password;
+        }
     }
 
     /**
      * Set maximum number of redirection to follow
      *
-     * @param integer $value Maximum number of redirects
-     * @return void
+     * @param int $value Maximum number of redirects
      */
     function setMaxredirect($value)
     {
@@ -487,7 +473,6 @@ o     * @var string
      *
      * @param string $name Name of the parameter
      * @param string $value Value of the parameter
-     * @return void
      */
     function addParam($name, $value)
     {
@@ -499,7 +484,6 @@ o     * @var string
      *
      * @param string $name Name of cookie
      * @param string $value Value of cookie
-     * @return void
      */
     function addCookie($name, $value)
     {
@@ -509,7 +493,7 @@ o     * @var string
     /**
      * Whether to use cURL or not
      *
-     * @param boolean $value Whether to use cURL or not
+     * @param bool $value Whether to use cURL or not
      */
     function useCurl($value = TRUE)
     {
@@ -519,8 +503,7 @@ o     * @var string
     /**
      * Whether to use cookies or not
      *
-     * @param boolean $value Whether to use cookies or not
-     * @return void
+     * @param bool $value Whether to use cookies or not
      */
     function useCookie($value = TRUE)
     {
@@ -530,8 +513,7 @@ o     * @var string
     /**
      * Whether to save persistent cookies in subsequent calls
      *
-     * @param boolean $value Whether to save persistent cookies or not
-     * @return void
+     * @param bool $value Whether to save persistent cookies or not
      */
     function saveCookie($value = TRUE)
     {
@@ -541,8 +523,7 @@ o     * @var string
     /**
      * Whether to follow HTTP redirects
      *
-     * @param boolean $value Whether to follow HTTP redirects or not
-     * @return void
+     * @param bool $value Whether to follow HTTP redirects or not
      */
     function followRedirects($value = TRUE)
     {
@@ -572,7 +553,7 @@ o     * @var string
     /**
      * Get execution status code
      *
-     * @return integer last http status code
+     * @return int last http status code
      */
     function getStatus()
     {
@@ -1024,7 +1005,6 @@ o     * @var string
      * status, redirection location, cookies, etc.
      *
      * @param string $responseHeader Raw header response
-     * @return void
      * @access private
      * @internal
      */
@@ -1084,7 +1064,6 @@ o     * @var string
     /**
      * Clear the headers array (internal)
      *
-     * @return void
      * @internal
      * @access private
      */
@@ -1098,7 +1077,6 @@ o     * @var string
      *
      * Parse the set-cookie headers from response and add them for inclusion.
      *
-     * @return void
      * @access private
      * @internal
      */
@@ -1157,7 +1135,6 @@ o     * @var string
      * @param string Cookie path
      * @param string Cookie domain
      * @param string Cookie security (0 = non-secure, 1 = secure)
-     * @return void
      * @access private
      * @internal
      */
@@ -1219,7 +1196,6 @@ o     * @var string
      * Get the cookies which are valid for the current request. Checks
      * domain and path to decide the return.
      *
-     * @return void
      * @access private
      */
     function _passCookies()

@@ -138,7 +138,7 @@ final class CmsNlsOperations
    * @internal
    * @see set_locale
    * @param string The desired language.
-   * @return boolean
+   * @return bool
    */
   public static function set_language($lang = null)
   {
@@ -338,7 +338,6 @@ final class CmsNlsOperations
    * Set the current encoding
    *
    * @param mixed $str The encoding (comma separated encodings is acceptable.
-   * @return void
    */
   public static function set_encoding($str)
   {
@@ -355,8 +354,6 @@ final class CmsNlsOperations
    * will use the locale from the nls information for the current locale
    * if config entry is set... it will be used, but subsequent calls to this
    * method will do nothing.
-   *
-   * @return void
    */
   protected static function set_locale()
   {
@@ -392,7 +389,6 @@ final class CmsNlsOperations
    * Note, this module must return a language for which there is an available NLS file.
    *
    * @param CmsLanguageDetector Object containing methods to detect a compatible, desired language
-   * @return void
    */
   public static function set_language_detector(CmsLanguageDetector& $obj)
   {

@@ -47,7 +47,6 @@ final class Events
 	 *
 	 * @param string $modulename The name of the module that is sending the event
 	 * @param string $eventname The name of the event
-	 * @return void
 	 */
 	static public function CreateEvent( $modulename, $eventname )
 	{
@@ -70,7 +69,6 @@ final class Events
 	 *
 	 * @param string $modulename The name of the module that is sending the event
 	 * @param string $eventname The name of the event
-	 * @return void
 	 */
 	static public function RemoveEvent( $modulename, $eventname )
 	{
@@ -107,7 +105,6 @@ final class Events
 	 * @param string $modulename The name of the module that is sending the event
 	 * @param string $eventname The name of the event
 	 * @param array $params The parameters associated with this event.
-	 * @return void
 	 */
 	static public function SendEvent( $modulename, $eventname, $params = array() )
 	{
@@ -215,8 +212,8 @@ final class Events
 	 * @param string $eventname The name of the event
 	 * @param string $tag_name The name of a user defined tag. If not passed, no user defined tag is set.
 	 * @param string $module_handler The name of the module. If not passed, no module is set.
-	 * @param boolean $removable Can this event be removed from the list? Defaults to true.
-	 * @return boolean If successful, true.  If it fails, false.
+	 * @param bool $removable Can this event be removed from the list? Defaults to true.
+	 * @return bool If successful, true.  If it fails, false.
 	 */
 	static public function AddEventHandler( $modulename, $eventname, $tag_name = false, $module_handler = false, $removable = true)
 	{
@@ -290,7 +287,7 @@ final class Events
 	 * @param string $eventname The name of the event
 	 * @param string $tag_name The name of a user defined tag. If not passed, no user defined tag is set.
 	 * @param string $module_handler The name of the module. If not passed, no module is set.
-	 * @return boolean If successful, true.  If it fails, false.
+	 * @return bool If successful, true.  If it fails, false.
 	 */
 	static public function RemoveEventHandler( $modulename, $eventname, $tag_name = false, $module_handler = false )
 	{
@@ -335,7 +332,7 @@ final class Events
 	 *
 	 * @param string $modulename The name of the module sending the event
 	 * @param string $eventname The name of the event
-	 * @return boolean If successful, true.  If it fails, false.
+	 * @return bool If successful, true.  If it fails, false.
 	 */
 	static public function RemoveAllEventHandlers( $modulename, $eventname )
 	{
