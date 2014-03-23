@@ -258,7 +258,7 @@ final class cms_module_smarty_plugin_manager
 	 */
 	public static function remove_by_module($module_name)
 	{
-		self::get_instance()->remove_by_module($module_name);
+		self::get_instance()->_remove_by_module($module_name);
 	}
 
 	/**
@@ -266,7 +266,7 @@ final class cms_module_smarty_plugin_manager
 	 *
 	 * @param string $module_name
 	 */
-	public function remove_by_module($module_name)
+	public function _remove_by_module($module_name)
 	{
 		$this->_load();
 		if( is_array($this->_data) && count($this->_data) ) {
@@ -288,7 +288,7 @@ final class cms_module_smarty_plugin_manager
 	 */
 	public static function remove_by_name($name,$type)
 	{
-		self::get_instance()->remove_by_name($name,$type);
+		self::get_instance()->_remove_by_name($name,$type);
 	}
 
 	/**
@@ -297,7 +297,7 @@ final class cms_module_smarty_plugin_manager
 	 * @param string $name
 	 * @param string $type (function,block,modifier)
 	 */
-	public function remove_by_name($name,$type)
+	public function _remove_by_name($name,$type)
 	{
 		$this->_load();
 		if( is_array($this->_data) && count($this->_data) ) {

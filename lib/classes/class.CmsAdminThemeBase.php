@@ -209,7 +209,7 @@ abstract class CmsAdminThemeBase
 			$to = CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 			$newurl = preg_replace($from,$to,$url);
 		}
-		elseif( startswith($url,$config['root_url']) ) {
+		elseif( startswith($url,$config['root_url']) || !startswith($url,'http') ) {
 			$prefix = '?';
 			if( strpos($url,'?') !== FALSE ) $prefix = '&amp;';
 			$newurl .= $prefix.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
