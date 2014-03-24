@@ -74,7 +74,7 @@ function cms_autoloader($classname)
 
   // lowercase internal classes
   $lowercase = strtolower($classname);
-  $fn = cms_join_path($config['root_path'],'lib','classes','interna',"class.{$lowercase}.inc.php");
+  $fn = cms_join_path($config['root_path'],'lib','classes','internal',"class.{$lowercase}.inc.php");
   if( file_exists($fn) && $classname != 'Content' ) {
     __cms_load($fn);
     return;
