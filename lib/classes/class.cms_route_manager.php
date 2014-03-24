@@ -35,7 +35,10 @@
 #END_LICENSE
 
 /**
+ * Classes, functions and utilities for managing CMSMS routes.
  * @package CMS
+ * @author  Robert Campbell
+ * @license GPL
  */
 
 if( !function_exists('__internal_cmp_routes') ) {
@@ -53,18 +56,35 @@ if( !function_exists('__internal_cmp_routes') ) {
  * A class to manage all recognized routes in the system.
  *
  * @package CMS
+ * @license GPL
  * @author Robert Campbell <calguy1000@cmsmadesimple.org>
  * @since  1.9
  */
 final class cms_route_manager
 {
-	// this class cannot be instantiated.
+	/**
+	 * @ignore
+	 */
 	private function __construct() {}
 
+	/**
+	 * @ignore
+	 */
 	private static $_routes_loaded = FALSE;
+
+	/**
+	 * @ignore
+	 */
 	private static $_routes;
+
+	/**
+	 * @ignore
+	 */
 	private static $_dynamic_routes;
 
+	/**
+	 * @ignore
+	 */
 	static private function _find_match($needle,$haystack,$exact)
 	{
 		// split the haystack into an array of 'absolute' or 'regex' matches
@@ -97,7 +117,9 @@ final class cms_route_manager
 		return FALSE;
 	}
 
-	// this function should go into a global utils class somewhere.
+	/**
+	 * @ignore
+	 */
 	static private function route_binarySearch($needle,$haystack,$comparator)
 	{
 		if( count($haystack) == 0 ) return FALSE;
@@ -122,17 +144,15 @@ final class cms_route_manager
 
 		//The loop ended without a match
 		//Compensate for needle greater than highest haystack element
-		if($comparator($haystack[count($haystack)-1]['term'], $needle) < 0) {
-			$probe = count($haystack);
-		}
+		if($comparator($haystack[count($haystack)-1]['term'], $needle) < 0) $probe = count($haystack);
 		return FALSE;
 	}
 
 	/**
 	 * Test wether the specified route exists.
 	 *
-	 * @param CmsRoute The route object
-	 * @param bool  A flag indicating that only static routes should be checked.
+	 * @param CmsRoute $route The route object
+	 * @param bool     $static_only A flag indicating that only static routes should be checked.
 	 * @return bool
 	 */
 	static public function route_exists(CmsRoute $route,$static_only = FALSE)
@@ -144,7 +164,6 @@ final class cms_route_manager
 
 		if( $static_only ) return FALSE;
 
-
 		if( is_array(self::$_dynamic_routes) ) {
 			if( isset(self::$_dynamic_routes[$route->signature()]) ) return TRUE;
 		}
@@ -155,9 +174,9 @@ final class cms_route_manager
 	/**
 	 * Find a route that matches the specified string
 	 *
-	 * @param string The string to test against (usually an incoming url request)
-	 * @param bool Perform an exact string match rather than a regex match.
-	 * @param bool A flag indicating that only static routes should be checked.
+	 * @param string $str The string to test against (usually an incoming url request)
+	 * @param bool $exact Perform an exact string match rather than a regex match.
+	 * @param bool $static_only A flag indicating that only static routes should be checked.
 	 * @return CmsRoute the matching route, or null.
 	 */
 	static public function find_match($str,$exact = false,$static_only = FALSE)
@@ -185,7 +204,7 @@ final class cms_route_manager
 	 *
 	 * @author Robert Campbell <calguy1000@cmsmadesimple.org>
 	 * @since 1.11
-	 * @param CmsRoute the route to add.
+	 * @param CmsRoute $route The route to add.
 	 * @return bool
 	 */
 	public static function add_static(CmsRoute& $route)
@@ -208,12 +227,15 @@ final class cms_route_manager
 
 
 	/**
-	 * Delete a static route
+	 * Delete a static route.
 	 * The route cache will be removed if the route is successfully removed from the database.
 	 *
 	 * @author Robert Campbell <calguy1000@cmsmadesimple.org>
 	 * @since 1.11
-	 * @param mixed If a CmsRoute object is passed in, it can be removed directly.  Otherwise the term of a route (a string) can be passed in.
+	 * @param string $term The term to search for
+	 * @param string $key1
+	 * @param string $key2
+	 * @param string $key3
 	 * @return bool
 	 */
 	public static function del_static($term,$key1 = null,$key2 = null,$key3 = null)
@@ -256,14 +278,13 @@ final class cms_route_manager
 
 
 	/**
-	 * Add a dynamic route
+	 * Add a dynamic route.
 	 * Dynamic routes are not stored to the database, and are checked after static routes when searching for a match.
 	 * This method will return TRUE if the route already exists (static, or dynamic)
 	 *
 	 * @author Robert Campbell <calguy1000@cmsmadesimple.org>
 	 * @since 1.11
-	 * @param CmsRoute The dynamic route object to add
-	 * @param bool  Flag indicating wether duplicate checking should be done.
+	 * @param CmsRoute $route The dynamic route object to add
 	 * @return bool.
 	 */
 	public static function add_dynamic(CmsRoute& $route)
@@ -280,8 +301,7 @@ final class cms_route_manager
 	 * This is just an alias (for compatibility reasons) to the add_dynamc method.
 	 *
 	 * @see add_dynamic
-	 * @param CmsRoute The route to register
-	 * @param bool  Flag indicating wether duplicate checking should be done.
+	 * @param CmsRoute $route The route to register
 	 * @return bool
 	 */
 	static public function register(CmsRoute $route)
@@ -355,6 +375,7 @@ final class cms_route_manager
 	 * Load existing static routes from the cache
 	 * This method will also refresh the cache from the database if the cache cannot be found.
 	 * Note: It should not be necessary to load routes, as this method is called internally.
+	 * @internal
 	 */
 	private static function _load_static_routes()
 	{
@@ -371,7 +392,9 @@ final class cms_route_manager
 		}
 	}
 
-
+	/**
+	 * @ignore
+	 */
 	private static function _get_routes_from_cache()
 	{
 		$fn = self::_get_cache_filespec();
@@ -392,13 +415,17 @@ final class cms_route_manager
 		}
 	}
 
-
+	/**
+	 * @ignore
+	 */
 	private static function _get_cache_filespec()
 	{
 		return TMP_CACHE_LOCATION.'/'.md5(TMP_CACHE_LOCATION.get_class()).'.dat';
 	}
 
-
+	/**
+	 * @ignore
+	 */
 	private static function _clear_cache()
 	{
 		@unlink(self::_get_cache_filespec());
@@ -407,7 +434,6 @@ final class cms_route_manager
 		// note: dynamic routes don't get cleared.
 	}
 } // end of class
-
 
 # vim:ts=4 sw=4 noet
 ?>

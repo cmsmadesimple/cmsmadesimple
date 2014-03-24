@@ -22,7 +22,7 @@
  * Class definition and methods for Section Header content type
  *
  * @package CMS
- * @subpackage Content Types
+ * @subpackage content_types
  * @license GPL
  */
 
@@ -32,7 +32,7 @@
  * Section headers are logical ways to organize content.  They usually appear in navigations, but are not navigable.
  *
  * @package CMS
- * @subpackage Content Types
+ * @subpackage content_types
  * @license GPL
  */
 class SectionHeader extends ContentBase

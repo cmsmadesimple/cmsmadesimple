@@ -383,6 +383,8 @@ abstract class ContentBase
 	/**
 	 * Returns a friendly name for this content type
 	 *
+	 * Normally the content type returns a string representing the name of the content type translated into the users current language
+	 *
 	 * @abstract
 	 * @return string
 	 */

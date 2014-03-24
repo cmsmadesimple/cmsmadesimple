@@ -22,7 +22,7 @@
  * Class definition and methods for the Separator content type
  *
  * @package CMS
- * @subpackage Content Types
+ * @subpackage content_types
  * @license GPL
  */
 
@@ -33,7 +33,7 @@
  * as a horizontal or vertical bar.
  *
  * @package CMS
- * @subpackage Content Types
+ * @subpackage content_types
  * @license GPL
  */
 class Separator extends ContentBase

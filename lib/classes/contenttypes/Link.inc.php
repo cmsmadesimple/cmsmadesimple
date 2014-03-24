@@ -21,7 +21,7 @@
 /**
  * Define the link content type
  * @package CMS
- * @subpackage Content Types
+ * @subpackage content_types
  * @license GPL
  */
 
@@ -32,7 +32,7 @@
  * page or site.
  *
  * @package CMS
- * @subpackage Content Types
+ * @subpackage content_types
  * @license GPL
  */
 class Link extends ContentBase

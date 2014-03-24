@@ -21,7 +21,6 @@
 /**
  * Define the error page content type
  * @package CMS
- * @subpackage Content Types
  * @license GPL
  */
 
@@ -32,15 +31,23 @@
  * They are used for handling different types of errors.
  *
  * @package CMS
- * @subpackage Content Types
- * @version $Revision$
  * @license GPL
  */
 class ErrorPage extends Content
 {
-	var $doAliasCheck;
-	var $error_types;
+	/**
+	 * @ignore
+	 */
+	protected $doAliasCheck;
 
+	/**
+	 * @ignore
+	 */
+	protected $error_types;
+
+	/**
+	 * @ignore
+	 */
 	public function __construct()
 	{
 		parent::__construct();
@@ -52,16 +59,73 @@ class ErrorPage extends Content
 		$this->mType = strtolower(get_class($this)) ;
 	}
 
+	/**
+	 * The ErrorPage content type handles, and requires an alias
+	 *
+	 * @return true
+	 */
 	public function HandlesAlias() { return true; }
+
+	/**
+	 * Return the friendly name for this content type
+	 *
+	 * @return string
+	 */
 	public function FriendlyName() { return lang('contenttype_errorpage');	}
+
+	/**
+	 * This content type supports preview
+	 *
+	 * @return true
+	 */
 	public function HasPreview() {	return TRUE; }
+
+	/**
+	 * This content type is not copyable
+	 *
+	 * @return false
+	 */
 	public function IsCopyable() { return FALSE; }
+
+	/**
+	 * Pages using this content type cannot be the default.
+	 *
+	 * @return false
+	 */
 	public function IsDefaultPossible() { return FALSE; }
+
+	/**
+	 * This content type has no usable link and cannot be navigated to
+	 *
+	 * @return false
+	 */
 	public function HasUsableLink() { return false; }
+
+	/**
+	 * This content type does not want any children
+	 *
+	 * @return false
+	 */
 	public function WantsChildren() { return false; }
+
+	/**
+	 * This content type does create system pages
+	 *
+	 * @return true
+	 */
 	public function IsSystemPage() { return true; }
+
+	/**
+	 * This content type does not generate content that can be cached
+	 *
+	 * @return false
+	 */
 	public function HasSearchableContent() { return FALSE; }
 
+	/**
+	 * Setup the properties for this content type
+	 * many properties are disabled so that they will not appear in the edit form
+	 */
 	function SetProperties()
 	{
 		parent::SetProperties();
@@ -85,6 +149,12 @@ class ErrorPage extends Content
 		$this->AddBaseProperty('alias',10,1);
 	}
 
+	/**
+	 * Fill the content object from the edit form
+	 *
+	 * @param array $params
+	 * @param bool  $editing  Are we in an add or edit operation
+	 */
 	function FillParams($params,$editing = false)
 	{
 		parent::FillParams($params,$editing);
@@ -94,6 +164,13 @@ class ErrorPage extends Content
 		$this->mActive = true;
 	}
 
+	/**
+	 * Display a single element on the edit form
+	 *
+	 * @param string $one The property name
+	 * @param bool   $adding
+	 * @return string[] An array of 2 strings.  The first element is the prompt, the second element is the input field.
+	 */
     function display_single_element($one,$adding)
     {
 		switch($one) {
@@ -113,6 +190,11 @@ class ErrorPage extends Content
 		}
     }
 
+
+	/**
+	 * Validate the object to ensure correctness
+	 * @return string[]|false False indicates no validation errors.  Otherwise an array of strings is returned.
+	 */
 	function ValidateData()
 	{
 		// $this->SetPropertyValue('searchable',0);

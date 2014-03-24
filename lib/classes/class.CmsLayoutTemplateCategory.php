@@ -19,12 +19,15 @@
 #$Id: class.global.inc.php 6939 2011-03-06 00:12:54Z calguy1000 $
 
 /**
+ * Classes and utilities for managing template categories.
  * @package CMS
  * @license GPL
  */
 
 /**
- * A class to manage template types
+ * A class representing a template category.
+ *
+ * Templates can be optionally organized into categories, this class manages the category itself.
  *
  * @package CMS
  * @license GPL
@@ -33,24 +36,48 @@
  */
 class CmsLayoutTemplateCategory
 {
+	/**
+	 * @ignore
+	 */
   const TABLENAME = 'layout_tpl_categories';
+
+	/**
+	 * @ignore
+	 */
   private $_dirty;
+
+	/**
+	 * @ignore
+	 */
   private $_data = array();
 
+	/**
+	 * Get the category id
+	 *
+	 * @return int
+	 */
   public function get_id()
   {
     if( isset($this->_data['id']) ) return $this->_data['id'];
   }
 
+	/**
+	 * Get the category name
+	 *
+	 * @return string
+	 */
   public function get_name()
   {
     if( isset($this->_data['name']) ) return $this->_data['name'];
   }
 
   /**
-   * Set the template type name
+   * Set the category name.
+	 *
+	 * The category name must be unique, and can only contain certain characters.
    *
-   * @param sting The template type name.
+	 * @throws CmsInvalidDataException
+   * @param sting $str The template type name.
    */
   public function set_name($str)
   {
@@ -64,11 +91,21 @@ class CmsLayoutTemplateCategory
     $this->_dirty = TRUE;
   }
 
+	/**
+	 * Get the category description
+	 *
+	 * @return string
+	 */
   public function get_description()
   {
     if( isset($this->_data['description']) ) return $this->_data['description'];
   }
 
+	/**
+	 * Set the category description
+	 *
+	 * @param string $str The description
+	 */
   public function set_description($str)
   {
 		// description is allowed to be empty.
@@ -77,24 +114,47 @@ class CmsLayoutTemplateCategory
 		$this->_dirty = TRUE;
   }
 
+	/**
+	 * Get the category order
+	 *
+	 * @return int
+	 */
   public function get_item_order()
   {
     if( isset($this->_data['item_order']) ) return $this->_data['item_order'];
   }
 
+	/**
+	 * Set the item order.
+	 *
+	 * The item order must be unique and incremental
+	 * no validation is done on the item order in this method.
+	 *
+	 * @param int $idx
+	 */
   public function set_item_order($idx)
   {
 		// description is allowed to be empty.
 		$idx = (int)$idx;
+		if( $idx < 1 ) return;
 		$this->_data['item_order'] = $idx;
 		$this->_dirty = TRUE;
   }
 
+	/**
+	 * Get the date that this category was last saved to the database
+	 *
+	 * @return int The unix timestamp from the database
+	 */
   public function get_modified()
   {
     if( isset($this->_data['modified']) ) return $this->_data['modified'];
   }
 
+	/**
+	 * Validate the correctness of this object
+	 * @throws CmsInvalidDataException
+	 */
   protected function validate()
   {
     if( !$this->get_name() ) throw new CmsInvalidDataException('A Template Categoy must have a name');
@@ -118,6 +178,9 @@ class CmsLayoutTemplateCategory
     }
   }
 
+	/**
+	 * @ignore
+	 */
   protected function _insert()
   {
     if( !$this->_dirty ) return;
@@ -139,6 +202,9 @@ class CmsLayoutTemplateCategory
 		audit($this->get_id(),'CMSMS','Template Category Created');
   }
 
+	/**
+	 * @ignore
+	 */
   protected function _update()
   {
     if( !$this->_dirty ) return;
@@ -155,12 +221,25 @@ class CmsLayoutTemplateCategory
 		audit($this->get_id(),'CMSMS','Template Category Updated');
   }
 
+	/**
+	 * Save this object to the database
+	 * @throws CmsSQLErrorException
+	 * @throws CmsInvalidDataException
+	 */
   public function save()
   {
     if( !$this->get_id() ) return $this->_insert();
     return $this->_update();
   }
 
+	/**
+	 * Delete this object from the database
+	 *
+	 * This method will delete the object from the database, and erase the item order and id values
+	 * from this object, suitable for re-saving
+	 *
+	 * @throw CmsSQLErrorException
+	 */
   public function delete()
   {
     if( !$this->get_id() ) return;
@@ -179,6 +258,9 @@ class CmsLayoutTemplateCategory
     $this->_dirty = TRUE;
   }
 
+	/**
+	 * @ignore
+	 */
   private static function &_load_from_data($row)
   {
     $ob = new CmsLayoutTemplateCategory();
@@ -186,6 +268,12 @@ class CmsLayoutTemplateCategory
     return $ob;
   }
 
+	/**
+	 * Load a category object from the database
+	 *
+	 * @param int|string $val Either the integer category id, or the category name
+	 * @return self
+	 */
   public static function &load($val)
   {
     $db = cmsms()->GetDb();
@@ -203,7 +291,12 @@ class CmsLayoutTemplateCategory
     return self::_load_from_data($row);
   }
 
-
+	/**
+	 * Load a set of categories from the database
+	 *
+	 * @param string $prefix An optional category name prefix.
+	 * @return array Array of CmsLayoutTemplateCategory objects
+	 */
   public static function get_all($prefix = '')
   {
     $db = cmsms()->GetDb();

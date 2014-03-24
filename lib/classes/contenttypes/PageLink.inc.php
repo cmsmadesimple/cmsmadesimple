@@ -22,7 +22,7 @@
  * Class definition and methods for Page Link content type
  *
  * @package CMS
- * @subpackage Content Types
+ * @subpackage content_types
  * @license GPL
  */
 
@@ -33,8 +33,7 @@
  * that may be in another place in the page hierarchy.
  *
  * @package CMS
- * @subpackage Content Types
- * @version $Revision$
+ * @subpackage content_types
  * @license GPL
  */
 class PageLink extends ContentBase
