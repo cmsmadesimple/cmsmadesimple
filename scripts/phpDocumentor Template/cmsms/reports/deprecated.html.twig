@@ -12,7 +12,7 @@
                 <li class="nav-header">Navigation</li>
                 {% for element in project.indexes.elements if element.deprecated %}
                     {% if element.file.path != previousPath %}
-                        <li><a href="#{{ element.file.path }}"><i class="icon-file"></i> {{ element.file.path }}</a></li>
+                        <li><a href="#{{ element.file.path }}"><i class="glyphicon glyphicon-file"></i> {{ element.file.path }}</a></li>
                     {% endif %}
                     {% set previousPath = element.file.path %}
                 {% endfor %}
@@ -21,7 +21,7 @@
 
         <div class="col-lg-8">
             <ul class="breadcrumb">
-                <li><a href="{{ path('/') }}"><i class="icon-remove-sign"></i></a><span class="divider">\</span></li>
+                <li><a href="{{ path('/') }}"><i class="glyphicon glyphicon-warning-sign"></i></a><span class="divider">\</span></li>
                 <li>Deprecated elements</li>
             </ul>
 
@@ -34,7 +34,7 @@
                     {% endif %}
                     <a name="{{ element.file.path }}" id="{{ element.file.path }}"></a>
                     <h3>
-                        <i class="icon-file"></i>
+                        <i class="glyphicon glyphicon-file"></i>
                         {{ element.file.path }}
                         {# <small style="float: right;padding-right: 10px;">{{ element.tags.deprecated|length }}</small> #}
                     </h3>

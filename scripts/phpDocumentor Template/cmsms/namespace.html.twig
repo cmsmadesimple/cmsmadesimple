@@ -43,7 +43,7 @@
       <h4>Arguments</h4>
       {% for argument in element.arguments %}
       <div class="subelement argument">
-        <h4><code>{{ argument.types|route|join('|')|raw }}</code> {{ argument.name }}</h4>
+        <h4>{% if argument.types %}<code>{{ argument.types|route|join('|')|raw }}</code>{% endif %} {{ argument.name }}</h4>
         <p>{{ argument.description|markdown|raw }}</p>
       </div>
       {% endfor %}
@@ -51,7 +51,7 @@
 
       {% if element.response.types and element.response.types|join() != 'void' %}
       <h4>Response</h4>
-      <p> <code>{{ element.response.types|route|join('|')|raw }}</code> {{ element.response.description|markdown|raw }}</p>
+      <p> {% if element.response.types %}<code>{{ element.response.types|route|join('|')|raw }}</code>{% endif %} {{ element.response.description|markdown|raw }}</p>
       {% endif %}
     </div>
   </div>
