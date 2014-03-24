@@ -93,8 +93,8 @@ class Smarty_CMS extends SmartyBC
       if(isset($CMS_INSTALL_PAGE)) return;
 
       if (is_sitedown()) {
-	$this->setCaching(false);
-	$this->force_compile = true;
+		$this->setCaching(false);
+		$this->force_compile = true;
       }
 
       // Load resources
@@ -125,6 +125,9 @@ class Smarty_CMS extends SmartyBC
       $this->registerResource('globalcontent',new CMSNullTemplateResource());
     }
 
+	// Add assets tpl dir to scope
+	$this->addTemplateDir(cms_join_path($config['root_path'], 'lib', 'assets', 'templates'));
+	
     // Enable security object
     // Note: Buggy, disabled prior to release of CMSMS 1.11
     //$this->enableSecurity('CMSSmartySecurityPolicy');
@@ -376,11 +379,9 @@ class Smarty_CMS extends SmartyBC
   public function errorConsole(Exception $e)
   {
     $config = cmsms()->GetConfig();
-    $odir = $this->template_dir;
 
     $this->force_compile = true;
     $this->debugging = true;
-    $this->template_dir = cms_join_path($config['root_path'], 'lib', 'smarty');
 
     $this->assign('e_line', $e->getLine());
     $this->assign('e_file', $e->getFile());
@@ -390,11 +391,10 @@ class Smarty_CMS extends SmartyBC
     // put mention into the admin log
     audit('', 'An error has occurred', substr( $e->getMessage(),0 ,200 ) );
 
-    $output = $this->fetch('error-console.tpl');
+    $output = $this->fetch('cmsms-error-console.tpl');
 
     $this->force_compile = false;
     $this->debugging = false;		
-    $this->template_dir = $odir;
 
     return $output;
   }	
