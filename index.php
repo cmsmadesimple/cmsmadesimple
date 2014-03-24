@@ -187,21 +187,6 @@ while( $trycount < 2 ) {
       $trycount = 99; // no more iterations
     }
   }
-  catch (SmartyCompilerException $e) {
-    // <- Catch Smarty compile errors 
-    $handlers = ob_list_handlers(); 
-    for ($cnt = 0; $cnt < sizeof($handlers); $cnt++) { ob_end_clean(); }
-    echo $smarty->errorConsole($e);	
-    return;
-  } 
-
-  catch (SmartyException $e) {
-    // <- Catch rest of Smarty errors
-    $handlers = ob_list_handlers(); 
-    for ($cnt = 0; $cnt < sizeof($handlers); $cnt++) { ob_end_clean(); }
-    echo $smarty->errorConsole($e);
-    return;
-  }	
 
   catch (CmsError404Exception $e) {
     // Catch CMSMS 404 error
