@@ -3,7 +3,7 @@
 $lang['help_group_permissions'] = <<<EOT
 <h4>CMSMS Admin Permission Model</h4>
 <ul>
-<li>CMSMS Uses a system of named permissions.  Access to these permissions determines a users ability to perform different functions in the CMSMS admin console.</li>
+<li>CMSMS Uses a system of named permissions.  Access to these permissions determines a users ability to perform different functions in the CMSMS Admin console.</li>
 <li>The CMSMS core creates several permissions on installation <em>(occasionally permissions are added or deleted during an upgrade process)</em>.  Third party modules may create additional permissions.</li>
 <li>Permissions are associated with user groups.  An authorized user can adjust the permissions that are associated with certain member groups <em>(including the permission to change a group permissions)</em>.  The <strong>Admin</strong> group is a special group.  Members of this group will have all permissions.</li>
 <li>Admin user accounts can be members of zero or more groups.  It may be possible for a user account that is not a member of any groups to still perform various functionality <em>(please read about ownership and additional-editors in the Content Manager help, and Design Manager help).</em>.  The first user account <em>(uid == 1)</em>, which is typically named &quot;Admin&quot; is a special user account and will have all permissions.</li>
@@ -74,7 +74,7 @@ $lang['help_cmscontentmanager_help'] = <<<EOT
      </li>
      
      <li>Page Title / Menu Text Column
-      <p>This column can either display the page title, or the page menutext.  This depends on a setting in the &quot;Site Admin &raquo; Content Manager Settings&quot; page.</p>
+      <p>This column can either display the page title, or the page menu text.  This depends on a setting in the &quot;Site Admin &raquo; Content Manager Settings&quot; page.</p>
       <p>This column will contain a link to allow editing the content item <em>(unless the content item is locked)</em>.  Hovering over the text in this column will display additional information about the content item such as the unique numeric content id, and whether the page is cachable or not.</p>
       <p>If the content item is locked, hovering over the text in the column will display information about who locked the item, and when the lock expires.</p>
      </li>
@@ -87,7 +87,7 @@ $lang['help_cmscontentmanager_help'] = <<<EOT
       <p>This column displays the unique alias associated with each page.  Aliases are text strings that uniquely identify the content item.  You use the content items alias (or numeric id) when you need to refer to a page within the system.<em>(Note: Some content types do not have aliases).</em></p>
      </li>
 
-     <li>Template Column</li>
+     <li>Template Column
       <p>This column displays the design and template that is used to display the content for the item.  See the help for the &quot;Design Manager&quot; module for an explanation of how CMSMS manages designs, including stylesheets and templates.  <em>(Note: Some content item types do not use a design, or a template.)</em></p>
      </li>
 
@@ -99,33 +99,33 @@ $lang['help_cmscontentmanager_help'] = <<<EOT
        <p>The owner column displays the username of the owner of the content item.  Hovering over the text in this column will display information as to when the content item was created and last edited.</p>
      </li>
 
-     <li>Active Column.
+     <li>Active Column
        <p>This column displays icons to show the current active state of the content item.  Active items can be navigated to, and will appear in navigation menus on the frontend.  If your user account has sufficient privilege to the content item you can click on the icon to toggle its active state.</p>
      </li>
 
-     <li>Default Column.
+     <li>Default Column
        <p>This column displays whether the content item is the default page or not.  The default content item is the home page for your website.  Only some content types allow the content type to be the default.</p>
        <p>If your user account has sufficient privilege, and the content type supports being the default content for the website you can click on the icon to change the default flag to a different page.</p>
      </li>
 
-     <li>The &quot;Move&quot; Column.
+     <li>The &quot;Move&quot; Column
        <p>Depending upon your access privileges, you may see icons that allow changing the order of the content items with respect to its immediate peers.  This is a simple mechanism of quickly re-ordering content items amongst its peers.  The &quot;Re-order Pages&quot; option allows reorganizing pages en-mass, and when editing a content item you can quickly assign the item to a different parent.</p>
      </li>
 
-     <li>Action Icons.
+     <li>Action Icons
        <p>Depending on your access privileges, the content type and its current lock state you may see different icons on each content row allowing different functionality:</p>
        <ul>
          <li>View - Open up a new browser window <em>(or tab)</em> and view the content item as your visitors will see it.</li>
          <li>Copy - Copy the content item to a new content item.
            <p>A new content item will be created with a new page title, and alias and you will be presented with the ability to edit the new page.</p>
          </li>
-         <li>Delete - Delete the content item.
+         <li>Delete - Delete the content item
            <p>Depending upon your access privileges, and whether or not the content item has children, the option to delete the content item may be hidden or disabled.</p>
          </li>
          <li>Steal Lock
            <p>For content items that are currently being edited, but for which the lock has expired <em>(the editor has not made a change to the form for a while)</em> this option will allow you to steal the lock.</p>
          </li>
-         <li>Bulk operations checkbox.
+         <li>Bulk operations checkbox
            <p>The bulk operations checkbox allows selecting multiple content items to operate on en-mass.</p>
          </li>
        </ul> 
@@ -139,7 +139,7 @@ $lang['help_cmscontentmanager_help'] = <<<EOT
    <p>By default, the owner of a content item is the user that initially created it.  Owners, or users with &quot;Manage All Content&quot; permission can give ownership of a page to another user.</p>
 
  <h4>Additional Editors</h4>
-    <p>When editing a content item as an owner or as a user with &quot;Manage All Content&quot; permission, the user can select other administrative users, or admin groups that are also allowed to edit that content item.</p>
+    <p>When editing a content item as an owner or as a user with &quot;Manage All Content&quot; permission, the user can select other administrative users, or Admin groups that are also allowed to edit that content item.</p>
 
  <h4>Relevant Permissions.</h4>
     <p>There are a few permissions that effect what columns are displayed in the content list and the ability to interact with the content list:</p>
@@ -161,7 +161,7 @@ $lang['help_cmscontentmanager_help'] = <<<EOT
         <p>This permission provides super-user capability on all content items.  Users with this permission can add, edit, delete, and re-order any content item.  They also have the ability to set the default content item, and perform bulk actions like change ownership that may or may not be available to users with other permissions.</p>
       </li>
     </ul>
-   <p>It is possible for an admin user account to not be a member of any groups, and for that admin user account still have the ability <em>(as an owner or additional editor)</p> to edit some content items.</p>
+   <p>It is possible for an Admin user account to not be a member of any groups, and for that Admin user account still have the ability <em>(as an owner or additional editor)</p> to edit some content items.</p>
 
  <h4>Content Locking</h4>
    <p>Content locking is a mechanism that prevents two editors from editing the same item at the same time, and therefore destroying each others work.  Admin users are given exclusive access to a content item until such time as they submit the changes.</p>
@@ -251,7 +251,7 @@ $lang['help_cmscontentmanager_help'] = <<<EOT
      <li>Your permission level
        <p>If your user account does not have the &quot;Manage All Content&quot; permission level, then you are only permitted to manage <em>(by default)</em> the basic properties of the content item.  Enough to edit content, and pick a page in its navigation.  You may also be restricted as to where new content items can be placed in the content hierarchy.</p>
      </li>
-     <li>Site settings <em>(i.e: the &quot;Basic Properties&quot; field in the &quot;Global Settings&quot; window, and others)</em>.
+     <li>Site settings <em>(i.e.: the &quot;Basic Properties&quot; field in the &quot;Global Settings&quot; window, and others)</em>.
        <p>Some site settings <em>(and even config settings)</em> can influence what properties are displayed on what tab.  The &quot;Basic Properties&quot; setting in the &quot;Site Admin >> Global Settings&quot; page extends the list of content item properties that users with restricted permissions can edit.</p>
      </li>
      <li>The template that has been selected.
@@ -402,7 +402,7 @@ $lang['help_designmanager_help'] = <<<EOT
   <p>The core creates a few standard template types on installation.  Third party modules will probably create more.  Template type definitions normally have two parts, the Originator <em>(the module or functionality that created them)</em>, and the type name itself.  i.e:  Core::Page indicates a page template type created by the core.  News::Summary is the name of the template type for news summary templates.  Although site developers cannot create new template types they can specify the type for a template when adding or editing a template.</p>
   <p>Most template types have a &quot;prototype&quot; template that is used to provide a skeleton layout creating a new template of that type.</p>
   <p>Some template types (such as the &quot;Core::Page&quot; template type support the notion of a &quot;default template&quot;.  The default template of a type is typically used by modules so that a template of a certain type can be used in the event that a specific template is not named.  Additionally, the default template of type &quot;Core::Page&quot; is used as the default template when creating a new content item of type &quot;Content&quot;</p>
-  <p>The Design Manager admin interface allows filtering templates by originator, or their type to easily find templates to edit or manage.</p>
+  <p>The Design Manager Admin interface allows filtering templates by originator, or their type to easily find templates to edit or manage.</p>
 
   <h4>Generic Templates <em>(formerly Global Content Blocks)</em></h4>
     <p>A standard template type is called &quot;Core::generic&quot;.  This is a generic template that could be used for anything.  It replaces &quot;Global Content Blocks&quot; <em>(GCB)</em> from prior versions of CMSMS.</p>
@@ -411,11 +411,11 @@ $lang['help_designmanager_help'] = <<<EOT
   <p>Categories are a method site developers can use to further organize templates.  Site developers can create, rename and delete categories and associate different templates with them.   When managing templates site developers can filter templates by their category.</p>
 
 <h3>The Primary Interface</h3>
-  <p>The Design Manager admin panel is located in the CMSMS admin navigation as &quot;Design Manager&quot; under the &quot;Layout&quot; section.</p>
-  <p>The Design Manager admin panel has numerous tabs.  Each tab serves a particular purpose, and may require special privileges.  Only a user with one of the required permissions <em>(or ownership/additional editor status on one or more templates)</em> will be able to see the design manager in the CMSMS admin console.</p>
+  <p>The Design Manager Admin panel is located in the CMSMS Admin navigation as &quot;Design Manager&quot; under the &quot;Layout&quot; section.</p>
+  <p>The Design Manager Admin panel has numerous tabs.  Each tab serves a particular purpose, and may require special privileges.  Only a user with one of the required permissions <em>(or ownership/additional editor status on one or more templates)</em> will be able to see the design manager in the CMSMS Admin console.</p>
   <ul>
     <li>The Templates Tab
-      <p>The templates tab provides all of the functionality to conveniently and easily create and manage templates.  It is visible to admin users with the &quot;Modify Templates&quot; permission, or who are owners or additional editors of one or more templates.</p>
+      <p>The templates tab provides all of the functionality to conveniently and easily create and manage templates.  It is visible to Admin users with the &quot;Modify Templates&quot; permission, or who are owners or additional editors of one or more templates.</p>
       <p>Some of the features of this tab include:</p>
       <ul>
         <li>A tabular format which displays summary information about each template, and provides convenient actions for working on templates individually, or en-masse.</li>
@@ -426,20 +426,20 @@ $lang['help_designmanager_help'] = <<<EOT
     </li>
 
     <li>The Categories Tab
-      <p>The categories tab is visible to all admin users with the &quot;Modify Templates&quot; permission.  It provides the ability to add, edit, delete, rename and re-order categories.</p>
+      <p>The categories tab is visible to all Admin users with the &quot;Modify Templates&quot; permission.  It provides the ability to add, edit, delete, rename and re-order categories.</p>
       <p>When adding or editing a category it is possible to provide a description of the use of the category for reference purposes.</p>
     </li>
 
     <li>The Template Types Tab
-      <p>This tab is visible to all admin users with the &quot;Modify Templates&quot; permission.  It provides the ability to edit information about the template type including the prototype template.  And to create a new template of each type.</p>
+      <p>This tab is visible to all Admin users with the &quot;Modify Templates&quot; permission.  It provides the ability to edit information about the template type including the prototype template.  And to create a new template of each type.</p>
     </li>
       
     <li>The Stylesheets Tab
-      <p>This tab is visible to all admin users with the &quot;Manage Stylesheets&quot; permission.  It provides the ability to create, delete, edit, and manage stylesheets.<p>
+      <p>This tab is visible to all Admin users with the &quot;Manage Stylesheets&quot; permission.  It provides the ability to create, delete, edit, and manage stylesheets.<p>
     </li>
 
     <li>The Designs Tab
-      <p>This admin panel tab is visible to all admin users with the &quot;Manage Designs&quot; permission.  <em>(Note: users with that permission and no others may not have access to the full functionality of this tab)</em>.
+      <p>This admin panel tab is visible to all Admin users with the &quot;Manage Designs&quot; permission.  <em>(Note: users with that permission and no others may not have access to the full functionality of this tab)</em>.
       <p>This tab provides the ability to import, export, create, edit, and delete designs.</p>
     </li>
   </ul>
@@ -480,7 +480,7 @@ $lang['help_designmanager_help'] = <<<EOT
    <h4>Bulk Actions:</h4>
     <p>This is a dropdown with options <em>(currently only delete)</em> to perform on multiple templates at one time.  Use extreme caution when performing bulk actions as doing so could severely effect a working website.</p>
   <h4>Editing Templates</h4>
-    <p>The edit template form is a complex form that allows management of all of the attributes of a template.  For convenience the form is devided into numerous tabs.</p>
+    <p>The edit template form is a complex form that allows management of all of the attributes of a template.  For convenience the form is divided into numerous tabs.</p>
     <p>This form supports the &quot;dirtyform&quot; functionality to reduce the chances of accidentally losing unsaved changes.  Users will be notified if attempting to navigate away from this page if the template has not been saved.</p>
     <p>This form locks the selected template so that other authorized editors will not have the ability to edit the template at the same time.  This prevents somebody else from accidentally overwriting changes of another editor.</p>
     <ul>
@@ -551,7 +551,7 @@ $lang['help_designmanager_help'] = <<<EOT
         <p>This text string uniquely identifies the stylesheet.  The system will generate an error when saving the stylesheet if the name is already used by another stylesheet.</p>
       </li>
       <li>Stylesheet Content:
-        <p>This text area displays the actual CSS code.  If a syntax highlighter module is installed, supports hiliting CSS code, is enabled, and the user has enabled it in his settings, then it will be enabled in this area to provide advanced editing capabilities.</p>
+        <p>This text area displays the actual CSS code.  If a syntax highlighter module is installed, supports hi-lighting CSS code, is enabled, and the user has enabled it in his settings, then it will be enabled in this area to provide advanced editing capabilities.</p>
       </li>
       <li>Media Types <em style="color: red;">(deprecated)</em>:
         <p>This tab provides numerous checkbox allowing you to select media types to associate with the stylesheet.  It is preferred to use media queries instead, and this functionality may be removed at a later date.</p>
@@ -560,7 +560,7 @@ $lang['help_designmanager_help'] = <<<EOT
         <p>This tab provides a text area where a media query can be associated with the stylesheet.</p>
       </li>
       <li>Description:
-        <p>The text area in this tab provides the ability to describe the purpose of the stylesheets, and any notes that may be useful to editors in the future..</p>
+        <p>The text area in this tab provides the ability to describe the purpose of the stylesheets, and any notes that may be useful to editors in the future.</p>
       </li>
       <li>Designs:
         <p>This tab provides the ability to associate the stylesheet with one or more designs.  If any new design associations are detected this stylesheet will be placed at the end of the stylesheet list for that design.</p>
@@ -568,7 +568,7 @@ $lang['help_designmanager_help'] = <<<EOT
     </ul>
 <h3>Managing Designs</h3>
   <p>The designs tab is available to users with the &quot;Manage Designs&quot; permission.  It displays a list of all of the known designs in a tabular format.  Each row of the table represents a single design.  The columns of the table displays summary information about the design and provides some ability to interact with it.</p>
-  <p>This tab does not provide filtering, pagination, or bulk actions as it is intended that the number of designs associated with a website should normally be kept small and managable.</p>
+  <p>This tab does not provide filtering, pagination, or bulk actions as it is intended that the number of designs associated with a website should normally be kept small and manageable.</p>
   <p>An options menu exists providing the ability to create a new design, or to import a design from XML format.</p>
   <h4>Table Columns</h4>
   <ul>
@@ -607,7 +607,7 @@ $lang['help_designmanager_help'] = <<<EOT
       </li>
     </ul>
   <h4>Importing Designs</h4>
-     <p>The Design Manager module is capable of importing XML themes that were exported from CMSMS Design Manager, or from the older CMSMS theme manager.  It expands the uploaded XML file, and extracts templates, stylesheets, and other useful information from the file.  It also performs some minor transformation on the extraced data to try to adjust for overlapping names, etc.</p>
+     <p>The Design Manager module is capable of importing XML themes that were exported from CMSMS Design Manager, or from the older CMSMS theme manager.  It expands the uploaded XML file, and extracts templates, stylesheets, and other useful information from the file.  It also performs some minor transformation on the extracted data to try to adjust for overlapping names, etc.</p>
      <p>The import process is divided into a few steps:</p>
      <ul>
       <li>Step 1: Upload the file:
@@ -627,34 +627,34 @@ $lang['help_page_disablewysiwyg'] = '
 todo
 ';
 
-$lang['help_myaccount_admincallout'] = 'If enabled administrative bookmarks <em>(shortcuts)</em> will be enabled allowing you to manage a list of frequently used actions in the admin console.';
-$lang['help_myaccount_admintheme'] = 'Select an administration theme to use.  Different administration themes have different menu layouts, work better for mobile displays, and have varous additional features.';
+$lang['help_myaccount_admincallout'] = 'If enabled administrative bookmarks <em>(shortcuts)</em> will be enabled allowing you to manage a list of frequently used actions in the Admin console.';
+$lang['help_myaccount_admintheme'] = 'Select an administration theme to use.  Different administration themes have different menu layouts, work better for mobile displays, and have various additional features.';
 $lang['help_myaccount_ce_navdisplay'] = 'Select which content field should be displayed in content lists.  Options include the page title, or menu text.  If &quot;None&quot; is selected, then the site preference will be used';
 $lang['help_myaccount_dateformat'] = 'Specify a date format string to use when dates are displayed.  This string uses <a href="http://php.net/manual/en/function.strftime.php">strftime</a> format.  <strong>Note:</strong> some third party add-ons may not obey this setting.</strong>';
 $lang['help_myaccount_dfltparent'] = 'Specify the default parent page for creating a new content page.  The use of this setting also depends on your content editing permissions.<br/><br/>Drill down to the selected default parent page by selecting the topmost parent, and successive child pages from the provided dropdowns.<br/><br/>The text field on the right will always indicate which page is currently selected.';
-$lang['help_myaccount_email'] = 'Specify an email address.  This is used for the lost password functionality, and for any notification emails sent by the system (or addon modules).';
+$lang['help_myaccount_email'] = 'Specify an email address.  This is used for the lost password functionality, and for any notification emails sent by the system (or add-on modules).';
 $lang['help_myaccount_enablenotifications'] = 'If enabled, the system will display various notifications about things that need to be taken care of in the navigation';
-$lang['help_myaccount_firstname'] = 'Optionally specify your given name.  This may be used in the admin theme, or to personally address emails to you';
-$lang['help_myaccount_hidehelp'] = 'If enabled the system will hide module help links from the admin console.  In most circumstances the help provided with modules is targeted towards site developers and may not be useful to content editors.';
-$lang['help_myaccount_homepage'] = 'You may select a page to automatically direct to when you login to the CMSMS admin console.  This may be useful when you primarily use one function.';
-$lang['help_myaccount_ignoremodules'] = 'If admin notifications are enabled you can select to ignore notifications from some modules';
+$lang['help_myaccount_firstname'] = 'Optionally specify your given name.  This may be used in the Admin theme, or to personally address emails to you';
+$lang['help_myaccount_hidehelp'] = 'If enabled the system will hide module help links from the Admin console.  In most circumstances the help provided with modules is targeted towards site developers and may not be useful to content editors.';
+$lang['help_myaccount_homepage'] = 'You may select a page to automatically direct to when you login to the CMSMS Admin console.  This may be useful when you primarily use one function.';
+$lang['help_myaccount_ignoremodules'] = 'If Admin notifications are enabled you can select to ignore notifications from some modules';
 $lang['help_myaccount_indent'] = 'This option will indent the content list view to illustrate the parent and child page relationship';
-$lang['help_myaccount_language'] = 'Select the language to display for the admin interface.  The list of available languages may vary on each CMSMS install';
-$lang['help_myaccount_lastname'] = 'Optionally specify your surname.  This may be used in the admin theme, or to personally address emails to you';
+$lang['help_myaccount_language'] = 'Select the language to display for the Admin interface.  The list of available languages may vary on each CMSMS install';
+$lang['help_myaccount_lastname'] = 'Optionally specify your surname.  This may be used in the Admin theme, or to personally address emails to you';
 $lang['help_myaccount_password'] = 'Please enter a unique, and secure password for this website.  The password should be more more than six characters long, and should use a combination of upper case, lower case, non alphanumeric, and digits.  Please leave this field blank if you do no wish to change your password.';
 $lang['help_myaccount_passwordagain'] = 'To reduce errors, please enter your password again.  Leave this field empty if you do not wish to change your password.';
 $lang['help_myaccount_syntax'] = 'Select which syntax highlighting module to use when editing HTML, or smarty code.  The list of available modules may change depending on what your site administrator has configured';
-$lang['help_myaccount_username'] = 'Your username is your unique name for the CMSMS admin panel.  Please use only alphanumeric characters and the underscore';
+$lang['help_myaccount_username'] = 'Your username is your unique name for the CMSMS Admin panel.  Please use only alphanumeric characters and the underscore';
 $lang['help_myaccount_wysiwyg'] = 'Select which WYSIWYG <em>(What You See Is What You Get)</em> module to use when editing HTML content.  You may also select &quot;None&quot; if you are comfortable with HTML.  The list of available WYSIWYG editors may change depending on what t he site administrator has configured.';
 
 /* S */
 $lang['settings_searchmodule'] = 'Select the module that should be used to index words for searching, and will provide the site search capabilities';
 $lang['settings_autocreate_url'] = 'When editing content pages, should SEF/pretty URLS be auto-created?  Auto creating URLS will have no effect if pretty urls are not enabled in the CMSMS config.php file.';
 $lang['settings_nosefurl'] = 'To configure <strong>S</strong>each <strong>E</strong>ngine <strong>F</strong>riendly <em>(pretty)</em> URLs you need to edit a few lines in your config.php file and possibly to edit a .htaccess file or your web servers configuration.   You can read more about configuring pretty URLS <a href="http://docs.cmsmadesimple.org/configuration/pretty-url" target="blank"><u>here</u></a> &raquo;';
-$lang['settings_autocreate_flaturls'] = 'If SEF/pretty URLs are enabled, and the option to auto-create urls is enabled, this option indicates hat those auto-created URLS should be flat <em>(i.e: identical to the page alias)</em>.  <strong>Note:</strong> The two values do not need to remain identical, the URL value can be changed to be different than the page alias in subsequent page edits';
+$lang['settings_autocreate_flaturls'] = 'If SEF/pretty URLs are enabled, and the option to auto-create URLs is enabled, this option indicates hat those auto-created URLS should be flat <em>(i.e: identical to the page alias)</em>.  <strong>Note:</strong> The two values do not need to remain identical, the URL value can be changed to be different than the page alias in subsequent page edits';
 $lang['settings_mandatory_urls'] = 'If SEF/pretty URLs are enabled, this option indicates whether page URLS are a required field in the content editor.';
 $lang['settings_badtypes'] = 'Select which content types to remove from the content type dropdown when editing or adding content.  This feature is useful if you do not want editors to be able to create certain types of content.  Use CTRL+Click to select, unselect items.  Having no selected items will indicate that all content types are allowed. <em>(applies to all users)</em>';
-$lang['settings_basicattribs'] = 'This field allows you to specify which content properties that users without the &quot;Manage All Content&quot; permission are allowed to edit. The selected properties will appear in the &quot;Main Tab&quot; on the edit content page.<br/><br/>This feature us useful when you have content editors with restricted permission and want to control what content properties that they are allowed to edit.';
+$lang['settings_basicattribs'] = 'This field allows you to specify which content properties that users without the &quot;Manage All Content&quot; permission are allowed to edit. The selected properties will appear in the &quot;Main Tab&quot; on the edit content page.<br/><br/>This feature is useful when you have content editors with restricted permission and want to control what content properties that they are allowed to edit.';
 $lang['settings_imagefield_path'] = 'This setting is used when editing content.  The directory specified here is used to provide a list of images from which to associate an image with the content page.<br/></br/>Relative to the image uploads path, specify a directory name that contains the paths containing files for the image field';
 $lang['settings_thumbfield_path'] = 'This setting is used when editing content.  The directory specified here is used to provide a list of images from which to associate a thumbnail with the content page.<br/><br/>Relative to the image uploads path, specify a directory name that contains the paths containing files for the image field.  Usually this will be the same as the path above.';
 $lang['settings_contentimage_path'] = 'This setting is used when a page template contains the {content_image} tag.  The directory specified here is used to provide a selection of images to associate with the tag.<br/><br/>Relative to the uploads path, specify a directory name that contains the paths containing files for the {content_image} tag.  This value is used as a default for the dir parameter';
@@ -676,23 +676,23 @@ $lang['settings_browsercache_expiry'] = 'Specify the amount of time (in minutes)
 $lang['settings_autoclearcache'] = 'This option allows you to specify the maximum age <em>(in days)</em> before files in the cache directory will be deleted.<br/><br/>This option is useful to ensure that cached files are regenerated periodically, and that the filesystem does not become polluted with old and unnecessary files.  An ideal value for this field is 14 or 30 days.<br/><br/><strong>Note:</strong> Cached files are cleared at most once per day.';
 $lang['settings_umask'] = 'The &quot;umask&quot; is an octal value that is used to specify the default permission for newly created files (this is used for files in the cache directory, and uploaded files.  For more information see the appropriate <a href="http://en.wikipedia.org/wiki/Umask">Wikipedia article.</a>';
 $lang['settings_disablesafemodewarn'] = 'This option will disable a warning notice if CMSMS detects that <a href="http://php.net/manual/en/features.safe-mode.php">PHP Safe Mode</a> has been detected.<br/><br/><strong>Note:</strong> Safe mode has been deprecated as of PHP 5.3.0 and removed for PHP 5.4.0.  CMSMS Does not support operation under safe mode, and our support team will not render any technical assistance for installs where safe mode is active';
-$lang['settings_enablenotifications'] = 'This option will enable notifications being shown at the top of the page in each admin request.  This is useful for important notifications about the system that may require user action.  It is possible for each admin user to turn off notifications in their preferences.';
+$lang['settings_enablenotifications'] = 'This option will enable notifications being shown at the top of the page in each Admin request.  This is useful for important notifications about the system that may require user action.  It is possible for each Admin user to turn off notifications in their preferences.';
 $lang['settings_pseudocron_granularity'] = 'This setting indicates how often (in minutes) the system will attempt to handle regularly scheduled tasks.';
-$lang['settings_adminlog_lifetime'] = 'This setting indicates the maximum amount of time <em>(in days)</em> That entires in the admin log should be retained.';
+$lang['settings_adminlog_lifetime'] = 'This setting indicates the maximum amount of time <em>(in days)</em> that entries in the Admin log should be retained.';
 $lang['settings_checkversion'] = 'If enabled, the system will perform a daily check for a new release of CMSMS';
-$lang['settings_smartycaching'] = 'When enabled, the output from various plugins will be cached to increase performance. Additionally, most portions of compiled templates will be cached. This only applies to output on content pages marked as cachable, and only for non-admin users.  Note, this functionality may interfere with the behaviour of some modules or plugins, or plugins that use non-inline forms.<br/><br/><strong>Note:</strong> When smarty caching is enabled, global content blocks <em>(GCBs)</em> are always cached by smarty, and user defined tags <em>(UDTs)</em> are never cached.  Additionally, content blocks are never cached.';
+$lang['settings_smartycaching'] = 'When enabled, the output from various plugins will be cached to increase performance. Additionally, most portions of compiled templates will be cached. This only applies to output on content pages marked as cachable, and only for non-Admin users.  Note, this functionality may interfere with the behaviour of some modules or plugins, or plugins that use non-inline forms.<br/><br/><strong>Note:</strong> When smarty caching is enabled, global content blocks <em>(GCBs)</em> are always cached by smarty, and user defined tags <em>(UDTs)</em> are never cached.  Additionally, content blocks are never cached.';
 $lang['settings_smartycompilecheck'] = 'If disabled, smarty will not check the modification dates of templates to see if they have been modified.  This can significantly improve performance.  However performing any template change (or even some content changes) may require a cache clearing';
 
 $lang['siteprefs_lockrefresh'] = 'This field specifies the minimum frequency (in minutes) the Ajax based locking mechanism should &quot;touch&quot; a lock.  An ideal value for this field is 5.';
-$lang['siteprefs_locktimeout'] = 'This field specifies the number of minutes of inactivity before a lock times out.  After a lock times out other users may steal the lock.  In order for a lock to not timeout it must be &quot;touched&quot; before its expiry time.  This resets the expiry time of the lock.  Under most circumstances a 60 minute lock should be suitable.';
+$lang['siteprefs_locktimeout'] = 'This field specifies the number of minutes of inactivity before a lock times out.  After a lock times out other users may steal the lock.  In order for a lock to not time-out it must be &quot;touched&quot; before its expiry time.  This resets the expiry time of the lock.  Under most circumstances a 60 minute lock should be suitable.';
 $lang['siteprefs_sitename'] = 'This is a human readable name for your website, i.e: the business, club, or organization name';
 $lang['siteprefs_frontendlang'] = 'The default language that your website displays on the frontend.  This can be changed on a per-page basis using different smarty tags. i.e: <code>{cms_set_language}</code>';
 $lang['siteprefs_frontendwysiwyg'] = 'When WYSIWYG editors are provided on frontend forms, what WYSIWYG module should be used?  Or none.';
 $lang['siteprefs_nogcbwysiwyg'] = 'This option will disable the WYSIWYG editor on all global content blocks independent of user settings, or of the individual global content blocks';
-$lang['siteprefs_globalmetadata'] = 'This textarea provides the ability to enter meta information that is relevant to all content pages.  This is an ideal location for meta tags such as Generator, and Author, etc';
-$lang['siteprefs_logintheme'] = 'Select the admin theme (from installed admin themes) that will be used to generate the administrator login form, and as the default login theme for new admin user accounts.  Admin users will be able to select their preferred admin theme from within the user preferences panel.';
-$lang['siteprefs_backendwysiwyg'] = 'Select the WYSIWYG editor for newly created admin user accounts.  Admin users will be able to select their preferred WYSIWYG editor from within the user preference panel.';
+$lang['siteprefs_globalmetadata'] = 'This text area provides the ability to enter meta information that is relevant to all content pages.  This is an ideal location for meta tags such as Generator, and Author, etc.';
+$lang['siteprefs_logintheme'] = 'Select the Admin theme (from installed Admin themes) that will be used to generate the administrator login form, and as the default login theme for new Admin user accounts.  Admin users will be able to select their preferred admin theme from within the user preferences panel.';
+$lang['siteprefs_backendwysiwyg'] = 'Select the WYSIWYG editor for newly created Admin user accounts.  Admin users will be able to select their preferred WYSIWYG editor from within the user preference panel.';
 $lang['siteprefs_dateformat'] = '<p>Specify the date format string in <a href="http://ca2.php.net/manual/en/function.strftime.php">PHP strftime</a> format that will be used <em>(by default)</em> to display dates and times in your website.</p><p>Admin users can adjust these settings in the user preferences panel.</p><p><strong>Note:</strong> Some modules may choose to display times and dates differently</p>';
-$lang['siteprefs_thumbwidth'] = 'Specify a width <em>(in pixels)</em> to be used by default when generating thumbnails from uploaded image files.  Thumbnails are typically displayed in the admin panel in the FileManager module or when selecting an image to insert into page content.  However, some modules may use the thumbnails on the website frontend.<br/><br/><strong>Note:</strong> Some modules may have additional preferences for how to generate thumbnails, and ignore this setting.';
-$lang['siteprefs_thumbheight'] = 'Specify a height <em>(in pixels)</em> to be used by default when generating thumbnails from uploaded image files.  Thumbnails are typically displayed in the admin panel in the FileManager module or when selecting an image to insert into page content.  However, some modules may use the thumbnails on the website frontend.<br/><br/><strong>Note:</strong> Some modules may have additional preferences for how to generate thumbnails, and ignore this setting.';
+$lang['siteprefs_thumbwidth'] = 'Specify a width <em>(in pixels)</em> to be used by default when generating thumbnails from uploaded image files.  Thumbnails are typically displayed in the Admin panel in the FileManager module or when selecting an image to insert into page content.  However, some modules may use the thumbnails on the website frontend.<br/><br/><strong>Note:</strong> Some modules may have additional preferences for how to generate thumbnails, and ignore this setting.';
+$lang['siteprefs_thumbheight'] = 'Specify a height <em>(in pixels)</em> to be used by default when generating thumbnails from uploaded image files.  Thumbnails are typically displayed in the Admin panel in the FileManager module or when selecting an image to insert into page content.  However, some modules may use the thumbnails on the website frontend.<br/><br/><strong>Note:</strong> Some modules may have additional preferences for how to generate thumbnails, and ignore this setting.';
 ?>
