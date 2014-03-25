@@ -23,7 +23,7 @@ try {
   $result = $ops->ExpandXMLPackage( $file['tmp_name'], true, true );
 
   audit('',$this->GetName(),'Imported Module '.$file['name']);
-  $this->Setmessage($this->Lang('msg_moduleimported'));
+  $this->Setmessage($this->Lang('msg_module_imported'));
 }
 catch( Exception $e ) {
   $this->SetError($e->GetMessage());
