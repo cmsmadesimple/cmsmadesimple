@@ -919,7 +919,7 @@ function can_admin_upload()
     return FALSE;
   }
 
-  $safe_mode = ini_get_bool('safe_mode');
+  $safe_mode = ini_get_boolean('safe_mode');
   if( $safe_mode ) {
     // we're in safe mode.
     if( ($stat_moduleinterface[4] != $stat_modules[4]) ||

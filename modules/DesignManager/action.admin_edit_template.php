@@ -62,15 +62,9 @@ try {
 		if( isset($params['tpl_setall']) ) $this->Redirect($id,'admin_set_all_pages',$returnid,array('tpl'=>$params['tpl']));
 
     if( isset($params['submit']) || isset($params['apply']) ) {
-			try {
-				$parser = cmsms()->get_template_parser(); 
-				cms_utils::set_app_data('tmp_template',$params['contents']);
-				$parser->fetch('cms_template:appdata;tmp_template'); // do the magic.
-			} 
-			catch ( SmartyCompilerException $e ) {
-				$error .= "<li>".$e->getMessage().'</li>';
-				$validinfo = false;
-			}
+			$parser = cmsms()->get_template_parser();
+			cms_utils::set_app_data('tmp_template',$params['contents']);
+			$parser->fetch('cms_template:appdata;tmp_template'); // do the magic.
 
       $tpl_obj->set_name($params['name']);
       $tpl_obj->set_content($params['contents']);
@@ -112,11 +106,11 @@ try {
 			$this->RedirectToAdminTab();
     }
   }
-  catch( CmsException $e ) {
+  catch( Exception $e ) {
     echo $this->ShowErrors($e->GetMessage());
   }
 
-	// 
+	//
 	// BUILD THE DISPLAY
 	//
 	if( $tpl_obj && $tpl_obj->get_id() && dm_utils::locking_enabled() ) {
@@ -131,7 +125,7 @@ try {
 			$this->RedirectToAdminTab();
 		}
 	}
-	
+
 	$type_obj = CmsLayoutTemplateType::load($tpl_obj->get_type_id());
 	$smarty->assign('type_obj',$type_obj);
   $smarty->assign('extraparms',$extraparms);
