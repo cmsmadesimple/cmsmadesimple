@@ -2,17 +2,17 @@
 
 {% macro elementSummary(element, type) %}
 <div id="{{ type }}_{{ element.name }}" class="element ajax clickable {{ type }}">
-    <h1>{{ element.name }}<a href="{{ path(element) }}">¶</a></h1>
+    <h1>{{ element.name }}{% if type == 'class' or type == 'interface' %}<a href="{{ path(element) }}">¶</a>{% endif %}</h1>
     <p class="short_description">{{ element.summary }}</p>
     <div class="details collapse">
         {{ element.description }}
     </div>
-    <a href="{{ path(element) }}" class="more">« More »</a>
+    {% if type == 'class' or type == 'interface' %}<a href="{{ path(element) }}" class="more">« More »</a>{% endif %}
 </div>
 {% endmacro %}
 
 {% macro elementSidebar(element, type) %}
-    <li class="{{ type }} {{ element.visibility }}{{ element.parent.name != node.name ? ' inherited' : '' }}"><a href="#{{ type }}_{{ element.name }}" title="{{ element.name }} :: {{ element.summary }}"> {% if element.summary|length > 0 %}<span class="description">{{ element.summary }}</span>{% endif %}     <pre>{{ element.name }}</pre> </a></li>
+    <li class="{{ type }} {{ element.visibility }}{{ element.parent.name != node.name ? ' inherited' : '' }}"><a href="#{{ type }}_{{ element.name }}" title="{{ element.name }} :: {{ element.summary }}"> <pre>{{ element.name }}</pre> {% if element.summary|length > 0 %}<span class="description">{{ element.summary }}</span>{% endif %}</a></li>
 {% endmacro %}
 
 {% macro buildBreadcrumb(element) %}
@@ -111,7 +111,7 @@
                 
                 {% if node.functions|length > 0 %}
                 <li class="nav-header"><i class="glyphicon glyphicon-custom icon-function"></i> Functions
-                    <ul>
+                    <ul class="collapse">
                     {% for function in node.functions %}
                         {{ self.elementSidebar(function, 'function') }}
                     {% endfor %}
@@ -121,7 +121,7 @@
                 
                 {% if node.constants|length > 0 %}
                 <li class="nav-header"><i class="glyphicon glyphicon-custom icon-constant"></i> Constants
-                    <ul>
+                    <ul class="collapse">
                     {% for constant in node.constants %}
                         {{ self.elementSidebar(constant, 'constant') }}
                     {% endfor %}
@@ -131,7 +131,7 @@
                 
                 {% if node.traits|length > 0 %}
                 <li class="nav-header"><i class="glyphicon glyphicon-custom icon-class"></i> Traits
-                    <ul>
+                    <ul class="collapse">
                     {% for trait in node.traits %}
                         {{ self.elementSidebar(trait, 'trait') }}
                     {% endfor %}
@@ -140,7 +140,7 @@
                 {% endif %}
                 {% if node.interfaces|length > 0 %}
                 <li class="nav-header"><i class="glyphicon glyphicon-custom icon-class"></i> Interfaces
-                    <ul>
+                    <ul class="collapse">
                     {% for interface in node.interfaces %}
                         {{ self.elementSidebar(interface, 'interface') }}
                     {% endfor %}
@@ -149,7 +149,7 @@
                 {% endif %}
                 {% if node.classes|length > 0 %}
                 <li class="nav-header"><i class="glyphicon glyphicon-custom icon-class"></i> Classes
-                    <ul>
+                    <ul class="collapse">
                     {% for class in node.classes %}
                         {{ self.elementSidebar(class, 'class') }}
                     {% endfor %}

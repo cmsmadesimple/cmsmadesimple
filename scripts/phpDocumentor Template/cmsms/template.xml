@@ -17,7 +17,7 @@
     <transformation query="indexes.packages" writer="twig" source="templates/cmsms/package.html.twig" />
     <transformation query="indexes.classes" writer="twig" source="templates/cmsms/class.html.twig" />
     <transformation query="indexes.interfaces" writer="twig" source="templates/cmsms/class.html.twig" />
-    <transformation writer="twig" query="files" source="templates/clean/file.source.txt.twig" artifact="files/{{path}}.txt"/>
+    <transformation writer="twig" query="files" source="templates/cmsms/file.source.txt.twig" artifact="files/{{path}}.txt"/>
     <transformation writer="twig" source="templates/cmsms/reports/markers.html.twig" artifact="markers.html"/>
     <transformation writer="twig" source="templates/cmsms/reports/errors.html.twig" artifact="errors.html"/>
     <transformation writer="twig" source="templates/cmsms/reports/deprecated.html.twig" artifact="deprecated.html"/>

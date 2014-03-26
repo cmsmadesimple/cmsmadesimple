@@ -26,13 +26,13 @@
 {% endblock %}
 
 {% block sidebar_entry %}
-<li class="{{ type }} {{ item.visibility }}{{ item.parent.name != node.name ? ' inherited' : '' }}"><a href="#{{ type }}_{{ item.name }}" title="{{ item.name }} :: {{ item.summary }}"> <span class="description">{{ item.summary }}</span>     <pre>{{ item.name }}</pre> </a></li>
+<li class="{{ type }} {{ item.visibility }}{{ item.parent.name != node.name ? ' inherited' : '' }}"><a href="#{{ type }}_{{ item.name }}" title="{{ item.name }} :: {{ item.summary }}"> <pre>{{ item.name }}</pre> {% if item.summary %}<span class="description">{{ item.summary }}</span>{% endif %}</a></li>
 {% endblock %}
 
 {% block sidebar_content %}
 <ul class="side-nav nav nav-list">
     <li class="nav-header"><i class="glyphicon glyphicon-custom icon-method"></i> Methods
-        <ul>
+        <ul class="collapse">
             {% set specialMethods = node.magicMethods ? node.inheritedMethods.merge(node.magicMethods) : node.inheritedMethods %}
             {% for item in node.methods.merge(specialMethods) %}
                 {% set type='method' %}
@@ -42,7 +42,7 @@
             {% endfor %}
         </ul></li>
     <li class="nav-header protected">» Protected
-        <ul>
+        <ul class="collapse">
             {% set specialMethods = node.magicMethods ? node.inheritedMethods.merge(node.magicMethods) : node.inheritedMethods %}
             {% for method in node.methods.merge(specialMethods) %}
                 {% if method.visibility == 'protected' %}
@@ -51,7 +51,7 @@
             {% endfor %}
         </ul></li>
     <li class="nav-header private">» Private
-        <ul>
+        <ul class="collapse">
             {% set specialMethods = node.magicMethods ? node.inheritedMethods.merge(node.magicMethods) : node.inheritedMethods %}
             {% for method in node.methods.merge(specialMethods) %}
                 {% if method.visibility == 'private' %}
@@ -60,7 +60,7 @@
             {% endfor %}
         </ul></li>
     <li class="nav-header"><i class="glyphicon glyphicon-custom icon-constant"></i> Constants
-        <ul>
+        <ul class="collapse">
             {% for constant in node.constants.merge(node.inheritedConstants) %}
             <li class="constant {{ constant.visibility }}"><a href="#constant_{{ constant.name }}" title="{{ constant.name }} :: {{ constant.summary }}"> <span class="description">{{ constant.summary }}</span>                 <pre>{{ constant.name }}</pre> </a></li>
             {% endfor %}
