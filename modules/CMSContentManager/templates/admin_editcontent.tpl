@@ -66,7 +66,7 @@ $(document).ready(function(){
                 $('#previewframe').attr('src', url).show();
             }
         },'json');
-    }); 
+    });
 {/if}
 
     // here we want to disable the dirtyform stuff when these fields are changed
@@ -132,6 +132,22 @@ $(document).ready(function(){
         }
         jQuery('#Edit_Content_Result').html(htmlShow);
     });
+
+    {if isset($designchanged_ajax_url)}
+    $('#design_id').change(function(){
+      var v = $(this).val();
+      var data = { '{$actionid}design_id': v };
+      $.get('{$designchanged_ajax_url}',data,function(data,text) {
+        if( typeof data == 'object' ) {
+          $('#template_id').empty();
+          for( key in data ) {
+	    $('#template_id').append('<option value="'+key+'">'+data[key]+'</option>');
+	  }
+        }
+      }, 'json' );
+    });
+    $('#design_id').trigger('change');
+    {/if}
 });
 // ]]>
 </script>

@@ -223,5 +223,5 @@ $smarty->assign('cms_user_key',$_SESSION[CMS_USER_KEY]);
 echo $smarty->fetch('checksum.tpl');
 include_once("footer.php");
 
-# vim:ts=4 sw=4 noet
+
 ?>

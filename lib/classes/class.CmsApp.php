@@ -1,4 +1,4 @@
-<?php // -*- mode:php; tab-width:4; indent-tabs-mode:t; c-basic-offset:4; -*-
+<?php
 #CMS - CMS Made Simple
 #(c)2004-2010 by Ted Kulp (ted@cmsmadesimple.org)
 #Visit our homepage at: http://cmsmadesimple.org
@@ -126,7 +126,7 @@ final class CmsApp {
 	 */
 	public static function &get_instance()
 	{
-		if( !self::$_instance  ) self::$_instance = new CmsApp();
+		if( !isset(self::$_instance)  ) self::$_instance = new CmsApp();
 		return self::$_instance;
 	}
 
@@ -698,5 +698,4 @@ function cms_db_prefix() {
   return cmsms()->GetDbPrefix();
 }
 
-# vim:ts=4 sw=4 noet
 ?>

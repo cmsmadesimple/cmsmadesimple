@@ -1,10 +1,10 @@
-<?php // -*- mode:php; tab-width:4; indent-tabs-mode:t; c-basic-offset:4; -*-
+<?php
 #BEGIN_LICENSE
 #-------------------------------------------------------------------------
-# Module: cms_content_tree (c) 2010 by Robert Campbell 
+# Module: cms_content_tree (c) 2010 by Robert Campbell
 #         (calguy1000@cmsmadesimple.org)
 #  A caching tree for CMSMS content objects.
-# 
+#
 #-------------------------------------------------------------------------
 # CMS - CMS Made Simple is (c) 2005 by Ted Kulp (wishy@cmsmadesimple.org)
 # Visit our homepage at: http://www.cmsmadesimple.org
@@ -19,7 +19,7 @@
 # However, as a special exception to the GPL, this software is distributed
 # as an addon module to CMS Made Simple.  You may not use this software
 # in any Non GPL version of CMS Made simple, or in any version of CMS
-# Made simple that does not indicate clearly and obviously in its admin 
+# Made simple that does not indicate clearly and obviously in its admin
 # section that the site was built with CMS Made simple.
 #
 # This program is distributed in the hope that it will be useful,
@@ -86,10 +86,11 @@ final class cms_content_cache
 	/**
 	 * @ignore
 	 */
-	private function __construct() 
+	private function __construct()
 	{
 		if( !cmsms()->is_frontend_request() ) return;
 
+        debug_buffer('cms_content_cache: begin load needed content objects');
 		$content_ids = null;
 		$deep = FALSE;
 		$this->_key = 'pc'.md5($_SERVER['REQUEST_URI'].serialize($_GET));
@@ -105,12 +106,13 @@ final class cms_content_cache
 			$contentops = ContentOperations::get_instance();
 			$tmp = $contentops->LoadChildren(null,$deep,false,$content_ids);
 		}
+        debug_buffer('cms_content_cache: end loading needed content objects');
 	}
 
 	/**
 	 * @ignore
 	 */
-	public static function &get_instance() 
+	public static function &get_instance()
 	{
 		if( !is_object(self::$_instance) ) self::$_instance = new cms_content_cache();
 		return self::$_instance;
@@ -134,7 +136,7 @@ final class cms_content_cache
 				$t2 = array_diff($list,$this->_preload_cache);
 				if( is_array($t2) && count($t2) ) $dirty = true;
 			}
-			
+
 			if( $dirty ) {
 				$deep = FALSE;
 				foreach( $list as $one ) {
@@ -235,7 +237,7 @@ final class cms_content_cache
     if( !self::$_alias_map ) self::$_alias_map = array();
     if( !self::$_id_map ) self::$_id_map = array();
     if( !self::$_content_cache ) self::$_content_cache = array();
-    
+
     $hash = md5($id.$alias);
     self::$_content_cache[$hash] = $obj;
 	if( $alias ) self::$_alias_map[$alias] = $hash;

@@ -1,4 +1,4 @@
-<?php // -*- mode:php; tab-width:4; indent-tabs-mode:t; c-basic-offset:4; -*-
+<?php
 #CMS - CMS Made Simple
 #(c)2004-2010 by Ted Kulp (ted@cmsmadesimple.org)
 #Visit our homepage at: http://cmsmadesimple.org
@@ -118,14 +118,14 @@ class ContentOperations
 	 */
 	public function &LoadContentFromSerializedData(&$data)
 	{
-	  if( !isset($data['content_type']) && !isset($data['serialized_content']) ) return FALSE;
+		if( !isset($data['content_type']) && !isset($data['serialized_content']) ) return FALSE;
 
-	  $contenttype = 'content';
-	  if( isset($data['content_type']) ) $contenttype = $data['content_type'];
+		$contenttype = 'content';
+		if( isset($data['content_type']) ) $contenttype = $data['content_type'];
 
-	  $contentobj = $this->CreateNewContent($contenttype);
-	  $contentobj = unserialize($data['serialized_content']);
-	  return $contentobj;
+		$contentobj = $this->CreateNewContent($contenttype);
+		$contentobj = unserialize($data['serialized_content']);
+		return $contentobj;
 	}
 
 
@@ -240,11 +240,13 @@ class ContentOperations
 				return $contentobj;
 			}
 			else {
-			  $tmp = NULL; return $tmp;
+				$tmp = NULL;
+				return $tmp;
 			}
 		}
 		else {
-		  $tmp = NULL; return $tmp;
+			$tmp = NULL;
+			return $tmp;
 		}
 	}
 

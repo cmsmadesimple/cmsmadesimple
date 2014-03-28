@@ -1,4 +1,4 @@
-<?php // -*- mode:php; tab-width:4; indent-tabs-mode:t; c-basic-offset:4; -*-
+<?php
 
 /**
  * A group of CMSMS related utility functions for accessing the adodb library.
@@ -13,14 +13,14 @@
  * @ignore
  * @access private
  */
-function load_adodb() 
+function load_adodb()
 {
   $gCms = cmsms();
   $config = $gCms->GetConfig();
 
-  // @TODO: Remove dependence on PEAR for error handling	
+  // @TODO: Remove dependence on PEAR for error handling
   if( !defined('ADODB_OUTP') ) define('ADODB_OUTP', 'debug_sql');
-	
+
   $adodb_light = cms_join_path(dirname(__FILE__),'adodb_lite','adodb.inc.php');
   if (file_exists($adodb_light)) {
     // Load ADOdb Lite
@@ -96,5 +96,4 @@ function adodb_error($dbtype, $function_performed, $error_number, $error_message
   }
 }
 
-# vim:ts=4 sw=4 noet
 ?>

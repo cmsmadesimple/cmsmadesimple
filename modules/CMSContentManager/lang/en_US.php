@@ -149,6 +149,10 @@ $lang['msg_prefs_saved'] = 'Preferences saved';
 $lang['no'] = 'No';
 
 #O
+$lang['opt_alltemplates'] = 'All templates';
+$lang['opt_alldesign'] = 'All templates associated with the design';
+$lang['opt_allpage'] = 'All page templates';
+$lang['opt_designpage'] = 'All page templates associated with the design';
 
 #P
 $lang['page'] = 'Page';
@@ -175,8 +179,8 @@ $lang['prompt_editpage_editcontent']= 'Edit Content Page';
 $lang['prompt_editsettings']= 'Edit Settings';
 $lang['prompt_expandall'] = 'Expand all content pages';
 $lang['prompt_general'] = 'General';
-$lang['prompt_locktimeout'] = 'Locking Time-out (minutes)';
-$lang['prompt_lockrefresh'] = 'Locking Time-out (seconds)';
+$lang['prompt_locktimeout'] = 'Locking Expiration Time-out (minutes)';
+$lang['prompt_lockrefresh'] = 'Locking Refresh Interval (seconds)';
 $lang['prompt_multiselect_toggle'] = 'Select this page for bulk content operations';
 $lang['prompt_name'] = 'Name';
 $lang['prompt_options'] = 'Options';
@@ -223,6 +227,7 @@ $lang['prompt_secure'] = 'Secure';
 $lang['prompt_settings'] = 'Settings';
 $lang['prompt_steal_lock_edit'] = 'Steal this lock and edit the page';
 $lang['prompt_template'] = 'Template';
+$lang['prompt_template_list_mode'] = 'Template list mode';
 $lang['prompt_title'] = 'Title';
 $lang['prompt_withselected'] = 'With Selected';
 

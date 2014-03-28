@@ -46,13 +46,11 @@ function is_sitedown()
   if( !isset($_SERVER['REMOTE_ADDR']) ) return TRUE;
   $excludes = get_site_preference('sitedownexcludes','');
   if( empty($excludes) ) return TRUE;
- 
+
   $tmp = explode(',',$excludes);
   $ret = cms_ipmatches($_SERVER['REMOTE_ADDR'],$excludes);
   if( $ret ) return FALSE;
   return TRUE;
 }
 
-
-# vim:ts=4 sw=4 noet
 ?>

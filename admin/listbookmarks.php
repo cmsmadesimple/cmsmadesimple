@@ -110,5 +110,5 @@ include_once("header.php");
 
 include_once("footer.php");
 
-# vim:ts=4 sw=4 noet
+
 ?>

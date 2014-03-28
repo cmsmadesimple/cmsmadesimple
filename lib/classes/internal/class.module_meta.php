@@ -1,4 +1,4 @@
-<?php // -*- mode:php; tab-width:4; indent-tabs-mode:t; c-basic-offset:4; -*-
+<?php
 #CMS - CMS Made Simple
 #(c)2004-2010 by Ted Kulp (ted@cmsmadesimple.org)
 #Visit our homepage at: http://cmsmadesimple.org
@@ -19,12 +19,12 @@
 #$Id$
 
 /**
- * @package CMS 
+ * @package CMS
  */
 
 /**
  * A singleton class for managing meta data acquired from modules.
- * 
+ *
  * This class caches information from modules as needed.
  *
  * @package CMS
@@ -38,7 +38,7 @@ final class module_meta
   static private $_instance = null;
   private $_data = array();
 
-  private function __construct() 
+  private function __construct()
   {
   }
 
@@ -139,7 +139,7 @@ final class module_meta
    * Return a list of modules that have the supplied method.
    *
    * This method will query all available modules, check if the method name exists for that module, and if so, call the method and trap the
-   * return value.  
+   * return value.
    *
    * @param string method name
    * @param mixed  optional return value.
@@ -153,7 +153,7 @@ final class module_meta
     if( !isset($this->_data['methods']) || !isset($this->_data['methods'][$method]) ) {
 		debug_buffer('start building module method cache');
 		if( !isset($this->_data['methods']) ) $this->_data['methods'] = array();
-		  
+
 		$installed_modules = ModuleOperations::get_instance()->GetInstalledModules();
 		$loaded_modules = ModuleOperations::get_instance()->GetLoadedModules();
 		$this->_data['methods'][$method] = array();
@@ -194,5 +194,4 @@ final class module_meta
 #
 # EOF
 #
-# vim:ts=4 sw=4 noet
 ?>

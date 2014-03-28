@@ -42,5 +42,5 @@ $section = (isset($_GET['section'])) ? trim($_GET['section']) : '';
 $themeObject->do_toppage($section);
 include_once("footer.php");
 
-# vim:ts=4 sw=4 noet
+
 ?>

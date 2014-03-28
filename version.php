@@ -26,5 +26,4 @@ define('CMS_VERSION', $CMS_VERSION);
 define('CMS_VERSION_NAME', $CMS_VERSION_NAME);
 define('CMS_SCHEMA_VERSION', $CMS_SCHEMA_VERSION);
 
-# vim:ts=4 sw=4 noet
 ?>

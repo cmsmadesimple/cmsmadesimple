@@ -144,5 +144,4 @@ function get_language_list($allow_none = true)
   return $tmp;
 }
 
-# vim:ts=4 sw=4 noet
 ?>

@@ -1,8 +1,8 @@
 <?php
 
-class CmsModuleInfo implements ArrayAccess 
+class CmsModuleInfo implements ArrayAccess
 {
-  private static $_keys = array('name','version','depends','mincmsversion', 'author', 'authoremail', 'help', 'about', 
+  private static $_keys = array('name','version','depends','mincmsversion', 'author', 'authoremail', 'help', 'about',
 				'lazyloadadmin', 'lazyloadfrontend', 'changelog','ver_compatible','dir','writable',
 				'description','has_meta');
   private $_data = array();
@@ -87,7 +87,7 @@ class CmsModuleInfo implements ArrayAccess
 
     $fn = cms_join_path($dir,'help.inc');
     if( file_exists($fn) ) $this['help'] = file_get_contents($fn);
-    
+
     $this['has_meta'] = TRUE;
     return TRUE;
   }
@@ -124,7 +124,7 @@ class CmsModuleInfo implements ArrayAccess
   public function write_meta()
   {
     if( !$this['writable'] ) return FALSE;
-    
+
     $_write_ini = function($input,$filename,$depth = 0) use(&$_write_ini) {
       if( !is_array($input) ) return;
 
@@ -175,4 +175,5 @@ class CmsModuleInfo implements ArrayAccess
     return TRUE;
   }
 }
+
 ?>

@@ -1,4 +1,4 @@
-<?php // -*- mode:php; tab-width:4; indent-tabs-mode:t; c-basic-offset:4; -*-
+<?php
 #CMS - CMS Made Simple
 #(c)2004-2012 by Ted Kulp (wishy@users.sf.net)
 #Visit our homepage at: http://www.cmsmadesimple.org
@@ -416,5 +416,4 @@ final class CmsNlsOperations
 #
 # EOF
 #
-# vim:ts=4 sw=4 noet
 ?>

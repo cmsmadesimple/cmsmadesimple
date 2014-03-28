@@ -1,6 +1,6 @@
 <script type="text/javascript">
 // <![CDATA[
-$(document).ready(function(){  
+$(document).ready(function(){
   $(document).on('click', '#runbtn', function(){
     // get the data
     if( !confirm('{lang('confirm_runusertag')}') ) return false;
@@ -18,7 +18,6 @@ $(document).ready(function(){
     data.push({ 'name': 'apply', 'value': 1 });
     data.push({ 'name': 'ajax', 'value': 1 });
     $.post('{$smarty.server.REQUEST_URI}',data,function(resultdata,text) {
-      alert(resultdata);
       var x = $.parseJSON(resultdata);
       var r,d;
       if( typeof x.response != 'undefined' ) {

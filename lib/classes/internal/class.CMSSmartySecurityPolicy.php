@@ -31,7 +31,7 @@
  * @internal
  * @ignore
  */
-final class CMSSmartySecurityPolicy extends Smarty_Security 
+final class CMSSmartySecurityPolicy extends Smarty_Security
 {
   public $php_handling = Smarty::PHP_REMOVE;
   public $static_classes = null;

@@ -1,4 +1,4 @@
-<?php // -*- mode:php; tab-width:2; indent-tabs-mode:t; c-basic-offset:2; -*-
+<?php
 #CMS - CMS Made Simple
 #(c)2004-2012 by Ted Kulp (ted@cmsmadesimple.org)
 #Visit our homepage at: http://cmsmadesimple.org
@@ -680,6 +680,9 @@ class CmsLayoutCollection
 		return $newname;
 	}
 } // end of class
+
+// dunno if this should go here...
+class_alias('CmsLayoutCollection','CmsLayoutDesign')
 
 #
 # EOF

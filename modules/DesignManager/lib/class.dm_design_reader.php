@@ -1,4 +1,4 @@
-<?php // -*- mode:php; tab-width:2; indent-tabs-mode:t; c-basic-offset:2; -*-
+<?php
 #-------------------------------------------------------------------------
 # Module: AdminSearch - A CMSMS addon module to provide template management.
 # (c) 2012 by Robert Campbell <calguy1000@cmsmadesimple.org>
@@ -338,7 +338,7 @@ class dm_design_reader extends dm_reader_base
 		$description .= 'By CMSMS version: '.$info['cmsversion']."\n";
 		$description .= 'Imported '.strftime('%x %X');
 		$design->set_description($description);
-		
+
 		// expand URL FILES to become real files
 		// don't have to worry about duplicated filenames (hopefully)
 		// because the destinaton directory is unique.
@@ -349,9 +349,9 @@ class dm_design_reader extends dm_reader_base
 			$destfile = cms_join_path($config['uploads_path'],'designs',$destdir,$rec['value']);
 			file_put_contents($destfile,base64_decode($rec['data']));
 			$rec['tpl_url'] = "{uploads_url}/designs/$destdir/{$rec['value']}";
-			$rec['css_url'] = "[[uploads_url]]/designs/$destdir/{$rec['value']}";			
+			$rec['css_url'] = "[[uploads_url]]/designs/$destdir/{$rec['value']}";
 		}
-		
+
 		// expand stylesheets
 		foreach( $this->get_stylesheet_list() as $css ) {
 			$stylesheet = new CmsLayoutStylesheet();
@@ -359,7 +359,7 @@ class dm_design_reader extends dm_reader_base
 			if( isset($css['desc']) && $css['desc'] != '' ) {
 				$stylesheet->set_description($css['desc']);
 			}
-			
+
 			$content = $css['data'];
 			foreach( $this->_file_map as $key => &$rec ) {
 				if( !startswith($key,'__URL::') ) continue;
@@ -402,7 +402,7 @@ class dm_design_reader extends dm_reader_base
 				}
 			}
 
-			// substitute CSS keys for their values.  This should handle 
+			// substitute CSS keys for their values.  This should handle
 			$template->set_content($content);
 
 			// template type:

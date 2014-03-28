@@ -608,5 +608,4 @@ function get_pageid_or_alias_from_url()
   return $page;
 }
 
-# vim:ts=4 sw=4 noet
 ?>

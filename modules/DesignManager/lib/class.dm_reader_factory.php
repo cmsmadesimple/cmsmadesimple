@@ -1,4 +1,4 @@
-<?php // -*- mode:php; tab-width:2; indent-tabs-mode:t; c-basic-offset:2; -*-
+<?php
 #-------------------------------------------------------------------------
 # Module: AdminSearch - A CMSMS addon module to provide template management.
 # (c) 2012 by Robert Campbell <calguy1000@cmsmadesimple.org>
@@ -19,7 +19,7 @@
 #
 #-------------------------------------------------------------------------
 
-final class dm_reader_factory 
+final class dm_reader_factory
 {
   private function __construct() {}
 
@@ -41,7 +41,7 @@ final class dm_reader_factory
     $p = strpos($str,' ');
     if( $p === FALSE ) throw new CmsException($this->Lang('error_readxml'));  // highly unlikely.
     $word = substr($str,0,$p);
-    
+
 		$ob = null;
     switch( $word ) {
     case 'theme':

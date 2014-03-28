@@ -114,5 +114,5 @@ if( isset($gCms->config['show_performance_info']) ) {
   $memory_peak = (function_exists('memory_get_peak_usage')?memory_get_peak_usage():0);
   echo "<div>".microtime_diff($starttime,$endtime)." / ".(isset($db->query_count)?$db->query_count:'')." / {$memory_net} / {$memory} / {$memory_peak}</div>\n";
 }
-# vim:ts=4 sw=4 noet
+
 ?>

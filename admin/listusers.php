@@ -230,5 +230,5 @@ $smarty->display('listusers.tpl');
 <?php
 echo '</div>';
 include_once("footer.php");
-# vim:ts=4 sw=4 noet
+
 ?>

@@ -72,7 +72,7 @@ if( isset($_POST['submit']) || isset($_POST['apply']) ) {
   if( $record['code'] == '' ) {
     $error[] = lang('nofieldgiven', array(lang('code')));
   }
-  
+
   $code = $record['code'];
   if( startswith($code,'<?php') ) $code = substr($code,5);
   if( endswith($code,'?>') ) $code = substr($code,0,-2);
@@ -91,7 +91,7 @@ if( isset($_POST['submit']) || isset($_POST['apply']) ) {
       $error[] = lang('invalidcode');
       $buffer = ob_get_clean();
       //add error
-      $error[] = preg_replace('/<br \/>/', '', $buffer ); 
+      $error[] = preg_replace('/<br \/>/', '', $buffer );
       $validinfo = false;
     }
     else {
@@ -116,7 +116,7 @@ if( isset($_POST['submit']) || isset($_POST['apply']) ) {
       $tmp = @ob_get_contents();
       @ob_end_clean();
 
-      if( $tmp ) 
+      if( $tmp )
 	$details = $tmp;
       else
 	$details = $res;
@@ -159,5 +159,4 @@ include_once("footer.php");
 #
 # EOF
 #
-# vim:ts=4 sw=4 noet
 ?>

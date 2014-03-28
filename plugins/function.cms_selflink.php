@@ -1,7 +1,7 @@
-<?php // -*- mode:php; tab-width:4; indent-tabs-mode:t; c-basic-offset:4; -*-
+<?php
 #BEGIN_LICENSE
 #-------------------------------------------------------------------------
-# cms_selflink (c) 2013 by Robert Campbell 
+# cms_selflink (c) 2013 by Robert Campbell
 #         (calguy1000@cmsmadesimple.org)
 #  A function for retrieving A url or link to an internal CMSMS Page.
 #  This is a rewrite of the original cms_selflink plugin by Ted Kulk and various authors.
@@ -20,7 +20,7 @@
 # However, as a special exception to the GPL, this software is distributed
 # as an addon module to CMS Made Simple.  You may not use this software
 # in any Non GPL version of CMS Made simple, or in any version of CMS
-# Made simple that does not indicate clearly and obviously in its admin 
+# Made simple that does not indicate clearly and obviously in its admin
 # section that the site was built with CMS Made simple.
 #
 # This program is distributed in the hope that it will be useful,
@@ -35,7 +35,7 @@
 #-------------------------------------------------------------------------
 #END_LICENSE
 
-function smarty_function_cms_selflink($params, &$template) 
+function smarty_function_cms_selflink($params, &$template)
 {
 	$smarty = $template->smarty;
 	$gCms = cmsms();
@@ -69,10 +69,10 @@ function smarty_function_cms_selflink($params, &$template)
 			$node = $manager->find_by_tag('alias',$page);
 			if( !$node ) {
 				$node = $manager->find_by_tag('id',$page);
-				
+
 				$title = lang_by_realm('cms_selflink','page_not_exist');
                 echo '<a href="#" title="'.$title.'"><span class="page_not_exist">' . $params['text'] . '</span></a>';
-				
+
 				return;
 			}
 			$pageid = $node->get_tag('id');
@@ -261,7 +261,7 @@ function smarty_function_cms_selflink($params, &$template)
 	else {
 		if( isset($params['label_side']) ) $label_side = strtolower(trim($params['label_side']));
 		if( $label_side == 'left' ) $result .= $label.' ';
-		$result .= '<a href="'.$url.'"';      
+		$result .= '<a href="'.$url.'"';
 		$result .= ' title="'.$title.'" ';
 		if (isset($params['target'])) $result .= ' target="'.$params['target'].'"';
 		if (isset($params['id'])) $result .= ' id="'.$params['id'].'"';
@@ -270,7 +270,7 @@ function smarty_function_cms_selflink($params, &$template)
 		if (isset($params['more'])) $result .= ' '.$params['more'];
 		$result .= '>';
 
-		$linktext = $name; 
+		$linktext = $name;
 		if (isset($params['text'])) {
 			$linktext = $params['text'];
 		} elseif (isset($params['menu']) && $params['menu'] == "1") {
@@ -308,5 +308,4 @@ function smarty_cms_help_function_cms_selflink() {
 		echo lang_by_realm('tags','help_function_cms_selflink');
 }
 
-# vim:ts=4 sw=4 noet
 ?>

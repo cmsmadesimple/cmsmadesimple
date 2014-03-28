@@ -17,4 +17,12 @@
     <input type="text" name="{$actionid}lockrefresh" value="{$lockrefresh}" size="4" maxlength="4"/>
   </p>
 </div>
+<div class="pageoverflow">
+  <p class="pagetext"><label for="lockrefresh">{$mod->Lang('prompt_template_list_mode')}:</label>&nbsp;{cms_help key2='help_general_templatelistmode' title=$mod->Lang('prompt_template_list_mode')}</p>
+  <p class="pageinput">
+    <select name="{$actionid}template_list_mode">
+    {html_options options=$template_list_opts selected=$template_list_mode}
+    </select>
+  </p>
+</div>
 {form_end}

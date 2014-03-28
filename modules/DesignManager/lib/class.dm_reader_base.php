@@ -1,4 +1,4 @@
-<?php // -*- mode:php; tab-width:2; indent-tabs-mode:t; c-basic-offset:2; -*-
+<?php
 #-------------------------------------------------------------------------
 # Module: AdminSearch - A CMSMS addon module to provide template management.
 # (c) 2012 by Robert Campbell <calguy1000@cmsmadesimple.org>
@@ -19,7 +19,7 @@
 #
 #-------------------------------------------------------------------------
 
-abstract class dm_reader_base 
+abstract class dm_reader_base
 {
   private $_suggested_name;
 
@@ -45,14 +45,14 @@ abstract class dm_reader_base
 
   abstract public function validate();
 
-	/** 
+	/**
 	 * Retrieve information about the design
 	 *
 	 * @return a hash containing design name, description, generated, and cmsversion
 	 */
   abstract public function get_design_info();
 
-	/** 
+	/**
 	 * Retrieve an array of hashes representing template information.
 	 * each hash will have a name,key,desc,data,type_originator,type_name fields.
 	 * all data should be base64 decoded.
@@ -100,7 +100,7 @@ abstract class dm_reader_base
 			$x = strpos($t,'.');
 			$name = substr($t,$x);
 		}
-		
+
 		// now see if it's a duplicate name
 		$list = CmsLayoutCollection::get_list();
 		$orig_name = $name;
@@ -118,7 +118,7 @@ abstract class dm_reader_base
 				throw new CmsException('Could not determine a new name for this design');
 			}
 		}
-		
+
 		return $name;
 	}
 

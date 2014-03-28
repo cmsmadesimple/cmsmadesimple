@@ -1,4 +1,4 @@
-<?php // -*- mode:php; tab-width:2; indent-tabs-mode:t; c-basic-offset:2; -*-
+<?php
 #-------------------------------------------------------------------------
 # Module: AdminSearch - A CMSMS addon module to provide template management.
 # (c) 2012 by Robert Campbell <calguy1000@cmsmadesimple.org>
@@ -25,7 +25,7 @@ class dm_xml_reader extends XMLReader
   private $_old_err_handler;
   private $_old_internal_errors;
 
-  public static function __errhandler($errno,$errstr,$errfile,$errline) 
+  public static function __errhandler($errno,$errstr,$errfile,$errline)
   {
     if( strpos($errstr,'XMLReader') !== FALSE ) {
       audit('','DesignManager/dm_xml_reader',$errstr);

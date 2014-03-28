@@ -1,10 +1,10 @@
 <?php
 #BEGIN_LICENSE
 #-------------------------------------------------------------------------
-# Module: Content (c) 2013 by Robert Campbell 
+# Module: Content (c) 2013 by Robert Campbell
 #         (calguy1000@cmsmadesimple.org)
 #  A module for managing content in CMSMS.
-# 
+#
 #-------------------------------------------------------------------------
 # CMS - CMS Made Simple is (c) 2004 by Ted Kulp (wishy@cmsmadesimple.org)
 # Visit our homepage at: http://www.cmsmadesimple.org
@@ -19,7 +19,7 @@
 # However, as a special exception to the GPL, this software is distributed
 # as an addon module to CMS Made Simple.  You may not use this software
 # in any Non GPL version of CMS Made simple, or in any version of CMS
-# Made simple that does not indicate clearly and obviously in its admin 
+# Made simple that does not indicate clearly and obviously in its admin
 # section that the site was built with CMS Made simple.
 #
 # This program is distributed in the hope that it will be useful,
@@ -38,6 +38,10 @@ if( !$this->CheckPermission('Modify Site Preferences') ) return;
 
 $smarty->assign('locktimeout',$this->GetPreference('locktimeout'));
 $smarty->assign('lockrefresh',$this->GetPreference('lockrefresh'));
+
+$opts = array('all'=>$this->Lang('opt_alltemplates'),'alldesign'=>$this->Lang('opt_alldesign'),'allpage'=>$this->Lang('opt_allpage'),'designpage'=>$this->Lang('opt_designpage'));
+$smarty->assign('template_list_opts',$opts);
+$smarty->assign('template_list_mode',$this->GetPreference('template_list_mode','designpage'));
 echo $this->ProcessTemplate('admin_general_tab.tpl');
 
 #

@@ -1,4 +1,4 @@
-<?php // -*- mode:php; tab-width:4; indent-tabs-mode:t; c-basic-offset:4; -*-
+<?php
 #CMS - CMS Made Simple
 #(c)2004-2010 by Ted Kulp (ted@cmsmadesimple.org)
 #Visit our homepage at: http://cmsmadesimple.org
@@ -57,7 +57,7 @@ class Content extends ContentBase
      * Content pages do use a template.
      *
      * @since 2.0
-     * @return bool TRUE
+     * @return true
      */
 	public function HasTemplate()
 	{
@@ -534,5 +534,4 @@ class Content extends ContentBase
 
 } // end of class
 
-# vim:ts=4 sw=4 noet
 ?>

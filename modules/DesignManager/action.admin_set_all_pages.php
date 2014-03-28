@@ -1,4 +1,4 @@
-<?php // -*- mode:php; tab-width:2; indent-tabs-mode:t; c-basic-offset:2; -*-
+<?php
 #-------------------------------------------------------------------------
 # Module: AdminSearch - A CMSMS addon module to provide template management.
 # (c) 2012 by Robert Campbell <calguy1000@cmsmadesimple.org>
@@ -42,7 +42,7 @@ try {
 
     $db = cmsms()->GetDb();
     $time = $db->DbTimeStamp(time());
-    $query = 'UPDATE '.cms_db_prefix()."content 
+    $query = 'UPDATE '.cms_db_prefix()."content
               SET template_id = ?, last_modified_by = ?, modified_date = $time";
     $dbr = $db->Execute($query,array($tpl_obj->get_id(),get_userid()));
     if( !$dbr ) {
@@ -77,7 +77,7 @@ try {
 
   // lets see if we can find a content block in this template.
   try {
-    $parser = cmsms()->get_template_parser(); 
+    $parser = cmsms()->get_template_parser();
     cms_utils::set_app_data('tmp_template',$tpl_obj->get_content());
     $parser->fetch('cms_template:appdata;tmp_template');
 

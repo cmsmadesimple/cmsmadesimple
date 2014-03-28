@@ -1,4 +1,4 @@
-<?php // -*- mode:php; tab-width:2; indent-tabs-mode:t; c-basic-offset:2; -*-
+<?php
 #-------------------------------------------------------------------------
 # Module: AdminSearch - A CMSMS addon module to provide template management.
 # (c) 2012 by Robert Campbell <calguy1000@cmsmadesimple.org>
@@ -361,7 +361,7 @@ class dm_theme_reader extends dm_reader_base
 			$destfile = cms_join_path($config['uploads_path'],'themes',$destdir,$rec['name']);
 			file_put_contents($destfile,base64_decode($rec['data']));
 			$rec['tpl_url'] = "{uploads_url}/themes/$destdir/{$rec['name']}";
-			$rec['css_url'] = "[[uploads_url]]/themes/$destdir/{$rec['name']}";			
+			$rec['css_url'] = "[[uploads_url]]/themes/$destdir/{$rec['name']}";
 		}
 
 		// part3 .. process stylesheets
@@ -376,7 +376,7 @@ class dm_theme_reader extends dm_reader_base
 						               function($matches) use ($ob,$ref_map,$destdir) {
 														 $config = cmsms()->GetConfig();
 														 $url = $matches[1];
-														 if( !startswith($url,'http') || startswith($url,$config['root_url']) || 
+														 if( !startswith($url,'http') || startswith($url,$config['root_url']) ||
 																 startswith($url,'[[root_url]]') ) {
 															 $bn = basename($url);
 															 if( isset($ref_map[$bn]) ) {
@@ -436,7 +436,7 @@ class dm_theme_reader extends dm_reader_base
         $innerT = '[a-z0-9:?=&@/._-]+?';
         $content = preg_replace_callback("|$type\=([\"'`])(".$innerT.")\\1|i", $fn2,$content);
 			}
-			
+
 			$content = preg_replace('/\{stylesheet/','{cms_stylesheet',$content);
 
 			$regex='/\{menu.*\}/';

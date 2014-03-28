@@ -322,5 +322,5 @@ final class MenuManager extends CMSModule
 
 } // End of class
 
-# vim:ts=4 sw=4 noet
+
 ?>

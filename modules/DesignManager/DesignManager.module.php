@@ -1,4 +1,4 @@
-<?php // -*- mode:php; tab-width:2; indent-tabs-mode:t; c-basic-offset:2; -*-
+<?php
 #-------------------------------------------------------------------------
 # Module: DesignManager - A CMSMS addon module to provide template management.
 # (c) 2012 by Robert Campbell <calguy1000@cmsmadesimple.org>
@@ -38,13 +38,13 @@ final class DesignManager extends CMSModule
   function GetAdminDescription() { return $this->Lang('moddescription'); }
   function InstallPostMessage() { return $this->Lang('postinstall'); }
   function UninstallPostMessage() { return $this->Lang('postuninstall'); }
-  
+
   function VisibleToAdminUser()
   {
     if( $this->CheckPermission('Add Templates') ||
-				$this->CheckPermission('Modify Templates') || 
-				$this->CheckPermission('Manage Stylesheets') || 
-				$this->CheckPermission('Manage Designs') || 
+				$this->CheckPermission('Modify Templates') ||
+				$this->CheckPermission('Manage Stylesheets') ||
+				$this->CheckPermission('Manage Designs') ||
 				count(CmsLayoutTemplate::get_editable_templates(get_userid())) ) return TRUE;
     return FALSE;
   }

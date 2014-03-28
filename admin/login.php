@@ -324,5 +324,5 @@ if (isset($gCms->config) and $gCms->config['debug'] == true) {
     echo $globalerror;
   }
 }
-# vim:ts=4 sw=4 noet
+
 ?>

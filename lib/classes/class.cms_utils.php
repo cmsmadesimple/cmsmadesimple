@@ -1,4 +1,4 @@
-<?php // -*- mode:php; tab-width:4; indent-tabs-mode:t; c-basic-offset:4; -*-
+<?php
 #BEGIN_LICENSE
 #-------------------------------------------------------------------------
 # Module: cms_tree (c) 2010 by Robert Campbell
@@ -342,5 +342,4 @@ final class cms_utils
 	}
 } // end of class
 
-# vim:ts=4 sw=4 noet
 ?>

@@ -1,4 +1,4 @@
-<?php // -*- mode:php; tab-width:4; indent-tabs-mode:t; c-basic-offset:4; -*-
+<?php
 #CMS - CMS Made Simple
 #(c)2004 by Ted Kulp (wishy@users.sf.net)
 #Visit our homepage at: http://www.cmsmadesimple.org
@@ -31,8 +31,8 @@ $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 $thisurl=basename(__FILE__).$urlext;
 $userid = get_userid(); // <- Checks also login
 
-/** 
- * A convenience function to interpret octal permissions, and return 
+/**
+ * A convenience function to interpret octal permissions, and return
  * a human readable string.  Uses the lang() function for translation.
  *
  * @internal
@@ -194,7 +194,7 @@ $tab='';
 if( isset($_POST['active_tab']) ) $tab = trim($_POST['active_tab']);
 
 /**
- * Submit 
+ * Submit
  */
 if( isset($_POST['testmail']) ) {
   if( !$mail_is_set ) {
@@ -234,8 +234,8 @@ if (isset($_POST["testumask"])) {
   }
   else {
     @umask(octdec($global_umask));
-      
-    $fh = @fopen($testfile,"w");      
+
+    $fh = @fopen($testfile,"w");
     if( !$fh ) {
       $testresults = lang('errorcantcreatefile').' ('.$testfile.')';
     }
@@ -254,7 +254,7 @@ if (isset($_POST["testumask"])) {
 	$testresults = sprintf("%s: %s<br/>%s:<br/>&nbsp;&nbsp;%s",lang('owner'),"N/A",lang('permissions'),"N/A");
       }
       @unlink($testfile);
-    }	
+    }
   }
 }
 
@@ -266,7 +266,7 @@ if (isset($_POST["editsiteprefs"])) {
       if (isset($_POST['sitename'])) $sitename = cms_htmlentities($_POST['sitename']);
       cms_siteprefs::set('sitename', $sitename);
       if (isset($_POST['frontendlang'])) $frontendlang = $_POST['frontendlang'];
-      cms_siteprefs::set('frontendlang', $frontendlang);      
+      cms_siteprefs::set('frontendlang', $frontendlang);
       if (isset($_POST['frontendwysiwyg'])) $frontendwysiwyg = $_POST['frontendwysiwyg'];
       cms_siteprefs::set('frontendwysiwyg', $frontendwysiwyg);
       if (isset($_POST['metadata'])) $metadata = $_POST['metadata'];
@@ -274,7 +274,7 @@ if (isset($_POST["editsiteprefs"])) {
       if (isset($_POST["logintheme"])) $logintheme = $_POST["logintheme"];
       cms_siteprefs::set('logintheme', $logintheme);
       if (isset($_POST['backendwysiwyg'])) $backendwysiwyg = $_POST['backendwysiwyg'];
-      cms_siteprefs::set('backendwysiwyg', $backendwysiwyg);	  
+      cms_siteprefs::set('backendwysiwyg', $backendwysiwyg);
       if (isset($_POST["defaultdateformat"])) $defaultdateformat = $_POST["defaultdateformat"];
       cms_siteprefs::set('defaultdateformat', $defaultdateformat);
       if( isset($_POST['thumbnail_width']) ) $thumbnail_width = (int)$_POST['thumbnail_width'];
@@ -342,7 +342,7 @@ if (isset($_POST["editsiteprefs"])) {
       foreach( $_POST as $key => $val ) {
 	if( !startswith($key,$prefix) ) continue;
 	$key = substr($key,strlen($prefix));
-	
+
 	$mailprefs[$key] = trim($val);
       }
 
@@ -412,7 +412,7 @@ if (isset($_POST["editsiteprefs"])) {
 			cms_siteprefs::set('adminlog_lifetime',$adminlog_lifetime);
 		}
 		break;
-	  
+
     case 'smarty':
 		if( isset($_POST['use_smartycache']) ) {
 			$use_smartycache = $_POST['use_smartycache'];
@@ -435,17 +435,17 @@ if (isset($_POST["editsiteprefs"])) {
   else {
     $error .= "<li>".lang('noaccessto', array('Modify Site Permissions'))."</li>";
   }
-} 
+}
 
 /**
  * Build page
  */
- 
+
 include_once("header.php");
 
 if ($error != "") $themeObject->ShowErrors($error);
 if ($message != "") $themeObject->ShowMessage($message);
- 
+
 $templates = array();
 $templates['-1'] = lang('none');
 
@@ -457,7 +457,7 @@ while ($result && $row = $result->FetchRow()) {
 }
 
 // Make sure cache folder is writable
-if (FALSE == is_writable(TMP_CACHE_LOCATION) || 
+if (FALSE == is_writable(TMP_CACHE_LOCATION) ||
     FALSE == is_writable(TMP_TEMPLATES_C_LOCATION) ) {
   $themeObject->ShowErrors(lang('cachenotwritable'));
 }
@@ -500,8 +500,8 @@ $smarty->assign('pretty_urls',$pretty_urls);
   $smarty->assign('wysiwyg',$tmp2);
 }
 
-if ($dir=opendir(dirname(__FILE__)."/themes/")) 
-{ 
+if ($dir=opendir(dirname(__FILE__)."/themes/"))
+{
   $themes = array();
   while (($file = readdir($dir)) !== false ) {
     if( @is_dir("themes/".$file) && ($file[0]!='.') && @is_readable("themes/{$file}/{$file}Theme.php")) {
@@ -564,7 +564,7 @@ $tmp = array(15=>lang('cron_15m'),30=>lang('cron_30m'),
 	     12*60=>lang('cron_12h'),
 	     24*60=>lang('cron_24h'),
 	     -1=>lang('cron_request'));
-$smarty->assign('pseudocron_options',$tmp);	     
+$smarty->assign('pseudocron_options',$tmp);
 $smarty->assign('lang_info_pseudocron_granularity',lang('info_pseudocron_granularity'));
 
 $tmp = array(
@@ -630,5 +630,4 @@ $smarty->assign('formurl', $thisurl);
 $smarty->display('siteprefs.tpl');
 include_once("footer.php");
 
-# vim:ts=4 sw=4 noet
 ?>

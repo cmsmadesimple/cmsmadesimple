@@ -1,4 +1,4 @@
-<?php // -*- mode:php; tab-width:4; indent-tabs-mode:t; c-basic-offset:4; -*-
+<?php
 # CMS - CMS Made Simple
 # (c)2004 by Ted Kulp (tedkulp@users.sf.net)
 # Visit our homepage at: http://www.cmsmadesimple.org
@@ -1391,28 +1391,28 @@ abstract class ContentBase
 
 		$query = "UPDATE ".cms_db_prefix()."content SET content_name = ?, owner_id = ?, type = ?, template_id = ?, parent_id = ?, active = ?, default_content = ?, show_in_menu = ?, cachable = ?, secure = ?, page_url = ?, menu_text = ?, content_alias = ?, metadata = ?, titleattribute = ?, accesskey = ?, tabindex = ?, modified_date = ?, item_order = ?, last_modified_by = ? WHERE content_id = ?";
 		$dbresult = $db->Execute($query, array(
-											   $this->mName,
-											   $this->mOwner,
-											   $this->Type(),
-											   $this->mTemplateId,
-											   $this->mParentId,
-											   ($this->mActive == true         ? 1 : 0),
-											   ($this->mDefaultContent == true ? 1 : 0),
-											   ($this->mShowInMenu == true     ? 1 : 0),
-											   ($this->mCachable == true       ? 1 : 0),
-											   $this->mSecure,
-											   $this->mURL,
-											   $this->mMenuText,
-											   $this->mAlias,
-											   $this->mMetadata,
-											   $this->mTitleAttribute,
-											   $this->mAccessKey,
-											   $this->mTabIndex,
-											   $this->mModifiedDate,
-											   $this->mItemOrder,
-											   $this->mLastModifiedBy,
-											   $this->mId
-											   ));
+                                     $this->mName,
+                                     $this->mOwner,
+                                     $this->Type(),
+                                     $this->mTemplateId,
+                                     $this->mParentId,
+                                     ($this->mActive == true         ? 1 : 0),
+                                     ($this->mDefaultContent == true ? 1 : 0),
+                                     ($this->mShowInMenu == true     ? 1 : 0),
+                                     ($this->mCachable == true       ? 1 : 0),
+                                     $this->mSecure,
+                                     $this->mURL,
+                                     $this->mMenuText,
+                                     $this->mAlias,
+                                     $this->mMetadata,
+                                     $this->mTitleAttribute,
+                                     $this->mAccessKey,
+                                     $this->mTabIndex,
+                                     $this->mModifiedDate,
+                                     $this->mItemOrder,
+                                     $this->mLastModifiedBy,
+                                     $this->mId
+                                     ));
 
 		if ($this->mOldParentId != $this->mParentId) {
 			// Fix the item_order if necessary
@@ -1457,9 +1457,9 @@ abstract class ContentBase
 	 */
 	protected function Insert()
 	{
-	# :TODO: This function should return something
-	# :TODO: Take care bout hierarchy here, it has no value !
-	# :TODO: Figure out proper item_order
+        # :TODO: This function should return something
+        # :TODO: Take care bout hierarchy here, it has no value !
+        # :TODO: Figure out proper item_order
 		$gCms = cmsms();
 		$db = $gCms->GetDb();
 		$config = $gCms->GetConfig();
@@ -1489,31 +1489,31 @@ abstract class ContentBase
 		$query = "INSERT INTO ".cms_db_prefix()."content (content_id, content_name, content_alias, type, owner_id, parent_id, template_id, item_order, hierarchy, id_hierarchy, active, default_content, show_in_menu, cachable, secure, page_url, menu_text, metadata, titleattribute, accesskey, tabindex, last_modified_by, create_date, modified_date) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
 		$dbresult = $db->Execute($query, array(
-											   $newid,
-											   $this->mName,
-											   $this->mAlias,
-											   $this->Type(),
-											   $this->mOwner,
-											   $this->mParentId,
-											   $this->mTemplateId,
-											   $this->mItemOrder,
-											   $this->mHierarchy,
-											   $this->mIdHierarchy,
-											   ($this->mActive == true         ? 1 : 0),
-											   ($this->mDefaultContent == true ? 1 : 0),
-											   ($this->mShowInMenu == true     ? 1 : 0),
-											   ($this->mCachable == true       ? 1 : 0),
-											   $this->mSecure,
-											   $this->mURL,
-											   $this->mMenuText,
-											   $this->mMetadata,
-											   $this->mTitleAttribute,
-											   $this->mAccessKey,
-											   $this->mTabIndex,
-											   $this->mLastModifiedBy,
-											   $this->mModifiedDate,
-											   $this->mCreationDate
-											   ));
+                                     $newid,
+                                     $this->mName,
+                                     $this->mAlias,
+                                     $this->Type(),
+                                     $this->mOwner,
+                                     $this->mParentId,
+                                     $this->mTemplateId,
+                                     $this->mItemOrder,
+                                     $this->mHierarchy,
+                                     $this->mIdHierarchy,
+                                     ($this->mActive == true         ? 1 : 0),
+                                     ($this->mDefaultContent == true ? 1 : 0),
+                                     ($this->mShowInMenu == true     ? 1 : 0),
+                                     ($this->mCachable == true       ? 1 : 0),
+                                     $this->mSecure,
+                                     $this->mURL,
+                                     $this->mMenuText,
+                                     $this->mMetadata,
+                                     $this->mTitleAttribute,
+                                     $this->mAccessKey,
+                                     $this->mTabIndex,
+                                     $this->mLastModifiedBy,
+                                     $this->mModifiedDate,
+                                     $this->mCreationDate
+                                     ));
 
 		if (! $dbresult) {
 			die($db->sql.'<br/>'.$db->ErrorMsg());
@@ -1907,9 +1907,7 @@ abstract class ContentBase
 
 			$out = array();
 			foreach( $this->_attributes as $one ) {
-				if( in_array($one->name,$basic_attributes) ) {
-					$out[] = $one;
-				}
+				if( in_array($one->name,$basic_attributes) ) $out[] = $one;
 			}
 			return $out;
 		}
@@ -1925,20 +1923,20 @@ abstract class ContentBase
 		// sort the properties.
 		// sort the attributes by tab, priority, name...
 		usort($props,function($a,$b) {
-				  if( !isset($a->tab) || $a->tab == '' ) $a->tab = ContentBase::TAB_MAIN;
-				  if( !isset($b->tab) || $b->tab == '' ) $b->tab = ContentBase::TAB_MAIN;
+                if( !isset($a->tab) || $a->tab == '' ) $a->tab = ContentBase::TAB_MAIN;
+                if( !isset($b->tab) || $b->tab == '' ) $b->tab = ContentBase::TAB_MAIN;
 
-				  // sort elements by tabname, and then priority
-				  $atab = $a->tab;
-				  $btab = $b->tab;
+                // sort elements by tabname, and then priority
+                $atab = $a->tab;
+                $btab = $b->tab;
 
-				  $res = null;
-				  if( ($r = strcmp($atab,$btab)) != 0 ) $res = $r;
-				  else if( $a->priority < $b->priority ) $res = -1;
-				  else if( $a->priority > $b->priority ) $res = 1;
-				  else $res = strcmp($a->name,$b->name);
-				  return $res;
-			  });
+                $res = null;
+                if( ($r = strcmp($atab,$btab)) != 0 ) $res = $r;
+                else if( $a->priority < $b->priority ) $res = -1;
+                else if( $a->priority > $b->priority ) $res = 1;
+                else $res = strcmp($a->name,$b->name);
+                return $res;
+            });
 
 		return $props;
 	}
@@ -2391,5 +2389,4 @@ abstract class ContentBase
 	}
 } // end of class
 
-# vim:ts=4 sw=4 noet
 ?>

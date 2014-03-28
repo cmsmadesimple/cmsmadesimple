@@ -30,7 +30,7 @@
  * @since 1.11.3
  */
 class Smarty_Parser extends Smarty_CMS
-{	
+{
 	public $id; // <- triggers error without | do search why this is needed
 	public $params; // <- triggers error without | do search why this is needed
 	private static $_instance;
@@ -42,21 +42,21 @@ class Smarty_Parser extends Smarty_CMS
 	* @param array The hash of CMSMS config settings
 	*/
 	public function __construct()
-	{ 
-		parent::__construct();		
-	
+	{
+		parent::__construct();
+
 		$config = cmsms()->GetConfig();
 
 		$this->setTemplateDir(cms_join_path($config['root_path'],'tmp','templates'));
-		$this->setConfigDir(cms_join_path($config['root_path'],'tmp','templates'));		
-		
+		$this->setConfigDir(cms_join_path($config['root_path'],'tmp','templates'));
+
 		$this->setCaching(false);
 		$this->force_compile = true;
 		$this->compile_id = 'parser' . time();
 
 		// register default plugin handler
-		$this->registerDefaultPluginHandler(array(&$this, 'defaultPluginHandler'));		
-		
+		$this->registerDefaultPluginHandler(array(&$this, 'defaultPluginHandler'));
+
 		// Register plugins
 		$this->registerPlugin('compiler','content',array('CMS_Content_Block','smarty_compiler_contentblock'),false);
 		$this->registerPlugin('compiler','content_image',array('CMS_Content_Block','smarty_compiler_imageblock'),false);
@@ -70,15 +70,15 @@ class Smarty_Parser extends Smarty_CMS
 	*/
 	public static function &get_instance()
 	{
-		if( !is_object(self::$_instance) ) 
+		if( !is_object(self::$_instance) )
 			self::$_instance = new self;
-		
+
 		// Merge variables
 		self::$_instance->tpl_vars = array_merge(self::$_instance->tpl_vars, parent::get_instance()->tpl_vars);
-		
+
 		return self::$_instance;
-	}	
-	
+	}
+
     /**
      * _dflt_plugin
      *
@@ -98,15 +98,15 @@ class Smarty_Parser extends Smarty_CMS
     public function defaultPluginHandler($name, $type, $template, &$callback, &$script, &$cachable)
     {
 		if($type == 'compiler') {
-		
+
 			$callback = array(__CLASS__,'_dflt_plugin');
 			$cachable = false;
 			return TRUE;
 		}
 
-		return parent::defaultPluginHandler($name, $type, $template, $callback, $script, $cachable);	
+		return parent::defaultPluginHandler($name, $type, $template, $callback, $script, $cachable);
     }
-	
+
 	/**
      * fetches a rendered Smarty template
      *
@@ -267,20 +267,20 @@ class Smarty_Parser extends Smarty_CMS
                         //
                         // render compiled template
                         //
-						
+
 						// CMSMS MOD START
 						if(isset($_template->compiled->_properties['variables'])) {
-						
+
 							foreach((array)$_template->compiled->_properties['variables'] as $k=>$v) {
-							
+
 								if(!array_key_exists($k, $_template->tpl_vars)) {
-							
+
 									$_template->tpl_vars[$k] = new CMSMS_Dummy_Smarty_Variable;
 								}
 							}
 						}
-						// CMSMS MOD END						
-						
+						// CMSMS MOD END
+
                         $_template->properties['unifunc']($_template);
                         // any unclosed {capture} tags ?
                         if (isset($_template->_capture_stack[0][0])) {
@@ -463,7 +463,7 @@ class Smarty_Parser extends Smarty_CMS
             return $_output;
         }
     }
-		
+
     /**
      * Takes unknown classes and loads plugin files for them
      * class name format: Smarty_PluginType_PluginName
@@ -481,27 +481,27 @@ class Smarty_Parser extends Smarty_CMS
 		if ($check && (is_callable($plugin_name) || class_exists($plugin_name, false))) {
 			return true;
 		}
-		
+
 		// Plugin name is expected to be: Smarty_[Type]_[Name]
 		$_name_parts = explode('_', $plugin_name, 3);
-		
+
 		// class name must have three parts to be valid plugin
 		// count($_name_parts) < 3 === !isset($_name_parts[2])
 		if (!isset($_name_parts[2]) || strtolower($_name_parts[0]) !== 'smarty') {
 			throw new SmartyException("plugin {$plugin_name} is not a valid name format");
 			return false;
 		}
-		
+
 		// if type is "internal", get plugin from sysplugins
 		if (strtolower($_name_parts[1]) == 'internal') {
-		
+
 			$file = SMARTY_SYSPLUGINS_DIR . strtolower($plugin_name) . '.php';
 			if (file_exists($file)) {
-			
+
 				require_once($file);
 				return $file;
 			} else {
-			
+
 				return false;
 			}
 		}
@@ -512,33 +512,33 @@ class Smarty_Parser extends Smarty_CMS
 
 		// loop through plugin dirs and find the plugin
 		foreach($this->getPluginsDir() as $_plugin_dir) {
-		
+
 			$names = array(
 				$_plugin_dir . $_plugin_filename,
 				$_plugin_dir . strtolower($_plugin_filename)
 			);
-			
+
 			foreach ($names as $file) {
-			
-				if (file_exists($file) && 
-					(in_array($_name_parts[2], self::$_allowed_static_plugins) || 
-						startswith($file, SMARTY_PLUGINS_DIR) || 
+
+				if (file_exists($file) &&
+					(in_array($_name_parts[2], self::$_allowed_static_plugins) ||
+						startswith($file, SMARTY_PLUGINS_DIR) ||
 						$_name_parts[1] == 'modifier')
 					) {
-				
+
 					require_once($file);
 					if( is_callable($plugin_name) || class_exists($plugin_name, false) )
 						return $file;
 				}
-				
+
 				if ($this->use_include_path && !preg_match('/^([\/\\\\]|[a-zA-Z]:[\/\\\\])/', $_plugin_dir)) {
-				
+
 					// try PHP include_path
 					if ($_stream_resolve_include_path) {
-					
+
 						$file = stream_resolve_include_path($file);
 					} else {
-					
+
 						$file = Smarty_Internal_Get_Include_Path::getIncludePath($file);
 					}
 
@@ -552,7 +552,7 @@ class Smarty_Parser extends Smarty_CMS
 		}
 		// no plugin loaded
 		return false;
-    }	
+    }
 
 } // end of class
 
@@ -621,7 +621,7 @@ class CMSMS_Dummy_Smarty_Variable {
  */
 class CMSMS_Dummy_Variable_Value extends ArrayObject {
 
-    public function offsetGet($name) 
+    public function offsetGet($name)
 	{
         return new CMSMS_Dummy_Variable_Value;
     }
@@ -630,16 +630,16 @@ class CMSMS_Dummy_Variable_Value extends ArrayObject {
     {
         return new CMSMS_Dummy_Variable_Value;
     }
-	
+
     public function __call($name, $arguments)
     {
         return new CMSMS_Dummy_Variable_Value;
-    }	
+    }
 
     public function __toString()
     {
         return "";
-    }	
+    }
 
 } // end of class
 

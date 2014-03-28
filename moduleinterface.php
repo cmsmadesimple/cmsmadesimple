@@ -21,5 +21,4 @@
 
 include_once(__DIR__ . '/index.php');
 
-# vim:ts=4 sw=4 noet
 ?>

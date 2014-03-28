@@ -113,5 +113,5 @@ if( !isset($USE_THEME) || $USE_THEME != false ) {
     include_once("footer.php");
   }
  }
-# vim:ts=4 sw=4 noet
+
 ?>

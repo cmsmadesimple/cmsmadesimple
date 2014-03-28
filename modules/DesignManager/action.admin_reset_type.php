@@ -1,4 +1,4 @@
-<?php // -*- mode:php; tab-width:2; indent-tabs-mode:t; c-basic-offset:2; -*-
+<?php
 #-------------------------------------------------------------------------
 # Module: AdminSearch - A CMSMS addon module to provide template management.
 # (c) 2012 by Robert Campbell <calguy1000@cmsmadesimple.org>
@@ -31,7 +31,7 @@ try {
   $type = CmsLayoutTemplateType::load($params['type']);
   $type->reset_content_to_factory();
   $type->save();
-  
+
   $this->SetMessage($this->Lang('msg_template_reset',$type->get_langified_display_value()));
   $this->RedirectToAdminTab();
 }

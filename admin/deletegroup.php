@@ -82,5 +82,5 @@ if (isset($_GET["group_id"]))
 
 redirect("listgroups.php".$urlext);
 
-# vim:ts=4 sw=4 noet
+
 ?>

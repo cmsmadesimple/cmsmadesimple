@@ -1,4 +1,4 @@
-<?php // -*- mode:php; tab-width:4; indent-tabs-mode:t; c-basic-offset:4; -*-
+<?php
 #BEGIN_LICENSE
 #-------------------------------------------------------------------------
 # Module: cms_content_tree (c) 2010 by Robert Campbell

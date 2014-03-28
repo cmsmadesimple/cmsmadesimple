@@ -47,5 +47,5 @@ if ($this->CheckPermission('Modify Site Preferences')) {
 
 echo $this->EndTabContent();
 
-# vim:ts=4 sw=4 noet
+
 ?>

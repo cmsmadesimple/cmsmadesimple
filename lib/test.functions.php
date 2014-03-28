@@ -1,4 +1,4 @@
-<?php // -*- mode:php; tab-width:4; indent-tabs-mode:t; c-basic-offset:4; -*-
+<?php
 #CMS - CMS Made Simple
 #(c)2004-2008 by Ted Kulp (ted@cmsmadesimple.org)
 #Visit our homepage at: http://cmsmadesimple.org
@@ -33,7 +33,7 @@ if( isset($CMS_INSTALL_PAGE) ) {
 
 /**
  * A class for working with tests
- * 
+ *
  * @package CMS
  * @ignore
  * @internal
@@ -179,7 +179,7 @@ function getTestReturn( &$test, $required, $message = '', $error_fragment = '', 
 function & testSupportedDatabase( $required, $title, $db = false, $message = '' )
 {
 	global $lang_fn;
-	
+
 	$drivers = getSupportedDBDriver();
 
 //TODO?
@@ -287,7 +287,7 @@ function getApacheModules( $module = false )
  * @param string $value
  * @param string $return
  * @param string $message
- * @param string $error_fragment	
+ * @param string $error_fragment
  * @param string $error
 */
 function & testDummy( $title, $value, $return, $message = '', $error_fragment = '', $error = '' )
@@ -398,14 +398,14 @@ function & testIntegerMask($required,$title,$var,$mask,$message = '',$ini = true
 {
 	$test = new CmsInstallTest();
 	$test->title = $title;
-	
+
 	if( $ini ) {
 		testIni($test,$var,'and',$mask);
 	}
 	else {
 		$test->ini_val = $var;
 	}
-	
+
 	// did the ini test work.
 	$test->value = 0;
 	if( $test->ini_val !== '' ) $test->value = $test->ini_val;
@@ -476,7 +476,7 @@ function & testInteger( $required, $title, $var, $message = '', $ini = true, $em
  * @param boolean $code_not_empty
  * @param string  $error_fragment
 */
-function & testString( $required, $title, $var, $message = '', $ini = true, $code_empty = 'green', $code_not_empty = 'yellow', 
+function & testString( $required, $title, $var, $message = '', $ini = true, $code_empty = 'green', $code_not_empty = 'yellow',
 					   $error_fragment = '' )
 {
 	$test = new CmsInstallTest();
@@ -555,7 +555,7 @@ function & testBoolean( $required, $title, $var, $message = '', $ini = true, $ne
  * @param int     $unlimited
  * @param string  $error_fragment
 */
-function & testVersionRange( $required, $title, $var, $message = '', $minimum, $recommended, $ini = true, $unlimited = null, 
+function & testVersionRange( $required, $title, $var, $message = '', $minimum, $recommended, $ini = true, $unlimited = null,
 							 $error_fragment='' )
 {
 	$test = new CmsInstallTest();
@@ -606,12 +606,12 @@ function & testVersionRange( $required, $title, $var, $message = '', $minimum, $
  * @param int     $unlimited
  * @param string  $error_fragment
 */
-function & testRange( $required, $title, $var, $message = '', $minimum, $recommended, $ini = true, $test_as_bytes = false, $unlimited = null, 
+function & testRange( $required, $title, $var, $message = '', $minimum, $recommended, $ini = true, $test_as_bytes = false, $unlimited = null,
 					  $error_fragment = '' )
 {
 	$test = new CmsInstallTest();
 	$test->title = $title;
-	
+
 	global $lang_fn;
 
 	if($ini) {
@@ -688,7 +688,7 @@ function & testUmask( $required, $title, $umask, $message = '', $debug = false, 
 {
 	$test = new CmsInstallTest();
 	$test->title = $title;
-	
+
 	global $lang_fn;
 
 	if(empty($dir))	$dir = TMP_CACHE_LOCATION;
@@ -863,7 +863,7 @@ function & testCreateDirAndFile( $required, $title, $message = '', $debug = fals
 	$test->title = $title;
 	$dir = cms_join_path(TMP_CACHE_LOCATION, $dir);
 	$file = cms_join_path($dir, $file);
-	
+
 	global $lang_fn;
 
 	if($debug) {
@@ -976,7 +976,7 @@ function & testFileWritable( $required, $title, $file, $message = '', $debug = f
 {
 	$test = new CmsInstallTest();
 	$test->title = $title;
-	
+
 	global $lang_fn;
 
 	if(empty($file)) {
@@ -1248,7 +1248,7 @@ function & testFileChecksum( $required, $title, $file, $checksum, $message = '',
 	$test = new CmsInstallTest();
 	$test->title = $title;
 	$test->value = $file;
-	
+
 	global $lang_fn;
 
 	if(is_dir($file)) {
@@ -1343,7 +1343,7 @@ function testSessionSavePath( $sess_path )
 function & testFileUploads( $inputname )
 {
 	global $lang_fn;
-	
+
 	$_errors = array(
 		UPLOAD_ERR_INI_SIZE => $lang_fn('upload_err_ini_size'),
 		UPLOAD_ERR_FORM_SIZE => $lang_fn('upload_err_form_size'),
@@ -1418,7 +1418,7 @@ function &_testTimeSettings1()
 	global $lang_fn;
 	$test = new CmsInstallTest();
 	$test->title = $lang_fn('test_file_timedifference');
-	
+
 	$fn = tempnam(TMP_CACHE_LOCATION,'tst');
 	@touch($fn);
 	$mtime = filemtime($fn);
@@ -1513,5 +1513,4 @@ function GDVersion()
 	return $gd_version_number;
 }
 
-# vim:ts=4 sw=4 noet
 ?>

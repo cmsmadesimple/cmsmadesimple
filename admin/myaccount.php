@@ -286,5 +286,5 @@ $smarty->assign('managesettings',check_permission($userid,'Manage My Settings'))
 # Output
 $smarty->display('myaccount.tpl');
 include_once ("footer.php");
-# vim:ts=4 sw=4 noet
+
 ?>

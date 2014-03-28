@@ -217,5 +217,5 @@ $smarty->display('edituser.tpl');
 
 include_once("footer.php");
 
-# vim:ts=4 sw=4 noet
+
 ?>

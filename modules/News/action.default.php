@@ -348,5 +348,5 @@ if( !$smarty->isCached($this->GetDatabaseResource($template),$cache_id) ) {
 
 // Display template
 echo $smarty->fetch($this->GetDatabaseResource($template),$cache_id);
-# vim:ts=4 sw=4 noet
+
 ?>

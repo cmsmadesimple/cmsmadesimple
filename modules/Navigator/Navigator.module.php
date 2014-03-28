@@ -1,10 +1,10 @@
-<?php // -*- mode:php; tab-width:2; indent-tabs-mode:t; c-basic-offset:2; -*-
+<?php
 #BEGIN_LICENSE
 #-------------------------------------------------------------------------
-# Module: Navigator (c) 2013 by Robert Campbell 
+# Module: Navigator (c) 2013 by Robert Campbell
 #         (calguy1000@cmsmadesimple.org)
 #  An module for CMS Made Simple to allow building hierarchical navigations.
-# 
+#
 #-------------------------------------------------------------------------
 # CMS - CMS Made Simple is (c) 2005 by Ted Kulp (wishy@cmsmadesimple.org)
 # Visit our homepage at: http://www.cmsmadesimple.org
@@ -19,7 +19,7 @@
 # However, as a special exception to the GPL, this software is distributed
 # as an addon module to CMS Made Simple.  You may not use this software
 # in any Non GPL version of CMS Made simple, or in any version of CMS
-# Made simple that does not indicate clearly and obviously in its admin 
+# Made simple that does not indicate clearly and obviously in its admin
 # section that the site was built with CMS Made simple.
 #
 # This program is distributed in the hope that it will be useful,
@@ -50,7 +50,7 @@ final class Navigator extends CMSModule
   function GetHelp($lang='en_US') { return $this->Lang('help'); }
   function GetAuthor() { return 'Robert Campbell'; }
   function GetAuthorEmail() { return 'calguy1000@cmsmadesimple.org'; }
-  function GetChangeLog() { return file_get_contents(dirname(__FILE__).'/changelog.inc'); } 
+  function GetChangeLog() { return file_get_contents(dirname(__FILE__).'/changelog.inc'); }
 
   public function InitializeFrontend()
   {
@@ -61,10 +61,10 @@ final class Navigator extends CMSModule
     $this->SetParameterType('show_all',CLEAN_INT);
     $this->SetParameterType('show_root_siblings',CLEAN_INT);
     $this->SetParameterType('start_element',CLEAN_STRING); // yeah, it's a string
-    $this->SetParameterType('start_page',CLEAN_STRING); 
-    $this->SetParameterType('start_text',CLEAN_STRING); 
+    $this->SetParameterType('start_page',CLEAN_STRING);
+    $this->SetParameterType('start_text',CLEAN_STRING);
     $this->SetParameterType('start_level',CLEAN_INT);
-    $this->SetParameterType('template',CLEAN_STRING); 
+    $this->SetParameterType('template',CLEAN_STRING);
     $this->SetParameterType('childrenof',CLEAN_STRING);
     $this->SetParameterType('loadprops',CLEAN_INT);
     $this->SetParameterType('collapse',CLEAN_INT);
@@ -128,5 +128,4 @@ final class Navigator extends CMSModule
   }
 } // End of class
 
-# vim:ts=4 sw=4 noet
 ?>

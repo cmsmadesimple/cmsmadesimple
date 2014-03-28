@@ -29,23 +29,23 @@ class cms_cache_handler
   /**
    * @ignore
    */
-  private function __construct() 
+  private function __construct()
   {
-    // todo... set a default cache handler or something.
-    $driver_name = cms_siteprefs::get('cache_driver');
-    if( !$driver_name ) $driver_name = 'cms_filecache_driver';
+      // todo... set a default cache handler or something.
+      $driver_name = cms_siteprefs::get('cache_driver');
+      if( !$driver_name ) $driver_name = 'cms_filecache_driver';
 
-    if( $driver_name && $driver_name != '-1' && class_exists($driver_name) ) {
-      if( $driver_name == 'cms_filecache_driver' ) {
-	$parms = array();
-	$parms['lifetime'] = cms_siteprefs::get('cache_filecache_lifetime',3600);
-	$parms['locking'] = cms_siteprefs::get('cache_filecache_locking',0);
-	$parms['auto_cleaning'] = cms_siteprefs::get('cache_filecache_autocleaning',0);
-	$parms['blocking'] = cms_siteprefs::get('cache_filecache_blocking',0);
-	$driver_obj = new $driver_name($parms);
-	$this->_driver = $driver_obj;
+      if( $driver_name && $driver_name != '-1' && class_exists($driver_name) ) {
+          if( $driver_name == 'cms_filecache_driver' ) {
+              $parms = array();
+              $parms['lifetime'] = cms_siteprefs::get('cache_filecache_lifetime',3600);
+              $parms['locking'] = cms_siteprefs::get('cache_filecache_locking',0);
+              $parms['auto_cleaning'] = cms_siteprefs::get('cache_filecache_autocleaning',0);
+              $parms['blocking'] = cms_siteprefs::get('cache_filecache_blocking',0);
+              $driver_obj = new $driver_name($parms);
+              $this->_driver = $driver_obj;
+          }
       }
-    }
   }
 
   /**
@@ -186,7 +186,6 @@ class cms_cache_handler
 
     if( !is_object($this->_driver) ) return FALSE;
     if( isset($CMS_INSTALL_PAGE) ) return FALSE;
-    //if( isset($_SERVER['REQUEST_METHOD']) && strtoupper($_SERVER['REQUEST_METHOD']) == 'POST' ) return FALSE;
 
     return TRuE;
   }

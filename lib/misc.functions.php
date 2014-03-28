@@ -1233,5 +1233,4 @@ function cms_get_jquery($exclude = '',$ssl = null,$cdn = false,$append = '',$cus
   return $output;
 }
 
-# vim:ts=4 sw=4 noet
 ?>

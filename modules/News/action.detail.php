@@ -80,5 +80,5 @@ if( $preview ||
 //Display template
 echo $smarty->fetch($this->GetDatabaseResource($template),$cache_id,$compile_id);
 
-# vim:ts=4 sw=4 noet
+
 ?>

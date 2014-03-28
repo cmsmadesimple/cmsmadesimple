@@ -1,4 +1,4 @@
-<?php // -*- mode:php; tab-width:4; indent-tabs-mode:t; c-basic-offset:4; -*-
+<?php
 #CMS - CMS Made Simple
 #(c)2004-2010 by Ted Kulp (ted@cmsmadesimple.org)
 #Visit our homepage at: http://cmsmadesimple.org
@@ -124,9 +124,7 @@ final class Events
 				else if( isset( $row['module_name'] ) && $row['module_name'] != '' ) {
 					// here's a quick check to make sure that we're not calling the module
 					// DoEvent function for an event originated by the same module.
-					if( $row['module_name'] == $modulename ) {
-						continue;
-					}
+					if( $row['module_name'] == $modulename ) continue;
 
 					// and call the module event handler.
 					$obj = CMSModule::GetModuleInstance($row['module_name']);
@@ -187,7 +185,6 @@ final class Events
 		$gCms = cmsms();
 		$db = $gCms->GetDb();
 
-		//$q = "SELECT * FROM ".cms_db_prefix()."events ORDER BY originator,event_name";
 		$q = 'SELECT e.*, count(eh.event_id) as usage_count FROM '.cms_db_prefix().
 			'events e left outer join '.cms_db_prefix().
 			'event_handlers eh on e.event_id=eh.event_id GROUP BY e.event_id ORDER BY originator,event_name';
@@ -299,8 +296,7 @@ final class Events
 		$db = $gCms->GetDb();
 
 		// find the id
-		$q = "SELECT event_id FROM ".cms_db_prefix()."events WHERE
-		originator = ? AND event_name = ?";
+		$q = "SELECT event_id FROM ".cms_db_prefix()."events WHERE originator = ? AND event_name = ?";
 		$dbresult = $db->Execute( $q, array( $modulename, $eventname ) );
 		if( $dbresult == false || $dbresult->RecordCount() == 0 ) {
 			// query failed, event not found
@@ -311,8 +307,7 @@ final class Events
 
 		// delete the record
 		$params = array( $id );
-		$query = "DELETE FROM ".cms_db_prefix()."event_handlers
- 		          WHERE event_id = ? AND ";
+		$query = "DELETE FROM ".cms_db_prefix()."event_handlers WHERE event_id = ? AND ";
 		if( $modulename != false ) {
 			$query .= 'module_name = ?';
 			$params[] = $module_handler;
@@ -386,5 +381,5 @@ final class Events
 		return lang('event_desc_'.strtolower($eventname));
 	}
 } // class
-# vim:ts=4 sw=4 noet
+
 ?>

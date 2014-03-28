@@ -1,4 +1,4 @@
-<?php // -*- mode:php; tab-width:4; indent-tabs-mode:t; c-basic-offset:4; -*-
+<?php
 #CMS - CMS Made Simple
 #(c)2004-2013 by Ted Kulp (wishy@users.sf.net)
 #Visit our homepage at: http://www.cmsmadesimple.org
@@ -206,5 +206,4 @@ if( !isset($DONT_LOAD_SMARTY) ) {
 #Do auto task stuff.
 if (!isset($CMS_INSTALL_PAGE) && !isset($CMS_LOGIN_PAGE)) CmsRegularTaskHandler::handle_tasks();
 
-# vim:ts=4 sw=4 noet
 ?>

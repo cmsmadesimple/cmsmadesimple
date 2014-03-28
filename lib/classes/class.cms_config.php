@@ -1,4 +1,4 @@
-<?php // -*- mode:php; tab-width:4; indent-tabs-mode:t; c-basic-offset:4; -*-
+<?php
 #CMS - CMS Made Simple
 #(c)2004-2013 by Ted Kulp (ted@cmsmadesimple.org)
 #Visit our homepage at: http://www.cmsmadesimple.org
@@ -409,12 +409,12 @@ final class cms_config implements ArrayAccess
    */
   public function offsetSet($key,$value)
   {
-	global $CMS_INSTALL_PAGE;
-	if( !isset($CMS_INSTALL_PAGE) ) {
-		trigger_error('Modification of config variables is deprecated',E_USER_ERROR);
-		return;
-	}
-    $this->_data[$key] = $value;
+      global $CMS_INSTALL_PAGE;
+      if( !isset($CMS_INSTALL_PAGE) ) {
+          trigger_error('Modification of config variables is deprecated',E_USER_ERROR);
+          return;
+      }
+      $this->_data[$key] = $value;
   }
 
   /**
@@ -422,7 +422,7 @@ final class cms_config implements ArrayAccess
    */
   public function offsetUnset($key)
   {
-    trigger_error('Unsetting config variable '.$key.' is invalid',E_USER_ERROR);
+      trigger_error('Unsetting config variable '.$key.' is invalid',E_USER_ERROR);
   }
 
   /**
@@ -456,7 +456,7 @@ final class cms_config implements ArrayAccess
    * before overwriting.
    *
    *
-   * @param bool $verbose indicates whether comments should be stored in the config.php file. 
+   * @param bool $verbose indicates whether comments should be stored in the config.php file.
    * @param string  $filename An optional complete file specification.  If not specified the standard config file location will be used.
    */
   public function save($verbose = true,$filename = '')
@@ -515,5 +515,4 @@ final class cms_config implements ArrayAccess
 #
 # EOF
 #
-# vim:ts=4 sw=4 noet
 ?>

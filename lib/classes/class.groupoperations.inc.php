@@ -1,4 +1,4 @@
-<?php // -*- mode:php; tab-width:4; indent-tabs-mode:t; c-basic-offset:4; -*-
+<?php
 #CMS - CMS Made Simple
 #(c)2004-2010 by Ted Kulp (ted@cmsmadesimple.org)
 #Visit our homepage at: http://cmsmadesimple.org
@@ -20,7 +20,7 @@
 
 /**
  * Group related functions
- * @package CMS 
+ * @package CMS
  * @license GPL
  */
 
@@ -30,7 +30,7 @@
 include_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'class.group.inc.php');
 
 /**
- * A singleton Class for doing group related functions.  
+ * A singleton Class for doing group related functions.
  * Many of the Group object functions are just wrappers around these.
  *
  * @since 0.6
@@ -122,7 +122,7 @@ final class GroupOperations
 	 */
 	public function InsertGroup($group)
 	{
-		$result = -1; 
+		$result = -1;
 		$db = cmsms()->GetDb();
 
 		$query = 'SELECT group_id FROM '.cms_db_prefix().'groups WHERE group_name = ?';
@@ -131,7 +131,7 @@ final class GroupOperations
 
 		$new_group_id = $db->GenID(cms_db_prefix()."groups_seq");
 		$time = $db->DBTimeStamp(time());
-		$query = "INSERT INTO ".cms_db_prefix()."groups (group_id, group_name, group_desc, active, create_date, modified_date) 
+		$query = "INSERT INTO ".cms_db_prefix()."groups (group_id, group_name, group_desc, active, create_date, modified_date)
                   VALUES (?,?,?,?,".$time.", ".$time.")";
 		$dbresult = $db->Execute($query, array($new_group_id, $group->name, $group->description, $group->active));
 		if ($dbresult !== false) $result = $new_group_id;
@@ -147,7 +147,7 @@ final class GroupOperations
 	 */
 	public function UpdateGroup($group)
 	{
-		$result = false; 
+		$result = false;
 		$db = cmsms()->GetDb();
 
 		$query = 'SELECT group_id FROM '.cms_db_prefix().'groups WHERE group_name = ? AND group_id != ?';
@@ -253,5 +253,4 @@ final class GroupOperations
 	}
 }
 
-# vim:ts=4 sw=4 noet
 ?>

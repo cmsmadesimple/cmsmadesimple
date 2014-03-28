@@ -45,5 +45,5 @@ if (isset($_GET["bookmark_id"]))
 
 redirect("listbookmarks.php".$urlext);
 
-# vim:ts=4 sw=4 noet
+
 ?>

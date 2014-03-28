@@ -1,4 +1,4 @@
-<?php // -*- mode:php; tab-width:2; indent-tabs-mode:t; c-basic-offset:2; -*-
+<?php
 #-------------------------------------------------------------------------
 # Module: AdminSearch - A CMSMS addon module to provide template management.
 # (c) 2012 by Robert Campbell <calguy1000@cmsmadesimple.org>
@@ -178,7 +178,7 @@ $smarty->assign('manage_designs',$this->CheckPermission('Manage Designs'));
 $smarty->assign('import_url',$this->create_url($id,'admin_import_template'));
 $smarty->assign('admin_url',$config['admin_url']);
 $smarty->assign('has_add_right',
-								$this->CheckPermission('Modify Templates') || 
+								$this->CheckPermission('Modify Templates') ||
 								$this->CheckPermission('Add Templates'));
 
 echo $this->ProcessTemplate('defaultadmin.tpl');

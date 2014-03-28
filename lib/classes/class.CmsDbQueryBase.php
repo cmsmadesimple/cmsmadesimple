@@ -1,4 +1,4 @@
-<?php // -*- mode:php; tab-width:2; indent-tabs-mode:t; c-basic-offset:2; -*-
+<?php
 #CMS - CMS Made Simple
 #(c)2004-2012 by Ted Kulp (ted@cmsmadesimple.org)
 #Visit our homepage at: http://cmsmadesimple.org
@@ -26,7 +26,7 @@
  */
 
 /**
- * An abstract class for building queries and managing results 
+ * An abstract class for building queries and managing results
  *
  * @since 2.0
  * @author Robert Campbell <calguy1000@gmail.com>
@@ -40,7 +40,7 @@
 abstract class CmsDbQueryBase
 {
 	/**
-	 * The total number of rows matching the query.  
+	 * The total number of rows matching the query.
 	 * This value is populated after execute() is called.
 	 *
 	 * @see execute()
@@ -76,7 +76,7 @@ abstract class CmsDbQueryBase
   public function __construct($args = '')
   {
     if( empty($args) ) return;
-    
+
     if( is_array($args) ) {
       $this->_args = $args;
     }

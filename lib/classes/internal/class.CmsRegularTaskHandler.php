@@ -1,4 +1,4 @@
-<?php // -*- mode:php; tab-width:4; indent-tabs-mode:t; c-basic-offset:4; -*-
+<?php
 #CMS - CMS Made Simple
 #(c)2004-2010 by Ted Kulp (ted@cmsmadesimple.org)
 #Visit our homepage at: http://cmsmadesimple.org
@@ -26,7 +26,7 @@
 
 
 /**
- * A task for managing autometed tasks.  
+ * A task for managing autometed tasks.
  * Task classes are found in the lib/tasks directory.
  *
  * @package CMS
@@ -57,7 +57,7 @@ class CmsRegularTaskHandler
 	private static function get_tasks()
 	{
 		if( !is_object(self::$_tasks) )	self::$_tasks = new ArrayObject();
-		
+
 		// 1.  Get task objects from files.
 		$gCms = cmsms();
 		$dir = $gCms->config['root_path'].'/lib/tasks';
@@ -82,7 +82,7 @@ class CmsRegularTaskHandler
 		foreach( $modules as $one ) {
 			if( !is_object($one) ) $one = cms_utils::get_module($one);
 			if( !method_exists($one,'get_tasks') ) continue;
-			
+
 			$tasks = $one->get_tasks();
 			if( $tasks ) {
 				if( !is_array($tasks) ) {
@@ -159,7 +159,7 @@ class CmsRegularTaskHandler
 	  global $CMS_INSTALL_PAGE;
       global $CMS_LOGIN_PAGE;
 
-	  if( (isset($CMS_STYLESHEET) && $CMS_STYLESHEET == 1) || isset($CMS_INSTALL_PAGE) || 
+	  if( (isset($CMS_STYLESHEET) && $CMS_STYLESHEET == 1) || isset($CMS_INSTALL_PAGE) ||
 		  isset($CMS_LOGIN_PAGE) ) return;
 
 	  $granularity = (int)get_site_preference('pseudocron_granularity',60);
@@ -180,5 +180,4 @@ class CmsRegularTaskHandler
   }
 }
 
-# vim:ts=4 sw=4 noet
 ?>

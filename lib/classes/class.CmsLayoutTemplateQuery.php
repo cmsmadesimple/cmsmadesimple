@@ -1,4 +1,4 @@
-<?php // -*- mode:php; tab-width:2; indent-tabs-mode:t; c-basic-offset:2; -*-
+<?php
 #CMS - CMS Made Simple
 #(c)2004-2012 by Ted Kulp (ted@cmsmadesimple.org)
 #Visit our homepage at: http://cmsmadesimple.org
@@ -115,7 +115,7 @@ class CmsLayoutTemplateQuery extends CmsDbQueryBase
 				$second = (int)$second;
 				$q2 = 'SELECT DISTINCT tpl_id FROM (
                  SELECT tpl_id FROM '.cms_db_prefix().CmsLayoutTemplate::ADDUSERSTABLE.'
-                   WHERE user_id = ? 
+                   WHERE user_id = ?
                  UNION
                  SELECT id AS tpl_id FROM '.cms_db_prefix().CmsLayoutTemplate::TABLENAME.'
                    WHERE owner_id = ?)
@@ -145,7 +145,7 @@ class CmsLayoutTemplateQuery extends CmsDbQueryBase
 				case 'type':
 					$this->_sortby = 'CONCAT(type.originator,type.name)';
 					break;
-					
+
 				default:
 					throw new CmsInvalidDataException($val.' is an invalid sortby for '.__CLASS__);
 				}
@@ -172,7 +172,7 @@ class CmsLayoutTemplateQuery extends CmsDbQueryBase
     }
     if( count($tmp) ) $query .= ' WHERE ' . implode(' AND ',$tmp);
     $query .= ' ORDER BY '.$this->_sortby.' '.$this->_sortorder;
-    
+
     // execute the query
     $this->_rs = $db->SelectLimit($query,$this->_limit,$this->_offset);
     if( !$this->_rs ) throw new CmsSQLErrorException($db->sql.' -- '.$db->ErrorMsg());

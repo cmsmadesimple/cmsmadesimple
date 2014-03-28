@@ -1,4 +1,4 @@
-<?php // -*- mode:php; tab-width:2; indent-tabs-mode:t; c-basic-offset:2; -*-
+<?php
 #-------------------------------------------------------------------------
 # Module: DesignManager - A CMSMS addon module to provide template management.
 # (c) 2012 by Robert Campbell <calguy1000@cmsmadesimple.org>
@@ -65,7 +65,7 @@ try {
 	}
 
   $smarty->assign('css',$orig_css);
-  echo $this->ProcessTemplate('admin_copy_css.tpl');  
+  echo $this->ProcessTemplate('admin_copy_css.tpl');
 }
 catch( CmsException $e ) {
   $this->SetError($e->GetMessage());

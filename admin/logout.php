@@ -41,5 +41,5 @@ audit($userid, "Admin Username: ".$username, 'Logged Out');
 
 redirect("login.php");
 
-# vim:ts=4 sw=4 noet
+
 ?>

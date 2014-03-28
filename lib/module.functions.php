@@ -31,7 +31,7 @@
  *
  * @internal
  * @access private
- * @param array A hash of parameters 
+ * @param array A hash of parameters
  * @param object The smarty object
  * @return string The module output
  */
@@ -64,7 +64,7 @@ function cms_module_plugin($params,&$template)
   $inline = false;
   $checkid = '';
 
-  if (isset($params['module'])) 
+  if (isset($params['module']))
     $modulename = $params['module'];
   else
     return '<!-- ERROR: module name not specified -->';
@@ -84,7 +84,7 @@ function cms_module_plugin($params,&$template)
       $mactaction = (isset($ary[2])?$ary[2]:'');
     }
     $mactinline = (isset($ary[3]) && $ary[3] == 1?true:false);
-    
+
     if ($checkid == $id) {
       // the action is for this instance of the module
       $inline = $mactinline;
@@ -98,7 +98,7 @@ function cms_module_plugin($params,&$template)
   }
 
   if( $action == '' ) $action = 'default'; // probably not needed, but safe
-  
+
   class_exists($modulename);
   $module = cms_utils::get_module($modulename);
   if( $module && $module->isPluginModule() ) {
@@ -109,18 +109,17 @@ function cms_module_plugin($params,&$template)
     }
     $modresult = @ob_get_contents();
     @ob_end_clean();
-    
+
     if( isset($params['assign']) ) {
       $smarty->assign(trim($params['assign']),$modresult);
       return;
     }
     return $modresult;
-	  
+
   }
   else {
     return "<!-- Not a tag module -->\n";
   }
 }
 
-# vim:ts=4 sw=4 noet
 ?>

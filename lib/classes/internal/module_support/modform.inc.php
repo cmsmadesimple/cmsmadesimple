@@ -1,4 +1,4 @@
-<?php // -*- mode:php; tab-width:4; indent-tabs-mode:t; c-basic-offset:4; -*-
+<?php
 #CMS - CMS Made Simple
 #(c)2004-2010 by Ted Kulp (ted@cmsmadesimple.org)
 #Visit our homepage at: http://cmsmadesimple.org
@@ -588,7 +588,7 @@ function cms_module_CreateInputRadioGroup(&$modinstance, $id, $name, $items, $se
 /**
  * @access private
  */
-function cms_module_CreateLink(&$modinstance, $id, $action, $returnid='', $contents='', $params=array(), $warn_message='', 
+function cms_module_CreateLink(&$modinstance, $id, $action, $returnid='', $contents='', $params=array(), $warn_message='',
 							   $onlyhref=false, $inline=false, $addttext='', $targetcontentonly=false, $prettyurl='')
 {
   if( !is_array($params) && $params == '' ) $params = array();

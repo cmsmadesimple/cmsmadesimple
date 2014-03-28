@@ -20,7 +20,7 @@
 #$Id: class.content.inc.php 6905 2011-02-20 22:23:40Z calguy1000 $
 
 /**
- * This file contains a class for defining additonal content types 
+ * This file contains a class for defining additonal content types
  *
  * @package CMS
  */
@@ -61,7 +61,7 @@ abstract class CMSModuleContentType extends ContentBase
   /**
    * Returns the instance of the module this content type belongs to
    */
-  final public function GetModuleInstance() 
+  final public function GetModuleInstance()
   {
     $mod = cms_utils::get_module($this->ModuleName());
     if( $mod ) return $mod;
@@ -72,5 +72,4 @@ abstract class CMSModuleContentType extends ContentBase
 #
 # EOF
 #
-# vim:ts=4 sw=4 noet
 ?>

@@ -1,4 +1,4 @@
-<?php // -*- mode:php; tab-width:2; indent-tabs-mode:t; c-basic-offset:2; -*-
+<?php
 #-------------------------------------------------------------------------
 # Module: AdminSearch - A CMSMS addon module to provide template management.
 # (c) 2012 by Robert Campbell <calguy1000@cmsmadesimple.org>
@@ -59,7 +59,7 @@ function _get_css_urls($css_content)
 				     return $matches[0];
 				   },
 				   $content);
-  
+
   return $content;
 }
 
@@ -124,7 +124,7 @@ function _get_tpl_urls($tpl_content)
   $types = array("href", "src", "url");
   while(list(,$type) = each($types)) {
     $innerT = '[a-z0-9:?=&@/._-]+?';
-    $content = preg_replace_callback("|$type\=([\"'`])(".$innerT.")\\1|i", 
+    $content = preg_replace_callback("|$type\=([\"'`])(".$innerT.")\\1|i",
 				     function($matches) {
 				       $config = cmsms()->GetConfig();
 				       $url = $matches[2];
@@ -146,9 +146,9 @@ try {
 	$xml = $exporter->get_xml();
 
 	// clear any output buffers.
-	$handlers = ob_list_handlers(); 
+	$handlers = ob_list_handlers();
 	for ($cnt = 0; $cnt < sizeof($handlers); $cnt++) { ob_end_clean(); }
-	
+
 	// headers
 	header('Content-Description: File Transfer');
 	header('Content-Type: application/force-download');

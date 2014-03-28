@@ -1,4 +1,4 @@
-<?php // -*- mode:php; tab-width:4; indent-tabs-mode:t; c-basic-offset:4; -*-
+<?php
 #CMS - CMS Made Simple
 #(c)2004-2010 by Ted Kulp (ted@cmsmadesimple.org)
 #Visit our homepage at: http://cmsmadesimple.org
@@ -19,7 +19,7 @@
 #$Id$
 
 /**
- * @package CMS 
+ * @package CMS
  */
 
 /**
@@ -31,11 +31,11 @@
  * @version $Revision$
  * @license GPL
  **/
-final class bulkcontentoperations 
+final class bulkcontentoperations
 {
 	private function __construct() {}
 	private static $_list = array();
-	
+
 	/**
 	 * Register a function to show in the bulk content operations list
 	 * in listcontent.php.
@@ -72,7 +72,7 @@ final class bulkcontentoperations
 				$tmpm[$name] = $label;
 			}
 		}
-      
+
 		if( $separate_modules && count($tmpm) ) {
 			$tmpc[-1] = '----------';
 		}
@@ -81,5 +81,4 @@ final class bulkcontentoperations
     }
 } // end of class
 
-# vim:ts=4 sw=4 noet
 ?>

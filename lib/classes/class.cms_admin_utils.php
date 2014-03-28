@@ -1,10 +1,10 @@
-<?php // -*- mode:php; tab-width:4; indent-tabs-mode:t; c-basic-offset:4; -*-
+<?php
 #BEGIN_LICENSE
 #-------------------------------------------------------------------------
-# Module: cms_tree (c) 2010 by Robert Campbell 
+# Module: cms_tree (c) 2010 by Robert Campbell
 #         (calguy1000@cmsmadesimple.org)
 #  A simple php tree class.
-# 
+#
 #-------------------------------------------------------------------------
 # CMS - CMS Made Simple is (c) 2005 by Ted Kulp (wishy@cmsmadesimple.org)
 # Visit our homepage at: http://www.cmsmadesimple.org
@@ -19,7 +19,7 @@
 # However, as a special exception to the GPL, this software is distributed
 # as an addon module to CMS Made Simple.  You may not use this software
 # in any Non GPL version of CMS Made simple, or in any version of CMS
-# Made simple that does not indicate clearly and obviously in its admin 
+# Made simple that does not indicate clearly and obviously in its admin
 # section that the site was built with CMS Made simple.
 #
 # This program is distributed in the hope that it will be useful,
@@ -103,7 +103,7 @@ final class cms_admin_utils
 	 * This method accepts variable arguments.  If only one argument is passed it is assumed to be
 	 * the second key for the help tag and the first key is assumed to be the current module name.
 	 * If two arguments are passed the first argument is assumed to be key1 and the second to be key2.
-	 * 
+	 *
 	 * @param string $keys,... [$key2|$key1,$key2]
 	 * @return string HTML content of the help tag
 	 */
@@ -173,5 +173,4 @@ final class cms_admin_utils
 #
 #
 # EOF
-# vim:ts=4 sw=4 noet
 ?>
