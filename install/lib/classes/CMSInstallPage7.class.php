@@ -29,9 +29,7 @@ class CMSInstallerPage7 extends CMSInstallerPage
     $values['admininfo']['password'] = $_POST['adminpassword'];
 
     $base_url = 'http://' . $_SERVER['HTTP_HOST'] . substr($_SERVER['PHP_SELF'], 0, strlen($_SERVER['PHP_SELF']) - 18);
-    if( $_POST['docroot'] ) {
-      $base_url = str_replace(" ", "%20", rtrim($_POST['docroot'], '/'));
-    }
+    if( $_POST['docroot'] ) $base_url = str_replace(" ", "%20", rtrim(cleanValue($_POST['docroot']), '/'));
     $link = '<a href="'.$base_url.'">'.ilang('cms_site').'</a>';
 
     $this->smarty->assign('base_url', $base_url);
@@ -64,26 +62,18 @@ class CMSInstallerPage7 extends CMSInstallerPage
     $newconfig['db_prefix'] = trim($_POST['prefix']);
 
     $n = (int)$_POST['db_port'];
-    if( $n > 0 ) {
-      $newconfig['db_port'] = $n;
-    }
+    if( $n > 0 ) $newconfig['db_port'] = $n;
 
     $t = trim($_POST['docroot']);
-    if( $t ) {
-      $newconfig['root_url'] = trim($t,'/');
-    }
+    if( $t ) $newconfig['root_url'] = trim($t,'/');
 
     $tmp = trim($_POST['querystr']);
-    if( $tmp != 'page' ) {
-      $newconfig['query_var'] = $_POST['querystr'];
-    }
+    if( $tmp != 'page' ) $newconfig['query_var'] = $_POST['querystr'];
     $newconfig['timezone'] = $_POST['timezone'];
     $newconfig->save();
 
     if (file_exists(cms_join_path(TMP_CACHE_LOCATION, 'SITEDOWN'))) {
-      if (!unlink(cms_join_path(TMP_CACHE_LOCATION, 'SITEDOWN'))) {
-	echo ilang('install_admin_sitedown');
-      }
+      if (!unlink(cms_join_path(TMP_CACHE_LOCATION, 'SITEDOWN'))) echo ilang('install_admin_sitedown');
     }
 
     // Make sure $gCms->db is set

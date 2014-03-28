@@ -136,10 +136,7 @@ else if(! isset($_SESSION['test']))
 
 // First checks ok
 
-if(isset($_POST['default_cms_lang']))
-{
-	$frontendlang = $_POST['default_cms_lang'];
-}
+if(isset($_POST['default_cms_lang'])) $frontendlang = cleanValue($_POST['default_cms_lang']);
 require_once cms_join_path(CMS_INSTALL_BASE, 'lang.php');
 $smarty->register_function('lang_install','smarty_lang');
 $smarty->assign('default_cms_lang', $frontendlang);

@@ -45,9 +45,9 @@ if( isset($_POST['cancel']) ) redirect('listusertags.php'.$urlext);
 
 $error = array();
 if( isset($_POST['submit']) || isset($_POST['apply']) ) {
-  $record['userplugin_name'] = trim($_POST['userplugin_name']);
+  $record['userplugin_name'] = trim(cleanValue($_POST['userplugin_name']));
   $record['code'] = trim($_POST['code']);
-  $record['description'] = trim($_POST['description']);
+  $record['description'] = trim(cleanValue($_POST['description']));
 
   // validate
   if( $record['userplugin_name'] == '' ) {

@@ -191,7 +191,7 @@ if( $tmp ) $mailprefs = unserialize($tmp);
  * Check tab
  */
 $tab='';
-if( isset($_POST['active_tab']) ) $tab = trim($_POST['active_tab']);
+if( isset($_POST['active_tab']) ) $tab = trim(cleanValue($_POST['active_tab']));
 
 /**
  * Submit
@@ -204,7 +204,7 @@ if( isset($_POST['testmail']) ) {
     $error .= '<li>'.lang('error_mailtest_noaddress').'</li>';
   }
   else {
-    $addr = strip_tags($_POST['mailtest_testaddress']);
+    $addr = cleanValue($_POST['mailtest_testaddress']);
     if( !is_email($addr) ) {
       $error .= '<li>'.lang('error_mailtest_notemail').'</li>';
     }
@@ -259,36 +259,36 @@ if (isset($_POST["testumask"])) {
 }
 
 if (isset($_POST["editsiteprefs"])) {
-  if ($access) {
-    switch( $tab ) {
-    case 'general':
-      // tab 1
-      if (isset($_POST['sitename'])) $sitename = cms_htmlentities($_POST['sitename']);
-      cms_siteprefs::set('sitename', $sitename);
-      if (isset($_POST['frontendlang'])) $frontendlang = $_POST['frontendlang'];
-      cms_siteprefs::set('frontendlang', $frontendlang);
-      if (isset($_POST['frontendwysiwyg'])) $frontendwysiwyg = $_POST['frontendwysiwyg'];
-      cms_siteprefs::set('frontendwysiwyg', $frontendwysiwyg);
-      if (isset($_POST['metadata'])) $metadata = $_POST['metadata'];
-      cms_siteprefs::set('metadata', $metadata);
-      if (isset($_POST["logintheme"])) $logintheme = $_POST["logintheme"];
-      cms_siteprefs::set('logintheme', $logintheme);
-      if (isset($_POST['backendwysiwyg'])) $backendwysiwyg = $_POST['backendwysiwyg'];
-      cms_siteprefs::set('backendwysiwyg', $backendwysiwyg);
-      if (isset($_POST["defaultdateformat"])) $defaultdateformat = $_POST["defaultdateformat"];
-      cms_siteprefs::set('defaultdateformat', $defaultdateformat);
-      if( isset($_POST['thumbnail_width']) ) $thumbnail_width = (int)$_POST['thumbnail_width'];
-      if( isset($_POST['thumbnail_height']) ) $thumbnail_height = (int)$_POST['thumbnail_height'];
-      cms_siteprefs::set('thumbnail_width',$thumbnail_width);
-      cms_siteprefs::set('thumbnail_height',$thumbnail_height);
-      if( isset($_POST['search_module']) ) {
-	$search_module = trim($_POST['search_module']);
-	cms_siteprefs::set('searchmodule',$search_module);
-      }
-      break;
+	if ($access) {
+		switch( $tab ) {
+		case 'general':
+			// tab 1
+			if (isset($_POST['sitename'])) $sitename = cleanValue($_POST['sitename']);
+			cms_siteprefs::set('sitename', $sitename);
+			if (isset($_POST['frontendlang'])) $frontendlang = cleanValue($_POST['frontendlang']);
+			cms_siteprefs::set('frontendlang', $frontendlang);
+			if (isset($_POST['frontendwysiwyg'])) $frontendwysiwyg = cleanValue($_POST['frontendwysiwyg']);
+			cms_siteprefs::set('frontendwysiwyg', $frontendwysiwyg);
+			if (isset($_POST['metadata'])) $metadata = $_POST['metadata'];
+			cms_siteprefs::set('metadata', $metadata);
+			if (isset($_POST["logintheme"])) $logintheme = cleanValue($_POST["logintheme"]);
+			cms_siteprefs::set('logintheme', $logintheme);
+			if (isset($_POST['backendwysiwyg'])) $backendwysiwyg = cleanValue($_POST['backendwysiwyg']);
+			cms_siteprefs::set('backendwysiwyg', $backendwysiwyg);
+			if (isset($_POST["defaultdateformat"])) $defaultdateformat = cleanValue($_POST["defaultdateformat"]);
+			cms_siteprefs::set('defaultdateformat', $defaultdateformat);
+			if( isset($_POST['thumbnail_width']) ) $thumbnail_width = (int)$_POST['thumbnail_width'];
+			if( isset($_POST['thumbnail_height']) ) $thumbnail_height = (int)$_POST['thumbnail_height'];
+			cms_siteprefs::set('thumbnail_width',$thumbnail_width);
+			cms_siteprefs::set('thumbnail_height',$thumbnail_height);
+			if( isset($_POST['search_module']) ) {
+				$search_module = trim(cleanValue($_POST['search_module']));
+				cms_siteprefs::set('searchmodule',$search_module);
+			}
+			break;
 
-    case 'editcontent':
-  	  if( $pretty_urls ) {
+		case 'editcontent':
+			if( $pretty_urls ) {
 		  $content_autocreate_urls = (int)$_POST['content_autocreate_urls'];
 		  cms_siteprefs::set('content_autocreate_urls',$content_autocreate_urls);
 		  $content_autocreate_flaturls = (int)$_POST['content_autocreate_flaturls'];
@@ -379,13 +379,11 @@ if (isset($_POST["editsiteprefs"])) {
       break;
 
     case 'setup':
-		if (isset($_POST["disablesafemodewarning"])) $disablesafemodewarning = $_POST['disablesafemodewarning'];
-		if (isset($_POST["enablenotifications"])) $enablenotifications = $_POST['enablenotifications'];
-		if (isset($_POST["xmlmodulerepository"])) $xmlmodulerepository = $_POST["xmlmodulerepository"];
+		if (isset($_POST["disablesafemodewarning"])) $disablesafemodewarning = (int)$_POST['disablesafemodewarning'];
+		if (isset($_POST["enablenotifications"])) $enablenotifications = (int)$_POST['enablenotifications'];
+		if (isset($_POST["xmlmodulerepository"])) $xmlmodulerepository = cleanValue($_POST["xmlmodulerepository"]);
 		if (isset($_POST["checkversion"])) $checkversion = (int) $_POST["checkversion"];
-		if (isset($_POST['global_umask'])) {
-			$global_umask = $_POST['global_umask'];
-		}
+		if (isset($_POST['global_umask'])) $global_umask = cleanValue($_POST['global_umask']);
 		cms_siteprefs::set('global_umask', $global_umask);
 		cms_siteprefs::set('xmlmodulerepository', $xmlmodulerepository);
 		cms_siteprefs::set('checkversion', $checkversion);
@@ -408,18 +406,18 @@ if (isset($_POST["editsiteprefs"])) {
 			cms_siteprefs::set('pseudocron_granularity',$pseudocron_granularity);
 		}
 		if (isset($_POST["adminlog_lifetime"])) {
-			$adminlog_lifetime = $_POST["adminlog_lifetime"];
+			$adminlog_lifetime = (int)$_POST["adminlog_lifetime"];
 			cms_siteprefs::set('adminlog_lifetime',$adminlog_lifetime);
 		}
 		break;
 
     case 'smarty':
 		if( isset($_POST['use_smartycache']) ) {
-			$use_smartycache = $_POST['use_smartycache'];
+			$use_smartycache = (int)$_POST['use_smartycache'];
 			cms_siteprefs::set('use_smartycache',$use_smartycache);
 		}
 		if( isset($_POST['use_smartycompilecheck']) ) {
-			$use_smartycompilecheck = $_POST['use_smartycompilecheck'];
+			$use_smartycompilecheck = (int)$_POST['use_smartycompilecheck'];
 			cms_siteprefs::set('use_smartycompilecheck',$use_smartycompilecheck);
 		}
 		$gCms->clear_cached_files();

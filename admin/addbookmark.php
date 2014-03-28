@@ -28,9 +28,9 @@ check_login();
 $error = "";
 
 $title= "";
-if (isset($_POST["title"])) $title = $_POST["title"];
+if (isset($_POST["title"])) $title = trim(cleanValue($_POST["title"]));
 $url = "";
-if (isset($_POST["url"])) $url = $_POST["url"];
+if (isset($_POST["url"])) $url = trim(cleanValue($_POST["url"]));
 
 if (isset($_POST["cancel"])) {
 	redirect("listbookmarks.php".$urlext);

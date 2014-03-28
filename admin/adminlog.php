@@ -58,13 +58,12 @@ $smarty->assign("urlext",$urlext);
 $userid = get_userid();
 $access = check_permission($userid, 'Clear Admin Log');
 
-if (check_permission($userid, 'Modify Site Preferences'))
-{
+if (check_permission($userid, 'Modify Site Preferences')) {
   if (isset($_GET['clear']) && $access) {
     $query = "DELETE FROM ".cms_db_prefix()."adminlog";
     $db->Execute($query);
     echo $themeObject->ShowMessage(lang('adminlogcleared'));
-	// put mention into the admin log
+    // put mention into the admin log
     audit('', 'Admin Log', 'Cleared');
   }
 
@@ -77,12 +76,11 @@ if (check_permission($userid, 'Modify Site Preferences'))
 
   if (isset($_POST["filterreset"])) {
     set_site_preference('adminlog_filteruser','');
-    //set_site_preference('adminlog_filtername','');
     set_site_preference('adminlog_filteraction','');
   }
   if (isset($_POST["filterapply"])) {
-    if (isset($_POST['filteruser'])) set_site_preference('adminlog_filteruser',trim($_POST["filteruser"]));
-    if (isset($_POST['filteraction'])) set_site_preference('adminlog_filteraction',trim($_POST["filteraction"]));
+    if (isset($_POST['filteruser'])) set_site_preference('adminlog_filteruser',trim(cleanValue($_POST["filteruser"])));
+    if (isset($_POST['filteraction'])) set_site_preference('adminlog_filteraction',trim(cleanValue($_POST["filteraction"])));
   }
 
   $params=array();
@@ -109,30 +107,31 @@ if (check_permission($userid, 'Modify Site Preferences'))
       $page_string = pagination($page, $totalrows, $limit);
       $smarty->assign("pagestring",$page_string);
 
-      $smarty->assign("downloadlink",$themeObject->DisplayImage('icons/system/attachment.gif', lang('download'),'','','systemicon'));
-      $smarty->assign("langdownload",lang("download"));
+    $smarty->assign("downloadlink",$themeObject->DisplayImage('icons/system/attachment.gif', lang('download'),'','','systemicon'));
+    $smarty->assign("langdownload",lang("download"));
 
-      $smarty->assign("languser",lang("user"));
-      $smarty->assign("langitemid",lang("itemid"));
-      $smarty->assign("langitemname",lang("itemname"));
-      $smarty->assign("langaction",lang("action"));
-      $smarty->assign("langdate",lang("date"));
+    $smarty->assign("languser",lang("user"));
+    $smarty->assign("langitemid",lang("itemid"));
+    $smarty->assign("langitemname",lang("itemname"));
+    $smarty->assign("langaction",lang("action"));
+    $smarty->assign("langdate",lang("date"));
 
-      $loglines=array();
-      while ($row = $result->FetchRow()) {
-	$one=array();
-	$one['ip_addr'] = $row['ip_addr'];
-	$one["username"]=$row["username"];
-	$one["itemid"]=($row["item_id"]!=-1?$row["item_id"]:"&nbsp;");
-	$one["itemname"]=$row["item_name"];
-	$one["action"]=$row["action"];
-	$one["date"]=strftime($dateformat,$row['timestamp']);
+    $loglines=array();
+    while ($row = $result->FetchRow()) {
+      $one=array();
+      $one['ip_addr'] = $row['ip_addr'];
+      $one["username"]=$row["username"];
+      $one["itemid"]=($row["item_id"]!=-1?$row["item_id"]:"&nbsp;");
+      $one["itemname"]=$row["item_name"];
+      $one["action"]=$row["action"];
+      $one["date"]=strftime($dateformat,$row['timestamp']);
 
-	$loglines[]=$one;
-      }
-      $smarty->assign("loglines",$loglines);
-      $smarty->assign("logempty",false);
-    }	else {
+      $loglines[]=$one;
+    }
+    $smarty->assign("loglines",$loglines);
+    $smarty->assign("logempty",false);
+  }
+  else {
     $smarty->assign("langlogempty",lang('adminlogempty'));
     $smarty->assign("logempty",true);
   }
@@ -141,7 +140,7 @@ if (check_permission($userid, 'Modify Site Preferences'))
   if ($access && $result && $result->RecordCount() > 0) {
     $smarty->assign("clearicon",$themeObject->DisplayImage('icons/system/delete.gif', lang('delete'),'','','systemicon'));
     $smarty->assign("langclear",lang('clearadminlog'));
-	$smarty->assign("sysmain_confirmclearlog",lang('sysmain_confirmclearlog'));
+    $smarty->assign("sysmain_confirmclearlog",lang('sysmain_confirmclearlog'));
   }
 
   $smarty->assign('filteruser',get_site_preference('adminlog_filteruser',''));

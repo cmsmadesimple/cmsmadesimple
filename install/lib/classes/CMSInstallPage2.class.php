@@ -68,8 +68,14 @@ class CMSInstallerPage2 extends CMSInstallerPage
 		list($minimum, $recommended) = getTestValues('gd_version');
 		$settings['required'][] = testGDVersion(1, ilang('test_check_gd'), $minimum, ilang('test_check_gd_failed'), 'min_GD_version');
 
-		$settings['required'][] =
-			testFileWritable(1, ilang('test_check_write') . ' config.php', CONFIG_FILE_LOCATION, ilang('test_may_not_exist'), $this->debug);
+		if( file_exists(CONFIG_FILE_LOCATION.'/config.php') ) {
+		  $settings['required'][] =
+		    testFileWritable(1, ilang('test_check_write') . ' config.php', CONFIG_FILE_LOCATION, ilang('test_may_not_exist'), $this->debug);
+		}
+		else {
+		  $f = CMS_BASE;
+		  $settings['required'][] = testDirWrite(0, ilang('test_check_writable', $f), $f, ilang('test_check_root_failed'), 0, $this->debug);
+		}
 
 		$settings['required'][] = testBoolean(1, ilang('test_check_tempnam'), function_exists('tempnam'), '', false, false, 'Function_tempnam_disabled');
 

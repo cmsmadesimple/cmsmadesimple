@@ -29,81 +29,66 @@ $db = cmsms()->GetDb();
 $error = "";
 
 $title = "";
-if (isset($_POST["title"])) $title = $_POST["title"];
+if (isset($_POST["title"])) $title = trim(cleanValue($_POST["title"]));
 
 $myurl = "";
-if (isset($_POST["url"])) $myurl = $_POST["url"];
+if (isset($_POST["url"])) $myurl = trim(cleanValue($_POST["url"]));
 
 $bookmark_id = -1;
-if (isset($_POST["bookmark_id"])) $bookmark_id = $_POST["bookmark_id"];
-else if (isset($_GET["bookmark_id"])) $bookmark_id = $_GET["bookmark_id"];
+if (isset($_POST["bookmark_id"])) $bookmark_id = (int)$_POST["bookmark_id"];
+else if (isset($_GET["bookmark_id"])) $bookmark_id = (int)$_GET["bookmark_id"];
 
 if (isset($_POST["cancel"])) {
-	redirect("listbookmarks.php".$urlext);
-	return;
+  redirect("listbookmarks.php".$urlext);
+  return;
 }
 
 $userid = get_userid();
 
-if (isset($_POST["editbookmark"]))
-	{
-	$validinfo = true;
-	if ($title == "")
-		{
-		$validinfo = false;
-		$error .= "<li>".lang('nofieldgiven', array(lang('title')))."</li>";
-		}
-	if ($myurl == "")
-		{
-		$validinfo = false;
-		$error .= "<li>".lang('nofieldgiven', array(lang('url')))."</li>";
-		}
-
-	if ($validinfo)
-		{
-		  cmsms()->GetBookmarkOperations();
-		$markobj = new Bookmark();
-		$markobj->bookmark_id = $bookmark_id;
-		$markobj->title = $title;
-		$markobj->url = $myurl;
-		$markobj->user_id = $userid;
-
-		$result = $markobj->save();
-
-		if ($result)
-			{
-			redirect("listbookmarks.php".$urlext);
-			return;
-			}
-		else
-			{
-			$error .= "<li>".lang('errorupdatingbookmark')."</li>";
-			}
-		}
-
-	}
-else if ($bookmark_id != -1)
-	{
-	$query = "SELECT * from ".cms_db_prefix()."admin_bookmarks WHERE bookmark_id = ?";
-	$result = $db->Execute($query, array($bookmark_id));
-	
-	$row = $result->FetchRow();
-
-	$myurl = $row["url"];
-	$title = $row["title"];
-	}
-
-if (strlen($title) > 0)
-  {
-    $CMS_ADMIN_SUBTITLE = $title;
+if (isset($_POST["editbookmark"])) {
+  $validinfo = true;
+  if ($title == "") {
+    $validinfo = false;
+    $error .= "<li>".lang('nofieldgiven', array(lang('title')))."</li>";
   }
+  if ($myurl == "") {
+    $validinfo = false;
+    $error .= "<li>".lang('nofieldgiven', array(lang('url')))."</li>";
+  }
+
+  if ($validinfo) {
+    cmsms()->GetBookmarkOperations();
+    $markobj = new Bookmark();
+    $markobj->bookmark_id = $bookmark_id;
+    $markobj->title = $title;
+    $markobj->url = $myurl;
+    $markobj->user_id = $userid;
+
+    $result = $markobj->save();
+
+    if ($result) {
+      redirect("listbookmarks.php".$urlext);
+      return;
+    }
+    else {
+      $error .= "<li>".lang('errorupdatingbookmark')."</li>";
+    }
+  }
+}
+else if ($bookmark_id != -1) {
+  $query = "SELECT * from ".cms_db_prefix()."admin_bookmarks WHERE bookmark_id = ?";
+  $result = $db->Execute($query, array($bookmark_id));
+  $row = $result->FetchRow();
+
+  $myurl = $row["url"];
+  $title = $row["title"];
+}
+
+if (strlen($title) > 0) $CMS_ADMIN_SUBTITLE = $title;
 
 include_once("header.php");
 
-if ($error != "")
-	{
-	echo '<div class="pageerrorcontainer"><p class="pageerror">'.$error.'</p></div>';
-	}
+if ($error != "") echo '<div class="pageerrorcontainer"><p class="pageerror">'.$error.'</p></div>';
 ?>
 
 <div class="pagecontainer">

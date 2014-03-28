@@ -76,7 +76,7 @@ if (isset($_POST["cancel"])) redirect("index.php" . $urlext);
  * Check tab
  */
 $tab='';
-if( isset($_POST['active_tab']) ) $tab = trim($_POST['active_tab']);
+if( isset($_POST['active_tab']) ) $tab = trim(cleanValue($_POST['active_tab']));
 
 /**
  * Submit account
@@ -102,7 +102,7 @@ if (isset($_POST['submit_account']) && check_permission($userid,'Manage My Accou
   if (isset($_POST["lastname"])) $lastname = cleanValue($_POST["lastname"]);
 
   $email = '';
-  if (isset($_POST["email"])) $email = trim($_POST["email"]);
+  if (isset($_POST["email"])) $email = trim(cleanValue($_POST["email"]));
 
   // Do validations
   $validinfo = true;
@@ -150,26 +150,26 @@ if (isset($_POST['submit_account']) && check_permission($userid,'Manage My Accou
  */
 if (isset($_POST['submit_prefs']) && check_permission($userid,'Manage My Settings')) {
   // Get values from request and drive em to variables
-  $wysiwyg = $_POST['wysiwyg'];
-  $ce_navdisplay = $_POST['ce_navdisplay'];
-  $syntaxhighlighter = $_POST['syntaxhighlighter'];
+  $wysiwyg = cleanValue($_POST['wysiwyg']);
+  $ce_navdisplay = cleanValue($_POST['ce_navdisplay']);
+  $syntaxhighlighter = cleanValue($_POST['syntaxhighlighter']);
   $default_cms_language = '';
-  if (isset($_POST['default_cms_language'])) $default_cms_language = $_POST['default_cms_language'];
+  if (isset($_POST['default_cms_language'])) $default_cms_language = cleanValue($_POST['default_cms_language']);
   $old_default_cms_lang = '';
-  if (isset($_POST['old_default_cms_lang'])) $old_default_cms_lang = $_POST['old_default_cms_lang'];
-  $admintheme = $_POST['admintheme'];
+  if (isset($_POST['old_default_cms_lang'])) $old_default_cms_lang = cleanValue($_POST['old_default_cms_lang']);
+  $admintheme = cleanValue($_POST['admintheme']);
   $bookmarks = (isset($_POST['bookmarks']) ? 1 : 0);
   $indent = (isset($_POST['indent']) ? true : false);
   $enablenotifications = (isset($_POST['enablenotifications']) ? 1 : 0);
   $paging = (isset($_POST['paging']) ? 1 : 0);
-  $date_format_string = $_POST['date_format_string'];
+  $date_format_string = trim(strip_tags($_POST['date_format_string']));
   $default_parent = '';
-  if (isset($_POST['parent_id'])) $default_parent = $_POST['parent_id'];
-  $homepage = $_POST['homepage'];
+  if (isset($_POST['parent_id'])) $default_parent = (int)$_POST['parent_id'];
+  $homepage = cleanValue($_POST['homepage']);
   $hide_help_links = (isset($_POST['hide_help_links']) ? 1 : 0);
   $ignoredmodules = array();
   if (isset($_POST['ignoredmodules'])) {
-    $ignoredmodules = $_POST['ignoredmodules'];
+    $ignoredmodules = cleanValue($_POST['ignoredmodules']);
     if (in_array('**none**', $ignoredmodules)) $ignoredmodules = array();
   }
 
