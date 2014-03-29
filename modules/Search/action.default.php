@@ -49,13 +49,16 @@ if( !$smarty->isCached($this->GetDatabaseResource($template),$cache_id,$compile_
   $searchtext = (isset($params['searchtext'])) ? $params['searchtext'] : $this->GetPreference('searchtext','');
   $smarty->assign('search_actionid',$id);
   $smarty->assign('searchtext',$searchtext);
-  $smarty->assign('startform', 
-		  $this->CreateFormStart($id, 'dosearch', $returnid, $is_method, '', $inline ));
+  $smarty->assign('startform', $this->CreateFormStart($id, 'dosearch', $returnid, $is_method, '', $inline ));
   $smarty->assign('label', '<label for="'.$id.'searchinput">'.$this->Lang('search').'</label>');
   $smarty->assign('searchprompt',$this->Lang('search'));
   //$smarty->assign('inputbox', $this->CreateInputText($id, 'searchinput', $searchtext, 20, 50, $hogan));
   //$smarty->assign('submitbutton', $this->CreateInputSubmit($id, 'submit', $submittext));
   $smarty->assign('submittext', $submittext);
+
+  // only here for backwards compatibility.
+  $hogan = "onfocus=\"if(this.value==this.defaultValue) this.value='';\""." onblur=\"if(this.value=='') this.value=this.defaultValue;\"";
+  $smarty->assign('hogan',$hogan);
 
   $hidden = '';
   if( $origreturnid != $returnid ) {
