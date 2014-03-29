@@ -25,7 +25,7 @@ $(document).ready(function(){
     lostlock_handler: function(err) {
       // we lost the lock on this content... make sure we can't save anything.
       // and display a nice message.
-      $('[name$=cancel]').fadeOut().attr('value','{$mod->Lang('close')}').fadeIn();
+      $('[name$=cancel]').fadeOut().attr('value','{$mod->Lang('cancel')}').fadeIn();
       $('#form_edittemplate').dirtyForm('option','dirty',false);
       alert('{$mod->Lang('msg_lostlock')}');
     }
@@ -41,7 +41,7 @@ $(document).ready(function(){
     var url = $('#form_edittemplate').attr('action')+'?showtemplate=false&m1_apply=1';
     var data = $('#form_edittemplate').serializeArray();
     $.post(url,data,function(data,textStatus,jqXHR){
-      $('#cancelbtn').button('option','label','{$mod->Lang('close')}');
+      $('#cancelbtn').button('option','label','{$mod->Lang('cancel')}');
       $('#tpl_modified_cont').hide();
       $('#content').focus();
     });

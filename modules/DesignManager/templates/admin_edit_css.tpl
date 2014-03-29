@@ -24,7 +24,7 @@ $(document).ready(function(){
     lostlock_handler: function(err) {
       // we lost the lock on this stylesheet... make sure we can't save anything.
       // and display a nice message.
-      $('[name$=cancel]').fadeOut().attr('value','{$mod->Lang('close')}').fadeIn();
+      $('[name$=cancel]').fadeOut().attr('value','{$mod->Lang('cancel')}').fadeIn();
       $('#form_editcss').dirtyForm('option','dirty',false);
       alert('{$mod->Lang('msg_lostlock')}');
     }
@@ -41,7 +41,7 @@ $(document).ready(function(){
     var url = $('#form_editcss').attr('action')+'?showtemplate=false&m1_apply=1';
     var data = $('#form_editcss').serializeArray();
     $.post(url,data,function(data,textStatus,jqXHR){
-      $('#cancelbtn').button('option','label','{$mod->Lang('close')}');
+      $('#cancelbtn').button('option','label','{$mod->Lang('cancel')}');
       $('#css_modified_cont').hide();
       return false;
     });
