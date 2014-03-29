@@ -1048,7 +1048,7 @@ $lang['mail_testbody'] = "<h2 style=&quot;color: green;&quot;>Greetings</h2><p>Y
 $lang['mail_testsubject'] = "CMSMS Mail Test message";
 $lang['main'] = "Main";
 $lang['mainmenu'] = "Main Menu";
-$lang['maintenance_warning'] = "Website is still in maintenance mode!\nAre you sure you want to logout now?";
+$lang['maintenance_warning'] = "Website is still in maintenance mode! Are you sure you want to logout now?";
 $lang['managebookmarks'] = "Manage Shortcuts";
 $lang['managebookmarksdescription'] = "This is where you can manage your administration shortcuts.";
 $lang['master_admintheme'] = "Default Administration Theme (for the login page and new user accounts)";
