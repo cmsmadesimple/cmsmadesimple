@@ -27,7 +27,7 @@ $orig_memory = (function_exists('memory_get_usage')?memory_get_usage():0);
  * Entry point for all non-admin pages
  *
  * @package CMS
- */	
+ */
 
 clearstatcache();
 define('CONFIG_FILE_LOCATION',__DIR__.'/config.php');
@@ -37,17 +37,10 @@ if (!isset($_SERVER['REQUEST_URI']) && isset($_SERVER['QUERY_STRING'])) {
 }
 
 if (!file_exists(CONFIG_FILE_LOCATION) || filesize(CONFIG_FILE_LOCATION) < 100) {
-  @touch(CONFIG_FILE_LOCATION); // attempt to create the config.php if it doesn't already exist
-  require_once(__DIR__.'/lib/misc.functions.php');
-  if (FALSE == is_file(__DIR__.'/install/index.php')) {
-    die ('There is no config.php file or install/index.php please correct one these errors!');
-  } 
-  else {
-    redirect('install/');
-  }
+    die ('FATAL ERROR: config.php file not found or invalid');
 }
 
-require_once(__DIR__.'/include.php'); 
+require_once(__DIR__.'/include.php');
 
 if (file_exists(TMP_CACHE_LOCATION.'/SITEDOWN')) {
   echo "<html><head><title>Maintenance</title></head><body><p>Site down for maintenance.</p></body></html>";
@@ -126,7 +119,7 @@ while( $trycount < 2 ) {
     }
     else {
       debug_to_log('caching '.$page);
-      // as far as we know, the output is cachable at this point... 
+      // as far as we know, the output is cachable at this point...
       // so we mark it so that the output can be cached
       header('Expires: '.gmdate("D, d M Y H:i:s",time() + $expiry * 60).' GMT');
       $the_date = time();
@@ -149,17 +142,17 @@ while( $trycount < 2 ) {
     $smarty->assign('encoding',CmsNlsOperations::get_encoding());
 
     $html = '';
-    $showtemplate = true; 
+    $showtemplate = true;
 
-    if ((isset($_REQUEST['showtemplate']) && $_REQUEST['showtemplate'] == 'false') || 
-	(isset($smarty->id) && $smarty->id != '' && isset($_REQUEST[$smarty->id.'showtemplate']) && 
+    if ((isset($_REQUEST['showtemplate']) && $_REQUEST['showtemplate'] == 'false') ||
+	(isset($smarty->id) && $smarty->id != '' && isset($_REQUEST[$smarty->id.'showtemplate']) &&
 	 $_REQUEST[$smarty->id.'showtemplate'] == 'false')) {
       $showtemplate = false;
     }
 
     $smarty->set_global_cacheid('p'.$contentobj->Id());
     $uid = get_userid(FALSE);
-    if( $contentobj->Cachable() && $showtemplate && !$uid && get_site_preference('use_smartycache',0) && 
+    if( $contentobj->Cachable() && $showtemplate && !$uid && get_site_preference('use_smartycache',0) &&
 	$_SERVER['REQUEST_METHOD'] != 'POST' ) {
       if( version_compare(phpversion(),'5.3') >= 0 ) {
 	// this content is cachable... so enable smarty caching of this page data, for this user
@@ -183,7 +176,7 @@ while( $trycount < 2 ) {
       debug_buffer('process template head');
       $head = $smarty->fetch('tpl_head:'.$contentobj->TemplateId());
 
-      $html = $top.$head.$body;		
+      $html = $top.$head.$body;
       $trycount = 99; // no more iterations
     }
   }
@@ -196,7 +189,7 @@ while( $trycount < 2 ) {
     unset($_REQUEST['mact']);
     unset($_REQUEST['module']);
     unset($_REQUEST['action']);
-    $handlers = ob_list_handlers(); 
+    $handlers = ob_list_handlers();
     for ($cnt = 0; $cnt < sizeof($handlers); $cnt++) { ob_end_clean(); }
 
     // specified page not found, load the 404 error page
@@ -221,14 +214,14 @@ while( $trycount < 2 ) {
       exit();
     }
   }
-  
+
   catch (Exception $e) {
     // Catch rest of exceptions
-    $handlers = ob_list_handlers(); 
+    $handlers = ob_list_handlers();
     for ($cnt = 0; $cnt < sizeof($handlers); $cnt++) { ob_end_clean(); }
     echo $smarty->errorConsole($e);
     exit();
-  }	  
+  }
 } // end while trycount
 
 Events::SendEvent('Core', 'ContentPostRender', array('content' => &$html));

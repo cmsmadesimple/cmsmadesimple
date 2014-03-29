@@ -164,11 +164,6 @@ if (!isset($DONT_LOAD_DB)) {
   cmsms()->GetDb();
   debug_buffer('Done Initializing Database');
 
-  if( isset($CMS_ADMIN_PAGE) && !isset($CMS_LOGIN_PAGE) ) {
-    $current_version = cmsms()->get_installed_schema_version();
-    if ($current_version < $CMS_SCHEMA_VERSION) redirect($config['root_url'] . "/install/upgrade.php");
-  }
-
   // Set a umask
   $global_umask = get_site_preference('global_umask','');
   if( $global_umask != '' ) @umask( octdec($global_umask) );

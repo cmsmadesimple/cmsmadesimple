@@ -218,8 +218,6 @@ if (isset($_POST["username"]) && isset($_POST["password"])) {
     // redirect to upgrade if db_schema it's old
     $current_version = $CMS_SCHEMA_VERSION;
 
-    if( $gCms->get_installed_schema_version() < $CMS_SCHEMA_VERSION ) redirect($gCms->config['root_url'] . "/install/upgrade.php");
-
     if (isset($_POST['redirect_url'])) $_SESSION['redirect_url'] = $_POST['redirect_url'];
     if (isset($_SESSION["redirect_url"])) {
       if (isset($gCms->config) and $gCms->config['debug'] == true) {
