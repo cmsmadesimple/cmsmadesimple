@@ -182,7 +182,6 @@ $lang['nothinguploaded'] = 'Nothing uploaded';
 $lang['notwritable'] = 'Not writeable';
 
 // O
-$lang['ok'] = 'OK';
 $lang['others'] = 'Others';
 $lang['owner'] = 'Owner';
 
@@ -263,6 +262,7 @@ $lang['smallicons'] = 'Small icons';
 $lang['space'] = 'space';
 $lang['subdir'] = 'subdirectory';
 $lang['subdirs'] = 'subdirectories';
+$lang['submit'] = 'Submit';
 $lang['switchtofileview'] = 'Switch to file view';
 
 // T

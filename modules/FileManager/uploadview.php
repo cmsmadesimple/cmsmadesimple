@@ -10,7 +10,7 @@ $smarty->assign('formstart',$this->CreateFormStart($id, 'upload', $returnid,"pos
 $smarty->assign('actionid',$id);
 $smarty->assign('maxfilesize',$config["max_upload_size"]);
 
-$smarty->assign('submit',$this->CreateInputSubmit($id,"ok",$this->Lang("ok"),"",""));
+$smarty->assign('submit',$this->CreateInputSubmit($id,"submit",$this->Lang("submit"),"",""));
 $smarty->assign('formend',$this->CreateFormEnd());
 
 

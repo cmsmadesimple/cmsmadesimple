@@ -67,7 +67,7 @@ $(document).on('drop dragover', function(e) {
 					<select class="cms_dropdown" id="fm_newdir" name="m1_newdir">
                                           {html_options options=$dirlist selected="/`$cwd`"}
 					</select>
-					<input type="submit" name="m1_submit" value="{$mod->lang('ok')}" />
+					<input type="submit" name="m1_submit" value="{$mod->lang('submit')}" />
 				</fieldset>
 				</form>
 		</div>
