@@ -117,7 +117,7 @@ if (isset($_POST["submit"])) {
             }
             else {
                 cms_userprefs::set_for_user($userid, 'default_cms_language', cms_userprefs::get_for_user($adminid, 'default_cms_language'));
-                cms_userprefs::set_for_user($userid, 'wysiwyg', cms_userprefs::get_for_user($adminid,'backendwysiwyg'));
+                cms_userprefs::set_for_user($userid, 'wysiwyg', cms_userprefs::get_for_user($adminid,'wysiwyg'));
                 cms_userprefs::set_for_user($userid, 'admintheme', get_site_preference('logintheme',CmsAdminThemeBase::GetDefaultTheme()));
                 cms_userprefs::set_for_user($userid, 'bookmarks', cms_userprefs::get_for_user($adminid, 'bookmarks'));
                 cms_userprefs::set_for_user($userid, 'recent', cms_userprefs::get_for_user($adminid, 'recent'));

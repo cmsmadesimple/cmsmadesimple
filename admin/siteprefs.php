@@ -289,150 +289,150 @@ if (isset($_POST["editsiteprefs"])) {
 
 		case 'editcontent':
 			if( $pretty_urls ) {
-		  $content_autocreate_urls = (int)$_POST['content_autocreate_urls'];
-		  cms_siteprefs::set('content_autocreate_urls',$content_autocreate_urls);
-		  $content_autocreate_flaturls = (int)$_POST['content_autocreate_flaturls'];
-		  cms_siteprefs::set('content_autocreate_flaturls',$content_autocreate_flaturls);
-		  $content_mandatory_urls = (int)$_POST['content_mandatory_urls'];
-		  cms_siteprefs::set('content_mandatory_urls',$content_mandatory_urls);
-	  }
-      $content_imagefield_path = trim($_POST['content_imagefield_path']);
-      cms_siteprefs::set('content_imagefield_path',$content_imagefield_path);
-      $content_thumbnailfield_path = trim($_POST['content_thumbnailfield_path']);
-      cms_siteprefs::set('content_thumbnailfield_path',$content_thumbnailfield_path);
-      $contentimage_path = trim($_POST['contentimage_path']);
-      cms_siteprefs::set('contentimage_path',$contentimage_path);
-	  $content_cssnameisblockname = (int)$_POST['content_cssnameisblockname'];
-	  cms_siteprefs::set('content_cssnameisblockname',$content_cssnameisblockname);
-      if( isset($_POST['basic_attributes']) ) {
-		  $basic_attributes = implode(',',($_POST['basic_attributes']));
-      }
-      else {
-		  $basic_attributes = null;
-      }
-      cms_siteprefs::set('basic_attributes',$basic_attributes);
-      $disallowed_contenttypes = '';
-      if( isset($_POST['disallowed_contenttypes']) ) $disallowed_contenttypes = implode(',',$_POST['disallowed_contenttypes']);
-      cms_siteprefs::set('disallowed_contenttypes',$disallowed_contenttypes);
-      break;
+                $content_autocreate_urls = (int)$_POST['content_autocreate_urls'];
+                cms_siteprefs::set('content_autocreate_urls',$content_autocreate_urls);
+                $content_autocreate_flaturls = (int)$_POST['content_autocreate_flaturls'];
+                cms_siteprefs::set('content_autocreate_flaturls',$content_autocreate_flaturls);
+                $content_mandatory_urls = (int)$_POST['content_mandatory_urls'];
+                cms_siteprefs::set('content_mandatory_urls',$content_mandatory_urls);
+            }
+            $content_imagefield_path = trim($_POST['content_imagefield_path']);
+            cms_siteprefs::set('content_imagefield_path',$content_imagefield_path);
+            $content_thumbnailfield_path = trim($_POST['content_thumbnailfield_path']);
+            cms_siteprefs::set('content_thumbnailfield_path',$content_thumbnailfield_path);
+            $contentimage_path = trim($_POST['contentimage_path']);
+            cms_siteprefs::set('contentimage_path',$contentimage_path);
+            $content_cssnameisblockname = (int)$_POST['content_cssnameisblockname'];
+            cms_siteprefs::set('content_cssnameisblockname',$content_cssnameisblockname);
+            if( isset($_POST['basic_attributes']) ) {
+                $basic_attributes = implode(',',($_POST['basic_attributes']));
+            }
+            else {
+                $basic_attributes = null;
+            }
+            cms_siteprefs::set('basic_attributes',$basic_attributes);
+            $disallowed_contenttypes = '';
+            if( isset($_POST['disallowed_contenttypes']) ) $disallowed_contenttypes = implode(',',$_POST['disallowed_contenttypes']);
+            cms_siteprefs::set('disallowed_contenttypes',$disallowed_contenttypes);
+            break;
 
-    case 'sitedown':
-      if( isset($_POST['sitedownexcludes']) ) $sitedownexcludes = trim($_POST['sitedownexcludes']);
-      $sitedownexcludeadmins = (int)$_POST['sitedownexcludeadmins'];
-	  $prevsitedown = $enablesitedownmessage;
-      if (isset($_POST["enablesitedownmessage"])) $enablesitedownmessage=$_POST['enablesitedownmessage'];
-      if (isset($_POST["sitedownmessage"])) $sitedownmessage = $_POST["sitedownmessage"];
-      if (isset($_POST["use_wysiwyg"])) $use_wysiwyg = $_POST["use_wysiwyg"];
-	  if( !$prevsitedown && $enablesitedownmessage ) {
-		  audit('','Global Settings','Sitedown enabled');
-	  }
-	  else if( $prevsitedown && !$enablesitedownmessage ) {
-		  audit('','Global Settings','Sitedown disabled');
-	  }
-      cms_siteprefs::set('enablesitedownmessage', $enablesitedownmessage);
-      cms_siteprefs::set('sitedown_use_wysiwyg', $use_wysiwyg);
-      cms_siteprefs::set('sitedownmessage', $sitedownmessage);
-      cms_siteprefs::set('sitedownexcludes',$sitedownexcludes);
-      cms_siteprefs::set('sitedownexcludeadmins',$sitedownexcludeadmins);
-      break;
+        case 'sitedown':
+            if( isset($_POST['sitedownexcludes']) ) $sitedownexcludes = trim($_POST['sitedownexcludes']);
+            $sitedownexcludeadmins = (int)$_POST['sitedownexcludeadmins'];
+            $prevsitedown = $enablesitedownmessage;
+            if (isset($_POST["enablesitedownmessage"])) $enablesitedownmessage=$_POST['enablesitedownmessage'];
+            if (isset($_POST["sitedownmessage"])) $sitedownmessage = $_POST["sitedownmessage"];
+            if (isset($_POST["use_wysiwyg"])) $use_wysiwyg = $_POST["use_wysiwyg"];
+            if( !$prevsitedown && $enablesitedownmessage ) {
+                audit('','Global Settings','Sitedown enabled');
+            }
+            else if( $prevsitedown && !$enablesitedownmessage ) {
+                audit('','Global Settings','Sitedown disabled');
+            }
+            cms_siteprefs::set('enablesitedownmessage', $enablesitedownmessage);
+            cms_siteprefs::set('sitedown_use_wysiwyg', $use_wysiwyg);
+            cms_siteprefs::set('sitedownmessage', $sitedownmessage);
+            cms_siteprefs::set('sitedownexcludes',$sitedownexcludes);
+            cms_siteprefs::set('sitedownexcludeadmins',$sitedownexcludeadmins);
+            break;
 
-    case 'mail':
-      // gather mailprefs
-      $prefix = 'mailprefs_';
-      foreach( $_POST as $key => $val ) {
-	if( !startswith($key,$prefix) ) continue;
-	$key = substr($key,strlen($prefix));
+        case 'mail':
+            // gather mailprefs
+            $prefix = 'mailprefs_';
+            foreach( $_POST as $key => $val ) {
+                if( !startswith($key,$prefix) ) continue;
+                $key = substr($key,strlen($prefix));
 
-	$mailprefs[$key] = trim($val);
-      }
+                $mailprefs[$key] = trim($val);
+            }
 
-      // validate
-      if( $mailprefs['from'] == '' ) {
-	$error  .= '<li>'.lang('error_fromrequired').'</li>';
-      }
-      else if( !is_email($mailprefs['from']) ) {
-	$error .= '<li>'.lang('error_frominvalid').'</li>';
-      }
-      if( $mailprefs['mailer'] == 'smtp' ) {
-	if( $mailprefs['host'] == '' ) {
-	  $error .= '<li>'.lang('error_hostrequired').'</li>';
-	}
-	if( $mailprefs['port'] == '' ) $mailprefs['port'] = 25; // convenience.
-	if( $mailprefs['port'] < 1 || $mailprefs['port'] > 10240 ) {
-	  $error .= '<li>'.lang('error_portinvalid').'</li>';
-	}
-	if( $mailprefs['timeout'] == '' ) $mailprefs['timeout'] = 180;
-	if( $mailprefs['timeout'] < 1 || $mailprefs['timeout'] > 3600 ) {
-	  $error .= '<li>'.lang('error_timeoutinvalid').'</li>';
-	}
-	if( $mailprefs['smtpauth'] ) {
-	  if( $mailprefs['username'] == '' ) $error .= '<li>'.lang('error_usernamerequired').'</li>';
-	  if( $mailprefs['password'] == '' ) $error .= '<li>'.lang('error_passwordrequired').'</li>';
-	}
-      }
+            // validate
+            if( $mailprefs['from'] == '' ) {
+                $error  .= '<li>'.lang('error_fromrequired').'</li>';
+            }
+            else if( !is_email($mailprefs['from']) ) {
+                $error .= '<li>'.lang('error_frominvalid').'</li>';
+            }
+            if( $mailprefs['mailer'] == 'smtp' ) {
+                if( $mailprefs['host'] == '' ) {
+                    $error .= '<li>'.lang('error_hostrequired').'</li>';
+                }
+                if( $mailprefs['port'] == '' ) $mailprefs['port'] = 25; // convenience.
+                if( $mailprefs['port'] < 1 || $mailprefs['port'] > 10240 ) {
+                    $error .= '<li>'.lang('error_portinvalid').'</li>';
+                }
+                if( $mailprefs['timeout'] == '' ) $mailprefs['timeout'] = 180;
+                if( $mailprefs['timeout'] < 1 || $mailprefs['timeout'] > 3600 ) {
+                    $error .= '<li>'.lang('error_timeoutinvalid').'</li>';
+                }
+                if( $mailprefs['smtpauth'] ) {
+                    if( $mailprefs['username'] == '' ) $error .= '<li>'.lang('error_usernamerequired').'</li>';
+                    if( $mailprefs['password'] == '' ) $error .= '<li>'.lang('error_passwordrequired').'</li>';
+                }
+            }
 
-      // save.
-      if( !$error ) {
-		  cms_siteprefs::set('mail_is_set',1);
-		  cms_siteprefs::set('mailprefs',serialize($mailprefs));
-      }
-      break;
+            // save.
+            if( !$error ) {
+                cms_siteprefs::set('mail_is_set',1);
+                cms_siteprefs::set('mailprefs',serialize($mailprefs));
+            }
+            break;
 
-    case 'setup':
-		if (isset($_POST["disablesafemodewarning"])) $disablesafemodewarning = (int)$_POST['disablesafemodewarning'];
-		if (isset($_POST["enablenotifications"])) $enablenotifications = (int)$_POST['enablenotifications'];
-		if (isset($_POST["xmlmodulerepository"])) $xmlmodulerepository = cleanValue($_POST["xmlmodulerepository"]);
-		if (isset($_POST["checkversion"])) $checkversion = (int) $_POST["checkversion"];
-		if (isset($_POST['global_umask'])) $global_umask = cleanValue($_POST['global_umask']);
-		cms_siteprefs::set('global_umask', $global_umask);
-		cms_siteprefs::set('xmlmodulerepository', $xmlmodulerepository);
-		cms_siteprefs::set('checkversion', $checkversion);
-		cms_siteprefs::set('disablesafemodewarning',$disablesafemodewarning);
-		cms_siteprefs::set('enablenotifications',$enablenotifications);
-		if( isset($_POST['allow_browser_cache']) ) {
-			$allow_browser_cache = (int)$_POST['allow_browser_cache'];
-			cms_siteprefs::set('allow_browser_cache',$allow_browser_cache);
-		}
-		if( isset($_POST['browser_cache_expiry']) ) {
-			$browser_cache_expiry = (int)$_POST['browser_cache_expiry'];
-			cms_siteprefs::set('browser_cache_expiry',$browser_cache_expiry);
-		}
-		if( isset($_POST['auto_clear_cache_age']) ) {
-			$auto_clear_cache_age = (int)$_POST['auto_clear_cache_age'];
-			cms_siteprefs::set('auto_clear_cache_age',$auto_clear_cache_age);
-		}
-		if( isset($_POST['pseudocron_granularity']) ) {
-			$pseudocron_granularity = (int)$_POST['pseudocron_granularity'];
-			cms_siteprefs::set('pseudocron_granularity',$pseudocron_granularity);
-		}
-		if (isset($_POST["adminlog_lifetime"])) {
-			$adminlog_lifetime = (int)$_POST["adminlog_lifetime"];
-			cms_siteprefs::set('adminlog_lifetime',$adminlog_lifetime);
-		}
-		break;
+        case 'setup':
+            if (isset($_POST["disablesafemodewarning"])) $disablesafemodewarning = (int)$_POST['disablesafemodewarning'];
+            if (isset($_POST["enablenotifications"])) $enablenotifications = (int)$_POST['enablenotifications'];
+            if (isset($_POST["xmlmodulerepository"])) $xmlmodulerepository = cleanValue($_POST["xmlmodulerepository"]);
+            if (isset($_POST["checkversion"])) $checkversion = (int) $_POST["checkversion"];
+            if (isset($_POST['global_umask'])) $global_umask = cleanValue($_POST['global_umask']);
+            cms_siteprefs::set('global_umask', $global_umask);
+            cms_siteprefs::set('xmlmodulerepository', $xmlmodulerepository);
+            cms_siteprefs::set('checkversion', $checkversion);
+            cms_siteprefs::set('disablesafemodewarning',$disablesafemodewarning);
+            cms_siteprefs::set('enablenotifications',$enablenotifications);
+            if( isset($_POST['allow_browser_cache']) ) {
+                $allow_browser_cache = (int)$_POST['allow_browser_cache'];
+                cms_siteprefs::set('allow_browser_cache',$allow_browser_cache);
+            }
+            if( isset($_POST['browser_cache_expiry']) ) {
+                $browser_cache_expiry = (int)$_POST['browser_cache_expiry'];
+                cms_siteprefs::set('browser_cache_expiry',$browser_cache_expiry);
+            }
+            if( isset($_POST['auto_clear_cache_age']) ) {
+                $auto_clear_cache_age = (int)$_POST['auto_clear_cache_age'];
+                cms_siteprefs::set('auto_clear_cache_age',$auto_clear_cache_age);
+            }
+            if( isset($_POST['pseudocron_granularity']) ) {
+                $pseudocron_granularity = (int)$_POST['pseudocron_granularity'];
+                cms_siteprefs::set('pseudocron_granularity',$pseudocron_granularity);
+            }
+            if (isset($_POST["adminlog_lifetime"])) {
+                $adminlog_lifetime = (int)$_POST["adminlog_lifetime"];
+                cms_siteprefs::set('adminlog_lifetime',$adminlog_lifetime);
+            }
+            break;
 
-    case 'smarty':
-		if( isset($_POST['use_smartycache']) ) {
-			$use_smartycache = (int)$_POST['use_smartycache'];
-			cms_siteprefs::set('use_smartycache',$use_smartycache);
-		}
-		if( isset($_POST['use_smartycompilecheck']) ) {
-			$use_smartycompilecheck = (int)$_POST['use_smartycompilecheck'];
-			cms_siteprefs::set('use_smartycompilecheck',$use_smartycompilecheck);
-		}
-		$gCms->clear_cached_files();
-		break;
+        case 'smarty':
+            if( isset($_POST['use_smartycache']) ) {
+                $use_smartycache = (int)$_POST['use_smartycache'];
+                cms_siteprefs::set('use_smartycache',$use_smartycache);
+            }
+            if( isset($_POST['use_smartycompilecheck']) ) {
+                $use_smartycompilecheck = (int)$_POST['use_smartycompilecheck'];
+                cms_siteprefs::set('use_smartycompilecheck',$use_smartycompilecheck);
+            }
+            $gCms->clear_cached_files();
+            break;
+        }
+
+        // put mention into the admin log
+        if( !$error ) {
+            audit('', 'Global Settings', 'Edited');
+            $message .= lang('siteprefsupdated');
+        }
     }
-
-    // put mention into the admin log
-    if( !$error ) {
-      audit('', 'Global Settings', 'Edited');
-      $message .= lang('siteprefsupdated');
+    else {
+        $error .= "<li>".lang('noaccessto', array('Modify Site Permissions'))."</li>";
     }
-  }
-  else {
-    $error .= "<li>".lang('noaccessto', array('Modify Site Permissions'))."</li>";
-  }
 }
 
 /**

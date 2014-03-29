@@ -65,14 +65,6 @@ $(document).ready(function(){
 			</div>
 		{/if}
 		<div class="pageoverflow">
-			<p class="pagetext"><label for="backendwysiwyg">{lang('backendwysiwygtouse')}:</label></p>
-			<p class="pageinput">
-				<select id="backendwysiwyg" name="backendwysiwyg">
-					{html_options options=$wysiwyg selected=$backendwysiwyg}
-				</select>&nbsp;{cms_help key2='siteprefs_backendwysiwyg' title=lang('backendwysiwygtouse')}
-			</p>
-		</div>
-		<div class="pageoverflow">
 			<p class="pagetext"><label for="defaultdateformat">{lang('date_format_string')}:</label></p>
 			<p class="pageinput">
 				<input class="pagenb" id="defaultdateformat" type="text" name="defaultdateformat" size="20" maxlength="255" value="{$defaultdateformat}"/>&nbsp;{cms_help key2='siteprefs_dateformat' title=lang('date_format_string')}
@@ -210,7 +202,7 @@ $(document).ready(function(){
 			</p>
 		</div>
 	</form>
-	
+
 {* +++++++++++++++++++++++++++++++++++++++++++ *}
 {tab_start name='sitedown'}
 	<form id="siteprefform_sitedown" method="post" action="{$formurl}">
@@ -487,14 +479,14 @@ $(document).ready(function(){
 							{cms_yesno selected=$allow_browser_cache}
 						</select>&nbsp;{cms_help key2='settings_browsercache' title=lang('allow_browser_cache')}
 					</p>
-				</div>  
+				</div>
 				<div class="pageoverflow">
 					<p class="pagetext"><label for="browser_expiry">{lang('browser_cache_expiry')}:</label></p>
 					<p class="pageinput">
 						<input type="text" id="browser_expiry" name="browser_cache_expiry" value="{$browser_cache_expiry}" size="6" maxlength="10"/>
 						&nbsp;{cms_help key2='settings_browsercache_expiry' title=lang('browser_cache_expiry')}
 					</p>
-				</div>  
+				</div>
 		</fieldset>
 
 		<fieldset>
@@ -561,7 +553,7 @@ $(document).ready(function(){
 					<p class="pageinput">
 						<select id="checkversion" name="checkversion">
 							{cms_yesno options=$checkversion}
-						<select>&nbsp;{cms_help key2='settings_checkversion' title=lang('checkversion')}	  
+						<select>&nbsp;{cms_help key2='settings_checkversion' title=lang('checkversion')}
 					</p>
 				</div>
 		</fieldset>

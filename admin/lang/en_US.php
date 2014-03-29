@@ -88,7 +88,6 @@ $lang['automatedtask_success'] = "Automated task performed";
 
 ## B
 $lang['back'] = "Back to Menu";
-$lang['backendwysiwygtouse'] = "Default backend WYSIWYG (for new user accounts)";
 $lang['backtoplugins'] = "Back to Plugins List";
 $lang['basic_attributes'] = "Basic Properties";
 $lang['blobexists'] = "Global Content Block name already exists";
@@ -240,8 +239,6 @@ $lang['date_format_string_help'] = "<em>strftime</em> formatted date format stri
 $lang['day'] = "day";
 $lang['days'] = "days";
 $lang['default'] = "Default";
-$lang['defaultpagecontent'] = "Default Page Content";
-$lang['defaultparentpage'] = "Default Parent Page";
 $lang['default_contenttype'] = "Default Content Type";
 $lang['delete'] = "Delete";
 $lang['deleteassociationconfirm'] = "Are you sure you want to delete association to - %s - ?";
@@ -1525,7 +1522,6 @@ $lang['wysiwygtouse'] = "Select WYSIWYG to use";
 
 ## X
 $lang['xml'] = "XML";
-$lang['xmlmodulerepository'] = "URL of ModuleRepository soap server";
 $lang['xmlreader_class'] = "Checking for the XMLReader class";
 $lang['xml_function'] = "Basic XML (expat) support";
 
