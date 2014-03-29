@@ -607,7 +607,7 @@ abstract class CmsAdminThemeBase
 
 				$this->_menuItems[$key]=array('url'=>$menuItem->url,'parent'=>$sectionKey,'title'=>$this->_FixSpaces($menuItem->title),
 											  'description'=>$menuItem->description, 'show_in_menu'=>true,'module'=>$menuItem->module,
-											  'priority'=>($menuitem->priority > 0)?max(2,$menuItem->priority):999);
+											  'priority'=>($menuItem->priority > 0)?max(2,$menuItem->priority):999);
 			}
 		}
 
@@ -658,7 +658,7 @@ abstract class CmsAdminThemeBase
 		};
 		uasort($this->_menuItems,$fn);
 
-		// set everthing to be not selected.
+		// set everything to be not selected.
 		foreach ($this->_menuItems as $sectionKey=>$sectionArray) {
 			$this->_menuItems[$sectionKey]['selected'] = FALSE;
 			$this->_menuItems[$sectionKey]['children'] = array();
