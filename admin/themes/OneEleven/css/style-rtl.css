@@ -1242,6 +1242,9 @@ nav ul#oe_pagemenu li a.content {
 nav ul#oe_pagemenu li a.layout {
 	background: url(themes/OneEleven/images/layout/layout-off.png) right no-repeat;
 }
+nav ul#oe_pagemenu li a.files {
+	background: url(themes/OneEleven/images/layout/content-off.png) right no-repeat;
+}
 nav ul#oe_pagemenu li a.usersgroups {
 	background: url(themes/OneEleven/images/layout/users-off.png) right no-repeat;
 }
@@ -1269,6 +1272,11 @@ nav ul#oe_pagemenu li a.layout:hover,
 nav ul#oe_pagemenu li.current a.layout,
 nav ul#oe_pagemenu li:hover a.layout {
 	background: url(themes/OneEleven/images/layout/layout-on.png) right no-repeat;
+}
+nav ul#oe_pagemenu li a.files:hover, 
+nav ul#oe_pagemenu li.current a.files,
+nav ul#oe_pagemenu li:hover a.files {
+	background: url(themes/OneEleven/images/layout/content-on.png) right no-repeat;
 }
 nav ul#oe_pagemenu li a.usersgroups:hover, 
 nav ul#oe_pagemenu li.current a.usersgroups,

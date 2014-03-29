@@ -1100,6 +1100,9 @@ nav ul#oe_pagemenu li a.content {
 nav ul#oe_pagemenu li a.layout {
 	background-position: -10px -556px
 }
+nav ul#oe_pagemenu li a.files {
+	background-position: -10px -520px
+}
 nav ul#oe_pagemenu li a.usersgroups {
 	background-position: -10px -592px
 }
@@ -1130,6 +1133,11 @@ nav ul#oe_pagemenu li a.layout:hover,
 nav ul#oe_pagemenu li.current a.layout,
 nav ul#oe_pagemenu li:hover a.layout {
 	background-position: -10px -790px
+}
+nav ul#oe_pagemenu li a.files:hover, 
+nav ul#oe_pagemenu li.current a.files,
+nav ul#oe_pagemenu li:hover a.files {
+	background-position: -10px -758px
 }
 nav ul#oe_pagemenu li a.usersgroups:hover, 
 nav ul#oe_pagemenu li.current a.usersgroups,
