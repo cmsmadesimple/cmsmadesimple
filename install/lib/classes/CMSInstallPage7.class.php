@@ -108,7 +108,7 @@ class CMSInstallerPage7 extends CMSInstallerPage
 
       // Insert new site preferences
       set_site_preference('global_umask', $_POST['umask']);
-      set_preference(1, 'default_cms_language', $_POST['default_cms_lang']);
+      set_site_preference(1, 'default_cms_language', $_POST['default_cms_lang']);
     }
     else {
       $this->smarty->assign('tables_notinstalled',1);
