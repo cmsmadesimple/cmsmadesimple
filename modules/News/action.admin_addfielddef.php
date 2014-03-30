@@ -11,7 +11,7 @@ $type = '';
 if (isset($params['type'])) $type = $params['type'];
 
 $max_length = 255;
-if (isset($params['max_length'])) $max_length = (int)$params['max_length'];
+if (isset($params['max_length'])) $max_length = max(0,(int)$params['max_length']);
 
 $public = 1;
 if( isset($params['public']) ) {

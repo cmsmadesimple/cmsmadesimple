@@ -96,7 +96,7 @@ if( isset($params['submit']) || isset($params['apply']) ) {
   }
 
   if( !$error ) {
-    // 
+    //
     // database work
     //
     $query = 'UPDATE '.cms_db_prefix().'module_news SET news_title=?, news_data=?, summary=?, status=?, news_date=?, news_category_id=?, start_time=?, end_time=?, modified_date=?, news_extra=?, news_url = ?, searchable = ? WHERE news_id = ?';
@@ -104,21 +104,21 @@ if( isset($params['submit']) || isset($params['apply']) ) {
       $db->Execute($query, array($title, $content, $summary, $status, trim($db->DBTimeStamp($postdate), "'"), $usedcategory, trim($db->DBTimeStamp($startdate), "'"), trim($db->DBTimeStamp($enddate), "'"), trim($db->DBTimeStamp(time()), "'"), $extra, $news_url, $searchable, $articleid));
     }
     else {
-      $db->Execute($query, 
-		   array($title, $content, 
-			 $summary, $status, 
+      $db->Execute($query,
+		   array($title, $content,
+			 $summary, $status,
 			 trim($db->DBTimeStamp($postdate), "'"),
 			 $usedcategory,
 			 $startdatestr,
 			 $enddatestr,
-			 trim($db->DBTimeStamp(time()), "'"), 
+			 trim($db->DBTimeStamp(time()), "'"),
 			 $extra,
 			 $news_url,
 			 $searchable,
 			 $articleid)
 		   );
     }
-    
+
     //
     //Update custom fields
     //
@@ -201,7 +201,7 @@ if( isset($params['submit']) || isset($params['apply']) ) {
 	  }
 	}
 	$text .= $content.' '.$summary.' '.$title.' '.$title;
-	$module->AddWords($this->GetName(), $articleid, 'article', $text, 
+	$module->AddWords($this->GetName(), $articleid, 'article', $text,
 			  ($useexp == 1 && $this->GetPreference('expired_searchable',0) == 0) ? $enddate : NULL);
       }
     }
@@ -238,7 +238,7 @@ if( isset($params['submit']) || isset($params['apply']) ) {
 else if( isset($params['preview']) ) {
   // save data for preview.
   unset($params['apply']); unset($params['preview']); unset($params['submit']); unset($params['cancel']); unset($params['ajsx']);
-    
+
   $tmpfname = tempnam(TMP_CACHE_LOCATION,$this->GetName().'_preview');
   file_put_contents($tmpfname,serialize($params));
 
@@ -263,14 +263,14 @@ else if( isset($params['preview']) ) {
   }
   $response .= '</EditArticle>';
 
-  $handlers = ob_list_handlers(); 
+  $handlers = ob_list_handlers();
   for ($cnt = 0; $cnt < sizeof($handlers); $cnt++) { ob_end_clean(); }
   header('Content-Type: text/xml');
   echo $response;
   exit;
 }
 else {
-  // 
+  //
   // Load data from database
   //
   $query = 'SELECT * FROM '.cms_db_prefix().'module_news WHERE news_id = ?';
@@ -401,7 +401,14 @@ while( $dbr && ($row = $dbr->FetchRow()) ) {
   $value = isset($params['customfield'][$row['id']])&&in_array($params['customfield'][$row['id']],$params['customfield']) ? $params['customfield'][$row['id']]:$value;
   $obj = new StdClass();
   $name = "customfield[".$row['id']."]";
+  $obj->value = $value;
+  $obj->nameattr = $id.$name;
+  $obj->type = $row['type'];
+  $obj->idattr = 'customfield_'.$row['id'];
   $obj->prompt = $row['name'];
+  $obj->size = min(80,$row['max_length']);
+  $obj->max_len = max(1,(int)$row['max_length']);
+  $obj->options = $options;
   switch( $row['type'] ) {
   case 'textbox':
     $size = min(50,$row['max_length']);
@@ -427,7 +434,7 @@ while( $dbr && ($row = $dbr->FetchRow()) ) {
     break;
   }
 
-  $custom_flds[] = $obj;
+  $custom_flds[$row['name']] = $obj;
 }
 if( count($custom_flds) > 0 ) $smarty->assign('custom_fields',$custom_flds);
 

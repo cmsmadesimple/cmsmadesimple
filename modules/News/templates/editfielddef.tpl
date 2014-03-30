@@ -38,6 +38,9 @@ function handle_change(){
 $(document).ready(function(){
   handle_change();
   $('#fld_type').change(handle_change);
+  $('#{$actionid}cancel').click(function(){
+    $(this).closest('form').attr('novalidate','novalidate');
+  });
 });
 </script>
 
@@ -46,7 +49,7 @@ $(document).ready(function(){
 	<div class="pageoverflow">
 		<p class="pagetext"><label for="fld_name">*{$nametext}:</label> {cms_help key='help_fielddef_name'}</p>
 		<p class="pageinput">
-                  <input type="text" id="fld_name" name="{$actionid}name" value="{$name}" size="30" maxlength="255"/>
+                  <input type="text" id="fld_name" name="{$actionid}name" value="{$name}" size="30" maxlength="255" required/>
                 </p>
 	</div>
 	{if $showinputtype eq true}
@@ -70,7 +73,7 @@ $(document).ready(function(){
 	<div class="pageoverflow" id="area_maxlen">
 		<p class="pagetext"><label for="fld_maxlen">{$maxlengthtext}:</label> {cms_help help='help_fielddef_maxlen'}</p>
 		<p class="pageinput">
-                  <input type="text" id="fld_maxlen" name="{$actionid}max_length" value="{$max_length}" size="3" maxlength="3"/><br/>{$info_maxlength}
+                  <input type="text" id="fld_maxlen" name="{$actionid}max_length" value="{$max_length}" size="5" maxlength="5"/><br/>{$info_maxlength}
                 </p>
 	</div>
 	<div class="pageoverflow">

@@ -12,11 +12,14 @@ $(document).ready(function(){
     $('#edit_news').dirtyForm('option','dirty',true);
   });
   $(document).on('click','[name$=submit],[name$=apply],[name$=cancel]',function(){
-    $('#edit_news').dirtyForm('option','dirty',false);
+    $('#edit_news').dirtyForm('option','disabled',true);
   });
 
   $('#fld11').click(function(){
-    $('#expiryinfo').toggle('slow');	
+    $('#expiryinfo').toggle('slow');
+  });
+  $('#{$actionid}cancel').click(function(){
+    $(this).closest('form').attr('novalidate','novalidate');
   });
 });
 </script>
@@ -52,14 +55,14 @@ $(document).ready(function(){
 	</div>
 {/if}
 	<div class="pageoverflow">
-		<p class="pagetext"><label for="fld1">*{$titletext}:</label></p>
+		<p class="pagetext"><label for="fld1">*{$titletext}:</label> {cms_help key='help_article_title'}</p>
 		<p class="pageinput">
-                  <input type="text" id="fld1" name="{$actionid}title" value="{$title}" size="80" maxlength="255"/>
+                  <input type="text" id="fld1" name="{$actionid}title" value="{$title}" size="80" maxlength="255" required/>
                 </p>
 	</div>
 	<div class="pageoverflow">
-		<p class="pagetext"><label for="fld2">*{$categorytext}:</label></p>
-		<p class="pageinput">{$inputcategory|default:''}
+		<p class="pagetext"><label for="fld2">*{$categorytext}:</label> {cms_help key='help_article_category'}</p>
+		<p class="pageinput">
                   <select name="{$actionid}category" id="fld2">
                   {html_options options=$categorylist selected=$category}
                   </select>
@@ -67,35 +70,17 @@ $(document).ready(function(){
 	</div>
 {if !isset($hide_summary_field) or $hide_summary_field == '0'}
 	<div class="pageoverflow">
-		<p class="pagetext">{$summarytext}:</p>
+		<p class="pagetext">{$summarytext}: {cms_help key='help_article_summary'}</p>
 		<p class="pageinput">{$inputsummary}</p>
 	</div>
 {/if}
 	<div class="pageoverflow">
-		<p class="pagetext">*{$contenttext}:</p>
+		<p class="pagetext">*{$contenttext}: {cms_help key='help_article_content'}</p>
 		<p class="pageinput">{$inputcontent}</p>
-	</div>
-	<div class="pageoverflow">
-		<p class="pagetext"><label for="fld5">{$extratext}:</label></p>
-		<p class="pageinput">
-                  <input type="text" id="fld5" name="{$actionid}extra" value="{$extra}" size="50" maxlength="255"/>
-                </p>
-		
-	</div>
-        <div class="pageoverflow">
-                <p class="pagetext"><label for="fld7">{$urltext}:</label></p>
-                <p class="pageinput">
-                  <input type="text" id="fld7" name="{$actionid}news_url" value="{$news_url}" size="50" maxlength="255"/>
-                </p>
-        </div>
-
-	<div class="pageoverflow">
-		<p class="pagetext">{$postdatetext}:</p>
-		<p class="pageinput">{html_select_date prefix=$postdateprefix time=$postdate start_year='1980' end_year='+15'} {html_select_time prefix=$postdateprefix time=$postdate}</p>
 	</div>
 {if isset($statustext)}
 	<div class="pageoverflow">
-		<p class="pagetext"><label for="fld9">*{$statustext}:</label></p>
+		<p class="pagetext"><label for="fld9">*{$statustext}:</label> {cms_help key='help_article_status'}</p>
 		<p class="pageinput">
                    <select id="fld9" name="{$actionid}status">
                      {html_options options=$statuses selected=$status}
@@ -105,8 +90,26 @@ $(document).ready(function(){
 {else}
 	<input type="hidden" name="{$actionid}status" value="{$status}"/>
 {/if}
+
+        <div class="pageoverflow">
+                <p class="pagetext"><label for="fld7">{$urltext}:</label> {cms_help key='help_article_url'}</p>
+                <p class="pageinput">
+                  <input type="text" id="fld7" name="{$actionid}news_url" value="{$news_url}" size="50" maxlength="255"/>
+                </p>
+        </div>
 	<div class="pageoverflow">
-		<p class="pagetext"><label for="searchable">{$mod->Lang('searchable')}:</label></p>
+		<p class="pagetext"><label for="fld5">{$extratext}:</label> {cms_help key='help_article_extra'}</p>
+		<p class="pageinput">
+                  <input type="text" id="fld5" name="{$actionid}extra" value="{$extra}" size="50" maxlength="255"/>
+                </p>
+	</div>
+
+	<div class="pageoverflow">
+		<p class="pagetext">{$postdatetext}: {cms_help key='help_article_postdate'}</p>
+		<p class="pageinput">{html_select_date prefix=$postdateprefix time=$postdate start_year='1980' end_year='+15'} {html_select_time prefix=$postdateprefix time=$postdate}</p>
+	</div>
+	<div class="pageoverflow">
+		<p class="pagetext"><label for="searchable">{$mod->Lang('searchable')}:</label> {cms_help key='help_article_searchable'}</p>
 		<p class="pageinput">
 			<select name="{$actionid}searchable" id="searchable">
 			{cms_yesno selected=$searchable}
@@ -116,24 +119,39 @@ $(document).ready(function(){
 	</div>
 
 	<div class="pageoverflow">
-		<p class="pagetext"><label for="fld11">{$useexpirationtext}:</label></p>
+		<p class="pagetext"><label for="fld11">{$useexpirationtext}:</label> {cms_help key='help_article_useexpiry'}</p>
 		<p class="pageinput"><input id="fld11" type="checkbox" name="{$actionid}useexp" {if $useexp == 1}checked="checked"{/if} class="pagecheckbox"/></p>
 	</div>
 	<div id="expiryinfo" {if $useexp != 1}style="display: none;"{/if}>
 	<div class="pageoverflow">
-		<p class="pagetext">{$startdatetext}:</p>
+		<p class="pagetext">{$startdatetext}: {cms_help key='help_article_startdate'}</p>
 		<p class="pageinput">{html_select_date prefix=$startdateprefix time=$startdate start_year="-10" end_year="+15"} {html_select_time prefix=$startdateprefix time=$startdate}</p>
 	</div>
 	<div class="pageoverflow">
-		<p class="pagetext">{$enddatetext}:</p>
+		<p class="pagetext">{$enddatetext}: {cms_help key='help_article_enddate'}</p>
 		<p class="pageinput">{html_select_date prefix=$enddateprefix time=$enddate start_year="-10" end_year="+15"} {html_select_time prefix=$enddateprefix time=$enddate}</p>
 	</div>
 	</div>
 {if isset($custom_fields)}
 {foreach $custom_fields as $field}
         <div class="pageoverflow">
-           <p class="pagetext">{$field->prompt}</p>
-           <p class="pageinput">{$field->field}</p>
+           <p class="pagetext"><label for="{$field->idattr}">{$field->prompt}:</label></p>
+           <p class="pageinput">
+	     {if $field->type == 'textbox'}
+	       <input type="text" id="{$field->idattr}" name="{$field->nameattr}" value="{$field->value}" size="{$field->size}" maxlength="{$field->max_len}"/>
+	     {elseif $field->type == 'checkbox'}
+	       <input type="hidden" id="{$field->idattr}" name="{$field->nameattr}" value="{$field->value}"/>
+	       <input type="checkbox" id="{$field->idattr}" name="{$field->nameattr}" value="1" {if $field->value == 1}checked{/if}/>
+	     {elseif $field->type == 'textarea'}
+	        {cms_textarea id=$field->idattr name=$field->nameattr enablewysiwyg=1 value=$field->value maxlength=$field->max_len}
+	     {elseif $field->type == 'file'}
+	       <input type="file" id="{$field->idattr}" name="{$field->nameattr}"/>
+	     {elseif $field->type == 'dropdown'}
+	       <select id=""{$field->idattr}"" name="{$field->nameattr}">
+	         {html_options options=$field->options selected=$field->value}
+	       </select>
+	     {/if}
+           </p>
         </div>
 {/foreach}
 {/if}
@@ -232,7 +250,13 @@ jQuery(document).ready(function(){
 
 <div class="pageoverflow">
   <p class="pagetext">&nbsp;</p>
-  <p class="pageinput">{$hidden|default:''}{$submit}{$cancel}{if isset($apply)}{$apply}{/if}</p>
+  <p class="pageinput">{$hidden|default:''}
+    <input type="submit" name="{$actionid}submit" value="{$mod->Lang('submit')}"/>
+    <input type="submit" id="{$actionid}cancel" name="{$actionid}cancel" value="{$mod->Lang('cancel')}"/>
+    {if isset($articleid)}
+    <input type="submit" id="{$actionid}apply" name="{$actionid}apply" value="{$mod->Lang('apply')}"/>
+    {/if}
+  </p>
 </div>
 {$endform}
 </div>{* #edit_news *}

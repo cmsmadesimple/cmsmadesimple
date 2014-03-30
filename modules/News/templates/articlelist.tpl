@@ -8,10 +8,10 @@ $(document).ready(function(){
 	$('#toggle_filter').click(function(){
 		$('#filter').toggle(50);
 	});
-	
+
 	$('#articlelist').on('cms_checkall_toggle','[type=checkbox]',function(){
 		var l = $('#articlelist :checked').length;
-		
+
 		if( l == 0 ) {
 			$('#bulkactions').hide(50);
 		} else {
@@ -21,14 +21,14 @@ $(document).ready(function(){
 
 	$('#bulk_action').on('change',function(){
 		var v = $(this).val();
-		
+
 		if( v == 'setcategory' ) {
 			$('#bulk_category').show(50);
 		} else {
 			$('#bulk_category').hide(50);
 		}
 	});
-	
+
 	$('#bulkactions').on('click','#submit_bulkaction',function(){
 		return confirm('{$mod->Lang('areyousure_multiple')}');
 	});
@@ -38,20 +38,21 @@ $(document).ready(function(){
 
 {if isset($formstart) }
 <fieldset id="filter">
-  <legend>{$filtertext}</legend>
+  <legend>{$filtertext}:</legend>
   {$formstart}
   <div class="pageoverflow">
-    <p class="pagetext"><label for="filter_category">{$prompt_category}:</label></p>
+    <p class="pagetext"><label for="filter_category">{$prompt_category}:</label> {cms_help key='help_articles_filtercategory'}</p>
     <p class="pageinput">
       <select id="filter_category" name="{$actionid}category">
       {html_options options=$categorylist selected=$curcategory}
       </select>
       <label for="filter_allcategories">{$prompt_showchildcategories}:</label>
       <input id="filter_allcategories" type="checkbox" name="{$actionid}allcategories" value="yes" {if $allcategories=="yes"}checked="checked"{/if}>
+      {cms_help key='help_articles_filterchildcats'}
     </p>
   </div>
   <div class="pageoverflow">
-    <p class="pagetext"><label for="filter_sortby">{$prompt_sorting}:</label></p>
+    <p class="pagetext"><label for="filter_sortby">{$prompt_sorting}:</label> {cms_help key='help_articles_sortby'}</p>
     <p class="pageinput">
       <select id="filter_sorting" name="{$actionid}sortby">
       {html_options options=$sortlist selected=$sortby}
@@ -59,7 +60,7 @@ $(document).ready(function(){
     </p>
   </div>
   <div class="pageoverflow">
-    <p class="pagetext"><label for="filter_pagelimit">{$prompt_pagelimit}:</label></p>
+    <p class="pagetext"><label for="filter_pagelimit">{$prompt_pagelimit}:</label> {cms_help key='help_articles_pagelimit'}</p>
     <p class="pageinput">
       <select id="filter_pagelimit" name="{$actionid}pagelimit">
       {html_options options=$pagelimits selected=$pagelimit}
@@ -67,7 +68,6 @@ $(document).ready(function(){
     </p>
   </div>
   <div class="pageoverflow">
-    <p class="pagetext">&nbsp;</p>
     <p class="pageinput">
       <input type="submit" name="{$actionid}submitfilter" value="{$mod->Lang('submit')}"/>
       <input type="submit" name="{$actionid}resetfilter" value="{$mod->Lang('reset')}"/>
@@ -84,9 +84,9 @@ $(document).ready(function(){
     <label for="toggle_filter">{$mod->Lang('viewfilter')}</label>
     {if isset($addlink)}&nbsp;{$addlink}{/if}
   </div>
-  
+
   <div style="clear:both"></div>
-  
+
   {if $pagecount > 1}
     <div class="pageoptions" style="text-align: right;">
       {form_start}

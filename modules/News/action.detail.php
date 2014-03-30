@@ -43,7 +43,7 @@ if( $id == '_preview_' && isset($_SESSION['news_preview']) && isset($params['pre
   }
 }
 
-if( $preview || 
+if( $preview ||
     !$smarty->isCached($this->GetDatabaseResource($template),$cache_id,$compile_id) ) {
   // not cached... have to do to the work.
   if( isset($params['articleid']) && $params['articleid'] == -1 ) {
@@ -61,17 +61,17 @@ if( $preview ||
   $article->set_linkdata($id,$params);
 
   $return_url = $this->CreateReturnLink($id, isset($params['origid'])?$params['origid']:$returnid, $this->lang('news_return'));
-  $smarty->assign_by_ref('return_url', $return_url);
-  $smarty->assign_by_ref('entry', $article);
-  
+  $smarty->assign('return_url', $return_url);
+  $smarty->assign('entry', $article);
+
   $catName = '';
   if (isset($params['category_id'])) {
-    $catName = $db->GetOne('SELECT news_category_name FROM '.cms_db_prefix() . 'module_news_categories where news_category_id=?',array((int)$params['category_id']));		
+    $catName = $db->GetOne('SELECT news_category_name FROM '.cms_db_prefix() . 'module_news_categories where news_category_id=?',array((int)$params['category_id']));
   }
   $smarty->assign('category_name',$catName);
   unset($params['article_id']);
   $smarty->assign('category_link',$this->CreateLink($id, 'default', $returnid, $catName, $params));
-  
+
   $smarty->assign('category_label', $this->Lang('category_label'));
   $smarty->assign('author_label', $this->Lang('author_label'));
   $smarty->assign('extra_label', $this->Lang('extra_label'));
