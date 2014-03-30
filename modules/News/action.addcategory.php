@@ -2,14 +2,9 @@
 if (!isset($gCms)) exit;
 if (!$this->CheckPermission('Modify Site Preferences')) return;
 
-$this->SetCurrentTab('categories');
 $parent = -1;
-if( isset($params['parent'])) {
-  $parent = (int)$params['parent'];
- }
-if (isset($params['cancel'])) {
-  $this->Redirect($id, 'defaultadmin', $returnid);
- }
+if( isset($params['parent'])) $parent = (int)$params['parent'];
+if (isset($params['cancel'])) $this->RedirectToAdminTab('categories','','admin_settings');
 
 $name = '';
 if (isset($params['name'])) {
@@ -22,7 +17,7 @@ if (isset($params['name'])) {
       echo $this->ShowErrors($this->Lang('error_duplicatename'));
     }
     else {
-      $query = 'SELECT max(item_order) FROM '.cms_db_prefix().'module_news_category 
+      $query = 'SELECT max(item_order) FROM '.cms_db_prefix().'module_news_category
                 WHERE parent_id = ?';
       $item_order = (int)$db->GetOne($query,array($parentid));
       $item_order++;
@@ -40,7 +35,7 @@ if (isset($params['name'])) {
       audit($catid, 'News category: '.$catid, ' Category added');
 
       $this->SetMessage($this->Lang('categoryadded'));
-      $this->RedirectToAdminTab();
+      $this->RedirectToAdminTab('categories','','admin_settings');
     }
   }
   else {

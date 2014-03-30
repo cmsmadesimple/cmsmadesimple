@@ -2,11 +2,7 @@
 if (!isset($gCms)) exit;
 if (!$this->CheckPermission('Modify Site Preferences')) return;
 
-if (isset($params['cancel']))
-  {
-    $params = array('active_tab' => 'customfields');
-    $this->Redirect($id, 'defaultadmin', $returnid, $params);
-  }
+if (isset($params['cancel'])) $this->RedirectToAdminTab('customfields','','admin_settings');
 
 $name = '';
 if (isset($params['name'])) $name = trim($params['name']);
@@ -54,8 +50,8 @@ if (isset($params['submit'])) {
 
     $extra = array('options'=>$arr_options);
     $query = 'INSERT INTO '.cms_db_prefix().'module_news_fielddefs (name, type, max_length, item_order, create_date, modified_date, public, extra) VALUES (?,?,?,?,?,?,?,?)';
-    $parms = array($name, $type, $max_length, $max, 
-		   trim($db->DBTimeStamp(time()), "'"), 
+    $parms = array($name, $type, $max_length, $max,
+		   trim($db->DBTimeStamp(time()), "'"),
 		   trim($db->DBTimeStamp(time()), "'"),
 		   $public, serialize($extra));
     $db->Execute($query, $parms );
@@ -65,12 +61,11 @@ if (isset($params['submit'])) {
 
     // done.
     $params = array('tab_message'=> 'fielddefadded', 'active_tab' => 'customfields');
-    $this->Redirect($id, 'defaultadmin', $returnid, $params);
+    $this->SetMessage($this->Lang('fielddefadded'));
+    $this->RedirectToAdminTab('customfields','','admin_settings');
   }
 
-  if( $error ) {
-    echo $this->ShowErrors($error);
-  }
+  if( $error ) echo $this->ShowErrors($error);
 }
 
 #Display template

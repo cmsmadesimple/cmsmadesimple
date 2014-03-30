@@ -3,7 +3,7 @@ if (!isset($gCms)) exit;
 if (!$this->CheckPermission('Modify Site Preferences')) return;
 
 $this->SetCurrentTab('categories');
-if (isset($params['cancel'])) $this->RedirectToAdminTab();
+if (isset($params['cancel'])) $this->RedirectToAdminTab('','','admin_settings');
 
 $catid = '';
 $row = null;
@@ -32,7 +32,7 @@ if( isset($params['submit']) ) {
   }
   else {
     // its an update.
-    $query = 'SELECT news_category_id FROM '.cms_db_prefix().'module_news_categories 
+    $query = 'SELECT news_category_id FROM '.cms_db_prefix().'module_news_categories
               WHERE parent_id = ? AND news_category_name = ? AND news_category_id != ?';
     $tmp = $db->GetOne($query,array($parentid,$name,$catid));
     if( $tmp ) {
@@ -58,7 +58,7 @@ if( isset($params['submit']) ) {
 	$row['item_order'] = $maxn;
       }
 
-      $query = 'UPDATE '.cms_db_prefix().'module_news_categories 
+      $query = 'UPDATE '.cms_db_prefix().'module_news_categories
                 SET news_category_name = ?, item_order = ?, parent_id = ?, modified_date = NOW()
                 WHERE news_category_id = ?';
       $parms = array($name,$row['item_order'],$parentid);
@@ -90,7 +90,7 @@ $smarty->assign('catid',$catid);
 $smarty->assign('parent',$parentid);
 $smarty->assign('name',$name);
 $smarty->assign('categories',$categories);
-$smarty->assign('startform', $this->CreateFormStart($id, 'editcategory', 
+$smarty->assign('startform', $this->CreateFormStart($id, 'editcategory',
 						    $returnid, 'post', '', false, '', $parms));
 $smarty->assign('endform', $this->CreateFormEnd());
 $smarty->assign('nametext', $this->Lang('name'));

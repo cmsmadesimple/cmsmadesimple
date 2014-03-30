@@ -24,13 +24,14 @@ $row = $db->GetRow( $query, array( $catid ) );
 //And remove it from any articles
 $query = "UPDATE ".cms_db_prefix()."module_news SET news_category_id = -1 WHERE news_category_id = ?";
 	$db->Execute($query, array($catid));
-	
+
 @$this->SendEvent('NewsCategoryDeleted', array('category_id' => $catid, 'name' => $row['news_category_name']));
 	  // put mention into the admin log
 	  audit($catid, 'News category: '.$catid, ' Category deleted');
 
 news_admin_ops::UpdateHierarchyPositions();
 
-	$params = array('tab_message'=> 'categorydeleted', 'active_tab' => 'categories');
-	$this->Redirect($id, 'defaultadmin', $returnid, $params);
+$params = array('tab_message'=> 'categorydeleted', 'active_tab' => 'categories');
+$this->Setmessage($this->Lang('categorydeleted'));
+$this->RedirectToAdminTab('categories','','admin_settings');
 ?>

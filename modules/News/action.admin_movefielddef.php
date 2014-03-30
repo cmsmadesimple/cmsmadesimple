@@ -44,6 +44,5 @@ else if ($params['dir'] == "up")
     $db->Execute($query, array($fdid));
   }
 
-$params = array('active_tab' => 'customfields');
-$this->Redirect($id, 'defaultadmin', '', $params);
+$this->RedirectToAdminTab('customfields','','admin_settings');
 ?>

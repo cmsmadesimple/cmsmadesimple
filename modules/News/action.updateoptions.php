@@ -27,5 +27,6 @@ $this->SetPreference('detail_returnid',(int)$params['detail_returnid']);
 
 $this->CreateStaticRoutes();
 $params = array('tab_message'=> 'optionsupdated', 'active_tab' => 'options');
-$this->Redirect($id, 'defaultadmin', '', $params);
+$this->SetMessage($this->Lang('optionsupdated'));
+$this->RedirectToAdminTab('options','','admin_settings');
 ?>

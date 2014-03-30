@@ -20,10 +20,7 @@
 if (!isset($gCms)) exit;
 if (!$this->CheckPermission('Modify Site Preferences')) return;
 
-if (isset($params['cancel'])) {
-  $params = array('active_tab' => 'customfields');
-  $this->Redirect($id, 'defaultadmin', $returnid, $params);
-}
+if (isset($params['cancel'])) $this->RedirectToAdminTab('customfields','','admin_settings');
 
 $fdid = '';
 if (isset($params['fdid'])) $fdid = $params['fdid'];
@@ -66,10 +63,10 @@ if (isset($params['submit'])) {
     $res = $db->Execute($query, array($name, $type, $max_length, $public, serialize($extra), $fdid));
 
     if( !$res ) die( $db->ErrorMsg() );
-    $params = array('tab_message'=> 'fielddefupdated', 'active_tab' => 'customfields');
     // put mention into the admin log
     audit($name, 'News custom: '.$name, 'Field definition edited');
-    $this->Redirect($id, 'defaultadmin', $returnid, $params);
+    $this->SetMessage($this->Lang('fielddefupdated'));
+    $this->RedirectToAdminTab('customfields','','admin_settings');
   }
 }
 else {
@@ -109,7 +106,7 @@ $smarty->assign('public',$public);
 $smarty->assign('options',$options);
 
 $smarty->assign('mod',$this);
-$smarty->assign('hidden', 
+$smarty->assign('hidden',
 		$this->CreateInputHidden($id, 'fdid', $fdid).
 		$this->CreateInputHidden($id, 'origname', $origname));
 echo $this->ProcessTemplate('editfielddef.tpl');

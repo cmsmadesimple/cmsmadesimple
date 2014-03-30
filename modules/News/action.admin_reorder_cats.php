@@ -26,8 +26,7 @@ function news_reordercats_create_flatlist($tree,$parent_id = -1)
 }
 
 if( isset($params['cancel']) ) {
-  $this->SetMessage($this->Lang('msg_cancelled'));
-  $this->RedirectToAdminTab();
+    $this->RedirectToAdminTab('','','admin_settings');
 }
 else if( isset($params['submit']) ) {
   $data = json_decode($params['data']);
@@ -40,7 +39,7 @@ else if( isset($params['submit']) ) {
     }
     news_admin_ops::UpdateHierarchyPositions();
     $this->SetMessage($this->Lang('msg_categoriesreordered'));
-    $this->RedirectToAdminTab();
+    $this->RedirectToAdminTab('','','admin_settings');
   }
 }
 

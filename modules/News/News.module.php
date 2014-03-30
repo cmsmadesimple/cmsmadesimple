@@ -131,10 +131,10 @@ class News extends CMSModule
 
   function VisibleToAdminUser()
   {
-    return $this->CheckPermission('Modify News') || $this->CheckPermission('Modify Site Preferences') || 
+    return $this->CheckPermission('Modify News') || $this->CheckPermission('Modify Site Preferences') ||
       $this->CheckPermission('Approve News');
   }
-	
+
   function GetDfltEmailTemplate()
   {
     $text = "A new news article has been posted to your website.  The details are as follows:\n";
@@ -211,8 +211,8 @@ class News extends CMSModule
 
     while ($result && !$result->EOF) {
       if ($result->fields['status'] == 'published') {
-	$module->AddWords($this->GetName(), 
-			  $result->fields['news_id'], 'article', 
+	$module->AddWords($this->GetName(),
+			  $result->fields['news_id'], 'article',
 			  $result->fields['news_data'] . ' ' . $result->fields['summary'] . ' ' . $result->fields['news_title'] . ' ' . $result->fields['news_title'],
 			  ($result->fields['end_time'] != NULL && $this->GetPreference('expired_searchable',0) == 0) ?  $db->UnixTimeStamp($result->fields['end_time']) : NULL);
       }
@@ -268,7 +268,7 @@ class News extends CMSModule
     $c = strtoupper($str[0]);
     $x = substr($str,1);
     $x1 = '['.$c.strtolower($c).$x.']';
-    
+
     $route = new CmsRoute('/'.$x1.'\/(?P<articleid>[0-9]+)\/(?P<returnid>[0-9]+)\/(?P<junk>.*?)\/d,(?P<detailtemplate>.*?)$/',
 			  $this->GetName());
     cms_route_manager::add_static($route);
@@ -339,6 +339,25 @@ class News extends CMSModule
   {
     return array('News_AdminSearch_slave');
   }
+
+  public function GetAdminMenuItems()
+  {
+    $out = array();
+    if( $this->VisibleToAdminUser() ) $out[] = CmsAdminMenuItem::from_module($this);
+
+    if( $this->CheckPermission('Modify Site Preferences') ) {
+      $obj = new CmsAdminMenuItem();
+      $obj->module = $this->GetName();
+      $obj->section = 'siteadmin';
+      $obj->title = $this->Lang('title_news_settings');
+      $obj->description = $this->Lang('desc_news_settings');
+      $obj->action = 'admin_settings';
+      $obj->url = $this->create_url('m1_',$obj->action);
+      $out[] = $obj;
+    }
+    return $out;
+  }
+
 }
 
 
