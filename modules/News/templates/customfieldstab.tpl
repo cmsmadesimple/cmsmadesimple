@@ -16,7 +16,7 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
-#$Id$	
+#$Id$
 *}
 
 {if $itemcount > 0}
@@ -47,4 +47,6 @@
 </table>
 {/if}
 
-<div class="pageoptions"><p class="pageoptions">{$addlink}</p></div>
+<div class="pageoptions">
+  <a href="{$addurl}" title="{$mod->Lang('addfielddef')}">{admin_icon icon='newobject.gif'} {$mod->Lang('addfielddef')}</a>
+</div>
