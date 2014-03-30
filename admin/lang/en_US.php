@@ -124,7 +124,6 @@ $lang['clearcache'] = "Clear Cache";
 $lang['clearcache_taskdescription'] = "Executed daily, this task will clear cached files that are older than the age pre-set in the global preferences";
 $lang['clearcache_taskname'] = "Clear Cached Files";
 $lang['clearusersettings'] = "Clear all settings";
-$lang['clear_version_check_cache'] = "TODO";
 $lang['close'] = "Close";
 $lang['CMSEX_F001'] = "File system permissions problem";
 $lang['CMSEX_G001'] = "Attempt to set invalid property into object";
@@ -297,7 +296,7 @@ $lang['edited_udt'] = "Edited User Defined Tag";
 $lang['edited_user'] = "Edited User";
 $lang['edited_user_preferences'] = "Edited User Preferences";
 $lang['editeventhandler'] = "Edit Event Handler";
-$lang['editeventhandlerdescription'] = "TODO";
+$lang['editeventhandlerdescription'] = 'A utility to manage the handlers for a specific event.';
 $lang['editgroup'] = "Edit Group";
 $lang['edithtmlblob'] = "Edit Global Content Block";
 $lang['edithtmlblobsuccess'] = "Global content block updated";
@@ -396,8 +395,8 @@ $lang['eventhandler'] = "Event Handlers";
 $lang['eventhandlerdescription'] = "Associate User Defined Tags with Events";
 $lang['eventhandlers'] = "Event Manager";
 $lang['event_description'] = "Event Description";
-$lang['event_desc_adddesignpost'] = "TODO";
-$lang['event_desc_adddesignpre'] = "TODO";
+$lang['event_desc_adddesignpost'] = "Sent after a design/theme is saved.";
+$lang['event_desc_adddesignpre'] = "An event sent just before a design/theme is saved to the database.";
 $lang['event_desc_addglobalcontentpost'] = "Sent after a new global content block is created";
 $lang['event_desc_addglobalcontentpre'] = "Sent before a new global content block is created";
 $lang['event_desc_addgrouppost'] = "Sent after a new group is created";
@@ -406,8 +405,8 @@ $lang['event_desc_addstylesheetpost'] = "Sent after a new stylesheet is created"
 $lang['event_desc_addstylesheetpre'] = "Sent before a new stylesheet is created";
 $lang['event_desc_addtemplatepost'] = "Sent after a new template is created";
 $lang['event_desc_addtemplatepre'] = "Sent before a new template is created";
-$lang['event_desc_addtemplatetypepost'] = "TODO";
-$lang['event_desc_addtemplatetypepre'] = "TODO";
+$lang['event_desc_addtemplatetypepost'] = "An event sent just after a template type definition is saved to the database";
+$lang['event_desc_addtemplatetypepre'] = "An event sent just prior to a template type definition being saved to the database";
 $lang['event_desc_adduserdefinedtagpost'] = "Sent after a user defined tag is inserted";
 $lang['event_desc_adduserdefinedtagpre'] = "Sent prior to a user defined tag insert";
 $lang['event_desc_adduserpost'] = "Sent after a new user is created";
@@ -422,8 +421,8 @@ $lang['event_desc_contentpostcompile'] = "Sent after content has been processed 
 $lang['event_desc_contentpostrender'] = "Sent before the combined html is sent to the browser";
 $lang['event_desc_contentprecompile'] = "Sent before content is sent to smarty for processing";
 $lang['event_desc_contentstylesheet'] = "Sent before the stylesheet is sent to the browser";
-$lang['event_desc_deletedesignpost'] = "TODO";
-$lang['event_desc_deletedesignpre'] = "TODO";
+$lang['event_desc_deletedesignpost'] = "Sent just after a design/theme is removed";
+$lang['event_desc_deletedesignpre'] = "Sent just prior to a design/theme being removed";
 $lang['event_desc_deleteglobalcontentpost'] = "Sent after a global content block is deleted from the system";
 $lang['event_desc_deleteglobalcontentpre'] = "Sent before a global content block is deleted from the system";
 $lang['event_desc_deletegrouppost'] = "Sent after a group is deleted from the system";
@@ -432,14 +431,14 @@ $lang['event_desc_deletestylesheetpost'] = "Sent after a stylesheet is deleted f
 $lang['event_desc_deletestylesheetpre'] = "Sent before a stylesheet is deleted from the system";
 $lang['event_desc_deletetemplatepost'] = "Sent after a template is deleted from the system";
 $lang['event_desc_deletetemplatepre'] = "Sent before a template is deleted from the system";
-$lang['event_desc_deletetemplatetypepost'] = "TODO";
-$lang['event_desc_deletetemplatetypepre'] = "TODO";
+$lang['event_desc_deletetemplatetypepost'] = "Sent just after a template type definition is deleted";
+$lang['event_desc_deletetemplatetypepre'] = "Sent just prior to a template type definition being deleted";
 $lang['event_desc_deleteuserdefinedtagpost'] = "Sent after a user defined tag is deleted";
 $lang['event_desc_deleteuserdefinedtagpre'] = "Sent prior to deleting a user defined tag";
 $lang['event_desc_deleteuserpost'] = "Sent after a user is deleted from the system";
 $lang['event_desc_deleteuserpre'] = "Sent before a user is deleted from the system";
-$lang['event_desc_editdesignpost'] = "TODO";
-$lang['event_desc_editdesignpre'] = "TODO";
+$lang['event_desc_editdesignpost'] = "Sent just after a design/theme is saved to the database";
+$lang['event_desc_editdesignpre'] = "Sent just before a design/theme is saved to the database";
 $lang['event_desc_editglobalcontentpost'] = "Sent after edits to a global content block are saved";
 $lang['event_desc_editglobalcontentpre'] = "Sent before edits to a global content block are saved";
 $lang['event_desc_editgrouppost'] = "Sent after edits to a group are saved";
@@ -448,8 +447,8 @@ $lang['event_desc_editstylesheetpost'] = "Sent after edits to a stylesheet are s
 $lang['event_desc_editstylesheetpre'] = "Sent before edits to a stylesheet are saved";
 $lang['event_desc_edittemplatepost'] = "Sent after edits to a template are saved";
 $lang['event_desc_edittemplatepre'] = "Sent before edits to a template are saved";
-$lang['event_desc_edittemplatetypepost'] = "TODO";
-$lang['event_desc_edittemplatetypepre'] = "TODO";
+$lang['event_desc_edittemplatetypepost'] = "Sent just after a template type definition is saved";
+$lang['event_desc_edittemplatetypepre'] = "Sent just before a template type definition is saved";
 $lang['event_desc_edituserdefinedtagpost'] = "Sent after a user defined tag is updated";
 $lang['event_desc_edituserdefinedtagpre'] = "Sent prior to a user defined tag update";
 $lang['event_desc_edituserpost'] = "Sent after edits to a user are saved";
@@ -469,8 +468,8 @@ $lang['event_desc_stylesheetprecompile'] = "Sent before a stylesheet is compiled
 $lang['event_desc_templatepostcompile'] = "Sent after a template has been processed by smarty";
 $lang['event_desc_templateprecompile'] = "Sent before a template is sent to smarty for processing";
 $lang['event_desc_templateprefetch'] = "Sent before a template is fetched from smarty";
-$lang['event_help_adddesignpost'] = "TODO";
-$lang['event_help_adddesignpre'] = "TODO";
+$lang['event_help_adddesignpost'] = "Sent just after a new design/theme is saved to the database";
+$lang['event_help_adddesignpre'] = "Sent just before a new design/theme is saved to the database";
 $lang['event_help_addglobalcontentpost'] = "<h4>Parameters</h4>
 <ul>
 <li>'global_content' - Reference to the affected global content block object.</li>
@@ -511,8 +510,14 @@ $lang['event_help_addtemplatepre'] = "<h4>Parameters</h4>
 <li>'template' - Reference to the affected template object.</li>
 </ul>
 ";
-$lang['event_help_addtemplatetypepost'] = "TODO";
-$lang['event_help_addtemplatetypepre'] = "TODO";
+$lang['event_help_addtemplatetypepost'] = "<h4>Parameters</h4>
+<ul>
+  <li>'CmsLayoutTemplateType' - Reference to the effected template type object.</li>
+</ul>";
+$lang['event_help_addtemplatetypepre'] = "<h4>Parameters</h4>
+<ul>
+  <li>'CmsLayoutTemplateType' - Reference to the effected template type object.</li>
+</ul>";
 $lang['event_help_adduserdefinedtagpost'] = "<h4>Parameters</h4>
 <ul>
 <li>None</li>
@@ -585,8 +590,16 @@ $lang['event_help_contentstylesheet'] = "<h4>Parameters</h4>
 <li>'content' - Reference to the affected stylesheet text.</li>
 </ul>
 ";
-$lang['event_help_deletedesignpost'] = "TODO";
-$lang['event_help_deletedesignpre'] = "TODO";
+$lang['event_help_deletedesignpost'] = '<h4>Parameters</h4>
+<ul>
+  <li>\'CmsLayoutCollection\' - A reference to the affected collection (aka design/theme) object.</li>
+</ul>
+';
+$lang['event_help_deletedesignpre'] = '<h4>Parameters</h4>
+<ul>
+  <li>\'CmsLayoutCollection\' - A reference to the affected collection (aka design/theme) object.</li>
+</ul>
+';
 $lang['event_help_deleteglobalcontentpost'] = "<h4>Parameters</h4>
 <ul>
 <li>'global_content' - Reference to the affected global content block object.</li>
@@ -627,8 +640,14 @@ $lang['event_help_deletetemplatepre'] = "<h4>Parameters</h4>
 <li>'template' - Reference to the affected template object.</li>
 </ul>
 ";
-$lang['event_help_deletetemplatetypepost'] = "TODO";
-$lang['event_help_deletetemplatetypepre'] = "TODO";
+$lang['event_help_deletetemplatetypepost'] = "<h4>Parameters</h4>
+<ul>
+  <li>'CmsLayoutTemplateType' - Reference to the effected template type object.</li>
+</ul>";
+$lang['event_help_deletetemplatetypepre'] = "<h4>Parameters</h4>
+<ul>
+  <li>'CmsLayoutTemplateType' - Reference to the effected template type object.</li>
+</ul>";
 $lang['event_help_deleteuserdefinedtagpost'] = "<h4>Parameters</h4>
 <ul>
 <li>None</li>
@@ -649,8 +668,16 @@ $lang['event_help_deleteuserpre'] = "<h4>Parameters</h4>
 <li>'user' - Reference to the affected user object.</li>
 </ul>
 ";
-$lang['event_help_editdesignpost'] = "TODO";
-$lang['event_help_editdesignpre'] = "TODO";
+$lang['event_help_editdesignpost'] = '<h4>Parameters</h4>
+<ul>
+  <li>\'CmsLayoutCollection\' - A reference to the affected collection (aka design/theme) object.</li>
+</ul>
+';
+$lang['event_help_editdesignpre'] = '<h4>Parameters</h4>
+<ul>
+  <li>\'CmsLayoutCollection\' - A reference to the affected collection (aka design/theme) object.</li>
+</ul>
+';
 $lang['event_help_editglobalcontentpost'] = "<h4>Parameters</h4>
 <ul>
 <li>'global_content' - Reference to the affected global content block object.</li>
@@ -691,8 +718,14 @@ $lang['event_help_edittemplatepre'] = "<h4>Parameters</h4>
 <li>'template' - Reference to the affected template object.</li>
 </ul>
 ";
-$lang['event_help_edittemplatetypepost'] = "TODO";
-$lang['event_help_edittemplatetypepre'] = "TODO";
+$lang['event_help_edittemplatetypepost'] = "<h4>Parameters</h4>
+<ul>
+  <li>'CmsLayoutTemplateType' - Reference to the effected template type object.</li>
+</ul>";
+$lang['event_help_edittemplatetypepre'] = "<h4>Parameters</h4>
+<ul>
+  <li>'CmsLayoutTemplateType' - Reference to the effected template type object.</li>
+</ul>";
 $lang['event_help_edituserdefinedtagpost'] = "<h4>Parameters</h4>
 <ul>
 <li>None</li>
@@ -723,7 +756,10 @@ $lang['event_help_globalcontentprecompile'] = "<h4>Parameters</h4>
 <li>'global_content' - Reference to the affected global content block text.</li>
 </ul>
 ";
-$lang['event_help_loginfailed'] = "TODO";
+$lang['event_help_loginfailed'] = "<h4>Parameters</h4>
+<ul>
+  <li>'user' - (string) The username of the failed login attempt.</li>
+</ul>";
 $lang['event_help_loginpost'] = "<h4>Parameters</h4>
 <ul>
 <li>'user' - Reference to the affected user object.</li>
@@ -823,7 +859,7 @@ $lang['file_url'] = "Link to file (instead of URL)";
 $lang['filteraction'] = "Action contains";
 $lang['filterapplied'] = "Current Filter";
 $lang['filterapply'] = "Apply filters";
-$lang['filterbymodule'] = "Filter By Module";
+$lang['filterbymodule'] = "Filter By Originator";
 $lang['filtername'] = "Event name contains";
 $lang['filterreset'] = "Reset filters";
 $lang['filters'] = "Filters";
@@ -906,8 +942,14 @@ $lang['hour'] = "hour";
 $lang['hours'] = "hours";
 $lang['htmlblobdescription'] = "Global Content Blocks are chunks of content you can place in your pages or templates.";
 $lang['htmlblobs'] = "Global Content Blocks";
-$lang['h_udtcode'] = "TODO";
-$lang['h_udtdesc'] = "TODO";
+$lang['h_udtcode'] = 'Enter your PHP code here.  Keep in mind that a UDT <em>(User Defined Tag)</em> is infact a smarty function plugin.  It has limited scope.<br/>
+<ul>
+  <li><strong>Note:</strong> You have access to the full <a href=\"http://www.cmsmadesimple.org/APIDOC\">CMSMS API</a> to interact with the system and with modules.</li>
+  <li>Tip: Parameters passed to the UDT i.e: <code>{myudt param1=value1 param2=value2}</code> are available via the $params associative array, which is in scope.</li>
+  <li>Tip: It is best to do calculations and processing and return the results to smarty for formatting via the $smarty->assign() method.  The smarty object is also in scope.</li>
+  <li>Tip: It is best to keep UDTs short, with a single and small piece of functionality.</li>
+</ul>';
+$lang['h_udtdesc'] = "This field allows you to enter details and notes about the UDT for future reference when debugging or transforming the tag.  More details are better than less";
 $lang['h_udtname'] = "Enter a name for the user defined tag.  Name should contain ASCII alphanumeric characters and digits and underscores.  The name must not start with a digit";
 
 ## I
@@ -923,10 +965,7 @@ $lang['indent'] = "Indent Pagelist to Emphasize Hierarchy";
 $lang['informationmissing'] = "Information missing";
 $lang['info_adduser'] = "Add a administrative new user account";
 $lang['info_adduser_username'] = "The username field must consist of alphanumeric characters,, the dot (.), underscore, or space";
-$lang['info_adminlog_lifetime'] = "TODO";
 $lang['info_autoalias'] = "If this field is empty, an alias will be created automatically.";
-$lang['info_autoclearcache'] = "TODO";
-$lang['info_basic_attributes'] = "TODO";
 $lang['info_changegroupperms'] = "This page allows specifying which Admin user groups have which permission.  Keep in mind that an individual Admin user can belong to multiple Admin groups.<br/><strong>Note:</strong> the &quot;Admin&quot; group is a special group and is automatically granted all permissions.";
 $lang['info_changeusergroup'] = "This page allows specifying the member groups for each Admin user.  Group membership determines the permissions the user has, and therefore his capabilities in the admin console.<br/><strong>Note:</strong> the &quot;Admin&quot; group is a special group and is automatically granted all permissions.";
 $lang['info_clearusersettings'] = "This will remove all user settings from the database, setting every preference back to defaults";
@@ -948,7 +987,6 @@ $lang['info_noedituser'] = "Although this user account exists, your permissions 
 $lang['info_pagealias'] = "Specify a unique alias for this page.";
 $lang['info_pagedefaults'] = "This form allows specifying various options as to the initial settings when creating new content pages.  The items in this page have no effect when editing existing pages";
 $lang['info_preview_notice'] = "Warning: This preview panel behaves much like a browser window allowing you to navigate away from the initially previewed page. However, if you do that, you may experience unexpected behaviour. If you navigate away from the initial display and return, you may not see the un-committed content until you make a change to the content in the main tab, and then reload this tab. When adding content, if you navigate away from this page, you will be unable to return, and must refresh this panel.";
-$lang['info_pseudocron_granularity'] = "TODO";
 $lang['info_selectuser'] = "Toggle selection to perform actions on multiple users at once";
 $lang['info_settings_sitedown'] = "These options allow you to toggle the website as &quot;down for maintenance&quot; for website visitor.";
 $lang['info_setusersettings'] = "Set this users settings to be a template for newly created users and to effect other users";
@@ -1421,8 +1459,8 @@ $lang['test_curlversion'] = "Test Curl Version";
 $lang['test_db_timedifference'] = "Testing for time difference in the database";
 $lang['test_db_timedifference_msg'] = "Detected a difference of at least %d seconds.  This may effect the system dramatically";
 $lang['test_edeprecated_failed'] = "E_DEPRECATED is enabled";
-$lang['test_error_edeprecated'] = "TODO";
-$lang['test_error_estrict'] = "TODO";
+$lang['test_error_edeprecated'] = "Testing if E_DEPRECATED is enabled in php.ini error_reporting";
+$lang['test_error_estrict'] = "Testing if E_STRICT is enabled in php.ini error_reporting";
 $lang['test_estrict_failed'] = "E_STRICT is enabled in the error_reporting";
 $lang['test_file_timedifference'] = "Testing for time difference in the file system";
 $lang['test_file_timedifference_msg'] = "Detected a difference of at least %d seconds.  This may effect the system dramatically";
@@ -1439,6 +1477,10 @@ $lang['thumbnail_width'] = "Thumbnail Width";
 $lang['title'] = "Title";
 $lang['titleattribute'] = "Description (title attribute)";
 $lang['title_applyusertag'] = "Save this User Defined Tag, and continue editing";
+$lang['title_event_description'] = 'This column contains brief descriptions for each event';
+$lang['title_event_handlers'] = 'This column indicates the number of handlers for each event <em>(if any)</em>';
+$lang['title_event_name'] = 'This column contains a unique name for each event';
+$lang['title_event_originator'] = 'This column contains the name of the module or code piece that sends the event.  Usually &quot;Core&quot; indicates that the event is sent by a core API function.';
 $lang['title_hierselect'] = "This field displays the selected content page.  The actual string displayed (page title or menu text) is dependent on user and site preference.";
 $lang['title_hierselect_select'] = 'Select a content page.\n\nIf the selected page has children a new dropdown will appear.  Selecting "None" indicates that the selection stops with the value of the previous select if any.';
 $lang['title_mailtest'] = "Mail Test";

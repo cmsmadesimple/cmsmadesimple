@@ -575,8 +575,6 @@ $tmp = array(
 	 -1=>lang('adminlog_manual'));
 $smarty->assign('adminlog_options',$tmp);
 
-$smarty->assign('lang_info_adminlog_lifetime',lang('info_adminlog_lifetime'));
-$smarty->assign('lang_info_autoclearcache',lang('info_autoclearcache'));
 $smarty->assign('lang_autoclearcache',lang('autoclearcache'));
 
 $smarty->assign('lang_cancel',lang('cancel'));

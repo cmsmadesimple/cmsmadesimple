@@ -39,22 +39,10 @@ $action = '';
 $module = '';
 $event = '';
 $modulefilter = '';
-if( isset( $_GET['action'] ) && $_GET['action'] != '' )
-  {
-    $action = $_GET['action'];
-  }
-if( isset( $_GET['module'] ) && $_GET['module'] != '' )
-  {
-    $module = $_GET['module'];
-  }
-if( isset( $_GET['event'] ) && $_GET['event'] != '' )
-  {
-    $event = $_GET['event'];
-  }
-if( isset( $_GET['modulefilter'] ) && $_GET['modulefilter'] != '' )
-  {
-    $modulefilter = $_GET['modulefilter'];
-  }
+if( isset( $_GET['action'] ) && $_GET['action'] != '' ) $action = $_GET['action'];
+if( isset( $_GET['module'] ) && $_GET['module'] != '' ) $module = $_GET['module'];
+if( isset( $_GET['event'] ) && $_GET['event'] != '' ) $event = $_GET['event'];
+if( isset( $_GET['modulefilter'] ) && $_GET['modulefilter'] != '' ) $modulefilter = $_GET['modulefilter'];
 
 // display the page
 include_once("header.php");
@@ -66,62 +54,51 @@ echo '<div class="pagecontainer">';
 echo '<div class="pageoverflow">';
 echo $themeObject->ShowHeader('eventhandlers');
 
-switch( $action )
-{
+switch( $action ) {
 	case 'showeventhelp':
 	{
 		$desctext = '';
 		$text = '';
-		if ($module == 'Core')
-		{
+		if ($module == 'Core') {
 			$desctext = Events::GetEventDescription($event);
 			$text = Events::GetEventHelp($event);
 		}
-		else
-		{
+		else {
 		    $moduleobj = cms_utils::get_module($module);
-		    if( is_object($moduleobj) )
-		    {
+		    if( is_object($moduleobj) ) {
 				$desctext = $moduleobj->GetEventDescription($event);
 				$text = $moduleobj->GetEventHelp($event);
 		    }
 		}
-		
+
 		echo "<h3>$event</h3>";
 		if( $desctext != "" ) echo "<p><b>" . lang('description') . "</b>: " . $desctext . "</p>";
-		if( $text == "" )
-		{
+		if( $text == "" ) {
 			echo "No helptext available...";
 		}
-		else
-		{
+		else {
 			echo $text;
 		}
 
 		echo "<h4>".lang('eventhandler')."</h4>";
 		$hlist = Events::ListEventHandlers( $module, $event );
-		if ($hlist === false)
-			{
+		if ($hlist === false) {
 			echo '<p>'.lang('none').'</p>';
-			}
-		else
-			{
+        }
+		else {
 			echo '<ul>';
-			foreach ($hlist as $te)
-				{
+			foreach ($hlist as $te) {
 					echo '<li>'.$te['handler_order'].'. ';
-					if (!empty($te['tag_name']))
-					{
+					if (!empty($te['tag_name'])) {
 						echo lang('user_tag').': '.$te['tag_name'];
 					}
-					else if (!empty($te['module_name']))
-					{
+					else if (!empty($te['module_name'])) {
 						echo lang('module').': '.$te['module_name'];
 					}
 					echo '</li>';
 				}
 			echo '</ul>';
-			}
+        }
 		break;
 	}
 
@@ -135,21 +112,15 @@ switch( $action )
 		echo lang('filterbymodule').': <select name="modulefilter">' . "\n";
 		echo '<option value="">'.lang('showall').'</option>';
 		$modlist = array();
-		if( is_array($events) )
-		{
-			foreach( $events as $oneevent )
-			{
-				if (!in_array($oneevent['originator'], $modlist))
-					$modlist[] = $oneevent['originator'];
+		if( is_array($events) )	{
+			foreach( $events as $oneevent )	{
+				if (!in_array($oneevent['originator'], $modlist)) $modlist[] = $oneevent['originator'];
 			}
 		}
-		if (count($modlist) > 0)
-		{
-			foreach($modlist as $onemod)
-			{
+		if (count($modlist) > 0) {
+			foreach($modlist as $onemod) {
 				echo '<option value="'.$onemod.'"';
-				if ($onemod == $modulefilter)
-					echo ' selected="selected"';
+				if ($onemod == $modulefilter) echo ' selected="selected"';
 				echo '>'.$onemod.'</option>';
 			}
 		}
@@ -158,10 +129,10 @@ switch( $action )
 		echo "<table cellspacing=\"0\" class=\"pagetable\">\n";
 		echo "<thead>\n";
 		echo "  <tr>\n";
-		echo "    <th>".lang('originator')."</th>\n";
-		echo "    <th>".lang('event')."</th>\n";
-		echo "    <th>".lang('eventhandler')."</th>\n";
-		echo "    <th width='50%'>".lang('description')."</th>\n";
+		echo "    <th title=\"".lang('title_event_originator')."\">".lang('originator')."</th>\n";
+		echo "    <th title=\"".lang('title_event_name')."\">".lang('event')."</th>\n";
+		echo "    <th title=\"".lang('title_event_handlers')."\">".lang('eventhandler')."</th>\n";
+		echo "    <th title=\"".lang('title_event_description')."\" width='50%'>".lang('description')."</th>\n";
 		echo "    <th class=\"pageicon\">&nbsp;</th>\n";
 		echo "    <th class=\"pageicon\">&nbsp;</th>\n";
 		echo "  </tr>\n";
@@ -187,12 +158,12 @@ switch( $action )
 					  echo "    <td>".$objinstance->GetFriendlyName()."</td>\n";
 					}
 					echo "    <td>";
-if ($access) 
+if ($access)
 {
 					echo "<a href=\"editevent.php".$urlext."&amp;action=edit&amp;module=".$oneevent['originator']."&amp;event=".$oneevent['event_name']."\">";
 }
 					echo $oneevent['event_name'];
-if ($access) 
+if ($access)
 {
 					echo "</a>";
 }
@@ -206,7 +177,7 @@ if ($access)
 					echo "</td>\n";
 					echo "    <td>".$desctext."</td>\n";
 					echo "    <td class=\"icons_wide\"><a href=\"eventhandlers.php".$urlext."&amp;action=showeventhelp&amp;module=".$oneevent['originator']."&amp;event=".$oneevent['event_name']."\">".$infoImg."</a></td>\n";
-if ($access) 
+if ($access)
 {
 					echo "    <td class=\"icons_wide\"><a href=\"editevent.php".$urlext."&amp;action=edit&amp;module=".$oneevent['originator']."&amp;event=".$oneevent['event_name']."\">".$editImg."</a></td>\n";
 }
