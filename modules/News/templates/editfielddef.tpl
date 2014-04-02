@@ -65,13 +65,13 @@ $(document).ready(function(){
           <input type="hidden" id="fld_type" name="{$actionid}type" value="{$type}"/>
 	{/if}
 	<div class="pageoverflow" id="area_options">
-          <p class="pagetext"><label for="fld_options">{$mod->Lang('options')}:</label> {cms_help help='help_fielddef_options' title=$mod->Lang('options')}</p>
+          <p class="pagetext"><label for="fld_options">{$mod->Lang('options')}:</label> {cms_help key='help_fielddef_options' title=$mod->Lang('options')}</p>
 	  <p class="pageinput">
             <textarea id="fld_options" name="{$actionid}options" rows="5" cols="80">{$options}</textarea>
           </p>
         </div>
 	<div class="pageoverflow" id="area_maxlen">
-		<p class="pagetext"><label for="fld_maxlen">{$maxlengthtext}:</label> {cms_help help='help_fielddef_maxlen' title=$maxlengthtext}</p>
+		<p class="pagetext"><label for="fld_maxlen">{$maxlengthtext}:</label> {cms_help key='help_fielddef_maxlen' title=$maxlengthtext}</p>
 		<p class="pageinput">
                   <input type="text" id="fld_maxlen" name="{$actionid}max_length" value="{$max_length}" size="5" maxlength="5"/><br/>{$info_maxlength}
                 </p>
