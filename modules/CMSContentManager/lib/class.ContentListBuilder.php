@@ -1,10 +1,10 @@
 <?php
 #BEGIN_LICENSE
 #-------------------------------------------------------------------------
-# Module: CMSContentManager (c) 2013 by Robert Campbell 
+# Module: CMSContentManager (c) 2013 by Robert Campbell
 #         (calguy1000@cmsmadesimple.org)
 #  A module for managing content in CMSMS.
-# 
+#
 #-------------------------------------------------------------------------
 # CMS - CMS Made Simple is (c) 2004 by Ted Kulp (wishy@cmsmadesimple.org)
 # Visit our homepage at: http://www.cmsmadesimple.org
@@ -19,7 +19,7 @@
 # However, as a special exception to the GPL, this software is distributed
 # as an addon module to CMS Made Simple.  You may not use this software
 # in any Non GPL version of CMS Made simple, or in any version of CMS
-# Made simple that does not indicate clearly and obviously in its admin 
+# Made simple that does not indicate clearly and obviously in its admin
 # section that the site was built with CMS Made simple.
 #
 # This program is distributed in the hope that it will be useful,
@@ -49,7 +49,7 @@
  * @author Robert Campbell
  * @copyright Copyright (c) 2013, Robert Campbell <calguy1000@cmsmadesimple.org>
  */
-final class ContentListBuilder 
+final class ContentListBuilder
 {
   private $_opened_array = array();
   private $_module;
@@ -104,7 +104,7 @@ final class ContentListBuilder
   {
     $hm = cmsms()->GetHierarchyManager();
     // find all the pages (recursively) that have children.
-    
+
     // anonymous, recursive function.
     $func = function($node) use(&$func) {
       $out = null;
@@ -433,7 +433,7 @@ final class ContentListBuilder
     //         if not in opened array break
     //     if got to root, add items children
     // 3.  reduce list by items we are able to view (author pages)
-    
+
     $contentops = cmsms()->GetContentOperations();
     $hm = cmsms()->GetHierarchyManager();
     $display = array();
@@ -476,7 +476,7 @@ final class ContentListBuilder
       // we can only edit some pages.
       //
 
-      /*      
+      /*
       for each item
 	if in opened array or has no parent add item
 	if all parents are opened add item
@@ -720,9 +720,15 @@ final class ContentListBuilder
 	  break;
 
 	case 'template':
-	  if( $content->IsViewable() ) {
-	    $template = CmsLayoutTemplate::load($content->TemplateId());
-	    $rec[$column] = $template->get_name();
+     if( $content->IsViewable() ) {
+         try {
+             $template = CmsLayoutTemplate::load($content->TemplateId());
+             $rec[$column] = $template->get_name();
+         }
+         catch( Exception $e ) {
+             // can't edit this content object, cuz we can't get the template associated with it.
+             $rec['can_edit'] = false;
+         }
 	  }
 	  break;
 

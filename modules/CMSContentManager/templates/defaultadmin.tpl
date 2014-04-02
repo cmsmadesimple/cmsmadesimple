@@ -111,11 +111,11 @@ $(document).ready(function () {
             }
         });
     });
-    
+
     $('#ajax_find').keypress(function (e) {
         if (e.which == 13) e.preventDefault();
     });
-    
+
     $('#ajax_find').autocomplete({
         source: '{cms_action_url action=admin_ajax_pagelookup forjs=1}&showtemplate=false',
         minLength: 2,
@@ -130,7 +130,7 @@ $(document).ready(function () {
             event.preventDefault();
         }
     });
-    
+
     // go to page on option change
     $(document).on('change', '#{$actionid}curpage', function () {
         $(this).closest('form').submit();
@@ -179,11 +179,11 @@ $(document).ready(function () {
 				{form_end}
 			{/if}
 			</li>
-			
+
 			{if $can_add_content}
 			<li><a  href="{cms_action_url action=admin_editcontent}" accesskey="n" title="{$mod->Lang('addcontent')}" class="pageoptions">{admin_icon icon='newobject.gif' alt=$mod->Lang('addcontent')}&nbsp;{$mod->Lang('addcontent')}</a></li>
 			{/if}
-			
+
 			<li class="parent">{admin_icon icon='run.gif' alt=$mod->Lang('prompt_options')}&nbsp;{$mod->Lang('prompt_options')}
 				<ul id="popupmenucontents">
 					{if isset($content_list)}
@@ -242,7 +242,7 @@ $(document).ready(function () {
 								{/if}
 								<strong>{$mod->Lang('prompt_cachable')}:</strong> {if $row.cachable}{$mod->Lang('yes')}{else}{$mod->Lang('no')}{/if}<br/>
 							{/strip}{/capture}
-	
+
 						<a href="{cms_action_url action='admin_editcontent' content_id=$row.id}" class="page_edit tooltip" accesskey="e" data-cms-content='{$row.id}' data-cms-description='{$tooltip_pageinfo|cms_htmlentities}'>
 							{$row.page}
 						</a>
@@ -282,11 +282,13 @@ $(document).ready(function () {
 						{else}
 							{$row.template}
 						{/if}
+					{else}
+					  <span class="text-red">{$mod->Lang('critical_error')}</span>
 					{/if}
 				{elseif $column == 'friendlyname'}
 					{$row.friendlyname}
 				{elseif $column == 'owner'}
-					
+
 					{capture assign='tooltip_ownerinfo'}{strip}
 						<strong>{$mod->Lang('prompt_created')}:</strong> {$row.created|cms_date_format}<br/>
 						<strong>{$mod->Lang('prompt_lastmodified')}:</strong> {$row.lastmodified|cms_date_format}<br/>
@@ -353,7 +355,7 @@ $(document).ready(function () {
 						{/if}
 					{/if}
 				{elseif $column == 'delete'}
-					{if $row.delete != ''}
+					{if $row.can_delete && $row.delete != ''}
 						<a href="{cms_action_url action='defaultadmin' delete=$row.id}" class="page_delete" accesskey="r">
 						{admin_icon icon='delete.gif' class='page_delete' title=$mod->Lang('prompt_page_delete')}
 						</a>
@@ -381,7 +383,7 @@ $(document).ready(function () {
 			{foreach from=$columns key='column' item='flag'}
 				{if $flag}
 				<th>
-					{if $column == 'expand' or $column == 'hier' or $column == 'icon1' or $column == 'view' or $column == 'copy' 
+					{if $column == 'expand' or $column == 'hier' or $column == 'icon1' or $column == 'view' or $column == 'copy'
                                             or $column == 'edit' or $column == 'delete'}
 					        <span title="{$mod->Lang("coltitle_{$column}")}">&nbsp;</span>{* no colum header *}
 					{elseif $column == 'multiselect'}
@@ -398,7 +400,7 @@ $(document).ready(function () {
 	</thead>
 	<tbody class="contentrows">
 	{foreach $content_list as $row}
-	{cycle values="row1,row2" assign='rowclass'}	
+	{cycle values="row1,row2" assign='rowclass'}
 		<tr id="row_{$row.id}" class="{$rowclass} {if isset($row.selected)}selected{/if}">
 			{do_content_row row=$row columns=$columns}
 		</tr>

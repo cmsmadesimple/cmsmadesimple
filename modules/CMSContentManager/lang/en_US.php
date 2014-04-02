@@ -65,6 +65,7 @@ $lang['confirm_setinactive'] = 'Are you sure you want to set this page inactive?
 $lang['confirm_steal_lock'] = 'This page is locked.  Although you may steal this lock it is not always a nice thing to do.  The other party may lose valuable content edits.\n\n Are you sure you want to continue?';
 $lang['confirm_viewpage'] = 'Are you sure you want to open a new window to view this page?';
 $lang['contractall'] = 'Collapse All';
+$lang['critical_error'] = '** ERROR **';
 
 #D
 $lang['desc_contentmanager_settings'] = 'Adjust settings related to listing, or editing content pages';
