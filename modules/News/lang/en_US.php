@@ -406,7 +406,7 @@ $lang['unknown'] = 'Unknown';
 $lang['unlimited'] = 'Unlimited';
 $lang['up'] = 'Up';
 $lang['uploadscategory'] = 'Uploads Category';
-$lang['url'] = 'URL <em>(slug)</em>';
+$lang['url'] = 'URL (slug)';
 $lang['useexpiration'] = 'Use Expiration Date';
 
 // V

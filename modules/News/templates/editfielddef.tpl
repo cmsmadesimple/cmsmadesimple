@@ -47,14 +47,14 @@ $(document).ready(function(){
 <h3>{$title}</h3>
 {$startform}{$hidden|default:''}
 	<div class="pageoverflow">
-		<p class="pagetext"><label for="fld_name">*{$nametext}:</label> {cms_help key='help_fielddef_name'}</p>
+		<p class="pagetext"><label for="fld_name">*{$nametext}:</label> {cms_help key='help_fielddef_name' title=$nametext}</p>
 		<p class="pageinput">
                   <input type="text" id="fld_name" name="{$actionid}name" value="{$name}" size="30" maxlength="255" required/>
                 </p>
 	</div>
 	{if $showinputtype eq true}
 		<div class="pageoverflow">
-			<p class="pagetext"><label for="fld_type">*{$typetext}:</label> {cms_help key='help_fielddef_type'}</p>
+			<p class="pagetext"><label for="fld_type">*{$typetext}:</label> {cms_help key='help_fielddef_type' title=$typetext}</p>
 			<p class="pageinput">
                           <select id="fld_type" name="{$actionid}type">
 			  {html_options options=$fieldtypes selected=$type}
@@ -65,19 +65,19 @@ $(document).ready(function(){
           <input type="hidden" id="fld_type" name="{$actionid}type" value="{$type}"/>
 	{/if}
 	<div class="pageoverflow" id="area_options">
-          <p class="pagetext"><label for="fld_options">{$mod->Lang('options')}:</label> {cms_help help='help_fielddef_options'}</p>
+          <p class="pagetext"><label for="fld_options">{$mod->Lang('options')}:</label> {cms_help help='help_fielddef_options' title=$mod->Lang('options')}</p>
 	  <p class="pageinput">
             <textarea id="fld_options" name="{$actionid}options" rows="5" cols="80">{$options}</textarea>
           </p>
         </div>
 	<div class="pageoverflow" id="area_maxlen">
-		<p class="pagetext"><label for="fld_maxlen">{$maxlengthtext}:</label> {cms_help help='help_fielddef_maxlen'}</p>
+		<p class="pagetext"><label for="fld_maxlen">{$maxlengthtext}:</label> {cms_help help='help_fielddef_maxlen' title=$maxlengthtext}</p>
 		<p class="pageinput">
                   <input type="text" id="fld_maxlen" name="{$actionid}max_length" value="{$max_length}" size="5" maxlength="5"/><br/>{$info_maxlength}
                 </p>
 	</div>
 	<div class="pageoverflow">
-		<p class="pagetext"><label for="fld_public">{$userviewtext}:</label> {cms_help key='help_fielddef_public'}</p>
+		<p class="pagetext"><label for="fld_public">{$userviewtext}:</label> {cms_help key='help_fielddef_public' title=$userviewtext}</p>
 		<p class="pageinput">
                   <input type="hidden" name="{$actionid}public" value="0"/>
                   <input type="checkbox" id="fld_public" name="{$actionid}public" value="1" {if $public == 1}checked="checked"{/if}/>

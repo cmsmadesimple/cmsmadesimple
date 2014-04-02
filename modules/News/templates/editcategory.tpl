@@ -15,13 +15,13 @@ $(document).ready(function(){
 
 {$startform}
 	<div class="pageoverflow">
-		<p class="pagetext"><label for="{$actionid}name">*{$mod->Lang('name')}:</label> {cms_help key='help_category_name'}</p>
+		<p class="pagetext"><label for="{$actionid}name">*{$mod->Lang('name')}:</label> {cms_help key='help_category_name' title=$mod->Lang('name')}</p>
 		<p class="pageinput">
 		  <input type="text" id="{$actionid}name" name="{$actionid}name" value="{$name|default:''}"/ required>
 		</p>
 	</div>
 	<div class="pageoverflow">
-		<p class="pagetext"><label for="{$actionid}parent">{$mod->Lang('parent')}:</label> {cms_help key='help_category_parent'}</p>
+		<p class="pagetext"><label for="{$actionid}parent">{$mod->Lang('parent')}:</label> {cms_help key='help_category_parent' title=$mod->Lang('parent')}</p>
 		<p class="pageinput">
                   <select id="{$actionid}parent" name="{$actionid}parent">
                     {html_options options=$categories selected=$parent}

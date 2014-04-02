@@ -55,13 +55,13 @@ $(document).ready(function(){
 	</div>
 {/if}
 	<div class="pageoverflow">
-		<p class="pagetext"><label for="fld1">*{$titletext}:</label> {cms_help key='help_article_title'}</p>
+		<p class="pagetext"><label for="fld1">*{$titletext}:</label> {cms_help key='help_article_title' title=$titletext}</p>
 		<p class="pageinput">
                   <input type="text" id="fld1" name="{$actionid}title" value="{$title}" size="80" maxlength="255" required/>
                 </p>
 	</div>
 	<div class="pageoverflow">
-		<p class="pagetext"><label for="fld2">*{$categorytext}:</label> {cms_help key='help_article_category'}</p>
+		<p class="pagetext"><label for="fld2">*{$categorytext}:</label> {cms_help key='help_article_category' title=$categorytext}</p>
 		<p class="pageinput">
                   <select name="{$actionid}category" id="fld2">
                   {html_options options=$categorylist selected=$category}
@@ -70,17 +70,17 @@ $(document).ready(function(){
 	</div>
 {if !isset($hide_summary_field) or $hide_summary_field == '0'}
 	<div class="pageoverflow">
-		<p class="pagetext">{$summarytext}: {cms_help key='help_article_summary'}</p>
+		<p class="pagetext">{$summarytext}: {cms_help key='help_article_summary' title=$summarytext}</p>
 		<p class="pageinput">{$inputsummary}</p>
 	</div>
 {/if}
 	<div class="pageoverflow">
-		<p class="pagetext">*{$contenttext}: {cms_help key='help_article_content'}</p>
+		<p class="pagetext">*{$contenttext}: {cms_help key='help_article_content' title=$contenttext}</p>
 		<p class="pageinput">{$inputcontent}</p>
 	</div>
 {if isset($statustext)}
 	<div class="pageoverflow">
-		<p class="pagetext"><label for="fld9">*{$statustext}:</label> {cms_help key='help_article_status'}</p>
+		<p class="pagetext"><label for="fld9">*{$statustext}:</label> {cms_help key='help_article_status' title=$statustext}</p>
 		<p class="pageinput">
                    <select id="fld9" name="{$actionid}status">
                      {html_options options=$statuses selected=$status}
@@ -92,24 +92,24 @@ $(document).ready(function(){
 {/if}
 
         <div class="pageoverflow">
-                <p class="pagetext"><label for="fld7">{$urltext}:</label> {cms_help key='help_article_url'}</p>
+                <p class="pagetext"><label for="fld7">{$urltext}:</label> {cms_help key='help_article_url' title=$urltext}</p>
                 <p class="pageinput">
                   <input type="text" id="fld7" name="{$actionid}news_url" value="{$news_url}" size="50" maxlength="255"/>
                 </p>
         </div>
 	<div class="pageoverflow">
-		<p class="pagetext"><label for="fld5">{$extratext}:</label> {cms_help key='help_article_extra'}</p>
+		<p class="pagetext"><label for="fld5">{$extratext}:</label> {cms_help key='help_article_extra' title=$extratext}</p>
 		<p class="pageinput">
                   <input type="text" id="fld5" name="{$actionid}extra" value="{$extra}" size="50" maxlength="255"/>
                 </p>
 	</div>
 
 	<div class="pageoverflow">
-		<p class="pagetext">{$postdatetext}: {cms_help key='help_article_postdate'}</p>
+		<p class="pagetext">{$postdatetext}: {cms_help key='help_article_postdate' title=$postdatetext}</p>
 		<p class="pageinput">{html_select_date prefix=$postdateprefix time=$postdate start_year='1980' end_year='+15'} {html_select_time prefix=$postdateprefix time=$postdate}</p>
 	</div>
 	<div class="pageoverflow">
-		<p class="pagetext"><label for="searchable">{$mod->Lang('searchable')}:</label> {cms_help key='help_article_searchable'}</p>
+		<p class="pagetext"><label for="searchable">{$mod->Lang('searchable')}:</label> {cms_help key='help_article_searchable' title=$mod->Lang('searchable')}</p>
 		<p class="pageinput">
 			<select name="{$actionid}searchable" id="searchable">
 			{cms_yesno selected=$searchable}
@@ -119,16 +119,16 @@ $(document).ready(function(){
 	</div>
 
 	<div class="pageoverflow">
-		<p class="pagetext"><label for="fld11">{$useexpirationtext}:</label> {cms_help key='help_article_useexpiry'}</p>
+		<p class="pagetext"><label for="fld11">{$useexpirationtext}:</label> {cms_help key='help_article_useexpiry' title=$useexpirationtext}</p>
 		<p class="pageinput"><input id="fld11" type="checkbox" name="{$actionid}useexp" {if $useexp == 1}checked="checked"{/if} class="pagecheckbox"/></p>
 	</div>
 	<div id="expiryinfo" {if $useexp != 1}style="display: none;"{/if}>
 	<div class="pageoverflow">
-		<p class="pagetext">{$startdatetext}: {cms_help key='help_article_startdate'}</p>
+		<p class="pagetext">{$startdatetext}: {cms_help key='help_article_startdate' title=$startdatetext}</p>
 		<p class="pageinput">{html_select_date prefix=$startdateprefix time=$startdate start_year="-10" end_year="+15"} {html_select_time prefix=$startdateprefix time=$startdate}</p>
 	</div>
 	<div class="pageoverflow">
-		<p class="pagetext">{$enddatetext}: {cms_help key='help_article_enddate'}</p>
+		<p class="pagetext">{$enddatetext}: {cms_help key='help_article_enddate' title=$enddatetext}</p>
 		<p class="pageinput">{html_select_date prefix=$enddateprefix time=$enddate start_year="-10" end_year="+15"} {html_select_time prefix=$enddateprefix time=$enddate}</p>
 	</div>
 	</div>

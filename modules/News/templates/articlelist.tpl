@@ -41,18 +41,18 @@ $(document).ready(function(){
   <legend>{$filtertext}:</legend>
   {$formstart}
   <div class="pageoverflow">
-    <p class="pagetext"><label for="filter_category">{$prompt_category}:</label> {cms_help key='help_articles_filtercategory'}</p>
+    <p class="pagetext"><label for="filter_category">{$prompt_category}:</label> {cms_help key='help_articles_filtercategory' title=$prompt_category}</p>
     <p class="pageinput">
       <select id="filter_category" name="{$actionid}category">
       {html_options options=$categorylist selected=$curcategory}
       </select>
       <label for="filter_allcategories">{$prompt_showchildcategories}:</label>
       <input id="filter_allcategories" type="checkbox" name="{$actionid}allcategories" value="yes" {if $allcategories=="yes"}checked="checked"{/if}>
-      {cms_help key='help_articles_filterchildcats'}
+      {cms_help key='help_articles_filterchildcats' title=$prompt_showchildcategories}
     </p>
   </div>
   <div class="pageoverflow">
-    <p class="pagetext"><label for="filter_sortby">{$prompt_sorting}:</label> {cms_help key='help_articles_sortby'}</p>
+    <p class="pagetext"><label for="filter_sortby">{$prompt_sorting}:</label> {cms_help key='help_articles_sortby' title=$prompt_sorting}</p>
     <p class="pageinput">
       <select id="filter_sorting" name="{$actionid}sortby">
       {html_options options=$sortlist selected=$sortby}
@@ -60,7 +60,7 @@ $(document).ready(function(){
     </p>
   </div>
   <div class="pageoverflow">
-    <p class="pagetext"><label for="filter_pagelimit">{$prompt_pagelimit}:</label> {cms_help key='help_articles_pagelimit'}</p>
+    <p class="pagetext"><label for="filter_pagelimit">{$prompt_pagelimit}:</label> {cms_help key='help_articles_pagelimit' title=$prompt_pagelimit}</p>
     <p class="pageinput">
       <select id="filter_pagelimit" name="{$actionid}pagelimit">
       {html_options options=$pagelimits selected=$pagelimit}
