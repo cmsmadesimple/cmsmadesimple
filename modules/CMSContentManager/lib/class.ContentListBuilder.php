@@ -634,198 +634,199 @@ final class ContentListBuilder
    */
   private function _get_display_data($page_list)
   {
-    $users = $this->_get_users();
-    $contentops = cmsms()->GetContentOperations();
-    $mod = $this->_module;
-    $columns = $this->get_display_columns();
-    $userid = $this->_userid;
+      $users = $this->_get_users();
+      $contentops = cmsms()->GetContentOperations();
+      $mod = $this->_module;
+      $columns = $this->get_display_columns();
+      $userid = $this->_userid;
 
-    // preload the templates.
-    $tpl_list = array();
-    foreach( $page_list as $page_id ) {
-      $node = $contentops->quickfind_node_by_id($page_id);
-      if( !$node ) continue;
-      $content = $node->GetContent(FALSE,FALSE,TRUE);
-      if( !$content ) continue;
-      $tpl_list[] = $content->TemplateId();
-    }
-    $tpl_list = array_values(array_unique(array_values($tpl_list)));
-    $tpls = CmsLayoutTemplate::load_bulk($tpl_list);
-
-    $out = array();
-    foreach( $page_list as $page_id ) {
-      $node = $contentops->quickfind_node_by_id($page_id);
-      if( !$node ) continue;
-      $content = $node->GetContent(FALSE,FALSE,TRUE);
-      if( !$content ) continue;
-
-      $rec = array();
-      $rec['depth'] = $node->get_level();
-      $rec['hasusablelink'] = $content->HasUsableLink();
-      $rec['hastemplate'] = $content->HasTemplate();
-      $rec['menutext'] = $content->MenuText();
-      $rec['title'] = $content->Name();
-      $rec['template_id'] = $content->TemplateId();
-      $rec['can_edit_tpl'] = $mod->CheckPermission('Modify Templates');
-      $rec['id'] = $content->Id();
-      $rec['lastmodified'] = $content->GetModifiedDate();
-      $rec['created'] = $content->GetCreationDate();
-      $rec['secure'] = $content->Secure();
-      $rec['cachable'] = $content->Cachable();
-      if( $this->_is_locked($page_id) ) {
-	$lock = $this->_locks[$page_id];
-	$rec['lockuser'] = $users[$lock['uid']]->username;
-	$rec['lock'] = $this->_locks[$page_id];
+      // preload the templates.
+      $tpl_list = array();
+      foreach( $page_list as $page_id ) {
+          $node = $contentops->quickfind_node_by_id($page_id);
+          if( !$node ) continue;
+          $content = $node->GetContent(FALSE,FALSE,TRUE);
+          if( !$content ) continue;
+          $tpl_list[] = $content->TemplateId();
       }
-      if( $page_id == $this->_seek_to ) $rec['selected'] = 1;
-      if( $content->LastModifiedBy() > 0 && isset($users[$content->LastModifiedBy()]) ) {
-	$rec['lastmodifiedby'] = $users[$content->LastModifiedBy()]->username;
-      }
-      $rec['can_edit'] = ($mod->CheckPermission('Modify Any Page') || $mod->CheckPermission('Manage All Content') ||
-			  $this->_check_authorship($rec['id'])) && !$this->_is_locked($page_id);
-      $rec['can_steal'] = ($mod->CheckPermission('Modify Any Page') || $mod->CheckPermission('Manage All Content') ||
-			   $this->_check_authorship($rec['id'])) && $this->_is_locked($page_id) && $this->_is_lock_expired($page_id);
-      $rec['can_delete'] = $rec['can_edit'] && $mod->CheckPermission('Remove Pages');
+      $tpl_list = array_values(array_unique(array_values($tpl_list)));
+      $tpls = CmsLayoutTemplate::load_bulk($tpl_list);
 
-      foreach( $columns as $column => $displayable ) {
-	switch( $column ) {
-	case 'expand':
-	  $rec[$column] = 'none';
-	  if( $node->has_children() ) {
-	    if( in_array($page_id,$this->_opened_array) ) {
-	      $rec[$column] = 'open';
-	    } else {
-	      $rec[$column] = 'closed';
-	    }
-	  }
-	  break;
+      $out = array();
+      foreach( $page_list as $page_id ) {
+          $node = $contentops->quickfind_node_by_id($page_id);
+          if( !$node ) continue;
+          $content = $node->GetContent(FALSE,FALSE,TRUE);
+          if( !$content ) continue;
 
-	case 'hier':
-	  $rec[$column] = $content->Hierarchy();
-	  break;
+          $rec = array();
+          $rec['depth'] = $node->get_level();
+          $rec['hasusablelink'] = $content->HasUsableLink();
+          $rec['hastemplate'] = $content->HasTemplate();
+          $rec['menutext'] = $content->MenuText();
+          $rec['title'] = $content->Name();
+          $rec['template_id'] = $content->TemplateId();
+          $rec['can_edit_tpl'] = $mod->CheckPermission('Modify Templates');
+          $rec['id'] = $content->Id();
+          $rec['lastmodified'] = $content->GetModifiedDate();
+          $rec['created'] = $content->GetCreationDate();
+          $rec['secure'] = $content->Secure();
+          $rec['cachable'] = $content->Cachable();
+          $rec['showinmenu'] = $content->ShowInMenu();
+          if( $this->_is_locked($page_id) ) {
+              $lock = $this->_locks[$page_id];
+              $rec['lockuser'] = $users[$lock['uid']]->username;
+              $rec['lock'] = $this->_locks[$page_id];
+          }
+          if( $page_id == $this->_seek_to ) $rec['selected'] = 1;
+          if( $content->LastModifiedBy() > 0 && isset($users[$content->LastModifiedBy()]) ) {
+              $rec['lastmodifiedby'] = $users[$content->LastModifiedBy()]->username;
+          }
+          $rec['can_edit'] = ($mod->CheckPermission('Modify Any Page') || $mod->CheckPermission('Manage All Content') ||
+                              $this->_check_authorship($rec['id'])) && !$this->_is_locked($page_id);
+          $rec['can_steal'] = ($mod->CheckPermission('Modify Any Page') || $mod->CheckPermission('Manage All Content') ||
+                               $this->_check_authorship($rec['id'])) && $this->_is_locked($page_id) && $this->_is_lock_expired($page_id);
+          $rec['can_delete'] = $rec['can_edit'] && $mod->CheckPermission('Remove Pages');
 
-	case 'page':
-	  if( $content->MenuText() == CMS_CONTENT_HIDDEN_NAME ) continue;
-	  $rec[$column] = $content->MenuText();
-	  if( CmsContentManagerUtils::get_pagenav_display() == 'title' ) $rec[$column] = $content->Name();
-	  break;
+          foreach( $columns as $column => $displayable ) {
+              switch( $column ) {
+              case 'expand':
+                  $rec[$column] = 'none';
+                  if( $node->has_children() ) {
+                      if( in_array($page_id,$this->_opened_array) ) {
+                          $rec[$column] = 'open';
+                      } else {
+                          $rec[$column] = 'closed';
+                      }
+                  }
+                  break;
 
-	case 'alias':
-	  if( $content->HasUsableLink() && $content->Alias() != '' ) $rec[$column] = $content->Alias();
-	  break;
+              case 'hier':
+                  $rec[$column] = $content->Hierarchy();
+                  break;
 
-	case 'url':
-	  $rec[$column] = '';
-	  if( $content->HasUsableLink() && $content->URL() != '' ) $rec[$column] = $content->URL();
-	  break;
+              case 'page':
+                  if( $content->MenuText() == CMS_CONTENT_HIDDEN_NAME ) continue;
+                  $rec[$column] = $content->MenuText();
+                  if( CmsContentManagerUtils::get_pagenav_display() == 'title' ) $rec[$column] = $content->Name();
+                  break;
 
-	case 'template':
-     if( $content->IsViewable() ) {
-         try {
-             $template = CmsLayoutTemplate::load($content->TemplateId());
-             $rec[$column] = $template->get_name();
-         }
-         catch( Exception $e ) {
-             // can't edit this content object, cuz we can't get the template associated with it.
-             $rec['can_edit'] = false;
-         }
-	  }
-	  break;
+              case 'alias':
+                  if( $content->HasUsableLink() && $content->Alias() != '' ) $rec[$column] = $content->Alias();
+                  break;
 
-	case 'friendlyname':
-	  $rec[$column] = $content->FriendlyName();
-	  break;
+              case 'url':
+                  $rec[$column] = '';
+                  if( $content->HasUsableLink() && $content->URL() != '' ) $rec[$column] = $content->URL();
+                  break;
 
-	case 'owner':
-	  if( $content->Owner() > 0 ) $rec[$column] = $users[$content->Owner()]->username;
-	  break;
+              case 'template':
+                  if( $content->IsViewable() ) {
+                      try {
+                          $template = CmsLayoutTemplate::load($content->TemplateId());
+                          $rec[$column] = $template->get_name();
+                      }
+                      catch( Exception $e ) {
+                          // can't edit this content object, cuz we can't get the template associated with it.
+                          $rec['can_edit'] = false;
+                      }
+                  }
+                  break;
 
-	case 'active':
-	  $rec[$column] = '';
-	  if( $mod->CheckPermission('Manage All Content') && !$content->IsSystemPage() && !$this->_is_locked($page_id) ) {
-	    if( $content->Active() ) {
-	      $rec[$column] = 'active';
-	      if( $content->DefaultContent() ) $rec[$column] = 'default';
-	    } else {
-	      $rec[$column] = 'inactive';
-	    }
-	  }
-	  break;
+              case 'friendlyname':
+                  $rec[$column] = $content->FriendlyName();
+                  break;
 
-	case 'default':
-	  $rec[$column] = '';
-	  if( $this->_module->CheckPermission('Manage All Content') && !$this->_is_locked($page_id) && !$this->_is_default_locked() ) {
-	    if( $content->IsDefaultPossible() && $content->Active() ) $rec[$column] = ($content->DefaultContent())?'yes':'no';
-	  }
-	  break;
+              case 'owner':
+                  if( $content->Owner() > 0 ) $rec[$column] = $users[$content->Owner()]->username;
+                  break;
 
-	case 'move':
-	  $rec[$column] = '';
-	  if( !$this->have_locks() && $this->_check_peer_authorship($content->Id()) && ($nsiblings = $node->count_siblings()) > 1 ) {
-	    if( $content->ItemOrder() == 1 ) {
-	      $rec[$column] = 'down';
-	    }
-	    else if( $content->ItemOrder() == $nsiblings ) {
-	      $rec[$column] = 'up';
-	    }
-	    else {
-	      $rec[$column] = 'both';
-	    }
-	  }
-	  break;
+              case 'active':
+                  $rec[$column] = '';
+                  if( $mod->CheckPermission('Manage All Content') && !$content->IsSystemPage() && !$this->_is_locked($page_id) ) {
+                      if( $content->Active() ) {
+                          $rec[$column] = 'active';
+                          if( $content->DefaultContent() ) $rec[$column] = 'default';
+                      } else {
+                          $rec[$column] = 'inactive';
+                      }
+                  }
+                  break;
 
-	case 'view':
-	  $rec[$column] = '';
-	  if( $content->HasUsableLink() && $content->IsViewable() && $content->Active() ) $rec[$column] = $content->GetURL();
-	  break;
+              case 'default':
+                  $rec[$column] = '';
+                  if( $this->_module->CheckPermission('Manage All Content') && !$this->_is_locked($page_id) && !$this->_is_default_locked() ) {
+                      if( $content->IsDefaultPossible() && $content->Active() ) $rec[$column] = ($content->DefaultContent())?'yes':'no';
+                  }
+                  break;
 
-	case 'copy':
-	  $rec[$column] = '';
-	  if( $content->IsCopyable() && !$this->_is_locked($content->Id()) ) {
-	    if( $rec['can_edit'] && ($mod->CheckPermission('Add Pages') || $mod->CheckPermission('Manage All Content')) ) {
-	      $rec[$column] = 'yes';
-	    }
-	  }
-	  break;
+              case 'move':
+                  $rec[$column] = '';
+                  if( !$this->have_locks() && $this->_check_peer_authorship($content->Id()) && ($nsiblings = $node->count_siblings()) > 1 ) {
+                      if( $content->ItemOrder() == 1 ) {
+                          $rec[$column] = 'down';
+                      }
+                      else if( $content->ItemOrder() == $nsiblings ) {
+                          $rec[$column] = 'up';
+                      }
+                      else {
+                          $rec[$column] = 'both';
+                      }
+                  }
+                  break;
 
-	case 'edit':
-	  $rec[$column] = '';
-	  if( $rec['can_edit'] ) {
-	    $rec[$column] = 'yes';
-	  }
-	  elseif( $rec['can_steal'] ) {
-	    $rec[$column] = 'steal';
-	  }
-	  break;
+              case 'view':
+                  $rec[$column] = '';
+                  if( $content->HasUsableLink() && $content->IsViewable() && $content->Active() ) $rec[$column] = $content->GetURL();
+                  break;
 
-	case 'delete':
-	  $rec[$column] = '';
-	  if( $rec['can_delete'] && !$content->DefaultContent() && !$node->has_children() && !$this->_is_locked($content->Id()) ) {
-	    $rec[$column] = 'yes';
-	  }
-	  break;
+              case 'copy':
+                  $rec[$column] = '';
+                  if( $content->IsCopyable() && !$this->_is_locked($content->Id()) ) {
+                      if( $rec['can_edit'] && ($mod->CheckPermission('Add Pages') || $mod->CheckPermission('Manage All Content')) ) {
+                          $rec[$column] = 'yes';
+                      }
+                  }
+                  break;
 
-	case 'multiselect':
-	  $rec[$column] = '';
-	  if( !$content->IsSystemPage() && !$this->_is_locked($content->Id()) ) {
-	    if( $mod->CheckPermission('Manage All Content') || $mod->CheckPermission('Modify Any Page') ) {
-	      $rec[$column] = 'yes';
-	    }
-	    else if( $mod->CheckPermission('Remove Pages') && $this->_check_authorship($content->Id()) ) {
-	      $rec[$column] = 'yes';
-	    }
-	    else if( $this->_check_authorship($content->Id()) ) {
-	      $rec[$column] = 'yes';
-	    }
-	  }
-	  break;
-	} // switch
+              case 'edit':
+                  $rec[$column] = '';
+                  if( $rec['can_edit'] ) {
+                      $rec[$column] = 'yes';
+                  }
+                  elseif( $rec['can_steal'] ) {
+                      $rec[$column] = 'steal';
+                  }
+                  break;
+
+              case 'delete':
+                  $rec[$column] = '';
+                  if( $rec['can_delete'] && !$content->DefaultContent() && !$node->has_children() && !$this->_is_locked($content->Id()) ) {
+                      $rec[$column] = 'yes';
+                  }
+                  break;
+
+              case 'multiselect':
+                  $rec[$column] = '';
+                  if( !$content->IsSystemPage() && !$this->_is_locked($content->Id()) ) {
+                      if( $mod->CheckPermission('Manage All Content') || $mod->CheckPermission('Modify Any Page') ) {
+                          $rec[$column] = 'yes';
+                      }
+                      else if( $mod->CheckPermission('Remove Pages') && $this->_check_authorship($content->Id()) ) {
+                          $rec[$column] = 'yes';
+                      }
+                      else if( $this->_check_authorship($content->Id()) ) {
+                          $rec[$column] = 'yes';
+                      }
+                  }
+                  break;
+              } // switch
+          } // foreach
+
+          $out[] = $rec;
       } // foreach
 
-      $out[] = $rec;
-    } // foreach
-
-    return $out;
+      return $out;
   }
 
   /**

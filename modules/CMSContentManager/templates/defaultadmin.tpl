@@ -241,6 +241,7 @@ $(document).ready(function () {
 								<strong>{$mod->Lang('prompt_secure')}:</strong> {$mod->Lang('yes')}<br/>
 								{/if}
 								<strong>{$mod->Lang('prompt_cachable')}:</strong> {if $row.cachable}{$mod->Lang('yes')}{else}{$mod->Lang('no')}{/if}<br/>
+								<strong>{$mod->Lang('prompt_showinmenu')}:</strong> {if $row.showinmenu}{$mod->Lang('yes')}{else}{$mod->Lang('no')}{/if}
 							{/strip}{/capture}
 
 						<a href="{cms_action_url action='admin_editcontent' content_id=$row.id}" class="page_edit tooltip" accesskey="e" data-cms-content='{$row.id}' data-cms-description='{$tooltip_pageinfo|cms_htmlentities}'>
@@ -310,7 +311,7 @@ $(document).ready(function () {
 				{elseif $column == 'default'}
 					{if $row.default == 'yes'}
 						{admin_icon icon='true.gif' class='page_default' title=$mod->Lang('prompt_page_default')}
-					{else if $row.default == 'no'}
+					{else if $row.default == 'no' && $row.can_edit}
 						<a href="{cms_action_url action='defaultadmin' setdefault=$row.id}" class="page_setdefault" accesskey="d">
 						{admin_icon icon='false.gif' class='page_setdefault' title=$mod->Lang('prompt_page_setdefault')}
 						</a>
