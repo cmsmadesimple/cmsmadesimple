@@ -129,9 +129,10 @@ $lang['latestdepends'] = 'Always install the newest dependency module';
 // M
 $lang['minversion'] = 'Minimum Version';
 $lang['missingdeps'] = 'Missing dependencies';
-$lang['moddescription'] = 'A client for the CMS Made Simple™ Module Repository. This module allows previewing and installing modules from the CMSMS Forge without the need for ftp-ing, or unzipping archives.  Module XML files are downloaded using REST, integrity verified, and then expanded automatically.';
 $lang['mod_name_ver'] = '%s version %s';
+$lang['moddescription'] = 'A client for the CMS Made Simple™ Module Repository. This module allows previewing and installing modules from the CMSMS Forge without the need for ftp-ing, or unzipping archives.  Module XML files are downloaded using REST, integrity verified, and then expanded automatically.';
 $lang['msg_batch_completed'] = '%d operations completed';
+$lang['msg_cachecleared'] = 'Cache cleared';
 $lang['msg_cancelled'] = 'Operation cancelled';
 $lang['msg_module_activated'] = 'Module %s activated';
 $lang['msg_module_chmod'] = 'Permissions changed';
@@ -142,9 +143,9 @@ $lang['msg_module_installed'] = 'Module %s successfully installed';
 $lang['msg_module_removed'] = 'Module files permanently removed';
 $lang['msg_module_uninstalled'] = 'Module %s successfully uninstalled. Templates and data associated with this module has been deleted';
 $lang['msg_module_upgraded'] = 'Module %s successfully upgraded';
-$lang['msg_cachecleared'] = 'Cache cleared';
 $lang['msg_nodependencies'] = 'This file has not listed any dependencies';
 $lang['msg_prefssaved'] = 'Preferences Updated';
+$lang['msg_urlreset'] = 'The ModuleRepository URL has been reset to the default value';
 
 // N
 $lang['nametext'] = 'Module Name';
