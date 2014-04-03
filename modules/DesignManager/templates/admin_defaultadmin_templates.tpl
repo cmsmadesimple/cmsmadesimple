@@ -184,7 +184,8 @@ $(document).ready(function(){
   <table class="pagetable">
     <thead>
       <tr>
-        <th title="{$mod->Lang('title_tpl_id')}" width="5%">{$mod->Lang('prompt_id')}</th>
+        <th title="{$mod->Lang('title_tpl_id')}">{$mod->Lang('prompt_id')}</th>
+	<th class="pageicon"></th>
 	<th title="{$mod->Lang('title_tpl_name')}">{$mod->Lang('prompt_name')}</th>
 	<th title="{$mod->Lang('title_tpl_type')}">{$mod->Lang('prompt_type')}</th>
 	<th title="{$mod->Lang('title_tpl_design')}">{$mod->Lang('prompt_design')}</th>
@@ -211,9 +212,11 @@ $(document).ready(function(){
   	  {* template id, and template name columns *}
   	  {if !$template->locked()}
 	    <td><a href="{$edit_tpl}" data-tpl-id="{$template->get_id()}" class="edit_tpl tooltip" title="{$mod->Lang('edit_template')}" data-cms-description='{$tpl_tooltip}'>{$template->get_id()}</a></td>
+            <td></td>
 	    <td><a href="{$edit_tpl}" data-tpl-id="{$template->get_type_id()}" class="edit_tpl tooltip" title="{$mod->Lang('edit_template')}" data-cms-description='{$tpl_tooltip}'>{$template->get_name()}</a></td>
 	  {else}
 	    <td>{$template->get_id()}</td>
+	    <td>{admin_icon icon='warning.gif' title=$mod->Lang('title_locked')}</td>
 	    <td><span class="tooltip" data-cms-description='{$tpl_tooltip}'>{$template->get_name()}</span></td>
 	  {/if}
 

@@ -39,7 +39,7 @@ $(document).ready(function(){
     <div class="pageoverflow">
       <p class="pagetext"><label for="filter_css_design">{$mod->Lang('prompt_design')}:</label></p>
       <p class="pageinput">
-        <select id="filter_css_design" name="{$actionid}filter_css_design" title="{$mod->Lang('title_sortby_design')}">
+        <select id="filter_css_design" name="{$actionid}filter_css_design" title="{$mod->Lang('title_filter_design')}">
           <option value="">{$mod->Lang('any')}</option>
 	  {html_options options=$design_names selected=$css_filter.design}
         </select>
@@ -212,4 +212,3 @@ $(document).ready(function(){
 {else}
   <div class="warning">{$mod->Lang('warning_no_stylesheets')}</div>
 {/if}
-
