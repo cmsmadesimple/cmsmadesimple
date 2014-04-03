@@ -50,8 +50,14 @@ try {
   case 'test':      // alias for check
   case 'is_locked': // alias for check
   case 'check':
-    if( !$type || !$oid ) throw new CmsInvalidDataException(lang('missingparams'));
-    $out['lock_id'] = CmsLockOperations::is_locked($type,$oid) ? 1 : 0;
+      if( !$type ) throw new CmsInvalidDataException(lang('missingparams'));
+      if( $oid ) {
+          $out['lock_id'] = CmsLockOperations::is_locked($type,$oid) ? 1 : 0;
+      }
+      else {
+          $tmp = CmsLockOperations::get_locks($type);
+          if( is_array($tmp) && count($tmp) ) $out['lock_id'] = -1;
+      }
     break;
 
   case 'lock':
@@ -98,6 +104,8 @@ catch( Exception $e ) {
   $out['status'] = 'error';
   $out['error'] = array('type'=>'othererror','msg'=>$e->GetMessage());
 }
+
+if( $out['status'] != 'error' && isset($out['lock_id']) ) $out['locked'] = 1;
 
 debug_to_log($out);
 header('Pragma: public');

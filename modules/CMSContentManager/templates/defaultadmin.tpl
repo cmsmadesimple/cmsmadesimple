@@ -31,9 +31,9 @@ function cms_CMtoggleState(el) {
 }
 
 $(document).ready(function () {
-	$('#selectall').cmsms_checkall({
-		target: '#contenttable'
-	});
+    $('#selectall').cmsms_checkall({
+        target: '#contenttable'
+    });
     cms_CMtoggleState('#multiaction'),
     cms_CMtoggleState('#multisubmit'),
 
@@ -141,6 +141,30 @@ $(document).ready(function () {
         $('tr.selected').css('background', 'yellow');
     });
 
+    $('a#ordercontent').click(function(e){
+      var have_locks = {$have_locks};
+      if( !have_locks ) {
+         // double check to see if anything is locked
+         var content_id = $(this).attr('data-cms-content');
+   	 var url = '{$admin_url}/ajax_lock.php?showtemplate=false';
+         var opts = { opt: 'check', type: 'content' };
+         var ok = false;
+         opts[cms_data.secure_param_name] = cms_data.user_key;
+         $.ajax({
+           url: url,
+           async: false,
+           data: opts,
+           success: function(data,textStatus,jqXHR) {
+	     if( data.status != 'success' ) return;
+	     if( data.locked ) have_locks = true;
+	   }
+        });
+      }
+      if( have_locks ) {
+         alert('{$mod->Lang('error_action_contentlocked')}');
+	 e.preventDefault();
+      }
+    })
 });
 //]]>
 </script>

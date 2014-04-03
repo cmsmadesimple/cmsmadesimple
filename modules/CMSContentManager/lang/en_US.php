@@ -72,8 +72,9 @@ $lang['desc_contentmanager_settings'] = 'Adjust settings related to listing, or 
 
 #E
 $lang['editcontent_confirm_cancel'] = 'Are you sure you want to cancel this operation?  Any changes will be lost!';
+$lang['error_action_contentlocked'] = 'This operation cannot be performed while there is locked content';
 $lang['error_bulk_permission'] = 'You do not have permission to perform this bulk action';
-$lang['error_contentlocked'] = 'It appears that this content is already locked.  Try to refresh this page to see information about the current editor';
+$lang['error_contentlocked'] = 'It appears that this content is already locked.  Try to refresh this page to see up-todate information';
 $lang['error_contenttype_disallowed'] = 'Default Content Type is also set to Disallowed';
 $lang['error_copy_permission'] = 'You do not have permission to copy this content page';
 $lang['error_delete_defaultcontent'] = 'You cannot delete the default content page';

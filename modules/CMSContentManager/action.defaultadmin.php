@@ -1,10 +1,10 @@
 <?php
 #BEGIN_LICENSE
 #-------------------------------------------------------------------------
-# Module: Content (c) 2013 by Robert Campbell 
+# Module: Content (c) 2013 by Robert Campbell
 #         (calguy1000@cmsmadesimple.org)
 #  A module for managing content in CMSMS.
-# 
+#
 #-------------------------------------------------------------------------
 # CMS - CMS Made Simple is (c) 2004 by Ted Kulp (wishy@cmsmadesimple.org)
 # Visit our homepage at: http://www.cmsmadesimple.org
@@ -19,7 +19,7 @@
 # However, as a special exception to the GPL, this software is distributed
 # as an addon module to CMS Made Simple.  You may not use this software
 # in any Non GPL version of CMS Made simple, or in any version of CMS
-# Made simple that does not indicate clearly and obviously in its admin 
+# Made simple that does not indicate clearly and obviously in its admin
 # section that the site was built with CMS Made simple.
 #
 # This program is distributed in the hope that it will be useful,
@@ -55,7 +55,7 @@ if( !function_exists('cm_prettyurls_ok') ) {
   }
 }
 
-if( isset($params['multisubmit']) && isset($params['multiaction']) && 
+if( isset($params['multisubmit']) && isset($params['multiaction']) &&
     isset($params['multicontent']) && is_array($params['multicontent']) && count($params['multicontent']) > 0 ) {
   list($module,$bulkaction) = explode('::',$params['multiaction'],2);
   if( $module == '' || $module == '-1' || $bulkaction == '' || $bulkaction == '-1' ) {
@@ -72,7 +72,7 @@ $smarty->assign('prettyurls_ok',cm_prettyurls_ok());
 $smarty->assign('can_add_content',$this->CheckPermission('Add Pages') || $this->CheckPermission('Manage All Content'));
 $smarty->assign('can_reorder_content',$this->CheckPermission('Manage All Content'));
 
-// load all the content that this user can display... 
+// load all the content that this user can display...
 // organize it into a tree
 $builder = new ContentListBuilder($this);
 $builder->column_state('url',cm_prettyurls_ok());
@@ -154,7 +154,9 @@ for( $i = 0; $i < $npages; $i++ ) {
 }
 
 $smarty->assign('indent',cms_userprefs::get('indent',1));
-$smarty->assign('locks',$builder->get_locks());
+$locks = $builder->get_locks();
+$smarty->assign('have_locks',(is_array($locks) && count($locks))?1:0);
+//$smarty->assign('locks',$builder->get_locks()); // used?
 $smarty->assign('pagelimit',$pagelimit);
 $smarty->assign('pagelist',$pagelist);
 $smarty->assign('curpage',$builder->get_page());

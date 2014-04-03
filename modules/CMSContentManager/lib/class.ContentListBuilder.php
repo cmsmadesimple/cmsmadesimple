@@ -564,9 +564,9 @@ final class ContentListBuilder
     $this->_locks = array();
     $tmp = CmsLockOperations::get_locks('content');
     if( is_array($tmp) && count($tmp) ) {
-      foreach( $tmp as $lock_obj ) {
-	$this->_locks[$lock_obj['oid']] = $lock_obj;
-      }
+        foreach( $tmp as $lock_obj ) {
+            $this->_locks[$lock_obj['oid']] = $lock_obj;
+        }
     }
     return $this->_locks;
   }
