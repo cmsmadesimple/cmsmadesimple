@@ -552,8 +552,8 @@ $(document).ready(function(){
 					<p class="pagetext"><label for="checkversion">{lang('checkversion')}:</label></p>
 					<p class="pageinput">
 						<select id="checkversion" name="checkversion">
-							{cms_yesno options=$checkversion}
-						<select>&nbsp;{cms_help key2='settings_checkversion' title=lang('checkversion')}
+							{cms_yesno options=$checkversion selected=$checkversion}
+						</select>&nbsp;{cms_help key2='settings_checkversion' title=lang('checkversion')}
 					</p>
 				</div>
 		</fieldset>
