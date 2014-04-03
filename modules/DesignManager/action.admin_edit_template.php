@@ -117,7 +117,7 @@ try {
 		try {
 			$lock_id = CmsLockOperations::is_locked('template',$tpl_obj->get_id());
 			if( $lock_id > 0 ) CmsLockOperations::unlock($lock_id,'template',$tpl_obj->get_id());
-			$lock = new CmsLock('template',$tpl_obj->get_id());
+			$lock = new CmsLock('template',$tpl_obj->get_id(),(int)$this->GetPreference('lock_timeout'));
 			$smarty->assign('lock',$lock);
 		}
 		catch( CmsException $e ) {

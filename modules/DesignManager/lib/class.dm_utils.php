@@ -21,15 +21,15 @@
 
 final class dm_utils
 {
-  public function __construct() {}
+    public function __construct() {}
 
-  public static function locking_enabled()
-  {
+    public static function locking_enabled()
+    {
 		$mod = cms_utils::get_module('DesignManager');
-    $timeout = $mod->GetPreference('lock_timeout');
-    if( $timeout > 0 ) return TRUE;
-    return FALSE;
-  }
+        $timeout = $mod->GetPreference('lock_timeout');
+        if( $timeout > 0 ) return TRUE;
+        return FALSE;
+    }
 
 	public static function get_template_locks()
 	{

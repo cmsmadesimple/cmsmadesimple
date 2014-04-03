@@ -78,7 +78,7 @@ try {
 		try {
 			$lock_id = CmsLockOperations::is_locked('template',$css_ob->get_id());
 			if( $lock_id > 0 ) CmsLockOperations::unlock($lock_id,'template',$css_ob->get_id());
-			$lock = new CmsLock('stylesheet',$css_ob->get_id());
+			$lock = new CmsLock('stylesheet',$css_ob->get_id(),(int)$this->GetPreference('loock_timeout'));
 			$smarty->assign('lock',$lock);
 		}
 		catch( CmsException $e ) {
