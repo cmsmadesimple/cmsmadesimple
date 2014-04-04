@@ -105,14 +105,15 @@ catch( Exception $e ) {
   $out['error'] = array('type'=>'othererror','msg'=>$e->GetMessage());
 }
 
-if( $out['status'] != 'error' && isset($out['lock_id']) ) $out['locked'] = 1;
+if( $out['status'] != 'error' && isset($out['lock_id']) && $out['lock_id'] != 0 ) $out['locked'] = 1;
 
-debug_to_log($out);
-header('Pragma: public');
-header('Expires: 0');
-header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
-header('Cache-Control: private',false);
+header("Expires: Tue, 01 Jan 2000 00:00:00 GMT");
+header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
+header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
+header("Cache-Control: post-check=0, pre-check=0", false);
+header("Pragma: no-cache");
 header('Content-Type: application/json');
+
 echo json_encode($out);
 exit;
 
