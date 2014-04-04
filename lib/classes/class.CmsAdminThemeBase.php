@@ -498,24 +498,23 @@ abstract class CmsAdminThemeBase
 									'title'=>$this->_FixSpaces(lang('admin')),'priority'=>7,
 									'description'=>lang('admindescription'),
 									'show_in_menu'=>$this->HasPerm('siteAdminPerms'));
-		$items['siteprefs'] = array('url'=>'siteprefs.php','parent'=>'siteadmin',
+		$items['siteprefs'] = array('url'=>'siteprefs.php','parent'=>'siteadmin','priority'=>1,
 									'title'=>$this->_FixSpaces(lang('globalconfig')),
 									'description'=>lang('preferencesdescription'),
 									'show_in_menu'=>$this->HasPerm('sitePrefPerms'));
-		$items['systeminfo'] = array('url' => 'systeminfo.php', 'parent' => 'siteadmin',
+		$items['systeminfo'] = array('url' => 'systeminfo.php', 'parent' => 'siteadmin','priority'=>2,
 									 'title' => $this->_FixSpaces(lang('systeminfo')),
 									 'description' => lang('systeminfodescription'),
 									 'show_in_menu' => $this->HasPerm('adminPerms'));
-		$items['systemmaintenance'] = array('url' => 'systemmaintenance.php',
-											'parent' => 'siteadmin',
+		$items['systemmaintenance'] = array('url' => 'systemmaintenance.php','priority'=>1,'parent' => 'siteadmin',
 											'title' => $this->_FixSpaces(lang('systemmaintenance')),
 											'description' => lang('systemmaintenancedescription'),
 											'show_in_menu' => $this->HasPerm('adminPerms'));
-		$items['checksum'] = array('url' => 'checksum.php', 'parent' => 'siteadmin',
+		$items['checksum'] = array('url' => 'checksum.php', 'parent' => 'siteadmin','priority'=>4,
 								   'title' => $this->_FixSpaces(lang('system_verification')),
 								   'description' => lang('checksumdescription'),
 								   'show_in_menu' => $this->HasPerm('adminPerms'));
-		$items['adminlog'] = array('url'=>'adminlog.php','parent'=>'siteadmin',
+		$items['adminlog'] = array('url'=>'adminlog.php','parent'=>'siteadmin','priority'=>10,
 								   'title'=>$this->_FixSpaces(lang('adminlog')),
 								   'description'=>lang('adminlogdescription'),
 								   'show_in_menu'=>$this->HasPerm('adminPerms'));
@@ -654,7 +653,7 @@ abstract class CmsAdminThemeBase
 			if( $pa < $pb ) return -1;
 			if( $pa > $pb ) return 1;
 
-			return strcasecmp($a['title'],$b['title']);
+			return strnatcmp($a['title'],$b['title']);
 		};
 		uasort($this->_menuItems,$fn);
 
