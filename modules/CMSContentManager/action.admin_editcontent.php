@@ -244,7 +244,7 @@ foreach( $tab_names as $currenttab => $label ) {
                 // this is ugly... we should know if the type is a system type.
                 continue;
             }
-            $tmp2 .= CmsFormUtils::create_option(array('value'=>$type,'label'=>$label,'title'=>lang($label.'todo')),$content_type);  // todo: add title here.
+            $tmp2 .= CmsFormUtils::create_option(array('value'=>$type,'label'=>$label),$content_type);
         }
         $tmp2 .= '</select>';
         $tmp[] = $tmp2;
