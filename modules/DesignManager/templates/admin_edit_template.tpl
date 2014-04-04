@@ -94,7 +94,7 @@ $(document).ready(function(){
       </p>
     </div>
 
-    {if $has_manage_right}
+    {if $has_manage_right && $template->get_type_id() == '1'} {* Only show when it is a page template *}
     <div class="pageoverflow">
       <p class="pagetext"></p>
       <p class="pageinput">
