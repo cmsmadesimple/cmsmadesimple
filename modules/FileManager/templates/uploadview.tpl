@@ -27,20 +27,20 @@ $(function() {
         add: function(e, data) {
             _files.push(data.files[0].name);
             _jqXHR.push(data.submit());
-        },	
+        },
 
     	dataType: 'json',
     	dropZone: $('#dropzone'),
     	maxChunkSize: {/literal}{$max_chunksize},{literal}
-    	
+
     	start: function(e,data){
 		$('#cancel').show();
     		$('#progressarea').show();
     	},
-    	
+
     	done: function(e,data){
 		_files = [];
-		_jqXHR = [];		
+		_jqXHR = [];
         },
 
         fail: function(e, data) {
@@ -75,7 +75,7 @@ $(function() {
                     	$("#progressarea").progressbar({
                     		value: parseInt(total)
                     	});
-                    	$(".ui-progressbar-value").html(str);							    
+                    	$(".ui-progressbar-value").html(str);
         		}
         },
 
@@ -83,7 +83,7 @@ $(function() {
             $('#filesarea').load(refresh_url);
             $('#cancel').fadeOut();
             $('#progressarea').fadeOut();
-        }  
+        }
     });
 });
 {/literal}</script>
@@ -92,26 +92,26 @@ $(function() {
 .upload-wrapper {
 	margin: 10px 0
 }
-.hcentered { 
+.hcentered {
 	text-align: center
 	}
-.vcentered { 
-	display: table-cell; 
+.vcentered {
+	display: table-cell;
 	vertical-align: middle
    }
-#dropzone { 
+#dropzone {
 	margin: 15px 0;
 	border-radius: 4px;
-	border: 2px dashed #ccc 
+	border: 2px dashed #ccc
 	}
 #dropzone:hover{
 	cursor: move
-}	
-#progressarea { 
+}
+#progressarea {
 	margin: 15px;
 	height: 2em;
 	line-height: 2em;
-	text-align: center; 
+	text-align: center;
 	border: 1px solid #aaa;
 	border-radius: 4px;
 	display: none
@@ -131,7 +131,7 @@ $(function() {
 <div class="upload-wrapper">
 <div style="width: 60%; float: left;">
   {*<input type="hidden" name="MAX_FILE_SIZE" value="{$maxfilesize}" />*}{* recommendation for browser *}
-  <input id="fileupload" type="file" name="{$actionid}files[]" size="50" multiple/>
+  <input id="fileupload" type="file" name="{$actionid}files[]" size="50" title="{$mod->Lang('title_filefield')}" multiple/>
   <div id="pageoverflow">
     <p class="pagetext"></p>
     <p class="pageinput">
@@ -141,7 +141,7 @@ $(function() {
 </div>
 <div id="leftcol" style="height: 4em; width: 40%; float: left; display: table;">
   {if !isset($is_ie)}
-  <div id="dropzone" class="vcentered hcentered"><p id="dropzonetext">{$mod->Lang('prompt_dropfiles')}</p></div>
+  <div id="dropzone" class="vcentered hcentered" title="{$mod->Lang('title_dropzone')}"><p id="dropzonetext">{$mod->Lang('prompt_dropfiles')}</p></div>
   {/if}
 </div>
 <div class="clearb"></div>
