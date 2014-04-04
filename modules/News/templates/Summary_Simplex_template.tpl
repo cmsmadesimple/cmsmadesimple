@@ -45,11 +45,11 @@
         {if $pagecount > 1}
         <span class='paginate'>
             {if $pagenumber > 1}
-                {$firstpage} {$prevpage}
+                {$firstpage}&nbsp;{$prevpage}
             {/if}
-                {$pagetext} {$pagenumber} {$oftext} {$pagecount}
+                {$pagetext}&nbsp;{$pagenumber}&nbsp;{$oftext}&nbsp;{$pagecount}
             {if $pagenumber < $pagecount}
-                {$nextpage} {$lastpage}
+                {$nextpage}&nbsp;{$lastpage}
             {/if}
         </span>
         {/if}
