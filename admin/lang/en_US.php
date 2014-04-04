@@ -239,6 +239,7 @@ $lang['day'] = "day";
 $lang['days'] = "days";
 $lang['default'] = "Default";
 $lang['default_contenttype'] = "Default Content Type";
+$lang['defaultparentpage'] = "Default Parent Page";
 $lang['delete'] = "Delete";
 $lang['deleteassociationconfirm'] = "Are you sure you want to delete association to - %s - ?";
 $lang['deleteconfirm'] = "Are you sure you want to delete - %s - ?";
@@ -1580,5 +1581,5 @@ $lang['zz_3options_tab__'] = "Options";
 $lang['zz_4perms_tab__'] = "Permissions";
 
 ## _
-$lang['__CORE__'] = "CMSMS Core";
+// TODO $lang['__CORE__'] = "CMSMS Core";
 ?>
