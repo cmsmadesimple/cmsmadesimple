@@ -426,113 +426,113 @@ final class ContentListBuilder
    */
   private function _load_editable_content()
   {
-    // build a display list
-    // 1.  add in top level items (items with parent == -1) which cannot be closed
-    // 2.  for reach item in opened array
-    //       for each parent
-    //         if not in opened array break
-    //     if got to root, add items children
-    // 3.  reduce list by items we are able to view (author pages)
+      // build a display list
+      // 1.  add in top level items (items with parent == -1) which cannot be closed
+      // 2.  for reach item in opened array
+      //       for each parent
+      //         if not in opened array break
+      //     if got to root, add items children
+      // 3.  reduce list by items we are able to view (author pages)
 
-    $contentops = cmsms()->GetContentOperations();
-    $hm = cmsms()->GetHierarchyManager();
-    $display = array();
-
-    // filter the display list by what we're authorized to view.
-    if( $this->_use_perms && ($this->_module->CheckPermission('Manage All Content') || $this->_module->CheckPermission('Modify Any Page')) ) {
-      // we can display anything
-
-      // add in top level items.
-      {
-	$children = $hm->get_children();
-	foreach( $children as $child ) {
-	  $display[] = $child->get_tag('id');
-	}
-      }
-
-      // add children of opened_array items to the list.
-      $list = array();
-      foreach( $this->_opened_array as $one ) {
-	$node = $contentops->quickfind_node_by_id($one);
-	while( $node ) {
-	  $children = $node->get_children();
-	  if( $children && count($children) ) {
-	    foreach( $children as $child ) {
-	      $list[] = $child->get_tag('id');
-	    }
-	  }
-	  $node = $node->get_parent();
-	  if( $node && $node->get_tag('id') > 0 && !in_array($node->get_tag('id'),$this->_opened_array) ) {
-	    $list = null;
-	    break;
-	  }
-	}
-      }
-      if( is_array($list) && count($list) ) $display = array_merge($display,$list);
-      $display = array_unique($display);
-    }
-    else {
-      //
-      // we can only edit some pages.
-      //
-
-      /*
-      for each item
-	if in opened array or has no parent add item
-	if all parents are opened add item
-      */
-      $tmplist = $contentops->GetPageAccessForUser($this->_userid);
+      $contentops = cmsms()->GetContentOperations();
+      $hm = cmsms()->GetHierarchyManager();
       $display = array();
-      foreach( $tmplist as $item ) {
-	// get all the parents
-	$parents = array();
-	$startnode = $node = $contentops->quickfind_node_by_id($item);
-	while( $node && $node->get_tag('id') > 0 ) {
-	  $parents[] = $node->get_tag('id');
-	  $node = $node->getParent();
-	}
-	// start at root
-	// push items from list on the stack if they are root, or the previous item is in the opened array.
-	$parents = array_reverse($parents);
-	for( $i = 0; $i < count($parents); $i++ ) {
-	  if( $i == 0 ) {
-	    $display[] = $parents[$i];
-	    continue;
-	  }
-	  if( $i > 0 && in_array($parents[$i-1],$this->_opened_array) && in_array($parents[$i-1],$display) ) {
-	    $display[] = $parents[$i];
-	  }
-	}
+
+      // filter the display list by what we're authorized to view.
+      if( $this->_use_perms && ($this->_module->CheckPermission('Manage All Content') || $this->_module->CheckPermission('Modify Any Page')) ) {
+          // we can display anything
+
+          // add in top level items.
+          {
+              $children = $hm->get_children();
+              foreach( $children as $child ) {
+                  $display[] = $child->get_tag('id');
+              }
+          }
+
+          // add children of opened_array items to the list.
+          $list = array();
+          foreach( $this->_opened_array as $one ) {
+              $node = $contentops->quickfind_node_by_id($one);
+              // ignore if the parents are not also in the opened array
+              $parent = $node->get_parent();
+              $parent_id = $parent->get_tag('id');
+              if( $parent_id != '' && !in_array($parent_id,$this->_opened_array) ) continue;
+              while( $node ) {
+                  $children = $node->get_children();
+                  if( $children && count($children) ) {
+                      foreach( $children as $child ) {
+                          $list[] = $child->get_tag('id');
+                      }
+                  }
+                  $node = $node->get_parent();
+              }
+          }
+          if( is_array($list) && count($list) ) $display = array_merge($display,$list);
+          $display = array_unique($display);
       }
-    }
+      else {
+          //
+          // we can only edit some pages.
+          //
 
-    // now order the page id list by hierarchy. and make sure they are unique.
-    $display = array_unique($display);
-    usort($display,function($a,$b) use ($hm,$contentops) {
-	    $node_a = $contentops->quickfind_node_by_id($a);
-	    $hier_a = $node_a->getHierarchy();
-	    $node_b = $contentops->quickfind_node_by_id($b);
-	    $hier_b = $node_b->getHierarchy();
-	    return strcmp($hier_a,$hier_b);
-	  });
-
-    $this->_pagelist = $display;
-
-    if( $this->_seek_to > 0 ) {
-      // re-calculate an offset
-      $idx = array_search($this->_seek_to,$this->_pagelist);
-      if( $idx > 0 ) {
-	// item found.
-	$pagenum = (int)($idx / $this->_pagelimit);
-	$this->_offset = (int)($pagenum * $this->_pagelimit);
+          /*
+            for each item
+            if in opened array or has no parent add item
+            if all parents are opened add item
+          */
+          $tmplist = $contentops->GetPageAccessForUser($this->_userid);
+          $display = array();
+          foreach( $tmplist as $item ) {
+              // get all the parents
+              $parents = array();
+              $startnode = $node = $contentops->quickfind_node_by_id($item);
+              while( $node && $node->get_tag('id') > 0 ) {
+                  $parents[] = $node->get_tag('id');
+                  $node = $node->getParent();
+              }
+              // start at root
+              // push items from list on the stack if they are root, or the previous item is in the opened array.
+              $parents = array_reverse($parents);
+              for( $i = 0; $i < count($parents); $i++ ) {
+                  if( $i == 0 ) {
+                      $display[] = $parents[$i];
+                      continue;
+                  }
+                  if( $i > 0 && in_array($parents[$i-1],$this->_opened_array) && in_array($parents[$i-1],$display) ) {
+                      $display[] = $parents[$i];
+                  }
+              }
+          }
       }
-    }
 
-    $offset = min(count($this->_pagelist),$this->_offset);
-    $display = array_slice($display,$offset,$this->_pagelimit);
+      // now order the page id list by hierarchy. and make sure they are unique.
+      $display = array_unique($display);
+      usort($display,function($a,$b) use ($hm,$contentops) {
+              $node_a = $contentops->quickfind_node_by_id($a);
+              $hier_a = $node_a->getHierarchy();
+              $node_b = $contentops->quickfind_node_by_id($b);
+              $hier_b = $node_b->getHierarchy();
+              return strcmp($hier_a,$hier_b);
+          });
 
-    ContentOperations::get_instance()->LoadChildren(-1,FALSE,TRUE,$display);
-    return $display;
+      $this->_pagelist = $display;
+
+      if( $this->_seek_to > 0 ) {
+          // re-calculate an offset
+          $idx = array_search($this->_seek_to,$this->_pagelist);
+          if( $idx > 0 ) {
+              // item found.
+              $pagenum = (int)($idx / $this->_pagelimit);
+              $this->_offset = (int)($pagenum * $this->_pagelimit);
+          }
+      }
+
+      $offset = min(count($this->_pagelist),$this->_offset);
+      $display = array_slice($display,$offset,$this->_pagelimit);
+
+      ContentOperations::get_instance()->LoadChildren(-1,FALSE,TRUE,$display);
+      return $display;
   }
 
   /**

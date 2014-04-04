@@ -95,7 +95,7 @@ if( isset($params['collapseall']) || isset($_GET['collapseall']) ) {
   $curpage = 1;
 }
 if( isset($params['expand']) ) {
-  $builder->expand_section($params['expand']);
+    $builder->expand_section($params['expand']);
 }
 if( isset($params['collapse']) ) {
   $builder->collapse_section($params['collapse']);
