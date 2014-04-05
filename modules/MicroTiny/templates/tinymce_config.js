@@ -6,6 +6,7 @@ var cmsms_tiny = {};
 // this is the actual tinymce initialization
 tinymce.init({
     selector: '{if isset($mt_selector) && $mt_selector != ''}{$mt_selector}{else}textarea.MicroTiny{/if}',
+    language: '{$languageid}',
     cmsms_tiny: cmsms_tiny = {
         base_url : '{root_url}/',
         resize : '{mt_jsbool($mt_profile.allowresize)}',
@@ -51,10 +52,10 @@ tinymce.init({
     plugins: ['autolink link cmsms_linker charmap anchor searchreplace wordcount code fullscreen insertdatetime {if $mt_profile.allowimages}media image cmsms_filepicker cmsms_filebrowser{/if}'],
 {/if}
     // callback functions
-    urlconverter_callback: function(url, elm, onsave, name) { 
+    urlconverter_callback: function(url, elm, onsave, name) {
         var self = this;
         var settings = self.settings;
-        
+
         if (!settings.convert_urls || ( elm && elm.nodeName == 'LINK' ) || url.indexOf('file:') === 0 || url.length === 0) {
             return url;
         }
@@ -71,7 +72,7 @@ tinymce.init({
         }
         // Convert to absolute
         url = self.documentBaseURI.toAbsolute(url, settings.remove_script_host);
-        
+
         return url;
     },
     setup: function(editor) {
