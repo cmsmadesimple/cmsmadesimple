@@ -20,17 +20,17 @@ function search_StemPhrase(&$module,$phrase)
 {
   // strip out smarty tags
   $phrase = preg_replace('/{.*}/', '', $phrase);
-  
+
   // add spaces between tags
   $phrase = str_replace("<"," <",$phrase);
   $phrase = str_replace(">","> ",$phrase);
-  
+
   // strip out html and php stuff
   $phrase = strip_tags($phrase);
-  
+
   // escape meta characters
   $phrase = preg_quote($phrase);
-  
+
   // split into words
   // strtolower isn't friendly to other charsets
   $phrase = preg_replace_callback("/([A-Z]+)/",
@@ -51,10 +51,10 @@ function search_StemPhrase(&$module,$phrase)
 
   // ignore stop words
   $words = $module->RemoveStopWordsFromArray($words);
-  
+
   // stem words
   $stemmed_words = array();
-  $stemmer = null; 
+  $stemmer = null;
   if( $module->GetPreference('usestemming', 'false') != 'false' ) $stemmer = new PorterStemmer();
 
   foreach ($words as $word) {
@@ -79,12 +79,12 @@ function search_AddWords(&$obj, $module = 'Search', $id = -1, $attr = '', $conte
 {
   $obj->DeleteWords($module, $id, $attr);
   $db = $obj->GetDb();
-		
+
   $non_indexable = strpos($content, NON_INDEXABLE_CONTENT);
   if( $non_indexable !== FALSE ) return;
 
   @$obj->SendEvent('SearchItemAdded', array($module, $id, $attr, &$content, $expires));
-		
+
   if ($content != "") {
       //Clean up the content
       $stemmed_words = $obj->StemPhrase($content);
@@ -102,7 +102,7 @@ function search_AddWords(&$obj, $module = 'Search', $id = -1, $attr = '', $conte
 	$parms[] = $attr;
       }
       $dbresult = $db->Execute($q, $parms);
-		
+
       if ($dbresult && $dbresult->RecordCount() > 0 && $row = $dbresult->FetchRow()) {
 	$itemid = $row['id'];
       }
@@ -110,7 +110,7 @@ function search_AddWords(&$obj, $module = 'Search', $id = -1, $attr = '', $conte
 	$itemid = $db->GenID(cms_db_prefix()."module_search_items_seq");
 	$db->Execute('INSERT INTO '.cms_db_prefix().'module_search_items (id, module_name, content_id, extra_attr, expires) VALUES (?,?,?,?,?)', array($itemid, $module, $id, $attr, ($expires != NULL ? trim($db->DBTimeStamp($expires), "'") : NULL) ));
       }
-		
+
       foreach ($words as $word=>$count) {
 	$db->Execute('INSERT INTO '.cms_db_prefix().'module_search_index (item_id, word, count) VALUES (?,?,?)', array($itemid, $word, $count));
       }
@@ -148,7 +148,7 @@ function search_Reindex(&$module)
   $nperloop = min(200,count($full_list));
   $contentops = cmsms()->GetContentOperations();
   $offset = 0;
-  
+
   while( $offset < count($full_list) ) {
     // figure out the content to load.
     $idlist = array();
@@ -191,32 +191,29 @@ function search_DoEvent(&$module, $originator, $eventname, &$params )
 
   switch ($eventname) {
   case 'ContentEditPost':
-    $content = $params['content'];					
+    $content = $params['content'];
     if (!is_object($content)) return;
 
     $db = $module->GetDb();
     $module->DeleteWords($module->GetName(), $content->Id(), 'content');
-    if( !$content->Active() || !$content->IsSearchable() ) return;
+    if( $content->Active() && $content->IsSearchable() ) {
 
-    //Only index content if it's active
-    // and searchable.
-    // assume by default that it is searchable
-    //Weight the title and menu text higher
-    $text = str_repeat(' '.$content->Name(), 2) . ' ';
-    $text .= str_repeat(' '.$content->MenuText(), 2) . ' ';
+        $text = str_repeat(' '.$content->Name(), 2) . ' ';
+        $text .= str_repeat(' '.$content->MenuText(), 2) . ' ';
 
-    $props = $content->Properties();
-    if( is_array($props) && count($props) ) {
-      foreach( $props as $k => $v ) {
-	$text .= $v.' ';
-      }
+        $props = $content->Properties();
+        if( is_array($props) && count($props) ) {
+            foreach( $props as $k => $v ) {
+                $text .= $v.' ';
+            }
+        }
+
+        // here check for a string to see
+        // if module content is indexable at all
+        $non_indexable = (strpos($text, NON_INDEXABLE_CONTENT) !== FALSE)?1:FALSE;
+        $text = trim(strip_tags($text));
+        if( $text && !$non_indexable ) $module->AddWords($module->GetName(), $content->Id(), 'content', $text);
     }
-
-    // here check for a string to see
-    // if module content is indexable at all
-    $non_indexable = (strpos($text, NON_INDEXABLE_CONTENT) !== FALSE)?1:FALSE;
-    $text = strip_tags($text);
-    if( !$non_indexable ) $module->AddWords($module->GetName(), $content->Id(), 'content', $text);
     break;
 
   case 'ContentDeletePost':

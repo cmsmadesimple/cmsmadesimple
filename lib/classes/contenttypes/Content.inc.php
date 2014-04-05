@@ -53,6 +53,19 @@ class Content extends ContentBase
     }
 
     /**
+     * Indicates wether this content object can be used in search
+     * (does not test if individual properties are indexable or not)
+     *
+     * @since 2.0
+     * @return bool
+     */
+    public function IsSearchable()
+    {
+        if( !parent::IsSearchable() ) return FALSE;
+        return ($this->GetPropertyValue('searchable') == 0)?FALSE:TRUE;
+    }
+
+    /**
      * Indicates wether ths page type uses a template.
      * Content pages do use a template.
      *
