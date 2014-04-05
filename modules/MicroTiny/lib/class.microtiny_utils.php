@@ -166,7 +166,6 @@ class microtiny_utils
     }
 
     if( in_array($mylang,$langs) ) return $mylang;
-    die('test');
     if( in_array($shortlang,$langs) ) return $shortlang;
     return 'en';
   }
