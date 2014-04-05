@@ -41,7 +41,7 @@ switch( $op ) {
  case 'childrenof':
    debug_to_log('in childrenof');
    if( !isset($_REQUEST['page']) ) {
-     $error = 'missingparam';
+     $error = 'missingparams';
    }
    else {
      $page = (int)$_REQUEST['page'];
@@ -72,12 +72,12 @@ switch( $op ) {
 
  case 'pageinfo':
    if( !isset($_REQUEST['page']) ) {
-     $error = 'missingparam';
+     $error = 'missingparams';
    }
    else {
      $page = (int)$_REQUEST['page'];
      if( $page < 1 ) {
-       $error = 'missingparam';
+       $error = 'missingparams';
      }
      else {
        // get the page info.
@@ -96,7 +96,7 @@ switch( $op ) {
 
  case 'pagepeers':
    if( !isset($_REQUEST['pages']) || !is_array($_REQUEST['pages']) ) {
-     $error = 'missingparam';
+     $error = 'missingparams';
    }
    else {
      // clean up the data a bit
