@@ -28,7 +28,7 @@
 
 /**o
  * A simple class to handle a module database template.
- * 
+ *
  * @ignore
  * @internal
  * @since 1.11
@@ -36,26 +36,26 @@
  */
 class CMSModuleDbTemplateResource extends CMS_Fixed_Resource_Custom
 {
-  protected function fetch($name,&$source,&$mtime)
-  {
-    debug_buffer('','CMSModuleDbTemplateResource start'.$name);
-    $db = cmsms()->GetDb();
-    
-    $tmp = explode(';',$name);
-    $query = "SELECT * from ".cms_db_prefix()."module_templates WHERE module_name = ? and template_name = ?";
-    $row = $db->GetRow($query, preg_split('/;/', $name));
-    if ($row) {
-      $source = $row['content'];
-      $mtime = $db->UnixTimeStamp($row['modified_date']);
+    protected function fetch($name,&$source,&$mtime)
+    {
+        debug_buffer('','CMSModuleDbTemplateResource start'.$name);
+        $db = cmsms()->GetDb();
+
+        $tmp = explode(';',$name);
+        $query = "SELECT * from ".cms_db_prefix()."module_templates WHERE module_name = ? and template_name = ?";
+        $row = $db->GetRow($query, preg_split('/;/', $name));
+        if ($row) {
+            $source = $row['content'];
+            $mtime = $db->UnixTimeStamp($row['modified_date']);
+        }
+        debug_buffer('','CMSModuleDbTemplateResource end'.$name);
     }
-    debug_buffer('','CMSModuleDbTemplateResource end'.$name);
-  }
 } // end of class
 
 
 /**
  * A simple class to handle a module file template.
- * 
+ *
  * @ignore
  * @internal
  * @package CMS
@@ -63,26 +63,26 @@ class CMSModuleDbTemplateResource extends CMS_Fixed_Resource_Custom
  */
 class CMSModuleFileTemplateResource extends CMS_Fixed_Resource_Custom
 {
-  protected function fetch($name,&$source,&$mtime)
-  {
-    $source = null;
-    $mtime = null;
-    $params = preg_split('/;/', $name);
-    if( count($params) != 2 ) return;
+    protected function fetch($name,&$source,&$mtime)
+    {
+        $source = null;
+        $mtime = null;
+        $params = preg_split('/;/', $name);
+        if( count($params) != 2 ) return;
 
-    $config = cmsms()->GetConfig();
-    $files = array();
-    $files[] = cms_join_path($config['root_path'],'module_custom',$params[0],'templates',$params[1]);
-    $files[] = cms_join_path($config['root_path'],'modules',$params[0],'templates',$params[1]);
+        $config = cmsms()->GetConfig();
+        $files = array();
+        $files[] = cms_join_path($config['root_path'],'module_custom',$params[0],'templates',$params[1]);
+        $files[] = cms_join_path($config['root_path'],'modules',$params[0],'templates',$params[1]);
 
-    foreach( $files as $one ) {
-      if( file_exists($one) ) {
-	$source = @file_get_contents($one);
-	$mtime = @filemtime($one);
-	break;
-      }
+        foreach( $files as $one ) {
+            if( file_exists($one) ) {
+                $source = @file_get_contents($one);
+                $mtime = @filemtime($one);
+                break;
+            }
+        }
     }
-  }
 } // end of class
 
 

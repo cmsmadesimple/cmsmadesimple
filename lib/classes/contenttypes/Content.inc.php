@@ -240,23 +240,25 @@ class Content extends ContentBase
 		}
 
 		$have_content_en = FALSE;
-		foreach($blocks as $blockName => $blockInfo) {
-			if( $blockInfo['id'] == 'content_en' ) $have_content_en = TRUE;
-			if( isset($blockInfo['required']) && $blockInfo['required'] && ($val = $this->GetPropertyValue($blockName)) == '' ) {
-				$errors[] = lang('emptyblock',array($blockName));
-			}
-			if( isset($blockInfo['type']) && $blockInfo['type'] == 'module' ) {
-				$module = cms_utils::get_module($blockInfo['module']);
-				if( !is_object($module) ) continue;
-				if( !$module->HasCapability(CmsCoreCapabilities::CONTENT_BLOCKS) ) continue;
-				$value = $this->GetPropertyValue($blockInfo['id']);
-				$tmp = $module->ValidateContentBlockValue($blockName,$value,$blockInfo['params']);
-				if( !empty($tmp) ) {
-					$errors[] = $tmp;
-					$result = false;
-				}
-			}
-		}
+        if( is_array($blocks) && count($blocks) ) {
+            foreach($blocks as $blockName => $blockInfo) {
+                if( $blockInfo['id'] == 'content_en' ) $have_content_en = TRUE;
+                if( isset($blockInfo['required']) && $blockInfo['required'] && ($val = $this->GetPropertyValue($blockName)) == '' ) {
+                    $errors[] = lang('emptyblock',array($blockName));
+                }
+                if( isset($blockInfo['type']) && $blockInfo['type'] == 'module' ) {
+                    $module = cms_utils::get_module($blockInfo['module']);
+                    if( !is_object($module) ) continue;
+                    if( !$module->HasCapability(CmsCoreCapabilities::CONTENT_BLOCKS) ) continue;
+                    $value = $this->GetPropertyValue($blockInfo['id']);
+                    $tmp = $module->ValidateContentBlockValue($blockName,$value,$blockInfo['params']);
+                    if( !empty($tmp) ) {
+                        $errors[] = $tmp;
+                        $result = false;
+                    }
+                }
+            }
+        }
 
 		if( !$have_content_en ) {
 		    $errors[] = lang('error_no_default_content_block');

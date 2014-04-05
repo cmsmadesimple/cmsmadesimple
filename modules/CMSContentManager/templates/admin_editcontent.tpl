@@ -110,14 +110,15 @@ $(document).ready(function(){
         });
         $.post('{$smarty.server.REQUEST_URI}&showtemplate=false', data, function (data, text) {
             var event = $.Event('cms_ajax_apply');
-            event.response = data.response;
-            event.details = data.details;
-            event.close = 'close';
+	    event.response = data.response;
+	    event.details = data.details;
+	    event.close = '{$mod->Lang('close')}';
+	    if( typeof data.url != '' ) event.url = data.url;
             $('body').trigger(event);
         }, 'json');
         return false;
     });
-    jQuery('body').on('cms_ajax_apply', function (e) {
+    $(document).on('cms_ajax_apply', function (e) {
         var htmlShow = '';
         if (e.response == 'Success') {
             // here we could fire a custom event, give the details and let something else handle it.
@@ -125,6 +126,7 @@ $(document).ready(function(){
             $('[name$=cancel]').fadeOut();
             $('[name$=cancel]').attr('value', '{$mod->Lang('close')}');
             $('[name$=cancel]').fadeIn();
+	    if( typeof e.url != 'undefined' ) $('a#viewpage').attr('href',e.url);
         } else {
             htmlShow = '<div class="pageerrorcontainer"><ul class="pageerror">';
             htmlShow += e.details;
@@ -169,7 +171,7 @@ $(document).ready(function(){
     <input type="submit" name="{$actionid}apply" value="{$mod->Lang('apply')}" class="pagebutton" title="{$mod->Lang('title_editpage_apply')}"/>
   {/if}
   {if $content_obj->IsViewable() && $content_obj->Active()}
-    <a rel="external" href="{$content_obj->GetURL()}" title="{$mod->Lang('title_editpage_view')}">{admin_icon icon='view.gif' alt='view_page'|lang}</a>
+    <a id="viewpage" rel="external" href="{$content_obj->GetURL()}" title="{$mod->Lang('title_editpage_view')}">{admin_icon icon='view.gif' alt='view_page'|lang}</a>
   {/if}
 </p>
 {/function}

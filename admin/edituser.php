@@ -59,7 +59,6 @@ if (isset($_POST["firstname"])) $firstname = cleanValue($_POST["firstname"]);
 if (isset($_POST["lastname"])) $lastname = cleanValue($_POST["lastname"]);
 if (isset($_POST["email"])) $email = trim(strip_tags($_POST["email"]));
 if (!isset($_POST["adminaccess"]) && isset($_POST["submit"])) $adminaccess = 0;
-if (!isset($_POST["active"]) && ($user_id != $userid) && $userid != 1 && isset($_POST["submit"]) ) $active = 0;
 
 $gCms = cmsms();
 $userops = $gCms->GetUserOperations();
@@ -78,7 +77,8 @@ $manage_users = check_permission($userid,'Manage Users');
 $use_wysiwyg = "";
 
 if (isset($_POST["submit"])) {
-  $validinfo = true;
+    $active = (isset($_POST['active']))?1:0;
+    $validinfo = true;
 
   if ($user == "") {
     $validinfo = false;
@@ -88,7 +88,7 @@ if (isset($_POST["submit"])) {
   if ( !preg_match("/^[a-zA-Z0-9\._ ]+$/", $user) ) {
     $validinfo = false;
     $error .= "<li>".lang('illegalcharacters', array(lang('username')))."</li>";
-  } 
+  }
 
   if ($password != $passwordagain) {
     $validinfo = false;

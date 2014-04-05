@@ -188,7 +188,7 @@ try {
             }
 
             if( isset($params['ajax']) ) {
-                $tmp = array('response'=>'Success','details'=>$this->Lang('msg_editpage_success'));
+                $tmp = array('response'=>'Success','details'=>$this->Lang('msg_editpage_success'),'url'=>$content_obj->GetURL());
                 echo json_encode($tmp);
                 exit;
             }
@@ -196,7 +196,6 @@ try {
         else if( isset($params['preview']) && $content_obj->HasPreview() ) {
             $_SESSION['__cms_preview__'] = serialize($content_obj);
             $_SESSION['__cms_preview_type__'] = $content_type;
-            debug_to_log('preview1');
             exit;
         }
     }
