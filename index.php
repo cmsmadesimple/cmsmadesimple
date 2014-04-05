@@ -52,7 +52,7 @@ if (!is_writable(TMP_TEMPLATES_C_LOCATION) || !is_writable(TMP_CACHE_LOCATION)) 
   echo '<p>The following directories must be writable by the web server:<br />';
   echo 'tmp/cache<br />';
   echo 'tmp/templates_c<br /></p>';
-  echo '<p>Please correct by executing:<br /><em>chmod 777 tmp/cache<br />chmod 777 tmp/templates_c</em><br />or the equivilent for your platform before continuing.</p>';
+  echo '<p>Please correct by executing:<br /><em>chmod 777 tmp/cache<br />chmod 777 tmp/templates_c</em><br />or the equivalent for your platform before continuing.</p>';
   echo '</body></html>';
   exit;
 }
