@@ -128,6 +128,7 @@ $lang['friendlyname'] = 'Design Manager';
 $lang['go'] = 'Go';
 
 #H
+/* +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 $lang['help'] = <<<EOT
 <h3>What does this do?</h3>
   <p>The &quot;DesignManager&quot; module is a mechanism to comprehensively manage the various templates, stylesheets, and &quot;designs&quot; used in your website.  It provides convenient sorting, filtering, and organization mechanisms for these various primary elements.</p>
@@ -228,6 +229,8 @@ body {
 <p>For compatibility purposes, the old method of managing module templates has been kept. <em>(This functionality is <strong>deprecated</strong> and may be removed at a future date.)</em>  Therefore until modules migrate their functionality to use the new APIs for managing template types, templates and stylesheets you may still have to visit numerous different admin pages and experience different interfaces to manage the templates of those modules.</p>
 <br />
 EOT;
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
+
 $lang['help_bulk_templates'] = 'This option allows performing actions on many templates at one time.  Only the templates selected will be operated upon.';
 $lang['help_category_desc'] = 'A description for a template category is optional, but may help when organizing templates';
 $lang['help_category_name'] = 'A category name is required, and must be unique';
