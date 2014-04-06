@@ -3,8 +3,8 @@ if( !isset($gCms) ) exit;
 if( !$this->CheckPermission('Modify Modules') ) return;
 
 try {
-  $allmoduleinfo = ModuleManagerModuleInfo::get_all_module_info();
-  $smarty->assign('module_info',$allmoduleinfo);
+    $allmoduleinfo = ModuleManagerModuleInfo::get_all_module_info();
+    $smarty->assign('module_info',$allmoduleinfo);
 }
 catch( Exception $e ) {
   debug_display($e); die();

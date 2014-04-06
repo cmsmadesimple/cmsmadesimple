@@ -94,26 +94,26 @@ class CmsModuleInfo implements ArrayAccess
 
   private function _read_from_module($module_name)
   {
-    $mod = ModuleOperations::get_instance()->get_module_instance($module_name);
-    if( !is_object($mod) ) {
-      $this['name'] = $module_name;
+      $mod = ModuleOperations::get_instance()->get_module_instance($module_name,'',TRUE);
+      if( !is_object($mod) ) {
+          $this['name'] = $module_name;
+          return TRUE;
+      }
+
+      $this['name'] = $mod->GetName();
+      $this['description'] = $mod->GetDescription();
+      if( $this['description'] == '' ) $this['description'] = $mod->GetAdminDescription();
+      $this['version'] = $mod->GetVersion();
+      $this['depends'] = $mod->GetDependencies();
+      $this['mincmsversion'] = $mod->MinimumCMSVersion();
+      $this['author'] = $mod->GetAuthor();
+      $this['authoremail'] = $mod->GetAuthor();
+      $this['lazyloadadmin'] = $mod->LazyLoadAdmin();
+      $this['lazyloadfrontend'] = $mod->LazyLoadAdmin();
+      $this['help'] = $mod->GetHelp();
+      $this['changelog'] = $mod->GetChangelog();
+
       return TRUE;
-    }
-
-    $this['name'] = $mod->GetName();
-    $this['description'] = $mod->GetDescription();
-    if( $this['description'] == '' ) $this['description'] = $mod->GetAdminDescription();
-    $this['version'] = $mod->GetVersion();
-    $this['depends'] = $mod->GetDependencies();
-    $this['mincmsversion'] = $mod->MinimumCMSVersion();
-    $this['author'] = $mod->GetAuthor();
-    $this['authoremail'] = $mod->GetAuthor();
-    $this['lazyloadadmin'] = $mod->LazyLoadAdmin();
-    $this['lazyloadfrontend'] = $mod->LazyLoadAdmin();
-    $this['help'] = $mod->GetHelp();
-    $this['changelog'] = $mod->GetChangelog();
-
-    return TRUE;
   }
 
   /**

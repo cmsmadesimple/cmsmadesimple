@@ -1,11 +1,11 @@
 <?php
 #BEGIN_LICENSE
 #-------------------------------------------------------------------------
-# Module: ModuleManager (c) 2011 by Robert Campbell 
+# Module: ModuleManager (c) 2011 by Robert Campbell
 #         (calguy1000@cmsmadesimple.org)
 #  An addon module for CMS Made Simple to allow browsing remotely stored
 #  modules, viewing information about them, and downloading or upgrading
-# 
+#
 #-------------------------------------------------------------------------
 # CMS - CMS Made Simple is (c) 2005 by Ted Kulp (wishy@cmsmadesimple.org)
 # Visit our homepage at: http://www.cmsmadesimple.org
@@ -20,7 +20,7 @@
 # However, as a special exception to the GPL, this software is distributed
 # as an addon module to CMS Made Simple.  You may not use this software
 # in any Non GPL version of CMS Made simple, or in any version of CMS
-# Made simple that does not indicate clearly and obviously in its admin 
+# Made simple that does not indicate clearly and obviously in its admin
 # section that the site was built with CMS Made simple.
 #
 # This program is distributed in the hope that it will be useful,
@@ -70,7 +70,7 @@ final class modmgr_utils
     $n1 = $n2 = '';
     $v1 = $v2 = '';
     if( is_object($e1) ) {
-      $n1 = $e1->name; 
+      $n1 = $e1->name;
       $v1 = $e1->version;
     }
     else {
@@ -78,7 +78,7 @@ final class modmgr_utils
       $v1 = $e1['version'];
     }
     if( is_object($e2) ) {
-      $n2 = $e2->name; 
+      $n2 = $e2->name;
       $v2 = $e2->version;
     }
     else {
@@ -115,7 +115,7 @@ final class modmgr_utils
       $prev = '';
       foreach( $xmldetails as $det ) {
 	if( is_array($prev) && $prev['name'] == $det['name'] ) continue;
-	      
+
 	$prev = $det;
 	$thexmldetails[] = $det;
       }
@@ -181,7 +181,7 @@ final class modmgr_utils
 
     if( !$md5sum ) $md5sum = modulerep_client::get_module_md5($filename);
     $dl_md5 = md5_file($xml_filename);
-    
+
     if( $md5sum != $dl_md5 ) {
       @unlink($xml_filename);
       throw new CmsInvalidDataException($mod->Lang('error_checksum',array($server_md5,$dl_md5)));
@@ -223,7 +223,7 @@ final class modmgr_utils
     $ok = FALSE;
     return FALSE;
   }
-  
+
   public static function get_status($date)
   {
     $ts = strtotime($date);
@@ -241,9 +241,14 @@ final class modmgr_utils
     $mod = cms_utils::get_module('ModuleManager');
     $smarty = cmsms()->GetSmarty();
 
+
     $stale_img=$mod->GetModuleURLPath().'/images/error.png';
     $stale_img = '<img src="'.$stale_img.'" title="'.$mod->Lang('title_stale').'" alt="stale" height="16"/>';
     $smarty->assign('stale_img',$stale_img);
+
+    $stale_img=$mod->GetModuleURLPath().'/images/puzzle.png';
+    $stale_img = '<img src="'.$stale_img.'" title="'.$mod->Lang('title_missingdeps').'" alt="missingdeps" height="24"/>';
+    $smarty->assign('missingdep_img',$stale_img);
 
     $warn_img=$mod->GetModuleURLPath().'/images/warn.png';
     $warn_img = '<img src="'.$warn_img.'" title="'.$mod->Lang('title_warning').'" alt="warning" height="16"/>';

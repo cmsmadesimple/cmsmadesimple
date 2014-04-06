@@ -1,17 +1,9 @@
 <script type="text/javascript">
 $(document).ready(function(){
-  $('a.mod_upgrade').click(function(){
-    return confirm('{$mod->Lang('confirm_upgrade')}');
-  });
-  $('a.mod_remove').click(function(){
-    return confirm('{$mod->Lang('confirm_remove')}');
-  });
-  $('a.mod_chmod').click(function(){
-    return confirm('{$mod->Lang('confirm_chmod')}');
-  });
-  $('a.mod_uninstall').click(function(){
-    return confirm('{$mod->Lang('confirm_uninstall')}');
-  });
+  $('a.mod_upgrade').click(function() return confirm('{$mod->Lang('confirm_upgrade')}'); });
+  $('a.mod_remove').click(function(){ return confirm('{$mod->Lang('confirm_remove')}'); });
+  $('a.mod_chmod').click(function(){ return confirm('{$mod->Lang('confirm_chmod')}'); });
+  $('a.mod_uninstall').click(function(){ return confirm('{$mod->Lang('confirm_uninstall')}'); });
 
   $('#importbtn').click(function(){
     $('#importdlg').dialog({
@@ -76,6 +68,7 @@ $(document).ready(function(){
     <tr class="{$rowclass}">
       <td>{if $item.system_module}{$system_img}{/if}
            {if $item.e_status == 'newer_available'}{$star_img}{/if}
+	   {if $item.missing_deps}{$missingdep_img}{/if}
            {if $item.deprecated}{$deprecated_img}{/if}
       </td>
       <td>
@@ -103,6 +96,9 @@ $(document).ready(function(){
             {/if}
           {else}
             {capture assign='op'}{$tmp='status_'|cat:$item.status}<span title="{$mod->Lang($tmp)}">{$mod->Lang($item.status)}</span>{/capture}{$ops[]=$op}
+	    {if $item.missing_deps}
+              {capture assign='op'}<a class="modop mod_missingdeps important" style="color: red;" title="{$mod->Lang('title_missingdeps')}" href="{cms_action_url action='local_missingdeps' mod=$item.name}">{$mod->Lang('missingdeps')}</a>{/capture}{$ops[]=$op}
+	    {/if}
           {/if}
           {if isset($item.e_status)}
             {capture assign='op'}{$tmp='status_'|cat:$item.e_status}<span {if $item.e_status == 'db_newer'}class="important"{/if} title="{$mod->Lang($tmp)}">{$mod->Lang($item.e_status)}</span>{/capture}{$ops[]=$op}
@@ -119,6 +115,7 @@ $(document).ready(function(){
           {'<br/>'|implode:$ops}
       </td>
       <td>
+        {* action column *}
         {$ops=[]}
         {if !$item.installed}
           {if $item.can_install}
@@ -135,8 +132,9 @@ $(document).ready(function(){
               {capture assign='op'}<a class="modop mod_uninstall" href="{cms_action_url action='local_uninstall' mod=$item.name}" title="{$mod->Lang('title_uninstall')}">{$mod->Lang('uninstall')}</a>{/capture}{$ops[]=$op}
 	    {/if}
 	  {/if}
-          {if $item.e_status == 'need_upgrade' && $item.can_upgrade}
-            {capture assign='op'}<a class="modop mod_upgrade" href="{cms_action_url action='local_upgrade' mod=$item.name}" title="{$mod->Lang('title_upgrade')}">{$mod->Lang('upgrade')}</a>{/capture}{$ops[]=$op}
+          {if $item.e_status == 'need_upgrade' }
+              {capture assign='op'}<a class="modop mod_upgrade" href="{cms_action_url action='local_upgrade' mod=$item.name}" title="{$mod->Lang('title_upgrade')}">{$mod->Lang('upgrade')}</a>{/capture}
+	      {$ops[]=$op}
           {/if}
         {/if}
         {'<br/>'|implode:$ops}
@@ -164,7 +162,7 @@ $(document).ready(function(){
       </td>{/if}
     </tr>
     {/foreach}
-  </tbody>  
+  </tbody>
 </table>
 {else}
   <div class="warning">{$mod->Lang('error_nomodules')}</div>

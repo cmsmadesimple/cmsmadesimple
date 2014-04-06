@@ -2304,7 +2304,7 @@ abstract class ContentBase
 			if( $this->mSecure ) $opt = ' checked="checked"';
 			$str  = '<input type="hidden" name="secure" value="0"/>';
 			$str .= '<input type="checkbox" name="secure" id="secure" value="1"'.$opt.'/>';
-			$help = '&nbsp;'.cms_admin_utils::get_help_tag('core','help_content_secure','help_title_content_secure');
+			$help = '&nbsp;'.cms_admin_utils::get_help_tag('core','help_content_secure',lang('help_title_content_secure'));
 			return array('<label for="secure">'.lang('secure_page').':</label>'.$help,$str);
 
 		case 'page_url':

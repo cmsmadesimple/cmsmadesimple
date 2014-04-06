@@ -114,6 +114,31 @@ final class ModuleOperations
     }
 
 
+    private function _generate_moduleinfo( CMSModule &$modinstance )
+    {
+        $dir = dirname(dirname(dirname(__FILE__))).DIRECTORY_SEPARATOR."modules".DIRECTORY_SEPARATOR.$modinstance->GetName();
+        if( !is_writable( $dir ) && $brief == 0 ) throw new CmsFileSystemException(lang('errordirectorynotwritable'));
+
+        $fh = fopen($dir."/moduleinfo.ini",'w');
+        fputs($fh,"[module]\n");
+        fputs($fh,"name = ".$modinstance->GetName()."\n");
+        fputs($fh,"version = ".$modinstance->GetVersion()."\n");
+        fputs($fh,"description = ".$modinstance->GetDescription()."\n");
+        fputs($fh,"author = ".$modinstance->GetAuthor()."\n");
+        fputs($fh,"authoremail = ".$modinstance->GetAuthorEmail()."\n");
+        fputs($fh,"mincmsversion = ".$modinstance->MinimumCMSVersion()."\n");
+        fputs($fh,"lazyloadadmin = ".($modinstance->LazyLoadAdmin())?'1':'0'."\n");
+        fputs($fh,"lazyloadfrontend = ".$modinstance->LazyLoadFrontend()?'1':'0'."\n");
+
+        $depends = $modinstance->GetDependencies();
+        if( is_array($depends) && count($depends) ) {
+            fputs($fh,"[depends]\n");
+            foreach( $depends as $key => $val ) {
+                fputs($fh,"$key = $val\n");
+            }
+        }
+    }
+
     /**
      * Creates an xml data package from the module directory.
      *
@@ -124,11 +149,15 @@ final class ModuleOperations
      *                           total # of files in the package
      * @return string an XML string comprising the module and its files
      */
-    function CreateXMLPackage( &$modinstance, &$message, &$filecount )
+    function CreateXMLPackage( CMSModule &$modinstance, &$message, &$filecount )
     {
         // get a file list
         $filecount = 0;
         $dir = dirname(dirname(dirname(__FILE__))).DIRECTORY_SEPARATOR."modules".DIRECTORY_SEPARATOR.$modinstance->GetName();
+        if( !is_writable( $dir ) && $brief == 0 ) throw new CmsFileSystemException(lang('errordirectorynotwritable'));
+
+        // generate the moduleinfo.ini file
+        $this->_generate_moduleinfo($modinstance);
         $files = get_recursive_file_list( $dir, $this->xml_exclude_files );
 
         $xmltxt  = '<?xml version="1.0" encoding="ISO-8859-1"?>';

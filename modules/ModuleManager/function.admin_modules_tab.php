@@ -1,11 +1,11 @@
 <?php
 #BEGIN_LICENSE
 #-------------------------------------------------------------------------
-# Module: ModuleManager (c) 2008 by Robert Campbell 
+# Module: ModuleManager (c) 2008 by Robert Campbell
 #         (calguy1000@cmsmadesimple.org)
 #  An addon module for CMS Made Simple to allow browsing remotely stored
 #  modules, viewing information about them, and downloading or upgrading
-# 
+#
 #-------------------------------------------------------------------------
 # CMS - CMS Made Simple is (c) 2005 by Ted Kulp (wishy@cmsmadesimple.org)
 # Visit our homepage at: http://www.cmsmadesimple.org
@@ -20,7 +20,7 @@
 # However, as a special exception to the GPL, this software is distributed
 # as an addon module to CMS Made Simple.  You may not use this software
 # in any Non GPL version of CMS Made simple, or in any version of CMS
-# Made simple that does not indicate clearly and obviously in its admin 
+# Made simple that does not indicate clearly and obviously in its admin
 # section that the site was built with CMS Made simple.
 #
 # This program is distributed in the hope that it will be useful,
@@ -77,7 +77,7 @@ $instmodules = '';
     $this->_DisplayErrorPage( $id, $params, $returnid, $result[1] );
     return;
   }
-      
+
   $instmodules = $result[1];
 }
 
@@ -96,7 +96,7 @@ if( count( $data ) ) {
 
   // check for permissions
   $moduledir = dirname(dirname(dirname(__FILE__))).DIRECTORY_SEPARATOR."modules";
-  $writable = is_writable( $moduledir );	
+  $writable = is_writable( $moduledir );
 
   // build the table
   $rowarray = array();
@@ -112,21 +112,21 @@ if( count( $data ) ) {
 					   array('name' => $row['name'],'version' => $row['version'],'filename' => $row['filename']));
 
     $onerow->helplink = $this->CreateLink( $id, 'modulehelp', $returnid,
-					   $this->Lang('helptxt'), 
+					   $this->Lang('helptxt'),
 					   array('name' => $row['name'],'version' => $row['version'],'filename' => $row['filename']));
 
     $onerow->depends_url = $this->create_url( $id, 'moduledepends', $returnid,
 					      array('name' => $row['name'],'version' => $row['version'],'filename' => $row['filename']));
-					      
+
     $onerow->dependslink = $this->CreateLink( $id, 'moduledepends', $returnid,
-					      $this->Lang('dependstxt'), 
+					      $this->Lang('dependstxt'),
 					      array('name' => $row['name'],'version' => $row['version'],'filename' => $row['filename']));
 
     $onerow->about_url = $this->create_url( $id, 'moduleabout', $returnid,
 					    array('name' => $row['name'],'version' => $row['version'],'filename' => $row['filename']));
 
     $onerow->aboutlink = $this->CreateLink( $id, 'moduleabout', $returnid,
-					    $this->Lang('abouttxt'), 
+					    $this->Lang('abouttxt'),
 					    array('name' => $row['name'],'version' => $row['version'],'filename' => $row['filename']));
     $onerow->age = modmgr_utils::get_status($row['date']);
     $onerow->date = $row['date'];
@@ -150,7 +150,7 @@ if( count( $data ) ) {
 	     ($writable && !file_exists( $mod ) )) && $caninstall ) {
 	  $onerow->candownload = TRUE;
 	  $onerow->status = $this->CreateLink( $id, 'installmodule', $returnid,
-					       $this->Lang('download'), 
+					       $this->Lang('download'),
 					       array('name' => $row['name'],'version' => $row['version'],'filename' => $row['filename'],
 						     'size' => $row['size']));
 	}
@@ -166,7 +166,7 @@ if( count( $data ) ) {
 	     ($writable && !file_exists( $mod ) )) && $caninstall ) {
 	  $onerow->candownload = TRUE;
 	  $onerow->status = $this->CreateLink( $id, 'installmodule', $returnid,
-					       $this->Lang('upgrade'), 
+					       $this->Lang('upgrade'),
 					       array('name' => $row['name'],'version' => $row['version'],'filename' => $row['filename'],
 						     'size' => $row['size']));
 	}

@@ -15,7 +15,7 @@ $lang['allowuninstall'] = 'Allow Module Manager to be uninstalled? Be careful, t
 $lang['all_modules_up_to_date'] = 'There are no newer modules available in the repository';
 $lang['availablemodules'] = 'The current status of modules available from the current repository';
 $lang['available_updates'] = 'One or more modules are available for upgrade; Before upgrading, please read the about information for the release and make sure you have a current backup of your website.';
-$lang['availmodules'] = 'Available Modules'; 
+$lang['availmodules'] = 'Available Modules';
 
 // B
 $lang['back'] = 'Back';
@@ -91,7 +91,7 @@ $lang['export'] = 'Export';
 $lang['friendlyname'] = 'Module Manager';
 
 // G
-$lang['general_notice'] = 'The versions displayed here represent the latest XML files uploaded to the CMSMS Forge.  They may or may not represent the latest available versions.'; 
+$lang['general_notice'] = 'The versions displayed here represent the latest XML files uploaded to the CMSMS Forge.  They may or may not represent the latest available versions.';
 
 // H
 $lang['has_dependants'] = 'Has dependants';
@@ -207,7 +207,7 @@ $lang['title_has_dependants'] = 'This module is required because it used by othe
 $lang['title_install'] = 'Install this module for use in your website';
 $lang['title_installation_complete'] = 'Installation Process Complete!';
 $lang['title_letter'] = 'Show modules whose name starts with %s';
-$lang['title_missingdeps'] = 'This module cannot be installed due to missing dependencies';
+$lang['title_missingdeps'] = 'This module cannot be installed or upgraded due to missing dependencies';
 $lang['title_missingdeps2'] = 'Missing Dependencies';
 $lang['title_moduleabout'] = 'View the author and changelog information for this module';
 $lang['title_moduleactive'] = 'Toggle the active state of the module. Inactive modules are not loaded, and cannot be called, however data remains intact';
