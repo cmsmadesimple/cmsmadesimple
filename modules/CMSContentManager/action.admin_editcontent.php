@@ -235,7 +235,7 @@ foreach( $tab_names as $currenttab => $label ) {
     $contentarray = $content_obj->GetTabElements($currenttab);
     if( $currenttab == $content_obj::TAB_MAIN ) {
         // first tab... add the content type selector.
-        $help = '&nbsp;'.cms_admin_utils::get_help_tag('help_content_type');
+        $help = '&nbsp;'.cms_admin_utils::get_help_tag(array('key'=>'help_content_type','title'=>$this->Lang('help_title_content_type')));
         $tmp = array('<label for="content_type">*'.$this->Lang('prompt_editpage_contenttype').':</label>'.$help);
         $tmp2 = "<select id=\"content_type\" name=\"{$id}content_type\">";
         foreach( $existingtypes as $type => $label ) {

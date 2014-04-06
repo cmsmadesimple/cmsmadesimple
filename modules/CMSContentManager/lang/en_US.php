@@ -122,6 +122,7 @@ $lang['help_pagedflt_searchable'] = 'Specify whether new pages should be searcha
 $lang['help_pagedflt_secure'] = 'Specify whether new pages should be <em>(by default)</em> secure <em>(uses the HTTPS protocol)</em>.  For secure pages to work the site must have a valid certificate installed on the web server, and the site must be configured properly';
 $lang['help_pagedflt_showinmenu'] = 'Specify whether new pages should be visible in normal navigations by default';
 $lang['help_pagedflt_template_id'] = 'Specify the default template to use for the new content page.  The template controls page logic, and what content blocks are visible to the editor';
+$lang['help_title_content_type'] = 'Content Type Selector';
 
 #I
 $lang['info_javascript_required'] = '<strong>Warning:</strong> In order to operate correctly, this module requires a browser with JavaScript support enabled.';

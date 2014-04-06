@@ -113,9 +113,10 @@ final class cms_admin_utils
 
 		$params = array();
 		$args = func_get_args();
-		if( count($args) == 2 && is_string($args[0]) && is_string($args[1]) ) {
+		if( count($args) >= 2 && is_string($args[0]) && is_string($args[1]) ) {
 			$params['key1'] = $args[0];
 			$params['key2'] = $args[1];
+            if( isset($args[2]) ) $params['title'] = $args[2];
 		}
 		else if( count($args) == 1 && is_string($args[0]) ) {
 			$params['key2'] = $args[0];
@@ -130,6 +131,7 @@ final class cms_admin_utils
 		$key1 = '';
 		$key2 = '';
 		$title = '';
+        $titlekey = '';
 		foreach( $params as $key => $value ) {
 			switch( $key ) {
 			case 'key1':
@@ -141,6 +143,9 @@ final class cms_admin_utils
 			case 'key':
 				$key2 = trim($value);
 				break;
+            case 'titlekey':
+                $titlekey = $value;
+                break;
 			case 'title':
 				$title = $value;
 			}

@@ -42,12 +42,13 @@ $(document).ready(function () {
     //cms_CMloadUrl('a.collapseall'),
     //cms_CMloadUrl('a.page_collapse'),
     //cms_CMloadUrl('a.page_expand'),
+    // these links can't use ajax as they effect multiple rows.
+    //cms_CMloadUrl('a.page_sortup'),
+    //cms_CMloadUrl('a.page_sortdown'),
 
     cms_CMloadUrl('a.page_setinactive', '{$mod->Lang('confirm_setinactive')}'),
     cms_CMloadUrl('a.page_setactive'),
     cms_CMloadUrl('a.page_setdefault', '{$mod->Lang('confirm_setdefault')}'),
-    cms_CMloadUrl('a.page_sortup'),
-    cms_CMloadUrl('a.page_sortdown'),
     cms_CMloadUrl('a.page_delete', '{$mod->Lang('confirm_delete_page')}');
 
     $('a.page_view').on('click',function(e) {
@@ -260,7 +261,7 @@ $(document).ready(function () {
 								<strong>{$mod->Lang('prompt_content_id')}:</strong> {$row.id}<br/>
 								<strong>{$mod->Lang('prompt_title')}:</strong> {$row.title}<br/>
 								<strong>{$mod->Lang('prompt_name')}:</strong> {$row.menutext}<br/>
-								<strong>{$mod->Lang('prompt_alias')}:</strong> {$row.alias}<br/>
+								{if isset($row.alias)}<strong>{$mod->Lang('prompt_alias')}:</strong> {$row.alias}<br/>{/if}
 								{if $row.secure}
 								<strong>{$mod->Lang('prompt_secure')}:</strong> {$mod->Lang('yes')}<br/>
 								{/if}
@@ -291,7 +292,7 @@ $(document).ready(function () {
 						{/if}
 					{/if}
 				{elseif $column == 'alias'}
-					{$row.alias}
+					{$row.alias|default:''}
 				{elseif $column == 'url'}
 					{if $prettyurls_ok}
 						{$row.url}

@@ -175,15 +175,8 @@ class ErrorPage extends Content
     {
 		switch($one) {
 		case 'alias':
-			$dropdownopts = '';
-			//$dropdownopts = '<option value="">'.lang('none').'</option>';
-			foreach ($this->error_types as $code=>$name) {
-				$dropdownopts .= '<option value="error' . $code . '"';
-				if ('error'.$code == $this->mAlias)	$dropdownopts .= ' selected="selected" ';
-				$dropdownopts .= ">{$name} ({$code})</option>";
-			}
-			return array(lang('error_type').':', '<select name="alias">'.$dropdownopts.'</select>');
-			break;
+            // nothing here.
+            break;
 
 		default:
 			return parent::display_single_element($one,$adding);
@@ -203,6 +196,7 @@ class ErrorPage extends Content
 		if ($errors == FALSE) $errors = array();
 
 		//Do our own alias check
+        $this->mAlias = 'error404';
 		if ($this->mAlias == '') {
 			$errors[] = lang('nofieldgiven', array(lang('error_type')));
 		}

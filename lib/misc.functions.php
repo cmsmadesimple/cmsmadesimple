@@ -98,7 +98,7 @@ function redirect($to)
   else {
     if ( $debug ) {
       echo "Debug is on.  Redirecting disabled...  Please click this link to continue.<br />";
-      echo "<a href=\"".$to."\">".$to."</a><br />";
+      echo "<a accesskey=\"r\" href=\"".$to."\">".$to."</a><br />";
       echo '<div id="DebugFooter">';
       foreach (cmsms()->get_errors() as $error) {
 	echo $error;
