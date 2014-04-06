@@ -1,9 +1,9 @@
 <script type="text/javascript">
 $(document).ready(function(){
-  $('a.mod_upgrade').click(function() return confirm('{$mod->Lang('confirm_upgrade')}'); });
-  $('a.mod_remove').click(function(){ return confirm('{$mod->Lang('confirm_remove')}'); });
-  $('a.mod_chmod').click(function(){ return confirm('{$mod->Lang('confirm_chmod')}'); });
-  $('a.mod_uninstall').click(function(){ return confirm('{$mod->Lang('confirm_uninstall')}'); });
+  $('a.mod_upgrade').click( function(){ return confirm('{$mod->Lang('confirm_upgrade')}'); });
+  $('a.mod_remove').click( function(){ return confirm('{$mod->Lang('confirm_remove')}'); });
+  $('a.mod_chmod').click( function(){ return confirm('{$mod->Lang('confirm_chmod')}'); });
+  $('a.mod_uninstall').click( function(){ return confirm('{$mod->Lang('confirm_uninstall')}'); });
 
   $('#importbtn').click(function(){
     $('#importdlg').dialog({
