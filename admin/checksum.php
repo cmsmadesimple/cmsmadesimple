@@ -19,6 +19,7 @@
 #$Id: supportinfo.php 4216 2007-10-06 19:28:55Z wishy $
 
 $CMS_ADMIN_PAGE=1;
+$orig_memory = (function_exists('memory_get_usage')?memory_get_usage():0);
 
 require_once("../include.php");
 $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
@@ -29,7 +30,6 @@ $access = check_permission($userid, "Modify Site Preferences");
 if (!$access) {
   die('Permission Denied');
 }
-
 
 
 include_once("header.php");
@@ -56,15 +56,17 @@ function check_checksum_data(&$report)
     $report = lang('error_uploadproblem');
     return false;
   }
-  
+
   $fh = fopen($_FILES['cksumdat']['tmp_name'],'r');
   if( !$fh ) {
     $report = lang('error_uploadproblem');
     return false;
   }
 
+
   $gCms = cmsms();
   $config = $gCms->GetConfig();
+  $salt = md5_file($config['root_path']."/version.php").md5_file($config['root_path']."/index.php");
   $filenotfound = array();
   $notreadable = 0;
   $md5failed = 0;
@@ -86,14 +88,12 @@ function check_checksum_data(&$report)
     if( empty($line) ) continue;
 
     // split it into fields
-    $md5sum = '';
-    $file = '';
-    if( strstr($line,' *.') !== FALSE ) {
-      list($md5sum,$file) = explode(' *.',$line,2);
+    if( strstr($line,'--::--') === FALSE ) {
+        $errorlines++;
+        continue;
     }
-    else if( strstr($line,'--:--') !== FALSE ) {
-      list($md5sum,$file) = explode('--:--',$line,2);
-    }
+    list($md5sum,$file) = explode('--::--',$line,2);
+
     if( !$md5sum || !$file ) {
       $errorlines++;
       continue;
@@ -115,7 +115,7 @@ function check_checksum_data(&$report)
       continue;
     }
 
-    $md5 = md5_file($fn);
+    $md5 = md5($salt.md5_file($fn));
     if( !$md5 ) {
       $md5failed++;
       continue;
@@ -161,6 +161,7 @@ function generate_checksum_file(&$report)
   $gCms = cmsms();
   $config = $gCms->GetConfig();
   $output = '';
+  $salt = md5_file($config['root_path']."/version.php").md5_file($config['root_path']."/index.php");
 
   $excludes = array('^\.svn' , '^CVS$' , '^\#.*\#$' , '~$', '\.bak$', '^uploads$', '^tmp$', '^captchas$' );
   $tmp = get_recursive_file_list( $config['root_path'], $excludes);
@@ -168,15 +169,15 @@ function generate_checksum_file(&$report)
     $report = lang('error_retrieving_file_list');
     return false;
   }
-  
+
   foreach( $tmp as $file ) {
     if( is_dir($file) ) continue;
-    $md5sum = md5_file($file);
+    $md5sum = md5($salt.md5_file($file));
     $file = str_replace($config['root_path'],'',$file);
-    $output .= "{$md5sum}--:--{$file}\n";
+    $output .= "{$md5sum}--::--{$file}\n";
   }
 
-  $handlers = ob_list_handlers(); 
+  $handlers = ob_list_handlers();
   for ($cnt = 0; $cnt < sizeof($handlers); $cnt++) { ob_end_clean(); }
   header('Pragma: public');
   header('Expires: 0');
