@@ -1,10 +1,10 @@
 <?php
 #BEGIN_LICENSE
 #-------------------------------------------------------------------------
-# Module: Navigator (c) 2013 by Robert Campbell 
+# Module: Navigator (c) 2013 by Robert Campbell
 #         (calguy1000@cmsmadesimple.org)
 #  An module for CMS Made Simple to allow building hierarchical navigations.
-# 
+#
 #-------------------------------------------------------------------------
 # CMS - CMS Made Simple is (c) 2005 by Ted Kulp (wishy@cmsmadesimple.org)
 # Visit our homepage at: http://www.cmsmadesimple.org
@@ -19,7 +19,7 @@
 # However, as a special exception to the GPL, this software is distributed
 # as an addon module to CMS Made Simple.  You may not use this software
 # in any Non GPL version of CMS Made simple, or in any version of CMS
-# Made simple that does not indicate clearly and obviously in its admin 
+# Made simple that does not indicate clearly and obviously in its admin
 # section that the site was built with CMS Made simple.
 #
 # This program is distributed in the hope that it will be useful,
@@ -150,30 +150,38 @@ try {
     $tpl->save();
   }
 
-  $fn = cms_join_path(dirname(__FILE__),'templates','Simplex_Main_Navigation.tpl');
-  if( file_exists( $fn ) ) {
-    $template = @file_get_contents($fn);
-    $tpl = new CmsLayoutTemplate();
-    $tpl->set_name('Simplex Main Navigation');
-    $tpl->set_owner($uid);
-    $tpl->set_content($template);
-    $tpl->set_type($menu_template_type);
-    $tpl->set_type_dflt(TRUE);
-    $tpl->add_design('Simplex');
-    $tpl->save();
+  try {
+      $simplex = CmsLayoutCollection::load('Simplex');
+
+      $fn = cms_join_path(dirname(__FILE__),'templates','Simplex_Main_Navigation.tpl');
+      if( file_exists( $fn ) ) {
+          $template = @file_get_contents($fn);
+          $tpl = new CmsLayoutTemplate();
+          $tpl->set_name('Simplex Main Navigation');
+          $tpl->set_owner($uid);
+          $tpl->set_content($template);
+          $tpl->set_type($menu_template_type);
+          $tpl->set_type_dflt(TRUE);
+          $tpl->add_design($simplex);
+          $tpl->save();
+      }
+
+      $fn = cms_join_path(dirname(__FILE__),'templates','Simplex_Footer_Navigation.tpl');
+      if( file_exists( $fn ) ) {
+          $template = @file_get_contents($fn);
+          $tpl = new CmsLayoutTemplate();
+          $tpl->set_name('Simplex Footer Navigation');
+          $tpl->set_owner($uid);
+          $tpl->set_content($template);
+          $tpl->set_type($menu_template_type);
+          $tpl->set_type_dflt(TRUE);
+          $tpl->add_design($simplex);
+          $tpl->save();
+      }
   }
-  
-  $fn = cms_join_path(dirname(__FILE__),'templates','Simplex_Footer_Navigation.tpl');
-  if( file_exists( $fn ) ) {
-    $template = @file_get_contents($fn);
-    $tpl = new CmsLayoutTemplate();
-    $tpl->set_name('Simplex Footer Navigation');
-    $tpl->set_owner($uid);
-    $tpl->set_content($template);
-    $tpl->set_type($menu_template_type);
-    $tpl->set_type_dflt(TRUE);
-    $tpl->add_design('Simplex');
-    $tpl->save();
+  catch( CmsException $e ) {
+      // if we got here, it's prolly because default content was not installed.
+      audit('',$this->GetName(),'Installation Error: '.$e->GetMessage());
   }
 
 }

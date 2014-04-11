@@ -1,10 +1,10 @@
 <?php
 #BEGIN_LICENSE
 #-------------------------------------------------------------------------
-# Module: Navigator (c) 2013 by Robert Campbell 
+# Module: Navigator (c) 2013 by Robert Campbell
 #         (calguy1000@cmsmadesimple.org)
 #  An module for CMS Made Simple to allow building hierarchical navigations.
-# 
+#
 #-------------------------------------------------------------------------
 # CMS - CMS Made Simple is (c) 2005 by Ted Kulp (wishy@cmsmadesimple.org)
 # Visit our homepage at: http://www.cmsmadesimple.org
@@ -19,7 +19,7 @@
 # However, as a special exception to the GPL, this software is distributed
 # as an addon module to CMS Made Simple.  You may not use this software
 # in any Non GPL version of CMS Made simple, or in any version of CMS
-# Made simple that does not indicate clearly and obviously in its admin 
+# Made simple that does not indicate clearly and obviously in its admin
 # section that the site was built with CMS Made simple.
 #
 # This program is distributed in the hope that it will be useful,
@@ -42,18 +42,24 @@ $this->RemoveSmartyPlugin();
 try {
   $types = CmsLayoutTemplateType::load_all_by_originator('Navigator');
   foreach( $types as $type ) {
-    $templates = $type->get_template_list();
-    if( is_array($templates) && count($templates) ) {
-      foreach( $templates as $tpl ) {
-	$tpl->delete();
+      try {
+          $templates = $type->get_template_list();
+          if( is_array($templates) && count($templates) ) {
+              foreach( $templates as $tpl ) {
+                  $tpl->delete();
+              }
+          }
       }
-    }
-    $type->delete();
+      catch( Exception $e ) {
+          audit('',$this->GetName(),'Uninstall Error: '.$e->GetMessage());
+      }
+      $type->delete();
   }
 }
 catch( CmsException $e ) {
-  // log it
-  audit('',$this->GetName(),'Uninstall Error: '.$e->GetMessage());
+    // log it
+    audit('',$this->GetName(),'Uninstall Error: '.$e->GetMessage());
+    return FALSE;
 }
 
 #
