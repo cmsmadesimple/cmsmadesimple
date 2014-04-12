@@ -20,7 +20,7 @@
     <div class="pageoverflow">
       <p class="pagetext"><label for="design_name">{$mod->Lang('prompt_name')}</label>:&nbsp;{cms_help key2='help_design_name' title=$mod->Lang('prompt_name')}</p>
       <p class="pageinput">
-        <input type="text" id="design_name" name="{$actionid}name" value="{$design->get_name()}" size="50" maxlength="50"/>
+        <input type="text" id="design_name" name="{$actionid}name" value="{$design->get_name()}" size="50" maxlength="90"/>
       </p>
     </div>
   </div>
@@ -64,7 +64,7 @@
 <script type="text/javascript">
 $(document).ready(function(){
   $(document).on('click', '#submitme,#applyme', function(){
-    $('select.selall').attr('multiple','multiple');	
+    $('select.selall').attr('multiple','multiple');
     $('select.selall option').attr('selected','selected');
   });
 });

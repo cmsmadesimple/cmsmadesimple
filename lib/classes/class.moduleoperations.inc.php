@@ -388,7 +388,7 @@ final class ModuleOperations
 
         $result = $module_obj->Install();
         if( !isset($result) || $result === FALSE) {
-            // install returned nothing, or FALSE
+            // install returned nothing, or FALSE, a successful installation
             $query = 'DELETE FROM '.cms_db_prefix().'modules WHERE module_name = ?';
             $dbr = $db->Execute($query,array($module_obj->GetName()));
 
@@ -420,6 +420,7 @@ final class ModuleOperations
             return array(TRUE,$module_obj->InstallPostMessage());
         }
 
+        // install returned something.
         return array(FALSE,$result);
     }
 
