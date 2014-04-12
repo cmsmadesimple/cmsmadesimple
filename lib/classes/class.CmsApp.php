@@ -93,6 +93,11 @@ final class CmsApp {
 	 */
 	private $dbprefix;
 
+    /**
+     * @ignore
+     */
+    private $hrinstance;
+
 	/**
 	 * Internal error array - So functions/modules can store up debug info and spit it all out at once
 	 * @ignore

@@ -316,7 +316,7 @@ class CmsLayoutTemplate
 			$n = $design->get_id();
 		}
 
-		if( !is_array($this->_design_assoc) ) $this->_design_assoc = array();
+		if( !is_array($this->_design_assoc) ) $this->get_designs();
 		$this->_design_assoc[] = $n;
 		$this->_dirty = TRUE;
 	}
@@ -343,9 +343,10 @@ class CmsLayoutTemplate
 			$n = $design->get_id();
 		}
 
-		if( in_array($n,$this->_design_assoc) ) {
+        $designs = $this->get_designs();
+		if( in_array($n,$designs) ) {
 			$t = array();
-			foreach( $this->_design_assoc as $one ) {
+			foreach( $designs as $one ) {
 				if( $n == $one ) continue;
 				$t[] = $one;
 			}
@@ -575,9 +576,7 @@ class CmsLayoutTemplate
 
 		$query = 'DELETE FROM '.cms_db_prefix().CmsLayoutCollection::TPLTABLE.' WHERE tpl_id = ?';
 		$dbr = $db->Execute($query,array($this->get_id()));
-		if( !$dbr ) {
-			throw new CmsSQLErrorException($db->sql.' -- '.$db->ErrorMsg());
-		}
+		if( !$dbr ) throw new CmsSQLErrorException($db->sql.' -- '.$db->ErrorMsg());
 		$t = $this->get_designs();
 		if( is_array($t) && count($t) ) {
 			$query = 'INSERT INTO '.cms_db_prefix().CmsLayoutCollection::TPLTABLE.' (tpl_id,design_id) VALUES(?,?)';

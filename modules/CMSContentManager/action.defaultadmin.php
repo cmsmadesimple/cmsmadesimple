@@ -37,35 +37,31 @@ if( !isset($gCms) ) exit;
 // no permissions checks here.
 
 echo '<noscript><h3 style="color: red; text-align: center;">'.$this->Lang('info_javascript_required').'</h3></noscript>'."\n";
-
 $error = '';
 
 if( !function_exists('cm_prettyurls_ok') ) {
-  function cm_prettyurls_ok()
-  {
-    static $_prettyurls_ok = -1;
-    if( -1 < $_prettyurls_ok ) return $_prettyurls_ok;
+    function cm_prettyurls_ok() {
+        static $_prettyurls_ok = -1;
+        if( -1 < $_prettyurls_ok ) return $_prettyurls_ok;
 
-    $config = cmsms()->GetConfig();
-    if( isset($config['url_rewriting']) && $config['url_rewriting'] != 'none' )
-      $_prettyurls_ok = 1;
-    else
-      $_prettyurls_ok = 0;
-    return $_prettyurls_ok;
-  }
+        $config = cmsms()->GetConfig();
+        $_prettyurls_ok = 0;
+        if( isset($config['url_rewriting']) && $config['url_rewriting'] != 'none' ) $_prettyurls_ok = 1;
+        return $_prettyurls_ok;
+    }
 }
 
 if( isset($params['multisubmit']) && isset($params['multiaction']) &&
     isset($params['multicontent']) && is_array($params['multicontent']) && count($params['multicontent']) > 0 ) {
-  list($module,$bulkaction) = explode('::',$params['multiaction'],2);
-  if( $module == '' || $module == '-1' || $bulkaction == '' || $bulkaction == '-1' ) {
-    $this->SetMessage($this->Lang('error_nobulkaction'));
-    $this->RedirectToAdminTab();
-  }
-  // redirect to special action to handle bulk content stuff.
-  $this->Redirect($id,'admin_multicontent',$returnid,
-		  array('multicontent'=>base64_encode(serialize($params['multicontent'])),
-			'multiaction'=>$params['multiaction']));
+    list($module,$bulkaction) = explode('::',$params['multiaction'],2);
+    if( $module == '' || $module == '-1' || $bulkaction == '' || $bulkaction == '-1' ) {
+        $this->SetMessage($this->Lang('error_nobulkaction'));
+        $this->RedirectToAdminTab();
+    }
+    // redirect to special action to handle bulk content stuff.
+    $this->Redirect($id,'admin_multicontent',$returnid,
+                    array('multicontent'=>base64_encode(serialize($params['multicontent'])),
+                          'multiaction'=>$params['multiaction']));
 }
 
 $smarty->assign('prettyurls_ok',cm_prettyurls_ok());
@@ -83,64 +79,69 @@ if( isset($params['curpage']) ) $curpage = (int)$params['curpage'];
 // handle all of the possible ajaxy/sub actions.
 //
 $ajax = 0;
-if( isset($params['ajax']) ) {
-  $ajax = 1;
-}
+if( isset($params['ajax']) ) $ajax = 1;
+
 if( isset($params['expandall']) || isset($_GET['expandall']) ) {
-  $builder->expand_all();
-  $curpage = 1;
+    $builder->expand_all();
+    $curpage = 1;
 }
+
 if( isset($params['collapseall']) || isset($_GET['collapseall']) ) {
-  $builder->collapse_all();
-  $curpage = 1;
+    $builder->collapse_all();
+    $curpage = 1;
 }
 if( isset($params['expand']) ) {
     $builder->expand_section($params['expand']);
 }
+
 if( isset($params['collapse']) ) {
-  $builder->collapse_section($params['collapse']);
-  $curpage = 1;
+    $builder->collapse_section($params['collapse']);
+    $curpage = 1;
 }
+
 if( isset($params['setinactive']) ) {
-  $builder->set_active($params['setinactive'],FALSE);
-  if( !$res ) $error = $this->Lang('error_setinactive');
+    $builder->set_active($params['setinactive'],FALSE);
+    if( !$res ) $error = $this->Lang('error_setinactive');
 }
+
 if( isset($params['setactive']) ) {
-  $res = $builder->set_active($params['setactive'],TRUE);
-  if( !$res ) $error = $this->Lang('error_setactive');
+    $res = $builder->set_active($params['setactive'],TRUE);
+    if( !$res ) $error = $this->Lang('error_setactive');
 }
+
 if( isset($params['setdefault']) ) {
-  $res = $builder->set_default($params['setdefault'],TRUE);
-  if( !$res ) $error = $this->Lang('error_setdefault');
+    $res = $builder->set_default($params['setdefault'],TRUE);
+    if( !$res ) $error = $this->Lang('error_setdefault');
 }
+
 if( isset($params['moveup']) ) {
-  $res = $builder->move_content($params['moveup'],-1);
-  if( !$res ) $error = $this->Lang('error_movecontent');
+    $res = $builder->move_content($params['moveup'],-1);
+    if( !$res ) $error = $this->Lang('error_movecontent');
 }
+
 if( isset($params['movedown']) ) {
-  $res = $builder->move_content($params['movedown'],1);
-  if( !$res ) $error = $this->Lang('error_movecontent');
+    $res = $builder->move_content($params['movedown'],1);
+    if( !$res ) $error = $this->Lang('error_movecontent');
 }
+
 if( isset($params['delete']) ) {
-  $res = $builder->delete_content($params['delete']);
-  if( $res ) $error = $res;
+    $res = $builder->delete_content($params['delete']);
+    if( $res ) $error = $res;
 }
 
 //
 // build the display
 //
 
-if( isset($params['setoptions']) ) {
-  cms_userprefs::set($this->GetName().'_pagelimit',(int)$params['pagelimit']);
-}
+if( isset($params['setoptions']) ) cms_userprefs::set($this->GetName().'_pagelimit',(int)$params['pagelimit']);
 $pagelimit = cms_userprefs::get($this->GetName().'_pagelimit',500);
 
 $builder->set_pagelimit($pagelimit);
 if( isset($params['seek']) && $params['seek'] != '' ) {
-  $builder->seek_to((int)$params['seek']);
+    $builder->seek_to((int)$params['seek']);
 }
 else {
-  $builder->set_page($curpage);
+    $builder->set_page($curpage);
 }
 
 
@@ -150,13 +151,12 @@ $pagelimits = array(10=>10,25=>25,100=>100,250=>250,500=>500);
 $smarty->assign('pagelimits',$pagelimits);
 $pagelist = array();
 for( $i = 0; $i < $npages; $i++ ) {
-  $pagelist[$i+1] = $i+1;
+    $pagelist[$i+1] = $i+1;
 }
 
 $smarty->assign('indent',cms_userprefs::get('indent',1));
 $locks = $builder->get_locks();
 $smarty->assign('have_locks',(is_array($locks) && count($locks))?1:0);
-//$smarty->assign('locks',$builder->get_locks()); // used?
 $smarty->assign('pagelimit',$pagelimit);
 $smarty->assign('pagelist',$pagelist);
 $smarty->assign('curpage',$builder->get_page());
@@ -166,12 +166,12 @@ $smarty->assign('multiselect',$builder->supports_multiselect());
 $columns  = $builder->get_display_columns();
 $smarty->assign('columns',$columns);
 if( CmsContentManagerUtils::get_pagenav_display() == 'title' ) {
-  $smarty->assign('colhdr_page',$this->Lang('colhdr_name'));
-  $smarty->assign('coltitle_page',$this->Lang('coltitle_name'));
+    $smarty->assign('colhdr_page',$this->Lang('colhdr_name'));
+    $smarty->assign('coltitle_page',$this->Lang('coltitle_name'));
 }
 else {
-  $smarty->assign('colhdr_page',$this->Lang('colhdr_menutext'));
-  $smarty->assign('coltitle_page',$this->Lang('coltitle_menutext'));
+    $smarty->assign('colhdr_page',$this->Lang('colhdr_menutext'));
+    $smarty->assign('coltitle_page',$this->Lang('coltitle_menutext'));
 }
 $smarty->assign('content_list',$editinfo);
 $smarty->assign('ajax',$ajax);
@@ -179,19 +179,20 @@ if( $error ) $smarty->assign('error',$error);
 
 $opts = array();
 if( $this->CheckPermission('Remove Pages') && $this->CheckPermission('Modify Any Page') ) {
-  bulkcontentoperations::register_function($this->Lang('bulk_delete'),'delete');
+    bulkcontentoperations::register_function($this->Lang('bulk_delete'),'delete');
 }
+
 if( $this->CheckPermission('Manage All Content')) {
-  bulkcontentoperations::register_function($this->Lang('bulk_active'),'active');
-  bulkcontentoperations::register_function($this->Lang('bulk_inactive'),'inactive');
-  bulkcontentoperations::register_function($this->Lang('bulk_cachable'),'setcachable');
-  bulkcontentoperations::register_function($this->Lang('bulk_noncachable'),'setnoncachable');
-  bulkcontentoperations::register_function($this->Lang('bulk_showinmenu'),'showinmenu');
-  bulkcontentoperations::register_function($this->Lang('bulk_hidefrommenu'),'hidefrommenu');
-  bulkcontentoperations::register_function($this->Lang('bulk_secure'),'secure');
-  bulkcontentoperations::register_function($this->Lang('bulk_insecure'),'insecure');
-  bulkcontentoperations::register_function($this->Lang('bulk_setdesign'),'setdesign');
-  bulkcontentoperations::register_function($this->Lang('bulk_changeowner'),'changeowner');
+    bulkcontentoperations::register_function($this->Lang('bulk_active'),'active');
+    bulkcontentoperations::register_function($this->Lang('bulk_inactive'),'inactive');
+    bulkcontentoperations::register_function($this->Lang('bulk_cachable'),'setcachable');
+    bulkcontentoperations::register_function($this->Lang('bulk_noncachable'),'setnoncachable');
+    bulkcontentoperations::register_function($this->Lang('bulk_showinmenu'),'showinmenu');
+    bulkcontentoperations::register_function($this->Lang('bulk_hidefrommenu'),'hidefrommenu');
+    bulkcontentoperations::register_function($this->Lang('bulk_secure'),'secure');
+    bulkcontentoperations::register_function($this->Lang('bulk_insecure'),'insecure');
+    bulkcontentoperations::register_function($this->Lang('bulk_setdesign'),'setdesign');
+    bulkcontentoperations::register_function($this->Lang('bulk_changeowner'),'changeowner');
 }
 $opts = bulkcontentoperations::get_operation_list();
 if( is_array($opts) && count($opts) ) $smarty->assign('bulk_options',$opts);

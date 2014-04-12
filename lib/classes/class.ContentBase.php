@@ -1871,7 +1871,6 @@ abstract class ContentBase
 			$db->Execute($query,array($this->Id()));
 		}
 		cms_cache_handler::get_instance()->erase('contentcache');
-
 	}
 
 	/**

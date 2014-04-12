@@ -28,49 +28,51 @@ if( isset($params['cancel']) ) {
 }
 
 try {
-  $css_ob = null;
-  $extraparms = array();
+    $css_ob = null;
+    $extraparms = array();
 
-  if( isset($params['css']) ) {
-    $css_ob = CmsLayoutStylesheet::load($params['css']);
-    $extraparms['css'] = $params['css'];
-  }
-  else {
-    $css_ob = new CmsLayoutStylesheet();
-  }
-
-  try {
-    if( isset($params['submit']) || isset($params['apply']) ) {
-      if( isset($params['name']) ) $css_ob->set_name($params['name']);
-      if( isset($params['description']) ) $css_ob->set_description($params['description']);
-      if( isset($params['content']) ) $css_ob->set_content($params['content']);
-      $typ = array();
-      if( isset($params['media_type']) ) $typ = $params['media_type'];
-      $css_ob->set_media_types($typ);
-      if( isset($params['media_query']) ) $css_ob->set_media_query($params['media_query']);
-      if( $this->CheckPermission('Manage Designs') ) {
-				$design_list = array();
-				if( isset($params['design_list']) ) $design_list = $params['design_list'];
-				$css_ob->set_designs($design_list);
-      }
-
-      $css_ob->save();
-
-			if( isset($params['apply']) ) {
-				echo 'AJAX GOOD';
-				exit;
-			}
-
-      $this->SetMessage($this->Lang('msg_stylesheet_saved'));
-      $this->RedirectToAdminTab();
+    if( isset($params['css']) ) {
+        $css_ob = CmsLayoutStylesheet::load($params['css']);
+        $extraparms['css'] = $params['css'];
     }
-  }
-  catch( CmsException $e ) {
-    echo $this->ShowErrors($e->GetMessage());
-  }
+    else {
+        $css_ob = new CmsLayoutStylesheet();
+    }
+
+    try {
+        if( isset($params['submit']) || isset($params['apply']) ) {
+            if( isset($params['name']) ) $css_ob->set_name($params['name']);
+            if( isset($params['description']) ) $css_ob->set_description($params['description']);
+            if( isset($params['content']) ) $css_ob->set_content($params['content']);
+            $typ = array();
+            if( isset($params['media_type']) ) $typ = $params['media_type'];
+            $css_ob->set_media_types($typ);
+            if( isset($params['media_query']) ) $css_ob->set_media_query($params['media_query']);
+            if( $this->CheckPermission('Manage Designs') ) {
+                $design_list = array();
+                if( isset($params['design_list']) ) $design_list = $params['design_list'];
+                $css_ob->set_designs($design_list);
+            }
+            $css_ob->set_designs(array());
+            if( isset($params['design_list']) ) $css_ob->set_designs($params['design_list']);
+
+            $css_ob->save();
+
+            if( isset($params['apply']) ) {
+                echo 'AJAX GOOD';
+                exit;
+            }
+
+            $this->SetMessage($this->Lang('msg_stylesheet_saved'));
+            $this->RedirectToAdminTab();
+        }
+    }
+    catch( CmsException $e ) {
+        echo $this->ShowErrors($e->GetMessage());
+    }
 
 	//
-  // prepare to display.
+    // prepare to display.
 	//
 	if( $css_ob && $css_ob->get_id() && dm_utils::locking_enabled() ) {
 		$smarty->assign('lock_timeout',$this->GetPreference('lock_timeout'));
@@ -87,25 +89,25 @@ try {
 		}
 	}
 
-  $designs = CmsLayoutCollection::get_all();
-  if( is_array($designs) && count($designs) ) {
-    $out = array();
-    foreach( $designs as $one ) {
-      $out[$one->get_id()] = $one->get_name();
+    $designs = CmsLayoutCollection::get_all();
+    if( is_array($designs) && count($designs) ) {
+        $out = array();
+        foreach( $designs as $one ) {
+            $out[$one->get_id()] = $one->get_name();
+        }
+        $smarty->assign('design_list',$out);
     }
-    $smarty->assign('design_list',$out);
-  }
 
-  $smarty->assign('has_designs_right',$this->CheckPermission('Manage Designs'));
-  $smarty->assign('extraparms',$extraparms);
-  $smarty->assign('css',$css_ob);
+    $smarty->assign('has_designs_right',$this->CheckPermission('Manage Designs'));
+    $smarty->assign('extraparms',$extraparms);
+    $smarty->assign('css',$css_ob);
 	if( $css_ob && $css_ob->get_id() ) $smarty->assign('css_id',$css_ob->get_id());
 
-  echo $this->ProcessTemplate('admin_edit_css.tpl');
+    echo $this->ProcessTemplate('admin_edit_css.tpl');
 }
 catch( CmsException $e ) {
-  $this->SetError($e->GetMessage());
-  $this->RedirectToAdminTab();
+    $this->SetError($e->GetMessage());
+    $this->RedirectToAdminTab();
 }
 
 #

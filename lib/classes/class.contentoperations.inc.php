@@ -994,9 +994,7 @@ class ContentOperations
 	{
 		$hm = cmsms()->GetHierarchyManager();
 		$node = $hm->getNodeById();
-		if( $node ) {
-			return $node->getTag('alias');
-		}
+		if( $node ) return $node->getTag('alias');
 	}
 
 

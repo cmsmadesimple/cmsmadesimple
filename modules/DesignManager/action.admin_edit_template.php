@@ -59,51 +59,51 @@ try {
   }
 
   try {
-		if( isset($params['tpl_setall']) ) $this->Redirect($id,'admin_set_all_pages',$returnid,array('tpl'=>$params['tpl']));
+      if( isset($params['tpl_setall']) ) $this->Redirect($id,'admin_set_all_pages',$returnid,array('tpl'=>$params['tpl']));
 
-    if( isset($params['submit']) || isset($params['apply']) ) {
-			$parser = cmsms()->get_template_parser();
-			cms_utils::set_app_data('tmp_template',$params['contents']);
-			$parser->fetch('cms_template:appdata;tmp_template'); // do the magic.
+      if( isset($params['submit']) || isset($params['apply']) ) {
+          $parser = cmsms()->get_template_parser();
+          cms_utils::set_app_data('tmp_template',$params['contents']);
+          $parser->fetch('cms_template:appdata;tmp_template'); // do the magic.
 
-      $tpl_obj->set_name($params['name']);
-      $tpl_obj->set_content($params['contents']);
-			if( isset($params['description']) ) $tpl_obj->set_description($params['description']);
-			if( isset($params['type']) ) $tpl_obj->set_type($params['type']);
-			if( isset($params['default']) ) $tpl_obj->set_type_dflt($params['default']);
-      if( isset($params['owner_id']) ) $tpl_obj->set_owner($params['owner_id']);
-      if( isset($params['addt_editors']) && is_array($params['addt_editors']) && count($params['addt_editors']) ) {
-				$tpl_obj->set_additional_editors($params['addt_editors']);
-      }
-      if( isset($params['category_id']) ) $tpl_obj->set_category($params['category_id']);
+          $tpl_obj->set_name($params['name']);
+          $tpl_obj->set_content($params['contents']);
+          if( isset($params['description']) ) $tpl_obj->set_description($params['description']);
+          if( isset($params['type']) ) $tpl_obj->set_type($params['type']);
+          if( isset($params['default']) ) $tpl_obj->set_type_dflt($params['default']);
+          if( isset($params['owner_id']) ) $tpl_obj->set_owner($params['owner_id']);
+          if( isset($params['addt_editors']) && is_array($params['addt_editors']) && count($params['addt_editors']) ) {
+              $tpl_obj->set_additional_editors($params['addt_editors']);
+          }
+          if( isset($params['category_id']) ) $tpl_obj->set_category($params['category_id']);
 
-			$type_obj = CmsLayoutTemplateType::load($tpl_obj->get_type_id());
-			if( $type_obj->get_content_block_flag() ) {
-				$contentBlocks = CMS_Content_Block::get_content_blocks();
-				if( !is_array($contentBlocks) || count($contentBlocks) == 0 ) {
-					throw new CmsEditContentException('No content blocks defined in template');
-				}
-				if( !isset($contentBlocks['content_en']) ) {
-					throw new CmsEditContentException('No default content block {content} or {content block=\'content_en\'} defined in template');
-				}
-			}
+          $type_obj = CmsLayoutTemplateType::load($tpl_obj->get_type_id());
+          if( $type_obj->get_content_block_flag() ) {
+              $contentBlocks = CMS_Content_Block::get_content_blocks();
+              if( !is_array($contentBlocks) || count($contentBlocks) == 0 ) {
+                  throw new CmsEditContentException('No content blocks defined in template');
+              }
+              if( !isset($contentBlocks['content_en']) ) {
+                  throw new CmsEditContentException('No default content block {content} or {content block=\'content_en\'} defined in template');
+              }
+          }
 
-			if( $this->CheckPermission('Manage Designs') ) {
-				$design_list = array();
-				if( isset($params['design_list']) ) $design_list = $params['design_list'];
-				$tpl_obj->set_designs($design_list);
-			}
+          if( $this->CheckPermission('Manage Designs') ) {
+              $design_list = array();
+              if( isset($params['design_list']) ) $design_list = $params['design_list'];
+              $tpl_obj->set_designs($design_list);
+          }
 
-			// if we got here, we're golden.
-      $tpl_obj->save();
+          // if we got here, we're golden.
+          $tpl_obj->save();
 
-			if( isset($params['apply']) ) {
-				echo 'AJAX GOOD';
-				exit;
-			}
+          if( isset($params['apply']) ) {
+              echo 'AJAX GOOD';
+              exit;
+          }
 
-			$this->SetMessage($this->Lang('msg_template_saved'));
-			$this->RedirectToAdminTab();
+          $this->SetMessage($this->Lang('msg_template_saved'));
+          $this->RedirectToAdminTab();
     }
   }
   catch( Exception $e ) {

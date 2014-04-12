@@ -307,20 +307,18 @@ final class ContentListBuilder
 
     $test = FALSE;
     if( $this->_module->CheckPermission('Manage All Content') ) {
-      $test = TRUE;
+        $test = TRUE;
     }
     else if( $this->_module->CheckPermission('Reorder Content') && $contentops->CheckPeerAuthorship($this->_userid,$page_id) ) {
-      $test = TRUE;
+        $test = TRUE;
     }
 
     if( !$test ) return FALSE;
 
-    $node = $contentops->quickfind_node_by_id($page_id);
-    if( !$node ) return FALSE;
-    $content1 = $node->GetContent(FALSE,FALSE,FALSE);
-    if( !$content1 ) return FALSE;
+    $content = $contentops->LoadContentFromId($page_id);
+    if( !$content ) return FALSE;
 
-    $content1->ChangeItemOrder($direction);
+    $content->ChangeItemOrder($direction);
     $contentops = ContentOperations::get_instance();
     $contentops->SetAllHierarchyPositions();
     return TRUE;
