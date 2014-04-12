@@ -73,8 +73,14 @@ if( isset($efilter['tpl']) && $efilter['tpl'] != '' ) {
 }
 if( !$this->CheckPermission('Modify Templates') ) $efilter[] = 'e:'.get_userid();
 
-$tpl_query = new CmsLayoutTemplateQuery($efilter);
-$templates = $tpl_query->GetMatches();
+$template = null;
+try {
+    $tpl_query = new CmsLayoutTemplateQuery($efilter);
+    $templates = $tpl_query->GetMatches();
+}
+catch( Exception $e ) {
+    // nothing here
+}
 if( count($templates) ) {
 	$smarty->assign('templates',$templates);
 	$tpl_nav = array();

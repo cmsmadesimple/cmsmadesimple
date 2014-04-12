@@ -98,10 +98,10 @@ class CmsLayoutTemplateQuery extends CmsDbQueryBase
       case 'd': // design
 			case 'design':
 				// find all the templates in design: d
-				$q2 = 'SELECT tpl_id FROM '.cms_db_prefix().CmsLayoutCollection::TPLTABLE.'
-               WHERE design_id = ?';
+				$q2 = 'SELECT tpl_id FROM '.cms_db_prefix().CmsLayoutCollection::TPLTABLE.' WHERE design_id = ?';
 				$tpls = $db->GetCol($q2,array((int)$second));
-				$where['design'][] = 'tpl.id IN ('.implode(',',$tpls).')';
+                if( !count($tpls) )  $tpls = array(-999); // this won't match anything
+                $where['design'][] = 'tpl.id IN ('.implode(',',$tpls).')';
 				break;
 
       case 'u': // user
