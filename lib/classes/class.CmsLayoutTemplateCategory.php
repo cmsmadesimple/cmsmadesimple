@@ -160,7 +160,7 @@ class CmsLayoutTemplateCategory
     if( !$this->get_name() ) throw new CmsInvalidDataException('A Template Categoy must have a name');
 
 		if( !preg_match('<^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$>', $this->get_name()) ) {
-			throw new CmsInvalidDataException('Name must contain only numbers letters, spaces and underscores.');
+			throw new CmsInvalidDataException('Name must contain only letters, numbers and underscores.');
 		}
 
     $db = cmsms()->GetDb();

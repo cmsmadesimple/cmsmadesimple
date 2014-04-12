@@ -331,7 +331,7 @@ class CmsLayoutTemplateType
         if( !$this->get_originator() ) throw new CmsInvalidDataException('Invalid Type Originator');
         if( !$this->get_name() ) throw new CmsInvalidDataException('Invalid Type Name');
 		if( !preg_match('/[A-Za-z0-9_\,\.\ ]/',$this->get_name()) ) {
-			throw new CmsInvalidDataException('Name must contain only numbers letters, spaces and underscores.');
+			throw new CmsInvalidDataException('Name must contain only letters, numbers and underscores.');
 		}
 
         if( !$is_insert ) {

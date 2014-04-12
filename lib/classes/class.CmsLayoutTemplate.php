@@ -513,7 +513,7 @@ class CmsLayoutTemplate
 		if( !$this->get_name() ) throw new CmsInvalidDataException('Each template must have a name');
 		if( endswith($this->get_name(),'.tpl') ) throw new CmsInvalidDataException('Invalid name for a database template');
 		if( !preg_match('/[A-Za-z0-9_\,\.\ ]/',$this->get_name()) ) {
-			throw new CmsInvalidDataException('Name must contain only numbers letters, spaces and underscores.');
+			throw new CmsInvalidDataException('Name must contain only letters, numbers and underscores.');
 		}
 
 		if( !$this->get_content() ) throw new CmsInvalidDataException('Each template must have some content');
