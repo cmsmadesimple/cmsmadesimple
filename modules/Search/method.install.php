@@ -28,10 +28,10 @@ $db->CreateSequence(cms_db_prefix()."module_search_items_seq");
 
 $sqlarray = $dict->CreateIndexSQL('module_name', $db_prefix."module_search_items", 'module_name');
 $dict->ExecuteSQLArray($sqlarray);
-	
+
 $sqlarray = $dict->CreateIndexSQL('content_id', $db_prefix."module_search_items", 'content_id');
 $dict->ExecuteSQLArray($sqlarray);
-	
+
 $sqlarray = $dict->CreateIndexSQL('extra_attr', $db_prefix."module_search_items", 'extra_attr');
 $dict->ExecuteSQLArray($sqlarray);
 
@@ -85,18 +85,23 @@ try {
   $tpl->set_type($searchform_type);
   $tpl->set_type_dflt(TRUE);
   $tpl->save();
-  
+
   // Setup Simplex Theme search form template
-  $fn = dirname(__FILE__).DIRECTORY_SEPARATOR.'templates'.DIRECTORY_SEPARATOR.'Simplex_Search_template.tpl';
-  if( file_exists( $fn ) ) {
-    $template = @file_get_contents($fn);
-    $tpl = new CmsLayoutTemplate();
-    $tpl->set_name('Simplex Search');
-    $tpl->set_owner($uid);
-    $tpl->set_content($template);
-    $tpl->set_type($searchform_type);
-    $tpl->add_design('Simplex');
-    $tpl->save();
+  try {
+      $fn = dirname(__FILE__).DIRECTORY_SEPARATOR.'templates'.DIRECTORY_SEPARATOR.'Simplex_Search_template.tpl';
+      if( file_exists( $fn ) ) {
+          $template = @file_get_contents($fn);
+          $tpl = new CmsLayoutTemplate();
+          $tpl->set_name('Simplex Search');
+          $tpl->set_owner($uid);
+          $tpl->set_content($template);
+          $tpl->set_type($searchform_type);
+          $tpl->add_design('Simplex');
+          $tpl->save();
+      }
+  }
+  catch( Exception $e ) {
+      audit('',$this->GetName(),'Installation Error: '.$e->GetMessage());
   }
 
   $searchresults_type = new CmsLayoutTemplateType();
@@ -125,7 +130,7 @@ $this->CreateEvent('SearchCompleted');
 $this->CreateEvent('SearchItemAdded');
 $this->CreateEvent('SearchItemDeleted');
 $this->CreateEvent('SearchAllItemsDeleted');
-	
+
 $this->RegisterEvents();
 $this->RegisterModulePlugin(true);
 $this->RegisterSmartyPlugin('search','function','function_plugin');
