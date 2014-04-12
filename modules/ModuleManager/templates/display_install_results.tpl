@@ -1,4 +1,4 @@
-<h3>{$mod->Lang('operation_results')}</h3>
+<h3>{$ModuleManager->Lang('operation_results')}</h3>
 
 {foreach from=$queue_results key='module_name' item='item'}
   <div class="pageoverflow">

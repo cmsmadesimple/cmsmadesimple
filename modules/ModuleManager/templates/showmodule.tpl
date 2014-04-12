@@ -28,9 +28,9 @@
 		<tr>
                         <th></th>
 			<th>{$nametext}</th>
-			<th><span title="{$mod->Lang('title_modulelastversion')}">{$vertext}</span></th>
-                        <th><span title="{$mod->Lang('title_modulereleasedate')}">{$mod->Lang('releasedate')}</span></th>
-                        <th><span title="{$mod->Lang('title_moduledownloads')}">{$mod->Lang('downloads')}</span></th>
+			<th><span title="{$ModuleManager->Lang('title_modulelastversion')}">{$vertext}</span></th>
+                        <th><span title="{$ModuleManager->Lang('title_modulereleasedate')}">{$ModuleManager->Lang('releasedate')}</span></th>
+                        <th><span title="{$ModuleManager->Lang('title_moduledownloads')}">{$ModuleManager->Lang('downloads')}</span></th>
 			<th>{$sizetext}</th>
 			<th>{$statustext}</th>
 			<th>&nbsp;</th>
@@ -49,9 +49,9 @@
 			<td>{$entry->downloads}</td>
 			<td>{$entry->size}</td>
 			<td>{$entry->status}</td>
-			<td><span title="{$mod->Lang('title_modulereleasedepends')}">{$entry->dependslink}</span></td>
-			<td><span title="{$mod->Lang('title_modulereleasehelp')}">{$entry->helplink}</span></td>
-			<td><span title="{$mod->Lang('title_modulereleaseabout')}">{$entry->aboutlink}</span></td>
+			<td><span title="{$ModuleManager->Lang('title_modulereleasedepends')}">{$entry->dependslink}</span></td>
+			<td><span title="{$ModuleManager->Lang('title_modulereleasehelp')}">{$entry->helplink}</span></td>
+			<td><span title="{$ModuleManager->Lang('title_modulereleaseabout')}">{$entry->aboutlink}</span></td>
 		</tr> 
 {/foreach}
 	</tbody>

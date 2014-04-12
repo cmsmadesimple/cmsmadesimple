@@ -21,21 +21,21 @@ $(document).ready(function(){
 
 {$formstart}
 <fieldset>
-<legend>{$mod->Lang('search_input')}:</legend>
+<legend>{$ModuleManager->Lang('search_input')}:</legend>
 <div class="pageoverflow">
-  <p class="pagetext"><label for="searchterm">{$mod->Lang('searchterm')}:</label></p>
+  <p class="pagetext"><label for="searchterm">{$ModuleManager->Lang('searchterm')}:</label></p>
   <p class="pageinput">
-    <input id="searchterm" type="text" name="{$actionid}term" size="50" value="{$term}" title="{$mod->Lang('title_searchterm')}" placeholder="{$mod->Lang('entersearchterm')}"/>&nbsp;
+    <input id="searchterm" type="text" name="{$actionid}term" size="50" value="{$term}" title="{$ModuleManager->Lang('title_searchterm')}" placeholder="{$ModuleManager->Lang('entersearchterm')}"/>&nbsp;
     <input type="hidden" name="{$actionid}advanced" value="0"/>
-    <input type="checkbox" id="advanced" name="{$actionid}advanced" value="1" {if $advanced}checked="checked"{/if} title="{$mod->Lang('title_advancedsearch')}"/>&nbsp;<label for="advanced">{$mod->Lang('prompt_advancedsearch')}</label>
-    <span id="advhelp" style="display: none;"><br/>{$mod->Lang('advancedsearch_help')}</span>
+    <input type="checkbox" id="advanced" name="{$actionid}advanced" value="1" {if $advanced}checked="checked"{/if} title="{$ModuleManager->Lang('title_advancedsearch')}"/>&nbsp;<label for="advanced">{$ModuleManager->Lang('prompt_advancedsearch')}</label>
+    <span id="advhelp" style="display: none;"><br/>{$ModuleManager->Lang('advancedsearch_help')}</span>
   </p>
 </div>
 
 <div class="pageoverflow">
   <p class="pagetext"></p>
   <p class="pageinput">
-    <input type="submit" name="{$actionid}submit" value="{$mod->Lang('submit')}"/>
+    <input type="submit" name="{$actionid}submit" value="{$ModuleManager->Lang('submit')}"/>
   </p>
 </div>
 </fieldset>
@@ -44,16 +44,16 @@ $(document).ready(function(){
 {if isset($search_data)}
 <br/>
 <fieldset>
-<legend>{$mod->Lang('search_results')}:</legend>
+<legend>{$ModuleManager->Lang('search_results')}:</legend>
 <table class="pagetable sortable" cellspacing="0">
  <thead>
   <tr>
    <th></th>
-   <th>{$mod->Lang('nametext')}</th>
-   <th>{$mod->Lang('vertext')}</th>
-   <th>{$mod->Lang('releasedate')}</th>
-   <th>{$mod->Lang('downloads')}</th>
-   <th>{$mod->Lang('sizetext')}</th>
+   <th>{$ModuleManager->Lang('nametext')}</th>
+   <th>{$ModuleManager->Lang('vertext')}</th>
+   <th>{$ModuleManager->Lang('releasedate')}</th>
+   <th>{$ModuleManager->Lang('downloads')}</th>
+   <th>{$ModuleManager->Lang('sizetext')}</th>
    <th>{$statustext}</th>
    <th>&nbsp;</th>
    <th>&nbsp;</th>

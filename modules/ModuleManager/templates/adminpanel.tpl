@@ -7,7 +7,7 @@
   {if $key == $curletter}
     <strong>{$key}</strong>&nbsp;
   {else}
-    <a href="{$url}" title="{$mod->Lang('title_letter',$key)}">{$key}</a>&nbsp;
+    <a href="{$url}" title="{$ModuleManager->Lang('title_letter',$key)}">{$key}</a>&nbsp;
   {/if}
 {/foreach}
 </p>
@@ -34,10 +34,10 @@
 		<tr>
 			<th></th>
 			<th>{$nametext}</th>
-			<th><span title="{$mod->Lang('title_modulelastversion')}">{$vertext}</span></th>
-			<th><span title="{$mod->Lang('title_modulelastreleasedate')}">{$mod->Lang('releasedate')}</span></th>
-			<th><span title="{$mod->Lang('title_moduletotaldownloads')}">{$mod->Lang('downloads')}</span></th>
-                        <th><span title="{$mod->Lang('title_modulestatus')}">{$mod->Lang('statustext')}</span></th>
+			<th><span title="{$ModuleManager->Lang('title_modulelastversion')}">{$vertext}</span></th>
+			<th><span title="{$ModuleManager->Lang('title_modulelastreleasedate')}">{$ModuleManager->Lang('releasedate')}</span></th>
+			<th><span title="{$ModuleManager->Lang('title_moduletotaldownloads')}">{$ModuleManager->Lang('downloads')}</span></th>
+                        <th><span title="{$ModuleManager->Lang('title_modulestatus')}">{$ModuleManager->Lang('statustext')}</span></th>
 			<th>&nbsp;</th>
 			<th>&nbsp;</th>
 			<th>&nbsp;</th>
@@ -53,14 +53,14 @@
 			<td>{$entry->date|date_format:'%x'}</td>
 			<td>{$entry->downloads}</td>
 			<td>{if $entry->candownload}
-                              <span title="{$mod->Lang('title_moduleinstallupgrade')}">{$entry->status}</span>
+                              <span title="{$ModuleManager->Lang('title_moduleinstallupgrade')}">{$entry->status}</span>
                             {else}
                                {$entry->status}
                             {/if}
                         </td>
-			<td><a href="{$entry->depends_url}" title="{$mod->Lang('title_moduledepends')}">{$mod->Lang('dependstxt')}</a></td>
-			<td><a href="{$entry->help_url}" title="{$mod->Lang('title_modulehelp')}">{$mod->Lang('helptxt')}</a></td>
-			<td><a href="{$entry->about_url}" title="{$mod->Lang('title_moduleabout')}">{$mod->Lang('abouttxt')}</a></td>
+			<td><a href="{$entry->depends_url}" title="{$ModuleManager->Lang('title_moduledepends')}">{$ModuleManager->Lang('dependstxt')}</a></td>
+			<td><a href="{$entry->help_url}" title="{$ModuleManager->Lang('title_modulehelp')}">{$ModuleManager->Lang('helptxt')}</a></td>
+			<td><a href="{$entry->about_url}" title="{$ModuleManager->Lang('title_moduleabout')}">{$ModuleManager->Lang('abouttxt')}</a></td>
 		</tr>
 	{/foreach}
 	</tbody>

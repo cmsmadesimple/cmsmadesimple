@@ -42,7 +42,7 @@ class ModuleManager extends CMSModule
 {
   const _dflt_request_url = 'http://www.cmsmadesimple.org/ModuleRepository/request/v2/';
 
-  function GetName() { return 'ModuleManager'; }
+  function GetName() { return get_class($this); }
   function GetFriendlyName() { return $this->Lang('friendlyname'); }
   function GetVersion() { return '2.0'; }
   function GetHelp() { return $this->Lang('help'); }
@@ -84,6 +84,10 @@ class ModuleManager extends CMSModule
   function DoAction($action, $id, $params, $returnid=-1)
   {
     @set_time_limit(9999);
+	
+	$smarty = cmsms()->GetSmarty();
+	$smarty->assignByRef($this->GetName(), $this);	
+	
     parent::DoAction( $action, $id, $params, $returnid );
   }
 

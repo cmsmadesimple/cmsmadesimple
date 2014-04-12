@@ -1,5 +1,5 @@
 <div class="pageoverflow">
-  <a href="{$back_url}">{$mod->Lang('back_to_module_manager')}</a>
+  <a href="{$back_url}">{$ModuleManager->Lang('back_to_module_manager')}</a>
 </div>
 <center><h1>{$title}</h1></center>
 <p><b>{$moduletext}</b>:&nbsp;{$modulename}</p>
