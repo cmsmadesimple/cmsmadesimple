@@ -42,41 +42,43 @@ $(document).ready(function(){
 {$formend}
 
 {if isset($search_data)}
-<br/>
 <fieldset>
 <legend>{$ModuleManager->Lang('search_results')}:</legend>
-<table class="pagetable sortable" cellspacing="0">
- <thead>
-  <tr>
-   <th></th>
-   <th>{$ModuleManager->Lang('nametext')}</th>
-   <th>{$ModuleManager->Lang('vertext')}</th>
-   <th>{$ModuleManager->Lang('releasedate')}</th>
-   <th>{$ModuleManager->Lang('downloads')}</th>
-   <th>{$ModuleManager->Lang('sizetext')}</th>
-   <th>{$statustext}</th>
-   <th>&nbsp;</th>
-   <th>&nbsp;</th>
-   <th>&nbsp;</th>
-  </tr>
- </thead>
- <tbody>
- {foreach from=$search_data item=entry}
-   {cycle values='row1,row2' assign='rowclass'}
-   <tr class="{$rowclass}" {if $entry->age=='new'}style="font-weight: bold;"{/if}>
-     <td>{get_module_status_icon status=$entry->age}</td>
-     <td><span title="{$entry->description|strip_tags|cms_escape}">{$entry->name}</span></td>
-     <td>{$entry->version}</td>
-     <td>{$entry->date|date_format:'%x'}</td>
-     <td>{$entry->downloads}</td>
-     <td>{$entry->size}</td>
-     <td>{if isset($entry->status)}{$entry->status}{/if}</td>
-     <td>{if isset($entry->dependslink)}{$entry->dependslink}{/if}</td>
-     <td>{$entry->helplink}</td>
-     <td>{if isset($entry->aboutlink)}{$entry->aboutlink}{/if}</td>
-   </tr>
- {/foreach}
- </tbody>
+<table cellspacing="0" class="pagetable scrollable">
+	<thead>
+		<tr>
+			<th></th>
+			<th>{$ModuleManager->Lang('nametext')}</th>
+			<th><span title="{$ModuleManager->Lang('title_modulelastversion')}">{$ModuleManager->Lang('vertext')}</span></th>
+			<th><span title="{$ModuleManager->Lang('title_modulelastreleasedate')}">{$ModuleManager->Lang('releasedate')}</span></th>
+			<th><span title="{$ModuleManager->Lang('title_moduletotaldownloads')}">{$ModuleManager->Lang('downloads')}</span></th>
+                        <th><span title="{$ModuleManager->Lang('title_modulestatus')}">{$ModuleManager->Lang('statustext')}</span></th>
+			<th>&nbsp;</th>
+			<th>&nbsp;</th>
+			<th>&nbsp;</th>
+		</tr>
+	</thead>
+	<tbody>
+	{foreach from=$search_data item=entry}
+		{cycle values="row1,row2" assign='rowclass'}
+	        <tr class="{$rowclass}" {if $entry->age=='new'}style="font-weight: bold;"{/if}>
+		        <td>{get_module_status_icon status=$entry->age}</td>
+			<td><span title="{$entry->description|strip_tags|cms_escape}">{$entry->name}</span></td>
+			<td>{$entry->version}</td>
+			<td>{$entry->date|date_format:'%x'}</td>
+			<td>{$entry->downloads}</td>
+			<td>{if $entry->candownload}
+                              <span title="{$ModuleManager->Lang('title_moduleinstallupgrade')}">{$entry->status}</span>
+                            {else}
+                               {$entry->status}
+                            {/if}
+                        </td>
+			<td><a href="{$entry->depends_url}" title="{$ModuleManager->Lang('title_moduledepends')}">{$ModuleManager->Lang('dependstxt')}</a></td>
+			<td><a href="{$entry->help_url}" title="{$ModuleManager->Lang('title_modulehelp')}">{$ModuleManager->Lang('helptxt')}</a></td>
+			<td><a href="{$entry->about_url}" title="{$ModuleManager->Lang('title_moduleabout')}">{$ModuleManager->Lang('abouttxt')}</a></td>
+		</tr>
+	{/foreach}
+	</tbody>
 </table>
 </fieldset>
 {/if}
