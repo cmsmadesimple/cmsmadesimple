@@ -853,7 +853,7 @@ class ContentOperations
 			$str .= $key.': '.$val.',';
 		}
 		$str = substr($str,0,-1).'}';
-		$out .= '<script type="text/javascript">$(document).ready(function(){ $(\'#'.$id.'\').hierselector('.$str.'); });</script>';
+		$out .= "<script type=\"text/javascript\">$(function(){ $('#$id').hierselector($str) });</script>";
 		return $out;
 	}
 // 	function CreateHierarchyDropdown($current = '', $parent = '', $name = 'parent_id', $allowcurrent = 0,
