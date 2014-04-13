@@ -1,11 +1,11 @@
 <?php
 #BEGIN_LICENSE
 #-------------------------------------------------------------------------
-# Module: ModuleManager (c) 2008 by Robert Campbell 
+# Module: ModuleManager (c) 2008 by Robert Campbell
 #         (calguy1000@cmsmadesimple.org)
 #  An addon module for CMS Made Simple to allow browsing remotely stored
 #  modules, viewing information about them, and downloading or upgrading
-# 
+#
 #-------------------------------------------------------------------------
 # CMS - CMS Made Simple is (c) 2005 by Ted Kulp (wishy@cmsmadesimple.org)
 # Visit our homepage at: http://www.cmsmadesimple.org
@@ -20,7 +20,7 @@
 # However, as a special exception to the GPL, this software is distributed
 # as an addon module to CMS Made Simple.  You may not use this software
 # in any Non GPL version of CMS Made simple, or in any version of CMS
-# Made simple that does not indicate clearly and obviously in its admin 
+# Made simple that does not indicate clearly and obviously in its admin
 # section that the site was built with CMS Made simple.
 #
 # This program is distributed in the hope that it will be useful,
@@ -126,14 +126,16 @@ try {
     foreach( $alldeps as $name => $row ) {
       $fnd = FALSE;
       $tmp = null;
-      foreach( $res as $rec ) {
-	if( $rec['name'] != $name ) continue;
-	$tmp = version_compare($row['version'],$rec['version']);
-	if( $tmp <= 0 ) {
-	  $fnd = TRUE;
-	  $alldeps[$name] = $rec;
-	  break;
-	}
+      if( is_array($res) && count($res) ) {
+          foreach( $res as $rec ) {
+              if( $rec['name'] != $name ) continue;
+              $tmp = version_compare($row['version'],$rec['version']);
+              if( $tmp <= 0 ) {
+                  $fnd = TRUE;
+                  $alldeps[$name] = $rec;
+                  break;
+              }
+          }
       }
     }
   }
@@ -172,7 +174,7 @@ try {
     if( !isset($rec['version']) ) throw new CmsInvalidDataException( $this->Lang('error_missingmoduleinfo',$mname) );
     if( !isset($rec['size']) ) throw new CmsInvalidDataException( $this->Lang('error_missingmoduleinfo',$mname.' '.$rec['version']) );
   }
-  
+
   // here, if alldeps is empty... we have nothing to do.
   $smarty->assign('return_url',$this->create_url($id,'defaultadmin',$returnid, array('__activetab'=>'modules')));
   $parms = array('name'=>$module_name,'version'=>$module_version,'filename'=>$module_filename,'size'=>$module_size);
