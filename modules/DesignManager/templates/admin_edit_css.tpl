@@ -46,6 +46,25 @@ $(document).ready(function(){
       return false;
     });
   });
+
+  // disabling Media Type checkboxes if Media query is in use
+  if ($('#mediaquery').val() !== '') {
+      $('.media-type :checkbox').attr({
+          disabled: 'disabled',
+          checked: false
+      });
+  }
+  
+  $('#mediaquery').keyup(function(e) {
+      if ($('#mediaquery').val() !== '') {
+          $('.media-type :checkbox').attr({
+              disabled: 'disabled',
+              checked: false
+          });
+      } else {
+          $('.media-type:checkbox').removeAttr('disabled');
+      }
+  });
 });
 </script>
 
@@ -117,7 +136,7 @@ $(document).ready(function(){
   <p class="patetext">{$mod->Lang('prompt_media_type')}:</p>
   {assign var='tmp' value='all,aural,speech,braille,embossed,handheld,print,projection,screen,tty,tv'}
   {assign var='all_types' value=explode(',',$tmp)}
-  <p class="pageinput">
+  <p class="pageinput media-type">
     {foreach from=$all_types item='type' name='media_type'}{strip}
       <input id="media_type_{$type}" type="checkbox" name="{$actionid}media_type[]" value="{$type}" {if $css->has_media_type($type)}checked="checked"{/if}/>
       &nbsp;
