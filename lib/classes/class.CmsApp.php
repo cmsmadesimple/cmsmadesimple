@@ -202,7 +202,7 @@ final class CmsApp {
 	public function set_content_type($mime_type = '')
 	{
 		$this->_content_type = null;
-		if( $txt ) 	$this->_content_type = $mime_type;
+		if( isset($txt) ) 	$this->_content_type = $mime_type;
 	}
 
 	/**
