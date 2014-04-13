@@ -5,52 +5,52 @@ global $admin_user;
 // Themes
 //
 
-// minimal theme has the minimal template, and no styesheets.
-echo "<br/>creating initial collections...\n";
+// minimal theme has the minimal template, and no stylesheets.
+echo "<br />creating initial collections...\n";
 $minimal_theme = new CmsLayoutCollection();
 $minimal_theme->set_name('Minimal');  // id = 19
-$minimal_theme->set_description('Minimal templates and stylesheets');
+$minimal_theme->set_description('Minimal template and stylesheets');
 $minimal_theme->save();
 
 $simplex_theme = new CmsLayoutCollection();
 $simplex_theme->set_name('Simplex');
-$simplex_theme->set_description('A Responsive and flexible CMSMS theme');
+$simplex_theme->set_description('A responsive and flexible CMS Made Simple theme');
 $simplex_theme->set_default(TRUE);
 $simplex_theme->save();
 
 $css_menuleft_1col_theme = new CmsLayoutCollection();
 $css_menuleft_1col_theme->set_name('CSSMenu left + 1 column');
-$css_menuleft_1col_theme->set_description('todo: '.__FILE__.' : '.__LINE__);
+$css_menuleft_1col_theme->set_description('Basic theme with a CSS menu in one column at the left');
 $css_menuleft_1col_theme->save();
 
 $css_menutop_2col_theme = new CmsLayoutCollection();
 $css_menutop_2col_theme->set_name('CSSMenu top + 2 columns');
-$css_menutop_2col_theme->set_description('todo: '.__FILE__.' : '.__LINE__);
+$css_menutop_2col_theme->set_description('Basic theme with a CSS menu at the top and two columns in the body');
 $css_menutop_2col_theme->save();
 
 $leftsimple_1col_theme = new CmsLayoutCollection();
 $leftsimple_1col_theme->set_name('Left simple navigation + 1 column');
-$leftsimple_1col_theme->set_description('todo: '.__FILE__.' : '.__LINE__);
+$leftsimple_1col_theme->set_description('Basic theme with one column at the left and a simple menu');
 $leftsimple_1col_theme->save();
 
 $ncleanblue_theme = new CmsLayoutCollection();
 $ncleanblue_theme->set_name('NCleanBlue');
-$ncleanblue_theme->set_description('todo: '.__FILE__.' : '.__LINE__);
+$ncleanblue_theme->set_description('More extended design with a fat footer menu');
 $ncleanblue_theme->save();
 
 $shadowmenu_left_1col_theme = new CmsLayoutCollection();
 $shadowmenu_left_1col_theme->set_name('ShadowMenu left + 1 column');
-$shadowmenu_left_1col_theme->set_description('todo: '.__FILE__.' : '.__LINE__);
+$shadowmenu_left_1col_theme->set_description('Basic theme with a shadow menu in the left column');
 $shadowmenu_left_1col_theme->save();
 
 $shadowmenu_tab_2col_theme = new CmsLayoutCollection();
 $shadowmenu_tab_2col_theme->set_name('ShadowMenu Tab + 2 columns');
-$shadowmenu_tab_2col_theme->set_description('todo: '.__FILE__.' : '.__LINE__);
+$shadowmenu_tab_2col_theme->set_description('Basic theme with two columns with shadow menu tabs');
 $shadowmenu_tab_2col_theme->save();
 
 $topsimple_leftsubnav_1col_theme = new CmsLayoutCollection();
 $topsimple_leftsubnav_1col_theme->set_name('Top simple navigation + left subnavigation + 1 column');
-$topsimple_leftsubnav_1col_theme->set_description('todo: '.__FILE__.' : '.__LINE__);
+$topsimple_leftsubnav_1col_theme->set_description('Basic theme with a top navigation and a sub menu in a column in the body');
 $topsimple_leftsubnav_1col_theme->save();
 
 
