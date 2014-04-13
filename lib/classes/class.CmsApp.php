@@ -181,7 +181,7 @@ final class CmsApp {
 
 
 	/**
-	 * Retrieve the request content type
+	 * Retrieve the request content type (for frontend requests)
 	 *
 	 * If no content type is explicity set, text/html is assumed.
 	 *

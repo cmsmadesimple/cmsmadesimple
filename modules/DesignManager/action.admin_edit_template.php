@@ -59,8 +59,6 @@ try {
     }
 
     try {
-        if( isset($params['tpl_setall']) ) $this->Redirect($id,'admin_set_all_pages',$returnid,array('tpl'=>$params['tpl']));
-
         if( isset($params['submit']) || isset($params['apply']) ) {
             $parser = cmsms()->get_template_parser();
             cms_utils::set_app_data('tmp_template',$params['contents']);

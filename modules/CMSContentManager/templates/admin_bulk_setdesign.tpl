@@ -9,6 +9,8 @@
 	</ul>
 </div>
 
+<div class="warning">{$mod->Lang('warn_destructive')}</div>
+
 <div class="pageoverflow">
 	<p class="pagetext"><label for="design_ctl">{$mod->Lang('prompt_design')}:</label></p>
 	<p class="pageinput">
