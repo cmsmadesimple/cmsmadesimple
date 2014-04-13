@@ -448,6 +448,8 @@
          * @function setUIButtons()
          */
         setUIButtons : function() {
+		
+			// Standard input buttons
             $('input[type="submit"], input[type="button"]').each(function() {
                 var button = $(this),
                     icon = 'ui-icon-circle-check',
@@ -476,6 +478,7 @@
                 button.replaceWith($btn);
             });
             
+			// Back links
             $('a.pageback').addClass('ui-state-default ui-corner-all')
                 .prepend('<span class="ui-icon ui-icon-arrowreturnthick-1-w">')
                 .hover(function() {
@@ -483,6 +486,18 @@
                 }, function() {
                     $(this).removeClass('ui-state-hover');
                 });
+				
+			// Generic style
+			$(".cmsms-button").each(function(index) {
+			
+				var icon = $(this).data("uiIcon");
+			
+				$(this).button({
+					icons: {
+						primary: icon
+					}
+				});
+			});			
         },
         
         /**
