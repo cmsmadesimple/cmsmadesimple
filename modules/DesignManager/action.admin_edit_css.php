@@ -41,7 +41,6 @@ try {
 
     try {
         if( isset($params['submit']) || isset($params['apply']) ) {
-            if( isset($params['name']) ) $css_ob->set_name($params['name']);
             if( isset($params['description']) ) $css_ob->set_description($params['description']);
             if( isset($params['content']) ) $css_ob->set_content($params['content']);
             $typ = array();
@@ -53,8 +52,12 @@ try {
                 if( isset($params['design_list']) ) $design_list = $params['design_list'];
                 $css_ob->set_designs($design_list);
             }
-            $css_ob->set_designs(array());
-            if( isset($params['design_list']) ) $css_ob->set_designs($params['design_list']);
+            //$css_ob->set_designs(array());
+            //if( isset($params['design_list']) ) $css_ob->set_designs($params['design_list']);
+
+            // set the name last as it is the most likely to generate an error.
+            // this allows us to preserve as much data as possible.
+            if( isset($params['name']) ) $css_ob->set_name($params['name']);
 
             $css_ob->save();
 

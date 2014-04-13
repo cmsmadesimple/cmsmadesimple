@@ -18,12 +18,12 @@ class CmsLayoutTemplate
 	/**
 	 * @ignore
 	 */
-  const TABLENAME = 'layout_templates';
+    const TABLENAME = 'layout_templates';
 
 	/**
 	 * @ignore
 	 */
-  const ADDUSERSTABLE = 'layout_tpl_addusers';
+    const ADDUSERSTABLE = 'layout_tpl_addusers';
 
 	/**
 	 * @ignore
@@ -296,7 +296,7 @@ class CmsLayoutTemplate
 		$this->_design_assoc = $x;
 	}
 
-  /**
+    /**
 	 * Associate a new design with this template
 	 *
 	 * @param mixed $a A CmsLayoutCollection object, an integer design id, or a string design name.
@@ -457,7 +457,7 @@ class CmsLayoutTemplate
 	public function set_additional_editors($a)
 	{
 		if( !is_array($a) ) {
-			if( is_string($a) || (int)$a > 0 ) {
+			if( is_string($a) || (int)$a != 0 ) {
 				// maybe a single value...
 				$res = self::_resolve_user($a);
 				$this->_addt_editors = array($res);
@@ -467,8 +467,9 @@ class CmsLayoutTemplate
 		else {
 			$tmp = array();
 			for( $i = 0; $i < count($a); $i++ ) {
-				if( (int)$a[$i] > 0 ) {
-					$tmp[] = (int)$a[$i];
+                $tmp2 = (int)$a[$i];
+				if( $tmp2 != 0 ) {
+					$tmp[] = $tmp2;
 				}
 				else if( is_string($a[$i]) ) {
 					$tmp[] = self::_resolve_user($a[$i]);
@@ -549,10 +550,10 @@ class CmsLayoutTemplate
               WHERE id = ?';
 		$db = cmsms()->GetDb();
 		$dbr = $db->Execute($query,
-												array($this->get_name(),$this->get_content(),$this->get_description(),
-															$this->get_type_id(),$this->get_type_dflt(),$this->get_category_id(),
-															$this->get_owner_id(),time(),
-															$this->get_id()));
+                            array($this->get_name(),$this->get_content(),$this->get_description(),
+                                  $this->get_type_id(),$this->get_type_dflt(),$this->get_category_id(),
+                                  $this->get_owner_id(),time(),
+                                  $this->get_id()));
 		if( !$dbr ) throw new CmsSQLErrorException($db->sql.' -- '.$db->ErrorMsg());
 
 		if( $this->get_type_dflt() ) {
@@ -659,7 +660,7 @@ class CmsLayoutTemplate
 	 */
 	public function delete()
 	{
-	  if( !$this->get_id() ) return;
+        if( !$this->get_id() ) return;
 
 		Events::SendEvent('Core','DeleteTemplatePre',array(get_class($this)=>&$this));
 		$db = cmsms()->GetDb();
@@ -773,7 +774,7 @@ class CmsLayoutTemplate
 				foreach( $list2 as $one ) {
 					$designs_by_tpl[$one] = array();
 				}
-  			$dquery = 'SELECT tpl_id,design_id FROM '.cms_db_prefix().CmsLayoutCollection::TPLTABLE.'
+                $dquery = 'SELECT tpl_id,design_id FROM '.cms_db_prefix().CmsLayoutCollection::TPLTABLE.'
                    WHERE tpl_id IN ('.implode(',',$list2).') ORDER BY tpl_id';
 				$designs_tmp1 = $db->GetArray($dquery);
 				foreach( $designs_tmp1 as $row ) {

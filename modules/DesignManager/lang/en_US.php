@@ -334,6 +334,7 @@ $lang['msg_cancelled'] = 'Operation Cancelled';
 $lang['msg_category_deleted'] = 'Category Deleted';
 $lang['msg_category_saved'] = 'Category Saved';
 $lang['msg_design_imported']  = 'Design Imported';
+$lang['msg_dflt_design_saved'] = 'Default design changed';
 $lang['msg_lostlock'] = 'Sorry, but you have lost the lock on this item, and somebody else has made edits to this item.  You can save your changes to a text file for future use, but you can no longer commit any changes';
 $lang['msg_options_saved'] = 'Options Saved';
 $lang['msg_steal_lock'] = 'You can steal this lock';

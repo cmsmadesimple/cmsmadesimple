@@ -42,10 +42,9 @@ $(document).ready(function () {
     //cms_CMloadUrl('a.collapseall'),
     //cms_CMloadUrl('a.page_collapse'),
     //cms_CMloadUrl('a.page_expand'),
-    // these links can't use ajax as they effect multiple rows.
-    //cms_CMloadUrl('a.page_sortup'),
-    //cms_CMloadUrl('a.page_sortdown'),
 
+    cms_CMloadUrl('a.page_sortup'),
+    cms_CMloadUrl('a.page_sortdown'),
     cms_CMloadUrl('a.page_setinactive', '{$mod->Lang('confirm_setinactive')}'),
     cms_CMloadUrl('a.page_setactive'),
     cms_CMloadUrl('a.page_setdefault', '{$mod->Lang('confirm_setdefault')}'),

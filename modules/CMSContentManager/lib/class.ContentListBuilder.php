@@ -274,17 +274,13 @@ final class ContentListBuilder
     if( !$this->_module->CheckPermission('Manage All Content') ) return;
 
     $contentops = cmsms()->GetContentOperations();
-    $node = $contentops->quickfind_node_by_id($page_id);
-    if( !$node ) return FALSE;
-    $content1 = $node->GetContent(FALSE,FALSE,FALSE);
+    $content1 = $contentops->LoadContentFromId($page_id);
     if( !$content1 ) return FALSE;
     if( !$content1->IsDefaultPossible() ) return FALSE;
     if( !$content1->Active() ) return FALSE;
 
     $page_id2 = ContentOperations::get_instance()->GetDefaultContent();
-    $contentops = cmsms()->GetContentOperations();
-    $node = $contentops->quickfind_node_by_id($page_id);
-    $content2 = $node->GetContent(FALSE,FALSE,FALSE);
+    $content2 = $contentops->LoadContentFromId($page_id2);
     if( !$content2 ) return FALSE;
 
     $content1->SetDefaultContent(TRUE);

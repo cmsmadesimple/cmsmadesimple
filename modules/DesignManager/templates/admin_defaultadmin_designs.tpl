@@ -32,7 +32,13 @@
     <tr class="{$rowclass}" onmouseover="this.className='{$rowclass}hover';" onmouseout="this.className='{$rowclass}';">
       <td><a href="{$edit_url}" title="{$mod->Lang('edit_design')}">{$design->get_id()}</a></td>
       <td><a href="{$edit_url}" title="{$mod->Lang('edit_design')}">{$design->get_name()}</a></td>
-      <td>{if $design->get_default()}{admin_icon icon='true.gif' title=$mod->Lang('prompt_dflt')}{else}{admin_icon icon='false.gif' title=$mod->Lang('prompt_notdflt')}{/if}</td>
+      <td>
+        {if $design->get_default()}
+	  {admin_icon icon='true.gif' title=$mod->Lang('prompt_dflt')}
+	{else}
+	  <a href="{cms_action_url design_setdflt=$design->get_id()}">{admin_icon icon='false.gif' title=$mod->Lang('prompt_setdflt_design')}</a>
+	{/if}
+      </td>
       <td><a href="{$edit_url}" title="{$mod->Lang('edit_design')}">{admin_icon icon='edit.gif'}</a></td>
       <td><a href="{$export_url}" title="{$mod->Lang('export_design')}">{admin_icon icon='export.gif'}</a></td>
       <td><a href="{$delete_url}" title="{$mod->Lang('delete_design')}">{admin_icon icon='delete.gif'}</a></td>
