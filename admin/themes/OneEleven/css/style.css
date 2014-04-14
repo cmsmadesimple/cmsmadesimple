@@ -1556,7 +1556,8 @@ td.icons_wide {
 	display: inline-block;
 }
 
-#oe_mainarea .available-items li .sortable-remove {
+#oe_mainarea .available-templates li .sortable-remove,
+#oe_mainarea .available-stylesheets li .sortable-remove {
 	display: none;
 }
 
