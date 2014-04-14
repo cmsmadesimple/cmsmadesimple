@@ -27,10 +27,10 @@
             <legend>{$mod->Lang('attached_templates')}</legend>
             <div id="selected-templates">
                 <ul class="sortable-templates sortable-list selected-templates">
-                    {if $design->get_templates()|@count == 0}<li class="placeholder">{$mod->Lang('drop_items')}</li>{/if}
+                    {if $design->get_templates()|@count == 0}<li class="placeholder no-sort">{$mod->Lang('drop_items')}</li>{/if}
                     {foreach from=$all_templates item='tpl'}
                         {if $tmpl && in_array($tpl->get_id(),$tmpl)}
-                            <li class="ui-state-default cf sortable-item" data-cmsms-item-id="{$tpl->get_id()}">
+                            <li class="ui-state-default cf sortable-item no-sort" data-cmsms-item-id="{$tpl->get_id()}">
                                 {$tpl->get_name()}
                                 <a href="#" title="{$mod->Lang('remove')}" class="ui-icon ui-icon-trash sortable-remove">{$mod->Lang('remove')}</a>
                                 <input class="hidden" type="checkbox" name="{$actionid}assoc_tpl[]" value="{$tpl->get_id()}" checked="checked" />
@@ -49,7 +49,7 @@ $(function() {
         delay: 150,
         revert: true,
         placeholder: 'ui-state-highlight',
-        items: 'li:not(.placeholder)',
+        items: 'li:not(.no-sort)',
         helper: function (event, ui) {
             if (!ui.hasClass('selected')) {
                 ui.addClass('selected')
