@@ -84,7 +84,8 @@ $(function() {
         
     $(document).on('click', '#selected-templates .sortable-remove', function(e) {
         $(this).next('input[type="checkbox"]').attr('checked', false);
-        $(this).parent('li').appendTo('#available-templates ul');
+        $(this).parent('li').removeClass('no-sort').appendTo('#available-templates ul');
+        $(this).remove();
         e.preventDefault();
     });
 });

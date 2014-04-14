@@ -83,6 +83,7 @@ $(function() {
     $(document).on('click', '#selected-stylesheets .sortable-remove', function(e) {
         $(this).next('input[type="checkbox"]').attr('checked', false);
         $(this).parent('li').appendTo('#available-stylesheets ul');
+        $(this).remove();
         e.preventDefault();
     });
 });
