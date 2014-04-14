@@ -8,14 +8,14 @@
 <div class="c_full cf">
     <div class="grid_6 draggable-area">
         <fieldset>
-            <legend>{$mod->Lang('available_templates')}</legend>
+            <legend>{$mod->Lang('available_stylesheets')}</legend>
             <div id="available-stylesheets">
                 <ul class="sortable-stylesheets sortable-list available-items">
                 {foreach from=$all_stylesheets item='css'}
                     {if !$cssl or !in_array($css->get_id(),$cssl)}
-                        <li class="ui-state-default" data-cmsms-item-id="{$tpl->get_id()}">
+                        <li class="ui-state-default" data-cmsms-item-id="{$css->get_id()}">
                             {$css->get_name()}
-                            <input class="hidden" type="checkbox" name="{$actionid}assoc_tpl[]" value="{$tpl->get_id()}" />
+                            <input class="hidden" type="checkbox" name="{$actionid}assoc_css[]" value="{$css->get_id()}" />
                         </li>
                     {/if}
                 {/foreach}
@@ -25,15 +25,15 @@
     </div>
     <div class="grid_6">
         <fieldset>
-            <legend>{$mod->Lang('attached_templates')}</legend>
+            <legend>{$mod->Lang('attached_stylesheets')}</legend>
             <div id="selected-stylesheets">
                 <ul class="sortable-stylesheets sortable-list selected-items">
                     {if $design->get_stylesheets()|count == 0}<li class="placeholder">{$mod->Lang('drop_items')}</li>{/if}
                     {foreach from=$design->get_stylesheets() item='one'}
-                        <li class="ui-state-default cf sortable-item" data-cmsms-item-id="{$tpl->get_id()}">
+                        <li class="ui-state-default cf sortable-item" data-cmsms-item-id="{$one}">
                             {$list_stylesheets.$one}
                             <a href="#" title="{$mod->Lang('remove')}" class="ui-icon ui-icon-trash sortable-remove">{$mod->Lang('remove')}</a>
-                            <input class="hidden" type="checkbox" name="{$actionid}assoc_tpl[]" value="{$tpl->get_id()}" checked="checked" />
+                            <input class="hidden" type="checkbox" name="{$actionid}assoc_css[]" value="{$one}" checked="checked" />
                         </li>
                     {/foreach}
                 </ul>
