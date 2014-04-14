@@ -1672,12 +1672,12 @@ td.icons_wide {
 	width: 25px
 }
 /*** Design manager ***/
-#oe_mainarea ul.sortable-list,
-#oe_mainarea ol.sortable-list {
+#oe_mainarea ul.sortable-list {
 	list-style: none;
 	padding: 0;
 	margin: 0;
 	max-height: 321px;
+	min-height: 25px;
 	overflow: auto;
 }
 

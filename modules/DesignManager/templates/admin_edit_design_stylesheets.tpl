@@ -10,7 +10,7 @@
         <fieldset>
             <legend>{$mod->Lang('available_stylesheets')}</legend>
             <div id="available-stylesheets">
-                <ul class="sortable-stylesheets sortable-list available-items">
+                <ul class="sortable-stylesheets sortable-list available-stylesheets">
                 {foreach from=$all_stylesheets item='css'}
                     {if !$cssl or !in_array($css->get_id(),$cssl)}
                         <li class="ui-state-default" data-cmsms-item-id="{$css->get_id()}">
@@ -27,7 +27,7 @@
         <fieldset>
             <legend>{$mod->Lang('attached_stylesheets')}</legend>
             <div id="selected-stylesheets">
-                <ul class="sortable-stylesheets sortable-list selected-items">
+                <ul class="sortable-stylesheets sortable-list selected-stylesheets">
                     {if $design->get_stylesheets()|count == 0}<li class="placeholder">{$mod->Lang('drop_items')}</li>{/if}
                     {foreach from=$design->get_stylesheets() item='one'}
                         <li class="ui-state-default cf sortable-item" data-cmsms-item-id="{$one}">
