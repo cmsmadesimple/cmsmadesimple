@@ -75,6 +75,7 @@ $(function() {
             
             $('.sortable-templates .placeholder').hide();
             $(elements).removeClass('selected ui-state-hover')
+                       .addClass('no-sort')
                        .append($('<a href="#"/>').addClass('ui-icon ui-icon-trash sortable-remove').text('Remove'))
                        .find('input[type="checkbox"]').attr('checked', true);
         }
