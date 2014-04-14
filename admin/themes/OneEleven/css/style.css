@@ -1532,6 +1532,38 @@ td.pageicon {
 td.icons_wide {
 	width: 25px
 }
+
+/*** Design manager ***/
+#oe_mainarea ul.sortable-list,
+#oe_mainarea ol.sortable-list {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+	max-height: 321px;
+	overflow: auto;
+}
+
+#oe_mainarea .sortable-list li {
+	list-style: none;
+	padding: 4px 12px;
+	margin-bottom: 1px;
+	display: block;
+	position: relative;
+}
+
+#oe_mainarea .sortable-list li .sortable-remove {
+	float: right;
+	display: inline-block;
+}
+
+#oe_mainarea .available-items li .sortable-remove {
+	display: none;
+}
+
+#oe_mainarea .sortable-list > li.ui-state-highlight {
+	padding: 14px 0;
+}
+
 /*** File Manager ***/
 #filesarea img {
 	max-width: 32px

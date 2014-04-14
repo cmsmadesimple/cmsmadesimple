@@ -63,10 +63,14 @@
 
 <script type="text/javascript">
 $(document).ready(function(){
-  $(document).on('click', '#submitme,#applyme', function(){
-    $('select.selall').attr('multiple','multiple');
-    $('select.selall option').attr('selected','selected');
-  });
+    $('.sortable-list input[type="checkbox"]').hide();
+    $('ul.available-items').on('click', 'li', function () {
+        $(this).toggleClass('selected ui-state-hover');
+    });
+    $(document).on('click', '#submitme,#applyme', function(){
+        $('select.selall').attr('multiple','multiple');
+        $('select.selall option').attr('selected','selected');
+    });
 });
 
 </script>

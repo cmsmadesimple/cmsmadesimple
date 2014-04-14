@@ -56,6 +56,7 @@ $lang['delete_stylesheet'] = 'Delete Stylesheet';
 $lang['delete_template'] = 'Delete Template';
 $lang['desc'] = 'Descending';
 $lang['desc_designmanager_settings'] = 'Adjust settings related to managing designs (templates and stylesheets)';
+$lang['drop_items'] = 'Drop selected items here';
 
 #E
 $lang['edit_category'] = 'Edit Category';
@@ -449,6 +450,7 @@ $lang['prompt_with_selected'] = 'With Selected';
 
 #R
 $lang['reset_factory'] = 'Reset to Factory Defaults';
+$lang['remove'] = 'Remove';
 
 #S
 $lang['set_all_pages'] = 'Set All Pages To This Template';

@@ -4,78 +4,88 @@
 {else}
 
 {assign var='tmpl' value=$design->get_templates()}
-<table class="pagetable" style="border: none;">
-<tr>
-  <td>
-    <fieldset>
-      <legend><label for="avail_tpl">{$mod->Lang('available_templates')}:</label></legend>
-      <select id="avail_tpl" multiple="multiple" size="10">
-      {foreach from=$all_templates item='tpl'}
-        {if !$tmpl || !in_array($tpl->get_id(),$tmpl)}
-          <option value="{$tpl->get_id()}">{$tpl->get_name()}</option>
-        {/if}
-      {/foreach}
-      </select>
-    </fieldset>
-  </td>
-  <td style="text-align: center;">
-    <div>{admin_icon icon='up.gif' id='tpl_up' title=$mod->Lang('help_move_up')}</div>
-    <div>{admin_icon icon='left.gif' id='tpl_left' title=$mod->Lang('help_move_left')}</div>
-    <div>{admin_icon icon='right.gif' id='tpl_right' title=$mod->Lang('help_move_right')}</div>
-    <div>{admin_icon icon='down.gif' id='tpl_down' title=$mod->Lang('help_move_down')}</div>
-  </td>
-  <td>
-    <fieldset>
-      <legend><label for="assoc_tpl">{$mod->Lang('attached_templates')}:</label></legend>
-      <select class="selall" id="assoc_tpl" name="{$actionid}assoc_tpl[]" size="10">
-      {foreach from=$all_templates item='tpl'}
-        {if $tmpl && in_array($tpl->get_id(),$tmpl)}
-          <option value="{$tpl->get_id()}">{$tpl->get_name()}</option>
-        {/if}
-      {/foreach}
-      </select>
-    </fieldset>
-  </td>
-  </tr>
-</table>
-
-<script type="text/javascript">
-$(document).ready(function(){
-  $('#tpl_right').click(function(){
-    var x = $('#avail_tpl :selected');
-    if( $(x).val() ) {
-      var x1 = $(x).clone();
-      $('#assoc_tpl').append(x1);
-      $(x).remove();
-    }
-  });
-  $('#tpl_left').click(function(){
-    var x = $('#assoc_tpl :selected');
-    if( $(x).val() ) {
-      var x1 = $(x).clone();
-      $('#avail_tpl').append(x1);
-      $(x).remove();
-    }
-  });
-  $('#tpl_up').click(function(){
-    var x = $('#assoc_tpl :selected');
-    var i = $(x).index();
-    if( i > 0 ) {
-      var x1 = $(x).clone().attr('selected','selected');
-      $(x).remove();
-      $('#assoc_tpl option').eq(i-1).before(x1);
-    }
-  });
-  $('#tpl_down').click(function(){
-    var x = $('#assoc_tpl :selected');
-    var i = $(x).index();
-    if( i < $('#assoc_tpl option').length - 1 ) {
-      var x1 = $(x).clone().attr('selected','selected');
-      $(x).remove();
-      $('#assoc_tpl option').eq(i).after(x1);
-    }
-  });
+<div class="c_full cf">
+    <div class="grid_6 draggable-area">
+        <fieldset>
+            <legend>{$mod->Lang('available_templates')}</legend>
+            <div id="available-templates">
+                <ul class="sortable-templates sortable-list available-templates">
+                {foreach from=$all_templates item='tpl'}
+                    {if !$tmpl || !in_array($tpl->get_id(),$tmpl)}
+                        <li class="ui-state-default" data-cmsms-item-id="{$tpl->get_id()}">
+                            {$tpl->get_name()}
+                            <input class="hidden" type="checkbox" name="{$actionid}assoc_tpl[]" value="{$tpl->get_id()}" />
+                        </li>
+                    {/if}
+                {/foreach}
+                </ul>
+            </div>
+        </fieldset>
+    </div>
+    <div class="grid_6">
+        <fieldset>
+            <legend>{$mod->Lang('attached_templates')}</legend>
+            <div id="selected-templates">
+                <ul class="sortable-templates sortable-list selected-templates">
+                    {if $design->get_templates()|@count == 0}<li class="placeholder">{$mod->Lang('drop_items')}</li>{/if}
+                    {foreach from=$all_templates item='tpl'}
+                        {if $tmpl && in_array($tpl->get_id(),$tmpl)}
+                            <li class="ui-state-default cf sortable-item" data-cmsms-item-id="{$tpl->get_id()}">
+                                {$tpl->get_name()}
+                                <a href="#" title="{$mod->Lang('remove')}" class="ui-icon ui-icon-trash sortable-remove">{$mod->Lang('remove')}</a>
+                                <input class="hidden" type="checkbox" name="{$actionid}assoc_tpl[]" value="{$tpl->get_id()}" checked="checked" />
+                            </li>
+                        {/if}
+                    {/foreach}
+                </ul>
+            </div>
+        </fieldset>
+    </div>
+</div>
+<script>
+$(function() {
+    $('ul.sortable-templates').sortable({
+        connectWith: '#selected-templates ul',
+        delay: 150,
+        revert: true,
+        placeholder: 'ui-state-highlight',
+        items: 'li:not(.placeholder)',
+        helper: function (event, ui) {
+            if (!ui.hasClass('selected')) {
+                ui.addClass('selected')
+                  .siblings()
+                  .removeClass('selected');
+            }
+            
+            var elements = ui.parent()
+                             .children('.selected')
+                             .clone(),
+                helper = $('<li/>');
+    
+            ui.data('multidrag', elements).siblings('.selected').remove();
+            return helper.append(elements);
+        },
+        stop: function (event, ui) {
+            var elements = ui.item.data('multidrag');
+            
+            ui.item.after(elements).remove();
+        },
+        receive: function(event, ui) {
+            var elements = ui.item.data('multidrag');
+            
+            $('.sortable-templates .placeholder').hide();
+            $(elements).removeClass('selected ui-state-hover')
+                       .append($('<a href="#"/>').addClass('ui-icon ui-icon-trash sortable-remove').text('Remove'))
+                       .find('input[type="checkbox"]').attr('checked', true);
+        }
+    
+    });
+        
+    $(document).on('click', '#selected-templates .sortable-remove', function(e) {
+        $(this).next('input[type="checkbox"]').attr('checked', false);
+        $(this).parent('li').appendTo('#available-templates ul');
+        e.preventDefault();
+    });
 });
 </script>
-
 {/if}

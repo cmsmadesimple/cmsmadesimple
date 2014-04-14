@@ -5,76 +5,85 @@
 {/if}
 
 {assign var='cssl' value=$design->get_stylesheets()}
-<div>
-  <table class="pagetable" style="border: none;">
-  <tr>
-    <td>
-      <fieldset>
-        <legend><label for="avail_css">{$mod->Lang('available_stylesheets')}:</label></legend>
-        <select id="avail_css" multiple="multiple" size="10">
-        {foreach from=$all_stylesheets item='css'}
-          {if !$cssl or !in_array($css->get_id(),$cssl)}
-          <option value="{$css->get_id()}">{$css->get_name()}</option>
-          {/if}
-        {/foreach}
-        </select>
-      </fieldset>
-    </td>
-    <td style="text-align: center;">
-      <div>{admin_icon icon='up.gif' id='css_up' title=$mod->Lang('help_move_up')}</div>
-      <div>{admin_icon icon='left.gif' id='css_left' title=$mod->Lang('help_move_left')}</div>
-      <div>{admin_icon icon='right.gif' id='css_right' title=$mod->Lang('help_move_right')}</div>
-      <div>{admin_icon icon='down.gif' id='css_down' title=$mod->Lang('help_move_down')}</div>
-    </td>
-    <td>
-      <fieldset>
-        <legend><label for="assoc_css">{$mod->Lang('attached_stylesheets')}:</label></legend>
-        <select class="selall" id="assoc_css" name="{$actionid}assoc_css[]" multiple="multiple" size="10">
-          {foreach from=$design->get_stylesheets() item='one'}
-          <option value="{$one}">{$list_stylesheets.$one}</option>
-          {/foreach}
-        </select>
-      </fieldset>
-    </td>
-    </tr>
-  </table>
+<div class="c_full cf">
+    <div class="grid_6 draggable-area">
+        <fieldset>
+            <legend>{$mod->Lang('available_templates')}</legend>
+            <div id="available-stylesheets">
+                <ul class="sortable-stylesheets sortable-list available-items">
+                {foreach from=$all_stylesheets item='css'}
+                    {if !$cssl or !in_array($css->get_id(),$cssl)}
+                        <li class="ui-state-default" data-cmsms-item-id="{$tpl->get_id()}">
+                            {$css->get_name()}
+                            <input class="hidden" type="checkbox" name="{$actionid}assoc_tpl[]" value="{$tpl->get_id()}" />
+                        </li>
+                    {/if}
+                {/foreach}
+                </ul>
+            </div>
+        </fieldset>
+    </div>
+    <div class="grid_6">
+        <fieldset>
+            <legend>{$mod->Lang('attached_templates')}</legend>
+            <div id="selected-stylesheets">
+                <ul class="sortable-stylesheets sortable-list selected-items">
+                    {if $design->get_stylesheets()|count == 0}<li class="placeholder">{$mod->Lang('drop_items')}</li>{/if}
+                    {foreach from=$design->get_stylesheets() item='one'}
+                        <li class="ui-state-default cf sortable-item" data-cmsms-item-id="{$tpl->get_id()}">
+                            {$list_stylesheets.$one}
+                            <a href="#" title="{$mod->Lang('remove')}" class="ui-icon ui-icon-trash sortable-remove">{$mod->Lang('remove')}</a>
+                            <input class="hidden" type="checkbox" name="{$actionid}assoc_tpl[]" value="{$tpl->get_id()}" checked="checked" />
+                        </li>
+                    {/foreach}
+                </ul>
+            </div>
+        </fieldset>
+    </div>
 </div>
-
-<script type="text/javascript">
-$(document).ready(function(){
-  $('#css_right').click(function(){
-    var x = $('#avail_css :selected');
-    if( $(x).val() ) {
-      var x1 = $(x).clone();
-      $('#assoc_css').append(x1);
-      $(x).remove();
-    }
-  });
-  $('#css_left').click(function(){
-    var x = $('#assoc_css :selected');
-    if( $(x).val() ) {
-      var x1 = $(x).clone();
-      $('#avail_css').append(x1);
-      $(x).remove();
-    }
-  });
-  $('#css_up').click(function(){
-    var x = $('#assoc_css :selected');
-    var i = $(x).index();
-    if( i > 0 ) {
-      var x1 = $(x).clone().attr('selected','selected');
-      $(x).remove();
-      $('#assoc_css option').eq(i-1).before(x1);
-    }
-  });
-  $('#css_down').click(function(){
-    var x = $('#assoc_css :selected');
-    var i = $(x).index();
-    if( i < $('#assoc_css option').length - 1 ) {
-      var x1 = $(x).clone().attr('selected','selected');
-      $(x).remove();
-      $('#assoc_css option').eq(i).after(x1);
-    }
-  });
+<script>
+$(function() {
+    $('ul.sortable-stylesheets').sortable({
+        connectWith: '#selected-stylesheets ul',
+        delay: 150,
+        revert: true,
+        placeholder: 'ui-state-highlight',
+        items: 'li:not(.placeholder)',
+        helper: function (event, ui) {
+            if (!ui.hasClass('selected')) {
+                ui.addClass('selected')
+                  .siblings()
+                  .removeClass('selected');
+            }
+            
+            var elements = ui.parent()
+                             .children('.selected')
+                             .clone(),
+                helper = $('<li/>');
+    
+            ui.data('multidrag', elements).siblings('.selected').remove();
+            return helper.append(elements);
+        },
+        stop: function (event, ui) {
+            var elements = ui.item.data('multidrag');
+            
+            ui.item.after(elements).remove();
+        },
+        receive: function(event, ui) {
+            var elements = ui.item.data('multidrag');
+            
+            $('.sortable-stylesheets .placeholder').hide();
+            $(elements).removeClass('selected ui-state-hover')
+                       .append($('<a href="#"/>').addClass('ui-icon ui-icon-trash sortable-remove').text('Remove'))
+                       .find('input[type="checkbox"]').attr('checked', true);
+        }
+    
+    });
+        
+    $(document).on('click', '#selected-stylesheets .sortable-remove', function(e) {
+        $(this).next('input[type="checkbox"]').attr('checked', false);
+        $(this).parent('li').appendTo('#available-stylesheets ul');
+        e.preventDefault();
+    });
 });
 </script>
