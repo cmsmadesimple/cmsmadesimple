@@ -15,11 +15,10 @@ jQuery(document).ready(function(){
   <form method="post" action="{$formurl}">
     <input type="hidden" name="active_tab" value="maintab" />
     <div class="pageoverflow">
-      <div class="pagetext"></div>
-      <div class="pageinput">
-	<input class="pagebutton" type="submit" name="submit_account" value="{lang('submit')}" />
-	<input class="pagebutton" type="submit" name="cancel" value="{lang('cancel')}" />
-      </div>
+		<div class="pageinput">
+			<input class="pagebutton" type="submit" name="submit_account" value="{lang('submit')}" />
+			<input class="pagebutton" type="submit" name="cancel" value="{lang('cancel')}" />
+		</div>
     </div>
 
     <div class="pageoverflow">
