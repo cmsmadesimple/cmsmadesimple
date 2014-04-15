@@ -27,5 +27,5 @@
 </div>
 {$formend}
 {else}
-<div class="pagewarning">{lang_by_realm('Search','nostatistics')}</div>
+<div class="information">{lang_by_realm('Search','nostatistics')}</div>
 {/if}
