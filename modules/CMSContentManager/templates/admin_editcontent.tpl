@@ -40,6 +40,7 @@ $(document).ready(function(){
 
 {if $content_obj->HasPreview()}
   $('#_preview_').click(function(){
+      if( typeof tinyMCE != 'undefined') tinyMCE.triggerSave();
         // serialize the form data
         var data = $('#Edit_Content').find('input:not([type=submit]), select, textarea').serializeArray();
         data.push({
@@ -99,6 +100,7 @@ $(document).ready(function(){
 
     // handle apply (ajax submit)
     $(document).on('click', '[name$=apply]', function () {
+        if( typeof tinyMCE != 'undefined') tinyMCE.triggerSave(); // TODO this needs better approach, create a common "ajax save" function that can be reused
         var data = $('#Edit_Content').find('input:not([type=submit]), select, textarea').serializeArray();
         data.push({
             'name': '{$actionid}ajax',
@@ -117,22 +119,6 @@ $(document).ready(function(){
             $('body').trigger(event);
         }, 'json');
         return false;
-    });
-    $(document).on('cms_ajax_apply', function (e) {
-        var htmlShow = '';
-        if (e.response == 'Success') {
-            // here we could fire a custom event, give the details and let something else handle it.
-            htmlShow = '<div class="pagemcontainer message"><p class="pagemessage">' + e.details + '<\/p><\/div>';
-            $('[name$=cancel]').fadeOut();
-            $('[name$=cancel]').attr('value', '{$mod->Lang('close')}');
-            $('[name$=cancel]').fadeIn();
-	    if( typeof e.url != 'undefined' ) $('a#viewpage').attr('href',e.url);
-        } else {
-            htmlShow = '<div class="pageerrorcontainer message"><ul class="pageerror">';
-            htmlShow += e.details;
-            htmlShow += '<\/ul><\/div>';
-        }
-        jQuery('#Edit_Content_Result').html(htmlShow);
     });
 
     {if isset($designchanged_ajax_url)}
