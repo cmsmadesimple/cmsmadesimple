@@ -9,7 +9,7 @@
         <fieldset>
             <legend>{$mod->Lang('available_templates')}</legend>
             <div id="available-templates">
-                <ul class="sortable-templates sortable-list available-templates">
+                <ul class="sortable-templates sortable-list available-items available-templates">
                 {foreach from=$all_templates item='tpl'}
                     {if !$tmpl || !in_array($tpl->get_id(),$tmpl)}
                         <li class="ui-state-default" data-cmsms-item-id="{$tpl->get_id()}">

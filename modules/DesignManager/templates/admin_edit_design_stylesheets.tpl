@@ -10,7 +10,7 @@
         <fieldset>
             <legend>{$mod->Lang('available_stylesheets')}</legend>
             <div id="available-stylesheets">
-                <ul class="sortable-stylesheets sortable-list available-stylesheets">
+                <ul class="sortable-stylesheets sortable-list available-items available-stylesheets">
                 {foreach from=$all_stylesheets item='css'}
                     {if !$cssl or !in_array($css->get_id(),$cssl)}
                         <li class="ui-state-default" data-cmsms-item-id="{$css->get_id()}">
