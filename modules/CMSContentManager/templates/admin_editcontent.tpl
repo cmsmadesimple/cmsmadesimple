@@ -122,13 +122,13 @@ $(document).ready(function(){
         var htmlShow = '';
         if (e.response == 'Success') {
             // here we could fire a custom event, give the details and let something else handle it.
-            htmlShow = '<div class="pagemcontainer"><p class="pagemessage">' + e.details + '<\/p><\/div>';
+            htmlShow = '<div class="pagemcontainer message"><p class="pagemessage">' + e.details + '<\/p><\/div>';
             $('[name$=cancel]').fadeOut();
             $('[name$=cancel]').attr('value', '{$mod->Lang('close')}');
             $('[name$=cancel]').fadeIn();
 	    if( typeof e.url != 'undefined' ) $('a#viewpage').attr('href',e.url);
         } else {
-            htmlShow = '<div class="pageerrorcontainer"><ul class="pageerror">';
+            htmlShow = '<div class="pageerrorcontainer message"><ul class="pageerror">';
             htmlShow += e.details;
             htmlShow += '<\/ul><\/div>';
         }
