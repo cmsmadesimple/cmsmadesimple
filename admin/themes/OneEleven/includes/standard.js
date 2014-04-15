@@ -381,7 +381,7 @@
          * @description Handles Core and Module messages 
          * @function showNotification()
          */
-        // TODO Rethink this in next versions, define a object based on type or something (maybe use plugin http://akquinet.github.io/jquery-toastmessage-plugin/demo/demo.html)
+        // TODO Rethink this in next versions, define a object based on type or something (maybe use plugin http://akquinet.github.io/jquery-toastmessage-plugin/demo/demo.html), move messages to global function in cms_admin.js so it can be reused by other themes 
         showNotifications : function() {
             
             $('.pagewarning, .message, .pageerrorcontainer, .pagemcontainer').prepend('<span class="close-warning"></span>');
@@ -411,16 +411,13 @@
                     }, 10000);
                 });
             });
-            
-            // TODO needs work, cms_ajax_apply event doesn't exist, seems like trigger inside post fails in ContentManager 
-            $('body').on('cms_ajax_apply', function(e) {
+ 
+            $(document).on('cms_ajax_apply', function(e) {
                 $('button[name=cancel], button[name=m1_cancel]').fadeOut();
                 $('button[name=cancel], button[name=m1_cancel]').button('option', 'label', e.close);
                 $('button[name=cancel], button[name=m1_cancel]').fadeIn();
                 
                 var htmlShow = '';
-                
-                console.log(event);
                 
                 if (e.response === 'Success') {
                     htmlShow = '<aside class="message pagemcontainer" role="status"><span class="close-warning">Close</span><p class="pagemessage">' + e.details + '<\/p><\/aside>';
@@ -429,6 +426,8 @@
                     htmlShow += e.details;
                     htmlShow += '<\/ul><\/aside>';
                 }
+                
+                console.log(e.response);
                 
                 $('body').append(htmlShow).slideDown(1000, function() {
                     window.setTimeout(function() {
@@ -439,7 +438,6 @@
                 $('.message').click(function() {
                     $('.message').slideUp();
                 });
-                $('body').off('cms_ajax_apply');
             });
         },
         

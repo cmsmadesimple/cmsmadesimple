@@ -21,7 +21,7 @@
 		<![endif]-->
 		<!-- custom jQueryUI Theme 1.10.04 see link in UI Stylesheet for color reference //-->
 		<link rel="stylesheet" href="style.php?{$secureparam}" />
-		{cms_jquery append="`$config.admin_url`/themes/OneEleven/includes/standard.js" include_css=0}
+		{cms_jquery append="`$config.admin_url`/themes/OneEleven/includes/standard.min.js" include_css=0}
 		<link href="{$config.admin_url}/themes/OneEleven/css/default-cmsms/jquery-ui-1.10.4.custom.min.css" rel="stylesheet" />
 		<!-- THIS IS WHERE HEADER STUFF SHOULD GO -->
 	 	{$headertext|default:''}
