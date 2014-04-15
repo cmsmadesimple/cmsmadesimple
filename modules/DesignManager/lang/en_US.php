@@ -424,6 +424,7 @@ $lang['prompt_requires_content_blocks'] = 'This template type requires content b
 $lang['prompt_return'] = 'Return';
 $lang['prompt_select'] = 'Select this item for performing bulk actions.';
 $lang['prompt_select_all'] = 'Select all';
+$lang['prompt_setdflt_design'] = 'Set as default design';
 $lang['prompt_source_css'] = 'Source Stylesheet';
 $lang['prompt_source_template'] = 'Source Template';
 $lang['prompt_sortby'] = 'Sort By';
