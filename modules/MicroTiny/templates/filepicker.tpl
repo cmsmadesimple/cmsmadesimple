@@ -93,7 +93,7 @@
 									{if !$file.isdir}{$file.size}{/if}
 								</span>
 								<span class="filepicker-file-ext">
-									{$file.ext|default:'dir'}
+									{if !$file.isdir}{$file.ext}{else}dir{/if}
 								</span>
 							</div>
 						</li>
