@@ -50,8 +50,6 @@ $lang['lbl_template_search'] = 'Search Templates';
 $lang['moddescription'] = 'A utility to search the database tables for rows containing certain text. Useful for finding where certain styles, tags, or modules are used.';
 
 // P
-$lang['param_formtemplate'] = 'TODO';
-$lang['param_resulttemplate'] = 'TODO';
 $lang['placeholder_search_text'] = 'Enter Search Text';
 $lang['postinstall'] = 'Admin Search module installed';
 $lang['postuninstall'] = 'Admin Search module uninstalled';
