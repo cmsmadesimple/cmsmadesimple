@@ -1611,5 +1611,5 @@ $lang['zz_3options_tab__'] = "Options";
 $lang['zz_4perms_tab__'] = "Permissions";
 
 ## _
-// TODO $lang['__CORE__'] = "CMSMS Core";
+$lang['__CORE__'] = "CMSMS Core";
 ?>
