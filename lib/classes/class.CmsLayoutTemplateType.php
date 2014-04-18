@@ -51,7 +51,7 @@ class CmsLayoutTemplateType
 	/**
 	 * This constant indicates a core template type
 	 */
-	const CORE = 'aa__CORE__';
+	const CORE = '__CORE__';
 
 	/**
 	 * @ignore
