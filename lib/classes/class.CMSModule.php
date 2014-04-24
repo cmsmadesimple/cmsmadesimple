@@ -803,7 +803,7 @@ abstract class CMSModule
      */
     public function GetChangeLog()
     {
-        return ModuleOperations::get_instance()->GetModuleChangelog($this->GetName());
+        return '';
     }
 
     /**
