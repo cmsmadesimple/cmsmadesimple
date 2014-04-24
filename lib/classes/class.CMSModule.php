@@ -2273,7 +2273,7 @@ abstract class CMSModule
         if( $params == '' ) $params = array();
         if( $tab != '' ) $params['__activetab'] = $tab;
         if( empty($action) ) $action = 'defaultadmin';
-        $this->Redirect('m1_',$action,'',$params,TRUE);
+        $this->Redirect('m1_',$action,'',$params,FALSE);
     }
 
     /**
