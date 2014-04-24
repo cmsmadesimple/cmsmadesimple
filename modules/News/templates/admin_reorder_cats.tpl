@@ -19,7 +19,7 @@ $(document).ready(function(){
     $('#submit_data').val(tree);
   });
 
-  $('ul.sortable').nestedSortable({	
+  $('ul.sortable').nestedSortable({
     disableNesting: 'no-nest',
     forcePlaceholderSize: true,
     handle: 'div',
@@ -35,7 +35,7 @@ $(document).ready(function(){
 </script>
 
 {function category_tree parent=-1 depth=1}{strip}
-<ul{if $depth==1} class="sortable"{/if}>
+<ul{if $depth==1} class="sortableList sortable"{/if}>
 {foreach $allcats as $cat}
   {if $cat.parent_id == $parent}
   <li id="cat_{$cat.news_category_id}">

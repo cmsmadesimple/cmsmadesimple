@@ -138,18 +138,6 @@ try {
     $tpl->save();
   }
 
-  $fn = cms_join_path(dirname(__FILE__),'templates','simple_navigation.tpl');
-  if( file_exists( $fn ) ) {
-    $template = @file_get_contents($fn);
-    $tpl = new CmsLayoutTemplate();
-    $tpl->set_name('simple_navigation');
-    $tpl->set_owner($uid);
-    $tpl->set_content($template);
-    $tpl->set_type($menu_template_type);
-    $tpl->set_type_dflt(TRUE);
-    $tpl->save();
-  }
-
   try {
       $simplex = CmsLayoutCollection::load('Simplex');
 
