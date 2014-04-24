@@ -26,8 +26,7 @@ require_once("../include.php");
 /**
  * Rolf: only used in admin/style.php
  */
-function cms_readfile($filename)
-{
+$cms_readfile = function($filename) {
   @ob_start();
   echo file_get_contents($filename);
   $result = @ob_get_contents();
@@ -37,7 +36,7 @@ function cms_readfile($filename)
     return TRUE;
   }
   return FALSE;
-}
+};
 
 $themeObject = cms_utils::get_theme_object();
 $theme = $themeObject->themeName;
@@ -45,40 +44,23 @@ $style="style";
 cms_admin_sendheaders('text/css');
 
 $thelang = CmsNlsOperations::get_language_info(CmsNlsOperations::get_current_language());
-if( is_object($thelang) && $thelang->direction() == 'rtl' )
-  {
-    $style.="-rtl";
-  }
-if (isset($_GET['ie']))
-  {
-    $style.="_ie";
-  }
+if( is_object($thelang) && $thelang->direction() == 'rtl' ) $style.="-rtl";
+if (isset($_GET['ie'])) $style.="_ie";
 $style .= ".css";
 
-if (file_exists(dirname(__FILE__)."/themes/".$theme."/css/".$style))
-  {
-    cms_readfile(dirname(__FILE__)."/themes/".$theme."/css/".$style);
-  }
-if (file_exists(dirname(__FILE__)."/themes/".$theme."/extcss/".$style))
-  {
-    cms_readfile(dirname(__FILE__)."/themes/".$theme."/extcss/".$style);
-  }
-// else if (file_exists(dirname(__FILE__)."/themes/default/css/".$style))
-//   {
-//     cms_readfile(dirname(__FILE__)."/themes/default/css/".$style);
-//   }
+if (file_exists(dirname(__FILE__)."/themes/".$theme."/css/".$style)) {
+    $cms_readfile(dirname(__FILE__)."/themes/".$theme."/css/".$style);
+}
+if (file_exists(dirname(__FILE__)."/themes/".$theme."/extcss/".$style)) {
+    $cms_readfile(dirname(__FILE__)."/themes/".$theme."/extcss/".$style);
+}
 
 $allmodules = ModuleOperations::get_instance()->GetLoadedModules();
-if( is_array($allmodules) && count($allmodules) )
-  {
-    foreach( $allmodules as $key => &$object )
-      {
-	if( !is_object($object) ) continue;
-	if( $object->HasAdmin() )
-	  {
-	    echo $object->AdminStyle();
-	  }
-      }
-  }
+if( is_array($allmodules) && count($allmodules) ) {
+    foreach( $allmodules as $key => &$object ) {
+        if( !is_object($object) ) continue;
+        if( $object->HasAdmin() ) echo $object->AdminStyle();
+    }
+}
 
 ?>
