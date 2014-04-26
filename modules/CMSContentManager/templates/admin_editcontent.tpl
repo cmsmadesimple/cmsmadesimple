@@ -110,7 +110,7 @@ $(document).ready(function(){
             'name': '{$actionid}apply',
             'value': 1
         });
-        $.post('{$smarty.server.REQUEST_URI}&showtemplate=false', data, function (data, text) {
+        $.post('{$apply_ajax_url}&showtemplate=false', data, function (data, text) {
             var event = $.Event('cms_ajax_apply');
 	    event.response = data.response;
 	    event.details = data.details;

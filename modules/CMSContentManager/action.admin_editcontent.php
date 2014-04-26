@@ -123,6 +123,7 @@ try {
     }
 }
 catch( Exception $e ) {
+    // An error here means we can't display anything
     $this->SetError($e->getMessage());
     $this->RedirectToAdminTab();
 }
@@ -204,6 +205,9 @@ catch( CmsEditContentException $e ) {
     $this->SetError($e->getMessage());
     $this->RedirectToAdminTab();
 }
+catch( CmsContentException $e ) {
+    $error = $e->GetMessage();
+}
 
 //
 // BUILD THE DISPLAY
@@ -222,36 +226,45 @@ if( $content_id && CmsContentManagerUtils::locking_enabled() ) {
     }
 }
 
-if( $error ) echo $this->ShowErrors($error);
-
-$tab_names = $content_obj->GetTabNames();
+$tab_names = null;
 $tab_contents_array = array();
 $tab_message_array = array();
+try {
+    $tab_names = $content_obj->GetTabNames();
+    $tab_contents_array = array();
+    $tab_message_array = array();
 
-foreach( $tab_names as $currenttab => $label ) {
-    $tmp = $content_obj->GetTabMessage($currenttab);
-    if( $tmp ) $tab_message_array[$currenttab] = $tmp;
+    foreach( $tab_names as $currenttab => $label ) {
+        $tmp = $content_obj->GetTabMessage($currenttab);
+        if( $tmp ) $tab_message_array[$currenttab] = $tmp;
 
-    $contentarray = $content_obj->GetTabElements($currenttab);
-    if( $currenttab == $content_obj::TAB_MAIN ) {
-        // first tab... add the content type selector.
-        $help = '&nbsp;'.cms_admin_utils::get_help_tag(array('key'=>'help_content_type','title'=>$this->Lang('help_title_content_type')));
-        $tmp = array('<label for="content_type">*'.$this->Lang('prompt_editpage_contenttype').':</label>'.$help);
-        $tmp2 = "<select id=\"content_type\" name=\"{$id}content_type\">";
-        foreach( $existingtypes as $type => $label ) {
-            if( $type == 'errorpage' && !$this->CheckPermission('Manage All Content') ) {
-                // this is ugly... we should know if the type is a system type.
-                continue;
+        $contentarray = $content_obj->GetTabElements($currenttab);
+        if( $currenttab == $content_obj::TAB_MAIN ) {
+            // first tab... add the content type selector.
+            $help = '&nbsp;'.cms_admin_utils::get_help_tag(array('key'=>'help_content_type','title'=>$this->Lang('help_title_content_type')));
+            $tmp = array('<label for="content_type">*'.$this->Lang('prompt_editpage_contenttype').':</label>'.$help);
+            $tmp2 = "<select id=\"content_type\" name=\"{$id}content_type\">";
+            foreach( $existingtypes as $type => $label ) {
+                if( $type == 'errorpage' && !$this->CheckPermission('Manage All Content') ) {
+                    // this is ugly... we should know if the type is a system type.
+                    continue;
+                }
+                $tmp2 .= CmsFormUtils::create_option(array('value'=>$type,'label'=>$label),$content_type);
             }
-            $tmp2 .= CmsFormUtils::create_option(array('value'=>$type,'label'=>$label),$content_type);
-        }
-        $tmp2 .= '</select>';
-        $tmp[] = $tmp2;
+            $tmp2 .= '</select>';
+            $tmp[] = $tmp2;
 
-        $contentarray = array_merge(array($tmp),$contentarray);
+            $contentarray = array_merge(array($tmp),$contentarray);
+        }
+        $tab_contents_array[$currenttab] = $contentarray;
     }
-    $tab_contents_array[$currenttab] = $contentarray;
 }
+catch( Exception $e ) {
+    $error = $e->GetMessage();
+}
+
+if( $error ) echo $this->ShowErrors($error);
+
 
 // give stuff to smarty.
 if( $content_obj->HasPreview() ) {
@@ -265,6 +278,11 @@ if( $this->GetPreference('template_list_mode','designpage') != 'all')  {
     $tmp = str_replace('amp;','',$tmp).'&showtemplate=false';
     $smarty->assign('designchanged_ajax_url',$tmp);
 }
+
+$parms = array();
+if( $content_id > 0 ) $parms['content_id']=$content_id;
+$url = str_replace('&amp','&',$this->create_url($id,'admin_editcontent',$returnid,$parms)).'&showtemplate=false';
+$smarty->assign('apply_ajax_url',$url);
 $smarty->assign('preview_ajax_url',$this->create_url($id,'admin_editcontent',$returnid,array('preview'=>1)));
 $smarty->assign('lock_timeout',$this->GetPreference('locktimeout'));
 $smarty->assign('lock_refresh',$this->GetPreference('lockrefresh'));

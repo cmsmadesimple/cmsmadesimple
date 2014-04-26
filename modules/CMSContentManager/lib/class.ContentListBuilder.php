@@ -667,6 +667,7 @@ final class ContentListBuilder
           $rec['secure'] = $content->Secure();
           $rec['cachable'] = $content->Cachable();
           $rec['showinmenu'] = $content->ShowInMenu();
+          $rec['viewable'] = $content->IsViewable();
           if( $this->_is_locked($page_id) ) {
               $lock = $this->_locks[$page_id];
               $rec['lockuser'] = $users[$lock['uid']]->username;

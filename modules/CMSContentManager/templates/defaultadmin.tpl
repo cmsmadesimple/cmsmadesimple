@@ -307,7 +307,7 @@ $(document).ready(function () {
 						{else}
 							{$row.template}
 						{/if}
-					{else}
+					{elseif $row.viewable}
 					  <span class="text-red">{$mod->Lang('critical_error')}</span>
 					{/if}
 				{elseif $column == 'friendlyname'}

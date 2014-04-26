@@ -204,7 +204,7 @@ class Content extends ContentBase
 		$props = parent::GetEditableProperties();
 
 		// add in content blocks
-		$blocks = $this->get_content_blocks();
+        $blocks = $this->get_content_blocks();
 		if( is_array($blocks) && count($blocks) ) {
 			$priority = 100;
 			foreach( $blocks as $block ) {
@@ -293,12 +293,19 @@ class Content extends ContentBase
     {
 		if( is_array($this->_contentBlocks) ) return $this->_contentBlocks;
 
-		CMS_Content_Block::reset();
-		$parser = cmsms()->get_template_parser();
-		$parser->fetch('cms_template:'.$this->TemplateId()); // do the magic.
+        CMS_Content_Block::reset();
+        $this->_contentBlocks = array();
+        try {
+            $parser = cmsms()->get_template_parser();
+            $parser->fetch('cms_template:'.$this->TemplateId()); // do the magic.
 
-		$this->_contentBlocks = CMS_Content_Block::get_content_blocks();
-		return $this->_contentBlocks;
+            $this->_contentBlocks = CMS_Content_Block::get_content_blocks();
+        }
+        catch( SmartyException $e ) {
+            // smarty exceptions here could be a bad template, or missing template, or something else.
+            throw new CmsContentException(lang('error_parsing_content_blocks'));
+        }
+        return $this->_contentBlocks;
     }
 
 	/**
@@ -398,7 +405,7 @@ class Content extends ContentBase
 
 		default:
 			// check if it's content block
-			$blocks = $this->get_content_blocks();
+            $blocks = $this->get_content_blocks();
 			if( isset($blocks[$one]) ) {
 				// its a content block
 				$block = $blocks[$one];

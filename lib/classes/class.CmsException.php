@@ -212,6 +212,16 @@ class CmsDataNotFoundException extends CmsException {}
 class CmsError404Exception extends CmsException {}
 
 /**
+ * A special exception indicating an error with a content object
+ *
+ * @package CMS
+ * @license GPL
+ * @author Robert Campbell (calguy1000@cmsmadesimple.org)
+ * @since 2.0
+ */
+class CmsContentException extends CmsException {}
+
+/**
  * A special exception indicating an error when editing content.
  *
  * @package CMS
@@ -219,7 +229,7 @@ class CmsError404Exception extends CmsException {}
  * @author Robert Campbell (calguy1000@cmsmadesimple.org)
  * @since 1.11
  */
-class CmsEditContentException extends CmsException {}
+class CmsEditContentException extends CmsContentException {}
 
 /**
  * A special exception indicating an SQL Error.
