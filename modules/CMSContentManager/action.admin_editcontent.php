@@ -113,7 +113,9 @@ try {
         // editint an existing content object
         $content_obj = $contentops->LoadContentFromId($content_id);
         $content_type = $content_obj->Type();
-        if( isset($params['content_type']) ) $content_type = trim($params['content_type']);
+        if( isset($params['content_type']) ) {
+            $content_type = trim($params['content_type']);
+        }
     }
 
     // validate the content type.
@@ -233,6 +235,12 @@ try {
     $tab_names = $content_obj->GetTabNames();
     $tab_contents_array = array();
     $tab_message_array = array();
+
+    // the content object may not have a main tab, but we require one
+    if( !in_array($content_obj::TAB_MAIN,$tab_names) ) {
+        $tmp = array($content_obj::TAB_MAIN=>lang($content_obj::TAB_MAIN));
+        $tab_names = array_merge($tmp,$tab_names);
+    }
 
     foreach( $tab_names as $currenttab => $label ) {
         $tmp = $content_obj->GetTabMessage($currenttab);
