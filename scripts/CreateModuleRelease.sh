@@ -9,7 +9,7 @@ _pwd=`pwd`
 _name=`basename $_pwd`
 _destdir=${HOME}
 _version=0
-_excludes='*~ #*# .svn CVS *.bak .git* *.tmp .cms_ignore'
+_excludes='*~ #*# .#* .svn CVS *.bak .git* *.tmp .cms_ignore *.swp'
 _tmpdir="/tmp/$_this.$$"
 _yes=0
 _svn=1
@@ -190,8 +190,13 @@ for x in $_x ; do
  _d=`dirname $x`
  _d=`basename $_d`
  _fi=`cat $x`
+ if [ $_d != '.' ]; then
+   _d="${_d}/"
+ else
+   _d="${_name}/"
+ fi
  for x2 in $_fi ; do
-   _excludes="$_excludes ${_d}/${x2}";
+   _excludes="$_excludes ${_d}${x2}";
  done
 done
 
