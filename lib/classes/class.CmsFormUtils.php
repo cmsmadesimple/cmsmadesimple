@@ -68,7 +68,7 @@ final class CmsFormUtils
                 if( $selected == $data['value'] || is_array($selected) && in_array($data['value'],$selected) ) $out .= ' selected="selected"';
                 if( isset($data['title']) && $data['title'] ) $out .= ' title="'.trim($data['title']).'"';
                 if( isset($data['class']) && $data['class'] ) $out .= ' class="'.trim($data['class']).'"';
-                $out .= '">'.$data['label'].'</option>';
+                $out .= '>'.$data['label'].'</option>';
             }
             else {
                 $out .= '<optgroup label="'.$data['label'].'">';
