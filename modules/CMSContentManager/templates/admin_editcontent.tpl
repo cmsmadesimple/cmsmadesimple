@@ -127,10 +127,12 @@ $(document).ready(function(){
       var data = { '{$actionid}design_id': v };
       $.get('{$designchanged_ajax_url}',data,function(data,text) {
         if( typeof data == 'object' ) {
+	  var sel = $('#template_id').val();
           $('#template_id').empty();
           for( key in data ) {
 	    $('#template_id').append('<option value="'+key+'">'+data[key]+'</option>');
 	  }
+	  $('#template_id').val(sel);
         }
       }, 'json' );
     });
