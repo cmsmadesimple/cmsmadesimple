@@ -1,6 +1,6 @@
 <?php
 if (!isset($gCms)) exit;
-$db =$this->GetDb();
+$db = $this->GetDb();
 
 $uid = null;
 if( cmsms()->test_state(CmsApp::STATE_INSTALL) ) {
@@ -12,29 +12,47 @@ if( cmsms()->test_state(CmsApp::STATE_INSTALL) ) {
 if( version_compare($oldversion,'2.50') < 0 ) {
   // create template types.
   $upgrade_template = function($type,$prefix,$tplname,$currentdflt,$prefix2) use (&$mod,$uid) {
-    if( !startswith($tplname,$prefix) ) return;
-    $contents = $mod->GetTemplate($tplname);
-    if( !$contents ) return;
-    $prototype = substr($tplname,strlen($prefix));
-    
-    $tpl = new CmsLayoutTemplate();
-    $tpl->set_name($tpl::generate_unique_name($prototype,$prefix2));
-    $tpl->set_owner($uid);
-    $tpl->set_content($contents);
-    $tpl->set_type($type);
-    $tpl->set_type_dflt($prototype == $mod->GetPreference($currentdflt));
+      if( !startswith($tplname,$prefix) ) return;
+      $contents = $mod->GetTemplate($tplname);
+      if( !$contents ) return;
+      $prototype = substr($tplname,strlen($prefix));
 
-    echo "DEBUG: creating template ".$tpl->get_name()." from $tplname for News<br/>\n";
-    $tpl->save();
+      $tpl = new CmsLayoutTemplate();
+      $tpl->set_name($tpl::generate_unique_name($prototype,$prefix2));
+      $tpl->set_owner($uid);
+      $tpl->set_content($contents);
+      $tpl->set_type($type);
+      $tpl->set_type_dflt($prototype == $mod->GetPreference($currentdflt));
 
-    $mod->DeleteTemplate($tplname);
+      $tpl->save();
+
+      $mod->DeleteTemplate($tplname);
   };
 
   try {
-    $mod = $this;
-    $alltemplates = $this->ListTemplates();
-    print_r($alltemplates); echo '<br/>';
-    
+      $dict = NewDataDictionary($db);
+      $sqlarray = $dict->AddColumnSQL(cms_db_prefix().'module_news','searchable I1');
+      $dict->ExecuteSQLArray($sqlarray);
+
+      $sqlarray = $dict->AddColumnSQL(cms_db_prefix().'module_news_categories','item_order I');
+      $dict->ExecuteSQLArray($sqlarray);
+
+      $query = "SELECT * FROM ".cms_db_prefix()."module_news_categories ORDER BY parent_id";
+      $categories = $db->GetArray($query);
+      if( is_array($categories) && count($categories) ) {
+          $prev_parent = null;
+          $item_order = 0;
+          foreach( $categories as $row ) {
+              $parent = $row['parent_id'];
+              if( $parent != $prev_parent ) $item_order = 0;
+              $item_order++;
+              $db->Execute($uquery,array($item_order,$row['news_category_id']));
+          }
+      }
+
+      $mod = $this;
+      $alltemplates = $this->ListTemplates();
+
     $summary_template_type = new CmsLayoutTemplateType();
     $summary_template_type->set_originator($this->GetName());
     $summary_template_type->set_name('summary');
@@ -43,7 +61,6 @@ if( version_compare($oldversion,'2.50') < 0 ) {
     $summary_template_type->set_content_callback('News::reset_page_type_defaults');
     $summary_template_type->reset_content_to_factory();
     $summary_template_type->save();
-    echo "DEBUG: create summary template type<br/>\n";
     foreach( $alltemplates as $tplname ) {
       $upgrade_template($summary_template_type,'summary',$tplname,'current_summary_template','News-Summary-');
     }
@@ -56,7 +73,6 @@ if( version_compare($oldversion,'2.50') < 0 ) {
     $detail_template_type->set_content_callback('News::reset_page_type_defaults');
     $detail_template_type->reset_content_to_factory();
     $detail_template_type->save();
-    echo "DEBUG: create detail template type<br/>\n";
     foreach( $alltemplates as $tplname ) {
       $upgrade_template($detail_template_type,'detail',$tplname,'current_detail_template','News-Detail-');
     }
@@ -70,7 +86,6 @@ if( version_compare($oldversion,'2.50') < 0 ) {
     $form_template_type->set_content_callback('News::reset_page_type_defaults');
     $form_template_type->reset_content_to_factory();
     $form_template_type->save();
-    echo "DEBUG: create form template type<br/>\n";
     foreach( $alltemplates as $tplname ) {
       $upgrade_template($form_template_type,'form',$tplname,'current_form_template','News-Form-');
     }
@@ -83,13 +98,11 @@ if( version_compare($oldversion,'2.50') < 0 ) {
     $browsecat_template_type->set_content_callback('News::reset_page_type_defaults');
     $browsecat_template_type->reset_content_to_factory();
     $browsecat_template_type->save();
-    echo "DEBUG: create browsecat template type<br/>\n";
     foreach( $alltemplates as $tplname ) {
       $upgrade_template($browsecat_template_type,'browsecat',$tplname,'current_browsecat_template','News-Browsecat-');
     }
   }
   catch( CmsException $e ) {
-    debug_to_log(__FILE__.':'.__LINE__.' '.$e->GetMessage());
     audit('',$this->GetName(),'Upgrade Error: '.$e->GetMessage());
     return;
   }
