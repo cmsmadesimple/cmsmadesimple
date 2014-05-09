@@ -108,41 +108,40 @@
                 menuItem.each(function () {
 
                     var currentItem = $(this),
-                        parentItem = currentItem.parents('li').addBack().first();
+                        parentItem = currentItem.parents('li').addBack().first(),
+                        event = 'click'; // we set as default click event
+                        
+                    if (SX.isTouch && !((SX.UA.indexOf('android') > -1 && SX.UA.indexOf('applewebkit') > -1) && !(SX.UA.indexOf('chrome') > -1))) {
+                        event = 'touchstart'; // if it's touch device and is NOT default android browser do touchstart event
+                    };
                         
 
-                    this.addEventListener('touchstart', function (e) {
-                        
-                        e.stopPropagation();
-                        
-                        if (e.touches.length === 1) {
-
-                            // toggle class for dropdown
-                            if (!currentItem.hasClass('active')) {
-                                
-                                // hide open dropdowns
-                                menuItem.removeClass('active');
-                                // prevent opening link on first touch
-                                if (e.target === this || e.target.parentNode === this) {
-                                    e.preventDefault();
-                                }
-
-                                // show current touched dropdown
-                                parentItem.addClass('active');
-                                currentItem.addClass('active')
-                                    .children('ul').slideDown();
-
-                                // hide dropdown on touch outside
-                                var closeDropdown = function (e) {
-                                    e.stopPropagation();
-
-                                    menuItem.removeClass('active');
-                                    menuItem.not('.active').children('ul').hide();
-                                    document.removeEventListener('touchstart', closeDropdown);
-                                };
-
-                                document.addEventListener('touchstart', closeDropdown);
+                    this.addEventListener(event, function (e) {
+                        // toggle class for dropdown
+                        if (!currentItem.hasClass('active')) {
+                            
+                            // hide open dropdowns
+                            menuItem.removeClass('active');
+                            // prevent opening link on first touch
+                            if (e.target === this || e.target.parentNode === this || e.target.firstChild === this) {
+                                e.preventDefault();
                             }
+
+                            // show current touched dropdown
+                            parentItem.addClass('active');
+                            currentItem.addClass('active')
+                                .children('ul').slideDown();
+
+                            // hide dropdown on touch outside
+                            var closeDropdown = function (e) {
+                                e.stopPropagation();
+
+                                current.removeClass('active');
+                                currentItem.not('.active').children('ul').hide();
+                                document.removeEventListener(event, closeDropdown);
+                            };
+
+                            document.addEventListener(event, closeDropdown);
                         }
                     }, false);
                 });
