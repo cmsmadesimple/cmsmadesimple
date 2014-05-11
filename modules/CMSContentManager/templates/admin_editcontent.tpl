@@ -12,11 +12,6 @@ $(document).ready(function(){
     }
   });
 
-  $('#Edit_Content').on('click','[name$=apply],[name$=submit],[name$=cancel]',function(event){
-    $('#Edit_Content :hidden').removeAttr('required');
-    $('#Edit_Content').dirtyForm('option','dirty',false);
-  });
-
   // initialize lock manager
 {if $content_id > 0}
   $('#Edit_Content').lockManager({
@@ -89,13 +84,16 @@ $(document).ready(function(){
 
     // handle cancel/close ... and unlock
     $(document).on('click', '[name$=cancel]', function () {
+        var dirty = $('#Edit_Content').dirtyForm('option','dirty');
         var tmp = $(this).val();
         if (tmp == '{$mod->Lang('close')}') {
             $('#Edit_Content').lockManager('unlock');
-            return true;
-        } else {
-            return confirm('{$mod->Lang('editcontent_confirm_cancel')}');
-        }
+	}
+        return true;
+    });
+
+    $('#Edit_Content').on('click','[name$=apply],[name$=submit],[name$=cancel]',function(event){
+      $('#Edit_Content :hidden').removeAttr('required');
     });
 
     // handle apply (ajax submit)
@@ -118,7 +116,14 @@ $(document).ready(function(){
 	    if( typeof data.url != '' ) event.url = data.url;
             $('body').trigger(event);
         }, 'json');
-        return false;
+            return false;
+    });
+
+    $(document).on('cms_ajax_apply',function(e){
+      $('#Edit_Content').dirtyForm('option','dirty',false);
+      if( typeof e.url != '' && typeof e.url != undefined ) {
+        $('a#viewpage').attr('href',e.url);
+      }
     });
 
     {if isset($designchanged_ajax_url)}
@@ -136,7 +141,9 @@ $(document).ready(function(){
         }
       }, 'json' );
     });
+
     $('#design_id').trigger('change');
+    $('#Edit_Content').dirtyForm('option','dirty',false);
     {/if}
 });
 // ]]>
