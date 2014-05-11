@@ -39,6 +39,8 @@ if( version_compare($oldversion,'2.50') < 0 ) {
 
       $query = "SELECT * FROM ".cms_db_prefix()."module_news_categories ORDER BY parent_id";
       $categories = $db->GetArray($query);
+
+      $uquery = 'UPDATE '.cms_db_prefix().'module_news_categories SET item_order = ? WHERE news_category_id = ?';
       if( is_array($categories) && count($categories) ) {
           $prev_parent = null;
           $item_order = 0;
