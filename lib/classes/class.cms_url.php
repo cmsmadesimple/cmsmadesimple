@@ -331,16 +331,6 @@ class cms_url
     // build the query array back into a string.
 	  if( count($this->_query) ) {
 		  $this->_parts['query'] = http_build_query($this->_query);
-		  /*
-		  $tmp = array();
-		  foreach( $this->_query as $key => $val ) {
-			  $tmp[] = $key.'='.$val;
-		  }
-
-		  $str = '?';
-		  $str = implode('&',$tmp);
-		  $this->_parts['query'] = $str;
-		  */
       }
 
 	  $parts = $this->_parts;

@@ -211,7 +211,7 @@ abstract class CmsAdminThemeBase
 		}
 		elseif( startswith($url,$config['root_url']) || !startswith($url,'http') ) {
 			$prefix = '?';
-			if( strpos($url,'?') !== FALSE ) $prefix = '&amp;';
+			if( strpos($url,'?') !== FALSE ) $prefix = '&';
 			$newurl .= $prefix.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 		}
 		return $newurl;
@@ -674,55 +674,82 @@ abstract class CmsAdminThemeBase
 					$this->_menuItems[$sectionKey]['children'][] = $subsectionKey;
 				}
 			}
+        }
 
-			// set selected
+        // find the selected menu item.
+        $selected_key = null;
+        $pending_selected_key = null;
+		foreach ($this->_menuItems as $sectionKey=>$sectionArray) {
 			if( strstr($_SERVER['REQUEST_URI'],'moduleinterface.php') !== FALSE &&
 				isset($_REQUEST['mact']) &&
 				isset($sectionArray['module']) && $sectionArray['module'] ) {
 
+                // note, this is kludgy
+                // we compare each and every menu item against the request.
+                // if the mact is set for both, and the module portion of the mact
+                // are the same, we add a reference to the option to our 'matches'
+                // list.  at the end, we re-compare
 				$u1 = new cms_url($sectionArray['url']);
 				$v1 = array();
 				parse_str($u1->get_query(),$v1);
 				$u2 = new cms_url($_SERVER['REQUEST_URI']);
 				$v2 = array();
+                if( $_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['mact']) && !isset($_GET['mact']) ) {
+                    // if mact is available via post and not via get we fake it, so that comparisons
+                    // can get the mact from the query
+                    $u2->set_queryvar('mact',$_REQUEST['mact']);
+                    $u2 = new cms_url((string)$u2);
+                }
 				parse_str($u2->get_query(),$v2);
 				if( $u1->get_path() == $u2->get_path() &&
-					isset($v1['mact']) && isset($v2['mact']) &&
-					$v1['mact'] == $v2['mact'] ) {
-					$this->_menuItems[$sectionKey]['selected'] = TRUE;
-					$this->_active_item = $sectionKey;
-					$this->_breadcrumbs[] = array('title'=>$this->_menuItems[$sectionKey]['title'],
-												  'url'=>$this->_menuItems[$sectionKey]['url']);
-					if ($sectionArray['parent'] != -1) {
-						$parent = $sectionArray['parent'];
-						while ($parent != -1) {
-							$this->_menuItems[$parent]['selected'] = TRUE;
-							$this->_breadcrumbs[] = array('title'=>$this->_menuItems[$parent]['title'],
-														  'url'=>$this->_menuItems[$parent]['url']);
-							$parent = $this->_menuItems[$parent]['parent'];
-						}
-					}
+					isset($v1['mact']) && isset($v2['mact']) ) {
+
+                    $t1 = explode(',',$v1['mact']);
+                    $t2 = explode(',',$v2['mact']);
+                    if( $t1[0] == $t2[0] ) {
+                        if( $t1[1] == $t2[1] && $t1[2] == $t2[2] ) {
+                            // requested action is for the same module and same action, we're done.
+                            $selected_key = $sectionKey;
+                            break;
+                        }
+                        else if( !$pending_selected_key ) {
+                            // requested action is for the same module, but different actions
+                            // we continue, but set a pending key (only once)
+                            $pending_selected_key = $sectionKey;
+                        }
+                    }
 				}
 			}
 			else if (strstr($_SERVER['REQUEST_URI'],$sectionArray['url']) !== FALSE &&
 					 (!isset($sectionArray['type']) || $sectionArray['type'] != 'external')) {
-				$this->_menuItems[$sectionKey]['selected'] = TRUE;
-				$this->_title .= $sectionArray['title'];
-				$this->_active_item = $sectionKey;
-				$this->_breadcrumbs[] = array('title'=>$this->_menuItems[$sectionKey]['title'],
-											  'url'=>$this->_menuItems[$sectionKey]['url']);
-				if ($sectionArray['parent'] != -1) {
-					$parent = $sectionArray['parent'];
-					while ($parent != -1) {
-						$this->_menuItems[$parent]['selected'] = TRUE;
-						$this->_breadcrumbs[] = array('title'=>$this->_menuItems[$parent]['title'],
-													  'url'=>$this->_menuItems[$parent]['url']);
-						$parent = $this->_menuItems[$parent]['parent'];
-					}
-				}
-			}
-		}
-		$this->_breadcrumbs = array_reverse($this->_breadcrumbs);
+                $selected_key = $sectionKey;
+                break;
+            }
+        }
+
+        if( $selected_key || $pending_selected_key ) {
+            if( !$selected_key && $pending_selected_key ) $selected_key = $pending_selected_key;
+
+            // we have the sectionKey of the selected match
+            // now set it active, and set the parent all the way to the top
+            // and build breadcrumbs
+            $item =& $this->_menuItems[$selected_key];
+            $item['selected'] = TRUE;
+            $this->_title .= $item['title'];
+            $this->_active_item = $selected_key;
+            $this->_breadcrumbs[] = array('title'=>$item['title'],'url'=>$item['url']);
+            if( $item['parent'] != -1 ) {
+                $parent = $item['parent'];
+                // walk up to the root.
+                while( $parent != -1 ) {
+                    $this->_menuItems[$parent]['selected'] = TRUE;
+                    $this->_breadcrumbs[] = array('title'=>$this->_menuItems[$parent]['title'],
+                                                  'url'=>$this->_menuItems[$parent]['url']);
+                    $parent = $this->_menuItems[$parent]['parent'];
+                }
+            }
+            $this->_breadcrumbs = array_reverse($this->_breadcrumbs);
+        }
 
 		// fix subtitle, if any
 		if ($subtitle != '') $this->_title .= ': '.$subtitle;
