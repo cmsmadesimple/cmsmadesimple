@@ -149,7 +149,7 @@ $(document).ready(function(){
                           <a href="{$entry->delete_url}" title="{$mod->Lang('delete_article')}">{admin_icon icon='delete.gif'}</a>
                           {/if}
                         </td>
-			<td><input type="checkbox" name="{$actionid}sel[]" value="$entry->id" title="{$mod->Lang('toggle_bulk')}"/></td>
+			<td><input type="checkbox" name="{$actionid}sel[]" value="{$entry->id}" title="{$mod->Lang('toggle_bulk')}"/></td>
 		</tr>
 	{/foreach}
 	</tbody>
