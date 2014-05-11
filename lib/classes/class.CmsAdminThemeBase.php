@@ -141,7 +141,7 @@ abstract class CmsAdminThemeBase
 	/**
 	 * @ignore
 	 */
-	private $_valid_sections = array('content','layout','files','usersgroups','extensions','preferences','siteadmin','ecommerce');
+	private $_valid_sections = array('main','content','layout','files','usersgroups','extensions','siteadmin','ecommerce','myprefs');
 
 	/**
 	 * @ignore
@@ -301,6 +301,7 @@ abstract class CmsAdminThemeBase
 				if( $obj->section == '' ) $obj->section = 'extensions';
 
 				$section = $obj->section;
+                if( !in_array($section,$this->_valid_sections) ) $section = 'extensions';
 				if (! isset($this->_sectionCount[$section])) $this->_sectionCount[$section] = 0;
 
 				// fix up the session key stuff.
