@@ -659,26 +659,32 @@ abstract class CmsAdminThemeBase
 		uasort($this->_menuItems,$fn);
 
 		// set everything to be not selected.
+		// resolve the tree to be doubly-linked,
 		foreach ($this->_menuItems as $sectionKey=>$sectionArray) {
 			$this->_menuItems[$sectionKey]['selected'] = FALSE;
 			$this->_menuItems[$sectionKey]['children'] = array();
-		}
 
-		// resolve the tree to be doubly-linked,
-		// and make sure the selections are selected
-		foreach ($this->_menuItems as $sectionKey=>$sectionArray) {
-			// link the children to the parents; a little clumsy since we can't
-			// assume php5-style references in a foreach.
+			// link the children to the parents; a little clumsy.
 			foreach ($this->_menuItems as $subsectionKey=>$subsectionArray) {
 				if ($subsectionArray['parent'] == $sectionKey) {
 					$this->_menuItems[$sectionKey]['children'][] = $subsectionKey;
 				}
 			}
-        }
+		}
 
         // find the selected menu item.
         $selected_key = null;
         $pending_selected_key = null;
+        $req_url = new cms_url($_SERVER['REQUEST_URI']);
+        $req_vars = array();
+        if( $_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['mact']) && !isset($_GET['mact']) ) {
+            // if mact is available via post and not via get we fake it, so that comparisons
+            // can get the mact from the query
+            $req_url->set_queryvar('mact',$_REQUEST['mact']);
+            $req_url = new cms_url((string)$req_url);
+        }
+        parse_str($req_url->get_query(),$req_vars);
+
 		foreach ($this->_menuItems as $sectionKey=>$sectionArray) {
 			if( strstr($_SERVER['REQUEST_URI'],'moduleinterface.php') !== FALSE &&
 				isset($_REQUEST['mact']) &&
@@ -692,20 +698,11 @@ abstract class CmsAdminThemeBase
 				$u1 = new cms_url($sectionArray['url']);
 				$v1 = array();
 				parse_str($u1->get_query(),$v1);
-				$u2 = new cms_url($_SERVER['REQUEST_URI']);
-				$v2 = array();
-                if( $_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['mact']) && !isset($_GET['mact']) ) {
-                    // if mact is available via post and not via get we fake it, so that comparisons
-                    // can get the mact from the query
-                    $u2->set_queryvar('mact',$_REQUEST['mact']);
-                    $u2 = new cms_url((string)$u2);
-                }
-				parse_str($u2->get_query(),$v2);
-				if( $u1->get_path() == $u2->get_path() &&
-					isset($v1['mact']) && isset($v2['mact']) ) {
+				if( $u1->get_path() == $req_url->get_path() &&
+					isset($v1['mact']) && isset($req_vars['mact']) ) {
 
                     $t1 = explode(',',$v1['mact']);
-                    $t2 = explode(',',$v2['mact']);
+                    $t2 = explode(',',$req_vars['mact']);
                     if( $t1[0] == $t2[0] ) {
                         if( $t1[1] == $t2[1] && $t1[2] == $t2[2] ) {
                             // requested action is for the same module and same action, we're done.
@@ -722,12 +719,15 @@ abstract class CmsAdminThemeBase
 			}
 			else if (strstr($_SERVER['REQUEST_URI'],$sectionArray['url']) !== FALSE &&
 					 (!isset($sectionArray['type']) || $sectionArray['type'] != 'external')) {
+                // this handles selecting internal actions that are not part of modules
+                // i.e (admin/somefile.php stuff)
                 $selected_key = $sectionKey;
                 break;
             }
         }
 
         if( $selected_key || $pending_selected_key ) {
+            // if we only have a pending key, we use it... not ideal.
             if( !$selected_key && $pending_selected_key ) $selected_key = $pending_selected_key;
 
             // we have the sectionKey of the selected match
