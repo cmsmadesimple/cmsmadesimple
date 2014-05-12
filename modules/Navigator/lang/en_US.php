@@ -3,7 +3,7 @@
 #B
 #C
 #D
-$lang['description'] = 'TODO module description';
+//$lang['description'] = 'TODO module description';
 
 #E
 #F
@@ -68,7 +68,7 @@ $lang['help'] = <<<EOT
    </li>
 </ul>
 EOT;
-$lang['help_action'] = 'TODO';
+//$lang['help_action'] = 'TODO';
 $lang['help_collapse'] = 'When enabled, only items directly related to the current active page will be output';
 $lang['help_childrenof'] = 'This option will have the menu only display items that are descendants of the selected page id or alias.  i.e: <code>{menu childrenof=$page_alias}</code> will only display the children of the current page.';
 $lang['help_excludeprefix'] = 'Exclude all items (and their children) who\'s page alias matches one of the specified (comma separated) prefixes.  This parameter must not be used in conjunction with the includeprefix parameter.';
@@ -77,14 +77,14 @@ $lang['help_items'] = 'Specify a comma separated list of page aliases that this 
 $lang['help_loadprops'] = 'Use this parameter when NOT using advanced properties in your menu manager template.  This will disable the loading of all of the content properties for each node (such as extra1, image, thumbnail, etc.).  This will dramatically decrease the number of queries required to build a menu, and increase memory requirements, but will remove the possibility for much more advanced menus';
 $lang['help_nlevels'] = 'Alias for number_of_levels';
 $lang['help_number_of_levels'] = 'This setting will limit the depth of the generated menu to the specified number of levels.  By default the value for this parameter is implied to be unlimited, except when using the items parameter, in which case the number_of_levels parameter is implied to be 1';
-$lang['help_root'] = 'TODO';
+//$lang['help_root'] = 'TODO';
 $lang['help_show_all'] = 'This option will cause the menu to show all nodes even if they are set to not show in the menu. It will still not display inactive pages however.';
 $lang['help_show_root_siblings'] = 'This option only becomes useful if start_element or start_page are used.  It basically will display the siblings along side of the selected start_page/element.';
 $lang['help_start_element'] = 'Starts the menu displaying at the given start_element and showing that element and it\'s children only.  Takes a hierarchy position (e.g. 5.1.2).';
-$lang['help_start_level'] = 'TODO';
+//$lang['help_start_level'] = 'TODO';
 $lang['help_start_page'] = 'Starts the menu displaying at the given start_page and showing that element and it\'s children only.  Takes a page alias.';
 $lang['help_template'] = 'The template to use for displaying the menu.  The named template must exist in the DesignManager or an error will be displayed.  If this parameter is not specified the default template of type Navigator::Navigation will be used';
-$lang['help_start_text'] = 'TODO';
+//$lang['help_start_text'] = 'TODO';
 #I
 #J
 #K
@@ -97,7 +97,7 @@ $lang['help_start_text'] = 'TODO';
 #R
 #S
 #T
-$lang['toggle'] = 'TODO';
+//$lang['toggle'] = 'TODO';
 $lang['type_breadcrumbs'] = 'Breadcrumbs';
 $lang['type_Navigator'] = 'Navigator';
 $lang['type_navigation'] = 'Navigation';
