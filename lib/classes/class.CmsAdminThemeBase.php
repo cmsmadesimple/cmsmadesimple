@@ -1053,7 +1053,7 @@ abstract class CmsAdminThemeBase
 			}
 			else {
 				// todo: uses default theme.
-				$this->_imageLink[$imageName] = 'themes/default/images/' . $imagePath . $imageName;
+				$this->_imageLink[$imageName] = 'themes/OneEleven/images/' . $imagePath . $imageName;
 			}
 		}
 
@@ -1068,7 +1068,7 @@ abstract class CmsAdminThemeBase
 
 
 	/**
-	 * Abstrct function for showing errors in the admin theme.
+	 * Abstract function for showing errors in the admin theme.
 	 *
 	 * @abstract
 	 * @param mixed $errors The errors, either a string, or an array of strings
