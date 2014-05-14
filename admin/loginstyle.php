@@ -33,6 +33,6 @@ if (file_exists(dirname(__FILE__)."/themes/$theme/css/style.css"))
   }
 else
   {
-    echo file_get_contents(dirname(__FILE__)."/themes/default/css/style.css");
+    echo file_get_contents(dirname(__FILE__)."/themes/OneEleven/css/style.css");
   }
 ?>
