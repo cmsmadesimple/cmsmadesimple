@@ -82,7 +82,7 @@ $lang['param_modules'] = 'Limit search results to values indexed from the specif
 $lang['param_pageid'] = 'Applicable only with the keywords action, this parameter can be used to specify a different pageid to return results for';
 $lang['param_passthru'] = 'Pass named parameters down to specified modules.  The format of each of these parameters is: "passtru_MODULENAME_PARAMNAME=\'value\'" i.e.: passthru_News_detailpage=\'newsdetails\'"';
 $lang['param_resultpage'] = 'Page to display search results in.  This can either be a page alias or an id.  Used to allow search results to be displayed in a different template from the search form';
-//$lang['param_resulttemplate'] = 'This parameter allows specyfing the name of a non default template to use for displaying search results.';
+$lang['param_resulttemplate'] = 'This parameter allows specifying the name of a non default template to use for displaying search results.';
 $lang['param_searchtext'] = 'Text to place into the search box';
 $lang['param_submit'] = 'Text to place into the submit button';
 $lang['param_useor'] = 'Change the default relationship from an OR relationship to an AND relationship';

@@ -364,7 +364,7 @@ $lang['error_coreupgradeneeded'] = "The CMSMS core must be upgraded before this 
 $lang['error_delete_default_parent'] = "You cannot delete the default page, or a parent of the default page.";
 $lang['error_frominvalid'] = "The from address specified is not a valid email address";
 $lang['error_fromrequired'] = "A from address is required";
-$lang['error_hostrequired'] = "A host name is required when using the smtp mailer";
+$lang['error_hostrequired'] = "A host name is required when using the SMTP mailer";
 $lang['error_internal'] = "Internal error";
 $lang['error_locknotsaved'] = "Cannot retrieve this information... lock has not been saved";
 $lang['error_mailnotset_notest'] = "Mail settings have not been saved.  Cannot test";
@@ -979,7 +979,7 @@ $lang['hour'] = "hour";
 $lang['hours'] = "hours";
 $lang['htmlblobdescription'] = "Global Content Blocks are chunks of content you can place in your pages or templates.";
 $lang['htmlblobs'] = "Global Content Blocks";
-$lang['h_udtcode'] = 'Enter your PHP code here.  Keep in mind that a UDT <em>(User Defined Tag)</em> is infact a smarty function plugin.  It has limited scope.<br/>
+$lang['h_udtcode'] = 'Enter your PHP code here.  Keep in mind that a UDT <em>(User Defined Tag)</em> is in fact a smarty function plugin.  It has limited scope.<br/>
 <ul>
   <li><strong>Note:</strong> You have access to the full <a href=\"http://www.cmsmadesimple.org/APIDOC\">CMSMS API</a> to interact with the system and with modules.</li>
   <li>Tip: Parameters passed to the UDT i.e: <code>{myudt param1=value1 param2=value2}</code> are available via the $params associative array, which is in scope.</li>
@@ -1032,7 +1032,7 @@ $lang['info_sitedownexcludes'] = "This parameter allows listing a comma separate
 2. xxx.xxx.xxx.[yyy-zzz] -- (IP address range)<br />
 3. xxx.xxx.xxx.xxx/nn -- (nnn = number of bits, cisco style.  i.e:  192.168.0.100/24 = entire 192.168.0 class C subnet)";
 $lang['info_smarty_cachemodules'] = "Select how to cache tags in various templates that call module actions.  If enabled, all module calls will be cached.  This may have negative effects on some modules, or modules with forms.  <em>(note: you can override this using the nocache option as described in the smarty manual)</em>.  If disabled no module calls will be cached which may have an effect on performance.   If you select to allow the module to decide, the default is that caching is not performed.  The module can override this, and you can disable caching using the nocache parameter when calling the module.";
-$lang['info_smarty_cacheudt'] = "If enabled, all calls to user defined tags will be cached.  This will be useful for tags that display the output of database queries.  You can disable caching using the nocache parameter in the udt call.  i.e: <code>{myusertag nocache}</code>";
+$lang['info_smarty_cacheudt'] = "If enabled, all calls to user defined tags will be cached.  This will be useful for tags that display the output of database queries.  You can disable caching using the nocache parameter in the UDT call.  i.e: <code>{myusertag nocache}</code>";
 $lang['info_smarty_options'] = "The following options have effect only when the above caching options are enabled";
 $lang['info_target'] = "This option may used by the Menu Manager to indicate when and how new frames or windows should be opened.  Some menu manager templates may ignore this option.";
 $lang['info_templateuser'] = "This account is the template user account.  New users will be created using this accounts settings";
@@ -1047,7 +1047,7 @@ $lang['installed'] = "Installed";
 $lang['installed_mod'] = "Installed version %s";
 $lang['installed_modules'] = "Installed Modules";
 $lang['invalid'] = "Invalid";
-$lang['invalidalias'] = "The alias entered contains invalid characters.  whitespace, / . and other punctuation characters are not permitted.";
+$lang['invalidalias'] = "The alias entered contains invalid characters. White space, / . and other punctuation characters are not permitted.";
 $lang['invalidcode'] = "Invalid code entered.";
 $lang['invalidcode_brace_missing'] = "Uneven amount of braces";
 $lang['invalidemail'] = "The email address entered is invalid";
@@ -1107,7 +1107,7 @@ $lang['login_info_params'] = "<ol>
 $lang['login_info_title'] = "Information";
 $lang['logout'] = "Logout";
 $lang['lostpw'] = "Forgot your password?";
-$lang['lostpwemail'] = "You are recieving this e-mail because a request has been made to change the (%s) password associated with this user account (%s).  If you would like to reset the password for this account simply click on the link below or paste it into the URL field on your favourite browser:
+$lang['lostpwemail'] = "You are receiving this e-mail because a request has been made to change the (%s) password associated with this user account (%s).  If you would like to reset the password for this account simply click on the link below or paste it into the URL field on your favourite browser:
 %s
 
 If you feel this is incorrect or made in error, simply ignore the email and nothing will change.";
@@ -1119,7 +1119,7 @@ $lang['magic_quotes_gpc_on'] = "Single-quote, double quote and backslash are esc
 $lang['magic_quotes_runtime'] = "Magic quotes in runtime";
 $lang['magic_quotes_runtime_on'] = "Most functions that return data will have quotes escaped with a backslash. You can experience problems";
 $lang['mail_settings'] = "Mail Settings";
-$lang['mail_testbody'] = "<h2 style=&quot;color: green;&quot;>Greetings</h2><p>You are receiving this message from an installation of <strong>CMS Made Simple</strong>.  This message is proving the validity of the settings used for sending email messages.   If you are reading this message, then everything appears to be working fine.  However, if you did not solicit this email from a CMS Made Simple admin console, please contact the website administrator.</p>";
+$lang['mail_testbody'] = "<h2 style=&quot;color: green;&quot;>Greetings</h2><p>You are receiving this message from an installation of <strong>CMS Made Simple</strong>.  This message is proving the validity of the settings used for sending email messages.   If you are reading this message, then everything appears to be working fine.  However, if you did not solicit this email from a CMS Made Simple Admin console, please contact the website administrator.</p>";
 $lang['mail_testsubject'] = "CMSMS Mail Test message";
 $lang['main'] = "Main";
 $lang['mainmenu'] = "Main Menu";
@@ -1182,7 +1182,7 @@ $lang['msg_defaultcontent'] = "Add code here that should appear as the default c
 $lang['msg_defaultmetadata'] = "Add code here that should appear in the metadata section of all new pages";
 $lang['msg_grantall_found'] = "Found a &quot;GRANT ALL&quot; statement that appears to be suitable";
 $lang['msg_mailprefs_set'] = "Email settings saved";
-$lang['msg_notimedifference'] = "No filesystem time difference found";
+$lang['msg_notimedifference'] = "No file system time difference found";
 $lang['msg_permstab'] = "Authorized administrators, or page owners can adjust the ownership and additional editors of a content page";
 $lang['msg_settemplateuser'] = "Template user account set";
 $lang['msg_usersdeleted'] = "%d users were deleted";
@@ -1278,7 +1278,7 @@ $lang['password'] = "Password";
 $lang['passwordagain'] = "Password (again)";
 $lang['passwordchange'] = "Please, provide the new password";
 $lang['passwordchangedlogin'] = "Password changed.  Please log in using the new credentials.";
-$lang['performance_information'] = "Performance and Tuning Information";
+$lang['performance_information'] = "Performance and Tuning Information (recommended settings, but not required)";
 $lang['perform_validation'] = "Perform Validation";
 $lang['period_ago'] = "ago";
 $lang['period_day'] = "day";
@@ -1398,7 +1398,7 @@ $lang['showfilters'] = "Edit filter";
 $lang['showinmenu'] = "Show in Menu";
 $lang['showrecent'] = "Show Recently Used Pages";
 $lang['showsite'] = "Show Site";
-$lang['show_shortcuts_message'] = "To show the shortcuts button in your admin theme, set My account >> User Preferences >> Administration Shortcuts";
+$lang['show_shortcuts_message'] = "To show the shortcuts button in your Admin theme, set My account >> User Preferences >> Administration Shortcuts";
 $lang['sibling_duplicate_order'] = "Two sibling pages can not have the same order. Pages were not reordered.";
 $lang['siteadmin'] = "Site Admin";
 $lang['sitedownexcludeadmins'] = "Exclude users logged in to the CMSMS Admin console";
@@ -1595,8 +1595,8 @@ $lang['warn_bulk_settemplate'] = '<strong>Warning:</strong> This is potentially 
 $lang['warn_nosefurl'] = "SEO Friendly or Pretty URLs have not been configured. Its settings are not visible here";
 $lang['welcomemsg'] = "Welcome %s";
 $lang['welcome_user'] = "Welcome";
-$lang['wiki'] = "Wiki";
-$lang['wikihelp'] = "Community Help";
+//$lang['wiki'] = "Wiki";
+//$lang['wikihelp'] = "Community Help";
 $lang['wontdeletetemplateinuse'] = "These templates are in use and will not be deleted";
 $lang['write'] = "Write";
 $lang['wysiwygtouse'] = "Select WYSIWYG to use";
