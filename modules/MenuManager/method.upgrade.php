@@ -29,8 +29,6 @@ if( version_compare($oldversion,'1.50') < 0 ) {
   try {
     $mod = $this;
 
-    echo "DEBUG: MenuManager create template type<br/>\n";
-
     $menu_template_type = new CmsLayoutTemplateType();
     $menu_template_type->set_originator($this->GetName());
     $menu_template_type->set_name('navigation');
@@ -42,12 +40,10 @@ if( version_compare($oldversion,'1.50') < 0 ) {
 
     // convert a default file template to a database template (very temporarily... it's deleted below).
     $default_template = $this->GetPreference('default_template','simple_navigation.tpl');
-    echo "DEBUG: MenuManager default template is: $default_template<br/>\n";
     if( $default_template && endswith($default_template,'.tpl') ) {
       $tpl = $this->GetTemplateFromFile($default_template);
       $this->SetTemplate('mm-default',$tpl);
       $default_template = 'mm-default';
-      echo "DEBUG: MenuManager NEW default template is: $default_template<br/></n>";
     }
 
     $alltemplates = $this->ListTemplates();
@@ -56,8 +52,6 @@ if( version_compare($oldversion,'1.50') < 0 ) {
     }
   }
   catch( CmsException $e ) {
-    echo "ERROR: ".$e->GetMessage()."<br/>\n";
-    debug_to_log(__FILE__.':'.__LINE__.' '.$e->GetMessage());
     audit('',$this->GetName(),'Upgrade Error: '.$e->GetMessage());
     return;
   }
