@@ -74,7 +74,15 @@ final class DesignManager extends CMSModule
     return $out;
   }
 
+  public function GetEventHelp( $eventname )
+  {
+      return lang('event_help_'.$eventname);
+  }
 
+  public function GetEventDescription( $eventname )
+  {
+      return lang('event_desc_'.$eventname);
+  }
 } // class
 
 #

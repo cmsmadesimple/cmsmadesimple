@@ -4,7 +4,7 @@ $this->CheckPermission('dummy permission'); //Redirect if not logged in
 
 echo '<!-- DEBUG1 -->';
 if (isset($params['reindex'])) {
-  $this->Reindex();
+    $this->Reindex();
   echo $this->ShowMessage($this->Lang('reindexcomplete'));
 }
 else if (isset($params['clearwordcount'])) {
@@ -30,7 +30,7 @@ else if (isset($params['exportcsv']) ) {
 }
 else if (isset($params['resettodefault'])) {
   $this->SetPreference('stopwords', $this->DefaultStopWords());
-}  
+}
 else if (isset($params['submit'])) {
   $this->SetPreference('stopwords', $params['stopwords']);
   $this->SetPreference('searchtext', $params['searchtext']);
@@ -67,7 +67,7 @@ if (FALSE == empty($params['active_tab'])) {
 }
 
 if ($this->CheckPermission('Modify Site Preferences')) {
-  echo $this->SetTabHeader('statistics',$this->Lang('statistics'), 
+  echo $this->SetTabHeader('statistics',$this->Lang('statistics'),
 			   ('statistics' == $tab)?true:false);
   echo $this->SetTabHeader('options',$this->Lang('options'), ('options' == $tab)?true:false);
 }
@@ -88,15 +88,15 @@ if ($this->CheckPermission('Modify Site Preferences')) {
   $smarty->assign('reindex',$this->CreateInputSubmit($id, 'reindex', $this->Lang('reindexallcontent')));
   $smarty->assign('prompt_stopwords',$this->Lang('stopwords'));
   $smarty->assign('input_stopwords',
-		  $this->CreateTextArea(false, $id, str_replace(array("\r", "\n"), '', 
-								$this->GetPreference('stopwords', $this->DefaultStopWords())), 
+		  $this->CreateTextArea(false, $id, str_replace(array("\r", "\n"), '',
+								$this->GetPreference('stopwords', $this->DefaultStopWords())),
 					'stopwords', '', '', '', '', '50', '6'));
   $smarty->assign('prompt_resetstopwords',$this->Lang('prompt_resetstopwords'));
-  $smarty->assign('input_resetstopwords',$this->CreateInputSubmit($id, 'resettodefault', $this->Lang('input_resetstopwords')));                 
+  $smarty->assign('input_resetstopwords',$this->CreateInputSubmit($id, 'resettodefault', $this->Lang('input_resetstopwords')));
 
   $smarty->assign('prompt_stemming',$this->Lang('usestemming'));
   $smarty->assign('input_stemming',
-		  $this->CreateInputCheckbox($id, 'usestemming', 'true', 
+		  $this->CreateInputCheckbox($id, 'usestemming', 'true',
 					     $this->GetPreference('usestemming', 'false')));
 
   $smarty->assign('prompt_searchtext',$this->Lang('prompt_searchtext'));
@@ -114,7 +114,7 @@ if ($this->CheckPermission('Modify Site Preferences')) {
 		  $this->CreateInputCheckbox($id,'alpharesults','true',
 					     $this->GetPreference('alpharesults','false')));
 
-  $contentops = $gCms->GetContentOperations(); 
+  $contentops = $gCms->GetContentOperations();
   $smarty->assign('prompt_resultpage',$this->Lang('prompt_resultpage'));
   $smarty->assign('input_resultpage',
 		  $contentops->CreateHierarchyDropdown('',$this->GetPreference('resultpage',-1),$id.'resultpage',1));

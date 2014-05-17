@@ -563,7 +563,6 @@ $tmp = array(15=>lang('cron_15m'),30=>lang('cron_30m'),
 	     24*60=>lang('cron_24h'),
 	     -1=>lang('cron_request'));
 $smarty->assign('pseudocron_options',$tmp);
-$smarty->assign('lang_info_pseudocron_granularity',lang('info_pseudocron_granularity'));
 
 $tmp = array(
          60*60*24=>lang('adminlog_1day'),
@@ -584,10 +583,8 @@ $smarty->assign('lang_clear',lang('clear'));
 $smarty->assign('lang_frontendlang',lang('frontendlang'));
 $smarty->assign('lang_frontendwysiwygtouse',lang('frontendwysiwygtouse'));
 $smarty->assign('lang_template',lang('template'));
-$smarty->assign('lang_clear_version_check_cache',lang('clear_version_check_cache'));
 $smarty->assign('lang_date_format_string_help',lang('date_format_string_help'));
 $smarty->assign('lang_info_sitedownexcludes',lang('info_sitedownexcludes'));
-$smarty->assign('lang_info_basic_attributes',lang('info_basic_attributes'));
 
 $all_attributes = null;
 {

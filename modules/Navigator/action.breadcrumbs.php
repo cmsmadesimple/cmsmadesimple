@@ -63,7 +63,7 @@ if( !$smarty->isCached($this->GetTemplateResource($template),$cache_id,$compile_
   $endNode = $hm->GetNodeById($thispageid);
   if( !$endNode ) return; // no current page?
   $starttext = $this->Lang('youarehere');
-  if( isset($params['start_text']) ) $starttext = $params['start_text'];
+  if( isset($params['start_text']) ) $starttext = trim($params['start_text']);
 
   $deep = 1;
   $stopat = '***DEFAULT_PAGE***';
@@ -86,6 +86,7 @@ if( !$smarty->isCached($this->GetTemplateResource($template),$cache_id,$compile_
     if( $content->Active() && ($showall || $content->ShowInMenu()) ) {
       $pagestack[] = Nav_utils::fill_node($curNode,$deep,-1,$showall);
     }
+    if( $content->Alias() == $stopat ) break;
     $curNode = $curNode->get_parent();
   }
 

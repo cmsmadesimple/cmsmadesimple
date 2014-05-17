@@ -255,7 +255,6 @@ $smarty->assign('filtertext',$this->Lang('title_filter'));
 $smarty->assign('statustext',$this->Lang('status'));
 $smarty->assign('startdatetext',$this->Lang('startdate'));
 $smarty->assign('enddatetext',$this->Lang('enddate'));
-$smarty->assign('statetext',$this->Lang('state'));
 $smarty->assign('titletext', $this->Lang('title'));
 $smarty->assign('postdatetext', $this->Lang('postdate'));
 $smarty->assign('categorytext', $this->Lang('category'));

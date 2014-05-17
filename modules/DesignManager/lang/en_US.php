@@ -81,43 +81,6 @@ $lang['error_readxml'] = 'A problem occurred reading the XML file (possible synt
 $lang['error_uploading'] = 'Problem uploading file (perhaps it is too large)';
 $lang['error_upload_filetype'] = 'The file uploaded is not of the proper type (%s)';
 $lang['error_xmlstructure'] = 'Error in the structure of the XML File';
-
-//$lang['event_desc_adddesignpost'] = 'TODO';
-//$lang['event_help_adddesignpost'] = 'TODO';
-
-//$lang['event_desc_adddesignpre'] = 'TODO';
-//$lang['event_help_adddesignpre'] = 'TODO';
-
-//$lang['event_desc_addtemplatetypepost'] = 'TODO';
-//$lang['event_help_addtemplatetypepost'] = 'TODO';
-
-//$lang['event_desc_addtemplatetypepre'] = 'TODO';
-//$lang['event_help_addtemplatetypepre'] = 'TODO';
-
-//$lang['event_desc_deletedesignpost'] = 'TODO';
-//$lang['event_help_deletedesignpost'] = 'TODO';
-
-//$lang['event_desc_deletedesignpre'] = 'TODO';
-//$lang['event_help_editdesignpre'] = 'TODO';
-
-//$lang['event_desc_deletetemplatetypepost'] = 'TODO';
-//$lang['event_help_deletetemplatetypepost'] = 'TODO';
-
-//$lang['event_desc_deletetemplatetypepre'] = 'TODO';
-//$lang['event_help_deletetemplatetypepre'] = 'TODO';
-
-//$lang['event_desc_editdesignpost'] = 'TODO';
-//$lang['event_help_editdesignpost'] = 'TODO';
-
-//$lang['event_desc_editdesignpre'] = 'TODO';
-//$lang['event_help_deletedesignpre'] = 'TODO';
-
-//$lang['event_desc_edittemplatetypepost'] = 'TODO';
-//$lang['event_help_edittemplatetypepost'] = 'TODO';
-
-//$lang['event_desc_edittemplatetypepre'] = 'TODO';
-//$lang['event_help_edittemplatetypepre'] = 'TODO';
-
 $lang['export_design'] = 'Export Design to XML';
 
 #F
