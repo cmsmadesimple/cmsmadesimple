@@ -370,7 +370,7 @@ final class CmsApp {
 
 
 	/**
-	* Get a handle to the CMS UserOperations object.
+	* Get a handle to the CMS UserOperations singleton object.
 	* If it does not yet exist, this method will instantiate it.
 	*
 	* @final
@@ -383,11 +383,8 @@ final class CmsApp {
 	}
 
 	/**
-	* Get a handle to the CMS ContentOperations object.
+	* Get a handle to the CMS ContentOperations singleton object.
 	* If it does not yet exist, this method will instantiate it.
-	* To disambiguate, this is a globally-available
-	* object with methods for dealing with Content -- it should not to be confused with
-	* the GlobalContentOperations object.
 	*
 	* @final
 	* @see ContentOperations::get_instance()
@@ -399,7 +396,7 @@ final class CmsApp {
 	}
 
 	/**
-	* Get a handle to the CMS Admin BookmarkOperations object.
+	* Get a handle to the CMS Admin BookmarkOperations singleton object.
 	* If it does not yet exist, this method will instantiate it.
 	*
 	* @final
