@@ -195,7 +195,7 @@ jQuery(document).ready(function(){
     data.push({ 'name': 'm1_ajax', 'value': 1 });
     data.push({ 'name': 'm1_preview', 'value': 1 });
     data.push({ 'name': 'showtemplate', 'value': 'false' });
-    data.push({ 'name': 'm1_previewpage', 'value': jQuery('#preview_returnid').val() });
+    data.push({ 'name': 'm1_previewpage', 'value': jQuery("input[name='preview_returnid']").val() });
     data.push({ 'name': 'm1_detailtemplate', 'value': jQuery('#preview_template').val() });
     var url = jQuery('form').attr('action');
     jQuery.post(url,data,function(resultdata,text){
@@ -219,12 +219,12 @@ jQuery(document).ready(function(){
     },'xml');
   }
 
-  jQuery('#preview').click(function(){
+  $('#preview').click(function(){
     news_dopreview();
     return false;
   });
 
-  jQuery('#preview_returnid,#preview_template').change(function(){
+  $(document).on('change',"input[name='preview_returnid'],#preview_template",function(){
     news_dopreview();
     return false;
   });
@@ -239,8 +239,7 @@ jQuery(document).ready(function(){
   {html_options options=$detail_templates selected=$cur_detail_template}
   </select>&nbsp;
 
-  <label for="preview_returnid">{$prompt_detail_page}:</label>&nbsp;
-  {$preview_returnid}
+  <label>{$prompt_detail_page}: {$preview_returnid}</label>&nbsp;
 </fieldset>
 <br/>
 <iframe id="previewframe" style="height: 800px; width: 100%; border: 1px solid black; overflow: auto;" src=""></iframe>

@@ -447,27 +447,34 @@ $smarty->assign('end_tab_headers',$this->EndTabHeaders());
 $smarty->assign('start_tab_content',$this->StartTabContent());
 $smarty->assign('start_tab_article',$this->StartTab('article',$params));
 $smarty->assign('end_tab_article',$this->EndTab());
-$smarty->assign('start_tab_preview',$this->StartTab('preview',$params));
-$smarty->assign('end_tab_preview',$this->EndTab());
 $smarty->assign('end_tab_content',$this->EndTabContent());
 
 $smarty->assign('warning_preview',$this->Lang('warning_preview'));
 $contentops = cmsms()->GetContentOperations();
 $smarty->assign('preview_returnid',
-		$contentops->CreateHierarchyDropdown('',$this->GetPreference('detail_returnid',-1), 'preview_returnid'));
-{
-  $tmp = $this->ListTemplates();
-  $tmp2 = array();
-  for( $i = 0; $i < count($tmp); $i++ ) {
-    if( startswith($tmp[$i],'detail') ) {
-      $x = substr($tmp[$i],6);
-      $tmp2[$x] = $x;
+                $contentops->CreateHierarchyDropdown('',$this->GetPreference('detail_returnid',-1), 'preview_returnid'));
+
+// get the list of detail templates.
+try {
+    $type = CmsLayoutTemplateType::load($this->GetName().'::detail');
+    $templates = $type->get_template_list();
+    $list = array();
+    if( is_array($templates) && count($templates) ) {
+        foreach( $templates as $template ) {
+            $list[$template->get_id()] = $template->get_name();
+        }
     }
-  }
-  $smarty->assign('prompt_detail_template',$this->Lang('detail_template'));
-  $smarty->assign('prompt_detail_page',$this->Lang('detail_page'));
-  $smarty->assign('detail_templates',$tmp2);
-  $smarty->assign('cur_detail_template',$this->GetPreference('current_detail_template'));
+    if( count($list) ) {
+        $smarty->assign('prompt_detail_template',$this->Lang('detail_template'));
+        $smarty->assign('prompt_detail_page',$this->Lang('detail_page'));
+        $smarty->assign('detail_templates',$list);
+        $smarty->assign('cur_detail_template',$this->GetPreference('current_detail_template'));
+        $smarty->assign('start_tab_preview',$this->StartTab('preview',$params));
+        $smarty->assign('end_tab_preview',$this->EndTab());
+    }
+}
+catch( Exception $e ) {
+    audit('',$this->GetName(),'No detail templates available for preview');
 }
 
 // and display the template.

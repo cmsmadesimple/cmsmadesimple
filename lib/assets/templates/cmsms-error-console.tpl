@@ -127,7 +127,7 @@
                 Don’t worry, it can happen to any of us.
             </p>
             <div class="clear"></div>
-			{if isset($smarty.cookies.cms_admin_user_id)}
+			{if isset($smarty.session.cms_admin_user_id)}
 				<div class="error">
 					<h2 class="error-message"><span class="important">Error:</span> at line {$e_line} in file {$e_file}:</h2>
 					<p class="message">

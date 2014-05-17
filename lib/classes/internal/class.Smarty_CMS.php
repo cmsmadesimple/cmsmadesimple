@@ -31,7 +31,7 @@ require_once(dirname(dirname(__DIR__)).'/smarty/SmartyBC.class.php');
  * @since 0.1
  */
 class Smarty_CMS extends SmartyBC
-{	
+{
   public $id; // <- triggers error without | do search why this is needed
   public $params; // <- triggers error without | do search why this is needed
   protected $_global_cache_id;
@@ -43,12 +43,12 @@ class Smarty_CMS extends SmartyBC
    * @param array The hash of CMSMS config settings
    */
   public function __construct()
-  { 
+  {
     parent::__construct();
 
     global $CMS_ADMIN_PAGE; // <- Still needed?
     global $CMS_INSTALL_PAGE;
-		
+
     $config = cmsms()->GetConfig();
 
     // Set template_c and cache dirs
@@ -67,7 +67,7 @@ class Smarty_CMS extends SmartyBC
     // common resources.
     $this->registerResource('module_db_tpl',new CMSModuleDbTemplateResource());
     $this->registerResource('module_file_tpl',new CMSModuleFileTemplateResource());
-    $this->registerResource('cms_template',new CmsTemplateResource()); // <- Should proably be global and removed from parser?		
+    $this->registerResource('cms_template',new CmsTemplateResource()); // <- Should proably be global and removed from parser?
 
     // register default plugin handler
     $this->registerDefaultPluginHandler(array(&$this, 'defaultPluginHandler'));
@@ -85,7 +85,7 @@ class Smarty_CMS extends SmartyBC
     }
 
     if(cmsms()->is_frontend_request()) {
-		
+
       $this->setTemplateDir(cms_join_path($config['root_path'],'tmp','templates'));
       $this->setConfigDir(cms_join_path($config['root_path'],'tmp','templates'));
 
@@ -125,12 +125,12 @@ class Smarty_CMS extends SmartyBC
 
 	// Add assets tpl dir to scope
 	$this->addTemplateDir(cms_join_path($config['root_path'], 'lib', 'assets', 'templates'));
-	
+
     // Enable security object
     // Note: Buggy, disabled prior to release of CMSMS 1.11
     //$this->enableSecurity('CMSSmartySecurityPolicy');
   }
-	
+
   /**
    * get_instance method
    *
@@ -140,19 +140,19 @@ class Smarty_CMS extends SmartyBC
   {
     if( !is_object(self::$_instance) ) self::$_instance = new self;
     return self::$_instance;
-  }	
+  }
 
   /**
    * Load filters from CMSMS plugins folder
    *
    * @return void
-   */	
+   */
   private function autoloadFilters()
   {
     $pre = array();
     $post = array();
     $output = array();
-		
+
     foreach( $this->plugins_dir as $onedir ) {
       if( !is_dir($onedir) ) continue;
 
@@ -163,16 +163,16 @@ class Smarty_CMS extends SmartyBC
 	$onefile = basename($onefile);
 	$parts = explode('.',$onefile);
 	if( !is_array($parts) || count($parts) != 3 ) continue;
-				
+
 	switch( $parts[0] ) {
 	case 'output':
 	  $output[] = $parts[1];
 	  break;
-						
+
 	case 'prefilter':
 	  $pre[] = $parts[1];
 	  break;
-						
+
 	case 'postfilter':
 	  $post[] = $parts[1];
 	  break;
@@ -182,7 +182,7 @@ class Smarty_CMS extends SmartyBC
 
     $this->autoload_filters = array('pre'=>$pre,'post'=>$post,'output'=>$output);
   }
-	
+
   /**
    * Registers plugin to be used in templates
    *
@@ -199,7 +199,7 @@ class Smarty_CMS extends SmartyBC
     if (!isset($this->smarty->registered_plugins[$type][$tag])) {
       $this->smarty->registered_plugins[$type][$tag] = array($callback, (bool) $cacheable, (array) $cache_attr);
     }
-        
+
     return $this;
   }
 
@@ -213,7 +213,7 @@ class Smarty_CMS extends SmartyBC
    * @param string $callback
    * @param string $script
    * @return bool true on success, false on failure
-   */	
+   */
   public function defaultPluginHandler($name, $type, $template, &$callback, &$script, &$cachable)
   {
     debug_buffer('',"Start Load Smarty Plugin $name/$type");
@@ -236,7 +236,7 @@ class Smarty_CMS extends SmartyBC
 
     if( cmsms()->is_frontend_request() ) {
       $row = cms_module_smarty_plugin_manager::load_plugin($name,$type);
-      if( is_array($row) && is_array($row['callback']) && count($row['callback']) == 2 && 
+      if( is_array($row) && is_array($row['callback']) && count($row['callback']) == 2 &&
 	  is_string($row['callback'][0]) && is_string($row['callback'][1]) ) {
 	$cachable = $row['cachable'];
 	$callback = $row['callback'][0].'::'.$row['callback'][1];
@@ -285,7 +285,7 @@ class Smarty_CMS extends SmartyBC
    * @param bool $merge_tpl_vars
    * @param bool $no_output_filter
    * @return mixed
-   */	
+   */
   public function fetch($template = null,$cache_id = null, $compile_id = null, $parent = null, $display = false, $merge_tpl_vars = true, $no_output_filter = false)
   {
     $name = $template; if( startswith($name,'string:') ) $name = 'string:';
@@ -334,7 +334,7 @@ class Smarty_CMS extends SmartyBC
    * @param mixed $exp_time
    * @param mixed $type
    * @return mixed
-   */	
+   */
   public function clearCache($template_name,$cache_id = null,$compile_id = null,$exp_time = null,$type = null)
   {
     if( is_null($cache_id) || $cache_id === '' ) {
@@ -355,7 +355,7 @@ class Smarty_CMS extends SmartyBC
    * @param int $compile_id
    * @param mixed $parent
    * @return mixed
-   */	
+   */
   public function isCached($template = null,$cache_id = null,$compile_id = null, $parent = null)
   {
     if( is_null($cache_id) || $cache_id === '' ) {
@@ -366,14 +366,14 @@ class Smarty_CMS extends SmartyBC
     }
     return parent::isCached($template,$cache_id,$compile_id,$parent);
   }
-	
+
   /**
    * Error console
    *
    * @param object Exception $e
    * @return html
    * @author Stikki
-   */	
+   */
   public function errorConsole(Exception $e)
   {
     $config = cmsms()->GetConfig();
@@ -392,10 +392,10 @@ class Smarty_CMS extends SmartyBC
     $output = $this->fetch('cmsms-error-console.tpl');
 
     $this->force_compile = false;
-    $this->debugging = false;		
+    $this->debugging = false;
 
     return $output;
-  }	
+  }
 
 
   /**
@@ -413,17 +413,17 @@ class Smarty_CMS extends SmartyBC
   {
     // if function or class exists, exit silently (already loaded)
     if ($check && (is_callable($plugin_name) || class_exists($plugin_name, false))) return true;
-		
+
     // Plugin name is expected to be: Smarty_[Type]_[Name]
     $_name_parts = explode('_', $plugin_name, 3);
-		
+
     // class name must have three parts to be valid plugin
     // count($_name_parts) < 3 === !isset($_name_parts[2])
     if (!isset($_name_parts[2]) || strtolower($_name_parts[0]) !== 'smarty') {
       throw new SmartyException("plugin {$plugin_name} is not a valid name format");
       return false;
     }
-		
+
     // if type is "internal", get plugin from sysplugins
     if (strtolower($_name_parts[1]) == 'internal') {
       $file = SMARTY_SYSPLUGINS_DIR . strtolower($plugin_name) . '.php';
@@ -445,14 +445,14 @@ class Smarty_CMS extends SmartyBC
       $names = array($_plugin_dir . $_plugin_filename,
 		     $_plugin_dir . strtolower($_plugin_filename)
 		     );
-			
+
       foreach ($names as $file) {
 	if (file_exists($file)) {
 	  require_once($file);
 	  if( is_callable($plugin_name) || class_exists($plugin_name, false) ) return $file;
 	}
-				
-	if ($this->use_include_path && 
+
+	if ($this->use_include_path &&
 	    !preg_match('/^([\/\\\\]|[a-zA-Z]:[\/\\\\])/', $_plugin_dir)) {
 	  // try PHP include_path
 	  if ($_stream_resolve_include_path) {
@@ -470,7 +470,7 @@ class Smarty_CMS extends SmartyBC
     }
     // no plugin loaded
     return false;
-  }	
+  }
 
 } // end of class
 
