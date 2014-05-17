@@ -242,7 +242,6 @@ if (isset($_POST["username"]) && isset($_POST["password"])) {
 	if( !strstr($tmp,'.php') || endswith($tmp,'/') ) {
 	  // force the url to go to index.php
 	  $tmp = $config['admin_url'].'/index.php?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
-	  debug_to_log('change session var to '.$tmp);
 	}
 
 	redirect($tmp);

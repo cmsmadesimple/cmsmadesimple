@@ -543,7 +543,6 @@ class ContentOperations
 		if( ($tmp = cms_cache_handler::get_instance()->get('contentcache')) ) {
 			list($mtime,$data) = unserialize($tmp);
 			if( $mtime > $this->GetLastContentModification() ) {
-				debug_to_log('loading tree from cache');
 				if( get_class($data) == 'cms_content_tree' ) {
 					$tree = $data;
 					$loadedcache = true;
@@ -552,7 +551,6 @@ class ContentOperations
 		}
 
 		if (!$loadedcache) {
-			debug_to_log('loading tree from database');
 			debug_buffer('', 'Start loading content tree from database and serializing');
 			$query = 'SELECT content_id,parent_id,item_order,content_alias FROM '.cms_db_prefix().'content ORDER BY hierarchy ASC';
 			$nodes = $db->GetArray($query);

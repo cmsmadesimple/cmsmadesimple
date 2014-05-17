@@ -27,7 +27,6 @@ if( $alias ) {
   $query = 'SELECT content_id,content_name,menu_text,content_alias FROM '.cms_db_prefix().'content
             WHERE content_alias = ? AND active = 1';
   $dbr = $db->GetRow($query,array($alias));
-  debug_to_log('got alias '.$alias);
   if( is_array($dbr) && count($dbr) ) {
     $out = array('label'=>$dbr['content_name'], 'value'=>$dbr['content_alias']);
     echo json_encode($out);

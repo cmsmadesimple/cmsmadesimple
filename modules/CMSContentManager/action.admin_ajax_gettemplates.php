@@ -82,7 +82,6 @@ try {
     }
 }
 catch( Exception $e ) {
-    debug_to_log($e->GetMessage());
     $out = null;
 }
 

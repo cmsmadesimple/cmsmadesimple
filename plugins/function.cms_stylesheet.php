@@ -46,12 +46,7 @@ function smarty_cms_function_cms_stylesheet($params, &$template)
 	# Trivial Exclusion
 	#---------------------------------------------	
 	
-	debug_to_log('cms_stylesheet');
-	debug_to_log($params);
-
 	if( isset($CMS_LOGIN_PAGE) ) return;
-
-	debug_to_log('cms_stylesheet2');
 
 	#---------------------------------------------
 	# Read parameters
@@ -59,7 +54,6 @@ function smarty_cms_function_cms_stylesheet($params, &$template)
 
 	if (isset($params['name']) && $params['name'] != '' ) {
   	        $name = trim($params['name']);
-		debug_to_log('cms_stylesheet3 '.$name);
 	}
 	else if (isset($params['designid']) && $params['designid']!='') {
 		$design_id = (int)$params['designid'];
@@ -321,7 +315,6 @@ function cms_stylesheet_writeCache($filename, $string, $trimbackground, &$smarty
 	}
 	catch (SmartyException $e)
 	{
-	  die($e->GetMessage());
 	  debug_to_log('Error Processing Stylesheet');
 	  debug_to_log($e->GetMessage());
 	  audit('','Plugin: cms_stylesheet', 'Smarty Compile process failed, unable to write cache file');

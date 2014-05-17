@@ -115,10 +115,8 @@ while( $trycount < 2 ) {
       header("Cache-Control: no-store, no-cache, must-revalidate");
       header("Cache-Control: post-check=0, pre-check=0", false);
       header("Pragma: no-cache");
-      debug_to_log('donotcache '.$page);
     }
     else {
-      debug_to_log('caching '.$page);
       // as far as we know, the output is cachable at this point...
       // so we mark it so that the output can be cached
       header('Expires: '.gmdate("D, d M Y H:i:s",time() + $expiry * 60).' GMT');

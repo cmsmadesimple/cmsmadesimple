@@ -78,7 +78,6 @@ final class News_AdminSearch_slave extends AdminSearch_slave
 		     'edit_url'=>$url,'text'=>$text);
 	$output[] = $tmp;
       }
-      debug_to_log($output);
       return $output;
     }
   }

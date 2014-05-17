@@ -43,7 +43,6 @@ final class AdminSearch_css_slave extends AdminSearch_slave
       foreach( $dbr as $row ) {
 	$one = $row['id'];
 
-	debug_to_log($row);
 	// here we could actually have a smarty template to build the description.
 	$mod = cms_utils::get_module('DesignManager');
 	$url = $mod->create_url('m1_','admin_edit_css','',array('css'=>$one));
