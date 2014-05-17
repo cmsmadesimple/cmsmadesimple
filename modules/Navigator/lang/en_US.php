@@ -2,19 +2,22 @@
 #A
 #B
 #C
+
 #D
 $lang['description'] = 'This module provides a simple and easy way to generate the HTML needed for a website navigation directly, and dynamically from the CMSMS page structure.  It provides flexible filtering, and templating capabilities to build powerful, fast, and appealing website navigations with no interaction from the content editor.';
 
 #E
+
 #F
 $lang['friendlyname'] = 'CMSMS Navigation Builder';
 
 #G
+
 #H
 $lang['help'] = <<<EOT
 <h3>What does this do?</h3>
   <p>The &quot;Navigator&quot; module is an engine for generating navigations from the CMSMS content tree and a smarty template.  This module provides flexible filtering capabilities to allow building numerous navigations based on different criteria, and a simple to use hierarchical data format for generating navigations with complete flexibility.</p>
-  <p>This module has no admin interface of its own, instead it uses the DesignManager to manage menu templates.</p>
+  <p>This module has no Admin interface of its own, instead it uses the DesignManager to manage menu templates.</p>
 <h3>How do I use it?</h3>
 <p>The simplest way to use this module is to insert the <code>{Navigator}</code> tag into a template.  The module accepts numerous parameters to alter its behavior and filter the data.</p>
 <h3>Why do I care about templates?</h3>
@@ -55,7 +58,7 @@ $lang['help'] = <<<EOT
      <pre><code>{Navigator number_of_levels=2 start_page=\$page_lias}</code></pre>
    </li>
    <li>Display a simple navigation two levels deep starting with the children of the current page.  Use the default template:</li>
-     <pre><code>{Navigator number_of_levels=2 childrenof=\$page_lias}</code></pre>
+     <pre><code>{Navigator number_of_levels=2 childrenof=\$page_alias}</code></pre>
    </li>
    <li>Display a simple navigation two levels deep starting with the current page, and everything below it.  Use the default template:</li>
      <pre><code>{Navigator number_of_levels=2 start_page=\$page_lias}</code></pre>
@@ -89,7 +92,8 @@ $lang['help_start_level'] = 'This option will have the menu only display items s
 \'.  Then as a second menu, you have start_level=\'2\'.  Now, your second menu will show items based on what is selected in the first menu.';
 $lang['help_start_page'] = 'Starts the menu displaying at the given start_page and showing that element and it\'s children only.  Takes a page alias.';
 $lang['help_template'] = 'The template to use for displaying the menu.  The named template must exist in the DesignManager or an error will be displayed.  If this parameter is not specified the default template of type Navigator::Navigation will be used';
-//$lang['help_start_text'] = 'Useful only in the breadcrumbs action, this parameter allows specifying some optional text to display at the beginning of the breadcrumb navigation.  An example would be &quot;You Are Here&quot;';
+$lang['help_start_text'] = 'Useful only in the breadcrumbs action, this parameter allows specifying some optional text to display at the beginning of the breadcrumb navigation.  An example would be &quot;You Are Here&quot;';
+
 #I
 #J
 #K
@@ -101,6 +105,7 @@ $lang['help_template'] = 'The template to use for displaying the menu.  The name
 #Q
 #R
 #S
+
 #T
 $lang['type_breadcrumbs'] = 'Breadcrumbs';
 $lang['type_Navigator'] = 'Navigator';
@@ -110,8 +115,10 @@ $lang['type_navigation'] = 'Navigation';
 #V
 #W
 #X
+
 #Y
 $lang['youarehere'] = 'You are here';
 
 #Z
+
 ?>
