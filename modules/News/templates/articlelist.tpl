@@ -8,7 +8,9 @@ $(document).ready(function(){
 	$('#toggle_filter').click(function(){
 		$('#filter').toggle(50);
 	});
-
+        $('a.delete_article').click(function(){
+        	return confirm('{$mod->Lang('areyousure')}');
+        });
 	$('#articlelist').on('cms_checkall_toggle','[type=checkbox]',function(){
 		var l = $('#articlelist :checked').length;
 
@@ -146,7 +148,7 @@ $(document).ready(function(){
                         </td>
 			<td>
                           {if isset($entry->delete_url)}
-                          <a href="{$entry->delete_url}" title="{$mod->Lang('delete_article')}">{admin_icon icon='delete.gif'}</a>
+                          <a class="delete_article" href="{$entry->delete_url}" title="{$mod->Lang('delete_article')}">{admin_icon icon='delete.gif'}</a>
                           {/if}
                         </td>
 			<td><input type="checkbox" name="{$actionid}sel[]" value="{$entry->id}" title="{$mod->Lang('toggle_bulk')}"/></td>

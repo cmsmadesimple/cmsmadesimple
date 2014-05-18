@@ -220,10 +220,8 @@ while ($dbresult && $row = $dbresult->FetchRow()) {
     $onerow->editlink = $this->CreateLink($id, 'editarticle', $returnid, $admintheme->DisplayImage('icons/system/edit.gif', $this->Lang('edit'),'','','systemicon'), array('articleid'=>$row['news_id']));
   }
   if( $this->CheckPermission('Delete News') ) {
-    $onerow->delete_url = $this->create_url($id,'deletearticle',$returnid,
-					    array('articleid'=>$row['news_id']));
+    $onerow->delete_url = $this->create_url($id,'deletearticle',$returnid, array('articleid'=>$row['news_id']));
 
-    $onerow->deletelink = $this->CreateLink($id, 'deletearticle', $returnid, $admintheme->DisplayImage('icons/system/delete.gif', $this->Lang('delete'),'','','systemicon'), array('articleid'=>$row['news_id']), $this->Lang('areyousure'));
   }
 
   $entryarray[] = $onerow;
