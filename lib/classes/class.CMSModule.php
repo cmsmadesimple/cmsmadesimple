@@ -2848,12 +2848,13 @@ abstract class CMSModule
         try {
             if( !$permission_text ) $permission_text = $permission_name;
             $perm = new CmsPermission();
-            $perm->originator = $this->GetName();
+            $perm->source = $this->GetName();
             $perm->name = $permission_name;
             $perm->text = $permission_text;
             $perm->save();
         }
         catch( Exception $e ) {
+			// ignored.
         }
     }
 
