@@ -379,8 +379,8 @@ function create_textarea($enablewysiwyg, $text, $name, $classname = '', $id = ''
   if( $id ) $parms['id'] = $id;
   if( $encoding ) $parms['encoding'] = $encoding;
   //  if( $stylesheet ) $parms['stylesheet'] = $stylesheet; // ignored
-  if( $width ) $parms['rows'] = $width;
-  if( $height ) $parms['cols'] = $height;
+  if( $width ) $parms['rows'] = $height;
+  if( $height ) $parms['cols'] = $width;
   if( $forcewysiwyg ) $parms['forcemodule'] = $forcewysiwyg;
   if( $wantedsyntax ) $parms['wantedsyntax'] = $wantedsyntax;
   if( $addtext ) $parms['addtext'] = $addtext;
