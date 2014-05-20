@@ -2421,7 +2421,7 @@ abstract class CMSModule
     final public function GetDatabaseResource($template)
     {
         if( endswith($template,'.tpl') ) return 'module_file_tpl:'.$this->GetName().';'.$template;
-        return 'module_db_tpl:'.$this->GetName().':'.$template;
+        return 'module_db_tpl:'.$this->GetName().';'.$template;
     }
 
     /**

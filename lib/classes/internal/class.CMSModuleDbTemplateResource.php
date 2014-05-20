@@ -43,7 +43,7 @@ class CMSModuleDbTemplateResource extends CMS_Fixed_Resource_Custom
 
         $tmp = explode(';',$name);
         $query = "SELECT * from ".cms_db_prefix()."module_templates WHERE module_name = ? and template_name = ?";
-        $parts = explode(':',$name);
+        $parts = explode(';',$name);
         $row = $db->GetRow($query, $parts);
         if ($row) {
             $source = $row['content'];
