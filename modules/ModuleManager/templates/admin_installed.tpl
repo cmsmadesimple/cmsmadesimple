@@ -72,7 +72,7 @@ $(document).ready(function(){
            {if $item.deprecated}{$deprecated_img}{/if}
       </td>
       <td>
-          {if !$item.installed}
+          {if !$item.installed || $item.e_status == 'need_upgrade'}
             <span title="{$item.description}" class="important">{$item.name}</span>
           {elseif $item.deprecated}
             <span title="{$item.description}" style="color: red;">{$item.name}</span>
