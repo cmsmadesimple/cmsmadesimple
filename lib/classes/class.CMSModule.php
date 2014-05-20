@@ -2409,7 +2409,8 @@ abstract class CMSModule
      */
 
     /**
-     * Alias for the GetTemplateResource method, for compatibility.
+     * Build a resource string for an old module templates resource.
+     * If the template name provided ends with .tpl a module file template is assumed.
      *
      * @final
      * @since 1.11
@@ -2420,7 +2421,7 @@ abstract class CMSModule
     final public function GetDatabaseResource($template)
     {
         if( endswith($template,'.tpl') ) return 'module_file_tpl:'.$this->GetName().';'.$template;
-        return 'cms_template:'.$template;
+        return 'module_db_tpl:'.$template;
     }
 
     /**

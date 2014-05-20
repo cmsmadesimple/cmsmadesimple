@@ -48,6 +48,17 @@ class CMSModuleDbTemplateResource extends CMS_Fixed_Resource_Custom
             $source = $row['content'];
             $mtime = $db->UnixTimeStamp($row['modified_date']);
         }
+        else {
+            // fallback to the layout stuff.
+            try {
+                $obj = CmsLayoutTemplate::load($name);
+                $source = $obj->get_content();
+                $mtime = $obj->get_modified();
+            }
+            catch( Exception $e ) {
+                // nothing here.
+            }
+        }
         debug_buffer('','CMSModuleDbTemplateResource end'.$name);
     }
 } // end of class
