@@ -895,13 +895,13 @@ $lang['global_umask'] = "File Creation Mask (umask)";
 $lang['goto'] = "Back to:";
 $lang['group'] = "Group";
 $lang['groupassignmentdescription'] = "Here you can assign users to groups.";
-$lang['groupassignments'] = "Manage Admin Group Assignments";
+$lang['groupassignments'] = "Manage Backend Group Assignments";
 $lang['groupmanagement'] = "Group Management";
 $lang['groupname'] = "Group Name";
 $lang['grouppermissions'] = "Group Permissions";
-$lang['groupperms'] = "Manage Admin Group Permissions";
+$lang['groupperms'] = "Manage Backend Group Permissions";
 $lang['grouppermsdescription'] = "Set permissions and access levels for Admin groups";
-$lang['groups'] = "Manage Admin Groups";
+$lang['groups'] = "Manage Backend Groups";
 $lang['groupsdescription'] = "This is where you manage Admin groups.";
 
 ## H
@@ -1557,7 +1557,7 @@ $lang['username'] = "User name";
 $lang['usernameincorrect'] = "User name or password incorrect";
 $lang['usernotfound'] = "User Not Found";
 $lang['userprefs'] = "User Preferences";
-$lang['users'] = "Manage Admin Users";
+$lang['users'] = "Manage Backend Users";
 $lang['usersassignedtogroup'] = "Users Assigned to Group %s";
 $lang['usersdescription'] = "Here you can manage Admin users.";
 $lang['usersettings'] = "User Settings";
