@@ -33,6 +33,11 @@
 <div class="hidden">
   <input type="hidden" name="{$cms_secure_param_name}" value="{$cms_user_key}" />
 </div>
+
+<div class="pageoverflow">
+	<p class="pageoptions">{$hidden}{$submit} {$cancel}</p>
+</div>
+
 {assign var='group_count' value=count($group_list)}
 <table cellspacing="0" class="pagetable" id="permtable">
   <thead>
@@ -89,9 +94,6 @@
 </table>
 
 <div class="pageoverflow">
-  <p class="pageoptions">
-    {$hidden}
-    {$submit} {$cancel} 
-  </p>
+	<p class="pageoptions">{$hidden}{$submit} {$cancel}</p>
 </div>
 </form>

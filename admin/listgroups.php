@@ -38,6 +38,21 @@ if (!$access) {
 
 include_once("header.php");
 
+
+if (check_permission($userid, 'Add Groups')) {
+?>
+	<div class="pageoptions">
+		<p class="pageoptions">
+			<a href="addgroup.php<?php echo $urlext ?>">
+				<?php 
+					echo $themeObject->DisplayImage('icons/system/newobject.gif', lang('addgroup'),'','','systemicon').'</a>';
+					echo ' <a class="pageoptions" href="addgroup.php'.$urlext.'">'.lang("addgroup");
+				?>
+			</a>
+		</p>
+	</div>
+<?php
+}
 ?>
 
 <div class="pagecontainer">
@@ -135,13 +150,14 @@ if (check_permission($userid, 'Add Groups')) {
 			</a>
 		</p>
 	</div>
-</div>
-
-
 <?php
 }
+?>
+
+</div>
+
+<?php
 
 include_once("footer.php");
-
 
 ?>

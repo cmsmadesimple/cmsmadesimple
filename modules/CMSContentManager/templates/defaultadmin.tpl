@@ -447,5 +447,15 @@ $(document).ready(function () {
 </div>
 {/if}
 
+{if $can_add_content}
+<div class="row c_full">
+	<div class="pageoptions grid_6">
+		<ul class="options-menu">
+			<li><a  href="{cms_action_url action=admin_editcontent}" accesskey="n" title="{$mod->Lang('addcontent')}" class="pageoptions">{admin_icon icon='newobject.gif' alt=$mod->Lang('addcontent')}&nbsp;{$mod->Lang('addcontent')}</a></li>
+		</ul>
+	</div>
+</div>
+{/if}
+
 {form_end}
 <div class="clearb"></div>
