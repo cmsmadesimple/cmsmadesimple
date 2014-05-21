@@ -25,7 +25,7 @@ $(document).ready(function(){
   $(document).on('click', '#bulksubmit', function(){
     return confirm('{lang('confirm_bulkuserop')}');
   });
-  $('.multiselect').click(function(){ 
+  $('.multiselect').click(function(){
     toggle_bulk();
     $('#sel_all').removeAttr('checked');
   });
@@ -55,6 +55,10 @@ $(document).ready(function(){
 
 
   {form_start url='listusers.php'}
+  <div class="pageoptions">
+    <a href="adduser.php{$urlext}" title="{lang('info_adduser')}">{admin_icon icon='newobject.gif' class='systemicon'}&nbsp;{lang('adduser')}</a>
+  </div>
+
   <table class="pagetable" cellspacing="0">
     <thead>
       <tr>

@@ -159,7 +159,7 @@ $smarty->assign('cancel','<input type="submit" name="cancel" value="'.lang('canc
 
 # begin output
 if( !empty($message) ) echo $themeObject->ShowMessage($message);
-echo '<div class="pagecontainer">'.$themeObject->ShowHeader('grouppermissions',array($group_name));
+echo '<div class="pagecontainer">'.$themeObject->ShowHeader('groupperms',array($group_name));
 echo $smarty->fetch('changegroupperm.tpl');
 echo '</div>';
 

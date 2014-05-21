@@ -39,26 +39,26 @@ if (!$access) {
 include_once("header.php");
 
 
-if (check_permission($userid, 'Add Groups')) {
-?>
-	<div class="pageoptions">
-		<p class="pageoptions">
-			<a href="addgroup.php<?php echo $urlext ?>">
-				<?php 
-					echo $themeObject->DisplayImage('icons/system/newobject.gif', lang('addgroup'),'','','systemicon').'</a>';
-					echo ' <a class="pageoptions" href="addgroup.php'.$urlext.'">'.lang("addgroup");
-				?>
-			</a>
-		</p>
-	</div>
-<?php
-}
 ?>
 
 <div class="pagecontainer">
 	<div class="pageoverflow">
 
 <?php
+
+if (check_permission($userid, 'Add Groups')) {
+?>
+	<div class="pageoptions">
+			<a href="addgroup.php<?php echo $urlext ?>">
+				<?php
+					echo $themeObject->DisplayImage('icons/system/newobject.gif', lang('addgroup'),'','','systemicon').'</a>';
+					echo ' <a class="pageoptions" href="addgroup.php'.$urlext.'">'.lang("addgroup");
+				?>
+			</a>
+	</div>
+</div>
+<?php
+}
 
 	$userid = get_userid();
         $gCms = cmsms();
@@ -141,21 +141,18 @@ if (check_permission($userid, 'Add Groups')) {
 if (check_permission($userid, 'Add Groups')) {
 ?>
 	<div class="pageoptions">
-		<p class="pageoptions">
 			<a href="addgroup.php<?php echo $urlext ?>">
-				<?php 
+				<?php
 					echo $themeObject->DisplayImage('icons/system/newobject.gif', lang('addgroup'),'','','systemicon').'</a>';
 					echo ' <a class="pageoptions" href="addgroup.php'.$urlext.'">'.lang("addgroup");
 				?>
 			</a>
-		</p>
 	</div>
 <?php
 }
 ?>
 
 </div>
-
 <?php
 
 include_once("footer.php");

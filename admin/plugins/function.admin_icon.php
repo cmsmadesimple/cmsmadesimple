@@ -19,7 +19,7 @@
 function smarty_function_admin_icon($params,&$template)
 {
   $smarty = $template->smarty;
-  
+
   if( !cmsms()->test_state(CmsApp::STATE_ADMIN_PAGE) ) return;
 
   $icon = null;
@@ -49,9 +49,8 @@ function smarty_function_admin_icon($params,&$template)
   $fnd = cms_admin_utils::get_icon($icon);
   if( !$fnd ) return;
 
-  if( !isset($tagparms['alt']) ) {
-    $tagparms['alt'] = basename($fnd);
-  }
+  if( !isset($tagparms['alt']) ) $tagparms['alt'] = basename($fnd);
+  if( !isset($tagparms['class']) ) $tagparms['class'] = 'systemicon';
 
   $out = "<img src=\"{$fnd}\"";
   foreach( $tagparms as $key => $value ) {
