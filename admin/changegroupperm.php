@@ -30,7 +30,7 @@ if (isset($_POST["submitted"])) $submitted = $_POST["submitted"];
 else if (isset($_GET["submitted"])) $submitted = $_GET["submitted"];
 
 if (isset($_POST["cancel"])) {
-  redirect("topusers.php".$urlext);
+  redirect("changegroupperm.php".$urlext);
   return;
 }
 

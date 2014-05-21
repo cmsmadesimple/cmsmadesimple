@@ -49,11 +49,6 @@ $(document).ready(function(){
 });
 </script>
 
- <div class="pageoptions">
-    <a href="adduser.php{$urlext}" title="{lang('info_adduser')}">{admin_icon icon='newobject.gif'}&nbsp;{lang('adduser')}</a>
-</div>
-
-
   {form_start url='listusers.php'}
   <div class="pageoptions">
     <a href="adduser.php{$urlext}" title="{lang('info_adduser')}">{admin_icon icon='newobject.gif' class='systemicon'}&nbsp;{lang('adduser')}</a>

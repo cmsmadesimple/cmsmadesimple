@@ -35,7 +35,7 @@ else if (isset($_GET["submitted"])) $submitted = $_GET["submitted"];
 $group_name="";
 
 if (isset($_POST["cancel"])) {
-	redirect("topusers.php".$urlext);
+	redirect("changegroupassign.php".$urlext);
 	return;
 }
 
