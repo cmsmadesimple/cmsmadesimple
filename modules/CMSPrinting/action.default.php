@@ -28,7 +28,10 @@ if( !$smarty->isCached($this->GetDatabaseResource($template),$cache_id) ) {
   $smarty->assign("target", $target);
   $onlyurl=false;
   if (isset($params["onlyurl"])) {
-    if ($params["onlyurl"]=="true" || $params["onlyurl"]=="1") $onlyurl=true;
+    if ($params['onlyurl']== true || $params['onlyurl'] == 1) {
+        $onlyurl=true;
+        $smarty->assign('onlyurl', 1);
+    }
   }
 
   $includetemplate=false;
