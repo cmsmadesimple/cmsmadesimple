@@ -103,7 +103,7 @@
                 $('body').addClass('touch-device');
             }
             
-            if (!window.attachEvent && window.addEventListener) {
+            if (!window.attachEvent && window.addEventListener && SX.isMobile) {
 
                 menuItem.each(function () {
 
