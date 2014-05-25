@@ -437,25 +437,24 @@ $(document).ready(function () {
 {/if}
 </div>{* #contentlist *}
 
-{if isset($content_list) && $multiselect && isset($bulk_options)}
-<div class="pageoptions" style="float: right">
-	<label for="multiaction">{$mod->Lang('prompt_withselected')}:</label>&nbsp;&nbsp;
-	<select name="{$actionid}multiaction" id="multiaction">
-		{html_options options=$bulk_options}
-	</select>
-	<input type="submit" id="multisubmit" name="{$actionid}multisubmit" accesskey="s" value="{$mod->Lang('submit')}"/>
-</div>
-{/if}
-
-{if $can_add_content}
 <div class="row c_full">
+{if $can_add_content}
 	<div class="pageoptions grid_6">
 		<ul class="options-menu">
 			<li><a  href="{cms_action_url action=admin_editcontent}" accesskey="n" title="{$mod->Lang('addcontent')}" class="pageoptions">{admin_icon icon='newobject.gif' alt=$mod->Lang('addcontent')}&nbsp;{$mod->Lang('addcontent')}</a></li>
 		</ul>
 	</div>
-</div>
 {/if}
+{if isset($content_list) && $multiselect && isset($bulk_options)}
+    <div class="pageoptions grid_6" style="text-align: right;">
+        <label for="multiaction">{$mod->Lang('prompt_withselected')}:</label>&nbsp;&nbsp;
+        <select name="{$actionid}multiaction" id="multiaction">
+            {html_options options=$bulk_options}
+        </select>
+        <input type="submit" id="multisubmit" name="{$actionid}multisubmit" accesskey="s" value="{$mod->Lang('submit')}"/>
+    </div>
+{/if}
+</div>
 
 {form_end}
 <div class="clearb"></div>
