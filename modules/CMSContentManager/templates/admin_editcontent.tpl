@@ -8,18 +8,19 @@ $(document).ready(function(){
   // initialize the dirtyform stuff.
   $('#Edit_Content').dirtyForm({
     beforeUnload: function() {
-      $('#Edit_Content').lockManager('unlock');
+      {if isset($lock_timeout) && $lock_timeout > 0}$('#Edit_Content').lockManager('unlock');{/if}
     }
   });
 
-  // initialize lock manager
 {if $content_id > 0}
+  {if isset($lock_timeout) && $lock_timeout > 0}
+  // initialize lock manager
   $('#Edit_Content').lockManager({
       type: 'content',
       oid: {$content_id},
       uid: {get_userid(FALSE)},
-      {if !empty($lock_timeout)}lock_timeout: {$lock_timeout},{/if}
-      {if !empty($lock_refresh)}lock_refresh: {$lock_refresh},{/if}
+      {if !empty($lock_timeout) && $lock_timeout > 0}lock_timeout: {$lock_timeout},{/if}
+      {if !empty($lock_refresh) && $lock_timeout > 0}lock_refresh: {$lock_refresh},{/if}
       error_handler: function (err) {
           alert('got error ' + err.type + ' // ' + err.msg);
       },
@@ -31,6 +32,7 @@ $(document).ready(function(){
           alert('{$mod->Lang('msg_lostlock')}');
       }
   });
+  {/if}
 {/if}
 
 {if $content_obj->HasPreview()}
@@ -87,7 +89,7 @@ $(document).ready(function(){
         var dirty = $('#Edit_Content').dirtyForm('option','dirty');
         var tmp = $(this).val();
         if (tmp == '{$mod->Lang('close')}') {
-            $('#Edit_Content').lockManager('unlock');
+	  {if isset($lock_timeout) && $lock_timeout > 0}$('#Edit_Content').lockManager('unlock');{/if}
 	}
         return true;
     });

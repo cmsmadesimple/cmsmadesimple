@@ -72,7 +72,7 @@ $lang['help_cmscontentmanager_help'] = <<<EOT
       <p>The hierarchy column displays the location of each content item in the hierarchy in a numeric fashion.  The hierarchy of the first root level page begins with 1 and increases incrementally for each peer. Each child begins with the 1, and its peers increment incrementally.   Therefore, the second grandchild of the third child of the first item in the content list would have a hierarchy of 1.3.2.</p>
       <p>The hierarchy mechanism is a significant portion of what provides the ability of CMS Content Manager to organize content items, and then build navigations from them.</p>
      </li>
-     
+
      <li>Page Title / Menu Text Column
       <p>This column can either display the page title, or the page menu text.  This depends on a setting in the &quot;Site Admin &raquo; Content Manager Settings&quot; page.</p>
       <p>This column will contain a link to allow editing the content item <em>(unless the content item is locked)</em>.  Hovering over the text in this column will display additional information about the content item such as the unique numeric content id, and whether the page is cachable or not.</p>
@@ -128,7 +128,7 @@ $lang['help_cmscontentmanager_help'] = <<<EOT
          <li>Bulk operations checkbox
            <p>The bulk operations checkbox allows selecting multiple content items to operate on en-mass.</p>
          </li>
-       </ul> 
+       </ul>
      </li>
    </ul>
 
@@ -147,7 +147,7 @@ $lang['help_cmscontentmanager_help'] = <<<EOT
       <li>Add Pages
     <p>This permission allows users to create new content items. Additionally, users with this permission are able to copy content items that they have edit ability on.</p>
       </li>
-      <li>Modify Any Page 
+      <li>Modify Any Page
         <p>Users with this position will have the ability to edit any content item.  It is similar to being an &quot;Additional Editor&quot; on all content items.</p>
       </li>
       <li>Remove Pages
@@ -373,7 +373,7 @@ $lang['help_cmscontentmanager_help'] = <<<EOT
     </li>
 
     <li>Page Metadata
-        <p>The primary purpose of this property is for injecting meta properties into the &lt;head&gt; section of the rendered HTML page.  Typically it is useful for injecting a meta description tag.</p>      
+        <p>The primary purpose of this property is for injecting meta properties into the &lt;head&gt; section of the rendered HTML page.  Typically it is useful for injecting a meta description tag.</p>
         <p>Users with restricted permissions may not have the ability to adjust or specify this property.</p>
     </li>
 
@@ -433,7 +433,7 @@ $lang['help_designmanager_help'] = <<<EOT
     <li>The Template Types Tab
       <p>This tab is visible to all Admin users with the &quot;Modify Templates&quot; permission.  It provides the ability to edit information about the template type including the prototype template.  And to create a new template of each type.</p>
     </li>
-      
+
     <li>The Stylesheets Tab
       <p>This tab is visible to all Admin users with the &quot;Manage Stylesheets&quot; permission.  It provides the ability to create, delete, edit, and manage stylesheets.<p>
     </li>
@@ -468,10 +468,10 @@ $lang['help_designmanager_help'] = <<<EOT
        <p>Depending upon user privileges there will be one or more icons displayed in this column to perform various actions on, or with the template:</p>
        <ul>
           <li>Edit - Display a form to edit the contents and attributes of the template.</li>
-          <li>Copy - Display a form to allow copying the selected template to a new name.  For convenience a default new name will be provided.</li> 
+          <li>Copy - Display a form to allow copying the selected template to a new name.  For convenience a default new name will be provided.</li>
           <li>Delete - Display a form to allow deleting the selected template.  Extra confirmation is required for this action as no checks are possible to see if the template is in use by any page, or recursively by any other template.</li>
        </ul>
-       
+
      </li>
      <li>Multiselect:
 	  <p>This column (depending upon permissions) will display a checkbox allowing the selection of multiple templates to perform actions on all of them simultaneously.</p>
@@ -673,6 +673,7 @@ $lang['settings_autoclearcache'] = 'This option allows you to specify the maximu
 $lang['settings_umask'] = 'The &quot;umask&quot; is an octal value that is used to specify the default permission for newly created files (this is used for files in the cache directory, and uploaded files.  For more information see the appropriate <a href="http://en.wikipedia.org/wiki/Umask">Wikipedia article.</a>';
 $lang['settings_disablesafemodewarn'] = 'This option will disable a warning notice if CMSMS detects that <a href="http://php.net/manual/en/features.safe-mode.php">PHP Safe Mode</a> has been detected.<br/><br/><strong>Note:</strong> Safe mode has been deprecated as of PHP 5.3.0 and removed for PHP 5.4.0.  CMSMS Does not support operation under safe mode, and our support team will not render any technical assistance for installs where safe mode is active';
 $lang['settings_enablenotifications'] = 'This option will enable notifications being shown at the top of the page in each Admin request.  This is useful for important notifications about the system that may require user action.  It is possible for each Admin user to turn off notifications in their preferences.';
+$lang['settings_lock_timeout'] = 'Enter a default value (in minutes) for locks to timeout.  This is used if a piece of functionality does not provide a custom lock timeout value';
 $lang['settings_pseudocron_granularity'] = 'This setting indicates how often (in minutes) the system will attempt to handle regularly scheduled tasks.';
 $lang['settings_adminlog_lifetime'] = 'This setting indicates the maximum amount of time <em>(in days)</em> that entries in the Admin log should be retained.';
 $lang['settings_checkversion'] = 'If enabled, the system will perform a daily check for a new release of CMSMS';

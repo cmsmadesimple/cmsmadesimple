@@ -61,6 +61,7 @@ $lang['adminsystemtitle'] = "CMSMS Admin System";
 $lang['admintheme'] = "Administration Theme";
 $lang['admin_enablenotifications'] = "Allow users to view notifications<br /><em>(notifications will be displayed on all Admin pages)</em>";
 $lang['admin_layout_legend'] = "Admin lay-out settings";
+$lang['admin_lock_timeout'] = 'Lock timeout';
 $lang['advanced'] = "Advanced";
 $lang['alert'] = "Alert";
 $lang['alias'] = "Alias";

@@ -533,6 +533,12 @@ $(document).ready(function(){
 						</select>&nbsp;{cms_help key2='settings_enablenotifications' title=lang('admin_enablenotifications')}
 				</div>
 				<div class="pageoverflow">
+					<p class="pagetext"><label for="notifications">{lang('admin_lock_timeout')}:</label></p>
+					<p class="pageinput">
+					        <input type="text" name="lock_timeout" size="3" value="{$lock_timeout}"/>
+						&nbsp;{cms_help key2='settings_lock_timeout' title=lang('admin_lock_timeout')}
+				</div>
+				<div class="pageoverflow">
 					<p class="pagetext"><label for="pseudocron">{lang('pseudocron_granularity')}:</label></p>
 					<p class="pageinput">
 						<select id="pseudocron" name="pseudocron_granularity">

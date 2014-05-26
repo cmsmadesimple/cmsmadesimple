@@ -101,6 +101,7 @@ $xmlmodulerepository = "";
 $checkversion = 1;
 $defaultdateformat = "";
 $enablesitedownmessage = "0";
+$lock_timeout = 60;
 $use_wysiwyg = "1";
 $sitedownmessage = "<p>Site is currently down.  Check back later.</p>";
 $sitedownmessagetemplate = "-1";
@@ -169,6 +170,7 @@ $metadata = cms_siteprefs::get('metadata',$metadata);
 $sitename = cms_siteprefs::get('sitename',$sitename);
 $disablesafemodewarning = cms_siteprefs::get('disablesafemodewarning',$disablesafemodewarning);
 $enablenotifications = cms_siteprefs::get('enablenotifications',$enablenotifications);
+$lock_timeout = (int)cms_siteprefs::get('lock_timeout',$lock_timeout);
 $sitedownexcludes = cms_siteprefs::get('sitedownexcludes',$sitedownexcludes);
 $sitedownexcludeadmins = cms_siteprefs::get('sitedownexcludeadmins',$sitedownexcludeadmins);
 $disallowed_contenttypes = cms_siteprefs::get('disallowed_contenttypes',$disallowed_contenttypes);
@@ -381,6 +383,7 @@ if (isset($_POST["editsiteprefs"])) {
         case 'setup':
             if (isset($_POST["disablesafemodewarning"])) $disablesafemodewarning = (int)$_POST['disablesafemodewarning'];
             if (isset($_POST["enablenotifications"])) $enablenotifications = (int)$_POST['enablenotifications'];
+            if (isset($_POST["lock_timeout"])) $lock_timeout = (int)$_POST['lock_timeout'];
             if (isset($_POST["xmlmodulerepository"])) $xmlmodulerepository = cleanValue($_POST["xmlmodulerepository"]);
             if (isset($_POST["checkversion"])) $checkversion = (int) $_POST["checkversion"];
             if (isset($_POST['global_umask'])) $global_umask = cleanValue($_POST['global_umask']);
@@ -389,6 +392,7 @@ if (isset($_POST["editsiteprefs"])) {
             cms_siteprefs::set('checkversion', $checkversion);
             cms_siteprefs::set('disablesafemodewarning',$disablesafemodewarning);
             cms_siteprefs::set('enablenotifications',$enablenotifications);
+            cms_siteprefs::set('lock_timeout',$lock_timeout);
             if( isset($_POST['allow_browser_cache']) ) {
                 $allow_browser_cache = (int)$_POST['allow_browser_cache'];
                 cms_siteprefs::set('allow_browser_cache',$allow_browser_cache);
@@ -534,6 +538,7 @@ $smarty->assign('checkversion',$checkversion);
 $smarty->assign('disablesafemodewarning',$disablesafemodewarning);
 $smarty->assign('defaultdateformat',$defaultdateformat);
 $smarty->assign('enablenotifications',$enablenotifications);
+$smarty->assign('lock_timeout',$lock_timeout);
 $smarty->assign('sitedownexcludes',$sitedownexcludes);
 $smarty->assign('sitedownexcludeadmins',$sitedownexcludeadmins);
 $smarty->assign('basic_attributes',explode(',',$basic_attributes));

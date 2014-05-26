@@ -1,10 +1,10 @@
 <?php
 #BEGIN_LICENSE
 #-------------------------------------------------------------------------
-# Module: CMSContentManager (c) 2013 by Robert Campbell 
+# Module: CMSContentManager (c) 2013 by Robert Campbell
 #         (calguy1000@cmsmadesimple.org)
 #  A module for managing content in CMSMS.
-# 
+#
 #-------------------------------------------------------------------------
 # CMS - CMS Made Simple is (c) 2004 by Ted Kulp (wishy@cmsmadesimple.org)
 # Visit our homepage at: http://www.cmsmadesimple.org
@@ -19,7 +19,7 @@
 # However, as a special exception to the GPL, this software is distributed
 # as an addon module to CMS Made Simple.  You may not use this software
 # in any Non GPL version of CMS Made simple, or in any version of CMS
-# Made simple that does not indicate clearly and obviously in its admin 
+# Made simple that does not indicate clearly and obviously in its admin
 # section that the site was built with CMS Made simple.
 #
 # This program is distributed in the hope that it will be useful,
@@ -49,7 +49,7 @@
  * @author Robert Campbell
  * @copyright Copyright (c) 2013, Robert Campbell <calguy1000@cmsmadesimple.org>
  */
-final class CmsContentManagerUtils 
+final class CmsContentManagerUtils
 {
   private function __construct() {}
 
@@ -83,9 +83,10 @@ final class CmsContentManagerUtils
 
   public static function locking_enabled()
   {
-    $timeout = cms_siteprefs::get('locktimeout');
-    if( $timeout > 0 ) return TRUE;
-    return FALSE;
+      $mod = cms_utils::get_module('CMSContentManager');
+      $timeout = (int) $mod->GetPreference('locktimeout');
+      if( $timeout > 0 ) return TRUE;
+      return FALSE;
   }
 
   public static function get_pagenav_display()
