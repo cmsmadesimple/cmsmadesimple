@@ -213,9 +213,9 @@ class CmsLayoutTemplateCategory
     $db = cmsms()->GetDb();
     $query = 'UPDATE '.cms_db_prefix().self::TABLENAME.' SET name = ?, description = ?, item_order = ?, modified = ? WHERE id = ?';
     $dbr = $db->Execute($query,array($this->get_name(),
-																		 $this->get_description(),
-																		 $this->get_item_order(),
-																		 time(),$this->get_id()));
+                                     $this->get_description(),
+                                     $this->get_item_order(),
+                                     time(),(int)$this->get_id()));
     if( !$dbr ) throw new CmsSQLErrorException($db->sql.' -- '.$db->ErrorMsg());
     $this->_dirty = FALSE;
 		audit($this->get_id(),'CMSMS','Template Category Updated');

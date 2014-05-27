@@ -54,7 +54,7 @@ $(document).ready(function(){
           checked: false
       });
   }
-  
+
   $('#mediaquery').keyup(function(e) {
       if ($('#mediaquery').val() !== '') {
           $('.media-type :checkbox').attr({
@@ -101,13 +101,13 @@ $(document).ready(function(){
     <div class="pageoverflow">
       <p class="pagetext"><label for="css_created">{$mod->Lang('prompt_created')}:</label>&nbsp;{cms_help key2=help_stylesheet_created title=$mod->Lang('prompt_created')}</p>
       <p class="pageinput">
-        <input type="text" id="css_created" value="{$css->get_created()|date_format:'%x %X'}" readonly="readonly"/>
+        {$css->get_created()|date_format:'%x %X'}
       </p>
     </div>
     <div class="pageoverflow">
       <p class="pagetext"><label for="css_modified">{$mod->Lang('prompt_modified')}:</label>&nbsp;{cms_help key2=help_stylesheet_modified title=$mod->Lang('prompt_modified')}</p>
       <p class="pageinput">
-        <input type="text" id="css_modified" value="{$css->get_modified()|date_format:'%x %X'}" readonly="readonly"/>
+        {$css->get_modified()|date_format:'%x %X'}
       </p>
     </div>
     {/if}

@@ -110,7 +110,7 @@ $(document).ready(function(){
 			<input type="hidden" name="editsiteprefs" value="true" />
 		</div>
 		{if !$pretty_urls}
-			<div class="warning">{lang('warn_nosefurl')}&nbsp;&nbsp;{cms_help key2='settings_nosefurl' title=lang('warn_nosefurl')}</div>
+			<div class="warning" style="display: block;">{lang('warn_nosefurl')}&nbsp;&nbsp;{cms_help key2='settings_nosefurl' title=lang('warn_nosefurl')}</div>
 		{/if}
 		<div class="pageoverflow">
 			<p class="pageinput">
@@ -211,7 +211,7 @@ $(document).ready(function(){
 			<input type="hidden" name="active_tab" value="sitedown" />
 			<input type="hidden" name="editsiteprefs" value="true" />
 		</div>
-		<div class="information">{lang('info_settings_sitedown')}</div>
+		<div class="information" style="display: block;">{lang('info_settings_sitedown')}</div>
 		<div class="pageoverflow">
 			<p class="pageinput">
 				<input type="submit" name="submit" value="{lang('submit')}" class="pagebutton"  />
@@ -228,10 +228,10 @@ $(document).ready(function(){
 				</select>
 		</div>
 		<div class="pageoverflow">
-			<p class="pagetext"><label for="enablewysiwyg">{lang('enablewysiwyg')}:</label></p>
+			<p class="pagetext"><label for="usewysiwyg">{lang('enablewysiwyg')}:</label></p>
 			<p class="pageinput">
-				<select id="enablewysiwyg">
-					{cms_yesno selected=$enablewysiwyg}
+				<select id="enablewysiwyg" name="use_wysiwyg">
+					{cms_yesno selected=$use_wysiwyg}
 				</select>
 		</div>
 		<div class="pageoverflow">

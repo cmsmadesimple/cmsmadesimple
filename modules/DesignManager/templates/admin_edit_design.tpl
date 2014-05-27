@@ -28,14 +28,14 @@
     <div class="pageoverflow">
       <p class="pagetext"><label for="created">{$mod->Lang('prompt_created')}:</label>&nbsp;{cms_help key2='help_design_created' title=$mod->Lang('prompt_created')}</p>
       <p class="pageinput">
-        <input id="created" type="text" readonly="readonly" value="{$design->get_created()|date_format:'%x %X'}"/>
+      {$design->get_created()|date_format:'%x %X'}
       </p>
     </div>
 
     <div class="pageoverflow">
       <p class="pagetext"><label for="modified">{$mod->Lang('prompt_modified')}:</label>&nbsp;{cms_help key2='help_design_modified' title=$mod->Lang('prompt_modified')}</p>
       <p class="pageinput">
-        <input id="modified" type="text" readonly="readonly" value="{$design->get_modified()|date_format:'%x %X'}"/>
+      {$design->get_modified()|date_format:'%x %X'}
       </p>
     </div>
   </div>

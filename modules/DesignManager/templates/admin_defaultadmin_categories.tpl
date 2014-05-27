@@ -7,7 +7,13 @@ $(document).ready(function () {
 });
 </script>
 
-<div class="pagewarning">{$mod->Lang('warning_category_dragdrop')}</div>
+<div class="pagewarning" style="display: block;">{$mod->Lang('warning_category_dragdrop')}</div>
+
+<div class="pagecontainer">
+	{cms_action_url action='admin_edit_category' assign='url'}
+	<a href="{$url}" title="{$mod->Lang('create_category')}">{admin_icon icon='newobject.gif'}</a>&nbsp;
+	<a href="{$url}" title="{$mod->Lang('create_category')}">{$mod->Lang('create_category')}</a>
+</div>
 
 <table id="categorylist" class="pagetable">
 	<thead>
@@ -32,9 +38,3 @@ $(document).ready(function () {
 	</tbody>
 </table>
 {/if}
-
-<div class="pagecontainer">
-	{cms_action_url action='admin_edit_category' assign='url'}
-	<a href="{$url}" title="{$mod->Lang('create_category')}">{admin_icon icon='newobject.gif'}</a>&nbsp;
-	<a href="{$url}" title="{$mod->Lang('create_category')}">{$mod->Lang('create_category')}</a>
-</div>

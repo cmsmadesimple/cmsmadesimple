@@ -448,6 +448,7 @@ final class ContentListBuilder
           $list = array();
           foreach( $this->_opened_array as $one ) {
               $node = $contentops->quickfind_node_by_id($one);
+              if( !$node ) continue;
               // ignore if the parents are not also in the opened array
               $parent = $node->get_parent();
               $parent_id = $parent->get_tag('id');
