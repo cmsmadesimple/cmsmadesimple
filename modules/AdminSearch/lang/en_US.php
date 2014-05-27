@@ -62,6 +62,6 @@ $lang['settings'] = 'Settings';
 $lang['starting'] = 'Starting';
 
 // W
-$lang['warn_clickthru'] = 'This will open another form. Cancelling from that form may not return you to this page. Your search results may be lost.';
+$lang['warn_clickthru'] = 'This will open another window. Cancelling from that window may not return you to this page. Your search results may be lost.';
 
 ?>
