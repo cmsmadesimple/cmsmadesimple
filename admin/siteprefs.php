@@ -102,7 +102,7 @@ $checkversion = 1;
 $defaultdateformat = "";
 $enablesitedownmessage = "0";
 $lock_timeout = 60;
-$use_wysiwyg = "1";
+$use_wysiwyg = 1;
 $sitedownmessage = "<p>Site is currently down.  Check back later.</p>";
 $sitedownmessagetemplate = "-1";
 $metadata = '';
@@ -277,7 +277,7 @@ if (isset($_POST["editsiteprefs"])) {
 			cms_siteprefs::set('logintheme', $logintheme);
 			if (isset($_POST['backendwysiwyg'])) $backendwysiwyg = cleanValue($_POST['backendwysiwyg']);
 			cms_siteprefs::set('backendwysiwyg', $backendwysiwyg);
-			if (isset($_POST["defaultdateformat"])) $defaultdateformat = cleanValue($_POST["defaultdateformat"]);
+			if (isset($_POST["defaultdateformat"])) $defaultdateformat = str_replace('&#37;','%',cleanValue($_POST["defaultdateformat"])); // have to undo some cleaning.
 			cms_siteprefs::set('defaultdateformat', $defaultdateformat);
 			if( isset($_POST['thumbnail_width']) ) $thumbnail_width = (int)$_POST['thumbnail_width'];
 			if( isset($_POST['thumbnail_height']) ) $thumbnail_height = (int)$_POST['thumbnail_height'];
