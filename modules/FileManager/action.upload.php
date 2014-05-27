@@ -6,14 +6,12 @@ class FileManagerUploadHandler extends jquery_upload_handler
 {
   function __construct($options=null)
   {
-    if( !is_array($options) )
-      {
-	$options = array();
-      }
+    if( !is_array($options) ) $options = array();
+
     // remove image handling, we're gonna handle this another way
     $options['orient_image'] = false;  // turn off auto image rotation
     $options['image_versions'] = array();
-    
+
     $options['upload_dir'] = filemanager_utils::get_full_cwd().'/';
     $options['upload_url'] = filemanager_utils::get_cwd_url().'/';
 
@@ -23,7 +21,7 @@ class FileManagerUploadHandler extends jquery_upload_handler
 
   protected function after_uploaded_file($fileobject)
   {
-    // here we may do image handling, and other cruft.
+      // here we may do image handling, and other cruft.
     if( is_object($fileobject) && $fileobject->name != '' ) {
 
       $mod = cms_utils::get_module('FileManager');
@@ -31,16 +29,12 @@ class FileManagerUploadHandler extends jquery_upload_handler
       $parms['file'] = filemanager_utils::join_path(filemanager_utils::get_full_cwd(),$fileobject->name);
 
       if( $mod->GetPreference('create_thumbnails') ) {
-	$thumb = filemanager_utils::create_thumbnail($parms['file']);
-        if( $thumb ) {
-	  $params['thumb'] = $thumb;
-        }
+          $thumb = filemanager_utils::create_thumbnail($parms['file']);
+          if( $thumb ) $params['thumb'] = $thumb;
       }
 
       $str = $fileobject->name.' uploaded to '.filemanager_utils::get_full_cwd();
-      if( isset($params['thumb']) ) {
-        $str .= ' and a thumbnail was generated';
-      }
+      if( isset($params['thumb']) ) $str .= ' and a thumbnail was generated';
       audit('',$mod->GetName(),$str);
 
       $mod->SendEvent('OnFileUploaded',$parms);
