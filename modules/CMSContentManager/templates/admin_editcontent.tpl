@@ -68,25 +68,18 @@ $(document).ready(function(){
 {/if}
 
     // here we want to disable the dirtyform stuff when these fields are changed
-    $('#content_type').change(function () {
-        $('#Edit_Content').dirtyForm('disable');
-        $(this).closest('form').submit();
-    });
     $('#id_disablewysiwyg').change(function () {
-        $('#Edit_Content').dirtyForm('disable');
-    });
-    $('#template_id').change(function(event){
         $('#Edit_Content').dirtyForm('disable');
     });
 
     // submit the form if template id, and/or content-type fields are changed.
     $('#template_id, #content_type').on('change', function () {
+        $('#Edit_Content').dirtyForm('disable');
         $(this).closest('form').submit();
     });
 
     // handle cancel/close ... and unlock
     $(document).on('click', '[name$=cancel]', function () {
-        var dirty = $('#Edit_Content').dirtyForm('option','dirty');
         var tmp = $(this).val();
         if (tmp == '{$mod->Lang('close')}') {
 	  {if isset($lock_timeout) && $lock_timeout > 0}$('#Edit_Content').lockManager('unlock');{/if}
@@ -96,6 +89,10 @@ $(document).ready(function(){
 
     $('#Edit_Content').on('click','[name$=apply],[name$=submit],[name$=cancel]',function(event){
       $('#Edit_Content :hidden').removeAttr('required');
+    });
+
+    $(document).on('click', '[name$=submit]', function () {
+      $('#Edit_Content').dirtyForm('option','dirty',false);
     });
 
     // handle apply (ajax submit)
