@@ -64,7 +64,7 @@ function smarty_function_cms_action_url($params, &$template)
   else if( cmsms()->is_frontend_request() ) {
     if( $mid == '' ) $mid = 'cntnt01';
     if( $action == '' ) $action = 'default';
-    if( $returnid = '' ) {
+    if( $returnid == '' ) {
       $contentops = cmsms()->GetContentOperations();
       $returnid = $contentops->GetDefaultContent();
     }
