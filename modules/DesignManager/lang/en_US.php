@@ -261,8 +261,18 @@ $lang['import_design_step2'] = 'Import Design Step 2';
 $lang['info_copy_css'] = '<strong>Note:</strong><br />Copying a stylesheet will copy the stylesheet contents, as well as the description, media query, and media types.  However, the new stylesheet will not be associated with any designs';
 $lang['info_editcss_mediatype_tab'] = '<strong>Warning:</strong> This functionality is deprecated and will be removed at a later date.  If both the media type and media query are specified, then the media query will take preference when rendering stylesheets';
 $lang['info_editcss_mediaquery_tab'] = '<strong>Warning:</strong> If both the media type and media query are specified, then the media query will take preference when rendering stylesheets';
-$lang['info_edittemplate_templates_tab'] = 'Select the templates that should be attached to the design.  Attaching a template to a design is used only for organizational and export purposes.  Order is not important.';
-$lang['info_edittemplate_stylesheets_tab'] = 'Select the stylesheets that should be attached to the design.  Stylesheets are used to control the appearance of the web pages, and for organizational and export purposes.  The order is used for determining the order in which stylesheets are output for a page using the this design.';
+$lang['info_edittemplate_templates_tab'] = 'Here you can select the templates that should be attached to the design.<br />
+Attaching a template to a design is only used for organizational and export purposes. Order is not important.<br />
+<br />
+<b>How to use:</b><br />
+Select one or more templates, drag them from Available Templates and drop them in the Attached Templates box, then hit Apply or Submit.<br />
+Delete an attached template by clicking the trash icon.';
+$lang['info_edittemplate_stylesheets_tab'] = 'Here you can select the stylesheets that should be attached to the design.<br />
+Stylesheets are used to control the appearance of the web pages, and for organizational and export purposes. The order is used for determining the order in which stylesheets are output for a page using this design.<br />
+<br />
+<b>How to use:</b><br />
+Select one or more stylesheets, drag them from Available Stylesheets and drop them in the Attached Stylesheets box, then hit Apply or Submit.<br />
+Delete an attached stylesheet by clicking the trash icon.';
 $lang['info_import_xml_step1'] = 'Step 1: Choose a Design XML File to import';
 $lang['info_import_xml_step2'] = 'Step 2: Read information about this design before importing it to your CMSMS installation.';
 $lang['info_nodescription'] = 'There is no description entered for this item';
