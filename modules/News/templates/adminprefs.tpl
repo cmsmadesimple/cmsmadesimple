@@ -49,7 +49,7 @@
 	<div class="pageoverflow">
 		<p class="pagetext"><label for="fld10">{$title_fesubmit_redirect}:</label> {cms_help key='help_fesubmit_redirect' title=$title_fesubmit_redirect}</p>
 		<p class="pageinput">
-                   <input type="text" id="fld10" name-"{$actionid}fesubmit_redirect" value="{$fesubmit_redirect}" size="20" maxlength="20"/>
+                   <input type="text" id="fld10" name="{$actionid}fesubmit_redirect" value="{$fesubmit_redirect}" size="20" maxlength="20"/>
                 </p>
 	</div>
 

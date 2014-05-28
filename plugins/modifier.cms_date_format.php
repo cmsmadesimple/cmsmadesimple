@@ -31,26 +31,23 @@
 function smarty_cms_modifier_cms_date_format($string, $format = '', $default_date = '')
 {
 	if($format == '') {
-	
+
 		$format = get_site_preference('defaultdateformat');
-		if($format == '')		
-			$format = '%b %e, %Y';
-		
+		if($format == '') $format = '%b %e, %Y';
+
 		if(!cmsms()->is_frontend_request()) {
-		
+
 			if($uid = get_userid(false)) {
-			
+
 				$tmp = get_preference($uid, 'date_format_string');
-				if($tmp != '')
-					$format = $tmp;
+				if($tmp != '') $format = $tmp;
 			}
 		}
 	}
-	
+
 	$fn = cms_join_path(SMARTY_PLUGINS_DIR, 'modifier.date_format.php');
-	if(!file_exists($fn)) 
-		die();
-		
+	if(!file_exists($fn)) die();
+
 	require_once( $fn );
 
 	return smarty_modifier_date_format($string,$format,$default_date);

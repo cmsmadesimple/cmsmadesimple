@@ -11,7 +11,7 @@
 {else}
   <strong>{$mod->Lang('prompt_name')}:</strong> {$template->get_name()} <em>({$template->get_id()})</em><br/>
   <strong>{$mod->Lang('prompt_owner')}:</strong> {cms_admin_user uid=$template->get_owner_id()}<br/>
-  <strong>{$mod->Lang('prompt_created')}:</strong> {$template->get_created()|cms_date_format}<br/>
+  <strong>{$mod->Lang('prompt_created')}:</strong> {$template->get_created()|cms_date_format|cms_escape}<br/>
   <strong>{$mod->Lang('prompt_modified')}:</strong> {$template->get_modified()|relative_time}
   {$tmp=$template->get_description()}
   {if $tmp != ''}<br/><strong>{$mod->Lang('prompt_description')}:</strong> {$tmp|strip_tags|cms_escape|summarize}{/if}

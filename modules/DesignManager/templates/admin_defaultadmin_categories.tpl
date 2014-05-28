@@ -8,6 +8,7 @@ $(document).ready(function () {
 </script>
 
 <div class="pagewarning" style="display: block;">{$mod->Lang('warning_category_dragdrop')}</div>
+{/if}
 
 <div class="pagecontainer">
 	{cms_action_url action='admin_edit_category' assign='url'}
@@ -15,6 +16,7 @@ $(document).ready(function () {
 	<a href="{$url}" title="{$mod->Lang('create_category')}">{$mod->Lang('create_category')}</a>
 </div>
 
+{if isset($list_categories)}
 <table id="categorylist" class="pagetable">
 	<thead>
 		<tr>

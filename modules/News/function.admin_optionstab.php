@@ -7,7 +7,7 @@ $smarty->assign('startform', $this->CreateFormStart ($id, 'updateoptions', $retu
 $smarty->assign('endform', $this->CreateFormEnd ());
 
 $smarty->assign('title_formsubmit_emailaddress',$this->Lang('formsubmit_emailaddress'));
-$smarty->assign('formsubmit_emailaddress',$this->GetPreference('formsubmit_emailadress',''));
+$smarty->assign('formsubmit_emailaddress',$this->GetPreference('formsubmit_emailaddress',''));
 
 $smarty->assign('title_email_subject',$this->Lang('email_subject'));
 $smarty->assign('email_subject',$this->GetPreference('email_subject',''));
@@ -20,10 +20,9 @@ $categorylist = array();
 $query = "SELECT * FROM ".cms_db_prefix()."module_news_categories ORDER BY hierarchy";
 $dbresult = $db->Execute($query);
 
-while ($dbresult && $row = $dbresult->FetchRow())
-  {
+while ($dbresult && $row = $dbresult->FetchRow()) {
     $categorylist[$row['long_name']] = $row['news_category_id'];
-  }
+}
 
 $smarty->assign('title_default_category', $this->Lang('default_category'));
 $smarty->assign('categorylist',array_flip($categorylist));
