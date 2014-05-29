@@ -130,8 +130,7 @@ abstract class CMSModule
         global $CMS_MODULE_PAGE;
         global $CMS_INSTALL_PAGE;
 
-        if( !isset($CMS_ADMIN_PAGE) && !isset($CMS_STYLESHEET) && !isset($CMS_INSTALL_PAGE)) {
-
+        if( cmsms()->is_frontend_request() ) {
             $this->SetParameterType('assign',CLEAN_STRING);
             $this->SetParameterType('module',CLEAN_STRING);
             $this->SetParameterType('lang',CLEAN_STRING); // this will be ignored.
@@ -143,7 +142,6 @@ abstract class CMSModule
             $this->InitializeFrontend();
         }
         else if( isset($CMS_ADMIN_PAGE) && !isset($CMS_STYLESHEET) && !isset($CMS_INSTALL_PAGE) ) {
-
             $this->InitializeAdmin();
         }
     }

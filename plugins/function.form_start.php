@@ -33,10 +33,11 @@ function smarty_cms_function_form_start($params, &$template)
   if( cmsms()->test_state(CmsApp::STATE_ADMIN_PAGE) ) {
     if( !isset($mactparms['action']) ) $mactparms['action'] = 'defaultadmin';
     $mactparms['returnid'] = '';
+    if( !isset($mactparms['id']) ) $mactparms['mid'] = 'm1_';
   }
   else if( cmsms()->is_frontend_request() ) {
-    if( !isset($mactparms['action']) ) $mactparms['action'] = 'default';
-    $mactparms['mid'] = 'cntnt01';
+      if( !isset($mactparms['action']) ) $mactparms['action'] = 'default';
+      if( !isset($mactparms['id']) ) $mactparms['mid'] = 'cntnt01';
   }
 
   if( $mactparms['returnid'] != '' ) {
@@ -50,48 +51,52 @@ function smarty_cms_function_form_start($params, &$template)
 
   $parms = array();
   foreach( $params as $key => $value ) {
-    switch( $key ) {
-    case 'module':
-    case 'action':
-    case 'mid':
-    case 'returnid':
-    case 'inline':
-      $mactparms[$key] = trim($value);
-      break;
+      switch( $key ) {
+      case 'module':
+      case 'action':
+      case 'mid':
+      case 'returnid':
+      case 'inline':
+          $mactparms[$key] = trim($value);
+          break;
+
+      case 'prefix':
+          $mactparms['mid'] = trim($value);
+          break;
 
     case 'method':
-      $tagparms[$key] = strtolower(trim($value));
-      break;
+        $tagparms[$key] = strtolower(trim($value));
+        break;
 
     case 'url':
-      $key = 'action';
-      if( dirname($value) == '.' ) {
-	$config = cmsms()->GetConfig();
-	$value = $config['admin_url'].'/'.trim($value);
+        $key = 'action';
+        if( dirname($value) == '.' ) {
+            $config = cmsms()->GetConfig();
+            $value = $config['admin_url'].'/'.trim($value);
+        }
+        $tagparms[$key] = trim($value);
+        break;
+
+      case 'enctype':
+      case 'id':
+      case 'class':
+          $tagparms[$key] = trim($value);
+          break;
+
+      case 'extraparms':
+          if( is_array($value) && count($value) ) {
+              foreach( $value as $key=>$value2 ) {
+                  $parms[$key] = $value2;
+              }
+          }
+          break;
+      case 'assign':
+          break;
+
+      default:
+          $parms[$key] = $value;
+          break;
       }
-      $tagparms[$key] = trim($value);
-      break;
-
-    case 'enctype':
-    case 'id':
-    case 'class':
-      $tagparms[$key] = trim($value);
-      break;
-
-    case 'extraparms':
-      if( is_array($value) && count($value) ) {
-	foreach( $value as $key=>$value2 ) {
-	  $parms[$key] = $value2;
-	}
-      }
-      break;
-    case 'assign':
-      break;
-
-    default:
-      $parms[$key] = $value;
-      break;
-    }
   }
 
   $out = '<form';

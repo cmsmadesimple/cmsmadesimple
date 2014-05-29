@@ -66,20 +66,17 @@ function smarty_function_cms_selflink($params, &$template)
 		}
 
 		if( $page ) {
-			$node = $manager->find_by_tag('alias',$page);
-			if( !$node ) {
-				$node = $manager->find_by_tag('id',$page);
-
-				$title = lang_by_realm('cms_selflink','page_not_exist');
-                echo '<a href="#" title="'.$title.'"><span class="page_not_exist">' . $params['text'] . '</span></a>';
-
-				return;
-			}
-			$pageid = $node->get_tag('id');
+            if( (int)$page > 0 ) {
+                $pageid = (int)$page;
+            }
+            else {
+                $node = $manager->find_by_tag('alias',$page);
+                if( $node ) $pageid = $node->get_tag('id');
+            }
 		}
 	}
 
-	if( isset($params['dir']) ) {
+	else if( isset($params['dir']) ) {
 		$startpage = null;
 		if( $pageid ) $startpage = $pageid;
 		if( !$startpage ) $startpage = $gCms->get_content_id();

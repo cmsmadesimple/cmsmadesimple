@@ -14,7 +14,7 @@
       {elseif $node->type == 'sectionheader'}
         {$node->menutext}&nbsp;
       {else}
-        <a href="{$node->url}" title="{$node->menutext}">{$node->menutext}</a>&nbsp;
+        <a href="{$node->url}" title="{$node->menutext}">{$node->menutext}</a>
       {/if}
     </span>
 

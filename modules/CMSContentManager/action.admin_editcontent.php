@@ -219,7 +219,7 @@ if( $content_id && CmsContentManagerUtils::locking_enabled() ) {
         // here we are attempting to steal a lock.
         $lock_id = CmsLockOperations::is_locked('content',$content_id);
         if( $lock_id > 0 ) CmsLockOperations::unlock($lock_id,'content',$content_id);
-        $lock = new CmsLock('content',$content_id);
+        $lock = new CmsLock('content',$content_id, (int) $this->GetPreference('lock_timeout'));
         $smarty->assign('lock',$lock);
     }
     catch( CmsException $e ) {

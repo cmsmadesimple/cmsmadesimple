@@ -27,6 +27,7 @@ $type = get_parameter_value($_REQUEST,'type');
 $oid = get_parameter_value($_REQUEST,'oid');
 $uid = get_parameter_value($_REQUEST,'uid');
 $lock_id = get_parameter_value($_REQUEST,'lock_id');
+$lifetime = get_parameter_value($_REQUEST,'lifetime',cms_siteprefs::get('lock_timeout',60));
 
 $out = array();
 $out['status'] = 'success';
@@ -70,8 +71,8 @@ try {
       $lock = CmsLock::load($type,$oid,$uid);
     }
     catch( CmsNoLockException $e ) {
-      // lock doesn't exist, gotta create one.
-      $lock = new CmsLock($type,$oid);
+        // lock doesn't exist, gotta create one.
+        $lock = new CmsLock($type,$oid,$lifetime);
     }
     $lock->save();
     $out['lock_id'] = $lock['id'];
