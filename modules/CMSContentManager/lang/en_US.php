@@ -92,7 +92,7 @@ $lang['error_notconfirmed'] = 'Operation not confirmed';
 $lang['error_ordercontent_nothingtodo'] = 'Nothing to do!';
 $lang['error_setactive'] = 'Could not activate this page.  This could be a database problem, or a permissions issue.';
 $lang['error_setdefault'] = 'Could not change the default content page.  This could be a database problem, or a permissions issue.';
-$lang['error_setinactive'] = 'Could deactivate this page.  This could be a database problem, or a permissions issue.';
+$lang['error_setinactive'] = 'Could not deactivate this page.  This could be a database problem, or a permissions issue.';
 $lang['expandall'] = 'Expand All';
 
 #F
@@ -116,8 +116,8 @@ $lang['help_pagedflt_contenttype'] = 'Specify the default content type for new p
 $lang['help_pagedflt_metadata'] = 'Specify HTML tags <em>(usually meta tags)</em> or smarty tags here that are specific to each page, and should be placed by default in the head section of each page.  You will have the ability to customize this code for each page when creating or editing the page.';
 $lang['help_pagedflt_design_id'] = 'Specify the default design of the new content page.  The design is used to find the stylesheets to use';
 $lang['help_pagedflt_extra1'] = 'Specify the default value for the extra1 field for newly created content pages';
-$lang['help_pagedflt_extra2'] = 'Specify the default value for the extra1 field for newly created content pages';
-$lang['help_pagedflt_extra3'] = 'Specify the default value for the extra1 field for newly created content pages';
+$lang['help_pagedflt_extra2'] = 'Specify the default value for the extra2 field for newly created content pages';
+$lang['help_pagedflt_extra3'] = 'Specify the default value for the extra3 field for newly created content pages';
 $lang['help_pagedflt_searchable'] = 'Specify whether new pages should be searchable, or not.';
 $lang['help_pagedflt_secure'] = 'Specify whether new pages should be <em>(by default)</em> secure <em>(uses the HTTPS protocol)</em>.  For secure pages to work the site must have a valid certificate installed on the web server, and the site must be configured properly';
 $lang['help_pagedflt_showinmenu'] = 'Specify whether new pages should be visible in normal navigations by default';
