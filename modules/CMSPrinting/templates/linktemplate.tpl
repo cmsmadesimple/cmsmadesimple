@@ -9,6 +9,7 @@
 	{else}
 		{$linktext}
 	{/if}
+	</a>
 {/if}
 
 {/strip}
