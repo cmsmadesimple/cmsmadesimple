@@ -6,6 +6,12 @@ $(document).ready(function(){
 });
 </script>
 
+<div class="pageoptions"><p class="pageoptions">
+  <a href="{cms_action_url action='addcategory'}" title="{$mod->Lang('addcategory')}">{admin_icon icon='newobject.gif'} {$mod->Lang('addcategory')}</a>
+  &nbsp;
+  <a href="{cms_action_url action='admin_reorder_cats'}" title="{$mod->Lang('reorder')}">{admin_icon icon='reorder.gif'} {$mod->Lang('reorder')}</a>
+</p></div>
+
 {if $itemcount > 0}
 <table cellspacing="0" class="pagetable">
 	<thead>
@@ -26,9 +32,3 @@ $(document).ready(function(){
 	</tbody>
 </table>
 {/if}
-
-<div class="pageoptions"><p class="pageoptions">
-  <a href="{cms_action_url action='addcategory'}" title="{$mod->Lang('addcategory')}">{admin_icon icon='newobject.gif'} {$mod->Lang('addcategory')}</a>
-  &nbsp;
-  <a href="{cms_action_url action='admin_reorder_cats'}" title="{$mod->Lang('reorder')}">{admin_icon icon='reorder.gif'} {$mod->Lang('reorder')}</a>
-</p></div>

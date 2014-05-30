@@ -324,6 +324,8 @@ abstract class CMSModule
         $admin_req = (isset($CMS_ADMIN_PAGE) && !$this->LazyLoadAdmin())?1:0;
         $fe_req = (!isset($CMS_ADMIN_PAGE) && !$this->LazyLoadFrontend())?1:0;
         if( ($fe_req || $admin_req) && !$forcedb ) {
+            if( isset($CMS_INSTALL_PAGE) ) return TRUE;
+
             // no lazy loading.
             $gCms = cmsms();
             $smarty = $gCms->GetSmarty();

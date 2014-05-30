@@ -2,11 +2,13 @@
 //<![CDATA[
 $(document).ready(function(){
 	$('#selall').cmsms_checkall();
-	$('#filter').hide();
 	$('#bulkactions').hide();
 	$('#bulk_category').hide();
 	$('#toggle_filter').click(function(){
-		$('#filter').toggle(50);
+	   $('#filter').dialog({
+	     width: 'auto',
+	     modal:  true
+	   });
 	});
         $('a.delete_article').click(function(){
         	return confirm('{$mod->Lang('areyousure')}');
@@ -39,7 +41,7 @@ $(document).ready(function(){
 </script>
 
 {if isset($formstart) }
-<fieldset id="filter">
+<div id="filter" title="{$filtertext}" style="display: none;">
   <legend>{$filtertext}:</legend>
   {$formstart}
   <div class="pageoverflow">
@@ -76,14 +78,13 @@ $(document).ready(function(){
     </p>
   </div>
   {$formend}
-</fieldset>
+</div>
 {/if}
 
 {if $itemcount > 0}
 <div class=row">
   <div class="pageoptions half" style="margin-top: 8px;">
-    <input type="checkbox" id="toggle_filter" value="1"/>
-    <label for="toggle_filter">{$mod->Lang('viewfilter')}</label>
+    <a id="toggle_filter">{admin_icon icon='view.gif' alt=$mod->Lang('viewfilter')} {$mod->Lang('viewfilter')}</a>
     {if isset($addlink)}&nbsp;{$addlink}{/if}
   </div>
 

@@ -110,7 +110,7 @@ $(document).ready(function(){
             {capture assign='op'}<span title="{$ModuleManager->Lang('title_cantremove')}">{$ModuleManager->Lang('cantremove')}</span>{/capture}{$ops[]=$op}
           {/if}
           {if isset($item.dependants)}
-            {capture assign='op'}<span title="{$ModuleManager->Lang('title_has_dependants')}">{$ModuleManager->Lang('has_dependants')}</span>: (<strong>{implode(',',$item.dependants)}</strong>){/capture}{$ops[]=$op}
+            {capture assign='op'}<span title="{$ModuleManager->Lang('title_has_dependants')}">{$ModuleManager->Lang('has_dependants')}</span>: (<strong>{implode(', ',$item.dependants)}</strong>){/capture}{$ops[]=$op}
           {/if}
           {'<br/>'|implode:$ops}
       </td>

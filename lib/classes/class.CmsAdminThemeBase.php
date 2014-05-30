@@ -211,7 +211,7 @@ abstract class CmsAdminThemeBase
 		}
 		elseif( startswith($url,$config['root_url']) || !startswith($url,'http') ) {
 			$prefix = '?';
-			if( strpos($url,'?') !== FALSE ) $prefix = '&';
+			if( strpos($url,'?') !== FALSE ) $prefix = '&amp;';
 			$newurl .= $prefix.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 		}
 		return $newurl;

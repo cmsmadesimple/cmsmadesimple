@@ -1,4 +1,10 @@
 {$startform}
+<div class="pageoverflow">
+  <p class="pageinput">
+    <input type="submit" name="{$actionid}optionssubmitbutton" value="{$mod->Lang('submit')}"/>
+  </p>
+</div>
+
 <fieldset>
 <legend>{$title_submission_settings}:</legend>
 	<div class="pageoverflow">
@@ -99,9 +105,4 @@
         </div>
 </fieldset>
 
-	<div class="pageoverflow">
-		<p class="pagetext">&nbsp;</p>
-		<p class="pageinput">
-                  <input type="submit" name="{$actionid}optionssubmitbutton" value="{$mod->Lang('submit')}"/>
-	</div>
 {$endform}

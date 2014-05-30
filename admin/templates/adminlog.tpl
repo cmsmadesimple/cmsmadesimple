@@ -1,51 +1,49 @@
+<script type="text/javascript">
+$(document).ready(function(){
+  $('#toggle_filters').click(function(){
+    $('#adminlog_filters').dialog({
+      modal: true,
+      width: 'auto'
+    });
+  });
+})
+</script>
+
 <div class="pagecontainer">
   <div class="pageoverflow">
-  {$header}
     {if $filteruser != '' or $filteraction != ''}
-    <div>
-      <p class="pagetext">{'filterapplied'|lang}:</p>
+    <fieldset>
+      <legend>{'filterapplied'|lang}:</legend>
       {if $filteruser != ''}<p class="pageinput">{'user'|lang} = {$filteruser}</p>{/if}
       {if $filteraction != ''}<p class="pageinput">{'actioncontains'|lang}: {$filteraction}</p>{/if}
-    </div>
+    </fieldset>
     {/if}
-    <p class="pageinput">
-    </p>
 
-    <div id="adminlog_filters" style="display: {$filterdisplay}">
-      <fieldset>
-        <legend>{$langfilters}</legend>
+    <div id="adminlog_filters" style="display: none;" title="{$langfilters}">
         <form id="adminlog_filter" method="post" action="adminlog.php?{$SECURE_PARAM_NAME}={$CMS_USER_KEY}">
           <div class="pageoverflow">
-  <p class="pagetext">{$langfilteruser}</p>
-  <p class="pageinput"><input type="text" name="filteruser" value="{$filteruservalue}"/></p>
-</div>
-{*
-<div class="pageoverflow">
-  <p class="pagetext">{$langfiltername}</p>
-  <p class="pageinput"><input type="text" name="filtername" value="{$filternamevalue}"/></p>
-</div>
-*}
+            <p class="pagetext">{$langfilteruser}</p>
+            <p class="pageinput"><input type="text" name="filteruser" value="{$filteruservalue}"/></p>
+          </div>
           <div class="pageoverflow">
-  <p class="pagetext">{$langfilteraction}</p>
-  <p class="pageinput"><input type="text" name="filteraction" value="{$filteractionvalue}"/></p>
-</div>
+            <p class="pagetext">{$langfilteraction}</p>
+            <p class="pageinput"><input type="text" name="filteraction" value="{$filteractionvalue}"/></p>
+          </div>
           <div class="pageoverflow">
-  <p class="pagetext"></p>
-  <p class="pageinput"><input type="submit" name="filterapply" value="{$langfilterapply}"/><input type="submit" name="filterreset"
-                                                                                     value="{$langfilterreset}"/></p>
-</div>
-
+            <p class="pagetext"></p>
+            <p class="pageinput">
+	      <input type="submit" name="filterapply" value="{lang('apply')}"/>
+	      <input type="submit" name="filterreset" value="{lang('filterreset')}"/>
+	    </p>
+          </div>
         </form>
-      </fieldset>
     </div>
 
   {if $logempty==false}
 
     <div class="pageoptions">
     <div style="float: left; width: 49%;">
-    <input type="checkbox" id="toggle_filters" {if $filterdisplay=="block"}checked="1"  {/if}
-           onclick="if (this.checked) document.getElementById('adminlog_filters').style.display = 'block'; else document.getElementById('adminlog_filters').style.display = 'none';"/>
-    <label for="toggle_filters">{$langshowfilters}</label>&nbsp;
+    <a id="toggle_filters">{admin_icon icon='view.gif' alt="{$langshowfilters}"} {$langshowfilters}</a>
     {if isset($downloadlink)}
       <a href="adminlog.php{$urlext}&amp;download=1">{$downloadlink}</a>
       <a href="adminlog.php{$urlext}&amp;download=1">{$langdownload}</a>
