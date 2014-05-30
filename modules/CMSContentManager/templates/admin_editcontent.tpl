@@ -1,7 +1,3 @@
-<style type="text/css">
-form.dirtyForm { color: salmon; }
-</style>
-
 <script type="text/javascript">
 // <![CDATA[
 $(document).ready(function(){

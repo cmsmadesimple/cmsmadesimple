@@ -333,8 +333,8 @@ $lang['help_function_content_image'] = <<<EOT
   </li>
   <li><em>(optional)</em> class='' - The css class name to use on the img tag in frontend display.</li>
   <li><em>(optional)</em> default='' - Use to set a default image used when no image is selected.</li>
-  <li><em>(optional)</em> id='' - The id name to use on the img tag in frontend display.</li> 
-  <li><em>(optional)</em> name='' - The tag name to use on the img tag in frontend display.</li> 
+  <li><em>(optional)</em> id='' - The id name to use on the img tag in frontend display.</li>
+  <li><em>(optional)</em> name='' - The tag name to use on the img tag in frontend display.</li>
   <li><em>(optional)</em> width='' - The desired width of the image.</li>
   <li><em>(optional)</em> height='' - The desired height of the image.</li>
   <li><em>(optional)</em> alt='' - Alternative text if the image cannot be found.</li>
@@ -484,7 +484,7 @@ EOT;
 
 $lang['help_function_search'] = <<<EOT
 	<h3>What does this do?</h3>
-	<p>This is actually just a wrapper tag for the Search module to make the tag syntax easier. 
+	<p>This is actually just a wrapper tag for the Search module to make the tag syntax easier.
 	Instead of having to use <code>{cms_module module='Search'}</code> you can now just use <code>{search}</code> to insert the module in a template.
 	</p>
 	<h3>How do I use it?</h3>
@@ -501,7 +501,7 @@ $lang['help_function_cms_textarea'] = <<<EOT
   <ul>
     <li>name - required string : name attribute for the text area element.</li>
     <li>prefix - optional string : optional prefix for the name attribute.</li>
-    <li>class - optional string : class attribute for the text area element.  Additional classes may be added automatically.</li> 
+    <li>class - optional string : class attribute for the text area element.  Additional classes may be added automatically.</li>
     <li>classname - alias for the class parameter.</li>
     <li>forcemodule - optional string : used to specify the WYSIWYG or syntax highlighter module to enable.  If specified, and available, the module name will be added o the class attribute.</li>
     <li>enablewysiwyg - optional boolean : used to specify whether a WYSIWYG textarea is required.  Sets the language to &quot;html&quot;</li>
@@ -554,9 +554,9 @@ $lang['help_function_recently_updated'] = <<<EOT
 	<ul>
 	 <li><p><em>(optional)</em> number='10' - Number of updated pages to show.</p><p>Example: {recently_updated number='15'}</p></li>
  	 <li><p><em>(optional)</em> leadin='Last changed' - Text to show left of the modified date.</p><p>Example: {recently_updated leadin='Last Changed'}</p></li>
- 	 <li><p><em>(optional)</em> showtitle='true' - Shows the title attribute if it exists as well (true|false).</p><p>Example: {recently_updated showtitle='true'}</p></li>											 	
-	 <li><p><em>(optional)</em> css_class='some_name' - Warp a div tag with this class around the list.</p><p>Example: {recently_updated css_class='some_name'}</p></li>											 	
-	 <li><p><em>(optional)</em> dateformat='d.m.y h:m' - default is d.m.y h:m , use the format you whish (php -date- format)</p><p>Example: {recently_updated dateformat='D M j G:i:s T Y'}</p></li>	
+ 	 <li><p><em>(optional)</em> showtitle='true' - Shows the title attribute if it exists as well (true|false).</p><p>Example: {recently_updated showtitle='true'}</p></li>
+	 <li><p><em>(optional)</em> css_class='some_name' - Warp a div tag with this class around the list.</p><p>Example: {recently_updated css_class='some_name'}</p></li>
+	 <li><p><em>(optional)</em> dateformat='d.m.y h:m' - default is d.m.y h:m , use the format you whish (php -date- format)</p><p>Example: {recently_updated dateformat='D M j G:i:s T Y'}</p></li>
 	 <li><em>(optional)</em> <tt>assign</tt> - Assign the results to the named smarty variable.</li>
 	</ul>
 	<p>or combined:</p>
@@ -565,7 +565,7 @@ EOT;
 
 $lang['help_function_print'] = <<<EOT
 	<h3>What does this do?</h3>
-	<p>This is actually just a wrapper tag for the CMSPrinting module to make the tag syntax easier. 
+	<p>This is actually just a wrapper tag for the CMSPrinting module to make the tag syntax easier.
 	Instead of having to use <code>{cms_module module='CMSPrinting'}</code> you can now just use <code>{print}</code> to insert the module on pages and templates.
 	</p>
 	<h3>How do I use it?</h3>
@@ -574,7 +574,7 @@ EOT;
 
 $lang['help_function_news'] = <<<EOT
 	<h3>What does this do?</h3>
-	<p>This is actually just a wrapper tag for the News module to make the tag syntax easier. 
+	<p>This is actually just a wrapper tag for the News module to make the tag syntax easier.
 	Instead of having to use <code>{cms_module module='News'}</code> you can now just use <code>{news}</code> to insert the module on pages and templates.
 	</p>
 	<h3>How do I use it?</h3>
@@ -616,7 +616,7 @@ EOT;
 
 $lang['help_function_menu'] = <<<EOT
 	<h3>What does this do?</h3>
-	<p>This is actually just a wrapper tag for the Menu Manager module to make the tag syntax easier. 
+	<p>This is actually just a wrapper tag for the Menu Manager module to make the tag syntax easier.
 	Instead of having to use <code>{cms_module module='MenuManager'}</code> you can now just use <code>{menu}</code> to insert the module on pages and templates.
 	</p>
 	<h3>How do I use it?</h3>
@@ -732,8 +732,8 @@ EOT;
 
 $lang['help_function_embed'] = <<<EOT
 	<h3>What does this do?</h3>
-	<p>Enable inclusion (embedding) of any other application into the CMS. The most usual use could be a forum. 
-	This implementation is using IFRAMES so older browsers can have problems. Sorry bu this is the only known way 
+	<p>Enable inclusion (embedding) of any other application into the CMS. The most usual use could be a forum.
+	This implementation is using IFRAMES so older browsers can have problems. Sorry bu this is the only known way
 	that works without modifying the embedded application.</p>
 	<h3>How do I use it?</h3>
         <ul>
@@ -747,10 +747,10 @@ $lang['help_function_embed'] = <<<EOT
         <br/>
         <h3>What parameters does it take?</h3>
         <ul>
-            <li><em>(required)</em>url - the url to be included</li> 
+            <li><em>(required)</em>url - the url to be included</li>
             <li><em>(required)</em>header=true - this will generate the header code for good resizing of the IFRAME.</li>
             <li>(optional)name - an optional name to use for the iframe (instead of myframe).<p>If this option is used, it must be used identically in both calls, i.e: {embed header=true name=foo} and {embed name=foo url=http://www.google.com} calls.</p></li>
-			
+
         </ul>
 EOT;
 
@@ -787,17 +787,18 @@ $lang['help_function_content'] = <<<EOT
 <p>Example:</p>
 <pre>{content block="second_content_block" label="Second Content Block"}</pre>
 <p>Now, when you edit a page there will a textarea called "Second Content Block".</p></li>
-		<li><em>(optional) </em>wysiwyg (true/false) - If set to false, then a WYSIWYG will never be used while editing this block. If true, then it acts as normal.  Only works when block parameter is used.</li>
-		<li><em>(optional) </em>oneline (true/false) - If set to true, then only one edit line will be shown while editing this block. If false, then it acts as normal.  Only works when block parameter is used.</li>
-	        <li><em>(optional) </em>size (positive integer) - Applicable only when the oneline option is used this optional parameter allows you to specify the size of the edit field.  The default value is 50.</li>
-		<li><em>(optional) </em>maxlength (positive integer) - Applicable only when the oneline option is used this optional parameter allows you to specify the maximum length of input for the edit field.  The default value is 255.</li>
-	        <li><em>(optional) </em>default (string) - Allows you to specify default content for this content blocks (additional content blocks only).</li>
+		<li><em>(optional)</em> wysiwyg (true/false) - If set to false, then a WYSIWYG will never be used while editing this block. If true, then it acts as normal.  Only works when block parameter is used.</li>
+		<li><em>(optional)</em> oneline (true/false) - If set to true, then only one edit line will be shown while editing this block. If false, then it acts as normal.  Only works when block parameter is used.</li>
+        <li><em>(optional)</em> size (positive integer) - Applicable only when the oneline option is used this optional parameter allows you to specify the size of the edit field.  The default value is 50.</li>
+		<li><em>(optional)</em> maxlength (positive integer) - Applicable only when the oneline option is used this optional parameter allows you to specify the maximum length of input for the edit field.  The default value is 255.</li>
+        <li><em>(optional)</em> default (string) - Allows you to specify default content for this content blocks (additional content blocks only).</li>
 		<li><em>(optional)</em> label (string) - Allows specifying a label for display in the edit content page.</li>
-	        <li><em>(optional)</em> required (true/false) - Allows specifying that the content block must contain some text.</li>
-	        <li><em>(optional)</em> placeholder (string) - Allows specifying placeholder text.</li>
-                <li><em>(optional)</em> priority (integer) - Allows specifying an integer priority for the block within the tab.</li>
-	        <li><em>(optional)</em> tab (string) - The desired tab to display this field on in the edit form..</li>
-                <li><em>(optional)</em> cssname (string) - A hint to the WYSIWYG editor module to use the specified stylesheet name for extended styles.</li>
+        <li><em>(optional)</em> required (true/false) - Allows specifying that the content block must contain some text.</li>
+        <li><em>(optional)</em> placeholder (string) - Allows specifying placeholder text.</li>
+        <li><em>(optional)</em> priority (integer) - Allows specifying an integer priority for the block within the tab.</li>
+        <li><em>(optional)</em> tab (string) - The desired tab to display this field on in the edit form..</li>
+        <li><em>(optional)</em> cssname (string) - A hint to the WYSIWYG editor module to use the specified stylesheet name for extended styles.</li>
+        <li><em>(optional)</em> noedit (true/false) - If set to true, then the content block will not be available for editing in the content editing form.  This is useful for outputting a content block to page content that was created via a third party module.</li>
 		<li><em>(optional)</em> assign - Assigns the content to a smarty parameter, which you can then use in other areas of the page, or use to test whether content exists in it or not.
 <p>Example of passing page content to a User Defined Tag as a parameter:</p></li>
 <pre>
@@ -967,7 +968,7 @@ $lang['help_function_cms_jquery'] = <<<EOT
 	<li><tt>nestedSortable</tt>(1.3.4) - jquery.ui.nestedSortable.js</li>
 	<li><tt>jQuery json</tt><em>(2.3)</em> - jquery.json.min.js</li>
 </ul>
-    
+
 <h3>What parameters does it take?</h3>
 <ul>
 	<li><em>(optional) </em><tt>exclude</tt> - use comma seperated value(CSV) list of scripts you would like to exclude. <code>'jquery.ui.nestedSortable.js,jquery.json.min.js'</code></li>

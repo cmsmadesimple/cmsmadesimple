@@ -158,7 +158,7 @@ class Content extends ContentBase
 						$module = cms_utils::get_module($blockInfo['module']);
 						if( !is_object($module) ) continue;
 						if( !$module->HasCapability(CmsCoreCapabilities::CONTENT_BLOCKS) ) continue;
-						$tmp = $module->GetContentBlockValue($blockName,$blockInfo['params'],$params);
+						$tmp = $module->GetContentBlockValue($blockName,$blockInfo['params'],$params,!$editing,$this);
 						if( $tmp != null ) $params[$name] = $tmp;
 					}
 				}
@@ -264,7 +264,7 @@ class Content extends ContentBase
                     if( !is_object($module) ) continue;
                     if( !$module->HasCapability(CmsCoreCapabilities::CONTENT_BLOCKS) ) continue;
                     $value = $this->GetPropertyValue($blockInfo['id']);
-                    $tmp = $module->ValidateContentBlockValue($blockName,$value,$blockInfo['params']);
+                    $tmp = $module->ValidateContentBlockValue($blockName,$value,$blockInfo['params'],$this);
                     if( !empty($tmp) ) {
                         $errors[] = $tmp;
                         $result = false;
@@ -498,7 +498,7 @@ class Content extends ContentBase
 			// a hack to allow overriding the input field name.
 			$blockName = $blockInfo['inputname'];
 		}
-		$tmp = $module->GetContentBlockInput($blockName,$value,$blockInfo['params'],$adding);
+		$tmp = $module->GetContentBlockInput($blockName,$value,$blockInfo['params'],$adding,$this);
 		return $tmp;
 	}
 
@@ -509,6 +509,9 @@ class Content extends ContentBase
 	{
 		// it'd be nice if the content block was an object..
 		// but I don't have the time to do it at the moment.
+        $noedit = cms_to_bool(get_parameter_value($blockInfo,'noedit','false'));
+        if( $noedit ) return;
+
 		$field = '';
 		$help = '';
 		$label = trim(get_parameter_value($blockInfo,'label'));
@@ -537,7 +540,7 @@ class Content extends ContentBase
 			$tmp = $this->_display_module_block($blockName,$blockInfo,$value,$adding);
 			if( is_array($tmp) ) {
 				if( count($tmp) == 2 ) {
-					$label = $tmp[0];
+                    if( !$label ) $label = $tmp[0];
 					$field = $tmp[1];
 				}
 				else {

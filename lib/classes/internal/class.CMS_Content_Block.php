@@ -27,7 +27,7 @@
  *
  * @author              Robert Campbell <calguy1000@cmsmadesimple.org>
  * @since		1.11
- * @ignore 
+ * @ignore
  * @internal
  * @package		CMS
  */
@@ -64,8 +64,8 @@ final class CMS_Content_Block
   public static function smarty_compiler_contentblock($params,$smarty)
   {
     // {content} tag encountered.
-    $rec = array('type'=>'text','id'=>'','name'=>'','usewysiwyg'=>'true','oneline'=>'false','default'=>'','label'=>'',
-		 'size'=>'50','tab'=>'','maxlength'=>'255','required'=>0,'placeholder'=>'','priority'=>'','cssname'=>'');
+      $rec = array('type'=>'text','id'=>'','name'=>'','noedit'=>false, 'usewysiwyg'=>'true','oneline'=>'false','default'=>'','label'=>'',
+                   'size'=>'50','tab'=>'','maxlength'=>'255','required'=>0,'placeholder'=>'','priority'=>'','cssname'=>'');
     foreach( $params as $key => $value ) {
       $value = trim($value,'"\'');
       if( $key == 'type' ) continue;
@@ -205,7 +205,7 @@ final class CMS_Content_Block
       //   1. $id is cntnt01
       //   2. or inline is false
 
-      if (!isset($params['block']) && 
+      if (!isset($params['block']) &&
 	  ($id == 'cntnt01' || $id == '_preview_' || ($id != '' && $inline == false))) {
 	// todo, would be neat here if we could get a list of only frontend modules.
 	$installedmodules = ModuleOperations::get_instance()->GetInstalledModules();
@@ -214,7 +214,7 @@ final class CMS_Content_Block
 	  foreach( $installedmodules  as $key ) {
 	    if (strtolower($modulename) == strtolower($key)) $modulename = $key;
 	  }
-		      
+
 	  if (!isset($modulename) || empty($modulename) ) {
 	    // no module specified.
 	    @trigger_error('Attempt to call a module action, without specifying a valid module name');
@@ -281,7 +281,7 @@ final class CMS_Content_Block
 	  $result = $smarty->fetch(str_replace(' ', '_', 'content:' . $block), '|'.$block, $contentobj->Id().$block);
 	}
 	$smarty->caching = $oldvalue;
-	
+
 	return self::content_return($result, $params, $smarty);
       }
     }
@@ -354,7 +354,7 @@ final class CMS_Content_Block
     if( isset($params['height']) ) $height = $params['height'];
     if( isset($params['urlonly']) ) $urlonly = true;
     if( !isset($params['alt']) ) $alt = $img;
-  
+
     $out = '';
     if( $urlonly ) {
       $out = $img;

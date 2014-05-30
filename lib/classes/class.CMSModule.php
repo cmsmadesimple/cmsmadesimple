@@ -867,6 +867,8 @@ abstract class CMSModule
     /**
      * Get an input field for a module generated content block type.
      *
+     * This method is called from the content edit form when a {content_module} tag is encountered.
+     *
      * This method can be overridden if the module is providing content
      * block types to the CMSMS content objects.
      *
@@ -874,16 +876,20 @@ abstract class CMSModule
      * @param string $blockName Content block name
      * @param mixed  $value     Content block value
      * @param array  $params    Associative array containing content block parameters
-     * @param bool $adding   A flag indicating wether the content editor is in create mode (adding) vs. edit mod.
+     * @param bool   $adding   A flag indicating wether the content editor is in create mode (adding) vs. edit mod.
+     * @param ContentBase $content_obj The content object being edited.
      * @return mixed Either an array with two elements (prompt, and xhtml element) or a string containing only the xhtml input element.
      */
-    function GetContentBlockInput($blockName,$value,$params,$adding = false)
+    function GetContentBlockInput($blockName,$value,$params,$adding,ContentBase $content_obj)
     {
         return FALSE;
     }
 
     /**
      * Return a value for a module generated content block type.
+     *
+     * This mehod is called from a {content_module} tag, when the content edit form is being edited.
+     *
      * Given input parameters (i.e: via _POST or _REQUEST), this method
      * will extract a value for the given content block information.
      *
@@ -894,15 +900,18 @@ abstract class CMSModule
      * @param string $blockName Content block name
      * @param array  $blockParams Content block parameters
      * @param array  $inputParams input parameters
+     * @param ContentBase $content_obj The content object being edited.
      * @return mixed|false The content block value if possible.
      */
-    function GetContentBlockValue($blockName,$blockParams,$inputParams)
+    function GetContentBlockValue($blockName,$blockParams,$inputParams,ContentBase $content_obj)
     {
         return FALSE;
     }
 
     /**
      * Validate the value for a module generated content block type.
+     *
+     * This mehod is called from a {content_module} tag, when the content edit form is being validated.
      *
      * This method can be overridden if the module is providing content
      * block types to the CMSMS content objects.
@@ -911,9 +920,10 @@ abstract class CMSModule
      * @param string $blockName Content block name
      * @param mixed  $value     Content block value
      * @param arrray $blockparams Content block parameters.
+     * @param contentBase $content_obj The content object that is currently being edited.
      * @return string An error message if the value is invalid, empty otherwise.
      */
-    function ValidateContentBlockValue($blockName,$value,$blockparams)
+    function ValidateContentBlockValue($blockName,$value,$blockparams,ContentBase $content_obj)
     {
         return '';
     }
