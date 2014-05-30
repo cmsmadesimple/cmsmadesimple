@@ -44,24 +44,24 @@
         if (SX.isMobile) {
             $('body').addClass('mobile-device');
         }
-        
+
         /**
          * add Touch polyfill for DAMN Internet Explorer, i do not have a Windows Phone or Windows 8 device with touch support
-         * therefore this is untested and installing a VM with Windows 8 and Windows Phone Emulator is something i do not intended 
+         * therefore this is untested and installing a VM with Windows 8 and Windows Phone Emulator is something i do not intended
          * to do just to test this theme, if touch events do not work there, sorry, bad karma.
          */
         if (window.navigator.msPointerEnabled) {
-            
+
             var tchr = document.createElement('script');
                 tchr.src = './uploads/simplex/js/touchr.js';
                 tchr.type = 'text/javascript';
             if ( typeof tchr.async !== 'undefined' ) {
                 tchr.async = true;
-            } 
-             
+            }
+
             (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(tchr);
         }
-        
+
         // initialize touch menu function
         SX.init.mobileMenu();
         // initalize swipe function
@@ -76,10 +76,10 @@
             animateStartingFrameIn: true,
             autoPlay: true,
             autoPlayDelay: 6000,
-            preloader: true, 
+            preloader: true,
             preloadTheseFrames: [1]
         };
-        
+
         SX.sequenceInit = $('#sx-slides').sequence(SX.sequenceOptions).data('sequence');
     });
 
@@ -102,7 +102,7 @@
             if (SX.isTouch) {
                 $('body').addClass('touch-device');
             }
-            
+
             if (!window.attachEvent && window.addEventListener && SX.isMobile) {
 
                 menuItem.each(function () {
@@ -110,16 +110,16 @@
                     var currentItem = $(this),
                         parentItem = currentItem.parents('li').addBack().first(),
                         event = 'click'; // we set as default click event
-                        
+
                     if (SX.isTouch && !((SX.UA.indexOf('android') > -1 && SX.UA.indexOf('applewebkit') > -1) && !(SX.UA.indexOf('chrome') > -1))) {
                         event = 'touchstart'; // if it's touch device and is NOT default android browser do touchstart event
                     };
-                        
+
 
                     this.addEventListener(event, function (e) {
                         // toggle class for dropdown
                         if (!currentItem.hasClass('active')) {
-                            
+
                             // hide open dropdowns
                             menuItem.removeClass('active');
                             // prevent opening link on first touch
@@ -136,7 +136,6 @@
                             var closeDropdown = function (e) {
                                 e.stopPropagation();
 
-                                current.removeClass('active');
                                 currentItem.not('.active').children('ul').hide();
                                 document.removeEventListener(event, closeDropdown);
                             };
@@ -181,7 +180,7 @@
                     end.y = touch.pageY;
 
                     if (Math.abs(end.x - start.x) >= 8 && Math.abs(end.y - start.y) <= 20) {
-                        e.stopPropagation(); 
+                        e.stopPropagation();
                         e.preventDefault();
                     }
                 })
@@ -216,7 +215,7 @@
 
             if ($('#main').length > 0) {
                 trigger.click(function (event) {
-                    
+
                     if (SX.UA.match(/android|ipod|ipad|iphone/i)) {
                         window.scrollTo(0);
                     } else {
@@ -224,7 +223,7 @@
                             scrollTop: $(target).offset().top
                         }, 500);
                     }
-                    
+
                     event.preventDefault();
                 });
             }
