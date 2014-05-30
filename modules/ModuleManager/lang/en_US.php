@@ -110,6 +110,7 @@ $lang['helptxt'] = 'Help';
 $lang['help_allowuninstall'] = 'If enabled, then this module can be uninstalled.  This is to prevent the accidental removal of this module which would result in an unrecoverable error';
 $lang['help_dl_chunksize'] = 'This parameter specifies the size <em>(in kilobytes)</em> of each chunk of data that will be downloaded from the repository when requesting a module.';
 $lang['help_latestdepends'] = 'When installing a module with dependencies, this will ensure that the newest version of a dependent module is installed';
+$lang['help_mm_importxml'] = 'This form allows importing a module XML file that you received from another user, or downloaded from the <a class="external" ""href="http://dev.cmsmadesimple.org">CMSMS Forge</a>';
 
 // I
 $lang['importxml'] = 'Import Module';
@@ -209,6 +210,7 @@ $lang['title_installation_complete'] = 'Installation Process Complete!';
 $lang['title_letter'] = 'Show modules whose name starts with %s';
 $lang['title_missingdeps'] = 'This module cannot be installed or upgraded due to missing dependencies';
 $lang['title_missingdeps2'] = 'Missing Dependencies';
+$lang['title_mm_importxml'] = 'Import module from XML';
 $lang['title_moduleabout'] = 'View the author and changelog information for this module';
 $lang['title_moduleactive'] = 'Toggle the active state of the module. Inactive modules are not loaded, and cannot be called, however data remains intact';
 $lang['title_moduleaction'] = 'This column displays the actions available for each module';

@@ -4,7 +4,7 @@ class ModuleManagerModuleInfo extends CmsExtendedModuleInfo
 {
     private static $_minfo;
     private static $_deprecated = array('CMSMailer','MenuManager');
-    private static $_mmkeys = array('e_status','can_install','can_upgrade','can_uninstall','missing_deps','deprecated');
+    private static $_mmkeys = array('e_status','can_install','can_upgrade','can_uninstall','missing_deps','deprecated','needs_upgrade');
     private $_mmdata = array();
 
     public function __construct($module_name,$can_load = TRUE,$can_check_forge = TRUE)
@@ -34,6 +34,7 @@ class ModuleManagerModuleInfo extends CmsExtendedModuleInfo
                 }
             }
         }
+
     }
 
     private function _get_missing_dependencies()
@@ -44,10 +45,17 @@ class ModuleManagerModuleInfo extends CmsExtendedModuleInfo
             foreach( $depends as $name => $ver ) {
                 $rec = self::get_module_info($name);
                 if( !is_object($rec) ) {
+                    // problem getting module info for it.
                     $out[$name] = '0.0.0.1';
                     continue;
                 }
                 if( !$rec['installed'] || !$rec['active'] ) {
+                    // dependent is not installed (or not active) so its missing
+                    $out[$name] = $ver;
+                    continue;
+                }
+                if( $rec['needs_upgrade'] ) {
+                    // dependent needs upgrading, so it's a missing dependency
                     $out[$name] = $ver;
                     continue;
                 }
@@ -72,28 +80,47 @@ class ModuleManagerModuleInfo extends CmsExtendedModuleInfo
         if( isset($this->_mmdata[$key]) ) return $this->_mmdata[$key];
 
         if( $key == 'can_install' ) {
+            // can we install this module
             if( $this['installed'] ) return FALSE;
             if( !$this['ver_compatible'] ) return FALSE;
             return $this->_check_dependencies();
         }
 
+
         if( $key == 'can_upgrade' ) {
+            // see if we can upgrade this module
             return $this->_check_dependencies();
         }
 
+        if( $key == 'needs_upgrade' || $key == 'need_upgrade' ) {
+            // test if this module needs an upgrade
+            // this only checks with the data we have, does not calculate an extended status.
+            if( !$this['version'] || !$this['installed_version'] ) {
+                // if it's not installed, it doesn't need an upgrade
+                return FALSE;
+            }
+            $tmp = version_compare($this['installed_version'],$this['version']);
+            if( $tmp < 0 ) return TRUE;
+            // The e_status field checks the repository... and tells if the db version is newer.
+            return FALSE;
+        }
+
         if( $key == 'can_uninstall' ) {
+            // check if this module can be uninstalled
             if( !$this['installed'] ) return FALSE;
             // check for installed modules that are dependent upon this one
             if( is_array($this['dependants']) && count($this['dependants']) ) return FALSE;
-            return TRUE;
+            return $this->_check_dependencies();
         }
 
         if( $key == 'missing_deps' ) {
+            // test if this module is missing dependencies
             $out = $this->_get_missing_dependencies();
             return $out;
         }
 
         if( $key == 'deprecated' ) {
+            // test if this module is deprecated
             if( in_array($this['name'],self::$_deprecated) ) return TRUE;
             return FALSE;
         }

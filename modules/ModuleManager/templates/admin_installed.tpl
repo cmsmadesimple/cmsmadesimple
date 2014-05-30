@@ -35,7 +35,9 @@ $(document).ready(function(){
 <div id="importdlg" title="{$ModuleManager->Lang('importxml')}" style="display: none;">
   {form_start id='local_import' action='local_import'}
   <div class="pageoverflow">
-    <p class="pagetext"><label for="xml_upload">{$ModuleManager->Lang('uploadfile')}:</label></p>
+    <p class="pagetext"><label for="xml_upload">{$ModuleManager->Lang('uploadfile')}:</label>
+       {cms_help title=$mod->Lang('title_mm_importxml') key='help_mm_importxml'}
+    </p>
     <p class="pageinput">
       <input id="xml_upload" type="file" name="{$actionid}upload" accept="text/xml"/>
     </p>
@@ -65,7 +67,7 @@ $(document).ready(function(){
   <tbody>
     {foreach $module_info as $item}
     {cycle values="row1,row2" assign='rowclass'}
-    <tr class="{$rowclass}">
+    <tr class="{$rowclass}" id="_{$item.name}">
       <td>{if $item.system_module}{$system_img}{/if}
            {if $item.e_status == 'newer_available'}{$star_img}{/if}
 	   {if $item.missing_deps}{$missingdep_img}{/if}
@@ -110,7 +112,11 @@ $(document).ready(function(){
             {capture assign='op'}<span title="{$ModuleManager->Lang('title_cantremove')}">{$ModuleManager->Lang('cantremove')}</span>{/capture}{$ops[]=$op}
           {/if}
           {if isset($item.dependants)}
-            {capture assign='op'}<span title="{$ModuleManager->Lang('title_has_dependants')}">{$ModuleManager->Lang('has_dependants')}</span>: (<strong>{implode(', ',$item.dependants)}</strong>){/capture}{$ops[]=$op}
+	    {$tmp=[]}
+	    {foreach $item.dependants as $one}
+	      {$tmp[]="<a href=\"{cms_action_url}#_{$one}\">{$one}</a>"}
+	    {/foreach}
+            {capture assign='op'}<span title="{$ModuleManager->Lang('title_has_dependants')}">{$ModuleManager->Lang('has_dependants')}</span>: ({implode(', ',$tmp)}{/capture}{$ops[]=$op}
           {/if}
           {'<br/>'|implode:$ops}
       </td>
