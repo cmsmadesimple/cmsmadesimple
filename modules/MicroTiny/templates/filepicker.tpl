@@ -11,7 +11,7 @@
 			<div class="filepicker-navbar">
 				<div class="filepicker-navbar-inner">
 					<div class="filepicker-view-option">
-						<p><span class="filepicker-option-title">{$mod->Lang('fileview')}:&nbsp;</span> 
+						<p><span class="filepicker-option-title">{$mod->Lang('fileview')}:&nbsp;</span>
 							<span class="js-trigger view-list filepicker-button" title="{$mod->Lang('switchlist')}"><i class="cmsms-fp-th-list"></i></span>&nbsp;
 							<span class="js-trigger view-grid filepicker-button active" title="{$mod->Lang('switchgrid')}"><i class="cmsms-fp-th"></i></span>
 						</p>
@@ -68,7 +68,7 @@
 										<i class="cmsms-fp-facetime-video"></i>
 									{elseif $file.filetype == 'audio'}
 										<i class="cmsms-fp-music"></i>
-									{elseif $file.filetype == 'archive'} 
+									{elseif $file.filetype == 'archive'}
 										<i class="cmsms-fp-zip"></i>
 									{else}
 										<i class="cmsms-fp-file"></i>
@@ -104,10 +104,10 @@
 		</div>
 	</body>
 	{/strip}
-	{cms_jquery exclude='ui,nestedSortable,json,migrate,cms_admin,cms_dirtyform,cms_hiersel,cms_lock' append="`$mod->GetModuleURLPath()`/lib/js/tinymce/plugins/cmsms_filebrowser/filebrowser.js"}
+	{cms_jquery exclude='ui,cms_js_setup,ui_touch_punch,nestedSortable,json,migrate,cms_admin,cms_dirtyform,cms_hiersel,cms_lock' append="`$mod->GetModuleURLPath()`/lib/js/tinymce/plugins/cmsms_filebrowser/filebrowser.js"}
 	<script type="text/javascript">
 		var filebrowser_global = {
 			field_id : '{$field}'
-		}
+		};
 	</script>
 </html>
