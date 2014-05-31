@@ -85,7 +85,6 @@ try {
 	// handle the response message
 	if ($apply) {
 		$this->GetJSONResponse($response, $message);
-		exit ;
 	} elseif (!$apply && $response == 'error') {
 		echo $this->ShowErrors($message);
 	}
