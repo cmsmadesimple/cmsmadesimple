@@ -282,9 +282,9 @@ function on_mailer()
   }
 }
 $(document).ready(function(){
-{if !$mail_is_set}$('#mailertest').hide();{/if}
   $(document).on('click', '#mailertest', function(e){
     $('#testpopup').dialog({
+      width: 'auto',
       modal: true
     });
     return false;

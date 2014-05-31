@@ -490,7 +490,6 @@ class PHPMailer {
       }
       return false;
     }
-    debug_display($address);
     $address = trim($address);
     $name = trim(preg_replace('/[\r\n]+/', '', $name)); //Strip breaks and trim
     if (!self::ValidateAddress($address)) {
