@@ -19,24 +19,20 @@
 function smarty_function_modified_date($params, &$template)
 {
 	$smarty = $template->smarty;
-	$content_obj = cmsms()->variables['content_obj'];
+	$content_obj = cmsms()->get_content_object();
 
-	if(empty($params['format']))
-	{
+	if(empty($params['format'])) {
 		$format = "%x %X";
 	}
-	else
-	{
+	else {
 		$format = $params['format'];
 	}
 
-	if (is_object($content_obj) && $content_obj->GetModifiedDate() && $content_obj->GetModifiedDate() > -1)
-	{
+	if (is_object($content_obj) && $content_obj->GetModifiedDate() && $content_obj->GetModifiedDate() > -1)	{
 		$time = $content_obj->GetModifiedDate();
 		$str = cms_htmlentities(strftime($format, $time));
 
-		if( isset($params['assign']) )
-	    {
+		if( isset($params['assign']) ) {
 			$smarty->assign($params['assign'],$str);
 			return;
 	    }
