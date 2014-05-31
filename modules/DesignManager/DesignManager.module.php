@@ -83,6 +83,36 @@ final class DesignManager extends CMSModule
   {
       return lang('event_desc_'.$eventname);
   }
+
+	/**
+	 * A module method for handling module response with ajax actions, returning a JSON encoded response.
+	 * @param  string $status The status of returned response, in example error, success, warning, info
+	 * @param  string $message The message of returned response
+	 * @param  mixed $data A string or array of response data
+	 * @return string Returns a string containing the JSON representation of provided response data
+	 */
+	public function GetJSONResponse($status, $message, $data = null)
+	{
+
+		if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest') {
+
+			$handlers = ob_list_handlers();
+			for ($cnt = 0; $cnt < sizeof($handlers); $cnt++) { ob_end_clean(); }
+
+			header('Content-type:application/json; charset=utf-8');
+
+			if ($data) {
+				$json = json_encode(array('status' => $status, 'message' => $message, 'data' => $data));
+			} else {
+				$json = json_encode(array('status' => $status, 'message' => $message));
+			}
+
+			echo $json;
+			exit();
+		}
+
+		return false;
+	}
 } // class
 
 #

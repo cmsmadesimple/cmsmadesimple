@@ -47,8 +47,8 @@
          * @param {requestCallback|boolean} arg2
          */
         loadScript : function(url, arg1, arg2) {
-            var cache = true, 
-                callback = null, 
+            var cache = true,
+                callback = null,
                 load = true;
             //arg1 and arg2 can be interchangable
             if ($.isFunction(arg1)) {
@@ -93,8 +93,8 @@
          * @param {number} expires (number in days)
          */
         setStorageValue : function(key, value, expires) {
-            var _this = this, 
-                expiration = new Date().getTime() + ( expires * 24 * 60 * 60 * 1000 ), 
+            var _this = this,
+                expiration = new Date().getTime() + ( expires * 24 * 60 * 60 * 1000 ),
                 obj = {};
 
             try {
@@ -141,8 +141,8 @@
          * @param {string} key
          */
         getStorageValue : function(key) {
-            var _this = this, 
-                data = '', 
+            var _this = this,
+                data = '',
                 value;
 
             if (_this._isLocalStorage()) {
@@ -177,27 +177,27 @@
                 $.cookie(key, null);
             }
         },
-        
+
         /**
          * @description Sets equal height on specified element group
          * @memberof OE.helper
          * @function equalHeight(obj)
-         * @param {object} 
+         * @param {object}
          */
         equalHeight : function(obj) {
             var tallest = 0,
                 elHeight;
-            
+
             obj.each(function() {
                 var el = $(this),
                     elHeight = el.height();
-                
+
                 if (elHeight > tallest) {
                     tallest = elHeight;
                 }
-                
+
             });
-            
+
             obj.height(tallest);
         },
 
@@ -209,41 +209,41 @@
         _isLocalStorage : function() {
             return typeof (Storage) !== 'undefined';
         },
-        
+
         /**
          * @description Basic check for common mobile devices and touch capability
          * @function _isMobileDevice()
-         * @private 
+         * @private
          */
         _isMobileDevice : function() {
             var devices = /(Android|iPhone|iPad|iPod|Blackberry|Dolphin|IEMobile|WPhone|Windows Mobile|IEMobile9||IEMobile10||IEMobile11|Kindle|Mobile|MMP|MIDP|Pocket|PSP|Symbian|Smartphone|Sreo|Up.Browser|Up.Link|Vodafone|WAP|Opera Mini|Opera Tablet|Mobile|Fennec)/i;
-            
+
             if (devices.test(navigator.userAgent) && (document.documentElement.hasOwnProperty('ontouchstart') || (window.DocumentTouch && document instanceof DocumentTouch))) {
                 return true;
             }
         }
-        
+
     };
-    
+
     /**
      * @namespace OE.view
      */
     OE.view = {
-        
+
         init : function() {
             var _this = this,
-                $sidebar_toggle = $('.toggle-button'), // object for sidebar toggle 
+                $sidebar_toggle = $('.toggle-button'), // object for sidebar toggle
                 $container = $('#oe_container'), // page container
                 $menu = $('#oe_pagemenu'), // page menu
                 $toggle_dropzone = $('.toggle-dropzone'), // dropzone toggle trigger
                 $dropzone = $('.pageheader'); // dropzone container
-            
+
             // fix footer, breaks when max-width 1024 kicks in and there is less content then height of menu
             $('#oe_admin-content').css('min-height', ($('#oe_sidebar').height()));
-            
+
             // handle navigation sidebar toggling
             $sidebar_toggle.on('click', function(e) {
-                
+
                 e.preventDefault();
                 if ($container.hasClass('sidebar-on')) {
                     _this._closeSidebar($container, $menu);
@@ -251,7 +251,7 @@
                     _this._showSidebar($container, $menu);
                 }
             });
-            
+
             // trigger hide/reveal dropzone
             _this.toggleDropzone($toggle_dropzone, $dropzone);
             // toggle hide/reveal menu children
@@ -262,13 +262,13 @@
             _this.setUIButtons();
             // handle functions that need window resize
             _this.updateDisplay();
-            
+
             $(window).resize(function() {
                 $('.dashboard-inner').css('height', 'auto');
                 _this.updateDisplay();
             });
         },
-        
+
         /**
          * @description Checks for saved state of sidebar
          * @function handleSidebar(trigger, container)
@@ -278,7 +278,7 @@
          */
         handleSidebar : function(trigger, container) {
             var viewportWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
-            
+
             if (OE.helper.getStorageValue('sidebar-pref') === 'sidebar-off' && viewportWidth > 768) {
                 container.addClass('sidebar-off').removeClass('sidebar-on');
                 trigger.addClass('open-sidebar');
@@ -287,10 +287,10 @@
                 trigger.addClass('close-sidebar');
             }
         },
-        
+
         /**
          * @description Sets sidebar menu to fixed position on scroll
-         * @function stickyMenu() 
+         * @function stickyMenu()
          * @param {object} obj
          * @memberof OE.view
          */
@@ -310,7 +310,7 @@
                     });
                 } else if (( viewportWidth >= 768 ) && ( viewportHeight >= obj.height() )) {
                     scrollTop = $(window).scrollTop();
-                    
+
                     if (scrollTop >= topOffset) {
                         obj.css({
                             marginTop : '-100px',
@@ -325,21 +325,21 @@
                 }
             });
         },
-        
+
         /**
          * @description Handles open/close state of FileManager dropzone in OneEleven theme
-         * @function toggleDropzone() 
+         * @function toggleDropzone()
          * @param {object} trigger - click event handler
          * @param {object} obj
          * @memberof OE.view
          */
         toggleDropzone : function(trigger, obj) {
-            
+
             trigger.click(function(e) {
                 e.preventDefault();
-                
+
                 $('.drop').toggleClass('hidden');
-                
+
                 if ($('.drop').hasClass('hidden')) {
                     obj.addClass('drop-hidden');
                     OE.helper.setStorageValue('dropzone-pref', 'hidden', 60);
@@ -348,7 +348,7 @@
                     OE.helper.removeStorageValue('dropzone-pref');
                 }
             });
-            
+
             if (OE.helper.getStorageValue('dropzone-pref') === 'hidden') {
                 $('.drop').addClass('hidden');
                 obj.addClass('drop-hidden');
@@ -356,7 +356,7 @@
                 $('.pageheader').addClass('drop-visible');
             }
         },
-        
+
         /**
          * @description Handles toggling of main menu child items
          * @function toggleSubMenu(obj)
@@ -368,41 +368,42 @@
             obj.find('li.current span').addClass('open-sub');
             obj .find('> li > span').click(function() {
                 var ul = $(this).next();
-                
+
                 if (ul.is(':visible') === false) {
                     obj.find('ul').slideUp(duration);
                 }
-                
+
                 ul.slideToggle(duration);
             });
         },
-        
+
         /**
-         * @description Handles Core and Module messages 
+         * @description Handles Core and Module messages
          * @function showNotification()
          */
-        // TODO Rethink this in next versions, define a object based on type or something (maybe use plugin http://akquinet.github.io/jquery-toastmessage-plugin/demo/demo.html), move messages to global function in cms_admin.js so it can be reused by other themes 
+        // TODO Rethink this in next versions, define a object based on type or something (maybe use plugin http://akquinet.github.io/jquery-toastmessage-plugin/demo/demo.html), move messages to global function in cms_admin.js so it can be reused by other themes
         showNotifications : function() {
-            
+
             $('.pagewarning, .message, .pageerrorcontainer, .pagemcontainer').prepend('<span class="close-warning"></span>');
-            $('.close-warning').click(function() {
+            $(document).on('click', '.close-warning', function() {
                 $(this).parent().hide();
+                $(this).parent().remove();
             });
-            
+
             // pagewarning status hidden?
             var key = $('body').attr('id') + '_notification';
             $('.pagewarning .close-warning').click(function() {
                 OE.helper.setStorageValue(key, 'hidden', 60);
             });
-            
+
             if (OE.helper.getStorageValue(key) === 'hidden') {
                 $('.pagewarning').addClass('hidden');
             }
-            
+
             $('.message:not(.no-slide)').click(function() {
                 $('.message').slideUp();
             });
-            
+
             $('.message:not(.no-slide), .pageerrorcontainer:not(.no-slide), .pagemcontainer:not(.no-slide)').each(function() {
                 var message = $(this);
                 $(message).hide().slideDown(1000, function() {
@@ -411,14 +412,14 @@
                     }, 10000);
                 });
             });
- 
+
             $(document).on('cms_ajax_apply', function(e) {
                 $('button[name=cancel], button[name=m1_cancel]').fadeOut();
                 $('button[name=cancel], button[name=m1_cancel]').button('option', 'label', e.close);
                 $('button[name=cancel], button[name=m1_cancel]').fadeIn();
-                
+
                 var htmlShow = '';
-                
+
                 if (e.response === 'Success') {
                     htmlShow = '<aside class="message pagemcontainer" role="status"><span class="close-warning">Close</span><p class="pagemessage">' + e.details + '<\/p><\/aside>';
                 } else {
@@ -426,33 +427,33 @@
                     htmlShow += e.details;
                     htmlShow += '<\/ul><\/aside>';
                 }
-                
-                console.log(e.response);
-                
+
                 $('body').append(htmlShow).slideDown(1000, function() {
                     window.setTimeout(function() {
                         $('.message').slideUp();
+                        $('.message').remove();
                     }, 10000);
                 });
-                
-                $('.message').click(function() {
+
+                $(document).on('click', '.close-warning', function() {
                     $('.message').slideUp();
+                    $('.message').remove();
                 });
             });
         },
-        
+
         /**
          * @description Applies jQueryUI button function to input buttons
          * @function setUIButtons()
          */
         setUIButtons : function() {
-		
+
 			// Standard input buttons
             $('input[type="submit"], input[type="button"]').each(function() {
                 var button = $(this),
                     icon = 'ui-icon-circle-check',
                     $btn = $('<button />');
-                    
+
                 if (!button.hasClass('noautobtn')) {
                     if (button.is('[name*=apply]')) {
                         icon = 'ui-icon-disk';
@@ -462,7 +463,7 @@
                         icon = 'ui-icon-refresh';
                     }
                 }
-                
+
                 $(this.attributes).each(function(index, attribute) {
                     $btn.attr(attribute.name, attribute.value);
                 });
@@ -475,7 +476,7 @@
                 });
                 button.replaceWith($btn);
             });
-            
+
 			// Back links
             $('a.pageback').addClass('ui-state-default ui-corner-all')
                 .prepend('<span class="ui-icon ui-icon-arrowreturnthick-1-w">')
@@ -484,22 +485,22 @@
                 }, function() {
                     $(this).removeClass('ui-state-hover');
                 });
-				
+
 			// Generic style
 			$(".cmsms-button").each(function(index) {
-			
+
 				var icon = $(this).data("uiIcon");
-			
+
 				$(this).button({
 					icons: {
 						primary: icon
 					}
 				});
-			});			
+			});
         },
-        
+
         /**
-         * @description Placeholder function for functions that need to be triggered on window resize 
+         * @description Placeholder function for functions that need to be triggered on window resize
          * @memberof OE.view
          * @function updateDisplay()
          */
@@ -510,7 +511,7 @@
                 $container = $('#oe_container'), // page container object
                 $menu_container = $('#oe_menu'), // menu container object
                 $group = $('.dashboard-inner'); // object for equalHeight(obj) function
-                    
+
                 // set sidebar visibility
                 _this.handleSidebar($sidebar_toggle, $container);
                 // handle equal height blocks
@@ -520,36 +521,36 @@
                     _this.stickyMenu($menu_container);
                 }
         },
-        
+
         /**
-         * @description Handles setting for Sidebar and sets open state 
+         * @description Handles setting for Sidebar and sets open state
          * @private
          * @function _showSidebar(obj, target)
          * @params {object} obj
          * @params {object} target
          */
         _showSidebar : function(obj, target) {
-            
+
             obj.addClass('sidebar-on').removeClass('sidebar-off');
             target.find('li.current ul').show();
-            
+
             OE.helper.setStorageValue('sidebar-pref', 'sidebar-on', 60);
         },
-        
+
         /**
-         * @description Handles setting for Sidebar and sets closed state 
+         * @description Handles setting for Sidebar and sets closed state
          * @private
          * @function _closeSidebar(obj, target)
          * @params {object} obj
          * @params {object} target
          */
         _closeSidebar : function(obj, target) {
-            
+
             obj.removeClass('sidebar-on').addClass('sidebar-off');
             target.find('li ul').hide();
-            
+
             OE.helper.setStorageValue('sidebar-pref', 'sidebar-off', 60);
         },
-        
+
     };
 } )(this, jQuery);

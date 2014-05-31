@@ -35,17 +35,40 @@ $(document).ready(function(){
     $('#form_editcss').dirtyForm('option','dirty',false);
   });
 
-  $(document).on('click', '#applybtn', function(e){
-    // serialize the form
-    e.preventDefault();
-    var url = $('#form_editcss').attr('action')+'?showtemplate=false&m1_apply=1';
-    var data = $('#form_editcss').serializeArray();
-    $.post(url,data,function(data,textStatus,jqXHR){
-      $('#cancelbtn').button('option','label','{$mod->Lang('cancel')}');
-      $('#css_modified_cont').hide();
-      return false;
+    $(document).on('click', '#applybtn', function(e){
+        e.preventDefault();
+
+        var url = $('#form_editcss').attr('action')+'?showtemplate=false&m1_apply=1',
+            data = $('#form_editcss').serializeArray();
+
+        $.post(url, data, function(data,textStatus,jqXHR) {
+
+            var $response = $('<aside/>').addClass('message');
+
+            if (data.status === 'success') {
+
+                $response.addClass('pagemcontainer')
+                    .append($('<span>').text('Close').addClass('close-warning'))
+                    .append($('<p/>').text(data.message));
+            } else if (data.status === 'error') {
+
+                $response.addClass('pageerrorcontainer')
+                    .append($('<span>').text('Close').addClass('close-warning'))
+                    .append($('<p/>').text(data.message));
+            }
+
+            $('body').append($response).slideDown(1000, function() {
+                window.setTimeout(function() {
+                    $response.slideUp();
+                    $response.remove();
+                }, 10000);
+            });
+
+            $('#cancelbtn').button('option','label','{$mod->Lang('cancel')}');
+            $('#tpl_modified_cont').hide();
+            $('#content').focus();
+        });
     });
-  });
 
   // disabling Media Type checkboxes if Media query is in use
   if ($('#mediaquery').val() !== '') {
