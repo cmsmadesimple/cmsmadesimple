@@ -221,25 +221,25 @@ $(document).ready(function(){
 		</div>
 
 		<div class="pageoverflow">
-			<p class="pagetext"><label for="enablesitedown">{lang('enablesitedown')}:</label></p>
+			<p class="pagetext"><label for="enablesitedown">{lang('enablesitedown')}:</label> {cms_help key2='settings_enablesitedown' title=lang('enablesitedown')}</p>
 			<p class="pageinput">
 				<select id="enablesitedown" name="enablesitedownmessage">
 					{cms_yesno selected=$enablesitedownmessage}
 				</select>
 		</div>
 		<div class="pageoverflow">
-			<p class="pagetext"><label for="usewysiwyg">{lang('enablewysiwyg')}:</label></p>
+			<p class="pagetext"><label for="usewysiwyg">{lang('enablewysiwyg')}:</label> {cms_help key2='settings_enablewysiwyg' title=lang('enablewysiwyg')}</p>
 			<p class="pageinput">
 				<select id="enablewysiwyg" name="use_wysiwyg">
 					{cms_yesno selected=$use_wysiwyg}
 				</select>
 		</div>
 		<div class="pageoverflow">
-			<p class="pagetext">{lang('sitedownmessage')}:</p>
+			<p class="pagetext">{lang('sitedownmessage')}: {cms_help key2='settings_sitedownmessage' title=lang('sitedownmessage')}</p>
 			<p class="pageinput">{$textarea_sitedownmessage}</p>
 		</div>
 		<div class="pageoverflow">
-			<p class="pagetext">{'sitedownexcludeadmins'|lang}:</p>
+			<p class="pagetext">{lang('sitedownexcludeadmins')}: {cms_help key2='settings_sitedownexcludeadmins' title=lang('sitedownexcludeadmins')}</p>
 			<p class="pageinput">
 				<select id="sitedownexcludeadmins" name="sitedownexcludeadmins">
 					{cms_yesno selected=$sitedownexcludeadmins}
@@ -247,7 +247,7 @@ $(document).ready(function(){
 			</p>
 		</div>
 		<div class="pageoverflow">
-			<p class="pagetext"><label for="sitedownexcludes">{lang('sitedownexcludes')}:</label></p>
+			<p class="pagetext"><label for="sitedownexcludes">{lang('sitedownexcludes')}:</label> {cms_help key2='settings_sitedownexcludes' title=lang('sitedownexcludes')}</p>
 			<p class="pageinput">
 				<input id="sitedownexcludes" type="text" name="sitedownexcludes" size="50" maxlength="255" value="{$sitedownexcludes}" />
 				<br /><strong>{lang('your_ipaddress')}:</strong>&nbsp;<span style="color: red;">{cms_utils::get_real_ip()}</span><br/>{$lang_info_sitedownexcludes}
