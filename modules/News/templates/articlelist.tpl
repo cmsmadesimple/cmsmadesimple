@@ -82,7 +82,7 @@ $(document).ready(function(){
 {/if}
 
 {if $itemcount > 0}
-<div class=row">
+<div class="row">
   <div class="pageoptions half" style="margin-top: 8px;">
     <a id="toggle_filter">{admin_icon icon='view.gif' alt=$mod->Lang('viewfilter')} {$mod->Lang('viewfilter')}</a>
     {if isset($addlink)}&nbsp;{$addlink}{/if}
