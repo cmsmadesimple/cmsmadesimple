@@ -1159,8 +1159,8 @@ function cms_get_jquery($exclude = '',$ssl = null,$cdn = false,$append = '',$cus
   $basePath=$custom_root!=''?trim($custom_root,'/'):$base_url;
 
   // Scripts to include
-  $scripts['jquery'] = array('cdn'=>'https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js',
-			     'local'=>$basePath.'/lib/jquery/js/jquery-1.11.0.min.js',
+  $scripts['jquery'] = array('cdn'=>'https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js',
+			     'local'=>$basePath.'/lib/jquery/js/jquery-1.11.1.min.js',
 			     'aliases'=>array('jquery.min.js','jquery',));
   $scripts['jquery-ui'] = array('cdn'=>'https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js',
 				'local'=>$basePath.'/lib/jquery/js/jquery-ui-1.10.4.custom.min.js',
