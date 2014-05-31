@@ -13,23 +13,17 @@
 
     <div class="pageoverflow">
       <p class="pagetext"><label for="originator">{$mod->Lang('prompt_originator')}:</label>&nbsp;{cms_help key2='help_type_originator' title=$mod->Lang('prompt_originator')}</p>
-      <p class="pageinput">
-        <input id="originator" type="text" readonly="readonly" value="{$type->get_originator(TRUE)}"/>
-      </p>
+      <p class="pageinput">{$type->get_originator(TRUE)}</p>
     </div>
 
     <div class="pageoverflow">
       <p class="pagetext"><label for="name">{$mod->Lang('prompt_name')}:</label>&nbsp;{cms_help key2='help_type_name' title=$mod->Lang('prompt_name')}</p>
-      <p class="pageinput">
-        <input id="name" type="text" readonly="readonly" value="{$type->get_name()}"/>
-      </p>
+      <p class="pageinput">{$type->get_name()}</p>
     </div>
 
     <div class="pageoverflow">
       <p class="pagetext"><label for="descname">{$mod->Lang('prompt_descriptive_name')}:</label>&nbsp;{cms_help key2='help_type_descriptive_name' title=$mod->Lang('prompt_descriptive_name')}</p>
-      <p class="pageinput">
-        <input id="descname" type="text" readonly="readonly" value="{$type->get_langified_display_value()}"/>
-      </p>
+      <p class="pageinput">{$type->get_langified_display_value()}</p>
     </div>
 
   </div>{* left container *}
@@ -38,30 +32,21 @@
   <div style="width: 45%; float: right;">
     <div class="pageoverflow">
       <p class="pagetext"><label for="hasdflt">{$mod->Lang('prompt_has_dflt')}:</label>&nbsp;{cms_help key2=help_has_dflt title=$mod->Lang('prompt_has_dflt')}</p>
-      <p class="pageinput">
-        <input id="hasdflt" type="text" readonly="readonly" value="{if $type->get_dflt_flag()}{$mod->Lang('yes')}{else}{$mod->Lang('no')}{/if}"/>
-      </p>
+      <p class="pageinput">{if $type->get_dflt_flag()}{$mod->Lang('yes')}{else}{$mod->Lang('no')}{/if}</p>
     </div>
 
     <div class="pageoverflow">
       <p class="pagetext"><label for="rcb">{$mod->Lang('prompt_requires_content_blocks')}:</label>&nbsp;{cms_help key2='help_type_reqcontentblocks' title=$mod->Lang('prompt_requires_content_blocks')}</p>
-      <p class="pageinput">
-        {$tmp=$mod->Lang('no')}{if $type->get_content_block_flag()}{$tmp=$mod->Lang('yes')}{/if}
-        <input id="rcb" type="text" readonly="readonly" value="{$tmp}"/>
-      </p>
+      <p class="pageinput">{if $type->get_content_block_flag()}{$mod->Lang('yes')}{else}{$mod->Lang('no')}{/if}</p>
     </div>
 
     <div class="pageoverflow">
       <p class="pagetext"><label for="created">{$mod->Lang('prompt_created')}:</label>&nbsp;{cms_help key2='help_type_createdate' title=$mod->Lang('prompt_created')}</p>
-      <p class="pageinput">
-        <input id="created" type="text" readonly="readonly" value="{$type->get_create_date()|date_format:'%x %X'}"/>
-      </p>
+      <p class="pageinput">{$type->get_create_date()|date_format:'%x %X'}</p>
     </div>
     <div class="pageoverflow">
       <p class="pagetext"><label for="modified">{$mod->Lang('prompt_modified')}:</label>&nbsp;{cms_help key2='help_type_modifieddate' title=$mod->Lang('prompt_modified')}</p>
-      <p class="pageinput">
-        <input id="modified" type="text" readonly="readonly" value="{$type->get_modified_date()|date_format:'%x %X'}"/>
-      </p>
+      <p class="pageinput">{$type->get_modified_date()|date_format:'%x %X'}</p>
     </div>
   </div>{* right container *}
   <div style="clear: both;"></div>
