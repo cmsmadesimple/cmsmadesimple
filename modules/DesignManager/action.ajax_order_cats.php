@@ -34,16 +34,16 @@ try {
 		}
 	}
 	audit('',$this->GetName(),'Category order changed');
-	$out = 'SUCCESS';
+	$out = $this->Lang('category_reordered');
+	$response = 'success';
 }
 catch( CmsException $e ) {
 	audit('','CMSMS','Problem working with category in ajax: '.$e->GetMessage());
-	$out = 'ERROR: '.$e->GetMessage();;
+	$out = 'ERROR: '.$e->GetMessage();
+	$response = 'error';
 }
 
-echo $out;
-
-exit();
+$this->GetJSONResponse($response, $out);
 #
 # EOF
 #

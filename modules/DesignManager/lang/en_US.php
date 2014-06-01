@@ -47,6 +47,7 @@ $lang['create_design'] = 'Create a new Design';
 $lang['create_stylesheet'] = 'Create a new Stylesheet';
 $lang['create_template'] = 'Create a new Template';
 $lang['css_filter'] = 'Filter Stylesheets';
+$lang['category_reordered'] = 'Category order changed';
 
 #D
 $lang['delete_attached_stylesheets'] = 'Delete attached and orphaned stylesheets';

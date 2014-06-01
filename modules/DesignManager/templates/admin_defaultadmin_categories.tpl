@@ -2,7 +2,30 @@
 <script type="text/javascript">
 $(document).ready(function () {
     $('#categorylist tbody').cmsms_sortable_table({
-    	actionurl: '{cms_action_url action='ajax_order_cats' forjs=1}&showtemplate=false'
+        actionurl: '{cms_action_url action='ajax_order_cats' forjs=1}&showtemplate=false',
+        callback: function(data) {
+
+            var $response = $('<aside/>').addClass('message');
+
+            if (data.status === 'success') {
+
+                $response.addClass('pagemcontainer')
+                    .append($('<span>').text('Close').addClass('close-warning'))
+                    .append($('<p/>').text(data.message));
+            } else if (data.status === 'error') {
+
+                $response.addClass('pageerrorcontainer')
+                    .append($('<span>').text('Close').addClass('close-warning'))
+                    .append($('<p/>').text(data.message));
+            }
+
+            $('body').append($response).slideDown(1000, function() {
+                window.setTimeout(function() {
+                    $response.slideUp();
+                    $response.remove();
+                }, 10000);
+            });
+    	}
     });
 });
 </script>
