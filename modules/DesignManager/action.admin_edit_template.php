@@ -108,7 +108,7 @@ try {
 			// if we got here, we're golden.
 			$tpl_obj->save();
 
-			if (!isset($apply)) {
+			if (!$apply) {
 				$this->SetMessage($message);
 				$this->RedirectToAdminTab();
 			}

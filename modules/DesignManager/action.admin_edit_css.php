@@ -72,7 +72,7 @@ try {
 
 			$css_ob->save();
 
-			if (!isset($apply)) {
+			if (!$apply) {
 				$this->SetMessage($message);
 				$this->RedirectToAdminTab();
 			}
