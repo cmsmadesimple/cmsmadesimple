@@ -449,20 +449,25 @@
          */
         setUIButtons : function() {
 
-			// Standard input buttons
-            $('input[type="submit"], input[type="button"]').each(function() {
+            // Standard input buttons
+            $('input[type="submit"], :button').each(function() {
                 var button = $(this),
-                    icon = 'ui-icon-circle-check',
+                    icon = button.data('uiIcon') || 'ui-icon-circle-check',
+                    label = button.val(),
                     $btn = $('<button />');
 
-                if (!button.hasClass('noautobtn')) {
+                if (!button.hasClass('noautobtn') || !button.hasClass('no-ui-btn')) {
                     if (button.is('[name*=apply]')) {
-                        icon = 'ui-icon-disk';
+                        icon = button.data('uiIcon') || 'ui-icon-disk';
                     } else if (button.is('[name*=cancel]')) {
-                        icon = 'ui-icon-circle-close';
+                        icon = button.data('uiIcon') ||'ui-icon-circle-close';
                     } else if (button.is('[name*=resettodefault]') || button.attr('id') === 'refresh') {
-                        icon = 'ui-icon-refresh';
+                        icon = button.data('uiIcon') ||'ui-icon-refresh';
                     }
+                }
+
+                if (button.is(':button')) {
+                    label = button.text();
                 }
 
                 $(this.attributes).each(function(index, attribute) {
@@ -473,12 +478,12 @@
                     icons : {
                         primary : icon
                     },
-                    label : button.val()
+                    label : label
                 });
                 button.replaceWith($btn);
             });
 
-			// Back links
+            // Back links
             $('a.pageback').addClass('ui-state-default ui-corner-all')
                 .prepend('<span class="ui-icon ui-icon-arrowreturnthick-1-w">')
                 .hover(function() {
@@ -487,17 +492,6 @@
                     $(this).removeClass('ui-state-hover');
                 });
 
-			// Generic style
-			$(".cmsms-button").each(function(index) {
-
-				var icon = $(this).data("uiIcon");
-
-				$(this).button({
-					icons: {
-						primary: icon
-					}
-				});
-			});
         },
 
         /**
