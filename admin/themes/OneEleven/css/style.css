@@ -2,11 +2,11 @@
  * Theme: OneEleven 2012 (c)
  * Author: Goran Ilic (ja@ich-mach-das.at) - http://dev.cmsmadesimple.org/users/uniqu3
  * Version: 1.0
- * 
+ *
  */
 
 /* NORMALIZE BROWSER
- * normalize.css 2011-11-04T15:38 UTC - http://github.com/necolas/normalize.css 
+ * normalize.css 2011-11-04T15:38 UTC - http://github.com/necolas/normalize.css
  */
 article, aside, details, figcaption, figure, footer, header, hgroup, nav, section {	display: block }
 audio, canvas, video {
@@ -22,7 +22,10 @@ html {
 	-ms-text-size-adjust: 100%
 }
 body { margin: 0 }
-body, button, input, select, textarea {	font-family: sans-serif }
+body, button, input, select, textarea {
+    -webkit-font-smoothing: subpixel-antialiased;
+    font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
 a:focus { outline: thin dotted }
 a:hover, a:active {	outline: 0 }
 h1 { font-size: 2em }
@@ -35,8 +38,8 @@ mark {
 	color: #000
 }
 pre, code, kbd, samp {
-	font-family: monospace, serif;
-	_font-family: 'courier new', monospace;
+	font-family: Consolas, 'Andale Mono WT', 'Andale Mono', 'Lucida Console', 'Lucida Sans Typewriter', 'Courier New', monospace;
+	_font-family: Consolas, 'Andale Mono WT', 'Andale Mono', 'Lucida Console', 'Lucida Sans Typewriter', 'Courier New', monospace;
 	font-size: 1em
 }
 pre {
@@ -121,15 +124,15 @@ table {
 	border-spacing: 0
 }
 /* GRID SYSTEM
- * Fluid Grid based on Based on 960 Grid System - http://www.960.gs 
+ * Fluid Grid based on Based on 960 Grid System - http://www.960.gs
  * Helper Styles for Module Developer, make aligning modules easier.
  * (To bad Robert didn't request this earlier i could of saved myself
  * from writing a bunch of Styles)
- * For Demo see /admin/themes/OneEleven/doc/grid.html 
+ * For Demo see /admin/themes/OneEleven/doc/grid.html
  */
 
-/* Container - Wrapping all grids inside, 
- * use .cf class to clear floated elements 
+/* Container - Wrapping all grids inside,
+ * use .cf class to clear floated elements
  */
 .c_full { width: 100% }
 
@@ -312,37 +315,37 @@ body {
 	min-width: 900px;
 	color: #232323;
 	line-height: 1.3;
-	font-size: 12px;
+	font-size: 13px;
 	background: #f6f6f6
 }
-ins { 
-	background-color: #ff9; 
-	color: #232323; 
-	text-decoration: none; 
+ins {
+	background-color: #ff9;
+	color: #232323;
+	text-decoration: none;
 }
-mark { 
-	font-style: italic; 
+mark {
+	font-style: italic;
 	font-weight: bold;
 }
-del { 
-	text-decoration: line-through; 
+del {
+	text-decoration: line-through;
 }
-abbr[title], 
-dfn[title] { 
-	border-bottom: 1px dotted; 
+abbr[title],
+dfn[title] {
+	border-bottom: 1px dotted;
 	cursor: help
 }
-table { 
-	border-collapse: collapse; 
+table {
+	border-collapse: collapse;
 	border-spacing: 0;
 }
-hr { 
-	display: block; 
-	height: 1px; 
-	border: 0; 
-	border-top: 1px solid #cecece; 
-	margin: 10px 0; 
-	padding: 0 
+hr {
+	display: block;
+	height: 1px;
+	border: 0;
+	border-top: 1px solid #cecece;
+	margin: 10px 0;
+	padding: 0
 }
 ul, ol {
 	list-style: none;
@@ -385,10 +388,10 @@ h5 {
 	font-size: 12px
 }
 h6 {
-	font-size: 11px
+	font-size: 12px
 }
 p {
-	font-size: 12px;
+	font-size: 13px;
 	margin: 2px 0
 }
 a,
@@ -429,11 +432,11 @@ a.external {
 	color: red;
 	font-weight: normal
 }
-.smallgrey { 
+.smallgrey {
         font-weight: normal;
         font-size: 10px;
 		margin: 10px 0 0 0
-} 
+}
 div.pagecontainer .h-inside {
 	float: left;
 	padding-top: 8px;
@@ -460,7 +463,7 @@ pre, code, samp, kbd {
 	text-align: left;
 	color: #232323;
 	height: auto;
-	font-size: 12px
+	font-size: 13px
 	}
 pre code {
 
@@ -474,7 +477,7 @@ pre {
 	display: inline-block;
 	width: auto
 	}
-/* border radius */	
+/* border radius */
 table.pagetable,
 table.pagetable a.tooltip span,
 div.pagecontainer fieldset,
@@ -495,7 +498,7 @@ menu,
 .yellow  {
 	border-radius: 4px
 }
-/* forms */	
+/* forms */
 form {
 	margin: 0px;
 	display: inline
@@ -504,14 +507,14 @@ input,
 textarea,
 select,
 menu {
-	font-family: sans-serif;
-	font-size: 12px;
+	font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;;
+	font-size: 13px;
 	margin: 2px 5px 2px 0;
 	padding: 4px 5px;
 	border: 1px solid #aaa;
 	border-bottom: 1px solid #ddd;
-	border-right: 1px solid #ddd;	
-	background: #f0f0f0		
+	border-right: 1px solid #ddd;
+	background: #f0f0f0
 }
 textarea {
 	resize: both;
@@ -534,31 +537,31 @@ input[type='text'] {
 input[type='text']#in_title,
 input[type='text']#in_menutext {
 	min-width: 30%
-} 
-input:hover, 
-input:focus, 
-textarea:hover, 
+}
+input:hover,
+input:focus,
+textarea:hover,
 textarea:focus,
 select:hover,
 select:focus,
-menu:focus, 
+menu:focus,
 checkbox:hover {
 	border: 1px solid #aaa;
 	outline: 0;
 	background: #fff
 }
-input[type="text"], 
+input[type="text"],
 input[type="password"] {
 	padding: 5px
 }
-input[type="button"], 
+input[type="button"],
 input[type="submit"],
 .ui-button
  {
-	border: 1px solid #d3d3d3; 
-	background: #cecece url(themes/OneEleven/css/default-cmsms/images/ui-bg_highlight-soft_75_cecece_1x100.png) 50% 50% repeat-x; 
-	font-weight: normal; 
-	color: #555; 	
+	border: 1px solid #d3d3d3;
+	background: #cecece url(themes/OneEleven/css/default-cmsms/images/ui-bg_highlight-soft_75_cecece_1x100.png) 50% 50% repeat-x;
+	font-weight: normal;
+	color: #555;
 	cursor: pointer;
 	height: 28px;
 	font-size: 12px
@@ -571,12 +574,12 @@ input[type="submit"],
 	margin-left: 2px
 }
 button.ui-button.ui-state-active {
-	border: 1px solid #d3d3d3; 
-	background: #cecece url(themes/OneEleven/css/default-cmsms/images/ui-bg_highlight-soft_75_cecece_1x100.png) 50% 50% repeat-x; 
-	font-weight: normal; 
+	border: 1px solid #d3d3d3;
+	background: #cecece url(themes/OneEleven/css/default-cmsms/images/ui-bg_highlight-soft_75_cecece_1x100.png) 50% 50% repeat-x;
+	font-weight: normal;
 	color: #147fdb
 }
-input[type="button"]:hover, 
+input[type="button"]:hover,
 input[type="submit"]:hover {
 	cursor: pointer
 }
@@ -627,7 +630,7 @@ table.pagetable a.text-red  {
 .information {
 	display: inline-block;
 	width: auto;
-	font-size: 11px;
+	font-size: 12px;
 	padding: 10px 10px 10px 40px;
 	margin: 10px 0
 }
@@ -665,7 +668,7 @@ table.pagetable a.text-red  {
 .red {
 	background: #f2d4ce;
 	color: #ae432e;
-	border: 1px solid #ae432e	
+	border: 1px solid #ae432e
 }
 .success,
 .pagemcontainer {
@@ -675,7 +678,7 @@ table.pagetable a.text-red  {
 .green {
 	background: #d9e6c3;
 	color: #77ab13;
-	border: 1px solid #77ab13	
+	border: 1px solid #77ab13
 }
 .information {
 	background: #cee6f2 url(themes/OneEleven/images/icons/extra/info.png) 10px 50% no-repeat;
@@ -688,8 +691,8 @@ table.pagetable a.text-red  {
 .pagewarning p,
 .message p {
 	color: #232323;
-	margin: 0;	
-	font-size: 11px
+	margin: 0;
+	font-size: 12px
 }
 .warning h3,
 .pagewarning h3 {
@@ -708,7 +711,7 @@ aside.message,
 	z-index: 9999;
 	border-top: none;
 	width: 30%;
-	font-size: 11px;
+	font-size: 12px;
 	border-radius: 0 0 4px 4px;
 	box-shadow: 1px 1px 3px 1px #444;
 	-webkit-box-shadow: 1px 1px 3px 1px #444;
@@ -735,7 +738,7 @@ aside .no-slide,
 	margin-left: 25px;
 	background: none
 }
-.errorDialog { 
+.errorDialog {
   border: 1px solid red;
   color: red;
   height: 100%;
@@ -977,7 +980,7 @@ header .shortcuts li.favorites a {
 	text-decoration: none;
 	display: block;
 	height: 35px;
-	background: url(themes/OneEleven/images/layout/sprite_norepeat.png) -10px -446px no-repeat;	
+	background: url(themes/OneEleven/images/layout/sprite_norepeat.png) -10px -446px no-repeat;
 	color: #fff
 }
 #oe_sidebar .notification a span {
@@ -992,7 +995,7 @@ header .shortcuts li.favorites a {
 	background: #232323 url(themes/OneEleven/images/layout/sprite_repeatx.png) 122px -175px repeat-x;
 	color: #fff
 }
-#oe_sidebar div.notification .box-shadow, 
+#oe_sidebar div.notification .box-shadow,
 #oe_sidebar nav.navigation .box-shadow {
 	width: 11px;
 	z-index: 10;
@@ -1052,7 +1055,7 @@ nav ul#oe_pagemenu li:hover span.open-nav,
 nav ul#oe_pagemenu li.current span.open-nav,
 nav ul#oe_pagemenu li.current:hover span.open-nav,
 nav ul#oe_pagemenu li a span:hover {
-	cursor: pointer;	
+	cursor: pointer;
 	background: url(themes/OneEleven/images/layout/sprite_norepeat.png) 180px -176px no-repeat
 }
 /*** menu style ***/
@@ -1070,7 +1073,7 @@ nav ul#oe_pagemenu li a {
 }
 nav ul#oe_pagemenu li.current li a {
 	color: #232323
-} 
+}
 nav ul#oe_pagemenu li ul,
 #oe_container.sidebar-off nav ul#oe_pagemenu li span.open-nav {
 	display: none
@@ -1119,47 +1122,47 @@ nav ul#oe_pagemenu li a.ecommerce {
 	background-position: -10px -990px
 }
 /* hover, active */
-nav ul#oe_pagemenu li a.main:hover, 
+nav ul#oe_pagemenu li a.main:hover,
 nav ul#oe_pagemenu li.current a.main,
 nav ul#oe_pagemenu li:hover a.main {
 	background-position: -10px -278px
 }
-nav ul#oe_pagemenu li a.content:hover, 
+nav ul#oe_pagemenu li a.content:hover,
 nav ul#oe_pagemenu li.current a.content,
 nav ul#oe_pagemenu li:hover a.content {
 	background-position: -10px -758px
 }
-nav ul#oe_pagemenu li a.layout:hover, 
+nav ul#oe_pagemenu li a.layout:hover,
 nav ul#oe_pagemenu li.current a.layout,
 nav ul#oe_pagemenu li:hover a.layout {
 	background-position: -10px -790px
 }
-nav ul#oe_pagemenu li a.files:hover, 
+nav ul#oe_pagemenu li a.files:hover,
 nav ul#oe_pagemenu li.current a.files,
 nav ul#oe_pagemenu li:hover a.files {
 	background-position: -10px -758px
 }
-nav ul#oe_pagemenu li a.usersgroups:hover, 
+nav ul#oe_pagemenu li a.usersgroups:hover,
 nav ul#oe_pagemenu li.current a.usersgroups,
 nav ul#oe_pagemenu li:hover a.usersgroups {
 	background-position: -10px -823px
 }
-nav ul#oe_pagemenu li a.extensions:hover, 
+nav ul#oe_pagemenu li a.extensions:hover,
 nav ul#oe_pagemenu li.current a.extensions,
 nav ul#oe_pagemenu li:hover a.extensions {
 	background-position: -10px -854px
 }
-nav ul#oe_pagemenu li a.siteadmin:hover, 
+nav ul#oe_pagemenu li a.siteadmin:hover,
 nav ul#oe_pagemenu li.current a.siteadmin,
 nav ul#oe_pagemenu li:hover a.siteadmin  {
 	background-position: -10px -921px
 }
-nav ul#oe_pagemenu li a.myprefs:hover, 
+nav ul#oe_pagemenu li a.myprefs:hover,
 nav ul#oe_pagemenu li.current a.myprefs,
 nav ul#oe_pagemenu li:hover a.myprefs {
 	background-position: -10px -885px
 }
-nav ul#oe_pagemenu li a.ecommerce:hover, 
+nav ul#oe_pagemenu li a.ecommerce:hover,
 nav ul#oe_pagemenu li.current a.ecommerce,
 nav ul#oe_pagemenu li:hover a.ecommerce {
 	background-position: -10px -953px
@@ -1259,7 +1262,7 @@ footer#oe_footer a:hover, footer#oe_footer a:active {
 #oe_footer ul.links {
 	display: inline-block;
 	margin-right: 20px;
-	font-size: 11px;
+	font-size: 12px;
 	width: auto
 }
 #oe_footer ul.links li {
@@ -1317,7 +1320,7 @@ span.helptext a {
 	display: inline-block;
 	line-height: 1.3;
 	padding-right: 0;
-	margin-left: 8px;	
+	margin-left: 8px;
 	background: none
 }
 .pageheader span.helptext a img{
@@ -1331,7 +1334,7 @@ span.helptext a {
 	font-weight: normal;
 	margin:0;
 	padding:0;
-	color: #147fdb	
+	color: #147fdb
 }
 div.pageoverflow {
 	clear: left;
@@ -1372,9 +1375,9 @@ img.systemicon {
 .pagerows strong {
 	background: #147fdb;
 	padding: 2px 4px;
-	margin: 0 1px;	
+	margin: 0 1px;
 	color: #fff;
-	border: 1px solid #147fdb 
+	border: 1px solid #147fdb
 }
 /*** dialogs ***/
 div.alert-dialog ul li {
@@ -1414,7 +1417,7 @@ table tr:last-child td:last-child {
 	}
 table.pagetable {
 	border-collapse: inherit;
-	font-size: 11px;
+	font-size: 12px;
 	border: 1px solid #ddd;
 	width: 100%;
 	margin: 5px 0
@@ -1443,7 +1446,7 @@ table.pagetable th a {
 table.pagetable th.active {
 	color: #147fdb
 }
-table.pagetable th.active a, 
+table.pagetable th.active a,
 table.pagetable th a:hover {
 	color: #147fdb;
 	text-decoration: underline
@@ -1474,7 +1477,7 @@ table.pagetable a.tooltip span {
 	-webkit-box-shadow: 1px 1px 3px 1px #222;
 	border: 1px solid #ddd;
 	padding: 5px;
-	z-index: 900;	
+	z-index: 900;
 	min-width: 150px;
 	width: auto;
 	line-height: 1.3
@@ -1617,7 +1620,7 @@ div.pagecontainer .pagetext {
 }
 div.pagecontainer .pageshowrows {
 	color: #585858;
-	font-size: 11px;
+	font-size: 12px;
 	text-align: right;
 	margin-bottom: 5px
 }
@@ -1665,7 +1668,7 @@ div.pagecontainer legend {
 }
 div.pagecontainer p.pageinput,
 div.pagecontainer .pageinput label {
-	font-size: 11px
+	font-size: 12px
 }
 p.pageinputwysiwyg {
 	padding-top: 5px
@@ -1687,7 +1690,7 @@ textarea.pagebigtextarea {
 .pageinput textarea {
 	width: 90%;
 	font-family: Consolas, 'Andale Mono WT', 'Andale Mono', 'Lucida Console', 'Lucida Sans Typewriter', 'Courier New', monospace;
-	font-size: 12px;
+	font-size: 13px;
 	line-height: 1.6
 }
 textarea.pagesmalltextarea {
@@ -1767,9 +1770,9 @@ textarea.pageextrasmalltextarea {
 	background: #fff
 }
 .dashboard-box:hover img {
-	box-shadow: inset 0px 1px 15px 1px #ffd8b0;	
+	box-shadow: inset 0px 1px 15px 1px #ffd8b0;
 	-webkit-box-shadow: inset 0px 1px 15px 1px #ffd8b0;
-	transition: all 600ms ease-in-out;	
+	transition: all 600ms ease-in-out;
 	-webkit-transition: all 600ms ease-in-out;
 	   -moz-transition: all 600ms ease-in-out;
 	     -o-transition: all 600ms ease-in-out
@@ -1784,7 +1787,7 @@ textarea.pageextrasmalltextarea {
 }
 .dashboard-box h4 {
 	margin: 5px 0;
-	font-size: 11px;
+	font-size: 12px;
 	color: #232323
 }
 #oe_mainarea .dashboard-box ul.subitems {
@@ -1794,11 +1797,11 @@ textarea.pageextrasmalltextarea {
 .dashboard-box ul.subitems li {
 	list-style: none;
 	margin: 0 4px;
-	line-height: 1.4;	
+	line-height: 1.4;
 	float:left
 }
 .dashboard-box ul.subitems li a {
-	font-size: 11px;
+	font-size: 12px;
 	text-decoration: underline
 }
 /*** reorder pages ***/
@@ -1812,7 +1815,7 @@ ul.sortableList,
 	margin: 0;
 	padding: 0
 }
-ul.sortableList li { 
+ul.sortableList li {
 	list-style-type: none;
 	display: block;
 	margin: 10px 0
@@ -1833,27 +1836,27 @@ ul.sortableList li div.label em {
 	text-indent: 10px;
 	font-weight: normal;
 	color: #147fdb;
-	font-size: 11px
+	font-size: 12px
 }
 ul.sortable .placeholder {
 	border: 2px dashed #ddd;
 	background: #f2f2f2
 }
 /* Changelog, System Maintenance page */
-.version { 
+.version {
 	background: #f1f1f1;
 	border: 1px solid #ddd;
 	margin: 15px  0;
 	padding: 20px;
-	font-family: Monaco,"Bitstream Vera Sans Mono","Lucida Console",Terminal,monospace;
+	font-family: Consolas, 'Andale Mono WT', 'Andale Mono', 'Lucida Console', 'Lucida Sans Typewriter', 'Courier New', monospace;
 	line-height: 1.5
 }
 .version h3 {
 	text-transform: uppercase;
 	color: #147fdb;
 	margin: 0;
-	padding: 0;	
-	font-family: sans-serif;
+	padding: 0;
+	font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 /*** theme dropzone ***/
 .drop {
@@ -1868,7 +1871,7 @@ ul.sortable .placeholder {
 .drop a.toggle-dropzone {
 	background: transparent url(themes/OneEleven/images/layout/toggle-dropzone.png) no-repeat -15px 0;
 	border: 1px solid #ccc;
-	border-top: none;	
+	border-top: none;
 	text-indent: -9999em;
 	width: 15px;
 	height: 14px;
@@ -1892,7 +1895,7 @@ a.toggle-dropzone:focus {
 	color: #585858;
 	text-shadow: 1px 1px 0 #fff;
 	padding: 5px 10px;
-	width: 240px	
+	width: 240px
 }
 .drop div.zone {
 	display: block;
@@ -1926,20 +1929,20 @@ a.toggle-dropzone:focus {
 .drop.hidden .drop-inner {
 	display: none
 }
-.drop #theme_dropzone .ui-progressbar-value { 
+.drop #theme_dropzone .ui-progressbar-value {
 	margin: 10px 5px 5px 0;
 	max-width: 190px;
 	text-shadow: none;
 	height: 12px;
 	line-height: 12px;
 	font-weight: normal;
-	font-size: 11px;
-	text-align: center; 
+	font-size: 12px;
+	text-align: center;
 	border: 1px solid #aaa;
 	border-radius: 4px;
 	display: none
 }
-	
+
 /* --- LOGIN PAGE --- */
 #login #wrapper {
 	padding-top: 10%
@@ -1984,7 +1987,7 @@ a.toggle-dropzone:focus {
 }
 #login label {
 	color: #585858;
-	font-size: 11px
+	font-size: 13px
 }
 #login input[type="text"],
 #login input[type="password"] {
@@ -2046,7 +2049,7 @@ a.toggle-dropzone:focus {
 	background: #ececec url(themes/OneEleven/images/layout/information.png) no-repeat center
 }
 #login aside.info {
-	font-size: 11px;
+	font-size: 12px;
 	color: #585858;
 	background: #ececec;
 	width: 255px;
@@ -2056,7 +2059,7 @@ a.toggle-dropzone:focus {
 	border-radius: 0 0 0 4px
 }
 #login aside.info p {
-	font-size: 11px
+	font-size: 12px
 }
 #login aside.info p.warning {
 	background-image: none;
@@ -2086,7 +2089,7 @@ a.toggle-dropzone:focus {
 	background: url(themes/OneEleven/images/layout/help.png) left 50% no-repeat;
 	color: #585858;
 	text-shadow: 0 1px 0 #fff;
-	font-size: 11px;
+	font-size: 12px;
 	text-decoration: none
 }
 #login .copyright {
@@ -2206,7 +2209,7 @@ a.toggle-dropzone:focus {
 	}
 	@viewport {
 		width: device-width;
-	}	
+	}
 	/* change tabs to full width on smaller screen size */
 	.sidebar-on #page_tabs div {
 		text-align: left;
@@ -2237,18 +2240,18 @@ a.toggle-dropzone:focus {
 	}
 	#oe_mainarea header.pageheader span.helptext em{
 		display: none
-	}		
+	}
 	.dashboard-box {
 		float: none;
 		width: auto;
 		margin: 10px 0
-	}	
+	}
 	footer#oe_footer {
 		clear: both;
 		overflow: hidden;
 		line-height: 20px;
 		position: static
-	}	
+	}
 	#oe_footer .footer-left {
 		margin-left: 0
 	}
@@ -2281,7 +2284,7 @@ a.toggle-dropzone:focus {
 	}
 }
 /* --- SCREEN UP TO 768px --- */
-@media screen and (max-width: 768px) {	
+@media screen and (max-width: 768px) {
 	@-ms-viewport {
 		width: device-width;
 	}
@@ -2302,7 +2305,7 @@ a.toggle-dropzone:focus {
 		margin: 0;
 		min-width: 100%;
 		padding: 0;
-		
+
 	}
 	a {
 		outline: 0
@@ -2357,13 +2360,13 @@ a.toggle-dropzone:focus {
 	.sidebar-off #oe_sidebar nav.navigation {
 		width: auto;
 		overflow: hidden
-	}	
+	}
 	header.header {
 		overflow: hidden
 	}
 	#oe_mainarea header.pageheader span.helptext {
 		margin-right: 0
-	}	
+	}
 	#oe_mainarea {
 		width: 100%;
 		display: block
@@ -2380,7 +2383,7 @@ a.toggle-dropzone:focus {
 	}
 	header .shortcuts li:last-child, header .shortcuts li.last {
 		padding: 0 0 0 5px
-	}		
+	}
 	.dashboard-box {
 		float: none;
 		width: auto;
@@ -2452,7 +2455,7 @@ a.toggle-dropzone:focus {
     }
 	#login #wrapper {
 		padding-top: 2%
-	}	
+	}
 }
 @media screen and (max-width: 480px) {
 	@-ms-viewport {
