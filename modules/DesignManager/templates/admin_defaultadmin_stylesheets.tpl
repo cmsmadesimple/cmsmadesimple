@@ -115,6 +115,7 @@ $(document).ready(function(){
     <thead>
       <tr>
  	<th title="{$mod->Lang('title_css_id')}">{$mod->Lang('prompt_id')}</th>
+ 	<th class="pageicon"></th>
  	<th title="{$mod->Lang('title_css_name')}">{$mod->Lang('prompt_name')}</th>
   	<th title="{$mod->Lang('title_css_designs')}">{$mod->Lang('prompt_design')}</th>
 	<th title="{$mod->Lang('title_css_modified')}">{$mod->Lang('prompt_modified')}</th>
@@ -135,9 +136,11 @@ $(document).ready(function(){
 	<tr class="{$rowclass}">
 	{if !$css->locked()}
           <td><a href="{$edit_css}" data-css-id="{$css->get_id()}" class="edit_css tooltip" title="{$mod->Lang('edit_stylesheet')}" data-cms-description='{$css_tooltip}'>{$css->get_id()}</a></td>
+          <td></td>
           <td><a href="{$edit_css}" data-css-id="{$css->get_id()}" class="edit_css tooltip" title="{$mod->Lang('edit_stylesheet')}" data-cms-description='{$css_tooltip}'>{$css->get_name()}</a></td>
         {else}
           <td>{$css->get_id()}</td>
+          <td>{admin_icon icon='warning.gif' title=$mod->Lang('title_locked')}</td>
           <td><span class="tooltip" data-cms-description='{$css_tooltip}'>{$css->get_name()}</span></td>
         {/if}
 
