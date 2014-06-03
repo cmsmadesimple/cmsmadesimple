@@ -450,7 +450,7 @@
         setUIButtons : function() {
 
             // Standard input buttons
-            $('input[type="submit"], :button').each(function() {
+            $('input[type="submit"], :button[data-ui-icon]').each(function() {
                 var button = $(this),
                     icon = button.data('uiIcon') || 'ui-icon-circle-check',
                     label = button.val(),
