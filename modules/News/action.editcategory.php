@@ -21,7 +21,7 @@ if( isset($params['catid']) ) {
   $parentid = (int)$row['parent_id'];
 }
 
-$parentid = '-1';
+//$parentid = '-1'; // why reset again?
 
 if( isset($params['submit']) ) {
   $parentid = (int)$params['parent'];
