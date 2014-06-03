@@ -8,7 +8,7 @@ if (isset($params['cancel'])) $this->RedirectToAdminTab('categories','','admin_s
 
 $name = '';
 if (isset($params['name'])) {
-  if( $parent == 0 ) $parent = -1;
+  //if( $parent == 0 ) $parent = -1;
   $name = trim($params['name']);
   if ($name != '') {
     $query = 'SELECT news_category_id FROM '.cms_db_prefix().'module_news_categories WHERE parent_id = ? AND news_category_name = ?';

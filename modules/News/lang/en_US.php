@@ -351,6 +351,7 @@ $lang['revert'] = 'Set Status to \'Draft\'';
 // S
 $lang['searchable'] = 'Searchable';
 $lang['select'] = 'Select';
+$lang['select_option'] = 'Select Option';
 $lang['selectall'] = 'Select All';
 $lang['selectcategory'] = 'Select Category';
 $lang['showchildcategories'] = 'Show Child Categories';
