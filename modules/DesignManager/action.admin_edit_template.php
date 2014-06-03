@@ -191,8 +191,9 @@ try {
 		$allusers = $userops->LoadUsers();
 		$tmp = array();
 		foreach ($allusers as $one) {
-			if ($one->id == 1)
-				continue;
+			//FIXME Why skip admin here? If template owner is admin this would unset admin as owner
+			//if ($one->id == 1)
+			//	continue;
 			$tmp[$one->id] = $one->username;
 		}
 		if (is_array($tmp) && count($tmp))
