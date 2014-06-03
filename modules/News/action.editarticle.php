@@ -332,20 +332,20 @@ if (isset($params['submit']) || isset($params['apply'])) {
     $row = $db->GetRow($query, array($articleid));
 
     if ($row) {
-        $title = $row['news_title'];
-        $content = $row['news_data'];
-        $extra = $row['news_extra'];
-        $summary = $row['summary'];
-        $news_url = $row['news_url'];
-        $status = $row['status'];
+        $title        = $row['news_title'];
+        $content      = $row['news_data'];
+        $extra        = $row['news_extra'];
+        $summary      = $row['summary'];
+        $news_url     = $row['news_url'];
+        $status       = $row['status'];
         $usedcategory = $row['news_category_id'];
-        $postdate = $db->UnixTimeStamp($row['news_date']);
-        $startdate = $db->UnixTimeStamp($row['start_time']);
-        $author_id = $row['author_id'];
-        $searchable = $row['searchable'];
+        $postdate     = $db->UnixTimeStamp($row['news_date']);
+        $startdate    = $db->UnixTimeStamp($row['start_time']);
+        $author_id    = $row['author_id'];
+        $searchable   = $row['searchable'];
         $useexp = 0;
         if (isset($row['end_time'])) {
-            $useexp = 1;
+            $useexp  = 1;
             $enddate = $db->UnixTimeStamp($row['end_time']);
         }
     }
@@ -383,8 +383,8 @@ $custom_flds = array();
 while ($dbr && ($row = $dbr->FetchRow())) {
     if (isset($row['extra']) && $row['extra'])
         $row['extra'] = unserialize($row['extra']);
-    $options = null;
 
+    $options = null;
     if (isset($row['extra']['options']))
         $options = $row['extra']['options'];
 
@@ -392,13 +392,15 @@ while ($dbr && ($row = $dbr->FetchRow())) {
     if (isset($fieldvals[$row['id']]))
         $value = $fieldvals[$row['id']]['value'];
     $value = isset($params['customfield'][$row['id']]) && in_array($params['customfield'][$row['id']], $params['customfield']) ? $params['customfield'][$row['id']] : $value;
-    $obj = new StdClass();
 
     if ($row['type'] == 'file') {
         $name = "customfield_" . $row['id'];
     } else {
         $name = "customfield[" . $row['id'] . "]";
     }
+
+    $obj = new StdClass();
+
     $obj->value    = $value;
     $obj->nameattr = $id . $name;
     $obj->type     = $row['type'];

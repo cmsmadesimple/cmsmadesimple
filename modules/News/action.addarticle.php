@@ -300,21 +300,29 @@ $custom_flds = array();
 while ($dbr && ($row = $dbr->FetchRow())) {
     if (isset($row['extra']) && $row['extra'])
         $row['extra'] = unserialize($row['extra']);
+
     $options = null;
     if (isset($row['extra']['options']))
         $options = $row['extra']['options'];
 
-    $obj = new StdClass();
-    $name = "customfield[" . $row['id'] . "]";
     $value = isset($params['customfield'][$row['id']]) && in_array($params['customfield'][$row['id']], $params['customfield']) ? $params['customfield'][$row['id']] : '';
-    $obj->value = $value;
-    $obj->type = $row['type'];
+
+    if ($row['type'] == 'file') {
+        $name = "customfield_" . $row['id'];
+    } else {
+        $name = "customfield[" . $row['id'] . "]";
+    }
+
+    $obj = new StdClass();
+
+    $obj->value    = $value;
+    $obj->type     = $row['type'];
     $obj->nameattr = $id . $name;
-    $obj->idattr = 'customfield_' . $row['id'];
-    $obj->prompt = $row['name'];
-    $obj->size = min(80, (int)$row['max_length']);
-    $obj->max_len = max(1, (int)$row['max_length']);
-    $obj->options = $options;
+    $obj->idattr   = 'customfield_' . $row['id'];
+    $obj->prompt   = $row['name'];
+    $obj->size     = min(80, (int)$row['max_length']);
+    $obj->max_len  = max(1, (int)$row['max_length']);
+    $obj->options  = $options;
     // FIXME - If we create inputs with hmtl markup in smarty template, whats the use of switch and form API here?
     /*
     switch( $row['type'] ) {
