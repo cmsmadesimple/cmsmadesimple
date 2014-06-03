@@ -72,7 +72,7 @@ if( isset($params['submit']) ) {
       audit($catid, 'News category: '.$catid, ' Category edited');
 
       $this->SetMessage($this->Lang('categoryupdated'));
-      $this->RedirectToAdminTab();
+      $this->RedirectToAdminTab('categories','','admin_settings');
     }
   }
 }
