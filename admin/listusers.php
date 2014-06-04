@@ -67,7 +67,7 @@ if (isset($_GET["toggleactive"])) {
     }
   }
 }
-else if( isset($_POST['bulk']) && isset($_POST['bulkaction']) && 
+else if( isset($_POST['bulk']) && isset($_POST['bulkaction']) &&
 	 isset($_POST['multiselect']) && is_array($_POST['multiselect']) && count($_POST['multiselect']) ) {
   switch( $_POST['bulkaction'] ) {
   case 'delete':
@@ -75,18 +75,18 @@ else if( isset($_POST['bulk']) && isset($_POST['bulkaction']) &&
     $ndeleted = 0;
     foreach( $_POST['multiselect'] as $uid ) {
       $uid = (int)$uid;
-      if( $uid <= 1 ) continue; // can't delete the magic user... 
+      if( $uid <= 1 ) continue; // can't delete the magic user...
       if( $uid == get_userid() ) continue; // can't delete self.
       $oneuser = $userops->LoadUserById($uid);
       if( !is_object($oneuser) ) continue; // invalid user
       $ownercount = $userops->CountPageOwnershipById($uid);
       if( $ownercount > 0 ) continue; // can't delete user who owns pages.
-      
+
       // ready to delete.
       Events::SendEvent('Core', 'DeleteUserPre', array('user' => &$oneuser));
       $oneuser->Delete();
       Events::SendEvent('Core', 'DeleteUserPost', array('user' => &$oneuser));
-      audit($uid, 'Admin Username: '.$user_name, 'Deleted');
+      audit($uid, 'Admin Username: '.$oneuser->username, 'Deleted');
       $ndeleted++;
     }
     if( $ndeleted > 0 ) {
@@ -98,7 +98,7 @@ else if( isset($_POST['bulk']) && isset($_POST['bulkaction']) &&
     $nusers = 0;
     foreach( $_POST['multiselect'] as $uid ) {
       $uid = (int)$uid;
-      if( $uid <= 1 ) continue; // can't edit the magic user... 
+      if( $uid <= 1 ) continue; // can't edit the magic user...
       $oneuser = $userops->LoadUserById($uid);
       if( !is_object($oneuser) ) continue; // invalid user
 
@@ -122,11 +122,11 @@ else if( isset($_POST['bulk']) && isset($_POST['bulkaction']) &&
 	if( is_array($prefs) && count($prefs) ) {
 	  foreach( $_POST['multiselect'] as $uid ) {
 	    $uid = (int)$uid;
-	    if( $uid <= 1 ) continue; // can't edit the magic user... 
+	    if( $uid <= 1 ) continue; // can't edit the magic user...
 	    if( $uid == $fromuser ) continue; // can't overwrite the same users prefs.
 	    $oneuser = $userops->LoadUserById($uid);
 	    if( !is_object($oneuser) ) continue; // invalid user
-	  
+
 	    Events::SendEvent('Core','EditUserPre',array('user'=>$oneuser));
 	    cms_userprefs::remove_for_user($uid);
 	    foreach( $prefs as $k => $v ) {
@@ -148,7 +148,7 @@ else if( isset($_POST['bulk']) && isset($_POST['bulkaction']) &&
     $nusers = 0;
     foreach( $_POST['multiselect'] as $uid ) {
       $uid = (int)$uid;
-      if( $uid <= 1 ) continue; // can't disable the magic user... 
+      if( $uid <= 1 ) continue; // can't disable the magic user...
       if( $uid == get_userid() ) continue; // can't disable self.
       $oneuser = $userops->LoadUserById($uid);
       if( !is_object($oneuser) ) continue; // invalid user
@@ -171,7 +171,7 @@ else if( isset($_POST['bulk']) && isset($_POST['bulkaction']) &&
     $nusers = 0;
     foreach( $_POST['multiselect'] as $uid ) {
       $uid = (int)$uid;
-      if( $uid <= 1 ) continue; // can't disable the magic user... 
+      if( $uid <= 1 ) continue; // can't disable the magic user...
       if( $uid == get_userid() ) continue; // can't disable self.
       $oneuser = $userops->LoadUserById($uid);
       if( !is_object($oneuser) ) continue; // invalid user
