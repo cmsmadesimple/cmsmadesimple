@@ -175,7 +175,6 @@ $smarty->assign('passwordagain', $passwordagain);
 $smarty->assign('firstname', $firstname);
 $smarty->assign('lastname', $lastname);
 $smarty->assign('email', $email);
-$smarty->assign('active', $active);
 $smarty->assign('copyusersettings', $copyusersettings);
 $smarty->assign('sel_groups', $sel_groups);
 $smarty->assign('my_userid', get_userid());
