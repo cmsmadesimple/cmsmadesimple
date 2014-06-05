@@ -116,7 +116,7 @@ $(document).ready(function(){
 	    {foreach $item.dependants as $one}
 	      {$tmp[]="<a href=\"{cms_action_url}#_{$one}\">{$one}</a>"}
 	    {/foreach}
-            {capture assign='op'}<span title="{$ModuleManager->Lang('title_has_dependants')}">{$ModuleManager->Lang('has_dependants')}</span>: ({implode(', ',$tmp)}{/capture}{$ops[]=$op}
+            {capture assign='op'}<span title="{$ModuleManager->Lang('title_has_dependants')}">{$ModuleManager->Lang('has_dependants')}</span>: {implode(', ',$tmp)}{/capture}{$ops[]=$op}
           {/if}
           {'<br/>'|implode:$ops}
       </td>
