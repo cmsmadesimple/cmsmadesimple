@@ -18,82 +18,83 @@
 #
 #$Id$
 
-$CMS_ADMIN_PAGE=1;
-
-require_once("../include.php");
-$urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
+$CMS_ADMIN_PAGE = 1;
+require_once ('../include.php');
 
 check_login();
 $userid = get_userid();
-if( !check_permission($userid, 'Manage Users') ) die('Permission Denied');
 
-$gCms = cmsms();
-$db = $gCms->GetDb();
-$assign_group_perm = check_permission($userid,'Manage Groups');
-$groupops = $gCms->GetGroupOperations();
-$error = "";
-$user= "";
-$firstname = "";
-$lastname = "";
-$password = "";
-$passwordagain = "";
-$email = "";
-$active = 1;
-$copyusersettings = null;
-$adminaccess = 1;
-$sel_groups = array();
+if (!check_permission($userid, 'Manage Users'))
+    die('Permission Denied');
 
-if (isset($_POST["user"])) $user = cleanValue($_POST["user"]);
-if (isset($_POST["firstname"])) $firstname = cleanValue($_POST["firstname"]);
-if (isset($_POST["lastname"])) $lastname = cleanValue($_POST["lastname"]);
-if (isset($_POST["password"])) $password = trim($_POST["password"]);
-if (isset($_POST["passwordagain"])) $passwordagain = trim($_POST["passwordagain"]);
-if (isset($_POST["email"])) $email = trim(strip_tags($_POST["email"]));
-if (!isset($_POST["active"]) && isset($_POST["adduser"])) $active = 0;
-if (isset($_POST['copyusersettings'])) $copyusersettings = (int)$_POST['copyusersettings'];
-if (!isset($_POST["adminaccess"]) && isset($_POST["submit"])) $adminaccess = 0;
-if (isset($_POST['sel_groups']) && is_array($_POST['sel_groups']) ) $sel_groups = $_POST['sel_groups'];
+/*--------------------
+ * Variables
+ ---------------------*/
 
-if( isset($_POST["cancel"]) ) {
-    redirect("listusers.php".$urlext);
+$urlext            = '?' . CMS_SECURE_PARAM_NAME . '=' . $_SESSION[CMS_USER_KEY];
+$gCms              = cmsms();
+$db                = $gCms->GetDb();
+$assign_group_perm = check_permission($userid, 'Manage Groups');
+$groupops          = $gCms->GetGroupOperations();
+$error             = '';
+$adminaccess       = 1;
+$active            = 1;
+$sel_groups        = array();
+// Post data
+$user              = isset($_POST["user"]) ? cleanValue($_POST["user"]) : '';
+$password          = isset($_POST["password"]) ? trim($_POST["password"]) : '';
+$passwordagain     = isset($_POST["passwordagain"]) ? trim($_POST["passwordagain"]) : '';
+$firstname         = isset($_POST["firstname"]) ? cleanValue($_POST["firstname"]) : '';
+$lastname          = isset($_POST["lastname"]) ? cleanValue($_POST["lastname"]) : '';
+$email             = isset($_POST["email"]) ? trim(strip_tags($_POST["email"])) : '';
+$copyusersettings  = isset($_POST['copyusersettings']) ? (int)$_POST['copyusersettings'] : null;
+$sel_groups        = (isset($_POST['sel_groups']) && is_array($_POST['sel_groups'])) ? $_POST['sel_groups'] : $sel_groups;
+
+/*--------------------
+ * Variables
+ ---------------------*/
+
+if (isset($_POST["cancel"])) {
+    redirect('listusers.php' . $urlext);
     return;
 }
 
 if (isset($_POST["submit"])) {
-    $validinfo = true;
+
+    $active      = !isset($_POST["active"]) ? 0 : 1;
+    $adminaccess = !isset($_POST["adminaccess"]) ? 0 : 1;
+    $validinfo   = true;
 
     if ($user == "") {
         $validinfo = false;
-        $error .= "<li>".lang('nofieldgiven', array(lang('username')))."</li>";
-    }
-    else if ( !preg_match("/^[a-zA-Z0-9\._ ]+$/", $user) ) {
+        $error .= "<li>" . lang('nofieldgiven', array(lang('username'))) . "</li>";
+    } else if (!preg_match("/^[a-zA-Z0-9\._ ]+$/", $user)) {
         $validinfo = false;
-        $error .= "<li>".lang('illegalcharacters', array(lang('username')))."</li>";
+        $error .= "<li>" . lang('illegalcharacters', array(lang('username'))) . "</li>";
     }
 
     if ($password == "") {
         $validinfo = false;
-        $error .= "<li>".lang('nofieldgiven', array(lang('password')))."</li>";
-    }
-    else if ($password != $passwordagain) {
+        $error .= "<li>" . lang('nofieldgiven', array(lang('password'))) . "</li>";
+    } else if ($password != $passwordagain) {
         // We don't want to see this if no password was given
         $validinfo = false;
-        $error .= "<li>".lang('nopasswordmatch')."</li>";
+        $error .= "<li>" . lang('nopasswordmatch') . "</li>";
     }
 
     if (!empty($email) && !is_email($email)) {
         $validinfo = false;
-        $error .= '<li>'.lang('invalidemail').'</li>';
+        $error .= '<li>' . lang('invalidemail') . '</li>';
     }
 
     if ($validinfo) {
         $newuser = new User();
-        $newuser->username = $user;
-        $newuser->SetPassword($password);
-        $newuser->active = $active;
-        $newuser->firstname = $firstname;
-        $newuser->lastname = $lastname;
-        $newuser->email = $email;
+
+        $newuser->username    = $user;
+        $newuser->active      = $active;
+        $newuser->firstname   = $firstname;
+        $newuser->lastname    = $lastname;
+        $newuser->email       = $email;
         $newuser->adminaccess = $adminaccess;
         $newuser->SetPassword($password);
 
@@ -107,75 +108,80 @@ if (isset($_POST["submit"])) {
             // set some default preferences, based on the user creating this user
             $adminid = get_userid();
             $userid = $newuser->id;
-            if( $copyusersettings > 0 ) {
+            if ($copyusersettings > 0) {
                 $prefs = cms_userprefs::get_all_for_user($copyusersettings);
-                if( is_array($prefs) && count($prefs) ) {
-                    foreach( $prefs as $k => $v ) {
-                        cms_userprefs::set_for_user($userid,$k,$v);
+                if (is_array($prefs) && count($prefs)) {
+                    foreach ($prefs as $k => $v) {
+                        cms_userprefs::set_for_user($userid, $k, $v);
                     }
                 }
-            }
-            else {
+            } else {
                 cms_userprefs::set_for_user($userid, 'default_cms_language', cms_userprefs::get_for_user($adminid, 'default_cms_language'));
-                cms_userprefs::set_for_user($userid, 'wysiwyg', cms_userprefs::get_for_user($adminid,'wysiwyg'));
-                cms_userprefs::set_for_user($userid, 'admintheme', get_site_preference('logintheme',CmsAdminThemeBase::GetDefaultTheme()));
+                cms_userprefs::set_for_user($userid, 'wysiwyg', cms_userprefs::get_for_user($adminid, 'wysiwyg'));
+                cms_userprefs::set_for_user($userid, 'admintheme', get_site_preference('logintheme', CmsAdminThemeBase::GetDefaultTheme()));
                 cms_userprefs::set_for_user($userid, 'bookmarks', cms_userprefs::get_for_user($adminid, 'bookmarks'));
                 cms_userprefs::set_for_user($userid, 'recent', cms_userprefs::get_for_user($adminid, 'recent'));
             }
 
-            if ($assign_group_perm && is_array($sel_groups) && count($sel_groups) ) {
-                $iquery = "INSERT INTO ".cms_db_prefix()."user_groups (user_id,group_id) VALUES (?,?)";
-                foreach( $sel_groups as $gid ) {
+            if ($assign_group_perm && is_array($sel_groups) && count($sel_groups)) {
+                $iquery = "INSERT INTO " . cms_db_prefix() . "user_groups (user_id,group_id) VALUES (?,?)";
+                foreach ($sel_groups as $gid) {
                     $gid = (int)$gid;
-                    if( $gid < 1 ) continue;
-                    $db->Execute($iquery,array($userid,$gid));
+                    if ($gid < 1)
+                        continue;
+                    $db->Execute($iquery, array(
+                        $userid,
+                        $gid
+                    ));
                 }
             }
 
             // put mention into the admin log
-            audit($newuser->id, 'Admin Username: '.$newuser->username, 'Added');
-            redirect("listusers.php".$urlext);
-        }
-        else {
-            $error .= "<li>".lang('errorinsertinguser')."</li>";
+            audit($newuser->id, 'Admin Username: ' . $newuser->username, 'Added');
+            redirect("listusers.php" . $urlext);
+        } else {
+            $error .= "<li>" . lang('errorinsertinguser') . "</li>";
         }
     }
 }
 
-include_once("header.php");
+/*--------------------
+ * Display view
+ ---------------------*/
 
-if ($error != "") {
-    echo $themeObject->ShowErrors('<ul class="error">'.$error.'</ul>');
+include_once ('header.php');
+
+if ($error != '') {
+    echo $themeObject->ShowErrors('<ul class="error">' . $error . '</ul>');
 }
 
-$smarty = cmsms()->GetSmarty();
-$smarty->assign('adminaccess',$adminaccess);
-$smarty->assign('active',$active);
-$smarty->assign('user',$user);
-$smarty->assign('password',$password);
-$smarty->assign('passwordagain',$passwordagain);
-$smarty->assign('firstname',$firstname);
-$smarty->assign('lastname',$lastname);
-$smarty->assign('email',$email);
-$smarty->assign('active',$active);
-$smarty->assign('copyusersettings',$copyusersettings);
-$smarty->assign('sel_groups',$sel_groups);
-$smarty->assign('my_userid',get_userid());
-if($assign_group_perm ) {
-    $groups = GroupOperations::get_instance()->LoadGroups();
-    $smarty->assign('groups',$groups);
-}
-
-$out = array(-1=>lang('none'));
+$out      = array(-1 => lang('none'));
 $userlist = UserOperations::get_instance()->LoadUsers();
-foreach( $userlist as $one ) {
+
+foreach ($userlist as $one) {
     $out[$one->id] = $one->username;
 }
-$smarty->assign('users',$out);
+
+if ($assign_group_perm) {
+    $groups = GroupOperations::get_instance()->LoadGroups();
+    $smarty->assign('groups', $groups);
+}
+
+$smarty->assign('adminaccess', $adminaccess);
+$smarty->assign('active', $active);
+$smarty->assign('user', $user);
+$smarty->assign('password', $password);
+$smarty->assign('passwordagain', $passwordagain);
+$smarty->assign('firstname', $firstname);
+$smarty->assign('lastname', $lastname);
+$smarty->assign('email', $email);
+$smarty->assign('active', $active);
+$smarty->assign('copyusersettings', $copyusersettings);
+$smarty->assign('sel_groups', $sel_groups);
+$smarty->assign('my_userid', get_userid());
+$smarty->assign('users', $out);
 
 $smarty->display('adduser.tpl');
 
-include_once("footer.php");
-
-
+include_once ('footer.php');
 ?>

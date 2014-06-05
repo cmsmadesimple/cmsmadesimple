@@ -44,13 +44,15 @@ $(document).ready(function() {
 </script>
 {strip}
 
+<h3 class="invisible">{lang('currentusers')}</h3>
+
 {form_start url='listusers.php'}
 
     <div class="pageoptions">
         <a href="adduser.php{$urlext}" title="{lang('info_adduser')}">{admin_icon icon='newobject.gif' class='systemicon'}&nbsp;{lang('adduser')}</a>
     </div>
 
-    <table class="pagetable" cellspacing="0">
+    <table class="pagetable">
         <thead>
             <tr>
                 <th>{lang('username')}</th>
