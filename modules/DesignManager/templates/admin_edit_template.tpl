@@ -93,10 +93,10 @@ $(document).ready(function(){
     <div class="grid_6">
         <div class="pageoverflow">
             <p class="pageinput">
-                <input type="submit" name="{$actionid}submit" value="{$mod->Lang('submit')}" />
+                <input type="submit" name="{$actionid}submit" value="{$mod->Lang('submit')}"{$disable|strip} />
                 <input type="submit" id="cancelbtn" name="{$actionid}cancel" value="{$mod->Lang('cancel')}" >
                 {if $template->get_id()}
-                <input type="submit" id="applybtn" name="{$actionid}apply" value="{$mod->Lang('apply')}" />
+                <input type="submit" id="applybtn" name="{$actionid}apply" value="{$mod->Lang('apply')}"{$disable|strip} />
                 {/if}
             </p>
         </div>
