@@ -20,13 +20,14 @@
 
 $CMS_ADMIN_PAGE=1;
 require_once("../include.php");
+
 $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 check_login();
 $config = cmsms()->GetConfig();
 
-//
-// get some urls.
-//
+
+// get some urls and preset language strings.
+
 $data = array();
 $data['ajax_help_url'] = 'ajax_help.php'.$urlext;
 $data['title_help'] = lang('help');
@@ -48,15 +49,17 @@ $data['user_key'] = $_SESSION[CMS_USER_KEY];
 
 // output some javascript
 $out = 'var cms_data = {};'."\n";
+
 foreach( $data as $key => $value ) {
-  $out .= "cms_data.{$key} = '{$value}';\n";
+    $value = json_encode($value);
+    $out .= "cms_data.{$key} = {$value};\n";
 }
 
 $out .= <<<EOT
 function cms_lang(key) {
     'use strict';
     key = 'lang_'+key;
-    if( typeof(cms_data[key]) !== 'undefined' ) return cms_data[key];
+    if( typeof(cms_data.key) !== 'undefined' ) return cms_data.key;
 }
 EOT;
 header('Pragma: public');
