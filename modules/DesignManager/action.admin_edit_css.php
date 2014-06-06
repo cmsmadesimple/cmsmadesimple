@@ -24,6 +24,7 @@ if (!$this->CheckPermission('Manage Stylesheets'))
     return;
 
 $this->SetCurrentTab('stylesheets');
+
 if (isset($params['cancel'])) {
     if ($params['cancel'] == $this->Lang('cancel'))
         $this->SetMessage($this->Lang('msg_cancelled'));
@@ -44,8 +45,31 @@ try {
         $css_ob = new CmsLayoutStylesheet();
     }
 
+//
+    // prepare to display.
+    //
+    if ($css_ob && $css_ob->get_id() && dm_utils::locking_enabled()) {
+        $smarty->assign('lock_timeout', $this->GetPreference('lock_timeout'));
+        $smarty->assign('lock_refresh', $this->GetPreference('lock_refresh'));
+        try {
+            $lock_id = CmsLockOperations::is_locked('stylesheet', $css_ob->get_id());
+            if ($lock_id > 0)
+                CmsLockOperations::unlock($lock_id, 'stylesheet', $css_ob->get_id());
+            $lock = new CmsLock('stylesheet', $css_ob->get_id(), (int)$this->GetPreference('lock_timeout'));
+            $smarty->assign('lock', $lock);
+        } catch( CmsException $e ) {
+            $response = 'error';
+            $message = $e->GetMessage();
+
+            if (!$apply) {
+                $this->SetError($message);
+                $this->RedirectToAdminTab();
+            }
+        }
+    }
+
     try {
-        if (isset($params['submit']) || isset($params['apply'])) {
+        if (isset($params['submit']) || isset($params['apply']) && $response !== 'error') {
             if (isset($params['description']))
                 $css_ob->set_description($params['description']);
             if (isset($params['content']))
@@ -87,24 +111,6 @@ try {
         $this->GetJSONResponse($response, $message);
     } elseif (!$apply && $response == 'error') {
         echo $this->ShowErrors($message);
-    }
-
-    //
-    // prepare to display.
-    //
-    if ($css_ob && $css_ob->get_id() && dm_utils::locking_enabled()) {
-        $smarty->assign('lock_timeout', $this->GetPreference('lock_timeout'));
-        $smarty->assign('lock_refresh', $this->GetPreference('lock_refresh'));
-        try {
-            $lock_id = CmsLockOperations::is_locked('template', $css_ob->get_id());
-            if ($lock_id > 0)
-                CmsLockOperations::unlock($lock_id, 'template', $css_ob->get_id());
-            $lock = new CmsLock('stylesheet', $css_ob->get_id(), (int)$this->GetPreference('lock_timeout'));
-            $smarty->assign('lock', $lock);
-        } catch( CmsException $e ) {
-            $this->SetMessage($e->GetMessage());
-            $this->RedirectToAdminTab();
-        }
     }
 
     $designs = CmsLayoutCollection::get_all();

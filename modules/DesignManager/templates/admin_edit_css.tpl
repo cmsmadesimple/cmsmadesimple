@@ -15,8 +15,8 @@ $(document).ready(function(){
 
     $('#form_editcss').lockManager({
         type: 'stylesheet',
-        oid:  {$css_id},
-        uid:  {get_userid(FALSE)},
+        oid: {$css_id},
+        uid: {get_userid(FALSE)},
         lock_timeout: {$lock_timeout},
         lock_refresh: {$lock_refresh},
         error_handler: function(err) {
@@ -91,10 +91,21 @@ $(document).ready(function(){
 });
 </script>
 
+
+{$get_lock = $css->get_lock()}
+{capture assign='disable'}
+    {if isset($get_lock) && ({get_userid(false)} != $get_lock.uid)}disabled="disabled"{/if}
+{/capture}
 {if !$css->get_id()}
 <h3>{$mod->Lang('create_stylesheet')}</h3>
 {else}
 <h3>{$mod->Lang('edit_stylesheet')}: {$css->get_name()} ({$css->get_id()})</h3>
+{/if}
+
+{if isset($get_lock) && ({get_userid(false)} != $get_lock.uid)}
+<div class="warning">
+    {$mod->Lang('lock_warning')}
+</div>
 {/if}
 
 {form_start id='form_editcss' extraparms=$extraparms}
@@ -102,10 +113,10 @@ $(document).ready(function(){
     <div class="grid_6">
         <div class="pageoverflow">
             <p class="pageinput">
-                <input type="submit" name="{$actionid}submit" value="{$mod->Lang('submit')}"/>
+                <input type="submit" name="{$actionid}submit" value="{$mod->Lang('submit')}"{$disable|strip}/>
                 <input type="submit" id="cancelbtn" name="{$actionid}cancel" value="{$mod->Lang('cancel')}"/>
                 {if $css->get_id()}
-                <input type="submit" id="applybtn" name="{$actionid}apply" value="{$mod->Lang('apply')}"/>
+                <input type="submit" id="applybtn" name="{$actionid}apply" value="{$mod->Lang('apply')}"{$disable|strip}/>
                 {/if}
             </p>
         </div>

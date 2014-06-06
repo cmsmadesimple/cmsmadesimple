@@ -288,6 +288,7 @@ $lang['info_template_delete'] = 'This template may be used by a working system. 
 #L
 $lang['lock_timeout'] = 'Lock Time out (minutes)';
 $lang['lock_refresh'] = 'Lock Refresh Interval (seconds)';
+$lang['lock_warning'] = 'Another user is editing this item. You will not be able to save any of your work until lock time out expires.';
 
 #M
 $lang['media_type_all'] = 'All';

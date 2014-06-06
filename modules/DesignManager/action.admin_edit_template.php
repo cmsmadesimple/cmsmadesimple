@@ -61,8 +61,31 @@ try {
         $this->RedirectToAdminTab();
     }
 
+    //
+    // BUILD THE DISPLAY
+    //
+    if ($tpl_obj && $tpl_obj->get_id() && dm_utils::locking_enabled()) {
+        $smarty->assign('lock_timeout', $this->GetPreference('lock_timeout'));
+        $smarty->assign('lock_refresh', $this->GetPreference('lock_refresh'));
+        try {
+            $lock_id = CmsLockOperations::is_locked('template', $tpl_obj->get_id());
+            if ($lock_id > 0)
+                CmsLockOperations::unlock($lock_id, 'template', $tpl_obj->get_id());
+            $lock = new CmsLock('template', $tpl_obj->get_id(), (int)$this->GetPreference('lock_timeout'));
+            $smarty->assign('lock', $lock);
+        } catch( CmsException $e ) {
+            $response = 'error';
+            $message = $e->GetMessage();
+
+            if (!$apply) {
+                $this->SetError($message);
+                $this->RedirectToAdminTab();
+            }
+        }
+    }
+
     try {
-        if (isset($params['submit']) || isset($params['apply'])) {
+        if (isset($params['submit']) || isset($params['apply']) && $response !== 'error') {
             $parser = cmsms()->get_template_parser();
             cms_utils::set_app_data('tmp_template', $params['contents']);
             $parser->fetch('cms_template:appdata;tmp_template');
@@ -124,24 +147,6 @@ try {
         $this->GetJSONResponse($response, $message);
     } elseif (!$apply && $response == 'error') {
         echo $this->ShowErrors($message);
-    }
-
-    //
-    // BUILD THE DISPLAY
-    //
-    if ($tpl_obj && $tpl_obj->get_id() && dm_utils::locking_enabled()) {
-        $smarty->assign('lock_timeout', $this->GetPreference('lock_timeout'));
-        $smarty->assign('lock_refresh', $this->GetPreference('lock_refresh'));
-        try {
-            $lock_id = CmsLockOperations::is_locked('template', $tpl_obj->get_id());
-            if ($lock_id > 0)
-                CmsLockOperations::unlock($lock_id, 'template', $tpl_obj->get_id());
-            $lock = new CmsLock('template', $tpl_obj->get_id(), (int)$this->GetPreference('lock_timeout'));
-            $smarty->assign('lock', $lock);
-        } catch( CmsException $e ) {
-            $this->SetMessage($e->GetMessage());
-            $this->RedirectToAdminTab();
-        }
     }
 
     $type_obj = CmsLayoutTemplateType::load($tpl_obj->get_type_id());
