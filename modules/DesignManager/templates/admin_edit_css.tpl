@@ -27,6 +27,9 @@ $(document).ready(function(){
             // and display a nice message.
             $('[name$=cancel]').fadeOut().attr('value','{$mod->Lang('cancel')}').fadeIn();
             $('#form_editcss').dirtyForm('option','dirty',false);
+            $('#submit-btn, #applybtn').attr('disabled','disabled');
+            $('#submit-btn, #applybtn').button({ 'disabled' : true });
+            $('.lock-warning').removeClass('hidden');
             alert('{$mod->Lang('msg_lostlock')|escape:'javascript'}');
         }
     });
@@ -102,18 +105,16 @@ $(document).ready(function(){
 <h3>{$mod->Lang('edit_stylesheet')}: {$css->get_name()} ({$css->get_id()})</h3>
 {/if}
 
-{if isset($get_lock) && ({get_userid(false)} != $get_lock.uid)}
-<div class="warning">
+<div class="warning lock-warning{if !isset($get_lock)} hidden{/if}">
     {$mod->Lang('lock_warning')}
 </div>
-{/if}
 
 {form_start id='form_editcss' extraparms=$extraparms}
 <fieldset class="c_full cf">
     <div class="grid_6">
         <div class="pageoverflow">
             <p class="pageinput">
-                <input type="submit" name="{$actionid}submit" value="{$mod->Lang('submit')}"{$disable|strip}/>
+                <input type="submit" id="submit-btn" name="{$actionid}submit" value="{$mod->Lang('submit')}"{$disable|strip}/>
                 <input type="submit" id="cancelbtn" name="{$actionid}cancel" value="{$mod->Lang('cancel')}"/>
                 {if $css->get_id()}
                 <input type="submit" id="applybtn" name="{$actionid}apply" value="{$mod->Lang('apply')}"{$disable|strip}/>

@@ -457,6 +457,11 @@ div.pagecontainer .h-inside {
 	height:1px;
 	overflow:hidden
 }
+
+.hidden {
+    display: none !important;
+}
+
 /* Format code chunks */
 pre, code, samp, kbd {
 	font-family: Consolas, 'Andale Mono WT', 'Andale Mono', 'Lucida Console', 'Lucida Sans Typewriter', 'Courier New', monospace;
