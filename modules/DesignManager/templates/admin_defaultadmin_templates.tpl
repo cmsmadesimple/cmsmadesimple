@@ -18,7 +18,7 @@ $(document).ready(function(){
 
     $('a.steal_tpl_lock').on('click',function(e) {
       // we're gonna confirm stealing this lock.
-      var v = confirm('{$mod->Lang('confirm_steal_lock')}');
+      var v = confirm('{$mod->Lang('confirm_steal_lock')|escape:'javascript'}');
       return v;
     });
 
@@ -39,7 +39,7 @@ $(document).ready(function(){
 	  if( data.status == 'success' ) {
             if( data.locked ) {
               // gotta display a message.
-	      cms_alert('{$mod->Lang('error_contentlocked')}');
+	      cms_alert('{$mod->Lang('error_contentlocked')|escape:'javascript'}');
             }
             else {
               // we're okay to edit
@@ -54,21 +54,21 @@ $(document).ready(function(){
     $(document).on('click','#tpl_bulk_submit',function() {
         var n = $('input:checkbox:checked.tpl_select').length
             if( n == 0 ) {
-                cms_alert('{$mod->Lang('error_nothingselected')}');
+                cms_alert('{$mod->Lang('error_nothingselected')|escape:'javascript'}');
                 return false;
             }
-            return confirm('{$mod->Lang('confirm_bulk_tmplop')}');
+            return confirm('{$mod->Lang('confirm_bulk_tmplop')|escape:'javascript'}');
         });
 
     $('#edittplfilter').on('click', function () {
       $('#filterdialog').dialog({
         width: 'auto',
         buttons: {
-          '{$mod->Lang('submit')}': function () {
+          '{$mod->Lang('submit')|escape:'javascript'}': function () {
             $(this).dialog('close');
             $('#filterdialog_form').submit();
           },
-          '{$mod->Lang('cancel')}': function () {
+          '{$mod->Lang('cancel')|escape:'javascript'}': function () {
             $(this).dialog('close');
           },
         }
@@ -77,11 +77,11 @@ $(document).ready(function(){
     $(document).on('click','#addtemplate', function () {
       $('#addtemplatedialog').dialog({
         buttons: {
-          '{$mod->Lang('submit')}': function () {
+          '{$mod->Lang('submit')|escape:'javascript'}': function () {
             $(this).dialog('close');
             $('#addtemplate_form').submit();
           },
-          '{$mod->Lang('cancel')}': function () {
+          '{$mod->Lang('cancel')|escape:'javascript'}': function () {
             $(this).dialog('close');
           },
         }
@@ -90,7 +90,7 @@ $(document).ready(function(){
 });
 </script>
 
-<div id="filterdialog" style="display: none;" title="{$mod->Lang('tpl_filter')}">
+<div id="filterdialog" style="display: none;" title="{$mod->Lang('tpl_filter')|escape:'javascript'}">
   {form_start action='defaultadmin' id='filterdialog_form'}
     <input type="hidden" name="{$actionid}submit_filter_tpl" value="1"/>
     <div class="pageoverflow">

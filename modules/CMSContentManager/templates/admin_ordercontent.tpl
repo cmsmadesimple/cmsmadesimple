@@ -14,7 +14,7 @@
 
     $(document).ready(function() {
         $(document).on('click', '#btn_submit', function() {
-            if (confirm('{$mod->Lang('confirm_reorder')}')) {
+            if (confirm('{$mod->Lang('confirm_reorder')|escape:'javascript'}')) {
                 var tree = $.toJSON(parseTree($('#masterlist')));
                 var ajax_res = false;
 
@@ -35,7 +35,7 @@
             listType : 'ul',
             toleranceElement : '> div'
         });
-    }); 
+    });
 </script>
 
 {function display_tree depth=0}

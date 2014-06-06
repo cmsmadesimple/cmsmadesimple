@@ -51,7 +51,7 @@ $(document).ready(function(){
     {if $clearicon != ''}
       &nbsp;
       <a href="adminlog.php{$urlext}&amp;clear=true">{$clearicon}</a>
-      <a href="adminlog.php{$urlext}&amp;clear=true" onclick="return confirm('{$sysmain_confirmclearlog}')">{$langclear}</a>
+      <a href="adminlog.php{$urlext}&amp;clear=true" onclick="return confirm('{$sysmain_confirmclearlog|escape:'javascript'}')">{$langclear}</a>
     {/if}
     </div>
     <div style="text-align: right;">{$pagestring}</div>
@@ -108,7 +108,7 @@ $(document).ready(function(){
       <div class="pageoptions">
         <p class="pageoptions">
           <a href="adminlog.php{$urlext}&amp;clear=true">{$clearicon}</a>
-          <a class="pageoptions" href="adminlog.php{$urlext}&amp;clear=true" onclick="return confirm('{$sysmain_confirmclearlog}')">{$langclear}</a>
+          <a class="pageoptions" href="adminlog.php{$urlext}&amp;clear=true" onclick="return confirm('{$sysmain_confirmclearlog|escape:'javascript'}')">{$langclear}</a>
         </p>
       </div>
     </td></tr>

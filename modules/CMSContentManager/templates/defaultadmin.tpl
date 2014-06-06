@@ -45,10 +45,10 @@ $(document).ready(function () {
 
     cms_CMloadUrl('a.page_sortup'),
     cms_CMloadUrl('a.page_sortdown'),
-    cms_CMloadUrl('a.page_setinactive', '{$mod->Lang('confirm_setinactive')}'),
+    cms_CMloadUrl('a.page_setinactive', '{$mod->Lang('confirm_setinactive')|escape:'javascript'}'),
     cms_CMloadUrl('a.page_setactive'),
-    cms_CMloadUrl('a.page_setdefault', '{$mod->Lang('confirm_setdefault')}'),
-    cms_CMloadUrl('a.page_delete', '{$mod->Lang('confirm_delete_page')}');
+    cms_CMloadUrl('a.page_setdefault', '{$mod->Lang('confirm_setdefault')|escape:'javascript'}'),
+    cms_CMloadUrl('a.page_delete', '{$mod->Lang('confirm_delete_page')|escape:'javascript'}');
 
     // $('a.page_view').on('click',function(e) {
     //  return confirm('{$mod->Lang('confirm_viewpage')}');
@@ -56,7 +56,7 @@ $(document).ready(function () {
 
     $('a.steal_lock').on('click',function(e) {
       // we're gonna confirm stealing this lock.
-      var v = confirm('{$mod->Lang('confirm_steal_lock')}');
+      var v = confirm('{$mod->Lang('confirm_steal_lock')|escape:'javascript'}');
       $(this).data('steal_lock',v);
       if( v ) {
         var url = $(this).attr('href');
@@ -85,7 +85,7 @@ $(document).ready(function () {
 	  if( data.status == 'success' ) {
             if( data.locked ) {
               // gotta display a message.
-	      alert('{$mod->Lang('error_contentlocked')}');
+	      alert('{$mod->Lang('error_contentlocked')|escape:'javascript'}');
             }
             else {
               // we're okay to edit
@@ -101,11 +101,11 @@ $(document).ready(function () {
         $('#useroptions').dialog({
             resizable: false,
             buttons: {
-                '{$mod->Lang('submit')}': function () {
+                '{$mod->Lang('submit')|escape:'javascript'}': function () {
                     $(this).dialog('close');
                     $('#myoptions_form').submit();
                 },
-                '{$mod->Lang('cancel')}': function () {
+                '{$mod->Lang('cancel')|escape:'javascript'}': function () {
                     $(this).dialog('close');
                 },
             }
@@ -161,7 +161,7 @@ $(document).ready(function () {
         });
       }
       if( have_locks ) {
-         alert('{$mod->Lang('error_action_contentlocked')}');
+         alert('{$mod->Lang('error_action_contentlocked')|escape:'javascript'}');
 	 e.preventDefault();
       }
     })

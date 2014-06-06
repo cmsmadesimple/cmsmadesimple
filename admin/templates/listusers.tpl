@@ -4,15 +4,15 @@ $(document).ready(function() {
     $('#sel_all').cmsms_checkall();
 
     $('.toggleactive').click(function(){
-        return confirm('{lang('confirm_toggleuseractive')|strip}');
+        return confirm('{lang('confirm_toggleuseractive')|escape:'javascript'}');
     });
 
     $(document).on('click', '#bulksubmit', function(){
-        return confirm('{lang('confirm_bulkuserop')|strip}');
+        return confirm('{lang('confirm_bulkuserop')|escape:'javascript'}');
     });
 
     $(document).on('click', '.js-delete', function(){
-        return confirm('{lang('confirm_delete_user')|strip}');
+        return confirm('{lang('confirm_delete_user')|escape:'javascript'}');
     });
 
     $('#withselected, #bulksubmit').attr('disabled','disabled');
@@ -35,7 +35,7 @@ $(document).ready(function() {
         if (v === 'copyoptions') {
             $('#userlist').show();
         } else if  (v === 'delete') {
-            return confirm('{lang('confirm_delete_user')|strip}');
+            return confirm('{lang('confirm_delete_user')|escape:'javascript'}');
         } else {
             $('#userlist').hide();
         }

@@ -3,7 +3,7 @@
 <script type="text/javascript">
 $(document).ready(function(){
   $(document).on('click','[name=submit]',function(){
-    return confirm('{lang('siteprefs_confirm')}');
+    return confirm('{lang('siteprefs_confirm')|escape:'javascript'}');
   });
 });
 </script>

@@ -25,7 +25,7 @@ $(document).ready(function(){
           // and display a nice message.
           $('[name$=cancel]').fadeOut().attr('value', '{$mod->Lang('close')}').fadeIn();
           $('#Edit_Content').dirtyForm('option', 'dirty', false);
-          alert('{$mod->Lang('msg_lostlock')}');
+          alert('{$mod->Lang('msg_lostlock')|escape:'javascript'}');
       }
   });
   {/if}
@@ -107,7 +107,7 @@ $(document).ready(function(){
             var event = $.Event('cms_ajax_apply');
 	    event.response = data.response;
 	    event.details = data.details;
-	    event.close = '{$mod->Lang('close')}';
+	    event.close = '{$mod->Lang('close')|escape:'javascript'}';
 	    if( typeof data.url != '' ) event.url = data.url;
             $('body').trigger(event);
         }, 'json');

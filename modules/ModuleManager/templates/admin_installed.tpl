@@ -1,9 +1,9 @@
 <script type="text/javascript">
 $(document).ready(function(){
-  $('a.mod_upgrade').click( function(){ return confirm('{$ModuleManager->Lang('confirm_upgrade')}'); });
-  $('a.mod_remove').click( function(){ return confirm('{$ModuleManager->Lang('confirm_remove')}'); });
-  $('a.mod_chmod').click( function(){ return confirm('{$ModuleManager->Lang('confirm_chmod')}'); });
-  $('a.mod_uninstall').click( function(){ return confirm('{$ModuleManager->Lang('confirm_uninstall')}'); });
+  $('a.mod_upgrade').click( function(){ return confirm('{$ModuleManager->Lang('confirm_upgrade')|escape:'javascript'}'); });
+  $('a.mod_remove').click( function(){ return confirm('{$ModuleManager->Lang('confirm_remove')|escape:'javascript'}'); });
+  $('a.mod_chmod').click( function(){ return confirm('{$ModuleManager->Lang('confirm_chmod')|escape:'javascript'}'); });
+  $('a.mod_uninstall').click( function(){ return confirm('{$ModuleManager->Lang('confirm_uninstall')|escape:'javascript'}'); });
 
   $('#importbtn').click(function(){
     $('#importdlg').dialog({
@@ -12,12 +12,12 @@ $(document).ready(function(){
         {$ModuleManager->Lang('submit')}: function() {
           var file = $('#xml_upload').val();
           if( file.length == 0 ) {
-            alert('{$ModuleManager->Lang('error_nofileuploaded')}');
+            alert('{$ModuleManager->Lang('error_nofileuploaded')|escape:'javascript'}');
             return;
           }
           var ext  = file.split('.').pop().toLowerCase();
           if($.inArray(ext, ['xml','cmsmod']) == -1) {
-            alert('{$ModuleManager->Lang('error_invaliduploadtype')}');
+            alert('{$ModuleManager->Lang('error_invaliduploadtype')|escape:'javascript'}');
             return;
           }
           $(this).dialog('close');

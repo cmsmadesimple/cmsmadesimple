@@ -3,7 +3,7 @@
 $(document).ready(function(){
   $(document).on('click', '#runbtn', function(){
     // get the data
-    if( !confirm('{lang('confirm_runusertag')}') ) return false;
+    if( !confirm('{lang('confirm_runusertag')|strip|escape:'quotes'}') ) return false;
 
     var code = $('#udtcode').val();
     if( code.length == 0 ) {

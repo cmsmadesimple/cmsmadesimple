@@ -27,7 +27,7 @@ $(document).ready(function(){
       // and display a nice message.
       $('[name$=cancel]').fadeOut().attr('value','{$mod->Lang('cancel')}').fadeIn();
       $('#form_edittemplate').dirtyForm('option','dirty',false);
-      alert('{$mod->Lang('msg_lostlock')}');
+      alert('{$mod->Lang('msg_lostlock')|escape:'javascript'}');
     }
   });
   {/if}

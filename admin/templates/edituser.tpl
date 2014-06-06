@@ -1,7 +1,7 @@
 <script type="text/javascript">
 $(document).ready(function(){
     $(document).on('click', '#submit', function(){
-        return confirm('{lang('confirm_edituser')}');
+        return confirm('{lang('confirm_edituser')|escape:'javascript'}');
     });
 
     //{if $manage_users == true}

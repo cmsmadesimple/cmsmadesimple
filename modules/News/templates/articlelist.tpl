@@ -11,7 +11,7 @@ $(document).ready(function(){
 	   });
 	});
         $('a.delete_article').click(function(){
-        	return confirm('{$mod->Lang('areyousure')}');
+        	return confirm('{$mod->Lang('areyousure')|escape:'javascript'}');
         });
 	$('#articlelist').on('cms_checkall_toggle','[type=checkbox]',function(){
 		var l = $('#articlelist :checked').length;
@@ -34,7 +34,7 @@ $(document).ready(function(){
 	});
 
 	$('#bulkactions').on('click','#submit_bulkaction',function(){
-		return confirm('{$mod->Lang('areyousure_multiple')}');
+		return confirm('{$mod->Lang('areyousure_multiple')|escape:'javascript'}');
 	});
 });
 //]]>

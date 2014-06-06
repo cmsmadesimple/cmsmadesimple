@@ -1,7 +1,7 @@
 <script type="text/javascript">
 $(document).ready(function(){
   $('a.del_cat').click(function(){
-    return confirm('{$mod->Lang('areyousure')}');
+    return confirm('{$mod->Lang('areyousure')|escape:'javascript'}');
   });
 });
 </script>

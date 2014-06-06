@@ -1,10 +1,10 @@
 <script type="text/javascript">
 $(document).ready(function(){
   $(document).on('click','#reseturl',function(){
-    return confirm('{$ModuleManager->Lang('confirm_reseturl')}');
+    return confirm('{$ModuleManager->Lang('confirm_reseturl')|escape:'javascript'}');
   });
   $(document).on('click','#settings_submit',function(){
-    return confirm('{$ModuleManager->Lang('confirm_settings')}');
+    return confirm('{$ModuleManager->Lang('confirm_settings')|escape:'javascript'}');
   });
 });
 </script>
@@ -19,7 +19,7 @@ $(document).ready(function(){
       <input type="submit" id="reseturl" name="{$actionid}reseturl" value="{$ModuleManager->Lang('reset')}"/>
     </p>
   </div>
- 
+
    <div class="pageoverflow">
     <p class="pagetext"><label for="allowuninstall">{$ModuleManager->Lang('allowuninstall')}:</label>&nbsp;{cms_help key2='help_allowuninstall' title=$ModuleManager->Lang('allowuninstall')}</p>
     <p class="pageinput">
@@ -51,7 +51,7 @@ $(document).ready(function(){
   </div>
 {/if}
 
-{if isset($disable_caching)}	
+{if isset($disable_caching)}
   <div class="pageoverflow">
     <p class="pagetext"><label for="disable_caching">{$ModuleManager->Lang('prompt_disable_caching')}:</label></p>
     <p class="pageinput">
