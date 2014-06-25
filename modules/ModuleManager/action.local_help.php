@@ -36,7 +36,7 @@ if( $our_lang != 'en_US' ) {
 }
 
 $smarty->assign('module_name',$modinstance->GetName());
-$smarty->assign('friendly_name',$modinstance->FriendlyName());
+$smarty->assign('friendly_name',$modinstance->GetFriendlyName());
 
 $smarty->assign('help_page',$modinstance->GetHelpPage());
 if( $our_lang != 'en_US' && $lang != '' ) {
