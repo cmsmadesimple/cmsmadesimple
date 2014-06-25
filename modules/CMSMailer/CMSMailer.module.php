@@ -42,7 +42,7 @@ class CMSMailer extends CMSModule
   function GetHelp() { return $this->Lang('help'); }
   function GetAuthor() { return 'Calguy1000'; }
   function GetAuthorEmail() { return 'calguy1000@hotmail.com'; }
-  function GetChangeLog() { return __DIR__.'/changelog.inc'; }
+  function GetChangeLog() { return file_get_contents(dirname(__FILE__).'/changelog.inc'); }
   function IsPluginModule() { return FALSE; }
   function HasAdmin() { return FALSE; }
   function GetAdminSection() { return 'extensions'; }
