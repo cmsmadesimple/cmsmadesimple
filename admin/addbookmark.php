@@ -43,9 +43,14 @@ if (isset($_POST["addbookmark"]))
 	{
 	$validinfo = true;
 
-	if ($title == "")
+	if ( $title == "" )
 		{
-		$error .= lang('nofieldgiven', array('addbookmark'));
+		$error .= lang('nofieldgiven', array(lang('title')));
+		$validinfo = false;
+		}
+		else if ( $url == "" )
+		{
+		$error .= lang('nofieldgiven', array(lang('url')));
 		$validinfo = false;
 		}
 
