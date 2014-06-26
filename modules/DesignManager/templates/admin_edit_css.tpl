@@ -29,7 +29,7 @@ $(document).ready(function(){
             $('#form_editcss').dirtyForm('option','dirty',false);
             $('#submit-btn, #applybtn').attr('disabled','disabled');
             $('#submit-btn, #applybtn').button({ 'disabled' : true });
-            $('.lock-warning').removeClass('hidden');
+            $('.lock-warning').removeClass('hidden-item');
             alert('{$mod->Lang('msg_lostlock')|escape:'javascript'}');
         }
     });
@@ -60,7 +60,8 @@ $(document).ready(function(){
                     .append($('<p/>').text(data.message));
             }
 
-            $('body').append($response).slideDown(1000, function() {
+            $('body').append($response.hide());
+            $response.slideDown(1000, function() {
                 window.setTimeout(function() {
                     $response.slideUp();
                     $response.remove();
@@ -105,12 +106,12 @@ $(document).ready(function(){
 <h3>{$mod->Lang('edit_stylesheet')}: {$css->get_name()} ({$css->get_id()})</h3>
 {/if}
 
-<div class="warning lock-warning{if !isset($get_lock)} hidden{/if}">
+<div class="warning lock-warning{if !isset($get_lock)} hidden-item{/if}">
     {$mod->Lang('lock_warning')}
 </div>
 
 {form_start id='form_editcss' extraparms=$extraparms}
-<fieldset class="c_full cf">
+<fieldset class="cf">
     <div class="grid_6">
         <div class="pageoverflow">
             <p class="pageinput">
