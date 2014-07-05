@@ -76,6 +76,7 @@ $(document).ready(function(){
 </script>
 
 {$get_lock = $template->get_lock()}
+
 {capture assign='disable'}
     {if isset($get_lock) && ({get_userid(false)} != $get_lock.uid)}disabled="disabled"{/if}
 {/capture}
@@ -86,9 +87,11 @@ $(document).ready(function(){
     <h3>{$mod->Lang('edit_template')}: {$template->get_name()} ({$template->get_id()})</h3>
 {/if}
 
-<div class="warning lock-warning{if !isset($get_lock)} hidden-item{/if}">
-    {$mod->Lang('lock_warning')}
-</div>
+{if isset($get_lock)}
+	<div class="warning lock-warning">
+		{$mod->Lang('lock_warning')}
+	</div>
+{/if}
 
 {form_start id="form_edittemplate" extraparms=$extraparms}
 <fieldset class="cf">
@@ -142,7 +145,7 @@ $(document).ready(function(){
 {/if}
 
 {tab_start name='template'}
-<!-- tmeplate -->
+<!-- template -->
 <div class="pageoverflow">
     <p class="pagetext"><label for="contents">{$mod->Lang('prompt_template')}:</label>&nbsp;{cms_help key2=help_template_contents title=$mod->Lang('prompt_template')}</p>
     <p class="pageinput">
