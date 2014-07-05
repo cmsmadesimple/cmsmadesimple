@@ -100,15 +100,18 @@ $(document).ready(function(){
 {capture assign='disable'}
     {if isset($get_lock) && ({get_userid(false)} != $get_lock.uid)}disabled="disabled"{/if}
 {/capture}
+
 {if !$css->get_id()}
-<h3>{$mod->Lang('create_stylesheet')}</h3>
+	<h3>{$mod->Lang('create_stylesheet')}</h3>
 {else}
-<h3>{$mod->Lang('edit_stylesheet')}: {$css->get_name()} ({$css->get_id()})</h3>
+	<h3>{$mod->Lang('edit_stylesheet')}: {$css->get_name()} ({$css->get_id()})</h3>
 {/if}
 
-<div class="warning lock-warning{if !isset($get_lock)} hidden-item{/if}">
-    {$mod->Lang('lock_warning')}
-</div>
+{if isset($get_lock)}
+	<div class="warning lock-warning">
+		{$mod->Lang('lock_warning')}
+	</div>
+{/if}
 
 {form_start id='form_editcss' extraparms=$extraparms}
 <fieldset class="cf">
@@ -203,17 +206,16 @@ $(document).ready(function(){
 </div>
 
 {if $has_designs_right}
-
-{tab_start name='designs'}
-<!-- designs -->
-<div class="pageoverflow">
-    <p class="pagetext"><label for="designlist">{$mod->Lang('prompt_designs')}:</label>&nbsp;{cms_help key2=help_css_designs title=$mod->Lang('prompt_designs')}</p>
-    <p class="pageinput">
-        <select id="designlist" name="{$actionid}design_list[]" multiple="multiple" size="5">
-            {html_options options=$design_list selected=$css->get_designs()}
-        </select>
-    </p>
-</div>
+	{tab_start name='designs'}
+	<!-- designs -->
+	<div class="pageoverflow">
+		<p class="pagetext"><label for="designlist">{$mod->Lang('prompt_designs')}:</label>&nbsp;{cms_help key2=help_css_designs title=$mod->Lang('prompt_designs')}</p>
+		<p class="pageinput">
+			<select id="designlist" name="{$actionid}design_list[]" multiple="multiple" size="5">
+				{html_options options=$design_list selected=$css->get_designs()}
+			</select>
+		</p>
+	</div>
 {/if}
 
 {tab_end}
