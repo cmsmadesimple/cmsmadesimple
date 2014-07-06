@@ -15,6 +15,12 @@ $(document).ready(function(){
         $('#css_bulk_submit').button({ 'disabled' : false });
       }
     });
+	
+    $('a.steal_css_lock').on('click',function(e) {
+      // we're gonna confirm stealing this lock.
+      var v = confirm('{$mod->Lang('confirm_steal_lock')|escape:'javascript'}');
+      return v;
+    });
 
     $('#editcssfilter').on('click',function(){
       $('#filtercssdlg').dialog({
