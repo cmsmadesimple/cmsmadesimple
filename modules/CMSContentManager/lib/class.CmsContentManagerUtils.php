@@ -55,30 +55,36 @@ final class CmsContentManagerUtils
 
   public static function get_pagedefaults()
   {
-    $tpl = CmsLayoutTemplate::load_dflt_by_type(CmsLayoutTemplateType::CORE.'::page');
-    $tpl_id = -1;
-    if( $tpl ) $tpl_id = $tpl->get_id();
-    $page_prefs = array('contenttype'=>'content', // string
-			'disallowed_types'=>'', // array of strings
-			'design_id'=>CmsLayoutCollection::load_default()->get_id(), // int
-			'template_id'=>$tpl_id,
-			'parent_id'=>-2, // int
-			'secure'=>0, // boolean
-			'cachable'=>1, // boolean
-			'active'=>1, // boolean
-			'showinmenu'=>1, // boolean
-			'metadata'=>'', // string
-			'content'=>'', // string
-			'searchable'=>1, // boolean
-			'addteditors'=>array(), // array of ints.
-			'extra1'=>'', // string
-			'extra2'=>'', // string
-			'extra3'=>''); // string
-    $mod = cms_utils::get_module('CMSContentManager');
-    $tmp = $mod->GetPreference('page_prefs');
-    if( $tmp ) $page_prefs = unserialize($tmp);
+      $tpl = null;
+      $tpl_id = -1;
+      try {
+          $tpl = CmsLayoutTemplate::load_dflt_by_type(CmsLayoutTemplateType::CORE.'::page');
+          $tpl_id = $tpl->get_id();
+      }
+      catch( \Exception $e ) {
+      }
 
-    return $page_prefs;
+      $page_prefs = array('contenttype'=>'content', // string
+                          'disallowed_types'=>'', // array of strings
+                          'design_id'=>CmsLayoutCollection::load_default()->get_id(), // int
+                          'template_id'=>$tpl_id,
+                          'parent_id'=>-2, // int
+                          'secure'=>0, // boolean
+                          'cachable'=>1, // boolean
+                          'active'=>1, // boolean
+                          'showinmenu'=>1, // boolean
+                          'metadata'=>'', // string
+                          'content'=>'', // string
+                          'searchable'=>1, // boolean
+                          'addteditors'=>array(), // array of ints.
+                          'extra1'=>'', // string
+                          'extra2'=>'', // string
+                          'extra3'=>''); // string
+      $mod = cms_utils::get_module('CMSContentManager');
+      $tmp = $mod->GetPreference('page_prefs');
+      if( $tmp ) $page_prefs = unserialize($tmp);
+
+      return $page_prefs;
   }
 
   public static function locking_enabled()
