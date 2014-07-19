@@ -292,6 +292,7 @@ $(document).ready(function(){
 
   $(document).on('click', '#testcancel', function(e){
     $('#testpopup').dialog('close');
+    return false;
   });
   $(document).on('click','#testsend', function(e){
     $('#testpopup').dialog('close');
