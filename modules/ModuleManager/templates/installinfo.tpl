@@ -4,7 +4,7 @@
   <h3>{$ModuleManager->Lang('install_module')} {$module_name} <em>({$ModuleManager->Lang('vertext')} {$module_version})</em></h3>
 {/if}
 
-<div class="pagewarning">
+<div class="warning">
   <h3>{$ModuleManager->Lang('notice')}:</h3>
   <p>{$ModuleManager->Lang('time_warning')}</p>
 </div>
