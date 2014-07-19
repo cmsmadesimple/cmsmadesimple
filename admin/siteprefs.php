@@ -448,16 +448,6 @@ include_once("header.php");
 if ($error != "") $themeObject->ShowErrors($error);
 if ($message != "") $themeObject->ShowMessage($message);
 
-$templates = array();
-$templates['-1'] = lang('none');
-
-$query = "SELECT * FROM ".cms_db_prefix()."templates where active = 1 ORDER BY template_name";
-$result = $db->Execute($query);
-
-while ($result && $row = $result->FetchRow()) {
-  $templates[$row['template_id']] = $row['template_name'];
-}
-
 // Make sure cache folder is writable
 if (FALSE == is_writable(TMP_CACHE_LOCATION) ||
     FALSE == is_writable(TMP_TEMPLATES_C_LOCATION) ) {
@@ -488,7 +478,6 @@ $smarty->assign('mail_is_set',$mail_is_set);
 $smarty->assign('mailprefs',$mailprefs);
 
 $smarty->assign('languages',get_language_list());
-$smarty->assign('templates',$templates);
 $smarty->assign('tab',$tab);
 $smarty->assign('pretty_urls',$pretty_urls);
 
