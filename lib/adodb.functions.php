@@ -45,7 +45,7 @@ function &adodb_connect()
   $gCms = cmsms();
   $config = $gCms->GetConfig();
 
-  $str = 'pear:date:extend';
+  $str = 'pear:date:extend:transaction';
   $dbinstance = ADONewConnection($config['dbms'], $str);
   $dbinstance->raiseErrorFn = "adodb_error";
   $conn_func = (isset($config['persistent_db_conn']) && $config['persistent_db_conn'] == true) ? 'PConnect' : 'Connect';

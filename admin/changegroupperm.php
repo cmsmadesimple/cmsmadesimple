@@ -87,31 +87,31 @@ if ($submitted == 1) {
     "group_perms (group_perm_id, group_id, permission_id, create_date, modified_date)
        VALUES (?,?,?,$now,$now)";
 
-  $groups = array();
-  foreach( $_POST as $key=>$value ) {
-    if (strpos($key,"pg") == 0 && strpos($key,"pg") !== false) {
-      $keyparts = explode('_',$key);
-      if ($keyparts[2] != '1' && $value == '1') {
-	if( !in_array($keyparts[2],$groups) ) $groups[] = $keyparts[2];
+  $selected_groups = unserialize(base64_decode($_POST['sel_groups']));
+  if( is_array($selected_groups) && count($selected_groups) ) {
+      // clean this array
+      $tmp = array();
+      foreach( $selected_groups as &$one ) {
+          $one = (int)$one;
+          if( $one > 0 ) $tmp[] = $one;
       }
-    }
+      $query = 'DELETE FROM '.cms_db_prefix().'group_perms
+                WHERE group_id IN ('.implode(',',$tmp).')';
+      $db->Execute($query);
   }
 
-  $selected_groups = unserialize(base64_decode($_POST['sel_groups']));
-  $query = 'DELETE FROM '.cms_db_prefix().'group_perms WHERE group_id IN ('.implode(',',$selected_groups).')';
-  $db->Execute($query);
-
   foreach ($_POST as $key=>$value) {
-    if (strpos($key,"pg") == 0 && strpos($key,"pg") !== false) {
-      $keyparts = explode('_',$key);
-      if ($keyparts[2] != '1' && $value == '1') {
-	$new_id = $db->GenID(cms_db_prefix()."group_perms_seq");
-	$result = $db->Execute($iquery, array($new_id,$keyparts[2],$keyparts[1]));
-	if( !$result ) {
-	  echo "FATAL: ".$db->ErrorMsg().'<br/>'.$db->sql; exit();
-	}
+      if (strpos($key,"pg") == 0 && strpos($key,"pg") !== false) {
+          $keyparts = explode('_',$key);
+          $keyparts[1] = (int)$keyparts[1];
+          if ($keyparts[1] > 0 && $keyparts[2] != '1' && $value == '1') {
+              $new_id = $db->GenID(cms_db_prefix()."group_perms_seq");
+              $result = $db->Execute($iquery, array($new_id,$keyparts[2],$keyparts[1]));
+              if( !$result ) {
+                  echo "FATAL: ".$db->ErrorMsg().'<br/>'.$db->sql; exit();
+              }
+          }
       }
-    }
   }
 
   // put mention into the admin log

@@ -59,59 +59,44 @@ $themeObject = cms_utils::get_theme_object();
 $themeObject->set_action_module($module);
 
 $USE_THEME = true;
-$USE_OUTPUT_BUFFERING = true;
-if (isset($_REQUEST[$id . 'disable_buffer']) || isset($_REQUEST['disable_buffer']) ) {
-  $USE_OUTPUT_BUFFERING = false;
-  $USE_THEME = false;
-}
-else if( isset($_REQUEST[$id . 'disable_theme']) || isset($_REQUEST['disable_theme']) ) {
-  $USE_THEME = false;
-}
-
 if( isset($_REQUEST['showtemplate']) && ($_REQUEST['showtemplate'] == 'false')) {
   // for simplicity and compatibility with the frontend.
   $USE_THEME = false;
-  $USE_OUTPUT_BUFFERING = false;
 }
-
-cms_admin_sendheaders();
-$txt = $modinst->GetHeaderHTML();
-if( $txt !== false ) $headtext = $txt;
 
 if( $modinst->SuppressAdminOutput($_REQUEST) != false || isset($_REQUEST['suppressoutput']) ) {
-  $suppressOutput = true;
-}
-else {
-  include_once("header.php");
+    $USE_THEME = false;
 }
 
+// module output
 $params = ModuleOperations::get_instance()->GetModuleParameters($id);
-if( !isset($USE_THEME) || $USE_THEME != false ) {
-  if (FALSE == empty($params['module_message'])) echo $themeObject->ShowMessage($params['module_message']);
-  if (FALSE == empty($params['module_error'])) echo $themeObject->ShowErrors($params['module_error']);
-  if (!$suppressOutput) {
+$content = null;
+if( $USE_THEME ) {
+    @ob_start();
+    echo  $modinst->DoActionBase($action, $id, $params);
+    $content = @ob_get_contents();
+    @ob_end_clean();
+
+    cms_admin_sendheaders();
+    $txt = $modinst->GetHeaderHTML($action);
+    if( $txt !== false ) $headtext = $txt; // headtext is a global
+
+    if (FALSE == empty($params['module_message'])) echo $themeObject->ShowMessage($params['module_message']);
+    if (FALSE == empty($params['module_error'])) echo $themeObject->ShowErrors($params['module_error']);
+    include_once("header.php");
     echo '<div class="pagecontainer">';
     echo '<div class="pageoverflow">';
     $title = $themeObject->get_active_title();
     if( !$title ) $title = $modinst->GetFriendlyName();
     echo $themeObject->ShowHeader($title, '', '', 'both').'</div>';
-  }
-}
-if( $USE_OUTPUT_BUFFERING ) @ob_start();
-
-echo $modinst->DoActionBase($action, $id, $params);
-
-if( $USE_OUTPUT_BUFFERING ) {
-  $content = @ob_get_contents();
-  @ob_end_clean();
-  echo $content;
+    echo $content;
+} else {
+    echo $modinst->DoActionBase($action, $id, $params);
 }
 
-if( !isset($USE_THEME) || $USE_THEME != false ) {
-  if (!$suppressOutput) {
+if( $USE_THEME ) {
     echo '</div>';
     include_once("footer.php");
-  }
- }
+}
 
 ?>

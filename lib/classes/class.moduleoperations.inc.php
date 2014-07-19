@@ -861,7 +861,7 @@ final class ModuleOperations
                 $db->Execute('DELETE FROM '.cms_db_prefix().'module_smarty_plugins where module=?',array($module));
                 $db->Execute('DELETE FROM '.cms_db_prefix()."siteprefs WHERE sitepref_name LIKE '".
                              str_replace("'",'',$db->qstr($module))."_mapi_pref%'");
-                $db->Execute('DELETE FROM '.cms_db_prefix().'routes WHERE dest = ?',array($module));
+                $db->Execute('DELETE FROM '.cms_db_prefix().'routes WHERE key1 = ?',array($module));
                 $db->Execute('DELETE FROM '.cms_db_prefix().'module_smarty_plugins WHERE module = ?',array($module));
             }
 
