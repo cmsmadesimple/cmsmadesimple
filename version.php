@@ -18,7 +18,7 @@
 #
 #$Id$
 
-$CMS_VERSION = "2.0-beta1.1";
+$CMS_VERSION = "2.0-beta2";
 $CMS_VERSION_NAME = "NO NAME SET";
 $CMS_SCHEMA_VERSION = '200';
 
