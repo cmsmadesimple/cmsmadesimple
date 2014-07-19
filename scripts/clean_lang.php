@@ -2,7 +2,7 @@
 
   /* clean lang file
      given - master file, slave lang file
-    
+
      a: clean all keys from slave that are not in master
         - count cleaned keys
      b: clean all keys from slave where value of master == value of slave
@@ -17,38 +17,51 @@ function output($str)
   if( !$quiet ) echo $str."\n";
 }
 
-$options = getopt('m:s:o:q');
+$options = getopt('nm:s:o:q');
 $master = $slave = null;
-$outfile = 'php://stdout';
+//$outfile = 'php://stdout';
+$outfile = null;
 $quiet = false;
-foreach( $options as $k => $v ) {
-  switch( $k ) {
-  case 'm':
-   $master = trim($v);
-   if( !is_file($master) || !is_readable($master) ) die("master file $v is not readable\n");
-   break;
+$backup = true;
+for( $i = 1; $i < $argc ; $i++ ) {
+    switch( $argv[$i] ) {
+    case '-m':
+        $i++;
+        $master = $argv[$i];
+        if( !is_file($master) || !is_readable($master) ) die("master file $v is not readable\n");
+        break;
 
- case 's':
-   $slave = trim($v);
-   if( !is_file($slave) || !is_readable($slave) ) die("slave file $v is not readable\n");
-   break;
+    case '-s':
+        $i++;
+        $slave = $argv[$i];
+        if( !is_file($slave) || !is_readable($slave) ) die("slave file $v is not readable\n");
+        break;
 
- case 'o':
-   $outfile = trim($v);
-   break;
-   
- case 'q':
-   $quiet = true;
-   break;
-  }
+    case '-q':
+        $quiet = true;
+        break;
+
+    case '-o':
+        $i++;
+        $outfile = $argv[$i];
+        break;
+
+    default:
+        if( $i == $argc - 1 ) {
+            if( !$slave ) $slave = $argv[$i];
+        }
+        break;
+    }
 }
+
+if( !$outfile ) $outfile = $slave;
 
 // validate that the filenames end in .php
 // maybe check mime type.
 
 // read the master file
 $lang = null;
-require_once($master);
+@require_once($master);
 $master_strs = $lang;
 unset($lang);
 output('Processing: '.$slave);
@@ -56,7 +69,7 @@ output('Number of strings in master: '.count($master_strs));
 
 // read the slave file
 $lang = null;
-require_once($slave);
+@require_once($slave);
 $slave_strs = $lang;
 unset($lang);
 output('Number of strings in slave: '.count($master_strs));
@@ -82,17 +95,32 @@ foreach( $slave_keys as $key ) {
 if( $count_extra_keys ) output('Number of extra entries in slave file: '.$count_extra_keys);
 if( $count_extra_keys ) output('Number of duplicated strings in slave file: '.$count_dup_keys);
 output('Number of strings in output file '.count($slave_strs));
-echo "\n";
 
-ksort($slave_strs);
+uksort($slave_strs,'strnatcasecmp');
 
 // do our output.
-if( $outfile == $slave ) copy($slave,$slave.'~');
-$fh = fopen($outfile,'w');
-fputs($fh,"<?php\n");
-foreach( $slave_strs as $key => $value ) {
-  fputs($fh,'$lang[\''.$key.'\']=\''.$value."';\n");
+function ob_file_callback($buffer) {
+  global $ob_file;
+  fwrite($ob_file,$buffer);
 }
-fputs($fh,"?>");
-fclose($fh);
+
+if( $outfile == $slave && $backup ) copy($slave,$slave.'~');
+$ob_file = fopen($outfile,'w');
+ob_start('ob_file_callback');
+echo "<?php\n";
+$letter = null;
+foreach( $slave_strs as $key => $val ) {
+    $tmp = strtoupper($key[0]);
+    $val = trim($val);
+    if( !$val ) continue;
+    if( $tmp != $letter ) {
+        $letter = $tmp;
+        echo "\n## {$letter}\n";
+    }
+    echo "\$lang['{$key}'] = '{$val}';\n";
+}
+echo "?>";
+ob_end_flush();
+
+echo "Done: $slave\n";
 ?>
