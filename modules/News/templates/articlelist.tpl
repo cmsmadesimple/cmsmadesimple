@@ -80,15 +80,17 @@ $(document).ready(function(){
 </div>
 {/if}
 
-{if $itemcount > 0}
 <div class="row">
   <div class="pageoptions half" style="margin-top: 8px;">
     <a id="toggle_filter" {if $curcategory != ''} style="font-weight: bold; color: green;"{/if}>{admin_icon icon='view.gif' alt=$mod->Lang('viewfilter')} {if $curcategory != ''}*{/if}{$mod->Lang('viewfilter')}</a>
     {if isset($addlink)}&nbsp;{$addlink}{/if}
   </div>
+</div>
 
-  <div style="clear:both"></div>
+<div style="clear:both"></div>
 
+{if $itemcount > 0}
+<div class="row">
   {if $pagecount > 1}
     <div class="pageoptions" style="text-align: right;">
       {form_start}
@@ -156,6 +158,8 @@ $(document).ready(function(){
 	{/foreach}
 	</tbody>
 </table>
+{else}
+	<p class="warning">{if $curcategory == ''}{$mod->Lang('noarticles')}{else}{$mod->Lang('noarticlesinfilter')}{/if}</p>
 {/if}
 
 <div style="width: 99%;">
