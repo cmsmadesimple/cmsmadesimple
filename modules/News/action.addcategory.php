@@ -32,7 +32,7 @@ if (isset($params['name'])) {
 
       @$this->SendEvent('NewsCategoryAdded', array('category_id' => $catid, 'name' => $name));
       // put mention into the admin log
-      audit($catid, 'News category: '.$catid, ' Category added');
+      audit($catid, 'News category: '.$name, ' Category added');
 
       $this->SetMessage($this->Lang('categoryadded'));
       $this->RedirectToAdminTab('categories','','admin_settings');
