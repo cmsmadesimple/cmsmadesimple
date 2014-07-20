@@ -67,7 +67,7 @@ $(document).ready(function(){
     <p class="pagetext"><label for="filter_pagelimit">{$prompt_pagelimit}:</label> {cms_help key='help_articles_pagelimit' title=$prompt_pagelimit}</p>
     <p class="pageinput">
       <select id="filter_pagelimit" name="{$actionid}pagelimit">
-      {html_options options=$pagelimits selected=$pagelimit}
+      {html_options options=$pagelimits selected=$sortby}
       </select>
     </p>
   </div>
@@ -84,7 +84,7 @@ $(document).ready(function(){
 {if $itemcount > 0}
 <div class="row">
   <div class="pageoptions half" style="margin-top: 8px;">
-    <a id="toggle_filter">{admin_icon icon='view.gif' alt=$mod->Lang('viewfilter')} {$mod->Lang('viewfilter')}</a>
+    <a id="toggle_filter" {if $curcategory != ''} style="font-weight: bold;"{/if}>{admin_icon icon='view.gif' alt=$mod->Lang('viewfilter')} {$mod->Lang('viewfilter')}</a>
     {if isset($addlink)}&nbsp;{$addlink}{/if}
   </div>
 
