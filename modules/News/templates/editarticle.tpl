@@ -8,13 +8,12 @@
             }
         });
         $(document).on('cmsms_textchange', function (event) {
-            // editor textchange, set the form dirty.
+            // editor text change, set the form dirty.
             $('#edit_news').dirtyForm('option', 'dirty', true);
         });
         $(document).on('click', '[name$=submit],[name$=apply],[name$=cancel]', function () {
             $('#edit_news').dirtyForm('option', 'disabled', true);
         });
-
         $('#fld11').click(function () {
             $('#expiryinfo').toggle('slow');
         });
@@ -23,11 +22,7 @@
         });
     });
 </script>
-{if isset($articleid)}
-<h3>{$mod->Lang('editarticle')}</h3>
-{else}
-<h3>{$mod->Lang('addarticle')}</h3>
-{/if}
+<h3>{if isset($articleid)}{$mod->Lang('editarticle')}{else}{$mod->Lang('addarticle')}{/if}</h3>
 {strip}
 <div id="editarticle_result"></div>
 
@@ -37,7 +32,7 @@
         <p class="pageinput">
             {$hidden|default:''}
             <input type="submit" name="{$actionid}submit" value="{$mod->Lang('submit')}"/>
-            <input type="submit" name="{$actionid}cancel" value="{$mod->Lang('cancel')}"/>
+			<input type="submit" id="{$actionid}cancel" name="{$actionid}cancel" value="{$mod->Lang('cancel')}"/>
             {if isset($articleid)}
                 <input type="submit" name="{$actionid}apply" value="{$mod->Lang('apply')}"/>
             {/if}

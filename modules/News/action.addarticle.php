@@ -5,7 +5,7 @@ if (!isset($gCms))
 if (!$this->CheckPermission('Modify News'))
     return;
 
-if (isset($params['cancel']))
+if (isset($params['cancel'])) 
     $this->Redirect($id, 'defaultadmin', $returnid);
 
 /*--------------------
@@ -89,7 +89,7 @@ if (isset($params['submit'])) {
     //
     // database work
     //
-    if ($error !== FAlSE) {
+    if ($error !== FALSE) {
         echo $error;
     } else {
         $articleid = $db->GenID(cms_db_prefix() . "module_news_seq");

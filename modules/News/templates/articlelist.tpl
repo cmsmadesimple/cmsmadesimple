@@ -42,7 +42,6 @@ $(document).ready(function(){
 
 {if isset($formstart) }
 <div id="filter" title="{$filtertext}" style="display: none;">
-  <legend>{$filtertext}:</legend>
   {$formstart}
   <div class="pageoverflow">
     <p class="pagetext"><label for="filter_category">{$prompt_category}:</label> {cms_help key='help_articles_filtercategory' title=$prompt_category}</p>
@@ -84,7 +83,7 @@ $(document).ready(function(){
 {if $itemcount > 0}
 <div class="row">
   <div class="pageoptions half" style="margin-top: 8px;">
-    <a id="toggle_filter" {if $curcategory != ''} style="font-weight: bold;"{/if}>{admin_icon icon='view.gif' alt=$mod->Lang('viewfilter')} {$mod->Lang('viewfilter')}</a>
+    <a id="toggle_filter" {if $curcategory != ''} style="font-weight: bold; color: green;"{/if}>{admin_icon icon='view.gif' alt=$mod->Lang('viewfilter')} {if $curcategory != ''}*{/if}{$mod->Lang('viewfilter')}</a>
     {if isset($addlink)}&nbsp;{$addlink}{/if}
   </div>
 
