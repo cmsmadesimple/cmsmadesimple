@@ -136,7 +136,11 @@ if( !$smarty->isCached($this->GetDatabaseResource($template),$cache_id) ) {
   $sortby = trim(get_parameter_value($params,'sortby','news_date'));
   switch( $sortby ) {
     case 'news_category':
-      $query1 .= "ORDER BY 'long_name', 'news_date' ";
+      if (isset($params['sortasc']) && (strtolower($params['sortasc']) == 'true')) {
+        $query1 .= "ORDER BY mnc.long_name ASC, mn.news_date "; 
+      } else {
+        $query1 .= "ORDER BY mnc.long_name DESC, mn.news_date ";
+      }    
       break;
 
     case 'random':
