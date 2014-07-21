@@ -69,7 +69,7 @@ if( isset($params['submit']) ) {
 
       @$this->SendEvent('NewsCategoryEdited', array('category_id' => $catid, 'name' => $name, 'origname' => $origname));
       // put mention into the admin log
-      audit($catid, 'News category: '.$catid, ' Category edited');
+      audit($catid, 'News category: '.$name, ' Category edited');
 
       $this->SetMessage($this->Lang('categoryupdated'));
       $this->RedirectToAdminTab('categories','','admin_settings');
