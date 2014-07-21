@@ -220,7 +220,7 @@ if (isset($params['submit'])) {
                 'extra' => $extra
             ));
             // put mention into the admin log
-            audit($articleid, 'News: ' . $articleid, 'Article added');
+            audit($articleid, 'News: ' . $title, 'Article added');
             $params = array(
                 'tab_message' => $this->Lang('articleadded'),
                 'active_tab' => 'articles'
@@ -235,7 +235,7 @@ if (isset($params['submit'])) {
     unset($params['preview']);
     unset($params['submit']);
     unset($params['cancel']);
-    unset($params['ajsx']);
+    unset($params['ajax']);
 
     $tmpfname = tempnam(TMP_CACHE_LOCATION, $this->GetName() . '_preview');
     file_put_contents($tmpfname, serialize($params));

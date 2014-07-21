@@ -250,7 +250,7 @@ if (isset($params['submit']) || isset($params['apply'])) {
             'news_url' => $news_url
         ));
         // put mention into the admin log
-        audit($articleid, 'News: ' . $articleid, 'Article edited');
+        audit($articleid, 'News: ' . $title, 'Article edited');
     }// if no error.
 
     if (isset($params['apply']) && isset($params['ajax'])) {
@@ -287,7 +287,7 @@ if (isset($params['submit']) || isset($params['apply'])) {
     unset($params['preview']);
     unset($params['submit']);
     unset($params['cancel']);
-    unset($params['ajsx']);
+    unset($params['ajax']);
 
     $tmpfname = tempnam(TMP_CACHE_LOCATION, $this->GetName() . '_preview');
     file_put_contents($tmpfname, serialize($params));
