@@ -4,8 +4,8 @@ $lang["backbuttontext"] = "Go back";
 
 // C
 $lang["confirmresetstyle"] = "Are you sure the stylesheet should be reset?";
-$lang["confirmresettemplate"] = "Are you sure the template should be reset to its default value?";
-$lang["confirmuninstall"] = "Are you sure the module should be uninstalled?";
+//$lang["confirmresettemplate"] = "Are you sure the template should be reset to its default value?";
+//$lang["confirmuninstall"] = "Are you sure the module should be uninstalled?";
 
 // D
 $lang["defaultlinktext"] = "Print this page";
