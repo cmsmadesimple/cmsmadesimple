@@ -92,7 +92,7 @@ function smarty_function_cms_selflink($params, &$template)
 				for( $j = $i + 1; $j < count($flatcontent); $j++ ) {
 					$k = $indexes[$j];
 					$content = $flatcontent[$k]->getContent();
-					if( !is_object($content) ) return;
+					if( !is_object($content) ) continue;
 					if( !$content->Active() || !$content->HasUsableLink() || !$content->ShowInMenu() ) continue;
 					$pageid = $content->Id();
 					$label = CmsLangOperations::lang_from_realm('cms_selflink','next_label');
@@ -116,7 +116,7 @@ function smarty_function_cms_selflink($params, &$template)
 			if( $i < count($children) ) {
 				for( $j = $i + 1; $j < count($children); $j++ ) {
 					$content = $children[$j]->getContent();
-					if( !is_object($content) ) return;
+					if( !is_object($content) ) continue;
 					if( !$content->Active() || !$content->HasUsableLink() || !$content->ShowInMenu() ) continue;
 					$pageid = $content->Id();
 					$label = CmsLangOperations::lang_from_realm('cms_selflink','next_label');
@@ -135,7 +135,7 @@ function smarty_function_cms_selflink($params, &$template)
 				for( $j = $i - 1; $j >= 0; $j-- ) {
 					$k = $indexes[$j];
 					$content = $flatcontent[$k]->getContent();
-					if( !$content->Active() || !$content->HasUsableLink() || !$content->ShowInMenu() ) continue;
+					if( !is_object($content) || !$content->Active() || !$content->HasUsableLink() || !$content->ShowInMenu() ) continue;
 					$pageid = $content->Id();
 					$label = CmsLangOperations::lang_from_realm('cms_selflink','prev_label');
 					break;
@@ -158,7 +158,7 @@ function smarty_function_cms_selflink($params, &$template)
 			if( $i < count($children) ) {
 				for( $j = $i - 1; $j >= 0; $j-- ) {
 					$content = $children[$j]->getContent();
-					if( !$content->Active() || !$content->HasUsableLink() || !$content->ShowInMenu() ) continue;
+					if( !is_object($content) || !$content->Active() || !$content->HasUsableLink() || !$content->ShowInMenu() ) continue;
 					$pageid = $content->Id();
 					$label = CmsLangOperations::lang_from_realm('cms_selflink','prev_label');
 					break;
