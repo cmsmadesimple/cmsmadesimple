@@ -261,7 +261,6 @@ final class CmsFormUtils
         $enablewysiwyg = cms_to_bool(get_parameter_value($parms,'enablewysiwyg','false')); // if not false, we want a wysiwyg area
         $wantedsyntax = get_parameter_value($parms,'wantedsyntax'); // if not null, and no wysiwyg found, use a syntax area.
         $wantedsyntax = get_parameter_value($parms,'type',$wantedsyntax);
-
         $attribs['class'] .= ' '.$attribs['name']; // make sure the name is one of the classes.
 
         if( $enablewysiwyg ) {

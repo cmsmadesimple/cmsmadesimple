@@ -618,7 +618,9 @@ function is_directory_writable( $path )
             if( $file == '.' || $file == '..' ) continue;
 
             $p = $path.$file;
-            if( !@is_writable( $p ) ) return FALSE;
+            if( !@is_writable( $p ) ) {
+                return FALSE;
+            }
 
             if( @is_dir( $p ) ) {
                 $result = is_directory_writable( $p );
