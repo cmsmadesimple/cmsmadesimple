@@ -247,35 +247,35 @@ function cms_utf8entities($val)
  */
 function debug_bt_to_log()
 {
-  if( cmsms()->config['debug_to_log'] || check_login(TRUE) ) {
-      $bt=debug_backtrace();
-      $file = $bt[0]['file'];
-      $line = $bt[0]['line'];
+    if( cmsms()->config['debug_to_log'] || (function_exists('check_login') && check_login(TRUE)) ) {
+        $bt=debug_backtrace();
+        $file = $bt[0]['file'];
+        $line = $bt[0]['line'];
 
-    $out = array();
-    $out[] = "Backtrace in $file on line $line";
+        $out = array();
+        $out[] = "Backtrace in $file on line $line";
 
-    $bt = array_reverse($bt);
-    foreach($bt as $trace) {
-      if( $trace['function'] == 'debug_bt_to_log' ) continue;
+        $bt = array_reverse($bt);
+        foreach($bt as $trace) {
+            if( $trace['function'] == 'debug_bt_to_log' ) continue;
 
-      $file = '';
-      $line = '';
-      if( isset($trace['file']) ) {
-	$file = $trace['file'];
-	$line = $trace['line'];
-      }
-      $function = $trace['function'];
-      $str = "$function";
-      if( $file ) $str .= " at $file:$line";
-      $out[] = $str;
+            $file = '';
+            $line = '';
+            if( isset($trace['file']) ) {
+                $file = $trace['file'];
+                $line = $trace['line'];
+            }
+            $function = $trace['function'];
+            $str = "$function";
+            if( $file ) $str .= " at $file:$line";
+            $out[] = $str;
+        }
+
+        $filename = TMP_CACHE_LOCATION . '/debug.log';
+        foreach ($out as $txt) {
+            error_log($txt . "\n", 3, $filename);
+        }
     }
-
-    $filename = TMP_CACHE_LOCATION . '/debug.log';
-    foreach ($out as $txt) {
-      error_log($txt . "\n", 3, $filename);
-    }
-  }
 }
 
 
@@ -403,17 +403,17 @@ function debug_output($var, $title="")
  */
 function debug_to_log($var, $title='',$filename = '')
 {
-  if( cmsms()->config['debug_to_log'] || check_login(TRUE) ) {
-    if( $filename == '' ) {
-      $filename = TMP_CACHE_LOCATION . '/debug.log';
-      $x = @filemtime($filename);
-      if( $x !== FALSE && $x < (time() - 24 * 3600) ) @unlink($filename);
+    if( cmsms()->config['debug_to_log'] || (function_exists('check_login') && check_login(TRUE)) ) {
+        if( $filename == '' ) {
+            $filename = TMP_CACHE_LOCATION . '/debug.log';
+            $x = @filemtime($filename);
+            if( $x !== FALSE && $x < (time() - 24 * 3600) ) @unlink($filename);
+        }
+        $errlines = explode("\n",debug_display($var, $title, false, false, false));
+        foreach ($errlines as $txt) {
+            error_log($txt . "\n", 3, $filename);
+        }
     }
-    $errlines = explode("\n",debug_display($var, $title, false, false, false));
-    foreach ($errlines as $txt) {
-      error_log($txt . "\n", 3, $filename);
-    }
-  }
 }
 
 
