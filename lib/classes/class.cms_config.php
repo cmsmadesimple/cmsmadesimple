@@ -237,8 +237,9 @@ final class cms_config implements ArrayAccess
 		  return FALSE;
 
 	  case 'default_upload_permission':
-		  $mask = get_site_preference('global_umask',022);
-		  return 0666 & ~$mask;
+		  $mask = octdec(get_site_preference('global_umask','0022'));
+		  $val = 0666 & ~$mask;
+          return sprintf('%o',$val);
 
 	  case 'assume_mod_rewrite':
 		  // deprecated, backwards compat only
