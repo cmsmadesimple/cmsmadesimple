@@ -396,6 +396,7 @@ $(document).ready(function(){
 						<input type="text" id="timeout" name="mailprefs_timeout" value="{$mailprefs.timeout}" size="6" maxlength="8"/>
 						&nbsp;{cms_help key2='settings_mailprefs_smtptimeout' title=lang('settings_smtptimeout')}
 					</p>
+				</div>
 
 				<fieldset>
 					<legend>{lang('settings_authentication')}:</legend>
