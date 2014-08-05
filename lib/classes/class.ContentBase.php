@@ -1554,7 +1554,6 @@ abstract class ContentBase
 		$errors = array();
 
 		if ($this->mParentId < -1) {
-			die('parent id is '.$this->mParentId);
 			$errors[] = lang('invalidparent');
 			$result = false;
 		}
@@ -2265,8 +2264,9 @@ abstract class ContentBase
 		case 'parent':
 			$contentops = $gCms->GetContentOperations();
 			$tmp = $contentops->CreateHierarchyDropdown($this->mId, $this->mParentId, 'parent_id', 0, 1, 0, 1,get_site_preference('listcontent_showtitle',true) );
-			if( empty($tmp) && !check_permission(get_userid(),'Manage All Content') )
+			if( empty($tmp) && !check_permission(get_userid(),'Manage All Content') ) {
 				return array('','<input type="hidden" name="parent_id" value="'.$this->mParentId.'" />');
+            }
 			$help = '&nbsp;'.cms_admin_utils::get_help_tag('core','help_content_parent',lang('help_title_content_parent'));
 			if( !empty($tmp) ) return array('<label for="parent_id">*'.lang('parent').':</label>'.$help,$tmp);
 			break;

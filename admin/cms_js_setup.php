@@ -48,7 +48,7 @@ $data['secure_param_name'] = CMS_SECURE_PARAM_NAME;
 $data['user_key'] = $_SESSION[CMS_USER_KEY];
 
 // output some javascript
-$out = 'var cms_data = {};'."\n";
+$out = 'cms_data = {};'."\n";
 
 foreach( $data as $key => $value ) {
     $value = json_encode($value);
@@ -59,7 +59,10 @@ $out .= <<<EOT
 function cms_lang(key) {
     'use strict';
     key = 'lang_'+key;
-    if( typeof(cms_data.key) !== 'undefined' ) return cms_data.key;
+    if( typeof(cms_data[key]) !== 'undefined' ) {
+      return cms_data[key];
+    }
+    alert('notset');
 }
 EOT;
 header('Pragma: public');

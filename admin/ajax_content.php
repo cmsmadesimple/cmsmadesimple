@@ -53,7 +53,9 @@ case 'childrenof':
             if( is_array($children) && count($children) ) {
                 $out = array();
                 foreach( $children as $child ) {
-                    $res = $child->getContent(FALSE)->ToData();
+                    $content = $child->getContent(FALSE);
+                    if( !is_object($content) ) continue;
+                    $res = $content->ToData();
                     $res['display'] = $res['menu_text'];
                     if( $display == 'title' ) $res['display'] = $res['content_name'];
                     $out[] = $res;

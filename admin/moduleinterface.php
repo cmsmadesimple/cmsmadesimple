@@ -55,9 +55,6 @@ if( !$modinst ) {
   redirect('index.php'.$urlext);
 }
 
-$themeObject = cms_utils::get_theme_object();
-$themeObject->set_action_module($module);
-
 $USE_THEME = true;
 if( isset($_REQUEST['showtemplate']) && ($_REQUEST['showtemplate'] == 'false')) {
   // for simplicity and compatibility with the frontend.
@@ -72,6 +69,9 @@ if( $modinst->SuppressAdminOutput($_REQUEST) != false || isset($_REQUEST['suppre
 $params = ModuleOperations::get_instance()->GetModuleParameters($id);
 $content = null;
 if( $USE_THEME ) {
+    $themeObject = cms_utils::get_theme_object();
+    $themeObject->set_action_module($module);
+
     @ob_start();
     echo  $modinst->DoActionBase($action, $id, $params);
     $content = @ob_get_contents();
