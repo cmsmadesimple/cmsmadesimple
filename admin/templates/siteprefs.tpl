@@ -396,7 +396,6 @@ $(document).ready(function(){
 						<input type="text" id="timeout" name="mailprefs_timeout" value="{$mailprefs.timeout}" size="6" maxlength="8"/>
 						&nbsp;{cms_help key2='settings_mailprefs_smtptimeout' title=lang('settings_smtptimeout')}
 					</p>
-				</div>
 
 				<fieldset>
 					<legend>{lang('settings_authentication')}:</legend>
@@ -404,7 +403,7 @@ $(document).ready(function(){
 						<p class="pagetext"><label for="smtpauth">{lang('settings_smtpauth')}:</label></p>
 						<p class="pageinput">
 							<select id="smtpauth" name="mailprefs_smtpauth">
-								{cms_yesno selected=$prefs.smtpauth}
+								{cms_yesno selected=$mailprefs.smtpauth}
 							</select>&nbsp;{cms_help key2='settings_mailprefs_smtpauth' title=lang('settings_smtpauth')}
 						</p>
 					</div>
@@ -413,7 +412,7 @@ $(document).ready(function(){
 						<p class="pagetext"><label for="secure">{lang('settings_authsecure')}:</label></p>
 						<p class="pageinput">
 							<select id="secure" name="mailprefs_secure">
-								{html_options options=$secure_opts selected=$prefs.secure}
+								{html_options options=$secure_opts selected=$mailprefs.secure}
 							</select>&nbsp;{cms_help key2='settings_mailprefs_smtpsecure' title=lang('settings_authsecure')}
 						</p>
 					</div>
