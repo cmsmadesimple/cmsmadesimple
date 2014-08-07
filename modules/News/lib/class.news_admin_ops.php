@@ -29,23 +29,23 @@ final class news_admin_ops
     //Now remove the article
     $query = "DELETE FROM ".cms_db_prefix()."module_news WHERE news_id = ?";
     $db->Execute($query, array($articleid));
-    
+
     // Delete it from the custom fields
     $query = 'DELETE FROM '.cms_db_prefix().'module_news_fieldvals WHERE news_id = ?';
     $db->Execute($query, array($articleid));
 
     // delete any files...
-    $config = cmsms()->GetConfig;
+    $config = cmsms()->GetConfig();
     $p = cms_join_path($config['uploads_path'],'news','id'.$articleid);
     if( is_dir($p) ) recursive_delete($p);
 
     news_admin_ops::delete_static_route($articleid);
-    
+
     //Update search index
     $mod = cms_utils::get_module('News');
     $module = cms_utils::get_search_module();
     if ($module != FALSE) $module->DeleteWords($mod->GetName(), $articleid, 'article');
-    
+
     @$mod->SendEvent('NewsArticleDeleted', array('news_id' => $articleid));
 
     // put mention into the admin log
@@ -56,7 +56,7 @@ final class news_admin_ops
   public static function handle_upload($itemid,$fieldname,&$error)
   {
     $config = cmsms()->GetConfig();
-	  
+
     $mod = cms_utils::get_module('News');
     $p = cms_join_path($config['uploads_path'],'news');
     if (!is_dir($p)) {
