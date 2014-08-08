@@ -9,10 +9,10 @@
 		<meta name="viewport" content="initial-scale=1.0 maximum-scale=1.0 user-scalable=no" />
 		<meta name="HandheldFriendly" content="True"/>
 		<link rel="shortcut icon" href="{$config.admin_url}/themes/OneEleven/images/favicon/cmsms-favicon.ico"/>
-		<link rel='apple-touch-icon' href='{$config.admin_url}/themes/OneEleven/images/favicon/apple-touch-icon-iphone.png' /> 
-		<link rel='apple-touch-icon' sizes='72x72' href='{$config.admin_url}/themes/OneEleven/images/favicon/apple-touch-icon-ipad.png' /> 
+		<link rel='apple-touch-icon' href='{$config.admin_url}/themes/OneEleven/images/favicon/apple-touch-icon-iphone.png' />
+		<link rel='apple-touch-icon' sizes='72x72' href='{$config.admin_url}/themes/OneEleven/images/favicon/apple-touch-icon-ipad.png' />
 		<link rel='apple-touch-icon' sizes='114x114' href='{$config.admin_url}/themes/OneEleven/images/favicon/apple-touch-icon-iphone4.png' />
-		<link rel='apple-touch-icon' sizes='144x144' href='{$config.admin_url}/themes/OneEleven/images/favicon/apple-touch-icon-ipad3.png' />		
+		<link rel='apple-touch-icon' sizes='144x144' href='{$config.admin_url}/themes/OneEleven/images/favicon/apple-touch-icon-ipad3.png' />
 		<meta name='msapplication-TileImage' content='{$config.admin_url}/themes/OneEleven/images/favicon/ms-application-icon.png' />
 		<meta name='msapplication-TileColor' content='#f89938'>
 		<!-- learn IE html5 -->
@@ -21,7 +21,7 @@
 		<![endif]-->
 		<!-- custom jQueryUI Theme 1.10.04 see link in UI Stylesheet for color reference //-->
 		<link rel="stylesheet" href="style.php?{$secureparam}" />
-		{cms_jquery append="`$config.admin_url`/themes/OneEleven/includes/standard.js" include_css=0}
+		{cms_jquery append="`$config.admin_url`/themes/OneEleven/includes/standard.min.js" include_css=0}
 		<link href="{$config.admin_url}/themes/OneEleven/css/default-cmsms/jquery-ui-1.10.4.custom.min.css" rel="stylesheet" />
 		<!-- THIS IS WHERE HEADER STUFF SHOULD GO -->
 	 	{$headertext|default:''}
@@ -67,9 +67,9 @@
 						{assign var='is_notifications' value=$theme->get_notifications()}
 						<span title="{'open'|lang}/{'close'|lang}" class="toggle-button close{if empty($is_notifications)} top{/if}">{'open'|lang}/{'close'|lang}</span>
 						<!-- notifications -->
-						{include file='notifications.tpl' items=$theme->get_notifications()} 
+						{include file='notifications.tpl' items=$theme->get_notifications()}
 							<!-- start navigation -->
-						{include file='navigation.tpl' nav=$theme->get_navigation_tree()} 
+						{include file='navigation.tpl' nav=$theme->get_navigation_tree()}
 						<!-- end navigation //-->
 					</aside>
 				</div>
@@ -81,17 +81,17 @@
 					{if isset($fmgood) && $fmgood}{cms_module module=FileManager action='dropzone' id='dropzone' assign='droparea'}{/if}
 					<article role="main" class="content-inner">
 						<header class="pageheader{if isset($is_ie)} drop-hidden{/if} cf">
-							{if isset($module_icon_url) or isset($pagetitle)} 
+							{if isset($module_icon_url) or isset($pagetitle)}
 							<h1>{if isset($module_icon_url)}<img src="{$module_icon_url}" alt="{$module_name|default:''}" class="module-icon" />{/if}
 							{$pagetitle|default:''}
 							</h1>
 							{if isset($module_help_url) or isset($wiki_url)} <span class="helptext"> {if isset($module_help_url)}<a href="{$module_help_url}">{'module_help'|lang}</a>{/if}
 								{if isset($wiki_url)}<a href="{$wiki_url}" class="external" target="_blank">{'help'|lang}</a> <em>({'new_window'|lang})</em>{/if} </span> {/if}
 							{/if}
-							{* filemanager dropzone *}							
+							{* filemanager dropzone *}
 							{if isset($droparea) && !isset($is_ie)}
 								{$droparea}
-							{/if} 
+							{/if}
 						</header>
 						<section class="cf">
 							{$content}
@@ -106,7 +106,7 @@
 			</div>
 			<!-- end content //-->
 			<!-- start footer -->
-			{include file='footer.tpl'} 
+			{include file='footer.tpl'}
 			<!-- end footer //-->
 		</div>
 		<!-- end container //-->
