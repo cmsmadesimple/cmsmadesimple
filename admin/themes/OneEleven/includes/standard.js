@@ -342,19 +342,16 @@
                 $('.drop-inner').toggleClass('hidden');
 
                 if ($('.drop-inner').hasClass('hidden')) {
-                    obj.addClass('drop-hidden');
                     OE.helper.setStorageValue('dropzone-pref', 'hidden', 60);
                 } else {
-                    trigger.removeClass('drop-hidden');
                     OE.helper.removeStorageValue('dropzone-pref');
                 }
             });
 
             if (OE.helper.getStorageValue('dropzone-pref') === 'hidden') {
                 $('.drop-inner').addClass('hidden');
-                obj.addClass('drop-hidden');
             } else {
-                $('.pageheader').addClass('drop-visible');
+                $('.drop-inner').removeClass('hidden');
             }
         },
 
