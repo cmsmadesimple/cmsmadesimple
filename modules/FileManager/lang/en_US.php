@@ -5,8 +5,8 @@ $lang['755style'] = '755 style';
 $lang['actiondelete'] = 'Delete one or more items';
 $lang['actions']= 'Actions';
 $lang['advancedhelp'] = 'Lets you gain access to whole CMSMS file system, not just /uploads/ (if allowed)';
-$lang['afilecontainsillegalchars'] = 'A file name contains one or more illegal characters (\',",+,*,\\,/,&,$). Upload cancelled.';
-$lang['afileistoobig'] = 'A file is too big. The upload is cancelled.';
+$lang['afilecontainsillegalchars'] = 'A file name contains one or more illegal characters (\',",+,*,\\,/,&,$). Upload canceled.';
+$lang['afileistoobig'] = 'A file is too big. The upload is canceled.';
 $lang['and'] = 'and';
 $lang['angle'] = 'Angle';
 
@@ -18,7 +18,7 @@ $lang['bytesin'] = 'bytes in';
 $lang['cancel'] = 'Cancel';
 $lang['change_working_folder'] = 'Change working folder';
 $lang['chmod'] = 'Change permissions';
-$lang['chmodcancelled'] = 'Changing of permissions cancelled';
+$lang['chmodcancelled'] = 'Changing of permissions canceled';
 $lang['chmodfailure'] = 'Changing permissions of file failed';
 $lang['chmodselected'] = 'Change permissions on selected files';
 $lang['chmodsuccess'] = 'File successfully got new permissions';
@@ -46,7 +46,7 @@ $lang['currentpath'] = 'Current path:';
 // D
 $lang['delete'] = 'Delete';
 $lang['deleteselected'] = 'Delete the selected files/directories';
-$lang['deleteselectedcancelled'] = 'Deletion of selected files cancelled';
+$lang['deleteselectedcancelled'] = 'Deletion of selected files canceled';
 $lang['deletesuccess'] = 'Items successfully deleted';
 $lang['dirchmodfailmulti'] = 'Changing permissions on the directory failed, some of it\'s content may have gotten new permissions, though.';
 $lang['dirchmodfailure'] = 'Changing permissions of the directory failed';
@@ -54,7 +54,7 @@ $lang['dirchmodsuccess'] = 'The directory successfully got new permissions';
 $lang['dirchmodsuccessmulti'] = 'Changing permissions on the directory and it\'s content was successful';
 $lang['direxists'] = 'The directory already exists';
 $lang['dirnotemptyconfirm'] = 'The directory isn\'t empty! Do you really want to delete it, including all content and subdirectories?';
-$lang['dirtreedeletecancelled'] = 'Deletion of directory cancelled';
+$lang['dirtreedeletecancelled'] = 'Deletion of directory canceled';
 $lang['dirtreedeletefail'] = 'An error occurred when deleting this directory. Some of the contents may have been deleted, however.';
 $lang['dirtreedeletesuccess'] = 'The directory including content was successfully deleted.';
 
@@ -179,9 +179,10 @@ $lang['nodestinationdirs'] = 'Could not find any valid destination directories f
 $lang['nofilesselected'] = 'No files selected';
 $lang['none'] = 'None';
 $lang['nothinguploaded'] = 'Nothing uploaded';
-$lang['notwritable'] = 'Not writeable';
+$lang['notwritable'] = 'Not writable';
 
 // O
+$lang['ok'] = 'OK';
 $lang['others'] = 'Others';
 $lang['owner'] = 'Owner';
 
@@ -221,7 +222,7 @@ $lang['really_uninstall'] = 'Are you sure the File Manager module should be unin
 $lang['recursetext'] = 'Recurse into subdirectories';
 $lang['refresh'] = 'refresh';
 $lang['rename'] = 'Rename';
-$lang['renamecancelled'] = 'Renaming cancelled';
+$lang['renamecancelled'] = 'Renaming canceled';
 $lang['renameerror'] = 'Error! Item could not be renamed';
 $lang['renamefailure'] = 'Renaming of file failed';
 $lang['renamesuccess'] = 'Item successfully renamed';
@@ -300,7 +301,7 @@ $lang['unpackafterupload'] = 'Try to unpack file after upload (only tgz and most
 $lang['unpackfail'] = ' failed with this error: ';
 $lang['unpacksuccess'] = 'is successfully unpacked';
 $lang['upgraded'] = 'The FileManager module is upgraded to version %s';
-$lang['uploaderstandard'] = 'Standard html input-method (allows unpacking)';
+$lang['uploaderstandard'] = 'Standard HTML input-method (allows unpacking)';
 $lang['uploadfail'] = 'failed to upload successfully';
 $lang['uploadmethod'] = 'Upload method';
 $lang['uploadnewfile'] = 'Upload new file(s):';
@@ -310,7 +311,7 @@ $lang['uploadsuccess'] = 'is uploaded successfully';
 $lang['view'] = 'View';
 
 // W
-$lang['writable'] = 'Writeable';
+$lang['writable'] = 'Writable';
 $lang['writeprotected'] = 'Write protected';
 
 ?>
