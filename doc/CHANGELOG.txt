@@ -30,6 +30,8 @@ Core - General
   - Remove direct ImageMagick support (no more config entries)
   - Removed AllowAutoUpgrade and AllowAutoInstall from module API
   - Removed valid_css and valid_xhtml tags
+  - Modules can have multiple admin menu entries
+  - more
 
 Core - Bug Reports
   - #9721 There's no check if changelog.txt exists
