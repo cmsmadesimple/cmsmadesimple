@@ -3,24 +3,24 @@ Version 2.0 - NO NAME SET
 TESTING
 Core - General
   - Default upload permission is now based on the umask
-  - Removed the NCleanGrey admin theme
-  - Many tweaks to the admin theme
+  - Removed the NCleanGrey Admin theme
+  - Many tweaks to the Admin theme
   - Improvements to module loading
-  - Many new smarty plugins for form building in modules
+  - Many new Smarty plugins for form building in modules
   - New ajaxy help
-  - UI Review trough many admin pages
+  - UI Review trough many Admin pages
   - New jquery based page selector
   - Improved and documented htaccess.txt file
   - Many new smarty plugins to aid in module development and separation of logic from display
   - Adds the {cms_module_hint} plugin
   - {content}, {content_image} and {content_module} plugins all receive the required and priority parameters
   - {content} tag now has the placeholder attribute
-  - Major accessibility review throughout admin interface
-  - Removed many static admin pages, and replaced with new modules
+  - Major accessibility review throughout Admin interface
+  - Removed many static Admin pages, and replaced with new modules
   - Accept UTF-8 chars in page alias and in custom URLs
     (punctuation, whitespace, / and . are not allowed in the alias. Punctuation, whitespace and . are not allowed in URLs)
   - Removed the 'ext' parameter from cms_selflink
-  - Removed the old compatibility admintheme class (admintheme.inc.php) was deprecated in 1.11
+  - Removed the old compatibility Admin theme class (admintheme.inc.php) was deprecated in 1.11
   - Admin interface now assumes HTML5.  Porting admin themes must include porting them to HTML5
   - Simplex Theme gets some love: updated Grid system, removed all images and replaced with icon fonts, extended JS functions with 
     hopefully better Mobile support, Theme JS includes now helper variables like SX.isTouch, SX.isMobile, SX.viewportWidth and SX.UA,
@@ -30,13 +30,13 @@ Core - General
   - Remove direct ImageMagick support (no more config entries)
   - Removed AllowAutoUpgrade and AllowAutoInstall from module API
   - Removed valid_css and valid_xhtml tags
-  - Modules can have multiple admin menu entries
-  - more
+  - Modules can have multiple Admin menu entries
+  - more...
 
 Core - Bug Reports
   - #9721 There's no check if changelog.txt exists
 
-Core - Feature Requests:
+Core - Feature Requests
   - #4178 Improve behaviour of cms_selflink
   - #9270 More visible indication of "Site Down" status
 
@@ -97,6 +97,33 @@ ModuleManager
   - Now shows summary of releases for a specific module
   - Visual indicators for stale and new modules
 
+  
+Version 1.11.11 - San Cristobal
+-------------------------------
+Core - General
+  - Minor improvements to module loading
+  - Minor fix to error console
+  - xajax now cleans buffers before outputting anything
+  - Improvements to behavior of the 'label' parameter on content_module blocks
+  - Enable adodb transactions
+  - Fix minor security issue with changegroupperms
+  - Minor bug fixes wrt static routes
+  - Now update dependencies when a module is upgraded
+  - Fixes #10135
+
+Core - Installer
+  - Minor change to timezone handling
+
+Core - Module Manager
+  - Fixes problem with displaying help and about
+
+Core - News
+  - Fixed sorting by category
+
+Core - MicroTiny
+  - Updated to tinymce 3.5.11 to fix IE11 issues
+  - Now use "forced_root_block: 'p'" to ensure that newlines generate paragraphs, and ctrl+enter generates <br /> tags
+
 
 Version 1.11.10 - Pinzon
 ------------------------
@@ -115,7 +142,7 @@ Core - FileManager
 Core - News
  - Fix potential SQL injection vulnerability wrt the sortby parameter
 
- 
+
 Version 1.11.9 - Bartolome
 -----------------------------
 Core - General
