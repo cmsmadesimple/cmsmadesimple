@@ -44,7 +44,7 @@ $(document).ready(function(){
 {if isset($search_data)}
 <fieldset>
 <legend>{$ModuleManager->Lang('search_results')}:</legend>
-<table cellspacing="0" class="pagetable scrollable">
+<table class="pagetable scrollable">
 	<thead>
 		<tr>
 			<th></th>
@@ -52,7 +52,7 @@ $(document).ready(function(){
 			<th><span title="{$ModuleManager->Lang('title_modulelastversion')}">{$ModuleManager->Lang('vertext')}</span></th>
 			<th><span title="{$ModuleManager->Lang('title_modulelastreleasedate')}">{$ModuleManager->Lang('releasedate')}</span></th>
 			<th><span title="{$ModuleManager->Lang('title_moduletotaldownloads')}">{$ModuleManager->Lang('downloads')}</span></th>
-                        <th><span title="{$ModuleManager->Lang('title_modulestatus')}">{$ModuleManager->Lang('statustext')}</span></th>
+            <th><span title="{$ModuleManager->Lang('title_modulestatus')}">{$ModuleManager->Lang('statustext')}</span></th>
 			<th>&nbsp;</th>
 			<th>&nbsp;</th>
 			<th>&nbsp;</th>
@@ -62,7 +62,7 @@ $(document).ready(function(){
 	{foreach from=$search_data item=entry}
 		{cycle values="row1,row2" assign='rowclass'}
 	        <tr class="{$rowclass}" {if $entry->age=='new'}style="font-weight: bold;"{/if}>
-		        <td>{get_module_status_icon status=$entry->age}</td>
+		    <td>{get_module_status_icon status=$entry->age}</td>
 			<td><span title="{$entry->description|strip_tags|cms_escape}">{$entry->name}</span></td>
 			<td>{$entry->version}</td>
 			<td>{$entry->date|date_format:'%x'}</td>
@@ -72,7 +72,7 @@ $(document).ready(function(){
                             {else}
                                {$entry->status}
                             {/if}
-                        </td>
+            </td>
 			<td><a href="{$entry->depends_url}" title="{$ModuleManager->Lang('title_moduledepends')}">{$ModuleManager->Lang('dependstxt')}</a></td>
 			<td><a href="{$entry->help_url}" title="{$ModuleManager->Lang('title_modulehelp')}">{$ModuleManager->Lang('helptxt')}</a></td>
 			<td><a href="{$entry->about_url}" title="{$ModuleManager->Lang('title_moduleabout')}">{$ModuleManager->Lang('abouttxt')}</a></td>

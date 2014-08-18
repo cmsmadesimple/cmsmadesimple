@@ -53,7 +53,7 @@ include_once("header.php");
 	
 		echo'<p class="pagewarning visible">' . lang('show_shortcuts_message') . '</p>';
 
-		echo "<table cellspacing=\"0\" class=\"pagetable\">\n";
+		echo "<table class=\"pagetable\">\n";
 		echo '<thead>';
 		echo "<tr>\n";
 		echo "<th class=\"pagew60\">".lang('name')."</th>\n";

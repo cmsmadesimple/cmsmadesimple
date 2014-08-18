@@ -60,7 +60,7 @@ if (FALSE == empty($_GET['message'])) {
 echo '<div class="pagecontainer">';
 echo '<div class="pageoverflow">';
 echo $themeObject->ShowHeader('userdefinedtags');
-echo "<table cellspacing=\"0\" class=\"pagetable\">\n";
+echo "<table class=\"pagetable\">\n";
 echo '<thead>';
 echo "<tr>\n";
 echo "<th>".lang('name')."</th>\n";

@@ -37,7 +37,7 @@
     {$submit} {$cancel}
 </div>
 {assign var='group_count' value=count($group_list)}
-<table cellspacing="0" class="pagetable" id="permtable">
+<table class="pagetable" id="permtable">
   <thead>
   <tr>
     <th>{if isset($title_group)}{$title_group}{/if}</th>

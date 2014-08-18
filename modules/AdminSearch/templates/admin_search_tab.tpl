@@ -33,7 +33,7 @@
 <div id="adminsearchform">
 {$formstart}
 
-<table class="pagetable" cellspacing="0">
+<table class="pagetable">
 <tr valign="top">
 <td width="50%">
 <div class="pageoverflow">

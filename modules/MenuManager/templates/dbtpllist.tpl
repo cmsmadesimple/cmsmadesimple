@@ -3,7 +3,7 @@
 	<p class="pageoptions">{$addlink}</p>
 </div>
 
-<table cellspacing="0" class="pagetable">
+<table class="pagetable">
 	<thead>
 		<tr>
 			<th>{$templatetext}</th>
@@ -27,7 +27,7 @@
                           {else if isset($entry->setdefault_link)}
                             {$entry->setdefault_link}
  			  {/if}
-                        </td>
+            </td>
             <td>{if isset($entry->setcachable_link)}{$entry->setcachable_link}{/if}</td>
 			<td>{if isset($entry->importlink)}{$entry->importlink}{/if}</td>
 			<td>{if isset($entry->editlink)}{$entry->editlink}{/if}</td>

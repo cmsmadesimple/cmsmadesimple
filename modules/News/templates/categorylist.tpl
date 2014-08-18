@@ -13,7 +13,7 @@ $(document).ready(function(){
 </p></div>
 
 {if $itemcount > 0}
-<table cellspacing="0" class="pagetable">
+<table class="pagetable">
 	<thead>
 		<tr>
 			<th>{$categorytext}</th>

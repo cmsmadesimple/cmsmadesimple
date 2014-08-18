@@ -15,7 +15,7 @@
   {elseif isset($error)}
     <div class="pageerrorcontainer"><div class="pageoverflow"><ul class="pageerror"><li>{$error}</li></ul></div></div>
   {elseif isset($plugins)}
-    <table cellspacing="0" class="pagetable">
+    <table class="pagetable">
       <thead> 
        <tr>
          <th><span title="{lang_by_realm('tags','tag_name')}">{'name'|lang}</span></th>

@@ -74,7 +74,7 @@ if (check_permission($userid, 'Add Groups')) {
 	  echo "<p class=\"pageshowrows\">".pagination($page, count($grouplist), $limit)."</p>";
 	}
 	if (count($grouplist) > 0) {
-	  echo "<table cellspacing=\"0\" class=\"pagetable\">\n";
+	  echo "<table class=\"pagetable\">\n";
 	  echo '<thead>';
 	  echo "<tr>\n";
 	  echo "<th class=\"pagew60\">".lang('name')."</th>\n";

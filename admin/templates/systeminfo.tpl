@@ -9,7 +9,7 @@
 		<p>{si_lang a=help_systeminformation}</p>
 	</div>
 <hr/>
-<table class="pagetable" cellspacing="0" summary="{si_lang a=cms_install_information}">
+<table class="pagetable" summary="{si_lang a=cms_install_information}">
     <thead> 
        <tr>
          <th colspan="3">{si_lang a=cms_install_information}</th>
@@ -24,7 +24,7 @@
 	</tbody>
 </table>
 <br /><br />
-<table class="pagetable" cellspacing="0" summary="{si_lang a=installed_modules}">
+<table class="pagetable" summary="{si_lang a=installed_modules}">
     <thead> 
        <tr>
          <th colspan="3">{si_lang a=installed_modules}</th>
@@ -41,7 +41,7 @@
 	</tbody>
 </table>
 <br /><br />
-<table class="pagetable" cellspacing="0" summary="{si_lang a=config_information}">
+<table class="pagetable" summary="{si_lang a=config_information}">
     <thead> 
        <tr>
          <th colspan="3">{si_lang a=config_information}</th>
@@ -67,7 +67,7 @@
 <br /><br />
 
 
-<table class="pagetable" cellspacing="0" summary="{lang('performance_information')}">
+<table class="pagetable" summary="{lang('performance_information')}">
     <thead> 
        <tr>
          <th colspan="3">{lang('performance_information')}</th>
@@ -92,7 +92,7 @@
 </table>
 <br /><br />
 
-<table class="pagetable" cellspacing="0" summary="{si_lang a=php_information}">
+<table class="pagetable" summary="{si_lang a=php_information}">
     <thead> 
        <tr>
          <th colspan="3">{si_lang a=php_information}</th>
@@ -121,7 +121,7 @@
 	</tbody>
 </table>
 <br /><br />
-<table class="pagetable" cellspacing="0" summary="{si_lang a=server_information}">
+<table class="pagetable" summary="{si_lang a=server_information}">
     <thead> 
        <tr>
          <th colspan="3">{si_lang a=server_information}</th>
@@ -144,7 +144,7 @@
 	</tbody>
 </table>
 <br /><br />
-<table class="pagetable" cellspacing="0" summary="{si_lang a=permission_information}">
+<table class="pagetable" summary="{si_lang a=permission_information}">
     <thead> 
        <tr>
          <th colspan="3">{si_lang a=permission_information}</th>

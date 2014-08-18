@@ -1,6 +1,6 @@
 {if $itemcount > 0}
 
-<table cellspacing="0" class="pagetable">
+<table class="pagetable">
 	<thead>
 		<tr>
 			<th>{$filenametext}</th>
@@ -16,6 +16,9 @@
 	{/foreach}
 	</tbody>
 </table>
+
 {else}
+
 <h4>{$nofilestext}</h4>
+
 {/if}

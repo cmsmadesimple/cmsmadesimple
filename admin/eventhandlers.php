@@ -126,7 +126,7 @@ switch( $action ) {
 		}
 		echo "</select> <input type=\"submit\" value=\"".lang('submit')."\" /></form>\n\n";
 
-		echo "<table cellspacing=\"0\" class=\"pagetable\">\n";
+		echo "<table class=\"pagetable\">\n";
 		echo "<thead>\n";
 		echo "  <tr>\n";
 		echo "    <th title=\"".lang('title_event_originator')."\">".lang('originator')."</th>\n";

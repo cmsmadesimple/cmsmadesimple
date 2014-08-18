@@ -206,7 +206,7 @@ if ($access) {
   echo "<p class=\"pageinput\">".$description."</p>\n";
   echo "</div>\n";
 
-  echo "<br/><table cellspacing=\"0\" class=\"pagetable\">\n";
+  echo "<br/><table class=\"pagetable\">\n";
   echo "<thead>\n";
   echo "  <tr>\n";
   echo "    <th>".lang('order')."</th>\n";

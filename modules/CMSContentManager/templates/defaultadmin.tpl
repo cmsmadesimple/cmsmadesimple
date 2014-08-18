@@ -402,7 +402,7 @@ $(document).ready(function () {
 </div>
 
 {strip}
-<table id="contenttable" cellspacing="0" class="pagetable" width="100%">
+<table id="contenttable" class="pagetable" width="100%">
 	<thead>
 		<tr>
 			{foreach from=$columns key='column' item='flag'}

@@ -1,5 +1,5 @@
 <div class="pageoverflow">
-<table cellspacing="0" class="pagetable">
+<table class="pagetable">
   <thead>
     <tr>
       <th width="75%">{$nameprompt}</th>

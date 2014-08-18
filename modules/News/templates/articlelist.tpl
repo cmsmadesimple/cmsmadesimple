@@ -105,7 +105,7 @@ $(document).ready(function(){
 </div>{* .row *}
 
 {$form2start}
-<table cellspacing="0" class="pagetable" id="articlelist">
+<table class="pagetable" id="articlelist">
 	<thead>
 		<tr>
 			<th>#</th>

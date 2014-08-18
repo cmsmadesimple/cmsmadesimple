@@ -3,7 +3,7 @@
 {if isset($topwords)}
 {$formstart}
 <div class="pageoverflow">
-  <table class="pagetable" cellspacing="0">
+  <table class="pagetable">
     <thead>
       <tr>
         <th width="75%">{$wordtext}</th>
