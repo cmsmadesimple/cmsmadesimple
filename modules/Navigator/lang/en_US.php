@@ -55,16 +55,16 @@ $lang['help'] = <<<EOT
      <pre><code>{Navigator number_of_levels=2}</code></pre>
    </li>
      <li>Display a simple navigation two levels deep starting with the children of the current page.  Use the default template:</li>
-     <pre><code>{Navigator number_of_levels=2 start_page=\$page_lias}</code></pre>
+     <pre><code>{Navigator number_of_levels=2 start_page=\$page_alias}</code></pre>
    </li>
    <li>Display a simple navigation two levels deep starting with the children of the current page.  Use the default template:</li>
      <pre><code>{Navigator number_of_levels=2 childrenof=\$page_alias}</code></pre>
    </li>
    <li>Display a simple navigation two levels deep starting with the current page, and everything below it.  Use the default template:</li>
-     <pre><code>{Navigator number_of_levels=2 start_page=\$page_lias}</code></pre>
+     <pre><code>{Navigator number_of_levels=2 start_page=\$page_alias}</code></pre>
    </li>
    <li>Display a navigation two levels deep starting with the current page, its peers, and everything below it.  Use the default template:</li>
-     <pre><code>{Navigator start_page=\$page_lias show_root_siblings=1}</code></pre>
+     <pre><code>{Navigator start_page=\$page_alias show_root_siblings=1}</code></pre>
    </li>
    <li>Display a navigation of the specified menu items and their children.  Use the template named mymenu</li>
      <pre><code>{Navigator items='alias1,alias2,alias3' number_of_levels=20 template=mymenu}</code></pre>
