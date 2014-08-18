@@ -36,7 +36,7 @@ $(document).ready(function(){
   {form_start id='local_import' action='local_import'}
   <div class="pageoverflow">
     <p class="pagetext"><label for="xml_upload">{$ModuleManager->Lang('uploadfile')}:</label>
-       {cms_help title=$mod->Lang('title_mm_importxml') key='help_mm_importxml'}
+       {cms_help title=$ModuleManager->Lang('title_mm_importxml') key='help_mm_importxml'}
     </p>
     <p class="pageinput">
       <input id="xml_upload" type="file" name="{$actionid}upload" accept="text/xml"/>
