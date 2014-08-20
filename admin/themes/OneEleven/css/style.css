@@ -1172,7 +1172,7 @@ nav ul#oe_pagemenu li.current a.ecommerce,
 nav ul#oe_pagemenu li:hover a.ecommerce {
 	background-position: -10px -953px
 }
-/* second level & colapsed sidebar */
+/* second level & collapsed sidebar */
 nav ul#oe_pagemenu ul {
 	padding: 8px 0;
 	background: #f0f0f0
@@ -1223,6 +1223,9 @@ nav ul#oe_pagemenu li.current li a:active  {
 	margin-bottom: 15px;
 	position: relative;
 	border-bottom: 1px solid #fa8004
+}
+.cms_helpicon {
+	cursor: pointer;
 }
 /*** footer ***/
 footer#oe_footer {

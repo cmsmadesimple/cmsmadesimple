@@ -592,7 +592,6 @@ textarea {
 .tooltip {
 	cursor: help;
 }
-
 a.tooltip {
 	cursor: pointer;
 }
@@ -1354,6 +1353,9 @@ nav ul#oe_pagemenu li.current li a:active  {
 	margin-bottom: 15px;
 	position: relative;
 	border-bottom: 1px solid #fa8004
+}
+.cms_helpicon {
+	cursor: pointer;
 }
 /*** footer ***/
 footer#oe_footer {
