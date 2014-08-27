@@ -268,11 +268,8 @@ if (isset($params['submit']) || isset($params['apply'])) {
     }
 
     if (!isset($params['apply']) && !$error) {
-        // redirect out o here.
-        $params = array(
-            'tab_message' => $this->Lang('articleupdated'),
-            'active_tab' => 'articles'
-        );
+        // redirect out of here.
+		$this->SetMessage($this->Lang('articlesubmitted'));
         $this->Redirect($id, 'defaultadmin', $returnid, $params);
         return;
     }

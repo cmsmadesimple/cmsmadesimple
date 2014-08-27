@@ -18,6 +18,7 @@ $lang['article'] = 'Article';
 $lang['articleadded'] = 'The article was successfully added.';
 $lang['articledeleted'] = 'The article was successfully deleted.';
 $lang['articles'] = 'Articles';
+$lang['articlesubmitted'] = 'The article was successfully submitted.';
 $lang['articleupdated'] = 'The article was successfully updated.';
 $lang['author'] = 'Author';
 $lang['author_label'] = 'Posted by:';

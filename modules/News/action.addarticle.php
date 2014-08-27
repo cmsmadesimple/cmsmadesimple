@@ -221,10 +221,7 @@ if (isset($params['submit'])) {
             ));
             // put mention into the admin log
             audit($articleid, 'News: ' . $title, 'Article added');
-            $params = array(
-                'tab_message' => $this->Lang('articleadded'),
-                'active_tab' => 'articles'
-            );
+			$this->SetMessage($this->Lang('articleadded'));
             $this->Redirect($id, 'defaultadmin', $returnid, $params);
         } // if !$error
     } // outer if !$error
