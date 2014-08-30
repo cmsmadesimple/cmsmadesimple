@@ -18,8 +18,7 @@
 # Or read it online: http://www.gnu.org/licenses/licenses.html#GPL
 #
 #-------------------------------------------------------------------------
-if (!isset($gCms))
-    exit ;
+if (!isset($gCms)) exit ;
 if (!$this->CheckPermission('Modify Templates')) {
     // no manage templates permission
     if (!$this->CheckPermission('Add Templates')) {
@@ -34,8 +33,7 @@ if (!$this->CheckPermission('Modify Templates')) {
 $this->SetCurrentTab('templates');
 
 if (isset($params['cancel'])) {
-    if ($params['cancel'] == $this->Lang('cancel'))
-        $this->SetMessage($this->Lang('msg_cancelled'));
+    if ($params['cancel'] == $this->Lang('cancel')) $this->SetMessage($this->Lang('msg_cancelled'));
     $this->RedirectToAdminTab();
 }
 
@@ -69,8 +67,7 @@ try {
         $smarty->assign('lock_refresh', $this->GetPreference('lock_refresh'));
         try {
             $lock_id = CmsLockOperations::is_locked('template', $tpl_obj->get_id());
-            if ($lock_id > 0)
-                CmsLockOperations::unlock($lock_id, 'template', $tpl_obj->get_id());
+            if ($lock_id > 0) CmsLockOperations::unlock($lock_id, 'template', $tpl_obj->get_id());
             $lock = new CmsLock('template', $tpl_obj->get_id(), (int)$this->GetPreference('lock_timeout'));
             $smarty->assign('lock', $lock);
         } catch( CmsException $e ) {
@@ -91,20 +88,16 @@ try {
             $parser->fetch('cms_template:appdata;tmp_template');
             // do the magic.
 
-            if (isset($params['description']))
-                $tpl_obj->set_description($params['description']);
-            if (isset($params['type']))
-                $tpl_obj->set_type($params['type']);
-            if (isset($params['default']))
-                $tpl_obj->set_type_dflt($params['default']);
-            if (isset($params['owner_id']))
-                $tpl_obj->set_owner($params['owner_id']);
+            if (isset($params['description'])) $tpl_obj->set_description($params['description']);
+            if (isset($params['type'])) $tpl_obj->set_type($params['type']);
+            if (isset($params['default'])) $tpl_obj->set_type_dflt($params['default']);
+            if (isset($params['owner_id'])) $tpl_obj->set_owner($params['owner_id']);
             if (isset($params['addt_editors']) && is_array($params['addt_editors']) && count($params['addt_editors'])) {
                 $tpl_obj->set_additional_editors($params['addt_editors']);
             }
-            if (isset($params['category_id']))
-                $tpl_obj->set_category($params['category_id']);
+            if (isset($params['category_id'])) $tpl_obj->set_category($params['category_id']);
             $tpl_obj->set_content($params['contents']);
+            $tpl_obj->set_name($params['name']);
 
             $type_obj = CmsLayoutTemplateType::load($tpl_obj->get_type_id());
             if ($type_obj->get_content_block_flag()) {
@@ -119,14 +112,9 @@ try {
 
             if ($this->CheckPermission('Manage Designs')) {
                 $design_list = array();
-                if (isset($params['design_list']))
-                    $design_list = $params['design_list'];
+                if (isset($params['design_list'])) $design_list = $params['design_list'];
                 $tpl_obj->set_designs($design_list);
             }
-
-            // set the name last as it is most likely to throw an error.
-            // and we want to preserve as much data as possible.
-            $tpl_obj->set_name($params['name']);
 
             // if we got here, we're golden.
             $tpl_obj->save();
@@ -185,9 +173,7 @@ try {
         $smarty->assign('design_list', $out);
     }
 
-    if ($tpl_obj->get_id()) {
-        $smarty->assign('tpl_id', $tpl_obj->get_id());
-    }
+    if ($tpl_obj->get_id()) $smarty->assign('tpl_id', $tpl_obj->get_id());
     $smarty->assign('has_manage_right', $this->CheckPermission('Modify Templates'));
     $smarty->assign('has_themes_right', $this->CheckPermission('Manage Designs'));
     if ($this->CheckPermission('Modify Templates') || $tpl_obj->get_owner_id() == get_userid()) {
@@ -201,21 +187,17 @@ try {
             //    continue;
             $tmp[$one->id] = $one->username;
         }
-        if (is_array($tmp) && count($tmp))
-            $smarty->assign('user_list', $tmp);
+        if (is_array($tmp) && count($tmp)) $smarty->assign('user_list', $tmp);
 
         $groupops = cmsms()->GetGroupOperations();
         $allgroups = $groupops->LoadGroups();
         foreach ($allgroups as $one) {
-            if ($one->id == 1)
-                continue;
-            if ($one->active == 0)
-                continue;
+            if ($one->id == 1) continue;
+            if ($one->active == 0) continue;
             $tmp[$one->id * -1] = $this->Lang('prompt_group') . ': ' . $one->name;
             // appends to the tmp array.
         }
-        if (is_array($tmp) && count($tmp))
-            $smarty->assign('addt_editor_list', $tmp);
+        if (is_array($tmp) && count($tmp)) $smarty->assign('addt_editor_list', $tmp);
     }
     echo $this->ProcessTemplate('admin_edit_template.tpl');
 } catch( CmsException $e ) {
