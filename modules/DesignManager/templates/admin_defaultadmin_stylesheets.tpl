@@ -5,7 +5,9 @@ $(document).ready(function(){
     $('#css_bulk_action,#css_bulk_submit').attr('disabled','disabled');
     $('#css_bulk_submit').button({ 'disabled' : true });
     $('#css_selall,.css_select').on('click',function(){
-      if( !$(this).is(':checked') ) {
+      // if there is one or more .css_select checked, we enabled the bulk actions
+      var l = $('.css_select:checked').length;
+      if( l == 0 ) {
         $('#css_bulk_action').attr('disabled','disabled');
         $('#css_bulk_submit').attr('disabled','disabled');
         $('#css_bulk_submit').button({ 'disabled' : true });
@@ -15,7 +17,7 @@ $(document).ready(function(){
         $('#css_bulk_submit').button({ 'disabled' : false });
       }
     });
-	
+
     $('a.steal_css_lock').on('click',function(e) {
       // we're gonna confirm stealing this lock.
       var v = confirm('{$mod->Lang('confirm_steal_lock')|escape:'javascript'}');

@@ -5,7 +5,8 @@ $(document).ready(function(){
     $('#tpl_bulk_action,#tpl_bulk_submit').attr('disabled','disabled');
     $('#tpl_bulk_submit').button({ 'disabled' : true });
     $('#tpl_selall,.tpl_select').on('click',function(){
-      if( !$(this).is(':checked') ) {
+      var l = $('.tpl_select:checked').length;
+      if( l == 0 ) {
         $('#tpl_bulk_action').attr('disabled','disabled');
         $('#tpl_bulk_submit').attr('disabled','disabled');
         $('#tpl_bulk_submit').button({ 'disabled' : true });
