@@ -128,11 +128,20 @@ $(document).ready(function(){
       $.get('{$designchanged_ajax_url}',data,function(data,text) {
         if( typeof data == 'object' ) {
 	  var sel = $('#template_id').val();
+	  var fnd = false;
+	  var first = null;
           $('#template_id').empty();
           for( key in data ) {
+	    if( key == sel ) fnd = true;
+	    if( first == null ) first = key;
 	    $('#template_id').append('<option value="'+key+'">'+data[key]+'</option>');
 	  }
-	  $('#template_id').val(sel);
+	  if( fnd ) {
+  	    $('#template_id').val(sel);
+	  }
+	  else {
+  	    $('#template_id').val(first);
+	  }
         }
       }, 'json' );
     });
