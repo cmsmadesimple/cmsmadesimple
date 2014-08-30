@@ -41,7 +41,11 @@
       </td>
       <td><a href="{$edit_url}" title="{$mod->Lang('edit_design')}">{admin_icon icon='edit.gif'}</a></td>
       <td><a href="{$export_url}" title="{$mod->Lang('export_design')}">{admin_icon icon='export.gif'}</a></td>
-      <td><a href="{$delete_url}" title="{$mod->Lang('delete_design')}">{admin_icon icon='delete.gif'}</a></td>
+      <td>
+        {if !$design->get_default()}
+          <a href="{$delete_url}" title="{$mod->Lang('delete_design')}">{admin_icon icon='delete.gif'}</a>
+	{/if}
+      </td>
     </tr>
   {/foreach}
   </tbody>
