@@ -520,8 +520,6 @@ class Content extends ContentBase
 		if( $blockName == 'content_en' && $label == $blockName ) {
 			$help = '&nbsp;'.cms_admin_utils::get_help_tag('core','help_content_content_en',lang('help_title_maincontent'));
 			$label = lang('content');
-			$blockInfo['required'] = true;
-			$required = true;
 		}
 		if( $required ) $label = '*'.$label;
 
