@@ -22,16 +22,17 @@ Core - General
   - Removed the 'ext' parameter from cms_selflink
   - Removed the old compatibility Admin theme class (admintheme.inc.php) was deprecated in 1.11
   - Admin interface now assumes HTML5.  Porting admin themes must include porting them to HTML5
-  - Simplex Theme gets some love: updated Grid system, removed all images and replaced with icon fonts, extended JS functions with 
-    hopefully better Mobile support, Theme JS includes now helper variables like SX.isTouch, SX.isMobile, SX.viewportWidth and SX.UA,
-    for more information refer to uploads/simplex/js/ functions.js (note: Theme is using functions.min.js), dropped IE7 support, NOT!! tested in Windows Mobile
+  - Simplex Theme gets some love: updated Grid system, removed all images and replaced with icon fonts, 
+    extended JS functions with hopefully better Mobile support, Theme JS includes now helper variables like
+    SX.isTouch, SX.isMobile, SX.viewportWidth and SX.UA, for more information refer to uploads/simplex/js/ functions.js 
+	(note: Theme is using functions.min.js), dropped IE7 support, NOT tested in Windows Mobile!!
   - Removed deprecated {breadcrumbs} tag
   - Deprecate template functions in the module API
   - Remove direct ImageMagick support (no more config entries)
   - Removed AllowAutoUpgrade and AllowAutoInstall from module API
   - Removed valid_css and valid_xhtml tags
   - Modules can have multiple Admin menu entries
-  - more...
+  - More...
 
 Core - Bug Reports
   - #9721 There's no check if changelog.txt exists
@@ -53,13 +54,13 @@ Navigator
 
 MicroTiny
   - Complete rewrite
-  - Now uses TinyMCE 4.0.12
+  - Now uses tinymce 4.0.12
 
 AdminSearch
   - New module for searching for tags and any content in templates
 
 CMSContentManager
-  - New module for content editing.
+  - New module for content editing
   - Pagination and filtering in listcontent
   - Implements content locking
   - Implements dirty form checking 
