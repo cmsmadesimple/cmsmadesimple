@@ -45,9 +45,7 @@ function send_recovery_email($username)
   $userops = $gCms->GetUserOperations();
   $user = $userops->LoadUserByUsername($username);
 
-  $obj = cms_utils::get_module('CMSMailer');
-  if ($obj == null) return false;
-
+  $obj = new cms_mailer;
   $obj->AddAddress($user->email, html_entity_decode($user->firstname . ' ' . $user->lastname));
   $obj->SetSubject(lang('lostpwemailsubject',html_entity_decode(get_site_preference('sitename','CMSMS Site'))));
 

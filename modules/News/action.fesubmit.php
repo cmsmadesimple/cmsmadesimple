@@ -57,12 +57,12 @@ if( isset( $params['submit'] ) ) {
     if( isset($params['input_category'])) $category_id = (int)$params['input_category'];
 
     if (isset($params['startdate_Month'])) {
-      $startdate = mktime($params['startdate_Hour'], $params['startdate_Minute'], $params['startdate_Second'], 
+      $startdate = mktime($params['startdate_Hour'], $params['startdate_Minute'], $params['startdate_Second'],
 			  $params['startdate_Month'], $params['startdate_Day'], $params['startdate_Year']);
     }
-    
+
     if (isset($params['enddate_Month'])) {
-      $enddate = mktime($params['enddate_Hour'], $params['enddate_Minute'], $params['enddate_Second'], 
+      $enddate = mktime($params['enddate_Hour'], $params['enddate_Minute'], $params['enddate_Second'],
 			$params['enddate_Month'], $params['enddate_Day'], $params['enddate_Year']);
     }
 
@@ -98,19 +98,19 @@ if( isset( $params['submit'] ) ) {
 
     // and generate the insert query
     // note: there's no option for fesubmit wether it's searchable or not.
-    $query = 'INSERT INTO '.cms_db_prefix().'module_news 
+    $query = 'INSERT INTO '.cms_db_prefix().'module_news
               (news_id, news_category_id, news_title, news_data, summary,
-               news_extra, status, news_date, start_time, end_time, create_date, 
-               modified_date,author_id,searchable) 
+               news_extra, status, news_date, start_time, end_time, create_date,
+               modified_date,author_id,searchable)
                VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
-    $dbr = $db->Execute($query, 
-			array($articleid, $category_id, $title, 
-			      $content, $summary, $extra, $status, 
-			      trim($db->DBTimeStamp($startdate), "'"), 
-			      trim($db->DBTimeStamp($startdate), "'"), 
-			      trim($db->DBTimeStamp($enddate), "'"), 
-			      trim($db->DBTimeStamp(time()), "'"), 
-			      trim($db->DBTimeStamp(time()), "'"), 
+    $dbr = $db->Execute($query,
+			array($articleid, $category_id, $title,
+			      $content, $summary, $extra, $status,
+			      trim($db->DBTimeStamp($startdate), "'"),
+			      trim($db->DBTimeStamp($startdate), "'"),
+			      trim($db->DBTimeStamp($enddate), "'"),
+			      trim($db->DBTimeStamp(time()), "'"),
+			      trim($db->DBTimeStamp(time()), "'"),
 			      $userid,1));
 
     if( $dbr ) {
@@ -140,15 +140,15 @@ if( isset( $params['submit'] ) ) {
       $do_redirect = true;
 
       // send an event
-      @$this->SendEvent('NewsArticleAdded', 
-			array('news_id' => $articleid, 
-			      'category_id' => $category_id, 
-			      'title' => $title, 
-			      'content' => $content, 
-			      'summary' => $summary, 
-			      'status' => $status, 
-			      'start_time' => $startdate, 
-			      'end_time' => $enddate, 
+      @$this->SendEvent('NewsArticleAdded',
+			array('news_id' => $articleid,
+			      'category_id' => $category_id,
+			      'title' => $title,
+			      'content' => $content,
+			      'summary' => $summary,
+			      'status' => $status,
+			      'start_time' => $startdate,
+			      'end_time' => $enddate,
 			      'useexp' => 1));
 
       // put mention into the admin log
@@ -216,25 +216,25 @@ else {
 echo $smarty->fetch($this->GetDatabaseResource($template));
 
 if( $do_send_email == true ) {
-  // this needs to be done after the form is generated
-  // because we use some of the same smarty variables
-  $cmsmailer = $this->GetModuleInstance('CMSMailer');
-  if( $cmsmailer ) {
-    $addy = trim($this->GetPreference('formsubmit_emailaddress'));
-    if( $addy != '' ) {
-      if( $title != '' ) $smarty->assign('title',$title);
-      if( $summary != '' ) $smarty->assign('summary',$summary);
-      if( $content != '' ) $smarty->assign('content',$content);
+    // this needs to be done after the form is generated
+    // because we use some of the same smarty variables
+    $cmsmailer = new cms_mailer;
+    if( $cmsmailer ) {
+        $addy = trim($this->GetPreference('formsubmit_emailaddress'));
+        if( $addy != '' ) {
+            if( $title != '' ) $smarty->assign('title',$title);
+            if( $summary != '' ) $smarty->assign('summary',$summary);
+            if( $content != '' ) $smarty->assign('content',$content);
 
-      $cmsmailer->AddAddress( $addy );
-      $cmsmailer->SetSubject( $this->GetPreference('email_subject',$this->Lang('subject_newnews')));
-      $cmsmailer->IsHTML( false );
+            $cmsmailer->AddAddress( $addy );
+            $cmsmailer->SetSubject( $this->GetPreference('email_subject',$this->Lang('subject_newnews')));
+            $cmsmailer->IsHTML( false );
 
-      $body = $this->ProcessTemplateFromDatabase('email_template');
-      $cmsmailer->SetBody( $body );
-      $cmsmailer->Send();
+            $body = $this->ProcessTemplateFromDatabase('email_template');
+            $cmsmailer->SetBody( $body );
+            $cmsmailer->Send();
+        }
     }
-  }
 }
 
 if( $do_redirect ) $this->RedirectContent($dest_page);
