@@ -20,12 +20,6 @@ $(document).ready(function(){
     </p>
   </div>
 
-   <div class="pageoverflow">
-    <p class="pagetext"><label for="allowuninstall">{$ModuleManager->Lang('allowuninstall')}:</label>&nbsp;{cms_help key2='help_allowuninstall' title=$ModuleManager->Lang('allowuninstall')}</p>
-    <p class="pageinput">
-      <select id="allowuninstall" name="{$actionid}allowuninstall">{cms_yesno selected=$allowuninstall}</select>
-    </p>
-  </div>
 {/if}
 
   <div class="pageoverflow">
