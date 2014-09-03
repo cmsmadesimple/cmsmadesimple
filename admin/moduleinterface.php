@@ -86,7 +86,8 @@ if( $USE_THEME ) {
     include_once("header.php");
     echo '<div class="pagecontainer">';
     echo '<div class="pageoverflow">';
-    $title = $themeObject->get_active_title();
+    $title = $themeObject->title;
+    if( !$title ) $title = $themeObject->get_active_title();
     if( !$title ) $title = $modinst->GetFriendlyName();
     echo $themeObject->ShowHeader($title, '', '', 'both').'</div>';
     echo $content;
