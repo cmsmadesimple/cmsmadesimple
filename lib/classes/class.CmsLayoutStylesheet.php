@@ -312,7 +312,7 @@ class CmsLayoutStylesheet
         if( !is_array($x) ) return;
 
         foreach( $x as $y ) {
-            if( !is_numeric($y) ) throw new CmsInvalidDatException('Invalid data in design list.  Expect array of integers');
+            if( !is_numeric($y) ) throw new CmsInvalidDataException('Invalid data in design list.  Expect array of integers');
         }
 
         $this->_design_assoc = $x;

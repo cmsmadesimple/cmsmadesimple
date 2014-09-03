@@ -290,7 +290,7 @@ class CmsLayoutTemplate
 		if( !is_array($x) ) return;
 
 		foreach( $x as $y ) {
-			if( (int)$y < 1 )	throw new CmsInvalidDatException('Invalid data in design list.  Expect array of integers');
+			if( (int)$y < 1 )	throw new CmsInvalidDataException('Invalid data in design list.  Expect array of integers');
 		}
 
 		$this->_design_assoc = $x;
