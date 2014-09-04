@@ -38,7 +38,7 @@
   <p class="pagetext"><label for="iconsize">{$mod->Lang('iconsize')}:</label>&nbsp;{cms_help key2='help_iconsize' title=$mod->Lang('iconsize')}</p>
   <p class="pageinput">
     <select id="iconsize" name="{$actionid}iconsize">
-      {html_options options=$iconsizes}
+      {html_options options=$iconsizes selected=$iconsize}
     </select>
   </p>
 </div>
