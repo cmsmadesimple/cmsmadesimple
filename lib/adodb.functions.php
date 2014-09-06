@@ -53,7 +53,7 @@ function &adodb_connect()
   $connect_result = $dbinstance->$conn_func($config['db_hostname'], $config['db_username'], $config['db_password'], $config['db_name']);
 
   if (FALSE == $connect_result) {
-    $str = "Attempt to connect to database {$config['db_name']} on {$config['db_username']}@{$config['db_hostname']} failed";
+    $str = "Attempt to connect to database failed";
     trigger_error($str,E_USER_ERROR);
 	throw new CmsException($str);
   }
