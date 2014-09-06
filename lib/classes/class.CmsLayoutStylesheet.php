@@ -25,8 +25,12 @@
 
 /**
  * A class to represent a stylesheet.
+ *
+ * This class is capable of managing a single stylesheet, and has static methods for loading stylesheets from the database.
+ * Loaded stylesheets are cached in internal memory to ensure that the same stylesheet is not loaded twice for a request.
+ *
  * Stylesheets are (optionally) attached to designs (CmsLayoutCollection)
- * see the {cms_stylesheet} plugin for more information
+ * see the {cms_stylesheet} plugin for more information.
  *
  * @since 2.0
  * @author Robert Campbell <calguy1000@gmail.com>
@@ -420,8 +424,7 @@ class CmsLayoutStylesheet
         $this->validate();
 
         $query = 'UPDATE '.cms_db_prefix().self::TABLENAME.'
-              SET name = ?, content = ?, description = ?, media_type = ?, media_query = ?,
-                  modified = ?
+              SET name = ?, content = ?, description = ?, media_type = ?, media_query = ?, modified = ?
               WHERE id = ?';
         $tmp = '';
         if( isset($this->_data['media_type']) ) $tmp = implode(',',$this->_data['media_type']);
@@ -635,6 +638,7 @@ class CmsLayoutStylesheet
 	 *
 	 * @param mixed $a Either an integer stylesheet id, or a string stylesheet name.
 	 * @return CmsLayoutStylesheet
+	 * @throws CmsInvalidDataException
 	 */
     public static function &load($a)
     {
@@ -645,7 +649,7 @@ class CmsLayoutStylesheet
 			$a = (int)$a;
 			if( isset(self::$_css_cache[$a]) ) return self::$_css_cache[$a];
 			// not in cache
-            $query = 'SELECT * FROM '.cms_db_prefix().self::TABLENAME.' WHERE id = ?';
+            $query = 'SELECT id,name,content,description,media_type,media_query,created,modified FROM '.cms_db_prefix().self::TABLENAME.' WHERE id = ?';
             $row = $db->GetRow($query,array($a));
         }
         else if( is_string($a) && strlen($a) > 0 ) {
@@ -654,7 +658,7 @@ class CmsLayoutStylesheet
 				if( isset(self::$_css_cache[$b]) ) return self::$_css_cache[$b];
 			}
 			// not in cache
-            $query = 'SELECT * FROM '.cms_db_prefix().self::TABLENAME.' WHERE name = ?';
+            $query = 'SELECT id,name,content,description,media_type,media_query,created,modified FROM '.cms_db_prefix().self::TABLENAME.' WHERE name = ?';
             $row = $db->GetRow($query,array($a));
         }
         if( !is_array($row) || count($row) == 0 ) throw new CmsDataNotFoundException('Could not find template identified by '.$a);
@@ -665,7 +669,9 @@ class CmsLayoutStylesheet
 	/**
 	 * Load multiple stylesheets in an optimized fashion
 	 *
-	 * @param array $ids Array of integer stylesheet ids
+     * This method does not throw exceptions if one requested id, or name does not exist.
+     *
+	 * @param array $ids Array of integer stylesheet ids or an array of string stylesheet names.
 	 * @param bool $deep wether or not to load associated data
 	 * @return array Array of CmsLayoutStylesheet objects
 	 * @throws CmsInvalidDataException
@@ -674,6 +680,7 @@ class CmsLayoutStylesheet
 	{
 		if( !is_array($ids) || count($ids) == 0 ) return;
 
+        // clean up the input data
 		$is_ints = FALSE;
 		if( (int)$ids[0] > 0 ) {
 			$is_ints = TRUE;
@@ -687,37 +694,58 @@ class CmsLayoutStylesheet
 			}
 		}
 		else {
-			// what the fuck
+            // what ??
 			throw new CmsInvalidDataException('Invalid data passed to '.__CLASS__.'::'.__METHOD__);
 		}
 		$ids = array_unique($ids);
 
 		$db = cmsms()->GetDb();
-		$query = 'SELECT * FROM '.cms_db_prefix().self::TABLENAME.' WHERE id IN ('.implode(',',$ids).')';
-		if( !$is_ints ) $query = 'SELECT * FROM '.cms_db_prefix().self::TABLENAME.' WHERE name IN ('.implode(',',$ids).')';
+		$query = 'SELECT id,name,content,description,media_type,media_query,created,modified FROM '.cms_db_prefix().self::TABLENAME.' WHERE id IN ('.implode(',',$ids).')';
+		if( !$is_ints ) $query = 'SELECT id,name,content,description,media_type,media_query,created,modified FROM '.cms_db_prefix().self::TABLENAME.' WHERE name IN ('.implode(',',$ids).')';
 
 		$dbr = $db->GetArray($query);
 		$out = array();
 		if( is_array($dbr) && count($dbr) ) {
 			$designs_by_css = array();
 			if( $deep ) {
-				$ids = array();
+				$ids2 = array();
 				foreach( $dbr as $row ) {
-					$ids[] = $row['id'];
+					$ids2[] = $row['id'];
 					$designs_by_css[$row['id']] = array();
 				}
-				$dquery = 'SELECT design_id,css_id FROM '.cms_db_prefix().CmsLayoutCollection::CSSTABLE.' WHERE css_id IN ('.implode(',',$ids).') ORDER BY css_id';
+				$dquery = 'SELECT design_id,css_id FROM '.cms_db_prefix().CmsLayoutCollection::CSSTABLE.' WHERE css_id IN ('.implode(',',$ids2).') ORDER BY css_id';
 				$dbr2 = $db->GetArray($dquery);
 				foreach( $dbr2 as $row ) {
 					$designs_by_css[$row['css_id']][] = $row['design_id'];
 				}
 			}
 
-			foreach( $dbr as $row ) {
-				$id = $row['id'];
-				$tmp = self::_load_from_data($row,(isset($designs_by_css[$id]))?$designs_by_css[$id]:null);
+            // this makes sure that the returned array matches the order specified.
+            foreach( $ids as $one ) {
+                $found = null;
+                if( $is_ints ) {
+                    // find item in $dbr by id
+                    foreach( $dbr as $row ) {
+                        if( $row['id'] == $one ) {
+                            $found = $row;
+                            break;
+                        }
+                    }
+                }
+                else {
+                    // find item in $dbr by name
+                    foreach( $dbr as $row ) {
+                        if( $row['name'] == $one ) {
+                            $found = $row;
+                            break;
+                        }
+                    }
+                }
+
+                $id = $found['id'];
+				$tmp = self::_load_from_data($found,(isset($designs_by_css[$id]))?$designs_by_css[$id]:null);
 				if( is_object($tmp) ) $out[] = $tmp;
-			}
+            }
 		}
 
 		if( count($out) ) return $out;
@@ -748,6 +776,24 @@ class CmsLayoutStylesheet
 			$ids = $db->GetCol($query);
 			return self::load_bulk($ids);
 		}
+    }
+
+
+    /**
+     * Test if the specific stylesheet (by name or id) is loaded
+     *
+     * @param mixed $id Either an integer stylesheet id, or a string stylesheet name
+     * @return bool
+     */
+    public static function is_loaded($id)
+    {
+        if( (int)$id > 0 ) {
+            if( isset(self::$_css_cache[$id]) ) return TRUE;
+        }
+        else if( is_string($id) && strlen($id) > 0 ) {
+            if( isset(self::$_name_cache[$id]) ) return TRUE;
+        }
+        return FALSE;
     }
 } // end of class
 
