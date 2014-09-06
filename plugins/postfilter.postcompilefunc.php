@@ -20,37 +20,32 @@ function smarty_postfilter_postcompilefunc($tpl_output, &$template)
 {
 	$smarty = $template->smarty;
 	$result = explode(':', $smarty->_current_file);
-	
-	if (count($result) > 1)
-	{
-		switch ($result[0])
-		{
-			case 'stylesheet':
-				Events::SendEvent('Core','StylesheetPostCompile',array('stylesheet'=>&$tpl_output));
-				break;
 
-			case "content":
-				Events::SendEvent('Core', 'ContentPostCompile', array('content' => &$tpl_output));
-				break;
+	if (count($result) > 1)	{
+		switch ($result[0])	{
+        case 'cms_stylesheet':
+        case 'stylesheet':
+            Events::SendEvent('Core','StylesheetPostCompile',array('stylesheet'=>&$tpl_output));
+            break;
 
-			case "template":
-			
-			case 'tpl_top':
-			
-			case 'tpl_body':
-			
-			case 'tpl_head':
-				Events::SendEvent('Core','TemplatePostCompile',array('template'=>&$tpl_output,'type'=>$result[0]));
-				break;
+        case "content":
+            Events::SendEvent('Core', 'ContentPostCompile', array('content' => &$tpl_output));
+            break;
 
-			case "globalcontent":
-				Events::SendEvent('Core', 'GlobalContentPostCompile', array('global_content' => &$tpl_output));
-				break;
+        case "template":
+        case 'tpl_top':
+        case 'tpl_body':
+        case 'tpl_head':
+            Events::SendEvent('Core','TemplatePostCompile',array('template'=>&$tpl_output,'type'=>$result[0]));
+            break;
 
-			default:
-				break;
+        case "globalcontent":
+            Events::SendEvent('Core', 'GlobalContentPostCompile', array('global_content' => &$tpl_output));
+            break;
+
+        default:
+            break;
 		}
-
 	}
 
 	Events::SendEvent('Core', 'SmartyPostCompile', array('content' => &$tpl_output));
