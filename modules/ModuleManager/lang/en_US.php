@@ -108,6 +108,7 @@ $lang['help'] = '<h3>What Does This Do?</h3>
 <p>This module has been released under the <a href="http://www.gnu.org/licenses/licenses.html#GPL">GNU Public License</a>. You must agree to this license before using the module.</p>';
 $lang['helptxt'] = 'Help';
 $lang['help_allowuninstall'] = 'If enabled, then this module can be uninstalled.  This is to prevent the accidental removal of this module which would result in an unrecoverable error';
+$lang['help_disable_caching'] = 'TODO';
 $lang['help_dl_chunksize'] = 'This parameter specifies the size <em>(in kilobytes)</em> of each chunk of data that will be downloaded from the repository when requesting a module.';
 $lang['help_latestdepends'] = 'When installing a module with dependencies, this will ensure that the newest version of a dependent module is installed';
 $lang['help_mm_importxml'] = 'This form allows importing a module XML file that you received from another user, or downloaded from the <a class="external" href="http://dev.cmsmadesimple.org" target="_blank">CMSMS Forge</a>';
