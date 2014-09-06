@@ -36,80 +36,113 @@
 class CmsLayoutStylesheetQuery extends CmsDbQueryBase
 {
 	/**
-	 * The default sort field.
-	 */
-	protected $_sortby = 'name';
-
-	/**
-	 * The default sort order
-	 */
-	protected $_sortorder = 'ASC';
-
-	/**
 	 * Execute the query in this object.
 	 *
 	 * @throws CmsSQLErrorException
 	 */
-  public function execute()
-  {
-    if( !is_null($this->_rs) ) return;
-    $query = 'SELECT SQL_CALC_FOUND_ROWS id FROM '.cms_db_prefix().CmsLayoutStylesheet::TABLENAME;
+    public function execute()
+    {
+        if( !is_null($this->_rs) ) return;
+        $query = 'SELECT SQL_CALC_FOUND_ROWS DISTINCT S.id FROM '.cms_db_prefix().CmsLayoutStylesheet::TABLENAME.' S';
 
-    $this->_limit = 1000;
-    $this->_offset = 0;
-    $db = cmsms()->GetDb();
-    $where = array();
-    foreach( $this->_args as $key => $val ) {
-      if( empty($val) ) continue;
-      if( is_numeric($key) && $val[1] == ':' ) list($key,$val) = explode(':',$val,2);
-      switch( strtolower($key) ) {
-      case 'n': // name (prefix)
-      case 'name': // name (prefix)
-				$val = trim($val);
-				$where[] = 'name LIKE '.$db->qstr($val.'%');
-				break;
-      case 'd': // design
-			case 'design':
-				$q2 = 'SELECT css_id FROM '.cms_db_prefix().CmsLayoutCollection::CSSTABLE.' WHERE design_id = ?';
-				$tpls = $db->GetCol($q2,array((int)$val));
-				if( is_array($tpls) && count($tpls) ) {
-					$where[] = 'id IN ('.implode(',',$tpls).')';
-				}
-				else {
-					$where[] = 'id IN (-1)';
-				}
-				break;
-      case 'limit':
-				$this->_limit = max(1,min(1000,$val));
-				break;
-      case 'offset':
-				$this->_offset = max(0,$val);
-				break;
-			case 'sortby':
-				break;
-			case 'sortorder':
-				$val = strtoupper($val);
-				switch( $val ) {
-				case 'DESC':
-					$this->_sortorder = 'DESC';
-					break;
+        // if we are using a design id argument
+        // we do join, and sort by item order in the design
+        $dflt_sort = TRUE;
+        $have_design = FALSE;
+        foreach( $this->_args as $key => $val ) {
+            switch( $key ) {
+            case 'sortby':
+                $dflt_sort = FALSE;
+                break;
 
-				case 'ASC':
-				default:
-					$this->_sortorder = 'ASC';
-					break;
-				}
-				break;
-      }
+            case 'd':
+            case 'design':
+                $have_design = TRUE;
+            }
+        }
+
+        if( $dflt_sort && $have_design ) $this->_args['sortby'] = 'item_order';
+
+        $sortorder = 'ASC';
+        $sortby = 'S.name';
+        $this->_limit = 1000;
+        $this->_offset = 0;
+        $db = cmsms()->GetDb();
+        $where = array();
+        foreach( $this->_args as $key => $val ) {
+            if( empty($val) ) continue;
+            if( is_numeric($key) && $val[1] == ':' ) list($key,$val) = explode(':',$val,2);
+            switch( strtolower($key) ) {
+            case 'i':
+            case 'id':
+                $val = (int)$val;
+                $where[] = "id = $val";
+                break;
+
+            case 'n': // name (prefix)
+            case 'name': // name (prefix)
+                $val = trim($val);
+                $where[] = 'name LIKE '.$db->qstr($val.'%');
+                break;
+
+            case 'd': // design
+            case 'design':
+                $query .= ' LEFT JOIN '.cms_db_prefix().CmsLayoutCollection::CSSTABLE.' D ON S.id = D.css_id';
+                $val = (int)$val;
+                $where[] = "D.design_id = $val";
+                break;
+
+            case 'limit':
+                $this->_limit = max(1,min(1000,$val));
+                break;
+
+            case 'offset':
+                $this->_offset = max(0,$val);
+                break;
+
+            case 'sortby':
+                $val = strtolower($val);
+                switch( $val ) {
+                case 'id':
+                    $sortby = 'S.id';
+                    break;
+
+                case 'item_order':
+                case 'design':
+                    if( !$have_design ) throw new CmsInvalidDataException('Cannot sort by item_order/design if design_id is not known');
+                    $sortby = 'D.item_order';
+                    break;
+
+                case 'name':
+                default:
+                    $sortby = 'S.name';
+                    break;
+                }
+                break;
+
+            case 'sortorder':
+                $val = strtoupper($val);
+                switch( $val ) {
+                case 'DESC':
+                    $sortorder = 'DESC';
+                    break;
+
+                case 'ASC':
+                default:
+                    $sortorder = 'ASC';
+                    break;
+                }
+                break;
+            }
+        }
+
+        if( count($where) ) $query .= ' WHERE '.implode(' AND ',$where);
+        $query .= ' ORDER BY '.$sortby.' '.$sortorder;
+
+        $this->_rs = $db->SelectLimit($query,$this->_limit,$this->_offset);
+        if( $db->ErrorMsg() != '' ) throw new CmsSQLErrorException($db->sql.' -- '.$db->ErrorMsg());
+        $this->_totalmatchingrows = $db->GetOne('SELECT FOUND_ROWS()');
     }
-
-    if( count($where) ) $query .= ' WHERE '.implode(' AND ',$where);
-    $query .= ' ORDER BY '.$this->_sortby.' '.$this->_sortorder;
-
-    $this->_rs = $db->SelectLimit($query,$this->_limit,$this->_offset);
-    if( $db->ErrorMsg() != '' ) throw new CmsSQLErrorException($db->sql.' -- '.$db->ErrorMsg());
-    $this->_totalmatchingrows = $db->GetOne('SELECT FOUND_ROWS()');
-  }
 
 	/**
 	 * Return all of the matches for this query
@@ -117,19 +150,18 @@ class CmsLayoutStylesheetQuery extends CmsDbQueryBase
 	 * @throws CmsLogicExceptin
 	 * @return array Array of CmsLayoutStylesheet object
 	 */
-  public function GetMatches()
-  {
-    $this->execute();
-    if( !$this->_rs ) throw new CmsLogicException('Cannot get template from invalid template query object');
+    public function GetMatches()
+    {
+        $this->execute();
+        if( !$this->_rs ) throw new CmsLogicException('Cannot get template from invalid template query object');
 
-    $tmp = array();
-    while( !$this->EOF() ) {
-      $tmp[] = $this->fields['id'];
-      $this->MoveNext();
+        $tmp = array();
+        while( !$this->EOF() ) {
+            $tmp[] = $this->fields['id'];
+            $this->MoveNext();
+        }
+        return CmsLayoutStylesheet::load_bulk($tmp);
     }
-
-    return CmsLayoutStylesheet::load_bulk($tmp);
-  }
 } // end of class
 
 #
