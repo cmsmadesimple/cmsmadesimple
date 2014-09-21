@@ -291,7 +291,6 @@ final class CmsNlsOperations
 	  if( !isset($_SERVER['HTTP_ACCEPT_LANGUAGE']) ) return;
 
 	  $in = $_SERVER['HTTP_ACCEPT_LANGUAGE'];
-	  $in = 'en-us,en;q=0.5';
 	  preg_match_all('/([a-z]{1,8}(-[a-z]{1,8})?)\s*(;\s*q\s*=\s*(1|0\.[0-9]+))?/i', $in, $lang_parse);
 
 	  if (count($lang_parse[1])) {
