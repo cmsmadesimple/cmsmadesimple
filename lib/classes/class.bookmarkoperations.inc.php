@@ -46,12 +46,9 @@ class BookmarkOperations
   private function _prep_for_saving($url)
   {
 	  $config = cmsms()->GetConfig();
-	  $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
-
-	  $map = array('[SECURITYTAG]'=>$urlext,'[ROOT_URL]'=>$config['root_url']);
-	  foreach( $map as $to => $from ) {
-		  $url = str_replace($from,$to,$url);
-      }
+	  $urlext = CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
+      if( startswith($url,$config['root_url']) ) $url = str_replace($config['root_url'],'[ROOT_URL]',$url);
+      $url = str_replace($urlext,'[SECURITYTAG]',$url);
 	  return $url;
   }
 
@@ -66,7 +63,7 @@ class BookmarkOperations
   private function _prep_for_display($url)
   {
 	  $config = cmsms()->GetConfig();
-	  $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
+	  $urlext = CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 
 	  $map = array('[SECURITYTAG]'=>$urlext,'[ROOT_URL]'=>$config['root_url']);
 	  foreach( $map as $from => $to ) {
