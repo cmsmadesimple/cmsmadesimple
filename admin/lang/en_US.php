@@ -22,7 +22,6 @@ $lang['added_content'] = "Added Content";
 //$lang['added_css_association'] = "Added Stylesheet Association";
 //$lang['added_gcb'] = "Added Global Content Block";
 $lang['added_group'] = "Added Group";
-$lang['added_template'] = "Added Template"; // serving third-party modules
 $lang['added_udt'] = "Added User Defined Tag";
 $lang['added_user'] = "Added User";
 $lang['addgroup'] = "Add New Group";
@@ -30,7 +29,6 @@ $lang['addgroup'] = "Add New Group";
 $lang['additionaleditors'] = "Additional Editors";
 $lang['additional_params'] = "Additional Parameters";
 //$lang['addstylesheet'] = "Add a Stylesheet";
-$lang['addtemplate'] = "Add New Template"; // serving third-party modules
 $lang['adduser'] = "Add New User";
 $lang['addusertag'] = "Add User Defined Tag";
 $lang['admin'] = "Site Admin";
@@ -255,14 +253,10 @@ $lang['deleted_file'] = "Deleted File";
 //$lang['deleted_gcb'] = "Deleted Global Content Block";
 $lang['deleted_group'] = "Deleted Group";
 $lang['deleted_module'] = "Permanently removed %s";
-$lang['deleted_template'] = "Deleted Template"; // serving third-party modules
 $lang['deleted_udt'] = "Deleted User Defined Tag";
 $lang['deleted_user'] = "Deleted User";
 $lang['deletepages'] = "Delete these pages?";
-//$lang['deletetemplate'] = "Delete Template";
-//$lang['deletetemplates'] = "Delete Templates";
 $lang['deleteuser'] = "Delete User Account";
-$lang['dependencies'] = "Dependencies"; // serving Content Manager module
 //$lang['depsformodule'] = "Dependencies for %s Module";
 $lang['description'] = "Description";
 $lang['design'] = "Design";
@@ -305,8 +299,6 @@ $lang['editgroup'] = "Edit Group";
 //$lang['edithtmlblobsuccess'] = "Global content block updated";
 //$lang['editpage'] = "Edit Page";
 //$lang['editstylesheet'] = "Edit Stylesheet";
-$lang['edittemplate'] = "Edit Template"; // serving third-party modules
-$lang['edittemplatesuccess'] = "Template updated"; // serving third-party modules
 $lang['edituser'] = "Edit User";
 $lang['editusertag'] = "Edit User Defined Tag";
 $lang['email'] = "Email Address";
@@ -932,17 +924,6 @@ $lang['help_content_pagemeta'] = "In this field you can enter HTML meta tags. Th
 $lang['help_content_parent'] = "Select an existing page in the content hierarchy which will be the parent page for this content page.  This relationship is used when building a navigation";
 $lang['help_content_secure'] = "Specify whether this page should be accessed via a secure (encrypted) connection.  i.e: via HTTPS";
 $lang['help_content_showinmenu'] = "Select whether this page will be visible (by default) in the navigation.";
-$lang['help_content_tabindex'] = "Specify an integer value for the tab order used when surfing the navigation to browse to this page. This is useful when building accessible websites"; // serving Content Manager module
-$lang['help_content_target'] = "Specify a target attribute to use when including this item in the navigation.  A target of _blank will open this page in a new navigator window, or tab."; // serving Content Manager module
-$lang['help_content_thumbnail'] = "This field allows you to associate a thumbnail image with the content page.  The images must have already been generated on the website <em>(The FileManager module can generate thumbnails on upload)</em> to a directory specified by the website designer.  The image may optionally be displayed on the page, or used when building a navigation"; // serving Content Manager module
-$lang['help_content_title'] = "The title of the page is displayed in the title bar of the browser, is used in search engine optimization, and is usually displayed prominently on the website"; // serving Content Manager module
-$lang['help_content_titleattribute'] = "Specify a brief description for this content page.  This data can be used for search engine optimization, or in the navigation"; // serving Content Manager module
-$lang['help_css_max_age'] = "This parameter should be set relatively high for static sites, and should be set to 0 for site development"; // serving Content Manager module
-$lang['help_page_alias'] = "The alias is used as an alternate to the page id to uniquely identify a page. It must be unique across all pages.  The alias is also used to assist in building the URL for the page"; // serving Content Manager module
-$lang['help_page_cachable'] = "Performance can be increased by setting as many pages as possible to cachable.  However this cannot be used for pages where content may change on a per request basis"; // serving Content Manager module
-$lang['help_page_disablewysiwyg'] = "This option will disable the WYSIWYG editor for all content areas on this page independent of settings in the {content} block or user settings"; // serving Content Manager module
-$lang['help_page_searchable'] = "This setting indicates whether the content of this page should be indexed by the Search module"; // serving Content Manager module
-$lang['help_page_url'] = "Specify an alternate URL (relative to the root of your website) that can be used to uniquely identify this page.  i.e: path/to/mypage.  The page URL is only useful when pretty urls are enabled."; // serving Content Manager module
 $lang['help_systeminformation'] = "The information displayed below is collected from a variety of locations, and summarized here so that you may be able to conveniently find some of the information required when trying to diagnose a problem or request help with your CMS Made Simple&trade; installation.";
 $lang['hidefrommenu'] = "Hide From Menu";
 $lang['hide_help_links'] = "Hide module help links";
@@ -1481,12 +1462,9 @@ $lang['tags'] = "Tags";
 $lang['tagtousegcb'] = "Tag to Use this Block";
 $lang['target'] = "Target";
 $lang['team'] = "Team";
-$lang['template'] = "Template"; // serving third-party modules
 //$lang['templatecopied'] = "Template Copied";
 //$lang['templatecss'] = "Assign Templates to Stylesheet";
-$lang['templateexists'] = "Template name already exists"; // serving third-party modules
 //$lang['templatemanagement'] = "Template Management";
-$lang['templates'] = "Templates"; // serving third-party modules
 //$lang['templatesdescription'] = "This is where we add and edit templates. Templates define the look and feel of your site.";
 //$lang['templatestodelete'] = "These templates will be deleted";
 //$lang['templateuser'] = "Template Account";
@@ -1622,5 +1600,37 @@ $lang['zz_1nav_tab__'] = "Navigation";
 $lang['zz_2logic_tab__'] = "Logic";
 $lang['zz_3options_tab__'] = "Options";
 $lang['zz_4perms_tab__'] = "Permissions";
+
+
+## Serving Content Manager module ##
+$lang['dependencies'] = "Dependencies"; // also serving third-party modules
+
+$lang['help_content_tabindex'] = "Specify an integer value for the tab order used when surfing the navigation to browse to this page. This is useful when building accessible websites";
+$lang['help_content_target'] = "Specify a target attribute to use when including this item in the navigation.  A target of _blank will open this page in a new navigator window, or tab.";
+$lang['help_content_thumbnail'] = "This field allows you to associate a thumbnail image with the content page.  The images must have already been generated on the website <em>(The FileManager module can generate thumbnails on upload)</em> to a directory specified by the website designer.  The image may optionally be displayed on the page, or used when building a navigation";
+$lang['help_content_title'] = "The title of the page is displayed in the title bar of the browser, is used in search engine optimization, and is usually displayed prominently on the website";
+$lang['help_content_titleattribute'] = "Specify a brief description for this content page.  This data can be used for search engine optimization, or in the navigation";
+$lang['help_css_max_age'] = "This parameter should be set relatively high for static sites, and should be set to 0 for site development";
+$lang['help_page_alias'] = "The alias is used as an alternate to the page id to uniquely identify a page. It must be unique across all pages.  The alias is also used to assist in building the URL for the page";
+$lang['help_page_cachable'] = "Performance can be increased by setting as many pages as possible to cachable.  However this cannot be used for pages where content may change on a per request basis";
+$lang['help_page_disablewysiwyg'] = "This option will disable the WYSIWYG editor for all content areas on this page independent of settings in the {content} block or user settings";
+$lang['help_page_searchable'] = "This setting indicates whether the content of this page should be indexed by the Search module";
+$lang['help_page_url'] = "Specify an alternate URL (relative to the root of your website) that can be used to uniquely identify this page.  i.e: path/to/mypage.  The page URL is only useful when pretty URLs are enabled.";
+
+
+## Serving third-party modules ##
+$lang['added_template'] = "Added Template";
+$lang['addtemplate'] = "Add New Template";
+
+$lang['deleted_template'] = "Deleted Template";
+$lang['deletetemplate'] = "Delete Template";
+$lang['deletetemplates'] = "Delete Templates";
+
+$lang['edittemplate'] = "Edit Template";
+$lang['edittemplatesuccess'] = "Template updated";
+
+$lang['template'] = "Template";
+$lang['templateexists'] = "Template name already exists";
+$lang['templates'] = "Templates";
 
 ?>
