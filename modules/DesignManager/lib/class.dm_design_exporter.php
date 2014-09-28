@@ -90,7 +90,7 @@ EOT;
 				       return $matches[0];
 				     },
 				     $content);
-  
+
     return $content;
   }
 
@@ -100,7 +100,7 @@ EOT;
     $types = array("href", "src", "url");
     foreach( $types as $type ) {
       $innerT = '[a-z0-9:?=&@/._-]+?';
-      $content = preg_replace_callback("|$type\=([\"'`])(".$innerT.")\\1|i", 
+      $content = preg_replace_callback("|$type\=([\"'`])(".$innerT.")\\1|i",
 				       function($matches) use ($ob,$type) {
 					 $config = cmsms()->GetConfig();
 					 $url = $matches[2];
@@ -175,7 +175,7 @@ EOT;
 	if( !is_array($this->_tpl_list) ) $this->_tpl_list = array();
 	$this->_tpl_list[$sig] = $new_tpl_ob;
 	return $sig;
-	
+
       case 'MM':
 	// MenuManager file template
 	$mod = cms_utils::get_module('MenuManager');
@@ -344,76 +344,77 @@ EOT;
 
   private function _xml_output_file($key,$value,$lvl = 0)
   {
-    if( !startswith($key,'__') || !endswith($key,'__') ) return; // invalid
-    $p = strpos($key,':');
-    $nkey = substr($key,0,$p);
-    $nkey = substr($nkey,2);
- 
-    $smarty = cmsms()->GetSmarty();
-    $output = $this->_open_tag('file',$lvl);
-    $output .= $this->_output('fkey',$key,$lvl+1);
-    switch($nkey) {
-    case 'URL':
-      // javascript file or image or something.
-      // could have smarty syntax.
-      $nvalue = $value;
-      if( strpos($value,'[[') !== FALSE ) {
-	// smarty syntax with [[ and ]] as delimiters
-	$smarty->left_delimiter = '[[';
-	$smarty->right_delimiter = ']]';
-	$nvalue = $smarty->fetch('string:'.$value);
-	$smarty->left_delimiter = '{';
-	$smarty->right_delimiter = '}';
+      if( !startswith($key,'__') || !endswith($key,'__') ) return; // invalid
+      $p = strpos($key,':');
+      $nkey = substr($key,0,$p);
+      $nkey = substr($nkey,2);
+
+      $mod = cms_utils::get_module('DesignManager');
+      $smarty = cmsms()->GetSmarty();
+      $output = $this->_open_tag('file',$lvl);
+      $output .= $this->_output('fkey',$key,$lvl+1);
+      switch($nkey) {
+      case 'URL':
+          // javascript file or image or something.
+          // could have smarty syntax.
+          $nvalue = $value;
+          if( strpos($value,'[[') !== FALSE ) {
+              // smarty syntax with [[ and ]] as delimiters
+              $smarty->left_delimiter = '[[';
+              $smarty->right_delimiter = ']]';
+              $nvalue = $smarty->fetch('string:'.$value);
+              $smarty->left_delimiter = '{';
+              $smarty->right_delimiter = '}';
+          }
+          else if( strpos('{',$value) !== FALSE ) {
+              // smarty syntax with { and } as delimiters
+              $nvalue = $smarty->fetch('string:'.$value);
+          }
+
+          // now, it should be a full URL, or start at /
+          // gotta convert it to a file.
+          $config = cmsms()->GetConfig();
+          // assumes it's a filename relative to root.
+          $fn = cms_join_path($config['root_path'],$nvalue);
+          if( startswith($nvalue,'/') ) {
+              $fn = cms_join_path($config['root_path'],$nvalue);
+          } elseif( startswith($nvalue,$config['root_url']) ) {
+              $fn = str_replace($config['root_url'],$config['root_path'],$nvalue);
+          }
+
+          if( !file_exists($fn) ) throw new CmsException($mod->Lang('error_nophysicalfile',$value));
+
+          $data = file_get_contents($fn);
+          if( strlen($data) == 0 ) throw new CmsException('No data found for '.$value);
+
+          $nvalue = basename($nvalue);
+          $output .= $this->_output('fvalue',$nvalue,$lvl+1);
+          $output .= $this->_output_data('fdata',$data,$lvl+1);
+          break;
+
+      case 'TPL':
+          // template signature...
+          // just need the key and value.
+          $output .= $this->_output('fvalue',$value,$lvl+1);
+          break;
+
+      case 'CSS':
+          // stylesheet signature
+          // just need the key and value.
+          $output .= $this->_output('fvalue',$value,$lvl+1);
+          break;
+
+      case 'MM':
+          // menu manager file template
+          // just need the key and value.
+          $output .= $this->_output('fvalue',$value,$lvl+1);
+          break;
+
+      default:
+          return;
       }
-      else if( strpos('{',$value) !== FALSE ) {
-	// smarty syntax with { and } as delimiters
-	$nvalue = $smarty->fetch('string:'.$value);
-      }
-
-      // now, it should be a full URL, or start at /
-      // gotta convert it to a file.
-      $config = cmsms()->GetConfig();
-      // assumes it's a filename relative to root.
-      $fn = cms_join_path($config['root_path'],$nvalue);
-      if( startswith($nvalue,'/') ) {
-	$fn = cms_join_path($config['root_path'],$nvalue);
-      } elseif( startswith($nvalue,$config['root_url']) ) {
-	$fn = str_replace($config['root_url'],$config['root_path'],$nvalue);
-      }
-      
-      if( !file_exists($fn) ) throw new CmsException('Could not find a physical file for '.$value);
-
-      $data = file_get_contents($fn);
-      if( strlen($data) == 0 ) throw new CmsException('No data found for '.$value);
-
-      $nvalue = basename($nvalue);
-      $output .= $this->_output('fvalue',$nvalue,$lvl+1);
-      $output .= $this->_output_data('fdata',$data,$lvl+1);
-      break;
-
-    case 'TPL':
-      // template signature...
-      // just need the key and value.
-      $output .= $this->_output('fvalue',$value,$lvl+1);
-      break;
-
-    case 'CSS':
-      // stylesheet signature
-      // just need the key and value.
-      $output .= $this->_output('fvalue',$value,$lvl+1);
-      break;
-
-    case 'MM':
-      // menu manager file template
-      // just need the key and value.
-      $output .= $this->_output('fvalue',$value,$lvl+1);
-      break;
-
-    default:
-      return;
-    }
-    $output .= $this->_close_tag('file',$lvl);
-    return $output;
+      $output .= $this->_close_tag('file',$lvl);
+      return $output;
   }
 
   public function get_xml()
@@ -434,8 +435,10 @@ EOT;
     foreach( $this->_css_list as $one ) {
       $output .= $this->_xml_output_stylesheet($one,1);
     }
-    foreach( $this->_files as $key => $value ) {
-      $output .= $this->_xml_output_file($key,$value,1);
+    if( count($this->_files) ) {
+        foreach( $this->_files as $key => $value ) {
+            $output .= $this->_xml_output_file($key,$value,1);
+        }
     }
     $output .= $this->_close_tag('design',0);
     return $output;
