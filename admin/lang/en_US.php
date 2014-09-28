@@ -1602,7 +1602,7 @@ $lang['zz_3options_tab__'] = "Options";
 $lang['zz_4perms_tab__'] = "Permissions";
 
 
-## Serving Content Manager module ##
+## Serving Content Manager module
 $lang['dependencies'] = "Dependencies"; // also serving third-party modules
 
 $lang['help_content_tabindex'] = "Specify an integer value for the tab order used when surfing the navigation to browse to this page. This is useful when building accessible websites";
@@ -1618,7 +1618,7 @@ $lang['help_page_searchable'] = "This setting indicates whether the content of t
 $lang['help_page_url'] = "Specify an alternate URL (relative to the root of your website) that can be used to uniquely identify this page.  i.e: path/to/mypage.  The page URL is only useful when pretty URLs are enabled.";
 
 
-## Serving third-party modules ##
+## Serving third-party modules
 $lang['added_template'] = "Added Template";
 $lang['addtemplate'] = "Add New Template";
 
