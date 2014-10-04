@@ -75,7 +75,7 @@ $lang['help'] = <<<EOF
         <p>Each menu template can be marked as &quot;Cachable&quot;. When a cachable menu template is used on a content page that is cachable, any cached menu output that is available for thsi page will be used.  The nocache parameter on the menu tag can be used to completely disable caching.</p>
         <p>All cached menu files are erased when a content item is added, edited, or deleted... and also when a menu template is added/edited or deleted.</p>
         <h3>Alternate Tags:</h3>
-        <p>The <strong>{cms_breadcrumbs}</strong> tag (short for {menu action='breadcrumbs}) can be used to create a breadcrumb trail to the currently displayed page.</p>
+        <p>The <strong>{cms_breadcrumbs}</strong> tag (short for {menu action='breadcrumbs'}) can be used to create a breadcrumb trail to the currently displayed page.</p>
 EOF;
 $lang['help_action'] = 'Specify the behavior of the module.  There are two possiblities for this parameter:
 <ul>
