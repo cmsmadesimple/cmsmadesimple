@@ -458,7 +458,7 @@ class dm_theme_reader extends dm_reader_base
 		// part6 ... Make sure MenuManager is activated.
 		if( $have_mm_template ) {
 			$modops = ModuleOperations::get_instance();
-			$modops->Activate('MenuManager',1);
+			$modops->ActivateModule('MenuManager',1);
 		}
 	}
 } // end of class
