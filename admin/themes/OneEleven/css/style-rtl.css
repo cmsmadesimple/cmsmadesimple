@@ -1698,6 +1698,7 @@ td.icons_wide {
 	margin-bottom: 1px;
 	display: block;
 	position: relative;
+	cursor: move;
 }
 
 #oe_mainarea .sortable-list li .sortable-remove {
