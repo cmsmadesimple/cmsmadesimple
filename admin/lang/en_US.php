@@ -1037,7 +1037,6 @@ $lang['invalidemail'] = "The email address entered is invalid";
 $lang['invalidparent'] = "You must select a parent page (contact your administrator if you do not see this option).";
 //$lang['invalidtemplate'] = "The template is not valid";
 $lang['invalid_test'] = "Invalid test param value!";
-$lang['invalid_url2'] = "The page URL specified is invalid.  It should contain only alphanumeric characters, or - or /.  Extensions must contain only alphanumeric chars and be less than 5 characters in length.  It is also possible that the URL specified is already in use.";
 $lang['ip_addr'] = "IP Address";
 $lang['irc'] = "IRC";
 $lang['itemid'] = "Item ID";
@@ -1616,6 +1615,7 @@ $lang['help_page_cachable'] = "Performance can be increased by setting as many p
 $lang['help_page_disablewysiwyg'] = "This option will disable the WYSIWYG editor for all content areas on this page independent of settings in the {content} block or user settings";
 $lang['help_page_searchable'] = "This setting indicates whether the content of this page should be indexed by the Search module";
 $lang['help_page_url'] = "Specify an alternate URL (relative to the root of your website) that can be used to uniquely identify this page.  i.e: path/to/mypage.  The page URL is only useful when pretty URLs are enabled.";
+$lang['invalid_url2'] = "The page URL specified is invalid.  It should contain only alphanumeric characters, or - or /.  Extensions must contain only alphanumeric chars and be less than 5 characters in length.  It is also possible that the URL specified is already in use.";
 
 
 ## Serving third-party modules
