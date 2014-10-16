@@ -53,7 +53,7 @@ $(document).ready(function () {
 	{foreach from=$list_categories item='category'}
 		{cycle values="row1,row2" assign='rowclass'}
 		{cms_action_url action='admin_edit_category' cat=$category->get_id() assign='edit_url'}
-		<tr class="{$rowclass}"id="cat_{$category->get_id()}">
+		<tr class="{$rowclass} sortable-table" id="cat_{$category->get_id()}">
 			<td><a href="{$edit_url}" title="{$mod->Lang('prompt_edit')}">{$category->get_id()}</a></td>
 			<td><a href="{$edit_url}" title="{$mod->Lang('prompt_edit')}">{$category->get_name()}</a></td>
 			<td><a href="{$edit_url}" title="{$mod->Lang('prompt_edit')}">{admin_icon icon='edit.gif'}</a></td>
