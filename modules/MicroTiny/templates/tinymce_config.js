@@ -41,6 +41,7 @@ tinymce.init({
     statusbar: cmsms_tiny.statusbar,
     resize: cmsms_tiny.resize,
     removed_menuitems: 'newdocument',
+    browser_spellcheck: true,
     // smarty logic stuff
 {if isset($mt_cssname) && $mt_cssname != ''}
     content_css : '{cms_stylesheet name=$mt_cssname nolinks=1}',
