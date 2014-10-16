@@ -1714,6 +1714,11 @@ td.icons_wide {
 #oe_mainarea .sortable-list > li.ui-state-highlight {
 	padding: 14px 0;
 }
+
+#oe_mainarea .sortable-table {
+	cursor: move;
+}
+
 /*** File Manager ***/
 #filesarea img {
 	max-width: 32px
