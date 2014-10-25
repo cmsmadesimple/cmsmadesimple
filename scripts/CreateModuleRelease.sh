@@ -9,11 +9,12 @@ _pwd=`pwd`
 _name=`basename $_pwd`
 _destdir=${HOME}
 _version=0
-_excludes='*~ #*# .#* .svn CVS *.bak .git* *.tmp .cms_ignore *.swp'
+_excludes='*~ #*# .#* .svn CVS *.bak .git* *.tmp .cms_ignore *.swp _internal phpdoc.xml'
 _tmpdir="/tmp/$_this.$$"
 _yes=0
 _svn=1
 _tag=1
+_doc=1
 _salt=''
 _checksums=1
 
@@ -22,21 +23,37 @@ usage()
   echo "USAGE $_this [options]"
   echo "options:";
   echo "  -t|--notag                 : do not create a tag for this release";
+  echo "  -D|--nodoc                 : do not attempt to run phpdocs";
   echo "  -c|--configfile <filename> : source this file for config information"
   echo "  -d|--destdir <directory>   : place output file in directory"
   echo "  -n|--name  <name>          : use name for module name (use caution)"
   echo "  -v|--version <version>     : use version for version tag"
-  echo "  -v|--exclude <pattern>     : exclude files matching this pattern"
+  echo "  -e|--exclude <pattern>     : exclude files matching this pattern"
   echo "                               from the resulting archive"
   echo "  -q|--quiet                 : assume non interactive mode"
   echo "  -s|--svn                   : skip the svn update step"
   echo "  -m|--checksums             : skip the checksum generation step."
   echo "  -h|-help|--help            : this text"
-  echo 
+  echo
   echo "NOTE: This utility expects the module or the desired export directory"
   echo "      to be your current working directory. It also looks for a file"
   echo "      entitled <name>.module.php in the current working directory"
   echo "      If this file does not exist, the script will not proceed"
+  echo
+  echo "NOTE: This function will look in the home directory for a file called .CreateRelease.rc"
+  echo "      which can contain default values for the various argument of this script."
+  echo "      This file is a standard bash script that is 'included' by this script."
+  echo "      variables that can be adjusted are:"
+  echo "        _doc = turn on or off phpdoc generation."
+  echo "        _tag = turn on or off svn tag generation."
+  echo "        _destdir = The destination directory."
+  echo "        _excludes = Standard exlude patterns."
+  echo "        _yes = if value is 1, turn on quiet mode."
+  echo "        _svn = if value is 0 turn off svn update option."
+  echo "        _checksums = if value is 0 do not attempt to create checksums."
+  echo "NOTE:  Standard excludes are: *~ #*# .#* .svn CVS *.bak .git* *.tmp .cms_ignore *.swp _internal phpdoc.xml"
+  echo
+  echo "  The special file .cms_ignore in any directory to exclude additional files in that directory and files below it (one pattern per line)"
   echo
 }
 
@@ -54,9 +71,15 @@ while [ $# -gt 0 ]; do
       continue
       ;;
 
+    -D|--nodoc)
+      _doc=0
+      shift
+      continue
+      ;;
+
     -t|--notag)
       _tag=0
-      shift 
+      shift
       continue
       ;;
 
@@ -68,7 +91,7 @@ while [ $# -gt 0 ]; do
 
     -n|--name)
       _name=$2
-      shift 
+      shift
       continue
       ;;
 
@@ -83,7 +106,7 @@ while [ $# -gt 0 ]; do
       shift 2
       continue
       ;;
- 
+
     -q|--quiet)
       _yes=1
       shift
@@ -106,7 +129,7 @@ while [ $# -gt 0 ]; do
       usage;
       exit 0;
       ;;
-  
+
     *)
       echo "FATAL: unrecognized option $1"
       usage
@@ -157,7 +180,7 @@ if [ $_yes = 0 ]; then
   fi
   if [ "$_ans" = 'y' -o "$_ans" = 'Y' -o "$_ans" = 'YES' -o "$_ans" = 'yes' ]; then
     _yes=1
-  fi   
+  fi
 fi
 if [ $_yes = 0 ]; then
   exit 0;
@@ -172,13 +195,25 @@ elif [ -d .git ]; then
   fi
 fi
 
+# do a phpdoc generation
+if [ $_doc = 1 -a -r phpdoc.xml ]; then
+    _t=`which phpdoc`;
+    if [ -z $_t ]; then
+      echo "WARNING: phpdoc.xml file found, but could not find phpdoc executable.";
+    else
+	_o="/tmp/phpdoc.$_this.$$";
+	echo "INFO: generating phpdocs. Output from this command will be stored in $_o";
+	phpdoc > $_o;
+    fi
+fi
+
 # do an svn update
 if [ $_svn = 1 -a ${_vc_type:-bad} != 'bad' ]; then
   if [ $_vc_type = 'gitsvn' ]; then
-    echo "Performing git-svn rebase"
+    echo "INFO: Performing git-svn rebase"
     git svn rebase
   else
-    echo "Performing svn update"
+    echo "INFO: Performing svn update"
     svn update >/dev/null 2>&1
   fi
 fi
@@ -233,7 +268,7 @@ if [ $_tag = 1 -a ${_vc_type:-bad} != 'bad' ]; then
        echo "Performiong git svn branch";
        git svn branch -t -m "${_msg}" ${_newtag} .
      fi
-   fi   
+   fi
 fi
 
 # make a temporary file of all the stuff we don't want in the archive
@@ -251,7 +286,9 @@ cd ${_tmpdir}/tmp
 tar zxf ${_tmpdir}/files.tgz
 
 if [ $_checksums = 1 ]; then
-  # create the archive checksums
+    # create the archive checksums
+    # _c.dat contains checksum values for each individual file
+    # _d.dat contains checksum values for the _c.dat file.
   cd ${_name}
   find . -name '*php' | grep -v lang > ${_tmpdir}/file.lst
   while read _line ; do
