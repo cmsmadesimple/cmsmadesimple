@@ -267,7 +267,7 @@ class News extends CMSModule
     $str = $this->GetName();
     $c = strtoupper($str[0]);
     $x = substr($str,1);
-    $x1 = '['.$c.strtolower($c).$x.']';
+    $x1 = '['.$c.strtolower($c).']'.$x;
 
     $route = new CmsRoute('/'.$x1.'\/(?P<articleid>[0-9]+)\/(?P<returnid>[0-9]+)\/(?P<junk>.*?)\/d,(?P<detailtemplate>.*?)$/',
 			  $this->GetName());
