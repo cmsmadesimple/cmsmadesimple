@@ -176,7 +176,7 @@ class cms_url
    */
   public function set_port($val)
   {
-    return $this->_set_part('port',(int)$val);
+    return $this->_set_part('port',$val);
   }
 
   /**

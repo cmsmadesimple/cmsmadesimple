@@ -1077,6 +1077,7 @@ abstract class ContentBase
 
 	/**
 	 * Get the value for the named property.
+	 * Properties will be loaded from the database if necessary.
 	 *
 	 * @param string $name
 	 * @return mixed String value, or null if the property does not exist.
