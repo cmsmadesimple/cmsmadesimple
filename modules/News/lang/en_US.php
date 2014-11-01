@@ -201,7 +201,7 @@ $lang['help'] = <<<EOF
 <p>Since version 2.3 News supports multiple database templates, and no longer supports additional file templates.  Users who used the old file template system should follow these steps (for each file template):</p>
 <ul>
 <li>Copy the file template into the clipboard</li>
-<li>Create a new database template <em>(either summary or detailed as required)</em>.  Give the new template the same name (including the .tpl extension) as the old file template, and paste the contents.</li>
+<li>Create a new database template <em>(either summary or detailed as required)</em>.  Give the new template the same name as the old file template, and paste the contents.</li>
 <li>Hit Submit</li>
 </ul>
 <p>Following these steps should solve the problem of your news templates not being found and other similar smarty errors when you upgrade to a version of CMS that has News 2.3 or greater.</p>
@@ -216,11 +216,11 @@ Override the default action.  Possible values are:
 </ul>
 EOT;
 $lang['helpbrowsecat'] = 'Shows a browsable category list.';
-$lang['helpbrowsecattemplate'] = 'Use a database template for displaying the category browser. This template must exist and be visible in the Browse Category Templates tab of the News admin, though it does not need to be the default.  If this parameter is not specified, then the current template marked as default will be used.';
+$lang['helpbrowsecattemplate'] = 'Use a database template for displaying the category browser. This template must exist in the Design Manager, though it does not need to be the default.  If this parameter is not specified, then the current template marked as default will be used.';
 $lang['helpcategory'] = 'Used in the summary view to display only items for the specified categories. <b>Use * after the name to show children.</b>  Multiple categories can be used if separated with a comma. Leaving empty, will show all categories.  This parameter also works for the frontend submit action, however only a single category name is supported.';
 $lang['helpdetailpage'] = 'Page to display News details in.  This can either be a page alias or an id. Used to allow details to be displayed in a different template from the summary.  This parameter will have no effect for articles with custom URLs.';
-$lang['helpdetailtemplate'] = 'Use a separate database template for displaying the article detail. This template must exist and be visible in the detail template tab of the News Admin, though it does not need to be the default.  If this parameter is not specified, then the current template marked as default will be used.  This parameter is not used when generating urls if custom urls are specified.';
-$lang['helpformtemplate'] = 'Use a database template for displaying the article submission form. This template must exist and be visible in the form templates tab of the News Admin, though it does not need to be the default.  If this parameter is not specified, then the current template marked as default will be used.';
+$lang['helpdetailtemplate'] = 'Use a separate database template for displaying the article detail. This template must exist in the Design Manager, though it does not need to be the default.  If this parameter is not specified, then the current template marked as default will be used.  This parameter is not used when generating urls if custom urls are specified.';
+$lang['helpformtemplate'] = 'Use a database template for displaying the article submission form. This template must exist in the Design Manager, though it does not need to be the default.  If this parameter is not specified, then the current template marked as default will be used.';
 $lang['helpmoretext'] = 'Text to display at the end of a news item if it goes over the summary length.  Defaults to "More"';
 $lang['helpnumber'] = 'Maximum number of items to display (per page) -- leaving empty will show all items.  This is a synonym for the pagelimit parameter.';
 $lang['helpshowall'] = 'Show all articles, irrespective of end date';
@@ -228,7 +228,7 @@ $lang['helpshowarchive'] = 'Show only expired news articles.';
 $lang['helpsortasc'] = 'Sort news items in ascending date order rather than descending.';
 $lang['helpsortby'] = 'Field to sort by.  Options are: "news_date", "summary", "news_data", "news_category", "news_title", "news_extra", "end_time", "start_time", "random".  Defaults to "news_date". If "random" is specified, the sortasc parameter is ignored.';
 $lang['helpstart'] = 'Start at the nth item -- leaving empty will start at the first item.';
-$lang['helpsummarytemplate'] = 'Use a separate database template for displaying the article summary.  This template must exist and be visible in the summary template tab of the News admin, though it does not need to be the default.  If this parameter is not specified, then the current template marked as default will be used.';
+$lang['helpsummarytemplate'] = 'Use a separate database template for displaying the article summary.  This template must exist in the Design Manager, though it does not need to be the default.  If this parameter is not specified, then the current template marked as default will be used.';
 $lang['help_articleid'] = 'This parameter is only applicable to the detail view.  It allows specifying which news article to display in detail mode.  If the special value -1 is used, the system will display the newest, published, non expired article.';
 $lang['help_article_title'] = 'Enter the article title.  It should be a brief, and should not include any html tags.';
 $lang['help_article_category'] = 'For organization purposes, you may select a category';

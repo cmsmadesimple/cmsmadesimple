@@ -597,10 +597,10 @@ $lang['help_designmanager_help'] = <<<EOT
       <li>Name:
       </li>
       <li>Templates:
-        <p>This tab allows selecting different templates to associate with the design.  Four buttons are provided to add templates to the &quot;Attached List&quot; and to order templates within the attached list.  At this time, ordering of templates within the attached template list is not significant.</p>
+        <p>This tab allows selecting different templates to associate with the design. You can drag and drop templates between the &quot;Available Templates&quot; list and the &quot;Attached Templates&quot; list and to order templates within the attached list. At this time, ordering of templates within the attached template list is not significant.</p>
       </li>
       <li>Stylesheets:
-	  <p>This tab allows selecting different stylesheets to associate with the design.  Four buttons are provided to add templates to the &quot;Attached List&quot; and to order stylesheets within the attached list.  The order of stylesheets within the attached list determines the order that they will be included in the rendered page content for content items of type &quot;Content Page&quot;.</p>
+	  <p>This tab allows selecting different stylesheets to associate with the design. You can drag and drop stylesheets between the &quot;Available Stylesheets&quot; list and the &quot;Attached Stylesheets&quot; list and to order stylesheets within the attached list.  The order of stylesheets within the attached list determines the order that they will be included in the rendered page content for content items of type &quot;Content Page&quot;.</p>
       </li>
       <li>Description:
         <p>This tab provides a free form text area where a description of the design, and additional notes can be entered.  the description is also useful to other users when deciding to share a design.</p>
