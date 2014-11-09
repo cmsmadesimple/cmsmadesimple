@@ -52,8 +52,8 @@ function systeminfo_lang($params,&$smarty)
 		foreach( $params as $k=>$v)
 		{
 			$tmp[] = $v;
-		}      
-      
+		}
+
 		$str = $tmp[0];
 		$tmp2 = array();
 		for( $i = 1; $i < count($tmp); $i++ )
@@ -123,18 +123,18 @@ $smarty->assign('config_info', $tmp);
 $tmp = array(0=>array(), 1=>array());
 
 $res = get_site_preference('allow_browser_cache',60);
-$tmp[0]['allow_browser_cache'] = testBoolean(0, lang('allow_browser_cache'),$res,lang('test_allow_browser_cache'));
+$tmp[0]['allow_browser_cache'] = testBoolean(0, lang('allow_browser_cache'),$res,lang('test_allow_browser_cache'), FALSE);
 $res = get_site_preference('browser_cache_expiry',60);
 $tmp[0]['browser_cache_expiry'] = testRange(0, lang('browser_cache_expiry'),$res,lang('test_browser_cache_expiry'),1,60,FALSE);
 
-$res = get_site_preference('use_smartycache', FALSE);
-$tmp[0]['smarty_cache'] = testBoolean(0, lang('prompt_use_smartycaching'),$res,lang('test_smarty_caching'));
+$res = (bool) get_site_preference('use_smartycache', FALSE);
+$tmp[0]['smarty_cache'] = testBoolean(0, lang('prompt_use_smartycaching'),$res,lang('test_smarty_caching'), FALSE);
 $res = get_site_preference('use_smarty_compilecheck', FALSE);
 $tmp[0]['smarty_compilecheck'] = testBoolean(0, lang('prompt_smarty_compilecheck'),$res,lang('test_smarty_caching'),FALSE,TRUE);
 $res = get_site_preference('use_smartycache', FALSE);
-$tmp[0]['smarty_cache_udt'] = testBoolean(0, lang('prompt_smarty_cacheudt'),$res,lang('test_smarty_cacheudt'));
+$tmp[0]['smarty_cache_udt'] = testBoolean(0, lang('prompt_smarty_cacheudt'),$res,lang('test_smarty_cacheudt'), FALSE);
 $res = get_site_preference('auto_clear_cache_age', 0);
-$tmp[0]['auto_clear_cache_age'] = testBoolean(0, lang('autoclearcache2'),$res,lang('test_auto_clear_cache_age'));
+$tmp[0]['auto_clear_cache_age'] = testBoolean(0, lang('autoclearcache2'),$res,lang('test_auto_clear_cache_age'), FALSE);
 
 $smarty->assign('performance_info', $tmp);
 
@@ -275,7 +275,7 @@ $tmp[0]['server_api'] = testDummy('', PHP_SAPI, '');
 $tmp[1]['server_os'] = testDummy('', PHP_OS . ' ' . php_uname('r') .' '. lang('on') .' '. php_uname('m'), '');
 
 switch($config['dbms']) { //workaround: ServerInfo() is unsupported in adodblite
- case 'mysqli':	
+ case 'mysqli':
  case 'mysql':
    $v = $db->GetOne('SELECT version()');
    $tmp[0]['server_db_type'] = testDummy('', 'MySQL ('.$config['dbms'].')', '');
@@ -289,7 +289,7 @@ switch($config['dbms']) { //workaround: ServerInfo() is unsupported in adodblite
    }
    else {
      $found_grantall = 0;
-     function __check_grant_all($item,$key) 
+     function __check_grant_all($item,$key)
      {
        $item = strtoupper($item);
        if( strstr($item,'GRANT ALL PRIVILEGES') !== FALSE )
