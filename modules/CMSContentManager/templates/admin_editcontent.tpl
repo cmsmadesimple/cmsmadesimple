@@ -169,7 +169,7 @@ $(document).ready(function(){
   {if $content_id != ''}
     <input type="submit" name="{$actionid}apply" value="{$mod->Lang('apply')}" class="pagebutton" title="{$mod->Lang('title_editpage_apply')}"/>
   {/if}
-  {if $content_obj->IsViewable() && $content_obj->Active()}
+  {if ($content_id != '') && $content_obj->IsViewable() && $content_obj->Active()}
     <a id="viewpage" rel="external" href="{$content_obj->GetURL()}" title="{$mod->Lang('title_editpage_view')}">{admin_icon icon='view.gif' alt='view_page'|lang}</a>
   {/if}
 </p>
