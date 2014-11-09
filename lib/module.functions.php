@@ -37,89 +37,86 @@
  */
 function cms_module_plugin($params,&$template)
 {
-  if( !is_object($template) ) {
-    stack_trace(); die();
-  }
-  $smarty = $template->smarty;
-  $mid_cache = cms_utils::get_app_data('mid_cache');
-  if( empty($mid_cache) ) {
-    $mid_cache = array();
-  }
-  for( $i = 0; $i < 10; $i++ ) {
-    $tmp = $i;
-    foreach($params as $key=>$value)
-      $tmp .= $key.'='.$value;
-    $id = 'm'.substr(md5($tmp),0,5);
-    if( !isset($mid_cache[$id]) ) {
-      $mid_cache[$id] = $id;
-      break;
+    $smarty = $template->smarty;
+    $mid_cache = cms_utils::get_app_data('mid_cache');
+    if( empty($mid_cache) ) {
+        $mid_cache = array();
     }
-  }
-  cms_utils::set_app_data('mid_cache',$mid_cache);
-
-  $returnid = cmsms()->get_content_id();
-
-  $modulename = '';
-  $action = 'default';
-  $inline = false;
-  $checkid = '';
-
-  if (isset($params['module']))
-    $modulename = $params['module'];
-  else
-    return '<!-- ERROR: module name not specified -->';
-
-  if (isset($params['idprefix'])) $id = trim($params['idprefix']);
-  if (isset($params['action']) && $params['action'] != '') {
-    // action was set in the module tag
-    $action = $params['action'];
-  }
-
-  if (isset($_REQUEST['mact'])) {
-    // we're handling an action
-    $ary = explode(',', cms_htmlentities($_REQUEST['mact']), 4);
-    $mactmodulename = (isset($ary[0])?$ary[0]:'');
-    if (!strcasecmp($mactmodulename,$params['module'])) {
-      $checkid = (isset($ary[1])?$ary[1]:'');
-      $mactaction = (isset($ary[2])?$ary[2]:'');
+    for( $i = 0; $i < 10; $i++ ) {
+        $tmp = $i;
+        foreach($params as $key=>$value)
+            $tmp .= $key.'='.$value;
+        $id = 'm'.substr(md5($tmp),0,5);
+        if( !isset($mid_cache[$id]) ) {
+            $mid_cache[$id] = $id;
+            break;
+        }
     }
-    $mactinline = (isset($ary[3]) && $ary[3] == 1?true:false);
+    cms_utils::set_app_data('mid_cache',$mid_cache);
 
-    if ($checkid == $id) {
-      // the action is for this instance of the module
-      $inline = $mactinline;
-      if( $inline == true ) {
-	// and we're inline (the results are supposed to replace
-	// the tag, not {content}
-	$action = $mactaction;
-	$params = array_merge($params, ModuleOperations::get_instance()->GetModuleParameters($id));
-      }
+    $returnid = cmsms()->get_content_id();
+
+    $modulename = '';
+    $action = 'default';
+    $inline = false;
+    $checkid = '';
+
+    if (isset($params['module']))
+        $modulename = $params['module'];
+    else
+        return '<!-- ERROR: module name not specified -->';
+
+    if (isset($params['idprefix'])) $id = trim($params['idprefix']);
+    if (isset($params['action']) && $params['action'] != '') {
+        // action was set in the module tag
+        $action = $params['action'];
     }
-  }
 
-  if( $action == '' ) $action = 'default'; // probably not needed, but safe
+    if (isset($_REQUEST['mact'])) {
+        // we're handling an action
+        $ary = explode(',', cms_htmlentities($_REQUEST['mact']), 4);
+        $mactmodulename = (isset($ary[0])?$ary[0]:'');
+        if (!strcasecmp($mactmodulename,$params['module'])) {
+            $checkid = (isset($ary[1])?$ary[1]:'');
+            $mactaction = (isset($ary[2])?$ary[2]:'');
+        }
+        $mactinline = (isset($ary[3]) && $ary[3] == 1?true:false);
 
-  class_exists($modulename);
-  $module = cms_utils::get_module($modulename);
-  if( $module && $module->isPluginModule() ) {
-    @ob_start();
-    $result = $module->DoActionBase($action, $id, $params, $returnid);
-    if ($result !== FALSE) {
-      echo $result;
+        if ($checkid == $id) {
+            // the action is for this instance of the module
+            $inline = $mactinline;
+            if( $inline == true ) {
+                // and we're inline (the results are supposed to replace
+                // the tag, not {content}
+                $action = $mactaction;
+                $params = array_merge($params, ModuleOperations::get_instance()->GetModuleParameters($id));
+            }
+        }
     }
-    $modresult = @ob_get_contents();
-    @ob_end_clean();
 
-    if( isset($params['assign']) ) {
-      $smarty->assign(trim($params['assign']),$modresult);
-      return;
+    if( $action == '' ) $action = 'default'; // probably not needed, but safe
+
+    class_exists($modulename);
+    $module = cms_utils::get_module($modulename);
+    if( $module && $module->isPluginModule() ) {
+        @ob_start();
+        $result = $module->DoActionBase($action, $id, $params, $returnid);
+        if ($result !== FALSE) {
+            echo $result;
+        }
+        $modresult = @ob_get_contents();
+        @ob_end_clean();
+
+        if( isset($params['assign']) ) {
+            $smarty->assign(trim($params['assign']),$modresult);
+            return;
+        }
+        return $modresult;
+
     }
-    return $modresult;
-
-  }
-  else {
-    return "<!-- Not a tag module -->\n";
-  }
+    else {
+        return "<!-- Not a tag module -->\n";
+    }
 }
 
 ?>
