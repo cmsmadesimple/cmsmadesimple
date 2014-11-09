@@ -39,24 +39,24 @@ $(document).ready(function(){
         </form>
     </div>
 
+    <div class="c_full">
+      <div class="grid_6">
+        <a id="toggle_filters">{admin_icon icon='view.gif' alt="{$langshowfilters}"} {$langshowfilters}</a>
+        {if isset($downloadlink)}
+          <a href="adminlog.php{$urlext}&amp;download=1">{$downloadlink}</a>&nbsp;
+          <a href="adminlog.php{$urlext}&amp;download=1">{$langdownload}</a>
+        {/if}
+        {if $clearicon != ''}
+          &nbsp;
+          <a href="adminlog.php{$urlext}&amp;clear=true">{$clearicon}</a>
+          <a href="adminlog.php{$urlext}&amp;clear=true" onclick="return confirm('{$sysmain_confirmclearlog|escape:'javascript'}')">{$langclear}</a>
+        {/if}
+      </div>
+      {if isset($pagestring)}<div class="grid_6" style="text-align: right;">{$pagestring}</div>{/if}
+      <div class="clear"></div>
+  </div>
+
   {if $logempty==false}
-
-    <div class="pageoptions">
-    <div style="float: left; width: 49%;">
-    <a id="toggle_filters">{admin_icon icon='view.gif' alt="{$langshowfilters}"} {$langshowfilters}</a>
-    {if isset($downloadlink)}
-      <a href="adminlog.php{$urlext}&amp;download=1">{$downloadlink}</a>
-      <a href="adminlog.php{$urlext}&amp;download=1">{$langdownload}</a>
-    {/if}
-    {if $clearicon != ''}
-      &nbsp;
-      <a href="adminlog.php{$urlext}&amp;clear=true">{$clearicon}</a>
-      <a href="adminlog.php{$urlext}&amp;clear=true" onclick="return confirm('{$sysmain_confirmclearlog|escape:'javascript'}')">{$langclear}</a>
-    {/if}
-    </div>
-    <div style="text-align: right;">{$pagestring}</div>
-    </div>
-
     <table class="pagetable">
       <thead>
       <tr>
@@ -83,9 +83,8 @@ $(document).ready(function(){
 
       </tbody>
     </table>
-
-    {else}
-    <p>{$langlogempty}</p>
+  {else}
+    <h3 style="text-align: center; color: red;">{$langlogempty}</h3>
   {/if}
 
   </div>
