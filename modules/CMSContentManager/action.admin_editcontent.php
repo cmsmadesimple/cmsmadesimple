@@ -52,7 +52,10 @@ if( isset($params['content_id']) ) $content_id = (int)$params['content_id'];
 
 if( isset($params['cancel']) ) {
     try {
-        if( $content_id && CmsContentManagerUtils::locking_enabled() ) CmsLockOperations::unlock('content',$content_id);
+        if( $content_id && CmsContentManagerUtils::locking_enabled() ) {
+            $lock_id = CmsLockOperations::is_locked('content',$content_id);
+            CmsLockOperations::unlock($lock_id,'content',$content_id);
+        }
     }
     catch( Exception $e ) {
         // do nothing.
@@ -181,7 +184,10 @@ try {
             audit($content_obj->Id(),'Content Item: '.$content_obj->Name(),' Edited');
             if( isset($params['submit']) ) {
                 try {
-                    if( $content_id && CmsContentManagerUtils::locking_enabled() ) CmsLockOperations::unlock('content',$content_id);
+                    if( $content_id && CmsContentManagerUtils::locking_enabled() ) {
+                        $lock_id = CmsLockOperations::is_locked('content',$content_id);
+                        CmsLockOperations::unlock($lock_id,'content',$content_id);
+                    }
                 }
                 catch( Exception $e ) {
                     // do nothing.

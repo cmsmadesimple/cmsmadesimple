@@ -87,9 +87,11 @@ if( $USE_THEME ) {
     echo '<div class="pagecontainer">';
     echo '<div class="pageoverflow">';
     $title = $themeObject->title;
+    $module_help_type = 'both';
+    if( $title ) $module_help_type = null;
     if( !$title ) $title = $themeObject->get_active_title();
     if( !$title ) $title = $modinst->GetFriendlyName();
-    echo $themeObject->ShowHeader($title, '', '', 'both').'</div>';
+    echo $themeObject->ShowHeader($title,'','',$module_help_type).'</div>';
     echo $content;
 } else {
     echo $modinst->DoActionBase($action, $id, $params);

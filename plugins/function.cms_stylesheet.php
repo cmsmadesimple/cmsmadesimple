@@ -64,9 +64,7 @@ function smarty_cms_function_cms_stylesheet($params, &$template)
     // @todo: change this stuff to just use // instead of protocol specific URL.
 	if( isset($params['auto_https']) && $params['auto_https'] == 0 ) $auto_https = 0;
 	if( isset($params['https']) ) $use_https = cms_to_bool($params['https']);
-	if( $auto_https ) {
-		if (isset($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) != 'off') $use_https = 1;
-	}
+	if( $auto_https && cmsms()->is_https_request() ) $use_https = 1;
 
 	if($use_https && isset($config['ssl_url'])) $root_url = $config['ssl_css_url'];
 	if( isset($params['nocombine']) ) $combine_stylesheets = !cms_to_bool($params['nocombine']);

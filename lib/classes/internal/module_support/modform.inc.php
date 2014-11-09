@@ -52,7 +52,7 @@ function cms_module_CreateFormStart(&$modinstance, $id, $action='default', $retu
 	      if( $content_obj ) $goto = $content_obj->GetURL();
 	  }
 	}
-	if (isset($_SERVER["HTTPS"]) && $_SERVER["HTTPS"] == "on" && strpos($goto,':') !== FALSE ) $goto = str_replace('http:','https:',$goto);
+    if( cmsms()->is_https_request() && strpos($goto,':') !== FALSE ) $goto = str_replace('http:','https:',$goto);
 	$goto = ' action="'.$goto.'"';
 
 	$text = '<form id="'.$id.'moduleform_'.$idsuffix.'" method="'.$method.'"'.$goto;

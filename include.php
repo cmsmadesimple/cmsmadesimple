@@ -59,12 +59,8 @@ if( !isset($CMS_INSTALL_PAGE) ) {
 #Setup session with different id and start it
 if( isset($CMS_ADMIN_PAGE) || isset($CMS_INSTALL_PAGE) && !headers_sent() ) {
   // admin pages can't be cached... period, at all.. never.
-  @session_cache_limiter('private');
-  header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
+  @session_cache_limiter('nocache');
   header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
-  header("Cache-Control: no-store, no-cache, must-revalidate");
-  header("Cache-Control: post-check=0, pre-check=0", false);
-  header("Pragma: no-cache");
 }
 else {
   @session_cache_limiter('public');

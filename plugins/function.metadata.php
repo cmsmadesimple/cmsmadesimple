@@ -22,46 +22,34 @@ function smarty_function_metadata($params, &$template)
 	$config = cmsms()->GetConfig();
 	$content_obj = cmsms()->get_content_object();
 
-	$result = '';	
+	$result = '';
 
 	$showbase = true;
-	
+
 	# Show a base tag unless showbase is false in config.php
 	# It really can't hinder, only help
 	if( isset($config['showbase']))  $showbase = $config['showbase'];
 
     # But allow a parameter to override it
-	if (isset($params['showbase']))
-	{
-		if ($params['showbase'] == 'false')
-		{
-			$showbase = false;
-		}
+	if (isset($params['showbase']))	{
+		if ($params['showbase'] == 'false')	$showbase = false;
 	}
 
-	if ($showbase)
-	{
-		$base = $config['root_url'];
-		if (isset($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) != 'off')
-		{
-			$base = $config['ssl_url'];
-		}
+	if ($showbase)	{
+        $base = $config['root_url'];
+        if( cmsms()->is_https_request() ) $base = $config['ssl_url'];
 		$result .= "\n<base href=\"".$base."/\" />\n";
 	}
 
 	$result .= get_site_preference('metadata', '');
 
-	if (is_object($content_obj) && $content_obj->Metadata() != '')
-	{
-	  $result .= "\n" . $content_obj->Metadata();
-	}
+	if (is_object($content_obj) && $content_obj->Metadata() != '') $result .= "\n" . $content_obj->Metadata();
 
-	if ((!strpos($result,$smarty->left_delimiter) === false) and (!strpos($result,$smarty->right_delimiter) === false))
-	{
-	  $result = $smarty->fetch('string:'.$result);
-	}
-	if( isset($params['assign']) )
-	{
+	if ((!strpos($result,$smarty->left_delimiter) === false) and (!strpos($result,$smarty->right_delimiter) === false))	{
+        $result = $smarty->fetch('string:'.$result);
+    }
+
+	if( isset($params['assign']) )	{
 		$smarty->assign(trim($params['assign']),$result);
 		return;
 	}

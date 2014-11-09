@@ -17,9 +17,11 @@ if( !is_object($modinstance) ) {
   $this->RedirectToAdminTab();
 }
 
+$theme = cms_utils::get_theme_object();
+$theme->SetTitle('module_help');
+
 $our_lang =  CmsNlsOperations::get_current_language();
 $smarty->assign('our_lang',$our_lang);
-$smarty->assign('back_url',$this->create_url($id,'defaultadmin',$returnid));
 
 if( $our_lang != 'en_US' ) {
   if( $lang != '' ) {

@@ -42,7 +42,7 @@ function redirect($to)
   $_SERVER['PHP_SELF'] = null;
 
   $schema = 'http';
-  if( isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' ) $schema = 'https';
+  if( cmsms()->is_https_request ) $schema = 'https';
 
   $host = $_SERVER['HTTP_HOST'];
   $components = parse_url($to);

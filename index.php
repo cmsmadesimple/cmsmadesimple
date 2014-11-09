@@ -101,7 +101,7 @@ while( $trycount < 2 ) {
       throw new CmsError404Exception('Cannot view an unviewable page');
     }
 
-    if( $contentobj->Secure() && (!isset($_SERVER['HTTPS']) || empty($_SERVER['HTTPS']) || $_SERVER['HTTPS'] == 'off') ) {
+    if( $contentobj->Secure() && !cmsms()->is_https_request() ) {
       redirect($contentobj->GetURL()); // if this page is marked to be secure, make sure we redirect to the secure page
     }
 
@@ -131,7 +131,7 @@ while( $trycount < 2 ) {
     $smarty->assign('page_id', $page);
     $smarty->assign('page_alias', $contentobj->Alias());
 
-    if( $contentobj->Secure() && (! isset($_SERVER['HTTPS']) || empty($_SERVER['HTTPS']) || $_SERVER['HTTPS'] == 'off') ) {
+    if( $contentobj->Secure() && !cmsms()->is_https_request() ) {
       redirect($contentobj->GetURL()); // if this page is marked to be secure, make sure we redirect to the secure page
     }
 

@@ -97,6 +97,10 @@ class OneElevenTheme extends CmsAdminThemeBase {
 				$url = $config->smart_root_url() . '/' . $icon;
 				$this->set_value('module_icon_url', $url);
 			}
+
+			// set the module help url (this should be supplied TO the theme)
+			$module_help_url = $this->get_module_help_url();
+			$this->set_value('module_help_url', $module_help_url);
 		}
 
 		$bc = $this->get_breadcrumbs();
@@ -125,10 +129,6 @@ class OneElevenTheme extends CmsAdminThemeBase {
 					$title_key = $this->find_menuitem_by_title($title);
 				}
 			}// for loop.
-
-			// set the module help url (this should be supplied TO the theme)
-			$module_help_url = $this->get_module_help_url();
-			$this->set_value('module_help_url', $module_help_url);
 		}
 	}
 

@@ -97,22 +97,12 @@ final class cms_cookies
   /**
    * @ignore
    */
-  private static function __https()
-  {
-    if( !isset($_SERVER['HTTPS']) || empty($_SERVER['HTTPS']) || $_SERVER['HTTPS'] == 'off' ) return FALSE;
-    return TRUE;
-  }
-
-
-  /**
-   * @ignore
-   */
   private static function __setcookie($key,$value,$expire)
   {
     $res = setcookie($key,$value,$expire,
 					 self::__path(),
 					 self::__domain(),
-					 self::__https(),
+                     cmsms()->is_https_request(),
 					 TRUE);
   }
 

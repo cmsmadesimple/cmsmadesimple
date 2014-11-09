@@ -646,6 +646,18 @@ final class CmsApp {
 		if( !is_array($tmp) || count($tmp) == 0 ) return TRUE;
 		return FALSE;
 	}
+
+    /** A convenience method to test if the current request was over HTTPS.
+     *
+	 * @since 1.11.12
+	 * @author Robert Campbell
+	 * @return boolean
+	 */
+    public function is_https_request()
+    {
+        if( isset($_SERVER['HTTPS']) && !empty($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) != 'off' ) return TRUE;
+        return FALSE;
+    }
 }
 
 

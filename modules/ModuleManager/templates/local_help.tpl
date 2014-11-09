@@ -8,7 +8,7 @@
 	{else}
 		{$module_name}
 	{/if}
-	
+
 	<span class="helptext">
 		{if isset($englang_url)}
 			<a href="{$englang_url}">{$englang_text}</a>&nbsp;
@@ -19,7 +19,3 @@
 </div>
 
 {$help_page}
-
-<p class="pageback">
-	<a class="pageback" href="{$back_url}">{$ModuleManager->Lang('back')}</a>
-</p>
