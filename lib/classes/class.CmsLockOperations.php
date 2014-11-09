@@ -1,10 +1,10 @@
 <?php
 #BEGIN_LICENSE
 #-------------------------------------------------------------------------
-# Class: CmsLockOperations (c) 2013 by Robert Campbell 
+# Class: CmsLockOperations (c) 2013 by Robert Campbell
 #         (calguy1000@cmsmadesimple.org)
 #  A class for managing locks on various objects.
-# 
+#
 #-------------------------------------------------------------------------
 # CMS - CMS Made Simple is (c) 2004 by Ted Kulp (wishy@cmsmadesimple.org)
 # Visit our homepage at: http://www.cmsmadesimple.org
@@ -19,7 +19,7 @@
 # However, as a special exception to the GPL, this software is distributed
 # as an addon module to CMS Made Simple.  You may not use this software
 # in any Non GPL version of CMS Made simple, or in any version of CMS
-# Made simple that does not indicate clearly and obviously in its admin 
+# Made simple that does not indicate clearly and obviously in its admin
 # section that the site was built with CMS Made simple.
 #
 # This program is distributed in the hope that it will be useful,
@@ -89,9 +89,11 @@ final class CmsLockOperations
    */
   public static function unlock($lock_id,$type,$oid)
   {
-    $uid = get_userid(FALSE);
-    $lock = CmsLock::load_by_id($lock_id,$type,$oid);
-    $lock->delete();
+      if( $lock_id ) {
+          $uid = get_userid(FALSE);
+          $lock = CmsLock::load_by_id($lock_id,$type,$oid);
+          $lock->delete();
+      }
   }
 
   /**
@@ -111,7 +113,7 @@ final class CmsLockOperations
       return FALSE;
     }
   }
-  
+
   /**
    * Delete any locks that have expired.
    *
@@ -161,7 +163,7 @@ final class CmsLockOperations
     $query = 'DELETE FROM '.cms_db_prefix().CmsLock::LOCK_TABLE.' WHERE uid = ?';
     $db->Execute($query,array($uid));
   }
-  
+
 } // end of class
 
 #
