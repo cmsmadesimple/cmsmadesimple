@@ -18,18 +18,26 @@ $(document).ready(function(){
     data.push({ 'name': 'apply', 'value': 1 });
     data.push({ 'name': 'ajax', 'value': 1 });
     $.post('{$smarty.server.REQUEST_URI}',data,function(resultdata,text) {
-      var x = $.parseJSON(resultdata);
-      var r,d;
-      if( typeof x.response != 'undefined' ) {
-        r = x.response;
-        d = x.details;
-      } else {
-        d = resultdata;
+      var r,d,e;
+      try {
+        var x = $.parseJSON(resultdata);
+        if( typeof x.response != 'undefined' ) {
+          r = x.response;
+          d = x.details;
+        } else {
+          d = resultdata;
+        }
+      }
+      catch( e ) {
+        r = '_error';
+	d = resultdata;
       }
 
-      var e = $('<div />').text(d).html(); // quick tip for entity encoding.
+
+      e = $('<div />').text(d).html(); // quick tip for entity encoding.
+      if( r = '_error' ) e = d;
       $('#edit_userplugin_runout').html(e);
-      $('#edit_userplugin_runout').dialog({ modal: true });
+      $('#edit_userplugin_runout').dialog({ modal: true, width: 'auto' });
     });
     return false;
   });
