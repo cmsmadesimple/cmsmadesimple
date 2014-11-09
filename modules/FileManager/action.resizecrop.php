@@ -27,12 +27,12 @@ if( !file_exists($src) ) {
 }
 $imageinfo = getimagesize($src);
 if( !$imageinfo || !isset($imageinfo['mime']) || !startswith($imageinfo['mime'],'image') ) {
-  $params["fmerror"]="filenotimage";
-  $this->Redirect($id,"defaultadmin",$returnid,$params);
+    $this->SetError($this->Lang('filenotimage'));
+    $this->Redirect($id,"defaultadmin",$returnid);
 }
 if( !is_writable($src) ) {
-  $params["fmerror"]="notwritable";
-  $this->Redirect($id,"defaultadmin",$returnid,$params);
+    $this->SetError($this->Lang('filenotimage'));
+    $this->Redirect($id,"defaultadmin",$returnid);
 }
 
 //
@@ -40,28 +40,29 @@ if( !is_writable($src) ) {
 //
 
 if(empty($params['reset'])
-   && !empty($params['cx']) && !empty($params['cy']) 
-   && !empty($params['cw']) && !empty($params['ch']) 
+   && !empty($params['cx']) && !empty($params['cy'])
+   && !empty($params['cw']) && !empty($params['ch'])
    && !empty($params['iw']) && !empty($params['ih'])) {
 
   //Get the mimeType
-  $mimeType = imageEditor::getMime($imagepath);
+  $mimeType = imageEditor::getMime($src);
 
   //Open new Instance
-  $instance = imageEditor::open($imagepath);
+  $instance = imageEditor::open($src);
 
   //Resize it if necessary
-  if(!empty($params['resize']) && $params['resize'] == 'resize'){
-    $instance = imageEditor::resize($instance, $mimeType, $params['iw'], $params['ih']);
+  if( !empty($params['iw']) && !empty($params['ih']) ) {
+      $instance = imageEditor::resize($instance, $mimeType, $params['iw'], $params['ih']);
   }
 
   //Crop it if necessary
-  if(!empty($params['crop']) && $params['crop'] == 'crop'){
-    $instance = imageEditor::crop($instance, $mimeType, $params['cx'], $params['cy'], $params['cw'], $params['ch']);
+  if( !empty($params['cx']) && !empty($params['cy']) && !empty($params['cw']) && !empty($params['ch']) ) {
+      $instance = imageEditor::crop($instance, $mimeType, $params['cx'], $params['cy'], $params['cw'], $params['ch']);
   }
-	
+
   //Save it
-  imageEditor::save($instance, $imagepath, $mimeType);
+  $res = imageEditor::save($instance, $src, $mimeType);
+  $this->Redirect($id,"defaultadmin",$returnid);
 }
 
 
