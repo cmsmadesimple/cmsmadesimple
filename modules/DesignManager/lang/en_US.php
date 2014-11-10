@@ -82,7 +82,7 @@ $lang['error_readxml'] = 'A problem occurred reading the XML file (possible synt
 $lang['error_uploading'] = 'Problem uploading file (perhaps it is too large)';
 $lang['error_upload_filetype'] = 'The file uploaded is not of the proper type (%s)';
 $lang['error_xmlstructure'] = 'Error in the structure of the XML File';
-$lang['error_nophysicalfile'] = 'An error occurred parsing the stylesheets, and or templates.  The url %s could not be located as a physical file.  This probably indicates that the template and/or stylesheets of thise theme are using advanced logic that the design manager cannot process.';
+$lang['error_nophysicalfile'] = 'An error occurred parsing the stylesheets, and/or templates of the design.  The url %s could not be located as a physical file.  This probably indicates that the template and/or stylesheets of this theme are using advanced logic that the design manager cannot process.';
 $lang['export_design'] = 'Export Design to XML';
 
 #F

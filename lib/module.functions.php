@@ -115,7 +115,7 @@ function cms_module_plugin($params,&$template)
 
     }
     else {
-        return "<!-- Not a tag module -->\n";
+        return "<!-- $modulename is not a plugin module -->\n";
     }
 }
 
