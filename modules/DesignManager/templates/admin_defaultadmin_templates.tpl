@@ -92,7 +92,7 @@ $(document).ready(function(){
 </script>
 
 <div id="filterdialog" style="display: none;" title="{$mod->Lang('tpl_filter')|escape:'javascript'}">
-  {form_start action='defaultadmin' id='filterdialog_form'}
+  {form_start action='defaultadmin' id='filterdialog_form' __activetab='templates'}
     <input type="hidden" name="{$actionid}submit_filter_tpl" value="1"/>
     <div class="pageoverflow">
       <p class="pagetext"><label for="filter_tpl">{$mod->Lang('prompt_options')}:</label></p>
