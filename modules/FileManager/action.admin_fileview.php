@@ -84,41 +84,38 @@ for ($i = 0; $i < count($filelist); $i++) {
   $onerow->thumbnail = '';
   $onerow->editor = '';
   if ($filelist[$i]["image"]) {
-    $onerow->type[] = 'image';
-    $params['imagesrc'] = $path.'/'.$filelist[$i]['name'];
-    if($this->GetPreference("showthumbnails", 0) == 1) {
-      $onerow->thumbnail = $this->GetThumbnailLink($filelist[$i], $path);
-    }
+      $onerow->type[] = 'image';
+      $params['imagesrc'] = $path.'/'.$filelist[$i]['name'];
+      if($this->GetPreference("showthumbnails", 0) == 1) {
+          $onerow->thumbnail = $this->GetThumbnailLink($filelist[$i], $path);
+      }
   }
 
   if ($filelist[$i]["dir"]) {
-    $onerow->iconlink = $this->CreateLink($id,
-        "changedir",
-        "",
-        $this->GetFileIcon($filelist[$i]["ext"], $filelist[$i]["dir"]),
-        array("newdir" => $filelist[$i]["name"], "path" => $path, "sortby" => $sortby));
+      $onerow->iconlink = $this->CreateLink($id, "changedir",  "", $this->GetFileIcon($filelist[$i]["ext"], $filelist[$i]["dir"]),
+                                            array("newdir" => $filelist[$i]["name"], "path" => $path, "sortby" => $sortby));
   } else {
-    $onerow->iconlink = "<a href='" . $filelist[$i]["url"] . "' target='_blank'>" . $this->GetFileIcon($filelist[$i]["ext"]) . "</a>";
+      $onerow->iconlink = "<a href='" . $filelist[$i]["url"] . "' target='_blank'>" . $this->GetFileIcon($filelist[$i]["ext"]) . "</a>";
   }
 
   $link = $filelist[$i]["name"];
   if ($filelist[$i]["dir"]) {
-    if( $filelist[$i]['name'] != '..' ) {
-      $countdirs++;
-      $onerow->type = array('dir');
-    } else {
-      $onerow->noCheckbox = 1;
-    }
-    $url = $this->create_url($id,'changedir','',array("newdir" => $filelist[$i]["name"], "path" => $path, "sortby" => $sortby));
-    $onerow->txtlink = "<a href=\"{$url}\" title=\"{$this->Lang('title_changedir')}\">{$link}</a>";
+      if( $filelist[$i]['name'] != '..' ) {
+          $countdirs++;
+          $onerow->type = array('dir');
+      } else {
+          $onerow->noCheckbox = 1;
+      }
+      $url = $this->create_url($id,'changedir','',array("newdir" => $filelist[$i]["name"], "path" => $path, "sortby" => $sortby));
+      $onerow->txtlink = "<a href=\"{$url}\" title=\"{$this->Lang('title_changedir')}\">{$link}</a>";
   } else {
-    $countfiles++;
-    $countfilesize+=$filelist[$i]["size"];
-    $onerow->txtlink = "<a href='" . $filelist[$i]["url"] . "' target='_blank' title=\"".$this->Lang('title_view_newwindow')."\">" . $link . "</a>";
+      $countfiles++;
+      $countfilesize+=$filelist[$i]["size"];
+      $url = $this->create_url($id,'view','',array('file'=>$this->encodefilename($filelist[$i]['name'])));
+      //$onerow->txtlink = "<a href='" . $filelist[$i]["url"] . "' target='_blank' title=\"".$this->Lang('title_view_newwindow')."\">" . $link . "</a>";
+      $onerow->txtlink = "<a href='" . $url . "' target='_blank' title=\"".$this->Lang('title_view_newwindow')."\">" . $link . "</a>";
   }
-  if( $filelist[$i]['archive']  ) {
-    $onerow->type[] = 'archive';
-  }
+  if( $filelist[$i]['archive']  ) $onerow->type[] = 'archive';
 
   $onerow->fileinfo = trim($filelist[$i]["fileinfo"]);
   if ($filelist[$i]["name"] == "..") {
