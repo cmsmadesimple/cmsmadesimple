@@ -110,12 +110,12 @@ function smarty_cms_function_cms_stylesheet($params, &$template)
 					$all_media[$key][] = $one;
 					$all_timestamps[$key][] = $one->get_modified();
 				} else if( !$mt ) {
+					$all_media['all'][] = $one;
+					$all_timestamps['all'][] = $one->get_modified();
+				} else {
 					$key = md5($mt);
 					$all_media[$key][] = $one;
 					$all_timestamps[$key][] = $one->get_modified();
-				} else {
-					$all_media['all'][] = $one;
-					$all_timestamps['all'][] = $one->get_modified();
 				}
 
 			}
@@ -129,13 +129,12 @@ function smarty_cms_function_cms_stylesheet($params, &$template)
 				$fn = cms_join_path($cache_dir,$filename);
 
 				if( !file_exists($fn) ) {
-
                     $list = array();
                     foreach ($res as $one) {
-                        $list[] = $one->get_name();
+                        if( in_array($params['media'],$one->get_media_types()) ) $list[] = $one->get_name();
                     }
 
-					cms_stylesheet_writeCache($fn, $text, $trimbackground, $smarty);
+					cms_stylesheet_writeCache($fn, $list, $trimbackground, $smarty);
 				}
 
 				cms_stylesheet_toString($filename, $params['media'], '', $root_url, $stylesheet, $params);
@@ -171,8 +170,9 @@ function smarty_cms_function_cms_stylesheet($params, &$template)
 			foreach ($res as $one) {
 
 			    if (isset($params['media'])) {
-			        $media_query = $params['media'];
-			        $media_type  = '';
+                    if( !in_array($params['media'],$one->get_media_types()) ) continue;
+                    $media_query = '';
+			        $media_type = $params['media'];
                 } else {
                     $media_query = $one->get_media_query();
                     $media_type  = implode(',',$one->get_media_types());
