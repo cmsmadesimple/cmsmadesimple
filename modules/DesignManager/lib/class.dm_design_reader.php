@@ -226,8 +226,8 @@ class dm_design_reader extends dm_reader_base
       $rec['key'] = $key;
       $rec['desc'] = base64_decode($one['desc']);
       $rec['data'] = base64_decode($one['data']);
-			$rec['type_originator'] = base64_decode($one['ttype_originator']);
-			$rec['type_name'] = base64_decode($one['ttype_name']);
+      $rec['type_originator'] = base64_decode($one['ttype_originator']);
+      $rec['type_name'] = base64_decode($one['ttype_name']);
       $out[] = $rec;
     }
     return $out;
@@ -409,7 +409,7 @@ class dm_design_reader extends dm_reader_base
 			// - try to find the template type
 		        // - if not, set the type to 'generic'.
 			try {
-				$typename = $rec['ttype_originator'].'::'.$rec['ttype_name'];
+				$typename = $tpl['type_originator'].'::'.$tpl['type_name'];
 				$type_obj = CmsLayoutTemplateType::load($typename);
 				$template->set_type($type_obj);
 			}

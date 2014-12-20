@@ -320,7 +320,7 @@ EOT;
     $output .= $this->_output('tkey',$tpl->get_name(),$lvl+1);
     $output .= $this->_output_data('tdesc',$tpl->get_description(),$lvl+1);
     $output .= $this->_output_data('tdata',$tpl->get_content(),$lvl+1);
-    if( !$tpl->get_type_id() ) die('test123');
+    if( !$tpl->get_type_id() ) throw new \CmsException('Cannot get template type for '.$tpl->get_name());
 
     $type = CmsLayoutTemplateType::load($tpl->get_type_id());
     $output .= $this->_output_data('ttype_originator',$type->get_originator(),$lvl+1);
