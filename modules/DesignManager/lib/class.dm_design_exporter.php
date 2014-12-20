@@ -426,7 +426,7 @@ EOT;
     $output .= self::$_dtd;
     $output .= $this->_open_tag('design',0);
     $output .= $this->_output('name',$this->_design->get_name());
-    $output .= $this->_output('description',$this->_design->get_description());
+    $output .= $this->_output('description',htmlentities($this->_design->get_description())); // todo: encode stuff here
     $output .= $this->_output('generated',time());
     $output .= $this->_output('cmsversion',CMS_VERSION);
     foreach( $this->_tpl_list as $one ) {
