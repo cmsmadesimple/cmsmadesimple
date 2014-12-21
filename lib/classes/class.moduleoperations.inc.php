@@ -43,7 +43,7 @@ final class ModuleOperations
 	 * @access private
 	 * @internal
 	 */
-	protected $cmssystemmodules =  array( 'AdminSearch', 'CMSContentManager', 'DesignManager', 'FileManager','MenuManager','ModuleManager','Search','News','MicroTiny','CMSPrinting','Navigator' );
+	protected $cmssystemmodules =  array( 'AdminSearch', 'CMSContentManager', 'DesignManager', 'FileManager','MenuManager','ModuleManager','Search','News','MicroTiny','Navigator' );
 
 	/**
 	 * @ignore
