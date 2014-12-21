@@ -268,8 +268,8 @@ class CmsLayoutTemplate
 	 */
 	public function get_designs()
 	{
-		if( !$this->get_id() ) return;
 		if( !is_array($this->_design_assoc) ) {
+            if( !$this->get_id() ) return;
 			$this->_design_assoc = array();
 			$db = cmsms()->GetDb();
 			$query = 'SELECT design_id FROM '.cms_db_prefix().CmsLayoutCollection::TPLTABLE.' WHERE tpl_id = ?';
