@@ -15,6 +15,7 @@ Core - General
   - Adds the {cms_module_hint} plugin
   - {content}, {content_image} and {content_module} plugins all receive the required and priority parameters
   - {content} tag now has the placeholder attribute
+  - More smarty plugins for form creation in the template.
   - Major accessibility review throughout Admin interface
   - Removed many static Admin pages, and replaced with new modules
   - Accept UTF-8 chars in page alias and in custom URLs
@@ -32,7 +33,7 @@ Core - General
   - Removed AllowAutoUpgrade and AllowAutoInstall from module API
   - Removed valid_css and valid_xhtml tags
   - Modules can have multiple Admin menu entries
-  - More...
+  - Much, Much More...
 
 Core - Bug Reports
   - #9721 There's no check if changelog.txt exists
@@ -54,7 +55,7 @@ Navigator
 
 MicroTiny
   - Complete rewrite
-  - Now uses tinymce 4.0.12
+  - Now uses tinymce 4.1.7
 
 AdminSearch
   - New module for searching for tags and any content in templates
@@ -71,7 +72,7 @@ DesignManager
   - Implements locking for templates
 
 CMSPrinting
-  - Uses new CmsLayout API's for template management
+  - removed.
 
 News 
   - Each article now has a searchable option
