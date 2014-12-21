@@ -349,7 +349,7 @@ class CmsLayoutCollection
             $query = 'SELECT id FROM '.cms_db_prefix().self::TABLENAME.' WHERE name = ?';
             $tmp = $db->GetOne($query,array($this->get_name()));
         }
-        if( $tmp ) throw new CmsInvalidDataException('Collection with the same name already exists.');
+        if( $tmp ) throw new CmsInvalidDataException('Collection/Design with the same name already exists.');
     }
 
 	/**
