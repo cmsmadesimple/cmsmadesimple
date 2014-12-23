@@ -72,7 +72,7 @@ DesignManager
   - Implements locking for templates
 
 CMSPrinting
-  - removed.
+  - removed.  A new UDT entitled {print} which merely outputs an HTML comment is provided on upgrade to prevent fatal site errors.
 
 News 
   - Each article now has a searchable option
