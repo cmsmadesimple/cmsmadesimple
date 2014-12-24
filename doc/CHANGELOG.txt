@@ -9,20 +9,20 @@ Core - General
   - Many new Smarty plugins for form building in modules
   - New ajaxy help
   - UI Review trough many Admin pages
-  - New jquery based page selector
+  - New jQuery based page selector
   - Improved and documented htaccess.txt file
-  - Many new smarty plugins to aid in module development and separation of logic from display
+  - Many new Smarty plugins to aid in module development and separation of logic from display
   - Adds the {cms_module_hint} plugin
   - {content}, {content_image} and {content_module} plugins all receive the required and priority parameters
   - {content} tag now has the placeholder attribute
-  - More smarty plugins for form creation in the template.
+  - More Smarty plugins for form creation in the template
   - Major accessibility review throughout Admin interface
   - Removed many static Admin pages, and replaced with new modules
   - Accept UTF-8 chars in page alias and in custom URLs
     (punctuation, whitespace, / and . are not allowed in the alias. Punctuation, whitespace and . are not allowed in URLs)
   - Removed the 'ext' parameter from cms_selflink
   - Removed the old compatibility Admin theme class (admintheme.inc.php) was deprecated in 1.11
-  - Admin interface now assumes HTML5.  Porting admin themes must include porting them to HTML5
+  - Admin interface now assumes HTML5.  Porting Admin themes must include porting them to HTML5
   - Simplex Theme gets some love: updated Grid system, removed all images and replaced with icon fonts, 
     extended JS functions with hopefully better Mobile support, Theme JS includes now helper variables like
     SX.isTouch, SX.isMobile, SX.viewportWidth and SX.UA, for more information refer to uploads/simplex/js/ functions.js 
@@ -33,7 +33,7 @@ Core - General
   - Removed AllowAutoUpgrade and AllowAutoInstall from module API
   - Removed valid_css and valid_xhtml tags
   - Modules can have multiple Admin menu entries
-  - Much, Much More...
+  - Much, much more...
 
 Core - Bug Reports
   - #9721 There's no check if changelog.txt exists
@@ -72,7 +72,7 @@ DesignManager
   - Implements locking for templates
 
 CMSPrinting
-  - removed.  A new UDT entitled {print} which merely outputs an HTML comment is provided on upgrade to prevent fatal site errors.
+  - Removed.  A new UDT entitled {print} which merely outputs an HTML comment is provided on upgrade to prevent fatal site errors.
 
 News 
   - Each article now has a searchable option
@@ -93,7 +93,7 @@ Search
   - Now supports multiple form and result templates
 
 ModuleManager
-  - Compete rewrite
+  - Complete rewrite
   - Includes functionality to interact with local modules
   - Now shows release dates and approximate download counts for each module
   - Now shows summary of releases for a specific module
