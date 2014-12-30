@@ -152,6 +152,8 @@ final class ModuleOperations
     function CreateXMLPackage( CMSModule &$modinstance, &$message, &$filecount )
     {
         // get a file list
+        global $CMSMS_GENERATING_XML;
+        $CMSMS_GENERATING_XML = 1;
         $filecount = 0;
         $dir = dirname(dirname(dirname(__FILE__))).DIRECTORY_SEPARATOR."modules".DIRECTORY_SEPARATOR.$modinstance->GetName();
         if( !is_writable( $dir ) && $brief == 0 ) throw new CmsFileSystemException(lang('errordirectorynotwritable'));
@@ -202,6 +204,7 @@ final class ModuleOperations
         $xmltxt .= "</module>\n";
         $message = 'XML package of '.strlen($xmltxt).' bytes created for '.$modinstance->GetName();
         $message .= ' including '.$filecount.' files';
+        unset($CMSMS_GENERATING_XML);
         return $xmltxt;
     }
 

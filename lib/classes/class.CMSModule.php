@@ -467,6 +467,11 @@ abstract class CMSModule
     /**
      * Returns the help for the module
      *
+     * Note: New for CMSMS 1.11.12 - If the global variable CMSMS_GENERATING_XML is set
+     * it indicates that the help output will be stored in an XML file.  This variable
+     * can be used to check wether advanced html output (like links to other documents)
+     * should be generated.
+	 *
      * @param string Optional language that the admin is using.	 If that language
      * is not defined, use en_US.
      *
