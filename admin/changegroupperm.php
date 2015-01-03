@@ -87,18 +87,25 @@ if ($submitted == 1) {
     "group_perms (group_perm_id, group_id, permission_id, create_date, modified_date)
        VALUES (?,?,?,$now,$now)";
 
-  $selected_groups = unserialize(base64_decode($_POST['sel_groups']));
-  if( is_array($selected_groups) && count($selected_groups) ) {
-      // clean this array
-      $tmp = array();
-      foreach( $selected_groups as &$one ) {
-          $one = (int)$one;
-          if( $one > 0 ) $tmp[] = $one;
-      }
-      $query = 'DELETE FROM '.cms_db_prefix().'group_perms
+  $parts = explode('::',$_POST['sel_groups']);
+  if( count($parts) == 2 ) {
+      if( md5(__FILE__.$parts[1]) == $parts[0] ) {
+          $selected_groups = (array) unserialize(base64_decode($parts[1]));
+          if( is_array($selected_groups) && count($selected_groups) ) {
+              // clean this array
+              $tmp = array();
+              foreach( $selected_groups as &$one ) {
+                  $one = (int)$one;
+                  if( $one > 0 ) $tmp[] = $one;
+              }
+              $query = 'DELETE FROM '.cms_db_prefix().'group_perms
                 WHERE group_id IN ('.implode(',',$tmp).')';
-      $db->Execute($query);
+              $db->Execute($query);
+          }
+          unset($selected_groups);
+      }
   }
+  unset($parts);
 
   foreach ($_POST as $key=>$value) {
       if (strpos($key,"pg") == 0 && strpos($key,"pg") !== false) {
@@ -141,7 +148,7 @@ while($result && $row = $result->FetchRow()) {
     $perm_struct[$row['permission_id']] = $thisPerm;
   }
 }
-$smarty->assign_by_ref('perms',$perm_struct);
+$smarty->assign('perms',$perm_struct);
 $smarty->assign('cms_secure_param_name',CMS_SECURE_PARAM_NAME);
 $smarty->assign('cms_user_key',$_SESSION[CMS_USER_KEY]);
 $smarty->assign('form_start','<form id="groupname" method="post" action="changegroupperm.php">');
@@ -151,7 +158,9 @@ $smarty->assign('disp_group',$disp_group);
 $smarty->assign('apply',lang('apply'));
 $smarty->assign('title_permission',lang('permission'));
 $smarty->assign('selectgroup',lang('selectgroup'));
-$smarty->assign('hidden2','<input type="hidden" name="sel_groups" value="'.base64_encode(serialize($sel_group_ids)).'"/>');
+$tmp = base64_encode(serialize($sel_group_ids));
+$sig = md5(__FILE__.$tmp);
+$smarty->assign('hidden2','<input type="hidden" name="sel_groups" value="'.$sig.'::'.base64_encode(serialize($sel_group_ids)).'"/>');
 $smarty->assign('hidden','<input type="hidden" name="submitted" value="1" />');
 $smarty->assign('submit','<input type="submit" name="changeperm" value="'.lang('submit').'" class="pagebutton" />');
 $smarty->assign('cancel','<input type="submit" name="cancel" value="'.lang('cancel').'" class="pagebutton" />');
