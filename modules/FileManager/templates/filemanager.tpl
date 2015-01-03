@@ -56,6 +56,10 @@ $(document).ready(function () {
         // if change dir via the dropzone, make sure filemanager refreshes.
         location.reload();
     });
+    $(document).on('dropzone_stop', $(this), function (e, data) {
+        // if change dir via the dropzone, make sure filemanager refreshes.
+        location.reload();
+    });
 
     $(document).on('change', '#filesarea input[type="checkbox"].fileselect', function (e) {
         // find the parent row
@@ -138,7 +142,7 @@ $(document).ready(function () {
 {$hiddenpath}
 {/if}
 
-<div id="filesarea">  
+<div id="filesarea">
 	<table width="100%" class="pagetable scrollable">
 		<thead>
 			<tr>
@@ -159,7 +163,7 @@ $(document).ready(function () {
 		<tbody>
 		{foreach from=$files item=file}
 			{cycle values="row1,row2" assign=rowclass}
-			<tr class="{$rowclass}">    
+			<tr class="{$rowclass}">
 				<td valign="middle">{if isset($file->thumbnail) && $file->thumbnail!=''}{$file->thumbnail}{else}{$file->iconlink}{/if}</td>
 				<td class="clickable" valign="middle">{$file->txtlink}</td>
 				<td class="clickable" valign="middle">{$file->mime}</td>
