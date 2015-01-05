@@ -36,11 +36,11 @@ function cms_html_entity_decode_utf8( $string, $convert_single_quotes = false )
 {
 	static $trans_tbl;
 	//replace numeric entities
-	$string = preg_replace_callback('~&#x0*([0-9a-f]+);~ei',
+	$string = preg_replace_callback('~&#x0*([0-9a-f]+);~i',
                            function($matches) {
                                _code2utf8(hexdec($matches[1]));
                            }, $string);
-	$string = preg_replace_callback('~&#0*([0-9]+);~e',
+	$string = preg_replace_callback('~&#0*([0-9]+);~',
                            function($matches) {
                                _code2utf8(hexdec($matches[1]));
                            }, $string);
