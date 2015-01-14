@@ -1301,10 +1301,9 @@ abstract class CMSModule
      *
      *
      * @abstract
-     * @param string $htmlresult The html-code of the page before replacing SyntaxHighlighter-stuff
      * @return string
      */
-    public function SyntaxGenerateHeader($htmlresult='')
+    public function SyntaxGenerateHeader()
     {
         return '';
     }

@@ -214,7 +214,7 @@ $smarty->assign('SECURE_PARAM_NAME', CMS_SECURE_PARAM_NAME); // Assigned at incl
 $smarty->assign('CMS_USER_KEY', $_SESSION[CMS_USER_KEY]); // Assigned at include.php?
 
 # WYSIWYG editor
-$tmp = module_meta::get_instance()->module_list_by_capability('wysiwyg');
+$tmp = module_meta::get_instance()->module_list_by_capability(CmsCoreCapabilities::WYSIWYG_MODULE);
 $tmp2 = array(-1 => lang('none'));
 for ($i = 0; $i < count($tmp); $i++) {
   $tmp2[$tmp[$i]] = $tmp[$i];
@@ -223,7 +223,7 @@ for ($i = 0; $i < count($tmp); $i++) {
 $smarty -> assign('wysiwyg_opts', $tmp2);
 
 # Syntaxhighlighter editor
-$tmp = module_meta::get_instance()->module_list_by_method('IsSyntaxHighlighter');
+$tmp = module_meta::get_instance()->module_list_by_capability(CmsCoreCapabilities::SYNTAX_MODULE);
 $tmp2 = array(-1 => lang('none'));
 for ($i = 0; $i < count($tmp); $i++) {
   $tmp2[$tmp[$i]] = $tmp[$i];

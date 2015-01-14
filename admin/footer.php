@@ -98,7 +98,7 @@ $list = CmsFormUtils::get_requested_syntax_modules();
 if( is_array($list) && count($list) ) {
   foreach( $list as $one ) {
     $obj = cms_utils::get_module($one);
-    if( is_object($obj) ) $headertext .= $obj->SyntaxGenerateHeader($htmlresult);
+    if( is_object($obj) ) $headertext .= $obj->SyntaxGenerateHeader();
   }
 }
 
