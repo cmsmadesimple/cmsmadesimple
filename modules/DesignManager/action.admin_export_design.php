@@ -152,7 +152,7 @@ try {
 	// headers
 	header('Content-Description: File Transfer');
 	header('Content-Type: application/force-download');
-	header('Content-Disposition: attachment; filename='.$the_design->get_name().'.xml');
+	header('Content-Disposition: attachment; filename='.munge_string_to_url($the_design->get_name()).'.xml');
 
 	// output
 	echo $xml;
