@@ -280,11 +280,10 @@ final class CmsFormUtils
         }
 
         if( !$module && $wantedsyntax ) {
-            $attribs['data-cms-lang'] = 'smarty';
+            $attribs['data-cms-lang'] = trim($wantedsyntax);
             $module = cmsms()->GetModuleOperations()->GetSyntaxHighlighter($forcemodule);
             if( $module && $module->HasCapability(CmsCoreCapabilities::SYNTAX_MODULE) ) {
                 $attribs['class'] .= ' '.$module->GetName();
-                $attribs['data-cms-lang'] = trim($wantedsyntax);
                 self::_add_syntax($module->GetName());
             } else {
                 // wanted a syntax module, but couldn't find one...
