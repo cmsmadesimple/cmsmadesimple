@@ -38,14 +38,14 @@ EOT;
 
   public function __construct(CmsLayoutCollection &$design)
   {
-    $this->_design = $design;
-    if( !is_array(self::$_mm_types ) ) {
-      self::$_mm_types = CmsLayoutTemplateType::load_all_by_originator('MenuManager');
-      self::$_nav_types = CmsLayoutTemplateType::load_all_by_originator('Navigator');
-      if( !is_array(self::$_mm_types) || count(self::$_mm_types) == 0 || !is_array(self::$_nav_types) || count(self::$_nav_types) == 0 ) {
-	throw new CmsException('Cannot find any MenuManager template types (is MenuManager installed and enabled?');
+      $this->_design = $design;
+      if( !is_array(self::$_mm_types ) ) {
+          self::$_mm_types = CmsLayoutTemplateType::load_all_by_originator('MenuManager');
+          self::$_nav_types = CmsLayoutTemplateType::load_all_by_originator('Navigator');
+          if( (!is_array(self::$_mm_types) || count(self::$_mm_types) == 0) && (!is_array(self::$_nav_types) || count(self::$_nav_types) == 0) ) {
+              throw new CmsException('Cannot find any Navigation template types (is MenuManager or Navigator installed and enabled?');
+          }
       }
-    }
   }
 
   public function get_description()
@@ -158,105 +158,105 @@ EOT;
 
   public function _add_template($name,$type = 'TPL')
   {
-    try {
-      switch( $type ) {
-      case 'TPL':
-	$tpl_ob = CmsLayoutTemplate::load($name);
-	$sig = $this->_get_signature($tpl_ob->get_name(),$type);
+      try {
+          switch( $type ) {
+          case 'TPL':
+              $tpl_ob = CmsLayoutTemplate::load($name);
+              $sig = $this->_get_signature($tpl_ob->get_name(),$type);
 
-	// recursion...
-	$new_content = $this->_parse_tpl_urls($tpl_ob->get_content());
-	$new_content = $this->_get_sub_templates($new_content);
-	$sig = $this->_get_signature($tpl_ob->get_name(),'TPL');
-	$new_tpl_ob = clone $tpl_ob;
-	$new_tpl_ob->set_name($sig);
-	$new_tpl_ob->set_content($new_content);
+              // recursion...
+              $new_content = $this->_parse_tpl_urls($tpl_ob->get_content());
+              $new_content = $this->_get_sub_templates($new_content);
+              $sig = $this->_get_signature($tpl_ob->get_name(),'TPL');
+              $new_tpl_ob = clone $tpl_ob;
+              $new_tpl_ob->set_name($sig);
+              $new_tpl_ob->set_content($new_content);
 
-	if( !is_array($this->_tpl_list) ) $this->_tpl_list = array();
-	$this->_tpl_list[$sig] = $new_tpl_ob;
-	return $sig;
+              if( !is_array($this->_tpl_list) ) $this->_tpl_list = array();
+              $this->_tpl_list[$sig] = $new_tpl_ob;
+              return $sig;
 
-      case 'MM':
-	// MenuManager file template
-	$mod = cms_utils::get_module('MenuManager');
-	if( $mod ) {
-	  $tpl = $mod->GetTemplateFromFile($name);
-	  if( $tpl ) {
-	    // create a new CmsLayoutTemplate object for this template
-	    // and add it to the list.
-	    // notice we don't recurse.
-	    $tpl = $this->_parse_tpl_urls($tpl);
-	    $new_tpl_ob = new CmsLayoutTemplate;
-	    $new_tpl_ob->set_content($tpl);
-	    $name = substr($name,0,-4);
-	    $type = 'TPL';
-	    $sig = $this->_get_signature($name,$type);
-	    $new_tpl_ob->set_name($sig);
-	    // it's a menu manager template
-	    // we need to get a 'type' for this.
-	    $new_tpl_ob->set_type(self::$_mm_types[0]);
-	    $this->_tpl_list[$sig] = $new_tpl_ob;
-	    return $sig;
-	  }
-	}
-      } // switch
-    }
-    catch( CmsException $e ) {
-    }
+          case 'MM':
+              // MenuManager file template
+              $mod = cms_utils::get_module('MenuManager');
+              if( $mod ) {
+                  $tpl = $mod->GetTemplateFromFile($name);
+                  if( $tpl ) {
+                      // create a new CmsLayoutTemplate object for this template
+                      // and add it to the list.
+                      // notice we don't recurse.
+                      $tpl = $this->_parse_tpl_urls($tpl);
+                      $new_tpl_ob = new CmsLayoutTemplate;
+                      $new_tpl_ob->set_content($tpl);
+                      $name = substr($name,0,-4);
+                      $type = 'TPL';
+                      $sig = $this->_get_signature($name,$type);
+                      $new_tpl_ob->set_name($sig);
+                      // it's a menu manager template
+                      // we need to get a 'type' for this.
+                      $new_tpl_ob->set_type(self::$_mm_types[0]);
+                      $this->_tpl_list[$sig] = $new_tpl_ob;
+                      return $sig;
+                  }
+              }
+          } // switch
+      }
+      catch( CmsException $e ) {
+      }
   }
 
   private function _get_sub_templates($template)
   {
-    $ob = &$this;
+      $ob = &$this;
 
-    $replace_fn = function($matches) use ($ob) {
-      $out = preg_replace_callback("/template\s*=[\\\"']{0,1}([a-zA-Z0-9._\ \:\-\/]+)[\\\"']{0,1}/i",
-				   function($matches) use ($ob) {
-				     $type = 'TPL';
-				     if( endswith($matches[1],'.tpl') ) $type = 'MM';
-				     $sig = $ob->_add_template($matches[1],$type);
-				     return str_replace($matches[1],$sig,$matches[0]);
-				   },$matches[0]);
-      return $out;
-    };
+      $replace_fn = function($matches) use ($ob) {
+          $out = preg_replace_callback("/template\s*=[\\\"']{0,1}([a-zA-Z0-9._\ \:\-\/]+)[\\\"']{0,1}/i",
+                                       function($matches) use ($ob) {
+                                           $type = 'TPL';
+                                           if( endswith($matches[1],'.tpl') ) $type = 'MM';
+                                           $sig = $ob->_add_template($matches[1],$type);
+                                           return str_replace($matches[1],$sig,$matches[0]);
+                                       },$matches[0]);
+          return $out;
+      };
 
-    $replace_fn2 = function($matches) use ($ob) {
-      $out = preg_replace_callback("/name\s*=[\\\"']{0,1}([a-zA-Z0-9._\ \:\-\/]+)[\\\"']{0,1}/i",
-				   function($matches) use ($ob) {
-				     $sig = $ob->_add_template($matches[1]);
-				     return str_replace($matches[1],$sig,$matches[0]);
-				   },$matches[0]);
-      return $out;
-    };
+      $replace_fn2 = function($matches) use ($ob) {
+          $out = preg_replace_callback("/name\s*=[\\\"']{0,1}([a-zA-Z0-9._\ \:\-\/]+)[\\\"']{0,1}/i",
+                                       function($matches) use ($ob) {
+                                           $sig = $ob->_add_template($matches[1]);
+                                           return str_replace($matches[1],$sig,$matches[0]);
+                                       },$matches[0]);
+          return $out;
+      };
 
-    $replace_fn3 = function($matches) use ($ob) {
-      $out = preg_replace_callback("/file\s*=[\\\"']{0,1}([a-zA-Z0-9._\ \:\-\/]+)[\\\"']{0,1}/i",
-				   function($matches) use ($ob) {
-				     if( !startswith($matches[1],'cms_template:') ) return $matches[0];
+      $replace_fn3 = function($matches) use ($ob) {
+          $out = preg_replace_callback("/file\s*=[\\\"']{0,1}([a-zA-Z0-9._\ \:\-\/]+)[\\\"']{0,1}/i",
+                                       function($matches) use ($ob) {
+                                           if( !startswith($matches[1],'cms_template:') ) return $matches[0];
 
-				     $tpl = substr($matches[1],strlen('cms_template:'));
-				     $sig = $ob->_add_template($tpl);
-				     return str_replace($matches[1],'cms_template:'.$sig,$matches[0]);
-				   },$matches[0]);
-      return $out;
-    };
+                                           $tpl = substr($matches[1],strlen('cms_template:'));
+                                           $sig = $ob->_add_template($tpl);
+                                           return str_replace($matches[1],'cms_template:'.$sig,$matches[0]);
+                                       },$matches[0]);
+          return $out;
+      };
 
-    $regex='/\{menu.*\}/';
-    $template = preg_replace_callback( $regex, $replace_fn, $template );
+      $regex='/\{menu.*\}/';
+      $template = preg_replace_callback( $regex, $replace_fn, $template );
 
-    $regex='/\{.*MenuManager.*\}/';
-    $template = preg_replace_callback( $regex, $replace_fn, $template );
+      $regex='/\{.*MenuManager.*\}/';
+      $template = preg_replace_callback( $regex, $replace_fn, $template );
 
-    $regex='/\{.*Navigator.*\}/';
-    $template = preg_replace_callback( $regex, $replace_fn2, $template );
+      $regex='/\{.*Navigator.*\}/';
+      $template = preg_replace_callback( $regex, $replace_fn2, $template );
 
-    $regex='/\{global_content.*\}/';
-    $template = preg_replace_callback( $regex, $replace_fn2, $template );
+      $regex='/\{global_content.*\}/';
+      $template = preg_replace_callback( $regex, $replace_fn2, $template );
 
-    $regex='/\{include.*\}/';
-    $template = preg_replace_callback( $regex, $replace_fn3, $template );
+      $regex='/\{include.*\}/';
+      $template = preg_replace_callback( $regex, $replace_fn3, $template );
 
-    return $template;
+      return $template;
   }
 
   public function parse_templates()
