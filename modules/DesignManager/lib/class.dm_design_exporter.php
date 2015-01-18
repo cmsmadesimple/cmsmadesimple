@@ -12,7 +12,7 @@ class dm_design_exporter
 
   private static $_dtd = <<<EOT
 <!DOCTYPE design [
-  <!ELEMENT design (name,description,generated,cmsversion,template+,stylesheet+,file+)>
+  <!ELEMENT design (name,description,generated,cmsversion,template+,stylesheet*,file+)>
   <!ELEMENT name (#PCDATA)>
   <!ELEMENT description (#PCDATA)>
   <!ELEMENT generated (#PCDATA)>
