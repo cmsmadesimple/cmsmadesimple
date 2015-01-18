@@ -21,235 +21,235 @@
 
 class dm_design_reader extends dm_reader_base
 {
-  private $_xml;
-  private $_scanned;
-  private $_design_info = array();
-  private $_tpl_info = array();
-  private $_css_info = array();
-  private $_file_map = array();
+    private $_xml;
+    private $_scanned;
+    private $_raw_design_info = array();
+    private $_tpl_info = array();
+    private $_css_info = array();
+    private $_file_map = array();
 
-  public function __construct($fn)
-  {
-    $this->_xml = new dm_xml_reader();
-    $this->_xml->open($fn);
-    $this->_xml->SetParserProperty(XMLReader::VALIDATE,TRUE);
-  }
+    public function __construct($fn)
+    {
+        $this->_xml = new dm_xml_reader();
+        $this->_xml->open($fn);
+        $this->_xml->SetParserProperty(XMLReader::VALIDATE,TRUE);
+    }
 
-  public function validate()
-  {
-    while( $this->_xml->read() ) {
-      if( !$this->_xml->isValid() ) {
+    public function validate()
+    {
+        while( $this->_xml->read() ) {
+            if( !$this->_xml->isValid() ) {
 				throw new CmsException('Invalid XML FILE ');
-      }
+            }
+        }
+        // it validates.
     }
-    // it validates.
-  }
 
-  private function _scan()
-  {
-    $in = array();
-    $cur_key = null;
+    private function _scan()
+    {
+        $in = array();
+        $cur_key = null;
 
-    $__get_in = function() use ($in) {
-      global $in;
-      if( ($n = count($in)) ) {
-				return $in[$n-1];
-      }
-    };
+        $__get_in = function() use ($in) {
+            global $in;
+            if( ($n = count($in)) ) {
+                return $in[$n-1];
+            }
+        };
 
-    if( !$this->_scanned ) {
-      $this->_scanned = TRUE;
-      while( $this->_xml->read() ) {
-				switch( $this->_xml->nodeType ) {
-				case XmlReader::ELEMENT:
-					switch( $this->_xml->localName ) {
-					case 'design':
-					case 'template':
-					case 'stylesheet':
-					case 'file':
-						$in[] = $this->_xml->localName;
-						break;
+        if( !$this->_scanned ) {
+            $this->_scanned = TRUE;
+            while( $this->_xml->read() ) {
+                switch( $this->_xml->nodeType ) {
+                case XmlReader::ELEMENT:
+                    switch( $this->_xml->localName ) {
+                    case 'design':
+                    case 'template':
+                    case 'stylesheet':
+                    case 'file':
+                        $in[] = $this->_xml->localName;
+                        break;
 
-					case 'name':
-					case 'description':
-					case 'generated':
-					case 'cmsversion':
-						if( $__get_in() != 'design' ) {
-							// validity error.
-						}
-						$name = $this->_xml->localName;
-						$this->_xml->read();
-						$this->_design_info[$name] = $this->_xml->value;
-						break;
+                    case 'name':
+                    case 'description':
+                    case 'generated':
+                    case 'cmsversion':
+                        if( $__get_in() != 'design' ) {
+                            // validity error.
+                        }
+                        $name = $this->_xml->localName;
+                        $this->_xml->read();
+                        $this->_raw_design_info[$name] = base64_decode($this->_xml->value);
+                        break;
 
-					case 'tkey':
-						if( $__get_in() != 'template' ) {
-							// validity error.
-						}
-						$this->_xml->read();
-						$cur_key = $this->_xml->value;
-						$this->_tpl_info[$cur_key] = array('key'=>$cur_key);
-						break;
+                    case 'tkey':
+                        if( $__get_in() != 'template' ) {
+                            // validity error.
+                        }
+                        $this->_xml->read();
+                        $cur_key = $this->_xml->value;
+                        $this->_tpl_info[$cur_key] = array('key'=>$cur_key);
+                        break;
 
-					case 'tdesc':
-						if( $__get_in() != 'template' || !$cur_key ) {
-							// validity error.
-						}
-						$this->_xml->read();
-						$this->_tpl_info[$cur_key]['desc'] = $this->_xml->value;
-						break;
+                    case 'tdesc':
+                        if( $__get_in() != 'template' || !$cur_key ) {
+                            // validity error.
+                        }
+                        $this->_xml->read();
+                        $this->_tpl_info[$cur_key]['desc'] = $this->_xml->value;
+                        break;
 
-					case 'tdata':
-						if( $__get_in() != 'template' || !$cur_key ) {
-							// validity error.
-						}
-						$this->_xml->read();
-						$this->_tpl_info[$cur_key]['data'] = $this->_xml->value;
-						break;
+                    case 'tdata':
+                        if( $__get_in() != 'template' || !$cur_key ) {
+                            // validity error.
+                        }
+                        $this->_xml->read();
+                        $this->_tpl_info[$cur_key]['data'] = $this->_xml->value;
+                        break;
 
-					case 'ttype_originator':
-					case 'ttype_name':
-						if( $__get_in() != 'template' || !$cur_key ) {
-							// validity error.
-						}
-						$key = $this->_xml->localName;
-						$this->_xml->read();
-						$this->_tpl_info[$cur_key][$key] = $this->_xml->value;
-						break;
+                    case 'ttype_originator':
+                    case 'ttype_name':
+                        if( $__get_in() != 'template' || !$cur_key ) {
+                            // validity error.
+                        }
+                        $key = $this->_xml->localName;
+                        $this->_xml->read();
+                        $this->_tpl_info[$cur_key][$key] = $this->_xml->value;
+                        break;
 
-					case 'csskey':
-						if( $__get_in() != 'stylesheet' ) {
-							// validity error.
-						}
-						$this->_xml->read();
-						$cur_key = $this->_xml->value;
-						$this->_css_info[$cur_key] = array('key'=>$cur_key);
-						break;
+                    case 'csskey':
+                        if( $__get_in() != 'stylesheet' ) {
+                            // validity error.
+                        }
+                        $this->_xml->read();
+                        $cur_key = $this->_xml->value;
+                        $this->_css_info[$cur_key] = array('key'=>$cur_key);
+                        break;
 
-					case 'cssdesc':
-						if( $__get_in() != 'stylesheet' || !$cur_key ) {
-							// validity error.
-						}
-						$this->_xml->read();
-						$this->_css_info[$cur_key]['desc'] = $this->_xml->value;
-						break;
+                    case 'cssdesc':
+                        if( $__get_in() != 'stylesheet' || !$cur_key ) {
+                            // validity error.
+                        }
+                        $this->_xml->read();
+                        $this->_css_info[$cur_key]['desc'] = $this->_xml->value;
+                        break;
 
-					case 'cssdata':
-						if( $__get_in() != 'stylesheet' || !$cur_key ) {
-							// validity error.
-						}
-						$this->_xml->read();
-						$this->_css_info[$cur_key]['data'] = $this->_xml->value;
-						break;
+                    case 'cssdata':
+                        if( $__get_in() != 'stylesheet' || !$cur_key ) {
+                            // validity error.
+                        }
+                        $this->_xml->read();
+                        $this->_css_info[$cur_key]['data'] = $this->_xml->value;
+                        break;
 
-					case 'cssmediatype':
-						if( $__get_in() != 'stylesheet' || !$cur_key ) {
-							// validity error.
-						}
-						$this->_xml->read();
-						$this->_css_info[$cur_key]['mediatype'] = $this->_xml->value;
-						break;
+                    case 'cssmediatype':
+                        if( $__get_in() != 'stylesheet' || !$cur_key ) {
+                            // validity error.
+                        }
+                        $this->_xml->read();
+                        $this->_css_info[$cur_key]['mediatype'] = $this->_xml->value;
+                        break;
 
-					case 'cssmediaquery':
-						if( $__get_in() != 'stylesheet' || !$cur_key ) {
-							// validity error.
-						}
-						$this->_xml->read();
-						$this->_css_info[$cur_key]['mediaquery'] = $this->_xml->value;
-						break;
+                    case 'cssmediaquery':
+                        if( $__get_in() != 'stylesheet' || !$cur_key ) {
+                            // validity error.
+                        }
+                        $this->_xml->read();
+                        $this->_css_info[$cur_key]['mediaquery'] = $this->_xml->value;
+                        break;
 
-					case 'fkey':
-						if( $__get_in() != 'file' ) {
-							// validity error.
-						}
-						$this->_xml->read();
-						$cur_key = $this->_xml->value;
-						$this->_file_map[$cur_key] = array('key'=>$cur_key);
-						break;
+                    case 'fkey':
+                        if( $__get_in() != 'file' ) {
+                            // validity error.
+                        }
+                        $this->_xml->read();
+                        $cur_key = $this->_xml->value;
+                        $this->_file_map[$cur_key] = array('key'=>$cur_key);
+                        break;
 
-					case 'fvalue':
-						if( $__get_in() != 'file' || !$cur_key ) {
-							// validity error.
-						}
-						$this->_xml->read();
-						$this->_file_map[$cur_key]['value'] = $this->_xml->value;
-						break;
+                    case 'fvalue':
+                        if( $__get_in() != 'file' || !$cur_key ) {
+                            // validity error.
+                        }
+                        $this->_xml->read();
+                        $this->_file_map[$cur_key]['value'] = $this->_xml->value;
+                        break;
 
-					case 'fdata':
-						if( $__get_in() != 'file' || !$cur_key ) {
-							// validity error.
-						}
-						$this->_xml->read();
-						$this->_file_map[$cur_key]['data'] = $this->_xml->value;
-						break;
-					}
-					break;
+                    case 'fdata':
+                        if( $__get_in() != 'file' || !$cur_key ) {
+                            // validity error.
+                        }
+                        $this->_xml->read();
+                        $this->_file_map[$cur_key]['data'] = $this->_xml->value;
+                        break;
+                    }
+                    break;
 
-				case XmlReader::END_ELEMENT:
-					switch( $this->_xml->localName ) {
-					case 'design':
-					case 'template':
-					case 'stylesheet':
-					case 'file':
-						if( count($in) ) {
-							array_pop($in);
-						}
-						$cur_key = null;
-						break;
-					}
-				}
-      }
+                case XmlReader::END_ELEMENT:
+                    switch( $this->_xml->localName ) {
+                    case 'design':
+                    case 'template':
+                    case 'stylesheet':
+                    case 'file':
+                        if( count($in) ) {
+                            array_pop($in);
+                        }
+                        $cur_key = null;
+                        break;
+                    }
+                }
+            }
+        }
     }
-  }
 
-  private function _get_name($key)
-  {
-    if( isset($this->_file_map[$key]) ) {
-      return $this->_file_map[$key]['value'];
+    private function _get_name($key)
+    {
+        if( isset($this->_file_map[$key]) ) {
+            return $this->_file_map[$key]['value'];
+        }
     }
-  }
 
-  public function get_design_info()
-  {
-    $this->_scan();
-    return $this->_design_info;
-  }
-
-  public function get_template_list()
-  {
-    $this->_scan();
-    $out = array();
-    foreach( $this->_tpl_info as $key => $one ) {
-      $name = $this->_get_name($key);
-      $rec = array();
-      $rec['name'] = $name;
-      $rec['key'] = $key;
-      $rec['desc'] = base64_decode($one['desc']);
-      $rec['data'] = base64_decode($one['data']);
-      $rec['type_originator'] = base64_decode($one['ttype_originator']);
-      $rec['type_name'] = base64_decode($one['ttype_name']);
-      $out[] = $rec;
+    public function get_design_info()
+    {
+        $this->_scan();
+        return $this->_raw_design_info;
     }
-    return $out;
-  }
 
-  public function get_stylesheet_list()
-  {
-    $this->_scan();
-    $out = array();
-    foreach( $this->_css_info as $key => $one ) {
-      $name = $this->_get_name($key);
-      $rec = array();
-      $rec['name'] = $name;
-      $rec['key'] = $key;
-      $rec['desc'] = base64_decode($one['desc']);
-      $rec['data'] = base64_decode($one['data']);
-      $rec['mediatype'] = base64_decode($one['mediatype']);
-      $rec['medisaquery'] = base64_decode($one['mediaquery']);
-      $out[] = $rec;
+    public function get_template_list()
+    {
+        $this->_scan();
+        $out = array();
+        foreach( $this->_tpl_info as $key => $one ) {
+            $name = $this->_get_name($key);
+            $rec = array();
+            $rec['name'] = $name;
+            $rec['key'] = $key;
+            $rec['desc'] = base64_decode($one['desc']);
+            $rec['data'] = base64_decode($one['data']);
+            $rec['type_originator'] = base64_decode($one['ttype_originator']);
+            $rec['type_name'] = base64_decode($one['ttype_name']);
+            $out[] = $rec;
+        }
+        return $out;
     }
-    return $out;
-  }
+
+    public function get_stylesheet_list()
+    {
+        $this->_scan();
+        $out = array();
+        foreach( $this->_css_info as $key => $one ) {
+            $name = $this->_get_name($key);
+            $rec = array();
+            $rec['name'] = $name;
+            $rec['key'] = $key;
+            $rec['desc'] = base64_decode($one['desc']);
+            $rec['data'] = base64_decode($one['data']);
+            $rec['mediatype'] = base64_decode($one['mediatype']);
+            $rec['medisaquery'] = base64_decode($one['mediaquery']);
+            $out[] = $rec;
+        }
+        return $out;
+    }
 
 	protected function validate_template_names()
 	{
@@ -266,7 +266,7 @@ class dm_design_reader extends dm_reader_base
 				$orig_name = $rec['value'];
 				$n = 1;
 				while( $n < 10 ) {
-          $n++;
+                    $n++;
 					$new_name = $orig_name.' '.$n;
 					if( !in_array($new_name,$tpl_names) ) {
 						$rec['old_value'] = $rec['value'];
@@ -293,7 +293,7 @@ class dm_design_reader extends dm_reader_base
 				$orig_name = $rec['value'];
 				$n = 1;
 				while( $n < 10 ) {
-          $n++;
+                    $n++;
 					$new_name = $orig_name.' '.$n;
 					if( !in_array($new_name,$css_names) ) {
 						$rec['old_value'] = $rec['value'];
@@ -407,7 +407,7 @@ class dm_design_reader extends dm_reader_base
 
 			// template type:
 			// - try to find the template type
-		        // - if not, set the type to 'generic'.
+            // - if not, set the type to 'generic'.
 			try {
 				$typename = $tpl['type_originator'].'::'.$tpl['type_name'];
 				$type_obj = CmsLayoutTemplateType::load($typename);
