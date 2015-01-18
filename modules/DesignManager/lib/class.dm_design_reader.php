@@ -71,6 +71,14 @@ class dm_design_reader extends dm_reader_base
                         break;
 
                     case 'name':
+                        if( $__get_in() != 'design' ) {
+                            // validity error.
+                        }
+                        $name = $this->_xml->localName;
+                        $this->_xml->read();
+                        $this->_raw_design_info[$name] = $this->_xml->value;
+                        break;
+
                     case 'description':
                     case 'generated':
                     case 'cmsversion':
@@ -204,9 +212,7 @@ class dm_design_reader extends dm_reader_base
 
     private function _get_name($key)
     {
-        if( isset($this->_file_map[$key]) ) {
-            return $this->_file_map[$key]['value'];
-        }
+        if( isset($this->_file_map[$key]) ) return $this->_file_map[$key]['value'];
     }
 
     public function get_design_info()
@@ -356,9 +362,7 @@ class dm_design_reader extends dm_reader_base
 		foreach( $this->get_stylesheet_list() as $css ) {
 			$stylesheet = new CmsLayoutStylesheet();
 			$stylesheet->set_name($css['name']);
-			if( isset($css['desc']) && $css['desc'] != '' ) {
-				$stylesheet->set_description($css['desc']);
-			}
+			if( isset($css['desc']) && $css['desc'] != '' ) $stylesheet->set_description($css['desc']);
 
 			$content = $css['data'];
 			foreach( $this->_file_map as $key => &$rec ) {
@@ -366,6 +370,16 @@ class dm_design_reader extends dm_reader_base
 				if( !isset($rec['css_url']) ) continue;
 				$content = str_replace($key,$rec['css_url'],$content);
 			}
+
+            if( $css['mediatype'] ) {
+                $tmp = explode(',',$css['mediatype']);
+                for( $i = 0; $i < count($tmp); $i++ ) {
+                    $str = trim($tmp[$i]);
+                    if( $str ) $stylesheet->add_media_type($str);
+                }
+            }
+
+            if( $css['mediaquery'] ) $stylesheet->set_media_query(trim($css['mediaquery']));
 
 			// save the stylesheet and add it to the design.
 			$stylesheet->set_content($content);
@@ -377,9 +391,7 @@ class dm_design_reader extends dm_reader_base
 		foreach( $this->get_template_list() as $key => $tpl ) {
 			$template = new CmsLayoutTemplate();
 			$template->set_name($tpl['name']);
-			if( isset($tpl['desc']) && $tpl['desc'] != '' ) {
-				$template->set_description($tpl['desc']);
-			}
+			if( isset($tpl['desc']) && $tpl['desc'] != '' ) $template->set_description($tpl['desc']);
 			$content = $tpl['data'];
 
 			// substitute URL keys for the values.

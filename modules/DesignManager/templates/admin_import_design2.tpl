@@ -5,13 +5,23 @@ $(document).ready(function(){
     $('#'+x).dialog({ width: 'auto' });
   });
   $('.template_view').click(function(){
-    var x = $(this).attr('rel');
-    $('#'+x).dialog({ width: 'auto' });
+    var row = $(this).closest('tr');
+    $('.template_content',row).dialog({
+      width: 'auto',
+      close: function( ev, ui ) {
+         $(this).dialog('destroy');
+      }
+    });
     return false;
   });
   $('.stylesheet_view').click(function(){
-    var x = $(this).attr('rel');
-    $('#'+x).dialog({ width: 'auto' });
+    var row = $(this).closest('tr');
+    $('.stylesheet_content',row).dialog({
+      width: 'auto',
+      close: function( ev, ui ) {
+         $(this).dialog('destroy');
+      }
+    });
     return false;
   });
 });
@@ -58,43 +68,77 @@ $(document).ready(function(){
 </fieldset>
 
 {tab_header name='description' label=$mod->Lang('prompt_description')}
-{tab_header name='copyright' label=$mod->Lang('prompt_copyrightlicense')}
+{* tab_header name='copyright' label=$mod->Lang('prompt_copyrightlicense') *}
 {tab_header name='templates' label=$mod->Lang('prompt_templates')}
 {tab_header name='stylesheets' label=$mod->Lang('prompt_stylesheets')}
+
 {tab_start name='description'}
 {* no name set on this field... *}
 <textarea rows="5" cols="80">{$design_info.description}</textarea>
-{tab_start name='copyright'}
-TODO
+
+{* tab_start name='copyright' *}
+
 {tab_start name='templates'}
-<div id="template_list">
-  {foreach from=$templates item='one' name='tpl'}
-   {assign var='typename' value=$one.type_originator|cat:'::'|cat:$one.type_name}
-   {assign var='type_obj' value=CmsLayoutTemplateType::load($typename)}
-  <h3><a href="#" rel="tpl_{$smarty.foreach.tpl.index}" class="template_view">{$one.name}</a></h3>
-  <div>
-    <table class="pagetable">
-      <tr>
-         <th>{$mod->Lang('prompt_templatetype')}:</th>
-         <td>{$type_obj->get_langified_display_value()}</td>
-      </tr>
-      <tr>
-         <th>{$mod->Lang('prompt_description')}:</th>
-         <td>{$one.desc|default:$mod->Lang('info_nodescription')}</td>
-      </tr>
-    </table>
-    <div id="tpl_{$smarty.foreach.tpl.index}" title="{$one.name}" style="display: none;"><textarea rows="10" cols="80">{$one.data}</textarea></div>
-  </div>
+<table class="pagetable">
+  <thead>
+    <tr>
+      <th>{$mod->Lang('name')}</th>
+      <th>{$mod->Lang('type')}</th>
+      <th>{$mod->Lang('prompt_description')}</th>
+      <th class="pageicon"></th>
+    </tr>
+  </thead>
+  <tbody>
+  {foreach $templates as $one}
+   {$typename=$one.type_originator|cat:'::'|cat:$one.type_name}
+   {$type_obj=CmsLayoutTemplateType::load($typename)}
+   <tr class="{cycle values='row1,row2'}">
+    <td>
+      <h3 data-idx="{$one@index}" class="template_view pointer">{$one.name}</h3>
+    </td>
+    <td>{$type_obj->get_langified_display_value()}</td>
+    <td>{$one.desc|default:$mod->Lang('info_nodescription')|summarize:80}
+      <div id="tpl_{$one@index}" class="template_content" title="{$one.name}" style="display: none;"><textarea rows="10" cols="80">{$one.data}</textarea></div>
+    </td>
+    <td>
+      {admin_icon class="template_view pointer" icon='view.gif' alt=lang('view')}
+    </td>
+  </tr>
   {/foreach}
-</div>
+  </tbody>
+</table>
+
+
 {tab_start name='stylesheets'}
 <div id="stylesheet_list">
-  {foreach from=$stylesheets item='one' name='css'}
-  <h3><a href="#" rel="css_{$smarty.foreach.css.index}" class="stylesheet_view">{$one.name}</a></h3>
-  <div><p>{$one.desc|default:$mod->Lang('info_nodescription')}</p>
-    <div id="css_{$smarty.foreach.css.index}" title="{$one.name}" style="display: none;"><textarea rows="10" cols="80">{$one.data|cms_escape}</textarea></div>
-  </div>
-  {/foreach}
+  <table class="pagetable">
+    <thead>
+      <tr>
+        <th>{$mod->Lang('name')}</th>
+	<th>{$mod->Lang('prompt_media_type')}</th>
+        <th>{$mod->Lang('prompt_description')}</th>
+	<th class="pageicon"></th>
+      </tr>
+    </thead>
+    <tbody>
+      {foreach from=$stylesheets item='one' name='css'}
+      <tr>
+        <td>
+	  <h3 class="stylesheet_view pointer">{$one.name}</h3>
+	</td>
+	<td>{$one.mediatype}</td>
+        <td>{$one.desc|default:$mod->Lang('info_nodescription')}
+           <div class="stylesheet_content" title="{$one.name}" style="display: none;">
+	     <textarea rows="10" cols="80">{$one.data}</textarea>
+	   </div>
+	</td>
+	<td>
+          {admin_icon class="stylesheet_view pointer" icon='view.gif' alt=lang('view')}
+	</td>
+      </tr>
+      {/foreach}
+    </tbody>
+  </table>
 </div>
 {tab_end}
 
