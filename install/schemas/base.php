@@ -106,8 +106,63 @@ UserTagOperations::get_instance()->SetUserTag('user_agent',
 $txt = <<<EOT
 // set start date your site was published\n\$startCopyRight = '2004';\n\n// check if start year is this year\nif (date('Y') == \$startCopyRight)\n{\n    // it was, just print this year\n    echo \$startCopyRight;\n} else {\n    // it was not, print start year and this year delimited with a dash\n    echo \$startCopyRight . '-' . date('Y');\n}
 EOT;
-UserTagOperations::get_instance()->SetUserTag('custom_copyright',$txt,
-					      'Code to output copyright information');
+UserTagOperations::get_instance()->SetUserTag('custom_copyright',$txt,'Code to output copyright information');
+
+//
+// Template Types
+//
+$page_template_type = new CmsLayoutTemplateType();
+$page_template_type->set_originator(CmsLayoutTemplateType::CORE);
+$page_template_type->set_name('page');
+$page_template_type->set_dflt_flag(TRUE);
+$page_template_type->set_lang_callback('CmsTemplateResource::page_type_lang_callback');
+$page_template_type->set_content_callback('CmsTemplateResource::reset_page_type_defaults');
+$page_template_type->reset_content_to_factory();
+$page_template_type->set_content_block_flag(TRUE);
+$dflt_content = <<<EOT
+{process_pagedata}<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" >
+<head>
+<title>{sitename} - {title}</title>
+{metadata}
+{cms_stylesheet}
+</head>
+<body>
+
+{* start header *}
+<div id="header">
+  <h1>{sitename}</h1>
+</div>
+{* end header *}
+
+{* start menu *}
+<div id="menu">
+  {menu}
+</div>
+{*} end menu *}
+
+{* start content *}
+<div id="content">
+  <h1>{title}</h1>
+  {content}
+</div>
+{* end content *}
+
+</body>
+</html>
+EOT;
+$page_template_type->set_dflt_contents($dflt_content);
+$page_template_type->save();
+
+$gcb_template_type = new CmsLayoutTemplateType();
+$gcb_template_type->set_originator(CmsLayoutTemplateType::CORE);
+$gcb_template_type->set_name('generic');
+$gcb_template_type->set_lang_callback('CmsTemplateResource::generic_type_lang_callback');
+$dflt_content = <<<EOT
+{* New generic template *}
+EOT;
+$gcb_template_type->set_dflt_contents($dflt_content);
+$gcb_template_type->save();
 
 //
 // Events

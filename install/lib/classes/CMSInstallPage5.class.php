@@ -48,7 +48,6 @@ class CMSInstallerPage5 extends CMSInstallerPage
     $values['admininfo']['password'] = $_POST['adminpassword'];
     $values['email_accountinfo'] = empty($_POST['email_accountinfo']) ? 0 : 1;
     $values['createtables'] = isset($_POST['createtables']) ? 1 : (isset($_POST['sitename']) ? 0 : 1);
-    $values['createextra'] = isset($_POST['createextra']) ? 1 : (isset($_POST['sitename']) ? 0 : 1);
     $databases = array(
 		       array('name' => 'mysqli', 'title' => 'MySQLi (4.1+)'),
 		       array('name' => 'mysql', 'title' => 'MySQL (compatibility)')
@@ -71,7 +70,6 @@ class CMSInstallerPage5 extends CMSInstallerPage
       $this->smarty->assign('timezones',$timezones);
     }
 
-    $this->smarty->assign('extra_sql', is_file(cms_join_path(CMS_INSTALL_BASE, 'schemas', 'extra.php')));
     $this->smarty->assign('dbms_options', $dbms_options);
     $this->smarty->assign('values', $values);
 

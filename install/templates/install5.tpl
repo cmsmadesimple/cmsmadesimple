@@ -16,7 +16,7 @@
           <select name="timezone">{html_options options=$timezones selected=$values.timezone}</select>
         </p>
         {/if}
-        
+
 	<h3>{lang_install a=install_admin_db}</h3>
 
 	{lang_install a=install_admin_db_info}
@@ -88,14 +88,6 @@
 				{lang_install a=install_warn_db_createtables}
 			</td>
 		</tr>
-{if $extra_sql}
-		<tr class="row1">
-			<td>{lang_install a=install_admin_db_sample}</td>
-			<td>
-				<input type="checkbox" name="createextra"{if $values.createextra == 1} checked="checked"{/if} />
-			</td>
-		</tr>
-{/if}
 	</table>
 	<div  class="continue">
 		<input type="hidden" name="umask" value="{$values.umask}" />

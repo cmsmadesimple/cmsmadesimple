@@ -55,14 +55,21 @@ else if( isset($params['submit_bulk_css']) ) {
 }
 else if( isset($params['design_setdflt']) && $this->CheckPermission('Manage Designs') ) {
     $design_id = (int)$params['design_setdflt'];
-    $cur_dflt = CmsLayoutCollection::load_default();
-    if( $cur_dflt->get_id() != $design_id ) {
-        $new_dflt = CmsLayoutCollection::load($design_id);
-        $cur_dflt->set_default(false);
-        $new_dflt->set_default(true);
-        $cur_dflt->save();
-        $new_dflt->save();
+    try {
+        $cur_dflt = CmsLayoutCollection::load_default();
+        if( is_object($cur_dflt) && $cur_dflt->get_id() != $design_id ) {
+            $cur_dflt->set_default(false);
+            $cur_dflt->save();
+        }
     }
+    catch( \Exception $e ) {
+        // do nothing
+    }
+
+    $new_dflt = CmsLayoutCollection::load($design_id);
+    $new_dflt->set_default(true);
+    $new_dflt->save();
+
     $this->SetCurrentTab('designs');
     echo $this->ShowMessage($this->Lang('msg_dflt_design_saved'));
 }

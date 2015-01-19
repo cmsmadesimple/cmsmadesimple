@@ -512,17 +512,15 @@ final class CmsApp {
 		if( !defined('TMP_CACHE_LOCATION') ) return;
 		$the_time = time() - $age_days * 24*60*60;
 
-		$dirs = array(TMP_CACHE_LOCATION,TMP_TEMPLATES_C_LOCATION);
+		$dirs = array(TMP_CACHE_LOCATION,PUBLIC_CACHE_LOCATION,TMP_TEMPLATES_C_LOCATION);
 		foreach( $dirs as $start_dir ) {
 			$dirIterator = new RecursiveDirectoryIterator($start_dir);
 			$dirContents = new RecursiveIteratorIterator($dirIterator);
 			foreach( $dirContents as $one ) {
 				if( $one->isFile() && $one->getMTime() <= $the_time ) @unlink($one->getPathname());
 			}
+            @touch(cms_join_path($start_dir,'index.html'));
 		}
-
-		@touch(cms_join_path(TMP_CACHE_LOCATION,'index.html'));
-		@touch(cms_join_path(TMP_TEMPLATES_C_LOCATION,'index.html'));
 	}
 
 

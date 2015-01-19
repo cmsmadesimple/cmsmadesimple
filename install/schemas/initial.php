@@ -1,4 +1,5 @@
 <?php
+return;
 global $admin_user;
 
 //
@@ -36,7 +37,7 @@ $css->set_media_types('screen');
 $css->Save();
 $css_list[] = $css;
 
-// 
+//
 // Designs
 //
 $design = new CmsLayoutCollection();
@@ -48,25 +49,6 @@ foreach( $css_list as $one ) {
   $design->add_stylesheet($one);
 }
 $design->save();
-
-//
-// Types
-//
-$page_template_type = new CmsLayoutTemplateType();
-$page_template_type->set_originator(CmsLayoutTemplateType::CORE);
-$page_template_type->set_name('page');
-$page_template_type->set_dflt_flag(TRUE);
-$page_template_type->set_lang_callback('CmsTemplateResource::page_type_lang_callback');
-$page_template_type->set_content_callback('CmsTemplateResource::reset_page_type_defaults');
-$page_template_type->reset_content_to_factory();
-$page_template_type->set_content_block_flag(TRUE);
-$page_template_type->save();
-
-$gcb_template_type = new CmsLayoutTemplateType();
-$gcb_template_type->set_originator(CmsLayoutTemplateType::CORE);
-$gcb_template_type->set_name('generic');
-$gcb_template_type->set_lang_callback('CmsTemplateResource::generic_type_lang_callback');
-$gcb_template_type->save();
 
 //
 // Template Categories
