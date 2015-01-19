@@ -207,10 +207,11 @@ EOT;
 
             $have_template = false;
             $out = preg_replace_callback("/template\s*=[\\\"']{0,1}([a-zA-Z0-9._\ \:\-\/]+)[\\\"']{0,1}/i",
-                                         function($matches) use ($ob,$have_template) {
+                                         function($matches) use ($ob,&$have_template) {
                                              $type = 'TPL';
                                              if( endswith($matches[1],'.tpl') ) $type = 'MM';
                                              $sig = $ob->_add_template($matches[1],$type);
+                                             $have_template = TRUE;
                                              return str_replace($matches[1],$sig,$matches[0]);
                                          },$matches[0]);
 
@@ -230,7 +231,8 @@ EOT;
 
             $have_template = false;
             $out = preg_replace_callback("/template\s*=[\\\"']{0,1}([a-zA-Z0-9._\ \:\-\/]+)[\\\"']{0,1}/i",
-                                         function($matches) use ($ob,$have_template) {
+                                         function($matches) use ($ob,&$have_template) {
+                                             $have_template = TRUE;
                                              $sig = $ob->_add_template($matches[1]);
                                              return str_replace($matches[1],$sig,$matches[0]);
                                          },$matches[0]);
