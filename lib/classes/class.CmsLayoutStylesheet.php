@@ -212,7 +212,8 @@ class CmsLayoutStylesheet
 	 */
 	public function add_media_type($str)
 	{
-        $str = trim($str);
+        $str = trim((string) $str);
+        if( !$str ) return;
 		if( !is_array($this->_data['media_type']) ) $this->_data['media_type'] = array();
 		$this->_data['media_type'][] = $str;
 		$this->_dirty = TRUE;

@@ -1550,6 +1550,10 @@ td.icons_wide {
 }
 
 /*** Design manager ***/
+.pointer {
+    cursor: pointer;
+}
+
 #oe_mainarea ul.sortable-list {
 	list-style: none;
 	padding: 0;
