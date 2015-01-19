@@ -1,11 +1,10 @@
 {* stylesheets tab for edit template *}
 <div class="information">{$mod->Lang('info_edittemplate_stylesheets_tab')}</div>
 {if !isset($all_stylesheets)}
-<div class="pagewarning">{$mod->Lang('warning_edittemplate_nostylesheets')}</div>
-{/if}
-
-{assign var='cssl' value=$design->get_stylesheets()}
-<div class="c_full cf">
+  <div class="warning" style="width: 95%;">{$mod->Lang('warning_editdesign_nostylesheets')}</div>
+{else}
+  {assign var='cssl' value=$design->get_stylesheets()}
+  <div class="c_full cf">
     <div class="grid_6 draggable-area">
         <fieldset>
             <legend>{$mod->Lang('available_stylesheets')}</legend>
@@ -40,9 +39,9 @@
             </div>
         </fieldset>
     </div>
-</div>
-<script>
-$(function() {
+  </div>
+  <script>
+  $(function() {
     $('ul.sortable-stylesheets').sortable({
         connectWith: '#selected-stylesheets ul',
         delay: 150,
@@ -55,36 +54,37 @@ $(function() {
                   .siblings()
                   .removeClass('selected');
             }
-            
+
             var elements = ui.parent()
                              .children('.selected')
                              .clone(),
                 helper = $('<li/>');
-    
+
             ui.data('multidrag', elements).siblings('.selected').remove();
             return helper.append(elements);
         },
         stop: function (event, ui) {
             var elements = ui.item.data('multidrag');
-            
+
             ui.item.after(elements).remove();
         },
         receive: function(event, ui) {
             var elements = ui.item.data('multidrag');
-            
+
             $('.sortable-stylesheets .placeholder').hide();
             $(elements).removeClass('selected ui-state-hover')
                        .append($('<a href="#"/>').addClass('ui-icon ui-icon-trash sortable-remove').text('Remove'))
                        .find('input[type="checkbox"]').attr('checked', true);
         }
-    
+
     });
-        
+
     $(document).on('click', '#selected-stylesheets .sortable-remove', function(e) {
         $(this).next('input[type="checkbox"]').attr('checked', false);
         $(this).parent('li').appendTo('#available-stylesheets ul');
         $(this).remove();
         e.preventDefault();
     });
-});
-</script>
+  });
+  </script>
+{/if}

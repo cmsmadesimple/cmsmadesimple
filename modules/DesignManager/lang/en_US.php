@@ -481,6 +481,7 @@ $lang['warn_template_used'] = '<strong>Warning:</strong> This template is in use
 $lang['warning_category_dragdrop'] = 'To change the display order of categories you can drag the rows into their correct order';
 $lang['warning_deletetemplate_attachments'] = 'This design has templates attached to it.  These templates may be in use on some page or by a module. Deleting these templates, even if they are attached to no other design, may break an otherwise working site.   Please exercise extreme caution!';
 $lang['warning_deletestylesheet_attachments'] = 'This design has stylesheets attached to it.  Some of the templates in use by the system but not necessarily attached to this design may rely on these stylesheets.  Deleting these stylesheets, even if they are attached to no other design may break an otherwise working site. Please exercise extreme caution!';
+$lang['warning_editdesign_nostylesheets'] = 'There are no stylesheets available in the system.';
 $lang['warning_edittemplate_nostylesheets'] = 'No stylesheets attached';
 $lang['warning_no_templates_available'] = 'We could find no templates that match the selected criteria or that you have permission to edit';
 $lang['warning_no_stylesheets'] = 'We could find no stylesheets that match the selected criteria or that you have permission to edit';
