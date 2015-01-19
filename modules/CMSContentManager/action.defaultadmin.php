@@ -173,7 +173,7 @@ else {
     $smarty->assign('colhdr_page',$this->Lang('colhdr_menutext'));
     $smarty->assign('coltitle_page',$this->Lang('coltitle_menutext'));
 }
-$smarty->assign('content_list',$editinfo);
+if( $editinfo ) $smarty->assign('content_list',$editinfo);
 $smarty->assign('ajax',$ajax);
 if( $error ) $smarty->assign('error',$error);
 

@@ -437,8 +437,8 @@ final class ContentListBuilder
           // we can display anything
 
           // add in top level items.
-          {
-              $children = $hm->get_children();
+          $children = $hm->get_children();
+          if( count($children) ) {
               foreach( $children as $child ) {
                   $display[] = $child->get_tag('id');
               }

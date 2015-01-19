@@ -40,54 +40,53 @@ $this->SetCurrentTab('pages');
 //
 // init
 //
-$this->SetCurrentTab('pages');
-$user_id = get_userid();
-$content_id = null;
-$content_obj = null;
-$pagedefaults = CmsContentManagerUtils::get_pagedefaults();
-$content_type = $pagedefaults['contenttype'];
-$error = null;
+try {
+    $user_id = get_userid();
+    $content_id = null;
+    $content_obj = null;
+    $pagedefaults = CmsContentManagerUtils::get_pagedefaults();
+    $content_type = $pagedefaults['contenttype'];
+    $error = null;
 
-if( isset($params['content_id']) ) $content_id = (int)$params['content_id'];
+    if( isset($params['content_id']) ) $content_id = (int)$params['content_id'];
 
-if( isset($params['cancel']) ) {
-    try {
-        if( $content_id && CmsContentManagerUtils::locking_enabled() ) {
-            $lock_id = CmsLockOperations::is_locked('content',$content_id);
-            CmsLockOperations::unlock($lock_id,'content',$content_id);
+    if( isset($params['cancel']) ) {
+        try {
+            if( $content_id && CmsContentManagerUtils::locking_enabled() ) {
+                $lock_id = CmsLockOperations::is_locked('content',$content_id);
+                CmsLockOperations::unlock($lock_id,'content',$content_id);
+            }
+        }
+        catch( Exception $e ) {
+            // do nothing.
+        }
+        unset($_SESSION['__cms_copy_obj__']);
+        $this->SetMessage($this->Lang('msg_cancelled'));
+        $this->RedirectToAdminTab();
+    }
+
+    if( $content_id < 1 ) {
+        // adding.
+        if( !$this->CheckPermission('Add Pages') ) {
+            // no permission to add pages.
+            $this->SetError($this->Lang('error_editpage_permission'));
+            $this->RedirectToAdminTab();
         }
     }
-    catch( Exception $e ) {
-        // do nothing.
-    }
-    unset($_SESSION['__cms_copy_obj__']);
-    $this->SetMessage($this->Lang('msg_cancelled'));
-    $this->RedirectToAdminTab();
-}
-
-if( $content_id < 1 ) {
-    // adding.
-    if( !$this->CheckPermission('Add Pages') ) {
-        // no permission to add pages.
+    else if( !$this->CanEditContent($content_id) ) {
+        // nope, can't edit this page anyways.
         $this->SetError($this->Lang('error_editpage_permission'));
         $this->RedirectToAdminTab();
     }
-}
-else if( !$this->CanEditContent($content_id) ) {
-    // nope, can't edit this page anyways.
-    $this->SetError($this->Lang('error_editpage_permission'));
-    $this->RedirectToAdminTab();
-}
 
-// Get a list of content types and pick a default if necessary
-$gCms = cmsms();
-$contentops = $gCms->GetContentOperations();
-$existingtypes = $contentops->ListContentTypes(false,true);
+    // Get a list of content types and pick a default if necessary
+    $gCms = cmsms();
+    $contentops = $gCms->GetContentOperations();
+    $existingtypes = $contentops->ListContentTypes(false,true);
 
-//
-// load or create the initial content object
-//
-try {
+    //
+    // load or create the initial content object
+    //
     if( $content_id == 'copy' && isset($_SESSION['__cms_copy_obj__']) ) {
         // we're copying a content object.
         $content_obj = unserialize($_SESSION['__cms_copy_obj__']);
