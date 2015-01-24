@@ -99,7 +99,30 @@ ModuleManager
   - Now shows summary of releases for a specific module
   - Visual indicators for stale and new modules
 
-  
+
+Version 1.11.12 - Seymour Norte
+--------------------------------
+Core - General
+  - Fixes ShowMessage() and ShowErrors() when using the NCleanGrey Admin theme
+  - now determine SSL requests in a centralized, and consistent manner
+  - dynamic root_url calculations now correctly determine schema
+  - Using HTTPS by default now works for new pages
+  - Minor fix for default content type selection when loading an object
+  - Rationalize HTTPS request detection
+  - Adds a new 403 exception
+  - Adds a new method IsPermitted in the Content base class
+  - Ensure that 404 and 403 errors do not cache
+  - Fixes to caching of block plugins
+  - Fixes to caching of content blocks on non cachable pages
+  - now set a global variable CMSMS_GENERATING_XML when generating an XML file
+
+Core - MicroTiny
+  - Improvements to URL generation
+
+Core - Bug Reports
+  - #10170 Incorrect setting for session_cache_limiter() in include.php
+
+
 Version 1.11.11 - San Cristobal
 -------------------------------
 Core - General
