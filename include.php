@@ -49,9 +49,9 @@ define('CMS_USER_KEY','_userkey_');
 
 global $CMS_INSTALL_PAGE,$CMS_ADMIN_PAGE,$CMS_LOGIN_PAGE,$DONT_LOAD_DB,$DONT_LOAD_SMARTY;
 
-$session_key = substr(md5($dirname), 0, 12);
+$session_name = 'CMSSESSID'.substr(md5($dirname), 0, 12);
 if( !isset($CMS_INSTALL_PAGE) ) {
-  @session_name('CMSSESSID' . $session_key);
+  @session_name($session_name);
   @ini_set('url_rewriter.tags', '');
   @ini_set('session.use_trans_sid', 0);
 }
@@ -66,6 +66,14 @@ else {
   @session_cache_limiter('public');
 }
 
+if( isset($_COOKIE[$session_name]) ) {
+    // validate the contents of the cookie.
+    if (!preg_match('/^[a-zA-Z0-9,\-]{22,40}$/', $_COOKIE[$session_name]) ) {
+        session_id( uniquid() );
+        session_start();
+        session_regenerate_id();
+    }
+}
 if(!@session_id()) session_start();
 
 // minimum stuff to get started (autoloader needs the cmsms() and the config stuff.
@@ -136,8 +144,8 @@ if( $config['timezone'] != '' ) @date_default_timezone_set(trim($config['timezon
 if( isset($config['php_memory_limit']) && !empty($config['php_memory_limit'])  ) ini_set('memory_limit',trim($config['php_memory_limit']));
 
 if ($config["debug"] == true) {
-  @ini_set('display_errors',1);
-  @error_reporting(E_ALL);
+    @ini_set('display_errors',1);
+    @error_reporting(E_ALL);
 }
 
 debug_buffer('loading page functions');

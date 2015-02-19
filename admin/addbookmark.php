@@ -107,7 +107,7 @@ if ($error != "")
 						<input type="submit" value="<?php echo lang('submit')?>" class="pagebutton" />
 						<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="pagebutton" />
 					</p>
-				</div>		
+				</div>
 			</form>
 	</div>
 </div>
