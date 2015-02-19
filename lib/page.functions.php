@@ -514,7 +514,7 @@ function get_pageid_or_alias_from_url()
   }
   else if( isset($_REQUEST[$query_var]) ) {
     // using non friendly urls... get the page alias/id from the query var.
-    $page = trim($_REQUEST[$query_var]);
+    $page = @trim($_REQUEST[$query_var]);
   }
   else {
     // either we're using pretty urls
