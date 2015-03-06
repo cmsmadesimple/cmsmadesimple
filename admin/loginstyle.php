@@ -35,4 +35,10 @@ else
   {
     echo file_get_contents(dirname(__FILE__)."/themes/OneEleven/css/style.css");
   }
+  
+if (file_exists(dirname(__FILE__)."/themes/".$theme."/extcss/style.css"))
+  {
+    cms_readfile(dirname(__FILE__)."/themes/".$theme."/extcss/style.css");
+  }
+  
 ?>
