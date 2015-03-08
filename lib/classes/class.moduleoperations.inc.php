@@ -597,6 +597,7 @@ final class ModuleOperations
                 // looks like upgrade is needed
                 if( in_array($module_name,$this->cmssystemmodules) || $this->IsQueuedForInstall($module_name) ) {
                     // we're allowed to upgrade
+		    audit('','debug1','attempting to upgrade '.$module_name);
                     $res = $this->_upgrade_module($obj);
                     $this->_unqueue_install($module_name);
                     if( !isset($_SESSION['moduleoperations_result']) ) $_SESSION['moduleoperations_result'] = array();
@@ -758,7 +759,10 @@ final class ModuleOperations
         $dbversion = $info[$module_name]['version'];
         if( $to_version == '' ) $to_version = $module_obj->GetVersion();
         $dbversion = $info[$module_name]['version'];
-        if( version_compare($dbversion, $to_version) == -1 ) return array(TRUE); // nothing to do.
+        if( version_compare($dbversion, $to_version) == -1 ) {
+          audit('','debug2','Attempt to upgrade '.$module_name.' from '.$dbversion.' not necessary');
+          return array(TRUE); // nothing to do.
+        }
 
         $db = cmsms()->GetDb();
         $result = $module_obj->Upgrade($dbversion,$to_version);
