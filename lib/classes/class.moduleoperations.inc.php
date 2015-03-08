@@ -759,8 +759,8 @@ final class ModuleOperations
         $dbversion = $info[$module_name]['version'];
         if( $to_version == '' ) $to_version = $module_obj->GetVersion();
         $dbversion = $info[$module_name]['version'];
-        if( version_compare($dbversion, $to_version) == -1 ) {
-          audit('','debug2','Attempt to upgrade '.$module_name.' from '.$dbversion.' not necessary');
+        if( version_compare($dbversion, $to_version) != -1 ) {
+          audit('','debug2','Attempt to upgrade '.$module_name.' from '.$dbversion.' to '.$to_version.' not necessary');
           return array(TRUE); // nothing to do.
         }
 

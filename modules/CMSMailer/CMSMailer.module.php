@@ -38,7 +38,7 @@ class CMSMailer extends CMSModule
   function GetName() { return 'CMSMailer'; }
   function GetFriendlyName() { return $this->Lang('friendlyname'); }
   function GetVersion() { return '5.2.4'; }
-  function MinimumCMSVersion() { return '1.11.5'; }
+  function MinimumCMSVersion() { return '1.99-alpha0'; }
   function GetHelp() { return $this->Lang('help'); }
   function GetAuthor() { return 'Calguy1000'; }
   function GetAuthorEmail() { return 'calguy1000@hotmail.com'; }
