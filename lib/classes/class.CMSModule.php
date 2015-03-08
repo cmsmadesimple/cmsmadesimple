@@ -2121,6 +2121,7 @@ abstract class CMSModule
      * Returns the xhtml equivalent of a textarea.	Also takes Syntax hilighter preference
      * into consideration if it's called from the admin side.
      *
+     * @deprecated
      * @param string $id The id given to the module on execution
      * @param string $text The text to display in the textarea's content
      * @param string $name The html name of the textarea

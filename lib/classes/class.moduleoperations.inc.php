@@ -573,12 +573,13 @@ final class ModuleOperations
         if( is_object($obj) ) $this->_modules[$module_name] = $obj;
 
         if( (!isset($info[$module_name]) || $info[$module_name]['status'] != 'installed') &&
-            (isset($CMS_INSTALL_PAGE) || $this->_is_queued_for_install($module_name)) ) {
+            (isset($CMS_INSTALL_PAGE) || $this->IsQueuedForInstall($module_name)) ) {
             // not installed, can we auto-install it?
-            if( in_array($module_name,$this->cmssystemmodules) || $this->_is_queued_for_install($module_name) ) {
+            if( in_array($module_name,$this->cmssystemmodules) || $this->IsQueuedForInstall($module_name) ) {
                 $res = $this->_install_module($obj);
                 if( !isset($_SESSION['moduleoperations_result']) ) $_SESSION['moduleoperations_result'] = array();
                 $_SESSION['moduleoperations_result'][$module_name] = $res;
+                $this->_unqueue_install($module_name);
             }
             else {
                 // nope, can't auto install...
@@ -593,36 +594,35 @@ final class ModuleOperations
             // check to see if an upgrade is needed.
             allow_admin_lang(TRUE); // isn't this ugly.
             if( isset($info[$module_name]) && $info[$module_name]['status'] == 'installed' ) {
-                $dbversion = $info[$module_name]['version'];
-                if( version_compare($dbversion, $obj->GetVersion()) == -1 ) {
-                    // upgrade is needed
-                    if( in_array($module_name,$this->cmssystemmodules) || $this->_is_queued_for_install($module_name) ) {
-                        // we're allowed to upgrade
-                        $res = $this->_upgrade_module($obj);
-                        if( !isset($_SESSION['moduleoperations_result']) ) $_SESSION['moduleoperations_result'] = array();
-                        if( $res ) {
-                            $res2 = array(TRUE,lang('moduleupgraded'));
-                            $_SESSION['moduleoperations_result'][$module_name] = $res2;
-                        }
-                        else {
-                            // upgrade failed
-                            $res2 = array(FALSE,lang('moduleupgradeerror'));
-                            $_SESSION['moduleoperations_result'][$module_name] = $res2;
-                        }
-                        if( !$res ) {
-                            // upgrade failed
-                            allow_admin_lang(FALSE); // isn't this ugly.
-                            debug_buffer("Automatic upgrade of $module_name failed");
-                            unset($obj,$this->_modules[$module_name]);
-                            return FALSE;
-                        }
+                // looks like upgrade is needed
+                if( in_array($module_name,$this->cmssystemmodules) || $this->IsQueuedForInstall($module_name) ) {
+                    // we're allowed to upgrade
+                    $res = $this->_upgrade_module($obj);
+                    $this->_unqueue_install($module_name);
+                    if( !isset($_SESSION['moduleoperations_result']) ) $_SESSION['moduleoperations_result'] = array();
+                    if( $res ) {
+                        // upgrade succeeded
+                        $res2 = array(TRUE,lang('moduleupgraded'));
+                        $_SESSION['moduleoperations_result'][$module_name] = $res2;
                     }
-                    else if( !$force_load ) {
-                        // nope, can't auto upgrade either
+                    else {
+                        // upgrade failed
+                        $res2 = array(FALSE,lang('moduleupgradeerror'));
+                        $_SESSION['moduleoperations_result'][$module_name] = $res2;
+                    }
+                    if( !$res ) {
+                        // upgrade failed
                         allow_admin_lang(FALSE); // isn't this ugly.
+                        debug_buffer("Automatic upgrade of $module_name failed");
                         unset($obj,$this->_modules[$module_name]);
                         return FALSE;
                     }
+                }
+                else if( !$force_load ) {
+                    // nope, can't auto upgrade either
+                    allow_admin_lang(FALSE); // isn't this ugly.
+                    unset($obj,$this->_modules[$module_name]);
+                    return FALSE;
                 }
             }
         }
@@ -757,6 +757,8 @@ final class ModuleOperations
         $module_name = $module_obj->GetName();
         $dbversion = $info[$module_name]['version'];
         if( $to_version == '' ) $to_version = $module_obj->GetVersion();
+        $dbversion = $info[$module_name]['version'];
+        if( version_compare($dbversion, $toversion) == -1 ) return array(TRUE); // nothing to do.
 
         $db = cmsms()->GetDb();
         $result = $module_obj->Upgrade($dbversion,$to_version);
@@ -1189,15 +1191,32 @@ final class ModuleOperations
 
 
     /**
+     * Check if a module is queued for install.
+     *
+     * This is an internal method, subject to change in later releases.  It should never be called for upgrading arbitrary modules.
+     * Any use of this function by third party code will not be supported.  Use at your own risk and do not report bugs or issues
+     * related to your use of this module.
+     *
      * @ignore
      */
-    private function _is_queued_for_install($module_name)
+    public function IsQueuedForInstall($module_name)
     {
+        $module_name = trim((string)$module_name);
+        if( !$module_name ) return;
         if( !isset($_SESSION['moduleoperations']) ) return FALSE;
         if( !isset($_SESSION['moduleoperations'][$module_name]) ) return FALSE;
         return TRUE;
     }
 
+    /**
+     * @ignore
+     */
+    private function _unqueue_install($module_name)
+    {
+        $module_name = trim((string)$module_name);
+        if( !$module_name ) return;
+        if( isset($_SESSION['moduleoperations'][$module_name]) ) unset($_SESSION['moduleoperations'][$module_name]);
+    }
 
     /**
      * Queue a module for install
@@ -1208,6 +1227,7 @@ final class ModuleOperations
      */
     public function QueueForInstall($module_name)
     {
+        $module_name = trim((string)$module_name);
         if( !$module_name ) return;
         if( !isset($_SESSION['moduleoperations']) ) $_SESSION['moduleoperations'] = array();
         if( !isset($_SESSION['moduleoperations'][$module_name]) ) $_SESSION['moduleoperations'][$module_name] = 1;
