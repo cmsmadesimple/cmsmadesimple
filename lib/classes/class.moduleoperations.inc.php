@@ -758,7 +758,7 @@ final class ModuleOperations
         $dbversion = $info[$module_name]['version'];
         if( $to_version == '' ) $to_version = $module_obj->GetVersion();
         $dbversion = $info[$module_name]['version'];
-        if( version_compare($dbversion, $toversion) == -1 ) return array(TRUE); // nothing to do.
+        if( version_compare($dbversion, $to_version) == -1 ) return array(TRUE); // nothing to do.
 
         $db = cmsms()->GetDb();
         $result = $module_obj->Upgrade($dbversion,$to_version);
