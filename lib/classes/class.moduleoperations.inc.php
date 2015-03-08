@@ -595,35 +595,38 @@ final class ModuleOperations
             allow_admin_lang(TRUE); // isn't this ugly.
             if( isset($info[$module_name]) && $info[$module_name]['status'] == 'installed' ) {
                 // looks like upgrade is needed
-                if( in_array($module_name,$this->cmssystemmodules) || $this->IsQueuedForInstall($module_name) ) {
-                    // we're allowed to upgrade
-		    audit('','debug1','attempting to upgrade '.$module_name);
-                    $res = $this->_upgrade_module($obj);
-                    $this->_unqueue_install($module_name);
-                    if( !isset($_SESSION['moduleoperations_result']) ) $_SESSION['moduleoperations_result'] = array();
-                    if( $res ) {
-                        // upgrade succeeded
-                        $res2 = array(TRUE,lang('moduleupgraded'));
-                        $_SESSION['moduleoperations_result'][$module_name] = $res2;
+                $dbversion = $info[$module_name]['version'];
+                if( version_compare($dbversion, $obj->GetVersion()) == -1 ) {
+                    if( in_array($module_name,$this->cmssystemmodules) || $this->IsQueuedForInstall($module_name) ) {
+                        // we're allowed to upgrade
+                        audit('','debug1','attempting to upgrade '.$module_name);
+                        $res = $this->_upgrade_module($obj);
+                        $this->_unqueue_install($module_name);
+                        if( !isset($_SESSION['moduleoperations_result']) ) $_SESSION['moduleoperations_result'] = array();
+                        if( $res ) {
+                            // upgrade succeeded
+                            $res2 = array(TRUE,lang('moduleupgraded'));
+                            $_SESSION['moduleoperations_result'][$module_name] = $res2;
+                        }
+                        else {
+                            // upgrade failed
+                            $res2 = array(FALSE,lang('moduleupgradeerror'));
+                            $_SESSION['moduleoperations_result'][$module_name] = $res2;
+                        }
+                        if( !$res ) {
+                            // upgrade failed
+                            allow_admin_lang(FALSE); // isn't this ugly.
+                            debug_buffer("Automatic upgrade of $module_name failed");
+                            unset($obj,$this->_modules[$module_name]);
+                            return FALSE;
+                        }
                     }
-                    else {
-                        // upgrade failed
-                        $res2 = array(FALSE,lang('moduleupgradeerror'));
-                        $_SESSION['moduleoperations_result'][$module_name] = $res2;
-                    }
-                    if( !$res ) {
-                        // upgrade failed
+                    else if( !$force_load ) {
+                        // nope, can't auto upgrade either
                         allow_admin_lang(FALSE); // isn't this ugly.
-                        debug_buffer("Automatic upgrade of $module_name failed");
                         unset($obj,$this->_modules[$module_name]);
                         return FALSE;
                     }
-                }
-                else if( !$force_load ) {
-                    // nope, can't auto upgrade either
-                    allow_admin_lang(FALSE); // isn't this ugly.
-                    unset($obj,$this->_modules[$module_name]);
-                    return FALSE;
                 }
             }
         }
