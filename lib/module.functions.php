@@ -38,6 +38,8 @@
 function cms_module_plugin($params,&$template)
 {
     $smarty = $template->smarty;
+    if( get_class($smarty) == 'Smarty_Parser' ) return; // if we are in the parser, we don't process module calls.
+
     $mid_cache = cms_utils::get_app_data('mid_cache');
     if( empty($mid_cache) ) {
         $mid_cache = array();
