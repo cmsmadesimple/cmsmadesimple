@@ -98,6 +98,23 @@ ModuleManager
   - Now shows release dates and approximate download counts for each module
   - Now shows summary of releases for a specific module
   - Visual indicators for stale and new modules
+  
+  
+Version 1.11.13 - Baquerizo Moreno 
+----------------------------------
+Core - General
+  - Minor fix to index.php wrt regular expressions
+  - Minor fix to cms_url class
+  - Fixes path disclosure vulnerability in page functions
+  - Fixes minor XSS issue in add bookmark
+  - Adds minor casts and type safeness in change group permissions
+
+News - 2.15
+  - Security feature, now the fesubmit action (which is still deprecated) must be explicitly enabled in the News module options
+  - Fixes XSS issues in the News module fesubmit action
+  
+MicroTiny
+  - Improvements to URL handling when inserting links and images
 
 
 Version 1.11.12 - Seymour Norte
