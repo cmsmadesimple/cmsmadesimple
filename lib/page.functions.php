@@ -546,8 +546,9 @@ function get_pageid_or_alias_from_url()
         $page = substr($page, 0, strlen($page) - strlen($config['page_extension']));
     }
 
-    // trim trailing /
-    $page = rtrim($page, '/');
+    // trim trailing and leading /
+    // it appears that some servers leave in the first / of a request some times which will stop rout matching.
+    $page = trim($page, '/');
 
     // see if there's a route that matches.
     $matched = false;
