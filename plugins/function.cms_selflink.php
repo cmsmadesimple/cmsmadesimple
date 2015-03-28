@@ -233,7 +233,7 @@ function smarty_function_cms_selflink($params, &$template)
 	else if( !empty($titleattr) ) {
 		$title = $titleattr;
 	}
-	$title = cms_htmlentities($title);
+	$title = cms_htmlentities(strip_tags($title));
 
 	if ($rellink && $dir != '' ) {
 		// output a relative link.
