@@ -21,7 +21,6 @@
 $CMS_ADMIN_PAGE=1;
 
 require_once("../include.php");
-require_once(cms_join_path($dirname,'lib','html_entity_decode_utf8.php'));
 $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 
 check_login();
@@ -86,7 +85,7 @@ if( count($tags) )
 	echo "<td class=\"icons_wide\"><a href=\"editusertag.php".$urlext."&amp;userplugin_id=".$oneplugin."\">";
 	echo $themeObject->DisplayImage('icons/system/edit.gif', lang('edit'),'','','systemicon');
 	echo "</a></td>\n";
-	echo "<td class=\"icons_wide\"><a href=\"deleteuserplugin.php".$urlext."&amp;userplugin_id=".$oneplugin."\" onclick=\"return confirm('".cms_html_entity_decode_utf8(lang('deleteconfirm', $label),true)."');\">";
+	echo "<td class=\"icons_wide\"><a href=\"deleteuserplugin.php".$urlext."&amp;userplugin_id=".$oneplugin."\" onclick=\"return confirm('".cms_html_entity_decode(lang('deleteconfirm', $label) )."');\">";
 	echo $themeObject->DisplayImage('icons/system/delete.gif', lang('delete'),'','','systemicon');
 	echo "</a></td>\n";
 	echo "</tr>\n";

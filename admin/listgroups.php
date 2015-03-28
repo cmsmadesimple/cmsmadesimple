@@ -119,7 +119,7 @@ if (check_permission($userid, 'Add Groups')) {
 	      echo $themeObject->DisplayImage('icons/system/edit.gif', lang('edit'),'','','systemicon');
 	      echo "</a></td>\n";
 	      if ($onegroup->id != 1 && !$userops->UserInGroup($userid,$onegroup->id)) {
-		echo "<td class=\"icons_wide\"><a href=\"deletegroup.php".$urlext."&amp;group_id=".$onegroup->id."\" onclick=\"return confirm('".cms_html_entity_decode_utf8(lang('deleteconfirm', $onegroup->name),true)."');\">";
+		echo "<td class=\"icons_wide\"><a href=\"deletegroup.php".$urlext."&amp;group_id=".$onegroup->id."\" onclick=\"return confirm('".cms_html_entity_decode(lang('deleteconfirm', $onegroup->name) )."');\">";
 		echo $themeObject->DisplayImage('icons/system/delete.gif', lang('delete'),'','','systemicon');
 		echo "</a></td>\n";
 	      }
