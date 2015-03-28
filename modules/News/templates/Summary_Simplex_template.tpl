@@ -33,10 +33,10 @@
             </div>
         </header>
         {if $entry->summary}
-            <p>{eval var=$entry->summary|strip_tags}</p>
+            <p>{$entry->summary|strip_tags}</p>
             <span class='more'>{$entry->morelink} &#8594;</span>
         {else if $entry->content}
-            <p>{eval var=$entry->content|strip_tags}</p>
+            <p>{$entry->content|strip_tags}</p>
         {/if}
     </section>
     <!-- .news-article //-->

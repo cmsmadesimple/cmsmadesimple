@@ -6,9 +6,9 @@
 
 {* <h2>{$entry->title|cms_escape:htmlall}</h2> *}
 {if $entry->summary}
-    {eval var=$entry->summary}
+    {$entry->summary}
 {/if}
-    {eval var=$entry->content}
+    {$entry->content}
 {if $entry->extra}
         {$extra_label} {$entry->extra}
 {/if}
@@ -24,7 +24,7 @@
       {* this template assumes that every file uploaded is an image of some sort, because News doesn't distinguish *}
           <img src='{$entry->file_location}/{$field->value}' alt='' />
         {else}
-          {$field->name}: {eval var=$field->value}
+          {$field->name}: {$field->value}
         {/if}
      </div>
   {/foreach}

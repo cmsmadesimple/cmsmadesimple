@@ -59,7 +59,7 @@
 
 {if $entry->summary}
 	<div class="NewsSummarySummary">
-		{eval var=$entry->summary}
+		{$entry->summary}
 	</div>
 
 	<div class="NewsSummaryMorelink">
@@ -69,13 +69,13 @@
 {else if $entry->content}
 
 	<div class="NewsSummaryContent">
-		{eval var=$entry->content}
+		{$entry->content}
 	</div>
 {/if}
 
 {if isset($entry->extra)}
     <div class="NewsSummaryExtra">
-        {eval var=$entry->extra}
+        {$entry->extra}
 	{* {cms_module module='Uploads' mode='simpleurl' upload_id=$entry->extravalue} *}
     </div>
 {/if}
@@ -85,7 +85,7 @@
         {if $field->type == 'file'}
           <img src="{$entry->file_location}/{$field->value}"/>
         {else}
-          {$field->name}:&nbsp;{eval var=$field->value}
+          {$field->name}:&nbsp;{$field->value}
         {/if}
      </div>
   {/foreach}

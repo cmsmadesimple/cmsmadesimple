@@ -13,7 +13,7 @@
      Members can be displayed by the following syntax: {$entry->membername} or assigned to another smarty variable using {assign var='foo' value=$entry->membername}.
 
      The following members are available in the entry array:
-   
+
      id (integer)           = The unique article id.
      author_id (integer)    = The userid of the author who created the article.  This value may be negative to indicate an FEU userid.
      title (string)         = The title of the article.
@@ -34,7 +34,7 @@
      fieldsbyname           = (deprecated) - A synonym for the 'fields' member
      useexp (integer)       = A flag indicating wether this article is using the expiry information.
      file_location (string) = A url containing the location where files attached the article are stored... the field value should be appended to this url.
-     
+
 
    ====
    news_field Object Reference
@@ -73,7 +73,7 @@
 {if $entry->summary}
 	<div id="NewsPostDetailSummary">
 		<strong>
-			{eval var=$entry->summary}
+			{$entry->summary}
 		</strong>
 	</div>
 {/if}
@@ -90,7 +90,7 @@
 {/if}
 
 <div id="NewsPostDetailContent">
-	{eval var=$entry->content}
+	{$entry->content}
 </div>
 
 {if $entry->extra}
@@ -110,7 +110,7 @@
 	  {* this template assumes that every file uploaded is an image of some sort, because News doesn't distinguish *}
           <img src="{$entry->file_location}/{$field->value}"/>
         {else}
-          {$field->name}:&nbsp;{eval var=$field->value}
+          {$field->name}:&nbsp;{$field->value}
         {/if}
      </div>
   {/foreach}
