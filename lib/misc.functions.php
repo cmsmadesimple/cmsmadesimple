@@ -1122,7 +1122,7 @@ function cms_to_bool($str)
   if( is_numeric($str) ) return ((int)$str != 0)?TRUE:FALSE;
 
   $str = strtolower($str);
-  if( $str == '1' || $str == 'y' || $str == 'yes' || $str == 'true' ) return TRUE;
+  if( $str == '1' || $str == 'y' || $str == 'yes' || $str == 'true' || $str === 'on' ) return TRUE;
   return FALSE;
 }
 
