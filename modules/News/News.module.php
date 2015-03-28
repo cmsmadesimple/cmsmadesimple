@@ -287,9 +287,9 @@ class News extends CMSModule
     $tmp = $db->GetArray($query,array('published',''));
 
     if( is_array($tmp) ) {
-      foreach( $tmp as $one ) {
-	news_admin_ops::register_static_route($one['news_url'],$one['news_id']);
-      }
+        foreach( $tmp as $one ) {
+            news_admin_ops::register_static_route($one['news_url'],$one['news_id']);
+        }
     }
   }
 

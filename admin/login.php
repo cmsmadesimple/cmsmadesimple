@@ -164,6 +164,7 @@ else if ( isset($_SESSION['redirect_url']) ) {
   if (true == $is_logged_in) {
     $userid = get_userid();
     $homepage = cms_userprefs::get_for_user($userid,'homepage'.'index.php');
+    $homepage = CmsAdminUtils::get_session_url($homepage);
 
     $homepage = str_replace('&amp;','&',$homepage);
     $tmp = explode('?',$homepage);

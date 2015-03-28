@@ -1224,54 +1224,78 @@ abstract class CmsAdminThemeBase
 	}
 
 
-	/**
-	 * Returns a select list of the pages in the system for use in
-	 * various admin pages.
+    /**
+	 * Return an array of admin pages, suitable for use in a dropdown.
 	 *
-	 * @param string $name - The html name of the select box
-	 * @param string $selected - If a matching id is found in the list, that item is marked as selected.
-	 * @param string $id - The html id attribute for the select box.
-	 * @return string The select list of pages
+	 * @internal
+	 * @since 1.12
+	 * @param bool $none A flag indicating wether 'none' should be the first option.
+	 * @return array The keys of the array are langified strings to display to the user.  The values are URLS.
 	 */
-	public function GetAdminPageDropdown($name,$selected,$id = '')
+    public function GetAdminPages($none = TRUE)
 	{
 		$opts = array();
-		$opts[ucfirst(lang('none'))] = '';
+		if( $none ) $opts[ucfirst(lang('none'))] = '';
 
 		$depth = 0;
 		$menuItems = $this->get_admin_navigation();
 		foreach( $menuItems as $sectionKey=>$menuItem ) {
-			if( $menuItem['parent'] != -1 ) continue;
-			if( !$menuItem['show_in_menu'] || strlen($menuItem['url']) < 1 ) continue;
+			if( $menuItem['parent'] != -1 ) continue; // only parent pages
+			if( !$menuItem['show_in_menu'] || strlen($menuItem['url']) < 1 ) continue; // only visible stuff
 
-			$opts[$menuItem['title']] = $menuItem['url'];
+			$opts[$menuItem['title']] = CmsAdminUtils::get_generic_url($menuItem['url']);
 
-			if( is_array($menuItem['children']) &&
-				count($menuItem['children']) ) {
+			if( is_array($menuItem['children']) && count($menuItem['children']) ) {
 				foreach( $menuItem['children'] as $thisChild ) {
-					if( $thisChild == 'home' || $thisChild == 'logout' ||
-						$thisChild == 'viewsite') {
+					if( $thisChild == 'home' || $thisChild == 'logout' || $thisChild == 'viewsite') {
 						continue;
 					}
 
 					$menuChild = $menuItems[$thisChild];
-					if( !$menuChild['show_in_menu'] || strlen($menuChild['url']) < 1 ) continue;
+					if( !$menuChild['show_in_menu'] || strlen($menuChild['url']) < 1 ) {
+						continue;
+					}
 
 					//$opts['&nbsp;&nbsp;'.$menuChild['title']] = cms_htmlentities($menuChild['url']);
-					$opts['&nbsp;&nbsp;'.$menuChild['title']] = $menuChild['url'];
+					$url = $menuChild['url'];
+					$url = CmsAdminUtils::get_generic_url($url);
+					$opts['&nbsp;&nbsp;'.$menuChild['title']] = $url;
 				}
 			}
 		}
+		return $opts;
+	}
 
-		$atext = '';
-		if( $id != '' ) $atext = ' id="'.trim($id).'"';
-		$output = '<select'.$atext.' name="'.$name.'">'."\n";
+	/**
+	 * Returns a select list of the pages in the system for use in
+	 * various admin pages.
+	 *
+	 * @internal
+	 * @param string $name - The html name of the select box
+	 * @param string $selected - If a matching id is found in the list, that item
+	 *                           is marked as selected.
+	 * @return string The select list of pages
+	 */
+	public function GetAdminPageDropdown($name,$selected,$id = '')
+	{
+		$opts = $this->GetAdminPages();
+
+        $attrs = array('name'=>trim((string)$name));
+        if( $id ) $attrs['id'] = trim((string)$id);
+        $output = '<select ';
+        foreach( $attrs as $key => $val ) {
+            $output .= ' '.$key.'='.$val;
+        }
+        $output .= '>';
+
 		foreach( $opts as $key => $value ) {
 			if( $value == $selected ) {
-				$output .= sprintf("<option selected=\"selected\" value=\"%s\">%s</option>\n",$value,$key);
+				$output .= sprintf("<option selected=\"selected\" value=\"%s\">%s</option>\n",
+								   $value,$key);
 			}
 			else {
-				$output .= sprintf("<option value=\"%s\">%s</option>\n",$value,$key);
+				$output .= sprintf("<option value=\"%s\">%s</option>\n",
+								   $value,$key);
 			}
 		}
 		$output .= '</select>'."\n";
