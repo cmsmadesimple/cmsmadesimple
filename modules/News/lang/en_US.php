@@ -260,7 +260,7 @@ $lang['help_opt_dflt_category'] = 'This option allows specifying the default cat
 $lang['help_opt_hide_summary'] = 'This option allows disabling the summary field when adding and/or editing a news article <em>(including with the fesubmit action)</em>';
 $lang['help_opt_allow_summary_wysiwyg'] = 'This field indicates whether a WYSIWYG editor should be enabled for the summary field when editing an article.  In many circumstances the summary field is a simple text field, however this is optional.<br/>This setting is ignored if the summary field is disabled completely <em>(see above)</em>';
 $lang['help_opt_expiry_interval'] = 'Set the default number of days (minimum 1) That articles will expire in when article expiry is enabled.   The expiry date can be adjusted when adding or editing a news article';
-$lang['help_pagelimit'] = 'Maximum number of items to display (per page).  If this parameter is not supplied all matching items will be displayed.  If it is, and there are more items available than specified in the parameter, text and links will be supplied to allow scrolling through the results';
+$lang['help_pagelimit'] = 'Maximum number of items to display (per page).  If this parameter is not supplied all matching items will be displayed.  If it is, and there are more items available than specified in the parameter, text and links will be supplied to allow scrolling through the results.  The maximum value for this parameter is 1000.';
 $lang['hide_summary_field'] = 'Hide the summary field when adding or editing articles';
 
 // I
