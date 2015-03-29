@@ -21,7 +21,7 @@
 #The basic idea and values was taken from then Horde Framework (http://horde.org)
 #The original filename was horde/config/nls.php.
 #The modifications to fit it for Gallery were made by Jens Tkotz
-#(http://gallery.meanalto.com) 
+#(http://gallery.meanalto.com)
 
 #Ideas from Gallery's implementation made to CMS by Ted Kulp
 
@@ -40,7 +40,7 @@ $nls['alias']['fr_CH'] = 'fr_FR' ;
 $nls['alias']['fr_FR.ISO8859-1'] = 'fr_FR' ;
 
 #Possible locale for language
-$nls['locale']['fr_FR'] = 'fr_FR,fr_FR.utf8,fr_FR.utf-8,fr_FR.UTF-8,fr_FR@euro,french,French_France.1252';
+$nls['locale']['fr_FR'] = 'fr_FR.UTF-8,fr_FR.utf8,fr_FR.utf-8,fr_FR,fr_FR@euro,french,French_France.1252';
 
 #Encoding of the language
 $nls['encoding']['fr_FR'] = 'UTF-8';
