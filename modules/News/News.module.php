@@ -109,7 +109,7 @@ class News extends CMSModule
 
   function InitializeAdmin()
   {
-    $this->CreateParameter('pagelimit', 100000, $this->Lang('help_pagelimit'));
+    $this->CreateParameter('pagelimit', 1000, $this->Lang('help_pagelimit'));
     $this->CreateParameter('browsecat', 0, $this->lang('helpbrowsecat'));
     $this->CreateParameter('showall', 0, $this->lang('helpshowall'));
     $this->CreateParameter('showarchive', 0, $this->lang('helpshowarchive'));
