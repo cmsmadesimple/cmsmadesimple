@@ -56,15 +56,6 @@ $paging = cms_userprefs::get_for_user($userid, 'paging', 0);
 $date_format_string = cms_userprefs::get_for_user($userid, 'date_format_string', '%x %X');
 $default_parent = cms_userprefs::get_for_user($userid, 'default_parent', -2);
 $homepage = cms_userprefs::get_for_user($userid, 'homepage');
-if( strpos($homepage,'&') !== FALSE && strpos($homepage,'&amp;') === FALSE ) {
-  $homepage = str_replace('&','&amp;',$homepage);
-}
-$to = CMS_SECURE_PARAM_NAME . '=' . $_SESSION[CMS_USER_KEY];
-$pos = strpos($homepage, CMS_SECURE_PARAM_NAME.'=');
-if( $pos !== FALSE )  {
-  $from = substr($homepage, $pos, strlen($to));
-  $homepage = str_replace($from, $to, $homepage);
-}
 $hide_help_links = cms_userprefs::get_for_user($userid, 'hide_help_links', 0);
 
 /**
@@ -165,7 +156,7 @@ if (isset($_POST['submit_prefs']) && check_permission($userid,'Manage My Setting
   $date_format_string = trim(strip_tags($_POST['date_format_string']));
   $default_parent = '';
   if (isset($_POST['parent_id'])) $default_parent = (int)$_POST['parent_id'];
-  $homepage = cleanValue($_POST['homepage']);
+  $homepage = cms_htmlentities(cleanValue($_POST['homepage']));
   $hide_help_links = (isset($_POST['hide_help_links']) ? 1 : 0);
   $ignoredmodules = array();
   if (isset($_POST['ignoredmodules'])) {
