@@ -1065,7 +1065,7 @@ class CmsLayoutTemplate
 		$db = cmsms()->GetDb();
 		$query = 'SELECT id FROM '.cms_db_prefix().self::TABLENAME.' WHERE name = ?';
 		for( $i = 1; $i < 25; $i++ ) {
-			$name = $prototype;
+			$name = $prefix.$prototype;
 			if( $i > 1 ) $name = $prefix.$prototype.' '.$i;
 			$tmp = $db->GetOne($query,array($name));
 			if( !$tmp ) return $name;
