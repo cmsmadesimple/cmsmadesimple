@@ -342,7 +342,7 @@ class cms_url
         $url = ((isset($parts['scheme'])) ? $parts['scheme'] . '://' : '')
             .((isset($parts['user'])) ? $parts['user'] . ((isset($parts['pass'])) ? ':' . $parts['pass'] : '') .'@' : '')
             .((isset($parts['host'])) ? $parts['host'] : '')
-            .((isset($parts['port'])) ? ':' . $parts['port'] : '')
+            .((isset($parts['port']) && $parts['port'] != '0' ) ? ':' . $parts['port'] : '')
             .$path
             .((isset($parts['query'])) ? '?' . $parts['query'] : '')
             .((isset($parts['fragment'])) ? '#' . $parts['fragment'] : '');
