@@ -34,10 +34,8 @@ if( isset($params['cancel']) ) {
     catch( Exception $e ) {
         // do nothing.
     }
-    if( $params['cancel'] == $this->Lang('cancel') ) {
-        $this->SetMessage($this->Lang('msg_cancelled'));
-        $this->RedirectToAdminTab();
-    }
+    if( $params['cancel'] == $this->Lang('cancel') ) $this->SetMessage($this->Lang('msg_cancelled'));
+    $this->RedirectToAdminTab();
 }
 
 try {
@@ -57,7 +55,7 @@ try {
     //
     // prepare to display.
     //
-    if ($css_ob && $css_ob->get_id() && dm_utils::locking_enabled()) {
+    if (!$apply && $css_ob && $css_ob->get_id() && dm_utils::locking_enabled()) {
         $smarty->assign('lock_timeout', $this->GetPreference('lock_timeout'));
         $smarty->assign('lock_refresh', $this->GetPreference('lock_refresh'));
         try {

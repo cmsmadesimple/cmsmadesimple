@@ -31,8 +31,18 @@ if (!$this->CheckPermission('Modify Templates')) {
 }
 
 $this->SetCurrentTab('templates');
+$tpl_id = (int) get_parameter_value($params,'tpl');
 
 if (isset($params['cancel'])) {
+    try {
+        if( $tpl_id && dm_utils::locking_enabled() ) {
+            $lock_id = CmsLockOperations::is_locked('template',$tpl_id);
+            CmsLockOperations::unlock($lock_id,'template',$tpl_id);
+        }
+    }
+    catch( Exception $e ) {
+        // do nothing.
+    }
     if ($params['cancel'] == $this->Lang('cancel')) $this->SetMessage($this->Lang('msg_cancelled'));
     $this->RedirectToAdminTab();
 }
@@ -62,22 +72,25 @@ try {
     //
     // BUILD THE DISPLAY
     //
-    if ($tpl_obj && $tpl_obj->get_id() && dm_utils::locking_enabled()) {
+    if (!$apply && $tpl_obj && $tpl_obj->get_id() && dm_utils::locking_enabled()) {
         $smarty->assign('lock_timeout', $this->GetPreference('lock_timeout'));
         $smarty->assign('lock_refresh', $this->GetPreference('lock_refresh'));
         try {
             $lock_id = CmsLockOperations::is_locked('template', $tpl_obj->get_id());
-            if ($lock_id > 0) CmsLockOperations::unlock($lock_id, 'template', $tpl_obj->get_id());
+            $lock = null;
+            if( $lock_id > 0 ) {
+                // it's locked... by somebody, make sure it's expired before we allow stealing it.
+                $lock = CmsLock::load('template',$tpl_obj->get_id());
+                if( !$lock->expired() ) throw new CmsLockException('CMSEX_L010');
+                CmsLockOperations::unlock($lock_id,'template',$tpl_obj->get_id());
+            }
             $lock = new CmsLock('template', $tpl_obj->get_id(), (int)$this->GetPreference('lock_timeout'));
             $smarty->assign('lock', $lock);
         } catch( CmsException $e ) {
             $response = 'error';
             $message = $e->GetMessage();
-
-            if (!$apply) {
-                $this->SetError($message);
-                $this->RedirectToAdminTab();
-            }
+            $this->SetError($message);
+            $this->RedirectToAdminTab();
         }
     }
 
@@ -120,6 +133,17 @@ try {
             $tpl_obj->save();
 
             if (!$apply) {
+                // unlock
+                try {
+                    if( $tpl_id && CmsContentManagerUtils::locking_enabled() ) {
+                        $lock_id = CmsLockOperations::is_locked('template',$tpl_id);
+                        CmsLockOperations::unlock($lock_id,'template',$tpl_id);
+                    }
+                }
+                catch( Exception $e ) {
+                    // do nothing.
+                }
+
                 $this->SetMessage($message);
                 $this->RedirectToAdminTab();
             }
