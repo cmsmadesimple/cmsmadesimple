@@ -135,6 +135,7 @@ $lang['CMSEX_L006'] = "Lock is owned by a different user. We cannot manipulate i
 $lang['CMSEX_L007'] = "Other/unknown locking error";
 $lang['CMSEX_L008'] = "Locking exception";
 $lang['CMSEX_L009'] = "Problem removing lock";
+$lang['CMSEX_L010'] = 'Sorry, This item is locked, and cannot be edited at this time.  Additionally, only expired locks can be removed.';
 $lang['CMSEX_M001'] = "Module already installed";
 $lang['CMSEX_M002'] = "Installing this package would result in a downgrade. Operation aborted";
 $lang['CMSEX_MODULENOTFOUND'] = "Module %s not found";
