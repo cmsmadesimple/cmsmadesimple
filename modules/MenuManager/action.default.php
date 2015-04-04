@@ -19,7 +19,9 @@ else {
 $cache_id = '|ns'.md5(serialize($params));
 $compile_id = '';
 
-if( !$smarty->isCached($this->GetTemplateResource($template),$cache_id,$compile_id) ) {
+$tpl = $smarty->CreateTemplate($this->GetTemplateResource($template),$cache_id,$compile_id);
+$tpl->assign('count',0); // for backwards compat.
+if( !$tpl->isCached() ) {
   $hm = $gCms->GetHierarchyManager();
   $deep = 1;
   if( isset($params['loadprops']) && $params['loadprops'] == 0 )
@@ -33,7 +35,7 @@ if( !$smarty->isCached($this->GetTemplateResource($template),$cache_id,$compile_
   $prevdepth = 1;
 
   if (isset($params['childrenof']) ) {
-    $parent = $hm->sureGetNodeByAlias($params['childrenof']);;
+      $parent = $hm->sureGetNodeByAlias($params['childrenof']);;
     if( $parent ) {
       // get the children.
       $children = $parent->GetChildren($deep);
@@ -41,7 +43,7 @@ if( !$smarty->isCached($this->GetTemplateResource($template),$cache_id,$compile_
       if( is_array($children) && count($children) ) {
 	foreach( $children as $onechild ) {
 	  $obj = $onechild->GetContent();
-	  if( is_object($obj) && $obj->Active() && 
+	  if( is_object($obj) && $obj->Active() &&
 	      ($obj->ShowInMenu() || (isset($params['show_all']) && $params['show_all'])) ) {
 	    $rootnode[] = $onechild;
 	  }
@@ -76,7 +78,7 @@ if( !$smarty->isCached($this->GetTemplateResource($template),$cache_id,$compile_
 	else {
 	  //Show a page if it's active and set to show in menu...
 	  //Or if show_all is set and the page isn't a "system" page
-	  if ($content->Active() && 
+	  if ($content->Active() &&
 	      ($content->ShowInMenu() || (isset($params['show_all']) && $params['show_all'] == 1 && !$content->IsSystemPage()))) {
 	    $prevdepth = count(explode('.', $content->Hierarchy()));
 	    $this->FillNode($content, $rootnode, $nodelist, $count, $origdepth, $prevdepth, $deep, $params);
@@ -88,14 +90,14 @@ if( !$smarty->isCached($this->GetTemplateResource($template),$cache_id,$compile_
     }
   }
   else if (isset($params['start_level']) && intval($params['start_level']) > 1) {
-    $curcontent = $gCms->get_content_object();
-    if( $curcontent )  {
-      $properparentpos = $this->nthPos($curcontent->Hierarchy() . '.', '.', intval($params['start_level']) - 1);
-      if ($properparentpos > -1) {
-	$prevdepth = intval($params['start_level']);
-	$rootnode = $hm->getNodeByHierarchy(substr($curcontent->Hierarchy(), 0, $properparentpos));
+      $curcontent = $gCms->get_content_object();
+      if( $curcontent )  {
+          $properparentpos = $this->nthPos($curcontent->Hierarchy() . '.', '.', intval($params['start_level']) - 1);
+          if ($properparentpos > -1) {
+              $prevdepth = intval($params['start_level']);
+              $rootnode = $hm->getNodeByHierarchy(substr($curcontent->Hierarchy(), 0, $properparentpos));
+          }
       }
-    }
   }
   else if (isset($params['items'])) {
     if( !isset($params['number_of_levels']) ){
@@ -148,50 +150,49 @@ if( !$smarty->isCached($this->GetTemplateResource($template),$cache_id,$compile_
 
   if (isset($rootnode) && $getchildren) {
     if( is_array($rootnode) && count($rootnode) ) {
-      $first = 1;
-      for( $n = 0; $n < count($rootnode); $n++ ) {
-	$onenode = $rootnode[$n];
-	$content = $onenode->GetContent();
-	if( $first ) {
-	  $prevdepth = $origdepth = $onenode->GetLevel() + 1;
-	  $first = 0;
-	}
-	if( $content ) {
-	  $mnode = $this->FillNode($content, $onenode, $nodelist, $count, $prevdepth, $prevdepth, $deep);
-	  if( $n == 0 ) {
-	    $mnode->first = 1;
-	  }
-	  if( $n >= count($rootnode) - 1 ) {
-	    $mnode->last = 1;
-	  }
-	  if( !isset($params['number_of_levels']) ) {
-	    $params['number_of_levels'] = 99;
-	  }
-	  if( $params['number_of_levels'] > 1 ) {
-	    // we are getting more than one level.
-	    $res = $this->GetChildNodes($onenode,$nodelist,$gCms,$prevdepth,$count,$params,
-					$origdepth,$showparents,$deep);
-	    if( $res ) {
-	      $mnode->haschildren = true;
-	    }
-	  }
-	}
-      }
+        $first = 1;
+        for( $n = 0; $n < count($rootnode); $n++ ) {
+            $onenode = $rootnode[$n];
+            $content = $onenode->GetContent();
+            if( $first ) {
+                $prevdepth = $origdepth = $onenode->GetLevel() + 1;
+                $first = 0;
+            }
+            if( $content ) {
+                $mnode = $this->FillNode($content, $onenode, $nodelist, $count, $prevdepth, $prevdepth, $deep);
+                if( $n == 0 ) {
+                    $mnode->first = 1;
+                }
+                if( $n >= count($rootnode) - 1 ) {
+                    $mnode->last = 1;
+                }
+                if( !isset($params['number_of_levels']) ) {
+                    $params['number_of_levels'] = 99;
+                }
+                if( $params['number_of_levels'] > 1 ) {
+                    // we are getting more than one level.
+                    $res = $this->GetChildNodes($onenode,$nodelist,$gCms,$prevdepth,$count,$params,
+                                                $origdepth,$showparents,$deep);
+                    if( $res ) {
+                        $mnode->haschildren = true;
+                    }
+                }
+            }
+        }
     }
     else if( $rootnode ) {
-      $this->GetChildNodes($rootnode, $nodelist, $gCms, $prevdepth, $count, $params, 
-			   $origdepth, $showparents, $deep);
+        $this->GetChildNodes($rootnode, $nodelist, $gCms, $prevdepth, $count, $params,
+                             $origdepth, $showparents, $deep);
     }
   }
 
   if (count($nodelist) > 0) {
-    $smarty = $this->smarty;
-    $smarty->assign('menuparams',$params);
-    $smarty->assign('count', count($nodelist));
-    $smarty->assign('nodelist', $nodelist);
+    $tpl->assign('menuparams',$params);
+    $tpl->assign('count', count($nodelist));
+    $tpl->assign('nodelist', $nodelist);
   }
 }
 
-echo $smarty->fetch($this->GetTemplateResource($template),$cache_id,$compile_id);
+$tpl->display();
 debug_buffer('', 'End of Menu Manager Display');
 ?>
