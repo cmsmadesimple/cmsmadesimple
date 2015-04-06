@@ -135,7 +135,7 @@ try {
             if (!$apply) {
                 // unlock
                 try {
-                    if( $tpl_id && CmsContentManagerUtils::locking_enabled() ) {
+                    if( $tpl_id && dm_utils::locking_enabled() ) {
                         $lock_id = CmsLockOperations::is_locked('template',$tpl_id);
                         CmsLockOperations::unlock($lock_id,'template',$tpl_id);
                     }

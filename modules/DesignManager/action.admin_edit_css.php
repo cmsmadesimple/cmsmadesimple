@@ -104,7 +104,7 @@ try {
 
             if (!$apply) {
                 try {
-                    if( $css_id && CmsContentManagerUtils::locking_enabled() ) {
+                    if( $css_id && dm_utils::locking_enabled() ) {
                         $lock_id = CmsLockOperations::is_locked('stylesheet',$css_id);
                         CmsLockOperations::unlock($lock_id,'stylesheet',$css_id);
                     }
