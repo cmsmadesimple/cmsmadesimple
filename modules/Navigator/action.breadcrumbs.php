@@ -33,6 +33,7 @@
 #
 #-------------------------------------------------------------------------
 #END_LICENSE
+if( !defined('CMS_VERSION') ) exit;
 
 debug_buffer('Start Navigator breadcrumbs action');
 
