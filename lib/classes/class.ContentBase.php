@@ -1467,6 +1467,9 @@ abstract class ContentBase
 
 		$result = false;
 
+        $dflt_pageid = $gCms->GetContentOperations()->GetDefaultContent();
+        if( $dflt_pageid < 1 ) $this->SetDefaultContent(TRUE);
+
 		// Figure out the item_order
 		if ($this->mItemOrder < 1) {
 			$query = "SELECT max(item_order) as new_order FROM ".cms_db_prefix()."content WHERE parent_id = ?";
