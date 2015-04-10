@@ -275,18 +275,21 @@ final class ContentListBuilder
 
     $contentops = cmsms()->GetContentOperations();
     $content1 = $contentops->LoadContentFromId($page_id);
+    $page_id2 = ContentOperations::get_instance()->GetDefaultContent();
+    $content2 = $contentops->LoadContentFromId($page_id2);
+
     if( !$content1 ) return FALSE;
     if( !$content1->IsDefaultPossible() ) return FALSE;
     if( !$content1->Active() ) return FALSE;
 
-    $page_id2 = ContentOperations::get_instance()->GetDefaultContent();
-    $content2 = $contentops->LoadContentFromId($page_id2);
-    if( !$content2 ) return FALSE;
-
     $content1->SetDefaultContent(TRUE);
     $content1->Save();
-    $content2->SetDefaultContent(FALSE);
-    $content2->Save();
+
+    if( $page_id != $page_id2 && $content2 ) {
+        $content2->SetDefaultContent(FALSE);
+        $content2->Save();
+    }
+
     return TRUE;
   }
 
