@@ -39,18 +39,6 @@ if( !isset($gCms) ) exit;
 echo '<noscript><h3 style="color: red; text-align: center;">'.$this->Lang('info_javascript_required').'</h3></noscript>'."\n";
 $error = '';
 
-if( !function_exists('cm_prettyurls_ok') ) {
-    function cm_prettyurls_ok() {
-        static $_prettyurls_ok = -1;
-        if( -1 < $_prettyurls_ok ) return $_prettyurls_ok;
-
-        $config = cmsms()->GetConfig();
-        $_prettyurls_ok = 0;
-        if( isset($config['url_rewriting']) && $config['url_rewriting'] != 'none' ) $_prettyurls_ok = 1;
-        return $_prettyurls_ok;
-    }
-}
-
 if( isset($params['multisubmit']) && isset($params['multiaction']) &&
     isset($params['multicontent']) && is_array($params['multicontent']) && count($params['multicontent']) > 0 ) {
     list($module,$bulkaction) = explode('::',$params['multiaction'],2);
@@ -64,16 +52,15 @@ if( isset($params['multisubmit']) && isset($params['multiaction']) &&
                           'multiaction'=>$params['multiaction']));
 }
 
-$smarty->assign('prettyurls_ok',cm_prettyurls_ok());
 $smarty->assign('can_add_content',$this->CheckPermission('Add Pages') || $this->CheckPermission('Manage All Content'));
 $smarty->assign('can_reorder_content',$this->CheckPermission('Manage All Content'));
 
 // load all the content that this user can display...
 // organize it into a tree
 $builder = new ContentListBuilder($this);
-$builder->column_state('url',cm_prettyurls_ok());
 $curpage = 1;
 if( isset($params['curpage']) ) $curpage = (int)$params['curpage'];
+$smarty->assign('prettyurls_ok',$builder->pretty_urls_configured());
 
 //
 // handle all of the possible ajaxy/sub actions.

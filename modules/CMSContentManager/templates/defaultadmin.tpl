@@ -238,7 +238,7 @@
   {if isset($content_list)}
     {function do_content_row}
       {foreach $columns as $column => $flag}
-        {if $flag == 0}{continue}{/if}
+        {if !$flag}{continue}{/if}
 	<td>
 	  {if $column == 'expand'}
 	    {if $row.expand == 'open'}
@@ -406,7 +406,7 @@
       <tr>
         {foreach from=$columns key='column' item='flag'}
 	{if $flag}
-	  <th>
+	  <th{if $flag=='icon'} class="pageicon"{/if}><!-- {$column} -->
 	  {if $column == 'expand' or $column == 'hier' or $column == 'icon1' or $column == 'view' or $column == 'copy' or $column == 'edit' or $column == 'delete'}
             <span title="{$mod->Lang("coltitle_{$column}")}">&nbsp;</span>{* no column header *}
   	  {elseif $column == 'multiselect'}

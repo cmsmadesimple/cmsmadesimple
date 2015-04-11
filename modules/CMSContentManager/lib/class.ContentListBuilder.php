@@ -364,8 +364,17 @@ final class ContentListBuilder
     $contentops->SetAllHierarchyPositions();
   }
 
+  public function pretty_urls_configured()
+  {
+      $config = cmsms()->GetConfig();
+      return (isset($config['url_rewriting']) && $config['url_rewriting'] != 'none' ) ? TRUE : FALSE;
+  }
+
   /**
    * Get the columns that are visible to display in the content list
+   *
+   * @return array associative array.  Column key is the key, and a string (either, 'icon','normal' to indicate
+   * how the column header is intended.  or empty/null to indicate if the column should be hidden.
    */
   public function get_display_columns()
   {
@@ -375,23 +384,23 @@ final class ContentListBuilder
     $cols = explode(',',$mod->GetPreference('list_visiblecolumns',$dflt));
 
     $columnstodisplay = array();
-    $columnstodisplay['expand'] = in_array('expand',$cols);
-    $columnstodisplay['icon1'] = in_array('icon1',$cols);
-    $columnstodisplay['hier'] = in_array('hier',$cols);
-    $columnstodisplay['page'] = in_array('page',$cols);
-    $columnstodisplay['alias'] = in_array('alias',$cols);
-    $columnstodisplay['url'] = in_array('url',$cols) && $config['url_rewriting'] != 'none';
-    $columnstodisplay['template'] = in_array('template',$cols);
-    $columnstodisplay['friendlyname'] = in_array('friendlyname',$cols);
-    $columnstodisplay['owner'] = in_array('owner',$cols);
-    $columnstodisplay['active'] = in_array('active',$cols) && $mod->CheckPermission('Manage All Content');
-    $columnstodisplay['default'] = in_array('default',$cols) && $mod->CheckPermission('Manage All Content');
-    $columnstodisplay['move'] = in_array('move',$cols) && ($mod->CheckPermission('Manage All Content') || $mod->CheckPermission('Reorder Content'));
-    $columnstodisplay['view'] = in_array('view',$cols);
-    $columnstodisplay['copy'] = in_array('copy',$cols) && ($mod->CheckPermission('Add Pages') || $mod->CheckPermission('Manage All Content'));
-    $columnstodisplay['edit'] = in_array('edit',$cols);
-    $columnstodisplay['delete'] = in_array('delete',$cols) && ($mod->CheckPermission('Remove Pages') || $mod->CheckPermission('Manage All Content'));
-    $columnstodisplay['multiselect'] = in_array('multiselect',$cols) && ($mod->CheckPermission('Remove Pages') || $mod->CheckPermission('Manage All Content'));
+    $columnstodisplay['expand'] = in_array('expand',$cols) ? 'icon' : null;
+    $columnstodisplay['icon1'] = in_array('icon1',$cols) ? 'icon' : null;
+    $columnstodisplay['hier'] = in_array('hier',$cols) ? 'normal' : null;
+    $columnstodisplay['page'] = in_array('page',$cols) ? 'normal' : null;
+    $columnstodisplay['alias'] = in_array('alias',$cols) ? 'normal' : null;
+    $columnstodisplay['url'] = in_array('url',$cols) ? 'normal' : null;
+    $columnstodisplay['template'] = in_array('template',$cols) ? 'normal' : null;
+    $columnstodisplay['friendlyname'] = in_array('friendlyname',$cols) ? 'normal' : null;
+    $columnstodisplay['owner'] = in_array('owner',$cols) ? 'normal' : null;
+    $columnstodisplay['active'] = (in_array('active',$cols) && $mod->CheckPermission('Manage All Content')) ? 'icon' : null;
+    $columnstodisplay['default'] = (in_array('default',$cols) && $mod->CheckPermission('Manage All Content')) ? 'icon' : null;
+    $columnstodisplay['move'] = (in_array('move',$cols) && ($mod->CheckPermission('Manage All Content') || $mod->CheckPermission('Reorder Content'))) ? 'icon' : null;
+    $columnstodisplay['view'] = in_array('view',$cols) ? 'icon' : null;
+    $columnstodisplay['copy'] = (in_array('copy',$cols) && ($mod->CheckPermission('Add Pages') || $mod->CheckPermission('Manage All Content'))) ? 'icon' : null;
+    $columnstodisplay['edit'] = in_array('edit',$cols) ? 'icon' : null;
+    $columnstodisplay['delete'] = (in_array('delete',$cols) && ($mod->CheckPermission('Remove Pages') || $mod->CheckPermission('Manage All Content'))) ? 'icon' : null;
+    $columnstodisplay['multiselect'] = (in_array('multiselect',$cols) && ($mod->CheckPermission('Remove Pages') || $mod->CheckPermission('Manage All Content'))) ? 'icon' : null;
 
     foreach( $columnstodisplay as $key => $val ) {
       if( isset($this->_display_columns[$key]) ) $columnstodisplay[$key] = $val && $this->_display_columns[$key];
