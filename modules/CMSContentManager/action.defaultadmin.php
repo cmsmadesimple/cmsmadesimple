@@ -163,8 +163,7 @@ $smarty->assign('curpage',$builder->get_page());
 $smarty->assign('npages',$npages);
 $smarty->assign('admin_url',$config['admin_url']);
 $smarty->assign('multiselect',$builder->supports_multiselect());
-$columns  = $builder->get_display_columns();
-$smarty->assign('columns',$columns);
+$smarty->assign('columns',$builder->get_display_columns());
 if( CmsContentManagerUtils::get_pagenav_display() == 'title' ) {
     $smarty->assign('colhdr_page',$this->Lang('colhdr_name'));
     $smarty->assign('coltitle_page',$this->Lang('coltitle_name'));
