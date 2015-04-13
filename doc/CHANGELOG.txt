@@ -98,8 +98,31 @@ ModuleManager
   - Now shows release dates and approximate download counts for each module
   - Now shows summary of releases for a specific module
   - Visual indicators for stale and new modules
-  
-  
+
+
+Version 1.12 - Pohnpei
+----------------------------------
+Core - General
+  - Now require that register_globals be OFF. This may generate errors for some sites, you MUST change their PHP config if register_globals is on! [Security fix]
+  - Smarty template security fix
+  - Replace stub file for function.process_pagedata.php
+  - Fixes Admin homepage issue (Note: current homepage must be reset!)
+  - Adds the CmsAdminUtils class (new utility class for Admin requests). Currently with two static methods
+  - Fixes to HTML entity decoding
+  - PHP 5.2.x compatibility issues
+  - Remove the html_entity_decode_utf8 function (should only have been used in the core). We now have one standard cms_html_entity_decode function
+  - Minor fix to {cms_selflink}
+  - Remove some extra whitespace from editcontent and edittemplate
+  - Increase Image Manager height
+  - Fixes issue with French locale string
+  - Fixes #9598 - Issues with cancel button in changegroupperm and changegroupassign
+
+News
+  - Remove {eval} from factory default display templates (will not effect existing installs) [Security fix]
+  - Fixes #10129 - DoS by specifying extra-large pagelimit (now maximum of 1000) [Security fix]
+  - Fixes #10452 - Browsecat counting articles that do not start yet
+
+
 Version 1.11.13 - Baquerizo Moreno 
 ----------------------------------
 Core - General
