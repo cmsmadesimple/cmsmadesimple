@@ -21,7 +21,7 @@ function load_adodb()
   // @TODO: Remove dependence on PEAR for error handling
   if( !defined('ADODB_OUTP') ) define('ADODB_OUTP', 'debug_sql');
 
-  $adodb_light = cms_join_path(dirname(__FILE__),'adodb_lite','adodb.inc.php');
+  $adodb_light = cms_join_path(__DIR__,'adodb_lite','adodb.inc.php');
   if (file_exists($adodb_light)) {
     // Load ADOdb Lite
     require_once($adodb_light);

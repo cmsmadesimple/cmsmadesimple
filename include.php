@@ -77,7 +77,7 @@ if( isset($_COOKIE[$session_name]) ) {
 if(!@session_id()) session_start();
 
 // minimum stuff to get started (autoloader needs the cmsms() and the config stuff.
-if( !defined('CONFIG_FILE_LOCATION') ) define('CONFIG_FILE_LOCATION',dirname(__FILE__).'/config.php');
+if( !defined('CONFIG_FILE_LOCATION') ) define('CONFIG_FILE_LOCATION',__DIR__.'/config.php');
 
 require_once($dirname.DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR.'compat.functions.php');
 require_once($dirname.DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR.'classes'.DIRECTORY_SEPARATOR.'class.CmsException.php');

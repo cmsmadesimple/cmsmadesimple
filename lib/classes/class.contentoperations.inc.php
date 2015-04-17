@@ -294,7 +294,7 @@ class ContentOperations
 	private function _get_std_content_types()
 	{
 		$result = array();
-		$dir = dirname(__FILE__).'/contenttypes';
+		$dir = __DIR__.'/contenttypes';
 		$files = glob($dir.'/*.inc.php');
 		if( is_array($files) ) {
 			foreach( $files as $one ) {

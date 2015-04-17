@@ -29,7 +29,7 @@
 /**
  * Include user class definition
  */
-require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'class.user.inc.php');
+require_once(__DIR__ . DIRECTORY_SEPARATOR . 'class.user.inc.php');
 
 /**
  * Class for doing user related functions.  Maybe of the User object functions

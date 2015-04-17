@@ -116,7 +116,7 @@ final class ModuleOperations
 
     private function _generate_moduleinfo( CMSModule &$modinstance )
     {
-        $dir = dirname(dirname(dirname(__FILE__))).DIRECTORY_SEPARATOR."modules".DIRECTORY_SEPARATOR.$modinstance->GetName();
+        $dir = dirname(dirname(__DIR__)).DIRECTORY_SEPARATOR."modules".DIRECTORY_SEPARATOR.$modinstance->GetName();
         if( !is_writable( $dir ) && $brief == 0 ) throw new CmsFileSystemException(lang('errordirectorynotwritable'));
 
         $fh = fopen($dir."/moduleinfo.ini",'w');
@@ -155,7 +155,7 @@ final class ModuleOperations
         global $CMSMS_GENERATING_XML;
         $CMSMS_GENERATING_XML = 1;
         $filecount = 0;
-        $dir = dirname(dirname(dirname(__FILE__))).DIRECTORY_SEPARATOR."modules".DIRECTORY_SEPARATOR.$modinstance->GetName();
+        $dir = dirname(dirname(__DIR__)).DIRECTORY_SEPARATOR."modules".DIRECTORY_SEPARATOR.$modinstance->GetName();
         if( !is_writable( $dir ) && $brief == 0 ) throw new CmsFileSystemException(lang('errordirectorynotwritable'));
 
         // generate the moduleinfo.ini file
@@ -224,7 +224,7 @@ final class ModuleOperations
         $gCms = cmsms();
 
         // first make sure that we can actually write to the module directory
-        $dir = dirname(dirname(dirname(__FILE__))).DIRECTORY_SEPARATOR."modules";
+        $dir = dirname(dirname(__DIR__)).DIRECTORY_SEPARATOR."modules";
 
         if( !is_writable( $dir ) && $brief == 0 ) throw new CmsFileSystemException(lang('errordirectorynotwritable'));
 
@@ -476,7 +476,7 @@ final class ModuleOperations
             $tmp = $db->GetArray($query);
 
             if( is_array($tmp) ) {
-                $dir = dirname(dirname(dirname(__FILE__))).DIRECTORY_SEPARATOR."modules";
+                $dir = dirname(dirname(__DIR__)).DIRECTORY_SEPARATOR."modules";
                 $this->_moduleinfo = array();
                 for( $i = 0; $i < count($tmp); $i++ ) {
                     $name = $tmp[$i]['module_name'];
@@ -649,7 +649,7 @@ final class ModuleOperations
      */
     public function FindAllModules()
     {
-        $dir = dirname(dirname(dirname(__FILE__))).DIRECTORY_SEPARATOR."modules";
+        $dir = dirname(dirname(__DIR__)).DIRECTORY_SEPARATOR."modules";
 
         $result = array();
         if( $handle = @opendir($dir) ) {
