@@ -123,43 +123,42 @@ final class CMS_Content_Block
 
   public static function smarty_compiler_moduleblock($params,$smarty)
   {
-    // {content_image} tag encountered.
-    if( !isset($params['block']) || empty($params['block']) ) {
-      throw new CmsEditContentException('{content_module} tag requires block parameter');
-    }
-
-    $rec = array('type'=>'module','id'=>'','name'=>'','module'=>'','label'=>'',
-		 'blocktype'=>'','tab'=>'');
-    $parms = array();
-    foreach( $params as $key => $value ) {
-      if( $key == 'block' ) $key = 'name';
-
-      $value = trim(trim($value,'"\''));
-      if( isset($rec[$key]) ) {
-	$rec[$key] = $value;
+      // {content_module} tag encountered.
+      if( !isset($params['block']) || empty($params['block']) ) {
+          throw new CmsEditContentException('{content_module} tag requires block parameter');
       }
-      else {
-	$parms[$key] = $value;
+
+      $rec = array('type'=>'module','id'=>'','name'=>'','module'=>'','label'=>'', 'blocktype'=>'','tab'=>'');
+      $parms = array();
+      foreach( $params as $key => $value ) {
+          if( $key == 'block' ) $key = 'name';
+
+          $value = trim(trim($value,'"\''));
+          if( isset($rec[$key]) ) {
+              $rec[$key] = $value;
+          }
+          else {
+              $parms[$key] = $value;
+          }
       }
-    }
 
-    if( !$rec['name'] ) {
-      $n = count(self::$_contentBlocks)+1;
-      $rec['id'] = $rec['name'] = 'module_'+$n;
-    }
-    if( !$rec['id'] ) $rec['id'] = str_replace(' ','_',$rec['name']);
-    $rec['params'] = $parms;
-    if( $rec['module'] == '' ) {
-      throw new CmsEditContentException('Missing module param for content_module tag');
-    }
+      if( !$rec['name'] ) {
+          $n = count(self::$_contentBlocks)+1;
+          $rec['id'] = $rec['name'] = 'module_'+$n;
+      }
+      if( !$rec['id'] ) $rec['id'] = str_replace(' ','_',$rec['name']);
+      $rec['params'] = $parms;
+      if( $rec['module'] == '' ) {
+          throw new CmsEditContentException('Missing module param for content_module tag');
+      }
 
-    // check for duplicate.
-    if( isset(self::$_contentBlocks[$rec['name']]) ) {
-      throw new CmsEditContentException('Duplicate content block: '.$rec['name']);
-    }
+      // check for duplicate.
+      if( isset(self::$_contentBlocks[$rec['name']]) ) {
+          throw new CmsEditContentException('Duplicate content block: '.$rec['name']);
+      }
 
-    if( !is_array(self::$_contentBlocks) ) self::$_contentBlocks = array();
-    self::$_contentBlocks[$rec['name']] = $rec;
+      if( !is_array(self::$_contentBlocks) ) self::$_contentBlocks = array();
+      self::$_contentBlocks[$rec['name']] = $rec;
   }
 
   public static function smarty_compile_fecontentblock($params,$template)
@@ -306,97 +305,95 @@ final class CMS_Content_Block
 
   public static function smarty_fetch_imageblock($params,&$template)
   {
-    $smarty = $template->smarty;
-    $gCms = cmsms();
-    $config = $gCms->GetConfig();
+      $smarty = $template->smarty;
+      $gCms = cmsms();
+      $config = $gCms->GetConfig();
 
-    $contentobj = $gCms->get_content_object();
-    if( !is_object($contentobj) || $contentobj->Id() <= 0 ) return self::content_return('', $params, $smarty);
+      $contentobj = $gCms->get_content_object();
+      if( !is_object($contentobj) || $contentobj->Id() <= 0 ) return self::content_return('', $params, $smarty);
 
-    $adddir = get_site_preference('contentimage_path');
-    if( isset($params['dir']) && $params['dir'] != '' ) $adddir = $params['dir'];
-    $dir = cms_join_path($config['uploads_path'],$adddir);
-    $basename = basename($config['uploads_path']);
+      $adddir = get_site_preference('contentimage_path');
+      if( isset($params['dir']) && $params['dir'] != '' ) $adddir = $params['dir'];
+      $dir = cms_join_path($config['uploads_path'],$adddir);
+      $basename = basename($config['uploads_path']);
 
-    $result = '';
-    if( isset($params['block']) ) {
-      $oldvalue = $smarty->caching;
-      $smarty->caching = false;
-      $result = $smarty->fetch(str_replace(' ', '_', 'content:' . $params['block']), '|'.$params['block'], $contentobj->Id().$params['block']);
-      $smarty->caching = $oldvalue;
-    }
-    $img = $result;
-    if( $img == -1 || empty($img) ) return;
+      $result = '';
+      if( isset($params['block']) ) {
+          $oldvalue = $smarty->caching;
+          $smarty->caching = false;
+          $result = $smarty->fetch(str_replace(' ', '_', 'content:' . $params['block']), '|'.$params['block'], $contentobj->Id().$params['block']);
+          $smarty->caching = $oldvalue;
+      }
+      $img = $result;
+      if( $img == -1 || empty($img) ) return;
 
-    // create the absolute url.
-    if( startswith($img,$basename) ) {
-      // old style url.
-      if( !startswith($img,'http') ) $img = str_replace('//','/',$img);
-      $img = substr($img,strlen($basename.'/'));
-      $img = $config['uploads_url'] . '/'.$img;
-    }
-    else {
-      $img = $config['uploads_url'] . '/'.$adddir.'/'.$img;
-    }
+      // create the absolute url.
+      if( startswith($img,$basename) ) {
+          // old style url.
+          if( !startswith($img,'http') ) $img = str_replace('//','/',$img);
+          $img = substr($img,strlen($basename.'/'));
+          $img = $config['uploads_url'] . '/'.$img;
+      }
+      else {
+          $img = $config['uploads_url'] . '/'.$adddir.'/'.$img;
+      }
 
-    $name = $params['block'];
-    $alt = '';
-    $width = '';
-    $height = '';
-    $urlonly = false;
-    $xid = '';
-    $class = '';
-    if( isset($params['name']) ) $name = $params['name'];
-    if( isset($params['class']) ) $class = $params['class'];
-    if( isset($params['id']) ) $xid = $params['id'];
-    if( isset($params['alt']) ) $alt = $params['alt'];
-    if( isset($params['width']) ) $width = $params['width'];
-    if( isset($params['height']) ) $height = $params['height'];
-    if( isset($params['urlonly']) ) $urlonly = true;
-    if( !isset($params['alt']) ) $alt = $img;
+      $alt = '';
+      $width = '';
+      $height = '';
+      $urlonly = false;
+      $xid = '';
+      $class = '';
+      if( isset($params['class']) ) $class = $params['class'];
+      if( isset($params['id']) ) $xid = $params['id'];
+      if( isset($params['alt']) ) $alt = $params['alt'];
+      if( isset($params['width']) ) $width = $params['width'];
+      if( isset($params['height']) ) $height = $params['height'];
+      if( isset($params['urlonly']) ) $urlonly = true;
+      if( !isset($params['alt']) ) $alt = $img;
 
-    $out = '';
-    if( $urlonly ) {
-      $out = $img;
-    }
-    else {
-      $out = '<img src="'.$img.'" ';
-      if( !empty($class) ) $out .= 'class="'.$class.'" ';
-      if( !empty($xid) ) $out .= 'id="'.$xid.'" ';
-      if( !empty($width) ) $out .= 'width="'.$width.'" ';
-      if( !empty($height) ) $out .= 'height="'.$height.'" ';
-      if( !empty($alt) ) $out .= 'alt="'.$alt.'" ';
-      $out .= '/>';
-    }
-    if( isset($params['assign']) ){
-      $smarty->assign(trim($params['assign']),$out);
-      return;
-    }
-    return $out;
+      $out = '';
+      if( $urlonly ) {
+          $out = $img;
+      }
+      else {
+          $out = '<img src="'.$img.'" ';
+          if( !empty($class) ) $out .= 'class="'.$class.'" ';
+          if( !empty($xid) ) $out .= 'id="'.$xid.'" ';
+          if( !empty($width) ) $out .= 'width="'.$width.'" ';
+          if( !empty($height) ) $out .= 'height="'.$height.'" ';
+          if( !empty($alt) ) $out .= 'alt="'.$alt.'" ';
+          $out .= '/>';
+      }
+      if( isset($params['assign']) ){
+          $smarty->assign(trim($params['assign']),$out);
+          return;
+      }
+      return $out;
   }
 
   public static function smarty_fetch_moduleblock($params,&$template)
   {
-    $smarty = $template->smarty;
-    $result = '';
-    $key = '';
+      $smarty = $template->smarty;
+      $result = '';
+      $key = '';
 
-    if( !isset($params['block']) ) return;
-    $block = $params['block'];
+      if( !isset($params['block']) ) return;
+      $block = $params['block'];
 
-    $gCms = cmsms();
-    $content_obj = $gCms->get_content_object();
-    if( is_object($content_obj) ) {
-      $result = $content_obj->GetPropertyValue($block);
-      if( $result == -1 ) $result = '';
-    }
+      $gCms = cmsms();
+      $content_obj = $gCms->get_content_object();
+      if( is_object($content_obj) ) {
+          $result = $content_obj->GetPropertyValue($block);
+          if( $result == -1 ) $result = '';
+      }
 
-    if( isset($params['assign']) ) {
-      $smarty->assign($params['assign'],$result);
-      return;
-    }
+      if( isset($params['assign']) ) {
+          $smarty->assign($params['assign'],$result);
+          return;
+      }
 
-    return $result;
+      return $result;
   }
 
 } // end of class.
