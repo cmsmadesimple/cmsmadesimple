@@ -19,7 +19,7 @@
 function search_StemPhrase(&$module,$phrase)
 {
   // strip out smarty tags
-  $phrase = preg_replace('/{.*?}/', '', $phrase);
+  $phrase = preg_replace('/{.*?}/', ' ', $phrase);
   $phrase = preg_replace('/[\{\}]/', '', $phrase);
 
   // strip out html and php stuff
@@ -32,7 +32,6 @@ function search_StemPhrase(&$module,$phrase)
   // escape meta characters
   $phrase = preg_quote($phrase);
 
-  // split into words
   // strtolower isn't friendly to other charsets
   $phrase = preg_replace_callback("/([A-Z]+?)/",
 				  function($matches) {
@@ -40,6 +39,7 @@ function search_StemPhrase(&$module,$phrase)
 				  },
 				  $phrase);
 
+  // split into words
   $words = preg_split('/[\s,!.;:\?()+-\/\\\\]+/', $phrase);
 
   // strip off anything 3 chars or less
