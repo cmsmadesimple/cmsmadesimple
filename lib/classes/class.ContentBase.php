@@ -1467,7 +1467,8 @@ abstract class ContentBase
 
 		$result = false;
 
-        $dflt_pageid = $gCms->GetContentOperations()->GetDefaultContent();
+        $query = 'SELECT content_id FROM '.cms_db_prefix().'content WHERE default_content = 1';
+        $dflt_pageid = (int) $db->GetOne($query);
         if( $dflt_pageid < 1 ) $this->SetDefaultContent(TRUE);
 
 		// Figure out the item_order
