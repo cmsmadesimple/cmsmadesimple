@@ -19,21 +19,22 @@
 function search_StemPhrase(&$module,$phrase)
 {
   // strip out smarty tags
-  $phrase = preg_replace('/{.*}/', '', $phrase);
+  $phrase = preg_replace('/{.*?}/', '', $phrase);
+  $phrase = preg_replace('/[\{\}]/', '', $phrase);
+
+  // strip out html and php stuff
+  $phrase = strip_tags($phrase);
 
   // add spaces between tags
   $phrase = str_replace("<"," <",$phrase);
   $phrase = str_replace(">","> ",$phrase);
-
-  // strip out html and php stuff
-  $phrase = strip_tags($phrase);
 
   // escape meta characters
   $phrase = preg_quote($phrase);
 
   // split into words
   // strtolower isn't friendly to other charsets
-  $phrase = preg_replace_callback("/([A-Z]+)/",
+  $phrase = preg_replace_callback("/([A-Z]+?)/",
 				  function($matches) {
 				    return strtolower($matches[1]);
 				  },
