@@ -221,7 +221,7 @@ catch( CmsContentException $e ) {
 //
 if( $content_id && CmsContentManagerUtils::locking_enabled() ) {
     try {
-        // here we are attempting to steal a lock.
+        // check if this thing is already locked.
         $lock_id = CmsLockOperations::is_locked('content',$content_id);
         $lock = null;
         if( $lock_id > 0 ) {
@@ -230,7 +230,9 @@ if( $content_id && CmsContentManagerUtils::locking_enabled() ) {
             if( !$lock->expired() ) throw new CmsLockException('CMSEX_L010');
             CmsLockOperations::unlock($lock_id,'content',$content_id);
         }
+        // get a new lock.
         $lock = new CmsLock('content',$content_id, (int) $this->GetPreference('lock_timeout'));
+        $lock->save();
         $smarty->assign('lock',$lock);
     }
     catch( CmsException $e ) {

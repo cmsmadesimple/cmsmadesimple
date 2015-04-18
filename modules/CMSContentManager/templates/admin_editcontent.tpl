@@ -13,6 +13,7 @@ $(document).ready(function(){
   // initialize lock manager
   $('#Edit_Content').lockManager({
       type: 'content',
+      lock_id: {$lock.id},
       oid: {$content_id},
       uid: {get_userid(FALSE)},
       {if !empty($lock_timeout) && $lock_timeout > 0}lock_timeout: {$lock_timeout},{/if}
@@ -66,6 +67,8 @@ $(document).ready(function(){
     // here we want to disable the dirtyform stuff when these fields are changed
     $('#id_disablewysiwyg').change(function () {
         $('#Edit_Content').dirtyForm('disable');
+	$('#Edit_Content').lockManager('unlock');
+	$(this).closest('form').submit();
     });
 
     // submit the form if template id, and/or content-type fields are changed.

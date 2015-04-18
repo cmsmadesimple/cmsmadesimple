@@ -400,7 +400,7 @@ class Content extends ContentBase
 			$help = '&nbsp;'.cms_admin_utils::get_help_tag('core','help_page_disablewysiwyg',lang('help_title_page_disablewysiwyg'));
 			return array('<label for="id_disablewysiwyg">'.lang('disable_wysiwyg').':</label>'.$help,
 						 '<input type="hidden" name="disable_wysiwyg" value="0" />
-             <input id="id_disablewysiwyg" type="checkbox" name="disable_wysiwyg" value="1"  '.($disable_wysiwyg==1?'checked="checked"':'').' onclick="this.form.submit()" />');
+             <input id="id_disablewysiwyg" type="checkbox" name="disable_wysiwyg" value="1"  '.($disable_wysiwyg==1?'checked="checked"':'').'/>');
 			break;
 
 		default:
