@@ -286,9 +286,9 @@ final class cms_module_smarty_plugin_manager
 	 * @param string $name
 	 * @param string $type (function,block,modifier)
 	 */
-	public static function remove_by_name($name,$type)
+	public static function remove_by_name($name)
 	{
-		self::get_instance()->_remove_by_name($name,$type);
+		self::get_instance()->_remove_by_name($name);
 	}
 
 	/**
@@ -297,7 +297,7 @@ final class cms_module_smarty_plugin_manager
 	 * @param string $name
 	 * @param string $type (function,block,modifier)
 	 */
-	public function _remove_by_name($name,$type)
+	public function _remove_by_name($name)
 	{
 		$this->_load();
 		if( is_array($this->_data) && count($this->_data) ) {
