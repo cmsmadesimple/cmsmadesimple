@@ -80,7 +80,6 @@ if( !$smarty->isCached($this->GetTemplateResource($template),$cache_id,$compile_
             $start_page = null;
             $start_level = null;
             $childrenof = null;
-            $show_all = true;
             break;
 
         case 'includeprefix':
