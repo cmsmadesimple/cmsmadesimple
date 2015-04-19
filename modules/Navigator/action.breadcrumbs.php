@@ -85,7 +85,7 @@ if( !$smarty->isCached($this->GetTemplateResource($template),$cache_id,$compile_
         }
 
         if( $content->Active() && ($showall || $content->ShowInMenu()) ) {
-            $pagestack[] = Nav_utils::fill_node($curNode,$deep,-1,$showall);
+            $pagestack[$content->Id()] = Nav_utils::fill_node($curNode,$deep,-1,$showall);
         }
         if( $content->Alias() == $stopat || $content->Id() == (int) $stopat ) {
             $have_stopnode = TRUE;
@@ -99,7 +99,7 @@ if( !$smarty->isCached($this->GetTemplateResource($template),$cache_id,$compile_
         // get the 'home' page and push it on the list
         $dflt_content_id = ContentOperations::get_instance()->GetDefaultContent();
         $node = $hm->GetNodeById($dflt_content_id);
-        $pagestack[] = Nav_utils::fill_node($node,$deep,-1,$showall);
+        $pagestack[$dflt_content_id] = Nav_utils::fill_node($node,$deep,-1,$showall);
     }
 
     $smarty->assign('starttext',$starttext);
