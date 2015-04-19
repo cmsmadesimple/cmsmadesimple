@@ -412,6 +412,7 @@ public static function preloadFieldData($ids)
             foreach( $field as $k => $v ) {
                 $obj->$k = $v;
             }
+            $obj->value = null;
             self::$_cached_fieldvals[$news_id][$field['id']] = $obj;
         }
     }
@@ -430,9 +431,27 @@ public static function preloadFieldData($ids)
 public static function get_fields($news_id,$public_only = true,$filled_only = FALSE)
 {
     if( $news_id <= 0 ) return;
-    if( !isset(self::$_cached_fieldvals[$news_id]) ) return;
+    $fd = self::get_fielddefs();
+    if( !count($fd) ) return;
 
     $results = array();
+    foreach( $fd as $field ) {
+        $obj = null;
+        if( isset(self::$_cached_fieldvals[$news_id][$field['id']]) ) {
+            $obj = self::$_cached_fieldvals[$news_id][$field['id']];
+        }
+        else {
+            // data for this field must not have been preloaded.
+            // means there is no value, so just build one
+            $obj = new news_field;
+            foreach( $field as $k => $v ) {
+                $obj->$k = $v;
+            }
+            $obj->value = null;
+        }
+        $results[$field['name']] = $obj;
+    }
+    /*
     foreach( self::$_cached_fieldvals[$news_id] as $fid => $data ) {
         if( !$public_only || $data->public ) {
             if( !$filled_only || (isset($data->value) && $data->value != '') ) {
@@ -440,6 +459,7 @@ public static function get_fields($news_id,$public_only = true,$filled_only = FA
             }
         }
     }
+    */
     return $results;
 }
 } // end of class
