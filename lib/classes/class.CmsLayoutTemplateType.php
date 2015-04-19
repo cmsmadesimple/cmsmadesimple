@@ -570,7 +570,7 @@ class CmsLayoutTemplateType
             $tmp = explode('::',$val);
             if( count($tmp) == 2 ) {
                 $query = 'SELECT * FROM '.cms_db_prefix().self::TABLENAME.' WHERE originator = ? AND name = ?';
-                if( $tmp[0] == 'Core' or $tmp[0] == 'core' ) $tmp[0] == self::CORE;
+                if( $tmp[0] == 'Core' or $tmp[0] == 'core' ) $tmp[0] = self::CORE;
                 $row = $db->GetRow($query,array(trim($tmp[0]),trim($tmp[1])));
             }
         }

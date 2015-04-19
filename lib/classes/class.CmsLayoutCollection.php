@@ -244,9 +244,9 @@ class CmsLayoutCollection
 	 */
     public function delete_stylesheet($css)
     {
-        if( is_object($css) && is_a($css,'Stylesheet') ) $css = $css->id;
+        if( is_object($css) && is_a($css,'CmsLayoutStylesheet') ) $css = $css->id;
         $css = (int)$css;
-        if( $css <= 0 ) throw new CmsInvalidDataException('Invalid css id specified to CmsLayoutCollection::add_stylesheet');
+        if( $css <= 0 ) throw new CmsInvalidDataException('Invalid css id specified to CmsLayoutCollection::delete_stylesheet');
 
         if( !in_array($css,$this->_css_assoc) ) return;
         $t = array();
@@ -258,6 +258,7 @@ class CmsLayoutCollection
 				// do we want to delete this css from the database?
 			}
         }
+        $this->_css_assoc = $t;
         $this->_dirty = TRUE;
     }
 
@@ -320,6 +321,32 @@ class CmsLayoutCollection
 		if( !in_array($tpl,$this->_tpl_assoc) ) $this->_tpl_assoc[] = $tpl;
         $this->_dirty = TRUE;
 	}
+
+	/**
+	 * Delete a template from the list of templates associated with this theme
+	 *
+	 * @throws CmsInvalidDataException
+	 * @param mixed $css Either an integer template id, or a CmsLayoutTemplate object
+	 */
+    public function delete_template($tpl)
+    {
+        if( is_object($tpl) && is_a($css,'CmsLayoutTemplate') ) $tpl = $tpl->get_id();
+        $tpl = (int) $tpl;
+        if( $tpl <= 0 ) throw new CmsInvalidDataException('Invalid css id specified to CmsLayoutCollection::delete_template');
+
+        if( !in_array($tpl,$this->_tpl_assoc) ) return;
+        $t = array();
+        foreach( $this->_tpl_assoc as $one ) {
+            if( $tpl != $one ) {
+				$t[] = $one;
+			}
+			else {
+				// do we want to delete this css from the database?
+			}
+        }
+        $this->_tpl_assoc = $t;
+        $this->_dirty = TRUE;
+    }
 
 	/**
 	 * Validate this object before saving.
