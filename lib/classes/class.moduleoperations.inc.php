@@ -599,7 +599,6 @@ final class ModuleOperations
                 if( version_compare($dbversion, $obj->GetVersion()) == -1 ) {
                     if( in_array($module_name,$this->cmssystemmodules) || $this->IsQueuedForInstall($module_name) ) {
                         // we're allowed to upgrade
-                        audit('','debug1','attempting to upgrade '.$module_name);
                         $res = $this->_upgrade_module($obj);
                         $this->_unqueue_install($module_name);
                         if( !isset($_SESSION['moduleoperations_result']) ) $_SESSION['moduleoperations_result'] = array();
