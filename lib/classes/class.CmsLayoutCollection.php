@@ -465,7 +465,7 @@ class CmsLayoutCollection
     {
         if( !$this->get_id() ) return;
 
-        if( !$force && $this->has_templates() ) throw new CmsException('Cannot Delete a Design that has Templats Attached');
+        if( !$force && $this->has_templates() ) throw new CmsException('Cannot Delete a Design that has Templates Attached');
 
 		Events::SendEvent('Core','DeleteDesignPre',array(get_class($this)=>&$this));
 		$db = cmsms()->GetDb();
