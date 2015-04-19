@@ -108,7 +108,9 @@
      <div class="NewsDetailField">
         {if $field->type == 'file'}
 	  {* this template assumes that every file uploaded is an image of some sort, because News doesn't distinguish *}
-          <img src="{$entry->file_location}/{$field->value}"/>
+          {if isset($field->value) && $field->value}
+            <img src="{$entry->file_location}/{$field->value}"/>
+          {/if}
         {else}
           {$field->name}:&nbsp;{$field->value}
         {/if}

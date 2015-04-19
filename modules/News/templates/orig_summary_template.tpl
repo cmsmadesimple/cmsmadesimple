@@ -83,7 +83,9 @@
   {foreach from=$entry->fields item='field'}
      <div class="NewsSummaryField">
         {if $field->type == 'file'}
-          <img src="{$entry->file_location}/{$field->value}"/>
+          {if isset($field->value) && $field->value}
+            <img src="{$entry->file_location}/{$field->value}"/>
+          {/if}
         {else}
           {$field->name}:&nbsp;{$field->value}
         {/if}
