@@ -667,19 +667,13 @@ class CmsLayoutCollection
 	{
 		$tmp = null;
 		if( self::$_dflt_id == '' ) {
-			$query = 'SELECT * FROM '.cms_db_prefix().self::TABLENAME.' WHERE dflt = 1';
+			$query = 'SELECT id FROM '.cms_db_prefix().self::TABLENAME.' WHERE dflt = 1';
 			$db = cmsms()->GetDb();
-			$tmp = $db->GetRow($query);
-			if( $tmp && $tmp['id'] > 0 && $tmp['dflt'] == 1) self::$_dflt_id = $tmp['id'];
+            $tmp = (int) $db->GetOne($query);
+            if( $tmp > 0 ) self::$_dflt_id = $tmp;
 		}
 
-		if( self::$_dflt_id > 0 ) {
-			if( is_array($tmp) ) {
-				if( !is_array(self::$_raw_cache) ) self::$_raw_cache = array();
-				self::$_raw_cache[$tmp['id']] = $tmp;
-			}
-			return self::load(self::$_dflt_id);
-		}
+		if( self::$_dflt_id > 0 ) return self::load(self::$_dflt_id);
 
         throw new CmsInvalidDataException('There is no default design selected');
 	}
