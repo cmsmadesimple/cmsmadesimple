@@ -37,71 +37,71 @@
  */
 function check_login($no_redirect = false)
 {
-  $config = cmsms()->GetConfig();
+    $config = cmsms()->GetConfig();
 
-  //Handle a current login if one is in queue in the SESSION
-  if (isset($_SESSION['login_user_id'])) {
-    debug_buffer("Found login_user_id.  Going to generate the user object.");
-    generate_user_object($_SESSION['login_user_id']);
-    unset($_SESSION['login_user_id']);
-  }
-
-  if (isset($_SESSION['login_cms_language'])) {
-    debug_buffer('Setting language to: ' . $_SESSION['login_cms_language']);
-    cms_cookies::set('cms_language', $_SESSION['login_cms_language']);
-    unset($_SESSION['login_cms_language']);
-  }
-
-  if (!isset($_SESSION["cms_admin_user_id"])) {
-    debug_buffer('No session found.  Now check for cookies');
-    if( cms_cookies::exists('cms_admin_user_id') && cms_cookies::exists('cms_passhash') ) {
-      debug_buffer('Cookies found, do a passhash check');
-      if (check_passhash(cms_cookies::get('cms_admin_user_id'), cms_cookies::get('cms_passhash'))) {
-	debug_buffer('passhash check succeeded...  creating session object');
-	generate_user_object(cms_cookies::get('cms_admin_user_id'));
-      }
-      else {
-	debug_buffer('passhash check failed...  redirect to login');
-	$_SESSION["redirect_url"] = $_SERVER["REQUEST_URI"];
-	if (false == $no_redirect) redirect($config['admin_url']."/login.php");
-	return false;
-      }
-    }
-    else {
-      debug_buffer('No cookies found.  Redirect to login.');
-      $_SESSION["redirect_url"] = $_SERVER["REQUEST_URI"];
-      if (false == $no_redirect) redirect($config['admin_url']."/login.php");
-      return false;
-    }
-  }
-
-  global $CMS_ADMIN_PAGE;
-  if( ($config['debug'] === false) && isset($CMS_ADMIN_PAGE) ) {
-    if( !isset($_SESSION[CMS_USER_KEY]) ) {
-      // it's not in the session, try to grab something from cookies
-      if( cms_cookies::exists(CMS_SECURE_PARAM_NAME) ) $_SESSION[CMS_USER_KEY] = cms_cookies::get(CMS_SECURE_PARAM_NAME);
+    //Handle a current login if one is in queue in the SESSION
+    if (isset($_SESSION['login_user_id'])) {
+        debug_buffer("Found login_user_id.  Going to generate the user object.");
+        generate_user_object($_SESSION['login_user_id']);
+        unset($_SESSION['login_user_id']);
     }
 
-    // now we've got to check the request
-    // and make sure it matches the session key
-    if( !isset($_SESSION[CMS_USER_KEY]) ||
-        !isset($_GET[CMS_SECURE_PARAM_NAME]) ||
-        !isset($_POST[CMS_SECURE_PARAM_NAME]) ) {
-        $v = '<no$!tgonna!$happen>';
-        if( isset($_GET[CMS_SECURE_PARAM_NAME]) ) {
-            $v = $_GET[CMS_SECURE_PARAM_NAME];
+    if (isset($_SESSION['login_cms_language'])) {
+        debug_buffer('Setting language to: ' . $_SESSION['login_cms_language']);
+        cms_cookies::set('cms_language', $_SESSION['login_cms_language']);
+        unset($_SESSION['login_cms_language']);
+    }
+
+    if (!isset($_SESSION["cms_admin_user_id"])) {
+        debug_buffer('No session found.  Now check for cookies');
+        if( cms_cookies::exists('cms_admin_user_id') && cms_cookies::exists('cms_passhash') ) {
+            debug_buffer('Cookies found, do a passhash check');
+            if (check_passhash(cms_cookies::get('cms_admin_user_id'), cms_cookies::get('cms_passhash'))) {
+                debug_buffer('passhash check succeeded...  creating session object');
+                generate_user_object(cms_cookies::get('cms_admin_user_id'));
+            }
+            else {
+                debug_buffer('passhash check failed...  redirect to login');
+                $_SESSION["redirect_url"] = $_SERVER["REQUEST_URI"];
+                if (false == $no_redirect) redirect($config['admin_url']."/login.php");
+                return false;
+            }
         }
-        else if( isset($_POST[CMS_SECURE_PARAM_NAME]) ) {
-            $v = $_POST[CMS_SECURE_PARAM_NAME];
-        }
-
-        if( $v != $_SESSION[CMS_USER_KEY] && !isset($config['stupidly_ignore_xss_vulnerability']) ) {
-            if (false == $no_redirect) redirect($config['admin_url'].'/login.php');
+        else {
+            debug_buffer('No cookies found.  Redirect to login.');
+            $_SESSION["redirect_url"] = $_SERVER["REQUEST_URI"];
+            if (false == $no_redirect) redirect($config['admin_url']."/login.php");
             return false;
         }
     }
-  }
-  return true;
+
+    global $CMS_ADMIN_PAGE;
+    if( ($config['debug'] === false) && isset($CMS_ADMIN_PAGE) ) {
+        if( !isset($_SESSION[CMS_USER_KEY]) ) {
+            // it's not in the session, try to grab something from cookies
+            if( cms_cookies::exists(CMS_SECURE_PARAM_NAME) ) $_SESSION[CMS_USER_KEY] = cms_cookies::get(CMS_SECURE_PARAM_NAME);
+        }
+
+        // now we've got to check the request
+        // and make sure it matches the session key
+        if( !isset($_SESSION[CMS_USER_KEY]) ||
+            !isset($_GET[CMS_SECURE_PARAM_NAME]) ||
+            !isset($_POST[CMS_SECURE_PARAM_NAME]) ) {
+            $v = '<no$!tgonna!$happen>';
+            if( isset($_GET[CMS_SECURE_PARAM_NAME]) ) {
+                $v = $_GET[CMS_SECURE_PARAM_NAME];
+            }
+            else if( isset($_POST[CMS_SECURE_PARAM_NAME]) ) {
+                $v = $_POST[CMS_SECURE_PARAM_NAME];
+            }
+
+            if( $v != $_SESSION[CMS_USER_KEY] && !isset($config['stupidly_ignore_xss_vulnerability']) ) {
+                if (false == $no_redirect) redirect($config['admin_url'].'/login.php');
+                return false;
+            }
+        }
+    }
+    return true;
 }
 
 
@@ -114,9 +114,9 @@ function check_login($no_redirect = false)
  */
 function get_userid($check = true)
 {
-  if ($check) check_login(); //It'll redirect out to login if it fails
-  if (isset($_SESSION["cms_admin_user_id"])) return $_SESSION["cms_admin_user_id"];
-  return false;
+    if ($check) check_login(); //It'll redirect out to login if it fails
+    if (isset($_SESSION["cms_admin_user_id"])) return $_SESSION["cms_admin_user_id"];
+    return false;
 }
 
 /**
@@ -128,9 +128,9 @@ function get_userid($check = true)
  */
 function get_username($check = true)
 {
-  if ($check) check_login(); //It'll redirect out to login if it fails
-  if (isset($_SESSION["cms_admin_username"])) return $_SESSION["cms_admin_username"];
-  return false;
+    if ($check) check_login(); //It'll redirect out to login if it fails
+    if (isset($_SESSION["cms_admin_username"])) return $_SESSION["cms_admin_username"];
+    return false;
 }
 
 
@@ -145,16 +145,15 @@ function get_username($check = true)
  */
 function check_passhash($userid, $checksum)
 {
-  $gCms = cmsms();
-  $config = $gCms->GetConfig();
+    $gCms = cmsms();
 
-  $userops = $gCms->GetUserOperations();
-  $oneuser = $userops->LoadUserByID($userid);
+    $userops = $gCms->GetUserOperations();
+    $oneuser = $userops->LoadUserByID($userid);
 
-  $tmp = array(md5(__FILE__),$oneuser->password,cms_utils::get_real_ip(),$_SERVER['HTTP_USER_AGENT']);
-  $tmp = md5(serialize($tmp));
-  if ($oneuser && (string)$checksum != '' && $checksum == $tmp ) return TRUE;
-  return FALSE;
+    $tmp = array(md5(__FILE__),$oneuser->password,cms_utils::get_real_ip(),$_SERVER['HTTP_USER_AGENT']);
+    $tmp = md5(serialize($tmp));
+    if ($oneuser && (string)$checksum != '' && $checksum == $tmp ) return TRUE;
+    return FALSE;
 }
 
 
@@ -174,18 +173,17 @@ function check_passhash($userid, $checksum)
 function generate_user_object($userid)
 {
   $gCms = cmsms();
-  $config = $gCms->GetConfig();
 
   $userops = $gCms->GetUserOperations();
   $oneuser = $userops->LoadUserByID($userid);
 
   if ($oneuser) {
-    $_SESSION['cms_admin_user_id'] = $userid;
-    $_SESSION['cms_admin_username'] = $oneuser->username;
-    cms_cookies::set('cms_admin_user_id', $oneuser->id);
-    $tmp = array(md5(__FILE__),$oneuser->password,cms_utils::get_real_ip(),$_SERVER['HTTP_USER_AGENT']);
-    $tmp = md5(serialize($tmp));
-    cms_cookies::set('cms_passhash', $tmp);
+      $_SESSION['cms_admin_user_id'] = $userid;
+      $_SESSION['cms_admin_username'] = $oneuser->username;
+      cms_cookies::set('cms_admin_user_id', $oneuser->id);
+      $tmp = array(md5(__FILE__),$oneuser->password,cms_utils::get_real_ip(),$_SERVER['HTTP_USER_AGENT']);
+      $tmp = md5(serialize($tmp));
+      cms_cookies::set('cms_passhash', $tmp);
   }
 }
 
@@ -271,31 +269,31 @@ function author_pages($userid)
  */
 function audit($itemid, $itemname, $action)
 {
-  if( !isset($action) ) $action = '-- unset --';
-  $db = cmsms()->GetDb();
+    if( !isset($action) ) $action = '-- unset --';
+    $db = cmsms()->GetDb();
 
-  $userid = 0;
-  $username = '';
-  $ip_addr = '';
-  if( $itemid == '' ) $itemid = -1;
+    $userid = 0;
+    $username = '';
+    $ip_addr = '';
+    if( $itemid == '' ) $itemid = -1;
 
-  if (isset($_SESSION["cms_admin_user_id"])) {
-    $userid = $_SESSION["cms_admin_user_id"];
-    $ip_addr = cms_utils::get_real_ip();
-  }
-  else {
-    if (isset($_SESSION['login_user_id'])) {
-      $userid = $_SESSION['login_user_id'];
-      $username = $_SESSION['login_user_username'];
+    if (isset($_SESSION["cms_admin_user_id"])) {
+        $userid = $_SESSION["cms_admin_user_id"];
+        $ip_addr = cms_utils::get_real_ip();
     }
-  }
+    else {
+        if (isset($_SESSION['login_user_id'])) {
+            $userid = $_SESSION['login_user_id'];
+            $username = $_SESSION['login_user_username'];
+        }
+    }
 
-  if (isset($_SESSION["cms_admin_username"])) $username = $_SESSION["cms_admin_username"];
+    if (isset($_SESSION["cms_admin_username"])) $username = $_SESSION["cms_admin_username"];
 
-  if (!isset($userid) || $userid == "") $userid = 0;
+    if (!isset($userid) || $userid == "") $userid = 0;
 
-  $query = "INSERT INTO ".cms_db_prefix()."adminlog (timestamp, user_id, username, item_id, item_name, action, ip_addr) VALUES (?,?,?,?,?,?,?)";
-  $db->Execute($query,array(time(),$userid,$username,$itemid,$itemname,$action,$ip_addr));
+    $query = "INSERT INTO ".cms_db_prefix()."adminlog (timestamp, user_id, username, item_id, item_name, action, ip_addr) VALUES (?,?,?,?,?,?,?)";
+    $db->Execute($query,array(time(),$userid,$username,$itemid,$itemname,$action,$ip_addr));
 }
 
 

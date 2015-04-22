@@ -39,78 +39,78 @@
  */
 function redirect($to)
 {
-  $_SERVER['PHP_SELF'] = null;
+    $_SERVER['PHP_SELF'] = null;
 
-  $schema = 'http';
-  if( cmsms()->is_https_request ) $schema = 'https';
+    $schema = 'http';
+    if( cmsms()->is_https_request ) $schema = 'https';
 
-  $host = $_SERVER['HTTP_HOST'];
-  $components = parse_url($to);
-  if(count($components) > 0) {
-    $to =  (isset($components['scheme']) && startswith($components['scheme'], 'http') ? $components['scheme'] : $schema) . '://';
-    $to .= isset($components['host']) ? $components['host'] : $host;
-    $to .= isset($components['port']) ? ':' . $components['port'] : '';
-    if(isset($components['path'])) {
-      if(in_array(substr($components['path'],0,1),array('\\','/'))) {
-	//Path is absolute, just append.
-	$to .= $components['path'];
-      }
-      //Path is relative, append current directory first.
-      else if (isset($_SERVER['PHP_SELF']) && !is_null($_SERVER['PHP_SELF'])) { //Apache
-	$to .= (strlen(dirname($_SERVER['PHP_SELF'])) > 1 ?  dirname($_SERVER['PHP_SELF']).'/' : '/') . $components['path'];
-      }
-      else if (isset($_SERVER['REQUEST_URI']) && !is_null($_SERVER['REQUEST_URI'])) { //Lighttpd
-	if (endswith($_SERVER['REQUEST_URI'], '/')) {
-	  $to .= (strlen($_SERVER['REQUEST_URI']) > 1 ? $_SERVER['REQUEST_URI'] : '/') . $components['path'];
-	}
-	else {
-	  $dn = dirname($_SERVER['REQUEST_URI']);
-	  if( !endswith($dn,'/') ) $dn .= '/';
-	  $to .= $dn . $components['path'];
-	}
-      }
+    $host = $_SERVER['HTTP_HOST'];
+    $components = parse_url($to);
+    if(count($components) > 0) {
+        $to =  (isset($components['scheme']) && startswith($components['scheme'], 'http') ? $components['scheme'] : $schema) . '://';
+        $to .= isset($components['host']) ? $components['host'] : $host;
+        $to .= isset($components['port']) ? ':' . $components['port'] : '';
+        if(isset($components['path'])) {
+            if(in_array(substr($components['path'],0,1),array('\\','/'))) {
+                //Path is absolute, just append.
+                $to .= $components['path'];
+            }
+            //Path is relative, append current directory first.
+            else if (isset($_SERVER['PHP_SELF']) && !is_null($_SERVER['PHP_SELF'])) { //Apache
+                $to .= (strlen(dirname($_SERVER['PHP_SELF'])) > 1 ?  dirname($_SERVER['PHP_SELF']).'/' : '/') . $components['path'];
+            }
+            else if (isset($_SERVER['REQUEST_URI']) && !is_null($_SERVER['REQUEST_URI'])) { //Lighttpd
+                if (endswith($_SERVER['REQUEST_URI'], '/')) {
+                    $to .= (strlen($_SERVER['REQUEST_URI']) > 1 ? $_SERVER['REQUEST_URI'] : '/') . $components['path'];
+                }
+                else {
+                    $dn = dirname($_SERVER['REQUEST_URI']);
+                    if( !endswith($dn,'/') ) $dn .= '/';
+                    $to .= $dn . $components['path'];
+                }
+            }
+        }
+        $to .= isset($components['query']) ? '?' . $components['query'] : '';
+        $to .= isset($components['fragment']) ? '#' . $components['fragment'] : '';
     }
-    $to .= isset($components['query']) ? '?' . $components['query'] : '';
-    $to .= isset($components['fragment']) ? '#' . $components['fragment'] : '';
-  }
-  else {
-    $to = $schema."://".$host."/".$to;
-  }
+    else {
+        $to = $schema."://".$host."/".$to;
+    }
 
-  session_write_close();
+    session_write_close();
 
-  $debug = false;
-  if( class_exists('CmsApp') ) {
-    $config = cmsms()->GetConfig();
-    $debug = $config['debug'];
-  }
+    $debug = false;
+    if( class_exists('CmsApp') ) {
+        $config = cmsms()->GetConfig();
+        $debug = $config['debug'];
+    }
 
-  if (headers_sent() && !$debug) {
-    // use javascript instead
-    echo '<script type="text/javascript">
+    if (headers_sent() && !$debug) {
+        // use javascript instead
+        echo '<script type="text/javascript">
           <!--location.replace("'.$to.'"); // -->
           </script>
           <noscript>
           <meta http-equiv="Refresh" content="0;URL='.$to.'">
           </noscript>';
-    exit;
-  }
-  else {
-    if ( $debug ) {
-      echo "Debug is on.  Redirecting disabled...  Please click this link to continue.<br />";
-      echo "<a accesskey=\"r\" href=\"".$to."\">".$to."</a><br />";
-      echo '<div id="DebugFooter">';
-      foreach (cmsms()->get_errors() as $error) {
-	echo $error;
-      }
-      echo '</div> <!-- end DebugFooter -->';
-      exit();
+        exit;
     }
     else {
-      header("Location: $to");
-      exit();
+        if ( $debug ) {
+            echo "Debug is on.  Redirecting disabled...  Please click this link to continue.<br />";
+            echo "<a accesskey=\"r\" href=\"".$to."\">".$to."</a><br />";
+            echo '<div id="DebugFooter">';
+            foreach (cmsms()->get_errors() as $error) {
+                echo $error;
+            }
+            echo '</div> <!-- end DebugFooter -->';
+            exit();
+        }
+        else {
+            header("Location: $to");
+            exit();
+        }
     }
-  }
 }
 
 
@@ -150,9 +150,9 @@ function redirect_to_alias($alias)
  */
 function microtime_diff($a, $b)
 {
-  list($a_dec, $a_sec) = explode(" ", $a);
-  list($b_dec, $b_sec) = explode(" ", $b);
-  return $b_sec - $a_sec + $b_dec - $a_dec;
+    list($a_dec, $a_sec) = explode(" ", $a);
+    list($b_dec, $b_sec) = explode(" ", $b);
+    return $b_sec - $a_sec + $b_dec - $a_dec;
 }
 
 
@@ -172,8 +172,8 @@ function microtime_diff($a, $b)
  */
 function cms_join_path()
 {
-  $args = func_get_args();
-  return implode(DIRECTORY_SEPARATOR,$args);
+    $args = func_get_args();
+    return implode(DIRECTORY_SEPARATOR,$args);
 }
 
 
@@ -211,32 +211,6 @@ function cms_htmlentities($val, $param=ENT_QUOTES, $charset="UTF-8", $convert_si
 
   return $val;
 }
-
-
-/**
- * Convert a string into UTF-8 entities.
- *
- * @internal
- * @deprecated
- * @param string Input string
- * @return string
- * Rolf: used in admin/listmodules.php
- */
-function cms_utf8entities($val)
-{
-  if ($val == "") return "";
-  $val = str_replace( "&#032;", " ", $val );
-  $val = str_replace( "&"  , "\u0026" , $val );
-  $val = str_replace( ">"  , "\u003E" , $val );
-  $val = str_replace( "<"  , "\u003C" , $val );
-
-  $val = str_replace( "\"" , "\u0022" , $val );
-  $val = str_replace( "!"  , "\u0021" , $val );
-  $val = str_replace( "'"  , "\u0027" , $val );
-
-  return $val;
-}
-
 
 
 /**
@@ -296,11 +270,11 @@ function debug_bt()
     $bt = array_reverse($bt);
     echo "<pre><dl>\n";
     foreach($bt as $trace) {
-      $file = $trace['file'];
-      $line = $trace['line'];
-      $function = $trace['function'];
-      $args = implode(',', $trace['args']);
-      echo "
+        $file = $trace['file'];
+        $line = $trace['line'];
+        $function = $trace['function'];
+        $args = implode(',', $trace['args']);
+        echo "
         <dt><b>$function</b>($args) </dt>
         <dd>$file on line $line</dd>
 		";
@@ -322,60 +296,60 @@ function debug_bt()
 */
 function debug_display($var, $title="", $echo_to_screen = true, $use_html = true,$showtitle = TRUE)
 {
-  global $starttime;
-  if( !$starttime ) $starttime = microtime();
+    global $starttime;
+    if( !$starttime ) $starttime = microtime();
 
-  ob_start();
+    ob_start();
 
-  if( $showtitle ) {
-    $titleText = "Debug: ";
-    if($title) $titleText = "Debug display of '$title':";
-    $titleText .= '(' . microtime_diff($starttime,microtime()) . ')';
-    if (function_exists('memory_get_usage')) $titleText .= ' - (usage: '.memory_get_usage().')';
+    if( $showtitle ) {
+        $titleText = "Debug: ";
+        if($title) $titleText = "Debug display of '$title':";
+        $titleText .= '(' . microtime_diff($starttime,microtime()) . ')';
+        if (function_exists('memory_get_usage')) $titleText .= ' - (usage: '.memory_get_usage().')';
 
-    $memory_peak = (function_exists('memory_get_peak_usage')?memory_get_peak_usage():'');
-    if( $memory_peak ) $titleText .= ' - (peak: '.$memory_peak.')';
+        $memory_peak = (function_exists('memory_get_peak_usage')?memory_get_peak_usage():'');
+        if( $memory_peak ) $titleText .= ' - (peak: '.$memory_peak.')';
 
-    if ($use_html) {
-      echo "<div><b>$titleText</b>\n";
+        if ($use_html) {
+            echo "<div><b>$titleText</b>\n";
+        }
+        else {
+            echo "$titleText\n";
+        }
     }
-    else {
-      echo "$titleText\n";
-    }
-  }
 
-  if(FALSE == empty($var)) {
-    if ($use_html) echo '<pre>';
-    if(is_array($var)) {
-      echo "Number of elements: " . count($var) . "\n";
-      print_r($var);
+    if(FALSE == empty($var)) {
+        if ($use_html) echo '<pre>';
+        if(is_array($var)) {
+            echo "Number of elements: " . count($var) . "\n";
+            print_r($var);
+        }
+        elseif(is_object($var)) {
+            print_r($var);
+        }
+        elseif(is_string($var)) {
+            if( $use_html ) {
+                print_r(htmlentities(str_replace("\t", '  ', $var)));
+            }
+            else {
+                print_r($var);
+            }
+        }
+        elseif(is_bool($var)) {
+            echo $var === true ? 'true' : 'false';
+        }
+        else {
+            print_r($var);
+        }
+        if ($use_html) echo '</pre>';
     }
-    elseif(is_object($var)) {
-      print_r($var);
-    }
-    elseif(is_string($var)) {
-      if( $use_html ) {
-	print_r(htmlentities(str_replace("\t", '  ', $var)));
-      }
-      else {
-	print_r($var);
-      }
-    }
-    elseif(is_bool($var)) {
-      echo $var === true ? 'true' : 'false';
-    }
-    else {
-      print_r($var);
-    }
-    if ($use_html) echo '</pre>';
-  }
-  if ($use_html) echo "</div>\n";
+    if ($use_html) echo "</div>\n";
 
-  $output = ob_get_contents();
-  ob_end_clean();
+    $output = ob_get_contents();
+    ob_end_clean();
 
-  if($echo_to_screen) echo $output;
-  return $output;
+    if($echo_to_screen) echo $output;
+    return $output;
 }
 
 
@@ -388,7 +362,7 @@ function debug_display($var, $title="", $echo_to_screen = true, $use_html = true
  */
 function debug_output($var, $title="")
 {
-  if(cmsms()->config["debug"] == true) debug_display($var, $title, true);
+    if(cmsms()->config["debug"] == true) debug_display($var, $title, true);
 }
 
 
@@ -426,8 +400,9 @@ function debug_to_log($var, $title='',$filename = '')
  */
 function debug_buffer($var, $title="")
 {
-  $config = cmsms()->GetConfig();
-  if($config["debug"] == true) cmsms()->add_error(debug_display($var, $title, false, true));
+    $gCms = cmsms();
+    $config = $gCms->GetConfig();
+    if($config["debug"] == true) $gCms->add_error(debug_display($var, $title, false, true));
 }
 
 
@@ -442,8 +417,9 @@ function debug_buffer($var, $title="")
  */
 function debug_sql($str, $newline = false)
 {
-  $config = cmsms()->GetConfig();
-  if($config["debug"] == true) cmsms()->add_error(debug_display($str, '', false, true));
+    $gCms = cmsms();
+    $config = $gCms->GetConfig();
+    if($config["debug"] == true) $gCms->add_error(debug_display($str, '', false, true));
 }
 
 
@@ -1101,11 +1077,11 @@ function is_email( $email, $checkDNS=false )
  */
 function get_secure_param()
 {
-  $urlext = '?';
-  $str = strtolower(ini_get('session.use_cookies'));
-  if( $str == '0' || $str == 'off' ) $urlext .= htmlspecialchars(SID).'&';
-  $urlext .= CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
-  return $urlext;
+    $urlext = '?';
+    $str = strtolower(ini_get('session.use_cookies'));
+    if( $str == '0' || $str == 'off' ) $urlext .= htmlspecialchars(SID).'&';
+    $urlext .= CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
+    return $urlext;
 }
 
 

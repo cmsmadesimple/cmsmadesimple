@@ -154,6 +154,7 @@ final class CmsApp {
 	/**
 	 * Retrieve the list of errors
 	 *
+     * @ignore
 	 * @since 1.9
 	 * @internal
 	 * @access private.
@@ -168,6 +169,7 @@ final class CmsApp {
 	/**
 	 * Add an error to the list
 	 *
+     * @ignore
 	 * @since 1.9
 	 * @internal
 	 * @access private
@@ -707,7 +709,7 @@ function &cmsms()
  * @return string
  */
 function cms_db_prefix() {
-  return cmsms()->GetDbPrefix();
+    return cmsms()->GetDbPrefix();
 }
 
 ?>
