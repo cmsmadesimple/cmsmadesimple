@@ -367,9 +367,9 @@ abstract class CmsAdminThemeBase
         $this->_perms['sitePrefPerms'] = check_permission($this->userid, 'Modify Site Preferences') |
             (isset($this->_sectionCount['preferences']) && $this->_sectionCount['preferences'] > 0);
         $this->_perms['adminPerms'] = $this->_perms['sitePrefPerms'] |
-            (isset($this->_sectionCount['admin']) && $this->_sectionCount['admin'] > 0);
+            (isset($this->_sectionCount['siteadmin']) && $this->_sectionCount['siteadmin'] > 0);
         $this->_perms['siteAdminPerms'] = $this->_perms['sitePrefPerms'] |
-			$this->_perms['adminPerms'] | (isset($this->_sectionCount['admin']) && $this->_sectionCount['admin'] > 0);
+			$this->_perms['adminPerms'] | (isset($this->_sectionCount['siteadmin']) && $this->_sectionCount['siteadmin'] > 0);
 
 		// extensions
         $this->_perms['codeBlockPerms'] = check_permission($this->userid, 'Modify User-defined Tags');
