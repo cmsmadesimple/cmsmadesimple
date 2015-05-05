@@ -321,7 +321,7 @@ class News extends CMSModule
       $fn = 'browsecat.tpl';
     }
 
-    $fn = cms_join_path(dirname(__FILE__),'templates',$fn);
+    $fn = cms_join_path(__DIR__,'templates',$fn);
     if( file_exists($fn) ) return @file_get_contents($fn);
   }
 

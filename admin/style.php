@@ -48,12 +48,8 @@ if( is_object($thelang) && $thelang->direction() == 'rtl' ) $style.="-rtl";
 if (isset($_GET['ie'])) $style.="_ie";
 $style .= ".css";
 
-if (file_exists(dirname(__FILE__)."/themes/".$theme."/css/".$style)) {
-    $cms_readfile(dirname(__FILE__)."/themes/".$theme."/css/".$style);
-}
-if (file_exists(dirname(__FILE__)."/themes/".$theme."/extcss/".$style)) {
-    $cms_readfile(dirname(__FILE__)."/themes/".$theme."/extcss/".$style);
-}
+if (file_exists(__DIR__."/themes/".$theme."/css/".$style)) $cms_readfile(__DIR__."/themes/".$theme."/css/".$style);
+if (file_exists(__DIR__."/themes/".$theme."/extcss/".$style)) $cms_readfile(__DIR__."/themes/".$theme."/extcss/".$style);
 
 $allmodules = ModuleOperations::get_instance()->GetLoadedModules();
 if( is_array($allmodules) && count($allmodules) ) {

@@ -80,7 +80,7 @@ class Search extends CMSModule
   public function InitializeFrontend()
   {
     $this->RestrictUnknownParams();
-	
+
     $this->SetParameterType('inline',CLEAN_STRING);
     $this->SetParameterType(CLEAN_REGEXP.'/passthru_.*/',CLEAN_STRING);
     $this->SetParameterType('modules',CLEAN_STRING);
@@ -111,7 +111,7 @@ class Search extends CMSModule
 {if isset($hidden)}{$hidden}{/if}
 {$endform}';
   }
-	
+
   protected function GetResultsHtmlTemplate()
   {
     $text = <<<EOT
@@ -120,10 +120,10 @@ class Search extends CMSModule
 <ul>
   {foreach from=\$results item=entry}
   <li>{\$entry->title} - <a href="{\$entry->url}">{\$entry->urltxt}</a> ({\$entry->weight}%)</li>
-  {* 
+  {*
      You can also instantiate custom behaviour on a module by module basis by looking at
-     the \$entry->module and \$entry->modulerecord fields in \$entry 
-      ie: {if \$entry->module == 'News'}{News action='detail' article_id=\$entry->modulerecord detailpage='News'} 
+     the \$entry->module and \$entry->modulerecord fields in \$entry
+      ie: {if \$entry->module == 'News'}{News action='detail' article_id=\$entry->modulerecord detailpage='News'}
   *}
   {/foreach}
 </ul>
@@ -135,7 +135,7 @@ class Search extends CMSModule
 EOT;
     return $text;
   }
-	
+
   protected function DefaultStopWords()
   {
     return $this->Lang('default_stopwords');
@@ -164,13 +164,13 @@ EOT;
     $this->load_tools();
     return search_DeleteWords($this,$module,$id,$attr);
   }
-	
+
   public function DeleteAllWords($module = 'Search', $id = -1, $attr = '')
   {
     $db = $this->GetDb();
-    $db->Execute('DELETE FROM '.cms_db_prefix().'module_search_index');
-    $db->Execute('DELETE FROM '.cms_db_prefix().'module_search_items');
-		
+    $db->Execute('TRUNCATE '.cms_db_prefix().'module_search_index');
+    $db->Execute('TRUNCATE '.cms_db_prefix().'module_search_items');
+
     @$this->SendEvent('SearchAllItemsDeleted',array($module, $id, $attr));
   }
 

@@ -141,7 +141,7 @@ class OneElevenTheme extends CmsAdminThemeBase {
 	public function do_toppage($section_name) {
 		$smarty = cmsms()->GetSmarty();
 		$otd = $smarty->template_dir;
-		$smarty->template_dir = dirname(__FILE__) . '/templates';
+		$smarty->template_dir = __DIR__ . '/templates';
 		if ($section_name) {
 			$smarty->assign('section_name', $section_name);
 			$smarty->assign('nodes', $this->get_navigation_tree($section_name, -1, FALSE));
@@ -168,7 +168,7 @@ class OneElevenTheme extends CmsAdminThemeBase {
 	  $config = cmsms()->GetConfig();
 	  $smarty = cmsms()->GetSmarty();
 
-	  $smarty->template_dir = dirname(__FILE__) . '/templates';
+	  $smarty->template_dir = __DIR__ . '/templates';
 	  global $error,$warningLogin,$acceptLogin,$changepwhash;
 	  $fn = $config['admin_path']."/themes/".$this->themeName."/login.php";
 	  include($fn);
@@ -181,7 +181,7 @@ class OneElevenTheme extends CmsAdminThemeBase {
 	public function postprocess($html) {
 		$smarty = cmsms()->GetSmarty();
 		$otd = $smarty->template_dir;
-		$smarty->template_dir = dirname(__FILE__) . '/templates';
+		$smarty->template_dir = __DIR__ . '/templates';
 		$module_help_type = $this->get_value('module_help_type');
 
 		// get a page title
