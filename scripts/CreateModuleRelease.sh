@@ -9,7 +9,7 @@ _pwd=`pwd`
 _name=`basename $_pwd`
 _destdir=${HOME}
 _version=0
-_excludes='*~ #*# .#* .svn CVS *.bak .git* *.tmp .cms_ignore *.swp _internal phpdoc.xml'
+_excludes='*~ #*# .#* .svn CVS *.bak .git* *.tmp .cms_ignore *.swp _internal phpdoc.xml _c1.dat _d1.dat'
 _tmpdir="/tmp/$_this.$$"
 _yes=0
 _svn=1
@@ -17,6 +17,8 @@ _tag=1
 _doc=1
 _salt=''
 _checksums=1
+_version=''
+_cleanup=1
 
 usage()
 {
@@ -33,6 +35,7 @@ usage()
   echo "  -q|--quiet                 : assume non interactive mode"
   echo "  -s|--svn                   : skip the svn update step"
   echo "  -m|--checksums             : skip the checksum generation step."
+  echo "  -N|--noclean               : skip cleanup."
   echo "  -h|-help|--help            : this text"
   echo
   echo "NOTE: This utility expects the module or the desired export directory"
@@ -119,7 +122,13 @@ while [ $# -gt 0 ]; do
       continue
       ;;
 
-    -m|--checksums)
+    -N|--noclean)
+	_cleanup=0
+	shift
+	continue
+	;;
+
+    -m|--nochecksums)
       _checksums=0
       shift
       continue
@@ -152,14 +161,17 @@ fi
 
 # find the version
 # thanks to _SjG_ the perl regexp expert
-_version2=`cat ${_fn} | perl -0777 -p -e 's/(.*?)function\s+GetVersion\(\)\s*\{\s*return\s*([^;]+)(.*)/$2/s' | cut -d\' -f2 | cut -d\" -f2`
-if [ ${_version2:-notset} = notset ]; then
-  echo "WARNING: could not auto-detect the version from the module.php file"
+_version2=`cat ${_fn} | perl -0777 -p -e 's/(.*?)function\s+GetVersion\(\)\s*\{\s*return\s*([^;]+)(.*)/$2/s' | head -4 | cut -d\' -f2 | cut -d\" -f2`
+_l=${#_version2}
+if [ $_l -gt 20 -o $_l = 0 ]; then
+    _version2=''
+    echo "WARNING: could not auto-detect the version from the module.php file"
+    echo
 fi
 
 #| perl -0777 -p -e 's/(.*?)function\s+GetVersion\(\)\s*\{\s*return\s*([^;]+)(.*)/$2/s' | cut -d\' -f2 | cut -d\" -f2
 # asks for the veersion
-while [ $_version = 0 ]; do
+while [ -z ${_version} ]; do
   echo -n "Please enter a version string like x.xx.x ($_version2): "
   read _v
   if [ ${_v:-notset} = notset ]; then
@@ -292,22 +304,31 @@ if [ $_checksums = 1 ]; then
     # create the archive checksums
     # _c.dat contains checksum values for each individual file
     # _d.dat contains checksum values for the _c.dat file.
-  cd ${_name}
-  find . -name '*php' | grep -v lang > ${_tmpdir}/file.lst
-  while read _line ; do
-    _md5=`md5sum $_line | cut -d" " -f1`
-    _fn=`echo $_line | cut -d/ -f2-`
-    _t=`echo "${_md5}::${_fn}::${_version}" | md5sum | cut -d" " -f1`
-    _t2=`echo "${_t}:${_salt}" | md5sum -b | cut -d" " -f1`
-    echo "${_t}::${_t2}" >> _c.dat
-  done < ${_tmpdir}/file.lst
-  _t3=`md5sum -b _c.dat | cut -d" " -f1`
-  echo "${_salt}::${_t3}" | md5sum -b > _d.dat
-  cd ..
+    _tmpd=`pwd`
+    _salt="$_name::$_version";
+    cd ${_tmpdir}/tmp/${_name}
+    find . -name '*' > ${_tmpdir}/file.lst
+    while read _line ; do
+        if [ -f $_line ]; then
+	    _fn=`echo $_line | cut -d/ -f2-`
+	    _md5=`md5sum $_line | cut -d" " -f1`
+	    _t=`echo "${_salt}::${_fn}" | md5sum | cut -d" " -f1`
+	    _t2=`echo "${_salt}::${_md5}" | md5sum | cut -d" " -f1`
+	    _t3=`echo "${_t}::${_t2}::${_salt}" | md5sum -b | cut -d" " -f1`
+	    echo "${_t}::${_t2}::${_t3}" >> _c1_t.dat
+	fi
+    done < ${_tmpdir}/file.lst
+    cat _c1_t.dat | sort > _c1.dat
+    rm _c1_t.dat
+    _t4=`md5sum -b _c1.dat | cut -d" " -f1`
+    echo "${_salt}::${_t4}" | md5sum -b > _d1.dat
+    cd $_tmpd
 fi
 
 # create the archive.
 tar zcf ${_destname} ${_name}
 
-# and cleanup
-#rm -rf $_tmpdir 2>/dev/null
+if [ $_cleanup = 1 ]; then
+    echo "DEBUG: cleaning up $_tmpdir"
+    rm -rf $_tmpdir 2>/dev/null
+fi
