@@ -1038,7 +1038,7 @@ class ContentOperations
 	{
 		#Change padded numbers back into user-friendly values
 		$tmp = '';
-		$levels = preg_split('/\./', $position);
+        $levels = explode('.',$position);
 
 		foreach ($levels as $onelevel) {
 			$tmp .= ltrim($onelevel, '0') . '.';
@@ -1058,7 +1058,7 @@ class ContentOperations
 	{
 		#Change user-friendly values into padded numbers
 		$tmp = '';
-		$levels = preg_split('/\./', $position);
+        $levels = explode('.',$position);
 
 		foreach ($levels as $onelevel) {
 			$tmp .= str_pad($onelevel, 5, '0', STR_PAD_LEFT) . '.';

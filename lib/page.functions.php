@@ -600,7 +600,7 @@ function get_pageid_or_alias_from_url()
     }
 
     // if no route matched... grab the alias from the last /
-    if( ($pos = strrpos($page,'/')) !== FALSE && $matched == false ) $page = substr($page, $pos + 1);
+    if( $matched == false && ($pos = strrpos($page,'/')) !== FALSE ) $page = substr($page, $pos + 1);
 
     // if there's nothing use the default content.
     if( empty($page) ) $page = $contentops->GetDefaultContent(); // maybe it's the home page.

@@ -187,7 +187,7 @@ class News extends CMSModule
 	}
 
 	$prettyurl = $row['news_url'];
-	if( $row['news_url'] != '' ) {
+	if( $row['news_url'] == '' ) {
 	  $aliased_title = munge_string_to_url($row['news_title']);
 	  $prettyurl = 'news/' . $articleid.'/'.$detailpage."/$aliased_title".$detailtemplate;
 	}

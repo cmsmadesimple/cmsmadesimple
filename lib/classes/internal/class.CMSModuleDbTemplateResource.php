@@ -79,7 +79,7 @@ class CMSModuleFileTemplateResource extends CMS_Fixed_Resource_Custom
     {
         $source = null;
         $mtime = null;
-        $params = preg_split('/;/', $name);
+        $params = explode(';',$name);
         if( count($params) != 2 ) return;
 
         $config = cmsms()->GetConfig();
