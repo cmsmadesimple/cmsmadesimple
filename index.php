@@ -236,11 +236,11 @@ if( $page == __CMS_PREVIEW_PAGE__ && isset($_SESSION['__cms_preview__']) ) unset
 
 $debug = (defined('CMS_DEBUG') && CMS_DEBUG)?TRUE:FALSE;
 if( $debug || (isset($config['show_performance_info']) && ($showtemplate == true)) ) {
-  $endtime = microtime();
   $db = cmsms()->GetDb();
   $memory = (function_exists('memory_get_usage')?memory_get_usage():0);
   $memory = $memory - $orig_memory;
   $memory_peak = (function_exists('memory_get_peak_usage')?memory_get_peak_usage():0);
+  $endtime = microtime();
 
   $txt = microtime_diff($starttime,$endtime).' / '.$db->query_time_total.' / '.(isset($db->query_count)?$db->query_count:'')." / {$memory} / {$memory_peak}";
   debug_display($txt);
