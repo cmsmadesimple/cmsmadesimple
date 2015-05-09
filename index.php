@@ -245,7 +245,6 @@ if( $debug || (isset($config['show_performance_info']) && ($showtemplate == true
   $txt = microtime_diff($starttime,$endtime).' / '.$db->query_time_total.' / '.(isset($db->query_count)?$db->query_count:'')." / {$memory} / {$memory_peak}";
   debug_display($txt);
   $txt = strftime('%x %X').' :: '.$txt;
-  debug_to_log($txt);
 }
 
 if( $debug || is_sitedown() ) {
