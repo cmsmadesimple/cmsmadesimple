@@ -104,6 +104,9 @@ if( cms_to_bool(ini_get('register_globals')) ) {
   array_walk_recursive($_SERVER,$sanitize);
 }
 
+#Grab the current configuration
+$config = cmsms()->GetConfig();
+
 if( isset($CMS_ADMIN_PAGE) ) {
   function cms_admin_sendheaders($content_type = 'text/html',$charset = '')
   {
@@ -139,9 +142,6 @@ if( isset($CMS_ADMIN_PAGE) ) {
   }
 }
 
-
-#Grab the current configuration
-$config = cmsms()->GetConfig();
 
 #Set the timezone
 if( $config['timezone'] != '' ) @date_default_timezone_set(trim($config['timezone']));
