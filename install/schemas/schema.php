@@ -513,7 +513,7 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 	echo ilang('install_creating_table', CmsLayoutTemplateType::TABLENAME, $ado_ret);
 
 	$sqlarray = $dbdict->CreateIndexSQL($db_prefix.'idx_layout_tpl_type_1', $db_prefix.CmsLayoutTemplateType::TABLENAME,
-					    'originator,name');
+                                        'originator,name', array('UNIQUE'));
 	$return = $dbdict->ExecuteSQLArray($sqlarray);
 	$ado_ret = ($return == 2) ? ilang('done') : ilang('failed');
 	echo ilang('install_creating_index', 'idx_layout_tpl_type_1', $ado_ret);
@@ -529,6 +529,10 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 					  $taboptarray);
 	$return = $dbdict->ExecuteSQLArray($sqlarray);
 	echo ilang('install_creating_table', CmsLayoutTemplateCategory::TABLENAME, $ado_ret);
+	$sqlarray = $dbdict->CreateIndexSQL(cms_db_prefix().'idx_layout_tpl_cat_1', cms_db_prefix().CmsLayoutTemplateCategory::TABLENAME,
+                                        'name',array('UNIQUE'));
+	$return = $dbdict->ExecuteSQLArray($sqlarray);
+	echo ilang('install_creating_index', 'idx_layout_tpl_cat_1', $ado_ret);
 
 	$flds = "
          id I KEY AUTO,
@@ -547,7 +551,7 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 	$ado_ret = ($return == 2) ? ilang('done') : ilang('failed');
 	echo ilang('install_creating_table', CmsLayoutTemplate::TABLENAME, $ado_ret);
 
-	$sqlarray = $dbdict->CreateIndexSQL($db_prefix.'idx_layout_tpl_1', $db_prefix.CmsLayoutTemplate::TABLENAME, 'name');
+	$sqlarray = $dbdict->CreateIndexSQL($db_prefix.'idx_layout_tpl_1', $db_prefix.CmsLayoutTemplate::TABLENAME, 'name',array('UNIQUE'));
 	$return = $dbdict->ExecuteSQLArray($sqlarray);
 	$ado_ret = ($return == 2) ? ilang('done') : ilang('failed');
 	echo ilang('install_creating_index', 'idx_layout_tpl_1', $ado_ret);
@@ -570,6 +574,10 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 					  $taboptarray);
 	$return = $dbdict->ExecuteSQLArray($sqlarray);
 	echo ilang('install_creating_table', CmsLayoutStylesheet::TABLENAME, $ado_ret);
+    $sqlarray = $dbdict->CreateIndexSQL(cms_db_prefix().'idx_layout_css_1',cms_db_prefix().CmsLayoutStylesheet::TABLENAME, 'name', array('UNIQUE'));
+	$return = $dbdict->ExecuteSQLArray($sqlarray);
+	$ado_ret = ($return == 2) ? ilang('done') : ilang('failed');
+	echo ilang('install_creating_index', 'idx_layout_css_1', $ado_ret);
 
 	$flds = "
          tpl_id I KEY,
@@ -591,7 +599,12 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
         ";
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix.CmsLayoutCollection::TABLENAME, $flds, $taboptarray);
 	$return = $dbdict->ExecuteSQLArray($sqlarray);
+	$ado_ret = ($return == 2) ? ilang('done') : ilang('failed');
 	echo ilang('install_creating_table', CmsLayoutCollection::TABLENAME, $ado_ret);
+    $sqlarray = $dbdict->CreateIndexSQL(cms_db_prefix().'idx_layout_dsn_1',cms_db_prefix().CmsLayoutCollection::TABLENAME, 'name', array('unique'));
+	$dbdict->ExecuteSQLArray($sqlarray);
+	$ado_ret = ($return == 2) ? ilang('done') : ilang('failed');
+	echo ilang('install_creating_index', 'idx_layout_dsn_1', $ado_ret);
 
 
 	$flds = "
@@ -600,7 +613,12 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
         ";
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix.CmsLayoutCollection::TPLTABLE, $flds, $taboptarray);
 	$return = $dbdict->ExecuteSQLArray($sqlarray);
+	$ado_ret = ($return == 2) ? ilang('done') : ilang('failed');
 	echo ilang('install_creating_table', CmsLayoutCollection::TPLTABLE, $ado_ret);
+	$sqlarray = $dbdict->CreateIndexSQL(cms_db_prefix().'index_dsnassoc1', cms_db_prefix().CmsLayoutCollection::TPLTABLE, 'css_id');
+	$return = $dbdict->ExecuteSQLArray($sqlarray);
+	$ado_ret = ($return == 2) ? ilang('done') : ilang('failed');
+	echo ilang('install_creating_index', 'index_dsnassoc1', $ado_ret);
 
 	$flds = "
          design_id I KEY NOTNULL,
@@ -609,6 +627,7 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
         ";
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix.CmsLayoutCollection::CSSTABLE, $flds, $taboptarray);
 	$return = $dbdict->ExecuteSQLArray($sqlarray);
+	$ado_ret = ($return == 2) ? ilang('done') : ilang('failed');
 	echo ilang('install_creating_table', CmsLayoutCollection::CSSTABLE, $ado_ret);
 
 	$flds = "

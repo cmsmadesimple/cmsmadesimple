@@ -46,19 +46,15 @@ function __cms_load($filename)
  */
 function cms_autoloader($classname)
 {
-  //if( $classname != 'Smarty_CMS' && $classname != 'Smarty_Parser' && startswith($classname,'Smarty') ) return;
-
-  $config = cmsms()->GetConfig();
-
   // standard classes
-  $fn = cms_join_path($config['root_path'],'lib','classes',"class.{$classname}.php");
+  $fn = cms_join_path(CMS_ROOT_PATH,'lib','classes',"class.{$classname}.php");
   if( file_exists($fn) ) {
     __cms_load($fn);
     return;
   }
 
   // standard internal classes
-  $fn = cms_join_path($config['root_path'],'lib','classes','internal',"class.{$classname}.php");
+  $fn = cms_join_path(CMS_ROOT_PATH,'lib','classes','internal',"class.{$classname}.php");
   if( file_exists($fn) ) {
     __cms_load($fn);
     return;
@@ -66,7 +62,7 @@ function cms_autoloader($classname)
 
   // lowercase classes
   $lowercase = strtolower($classname);
-  $fn = cms_join_path($config['root_path'],'lib','classes',"class.{$lowercase}.inc.php");
+  $fn = cms_join_path(CMS_ROOT_PATH,'lib','classes',"class.{$lowercase}.inc.php");
   if( file_exists($fn) && $classname != 'Content' ) {
     __cms_load($fn);
     return;
@@ -74,34 +70,34 @@ function cms_autoloader($classname)
 
   // lowercase internal classes
   $lowercase = strtolower($classname);
-  $fn = cms_join_path($config['root_path'],'lib','classes','internal',"class.{$lowercase}.inc.php");
+  $fn = cms_join_path(CMS_ROOT_PATH,'lib','classes','internal',"class.{$lowercase}.inc.php");
   if( file_exists($fn) && $classname != 'Content' ) {
     __cms_load($fn);
     return;
   }
 
   // standard interfaces
-  $fn = cms_join_path($config['root_path'],'lib','classes',"interface.{$classname}.php");
+  $fn = cms_join_path(CMS_ROOT_PATH,'lib','classes',"interface.{$classname}.php");
   if( file_exists($fn) ) {
     __cms_load($fn);
     return;
   }
 
   // internal interfaces
-  $fn = cms_join_path($config['root_path'],'lib','classes','internal',"interface.{$classname}.php");
+  $fn = cms_join_path(CMS_ROOT_PATH,'lib','classes','internal',"interface.{$classname}.php");
   if( file_exists($fn) ) {
     __cms_load($fn);
     return;
   }
 
   // standard content types
-  $fn = cms_join_path($config['root_path'],'lib','classes','contenttypes',"{$classname}.inc.php");
+  $fn = cms_join_path(CMS_ROOT_PATH,'lib','classes','contenttypes',"{$classname}.inc.php");
   if( file_exists($fn) ) {
     __cms_load($fn);
     return;
   }
 
-  $fn = $config['root_path']."/modules/{$classname}/{$classname}.module.php";
+  $fn = CMS_ROOT_PATH."/modules/{$classname}/{$classname}.module.php";
   if( file_exists($fn) ) {
     __cms_load($fn);
     return;
@@ -109,13 +105,13 @@ function cms_autoloader($classname)
 
   $list = ModuleOperations::get_instance()->GetLoadedModules();
   if( is_array($list) && count($list) ) {
-    foreach( array_keys($list) as $modname ) {
-      $fn = $config['root_path']."/modules/$modname/lib/class.$classname.php";
-      if( file_exists( $fn ) ) {
-	__cms_load($fn);
-	return;
+      foreach( array_keys($list) as $modname ) {
+          $fn = CMS_ROOT_PATH."/modules/$modname/lib/class.$classname.php";
+          if( file_exists( $fn ) ) {
+              __cms_load($fn);
+              return;
+          }
       }
-    }
   }
   // module classes
 }

@@ -1097,7 +1097,7 @@ abstract class ContentBase
 		$this->_props = array();
 		$db = cmsms()->GetDb();
 		$query = 'SELECT * FROM '.cms_db_prefix().'content_props WHERE content_id = ?';
-		$dbr = $db->GetArray($query,array($this->mId));
+		$dbr = $db->GetArray($query,array((int)$this->mId));
 
 		foreach( $dbr as $row ) {
 			$this->_props[$row['prop_name']] = $row['content'];

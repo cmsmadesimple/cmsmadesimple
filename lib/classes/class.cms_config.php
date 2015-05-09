@@ -204,6 +204,8 @@ final class cms_config implements ArrayAccess
 		  define('TMP_CACHE_LOCATION',self::$_instance['tmp_cache_location']);
 		  define('PUBLIC_CACHE_LOCATION',self::$_instance['public_cache_location']);
 		  define('TMP_TEMPLATES_C_LOCATION',self::$_instance['tmp_templates_c_location']);
+          define('CMS_DEBUG',self::$_instance['debug']);
+          define('CMS_ROOT_PATH',self::$_instance['root_path']);
 	  }
     }
 

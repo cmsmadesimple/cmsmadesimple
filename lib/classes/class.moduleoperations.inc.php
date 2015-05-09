@@ -485,13 +485,12 @@ final class ModuleOperations
                     }
                 }
 
-                $query = 'SELECT * FROM '.cms_db_prefix().'module_deps ORDER BY parent_module';
-                $tmp2 = $db->GetArray($query);
-                if( is_array($tmp2) && count($tmp2) ) {
-                    foreach( $tmp2 as $rec ) {
-                        if( isset($this->_moduleinfo[$rec['parent_module']]) ) {
-                            $minfo =& $this->_moduleinfo[$rec['parent_module']];
-                            $minfo['dependants'][] = $rec['child_module'];
+                $all_deps = $this->_get_all_module_dependencies();
+                if( count($all_deps) ) {
+                    foreach( $all_deps as $mname => $deps ) {
+                        if( is_array($deps) && count($deps) && isset($this->_moduleinfo[$mname]) ) {
+                            $minfo =& $this->_moduleinfo[$mname];
+                            $minfo['dependants'] = array_keys($deps);
                         }
                     }
                 }
@@ -1013,20 +1012,11 @@ final class ModuleOperations
         return module_meta::get_instance()->module_list_by_capability($capability,$args);
     }
 
-
     /**
-     * A function to return a list of dependencies from a module.
-     * this method works by reading the dependencies from the database.
-     *
-     * @since 1.11.8
-     * @author Robert Campbell
-     * @param string $module_name The module name
-     * @return array Hash of module names and array of dependencies
+     * @ignore
      */
-    public function get_module_dependencies($module_name)
+    private function _get_all_module_dependencies()
     {
-        if( !$module_name ) return;
-
         if( !is_array($this->_moduledeps) ) {
             $fn = TMP_CACHE_LOCATION.'/f'.md5(__FILE__.'deps').'.dat';
             if( file_exists($fn) ) {
@@ -1036,7 +1026,7 @@ final class ModuleOperations
             else {
                 $this->_moduledeps = array();
                 $db = cmsms()->GetDb();
-                $query = 'SELECT parent_module,child_module,minimum_version FROM '.cms_db_prefix().'module_deps';
+                $query = 'SELECT parent_module,child_module,minimum_version FROM '.cms_db_prefix().'module_deps ORDER BY parent_module';
                 $dbr = $db->GetArray($query);
                 if( is_array($dbr) && count($dbr) ) {
                     foreach( $dbr as $row ) {
@@ -1047,8 +1037,24 @@ final class ModuleOperations
                 file_put_contents($fn,serialize($this->_moduledeps));
             }
         }
+        return $this->_moduledeps;
+    }
 
-        if( isset($this->_moduledeps[$module_name]) ) return $this->_moduledeps[$module_name];
+    /**
+     * A function to return a list of dependencies from a module.
+     * this method works by reading the dependencies from the database.
+     *
+     * @since 1.11.8
+     * @author Robert Campbell
+     * @param string $module_name The module name
+     * @return array Hash of module names and dependencies
+     */
+    public function get_module_dependencies($module_name)
+    {
+        if( !$module_name ) return;
+
+        $deps = $this->_get_all_module_dependencies();
+        if( isset($deps[$module_name]) ) return $deps[$module_name];
     }
 
     /**

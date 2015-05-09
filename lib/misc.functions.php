@@ -79,6 +79,8 @@ function redirect($to)
 
     session_write_close();
 
+    // this could be used in install/upgrade routines where config is not set yet
+    // so cannot use constants.
     $debug = false;
     if( class_exists('CmsApp') ) {
         $config = cmsms()->GetConfig();
@@ -400,9 +402,8 @@ function debug_to_log($var, $title='',$filename = '')
  */
 function debug_buffer($var, $title="")
 {
-    $gCms = cmsms();
-    $config = $gCms->GetConfig();
-    if($config["debug"] == true) $gCms->add_error(debug_display($var, $title, false, true));
+    if( !defined('CMS_DEBUG') || CMS_DEBUG == 0 ) return;
+    cmsms()->add_error(debug_display($var, $title, false, true));
 }
 
 
@@ -417,9 +418,8 @@ function debug_buffer($var, $title="")
  */
 function debug_sql($str, $newline = false)
 {
-    $gCms = cmsms();
-    $config = $gCms->GetConfig();
-    if($config["debug"] == true) $gCms->add_error(debug_display($str, '', false, true));
+    if( !defined('CMS_DEBUG') || CMS_DEBUG == 0 ) return;
+    cmsms()->add_error(debug_display($str, '', false, true));
 }
 
 
@@ -877,11 +877,11 @@ function can_admin_upload()
   # can upload files.
   # if safe mode is off, then we just have to check the permissions.
   $config = cmsms()->GetConfig();
-  $file_index = $config['root_path'].DIRECTORY_SEPARATOR.'index.php';
-  $file_moduleinterface = $config['root_path'].DIRECTORY_SEPARATOR.
+  $file_index = CMS_ROOT_PATH.DIRECTORY_SEPARATOR.'index.php';
+  $file_moduleinterface = CMS_ROOT_PATH.DIRECTORY_SEPARATOR.
     $config['admin_dir'].DIRECTORY_SEPARATOR.'moduleinterface.php';
   $dir_uploads = $config['uploads_path'];
-  $dir_modules = $config['root_path'].DIRECTORY_SEPARATOR.'modules';
+  $dir_modules = CMS_ROOT_PATH.DIRECTORY_SEPARATOR.'modules';
 
   $stat_index = @stat($file_index);
   $stat_moduleinterface = @stat($file_moduleinterface);

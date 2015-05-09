@@ -54,7 +54,8 @@ try {
   $menu_template_type->save();
 }
 catch( CmsException $e ) {
-  // log it
+    // log it
+    debug_display($e); die();
   debug_to_log(__FILE__.':'.__LINE__.' '.$e->GetMessage());
   audit('',$this->GetName(),'Installation Error: '.$e->GetMessage());
   return $e->GetMessage();

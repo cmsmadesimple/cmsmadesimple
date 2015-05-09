@@ -200,7 +200,7 @@ if( !isset($DONT_LOAD_SMARTY) ) {
   debug_buffer('Initialize Smarty');
   $smarty = cmsms()->GetSmarty();
   debug_buffer('Done Initialiing Smarty');
-  if ($config['debug'] == true) {
+  if( defined('CMS_DEBUG') && CMS_DEBUG ) {
     $smarty->debugging = true;
     $smarty->error_reporting = 'E_ALL';
   }

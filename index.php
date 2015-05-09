@@ -234,7 +234,8 @@ echo $html;
 
 if( $page == __CMS_PREVIEW_PAGE__ && isset($_SESSION['__cms_preview__']) ) unset($_SESSION['__cms_preview__']);
 
-if( $config['debug'] == TRUE || (isset($config['show_performance_info']) && ($showtemplate == true)) ) {
+$debug = (defined('CMS_DEBUG') && CMS_DEBUG)?TRUE:FALSE;
+if( $debug || (isset($config['show_performance_info']) && ($showtemplate == true)) ) {
   $endtime = microtime();
   $db = cmsms()->GetDb();
   $memory = (function_exists('memory_get_usage')?memory_get_usage():0);
@@ -247,11 +248,11 @@ if( $config['debug'] == TRUE || (isset($config['show_performance_info']) && ($sh
   debug_to_log($txt);
 }
 
-if( is_sitedown() || $config['debug'] == true) {
+if( $debug || is_sitedown() ) {
   $smarty->clear_compiled_tpl();
 }
 
-if ( !is_sitedown() && $config["debug"] == true) {
+if ( $debug && !is_sitedown() ) {
   $arr = cmsms()->get_errors();
   foreach ($arr as $error) {
     echo $error;
