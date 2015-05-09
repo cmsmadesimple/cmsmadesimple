@@ -17,7 +17,8 @@ else {
 $cache_id = '|sr'.md5(serialize($params));
 $compile_id = '';
 
-if( !$smarty->isCached($this->GetDatabaseResource($template),$cache_id,$compile_id) ) {
+$tpl_ob = $smarty->CreateTemplate($this->GetTemplateResource($template),$cache_id,$compile_id);
+if( !$tpl_ob->IsCached() ) {
   $inline = false;
   if( isset( $params['inline'] ) ) {
     $txt = strtolower(trim($params['inline']));
@@ -47,18 +48,18 @@ if( !$smarty->isCached($this->GetDatabaseResource($template),$cache_id,$compile_
   // Variable named hogan in honor of moorezilla's Rhodesian Ridgeback :) http://forum.cmsmadesimple.org/index.php/topic,9580.0.html
   $submittext = (isset($params['submit'])) ? $params['submit'] : $this->Lang('searchsubmit');
   $searchtext = (isset($params['searchtext'])) ? $params['searchtext'] : $this->GetPreference('searchtext','');
-  $smarty->assign('search_actionid',$id);
-  $smarty->assign('searchtext',$searchtext);
-  $smarty->assign('startform', $this->CreateFormStart($id, 'dosearch', $returnid, $is_method, '', $inline ));
-  $smarty->assign('label', '<label for="'.$id.'searchinput">'.$this->Lang('search').'</label>');
-  $smarty->assign('searchprompt',$this->Lang('search'));
-  //$smarty->assign('inputbox', $this->CreateInputText($id, 'searchinput', $searchtext, 20, 50, $hogan));
-  //$smarty->assign('submitbutton', $this->CreateInputSubmit($id, 'submit', $submittext));
-  $smarty->assign('submittext', $submittext);
+  $tpl_ob->assign('search_actionid',$id);
+  $tpl_ob->assign('searchtext',$searchtext);
+  $tpl_ob->assign('startform', $this->CreateFormStart($id, 'dosearch', $returnid, $is_method, '', $inline ));
+  $tpl_ob->assign('label', '<label for="'.$id.'searchinput">'.$this->Lang('search').'</label>');
+  $tpl_ob->assign('searchprompt',$this->Lang('search'));
+  //$tpl_ob->assign('inputbox', $this->CreateInputText($id, 'searchinput', $searchtext, 20, 50, $hogan));
+  //$tpl_ob->assign('submitbutton', $this->CreateInputSubmit($id, 'submit', $submittext));
+  $tpl_ob->assign('submittext', $submittext);
 
   // only here for backwards compatibility.
   $hogan = "onfocus=\"if(this.value==this.defaultValue) this.value='';\""." onblur=\"if(this.value=='') this.value=this.defaultValue;\"";
-  $smarty->assign('hogan',$hogan);
+  $tpl_ob->assign('hogan',$hogan);
 
   $hidden = '';
   if( $origreturnid != $returnid ) {
@@ -77,9 +78,10 @@ if( !$smarty->isCached($this->GetDatabaseResource($template),$cache_id,$compile_
   }
 
   if( $hidden != '' ) {
-    $smarty->assign('hidden',$hidden);
+    $tpl_ob->assign('hidden',$hidden);
   }
-  $smarty->assign('endform', $this->CreateFormEnd());
+  $tpl_ob->assign('endform', $this->CreateFormEnd());
 }
-echo $smarty->fetch($this->GetDatabaseResource($template),$cache_id,$compile_id);
+$tpl_ob->display();
+
 ?>

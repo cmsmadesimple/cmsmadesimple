@@ -5,18 +5,18 @@ class SearchItemCollection
 {
   var $_ary;
   var $maxweight;
-  
+
   function SearchItemCollection()
   {
     $this->_ary = array();
     $this->maxweight = 1;
   }
-  
+
   function AddItem($title, $url, $txt, $weight = 1, $module = '', $modulerecord = 0)
   {
     if( $txt == '' ) $txt = $url;
     $exists = false;
-    
+
     foreach ($this->_ary as $oneitem) {
       if ($url == $oneitem->url) {
 	$exists = true;
@@ -38,7 +38,7 @@ class SearchItemCollection
       $this->_ary[] = $newitem;
     }
   }
-	
+
   function CalculateWeights()
   {
     reset($this->_ary);
@@ -54,10 +54,26 @@ class SearchItemCollection
       if ($a->urltxt == $b->urltxt) return 0;
       return ($a->urltxt < $b->urltxt ? -1 : 1);
     };
-		
+
     usort($this->_ary, $fn);
   }
+} // end of class
+
+/////////////////////////////////////////////////////////////////////////////////////
+
+$template = null;
+if( isset($params['resulttemplate']) ) {
+  $template = trim($params['resulttemplate']);
 }
+else {
+  $tpl = CmsLayoutTemplate::load_dflt_by_type('Search::searchresults');
+  if( !is_object($tpl) ) {
+    audit('',$this->GetName(),'No default summary template found');
+    return;
+  }
+  $template = $tpl->get_name();
+}
+$tpl_ob = $smarty->CreateTemplate($this->GetTemplateResource($template));
 
 if ($params['searchinput'] != '') {
   // Fix to prevent XSS like behaviour. See: http://www.securityfocus.com/archive/1/455417/30/0/threaded
@@ -67,7 +83,7 @@ if ($params['searchinput'] != '') {
 
   $searchstarttime = microtime();
 
-  $smarty->assign('phrase', $params['searchinput']);
+  $tpl_ob->assign('phrase', $params['searchinput']);
   $words = array_values($this->StemPhrase($params['searchinput']));
   $nb_words = count($words);
   $max_weight = 1;
@@ -179,17 +195,17 @@ if ($params['searchinput'] != '') {
 	      if( $name != '' ) $parms[$name] = $value;
 	    }
 	  }
-	  $searchresult = $moduleobj->SearchResultWithParams( $thepageid, $result->fields['content_id'], 
+	  $searchresult = $moduleobj->SearchResultWithParams( $thepageid, $result->fields['content_id'],
 							      $result->fields['extra_attr'], $parms);
 	  if (count($searchresult) == 3) {
-	    $col->AddItem($searchresult[0], $searchresult[2], $searchresult[1], 
+	    $col->AddItem($searchresult[0], $searchresult[2], $searchresult[1],
 			  $result->fields['total_weight'], $modulename, $result->fields['content_id']);
 	  }
 	}
 	else if (method_exists($moduleobj, 'SearchResult')) {
 	  $searchresult = $moduleobj->SearchResult( $thepageid, $result->fields['content_id'], $result->fields['extra_attr']);
 	  if (count($searchresult) == 3) {
-	    $col->AddItem($searchresult[0], $searchresult[2], $searchresult[1], 
+	    $col->AddItem($searchresult[0], $searchresult[2], $searchresult[1],
 			  $result->fields['total_weight'], $modulename, $result->fields['content_id']);
 	  }
 	}
@@ -220,40 +236,27 @@ if ($params['searchinput'] != '') {
     $newresults[] = $result;
   }
   $col->_ary = $newresults;
-	
+
   @$this->SendEvent('SearchCompleted', array(&$params['searchinput'], &$col->_ary));
 
-  $smarty->assign('searchwords',$words);
-  $smarty->assign('results', $col->_ary);
-  $smarty->assign('itemcount', count($col->_ary));
+  $tpl_ob->assign('searchwords',$words);
+  $tpl_ob->assign('results', $col->_ary);
+  $tpl_ob->assign('itemcount', count($col->_ary));
 
   $searchendtime = microtime();
-  $smarty->assign('timetook', ($searchendtime - $searchstarttime));
+  $tpl_ob->assign('timetook', ($searchendtime - $searchstarttime));
 }
 else {
-  $smarty->assign('phrase', '');
-  $smarty->assign('results', 0);
-  $smarty->assign('itemcount', 0);
-  $smarty->assign('timetook', 0);
+  $tpl_ob->assign('phrase', '');
+  $tpl_ob->assign('results', 0);
+  $tpl_ob->assign('itemcount', 0);
+  $tpl_ob->assign('timetook', 0);
 }
 
-$smarty->assign('use_or_text',$this->Lang('use_or'));
-$smarty->assign('searchresultsfor', $this->Lang('searchresultsfor'));
-$smarty->assign('noresultsfound', $this->Lang('noresultsfound'));
-$smarty->assign('timetaken', $this->Lang('timetaken'));
-
-$template = null;
-if( isset($params['resulttemplate']) ) {
-  $template = trim($params['resulttemplate']);
-}
-else {
-  $tpl = CmsLayoutTemplate::load_dflt_by_type('Search::searchresults');
-  if( !is_object($tpl) ) {
-    audit('',$this->GetName(),'No default summary template found');
-    return;
-  }
-  $template = $tpl->get_name();
-}
-echo $smarty->fetch($this->GetDatabaseResource($template));
+$tpl_ob->assign('use_or_text',$this->Lang('use_or'));
+$tpl_ob->assign('searchresultsfor', $this->Lang('searchresultsfor'));
+$tpl_ob->assign('noresultsfound', $this->Lang('noresultsfound'));
+$tpl_ob->assign('timetaken', $this->Lang('timetaken'));
+$tpl_ob->display();
 
 ?>
