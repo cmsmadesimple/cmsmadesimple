@@ -45,6 +45,16 @@
 <fieldset>
 <legend>{$title_fesubmit_settings}:</legend>
 	<div class="pageoverflow">
+		<p class="pagetext"><label for="fld9_a">{$mod->Lang('prompt_allow_fesubmit')}:</label></p>
+		<p class="pageinput">
+                  <select id="fld9_a" name="{$actionid}allow_fesubmit">
+                  {cms_yesno selected=$allow_fesubmit}
+                  </select>
+		  <br/>{$mod->Lang('info_allow_fesubmit')}
+                </p>
+	</div>
+
+	<div class="pageoverflow">
 		<p class="pagetext"><label for="fld9">{$title_fesubmit_status}:</label></p>
 		<p class="pageinput">
                   <select id="fld9" name="{$actionid}fesubmit_status">

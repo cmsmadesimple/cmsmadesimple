@@ -15,7 +15,8 @@ else {
 }
 
 $cache_id = '|ns'.md5(serialize($params));
-if( !$smarty->isCached($this->GetDatabaseResource($template),$cache_id) ) {
+$tpl_ob = $smarty->CreateTemplate($this->GetTemplateResource($template),$cache_id);
+if( !$tpl_ob->IsCached() ) {
   $detailpage = '';
   $tmp = $this->GetPreference('detail_returnid',-1);
   if( $tmp > 0 ) $detailpage = $tmp;
@@ -206,34 +207,34 @@ if( !$smarty->isCached($this->GetDatabaseResource($template),$cache_id) ) {
 
   // Assign some pagination variables to smarty
   if( $pagenumber == 1 ) {
-    $smarty->assign('prevpage',$this->Lang('prevpage'));
-    $smarty->assign('firstpage',$this->Lang('firstpage'));
+    $tpl_ob->assign('prevpage',$this->Lang('prevpage'));
+    $tpl_ob->assign('firstpage',$this->Lang('firstpage'));
   }
   else {
     $params['pagenumber']=$pagenumber-1;
-    $smarty->assign('prevpage',$this->CreateFrontendLink($id,$returnid,'default',$this->Lang('prevpage'),$params));
-    $smarty->assign('prevurl',$this->CreateFrontendLink($id,$returnid,'default','',$params, '', true));
+    $tpl_ob->assign('prevpage',$this->CreateFrontendLink($id,$returnid,'default',$this->Lang('prevpage'),$params));
+    $tpl_ob->assign('prevurl',$this->CreateFrontendLink($id,$returnid,'default','',$params, '', true));
     $params['pagenumber']=1;
-    $smarty->assign('firstpage',$this->CreateFrontendLink($id,$returnid,'default',$this->Lang('firstpage'),$params));
-    $smarty->assign('firsturl',$this->CreateFrontendLink($id,$returnid,'default','',$params, '', true));
+    $tpl_ob->assign('firstpage',$this->CreateFrontendLink($id,$returnid,'default',$this->Lang('firstpage'),$params));
+    $tpl_ob->assign('firsturl',$this->CreateFrontendLink($id,$returnid,'default','',$params, '', true));
   }
 
   if( $pagenumber >= $pagecount ) {
-    $smarty->assign('nextpage',$this->Lang('nextpage'));
-    $smarty->assign('lastpage',$this->Lang('lastpage'));
+    $tpl_ob->assign('nextpage',$this->Lang('nextpage'));
+    $tpl_ob->assign('lastpage',$this->Lang('lastpage'));
   }
   else {
     $params['pagenumber']=$pagenumber+1;
-    $smarty->assign('nextpage',$this->CreateFrontendLink($id,$returnid,'default',$this->Lang('nextpage'),$params));
-    $smarty->assign('nexturl',$this->CreateFrontendLink($id,$returnid,'default','',$params, '', true));
+    $tpl_ob->assign('nextpage',$this->CreateFrontendLink($id,$returnid,'default',$this->Lang('nextpage'),$params));
+    $tpl_ob->assign('nexturl',$this->CreateFrontendLink($id,$returnid,'default','',$params, '', true));
     $params['pagenumber']=$pagecount;
-    $smarty->assign('lastpage',$this->CreateFrontendLink($id,$returnid,'default',$this->Lang('lastpage'),$params));
-    $smarty->assign('lasturl',$this->CreateFrontendLink($id,$returnid,'default','',$params, '', true));
+    $tpl_ob->assign('lastpage',$this->CreateFrontendLink($id,$returnid,'default',$this->Lang('lastpage'),$params));
+    $tpl_ob->assign('lasturl',$this->CreateFrontendLink($id,$returnid,'default','',$params, '', true));
   }
-  $smarty->assign('pagenumber',$pagenumber);
-  $smarty->assign('pagecount',$pagecount);
-  $smarty->assign('oftext',$this->Lang('prompt_of'));
-  $smarty->assign('pagetext',$this->Lang('prompt_page'));
+  $tpl_ob->assign('pagenumber',$pagenumber);
+  $tpl_ob->assign('pagecount',$pagecount);
+  $tpl_ob->assign('oftext',$this->Lang('prompt_of'));
+  $tpl_ob->assign('pagetext',$this->Lang('prompt_page'));
 
   $dbresult = '';
   if( $pagelimit < 100000 || $startelement > 0 ) {
@@ -324,15 +325,15 @@ if( !$smarty->isCached($this->GetDatabaseResource($template),$cache_id) ) {
     $dbresult->MoveNext();
   }
 
-  $smarty->assign('itemcount', count($entryarray));
-  $smarty->assign('items', $entryarray);
-  $smarty->assign('category_label', $this->Lang('category_label'));
-  $smarty->assign('author_label', $this->Lang('author_label'));
+  $tpl_ob->assign('itemcount', count($entryarray));
+  $tpl_ob->assign('items', $entryarray);
+  $tpl_ob->assign('category_label', $this->Lang('category_label'));
+  $tpl_ob->assign('author_label', $this->Lang('author_label'));
 
   foreach( $params as $key => $value ) {
     if( $key == 'mact' || $key == 'action' ) continue;
 
-    $smarty->assign('param_'.$key,$value);
+    $tpl_ob->assign('param_'.$key,$value);
   }
 
   $catName = '';
@@ -342,15 +343,16 @@ if( !$smarty->isCached($this->GetDatabaseResource($template),$cache_id) ) {
   else if (isset($params['category_id'])) {
     $catName = $db->GetOne('SELECT news_category_name FROM '.cms_db_prefix() . 'module_news_categories where news_category_id=?',array($params['category_id']));
   }
-  $smarty->assign('category_name',$catName);
+  $tpl_ob->assign('category_name',$catName);
 
   unset($params['pagenumber']);
   $items = news_ops::get_categories($id,$params,$returnid);
-  $smarty->assign('count', count($items));
-  $smarty->assign('cats', $items);
+  $tpl_ob->assign('count', count($items));
+  $tpl_ob->assign('cats', $items);
 }
 
+
 // Display template
-echo $smarty->fetch($this->GetDatabaseResource($template),$cache_id);
+$tpl_ob->display();
 
 ?>

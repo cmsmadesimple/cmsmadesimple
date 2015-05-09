@@ -42,10 +42,10 @@ $db->CreateSequence(cms_db_prefix()."module_news_seq");
 
 $flds = "
 	news_category_id I KEY,
-	news_category_name C(255),
+	news_category_name C(255) NOTNULL,
 	parent_id I,
 	hierarchy C(255),
-        item_order I,
+    item_order I,
 	long_name X,
 	create_date T,
 	modified_date T
@@ -258,14 +258,14 @@ catch( CmsException $e ) {
 try {
   $fn = dirname(__FILE__).DIRECTORY_SEPARATOR.'templates'.DIRECTORY_SEPARATOR.'browsecat.tpl';
   if( file_exists( $fn ) ) {
-    $template = @file_get_contents($fn);
-    $tpl = new CmsLayoutTemplate();
-    $tpl->set_name('News Browse Category Sample');
-    $tpl->set_owner($uid);
-    $tpl->set_content($template);
-    $tpl->set_type($browsecat_template_type);
-    $tpl->set_type_dflt(TRUE);
-    $tpl->save();
+      $template = @file_get_contents($fn);
+      $tpl = new CmsLayoutTemplate();
+      $tpl->set_name('News Browse Category Sample');
+      $tpl->set_owner($uid);
+      $tpl->set_content($template);
+      $tpl->set_type($browsecat_template_type);
+      $tpl->set_type_dflt(TRUE);
+      $tpl->save();
   }
 }
 catch( CmsException $e ) {

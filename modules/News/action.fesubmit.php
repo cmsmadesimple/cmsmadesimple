@@ -1,7 +1,19 @@
 <?php
 // calguy1000: this action is officially deprecated.
 if (!isset($gCms)) exit;
+if( !$this->GetPreference('allow_fesubmit',0) ) return;
 
+function __newsCleanHTML($html)
+{
+    $i = 0;
+    for( $i = 0; $i < 10; $i++ ) {
+        $old = $html;
+        $html = preg_replace('/<script\b[^>]*>(.*?)<\/script>/is', "", $html);
+        $html = str_replace('script:','___',$html);
+        if( strcmp($old,$html) == 0 ) break;
+    }
+    return $html;
+}
 
 $title = '';
 $extra = '';
@@ -16,6 +28,19 @@ $userid = get_userid(false);
 $category_id = $this->GetPreference('default_category', '');
 $do_send_email = false;
 $do_redirect = false;
+
+$template = null;
+if (isset($params['formtemplate'])) {
+  $template = trim($params['formtemplate']);
+}
+else {
+  $tpl = CmsLayoutTemplate::load_dflt_by_type('News::form');
+  if( !is_object($tpl) ) {
+    audit('',$this->GetName(),'No default form template found');
+    return;
+  }
+  $template = $tpl->get_name();
+}
 
 // handle the page to go to after submit.
 $dest_page = $returnid;
@@ -48,119 +73,121 @@ if (isset($params['category'])) {
   if( $tmp ) $category_id = $tmp;
 }
 
+$tpl_ob = $smarty->CreateTemplate($this->GetTemplateResource($template));
+$tpl_ob->assign('mod',$this);
+$tpl_ob->assign('actionid',$id);
 if( isset( $params['submit'] ) ) {
-  try {
-    if( isset($params['content']) ) $content = cms_html_entity_decode(trim($params['content']));
-    if( isset($params['summary']) ) $summary = cms_html_entity_decode(trim($params['summary']));
-    if( isset($params['extra']) ) $extra = cms_html_entity_decode(trim($params['extra']));
-    if( isset($params['category_id']) ) $category_id = (int)$params['category_id'];
-    if( isset($params['input_category'])) $category_id = (int)$params['input_category'];
+    try {
+        if( isset($params['title'] ) ) $title = strip_tags(cms_html_entity_decode(trim($params['title'])));
+        if( isset($params['content']) ) $content = __newsCleanHTML(cms_html_entity_decode(trim($params['content'])));
+        if( isset($params['summary']) ) $summary = __newsCleanHTML(cms_html_entity_decode(trim($params['summary'])));
+        if( isset($params['extra']) ) $extra = strip_tags(cms_html_entity_decode(trim($params['extra'])));
+        if( isset($params['category_id']) ) $category_id = (int)$params['category_id'];
+        if( isset($params['input_category'])) $category_id = (int)$params['input_category'];
 
-    if (isset($params['startdate_Month'])) {
-      $startdate = mktime($params['startdate_Hour'], $params['startdate_Minute'], $params['startdate_Second'],
-			  $params['startdate_Month'], $params['startdate_Day'], $params['startdate_Year']);
-    }
+        if (isset($params['startdate_Month'])) {
+            $startdate = mktime((int)$params['startdate_Hour'], (int)$params['startdate_Minute'], (int)$params['startdate_Second'],
+                                (int)$params['startdate_Month'], (int)$params['startdate_Day'], (int)$params['startdate_Year']);
+        }
 
-    if (isset($params['enddate_Month'])) {
-      $enddate = mktime($params['enddate_Hour'], $params['enddate_Minute'], $params['enddate_Second'],
-			$params['enddate_Month'], $params['enddate_Day'], $params['enddate_Year']);
-    }
+        if (isset($params['enddate_Month'])) {
+            $enddate = mktime((int)$params['enddate_Hour'], (int)$params['enddate_Minute'], (int)$params['enddate_Second'],
+                              (int)$params['enddate_Month'], (int)$params['enddate_Day'], (int)$params['enddate_Year']);
+        }
 
-    if( $startdate > $enddate ) throw new CmsException($this->Lang('startdatetoolate'));
+        if( $startdate > $enddate ) throw new CmsException($this->Lang('startdatetoolate'));
+        if( $title == '' ) throw new CmsException($this->Lang('notitlegiven'));
+        if( $content == '' ) throw new CmsException($this->Lang('nocontentgiven'));
 
-    if( isset($params['title'] ) ) $title = strip_tags(cms_html_entity_decode(trim($params['title'])));
-    if( $title == '' ) throw new CmsException($this->Lang('notitlegiven'));
-    if( $content == '' ) throw new CmsException($this->Lang('nocontentgiven'));
+        // generate a new article id
+        $articleid = $db->GenID(cms_db_prefix()."module_news_seq");
 
-    // generate a new article id
-    $articleid = $db->GenID(cms_db_prefix()."module_news_seq");
+        // test file upload custom fields
+        $qu = "SELECT id,name,type FROM ".cms_db_prefix()."module_news_fielddefs WHERE type='file'";
+        $fields = $db->GetArray($qu);
 
-    // test file upload custom fields
-    $qu = "SELECT id,name,type FROM ".cms_db_prefix()."module_news_fielddefs WHERE type='file'";
-    $fields = $db->GetArray($qu);
+        foreach( $fields as $onefield ) {
+            $elem = $id.'news_customfield_'.$onefield['id'];
+            if( isset($_FILES[$elem]) && $_FILES[$elem]['name'] != '') {
+                if( $_FILES[$elem]['error'] == 0 && $_FILES[$elem]['tmp_name'] != '' ) {
+                    $error = '';
+                    $value = news_admin_ops::handle_upload($articleid,$elem,$error);
+                    if( $value === FALSE ) throw new CmsException($error);
+                    $params['news_customfield_'.$onefield['id']] = $value;
+                }
+                else {
+                    // error with upload
+                    // abort the whole thing
+                    throw new CmsException($this->Lang('error_upload'));
+                }
+            }
+        }
 
-    foreach( $fields as $onefield ) {
-      $elem = $id.'news_customfield_'.$onefield['id'];
-      if( isset($_FILES[$elem]) && $_FILES[$elem]['name'] != '') {
-	if( $_FILES[$elem]['error'] == 0 && $_FILES[$elem]['tmp_name'] != '' ) {
-	  $error = '';
-	  $value = news_admin_ops::handle_upload($articleid,$elem,$error);
-	  if( $value === FALSE ) throw new CmsException($error);
-	  $params['news_customfield_'.$onefield['id']] = $value;
-	}
-	else {
-	  // error with upload
-	  // abort the whole thing
-	  throw new CmsException($this->Lang('error_upload'));
-	}
-      }
-    }
-
-    // and generate the insert query
-    // note: there's no option for fesubmit wether it's searchable or not.
-    $query = 'INSERT INTO '.cms_db_prefix().'module_news
+        // and generate the insert query
+        // note: there's no option for fesubmit wether it's searchable or not.
+        $query = 'INSERT INTO '.cms_db_prefix().'module_news
               (news_id, news_category_id, news_title, news_data, summary,
                news_extra, status, news_date, start_time, end_time, create_date,
                modified_date,author_id,searchable)
                VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
-    $dbr = $db->Execute($query,
-			array($articleid, $category_id, $title,
-			      $content, $summary, $extra, $status,
-			      trim($db->DBTimeStamp($startdate), "'"),
-			      trim($db->DBTimeStamp($startdate), "'"),
-			      trim($db->DBTimeStamp($enddate), "'"),
-			      trim($db->DBTimeStamp(time()), "'"),
-			      trim($db->DBTimeStamp(time()), "'"),
-			      $userid,1));
+        $dbr = $db->Execute($query,
+                            array($articleid, $category_id, $title,
+                                  $content, $summary, $extra, $status,
+                                  trim($db->DBTimeStamp($startdate), "'"),
+                                  trim($db->DBTimeStamp($startdate), "'"),
+                                  trim($db->DBTimeStamp($enddate), "'"),
+                                  trim($db->DBTimeStamp(time()), "'"),
+                                  trim($db->DBTimeStamp(time()), "'"),
+                                  $userid,1));
 
-    if( $dbr ) {
-      // handle the custom fields
-      $now = $db->DbTimeStamp(time());
-      $query = 'INSERT INTO '.cms_db_prefix()."module_news_fieldvals (news_id, fielddef_id, value, create_date, modified_date)
+        if( $dbr ) {
+            // handle the custom fields
+            $now = $db->DbTimeStamp(time());
+            $query = 'INSERT INTO '.cms_db_prefix()."module_news_fieldvals (news_id, fielddef_id, value, create_date, modified_date)
                 VALUES (?,?,?,$now,$now)";
-      foreach( $params as $key => $value ) {
-	$value = trim($value);
-	if( empty($value) ) continue;
-	if( preg_match('/^news_customfield_/',$key) ) {
-	  $field_id = intval(substr($key,17));
-	  $db->Execute($query,array($articleid,$field_id,$value));
-	}
-      }
+            foreach( $params as $key => $value ) {
+                $value = trim($value);
+                if( empty($value) ) continue;
+                if( preg_match('/^news_customfield_/',$key) ) {
+                    $field_id = intval(substr($key,17));
+                    $db->Execute($query,array($articleid,$field_id,$value));
+                }
+            }
 
-      // should've checked those errors too, but eh, I'm up for the odds.
+            // should've checked those errors too, but eh, I'm up for the odds.
 
-      //Update search index
-      $module = cms_utils::get_search_module();
-      if (is_object($module)) {
-	$module->AddWords($this->GetName(), $articleid, 'article', $content . ' ' . $summary . ' ' . $title . ' ' . $title, $enddate );
-      }
+            //Update search index
+            $module = cms_utils::get_search_module();
+            if (is_object($module)) {
+                $module->AddWords($this->GetName(), $articleid, 'article', $content . ' ' . $summary . ' ' . $title . ' ' . $title, $enddate );
+            }
 
-      // Send an email
-      $do_send_email = true;
-      $do_redirect = true;
+            // Send an email
+            $do_send_email = true;
+            $do_redirect = true;
 
-      // send an event
-      @$this->SendEvent('NewsArticleAdded',
-			array('news_id' => $articleid,
-			      'category_id' => $category_id,
-			      'title' => $title,
-			      'content' => $content,
-			      'summary' => $summary,
-			      'status' => $status,
-			      'start_time' => $startdate,
-			      'end_time' => $enddate,
-			      'useexp' => 1));
+            // send an event
+            @$this->SendEvent('NewsArticleAdded',
+                              array('news_id' => $articleid,
+                                    'category_id' => $category_id,
+                                    'title' => $title,
+                                    'content' => $content,
+                                    'summary' => $summary,
+                                    'status' => $status,
+                                    'start_time' => $startdate,
+                                    'end_time' => $enddate,
+                                    'useexp' => 1));
 
-      // put mention into the admin log
-      audit('', 'News Frontend Submit', 'Article added');
+            // put mention into the admin log
+            audit('', 'News Frontend Submit', 'Article added');
 
-      // and we're done
-      $smarty->assign('message',$this->Lang('articleadded'));
+            // and we're done
+            $tpl_ob->assign('message',$this->Lang('articleadded'));
+        }
     }
-  }
-  catch( Exception $e ) {
-    $smarty->assign('error',$error);
-  }
+    catch( Exception $e ) {
+        $tpl_ob->assign('error',$error);
+    }
 }
 
 
@@ -169,22 +196,21 @@ $categorylist = array();
 $query = "SELECT * FROM ".cms_db_prefix()."module_news_categories ORDER BY hierarchy";
 $dbresult = $db->Execute($query);
 while ($dbresult && $row = $dbresult->FetchRow()) {
-  $categorylist[$row['long_name']] = $row['news_category_id'];
+    $categorylist[$row['news_category_id']] = $row['long_name'];
 }
 
 // Display template
-$smarty->assign('category_id',$category_id);
-$smarty->assign('title',$title);
-$smarty->assign('categorylist',$categorylist);
-$smarty->assign('extra',$extra);
-$smarty->assign('content',$content);
-$smarty->assign('summary',$summary);
-$smarty->assign('hide_summary_field',$this->GetPreference('hide_summary_field','0'));
-$smarty->assign('allow_summary_wysiwyg',$this->GetPreference('allow_summary_wysiwyg',1));
-$smarty->assign('postdate', $postdate);
-$smarty->assign('startdate', $startdate);
-$smarty->assign('enddate', $enddate);
-$smarty->assign('status',$this->CreateInputHidden($id,'status',$status));
+$tpl_ob->assign('category_id',$category_id);
+$tpl_ob->assign('title',$title);
+$tpl_ob->assign('categorylist',$categorylist);
+$tpl_ob->assign('extra',$extra);
+$tpl_ob->assign('content',$content);
+$tpl_ob->assign('summary',$summary);
+$tpl_ob->assign('hide_summary_field',$this->GetPreference('hide_summary_field','0'));
+$tpl_ob->assign('allow_summary_wysiwyg',$this->GetPreference('allow_summary_wysiwyg',1));
+$tpl_ob->assign('startdate', $startdate);
+$tpl_ob->assign('enddate', $enddate);
+$tpl_ob->assign('status',$this->CreateInputHidden($id,'status',$status));
 
 $query = 'SELECT * FROM '.cms_db_prefix().'module_news_fielddefs WHERE public = 1 ORDER BY item_order';
 $dbr = $db->Execute($query);
@@ -199,38 +225,38 @@ while( $dbr && ($row = $dbr->FetchRow()) ) {
   $key = str_replace(' ','_',strtolower($row['name']));
   $customfieldsbyname[$key] = $obj;
 }
-if( count($customfields) ) $smarty->assign('customfields',$customfieldsbyname);
+if( count($customfields) ) $tpl_ob->assign('customfields',$customfieldsbyname);
 
-$template = null;
-if (isset($params['formtemplate'])) {
-  $template = trim($params['formtemplate']);
-}
-else {
-  $tpl = CmsLayoutTemplate::load_dflt_by_type('News::form');
-  if( !is_object($tpl) ) {
-    audit('',$this->GetName(),'No default form template found');
-    return;
-  }
-  $template = $tpl->get_name();
-}
-echo $smarty->fetch($this->GetDatabaseResource($template));
+$tpl_ob->display();
 
 if( $do_send_email == true ) {
+
+    $tpl_ob2 = $smarty->CreateTemplate($this->GetDatabaseResource('email_template'));
+    $tmp_vars = $tpl_ob->get_template_vars();
+    foreach( $tmp_vars as $key => $val ) {
+        $tpl_ob2->assign($key,$val);
+    }
+    $tmp_vars2 = $tpl_ob2->get_template_vars();
+
     // this needs to be done after the form is generated
     // because we use some of the same smarty variables
     $cmsmailer = new cms_mailer;
     if( $cmsmailer ) {
         $addy = trim($this->GetPreference('formsubmit_emailaddress'));
         if( $addy != '' ) {
-            if( $title != '' ) $smarty->assign('title',$title);
-            if( $summary != '' ) $smarty->assign('summary',$summary);
-            if( $content != '' ) $smarty->assign('content',$content);
+            $tpl_ob2->assign('startdate',$startdate);
+            $tpl_ob2->assign('enddate',$enddate);
+            $tpl_ob2->assign('ipaddress',\cms_utils::get_real_ip());
+            $tpl_ob2->assign('status',$status);
+            if( $title != '' ) $tpl_ob2->assign('title',$title);
+            if( $summary != '' ) $tpl_ob2->assign('summary',$summary);
+            if( $content != '' ) $tpl_ob2->assign('content',$content);
 
             $cmsmailer->AddAddress( $addy );
             $cmsmailer->SetSubject( $this->GetPreference('email_subject',$this->Lang('subject_newnews')));
             $cmsmailer->IsHTML( false );
 
-            $body = $this->ProcessTemplateFromDatabase('email_template');
+            $body = $tpl_ob2->fetch();
             $cmsmailer->SetBody( $body );
             $cmsmailer->Send();
         }

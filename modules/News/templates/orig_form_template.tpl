@@ -57,8 +57,8 @@
 		<p class="col4">{$mod->Lang('enddate')}:</p>
 		<p class="col8">
 			{$tmp=$actionid|cat:'enddate_'}
-			{html_select_date prefix=$enddateprefix time=$enddate end_year="+15"}
-			{html_select_time prefix=$enddateprefix time=$enddate}
+			{html_select_date prefix=$tmp time=$enddate end_year="+15"}
+			{html_select_time prefix=$tmp time=$enddate}
 		</p>
 	</div>
 	{if isset($customfields)}
@@ -76,6 +76,7 @@
 			{cms_textarea id=$tmp1 name=$tmp2 enablewysiwyg=true}
 		{elseif $onefield->type == 'textbox'}
 			<input id="news_fld_{$field->id}" type="text"" name="{$actionid}news_customfield_{$field->id}" maxlength="{$field->max_length}"/>
+                {/if}
 		</p>
 	      </div>
 	   {/foreach}
@@ -84,7 +85,7 @@
 		<p class="col4">&nbsp;</p>
 		<p class="col8">
 			<input type="submit" name="{$actionid}submit" value="{$mod->Lang('submit')}"/>
-			<a href="{cms_selflink href=$page_alias}">{$mod->Lang('prompt_returntopage')}</a>
+			<a href="{cms_selflink href=$page_alias}">{$mod->Lang('prompt_redirecttocontent')}</a>
 		</p>
 	</div>
 {form_end}

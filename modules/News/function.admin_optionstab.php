@@ -72,6 +72,7 @@ $smarty->assign('title_submission_settings',$this->Lang('title_submission_settin
 $smarty->assign('title_fesubmit_settings',$this->Lang('title_fesubmit_settings'));
 $smarty->assign('title_notification_settings',$this->Lang('title_notification_settings'));
 $smarty->assign('title_detail_settings',$this->Lang('title_detail_settings'));
+$smarty->assign('allow_fesubmit',$this->GetPreference('allow_fesubmit',0));
 
 // Display the populated template
 echo $this->ProcessTemplate ('adminprefs.tpl');
