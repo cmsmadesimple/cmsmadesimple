@@ -28,7 +28,7 @@
  *
  * Modified by Tapio Löytty <stikki@cmsmadesimple.org>
  */
-function smarty_cms_modifier_cms_date_format($string, $format = '', $default_date = '')
+function smarty_modifier_cms_date_format($string, $format = '', $default_date = '')
 {
 	if($format == '') {
 
