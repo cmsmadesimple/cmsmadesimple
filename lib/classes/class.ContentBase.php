@@ -1369,7 +1369,6 @@ abstract class ContentBase
 	{
 		$gCms = CmsApp::get_instance();
 		$db = $gCms->GetDb();
-		$config = $gCms->GetConfig();
 		$result = false;
 
 		// Figure out the item_order (if necessary)
@@ -1462,7 +1461,6 @@ abstract class ContentBase
         # :TODO: Figure out proper item_order
 		$gCms = CmsApp::get_instance();
 		$db = $gCms->GetDb();
-		$config = $gCms->GetConfig();
 
 		$result = false;
 
@@ -1658,7 +1656,6 @@ abstract class ContentBase
 	function Delete()
 	{
 		$gCms = CmsApp::get_instance();
-		$config = $gCms->GetConfig();
 		Events::SendEvent('Core', 'ContentDeletePre', array('content' => &$this));
 		$db = $gCms->GetDb();
 		$result = false;
@@ -2086,9 +2083,8 @@ abstract class ContentBase
 	static public function GetAdditionalEditorOptions()
 	{
 		$opts = array();
-		$gCms = CmsApp::get_instance();
-		$userops = $gCms->GetUserOperations();
-		$groupops = $gCms->GetGroupOperations();
+		$userops = UserOperations::get_instance();
+		$groupops = GroupOperations::get_instance();
 		$allusers = $userops->LoadUsers();
 		$allgroups = $groupops->LoadGroups();
 		foreach ($allusers as $oneuser) {
@@ -2375,7 +2371,7 @@ abstract class ContentBase
 
 		case 'owner':
 			$showadmin = ContentOperations::get_instance()->CheckPageOwnership(get_userid(), $this->Id());
-			$userops = $gCms->GetUserOperations();
+			$userops = UserOperations::get_instance();
 			if (!$adding && (check_permission(get_userid(),'Manage All Content') || $showadmin) ) {
 				$help = '&nbsp;'.cms_admin_utils::get_help_tag('core','help_content_owner',lang('help_title_content_owner'));
 				return array('<label for="owner">'.lang('owner').':</label>'.$help, $userops->GenerateDropdown($this->Owner()));

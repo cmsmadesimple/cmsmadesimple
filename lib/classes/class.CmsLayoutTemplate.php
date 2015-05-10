@@ -380,7 +380,7 @@ class CmsLayoutTemplate
 		}
 		else if( is_string($a) ) {
 			// load the user by name.
-			$ops = CmsApp::get_instance()->GetUserOperations();
+			$ops = UserOperations::get_instance();
 			$ob = $ops->LoadUserByUsername($a);
 			if( is_object($a) && is_a($a,'User') ) $n = $a->id;
 		}
@@ -440,7 +440,7 @@ class CmsLayoutTemplate
 	{
 		if( (int)$a > 0 ) return $a;
 		if( is_string($a) ) {
-			$ops = CmsApp::get_instance()->GetUserOperations();
+			$ops = UserOperations::get_instance();
 			$ob = $ops->LoadUserByUsername($a);
 			if( is_object($a) && is_a($a,'User') ) return $a->id;
 		}
