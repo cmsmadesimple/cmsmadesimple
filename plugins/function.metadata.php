@@ -19,25 +19,26 @@
 function smarty_function_metadata($params, &$template)
 {
 	$smarty = $template->smarty;
-	$config = cmsms()->GetConfig();
-	$content_obj = cmsms()->get_content_object();
+    $gCms = CmsApp::get_instance();
+	$config = $gCms->GetConfig();
+	$content_obj = $gCms->get_content_object();
 
 	$result = '';
 
 	$showbase = true;
 
-	# Show a base tag unless showbase is false in config.php
-	# It really can't hinder, only help
+	// Show a base tag unless showbase is false in config.php
+    // It really can't hinder, only help
 	if( isset($config['showbase']))  $showbase = $config['showbase'];
 
-    # But allow a parameter to override it
+    // But allow a parameter to override it
 	if (isset($params['showbase']))	{
 		if ($params['showbase'] == 'false')	$showbase = false;
 	}
 
 	if ($showbase)	{
-        $base = $config['root_url'];
-        if( cmsms()->is_https_request() ) $base = $config['ssl_url'];
+        $base = CMS_ROOT_URL;
+        if( $gCms->is_https_request() ) $base = $config['ssl_url'];
 		$result .= "\n<base href=\"".$base."/\" />\n";
 	}
 

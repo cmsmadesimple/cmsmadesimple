@@ -23,7 +23,8 @@ function smarty_cms_function_cms_stylesheet($params, &$template)
 	#---------------------------------------------
 
 	$smarty = $template->smarty;
-	$config = cmsms()->GetConfig();
+    $gCms = CmsApp::get_instance();
+	$config = $gCms->GetConfig();
 
 	global $CMS_LOGIN_PAGE;
 	global $CMS_STYLESHEET;
@@ -55,7 +56,7 @@ function smarty_cms_function_cms_stylesheet($params, &$template)
 	else if (isset($params['designid']) && $params['designid']!='') {
 		$design_id = (int)$params['designid'];
 	} else {
-        $content_obj = cmsms()->get_content_object();
+        $content_obj = $gCms->get_content_object();
 		if( !is_object($content_obj) ) return;
 		$design_id = (int) $content_obj->GetPropertyValue('design_id');
 		$use_https = (int) $content_obj->Secure();
@@ -64,7 +65,7 @@ function smarty_cms_function_cms_stylesheet($params, &$template)
     // @todo: change this stuff to just use // instead of protocol specific URL.
 	if( isset($params['auto_https']) && $params['auto_https'] == 0 ) $auto_https = 0;
 	if( isset($params['https']) ) $use_https = cms_to_bool($params['https']);
-	if( $auto_https && cmsms()->is_https_request() ) $use_https = 1;
+	if( $auto_https && $gCms->is_https_request() ) $use_https = 1;
 
 	if($use_https && isset($config['ssl_url'])) $root_url = $config['ssl_css_url'];
 	if( isset($params['nocombine']) ) $combine_stylesheets = !cms_to_bool($params['nocombine']);

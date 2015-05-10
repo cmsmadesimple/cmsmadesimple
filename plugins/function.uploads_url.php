@@ -19,15 +19,15 @@
 function smarty_function_uploads_url($params, &$template)
 {
 	$smarty = $template->smarty;
-	$config = cmsms()->GetConfig();
-	
-	if( isset($params['assign']) )
-	{
-		$smarty->assign(trim($params['assign']),$config->smart_uploads_url());
+	$config = CmsApp::get_instance()->GetConfig();
+
+    $out = $config->smart_uploads_url();
+	if( isset($params['assign']) ) {
+		$smarty->assign(trim($params['assign']),$out);
 		return;
 	}
-	
-	return $config->smart_uploads_url();
+
+	return $out;
 }
 
 function smarty_cms_about_function_uploads_url() {

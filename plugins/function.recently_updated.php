@@ -19,30 +19,18 @@
 function smarty_function_recently_updated($params, &$template)
 {
 	$smarty = $template->smarty;
-	if(empty($params['number'])) {
-		$number = 10;
-	}
-	else {
-		$number = $params['number'];
-	}
-    
-	if(empty($params['leadin'])) {
-		$leadin = "Modified: ";
-	}
-	else {
-		$leadin = $params['leadin'];
-	}
-    
-	if(empty($params['showtitle'])) {
-		$showtitle='true';
-	}
-	else {
-		$showtitle = $params['showtitle'];
-	}    
-    
-	$dateformat = isset($params['dateformat']) ? $params['dateformat'] : "d.m.y h:m" ;    
-	$css_class = isset($params['css_class']) ? $params['css_class'] : "" ;    
-    
+    $number = 10;
+	if(!empty($params['number'])) $number = min(100,max(1,(int) $params['number']));
+
+    $leadin = "Modified: ";
+	if(!empty($params['leadin'])) $leadin = $params['leadin'];
+
+    $showtitle='true';
+	if(!empty($params['showtitle'])) $showtitle = $params['showtitle'];
+
+	$dateformat = isset($params['dateformat']) ? $params['dateformat'] : "d.m.y h:m" ;
+	$css_class = isset($params['css_class']) ? $params['css_class'] : "" ;
+
 	if (isset($params['css_class'])) {
 		$output = '<div class="'.$css_class.'"><ul>';
 	}
@@ -50,26 +38,26 @@ function smarty_function_recently_updated($params, &$template)
 		$output = '<ul>';
 	}
 
-	$hm = cmsms()->GetHierarchyManager();
-	$db = cmsms()->GetDb();
- 
+    $gCms = CmsApp::get_instance();
+	$hm = $gCms->GetHierarchyManager();
+	$db = $gCms->GetDb();
+
 	// Get list of most recently updated pages excluding the home page
 	$q = "SELECT * FROM ".cms_db_prefix()."content WHERE (type='content' OR type='link')
-        AND default_content != 1 AND active = 1 AND show_in_menu = 1 
+        AND default_content != 1 AND active = 1 AND show_in_menu = 1
         ORDER BY modified_date DESC LIMIT ".((int)$number);
 	$dbresult = $db->Execute( $q );
-	if( !$dbresult ) 
-	{
+	if( !$dbresult ) {
+        // @todo: throw an exception here
 		echo 'DB error: '. $db->ErrorMsg()."<br/>";
 	}
-	while ($dbresult && $updated_page = $dbresult->FetchRow()) 
+	while ($dbresult && $updated_page = $dbresult->FetchRow())
 	{
 		$curnode = $hm->getNodeById($updated_page['content_id']);
 		$curcontent = $curnode->GetContent();
 		$output .= '<li>';
 		$output .= '<a href="'.$curcontent->GetURL().'">'.$updated_page['content_name'].'</a>';
-		if ((FALSE == empty($updated_page['titleattribute'])) && ($showtitle=='true'))
-		{
+		if ((FALSE == empty($updated_page['titleattribute'])) && ($showtitle=='true')) {
 			$output .= '<br />';
 			$output .= $updated_page['titleattribute'];
 		}
@@ -80,12 +68,9 @@ function smarty_function_recently_updated($params, &$template)
 	}
 
 	$output .= '</ul>';
-	if (isset($params['css_class'])) 
-	{
-		$output .= '</div>';
-	}
-	if( isset($params['assign']) )
-	{
+	if (isset($params['css_class'])) $output .= '</div>';
+
+	if( isset($params['assign']) ) {
 		$smarty->assign(trim($params['assign']),$output);
 		return;
 	}

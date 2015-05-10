@@ -19,24 +19,19 @@
 function smarty_function_description($params, &$template)
 {
 	$smarty = $template->smarty;
-	$content_obj = cmsms()->variables['content_obj'];
-	$config = cmsms()->config;
-	if (!is_object($content_obj) || $content_obj->Id() == -1)
-	{
+    $gCms = CmsApp::get_instance();
+    $content_obj = $gCms->get_content_object();
+
+	if (!is_object($content_obj) || $content_obj->Id() == -1) {
 		// We've a custom error message...  set a message
 		$out="404 Error";
 	}
 	else {
 		$result = $content_obj->TitleAttribute();
-		if (!(isset($config["use_smarty_php_tags"]) && $config["use_smarty_php_tags"] == true))
-		{
-			$result = preg_replace("/\{\/?php\}/", "", $result);
-		}
-		$out=$result;
+        $out = preg_replace("/\{\/?php\}/", "", $result);
 	}
 
-	if( isset($params['assign']) )
-	{
+	if( isset($params['assign']) ) {
 		$smarty->assign(trim($params['assign']),$out);
 		return;
 	}

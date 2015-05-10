@@ -19,26 +19,19 @@
 function smarty_function_title($params, &$template)
 {
 	$smarty = $template->smarty;
-	$contentobj = cmsms()->get_content_object();
-	$config = cmsms()->GetConfig();
+	$contentobj = CmsApp::get_instance()->get_content_object();
 	$result = '';
-	
-	if (!is_object($contentobj))
-	{
-		#We've a custom error message...  set a current timestamp
+
+	if (!is_object($contentobj)) {
+		// We've a custom error message...  set a current timestamp
 		$result = "404 Error";
 	}
-	else
-	{
+    else {
 		$result = cms_htmlentities($contentobj->Name());
-		if (!(isset($config["use_smarty_php_tags"]) && $config["use_smarty_php_tags"] == true))
-		{
-			$result = preg_replace("/\{\/?php\}/", "", $result);
-		}
+        $result = preg_replace("/\{\/?php\}/", "", $result);
 	}
 
-	if( isset($params['assign']) )
-	{
+	if( isset($params['assign']) ) {
 	    $smarty->assign(trim($params['assign']),$result);
 	    return;
     }

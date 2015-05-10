@@ -19,25 +19,16 @@
 function smarty_function_created_date($params, &$template)
 {
 	$smarty = $template->smarty;
+    $content_obj = CmsApp::get_instance()->get_content_object();
 
-	$content_obj = cmsms()->variables['content_obj'];
+    $format = "%x %X";
+	if(!empty($params['format'])) $format = $params['format'];
 
-	if(empty($params['format']))
-	{
-		$format = "%x %X";
-	}
-	else
-	{
-		$format = $params['format'];
-	}
-
-	if (is_object($content_obj) && $content_obj->GetCreationDate() > -1)
-	{
+	if (is_object($content_obj) && $content_obj->GetCreationDate() > -1) {
 		$time = $content_obj->GetCreationDate();
 		$str = cms_htmlentities(strftime($format, $time));;
 
-		if( isset($params['assign']) )
-	    {
+		if( isset($params['assign']) ) {
 			$smarty->assign(trim($params['assign']),$str);
 			return;
 	    }

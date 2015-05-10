@@ -19,16 +19,11 @@
 function smarty_function_modified_date($params, &$template)
 {
 	$smarty = $template->smarty;
-	$content_obj = cmsms()->get_content_object();
+	$content_obj = CmsApp::get_instance()->get_content_object();
 
-	if(empty($params['format'])) {
-		$format = "%x %X";
-	}
-	else {
-		$format = $params['format'];
-	}
-
-	if (is_object($content_obj) && $content_obj->GetModifiedDate() && $content_obj->GetModifiedDate() > -1)	{
+    $format = "%x %X";
+	if(!empty($params['format'])) $format = $params['format'];
+	if (is_object($content_obj) && $content_obj->GetModifiedDate() > -1) {
 		$time = $content_obj->GetModifiedDate();
 		$str = cms_htmlentities(strftime($format, $time));
 

@@ -19,13 +19,13 @@
 function smarty_function_image($params, &$template)
 {
 	$smarty = $template->smarty;
-
+    $gCms = CmsApp::get_instance();
 	$text = '';
 	$imgstart = '<img src=';
 	$imgend = '/>';
 	if( !empty($params['src'] ) ) {
-		$text = $imgstart .= '"'.cmsms()->config['image_uploads_url'].'/'.$params['src'].'"';
-		$size = @getimagesize(cmsms()->config['image_uploads_path'].'/'.$params['src']);
+		$text = $imgstart .= '"'.$gCms->config['image_uploads_url'].'/'.$params['src'].'"';
+		$size = @getimagesize($gCms->config['image_uploads_path'].'/'.$params['src']);
 
         if( !empty($params['width'] ) ) {
             $text .= ' width="'.$params['width'].'"';

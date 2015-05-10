@@ -19,6 +19,7 @@
 function smarty_cms_function_form_start($params, &$template)
 {
     $smarty = $template->smarty;
+    $gCms = CmsApp::get_instance();
     $tagparms = array();
     $mactparms = array();
     $tmp = $smarty->get_template_vars('actionparams');
@@ -30,7 +31,7 @@ function smarty_cms_function_form_start($params, &$template)
     $tagparms['method'] = 'post';
     $tagparms['enctype'] = 'multipart/form-data';
     $tagparms['action'] = 'moduleinterface.php';
-    if( cmsms()->test_state(CmsApp::STATE_ADMIN_PAGE) ) {
+    if( $gCms->test_state(CmsApp::STATE_ADMIN_PAGE) ) {
         // check if it's a module action
         if( $mactparms['module'] ) {
             if( !isset($mactparms['action']) ) $mactparms['action'] = 'defaultadmin';
@@ -38,13 +39,13 @@ function smarty_cms_function_form_start($params, &$template)
             if( !isset($mactparms['id']) ) $mactparms['mid'] = 'm1_';
         }
     }
-    else if( cmsms()->is_frontend_request() ) {
+    else if( $gCms->is_frontend_request() ) {
         if( !isset($mactparms['action']) ) $mactparms['action'] = 'default';
         if( !isset($mactparms['id']) ) $mactparms['mid'] = 'cntnt01';
     }
 
     if( $mactparms['returnid'] != '' ) {
-        $hm = cmsms()->GetHierarchyManager();
+        $hm = $gCms->GetHierarchyManager();
         $node = $hm->sureGetNodeById($mactparms['returnid']);
         if( $node ) {
             $content_obj = $node->getContent();
@@ -74,7 +75,7 @@ function smarty_cms_function_form_start($params, &$template)
         case 'url':
             $key = 'action';
             if( dirname($value) == '.' ) {
-                $config = cmsms()->GetConfig();
+                $config = $gCms->GetConfig();
                 $value = $config['admin_url'].'/'.trim($value);
             }
             $tagparms[$key] = trim($value);

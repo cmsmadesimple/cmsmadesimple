@@ -31,14 +31,10 @@
 function smarty_modifier_cms_date_format($string, $format = '', $default_date = '')
 {
 	if($format == '') {
-
 		$format = get_site_preference('defaultdateformat');
 		if($format == '') $format = '%b %e, %Y';
-
-		if(!cmsms()->is_frontend_request()) {
-
+		if(!CmsApp::get_instance()->is_frontend_request()) {
 			if($uid = get_userid(false)) {
-
 				$tmp = get_preference($uid, 'date_format_string');
 				if($tmp != '') $format = $tmp;
 			}

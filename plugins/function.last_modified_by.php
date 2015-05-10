@@ -16,25 +16,23 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-function smarty_function_last_modified_by($params, &$template) 
+function smarty_function_last_modified_by($params, &$template)
 {
 	$smarty = $template->smarty;
-	$content_obj = cmsms()->variables['content_obj'];
+    $gCms = CmsApp::get_instance();
+    $content_obj = $gCms->get_content_object();
 	$id = "";
- 
-	if (isset($content_obj) && $content_obj->LastModifiedBy() > -1)
-	{
+
+	if (isset($content_obj) && $content_obj->LastModifiedBy() > -1)	{
 		$id = $content_obj->LastModifiedBy();
 	} else {
 		return "";
 	}
 
-	if(empty($params['format']))
-	{
-		$format = "id";
-	} else {
+    $format = "id";
+	if(!empty($params['format']))
 		$format = $params['format'];
-		$userops = cmsms()->GetUserOperations();
+		$userops = UserOperations::get_instance();
 		$thisuser = $userops->LoadUserByID($id);
 	}
 

@@ -38,13 +38,12 @@
 function smarty_function_cms_selflink($params, &$template)
 {
 	$smarty = $template->smarty;
-	$gCms = cmsms();
+	$gCms = CmsApp::get_instance();
 	$url = '';
 	$urlparam = '';
 	$label_side = 'left';
 	$label = '';
 	$urlonly = 0;
-	$contentops = $gCms->GetContentOperations();
 	$manager = $gCms->GetHierarchyManager();
 	$node = null;
 	$dir = null;
@@ -168,6 +167,7 @@ function smarty_function_cms_selflink($params, &$template)
 
 		case 'start':
 			// default home page
+            $contentops = ContentOperations::get_instance();
 			$pageid = $contentops->GetDefaultPageId();
 			break;
 

@@ -19,17 +19,14 @@
 function smarty_function_root_url($params, &$template)
 {
 	$smarty = $template->smarty;
-	$config = cmsms()->GetConfig();
-     
-    $str = $config['root_url'];
+    $str = CMS_ROOT_URL;
 
-	if( !isset($params['autossl']) || $params['autossl'] != 0 )
-	{
+	if( !isset($params['autossl']) || $params['autossl'] != 0 )	{
+        $config = CmsApp::get_instance()->GetConfig();
 		$str = $config->smart_root_url();
 	}
 
-    if( isset($params['assign']) )
-    {
+    if( isset($params['assign']) ) {
 		$smarty->assign(trim($params['assign']),$str);
 		return;
     }

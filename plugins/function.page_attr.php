@@ -22,18 +22,15 @@ function smarty_function_page_attr($params, &$template)
 	$result = '';
 	$key = '';
 
-	if( isset($params['key']) )
-	{
-		$key = $params['key'];
-		$contentops = cmsms()->GetContentOperations();
+	if( isset($params['key']) )	{
+		$key = trim($params['key']);
+		$contentops = ContentOperations::get_instance();
 		$contentobj = $contentops->getContentObject();
-		if( is_object($contentobj) )
-		{
+		if( is_object($contentobj) ) {
 			$result = $contentobj->GetPropertyValue($key);
 			if( $result == -1 ) $result = '';
 		}
-		if( isset($params['assign']) )
-		{
+		if( isset($params['assign']) ) {
 			$smarty->assign($params['assign'],$result);
 			return;
 		}
