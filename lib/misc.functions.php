@@ -42,7 +42,7 @@ function redirect($to)
     $_SERVER['PHP_SELF'] = null;
 
     $schema = 'http';
-    if( cmsms()->is_https_request ) $schema = 'https';
+    if( CmsApp::get_instance()->is_https_request ) $schema = 'https';
 
     $host = $_SERVER['HTTP_HOST'];
     $components = parse_url($to);
@@ -83,7 +83,7 @@ function redirect($to)
     // so cannot use constants.
     $debug = false;
     if( class_exists('CmsApp') ) {
-        $config = cmsms()->GetConfig();
+        $config = CmsApp::get_instance()->GetConfig();
         $debug = $config['debug'];
     }
 
@@ -102,7 +102,7 @@ function redirect($to)
             echo "Debug is on.  Redirecting disabled...  Please click this link to continue.<br />";
             echo "<a accesskey=\"r\" href=\"".$to."\">".$to."</a><br />";
             echo '<div id="DebugFooter">';
-            foreach (cmsms()->get_errors() as $error) {
+            foreach (CmsApp::get_instance()->get_errors() as $error) {
                 echo $error;
             }
             echo '</div> <!-- end DebugFooter -->';
@@ -125,7 +125,7 @@ function redirect($to)
  */
 function redirect_to_alias($alias)
 {
-  $manager = cmsms()->GetHierarchyManager();
+  $manager = CmsApp::get_instance()->GetHierarchyManager();
   $node = $manager->sureGetNodeByAlias($alias);
   if( !$node ) {
 	// put mention into the admin log
@@ -198,7 +198,7 @@ function cms_htmlentities($val, $param=ENT_QUOTES, $charset="UTF-8", $convert_si
   $val = str_replace( "&"            , "&amp;"         , $val );
   $val = str_replace( "<!--"         , "&#60;&#33;--"  , $val );
   $val = str_replace( "-->"          , "--&#62;"       , $val );
-  $val = preg_replace( "/<script/i"  , "&#60;script"   , $val );
+  $val = str_ireplace( "<script"     , "&#60;script"   , $val );
   $val = str_replace( ">"            , "&gt;"          , $val );
   $val = str_replace( "<"            , "&lt;"          , $val );
   $val = str_replace( "\""           , "&quot;"        , $val );
@@ -223,7 +223,7 @@ function cms_htmlentities($val, $param=ENT_QUOTES, $charset="UTF-8", $convert_si
  */
 function debug_bt_to_log()
 {
-    if( cmsms()->config['debug_to_log'] || (function_exists('check_login') && check_login(TRUE)) ) {
+    if( CmsApp::get_instance()->config['debug_to_log'] || (function_exists('check_login') && check_login(TRUE)) ) {
         $bt=debug_backtrace();
         $file = $bt[0]['file'];
         $line = $bt[0]['line'];
@@ -364,7 +364,7 @@ function debug_display($var, $title="", $echo_to_screen = true, $use_html = true
  */
 function debug_output($var, $title="")
 {
-    if(cmsms()->config["debug"] == true) debug_display($var, $title, true);
+    if(CmsApp::get_instance()->config["debug"] == true) debug_display($var, $title, true);
 }
 
 
@@ -379,7 +379,7 @@ function debug_output($var, $title="")
  */
 function debug_to_log($var, $title='',$filename = '')
 {
-    if( cmsms()->config['debug_to_log'] || (function_exists('check_login') && check_login(TRUE)) ) {
+    if( CmsApp::get_instance()->config['debug_to_log'] || (function_exists('check_login') && check_login(TRUE)) ) {
         if( $filename == '' ) {
             $filename = TMP_CACHE_LOCATION . '/debug.log';
             $x = @filemtime($filename);
@@ -395,7 +395,7 @@ function debug_to_log($var, $title='',$filename = '')
 
 
 /**
- * Display $var nicely to the cmsms()->errors array if $config['debug'] is set.
+ * Display $var nicely to the CmsApp::get_instance()->errors array if $config['debug'] is set.
  *
  * @param mixed $var
  * @param string $title
@@ -403,7 +403,7 @@ function debug_to_log($var, $title='',$filename = '')
 function debug_buffer($var, $title="")
 {
     if( !defined('CMS_DEBUG') || CMS_DEBUG == 0 ) return;
-    cmsms()->add_error(debug_display($var, $title, false, true));
+    CmsApp::get_instance()->add_error(debug_display($var, $title, false, true));
 }
 
 
@@ -419,7 +419,7 @@ function debug_buffer($var, $title="")
 function debug_sql($str, $newline = false)
 {
     if( !defined('CMS_DEBUG') || CMS_DEBUG == 0 ) return;
-    cmsms()->add_error(debug_display($str, '', false, true));
+    CmsApp::get_instance()->add_error(debug_display($str, '', false, true));
 }
 
 
@@ -876,7 +876,7 @@ function can_admin_upload()
   # and the uploads and modules directory.  if they all match, then we
   # can upload files.
   # if safe mode is off, then we just have to check the permissions.
-  $config = cmsms()->GetConfig();
+  $config = CmsApp::get_instance()->GetConfig();
   $file_index = CMS_ROOT_PATH.DIRECTORY_SEPARATOR.'index.php';
   $file_moduleinterface = CMS_ROOT_PATH.DIRECTORY_SEPARATOR.
     $config['admin_dir'].DIRECTORY_SEPARATOR.'moduleinterface.php';
@@ -964,7 +964,7 @@ function stack_trace()
  */
 function cms_move_uploaded_file( $tmpfile, $destination )
 {
-   $config = cmsms()->GetConfig();
+   $config = CmsApp::get_instance()->GetConfig();
 
    if( !@move_uploaded_file( $tmpfile, $destination ) ) return false;
    @chmod($destination,octdec($config['default_upload_permission']));
@@ -1148,7 +1148,7 @@ function cms_get_jquery($exclude = '',$ssl = null,$cdn = false,$append = '',$cus
   $scripts['json'] = array('local'=>$basePath.'/lib/jquery/js/jquery.json-2.4.min.js');
   $scripts['migrate'] = array('local'=>$basePath.'/lib/jquery/js/jquery-migrate-1.2.1.min.js');
 
-  if( cmsms()->test_state(CmsApp::STATE_ADMIN_PAGE) ) {
+  if( CmsApp::get_instance()->test_state(CmsApp::STATE_ADMIN_PAGE) ) {
     global $CMS_LOGIN_PAGE;
     if( isset($_SESSION[CMS_USER_KEY]) && !isset($CMS_LOGIN_PAGE) ) {
       $url = $config['admin_url'];

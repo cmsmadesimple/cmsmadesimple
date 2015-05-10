@@ -91,7 +91,7 @@ final class CmsPermission
 	{
 		$this->validate();
 
-		$db = cmsms()->GetDb();
+		$db = CmsApp::get_instance()->GetDb();
 		$new_id = $db->GenID(cms_db_prefix().'permissions_seq');
 		if( !$new_id ) throw new CmsSQLErrorException($db->sql.' -- '.$db->ErrorMsg());
 
@@ -122,7 +122,7 @@ final class CmsPermission
 
 		if( !isset($this->_data['id']) || $this->_data['id'] < 1 ) {
 			// Name must be unique
-			$db = cmsms()->GetDb();
+			$db = CmsApp::get_instance()->GetDb();
 			$query = 'SElECT permission_id FROM '.cms_db_prefix().'permissions
                 WHERE permission_name = ?';
 			$dbr = $db->GetOne($query,array($this->_data['name']));
@@ -152,7 +152,7 @@ final class CmsPermission
 			throw new CmsLogicException('Cannnot delete a CmsPermission object that has not been saved');
 		}
 
-		$db = cmsms()->GetDb();
+		$db = CmsApp::get_instance()->GetDb();
 		$query = 'DELETE FROM '.cms_db_prefix().'group_perms WHERE permission_id = ?';
 		$dbr = $db->Execute($query,array($this->_data['id']));
 		if( !$dbr ) throw new CmsSQLErrorException($db->sql.' -- '.$db->ErrorMsg());
@@ -179,7 +179,7 @@ final class CmsPermission
 			}
 		}
 
-		$db = cmsms()->GetDb();
+		$db = CmsApp::get_instance()->GetDb();
 		$row = null;
 		if( (int)$name > 0 ) {
 			$query = 'SELECT * FROM '.cms_db_prefix().'permissions WHERE permission_id = ?';

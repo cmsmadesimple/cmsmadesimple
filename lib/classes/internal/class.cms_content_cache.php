@@ -88,7 +88,7 @@ final class cms_content_cache
 	 */
 	private function __construct()
 	{
-		if( !cmsms()->is_frontend_request() ) return;
+		if( !CmsApp::get_instance()->is_frontend_request() ) return;
 
         debug_buffer('cms_content_cache: begin load needed content objects');
 		$content_ids = null;
@@ -123,7 +123,7 @@ final class cms_content_cache
 	 */
 	public function __destruct()
 	{
-		if( !cmsms()->is_frontend_request() ) return;
+		if( !CmsApp::get_instance()->is_frontend_request() ) return;
 		if( !$this->_key ) return;
 
 		$list = self::get_instance()->get_loaded_page_ids();

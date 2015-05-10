@@ -130,7 +130,7 @@ abstract class CMSModule
         global $CMS_MODULE_PAGE;
         global $CMS_INSTALL_PAGE;
 
-        if( cmsms()->is_frontend_request() ) {
+        if( CmsApp::get_instance()->is_frontend_request() ) {
             $this->SetParameterType('assign',CLEAN_STRING);
             $this->SetParameterType('module',CLEAN_STRING);
             $this->SetParameterType('lang',CLEAN_STRING); // this will be ignored.
@@ -153,16 +153,16 @@ abstract class CMSModule
     {
         switch( $key ) {
         case 'cms':
-            return cmsms();
+            return CmsApp::get_instance();
 
         case 'smarty':
-            return cmsms()->GetSmarty();
+            return CmsApp::get_instance()->GetSmarty();
 
         case 'config':
-            return cmsms()->GetConfig();
+            return CmsApp::get_instance()->GetConfig();
 
         case 'db':
-            return cmsms()->GetDb();
+            return CmsApp::get_instance()->GetDb();
         }
 
         return null;
@@ -327,7 +327,7 @@ abstract class CMSModule
             if( isset($CMS_INSTALL_PAGE) ) return TRUE;
 
             // no lazy loading.
-            $gCms = cmsms();
+            $gCms = CmsApp::get_instance();
             $smarty = $gCms->GetSmarty();
             $smarty->register_function($this->GetName(), array($this->GetName(),'function_plugin'), $cachable );
             return TRUE;
@@ -415,7 +415,7 @@ abstract class CMSModule
     final public function GetModulePath()
     {
         if (is_subclass_of($this, 'CMSModule')) {
-            return cms_join_path($this->config['root_path'], 'modules' , $this->GetName());
+            return cms_join_path(CMS_ROOT_PATH, 'modules' , $this->GetName());
         }
         return __DIR__;
     }
@@ -429,7 +429,7 @@ abstract class CMSModule
      */
     final public function GetModuleURLPath($use_ssl=false)
     {
-        return ($use_ssl?$this->config['ssl_url']:$this->config['root_url']) . '/modules/' . $this->GetName();
+        return ($use_ssl?$this->config['ssl_url']:CMS_ROOT_URL) . '/modules/' . $this->GetName();
     }
 
     /**
@@ -617,10 +617,7 @@ abstract class CMSModule
                             $value = CLEANED_FILENAME;
                         }
                         else {
-                            $config = cmsms()->GetConfig();
-                            if( strpos($realpath, $config['root_path']) !== 0 ) {
-                                $value = CLEANED_FILENAME;
-                            }
+                            if( strpos($realpath, CMS_ROOT_PATH) !== 0 ) $value = CLEANED_FILENAME;
                         }
                         $mappedcount++;
                         $mapped = true;
@@ -848,7 +845,7 @@ abstract class CMSModule
      */
     final public function &GetConfig()
     {
-        return cmsms()->GetConfig();
+        return CmsApp::get_instance()->GetConfig();
     }
 
     /**
@@ -860,7 +857,7 @@ abstract class CMSModule
      */
     final public function &GetDb()
     {
-        return cmsms()->GetDb();
+        return CmsApp::get_instance()->GetDb();
     }
 
     /**
@@ -971,7 +968,7 @@ abstract class CMSModule
     {
         $filename = dirname(dirname(__DIR__)) . '/modules/'.$this->GetName().'/method.install.php';
         if (@is_file($filename)) {
-            $gCms = cmsms();
+            $gCms = CmsApp::get_instance();
             $db = $gCms->GetDb();
             $config = $gCms->GetConfig();
             global $CMS_INSTALL_PAGE;
@@ -1012,7 +1009,7 @@ abstract class CMSModule
     {
         $filename = dirname(dirname(__DIR__)) . '/modules/'.$this->GetName().'/method.uninstall.php';
         if (@is_file($filename)) {
-            $gCms = cmsms();
+            $gCms = CmsApp::get_instance();
             $db = $gCms->GetDb();
             $config = $gCms->GetConfig();
             $smarty = $gCms->GetSmarty();
@@ -1084,7 +1081,7 @@ abstract class CMSModule
     {
         $filename = dirname(dirname(__DIR__)) . '/modules/'.$this->GetName().'/method.upgrade.php';
         if (@is_file($filename)) {
-            $gCms = cmsms();
+            $gCms = CmsApp::get_instance();
             $db = $gCms->GetDb();
             $config = $gCms->GetConfig();
             $smarty = $gCms->GetSmarty();
@@ -1121,7 +1118,7 @@ abstract class CMSModule
      */
     final public function CheckForDependents()
     {
-        $gCms = cmsms();
+        $gCms = CmsApp::get_instance();
         $db = $gCms->GetDb();
         $result = false;
 
@@ -1141,7 +1138,7 @@ abstract class CMSModule
      */
     final public function CreateXMLPackage( &$message, &$filecount )
     {
-        $gCms = cmsms();
+        $gCms = CmsApp::get_instance();
         $modops = $gCms->GetModuleOperations();
         return $modops->CreateXmlPackage($this, $message, $filecount);
     }
@@ -1374,7 +1371,7 @@ abstract class CMSModule
 
             $filename = $this->GetModulePath().'/action.' . $name . '.php';
             if (@is_file($filename)) {
-                $gCms = cmsms();
+                $gCms = CmsApp::get_instance();
                 $db = $gCms->GetDb();
                 $config = $gCms->GetConfig();
                 $smarty = $gCms->GetSmarty();
@@ -1435,7 +1432,7 @@ abstract class CMSModule
         $id = cms_htmlentities($id);
         $name = cms_htmlentities($name);
 
-        $smarty = cmsms()->GetSmarty();
+        $smarty = CmsApp::get_instance()->GetSmarty();
         $smarty->assign('actionid',$id);
         $smarty->assign('actionparams',$params);
         $smarty->assign('returnid',$returnid);
@@ -1445,7 +1442,7 @@ abstract class CMSModule
         $output = $this->DoAction($name, $id, $params, $returnid);
 
         if( isset($params['assign']) ) {
-            $gCms = cmsms();
+            $gCms = CmsApp::get_instance();
             $smarty = $gCms->GetSmarty();
             $smarty->assign(cms_htmlentities($params['assign']),$output);
             return;
@@ -2611,7 +2608,7 @@ abstract class CMSModule
      */
     final public function ListUserTags()
     {
-        $gCms = cmsms();
+        $gCms = CmsApp::get_instance();
         $usertagops = $gCms->GetUserTagOperations();
         return $usertagops->ListUserTags();
     }
@@ -2627,7 +2624,7 @@ abstract class CMSModule
      */
     final public function CallUserTag($name, $params = array())
     {
-        $gCms = cmsms();
+        $gCms = CmsApp::get_instance();
         $usertagops = $gCms->GetUserTagOperations();
         return $usertagops->CallUserTag($name, $params);
     }
@@ -2769,7 +2766,7 @@ abstract class CMSModule
      */
     public function SetContentType($contenttype)
     {
-        cmsms()->set_content_type($contenttype);
+        CmsApp::get_instance()->set_content_type($contenttype);
     }
 
     /**
@@ -3032,7 +3029,7 @@ abstract class CMSModule
                 . $originator . "." . $eventname . '.php';
 
             if (@is_file($filename)) {
-                $gCms = cmsms();
+                $gCms = CmsApp::get_instance();
                 $db = $gCms->GetDb();
                 $config = $gCms->GetConfig();
                 $smarty = $gCms->GetSmarty();

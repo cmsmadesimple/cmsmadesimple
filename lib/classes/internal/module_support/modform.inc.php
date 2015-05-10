@@ -31,7 +31,7 @@
  */
 function cms_module_CreateFormStart(&$modinstance, $id, $action='default', $returnid='', $method='post', $enctype='', $inline=false, $idsuffix='', $params = array(), $extra='')
 {
-	$gCms = cmsms();
+	$gCms = CmsApp::get_instance();
 	static $_formcount = 1;
 
 	$id = cms_htmlentities($id);
@@ -52,7 +52,7 @@ function cms_module_CreateFormStart(&$modinstance, $id, $action='default', $retu
 	      if( $content_obj ) $goto = $content_obj->GetURL();
 	  }
 	}
-    if( cmsms()->is_https_request() && strpos($goto,':') !== FALSE ) $goto = str_replace('http:','https:',$goto);
+    if( CmsApp::get_instance()->is_https_request() && strpos($goto,':') !== FALSE ) $goto = str_replace('http:','https:',$goto);
 	$goto = ' action="'.$goto.'"';
 
 	$text = '<form id="'.$id.'moduleform_'.$idsuffix.'" method="'.$method.'"'.$goto;
@@ -419,14 +419,11 @@ function cms_module_CreateInputSubmit(&$modinstance, $id, $name, $value='', $add
   $name = cms_htmlentities($name);
   $image = cms_htmlentities($image);
 
-  $gCms = cmsms();
-  $config = $gCms->GetConfig();
-
   $text = '<input class="cms_submit" name="'.$id.$name.'" id="'.$id.$name.'" value="'.$value.'" type=';
 
   if ($image != '') {
 	  $text .= '"image"';
-	  $img = $config['root_url'] . '/' . $image;
+	  $img = CMS_ROOT_URL . '/' . $image;
 	  $text .= ' src="'.$img.'"';
   }
   else {
@@ -597,9 +594,6 @@ function cms_module_CreateLink(&$modinstance, $id, $action, $returnid='', $conte
   $returnid = cms_htmlentities($returnid);
   $prettyurl = cms_htmlentities($prettyurl);
 
-  $gCms = cmsms();
-  $config = $gCms->GetConfig();
-
   $class = (isset($params['class'])?cms_htmlentities($params['class']):'');
 
   // create url....
@@ -624,7 +618,7 @@ function cms_module_CreateLink(&$modinstance, $id, $action, $returnid='', $conte
 function cms_module_create_url(&$modinstance,$id,$action,$returnid='',$params=array(),
 							   $inline=false,$targetcontentonly=false,$prettyurl='')
 {
-	$config = cmsms()->GetConfig();
+	$config = CmsApp::get_instance()->GetConfig();
 
 	$text = '';
 	if( empty($prettyurl) && $config['url_rewriting'] != 'none' ) {
@@ -635,11 +629,11 @@ function cms_module_create_url(&$modinstance,$id,$action,$returnid='',$params=ar
 		$prettyurl = $modinstance->get_pretty_url($id,$action,$returnid,$params,$inline);
 	}
 
-	$base_url = $config['root_url'];
+	$base_url = CMS_ROOT_URL;
 
 	// get the destination content object
 	if( $returnid != '' ) {
-		$content_obj = cmsms()->GetContentOperations()->LoadContentFromId($returnid);
+		$content_obj = CmsApp::get_instance()->GetContentOperations()->LoadContentFromId($returnid);
 		if( is_object($content_obj) && $content_obj->Secure() ) $base_url = $config['ssl_url'];
 	}
 
@@ -685,7 +679,7 @@ function cms_module_CreateContentLink(&$modinstance, $pageid, $contents='')
   $pageid = cms_htmlentities($pageid);
   $contents = cms_htmlentities($contents);
 
-  $gCms = cmsms();
+  $gCms = CmsApp::get_instance();
   $config = $gCms->GetConfig();
   $text = '<a href="';
   if ($config["url_rewriting"] == 'mod_rewrite') {
@@ -717,7 +711,7 @@ function cms_module_CreateReturnLink(&$modinstance, $id, $returnid, $contents=''
   $contents = $contents;
 
   $text = '';
-  $gCms = cmsms();
+  $gCms = CmsApp::get_instance();
   $config = $gCms->GetConfig();
   $manager = $gCms->GetHierarchyManager();
   $node = $manager->sureGetNodeById($returnid);

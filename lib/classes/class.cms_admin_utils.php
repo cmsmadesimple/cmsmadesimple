@@ -39,7 +39,7 @@
  * @package CMS
  */
 
-if( !cmsms()->test_state(CmsApp::STATE_ADMIN_PAGE) )
+if( !CmsApp::get_instance()->test_state(CmsApp::STATE_ADMIN_PAGE) )
   throw new CmsLogicException('Attempt to use cms_admin_utils class from an invalid request');
 
 /**
@@ -68,7 +68,7 @@ final class cms_admin_utils
 		$theme = cms_utils::get_theme_object();
 		if( !is_object($theme) ) return;
 
-		$smarty = cmsms()->GetSmarty();
+		$smarty = CmsApp::get_instance()->GetSmarty();
 		$module = $smarty->get_template_vars('actionmodule');
 
 		$dirs = array();
@@ -83,7 +83,7 @@ final class cms_admin_utils
 			}
 		}
 		if( basename($icon) == $icon ) $icon = "icons/system/{$icon}";
-		$config = cmsms()->GetConfig();
+		$config = CmsApp::get_instance()->GetConfig();
 		$dirs[] = array(cms_join_path($config['root_path'],$config['admin_dir'],"themes/{$theme->themeName}/images/{$icon}"),
 						$config['admin_url']."/themes/{$theme->themeName}/images/{$icon}");
 
@@ -109,7 +109,7 @@ final class cms_admin_utils
 	 */
 	public static function get_help_tag()
 	{
-		if( !cmsms()->test_state(CmsApp::STATE_ADMIN_PAGE) ) return;
+		if( !CmsApp::get_instance()->test_state(CmsApp::STATE_ADMIN_PAGE) ) return;
 
 		$params = array();
 		$args = func_get_args();
@@ -152,7 +152,7 @@ final class cms_admin_utils
 		}
 
 		if( !$key1 ) {
-			$smarty = cmsms()->GetSmarty();
+			$smarty = CmsApp::get_instance()->GetSmarty();
 			$module = $smarty->get_template_vars('actionmodule');
 			if( $module ) {
 				$key1 = $module;

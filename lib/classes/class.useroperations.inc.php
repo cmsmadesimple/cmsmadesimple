@@ -89,7 +89,7 @@ class UserOperations
 	function &LoadUsers($limit = 10000,$offset = 0)
 	{
 		if( !is_array($this->_users) ) {
-			$gCms = cmsms();
+			$gCms = CmsApp::get_instance();
 			$db = $gCms->GetDb();
 			$result = array();
 
@@ -127,7 +127,7 @@ class UserOperations
 	 */
 	function &LoadUsersInGroup($groupid)
 	{
-		$gCms = cmsms();
+		$gCms = CmsApp::get_instance();
 		$db = $gCms->GetDb();
 		$result = array();
 
@@ -165,7 +165,7 @@ class UserOperations
 	{
 		// note: does not use cache
 		$result = false;
-		$gCms = cmsms();
+		$gCms = CmsApp::get_instance();
 		$db = $gCms->GetDb();
 
 		$params = array();
@@ -213,7 +213,7 @@ class UserOperations
 		if( isset($this->_saved_users[$id]) ) return $this->_saved_users[$id];
 
 		$result = false;
-		$gCms = cmsms();
+		$gCms = CmsApp::get_instance();
 		$db = $gCms->GetDb();
 
 		$query = "SELECT username, password, active, first_name, last_name, admin_access, email FROM ".cms_db_prefix()."users WHERE user_id = ?";
@@ -247,7 +247,7 @@ class UserOperations
 	{
 		$result = -1;
 
-		$gCms = cmsms();
+		$gCms = CmsApp::get_instance();
 		$db = $gCms->GetDb();
 
 		// check for conflict in username
@@ -274,7 +274,7 @@ class UserOperations
 	function UpdateUser($user)
 	{
 		$result = false;
-		$gCms = cmsms();
+		$gCms = CmsApp::get_instance();
 		$db = $gCms->GetDb();
 
 		// check for username conflict
@@ -304,7 +304,7 @@ class UserOperations
  		if( !check_permission(get_userid(),'Manage Users') ) return false;
 
 		$result = false;
-		$gCms = cmsms();
+		$gCms = CmsApp::get_instance();
 		$db = $gCms->GetDb();
 
 		$query = "DELETE FROM ".cms_db_prefix()."user_groups where user_id = ?";
@@ -333,7 +333,7 @@ class UserOperations
 	function CountPageOwnershipByID($id)
 	{
 		$result = 0;
-		$gCms = cmsms();
+		$gCms = CmsApp::get_instance();
 		$db = $gCms->GetDb();
 
 		$query = "SELECT count(*) AS count FROM ".cms_db_prefix()."content WHERE owner_id = ?";
@@ -412,7 +412,7 @@ class UserOperations
 	function GetMemberGroups($uid)
 	{
 		if( !is_array(self::$_user_groups) || !isset(self::$_user_groups[$uid]) ) {
-			$db = cmsms()->GetDb();
+			$db = CmsApp::get_instance()->GetDb();
 			$query = 'SELECT group_id FROM '.cms_db_prefix().'user_groups WHERE user_id = ?';
 			$col = $db->GetCol($query,array((int)$uid));
 			if( !is_array(self::$_user_groups) ) self::$_user_groups = array();
@@ -433,7 +433,7 @@ class UserOperations
 		$gid = (int)$gid;
 		if( $uid < 1 || $gid < 1 ) return;
 
-		$db = cmsms()->GetDb();
+		$db = CmsApp::get_instance()->GetDb();
 		$now = $db->DbTimeStamp(time());
 		$query = 'INSERT INTO '.cms_db_prefix()."user_groups
                   (group_id,user_id,create_date,modified_date)
@@ -460,9 +460,7 @@ class UserOperations
 
 		try {
 			foreach( $groups as $gid ) {
-				if( GroupOperations::get_instance()->CheckPermission($gid,$permname) ) {
-					return TRUE;
-				}
+				if( GroupOperations::get_instance()->CheckPermission($gid,$permname) ) return TRUE;
 			}
 		}
 		catch( CmsException $e ) {

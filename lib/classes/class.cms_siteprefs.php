@@ -48,7 +48,7 @@ final class cms_siteprefs
 	private static function _read()
 	{
 		if( is_array(self::$_prefs) ) return;
-		$db = cmsms()->GetDb();
+		$db = CmsApp::get_instance()->GetDb();
 
 		if( !$db ) return;
 		$query = 'SELECT sitepref_name,sitepref_value FROM '.cms_db_prefix().'siteprefs';
@@ -107,7 +107,7 @@ final class cms_siteprefs
 	 */
 	public static function set($key,$value)
 	{
-		$db = cmsms()->GetDb();
+		$db = CmsApp::get_instance()->GetDb();
 		if( !self::exists($key) ) {
 			$query = 'INSERT INTO '.cms_db_prefix().'siteprefs (sitepref_name, sitepref_value) VALUES (?,?)';
 			$dbr = $db->Execute($query,array($key,$value));
@@ -133,7 +133,7 @@ final class cms_siteprefs
 			$query = 'DELETE FROM '.cms_db_prefix().'siteprefs WHERE sitepref_name LIKE ?';
 			$key .= '%';
 		}
-		$db = cmsms()->GetDb();
+		$db = CmsApp::get_instance()->GetDb();
 		$db->Execute($query,array($key));
 		self::_reset();
 	}
@@ -149,7 +149,7 @@ final class cms_siteprefs
 	{
 		if( !$prefix ) return;
 		$query = 'SELECT sitepref_name FROM '.cms_db_prefix().'siteprefs WHERE sitepref_name LIKE ?';
-		$db = cmsms()->GetDb();
+		$db = CmsApp::get_instance()->GetDb();
 		$dbr = $db->GetCol($query,array($prefix.'%'));
 		if( is_array($dbr) && count($dbr) ) return $dbr;
 	}

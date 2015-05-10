@@ -47,7 +47,7 @@ class BookmarkOperations
   {
 	  $config = cmsms()->GetConfig();
 	  $urlext = CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
-      if( startswith($url,$config['root_url']) ) $url = str_replace($config['root_url'],'[ROOT_URL]',$url);
+      if( startswith($url,CMS_ROOT_URL) ) $url = str_replace(CMS_ROOT_URL,'[ROOT_URL]',$url);
       $url = str_replace($urlext,'[SECURITYTAG]',$url);
 	  return $url;
   }
@@ -65,7 +65,7 @@ class BookmarkOperations
 	  $config = cmsms()->GetConfig();
 	  $urlext = CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 
-	  $map = array('[SECURITYTAG]'=>$urlext,'[ROOT_URL]'=>$config['root_url']);
+	  $map = array('[SECURITYTAG]'=>$urlext,'[ROOT_URL]'=>CMS_ROOT_URL);
 	  foreach( $map as $from => $to ) {
 		  $url = str_replace($from,$to,$url);
       }

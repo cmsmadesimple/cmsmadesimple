@@ -77,46 +77,46 @@ final class CmsLangOperations
 	  if( is_array(self::$_langdata) && isset(self::$_langdata[$curlang][$realm]) ) return;
 	  if( !is_array(self::$_langdata) ) self::$_langdata = array();
 	  if( !isset(self::$_langdata[$curlang]) ) self::$_langdata[$curlang] = array();
-	  $config = cmsms()->GetConfig();
+	  $config = CmsApp::get_instance()->GetConfig();
 
 	  // load the english file first.
 	  $files = array();
 	  $is_module = false;
 	  $filename = 'en_US.php';
 	  if( $realm == self::CMSMS_ADMIN_REALM ) {
-		  $files[] = cms_join_path($config['root_path'],$config['admin_dir'],'lang','en_US.php');
+		  $files[] = cms_join_path(CMS_ROOT_PATH,$config['admin_dir'],'lang','en_US.php');
 	  }
 	  else {
-		  if( is_dir(cms_join_path($config['root_path'],'modules',$realm)) ) {
+		  if( is_dir(cms_join_path(CMS_ROOT_PATH,'modules',$realm)) ) {
 			  $is_module = true;
-			  $files[] = cms_join_path($config['root_path'],'modules',$realm,'lang','en_US.php');
+			  $files[] = cms_join_path(CMS_ROOT_PATH,'modules',$realm,'lang','en_US.php');
 		  }
-		  $files[] = cms_join_path($config['root_path'],'lib','lang',$realm,'en_US.php');
+		  $files[] = cms_join_path(CMS_ROOT_PATH,'lib','lang',$realm,'en_US.php');
 	  }
 
 	  // now handle other lang files.
 	  if( $curlang != 'en_US' ) {
 		  if( $realm == self::CMSMS_ADMIN_REALM ) {
-			  $files[] = cms_join_path($config['root_path'],$config['admin_dir'],'lang','ext',$curlang.'.php');
+			  $files[] = cms_join_path(CMS_ROOT_PATH,$config['admin_dir'],'lang','ext',$curlang.'.php');
 		  }
 		  else {
 			  if( $is_module ) {
-				  $files[] = cms_join_path($config['root_path'],'modules',$realm,'lang','ext',$curlang.'.php');
+				  $files[] = cms_join_path(CMS_ROOT_PATH,'modules',$realm,'lang','ext',$curlang.'.php');
 			  }
 			  else {
-				  $files[] = cms_join_path($config['root_path'],'lib','lang',$realm,'ext',$curlang.'.php');
+				  $files[] = cms_join_path(CMS_ROOT_PATH,'lib','lang',$realm,'ext',$curlang.'.php');
 			  }
 		  }
 	  }
 
 	  // now load the custom stuff.
 	  if( $realm == self::CMSMS_ADMIN_REALM ) {
-		  $files[] = cms_join_path($config['root_path'],$config['admin_dir'],'custom','lang',$curlang.'.php');
+		  $files[] = cms_join_path(CMS_ROOT_PATH,$config['admin_dir'],'custom','lang',$curlang.'.php');
 	  }
 	  else {
 		  if( $is_module ) {
-			  $files[] = cms_join_path($config['root_path'],'module_custom',$realm,'lang',$curlang.'.php');
-			  $files[] = cms_join_path($config['root_path'],'module_custom',$realm,'lang','ext',$curlang.'.php');
+			  $files[] = cms_join_path(CMS_ROOT_PATH,'module_custom',$realm,'lang',$curlang.'.php');
+			  $files[] = cms_join_path(CMS_ROOT_PATH,'module_custom',$realm,'lang','ext',$curlang.'.php');
 		  }
 	  }
 
@@ -139,7 +139,7 @@ final class CmsLangOperations
     /*
     if( is_null(self::$_do_conversions) )
       {
-	$config = cmsms()->GetConfig();
+	$config = CmsApp::get_instance()->GetConfig();
 	self::$_do_conversions = 0;
 	if( isset($config['admin_encoding']) && strcasecmp(CmsNlsOperations::get_encoding(),$config['admin_encoding']) )
 	  {

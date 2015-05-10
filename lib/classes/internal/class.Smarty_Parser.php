@@ -45,10 +45,8 @@ class Smarty_Parser extends Smarty_CMS
 	{
 		parent::__construct();
 
-		$config = cmsms()->GetConfig();
-
-		$this->setTemplateDir(cms_join_path($config['root_path'],'tmp','templates'));
-		$this->setConfigDir(cms_join_path($config['root_path'],'tmp','templates'));
+		$this->setTemplateDir(cms_join_path(CMS_ROOT_PATH,'tmp','templates'));
+		$this->setConfigDir(cms_join_path(CMS_ROOT_PATH,'tmp','templates'));
 
 		$this->setCaching(false);
 		$this->force_compile = true;

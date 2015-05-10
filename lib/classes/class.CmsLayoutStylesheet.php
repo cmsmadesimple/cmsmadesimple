@@ -297,7 +297,7 @@ class CmsLayoutStylesheet
         if( !$this->get_id() ) return;
         if( !is_array($this->_design_assoc) ) {
             $this->_design_assoc = null;
-            $db = cmsms()->GetDb();
+            $db = CmsApp::get_instance()->GetDb();
             $query = 'SELECT design_id FROM '.cms_db_prefix().CmsLayoutCollection::CSSTABLE.' WHERE css_id = ?';
             $tmp = $db->GetCol($query,array($this->get_id()));
             if( is_array($tmp) && count($tmp) ) $this->_design_assoc = $tmp;
@@ -400,7 +400,7 @@ class CmsLayoutStylesheet
         if( !$this->get_content() ) throw new CmsInvalidDataException('Each stylesheet must have some content');
 		if( endswith($this->get_name(),'.css') ) throw new CmsInvalidDataException('Invalid name for a database stylesheet');
 
-        $db = cmsms()->GetDb();
+        $db = CmsApp::get_instance()->GetDb();
         $tmp = null;
         if( $this->get_id() ) {
             // double check the name.
@@ -429,7 +429,7 @@ class CmsLayoutStylesheet
               WHERE id = ?';
         $tmp = '';
         if( isset($this->_data['media_type']) ) $tmp = implode(',',$this->_data['media_type']);
-        $db = cmsms()->GetDb();
+        $db = CmsApp::get_instance()->GetDb();
         $dbr = $db->Execute($query,array($this->get_name(),$this->get_content(),$this->get_description(),
                                          $tmp,$this->get_media_query(),time(), $this->get_id()));
         if( !$dbr ) throw new CmsSQLErrorException($db->sql.' -- '.$db->ErrorMsg());
@@ -495,7 +495,7 @@ class CmsLayoutStylesheet
 		if( isset($this->_data['media_type']) ) $tmp = implode(',',$this->_data['media_type']);
         $query = 'INSERT INTO '.cms_db_prefix().self::TABLENAME.' (name,content,description,media_type,media_query, created,modified)
               VALUES (?,?,?,?,?,?,?)';
-        $db = cmsms()->GetDb();
+        $db = CmsApp::get_instance()->GetDb();
         $dbr = $db->Execute($query,	array($this->get_name(),$this->get_content(),$this->get_description(),
                                           $tmp,$this->get_media_query(), time(),time()));
         if( !$dbr ) throw new CmsSQLErrorException($db->sql.' -- '.$db->ErrorMsg());
@@ -551,7 +551,7 @@ class CmsLayoutStylesheet
         if( !$this->get_id() ) return;
 
 		Events::SendEvent('Core','DeleteStylesheetPre',array(get_class($this)=>&$this));
-        $db = cmsms()->GetDb();
+        $db = CmsApp::get_instance()->GetDb();
         $query = 'DELETE FROM '.cms_db_prefix().CmsLayoutCollection::CSSTABLE.' WHERE css_id = ?';
         $dbr = $db->Execute($query,array($this->get_id()));
 
@@ -644,7 +644,7 @@ class CmsLayoutStylesheet
     public static function &load($a)
     {
 		// check the cache first..
-        $db = cmsms()->GetDb();
+        $db = CmsApp::get_instance()->GetDb();
         $row = null;
         if( (int)$a > 0 ) {
 			$a = (int)$a;
@@ -700,7 +700,7 @@ class CmsLayoutStylesheet
 		}
 		$ids = array_unique($ids);
 
-		$db = cmsms()->GetDb();
+		$db = CmsApp::get_instance()->GetDb();
 		$query = 'SELECT id,name,content,description,media_type,media_query,created,modified FROM '.cms_db_prefix().self::TABLENAME.' WHERE id IN ('.implode(',',$ids).')';
 		if( !$is_ints ) $query = 'SELECT id,name,content,description,media_type,media_query,created,modified FROM '.cms_db_prefix().self::TABLENAME.' WHERE name IN ('.implode(',',$ids).')';
 
@@ -761,7 +761,7 @@ class CmsLayoutStylesheet
 	 */
     public static function get_all($as_list = FALSE)
     {
-        $db = cmsms()->GetDb();
+        $db = CmsApp::get_instance()->GetDb();
 
 		$out = array();
 		if( $as_list ) {

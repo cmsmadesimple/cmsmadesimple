@@ -136,9 +136,6 @@ class Content extends ContentBase
 	 */
     function FillParams($params,$editing = false)
     {
-		$gCms = cmsms();
-		$config = $gCms->GetConfig();
-
 		if (isset($params)) {
 			$parameters = array('pagedata','searchable','disable_wysiwyg','design_id');
 
@@ -238,7 +235,6 @@ class Content extends ContentBase
 	function ValidateData()
 	{
 		$errors = parent::ValidateData();
-		$gCms = cmsms();
 		if( $errors === FALSE ) $errors = array();
 
 		if ($this->mTemplateId <= 0 ) {
@@ -296,7 +292,7 @@ class Content extends ContentBase
         CMS_Content_Block::reset();
         $this->_contentBlocks = array();
         try {
-            $parser = cmsms()->get_template_parser();
+            $parser = CmsApp::get_instance()->get_template_parser();
             $parser->fetch('cms_template:'.$this->TemplateId()); // do the magic.
 
             $this->_contentBlocks = CMS_Content_Block::get_content_blocks();
@@ -318,7 +314,6 @@ class Content extends ContentBase
 	 */
     protected function display_single_element($one,$adding)
     {
-		$gCms = cmsms();
 		static $_designs;
 		static $_types;
 		static $_designtree;
@@ -467,8 +462,7 @@ class Content extends ContentBase
 	 */
 	private function _display_image_block($blockInfo,$value,$adding)
 	{
-		$gCms = cmsms();
-		$config = $gCms->GetConfig();
+		$config = CmsApp::get_instance()->GetConfig();
 		$adddir = get_site_preference('contentimage_path');
 		if( $blockInfo['dir'] != '' ) $adddir = $blockInfo['dir'];
 		$dir = cms_join_path($config['uploads_path'],$adddir);
@@ -488,7 +482,6 @@ class Content extends ContentBase
 	 */
 	private function _display_module_block($blockName,$blockInfo,$value,$adding)
 	{
-		$gCms = cmsms();
 		$ret = '';
 		if( !isset($blockInfo['module']) ) return FALSE;
 		$module = cms_utils::get_module($blockInfo['module']);

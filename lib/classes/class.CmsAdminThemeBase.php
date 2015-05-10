@@ -203,13 +203,12 @@ abstract class CmsAdminThemeBase
 	private function _fix_url_userkey($url)
 	{
 		$newurl = $url;
-		$config = cmsms()->GetConfig();
 		if( strpos($url,CMS_SECURE_PARAM_NAME) !== FALSE ) {
 			$from = '/'.CMS_SECURE_PARAM_NAME.'=[a-zA-Z0-9]{16}/i';
 			$to = CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 			$newurl = preg_replace($from,$to,$url);
 		}
-		elseif( startswith($url,$config['root_url']) || !startswith($url,'http') ) {
+		elseif( startswith($url,CMS_ROOT_URL) || !startswith($url,'http') ) {
 			$prefix = '?';
 			if( strpos($url,'?') !== FALSE ) $prefix = '&amp;';
 			$newurl .= $prefix.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
@@ -309,15 +308,14 @@ abstract class CmsAdminThemeBase
 
 				// find an icon for this thing.
 				if( $obj->icon == '' ) {
-					$config = cmsms()->GetConfig();
 					$tmp = array("modules/{$key}/images/icon.gif",
 								 "modules/{$key}/icons/icons.gif",
 								 "modules/{$key}/images/icon.png",
 								 "modules/{$key}/icons/icons.png");
 					foreach( $tmp as $one ) {
-						$fn = cms_join_path($config['root_path'],$one);
-						if( file_exists($fn) ) {
-							$obj->icon = $config['root_url'].'/'.$one;
+						$fn = cms_join_path(CMS_ROOT_PATH,$one);
+						if( is_file($fn) ) {
+							$obj->icon = CMS_ROOT_URL.'/'.$one;
 							break;
 						}
 					}
@@ -405,7 +403,6 @@ abstract class CmsAdminThemeBase
 		// note: it would be interesting if we could cache these menuItems in the session
 		// then clear this data when the cache is cleared (for when modules become available)
 
-		$config = cmsms()->GetConfig();
 		debug_buffer('before populate admin navigation');
 		if( $subtitle ) $this->_subtitle = $subtitle;
 
@@ -418,7 +415,7 @@ abstract class CmsAdminThemeBase
 		$items['main'] = array('url'=>'index.php','parent'=>-1,'title'=>'CMS','priority'=>1,'description'=>'','show_in_menu'=>true);
 		$items['home'] = array('url'=>'index.php','parent'=>'main','priority'=>1,'title'=>$this->_FixSpaces(lang('home')),
 							   'description'=>'','show_in_menu'=>true);
-		$items['viewsite'] = array('url'=>$config['root_url'].'/index.php','parent'=>'main',
+		$items['viewsite'] = array('url'=>CMS_ROOT_URL.'/index.php','parent'=>'main',
 								   'title'=>$this->_FixSpaces(lang('viewsite')),'type'=>'external','priority'=>2,
 								   'description'=>'','show_in_menu'=>true, 'target'=>'_blank');
 		$items['logout'] = array('url'=>'logout.php','parent'=>'main','title'=>$this->_FixSpaces(lang('logout')),'priority'=>3,
@@ -558,7 +555,6 @@ abstract class CmsAdminThemeBase
 		debug_buffer('before system modules');
 
 		// add in all of the 'system' modules next
-		$gCms = cmsms();
 		$moduleops = ModuleOperations::get_instance();
 		// todo: cleanup
 		foreach ($this->_menuItems as $sectionKey=>$sectionArray) {
@@ -814,7 +810,7 @@ abstract class CmsAdminThemeBase
 	 */
 	protected function get_admin_navigation()
 	{
-		$smarty = cmsms()->GetSmarty();
+		$smarty = CmsApp::get_instance()->GetSmarty();
 		$smarty->assign('secureparam', CMS_SECURE_PARAM_NAME . '=' . $_SESSION[CMS_USER_KEY]);
 		$this->_populate_admin_navigation();
 		return $this->_menuItems;
@@ -930,7 +926,7 @@ abstract class CmsAdminThemeBase
 	 */
 	public function get_bookmarks($pure = FALSE)
 	{
-		$bookops = cmsms()->GetBookmarkOperations();
+		$bookops = CmsApp::get_instance()->GetBookmarkOperations();
 		$marks = array_reverse($bookops->LoadBookmarks($this->userid));
 
 		if( !$pure ) {
@@ -1045,8 +1041,8 @@ abstract class CmsAdminThemeBase
 				$imageName = substr($imageName,strrpos($imageName,'/')+1);
 			}
 
-			$config = cmsms()->GetConfig();
-			$str = dirname($config['root_path'].'/'.$config['admin_dir']."/themes/{$this->themeName}/images/{$imagePath}{$imageName}");
+			$config = CmsApp::get_instance()->GetConfig();
+			$str = dirname(CMS_ROOT_PATH.'/'.$config['admin_dir']."/themes/{$this->themeName}/images/{$imagePath}{$imageName}");
 			if (file_exists("{$str}/{$imageName}")) {
 				$str = "themes/{$this->themeName}/images/{$imagePath}{$imageName}";
 				$this->_imageLink[$imageName] = $str;
@@ -1123,7 +1119,7 @@ abstract class CmsAdminThemeBase
 	 */
 	static public function GetAvailableThemes()
 	{
-		$config = cmsms()->GetConfig();
+		$config = CmsApp::get_instance()->GetConfig();
 
 		$files = glob(cms_join_path($config['admin_path'],'themes').'/*');
 		if( is_array($files) && count($files) ) {
@@ -1155,7 +1151,7 @@ abstract class CmsAdminThemeBase
 			self::$_instance = new $name;
 		}
 		else {
-			$gCms = cmsms();
+			$gCms = CmsApp::get_instance();
 			$config = $gCms->GetConfig();
 			$themeObjName = $name."Theme";
 			$fn = $config['admin_path']."/themes/$name/{$themeObjName}.php";

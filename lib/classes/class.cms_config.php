@@ -206,6 +206,7 @@ final class cms_config implements ArrayAccess
 		  define('TMP_TEMPLATES_C_LOCATION',self::$_instance['tmp_templates_c_location']);
           define('CMS_DEBUG',self::$_instance['debug']);
           define('CMS_ROOT_PATH',self::$_instance['root_path']);
+          define('CMS_ROOT_URL',self::$_instance['root_url']);
 	  }
     }
 
@@ -283,7 +284,7 @@ final class cms_config implements ArrayAccess
 		  return true;
 
 	  case 'root_path':
-		  $out = dirname(dirname(dirname(__FILE__)));
+		  $out = dirname(dirname(__DIR__)); // realpath here?
 		  $this->_cache[$key] = $out;
 		  return $out;
 
@@ -309,7 +310,7 @@ final class cms_config implements ArrayAccess
 			  if( ($pos = strpos($path,'/index.php')) !== FALSE ) $path = substr($path,0,$pos);
 		  }
 		  $prefix = 'http://';
-		  if( cmsms()->is_https_request() ) $prefix = 'https://';
+		  if( CmsApp::get_instance()->is_https_request() ) $prefix = 'https://';
 		  $str = $prefix.$_SERVER['HTTP_HOST'].$path;
 		  $this->_cache[$key] = $str;
 		  return $str;
@@ -494,7 +495,7 @@ final class cms_config implements ArrayAccess
    */
   public function smart_root_url()
   {
-	  if( cmsms()->is_https_request() ) return $this->offsetGet('ssl_url');
+	  if( CmsApp::get_instance()->is_https_request() ) return $this->offsetGet('ssl_url');
 	  return $this->offsetGet('root_url');
   }
 
@@ -503,7 +504,7 @@ final class cms_config implements ArrayAccess
    */
   public function smart_uploads_url()
   {
-	  if(cmsms()->is_https_request() ) return $this->offsetGet('ssl_uploads_url');
+	  if(CmsApp::get_instance()->is_https_request() ) return $this->offsetGet('ssl_uploads_url');
 	  return $this->offsetGet('uploads_url');
   }
 
@@ -512,7 +513,7 @@ final class cms_config implements ArrayAccess
    */
   public function smart_image_uploads_url()
   {
-	  if(cmsms()->is_https_request() ) return $this->offsetGet('ssl_image_uploads_url');
+	  if(CmsApp::get_instance()->is_https_request() ) return $this->offsetGet('ssl_image_uploads_url');
 	  return $this->offsetGet('image_uploads_url');
   }
 } // end of class

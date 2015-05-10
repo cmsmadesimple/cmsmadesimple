@@ -96,12 +96,12 @@ if( cms_to_bool(ini_get('register_globals')) ) {
 
 // sanitize $_GET and $_SERVER
 {
-  $sanitize = function(&$value,$key) {
-    $value = preg_replace('/\<\/?script[^\>]*\>/i', '', $value);
-    $value = preg_replace('/javascript\:/i', '', $value);
-  };
-  array_walk_recursive($_GET,$sanitize);
-  array_walk_recursive($_SERVER,$sanitize);
+    $sanitize = function(&$value,$key) {
+        $value = preg_replace('/\<\/?script[^\>]*\>/i', '', $value);
+        $value = str_ireplace('script:', '', $value);
+    };
+    array_walk_recursive($_GET,$sanitize);
+    array_walk_recursive($_SERVER,$sanitize);
 }
 
 #Grab the current configuration

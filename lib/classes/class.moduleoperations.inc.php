@@ -221,8 +221,6 @@ final class ModuleOperations
      */
     function ExpandXMLPackage( $xmluri, $overwrite = 0, $brief = 0 )
     {
-        $gCms = cmsms();
-
         // first make sure that we can actually write to the module directory
         $dir = dirname(dirname(__DIR__)).DIRECTORY_SEPARATOR."modules";
 
@@ -386,7 +384,7 @@ final class ModuleOperations
     {
         debug_buffer('install_module '.$module_obj->GetName());
 
-        $gCms = cmsms(); // preserve the global.
+        $gCms = CmsApp::get_instance(); // preserve the global.
         $db = $gCms->GetDb();
 
         $result = $module_obj->Install();
@@ -471,14 +469,14 @@ final class ModuleOperations
     private function &_get_module_info()
     {
         if( !is_array($this->_moduleinfo) || count($this->_moduleinfo) == 0 ) {
-            $db = cmsms()->GetDb();
+            $db = CmsApp::get_instance()->GetDb();
             $query = 'SELECT * FROM '.cms_db_prefix().'modules ORDER BY module_name';
             $tmp = $db->GetArray($query);
 
             if( is_array($tmp) ) {
                 $dir = dirname(dirname(__DIR__)).DIRECTORY_SEPARATOR."modules";
                 $this->_moduleinfo = array();
-                for( $i = 0; $i < count($tmp); $i++ ) {
+                for( $i = 0, $n = count($tmp); $i < $n; $i++ ) {
                     $name = $tmp[$i]['module_name'];
                     if( is_file($dir."/$name/$name.module.php") ) {
                         if( !isset($this->_moduleinfo[$name]) ) $this->_moduleinfo[$name] = $tmp[$i];
@@ -506,8 +504,8 @@ final class ModuleOperations
      */
     private function _load_module($module_name,$force_load = FALSE,$dependents = TRUE)
     {
-        $config = cmsms()->GetConfig();
-        $dir = $config['root_path'].'/modules';
+        $gCms = CmsApp::get_instance(); // backwards compatibility... set the global.
+        $dir = CMS_ROOT_PATH.'/modules';
 
         $info = $this->_get_module_info();
         if( !isset($info[$module_name]) && !$force_load ) {
@@ -520,7 +518,6 @@ final class ModuleOperations
         }
 
         global $CMS_INSTALL_PAGE;
-        $gCms = cmsms(); // backwards compatibility... set the global.
 
         // okay, lessee if we can load the dependants
         if( $dependents ) {
@@ -587,7 +584,7 @@ final class ModuleOperations
             }
         }
 
-        $tmp = cmsms()->get_installed_schema_version();
+        $tmp = CmsApp::get_instance()->get_installed_schema_version();
         if( $tmp == CMS_SCHEMA_VERSION ) {
             // can't auto upgrade modules if cmsms schema versions don't match.
             // check to see if an upgrade is needed.
@@ -714,7 +711,7 @@ final class ModuleOperations
         if( $loadall ) $this->_load_all_modules();
         global $CMS_ADMIN_PAGE;
         global $CMS_STYLESHEET;
-        $config = cmsms()->GetConfig();
+        $config = CmsApp::get_instance()->GetConfig();
         $allinfo = $this->_get_module_info();
         if( !is_array($allinfo) ) return; // no modules installed, probably an empty database... edge case.
 
@@ -752,7 +749,8 @@ final class ModuleOperations
     private function _upgrade_module( &$module_obj, $to_version = '' )
     {
         // we can't upgrade a module if the schema is not up to date.
-        $tmp = cmsms()->get_installed_schema_version();
+        $gCms = CmsApp::get_instance();
+        $tmp = $gCms->get_installed_schema_version();
         if( $tmp && $tmp < CMS_SCHEMA_VERSION ) return array(FALSE,lang('error_coreupgradeneeded'));
 
         $info = $this->_get_module_info();
@@ -764,7 +762,7 @@ final class ModuleOperations
           return array(TRUE); // nothing to do.
         }
 
-        $db = cmsms()->GetDb();
+        $db = $gCms->GetDb();
         $result = $module_obj->Upgrade($dbversion,$to_version);
         if( !isset($result) || $result === FALSE ) {
             $lazyload_fe    = (method_exists($module_obj,'LazyLoadFrontend') && $module_obj->LazyLoadFrontend())?1:0;
@@ -789,7 +787,7 @@ final class ModuleOperations
             }
 
             $this->_moduleinfo = array();
-            cmsms()->clear_cached_files();
+            $gCms->clear_cached_files();
             audit('','Module', 'Upgraded module '.$module_obj->GetName().' to version '.$module_obj->GetVersion());
             Events::SendEvent('Core', 'ModuleUpgraded', array('name' => $module_obj->GetName(), 'oldversion' => $dbversion, 'newversion' => $module_obj->GetVersion()));
 
@@ -830,7 +828,7 @@ final class ModuleOperations
      */
     public function UninstallModule( $module)
     {
-        $gCms = cmsms();
+        $gCms = CmsApp::get_instance();
         $db = $gCms->GetDb();
 
         $modinstance = cms_utils::get_module($module);
@@ -928,7 +926,7 @@ final class ModuleOperations
             $info[$module_name]['active'] = 0;
         }
         if( $info[$module_name]['active'] != $o_state ) {
-            $db = cmsms()->GetDb();
+            $db = CmsApp::get_instance()->GetDb();
             $query = 'UPDATE '.cms_db_prefix().'modules SET active = ? WHERE module_name = ?';
             $dbr = $db->Execute($query,array($info[$module_name]['active'],$module_name));
             $this->_moduleinfo = array();
@@ -1025,7 +1023,7 @@ final class ModuleOperations
             }
             else {
                 $this->_moduledeps = array();
-                $db = cmsms()->GetDb();
+                $db = CmsApp::get_instance()->GetDb();
                 $query = 'SELECT parent_module,child_module,minimum_version FROM '.cms_db_prefix().'module_deps ORDER BY parent_module';
                 $dbr = $db->GetArray($query);
                 if( is_array($dbr) && count($dbr) ) {
@@ -1151,7 +1149,7 @@ final class ModuleOperations
     {
         $obj = null;
         if( !$module_name ) {
-            if( cmsms()->is_frontend_request() ) {
+            if( CmsApp::get_instance()->is_frontend_request() ) {
                 $module_name = get_site_preference('frontendwysiwyg');
             }
             else {

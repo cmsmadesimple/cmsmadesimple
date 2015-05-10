@@ -77,9 +77,9 @@ final class CmsNlsOperations
   {
 	  if( !is_array(self::$_nls) ) {
 		  self::$_nls = array();
-		  $config = cmsms()->GetConfig();
-		  $nlsdir = cms_join_path($config['root_path'],'lib','nls');
-		  $langdir = cms_join_path($config['root_path'],$config['admin_dir'],'lang');
+		  $config = CmsApp::get_instance()->GetConfig();
+		  $nlsdir = cms_join_path(CMS_ROOT_PATH,'lib','nls');
+		  $langdir = cms_join_path(CMS_ROOT_PATH,$config['admin_dir'],'lang');
 		  $files = glob($nlsdir.'/*nls.php');
 		  if( is_array($files) && count($files) ) {
 			  for( $i = 0; $i < count($files); $i++ ) {
@@ -323,7 +323,7 @@ final class CmsNlsOperations
 	  if( self::$_encoding ) return self::$_encoding;
 
 	  // is it specified in the config.php?
-	  $config = cmsms()->GetConfig();
+	  $config = CmsApp::get_instance()->GetConfig();
 	  if( isset($config['default_encoding']) && $config['default_encoding'] != '' ) return $config['default_encoding'];
 
 	  $lang = self::get_current_language();
@@ -356,7 +356,7 @@ final class CmsNlsOperations
    */
   protected static function set_locale()
   {
-	  $config = cmsms()->GetConfig();
+	  $config = CmsApp::get_instance()->GetConfig();
 	  static $_locale_set;
 
 	  $locale = '';

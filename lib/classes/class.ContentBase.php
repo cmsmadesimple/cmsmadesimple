@@ -689,8 +689,7 @@ abstract class ContentBase
 	 */
 	public function Hierarchy()
 	{
-		$gCms = cmsms();
-		$contentops = $gCms->GetContentOperations();
+		$contentops = ContentOperations::get_instance();
 		return $contentops->CreateFriendlyHierarchyPosition($this->mHierarchy);
 	}
 
@@ -978,7 +977,7 @@ abstract class ContentBase
 	 */
 	public function SetAlias($alias = null, $doAutoAliasIfEnabled = true)
 	{
-		$gCms = cmsms();
+		$gCms = CmsApp::get_instance();
 		$config = $gCms->GetConfig();
 
 		if ($alias == '' && $doAutoAliasIfEnabled && $config['auto_alias_content'] == true) {
@@ -990,7 +989,7 @@ abstract class ContentBase
 			$alias = munge_string_to_url($alias, $tolower);
 
 			// Make sure auto-generated new alias is not already in use on a different page, if it does, add "-2" to the alias
-			$contentops = $gCms->GetContentOperations();
+			$contentops = ContentOperations::get_instance();
 			$error = $contentops->CheckAliasError($alias, $this->Id());
 			if ($error !== FALSE) {
 				if (FALSE == empty($alias)) {
@@ -1042,7 +1041,7 @@ abstract class ContentBase
 	 */
 	public function ChildCount()
 	{
-		$hm = cmsms()->GetHierarchyManager();
+		$hm = CmsApp::get_instance()->GetHierarchyManager();
 		$node = $hm->getNodeById($this->mId);
 		if( $node ) return $node->count_children();
 	}
@@ -1095,7 +1094,7 @@ abstract class ContentBase
 		if( $this->mId <= 0 ) return FALSE;
 
 		$this->_props = array();
-		$db = cmsms()->GetDb();
+		$db = CmsApp::get_instance()->GetDb();
 		$query = 'SELECT * FROM '.cms_db_prefix().'content_props WHERE content_id = ?';
 		$dbr = $db->GetArray($query,array((int)$this->mId));
 
@@ -1113,7 +1112,7 @@ abstract class ContentBase
 		if( $this->mId <= 0 ) return FALSE;
 		if( !is_array($this->_props) || count($this->_props) == 0 ) return FALSE;
 
-		$db = cmsms()->GetDb();
+		$db = CmsApp::get_instance()->GetDb();
 		$query = 'SELECT prop_name FROM '.cms_db_prefix().'content_props WHERE content_id = ?';
 		$gotprops = $db->GetCol($query,array($this->mId));
 
@@ -1368,7 +1367,7 @@ abstract class ContentBase
 	 */
 	protected function Update()
 	{
-		$gCms = cmsms();
+		$gCms = CmsApp::get_instance();
 		$db = $gCms->GetDb();
 		$config = $gCms->GetConfig();
 		$result = false;
@@ -1461,7 +1460,7 @@ abstract class ContentBase
         # :TODO: This function should return something
         # :TODO: Take care bout hierarchy here, it has no value !
         # :TODO: Figure out proper item_order
-		$gCms = cmsms();
+		$gCms = CmsApp::get_instance();
 		$db = $gCms->GetDb();
 		$config = $gCms->GetConfig();
 
@@ -1585,8 +1584,7 @@ abstract class ContentBase
 
 		if (!$this->HandlesAlias()) {
 			if ($this->mAlias != $this->mOldAlias || ($this->mAlias == '' && $this->RequiresAlias()) ) {
-				$gCms = cmsms();
-				$contentops = $gCms->GetContentOperations();
+				$contentops = ContentOperations::get_instance();
 				$error = $contentops->CheckAliasError($this->mAlias, $this->mId);
 				if ($error !== FALSE) {
 					$errors[]= $error;
@@ -1605,7 +1603,7 @@ abstract class ContentBase
 				}
 				else {
 					// if it don't explicitly say 'flat' we're creating a hierarchical url.
-					$gCms = cmsms();
+					$gCms = CmsApp::get_instance();
 					$tree = $gCms->GetHierarchyManager();
 					$node = $tree->find_by_tag('id',$this->ParentId());
 					$stack = array($this->mAlias);
@@ -1659,7 +1657,7 @@ abstract class ContentBase
 	 */
 	function Delete()
 	{
-		$gCms = cmsms();
+		$gCms = CmsApp::get_instance();
 		$config = $gCms->GetConfig();
 		Events::SendEvent('Core', 'ContentDeletePre', array('content' => &$this));
 		$db = $gCms->GetDb();
@@ -1812,33 +1810,38 @@ abstract class ContentBase
 	 */
 	public function GetURL($rewrite = true)
 	{
-		$gCms = cmsms();
+		$gCms = CmsApp::get_instance();
 		$config = $gCms->GetConfig();
 		$url = "";
 		$alias = ($this->mAlias != ''?$this->mAlias:$this->mId);
 
-		$base_url = $config['root_url'];
+		$base_url = CMS_ROOT_URL;
 		if( $this->Secure() ) $base_url = $config['ssl_url'];
 
 		/* use root_url for default content */
-		if($this->mDefaultContent) {
+		if($this->DefaultContent()) {
 			$url =  $base_url . '/';
 			return $url;
 		}
 
-		if ($config["url_rewriting"] == 'mod_rewrite' && $rewrite == true) {
-			$str = $this->HierarchyPath();
-			if( $this->mURL != '') $str = $this->mURL;	// we have a url path
-			$url = $base_url. '/' . $str . (isset($config['page_extension'])?$config['page_extension']:'.html');
-		}
-		else if (isset($_SERVER['PHP_SELF']) && $config['url_rewriting'] == 'internal' && $rewrite == true) {
-			$str = $this->HierarchyPath();
-			if( $this->mURL != '') $str = $this->mURL; // we have a url path
-			$url = $base_url . '/index.php/' . $str . (isset($config['page_extension'])?$config['page_extension']:'.html');
-		}
-		else {
-			$url = $base_url . '/index.php?' . $config['query_var'] . '=' . $alias;
-		}
+        if( $rewrite == true ) {
+            $url_rewriting = $config['url_rewriting'];
+            $page_extension = $config['page_extension'];
+            if ($url_rewriting == 'mod_rewrite') {
+                $str = $this->HierarchyPath();
+                if( $this->mURL != '') $str = $this->mURL;	// we have a url path
+                $url = $base_url. '/' . $str . ($page_extension)?$page_extension:'.html';
+                return $url;
+            }
+            else if (isset($_SERVER['PHP_SELF']) && $url_rewriting == 'internal') {
+                $str = $this->HierarchyPath();
+                if( $this->mURL != '') $str = $this->mURL; // we have a url path
+                $url = $base_url . '/index.php/' . $str . ($page_extension)?$page_extension:'.html';
+                return $url;
+            }
+        }
+
+        $url = $base_url . '/index.php?' . $config['query_var'] . '=' . $alias;
 		return $url;
 	}
 
@@ -1852,7 +1855,7 @@ abstract class ContentBase
 	 */
 	public function ChangeItemOrder($direction)
 	{
-		$db = cmsms()->GetDb();
+		$db = CmsApp::get_instance()->GetDb();
 		$time = $db->DBTimeStamp(time());
 		$parentid = $this->ParentId();
 		$order = $this->ItemOrder();
@@ -2021,14 +2024,14 @@ abstract class ContentBase
 	 */
 	public function HasChildren($activeonly = false)
 	{
-		$hm = cmsms()->GetHierarchyManager();
+		$hm = CmsApp::get_instance()->GetHierarchyManager();
 		$node = $hm->getNodeById($this->mId);
 		if( !$node->has_children() ) return false;
 		if( $activeonly == false) return true;
 
 		$children = $node->get_children();
 		if( $children ) {
-			for( $i = 0; $i < count($children); $i++ ) {
+			for( $i = 0, $n = count($children); $i < $n; $i++ ) {
 				$content = $children[$i]->getContent();
 				if( $content->Active() ) return true;
 			}
@@ -2046,7 +2049,7 @@ abstract class ContentBase
 	public function GetAdditionalEditors()
 	{
 		if (!isset($this->mAdditionalEditors)) {
-			$gCms = cmsms();
+			$gCms = CmsApp::get_instance();
 			$db = $gCms->GetDb();
 			$this->mAdditionalEditors = array();
 
@@ -2083,7 +2086,7 @@ abstract class ContentBase
 	static public function GetAdditionalEditorOptions()
 	{
 		$opts = array();
-		$gCms = cmsms();
+		$gCms = CmsApp::get_instance();
 		$userops = $gCms->GetUserOperations();
 		$groupops = $gCms->GetGroupOperations();
 		$allusers = $userops->LoadUsers();
@@ -2169,7 +2172,7 @@ abstract class ContentBase
 	{
 		if( !is_array($this->_attributes) ) return;
 		$tmp = array();
-		for( $i = 0; $i < count($this->_attributes); $i++ ) {
+		for( $i = 0, $n = count($this->_attributes); $i < $n; $i++ ) {
 			if( is_object($this->_attributes[$i]) && $this->_attributes[$i]->name == $name ) continue;
 			$tmp[] = $this->_attributes[$i];
 		}
@@ -2247,7 +2250,7 @@ abstract class ContentBase
 	 */
 	protected function display_single_element($one,$adding)
 	{
-		$gCms = cmsms();
+		$gCms = CmsApp::get_instance();
 		$config = $gCms->GetConfig();
 
 		switch( $one ) {
@@ -2267,7 +2270,7 @@ abstract class ContentBase
 						 '<input type="text" name="menutext" id="in_menutext" required="required" value="'.cms_htmlentities($this->mMenuText).'" />');
 
 		case 'parent':
-			$contentops = $gCms->GetContentOperations();
+			$contentops = ContentOperations::get_instance();
 			$tmp = $contentops->CreateHierarchyDropdown($this->mId, $this->mParentId, 'parent_id', 0, 1, 0, 1,get_site_preference('listcontent_showtitle',true) );
 			if( empty($tmp) && !check_permission(get_userid(),'Manage All Content') ) {
 				return array('','<input type="hidden" name="parent_id" value="'.$this->mParentId.'" />');
@@ -2371,7 +2374,7 @@ abstract class ContentBase
 						 '<input type="text" name="extra3" id="extra3" maxlength="255" size="80" value="'.cms_htmlentities($this->GetPropertyValue('extra3')).'" />');
 
 		case 'owner':
-			$showadmin = cmsms()->GetContentOperations()->CheckPageOwnership(get_userid(), $this->Id());
+			$showadmin = ContentOperations::get_instance()->CheckPageOwnership(get_userid(), $this->Id());
 			$userops = $gCms->GetUserOperations();
 			if (!$adding && (check_permission(get_userid(),'Manage All Content') || $showadmin) ) {
 				$help = '&nbsp;'.cms_admin_utils::get_help_tag('core','help_content_owner',lang('help_title_content_owner'));
@@ -2382,7 +2385,7 @@ abstract class ContentBase
 		case 'additionaleditors':
 			// do owner/additional-editor stuff
 			if( $adding || check_permission(get_userid(),'Manage All Content') ||
-				cmsms()->GetContentOperations()->CheckPageOwnership(get_userid(),$this->Id()) ) {
+				ContentOperations::get_instance()->CheckPageOwnership(get_userid(),$this->Id()) ) {
 				return $this->ShowAdditionalEditors();
 			}
 			break;

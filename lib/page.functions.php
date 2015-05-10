@@ -37,7 +37,7 @@
  */
 function check_login($no_redirect = false)
 {
-    $config = cmsms()->GetConfig();
+    $config = CmsApp::get_instance()->GetConfig();
 
     //Handle a current login if one is in queue in the SESSION
     if (isset($_SESSION['login_user_id'])) {
@@ -145,9 +145,7 @@ function get_username($check = true)
  */
 function check_passhash($userid, $checksum)
 {
-    $gCms = cmsms();
-
-    $userops = $gCms->GetUserOperations();
+    $userops = UserOperations::get_instance();
     $oneuser = $userops->LoadUserByID($userid);
 
     $tmp = array(md5(__FILE__),$oneuser->password,cms_utils::get_real_ip(),$_SERVER['HTTP_USER_AGENT']);
@@ -172,9 +170,7 @@ function check_passhash($userid, $checksum)
  */
 function generate_user_object($userid)
 {
-  $gCms = cmsms();
-
-  $userops = $gCms->GetUserOperations();
+  $userops = UserOperations::get_instance();
   $oneuser = $userops->LoadUserByID($userid);
 
   if ($oneuser) {
@@ -215,14 +211,11 @@ function check_permission($userid, $permname)
  */
 function check_ownership($userid, $contentid = '')
 {
-  $check = false;
-  $gCms = cmsms();
-
-  $userops = $gCms->GetUserOperations();
+  $userops = UserOperations::get_instance();
   $adminuser = $userops->UserInGroup($userid,1);
   if( $adminuser ) return true;
 
-  return cmsms()->GetContentOperations()->CheckPageOwnership($userid,$contentid);
+  return CmsApp::get_instance()->GetContentOperations()->CheckPageOwnership($userid,$contentid);
 }
 
 
@@ -270,7 +263,7 @@ function author_pages($userid)
 function audit($itemid, $itemname, $action)
 {
     if( !isset($action) ) $action = '-- unset --';
-    $db = cmsms()->GetDb();
+    $db = CmsApp::get_instance()->GetDb();
 
     $userid = 0;
     $username = '';
@@ -492,7 +485,7 @@ function create_file_dropdown($name,$dir,$value,$allowed_extensions,$optprefix='
  */
 function get_pageid_or_alias_from_url()
 {
-    $gCms = cmsms();
+    $gCms = CmsApp::get_instance();
     $config = $gCms->GetConfig();
     $contentops = $gCms->GetContentOperations();
     $smarty = $gCms->GetSmarty();

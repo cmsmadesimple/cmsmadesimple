@@ -709,7 +709,7 @@ function &cmsms()
  * @return string
  */
 function cms_db_prefix() {
-    return cmsms()->GetDbPrefix();
+    return CmsApp::get_instance()->GetDbPrefix();
 }
 
 ?>

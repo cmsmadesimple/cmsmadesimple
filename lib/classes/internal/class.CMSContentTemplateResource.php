@@ -40,42 +40,42 @@
  */
 class CMSContentTemplateResource extends CMS_Fixed_Resource_Custom
 {
-  protected function fetch($name,&$source,&$mtime)
-  {
-    $gCms = cmsms();
-    $config = $gCms->GetConfig();
-    $contentobj = $gCms->get_content_object();
+    protected function fetch($name,&$source,&$mtime)
+    {
+        $gCms = CmsApp::get_instance();
+        $config = $gCms->GetConfig();
+        $contentobj = $gCms->get_content_object();
 
-    if (!is_object($contentobj)) {
-      // We've a custom error message...  return it here
-      header("HTTP/1.0 404 Not Found");
-      header("Status: 404 Not Found");
-      $source = null;
-      if ($name == 'content_en') $source = get_site_preference('custom404');
-      $mtime = time();
-      $source = trim($source);
-      return;
+        if (!is_object($contentobj)) {
+            // We've a custom error message...  return it here
+            header("HTTP/1.0 404 Not Found");
+            header("Status: 404 Not Found");
+            $source = null;
+            if ($name == 'content_en') $source = get_site_preference('custom404');
+            $mtime = time();
+            $source = trim($source);
+            return;
+        }
+        else if( isset($_SESSION['__cms_preview_']) && $contentobj->Id() == __CMS_PREVIEW_PAGE__ ) {
+            $contentobj =& $_SESSION['__cms_preview__'];
+            $source = $contentobj->Show($name);
+            $mtime = time();
+            $source = preg_replace("/\{\/?php\}/", "", $source);
+            $source = trim($source);
+            return;
+        }
+        else if (isset($contentobj) && $contentobj !== FALSE) {
+            $source = $contentobj->Show($name);
+            $source = preg_replace("/\{\/?php\}/", "", $source);
+            $mtime = $contentobj->GetModifiedDate();
+            if( !$contentobj->Cachable() ) $mtime = time();
+            $source = trim($source);
+            return;
+        }
+        $source = null;
+        $mtime = null;
+        return;
     }
-    else if( isset($_SESSION['__cms_preview_']) && $contentobj->Id() == __CMS_PREVIEW_PAGE__ ) {
-      $contentobj =& $_SESSION['__cms_preview__'];
-      $source = $contentobj->Show($name);
-      $mtime = time();
-      $source = preg_replace("/\{\/?php\}/", "", $source);
-      $source = trim($source);
-      return;
-    }
-    else if (isset($contentobj) && $contentobj !== FALSE) {
-      $source = $contentobj->Show($name);
-      $source = preg_replace("/\{\/?php\}/", "", $source);
-      $mtime = $contentobj->GetModifiedDate();
-      if( !$contentobj->Cachable() ) $mtime = time();
-      $source = trim($source);
-      return;
-    }
-    $source = null;
-    $mtime = null;
-    return;
-  }
 } // end of class
 
 

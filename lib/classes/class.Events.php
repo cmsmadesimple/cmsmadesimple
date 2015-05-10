@@ -50,7 +50,7 @@ final class Events
 	 */
 	static public function CreateEvent( $modulename, $eventname )
 	{
-		$db = cmsms()->GetDb();
+		$db = CmsApp::get_instance()->GetDb();
 		$count = $db->GetOne('SELECT count(*) from '.cms_db_prefix().'events where originator = ? and event_name = ?', array($modulename, $eventname));
 		if ($count < 1) {
 			$id = $db->GenID( cms_db_prefix()."events_seq" );
@@ -72,7 +72,7 @@ final class Events
 	 */
 	static public function RemoveEvent( $modulename, $eventname )
 	{
-		$gCms = cmsms();
+		$gCms = CmsApp::get_instance();
 		$db = $gCms->GetDb();
 
 		// get the id
@@ -110,7 +110,7 @@ final class Events
 	{
 		global $CMS_INSTALL_PAGE;
 		if( isset($CMS_INSTALL_PAGE) ) return;
-		$gCms = cmsms();
+		$gCms = CmsApp::get_instance();
 
 		$results = Events::ListEventHandlers($modulename, $eventname);
 
@@ -149,7 +149,7 @@ final class Events
 	 */
 	static public function ListEventHandlers( $modulename, $eventname )
 	{
-		$gCms = cmsms();
+		$gCms = CmsApp::get_instance();
 		$db = $gCms->GetDb();
 
 		$params['module'] = $modulename;
@@ -182,7 +182,7 @@ final class Events
 	 */
 	static public function ListEvents()
 	{
-		$gCms = cmsms();
+		$gCms = CmsApp::get_instance();
 		$db = $gCms->GetDb();
 
 		$q = 'SELECT e.*, count(eh.event_id) as usage_count FROM '.cms_db_prefix().
@@ -217,7 +217,7 @@ final class Events
 		if( $tag_name == false && $module_handler == false ) return false;
 		if( $tag_name != false && $module_handler != false ) return false;
 
-		$gCms = cmsms();
+		$gCms = CmsApp::get_instance();
 		$db = $gCms->GetDb();
 
 		// find the id
@@ -292,7 +292,7 @@ final class Events
 		$field = 'handler_name';
 		if( $module_handler != false ) $field = 'module_handler';
 
-		$gCms = cmsms();
+		$gCms = CmsApp::get_instance();
 		$db = $gCms->GetDb();
 
 		// find the id
@@ -331,7 +331,7 @@ final class Events
 	 */
 	static public function RemoveAllEventHandlers( $modulename, $eventname )
 	{
-		$gCms = cmsms();
+		$gCms = CmsApp::get_instance();
 		$db = $gCms->GetDb();
 
 		// find the id

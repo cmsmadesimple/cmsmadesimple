@@ -245,7 +245,6 @@ final class CmsFormUtils
     public static function create_textarea($parms)
     {
         // todo: rewrite me with var args... to accept a numeric array of arguments, or a hash.
-        $gCms = cmsms();
         $haveit = FALSE;
         $result = '';
         $uid = get_userid(false);
@@ -266,7 +265,7 @@ final class CmsFormUtils
         if( $enablewysiwyg ) {
             // we want a wysiwyg
             $appendclass = 'cmsms_wysiwyg';
-            $module = cmsms()->GetModuleOperations()->GetWYSIWYGModule($forcemodule);
+            $module = ModuleOperations::get_instance()->GetWYSIWYGModule($forcemodule);
             if( $module && $module->HasCapability(CmsCoreCapabilities::WYSIWYG_MODULE) ) {
                 $appendclass = $module->GetName();
                 $attribs['data-cms-lang'] = 'html';
@@ -281,7 +280,7 @@ final class CmsFormUtils
 
         if( !$module && $wantedsyntax ) {
             $attribs['data-cms-lang'] = trim($wantedsyntax);
-            $module = cmsms()->GetModuleOperations()->GetSyntaxHighlighter($forcemodule);
+            $module = ModuleOperations::get_instance()->GetSyntaxHighlighter($forcemodule);
             if( $module && $module->HasCapability(CmsCoreCapabilities::SYNTAX_MODULE) ) {
                 $attribs['class'] .= ' '.$module->GetName();
                 self::_add_syntax($module->GetName());

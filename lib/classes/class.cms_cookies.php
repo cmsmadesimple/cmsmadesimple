@@ -69,8 +69,7 @@ final class cms_cookies
   private static function __path()
   {
 	  if( !is_array(self::$_parts) ) {
-		  $config = cmsms()->GetConfig();
-		  self::$_parts = parse_url($config['root_url']);
+		  self::$_parts = parse_url(CMS_ROOT_URL);
       }
 	  if( !isset(self::$_parts['path']) || self::$_parts['path'] == '' ) {
 		  self::$_parts['path'] = '/';
@@ -84,11 +83,10 @@ final class cms_cookies
   private static function __domain()
   {
 	  if( !is_array(self::$_parts) ) {
-		  $config = cmsms()->GetConfig();
-		  self::$_parts = parse_url($config['root_url']);
+		  self::$_parts = parse_url(CMS_ROOT_URL);
       }
 	  if( !isset(self::$_parts['host']) || self::$_parts['host'] == '' ) {
-		  self::$_parts['host'] = $config['root_url'];
+		  self::$_parts['host'] = CMS_ROOT_URL;
 	  }
 	  return self::$_parts['host'];
   }
@@ -102,7 +100,7 @@ final class cms_cookies
     $res = setcookie($key,$value,$expire,
 					 self::__path(),
 					 self::__domain(),
-                     cmsms()->is_https_request(),
+                     CmsApp::get_instance()->is_https_request(),
 					 TRUE);
   }
 

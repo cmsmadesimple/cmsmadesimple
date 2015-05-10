@@ -1,10 +1,10 @@
 <?php
 #BEGIN_LICENSE
 #-------------------------------------------------------------------------
-# Module: cms_tree (c) 2010 by Robert Campbell 
+# Module: cms_tree (c) 2010 by Robert Campbell
 #         (calguy1000@cmsmadesimple.org)
 #  A simple php tree class.
-# 
+#
 #-------------------------------------------------------------------------
 # CMS - CMS Made Simple is (c) 2005 by Ted Kulp (wishy@cmsmadesimple.org)
 # Visit our homepage at: http://www.cmsmadesimple.org
@@ -19,7 +19,7 @@
 # However, as a special exception to the GPL, this software is distributed
 # as an addon module to CMS Made Simple.  You may not use this software
 # in any Non GPL version of CMS Made simple, or in any version of CMS
-# Made simple that does not indicate clearly and obviously in its admin 
+# Made simple that does not indicate clearly and obviously in its admin
 # section that the site was built with CMS Made simple.
 #
 # This program is distributed in the hope that it will be useful,
@@ -88,38 +88,38 @@ class cms_tree_operations
    */
   public static function load_from_list($data)
   {
-    // create a tree object
-    $tree = new cms_content_tree();
-    $sorted = array();
-    $contentops = cmsms()->GetContentOperations();
+      // create a tree object
+      $tree = new cms_content_tree();
+      $sorted = array();
+      $contentops = ContentOperations::get_instance();
 
-    for( $i = 0; $i < count($data); $i++ ) {
-      $row = $data[$i];
+      for( $i = 0, $n = count($data); $i < $n; $i++ ) {
+          $row = $data[$i];
 
-      // create new node.
-      $node = new cms_content_tree(array('id'=>$row['content_id'],'alias'=>$row['content_alias']));
+          // create new node.
+          $node = new cms_content_tree(array('id'=>$row['content_id'],'alias'=>$row['content_alias']));
 
-      // find where to insert it.
-      $parent_node = null;
-      if( $row['parent_id'] < 1 ) {
-	$parent_node = $tree;
+          // find where to insert it.
+          $parent_node = null;
+          if( $row['parent_id'] < 1 ) {
+              $parent_node = $tree;
+          }
+          else {
+              if( !isset($sorted[$row['parent_id']]) ) {
+                  // ruh-roh
+                  debug_display($row); flush();
+                  die('foo2');
+              }
+              else {
+                  $parent_node = $sorted[$row['parent_id']];
+              }
+          }
+
+          // add it.
+          $parent_node->add_node($node);
+          $sorted[$row['content_id']] = $node;
       }
-      else {
-	if( !isset($sorted[$row['parent_id']]) ) {
-	  // ruh-roh
-	  debug_display($row); flush();
-          die('foo2');
-	}
-	else {
-	  $parent_node = $sorted[$row['parent_id']];
-	}
-      }
-
-      // add it.
-      $parent_node->add_node($node);
-      $sorted[$row['content_id']] = $node;
-    }
-    return $tree;
+      return $tree;
   }
 }
 

@@ -123,14 +123,11 @@ class User
 	{
 		$result = false;
 
+        $userops = UserOperations::get_instance();
 		if ($this->id > -1) {
-			$gCms = cmsms();
-			$userops = $gCms->GetUserOperations();
 			$result = $userops->UpdateUser($this);
 		}
 		else {
-			$gCms = cmsms();
-			$userops = $gCms->GetUserOperations();
 			$newid = $userops->InsertUser($this);
 			if ($newid > -1) {
 				$this->id = $newid;
@@ -151,16 +148,11 @@ class User
 	function Delete()
 	{
 		$result = false;
-
 		if ($this->id > -1) {
-			$gCms = cmsms();
-			$userops = $gCms->GetUserOperations();
+			$userops = UserOperations::get_instance();
 			$result = $userops->DeleteUserByID($this->id);
-			if ($result) {
-				$this->SetInitialValues();
-			}
+			if ($result) $this->SetInitialValues();
 		}
-
 		return $result;
 	}
 }

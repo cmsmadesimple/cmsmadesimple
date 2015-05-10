@@ -105,11 +105,11 @@ final class cms_module_smarty_plugin_manager
 
 		$this->_loaded = TRUE;
 		$this->_data = array();
-		$db = cmsms()->GetDb();
+		$db = CmsApp::get_instance()->GetDb();
 		$query = 'SELECT * FROM '.cms_db_prefix().'module_smarty_plugins ORDER BY module';
 		$tmp = $db->GetArray($query);
 		if( is_array($tmp) ) {
-			for( $i = 0; $i < count($tmp); $i++ ) {
+			for( $i = 0, $n = count($tmp); $i < $n; $i++ ) {
 				$row = $tmp[$i];
 				$row['callback'] = unserialize($row['callback']);
 				// todo, verify signature
@@ -126,7 +126,7 @@ final class cms_module_smarty_plugin_manager
 		if( !is_array($this->_data) || count($this->_data) == 0 || $this->_modified == FALSE )
 			return;
 
-		$db = cmsms()->GetDb();
+		$db = CmsApp::get_instance()->GetDb();
 		$query = 'TRUNCATE TABLE '.cms_db_prefix().'module_smarty_plugins';
 		$db->Execute($query);
 

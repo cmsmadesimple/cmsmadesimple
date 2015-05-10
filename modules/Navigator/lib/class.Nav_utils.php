@@ -96,11 +96,12 @@ final class Nav_utils
             $obj->has_children = FALSE;
             $obj->children_exist = FALSE;
 
-            if( ($tmp = cmsms()->get_content_id()) && $obj->id == $tmp ) {
+            $cur_content_id = $gCms->get_content_id();
+            if( $obj->id == $cur_content_id ) {
                 $obj->current = true;
             }
             else {
-                $tmp_node = $hm->find_by_tag('id',$tmp);
+                $tmp_node = $hm->find_by_tag('id',$cur_content_id);
                 while( $tmp_node ) {
                     if( $tmp_node->get_tag('id') == $obj->id ) {
                         $obj->parent = TRUE;
@@ -113,7 +114,7 @@ final class Nav_utils
             if( $content->DefaultContent() ) $obj->default = 1;
             if( $deep ) {
                 if ($content->HasProperty('target')) $obj->target = $content->GetPropertyValue('target');
-                $config = cmsms()->GetConfig();
+                $config = $gCms->GetConfig();
                 $obj->extra1 = $content->GetPropertyValue('extra1');
                 $obj->extra2 = $content->GetPropertyValue('extra2');
                 $obj->extra3 = $content->GetPropertyValue('extra3');

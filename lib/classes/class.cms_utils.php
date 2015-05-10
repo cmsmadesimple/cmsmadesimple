@@ -142,7 +142,7 @@ final class cms_utils
 	 */
 	final public static function & get_db()
 	{
-		return cmsms()->GetDb();
+		return CmsApp::get_instance()->GetDb();
 	}
 
 
@@ -155,7 +155,7 @@ final class cms_utils
 	 */
 	final public static function & get_config()
 	{
-		return cmsms()->GetConfig();
+		return CmsApp::get_instance()->GetConfig();
 	}
 
 
@@ -169,7 +169,7 @@ final class cms_utils
 	 */
 	final public static function & get_smarty()
 	{
-		return cmsms()->GetSmarty();
+		return CmsApp::get_instance()->GetSmarty();
 	}
 
 
@@ -184,7 +184,7 @@ final class cms_utils
 	 */
 	final public static function get_current_content()
 	{
-		return cmsms()->get_content_object();
+		return CmsApp::get_instance()->get_content_object();
 	}
 
 
@@ -199,7 +199,7 @@ final class cms_utils
 	 */
 	final public static function get_current_alias()
 	{
-		$obj = cmsms()->get_content_object();
+		$obj = CmsApp::get_instance()->get_content_object();
 		if( $obj ) return $obj->Alias();
 	}
 
@@ -215,7 +215,7 @@ final class cms_utils
 	 */
 	final public static function get_current_pageid()
 	{
-		return cmsms()->get_content_id();
+		return CmsApp::get_instance()->get_content_id();
 	}
 
 
@@ -298,48 +298,6 @@ final class cms_utils
 		return CmsAdminThemeBase::GetThemeObject();
 	}
 
-	/**
-	 * Create a thumbnail for an image.
-	 * This is a fairly smart routine that first detects if a thumbnail already exists, or if one can be written anyways, and then uses the system preferences
-	 * to generate the thumbnail file.
-	 *
-	 * @param string $srcfile complete file specification to a source image
-	 * @author calguy1000
-	 * @since 1.11
-	 * @returns string complete file specification to a thumbnail for an image.  Or null.
-	 */
-	public static function generate_thumbnail($srcfile)
-	{
-		if( !file_exists($srcfile) ) return;
-		$ext =  strtolower(strrchr($srcfile,'.'));
-		while( startswith($ext,'.') ) $ext = substr($ext,1);
-		if( !in_array($ext,array('jpg','jpeg','png','bmp','gif')) ) {
-			return; // not gonna create a thumb on anything but an image.
-		}
-		$dn = dirname($srcfile);
-		$bn = basename($srcfile);
-		if( startswith($bn,'thumb_') ) return;
-
-		$thumb = cms_join_path($dn,'thumb_'.$bn);
-		if( file_exists($thumb) && filemtime($thumb) > filemtime($srcfile) ) {
-			// nothing to do, thumb exists and is newer than the source.
-			return $thumb;
-		}
-
-		if( !is_writable($dn) ) return;
-
-		$config = cmsms()->GetConfig();
-		require_once($config['root_path'].'/lib/filemanager/ImageManager/Classes/Transform.php');
-		$width = get_site_preference('thumbnail_width',96);
-		$height = get_site_preference('thumbnail_height',96);
-
-		$transform = new Image_Transform;
-		$img = $transform->factory();
-		$img->load($srcfile);
-		$img->resize($width,$height);
-		$img->save($thumb);
-		return $thumb;
-	}
 } // end of class
 
 ?>

@@ -59,7 +59,7 @@ public static function get_categories($id,$params,$returnid=-1)
     if( !count($catinfo) ) return;
 
     $cat_ids = array();
-    for( $i = 0; $i < count($catinfo); $i++ ) {
+    for( $i = 0, $n = count($catinfo); $i < $n; $i++ ) {
         $cat_ids[] = $catinfo[$i]['news_category_id'];
     }
     sort($cat_ids);
@@ -84,7 +84,7 @@ public static function get_categories($id,$params,$returnid=-1)
         $q2 .= ' AND status = \'published\' GROUP BY news_category_id';
         $tmp = $db->GetArray($q2);
         if( count($tmp) ) {
-            for( $i = 0; $i < count($tmp); $i++ ) {
+            for( $i = 0, $n = count($tmp); $i < $n; $i++ ) {
                 $counts[$tmp[$i]['news_category_id']] = $tmp[$i]['cnt'];
             }
         }
@@ -93,7 +93,7 @@ public static function get_categories($id,$params,$returnid=-1)
     $rowcounter=0;
     $items = array();
     $depth = 1;
-    for( $i = 0; $i < count($catinfo); $i++ ) {
+    for( $i = 0, $n = count($catinfo); $i < $n; $i++ ) {
         $row =& $catinfo[$i];
         $row['index'] = $rowcounter++;
         $row['count'] = (isset($counts[$row['news_category_id']]))?$counts[$row['news_category_id']]:0;
@@ -135,7 +135,7 @@ public static function get_category_list()
 {
     self::get_all_categories();
     $categorylist = array();
-    for( $i = 0; $i < count(self::$_cached_categories); $i++ ) {
+    for( $i = 0, $n = count(self::$_cached_categories); $i < $n; $i++ ) {
         $row = self::$_cached_categories[$i];
         $categorylist[$row['long_name']] = $row['news_category_id'];
     }
@@ -148,7 +148,7 @@ public static function get_category_names_by_id()
 {
     self::get_all_categories();
     $list = array();
-    for( $i = 0; $i < count(self::$_cached_categories); $i++ ) {
+    for( $i = 0, $n = count(self::$_cached_categories); $i < $n; $i++ ) {
         $list[self::$_cached_categories[$i]['news_category_id']] = self::$_cached_categories[$i]['news_category_name'];
     }
     return $list;
@@ -158,7 +158,7 @@ public static function get_category_names_by_id()
 public static function get_category_name_from_id($id)
 {
     self::get_all_categories();
-    for( $i = 0; $i < count(self::$_cached_categories); $i++ ) {
+    for( $i = 0, $n = count(self::$_cached_categories); $i < $n; $i++ ) {
         if( $id == self::$_cached_categories[$i]['news_category_id'] ) {
             return self::$_cached_categories[$i]['news_category_name'];
         }
@@ -178,7 +178,7 @@ public static function get_fielddefs($publiconly = TRUE)
 
         self::$_cached_fielddefs = array();
         if( is_array($tmp) && count($tmp) ) {
-            for( $i = 0; $i < count($tmp); $i++ ) {
+            for( $i = 0, $n = count($tmp); $i < $n; $i++ ) {
                 self::$_cached_fielddefs[$tmp[$i]['id']] = $tmp[$i];
             }
         }
@@ -231,7 +231,7 @@ public static function fill_article_from_formparams(news_article &$news,$params,
 
         case 'category':
             $list = self::get_category_names_by_id();
-            for( $i = 0; $i < count(self::$_cached_categories); $i++ ) {
+            for( $i = 0, $n = count(self::$_cached_categories); $i < $n; $i++ ) {
                 if( $value == self::$_cached_categories[$i]['news_category_name'] )
                     $news->category_id = self::$_cached_categories[$i]['news_category_id'];
             }
@@ -379,7 +379,7 @@ public static function preloadFieldData($ids)
     if( !is_array($ids) && is_numeric($ids) ) $ids = array($ids);
 
     $tmp = array();
-    for( $i = 0; $i < count($ids); $i++ ) {
+    for( $i = 0, $n = count($ids); $i < $n; $i++ ) {
         $n = (int)$ids[$i];
         if( $n < 0 ) continue;
         if( is_array(self::$_cached_fieldvals) && isset(self::$_cached_fieldvals[$n]) ) continue;

@@ -56,7 +56,7 @@ function cms_module_plugin($params,&$template)
     }
     cms_utils::set_app_data('mid_cache',$mid_cache);
 
-    $returnid = cmsms()->get_content_id();
+    $returnid = CmsApp::get_instance()->get_content_id();
 
     $modulename = '';
     $action = 'default';

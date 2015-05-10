@@ -31,14 +31,14 @@
  */
 function cms_module_RedirectToAdmin(&$modinstance, $page, $params=array())
 {
-  $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
-  $url = $page.$urlext;
-  if( count($params) ) {
-      foreach ($params as $key=>$value) {
-		  $url .= '&'.$key.'='.rawurlencode($value);
-      }
-  }
-  redirect($url);
+    $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
+    $url = $page.$urlext;
+    if( count($params) ) {
+        foreach ($params as $key=>$value) {
+            $url .= '&'.$key.'='.rawurlencode($value);
+        }
+    }
+    redirect($url);
 }
 
 /**
@@ -46,12 +46,9 @@ function cms_module_RedirectToAdmin(&$modinstance, $page, $params=array())
  */
 function cms_module_Redirect(&$modinstance, $id, $action, $returnid='', $params=array(), $inline=false)
 {
-	$gCms = cmsms();
-	$config = $gCms->config;
-
 	$name = $modinstance->GetName();
 
-	#Suggestion by Calguy to make sure 2 actions don't get sent
+	// Suggestion by Calguy to make sure 2 actions don't get sent
 	if (isset($params['action']))unset($params['action']);
 	if (isset($params['id'])) unset($params['id']);
 	if (isset($params['module'])) unset($params['module']);
@@ -59,8 +56,7 @@ function cms_module_Redirect(&$modinstance, $id, $action, $returnid='', $params=
 
 	$text = '';
 	if ($returnid != '') {
-		// gotta get the URL for this page.
-		$contentops = $gCms->GetContentOperations();
+        $contentops = ContentOperations::get_instance();
 		$content = $contentops->LoadContentFromId($returnid);
 		if( !is_object($content) ) {
 			// no destination content object

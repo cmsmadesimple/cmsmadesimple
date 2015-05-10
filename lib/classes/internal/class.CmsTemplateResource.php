@@ -57,7 +57,7 @@ class CmsTemplateResource extends CMS_Fixed_Resource_Custom
 
 	protected function fetch($name,&$source,&$mtime)
 	{
-		if( is_sitedown() && cmsms()->is_frontend_request() ) {
+		if( is_sitedown() && CmsApp::get_instance()->is_frontend_request() ) {
 			$source = '';
 			$mtime = time();
 			if( $this->_section == 'body' ) {
@@ -142,7 +142,7 @@ class CmsTemplateResource extends CMS_Fixed_Resource_Custom
 
 	public static function reset_page_type_defaults()
 	{
-		$config = cmsms()->GetConfig();
+		$config = CmsApp::get_instance()->GetConfig();
 		$file = cms_join_path($config['admin_path'],'templates','orig_page_template.tpl');
 		$contents = '';
 		if( is_file($file) ) $contents = @file_get_contents($file);

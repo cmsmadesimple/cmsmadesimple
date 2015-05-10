@@ -63,7 +63,7 @@ class cms_content_tree extends cms_tree
 	public function &find_by_tag($tag_name,$value,$case_insensitive = FALSE)
 	{
 		if( $tag_name == 'id' && $case_insensitive == FALSE && ($this->get_parent() == null || $this->get_tag('id') == '') ) {
-			$res = cmsms()->GetContentOperations()->quickfind_node_by_id($value);
+			$res = ContentOperations::get_instance()->quickfind_node_by_id($value);
 			return $res;
 		}
 		return parent::find_by_tag($tag_name,$value,$case_insensitive);
@@ -139,9 +139,7 @@ class cms_content_tree extends cms_tree
 	function getNodeByHierarchy($position)
 	{
 		$result = null;
-		$gCms = cmsms();
-		$contentops = $gCms->GetContentOperations();
-		$id = $contentops->GetPageIDFromHierarchy($position);
+		$id = ContentOperations::get_instance()->GetPageIDFromHierarchy($position);
 		if ($id) $result = $this->find_by_tag('id',$id);
 		return $result;
 	}
@@ -257,10 +255,8 @@ class cms_content_tree extends cms_tree
 			$parent = $this->getParent();
 			if( !$loadsiblings || !$parent ) {
 				// only load this content object
-				$gCms = cmsms();
-				$contentops = $gCms->GetContentOperations();
 				// todo: LoadContentFromId should use content cache.
-				$content = $contentops->LoadContentFromId($this->get_tag('id'), $deep);
+				$content = ContentOperations::get_instance()->LoadContentFromId($this->get_tag('id'), $deep);
 				return $content;
 			}
 			else {
@@ -336,15 +332,13 @@ class cms_content_tree extends cms_tree
 		if( is_array($children) && count($children) && $loadcontent ) {
 			// check to see if we need to load anything.
 			$ids = array();
-			for( $i = 0; $i < count($children); $i++ ) {
+			for( $i = 0, $n = count($children); $i < $n; $i++ ) {
 				if( !$children[$i]->isContentCached() ) $ids[] = $children[$i]->get_tag('id');
 			}
 
 			if( count($ids) ) {
 				// load the children that aren't loaded yet.
-				$gCms = cmsms();
-				$contentops = $gCms->GetContentOperations();
-				$contentops->LoadChildren($this->get_tag('id'),$deep,$all,$ids);
+                ContentOperations::get_instance()->LoadChildren($this->get_tag('id'),$deep,$all,$ids);
 			}
 		}
 
@@ -360,21 +354,23 @@ class cms_content_tree extends cms_tree
 	 */
 	public function &getFlatList()
 	{
-		$result = array();
+        static $result = null;
+        if( is_null($result) ) {
+            $result = array();
 
-		if( $this->has_children() ) {
-			$children = $this->get_children();
-			for( $i = 0; $i < count($children); $i++ ) {
-				$result[$children[$i]->get_tag('id')] =& $children[$i];
-				if( $children[$i]->has_children() ) {
-					$tmp = $children[$i]->getFlatList();
-					foreach( $tmp as $key => &$node ) {
-						$result[$key] = $node;
-					}
-				}
-			}
-		}
-
+            if( $this->has_children() ) {
+                $children = $this->get_children();
+                for( $i = 0, $n = count($children); $i < $n; $i++ ) {
+                    $result[$children[$i]->get_tag('id')] =& $children[$i];
+                    if( $children[$i]->has_children() ) {
+                        $tmp = $children[$i]->getFlatList();
+                        foreach( $tmp as $key => &$node ) {
+                            $result[$key] = $node;
+                        }
+                    }
+                }
+            }
+        }
 		return $result;
 	}
 
@@ -402,7 +398,7 @@ class cms_content_tree extends cms_tree
 		$parent = $this->get_parent();
 		if( $parent ) {
 			$children = $parent->get_children();
-			for( $i = 0; $i < count($children); $i++ ) {
+			for( $i = 0, $n = count($children); $i < $n; $i++ ) {
 				if( $children[$i]->get_tag('id') == $this->get_tag('id') ) return $i+1;
 			}
 		}

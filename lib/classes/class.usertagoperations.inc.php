@@ -78,7 +78,7 @@ final class UserTagOperations
 	public function LoadUserTags()
 	{
 		if( count($this->_cache) == 0 ) {
-			$db = cmsms()->GetDb();
+			$db = CmsApp::get_instance()->GetDb();
 
 			$query = 'SELECT * FROM '.cms_db_prefix().'userplugins'.' ORDER BY userplugin_name';
 			$data = $db->GetArray($query);
@@ -140,8 +140,8 @@ final class UserTagOperations
 	function SmartyTagExists($name,$check_functions = true)
 	{
 		// get the list of smarty plugins that are known.
-		$config = cmsms()->GetConfig();
-		$phpfiles = glob($config['root_path'].'/plugins/function.*.php');
+		$config = CmsApp::get_instance()->GetConfig();
+		$phpfiles = glob(CMS_ROOT_PATH.'/plugins/function.*.php');
 		if( is_array($phpfiles) && count($phpfiles) ) {
 			for( $i = 0; $i < count($phpfiles); $i++ ) {
 				$fn = basename($phpfiles[$i]);
@@ -155,7 +155,7 @@ final class UserTagOperations
 
 		if( $check_functions ) {
 			// registered by something else... maybe a module.
-			$smarty = cmsms()->GetSmarty();
+			$smarty = CmsApp::get_instance()->GetSmarty();
 			if( $smarty->is_registered($name) ) return TRUE;
 		}
 
@@ -173,7 +173,7 @@ final class UserTagOperations
 	 */
 	function SetUserTag( $name, $text, $description )
 	{
-		$db = cmsms()->GetDb();
+		$db = CmsApp::get_instance()->GetDb();
 
 		$existing = $this->GetUserTag($name);
 		if (!$existing) {
@@ -211,7 +211,7 @@ final class UserTagOperations
 	 */
 	function RemoveUserTag( $name )
 	{
-		$gCms = cmsms();
+		$gCms = CmsApp::get_instance();
 		$db = $gCms->GetDb();
 
 		$query = 'DELETE FROM '.cms_db_prefix().'userplugins WHERE userplugin_name = ?';
@@ -253,7 +253,7 @@ final class UserTagOperations
 		$row = $this->_get_from_cache($name);
 		$result = FALSE;
 		if( $row ) {
-			$smarty = cmsms()->GetSmarty();
+			$smarty = CmsApp::get_instance()->GetSmarty();
 			$functionname = $this->CreateTagFunction($name);
 			$result = call_user_func_array($functionname, array(&$params, &$smarty));
 		}

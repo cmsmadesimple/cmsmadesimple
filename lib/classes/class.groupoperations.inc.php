@@ -72,7 +72,7 @@ final class GroupOperations
 	 */
 	public function LoadGroups()
 	{
-		$db = cmsms()->GetDb();
+		$db = CmsApp::get_instance()->GetDb();
 		$result = array();
 		$query = "SELECT group_id, group_name, group_desc, active FROM ".cms_db_prefix()."groups ORDER BY group_id";
 		$dbresult = $db->Execute($query);
@@ -97,7 +97,7 @@ final class GroupOperations
 	public function &LoadGroupByID($id)
 	{
 		$result = false;
-		$db = cmsms()->GetDb();
+		$db = CmsApp::get_instance()->GetDb();
 
 		$query = "SELECT group_id, group_name, group_desc, active FROM ".cms_db_prefix()."groups WHERE group_id = ? ORDER BY group_id";
 		$dbresult = $db->Execute($query, array($id));
@@ -123,7 +123,7 @@ final class GroupOperations
 	public function InsertGroup($group)
 	{
 		$result = -1;
-		$db = cmsms()->GetDb();
+		$db = CmsApp::get_instance()->GetDb();
 
 		$query = 'SELECT group_id FROM '.cms_db_prefix().'groups WHERE group_name = ?';
 		$tmp = $db->GetOne($query,array($group->name));
@@ -148,7 +148,7 @@ final class GroupOperations
 	public function UpdateGroup($group)
 	{
 		$result = false;
-		$db = cmsms()->GetDb();
+		$db = CmsApp::get_instance()->GetDb();
 
 		$query = 'SELECT group_id FROM '.cms_db_prefix().'groups WHERE group_name = ? AND group_id != ?';
 		$tmp = $db->GetOne($query,array($group->name,$group->id));
@@ -171,7 +171,7 @@ final class GroupOperations
 	public function DeleteGroupByID($id)
 	{
 		$result = false;
-		$db = cmsms()->GetDb();
+		$db = CmsApp::get_instance()->GetDb();
 
 		$query = 'DELETE FROM '.cms_db_prefix().'user_groups where group_id = ?';
 		$dbresult = $db->Execute($query, array($id));
@@ -202,7 +202,7 @@ final class GroupOperations
 		if( $groupid == 1 ) return TRUE;
 
 		if( !isset($this->_perm_cache) || !is_array($this->_perm_cache) || !isset($this->_perm_cache[$groupid]) ) {
-			$db = cmsms()->GetDb();
+			$db = CmsApp::get_instance()->GetDb();
 			$query = 'SELECT permission_id FROM '.cms_db_prefix().'group_perms WHERE group_id = ?';
 			$dbr = $db->GetCol($query,array((int)$groupid));
 			if( is_array($dbr) && count($dbr) ) $this->_perm_cache[$groupid] = $dbr;
@@ -223,7 +223,7 @@ final class GroupOperations
 		if( $permid < 1 ) return;
 		if( $groupid <= 1 ) return;
 
-		$db = cmsms()->GetDb();
+		$db = CmsApp::get_instance()->GetDb();
 
 		$new_id = $db->GenId(cms_db_prefix().'group_perms_seq');
 		if( !$new_id ) return;

@@ -23,17 +23,13 @@
  * @ignore
  */
 
+/*
 function __cms_load($filename)
 {
-  $gCms = cmsms(); // wierd, but this is required.
-  static $_cumulative = 0;
-  $mem = memory_get_usage();
-  $filesize = @filesize($filename);
+  $gCms = CmsApp::get_instance(); // wierd, but this is required.
   require_once($filename);
-  $mem = memory_get_usage() - $mem;
-  $_cumulative += $mem;
-  debug_buffer("Loaded $filename ($filesize) = $mem bytes for an approximate total of $_cumulative");
 }
+*/
 
 /**
  * A function for auto-loading classes.
@@ -46,69 +42,71 @@ function __cms_load($filename)
  */
 function cms_autoloader($classname)
 {
+    $gCms = CmsApp::get_instance();
+
   // standard classes
   $fn = cms_join_path(CMS_ROOT_PATH,'lib','classes',"class.{$classname}.php");
-  if( file_exists($fn) ) {
-    __cms_load($fn);
-    return;
+  if( is_file($fn) ) {
+      require_once($fn);
+      return;
   }
 
   // standard internal classes
   $fn = cms_join_path(CMS_ROOT_PATH,'lib','classes','internal',"class.{$classname}.php");
-  if( file_exists($fn) ) {
-    __cms_load($fn);
-    return;
+  if( is_file($fn) ) {
+      require_once($fn);
+      return;
   }
 
   // lowercase classes
   $lowercase = strtolower($classname);
   $fn = cms_join_path(CMS_ROOT_PATH,'lib','classes',"class.{$lowercase}.inc.php");
-  if( file_exists($fn) && $classname != 'Content' ) {
-    __cms_load($fn);
-    return;
+  if( is_file($fn) && $classname != 'Content' ) {
+      require_once($fn);
+      return;
   }
 
   // lowercase internal classes
   $lowercase = strtolower($classname);
   $fn = cms_join_path(CMS_ROOT_PATH,'lib','classes','internal',"class.{$lowercase}.inc.php");
-  if( file_exists($fn) && $classname != 'Content' ) {
-    __cms_load($fn);
-    return;
+  if( is_file($fn) && $classname != 'Content' ) {
+      require_once($fn);
+      return;
   }
 
   // standard interfaces
   $fn = cms_join_path(CMS_ROOT_PATH,'lib','classes',"interface.{$classname}.php");
-  if( file_exists($fn) ) {
-    __cms_load($fn);
-    return;
+  if( is_file($fn) ) {
+      require_once($fn);
+      return;
   }
 
   // internal interfaces
   $fn = cms_join_path(CMS_ROOT_PATH,'lib','classes','internal',"interface.{$classname}.php");
-  if( file_exists($fn) ) {
-    __cms_load($fn);
-    return;
+  if( is_file($fn) ) {
+      require_once($fn);
+      return;
   }
 
   // standard content types
   $fn = cms_join_path(CMS_ROOT_PATH,'lib','classes','contenttypes',"{$classname}.inc.php");
-  if( file_exists($fn) ) {
-    __cms_load($fn);
-    return;
+  if( is_file($fn) ) {
+      require_once($fn);
+      return;
   }
 
   $fn = CMS_ROOT_PATH."/modules/{$classname}/{$classname}.module.php";
-  if( file_exists($fn) ) {
-    __cms_load($fn);
-    return;
+  if( is_file($fn) ) {
+      require_once($fn);
+      return;
   }
 
   $list = ModuleOperations::get_instance()->GetLoadedModules();
   if( is_array($list) && count($list) ) {
       foreach( array_keys($list) as $modname ) {
           $fn = CMS_ROOT_PATH."/modules/$modname/lib/class.$classname.php";
-          if( file_exists( $fn ) ) {
-              __cms_load($fn);
+          if( is_file( $fn ) ) {
+              require_once($fn);
               return;
           }
       }

@@ -49,7 +49,7 @@ class Smarty_CMS extends SmartyBC
     global $CMS_ADMIN_PAGE; // <- Still needed?
     global $CMS_INSTALL_PAGE;
 
-    $config = cmsms()->GetConfig();
+    $config = CmsApp::get_instance()->GetConfig();
 
     // Set template_c and cache dirs
     $this->setCompileDir(TMP_TEMPLATES_C_LOCATION);
@@ -62,7 +62,7 @@ class Smarty_CMS extends SmartyBC
     }
 
     // Set plugins dirs
-    $this->addPluginsDir(cms_join_path($config['root_path'],'plugins'));
+    $this->addPluginsDir(cms_join_path(CMS_ROOT_PATH,'plugins'));
 
     // common resources.
     $this->registerResource('module_db_tpl',new CMSModuleDbTemplateResource());
@@ -74,21 +74,21 @@ class Smarty_CMS extends SmartyBC
     $this->registerDefaultPluginHandler(array(&$this, 'defaultPluginHandler'));
 
     // Load User Defined Tags
-    if( !cmsms()->test_state(CmsApp::STATE_INSTALL) ) {
-      $utops = cmsms()->GetUserTagOperations();
-      $usertags = $utops->ListUserTags();
-      $caching = false;
+    if( !CmsApp::get_instance()->test_state(CmsApp::STATE_INSTALL) ) {
+        $utops = UserTagOperations::get_instance();
+        $usertags = $utops->ListUserTags();
+        $caching = false;
 
-      foreach( $usertags as $id => $name ) {
-	$function = $utops->CreateTagFunction($name);
-	$this->registerPlugin('function',$name,$function,$caching);
-      }
+        foreach( $usertags as $id => $name ) {
+            $function = $utops->CreateTagFunction($name);
+            $this->registerPlugin('function',$name,$function,$caching);
+        }
     }
 
-    if(cmsms()->is_frontend_request()) {
+    if(CmsApp::get_instance()->is_frontend_request()) {
 
-      $this->setTemplateDir(cms_join_path($config['root_path'],'tmp','templates'));
-      $this->setConfigDir(cms_join_path($config['root_path'],'tmp','templates'));
+      $this->setTemplateDir(cms_join_path(CMS_ROOT_PATH,'tmp','templates'));
+      $this->setConfigDir(cms_join_path(CMS_ROOT_PATH,'tmp','templates'));
 
       // Check if we are at install page, don't register anything if so, cause nothing below is needed.
       if(isset($CMS_INSTALL_PAGE)) return;
@@ -116,16 +116,16 @@ class Smarty_CMS extends SmartyBC
       // compile check can only be enabled, if using smarty cache... just for safety.
       if( get_site_preference('use_smartycache',0) ) $this->setCompileCheck(get_site_preference('use_smartycompilecheck',1));
     }
-    else if(cmsms()->test_state(CmsApp::STATE_ADMIN_PAGE)) {
-      $this->addPluginsDir(cms_join_path($config['root_path'], $config['admin_dir'],'plugins'));
+    else if(CmsApp::get_instance()->test_state(CmsApp::STATE_ADMIN_PAGE)) {
+      $this->addPluginsDir(cms_join_path(CMS_ROOT_PATH, $config['admin_dir'],'plugins'));
 
       $this->setCaching(false);
-      $this->setTemplateDir(cms_join_path($config['root_path'],$config['admin_dir'],'templates'));
-      $this->setConfigDir(cms_join_path($config['root_path'],$config['admin_dir'],'configs'));;
+      $this->setTemplateDir(cms_join_path(CMS_ROOT_PATH,$config['admin_dir'],'templates'));
+      $this->setConfigDir(cms_join_path(CMS_ROOT_PATH,$config['admin_dir'],'configs'));;
     }
 
 	// Add assets tpl dir to scope
-	$this->addTemplateDir(cms_join_path($config['root_path'], 'lib', 'assets', 'templates'));
+	$this->addTemplateDir(cms_join_path(CMS_ROOT_PATH, 'lib', 'assets', 'templates'));
 
     // Enable security object
     // Note: Buggy, disabled prior to release of CMSMS 1.11
@@ -217,35 +217,34 @@ class Smarty_CMS extends SmartyBC
    */
   public function defaultPluginHandler($name, $type, $template, &$callback, &$script, &$cachable)
   {
-    debug_buffer('',"Start Load Smarty Plugin $name/$type");
+      debug_buffer('',"Start Load Smarty Plugin $name/$type");
 
-    $cachable = TRUE;
-    $config = cmsms()->GetConfig();
-    $fn = cms_join_path($config['root_path'],'plugins',$type.'.'.$name.'.php');
-    if( file_exists($fn) ) {
-      // plugins with the smarty_cms_function
-      require_once($fn);
-      $func = 'smarty_cms_'.$type.'_'.$name;
-      $script = $fn;
-      if( function_exists($func) ) {
-	$callback = $func;
-	$cachable = FALSE;
-	debug_buffer('',"End Load Smarty Plugin $name/$type");
-	return TRUE;
+      $cachable = TRUE;
+      $fn = cms_join_path(CMS_ROOT_PATH,'plugins',$type.'.'.$name.'.php');
+      if( file_exists($fn) ) {
+          // plugins with the smarty_cms_function
+          require_once($fn);
+          $func = 'smarty_cms_'.$type.'_'.$name;
+          $script = $fn;
+          if( function_exists($func) ) {
+              $callback = $func;
+              $cachable = FALSE;
+              debug_buffer('',"End Load Smarty Plugin $name/$type");
+              return TRUE;
+          }
       }
-    }
 
-    if( cmsms()->is_frontend_request() ) {
-      $row = cms_module_smarty_plugin_manager::load_plugin($name,$type);
-      if( is_array($row) && is_array($row['callback']) && count($row['callback']) == 2 &&
-	  is_string($row['callback'][0]) && is_string($row['callback'][1]) ) {
-	$cachable = $row['cachable'];
-	$callback = $row['callback'][0].'::'.$row['callback'][1];
-	return TRUE;
+      if( CmsApp::get_instance()->is_frontend_request() ) {
+          $row = cms_module_smarty_plugin_manager::load_plugin($name,$type);
+          if( is_array($row) && is_array($row['callback']) && count($row['callback']) == 2 &&
+              is_string($row['callback'][0]) && is_string($row['callback'][1]) ) {
+              $cachable = $row['cachable'];
+              $callback = $row['callback'][0].'::'.$row['callback'][1];
+              return TRUE;
+          }
       }
-    }
 
-    return FALSE;
+      return FALSE;
   }
 
   /**
@@ -299,7 +298,7 @@ class Smarty_CMS extends SmartyBC
     }
 
     // send an event before fetching...this allows us to change template stuff.
-    if( cmsms()->is_frontend_request() ) {
+    if( CmsApp::get_instance()->is_frontend_request() ) {
       $parms = array('template'=>&$template,'cache_id'=>&$cache_id,'compile_id'=>&$compile_id,'display'=>&$display);
       Events::SendEvent('Core','TemplatePreFetch',$parms);
     }
@@ -377,8 +376,6 @@ class Smarty_CMS extends SmartyBC
    */
   public function errorConsole(Exception $e)
   {
-    $config = cmsms()->GetConfig();
-
     $this->force_compile = true;
     $this->debugging = true;
 

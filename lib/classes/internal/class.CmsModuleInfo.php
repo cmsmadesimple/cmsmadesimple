@@ -18,8 +18,7 @@ class CmsModuleInfo implements ArrayAccess
       return version_compare($this['mincmsversion'],CMS_VERSION,'<=');
 
     case 'dir':
-      $config = cmsms()->GetConfig();
-      return cms_join_path($config['root_path'],'modules',$this['name']);
+      return cms_join_path(CMS_ROOT_PATH,'modules',$this['name']);
 
     case 'writable':
       return is_directory_writable($this['dir']);
