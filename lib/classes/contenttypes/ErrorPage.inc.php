@@ -204,8 +204,7 @@ class ErrorPage extends Content
 			$errors[] = lang('nofieldgiven', array(lang('error_type')));
 		}
 		else if ($this->mAlias != $this->mOldAlias) {
-			$gCms = cmsms();
-			$contentops = $gCms->GetContentOperations();
+			$contentops = ContentOperations::get_instance();
 			$error = $contentops->CheckAliasError($this->mAlias, $this->mId);
 			if ($error !== FALSE) {
 				if ($error == lang('aliasalreadyused')) {

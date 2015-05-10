@@ -62,7 +62,7 @@ final class module_meta
 	  global $CMS_INSTALL_PAGE;
 	  if( isset($CMS_INSTALL_PAGE) ) return;
 
-	  $config = cmsms()->GetConfig();
+	  //$config = cmsms()->GetConfig();
 	  //if( count($this->_data) == 0 && (!isset($config['debug']) || !$config['debug']))
 	  if( count($this->_data) == 0 ) {
 		  $this->_data = array();

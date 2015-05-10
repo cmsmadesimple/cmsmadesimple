@@ -58,7 +58,7 @@ class CmsTemplateCache
 
   public function __construct()
   {
-	  if( !cmsms()->is_frontend_request() ) throw new CmsLogicException('This class can only be instantiated on a frontend request');
+	  if( !CmsApp::get_instance()->is_frontend_request() ) throw new CmsLogicException('This class can only be instantiated on a frontend request');
 	  if( self::$_instance ) throw new CmsLogicException('Only one instance of this class is permitted');
 	  self::$_instance = TRUE;
 

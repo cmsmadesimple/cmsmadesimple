@@ -100,8 +100,6 @@ class Link extends ContentBase
 
     function EditAsArray($adding = false, $tab = 0, $showadmin = false)
     {
-		$gCms = cmsms();
-
 		switch($tab) {
 		case '0':
 			return $this->display_attributes($adding);

@@ -81,9 +81,6 @@ class PageLink extends ContentBase
 		$errors = parent::ValidateData();
 		if( $errors === FALSE ) $errors = array();
 
-		$gCms = cmsms();
-		$contentops = $gCms->GetContentOperations();
-
 		$page = $this->GetPropertyValue('page');
 		if ($page == '-1') {
 			$errors[]= lang('nofieldgiven',array(lang('page')));
@@ -92,6 +89,7 @@ class PageLink extends ContentBase
 
 		// get the content type of page.
 		else {
+            $contentops = ContentOperations::get_instance();
 			$destobj = $contentops->LoadContentFromID($page);
 			if( !is_object($destobj) ) {
 				$errors[] = lang('destinationnotfound');
@@ -120,8 +118,7 @@ class PageLink extends ContentBase
     {
 		switch($one) {
 		case 'page':
-			$gCms = cmsms();
-			$contentops = $gCms->GetContentOperations();
+			$contentops = ContentOperations::get_instance();
 			$tmp = $contentops->CreateHierarchyDropdown($this->mId, $this->GetPropertyValue('page'), 'page', 1, 0, 0, 0);
 			if( !empty($tmp) ) return array(lang('destination_page').':',$tmp);
 			break;
@@ -153,8 +150,7 @@ class PageLink extends ContentBase
 		$page = $this->GetPropertyValue('page');
 		$params = $this->GetPropertyValue('params');
 
-		$gCms = cmsms();
-		$contentops = $gCms->GetContentOperations();
+		$contentops = ContentOperations::get_instance();
 		$destcontent = $contentops->LoadContentFromId($page);
 		if( is_object( $destcontent ) ) {
 			$url = $destcontent->GetURL();
