@@ -84,23 +84,23 @@ class CmsNls
    * Test if this NLS object matches the passed in string
    *
    * Matches are achieved by checking name, isocode, fullname, and then aliases
-   * 
+   *
    * @param string $str The test string
    * @return bool
    */
   public function matches($str)
   {
-    if( $str == $this->name() ) return TRUE;
-    if( $str == $this->isocode() ) return TRUE;
-    if( $str == $this->fullname() ) return TRUE;
-    $aliases = $this->aliases();
-    if( !is_array($aliases) ) $aliases = explode(',',$aliases);
-    if( is_array($aliases) && count($aliases) ) {
-      for( $i = 0; $i < count($aliases); $i++ ) {
-	if( strtolower($aliases[$i]) == strtolower($str) ) return TRUE;
+      if( $str == $this->name() ) return TRUE;
+      if( $str == $this->isocode() ) return TRUE;
+      if( $str == $this->fullname() ) return TRUE;
+      $aliases = $this->aliases();
+      if( !is_array($aliases) ) $aliases = explode(',',$aliases);
+      if( is_array($aliases) && count($aliases) ) {
+          for( $i = 0, $n = count($aliases); $i < $n; $i++ ) {
+              if( strcasecmp($aliases[$i],$str) ) return TRUE;
+          }
       }
-    }
-    return FALSE;
+      return FALSE;
   }
 
   /**

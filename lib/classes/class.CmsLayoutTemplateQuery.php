@@ -59,7 +59,7 @@ class CmsLayoutTemplateQuery extends CmsDbQueryBase
 
         $this->_limit = 1000;
         $this->_offset = 0;
-        $db = cmsms()->GetDb();
+        $db = CmsApp::get_instance()->GetDb();
         foreach( $this->_args as $key => $val ) {
             if( empty($val) ) continue;
             if( is_numeric($key) && $val[1] == ':' ) list($key,$second) = explode(':',$val,2);
@@ -79,7 +79,7 @@ class CmsLayoutTemplateQuery extends CmsDbQueryBase
 				$second = trim($second);
 				$tmp = explode(',',$second);
 				$tmp2 = array();
-				for( $i = 0; $i < count($tmp); $i++ ) {
+				for( $i = 0, $n = count($tmp); $i < $n; $i++ ) {
 					$tmp3 = (int)$tmp[$i];
 					if( $tmp3 < 1 ) continue;
 					if( in_array($tmp3,$tmp2) ) continue;

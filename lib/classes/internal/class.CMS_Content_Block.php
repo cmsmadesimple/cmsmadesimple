@@ -207,11 +207,12 @@ final class CMS_Content_Block
             if (!isset($params['block']) &&
                 ($id == 'cntnt01' || $id == '_preview_' || ($id != '' && $inline == false))) {
                 // todo, would be neat here if we could get a list of only frontend modules.
-                $installedmodules = ModuleOperations::get_instance()->GetInstalledModules();
+                $modops = ModuleOperations::get_instance();
+                $installedmodules = $modops->GetInstalledModules();
                 if( count($installedmodules) ) {
                     // case insensitive module match.
                     foreach( $installedmodules  as $key ) {
-                        if (strtolower($modulename) == strtolower($key)) $modulename = $key;
+                        if( !strcasecmp($modulename,$key) ) $modulenae = $key;
                     }
 
                     if (!isset($modulename) || empty($modulename) ) {
@@ -220,7 +221,7 @@ final class CMS_Content_Block
                         return self::content_return('', $params, $smarty);
                     }
 
-                    $modobj = ModuleOperations::get_instance()->get_module_instance($modulename);
+                    $modobj = $modops->get_module_instance($modulename);
                     if( !$modobj ) {
                         // module not found... couldn't even autoload it.
                         @trigger_error('Attempt to access module '.$modulename.' which could not be found (is it properly installed and configured?');
@@ -239,7 +240,7 @@ final class CMS_Content_Block
                         unset($params['required']);
                         unset($params['priority']);
                         unset($params['placeholder']);
-                        $params = array_merge($params, ModuleOperations::get_instance()->GetModuleParameters($id));
+                        $params = array_merge($params, $modops->GetModuleParameters($id));
                         $returnid = '';
                         if (isset($params['returnid'])) {
                             $returnid = $params['returnid'];

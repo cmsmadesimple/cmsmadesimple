@@ -1138,8 +1138,7 @@ abstract class CMSModule
      */
     final public function CreateXMLPackage( &$message, &$filecount )
     {
-        $gCms = CmsApp::get_instance();
-        $modops = $gCms->GetModuleOperations();
+        $modops = ModuleOperations::get_instance();
         return $modops->CreateXmlPackage($this, $message, $filecount);
     }
 
@@ -1432,7 +1431,8 @@ abstract class CMSModule
         $id = cms_htmlentities($id);
         $name = cms_htmlentities($name);
 
-        $smarty = CmsApp::get_instance()->GetSmarty();
+        $gCms = CmsApp::get_instance();
+        $smarty = $gCms->GetSmarty();
         $smarty->assign('actionid',$id);
         $smarty->assign('actionparams',$params);
         $smarty->assign('returnid',$returnid);
@@ -1442,8 +1442,6 @@ abstract class CMSModule
         $output = $this->DoAction($name, $id, $params, $returnid);
 
         if( isset($params['assign']) ) {
-            $gCms = CmsApp::get_instance();
-            $smarty = $gCms->GetSmarty();
             $smarty->assign(cms_htmlentities($params['assign']),$output);
             return;
         }
@@ -2379,7 +2377,7 @@ abstract class CMSModule
         $result=array();
         $tmp = ModuleOperations::get_modules_with_capability($capability,$params);
         if( is_array($tmp) && count($tmp) ) {
-            for( $i = 0; $i < count($tmp); $i++ ) {
+            for( $i = 0, $n = count($tmp); $i < $n; $i++ ) {
                 if( is_object($tmp[$i]) ) {
                     $result[] = get_class($tmp[$i]);
                 }
@@ -2962,7 +2960,7 @@ abstract class CMSModule
         $prefix = $this->GetName().'_mapi_pref_'.$prefix;
         $tmp = cms_siteprefs::list_by_prefix($prefix);
         if( is_array($tmp) && count($tmp) ) {
-            for( $i = 0; $i < count($tmp); $i++ ) {
+            for( $i = 0, $n = count($tmp); $i < $n; $i++ ) {
                 if( !startswith($tmp[$i],$prefix) ) {
                     throw new CmsInvalidDataException(__CLASS__.'::'.__METHOD__.' invalid prefix for preference');
                 }

@@ -55,7 +55,7 @@ final class cms_siteprefs
 		$dbr = $db->GetArray($query);
 		if( is_array($dbr) ) {
 			self::$_prefs = array();
-			for( $i = 0; $i < count($dbr); $i++ ) {
+			for( $i = 0, $n = count($dbr); $i < $n; $i++ ) {
 				$row = $dbr[$i];
 				self::$_prefs[$row['sitepref_name']] = $row['sitepref_value'];
 			}

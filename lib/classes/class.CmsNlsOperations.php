@@ -82,11 +82,11 @@ final class CmsNlsOperations
 		  $langdir = cms_join_path(CMS_ROOT_PATH,$config['admin_dir'],'lang');
 		  $files = glob($nlsdir.'/*nls.php');
 		  if( is_array($files) && count($files) ) {
-			  for( $i = 0; $i < count($files); $i++ ) {
+			  for( $i = 0, $n = count($files); $i < $n; $i++ ) {
 				  if( !is_file($files[$i]) ) continue;
 				  $fn = basename($files[$i]);
 				  $tlang = substr($fn,0,strpos($fn,'.'));
-				  if( $tlang != 'en_US' && !file_exists(cms_join_path($langdir,'ext',$tlang.'.php')) ) continue;
+				  if( $tlang != 'en_US' && !is_file(cms_join_path($langdir,'ext',$tlang.'.php')) ) continue;
 
 				  unset($nls);
 				  include($files[$i]);

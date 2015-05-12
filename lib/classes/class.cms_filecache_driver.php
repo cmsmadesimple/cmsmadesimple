@@ -175,7 +175,7 @@ class cms_filecache_driver extends cms_cache_driver
         $this->_auto_clean_files();
         $fn = $this->_get_filename($key,$group);
         clearstatcache(false,$fn);
-        if( @file_exists($fn) ) return TRUE;
+        if( is_file($fn) ) return TRUE;
         return FALSE;
     }
 
@@ -193,7 +193,7 @@ class cms_filecache_driver extends cms_cache_driver
         if( !$group ) $group = $this->_group;
 
         $fn = $this->_get_filename($key,$group);
-        if( @file_exists($fn) ) {
+        if( is_file($fn) ) {
             @unlink($fn);
             return TRUE;
         }
@@ -283,7 +283,7 @@ class cms_filecache_driver extends cms_cache_driver
     {
         $this->_cleanup($fn);
         $data = null;
-        if( @file_exists($fn) ) {
+        if( is_file($fn) ) {
             clearstatcache();
             $fp = @fopen($fn,'rb');
             if( $fp ) {

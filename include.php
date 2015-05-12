@@ -105,11 +105,11 @@ if( cms_to_bool(ini_get('register_globals')) ) {
 }
 
 #Grab the current configuration
-$config = cmsms()->GetConfig();
+$_app = CmsApp::get_instance(); // for use in this file only.
+$config = $_app->GetConfig();
 
 if( isset($CMS_ADMIN_PAGE) ) {
-  function cms_admin_sendheaders($content_type = 'text/html',$charset = '')
-  {
+  function cms_admin_sendheaders($content_type = 'text/html',$charset = '') {
     if( !$charset ) $charset = get_encoding();
 
     // Date in the past
@@ -171,11 +171,11 @@ debug_buffer('done loading files');
 #Load them into the usual variables.  This'll go away a little later on.
 if (!isset($DONT_LOAD_DB)) {
   debug_buffer('Initialize Database');
-  cmsms()->GetDb();
+  $_app->GetDb();
   debug_buffer('Done Initializing Database');
 
   // Set a umask
-  $global_umask = get_site_preference('global_umask','');
+  $global_umask = cms_siteprefs::get('global_umask','');
   if( $global_umask != '' ) @umask( octdec($global_umask) );
 }
 
@@ -188,7 +188,7 @@ if (!isset($_SERVER['REQUEST_URI'])) {
 #Load all installed module code
 if (! isset($CMS_INSTALL_PAGE)) {
   debug_buffer('','Loading Modules');
-  $modops = cmsms()->GetModuleOperations();
+  $modops = ModuleOperations::get_instance();
   $modops->LoadModules(isset($LOAD_ALL_MODULES), !isset($CMS_ADMIN_PAGE));
   debug_buffer('', 'End of Loading Modules');
 }
@@ -198,13 +198,13 @@ if(isset($CMS_ADMIN_PAGE)) CmsNlsOperations::set_language();
 
 if( !isset($DONT_LOAD_SMARTY) ) {
   debug_buffer('Initialize Smarty');
-  $smarty = cmsms()->GetSmarty();
+  $smarty = $_app->GetSmarty();
   debug_buffer('Done Initialiing Smarty');
   if( defined('CMS_DEBUG') && CMS_DEBUG ) {
     $smarty->debugging = true;
     $smarty->error_reporting = 'E_ALL';
   }
-  $smarty->assign('sitename', get_site_preference('sitename', 'CMSMS Site'));
+  $smarty->assign('sitename', cms_siteprefs::get('sitename', 'CMSMS Site'));
 }
 
 

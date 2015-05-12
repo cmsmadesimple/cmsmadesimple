@@ -79,7 +79,7 @@ class cms_content_tree extends cms_tree
 	 */
 	public function sureGetNodeById($id)
 	{
-		return $this->find_by_tag('id',$id);
+        return ContentOperations::get_instance()->quickfind_node_by_id($id);
 	}
 
 

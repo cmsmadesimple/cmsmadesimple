@@ -685,12 +685,12 @@ class CmsLayoutStylesheet
 		$is_ints = FALSE;
 		if( (int)$ids[0] > 0 ) {
 			$is_ints = TRUE;
-			for( $i = 0; $i < count($ids); $i++ ) {
+			for( $i = 0, $n = count($ids); $i < $n; $i++ ) {
 				$ids[$i] = (int)$ids[$i];
 			}
 		}
 		else if( is_string($ids[0]) && strlen($ids[0]) > 0 ) {
-			for( $i = 0; $i < count($ids); $i++ ) {
+			for( $i = 0, $n = count($ids); $i < $n; $i++ ) {
 				$ids[$i] = "'".trim($ids[$i])."'";
 			}
 		}

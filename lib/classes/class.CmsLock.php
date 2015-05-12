@@ -219,7 +219,7 @@ final class CmsLock implements ArrayAccess
     {
         if( !$this->_dirty ) return;
 
-        $db = cmsms()->GetDb();
+        $db = CmsApp::get_instance()->GetDb();
         $dbr = null;
         $this->_data['expires'] = time()+$this->_data['lifetime']*60;
         if( !isset($this->_data['id']) ) {
@@ -277,7 +277,7 @@ final class CmsLock implements ArrayAccess
                                          $this->_data['id'],$this->_data['type'],$this->_data['oid'],$this->_data['uid']));
         }
 
-        $db = cmsms()->GetDb();
+        $db = CmsApp::get_instance()->GetDb();
         $query = 'DELETE FROM '.cms_db_prefix().self::LOCK_TABLE.' WHERE id = ?';
         $db->Execute($query,array($this->_data['id']));
         unset($this->_data['id']);
@@ -296,7 +296,7 @@ final class CmsLock implements ArrayAccess
     public static function &load_by_id($lock_id,$type,$oid,$uid = NULL)
     {
         $query = 'SELECT * FROM '.cms_db_prefix().self::LOCK_TABLE.' WHERE id = ? AND type = ? AND oid = ?';
-        $db = cmsms()->GetDb();
+        $db = CmsApp::get_instance()->GetDb();
         $parms = array($lock_id,$type,$oid);
         if( $uid > 0 ) {
             $query .= ' AND uid = ?';
@@ -319,7 +319,7 @@ final class CmsLock implements ArrayAccess
     public static function &load($type,$oid,$uid = null)
     {
         $query = 'SELECT * FROM '.cms_db_prefix().self::LOCK_TABLE.' WHERE type = ? AND oid = ?';
-        $db = cmsms()->GetDb();
+        $db = CmsApp::get_instance()->GetDb();
         $parms = array($type,$oid);
         if( $uid > 0 ) {
             $query .= ' AND uid = ?';

@@ -398,13 +398,12 @@ final class cms_route_manager
 	private static function _get_routes_from_cache()
 	{
 		$fn = self::_get_cache_filespec();
-		if( !file_exists($fn) ) {
+		if( !is_file($fn) ) {
 			$db = CmsApp::get_instance()->GetDb();
 			$query = 'SELECT * FROM '.cms_db_prefix().'routes';
 			$tmp = $db->GetArray($query);
 			self::$_routes_loaded = TRUE;
 			if( is_array($tmp) && count($tmp) ) {
-				$fn = self::_get_cache_filespec();
 				file_put_contents($fn,serialize($tmp));
 				return $tmp;
 			}
@@ -420,7 +419,7 @@ final class cms_route_manager
 	 */
 	private static function _get_cache_filespec()
 	{
-		return TMP_CACHE_LOCATION.'/'.md5(TMP_CACHE_LOCATION.get_class()).'.dat';
+		return TMP_CACHE_LOCATION.'/'.md5(TMP_CACHE_LOCATION.__CLASS__).'.dat';
 	}
 
 	/**

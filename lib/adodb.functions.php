@@ -15,14 +15,14 @@
  */
 function load_adodb()
 {
-  $gCms = cmsms();
+  $gCms = CmsApp::get_instance();
   $config = $gCms->GetConfig();
 
   // @TODO: Remove dependence on PEAR for error handling
   if( !defined('ADODB_OUTP') ) define('ADODB_OUTP', 'debug_sql');
 
   $adodb_light = cms_join_path(__DIR__,'adodb_lite','adodb.inc.php');
-  if (file_exists($adodb_light)) {
+  if (is_file($adodb_light)) {
     // Load ADOdb Lite
     require_once($adodb_light);
   }
@@ -42,7 +42,7 @@ function load_adodb()
  */
 function &adodb_connect()
 {
-  $gCms = cmsms();
+  $gCms = CmsApp::get_instance();
   $config = $gCms->GetConfig();
 
   $str = 'pear:date:extend:transaction';
@@ -60,7 +60,7 @@ function &adodb_connect()
 
   $dbinstance->raiseErrorFn = null;
   $dbinstance->SetFetchMode(ADODB_FETCH_ASSOC);
-  if ($config['debug'] == true) $dbinstance->debug = true;
+  if (CMS_DEBUG == true) $dbinstance->debug = true;
 
   $p1 = array();
   if($config['set_names'] == true) $p1[] = "NAMES 'utf8'";

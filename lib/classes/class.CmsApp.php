@@ -146,7 +146,7 @@ final class CmsApp {
 		static $_schema = -1;
 		if( $_schema == -1 ) {
 			$db = $this->GetDb();
-			$_schema = $db->GetOne('SELECT version FROM '.cms_db_prefix().'version');
+			$_schema = $db->GetOne('SELECT version FROM '.$this->GetDbPrefix().'version');
 		}
 		return $_schema;
 	}
@@ -338,9 +338,11 @@ final class CmsApp {
 	 */
 	public function GetDbPrefix()
 	{
-		if( $this->dbprefix ) return $this->dbprefix;
-		$config = $this->GetConfig();
-		return $config['db_prefix'];
+		if( !$this->dbprefix ) {
+            $config = $this->GetConfig();
+            $this->dbprefix = $config['db_prefix'];
+        }
+        return $this->dbprefix;
 	}
 
 	/**
@@ -351,7 +353,7 @@ final class CmsApp {
 	* @final
 	* @return cms_config The configuration object.
 	*/
-	public function &GetConfig()
+	public function GetConfig()
 	{
 		return cms_config::get_instance();
 	}
@@ -364,6 +366,7 @@ final class CmsApp {
 	* @final
 	* @see ModuleOperations
 	* @return ModuleOperations handle to the ModuleOperations object
+    * @deprecated
 	*/
 	public function & GetModuleOperations()
 	{
@@ -378,6 +381,7 @@ final class CmsApp {
 	* @final
 	* @see UserOperations
 	* @return UserOperations handle to the UserOperations object
+    * @deprecated
 	*/
 	public function & GetUserOperations()
 	{
@@ -391,6 +395,7 @@ final class CmsApp {
 	* @final
 	* @see ContentOperations::get_instance()
 	* @return ContentOperations handle to the ContentOperations object
+    * @deprecated
 	*/
 	public function & GetContentOperations()
 	{
@@ -404,6 +409,7 @@ final class CmsApp {
 	* @final
 	* @see BookmarkOperations
 	* @return BookmarkOperations handle to the BookmarkOperations object, useful only in the admin
+    * @deprecated
 	*/
 	public function & GetBookmarkOperations()
 	{
@@ -419,6 +425,7 @@ final class CmsApp {
 	* @final
 	* @see GroupOperations
 	* @return GroupOperations handle to the GroupOperations object
+    * @deprecated
 	*/
 	public function & GetGroupOperations()
 	{
@@ -432,6 +439,7 @@ final class CmsApp {
 	* @final
 	* @see UserTagOperations
 	* @return UserTagOperations handle to the UserTagOperations object
+    * @deprecated
 	*/
 	public function & GetUserTagOperations()
 	{
@@ -472,7 +480,7 @@ final class CmsApp {
 		  and, if not, go ahead an create the instance. */
         if (!isset($this->hrinstance)) {
 			debug_buffer('', 'Start Loading Hierarchy Manager');
-			$contentops = $this->GetContentOperations();
+			$contentops = ContentOperations::get_instance();
 			$this->hrinstance = $contentops->GetAllContentAsHierarchy(false);
 			debug_buffer('', 'End Loading Hierarchy Manager');
 		}
@@ -533,6 +541,7 @@ final class CmsApp {
 	 * @since 1.11.3
 	 * @author Tapio Löytty
 	 * @return Smarty_Parser handle to the Smarty object
+     * @deprecated
 	 */
 	final public function &get_template_parser()
 	{
@@ -695,6 +704,7 @@ class CmsContentTypePlaceholder
  *
  * @since 1.7
  * @return CmsApp
+ * @see CmsApp::get_instance()
  */
 function &cmsms()
 {
@@ -707,6 +717,7 @@ function &cmsms()
  *
  * @since 0.4
  * @return string
+ * @see CmsApp::GetDbPrefix();
  */
 function cms_db_prefix() {
     return CmsApp::get_instance()->GetDbPrefix();

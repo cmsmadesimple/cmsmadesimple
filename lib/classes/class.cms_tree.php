@@ -117,7 +117,7 @@ class cms_tree
       }
 
 	  if( $this->has_children() ) {
-		  for( $i = 0; $i < count($this->_children); $i++ ) {
+		  for( $i = 0, $n = count($this->_children); $i < $n; $i++ ) {
 			  $tmp = $this->_children[$i]->find_by_tag($tag_name,$value);
 			  if( $tmp ) return $tmp;
 		  }
@@ -185,7 +185,7 @@ class cms_tree
   {
 	  if( !$this->has_children() ) return FALSE;
 
-	  for( $i = 0; $i < count($this->_children); $i++ ) {
+	  for( $i = 0, $n = count($this->_children); $i < $n; $i++ ) {
 		  if( $this->_children[$i] == $node ) {
 			  // item found.
 			  unset($this->_children[$i]);
@@ -247,7 +247,7 @@ class cms_tree
   {
 	  if( !is_array($this->_children) ) $this->_children = array();
 
-	  for( $i = 0; $i < count($this->_children); $i++ ) {
+	  for( $i = 0, $n = count($this->_children); $i < $n; $i++ ) {
 		  if( $this->_children[$i] == $node ) return FALSE;
       }
 	  $node->_parent = $this;

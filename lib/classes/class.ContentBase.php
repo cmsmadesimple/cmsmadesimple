@@ -2021,8 +2021,7 @@ abstract class ContentBase
 	 */
 	public function HasChildren($activeonly = false)
 	{
-		$hm = CmsApp::get_instance()->GetHierarchyManager();
-		$node = $hm->getNodeById($this->mId);
+        $node = ContentOperations::get_instance()->quickfind_node_by_id($id);
 		if( !$node->has_children() ) return false;
 		if( $activeonly == false) return true;
 

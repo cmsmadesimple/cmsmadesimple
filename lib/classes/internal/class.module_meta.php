@@ -98,8 +98,9 @@ final class module_meta
 		debug_buffer('start building module capability list');
 		if( !isset($this->_data['capability']) ) $this->_data['capability'] = array();
 
-		$installed_modules = ModuleOperations::get_instance()->GetInstalledModules();
-		$loaded_modules = ModuleOperations::get_instance()->GetLoadedModules();
+        $modops = ModuleOperations::get_instance();
+		$installed_modules = $modops->GetInstalledModules();
+		$loaded_modules = $modops->GetLoadedModules();
 		$this->_data['capability'][$sig] = array();
 		foreach( $installed_modules as $onemodule ) {
 			$loaded_it = FALSE;
@@ -108,7 +109,7 @@ final class module_meta
 				$object = $loaded_modules[$onemodule];
 			}
 			else {
-				$object = ModuleOperations::get_instance()->get_module_instance($onemodule);
+				$object = $modops->get_module_instance($onemodule);
 				$loaded_it = TRUE;
 			}
 			if( !$object ) continue;
@@ -154,8 +155,9 @@ final class module_meta
 		debug_buffer('start building module method cache');
 		if( !isset($this->_data['methods']) ) $this->_data['methods'] = array();
 
-		$installed_modules = ModuleOperations::get_instance()->GetInstalledModules();
-		$loaded_modules = ModuleOperations::get_instance()->GetLoadedModules();
+        $modops = ModuleOperations::get_instance();
+		$installed_modules = $modops->GetInstalledModules();
+		$loaded_modules = $modops->GetLoadedModules();
 		$this->_data['methods'][$method] = array();
 		foreach( $installed_modules as $onemodule ) {
 			$loaded_it = FALSE;
@@ -164,7 +166,7 @@ final class module_meta
 				$object = $loaded_modules[$onemodule];
 			}
 			else {
-				$object = ModuleOperations::get_instance()->get_module_instance($onemodule);
+				$object = $modops->get_module_instance($onemodule);
 				$loaded_it = TRUE;
 			}
 			if( !$object ) continue;

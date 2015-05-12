@@ -344,25 +344,21 @@ class ADOConnection
 	{
 		global $ADODB_OUTP;
 		$this->debug_output = "(" . $this->dbtype . "): ".htmlspecialchars($text)."\n";
-                if( $this->ErrorNo() != 0 )
-		   $this->debug_output .= "Error (" . $this->ErrorNo() .'): '. $this->ErrorMsg() . "\n";
+        if( $this->ErrorNo() != 0 )
+            $this->debug_output .= "Error (" . $this->ErrorNo() .'): '. $this->ErrorMsg() . "\n";
 
-		if(defined('ADODB_OUTP'))
-		{
+		if(defined('ADODB_OUTP')) {
 			$fn = ADODB_OUTP;
-		} else if(isset($ADODB_OUTP))
-		{
+		} else if(isset($ADODB_OUTP)) {
 			$fn = $ADODB_OUTP;
 		}
 
-		if(defined('ADODB_OUTP') || isset($ADODB_OUTP))
-		{
+		if(defined('ADODB_OUTP') || isset($ADODB_OUTP)) {
 			$fn($this->debug_output, $newline);
 			return;
 		}
 
-		if($this->debug_echo)
-			echo $this->debug_output;
+		if($this->debug_echo) echo $this->debug_output;
 	}
 
 }

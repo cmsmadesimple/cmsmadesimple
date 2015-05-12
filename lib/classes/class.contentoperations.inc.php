@@ -670,6 +670,8 @@ class ContentOperations
 		if( is_array($explicit_ids) && count($explicit_ids) ) {
 			$loaded_ids = cms_content_cache::get_loaded_page_ids();
 			if( is_array($loaded_ids) && count($loaded_ids) ) {
+                $explicit_ids = array_diff($explicit_ids,$loaded_ids);
+                /*
 				$tmp = array();
 				foreach( $explicit_ids as $one ) {
 					if( in_array($one,$loaded_ids) ) continue;
@@ -677,6 +679,7 @@ class ContentOperations
 				}
 				if( count($tmp) == 0 ) return;
 				$explicit_ids = $tmp;
+                */
 			}
 
 			$expr = 'content_id IN ('.implode(',',$explicit_ids).')';
@@ -968,9 +971,7 @@ class ContentOperations
 		$query = "SELECT content_id FROM ".cms_db_prefix()."content WHERE hierarchy = ?";
 		$row = $db->GetRow($query, array($this->CreateUnfriendlyHierarchyPosition($position)));
 
-		if (!$row) {
-			return false;
-		}
+		if (!$row) return false;
 		return $row['content_id'];
 	}
 
@@ -983,8 +984,7 @@ class ContentOperations
 	 */
 	function GetPageAliasFromID( $id )
 	{
-		$hm = CmsApp::get_instance()->GetHierarchyManager();
-		$node = $hm->getNodeById();
+        $node = $this->quickfind_node_by_id($id);
 		if( $node ) return $node->getTag('alias');
 	}
 
@@ -1076,8 +1076,7 @@ class ContentOperations
 		$base_id = (int)$base_id;
 		if( $base_id < 1 ) return FALSE;
 
-		$hm = $gCms->GetHierarchyManager();
-		$node = $hm->find_by_tag('id',$base_id);
+        $node = $this->quickfind_node_by_id($base_id);
 		while( $node ) {
 			if( $node->get_tag('id') == $test_id ) return TRUE;
 			$node = $node->get_parent();
@@ -1230,6 +1229,7 @@ class ContentOperations
 
 	/**
 	 * A convenience function to find a hierarchy node given the page id
+     * This method will be moved to cms_content_tree at a later date.
 	 *
 	 * @param int $id The page id
 	 * @return cms_content_tree

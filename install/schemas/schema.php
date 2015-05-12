@@ -615,7 +615,7 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 	$return = $dbdict->ExecuteSQLArray($sqlarray);
 	$ado_ret = ($return == 2) ? ilang('done') : ilang('failed');
 	echo ilang('install_creating_table', CmsLayoutCollection::TPLTABLE, $ado_ret);
-	$sqlarray = $dbdict->CreateIndexSQL(cms_db_prefix().'index_dsnassoc1', cms_db_prefix().CmsLayoutCollection::TPLTABLE, 'css_id');
+	$sqlarray = $dbdict->CreateIndexSQL(cms_db_prefix().'index_dsnassoc1', cms_db_prefix().CmsLayoutCollection::TPLTABLE, 'tpl_id');
 	$return = $dbdict->ExecuteSQLArray($sqlarray);
 	$ado_ret = ($return == 2) ? ilang('done') : ilang('failed');
 	echo ilang('install_creating_index', 'index_dsnassoc1', $ado_ret);

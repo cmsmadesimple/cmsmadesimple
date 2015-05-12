@@ -43,7 +43,6 @@ class CMSContentTemplateResource extends CMS_Fixed_Resource_Custom
     protected function fetch($name,&$source,&$mtime)
     {
         $gCms = CmsApp::get_instance();
-        $config = $gCms->GetConfig();
         $contentobj = $gCms->get_content_object();
 
         if (!is_object($contentobj)) {

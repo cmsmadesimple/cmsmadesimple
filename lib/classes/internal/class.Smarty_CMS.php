@@ -49,16 +49,14 @@ class Smarty_CMS extends SmartyBC
     global $CMS_ADMIN_PAGE; // <- Still needed?
     global $CMS_INSTALL_PAGE;
 
-    $config = CmsApp::get_instance()->GetConfig();
-
     // Set template_c and cache dirs
     $this->setCompileDir(TMP_TEMPLATES_C_LOCATION);
     $this->setCacheDir(TMP_CACHE_LOCATION);
     $this->assign('app_name','CMSMS');
 
-    if ($config["debug"] == true) {
-      $this->debugging = false;
-      $this->error_reporting = 'E_ALL';
+    if (CMS_DEBUG == true) {
+        $this->debugging = false;
+        $this->error_reporting = 'E_ALL';
     }
 
     // Set plugins dirs
@@ -86,7 +84,6 @@ class Smarty_CMS extends SmartyBC
     }
 
     if(CmsApp::get_instance()->is_frontend_request()) {
-
       $this->setTemplateDir(cms_join_path(CMS_ROOT_PATH,'tmp','templates'));
       $this->setConfigDir(cms_join_path(CMS_ROOT_PATH,'tmp','templates'));
 
@@ -117,11 +114,13 @@ class Smarty_CMS extends SmartyBC
       if( get_site_preference('use_smartycache',0) ) $this->setCompileCheck(get_site_preference('use_smartycompilecheck',1));
     }
     else if(CmsApp::get_instance()->test_state(CmsApp::STATE_ADMIN_PAGE)) {
-      $this->addPluginsDir(cms_join_path(CMS_ROOT_PATH, $config['admin_dir'],'plugins'));
+        $config = CmsApp::get_instance()->GetConfig();
 
-      $this->setCaching(false);
-      $this->setTemplateDir(cms_join_path(CMS_ROOT_PATH,$config['admin_dir'],'templates'));
-      $this->setConfigDir(cms_join_path(CMS_ROOT_PATH,$config['admin_dir'],'configs'));;
+        $admin_dir = cms_join_path(CMS_ROOT_PATH,$config['admin_dir']);
+        $this->setCaching(false);
+        $this->addPluginsDir(cms_join_path($admin_dir,'plugins'));
+        $this->setTemplateDir(cms_join_path($admin_dir,'templates'));
+        $this->setConfigDir(cms_join_path($admin_dir,'configs'));;
     }
 
 	// Add assets tpl dir to scope
@@ -150,38 +149,38 @@ class Smarty_CMS extends SmartyBC
    */
   private function autoloadFilters()
   {
-    $pre = array();
-    $post = array();
-    $output = array();
+      $pre = array();
+      $post = array();
+      $output = array();
 
-    foreach( $this->plugins_dir as $onedir ) {
-      if( !is_dir($onedir) ) continue;
+      foreach( $this->plugins_dir as $onedir ) {
+          if( !is_dir($onedir) ) continue;
 
-      $files = glob($onedir.'/*php');
-      if( !is_array($files) || count($files) == 0 ) continue;
+          $files = glob($onedir.'/*php');
+          if( !is_array($files) || count($files) == 0 ) continue;
 
-      foreach( $files as $onefile ) {
-	$onefile = basename($onefile);
-	$parts = explode('.',$onefile);
-	if( !is_array($parts) || count($parts) != 3 ) continue;
+          foreach( $files as $onefile ) {
+              $onefile = basename($onefile);
+              $parts = explode('.',$onefile);
+              if( !is_array($parts) || count($parts) != 3 ) continue;
 
-	switch( $parts[0] ) {
-	case 'output':
-	  $output[] = $parts[1];
-	  break;
+              switch( $parts[0] ) {
+              case 'output':
+                  $output[] = $parts[1];
+                  break;
 
-	case 'prefilter':
-	  $pre[] = $parts[1];
-	  break;
+              case 'prefilter':
+                  $pre[] = $parts[1];
+                  break;
 
-	case 'postfilter':
-	  $post[] = $parts[1];
-	  break;
-	}
-      }
+              case 'postfilter':
+                  $post[] = $parts[1];
+                  break;
+              }
+          }
     }
 
-    $this->autoload_filters = array('pre'=>$pre,'post'=>$post,'output'=>$output);
+      $this->autoload_filters = array('pre'=>$pre,'post'=>$post,'output'=>$output);
   }
 
   /**
@@ -310,18 +309,18 @@ class Smarty_CMS extends SmartyBC
 
   public function createTemplate($template, $cache_id = null, $compile_id = null, $parent = null, $do_clone = true)
   {
-    if ($parent instanceof Smarty) {
-      $saved_tpl_vars = $parent->tpl_vars;
-      $saved_config_vars = $parent->config_vars;
-    }
-    $tpl = parent::createTemplate($template, $cache_id, $compile_id, $parent, $do_clone);
-    if ($parent instanceof Smarty) {
-      $parent->tpl_vars = $saved_tpl_vars;
-      $parent->config_vars = $saved_config_vars;
-      $tpl->tpl_vars = &$parent->tpl_vars;
-      $tpl->config_vars = &$parent->config_vars;
-    }
-    return $tpl;
+      if ($parent instanceof Smarty) {
+          $saved_tpl_vars = $parent->tpl_vars;
+          $saved_config_vars = $parent->config_vars;
+      }
+      $tpl = parent::createTemplate($template, $cache_id, $compile_id, $parent, $do_clone);
+      if ($parent instanceof Smarty) {
+          $parent->tpl_vars = $saved_tpl_vars;
+          $parent->config_vars = $saved_config_vars;
+          $tpl->tpl_vars = &$parent->tpl_vars;
+          $tpl->config_vars = &$parent->config_vars;
+      }
+      return $tpl;
   }
 
   /**
@@ -337,13 +336,13 @@ class Smarty_CMS extends SmartyBC
    */
   public function clearCache($template_name,$cache_id = null,$compile_id = null,$exp_time = null,$type = null)
   {
-    if( is_null($cache_id) || $cache_id === '' ) {
-      $cache_id = $this->_global_cache_id;
-    }
-    else if( $cache_id[0] == '|' ) {
-      $cache_id = $this->_global_cache_id . $cache_id;
-    }
-    return parent::clearCache($template_name,$cache_id,$compile_id,$exp_time,$type);
+      if( is_null($cache_id) || $cache_id === '' ) {
+          $cache_id = $this->_global_cache_id;
+      }
+      else if( $cache_id[0] == '|' ) {
+          $cache_id = $this->_global_cache_id . $cache_id;
+      }
+      return parent::clearCache($template_name,$cache_id,$compile_id,$exp_time,$type);
   }
 
   /**

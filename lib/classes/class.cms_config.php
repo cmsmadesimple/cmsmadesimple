@@ -139,7 +139,7 @@ final class cms_config implements ArrayAccess
 	$this->_types['public_cache_location'] = self::TYPE_STRING;
 
     $config = array();
-    if (defined('CONFIG_FILE_LOCATION') && file_exists(CONFIG_FILE_LOCATION)) {
+    if (defined('CONFIG_FILE_LOCATION') && is_file(CONFIG_FILE_LOCATION)) {
 		include(CONFIG_FILE_LOCATION);
 		foreach( $config as $key => &$value ) {
 			if( isset($this->_types[$key]) ) {
@@ -470,7 +470,7 @@ final class cms_config implements ArrayAccess
 	  if( !$filename ) $filename = CONFIG_FILE_LOCATION;
 
 	  // backup the original config.php file (just in case)
-	  if( file_exists($filename) ) @copy($filename,cms_join_path(TMP_CACHE_LOCATION,basename($filename).time().'.bak'));
+	  if( is_file($filename) ) @copy($filename,cms_join_path(TMP_CACHE_LOCATION,basename($filename).time().'.bak'));
 
 	  $output = "<?php\n# CMS Made Simple Configuration File\n# Documentation: /doc/CMSMS_config_reference.pdf\n#\n";
 	  // output header to the config file.

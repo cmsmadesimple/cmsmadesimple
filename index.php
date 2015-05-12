@@ -60,16 +60,17 @@ if (!is_writable(TMP_TEMPLATES_C_LOCATION) || !is_writable(TMP_CACHE_LOCATION)) 
 @ob_start();
 
 // initial setup
+$_app = CmsApp::get_instance(); // internal use only, subject to change.
 $params = array_merge($_GET, $_POST);
-$smarty = cmsms()->GetSmarty();
+$smarty = $_app->GetSmarty();
 $smarty->params = $params;
 $page = get_pageid_or_alias_from_url();
-$contentops = cmsms()->GetContentOperations();
+$contentops = ContentOperations::get_instance();
 $contentobj = '';
 $trycount = 0;
 
 cms_content_cache::get_instance();
-$tpl_cache = new CmsTemplateCache();
+$_tpl_cache = new CmsTemplateCache();
 
 while( $trycount < 2 ) {
   $trycount++;
@@ -101,12 +102,12 @@ while( $trycount < 2 ) {
       throw new CmsError404Exception('Cannot view an unviewable page');
     }
 
-    if( $contentobj->Secure() && !cmsms()->is_https_request() ) {
+    if( $contentobj->Secure() && !$_app->is_https_request() ) {
       redirect($contentobj->GetURL()); // if this page is marked to be secure, make sure we redirect to the secure page
     }
 
-    $allow_cache = (int)get_site_preference('allow_browser_cache',0);
-    $expiry = (int)max(0,get_site_preference('browser_cache_expiry',60));
+    $allow_cache = (int)cms_siteprefs::get('allow_browser_cache',0);
+    $expiry = (int)max(0,cms_siteprefs::get('browser_cache_expiry',60));
     $expiry *= $allow_cache;
     if( $_SERVER['REQUEST_METHOD'] == 'POST' || !$contentobj->Cachable() || $page == __CMS_PREVIEW_PAGE__ || $expiry == 0 ) {
       // Here we adjust headers for non cachable pages
@@ -125,13 +126,13 @@ while( $trycount < 2 ) {
       header('Last-Modified: ' . gmdate('D, d M Y H:i:s',$the_date) . ' GMT');
     }
 
-    cmsms()->set_content_object($contentobj);
+    $_app->set_content_object($contentobj);
     $smarty->assign('content_obj',$contentobj);
     $smarty->assign('content_id', $contentobj->Id());
     $smarty->assign('page_id', $page);
     $smarty->assign('page_alias', $contentobj->Alias());
 
-    if( $contentobj->Secure() && !cmsms()->is_https_request() ) {
+    if( $contentobj->Secure() && !$_app->is_https_request() ) {
       redirect($contentobj->GetURL()); // if this page is marked to be secure, make sure we redirect to the secure page
     }
 
@@ -150,32 +151,27 @@ while( $trycount < 2 ) {
 
     $smarty->set_global_cacheid('p'.$contentobj->Id());
     $uid = get_userid(FALSE);
-    if( $contentobj->Cachable() && $showtemplate && !$uid && get_site_preference('use_smartycache',0) &&
-	$_SERVER['REQUEST_METHOD'] != 'POST' ) {
-      if( version_compare(phpversion(),'5.3') >= 0 ) {
-	// this content is cachable... so enable smarty caching of this page data, for this user
-	$smarty->setCaching(Smarty::CACHING_LIFETIME_CURRENT);
-      }
+    if( $contentobj->Cachable() && $showtemplate && !$uid && cms_siteprefs::get('use_smartycache',0) &&
+        $_SERVER['REQUEST_METHOD'] != 'POST' ) {
+        $smarty->setCaching(Smarty::CACHING_LIFETIME_CURRENT);
     }
 
     if( !$showtemplate ) {
-      $smarty->setCaching(false);
-      // in smarty 3, we could use eval:{content} I think
-      $html = $smarty->fetch('cms_template:notemplate')."\n";
-      $trycount = 99;
+        $smarty->setCaching(false);
+        // in smarty 3, we could use eval:{content} I think
+        $html = $smarty->fetch('cms_template:notemplate')."\n";
+        $trycount = 99;
     }
     else {
-      debug_buffer('process template top');
-      $top  = $smarty->fetch('tpl_top:'.$contentobj->TemplateId());
-
-      debug_buffer('process template body');
-      $body = $smarty->fetch('tpl_body:'.$contentobj->TemplateId());
-
-      debug_buffer('process template head');
-      $head = $smarty->fetch('tpl_head:'.$contentobj->TemplateId());
-
-      $html = $top.$head.$body;
-      $trycount = 99; // no more iterations
+        debug_buffer('process template top');
+        $tpl_id = $contentobj->TemplateId();
+        $top  = $smarty->fetch('tpl_top:'.$tpl_id);
+        debug_buffer('process template body');
+        $body = $smarty->fetch('tpl_body:'.$tpl_id);
+        debug_buffer('process template head');
+        $head = $smarty->fetch('tpl_head:'.$tpl_id);
+        $html = $top.$head.$body;
+        $trycount = 99; // no more iterations
     }
   }
 
@@ -225,7 +221,7 @@ while( $trycount < 2 ) {
 Events::SendEvent('Core', 'ContentPostRender', array('content' => &$html));
 
 if( !headers_sent() ) {
-  $ct = cmsms()->get_content_type();
+  $ct = $_app->get_content_type();
   header("Content-Type: $ct; charset=" . CmsNlsOperations::get_encoding());
 }
 echo $html;
@@ -236,7 +232,7 @@ if( $page == __CMS_PREVIEW_PAGE__ && isset($_SESSION['__cms_preview__']) ) unset
 
 $debug = (defined('CMS_DEBUG') && CMS_DEBUG)?TRUE:FALSE;
 if( $debug || (isset($config['show_performance_info']) && ($showtemplate == true)) ) {
-  $db = cmsms()->GetDb();
+  $db = $_app->GetDb();
   $memory = (function_exists('memory_get_usage')?memory_get_usage():0);
   $memory = $memory - $orig_memory;
   $memory_peak = (function_exists('memory_get_peak_usage')?memory_get_peak_usage():0);
@@ -248,11 +244,11 @@ if( $debug || (isset($config['show_performance_info']) && ($showtemplate == true
 }
 
 if( $debug || is_sitedown() ) {
-  $smarty->clear_compiled_tpl();
+    $smarty->clear_compiled_tpl();
 }
 
 if ( $debug && !is_sitedown() ) {
-  $arr = cmsms()->get_errors();
+  $arr = $_app->get_errors();
   foreach ($arr as $error) {
     echo $error;
   }

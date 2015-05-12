@@ -36,15 +36,13 @@ function is_sitedown()
     global $CMS_INSTALL_PAGE;
     if( isset($CMS_INSTALL_PAGE) ) return TRUE;
 
-    if( get_site_preference('enablesitedownmessage') !== '1' ) return FALSE;
+    if( cms_siteprefs::get('enablesitedownmessage') !== '1' ) return FALSE;
 
-    if( get_site_preference('sitedownexcludeadmins') ) {
-        $uid = get_userid(FALSE);
-        if( $uid ) return FALSE;
-    }
+    $uid = get_userid(FALSE);
+    if( $uid && cms_siteprefs::get('sitedownexcludeadmins') ) return FALSE;
 
     if( !isset($_SERVER['REMOTE_ADDR']) ) return TRUE;
-    $excludes = get_site_preference('sitedownexcludes','');
+    $excludes = cms_siteprefs::get('sitedownexcludes','');
     if( empty($excludes) ) return TRUE;
 
     $tmp = explode(',',$excludes);

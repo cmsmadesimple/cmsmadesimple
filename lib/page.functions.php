@@ -215,7 +215,7 @@ function check_ownership($userid, $contentid = '')
   $adminuser = $userops->UserInGroup($userid,1);
   if( $adminuser ) return true;
 
-  return CmsApp::get_instance()->GetContentOperations()->CheckPageOwnership($userid,$contentid);
+  return ContentOperations::get_instance()->CheckPageOwnership($userid,$contentid);
 }
 
 
@@ -487,7 +487,7 @@ function get_pageid_or_alias_from_url()
 {
     $gCms = CmsApp::get_instance();
     $config = $gCms->GetConfig();
-    $contentops = $gCms->GetContentOperations();
+    $contentops = ContentOperations::get_instance();
     $smarty = $gCms->GetSmarty();
 
     $params = $_REQUEST;
