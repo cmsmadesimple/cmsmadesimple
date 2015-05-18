@@ -1828,13 +1828,13 @@ abstract class ContentBase
             if ($url_rewriting == 'mod_rewrite') {
                 $str = $this->HierarchyPath();
                 if( $this->mURL != '') $str = $this->mURL;	// we have a url path
-                $url = $base_url. '/' . $str . ($page_extension)?$page_extension:'.html';
+                $url = $base_url . '/' . $str . $page_extension;
                 return $url;
             }
             else if (isset($_SERVER['PHP_SELF']) && $url_rewriting == 'internal') {
                 $str = $this->HierarchyPath();
                 if( $this->mURL != '') $str = $this->mURL; // we have a url path
-                $url = $base_url . '/index.php/' . $str . ($page_extension)?$page_extension:'.html';
+                $url = $base_url . '/index.php/' . $str . $page_extension;
                 return $url;
             }
         }
