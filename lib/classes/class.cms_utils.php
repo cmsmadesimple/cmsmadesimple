@@ -155,7 +155,7 @@ final class cms_utils
 	 */
 	final public static function & get_config()
 	{
-		return CmsApp::get_instance()->GetConfig();
+		return cms_config::get_instance();
 	}
 
 

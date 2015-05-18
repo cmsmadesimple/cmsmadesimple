@@ -344,7 +344,7 @@ final class CmsApp {
 	* @final
 	* @return cms_config The configuration object.
 	*/
-	public function GetConfig()
+	public function &GetConfig()
 	{
 		return cms_config::get_instance();
 	}
