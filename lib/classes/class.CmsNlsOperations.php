@@ -237,7 +237,6 @@ final class CmsNlsOperations
 	  $uid = get_userid(false);
 	  $lang = '';
 	  if( $uid ) {
-          die('test0');
 		  $lang = cms_userprefs::get_for_user($uid,'default_cms_language');
 		  if( $lang ) {
 			  self::_load_nls();
