@@ -31,16 +31,16 @@ if( version_compare($oldversion,'2.50') < 0 ) {
 
   try {
       $dict = NewDataDictionary($db);
-      $sqlarray = $dict->AddColumnSQL(cms_db_prefix().'module_news','searchable I1');
+      $sqlarray = $dict->AddColumnSQL(CMS_DB_PREFIX.'module_news','searchable I1');
       $dict->ExecuteSQLArray($sqlarray);
 
-      $sqlarray = $dict->AddColumnSQL(cms_db_prefix().'module_news_categories','item_order I');
+      $sqlarray = $dict->AddColumnSQL(CMS_DB_PREFIX.'module_news_categories','item_order I');
       $dict->ExecuteSQLArray($sqlarray);
 
-      $query = "SELECT * FROM ".cms_db_prefix()."module_news_categories ORDER BY parent_id";
+      $query = "SELECT * FROM ".CMS_DB_PREFIX."module_news_categories ORDER BY parent_id";
       $categories = $db->GetArray($query);
 
-      $uquery = 'UPDATE '.cms_db_prefix().'module_news_categories SET item_order = ? WHERE news_category_id = ?';
+      $uquery = 'UPDATE '.CMS_DB_PREFIX.'module_news_categories SET item_order = ? WHERE news_category_id = ?';
       if( is_array($categories) && count($categories) ) {
           $prev_parent = null;
           $item_order = 0;

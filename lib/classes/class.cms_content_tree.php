@@ -346,6 +346,27 @@ class cms_content_tree extends cms_tree
 	}
 
 
+    private function &_buildFlatList()
+    {
+        $result = array();
+
+        if( $this->get_tag('id') > 0 ) $result[] = $this;
+        if( $this->has_children() ) {
+            $children = $this->get_children();
+            for( $i = 0, $n = count($children); $i < $n; $i++ ) {
+                $result[$children[$i]->get_tag('id')] = $children[$i];
+                if( $children[$i]->has_children() ) {
+                    $tmp = $children[$i]->_buildFlatList();
+                    foreach( $tmp as $key => $node ) {
+                        if( $key > 0 ) $result[$key] = $node;
+                    }
+                }
+            }
+        }
+
+        return $result;
+    }
+
 	/**
 	 * A function to build an array of cms_tree nodes, containing this node and all of the
 	 * children.
@@ -356,20 +377,7 @@ class cms_content_tree extends cms_tree
 	{
         static $result = null;
         if( is_null($result) ) {
-            $result = array();
-
-            if( $this->has_children() ) {
-                $children = $this->get_children();
-                for( $i = 0, $n = count($children); $i < $n; $i++ ) {
-                    $result[$children[$i]->get_tag('id')] =& $children[$i];
-                    if( $children[$i]->has_children() ) {
-                        $tmp = $children[$i]->getFlatList();
-                        foreach( $tmp as $key => &$node ) {
-                            $result[$key] = $node;
-                        }
-                    }
-                }
-            }
+            $result = $this->_buildFlatList();
         }
 		return $result;
 	}

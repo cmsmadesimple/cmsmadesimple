@@ -53,8 +53,8 @@ class CmsLayoutTemplateQuery extends CmsDbQueryBase
     {
         if( !is_null($this->_rs) ) return;
 
-        $query = 'SELECT SQL_CALC_FOUND_ROWS tpl.id FROM '.cms_db_prefix().CmsLayoutTemplate::TABLENAME.' tpl
-              LEFT JOIN '.cms_db_prefix().CmsLayoutTemplateType::TABLENAME.' type ON tpl.type_id = type.id';
+        $query = 'SELECT SQL_CALC_FOUND_ROWS tpl.id FROM '.CMS_DB_PREFIX.CmsLayoutTemplate::TABLENAME.' tpl
+              LEFT JOIN '.CMS_DB_PREFIX.CmsLayoutTemplateType::TABLENAME.' type ON tpl.type_id = type.id';
         $where = array('id'=>array(),'type'=>array(),'category'=>array(),'user'=>array(),'design'=>array());
 
         $this->_limit = 1000;
@@ -68,7 +68,7 @@ class CmsLayoutTemplateQuery extends CmsDbQueryBase
 			case 'o': // orginator
 			case 'originator':
 				$second = trim($second);
-                $q2 = 'SELECT id FROM '.cms_db_prefix().CmsLayoutTemplateType::TABLENAME.' WHERE originator = ?';
+                $q2 = 'SELECT id FROM '.CMS_DB_PREFIX.CmsLayoutTemplateType::TABLENAME.' WHERE originator = ?';
                 $typelist = $db->GetCol($q2,array($second));
                 if( !count($typelist) ) $typelist = array(-999);
                 $where['type'][] = 'type_id IN ('.implode(',',$typelist).')';
@@ -103,7 +103,7 @@ class CmsLayoutTemplateQuery extends CmsDbQueryBase
             case 'd': // design
 			case 'design':
 				// find all the templates in design: d
-				$q2 = 'SELECT tpl_id FROM '.cms_db_prefix().CmsLayoutCollection::TPLTABLE.' WHERE design_id = ?';
+				$q2 = 'SELECT tpl_id FROM '.CMS_DB_PREFIX.CmsLayoutCollection::TPLTABLE.' WHERE design_id = ?';
 				$tpls = $db->GetCol($q2,array((int)$second));
                 if( !count($tpls) )  $tpls = array(-999); // this won't match anything
                 $where['design'][] = 'tpl.id IN ('.implode(',',$tpls).')';
@@ -119,10 +119,10 @@ class CmsLayoutTemplateQuery extends CmsDbQueryBase
 			case 'editable':
 				$second = (int)$second;
 				$q2 = 'SELECT DISTINCT tpl_id FROM (
-                 SELECT tpl_id FROM '.cms_db_prefix().CmsLayoutTemplate::ADDUSERSTABLE.'
+                 SELECT tpl_id FROM '.CMS_DB_PREFIX.CmsLayoutTemplate::ADDUSERSTABLE.'
                    WHERE user_id = ?
                  UNION
-                 SELECT id AS tpl_id FROM '.cms_db_prefix().CmsLayoutTemplate::TABLENAME.'
+                 SELECT id AS tpl_id FROM '.CMS_DB_PREFIX.CmsLayoutTemplate::TABLENAME.'
                    WHERE owner_id = ?)
                  AS tmp1';
 				$t2 = $db->GetCol($q2,array($second,$second));

@@ -27,18 +27,18 @@ if (isset($params['fdid']))
 }
 
 // Get the category details
-$query = 'SELECT * FROM '.cms_db_prefix().'module_news_fielddefs WHERE id = ?';
+$query = 'SELECT * FROM '.CMS_DB_PREFIX.'module_news_fielddefs WHERE id = ?';
 $row = $db->GetRow($query, array($fdid));
 
 //Now remove the category
-$query = "DELETE FROM ".cms_db_prefix()."module_news_fielddefs WHERE id = ?";
+$query = "DELETE FROM ".CMS_DB_PREFIX."module_news_fielddefs WHERE id = ?";
 $db->Execute($query, array($fdid));
 
 //And remove it from any entries
-$query = "DELETE FROM ".cms_db_prefix()."module_news_fieldvals WHERE fielddef_id = ?";
+$query = "DELETE FROM ".CMS_DB_PREFIX."module_news_fieldvals WHERE fielddef_id = ?";
 $db->Execute($query, array($fdid));
 
-$db->Execute('UPDATE '.cms_db_prefix().'module_news_fielddefs SET item_order = (item_order - 1) WHERE item_order > ?', array($row['item_order']));
+$db->Execute('UPDATE '.CMS_DB_PREFIX.'module_news_fielddefs SET item_order = (item_order - 1) WHERE item_order > ?', array($row['item_order']));
 
 $params = array('tab_message'=> 'fielddefdeleted', 'active_tab' => 'customfields');
 // put mention into the admin log

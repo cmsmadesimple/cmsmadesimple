@@ -66,7 +66,7 @@ if( $preview || !$tpl_ob->IsCached() ) {
 
     $catName = '';
     if (isset($params['category_id'])) {
-        $catName = $db->GetOne('SELECT news_category_name FROM '.cms_db_prefix() . 'module_news_categories where news_category_id=?',array((int)$params['category_id']));
+        $catName = $db->GetOne('SELECT news_category_name FROM '.CMS_DB_PREFIX . 'module_news_categories where news_category_id=?',array((int)$params['category_id']));
     }
     $tpl_ob->assign('category_name',$catName);
     unset($params['article_id']);

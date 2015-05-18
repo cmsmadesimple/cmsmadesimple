@@ -26,7 +26,7 @@ final class News_AdminSearch_slave extends AdminSearch_slave
     if( !is_object($mod) ) return;
     $db = cmsms()->GetDb();
     // need to get the fielddefs of type textbox or textarea
-    $query = 'SELECT id FROM '.cms_db_prefix().'module_news_fielddefs WHERE type IN (?,?)';
+    $query = 'SELECT id FROM '.CMS_DB_PREFIX.'module_news_fielddefs WHERE type IN (?,?)';
     $fdlist = $db->GetCol($query,array('textbox','textarea'));
 
     $fields = array('N.*');
@@ -40,13 +40,13 @@ final class News_AdminSearch_slave extends AdminSearch_slave
       $tmp = 'FV'.$i;
       $fdid = $fdlist[$i];
       $fields[] = "$tmp.value";
-      $joins[] = 'LEFT JOIN '.cms_db_prefix()."module_news_fieldvals $tmp ON N.news_id = $tmp.news_id AND $tmp.fielddef_id = $fdid";
+      $joins[] = 'LEFT JOIN '.CMS_DB_PREFIX."module_news_fieldvals $tmp ON N.news_id = $tmp.news_id AND $tmp.fielddef_id = $fdid";
       $where[] = "$tmp.value LIKE ?";
       $parms[] = $str;
     }
 
     // build the query.
-    $query = 'SELECT '.implode(',',$fields).' FROM '.cms_db_prefix().'module_news N';
+    $query = 'SELECT '.implode(',',$fields).' FROM '.CMS_DB_PREFIX.'module_news N';
     if( count($joins) ) $query .= ' ' . implode(' ',$joines);
     if( count($where) ) $query .= ' WHERE '.implode(' OR ',$where);
     $query .= ' ORDER BY N.modified_date DESC';

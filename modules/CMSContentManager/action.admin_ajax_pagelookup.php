@@ -47,7 +47,7 @@ if( isset($_REQUEST['term']) ) {
   $field = 'content_name';
   if( $pref != 'title' ) $field = 'menu_text';
 
-  $query = 'SELECT content_id,hierarchy,'.$field.' FROM '.cms_db_prefix().'content WHERE '.$field.' LIKE ?';
+  $query = 'SELECT content_id,hierarchy,'.$field.' FROM '.CMS_DB_PREFIX.'content WHERE '.$field.' LIKE ?';
   $parms = array('%'.$term.'%');
 
   if( !$this->CheckPermission('Manage All Content') && !$this->CheckPermission('Modify Any Page') ) {

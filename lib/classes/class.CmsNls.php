@@ -96,8 +96,8 @@ class CmsNls
       $aliases = $this->aliases();
       if( !is_array($aliases) ) $aliases = explode(',',$aliases);
       if( is_array($aliases) && count($aliases) ) {
-          for( $i = 0, $n = count($aliases); $i < $n; $i++ ) {
-              if( strcasecmp($aliases[$i],$str) ) return TRUE;
+          foreach( $aliases as $alias ) {
+              if( !strcasecmp($alias,$str) ) return TRUE;
           }
       }
       return FALSE;

@@ -72,7 +72,7 @@ public static function get_categories($id,$params,$returnid=-1)
     $now = $db->DbTimeStamp(time());
 
     {
-        $q2 = 'SELECT news_category_id,COUNT(news_id) AS cnt FROM '.cms_db_prefix().'module_news WHERE news_category_id IN (';
+        $q2 = 'SELECT news_category_id,COUNT(news_id) AS cnt FROM '.CMS_DB_PREFIX.'module_news WHERE news_category_id IN (';
         $q2 .= implode(',',$cat_ids).')';
         if (isset($params['showarchive']) && $params['showarchive'] == true) {
             $q2 .= " AND (end_time < ".$db->DBTimeStamp(time()).") ";
@@ -122,7 +122,7 @@ public static function get_all_categories()
 {
     if( !self::$_categories_loaded ) {
         $db = cmsms()->GetDb();
-        $query = "SELECT * FROM ".cms_db_prefix()."module_news_categories ORDER BY hierarchy";
+        $query = "SELECT * FROM ".CMS_DB_PREFIX."module_news_categories ORDER BY hierarchy";
         $dbresult = $db->GetArray($query);
         if( $dbresult ) self::$_cached_categories = $dbresult;
         self::$_categories_loaded = TRUE;
@@ -170,9 +170,9 @@ public static function get_fielddefs($publiconly = TRUE)
 {
     if( !is_array(self::$_cached_fielddefs) ) {
         $db = cmsms()->GetDb();
-        $query = 'SELECT * FROM '.cms_db_prefix().'module_news_fielddefs WHERE public = 1 ORDER BY item_order';
+        $query = 'SELECT * FROM '.CMS_DB_PREFIX.'module_news_fielddefs WHERE public = 1 ORDER BY item_order';
         if( !$publiconly ) {
-            $query = 'SELECT * FROM '.cms_db_prefix().'module_news_fielddefs ORDER BY item_order';
+            $query = 'SELECT * FROM '.CMS_DB_PREFIX.'module_news_fielddefs ORDER BY item_order';
         }
         $tmp = $db->GetArray($query);
 
@@ -346,7 +346,7 @@ static public function &get_latest_article($for_display = TRUE)
 {
     $db = cmsms()->GetDb();
     $now = $db->DbTimeStamp(time());
-    $query = "SELECT mn.*, mnc.news_category_name FROM ".cms_db_prefix()."module_news mn LEFT OUTER JOIN ".cms_db_prefix()."module_news_categories mnc ON mnc.news_category_id = mn.news_category_id WHERE status = 'published' AND ";
+    $query = "SELECT mn.*, mnc.news_category_name FROM ".CMS_DB_PREFIX."module_news mn LEFT OUTER JOIN ".CMS_DB_PREFIX."module_news_categories mnc ON mnc.news_category_id = mn.news_category_id WHERE status = 'published' AND ";
     $query .= "(".$db->IfNull('start_time',$db->DBTimeStamp(1))." < $now) AND ";
     $query .= "((".$db->IfNull('end_time',$db->DBTimeStamp(1))." = ".$db->DBTimeStamp(1).") OR (end_time > $now)) ";
     $query .= 'ORDER BY news_date DESC LIMIT 1';
@@ -359,8 +359,8 @@ static public function &get_latest_article($for_display = TRUE)
 static public function &get_article_by_id($article_id,$for_display = TRUE,$allow_expired = FALSE)
 {
     $db = cmsms()->GetDb();
-    $query = 'SELECT mn.*, mnc.news_category_name FROM '.cms_db_prefix().'module_news mn
-              LEFT OUTER JOIN '.cms_db_prefix().'module_news_categories mnc ON mnc.news_category_id = mn.news_category_id
+    $query = 'SELECT mn.*, mnc.news_category_name FROM '.CMS_DB_PREFIX.'module_news mn
+              LEFT OUTER JOIN '.CMS_DB_PREFIX.'module_news_categories mnc ON mnc.news_category_id = mn.news_category_id
               WHERE status = \'published\' AND news_id = ?
               AND ('.$db->ifNull('start_time',$db->DbTimeStamp(1)).' < NOW())';
     if( !$allow_expired ) {
@@ -393,8 +393,8 @@ public static function preloadFieldData($ids)
     if( !count($fielddefs) ) return;
 
     $db = cmsms()->GetDb();
-    $query = 'SELECT A.news_id,A.fielddef_id,A.value FROM '.cms_db_prefix().'module_news_fieldvals A
-              INNER JOIN '.cms_db_prefix().'module_news_fielddefs B
+    $query = 'SELECT A.news_id,A.fielddef_id,A.value FROM '.CMS_DB_PREFIX.'module_news_fieldvals A
+              INNER JOIN '.CMS_DB_PREFIX.'module_news_fielddefs B
               ON A.fielddef_id = B.id
               WHERE news_id IN ('.implode(',',$idlist).')
               ORDER BY A.news_id,B.item_order';

@@ -11,7 +11,7 @@ if( isset($params['state']) ) $state = (int)$params['state'];
 $module = trim(get_parameter_value($params,'mod'));
 $ops = ModuleOperations::get_instance();
 
-$query = "UPDATE ".cms_db_prefix()."modules SET active = ? WHERE module_name = ?";
+$query = "UPDATE ".CMS_DB_PREFIX."modules SET active = ? WHERE module_name = ?";
 $dbr = $db->Execute($query, array($state,$module));
 if( !$dbr ) {
   $this->SetError($this->Lang('error_active_failed'));

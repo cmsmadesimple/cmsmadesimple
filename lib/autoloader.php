@@ -44,74 +44,87 @@ function cms_autoloader($classname)
 {
     $gCms = CmsApp::get_instance();
 
-  // standard classes
-  $fn = cms_join_path(CMS_ROOT_PATH,'lib','classes',"class.{$classname}.php");
-  if( is_file($fn) ) {
-      require_once($fn);
-      return;
-  }
+    if( startswith($classname,'CMSMS\\') ) {
+        $path = str_replace('\\','/',substr($classname,6));
+        $classname = basename($path);
+        $filenames = array("class.{$classname}.php","interface.{$classname}.php","trait.{$classname}.php");
+        foreach( $filenames as $test ) {
+            $fn = cms_join_path(CMS_ROOT_PATH,'lib','classes',$path,$test);
+            if( is_file($fn) ) {
+                require_once($fn);
+                return;
+            }
+        }
+    }
 
-  // standard internal classes
-  $fn = cms_join_path(CMS_ROOT_PATH,'lib','classes','internal',"class.{$classname}.php");
-  if( is_file($fn) ) {
-      require_once($fn);
-      return;
-  }
+    // standard classes
+    $fn = cms_join_path(CMS_ROOT_PATH,'lib','classes',"class.{$classname}.php");
+    if( is_file($fn) ) {
+        require_once($fn);
+        return;
+    }
 
-  // lowercase classes
-  $lowercase = strtolower($classname);
-  $fn = cms_join_path(CMS_ROOT_PATH,'lib','classes',"class.{$lowercase}.inc.php");
-  if( is_file($fn) && $classname != 'Content' ) {
-      require_once($fn);
-      return;
-  }
+    // standard internal classes
+    $fn = cms_join_path(CMS_ROOT_PATH,'lib','classes','internal',"class.{$classname}.php");
+    if( is_file($fn) ) {
+        require_once($fn);
+        return;
+    }
 
-  // lowercase internal classes
-  $lowercase = strtolower($classname);
-  $fn = cms_join_path(CMS_ROOT_PATH,'lib','classes','internal',"class.{$lowercase}.inc.php");
-  if( is_file($fn) && $classname != 'Content' ) {
-      require_once($fn);
-      return;
-  }
+    // lowercase classes
+    $lowercase = strtolower($classname);
+    $fn = cms_join_path(CMS_ROOT_PATH,'lib','classes',"class.{$lowercase}.inc.php");
+    if( is_file($fn) && $classname != 'Content' ) {
+        require_once($fn);
+        return;
+    }
 
-  // standard interfaces
-  $fn = cms_join_path(CMS_ROOT_PATH,'lib','classes',"interface.{$classname}.php");
-  if( is_file($fn) ) {
-      require_once($fn);
-      return;
-  }
+    // lowercase internal classes
+    $lowercase = strtolower($classname);
+    $fn = cms_join_path(CMS_ROOT_PATH,'lib','classes','internal',"class.{$lowercase}.inc.php");
+    if( is_file($fn) && $classname != 'Content' ) {
+        require_once($fn);
+        return;
+    }
 
-  // internal interfaces
-  $fn = cms_join_path(CMS_ROOT_PATH,'lib','classes','internal',"interface.{$classname}.php");
-  if( is_file($fn) ) {
-      require_once($fn);
-      return;
-  }
+    // standard interfaces
+    $fn = cms_join_path(CMS_ROOT_PATH,'lib','classes',"interface.{$classname}.php");
+    if( is_file($fn) ) {
+        require_once($fn);
+        return;
+    }
 
-  // standard content types
-  $fn = cms_join_path(CMS_ROOT_PATH,'lib','classes','contenttypes',"{$classname}.inc.php");
-  if( is_file($fn) ) {
-      require_once($fn);
-      return;
-  }
+    // internal interfaces
+    $fn = cms_join_path(CMS_ROOT_PATH,'lib','classes','internal',"interface.{$classname}.php");
+    if( is_file($fn) ) {
+        require_once($fn);
+        return;
+    }
 
-  $fn = CMS_ROOT_PATH."/modules/{$classname}/{$classname}.module.php";
-  if( is_file($fn) ) {
-      require_once($fn);
-      return;
-  }
+    // standard content types
+    $fn = cms_join_path(CMS_ROOT_PATH,'lib','classes','contenttypes',"{$classname}.inc.php");
+    if( is_file($fn) ) {
+        require_once($fn);
+        return;
+    }
 
-  $list = ModuleOperations::get_instance()->GetLoadedModules();
-  if( is_array($list) && count($list) ) {
-      foreach( array_keys($list) as $modname ) {
-          $fn = CMS_ROOT_PATH."/modules/$modname/lib/class.$classname.php";
-          if( is_file( $fn ) ) {
-              require_once($fn);
-              return;
-          }
-      }
-  }
-  // module classes
+    $fn = CMS_ROOT_PATH."/modules/{$classname}/{$classname}.module.php";
+    if( is_file($fn) ) {
+        require_once($fn);
+        return;
+    }
+
+    $list = ModuleOperations::get_instance()->GetLoadedModules();
+    if( is_array($list) && count($list) ) {
+        foreach( array_keys($list) as $modname ) {
+            $fn = CMS_ROOT_PATH."/modules/$modname/lib/class.$classname.php";
+            if( is_file( $fn ) ) {
+                require_once($fn);
+                return;
+            }
+        }
+    }
+    // module classes
 }
 
 spl_autoload_register('cms_autoloader');

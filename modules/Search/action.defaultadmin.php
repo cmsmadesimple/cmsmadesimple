@@ -8,11 +8,11 @@ if (isset($params['reindex'])) {
   echo $this->ShowMessage($this->Lang('reindexcomplete'));
 }
 else if (isset($params['clearwordcount'])) {
-  $query = 'DELETE FROM '.cms_db_prefix().'module_search_words';
+  $query = 'DELETE FROM '.CMS_DB_PREFIX.'module_search_words';
   $db->Execute($query);
 }
 else if (isset($params['exportcsv']) ) {
-  $query = 'SELECT * FROM '.cms_db_prefix().'module_search_words ORDER BY count DESC';
+  $query = 'SELECT * FROM '.CMS_DB_PREFIX.'module_search_words ORDER BY count DESC';
   $data = $db->GetArray($query);
   if( is_array($data) ) {
     header('Content-Description: File Transfer');

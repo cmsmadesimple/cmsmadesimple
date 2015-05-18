@@ -57,11 +57,6 @@ class ContentOperations
 	/**
 	 * @ignore
 	 */
-	private $_default_content_id;
-
-	/**
-	 * @ignore
-	 */
 	private static $_instance;
 
 	/**
@@ -188,7 +183,7 @@ class ContentOperations
 		$result = FALSE;
 		$db = CmsApp::get_instance()->GetDb();
 
-		$query = "SELECT * FROM ".cms_db_prefix()."content WHERE content_id = ?";
+		$query = "SELECT * FROM ".CMS_DB_PREFIX."content WHERE content_id = ?";
 		$row = $db->GetRow($query, array($id));
 		if ($row) {
 			$classtype = strtolower($row['type']);
@@ -218,12 +213,12 @@ class ContentOperations
 
 		$row = '';
 		if (is_numeric($alias) && strpos($alias,'.') === FALSE && strpos($alias,',') === FALSE) {
-			$query = "SELECT * FROM ".cms_db_prefix()."content WHERE content_id = ?";
+			$query = "SELECT * FROM ".CMS_DB_PREFIX."content WHERE content_id = ?";
 			if ($only_active == true) $query .= " AND active = 1";
 			$row = $db->GetRow($query, array($alias));
 		}
 		else {
-			$query = "SELECT * FROM ".cms_db_prefix()."content WHERE content_alias = ?";
+			$query = "SELECT * FROM ".CMS_DB_PREFIX."content WHERE content_alias = ?";
 			if ($only_active == true) $query .= " AND active = 1";
 			$row = $db->GetRow($query, array($alias));
 		}
@@ -256,25 +251,7 @@ class ContentOperations
 	 */
 	function GetDefaultContent()
 	{
-		if( $this->_default_content_id ) return $this->_default_content_id;
-
-		$db = CmsApp::get_instance()->GetDb();
-		$result = -1;
-
-		$query = "SELECT content_id FROM ".cms_db_prefix()."content WHERE default_content = 1";
-		$row = $db->GetRow($query);
-		if ($row) {
-			$result = $row['content_id'];
-		}
-		else {
-			// Just get something...
-			$query = "SELECT content_id FROM ".cms_db_prefix()."content";
-			$row = $db->GetRow($query);
-			if ($row) $result = $row['content_id'];
-		}
-
-		$this->_default_content_id = $result;
-		return $result;
+        return \CMSMS\internal\global_cache::get('default_content');
 	}
 
 
@@ -436,7 +413,7 @@ class ContentOperations
 		$count = 0;
 
 		while ($current_parent_id > -1) {
-			$query = "SELECT item_order, parent_id, content_alias FROM ".cms_db_prefix()."content WHERE content_id = ?";
+			$query = "SELECT item_order, parent_id, content_alias FROM ".CMS_DB_PREFIX."content WHERE content_id = ?";
 			$row = $db->GetRow($query, array($current_parent_id));
 			if ($row) {
 				$current_hierarchy_position = str_pad($row['item_order'], 5, '0', STR_PAD_LEFT) . "." . $current_hierarchy_position;
@@ -460,12 +437,12 @@ class ContentOperations
 			$current_hierarchy_path = substr($current_hierarchy_path, 0, strlen($current_hierarchy_path) - 1);
 		}
 
-		$query = "SELECT prop_name FROM ".cms_db_prefix()."content_props WHERE content_id = ?";
+		$query = "SELECT prop_name FROM ".CMS_DB_PREFIX."content_props WHERE content_id = ?";
 		$prop_name_array = $db->GetCol($query, array($contentid));
 
 		debug_buffer(array($current_hierarchy_position, $current_id_hierarchy_position, implode(',', $prop_name_array), $contentid));
 
-		$query = "UPDATE ".cms_db_prefix()."content SET hierarchy = ?, id_hierarchy = ?, hierarchy_path = ?, prop_names = ? WHERE content_id = ?";
+		$query = "UPDATE ".CMS_DB_PREFIX."content SET hierarchy = ?, id_hierarchy = ?, hierarchy_path = ?, prop_names = ? WHERE content_id = ?";
 		$db->Execute($query, array($current_hierarchy_position, $current_id_hierarchy_position, $current_hierarchy_path, implode(',', $prop_name_array), $contentid));
 
 		cms_content_cache::clear();
@@ -482,7 +459,7 @@ class ContentOperations
 	{
 		$db = CmsApp::get_instance()->GetDb();
 
-		$query = "SELECT content_id FROM ".cms_db_prefix()."content";
+		$query = "SELECT content_id FROM ".CMS_DB_PREFIX."content";
 		$dbresult = $db->GetCol($query);
 
 		foreach( $dbresult as $one ) {
@@ -501,14 +478,7 @@ class ContentOperations
 	 */
 	function GetLastContentModification()
 	{
-		if( $this->_last_modified <= 0 ) {
-			$db = CmsApp::get_instance()->GetDb();
-			$query = 'SELECT modified_date FROM '.cms_db_prefix().'content ORDER BY modified_date DESC';
-			$val = $db->GetOne($query);
-			$this->_last_modified = $db->UnixTimeStamp($val);
-		}
-		$last_modified_b = cms_cache_handler::get_instance()->get('lastmodified');
-		return max($this->_last_modified,$last_modified_b);
+        return \CMSMS\internal\global_cache::get('latest_content_modification');
 	}
 
 	/**
@@ -519,7 +489,8 @@ class ContentOperations
 	 */
 	public function SetContentModified()
 	{
-		cms_cache_handler::get_instance()->set('lastmodified',time());
+        \CMSMS\internal\global_cache::clear('latest_content_modification');
+        \CMSMS\internal\global_cache::clear('default_content');
 	}
 
 	/**
@@ -547,7 +518,7 @@ class ContentOperations
 
 		if (!$loadedcache) {
 			debug_buffer('', 'Start loading content tree from database and serializing');
-			$query = 'SELECT content_id,parent_id,item_order,content_alias FROM '.cms_db_prefix().'content ORDER BY hierarchy ASC';
+			$query = 'SELECT content_id,parent_id,item_order,content_alias FROM '.CMS_DB_PREFIX.'content ORDER BY hierarchy ASC';
 			$nodes = $db->GetArray($query);
 			$tree = cms_tree_operations::load_from_list($nodes);
 			$data = serialize(array(time(),$tree));
@@ -594,7 +565,7 @@ class ContentOperations
 			$expr[] = 'content_id NOT IN ('.implode(',',$loaded_ids).')';
 		}
 
-		$query = 'SELECT * FROM '.cms_db_prefix().'content FORCE INDEX ('.cms_db_prefix().'index_content_by_idhier) WHERE ';
+		$query = 'SELECT * FROM '.CMS_DB_PREFIX.'content FORCE INDEX ('.CMS_DB_PREFIX.'index_content_by_idhier) WHERE ';
 		$query .= implode(' AND ',$expr);
 		$dbr = $db->Execute($query,$parms);
 
@@ -609,7 +580,7 @@ class ContentOperations
 			$tmp = null;
 			if( count($child_ids) ) {
 				// get all the properties for the child_ids
-				$query = 'SELECT * FROM '.cms_db_prefix().'content_props WHERE content_id IN ('.implode(',',$child_ids).') ORDER BY content_id';
+				$query = 'SELECT * FROM '.CMS_DB_PREFIX.'content_props WHERE content_id IN ('.implode(',',$child_ids).') ORDER BY content_id';
 				$tmp = $db->GetArray($query);
 			}
 
@@ -686,14 +657,14 @@ class ContentOperations
 			if( !$all ) $expr .= ' AND active = 1';
 
 			// note, this is mysql specific...
-			$query = 'SELECT * FROM '.cms_db_prefix().'content FORCE INDEX ('.cms_db_prefix().'index_content_by_idhier) WHERE '.$expr.' ORDER BY hierarchy';
+			$query = 'SELECT * FROM '.CMS_DB_PREFIX.'content FORCE INDEX ('.CMS_DB_PREFIX.'index_content_by_idhier) WHERE '.$expr.' ORDER BY hierarchy';
 			$contentrows = $db->GetArray($query);
 		}
 		else {
 			if( !$id ) $id = -1;
 			// get the content rows
-			$query = "SELECT * FROM ".cms_db_prefix()."content WHERE parent_id = ? AND active = 1 ORDER BY hierarchy";
-			if( $all ) $query = "SELECT * FROM ".cms_db_prefix()."content WHERE parent_id = ? ORDER BY hierarchy";
+			$query = "SELECT * FROM ".CMS_DB_PREFIX."content WHERE parent_id = ? AND active = 1 ORDER BY hierarchy";
+			if( $all ) $query = "SELECT * FROM ".CMS_DB_PREFIX."content WHERE parent_id = ? ORDER BY hierarchy";
 			$contentrows = $db->GetArray($query, array($id));
 		}
 
@@ -708,7 +679,7 @@ class ContentOperations
 			$tmp = null;
 			if( count($child_ids) ) {
 				// get all the properties for the child_ids
-				$query = 'SELECT * FROM '.cms_db_prefix().'content_props WHERE content_id IN ('.implode(',',$child_ids).') ORDER BY content_id';
+				$query = 'SELECT * FROM '.CMS_DB_PREFIX.'content_props WHERE content_id IN ('.implode(',',$child_ids).') ORDER BY content_id';
 				$tmp = $db->GetArray($query);
 			}
 
@@ -764,7 +735,7 @@ class ContentOperations
 	function SetDefaultContent($id)
 	{
 		$db = CmsApp::get_instance()->GetDb();
-		$query = "SELECT content_id FROM ".cms_db_prefix()."content WHERE default_content=1";
+		$query = "SELECT content_id FROM ".CMS_DB_PREFIX."content WHERE default_content=1";
 		$old_id = $db->GetOne($query);
 		if (isset($old_id)) {
 			$one = $this->LoadContentFromId($old_id);
@@ -968,7 +939,7 @@ class ContentOperations
 		$gCms = CmsApp::get_instance();
 		$db = $gCms->GetDb();
 
-		$query = "SELECT content_id FROM ".cms_db_prefix()."content WHERE hierarchy = ?";
+		$query = "SELECT content_id FROM ".CMS_DB_PREFIX."content WHERE hierarchy = ?";
 		$row = $db->GetRow($query, array($this->CreateUnfriendlyHierarchyPosition($position)));
 
 		if (!$row) return false;
@@ -1006,7 +977,7 @@ class ContentOperations
 		}
 		else {
 			$params = array($alias);
-			$query = "SELECT content_id FROM ".cms_db_prefix()."content WHERE content_alias = ?";
+			$query = "SELECT content_id FROM ".CMS_DB_PREFIX."content WHERE content_alias = ?";
 			if ($content_id > -1) {
 				$query .= " AND content_id != ?";
 				$params[] = $content_id;
@@ -1097,7 +1068,7 @@ class ContentOperations
 		$gCms = CmsApp::get_instance();
  		$db = $gCms->GetDb();
 
-		$query = 'SELECT content_id,page_url FROM '.cms_db_prefix().'content
+		$query = 'SELECT content_id,page_url FROM '.CMS_DB_PREFIX.'content
                    WHERE active = 1 AND default_content = 0 AND page_url != \'\'';
 		$data = $db->GetArray($query);
  		if( is_array($data) ) {
@@ -1122,7 +1093,7 @@ class ContentOperations
 			$this->_ownedpages = array();
 
 			$db = CmsApp::get_instance()->GetDb();
-			$query = 'SELECT content_id FROM '.cms_db_prefix().'content WHERE owner_id = ? ORDER BY hierarchy';
+			$query = 'SELECT content_id FROM '.CMS_DB_PREFIX.'content WHERE owner_id = ? ORDER BY hierarchy';
 			$tmp = $db->GetCol($query,array($userid));
 			$data = array();
 			for( $i = 0, $n = count($tmp); $i < $n; $i++ ) {
@@ -1171,8 +1142,8 @@ class ContentOperations
 			}
 
 			$db = CmsApp::get_instance()->GetDb();
-			$query = "SELECT A.content_id FROM ".cms_db_prefix()."additional_users A
-                      LEFT JOIN ".cms_db_prefix().'content B ON A.content_id = B.content_id
+			$query = "SELECT A.content_id FROM ".CMS_DB_PREFIX."additional_users A
+                      LEFT JOIN ".CMS_DB_PREFIX.'content B ON A.content_id = B.content_id
                       WHERE A.user_id IN ('.implode(',',$list).')
                       ORDER BY B.hierarchy';
 			$tmp = $db->GetCol($query);

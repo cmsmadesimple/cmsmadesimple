@@ -36,9 +36,9 @@ $flds = "
 "; // icon is no longer used.
 
 $taboptarray = array('mysql' => 'TYPE=MyISAM');
-$sqlarray = $dict->CreateTableSQL(cms_db_prefix()."module_news", $flds, $taboptarray);
+$sqlarray = $dict->CreateTableSQL(CMS_DB_PREFIX."module_news", $flds, $taboptarray);
 $dict->ExecuteSQLArray($sqlarray);
-$db->CreateSequence(cms_db_prefix()."module_news_seq");
+$db->CreateSequence(CMS_DB_PREFIX."module_news_seq");
 
 $flds = "
 	news_category_id I KEY,
@@ -52,9 +52,9 @@ $flds = "
 ";
 
 $taboptarray = array('mysql' => 'TYPE=MyISAM');
-$sqlarray = $dict->CreateTableSQL(cms_db_prefix()."module_news_categories",$flds, $taboptarray);
+$sqlarray = $dict->CreateTableSQL(CMS_DB_PREFIX."module_news_categories",$flds, $taboptarray);
 $dict->ExecuteSQLArray($sqlarray);
-$db->CreateSequence(cms_db_prefix()."module_news_categories_seq");
+$db->CreateSequence(CMS_DB_PREFIX."module_news_categories_seq");
 
 $flds = "
 	id I KEY AUTO,
@@ -69,7 +69,7 @@ $flds = "
 ";
 
 $taboptarray = array('mysql' => 'TYPE=MyISAM');
-$sqlarray = $dict->CreateTableSQL(cms_db_prefix()."module_news_fielddefs", $flds, $taboptarray);
+$sqlarray = $dict->CreateTableSQL(CMS_DB_PREFIX."module_news_fielddefs", $flds, $taboptarray);
 $dict->ExecuteSQLArray($sqlarray);
 
 $flds = "
@@ -81,7 +81,7 @@ $flds = "
 ";
 
 $taboptarray = array('mysql' => 'TYPE=MyISAM');
-$sqlarray = $dict->CreateTableSQL(cms_db_prefix()."module_news_fieldvals", $flds, $taboptarray);
+$sqlarray = $dict->CreateTableSQL(CMS_DB_PREFIX."module_news_fieldvals", $flds, $taboptarray);
 $dict->ExecuteSQLArray($sqlarray);
 
 #Set Permission
@@ -283,59 +283,59 @@ $this->SetPreference('allowed_upload_types','gif,png,jpeg,jpg');
 $this->SetPreference('auto_create_thumbnails','gif,png,jpeg,jpg');
 
 # Setup General category
-$catid = $db->GenID(cms_db_prefix()."module_news_categories_seq");
-$query = 'INSERT INTO '.cms_db_prefix().'module_news_categories (news_category_id, news_category_name, parent_id, create_date, modified_date) VALUES (?,?,?,'.$db->DBTimeStamp(time()).','.$db->DBTimeStamp(time()).')';
+$catid = $db->GenID(CMS_DB_PREFIX."module_news_categories_seq");
+$query = 'INSERT INTO '.CMS_DB_PREFIX.'module_news_categories (news_category_id, news_category_name, parent_id, create_date, modified_date) VALUES (?,?,?,'.$db->DBTimeStamp(time()).','.$db->DBTimeStamp(time()).')';
 $db->Execute($query, array($catid, 'General', -1));
 
 # Setup initial news article
-$articleid = $db->GenID(cms_db_prefix()."module_news_seq");
-$query = 'INSERT INTO '.cms_db_prefix().'module_news ( NEWS_ID, NEWS_CATEGORY_ID, AUTHOR_ID, NEWS_TITLE, NEWS_DATA, NEWS_DATE, SUMMARY, START_TIME, END_TIME, STATUS, ICON, SEARCHABLE, CREATE_DATE, MODIFIED_DATE ) VALUES (?,?,?,?,?,'.$db->DBTimeStamp(time()).',?,?,?,?,?,?,'.$db->DBTimeStamp(time()).','.$db->DBTimeStamp(time()).')';
+$articleid = $db->GenID(CMS_DB_PREFIX."module_news_seq");
+$query = 'INSERT INTO '.CMS_DB_PREFIX.'module_news ( NEWS_ID, NEWS_CATEGORY_ID, AUTHOR_ID, NEWS_TITLE, NEWS_DATA, NEWS_DATE, SUMMARY, START_TIME, END_TIME, STATUS, ICON, SEARCHABLE, CREATE_DATE, MODIFIED_DATE ) VALUES (?,?,?,?,?,'.$db->DBTimeStamp(time()).',?,?,?,?,?,?,'.$db->DBTimeStamp(time()).','.$db->DBTimeStamp(time()).')';
 $db->Execute($query, array($articleid, $catid, 1, 'News Module Installed', 'The news module was installed.  Exciting. This news article is not using the Summary field and therefore there is no link to read more. But you can click on the news heading to read only this article.', null, null, null, 'published', null, 1));
 news_admin_ops::UpdateHierarchyPositions();
 
 # Setup permissions
-$perm_id = $db->GetOne("SELECT permission_id FROM ".cms_db_prefix()."permissions WHERE permission_name = 'Modify News'");
-$group_id = $db->GetOne("SELECT group_id FROM ".cms_db_prefix()."groups WHERE group_name = 'Admin'");
+$perm_id = $db->GetOne("SELECT permission_id FROM ".CMS_DB_PREFIX."permissions WHERE permission_name = 'Modify News'");
+$group_id = $db->GetOne("SELECT group_id FROM ".CMS_DB_PREFIX."groups WHERE group_name = 'Admin'");
 
-$count = $db->GetOne("SELECT count(*) FROM " . cms_db_prefix() . "group_perms WHERE group_id = ? AND permission_id = ?", array($group_id, $perm_id));
+$count = $db->GetOne("SELECT count(*) FROM " . CMS_DB_PREFIX . "group_perms WHERE group_id = ? AND permission_id = ?", array($group_id, $perm_id));
 if (isset($count) && intval($count) == 0) {
-  $new_id = $db->GenID(cms_db_prefix()."group_perms_seq");
-  $query = "INSERT INTO " . cms_db_prefix() . "group_perms (group_perm_id, group_id, permission_id, create_date, modified_date) VALUES (".$new_id.", ".$group_id.", ".$perm_id.", ". $db->DBTimeStamp(time()) . ", " . $db->DBTimeStamp(time()) . ")";
+  $new_id = $db->GenID(CMS_DB_PREFIX."group_perms_seq");
+  $query = "INSERT INTO " . CMS_DB_PREFIX . "group_perms (group_perm_id, group_id, permission_id, create_date, modified_date) VALUES (".$new_id.", ".$group_id.", ".$perm_id.", ". $db->DBTimeStamp(time()) . ", " . $db->DBTimeStamp(time()) . ")";
   $db->Execute($query);
 }
 
-$group_id = $db->GetOne("SELECT group_id FROM ".cms_db_prefix()."groups WHERE group_name = 'Editor'");
+$group_id = $db->GetOne("SELECT group_id FROM ".CMS_DB_PREFIX."groups WHERE group_name = 'Editor'");
 
-$count = $db->GetOne("SELECT count(*) FROM " . cms_db_prefix() . "group_perms WHERE group_id = ? AND permission_id = ?", array($group_id, $perm_id));
+$count = $db->GetOne("SELECT count(*) FROM " . CMS_DB_PREFIX . "group_perms WHERE group_id = ? AND permission_id = ?", array($group_id, $perm_id));
 if (isset($count) && intval($count) == 0) {
-  $new_id = $db->GenID(cms_db_prefix()."group_perms_seq");
-  $query = "INSERT INTO " . cms_db_prefix() . "group_perms (group_perm_id, group_id, permission_id, create_date, modified_date) VALUES (".$new_id.", ".$group_id.", ".$perm_id.", ". $db->DBTimeStamp(time()) . ", " . $db->DBTimeStamp(time()) . ")";
+  $new_id = $db->GenID(CMS_DB_PREFIX."group_perms_seq");
+  $query = "INSERT INTO " . CMS_DB_PREFIX . "group_perms (group_perm_id, group_id, permission_id, create_date, modified_date) VALUES (".$new_id.", ".$group_id.", ".$perm_id.", ". $db->DBTimeStamp(time()) . ", " . $db->DBTimeStamp(time()) . ")";
   $db->Execute($query);
 }
 
 # Indexes
-$sqlarray = $dict->CreateIndexSQL(cms_db_prefix().'news_postdate',
-				  cms_db_prefix().'module_news',
+$sqlarray = $dict->CreateIndexSQL(CMS_DB_PREFIX.'news_postdate',
+				  CMS_DB_PREFIX.'module_news',
 				  'news_date');
 $dict->ExecuteSQLArray($sqlarray);
-$sqlarray = $dict->CreateIndexSQL(cms_db_prefix().'news_daterange',
-				  cms_db_prefix().'module_news',
+$sqlarray = $dict->CreateIndexSQL(CMS_DB_PREFIX.'news_daterange',
+				  CMS_DB_PREFIX.'module_news',
 				  'start_time,end_time');
 $dict->ExecuteSQLArray($sqlarray);
-$sqlarray = $dict->CreateIndexSQL(cms_db_prefix().'news_author',
-				  cms_db_prefix().'module_news',
+$sqlarray = $dict->CreateIndexSQL(CMS_DB_PREFIX.'news_author',
+				  CMS_DB_PREFIX.'module_news',
 				  'author_id');
 $dict->ExecuteSQLArray($sqlarray);
-$sqlarray = $dict->CreateIndexSQL(cms_db_prefix().'news_hier',
-				  cms_db_prefix().'module_news',
+$sqlarray = $dict->CreateIndexSQL(CMS_DB_PREFIX.'news_hier',
+				  CMS_DB_PREFIX.'module_news',
 				  'news_category_id');
 $dict->ExecuteSQLArray($sqlarray);
-$sqlarray = $dict->CreateIndexSQL(cms_db_prefix().'news_url',
-				  cms_db_prefix().'module_news',
+$sqlarray = $dict->CreateIndexSQL(CMS_DB_PREFIX.'news_url',
+				  CMS_DB_PREFIX.'module_news',
 				  'news_url');
 $dict->ExecuteSQLArray($sqlarray);
-$sqlarray = $dict->CreateIndexSQL(cms_db_prefix().'news_startenddate',
-				  cms_db_prefix().'module_news',
+$sqlarray = $dict->CreateIndexSQL(CMS_DB_PREFIX.'news_startenddate',
+				  CMS_DB_PREFIX.'module_news',
 				  'start_time,end_time');
 $dict->ExecuteSQLArray($sqlarray);
 

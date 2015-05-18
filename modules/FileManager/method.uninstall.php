@@ -5,11 +5,11 @@ if (!function_exists("cmsms")) exit;
 
 // remove the database table
 /*$dict = NewDataDictionary( $db );
- $sqlarray = $dict->DropTableSQL( cms_db_prefix()."module_filemanager_thumbs" );
+ $sqlarray = $dict->DropTableSQL( CMS_DB_PREFIX."module_filemanager_thumbs" );
  $dict->ExecuteSQLArray($sqlarray);
  */
 // remove the sequence
-//$db->DropSequence( cms_db_prefix()."module_skeleton_seq" );
+//$db->DropSequence( CMS_DB_PREFIX."module_skeleton_seq" );
 
 // remove the permissions
 $this->RemovePermission('Use Filemanager'); //Used in some old versions

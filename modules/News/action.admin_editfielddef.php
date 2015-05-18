@@ -52,14 +52,14 @@ if (isset($params['submit'])) {
   if ($name == '') $error = $this->Lang('nonamegiven');
 
   if( !$error ) {
-    $query = 'SELECT id FROM '.cms_db_prefix().'module_news_fielddefs WHERE name = ? AND id != ?';
+    $query = 'SELECT id FROM '.CMS_DB_PREFIX.'module_news_fielddefs WHERE name = ? AND id != ?';
     $tmp = $db->GetOne($query,array($name,$fdid));
     if( $tmp ) $error = $this->Lang('nameexists');
   }
 
   if( !$error ) {
     $extra = array('options'=>$arr_options);
-    $query = 'UPDATE '.cms_db_prefix().'module_news_fielddefs SET name = ?, type = ?, max_length = ?, modified_date = '.$db->DBTimeStamp(time()).', public = ?, extra = ? WHERE id = ?';
+    $query = 'UPDATE '.CMS_DB_PREFIX.'module_news_fielddefs SET name = ?, type = ?, max_length = ?, modified_date = '.$db->DBTimeStamp(time()).', public = ?, extra = ? WHERE id = ?';
     $res = $db->Execute($query, array($name, $type, $max_length, $public, serialize($extra), $fdid));
 
     if( !$res ) die( $db->ErrorMsg() );
@@ -70,7 +70,7 @@ if (isset($params['submit'])) {
   }
 }
 else {
-   $query = 'SELECT * FROM '.cms_db_prefix().'module_news_fielddefs WHERE id = ?';
+   $query = 'SELECT * FROM '.CMS_DB_PREFIX.'module_news_fielddefs WHERE id = ?';
    $row = $db->GetRow($query, array($fdid));
 
    if ($row) {

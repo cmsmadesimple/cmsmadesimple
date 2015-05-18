@@ -106,7 +106,7 @@ final class cms_module_smarty_plugin_manager
 		$this->_loaded = TRUE;
 		$this->_data = array();
 		$db = CmsApp::get_instance()->GetDb();
-		$query = 'SELECT * FROM '.cms_db_prefix().'module_smarty_plugins ORDER BY module';
+		$query = 'SELECT * FROM '.CMS_DB_PREFIX.'module_smarty_plugins ORDER BY module';
 		$tmp = $db->GetArray($query);
 		if( is_array($tmp) ) {
 			for( $i = 0, $n = count($tmp); $i < $n; $i++ ) {
@@ -127,10 +127,10 @@ final class cms_module_smarty_plugin_manager
 			return;
 
 		$db = CmsApp::get_instance()->GetDb();
-		$query = 'TRUNCATE TABLE '.cms_db_prefix().'module_smarty_plugins';
+		$query = 'TRUNCATE TABLE '.CMS_DB_PREFIX.'module_smarty_plugins';
 		$db->Execute($query);
 
-		$query = 'INSERT INTO '.cms_db_prefix().'module_smarty_plugins (sig,name,module,type,callback,cachable,available) VALUES';
+		$query = 'INSERT INTO '.CMS_DB_PREFIX.'module_smarty_plugins (sig,name,module,type,callback,cachable,available) VALUES';
 		$fmt = " ('%s','%s','%s','%s','%s',%d,%d),";
 		foreach( $this->_data as $key => $row ) {
 			$query .= sprintf($fmt,$row['sig'],$row['name'],$row['module'],$row['type'],serialize($row['callback']),$row['cachable'],$row['available']);

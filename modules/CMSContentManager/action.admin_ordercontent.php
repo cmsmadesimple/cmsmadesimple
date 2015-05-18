@@ -102,7 +102,7 @@ if( isset($params['orderlist']) && $params['orderlist'] != '' ) {
         echo $this->ShowErrors($this->Lang('error_ordercontent_nothingtodo'));
     }
     else {
-        $query = 'UPDATE '.cms_db_prefix().'content SET item_order = ?, parent_id = ? WHERE content_id = ?';
+        $query = 'UPDATE '.CMS_DB_PREFIX.'content SET item_order = ?, parent_id = ? WHERE content_id = ?';
         foreach( $changelist as $rec ) {
             $db->Execute($query,array($rec['order'],$rec['parent_id'],$rec['id']));
         }

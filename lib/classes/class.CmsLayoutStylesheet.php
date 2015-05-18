@@ -298,7 +298,7 @@ class CmsLayoutStylesheet
         if( !is_array($this->_design_assoc) ) {
             $this->_design_assoc = null;
             $db = CmsApp::get_instance()->GetDb();
-            $query = 'SELECT design_id FROM '.cms_db_prefix().CmsLayoutCollection::CSSTABLE.' WHERE css_id = ?';
+            $query = 'SELECT design_id FROM '.CMS_DB_PREFIX.CmsLayoutCollection::CSSTABLE.' WHERE css_id = ?';
             $tmp = $db->GetCol($query,array($this->get_id()));
             if( is_array($tmp) && count($tmp) ) $this->_design_assoc = $tmp;
         }
@@ -404,11 +404,11 @@ class CmsLayoutStylesheet
         $tmp = null;
         if( $this->get_id() ) {
             // double check the name.
-            $query = 'SELECT id FROM '.cms_db_prefix().self::TABLENAME.' WHERE name = ? AND id != ?';
+            $query = 'SELECT id FROM '.CMS_DB_PREFIX.self::TABLENAME.' WHERE name = ? AND id != ?';
             $tmp = $db->GetOne($query,array($this->get_name(),$this->get_id()));
         } else {
             // double check the name.
-            $query = 'SELECT id FROM '.cms_db_prefix().self::TABLENAME.' WHERE name = ?';
+            $query = 'SELECT id FROM '.CMS_DB_PREFIX.self::TABLENAME.' WHERE name = ?';
             $tmp = $db->GetOne($query,array($this->get_name()));
         }
         if( $tmp ) {
@@ -424,7 +424,7 @@ class CmsLayoutStylesheet
         if( !$this->_dirty ) return;
         $this->validate();
 
-        $query = 'UPDATE '.cms_db_prefix().self::TABLENAME.'
+        $query = 'UPDATE '.CMS_DB_PREFIX.self::TABLENAME.'
               SET name = ?, content = ?, description = ?, media_type = ?, media_query = ?, modified = ?
               WHERE id = ?';
         $tmp = '';
@@ -435,7 +435,7 @@ class CmsLayoutStylesheet
         if( !$dbr ) throw new CmsSQLErrorException($db->sql.' -- '.$db->ErrorMsg());
 
         // get the designs that have this stylesheet from the database again.
-        $query = 'SELECT design_id FROM '.cms_db_prefix().CmsLayoutCollection::CSSTABLE.' WhERE css_id = ?';
+        $query = 'SELECT design_id FROM '.CMS_DB_PREFIX.CmsLayoutCollection::CSSTABLE.' WhERE css_id = ?';
         $design_list = $db->GetCol($query,array($this->get_id()));
         if( !is_array($design_list) ) $design_list = array();
 
@@ -452,9 +452,9 @@ class CmsLayoutStylesheet
 
         if( is_array($del_dl) && count($del_dl) ) {
             // delete deleted items
-            $query1 = 'SELECT item_order FROM '.cms_db_prefix().CmsLayoutCollection::CSSTABLE.' WHERE css_id = ? AND design_id = ?';
-            $query2 = 'UPDATE '.cms_db_prefix().CmsLayoutCollection::CSSTABLE.' SET item_order = item_order - 1 WHERE design_id = ? AND item_order > ?';
-            $query3 = 'DELETE FROM '.cms_db_prefix().CmsLayoutCollection::CSSTABLE.' WHERE design_id = ? AND css_id = ?';
+            $query1 = 'SELECT item_order FROM '.CMS_DB_PREFIX.CmsLayoutCollection::CSSTABLE.' WHERE css_id = ? AND design_id = ?';
+            $query2 = 'UPDATE '.CMS_DB_PREFIX.CmsLayoutCollection::CSSTABLE.' SET item_order = item_order - 1 WHERE design_id = ? AND item_order > ?';
+            $query3 = 'DELETE FROM '.CMS_DB_PREFIX.CmsLayoutCollection::CSSTABLE.' WHERE design_id = ? AND css_id = ?';
             foreach( $del_dl as $design_id ) {
                 $design_id = (int)$design_id;
                 $item_order = (int)$db->GetOne($query1,array($this->get_id(),$design_id));
@@ -467,8 +467,8 @@ class CmsLayoutStylesheet
 
         if( is_array($new_dl) && count($new_dl) ) {
             // add new items
-            $query1 = 'SELECT MAX(item_order) FROM '.cms_db_prefix().CmsLayoutCollection::CSSTABLE.' WHERE design_id = ?';
-            $query2 = 'INSERT INTO '.cms_db_prefix().CmsLayoutCollection::CSSTABLE.' (css_id,design_id,item_order) VALUES(?,?,?)';
+            $query1 = 'SELECT MAX(item_order) FROM '.CMS_DB_PREFIX.CmsLayoutCollection::CSSTABLE.' WHERE design_id = ?';
+            $query2 = 'INSERT INTO '.CMS_DB_PREFIX.CmsLayoutCollection::CSSTABLE.' (css_id,design_id,item_order) VALUES(?,?,?)';
             foreach( $new_dl as $one ) {
                 $one = (int)$one;
                 $num = (int)$db->GetOne($query1,array($one))+1;
@@ -493,7 +493,7 @@ class CmsLayoutStylesheet
         // insert the record
 		$tmp = '';
 		if( isset($this->_data['media_type']) ) $tmp = implode(',',$this->_data['media_type']);
-        $query = 'INSERT INTO '.cms_db_prefix().self::TABLENAME.' (name,content,description,media_type,media_query, created,modified)
+        $query = 'INSERT INTO '.CMS_DB_PREFIX.self::TABLENAME.' (name,content,description,media_type,media_query, created,modified)
               VALUES (?,?,?,?,?,?,?)';
         $db = CmsApp::get_instance()->GetDb();
         $dbr = $db->Execute($query,	array($this->get_name(),$this->get_content(),$this->get_description(),
@@ -503,7 +503,7 @@ class CmsLayoutStylesheet
 
         $t = $this->get_designs();
         if( is_array($t) && count($t) ) {
-            $query = 'INSERT INTO '.cms_db_prefix().CmsLayoutCollection::CSSTABLE.' (css_id,design_id) VALUES(?,?)';
+            $query = 'INSERT INTO '.CMS_DB_PREFIX.CmsLayoutCollection::CSSTABLE.' (css_id,design_id) VALUES(?,?)';
             foreach( $t as $one ) {
 				$dbr = $db->Execute($query,array($this->get_id(),(int)$one));
             }
@@ -552,10 +552,10 @@ class CmsLayoutStylesheet
 
 		Events::SendEvent('Core','DeleteStylesheetPre',array(get_class($this)=>&$this));
         $db = CmsApp::get_instance()->GetDb();
-        $query = 'DELETE FROM '.cms_db_prefix().CmsLayoutCollection::CSSTABLE.' WHERE css_id = ?';
+        $query = 'DELETE FROM '.CMS_DB_PREFIX.CmsLayoutCollection::CSSTABLE.' WHERE css_id = ?';
         $dbr = $db->Execute($query,array($this->get_id()));
 
-        $query = 'DELETE FROM '.cms_db_prefix().self::TABLENAME.' WHERE id = ?';
+        $query = 'DELETE FROM '.CMS_DB_PREFIX.self::TABLENAME.' WHERE id = ?';
         $dbr = $db->Execute($query,array($this->get_id()));
 
         CmsTemplateCache::clear_cache();
@@ -650,7 +650,7 @@ class CmsLayoutStylesheet
 			$a = (int)$a;
 			if( isset(self::$_css_cache[$a]) ) return self::$_css_cache[$a];
 			// not in cache
-            $query = 'SELECT id,name,content,description,media_type,media_query,created,modified FROM '.cms_db_prefix().self::TABLENAME.' WHERE id = ?';
+            $query = 'SELECT id,name,content,description,media_type,media_query,created,modified FROM '.CMS_DB_PREFIX.self::TABLENAME.' WHERE id = ?';
             $row = $db->GetRow($query,array($a));
         }
         else if( is_string($a) && strlen($a) > 0 ) {
@@ -659,7 +659,7 @@ class CmsLayoutStylesheet
 				if( isset(self::$_css_cache[$b]) ) return self::$_css_cache[$b];
 			}
 			// not in cache
-            $query = 'SELECT id,name,content,description,media_type,media_query,created,modified FROM '.cms_db_prefix().self::TABLENAME.' WHERE name = ?';
+            $query = 'SELECT id,name,content,description,media_type,media_query,created,modified FROM '.CMS_DB_PREFIX.self::TABLENAME.' WHERE name = ?';
             $row = $db->GetRow($query,array($a));
         }
         if( !is_array($row) || count($row) == 0 ) throw new CmsDataNotFoundException('Could not find template identified by '.$a);
@@ -701,8 +701,8 @@ class CmsLayoutStylesheet
 		$ids = array_unique($ids);
 
 		$db = CmsApp::get_instance()->GetDb();
-		$query = 'SELECT id,name,content,description,media_type,media_query,created,modified FROM '.cms_db_prefix().self::TABLENAME.' WHERE id IN ('.implode(',',$ids).')';
-		if( !$is_ints ) $query = 'SELECT id,name,content,description,media_type,media_query,created,modified FROM '.cms_db_prefix().self::TABLENAME.' WHERE name IN ('.implode(',',$ids).')';
+		$query = 'SELECT id,name,content,description,media_type,media_query,created,modified FROM '.CMS_DB_PREFIX.self::TABLENAME.' WHERE id IN ('.implode(',',$ids).')';
+		if( !$is_ints ) $query = 'SELECT id,name,content,description,media_type,media_query,created,modified FROM '.CMS_DB_PREFIX.self::TABLENAME.' WHERE name IN ('.implode(',',$ids).')';
 
 		$dbr = $db->GetArray($query);
 		$out = array();
@@ -714,7 +714,7 @@ class CmsLayoutStylesheet
 					$ids2[] = $row['id'];
 					$designs_by_css[$row['id']] = array();
 				}
-				$dquery = 'SELECT design_id,css_id FROM '.cms_db_prefix().CmsLayoutCollection::CSSTABLE.' WHERE css_id IN ('.implode(',',$ids2).') ORDER BY css_id';
+				$dquery = 'SELECT design_id,css_id FROM '.CMS_DB_PREFIX.CmsLayoutCollection::CSSTABLE.' WHERE css_id IN ('.implode(',',$ids2).') ORDER BY css_id';
 				$dbr2 = $db->GetArray($dquery);
 				foreach( $dbr2 as $row ) {
 					$designs_by_css[$row['css_id']][] = $row['design_id'];
@@ -765,7 +765,7 @@ class CmsLayoutStylesheet
 
 		$out = array();
 		if( $as_list ) {
-			$query = 'SELECT id,name FROM '.cms_db_prefix().self::TABLENAME.' ORDER BY modified DESC';
+			$query = 'SELECT id,name FROM '.CMS_DB_PREFIX.self::TABLENAME.' ORDER BY modified DESC';
 			$dbr = $db->GetArray($query);
 			foreach( $dbr as $row ) {
 				$out[$row['id']] = $row['name'];
@@ -773,7 +773,7 @@ class CmsLayoutStylesheet
 			return $out;
 		}
 		else {
-			$query = 'SELECT id FROM '.cms_db_prefix().self::TABLENAME.' ORDER BY modified DESC';
+			$query = 'SELECT id FROM '.CMS_DB_PREFIX.self::TABLENAME.' ORDER BY modified DESC';
 			$ids = $db->GetCol($query);
 			return self::load_bulk($ids);
 		}

@@ -3,16 +3,16 @@ if( !isset($gCms) ) exit;
 if( !$this->CheckPermission('Modify Site Preferences') ) return;
 
 $entryarray = array();
-$max = $db->GetOne("SELECT max(item_order) as max_item_order FROM ".cms_db_prefix()."module_news_fielddefs");
+$max = $db->GetOne("SELECT max(item_order) as max_item_order FROM ".CMS_DB_PREFIX."module_news_fielddefs");
 $usedfields = array();
-$tmp = $db->GetArray('SELECT DISTINCT fielddef_id FROM '.cms_db_prefix().'module_news_fieldvals');
+$tmp = $db->GetArray('SELECT DISTINCT fielddef_id FROM '.CMS_DB_PREFIX.'module_news_fieldvals');
 if( is_array($tmp) ) {
   foreach( $tmp as $row ) {
     $usedfields[] = $row['fielddef_id'];
   }
 }
 
-$query = "SELECT * FROM ".cms_db_prefix()."module_news_fielddefs ORDER BY item_order";
+$query = "SELECT * FROM ".CMS_DB_PREFIX."module_news_fielddefs ORDER BY item_order";
 $dbresult = $db->Execute($query);
 $admintheme = cms_utils::get_theme_object();
 $rowclass = 'row1';

@@ -14,8 +14,8 @@ if( isset($params['pageid']) )
   }
 
 $query = 'SELECT b.word 
-            FROM '.cms_db_prefix().'module_search_items a, 
-                 '.cms_db_prefix().'module_search_index b 
+            FROM '.CMS_DB_PREFIX.'module_search_items a, 
+                 '.CMS_DB_PREFIX.'module_search_index b 
            WHERE a.content_id = \''.$pageid.'\' 
              AND a.module_name = \'search\' 
              AND a.extra_attr = \'content\' 

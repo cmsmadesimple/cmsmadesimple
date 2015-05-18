@@ -1122,7 +1122,7 @@ abstract class CMSModule
         $db = $gCms->GetDb();
         $result = false;
 
-        $query = "SELECT child_module FROM ".cms_db_prefix()."module_deps WHERE parent_module = ? LIMIT 1";
+        $query = "SELECT child_module FROM ".CMS_DB_PREFIX."module_deps WHERE parent_module = ? LIMIT 1";
         $tmp = $db->GetOne($query,array($this->GetName()));
         if( $tmp ) $result = true;
         return $result;

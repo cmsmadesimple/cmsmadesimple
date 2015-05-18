@@ -532,7 +532,7 @@ abstract class Smarty_Internal_TemplateCompilerBase
 
 				// CMSMS MOD START
                 if (is_callable($this->smarty->default_plugin_handler_func)) {
-				
+
 					$found = false;
 					// look for already resolved tags
 					foreach ($this->smarty->plugin_search_order as $plugin_type) {
@@ -541,7 +541,7 @@ abstract class Smarty_Internal_TemplateCompilerBase
 							break;
 						}
 					}
-					
+
 					if (!$found) {
 						// call default handler
 						foreach ($this->smarty->plugin_search_order as $plugin_type) {
@@ -551,7 +551,7 @@ abstract class Smarty_Internal_TemplateCompilerBase
 							}
 						}
 					}
-					
+
 					if ($found) {
 						// if compiler function plugin call it now
 						if ($plugin_type == Smarty::PLUGIN_COMPILER) {
@@ -572,8 +572,8 @@ abstract class Smarty_Internal_TemplateCompilerBase
 						}
 					}
                 }
-				// CMSMS MOD END				
-                
+				// CMSMS MOD END
+
             }
             $this->trigger_template_error("unknown tag \"" . $tag . "\"", $this->lex->taglineno);
         }

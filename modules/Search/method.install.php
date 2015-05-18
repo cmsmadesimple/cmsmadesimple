@@ -11,7 +11,7 @@ if( cmsms()->test_state(CmsApp::STATE_INSTALL) ) {
 }
 
 
-$db_prefix = cms_db_prefix();
+$db_prefix = CMS_DB_PREFIX;
 $dict = NewDataDictionary($db);
 $flds= "
 		id I KEY,
@@ -21,10 +21,10 @@ $flds= "
 		expires " . CMS_ADODB_DT;
 
 $taboptarray = array('mysql' => 'TYPE=MyISAM');
-$sqlarray = $dict->CreateTableSQL(cms_db_prefix().'module_search_items', $flds, $taboptarray);
+$sqlarray = $dict->CreateTableSQL(CMS_DB_PREFIX.'module_search_items', $flds, $taboptarray);
 $dict->ExecuteSQLArray($sqlarray);
 
-$db->CreateSequence(cms_db_prefix()."module_search_items_seq");
+$db->CreateSequence(CMS_DB_PREFIX."module_search_items_seq");
 
 $sqlarray = $dict->CreateIndexSQL('module_name', $db_prefix."module_search_items", 'module_name');
 $dict->ExecuteSQLArray($sqlarray);
@@ -41,26 +41,26 @@ $flds= "
 		count I
 	";
 $taboptarray = array('mysql' => 'TYPE=MyISAM');
-$sqlarray = $dict->CreateTableSQL(cms_db_prefix().'module_search_index', $flds, $taboptarray);
+$sqlarray = $dict->CreateTableSQL(CMS_DB_PREFIX.'module_search_index', $flds, $taboptarray);
 $dict->ExecuteSQLArray($sqlarray);
 
-$sqlarray = $dict->CreateIndexSQL(cms_db_prefix().'index_search_count', $db_prefix."module_search_index", 'count');
+$sqlarray = $dict->CreateIndexSQL(CMS_DB_PREFIX.'index_search_count', $db_prefix."module_search_index", 'count');
 $dict->ExecuteSQLArray($sqlarray);
 
 $flds = "word C(255) KEY,
          count       I
         ";
 $taboptarray = array('mysql' => 'TYPE=MyISAM');
-$sqlarray = $dict->CreateTableSQL(cms_db_prefix().'module_search_words', $flds, $taboptarray);
+$sqlarray = $dict->CreateTableSQL(CMS_DB_PREFIX.'module_search_words', $flds, $taboptarray);
 $dict->ExecuteSQLArray($sqlarray);
 
 # Indexes
-$sqlarray = $dict->CreateIndexSQL(cms_db_prefix().'index_search_items',
-				   cms_db_prefix().'module_search_items',
+$sqlarray = $dict->CreateIndexSQL(CMS_DB_PREFIX.'index_search_items',
+				   CMS_DB_PREFIX.'module_search_items',
 				   'module_name,content_id');
 $dict->ExecuteSQLArray($sqlarray);
-$sqlarray = $dict->CreateIndexSQL(cms_db_prefix().'index_search_index',
-				   cms_db_prefix().'module_search_index',
+$sqlarray = $dict->CreateIndexSQL(CMS_DB_PREFIX.'index_search_index',
+				   CMS_DB_PREFIX.'module_search_index',
 				   'word');
 $dict->ExecuteSQLArray($sqlarray);
 

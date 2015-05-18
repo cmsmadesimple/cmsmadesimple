@@ -23,7 +23,7 @@ final class AdminSearch_template_slave extends AdminSearch_slave
   public function get_matches()
   {
     $db = cmsms()->GetDb();
-    $query = 'SELECT *FROM '.cms_db_prefix().CmsLayoutTemplate::TABLENAME.' WHERE name LIKE ? OR content LIKE ?';
+    $query = 'SELECT *FROM '.CMS_DB_PREFIX.CmsLayoutTemplate::TABLENAME.' WHERE name LIKE ? OR content LIKE ?';
     $str = '%'.$this->get_text().'%';
     $parms = array($str,$str);
     if( $this->search_descriptions() ) {

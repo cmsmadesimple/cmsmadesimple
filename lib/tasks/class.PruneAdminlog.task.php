@@ -39,7 +39,7 @@ class PruneAdminlogTask implements CmsRegularTask
     // do the task.
     $lifetime = (int)get_site_preference(self::LIFETIME_SITEPREF,(60*60*24*31));
     $db=cmsms()->GetDB();
-    $q="DELETE FROM ".cms_db_prefix()."adminlog WHERE timestamp<?";
+    $q="DELETE FROM ".CMS_DB_PREFIX."adminlog WHERE timestamp<?";
     $p=array(time()-$lifetime);
     $dbresult=$db->Execute($q,$p);
     //$gCms->clear_cached_files($age_days);

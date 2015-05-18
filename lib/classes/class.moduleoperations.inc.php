@@ -390,12 +390,12 @@ final class ModuleOperations
         $result = $module_obj->Install();
         if( !isset($result) || $result === FALSE) {
             // install returned nothing, or FALSE, a successful installation
-            $query = 'DELETE FROM '.cms_db_prefix().'modules WHERE module_name = ?';
+            $query = 'DELETE FROM '.CMS_DB_PREFIX.'modules WHERE module_name = ?';
             $dbr = $db->Execute($query,array($module_obj->GetName()));
 
             $lazyload_fe    = (method_exists($module_obj,'LazyLoadFrontend') && $module_obj->LazyLoadFrontend())?1:0;
             $lazyload_admin = (method_exists($module_obj,'LazyLoadAdmin') && $module_obj->LazyLoadAdmin())?1:0;
-            $query = 'INSERT INTO '.cms_db_prefix().'modules
+            $query = 'INSERT INTO '.CMS_DB_PREFIX.'modules
                       (module_name,version,status,admin_only,active,allow_fe_lazyload,allow_admin_lazyload)
                       VALUES (?,?,?,?,?,?,?)';
             $dbr = $db->Execute($query,array($module_obj->GetName(),$module_obj->GetVersion(),'installed',
@@ -404,7 +404,7 @@ final class ModuleOperations
 
             $deps = $module_obj->GetDependencies();
             if( is_array($deps) && count($deps) ) {
-                $query = 'INSERT INTO '.cms_db_prefix().'module_deps (parent_module,child_module,minimum_version,create_date,modified_date)
+                $query = 'INSERT INTO '.CMS_DB_PREFIX.'module_deps (parent_module,child_module,minimum_version,create_date,modified_date)
                           VALUES (?,?,?,NOW(),NOW())';
                 foreach( $deps as $depname => $depversion ) {
                     if( !$depname || !$depversion ) continue;
@@ -470,7 +470,7 @@ final class ModuleOperations
     {
         if( !is_array($this->_moduleinfo) || count($this->_moduleinfo) == 0 ) {
             $db = CmsApp::get_instance()->GetDb();
-            $query = 'SELECT * FROM '.cms_db_prefix().'modules ORDER BY module_name';
+            $query = 'SELECT * FROM '.CMS_DB_PREFIX.'modules ORDER BY module_name';
             $tmp = $db->GetArray($query);
 
             if( is_array($tmp) ) {
@@ -768,17 +768,17 @@ final class ModuleOperations
             $lazyload_fe    = (method_exists($module_obj,'LazyLoadFrontend') && $module_obj->LazyLoadFrontend())?1:0;
             $lazyload_admin = (method_exists($module_obj,'LazyLoadAdmin') && $module_obj->LazyLoadAdmin())?1:0;
 
-            $query = 'UPDATE '.cms_db_prefix().'modules SET version = ?, active = 1, allow_fe_lazyload = ?, allow_admin_lazyload = ?
+            $query = 'UPDATE '.CMS_DB_PREFIX.'modules SET version = ?, active = 1, allow_fe_lazyload = ?, allow_admin_lazyload = ?
                     WHERE module_name = ?';
             $dbr = $db->Execute($query,array($module_obj->GetVersion(),$lazyload_fe,$lazyload_admin,$module_obj->GetName()));
 
             // upgrade dependencies
-            $query = 'DELETE FROM '.cms_db_prefix().'module_deps WHERE child_module = ?';
+            $query = 'DELETE FROM '.CMS_DB_PREFIX.'module_deps WHERE child_module = ?';
             $dbr = $db->Execute($query,array($module_obj->GetName()));
 
             $deps = $module_obj->GetDependencies();
             if( is_array($deps) && count($deps) ) {
-                $query = 'INSERT INTO '.cms_db_prefix().'module_deps (parent_module,child_module,minimum_version,create_date,modified_date)
+                $query = 'INSERT INTO '.CMS_DB_PREFIX.'module_deps (parent_module,child_module,minimum_version,create_date,modified_date)
                        VALUES (?,?,?,NOW(),NOW())';
                 foreach( $deps as $depname => $depversion ) {
                     if( !$depname || !$depversion ) continue;
@@ -839,19 +839,19 @@ final class ModuleOperations
 
         if (!isset($result) || $result === FALSE) {
             // now delete the record
-            $query = "DELETE FROM ".cms_db_prefix()."modules WHERE module_name = ?";
+            $query = "DELETE FROM ".CMS_DB_PREFIX."modules WHERE module_name = ?";
             $db->Execute($query, array($module));
 
             // delete any dependencies
-            $query = "DELETE FROM ".cms_db_prefix()."module_deps WHERE child_module = ?";
+            $query = "DELETE FROM ".CMS_DB_PREFIX."module_deps WHERE child_module = ?";
             $db->Execute($query, array($module));
 
             // clean up, if permitted
             if ($cleanup) {
                 // deprecated
-                $db->Execute('DELETE FROM '.cms_db_prefix().'module_templates where module_name=?',array($module));
-                $db->Execute('DELETE FROM '.cms_db_prefix().'event_handlers where module_name=?',array($module));
-                $db->Execute('DELETE FROM '.cms_db_prefix().'events where originator=?',array($module));
+                $db->Execute('DELETE FROM '.CMS_DB_PREFIX.'module_templates where module_name=?',array($module));
+                $db->Execute('DELETE FROM '.CMS_DB_PREFIX.'event_handlers where module_name=?',array($module));
+                $db->Execute('DELETE FROM '.CMS_DB_PREFIX.'events where originator=?',array($module));
 
                 $types = CmsLayoutTemplateType::load_all_by_originator($module);
                 if( is_array($types) && count($types) ) {
@@ -866,11 +866,11 @@ final class ModuleOperations
                     }
                 }
 
-                $db->Execute('DELETE FROM '.cms_db_prefix().'module_smarty_plugins where module=?',array($module));
-                $db->Execute('DELETE FROM '.cms_db_prefix()."siteprefs WHERE sitepref_name LIKE '".
+                $db->Execute('DELETE FROM '.CMS_DB_PREFIX.'module_smarty_plugins where module=?',array($module));
+                $db->Execute('DELETE FROM '.CMS_DB_PREFIX."siteprefs WHERE sitepref_name LIKE '".
                              str_replace("'",'',$db->qstr($module))."_mapi_pref%'");
-                $db->Execute('DELETE FROM '.cms_db_prefix().'routes WHERE key1 = ?',array($module));
-                $db->Execute('DELETE FROM '.cms_db_prefix().'module_smarty_plugins WHERE module = ?',array($module));
+                $db->Execute('DELETE FROM '.CMS_DB_PREFIX.'routes WHERE key1 = ?',array($module));
+                $db->Execute('DELETE FROM '.CMS_DB_PREFIX.'module_smarty_plugins WHERE module = ?',array($module));
             }
 
             // clear the cache.
@@ -927,7 +927,7 @@ final class ModuleOperations
         }
         if( $info[$module_name]['active'] != $o_state ) {
             $db = CmsApp::get_instance()->GetDb();
-            $query = 'UPDATE '.cms_db_prefix().'modules SET active = ? WHERE module_name = ?';
+            $query = 'UPDATE '.CMS_DB_PREFIX.'modules SET active = ? WHERE module_name = ?';
             $dbr = $db->Execute($query,array($info[$module_name]['active'],$module_name));
             $this->_moduleinfo = array();
             audit('','Module','Activated '.$module_name);
@@ -1024,7 +1024,7 @@ final class ModuleOperations
             else {
                 $this->_moduledeps = array();
                 $db = CmsApp::get_instance()->GetDb();
-                $query = 'SELECT parent_module,child_module,minimum_version FROM '.cms_db_prefix().'module_deps ORDER BY parent_module';
+                $query = 'SELECT parent_module,child_module,minimum_version FROM '.CMS_DB_PREFIX.'module_deps ORDER BY parent_module';
                 $dbr = $db->GetArray($query);
                 if( is_array($dbr) && count($dbr) ) {
                     foreach( $dbr as $row ) {

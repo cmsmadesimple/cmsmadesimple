@@ -94,7 +94,7 @@ if (isset($params['submit']) || isset($params['apply'])) {
         //
         // database work
         //
-        $query = 'UPDATE ' . cms_db_prefix() . 'module_news SET news_title=?, news_data=?, summary=?, status=?, news_date=?, news_category_id=?, start_time=?, end_time=?, modified_date=?, news_extra=?, news_url = ?, searchable = ? WHERE news_id = ?';
+        $query = 'UPDATE ' . CMS_DB_PREFIX . 'module_news SET news_title=?, news_data=?, summary=?, status=?, news_date=?, news_category_id=?, start_time=?, end_time=?, modified_date=?, news_extra=?, news_url = ?, searchable = ? WHERE news_id = ?';
         if ($useexp == 1) {
             $db->Execute($query, array(
                 $title,
@@ -134,7 +134,7 @@ if (isset($params['submit']) || isset($params['apply'])) {
         //
 
         // get the field types
-        $qu = "SELECT id,name,type FROM " . cms_db_prefix() . "module_news_fielddefs WHERE type='file'";
+        $qu = "SELECT id,name,type FROM " . CMS_DB_PREFIX . "module_news_fielddefs WHERE type='file'";
         $types = $db->GetArray($qu);
 
         $error = false;
@@ -159,7 +159,7 @@ if (isset($params['submit']) || isset($params['apply'])) {
             $now = $db->DbTimeStamp(time());
             foreach ($params['customfield'] as $fldid => $value) {
                 // first check if it's available
-                $query = "SELECT value FROM " . cms_db_prefix() . "module_news_fieldvals WHERE news_id = ? AND fielddef_id = ?";
+                $query = "SELECT value FROM " . CMS_DB_PREFIX . "module_news_fieldvals WHERE news_id = ? AND fielddef_id = ?";
                 $tmp = $db->GetOne($query, array(
                     $articleid,
                     $fldid
@@ -167,7 +167,7 @@ if (isset($params['submit']) || isset($params['apply'])) {
                 $dbr = true;
                 if ($tmp === false) {
                     if (!empty($value)) {
-                        $query = "INSERT INTO " . cms_db_prefix() . "module_news_fieldvals (news_id,fielddef_id,value,create_date,modified_date) VALUES (?,?,?,$now,$now)";
+                        $query = "INSERT INTO " . CMS_DB_PREFIX . "module_news_fieldvals (news_id,fielddef_id,value,create_date,modified_date) VALUES (?,?,?,$now,$now)";
                         $dbr = $db->Execute($query, array(
                             $articleid,
                             $fldid,
@@ -176,13 +176,13 @@ if (isset($params['submit']) || isset($params['apply'])) {
                     }
                 } else {
                     if (empty($value)) {
-                        $query = 'DELETE FROM ' . cms_db_prefix() . 'module_news_fieldvals WHERE news_id = ? AND fielddef_id = ?';
+                        $query = 'DELETE FROM ' . CMS_DB_PREFIX . 'module_news_fieldvals WHERE news_id = ? AND fielddef_id = ?';
                         $dbr = $db->Execute($query, array(
                             $articleid,
                             $fldid
                         ));
                     } else {
-                        $query = "UPDATE " . cms_db_prefix() . "module_news_fieldvals
+                        $query = "UPDATE " . CMS_DB_PREFIX . "module_news_fieldvals
                       SET value = ?, modified_date = $now WHERE news_id = ? AND fielddef_id = ?";
                         $dbr = $db->Execute($query, array(
                             $value,
@@ -201,7 +201,7 @@ if (isset($params['submit']) || isset($params['apply'])) {
         foreach ($params['delete_customfield'] as $k => $v) {
             if ($v != 'delete')
                 continue;
-            $query = 'DELETE FROM ' . cms_db_prefix() . 'module_news_fieldvals WHERE news_id = ? AND fielddef_id = ?';
+            $query = 'DELETE FROM ' . CMS_DB_PREFIX . 'module_news_fieldvals WHERE news_id = ? AND fielddef_id = ?';
             $db->Execute($query, array(
                 $articleid,
                 $k
@@ -325,7 +325,7 @@ if (isset($params['submit']) || isset($params['apply'])) {
     //
     // Load data from database
     //
-    $query = 'SELECT * FROM ' . cms_db_prefix() . 'module_news WHERE news_id = ?';
+    $query = 'SELECT * FROM ' . CMS_DB_PREFIX . 'module_news WHERE news_id = ?';
     $row = $db->GetRow($query, array($articleid));
 
     if ($row) {
@@ -353,7 +353,7 @@ $statusdropdown[$this->Lang('draft')] = 'draft';
 $statusdropdown[$this->Lang('published')] = 'published';
 
 $categorylist = array();
-$query = "SELECT * FROM " . cms_db_prefix() . "module_news_categories ORDER BY hierarchy";
+$query = "SELECT * FROM " . CMS_DB_PREFIX . "module_news_categories ORDER BY hierarchy";
 $dbresult = $db->Execute($query);
 
 while ($dbresult && $row = $dbresult->FetchRow()) {
@@ -366,7 +366,7 @@ while ($dbresult && $row = $dbresult->FetchRow()) {
 
 // Get the field values
 $fieldvals = array();
-$query = 'SELECT * FROM ' . cms_db_prefix() . 'module_news_fieldvals WHERE news_id = ?';
+$query = 'SELECT * FROM ' . CMS_DB_PREFIX . 'module_news_fieldvals WHERE news_id = ?';
 $tmp = $db->GetArray($query, array($articleid));
 if (is_array($tmp)) {
     foreach ($tmp as $one) {
@@ -374,7 +374,7 @@ if (is_array($tmp)) {
     }
 }
 
-$query = 'SELECT * FROM ' . cms_db_prefix() . 'module_news_fielddefs ORDER BY item_order';
+$query = 'SELECT * FROM ' . CMS_DB_PREFIX . 'module_news_fielddefs ORDER BY item_order';
 $dbr = $db->Execute($query);
 $custom_flds = array();
 while ($dbr && ($row = $dbr->FetchRow())) {

@@ -168,8 +168,8 @@ EOT;
   public function DeleteAllWords($module = 'Search', $id = -1, $attr = '')
   {
     $db = $this->GetDb();
-    $db->Execute('TRUNCATE '.cms_db_prefix().'module_search_index');
-    $db->Execute('TRUNCATE '.cms_db_prefix().'module_search_items');
+    $db->Execute('TRUNCATE '.CMS_DB_PREFIX.'module_search_index');
+    $db->Execute('TRUNCATE '.CMS_DB_PREFIX.'module_search_items');
 
     @$this->SendEvent('SearchAllItemsDeleted',array($module, $id, $attr));
   }

@@ -17,7 +17,7 @@ $smarty->assign('email_template',$this->GetTemplate('email_template'));
 
 
 $categorylist = array();
-$query = "SELECT * FROM ".cms_db_prefix()."module_news_categories ORDER BY hierarchy";
+$query = "SELECT * FROM ".CMS_DB_PREFIX."module_news_categories ORDER BY hierarchy";
 $dbresult = $db->Execute($query);
 
 while ($dbresult && $row = $dbresult->FetchRow()) {

@@ -339,14 +339,14 @@ class CmsLayoutTemplateType
 
             // check for item with the same name
             $db = CmsApp::get_instance()->GetDb();
-            $query = 'SELECT id FROM '.cms_db_prefix().self::TABLENAME.' WHERE originator = ? AND name = ? AND id != ?';
+            $query = 'SELECT id FROM '.CMS_DB_PREFIX.self::TABLENAME.' WHERE originator = ? AND name = ? AND id != ?';
             $dbr = $db->GetOne($query,array($this->get_originator(),$this->get_name(),$this->get_id()));
             if( $dbr ) throw new CmsInvalidDataException('Template Type with the same name already exists.');
         }
         else {
             // check for item with the same name
             $db = CmsApp::get_instance()->GetDb();
-            $query = 'SELECT id FROM '.cms_db_prefix().self::TABLENAME.'
+            $query = 'SELECT id FROM '.CMS_DB_PREFIX.self::TABLENAME.'
                 WHERE originator = ? AND name = ?';
             $dbr = $db->GetOne($query,array($this->get_originator(),$this->get_name()));
             if( $dbr ) throw new CmsInvalidDataException('Template Type with the same name already exists.');
@@ -365,7 +365,7 @@ class CmsLayoutTemplateType
         $this->validate();
         $db = CmsApp::get_instance()->GetDb();
         $now = time();
-        $query = 'INSERT INTO '.cms_db_prefix().self::TABLENAME.'
+        $query = 'INSERT INTO '.CMS_DB_PREFIX.self::TABLENAME.'
                 (originator,name,has_dflt,dflt_contents,description,
                  lang_cb,dflt_content_cb,requires_contentblocks,owner,created,modified)
                 VALUES (?,?,?,?,?,?,?,?,?,?,?)';
@@ -395,7 +395,7 @@ class CmsLayoutTemplateType
         $db = CmsApp::get_instance()->GetDb();
         $now = time();
 
-        $query = 'UPDATE '.cms_db_prefix().self::TABLENAME.'
+        $query = 'UPDATE '.CMS_DB_PREFIX.self::TABLENAME.'
                 SET originator = ?, name = ?, has_dflt = ?, dflt_contents = ?, description = ?,
                     lang_cb = ?, dflt_content_cb = ?, requires_contentblocks = ?, owner = ?, modified = ?
                 WHERE id = ?';
@@ -450,7 +450,7 @@ class CmsLayoutTemplateType
 		$tmp = CmsLayoutTemplate::template_query(array('t:'.$this->get_id()));
         if( is_array($tmp) && count($tmp) ) throw new CmsInvalidDataException('Cannot delete a template type with existing templates');
         $db = CmsApp::get_instance()->GetDb();
-        $query = 'DELETE FROM '.cms_db_prefix().self::TABLENAME.' WHERE id = ?';
+        $query = 'DELETE FROM '.CMS_DB_PREFIX.self::TABLENAME.' WHERE id = ?';
         $dbr = $db->Execute($query,array($this->_data['id']));
         if( !$dbr ) throw new CmsSQLErrorException($db->sql.' -- '.$db->ErrorMsg());
 
@@ -558,7 +558,7 @@ class CmsLayoutTemplateType
         if( (int)$val > 0 ) {
 			if( isset(self::$_cache[$val]) ) return self::$_cache[$val];
 
-            $query = 'SELECT * FROM '.cms_db_prefix().self::TABLENAME.' WHERE id = ?';
+            $query = 'SELECT * FROM '.CMS_DB_PREFIX.self::TABLENAME.' WHERE id = ?';
             $row = $db->GetRow($query,array($val));
         }
         elseif( strlen($val) > 0 ) {
@@ -569,7 +569,7 @@ class CmsLayoutTemplateType
 
             $tmp = explode('::',$val);
             if( count($tmp) == 2 ) {
-                $query = 'SELECT * FROM '.cms_db_prefix().self::TABLENAME.' WHERE originator = ? AND name = ?';
+                $query = 'SELECT * FROM '.CMS_DB_PREFIX.self::TABLENAME.' WHERE originator = ? AND name = ?';
                 if( $tmp[0] == 'Core' or $tmp[0] == 'core' ) $tmp[0] = self::CORE;
                 $row = $db->GetRow($query,array(trim($tmp[0]),trim($tmp[1])));
             }
@@ -592,7 +592,7 @@ class CmsLayoutTemplateType
         if( !$originator ) throw new CmsInvalidDataException('Orignator is empty');
 
         $db = CmsApp::get_instance()->GetDb();
-        $query = 'SELECT * FROM '.cms_db_prefix().self::TABLENAME.' WHERE originator = ?';
+        $query = 'SELECT * FROM '.CMS_DB_PREFIX.self::TABLENAME.' WHERE originator = ?';
         if( count(self::$_cache) ) $query .= ' AND id NOT IN ('.implode(',',array_keys(self::$_cache)).')';
         $query .= ' ORDER BY modified DESC';
         $list = $db->GetArray($query,array($originator));
@@ -617,7 +617,7 @@ class CmsLayoutTemplateType
     public static function get_all()
     {
         $db = CmsApp::get_instance()->GetDb();
-        $query = 'SELECT * FROM '.cms_db_prefix().self::TABLENAME;
+        $query = 'SELECT * FROM '.CMS_DB_PREFIX.self::TABLENAME;
 		if( count(self::$_cache) ) $query .= ' WHERE id NOT IN ('.implode(',',array_keys(self::$_cache)).')';
 		$query .= '	ORDER BY modified ASC';
         $list = $db->GetArray($query);
@@ -648,7 +648,7 @@ class CmsLayoutTemplateType
 		}
 
         $db = CmsApp::get_instance()->GetDb();
-        $query = 'SELECT * FROM '.cms_db_prefix().self::TABLENAME.' WHERE id IN ('.implode(',',$list).')';
+        $query = 'SELECT * FROM '.CMS_DB_PREFIX.self::TABLENAME.' WHERE id IN ('.implode(',',$list).')';
         $list = $db->GetArray($query);
         if( !is_array($list) || count($list2) == 0 ) return;
 

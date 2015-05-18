@@ -91,7 +91,7 @@ function search_AddWords(&$obj, $module = 'Search', $id = -1, $attr = '', $conte
       $stemmed_words = $obj->StemPhrase($content);
       $words = array_count_values($stemmed_words);
 
-      $q = "SELECT id FROM ".cms_db_prefix().'module_search_items WHERE module_name=?';
+      $q = "SELECT id FROM ".CMS_DB_PREFIX.'module_search_items WHERE module_name=?';
       $parms = array($module);
 
       if( $id != -1 ) {
@@ -108,12 +108,12 @@ function search_AddWords(&$obj, $module = 'Search', $id = -1, $attr = '', $conte
 	$itemid = $row['id'];
       }
       else {
-	$itemid = $db->GenID(cms_db_prefix()."module_search_items_seq");
-	$db->Execute('INSERT INTO '.cms_db_prefix().'module_search_items (id, module_name, content_id, extra_attr, expires) VALUES (?,?,?,?,?)', array($itemid, $module, $id, $attr, ($expires != NULL ? trim($db->DBTimeStamp($expires), "'") : NULL) ));
+	$itemid = $db->GenID(CMS_DB_PREFIX."module_search_items_seq");
+	$db->Execute('INSERT INTO '.CMS_DB_PREFIX.'module_search_items (id, module_name, content_id, extra_attr, expires) VALUES (?,?,?,?,?)', array($itemid, $module, $id, $attr, ($expires != NULL ? trim($db->DBTimeStamp($expires), "'") : NULL) ));
       }
 
       foreach ($words as $word=>$count) {
-	$db->Execute('INSERT INTO '.cms_db_prefix().'module_search_index (item_id, word, count) VALUES (?,?,?)', array($itemid, $word, $count));
+	$db->Execute('INSERT INTO '.CMS_DB_PREFIX.'module_search_index (item_id, word, count) VALUES (?,?,?)', array($itemid, $word, $count));
       }
     }
 }
@@ -122,7 +122,7 @@ function search_DeleteWords(&$obj, $module = 'Search', $id = -1, $attr = '')
 {
   $db = $obj->GetDb();
   $parms = array( $module );
-  $q = "DELETE FROM ".cms_db_prefix().'module_search_items WHERE module_name=?';
+  $q = "DELETE FROM ".CMS_DB_PREFIX.'module_search_items WHERE module_name=?';
   if( $id != -1 )
     {
       $q .= " AND content_id=?";
@@ -134,7 +134,7 @@ function search_DeleteWords(&$obj, $module = 'Search', $id = -1, $attr = '')
       $parms[] = $attr;
     }
   $db->Execute($q, $parms);
-  $db->Execute('DELETE FROM '.cms_db_prefix().'module_search_index WHERE item_id NOT IN (SELECT id FROM '.cms_db_prefix().'module_search_items)');
+  $db->Execute('DELETE FROM '.CMS_DB_PREFIX.'module_search_index WHERE item_id NOT IN (SELECT id FROM '.CMS_DB_PREFIX.'module_search_items)');
   @$obj->SendEvent('SearchItemDeleted', array($module, $id, $attr));
 }
 

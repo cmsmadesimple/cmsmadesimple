@@ -7,20 +7,20 @@ $this->DeleteTemplate('displaydetail');
 
 $dict = NewDataDictionary( $db );
 
-$sqlarray = $dict->DropTableSQL( cms_db_prefix()."module_news" );
+$sqlarray = $dict->DropTableSQL( CMS_DB_PREFIX."module_news" );
 $dict->ExecuteSQLArray($sqlarray);
 
-$sqlarray = $dict->DropTableSQL( cms_db_prefix()."module_news_categories" );
+$sqlarray = $dict->DropTableSQL( CMS_DB_PREFIX."module_news_categories" );
 $dict->ExecuteSQLArray($sqlarray);
 
-$sqlarray = $dict->DropTableSQL( cms_db_prefix()."module_news_fielddefs" );
+$sqlarray = $dict->DropTableSQL( CMS_DB_PREFIX."module_news_fielddefs" );
 $dict->ExecuteSQLArray($sqlarray);
 
-$sqlarray = $dict->DropTableSQL( cms_db_prefix()."module_news_fieldvals" );
+$sqlarray = $dict->DropTableSQL( CMS_DB_PREFIX."module_news_fieldvals" );
 $dict->ExecuteSQLArray($sqlarray);
 
-$db->DropSequence( cms_db_prefix()."module_news_seq" );
-$db->DropSequence( cms_db_prefix()."module_news_categories_seq" );
+$db->DropSequence( CMS_DB_PREFIX."module_news_seq" );
+$db->DropSequence( CMS_DB_PREFIX."module_news_categories_seq" );
 
 $this->RemovePermission('Modify News');
 $this->RemovePermission('Approve News');

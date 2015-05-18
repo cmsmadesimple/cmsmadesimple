@@ -10,7 +10,7 @@ $this->SetCurrentTab('articles');
 $articleid = (int)$params['articleid'];
 $search = cms_utils::get_search_module();
 $status = '';
-$uquery = "UPDATE ".cms_db_prefix()."module_news SET status = ?,modified_date = NOW() WHERE news_id = ?";
+$uquery = "UPDATE ".CMS_DB_PREFIX."module_news SET status = ?,modified_date = NOW() WHERE news_id = ?";
 switch( $params['approve'] ) {
  case 0:
    $status = 'draft';
@@ -29,7 +29,7 @@ if( is_object($search) ) {
     $search->DeleteWords($this->GetName(),$articleid,'article');
   }
   else if( $status == 'published' ) {
-    $query = 'SELECT * FROM '.cms_db_prefix().'module_news WHERE news_id = ?';;
+    $query = 'SELECT * FROM '.CMS_DB_PREFIX.'module_news WHERE news_id = ?';;
     $article = $db->GetRow($query,array($articleid));
     if( !$article ) return;
 
@@ -42,7 +42,7 @@ if( is_object($search) ) {
 
     if( $t_end > time() || $this->GetPreference('expired_searchble',1) == 1 ) {
       $text = $article['news_data'] . ' ' . $article['summary'] . ' ' . $article['news_title'] . ' ' . $article['news_title'];
-      $query = 'SELECT value FROM '.cms_db_prefix().'module_news_fieldvals WHERE news_id = ?';
+      $query = 'SELECT value FROM '.CMS_DB_PREFIX.'module_news_fieldvals WHERE news_id = ?';
       $flds = $db->GetArray($query,array($articleid));
       if( is_array($flds) ) {
 	for( $i = 0; $i < count($flds); $i++ ) {

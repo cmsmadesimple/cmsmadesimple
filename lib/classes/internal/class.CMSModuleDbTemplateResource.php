@@ -42,7 +42,7 @@ class CMSModuleDbTemplateResource extends CMS_Fixed_Resource_Custom
         $db = CmsApp::get_instance()->GetDb();
 
         $tmp = explode(';',$name);
-        $query = "SELECT * from ".cms_db_prefix()."module_templates WHERE module_name = ? and template_name = ?";
+        $query = "SELECT * from ".CMS_DB_PREFIX."module_templates WHERE module_name = ? and template_name = ?";
         $parts = explode(';',$name);
         $row = $db->GetRow($query, $parts);
         if ($row) {

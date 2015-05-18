@@ -207,6 +207,7 @@ final class cms_config implements ArrayAccess
           define('CMS_DEBUG',self::$_instance['debug']);
           define('CMS_ROOT_PATH',self::$_instance['root_path']);
           define('CMS_ROOT_URL',self::$_instance['root_url']);
+          define('CMS_DB_PREFIX',self::$_instance['db_prefix']);
 	  }
     }
 

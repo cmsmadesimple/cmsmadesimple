@@ -108,6 +108,33 @@ if( cms_to_bool(ini_get('register_globals')) ) {
 $_app = CmsApp::get_instance(); // for use in this file only.
 $config = $_app->GetConfig();
 
+// new for 2.0 ... this creates a mechanism whereby items can be cached automatically, and fetched (or calculated) via the use of a callback
+// if the cache is too old, or the cached value has been cleared or not yet been saved.
+$obj = new \CMSMS\internal\global_cachable('schema_version',
+                                           function(){
+                                               $db = \CmsApp::get_instance()->GetDb();
+                                               $query = 'SELECT version FROM '.CmsApp::get_instance()->GetDbPrefix().'version';
+                                               return $db->GetOne($query);
+                                  });
+\CMSMS\internal\global_cache::add_cachable($obj);
+$obj = new \CMSMS\internal\global_cachable('latest_content_modification',
+                                           function(){
+                                               $db = \CmsApp::get_instance()->GetDb();
+                                               $query = 'SELECT modified_date FROM '.CmsApp::get_instance()->GetDbPrefix().'content ORDER BY modified date DESC';
+                                               $tmp = $db->GetOne($query);
+                                               return $db->UnixTimeStamp($tmp);
+                                           });
+\CMSMS\internal\global_cache::add_cachable($obj);
+$obj = new \CMSMS\internal\global_cachable('default_content',
+                                           function(){
+                                               $db = \CmsApp::get_instance()->GetDb();
+                                               $query = 'SELECT content_id FROM '.CmsApp::get_instance()->GetDbPrefix().'content WHERE default_content = 1';
+                                               $tmp = $db->GetOne($query);
+                                               return $tmp;
+                                           });
+\CMSMS\internal\global_cache::add_cachable($obj);
+cms_siteprefs::setup();
+
 if( isset($CMS_ADMIN_PAGE) ) {
   function cms_admin_sendheaders($content_type = 'text/html',$charset = '') {
     if( !$charset ) $charset = get_encoding();
@@ -176,7 +203,7 @@ if (!isset($DONT_LOAD_DB)) {
 
   // Set a umask
   $global_umask = cms_siteprefs::get('global_umask','');
-  if( $global_umask != '' ) @umask( octdec($global_umask) );
+  if( $global_umask != '' ) umask( octdec($global_umask) );
 }
 
 #Fix for IIS (and others) to make sure REQUEST_URI is filled in

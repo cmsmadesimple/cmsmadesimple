@@ -166,11 +166,11 @@ class CmsLayoutTemplateCategory
     $db = cmsms()->GetDb();
     $tmp = null;
     if( !$this->get_id() ) {
-      $query = 'SELECT id FROM '.cms_db_prefix().self::TABLENAME.' WHERE name = ?';
+      $query = 'SELECT id FROM '.CMS_DB_PREFIX.self::TABLENAME.' WHERE name = ?';
       $tmp = $db->GetOne($query,array($this->get_name()));
     }
     else {
-      $query = 'SELECT id FROM '.cms_db_prefix().self::TABLENAME.' WHERE name = ? AND id != ?';
+      $query = 'SELECT id FROM '.CMS_DB_PREFIX.self::TABLENAME.' WHERE name = ? AND id != ?';
       $tmp = $db->GetOne($query,array($this->get_name(),$this->get_id()));
     }
     if( $tmp ) {
@@ -187,13 +187,13 @@ class CmsLayoutTemplateCategory
     $this->validate();
 
     $db = cmsms()->GetDb();
-		$query = 'SELECT max(item_order) FROM '.cms_db_prefix().self::TABLENAME;
+		$query = 'SELECT max(item_order) FROM '.CMS_DB_PREFIX.self::TABLENAME;
     $item_order = $db->GetOne($query);
 		if( !$item_order ) $item_order=0;
 		$item_order++;
 		$this->_data['item_order'] = $item_order;
 
-    $query = 'INSERT INTO '.cms_db_prefix().self::TABLENAME.' (name,description,item_order,modified) VALUES (?,?,?,?)';
+    $query = 'INSERT INTO '.CMS_DB_PREFIX.self::TABLENAME.' (name,description,item_order,modified) VALUES (?,?,?,?)';
     $dbr = $db->Execute($query,array($this->get_name(),$this->get_description(),
 									 $this->get_item_order(),time()));
     if( !$dbr ) throw new CmsSQLErrorException($db->sql.' -- '.$db->ErrorMsg());
@@ -211,7 +211,7 @@ class CmsLayoutTemplateCategory
     $this->validate();
 
     $db = cmsms()->GetDb();
-    $query = 'UPDATE '.cms_db_prefix().self::TABLENAME.' SET name = ?, description = ?, item_order = ?, modified = ? WHERE id = ?';
+    $query = 'UPDATE '.CMS_DB_PREFIX.self::TABLENAME.' SET name = ?, description = ?, item_order = ?, modified = ? WHERE id = ?';
     $dbr = $db->Execute($query,array($this->get_name(),
                                      $this->get_description(),
                                      $this->get_item_order(),
@@ -245,11 +245,11 @@ class CmsLayoutTemplateCategory
     if( !$this->get_id() ) return;
 
     $db = cmsms()->GetDb();
-    $query = 'DELETE FROM '.cms_db_prefix().self::TABLENAME.' WHERE id = ?';
+    $query = 'DELETE FROM '.CMS_DB_PREFIX.self::TABLENAME.' WHERE id = ?';
     $dbr = $db->Execute($query,array($this->get_id()));
     if( !$dbr ) throw new CmsSQLErrorException($db->sql.' -- '.$db->ErrorMsg());
 
-		$query = 'UPDATE '.cms_db_prefix().self::TABLENAME.' SET item_order = item_order - 1 WHERE item_order > ?';
+		$query = 'UPDATE '.CMS_DB_PREFIX.self::TABLENAME.' SET item_order = item_order - 1 WHERE item_order > ?';
 		$dbr = $db->GetOne($query,array($this->_data['item_order']));
 
 		audit($this->get_id(),'CMSMS','Template Category Deleted');
@@ -279,11 +279,11 @@ class CmsLayoutTemplateCategory
     $db = cmsms()->GetDb();
     $row = null;
     if( (int)$val > 0 ) {
-      $query = 'SELECT * FROM '.cms_db_prefix().self::TABLENAME.' WHERE id = ?';
+      $query = 'SELECT * FROM '.CMS_DB_PREFIX.self::TABLENAME.' WHERE id = ?';
       $row = $db->GetRow($query,array((int)$val));
     }
     else {
-      $query = 'SELECT * FROM '.cms_db_prefix().self::TABLENAME.' WHERE name = ?';
+      $query = 'SELECT * FROM '.CMS_DB_PREFIX.self::TABLENAME.' WHERE name = ?';
       $row = $db->GetRow($query,array($val));
     }
     if( !is_array($row) || count($row) == 0 ) throw new CmsDataNotFoundException('Could not find template category identified by '.$val);
@@ -301,11 +301,11 @@ class CmsLayoutTemplateCategory
   {
     $db = cmsms()->GetDb();
     if( $prefix ) {
-      $query = 'SELECT * FROM '.cms_db_prefix().self::TABLENAME.' WHERE name LIKE ? ORDER BY item_order ASC';
+      $query = 'SELECT * FROM '.CMS_DB_PREFIX.self::TABLENAME.' WHERE name LIKE ? ORDER BY item_order ASC';
       $res = $db->GetArray($query,array($prefix.'%'));
     }
     else {
-      $query = 'SELECT * FROM '.cms_db_prefix().self::TABLENAME.' ORDER BY item_order ASC';
+      $query = 'SELECT * FROM '.CMS_DB_PREFIX.self::TABLENAME.' ORDER BY item_order ASC';
       $res = $db->GetArray($query);
     }
     if( is_array($res) && count($res) ) {

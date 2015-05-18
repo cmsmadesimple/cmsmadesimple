@@ -103,33 +103,33 @@ if ($params['searchinput'] != '') {
   // Update the search words table
   if( $this->GetPreference('savephrases','false') == 'false' ) {
     foreach( $words as $word ) {
-      $q = 'SELECT count FROM '.cms_db_prefix().'module_search_words WHERE word = ?';
+      $q = 'SELECT count FROM '.CMS_DB_PREFIX.'module_search_words WHERE word = ?';
       $tmp = $db->GetOne($q,array($word));
       if( $tmp ) {
-	$q = 'UPDATE '.cms_db_prefix().'module_search_words SET count=count+1 WHERE word = ?';
+	$q = 'UPDATE '.CMS_DB_PREFIX.'module_search_words SET count=count+1 WHERE word = ?';
 	$db->Execute($q,array($word));
       }
       else {
-	$q = 'INSERT INTO '.cms_db_prefix().'module_search_words (word,count) VALUES (?,1)';
+	$q = 'INSERT INTO '.CMS_DB_PREFIX.'module_search_words (word,count) VALUES (?,1)';
 	$db->Execute($q,array($word));
       }
     }
   }
   else {
     $term = trim($params['searchinput']);
-    $q = 'SELECT count FROM '.cms_db_prefix().'module_search_words WHERE word = ?';
+    $q = 'SELECT count FROM '.CMS_DB_PREFIX.'module_search_words WHERE word = ?';
     $tmp = $db->GetOne($q,array($term));
     if( $tmp ) {
-      $q = 'UPDATE '.cms_db_prefix().'module_search_words SET count=count+1 WHERE word = ?';
+      $q = 'UPDATE '.CMS_DB_PREFIX.'module_search_words SET count=count+1 WHERE word = ?';
       $db->Execute($q,array($term));
     }
     else {
-      $q = 'INSERT INTO '.cms_db_prefix().'module_search_words (word,count) VALUES (?,1)';
+      $q = 'INSERT INTO '.CMS_DB_PREFIX.'module_search_words (word,count) VALUES (?,1)';
       $db->Execute($q,array($term));
     }
   }
 
-  $query = "SELECT DISTINCT i.module_name, i.content_id, i.extra_attr, COUNT(*) AS nb, SUM(idx.count) AS total_weight FROM ".cms_db_prefix()."module_search_items i INNER JOIN ".cms_db_prefix()."module_search_index idx ON idx.item_id = i.id WHERE (".$searchphrase.") AND  (".$db->IfNull('i.expires',$db->DBTimeStamp(100 * 100 * 100 * 100 * 25))." > ".$db->DBTimeStamp(time()).") ";
+  $query = "SELECT DISTINCT i.module_name, i.content_id, i.extra_attr, COUNT(*) AS nb, SUM(idx.count) AS total_weight FROM ".CMS_DB_PREFIX."module_search_items i INNER JOIN ".CMS_DB_PREFIX."module_search_index idx ON idx.item_id = i.id WHERE (".$searchphrase.") AND  (".$db->IfNull('i.expires',$db->DBTimeStamp(100 * 100 * 100 * 100 * 25))." > ".$db->DBTimeStamp(time()).") ";
   if( isset( $params['modules'] ) ) {
     $modules = explode(",",$params['modules']);
     for( $i = 0; $i < count($modules); $i++ ) {

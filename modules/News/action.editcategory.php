@@ -11,7 +11,7 @@ $name = '';
 $parentid = -1;
 if( isset($params['catid']) ) {
   $catid = (int)$params['catid'];
-  $query = 'SELECT * FROM '.cms_db_prefix().'module_news_categories WHERE news_category_id = ?';
+  $query = 'SELECT * FROM '.CMS_DB_PREFIX.'module_news_categories WHERE news_category_id = ?';
   $row = $db->GetRow($query, array($catid));
   if( !$row ) {
     $this->SetError($this->Lang('error_categorynotfound'));
@@ -32,7 +32,7 @@ if( isset($params['submit']) ) {
   }
   else {
     // its an update.
-    $query = 'SELECT news_category_id FROM '.cms_db_prefix().'module_news_categories
+    $query = 'SELECT news_category_id FROM '.CMS_DB_PREFIX.'module_news_categories
               WHERE parent_id = ? AND news_category_name = ? AND news_category_id != ?';
     $tmp = $db->GetOne($query,array($parentid,$name,$catid));
     if( $tmp ) {
@@ -46,19 +46,19 @@ if( isset($params['submit']) ) {
 	// parent changed
 
 	// gotta figure out a new item order.
-	$query = 'SELECT max(item_order) FROM '.cms_db_prefix().'module_news_categories
+	$query = 'SELECT max(item_order) FROM '.CMS_DB_PREFIX.'module_news_categories
                   WHERE parent_id = ?';
 	$maxn = (int)$db->GetOne($query,array($parentid));
 	$maxn++;
 
-	$query = 'UPDATE '.cms_db_prefix().'module_news_categories SET item_order = item_order - 1
+	$query = 'UPDATE '.CMS_DB_PREFIX.'module_news_categories SET item_order = item_order - 1
                   WHERE parent_id = ? AND item_order > ?';
 	$db->Execute($query,array($row['parent_id'],$row['item_order']));
 
 	$row['item_order'] = $maxn;
       }
 
-      $query = 'UPDATE '.cms_db_prefix().'module_news_categories
+      $query = 'UPDATE '.CMS_DB_PREFIX.'module_news_categories
                 SET news_category_name = ?, item_order = ?, parent_id = ?, modified_date = NOW()
                 WHERE news_category_id = ?';
       $parms = array($name,$row['item_order'],$parentid);

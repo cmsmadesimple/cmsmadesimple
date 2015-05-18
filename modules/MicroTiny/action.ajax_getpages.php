@@ -24,7 +24,7 @@ $term = trim(strip_tags(get_parameter_value($_REQUEST,'term')));
 $alias = trim(strip_tags(get_parameter_value($_REQUEST,'alias')));
 
 if( $alias ) {
-  $query = 'SELECT content_id,content_name,menu_text,content_alias FROM '.cms_db_prefix().'content
+  $query = 'SELECT content_id,content_name,menu_text,content_alias FROM '.CMS_DB_PREFIX.'content
             WHERE content_alias = ? AND active = 1';
   $dbr = $db->GetRow($query,array($alias));
   if( is_array($dbr) && count($dbr) ) {
@@ -34,7 +34,7 @@ if( $alias ) {
 }
 else if( $term ) {
   $term = "%{$term}%";
-  $query = 'SELECT content_id,content_name,menu_text,content_alias FROM '.cms_db_prefix().'content 
+  $query = 'SELECT content_id,content_name,menu_text,content_alias FROM '.CMS_DB_PREFIX.'content 
             WHERE (content_name LIKE ? OR menu_text LIKE ? OR content_alias LIKE ?)
               AND active = 1
             ORDER BY default_content DESC, hierarchy ASC';

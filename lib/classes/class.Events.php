@@ -51,10 +51,10 @@ final class Events
 	static public function CreateEvent( $modulename, $eventname )
 	{
 		$db = CmsApp::get_instance()->GetDb();
-		$count = $db->GetOne('SELECT count(*) from '.cms_db_prefix().'events where originator = ? and event_name = ?', array($modulename, $eventname));
+		$count = $db->GetOne('SELECT count(*) from '.CMS_DB_PREFIX.'events where originator = ? and event_name = ?', array($modulename, $eventname));
 		if ($count < 1) {
-			$id = $db->GenID( cms_db_prefix()."events_seq" );
-			$q = "INSERT INTO ".cms_db_prefix()."events values (?,?,?)";
+			$id = $db->GenID( CMS_DB_PREFIX."events_seq" );
+			$q = "INSERT INTO ".CMS_DB_PREFIX."events values (?,?,?)";
 			$db->Execute( $q, array( $modulename, $eventname, $id ));
 		}
 	}
@@ -76,7 +76,7 @@ final class Events
 		$db = $gCms->GetDb();
 
 		// get the id
-		$q = "SELECT event_id FROM ".cms_db_prefix()."events WHERE
+		$q = "SELECT event_id FROM ".CMS_DB_PREFIX."events WHERE
 		originator = ? AND event_name = ?";
 		$dbresult = $db->Execute( $q, array( $modulename, $eventname ) );
 		if( $dbresult == false || $dbresult->RecordCount() == 0 ) {
@@ -87,12 +87,12 @@ final class Events
 		$id = $row['event_id'];
 
 		// delete all the handlers
-		$q = "DELETE FROM ".cms_db_prefix()."event_handlers WHERE
+		$q = "DELETE FROM ".CMS_DB_PREFIX."event_handlers WHERE
 		event_id = ?";
 		$db->Execute( $q, array( $id ) );
 
 		// then delete the event
-		$q = "DELETE FROM ".cms_db_prefix()."events WHERE
+		$q = "DELETE FROM ".CMS_DB_PREFIX."events WHERE
 		event_id = ?";
 		$db->Execute( $q, array( $id ) );
 	}
@@ -157,8 +157,8 @@ final class Events
 		$handlers = array();
 
 		if( !is_array(self::$_handlercache) ) {
-			$q = "SELECT eh.tag_name, eh.module_name, e.originator, e.event_name, eh.handler_order, eh.handler_id, eh.removable FROM ".cms_db_prefix()."event_handlers eh
-				INNER JOIN ".cms_db_prefix()."events e ON e.event_id = eh.event_id
+			$q = "SELECT eh.tag_name, eh.module_name, e.originator, e.event_name, eh.handler_order, eh.handler_id, eh.removable FROM ".CMS_DB_PREFIX."event_handlers eh
+				INNER JOIN ".CMS_DB_PREFIX."events e ON e.event_id = eh.event_id
 				ORDER BY eh.handler_order ASC";
 
 			self::$_handlercache = $db->GetArray( $q );
@@ -185,8 +185,8 @@ final class Events
 		$gCms = CmsApp::get_instance();
 		$db = $gCms->GetDb();
 
-		$q = 'SELECT e.*, count(eh.event_id) as usage_count FROM '.cms_db_prefix().
-			'events e left outer join '.cms_db_prefix().
+		$q = 'SELECT e.*, count(eh.event_id) as usage_count FROM '.CMS_DB_PREFIX.
+			'events e left outer join '.CMS_DB_PREFIX.
 			'event_handlers eh on e.event_id=eh.event_id GROUP BY e.event_id ORDER BY originator,event_name';
 
 		$dbresult = $db->Execute( $q );
@@ -221,7 +221,7 @@ final class Events
 		$db = $gCms->GetDb();
 
 		// find the id
-		$q = "SELECT event_id FROM ".cms_db_prefix()."events WHERE originator = ? AND event_name = ?";
+		$q = "SELECT event_id FROM ".CMS_DB_PREFIX."events WHERE originator = ? AND event_name = ?";
 		$dbresult = $db->Execute( $q, array( $modulename, $eventname ) );
 		if( $dbresult == false || $dbresult->RecordCount() == 0 ) return false; // query failed, event not found
 		$row = $dbresult->FetchRow();
@@ -229,7 +229,7 @@ final class Events
 
 		// now see if there's nothing already existing for this
 		// tag or module and this id
-		$q = "SELECT * FROM ".cms_db_prefix()."event_handlers WHERE	event_id = ? AND ";
+		$q = "SELECT * FROM ".CMS_DB_PREFIX."event_handlers WHERE	event_id = ? AND ";
 		$params = array();
 		$params[] = $id;
 		if( $tag_name != '' ) {
@@ -245,7 +245,7 @@ final class Events
 
 		// now see if we can get a new id
 		$order = 1;
-		$q = "SELECT max(handler_order) AS newid FROM ".cms_db_prefix()."event_handlers
+		$q = "SELECT max(handler_order) AS newid FROM ".CMS_DB_PREFIX."event_handlers
 		WHERE event_id = ?";
 		$dbresult = $db->Execute( $q, array( $id ) );
 		if( $dbresult != false && $dbresult->RecordCount() != 0) {
@@ -253,12 +253,12 @@ final class Events
 			$order = $row['newid'] + 1;
 		}
 
-		$handler_id = $db->GenId( cms_db_prefix()."event_handler_seq" );
+		$handler_id = $db->GenId( CMS_DB_PREFIX."event_handler_seq" );
 
 		// okay, we can insert
 		$params = array();
 		$params[] = $id;
-		$q = "INSERT INTO ".cms_db_prefix()."event_handlers ";
+		$q = "INSERT INTO ".CMS_DB_PREFIX."event_handlers ";
 		if( $module_handler != false ) {
 			$q .= '(event_id,module_name,removable,handler_order,handler_id)';
 			$params[] = $module_handler;
@@ -296,7 +296,7 @@ final class Events
 		$db = $gCms->GetDb();
 
 		// find the id
-		$q = "SELECT event_id FROM ".cms_db_prefix()."events WHERE originator = ? AND event_name = ?";
+		$q = "SELECT event_id FROM ".CMS_DB_PREFIX."events WHERE originator = ? AND event_name = ?";
 		$dbresult = $db->Execute( $q, array( $modulename, $eventname ) );
 		if( $dbresult == false || $dbresult->RecordCount() == 0 ) {
 			// query failed, event not found
@@ -307,7 +307,7 @@ final class Events
 
 		// delete the record
 		$params = array( $id );
-		$query = "DELETE FROM ".cms_db_prefix()."event_handlers WHERE event_id = ? AND ";
+		$query = "DELETE FROM ".CMS_DB_PREFIX."event_handlers WHERE event_id = ? AND ";
 		if( $modulename != false ) {
 			$query .= 'module_name = ?';
 			$params[] = $module_handler;
@@ -335,7 +335,7 @@ final class Events
 		$db = $gCms->GetDb();
 
 		// find the id
-		$q = "SELECT event_id FROM ".cms_db_prefix()."events WHERE
+		$q = "SELECT event_id FROM ".CMS_DB_PREFIX."events WHERE
 		originator = ? AND event_name = ?";
 		$dbresult = $db->Execute( $q, array( $modulename, $eventname ) );
 		if( $dbresult == false || $dbresult->RecordCount() == 0 ) {
@@ -346,7 +346,7 @@ final class Events
 		$id = $row['event_id'];
 
 		// and delete the handlers
-		$q = "DELETE FROM ".cms_db_prefix()."event_handlers
+		$q = "DELETE FROM ".CMS_DB_PREFIX."event_handlers
 		WHERE event_id = ?";
 		$dbresult = $db->Execute( $q, array( $id ) );
 		if( $dbresult == false ) return true;

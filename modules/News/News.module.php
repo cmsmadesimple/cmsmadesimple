@@ -153,7 +153,7 @@ class News extends CMSModule
 
     if ($attr == 'article') {
       $db = $this->GetDb();
-      $q = "SELECT news_title,news_url FROM ".cms_db_prefix()."module_news WHERE news_id = ?";
+      $q = "SELECT news_title,news_url FROM ".CMS_DB_PREFIX."module_news WHERE news_id = ?";
       $row = $db->GetRow( $q, array( $articleid ) );
 
       if ($row) {
@@ -205,7 +205,7 @@ class News extends CMSModule
   {
     $db = $this->GetDb();
 
-    $query = 'SELECT * FROM '.cms_db_prefix().'module_news WHERE searchable = 1 AND status = ? ORDER BY news_date';
+    $query = 'SELECT * FROM '.CMS_DB_PREFIX.'module_news WHERE searchable = 1 AND status = ? ORDER BY news_date';
     $result = $db->Execute($query,array('published'));
 
     while ($result && !$result->EOF) {
@@ -243,7 +243,7 @@ class News extends CMSModule
       $output = array();
       if( $this->CheckPermission('Approve News') ) {
 	$db = $this->GetDb();
-	$query = 'SELECT count(news_id) FROM '.cms_db_prefix().'module_news n WHERE status != \'published\'
+	$query = 'SELECT count(news_id) FROM '.CMS_DB_PREFIX.'module_news n WHERE status != \'published\'
                   AND (end_time IS NULL OR end_time > NOw())';
 	$count = $db->GetOne($query);
 	if( $count ) {
@@ -279,7 +279,7 @@ class News extends CMSModule
 			  array('returnid'=>$this->GetPreference('detail_returnid',-1)));
     cms_route_manager::add_static($route);
 
-    $query = 'SELECT news_id,news_url FROM '.cms_db_prefix().'module_news WHERE status = ? AND news_url != ? AND '
+    $query = 'SELECT news_id,news_url FROM '.CMS_DB_PREFIX.'module_news WHERE status = ? AND news_url != ? AND '
       . '('.$db->ifNull('start_time',$db->DbTimeStamp(1)).' < NOW()) AND '
       . '(('.$db->IfNull('end_time',$db->DbTimeStamp(1)).' = '.$db->DbTimeStamp(1).') OR (end_time > NOW()))';
     $query .= ' ORDER BY news_date DESC';

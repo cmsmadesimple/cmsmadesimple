@@ -68,7 +68,7 @@ if( $userid == '' ) {
 }
 
 if (isset($params['category'])) {
-  $query = 'SELECT news_category_id FROM '.cms_db_prefix().'module_news_categories WHERE news_category_name = ?';
+  $query = 'SELECT news_category_id FROM '.CMS_DB_PREFIX.'module_news_categories WHERE news_category_name = ?';
   $tmp = $db->GetOne($query,array($params['category']));
   if( $tmp ) $category_id = $tmp;
 }
@@ -100,10 +100,10 @@ if( isset( $params['submit'] ) ) {
         if( $content == '' ) throw new CmsException($this->Lang('nocontentgiven'));
 
         // generate a new article id
-        $articleid = $db->GenID(cms_db_prefix()."module_news_seq");
+        $articleid = $db->GenID(CMS_DB_PREFIX."module_news_seq");
 
         // test file upload custom fields
-        $qu = "SELECT id,name,type FROM ".cms_db_prefix()."module_news_fielddefs WHERE type='file'";
+        $qu = "SELECT id,name,type FROM ".CMS_DB_PREFIX."module_news_fielddefs WHERE type='file'";
         $fields = $db->GetArray($qu);
 
         foreach( $fields as $onefield ) {
@@ -125,7 +125,7 @@ if( isset( $params['submit'] ) ) {
 
         // and generate the insert query
         // note: there's no option for fesubmit wether it's searchable or not.
-        $query = 'INSERT INTO '.cms_db_prefix().'module_news
+        $query = 'INSERT INTO '.CMS_DB_PREFIX.'module_news
               (news_id, news_category_id, news_title, news_data, summary,
                news_extra, status, news_date, start_time, end_time, create_date,
                modified_date,author_id,searchable)
@@ -143,7 +143,7 @@ if( isset( $params['submit'] ) ) {
         if( $dbr ) {
             // handle the custom fields
             $now = $db->DbTimeStamp(time());
-            $query = 'INSERT INTO '.cms_db_prefix()."module_news_fieldvals (news_id, fielddef_id, value, create_date, modified_date)
+            $query = 'INSERT INTO '.CMS_DB_PREFIX."module_news_fieldvals (news_id, fielddef_id, value, create_date, modified_date)
                 VALUES (?,?,?,$now,$now)";
             foreach( $params as $key => $value ) {
                 $value = trim($value);
@@ -193,7 +193,7 @@ if( isset( $params['submit'] ) ) {
 
 // build the category list
 $categorylist = array();
-$query = "SELECT * FROM ".cms_db_prefix()."module_news_categories ORDER BY hierarchy";
+$query = "SELECT * FROM ".CMS_DB_PREFIX."module_news_categories ORDER BY hierarchy";
 $dbresult = $db->Execute($query);
 while ($dbresult && $row = $dbresult->FetchRow()) {
     $categorylist[$row['news_category_id']] = $row['long_name'];
@@ -212,7 +212,7 @@ $tpl_ob->assign('startdate', $startdate);
 $tpl_ob->assign('enddate', $enddate);
 $tpl_ob->assign('status',$this->CreateInputHidden($id,'status',$status));
 
-$query = 'SELECT * FROM '.cms_db_prefix().'module_news_fielddefs WHERE public = 1 ORDER BY item_order';
+$query = 'SELECT * FROM '.CMS_DB_PREFIX.'module_news_fielddefs WHERE public = 1 ORDER BY item_order';
 $dbr = $db->Execute($query);
 $customfields = array();
 $customfieldsbyname = array();

@@ -24,7 +24,7 @@ final class AdminSearch_oldmodtemplate_slave extends AdminSearch_slave
     $userid = get_userid();
 
     $db = cmsms()->GetDb();
-    $query = 'SELECT module_name,template_name,content FROM '.cms_db_prefix().'module_templates WHERE content LIKE ?';
+    $query = 'SELECT module_name,template_name,content FROM '.CMS_DB_PREFIX.'module_templates WHERE content LIKE ?';
     $dbr = $db->GetArray($query,array('%'.$this->get_text().'%'));
     if( is_array($dbr) && count($dbr) ) {
       $output = array();

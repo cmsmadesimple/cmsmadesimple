@@ -9,20 +9,20 @@ if (!$this->CheckPermission('Modify Site Preferences')) return;
 	}
 
 // Get the category details
-$query = 'SELECT * FROM '.cms_db_prefix().'module_news_categories
+$query = 'SELECT * FROM '.CMS_DB_PREFIX.'module_news_categories
            WHERE news_category_id = ?';
 $row = $db->GetRow( $query, array( $catid ) );
 
 	//Reset all categories using this parent to have no parent (-1)
-	$query = 'UPDATE '.cms_db_prefix().'module_news_categories SET parent_id=?, modified_date='.$db->DBTimeStamp(time()).' WHERE parent_id=?';
+	$query = 'UPDATE '.CMS_DB_PREFIX.'module_news_categories SET parent_id=?, modified_date='.$db->DBTimeStamp(time()).' WHERE parent_id=?';
 	$db->Execute($query, array(-1, $catid));
 
 	//Now remove the category
-	$query = "DELETE FROM ".cms_db_prefix()."module_news_categories WHERE news_category_id = ?";
+	$query = "DELETE FROM ".CMS_DB_PREFIX."module_news_categories WHERE news_category_id = ?";
 	$db->Execute($query, array($catid));
 
 //And remove it from any articles
-$query = "UPDATE ".cms_db_prefix()."module_news SET news_category_id = -1 WHERE news_category_id = ?";
+$query = "UPDATE ".CMS_DB_PREFIX."module_news SET news_category_id = -1 WHERE news_category_id = ?";
 	$db->Execute($query, array($catid));
 
 @$this->SendEvent('NewsCategoryDeleted', array('category_id' => $catid, 'name' => $row['news_category_name']));

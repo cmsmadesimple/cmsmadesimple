@@ -27,7 +27,7 @@ final class AdminSearch_css_slave extends AdminSearch_slave
 
     $db = cmsms()->GetDb();
     $query = 'SELECT *
-              FROM '.cms_db_prefix().CmsLayoutStylesheet::TABLENAME.'
+              FROM '.CMS_DB_PREFIX.CmsLayoutStylesheet::TABLENAME.'
               WHERE content LIKE ?';
     $str = '%'.$this->get_text().'%';
     $parms = array($str);

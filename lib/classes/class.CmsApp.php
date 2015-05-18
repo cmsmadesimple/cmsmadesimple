@@ -143,12 +143,7 @@ final class CmsApp {
 	 */
 	public function get_installed_schema_version()
 	{
-		static $_schema = -1;
-		if( $_schema == -1 ) {
-			$db = $this->GetDb();
-			$_schema = $db->GetOne('SELECT version FROM '.$this->GetDbPrefix().'version');
-		}
-		return $_schema;
+        return \CMSMS\internal\global_cache::get('schema_version');
 	}
 
 	/**
@@ -338,12 +333,8 @@ final class CmsApp {
 	 */
 	public function GetDbPrefix()
 	{
-		if( !$this->dbprefix ) {
-            $config = $this->GetConfig();
-            $this->dbprefix = $config['db_prefix'];
+		return CMS_DB_PREFIX;
         }
-        return $this->dbprefix;
-	}
 
 	/**
 	* Get a handle to the global CMS config.
@@ -720,7 +711,7 @@ function &cmsms()
  * @see CmsApp::GetDbPrefix();
  */
 function cms_db_prefix() {
-    return CmsApp::get_instance()->GetDbPrefix();
+    return CMS_DB_PREFIX();
 }
 
 ?>

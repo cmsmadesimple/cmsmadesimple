@@ -272,7 +272,7 @@ class CmsLayoutTemplate
             if( !$this->get_id() ) return;
 			$this->_design_assoc = array();
 			$db = CmsApp::get_instance()->GetDb();
-			$query = 'SELECT design_id FROM '.cms_db_prefix().CmsLayoutCollection::TPLTABLE.' WHERE tpl_id = ?';
+			$query = 'SELECT design_id FROM '.CMS_DB_PREFIX.CmsLayoutCollection::TPLTABLE.' WHERE tpl_id = ?';
 			$tmp = $db->GetCol($query,array((int)$this->get_id()));
 			if( is_array($tmp) && count($tmp) ) $this->_design_assoc = $tmp;
 		}
@@ -424,7 +424,7 @@ class CmsLayoutTemplate
 		if( is_null($this->_addt_editors) ) {
 			if( $this->get_id() ) {
 				$db = CmsApp::get_instance()->GetDb();
-				$query = 'SELECT user_id FROM '.cms_db_prefix().self::ADDUSERSTABLE.' WHERE tpl_id = ?';
+				$query = 'SELECT user_id FROM '.CMS_DB_PREFIX.self::ADDUSERSTABLE.' WHERE tpl_id = ?';
 				$col = $db->GetCol($query,array($this->get_id()));
 				$this->_addt_editors = array();
 				if( count($col) ) $this->_addt_editors = $col;
@@ -525,11 +525,11 @@ class CmsLayoutTemplate
 		$tmp = null;
 		if( $this->get_id() ) {
 			// double check the name.
-			$query = 'SELECT id FROM '.cms_db_prefix().self::TABLENAME.' WHERE name = ? AND id != ?';
+			$query = 'SELECT id FROM '.CMS_DB_PREFIX.self::TABLENAME.' WHERE name = ? AND id != ?';
 			$tmp = $db->GetOne($query,array($this->get_name(),$this->get_id()));
 		} else {
 			// double check the name.
-			$query = 'SELECT id FROM '.cms_db_prefix().self::TABLENAME.' WHERE name = ?';
+			$query = 'SELECT id FROM '.CMS_DB_PREFIX.self::TABLENAME.' WHERE name = ?';
 			$tmp = $db->GetOne($query,array($this->get_name()));
 		}
 		if( $tmp ) {
@@ -545,7 +545,7 @@ class CmsLayoutTemplate
 		if( !$this->_dirty ) return;
 		$this->validate();
 
-		$query = 'UPDATE '.cms_db_prefix().self::TABLENAME.'
+		$query = 'UPDATE '.CMS_DB_PREFIX.self::TABLENAME.'
               SET name = ?, content = ?, description = ?, type_id = ?, type_dflt = ?, category_id = ?, owner_id = ?, modified = ?
               WHERE id = ?';
 		$db = CmsApp::get_instance()->GetDb();
@@ -558,29 +558,29 @@ class CmsLayoutTemplate
 
 		if( $this->get_type_dflt() ) {
 			// if it's default for a type, unset default flag for all other records with this type
-			$query = 'UPDATE '.cms_db_prefix().self::TABLENAME.' SET type_dflt = 0 WHERE type_id = ? AND type_dflt = 1 AND id != ?';
+			$query = 'UPDATE '.CMS_DB_PREFIX.self::TABLENAME.' SET type_dflt = 0 WHERE type_id = ? AND type_dflt = 1 AND id != ?';
 			$dbr = $db->Execute($query,array($this->get_type_id(),$this->get_id()));
 			if( !$dbr ) throw new CmsSQLErrorException($db->sql.' -- '.$db->ErrorMsg());
 		}
 
-		$query = 'DELETE FROM '.cms_db_prefix().self::ADDUSERSTABLE.' WHERE tpl_id = ?';
+		$query = 'DELETE FROM '.CMS_DB_PREFIX.self::ADDUSERSTABLE.' WHERE tpl_id = ?';
 		$dbr = $db->Execute($query,array($this->get_id()));
 		if( !$dbr ) throw new CmsSQLErrorException($db->sql.' -- '.$db->ErrorMsg());
 
 		$t = $this->get_additional_editors();
 		if( is_array($t) && count($t) ) {
-			$query = 'INSERT INTO '.cms_db_prefix().self::ADDUSERSTABLE.' (tpl_id,user_id) VALUES(?,?)';
+			$query = 'INSERT INTO '.CMS_DB_PREFIX.self::ADDUSERSTABLE.' (tpl_id,user_id) VALUES(?,?)';
 			foreach( $t as $one ) {
 				$dbr = $db->Execute($query,array($this->get_id(),(int)$one));
 			}
 		}
 
-		$query = 'DELETE FROM '.cms_db_prefix().CmsLayoutCollection::TPLTABLE.' WHERE tpl_id = ?';
+		$query = 'DELETE FROM '.CMS_DB_PREFIX.CmsLayoutCollection::TPLTABLE.' WHERE tpl_id = ?';
 		$dbr = $db->Execute($query,array($this->get_id()));
 		if( !$dbr ) throw new CmsSQLErrorException($db->sql.' -- '.$db->ErrorMsg());
 		$t = $this->get_designs();
 		if( is_array($t) && count($t) ) {
-			$query = 'INSERT INTO '.cms_db_prefix().CmsLayoutCollection::TPLTABLE.' (tpl_id,design_id) VALUES(?,?)';
+			$query = 'INSERT INTO '.CMS_DB_PREFIX.CmsLayoutCollection::TPLTABLE.' (tpl_id,design_id) VALUES(?,?)';
 			foreach( $t as $one ) {
 				$dbr = $db->Execute($query,array($this->get_id(),(int)$one));
 			}
@@ -600,7 +600,7 @@ class CmsLayoutTemplate
 		$this->validate();
 
 		// insert the record
-		$query = 'INSERT INTO '.cms_db_prefix().self::TABLENAME.'
+		$query = 'INSERT INTO '.CMS_DB_PREFIX.self::TABLENAME.'
               (name,content,description,type_id,type_dflt,category_id,owner_id,
                created,modified) VALUES (?,?,?,?,?,?,?,?,?)';
 		$db = CmsApp::get_instance()->GetDb();
@@ -613,14 +613,14 @@ class CmsLayoutTemplate
 
 		if( $this->get_type_dflt() ) {
 			// if it's default for a type, unset default flag for all other records with this type
-			$query = 'UPDATE '.cms_db_prefix().self::TABLENAME.' SET type_dflt = 0 WHERE type_id = ? AND type_dflt = 1 AND id != ?';
+			$query = 'UPDATE '.CMS_DB_PREFIX.self::TABLENAME.' SET type_dflt = 0 WHERE type_id = ? AND type_dflt = 1 AND id != ?';
 			$dbr = $db->Execute($query,array($this->get_type_id(),$this->get_id()));
 			if( !$dbr ) throw new CmsSQLErrorException($db->sql.' -- '.$db->ErrorMsg());
 		}
 
 		$t = $this->get_additional_editors();
 		if( is_array($t) && count($t) ) {
-			$query = 'INSERT INTO '.cms_db_prefix().self::ADDUSERSTABLE.' (tpl_id,user_id) VALUES(?,?)';
+			$query = 'INSERT INTO '.CMS_DB_PREFIX.self::ADDUSERSTABLE.' (tpl_id,user_id) VALUES(?,?)';
 			foreach( $t as $one ) {
 				$dbr = $db->Execute($query,array($this->get_id(),(int)$one));
 			}
@@ -628,7 +628,7 @@ class CmsLayoutTemplate
 
 		$t = $this->get_designs();
 		if( is_array($t) && count($t) ) {
-			$query = 'INSERT INTO '.cms_db_prefix().CmsLayoutCollection::TPLTABLE.' (tpl_id,design_id) VALUES(?,?)';
+			$query = 'INSERT INTO '.CMS_DB_PREFIX.CmsLayoutCollection::TPLTABLE.' (tpl_id,design_id) VALUES(?,?)';
 			foreach( $t as $one ) {
 				$dbr = $db->Execute($query,array($this->get_id(),(int)$one));
 			}
@@ -664,10 +664,10 @@ class CmsLayoutTemplate
 
 		Events::SendEvent('Core','DeleteTemplatePre',array(get_class($this)=>&$this));
 		$db = CmsApp::get_instance()->GetDb();
-		$query = 'DELETE FROM '.cms_db_prefix().CmsLayoutCollection::TPLTABLE.' WHERE tpl_id = ?';
+		$query = 'DELETE FROM '.CMS_DB_PREFIX.CmsLayoutCollection::TPLTABLE.' WHERE tpl_id = ?';
 		$dbr = $db->Execute($query,array($this->get_id()));
 
-		$query = 'DELETE FROM '.cms_db_prefix().self::TABLENAME.' WHERE id = ?';
+		$query = 'DELETE FROM '.CMS_DB_PREFIX.self::TABLENAME.' WHERE id = ?';
 		$dbr = $db->Execute($query,array($this->get_id()));
 
 		CmsTemplateCache::clear_cache();
@@ -774,7 +774,7 @@ class CmsLayoutTemplate
 				foreach( $list2 as $one ) {
 					$designs_by_tpl[$one] = array();
 				}
-                $dquery = 'SELECT tpl_id,design_id FROM '.cms_db_prefix().CmsLayoutCollection::TPLTABLE.'
+                $dquery = 'SELECT tpl_id,design_id FROM '.CMS_DB_PREFIX.CmsLayoutCollection::TPLTABLE.'
                    WHERE tpl_id IN ('.implode(',',$list2).') ORDER BY tpl_id';
 				$designs_tmp1 = $db->GetArray($dquery);
 				foreach( $designs_tmp1 as $row ) {
@@ -782,7 +782,7 @@ class CmsLayoutTemplate
 				}
 			}
 
-			$query = 'SELECT * FROM '.cms_db_prefix().self::TABLENAME.' WHERE id IN ('.implode(',',$list2).')';
+			$query = 'SELECT * FROM '.CMS_DB_PREFIX.self::TABLENAME.' WHERE id IN ('.implode(',',$list2).')';
 			$dbr = $db->GetArray($query);
 			if( is_array($dbr) && count($dbr) ) {
 				foreach( $dbr as $row ) {
@@ -814,7 +814,7 @@ class CmsLayoutTemplate
 		$row = null;
 		if( (int)$a > 0 ) {
 			if( isset(self::$_obj_cache[$a]) ) return self::$_obj_cache[$a];
-			$query = 'SELECT * FROM '.cms_db_prefix().self::TABLENAME.' WHERE id = ?';
+			$query = 'SELECT * FROM '.CMS_DB_PREFIX.self::TABLENAME.' WHERE id = ?';
 			$row = $db->GetRow($query,array((int)$a));
 		}
 		else if( is_string($a) && strlen($a) > 0 ) {
@@ -823,7 +823,7 @@ class CmsLayoutTemplate
 				return self::$_obj_cache[$n];
 			}
 
-			$query = 'SELECT * FROM '.cms_db_prefix().self::TABLENAME.' WHERE name = ?';
+			$query = 'SELECT * FROM '.CMS_DB_PREFIX.self::TABLENAME.' WHERE name = ?';
 			$row = $db->GetRow($query,array($a));
 		}
 		if( !is_array($row) || count($row) == 0 ) throw new CmsDataNotFoundException('Could not find template identified by '.$a);
@@ -879,7 +879,7 @@ class CmsLayoutTemplate
 		if( $n <= 0 ) throw new CmsInvalidDataException('Invalid user specified to get_owned_templates');
 
 		$db = CmsApp::get_instance()->GetDb();
-		$query = 'SELECT id FROM '.cms_db_prefix().self::TABLENAME;
+		$query = 'SELECT id FROM '.CMS_DB_PREFIX.self::TABLENAME;
 		$parms = array();
 		if( !UserOperations::get_instance()->CheckPermission($n,'Modify Templates') ) {
 			$query .= ' WHERE owner_id = ?';
@@ -887,7 +887,7 @@ class CmsLayoutTemplate
 		}
 		$tmp1 = $db->GetCol($query,$parms);
 
-		$query = 'SELECT tpl_id FROM '.cms_db_prefix().self::ADDUSERSTABLE.' WHERE user_id = ?';
+		$query = 'SELECT tpl_id FROM '.CMS_DB_PREFIX.self::ADDUSERSTABLE.' WHERE user_id = ?';
 		$tmp2 = $db->GetCol($query,array($n));
 
 		if( is_array($tmp1) && is_array($tmp2) ) {
@@ -991,7 +991,7 @@ class CmsLayoutTemplate
 		}
 
 		$db = CmsApp::get_instance()->GetDb();
-		$query = 'SELECT * FROM '.cms_db_prefix().self::TABLENAME.' WHERE type_id = ? AND type_dflt = ?';
+		$query = 'SELECT * FROM '.CMS_DB_PREFIX.self::TABLENAME.' WHERE type_id = ? AND type_dflt = ?';
 		$tmp = $db->GetRow($query,array($t2->get_id(),1));
 		if( !is_array($tmp) || count($tmp) == 0 ) throw new CmsDataNotFoundException('Could not find default CmsLayoutTemplate row for type '.$t);
 
@@ -1008,7 +1008,7 @@ class CmsLayoutTemplate
 	public static function load_all_by_type(CmsLayoutTemplateType $type)
 	{
 		$db = CmsApp::get_instance()->GetDb();
-		$query = 'SELECT * FROM '.cms_db_prefix().self::TABLENAME.' WHERE type_id = ?';
+		$query = 'SELECT * FROM '.CMS_DB_PREFIX.self::TABLENAME.' WHERE type_id = ?';
 		$tmp = $db->GetArray($query,array($type->get_id()));
 		if( !is_array($tmp) || count($tmp) == 0 ) throw new CmsDataNotFoundException('Could not find CmsLayoutTemplate rows for type '.$type->get_id());
 
@@ -1063,7 +1063,7 @@ class CmsLayoutTemplate
 	{
 		if( !$prototype ) throw new CmsInvalidDataException('Prototype name cannot be empty');
 		$db = CmsApp::get_instance()->GetDb();
-		$query = 'SELECT id FROM '.cms_db_prefix().self::TABLENAME.' WHERE name = ?';
+		$query = 'SELECT id FROM '.CMS_DB_PREFIX.self::TABLENAME.' WHERE name = ?';
 		for( $i = 1; $i < 25; $i++ ) {
 			$name = $prefix.$prototype;
 			if( $i > 1 ) $name = $prefix.$prototype.' '.$i;

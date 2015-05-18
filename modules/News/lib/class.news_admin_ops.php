@@ -27,11 +27,11 @@ final class news_admin_ops
     $db = cmsms()->GetDb();
 
     //Now remove the article
-    $query = "DELETE FROM ".cms_db_prefix()."module_news WHERE news_id = ?";
+    $query = "DELETE FROM ".CMS_DB_PREFIX."module_news WHERE news_id = ?";
     $db->Execute($query, array($articleid));
 
     // Delete it from the custom fields
-    $query = 'DELETE FROM '.cms_db_prefix().'module_news_fieldvals WHERE news_id = ?';
+    $query = 'DELETE FROM '.CMS_DB_PREFIX.'module_news_fieldvals WHERE news_id = ?';
     $db->Execute($query, array($articleid));
 
     // delete any files...
@@ -106,7 +106,7 @@ final class news_admin_ops
   {
     $db = cmsms()->GetDb();
 
-    $query = "SELECT news_category_id, item_order, news_category_name FROM ".cms_db_prefix()."module_news_categories";
+    $query = "SELECT news_category_id, item_order, news_category_name FROM ".CMS_DB_PREFIX."module_news_categories";
     $dbresult = $db->Execute($query);
     while ($dbresult && $row = $dbresult->FetchRow()) {
       $current_hierarchy_position = "";
@@ -116,7 +116,7 @@ final class news_admin_ops
       $count = 0;
 
       while ($current_parent_id > -1) {
-	$query = "SELECT news_category_id, item_order, news_category_name, parent_id FROM ".cms_db_prefix()."module_news_categories WHERE news_category_id = ?";
+	$query = "SELECT news_category_id, item_order, news_category_name, parent_id FROM ".CMS_DB_PREFIX."module_news_categories WHERE news_category_id = ?";
 	$row2 = $db->GetRow($query, array($current_parent_id));
 	if ($row2) {
 	  $current_hierarchy_position = str_pad($row2['item_order'], 5, '0', STR_PAD_LEFT) . "." . $current_hierarchy_position;
@@ -137,7 +137,7 @@ final class news_admin_ops
 	$current_long_name = substr($current_long_name, 0, strlen($current_long_name) - 3);
       }
 
-      $query = "UPDATE ".cms_db_prefix()."module_news_categories SET hierarchy = ?, long_name = ? WHERE news_category_id = ?";
+      $query = "UPDATE ".CMS_DB_PREFIX."module_news_categories SET hierarchy = ?, long_name = ? WHERE news_category_id = ?";
       $db->Execute($query, array($current_hierarchy_position, $current_long_name, $content_id));
     }
   }

@@ -124,11 +124,11 @@ final class news_field
   {
     $db = cmsms()->GetDb();
     if( $this->item_order < 1 ) {
-      $query = 'SELECT MAX(item_order) FROM '.cms_db_prefix().'module_news_fielddefs';
+      $query = 'SELECT MAX(item_order) FROM '.CMS_DB_PREFIX.'module_news_fielddefs';
       $num = (int)$db->GetOne($query);
       $this->item_order = $num+1;
     }
-    $query = 'INSERT INTO '.cms_db_prefix()."module_news_fielddefs 
+    $query = 'INSERT INTO '.CMS_DB_PREFIX."module_news_fielddefs 
               (name,type,max_length,create_date,modified_date,item_order,public,extra) 
               VALUES (?,?,?,NOW(),NOW(),?,?,?)";
     $dbr = $db->Execute($query,array($this->name,$this->type,$this->max_length,$this->item_order,$this->public,
@@ -140,7 +140,7 @@ final class news_field
   private function _update()
   {
     $db = cmsms()->GetDb();
-    $query = 'UPDATE '.cms_db_prefix().'module_news_fielddefs SET name = ?, type = ?, max_length = ?, modified_date = NOW(),
+    $query = 'UPDATE '.CMS_DB_PREFIX.'module_news_fielddefs SET name = ?, type = ?, max_length = ?, modified_date = NOW(),
               item_orderr = ?, public = ?, extra = ? WHERE id = ?';
     $dbr = $db->Execute($query,array($this->name,$this->type,$this->max_length,$this->item_order,$this->public,
 				     serialize($this->extra),$this->id));
@@ -164,7 +164,7 @@ final class news_field
     if( $id < 1 ) return;
 
     $db = cmsms()->GetDb();
-    $query = 'SELECT * FROM '.cms_db_prefix().'module_news_fielddefs WHERE id = ?';
+    $query = 'SELECT * FROM '.CMS_DB_PREFIX.'module_news_fielddefs WHERE id = ?';
     $row = $db->GetRow($query,array($id));
     if( $row['extra'] ) $row['extra'] = unserialize($row['extra']);
     $obj = new news_field;
@@ -178,7 +178,7 @@ final class news_field
     if( !$name ) return;
 
     $db = cmsms()->GetDb();
-    $query = 'SELECT * FROM '.cms_db_prefix().'module_news_fielddefs WHERE name = ?';
+    $query = 'SELECT * FROM '.CMS_DB_PREFIX.'module_news_fielddefs WHERE name = ?';
     $row = $db->GetRow($query,array($name));
     if( $row['extra'] ) $row['extra'] = unserialize($row['extra']);
     $obj = new news_field;

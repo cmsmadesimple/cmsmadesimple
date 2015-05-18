@@ -47,10 +47,10 @@ if( !$tpl_ob->IsCached() ) {
                 u.first_name,
                 u.last_name
             FROM " .
-    cms_db_prefix() . "module_news mn
-            LEFT OUTER JOIN " . cms_db_prefix() . "module_news_categories mnc
+    CMS_DB_PREFIX . "module_news mn
+            LEFT OUTER JOIN " . CMS_DB_PREFIX . "module_news_categories mnc
             ON mnc.news_category_id = mn.news_category_id
-            LEFT OUTER JOIN " . cms_db_prefix() . "users u
+            LEFT OUTER JOIN " . CMS_DB_PREFIX . "users u
             ON u.user_id = mn.author_id
             WHERE
                 status = 'published'
@@ -60,10 +60,10 @@ if( !$tpl_ob->IsCached() ) {
   $query2 = "
             SELECT count(mn.news_id) as count
             FROM " .
-    cms_db_prefix() . "module_news mn
-            LEFT OUTER JOIN " . cms_db_prefix() . "module_news_categories mnc
+    CMS_DB_PREFIX . "module_news mn
+            LEFT OUTER JOIN " . CMS_DB_PREFIX . "module_news_categories mnc
             ON mnc.news_category_id = mn.news_category_id
-            LEFT OUTER JOIN " . cms_db_prefix() . "users u
+            LEFT OUTER JOIN " . CMS_DB_PREFIX . "users u
             ON u.user_id = mn.author_id
             WHERE
                 status = 'published'
@@ -341,7 +341,7 @@ if( !$tpl_ob->IsCached() ) {
     $catName = $params['category'];
   }
   else if (isset($params['category_id'])) {
-    $catName = $db->GetOne('SELECT news_category_name FROM '.cms_db_prefix() . 'module_news_categories where news_category_id=?',array($params['category_id']));
+    $catName = $db->GetOne('SELECT news_category_name FROM '.CMS_DB_PREFIX . 'module_news_categories where news_category_id=?',array($params['category_id']));
   }
   $tpl_ob->assign('category_name',$catName);
 

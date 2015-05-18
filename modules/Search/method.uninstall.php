@@ -4,16 +4,16 @@ if (!isset($gCms)) exit;
 $db =& $this->GetDb();
 $dict = NewDataDictionary($db);
 
-$sqlarray = $dict->DropTableSQL(cms_db_prefix().'module_search_index');
+$sqlarray = $dict->DropTableSQL(CMS_DB_PREFIX.'module_search_index');
 $dict->ExecuteSQLArray($sqlarray);
 
-$sqlarray = $dict->DropTableSQL(cms_db_prefix().'module_search_items');
+$sqlarray = $dict->DropTableSQL(CMS_DB_PREFIX.'module_search_items');
 $dict->ExecuteSQLArray($sqlarray);
 
-$sqlarray = $dict->DropTableSQL(cms_db_prefix().'module_search_words');
+$sqlarray = $dict->DropTableSQL(CMS_DB_PREFIX.'module_search_words');
 $dict->ExecuteSQLArray($sqlarray);
 
-$db->DropSequence( cms_db_prefix()."module_search_items_seq" );
+$db->DropSequence( CMS_DB_PREFIX."module_search_items_seq" );
 
 $this->DeleteTemplate();
 $this->RemovePreference();

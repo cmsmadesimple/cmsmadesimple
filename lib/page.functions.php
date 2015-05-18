@@ -285,7 +285,7 @@ function audit($itemid, $itemname, $action)
 
     if (!isset($userid) || $userid == "") $userid = 0;
 
-    $query = "INSERT INTO ".cms_db_prefix()."adminlog (timestamp, user_id, username, item_id, item_name, action, ip_addr) VALUES (?,?,?,?,?,?,?)";
+    $query = "INSERT INTO ".CMS_DB_PREFIX."adminlog (timestamp, user_id, username, item_id, item_name, action, ip_addr) VALUES (?,?,?,?,?,?,?)";
     $db->Execute($query,array(time(),$userid,$username,$itemid,$itemname,$action,$ip_addr));
 }
 

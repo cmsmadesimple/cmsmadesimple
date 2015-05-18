@@ -49,7 +49,7 @@ try {
 
   // find the number of 'pages' that use this template.
   $db = cmsms()->GetDb();
-  $query = 'SELECT * FROM '.cms_db_prefix().'content WHERE template_id = ?';
+  $query = 'SELECT * FROM '.CMS_DB_PREFIX.'content WHERE template_id = ?';
   $n = $db->GetOne($query,array($tpl_ob->get_id()));
   $smarty->assign('page_usage',$n);
 

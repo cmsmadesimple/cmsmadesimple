@@ -121,7 +121,7 @@ final class CmsLangOperations
 	  }
 
 	  foreach( $files as $fn ) {
-		  if( !file_exists($fn) ) continue;
+		  if( !is_file($fn) ) continue;
 
 		  $lang = array();
 		  include($fn);

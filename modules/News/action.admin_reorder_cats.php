@@ -32,7 +32,7 @@ else if( isset($params['submit']) ) {
   $data = json_decode($params['data']);
   $flat = news_reordercats_create_flatlist($data);
   if( is_array($flat) && count($flat) ) {
-    $query = 'UPDATE '.cms_db_prefix().'module_news_categories SET parent_id = ?, item_order = ?
+    $query = 'UPDATE '.CMS_DB_PREFIX.'module_news_categories SET parent_id = ?, item_order = ?
               WHERE news_category_id = ?';
     foreach( $flat as $rec ) {
       $dbr = $db->Execute($query,array($rec['parent_id'],$rec['order'],$rec['id']));
@@ -44,7 +44,7 @@ else if( isset($params['submit']) ) {
 }
 
 
-$query = 'SELECT * FROM '.cms_db_prefix().'module_news_categories ORDER BY hierarchy';
+$query = 'SELECT * FROM '.CMS_DB_PREFIX.'module_news_categories ORDER BY hierarchy';
 $allcats = $db->GetArray($query);
 
 

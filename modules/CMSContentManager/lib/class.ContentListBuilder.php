@@ -567,15 +567,16 @@ final class ContentListBuilder
    */
   public function get_locks()
   {
-    if( is_array($this->_locks) ) return $this->_locks;
-    $this->_locks = array();
-    $tmp = CmsLockOperations::get_locks('content');
-    if( is_array($tmp) && count($tmp) ) {
-        foreach( $tmp as $lock_obj ) {
-            $this->_locks[$lock_obj['oid']] = $lock_obj;
-        }
-    }
-    return $this->_locks;
+      if( $this->_module->GetPreference('locktimeout') < 1 ) return;
+      if( is_array($this->_locks) ) return $this->_locks;
+      $this->_locks = array();
+      $tmp = CmsLockOperations::get_locks('content');
+      if( is_array($tmp) && count($tmp) ) {
+          foreach( $tmp as $lock_obj ) {
+              $this->_locks[$lock_obj['oid']] = $lock_obj;
+          }
+      }
+      return $this->_locks;
   }
 
   /**
@@ -592,10 +593,11 @@ final class ContentListBuilder
    */
   private function _is_locked($page_id)
   {
-    $locks = $this->get_locks();
-    if( !is_array($locks) || count($locks) == 0 ) return FALSE;
-    if( in_array($page_id,array_keys($locks)) ) return TRUE;
-    return FALSE;
+      if( $this->_module->GetPreference('locktimeout') < 1 ) return FALSE;
+      $locks = $this->get_locks();
+      if( !is_array($locks) || count($locks) == 0 ) return FALSE;
+      if( in_array($page_id,array_keys($locks)) ) return TRUE;
+      return FALSE;
   }
 
   private function _is_default_locked()

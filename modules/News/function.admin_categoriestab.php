@@ -5,7 +5,7 @@ if( !$this->CheckPermission('Modify Site Preferences') ) return;
 // Put together a list of current categories...
 $entryarray = array();
 	
-$query = "SELECT * FROM ".cms_db_prefix()."module_news_categories ORDER BY hierarchy";
+$query = "SELECT * FROM ".CMS_DB_PREFIX."module_news_categories ORDER BY hierarchy";
 $dbresult = $db->Execute($query);
 $rowclass = 'row1';
 $admintheme = cms_utils::get_theme_object();

@@ -31,7 +31,7 @@ if (isset($params['submit_bulkaction']) && isset($params['bulk_action']) ) {
       break;
 
     case 'setcategory':
-      $query = 'UPDATE '.cms_db_prefix().'module_news SET news_category_id = ?, modified_date = NOW()
+      $query = 'UPDATE '.CMS_DB_PREFIX.'module_news SET news_category_id = ?, modified_date = NOW()
                 WHERE news_id IN ('.implode(',',$sel).')';
       $parms = array((int)$params['category']);
       $db->Execute($query,$parms);
@@ -40,7 +40,7 @@ if (isset($params['submit_bulkaction']) && isset($params['bulk_action']) ) {
       break;
 
     case 'setpublished':
-      $query = 'UPDATE '.cms_db_prefix().'module_news SET status = ?, modified_date = NOW()
+      $query = 'UPDATE '.CMS_DB_PREFIX.'module_news SET status = ?, modified_date = NOW()
                 WHERE news_id IN ('.implode(',',$sel).')';
       $db->Execute($query,array('published'));
       audit('',$this->GetName(),'status changed on '.count($sel).' articles');
@@ -48,7 +48,7 @@ if (isset($params['submit_bulkaction']) && isset($params['bulk_action']) ) {
       break;
 
     case 'setdraft':
-      $query = 'UPDATE '.cms_db_prefix().'module_news SET status = ?, modified_date = NOW()
+      $query = 'UPDATE '.CMS_DB_PREFIX.'module_news SET status = ?, modified_date = NOW()
                 WHERE news_id IN ('.implode(',',$sel).')';
       $db->Execute($query,array('draft'));
       audit('',$this->GetName(),'status changed on '.count($sel).' articles');
@@ -63,7 +63,7 @@ if (isset($params['submit_bulkaction']) && isset($params['bulk_action']) ) {
 
 $categorylist = array();
 $categorylist[$this->Lang('allcategories')] = '';
-$query = "SELECT * FROM ".cms_db_prefix()."module_news_categories ORDER BY hierarchy";
+$query = "SELECT * FROM ".CMS_DB_PREFIX."module_news_categories ORDER BY hierarchy";
 $dbresult = $db->Execute($query);
 while ($dbresult && $row = $dbresult->FetchRow()) {
   $categorylist[$row['long_name']] = $row['long_name'];
@@ -136,8 +136,8 @@ $entryarray = array();
 
 $dbresult = '';
 
-$query1 = "SELECT n.*, nc.long_name FROM ".cms_db_prefix()."module_news n LEFT OUTER JOIN ".cms_db_prefix()."module_news_categories nc ON n.news_category_id = nc.news_category_id ";
-$query2 = "SELECT count(n.news_id) AS count FROM ".cms_db_prefix()."module_news n LEFT OUTER JOIN ".cms_db_prefix()."module_news_categories nc ON n.news_category_id = nc.news_category_id ";
+$query1 = "SELECT n.*, nc.long_name FROM ".CMS_DB_PREFIX."module_news n LEFT OUTER JOIN ".CMS_DB_PREFIX."module_news_categories nc ON n.news_category_id = nc.news_category_id ";
+$query2 = "SELECT count(n.news_id) AS count FROM ".CMS_DB_PREFIX."module_news n LEFT OUTER JOIN ".CMS_DB_PREFIX."module_news_categories nc ON n.news_category_id = nc.news_category_id ";
 $parms = array();
 if ($curcategory != '') {
   $query1 .= " WHERE nc.long_name LIKE ?";

@@ -37,7 +37,7 @@ if (isset($params['submit'])) {
   }
 
   if( !$error ) {
-    $query = 'SELECT id FROM '.cms_db_prefix().'module_news_fielddefs WHERE name = ?';
+    $query = 'SELECT id FROM '.CMS_DB_PREFIX.'module_news_fielddefs WHERE name = ?';
     $exists = $db->GetOne($query,array($name));
     if( $exists ) {
       $error = $this->Lang('nameexists');
@@ -45,11 +45,11 @@ if (isset($params['submit'])) {
   }
 
   if( !$error ) {
-    $max = $db->GetOne('SELECT max(item_order) + 1 FROM ' . cms_db_prefix() . 'module_news_fielddefs');
+    $max = $db->GetOne('SELECT max(item_order) + 1 FROM ' . CMS_DB_PREFIX . 'module_news_fielddefs');
     if( $max == null ) $max = 1;
 
     $extra = array('options'=>$arr_options);
-    $query = 'INSERT INTO '.cms_db_prefix().'module_news_fielddefs (name, type, max_length, item_order, create_date, modified_date, public, extra) VALUES (?,?,?,?,?,?,?,?)';
+    $query = 'INSERT INTO '.CMS_DB_PREFIX.'module_news_fielddefs (name, type, max_length, item_order, create_date, modified_date, public, extra) VALUES (?,?,?,?,?,?,?,?)';
     $parms = array($name, $type, $max_length, $max,
 		   trim($db->DBTimeStamp(time()), "'"),
 		   trim($db->DBTimeStamp(time()), "'"),
