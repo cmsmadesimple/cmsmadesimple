@@ -1,4 +1,4 @@
-# This file is specific to Apache configurations.  
+# This file is specific to Apache configurations.
 # It attempts to optimize traffic and configuration for your CMS Made Simple website.
 # Many options are disabled by default as some providers do not allow you to override some of these settings in the .htaccess file.
 
@@ -42,7 +42,7 @@
 #
 # The following is to enable pretty URLS, only applicable if url_rewriting is set to 'mod_rewrite' in the config.php
 #
-<IfModule mod_rewrite.c>
+<IfModule rewrite_module>
 RewriteEngine on
 # If your CMSMS installation is in a subdirectory of your domain, you may need to specify the relative path (from the root of the domain) here.
 # i.e: RewriteBase /cmsms
@@ -70,8 +70,8 @@ RewriteRule ^(.+)$ index.php?page=$1 [QSA]
 #
 # The following setups compression for content, if compression is enabled on the server.
 #
-<IfModule mod_deflate.c>
-	AddOutputFilterByType DEFLATE text/css text/plain text/xml image/gif image/jpeg image/png
+<IfModule deflate_module>
+	AddOutputFilterByType DEFLATE text/css text/plain text/html text/xml image/gif image/jpeg image/png image/ico text/javascript application/x-javascript application/javascript application/json
 </IfModule>
 
 #
@@ -83,13 +83,13 @@ ExpiresDefault "access plus 1 month"
 # Set expires tags on various file types... so that the browser wont attempt to reload them.
 ExpiresByType image/jpg "access plus 1 year"
 ExpiresByType image/gif "access plus 1 year"
-ExpiresByType image/gif "access plus 1 year"
 ExpiresByType image/ico "access plus 1 year"
 ExpiresByType image/png "access plus 1 year"
 ExpiresByType video/x-flv "access plus 1 year"
 ExpiresByType application/pdf "access plus 1 year"
 ExpiresByType application/x-shockwave-flash "access plus 1 year"
 ExpiresByType application/javascript "access plus 1 month"
+ExpiresByType application/x-javascript "access plus 1 month"
 ExpiresByType text/javascript "access plus 1 month"
 ExpiresByType text/css "access plus 1 month"
 	<IfModule mod_headers.c>
