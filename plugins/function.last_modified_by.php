@@ -26,30 +26,29 @@ function smarty_function_last_modified_by($params, &$template)
 	if (isset($content_obj) && $content_obj->LastModifiedBy() > -1)	{
 		$id = $content_obj->LastModifiedBy();
 	} else {
-		return "";
+		return;
 	}
 
     $format = "id";
-	if(!empty($params['format']))
-		$format = $params['format'];
-		$userops = UserOperations::get_instance();
-		$thisuser = $userops->LoadUserByID($id);
-	}
+	if(!empty($params['format'])) $format = $params['format'];
+    $userops = UserOperations::get_instance();
+    $thisuser = $userops->LoadUserByID($id);
+    if( !$thisuser ) return; // could not find user record.
 
-	$output = '';
-	if($format==="id") {
-		$output = $id;
-	} else if ($format==="username") {
-		$output = cms_htmlentities($thisuser->username);
-	} else if ($format==="fullname") {
-		$output = cms_htmlentities($thisuser->firstname ." ". $thisuser->lastname);
-	}
+    $output = '';
+    if($format==="id") {
+        $output = $id;
+    } else if ($format==="username") {
+        $output = cms_htmlentities($thisuser->username);
+    } else if ($format==="fullname") {
+        $output = cms_htmlentities($thisuser->firstname ." ". $thisuser->lastname);
+    }
 
-	if( isset($params['assign']) ) {
-		$smarty->assign(trim($params['assign']),$output);
-		return;
-	}
-	return $output;
+    if( isset($params['assign']) ) {
+        $smarty->assign(trim($params['assign']),$output);
+        return;
+    }
+    return $output;
 }
 
 function smarty_cms_about_function_last_modified_by() {
