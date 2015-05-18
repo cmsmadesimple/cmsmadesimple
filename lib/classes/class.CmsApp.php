@@ -534,7 +534,7 @@ final class CmsApp {
 	 * @return Smarty_Parser handle to the Smarty object
      * @deprecated
 	 */
-	final public function &get_template_parser()
+	final public function & get_template_parser()
 	{
 		return Smarty_Parser::get_instance();
 	}

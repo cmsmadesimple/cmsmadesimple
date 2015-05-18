@@ -19,6 +19,8 @@
 #$Id: class.admintheme.inc.php 7596 2011-12-24 22:50:52Z calguy1000 $
 
 /**
+ * Classes and utilities for working with the CMSMS admin interface.
+ *
  * @package CMS
  */
 
@@ -33,6 +35,9 @@
  */
 final class CmsAdminUtils
 {
+   /**
+    * @ignore
+    */
     private function __construct() {}
 
     /**

@@ -36,8 +36,19 @@
  */
 final class cms_config implements ArrayAccess
 {
+  /**
+   * @ignore
+   */
   const TYPE_STRING = 'STRING';
+
+  /**
+   * @ignore
+   */
   const TYPE_INT = 'INT';
+
+  /**
+   * @ignore
+   */
   const TYPE_BOOL = 'BOOL';
 
   /**
@@ -201,12 +212,55 @@ final class cms_config implements ArrayAccess
       self::$_instance->load_config();
 
 	  if( !defined('TMP_CACHE_LOCATION') ) {
+          /**
+           * A constant to indicate the location where private cachable files can be written.
+           *
+           * @return string
+           */
 		  define('TMP_CACHE_LOCATION',self::$_instance['tmp_cache_location']);
+
+          /**
+           * A constant to indicate where public (browsable) cachable files can be written.
+           *
+           * @return string
+           */
 		  define('PUBLIC_CACHE_LOCATION',self::$_instance['public_cache_location']);
+
+          /**
+           * A constant containing the smarty template compile directory.
+           *
+           * @return string
+           */
 		  define('TMP_TEMPLATES_C_LOCATION',self::$_instance['tmp_templates_c_location']);
+
+          /**
+           * A constant indicating if CMSMS is in debug mode.
+           *
+           * @return bool
+           */
           define('CMS_DEBUG',self::$_instance['debug']);
+
+          /**
+           * A constant containing the directory where CMSMS is installed.
+           *
+           * @return string
+           */
           define('CMS_ROOT_PATH',self::$_instance['root_path']);
+
+          /**
+           * A constant containing the CMSMS root url.
+           * If the root_url variable is not specified in the config file, then
+           * CMSMS will attempt to calculate one.
+           *
+           * @return string
+           */
           define('CMS_ROOT_URL',self::$_instance['root_url']);
+
+          /**
+           * A constant containing the CMSMS database table prefix to be used on all queries.
+           *
+           * @return string
+           */
           define('CMS_DB_PREFIX',self::$_instance['db_prefix']);
 	  }
     }

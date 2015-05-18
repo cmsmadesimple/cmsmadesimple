@@ -346,6 +346,9 @@ class cms_content_tree extends cms_tree
 	}
 
 
+    /**
+     * @ignore
+     */
     private function &_buildFlatList()
     {
         $result = array();

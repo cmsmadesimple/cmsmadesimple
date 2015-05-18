@@ -42,6 +42,10 @@ final class cms_siteprefs
 	 */
 	private function __construct() {}
 
+    /**
+     * @ignore
+     * @internal
+     */
     public static function setup()
     {
         $obj = new \CMSMS\internal\global_cachable(__CLASS__,function(){
@@ -72,6 +76,10 @@ final class cms_siteprefs
 		}
 	}
 
+	/**
+	 * @ignore
+     * @internal
+	 */
     private static function _restore()
     {
         self::$_prefs = \CMSMS\internal\global_cache::get(__CLASS__);

@@ -114,6 +114,10 @@ final class ModuleOperations
     }
 
 
+    /**
+     * @internal
+     * @ignore
+     */
     private function _generate_moduleinfo( CMSModule &$modinstance )
     {
         $dir = dirname(dirname(__DIR__)).DIRECTORY_SEPARATOR."modules".DIRECTORY_SEPARATOR.$modinstance->GetName();
