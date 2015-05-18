@@ -711,7 +711,7 @@ function &cmsms()
  * @see CmsApp::GetDbPrefix();
  */
 function cms_db_prefix() {
-    return CMS_DB_PREFIX();
+    return CMS_DB_PREFIX;
 }
 
 ?>
