@@ -111,8 +111,8 @@ $tmp[1]['image_uploads_url'] = testConfig('image_uploads_url', 'image_uploads_ur
 $tmp[1]['ssl_uploads_url'] = testConfig('ssl_uploads_url', 'ssl_uploads_url');
 $tmp[0]['auto_alias_content'] = testConfig('auto_alias_content', 'auto_alias_content');
 $tmp[0]['locale'] = testConfig('locale', 'locale');
-$tmp[0]['default_encoding'] = testConfig('default_encoding', 'default_encoding');
-$tmp[0]['admin_encoding'] = testConfig('admin_encoding', 'admin_encoding');
+//$tmp[0]['default_encoding'] = testConfig('default_encoding', 'default_encoding');
+//$tmp[0]['admin_encoding'] = testConfig('admin_encoding', 'admin_encoding');
 $tmp[0]['set_names'] = testConfig('set_names', 'set_names');
 $tmp[0]['timezone'] = testConfig('timezone', 'timezone');
 
@@ -127,6 +127,12 @@ $tmp[0]['allow_browser_cache'] = testBoolean(0, lang('allow_browser_cache'),$res
 $res = get_site_preference('browser_cache_expiry',60);
 $tmp[0]['browser_cache_expiry'] = testRange(0, lang('browser_cache_expiry'),$res,lang('test_browser_cache_expiry'),1,60,FALSE);
 
+if( version_compare(phpversion(),'5.5') >= 0 ) {
+    $opcache = ini_get('opcache.enable');
+    $tmp[0]['php_opcache'] = testBoolean(0, lang('php_opcache'), $opcache, '', false, false, 'opcache_enabled');
+} else {
+    $tmp[0]['php_opcache'] = testBoolean(0, lang('php_opcache'), false, '', false, false, 'opcache_notavailable');
+}
 $res = (bool) get_site_preference('use_smartycache', FALSE);
 $tmp[0]['smarty_cache'] = testBoolean(0, lang('prompt_use_smartycaching'),$res,lang('test_smarty_caching'), FALSE);
 $res = get_site_preference('use_smarty_compilecheck', FALSE);
@@ -143,7 +149,6 @@ $smarty->assign('performance_info', $tmp);
 
 $tmp = array(0=>array(), 1=>array());
 
-$safe_mode = ini_get('safe_mode');
 $session_save_path = ini_get('session.save_path');
 $open_basedir = ini_get('open_basedir');
 
@@ -160,8 +165,7 @@ $tmp[0]['tempnam_function'] = testBoolean(0, 'tempnam_function', function_exists
 
 $tmp[0]['magic_quotes_runtime'] = testBoolean(0, 'magic_quotes_runtime', 'magic_quotes_runtime', lang('magic_quotes_runtime_on'), true, true, 'magic_quotes_runtime_On');
 $tmp[0]['E_STRICT'] = testIntegerMask(0,lang('test_error_estrict'), 'error_reporting',E_STRICT,lang('test_estrict_failed'),true,true,false);
-if( defined('E_DEPRECATED') )
-  {
+if( defined('E_DEPRECATED') ) {
     $tmp[0]['E_DEPRECATED'] =  testIntegerMask(0,lang('test_error_edeprecated'), 'error_reporting',E_DEPRECATED,lang('test_edeprecated_failed'),true,true,false);
   }
 
@@ -189,8 +193,6 @@ else
   }
 
 $tmp[1]['disable_functions'] = testString(0, lang('disable_functions'), 'disable_functions', '', true, 'green', 'yellow', 'disable_functions_not_empty');
-
-$tmp[0]['safe_mode'] = testBoolean(0, 'safe_mode', 'safe_mode', '', true, true, 'safe_mode_enabled');
 
 $tmp[1]['open_basedir'] = testString(0, lang('open_basedir'), $open_basedir, '', false, 'green', 'yellow', 'open_basedir_enabled');
 
@@ -234,35 +236,34 @@ $curlgood = 0;
 $curl_version = '';
 $min_curlversion = '7.19.7';
 if( in_array('curl',get_loaded_extensions()) ) {
-  $hascurl = 1;
-  if( function_exists('curl_version') ) {
-    $t = curl_version();
-    if( isset($t['version']) ) {
-      $curl_version = $t['version'];
-      if( version_compare($t['version'],$min_curlversion) >= 0 ) {
-	$curlgood = 1;
-      }
+    $hascurl = 1;
+    if( function_exists('curl_version') ) {
+        $t = curl_version();
+        if( isset($t['version']) ) {
+            $curl_version = $t['version'];
+            if( version_compare($t['version'],$min_curlversion) >= 0 ) {
+                $curlgood = 1;
+            }
+        }
     }
-  }
 }
 if( !$hascurl ) {
-  $tmp[1]['curl'] = testDummy('curl',lang('off'),'yellow','','curl_not_available','');
+    $tmp[1]['curl'] = testDummy('curl',lang('off'),'yellow','','curl_not_available','');
 }
 else {
-  $tmp[1]['curl'] = testDummy('curl',lang('on'),'green');
-  if( $curlgood ) {
-    $tmp[1]['curlversion'] = testDummy('curlversion',
-				       lang('curl_versionstr',$curl_version,$min_curlversion),
-				       'green');
-  }
-  else {
-    $tmp[1]['curlversion'] = testDummy('curlversion',lang('test_curlversion'),'yellow',
-				       lang('curl_versionstr',$curl_version,$min_curlversion));
-  }
+    $tmp[1]['curl'] = testDummy('curl',lang('on'),'green');
+    if( $curlgood ) {
+        $tmp[1]['curlversion'] = testDummy('curlversion',
+                                           lang('curl_versionstr',$curl_version,$min_curlversion),
+                                           'green');
+    }
+    else {
+        $tmp[1]['curlversion'] = testDummy('curlversion',lang('test_curlversion'),'yellow',
+                                           lang('curl_versionstr',$curl_version,$min_curlversion));
+    }
 }
 $smarty->assign('count_php_information', count($tmp[0]));
 $smarty->assign('php_information', $tmp);
-
 
 
 

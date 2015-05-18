@@ -55,6 +55,19 @@
 <br />
 {/if}
 
+{if count($performance_info)}
+<p><strong>Performance Information:</strong></p>
+<ul>
+  {$list=$performance_info[0]}
+  {foreach $list as $key => $test}
+    <li>{$key}:
+	{if isset($test->secondvalue)}{$test->value} ({$test->secondvalue})
+	{elseif isset($test->value)}{$test->value}
+	{/if}
+    </li>
+  {/foreach}
+</ul>
+{/if}
 
 {if $count_server_info > 1}
 <p><strong>{'server_information'|replace:'_':' '|ucwords}</strong>:</p>
