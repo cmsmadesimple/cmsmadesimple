@@ -207,6 +207,7 @@ if( isset($_POST['testmail']) ) {
     }
     else {
         $addr = cleanValue($_POST['mailtest_testaddress']);
+        $addr = cms_html_entity_decode($addr);
         if( !is_email($addr) ) {
             $error .= '<li>'.lang('error_mailtest_notemail').'</li>';
         }
