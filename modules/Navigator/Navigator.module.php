@@ -35,6 +35,8 @@
 #END_LICENSE
 #$Id: News.module.php 2114 2005-11-04 21:51:13Z wishy $
 
+class NavigatorNode {}
+
 final class Navigator extends CMSModule
 {
     const __DFLT_PAGE = '**DFLT_PAGE**';

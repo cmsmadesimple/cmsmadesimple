@@ -76,7 +76,7 @@ final class Nav_utils
             if( !$content->Active() ) return;
             if( !$content->ShowInMenu() && !$show_all ) return;
 
-            $obj = new stdClass();
+            $obj = new NavigatorNode;
             $obj->id = $content->Id();
             $obj->url = $content->GetURL();
             $obj->accesskey = $content->AccessKey();

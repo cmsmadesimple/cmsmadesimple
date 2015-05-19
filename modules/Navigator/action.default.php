@@ -96,8 +96,8 @@ if( !$smarty->isCached($this->GetTemplateResource($template),$cache_id,$compile_
                         $tmp = array();
                         foreach( $flatlist as $id => &$node ) {
                             $alias = $node->get_tag('alias');
-                            foreach( $list as $one ) {
-                                if( startswith( $alias, $one ) ) $tmp[] = $alias;
+                            foreach( $list as $t1 ) {
+                                if( startswith( $alias, $t1 ) ) $tmp[] = $alias;
                             }
                         }
                         if( is_array($tmp) && count($tmp) ) $items = implode(',',$tmp);
