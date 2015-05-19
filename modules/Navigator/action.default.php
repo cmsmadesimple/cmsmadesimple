@@ -209,7 +209,7 @@ if( !$smarty->isCached($this->GetTemplateResource($template),$cache_id,$compile_
         }
     }
     else if( $start_level > 0 ) {
-        $tmp = $hm->find_by_tag('id',cmsms()->get_content_id());
+        $tmp = $hm->sureGetNodeById(cmsms()->get_content_id());
         $arr = array();
         $arr2 = array();
         while( $tmp ) {
