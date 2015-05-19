@@ -143,7 +143,8 @@ for( $i = 0; $i < $npages; $i++ ) {
 
 $smarty->assign('indent',cms_userprefs::get('indent',1));
 $locks = $builder->get_locks();
-$smarty->assign('have_locks',(is_array($locks) && count($locks))?1:0);
+$have_locks = (is_array($locks) && count($locks))?1:0;
+$smarty->assign('have_locks',$have_locks);
 $smarty->assign('pagelimit',$pagelimit);
 $smarty->assign('pagelist',$pagelist);
 $smarty->assign('curpage',$builder->get_page());

@@ -1,5 +1,5 @@
 {* minimal navigation *}
-{* 
+{*
   variables:
   node: contains the current node.
   aclass: is used to build a string containing class names given to the a tag if one is used
@@ -8,7 +8,7 @@
 {* CSS classes used in this template:
 .currentpage - The active/current page
 .bullet_sectionheader - To style section header
-hr.separator - To style the ruler for the separator *} 
+hr.separator - To style the ruler for the separator *}
 
 {if !isset($depth)}{$depth=0}{/if}
 
@@ -18,7 +18,7 @@ hr.separator - To style the ruler for the separator *}
     {if $node->type == 'sectionheader'}
       {* section header *}
       <li class="sectionheader{if $node->parent} activeparent{/if}">
-        <a href="{$node->url}"{if $node->target ne ""} target="{$node->target}"{/if}>{$node->menutext}</a>
+        {$node->menutext}
         {if isset($node->children)}
           {include file=$smarty.template nodes=$node->children depth=$depth+1}
         {/if}

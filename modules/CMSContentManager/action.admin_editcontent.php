@@ -52,7 +52,7 @@ try {
 
     if( isset($params['cancel']) ) {
         try {
-            if( $content_id && CmsContentManagerUtils::locking_enabled() ) {
+            if( $content_id ) {
                 $lock_id = CmsLockOperations::is_locked('content',$content_id);
                 CmsLockOperations::unlock($lock_id,'content',$content_id);
             }
@@ -183,7 +183,8 @@ try {
             audit($content_obj->Id(),'Content Item: '.$content_obj->Name(),' Edited');
             if( isset($params['submit']) ) {
                 try {
-                    if( $content_id && CmsContentManagerUtils::locking_enabled() ) {
+                    if( $content_id ) {
+                        // unconditionally unlock, even if locking is not enabled.
                         $lock_id = CmsLockOperations::is_locked('content',$content_id);
                         CmsLockOperations::unlock($lock_id,'content',$content_id);
                     }

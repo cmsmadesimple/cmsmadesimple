@@ -567,7 +567,7 @@ final class ContentListBuilder
    */
   public function get_locks()
   {
-      if( $this->_module->GetPreference('locktimeout') < 1 ) return;
+      //if( $this->_module->GetPreference('locktimeout') < 1 ) return;
       if( is_array($this->_locks) ) return $this->_locks;
       $this->_locks = array();
       $tmp = CmsLockOperations::get_locks('content');
@@ -593,7 +593,7 @@ final class ContentListBuilder
    */
   private function _is_locked($page_id)
   {
-      if( $this->_module->GetPreference('locktimeout') < 1 ) return FALSE;
+      //if( $this->_module->GetPreference('locktimeout') < 1 ) return FALSE;
       $locks = $this->get_locks();
       if( !is_array($locks) || count($locks) == 0 ) return FALSE;
       if( in_array($page_id,array_keys($locks)) ) return TRUE;

@@ -177,22 +177,34 @@ if( !$smarty->isCached($this->GetTemplateResource($template),$cache_id,$compile_
         // get an alias... from a hierarchy level.
         $tmp = $hm->getNodeByHierarchy($start_element);
         if( is_object($tmp) ) {
-            if( $show_root_siblings ) {
-                $tmp = $tmp->getParent();
-            }
-            if( is_object($tmp) ) {
+            if( !$show_root_siblings ) {
                 $rootnodes[] = $tmp;
+            }
+            else {
+                $tmp = $tmp->getParent();
+                if( is_object($tmp) && $tmp->has_children() ) {
+                    $children = $tmp->get_children();
+                    foreach( $children as $one ) {
+                        $rootnodes[] = $one;
+                    }
+                }
             }
         }
     }
     else if( $start_page ) {
         $tmp = $hm->sureGetNodeByAlias($start_page);
         if( is_object($tmp) ) {
-            if( $show_root_siblings ) {
-                $tmp = $tmp->getParent();
-            }
-            if( is_object($tmp) ) {
+            if( !$show_root_siblings ) {
                 $rootnodes[] = $tmp;
+            }
+            else {
+                $tmp = $tmp->getParent();
+                if( is_object($tmp) && $tmp->has_children() ) {
+                    $children = $tmp->get_children();
+                    foreach( $children as $one ) {
+                        $rootnodes[] = $one;
+                    }
+                }
             }
         }
     }
