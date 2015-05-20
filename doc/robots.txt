@@ -7,3 +7,5 @@ Disallow: /modules/
 Disallow: /plugins/ 
 Disallow: /scripts/ 
 Disallow: /tmp/
+
+Allow: /tmp/cache/
