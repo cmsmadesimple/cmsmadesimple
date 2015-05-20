@@ -41,7 +41,7 @@ class global_cache
         $driver = self::_get_driver();
         $keys = array_keys(self::$_types);
         foreach( $keys as $key ) {
-            $driver->set($key,self::$_cache[$key]);
+            if( isset(self::$_cache[$key]) ) $driver->set($key,self::$_cache[$key]);
         }
     }
 
