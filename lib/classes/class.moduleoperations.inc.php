@@ -1036,7 +1036,8 @@ final class ModuleOperations
                         $this->_moduledeps[$row['child_module']][$row['parent_module']] = $row['minimum_version'];
                     }
                 }
-                file_put_contents($fn,serialize($this->_moduledeps));
+                global $CMS_INSTALL_PAGE;
+                if( isset($CMS_INSTALL_PAGE) ) file_put_contents($fn,serialize($this->_moduledeps));
             }
         }
         return $this->_moduledeps;

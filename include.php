@@ -51,19 +51,19 @@ global $CMS_INSTALL_PAGE,$CMS_ADMIN_PAGE,$CMS_LOGIN_PAGE,$DONT_LOAD_DB,$DONT_LOA
 
 $session_name = 'CMSSESSID'.substr(md5($dirname), 0, 12);
 if( !isset($CMS_INSTALL_PAGE) ) {
-  @session_name($session_name);
-  @ini_set('url_rewriter.tags', '');
-  @ini_set('session.use_trans_sid', 0);
+    @session_name($session_name);
+    @ini_set('url_rewriter.tags', '');
+    @ini_set('session.use_trans_sid', 0);
 }
 
 #Setup session with different id and start it
-if( isset($CMS_ADMIN_PAGE) || isset($CMS_INSTALL_PAGE) && !headers_sent() ) {
-  // admin pages can't be cached... period, at all.. never.
-  @session_cache_limiter('nocache');
-  header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
+if( (isset($CMS_ADMIN_PAGE) || isset($CMS_INSTALL_PAGE)) && !headers_sent() ) {
+    // admin pages can't be cached... period, at all.. never.
+    @session_cache_limiter('nocache');
+    header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
 }
 else {
-  @session_cache_limiter('public');
+    @session_cache_limiter('public');
 }
 
 if( isset($_COOKIE[$session_name]) ) {

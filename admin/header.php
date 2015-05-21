@@ -37,8 +37,11 @@ else {
             }
         }
 
-        $config = cmsms()->GetConfig();
-        $pattern = cms_join_path($config['root_path'],'cmsms-*-install.php');
+        if( is_writable(CONFIG_FILE_LOCATION) ) {
+            $themeObject->AddNotification(1,'Core',lang('config_writable'));
+        }
+
+        $pattern = cms_join_path(CMS_ROOT_PATH,'cmsms-*-install.php');
         $files = glob($pattern);
         if( is_array($files) && count($files) > 0 ) {
             $fn = basename($files[0]);
