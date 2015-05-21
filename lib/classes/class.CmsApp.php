@@ -143,6 +143,11 @@ final class CmsApp {
 	 */
 	public function get_installed_schema_version()
 	{
+        if( self::test_state(self::STATE_INSTALL) ) {
+            $db = $this->GetDb();
+            $query = 'SELECT version FROM '.CmsApp::get_instance()->GetDbPrefix().'version';
+            return $db->GetOne($query);
+        }
         return \CMSMS\internal\global_cache::get('schema_version');
 	}
 
