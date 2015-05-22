@@ -261,7 +261,7 @@ final class cms_config implements ArrayAccess
            *
            * @return string
            */
-          define('CMS_DB_PREFIX',self::$_instance['db_prefix']);
+          @define('CMS_DB_PREFIX',self::$_instance['db_prefix']);
 	  }
     }
 
