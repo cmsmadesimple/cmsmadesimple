@@ -394,7 +394,7 @@ EOT;
                 $smarty->left_delimiter = '{';
                 $smarty->right_delimiter = '}';
             }
-            else if( strpos('{',$value) !== FALSE ) {
+            else if( strpos($value,'{') !== FALSE ) {
                 // smarty syntax with { and } as delimiters
                 $nvalue = $smarty->fetch('string:'.$value);
             }
