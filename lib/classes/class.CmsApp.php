@@ -338,8 +338,10 @@ final class CmsApp {
 	 */
 	public function GetDbPrefix()
 	{
+		global $CMS_PHAR_INSTALLER, $CMS_INSTALL_PAGE;
+        if( isset($CMS_PHAR_INSTALLER) || isset($CMS_INSTALL_PAGE) ) return cms_config::get_instance()['db_prefix'];
 		return CMS_DB_PREFIX;
-        }
+    }
 
 	/**
 	* Get a handle to the global CMS config.
