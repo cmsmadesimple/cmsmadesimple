@@ -1,6 +1,8 @@
 {form_start design=$design->get_id()}
 <h3>{$mod->Lang('delete_design')}: {$design->get_name()} ({$design->get_id()})</h3>
 
+<div class="pagewarning">{$mod->Lang('warning_deletedesign')}</div>
+
 {if $design->has_templates() && $tpl_permission}
 <div class="pagewarning">{$mod->Lang('warning_deletetemplate_attachments')}</div>
 <div class="pageoverflow">
