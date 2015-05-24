@@ -670,7 +670,7 @@ class CmsLayoutStylesheet
             $query = 'SELECT id,name,content,description,media_type,media_query,created,modified FROM '.CMS_DB_PREFIX.self::TABLENAME.' WHERE name = ?';
             $row = $db->GetRow($query,array($a));
         }
-        if( !is_array($row) || count($row) == 0 ) throw new \CmsInvalidDataException('Could not find template identified by '.$a);
+        if( !is_array($row) || count($row) == 0 ) throw new \CmsInvalidDataException('Could not find stylesheet identified by '.$a);
 
         return self::_load_from_data($row);
     }
