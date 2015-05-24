@@ -66,6 +66,7 @@ class Smarty_CMS extends SmartyBC
     $this->registerResource('module_db_tpl',new CMSModuleDbTemplateResource());
     $this->registerResource('module_file_tpl',new CMSModuleFileTemplateResource());
     $this->registerResource('cms_template',new CmsTemplateResource()); // <- Should proably be global and removed from parser?
+    $this->registerResource('template',new CmsTemplateResource()); // <- Should proably be global and removed from parser? // deprecated
     $this->registerResource('cms_stylesheet',new CmsStylesheetResource());
 
     // register default plugin handler

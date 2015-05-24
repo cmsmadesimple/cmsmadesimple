@@ -1,7 +1,7 @@
 <?php
 #CMS - CMS Made Simple
 #(c)2004-2011 by Ted Kulp (ted@cmsmadesimple.org)
-#This project's homepage is: http://cmsmadesimple.org
+#This projects homepage is: http://cmsmadesimple.org
 #
 #This program is free software; you can redistribute it and/or modify
 #it under the terms of the GNU General Public License as published by
@@ -30,7 +30,7 @@
  * @package CMS
  * @version $Revision$
  * @license GPL
- * @since   1.12
+ * @since   2.0
  * @author  Robert Campbell
  */
 final class CmsAdminUtils
@@ -39,6 +39,29 @@ final class CmsAdminUtils
     * @ignore
     */
     private function __construct() {}
+
+    /**
+     * A regular expression to use when testing if an item has a valid name.
+     */
+    const ITEMNAME_REGEX = '<^[a-zA-Z0-9_\x7f-\xff][a-zA-Z0-9_\ \+\:\-\,\.\x7f-\xff]*$>';
+
+    /**
+     * Test if a string is suitable for use as a name of an item in CMSMS.
+     * For use by various modules and the core.
+     * The name must begin with an alphanumeric character (but some extended characters are allowed).  And must be followed by the same alphanumeric characters
+     * note the name is not necessarily guaranteed to be usable in smarty without backticks.
+     *
+     * @param string $str The string to test
+     * @return bool|string FALSE on error or the validated string.
+     */
+    public static function is_valid_itemname($str)
+    {
+        if( !is_string($str) ) return FALSE;
+        $t_str = trim($str);
+        if( !$t_str ) return FALSE;
+        if( !preg_match(self::ITEMNAME_REGEX,$t_str) ) return FALSE;
+        return $str;
+    }
 
     /**
      * Convert an admin request URL to a generic form that is suitable for saving to a database.

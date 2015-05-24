@@ -38,6 +38,7 @@ class CmsLayoutStylesheetQuery extends CmsDbQueryBase
 	/**
 	 * Execute the query in this object.
 	 *
+     * @throws CmsInvalidDataException
 	 * @throws CmsSQLErrorException
 	 */
     public function execute()

@@ -113,15 +113,12 @@ class CmsLayoutStylesheet
 	 * Set the unique name of this stylesheet
 	 * Stylesheet names must be unique throughout the system.
 	 *
+     * @throws CmsInvalidDataException
 	 * @param string $str
 	 */
     public function set_name($str)
     {
-        $str = trim($str);
-        if( !$str ) throw new CmsInvalidDataException('Name cannot be empty');
-		if( !preg_match('<^[a-zA-Z0-9_\x7f-\xff][a-zA-Z0-9\s\+_\:\-\x7f-\xff]*$>', $str) ) {
-			throw new CmsInvalidDataException('Invalid characters in name '.$str);
-		}
+        if( !CmsAdminUtils::is_valid_itemname($str)) throw new CmsInvalidDataException("Invalid characters in name: $str");
         $this->_data['name'] = $str;
         $this->_dirty = TRUE;
     }
@@ -139,6 +136,7 @@ class CmsLayoutStylesheet
 	/**
 	 * Set the CSS content of this stylesheet object
 	 *
+     * @throws CmsInvalidDataException
 	 * @param string $str
 	 */
     public function set_content($str)
@@ -229,7 +227,7 @@ class CmsLayoutStylesheet
     public function set_media_types($arr)
     {
 		if( !is_array($arr) ) {
-			if( (int)$arr == 0 && $arr && is_string($arr) ) {
+			if( !is_numeric($arr) && $arr && is_string($arr) ) {
 				$arr = array($arr);
 			}
 			else {
@@ -328,7 +326,7 @@ class CmsLayoutStylesheet
 	 * Add a design association for this stylesheet object
 	 *
 	 * @see CmsLayoutCollection
-	 * @throws CmsInvalidDataException
+	 * @throws CmsLogicException
 	 * @param mixed $a An Instance of a CmsLayoutCollection object, or an integer design id, or a string design name
 	 */
     public function add_design($a)
@@ -337,18 +335,21 @@ class CmsLayoutStylesheet
         if( is_object($a) && is_a($a,'CmsLayoutCollection') ) {
             $n = $a->get_id();
         }
-        else if( (int)$a > 0 ) {
+        else if( is_numeric($a) && (int)$a > 0 ) {
             $n = $a;
         }
-        else if( (is_string($a) && strlen($a)) || (int)$a > 0 ) {
+        else if( (is_string($a) && strlen($a)) ) {
             $design = CmsLayoutCollection::load($a);
             $n = $design->get_id();
+        }
+        else {
+            throw new \CmsLogicException('Invalid data passed to '.__METHOD__);
         }
 
         // note: should load designs before adding.
         $designs = $this->get_designs();
         if( !in_array($n,$designs) ) {
-            $this->_design_assoc[] = $n;
+            $this->_design_assoc[] = (int) $n;
             $this->_dirty = TRUE;
         }
     }
@@ -356,6 +357,7 @@ class CmsLayoutStylesheet
 	/**
 	 * Remove a design from the association list.
 	 *
+     * @throws CmsLogicException
 	 * @see CmsLayoutCollection
 	 * @param mixed $a An Instance of a CmsLayoutCollection object, or an integer design id, or a string design name
 	 */
@@ -368,12 +370,15 @@ class CmsLayoutStylesheet
         if( is_object($a) && is_a($a,'CmsLayoutCollection') ) {
             $n = $a->get_id();
         }
-        else if( (int)$a > 0 ) {
+        else if( is_numeric($a) && (int)$a > 0 ) {
             $n = $a;
         }
-        else if( (is_string($a) && strlen($a)) || (int)$a > 0 ) {
+        else if( (is_string($a) && strlen($a)) ) {
             $design = CmsLayoutCollection::load($a);
             $n = $design->get_id();
+        }
+        else {
+            throw new \CmsLogicException('Invalid data passed to '.__METHOD__);
         }
 
         $designs = $this->get_designs();
@@ -399,6 +404,9 @@ class CmsLayoutStylesheet
         if( !$this->get_name() ) throw new CmsInvalidDataException('Each stylesheet must have a name');
         if( !$this->get_content() ) throw new CmsInvalidDataException('Each stylesheet must have some content');
 		if( endswith($this->get_name(),'.css') ) throw new CmsInvalidDataException('Invalid name for a database stylesheet');
+        if( !CmsAdminUtils::is_valid_itemname($this->get_name()) ) {
+			throw new CmsInvalidDataException('There are invalid characters in the stylesheet name.');
+		}
 
         $db = CmsApp::get_instance()->GetDb();
         $tmp = null;
@@ -646,7 +654,7 @@ class CmsLayoutStylesheet
 		// check the cache first..
         $db = CmsApp::get_instance()->GetDb();
         $row = null;
-        if( (int)$a > 0 ) {
+        if( is_numeric($a) && (int)$a > 0 ) {
 			$a = (int)$a;
 			if( isset(self::$_css_cache[$a]) ) return self::$_css_cache[$a];
 			// not in cache
@@ -662,7 +670,7 @@ class CmsLayoutStylesheet
             $query = 'SELECT id,name,content,description,media_type,media_query,created,modified FROM '.CMS_DB_PREFIX.self::TABLENAME.' WHERE name = ?';
             $row = $db->GetRow($query,array($a));
         }
-        if( !is_array($row) || count($row) == 0 ) throw new CmsDataNotFoundException('Could not find template identified by '.$a);
+        if( !is_array($row) || count($row) == 0 ) throw new \CmsInvalidDataException('Could not find template identified by '.$a);
 
         return self::_load_from_data($row);
     }
@@ -683,7 +691,7 @@ class CmsLayoutStylesheet
 
         // clean up the input data
 		$is_ints = FALSE;
-		if( (int)$ids[0] > 0 ) {
+		if( is_numeric($ids[0]) && (int)$ids[0] > 0 ) {
 			$is_ints = TRUE;
 			for( $i = 0, $n = count($ids); $i < $n; $i++ ) {
 				$ids[$i] = (int)$ids[$i];
@@ -788,7 +796,7 @@ class CmsLayoutStylesheet
      */
     public static function is_loaded($id)
     {
-        if( (int)$id > 0 ) {
+        if( is_numeric($id) && (int)$id > 0 ) {
             if( isset(self::$_css_cache[$id]) ) return TRUE;
         }
         else if( is_string($id) && strlen($id) > 0 ) {

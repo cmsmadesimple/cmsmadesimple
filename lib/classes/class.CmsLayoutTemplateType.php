@@ -105,6 +105,7 @@ class CmsLayoutTemplateType
     /**
      * Set the template originator string.
      *
+     * @throws CmsInvalidDataException
      * @param string $str The originator string, usually a module name.
      */
     public function set_originator($str)
@@ -128,6 +129,7 @@ class CmsLayoutTemplateType
     /**
      * Set the template type name
      *
+     * @throws CmsInvalidDataException
      * @param sting $str The template type name.
      */
     public function set_name($str)
@@ -151,6 +153,7 @@ class CmsLayoutTemplateType
     /**
      * Set the flag indicating if this template type can have a 'default'
      *
+     * @throws CmsInvalidDataException
      * @param bool $flag
      */
     public function set_dflt_flag($flag = TRUE)
@@ -216,11 +219,12 @@ class CmsLayoutTemplateType
     /**
      * Set the owner of this template type
      *
+     * @throws CmsInvalidDataException
      * @param int $owner
      */
     public function set_owner($owner)
     {
-        if( (int)$owner == 0 ) throw new CmsInvalidDataException('value is invalid for owner');
+        if( !is_numeric($owner) || (int)$owner == 0 ) throw new CmsInvalidDataException('value is invalid for owner in '.__METHOD__);
         $this->_data['owner'] = (int)$owner;
         $this->_dirty = TRUE;
     }
@@ -324,6 +328,7 @@ class CmsLayoutTemplateType
      *
      * This method throws an exception if an error is found in the integrity of the object.
      *
+     * @throws CmsInvalidDataException
      * @param bool $is_insert Wether this is a new insert, or an update.
      */
     protected function validate($is_insert = TRUE)
@@ -335,7 +340,7 @@ class CmsLayoutTemplateType
 		}
 
         if( !$is_insert ) {
-            if( !isset($this->_data['id']) || (int)$this->_data['id'] <= 0 ) throw new CmsInvalidDataException('id is not set');
+            if( !isset($this->_data['id']) || (int)$this->_data['id'] < 1 ) throw new CmsInvalidDataException('id is not set');
 
             // check for item with the same name
             $db = CmsApp::get_instance()->GetDb();
@@ -358,6 +363,8 @@ class CmsLayoutTemplateType
      *
      * This method will ensure that the current object is valid, generate an id, and
      * insert the record into the database.  An exception will be thrown if errors occur.
+     *
+     * @throws CmsSQLErrorException
      */
     protected function _insert()
     {
@@ -387,6 +394,8 @@ class CmsLayoutTemplateType
      *
      * This method will ensure that the current object is valid, generate an id, and
      * update the record in the database.  An exception will be thrown if errors occur.
+     *
+     * @throws CmsSQLErrorException
      */
     protected function _update()
     {
@@ -440,7 +449,8 @@ class CmsLayoutTemplateType
     /**
      * Delete the current object from the database (if it has been saved).
      *
-     * This method will throw exceptions on error.
+     * @throws CmsInvalidDataException
+     * @throws CmsSQLErrorException
      */
     public function delete()
     {
@@ -509,6 +519,9 @@ class CmsLayoutTemplateType
 
 	/**
 	 * Reset the default contens of this template type back to factory defaults
+     *
+     * @throws CmsException
+     * @throws CmsDataNotFoundException
 	 */
     public function reset_content_to_factory()
     {
@@ -548,6 +561,7 @@ class CmsLayoutTemplateType
      *
      * This method throws an exception when the requested object cannot be found.
      *
+     * @throws CmsDataNotFoundException
      * @param mixed $val An integer template type id, or a string in the form of Originator::Name
      * @return CmsLayoutTemplateType
      */
@@ -555,7 +569,8 @@ class CmsLayoutTemplateType
     {
         $db = CmsApp::get_instance()->GetDb();
         $row = null;
-        if( (int)$val > 0 ) {
+        if( is_numeric($val) && (int)$val > 0 ) {
+            $val = (int) $val;
 			if( isset(self::$_cache[$val]) ) return self::$_cache[$val];
 
             $query = 'SELECT * FROM '.CMS_DB_PREFIX.self::TABLENAME.' WHERE id = ?';
@@ -584,6 +599,7 @@ class CmsLayoutTemplateType
      *
      * This method will throw exceptions if an error is encounted.
      *
+     * @throws CmsInvalidDataException
      * @param string $originator The origiator name
      * @return array An array of CmsLayoutTemplateType objects, or null if no matches are found.
      */
@@ -633,7 +649,7 @@ class CmsLayoutTemplateType
 	/**
 	 * Load template type objects by specifying an array of ids
 	 *
-	 * @param array $list Array of template typd ids
+	 * @param int[] $list Array of template type ids
 	 */
 	public static function load_bulk($list)
 	{
@@ -641,8 +657,8 @@ class CmsLayoutTemplateType
 
 		$list2 = array();
 		foreach( $list as $one ) {
+            if( !is_numeric($one) || (int)$one < 1 ) continue;
 			$one = (int)$one;
-			if( $one <= 0 ) continue;
 			if( isset(self::$_cache[$one]) ) continue;
 			$list2[] = $one;
 		}
