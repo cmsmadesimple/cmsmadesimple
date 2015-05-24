@@ -251,6 +251,7 @@ class CmsLayoutTemplate
 	 */
 	public function set_category($a)
 	{
+        if( !$a ) return;
 		$n = null;
 		if( is_object($a) && is_a($a,'CmsLayoutTemplateCategory') ) {
 			$n = $a->get_id();
@@ -299,7 +300,7 @@ class CmsLayoutTemplate
 		if( !is_array($x) ) return;
 
 		foreach( $x as $y ) {
-            if( !is_int($y) || $y < 1 ) throw new CmsInvalidDataException('Invalid data in design list.  Expect array of integers');
+            if( !is_numeric($y) || (int) $y < 1 ) throw new CmsInvalidDataException('Invalid data in design list.  Expect array of integers');
 		}
 
 		$this->_design_assoc = $x;
