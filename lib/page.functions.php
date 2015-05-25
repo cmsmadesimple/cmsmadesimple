@@ -146,7 +146,8 @@ function get_username($check = true)
 function check_passhash($userid, $checksum)
 {
     $userops = UserOperations::get_instance();
-    $oneuser = $userops->LoadUserByID($userid);
+    $oneuser = $userops->LoadUserByID((int) $userid);
+    if( !$oneuser ) return FALSE;
 
     $tmp = array(md5(__FILE__),$oneuser->password,cms_utils::get_real_ip(),$_SERVER['HTTP_USER_AGENT']);
     $tmp = md5(serialize($tmp));
