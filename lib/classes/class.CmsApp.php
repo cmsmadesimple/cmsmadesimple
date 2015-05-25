@@ -204,7 +204,7 @@ final class CmsApp {
 	public function set_content_type($mime_type = '')
 	{
 		$this->_content_type = null;
-		if( isset($txt) ) 	$this->_content_type = $mime_type;
+		if( isset($mime_type) ) $this->_content_type = $mime_type;
 	}
 
 	/**
@@ -489,6 +489,7 @@ final class CmsApp {
 	*
 	* @final
 	* @internal
+    * @ignore
 	* @access private
 	*/
 	public function dbshutdown()
@@ -589,7 +590,7 @@ final class CmsApp {
 	 *
 	 * @since 1.11.2
 	 * @author Robert Campbell
-	 * @return Array of state strings, or null.
+	 * @return stringp[] Array of state strings, or null.
 	 */
     public function get_states()
     {
@@ -656,7 +657,7 @@ final class CmsApp {
      *
 	 * @since 1.11.12
 	 * @author Robert Campbell
-	 * @return boolean
+	 * @return bool
 	 */
     public function is_https_request()
     {
@@ -696,7 +697,7 @@ class CmsContentTypePlaceholder
 
 
 /**
- * Return the global cmsms() object
+ * Return the global cmsms() object.
  *
  * @since 1.7
  * @return CmsApp
