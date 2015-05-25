@@ -122,7 +122,7 @@ $smarty->assign('config_info', $tmp);
 /* Performance Information */
 $tmp = array(0=>array(), 1=>array());
 
-$res = get_site_preference('allow_browser_cache',60);
+$res = get_site_preference('allow_browser_cache',0);
 $tmp[0]['allow_browser_cache'] = testBoolean(0, lang('allow_browser_cache'),$res,lang('test_allow_browser_cache'), FALSE);
 $res = get_site_preference('browser_cache_expiry',60);
 $tmp[0]['browser_cache_expiry'] = testRange(0, lang('browser_cache_expiry'),$res,lang('test_browser_cache_expiry'),1,60,FALSE);
