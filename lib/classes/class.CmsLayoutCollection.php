@@ -332,7 +332,7 @@ class CmsLayoutCollection
         if( $tpl_id < 1 ) throw new CmsLogicException('Invalid template id specified to CmsLayoutCollection::add_template');
 
 		if( !is_array($this->_tpl_assoc) ) $this->_tpl_assoc = array();
-		if( !in_array($tpl,$this->_tpl_assoc) ) $this->_tpl_assoc[] = (int) $tpl_id;
+		if( !in_array($tpl_id,$this->_tpl_assoc) ) $this->_tpl_assoc[] = (int) $tpl_id;
         $this->_dirty = TRUE;
 	}
 
