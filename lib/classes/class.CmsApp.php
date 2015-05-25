@@ -217,7 +217,7 @@ final class CmsApp {
 	 */
 	public function set_content_object(ContentBase &$content)
 	{
-		$this->_current_content_page = $content;
+        if( !$this->_current_content_page ) $this->_current_content_page = $content;
 	}
 
 	/**
