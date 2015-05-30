@@ -287,9 +287,9 @@ final class CMS_Content_Block
         return self::content_return('', $params, $smarty);
     }
 
-    public static function smarty_fetch_pagedata($params,&$template)
+    public static function smarty_fetch_pagedata($params,&$smarty)
     {
-        $smarty = $template->smarty;
+        //$smarty = $template->smarty;
         $gCms = CmsApp::get_instance();
 
         $contentobj = CmsApp::get_instance()->get_content_object();

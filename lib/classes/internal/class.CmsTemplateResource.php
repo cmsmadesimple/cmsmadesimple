@@ -41,7 +41,7 @@ class CmsTemplateResource extends CMS_Fixed_Resource_Custom
 		if( in_array($section,array('top','head','body')) ) $this->_section = $section;
 	}
 
-	protected function buildUniqueResourceName(Smarty $smarty,$resource_name, $is_config = false)
+	public function buildUniqueResourceName(Smarty $smarty,$resource_name, $is_config = false)
 	{
 		return parent::buildUniqueResourceName($smarty,$resource_name,$is_config).'--'.$this->_section;
 	}
