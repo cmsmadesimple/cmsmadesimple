@@ -59,6 +59,9 @@ class Smarty_CMS extends SmartyBC
         $this->error_reporting = 'E_ALL';
     }
 
+    // set our own template class with some funky stuff in it
+    $this->template_class = 'CMS_Smarty_Template';
+
     // Set plugins dirs
     $this->addPluginsDir(cms_join_path(CMS_ROOT_PATH,'plugins'));
 
