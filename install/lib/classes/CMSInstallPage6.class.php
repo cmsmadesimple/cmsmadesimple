@@ -58,6 +58,7 @@ class CMSInstallerPage6 extends CMSInstallerPage
 
       $CMS_INSTALL_DROP_TABLES=1;
       $CMS_INSTALL_CREATE_TABLES=1;
+      if(!defined('CMS_DB_PREFIX')) define('CMS_DB_PREFIX',$db_prefix);
 
       include_once(cms_join_path(CMS_INSTALL_BASE, 'schemas', 'schema.php'));
 
