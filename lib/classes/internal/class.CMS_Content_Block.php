@@ -177,7 +177,7 @@ final class CMS_Content_Block
      * @internal
      * @ignore
      */
-    public static function smarty_internal_fetch_contentblock($params,$smarty)
+    public static function smarty_internal_fetch_contentblock($params,&$smarty)
     {
         $gCms = CmsApp::get_instance();
 
