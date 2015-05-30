@@ -34,7 +34,7 @@
 final class CMSSmartySecurityPolicy extends Smarty_Security
 {
   public $php_handling = Smarty::PHP_REMOVE;
-  public $static_classes = null;
+
   public $php_modifiers = array();
   //public $php_modifiers = array('escape','count','preg_replace','lang', 'ucwords','print_r','var_dump','trim','htmlspecialchars','explode','htmlspecialchars_decode','strpos','strrpos','startswith','endswith');
   public $streams = null;
@@ -46,8 +46,20 @@ final class CMSSmartySecurityPolicy extends Smarty_Security
   {
     parent::__construct($smarty);
     $this->allow_php_tag = FALSE;
-    $this->php_functions = array('isset', 'empty','count', 'sizeof','in_array', 'is_array','time', 'lang',
-				 'nl2br','file_exists', 'is_string', 'is_object', 'is_file','print_r','var_dump','htmlspecialchars','htmlspecialchars_decode');
+    if(CmsApp::get_instance()->is_frontend_request() )
+    {
+      $this->php_functions = array('isset', 'empty','count', 'sizeof','in_array', 'is_array','time', 'lang',
+         'nl2br','file_exists', 'is_string', 'is_object', 'is_file','print_r','var_dump','htmlspecialchars','htmlspecialchars_decode');
+      $this->static_classes = null;
+    }
+    else
+    {
+      $this->php_functions = array();
+      $this->static_classes = array();
+      $this->allow_constants = true;
+    }
+    
+    
   }
 } // end of class
 
