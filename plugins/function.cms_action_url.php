@@ -17,10 +17,8 @@
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 
-function smarty_function_cms_action_url($params, &$template)
+function smarty_function_cms_action_url($params, &$smarty)
 {
-    $smarty = $template->smarty;
-
     $module = $smarty->get_template_vars('actionmodule');
     $returnid = $smarty->get_template_vars('returnid');
     $mid = $smarty->get_template_vars('actionid');

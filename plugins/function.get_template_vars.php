@@ -80,16 +80,16 @@ if( !function_exists('__cms_function_output_var') ) {
     }
 }
 
-function smarty_cms_function_get_template_vars($params, &$template)
+function smarty_cms_function_get_template_vars($params, &$smarty)
 {
-	$tpl_vars = $template->get_template_vars();
+	$tpl_vars = $smarty->get_template_vars();
 	$str = '<pre>';
 	foreach( $tpl_vars as $key => $value ) {
         $str .= __cms_function_output_var($key,$value);
     }
     $str .= '</pre>';
 	if( isset($params['assign']) ){
-	    $template->assign(trim($params['assign']),$str);
+	    $smarty->assign(trim($params['assign']),$str);
 	    return;
     }
 	return $str;

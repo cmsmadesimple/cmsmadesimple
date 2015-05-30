@@ -16,10 +16,9 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-function smarty_function_image($params, &$template)
+function smarty_function_image($params, &$smarty)
 {
-	$smarty = $template->smarty;
-    $gCms = CmsApp::get_instance();
+  $gCms = CmsApp::get_instance();
 	$text = '';
 	$imgstart = '<img src=';
 	$imgend = '/>';

@@ -16,9 +16,8 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-function smarty_function_site_mapper($params, &$template)
+function smarty_function_site_mapper($params, &$smarty)
 {
-	$smarty = $template->smarty;
 	$params['module'] = 'Navigator';
 	
 	if( !isset($params['template']) )

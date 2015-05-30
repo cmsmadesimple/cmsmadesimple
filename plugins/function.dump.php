@@ -16,9 +16,8 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-function smarty_function_dump($params, &$template)
+function smarty_function_dump($params, &$smarty)
 {
-	$smarty = $template->smarty;
 	$ignore = array('cms','smarty','db','config','params','param_map','langhash','xml_exclude_files','xmldtd');
 
 	if( !function_exists('build_accessor') )
