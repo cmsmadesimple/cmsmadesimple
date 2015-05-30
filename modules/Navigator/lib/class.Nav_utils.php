@@ -69,7 +69,7 @@ final class Nav_utils
     public static function fill_node(cms_content_tree $node,$deep,$nlevels,$show_all,$collapse = FALSE,$depth = 0)
     {
         if( !is_object($node) ) return;
-        $gCms = cmsms();
+        $gCms = CmsApp::get_instance();
         $hm = $gCms->GetHierarchyManager();
         $content = $node->getContent(TRUE,TRUE);
         if( is_object($content) ) {

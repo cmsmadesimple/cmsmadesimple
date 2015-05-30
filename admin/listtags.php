@@ -99,53 +99,53 @@ else {
 
   $files = array();
   foreach( $dirs as $one ) {
-    $files = array_merge($files,glob($one));
+      $files = array_merge($files,glob($one));
   }
 
   if( is_array($files) && count($files) ) {
-    $file_array = array();
-    foreach($files as $onefile) {
-      $file = basename($onefile);
-      $parts = explode('.',$file);
-      if( !is_array($parts) || count($parts) != 3 ) continue;
+      $file_array = array();
+      foreach($files as $onefile) {
+          $file = basename($onefile);
+          $parts = explode('.',$file);
+          if( !is_array($parts) || count($parts) != 3 ) continue;
 
-      $rec = array();
-      $rec['type'] = $parts[0];
-      $rec['name'] = $parts[1];
-      $rec['admin'] = 0;
-      if( startswith($onefile,$config['admin_path']) ) $rec['admin'] = 1;
+          $rec = array();
+          $rec['type'] = $parts[0];
+          $rec['name'] = $parts[1];
+          $rec['admin'] = 0;
+          if( startswith($onefile,$config['admin_path']) ) $rec['admin'] = 1;
 
-      include_once($onefile);
+          include_once($onefile);
 
-      if( !function_exists('smarty_'.$rec['type'].'_'.$rec['name']) &&
-	  !function_exists('smarty_cms_'.$rec['type'].'_'.$rec['name']) ) continue;
+          if( !function_exists('smarty_'.$rec['type'].'_'.$rec['name']) &&
+              !function_exists('smarty_cms_'.$rec['type'].'_'.$rec['name']) ) continue;
 
-      $rec['cachable'] = 'n_a';
-      if( $rec['type'] == 'function' && $rec['admin'] == 0 ) {
-	if( function_exists('smarty_cms_'.$rec['type'].'_'.$rec['name']) ) {
-	  $rec['cachable'] = 'no';
-	}
-	else if( function_exists('smarty_'.$rec['type'].'_'.$rec['name']) ) {
-	  $rec['cachable'] = 'yes';
-	}
+          $rec['cachable'] = 'n_a';
+          if( $rec['type'] == 'function' && $rec['admin'] == 0 ) {
+              if( function_exists('smarty_cms_'.$rec['type'].'_'.$rec['name']) ) {
+                  $rec['cachable'] = 'no';
+              }
+              else if( function_exists('smarty_'.$rec['type'].'_'.$rec['name']) ) {
+                  $rec['cachable'] = 'yes';
+              }
+          }
+
+          if( function_exists("smarty_cms_help_".$rec['type']."_".$rec['name']) ) {
+              $rec['help_url'] = 'listtags.php'.$urlext.'&amp;action=showpluginhelp&amp;plugin='.$rec['name'].'&amp;type='.$rec['type'];
+          }
+          else if( CmsLangOperations::key_exists('help_'.$rec['type'].'_'.$rec['name'],'tags') ) {
+              $rec['help_url'] = 'listtags.php'.$urlext.'&amp;action=showpluginhelp&amp;plugin='.$rec['name'].'&amp;type='.$rec['type'];
+          }
+          else if( CmsLangOperations::key_exists('help_'.$rec['type'].'_'.$rec['name']) ) {
+              $rec['help_url'] = 'listtags.php'.$urlext.'&amp;action=showpluginhelp&amp;plugin='.$rec['name'].'&amp;type='.$rec['type'];
+          }
+
+          if( function_exists("smarty_cms_about_".$rec['type']."_".$rec['name']) ) {
+              $rec['about_url'] = 'listtags.php'.$urlext.'&amp;action=showpluginabout&amp;plugin='.$rec['name'].'&amp;type='.$rec['type'];
+          }
+
+          $file_array[] = $rec;
       }
-
-      if( function_exists("smarty_cms_help_".$rec['type']."_".$rec['name']) ) {
-	$rec['help_url'] = 'listtags.php'.$urlext.'&amp;action=showpluginhelp&amp;plugin='.$rec['name'].'&amp;type='.$rec['type'];
-      }
-      else if( CmsLangOperations::key_exists('help_'.$rec['type'].'_'.$rec['name'],'tags') ) {
-	$rec['help_url'] = 'listtags.php'.$urlext.'&amp;action=showpluginhelp&amp;plugin='.$rec['name'].'&amp;type='.$rec['type'];
-      }
-      else if( CmsLangOperations::key_exists('help_'.$rec['type'].'_'.$rec['name']) ) {
-	$rec['help_url'] = 'listtags.php'.$urlext.'&amp;action=showpluginhelp&amp;plugin='.$rec['name'].'&amp;type='.$rec['type'];
-      }
-
-      if( function_exists("smarty_cms_about_".$rec['type']."_".$rec['name']) ) {
-	$rec['about_url'] = 'listtags.php'.$urlext.'&amp;action=showpluginabout&amp;plugin='.$rec['name'].'&amp;type='.$rec['type'];
-      }
-
-      $file_array[] = $rec;
-    }
   }
 
   // add in standard tags...
@@ -171,11 +171,11 @@ else {
 
   function listtags_plugin_sort($a,$b)
   {
-    return strcmp($a['name'],$b['name']);
+      return strcmp($a['name'],$b['name']);
   }
-  
+
   usort($file_array,'listtags_plugin_sort');
-  
+
   $smarty->assign('plugins',$file_array);
 }
 
