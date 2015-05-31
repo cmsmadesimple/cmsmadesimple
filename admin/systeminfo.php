@@ -115,7 +115,7 @@ $tmp[0]['locale'] = testConfig('locale', 'locale');
 //$tmp[0]['admin_encoding'] = testConfig('admin_encoding', 'admin_encoding');
 $tmp[0]['set_names'] = testConfig('set_names', 'set_names');
 $tmp[0]['timezone'] = testConfig('timezone', 'timezone');
-
+$tmp[0]['permissive_smarty'] = testConfig('permissive_smarty','permissive_smarty');
 $smarty->assign('count_config_info', count($tmp[0]));
 $smarty->assign('config_info', $tmp);
 
@@ -354,7 +354,6 @@ $smarty->assign('count_permission_info', count($tmp[0]));
 $smarty->assign('permission_info', $tmp);
 
 
-
 if(isset($_GET['cleanreport']) && $_GET['cleanreport'] == 1) {
   $orig_lang = CmsNlsOperations::get_current_language();
   CmsNlsOperations::set_language('en_US');
@@ -365,6 +364,5 @@ else echo $smarty->fetch('systeminfo.tpl');
 
 
 include_once("footer.php");
-
 
 ?>

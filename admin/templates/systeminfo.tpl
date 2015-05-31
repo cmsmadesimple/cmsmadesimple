@@ -10,11 +10,11 @@
 	</div>
 <hr/>
 <table class="pagetable" summary="{si_lang a=cms_install_information}">
-    <thead> 
+    <thead>
        <tr>
          <th colspan="3">{si_lang a=cms_install_information}</th>
        </tr>
-    </thead> 
+    </thead>
 	<tbody>
 		<tr class="{cycle values='row1,row2'}">
   			<td width="45%">{si_lang a=cms_version}</td>
@@ -25,11 +25,11 @@
 </table>
 <br /><br />
 <table class="pagetable" summary="{si_lang a=installed_modules}">
-    <thead> 
+    <thead>
        <tr>
          <th colspan="3">{si_lang a=installed_modules}</th>
        </tr>
-    </thead> 
+    </thead>
 	<tbody>
   		{foreach from=$installed_modules item='module'}
   		<tr class="{cycle values='row1,row2'}">
@@ -41,12 +41,13 @@
 	</tbody>
 </table>
 <br /><br />
+
 <table class="pagetable" summary="{si_lang a=config_information}">
-    <thead> 
+    <thead>
        <tr>
          <th colspan="3">{si_lang a=config_information}</th>
        </tr>
-    </thead> 
+    </thead>
 	<tbody>
   	{foreach from=$config_info key='view' item='tmp'}
   		{foreach from=$tmp key='key' item='test'}
@@ -68,11 +69,11 @@
 
 
 <table class="pagetable" summary="{lang('performance_information')}">
-    <thead> 
+    <thead>
        <tr>
          <th colspan="3">{lang('performance_information')}</th>
        </tr>
-    </thead> 
+    </thead>
 	<tbody>
   	{foreach from=$performance_info key='view' item='tmp'}
   		{foreach from=$tmp key='key' item='test'}
@@ -93,11 +94,11 @@
 <br /><br />
 
 <table class="pagetable" summary="{si_lang a=php_information}">
-    <thead> 
+    <thead>
        <tr>
          <th colspan="3">{si_lang a=php_information}</th>
        </tr>
-    </thead> 
+    </thead>
 	<tbody>
 	{foreach from=$php_information key='view' item='tmp'}
   		{foreach from=$tmp key='key' item='test'}
@@ -122,11 +123,11 @@
 </table>
 <br /><br />
 <table class="pagetable" summary="{si_lang a=server_information}">
-    <thead> 
+    <thead>
        <tr>
          <th colspan="3">{si_lang a=server_information}</th>
        </tr>
-    </thead> 
+    </thead>
 	<tbody>
 	{foreach from=$server_info key='view' item='tmp'}
   		{foreach from=$tmp key='key' item='test'}
@@ -145,11 +146,11 @@
 </table>
 <br /><br />
 <table class="pagetable" summary="{si_lang a=permission_information}">
-    <thead> 
+    <thead>
        <tr>
          <th colspan="3">{si_lang a=permission_information}</th>
        </tr>
-    </thead> 
+    </thead>
 	<tbody>
 	{foreach from=$permission_info key='view' item='tmp'}
   		{foreach from=$tmp key='key' item='test'}

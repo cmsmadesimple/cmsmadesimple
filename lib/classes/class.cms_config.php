@@ -148,6 +148,8 @@ final class cms_config implements ArrayAccess
 	$this->_types['tmp_cache_location'] = self::TYPE_STRING;
 	$this->_types['tmp_templates_c_location'] = self::TYPE_STRING;
 	$this->_types['public_cache_location'] = self::TYPE_STRING;
+    $this->_types['assets_path'] = self::TYPE_STRING;
+    $this->_types['permissive_smarty'] = self::TYPE_BOOL;
 
     $config = array();
     if (defined('CONFIG_FILE_LOCATION') && is_file(CONFIG_FILE_LOCATION)) {
@@ -332,6 +334,7 @@ final class cms_config implements ArrayAccess
 	  case 'query_var':
 		  return 'page';
 
+      case 'permissive_smarty':
 	  case 'persist_db_conn':
 		  return false;
 
@@ -410,6 +413,9 @@ final class cms_config implements ArrayAccess
 
 	  case 'timezone':
 		  return '';
+
+      case 'assets_path':
+          return $this->OffsetGet('root_path').'/tmp';
 
 	  case 'db_port':
 		  return '';

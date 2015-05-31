@@ -33,35 +33,37 @@
  */
 final class CMSSmartySecurityPolicy extends Smarty_Security
 {
-  public $php_handling = Smarty::PHP_REMOVE;
+    public $php_handling = Smarty::PHP_REMOVE;
 
-  public $secure_dir = null;
-  public $php_modifiers = array();
-  //public $php_modifiers = array('escape','count','preg_replace','lang', 'ucwords','print_r','var_dump','trim','htmlspecialchars','explode','htmlspecialchars_decode','strpos','strrpos','startswith','endswith');
-  public $streams = null;
-  public $allow_constants = false;
-  //public $allow_super_globals = false;
-  public $allow_php_tag = false;
+    public $secure_dir = null;
+    public $php_modifiers = array();
+    //public $php_modifiers = array('escape','count','preg_replace','lang', 'ucwords','print_r','var_dump','trim','htmlspecialchars','explode','htmlspecialchars_decode','strpos','strrpos','startswith','endswith');
+    public $streams = null;
+    public $allow_constants = false;
+    //public $allow_super_globals = false;
+    public $allow_php_tag = false;
 
-  public function __construct($smarty)
-  {
-    parent::__construct($smarty);
-    $this->allow_php_tag = FALSE;
-    if(CmsApp::get_instance()->is_frontend_request() )
+    public function __construct($smarty)
     {
-      $this->php_functions = array('isset', 'implode','empty','count', 'sizeof','in_array', 'is_array','time', 'lang',
-         'nl2br','file_exists', 'is_string', 'is_object', 'is_file','print_r','var_dump','htmlspecialchars','htmlspecialchars_decode');
-      $this->static_classes = null;
+        parent::__construct($smarty);
+        $this->allow_php_tag = FALSE;
+        $gCms = CmsApp::get_instance();
+        if($gCms->is_frontend_request() ) {
+            $this->static_classes = array(); // allow all static classes
+            $this->php_functions = array(); // allow any php functions
+            $config = $gCms->GetConfig();
+            if( !$config['permissive_smarty'] ) {
+                $this->static_classes = null;
+                $this->php_functions = array('isset', 'implode','empty','count', 'sizeof','in_array', 'is_array','time', 'lang',
+                                             'nl2br','file_exists', 'is_string', 'is_object', 'is_file','print_r','var_dump','htmlspecialchars','htmlspecialchars_decode');
+            }
+        }
+        else {
+            $this->php_functions = array();
+            $this->static_classes = array();
+            $this->allow_constants = true;
+        }
     }
-    else
-    {
-      $this->php_functions = array();
-      $this->static_classes = array();
-      $this->allow_constants = true;
-    }
-    
-    
-  }
 } // end of class
 
 ?>

@@ -88,43 +88,43 @@ class Smarty_CMS extends SmartyBC
     }
 
     if(CmsApp::get_instance()->is_frontend_request()) {
-      $this->setTemplateDir(cms_join_path(CMS_ROOT_PATH,'tmp','templates'));
-      $this->setConfigDir(cms_join_path(CMS_ROOT_PATH,'tmp','templates'));
+        $config = cmsms()->GetConfig();
+        $this->addTemplateDir($config['assets_dir'].'/templates');
+        $this->addConfigDir($config['assets_dir'].'/configs');
 
-      // Check if we are at install page, don't register anything if so, cause nothing below is needed.
-      if(isset($CMS_INSTALL_PAGE)) return;
+        // Check if we are at install page, don't register anything if so, cause nothing below is needed.
+        if(isset($CMS_INSTALL_PAGE)) return;
 
-      if (is_sitedown()) {
-		$this->setCaching(false);
-		$this->force_compile = true;
-      }
+        if (is_sitedown()) {
+            $this->setCaching(false);
+            $this->force_compile = true;
+        }
 
-      // Load resources
-      $this->registerResource('tpl_top',new CmsTemplateResource('top'));
-      $this->registerResource('tpl_head',new CmsTemplateResource('head'));
-      $this->registerResource('tpl_body',new CmsTemplateResource('body'));
-      $this->registerResource('content',new CMSContentTemplateResource());
+        // Load resources
+        $this->registerResource('tpl_top',new CmsTemplateResource('top'));
+        $this->registerResource('tpl_head',new CmsTemplateResource('head'));
+        $this->registerResource('tpl_body',new CmsTemplateResource('body'));
+        $this->registerResource('content',new CMSContentTemplateResource());
 
-      // just for frontend actions.
-      $this->registerPlugin('compiler','content',array('CMS_Content_Block','smarty_compile_fecontentblock'),false);
-      $this->registerPlugin('function','content_image','CMS_Content_Block::smarty_fetch_imageblock',false);
-      $this->registerPlugin('function','content_module','CMS_Content_Block::smarty_fetch_moduleblock',false);
-      $this->registerPlugin('function','process_pagedata','CMS_Content_Block::smarty_fetch_pagedata',false);
+        // just for frontend actions.
+        $this->registerPlugin('compiler','content',array('CMS_Content_Block','smarty_compile_fecontentblock'),false);
+        $this->registerPlugin('function','content_image','CMS_Content_Block::smarty_fetch_imageblock',false);
+        $this->registerPlugin('function','content_module','CMS_Content_Block::smarty_fetch_moduleblock',false);
+        $this->registerPlugin('function','process_pagedata','CMS_Content_Block::smarty_fetch_pagedata',false);
 
-      // Autoload filters
-      $this->autoloadFilters();
+        // Autoload filters
+        $this->autoloadFilters();
 
-      // compile check can only be enabled, if using smarty cache... just for safety.
-      if( get_site_preference('use_smartycache',0) ) $this->setCompileCheck(get_site_preference('use_smartycompilecheck',1));
+        // compile check can only be enabled, if using smarty cache... just for safety.
+        if( get_site_preference('use_smartycache',0) ) $this->setCompileCheck(get_site_preference('use_smartycompilecheck',1));
     }
     else if(CmsApp::get_instance()->test_state(CmsApp::STATE_ADMIN_PAGE)) {
-        $config = CmsApp::get_instance()->GetConfig();
-
-        $admin_dir = cms_join_path(CMS_ROOT_PATH,$config['admin_dir']);
         $this->setCaching(false);
-        $this->addPluginsDir(cms_join_path($admin_dir,'plugins'));
-        $this->setTemplateDir(cms_join_path($admin_dir,'templates'));
-        $this->setConfigDir(cms_join_path($admin_dir,'configs'));;
+        $config = CmsApp::get_instance()->GetConfig();
+        $admin_dir = $config['admin_path'];
+        $this->addPluginsDir($admin_dir.'/plugins');
+        $this->setTemplateDir($admin_dir.'/templates');
+        $this->setConfigDir($admin_dir.'/configs');;
     }
 
 	// Add assets tpl dir to scope
