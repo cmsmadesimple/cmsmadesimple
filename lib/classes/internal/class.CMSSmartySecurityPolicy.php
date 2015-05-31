@@ -35,7 +35,7 @@ final class CMSSmartySecurityPolicy extends Smarty_Security
 {
     public $php_handling = Smarty::PHP_REMOVE;
 
-    public $secure_dir = null;
+    public $secure_dir = null; // this is the magic that stops stuff from happening outside of the specified directories.
     public $php_modifiers = array();
     //public $php_modifiers = array('escape','count','preg_replace','lang', 'ucwords','print_r','var_dump','trim','htmlspecialchars','explode','htmlspecialchars_decode','strpos','strrpos','startswith','endswith');
     public $streams = null;
@@ -54,8 +54,9 @@ final class CMSSmartySecurityPolicy extends Smarty_Security
             $config = $gCms->GetConfig();
             if( !$config['permissive_smarty'] ) {
                 $this->static_classes = null;
-                $this->php_functions = array('isset', 'implode','empty','count', 'sizeof','in_array', 'is_array','time', 'lang',
-                                             'nl2br','file_exists', 'is_string', 'is_object', 'is_file','print_r','var_dump','htmlspecialchars','htmlspecialchars_decode');
+                $this->php_functions = array('isset', 'implode','empty','count', 'sizeof','in_array', 'is_array','time','lang',
+                                             'nl2br','file_exists', 'is_string', 'is_object', 'is_file','is_dir','print_r','var_dump',
+                                             'htmlspecialchars','htmlspecialchars_decode','cms_html_entity_decode');
             }
         }
         else {
