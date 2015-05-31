@@ -18,7 +18,8 @@
 function smarty_cms_function_share_data($params, &$template)
 {
     $dest = trim(strtolower(get_parameter_value($params,'scope','parent')));
-    $vars = (isset($params['vars']))?$params['vars']:null;
+    $vars = (isset($params['data']))?$params['data']:null;
+    $vars = (isset($params['vars']))?$params['vars']:$vars;
     if( !$vars ) return; // nothing to do.
 
     if( is_string($vars) ) {
