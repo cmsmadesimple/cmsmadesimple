@@ -131,10 +131,7 @@ class Smarty_CMS extends SmartyBC
 	$this->addTemplateDir(cms_join_path(CMS_ROOT_PATH, 'lib', 'assets', 'templates'));
 
     // Enable security object
-    // Note: Buggy, disabled prior to release of CMSMS 1.11
-    // on tests
     $this->enableSecurity('CMSSmartySecurityPolicy');
-    // on tests end
   }
 
   /**
@@ -382,7 +379,9 @@ class Smarty_CMS extends SmartyBC
   public function errorConsole(Exception $e)
   {
     $this->force_compile = true;
-    $this->debugging = true;
+
+    # do not show smarty debug console popup to users not logged in
+    $this->debugging = check_login(true);;
 
     $this->assign('e_line', $e->getLine());
     $this->assign('e_file', $e->getFile());
