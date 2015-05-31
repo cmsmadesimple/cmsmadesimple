@@ -60,11 +60,12 @@ else {
     $template = $tpl->get_name();
 }
 
-$hm = cmsms()->GetHierarchyManager();
+$hm = $gCms->GetHierarchyManager();
 $cache_id = '|nav'.md5(serialize($params));
 $compile_id = '';
 
-if( !$smarty->isCached($this->GetTemplateResource($template),$cache_id,$compile_id) ) {
+$tpl = $smarty->CreateTemplate($this->GetTemplateResource($template),$cache_id,$compile_id);
+if( !$tpl->isCached() ) {
     foreach( $params as $key => $value ) {
         switch( $key ) {
         case 'loadprops':
@@ -209,7 +210,7 @@ if( !$smarty->isCached($this->GetTemplateResource($template),$cache_id,$compile_
         }
     }
     else if( $start_level > 0 ) {
-        $tmp = $hm->sureGetNodeById(cmsms()->get_content_id());
+        $tmp = $hm->sureGetNodeById($gCms->get_content_id());
         $arr = array();
         $arr2 = array();
         while( $tmp ) {
@@ -275,9 +276,10 @@ if( !$smarty->isCached($this->GetTemplateResource($template),$cache_id,$compile_
     }
 
     Nav_utils::clear_excludes();
-    $smarty->assign('nodes',$outtree);
+    $tpl->assign('nodes',$outtree);
 }
-echo $smarty->fetch($this->GetTemplateResource($template),$cache_id,$compile_id);
+
+$tpl->display();
 debug_buffer('End Navigator default action');
 #
 # EOF

@@ -51,6 +51,7 @@ class CMSInstallerPage7 extends CMSInstallerPage
       $this->errors[] = ilang('could_not_connect_db');
       return;
     }
+    if( !defined('CMS_DB_PREFIX') ) define('CMS_DB_PREFIX',trim($_POST['prefix']));
     cmsms()->_setDb($db,trim($_POST['prefix']));
 
     $newconfig = cmsms()->GetConfig();

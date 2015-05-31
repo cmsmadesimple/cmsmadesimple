@@ -16,14 +16,13 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-function smarty_cms_function_cms_stylesheet($params, &$template)
+function smarty_cms_function_cms_stylesheet($params, &$smarty)
 {
 	#---------------------------------------------
 	# Initials
 	#---------------------------------------------
 
-	$smarty = $template->smarty;
-    $gCms = CmsApp::get_instance();
+  $gCms = CmsApp::get_instance();
 	$config = $gCms->GetConfig();
 
 	global $CMS_LOGIN_PAGE;

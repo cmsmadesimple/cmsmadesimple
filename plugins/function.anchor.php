@@ -18,7 +18,6 @@
 
 function smarty_function_anchor($params, &$smarty)
 {
-    $gCms = cmsms();
     $content = cms_utils::get_current_content();
     if( !is_object($content) ) return;
 

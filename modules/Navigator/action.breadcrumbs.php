@@ -51,8 +51,8 @@ else {
 }
 
 $cache_id = '|nav'.md5(serialize($params));
-$compile_id = '';
-if( !$smarty->isCached($this->GetTemplateResource($template),$cache_id,$compile_id) ) {
+$tpl = $smarty->CreateTemplate($this->GetTemplateResource($template),$cache_id);
+if( !$tpl->isCached() ) {
     //
     // initialization
     //
@@ -102,10 +102,10 @@ if( !$smarty->isCached($this->GetTemplateResource($template),$cache_id,$compile_
         $pagestack[$dflt_content_id] = Nav_utils::fill_node($node,$deep,-1,$showall);
     }
 
-    $smarty->assign('starttext',$starttext);
-    $smarty->assign('nodelist',array_reverse($pagestack));
+    $tpl->assign('starttext',$starttext);
+    $tpl->assign('nodelist',array_reverse($pagestack));
 }
-echo $smarty->fetch($this->GetTemplateResource($template),$cache_id,$compile_id);
+$tpl->display();
 
 debug_buffer('End Navigator breadcrumbs action');
 

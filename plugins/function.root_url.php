@@ -16,9 +16,8 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-function smarty_function_root_url($params, &$template)
+function smarty_function_root_url($params, &$smarty)
 {
-	$smarty = $template->smarty;
     $str = CMS_ROOT_URL;
 
 	if( !isset($params['autossl']) || $params['autossl'] != 0 )	{

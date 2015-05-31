@@ -173,6 +173,20 @@ $lang['help_function_cms_pageoptions'] = <<<EOT
 <pre><code>&lt;select name="{\$actionid}pagenum"&gt;{cms_pageoptions numpages=50 curpage=14}&lt;/select&gt;</code></pre>
 EOT;
 
+$lang['help_function_share_data'] = <<<EOT
+<h3>What does this do?</h3>
+<p>This plugin is used to copy one, or more active smarty variables to the parent or global scope.</p>
+<h3>What parameters does it take?</h3>
+<ul>
+<li>scope - <strong>optional string</strong> - The target scope to copy variables to.  Possible values are &quot;parent&quot; <em>(the default)</em> or &quot;global&quot; to copy the data to the global smarty object for subsequent use throughout the page.</li>
+<li>vars - <strong>required mixed</strong> - Either an array of string variable names, or a comma separated list of string variable names.</li>
+</ul>
+<h3>Example:</h3>
+<pre><code>{share_data scope=global data='title,canonical'}</code></pre>
+<h3>Note:</h3>
+<p>This plugin will not accept array accessors or object members as variable names.  i.e: <code>]\$foo[1]</code> or <code>{\$foo->bar}</code> will not work.</p>
+EOT;
+
 $lang['help_function_cms_yesno'] = <<<EOT
 <h3>What does this do?</h3>
 <p>This is a simple plugin used in form generation to create a set of options for a &lt;select&gt; representing a yes/no choice.</p>

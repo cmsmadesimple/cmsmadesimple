@@ -37,16 +37,14 @@ final class CMS_Content_Block
     private static $_contentBlocks;
     private function __construct() {}
 
-    private static function content_return($result, &$params, &$template)
+    private static function content_return($result, &$params, &$smarty)
     {
-        $smarty = $template->smarty;
         if ( empty($params['assign']) ) {
             echo $result;
-            //return $result;
         }
         else {
             $smarty->assign(trim($params['assign']), $result);
-            return '';
+            return;
         }
     }
 
@@ -179,9 +177,8 @@ final class CMS_Content_Block
      * @internal
      * @ignore
      */
-    public static function smarty_internal_fetch_contentblock($params,$template)
+    public static function smarty_internal_fetch_contentblock($params,&$smarty)
     {
-        $smarty = $template->smarty;
         $gCms = CmsApp::get_instance();
 
         $contentobj = CmsApp::get_instance()->get_content_object();
@@ -287,9 +284,8 @@ final class CMS_Content_Block
         return self::content_return('', $params, $smarty);
     }
 
-    public static function smarty_fetch_pagedata($params,&$template)
+    public static function smarty_fetch_pagedata($params,&$smarty)
     {
-        $smarty = $template->smarty;
         $gCms = CmsApp::get_instance();
 
         $contentobj = CmsApp::get_instance()->get_content_object();
@@ -303,9 +299,8 @@ final class CMS_Content_Block
         return $result;
     }
 
-    public static function smarty_fetch_imageblock($params,&$template)
+    public static function smarty_fetch_imageblock($params,&$smarty)
     {
-        $smarty = $template->smarty;
         $gCms = CmsApp::get_instance();
         $config = $gCms->GetConfig();
 
@@ -372,9 +367,8 @@ final class CMS_Content_Block
         return $out;
     }
 
-    public static function smarty_fetch_moduleblock($params,&$template)
+    public static function smarty_fetch_moduleblock($params,&$smarty)
     {
-        $smarty = $template->smarty;
         $result = '';
         $key = '';
 

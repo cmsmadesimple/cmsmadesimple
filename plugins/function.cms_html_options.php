@@ -16,7 +16,7 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-function smarty_function_cms_html_options($params,&$template)
+function smarty_function_cms_html_options($params, &$smarty)
 {
   $options = null;
   if( !isset($params['options']) ) {
@@ -47,7 +47,6 @@ function smarty_function_cms_html_options($params,&$template)
   }
 
   if( isset($params['assign']) ) {
-    $smarty   = $template->smarty;
     $smarty->assign($params['assign'],$out);
     return;
   }

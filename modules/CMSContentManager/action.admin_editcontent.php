@@ -282,7 +282,6 @@ try {
     }
 }
 catch( Exception $e ) {
-    debug_display($e); die();
     $error = $e->GetMessage();
 }
 
