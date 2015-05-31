@@ -113,10 +113,10 @@ try {
 
   // get information for all dependencies, and make sure that they are all there.
   if( is_array($alldeps) && count($alldeps) ) {
-    $res = null;
-    if( $this->GetPreference('latestdepends') ) {
-      // get the latest version of dependency (but not necessarily of the module we're installing)
-      $res = modulerep_client::get_modulelatest(array_keys($alldeps));
+      $res = null;
+      if( $this->GetPreference('latestdepends',1) ) {
+          // get the latest version of dependency (but not necessarily of the module we're installing)
+          $res = modulerep_client::get_modulelatest(array_keys($alldeps));
     }
     else {
       // get the info for all dependencies

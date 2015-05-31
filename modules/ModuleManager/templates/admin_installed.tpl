@@ -101,6 +101,9 @@ $(document).ready(function(){
 	    {if $item.missing_deps}
               {capture assign='op'}<a class="modop mod_missingdeps important" style="color: red;" title="{$ModuleManager->Lang('title_missingdeps')}" href="{cms_action_url action='local_missingdeps' mod=$item.name}">{$ModuleManager->Lang('missingdeps')}</a>{/capture}{$ops[]=$op}
 	    {/if}
+  	    {if !$item.can_uninstall}
+              {capture assign='op'}<span title="{$ModuleManager->Lang('title_cantuninstall')}">{$ModuleManager->Lang('cantuninstall')}</span>{/capture}{$ops[]=$op}
+	    {/if}
           {/if}
           {if isset($item.e_status)}
             {capture assign='op'}{$tmp='status_'|cat:$item.e_status}<span {if $item.e_status == 'db_newer'}class="important"{/if} title="{$ModuleManager->Lang($tmp)}">{$ModuleManager->Lang($item.e_status)}</span>{/capture}{$ops[]=$op}
