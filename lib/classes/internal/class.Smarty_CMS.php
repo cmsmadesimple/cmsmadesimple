@@ -197,14 +197,13 @@ class Smarty_CMS extends SmartyBC
    * @return Smarty_Internal_Templatebase current Smarty_Internal_Templatebase (or Smarty or Smarty_Internal_Template) instance for chaining
    * @throws SmartyException when the plugin tag is invalid
    */
-//  public function registerPlugin($type, $tag, $callback, $cacheable = true, $cache_attr = null)
-//  {
-//    if (!isset($this->smarty->registered_plugins[$type][$tag])) {
-//      $this->smarty->registered_plugins[$type][$tag] = array($callback, (bool) $cacheable, (array) $cache_attr);
-//    }
-//
-//    return $this;
-//  }
+  public function registerPlugin($type, $tag, $callback, $cacheable = true, $cache_attr = null)
+  {
+      if (!isset($this->registered_plugins[$type][$tag])) {
+          return parent::registerPlugin($type,$tag,$callback,$cacheable,$cache_attr);
+      }
+      return $this;
+  }
 
   /**
    * defaultPluginHandler
