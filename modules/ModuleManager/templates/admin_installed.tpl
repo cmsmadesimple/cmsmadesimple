@@ -133,7 +133,7 @@ $(document).ready(function(){
             {capture assign='op'}<a class="modop mod_chmod" href="{cms_action_url action='local_chmod' mod=$item.name}" title="{$ModuleManager->Lang('title_chmod')}">{$ModuleManager->Lang('changeperms')}</a>{/capture}{$ops[]=$op}
           {/if}
         {else}
-	  {if !isset($item.dependants) & $item.can_uninstall}
+	  {if $item.can_uninstall}
             {if $item.name != 'ModuleManager' || $allow_modman_uninstall}
               {capture assign='op'}<a class="modop mod_uninstall" href="{cms_action_url action='local_uninstall' mod=$item.name}" title="{$ModuleManager->Lang('title_uninstall')}">{$ModuleManager->Lang('uninstall')}</a>{/capture}{$ops[]=$op}
 	    {/if}

@@ -108,9 +108,16 @@ class ModuleManagerModuleInfo extends CmsExtendedModuleInfo
         if( $key == 'can_uninstall' ) {
             // check if this module can be uninstalled
             if( !$this['installed'] ) return FALSE;
+
             // check for installed modules that are dependent upon this one
-            if( is_array($this['dependants']) && count($this['dependants']) ) return FALSE;
-            return $this->_check_dependencies();
+            $name = $this['name'];
+            foreach( self::$_minfo as $mname => $minfo ) {
+                if( is_array($minfo['dependants']) && count($minfo['dependants']) ) {
+                    if( in_array($name,$minfo['dependants']) ) return FALSE;
+                }
+
+            }
+            return TRUE;
         }
 
         if( $key == 'missing_deps' ) {
@@ -147,11 +154,13 @@ class ModuleManagerModuleInfo extends CmsExtendedModuleInfo
         $ops = ModuleOperations::get_instance();
         $allknownmodules = $ops->FindAllModules();
 
+        // first pass...
         $out = array();
         foreach( $allknownmodules as $module_name ) {
             $info = new ModuleManagerModuleInfo($module_name,TRUE,$can_check_forge);
             $out[$module_name] = $info;
         }
+
         self::$_minfo = $out;
         return self::$_minfo;
     }
