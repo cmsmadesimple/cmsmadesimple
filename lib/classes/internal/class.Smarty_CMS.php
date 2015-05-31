@@ -89,8 +89,8 @@ class Smarty_CMS extends SmartyBC
 
     if(CmsApp::get_instance()->is_frontend_request()) {
         $config = cmsms()->GetConfig();
-        $this->addTemplateDir($config['assets_dir'].'/templates');
-        $this->addConfigDir($config['assets_dir'].'/configs');
+        $this->addTemplateDir($config['assets_path'].'/templates');
+        $this->addConfigDir($config['assets_path'].'/configs');
 
         // Check if we are at install page, don't register anything if so, cause nothing below is needed.
         if(isset($CMS_INSTALL_PAGE)) return;
