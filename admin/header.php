@@ -59,10 +59,18 @@ else {
             if( CmsAdminUtils::site_needs_updating() ) {
                 $remote_ver = CmsAdminUtils::fetch_latest_cmsms_ver();
                 $themeObject->AddNotification(1,'Core',lang('new_version_available'));
-                audit('','Core','CMSMS version '.$remote_ver.' is available');
+                // only audit once per day
+                if( cms_siteprefs::get('last_versioncheck') < (time() - 3600 * 24) ) {
+                    cms_siteprefs::set('last_versioncheck',time());
+                    audit('','Core','CMSMS version '.$remote_ver.' is available');
+                }
             }
             else {
-                audit('','Core','Tested for newer CMSMS Version. None Available.');
+                // only audit once per day
+                if( cms_siteprefs::get('last_versioncheck') < (time() - 3600 * 24) ) {
+                    cms_siteprefs::set('last_versioncheck',time());
+                    audit('','Core','Tested for newer CMSMS Version. None Available.');
+                }
             }
 
         }

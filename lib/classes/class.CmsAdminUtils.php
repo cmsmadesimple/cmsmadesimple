@@ -102,6 +102,8 @@ final class CmsAdminUtils
     /**
      * Get the latest available CMSMS version.
      * This method does a remote request to the version check URL at most once per day.
+     *
+     * @return string
      */
     public static function fetch_latest_cmsms_ver()
     {
@@ -124,6 +126,11 @@ final class CmsAdminUtils
         return $remote_ver;
     }
 
+    /**
+     * Test if the current site is in need of upgrading (a new version of CMSMS is available)
+     *
+     * @return bool
+     */
     public static function site_needs_updating()
     {
         $remote_ver = self::fetch_latest_cmsms_ver();
