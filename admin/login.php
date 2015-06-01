@@ -102,6 +102,7 @@ else if (isset($_REQUEST['forgotpwform']) && isset($_REQUEST['forgottenusername'
     }
   }
   else {
+    unset($_POST['username'],$_POST['password'],$_REQUEST['username'],$_REQUEST['password']);
     Events::SendEvent('Core','LoginFailed',array('user'=>$_REQUEST['forgottenusername']));
     $error = lang('usernotfound');
   }
@@ -212,7 +213,7 @@ if (isset($_POST["username"]) && isset($_POST["password"])) {
     audit($oneuser->id, "Admin Username: ".$oneuser->username, 'Logged In');
 
     // Now call the event
-    unset($_POST['username'],$_POST['password']);
+    unset($_POST['username'],$_POST['password'],$_REQUEST['username'],$_REQUEST['password']);
     Events::SendEvent('Core', 'LoginPost', array('user' => &$oneuser));
 
     // redirect to upgrade if db_schema it's old
@@ -289,6 +290,7 @@ if (isset($_POST["username"]) && isset($_POST["password"])) {
     $error .= lang('usernameincorrect');
     debug_buffer("Login failed.  Error is: " . $error);
 
+    unset($_POST['username'],$_POST['password'],$_REQUEST['username'],$_REQUEST['password']);
     Events::SendEvent('Core','LoginFailed',array('user'=>$_POST['username']));;
     // put mention into the admin log
     $ip_login_failed = cms_utils::get_real_ip();
