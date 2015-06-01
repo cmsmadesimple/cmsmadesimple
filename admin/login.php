@@ -212,6 +212,7 @@ if (isset($_POST["username"]) && isset($_POST["password"])) {
     audit($oneuser->id, "Admin Username: ".$oneuser->username, 'Logged In');
 
     // Now call the event
+    unset($_POST['username'],$_POST['password']);
     Events::SendEvent('Core', 'LoginPost', array('user' => &$oneuser));
 
     // redirect to upgrade if db_schema it's old
