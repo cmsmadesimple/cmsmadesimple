@@ -519,14 +519,6 @@ $(document).ready(function(){
 					<p class="pageinput"><input type="submit" name="testumask" value="{lang('test')}" class="pagebutton"  /></p>
 				</div>
 				<div class="pageoverflow">
-					<p class="pagetext"><label for="safemodewarn">{lang('disablesafemodewarning')}:</label></p>
-					<p class="pageinput">
-						<select id="safemodewarn" name="disablesafemodewarning">
-							{cms_yesno selected=$disablesafemodewarning}
-						</select>&nbsp;{cms_help key2='settings_disablesafemodewarn' title=lang('disablesafemodewarning')}
-					</p>
-				</div>
-				<div class="pageoverflow">
 					<p class="pagetext"><label for="notifications">{lang('admin_enablenotifications')}:</label></p>
 					<p class="pageinput">
 						<select id="notifications" name="enablenotifications">

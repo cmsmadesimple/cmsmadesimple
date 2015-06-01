@@ -98,5 +98,42 @@ final class CmsAdminUtils
         $out_p = CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
         return preg_replace($in_p,$out_p,$in_url);
     }
+
+    /**
+     * Get the latest available CMSMS version.
+     * This method does a remote request to the version check URL at most once per day.
+     */
+    public static function fetch_latest_cmsms_ver()
+    {
+        $last_fetch = (int) cms_siteprefs::get('last_remotever_check');
+        $remote_ver = cms_siteprefs::get('last_remotever');
+        if( $last_fetch < (time() - 24 * 3600) ) {
+            $req = new cms_http_request();
+            $req->setTimeout(10);
+            $req->execute(CMS_DEFAULT_VERSIONCHECK_URL);
+            if( $req->getStatus() == 200 ) {
+                $remote_ver = trim($req->getResult());
+                if( strpos($remote_ver,':') !== FALSE ) {
+                    list($tmp,$remote_ver) = explode(':',$remote_ver,2);
+                    $remote_ver = trim($remote_ver);
+                }
+                cms_siteprefs::set('last_remotever',$remote_ver);
+                cms_siteprefs::set('last_remotever_check',time());
+            }
+        }
+        return $remote_ver;
+    }
+
+    public static function site_needs_updating()
+    {
+        $remote_ver = self::fetch_latest_cmsms_ver();
+        if( version_compare(CMS_VERSION,$remote_ver) < 0 ) {
+            return TRUE;
+        }
+        else {
+            return FALSE;
+        }
+    }
+
 }
 ?>
