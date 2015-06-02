@@ -296,9 +296,29 @@ $lang['help_function_page_attr'] = <<<EOT
 <p>Insert the tag into the template like: <code>{page_attr key="extra1"}</code>.</p>
 <h3>What parameters does it take?</h3>
 <ul>
-  <li><strong>key [required]</strong> The key to return the attribute of.</li>
+  <li><em>(optional)</em> page (int|string) - An optional page id or alias to fetch the content from.  If not specified, the current page is assumed.</li>
+  <li><strong>key [required]</strong> The key to return the attribute of.
+    <p>The key can either be a block name, or from a set of standard properties associated with a content page.  The accepted standard properties are:</p>
+    <ul>
+      <li>_dflt_ - (string) The value for the default content block (also known as content_en).</li>
+      <li>title</li>
+      <li>description</li>
+      <li>created_date - (string date) Date of the creation of the content object.</li>
+      <li>modified_date - (string date) Date of the last modification of the content object.</li>
+      <li>last_modified_by - (int) UID of the user who last modified the page.</li>
+      <li>owner - (int) UID of the page owner.</li>
+      <li>image - (string) The path to the image assocated with the content page.</li>
+      <li>thumbnail - (string) The path to the thumbnail assocated with the content page.</li>
+      <li>extra1 - (string) The value of the extra1 attribute.</li>
+      <li>extra2 - (string) The value of the extra2 attribute.</li>
+      <li>extra3 - (string) The value of the extra3 attribute.</li>
+    </ul>
+  </li>
   <li><em>(optional)</em> assign (string) - Assign the results to a smarty variable with that name.</li>
 </ul>
+<h3>Returns:</h3>
+<p><strong>string</string> - The actual value of the content block from the database for the specified block and page.</p>
+<p><strong>Note:</strong> - The output of this plugin is not passed through smarty or cleaned for display.   If displaying the data you must convert string data to entities, and/or pass it through smarty.</p>
 EOT;
 
 $lang['help_function_page_image'] = <<<EOT

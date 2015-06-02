@@ -18,22 +18,74 @@
 
 function smarty_function_page_attr($params, &$smarty)
 {
-	$result = '';
-	$key = '';
+	$key = trim(get_parameter_value($params,'key'));
+    $page = trim(get_parameter_value($params,'page'));
+    $assign = trim(get_parameter_value($params,'assign'));
+    $contentobj = null;
 
-	if( isset($params['key']) )	{
-		$key = trim($params['key']);
-		$contentops = ContentOperations::get_instance();
-		$contentobj = $contentops->getContentObject();
-		if( is_object($contentobj) ) {
-			$result = $contentobj->GetPropertyValue($key);
-			if( $result == -1 ) $result = '';
-		}
-		if( isset($params['assign']) ) {
-			$smarty->assign($params['assign'],$result);
-			return;
-		}
-	}
+    if( !$page ) {
+        // gotta find it by id or alias
+        if( is_numeric($page) && (int) $page > 0 ) {
+            // it's an id
+            $hm = CmsApp::get_instance()->GetHierarchyManager();
+            $node = $hm->find_by_tag('id',$page);
+            if( $node ) $contentobj = $node->getContent(TRUE);
+        }
+        else {
+            // this is quicker if using an alias
+            $content_ops = ContentOperations::get_instance();
+            $contentobj = $content_ops->LoadContentFromAlias($page,TRUE);
+        }
+    }
+    else {
+        $contentobj = cms_utils::get_current_content();
+    }
+
+    $result = null;
+    if( $contentobj && $key ) {
+        switch( $key ) {
+        case '_dflt_':
+            $key = 'content_dn';
+            $result = $contentobj->GetPropertyValue($key);
+            break;
+
+        case 'title':
+        case 'name':
+            $result = $contentobj->Name();
+            break;
+
+        case 'titleattribute':
+        case 'description':
+            $result = $content_obj->TitleAttribute();
+            break;
+
+        case 'created_date':
+            $result = $content_obj->GetCreationDate();
+            if( $result < 0 ) $result = null;
+            break;
+
+        case 'modified_date':
+            $result = $content_obj->GetModifiedDate();
+            if( $result < 0 ) $result = null;
+            break;
+
+        case 'last_modified_by':
+            $result = (int) $content_obj->GetLastModifiedBy();
+            break;
+
+        case 'owner':
+            $result = (int) $content_obj->Owner();
+            break;
+
+        default:
+            $result = $contentobj->GetPropertyValue($key);
+            break;
+        }
+    }
+    if( $assign ) {
+        $smarty->assign($assign,$result);
+        return;
+    }
 	return $result;
 }
 
@@ -44,6 +96,7 @@ function smarty_cms_about_function_page_attr() {
 	<p>Change History:</p>
 	<ul>
 		<li>None</li>
+       <li>2015-06-02 - Added page parameter (calguy1000)</li>
 	</ul>
 <?php
 }
