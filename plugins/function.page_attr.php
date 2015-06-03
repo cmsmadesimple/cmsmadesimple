@@ -18,12 +18,12 @@
 
 function smarty_function_page_attr($params, &$smarty)
 {
-	$key = trim(get_parameter_value($params,'key'));
+    $key = trim(get_parameter_value($params,'key'));
     $page = trim(get_parameter_value($params,'page'));
     $assign = trim(get_parameter_value($params,'assign'));
     $contentobj = null;
 
-    if( !$page ) {
+    if( $page ) {
         // gotta find it by id or alias
         if( is_numeric($page) && (int) $page > 0 ) {
             // it's an id
@@ -45,7 +45,7 @@ function smarty_function_page_attr($params, &$smarty)
     if( $contentobj && $key ) {
         switch( $key ) {
         case '_dflt_':
-            $key = 'content_dn';
+            $key = 'content_en';
             $result = $contentobj->GetPropertyValue($key);
             break;
 
@@ -56,25 +56,25 @@ function smarty_function_page_attr($params, &$smarty)
 
         case 'titleattribute':
         case 'description':
-            $result = $content_obj->TitleAttribute();
+            $result = $contentobj->TitleAttribute();
             break;
 
         case 'created_date':
-            $result = $content_obj->GetCreationDate();
+            $result = $contentobj->GetCreationDate();
             if( $result < 0 ) $result = null;
             break;
 
         case 'modified_date':
-            $result = $content_obj->GetModifiedDate();
+            $result = $contentobj->GetModifiedDate();
             if( $result < 0 ) $result = null;
             break;
 
         case 'last_modified_by':
-            $result = (int) $content_obj->GetLastModifiedBy();
+            $result = (int) $contentobj->LastModifiedBy();
             break;
 
         case 'owner':
-            $result = (int) $content_obj->Owner();
+            $result = (int) $contentobj->Owner();
             break;
 
         default:
