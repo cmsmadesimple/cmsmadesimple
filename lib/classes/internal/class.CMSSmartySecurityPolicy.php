@@ -54,8 +54,12 @@ final class CMSSmartySecurityPolicy extends Smarty_Security
             $config = $gCms->GetConfig();
             if( !$config['permissive_smarty'] ) {
                 $this->static_classes = null;
-                $this->php_functions = array('isset', 'implode','empty','count', 'sizeof','in_array', 'is_array','time','lang',
-                                             'nl2br','file_exists', 'is_string', 'is_object', 'is_file','is_dir','print_r','var_dump',
+                // this should allow most stuff that does modification to data or formatting.
+                // i.e: string searches, array searches, string comparison, sorting, etc.
+                $this->php_functions = array('isset', 'implode','explode','empty','count', 'sizeof','in_array', 'is_array','time','lang',
+                                             'is_string','strpos','strtolower','strtoupper','strcmp','strcasecmp','strlen','array_search','sort','asort',
+                                             'nl2br','file_exists', 'is_object', 'is_file','is_dir','print_r','var_dump',
+                                             'debug_display','debug_to_log',
                                              'htmlspecialchars','htmlspecialchars_decode','cms_html_entity_decode');
             }
         }
