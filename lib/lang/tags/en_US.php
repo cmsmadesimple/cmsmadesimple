@@ -317,7 +317,7 @@ $lang['help_function_page_attr'] = <<<EOT
   <li><em>(optional)</em> assign (string) - Assign the results to a smarty variable with that name.</li>
 </ul>
 <h3>Returns:</h3>
-<p><strong>string</string> - The actual value of the content block from the database for the specified block and page.</p>
+<p><strong>string</strong> - The actual value of the content block from the database for the specified block and page.</p>
 <p><strong>Note:</strong> - The output of this plugin is not passed through smarty or cleaned for display.   If displaying the data you must convert string data to entities, and/or pass it through smarty.</p>
 EOT;
 
