@@ -63,7 +63,6 @@ $(document).ready(function(){
         },'json');
     });
 {/if}
-
     // here we want to disable the dirtyform stuff when these fields are changed
     $('#id_disablewysiwyg').change(function () {
         $('#Edit_Content').dirtyForm('disable');
@@ -125,7 +124,7 @@ $(document).ready(function(){
     });
 
     {if isset($designchanged_ajax_url)}
-    $('#design_id').change(function(){
+    $('#design_id').change(function(e,edata){
       var v = $(this).val();
       var data = { '{$actionid}design_id': v };
       $.get('{$designchanged_ajax_url}',data,function(data,text) {
@@ -145,11 +144,14 @@ $(document).ready(function(){
 	  else {
   	    $('#template_id').val(first);
 	  }
+	  if( typeof edata == 'undefined' || typeof edata.skip_fallthru == 'undefined' ) {
+  	    $('#template_id').trigger('change');
+	  }
         }
       }, 'json' );
     });
 
-    $('#design_id').trigger('change');
+    $('#design_id').trigger('change', [{ skip_fallthru: 1 }]);
     $('#Edit_Content').dirtyForm('option','dirty',false);
     {/if}
 });

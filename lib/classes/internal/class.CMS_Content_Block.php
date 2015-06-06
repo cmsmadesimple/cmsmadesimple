@@ -320,45 +320,50 @@ final class CMS_Content_Block
             $smarty->caching = $oldvalue;
         }
         $img = $result;
-        if( $img == -1 || empty($img) ) return;
 
-        // create the absolute url.
-        if( startswith($img,$basename) ) {
-            // old style url.
-            if( !startswith($img,'http') ) $img = str_replace('//','/',$img);
-            $img = substr($img,strlen($basename.'/'));
-            $img = $config['uploads_url'] . '/'.$img;
-        }
-        else {
-            $img = $config['uploads_url'] . '/'.$adddir.'/'.$img;
-        }
+        $out = null;
+        if( startswith($realpath($dir),realpath($basename)) ) {
+            if( $img != -1 && !empty($img) ) {
 
-        $alt = '';
-        $width = '';
-        $height = '';
-        $urlonly = false;
-        $xid = '';
-        $class = '';
-        if( isset($params['class']) ) $class = $params['class'];
-        if( isset($params['id']) ) $xid = $params['id'];
-        if( isset($params['alt']) ) $alt = $params['alt'];
-        if( isset($params['width']) ) $width = $params['width'];
-        if( isset($params['height']) ) $height = $params['height'];
-        if( isset($params['urlonly']) ) $urlonly = true;
-        if( !isset($params['alt']) ) $alt = $img;
+                // create the absolute url.
+                if( startswith($img,$basename) ) {
+                    // old style url.
+                    if( !startswith($img,'http') ) $img = str_replace('//','/',$img);
+                    $img = substr($img,strlen($basename.'/'));
+                    $img = $config['uploads_url'] . '/'.$img;
+                }
+                else {
+                    $img = $config['uploads_url'] . '/'.$adddir.'/'.$img;
+                }
 
-        $out = '';
-        if( $urlonly ) {
-            $out = $img;
-        }
-        else {
-            $out = '<img src="'.$img.'" ';
-            if( !empty($class) ) $out .= 'class="'.$class.'" ';
-            if( !empty($xid) ) $out .= 'id="'.$xid.'" ';
-            if( !empty($width) ) $out .= 'width="'.$width.'" ';
-            if( !empty($height) ) $out .= 'height="'.$height.'" ';
-            if( !empty($alt) ) $out .= 'alt="'.$alt.'" ';
-            $out .= '/>';
+                $alt = '';
+                $width = '';
+                $height = '';
+                $urlonly = false;
+                $xid = '';
+                $class = '';
+                if( isset($params['class']) ) $class = $params['class'];
+                if( isset($params['id']) ) $xid = $params['id'];
+                if( isset($params['alt']) ) $alt = $params['alt'];
+                if( isset($params['width']) ) $width = $params['width'];
+                if( isset($params['height']) ) $height = $params['height'];
+                if( isset($params['urlonly']) ) $urlonly = true;
+                if( !isset($params['alt']) ) $alt = $img;
+
+                $out = '';
+                if( $urlonly ) {
+                    $out = $img;
+                }
+                else {
+                    $out = '<img src="'.$img.'" ';
+                    if( !empty($class) ) $out .= 'class="'.$class.'" ';
+                    if( !empty($xid) ) $out .= 'id="'.$xid.'" ';
+                    if( !empty($width) ) $out .= 'width="'.$width.'" ';
+                    if( !empty($height) ) $out .= 'height="'.$height.'" ';
+                    if( !empty($alt) ) $out .= 'alt="'.$alt.'" ';
+                    $out .= '/>';
+                }
+            }
         }
         if( isset($params['assign']) ){
             $smarty->assign(trim($params['assign']),$out);

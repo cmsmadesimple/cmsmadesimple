@@ -466,6 +466,15 @@ class Content extends ContentBase
 		$adddir = get_site_preference('contentimage_path');
 		if( $blockInfo['dir'] != '' ) $adddir = $blockInfo['dir'];
 		$dir = cms_join_path($config['uploads_path'],$adddir);
+        $rp1 = realpath($config['uploads_path']);
+        $rp2 = realpath($dir);
+
+        $dropdown = null;
+        if( !startswith($rp2,$rp1) ) {
+            $err = lang('err_invalidcontentimgpath');
+            return '<div class="red">'.$err.'</div>';
+        }
+
 		$optprefix = '';
 		$inputname = $blockInfo['id'];
 		if( isset($blockInfo['inputname']) ) $inputname = $blockInfo['inputname'];
