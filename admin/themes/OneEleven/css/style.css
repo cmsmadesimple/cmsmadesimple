@@ -2183,8 +2183,8 @@ a.toggle-dropzone:focus {
 }
 
 #oe_mainarea .options-menu li.parent:hover {
-	background: #fafafa;
-	cursor: pointer;
+    background: #fafafa;
+    cursor: pointer;
 }
 
 #oe_mainarea .options-menu li:hover ul {
@@ -2192,6 +2192,7 @@ a.toggle-dropzone:focus {
 	top: 32px;
 	width: 240px;
 	background: #fafafa;
+        border: 1px solid #d0d0d0;
 }
 
 #oe_mainarea .options-menu li li {
