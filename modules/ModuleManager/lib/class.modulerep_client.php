@@ -1,11 +1,11 @@
 <?php
 #BEGIN_LICENSE
 #-------------------------------------------------------------------------
-# Module: ModuleManager (c) 2011 by Robert Campbell 
+# Module: ModuleManager (c) 2011 by Robert Campbell
 #         (calguy1000@cmsmadesimple.org)
 #  An addon module for CMS Made Simple to allow browsing remotely stored
 #  modules, viewing information about them, and downloading or upgrading
-# 
+#
 #-------------------------------------------------------------------------
 # CMS - CMS Made Simple is (c) 2005 by Ted Kulp (wishy@cmsmadesimple.org)
 # Visit our homepage at: http://www.cmsmadesimple.org
@@ -20,7 +20,7 @@
 # However, as a special exception to the GPL, this software is distributed
 # as an addon module to CMS Made Simple.  You may not use this software
 # in any Non GPL version of CMS Made simple, or in any version of CMS
-# Made simple that does not indicate clearly and obviously in its admin 
+# Made simple that does not indicate clearly and obviously in its admin
 # section that the site was built with CMS Made simple.
 #
 # This program is distributed in the hope that it will be useful,
@@ -67,7 +67,7 @@ final class modulerep_client
   {
     $mod = cms_utils::get_module('ModuleManager');
     if( !is_array($input) || count($input) == 0 ) throw new CmsInvalidDataException($mod->Lang('error_missingparam'));
-    
+
     $out = array();
     foreach( $input as $key => $data ) {
       if( is_array($data) && isset($data['name']) && isset($data['version']) && $data['name'] && $data['version'] ) {
@@ -86,7 +86,7 @@ final class modulerep_client
     if( !$url )	return array(false,$mod->Lang('error_norepositoryurl'));
     $url .= '/multimoduleinfo';
     $data = array('data'=>json_encode($out));
-    
+
     $req = new modmgr_cached_request();
     $req->execute($url,$data);
     $status = $req->getStatus();
@@ -143,6 +143,7 @@ final class modulerep_client
     $req->execute($url,$parms);
     $status = $req->getStatus();
     $result = $req->getResult();
+    if( $status == 400 ) throw new \RuntimeException("Could not find information in the repository for ".$module_name);
     if( $status != 200 || $result == '' ) throw new CmsCommunicationException($mod->Lang('error_request_problem'));
 
     $data = json_decode($result,true);
@@ -277,7 +278,7 @@ final class modulerep_client
    * returns the latest info about all specified modules
    * on success returns associative array of info about modules
    * on error throws an exception.
-   * @return array 
+   * @return array
    */
   public static function get_modulelatest($modules)
   {
@@ -299,7 +300,7 @@ final class modulerep_client
     if( $status != 200 ) throw new CmsCommunicationException($mod->Lang('error_request_problem'));
 
     $data = json_decode($result,true);
-    if( !$data || !is_array($data) ) throw new CmsInvalidDataException($mod->Lang('error_nomatchingmodules'));
+    //if( !$data || !is_array($data) ) throw new CmsInvalidDataException($mod->Lang('error_nomatchingmodules'));
 
     return $data;
   }
@@ -308,7 +309,7 @@ final class modulerep_client
    * returns the latest info about installed modules.
    * on success returns associative array of info about modules
    * on error throw exception.
-   * @return array 
+   * @return array
    */
   public static function get_allmoduleversions()
   {
@@ -321,7 +322,7 @@ final class modulerep_client
 
   /**
    * Return info about installed modules that have newer versions available.
-   * return mixed (FALSE on error, NULL or associative array on success 
+   * return mixed (FALSE on error, NULL or associative array on success
    */
   public static function get_newmoduleversions()
   {
@@ -352,7 +353,7 @@ final class modulerep_client
   }
 } // end of class
 
-# 
+#
 # EOF
 #
 ?>
