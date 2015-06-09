@@ -1092,8 +1092,9 @@ class CmsLayoutTemplate
 		if( !$prototype ) throw new CmsInvalidDataException('Prototype name cannot be empty');
 		$db = CmsApp::get_instance()->GetDb();
 		$query = 'SELECT id FROM '.CMS_DB_PREFIX.self::TABLENAME.' WHERE name = ?';
-		for( $i = 1; $i < 25; $i++ ) {
+		for( $i = 0; $i < 25; $i++ ) {
 			$name = $prefix.$prototype;
+            if( $i == 0 ) $name = $prototype;
 			if( $i > 1 ) $name = $prefix.$prototype.' '.$i;
 			$tmp = $db->GetOne($query,array($name));
 			if( !$tmp ) return $name;
