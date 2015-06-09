@@ -76,7 +76,8 @@ class Smarty_CMS extends SmartyBC
     $this->registerDefaultPluginHandler(array(&$this, 'defaultPluginHandler'));
 
     // Load User Defined Tags
-    if( !CmsApp::get_instance()->test_state(CmsApp::STATE_INSTALL) ) {
+    $gCms = CmsApp::get_instance();
+    if( !$gCms->test_state(CmsApp::STATE_INSTALL) ) {
         $utops = UserTagOperations::get_instance();
         $usertags = $utops->ListUserTags();
         $caching = false;
@@ -87,8 +88,8 @@ class Smarty_CMS extends SmartyBC
         }
     }
 
-    if(CmsApp::get_instance()->is_frontend_request()) {
-        $config = cmsms()->GetConfig();
+    if($gCms->is_frontend_request()) {
+        $config = cms_config::get_instance();
         $this->addTemplateDir($config['assets_path'].'/templates');
         $this->addConfigDir($config['assets_path'].'/configs');
 
@@ -118,7 +119,7 @@ class Smarty_CMS extends SmartyBC
         // compile check can only be enabled, if using smarty cache... just for safety.
         if( get_site_preference('use_smartycache',0) ) $this->setCompileCheck(get_site_preference('use_smartycompilecheck',1));
     }
-    else if(CmsApp::get_instance()->test_state(CmsApp::STATE_ADMIN_PAGE)) {
+    else if($gCms->test_state(CmsApp::STATE_ADMIN_PAGE)) {
         $this->setCaching(false);
         $config = CmsApp::get_instance()->GetConfig();
         $admin_dir = $config['admin_path'];
@@ -189,7 +190,8 @@ class Smarty_CMS extends SmartyBC
     public function registerClass($a,$b)
     {
         if( $this->security_policy ) {
-            $this->security_policy->static_classes[] = $a;
+            $config = cms_config::get_instance();
+            if( !$config['permissive_smarty'] ) $this->security_policy->static_classes[] = $a;
         }
         parent::registerClass($a,$b);
     }
