@@ -290,7 +290,7 @@ if (isset($_POST["username"]) && isset($_POST["password"])) {
     $error .= lang('usernameincorrect');
     debug_buffer("Login failed.  Error is: " . $error);
 
-    unset($_POST['username'],$_POST['password'],$_REQUEST['username'],$_REQUEST['password']);
+    unset($_POST['password'],$_REQUEST['password']);
     Events::SendEvent('Core','LoginFailed',array('user'=>$_POST['username']));;
     // put mention into the admin log
     $ip_login_failed = cms_utils::get_real_ip();
