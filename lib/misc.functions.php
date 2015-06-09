@@ -1149,50 +1149,52 @@ function cms_get_jquery($exclude = '',$ssl = null,$cdn = false,$append = '',$cus
   $scripts['migrate'] = array('local'=>$basePath.'/lib/jquery/js/jquery-migrate-1.2.1.min.js');
 
   if( CmsApp::get_instance()->test_state(CmsApp::STATE_ADMIN_PAGE) ) {
-    global $CMS_LOGIN_PAGE;
-    if( isset($_SESSION[CMS_USER_KEY]) && !isset($CMS_LOGIN_PAGE) ) {
-      $url = $config['admin_url'];
-      $scripts['cms_js_setup'] = array('local'=>$url.'/cms_js_setup.php?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY]);
-    }
-    $scripts['cms_admin'] = array('local'=>$basePath.'/lib/jquery/js/jquery.cms_admin.js');
-    $scripts['cms_dirtyform'] = array('local'=>$basePath.'/lib/jquery/js/jquery.cmsms_dirtyform.js');
-    $scripts['cms_lock'] = array('local'=>$basePath.'/lib/jquery/js/jquery.cmsms_lock.js');
-    $scripts['cms_hiersel'] = array('local'=>$basePath.'/lib/jquery/js/jquery.cmsms_hierselector.js');
-	$scripts['ui_touch_punch'] = array('local'=>$basePath.'/lib/jquery/js/jquery.ui.touch-punch.min.js');
+      global $CMS_LOGIN_PAGE;
+      if( isset($_SESSION[CMS_USER_KEY]) && !isset($CMS_LOGIN_PAGE) ) {
+          $url = $config['admin_url'];
+          $scripts['cms_js_setup'] = array('local'=>$url.'/cms_js_setup.php?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY]);
+      }
+      $scripts['cms_admin'] = array('local'=>$basePath.'/lib/jquery/js/jquery.cms_admin.js');
+      $scripts['cms_dirtyform'] = array('local'=>$basePath.'/lib/jquery/js/jquery.cmsms_dirtyform.js');
+      $scripts['cms_lock'] = array('local'=>$basePath.'/lib/jquery/js/jquery.cmsms_lock.js');
+      $scripts['cms_hiersel'] = array('local'=>$basePath.'/lib/jquery/js/jquery.cmsms_hierselector.js');
+      $scripts['ui_touch_punch'] = array('local'=>$basePath.'/lib/jquery/js/jquery.ui.touch-punch.min.js');
   }
 
   // Check if we need to exclude some script
   if(!empty($exclude)) {
-    $exclude_list = explode(",", trim(str_replace(' ','',$exclude)));
-    foreach($exclude_list as $one) {
-      // find a match
-      $found = null;
-      foreach( $scripts as $key => $rec ) {
-	if( strtolower($one) == strtolower($key) ) {
-	  $found = $key;
-	  break;
-	}
-	if( isset($rec['aliases']) && is_array($rec['aliases']) ) {
-	  foreach( $rec['aliases'] as $alias ) {
-	    if( strtolower($one) == strtolower($alias) ) {
-	      $found = $key;
-	      break;
-	    }
-	  }
-	  if( $found ) break;
-	}
-      }
+      $exclude_list = explode(",", trim(str_replace(' ','',$exclude)));
+      foreach($exclude_list as $one) {
+          $one = trim(strtolower($one));
 
-      if( $found ) unset($scripts[$found]);
-    }
+          // find a match
+          $found = null;
+          foreach( $scripts as $key => $rec ) {
+              if( strtolower($one) == strtolower($key) ) {
+                  $found = $key;
+                  break;
+              }
+              if( isset($rec['aliases']) && is_array($rec['aliases']) ) {
+                  foreach( $rec['aliases'] as $alias ) {
+                      if( strtolower($one) == strtolower($alias) ) {
+                          $found = $key;
+                          break;
+                      }
+                  }
+                  if( $found ) break;
+              }
+          }
+
+          if( $found ) unset($scripts[$found]);
+      }
   }
 
   // let them add scripts to the end ie: a jQuery plugin
   if(!empty($append)) {
-    $append_list = explode(",", trim(str_replace(' ','',$append)));
-    foreach($append_list as $key => $item) {
-      $scripts['user_'+$key] = array('local'=>$item);
-    }
+      $append_list = explode(",", trim(str_replace(' ','',$append)));
+      foreach($append_list as $key => $item) {
+          $scripts['user_'+$key] = array('local'=>$item);
+      }
   }
 
   // Output
@@ -1200,14 +1202,14 @@ function cms_get_jquery($exclude = '',$ssl = null,$cdn = false,$append = '',$cus
   $fmt_js = '<script type="text/javascript" src="%s"></script>';
   $fmt_css = '<link rel="stylesheet" type="text/css" href="%s"/>';
   foreach($scripts as $script) {
-    $url_js = $script['local'];
-    if( $cdn && isset($script['cdn']) ) $url_js = $script['cdn'];
-    $output .= sprintf($fmt_js,$url_js)."\n";
-    if( isset($script['css']) && $script['css'] != '' ) {
-      $url_css = $script['css'];
-      if( $cdn && isset($script['css_cdn']) ) $url_css = $script['css_cdn'];
-      if( $include_css ) $output .= sprintf($fmt_css,$url_css)."\n";
-    }
+      $url_js = $script['local'];
+      if( $cdn && isset($script['cdn']) ) $url_js = $script['cdn'];
+      $output .= sprintf($fmt_js,$url_js)."\n";
+      if( isset($script['css']) && $script['css'] != '' ) {
+          $url_css = $script['css'];
+          if( $cdn && isset($script['css_cdn']) ) $url_css = $script['css_cdn'];
+          if( $include_css ) $output .= sprintf($fmt_css,$url_css)."\n";
+      }
   }
   return $output;
 }

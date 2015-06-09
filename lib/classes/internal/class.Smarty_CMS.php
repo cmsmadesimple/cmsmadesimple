@@ -186,6 +186,14 @@ class Smarty_CMS extends SmartyBC
       $this->autoload_filters = array('pre'=>$pre,'post'=>$post,'output'=>$output);
   }
 
+    public function registerClass($a,$b)
+    {
+        if( $this->security_policy ) {
+            $this->security_policy->static_classes[] = $a;
+        }
+        parent::registerClass($a,$b);
+    }
+
   /**
    * Registers plugin to be used in templates
    *

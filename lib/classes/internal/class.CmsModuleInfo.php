@@ -83,8 +83,12 @@ class CmsModuleInfo implements ArrayAccess
 
     $fn = cms_join_path($dir,'changelog.inc');
     if( file_exists($fn) ) $this['changelog'] = file_get_contents($fn);
+    $fn = cms_join_path($dir,'doc/changelog.inc');
+    if( file_exists($fn) ) $this['changelog'] = file_get_contents($fn);
 
     $fn = cms_join_path($dir,'help.inc');
+    if( file_exists($fn) ) $this['help'] = file_get_contents($fn);
+    $fn = cms_join_path($dir,'doc/help.inc');
     if( file_exists($fn) ) $this['help'] = file_get_contents($fn);
 
     $this['has_meta'] = TRUE;
