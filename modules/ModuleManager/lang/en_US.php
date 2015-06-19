@@ -42,6 +42,7 @@ $lang['dependstxt'] = 'Dependencies';
 $lang['depend_activate'] = 'Module %s will be activated.';
 $lang['depend_install'] = 'Module %s (version %s) will be installed.';
 $lang['depend_upgrade'] = 'Module %s will be upgraded to version %s.';
+$lang['depends_upon'] = 'Depends on'
 $lang['display_in_english'] = 'Display in English';
 $lang['display_in_mylanguage'] = 'Display in NAME LANGUAGE HERE';
 $lang['download'] = 'Download &amp; Install';
@@ -95,7 +96,6 @@ $lang['friendlyname'] = 'Module Manager';
 $lang['general_notice'] = 'The versions displayed here represent the latest XML files uploaded to the CMSMS Forge.  They may or may not represent the latest available versions.';
 
 // H
-$lang['has_dependants'] = 'Has dependants';
 $lang['help'] = '<h3>What Does This Do?</h3>
 <p>A client for the CMS Made Simple Module Repository. This module allows previewing and installing modules from the CMSMS Forge without the need for ftp-ing, or unzipping archives.  Module XML files are downloaded using REST, integrity verified, and then expanded automatically.</p>
 <h3>How Do I Use It</h3>
@@ -206,6 +206,7 @@ $lang['title_advancedsearch'] = 'Enable advanced search functionality';
 $lang['title_cantremove'] = 'The file system permissions on this module directory do not permit deleting the files';
 $lang['title_cantuninstall'] = 'Other installed modules depend on this module, therefore you cannot uninstall it at this time.';
 $lang['title_chmod'] = 'Attempt to recursively change permissions on this directory';
+$lang['title_depends_upon'] = 'This module depends on on other modules for its functionality.'
 $lang['title_deprecated'] = 'This module is deprecated (the development is stopped and there will be no new releases).';
 $lang['title_has_dependants'] = 'This module is required because it used by other installed modules, and therefore cannot be uninstalled';
 $lang['title_install'] = 'Install this module for use in your website';
