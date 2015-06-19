@@ -27,12 +27,11 @@ function smarty_function_cms_jquery($params, &$smarty)
 
 	// get the output
 	$out = cms_get_jquery($exclude,$ssl,$cdn,$append,$custom_root,$include_css);
-	if( isset($params['assign']) )
-	{
+	if( isset($params['assign']) ) {
 		$smarty->assign(trim($params['assign']),$out);
 		return;
 	}
-	
+
 	return $out;
 }
 

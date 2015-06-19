@@ -155,7 +155,7 @@ class Content extends ContentBase
 						$module = cms_utils::get_module($blockInfo['module']);
 						if( !is_object($module) ) continue;
 						if( !$module->HasCapability(CmsCoreCapabilities::CONTENT_BLOCKS) ) continue;
-						$tmp = $module->GetContentBlockValue($blockName,$blockInfo['params'],$params,!$editing,$this);
+						$tmp = $module->GetContentBlockFieldValue($blockName,$blockInfo['params'],$params,!$editing,$this);
 						if( $tmp != null ) $params[$name] = $tmp;
 					}
 				}
@@ -260,7 +260,7 @@ class Content extends ContentBase
                     if( !is_object($module) ) continue;
                     if( !$module->HasCapability(CmsCoreCapabilities::CONTENT_BLOCKS) ) continue;
                     $value = $this->GetPropertyValue($blockInfo['id']);
-                    $tmp = $module->ValidateContentBlockValue($blockName,$value,$blockInfo['params'],$this);
+                    $tmp = $module->ValidateContentBlockFieldValue($blockName,$value,$blockInfo['params'],$this);
                     if( !empty($tmp) ) {
                         $errors[] = $tmp;
                         $result = false;
@@ -500,7 +500,7 @@ class Content extends ContentBase
 			// a hack to allow overriding the input field name.
 			$blockName = $blockInfo['inputname'];
 		}
-		$tmp = $module->GetContentBlockInput($blockName,$value,$blockInfo['params'],$adding,$this);
+		$tmp = $module->GetContentBlockFieldInput($blockName,$value,$blockInfo['params'],$adding,$this);
 		return $tmp;
 	}
 

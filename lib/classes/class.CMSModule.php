@@ -875,6 +875,7 @@ abstract class CMSModule
      * block types to the CMSMS content objects.
      *
      * @abstract
+     * @since 2.0
      * @param string $blockName Content block name
      * @param mixed  $value     Content block value
      * @param array  $params    Associative array containing content block parameters
@@ -882,7 +883,7 @@ abstract class CMSModule
      * @param ContentBase $content_obj The content object being edited.
      * @return mixed Either an array with two elements (prompt, and xhtml element) or a string containing only the xhtml input element.
      */
-    function GetContentBlockInput($blockName,$value,$params,$adding,ContentBase $content_obj)
+    function GetContentBlockFieldInput($blockName,$value,$params,$adding,ContentBase $content_obj)
     {
         return FALSE;
     }
@@ -899,13 +900,14 @@ abstract class CMSModule
      * block types to the CMSMS content objects.
      *
      * @abstract
+     * @since 2.0
      * @param string $blockName Content block name
      * @param array  $blockParams Content block parameters
      * @param array  $inputParams input parameters
      * @param ContentBase $content_obj The content object being edited.
      * @return mixed|false The content block value if possible.
      */
-    function GetContentBlockValue($blockName,$blockParams,$inputParams,ContentBase $content_obj)
+    function GetContentBlockFieldValue($blockName,$blockParams,$inputParams,ContentBase $content_obj)
     {
         return FALSE;
     }
@@ -919,13 +921,14 @@ abstract class CMSModule
      * block types to the CMSMS content objects.
      *
      * @abstract
+     * @since 2.0
      * @param string $blockName Content block name
      * @param mixed  $value     Content block value
      * @param arrray $blockparams Content block parameters.
      * @param contentBase $content_obj The content object that is currently being edited.
      * @return string An error message if the value is invalid, empty otherwise.
      */
-    function ValidateContentBlockValue($blockName,$value,$blockparams,ContentBase $content_obj)
+    function ValidateContentBlockFieldValue($blockName,$value,$blockparams,ContentBase $content_obj)
     {
         return '';
     }
