@@ -143,8 +143,13 @@ final class modulerep_client
     $req->execute($url,$parms);
     $status = $req->getStatus();
     $result = $req->getResult();
-    if( $status == 400 ) throw new \RuntimeException("Could not find information in the repository for ".$module_name);
-    if( $status != 200 || $result == '' ) throw new CmsCommunicationException($mod->Lang('error_request_problem'));
+    if( $status == 400 ) {
+        // no dependencies found
+        return;
+    }
+    else if( $status != 200 || $result == '' ) {
+        throw new CmsCommunicationException($mod->Lang('error_request_problem'));
+    }
 
     $data = json_decode($result,true);
     return $data;
@@ -300,7 +305,7 @@ final class modulerep_client
     if( $status != 200 ) throw new CmsCommunicationException($mod->Lang('error_request_problem'));
 
     $data = json_decode($result,true);
-    //if( !$data || !is_array($data) ) throw new CmsInvalidDataException($mod->Lang('error_nomatchingmodules'));
+    if( !$data || !is_array($data) ) throw new CmsInvalidDataException($mod->Lang('error_nomatchingmodules'));
 
     return $data;
   }
