@@ -92,7 +92,7 @@ try {
 				}
 				else {
 					// redirect to this action, with step3.
-					$this->Redirect($id,'admin_import_design',$returnid,array('step'=>3,'tmpfile'=>$tmpfile,'newname'=>$params['newname']));
+					$this->Redirect($id,'admin_import_design',$returnid,array('step'=>3,'tmpfile'=>$tmpfile,'newname'=>$params['newname'], 'newdescription'=>$params['newdescription']));
 				}
 			}
 
@@ -105,7 +105,7 @@ try {
 			$smarty->assign('templates',$reader->get_template_list());
 			$smarty->assign('stylesheets',$reader->get_stylesheet_list());
 			$newname = CmsLayoutCollection::suggest_name($design_info['name']);
-			$smarty->assign('new_name',$newname);
+      $smarty->assign('new_name',$newname);
 		}
     catch( CmsException $e ) {
       echo $this->ShowErrors($e->GetMessage());
@@ -121,7 +121,9 @@ try {
 			throw new CmsException($this->Lang('error_missingparam'));
 		}
 		$tmpfile = trim($params['tmpfile']);
-		$newname = trim($params['newname']);
+    $newname = trim($params['newname']);
+		$newdescription = trim($params['newdescription']);
+    
 		if( !file_exists($tmpfile) ) {
 			// bad error, redirect to admin tab.
 			throw new CmsException($this->Lang('error_filenotfound',$tmpfile));
@@ -129,7 +131,11 @@ try {
 
 		$destdir = $config['uploads_path'].'/designmanager_import';
 		$reader = dm_reader_factory::get_reader($tmpfile);
-		$reader->set_suggested_name($newname);
+    $reader->set_suggested_name($newname);
+    
+    if( !empty($newdescription) )
+		  $reader->set_new_description($newdescription);
+      
 		$reader->import();
 		$this->SetMessage($this->Lang('msg_design_imported'));
 		$this->RedirectToAdminTab();

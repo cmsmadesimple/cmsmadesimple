@@ -73,8 +73,8 @@ $(document).ready(function(){
 {tab_header name='stylesheets' label=$mod->Lang('prompt_stylesheets')}
 
 {tab_start name='description'}
-{* no name set on this field... *}
-<textarea rows="5" cols="80">{$design_info.description}</textarea>
+
+<textarea name={$actionid}newdescription rows="5" cols="80">{$design_info.description}</textarea>
 
 {* tab_start name='copyright' *}
 
