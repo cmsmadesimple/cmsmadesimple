@@ -65,7 +65,7 @@
           }
       });
 
-      $('a.page_edit').on('click',function() {
+      $('a.page_edit').on('click',function(event) {
           var v = $(this).data('steal_lock');
           $(this).removeData('steal_lock');
           if( typeof(v) != 'undefined' && v != null && !v ) return false;
@@ -79,22 +79,18 @@
           opts[cms_data.secure_param_name] = cms_data.user_key;
           $.ajax({
               url: url,
-              async: false,
               data: opts,
               success: function(data,textStatus,jqXHR) {
-    	          if( data.status == 'success' ) {
-                      if( data.locked ) {
-                          // gotta display a message.
-	                  alert('{$mod->Lang('error_contentlocked')|escape:'javascript'}');
-                      }
-                      else {
-                          // we're okay to edit
-	                  ok = true;
-                      }
-                 }
              }
-          });
-          return ok;
+          }).done(data,function(){
+              if( data.status == 'success' ) {
+                  if( data.locked ) {
+                      // gotta display a message.
+	              alert('{$mod->Lang('error_contentlocked')|escape:'javascript'}');
+		      event.preventDefault();
+                  }
+              }
+	  });
       });
 
       $(document).on('click', '#myoptions', function () {

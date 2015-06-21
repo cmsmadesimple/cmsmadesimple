@@ -43,6 +43,7 @@ class Smarty_Parser extends Smarty_CMS
 	*/
 	public function __construct()
 	{
+        stack_trace(); die();
 		parent::__construct();
 
 		$this->setTemplateDir(cms_join_path(CMS_ROOT_PATH,'tmp','templates'));

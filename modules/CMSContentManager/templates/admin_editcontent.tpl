@@ -82,11 +82,10 @@ $(document).ready(function(){
         if (tmp == '{$mod->Lang('close')}') {
 	  {if isset($lock_timeout) && $lock_timeout > 0}$('#Edit_Content').lockManager('unlock');{/if}
 	}
-        return true;
     });
 
     $('#Edit_Content').on('click','[name$=apply],[name$=submit],[name$=cancel]',function(event){
-      $('#Edit_Content :hidden').removeAttr('required');
+        $('#Edit_Content :hidden').removeAttr('required');
     });
 
     $(document).on('click', '[name$=submit]', function () {

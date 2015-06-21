@@ -292,8 +292,9 @@ class Content extends ContentBase
         CMS_Content_Block::reset();
         $this->_contentBlocks = array();
         try {
-            $parser = CmsApp::get_instance()->get_template_parser();
-            $parser->fetch('cms_template:'.$this->TemplateId()); // do the magic.
+            $smarty = Smarty_CMS::get_instance();
+            $parser = new \CMSMS\internal\page_template_parser('cms_template:'.$this->TemplateId(),$smarty);
+            $parser->compileTemplateSource();
 
             $this->_contentBlocks = CMS_Content_Block::get_content_blocks();
         }

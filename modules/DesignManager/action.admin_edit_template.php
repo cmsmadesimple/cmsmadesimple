@@ -96,9 +96,14 @@ try {
 
     try {
         if (isset($params['submit']) || isset($params['apply']) && $response !== 'error') {
-            $parser = cmsms()->get_template_parser();
             cms_utils::set_app_data('tmp_template', $params['contents']);
+            $parser = new \CMSMS\internal\page_template_parser('cms_template:appdata;tmp_template',$smarty);
+            $parser->compileTemplateSource();
+            /*
+            $parser = cmsms()->get_template_parser();
             $parser->fetch('cms_template:appdata;tmp_template');
+            */
+            //die(__FILE__.'::'.__LINE__);
             // do the magic.
 
             if (isset($params['description'])) $tpl_obj->set_description($params['description']);

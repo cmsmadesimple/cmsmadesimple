@@ -61,6 +61,7 @@ final class CMS_Content_Block
 
     public static function smarty_compiler_contentblock($params,$smarty)
     {
+        // todo: should be in page_template_parser
         // {content} tag encountered.
         $rec = array('type'=>'text','id'=>'','name'=>'','noedit'=>false, 'usewysiwyg'=>'true','oneline'=>'false','default'=>'','label'=>'',
                      'size'=>'50','tab'=>'','maxlength'=>'255','required'=>0,'placeholder'=>'','priority'=>'','cssname'=>'');
@@ -91,6 +92,7 @@ final class CMS_Content_Block
 
     public static function smarty_compiler_imageblock($params,$smarty)
     {
+        // todo: should be in page_template_parser
         // {content_image} tag encountered.
         if( !isset($params['block']) || empty($params['block']) ) {
             throw new CmsEditContentException('{content_image} tag requires block parameter');
@@ -121,6 +123,7 @@ final class CMS_Content_Block
 
     public static function smarty_compiler_moduleblock($params,$smarty)
     {
+        // todo: should be in page_template_parser
         // {content_module} tag encountered.
         if( !isset($params['block']) || empty($params['block']) ) {
             throw new CmsEditContentException('{content_module} tag requires block parameter');
@@ -161,6 +164,8 @@ final class CMS_Content_Block
 
     public static function smarty_compile_fecontentblock($params,$template)
     {
+        die(__METHOD__);
+        // todo: should be in page_template_parser
         $ptext = 'array(';
         $tmp = array();
         foreach($params as $k => $v) {
