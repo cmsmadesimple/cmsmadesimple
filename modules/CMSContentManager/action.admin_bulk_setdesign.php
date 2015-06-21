@@ -1,10 +1,10 @@
 <?php
 #BEGIN_LICENSE
 #-------------------------------------------------------------------------
-# Module: Content (c) 2013 by Robert Campbell 
+# Module: Content (c) 2013 by Robert Campbell
 #         (calguy1000@cmsmadesimple.org)
 #  A module for managing content in CMSMS.
-# 
+#
 #-------------------------------------------------------------------------
 # CMS - CMS Made Simple is (c) 2004 by Ted Kulp (wishy@cmsmadesimple.org)
 # Visit our homepage at: http://www.cmsmadesimple.org
@@ -19,7 +19,7 @@
 # However, as a special exception to the GPL, this software is distributed
 # as an addon module to CMS Made Simple.  You may not use this software
 # in any Non GPL version of CMS Made simple, or in any version of CMS
-# Made simple that does not indicate clearly and obviously in its admin 
+# Made simple that does not indicate clearly and obviously in its admin
 # section that the site was built with CMS Made simple.
 #
 # This program is distributed in the hope that it will be useful,
@@ -116,8 +116,15 @@ $smarty->assign('alldesigns',CmsLayoutCollection::get_list());
 $dflt_design = CmsLayoutCollection::load_default();
 $smarty->assign('dflt_design_id',$dflt_design->get_id());
 
-$dflt_tpl = CmsLayoutTemplate::load_dflt_by_type(CmsLayoutTemplateType::CORE.'::page');
-$smarty->assign('dflt_tpl_id',$dflt_tpl->get_id());
+$dflt_tpl_id = -1;
+try {
+    $dflt_tpl = CmsLayoutTemplate::load_dflt_by_type(CmsLayoutTemplateType::CORE.'::page');
+    $dflt_tpl_id = $dflt_tpl->get_id();
+}
+catch( \Exception $e ) {
+    // ignore
+}
+$smarty->assign('dflt_tpl_id',$dflt_tpl_id);
 $_tpl = CmsLayoutTemplate::template_query(array('as_list'=>1));
 $smarty->assign('alltemplates',$_tpl);
 
