@@ -379,7 +379,7 @@ public static function preloadFieldData($ids)
     if( !is_array($ids) && is_numeric($ids) ) $ids = array($ids);
 
     $tmp = array();
-    for( $i = 0, $n = count($ids); $i < $n; $i++ ) {
+    for( $i = 0, $nn = count($ids); $i < $nn; $i++ ) {
         $n = (int)$ids[$i];
         if( $n < 0 ) continue;
         if( is_array(self::$_cached_fieldvals) && isset(self::$_cached_fieldvals[$n]) ) continue;
