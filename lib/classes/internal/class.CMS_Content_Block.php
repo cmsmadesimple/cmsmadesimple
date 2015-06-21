@@ -164,7 +164,6 @@ final class CMS_Content_Block
 
     public static function smarty_compile_fecontentblock($params,$template)
     {
-        die(__METHOD__);
         // todo: should be in page_template_parser
         $ptext = 'array(';
         $tmp = array();

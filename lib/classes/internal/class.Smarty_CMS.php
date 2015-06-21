@@ -76,19 +76,19 @@ class Smarty_CMS extends SmartyBC
     $this->registerDefaultPluginHandler(array(&$this, 'defaultPluginHandler'));
 
     // Load User Defined Tags
-    if( !CmsApp::get_instance()->test_state(CmsApp::STATE_INSTALL) ) {
+    $_gCms = CmsApp::get_instance();
+    if( !$_gCms->test_state(CmsApp::STATE_INSTALL) ) {
         $utops = UserTagOperations::get_instance();
         $usertags = $utops->ListUserTags();
-        $caching = false;
 
         foreach( $usertags as $id => $name ) {
             $function = $utops->CreateTagFunction($name);
-            $this->registerPlugin('function',$name,$function,$caching);
+            $this->registerPlugin('function',$name,$function,false);
         }
     }
 
-    if(CmsApp::get_instance()->is_frontend_request()) {
-        $config = cmsms()->GetConfig();
+    if( $_gCms->is_frontend_request()) {
+        $config = cms_config::get_instance();
         $this->addTemplateDir($config['assets_path'].'/templates');
         $this->addConfigDir($config['assets_path'].'/configs');
 
@@ -121,9 +121,9 @@ class Smarty_CMS extends SmartyBC
         // Enable security object
         $this->enableSecurity('CMSSmartySecurityPolicy');
     }
-    else if(CmsApp::get_instance()->test_state(CmsApp::STATE_ADMIN_PAGE)) {
+    else if($_gCms->test_state(CmsApp::STATE_ADMIN_PAGE)) {
         $this->setCaching(false);
-        $config = CmsApp::get_instance()->GetConfig();
+        $config = cms_config::get_instance();
         $admin_dir = $config['admin_path'];
         $this->addPluginsDir($admin_dir.'/plugins');
         $this->setTemplateDir($admin_dir.'/templates');
