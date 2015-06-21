@@ -781,7 +781,7 @@ class CmsLayoutTemplate
 		foreach( $list as $one ) {
             if( !is_numeric($one) ) continue;
 			$one = (int)$one;
-			if( $one <= 1 ) continue;
+			if( $one < 1 ) continue;
 			if( isset(self::$_obj_cache[$one]) ) continue;
 			$list2[] = $one;
 		}
@@ -891,7 +891,6 @@ class CmsLayoutTemplate
 			}
 			return $tmp2;
 		}
-		return $out;
 	}
 
 	/**
