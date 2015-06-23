@@ -344,8 +344,9 @@ class dm_design_reader extends dm_reader_base
     // create new design... fill it with info
     $design = new CmsLayoutCollection();
     $design->set_name($newname);
+    $description = $this->get_suggested_description();
     
-    if(empty($this->_new_design_description))
+    if(empty($description))
     {
       $description = $info['description'];
       if( $description ) $description .= "\n----------------------------------------\n";
@@ -353,8 +354,6 @@ class dm_design_reader extends dm_reader_base
       $description .= 'By CMSMS version: '.$info['cmsversion']."\n";
       $description .= 'Imported '.strftime('%x %X');
     }
-    else
-      $description = $this->_new_design_description;
 
     $design->set_description($description);
 

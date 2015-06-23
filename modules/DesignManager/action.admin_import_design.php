@@ -132,10 +132,7 @@ try {
 		$destdir = $config['uploads_path'].'/designmanager_import';
 		$reader = dm_reader_factory::get_reader($tmpfile);
     $reader->set_suggested_name($newname);
-    
-    if( !empty($newdescription) )
-		  $reader->set_new_description($newdescription);
-      
+    $reader->set_suggested_description($newdescription);
 		$reader->import();
 		$this->SetMessage($this->Lang('msg_design_imported'));
 		$this->RedirectToAdminTab();
