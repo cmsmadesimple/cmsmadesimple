@@ -1011,6 +1011,7 @@ abstract class ContentBase
 		}
 
 		$this->mAlias = $alias;
+		cms_cache_handler::get_instance()->erase('contentcache');
 	}
 
 	/**
