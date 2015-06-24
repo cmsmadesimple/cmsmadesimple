@@ -1,10 +1,10 @@
 <?php
 #BEGIN_LICENSE
 #-------------------------------------------------------------------------
-# Module: Content (c) 2013 by Robert Campbell 
+# Module: Content (c) 2013 by Robert Campbell
 #         (calguy1000@cmsmadesimple.org)
 #  A module for managing content in CMSMS.
-# 
+#
 #-------------------------------------------------------------------------
 # CMS - CMS Made Simple is (c) 2004 by Ted Kulp (wishy@cmsmadesimple.org)
 # Visit our homepage at: http://www.cmsmadesimple.org
@@ -19,7 +19,7 @@
 # However, as a special exception to the GPL, this software is distributed
 # as an addon module to CMS Made Simple.  You may not use this software
 # in any Non GPL version of CMS Made simple, or in any version of CMS
-# Made simple that does not indicate clearly and obviously in its admin 
+# Made simple that does not indicate clearly and obviously in its admin
 # section that the site was built with CMS Made simple.
 #
 # This program is distributed in the hope that it will be useful,
@@ -69,18 +69,18 @@ if( !$multiaction ) {
 //
 list($module,$bulkaction) = explode('::',$multiaction,2);
 if( $module == '' || $module == '-1' || $bulkaction == '' || $bulkaction == -1 ) {
-  $this->SetError('error_invalidbulkaction');
-  $this->RedirectToAdminTab();
+    $this->SetError($this->Lang('error_invalidbulkaction'));
+    $this->RedirectToAdminTab();
 }
 if( $module != 'core' ) {
-  $modobj = cms_utils::get_module($module);
-  if( !is_object($modobj) ) {
-    $this->SetError('error_invalidbulkaction');
-    $this->RedirectToAdminTab();
-  }
-  $url = $modobj->create_url($id,$bulkaction,$returnid,array('contentlist'=>implode(',',$multicontent)));
-  $url = str_replace('&amp;','&',$url);
-  redirect($url);
+    $modobj = cms_utils::get_module($module);
+    if( !is_object($modobj) ) {
+        $this->SetError($this->Lang('error_invalidbulkaction'));
+        $this->RedirectToAdminTab();
+    }
+    $url = $modobj->create_url($id,$bulkaction,$returnid,array('contentlist'=>implode(',',$multicontent)));
+    $url = str_replace('&amp;','&',$url);
+    redirect($url);
 }
 
 $parms = array('multicontent'=>$params['multicontent']);
@@ -104,7 +104,7 @@ switch( $bulkaction ) {
    $parms['cachable'] = 1;
    $this->Redirect($id,'admin_bulk_cachable',$returnid,$parms);
    break;
-   
+
  case 'secure':
    $parms['secure'] = 1;
    $this->Redirect($id,'admin_bulk_secure',$returnid,$parms);
