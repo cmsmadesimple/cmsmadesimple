@@ -97,6 +97,31 @@ EOT;
     private function _parse_tpl_urls($content)
     {
         $ob = &$this;
+
+        $temp_fix_cmsselflink = function($matches) use ($ob) {
+            // GCB (required name param)
+            $out = preg_replace_callback("/href\s*=[\\\"']{0,1}([a-zA-Z0-9._\ \:\-\/]+)[\\\"']{0,1}/i",
+                                         function($matches) use ($ob) {
+                                             return str_replace($matches[1],'ignore::'.$matches[1],$matches[0]);
+                                         },$matches[0]);
+            return $out;
+        };
+
+        $undo_fix_cmsselflink = function($matches) use ($ob) {
+            // GCB (required name param)
+            $out = preg_replace_callback("/href\s*=[\\\"']{0,1}(ignore\:\:[a-zA-Z0-9._\ \:\-\/]+)[\\\"']{0,1}/i",
+                                         function($matches) use ($ob) {
+                                             $rep = substr($matches[1],8);
+                                             return str_replace($matches[1],$reo,$matches[0]);
+                                         },$matches[0]);
+            return $out;
+        };
+
+        // replace cms_selflink stuff with an ignore
+        $regex='/\{cms_selflink.*\}/';
+        $content = preg_replace_callback( $regex, $temp_fix_cmsselflink, $content );
+
+        $ob = &$this;
         $types = array("href", "src", "url");
         foreach( $types as $type ) {
             $innerT = '[a-z0-9:?=&@/._-]+?';
@@ -104,7 +129,8 @@ EOT;
                                              function($matches) use ($ob,$type) {
                                                  $config = cmsms()->GetConfig();
                                                  $url = $matches[2];
-                                                 if( !startswith($url,'http') || startswith($url,$config['root_url']) || startswith($url,'{root_url}') ) {
+                                                 if( !startswith($url,'ignore::') && (!startswith($url,'http') || startswith($url,$config['root_url']) || startswith($url,'{root_url}')
+                                                                                     || !startswith($url,'{uploads_url}') ) ) {
                                                      $sig = $ob->_get_signature($url);
                                                      //return $sig;
                                                      return " $type=\"$sig\"";
@@ -113,6 +139,11 @@ EOT;
                                              },
                                              $content);
         }
+
+        // remove ignore stuff on cms_selflink
+        $regex='/\{cms_selflink.*\}/';
+        $content = preg_replace_callback( $regex, $undo_fix_cmsselflink, $content );
+
         return $content;
     }
 
