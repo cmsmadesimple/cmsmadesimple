@@ -23,33 +23,26 @@ $(document).ready(function(){
       return v;
     });
 
-    $('a.edit_tpl').on('click',function() {
+    $('a.edit_tpl').on('click',function(ev) {
       if( $(this).hasClass('steal_tpl_lock') ) return true;
 
       // do a double check to see if this page is locked or not.
       var tpl_id = $(this).attr('data-tpl-id');
       var url = '{$admin_url}/ajax_lock.php?showtemplate=false';
       var opts = { opt: 'check', type: 'template', oid: tpl_id };
-      var ok = false;
       opts[cms_data.secure_param_name] = cms_data.user_key;
       $.ajax({
         url: url,
-        async: false,
         data: opts,
-        success: function(data,textStatus,jqXHR) {
-	  if( data.status == 'success' ) {
-            if( data.locked ) {
-              // gotta display a message.
-	      cms_alert('{$mod->Lang('error_contentlocked')|escape:'javascript'}');
-            }
-            else {
-              // we're okay to edit
-	      ok = true;
-            }
+      }).done(function(data){
+        if( data.status == 'success' ) {
+          if( data.locked ) {
+            // gotta display a message.
+	    ev.preventDefault();
+	    cms_alert('{$mod->Lang('error_contentlocked')|escape:'javascript'}');
           }
         }
       });
-      return ok;
     });
 
     $(document).on('click','#tpl_bulk_submit',function() {
