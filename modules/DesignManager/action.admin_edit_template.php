@@ -69,33 +69,8 @@ try {
         $this->RedirectToAdminTab();
     }
 
-    //
-    // BUILD THE DISPLAY
-    //
-    if (!$apply && $tpl_obj && $tpl_obj->get_id() && dm_utils::locking_enabled()) {
-        $smarty->assign('lock_timeout', $this->GetPreference('lock_timeout'));
-        $smarty->assign('lock_refresh', $this->GetPreference('lock_refresh'));
-        try {
-            $lock_id = CmsLockOperations::is_locked('template', $tpl_obj->get_id());
-            $lock = null;
-            if( $lock_id > 0 ) {
-                // it's locked... by somebody, make sure it's expired before we allow stealing it.
-                $lock = CmsLock::load('template',$tpl_obj->get_id());
-                if( !$lock->expired() ) throw new CmsLockException('CMSEX_L010');
-                CmsLockOperations::unlock($lock_id,'template',$tpl_obj->get_id());
-            }
-            $lock = new CmsLock('template', $tpl_obj->get_id(), (int)$this->GetPreference('lock_timeout'));
-            $smarty->assign('lock', $lock);
-        } catch( CmsException $e ) {
-            $response = 'error';
-            $message = $e->GetMessage();
-            $this->SetError($message);
-            $this->RedirectToAdminTab();
-        }
-    }
-
     try {
-        if (isset($params['submit']) || isset($params['apply']) && $response !== 'error') {
+        if (isset($params['submit']) || isset($params['apply']) ) {
             cms_utils::set_app_data('tmp_template', $params['contents']);
             $parser = new \CMSMS\internal\page_template_parser('cms_template:appdata;tmp_template',$smarty);
             $parser->compileTemplateSource();
@@ -152,6 +127,30 @@ try {
     } catch( Exception $e ) {
         $message = $e->GetMessage();
         $response = 'error';
+    }
+
+    //
+    // BUILD THE DISPLAY
+    //
+    if (!$apply && $tpl_obj && $tpl_obj->get_id() && dm_utils::locking_enabled()) {
+        $smarty->assign('lock_timeout', $this->GetPreference('lock_timeout'));
+        $smarty->assign('lock_refresh', $this->GetPreference('lock_refresh'));
+        try {
+            $lock_id = CmsLockOperations::is_locked('template', $tpl_obj->get_id());
+            $lock = null;
+            if( $lock_id > 0 ) {
+                // it's locked... by somebody, make sure it's expired before we allow stealing it.
+                $lock = CmsLock::load('template',$tpl_obj->get_id());
+                if( !$lock->expired() ) throw new CmsLockException('CMSEX_L010');
+                CmsLockOperations::unlock($lock_id,'template',$tpl_obj->get_id());
+            }
+            $lock = new CmsLock('template', $tpl_obj->get_id(), (int)$this->GetPreference('lock_timeout'));
+            $smarty->assign('lock', $lock);
+        } catch( CmsException $e ) {
+            $message = $e->GetMessage();
+            $this->SetError($message);
+            $this->RedirectToAdminTab();
+        }
     }
 
     // handle the response message

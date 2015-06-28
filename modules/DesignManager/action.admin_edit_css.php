@@ -52,34 +52,6 @@ try {
         $css_ob = new CmsLayoutStylesheet();
     }
 
-    //
-    // prepare to display.
-    //
-    if (!$apply && $css_ob && $css_ob->get_id() && dm_utils::locking_enabled()) {
-        $smarty->assign('lock_timeout', $this->GetPreference('lock_timeout'));
-        $smarty->assign('lock_refresh', $this->GetPreference('lock_refresh'));
-        try {
-            $lock_id = CmsLockOperations::is_locked('stylesheet', $css_ob->get_id());
-            $lock = null;
-            if( $lock_id > 0 ) {
-                // it's locked... by somebody, make sure it's expired before we allow stealing it.
-                $lock = CmsLock::load('stylesheet',$css_ob->get_id());
-                if( !$lock->expired() ) throw new CmsLockException('CMSEX_L010');
-                CmsLockOperations::unlock($lock_id,'stylesheet',$css_ob->get_id());
-            }
-            $lock = new CmsLock('stylesheet', $css_ob->get_id(), (int)$this->GetPreference('lock_timeout'));
-            $smarty->assign('lock', $lock);
-        } catch( CmsException $e ) {
-            $response = 'error';
-            $message = $e->GetMessage();
-
-            if (!$apply) {
-                $this->SetError($message);
-                $this->RedirectToAdminTab();
-            }
-        }
-    }
-
     try {
         if (isset($params['submit']) || isset($params['apply']) && $response !== 'error') {
             if (isset($params['name'])) $css_ob->set_name($params['name']);
@@ -119,6 +91,34 @@ try {
     } catch( CmsException $e ) {
         $message = $e->GetMessage();
         $response = 'error';
+    }
+
+    //
+    // prepare to display.
+    //
+    if (!$apply && $css_ob && $css_ob->get_id() && dm_utils::locking_enabled()) {
+        $smarty->assign('lock_timeout', $this->GetPreference('lock_timeout'));
+        $smarty->assign('lock_refresh', $this->GetPreference('lock_refresh'));
+        try {
+            $lock_id = CmsLockOperations::is_locked('stylesheet', $css_ob->get_id());
+            $lock = null;
+            if( $lock_id > 0 ) {
+                // it's locked... by somebody, make sure it's expired before we allow stealing it.
+                $lock = CmsLock::load('stylesheet',$css_ob->get_id());
+                if( !$lock->expired() ) throw new CmsLockException('CMSEX_L010');
+                CmsLockOperations::unlock($lock_id,'stylesheet',$css_ob->get_id());
+            }
+            $lock = new CmsLock('stylesheet', $css_ob->get_id(), (int)$this->GetPreference('lock_timeout'));
+            $smarty->assign('lock', $lock);
+        } catch( CmsException $e ) {
+            $response = 'error';
+            $message = $e->GetMessage();
+
+            if (!$apply) {
+                $this->SetError($message);
+                $this->RedirectToAdminTab();
+            }
+        }
     }
 
     // handle the response message
