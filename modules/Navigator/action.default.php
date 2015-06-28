@@ -216,13 +216,15 @@ if( !$tpl->isCached() ) {
         while( $tmp ) {
             $id = $tmp->get_tag('id');
             if( !$id ) break;
-            $arr[] = $tmp;
+            $arr[$id] = $tmp;
             $arr2[] = $id;
             $tmp = $tmp->get_parent();
         }
         if( $start_level - 2 < count($arr) ) {
             // now do a childrenof the last element.
-            $tmp = $arr[$start_level-2];
+            array_reverse($arr2);
+            $id = $arr2[$start_level-1];
+            $tmp = $arr[$id];
             if( $tmp->has_children() ) {
                 $children = $tmp->get_children();
                 foreach( $children as $one ) {
