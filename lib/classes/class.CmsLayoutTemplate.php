@@ -891,6 +891,7 @@ class CmsLayoutTemplate
 			}
 			return $tmp2;
 		}
+        return $out;
 	}
 
 	/**
