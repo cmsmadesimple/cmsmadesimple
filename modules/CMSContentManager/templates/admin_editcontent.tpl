@@ -73,6 +73,7 @@ $(document).ready(function(){
     // submit the form if template id, and/or content-type fields are changed.
     $('#template_id, #content_type').on('change', function () {
         $('#Edit_Content').dirtyForm('disable');
+	$('#Edit_Content').lockManager('unlock');
         $(this).closest('form').submit();
     });
 
@@ -128,6 +129,7 @@ $(document).ready(function(){
       var data = { '{$actionid}design_id': v };
       $.get('{$designchanged_ajax_url}',data,function(data,text) {
         if( typeof data == 'object' ) {
+	   alert('got object');
 	  var sel = $('#template_id').val();
 	  var fnd = false;
 	  var first = null;
