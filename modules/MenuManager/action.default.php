@@ -135,10 +135,14 @@ if( !$tpl->isCached() ) {
 
     if (isset($params['collapse']) && $params['collapse'] == '1') {
         $newpos = '';
-        $node = $hm->find_by_tag('id',$gCms->get_content_id());
-        while( $node ) {
-            $showparents[] = $node->get_tag('id');
-            $node = $node->get_parent();
+        $content = CmsApp::get_instance()->get_content_object();
+        if( $content ) {
+            $_list = explode('.',$content->Hierarchy());
+            $newpos = '';
+            foreach( $_list as $lev ) {
+                $newpos .= $lev . '.';
+                $showparents[] = $newpos;
+            }
         }
     }
 
