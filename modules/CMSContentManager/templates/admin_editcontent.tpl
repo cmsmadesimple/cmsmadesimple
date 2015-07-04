@@ -129,7 +129,6 @@ $(document).ready(function(){
       var data = { '{$actionid}design_id': v };
       $.get('{$designchanged_ajax_url}',data,function(data,text) {
         if( typeof data == 'object' ) {
-	   alert('got object');
 	  var sel = $('#template_id').val();
 	  var fnd = false;
 	  var first = null;
