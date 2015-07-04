@@ -211,7 +211,7 @@ if( !$tpl->isCached() ) {
             }
         }
     }
-    else if( $start_level > 0 ) {
+    else if( $start_level > 1 ) {
         $tmp = $hm->sureGetNodeById($gCms->get_content_id());
         $arr = array();
         $arr2 = array();
@@ -223,9 +223,7 @@ if( !$tpl->isCached() ) {
             $tmp = $tmp->get_parent();
         }
         if( $start_level - 2 < count($arr) ) {
-            // now do a childrenof the last element.
-            array_reverse($arr2);
-            $id = $arr2[$start_level-1];
+            $id = $arr2[$start_level];
             $tmp = $arr[$id];
             if( $tmp->has_children() ) {
                 $children = $tmp->get_children();
