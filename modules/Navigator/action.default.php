@@ -152,9 +152,11 @@ if( !$tpl->isCached() ) {
         case 'start_level':
             $start_element = null;
             $start_page = null;
-            $value = (int)$value;
-            $start_level = (int)$value;
             $items = null;
+            $value = (int)$value;
+            if( $value > 1 ) {
+                $start_level = (int)$value;
+            }
             break;
 
         case 'childrenof':
