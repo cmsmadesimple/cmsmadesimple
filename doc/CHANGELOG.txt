@@ -1,4 +1,6 @@
 
+==================================================
+The CHANGELOG is cleared for the CMSMS 2.0 release
+==================================================
 
-===================================================
-This document was cleared for the CMSMS 2.0 release
+No changes yet... ;)
