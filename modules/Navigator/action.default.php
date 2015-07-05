@@ -60,9 +60,9 @@ else {
     $template = $tpl->get_name();
 }
 
-$hm = $gCms->GetHierarchyManager();
 $cache_id = '|nav'.md5(serialize($params));
 $compile_id = '';
+$hm = $gCms->GetHierarchyManager();
 
 $tpl = $smarty->CreateTemplate($this->GetTemplateResource($template),$cache_id,$compile_id);
 if( !$tpl->isCached() ) {
@@ -213,24 +213,26 @@ if( !$tpl->isCached() ) {
     }
     else if( $start_level > 1 ) {
         $tmp = $hm->sureGetNodeById($gCms->get_content_id());
-        $arr = array();
-        $arr2 = array();
-        while( $tmp ) {
-            $id = $tmp->get_tag('id');
-            if( !$id ) break;
-            $arr[$id] = $tmp;
-            $arr2[] = $id;
-            $tmp = $tmp->get_parent();
-        }
-        if( $start_level <= count($arr2) ) {
-            $arr2 = array_reverse($arr2);
-            $id = $arr2[$start_level-2];
-            $tmp = $arr[$id];
-            if( $tmp->has_children() ) {
-                // do childrenof this element
-                $children = $tmp->get_children();
-                foreach( $children as $one ) {
-                    $rootnodes[] = $one;
+        if( $tmp ) {
+            $arr = array();
+            $arr2 = array();
+            while( $tmp ) {
+                $id = $tmp->get_tag('id');
+                if( !$id ) break;
+                $arr[$id] = $tmp;
+                $arr2[] = $id;
+                $tmp = $tmp->get_parent();
+            }
+            if( $start_level <= count($arr2) ) {
+                $arr2 = array_reverse($arr2);
+                $id = $arr2[$start_level-2];
+                $tmp = $arr[$id];
+                if( $tmp->has_children() ) {
+                    // do childrenof this element
+                    $children = $tmp->get_children();
+                    foreach( $children as $one ) {
+                        $rootnodes[] = $one;
+                    }
                 }
             }
         }
