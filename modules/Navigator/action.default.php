@@ -154,7 +154,7 @@ if( !$tpl->isCached() ) {
             $start_page = null;
             $items = null;
             $value = (int)$value;
-            if( $value > 1 ) {
+            if( $value > 0 ) {
                 $start_level = (int)$value;
             }
             break;
@@ -211,7 +211,7 @@ if( !$tpl->isCached() ) {
             }
         }
     }
-    else if( $start_level > 1 ) {
+    else if( $start_level > 0 ) {
         $tmp = $hm->sureGetNodeById($gCms->get_content_id());
         $arr = array();
         $arr2 = array();
