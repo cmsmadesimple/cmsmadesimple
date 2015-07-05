@@ -222,10 +222,12 @@ if( !$tpl->isCached() ) {
             $arr2[] = $id;
             $tmp = $tmp->get_parent();
         }
-        if( $start_level - 2 < count($arr) ) {
-            $id = $arr2[$start_level];
+        if( $start_level <= count($arr2) ) {
+            $arr2 = array_reverse($arr2);
+            $id = $arr2[$start_level-2];
             $tmp = $arr[$id];
             if( $tmp->has_children() ) {
+                // do childrenof this element
                 $children = $tmp->get_children();
                 foreach( $children as $one ) {
                     $rootnodes[] = $one;
