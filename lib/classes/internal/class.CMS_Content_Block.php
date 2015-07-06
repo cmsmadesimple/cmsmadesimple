@@ -326,7 +326,7 @@ final class CMS_Content_Block
         $img = $result;
 
         $out = null;
-        if( startswith($realpath($dir),realpath($basename)) ) {
+        if( startswith(realpath($dir),realpath($basename)) ) {
             if( $img != -1 && !empty($img) ) {
 
                 // create the absolute url.
