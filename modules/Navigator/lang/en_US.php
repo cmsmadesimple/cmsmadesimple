@@ -85,7 +85,7 @@ $lang['help_root2'] = 'Used only in the &quot;breadcrumbs&quot; action this para
 $lang['help_show_all'] = 'This option will cause the menu to show all nodes even if they are set to not show in the menu. It will still not display inactive pages however.';
 $lang['help_show_root_siblings'] = 'This option only becomes useful if start_element or start_page are used.  It basically will display the siblings along side of the selected start_page/element.';
 $lang['help_start_element'] = 'Starts the menu displaying at the given start_element and showing that element and it\'s children only.  Takes a hierarchy position (e.g. 5.1.2).';
-$lang['help_start_level'] = 'This option will have the menu only display items starting at the given level.  An easy example would be if you had one menu on the page with number_of_levels=1
+$lang['help_start_level'] = 'This option will have the menu only display items starting at the given level relative to the current page.  An easy example would be if you had one menu on the page with number_of_levels=1
 .  Then as a second menu, you have start_level=2.  Now, your second menu will show items based on what is selected in the first menu.  The minimum value for this parameter is 2';
 $lang['help_start_page'] = 'Starts the menu displaying at the given start_page and showing that element and it\'s children only.  Takes a page alias.';
 $lang['help_template'] = 'The template to use for displaying the menu.  The named template must exist in the DesignManager or an error will be displayed.  If this parameter is not specified the default template of type Navigator::Navigation will be used';
