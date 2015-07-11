@@ -31,7 +31,7 @@ function smarty_cms_function_share_data($params, &$template)
         }
         $vars = $t_list_2;
     }
-    $vars = array_unique($vars);
+
     if( !count($vars) ) return;
 
     $scope = null;
