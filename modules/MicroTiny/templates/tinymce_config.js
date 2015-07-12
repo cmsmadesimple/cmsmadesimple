@@ -8,6 +8,7 @@ tinymce.init({
     selector: '{if isset($mt_selector) && $mt_selector != ''}{$mt_selector}{else}textarea.MicroTiny{/if}',
     language: '{$languageid}',
     cmsms_tiny: cmsms_tiny = {
+        schema: 'html5',
         base_url : '{root_url}/',
         resize : {mt_jsbool($mt_profile.allowresize)},
         statusbar : {mt_jsbool($mt_profile.showstatusbar)},
