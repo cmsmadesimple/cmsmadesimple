@@ -125,18 +125,18 @@ while( $trycount < 2 ) {
         }
 
         $_app->set_content_object($contentobj);
-        $smarty->assign('content_obj',$contentobj);
-        $smarty->assign('content_id', $contentobj->Id());
-        $smarty->assign('page_id', $page);
-        $smarty->assign('page_alias', $contentobj->Alias());
+        $smarty->assignGlobal('content_obj',$contentobj);
+        $smarty->assignGlobal('content_id', $contentobj->Id());
+        $smarty->assignGlobal('page_id', $page);
+        $smarty->assignGlobal('page_alias', $contentobj->Alias());
 
         if( $contentobj->Secure() && !$_app->is_https_request() ) {
             redirect($contentobj->GetURL()); // if this page is marked to be secure, make sure we redirect to the secure page
         }
 
         CmsNlsOperations::set_language(); // <- NLS detection for frontend
-        $smarty->assign('lang',CmsNlsOperations::get_current_language());
-        $smarty->assign('encoding',CmsNlsOperations::get_encoding());
+        $smarty->assignGlobal('lang',CmsNlsOperations::get_current_language());
+        $smarty->assignGlobal('encoding',CmsNlsOperations::get_encoding());
 
         $html = '';
         $showtemplate = true;
