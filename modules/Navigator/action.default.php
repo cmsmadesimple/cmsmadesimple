@@ -223,7 +223,7 @@ if( !$tpl->isCached() ) {
                 $arr2[] = $id;
                 $tmp = $tmp->get_parent();
             }
-            if( $start_level <= count($arr2) ) {
+            if( ($start_level - 2) < count($arr2) ) {
                 $arr2 = array_reverse($arr2);
                 $id = $arr2[$start_level-2];
                 $tmp = $arr[$id];
