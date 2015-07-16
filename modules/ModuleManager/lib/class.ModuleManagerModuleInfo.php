@@ -46,7 +46,7 @@ class ModuleManagerModuleInfo extends CmsExtendedModuleInfo
                 $rec = self::get_module_info($name);
                 if( !is_object($rec) ) {
                     // problem getting module info for it.
-                    $out[$name] = '0.0.0.1';
+                    $out[$name] = $ver;
                     continue;
                 }
                 if( !$rec['installed'] || !$rec['active'] ) {
