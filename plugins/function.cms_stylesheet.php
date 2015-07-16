@@ -231,7 +231,11 @@ function cms_stylesheet_writeCache($filename, $list, $trimbackground, &$smarty)
 
 	try {
         foreach( $list as $name ) {
+            // force the stylesheet to compile because of smarty bug:  https://github.com/smarty-php/smarty/issues/72
+            $tmp = $smarty->force_compile;
+            $smarty->force_compile = 1;
             $_contents .= $smarty->fetch('cms_stylesheet:'.$name);
+            $smarty->force_compile = $tmp;
         }
 	}
 	catch (SmartyException $e) {
