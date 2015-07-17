@@ -4,7 +4,7 @@ $(document).ready(function(){
   // initialize the dirtyform stuff.
   $('#Edit_Content').dirtyForm({
     beforeUnload: function() {
-      {if isset($lock_timeout) && $lock_timeout > 0}$('#Edit_Content').lockManager('unlock');{/if}
+      {if $content_id > 0 && isset($lock_timeout) && $lock_timeout > 0}$('#Edit_Content').lockManager('unlock');{/if}
     }
   });
 
@@ -63,22 +63,31 @@ $(document).ready(function(){
         },'json');
     });
 {/if}
-    // here we want to disable the dirtyform stuff when these fields are changed
-    $('#id_disablewysiwyg').change(function () {
+
+// here we want to disable the dirtyform stuff when these fields are changed
+    $('#id_disablewysiwyg').change(function (ev) {
         var self = this;
         $('#Edit_Content').dirtyForm('disable');
-	$('#Edit_Content').lockManager('unlock').done(function(){
-	    $(self).closest('form').submit();
-	});
+	{if $content_id > 0}
+  	  $('#Edit_Content').lockManager('unlock').done(function(){
+	     $(self).closest('form').submit();
+	  });
+	{else}
+          $(self).closest('form').submit();
+	{/if}
     });
 
     // submit the form if template id, and/or content-type fields are changed.
     $('#template_id, #content_type').on('change', function () {
         var self = this;
         $('#Edit_Content').dirtyForm('disable');
-	$('#Edit_Content').lockManager('unlock').done(function(){
-           $(self).closest('form').submit();
-	});
+	{if $content_id > 0}
+	  $('#Edit_Content').lockManager('unlock').done(function(){
+            $(self).closest('form').submit();
+	  });
+	{else}
+          $(self).closest('form').submit();
+	{/if}
     });
 
     // handle cancel/close ... and unlock
