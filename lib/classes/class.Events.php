@@ -115,6 +115,8 @@ final class Events
 		$results = Events::ListEventHandlers($modulename, $eventname);
 
 		if ($results != false) {
+            $params['_modulename'] = $modulename;
+            $params['_eventname'] = $eventname;
 			foreach( $results as $row ) {
 				if( isset( $row['tag_name'] ) && $row['tag_name'] != '' ) {
 					debug_buffer('calling user tag ' . $row['tag_name'] . ' from event ' . $eventname);
@@ -157,9 +159,10 @@ final class Events
 		$handlers = array();
 
 		if( !is_array(self::$_handlercache) ) {
-			$q = "SELECT eh.tag_name, eh.module_name, e.originator, e.event_name, eh.handler_order, eh.handler_id, eh.removable FROM ".CMS_DB_PREFIX."event_handlers eh
-				INNER JOIN ".CMS_DB_PREFIX."events e ON e.event_id = eh.event_id
-				ORDER BY eh.handler_order ASC";
+			$q = "SELECT eh.tag_name, eh.module_name, e.originator, e.event_name, eh.handler_order, eh.handler_id, eh.removable
+                  FROM ".CMS_DB_PREFIX."event_handlers eh
+				  INNER JOIN ".CMS_DB_PREFIX."events e ON e.event_id = eh.event_id
+				  ORDER BY eh.handler_order ASC";
 
 			self::$_handlercache = $db->GetArray( $q );
 		}
