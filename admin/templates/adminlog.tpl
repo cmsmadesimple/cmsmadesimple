@@ -11,7 +11,7 @@ $(document).ready(function(){
 
 <div class="pagecontainer">
   <div class="pageoverflow">
-    {if $filteruser != '' or $filteraction != ''}
+    {if isset($filteruser) && $filteruser != '' or $filteraction != ''}
     <fieldset>
       <legend>{'filterapplied'|lang}:</legend>
       {if $filteruser != ''}<p class="pageinput">{'user'|lang} = {$filteruser}</p>{/if}
