@@ -93,7 +93,7 @@ if( isset($efilter['tpl']) && $efilter['tpl'] != '' ) {
 }
 if( !$this->CheckPermission('Modify Templates') ) $efilter[] = 'e:'.get_userid();
 
-$template = null;
+$templates = null;
 try {
     $tpl_query = new CmsLayoutTemplateQuery($efilter);
     $templates = $tpl_query->GetMatches();
