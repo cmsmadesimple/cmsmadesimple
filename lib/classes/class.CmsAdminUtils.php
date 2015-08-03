@@ -43,7 +43,7 @@ final class CmsAdminUtils
     /**
      * A regular expression to use when testing if an item has a valid name.
      */
-    const ITEMNAME_REGEX = '<^[a-zA-Z0-9_\x7f-\xff][a-zA-Z0-9_\ \/\+\:\-\,\.\x7f-\xff]*$>';
+    const ITEMNAME_REGEX = '<^[a-zA-Z0-9_\x7f-\xff][a-zA-Z0-9_\ \/\+\-\,\.\x7f-\xff]*$>';
 
     /**
      * Test if a string is suitable for use as a name of an item in CMSMS.
