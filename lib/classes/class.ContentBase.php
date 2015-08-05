@@ -921,6 +921,18 @@ abstract class ContentBase
 		return TRUE;
 	}
 
+    /**
+     * Indicates wether the current user is permitted to view this content page.
+     *
+     * @since 1.11.12
+     * @abstract
+     * @return boolean
+     */
+    public function IsPermitted()
+    {
+      return TRUE;
+    }
+
 	/**
 	 * Indicates whether this content type is searchable.
 	 *
@@ -934,7 +946,7 @@ abstract class ContentBase
 	 */
     public function IsSearchable()
 	{
-		if( !$this->IsViewable() || !$this->HasTemplate() || $this->IsSystemPage() ) return FALSE;
+		if( !$this->isPermitted() || !$this->IsViewable() || !$this->HasTemplate() || $this->IsSystemPage() ) return FALSE;
 		return $this->HasSearchableContent();
 	}
 
