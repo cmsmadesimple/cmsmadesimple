@@ -184,7 +184,7 @@
                 {if $field->type == 'textbox'}
                     <input type="text" id="{$field->idattr}" name="{$field->nameattr}" value="{$field->value}" size="{$field->size}" maxlength="{$field->max_len}" />
                 {elseif $field->type == 'checkbox'}
-                    <input type="hidden" name="{$field->nameattr}" value="{$field->value}" />
+                    <input type="hidden" name="{$field->nameattr}" value="0" />
                     <input type="checkbox" id="{$field->idattr}" name="{$field->nameattr}" value="1"{if $field->value == 1} checked="checked"{/if} />
                 {elseif $field->type == 'textarea'}
                     {cms_textarea id=$field->idattr name=$field->nameattr enablewysiwyg=1 value=$field->value maxlength=$field->max_len}

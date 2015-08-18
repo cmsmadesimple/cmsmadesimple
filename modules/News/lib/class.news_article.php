@@ -62,34 +62,30 @@ class news_article
 
   private function _get_returnid()
   {
-    if( !isset($this->_meta['returnid']) )
-      {
-	$mod = cms_utils::get_module('News');
-	$tmp = $mod->GetPreference('detail_returnid',-1);
-	if( $tmp <= 0 )
-	  {
-	    $tmp = ContentOperations::get_instance()->GetDefaultContent();
-	  }
-	$this->_meta['returnid'] = $tmp;
+      if( !isset($this->_meta['returnid']) ) {
+          $mod = cms_utils::get_module('News');
+          $tmp = $mod->GetPreference('detail_returnid',-1);
+          if( $tmp <= 0 ) {
+              $tmp = ContentOperations::get_instance()->GetDefaultContent();
+          }
+          $this->_meta['returnid'] = $tmp;
       }
-    return $this->_meta['returnid'];
+      return $this->_meta['returnid'];
   }
 
 
   private function _get_canonical()
   {
-    if( !isset($this->_meta['canonical']) )
-      {
-	$tmp = $this->news_url;
-	if( $tmp == '' )
-	  {
-	    $aliased_title = munge_string_to_url($this->title);
-	    $tmp = 'news/'.$this->id.'/'.$this->returnid."/{$aliased_title}";
-	  }
-	$mod = cms_utils::get_module('News');
-	$canonical = $mod->create_url($this->_inid,'detail',$this->returnid,$this->params,false,false,$tmp);
-	$this->_meta['canonical'] = $canonical;
-      }
+    if( !isset($this->_meta['canonical']) ) {
+        $tmp = $this->news_url;
+        if( $tmp == '' ) {
+            $aliased_title = munge_string_to_url($this->title);
+            $tmp = 'news/'.$this->id.'/'.$this->returnid."/{$aliased_title}";
+        }
+        $mod = cms_utils::get_module('News');
+        $canonical = $mod->create_url($this->_inid,'detail',$this->returnid,$this->params,false,false,$tmp);
+        $this->_meta['canonical'] = $canonical;
+    }
     return $this->_meta['canonical'];
   }
 
@@ -154,7 +150,7 @@ class news_article
     $this->_rawdata['fieldsbyname'][$name] = $field;
   }
 
- 
+
   public function unset_field($name)
   {
     if( isset($this->_rawdata['fieldsbyname']) )
@@ -181,7 +177,7 @@ class news_article
       case 'content':
       case 'summary':
       case 'extra':
-      case 'news_url':  
+      case 'news_url':
       case 'postdate':       // db time format
       case 'startdate':      // db time format
       case 'enddate':        // db time format
@@ -189,8 +185,8 @@ class news_article
       case 'modified_date':  // db time format
       case 'category_id':
       case 'status':
-	return $this->_getdata($key);
-	
+          return $this->_getdata($key);
+
       case 'file_location':
 	$config = cmsms()->GetConfig();
 	$url = $config['uploads_url'].'/news/id'.$this->id;
@@ -199,12 +195,12 @@ class news_article
       case 'author':
 	// metadata.
 	return $this->_getauthorinfo($this->author_id);
-	
+
       case 'authorname':
 	// metadata.
 	return $this->_getauthorinfo($this->author_id,TRUE);
-	
-      case 'category':     
+
+      case 'category':
 	// metadata.
 	return news_ops::get_category_name_from_id($this->category_id);
 
@@ -216,7 +212,7 @@ class news_article
 	// metadata
 	return $this->_get_canonical();
 	break;
-	
+
       case 'fields':
       case 'customfieldsbyname': // deprecated
       case 'fieldsbyname': // deprecated
@@ -225,37 +221,37 @@ class news_article
 	    return $this->_rawdata['fieldsbyname'];
 	  }
 	break;
-	
+
 //       case 'printlink':    // meta
 // 	// metadata
 // 	return $this->_get_printurl(true);
-	
+
 //       case 'printurl':    // meta
 // 	// metadata
 // 	return $this->_get_printurl();
-	
+
       case 'returnid':
-	// metadata
-	return $this->_get_returnid();
-	
+          // metadata
+          return $this->_get_returnid();
+
       case 'params':
-	// metadata
-	return $this->_get_params();
-	
+          // metadata
+          return $this->_get_params();
+
       default:
-	// check if there is a field with this alias
-	if( isset($this->_rawdata['fieldsbyname']) && is_array($this->_rawdata['fieldsbyname']) )
-	  {
-	    foreach( $this->_rawdata['fieldsbyname'] as $fname => &$obj )
-	      {
-		if( !is_object($obj) ) continue;
-		if( $key == $obj->alias )
-		  {
-		    return $obj->value;
-		  }
-	      }
-	  }
-	//throw new Exception('Requesting indvlid data from News article object '.$key);
+          // check if there is a field with this alias
+          if( isset($this->_rawdata['fieldsbyname']) && is_array($this->_rawdata['fieldsbyname']) )
+          {
+              foreach( $this->_rawdata['fieldsbyname'] as $fname => &$obj )
+              {
+                  if( !is_object($obj) ) continue;
+                  if( $key == $obj->alias )
+                  {
+                      return $obj->value;
+                  }
+              }
+          }
+          //throw new Exception('Requesting indvlid data from News article object '.$key);
       }
   }
 
@@ -270,11 +266,11 @@ class news_article
       case 'content':
       case 'summary':
       case 'extra':
-      case 'news_url':  
+      case 'news_url':
       case 'category_id':
       case 'postdate':
-      case 'startdate':  
-      case 'enddate':    
+      case 'startdate':
+      case 'enddate':
       case 'fieldsbyname':
       case 'status':
 	return isset($this->_rawdata[$key]);
@@ -285,10 +281,10 @@ class news_article
 
       case 'author':
       case 'authorname':
-      case 'category':     
+      case 'category':
       case 'canonical':
-//       case 'printlink':  
-//       case 'printurl':   
+//       case 'printlink':
+//       case 'printurl':
       case 'returnid':
       case 'params':
       case 'useexp':
@@ -320,7 +316,7 @@ class news_article
       case 'content':
       case 'summary':
       case 'extra':
-      case 'news_url':  
+      case 'news_url':
       case 'category_id':
 	$this->_rawdata[$key] = $value;
 	break;
