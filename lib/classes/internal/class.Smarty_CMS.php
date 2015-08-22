@@ -60,7 +60,8 @@ class Smarty_CMS extends SmartyBC
     }
 
     // set our own template class with some funky stuff in it
-    $this->template_class = 'CMS_Smarty_Template';
+    // note, can get rid of the CMS_Smarty_Template class and the Smarty_Parser classes.
+    //$this->template_class = 'CMS_Smarty_Template';
 
     // Set plugins dirs
     $this->addPluginsDir(cms_join_path(CMS_ROOT_PATH,'plugins'));
@@ -319,11 +320,13 @@ class Smarty_CMS extends SmartyBC
 
   public function createTemplate($template, $cache_id = null, $compile_id = null, $parent = null, $do_clone = true)
   {
+      $saved_tpl_vars = array();
       if ($parent instanceof Smarty) {
           $saved_tpl_vars = $parent->tpl_vars;
           $saved_config_vars = $parent->config_vars;
       }
       $tpl = parent::createTemplate($template, $cache_id, $compile_id, $parent, $do_clone);
+      if (!empty(Smarty::$global_tpl_vars)) $saved_tpl_vars = array_merge(Smarty::$global_tpl_vars, $saved_tpl_vars);
       if ($parent instanceof Smarty) {
           $parent->tpl_vars = $saved_tpl_vars;
           $parent->config_vars = $saved_config_vars;
