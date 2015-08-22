@@ -83,6 +83,7 @@ $(document).ready(function(){
   <thead>
     <tr>
       <th>{$mod->Lang('name')}</th>
+      <th>{$mod->Lang('newname')}</th>
       <th>{$mod->Lang('type')}</th>
       <th>{$mod->Lang('prompt_description')}</th>
       <th class="pageicon"></th>
@@ -94,8 +95,9 @@ $(document).ready(function(){
    {$type_obj=CmsLayoutTemplateType::load($typename)}
    <tr class="{cycle values='row1,row2'}">
     <td>
-      <h3 data-idx="{$one@index}" class="template_view pointer">{$one.name}</h3>
+      <span data-idx="{$one@index}" class="template_view pointer">{$one.name}</span>
     </td>
+    <td><h3>{$one.newname}</h3></td>
     <td>{$type_obj->get_langified_display_value()}</td>
     <td>{$one.desc|default:$mod->Lang('info_nodescription')|summarize:80}
       <div id="tpl_{$one@index}" class="template_content" title="{$one.name}" style="display: none;"><textarea rows="10" cols="80">{$one.data}</textarea></div>
@@ -115,6 +117,7 @@ $(document).ready(function(){
     <thead>
       <tr>
         <th>{$mod->Lang('name')}</th>
+        <th>{$mod->Lang('newname')}</th>
 	<th>{$mod->Lang('prompt_media_type')}</th>
         <th>{$mod->Lang('prompt_description')}</th>
 	<th class="pageicon"></th>
@@ -123,8 +126,9 @@ $(document).ready(function(){
     <tbody>
       {foreach from=$stylesheets item='one' name='css'}
       <tr>
-        <td>
-	  <h3 class="stylesheet_view pointer">{$one.name}</h3>
+        <td>{$one.name}</td>
+	<td>
+	  <h3>{$one.newname}</h3>
 	</td>
 	<td>{$one.mediatype}</td>
         <td>{$one.desc|default:$mod->Lang('info_nodescription')}

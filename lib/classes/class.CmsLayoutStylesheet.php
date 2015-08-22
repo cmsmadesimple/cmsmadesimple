@@ -804,6 +804,30 @@ class CmsLayoutStylesheet
         }
         return FALSE;
     }
+
+	/**
+	 * Generate a unique name for a stylesheet
+	 *
+	 * @throws CmsInvalidDataException
+     * @throws CmsLogicException
+	 * @param string $prototype A prototype template name
+	 * @param string $prefix An optional name prefix.
+	 */
+	public static function generate_unique_name($prototype,$prefix = null)
+	{
+		if( !$prototype ) throw new CmsInvalidDataException('Prototype name cannot be empty');
+		$db = CmsApp::get_instance()->GetDb();
+		$query = 'SELECT id FROM '.CMS_DB_PREFIX.self::TABLENAME.' WHERE name = ?';
+		for( $i = 0; $i < 25; $i++ ) {
+			$name = $prefix.$prototype;
+            if( $i == 0 ) $name = $prototype;
+			if( $i > 1 ) $name = $prefix.$prototype.' '.$i;
+			$tmp = $db->GetOne($query,array($name));
+			if( !$tmp ) return $name;
+		}
+		throw new CmsLogicException('Could not generate a template name for '.$prototype);
+	}
+
 } // end of class
 
 #

@@ -159,6 +159,7 @@ try {
     exit();
 }
 catch( \Exception $e ) {
+    debug_display($e); die();
   $this->SetError($e->GetMessage());
   $this->RedirectToAdminTab();
 }

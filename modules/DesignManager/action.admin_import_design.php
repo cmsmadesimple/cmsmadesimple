@@ -105,7 +105,7 @@ try {
 			$smarty->assign('templates',$reader->get_template_list());
 			$smarty->assign('stylesheets',$reader->get_stylesheet_list());
 			$newname = CmsLayoutCollection::suggest_name($design_info['name']);
-      $smarty->assign('new_name',$newname);
+            $smarty->assign('new_name',$newname);
 		}
     catch( CmsException $e ) {
       echo $this->ShowErrors($e->GetMessage());
@@ -123,7 +123,7 @@ try {
 		$tmpfile = trim($params['tmpfile']);
     $newname = trim($params['newname']);
 		$newdescription = trim($params['newdescription']);
-    
+
 		if( !file_exists($tmpfile) ) {
 			// bad error, redirect to admin tab.
 			throw new CmsException($this->Lang('error_filenotfound',$tmpfile));

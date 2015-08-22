@@ -100,6 +100,14 @@ class dm_design_reader extends dm_reader_base
                         $this->_tpl_info[$cur_key] = array('key'=>$cur_key);
                         break;
 
+                    case 'tname':
+                        if( $__get_in() != 'template' || !$cur_key ) {
+                            // validity error.
+                        }
+                        $this->_xml->read();
+                        $this->_tpl_info[$cur_key]['name'] = $this->_xml->value;
+                        break;
+
                     case 'tdesc':
                         if( $__get_in() != 'template' || !$cur_key ) {
                             // validity error.
@@ -133,6 +141,14 @@ class dm_design_reader extends dm_reader_base
                         $this->_xml->read();
                         $cur_key = $this->_xml->value;
                         $this->_css_info[$cur_key] = array('key'=>$cur_key);
+                        break;
+
+                    case 'cssname':
+                        if( $__get_in() != 'stylesheet' || !$cur_key ) {
+                            // validity error.
+                        }
+                        $this->_xml->read();
+                        $this->_css_info[$cur_key]['name'] = $this->_xml->value;
                         break;
 
                     case 'cssdesc':
@@ -221,7 +237,7 @@ class dm_design_reader extends dm_reader_base
         $this->_scan();
         return $this->_raw_design_info;
     }
-    
+
     public function set_new_description($description = '')
     {
       $this->_new_design_description = $description;
@@ -234,7 +250,8 @@ class dm_design_reader extends dm_reader_base
         foreach( $this->_tpl_info as $key => $one ) {
             $name = $this->_get_name($key);
             $rec = array();
-            $rec['name'] = $name;
+            $rec['name'] = base64_decode($one['name']);
+            $rec['newname'] = \CmsLayoutTemplate::generate_unique_name($rec['name']);
             $rec['key'] = $key;
             $rec['desc'] = base64_decode($one['desc']);
             $rec['data'] = base64_decode($one['data']);
@@ -252,7 +269,8 @@ class dm_design_reader extends dm_reader_base
         foreach( $this->_css_info as $key => $one ) {
             $name = $this->_get_name($key);
             $rec = array();
-            $rec['name'] = $name;
+            $rec['name'] = base64_decode($one['name']);
+            $rec['newname'] = \CmsLayoutStylesheet::generate_unique_name($rec['name']);
             $rec['key'] = $key;
             $rec['desc'] = base64_decode($one['desc']);
             $rec['data'] = base64_decode($one['data']);
@@ -271,7 +289,7 @@ class dm_design_reader extends dm_reader_base
     $tpl_names = array_values($templates);
 
     foreach( $this->_file_map as $key => &$rec ) {
-      if( !startswith($key,'__TPL::') ) continue;
+      if( !startswith($key,'__TPL,,') ) continue;
 
       if( in_array($rec['value'],$tpl_names) ) {
         // gotta come up with a new name
@@ -298,7 +316,7 @@ class dm_design_reader extends dm_reader_base
     $css_names = array_values($stylesheets);
 
     foreach( $this->_file_map as $key => &$rec ) {
-      if( !startswith($key,'__CSS::') ) continue;
+      if( !startswith($key,'__CSS,,') ) continue;
 
       if( in_array($rec['value'],$css_names) ) {
         // gotta come up with a new name
@@ -345,7 +363,7 @@ class dm_design_reader extends dm_reader_base
     $design = new CmsLayoutCollection();
     $design->set_name($newname);
     $description = $this->get_suggested_description();
-    
+
     if(empty($description))
     {
       $description = $info['description'];
@@ -361,7 +379,7 @@ class dm_design_reader extends dm_reader_base
     // don't have to worry about duplicated filenames (hopefully)
     // because the destinaton directory is unique.
     foreach( $this->_file_map as $key => &$rec ) {
-      if( !startswith($key,'__URL::') ) continue;
+      if( !startswith($key,'__URL,,') ) continue;
       if( !isset($rec['data']) || $rec['data'] == '' ) continue;
 
       $destfile = cms_join_path($config['uploads_path'],'designs',$destdir,$rec['value']);
@@ -373,25 +391,25 @@ class dm_design_reader extends dm_reader_base
     // expand stylesheets
     foreach( $this->get_stylesheet_list() as $css ) {
       $stylesheet = new CmsLayoutStylesheet();
-      $stylesheet->set_name($css['name']);
+      $stylesheet->set_name($css['newname']);
       if( isset($css['desc']) && $css['desc'] != '' ) $stylesheet->set_description($css['desc']);
 
       $content = $css['data'];
       foreach( $this->_file_map as $key => &$rec ) {
-        if( !startswith($key,'__URL::') ) continue;
+        if( !startswith($key,'__URL,,') ) continue;
         if( !isset($rec['css_url']) ) continue;
         $content = str_replace($key,$rec['css_url'],$content);
       }
 
-            if( $css['mediatype'] ) {
-                $tmp = explode(',',$css['mediatype']);
-                for( $i = 0; $i < count($tmp); $i++ ) {
-                    $str = trim($tmp[$i]);
-                    if( $str ) $stylesheet->add_media_type($str);
-                }
-            }
+      if( $css['mediatype'] ) {
+          $tmp = explode(',',$css['mediatype']);
+          for( $i = 0; $i < count($tmp); $i++ ) {
+              $str = trim($tmp[$i]);
+              if( $str ) $stylesheet->add_media_type($str);
+          }
+      }
 
-            if( $css['mediaquery'] ) $stylesheet->set_media_query(trim($css['mediaquery']));
+      if( $css['mediaquery'] ) $stylesheet->set_media_query(trim($css['mediaquery']));
 
       // save the stylesheet and add it to the design.
       $stylesheet->set_content($content);
@@ -402,23 +420,23 @@ class dm_design_reader extends dm_reader_base
     // expand templates
     foreach( $this->get_template_list() as $key => $tpl ) {
       $template = new CmsLayoutTemplate();
-      $template->set_name($tpl['name']);
+      $template->set_name($tpl['newname']);
       if( isset($tpl['desc']) && $tpl['desc'] != '' ) $template->set_description($tpl['desc']);
       $content = $tpl['data'];
 
       // substitute URL keys for the values.
       foreach( $this->_file_map as $key => &$rec ) {
-        if( startswith($key,'__URL::') ) {
+        if( startswith($key,'__URL,,') ) {
           // handle URL keys... handles image links etc.
           if( !isset($rec['tpl_url']) ) continue;
           $content = str_replace($key,$rec['tpl_url'],$content);
         }
-        else if( startswith($key,'__CSS::') ) {
+        else if( startswith($key,'__CSS,,') ) {
           // handle CSS keys... for things like {cms_stylesheet name='xxxx'}
           if( !isset($rec['value']) ) continue;
           $content = str_replace($key,$rec['value'],$content);
         }
-        else if( startswith($key,'__TPL::') ) {
+        else if( startswith($key,'__TPL,,') ) {
           // handle TPL keys... for things like {include file='xxxx'}
           // or calling a module with a specific template.
           if( !isset($rec['value']) ) continue;

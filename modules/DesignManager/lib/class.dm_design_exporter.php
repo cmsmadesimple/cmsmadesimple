@@ -12,19 +12,21 @@ class dm_design_exporter
 
     private static $_dtd = <<<EOT
 <!DOCTYPE design [
-  <!ELEMENT design (name,description,generated,cmsversion,template+,stylesheet*,file+)>
+  <!ELEMENT design (name,description,generated,cmsversion,template+,stylesheet*,file*)>
   <!ELEMENT name (#PCDATA)>
   <!ELEMENT description (#PCDATA)>
   <!ELEMENT generated (#PCDATA)>
   <!ELEMENT cmsversion (#PCDATA)>
-  <!ELEMENT template (tkey,tdesc,tdata,ttype_originator,ttype_name)>
+  <!ELEMENT template (tkey,tname,tdesc,tdata,ttype_originator,ttype_name)>
   <!ELEMENT tkey (#PCDATA)>
+  <!ELEMENT tname (#PCDATA)>
   <!ELEMENT tdesc (#PCDATA)>
   <!ELEMENT tdata (#PCDATA)>
   <!ELEMENT ttype_originator (#PCDATA)>
   <!ELEMENT ttype_name (#PCDATA)>
-  <!ELEMENT stylesheet (csskey,cssdesc,cssmediatype,cssmediaquery,cssdata)>
+  <!ELEMENT stylesheet (csskey,cssname,cssdesc,cssmediatype,cssmediaquery,cssdata)>
   <!ELEMENT csskey (#PCDATA)>
+  <!ELEMENT cssname (#PCDATA)>
   <!ELEMENT cssdesc (#PCDATA)>
   <!ELEMENT cssmediatype (#PCDATA)>
   <!ELEMENT cssmediaquery (#PCDATA)>
@@ -68,7 +70,7 @@ EOT;
                 if( $fn == $data ) return $key;
             }
         }
-        $sig = '__'.$type.'::'.md5($fn).'__';
+        $sig = '__'.$type.',,'.md5($fn).'__';
         if( !is_array($this->_files) ) $this->_files = array();
         $this->_files[$sig] = $fn;
         return $sig;
@@ -164,7 +166,7 @@ EOT;
                     $new_css_ob->set_content($new_content);
 
                     if( !is_array($this->_css_list) ) $this->_css_list = array();
-                    $this->_css_list[] = $new_css_ob;
+                    $this->_css_list[] = array('name'=>$css_ob->get_name(),'obj'=>$new_css_ob);
                 }
             }
         }
@@ -175,8 +177,8 @@ EOT;
         $this->parse_stylesheets();
         if( is_array($this->_css_list) && count($this->_css_list) ) {
             $out = array();
-            foreach( $this->_css_list as $one ) {
-                $out[] = $one->get_name();
+            foreach( $this->_css_list as $rec ) {
+                $out[] = $rec['obj']->get_name();
             }
             return $out;
         }
@@ -186,7 +188,14 @@ EOT;
     {
         switch( $type ) {
         case 'TPL':
-            $tpl_ob = CmsLayoutTemplate::load($name);
+            $tpl_ob = null;
+            if( is_object($name) ) {
+                $tpl_ob = $name;
+                $name = $tpl_ob->get_name();
+            }
+            else {
+                $tpl_ob = CmsLayoutTemplate::load($name);
+            }
             $sig = $this->_get_signature($tpl_ob->get_name(),$type);
 
             // recursion...
@@ -198,7 +207,7 @@ EOT;
             $new_tpl_ob->set_content($new_content);
 
             if( !is_array($this->_tpl_list) ) $this->_tpl_list = array();
-            $this->_tpl_list[$sig] = $new_tpl_ob;
+            $this->_tpl_list[$sig] = array('name'=>$name,'obj'=>$new_tpl_ob);
             return $sig;
 
         case 'MM':
@@ -222,7 +231,7 @@ EOT;
             // it's a menu manager template
             // we need to get a 'type' for this.
             $new_tpl_ob->set_type(self::$_mm_types[0]);
-            $this->_tpl_list[$sig] = $new_tpl_ob;
+            $this->_tpl_list[$sig] = array('name'=>$name,'obj'=>$new_tpl_ob);
             return $sig;
         } // switch
     }
@@ -323,10 +332,12 @@ EOT;
         if( is_null($this->_tpl_list) ) {
             $this->_tpl_list = array();
 
-            $tpllist = $this->_design->get_templates();
-            if( is_array($tpllist) && count($tpllist) > 0 ) {
-                foreach( $tpllist as $tpl_id ) {
-                    $this->_add_template($tpl_id);
+            $idlist = $this->_design->get_templates();
+            if( is_array($idlist) && count($idlist) > 0 ) {
+                $tpllist = \CmsLayoutTemplate::load_bulk($idlist);
+                if( count($idlist) != count($tpllist) ) throw new \CmsException('Internal error... could not directly load all of the templates associated with this design');
+                foreach( $tpllist as $tpl ) {
+                    $this->_add_template($tpl);
                 }
             }
         }
@@ -337,8 +348,8 @@ EOT;
         $this->parse_templates();
         if( is_array($this->_tpl_list) && count($this->_tpl_list) ) {
             $out = array();
-            foreach( $this->_tpl_list as $one ) {
-                $out[] = $one->get_name();
+            foreach( $this->_tpl_list as $rec ) {
+                $out[] = $one['obj']->get_name();
             }
             return $out;
         }
@@ -372,11 +383,12 @@ EOT;
         return $this->_output($elem,$data,$lvl);
     }
 
-    private function _xml_output_template(CmsLayoutTemplate $tpl,$lvl = 0)
+    private function _xml_output_template(CmsLayoutTemplate $tpl,$name,$lvl = 0)
     {
         if( $tpl->get_content() == '' ) throw new CmsException('Cannot export empty template');
         $output = $this->_open_tag('template',$lvl);
         $output .= $this->_output('tkey',$tpl->get_name(),$lvl+1);
+        $output .= $this->_output_data('tname',$name,$lvl+1);
         $output .= $this->_output_data('tdesc',$tpl->get_description(),$lvl+1);
         $output .= $this->_output_data('tdata',$tpl->get_content(),$lvl+1);
         if( !$tpl->get_type_id() ) throw new \CmsException('Cannot get template type for '.$tpl->get_name());
@@ -388,11 +400,12 @@ EOT;
         return $output;
     }
 
-    private function _xml_output_stylesheet(CmsLayoutStylesheet $css,$lvl = 0)
+    private function _xml_output_stylesheet(CmsLayoutStylesheet $css,$name,$lvl = 0)
     {
         if( $css->get_content() == '' ) throw new CmsException('Cannot export empty stylesheet');
         $output = $this->_open_tag('stylesheet',$lvl);
         $output .= $this->_output('csskey',$css->get_name(),$lvl+1);
+        $output .= $this->_output_data('cssname',$name,$lvl+1);
         $output .= $this->_output_data('cssdesc',$css->get_description(),$lvl+1);
         $output .= $this->_output_data('cssmediatype',implode(',',$css->get_media_types()),$lvl+1);
         $output .= $this->_output_data('cssmediaquery',$css->get_media_query(),$lvl+1);
@@ -488,11 +501,11 @@ EOT;
         $output .= $this->_output_data('description',$this->_design->get_description());
         $output .= $this->_output_data('generated',time());
         $output .= $this->_output_data('cmsversion',CMS_VERSION);
-        foreach( $this->_tpl_list as $one ) {
-            $output .= $this->_xml_output_template($one,1);
+        foreach( $this->_tpl_list as $rec ) {
+            $output .= $this->_xml_output_template($rec['obj'],$rec['name'],1);
         }
-        foreach( $this->_css_list as $one ) {
-            $output .= $this->_xml_output_stylesheet($one,1);
+        foreach( $this->_css_list as $rec ) {
+            $output .= $this->_xml_output_stylesheet($rec['obj'],$rec['name'],1);
         }
         if( count($this->_files) ) {
             foreach( $this->_files as $key => $value ) {
