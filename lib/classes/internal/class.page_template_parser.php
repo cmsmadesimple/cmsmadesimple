@@ -46,8 +46,8 @@ class page_template_parser extends \Smarty_Internal_Template
         return FALSE;
     }
 
-    public function fetch()
+    public function fetch($template = null, $cache_id = null, $compile_id = null, $parent = null, $display = false, $merge_tpl_vars = true, $no_output_filter = false)
     {
-        die(__METHOD__.' should never be called');
+        die(__FILE__.'::'.__LINE__.' CRITICAL: This method should never be called');
     }
 }
