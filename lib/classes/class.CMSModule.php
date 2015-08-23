@@ -1434,7 +1434,7 @@ abstract class CMSModule
         $id = cms_htmlentities($id);
         $name = cms_htmlentities($name);
 
-        $gCms = CmsApp::get_instance();
+        $gCms = CmsApp::get_instance(); // in scope for compatibility reasons.
         $smarty = $gCms->GetSmarty();
         $smarty->assign('actionid',$id);
         $smarty->assign('actionparams',$params);

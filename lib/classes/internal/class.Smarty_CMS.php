@@ -45,14 +45,14 @@ class Smarty_CMS extends SmartyBC
   public function __construct()
   {
     parent::__construct();
+    $this->direct_access_security = TRUE;
 
-    global $CMS_ADMIN_PAGE; // <- Still needed?
     global $CMS_INSTALL_PAGE;
 
     // Set template_c and cache dirs
     $this->setCompileDir(TMP_TEMPLATES_C_LOCATION);
     $this->setCacheDir(TMP_CACHE_LOCATION);
-    $this->assign('app_name','CMSMS');
+    $this->assignGlobal('app_name','CMSMS');
 
     if (CMS_DEBUG == true) {
         $this->debugging = false;
@@ -120,7 +120,7 @@ class Smarty_CMS extends SmartyBC
         if( get_site_preference('use_smartycache',0) ) $this->setCompileCheck(get_site_preference('use_smartycompilecheck',1));
 
         // Enable security object
-        $this->enableSecurity('CMSSmartySecurityPolicy');
+        if( !$config['permissive_smarty'] ) $this->enableSecurity('CMSSmartySecurityPolicy');
     }
     else if($_gCms->test_state(CmsApp::STATE_ADMIN_PAGE)) {
         $this->setCaching(false);
@@ -313,11 +313,12 @@ class Smarty_CMS extends SmartyBC
       Events::SendEvent('Core','TemplatePreFetch',$parms);
     }
 
-    $tmp = parent::fetch($template,$cache_id,$compile_id,$parent,$display,false,$no_output_filter);
+    $tmp = parent::fetch($template,$cache_id,$compile_id,$parent,$display,$merge_tpl_vars,$no_output_filter);
     debug_buffer('','Fetch '.$name.' end');
     return $tmp;
   }
 
+  /*
   public function createTemplate($template, $cache_id = null, $compile_id = null, $parent = null, $do_clone = true)
   {
       $saved_tpl_vars = array();
@@ -335,6 +336,7 @@ class Smarty_CMS extends SmartyBC
       }
       return $tpl;
   }
+  */
 
   /**
    * clearCache method
