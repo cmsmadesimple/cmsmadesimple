@@ -35,19 +35,17 @@
  * @param object The smarty object
  * @return string The module output
  */
-function cms_module_plugin($params,&$template)
+function cms_module_plugin($params,&$smarty)
 {
-    $smarty = $template->smarty;
     if( get_class($smarty) == 'Smarty_Parser' ) return; // if we are in the parser, we don't process module calls.
 
     $mid_cache = cms_utils::get_app_data('mid_cache');
-    if( empty($mid_cache) ) {
-        $mid_cache = array();
-    }
+    if( empty($mid_cache) ) $mid_cache = array();
     for( $i = 0; $i < 10; $i++ ) {
         $tmp = $i;
-        foreach($params as $key=>$value)
+        foreach($params as $key=>$value) {
             $tmp .= $key.'='.$value;
+        }
         $id = 'm'.substr(md5($tmp),0,5);
         if( !isset($mid_cache[$id]) ) {
             $mid_cache[$id] = $id;
@@ -63,10 +61,12 @@ function cms_module_plugin($params,&$template)
     $inline = false;
     $checkid = '';
 
-    if (isset($params['module']))
+    if (isset($params['module'])) {
         $modulename = $params['module'];
-    else
+    }
+    else {
         return '<!-- ERROR: module name not specified -->';
+    }
 
     if (isset($params['idprefix'])) $id = trim($params['idprefix']);
     if (isset($params['action']) && $params['action'] != '') {
@@ -103,9 +103,7 @@ function cms_module_plugin($params,&$template)
     if( $module && $module->isPluginModule() ) {
         @ob_start();
         $result = $module->DoActionBase($action, $id, $params, $returnid);
-        if ($result !== FALSE) {
-            echo $result;
-        }
+        if ($result !== FALSE) echo $result;
         $modresult = @ob_get_contents();
         @ob_end_clean();
 
