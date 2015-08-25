@@ -348,7 +348,7 @@ class dm_theme_reader extends dm_reader_base
     $design = new CmsLayoutCollection();
     $design->set_name($newname);
     $description = $this->get_suggested_description();
-    
+
     if(empty($description))
     {
       $description = $info['description'];
@@ -357,7 +357,7 @@ class dm_theme_reader extends dm_reader_base
       $description .= 'By CMSMS version: '.$info['cmsversion']."\n";
       $description .= 'Imported '.strftime('%x %X');
     }
-      
+
     $design->set_description($description);
 
     // part2 .. expand files.
@@ -433,6 +433,7 @@ class dm_theme_reader extends dm_reader_base
       if( $tpl_rec['type_originator'] == 'MenuManager' ) $have_mm_template = TRUE;
 
       $template = new CmsLayoutTemplate();
+      $template->set_owner(get_userid(FALSE));
       $template->set_name($tpl_rec['name']);
 
       $types = array("href", "src", "url");
@@ -454,8 +455,8 @@ class dm_theme_reader extends dm_reader_base
       $tpl_rec['data'] = $content;
       $template->set_content($content);
       $template->set_type($tpl_rec['type_originator'].'::'.$tpl_rec['type_name']);
-       $template->save();
-       $design->add_template($template);
+      $template->save();
+      $design->add_template($template);
     }
 
     // part5 ... save design
