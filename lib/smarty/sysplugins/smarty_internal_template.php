@@ -195,7 +195,6 @@ class Smarty_Internal_Template extends Smarty_Internal_TemplateBase
         if (!$this->source->recompiled && $this->compiler->write_compiled_code) {
             // write compiled template
             $_filepath = $this->compiled->filepath;
-            debug_to_log(__METHOD__.' -- '.$_filepath);
             if ($_filepath === false)
                 throw new SmartyException('getCompiledFilepath() did not return a destination to save the compiled template to');
             Smarty_Internal_Write_File::writeFile($_filepath, $code, $this->smarty);

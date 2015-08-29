@@ -9,14 +9,21 @@ class page_template_parser extends \Smarty_Internal_Template
     public function __construct($template_resource, $smarty, $_parent = null, $_cache_id = null, $_compile_id = null, $_caching = null, $_cache_lifetime = null)
     {
         $_caching = false;
-        $_compile_id = 'cmsms_parser_'.time();
+        $_compile_id = 'cmsms_parser_'.microtime();
+        $_cache_lifetime = 0;
         parent::__construct($template_resource, $smarty, $_parent, $_cache_id, $_compile_id, $_caching, $_cache_lifetime);
 
         $this->registerDefaultPluginHandler(array($this,'defaultPluginHandler'));
 
-        $this->registerPlugin('compiler','content',array('CMS_Content_Block','smarty_compiler_contentblock'),false);
-        $this->registerPlugin('compiler','content_image',array('CMS_Content_Block','smarty_compiler_imageblock'),false);
-        $this->registerPlugin('compiler','content_module',array('CMS_Content_Block','smarty_compiler_moduleblock'),false);
+        try {
+            $this->registerPlugin('compiler','content',array('CMS_Content_Block','smarty_compiler_contentblock'),false);
+            $this->registerPlugin('compiler','content_image',array('CMS_Content_Block','smarty_compiler_imageblock'),false);
+            $this->registerPlugin('compiler','content_module',array('CMS_Content_Block','smarty_compiler_moduleblock'),false);
+        }
+        catch( \SmartyException $e ) {
+            // ignore these... throws an error in Smarty 3.1.16 if plugin is already registered
+            // because plugin registration is global.
+        }
     }
 
     /**
