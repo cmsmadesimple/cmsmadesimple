@@ -120,7 +120,7 @@ $obj = new \CMSMS\internal\global_cachable('schema_version',
 $obj = new \CMSMS\internal\global_cachable('latest_content_modification',
                                            function(){
                                                $db = \CmsApp::get_instance()->GetDb();
-                                               $query = 'SELECT modified_date FROM '.CmsApp::get_instance()->GetDbPrefix().'content ORDER BY modified date DESC';
+                                               $query = 'SELECT modified_date FROM '.CmsApp::get_instance()->GetDbPrefix().'content ORDER BY modified_date DESC';
                                                $tmp = $db->GetOne($query);
                                                return $db->UnixTimeStamp($tmp);
                                            });
