@@ -1361,7 +1361,9 @@ abstract class ContentBase
 			$this->Insert();
 		}
 
-        ContentOperations::get_instance()->SetContentModified();
+        $contentops = ContentOperations::get_instance();
+        $contentops->SetContentModified();
+        $contentops->SetAllHierarchyPositions();
 		Events::SendEvent('Core', 'ContentEditPost', array('content' => &$this));
 	}
 

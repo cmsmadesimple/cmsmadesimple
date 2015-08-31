@@ -400,52 +400,53 @@ class ContentOperations
     /**
      * Updates the hierarchy position of one item
 	 *
+     * @internal
+     * @ignore
 	 * @param int $contentid The content id to update
+	 * @return array|null
      */
 	private function _SetHierarchyPosition($contentid)
 	{
-		$db = CmsApp::get_instance()->GetDb();;
+        // do nothing
+	}
 
-		$current_hierarchy_position = '';
-		$current_id_hierarchy_position = '';
-		$current_hierarchy_path = '';
-		$current_parent_id = $contentid;
-		$count = 0;
 
-		while ($current_parent_id > -1) {
-			$query = "SELECT item_order, parent_id, content_alias FROM ".CMS_DB_PREFIX."content WHERE content_id = ?";
-			$row = $db->GetRow($query, array($current_parent_id));
-			if ($row) {
-				$current_hierarchy_position = str_pad($row['item_order'], 5, '0', STR_PAD_LEFT) . "." . $current_hierarchy_position;
-				$current_id_hierarchy_position = $current_parent_id . '.' . $current_id_hierarchy_position;
-				$current_hierarchy_path = $row['content_alias'] . '/' . $current_hierarchy_path;
-				$current_parent_id = $row['parent_id'];
-				$count++;
-			}
-			else {
-				$current_parent_id = -1;
-			}
+    /**
+     * Updates the hierarchy position of one item
+	 *
+	 * @internal
+     * @ignore
+	 * @param integer $contentid The content id to update
+	 * @param array $hash A hash of all content objects (only certain fields)
+	 * @return array|null
+     */
+    private function _set_hierarchy_position($content_id,$hash)
+	{
+		$row = $hash[$content_id];
+		$saved_row = $row;
+		$hier = $idhier = $pathhier = '';
+		$current_parent_id = $content_id;
+
+		while( $current_parent_id > 0 ) {
+			$hier = str_pad($row['item_order'], 5, '0', STR_PAD_LEFT) . "." . $hier;
+			$idhier = $current_parent_id . '.' . $idhier;
+			$pathhier = $row['alias'] . '/' . $pathhier;
+			$current_parent_id = $row['parent_id'];
+			if( $current_parent_id < 1 ) break;
+			$row = $hash[$current_parent_id];
 		}
 
-		if (strlen($current_hierarchy_position) > 0) {
-			$current_hierarchy_position = substr($current_hierarchy_position, 0, strlen($current_hierarchy_position) - 1);
+		if (strlen($hier) > 0) $hier = substr($hier, 0, strlen($hier) - 1);
+		if (strlen($idhier) > 0) $idhier = substr($idhier, 0, strlen($idhier) - 1);
+		if (strlen($pathhier) > 0) $pathhier = substr($pathhier, 0, strlen($pathhier) - 1);
+
+		// if we actually did something, return the row.
+		if( $hier != $saved_row['hierarchy'] || $idhier != $saved_row['id_hierarchy'] || $pathhier != $row['hierarchy_path'] ) {
+			$saved_row['hierarchy'] = $hier;
+			$saved_row['id_hierarchy'] = $idhier;
+			$saved_row['hierarchy_path'] = $pathhier;
+			return $saved_row;
 		}
-		if (strlen($current_id_hierarchy_position) > 0) {
-			$current_id_hierarchy_position = substr($current_id_hierarchy_position, 0, strlen($current_id_hierarchy_position) - 1);
-		}
-		if (strlen($current_hierarchy_path) > 0) {
-			$current_hierarchy_path = substr($current_hierarchy_path, 0, strlen($current_hierarchy_path) - 1);
-		}
-
-		$query = "SELECT prop_name FROM ".CMS_DB_PREFIX."content_props WHERE content_id = ?";
-		$prop_name_array = $db->GetCol($query, array($contentid));
-
-		debug_buffer(array($current_hierarchy_position, $current_id_hierarchy_position, implode(',', $prop_name_array), $contentid));
-
-		$query = "UPDATE ".CMS_DB_PREFIX."content SET hierarchy = ?, id_hierarchy = ?, hierarchy_path = ?, prop_names = ? WHERE content_id = ?";
-		$db->Execute($query, array($current_hierarchy_position, $current_id_hierarchy_position, $current_hierarchy_path, implode(',', $prop_name_array), $contentid));
-
-		cms_content_cache::clear();
 	}
 
 
@@ -457,15 +458,31 @@ class ContentOperations
 	 */
 	function SetAllHierarchyPositions()
 	{
+		// load some data about all pages into memory... and convert into a hash.
 		$db = CmsApp::get_instance()->GetDb();
+		$sql = 'SELECT content_id, parent_id, item_order, content_alias AS alias, hierarchy, id_hierarchy, hierarchy_path FROM '.cms_db_prefix().'content ORDER BY hierarchy';
+		$list = $db->GetArray($sql);
+		if( !count($list) ) {
+			// nothing to do, get outa here.
+			return;
+		}
+		$hash = array();
+		foreach( $list as $row ) {
+			$hash[$row['content_id']] = $row;
+		}
+		unset($list);
 
-		$query = "SELECT content_id FROM ".CMS_DB_PREFIX."content";
-		$dbresult = $db->GetCol($query);
-
-		foreach( $dbresult as $one ) {
-		    $this->_SetHierarchyPosition($one);
+		// would be nice to use a transaction here.
+		$usql = "UPDATE ".cms_db_prefix()."content SET hierarchy = ?, id_hierarchy = ?, hierarchy_path = ? WHERE content_id = ?";
+		foreach( $hash as $content_id => $row ) {
+			$changed = $this->_set_hierarchy_position($content_id,$hash);
+			if( is_array($changed) ) {
+				$db->Execute($usql, array($changed['hierarchy'], $changed['id_hierarchy'], $changed['hierarchy_path'], $changed['content_id']));
+			}
 		}
 
+		// clear the content cache again.
+		cms_content_cache::clear();
 		CmsApp::get_instance()->clear_cached_files();
 	}
 
