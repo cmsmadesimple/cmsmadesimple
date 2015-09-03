@@ -47,6 +47,7 @@ function cms_autoloader($classname)
     if( startswith($classname,'CMSMS\\') ) {
         $path = str_replace('\\','/',substr($classname,6));
         $classname = basename($path);
+        $path = dirname($path);
         $filenames = array("class.{$classname}.php","interface.{$classname}.php","trait.{$classname}.php");
         foreach( $filenames as $test ) {
             $fn = cms_join_path(CMS_ROOT_PATH,'lib','classes',$path,$test);

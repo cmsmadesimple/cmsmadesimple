@@ -323,9 +323,8 @@ final class CmsApp {
 		global $CMS_INSTALL_PAGE;
 
 		if( !isset($DONT_LOAD_DB) && !function_exists('load_adodb') ) {
-			require(dirname(__DIR__).'/adodb.functions.php');
-			load_adodb();
-			$this->db = adodb_connect();
+            $config = $this->GetConfig();
+            $this->db = \CMSMS\Database\compatibility::init($config);
 		}
 
 		return $this->db;
