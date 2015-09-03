@@ -441,7 +441,12 @@ class ContentOperations
 		if (strlen($pathhier) > 0) $pathhier = substr($pathhier, 0, strlen($pathhier) - 1);
 
 		// if we actually did something, return the row.
-		if( $hier != $saved_row['hierarchy'] || $idhier != $saved_row['id_hierarchy'] || $pathhier != $row['hierarchy_path'] ) {
+        static $_cnt;
+        $a = ($hier == $saved_row['hierarchy']);
+        $b = ($idhier == $saved_row['id_hierarchy']);
+        $c = ($pathhier == $saved_row['hierarchy_path']);
+        if( !$a || !$b || !$c ) {
+            $_cnt++;
 			$saved_row['hierarchy'] = $hier;
 			$saved_row['id_hierarchy'] = $idhier;
 			$saved_row['hierarchy_path'] = $pathhier;
