@@ -151,6 +151,7 @@ namespace CMSMS\Database {
         {
             $rs =  $this->SelectLimit( $sql, 1, -1, $inputarr );
             $res = $rs->fields();
+            if( !$res ) return;
             $key = array_keys($res)[0];
             return $res[$key];
         }

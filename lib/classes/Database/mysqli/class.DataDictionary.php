@@ -240,7 +240,7 @@ class DataDictionary extends \CMSMS\Database\DataDictionary
 
 		$s .= ' (' . $flds . ')';
 
-		if ( isset($idxoptions[$this->upperName]) ) $s .= $idxoptions[$this->upperName];
+        if( ($opts = $this->get_dbtype_options($idxoptions)) ) $s .= $opts;
 
 		$sql[] = $s;
 

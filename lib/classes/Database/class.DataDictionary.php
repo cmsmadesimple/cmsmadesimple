@@ -578,7 +578,7 @@ abstract class DataDictionary
 		return false;
 	}
 
-    private function get_dbtype_options($opts,$suffix = null)
+    protected function get_dbtype_options($opts,$suffix = null)
     {
         $dbtype = $this->_DBType();
         $list = array($dbtype.$suffix,strtoupper($dbtype).$suffix,strtolower($dbtype).$suffix);
