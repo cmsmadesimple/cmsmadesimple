@@ -33,7 +33,7 @@ if( !function_exists('__cms_function_output_var') ) {
             return ".{$key}";
 
         default:
-            // should not get ehre....
+            // should not get here....
             die('got here');
         }
     }
@@ -57,7 +57,7 @@ if( !function_exists('__cms_function_output_var') ) {
         }
         else if( is_array($val) ) {
             $out .= str_repeat($depth_str,$depth);
-            $out .= "{$acc} <em>($type)</em> = {<br/>";
+            $out .= "{$acc} <em>($type)</em> = [<br/>";
             foreach( $val as $a_key => $a_val ) {
                 $out .= __cms_function_output_var($a_key,$a_val,$type,$depth+1);
             }
