@@ -80,7 +80,6 @@ if( version_compare($oldversion,'1.50') < 0 ) {
         foreach( $alltemplates as $tplname ) {
             $upgrade_template($menu_template_type,'',$tplname,$default_template);
         }
-        die('end modulemanager upgrade');
     }
     catch( CmsException $e ) {
         audit('',$this->GetName(),'Upgrade Error: '.$e->GetMessage());
