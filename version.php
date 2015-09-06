@@ -18,7 +18,7 @@
 #
 #$Id$
 
-$CMS_VERSION = "2.0";
+$CMS_VERSION = "2.0.0.1-testing";
 $CMS_VERSION_NAME = "Australia";
 $CMS_SCHEMA_VERSION = '200';
 
