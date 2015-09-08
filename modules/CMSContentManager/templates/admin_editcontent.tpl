@@ -65,20 +65,9 @@ $(document).ready(function(){
 {/if}
 
 // here we want to disable the dirtyform stuff when these fields are changed
-    $('#id_disablewysiwyg').change(function (ev) {
-        var self = this;
-        $('#Edit_Content').dirtyForm('disable');
-	{if $content_id > 0}
-  	  $('#Edit_Content').lockManager('unlock').done(function(){
-	     $(self).closest('form').submit();
-	  });
-	{else}
-          $(self).closest('form').submit();
-	{/if}
-    });
 
-    // submit the form if template id, and/or content-type fields are changed.
-    $('#template_id, #content_type').on('change', function () {
+    // submit the form if disable wysiwyg, template id, and/or content-type fields are changed.
+    $('#id_disablewysiwyg, #template_id, #content_type').on('change', function () {
         var self = this;
         $('#Edit_Content').dirtyForm('disable');
 	{if $content_id > 0}
