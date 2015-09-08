@@ -1,6 +1,11 @@
+2.0.1 
+------
+- Improved optimization in ContentOperations::SetAllHierarchyPositions
+- Fixed return type of ContentOperations::GetPageIdFromAlias()
+
+CMSContentManager:
+- Fixes for changing content types.
 
 ==================================================
 The CHANGELOG is cleared for the CMSMS 2.0 release
 ==================================================
-
-No changes yet... ;)
