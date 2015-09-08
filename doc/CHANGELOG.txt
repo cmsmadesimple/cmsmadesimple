@@ -2,6 +2,7 @@
 ------
 - Improved optimization in ContentOperations::SetAllHierarchyPositions
 - Fixed return type of ContentOperations::GetPageIdFromAlias()
+- help for the {cms_html_options} plugin.
 
 CMSContentManager:
 - Fixes for changing content types.
