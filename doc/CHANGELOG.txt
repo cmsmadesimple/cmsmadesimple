@@ -7,6 +7,8 @@
 - Explicitly force $smarty->fetch() to create a new template, and therefore a new scope.  Keep track of scopes in a stack.
 - SITENAME is now assigned as a smarty global.
 - Fix problem with changing content types.
+- Fix problem with CmsLayoutTemplateQuery wrt the editable option, that generated an SQL error.
+  (resolves problems where people have additional editor access to templates, but no other design manager permissions).
 
 CMSContentManager v1.0.1
 - Fixes for changing content types.

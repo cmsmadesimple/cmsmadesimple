@@ -126,7 +126,7 @@ class CmsLayoutTemplateQuery extends CmsDbQueryBase
                    WHERE owner_id = ?)
                  AS tmp1';
 				$t2 = $db->GetCol($q2,array($second,$second));
-				if( is_array($t2) && count($t2) ) $where['user'][] = 'id IN ('.implode(',',$t2).')';
+				if( is_array($t2) && count($t2) ) $where['user'][] = 'tpl.id IN ('.implode(',',$t2).')';
 				break;
 
             case 'limit':
