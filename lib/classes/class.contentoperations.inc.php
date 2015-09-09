@@ -428,7 +428,8 @@ class ContentOperations
 		$current_parent_id = $content_id;
 
 		while( $current_parent_id > 0 ) {
-			$hier = str_pad($row['item_order'], 5, '0', STR_PAD_LEFT) . "." . $hier;
+            $item_order = max($row['item_order'],1);
+			$hier = str_pad($item_order, 5, '0', STR_PAD_LEFT) . "." . $hier;
 			$idhier = $current_parent_id . '.' . $idhier;
 			$pathhier = $row['alias'] . '/' . $pathhier;
 			$current_parent_id = $row['parent_id'];
@@ -446,6 +447,7 @@ class ContentOperations
         $b = ($idhier == $saved_row['id_hierarchy']);
         $c = ($pathhier == $saved_row['hierarchy_path']);
         if( !$a || !$b || !$c ) {
+            //debug_display($saved_row); debug_display("$hier -- $idhier -- $pathhier"); die();
             $_cnt++;
 			$saved_row['hierarchy'] = $hier;
 			$saved_row['id_hierarchy'] = $idhier;
@@ -476,11 +478,15 @@ class ContentOperations
 			$hash[$row['content_id']] = $row;
 		}
 		unset($list);
+        //stack_trace(); die();
 
 		// would be nice to use a transaction here.
+        static $_n;
 		$usql = "UPDATE ".cms_db_prefix()."content SET hierarchy = ?, id_hierarchy = ?, hierarchy_path = ? WHERE content_id = ?";
 		foreach( $hash as $content_id => $row ) {
 			$changed = $this->_set_hierarchy_position($content_id,$hash);
+            /* if( $_n > 1 ) { debug_display($changed); die(); } */
+            /* $_n++; */
 			if( is_array($changed) ) {
 				$db->Execute($usql, array($changed['hierarchy'], $changed['id_hierarchy'], $changed['hierarchy_path'], $changed['content_id']));
 			}

@@ -385,7 +385,7 @@ function debug_to_log($var, $title='',$filename = '')
             $x = @filemtime($filename);
             if( $x !== FALSE && $x < (time() - 24 * 3600) ) @unlink($filename);
         }
-        $errlines = explode("\n",debug_display($var, $title, false, false, false));
+        $errlines = explode("\n",debug_display($var, $title, false, false, true));
         foreach ($errlines as $txt) {
             error_log($txt . "\n", 3, $filename);
         }

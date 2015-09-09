@@ -301,19 +301,24 @@ class Smarty_CMS extends SmartyBC
     $name = $template; if( startswith($name,'string:') ) $name = 'string:';
     debug_buffer('','Fetch '.$name.' start');
     if( is_null($cache_id) || $cache_id === '' ) {
-      $cache_id = $this->_global_cache_id;
+        $cache_id = $this->_global_cache_id;
     }
     else if( $cache_id[0] == '|' ) {
-      $cache_id = $this->_global_cache_id . $cache_id;
+        $cache_id = $this->_global_cache_id . $cache_id;
     }
 
     // send an event before fetching...this allows us to change template stuff.
     if( CmsApp::get_instance()->is_frontend_request() ) {
-      $parms = array('template'=>&$template,'cache_id'=>&$cache_id,'compile_id'=>&$compile_id,'display'=>&$display);
-      Events::SendEvent('Core','TemplatePreFetch',$parms);
+        $parms = array('template'=>&$template,'cache_id'=>&$cache_id,'compile_id'=>&$compile_id,'display'=>&$display);
+        Events::SendEvent('Core','TemplatePreFetch',$parms);
+        $_tpl = $this->CreateTemplate($template,$cache_id,$compile_id);
+        $tmp = $_tpl->fetch();
     }
-
-    $tmp = parent::fetch($template,$cache_id,$compile_id,$parent,$display,$merge_tpl_vars,$no_output_filter);
+    else {
+        // admin requests are a bit fugged up... lots of stuff relies on a single smarty scope.
+        // gotta fix that.
+        $tmp = parent::fetch($template,$cache_id,$compile_id,$parent,$display,$merge_tpl_vars,$no_output_filter);
+    }
     debug_buffer('','Fetch '.$name.' end');
     return $tmp;
   }

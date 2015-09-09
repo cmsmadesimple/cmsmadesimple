@@ -4,6 +4,9 @@
 - Fixed return type of ContentOperations::GetPageIdFromAlias()
 - help for the {cms_html_options} plugin.
 - Change the default page template to use {Navigator}
+- Explicitly force $smarty->fetch() to create a new template, and therefore a new scope.
+- SITENAME is now assigned as a smarty global.
+- Fix problem with changing content types.
 
 CMSContentManager:
 - Fixes for changing content types.

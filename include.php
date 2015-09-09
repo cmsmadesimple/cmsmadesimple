@@ -231,7 +231,7 @@ if( !isset($DONT_LOAD_SMARTY) ) {
     $smarty->debugging = true;
     $smarty->error_reporting = 'E_ALL';
   }
-  $smarty->assign('sitename', cms_siteprefs::get('sitename', 'CMSMS Site'));
+  $smarty->assignGlobal('sitename', cms_siteprefs::get('sitename', 'CMSMS Site'));
 }
 
 
