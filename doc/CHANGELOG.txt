@@ -1,11 +1,15 @@
-2.0.1 
+2.0.1
 ------
 - Improved optimization in ContentOperations::SetAllHierarchyPositions
 - Fixed return type of ContentOperations::GetPageIdFromAlias()
 - help for the {cms_html_options} plugin.
+- Change the default page template to use {Navigator}
 
 CMSContentManager:
 - Fixes for changing content types.
+
+DesignManager
+- Clear the type_default flag when copying a template.
 
 ==================================================
 The CHANGELOG is cleared for the CMSMS 2.0 release

@@ -20,115 +20,115 @@
 #-------------------------------------------------------------------------
 if( !isset($gCms) ) exit;
 if( !$this->CheckPermission('Modify Templates') ) {
-  // no manage templates permission
-  if( !$this->CheckPermission('Add Templates') ) {
-    // no add templates permission
-    if( !isset($params['tpl']) || !CmsLayoutTemplate::user_can_edit($params['tpl']) ) {
-      // no parameter, or no ownership/addt_editors.
-      return;
+    // no manage templates permission
+    if( !$this->CheckPermission('Add Templates') ) {
+        // no add templates permission
+        if( !isset($params['tpl']) || !CmsLayoutTemplate::user_can_edit($params['tpl']) ) {
+            // no parameter, or no ownership/addt_editors.
+            return;
+        }
     }
-  }
 }
 
 $this->SetCurrentTab('templates');
 if( !isset($params['tpl']) ) {
-  $this->SetError($this->Lang('error_missingparam'));
-  $this->RedirectToAdminTab();
+    $this->SetError($this->Lang('error_missingparam'));
+    $this->RedirectToAdminTab();
 }
 if( isset($params['cancel']) ) {
-  $this->SetMessage($this->Lang('msg_cancelled'));
-  $this->RedirectToAdminTab();
+    $this->SetMessage($this->Lang('msg_cancelled'));
+    $this->RedirectToAdminTab();
 }
 
 try {
-  $orig_tpl = CmsLayoutTemplate::load($params['tpl']);
+    $orig_tpl = CmsLayoutTemplate::load($params['tpl']);
 
-  if( isset($params['submit']) || isset($params['submitandedit']) ) {
+    if( isset($params['submit']) || isset($params['submitandedit']) ) {
 
-    try {
-      $new_tpl = clone($orig_tpl);
-      $new_tpl->set_owner(get_userid());
-      $new_tpl->set_name(trim($params['new_name']));
-      $new_tpl->set_additional_editors(array());
+        try {
+            $new_tpl = clone($orig_tpl);
+            $new_tpl->set_owner(get_userid());
+            $new_tpl->set_name(trim($params['new_name']));
+            $new_tpl->set_additional_editors(array());
 
-      // only if have manage themes right.
-      if( $this->CheckPermission('Modify Designs') ) {
+            // only if have manage themes right.
+            if( $this->CheckPermission('Modify Designs') ) {
 				$new_tpl->set_designs($orig_tpl->get_designs());
-      }
-      else {
+            }
+            else {
 				$new_tpl->set_designs(array());
-      }
-      $new_tpl->save();
+            }
+            $new_tpl->save();
 
-      if( isset($params['submitandedit']) ) {
+            if( isset($params['submitandedit']) ) {
 				$this->SetMessage($this->Lang('msg_template_copied_edit'));
 				$this->Redirect($id,'admin_edit_template',$returnid,array('tpl'=>$new_tpl->get_id()));
-      }
-      else {
+            }
+            else {
 				$this->SetMessage($this->Lang('msg_template_copied'));
 				$this->RedirectToAdminTab();
-      }
+            }
+        }
+        catch( CmsException $e ) {
+            echo $this->ShowErrors($e->GetMessage());
+        }
     }
-    catch( CmsException $e ) {
-      echo $this->ShowErrors($e->GetMessage());
-    }
-  }
 
-  // build a display.
-  $cats = CmsLayoutTemplateCategory::get_all();
-  $out = array();
-  $out[0] = $this->Lang('prompt_none');
-  if( is_array($cats) && count($cats) ) {
-    foreach( $cats as $one ) {
-      $out[$one->get_id()] = $one->get_name();
-    }
-  }
-  $smarty->assign('category_list',$out);
-
-  $types = CmsLayoutTemplateType::get_all();
-  if( is_array($types) && count($types) ) {
+    // build a display.
+    $cats = CmsLayoutTemplateCategory::get_all();
     $out = array();
-    foreach( $types as $one ) {
-      $out[$one->get_id()] = $one->get_langified_display_value();
+    $out[0] = $this->Lang('prompt_none');
+    if( is_array($cats) && count($cats) ) {
+        foreach( $cats as $one ) {
+            $out[$one->get_id()] = $one->get_name();
+        }
     }
-    $smarty->assign('type_list',$out);
-  }
+    $smarty->assign('category_list',$out);
 
-  $designs = CmsLayoutCollection::get_all();
-  if( is_array($designs) && count($designs) ) {
-    $out = array();
-    foreach( $designs as $one ) {
-      $out[$one->get_id()] = $one->get_name();
+    $types = CmsLayoutTemplateType::get_all();
+    if( is_array($types) && count($types) ) {
+        $out = array();
+        foreach( $types as $one ) {
+            $out[$one->get_id()] = $one->get_langified_display_value();
+        }
+        $smarty->assign('type_list',$out);
     }
-    $smarty->assign('design_list',$out);
-  }
 
-  $userops = cmsms()->GetUserOperations();
-  $allusers = $userops->LoadUsers();
-  $tmp = array();
-  foreach( $allusers as $one ) {
-    $tmp[$one->id] = $one->username;
-  }
-  if( is_array($tmp) && count($tmp) ) {
-    $smarty->assign('user_list',$tmp);
-  }
+    $designs = CmsLayoutCollection::get_all();
+    if( is_array($designs) && count($designs) ) {
+        $out = array();
+        foreach( $designs as $one ) {
+            $out[$one->get_id()] = $one->get_name();
+        }
+        $smarty->assign('design_list',$out);
+    }
 
-  $new_name = $orig_tpl->get_name();
-  $p = strrpos($new_name,' -- ');
-  $n = 2;
-  if( $p !== FALSE ) {
-    $n = (int)substr($new_name,$p+4)+1;
-    $new_name = substr($new_name,0,$p);
-  }
-  $new_name .= ' -- '.$n;
-  $smarty->assign('new_name',$new_name);
+    $userops = cmsms()->GetUserOperations();
+    $allusers = $userops->LoadUsers();
+    $tmp = array();
+    foreach( $allusers as $one ) {
+        $tmp[$one->id] = $one->username;
+    }
+    if( is_array($tmp) && count($tmp) ) {
+        $smarty->assign('user_list',$tmp);
+    }
 
-  $smarty->assign('tpl',$orig_tpl);
-  echo $this->ProcessTemplate('admin_copy_template.tpl');
+    $new_name = $orig_tpl->get_name();
+    $p = strrpos($new_name,' -- ');
+    $n = 2;
+    if( $p !== FALSE ) {
+        $n = (int)substr($new_name,$p+4)+1;
+        $new_name = substr($new_name,0,$p);
+    }
+    $new_name .= ' -- '.$n;
+    $smarty->assign('new_name',$new_name);
+
+    $smarty->assign('tpl',$orig_tpl);
+    echo $this->ProcessTemplate('admin_copy_template.tpl');
 }
 catch( CmsException $e ) {
-  $this->SetError($e->GetMessage());
-  $this->RedirectToAdminTab();
+    $this->SetError($e->GetMessage());
+    $this->RedirectToAdminTab();
 }
 #
 # EOF
