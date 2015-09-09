@@ -73,7 +73,7 @@ if (isset($params['category'])) {
   if( $tmp ) $category_id = $tmp;
 }
 
-$tpl_ob = $smarty->CreateTemplate($this->GetTemplateResource($template));
+$tpl_ob = $smarty->CreateTemplate($this->GetTemplateResource($template),null,null,$smarty->get_template_parent());
 $tpl_ob->assign('mod',$this);
 $tpl_ob->assign('actionid',$id);
 if( isset( $params['submit'] ) ) {

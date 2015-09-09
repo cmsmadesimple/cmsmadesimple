@@ -4,15 +4,27 @@
 - Fixed return type of ContentOperations::GetPageIdFromAlias()
 - help for the {cms_html_options} plugin.
 - Change the default page template to use {Navigator}
-- Explicitly force $smarty->fetch() to create a new template, and therefore a new scope.
+- Explicitly force $smarty->fetch() to create a new template, and therefore a new scope.  Keep track of scopes in a stack.
 - SITENAME is now assigned as a smarty global.
 - Fix problem with changing content types.
 
-CMSContentManager:
+CMSContentManager v1.0.1
 - Fixes for changing content types.
 
-DesignManager
+DesignManager v1.0.1
 - Clear the type_default flag when copying a template.
+
+MenuManager v1.50.1
+- Changes to createSmartyTemplate calls (now use $smarty->get_template_parent())
+
+Navigator v1.0.1
+- Changes to createSmartyTemplate calls (now use $smarty->get_template_parent())
+
+Search v1.50.1
+- Changes to createSmartyTemplate calls (now use $smarty->get_template_parent())
+
+News v2.50.1
+- Changes to createSmartyTemplate calls (now use $smarty->get_template_parent())
 
 ==================================================
 The CHANGELOG is cleared for the CMSMS 2.0 release

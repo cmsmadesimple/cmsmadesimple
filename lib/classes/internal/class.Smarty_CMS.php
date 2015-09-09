@@ -36,6 +36,7 @@ class Smarty_CMS extends SmartyBC
   public $params; // <- triggers error without | do search why this is needed
   protected $_global_cache_id;
   private static $_instance;
+  private $_tpl_stack = array();
 
   /**
    * Constructor
@@ -285,6 +286,32 @@ class Smarty_CMS extends SmartyBC
   }
 
   /**
+   * Get a suitable parent template for a new template.
+   *
+   * This method is used when creating new smarty template objects to find a suitable parent.
+   * An internal stack of parents is used to find the latest item on the stack.
+   * if there are no parents, then the root smart object is used.
+   *
+   * i.e:
+   * <code>$smarty->CreateSmartyTemplate('somefile.tpl',$cache_id,$compile_id,$smarty->get_template_parent());</code>
+   *
+   * @since 2.0.1
+   * @return \smarty_internal_template
+   */
+  public function get_template_parent()
+  {
+      // no parent specified, see if there is a stack of parents.
+      if( count($this->_tpl_stack) ) {
+          $parent = $this->_tpl_stack[count($this->_tpl_stack)-1];
+      }
+      else {
+          // no stack, so use this (the Smarty_CMS) class.
+          $parent = $this;
+      }
+      return $parent;
+  }
+
+  /**
    * fetch method
    * NOTE: Overwrites parent
    *
@@ -311,14 +338,35 @@ class Smarty_CMS extends SmartyBC
     if( CmsApp::get_instance()->is_frontend_request() ) {
         $parms = array('template'=>&$template,'cache_id'=>&$cache_id,'compile_id'=>&$compile_id,'display'=>&$display);
         Events::SendEvent('Core','TemplatePreFetch',$parms);
-        $_tpl = $this->CreateTemplate($template,$cache_id,$compile_id);
+    }
+
+    if( !$parent ) {
+        $parent = $this->get_template_parent();
+    }
+    $_tpl = $this->CreateTemplate($template,$cache_id,$compile_id,$parent);
+
+    /*
+    if( $parent ) {
+        // copy template variables from the parent, and global variables into this scope.
+        $_tpl->tpl_vars = array_merge(self::$global_tpl_vars,$parent->tpl_vars);
+    }
+    */
+
+    //put the item onto thee stack, and do our work, to handle recursive calls.
+    $this->_tpl_stack[] = $_tpl;
+    $tmp = null;
+    if( $display ) {
+        $_tpl->display();
+    } else {
         $tmp = $_tpl->fetch();
     }
-    else {
-        // admin requests are a bit fugged up... lots of stuff relies on a single smarty scope.
-        // gotta fix that.
-        $tmp = parent::fetch($template,$cache_id,$compile_id,$parent,$display,$merge_tpl_vars,$no_output_filter);
-    }
+
+    // and pop off the stack again.
+    array_pop($this->_tpl_stack);
+
+    // admin requests are a bit fugged up... lots of stuff relies on a single smarty scope.
+    // gotta fix that.
+    //$tmp = parent::fetch($template,$cache_id,$compile_id,$parent,$display,$merge_tpl_vars,$no_output_filter);
     debug_buffer('','Fetch '.$name.' end');
     return $tmp;
   }
