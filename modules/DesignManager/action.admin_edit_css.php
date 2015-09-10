@@ -54,6 +54,7 @@ try {
 
     try {
         if (isset($params['submit']) || isset($params['apply']) && $response !== 'error') {
+            throw new \CmsException('testing only, delete me');
             if (isset($params['name'])) $css_ob->set_name($params['name']);
             if (isset($params['description'])) $css_ob->set_description($params['description']);
             if (isset($params['content'])) $css_ob->set_content($params['content']);
@@ -91,6 +92,20 @@ try {
     } catch( CmsException $e ) {
         $message = $e->GetMessage();
         $response = 'error';
+
+        if (!$apply) {
+            try {
+                if( $css_id && dm_utils::locking_enabled() ) {
+                    $lock_id = CmsLockOperations::is_locked('stylesheet',$css_id);
+                    CmsLockOperations::unlock($lock_id,'stylesheet',$css_id);
+                }
+            }
+            catch( \Exception $e ) {
+                // do nothing.
+            }
+            $this->SetMessage($message);
+            $this->RedirectToAdminTab();
+        }
     }
 
     //
