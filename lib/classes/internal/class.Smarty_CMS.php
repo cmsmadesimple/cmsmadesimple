@@ -343,7 +343,11 @@ class Smarty_CMS extends SmartyBC
     if( !$parent ) {
         $parent = $this->get_template_parent();
     }
-    $_tpl = $this->CreateTemplate($template,$cache_id,$compile_id,$parent);
+    if( is_object($template) ) {
+        $_tpl = $template;
+    } else {
+        $_tpl = $this->CreateTemplate($template,$cache_id,$compile_id,$parent);
+    }
 
     /*
     if( $parent ) {

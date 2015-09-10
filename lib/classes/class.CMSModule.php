@@ -114,6 +114,12 @@ abstract class CMSModule
     private $__current_tab;
 
     /**
+     * @access private
+     * @ignore
+     */
+    private $_action_tpl;
+
+    /**
      * ------------------------------------------------------------------
      * Magic methods
      * ------------------------------------------------------------------
@@ -1377,7 +1383,7 @@ abstract class CMSModule
                 $gCms = CmsApp::get_instance();
                 $db = $gCms->GetDb();
                 $config = $gCms->GetConfig();
-                $smarty = $gCms->GetSmarty()->get_template_parent();
+                $smarty = ( $this->_action_tpl ) ? $this->_action_tpl : $smarty = $gCms->GetSmarty()->get_template_parent();
                 include($filename);
             }
         }
@@ -1444,7 +1450,10 @@ abstract class CMSModule
         $smarty->assign('actionmodule',$this->GetName());
         $smarty->assign('mod',$this);
 
+        $saved_action_tpl = $this->_action_tpl;
+        $this->_action_tpl = $smarty;
         $output = $this->DoAction($name, $id, $params, $returnid);
+        $this->_action_tpl = $saved_action_tpl;
 
         if( isset($params['assign']) ) {
             $smarty->assign(cms_htmlentities($params['assign']),$output);

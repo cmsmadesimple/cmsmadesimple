@@ -43,8 +43,7 @@ if( $id == '_preview_' && isset($_SESSION['news_preview']) && isset($params['pre
     }
 }
 
-$parent = $smarty->get_template_parent();
-$tpl_ob = $smarty->CreateTemplate($this->GetTemplateResource($template),$cache_id,$compile_id,$parent);
+$tpl_ob = $smarty->CreateTemplate($this->GetTemplateResource($template),$cache_id,$compile_id,$smarty);
 if( $preview || !$tpl_ob->IsCached() ) {
     // not cached... have to do to the work.
     if( isset($params['articleid']) && $params['articleid'] == -1 ) {

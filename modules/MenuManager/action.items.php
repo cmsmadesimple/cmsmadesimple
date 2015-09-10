@@ -16,7 +16,7 @@ else {
 }
 
 $cache_id = '|ns'.md5(serialize($params));
-$tpl = $smarty->CreateTemplate($this->GetTemplateResource($template),$cache_id,null,$smarty->get_template_parent());
+$tpl = $smarty->CreateTemplate($this->GetTemplateResource($template),$cache_id,null,$smarty);
 if( !$tpl->isCached() ) {
     // init.
     $showparents = array();
