@@ -28,7 +28,7 @@ final class FileManager extends CMSModule {
   function GetChangeLog() { return $this->ProcessTemplate('changelog.tpl'); }
   function GetHeaderHTML() { return $this->_output_header_javascript(); }
   function GetFriendlyName() { return $this->Lang('friendlyname'); }
-  function GetVersion() { return '1.5'; }
+  function GetVersion() { return '1.5.1'; }
   function GetHelp() { return $this->Lang('help'); }
   function GetAuthor() { return 'Morten Poulsen (Silmarillion)'; }
   function GetAuthorEmail() { return 'morten@poulsen.org'; }

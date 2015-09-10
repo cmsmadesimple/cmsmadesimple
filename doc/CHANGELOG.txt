@@ -31,6 +31,9 @@ Search v1.50.1
 News v2.50.1
 - Changes to createSmartyTemplate calls (now use $smarty->get_template_parent())
 
+FileManager v1.5.1
+- Fix minor problem with smarty scope in the dropzone.
+
 ==================================================
 The CHANGELOG is cleared for the CMSMS 2.0 release
 ==================================================

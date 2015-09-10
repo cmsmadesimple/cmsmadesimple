@@ -2,23 +2,23 @@
 {* IE sucks... we only get here for REAL browsers. *}
 <script type="text/javascript">{literal}
 $(document).ready(function(){
-    
+
     var thediv = '#theme_dropzone';
-    
+
     $(document).on('dialogopen', '.drop .dialog', function(event,ui){
         var url = '{/literal}{$chdir_url}{literal}';
             url = url.replace(/amp;/g,'')+'&showtemplate=false';
-     
+
         $.get(url,function(data) {
             $('#fm_newdir').val('/'+data);
         });
     });
-    
+
     $('#chdir_form').submit(function(e){
         var data = $(this).serialize();
         var url = '{/literal}{$chdir_url}{literal}';
         url = url.replace(/amp;/g,'')+'&showtemplate=false';
-        
+
         $.post(url,data,function(data,textStatus,jqXHR){
             // stuff to do on post finishing.
             $('#chdir_form').trigger('dropzone_chdir');
@@ -38,14 +38,14 @@ $(document).on('drop dragover', function(e) {
         dataType: 'json',
         dropZone: $(thediv),
         maxChunkSize: {/literal}{$max_chunksize},{literal}
-      
+
         progressall: function(e,data) {
             var total = (data.loaded / data.total * 100).toFixed(0);
-            
+
             $(thediv).progressbar({ value: parseInt(total) });
             $('.ui-progressbar-value').html(total+'%');
          },
-    
+
          stop: function(e,data) {
            $(thediv).progressbar('destroy');
            $(thediv).trigger('dropzone_stop');
@@ -57,21 +57,21 @@ $(document).on('drop dragover', function(e) {
 	<div class="drop-inner cf">
 	{if isset($dirlist)}
 		<span class="folder-selection open" title="{'open'|lang}"></span>
-		<div class="dialog invisible" role="dialog" title="{$mod->Lang('change_working_folder')}">
+		<div class="dialog invisible" role="dialog" title="{$FileManager->Lang('change_working_folder')}">
 			<form id="chdir_form" class="cms_form" action="{$chdir_url}" method="post">
 				<fieldset>
-					<legend>{$mod->Lang('change_working_folder')}</legend>
-					<label>{$mod->Lang('folder')}: </label>
+					<legend>{$FileManager->Lang('change_working_folder')}</legend>
+					<label>{$FileManager->Lang('folder')}: </label>
                                         <input type="hidden" name="m1_path" value="{$cwd}"/>
                                         <input type="hidden" name="m1_ajax" value="1"/>
 					<select class="cms_dropdown" id="fm_newdir" name="m1_newdir">
                                           {html_options options=$dirlist selected="/`$cwd`"}
 					</select>
-					<input type="submit" name="m1_submit" value="{$mod->lang('submit')}" />
+					<input type="submit" name="m1_submit" value="{$FileManager->lang('submit')}" />
 				</fieldset>
 				</form>
 		</div>
-	{/if}								
+	{/if}
 		<div class="zone">
 			<div id="theme_dropzone">
 				{$formstart}
@@ -81,7 +81,7 @@ $(document).on('drop dragover', function(e) {
 				{$formend}
 			</div>
 		</div>
-	</div>									
+	</div>
 	<a href="#" title="{'open'|lang}/{'close'|lang}" class="toggle-dropzone">{'open'|lang}/{'close'|lang}</a>
 </div>
 {/if}
