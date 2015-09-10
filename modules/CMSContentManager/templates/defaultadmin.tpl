@@ -304,7 +304,7 @@
 	        {$row.template}
 	      {/if}
 	    {elseif $row.viewable}
-	      <span class="text-red">{$mod->Lang('critical_error')}</span>
+	      <span class="text-red" title="{$mod->Lang('error_template_notavailable')}">{$mod->Lang('critical_error')}</span>
 	    {/if}
 	  {elseif $column == 'friendlyname'}
 	    {$row.friendlyname}
