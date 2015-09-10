@@ -16,6 +16,7 @@ CMSContentManager v1.0.1
 
 DesignManager v1.0.1
 - Clear the type_default flag when copying a template.
+- Clear any locks if an exception occurred while submitting a template.
 
 MenuManager v1.50.1
 - Changes to createSmartyTemplate calls (now use $smarty->get_template_parent())
