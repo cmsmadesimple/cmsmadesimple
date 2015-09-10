@@ -1373,10 +1373,11 @@ abstract class CMSModule
 
             $filename = $this->GetModulePath().'/action.' . $name . '.php';
             if (@is_file($filename)) {
+                // these are included in scope in the included file for convenience.
                 $gCms = CmsApp::get_instance();
                 $db = $gCms->GetDb();
                 $config = $gCms->GetConfig();
-                $smarty = $gCms->GetSmarty();
+                $smarty = $gCms->GetSmarty()->get_template_parent();
                 include($filename);
             }
         }
@@ -1390,13 +1391,14 @@ abstract class CMSModule
      * @ignore
      * @final
      * @access private
-     * @param string The action name
-     * @param string The action identifier
-     * @param array  The action params
-     * @param int The current page id.
+     * @param string $name The action name
+     * @param string $id The action identifier
+     * @param array  $params The action params
+     * @param int $returnid The current page id.  Empty for admin requests.
+     * @param Smarty_Internal_Template &$smarty The curernt smarty template object.
      * @return string The action output.
      */
-    final public function DoActionBase($name, $id, $params, $returnid='')
+    final public function DoActionBase($name, $id, $params, $returnid='', &$smarty )
     {
         $name = preg_replace('/[^A-Za-z0-9\-_+]/', '', $name);
         if( $returnid != '' ) {
@@ -1435,7 +1437,7 @@ abstract class CMSModule
         $name = cms_htmlentities($name);
 
         $gCms = CmsApp::get_instance(); // in scope for compatibility reasons.
-        $smarty = $gCms->GetSmarty();
+        //$smarty = $gCms->GetSmarty(); // use the passed in template.
         $smarty->assign('actionid',$id);
         $smarty->assign('actionparams',$params);
         $smarty->assign('returnid',$returnid);

@@ -35,7 +35,7 @@ if( isset($_SESSION['cms_passthru']) ) {
   unset($_SESSION['cms_passthru']);
 }
 
-$smarty = cmsms()->GetSmarty();
+$smarty = \Smarty_CMS::get_instance();
 $smarty->assign('date_format_string',cms_userprefs::get_for_user($userid,'date_format_string','%x %X'));
 
 $id = 'm1_';
@@ -73,7 +73,7 @@ if( $USE_THEME ) {
     $themeObject->set_action_module($module);
 
     @ob_start();
-    echo  $modinst->DoActionBase($action, $id, $params);
+    echo  $modinst->DoActionBase($action, $id, $params, '', $smarty);
     $content = @ob_get_contents();
     @ob_end_clean();
 
@@ -94,7 +94,7 @@ if( $USE_THEME ) {
     echo $themeObject->ShowHeader($title,'','',$module_help_type).'</div>';
     echo $content;
 } else {
-    echo $modinst->DoActionBase($action, $id, $params);
+    echo $modinst->DoActionBase($action, $id, $params, '', $smarty);
 }
 
 if( $USE_THEME ) {

@@ -163,11 +163,15 @@ while( $trycount < 2 ) {
         else {
             debug_buffer('process template top');
             $tpl_id = $contentobj->TemplateId();
-            $top  = $smarty->fetch('tpl_top:'.$tpl_id);
-            debug_buffer('process template body');
-            $body = $smarty->fetch('tpl_body:'.$tpl_id);
-            debug_buffer('process template head');
-            $head = $smarty->fetch('tpl_head:'.$tpl_id);
+            $tpl = $smarty->createTemplate('tpl_top:'.$tpl_id);
+            $top  = $tpl->fetch();
+            unset($tpl);
+            $tpl = $smarty->createTemplate('tpl_body:'.$tpl_id);
+            $body  = $tpl->fetch();
+            unset($tpl);
+            $tpl = $smarty->createTemplate('tpl_head:'.$tpl_id);
+            $head = $tpl->fetch();
+            unset($tpl);
             $html = $top.$head.$body;
             $trycount = 99; // no more iterations
         }

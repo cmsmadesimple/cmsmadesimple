@@ -256,7 +256,7 @@ final class CMS_Content_Block
 
                         $oldcache = $smarty->caching;
                         $smarty->caching = false;
-                        $result = $modobj->DoActionBase($action, $id, $parms, $returnid);
+                        $result = $modobj->DoActionBase($action, $id, $parms, $returnid,$smarty);
                         $smarty->caching = $oldcache;
 
                         if ($result !== FALSE) echo $result;
