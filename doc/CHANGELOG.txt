@@ -10,6 +10,7 @@
 - Fix problem with CmsLayoutTemplateQuery wrt the editable option, that generated an SQL error.
   (resolves problems where people have additional editor access to templates, but no other design manager permissions).
 - Fix minor javascript error (error checking).
+- Fix problems where If assign was passed to a {content} tag, do not pass it to the module on a mact request.
 
 CMSContentManager v1.0.1
 - Fixes for changing content types.

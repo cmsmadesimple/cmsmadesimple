@@ -39,6 +39,7 @@ final class CMS_Content_Block
 
     private static function content_return($result, &$params, &$smarty)
     {
+        // this is a smarty tempalte, not the global smarty instance
         if ( empty($params['assign']) ) {
             echo $result;
         }
@@ -191,6 +192,7 @@ final class CMS_Content_Block
             $modulename = '';
             $action = '';
             $inline = false;
+            $assign = (isset($params['assign'])) ? trim($params['assign']) : null;
             if (isset($_REQUEST['mact'])) {
                 $ary = explode(',', cms_htmlentities($_REQUEST['mact']), 4);
                 $modulename = (isset($ary[0])?$ary[0]:'');
@@ -231,20 +233,22 @@ final class CMS_Content_Block
 
                     if ($modobj->IsPluginModule() ) {
                         @ob_start();
-                        unset($params['block']);
-                        unset($params['label']);
-                        unset($params['wysiwyg']);
-                        unset($params['oneline']);
-                        unset($params['default']);
-                        unset($params['size']);
-                        unset($params['tab']);
-                        unset($params['required']);
-                        unset($params['priority']);
-                        unset($params['placeholder']);
-                        $params = array_merge($params, $modops->GetModuleParameters($id));
+                        $parms = $params;
+                        unset($parms['block']);
+                        unset($parms['label']);
+                        unset($parms['wysiwyg']);
+                        unset($parms['oneline']);
+                        unset($parms['default']);
+                        unset($parms['size']);
+                        unset($parms['tab']);
+                        unset($parms['required']);
+                        unset($parms['priority']);
+                        unset($parms['placeholder']);
+                        unset($parms['assign']);
+                        $parms = array_merge($parms, $modops->GetModuleParameters($id));
                         $returnid = '';
-                        if (isset($params['returnid'])) {
-                            $returnid = $params['returnid'];
+                        if (isset($parms['returnid'])) {
+                            $returnid = $parms['returnid'];
                         }
                         else {
                             $returnid = $contentobj->Id();
@@ -252,12 +256,13 @@ final class CMS_Content_Block
 
                         $oldcache = $smarty->caching;
                         $smarty->caching = false;
-                        $result = $modobj->DoActionBase($action, $id, $params, $returnid);
+                        $result = $modobj->DoActionBase($action, $id, $parms, $returnid);
                         $smarty->caching = $oldcache;
 
                         if ($result !== FALSE) echo $result;
                         $modresult = @ob_get_contents();
                         @ob_end_clean();
+
                         return self::content_return($modresult, $params, $smarty);
                     }
                     else {
