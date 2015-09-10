@@ -14,6 +14,8 @@
 CMSContentManager v1.0.1
 - Fixes for changing content types.
 - Adds a title for some contextual help if a template is not available for a content item.
+- Clear any locks if an exception occurred while submitting a content item. 
+- Improvements to error handling with apply and preview
 
 DesignManager v1.0.1
 - Clear the type_default flag when copying a template.

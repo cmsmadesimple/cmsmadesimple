@@ -210,11 +210,35 @@ try {
     }
 }
 catch( CmsEditContentException $e ) {
-    $this->SetError($e->getMessage());
-    $this->RedirectToAdminTab();
-}
-catch( CmsContentException $e ) {
+    if( isset($params['submit']) ) {
+        try {
+            if( $content_id ) {
+                // unconditionally unlock, even if locking is not enabled.
+                $lock_id = CmsLockOperations::is_locked('content',$content_id);
+                CmsLockOperations::unlock($lock_id,'content',$content_id);
+            }
+        }
+        catch( Exception $e ) {
+            // do nothing.
+        }
+        $this->SetError($e->getMessage());
+        $this->RedirectToAdminTab();
+    };
+
     $error = $e->GetMessage();
+    if( isset($params['ajax']) ) {
+        $tmp = array('response'=>'Error','details'=>$error);
+        echo json_encode($tmp);
+        exit;
+    }
+}
+catch( ContentException $e ) {
+    $error = $e->GetMessage();
+    if( isset($params['ajax']) ) {
+        $tmp = array('response'=>'Error','details'=>$error);
+        echo json_encode($tmp);
+        exit;
+    }
 }
 
 //

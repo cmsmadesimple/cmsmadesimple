@@ -107,15 +107,20 @@ $(document).ready(function(){
             'name': '{$actionid}apply',
             'value': 1
         });
-        $.post('{$apply_ajax_url}&showtemplate=false', data, function (data, text) {
+	$.ajax({
+	   type: 'POST',
+	   url: '{$apply_ajax_url}&showtemplate=false',
+	   data: data,
+	   dataType: 'json',
+	}).done(function(data, text) {
             var event = $.Event('cms_ajax_apply');
 	    event.response = data.response;
 	    event.details = data.details;
 	    event.close = '{$mod->Lang('close')|escape:'javascript'}';
 	    if( typeof data.url != '' ) event.url = data.url;
             $('body').trigger(event);
-        }, 'json');
-            return false;
+        });
+        return false;
     });
 
     $(document).on('cms_ajax_apply',function(e){
