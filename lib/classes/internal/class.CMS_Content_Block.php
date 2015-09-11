@@ -188,6 +188,7 @@ final class CMS_Content_Block
 
         $contentobj = CmsApp::get_instance()->get_content_object();
         if (is_object($contentobj)) {
+            if( !$contentobj->IsPermitted() ) throw new CmsError403Exception();
             $id = '';
             $modulename = '';
             $action = '';
