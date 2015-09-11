@@ -310,7 +310,7 @@ class Content extends ContentBase
 	 *
 	 * @param string $one The property name
 	 * @param string $adding A flag indicating whether or not we are in add or edit mode
-	 * @return array consisting of two elements: A label, and the input element
+	 * @return array consisting of two elements: A label, and the input element HTML and javascript.
 	 * @internal
 	 */
     protected function display_single_element($one,$adding)
