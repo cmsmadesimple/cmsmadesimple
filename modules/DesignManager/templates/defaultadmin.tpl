@@ -11,9 +11,8 @@ $(document).ready(function(){
 	{tab_header name='designs' label=$mod->Lang('prompt_designs')}
 {/if}
 
-{if $has_templates}
-	{tab_header name='templates' label=$mod->Lang('prompt_templates')}
-{/if}
+{* always display templates tab *}
+{tab_header name='templates' label=$mod->Lang('prompt_templates')}
 
 {if $manage_stylesheets}
 	{tab_header name='stylesheets' label=$mod->Lang('prompt_stylesheets')}
@@ -29,10 +28,9 @@ $(document).ready(function(){
 	{include file='module_file_tpl:DesignManager;admin_defaultadmin_designs.tpl' scope='root'}
 {/if}
 
-{if $has_templates}
-	{tab_start name='templates'}
-	{include file='module_file_tpl:DesignManager;admin_defaultadmin_templates.tpl' scope='root'}
-{/if}
+{* templates tab displayed at all times*}
+{tab_start name='templates'}
+{include file='module_file_tpl:DesignManager;admin_defaultadmin_templates.tpl' scope='root'}
 
 {if $manage_stylesheets}
 	{tab_start name='stylesheets'}

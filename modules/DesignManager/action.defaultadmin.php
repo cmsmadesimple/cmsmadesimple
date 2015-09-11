@@ -91,8 +91,8 @@ if( isset($efilter['tpl']) && $efilter['tpl'] != '' ) {
 	$efilter[] = $efilter['tpl'];
 	unset($efilter['tpl']);
 }
-if( !$this->CheckPermission('Modify Templates') ) $efilter[] = 'e:'.get_userid();
 
+/*
 $templates = null;
 try {
     $tpl_query = new CmsLayoutTemplateQuery($efilter);
@@ -110,6 +110,7 @@ if( count($templates) ) {
 	$tpl_nav['curpage'] = (int)($tpl_query->offset / $tpl_query->limit) + 1;
 	$smarty->assign('tpl_nav',$tpl_nav);
 }
+*/
 
 // build a list of the types, and categories, and later (designs).
 $opts = array();
@@ -195,17 +196,18 @@ $smarty->assign('filter_tpl_options',$opts);
 $smarty->assign('tpl_filter',$filter_tpl_rec);
 $smarty->assign('css_filter',$filter_css_rec);
 
-$tmp = ($this->CheckPermission('Modify Templates') || count($templates))?1:0;
+$smarty->assign('has_add_right',
+                $this->CheckPermission('Modify Templates') ||
+                $this->CheckPermission('Add Templates'));
 $smarty->assign('coretypename',CmsLayoutTemplateType::CORE);
-$smarty->assign('has_templates',$tmp);
 $smarty->assign('manage_stylesheets',$this->CheckPermission('Manage Stylesheets'));
 $smarty->assign('manage_templates',$this->CheckPermission('Modify Templates'));
 $smarty->assign('manage_designs',$this->CheckPermission('Manage Designs'));
 $smarty->assign('import_url',$this->create_url($id,'admin_import_template'));
 $smarty->assign('admin_url',$config['admin_url']);
-$smarty->assign('has_add_right',
-                $this->CheckPermission('Modify Templates') ||
-                $this->CheckPermission('Add Templates'));
+$smarty->assign('jsonfilter',json_encode($efilter));
+$url = $this->create_url($id,'ajax_get_templates');
+$smarty->assign('ajax_templates_url',str_replace('amp;','',$url));
 
 echo $this->ProcessTemplate('defaultadmin.tpl');
 
