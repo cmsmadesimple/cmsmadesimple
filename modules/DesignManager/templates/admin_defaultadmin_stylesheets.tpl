@@ -172,7 +172,7 @@ $(document).ready(function(){
 	      {$design_names.$dsn_id}<br />
 	    {/foreach}
 	    {/strip}{/capture}
-	    <a class="tooltip text-red" data-cms-description='{$tooltip_designs|htmlentities}' title="{$mod->Lang('help_stylesheet_multiple_designs')}">{$mod->Lang('prompt_multiple')} ({count($t1)})
+	    <a class="tooltip text-red" data-cms-description='{$tooltip_designs|htmlentities}' title="{$mod->Lang('help_stylesheet_multiple_designs')}">{$mod->Lang('prompt_multiple')} ({count($t1)})</a>
 	  {/if}
 	</td>
 	<td>{$css->get_modified()|date_format:'%x %X'}</td>
@@ -200,6 +200,7 @@ $(document).ready(function(){
       {/foreach}
     </tbody>
   </table>
+  {form_end}
   {/strip}
 
   {capture assign='stylesheet_dropdown_options'}
@@ -219,7 +220,6 @@ $(document).ready(function(){
     <div class="half"></div>
     {if isset($stylesheet_dropdown_options)}{$stylesheet_dropdown_options}{/if}
   </div>
-  {form_end}
 {else}
   <div class="warning">{$mod->Lang('warning_no_stylesheets')}</div>
 {/if}
