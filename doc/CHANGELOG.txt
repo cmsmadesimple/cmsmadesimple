@@ -1,4 +1,4 @@
-Version 2.0.1 - NO NAME SET
+Version 2.0.1 - Adelaide
 ----------------------------------
 Core - General
 - Improved optimization in ContentOperations::SetAllHierarchyPositions
@@ -42,7 +42,6 @@ FileManager v1.5.1
 - Fix minor problem with Smarty scope in the dropzone.
 
 
-==================================================
-The CHANGELOG is cleared for the CMSMS 2.0 release
-==================================================
-
+Version 2.0 - Australia
+----------------------------------
++++ Initial Release +++
