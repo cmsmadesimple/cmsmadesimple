@@ -54,7 +54,6 @@ try {
 
     try {
         if (isset($params['submit']) || isset($params['apply']) && $response !== 'error') {
-            throw new \CmsException('testing only, delete me');
             if (isset($params['name'])) $css_ob->set_name($params['name']);
             if (isset($params['description'])) $css_ob->set_description($params['description']);
             if (isset($params['content'])) $css_ob->set_content($params['content']);
