@@ -198,52 +198,5 @@
   <div class="clearb"></div>
 {/if}{* ajax *}
 
-<div class="row c_full">
-  <div class="pageoptions grid_6">
-    <ul class="options-menu">
-      {if isset($content_list) && $npages > 1}
-      <li>
-        {form_start action='defaultadmin'}
-	  <span>{$mod->Lang('page')}:&nbsp;
-	    <select name="{$actionid}curpage" id="{$actionid}curpage">
-	      {html_options options=$pagelist selected=$curpage}
-	    </select>
-	    <button name="{$actionid}submitpage" class="invisible ui-button ui-widget ui-corner-all ui-state-default ui-button-text-icon-primary">
-	      <span class="ui-button-icon-primary ui-icon ui-icon-circle-check"></span>
-	      <span class="ui-button-text">{$mod->Lang('submit')}</span>
-	    </button>
-	  </span>
-	{form_end}
-      </li>
-      {/if}
-
-      {if $can_add_content}
-      <li>
-        <a  href="{cms_action_url action=admin_editcontent}" accesskey="n" title="{$mod->Lang('addcontent')}" class="pageoptions">{admin_icon icon='newobject.gif' alt=$mod->Lang('addcontent')}&nbsp;{$mod->Lang('addcontent')}</a>
-      </li>
-      {/if}
-
-      {if isset($content_list)}
-        <li class="parent">{admin_icon icon='run.gif' alt=$mod->Lang('prompt_options')}&nbsp;{$mod->Lang('prompt_options')}
-        <ul id="popupmenucontents">
-          <li><a class="expandall" href="{cms_action_url action='defaultadmin' expandall=1}" accesskey="e" title="{$mod->Lang('prompt_expandall')}">{admin_icon icon='expandall.gif' alt=$mod->Lang('expandall')}&nbsp;{$mod->Lang('expandall')}</a></li>
-	    <li><a class="collapseall" href="{cms_action_url action='defaultadmin' collapseall=1}" accesskey="c" title="{$mod->Lang('prompt_collapseall')}">{admin_icon icon='contractall.gif' alt=$mod->Lang('contractall')}&nbsp;{$mod->Lang('contractall')}</a></li>
-
-	  {if $can_reorder_content}
-	    <li><a id="ordercontent" href="{cms_action_url action=admin_ordercontent}" accesskey="r" title="{$mod->Lang('prompt_ordercontent')}">{admin_icon icon='reorder.gif' alt=$mod->Lang('reorderpages')}&nbsp;{$mod->Lang('reorderpages')}</a></li>
-	  {/if}
-	  <li><a id="myoptions" accesskey="o" title="{$mod->Lang('prompt_settings')}">{admin_icon icon='edit.gif' alt=$mod->Lang('prompt_settings')}&nbsp;{$mod->lang('prompt_settings')}</a></li>
-	</ul>
-        </li>
-      {/if}
-    </ul>
-  </div>
-
-  {if isset($content_list)}
-  <div class="pageoptions options-form grid_6">
-    <span><label for="ajax_find">{$mod->Lang('find')}:</label>&nbsp;<input type="text" id="ajax_find" name="ajax_find" title="{$mod->Lang('title_listcontent_find')}" value="" size="25"/></span>
-  </div>
-  {/if}
-</div>
 
 <div id="content_area"></div>
