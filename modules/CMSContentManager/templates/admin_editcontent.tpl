@@ -3,8 +3,8 @@
 $(document).ready(function(){
   // initialize the dirtyform stuff.
   $('#Edit_Content').dirtyForm({
-    beforeUnload: function() {
-      {if $content_id > 0 && isset($lock_timeout) && $lock_timeout > 0}$('#Edit_Content').lockManager('unlock');{/if}
+    onUnload: function() {
+      $('#Edit_Content').lockManager('unlock');
     }
   });
 
