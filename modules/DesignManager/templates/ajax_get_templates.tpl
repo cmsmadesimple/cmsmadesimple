@@ -1,3 +1,33 @@
+{form_start action=defaultadmin}{strip}
+
+<div class="row">
+  <div class="pageoptions options-menu half">
+    <ul class="options-menu">
+      <li class="parent">{admin_icon icon='run.gif' alt=$mod->Lang('prompt_options')}&nbsp;{$mod->lang('prompt_options')}
+        <ul id="popuptplcontents">
+          {if $has_add_right}
+            <li><a id="addtemplate" accesskey="a" title="{$mod->Lang('create_template')}">{admin_icon icon='newobject.gif' alt=$mod->Lang('create_template')}&nbsp;{$mod->Lang('create_template')}</a></li>
+          {/if}
+          <li><a id="edittplfilter" accesskey="f" title="{$mod->Lang('prompt_editfilter')}">{admin_icon icon='edit.gif' alt=$mod->Lang('prompt_editfilter')}&nbsp;{$mod->Lang('filter')}</a></li>
+        </ul>
+      </li>
+      {if $tpl_filter.tpl != '' && $tpl_filter != -1}
+        <li><span style="color: green;" title="{$mod->Lang('title_filterapplied')}">{$mod->Lang('filterapplied')}</span></li>
+      {/if}
+    </ul>
+  </div>
+
+  {if isset($tpl_nav) && $tpl_nav.numpages > 1}
+    <div class="pageoptions" style="text-align: right;">
+        <label for="tpl_page">{$mod->Lang('prompt_page')}:</label>&nbsp;
+        <select id="tpl_page" name="{$actionid}tpl_page">
+          {cms_pageoptions numpages=$tpl_nav.numpages curpage=$tpl_nav.curpage}
+        </select>
+        &nbsp;<input type="submit" value="{$mod->Lang('go')}"/>
+    </div>
+  {/if}
+</div>
+
 {if isset($templates)}
   <table class="pagetable">
     <thead>
@@ -132,3 +162,5 @@
 {else}
   {page_warning msg=$mod->Lang('warning_no_templates_available')}
 {/if}
+
+{/strip}{form_end}
