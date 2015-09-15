@@ -42,16 +42,22 @@ $error = '';
 $builder = new ContentListBuilder($this);
 $pagelimit = cms_userprefs::get($this->GetName().'_pagelimit',500);
 $ajax = 0;
-
 if( isset($params['ajax']) ) $ajax = 1;
+if( isset($params['curpage']) ) {
+    $curpage = max(1,min(500,(int)$params['curpage']));
+}
+
 if( isset($params['expandall']) || isset($_GET['expandall']) ) {
     $builder->expand_all();
     $curpage = 1;
 }
-
-if( isset($params['collapseall']) || isset($_GET['collapseall']) ) {
+else if( isset($params['collapseall']) || isset($_GET['collapseall']) ) {
     $builder->collapse_all();
     $curpage = 1;
+}
+if( isset($params['setoptions']) ) {
+    $pagelimit = max(1,min(500,(int)$params['pagelimit']));
+    cms_userprefs::set($this->GetName().'_pagelimit',$pagelimit);
 }
 if( isset($params['expand']) ) {
     $builder->expand_section($params['expand']);
@@ -105,6 +111,7 @@ if( isset($params['multisubmit']) && isset($params['multiaction']) &&
                           'multiaction'=>$params['multiaction']));
 }
 
+if( isset($curpage) ) $_SESSION[$this->GetName().'_curpage'] = $curpage; // for use by ajax_get_content
 
 $url = $this->create_url($id,'ajax_get_content',$returnid);
 $smarty->assign('ajax_get_content',str_replace('amp;','',$url));
