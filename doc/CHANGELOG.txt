@@ -14,17 +14,20 @@ Core - General
 - Fix problems where If assign was passed to a {content} tag, do not pass it to the module on a mact request.
 - Change prototype to CMSModule::DoActionBase to pass in the current template object.
 - Implements the completely forgotten 403 exception stuff and the IsPermitted content method.
+- Improve the cmsms_dirtyform jquery plugin to support the unload handler and an onUnload callback.
 
 CMSContentManager v1.0.1
 - Fixes for changing content types.
 - Adds a title for some contextual help if a template is not available for a content item.
 - Clear any locks if an exception occurred while submitting a content item. 
 - Improvements to error handling with apply and preview
+- Content list now refreshes every 30 seconds to display up-to-date lock information.
 
 DesignManager v1.0.1
 - Clear the type_default flag when copying a template.
 - Clear any locks if an exception occurred while submitting a template.
 - Clear any locks if an exception occurred while submitting a stylesheet.
+- Template and stylesheets lists now refresh every 30 seconds to display up-to-date lock information.
 
 MenuManager v1.50.1
 - Changes to createSmartyTemplate calls (now use $smarty->get_template_parent())
