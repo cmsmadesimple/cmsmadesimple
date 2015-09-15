@@ -42,7 +42,7 @@ $(document).ready(function(){
       return v;
     });
 
-    $('#editcssfilter').on('click',function(){
+    $('#stylesheet_area').on('click','#editcssfilter',function(){
       $('#filtercssdlg').dialog({
         width: 'auto',
         buttons: {

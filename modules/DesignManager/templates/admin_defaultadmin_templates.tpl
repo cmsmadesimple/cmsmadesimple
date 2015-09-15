@@ -73,7 +73,7 @@ $(document).ready(function(){
             //return confirm('{$mod->Lang('confirm_bulk_tmplop')|escape:'javascript'}');
         });
 
-    $('#edittplfilter').on('click', function () {
+    $('#template_area').on('click', '#edittplfilter', function () {
       $('#filterdialog').dialog({
         width: 'auto',
         buttons: {

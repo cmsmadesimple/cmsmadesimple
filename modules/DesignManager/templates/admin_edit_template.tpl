@@ -2,9 +2,7 @@
 $(document).ready(function(){
     $('#form_edittemplate').dirtyForm({
         onUnload: function() {
-	    console.debug('in onunload handler');
             $('#form_edittemplate').lockManager('unlock').done(function(){
-	       console.debug('done unlock');
 	    });
         }
     });
