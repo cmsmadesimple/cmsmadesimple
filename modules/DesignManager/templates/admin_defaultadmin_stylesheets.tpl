@@ -1,6 +1,5 @@
 <script type="text/javascript">
 $(document).ready(function(){
-    $('#css_selall').cmsms_checkall();
     $('#css_bulk_action,#css_bulk_submit').attr('disabled','disabled');
     $('#css_bulk_submit').button({ 'disabled' : true });
     $('#css_selall,.css_select').on('click',function(){

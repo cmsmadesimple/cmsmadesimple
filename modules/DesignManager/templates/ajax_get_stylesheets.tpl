@@ -1,3 +1,7 @@
+<script>
+$('#css_selall').cmsms_checkall();
+</script>
+
 <div class="row">
   <div class="pageoptions options-menu half">
     <ul class="options-menu">

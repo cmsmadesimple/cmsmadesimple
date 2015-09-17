@@ -1,7 +1,5 @@
 <script type="text/javascript">
 $(document).ready(function(){
-    $('#tpl_selall').cmsms_checkall();
-
     // load the templates area.
     function refresh_template_list() {
 	console.log('refresh template list');

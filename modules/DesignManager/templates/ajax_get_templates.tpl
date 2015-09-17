@@ -1,3 +1,7 @@
+<script>
+$('#tpl_selall').cmsms_checkall();
+</script>
+
 {form_start action=defaultadmin}{strip}
 
 <div class="row">
