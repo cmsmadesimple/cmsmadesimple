@@ -15,6 +15,7 @@ Core - General
 - Change prototype to CMSModule::DoActionBase to pass in the current template object.
 - Implements the completely forgotten 403 exception stuff and the IsPermitted content method.
 - Improve the cmsms_dirtyform jquery plugin to support the unload handler and an onUnload callback.
+- Fixed the jquery page selector plugin when the current value points to an invalid page,  and fixes for asynchronous ajax.
 
 CMSContentManager v1.0.1
 - Fixes for changing content types.
