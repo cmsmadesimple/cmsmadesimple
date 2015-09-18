@@ -21,6 +21,7 @@
 /**
  * Translation functions/classes
  * @package CMS
+ * @license GPL
  */
 
 /**
@@ -31,6 +32,7 @@
  * @see CmsNlsOperations::set_language_detector()
  * @author Robert Campbell
  * @package CMS
+ * @license GPL
  * @since 1.11
  */
 abstract class CmsLanguageDetector

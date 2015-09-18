@@ -22,6 +22,7 @@
  * Translation functions/classes
  *
  * @package CMS
+ * @license GPL
  */
 
 /**
@@ -29,6 +30,7 @@
  * encodings, and locales.  This class does not handle translation strings.
  *
  * @package CMS
+ * @license GPL
  * @author Robert Campbell
  * @since 1.11
  */

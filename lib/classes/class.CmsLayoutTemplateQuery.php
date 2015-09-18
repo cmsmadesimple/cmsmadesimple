@@ -21,11 +21,30 @@
 /**
  * Contains classes to represent a template query and its results.
  * @package CMS
+ * @license GPL
  */
 
 /**
  * A class to represent a template query, and its results.
+ * This class accepts in it's constructor an array (or a comma separated string, of filter arguments).
+ * Accepted filter arguments are:<br/>
+ *  o:string - The originator name<br/>
+ *  i:##,##,## - A list of template id's<br/>
+ *  t:## - A template type id<br/>
+ *  c:## - A template category id.<br/>
+ *  d:## - A design id<br/>
+ *  u:## - A template owner id<br/>
+ *  e:## - An additional editor id.<br/>
  *
+ * Example:<br/>
+ * <code>
+ * $qry = new CmsTemplateQuery(array('o:'.get_userid(false)));<br/>
+ * $qry->limit = 50;<br/>
+ * $list = $qry->GetMatches();<br/>
+ * </code>
+ *
+ * @package CMS
+ * @license GPL
  * @since 2.0
  * @author Robert Campbell <calguy1000@gmail.com>
  * @see CmsDbQueryBase

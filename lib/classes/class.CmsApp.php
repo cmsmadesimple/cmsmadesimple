@@ -22,6 +22,7 @@
  * Global class for easy access to all important variables.
  *
  * @package CMS
+ * @license GPL
  */
 
 /**
@@ -31,6 +32,7 @@
  * Note: This class was named CmsObject before version 1.10
  *
  * @package CMS
+ * @license GPL
  * @since 0.5
  */
 final class CmsApp {

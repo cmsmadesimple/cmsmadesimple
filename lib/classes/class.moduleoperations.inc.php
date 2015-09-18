@@ -22,6 +22,7 @@
  * Classes and utilities for operationg on and with modules
  *
  * @package CMS
+ * @license GPL
  */
 
 /**
@@ -34,6 +35,7 @@ define( "MODULE_DTD_VERSION", "1.3" );
  *
  * @since		0.9
  * @package		CMS
+ * @license GPL
  */
 final class ModuleOperations
 {

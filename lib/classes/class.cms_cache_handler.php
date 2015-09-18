@@ -3,6 +3,7 @@
 /**
  * Contains a generic cache handler wrapper.
  * @package CMS
+ * @license GPL
  */
 
 /**

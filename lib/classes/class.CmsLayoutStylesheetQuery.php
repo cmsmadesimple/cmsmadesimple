@@ -23,11 +23,14 @@
  *
  * @since   2.0
  * @package CMS
+ * @license GPL
  */
 
 /**
  * A class to represent a template query, and its results.
  *
+ * @package CMS
+ * @license GPL
  * @since 2.0
  * @author Robert Campbell <calguy1000@gmail.com>
  * @see CmsDbQueryBase

@@ -21,11 +21,14 @@
 /**
  * This class defines classes and utility functions for a Theme or Collection.
  * @package CMS
+ * @license GPL
  */
 
 /**
  * A class to manage a collection (or theme) of Templates and Stylesheets
  *
+ * @package CMS
+ * @license GPL
  * @since 2.0
  * @author Robert Campbell <calguy1000@gmail.com>
  */

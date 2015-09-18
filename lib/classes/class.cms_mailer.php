@@ -29,6 +29,7 @@
  * This file contains the class that wraps PHPMailer usage for CMSMS.
  *
  * @package CMS
+ * @license GPL
  */
 
 /**
@@ -37,6 +38,7 @@
  * Prior to CMSMS 2.0 this class was implemented as a core module.
  *
  * @package CMS
+ * @license GPL
  * @since 2.0
  * @author Robert Campbell (calguy1000@cmsmadesimple.org)
  */
@@ -61,18 +63,18 @@ class cms_mailer
     $this->_mailer->PluginDir = $dir;
     $this->reset();
   }
-  
+
   /**
    * __call
    *
    * @param string $method Call method to call from PHP Mailer
    * @param array $args Arguments passed to PHP Mailer method
-   */  
+   */
   public function __call($method,$args)
   {
-    if(method_exists($this->_mailer, $method)) 
+    if(method_exists($this->_mailer, $method))
 		return call_user_func_array(array($this->_mailer,$method), $args);
-  }  
+  }
 
   /**
    * Reset the mailer to standard settings

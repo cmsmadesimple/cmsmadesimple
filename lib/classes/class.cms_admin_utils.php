@@ -37,6 +37,7 @@
 /**
  * Static classes providing convenience functions for admin console requests.
  * @package CMS
+ * @license GPL
  */
 
 if( !CmsApp::get_instance()->test_state(CmsApp::STATE_ADMIN_PAGE) )
@@ -46,6 +47,7 @@ if( !CmsApp::get_instance()->test_state(CmsApp::STATE_ADMIN_PAGE) )
  * A Simple static class providing various convenience utilities for admin requests.
  *
  * @package CMS
+ * @license GPL
  * @author  Robert Campbell
  * @copyright Copyright (c) 2012, Robert Campbell <calguy1000@cmsmadesimple.org>
  * @since 2.0

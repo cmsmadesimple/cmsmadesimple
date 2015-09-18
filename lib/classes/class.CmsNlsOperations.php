@@ -22,6 +22,7 @@
  * Translation functions/classes
  *
  * @package CMS
+ * @license GPL
  */
 
 /**

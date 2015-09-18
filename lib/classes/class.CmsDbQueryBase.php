@@ -23,12 +23,15 @@
  *
  * @since 2.0
  * @package CMS
+ * @license GPL
  */
 
 /**
  * An abstract class for building queries and managing results
  *
  * @since 2.0
+ * @package CMS
+ * @license GPL
  * @author Robert Campbell <calguy1000@gmail.com>
  * @property-read array $fields Associative array of the current row of the resultset (read only)
  * @property-read boolean $EOF  Indicates wether the resultset is past the last element (read only)

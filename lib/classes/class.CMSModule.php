@@ -22,6 +22,7 @@
  * This file contains the base module class for all CMSMS modules.
  *
  * @package CMS
+ * @license GPL
  */
 
 /**

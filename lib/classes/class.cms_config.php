@@ -22,6 +22,7 @@
  * This file contains the class that manages the CMSMS config.php file
  *
  * @package CMS
+ * @license GPL
  * @author Robert Campbell (calguy1000@cmsmadesimple.org)
  */
 
@@ -32,6 +33,7 @@
  *
  * @since 1.9
  * @package CMS
+ * @license GPL
  * @author Robert Campbell (calguy1000@cmsmadesimple.org)
  */
 final class cms_config implements ArrayAccess

@@ -37,12 +37,14 @@
 /**
  * This file manages the route class.
  * @package CMS
+ * @license GPL
  */
 
 /**
  * Simple global convenience object to hold information for a single route.
  *
  * @package CMS
+ * @license GPL
  * @author Robert Campbell <calguy1000@cmsmadesimple.org>
  * @since  1.9
  * @property string $term
