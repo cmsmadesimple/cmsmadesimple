@@ -2,16 +2,24 @@
   <script type="text/javascript">
   //<![CDATA[
 
-      function refresh_content_list() {
-          console.log('refresh content list');
-          $('#content_area').css({ 'pointer-events': 'none', 'cursor': 'busy' }); // set busy
-          $.ajax({
-	      url: '{$ajax_get_content}',
-          }).done(function(data){
-              $('#content_area').html(data);
-	      $('#content_area').css({ 'pointer-events': '', 'cursor': '' }); // clear busy
-	  });
-      }
+  function refresh_content_list() {
+     $('#content_area').css({ 'pointer-events': 'none', 'cursor': 'wait' }); // set busy
+     $.ajax({
+        url: '{$ajax_get_content}',
+     }).done(function(data){
+        $('#content_area').html(data);
+        $('#content_area').css({ 'pointer-events': '', 'cursor': '' }); // clear busy
+     });
+  }
+
+  function reset_auto_refresh()
+  {
+      if( typeof this._timer == 'undefined' ) this._timer = null;  // this._timer is a static
+      if( this._timer ) clearInterval(this._timer);
+      this._timer = setInterval( function() {
+         refresh_content_list();
+      }, 30000);
+  }
 
   function cms_CMloadUrl(link, lang) {
       $(document).on('click', link, function (e) {
@@ -65,11 +73,14 @@
       cms_CMloadUrl('a.page_setdefault', '{$mod->Lang('confirm_setdefault')|escape:'javascript'}'),
       cms_CMloadUrl('a.page_delete', '{$mod->Lang('confirm_delete_page')|escape:'javascript'}');
 
+      reset_auto_refresh();
       // load the contents area.
-      setInterval( function() {
-         refresh_content_list();
-      }, 30000);
       refresh_content_list();
+
+      $('#content_area').on('click',':input.multicontent,#selectall,a.page_sortup,a.page_sortdown,a.page_setinactive,a.page_setactive,a.page_setdefault,a.page_delete',function(){
+          // reset the auto refresh when we do something in the form.
+          reset_auto_refresh();
+      });
 
       $('a.steal_lock').on('click',function(e) {
           // we're gonna confirm stealing this lock.
