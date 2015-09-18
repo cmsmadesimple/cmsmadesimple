@@ -34,13 +34,13 @@ $(document).ready(function(){
       }
     });
 
-    $('a.steal_tpl_lock').on('click',function(e) {
+    $(document).on('click','a.steal_tpl_lock',function(e) {
       // we're gonna confirm stealing this lock.
       var v = confirm('{$mod->Lang('confirm_steal_lock')|escape:'javascript'}');
       return v;
     });
 
-    $('a.edit_tpl').on('click',function(ev) {
+    $(document).on('click','a.sedit_tpl',function(e) {
       if( $(this).hasClass('steal_tpl_lock') ) return true;
 
       // do a double check to see if this page is locked or not.
