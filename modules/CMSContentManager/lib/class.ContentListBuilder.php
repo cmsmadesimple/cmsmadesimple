@@ -102,27 +102,27 @@ final class ContentListBuilder
    */
   public function expand_all()
   {
-    $hm = cmsms()->GetHierarchyManager();
-    // find all the pages (recursively) that have children.
+      $hm = CmsApp::get_instance()->GetHierarchyManager();
+      // find all the pages (recursively) that have children.
 
-    // anonymous, recursive function.
-    $func = function($node) use(&$func) {
-      $out = null;
-      if( $node->has_children() ) {
-	$out = array();
-	if( $node->get_tag('id') ) $out[] = $node->get_tag('id');
-        $children = $node->get_children();
-	for( $i = 0; $i < count($children); $i++ ) {
-	  $tmp = $func($children[$i]);
-          if( is_array($tmp) && count($tmp) ) $out = array_merge($out,$tmp);
-	}
-	$out = array_unique($out);
-      }
-      return $out;
-    }; // function.
+      // anonymous, recursive function.
+      $func = function($node) use(&$func) {
+          $out = null;
+          if( $node->has_children() ) {
+              $out = array();
+              if( $node->get_tag('id') ) $out[] = $node->get_tag('id');
+              $children = $node->get_children();
+              for( $i = 0; $i < count($children); $i++ ) {
+                  $tmp = $func($children[$i]);
+                  if( is_array($tmp) && count($tmp) ) $out = array_merge($out,$tmp);
+              }
+              $out = array_unique($out);
+          }
+          return $out;
+      }; // function.
 
-    $this->_opened_array = $func($hm);
-    cms_userprefs::set('opened_pages',implode(',',$this->_opened_array));
+      $this->_opened_array = $func($hm);
+      cms_userprefs::set('opened_pages',implode(',',$this->_opened_array));
   }
 
   /**
@@ -167,7 +167,7 @@ final class ContentListBuilder
     if( $page_id < 1 ) return FALSE;
     if( !$this->_module->CheckPermission('Manage All Content') ) return FALSE;
 
-    $contentops = cmsms()->GetContentOperations();
+    $contentops = ContentOperations::get_instance();
     $node = $contentops->quickfind_node_by_id($page_id);
     if( !$node ) return FALSE;
     $content = $node->GetContent(FALSE,FALSE,FALSE);
@@ -273,7 +273,7 @@ final class ContentListBuilder
 
     if( !$this->_module->CheckPermission('Manage All Content') ) return;
 
-    $contentops = cmsms()->GetContentOperations();
+    $contentops = ContentOperations::get_instance();
     $content1 = $contentops->LoadContentFromId($page_id);
     $page_id2 = ContentOperations::get_instance()->GetDefaultContent();
     $content2 = $contentops->LoadContentFromId($page_id2);
@@ -302,7 +302,7 @@ final class ContentListBuilder
     if( $page_id < 1 ) return FALSE;
     $direction = (int)$direction;
     if( $direction == 0 ) return FALSE;
-    $contentops = cmsms()->GetContentOperations();
+    $contentops = ContentOperations::get_instance();
 
     $test = FALSE;
     if( $this->_module->CheckPermission('Manage All Content') ) {
@@ -343,7 +343,7 @@ final class ContentListBuilder
 
     if( !$test ) return $this->_module->Lang('error_delete_permission');
 
-    $contentops = cmsms()->GetContentOperations();
+    $contentops = ContentOperations::get_instance();
     $node = $contentops->quickfind_node_by_id($page_id);
     if( !$node ) return $this->_module->Lang('error_invalidpageid');
     if( $node->has_children() ) return $this->_module->Lang('error_delete_haschildren');
@@ -366,7 +366,7 @@ final class ContentListBuilder
 
   public function pretty_urls_configured()
   {
-      $config = cmsms()->GetConfig();
+      $config = \cms_config::get_instance();
       return (isset($config['url_rewriting']) && $config['url_rewriting'] != 'none' ) ? TRUE : FALSE;
   }
 
@@ -378,35 +378,35 @@ final class ContentListBuilder
    */
   public function get_display_columns()
   {
-    $config = cmsms()->GetConfig();
-    $dflt = 'expand,icon1,hier,page,alias,url,template,friendlyname,owner,active,default,move,view,copy,edit,delete,multiselect';
-    $mod = $this->_module;
-    $cols = explode(',',$mod->GetPreference('list_visiblecolumns',$dflt));
+      $config = \cms_config::get_instance();
+      $dflt = 'expand,icon1,hier,page,alias,url,template,friendlyname,owner,active,default,move,view,copy,edit,delete,multiselect';
+      $mod = $this->_module;
+      $cols = explode(',',$mod->GetPreference('list_visiblecolumns',$dflt));
 
-    $columnstodisplay = array();
-    $columnstodisplay['expand'] = in_array('expand',$cols) ? 'icon' : null;
-    $columnstodisplay['icon1'] = in_array('icon1',$cols) ? 'icon' : null;
-    $columnstodisplay['hier'] = in_array('hier',$cols) ? 'normal' : null;
-    $columnstodisplay['page'] = in_array('page',$cols) ? 'normal' : null;
-    $columnstodisplay['alias'] = in_array('alias',$cols) ? 'normal' : null;
-    $columnstodisplay['url'] = in_array('url',$cols) ? 'normal' : null;
-    $columnstodisplay['template'] = in_array('template',$cols) ? 'normal' : null;
-    $columnstodisplay['friendlyname'] = in_array('friendlyname',$cols) ? 'normal' : null;
-    $columnstodisplay['owner'] = in_array('owner',$cols) ? 'normal' : null;
-    $columnstodisplay['active'] = (in_array('active',$cols) && $mod->CheckPermission('Manage All Content')) ? 'icon' : null;
-    $columnstodisplay['default'] = (in_array('default',$cols) && $mod->CheckPermission('Manage All Content')) ? 'icon' : null;
-    $columnstodisplay['move'] = (in_array('move',$cols) && ($mod->CheckPermission('Manage All Content') || $mod->CheckPermission('Reorder Content'))) ? 'icon' : null;
-    $columnstodisplay['view'] = in_array('view',$cols) ? 'icon' : null;
-    $columnstodisplay['copy'] = (in_array('copy',$cols) && ($mod->CheckPermission('Add Pages') || $mod->CheckPermission('Manage All Content'))) ? 'icon' : null;
-    $columnstodisplay['edit'] = in_array('edit',$cols) ? 'icon' : null;
-    $columnstodisplay['delete'] = (in_array('delete',$cols) && ($mod->CheckPermission('Remove Pages') || $mod->CheckPermission('Manage All Content'))) ? 'icon' : null;
-    $columnstodisplay['multiselect'] = (in_array('multiselect',$cols) && ($mod->CheckPermission('Remove Pages') || $mod->CheckPermission('Manage All Content'))) ? 'icon' : null;
+      $columnstodisplay = array();
+      $columnstodisplay['expand'] = in_array('expand',$cols) ? 'icon' : null;
+      $columnstodisplay['icon1'] = in_array('icon1',$cols) ? 'icon' : null;
+      $columnstodisplay['hier'] = in_array('hier',$cols) ? 'normal' : null;
+      $columnstodisplay['page'] = in_array('page',$cols) ? 'normal' : null;
+      $columnstodisplay['alias'] = in_array('alias',$cols) ? 'normal' : null;
+      $columnstodisplay['url'] = in_array('url',$cols) ? 'normal' : null;
+      $columnstodisplay['template'] = in_array('template',$cols) ? 'normal' : null;
+      $columnstodisplay['friendlyname'] = in_array('friendlyname',$cols) ? 'normal' : null;
+      $columnstodisplay['owner'] = in_array('owner',$cols) ? 'normal' : null;
+      $columnstodisplay['active'] = (in_array('active',$cols) && $mod->CheckPermission('Manage All Content')) ? 'icon' : null;
+      $columnstodisplay['default'] = (in_array('default',$cols) && $mod->CheckPermission('Manage All Content')) ? 'icon' : null;
+      $columnstodisplay['move'] = (in_array('move',$cols) && ($mod->CheckPermission('Manage All Content') || $mod->CheckPermission('Reorder Content'))) ? 'icon' : null;
+      $columnstodisplay['view'] = in_array('view',$cols) ? 'icon' : null;
+      $columnstodisplay['copy'] = (in_array('copy',$cols) && ($mod->CheckPermission('Add Pages') || $mod->CheckPermission('Manage All Content'))) ? 'icon' : null;
+      $columnstodisplay['edit'] = in_array('edit',$cols) ? 'icon' : null;
+      $columnstodisplay['delete'] = (in_array('delete',$cols) && ($mod->CheckPermission('Remove Pages') || $mod->CheckPermission('Manage All Content'))) ? 'icon' : null;
+      $columnstodisplay['multiselect'] = (in_array('multiselect',$cols) && ($mod->CheckPermission('Remove Pages') || $mod->CheckPermission('Manage All Content'))) ? 'icon' : null;
 
-    foreach( $columnstodisplay as $key => $val ) {
-      if( isset($this->_display_columns[$key]) ) $columnstodisplay[$key] = $val && $this->_display_columns[$key];
-    }
+      foreach( $columnstodisplay as $key => $val ) {
+          if( isset($this->_display_columns[$key]) ) $columnstodisplay[$key] = $val && $this->_display_columns[$key];
+      }
 
-    return $columnstodisplay;
+      return $columnstodisplay;
   }
 
   /**
@@ -414,17 +414,17 @@ final class ContentListBuilder
    */
   private function _get_all_pages(cms_tree $node)
   {
-    $out = array();
-    if( $node->get_tag('id') ) $out[] = $node->get_tag('id');
-    if( $node->has_children() ) {
-      $children = $node->get_children();
-      for( $i = 0; $i < count($children); $i++ ) {
-	$child = $children[$i];
-	$tmp = $this->_get_all_pages($child);
-	if( is_array($tmp) && count($tmp) ) $out = array_merge($out,$tmp);
+      $out = array();
+      if( $node->get_tag('id') ) $out[] = $node->get_tag('id');
+      if( $node->has_children() ) {
+          $children = $node->get_children();
+          for( $i = 0; $i < count($children); $i++ ) {
+              $child = $children[$i];
+              $tmp = $this->_get_all_pages($child);
+              if( is_array($tmp) && count($tmp) ) $out = array_merge($out,$tmp);
+          }
       }
-    }
-    return $out;
+      return $out;
   }
 
   /**
@@ -440,8 +440,8 @@ final class ContentListBuilder
       //     if got to root, add items children
       // 3.  reduce list by items we are able to view (author pages)
 
-      $contentops = cmsms()->GetContentOperations();
-      $hm = cmsms()->GetHierarchyManager();
+      $contentops = ContentOperations::get_instance();
+      $hm = CmsApp::get_instance()->GetHierarchyManager();
       $display = array();
 
       // filter the display list by what we're authorized to view.
@@ -549,7 +549,7 @@ final class ContentListBuilder
   {
     if( $content_id < 1 ) return FALSE;
     if( $userid <= 0 ) $userid = $this->_userid;
-    $contentops = cmsms()->GetContentOperations();
+    $contentops = ContentOperations::get_instance();
     return $contentops->CheckPeerAuthorship($userid,$content_id);
   }
 
@@ -559,7 +559,7 @@ final class ContentListBuilder
   private function _check_authorship($content_id,$userid = null)
   {
     if( $userid <= 0 ) $userid = $this->_userid;
-    return cmsms()->GetContentOperations()->CheckPageAuthorship($userid,$content_id);
+    return ContentOperations::get_instance()->CheckPageAuthorship($userid,$content_id);
   }
 
   /**
@@ -624,18 +624,18 @@ final class ContentListBuilder
    */
   private function _get_users()
   {
-    static $_users = null;
-    if( !$_users ) {
-      $tmp = UserOperations::get_instance()->LoadUsers();
-      if( is_array($tmp) && count($tmp) ) {
-	$_users = array();
-	for( $i = 0; $i < count($tmp); $i++ ) {
-	  $oneuser = $tmp[$i];
-	  $_users[$oneuser->id] = $oneuser;
-	}
+      static $_users = null;
+      if( !$_users ) {
+          $tmp = UserOperations::get_instance()->LoadUsers();
+          if( is_array($tmp) && count($tmp) ) {
+              $_users = array();
+              for( $i = 0; $i < count($tmp); $i++ ) {
+                  $oneuser = $tmp[$i];
+                  $_users[$oneuser->id] = $oneuser;
+              }
+          }
       }
-    }
-    return $_users;
+      return $_users;
   }
 
   /**
@@ -644,7 +644,7 @@ final class ContentListBuilder
   private function _get_display_data($page_list)
   {
       $users = $this->_get_users();
-      $contentops = cmsms()->GetContentOperations();
+      $contentops = ContentOperations::get_instance();
       $mod = $this->_module;
       $columns = $this->get_display_columns();
       $userid = $this->_userid;
@@ -665,7 +665,7 @@ final class ContentListBuilder
       foreach( $page_list as $page_id ) {
           $node = $contentops->quickfind_node_by_id($page_id);
           if( !$node ) continue;
-          $content = $node->GetContent(FALSE,FALSE,TRUE);
+          $content = $node->GetContent(FALSE,TRUE,TRUE);
           if( !$content ) continue;
 
           $rec = array();
