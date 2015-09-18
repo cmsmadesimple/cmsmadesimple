@@ -28,13 +28,18 @@
 
 /**
  * A class to represent a template query, and its results.
+ * This class accepts in it's constructor an array of filter arguments.
  *
  * @package CMS
  * @license GPL
  * @since 2.0
  * @author Robert Campbell <calguy1000@gmail.com>
  * @see CmsDbQueryBase
- *
+ * @property int $id The stylesheet id.  This will result in at most 1 result being returned.
+ * @property string $name A stylesheet name to filter upon.  If a partial name is provided, it is assumed to be a prefix.
+ * @property int $design A design id to filter upon.
+ * @property string $sortby Possible values are id,item_order,design,name  Default is to sort by name.
+ * @property string $sortorder Possible values are ASC, DESC.  Default is ASC.
  */
 class CmsLayoutStylesheetQuery extends CmsDbQueryBase
 {

@@ -48,6 +48,8 @@
  * @since 2.0
  * @author Robert Campbell <calguy1000@gmail.com>
  * @see CmsDbQueryBase
+ * @property string $sortby The sorting field for the returned results.  Possible values are: id,name,created,modified,type.  The default is to sort by template name.';
+ * @property string $sortorder The sorting order for the returned results.  Possible values are: ASC,DESC.  The default is ASC.
  */
 class CmsLayoutTemplateQuery extends CmsDbQueryBase
 {
