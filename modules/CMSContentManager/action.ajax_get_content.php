@@ -58,7 +58,7 @@ $smarty->assign('prettyurls_ok',$builder->pretty_urls_configured());
 //
 
 if( isset($params['setoptions']) ) cms_userprefs::set($this->GetName().'_pagelimit',(int)$params['pagelimit']);
-$pagelimit = cms_userprefs::get($this->GetName().'_pagelimit',500);
+$pagelimit = cms_userprefs::get($this->GetName().'_pagelimit',100);
 
 $builder->set_pagelimit($pagelimit);
 if( isset($params['seek']) && $params['seek'] != '' ) {
