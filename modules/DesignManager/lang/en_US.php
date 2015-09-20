@@ -438,7 +438,7 @@ $lang['submitandedit'] = 'Submit And Edit';
 #T
 $lang['title_cat_id'] = 'This column displays the unique integer id for the category.';
 $lang['title_cat_name'] = 'This column displays the unique name for the category.';
-$lang['title_css_designs'] = 'This column lists the design<em>(s)</em> that a stylesheet is attached to';
+$lang['title_css_designs'] = 'This column lists the design that a stylesheet is attached to. If any.';
 $lang['title_css_id'] = 'This column displays the unique integer id for the stylesheet.';
 $lang['title_css_modified'] = 'Displays the date the stylesheet was last modified.';
 $lang['title_css_name'] = 'This column displays the unique name for the stylesheet.';
