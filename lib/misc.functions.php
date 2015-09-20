@@ -1158,6 +1158,7 @@ function cms_get_jquery($exclude = '',$ssl = null,$cdn = false,$append = '',$cus
       $scripts['cms_dirtyform'] = array('local'=>$basePath.'/lib/jquery/js/jquery.cmsms_dirtyform.js');
       $scripts['cms_lock'] = array('local'=>$basePath.'/lib/jquery/js/jquery.cmsms_lock.js');
       $scripts['cms_hiersel'] = array('local'=>$basePath.'/lib/jquery/js/jquery.cmsms_hierselector.js');
+      $scripts['cms_autorefresh'] = array('local'=>$basePath.'/lib/jquery/js/jquery.cmsms_autorefresh.js');
       $scripts['ui_touch_punch'] = array('local'=>$basePath.'/lib/jquery/js/jquery.ui.touch-punch.min.js');
   }
 
