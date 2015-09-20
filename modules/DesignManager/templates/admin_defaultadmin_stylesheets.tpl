@@ -1,5 +1,12 @@
 <script type="text/javascript">
 $(document).ready(function(){
+    cms_busy();
+    $('#stylesheet_area').autoRefresh({
+      url: '{$ajax_stylesheets_url}',
+      data: {
+        filter: '{$jsoncssfilter}'
+      }
+    });
     $('#css_bulk_action,#css_bulk_submit').attr('disabled','disabled');
     $('#css_bulk_submit').button({ 'disabled' : true });
     $('#css_selall,.css_select').on('click',function(){
@@ -15,25 +22,6 @@ $(document).ready(function(){
         $('#css_bulk_submit').button({ 'disabled' : false });
       }
     });
-
-    // load the stylesheets area.
-    function refresh_stylesheet_list() {
-        $('#stylesheet_area').css({ 'pointer-events': 'none', 'cursor': 'busy' }); // set busy
-	console.log('refreshing stylesheet list');
-        $.ajax({
-	    url: '{$ajax_stylesheets_url}',
-	    data: {
-	        filter: '{$jsoncssfilter}'
-	    }
-        }).done(function(data){
-            $('#stylesheet_area').html(data);
-	    $('#stylesheet_area').css({ 'pointer-events': '', 'cursor': '' }); // clear busy
-	});
-    }
-    setInterval( function() {
-       refresh_stylesheet_list();
-    }, 30000);
-    refresh_stylesheet_list();
 
     $('a.steal_css_lock').on('click',function(e) {
       // we're gonna confirm stealing this lock.

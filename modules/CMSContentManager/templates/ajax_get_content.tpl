@@ -1,21 +1,6 @@
 <div class="row c_full">
   <div class="pageoptions grid_6">
     <ul class="options-menu">
-      {if isset($content_list) && $npages > 1}
-      <li>
-        {form_start action='defaultadmin'}
-	  <span>{$mod->Lang('page')}:&nbsp;
-	    <select name="{$actionid}curpage" id="{$actionid}curpage">
-	      {html_options options=$pagelist selected=$curpage}
-	    </select>
-	    <button name="{$actionid}submitpage" class="invisible ui-button ui-widget ui-corner-all ui-state-default ui-button-text-icon-primary">
-	      <span class="ui-button-icon-primary ui-icon ui-icon-circle-check"></span>
-	      <span class="ui-button-text">{$mod->Lang('submit')}</span>
-	    </button>
-	  </span>
-	{form_end}
-      </li>
-      {/if}
 
       {if $can_add_content}
       <li>
@@ -39,11 +24,25 @@
     </ul>
   </div>
 
-  {if isset($content_list)}
   <div class="pageoptions options-form grid_6">
+    {if isset($content_list)}
     <span><label for="ajax_find">{$mod->Lang('find')}:</label>&nbsp;<input type="text" id="ajax_find" name="ajax_find" title="{$mod->Lang('title_listcontent_find')}" value="" size="25"/></span>
+    {/if}
+
+    {if isset($content_list) && $npages > 1}
+      {form_start action='defaultadmin'}
+        <span>{$mod->Lang('page')}:&nbsp;
+        <select name="{$actionid}curpage" id="{$actionid}curpage">
+          {html_options options=$pagelist selected=$curpage}
+        </select>
+        <button name="{$actionid}submitpage" class="invisible ui-button ui-widget ui-corner-all ui-state-default ui-button-text-icon-primary">
+          <span class="ui-button-icon-primary ui-icon ui-icon-circle-check"></span>
+          <span class="ui-button-text">{$mod->Lang('go')}</span>
+        </button>
+        </span>
+      {form_end}
+    {/if}
   </div>
-  {/if}
 </div>
 
 {form_start action='defaultadmin' id='listform'}

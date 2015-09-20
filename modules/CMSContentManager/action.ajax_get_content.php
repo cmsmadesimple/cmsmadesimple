@@ -36,90 +36,104 @@
 if( !isset($gCms) ) exit;
 // no permissions checks here.
 
+debug_to_log('in ajax_getcontent');
+
 $handlers = ob_list_handlers();
 for ($cnt = 0; $cnt < sizeof($handlers); $cnt++) { ob_end_clean(); }
 
-$smarty->assign('can_add_content',$this->CheckPermission('Add Pages') || $this->CheckPermission('Manage All Content'));
-$smarty->assign('can_reorder_content',$this->CheckPermission('Manage All Content'));
+try {
+    $smarty->assign('can_add_content',$this->CheckPermission('Add Pages') || $this->CheckPermission('Manage All Content'));
+    $smarty->assign('can_reorder_content',$this->CheckPermission('Manage All Content'));
 
-// load all the content that this user can display...
-// organize it into a tree
-$builder = new ContentListBuilder($this);
-$curpage = (isset($_SESSION[$this->GetName().'_curpage'])) ? (int) $_SESSION[$this->GetName().'_curpage'] : 1;
-if( isset($params['curpage']) ) $curpage = (int)$params['curpage'];
-$smarty->assign('prettyurls_ok',$builder->pretty_urls_configured());
+    debug_to_log(__FILE__);
+    debug_to_log($params);
 
-//
-// handle all of the possible ajaxy/sub actions.
-//
+    // load all the content that this user can display...
+    // organize it into a tree
+    $builder = new ContentListBuilder($this);
+    $curpage = (isset($_SESSION[$this->GetName().'_curpage']) && !isset($params['seek'])) ? (int) $_SESSION[$this->GetName().'_curpage'] : 1;
+    if( isset($params['curpage']) ) $curpage = (int)$params['curpage'];
+    $smarty->assign('prettyurls_ok',$builder->pretty_urls_configured());
 
-//
-// build the display
-//
+    //
+    // handle all of the possible ajaxy/sub actions.
+    //
 
-if( isset($params['setoptions']) ) cms_userprefs::set($this->GetName().'_pagelimit',(int)$params['pagelimit']);
-$pagelimit = cms_userprefs::get($this->GetName().'_pagelimit',100);
+    //
+    // build the display
+    //
 
-$builder->set_pagelimit($pagelimit);
-if( isset($params['seek']) && $params['seek'] != '' ) {
-    $builder->seek_to((int)$params['seek']);
+    if( isset($params['setoptions']) ) cms_userprefs::set($this->GetName().'_pagelimit',(int)$params['pagelimit']);
+    $pagelimit = cms_userprefs::get($this->GetName().'_pagelimit',100);
+
+    $builder->set_pagelimit($pagelimit);
+    if( isset($params['seek']) && $params['seek'] != '' ) {
+        debug_to_log('before seekto');
+        $builder->seek_to((int)$params['seek']);
+        debug_to_log('after seekto');
+    }
+    else {
+        $builder->set_page($curpage);
+    }
+
+    $editinfo = $builder->get_content_list();
+    debug_to_log('found '.count($editinfo).' items');
+    $npages = $builder->get_numpages();
+    $pagelist = array();
+    for( $i = 0; $i < $npages; $i++ ) {
+        $pagelist[$i+1] = $i+1;
+    }
+
+    $smarty->assign('indent',cms_userprefs::get('indent',1));
+    $locks = $builder->get_locks();
+    $have_locks = (is_array($locks) && count($locks))?1:0;
+    $smarty->assign('have_locks',$have_locks);
+    $smarty->assign('pagelimit',$pagelimit);
+    $smarty->assign('pagelist',$pagelist);
+    $smarty->assign('curpage',$builder->get_page());
+    $smarty->assign('npages',$npages);
+    $smarty->assign('multiselect',$builder->supports_multiselect());
+    $smarty->assign('columns',$builder->get_display_columns());
+    $url = $this->create_url($id,'ajax_get_content',$returnid);
+    $smarty->assign('ajax_get_content_url',str_replace('amp;','',$url));
+
+    if( CmsContentManagerUtils::get_pagenav_display() == 'title' ) {
+        $smarty->assign('colhdr_page',$this->Lang('colhdr_name'));
+        $smarty->assign('coltitle_page',$this->Lang('coltitle_name'));
+    }
+    else {
+        $smarty->assign('colhdr_page',$this->Lang('colhdr_menutext'));
+        $smarty->assign('coltitle_page',$this->Lang('coltitle_menutext'));
+    }
+    if( $editinfo ) $smarty->assign('content_list',$editinfo);
+
+    $opts = array();
+    if( $this->CheckPermission('Remove Pages') && $this->CheckPermission('Modify Any Page') ) {
+        bulkcontentoperations::register_function($this->Lang('bulk_delete'),'delete');
+    }
+
+    if( $this->CheckPermission('Manage All Content')) {
+        bulkcontentoperations::register_function($this->Lang('bulk_active'),'active');
+        bulkcontentoperations::register_function($this->Lang('bulk_inactive'),'inactive');
+        bulkcontentoperations::register_function($this->Lang('bulk_cachable'),'setcachable');
+        bulkcontentoperations::register_function($this->Lang('bulk_noncachable'),'setnoncachable');
+        bulkcontentoperations::register_function($this->Lang('bulk_showinmenu'),'showinmenu');
+        bulkcontentoperations::register_function($this->Lang('bulk_hidefrommenu'),'hidefrommenu');
+        bulkcontentoperations::register_function($this->Lang('bulk_secure'),'secure');
+        bulkcontentoperations::register_function($this->Lang('bulk_insecure'),'insecure');
+        bulkcontentoperations::register_function($this->Lang('bulk_setdesign'),'setdesign');
+        bulkcontentoperations::register_function($this->Lang('bulk_changeowner'),'changeowner');
+    }
+    $opts = bulkcontentoperations::get_operation_list();
+    if( is_array($opts) && count($opts) ) $smarty->assign('bulk_options',$opts);
+
+    $out = $this->ProcessTEmplate('ajax_get_content.tpl');
+    debug_to_log('output');
+    echo $out;
 }
-else {
-    $builder->set_page($curpage);
+catch( \Exception $e ) {
+    debug_to_log($e);
 }
-
-
-$editinfo = $builder->get_content_list();
-$npages = $builder->get_numpages();
-$pagelist = array();
-for( $i = 0; $i < $npages; $i++ ) {
-    $pagelist[$i+1] = $i+1;
-}
-
-$smarty->assign('indent',cms_userprefs::get('indent',1));
-$locks = $builder->get_locks();
-$have_locks = (is_array($locks) && count($locks))?1:0;
-$smarty->assign('have_locks',$have_locks);
-$smarty->assign('pagelimit',$pagelimit);
-$smarty->assign('pagelist',$pagelist);
-$smarty->assign('curpage',$builder->get_page());
-$smarty->assign('npages',$npages);
-$smarty->assign('multiselect',$builder->supports_multiselect());
-$smarty->assign('columns',$builder->get_display_columns());
-$url = $this->create_url($id,'ajax_get_content',$returnid);
-$smarty->assign('ajax_get_content_url',str_replace('amp;','',$url));
-
-if( CmsContentManagerUtils::get_pagenav_display() == 'title' ) {
-    $smarty->assign('colhdr_page',$this->Lang('colhdr_name'));
-    $smarty->assign('coltitle_page',$this->Lang('coltitle_name'));
-}
-else {
-    $smarty->assign('colhdr_page',$this->Lang('colhdr_menutext'));
-    $smarty->assign('coltitle_page',$this->Lang('coltitle_menutext'));
-}
-if( $editinfo ) $smarty->assign('content_list',$editinfo);
-
-$opts = array();
-if( $this->CheckPermission('Remove Pages') && $this->CheckPermission('Modify Any Page') ) {
-    bulkcontentoperations::register_function($this->Lang('bulk_delete'),'delete');
-}
-
-if( $this->CheckPermission('Manage All Content')) {
-    bulkcontentoperations::register_function($this->Lang('bulk_active'),'active');
-    bulkcontentoperations::register_function($this->Lang('bulk_inactive'),'inactive');
-    bulkcontentoperations::register_function($this->Lang('bulk_cachable'),'setcachable');
-    bulkcontentoperations::register_function($this->Lang('bulk_noncachable'),'setnoncachable');
-    bulkcontentoperations::register_function($this->Lang('bulk_showinmenu'),'showinmenu');
-    bulkcontentoperations::register_function($this->Lang('bulk_hidefrommenu'),'hidefrommenu');
-    bulkcontentoperations::register_function($this->Lang('bulk_secure'),'secure');
-    bulkcontentoperations::register_function($this->Lang('bulk_insecure'),'insecure');
-    bulkcontentoperations::register_function($this->Lang('bulk_setdesign'),'setdesign');
-    bulkcontentoperations::register_function($this->Lang('bulk_changeowner'),'changeowner');
-}
-$opts = bulkcontentoperations::get_operation_list();
-if( is_array($opts) && count($opts) ) $smarty->assign('bulk_options',$opts);
-
-echo $this->ProcessTEmplate('ajax_get_content.tpl');
 exit;
 
 #

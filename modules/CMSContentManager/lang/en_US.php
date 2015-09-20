@@ -101,6 +101,7 @@ $lang['find'] = 'Find';
 $lang['friendlyname'] = 'Content Manager';
 
 #G
+$lang['go'] = 'Go';
 
 #H
 $lang['help_content_type'] = 'The content type controls the overall function of an item.  Some content types are used for building HTML pages, while others are for building links or other navigation functions.';

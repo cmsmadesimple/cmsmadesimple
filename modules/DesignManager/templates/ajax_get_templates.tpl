@@ -15,7 +15,7 @@ $('#tpl_selall').cmsms_checkall();
           <li><a id="edittplfilter" accesskey="f" title="{$mod->Lang('prompt_editfilter')}">{admin_icon icon='edit.gif' alt=$mod->Lang('prompt_editfilter')}&nbsp;{$mod->Lang('filter')}</a></li>
         </ul>
       </li>
-      {if $tpl_filter.tpl != '' && $tpl_filter != -1}
+      {if !empty($tpl_filter[0])}
         <li><span style="color: green;" title="{$mod->Lang('title_filterapplied')}">{$mod->Lang('filterapplied')}</span></li>
       {/if}
     </ul>

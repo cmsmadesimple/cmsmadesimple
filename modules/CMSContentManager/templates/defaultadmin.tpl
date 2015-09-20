@@ -1,26 +1,6 @@
 {if $ajax == 0}
   <script type="text/javascript">
   //<![CDATA[
-
-  function refresh_content_list() {
-     $('#content_area').css({ 'pointer-events': 'none', 'cursor': 'wait' }); // set busy
-     $.ajax({
-        url: '{$ajax_get_content}',
-     }).done(function(data){
-        $('#content_area').html(data);
-        $('#content_area').css({ 'pointer-events': '', 'cursor': '' }); // clear busy
-     });
-  }
-
-  function reset_auto_refresh()
-  {
-      if( typeof this._timer == 'undefined' ) this._timer = null;  // this._timer is a static
-      if( this._timer ) clearInterval(this._timer);
-      this._timer = setInterval( function() {
-         refresh_content_list();
-      }, 30000);
-  }
-
   function cms_CMloadUrl(link, lang) {
       $(document).on('click', link, function (e) {
           var url = $(this).attr('href') + '&showtemplate=false&{$actionid}ajax=1';
@@ -31,7 +11,7 @@
 	  $.ajax({
 	    url: url,
 	  }).done(function(){
-	    refresh_content_list();
+ 	    $('#content_area').autoRefresh('refresh');
 	  })
           e.preventDefault();
       });
@@ -54,9 +34,39 @@
   }
 
   $(document).ready(function () {
+      cms_busy();
+      $('#content_area').autoRefresh({
+          url: '{$ajax_get_content}',
+	  done_handler: function() {
+	        $('#ajax_find').autocomplete({
+			source: '{cms_action_url action=admin_ajax_pagelookup forjs=1}&showtemplate=false',
+			minLength: 2,
+			position: {
+              			  my: "right top",
+				  at: "right bottom"
+                        },
+			change: function (event, ui)  {
+			    // goes back to the full list, no options
+			    console.debug('in autocomplete change');
+			    $('#ajax_find').val('');
+    		            $('#content_area').autoRefresh('option','url','{$ajax_get_content}');
+			},
+                        select: function (event, ui) {
+			    console.debug('in autocomplete select');
+                            event.preventDefault();
+                            $(this).val(ui.item.label);
+                            var url = '{cms_action_url action=ajax_get_content forjs=1}&showtemplate=false&{$actionid}seek=' + ui.item.value;
+			    console.debug('url is '+url);
+			    $('#content_area').autoRefresh('option','url',url);
+                        }
+                });
+	  }
+      });
+
       $('#selectall').cmsms_checkall({
           target: '#contenttable'
       });
+
       cms_CMtoggleState('#multiaction'),
       cms_CMtoggleState('#multisubmit'),
 
@@ -72,15 +82,6 @@
       cms_CMloadUrl('a.page_setactive'),
       cms_CMloadUrl('a.page_setdefault', '{$mod->Lang('confirm_setdefault')|escape:'javascript'}'),
       cms_CMloadUrl('a.page_delete', '{$mod->Lang('confirm_delete_page')|escape:'javascript'}');
-
-      reset_auto_refresh();
-      // load the contents area.
-      refresh_content_list();
-
-      $('#content_area').on('click',':input.multicontent,#selectall,a.page_sortup,a.page_sortdown,a.page_setinactive,a.page_setactive,a.page_setdefault,a.page_delete',function(){
-          // reset the auto refresh when we do something in the form.
-          reset_auto_refresh();
-      });
 
       $('a.steal_lock').on('click',function(e) {
           // we're gonna confirm stealing this lock.
@@ -138,21 +139,6 @@
 
       $('#ajax_find').keypress(function (e) {
           if (e.which == 13) e.preventDefault();
-      });
-
-      $('#ajax_find').autocomplete({
-          source: '{cms_action_url action=admin_ajax_pagelookup forjs=1}&showtemplate=false',
-          minLength: 2,
-          position: {
-              my: "right top",
-              at: "right bottom"
-          },
-          select: function (event, ui) {
-              $(this).val(ui.item.label);
-              var url = '{cms_action_url action=defaultadmin forjs=1}&showtemplate=false&{$actionid}ajax=1&{$actionid}seek=' + ui.item.value;
-              $('#contenttable').load(url + ' #contenttable > *');
-              event.preventDefault();
-          }
       });
 
       // go to page on option change

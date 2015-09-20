@@ -1,23 +1,13 @@
 <script type="text/javascript">
 $(document).ready(function(){
     // load the templates area.
-    function refresh_template_list() {
-	console.log('refresh template list');
-        $('#template_area').css({ 'pointer-events': 'none', 'cursor': 'busy' }); // set busy
-        $.ajax({
-	    url: '{$ajax_templates_url}',
-	    data: {
-	        filter: '{$jsonfilter}'
-	    }
-        }).done(function(data){
-            $('#template_area').html(data);
-	    $('#template_area').css({ 'pointer-events': '', 'cursor': '' }); // clear busy
-	});
-    }
-    setInterval( function() {
-       refresh_template_list();
-    }, 30000);
-    refresh_template_list();
+    cms_busy();
+    $('#template_area').autoRefresh({
+      url: '{$ajax_templates_url}',
+      data: {
+         filter: '{$jsonfilter}'
+      }
+    });
 
     $('#tpl_bulk_action,#tpl_bulk_submit').attr('disabled','disabled');
     $('#tpl_bulk_submit').button({ 'disabled' : true });
