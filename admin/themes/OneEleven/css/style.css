@@ -749,6 +749,21 @@ aside .no-slide,
   height: 100%;
   line-height: 100%;
 }
+#cms_busy, .busy {
+    position: fixed;
+    z-index: 999;
+    height: 140px;
+    width: 140px;
+    overflow: show;
+    margin: auto;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background: transparent url(themes/OneEleven/images/icons/extra/spinner.gif) no-repeat;
+    cursor: wait;
+}
+
 /* close notification */
 .close-warning {
 	float:right;
