@@ -36,17 +36,12 @@
 if( !isset($gCms) ) exit;
 // no permissions checks here.
 
-debug_to_log('in ajax_getcontent');
-
 $handlers = ob_list_handlers();
 for ($cnt = 0; $cnt < sizeof($handlers); $cnt++) { ob_end_clean(); }
 
 try {
     $smarty->assign('can_add_content',$this->CheckPermission('Add Pages') || $this->CheckPermission('Manage All Content'));
     $smarty->assign('can_reorder_content',$this->CheckPermission('Manage All Content'));
-
-    debug_to_log(__FILE__);
-    debug_to_log($params);
 
     // load all the content that this user can display...
     // organize it into a tree
@@ -68,16 +63,13 @@ try {
 
     $builder->set_pagelimit($pagelimit);
     if( isset($params['seek']) && $params['seek'] != '' ) {
-        debug_to_log('before seekto');
         $builder->seek_to((int)$params['seek']);
-        debug_to_log('after seekto');
     }
     else {
         $builder->set_page($curpage);
     }
 
     $editinfo = $builder->get_content_list();
-    debug_to_log('found '.count($editinfo).' items');
     $npages = $builder->get_numpages();
     $pagelist = array();
     for( $i = 0; $i < $npages; $i++ ) {
@@ -128,7 +120,6 @@ try {
     if( is_array($opts) && count($opts) ) $smarty->assign('bulk_options',$opts);
 
     $out = $this->ProcessTEmplate('ajax_get_content.tpl');
-    debug_to_log('output');
     echo $out;
 }
 catch( \Exception $e ) {

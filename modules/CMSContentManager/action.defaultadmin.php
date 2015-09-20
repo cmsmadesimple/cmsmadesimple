@@ -58,6 +58,7 @@ else if( isset($params['collapseall']) || isset($_GET['collapseall']) ) {
 if( isset($params['setoptions']) ) {
     $pagelimit = max(1,min(500,(int)$params['pagelimit']));
     cms_userprefs::set($this->GetName().'_pagelimit',$pagelimit);
+    $curpage = 1;
 }
 if( isset($params['expand']) ) {
     $builder->expand_section($params['expand']);
