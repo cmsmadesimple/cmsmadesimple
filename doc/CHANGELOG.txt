@@ -6,16 +6,18 @@ Core - General
 - help for the {cms_html_options} plugin.
 - Change the default page template to use {Navigator}
 - Explicitly force $smarty->fetch() to create a new template, and therefore a new scope. Keep track of scopes in a stack.
+- Change prototype to CMSModule::DoActionBase to pass in the current template object.
 - SITENAME is now assigned as a Smarty global.
+  (fixes some variable scope issues)
 - Fix problem with changing content types.
 - Fix problem with CmsLayoutTemplateQuery wrt the editable option, that generated an SQL error.
   (resolves problems where people have additional editor access to templates, but no other design manager permissions).
-- Fix minor javascript error (error checking).
+- Fix minor javascript errors in plugin (error checking).
 - Fix problems where If assign was passed to a {content} tag, do not pass it to the module on a mact request.
-- Change prototype to CMSModule::DoActionBase to pass in the current template object.
 - Implements the completely forgotten 403 exception stuff and the IsPermitted content method.
 - Improve the cmsms_dirtyform jquery plugin to support the unload handler and an onUnload callback.
 - Fixed the jquery page selector plugin when the current value points to an invalid page,  and fixes for asynchronous ajax.
+- Adds a globally available cms_busy() javascript function for the admin
 
 CMSContentManager v1.0.1
 - Fixes for changing content types.
@@ -28,7 +30,7 @@ DesignManager v1.0.1
 - Clear the type_default flag when copying a template.
 - Clear any locks if an exception occurred while submitting a template.
 - Clear any locks if an exception occurred while submitting a stylesheet.
-- Template and stylesheets lists now refresh every 30 seconds to display up-to-date lock information.
+- Template and stylesheet lists now refresh every 30 seconds to display up-to-date lock information.
 
 MenuManager v1.50.1
 - Changes to createSmartyTemplate calls (now use $smarty->get_template_parent())
