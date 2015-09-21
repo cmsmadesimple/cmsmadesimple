@@ -479,15 +479,12 @@ abstract class CMSModule
      * can be used to check wether advanced html output (like links to other documents)
      * should be generated.
 	 *
-     * @param string Optional language that the admin is using.	 If that language
-     * is not defined, use en_US.
-     *
      * @abstract
      * @return string Help HTML Text.
      */
     public function GetHelp()
     {
-        return ModuleOperations::get_instance()->GetModuleHelp($this->GetName());
+        return '';
     }
 
     /**
