@@ -1,10 +1,10 @@
 Version 2.0.1 - Adelaide
 ----------------------------------
 Core - General
-- Improved optimization in ContentOperations::SetAllHierarchyPositions
-- Fixed return type of ContentOperations::GetPageIdFromAlias()
-- help for the {cms_html_options} plugin.
-- Change the default page template to use {Navigator}
+- Improved optimization in ContentOperations::SetAllHierarchyPositions.
+- Fixed return type of ContentOperations::GetPageIdFromAlias().
+- Help for the {cms_html_options} plugin.
+- Change the default page template to use {Navigator}.
 - Explicitly force $smarty->fetch() to create a new template, and therefore a new scope. Keep track of scopes in a stack.
 - Change prototype to CMSModule::DoActionBase to pass in the current template object.
 - SITENAME is now assigned as a Smarty global.
@@ -12,18 +12,18 @@ Core - General
 - Fix problem with changing content types.
 - Fix problem with CmsLayoutTemplateQuery wrt the editable option, that generated an SQL error.
   (resolves problems where people have additional editor access to templates, but no other design manager permissions).
-- Fix minor javascript errors in plugin (error checking).
+- Fix minor JavaScript errors in plugin (error checking).
 - Fix problems where If assign was passed to a {content} tag, do not pass it to the module on a mact request.
 - Implements the completely forgotten 403 exception stuff and the IsPermitted content method.
-- Improve the cmsms_dirtyform jquery plugin to support the unload handler and an onUnload callback.
-- Fixed the jquery page selector plugin when the current value points to an invalid page,  and fixes for asynchronous ajax.
-- Adds a globally available cms_busy() javascript function for the admin
+- Improve the cmsms_dirtyform jQuery plugin to support the unload handler and an onUnload callback.
+- Fixed the jQuery page selector plugin when the current value points to an invalid page,  and fixes for asynchronous Ajax.
+- Adds a globally available cms_busy() JavaScript function for the Admin.
 
 CMSContentManager v1.0.1
 - Fixes for changing content types.
 - Adds a title for some contextual help if a template is not available for a content item.
 - Clear any locks if an exception occurred while submitting a content item. 
-- Improvements to error handling with apply and preview
+- Improvements to error handling with apply and preview.
 - Content list now refreshes every 30 seconds to display up-to-date lock information.
 
 DesignManager v1.0.1
@@ -33,19 +33,19 @@ DesignManager v1.0.1
 - Template and stylesheet lists now refresh every 30 seconds to display up-to-date lock information.
 
 MenuManager v1.50.1
-- Changes to createSmartyTemplate calls (now use $smarty->get_template_parent())
+- Changes to createSmartyTemplate calls (now use $smarty->get_template_parent()).
 
 Navigator v1.0.1
-- Changes to createSmartyTemplate calls (now use $smarty->get_template_parent())
+- Changes to createSmartyTemplate calls (now use $smarty->get_template_parent()).
 
 Search v1.50.1
-- Changes to createSmartyTemplate calls (now use $smarty->get_template_parent())
+- Changes to createSmartyTemplate calls (now use $smarty->get_template_parent()).
 
 News v2.50.1
-- Changes to createSmartyTemplate calls (now use $smarty->get_template_parent())
+- Changes to createSmartyTemplate calls (now use $smarty->get_template_parent()).
 
 FileManager v1.5.1
-- Fix minor problem with Smarty scope in the dropzone.
+- Fix minor problem with Smarty scope in the drop zone.
 
 
 Version 2.0 - Australia
