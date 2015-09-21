@@ -752,8 +752,8 @@ aside .no-slide,
 #cms_busy, .busy {
     position: fixed;
     z-index: 999;
-    height: 140px;
-    width: 140px;
+    height: 50px;
+    width: 50px;
     overflow: show;
     margin: auto;
     top: 0;
@@ -761,6 +761,7 @@ aside .no-slide,
     bottom: 0;
     right: 0;
     background: transparent url(themes/OneEleven/images/icons/extra/spinner.gif) no-repeat;
+	background-size: 50px 50px;
     cursor: wait;
 }
 
