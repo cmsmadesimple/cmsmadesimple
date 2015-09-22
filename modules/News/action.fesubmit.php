@@ -225,7 +225,7 @@ while( $dbr && ($row = $dbr->FetchRow()) ) {
   $key = str_replace(' ','_',strtolower($row['name']));
   $customfieldsbyname[$key] = $obj;
 }
-if( count($customfields) ) $tpl_ob->assign('customfields',$customfieldsbyname);
+if( count($customfieldsbyname) ) $tpl_ob->assign('customfields',$customfieldsbyname);
 
 $tpl_ob->display();
 
