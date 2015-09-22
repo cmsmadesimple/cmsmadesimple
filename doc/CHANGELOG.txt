@@ -18,6 +18,7 @@ Core - General
 - Improve the cmsms_dirtyform jQuery plugin to support the unload handler and an onUnload callback.
 - Fixed the jQuery page selector plugin when the current value points to an invalid page,  and fixes for asynchronous Ajax.
 - Adds a globally available cms_busy() JavaScript function for the Admin.
+- Fix problem with html entitites in email addresses in user settings.
 
 CMSContentManager v1.0.1
 - Fixes for changing content types.

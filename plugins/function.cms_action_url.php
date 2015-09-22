@@ -70,7 +70,6 @@ function smarty_function_cms_action_url($params, &$smarty)
     }
     if( $action == '' ) return;
 
-
     $obj = cms_utils::get_module($module);
     if( !$obj ) return;
 

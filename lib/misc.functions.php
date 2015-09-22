@@ -1057,7 +1057,10 @@ function cms_ipmatches($ip,$checklist)
 */
 function is_email( $email, $checkDNS=false )
 {
-  if( !filter_var($email,FILTER_VALIDATE_EMAIL) ) return FALSE;
+    if( !filter_var($email,FILTER_VALIDATE_EMAIL) ) {
+        die($email.' failed');
+        return FALSE;
+    }
   if ($checkDNS && function_exists('checkdnsrr')) {
     if (!(checkdnsrr($domain, 'A') || checkdnsrr($domain, 'MX'))) return FALSE;	// Domain doesn't actually exist
   }
