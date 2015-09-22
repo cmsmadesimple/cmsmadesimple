@@ -952,7 +952,8 @@ class ContentOperations
 	function GetPageIDFromAlias( $alias )
 	{
 		$hm = CmsApp::get_instance()->GetHierarchyManager();
-		return $hm->sureGetNodeByAlias($alias);
+	    $node = $hm->sureGetNodeByAlias($alias);
+        if( $node ) return $node->get_tag('id');
 	}
 
 
