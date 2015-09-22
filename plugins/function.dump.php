@@ -46,9 +46,9 @@ function smarty_function_dump($params, &$smarty)
 					$maxlevel = max(1,$maxlevel);
 					$maxlevel = min(10,$maxlevel);
 				}
-			
+
 			if( $level > $maxlevel ) return;
-			
+
 			$objname = get_class($obj);
 			$str = '';
 			$str .= str_repeat('  ',$level).'Object Name: '.$objname.'<br/>';
@@ -77,7 +77,7 @@ function smarty_function_dump($params, &$smarty)
 					{
 						if( in_array($name,$ignore) ) continue;
 						$acc = build_accessor($accessor,'object',$name);
-				
+
 						$type = gettype($value);
 						if( $type == 'object' )
 						{
@@ -118,10 +118,10 @@ function smarty_function_dump($params, &$smarty)
 				$maxlevel = max(1,$maxlevel);
 				$maxlevel = min(10,$maxlevel);
 			}
-			
+
 			if( $level > $maxlevel ) return;
 			$str = '';
-			
+
 			foreach( $data as $key => $value )
 			{
 				$acc = build_accessor($accessor,'array',$key);
@@ -177,12 +177,12 @@ function smarty_function_dump($params, &$smarty)
 		$pos = $pos2;
 		$len = 1;
     }
-	
+
 	$str = substr($item,0,$pos);
 	$work = substr($item,$pos+$len);
 
 	// get the base object from smarty.
-	$baseobj = $smarty->get_template_vars($str);
+	$baseobj = $smarty->getTemplateVars($str);
 	$obj = $baseobj;
 
 	$str = '$baseobj';
@@ -212,7 +212,7 @@ function smarty_function_dump($params, &$smarty)
 		{
 			$tmp = substr($work,0,$pos);
 		}
-		
+
 		if( !empty($tmp) )
 		{
 			if( is_object($obj) )
@@ -248,12 +248,12 @@ function smarty_function_dump($params, &$smarty)
     {
 		$str .= dump_array($params,$obj,0,$ignore,$item);
     }
-	else 
+	else
     {
 		$str .= $obj.'<br/>';
     }
 	$str.='</pre>';
-	
+
 	if( isset($params['assign']) )
 	{
 	    $smarty->assign(trim($params['assign']),$str);

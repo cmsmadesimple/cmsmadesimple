@@ -21,11 +21,11 @@ function smarty_function_form_start($params, &$smarty)
     $gCms = CmsApp::get_instance();
     $tagparms = array();
     $mactparms = array();
-    $tmp = $smarty->get_template_vars('actionparams');
+    $tmp = $smarty->getTemplateVars('actionparams');
     if( is_array($tmp) && isset($tmp['action']) ) $mactparms['action'] = $tmp['action'];
-    $mactparms['module'] = $smarty->get_template_vars('actionmodule');
-    $mactparms['mid'] = $smarty->get_template_vars('actionid');
-    $mactparms['returnid'] = $smarty->get_template_vars('returnid');
+    $mactparms['module'] = $smarty->getTemplateVars('actionmodule');
+    $mactparms['mid'] = $smarty->getTemplateVars('actionid');
+    $mactparms['returnid'] = $smarty->getTemplateVars('returnid');
     $mactparms['inline'] = 0;
     $tagparms['method'] = 'post';
     $tagparms['enctype'] = 'multipart/form-data';

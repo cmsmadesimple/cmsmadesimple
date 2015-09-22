@@ -19,9 +19,9 @@
 
 function smarty_function_cms_action_url($params, &$smarty)
 {
-    $module = $smarty->get_template_vars('actionmodule');
-    $returnid = $smarty->get_template_vars('returnid');
-    $mid = $smarty->get_template_vars('actionid');
+    $module = $smarty->getTemplateVars('actionmodule');
+    $returnid = $smarty->getTemplateVars('returnid');
+    $mid = $smarty->getTemplateVars('actionid');
     $action = null;
     $assign = null;
     $forjs  = 0;
