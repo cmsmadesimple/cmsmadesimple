@@ -745,6 +745,7 @@ class CmsLayoutStylesheet
                     }
                 }
                 else {
+                    $one = trim($one,"'");
                     // find item in $dbr by name
                     foreach( $dbr as $row ) {
                         if( $row['name'] == $one ) {
