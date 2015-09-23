@@ -133,8 +133,7 @@ function cms_module_ProcessTemplate(&$modinstance, $tpl_name, $designation = '',
 	$ok = (strpos($tpl_name, '..') === false);
 	if (!$ok) return;
 
-	$smarty = \Smarty_CMS::get_instance();
-
+    $smarty = $modinstance->GetActionTemplateObject();
 	$oldcache = $smarty->caching;
 	if( $smarty->caching != Smarty::CACHING_OFF ) {
 		$smarty->caching = ($modinstance->can_cache_output())?Smarty::CACHING_LIFETIME_CURRENT:Smarty::CACHING_OFF;
@@ -152,7 +151,7 @@ function cms_module_ProcessTemplate(&$modinstance, $tpl_name, $designation = '',
  */
 function cms_module_ProcessTemplateFromData(&$modinstance, $data)
 {
-	$smarty = \Smarty_CMS::get_instance();
+    $smarty = $modinstance->GetActionTemplateObject();
 	$_contents = $smarty->fetch('string:'.$data);
 	return $_contents;
 }
@@ -162,8 +161,7 @@ function cms_module_ProcessTemplateFromData(&$modinstance, $data)
  */
 function cms_module_ProcessTemplateFromDatabase(&$modinstance, $tpl_name, $designation = '', $cache = false, $modulename = '')
 {
-	$smarty = \Smarty_CMS::get_instance();
-
+    $smarty = $modinstance->GetActionTemplateObject();
 	if( $modulename == '' ) $modulename = $modinstance->GetName();
 
 	$oldcache = $smarty->caching;

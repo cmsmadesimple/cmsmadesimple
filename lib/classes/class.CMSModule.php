@@ -2431,6 +2431,20 @@ abstract class CMSModule
      */
 
     /**
+     * Get a reference to the smarty template object that was passed in to the the action.
+     * This method is only valid within a module action.
+     *
+     * @final
+     * @since 2.0.1
+     * @author calguy1000
+     * @return Smarty_Internal_Template
+     */
+    final public function GetActionTemplateObject()
+    {
+        if( $this->_action_tpl ) return $this->_action_tpl;
+    }
+
+    /**
      * Build a resource string for an old module templates resource.
      * If the template name provided ends with .tpl a module file template is assumed.
      *
