@@ -40,6 +40,7 @@ MenuManager v1.50.1
 
 Navigator v1.0.1
 - Changes to createSmartyTemplate calls (now use $smarty->get_template_parent()).
+- Minor change to the help ($node->children_exist)
 
 Search v1.50.1
 - Changes to createSmartyTemplate calls (now use $smarty->get_template_parent()).
