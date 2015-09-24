@@ -123,16 +123,31 @@ EOT;
         $regex='/\{cms_selflink.*\}/';
         $content = preg_replace_callback( $regex, $temp_fix_cmsselflink, $content );
 
+        // compars root url to another url
+        // handle relative paths
+        // and no schema
+        $is_same_host = function(cms_url $url1,cms_url $url2) {
+            if( $url1->get_host() != $url2->get_host() && $url2->get_host() != '') return FALSE;
+            if( $url1->get_port() != $url2->get_port() ) return FALSE;
+            if( $url1->get_schema() != $url2->get_schema() && $url2->get_schema() != '') return FALSE;
+            $p1 = $url1->get_path();
+            $p2 = $url2->get_path();
+            if( $p1 != $p2 && !startswith($p2,$p1) ) return FALSE;
+            return TRUE;
+        };
+
         $ob = &$this;
         $types = array("href", "src", "url");
         foreach( $types as $type ) {
             $innerT = '[a-z0-9:?=&@/._-]+?';
             $content = preg_replace_callback("|$type\=([\"'`])(".$innerT.")\\1|i",
-                                             function($matches) use ($ob,$type) {
+                                             function($matches) use ($ob,$type,&$is_same_host) {
                                                  $config = cmsms()->GetConfig();
                                                  $url = $matches[2];
-                                                 if( !startswith($url,'ignore::') && (!startswith($url,'http') || startswith($url,$config['root_url']) || startswith($url,'{root_url}')
-                                                                                     || !startswith($url,'{uploads_url}') ) ) {
+                                                 debug_display('test '.$url);
+                                                 $root_url = new cms_url($config['root_url']);
+                                                 $the_url = new cms_url($url);
+                                                 if( !startswith($url,'ignore::') && $is_same_host($root_url,$the_url) ) {
                                                      $sig = $ob->_get_signature($url);
                                                      //return $sig;
                                                      return " $type=\"$sig\"";
@@ -248,11 +263,14 @@ EOT;
             $have_template = false;
             $out = preg_replace_callback("/template\s*=[\\\"']{0,1}([a-zA-Z0-9._\ \:\-\/]+)[\\\"']{0,1}/i",
                                          function($matches) use ($ob,&$have_template) {
+                                             $the_tpl = $matches[1];
+                                             if( ($pos = strpos($matches[1],' ')) !== FALSE )  $the_tpl = substr($matches[1],0,$pos);
                                              $type = 'TPL';
-                                             if( endswith($matches[1],'.tpl') ) $type = 'MM';
-                                             $sig = $ob->_add_template($matches[1],$type);
+                                             if( endswith($the_tpl,'.tpl') ) $type = 'MM';
+                                             $sig = $ob->_add_template($the_tpl,$type);
                                              $have_template = TRUE;
-                                             return str_replace($matches[1],$sig,$matches[0]);
+                                             $out = str_replace($the_tpl,$sig,$matches[0]);
+                                             return $out;
                                          },$matches[0]);
 
             if( !$have_template ) {

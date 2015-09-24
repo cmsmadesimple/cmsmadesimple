@@ -34,6 +34,7 @@ DesignManager v1.0.1
 - Clear any locks if an exception occurred while submitting a template.
 - Clear any locks if an exception occurred while submitting a stylesheet.
 - Template and stylesheet lists now refresh every 30 seconds to display up-to-date lock information.
+- Fixes for design exporting templates with protocol-less URLs in them.
 
 MenuManager v1.50.1
 - Changes to createSmartyTemplate calls (now use $smarty->get_template_parent()).
