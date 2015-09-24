@@ -21,26 +21,34 @@ function smarty_function_form_start($params, &$smarty)
     $gCms = CmsApp::get_instance();
     $tagparms = array();
     $mactparms = array();
-    $tmp = $smarty->getTemplateVars('actionparams');
-    if( is_array($tmp) && isset($tmp['action']) ) $mactparms['action'] = $tmp['action'];
     $mactparms['module'] = $smarty->getTemplateVars('actionmodule');
     $mactparms['mid'] = $smarty->getTemplateVars('actionid');
     $mactparms['returnid'] = $smarty->getTemplateVars('returnid');
     $mactparms['inline'] = 0;
+
     $tagparms['method'] = 'post';
     $tagparms['enctype'] = 'multipart/form-data';
-    $tagparms['action'] = 'moduleinterface.php';
     if( $gCms->test_state(CmsApp::STATE_ADMIN_PAGE) ) {
         // check if it's a module action
         if( $mactparms['module'] ) {
+            $tmp = $smarty->getTemplateVars('actionparams');
+            if( is_array($tmp) && isset($tmp['action']) ) $mactparms['action'] = $tmp['action'];
+
+            $tagparms['action'] = 'moduleinterface.php';
             if( !isset($mactparms['action']) ) $mactparms['action'] = 'defaultadmin';
             $mactparms['returnid'] = '';
             if( !isset($mactparms['id']) ) $mactparms['mid'] = 'm1_';
         }
     }
     else if( $gCms->is_frontend_request() ) {
-        if( !isset($mactparms['action']) ) $mactparms['action'] = 'default';
-        if( !isset($mactparms['id']) ) $mactparms['mid'] = 'cntnt01';
+        if( $mactparms['module'] ) {
+            $tmp = $smarty->getTemplateVars('actionparams');
+            if( is_array($tmp) && isset($tmp['action']) ) $mactparms['action'] = $tmp['action'];
+
+            $tagparms['action'] = 'moduleinterface.php';
+            if( !isset($mactparms['action']) ) $mactparms['action'] = 'default';
+            if( !isset($mactparms['id']) ) $mactparms['mid'] = 'cntnt01';
+        }
     }
 
     if( $mactparms['returnid'] != '' ) {
