@@ -216,6 +216,7 @@ abstract class CmsDbQueryBase
         $out = array();
         while( !$this->EOF() ) {
             $out[] = $this->GetObject();
+            $this->MoveNext();
         }
         if( count($out) ) return $out;
     }
