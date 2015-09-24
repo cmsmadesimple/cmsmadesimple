@@ -129,7 +129,7 @@ EOT;
         $is_same_host = function(cms_url $url1,cms_url $url2) {
             if( $url1->get_host() != $url2->get_host() && $url2->get_host() != '') return FALSE;
             if( $url1->get_port() != $url2->get_port() ) return FALSE;
-            if( $url1->get_schema() != $url2->get_schema() && $url2->get_schema() != '') return FALSE;
+            if( $url1->get_scheme() != $url2->get_scheme() && $url2->get_scheme() != '') return FALSE;
             $p1 = $url1->get_path();
             $p2 = $url2->get_path();
             if( $p1 != $p2 && !startswith($p2,$p1) ) return FALSE;
