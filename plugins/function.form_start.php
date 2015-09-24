@@ -122,7 +122,7 @@ function smarty_function_form_start($params, &$smarty)
             $out .= '<input type="hidden" name="'.$mactparms['mid'].'returnid" value="'.$mactparms['returnid'].'"/>';
         }
     }
-    if( $gCms->is_frontend_request() ) {
+    if( !$gCms->is_frontend_request() ) {
         if( !isset($mactparms['returnid']) || $mactparms['returnid'] == '' ) {
             $out .= '<input type="hidden" name="'.CMS_SECURE_PARAM_NAME.'" value="'.$_SESSION[CMS_USER_KEY].'"/>';
         }
