@@ -419,7 +419,8 @@ class dm_design_reader extends dm_reader_base
     }
 
     // expand templates
-    foreach( $this->get_template_list() as $key => $tpl ) {
+    $tpl_recs = $this->get_template_list();
+    foreach( $tpl_recs as $tpl ) {
       $template = new CmsLayoutTemplate();
       $template->set_name($tpl['newname']);
       if( isset($tpl['desc']) && $tpl['desc'] != '' ) $template->set_description($tpl['desc']);
@@ -427,10 +428,10 @@ class dm_design_reader extends dm_reader_base
 
       // substitute URL keys for the values.
       foreach( $this->_file_map as $key => &$rec ) {
-        if( startswith($key,'__URL,,') ) {
-          // handle URL keys... handles image links etc.
-          if( !isset($rec['tpl_url']) ) continue;
-          $content = str_replace($key,$rec['tpl_url'],$content);
+          if( startswith($key,'__URL,,') ) {
+              // handle URL keys... handles image links etc.
+              if( !isset($rec['tpl_url']) ) continue;
+              $content = str_replace($key,$rec['tpl_url'],$content);
         }
         else if( startswith($key,'__CSS,,') ) {
           // handle CSS keys... for things like {cms_stylesheet name='xxxx'}
@@ -440,9 +441,15 @@ class dm_design_reader extends dm_reader_base
         else if( startswith($key,'__TPL,,') ) {
           // handle TPL keys... for things like {include file='xxxx'}
           // or calling a module with a specific template.
-          if( !isset($rec['value']) ) continue;
-          $content = str_replace($key,$rec['value'],$content);
+            if( !isset($rec['value']) ) continue;
+            $content = str_replace($key,$rec['value'],$content);
         }
+      }
+
+      // substitute other tpl keys in this content
+      foreach( $tpl_recs as $tpl2 ) {
+          if( $tpl['key'] == $tpl2['key'] ) continue;
+          $content = str_replace($tpl2['key'],$tpl2['newname'],$content);
       }
 
       // substitute CSS keys for their values.  This should handle
@@ -463,6 +470,7 @@ class dm_design_reader extends dm_reader_base
       }
 
       $template->save();
+      $tpl_recs['newname'] = $template->get_name();
       $design->add_template($template);
     }
 
