@@ -215,11 +215,25 @@ class CmsLayoutTemplateQuery extends CmsDbQueryBase
 	 */
     public function &GetTemplate()
     {
+        return $this->GetObject();
+    }
+
+	/**
+	 * Get the template object for the current member of the resultset (if any).
+     *
+     * This method is not as efficient as GetMatches() when the resultset has multiple items.
+	 *
+	 * This method calls the execute method.
+	 *
+	 * @throws CmsLogicException
+	 * @return CmsLayoutTemplate
+	 */
+    public function &GetObject()
+    {
         $this->execute();
         if( !$this->_rs ) throw new CmsLogicException('Cannot get template from invalid template query object');
         return CmsLayoutTemplate::load($this->_rs->_fields['id']);
     }
-
 	/**
 	 * Get the list of matched template ids
 	 *

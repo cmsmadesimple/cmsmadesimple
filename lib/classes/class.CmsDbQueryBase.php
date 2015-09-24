@@ -196,14 +196,29 @@ abstract class CmsDbQueryBase
         return TRUE;
     }
 
+    /**
+     * Get the object for the current item
+     *
+     * @return mixed
+     */
+    abstract public function &GetObject();
+
 	/**
 	 * Return an array of matched objects
 	 *
 	 * The output of this method depends on the derived class.
 	 *
-	 * @return mixed.
+	 * @return array|null
 	 */
-    abstract public function GetMatches();
+    public function GetMatches()
+    {
+        $this->MoveFirst();
+        $out = array();
+        while( !$this->EOF() ) {
+            $out[] = $this->GetObject();
+        }
+        if( count($out) ) return $out;
+    }
 
 	/**
 	 * @ignore

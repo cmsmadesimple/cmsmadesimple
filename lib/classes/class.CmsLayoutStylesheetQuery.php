@@ -153,6 +153,22 @@ class CmsLayoutStylesheetQuery extends CmsDbQueryBase
         $this->_totalmatchingrows = $db->GetOne('SELECT FOUND_ROWS()');
     }
 
+    /**
+     * Get a CmsLayoutStylesheet object for the current data in the fieldset.
+     *
+     * This method is not as efficient as the GetMatches() method when the resultset has multiple items.
+     *
+	 * @throws CmsLogicException
+     * @return CmsLayoutStylesheet
+     */
+    public function &GetObject()
+    {
+        $ths->execute();
+        if( !$this->_rs ) throw new CmsLogicException('Cannot get stylesheet from invalid stylesheet query object');
+        $id = (int) $this->fields['id'];
+        $obj = CmsLayoutStylesheet::load($id);
+    }
+
 	/**
 	 * Return all of the matches for this query
 	 *
