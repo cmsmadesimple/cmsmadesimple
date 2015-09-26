@@ -22,7 +22,7 @@ function smarty_cms_function_cms_stylesheet($params, &$smarty)
 	# Initials
 	#---------------------------------------------
 
-  $gCms = CmsApp::get_instance();
+    $gCms = CmsApp::get_instance();
 	$config = $gCms->GetConfig();
 
 	global $CMS_LOGIN_PAGE;
@@ -49,156 +49,163 @@ function smarty_cms_function_cms_stylesheet($params, &$smarty)
 	# Read parameters
 	#---------------------------------------------
 
-	if (isset($params['name']) && $params['name'] != '' ) {
-        $name = trim($params['name']);
-	}
-	else if (isset($params['designid']) && $params['designid']!='') {
-		$design_id = (int)$params['designid'];
-	} else {
-        $content_obj = $gCms->get_content_object();
-		if( !is_object($content_obj) ) return;
-		$design_id = (int) $content_obj->GetPropertyValue('design_id');
-		$use_https = (int) $content_obj->Secure();
-	}
+    try {
+        if (isset($params['name']) && $params['name'] != '' ) {
+            $name = trim($params['name']);
+        }
+        else if (isset($params['designid']) && $params['designid']!='') {
+            $design_id = (int)$params['designid'];
+        } else {
+            $content_obj = $gCms->get_content_object();
+            if( !is_object($content_obj) ) return;
+            $design_id = (int) $content_obj->GetPropertyValue('design_id');
+            $use_https = (int) $content_obj->Secure();
+        }
+        if( !$name && $design_id < 1 ) throw new \RuntimeException('Invalid parameters, or there is no design attached to the content page');
 
-    // @todo: change this stuff to just use // instead of protocol specific URL.
-	if( isset($params['auto_https']) && $params['auto_https'] == 0 ) $auto_https = 0;
-	if( isset($params['https']) ) $use_https = cms_to_bool($params['https']);
-	if( $auto_https && $gCms->is_https_request() ) $use_https = 1;
+        // @todo: change this stuff to just use // instead of protocol specific URL.
+        if( isset($params['auto_https']) && $params['auto_https'] == 0 ) $auto_https = 0;
+        if( isset($params['https']) ) $use_https = cms_to_bool($params['https']);
+        if( $auto_https && $gCms->is_https_request() ) $use_https = 1;
 
-	if($use_https && isset($config['ssl_url'])) $root_url = $config['ssl_css_url'];
-	if( isset($params['nocombine']) ) $combine_stylesheets = !cms_to_bool($params['nocombine']);
+        if($use_https && isset($config['ssl_url'])) $root_url = $config['ssl_css_url'];
+        if( isset($params['nocombine']) ) $combine_stylesheets = !cms_to_bool($params['nocombine']);
 
-	if( isset($params['stripbackground']) )	{
-        $trimbackground = cms_to_bool($params['stripbackground']);
-		$fnsuffix = '_e_';
-	}
+        if( isset($params['stripbackground']) )	{
+            $trimbackground = cms_to_bool($params['stripbackground']);
+            $fnsuffix = '_e_';
+        }
 
-	#---------------------------------------------
-	# Build query
-	#---------------------------------------------
+        #---------------------------------------------
+        # Build query
+        #---------------------------------------------
 
-	if( $name != '' ) {
-        // stylesheet by name
-        $query = new CmsLayoutStylesheetQuery(array('name'=>$params['name']) );
-    } else if( $design_id > 0 ) {
-        // stylesheet by design id
-        $query = new CmsLayoutStylesheetQuery(array('design'=>$design_id));
-	}
+        $query = null;
+        if( $name != '' ) {
+            // stylesheet by name
+            $query = new CmsLayoutStylesheetQuery(array('name'=>$params['name']) );
+        } else if( $design_id > 0 ) {
+            // stylesheet by design id
+            $query = new CmsLayoutStylesheetQuery(array('design'=>$design_id));
+        }
+        if( !$query ) throw new \RuntimeException('Problem: Could not build a stylesheet query with the provided data');
 
-	#---------------------------------------------
-	# Execute
-	#---------------------------------------------
+        #---------------------------------------------
+        # Execute
+        #---------------------------------------------
 
-    $nrows = $query->TotalMatches();
-	if( $nrows > 0 ) {
+        $nrows = $query->TotalMatches();
+        if( !$nrows ) throw new \RuntimeException('No stylesheets matched the criteria specified');
         $res = $query->GetMatches();
 
         // we have some output, and the stylesheet objects have already been loaded.
 
-		// Combine stylesheets
-		if($combine_stylesheets) {
+        // Combine stylesheets
+        if($combine_stylesheets) {
 
-			// Group queries & types
-			$all_media = array();
-			$all_timestamps = array();
+            // Group queries & types
+            $all_media = array();
+            $all_timestamps = array();
             foreach( $res as $one ) {
                 $mq = $one->get_media_query();
                 $mt = implode(',',$one->get_media_types());
-				if( !empty($mq) ) {
-					$key = md5($mq);
-					$all_media[$key][] = $one;
-					$all_timestamps[$key][] = $one->get_modified();
-				} else if( !$mt ) {
-					$all_media['all'][] = $one;
-					$all_timestamps['all'][] = $one->get_modified();
-				} else {
-					$key = md5($mt);
-					$all_media[$key][] = $one;
-					$all_timestamps[$key][] = $one->get_modified();
-				}
+                if( !empty($mq) ) {
+                    $key = md5($mq);
+                    $all_media[$key][] = $one;
+                    $all_timestamps[$key][] = $one->get_modified();
+                } else if( !$mt ) {
+                    $all_media['all'][] = $one;
+                    $all_timestamps['all'][] = $one->get_modified();
+                } else {
+                    $key = md5($mt);
+                    $all_media[$key][] = $one;
+                    $all_timestamps[$key][] = $one->get_modified();
+                }
 
-			}
+            }
 
-			// media parameter...
+            // media parameter...
             if( isset($params['media']) && strtolower($params['media']) != 'all' ) {
                 // media parameter is deprecated.
 
-				// combine all matches into one stylesheet
-				$filename = 'stylesheet_combined_'.md5($design_id.$use_https.serialize($params).serialize($all_timestamps).$fnsuffix).'.css';
-				$fn = cms_join_path($cache_dir,$filename);
+                // combine all matches into one stylesheet
+                $filename = 'stylesheet_combined_'.md5($design_id.$use_https.serialize($params).serialize($all_timestamps).$fnsuffix).'.css';
+                $fn = cms_join_path($cache_dir,$filename);
 
-				if( !file_exists($fn) ) {
+                if( !file_exists($fn) ) {
                     $list = array();
                     foreach ($res as $one) {
                         if( in_array($params['media'],$one->get_media_types()) ) $list[] = $one->get_name();
                     }
 
-					cms_stylesheet_writeCache($fn, $list, $trimbackground, $smarty);
-				}
+                    cms_stylesheet_writeCache($fn, $list, $trimbackground, $smarty);
+                }
 
-				cms_stylesheet_toString($filename, $params['media'], '', $root_url, $stylesheet, $params);
+                cms_stylesheet_toString($filename, $params['media'], '', $root_url, $stylesheet, $params);
 
-			} else {
+            } else {
 
-				foreach($all_media as $hash=>$onemedia) {
+                foreach($all_media as $hash=>$onemedia) {
 
-					// combine all matches into one stylesheet.
-					$filename = 'stylesheet_combined_'.md5($design_id.$use_https.serialize($params).serialize($all_timestamps[$hash]).$fnsuffix).'.css';
-					$fn = cms_join_path($cache_dir,$filename);
+                    // combine all matches into one stylesheet.
+                    $filename = 'stylesheet_combined_'.md5($design_id.$use_https.serialize($params).serialize($all_timestamps[$hash]).$fnsuffix).'.css';
+                    $fn = cms_join_path($cache_dir,$filename);
 
-					// Get media_type and media_query
-					$media_query = $onemedia[0]->get_media_query();
-					$media_type = implode(',',$onemedia[0]->get_media_types());
+                    // Get media_type and media_query
+                    $media_query = $onemedia[0]->get_media_query();
+                    $media_type = implode(',',$onemedia[0]->get_media_types());
 
-					if( !file_exists($fn) ) {
+                    if( !file_exists($fn) ) {
                         $list = array();
 
                         foreach( $onemedia as $one ) {
                             $list[] = $one->get_name();
                         }
 
-						cms_stylesheet_writeCache($fn, $list, $trimbackground, $smarty);
-					}
+                        cms_stylesheet_writeCache($fn, $list, $trimbackground, $smarty);
+                    }
 
-					cms_stylesheet_toString($filename, $media_query, $media_type, $root_url, $stylesheet, $params);
-				}
-			}
+                    cms_stylesheet_toString($filename, $media_query, $media_type, $root_url, $stylesheet, $params);
+                }
+            }
 
-		// Do not combine stylesheets
-		} else {
-			foreach ($res as $one) {
+            // Do not combine stylesheets
+        } else {
+            foreach ($res as $one) {
 
-			    if (isset($params['media'])) {
+                if (isset($params['media'])) {
                     if( !in_array($params['media'],$one->get_media_types()) ) continue;
                     $media_query = '';
-			        $media_type = $params['media'];
+                    $media_type = $params['media'];
                 } else {
                     $media_query = $one->get_media_query();
                     $media_type  = implode(',',$one->get_media_types());
                 }
 
-				$filename = 'stylesheet_'.md5('single'.$one->get_id().$use_https.$one->get_modified().$fnsuffix).'.css';
-				$fn = cms_join_path($cache_dir,$filename);
+                $filename = 'stylesheet_'.md5('single'.$one->get_id().$use_https.$one->get_modified().$fnsuffix).'.css';
+                $fn = cms_join_path($cache_dir,$filename);
 
-				if (!file_exists($fn) ) cms_stylesheet_writeCache($fn, $one->get_name(), $trimbackground, $smarty);
+                if (!file_exists($fn) ) cms_stylesheet_writeCache($fn, $one->get_name(), $trimbackground, $smarty);
 
-				cms_stylesheet_toString($filename, $media_query, $media_type, $root_url, $stylesheet, $params);
-			}
-		}
-	}
-
-	#---------------------------------------------
-	# Cleanup & output
-	#---------------------------------------------
-
-    if( strlen($stylesheet) ) {
-        $stylesheet = preg_replace("/\{\/?php\}/", "", $stylesheet);
-
-        // Remove last comma at the end when $params['nolinks'] is set
-        if( isset($params['nolinks']) && cms_to_bool($params['nolinks']) && endswith($stylesheet,',') ) {
-            $stylesheet = substr($stylesheet,0,strlen($stylesheet)-1);
+                cms_stylesheet_toString($filename, $media_query, $media_type, $root_url, $stylesheet, $params);
+            }
         }
+
+        #---------------------------------------------
+        # Cleanup & output
+        #---------------------------------------------
+
+        if( strlen($stylesheet) ) {
+            $stylesheet = preg_replace("/\{\/?php\}/", "", $stylesheet);
+
+            // Remove last comma at the end when $params['nolinks'] is set
+            if( isset($params['nolinks']) && cms_to_bool($params['nolinks']) && endswith($stylesheet,',') ) {
+                $stylesheet = substr($stylesheet,0,strlen($stylesheet)-1);
+            }
+        }
+    } catch( \Exception $e ) {
+        audit('','cms_stylesheet',$e->GetMessage());
+        $stylesheet = '<!-- cms_stylesheet error: '.$e->GetMessage().' -->';
     }
 
 	// Notify core that we are no longer at stylesheet, pretty ugly way to do this. -Stikki-
@@ -207,7 +214,6 @@ function smarty_cms_function_cms_stylesheet($params, &$smarty)
 	unset($GLOBALS['CMS_STYLESHEET']);
 
 	if( isset($params['assign']) ){
-
 	    $smarty->assign(trim($params['assign']), $stylesheet);
 	    return;
     }

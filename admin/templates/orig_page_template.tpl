@@ -15,7 +15,7 @@
 	</header>
 
 	<nav id="menu">
-		{menu}
+		{Navigator}
 	</nav>
 
 	<section id="content">

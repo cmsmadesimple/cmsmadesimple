@@ -17,7 +17,7 @@ else {
 }
 
 $cache_id = '|ns'.md5(serialize($params));
-$tpl = $smarty->CreateTemplate($this->GetTemplateResource($template),$cache_id);
+$tpl = $smarty->CreateTemplate($this->GetTemplateResource($template),$cache_id,null,$smarty);
 $tpl->assign('count',0); // for backwards compat.
 if( !$tpl->isCached() ) {
     $hm = $gCms->GetHierarchyManager();

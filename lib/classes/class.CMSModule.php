@@ -22,6 +22,7 @@
  * This file contains the base module class for all CMSMS modules.
  *
  * @package CMS
+ * @license GPL
  */
 
 /**
@@ -112,6 +113,12 @@ abstract class CMSModule
      * @ignore
      */
     private $__current_tab;
+
+    /**
+     * @access private
+     * @ignore
+     */
+    private $_action_tpl;
 
     /**
      * ------------------------------------------------------------------
@@ -472,15 +479,12 @@ abstract class CMSModule
      * can be used to check wether advanced html output (like links to other documents)
      * should be generated.
 	 *
-     * @param string Optional language that the admin is using.	 If that language
-     * is not defined, use en_US.
-     *
      * @abstract
      * @return string Help HTML Text.
      */
     public function GetHelp()
     {
-        return ModuleOperations::get_instance()->GetModuleHelp($this->GetName());
+        return '';
     }
 
     /**
@@ -1373,10 +1377,11 @@ abstract class CMSModule
 
             $filename = $this->GetModulePath().'/action.' . $name . '.php';
             if (@is_file($filename)) {
+                // these are included in scope in the included file for convenience.
                 $gCms = CmsApp::get_instance();
                 $db = $gCms->GetDb();
                 $config = $gCms->GetConfig();
-                $smarty = $gCms->GetSmarty();
+                $smarty = ( $this->_action_tpl ) ? $this->_action_tpl : $smarty = $gCms->GetSmarty()->get_template_parent();
                 include($filename);
             }
         }
@@ -1390,13 +1395,14 @@ abstract class CMSModule
      * @ignore
      * @final
      * @access private
-     * @param string The action name
-     * @param string The action identifier
-     * @param array  The action params
-     * @param int The current page id.
+     * @param string $name The action name
+     * @param string $id The action identifier
+     * @param array  $params The action params
+     * @param int $returnid The current page id.  Empty for admin requests.
+     * @param Smarty_Internal_Template &$smarty The curernt smarty template object.
      * @return string The action output.
      */
-    final public function DoActionBase($name, $id, $params, $returnid='')
+    final public function DoActionBase($name, $id, $params, $returnid='', &$smarty )
     {
         $name = preg_replace('/[^A-Za-z0-9\-_+]/', '', $name);
         if( $returnid != '' ) {
@@ -1435,14 +1441,17 @@ abstract class CMSModule
         $name = cms_htmlentities($name);
 
         $gCms = CmsApp::get_instance(); // in scope for compatibility reasons.
-        $smarty = $gCms->GetSmarty();
+        //$smarty = $gCms->GetSmarty(); // use the passed in template.
         $smarty->assign('actionid',$id);
         $smarty->assign('actionparams',$params);
         $smarty->assign('returnid',$returnid);
         $smarty->assign('actionmodule',$this->GetName());
         $smarty->assign('mod',$this);
 
+        $saved_action_tpl = $this->_action_tpl;
+        $this->_action_tpl = $smarty;
         $output = $this->DoAction($name, $id, $params, $returnid);
+        $this->_action_tpl = $saved_action_tpl;
 
         if( isset($params['assign']) ) {
             $smarty->assign(cms_htmlentities($params['assign']),$output);
@@ -2420,6 +2429,20 @@ abstract class CMSModule
      * Template/Smarty Functions
      * ------------------------------------------------------------------
      */
+
+    /**
+     * Get a reference to the smarty template object that was passed in to the the action.
+     * This method is only valid within a module action.
+     *
+     * @final
+     * @since 2.0.1
+     * @author calguy1000
+     * @return Smarty_Internal_Template
+     */
+    final public function GetActionTemplateObject()
+    {
+        if( $this->_action_tpl ) return $this->_action_tpl;
+    }
 
     /**
      * Build a resource string for an old module templates resource.

@@ -73,7 +73,7 @@ if (isset($params['category'])) {
   if( $tmp ) $category_id = $tmp;
 }
 
-$tpl_ob = $smarty->CreateTemplate($this->GetTemplateResource($template));
+$tpl_ob = $smarty->CreateTemplate($this->GetTemplateResource($template),null,null,$smarty);
 $tpl_ob->assign('mod',$this);
 $tpl_ob->assign('actionid',$id);
 if( isset( $params['submit'] ) ) {
@@ -225,7 +225,7 @@ while( $dbr && ($row = $dbr->FetchRow()) ) {
   $key = str_replace(' ','_',strtolower($row['name']));
   $customfieldsbyname[$key] = $obj;
 }
-if( count($customfields) ) $tpl_ob->assign('customfields',$customfieldsbyname);
+if( count($customfieldsbyname) ) $tpl_ob->assign('customfields',$customfieldsbyname);
 
 $tpl_ob->display();
 

@@ -56,7 +56,7 @@ class cms_http_request
     /**
      * Contains the target path
      *
-o     * @var string
+     * @var string
      */
     private $path;
 

@@ -2,9 +2,9 @@
   <div class="pageoptions options-menu half">
     <ul class="options-menu">
       <li class="parent">{admin_icon icon='run.gif' alt=$mod->Lang('prompt_options')}&nbsp;{$mod->lang('prompt_options')}
-        <ul id="popupcsscontents">
-           <li><a id="addcss" accesskey="a" href="{cms_action_url action='admin_edit_design'}" title="{$mod->Lang('create_design')}">{admin_icon icon='newobject.gif'} {$mod->Lang('create_design')}</a></li>
-           <li><a id="addcss" accesskey="a" href="{cms_action_url action='admin_import_design'}" title="{$mod->Lang('title_import_design')}">{admin_icon icon='import.gif'} {$mod->Lang('import_design')}</a></li>
+        <ul id="popupdsncontents">
+           <li><a accesskey="a" href="{cms_action_url action='admin_edit_design'}" title="{$mod->Lang('create_design')}">{admin_icon icon='newobject.gif'} {$mod->Lang('create_design')}</a></li>
+           <li><a accesskey="a" href="{cms_action_url action='admin_import_design'}" title="{$mod->Lang('title_import_design')}">{admin_icon icon='import.gif'} {$mod->Lang('import_design')}</a></li>
         </ul>
       </li>
     </ul>

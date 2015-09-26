@@ -438,7 +438,7 @@ $lang['submitandedit'] = 'Submit And Edit';
 #T
 $lang['title_cat_id'] = 'This column displays the unique integer id for the category.';
 $lang['title_cat_name'] = 'This column displays the unique name for the category.';
-$lang['title_css_designs'] = 'This column lists the design<em>(s)</em> that a stylesheet is attached to';
+$lang['title_css_designs'] = 'This column lists the design that a stylesheet is attached to. If any.';
 $lang['title_css_id'] = 'This column displays the unique integer id for the stylesheet.';
 $lang['title_css_modified'] = 'Displays the date the stylesheet was last modified.';
 $lang['title_css_name'] = 'This column displays the unique name for the stylesheet.';
@@ -485,6 +485,7 @@ $lang['warning_deletedesign'] = '<strong>Warning:  Use extreme caution.</strong>
 $lang['warning_deletestylesheet_attachments'] = 'This design has stylesheets attached to it.  Some of the templates in use by the system but not necessarily attached to this design may rely on these stylesheets.  Deleting these stylesheets, even if they are attached to no other design may break an otherwise working site. Please exercise extreme caution!';
 $lang['warning_editdesign_nostylesheets'] = 'There are no stylesheets available in the system.';
 $lang['warning_edittemplate_nostylesheets'] = 'No stylesheets attached';
+$lang['warning_edittemplate_notemplates'] = 'Sorry, we could not find any templates that you have permission to edit';
 $lang['warning_no_templates_available'] = 'We could find no templates that match the selected criteria or that you have permission to edit';
 $lang['warning_no_stylesheets'] = 'We could find no stylesheets that match the selected criteria or that you have permission to edit';
 $lang['warning_set_all_pages'] = '<strong>Warning:</strong> This is a potentially destructive operation!  You are asking that all content pages be set use this template.  Please confirm this action.';

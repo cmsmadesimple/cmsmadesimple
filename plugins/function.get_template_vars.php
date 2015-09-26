@@ -34,7 +34,7 @@ if( !function_exists('__cms_function_output_var') ) {
 
         default:
             // should not get here....
-            die('got here');
+            throw new \LogicException('Innvalid accessor type');
         }
     }
 
@@ -82,7 +82,7 @@ if( !function_exists('__cms_function_output_var') ) {
 
 function smarty_cms_function_get_template_vars($params, &$smarty)
 {
-	$tpl_vars = $smarty->get_template_vars();
+	$tpl_vars = $smarty->getTemplateVars();
 	$str = '<pre>';
 	foreach( $tpl_vars as $key => $value ) {
         $str .= __cms_function_output_var($key,$value);
@@ -93,10 +93,6 @@ function smarty_cms_function_get_template_vars($params, &$smarty)
 	    return;
     }
 	return $str;
-}
-
-function smarty_cms_help_function_get_template_vars() {
-  echo lang('help_function_get_template_vars');
 }
 
 function smarty_cms_about_function_get_template_vars() {

@@ -22,6 +22,7 @@
  * Global class for easy access to all important variables.
  *
  * @package CMS
+ * @license GPL
  */
 
 /**
@@ -31,6 +32,7 @@
  * Note: This class was named CmsObject before version 1.10
  *
  * @package CMS
+ * @license GPL
  * @since 0.5
  */
 final class CmsApp {
@@ -318,12 +320,10 @@ final class CmsApp {
 		/* Check to see if we have a valid instance.
 		 * If not, build the connection */
 		if (isset($this->db)) return $this->db;
-
 		global $DONT_LOAD_DB;
-		global $CMS_INSTALL_PAGE;
 
-		if( !isset($DONT_LOAD_DB) && !function_exists('load_adodb') ) {
-            $config = $this->GetConfig();
+		if( !isset($DONT_LOAD_DB) ) {
+            $config = \cms_config::get_instance();
             $this->db = \CMSMS\Database\compatibility::init($config);
 		}
 
@@ -535,11 +535,10 @@ final class CmsApp {
 	 *
 	 * @internal
 	 * @since 1.11.3
-	 * @author Tapio Löytty
 	 * @return Smarty_Parser handle to the Smarty object
-     * @deprecated
+         * @deprecated
 	 */
-	final public function & get_template_parser()
+	final public function &get_template_parser()
 	{
 		return Smarty_Parser::get_instance();
 	}

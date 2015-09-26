@@ -107,6 +107,7 @@ namespace CMSMS\Database {
         public function Execute($sql, $inputarr = null)
         {
             $rs = $this->SelectLimit($sql, -1, -1, $inputarr );
+            debug_buffer('in execute');
             return $rs;
         }
 
@@ -115,6 +116,7 @@ namespace CMSMS\Database {
             $result = $this->SelectLimit( $sql, -1, -1, $inputarr );
             $data = $result->GetArray();
             $result->Close();
+            unset($result);
             return $data;
         }
 
@@ -137,6 +139,7 @@ namespace CMSMS\Database {
                     $result->MoveNext();
                 }
                 $result->Close();
+                unset($result);
             }
             return $data;
         }
@@ -241,7 +244,9 @@ namespace CMSMS\Database {
         protected function add_debug_query($sql)
         {
             $this->_query_count++;
-            if( $this->_debug && $this->_debug_cb ) {
+            debug_buffer('query: '.$sql);
+            if( 0 && $this->_debug && $this->_debug_cb ) {
+                die('foo');
                 $this->_queries[] = trim($sql);
                 call_user_func($this->_debug_cb,$sql);
             }

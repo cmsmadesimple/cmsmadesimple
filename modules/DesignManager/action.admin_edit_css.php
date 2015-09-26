@@ -91,6 +91,20 @@ try {
     } catch( CmsException $e ) {
         $message = $e->GetMessage();
         $response = 'error';
+
+        if (!$apply) {
+            try {
+                if( $css_id && dm_utils::locking_enabled() ) {
+                    $lock_id = CmsLockOperations::is_locked('stylesheet',$css_id);
+                    CmsLockOperations::unlock($lock_id,'stylesheet',$css_id);
+                }
+            }
+            catch( \Exception $e ) {
+                // do nothing.
+            }
+            $this->SetMessage($message);
+            $this->RedirectToAdminTab();
+        }
     }
 
     //

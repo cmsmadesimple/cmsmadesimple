@@ -21,6 +21,7 @@
 /**
  * This file contains a class that defines a bookmark in the CMSMS admin console.
  * @package CMS
+ * @license GPL
  */
 
 /**

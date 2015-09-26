@@ -38,6 +38,7 @@
  * Classes and utilities for managing the CMSMS content tree.
  *
  * @package CMS
+ * @license GPL
  */
 
 /**
@@ -46,6 +47,7 @@
  * into the content cache.
  *
  * @package CMS
+ * @license GPL
  * @author  Robert Campbell
  * @copyright Copyright (c) 2010, Robert Campbell <calguy1000@cmsmadesimple.org>
  * @since 1.9

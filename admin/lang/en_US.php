@@ -1,6 +1,7 @@
 <?php
 
 ## 4
+$lang['403description'] = 'Page Forbidden';
 $lang['404description'] = "Page Not Found";
 
 ## A
@@ -171,7 +172,7 @@ $lang['contentimage_path'] = "Path for {content_image} tag";
 $lang['contentmanagement'] = "Content Management";
 $lang['contenttype'] = "Content Type";
 $lang['contenttype_content'] = "Content";
-$lang['contenttype_errorpage'] = "404 Handler";
+$lang['contenttype_errorpage'] = "Error Page";
 $lang['contenttype_pagelink'] = "Internal Page Link";
 $lang['contenttype_redirlink'] = "Redirecting Link";
 $lang['contenttype_sectionheader'] = "Section Header";

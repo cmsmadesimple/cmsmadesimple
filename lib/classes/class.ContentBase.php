@@ -104,9 +104,13 @@ abstract class ContentBase
 	protected $mParentId = -2;
 
 	/**
-	 * The old parent id... only used on update
+	 * The old parent id...
 	 *
+     * Used to be used only on update to detect reparenting... now since SetAllHierarchyPositions is efficient
+     * it is not needed.
+     *
 	 * @internal
+     * @deprecated
 	 */
 	protected $mOldParentId = -1;
 
@@ -1426,9 +1430,11 @@ abstract class ContentBase
                                      $this->mModifiedDate,
                                      $this->mItemOrder,
                                      $this->mLastModifiedBy,
-                                     $this->mId
+                                     (int) $this->mId
                                      ));
 
+        debug_display($db->sql);
+        /*
 		if ($this->mOldParentId != $this->mParentId) {
 			// Fix the item_order if necessary
 			$query = "UPDATE ".CMS_DB_PREFIX."content SET item_order = item_order - 1 WHERE parent_id = ? AND item_order > ?";
@@ -1437,6 +1443,7 @@ abstract class ContentBase
 			$this->mOldParentId = $this->mParentId;
 			$this->mOldItemOrder = $this->mItemOrder;
 		}
+        */
 
 		if (isset($this->mAdditionalEditors)) {
 			$query = "DELETE FROM ".CMS_DB_PREFIX."additional_users WHERE content_id = ?";

@@ -9,13 +9,15 @@ class ResultSet extends \CMSMS\Database\ResultSet
     private $_fields;
     private $_nrows;
     private $_pos;
+    private $_sql;
 
-    public function __construct(\mysqli $conn, $resultId)
+    public function __construct(\mysqli $conn, $resultId, $sql = null)
     {
         $this->_connection = $conn;
         $this->_resultId = $resultId;
         $this->_pos = 0;
         $this->_nrows = 0;
+        $this->_sql = $sql;
         if( is_object($resultId) ) $this->_nrows = mysqli_num_rows( $resultId );
         if( !$this->EOF() ) $this->fetch_row();
     }

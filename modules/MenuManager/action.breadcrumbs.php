@@ -8,7 +8,7 @@ $content_obj = $gCms->get_content_object();
 if( !$content_obj ) return; //  no current page?
 
 $cache_id = '|nav'.md5(serialize($params));
-$tpl = $smarty->createTemplate($this->GetTemplateResource($template),$cache_id);
+$tpl = $smarty->createTemplate($this->GetTemplateResource($template),$cache_id,null,$smarty->get_template_parent());
 if( !$tpl->isCached() ) {
     //
     // initialization

@@ -81,7 +81,7 @@ class OneElevenTheme extends CmsAdminThemeBase {
 		$this->set_value('module_help_type', $module_help_type);
 
 		// get the image url.
-		$config = cmsms()->GetConfig();
+		$config = cms_config::get_instance();
 		if ($module_help_type) {
 			// help for a module.
 			$module = '';
@@ -139,7 +139,7 @@ class OneElevenTheme extends CmsAdminThemeBase {
 	}
 
 	public function do_toppage($section_name) {
-		$smarty = cmsms()->GetSmarty();
+		$smarty = Smarty_CMS::get_instance();
 		$otd = $smarty->template_dir;
 		$smarty->template_dir = __DIR__ . '/templates';
 		if ($section_name) {
@@ -150,7 +150,7 @@ class OneElevenTheme extends CmsAdminThemeBase {
 			$smarty->assign('nodes', $nodes);
 		}
 
-		$smarty->assign('config', cmsms()->GetConfig());
+		$smarty->assign('config', cms_config::get_instance());
 		$smarty->assign('theme', $this);
 
 		// is the website set down for maintenance?
@@ -165,8 +165,8 @@ class OneElevenTheme extends CmsAdminThemeBase {
 	public function do_login($params)
 	{
 	  // by default we're gonna grab the theme name
-	  $config = cmsms()->GetConfig();
-	  $smarty = cmsms()->GetSmarty();
+        $config = cms_config::get_instance();
+        $smarty = Smarty_CMS::get_instance();
 
 	  $smarty->template_dir = __DIR__ . '/templates';
 	  global $error,$warningLogin,$acceptLogin,$changepwhash;
@@ -179,7 +179,7 @@ class OneElevenTheme extends CmsAdminThemeBase {
 	}
 
 	public function postprocess($html) {
-		$smarty = cmsms()->GetSmarty();
+		$smarty = Smarty_CMS::get_instance();
 		$otd = $smarty->template_dir;
 		$smarty->template_dir = __DIR__ . '/templates';
 		$module_help_type = $this->get_value('module_help_type');
@@ -244,10 +244,10 @@ class OneElevenTheme extends CmsAdminThemeBase {
 
 		// and some other common variables
 		$smarty->assign('content', str_replace('</body></html>', '', $html));
-		$smarty->assign('config', cmsms()->GetConfig());
+		$smarty->assign('config', cms_config::get_instance());
 		$smarty->assign('theme', $this);
 		$smarty->assign('secureparam', CMS_SECURE_PARAM_NAME . '=' . $_SESSION[CMS_USER_KEY]);
-		$userops = cmsms()->GetUserOperations();
+		$userops = UserOperations::get_instance();
 		$smarty->assign('user', $userops->LoadUserByID(get_userid()));
 		// get user selected language
 		$smarty->assign('lang',cms_userprefs::get_for_user(get_userid(), 'default_cms_language'));

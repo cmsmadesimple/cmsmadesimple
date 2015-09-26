@@ -104,6 +104,10 @@ while( $trycount < 2 ) {
             redirect($contentobj->GetURL()); // if this page is marked to be secure, make sure we redirect to the secure page
         }
 
+        if( !$contentobj->IsPermitted() ) {
+            throw new CmsError403Exception('Permission denied');
+        }
+
         $allow_cache = (int)cms_siteprefs::get('allow_browser_cache',0);
         $expiry = (int)max(0,cms_siteprefs::get('browser_cache_expiry',60));
         $expiry *= $allow_cache;
@@ -163,11 +167,15 @@ while( $trycount < 2 ) {
         else {
             debug_buffer('process template top');
             $tpl_id = $contentobj->TemplateId();
-            $top  = $smarty->fetch('tpl_top:'.$tpl_id);
-            debug_buffer('process template body');
-            $body = $smarty->fetch('tpl_body:'.$tpl_id);
-            debug_buffer('process template head');
-            $head = $smarty->fetch('tpl_head:'.$tpl_id);
+            $tpl = $smarty->createTemplate('tpl_top:'.$tpl_id);
+            $top  = $tpl->fetch();
+            unset($tpl);
+            $tpl = $smarty->createTemplate('tpl_body:'.$tpl_id);
+            $body  = $tpl->fetch();
+            unset($tpl);
+            $tpl = $smarty->createTemplate('tpl_head:'.$tpl_id);
+            $head = $tpl->fetch();
+            unset($tpl);
             $html = $top.$head.$body;
             $trycount = 99; // no more iterations
         }
@@ -203,6 +211,53 @@ while( $trycount < 2 ) {
 	    <h1>Not Found</h1>
 	    <p>The requested URL was not found on this server.</p>
 	    </body></html>';
+            exit();
+        }
+    }
+
+    catch (CmsError403Exception $e) // <- Catch CMSMS 403 error
+    {
+        //debug_display('handle 404 exception '.$e->getFile().' at '.$e->getLine().' -- '.$e->getMessage());
+        // 404 error thrown... gotta do this process all over again.
+        $page = 'error403';
+        $showtemplate = true;
+        unset($_REQUEST['mact']);
+        unset($_REQUEST['module']);
+        unset($_REQUEST['action']);
+        $handlers = ob_list_handlers();
+        for ($cnt = 0; $cnt < sizeof($handlers); $cnt++) { ob_end_clean(); }
+
+        // specified page not found, load the 404 error page.
+        $contentobj = $contentops->LoadContentFromAlias('error403',true);
+        if( is_object($contentobj) )
+        {
+            // we have a 403 error page.
+            header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
+            header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
+            header("Cache-Control: no-store, no-cache, must-revalidate");
+            header("Cache-Control: post-check=0, pre-check=0", false);
+            header("Pragma: no-cache");
+
+            header("HTTP/1.0 403 Forbidden");
+            header("Status: 403 Forbidden");
+        }
+        else
+        {
+            @ob_end_clean();
+            header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
+            header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
+            header("Cache-Control: no-store, no-cache, must-revalidate");
+            header("Cache-Control: post-check=0, pre-check=0", false);
+            header("Pragma: no-cache");
+            header("HTTP/1.0 403 Forbidden");
+            header("Status: 403 Forbidden");
+            echo '<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
+<html><head>
+<title>403 Forbidden</title>
+</head><body>
+<h1>Forbidden</h1>
+<p>We are sorry, but you do not have the appropriate permission to view this item.</p>
+</body></html>';
             exit();
         }
     }

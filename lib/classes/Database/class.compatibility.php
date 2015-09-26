@@ -15,7 +15,7 @@ namespace CMSMS\Database {
             $spec->password = $config['db_password'];
             $spec->dbname = $config['db_name'];
             $spec->port = $config['db_port'];
-            $spec->debug = (defined('CMS_DEBUG') && CMS_DEBUG)?TRUE:FALSE;
+            $spec->debug = CMS_DEBUG;
             $obj = Connection::Initialize($spec);
             if( $spec->debug ) $obj->SetDebugCallback('debug_buffer');
             return $obj;
@@ -59,8 +59,6 @@ namespace {
     {
         // does nothing.... remove me later.
     }
-
-
 
 }
 ?>

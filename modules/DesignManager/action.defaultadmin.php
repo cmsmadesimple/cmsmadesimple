@@ -22,7 +22,7 @@ if( !isset($gCms) ) exit;
 if( !$this->VisibleToAdminUser() ) return;
 
 $filter_tpl_rec = array('tpl'=>'','limit'=>100,'offset'=>0,'sortby'=>'name','sortorder'=>'asc');
-$filter_css_rec = array('limit'=>100,'offset'=>0,'sortby'=>'name','sortorder'=>'desc','design'=>'');
+$filter_css_rec = array('limit'=>100,'offset'=>0,'sortby'=>'name','sortorder'=>'asc','design'=>'');
 if( isset($params['submit_filter_tpl']) ) {
 	$filter_tpl_rec['tpl'] = $params['filter_tpl'];
 	$filter_tpl_rec['sortby'] = trim($params['filter_sortby']);
@@ -91,8 +91,8 @@ if( isset($efilter['tpl']) && $efilter['tpl'] != '' ) {
 	$efilter[] = $efilter['tpl'];
 	unset($efilter['tpl']);
 }
-if( !$this->CheckPermission('Modify Templates') ) $efilter[] = 'e:'.get_userid();
 
+/*
 $templates = null;
 try {
     $tpl_query = new CmsLayoutTemplateQuery($efilter);
@@ -110,6 +110,7 @@ if( count($templates) ) {
 	$tpl_nav['curpage'] = (int)($tpl_query->offset / $tpl_query->limit) + 1;
 	$smarty->assign('tpl_nav',$tpl_nav);
 }
+*/
 
 // build a list of the types, and categories, and later (designs).
 $opts = array();
@@ -178,34 +179,28 @@ if( $this->CheckPermission('Manage Stylesheets') ) {
 		$page = max(1,(int)$_SESSION[$this->GetName().'css_page']);
 		$filter_css_rec['offset'] = ($page - 1) * $filter_css_rec['limit'];
 	}
-
-	$css_query = new CmsLayoutStylesheetQuery($filter_css_rec);
-	$csslist = $css_query->GetMatches();
-	$smarty->assign('stylesheets',$csslist);
-	$css_nav = array();
-	$css_nav['pagelimit'] = $css_query->limit;
-	$css_nav['numpages'] = $css_query->numpages;
-	$css_nav['numrows'] = $css_query->totalrows;
-	$css_nav['curpage'] = (int)($css_query->offset / $css_query->limit) + 1;
-	$smarty->assign('css_nav',$css_nav);
 }
 
 // give everything to smarty that we can.
 $smarty->assign('filter_tpl_options',$opts);
-$smarty->assign('tpl_filter',$filter_tpl_rec);
-$smarty->assign('css_filter',$filter_css_rec);
+$smarty->assign('tpl_filter',$filter_tpl_rec); // used for filter form
+$smarty->assign('css_filter',$filter_css_rec); // used for filter form
+$smarty->assign('jsoncssfilter',json_encode($filter_css_rec)); // used for ajaxy stuff
+$smarty->assign('jsonfilter',json_encode($efilter)); // used for ajaxy stuff.
 
-$tmp = ($this->CheckPermission('Modify Templates') || count($templates))?1:0;
+$smarty->assign('has_add_right',
+                $this->CheckPermission('Modify Templates') ||
+                $this->CheckPermission('Add Templates'));
 $smarty->assign('coretypename',CmsLayoutTemplateType::CORE);
-$smarty->assign('has_templates',$tmp);
 $smarty->assign('manage_stylesheets',$this->CheckPermission('Manage Stylesheets'));
 $smarty->assign('manage_templates',$this->CheckPermission('Modify Templates'));
 $smarty->assign('manage_designs',$this->CheckPermission('Manage Designs'));
 $smarty->assign('import_url',$this->create_url($id,'admin_import_template'));
 $smarty->assign('admin_url',$config['admin_url']);
-$smarty->assign('has_add_right',
-                $this->CheckPermission('Modify Templates') ||
-                $this->CheckPermission('Add Templates'));
+$url = $this->create_url($id,'ajax_get_templates');
+$smarty->assign('ajax_templates_url',str_replace('amp;','',$url));
+$url = $this->create_url($id,'ajax_get_stylesheets');
+$smarty->assign('ajax_stylesheets_url',str_replace('amp;','',$url));
 
 echo $this->ProcessTemplate('defaultadmin.tpl');
 

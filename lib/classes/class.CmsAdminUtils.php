@@ -22,6 +22,7 @@
  * Classes and utilities for working with the CMSMS admin interface.
  *
  * @package CMS
+ * @license GPL
  */
 
 /**

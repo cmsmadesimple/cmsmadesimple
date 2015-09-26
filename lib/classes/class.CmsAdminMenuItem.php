@@ -21,6 +21,7 @@
 /**
  * Classes and utilities to provide menu items in the CMSMS admin navigation
  * @package CMS
+ * @license     GPL
  */
 
 /**

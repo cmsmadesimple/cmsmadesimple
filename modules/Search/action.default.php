@@ -17,7 +17,7 @@ else {
 $cache_id = '|sr'.md5(serialize($params));
 $compile_id = '';
 
-$tpl_ob = $smarty->CreateTemplate($this->GetTemplateResource($template),$cache_id,$compile_id);
+$tpl_ob = $smarty->CreateTemplate($this->GetTemplateResource($template),$cache_id,$compile_id,$smarty);
 if( !$tpl_ob->IsCached() ) {
   $inline = false;
   if( isset( $params['inline'] ) ) {

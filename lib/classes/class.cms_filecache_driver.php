@@ -37,6 +37,7 @@
 /**
  * A class to cache data into the TMP_CACHE directory.
  * @package CMS
+ * @license GPL
  */
 
 /**
@@ -46,9 +47,10 @@
  * a settable cache lifetime, md5 encoded keys and groups so that filenames cannot be easily
  * determined, and automatic cleaning.
  *
+ * @package CMS
+ * @license GPL
  * @since 2.0
  * @author Robert Campbell
- * @license GPL
  */
 class cms_filecache_driver extends cms_cache_driver
 {

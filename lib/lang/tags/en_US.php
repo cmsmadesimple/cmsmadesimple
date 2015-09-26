@@ -1,4 +1,39 @@
 <?php
+$lang['help_function_cms_html_options'] = <<<EOT
+<h3>What does this do?</h3>
+<p>This is a powerful plugin to render options for select elements into html &lt;option&gt; and &lt;optgroup&gt; tags.  Each option can have child elements, it's own title tag, and it's own class attribute.</p>
+<h3>Usage:</h3>
+<pre><code>{cms_html_options options=\$options [selected=value]}</code></pre>
+<h3>What Parameters Does it Take?</h3>
+<ul>
+  <li>options - <em>(array)</em> - An array of option definitions.</li>
+  <li>selected - <em>(string)</em> - The value to automatically select in the dropdown.  must correspond to the value of one of the options.</li>
+</ul>
+<h4>Options</h4>
+<p>Each option is an associative array with two or more of the following members:</p>
+<ul>
+  <li>label - <em>(<strong>required</strong> string)</em> A label for the option (this is what is presented to the user)</li>
+  <li>value - <em>(<strong>required</strong> mixed)</em> Either a string value for the option, or an array of option definitions.
+    <p>If the value of an option definition is itself an array of options, then the label will be rendered as an optgroup with children.</p>
+  </li>
+  <li>title - <em>(string)</em> A title attribute for the option.</li>
+  <li>class - <em>(string)</em> A class name for the option.</li>
+</ul>
+
+<h3>Example:</h3>
+<pre><code>
+{\$opts[]=['label'=>'Bird','value'=>'b','title'=>'I have a pet bird']}
+{\$opts[]=['label'=>'Fish','value'=>'f']}
+{\$sub[]=['label'=>'Small Dog','value'=>'sd']}
+{\$sub[]=['label'=>'Medium Dog','value'=>'md']}
+{\$sub[]=['label'=>'Large Dog','value'=>'ld']}
+{\$opts[]=['label'=>'Dog','value'=>\$sub]}
+{\$opts[]=['label'=>'Cat','value'=>'c','class'=>'cat']}
+&lt;select name="pet"&gt;
+  {cms_html_options options=\$opts selected='md'}
+&lt;/select&gt;</code></pre>
+EOT;
+
 $lang['help_modifier_cms_date_format'] = <<<EOT
 <h3>What does this do?</h3>
 <p>This modifier is used to format dates in a suitable format. It uses the standard strftime parameters. If no format string is specified, the system will use the date format string user preference (for logged in users) or the system date format preference.</p>

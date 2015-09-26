@@ -18,8 +18,8 @@
 #
 #$Id$
 
-$CMS_VERSION = "2.0-rc1";
-$CMS_VERSION_NAME = "NO NAME SET";
+$CMS_VERSION = "2.0.1";
+$CMS_VERSION_NAME = "Adelaide";
 $CMS_SCHEMA_VERSION = '200';
 
 define('CMS_VERSION', $CMS_VERSION);

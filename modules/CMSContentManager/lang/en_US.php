@@ -93,6 +93,7 @@ $lang['error_ordercontent_nothingtodo'] = 'Nothing to do!';
 $lang['error_setactive'] = 'Could not activate this page.  This could be a database problem, or a permissions issue.';
 $lang['error_setdefault'] = 'Could not change the default content page.  This could be a database problem, or a permissions issue.';
 $lang['error_setinactive'] = 'Could not deactivate this page.  This could be a database problem, or a permissions issue.';
+$lang['error_template_notavailable'] = 'Either there is no template associated with this object, or it is not available for edit.  Perhaps it has been deleted?';
 $lang['expandall'] = 'Expand All';
 
 #F
@@ -100,6 +101,7 @@ $lang['find'] = 'Find';
 $lang['friendlyname'] = 'Content Manager';
 
 #G
+$lang['go'] = 'Go';
 
 #H
 $lang['help_content_type'] = 'The content type controls the overall function of an item.  Some content types are used for building HTML pages, while others are for building links or other navigation functions.';

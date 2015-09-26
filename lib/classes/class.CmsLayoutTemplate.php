@@ -4,11 +4,14 @@
 /**
  * This file contails the classes and methods to define the LayoutTemplate functionality
  * @package CMS
+ * @license GPL
  */
 
 /**
  * A class to represent a smarty template.
  *
+ * @package CMS
+ * @license GPL
  * @since 2.0
  * @author Robert Campbell <calguy1000@gmail.com>
  */

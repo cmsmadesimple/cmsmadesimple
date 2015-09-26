@@ -42,7 +42,6 @@
  */
 
 $dirname = __DIR__;
-
 define('CMS_DEFAULT_VERSIONCHECK_URL','http://www.cmsmadesimple.org/latest_version.php');
 define('CMS_SECURE_PARAM_NAME','_sk_');
 define('CMS_USER_KEY','_userkey_');
@@ -80,11 +79,11 @@ if(!@session_id()) session_start();
 if( !defined('CONFIG_FILE_LOCATION') ) define('CONFIG_FILE_LOCATION',__DIR__.'/config.php');
 
 require_once($dirname.DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR.'compat.functions.php');
+require_once($dirname.DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR.'misc.functions.php');
+require_once($dirname.DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR.'autoloader.php');
 require_once($dirname.DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR.'classes'.DIRECTORY_SEPARATOR.'class.CmsException.php');
 require_once($dirname.DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR.'classes'.DIRECTORY_SEPARATOR.'class.cms_config.php');
 require_once($dirname.DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR.'classes'.DIRECTORY_SEPARATOR.'class.CmsApp.php');
-require_once($dirname.DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR.'autoloader.php');
-require_once($dirname.DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR.'misc.functions.php');
 require_once($dirname.DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR.'module.functions.php');
 require_once($dirname.DIRECTORY_SEPARATOR.'version.php');
 debug_buffer('done loading required files');
@@ -176,7 +175,7 @@ if( $config['timezone'] != '' ) @date_default_timezone_set(trim($config['timezon
 #Attempt to override the php memory limit
 if( isset($config['php_memory_limit']) && !empty($config['php_memory_limit'])  ) ini_set('memory_limit',trim($config['php_memory_limit']));
 
-if ($config["debug"] == true) {
+if ( CMS_DEBUG == true ) {
     @ini_set('display_errors',1);
     @error_reporting(E_ALL);
 }
@@ -231,7 +230,7 @@ if( !isset($DONT_LOAD_SMARTY) ) {
     $smarty->debugging = true;
     $smarty->error_reporting = 'E_ALL';
   }
-  $smarty->assign('sitename', cms_siteprefs::get('sitename', 'CMSMS Site'));
+  $smarty->assignGlobal('sitename', cms_siteprefs::get('sitename', 'CMSMS Site'));
 }
 
 

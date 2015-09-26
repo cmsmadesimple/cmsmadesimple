@@ -385,7 +385,7 @@ function debug_to_log($var, $title='',$filename = '')
             $x = @filemtime($filename);
             if( $x !== FALSE && $x < (time() - 24 * 3600) ) @unlink($filename);
         }
-        $errlines = explode("\n",debug_display($var, $title, false, false, false));
+        $errlines = explode("\n",debug_display($var, $title, false, false, true));
         foreach ($errlines as $txt) {
             error_log($txt . "\n", 3, $filename);
         }
@@ -1057,7 +1057,10 @@ function cms_ipmatches($ip,$checklist)
 */
 function is_email( $email, $checkDNS=false )
 {
-  if( !filter_var($email,FILTER_VALIDATE_EMAIL) ) return FALSE;
+    if( !filter_var($email,FILTER_VALIDATE_EMAIL) ) {
+        die($email.' failed');
+        return FALSE;
+    }
   if ($checkDNS && function_exists('checkdnsrr')) {
     if (!(checkdnsrr($domain, 'A') || checkdnsrr($domain, 'MX'))) return FALSE;	// Domain doesn't actually exist
   }
@@ -1158,6 +1161,7 @@ function cms_get_jquery($exclude = '',$ssl = null,$cdn = false,$append = '',$cus
       $scripts['cms_dirtyform'] = array('local'=>$basePath.'/lib/jquery/js/jquery.cmsms_dirtyform.js');
       $scripts['cms_lock'] = array('local'=>$basePath.'/lib/jquery/js/jquery.cmsms_lock.js');
       $scripts['cms_hiersel'] = array('local'=>$basePath.'/lib/jquery/js/jquery.cmsms_hierselector.js');
+      $scripts['cms_autorefresh'] = array('local'=>$basePath.'/lib/jquery/js/jquery.cmsms_autorefresh.js');
       $scripts['ui_touch_punch'] = array('local'=>$basePath.'/lib/jquery/js/jquery.ui.touch-punch.min.js');
   }
 

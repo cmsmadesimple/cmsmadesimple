@@ -212,6 +212,15 @@ class CmsDataNotFoundException extends CmsException {}
 class CmsError404Exception extends CmsException {}
 
 /**
+ * A special exception indicating that a 403 error should be supplied.
+ *
+ * @package CMS
+ * @author Robert Campbell (calguy1000@cmsmadesimple.org)
+ * @since 1.12
+ */
+class CmsError403Exception extends CmsException {}
+
+/**
  * A special exception indicating an error with a content object
  *
  * @package CMS

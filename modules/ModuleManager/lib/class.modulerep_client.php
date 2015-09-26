@@ -70,15 +70,15 @@ final class modulerep_client
 
     $out = array();
     foreach( $input as $key => $data ) {
-      if( is_array($data) && isset($data['name']) && isset($data['version']) && $data['name'] && $data['version'] ) {
-	$out[] = array('name'=>$data['name'],'version'=>$data['version']);
-      }
-      else if( is_string($key) && (int)$key == 0 ) {
-	$out[] = array('name'=>$key,'version'=>$data);
-      }
-      else {
-	throw new CmsInvalidDataException($mod->Lang('error_missingparam'));
-      }
+        if( is_array($data) && isset($data['name']) && isset($data['version']) && $data['name'] && $data['version'] ) {
+            $out[] = array('name'=>$data['name'],'version'=>$data['version']);
+        }
+        else if( is_string($key) && (int)$key == 0 ) {
+            $out[] = array('name'=>$key,'version'=>$data);
+        }
+        else {
+            throw new CmsInvalidDataException($mod->Lang('error_missingparam'));
+        }
     }
     if( count($out) == 0 ) new CmsInvalidDataException($mod->Lang('error_missingparam'));
 
@@ -92,10 +92,10 @@ final class modulerep_client
     $status = $req->getStatus();
     $result = $req->getResult();
     if( $status == 400 ) {
-      return;
+        return;
     }
     else if( $status != 200 || $result == '' ) {
-      throw new CmsCommunicationException($mod->Lang('error_request_problem'));
+        throw new CmsCommunicationException($mod->Lang('error_request_problem'));
     }
 
     return json_decode($result,true);
@@ -303,6 +303,7 @@ final class modulerep_client
     $status = $req->getStatus();
     $result = $req->getResult();
     if( $status != 200 ) throw new CmsCommunicationException($mod->Lang('error_request_problem'));
+    if( $status == 400 || !$result ) throw new ModuleNoDataException();
 
     $data = json_decode($result,true);
     if( !$data || !is_array($data) ) throw new CmsInvalidDataException($mod->Lang('error_nomatchingmodules'));
@@ -357,6 +358,10 @@ final class modulerep_client
     }
   }
 } // end of class
+
+class ModuleManagerException extends \CmsException {}
+class ModuleNoDataException extends ModuleManagerException {}
+class ModuleNotFoundException extends ModuleManagerException {}
 
 #
 # EOF

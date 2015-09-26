@@ -15,7 +15,7 @@ else {
 }
 
 $cache_id = '|ns'.md5(serialize($params));
-$tpl_ob = $smarty->CreateTemplate($this->GetTemplateResource($template),$cache_id);
+$tpl_ob = $smarty->CreateTemplate($this->GetTemplateResource($template),$cache_id,null,$smarty);
 if( !$tpl_ob->IsCached() ) {
   $detailpage = '';
   $tmp = $this->GetPreference('detail_returnid',-1);

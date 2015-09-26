@@ -34,6 +34,7 @@
         <ignore>smarty/*</ignore>
         <ignore>lib/tasks/*</ignore>
         <ignore>lib/classes/internal/*</ignore>
+        <ignore>lib/classes/contenttypes/*</ignore>
         <ignore>xajax/*</ignore>
         <ignore>html_entity_decode_php4.php</ignore>
         <ignore>html_entity_decode_utf8.php</ignore>

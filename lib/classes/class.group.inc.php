@@ -21,6 +21,7 @@
 /**
  * Classes and functions related to CMSMS admin groups.
  * @package CMS
+ * @license GPL
  */
 
 /**

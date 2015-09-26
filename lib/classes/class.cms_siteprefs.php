@@ -21,12 +21,14 @@
 /**
  * A class and utilities for working with site preferences.
  * @package CMS
+ * @license GPL
  */
 
 /**
  * A class for working with site preferences
  *
  * @package CMS
+ * @license GPL
  * @since 1.10
  * @author Robert Campbell (calguy1000@cmsmadesimple.org)
  */

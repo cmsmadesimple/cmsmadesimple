@@ -21,6 +21,7 @@
 /**
  * Contains classes and utilities for working with the CmsLayoutStylesheet stuff
  * @package CMS
+ * @license GPL
  */
 
 /**
@@ -32,6 +33,8 @@
  * Stylesheets are (optionally) attached to designs (CmsLayoutCollection)
  * see the {cms_stylesheet} plugin for more information.
  *
+ * @package CMS
+ * @license GPL
  * @since 2.0
  * @author Robert Campbell <calguy1000@gmail.com>
  * @see CmsLayoutCollection
@@ -742,6 +745,7 @@ class CmsLayoutStylesheet
                     }
                 }
                 else {
+                    $one = trim($one,"'");
                     // find item in $dbr by name
                     foreach( $dbr as $row ) {
                         if( $row['name'] == $one ) {

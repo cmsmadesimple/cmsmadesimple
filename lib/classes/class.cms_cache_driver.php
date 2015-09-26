@@ -1,10 +1,10 @@
 <?php
 #BEGIN_LICENSE
 #-------------------------------------------------------------------------
-# Class: cms_cache_driver (c) 2013 by Robert Campbell 
+# Class: cms_cache_driver (c) 2013 by Robert Campbell
 #         (calguy1000@cmsmadesimple.org)
 #  An abstract class for caching data for CMSMS.
-# 
+#
 #-------------------------------------------------------------------------
 # CMS - CMS Made Simple is (c) 2004 by Ted Kulp (wishy@cmsmadesimple.org)
 # Visit our homepage at: http://www.cmsmadesimple.org
@@ -19,7 +19,7 @@
 # However, as a special exception to the GPL, this software is distributed
 # as an addon module to CMS Made Simple.  You may not use this software
 # in any Non GPL version of CMS Made simple, or in any version of CMS
-# Made simple that does not indicate clearly and obviously in its admin 
+# Made simple that does not indicate clearly and obviously in its admin
 # section that the site was built with CMS Made simple.
 #
 # This program is distributed in the hope that it will be useful,
@@ -38,6 +38,7 @@
  * An abstract cache driver.
  *
  * @package CMS
+ * @license GPL
  */
 
 /**
@@ -45,6 +46,7 @@
  *
  * @since 2.0
  * @author Robert Campbell
+ * @package CMS
  * @license GPL
  */
 abstract class cms_cache_driver

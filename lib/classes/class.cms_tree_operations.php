@@ -37,12 +37,14 @@
 /**
  * A utility class to provide functions to populate a tree
  * @package CMS
+ * @license GPL
  */
 
 /**
  * A utility class to provide functions to populate a tree
  *
  * @package CMS
+ * @license GPL
  * @author  Robert Campbell
  * @copyright Copyright (c) 2010, Robert Campbell <calguy1000@cmsmadesimple.org>
  * @since 1.9

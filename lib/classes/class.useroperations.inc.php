@@ -35,9 +35,9 @@ require_once(__DIR__ . DIRECTORY_SEPARATOR . 'class.user.inc.php');
  * Class for doing user related functions.  Maybe of the User object functions
  * are just wrappers around these.
  *
- * @since 0.6.1
  * @package CMS
  * @license GPL
+ * @since 0.6.1
  */
 class UserOperations
 {

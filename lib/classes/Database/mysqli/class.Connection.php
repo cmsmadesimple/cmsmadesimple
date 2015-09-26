@@ -10,6 +10,7 @@ class Connection extends \CMSMS\Database\Connection
     private $_transaction_failed;
 
     public function DbType() { return 'mysqli'; }
+
     public function Connect()
     {
         if( !class_exists('\mysqli') ) throw new \LogicException("Configuration error... mysqli functions are not available");
@@ -98,7 +99,7 @@ class Connection extends \CMSMS\Database\Connection
             return;
         }
         $this->add_debug_query($sql);
-        $resultset = new ResultSet( $this->_mysql, $resultid );
+        $resultset = new ResultSet( $this->_mysql, $resultid, $sql );
         return $resultset;
     }
 

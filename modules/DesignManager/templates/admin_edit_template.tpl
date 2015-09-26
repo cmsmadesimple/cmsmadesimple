@@ -1,8 +1,9 @@
 <script type="text/javascript">
 $(document).ready(function(){
     $('#form_edittemplate').dirtyForm({
-        beforeUnload: function() {
-            $('#form_edittemplate').lockManager('unlock');
+        onUnload: function() {
+            $('#form_edittemplate').lockManager('unlock').done(function(){
+	    });
         }
     });
 

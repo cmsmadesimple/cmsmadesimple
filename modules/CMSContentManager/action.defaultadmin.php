@@ -39,42 +39,25 @@ if( !isset($gCms) ) exit;
 echo '<noscript><h3 style="color: red; text-align: center;">'.$this->Lang('info_javascript_required').'</h3></noscript>'."\n";
 $error = '';
 
-if( isset($params['multisubmit']) && isset($params['multiaction']) &&
-    isset($params['multicontent']) && is_array($params['multicontent']) && count($params['multicontent']) > 0 ) {
-    list($module,$bulkaction) = explode('::',$params['multiaction'],2);
-    if( $module == '' || $module == '-1' || $bulkaction == '' || $bulkaction == '-1' ) {
-        $this->SetMessage($this->Lang('error_nobulkaction'));
-        $this->RedirectToAdminTab();
-    }
-    // redirect to special action to handle bulk content stuff.
-    $this->Redirect($id,'admin_multicontent',$returnid,
-                    array('multicontent'=>base64_encode(serialize($params['multicontent'])),
-                          'multiaction'=>$params['multiaction']));
-}
-
-$smarty->assign('can_add_content',$this->CheckPermission('Add Pages') || $this->CheckPermission('Manage All Content'));
-$smarty->assign('can_reorder_content',$this->CheckPermission('Manage All Content'));
-
-// load all the content that this user can display...
-// organize it into a tree
 $builder = new ContentListBuilder($this);
-$curpage = 1;
-if( isset($params['curpage']) ) $curpage = (int)$params['curpage'];
-$smarty->assign('prettyurls_ok',$builder->pretty_urls_configured());
-
-//
-// handle all of the possible ajaxy/sub actions.
-//
+$pagelimit = cms_userprefs::get($this->GetName().'_pagelimit',500);
 $ajax = 0;
 if( isset($params['ajax']) ) $ajax = 1;
+if( isset($params['curpage']) ) {
+    $curpage = max(1,min(500,(int)$params['curpage']));
+}
 
 if( isset($params['expandall']) || isset($_GET['expandall']) ) {
     $builder->expand_all();
     $curpage = 1;
 }
-
-if( isset($params['collapseall']) || isset($_GET['collapseall']) ) {
+else if( isset($params['collapseall']) || isset($_GET['collapseall']) ) {
     $builder->collapse_all();
+    $curpage = 1;
+}
+if( isset($params['setoptions']) ) {
+    $pagelimit = max(1,min(500,(int)$params['pagelimit']));
+    cms_userprefs::set($this->GetName().'_pagelimit',$pagelimit);
     $curpage = 1;
 }
 if( isset($params['expand']) ) {
@@ -116,73 +99,34 @@ if( isset($params['delete']) ) {
     if( $res ) $error = $res;
 }
 
-//
-// build the display
-//
-
-if( isset($params['setoptions']) ) cms_userprefs::set($this->GetName().'_pagelimit',(int)$params['pagelimit']);
-$pagelimit = cms_userprefs::get($this->GetName().'_pagelimit',500);
-
-$builder->set_pagelimit($pagelimit);
-if( isset($params['seek']) && $params['seek'] != '' ) {
-    $builder->seek_to((int)$params['seek']);
-}
-else {
-    $builder->set_page($curpage);
+if( isset($params['multisubmit']) && isset($params['multiaction']) &&
+    isset($params['multicontent']) && is_array($params['multicontent']) && count($params['multicontent']) > 0 ) {
+    list($module,$bulkaction) = explode('::',$params['multiaction'],2);
+    if( $module == '' || $module == '-1' || $bulkaction == '' || $bulkaction == '-1' ) {
+        $this->SetMessage($this->Lang('error_nobulkaction'));
+        $this->RedirectToAdminTab();
+    }
+    // redirect to special action to handle bulk content stuff.
+    $this->Redirect($id,'admin_multicontent',$returnid,
+                    array('multicontent'=>base64_encode(serialize($params['multicontent'])),
+                          'multiaction'=>$params['multiaction']));
 }
 
+if( isset($curpage) ) $_SESSION[$this->GetName().'_curpage'] = $curpage; // for use by ajax_get_content
 
-$editinfo = $builder->get_content_list();
-$npages = $builder->get_numpages();
-$pagelimits = array(10=>10,25=>25,100=>100,250=>250,500=>500);
-$smarty->assign('pagelimits',$pagelimits);
-$pagelist = array();
-for( $i = 0; $i < $npages; $i++ ) {
-    $pagelist[$i+1] = $i+1;
-}
-
-$smarty->assign('indent',cms_userprefs::get('indent',1));
+$url = $this->create_url($id,'ajax_get_content',$returnid);
+$smarty->assign('ajax_get_content',str_replace('amp;','',$url));
+$smarty->assign('ajax',$ajax);
+$smarty->assign('can_add_content',$this->CheckPermission('Add Pages') || $this->CheckPermission('Manage All Content'));
+$smarty->assign('can_reorder_content',$this->CheckPermission('Manage All Content'));
+$smarty->assign('admin_url',$config['admin_url']);
 $locks = $builder->get_locks();
 $have_locks = (is_array($locks) && count($locks))?1:0;
 $smarty->assign('have_locks',$have_locks);
+$pagelimits = array(10=>10,25=>25,100=>100,250=>250,500=>500);
+$smarty->assign('pagelimits',$pagelimits);
 $smarty->assign('pagelimit',$pagelimit);
-$smarty->assign('pagelist',$pagelist);
-$smarty->assign('curpage',$builder->get_page());
-$smarty->assign('npages',$npages);
-$smarty->assign('admin_url',$config['admin_url']);
-$smarty->assign('multiselect',$builder->supports_multiselect());
-$smarty->assign('columns',$builder->get_display_columns());
-if( CmsContentManagerUtils::get_pagenav_display() == 'title' ) {
-    $smarty->assign('colhdr_page',$this->Lang('colhdr_name'));
-    $smarty->assign('coltitle_page',$this->Lang('coltitle_name'));
-}
-else {
-    $smarty->assign('colhdr_page',$this->Lang('colhdr_menutext'));
-    $smarty->assign('coltitle_page',$this->Lang('coltitle_menutext'));
-}
-if( $editinfo ) $smarty->assign('content_list',$editinfo);
-$smarty->assign('ajax',$ajax);
 if( $error ) $smarty->assign('error',$error);
-
-$opts = array();
-if( $this->CheckPermission('Remove Pages') && $this->CheckPermission('Modify Any Page') ) {
-    bulkcontentoperations::register_function($this->Lang('bulk_delete'),'delete');
-}
-
-if( $this->CheckPermission('Manage All Content')) {
-    bulkcontentoperations::register_function($this->Lang('bulk_active'),'active');
-    bulkcontentoperations::register_function($this->Lang('bulk_inactive'),'inactive');
-    bulkcontentoperations::register_function($this->Lang('bulk_cachable'),'setcachable');
-    bulkcontentoperations::register_function($this->Lang('bulk_noncachable'),'setnoncachable');
-    bulkcontentoperations::register_function($this->Lang('bulk_showinmenu'),'showinmenu');
-    bulkcontentoperations::register_function($this->Lang('bulk_hidefrommenu'),'hidefrommenu');
-    bulkcontentoperations::register_function($this->Lang('bulk_secure'),'secure');
-    bulkcontentoperations::register_function($this->Lang('bulk_insecure'),'insecure');
-    bulkcontentoperations::register_function($this->Lang('bulk_setdesign'),'setdesign');
-    bulkcontentoperations::register_function($this->Lang('bulk_changeowner'),'changeowner');
-}
-$opts = bulkcontentoperations::get_operation_list();
-if( is_array($opts) && count($opts) ) $smarty->assign('bulk_options',$opts);
 
 $res = $this->ProcessTemplate('defaultadmin.tpl');
 echo $res;

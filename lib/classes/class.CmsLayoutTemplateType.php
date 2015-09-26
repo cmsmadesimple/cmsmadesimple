@@ -37,11 +37,14 @@
 /**
  * This class contains classes and functions that define a template type.
  * @package CMS
+ * @license GPL
  */
 
 /**
  * A class to manage template types
  *
+ * @package CMS
+ * @license GPL
  * @since 2.0
  * @license 2.0
  * @author Robert Campbell <calguy1000@gmail.com>

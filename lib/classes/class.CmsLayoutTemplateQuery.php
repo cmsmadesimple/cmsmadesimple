@@ -21,14 +21,35 @@
 /**
  * Contains classes to represent a template query and its results.
  * @package CMS
+ * @license GPL
  */
 
 /**
  * A class to represent a template query, and its results.
+ * This class accepts in it's constructor an array (or a comma separated string, of filter arguments).
+ * Accepted filter arguments are:<br/>
+ *  o:string - The originator name<br/>
+ *  i:##,##,## - A list of template id's<br/>
+ *  t:## - A template type id<br/>
+ *  c:## - A template category id.<br/>
+ *  d:## - A design id<br/>
+ *  u:## - A template owner id<br/>
+ *  e:## - An additional editor id.<br/>
  *
+ * Example:<br/>
+ * <code>
+ * $qry = new CmsTemplateQuery(array('o:'.get_userid(false)));<br/>
+ * $qry->limit = 50;<br/>
+ * $list = $qry->GetMatches();<br/>
+ * </code>
+ *
+ * @package CMS
+ * @license GPL
  * @since 2.0
  * @author Robert Campbell <calguy1000@gmail.com>
  * @see CmsDbQueryBase
+ * @property string $sortby The sorting field for the returned results.  Possible values are: id,name,created,modified,type.  The default is to sort by template name.';
+ * @property string $sortorder The sorting order for the returned results.  Possible values are: ASC,DESC.  The default is ASC.
  */
 class CmsLayoutTemplateQuery extends CmsDbQueryBase
 {
@@ -45,7 +66,7 @@ class CmsLayoutTemplateQuery extends CmsDbQueryBase
 	/**
 	 * Execute the query given the parameters saved in the query
 	 *
-	 * @throws CmsInvalidDataException
+o	 * @throws CmsInvalidDataException
 	 * @throws CmsSQLErrorException
 	 * Though this method can be called directly, it is also called by other members automatically.
 	 */
@@ -126,7 +147,7 @@ class CmsLayoutTemplateQuery extends CmsDbQueryBase
                    WHERE owner_id = ?)
                  AS tmp1';
 				$t2 = $db->GetCol($q2,array($second,$second));
-				if( is_array($t2) && count($t2) ) $where['user'][] = 'id IN ('.implode(',',$t2).')';
+				if( is_array($t2) && count($t2) ) $where['user'][] = 'tpl.id IN ('.implode(',',$t2).')';
 				break;
 
             case 'limit':
@@ -194,11 +215,25 @@ class CmsLayoutTemplateQuery extends CmsDbQueryBase
 	 */
     public function &GetTemplate()
     {
-        $this->execute();
-        if( !$this->_rs ) throw new CmsLogicException('Cannot get template from invalid template query object');
-        return CmsLayoutTemplate::load($this->_rs->_fields['id']);
+        return $this->GetObject();
     }
 
+	/**
+	 * Get the template object for the current member of the resultset (if any).
+     *
+     * This method is not as efficient as GetMatches() when the resultset has multiple items.
+	 *
+	 * This method calls the execute method.
+	 *
+	 * @throws CmsLogicException
+	 * @return CmsLayoutTemplate
+	 */
+    public function &GetObject()
+    {
+        $this->execute();
+        if( !$this->_rs ) throw new CmsLogicException('Cannot get template from invalid template query object');
+        return CmsLayoutTemplate::load($this->fields['id']);
+    }
 	/**
 	 * Get the list of matched template ids
 	 *

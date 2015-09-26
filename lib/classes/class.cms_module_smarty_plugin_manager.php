@@ -38,6 +38,7 @@
 /**
  * Classes and functions to manage static smarty plugins
  * @package CMS
+ * @license GPL
  */
 
 
@@ -45,6 +46,7 @@
  * A singleton class to manage static smarty plugins registered by modules.
  *
  * @package CMS
+ * @license GPL
  * @author Robert Campbell <calguy1000@cmsmadesimple.org>
  * @internal
  * @access private

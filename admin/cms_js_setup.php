@@ -23,7 +23,7 @@ require_once("../include.php");
 
 $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 check_login();
-$config = cmsms()->GetConfig();
+$config = \cms_config::get_instance();
 
 
 // get some urls and preset language strings.

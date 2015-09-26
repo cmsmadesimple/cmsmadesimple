@@ -122,13 +122,19 @@ try {
     // get information for all dependencies, and make sure that they are all there.
     if( is_array($alldeps) && count($alldeps) ) {
         $res = null;
-        if( $this->GetPreference('latestdepends',1) ) {
-            // get the latest version of dependency (but not necessarily of the module we're installing)
-            $res = modulerep_client::get_modulelatest(array_keys($alldeps));
+        try {
+            if( $this->GetPreference('latestdepends',1) ) {
+                // get the latest version of dependency (but not necessarily of the module we're installing)
+                $res = modulerep_client::get_modulelatest(array_keys($alldeps));
+            }
+            else {
+                // get the info for all dependencies
+                $res = modulerep_client::get_multiple_moduleinfo($alldeps);
+            }
         }
-        else {
-            // get the info for all dependencies
-            $res = modulerep_client::get_multiple_moduleinfo($alldeps);
+        catch( \ModuleNoDataException $e ) {
+            // at least one of the dependencies could not be found on the server.
+            audit('',$this->GetVersion(),'At least one requested module was not available on the forge');
         }
 
         foreach( $alldeps as $name => $row ) {

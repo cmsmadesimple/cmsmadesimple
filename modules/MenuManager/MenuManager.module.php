@@ -25,7 +25,7 @@ final class MenuManager extends CMSModule
   function GetFriendlyName() { return $this->Lang('menumanager'); }
   function IsPluginModule() { return true; }
   function HasAdmin() { return false; }
-  function GetVersion() { return '1.50'; }
+  function GetVersion() { return '1.50.1'; }
   function MinimumCMSVersion() { return '1.99-alpha0'; }
   function GetAdminDescription() { return $this->Lang('description'); }
   function GetAdminSection() { return 'layout'; }
@@ -34,7 +34,7 @@ final class MenuManager extends CMSModule
   function GetHelp($lang='en_US') { return $this->Lang('help'); }
   function GetAuthor() { return 'Ted Kulp'; }
   function GetAuthorEmail() { return 'ted@cmsmadesimple.org'; }
-  function GetChangeLog() { return file_get_contents(dirname(__FILE__).'/changelog.inc'); } 
+  function GetChangeLog() { return file_get_contents(dirname(__FILE__).'/changelog.inc'); }
 
   function InstallPostMessage()
   {
@@ -53,10 +53,10 @@ final class MenuManager extends CMSModule
     $this->SetParameterType('show_root_siblings',CLEAN_INT);
     $this->SetParameterType('start_level',CLEAN_INT);
     $this->SetParameterType('start_element',CLEAN_STRING); // yeah, it's a string
-    $this->SetParameterType('start_page',CLEAN_STRING); 
-    $this->SetParameterType('template',CLEAN_STRING); 
-    $this->SetParameterType('excludeprefix',CLEAN_STRING); 
-    $this->SetParameterType('includeprefix',CLEAN_STRING); 
+    $this->SetParameterType('start_page',CLEAN_STRING);
+    $this->SetParameterType('template',CLEAN_STRING);
+    $this->SetParameterType('excludeprefix',CLEAN_STRING);
+    $this->SetParameterType('includeprefix',CLEAN_STRING);
     $this->SetParameterType('childrenof',CLEAN_STRING);
     $this->SetParameterType('root',CLEAN_STRING);
   }
@@ -93,7 +93,7 @@ final class MenuManager extends CMSModule
     else if( isset($params['excludeprefix']) ) {
       $excludeprefix = trim($params['excludeprefix']);
     }
-    
+
     if (isset($params['show_all'])) {
       $show_all = $params['show_all'];
     }
@@ -144,10 +144,10 @@ final class MenuManager extends CMSModule
 	    }
 	  }
 
-	  if ($content != NULL && $content->Active() && 
+	  if ($content != NULL && $content->Active() &&
 	      ($includeit && !$excludeit) &&
 	      ($content->ShowInMenu() || ($show_all == 1  && !$content->IsSystemPage()))) {
-	    $newnode = $this->FillNode($content, $onechild, $nodelist, 
+	    $newnode = $this->FillNode($content, $onechild, $nodelist,
 				       $count, $prevdepth, $origdepth, $deep, $params);
 	    if( $nc == 0 ) {
 	      $newnode->first = 1;
@@ -166,7 +166,7 @@ final class MenuManager extends CMSModule
 	    $have_depth = $limit_levels && ($n < (int)$params['number_of_levels']);
 	    $collapsing = count($showparents) > 0;
 	    $in_collapse_path = $collapsing && in_array($content->Hierarchy().'.',$showparents);
-	    if( ($limit_levels && $have_depth && !$collapsing) || 
+	    if( ($limit_levels && $have_depth && !$collapsing) ||
 		($in_collapse_path && ($have_depth || !$limit_levels)) || (!$limit_levels && !$collapsing) ) {
 	      $tmp = $this->GetChildNodes($onechild, $nodelist, $gCms, $prevdepth, $count, $params, $origdepth, $showparents, $deep);
 	      if( $tmp ) {

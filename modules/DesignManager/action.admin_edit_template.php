@@ -125,6 +125,19 @@ try {
 
         }
     } catch( Exception $e ) {
+        if( !$apply ) {
+            // unlock the template...
+            try {
+                if( $tpl_id && dm_utils::locking_enabled() ) {
+                    $lock_id = CmsLockOperations::is_locked('template',$tpl_id);
+                    CmsLockOperations::unlock($lock_id,'template',$tpl_id);
+                }
+            }
+            catch( Exception $e ) {
+                // do nothing.
+            }
+        }
+
         $message = $e->GetMessage();
         $response = 'error';
     }

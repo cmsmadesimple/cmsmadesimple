@@ -37,13 +37,15 @@
 /**
  * Classes and utilities for managing locks.
  * @package CMS
+ * @license GPL
  */
 
 /**
  * A singleton class providing utilities for interacting with locks.
  *
- * @since 2.0
+ * @package CMS
  * @licsense GPL
+ * @since 2.0
  */
 final class CmsLockOperations
 {

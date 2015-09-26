@@ -32,7 +32,7 @@
  * @internal
  * @access private
  * @param array A hash of parameters
- * @param object The smarty object
+ * @param object The smarty template object
  * @return string The module output
  */
 function cms_module_plugin($params,&$smarty)
@@ -102,7 +102,7 @@ function cms_module_plugin($params,&$smarty)
     $module = cms_utils::get_module($modulename);
     if( $module && $module->isPluginModule() ) {
         @ob_start();
-        $result = $module->DoActionBase($action, $id, $params, $returnid);
+        $result = $module->DoActionBase($action, $id, $params, $returnid,$smarty);
         if ($result !== FALSE) echo $result;
         $modresult = @ob_get_contents();
         @ob_end_clean();

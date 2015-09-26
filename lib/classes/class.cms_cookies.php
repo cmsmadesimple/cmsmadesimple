@@ -41,12 +41,14 @@
  * @copyright Copyright (c) 2010, Robert Campbell <calguy1000@cmsmadesimple.org>
  * @since 1.10
  * @package CMS
+ * @license GPL
  */
 
 /**
  * A simple static class providing convenience utilities for working with cookies.
  *
  * @package CMS
+ * @license GPL
  * @author Robert Campbell
  * @copyright Copyright (c) 2010, Robert Campbell <calguy1000@cmsmadesimple.org>
  * @since 1.10

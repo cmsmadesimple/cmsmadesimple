@@ -8,6 +8,8 @@
 /**
  * A simple convenience class for creating a tabbed interface in the CMSMS admin console
  *
+ * @package CMS
+ * @license GPL
  * @since 2.0
  * @author Robert Campbell
  */

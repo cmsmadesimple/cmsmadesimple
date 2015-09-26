@@ -46,8 +46,7 @@ if( !function_exists('__internal_cmp_routes') ) {
 	 * @internal
 	 * @ignore
 	 */
-	function __internal_cmp_routes($a,$b)
-	{
+	function __internal_cmp_routes($a,$b) {
 		return strcmp($a['term'],$b['term']);
 	}
 }
