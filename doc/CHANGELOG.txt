@@ -23,6 +23,7 @@ Core - General
 - Chaged cmsms plugins to use $smarty->getTemplateVars() instead of $smarty->get_template_vars() because of scope issues.
 - Minor fix to {form_start} when not used in a module.
 - Improved error handling for cms_stylesheet.  Now will generate a message in the admin log, and an html comment on error.
+- Minor fixes for module provided content blocks for Content type pages.
 
 CMSContentManager v1.0.1
 - Fixes for changing content types.

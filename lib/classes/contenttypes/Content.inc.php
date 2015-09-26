@@ -155,7 +155,7 @@ class Content extends ContentBase
 						$module = cms_utils::get_module($blockInfo['module']);
 						if( !is_object($module) ) continue;
 						if( !$module->HasCapability(CmsCoreCapabilities::CONTENT_BLOCKS) ) continue;
-						$tmp = $module->GetContentBlockFieldValue($blockName,$blockInfo['params'],$params,!$editing,$this);
+						$tmp = $module->GetContentBlockFieldValue($blockName,$blockInfo['params'],$params,$this);
 						if( $tmp != null ) $params[$name] = $tmp;
 					}
 				}
@@ -541,7 +541,7 @@ class Content extends ContentBase
 			$tmp = $this->_display_module_block($blockName,$blockInfo,$value,$adding);
 			if( is_array($tmp) ) {
 				if( count($tmp) == 2 ) {
-                    if( !$label ) $label = $tmp[0];
+                    if( !$label || $label == $blockName ) $label = $tmp[0];
 					$field = $tmp[1];
 				}
 				else {
