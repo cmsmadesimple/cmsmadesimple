@@ -52,6 +52,7 @@ Search v1.50.1
 News v2.50.1
 - Changes to createSmartyTemplate calls (now use $smarty->get_template_parent()).
 - Fix problem with custom fields not being assigned in fesubmit.
+- Fix minor problem with html entities in the detailtempalte parameter.
 
 FileManager v1.5.1
 - Fix minor problem with Smarty scope in the drop zone.
