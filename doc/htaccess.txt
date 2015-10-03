@@ -60,11 +60,14 @@ RewriteRule ^(.+)$ index.php?page=$1 [QSA]
 # The following are performance optimizations and security enhancements for content that is served by your CMSMS installation.
 #
 <IfModule mod_headers.c>
+        # Disable Last-Modified for performance
+        Header unset Last-Modified
 	# Disable ETags
 	Header unset ETag
 	FileEtag None
 	# For Security
 	Header set X-Frame-Options "SAMEORIGIN"
+        
 </IfModule>
 
 #
