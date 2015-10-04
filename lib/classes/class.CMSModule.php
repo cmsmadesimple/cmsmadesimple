@@ -36,7 +36,7 @@
  * @property    CmsApp $cms A reference to the application object (deprecated)
  * @property    Smarty_CMS $smarty A reference to the global smarty object (deprecated)
  * @property    cms_config $config A reference to the global app configuration object (deprecated)
- * @property    ADOConnection $db  A reference to the global database configuration object
+ * @property    ADOConnection $db  A reference to the global database configuration object (deprecated)
  */
 abstract class CMSModule
 {
