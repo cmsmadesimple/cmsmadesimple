@@ -108,25 +108,9 @@ while( $trycount < 2 ) {
             throw new CmsError403Exception('Permission denied');
         }
 
-        $allow_cache = (int)cms_siteprefs::get('allow_browser_cache',0);
-        $expiry = (int)max(0,cms_siteprefs::get('browser_cache_expiry',60));
-        $expiry *= $allow_cache;
-        if( $_SERVER['REQUEST_METHOD'] == 'POST' || !$contentobj->Cachable() || $page == __CMS_PREVIEW_PAGE__ || $expiry == 0 ) {
-            // Here we adjust headers for non cachable pages
-            header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
-            header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
-            header("Cache-Control: no-store, no-cache, must-revalidate");
-            header("Cache-Control: post-check=0, pre-check=0", false);
-            header("Pragma: no-cache");
-        }
-        else {
-            // as far as we know, the output is cachable at this point...
-            // so we mark it so that the output can be cached
-            header('Expires: '.gmdate("D, d M Y H:i:s",time() + $expiry * 60).' GMT');
-            $the_date = time();
-            if( $contentobj->Cachable() ) $the_date = $contentobj->GetModifiedDate();
-            header('Last-Modified: ' . gmdate('D, d M Y H:i:s',$the_date) . ' GMT');
-        }
+        $cachable = $contentobj->Cachable();
+        if( $page == __CMS_PREVIEW_PAGE__ ) $cachable = false;
+        setup_session($cachable);
 
         $_app->set_content_object($contentobj);
         $smarty->assignGlobal('content_obj',$contentobj);
@@ -233,11 +217,8 @@ while( $trycount < 2 ) {
         {
             // we have a 403 error page.
             header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
-            header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
             header("Cache-Control: no-store, no-cache, must-revalidate");
             header("Cache-Control: post-check=0, pre-check=0", false);
-            header("Pragma: no-cache");
-
             header("HTTP/1.0 403 Forbidden");
             header("Status: 403 Forbidden");
         }
@@ -245,10 +226,8 @@ while( $trycount < 2 ) {
         {
             @ob_end_clean();
             header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
-            header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
             header("Cache-Control: no-store, no-cache, must-revalidate");
             header("Cache-Control: post-check=0, pre-check=0", false);
-            header("Pragma: no-cache");
             header("HTTP/1.0 403 Forbidden");
             header("Status: 403 Forbidden");
             echo '<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">

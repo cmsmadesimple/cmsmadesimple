@@ -49,6 +49,7 @@ define('CMS_USER_KEY','_userkey_');
 
 global $CMS_INSTALL_PAGE,$CMS_ADMIN_PAGE,$CMS_LOGIN_PAGE,$DONT_LOAD_DB,$DONT_LOAD_SMARTY;
 
+/*
 $session_name = 'CMSSESSID'.substr(md5($dirname), 0, 12);
 if( !isset($CMS_INSTALL_PAGE) ) {
     @session_name($session_name);
@@ -75,6 +76,7 @@ if( isset($_COOKIE[$session_name]) ) {
     }
 }
 if(!@session_id()) session_start();
+*/
 
 // minimum stuff to get started (autoloader needs the cmsms() and the config stuff.
 if( !defined('CONFIG_FILE_LOCATION') ) define('CONFIG_FILE_LOCATION',__DIR__.'/config.php');
@@ -94,6 +96,8 @@ if( cms_to_bool(ini_get('register_globals')) ) {
     die();
 }
 
+if( isset($CMS_ADMIN_PAGE) ) setup_session();
+
 // sanitize $_GET and $_SERVER
 {
     $sanitize = function(&$value,$key) {
@@ -107,6 +111,27 @@ if( cms_to_bool(ini_get('register_globals')) ) {
 #Grab the current configuration
 $_app = CmsApp::get_instance(); // for use in this file only.
 $config = $_app->GetConfig();
+
+if( isset($CMS_ADMIN_PAGE) ) {
+    function cms_admin_sendheaders($content_type = 'text/html',$charset = '') {
+        if( !$charset ) $charset = get_encoding();
+
+        // Language shizzle
+        header("Content-Type: $content_type; charset=$charset");
+    }
+
+    if( !isset($_SESSION[CMS_USER_KEY]) ) {
+        if( cms_cookies::exists(CMS_SECURE_PARAM_NAME) ) {
+            $_SESSION[CMS_USER_KEY] = cms_cookies::get(CMS_SECURE_PARAM_NAME);
+        }
+        else {
+            // maybe change this algorithm.
+            $key = substr(str_shuffle(sha1($dirname.time().session_id())),-16);
+            $_SESSION[CMS_USER_KEY] = $key;
+            cms_cookies::set(CMS_SECURE_PARAM_NAME,$key);
+        }
+    }
+}
 
 // new for 2.0 ... this creates a mechanism whereby items can be cached automatically, and fetched (or calculated) via the use of a callback
 // if the cache is too old, or the cached value has been cleared or not yet been saved.
@@ -134,41 +159,6 @@ $obj = new \CMSMS\internal\global_cachable('default_content',
                                            });
 \CMSMS\internal\global_cache::add_cachable($obj);
 cms_siteprefs::setup();
-
-if( isset($CMS_ADMIN_PAGE) ) {
-  function cms_admin_sendheaders($content_type = 'text/html',$charset = '') {
-    if( !$charset ) $charset = get_encoding();
-
-    // Date in the past
-    header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
-
-    // always modified
-    header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
-
-    // HTTP/1.1
-    header("Cache-Control: no-store, no-cache, must-revalidate");
-    header("Cache-Control: post-check=0, pre-check=0", false);
-
-    // HTTP/1.0
-    header("Pragma: no-cache");
-
-    // Language shizzle
-    header("Content-Type: $content_type; charset=$charset");
-  }
-
-  if( !isset($_SESSION[CMS_USER_KEY]) ) {
-    if( cms_cookies::exists(CMS_SECURE_PARAM_NAME) ) {
-      $_SESSION[CMS_USER_KEY] = cms_cookies::get(CMS_SECURE_PARAM_NAME);
-    }
-    else {
-      // maybe change this algorithm.
-      $key = substr(str_shuffle(sha1($dirname.time().session_id())),-16);
-      $_SESSION[CMS_USER_KEY] = $key;
-      cms_cookies::set(CMS_SECURE_PARAM_NAME,$key);
-    }
-  }
-}
-
 
 #Set the timezone
 if( $config['timezone'] != '' ) @date_default_timezone_set(trim($config['timezone']));

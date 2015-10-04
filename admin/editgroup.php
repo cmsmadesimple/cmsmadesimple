@@ -57,52 +57,46 @@ $userops = $gCms->GetUserOperations();
 $useringroup = $userops->UserInGroup($userid,$group_id);
 
 if ($access) {
-  if (isset($_POST["editgroup"])) {
-    $validinfo = true;
-    if ($group == "") {
-      $validinfo = false;
-      $error .= "<li>".lang('nofieldgiven', array(lang('groupname')))."</li>";
+    $groupobj = new Group;
+    if( $group_id > 0 ) {
+        $groupobj = Group::load($group_id);
     }
+    if (isset($_POST["editgroup"])) {
+        $validinfo = true;
+        if ($group == "") {
+            $validinfo = false;
+            $error .= "<li>".lang('nofieldgiven', array(lang('groupname')))."</li>";
+        }
 
-    if ($validinfo) {
-      $groupobj = new Group();
-      $groupobj->id = $group_id;
-      $groupobj->name = $group;
-      $groupobj->description = $description;
-      $groupobj->active = $active;
+        if ($validinfo) {
+            $groupobj->name = $group;
+            $groupobj->description = $description;
+            $groupobj->active = $active;
+            Events::SendEvent('Core', 'EditGroupPre', array('group' => &$groupobj));
 
-      Events::SendEvent('Core', 'EditGroupPre', array('group' => &$groupobj));
+            $result = $groupobj->save();
+            if ($result) {
+                Events::SendEvent('Core', 'EditGroupPost', array('group' => &$groupobj));
 
-      $result = $groupobj->save();
+                // put mention into the admin log
+                audit($groupobj->id, 'Admin User Group: '.$groupobj->name, 'Edited');
+                redirect("listgroups.php".$urlext);
+                return;
+            }
+            else {
+                $error .= "<li>".lang('errorupdatinggroup')."</li>";
+            }
+        }
 
-      if ($result) {
-	Events::SendEvent('Core', 'EditGroupPost', array('group' => &$groupobj));
-
-	// put mention into the admin log
-	audit($groupobj->id, 'Admin User Group: '.$groupobj->name, 'Edited');
-	redirect("listgroups.php".$urlext);
-	return;
-      }
-      else {
-	$error .= "<li>".lang('errorupdatinggroup')."</li>";
-      }
     }
-
-  }
-  else if ($group_id != -1) {
-    $query = "SELECT * from ".cms_db_prefix()."groups WHERE group_id = ?";
-    $result = $db->Execute($query, array($group_id));
-
-    $row = $result->FetchRow();
-
-    $group = $row["group_name"];
-    $description = $row['group_desc'];
-    $active = $row["active"];
-  }
+    else if ($group_id != -1) {
+        $group = $groupobj->name;
+        $description = $groupobj->description;
+        $active = $groupobj->active;
+    }
 }
-if (strlen($group) > 0) {
-  $CMS_ADMIN_SUBTITLE = $group;
-}
+
+if (strlen($group) > 0) $CMS_ADMIN_SUBTITLE = $group;
 include_once("header.php");
 
 if (!$access) {
@@ -110,7 +104,7 @@ if (!$access) {
 }
 else {
   if ($error != "") {
-    echo "<div class=\"pageerrorcontainer\"><ul class=\"pageerror\">".$error."</ul></div>";	
+    echo "<div class=\"pageerrorcontainer\"><ul class=\"pageerror\">".$error."</ul></div>";
   }
 ?>
 
