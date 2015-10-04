@@ -76,7 +76,7 @@ class cms_url
         if( $url ) {
             $this->_orig = $url;
             $this->_parts = parse_url($url);
-            if( ($str = $this->get_query()) ) parse_str($str,$this->_query);
+			if( isset($this->_parts['query']) ) parse_str($this->_parts['query'],$this->_query);
         }
     }
 
@@ -250,11 +250,12 @@ class cms_url
     /**
      * Return the the query portion of the URL, if any is set.
      *
+     *
      * @return string (may be empty)
      */
     public function get_query()
     {
-        return $this->_get_part('query');
+        if( count($this->_query) ) return http_build_query($this->_query);
     }
 
     /**
@@ -303,6 +304,21 @@ class cms_url
     }
 
     /**
+     * Erase a query var if it exists.
+     *
+     * @since 2.0.1
+     * @param string $key
+     */
+    public function erase_queryvar($key)
+    {
+        $key = trim((string)$key);
+        if( $this->queryvar_exists($key) ) {
+			unset($this->_parts['query']);
+			unset($this->_query[$key]);
+		}
+    }
+
+    /**
      * Retrieve a query var from the url.
      *
      * @param string $key
@@ -321,9 +337,11 @@ class cms_url
      */
     public function set_queryvar($key,$value)
     {
-        $key = trim((string)$key);
-        $value = trim((string)$value);
-        if( $key && strlen($value) ) $this->_query[$key] = (string)$value;
+		$key = trim((string)$key);
+		if( $key ) {
+			unset($this->_parts['query']);
+			$this->_query[$key] = (string) $value;
+		}
     }
 
     /**
@@ -339,14 +357,22 @@ class cms_url
         $path = (isset($parts['path'])) ?$parts['path'] : '';
         if( $path && $path[0] != '/' ) $path = '/'.$path;
 
-        $url = ((isset($parts['scheme'])) ? $parts['scheme'] . '://' : '')
-            .((isset($parts['user'])) ? $parts['user'] . ((isset($parts['pass'])) ? ':' . $parts['pass'] : '') .'@' : '')
-            .((isset($parts['host'])) ? $parts['host'] : '')
-            .((isset($parts['port']) && $parts['port'] != '0' ) ? ':' . $parts['port'] : '')
-            .$path
-            .((isset($parts['query'])) ? '?' . $parts['query'] : '')
-            .((isset($parts['fragment'])) ? '#' . $parts['fragment'] : '');
-        return $url;
+		$parts = $this->_parts;
+		$url = ((isset($parts['scheme'])) ? $parts['scheme'] . '://' : '');
+		if( isset($parts['user']) ) {
+			$url .= $parts['user'];
+			if( isset($parts['pass']) ) $url .= ':'.$parts['pass'];
+			$url .= '@';
+		}
+		if( isset($parts['host']) ) $url .= $parts['host'];
+		if( isset($params['port']) && $parts['port'] > 0 ) $url .= ':'.$parts['post'];
+		if( isset($parts['path']) ) {
+			if( !startswith($parts['path'],'/') ) $url .= '/';
+			$url .= $parts['path'];
+		}
+		if( isset($parts['query']) ) $url .= '?'.$parts['query'];
+		if( isset($parts['fragment']) ) $url .= '#'.$parts['fragment'];
+		return $url;
     }
 } // end of class
 

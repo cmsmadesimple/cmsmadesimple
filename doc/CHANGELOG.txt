@@ -4,6 +4,7 @@ Minor performance tweak to sample htaccess.txt
 Improvements and re-factor the way headers are sent wrt caching
 Add a new method to the ModuleOperations class to allow a module to be within a namespace.
 Enhances the Group class.
+Enhancements and fixes to the cms_url class.
 
 MicroTiny v2.0.1
 - Now add page hierarchy to autocomplete text when using the linker.
