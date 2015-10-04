@@ -17,7 +17,7 @@
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 
-class MicroTiny extends CMSModule 
+class MicroTiny extends CMSModule
 {
   const PROFILE_FRONTEND = '__frontend__';
   const PROFILE_ADMIN = '__admin__';
@@ -25,7 +25,7 @@ class MicroTiny extends CMSModule
   public function __construct() { parent::__construct(); }
   public function GetName() { return 'MicroTiny'; }
   public function GetFriendlyName() { return $this->Lang("friendlyname"); }
-  public function GetVersion(){ return '2.0'; }
+  public function GetVersion(){ return '2.0.1'; }
   public function HasAdmin() { return TRUE; }
   public function IsPluginModule() { return TRUE; }
   public function LazyLoadFrontend() { return TRUE; }
@@ -42,12 +42,12 @@ class MicroTiny extends CMSModule
   public function WYSIWYGGenerateHeader($selector = null,$cssname = null) {
     return microtiny_utils::WYSIWYGGenerateHeader($selector, $cssname);
   }
-	
+
   public function HasCapability($capability, $params=array()) {
     if ($capability==CmsCoreCapabilities::WYSIWYG_MODULE) return true;
     return false;
   }
-  
+
 } // end of module class
 
 function mt_jsbool($val)
