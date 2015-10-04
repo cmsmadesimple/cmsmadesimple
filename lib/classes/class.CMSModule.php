@@ -34,7 +34,7 @@
  * @version     2.0
  * @package		CMS
  * @property    CmsApp $cms A reference to the application object (deprecated)
- * @property    Smarty_CMS $smarty A reference to the global smarty object
+ * @property    Smarty_CMS $smarty A reference to the global smarty object (deprecated)
  * @property    cms_config $config A reference to the global app configuration object (deprecated)
  * @property    ADOConnection $db  A reference to the global database configuration object
  */
@@ -163,6 +163,9 @@ abstract class CMSModule
             return CmsApp::get_instance();
 
         case 'smarty':
+            /* deprecated */
+            $tpl = $this->GetActionTemplateObject();
+            if( $tpl ) return $tpl;
             return CmsApp::get_instance()->GetSmarty();
 
         case 'config':
