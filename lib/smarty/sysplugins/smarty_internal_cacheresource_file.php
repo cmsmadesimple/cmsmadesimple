@@ -101,7 +101,6 @@
         public function writeCachedContent(Smarty_Internal_Template $_template, $content)
         {
             if (Smarty_Internal_Write_File::writeFile($_template->cached->filepath, $content, $_template->smarty) === true) {
-                debug_to_log(__METHOD__.' -- '.$_template->cached->filepath);
                 $_template->cached->timestamp = @filemtime($_template->cached->filepath);
                 $_template->cached->exists = !!$_template->cached->timestamp;
                 if ($_template->cached->exists) {
