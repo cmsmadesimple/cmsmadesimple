@@ -163,7 +163,8 @@ function cms_module_ProcessTemplateFromData(&$modinstance, $data)
  */
 function cms_module_ProcessTemplateFromDatabase(&$modinstance, $tpl_name, $designation = '', $cache = false, $modulename = '')
 {
-    $smarty = $modinstance->GetActionTemplateObject();
+    	$smarty = $modinstance->GetActionTemplateObject();
+        if( !$smarty ) $smarty = Smarty_CMS::get_instance();
 	if( $modulename == '' ) $modulename = $modinstance->GetName();
 
 	$oldcache = $smarty->caching;
