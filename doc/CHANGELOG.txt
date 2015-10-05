@@ -1,14 +1,20 @@
 Version 2.0.2
 ----------------------------------
-Minor performance tweak to sample htaccess.txt
-Improvements and re-factor the way headers are sent wrt caching
-Add a new method to the ModuleOperations class to allow a module to be within a namespace.
-Enhances the Group class.
-Enhancements and fixes to the cms_url class.
-Modified the $mod->smarty reference to be smarter... it is now deprecated.
+Core - General
+- Minor performance tweak to sample htaccess.txt
+- Improvements and re-factor the way headers are sent wrt caching
+- Add a new method to the ModuleOperations class to allow a module to be within a namespace.
+- Enhances the Group class.
+- Enhancements and fixes to the cms_url class.
+- Modified the $mod->smarty reference to be smarter... it is now deprecated.
 
 MicroTiny v2.0.1
 - Now add page hierarchy to autocomplete text when using the linker.
+
+
+Version 2.0.1.1 - Adelaide
+----------------------------------
+- 
 
 
 Version 2.0.1 - Adelaide
@@ -36,7 +42,6 @@ Core - General
 - Chaged cmsms plugins to use $smarty->getTemplateVars() instead of $smarty->get_template_vars() because of scope issues.
 - Minor fix to {form_start} when not used in a module.
 - Improved error handling for cms_stylesheet.  Now will generate a message in the admin log, and an html comment on error.
-- Minor fixes for module provided content blocks for Content type pages.
 
 CMSContentManager v1.0.1
 - Fixes for changing content types.
