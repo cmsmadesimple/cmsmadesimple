@@ -79,15 +79,15 @@ if(!@session_id()) session_start();
 */
 
 // minimum stuff to get started (autoloader needs the cmsms() and the config stuff.
-if( !defined('CONFIG_FILE_LOCATION') ) define('CONFIG_FILE_LOCATION',__DIR__.'/config.php');
+if( !defined('CONFIG_FILE_LOCATION') ) define('CONFIG_FILE_LOCATION',dirname(__DIR__).'/config.php');
 
-require_once($dirname.DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR.'compat.functions.php');
-require_once($dirname.DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR.'classes'.DIRECTORY_SEPARATOR.'class.CmsException.php');
-require_once($dirname.DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR.'classes'.DIRECTORY_SEPARATOR.'class.cms_config.php');
-require_once($dirname.DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR.'classes'.DIRECTORY_SEPARATOR.'class.CmsApp.php');
-require_once($dirname.DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR.'autoloader.php');
-require_once($dirname.DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR.'misc.functions.php');
-require_once($dirname.DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR.'module.functions.php');
+require_once($dirname.DIRECTORY_SEPARATOR.'compat.functions.php');
+require_once($dirname.DIRECTORY_SEPARATOR.'classes'.DIRECTORY_SEPARATOR.'class.CmsException.php');
+require_once($dirname.DIRECTORY_SEPARATOR.'classes'.DIRECTORY_SEPARATOR.'class.cms_config.php');
+require_once($dirname.DIRECTORY_SEPARATOR.'classes'.DIRECTORY_SEPARATOR.'class.CmsApp.php');
+require_once($dirname.DIRECTORY_SEPARATOR.'autoloader.php');
+require_once($dirname.DIRECTORY_SEPARATOR.'misc.functions.php');
+require_once($dirname.DIRECTORY_SEPARATOR.'module.functions.php');
 require_once($dirname.DIRECTORY_SEPARATOR.'version.php');
 debug_buffer('done loading required files');
 
@@ -172,16 +172,16 @@ if ($config["debug"] == true) {
 }
 
 debug_buffer('loading page functions');
-require_once(cms_join_path($dirname,'lib','page.functions.php'));
+require_once($dirname.DIRECTORY_SEPARATOR.'page.functions.php');
 
 debug_buffer('loading content functions');
-require_once(cms_join_path($dirname,'lib','content.functions.php'));
+require_once($dirname.DIRECTORY_SEPARATOR.'content.functions.php');
 
 debug_buffer('loading translation functions');
-require_once(cms_join_path($dirname,'lib','translation.functions.php'));
+require_once($dirname.DIRECTORY_SEPARATOR.'translation.functions.php');
 
 debug_buffer('loading php4 entity decode functions');
-require_once($dirname.DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR.'html_entity_decode_php4.php');
+require_once($dirname.DIRECTORY_SEPARATOR.'html_entity_decode_php4.php');
 
 debug_buffer('done loading files');
 

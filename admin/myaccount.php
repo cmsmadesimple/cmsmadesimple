@@ -27,7 +27,7 @@ $orig_memory = (function_exists('memory_get_usage')?memory_get_usage():0);
 $CMS_ADMIN_PAGE = 1;
 $CMS_TOP_MENU = 'admin';
 $CMS_ADMIN_TITLE = 'myaccount';
-require_once ("../include.php");
+require_once ("../lib/include.php");
 $urlext = '?' . CMS_SECURE_PARAM_NAME . '=' . $_SESSION[CMS_USER_KEY];
 $thisurl = basename(__FILE__) . $urlext;
 $userid = get_userid(); // Checks also login

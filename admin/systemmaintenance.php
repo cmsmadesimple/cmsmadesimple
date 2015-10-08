@@ -23,7 +23,7 @@ $CMS_ADMIN_PAGE = 1;
 // note, much of this code is mysql specific
 //
 
-require_once("../include.php");
+require_once("../lib/include.php");
 $urlext = '?' . CMS_SECURE_PARAM_NAME . '=' . $_SESSION[CMS_USER_KEY];
 check_login();
 
@@ -279,7 +279,7 @@ if (is_readable($ch_filename)) {
 		  } else {
 			  $changelog[$i] = "</div><div class=\"version\"><h3>" . $changelog[$i] . "</h3>";
 		  }
-		  
+
 	  }
 	}
 
@@ -287,7 +287,7 @@ if (is_readable($ch_filename)) {
 
 	$smarty->assign("changelog", $changelog);
 	$smarty->assign("changelogfilename", $ch_filename);
-	
+
 }
 
 $smarty->assign('backurl', $themeObject->BackUrl());

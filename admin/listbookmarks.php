@@ -20,7 +20,7 @@
 
 $CMS_ADMIN_PAGE=1;
 
-require_once("../include.php");
+require_once("../lib/include.php");
 $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 
 check_login();
@@ -34,14 +34,14 @@ include_once("header.php");
 <?php
 
 	$userid = get_userid();
-	
+
 	$bookops = cmsms()->GetBookmarkOperations();
 	$marklist = $bookops->LoadBookmarks($userid);
 
 	$page = 1;
 	if (isset($_GET['page'])) $page = $_GET['page'];
 	$limit = 20;
-	
+
 	if (count($marklist) > $limit)
 	{
 		echo "<p class=\"pageshowrows\">".pagination($page, count($marklist), $limit)."</p>";
@@ -49,7 +49,7 @@ include_once("header.php");
 	echo $themeObject->ShowHeader('bookmarks').'</div>';
 
 	if (count($marklist) > 0) {
-	
+
 		echo'<p class="pagewarning visible">' . lang('show_shortcuts_message') . '</p>';
 
 		echo "<table class=\"pagetable\">\n";
@@ -97,7 +97,7 @@ include_once("header.php");
 	<div class="pageoptions">
 		<p class="pageoptions">
 			<a href="addbookmark.php<?php echo $urlext ?>">
-				<?php 
+				<?php
 					echo $themeObject->DisplayImage('icons/system/newobject.gif', lang('addbookmark'),'','','systemicon').'</a>';
 					echo ' <a class="pageoptions" href="addbookmark.php'.$urlext.'">'.lang("addbookmark");
 				?>

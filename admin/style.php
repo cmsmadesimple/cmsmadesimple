@@ -21,7 +21,7 @@
 $CMS_ADMIN_PAGE = TRUE;
 $CMS_STYLESHEET = TRUE;
 
-require_once("../include.php");
+require_once("../lib/include.php");
 
 /**
  * Rolf: only used in admin/style.php

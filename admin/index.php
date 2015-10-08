@@ -27,7 +27,7 @@ $CMS_ADMIN_TITLE='mainmenu';
 $CMS_EXCLUDE_FROM_RECENT=1;
 
 
-require_once("../include.php");
+require_once("../lib/include.php");
 
 // if this page was accessed directly, and the secure param name is not in the URL
 // but it is in the session, assume it is correct.

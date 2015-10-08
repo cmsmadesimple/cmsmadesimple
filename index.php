@@ -40,7 +40,7 @@ if (!file_exists(CONFIG_FILE_LOCATION) || filesize(CONFIG_FILE_LOCATION) < 100) 
     die ('FATAL ERROR: config.php file not found or invalid');
 }
 
-require_once(__DIR__.'/include.php');
+require_once(__DIR__.'/lib/include.php');
 
 if (file_exists(TMP_CACHE_LOCATION.'/SITEDOWN')) {
     echo "<html><head><title>Maintenance</title></head><body><p>Site down for maintenance.</p></body></html>";

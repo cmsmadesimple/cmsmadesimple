@@ -19,7 +19,7 @@
 #$Id: moduleinterface.php 8558 2012-12-10 00:59:49Z calguy1000 $
 
 $CMS_ADMIN_PAGE=1;
-require_once("../include.php");
+require_once("../lib/include.php");
 $ruid = get_userid();
 
 $op = 'pageinfo';

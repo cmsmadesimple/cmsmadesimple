@@ -16,7 +16,7 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
-#$Id$
+#$Id: version.php 10177 2015-09-11 15:02:02Z calguy1000 $
 
 $CMS_VERSION = "2.0.1";
 $CMS_VERSION_NAME = "Adelaide";

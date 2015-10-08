@@ -16,12 +16,12 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
-#$Id$ 
+#$Id$
 
 global $CMS_ADMIN_PAGE;
 $CMS_ADMIN_PAGE = 1;
 
-require_once('../include.php');
+require_once('../lib/include.php');
 $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 
 include_once("header.php");

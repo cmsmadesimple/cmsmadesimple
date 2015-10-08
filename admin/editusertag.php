@@ -19,7 +19,7 @@
 #$Id: listusertags.php 7396 2011-09-15 12:57:25Z rolf1 $
 
 $CMS_ADMIN_PAGE=1;
-require_once("../include.php");
+require_once("../lib/include.php");
 $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 $userid = get_userid();
 if( !check_permission($userid, 'Modify User-defined Tags') ) return;

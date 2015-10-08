@@ -24,7 +24,7 @@ $CMS_MODULE_PAGE=1;
 $orig_memory = (function_exists('memory_get_usage')?memory_get_usage():0);
 $starttime = microtime();
 
-require_once("../include.php");
+require_once("../lib/include.php");
 debug_buffer("original memory is ".$orig_memory);
 $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 

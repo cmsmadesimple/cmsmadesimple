@@ -20,7 +20,7 @@
 
 $CMS_ADMIN_PAGE=1;
 
-require_once("../include.php");
+require_once("../lib/include.php");
 $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 
 check_login();
@@ -47,8 +47,8 @@ if (isset($_GET["userplugin_id"])) {
 
 		Events::SendEvent('Core', 'DeleteUserDefinedTagPre', array('id' => $userplugin_id, 'name' => &$userplugin_name));
 
-		$query = 'SELECT event_id,handler_id,handler_order FROM '.cms_db_prefix().'event_handlers 
-                           WHERE tag_name = ?'; 
+		$query = 'SELECT event_id,handler_id,handler_order FROM '.cms_db_prefix().'event_handlers
+                           WHERE tag_name = ?';
 		$handlers = $db->GetArray($query,array($userplugin_name));
 		if( is_array($handlers) && count($handlers) > 0 )
 		  {
