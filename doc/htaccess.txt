@@ -48,6 +48,7 @@ RewriteEngine on
 # i.e: RewriteBase /cmsms
 RewriteBase /
 
+
 #
 # Rewrites urls in the form of /parent/child/grandchild but only rewrites if the requested URL is not a file or directory.
 #
@@ -56,7 +57,20 @@ RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^(.+)$ index.php?page=$1 [QSA]
 </IfModule>
 
+
 #
+# The following are higly reommended security settings for files in your CMSMS install that should not be browsed directly
+#
+<Files ~ "\.ini$">
+  Order allow,deny
+  Deny from all
+</Files>
+<Files ~ "config\.php">
+  Order allow,deny
+  Deny from all
+</Files>
+
+
 # The following are performance optimizations and security enhancements for content that is served by your CMSMS installation.
 #
 <IfModule mod_headers.c>
@@ -67,7 +81,6 @@ RewriteRule ^(.+)$ index.php?page=$1 [QSA]
 	FileEtag None
 	# For Security
 	Header set X-Frame-Options "SAMEORIGIN"
-        
 </IfModule>
 
 #
