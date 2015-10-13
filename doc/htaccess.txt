@@ -22,7 +22,7 @@
 #
 # Don't allow the browser to know the type of signature.
 #
-#ServerSignature Off
+ServerSignature Off
 
 #
 # Allow the Apache server to follow symbolic links.  This is usually not necessary.
@@ -48,10 +48,7 @@ RewriteEngine on
 # i.e: RewriteBase /cmsms
 RewriteBase /
 
-
-#
 # Rewrites urls in the form of /parent/child/grandchild but only rewrites if the requested URL is not a file or directory.
-#
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^(.+)$ index.php?page=$1 [QSA]
@@ -61,6 +58,10 @@ RewriteRule ^(.+)$ index.php?page=$1 [QSA]
 #
 # The following are higly reommended security settings for files in your CMSMS install that should not be browsed directly
 #
+<Files ~ "\.htaccess">
+  Order allow,deny
+  Deny from all
+</Files>
 <Files ~ "\.ini$">
   Order allow,deny
   Deny from all
@@ -69,6 +70,15 @@ RewriteRule ^(.+)$ index.php?page=$1 [QSA]
   Order allow,deny
   Deny from all
 </Files>
+<Files ~ "/lib/*php">
+  Order allow,deny
+  Deny from all
+</Files>
+
+RedirectMatch 403 ^.*/lib/.*\.php$$
+RedirectMatch 403 ^.*/tmp/.*\.php$
+RedirectMatch 403 ^.*/modules/.*\.php$
+RedirectMatch 403 ^.*/uploads/.*\.php$
 
 
 # The following are performance optimizations and security enhancements for content that is served by your CMSMS installation.
