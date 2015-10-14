@@ -23,8 +23,8 @@ if( !isset($gCms) ) exit;
 final class DesignManager extends CMSModule
 {
   function GetFriendlyName()  { return $this->Lang('friendlyname');  }
-  function GetVersion()  { return '1.0.1'; }
-  function MinimumCMSVersion()  { return '1.12-alpha0';  }
+  function GetVersion()  { return '1.1'; }
+  function MinimumCMSVersion()  { return '2.1'; }
   function LazyLoadAdmin() { return TRUE; }
   function LazyLoadFrontend() { return TRUE; }
   function IsPluginModule() { return FALSE; }

@@ -18,7 +18,7 @@
 #
 #$Id: version.php 10177 2015-09-11 15:02:02Z calguy1000 $
 
-$CMS_VERSION = "2.0.1";
+$CMS_VERSION = "2.1";
 $CMS_VERSION_NAME = "Adelaide";
 $CMS_SCHEMA_VERSION = '200';
 

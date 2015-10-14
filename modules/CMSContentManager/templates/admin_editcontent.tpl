@@ -133,32 +133,44 @@ $(document).ready(function(){
     {if isset($designchanged_ajax_url)}
     $('#design_id').change(function(e,edata){
       var v = $(this).val();
+      var lastValue = $(this).data('lastValue');
       var data = { '{$actionid}design_id': v };
       $.get('{$designchanged_ajax_url}',data,function(data,text) {
         if( typeof data == 'object' ) {
 	  var sel = $('#template_id').val();
 	  var fnd = false;
 	  var first = null;
-          $('#template_id').empty();
-          for( key in data ) {
-	    if( key == sel ) fnd = true;
+	  for( key in data ) {
 	    if( first == null ) first = key;
-	    $('#template_id').append('<option value="'+key+'">'+data[key]+'</option>');
+	    if( key == sel ) fnd = true;
 	  }
-	  if( fnd ) {
-  	    $('#template_id').val(sel);
+	  if( !first ) {
+	    $('#design_id').val(lastValue);
+	    alert('{$mod->Lang('warn_notemplates_for_design')}');
 	  }
 	  else {
-  	    $('#template_id').val(first);
-	  }
-	  if( typeof edata == 'undefined' || typeof edata.skip_fallthru == 'undefined' ) {
-  	    $('#template_id').trigger('change');
-	  }
-        }
+  	    $('#template_id').val('');
+            $('#template_id').empty();
+            for( key in data ) {
+	      $('#template_id').append('<option value="'+key+'">'+data[key]+'</option>');
+	    }
+	    if( fnd ) {
+  	      $('#template_id').val(sel);
+	    }
+	    else if( first ) {
+  	      $('#template_id').val(first);
+	    }
+	    if( typeof edata == 'undefined' || typeof edata.skip_fallthru == 'undefined' ) {
+  	      $('#template_id').trigger('change');
+	    }
+          }
+	}
       }, 'json' );
     });
 
     $('#design_id').trigger('change', [{ skip_fallthru: 1 }]);
+    $('#design_id').data('lastValue',$('#design_id').val());
+    $('#template_id').data('lastValue',$('#template_id').val());
     $('#Edit_Content').dirtyForm('option','dirty',false);
     {/if}
 });

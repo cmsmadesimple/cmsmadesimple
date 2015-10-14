@@ -35,6 +35,7 @@
  *  d:## - A design id<br/>
  *  u:## - A template owner id<br/>
  *  e:## - An additional editor id.<br/>
+ *  l:#  - A boolean (0 or 1) indicating listable, or not listable.
  *
  * Example:<br/>
  * <code>
@@ -94,6 +95,12 @@ o	 * @throws CmsInvalidDataException
                 if( !count($typelist) ) $typelist = array(-999);
                 $where['type'][] = 'type_id IN ('.implode(',',$typelist).')';
 				break;
+
+            case 'l':
+            case 'listable':
+                $second = (cms_to_bool($second)) ? 0 : 1;
+                $where['listable'] = array('listable = '.$second);
+                break;
 
 			case 'i': // id list
 			case 'idlist':

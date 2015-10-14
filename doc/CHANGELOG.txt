@@ -1,4 +1,4 @@
-Version 2.0.2
+Version 2.1
 ----------------------------------
 Core - General
 - Minor performance tweak to sample htaccess.txt
@@ -8,12 +8,18 @@ Core - General
 - Enhancements and fixes to the cms_url class.
 - Modified the $mod->smarty reference to be smarter... it is now deprecated.
 - Fixes issue with https requests (#10697)
+- Modifies The CmsLayoutTemplate class and CmsLayoutTemplateQuery to allow filtering on listable or non listable
+  or setting a template as listable (default) or non listable
 
 MicroTiny v2.0.1
 - Now add page hierarchy to autocomplete text when using the linker.
 
 CMSContentManager v1.0.2
 - Fix problem with pagedefault metadata.
+- Fixes for handling no listable templates for a design
+
+DesignManager v1.0.2
+- Adds ability to toggle the listability of a template.
 
 Version 2.0.1.1 - Adelaide
 ----------------------------------

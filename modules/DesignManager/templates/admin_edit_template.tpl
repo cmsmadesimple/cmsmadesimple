@@ -179,6 +179,14 @@ $(document).ready(function(){
 {if $has_manage_right}
     {tab_start name='advanced'}
     <!-- advanced -->
+        <div class="pageoverflow">
+            <p class="pagetext"><label for="tpl_listable">{$mod->Lang('prompt_listable')}:</label>&nbsp;{cms_help key2=help_template_listable title=$mod->Lang('prompt_listable')}</p>
+            <p class="pageinput">
+                <select id="tpl_listable" name="{$actionid}listable"{if $type_is_readonly} readonly="readonly"{/if}>
+		    {cms_yesno selected=$template->get_listable()}
+                </select>
+            </p>
+        </div>
         {if isset($type_list)}
             <div class="pageoverflow">
                 <p class="pagetext"><label for="tpl_type">{$mod->Lang('prompt_type')}:</label>&nbsp;{cms_help key2=help_template_type title=$mod->Lang('prompt_type')}</p>
