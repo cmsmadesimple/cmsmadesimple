@@ -18,7 +18,7 @@ CMSContentManager v1.0.2
 - Fix problem with pagedefault metadata.
 - Fixes for handling no listable templates for a design
 
-DesignManager v1.0.2
+DesignManager v1.1
 - Adds ability to toggle the listability of a template.
 
 Version 2.0.1.1 - Adelaide
