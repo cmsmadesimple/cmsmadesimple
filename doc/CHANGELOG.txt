@@ -12,6 +12,8 @@ Core - General
 MicroTiny v2.0.1
 - Now add page hierarchy to autocomplete text when using the linker.
 
+CMSContentManager v1.0.2
+- Fix problem with pagedefault metadata.
 
 Version 2.0.1.1 - Adelaide
 ----------------------------------

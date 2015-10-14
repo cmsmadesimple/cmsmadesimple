@@ -105,7 +105,7 @@ try {
         $content_obj->SetTemplateId($pagedefaults['template_id']);
         $content_obj->SetPropertyValue('searchable',$pagedefaults['searchable']);
         $content_obj->SetPropertyValue('content_en',$pagedefaults['content']);
-        $content_obj->SetPropertyValue('pagemetadata',$pagedefaults['metadata']);
+        $content_obj->SetMetaData($pagedefaults['metadata']);
         $content_obj->SetPropertyValue('extra1',$pagedefaults['extra1']);
         $content_obj->SetPropertyValue('extra2',$pagedefaults['extra2']);
         $content_obj->SetPropertyValue('extra3',$pagedefaults['extra3']);
