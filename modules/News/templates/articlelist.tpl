@@ -98,7 +98,7 @@ $(document).ready(function(){
       <select name="{$actionid}pagenumber">
         {cms_pageoptions numpages=$pagecount curpage=$pagenumber}
       </select>&nbsp;
-      <input type="submit" name-"{$actionid}paginate" value="{$mod->Lang('prompt_go')}"/>
+      <input type="submit" name="{$actionid}paginate" value="{$mod->Lang('prompt_go')}"/>
       {form_end}
     </div>
   {/if}

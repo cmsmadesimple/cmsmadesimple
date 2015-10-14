@@ -9,6 +9,9 @@ Core - General
 - Modified the $mod->smarty reference to be smarter... it is now deprecated.
 - Fixes issue with https requests (#10697)
 
+News v2.50.2
+- Fix minor template problem with an input field name.
+
 MicroTiny v2.0.1
 - Now add page hierarchy to autocomplete text when using the linker.
 
