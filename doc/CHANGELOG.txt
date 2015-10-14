@@ -21,9 +21,12 @@ CMSContentManager v1.0.2
 DesignManager v1.1
 - Adds ability to toggle the listability of a template.
 
+
 Version 2.0.1.1 - Adelaide
 ----------------------------------
-- 
+Fix to the $this->smarty magic method in the module class to resolve to the 
+action template or the global smarty.
+ 
 
 
 Version 2.0.1 - Adelaide
