@@ -34,7 +34,7 @@ if( !function_exists('__cms_function_output_var') ) {
 
         default:
             // should not get here....
-            throw new \LogicException('Innvalid accessor type');
+            throw new \LogicException('Invalid accessor type');
         }
     }
 
@@ -64,7 +64,7 @@ if( !function_exists('__cms_function_output_var') ) {
             $out .= str_repeat($depth_str,$depth)."]<br/>";
         }
         else if( is_callable($val) ) {
-            $out .= str_repeat($depth_str,$depth)."{$acc} <em>($type)</em> = callable";
+            $out .= str_repeat($depth_str,$depth)."{$acc} <em>($type)</em> = callable<br/>";
         }
         else {
             $out .= str_repeat($depth_str,$depth);
