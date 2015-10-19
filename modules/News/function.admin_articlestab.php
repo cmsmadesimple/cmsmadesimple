@@ -1,7 +1,7 @@
 <?php
 if( !isset($gCms) ) exit;
 
-$smarty->assign('formstart',$this->CreateFormStart($id,'defaultadmin'));  
+$smarty->assign('formstart',$this->CreateFormStart($id,'defaultadmin'));
 
 if (isset($params['submit_bulkaction']) && isset($params['bulk_action']) ) {
   if( !isset($params['sel']) || !is_array($params['sel']) || count($params['sel']) == 0 ) {
@@ -69,6 +69,15 @@ while ($dbresult && $row = $dbresult->FetchRow()) {
   $categorylist[$row['long_name']] = $row['long_name'];
 }
 
+$pagenumber = 1;
+if( isset($_SESSION['news_pagenumber']) ) {
+  $pagenumber = (int)$_SESSION['news_pagenumber'];
+}
+if( isset( $params['pagenumber'] ) ) {
+  $pagenumber = (int)$params['pagenumber'];
+  $_SESSION['news_pagenumber'] = $pagenumber;
+}
+
 if( isset($params['submitfilter']) ) {
   if( isset( $params['category']) ) {
     $this->SetPreference('article_category',trim($params['category']));
@@ -81,6 +90,8 @@ if( isset($params['submitfilter']) ) {
   }
   $allcategories = (isset($params['allcategories'])?$params['allcategories']:'no');
   $this->SetPreference('allcategories',$allcategories);
+  unset($_SESSION['news_pagenumber']);
+  $pagenumber = 1;
 }
 else if( isset($params['resetfilter']) ) {
   $this->SetPreference('article_category','');
@@ -88,21 +99,13 @@ else if( isset($params['resetfilter']) ) {
   $this->SetPreference('article_sortby','news_date DESC');
   $this->SetPreference('allcategories','no');
   unset($_SESSION['news_pagenumber']);
+  $pagenumber = 1;
 }
 
 $curcategory = $this->GetPreference('article_category');
 $pagelimit = $this->GetPreference('article_pagelimit',50);
 $allcategories = $this->GetPreference('allcategories','no');
 
-$pagenumber = 1;
-if( isset($_SESSION['news_pagenumber']) ) {
-  $pagenumber = (int)$_SESSION['news_pagenumber'];
-}
-if( isset( $params['pagenumber'] ) ) {
-  $pagenumber = (int)$params['pagenumber'];
-  $_SESSION['news_pagenumber'] = $pagenumber;
-}
-$startelement = ($pagenumber-1) * $pagelimit;
 $sortby = $this->GetPreference('article_sortby','news_date DESC');
 $sortlist = array();
 $sortlist[$this->Lang('post_date_desc')]='news_date DESC';
@@ -128,9 +131,9 @@ $smarty->assign('submitfilter',
 		$this->CreateInputSubmit($id,'submitfilter',$this->Lang('submit')));
 $smarty->assign('prompt_pagelimit',
 		$this->Lang('prompt_pagelimit'));
-	
+
 $smarty->assign('formend',$this->CreateFormEnd());
-	
+
 //Load the current articles
 $entryarray = array();
 
@@ -152,24 +155,21 @@ if ($curcategory != '') {
 $query1 .= ' ORDER by '.$sortby;
 //$query1 .= " LIMIT $pagelimit OFFSET $startelement";
 
-// if is done to help adodb.
+// get the count
 $numrows = -1;
 if( count($parms) ) {
-  $row = $db->GetRow($query2,$parms);
-  $numrows = $row['count'];
-  $startelement = min($startelement,$numrows);
-  $dbresult = $db->SelectLimit( $query1, $pagelimit, $startelement, $parms);
+    $row = $db->GetRow($query2,$parms);
 }
 else {
-  $row = $db->GetRow($query2);
-  $numrows = $row['count'];
-  $startelement = min($startelement,$numrows);
-  $dbresult = $db->SelectLimit( $query1, $pagelimit, $startelement);
+    $row = $db->GetRow($query2);
 }
+$numrows = $row['count'];
 
-$pagecount = (int)($numrows/$pagelimit);
-if( ($numrows % $pagelimit) != 0 ) $pagecount++;
-$pagenumber = min($pagecount,$pagenumber);
+// caculate pagecount, and adjust start element
+$pagecount = (int)ceil($numrows/$pagelimit);
+$pagenumber = max(1,min($pagenumber,$pagecount));
+$startelement = ($pagenumber-1) * $pagelimit;
+$dbresult = $db->SelectLimit( $query1, $pagelimit, $startelement, $parms);
 
 $smarty->assign('mod',$this);
 $smarty->assign('pagenumber',$pagenumber);
@@ -225,7 +225,7 @@ while ($dbresult && $row = $dbresult->FetchRow()) {
   }
 
   $entryarray[] = $onerow;
-    
+
   ($rowclass=="row1"?$rowclass="row2":$rowclass="row1");
 }
 

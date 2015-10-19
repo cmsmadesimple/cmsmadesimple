@@ -21,6 +21,8 @@ CMSContentManager v1.0.2
 DesignManager v1.1
 - Adds ability to toggle the listability of a template.
 
+News v2.50.2
+- Fixes minor issue with pagination in News admin console.
 
 Version 2.0.1.1 - Adelaide
 ----------------------------------
