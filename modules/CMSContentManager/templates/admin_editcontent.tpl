@@ -1,23 +1,26 @@
 <script type="text/javascript">
 // <![CDATA[
 $(document).ready(function(){
+  var do_locking = {if $content_id > 0 && isset($lock_timeout) && $lock_timeout > 0}1{else}0{/if};
+
   // initialize the dirtyform stuff.
   $('#Edit_Content').dirtyForm({
-    onUnload: function() {
-      $('#Edit_Content').lockManager('unlock');
+    beforeUnload: function(is_dirty) {
+      if( do_locking ) $('#Edit_Content').lockManager('unlock');
+    },
+    unloadCancel: function(){
+      if( do_locking ) $('#Edit_Content').lockManager('relock');
     }
   });
 
-{if $content_id > 0}
-  {if isset($lock_timeout) && $lock_timeout > 0}
   // initialize lock manager
-  $('#Edit_Content').lockManager({
+  if( do_locking ) {
+    $('#Edit_Content').lockManager({
       type: 'content',
-      lock_id: {$lock.id},
       oid: {$content_id},
       uid: {get_userid(FALSE)},
-      {if !empty($lock_timeout) && $lock_timeout > 0}lock_timeout: {$lock_timeout},{/if}
-      {if !empty($lock_refresh) && $lock_timeout > 0}lock_refresh: {$lock_refresh},{/if}
+      lock_timeout: {$lock_timeout},
+      lock_refresh: {$lock_refresh},
       error_handler: function (err) {
           alert('got error ' + err.type + ' // ' + err.msg);
       },
@@ -28,9 +31,8 @@ $(document).ready(function(){
           $('#Edit_Content').dirtyForm('option', 'dirty', false);
           alert('{$mod->Lang('msg_lostlock')|escape:'javascript'}');
       }
-  });
-  {/if}
-{/if}
+    });
+  }
 
 {if $content_obj->HasPreview()}
   $('#_preview_').click(function(){

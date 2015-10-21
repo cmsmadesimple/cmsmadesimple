@@ -13,6 +13,7 @@ Core - General
 - Fixes a problem with styling of the login form if tasks must be run AND a module needs upgrading.
 - Fixes to the cloning of templates in CmsLayoutTemplate
 - Fxies problem with SetAllHierarchyPositions that cleared the entire cache instead of only the necessary part of it.
+- Adds the unloadCancel handler to the lockManager jquery plugin.
 
 MicroTiny v2.0.1
 - Now add page hierarchy to autocomplete text when using the linker.
@@ -20,10 +21,12 @@ MicroTiny v2.0.1
 CMSContentManager v1.0.2
 - Fix problem with pagedefault metadata.
 - Fixes for handling no listable templates for a design
+- More work with locking.  With only one exception all locking and unlocking is initiated via javascript.
 
 DesignManager v1.1
 - Adds ability to toggle the listability of a template.
 - Fixes problems with lost changes if there is a syntax error in the template.
+- More work with locking.  With only one exception all locking and unlocking is initiated via javascript.
 
 News v2.50.2
 - Fixes minor issue with pagination in News admin console.

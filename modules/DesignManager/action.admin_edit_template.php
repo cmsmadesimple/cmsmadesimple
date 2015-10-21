@@ -34,15 +34,6 @@ $this->SetCurrentTab('templates');
 $tpl_id = (int) get_parameter_value($params,'tpl');
 
 if (isset($params['cancel'])) {
-    try {
-        if( $tpl_id && dm_utils::locking_enabled() ) {
-            $lock_id = CmsLockOperations::is_locked('template',$tpl_id);
-            CmsLockOperations::unlock($lock_id,'template',$tpl_id);
-        }
-    }
-    catch( Exception $e ) {
-        // do nothing.
-    }
     if ($params['cancel'] == $this->Lang('cancel')) $this->SetMessage($this->Lang('msg_cancelled'));
     $this->RedirectToAdminTab();
 }
@@ -110,36 +101,12 @@ try {
             $tpl_obj->save();
 
             if (!$apply) {
-                // unlock
-                try {
-                    if( $tpl_id && dm_utils::locking_enabled() ) {
-                        $lock_id = CmsLockOperations::is_locked('template',$tpl_id);
-                        CmsLockOperations::unlock($lock_id,'template',$tpl_id);
-                    }
-                }
-                catch( Exception $e ) {
-                    // do nothing.
-                }
-
                 $this->SetMessage($message);
                 $this->RedirectToAdminTab();
             }
 
         }
     } catch( Exception $e ) {
-        if( !$apply ) {
-            // unlock the template...
-            try {
-                if( $tpl_id && dm_utils::locking_enabled() ) {
-                    $lock_id = CmsLockOperations::is_locked('template',$tpl_id);
-                    CmsLockOperations::unlock($lock_id,'template',$tpl_id);
-                }
-            }
-            catch( Exception $e ) {
-                // do nothing.
-            }
-        }
-
         $message = $e->GetMessage();
         $response = 'error';
     }
@@ -159,8 +126,6 @@ try {
                 if( !$lock->expired() ) throw new CmsLockException('CMSEX_L010');
                 CmsLockOperations::unlock($lock_id,'template',$tpl_obj->get_id());
             }
-            $lock = new CmsLock('template', $tpl_obj->get_id(), (int)$this->GetPreference('lock_timeout'));
-            $smarty->assign('lock', $lock);
         } catch( CmsException $e ) {
             $message = $e->GetMessage();
             $this->SetError($message);
