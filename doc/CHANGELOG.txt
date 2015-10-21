@@ -28,8 +28,9 @@ DesignManager v1.1
 - Fixes problems with lost changes if there is a syntax error in the template.
 - More work with locking.  With only one exception all locking and unlocking is initiated via javascript.
 
-News v2.50.2
+News v2.50.3
 - Fixes minor issue with pagination in News admin console.
+- Fix errors in the default form template.
 
 Version 2.0.1.1 - Adelaide
 ----------------------------------
