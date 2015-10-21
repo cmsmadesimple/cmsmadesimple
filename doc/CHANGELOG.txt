@@ -10,6 +10,7 @@ Core - General
 - Fixes issue with https requests (#10697)
 - Modifies The CmsLayoutTemplate class and CmsLayoutTemplateQuery to allow filtering on listable or non listable
   or setting a template as listable (default) or non listable
+- Fixes a problem with styling of the login form if tasks must be run AND a module needs upgrading.
 
 MicroTiny v2.0.1
 - Now add page hierarchy to autocomplete text when using the linker.
