@@ -74,6 +74,7 @@ class CmsLayoutTemplate
 	public function __clone()
 	{
 		if( isset($this->_data['id']) ) unset($this->_data['id']);
+        $this->_data['type_dflt'] = false;
 		$this->_dirty = TRUE;
 	}
 
