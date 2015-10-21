@@ -109,7 +109,7 @@ $(document).ready(function(){
         });
 	$.ajax({
 	   type: 'POST',
-	   url: '{$apply_ajax_url}&showtemplate=false',
+	   url: '{$apply_ajax_url}',
 	   data: data,
 	   dataType: 'json',
 	}).done(function(data, text) {

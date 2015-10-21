@@ -494,7 +494,8 @@ class ContentOperations
 
 		// clear the content cache again.
 		cms_content_cache::clear();
-		CmsApp::get_instance()->clear_cached_files();
+        cms_cache_handler::get_instance()->clear('contentcache');
+		//CmsApp::get_instance()->clear_cached_files();
 	}
 
 

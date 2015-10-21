@@ -12,6 +12,7 @@ Core - General
   or setting a template as listable (default) or non listable
 - Fixes a problem with styling of the login form if tasks must be run AND a module needs upgrading.
 - Fixes to the cloning of templates in CmsLayoutTemplate
+- Fxies problem with SetAllHierarchyPositions that cleared the entire cache instead of only the necessary part of it.
 
 MicroTiny v2.0.1
 - Now add page hierarchy to autocomplete text when using the linker.
