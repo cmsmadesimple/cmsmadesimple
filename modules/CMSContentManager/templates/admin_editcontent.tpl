@@ -1,7 +1,7 @@
 <script type="text/javascript">
 // <![CDATA[
 $(document).ready(function(){
-  var do_locking = {if $content_id > 0 && isset($lock_timeout) && $lock_timeout > 0}1{else}0{/if};
+  var do_locking = {if isset($content_id) && $content_id > 0 && isset($lock_timeout) && $lock_timeout > 0}1{else}0{/if};
 
   // initialize the dirtyform stuff.
   $('#Edit_Content').dirtyForm({
@@ -17,7 +17,7 @@ $(document).ready(function(){
   if( do_locking ) {
     $('#Edit_Content').lockManager({
       type: 'content',
-      oid: {$content_id},
+      oid: {$content_id|default:-1},
       uid: {get_userid(FALSE)},
       lock_timeout: {$lock_timeout},
       lock_refresh: {$lock_refresh},

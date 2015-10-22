@@ -1,7 +1,8 @@
 Version 2.1
 ----------------------------------
 Core - General
-- Minor performance tweak to sample htaccess.txt
+- Minor performance tweaks to sample htaccess.txt
+- Minor fix to the ProcessTemplateFromDatabase module API method.
 - Improvements and re-factor the way headers are sent wrt caching
 - Add a new method to the ModuleOperations class to allow a module to be within a namespace.
 - Enhances the Group class.
@@ -12,8 +13,9 @@ Core - General
   or setting a template as listable (default) or non listable
 - Fixes a problem with styling of the login form if tasks must be run AND a module needs upgrading.
 - Fixes to the cloning of templates in CmsLayoutTemplate
-- Fxies problem with SetAllHierarchyPositions that cleared the entire cache instead of only the necessary part of it.
+- Fixes problem with SetAllHierarchyPositions that cleared the entire cache instead of only the necessary part of it.
 - Adds the unloadCancel handler to the lockManager jquery plugin.
+- Moves version.php and include.php inside the lib directory so that they are easier to protect from unwanted direct access.
 
 MicroTiny v2.0.1
 - Now add page hierarchy to autocomplete text when using the linker.
@@ -32,11 +34,11 @@ News v2.50.3
 - Fixes minor issue with pagination in News admin console.
 - Fix errors in the default form template.
 
+
 Version 2.0.1.1 - Adelaide
 ----------------------------------
-Fix to the $this->smarty magic method in the module class to resolve to the 
+Fix to the $this->smarty magic method in the module class to resolve to the
 action template or the global smarty.
- 
 
 
 Version 2.0.1 - Adelaide
