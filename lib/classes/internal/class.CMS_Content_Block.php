@@ -221,15 +221,17 @@ final class CMS_Content_Block
 
                     if (!isset($modulename) || empty($modulename) ) {
                         // no module specified.
-                        @trigger_error('Attempt to call a module action, without specifying a valid module name');
-                        return self::content_return('', $params, $smarty);
+                        @trigger_error("Module $modulename requested but is not installed");
+                        throw new \CmsError404Exception("Module $modulename requested, but is not installed");
+                        //return self::content_return('', $params, $smarty);
                     }
 
                     $modobj = $modops->get_module_instance($modulename);
                     if( !$modobj ) {
                         // module not found... couldn't even autoload it.
                         @trigger_error('Attempt to access module '.$modulename.' which could not be found (is it properly installed and configured?');
-                        return self::content_return('', $params, $smarty);
+                        throw new \CmsError404Exception('Attempt to access module '.$modulename.' which could not be found (is it properly installed and configured?');
+                        //return self::content_return('', $params, $smarty);
                     }
 
                     if ($modobj->IsPluginModule() ) {

@@ -18,6 +18,7 @@ Core - General
 - Moves version.php and include.php inside the lib directory so that they are easier to protect from unwanted direct access.
 - Fixes to page alias tests when manually entering a page alias.
 - Missing lang strings are no longer output to admin log, but to the debug log.
+- Requests for modules that are not installed/enabled, or for invalid actions will now result in 404 errors.
 
 MicroTiny v2.0.1
 - Now add page hierarchy to autocomplete text when using the linker.
