@@ -59,7 +59,7 @@ final class CMSSmartySecurityPolicy extends Smarty_Security
                 $this->php_functions = array('isset', 'implode','explode','empty','count', 'sizeof','in_array', 'is_array','time','lang',
                                              'is_string','strpos','substr','strtolower','strtoupper','strcmp','strcasecmp','strlen','array_search','sort','ksort','asort',
                                              'nl2br','file_exists', 'is_object', 'is_file','is_dir','print_r','var_dump',
-                                             'debug_display','debug_to_log',
+                                             'debug_display','debug_to_log', 'startswith', 'endswidth' ,
                                              'htmlspecialchars','htmlspecialchars_decode','cms_html_entity_decode');
             }
         }
