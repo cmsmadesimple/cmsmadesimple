@@ -36,7 +36,7 @@ class CmsLayoutTemplate
 	/**
 	 * @ignore
 	 */
-	private $_data = array();
+	private $_data = array('listable'=>true);
 
 	/**
 	 * @ignore
