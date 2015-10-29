@@ -1433,7 +1433,6 @@ abstract class ContentBase
                                      (int) $this->mId
                                      ));
 
-        debug_display($db->sql);
         /*
 		if ($this->mOldParentId != $this->mParentId) {
 			// Fix the item_order if necessary

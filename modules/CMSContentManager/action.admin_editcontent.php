@@ -168,7 +168,6 @@ try {
         }
         else if( isset($params['submit']) || isset($params['apply']) ) {
             $content_obj->SetLastModifiedBy(get_userid());
-            debug_display($content_obj->id());
             $content_obj->Save();
             unset($_SESSION['__cms_copy_obj__']);
             audit($content_obj->Id(),'Content Item: '.$content_obj->Name(),' Edited');
