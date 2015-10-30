@@ -1,26 +1,46 @@
-Version 2.0.2
+Version 2.1 - NO NAME SET
 ----------------------------------
 Core - General
-- Minor performance tweak to sample htaccess.txt
+- Minor performance tweaks to sample htaccess.txt
+- Minor fix to the ProcessTemplateFromDatabase module API method.
 - Improvements and re-factor the way headers are sent wrt caching
 - Add a new method to the ModuleOperations class to allow a module to be within a namespace.
 - Enhances the Group class.
 - Enhancements and fixes to the cms_url class.
 - Modified the $mod->smarty reference to be smarter... it is now deprecated.
 - Fixes issue with https requests (#10697)
-
-News v2.50.2
-- Fix minor template problem with an input field name.
+- Modifies The CmsLayoutTemplate class and CmsLayoutTemplateQuery to allow filtering on listable or non listable
+  or setting a template as listable (default) or non listable
+- Fixes a problem with styling of the login form if tasks must be run AND a module needs upgrading.
+- Fixes to the cloning of templates in CmsLayoutTemplate
+- Fixes problem with SetAllHierarchyPositions that cleared the entire cache instead of only the necessary part of it.
+- Adds the unloadCancel handler to the lockManager jquery plugin.
+- Moves version.php and include.php inside the lib directory so that they are easier to protect from unwanted direct access.
+- Fixes to page alias tests when manually entering a page alias.
+- Missing language strings are no longer output to Admin log, but to the debug log.
+- Requests for modules that are not installed/enabled, or for invalid actions will now result in 404 errors.
 
 MicroTiny v2.0.1
 - Now add page hierarchy to autocomplete text when using the linker.
 
 CMSContentManager v1.0.2
 - Fix problem with pagedefault metadata.
+- Fixes for handling no listable templates for a design
+- More work with locking.  With only one exception all locking and unlocking is initiated via javascript.
+
+DesignManager v1.1
+- Adds ability to toggle the listability of a template.
+- Fixes problems with lost changes if there is a syntax error in the template.
+- More work with locking.  With only one exception all locking and unlocking is initiated via javascript.
+
+News v2.50.3
+- Fixes minor issue with pagination in News Admin console.
+- Fix errors in the default form template.
+
 
 Version 2.0.1.1 - Adelaide
 ----------------------------------
-- 
+Fix to the $this->smarty magic method in the module class to resolve to the action template or the global smarty.
 
 
 Version 2.0.1 - Adelaide
@@ -45,7 +65,7 @@ Core - General
 - Adds a globally available cms_busy() JavaScript function for the Admin.
 - Fix problem with html entitites in email addresses in user settings.
 - Fix problem with {content cssname=string} and quotes.
-- Chaged cmsms plugins to use $smarty->getTemplateVars() instead of $smarty->get_template_vars() because of scope issues.
+- Changed cmsms plugins to use $smarty->getTemplateVars() instead of $smarty->get_template_vars() because of scope issues.
 - Minor fix to {form_start} when not used in a module.
 - Improved error handling for cms_stylesheet.  Now will generate a message in the admin log, and an html comment on error.
 
