@@ -17,7 +17,10 @@
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 if( !isset($gCms) ) exit;
-check_login(); // admin only.... but any admin
+if( !check_login(FALSE) ) exit; // admin only.... but any admin
+
+$handlers = ob_list_handlers();
+for ($cnt = 0; $cnt < sizeof($handlers); $cnt++) { ob_end_clean(); }
 
 //
 // initialization
@@ -93,14 +96,14 @@ $accept_file = function($type,$cwd,$path,$filename) use (&$filemanager,&$is_imag
  * @String $ext
  */
 function set_filetype($ext) {
-	
+
 	$ext = strtolower($ext);
 	$filetype = 'file'; // default to all file
 	$imgext = array('jpg', 'jpeg', 'png', 'gif', 'bmp', 'tiff', 'svg', 'wbmp', 'webp'); // images
 	$videoext = array('mov', 'mpeg', 'mp4', 'avi', 'mpg','wma', 'flv', 'webm', 'wmv', 'qt', 'ogg'); // videos
 	$audioext = array('mp3', 'm4a', 'ac3', 'aiff', 'mid', 'wav'); // audio
 	$archiveext = array('zip', 'rar', 'gz', 'tar', 'iso', 'dmg'); // archives
-	
+
 	if(in_array($ext, $imgext)) {
 		$filetype = 'image';
 	} elseif(in_array($ext, $videoext)) {
@@ -121,7 +124,7 @@ function set_filetype($ext) {
 $files = array();
 $dh = dir($startdir);
 while( false !== ($filename = $dh->read()) ) {
-  if( !$accept_file( $type, $cwd, $startdir, $filename ) ) continue;  
+  if( !$accept_file( $type, $cwd, $startdir, $filename ) ) continue;
   $fullname = cms_join_path($startdir,$filename);
 
   $file = array();
