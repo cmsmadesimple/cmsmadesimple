@@ -20,6 +20,7 @@ Core - General
 - Missing language strings are no longer output to Admin log, but to the debug log.
 - Requests for modules that are not installed/enabled, or for invalid actions will now result in 404 errors.
 - Fixed problem where restricted content editors could implicitly change the page alias.
+- Improvements to the system information page, particularly the bbcode output.
 
 MicroTiny v2.0.1
 - Now add page hierarchy to autocomplete text when using the linker.
