@@ -22,6 +22,7 @@ Core - General
 - Fixed problem where restricted content editors could implicitly change the page alias.
 - Improvements to the system information page, particularly the bbcode output.
 - cms_init_editor, form_start, and cms_action_url plugins are no longer cachable.
+- Adds the 'adminonly' option to the {content}, {content_image}, and {content_module} tags to allow only members of the 'Admin' group to manipulate the values of that block.
 
 MicroTiny v2.0.2
 - Now add page hierarchy to autocomplete text when using the linker.

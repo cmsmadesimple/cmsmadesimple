@@ -65,7 +65,7 @@ final class CMS_Content_Block
         // todo: should be in page_template_parser
         // {content} tag encountered.
         $rec = array('type'=>'text','id'=>'','name'=>'','noedit'=>false, 'usewysiwyg'=>'true','oneline'=>'false','default'=>'','label'=>'',
-                     'size'=>'50','tab'=>'','maxlength'=>'255','required'=>0,'placeholder'=>'','priority'=>'','cssname'=>'');
+                     'size'=>'50','tab'=>'','maxlength'=>'255','required'=>0,'placeholder'=>'','priority'=>'','cssname'=>'','adminonly'=>0);
         foreach( $params as $key => $value ) {
             $value = trim($value,'"\'');
             if( $key == 'type' ) continue;

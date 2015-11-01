@@ -425,6 +425,12 @@ class Content extends ContentBase
 		$required = cms_to_bool(get_parameter_value($blockInfo,'required'));
 		$placeholder = get_parameter_value($blockInfo,'placeholder');
 		$maxlength = get_parameter_value($blockInfo,'maxlength',255);
+        $adminonly = cms_to_bool(get_parameter_value($blockInfo,'adminonly',0));
+        if( $adminonly ) {
+            $uid = get_userid(FALSE);
+            $res = \UserOperations::get_instance()->UserInGroup($uid,1);
+            if( !$res ) return;
+        }
 		if ($oneline) {
 			$size = get_parameter_value($blockInfo,'size',50);
 			$ret = '<input type="text" size="'.$size.'" maxlength="'.$maxlength.'" name="'.$blockInfo['id'].'" value="'.cms_htmlentities($value, ENT_NOQUOTES, CmsNlsOperations::get_encoding('')).'"';
@@ -463,6 +469,12 @@ class Content extends ContentBase
 	 */
 	private function _display_image_block($blockInfo,$value,$adding)
 	{
+        $adminonly = cms_to_bool(get_parameter_value($blockInfo,'adminonly',0));
+        if( $adminonly ) {
+            $uid = get_userid(FALSE);
+            $res = \UserOperations::get_instance()->UserInGroup($uid,1);
+            if( !$res ) return;
+        }
 		$config = CmsApp::get_instance()->GetConfig();
 		$adddir = get_site_preference('contentimage_path');
 		if( $blockInfo['dir'] != '' ) $adddir = $blockInfo['dir'];
@@ -492,6 +504,13 @@ class Content extends ContentBase
 	 */
 	private function _display_module_block($blockName,$blockInfo,$value,$adding)
 	{
+        $adminonly = cms_to_bool(get_parameter_value($blockInfo,'adminonly',0));
+        if( $adminonly ) {
+            $uid = get_userid(FALSE);
+            $res = \UserOperations::get_instance()->UserInGroup($uid,1);
+            if( !$res ) return;
+        }
+
 		$ret = '';
 		if( !isset($blockInfo['module']) ) return FALSE;
 		$module = cms_utils::get_module($blockInfo['module']);
