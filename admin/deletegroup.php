@@ -20,7 +20,7 @@
 
 $CMS_ADMIN_PAGE=1;
 
-require_once("../include.php");
+require_once("../lib/include.php");
 require_once("../lib/classes/class.group.inc.php");
 $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 
@@ -49,13 +49,13 @@ if (isset($_GET["group_id"]))
 	}
 
 	$result = false;
-	
+
 	$gCms = cmsms();
 	$groupops = $gCms->GetGroupOperations();
 	$userops = $gCms->GetUserOperations();
 	$groupobj = $groupops->LoadGroupByID($group_id);
 	$group_name = $groupobj->name;
-	
+
         # check to make sure we're not a member of this group
 	if( $userops->UserInGroup($userid,$group_id) )
 	  {
@@ -65,14 +65,14 @@ if (isset($_GET["group_id"]))
 
 	// now do the work.
 	Events::SendEvent('Core', 'DeleteGroupPre', array('group' => &$groupobj));
-	
+
 	if ($groupobj)
 	  {
 	    $result = $groupobj->Delete();
 	  }
-	
+
 	Events::SendEvent('Core', 'DeleteGroupPost', array('group' => &$groupobj));
-	
+
 	if ($result == true)
 	  {
 	    // put mention into the admin log

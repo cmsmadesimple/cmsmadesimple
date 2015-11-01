@@ -25,15 +25,6 @@ $this->SetCurrentTab('stylesheets');
 $css_id = (int) get_parameter_value($params,'css');
 
 if( isset($params['cancel']) ) {
-    try {
-        if( $css_id && dm_utils::locking_enabled() ) {
-            $lock_id = CmsLockOperations::is_locked('stylesheet',$css_id);
-            CmsLockOperations::unlock($lock_id,'stylesheet',$css_id);
-        }
-    }
-    catch( Exception $e ) {
-        // do nothing.
-    }
     if( $params['cancel'] == $this->Lang('cancel') ) $this->SetMessage($this->Lang('msg_cancelled'));
     $this->RedirectToAdminTab();
 }
@@ -75,15 +66,6 @@ try {
             $css_ob->save();
 
             if (!$apply) {
-                try {
-                    if( $css_id && dm_utils::locking_enabled() ) {
-                        $lock_id = CmsLockOperations::is_locked('stylesheet',$css_id);
-                        CmsLockOperations::unlock($lock_id,'stylesheet',$css_id);
-                    }
-                }
-                catch( \Exception $e ) {
-                    // do nothing.
-                }
                 $this->SetMessage($message);
                 $this->RedirectToAdminTab();
             }
@@ -93,15 +75,6 @@ try {
         $response = 'error';
 
         if (!$apply) {
-            try {
-                if( $css_id && dm_utils::locking_enabled() ) {
-                    $lock_id = CmsLockOperations::is_locked('stylesheet',$css_id);
-                    CmsLockOperations::unlock($lock_id,'stylesheet',$css_id);
-                }
-            }
-            catch( \Exception $e ) {
-                // do nothing.
-            }
             $this->SetMessage($message);
             $this->RedirectToAdminTab();
         }
@@ -122,8 +95,6 @@ try {
                 if( !$lock->expired() ) throw new CmsLockException('CMSEX_L010');
                 CmsLockOperations::unlock($lock_id,'stylesheet',$css_ob->get_id());
             }
-            $lock = new CmsLock('stylesheet', $css_ob->get_id(), (int)$this->GetPreference('lock_timeout'));
-            $smarty->assign('lock', $lock);
         } catch( CmsException $e ) {
             $response = 'error';
             $message = $e->GetMessage();

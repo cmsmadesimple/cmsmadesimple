@@ -133,8 +133,8 @@ function cms_module_ProcessTemplate(&$modinstance, $tpl_name, $designation = '',
 	$ok = (strpos($tpl_name, '..') === false);
 	if (!$ok) return;
 
-        $smarty = $modinstance->GetActionTemplateObject();
-        if( !$smarty ) $smarty = Smarty_CMS::get_instance();
+    $smarty = $modinstance->GetActionTemplateObject();
+    if( !$smarty ) $smarty = Smarty_CMS::get_instance();
 	$oldcache = $smarty->caching;
 	if( $smarty->caching != Smarty::CACHING_OFF ) {
 		$smarty->caching = ($modinstance->can_cache_output())?Smarty::CACHING_LIFETIME_CURRENT:Smarty::CACHING_OFF;
@@ -152,10 +152,10 @@ function cms_module_ProcessTemplate(&$modinstance, $tpl_name, $designation = '',
  */
 function cms_module_ProcessTemplateFromData(&$modinstance, $data)
 {
-        $smarty = $modinstance->GetActionTemplateObject();
-        if( !$smarty ) $smarty = Smarty_CMS::get_instance();
-	$_contents = $smarty->fetch('string:'.$data);
-	return $_contents;
+    $smarty = $modinstance->GetActionTemplateObject();
+    if( !$smarty ) $smarty = Smarty_CMS::get_instance();
+    $_contents = $smarty->fetch('string:'.$data);
+    return $_contents;
 }
 
 /**
@@ -164,16 +164,17 @@ function cms_module_ProcessTemplateFromData(&$modinstance, $data)
 function cms_module_ProcessTemplateFromDatabase(&$modinstance, $tpl_name, $designation = '', $cache = false, $modulename = '')
 {
     $smarty = $modinstance->GetActionTemplateObject();
-	if( $modulename == '' ) $modulename = $modinstance->GetName();
+    if( !$smarty ) $smarty = Smarty_CMS::get_instance();
+    if( $modulename == '' ) $modulename = $modinstance->GetName();
 
-	$oldcache = $smarty->caching;
-	if( $smarty->caching != Smarty::CACHING_OFF ) {
-		$smarty->caching = ($modinstance->can_cache_output())?Smarty::CACHING_LIFETIME_CURRENT:Smarty::CACHING_OFF;
-	}
-	$result = $smarty->fetch('module_db_tpl:'.$modulename.';'.$tpl_name, '', ($designation != ''?$designation:$modulename));
-	$smarty->caching = $oldcache;
+    $oldcache = $smarty->caching;
+    if( $smarty->caching != Smarty::CACHING_OFF ) {
+        $smarty->caching = ($modinstance->can_cache_output())?Smarty::CACHING_LIFETIME_CURRENT:Smarty::CACHING_OFF;
+    }
+    $result = $smarty->fetch('module_db_tpl:'.$modulename.';'.$tpl_name, '', ($designation != ''?$designation:$modulename));
+    $smarty->caching = $oldcache;
 
-	return $result;
+    return $result;
 }
 
 ?>

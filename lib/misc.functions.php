@@ -42,7 +42,7 @@ function redirect($to)
     $_SERVER['PHP_SELF'] = null;
 
     $schema = 'http';
-    if( CmsApp::get_instance()->is_https_request ) $schema = 'https';
+    if( CmsApp::get_instance()->is_https_request() ) $schema = 'https';
 
     $host = $_SERVER['HTTP_HOST'];
     $components = parse_url($to);
@@ -1216,6 +1216,55 @@ function cms_get_jquery($exclude = '',$ssl = null,$cdn = false,$append = '',$cus
       }
   }
   return $output;
+}
+
+/**
+ * @ignore
+ * @since 2.0.2
+ */
+function setup_session($cachable = FALSE)
+{
+    global $CMS_INSTALL_PAGE, $CMS_ADMIN_PAGE;
+    $_f = $_l = null;
+    if( headers_sent( $_f, $_l) ) throw new \LogicException("Attempt to set headers, but headers were already sent at: $_f::$_l");
+
+    if( $cachable ) {
+        if( $_SERVER['REQUEST_METHOD'] != 'GET' || isset($CMS_ADMIN_PAGE) || isset($CMS_INSTALL_PAGE) ) $cachable = FALSE;
+    }
+    if( $cachable ) {
+        $cachable = (int) cms_siteprefs::get('allow_browser_cache',0);
+    }
+    if( !$cachable ) {
+        // admin pages can't be cached... period, at all.. never.
+        @session_cache_limiter('nocache');
+    }
+    else {
+        // frontend request
+        $expiry = (int)max(0,cms_siteprefs::get('browser_cache_expiry',60));
+        @session_cache_expire($expiry);
+        @session_cache_limiter('public');
+        @header_remove('Last-Modified');
+		//header('Expires: '.gmdate("D, d M Y H:i:s",time() + $expiry * 60).' GMT');
+        //header('Cache-Control: public, max_age='.($expiry*60));
+    }
+
+    #Setup session with different id and start it
+    $session_name = 'CMSSESSID'.substr(md5(__DIR__), 0, 12);
+    if( !isset($CMS_INSTALL_PAGE) ) {
+        @session_name($session_name);
+        @ini_set('url_rewriter.tags', '');
+        @ini_set('session.use_trans_sid', 0);
+    }
+
+    if( isset($_COOKIE[$session_name]) ) {
+        // validate the contents of the cookie.
+        if (!preg_match('/^[a-zA-Z0-9,\-]{22,40}$/', $_COOKIE[$session_name]) ) {
+            session_id( uniqid() );
+            session_start();
+            session_regenerate_id();
+        }
+    }
+    if(!@session_id()) session_start();
 }
 
 ?>

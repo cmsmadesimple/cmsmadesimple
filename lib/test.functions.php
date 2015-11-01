@@ -479,6 +479,7 @@ function & testInteger( $required, $title, $var, $message = '', $ini = true, $em
 function & testString( $required, $title, $var, $message = '', $ini = true, $code_empty = 'green', $code_not_empty = 'yellow',
 					   $error_fragment = '' )
 {
+    global $lang_fn;
 	$test = new CmsInstallTest();
 	$test->title = $title;
 
@@ -886,10 +887,12 @@ function & testCreateDirAndFile( $required, $title, $message = '', $debug = fals
 	}
 
 	if(! $_test) {
+        $test->value = 0;
 		$test->res = 'red';
 		getTestReturn($test, $required, $message, 'Can.27t_create_file');
 	}
 	else {
+        $test->value = 1;
 		$test->res = 'green';
 		getTestReturn($test, $required);
 	}
@@ -1033,16 +1036,19 @@ function & testRemoteFile( $required, $title, $url = '', $message = '', $debug =
 
 	$test = new CmsInstallTest();
 	$test->title = $title;
+    $test->value = $lang_fn('success');
 
 	if(! $url_info = parse_url($url)) {
 		// Relative or invalid URL?
 		$test->res = 'red';
+        $test->value = $lang_fn('failure');
 		getTestReturn($test, $required, '', '', $lang_fn('invalid_test'));
 		return $test;
 	}
 
 	if( !isset($url_info['scheme']) || !isset($url_info['host']) ) {
 		$test->res = 'red';
+        $test->value = $lang_fn('failure');
 		getTestReturn($test, $required, '', '', $lang_fn('invalid_url'));
 		return $test;
 	}
@@ -1100,6 +1106,7 @@ function & testRemoteFile( $required, $title, $url = '', $message = '', $debug =
 		}
 		else {
 			$test->res = 'red';
+            $test->value = $lang_fn('failure');
 			getTestReturn($test, $required, '', '', $lang_fn('connection_error'));
 			$test->continueon = 0;
 			return $test;
@@ -1422,14 +1429,17 @@ function &_testTimeSettings1()
 	$fn = tempnam(TMP_CACHE_LOCATION,'tst');
 	@touch($fn);
 	$mtime = filemtime($fn);
+    $test->value = 1;
 	$test->res = 'green';
 	if( $mtime === FALSE ) {
+        $test->value = 0;
 		$test->res = 'red';
 	}
 	else {
 		$val = time() - $mtime;
 		if( abs($val) > 3 ) {
 			$test->res = 'red';
+            $test->value = 0;
 			$test->message = $lang_fn('test_file_timedifference_msg',$val);
 		}
 	}
@@ -1449,10 +1459,12 @@ function &_testTimeSettings2()
 
 	$query = 'SELECT UNIX_TIMESTAMP()';  // mysql only.
 	$test->res = 'green';
+    $test->value = 1;
 	$tmp = cmsms()->GetDb()->GetOne($query);
 	$val = time() - $tmp;
 	if( abs( time() - $tmp ) > 3 ) {
 		$test->res = 'red';
+        $test->value = 0;
 		$test->msg = $lang_fn('test_db_timedifference_msg',$val);
 	}
 	return $test;

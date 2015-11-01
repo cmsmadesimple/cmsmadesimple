@@ -1,6 +1,7 @@
 <?php
 #CMS - CMS Made Simple
 #(c)2004-2011 by Ted Kulp (ted@cmsmadesimple.org)
+#(c)2011-2014 by The CMSMS Dev Team
 #Visit our homepage at: http://www.cmsmadesimple.org
 #
 #This program is free software; you can redistribute it and/or modify
@@ -16,10 +17,10 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
-#$Id$
+#$Id: version.php 10177 2015-09-11 15:02:02Z calguy1000 $
 
-$CMS_VERSION = "2.0.1";
-$CMS_VERSION_NAME = "Adelaide";
+$CMS_VERSION = "2.1";
+$CMS_VERSION_NAME = "NO NAME SET";
 $CMS_SCHEMA_VERSION = '200';
 
 define('CMS_VERSION', $CMS_VERSION);

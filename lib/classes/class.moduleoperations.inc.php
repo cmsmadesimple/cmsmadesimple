@@ -102,6 +102,11 @@ final class ModuleOperations
 
 
     /**
+     * @ignore
+     */
+    private $_module_class_map;
+
+    /**
      * Get the only permitted instance of this object.  It will be created if necessary
      *
      * @return ModuleOperations
@@ -115,6 +120,14 @@ final class ModuleOperations
         return self::$_instance;
     }
 
+
+    public function set_module_classname($module,$classname)
+    {
+        if( !$module || !$classname ) return;
+        if( !isset($this->_module_class_map[$module]) ) {
+            $this->_module_class_map[(string)$module] = (string)$classname;
+        }
+    }
 
     /**
      * @internal
@@ -556,7 +569,9 @@ final class ModuleOperations
             require_once($fname);
         }
 
-        $obj = new $module_name;
+        $obj = null;
+        if( class_exists($module_name) ) $obj = new $module_name;
+        if( !$obj && isset($this->_module_class_map[$module_name]) ) $obj = new $this->_module_class_map[$module_name];
         if( !is_object($obj) ) {
             // oops, some problem loading.
             audit('','Module',"Cannot load module $module_name ... some problem instantiating the class");

@@ -50,6 +50,7 @@ try {
             $templates = CmsLayoutTemplate::load_bulk($template_list);
             $out = array();
             foreach( $templates as $one ) {
+                if( !$one->get_listable() ) continue;
                 $out[$one->get_id()] = $one->get_name();
             }
             break;
@@ -65,6 +66,7 @@ try {
                 $out = array();
                 foreach( $templates as $one ) {
                     if( $one->get_type_id() != $type_id ) continue;
+                    if( !$one->get_listable() ) continue;
                     $out[$one->get_id()] = $one->get_name();
                 }
             }
@@ -75,6 +77,7 @@ try {
             $template_list = CmsLayoutTemplate::load_all_by_type($type);
             $out = array();
             foreach( $template_list as $one ) {
+                if( !$one->get_listable() ) continue;
                 $out[$one->get_id()] = $one->get_name();
             }
             break;

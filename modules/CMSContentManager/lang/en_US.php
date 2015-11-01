@@ -266,6 +266,7 @@ $lang['toggle'] = 'Toggle Selected';
 
 #W
 $lang['warn_destructive'] = 'This operation can have undesired side effects, please exercise extreme caution';
+$lang['warn_notemplates_for_design'] = 'Sorry, but it does not appear that there are any usable page templates for the selected design';
 
 #X
 

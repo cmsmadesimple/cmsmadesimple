@@ -41,7 +41,7 @@ class microtiny_utils
       $mod = cms_utils::get_module('MicroTiny');
       if(!is_object($mod)) throw new CmsLogicException('Could not find the microtiny module...');
 
-      $frontend = cmsms()->is_frontend_request();
+      $frontend = CmsApp::get_instance()->is_frontend_request();
       $languageid = self::GetLanguageId($frontend);
       $mtime = time() - 300; // by defaul cache for 5 minutes ??
 
@@ -59,7 +59,7 @@ class microtiny_utils
       }
 
       // if this is an action for MicroTiny disable caching.
-      $smarty = cmsms()->GetSmarty();
+      $smarty = CmsApp::get_instance()->GetSmarty();
       $module = $smarty->get_template_vars('actionmodule');
       if( $module == $mod->GetName() ) $mtime = time() + 60;
 
@@ -105,39 +105,53 @@ class microtiny_utils
    */
   private static function _generate_config($frontend=false, $selector = null, $css_name = null, $languageid="en")
   {
-    $mod = cms_utils::get_module('MicroTiny');
-    $config = cms_utils::get_config();
-    $smarty = cmsms()->GetSmarty();
-    $smarty->assign('MicroTiny',$mod);
-    $smarty->clear_assign('mt_profile');
-    $smarty->clear_assign('mt_selector');
-    $smarty->assign('mt_actionid','m1_');
-    $smarty->assign('isfrontend',$frontend);
-    $smarty->assign('languageid',$languageid);
-    if( $selector ) $smarty->assign('mt_selector',$selector);
+      $ajax_url = function($url) {
+          return str_replace('&amp;','&',$url).'&showtemplate=false';
+      };
 
-    try {
-      $profile = null;
-      if( $frontend ) {
-	$profile = microtiny_profile::load(MicroTiny::PROFILE_FRONTEND);
+      $mod = cms_utils::get_module('MicroTiny');
+      $_gCms = CmsApp::get_instance();
+      $config = $_gCms->GetConfig();
+      $smarty = $_gCms->GetSmarty();
+      $page_id = ($_gCms->is_frontend_request()) ? $smarty->getTemplateVars('content_id') : '';
+      $tpl_ob = $smarty->CreateTemplate('module_file_tpl:MicroTiny;tinymce_config.js',null,null,$smarty); // child of the global smarty
+      $tpl_ob->assign('MicroTiny',$mod);
+      $tpl_ob->clear_assign('mt_profile');
+      $tpl_ob->clear_assign('mt_selector');
+      $tpl_ob->assign('mt_actionid','m1_');
+      $tpl_ob->assign('isfrontend',$frontend);
+      $tpl_ob->assign('languageid',$languageid);
+      $tpl_ob->assign('root_url',$config->smart_root_url());
+      $url = $mod->create_url('m1_','filepicker',$page_id);
+      $tpl_ob->assign('filepicker_url',$ajax_url($url));
+      $url = $mod->create_url('m1_','linker',$page_id);
+      $tpl_ob->assign('linker_url',$ajax_url($url));
+      $url = $mod->create_url('m1_','ajax_getpages',$page_id);
+      $tpl_ob->assign('getpages_url',$ajax_url($url));
+      if( $selector ) $tpl_ob->assign('mt_selector',$selector);
+
+      try {
+          $p1rofile = null;
+          if( $frontend ) {
+              $profile = microtiny_profile::load(MicroTiny::PROFILE_FRONTEND);
+          }
+          else {
+              $profile = microtiny_profile::load(MicroTiny::PROFILE_ADMIN);
+          }
+
+          $tpl_ob->assign('mt_profile',$profile);
+          $stylesheet = (int)$profile['dfltstylesheet'];
+          if( $stylesheet < 1 ) $stylesheet = null;
+          if( $profile['allowcssoverride'] && $css_name ) $stylesheet = $css_name;
+          if( $stylesheet ) $tpl_ob->assign('mt_cssname',$stylesheet);
       }
-      else {
-	$profile = microtiny_profile::load(MicroTiny::PROFILE_ADMIN);
+      catch( Exception $e ) {
+          // oops, we gots a problem.
+          die($e->Getmessage());
       }
 
-      $smarty->assign('mt_profile',$profile);
-      $stylesheet = (int)$profile['dfltstylesheet'];
-      if( $stylesheet < 1 ) $stylesheet = null;
-      if( $profile['allowcssoverride'] && $css_name ) $stylesheet = $css_name;
-      if( $stylesheet ) $smarty->assign('mt_cssname',$stylesheet);
-    }
-    catch( Exception $e ) {
-      // oops, we gots a problem.
-      die($e->Getmessage());
-    }
-
-    $result = $mod->ProcessTemplate('tinymce_config.js');
-    return $result;
+      return $tpl_ob->fetch();
+      return $result;
   }
 
   /**

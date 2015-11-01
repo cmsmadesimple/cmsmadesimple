@@ -72,20 +72,8 @@ final class GroupOperations
 	 */
 	public function LoadGroups()
 	{
-		$db = CmsApp::get_instance()->GetDb();
-		$result = array();
-		$query = "SELECT group_id, group_name, group_desc, active FROM ".CMS_DB_PREFIX."groups ORDER BY group_id";
-		$dbresult = $db->Execute($query);
-		while ($dbresult && $row = $dbresult->FetchRow()) {
-			$onegroup = new Group();
-			$onegroup->id = $row['group_id'];
-			$onegroup->name = $row['group_name'];
-			$onegroup->description = $row['group_desc'];
-			$onegroup->active = $row['active'];
-			$result[] = $onegroup;
-		}
-
-		return $result;
+        $list = Group::load_all();
+        return $list;
 	}
 
 	/**
@@ -93,25 +81,11 @@ final class GroupOperations
 	 *
 	 * @param int $id The id of the group to load
 	 * @return mixed The group if found. If it's not found, then false
+     * @deprecated
 	 */
 	public function &LoadGroupByID($id)
 	{
-		$result = false;
-		$db = CmsApp::get_instance()->GetDb();
-
-		$query = "SELECT group_id, group_name, group_desc, active FROM ".CMS_DB_PREFIX."groups WHERE group_id = ? ORDER BY group_id";
-		$dbresult = $db->Execute($query, array($id));
-
-		while ($dbresult && $row = $dbresult->FetchRow()) {
-			$onegroup = new Group();
-			$onegroup->id = $row['group_id'];
-			$onegroup->name = $row['group_name'];
-			$onegroup->description = $row['group_desc'];
-			$onegroup->active = $row['active'];
-			$result = $onegroup;
-		}
-
-		return $result;
+        return Group::load($id);
 	}
 
 	/**
@@ -119,24 +93,11 @@ final class GroupOperations
 	 *
 	 * @param mixed $group The group object to save to the database
 	 * @return int The id of the newly created group. If none is created, -1
+     * @deprecated
 	 */
-	public function InsertGroup($group)
+	public function InsertGroup(Group $group)
 	{
-		$result = -1;
-		$db = CmsApp::get_instance()->GetDb();
-
-		$query = 'SELECT group_id FROM '.CMS_DB_PREFIX.'groups WHERE group_name = ?';
-		$tmp = $db->GetOne($query,array($group->name));
-		if( $tmp ) return $result;
-
-		$new_group_id = $db->GenID(CMS_DB_PREFIX."groups_seq");
-		$time = $db->DBTimeStamp(time());
-		$query = "INSERT INTO ".CMS_DB_PREFIX."groups (group_id, group_name, group_desc, active, create_date, modified_date)
-                  VALUES (?,?,?,?,".$time.", ".$time.")";
-		$dbresult = $db->Execute($query, array($new_group_id, $group->name, $group->description, $group->active));
-		if ($dbresult !== false) $result = $new_group_id;
-
-		return $result;
+        $group->save();
 	}
 
 	/**
@@ -144,22 +105,11 @@ final class GroupOperations
 	 *
 	 * @param mixed $group The group to update
 	 * @return bool True if the update was successful, false if not
+     * @deprecated
 	 */
-	public function UpdateGroup($group)
+	public function UpdateGroup(Group $group)
 	{
-		$result = false;
-		$db = CmsApp::get_instance()->GetDb();
-
-		$query = 'SELECT group_id FROM '.CMS_DB_PREFIX.'groups WHERE group_name = ? AND group_id != ?';
-		$tmp = $db->GetOne($query,array($group->name,$group->id));
-		if( $tmp ) return $result;
-
-		$time = $db->DBTimeStamp(time());
-		$query = "UPDATE ".CMS_DB_PREFIX."groups SET group_name = ?, group_desc = ?, active = ?, modified_date = ".$time." WHERE group_id = ?";
-		$dbresult = $db->Execute($query, array($group->name, $group->description, $group->active, $group->id));
-		if ($dbresult !== false) $result = true;
-
-		return $result;
+        $group->save();
 	}
 
 	/**
@@ -167,25 +117,17 @@ final class GroupOperations
 	 *
 	 * @param int $id The group's id to delete
 	 * @return bool True if the delete was successful. False if not.
+     * @deprecated
 	 */
 	public function DeleteGroupByID($id)
 	{
-		$result = false;
-		$db = CmsApp::get_instance()->GetDb();
-
-		$query = 'DELETE FROM '.CMS_DB_PREFIX.'user_groups where group_id = ?';
-		$dbresult = $db->Execute($query, array($id));
-
-		$query = "DELETE FROM ".CMS_DB_PREFIX."group_perms where group_id = ?";
-		$dbresult = $db->Execute($query, array($id));
-
-		$query = "DELETE FROM ".CMS_DB_PREFIX."groups where group_id = ?";
-		$dbresult = $db->Execute($query, array($id));
-
-		if ($dbresult !== false) $result = true;
-
-		unset($this->_perm_cache);
-		return $result;
+        try {
+            $group = Group::load($id);
+            return $group->delete();
+        }
+        catch( \Exception $e ) {
+            return FALSE;
+        }
 	}
 
 	/**

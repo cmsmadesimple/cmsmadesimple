@@ -1,10 +1,10 @@
 <?php
 #BEGIN_LICENSE
 #-------------------------------------------------------------------------
-# Module: ContentManager (c) 2013 by Robert Campbell 
+# Module: ContentManager (c) 2013 by Robert Campbell
 #         (calguy1000@cmsmadesimple.org)
 #  A module for managing content in CMSMS.
-# 
+#
 #-------------------------------------------------------------------------
 # CMS - CMS Made Simple is (c) 2004 by Ted Kulp (wishy@cmsmadesimple.org)
 # Visit our homepage at: http://www.cmsmadesimple.org
@@ -19,7 +19,7 @@
 # However, as a special exception to the GPL, this software is distributed
 # as an addon module to CMS Made Simple.  You may not use this software
 # in any Non GPL version of CMS Made simple, or in any version of CMS
-# Made simple that does not indicate clearly and obviously in its admin 
+# Made simple that does not indicate clearly and obviously in its admin
 # section that the site was built with CMS Made simple.
 #
 # This program is distributed in the hope that it will be useful,
@@ -37,7 +37,7 @@
 final class CMSContentManager extends CMSModule
 {
   function GetFriendlyName() { return $this->Lang('friendlyname'); }
-  function GetVersion() { return '1.0.1'; }
+  function GetVersion() { return '1.0.2'; }
   function GetHelp() { return CmsLangOperations::lang_from_realm('help','help_cmscontentmanager_help'); }
   function GetAuthor() { return 'calguy1000'; }
   function GetAuthorEmail() { return 'calguy1000@cmsmadesimple.org'; }
@@ -60,7 +60,7 @@ final class CMSContentManager extends CMSModule
   {
     if( $this->CheckPermission('Manage All Content') ) return TRUE;
     if( $this->CheckPermission('Modify Any Page') ) return TRUE;
-    
+
     $pages = author_pages(get_userid(FALSE));
     if( count($pages) == 0 ) return FALSE;
 
@@ -68,13 +68,13 @@ final class CMSContentManager extends CMSModule
     return TRUE;
   }
 
-//   public function VisibleToAdminUser() 
+//   public function VisibleToAdminUser()
 //   {
 //     $x = $this->CheckPermission('Add Pages') ||
 //       $this->CheckPermission('Remove Pages') ||
 //       $this->CheckPermission('Modify Site Preferences');
 //     if( $x ) return TRUE;
-    
+
 //     return $this->CanEditContent();
 //   }
 

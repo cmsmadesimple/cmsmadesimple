@@ -20,7 +20,7 @@
 
 $CMS_ADMIN_PAGE=1;
 
-require_once("../include.php");
+require_once("../lib/include.php");
 $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 $gCms = cmsms();
 $db = $gCms->GetDb();
@@ -76,7 +76,7 @@ if ($access) {
     if( isset( $_GET['event'] ) && $_GET['event'] != '' ) $event = trim(cleanValue($_GET['event']));
     if( isset( $_GET['handler'] ) && $_GET['handler'] != '' ) $handler = (int)$_GET['handler'];
     if( isset( $_GET['order'] ) && $_GET['order'] != '' ) $cur_order = (int)$_GET['order'];
-	  
+
     switch( $action ) {
     case 'up':
       // move an item up (decrease the order)
@@ -150,13 +150,13 @@ if ($access) {
 	$dbresult = $db->Execute( $q, array( $cur_order, $event_id ) );
       }
       break;
-			
+
     default:
       // unknown or unset action
       break;
     } // switch
   } // else
-		
+
   // get the event description
   $usertagops = $gCms->GetUserTagOperations();
 

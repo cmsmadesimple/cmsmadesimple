@@ -4,6 +4,11 @@ namespace CMSMS\Database;
 
 abstract class Resultset
 {
+    public function __destruct()
+    {
+        $this->Close();
+    }
+
     abstract public function MoveFirst();
     abstract public function MoveNext();
     abstract public function MoveLast();

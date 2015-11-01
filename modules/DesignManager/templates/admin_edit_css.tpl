@@ -1,20 +1,18 @@
 <script type="text/javascript">
 $(document).ready(function(){
+    var do_locking = {if $css_id > 0 && isset($lock_timeout) && $lock_timeout > 0}1{else}0{/if};
     $('#form_editcss').dirtyForm({
-        onUnload: function() {
-            $('#form_editcss').lockManager('unlock').done(function(){
-	    });
+        beforeUnload: function() {
+            if( do_locking )$('#form_editcss').lockManager('unlock');
+        },
+        unloadCancel: function() {
+            if( do_locking )$('#form_editcss').lockManager('relock');
         }
     });
 
-    $(document).on('cmsms_textchange',function(event){
-        // editor textchange, set the form dirty.
-        $('#form_editcss').dirtyForm('option','dirty',true);
-    });
-
-    // initialize lock manager  {if isset($css_id) && isset($lock_timeout)}
-
-    $('#form_editcss').lockManager({
+    // initialize lock manager
+    if( do_locking ) {
+      $('#form_editcss').lockManager({
         type: 'stylesheet',
         oid: {$css_id},
         uid: {get_userid(FALSE)},
@@ -26,6 +24,7 @@ $(document).ready(function(){
         lostlock_handler: function(err) {
             // we lost the lock on this stylesheet... make sure we can't save anything.
             // and display a nice message.
+	    console.debug('lost lock handler');
             $('[name$=cancel]').fadeOut().attr('value','{$mod->Lang('cancel')}').fadeIn();
             $('#form_editcss').dirtyForm('option','dirty',false);
             $('#submit-btn, #applybtn').attr('disabled','disabled');
@@ -33,8 +32,13 @@ $(document).ready(function(){
             $('.lock-warning').removeClass('hidden-item');
             alert('{$mod->Lang('msg_lostlock')|escape:'javascript'}');
         }
+      });
+    }
+
+    $(document).on('cmsms_textchange',function(event){
+        // editor textchange, set the form dirty.
+        $('#form_editcss').dirtyForm('option','dirty',true);
     });
-    // {/if}
 
     $(document).on('click','[name$=apply],[name$=submit],[name$=cancel]',function(){
         $('#form_editcss').dirtyForm('option','dirty',false);

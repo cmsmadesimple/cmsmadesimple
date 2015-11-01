@@ -20,7 +20,7 @@
 
 $CMS_ADMIN_PAGE=1;
 
-require_once("../include.php");
+require_once("../lib/include.php");
 require_once("../lib/classes/class.group.inc.php");
 $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 
@@ -46,47 +46,41 @@ $userid = get_userid();
 $access = check_permission($userid, 'Manage Groups');
 
 if ($access) {
-  if (isset($_POST["addgroup"])) {
-    $validinfo = true;
+    if (isset($_POST["addgroup"])) {
+        try {
+            if ($group == '') throw new \CmsInvalidDataException(lang('nofieldgiven', lang('groupname')));
 
-    if ($group == "") {
-      $error .= "<li>".lang('nofieldgiven', lang('groupname'))."</li>";
-      $validinfo = false;
+            $groupobj = new Group();
+            $groupobj->name = $group;
+            $groupobj->description = $description;
+            $groupobj->active = $active;
+
+            Events::SendEvent('Core', 'AddGroupPre', array('group' => &$groupobj));
+
+            $result = $groupobj->save();
+            if( !$result ) throw new \RuntimeException(lang('errorinsertinggroup'));
+
+            Events::SendEvent('Core', 'AddGroupPost', array('group' => &$groupobj));
+            // put mention into the admin log
+            audit($groupobj->id, 'Admin User Group: '.$groupobj->name, 'Added');
+            redirect("listgroups.php".$urlext);
+            return;
+        }
+        catch( \Exception $e ) {
+            $error .= '<li>'.$e->GetMessage().'</li>';
+        }
     }
-
-    if ($validinfo) {
-      $groupobj = new Group();
-      $groupobj->name = $group;
-      $groupobj->description = $description;
-      $groupobj->active = $active;
-			
-      Events::SendEvent('Core', 'AddGroupPre', array('group' => &$groupobj));
-
-      $result = $groupobj->save();
-
-      if ($result) {
-	Events::SendEvent('Core', 'AddGroupPost', array('group' => &$groupobj));
-	// put mention into the admin log
-	audit($groupobj->id, 'Admin User Group: '.$groupobj->name, 'Added');
-	redirect("listgroups.php".$urlext);
-	return;
-      }
-      else {
-	$error .= "<li>".lang('errorinsertinggroup')."</li>";
-      }
-    }
-  }
 }
 
 include_once("header.php");
 
 if (!$access) {
-  echo "<div class=\"pageerrorcontainer\"><p class=\"pageerror\">".lang('noaccessto', array(lang('addgroup')))."</p></div>";
+    echo "<div class=\"pageerrorcontainer\"><p class=\"pageerror\">".lang('noaccessto', array(lang('addgroup')))."</p></div>";
 }
 else {
-  if ($error != "") {
-    echo "<div class=\"pageerrorcontainer\"><ul class=\"pageerror\">".$error."</ul></div>";
-  }
+    if ($error != "") {
+        echo "<div class=\"pageerrorcontainer\"><ul class=\"pageerror\">".$error."</ul></div>";
+    }
 ?>
 
 <div class="pagecontainer">
@@ -113,7 +107,7 @@ else {
     <p class="pageinput">
       <input type="hidden" name="addgroup" value="true" />
       <input type="submit" value="<?php echo lang('submit')?>" class="pagebutton" />
-      <input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="pagebutton" />			
+      <input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="pagebutton" />
     </p>
   </div>
   </form>

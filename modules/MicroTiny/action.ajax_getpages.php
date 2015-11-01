@@ -17,37 +17,42 @@
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 if( !isset($gCms) ) exit;
-check_login(); // admin only.... but any admin
+if( !check_login(FALSE) ) exit; // admin only.... but any admin
+
+$handlers = ob_list_handlers();
+for ($cnt = 0; $cnt < sizeof($handlers); $cnt++) { ob_end_clean(); }
 
 $out = null;
 $term = trim(strip_tags(get_parameter_value($_REQUEST,'term')));
 $alias = trim(strip_tags(get_parameter_value($_REQUEST,'alias')));
 
 if( $alias ) {
-  $query = 'SELECT content_id,content_name,menu_text,content_alias FROM '.CMS_DB_PREFIX.'content
-            WHERE content_alias = ? AND active = 1';
-  $dbr = $db->GetRow($query,array($alias));
-  if( is_array($dbr) && count($dbr) ) {
-    $out = array('label'=>$dbr['content_name'], 'value'=>$dbr['content_alias']);
-    echo json_encode($out);
-  }
+    $query = 'SELECT content_id,content_name,menu_text,content_alias,id_hierarchy FROM '.CMS_DB_PREFIX.'content
+              WHERE content_alias = ? AND active = 1';
+    $dbr = $db->GetRow($query,array($alias));
+    if( is_array($dbr) && count($dbr) ) {
+        $lbl = "{$dbr['content_name']} ({$dbr['id_hierarchy']})";
+        $out = array('label'=>$lbl, 'value'=>$dbr['content_alias']);
+        echo json_encode($out);
+    }
 }
 else if( $term ) {
-  $term = "%{$term}%";
-  $query = 'SELECT content_id,content_name,menu_text,content_alias FROM '.CMS_DB_PREFIX.'content 
+    $term = "%{$term}%";
+    $query = 'SELECT content_id,content_name,menu_text,content_alias,id_hierarchy FROM '.CMS_DB_PREFIX.'content
             WHERE (content_name LIKE ? OR menu_text LIKE ? OR content_alias LIKE ?)
               AND active = 1
             ORDER BY default_content DESC, hierarchy ASC';
-  $dbr = $db->GetArray($query,array($term,$term,$term));
-  if( is_array($dbr) && count($dbr) ) {
-    // found some pages to match
-    $out = array();
-    // load the content objects
-    foreach( $dbr as $row ) {
-      $out[] = array('label'=>$row['content_name'], 'value'=>$row['content_alias']);
+    $dbr = $db->GetArray($query,array($term,$term,$term));
+    if( is_array($dbr) && count($dbr) ) {
+        // found some pages to match
+        $out = array();
+        // load the content objects
+        foreach( $dbr as $row ) {
+            $lbl = "{$row['content_name']} ({$row['id_hierarchy']})";
+            $out[] = array('label'=>$lbl, 'value'=>$row['content_alias']);
+        }
+        echo json_encode($out);
     }
-    echo json_encode($out);
-  }
 }
 
 exit;

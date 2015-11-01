@@ -34,9 +34,9 @@
  * @version     2.0
  * @package		CMS
  * @property    CmsApp $cms A reference to the application object (deprecated)
- * @property    Smarty_CMS $smarty A reference to the global smarty object
+ * @property    Smarty_CMS $smarty A reference to the global smarty object (deprecated)
  * @property    cms_config $config A reference to the global app configuration object (deprecated)
- * @property    ADOConnection $db  A reference to the global database configuration object
+ * @property    ADOConnection $db  A reference to the global database configuration object (deprecated)
  */
 abstract class CMSModule
 {
@@ -163,6 +163,9 @@ abstract class CMSModule
             return CmsApp::get_instance();
 
         case 'smarty':
+            /* deprecated */
+            $tpl = $this->GetActionTemplateObject();
+            if( $tpl ) return $tpl;
             return CmsApp::get_instance()->GetSmarty();
 
         case 'config':
@@ -1376,14 +1379,17 @@ abstract class CMSModule
             $name = preg_replace('/[^A-Za-z0-9\-_+]/', '', $name);
 
             $filename = $this->GetModulePath().'/action.' . $name . '.php';
-            if (@is_file($filename)) {
-                // these are included in scope in the included file for convenience.
-                $gCms = CmsApp::get_instance();
-                $db = $gCms->GetDb();
-                $config = $gCms->GetConfig();
-                $smarty = ( $this->_action_tpl ) ? $this->_action_tpl : $smarty = $gCms->GetSmarty()->get_template_parent();
-                include($filename);
+            if( !is_file($filename) ) {
+                @trigger_error("$name is an unknown acton of module ".$this->GetName());
+                throw new \CmsError404Exception("Module action not found");
             }
+
+            // these are included in scope in the included file for convenience.
+            $gCms = CmsApp::get_instance();
+            $db = $gCms->GetDb();
+            $config = $gCms->GetConfig();
+            $smarty = ( $this->_action_tpl ) ? $this->_action_tpl : $smarty = $gCms->GetSmarty()->get_template_parent();
+            include($filename);
         }
     }
 

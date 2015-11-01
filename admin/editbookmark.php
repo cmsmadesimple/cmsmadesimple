@@ -20,7 +20,7 @@
 
 $CMS_ADMIN_PAGE=1;
 
-require_once("../include.php");
+require_once("../lib/include.php");
 $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 
 check_login();
@@ -112,7 +112,7 @@ if ($error != "") echo '<div class="pageerrorcontainer"><p class="pageerror">'.$
 				<input type="submit" value="<?php echo lang('submit')?>" class="pagebutton" />
 				<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="pagebutton" />
 			</p>
-		</div>		
+		</div>
 	</form>
 </div>
 <?php
