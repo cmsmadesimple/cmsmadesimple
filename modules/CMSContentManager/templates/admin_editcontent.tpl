@@ -84,13 +84,12 @@ $(document).ready(function(){
     // handle cancel/close ... and unlock
     $(document).on('click', '[name$=cancel]', function () {
         var tmp = $(this).val();
-        if (tmp == '{$mod->Lang('close')}') {
-	  {if isset($lock_timeout) && $lock_timeout > 0}$('#Edit_Content').lockManager('unlock');{/if}
-	}
+        if( do_locking ) $('#Edit_Content').lockManager('unlock');
     });
 
     $('#Edit_Content').on('click','[name$=apply],[name$=submit],[name$=cancel]',function(event){
         $('#Edit_Content :hidden').removeAttr('required');
+	if( do_locking ) $('#Edit_Content').lockManager('unlock');
     });
 
     $(document).on('click', '[name$=submit]', function () {
