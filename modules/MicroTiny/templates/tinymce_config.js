@@ -14,7 +14,7 @@ tinymce.init({
         statusbar : {mt_jsbool($mt_profile.showstatusbar)},
         menubar : {mt_jsbool($mt_profile.menubar)},
         filepicker_title : '{$MT->Lang('filepickertitle')}',
-        filepicker_url : '{$filepicker_url}',
+        filepicker_url : '{$filepicker_url}&field=',
         filebrowser_title : '{$MT->Lang('title_cmsms_filebrowser')}',
         linker_text : '{$MT->Lang('cmsms_linker')}',
         linker_title : '{$MT->Lang('title_cmsms_linker')}',

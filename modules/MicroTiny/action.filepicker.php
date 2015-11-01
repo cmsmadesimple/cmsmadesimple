@@ -9,7 +9,7 @@
 #(at your option) any later version.
 #
 #This program is distributed in the hope that it will be useful,
-#but WITHOUT ANY WARRANTY; without even the implied warranty of
+#but WITHOpUT ANY WARRANTY; without even the implied warranty of
 #MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 #GNU General Public License for more details.
 #You should have received a copy of the GNU General Public License
@@ -19,12 +19,14 @@
 if( !isset($gCms) ) exit;
 if( !check_login(FALSE) ) exit; // admin only.... but any admin
 
-$handlers = ob_list_handlers();
-for ($cnt = 0; $cnt < sizeof($handlers); $cnt++) { ob_end_clean(); }
+//$handlers = ob_list_handlers();
+//for ($cnt = 0; $cnt < sizeof($handlers); $cnt++) { ob_end_clean(); }
 
 //
 // initialization
 //
+debug_to_log(__FILE__);
+debug_to_log($_GET);
 $field = trim(get_parameter_value($_GET,'field'));
 $type = 'any';
 $filemanager = cms_utils::get_module('FileManager');
