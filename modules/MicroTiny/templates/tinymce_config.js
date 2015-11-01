@@ -49,13 +49,12 @@ tinymce.init({
 {/if}
 {if $isfrontend}
     toolbar: 'undo | bold italic underline | alignleft aligncenter alignright alignjustify | bullist numlist | link{if $mt_profile.allowimages} | image{/if}',
-    plugins: ['autolink link anchor wordcount {if $mt_profile.allowimages} media image{/if}'],
+    plugins: ['autolink paste link anchor wordcount {if $mt_profile.allowimages} media image{/if}'],
 {else}
     image_advtab: true,
     toolbar: 'undo redo | cut copy paste | styleselect | bold italic underline | alignleft aligncenter alignright alignjustify | bullist numlist | anchor link unlink cmsms_linker{if $mt_profile.allowimages} | image cmsms_filebrowser{/if}',
-    plugins: ['autolink link cmsms_linker charmap anchor searchreplace wordcount code fullscreen insertdatetime {if $mt_profile.allowimages}media image cmsms_filepicker cmsms_filebrowser{/if}'],
+    plugins: ['paste autolink link cmsms_linker charmap anchor searchreplace wordcount code fullscreen insertdatetime {if $mt_profile.allowimages}media image cmsms_filepicker cmsms_filebrowser{/if}'],
 {/if}
-    paste_as_text: true,
     // callback functions
     urlconverter_callback: function(url, elm, onsave, name) {
         var self = this;
@@ -85,4 +84,5 @@ tinymce.init({
             $(document).trigger('cmsms_formchange');
         });
     },
+    paste_as_text: true,
 });
