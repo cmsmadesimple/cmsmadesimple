@@ -29,6 +29,7 @@ MicroTiny v2.0.2
 - Now use $smarty->CreateTemplate for clarity when compling the config template
 - Now explicitly assign urls so that they do not get caced by smarty.
 - Slightly tweak the default HTML content in the example tab.
+- Updated tinymce to the latest 4.2.7 version, included the 'paste' plugin, and turned on 'paste_as_text'.
 
 CMSContentManager v1.0.2
 - Fix problem with pagedefault metadata.
