@@ -87,7 +87,7 @@ $(document).ready(function(){
         if( do_locking ) $('#Edit_Content').lockManager('unlock');
     });
 
-    $('#Edit_Content').on('click','[name$=apply],[name$=submit],[name$=cancel]',function(event){
+    $('#Edit_Content').on('click','[name$=submit],[name$=cancel]',function(event){
         $('#Edit_Content :hidden').removeAttr('required');
 	if( do_locking ) $('#Edit_Content').lockManager('unlock');
     });
