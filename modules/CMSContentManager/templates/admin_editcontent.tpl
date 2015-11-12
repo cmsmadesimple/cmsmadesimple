@@ -6,7 +6,6 @@ $(document).ready(function(){
   // initialize the dirtyform stuff.
   $('#Edit_Content').dirtyForm({
     beforeUnload: function(is_dirty) {
-      console.debug('in editcontent before unload');
       if( do_locking ) $('#Edit_Content').lockManager('unlock').done(function(){
          console.log('after unlock');
       });
@@ -239,7 +238,6 @@ $(document).ready(function(){
   {foreach $tab_names as $key => $tabname}
     {tab_start name=$key}
       {if isset($tab_message_array[$key])}{$tab_message_array[$key]}{/if}
-
       {if isset($tab_contents_array[$key])}
         {foreach $tab_contents_array.$key as $fld}
         <div class="pageoverflow">

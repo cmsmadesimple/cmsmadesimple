@@ -35,6 +35,7 @@ CMSContentManager v1.0.2
 - Fix problem with pagedefault metadata.
 - Fixes for handling no listable templates for a design
 - More work with locking.  With only one exception all locking and unlocking is initiated via javascript.
+- Minor fix to copycontent
 
 DesignManager v1.1
 - Adds ability to toggle the listability of a template.

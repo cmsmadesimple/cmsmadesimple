@@ -81,6 +81,7 @@ try {
     if( $content_id == 'copy' && isset($_SESSION['__cms_copy_obj__']) ) {
         // we're copying a content object.
         $content_obj = unserialize($_SESSION['__cms_copy_obj__']);
+        $content_type = $content_obj->Type();
     }
     else if( $content_id < 1 ) {
         // creating a new content object
@@ -185,6 +186,7 @@ try {
         else if( isset($params['preview']) && $content_obj->HasPreview() ) {
             $_SESSION['__cms_preview__'] = serialize($content_obj);
             $_SESSION['__cms_preview_type__'] = $content_type;
+            debug_to_log($_SESSION,'before preview');
             exit;
         }
     }
