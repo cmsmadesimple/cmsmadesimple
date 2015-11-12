@@ -383,6 +383,7 @@ $lang['error_passwordrequired'] = "A <b>password</b> is required for SMTP authen
 $lang['error_portinvalid'] = "Port number is invalid";
 $lang['error_retrieving_file_list'] = "Error retrieving file list";
 //$lang['error_setusersettings_self'] = "Cannot set the template user to this account";
+$lang['error_sitedownmessage'] = 'It appears that your sitedown message is empty.  Please at least display some text to inform visitors that your website is down for maintenance';
 $lang['error_timedifference2'] = "A discrepency in time with the PHP environment was detected. This may cause problems when publishing i.e. news articles.";
 $lang['error_timeoutinvalid'] = "The time-out specified is invalid (must be between 1 and 3600 seconds)";
 $lang['error_type'] = "Error Type";

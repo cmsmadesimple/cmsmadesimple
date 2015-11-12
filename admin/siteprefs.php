@@ -333,7 +333,9 @@ if (isset($_POST["editsiteprefs"])) {
             else if( $prevsitedown && !$enablesitedownmessage ) {
                 audit('','Global Settings','Sitedown disabled');
             }
-            cms_siteprefs::set('enablesitedownmessage', $enablesitedownmessage);
+            $tmp = trim(strip_tags($sitedownmessage));
+            if( !$tmp ) $error .= lang('error_sitedownmessage');
+            if( !$error ) cms_siteprefs::set('enablesitedownmessage', $enablesitedownmessage);
             cms_siteprefs::set('sitedown_use_wysiwyg', $use_wysiwyg);
             cms_siteprefs::set('sitedownmessage', $sitedownmessage);
             cms_siteprefs::set('sitedownexcludes',$sitedownexcludes);
