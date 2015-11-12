@@ -44,6 +44,7 @@ DesignManager v1.1
 News v2.50.3
 - Fixes minor issue with pagination in News admin console.
 - Fix errors in the default form template.
+- Fixed URL to long issues on redirection after adding/editing article.
 
 
 Version 2.0.1.1 - Adelaide
