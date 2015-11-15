@@ -1,20 +1,18 @@
 <script type="text/javascript">
 $(document).ready(function(){
+    var do_locking = {if $css_id > 0 && isset($lock_timeout) && $lock_timeout > 0}1{else}0{/if};
     $('#form_editcss').dirtyForm({
-        onUnload: function() {
-            $('#form_editcss').lockManager('unlock').done(function(){
-	    });
+        beforeUnload: function() {
+            if( do_locking )$('#form_editcss').lockManager('unlock');
+        },
+        unloadCancel: function() {
+            if( do_locking )$('#form_editcss').lockManager('relock');
         }
     });
 
-    $(document).on('cmsms_textchange',function(event){
-        // editor textchange, set the form dirty.
-        $('#form_editcss').dirtyForm('option','dirty',true);
-    });
-
-    // initialize lock manager  {if isset($css_id) && isset($lock_timeout)}
-
-    $('#form_editcss').lockManager({
+    // initialize lock manager
+    if( do_locking ) {
+      $('#form_editcss').lockManager({
         type: 'stylesheet',
         oid: {$css_id},
         uid: {get_userid(FALSE)},
@@ -26,18 +24,52 @@ $(document).ready(function(){
         lostlock_handler: function(err) {
             // we lost the lock on this stylesheet... make sure we can't save anything.
             // and display a nice message.
+	    console.debug('lost lock handler');
             $('[name$=cancel]').fadeOut().attr('value','{$mod->Lang('cancel')}').fadeIn();
             $('#form_editcss').dirtyForm('option','dirty',false);
-            $('#submit-btn, #applybtn').attr('disabled','disabled');
-            $('#submit-btn, #applybtn').button({ 'disabled' : true });
+            $('#submitbtn, #applybtn').attr('disabled','disabled');
+            $('#submitbtn, #applybtn').button({ 'disabled' : true });
             $('.lock-warning').removeClass('hidden-item');
             alert('{$mod->Lang('msg_lostlock')|escape:'javascript'}');
         }
-    });
-    // {/if}
+      });
+    }
 
-    $(document).on('click','[name$=apply],[name$=submit],[name$=cancel]',function(){
+    $(document).on('cmsms_textchange',function(event){
+        // editor textchange, set the form dirty.
+        $('#form_editcss').dirtyForm('option','dirty',true);
+    });
+
+    $(document).on('click','[name$=apply],[name$=submit]',function(){
         $('#form_editcss').dirtyForm('option','dirty',false);
+    });
+
+    $(document).on('click', '#submitbtn', function(ev){
+       if( do_locking ) {
+	  // unlock the item, and submit the form
+	  var self = this;
+	  ev.preventDefault();
+	  var form = $(this).closest('form');
+	  $('#form_editcss').lockManager('unlock').done(function(){
+ 	     var el = $('<input type="hidden"/>');
+             el.attr('name',$(self).attr('name')).val($(self).val()).appendTo(form);
+	     form.submit();
+	  });
+       }
+    });
+
+    $(document).on('click', '#cancelbtn', function(ev){
+       if( do_locking ) {
+	  // unlock the item, and submit the form
+	  var self = this;
+	  ev.preventDefault();
+	  var form = $(this).closest('form');
+	  $('#form_editcss').lockManager('unlock').done(function(){
+ 	     var el = $('<input type="hidden"/>');
+             el.attr('name',$(self).attr('name')).val($(self).val()).appendTo(form);
+	     form.submit();
+	  });
+       }
     });
 
     $(document).on('click', '#applybtn', function(e){
@@ -47,7 +79,6 @@ $(document).ready(function(){
             data = $('#form_editcss').serializeArray();
 
         $.post(url, data, function(data,textStatus,jqXHR) {
-
             var $response = $('<aside/>').addClass('message');
             if (data.status === 'success') {
 
@@ -119,7 +150,7 @@ $(document).ready(function(){
     <div class="grid_6">
         <div class="pageoverflow">
             <p class="pageinput">
-                <input type="submit" id="submit-btn" name="{$actionid}submit" value="{$mod->Lang('submit')}"{$disable|strip}/>
+                <input type="submit" id="submitbtn" name="{$actionid}submit" value="{$mod->Lang('submit')}"{$disable|strip}/>
                 <input type="submit" id="cancelbtn" name="{$actionid}cancel" value="{$mod->Lang('cancel')}"/>
                 {if $css->get_id()}
                 <input type="submit" id="applybtn" name="{$actionid}apply" value="{$mod->Lang('apply')}"{$disable|strip}/>

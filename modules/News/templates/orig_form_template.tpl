@@ -66,15 +66,15 @@
 	      <div class="row">
 		<p class="col4"><label for="news_fld_{$field->id}">{$field->name}:</label></p>
 		<p class="col8">
-		{if $onefield->type == 'file'}
+		{if $field->type == 'file'}
 			<input id="news_fld_{$field->id}" type="file" name="{$actionid}news_customfield_{$field->id}"/>
-		{elseif $onefield->type == 'checkbox'}
+		{elseif $field->type == 'checkbox'}
 			<input id="news_fld_{$field->id}" type="checkbox" name="{$actionid}news_customfield_{$field->id}" value="1"/>
-		{elseif $onefield->type == 'textarea'}
+		{elseif $field->type == 'textarea'}
 			{$tmp1='news_fld_'|cat:$field->id}
 			{capture assign='tmp2'}{$actionid}news_customfield_{$field->id}{/capture}
 			{cms_textarea id=$tmp1 name=$tmp2 enablewysiwyg=true}
-		{elseif $onefield->type == 'textbox'}
+		{elseif $field->type == 'textbox'}
 			<input id="news_fld_{$field->id}" type="text"" name="{$actionid}news_customfield_{$field->id}" maxlength="{$field->max_length}"/>
                 {/if}
 		</p>

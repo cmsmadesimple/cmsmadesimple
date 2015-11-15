@@ -66,6 +66,10 @@ RewriteRule ^(.+)$ index.php?page=$1 [QSA]
   Order allow,deny
   Deny from all
 </Files>
+<Files ~ "\.log$">
+  Order allow,deny
+  Deny from all
+</Files>
 <Files ~ "config\.php">
   Order allow,deny
   Deny from all
@@ -75,7 +79,7 @@ RewriteRule ^(.+)$ index.php?page=$1 [QSA]
   Deny from all
 </Files>
 
-RedirectMatch 403 ^.*/lib/.*\.php$$
+RedirectMatch 403 ^.*/lib/.*\.php$
 RedirectMatch 403 ^.*/tmp/.*\.php$
 RedirectMatch 403 ^.*/modules/.*\.php$
 RedirectMatch 403 ^.*/uploads/.*\.php$

@@ -17,7 +17,10 @@
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 if( !isset($gCms) ) exit;
-check_login(); // admin only.... but any admin
+if( !check_login(FALSE) ) exit; // admin only.... but any admin
+
+$handlers = ob_list_handlers();
+for ($cnt = 0; $cnt < sizeof($handlers); $cnt++) { ob_end_clean(); }
 
 $out = null;
 $term = trim(strip_tags(get_parameter_value($_REQUEST,'term')));

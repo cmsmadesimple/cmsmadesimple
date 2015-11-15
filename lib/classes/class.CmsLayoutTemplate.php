@@ -36,7 +36,7 @@ class CmsLayoutTemplate
 	/**
 	 * @ignore
 	 */
-	private $_data = array();
+	private $_data = array('listable'=>true);
 
 	/**
 	 * @ignore
@@ -74,6 +74,7 @@ class CmsLayoutTemplate
 	public function __clone()
 	{
 		if( isset($this->_data['id']) ) unset($this->_data['id']);
+        $this->_data['type_dflt'] = false;
 		$this->_dirty = TRUE;
 	}
 
@@ -518,6 +519,39 @@ class CmsLayoutTemplate
 		return FALSE;
 	}
 
+    /**
+     * Get wether this template is listable in public template lists.
+     *
+     * @return bool
+     * @since 2.1
+     */
+    public function get_listable()
+    {
+        return (bool) $this->_data['listable'];
+    }
+
+    /**
+     * Get wether this template is listable in public template lists.
+     *
+     * @return bool
+     * @since 2.1
+     */
+    public function is_listable()
+    {
+        return $this->get_listable();
+    }
+
+    /**
+     * Get wether this template is listable in public template lists.
+     *
+     * @return bool
+     * @since 2.1
+     */
+    public function set_listable($flag)
+    {
+        $this->_data['listable'] = cms_to_bool($flag);
+    }
+
 	/**
 	 * Process the template through smarty
 	 *
@@ -570,13 +604,13 @@ class CmsLayoutTemplate
 		$this->validate();
 
 		$query = 'UPDATE '.CMS_DB_PREFIX.self::TABLENAME.'
-              SET name = ?, content = ?, description = ?, type_id = ?, type_dflt = ?, category_id = ?, owner_id = ?, modified = ?
+              SET name = ?, content = ?, description = ?, type_id = ?, type_dflt = ?, category_id = ?, owner_id = ?, listable = ?, modified = ?
               WHERE id = ?';
 		$db = CmsApp::get_instance()->GetDb();
 		$dbr = $db->Execute($query,
                             array($this->get_name(),$this->get_content(),$this->get_description(),
                                   $this->get_type_id(),$this->get_type_dflt(),$this->get_category_id(),
-                                  $this->get_owner_id(),time(),
+                                  $this->get_owner_id(),$this->get_listable(),time(),
                                   $this->get_id()));
 		if( !$dbr ) throw new CmsSQLErrorException($db->sql.' -- '.$db->ErrorMsg());
 
@@ -626,12 +660,12 @@ class CmsLayoutTemplate
 		// insert the record
 		$query = 'INSERT INTO '.CMS_DB_PREFIX.self::TABLENAME.'
               (name,content,description,type_id,type_dflt,category_id,owner_id,
-               created,modified) VALUES (?,?,?,?,?,?,?,?,?)';
+               listable,created,modified) VALUES (?,?,?,?,?,?,?,?,?,?)';
 		$db = CmsApp::get_instance()->GetDb();
 		$dbr = $db->Execute($query,
 							array($this->get_name(),$this->get_content(),$this->get_description(),
 								  $this->get_type_id(),$this->get_type_dflt(),$this->get_category_id(),
-								  $this->get_owner_id(),time(),time()));
+								  $this->get_owner_id(),$this->get_listable(),time(),time()));
 		if( !$dbr ) throw new CmsSQLErrorException($db->sql.' -- '.$db->ErrorMsg());
 		$this->_data['id'] = $db->Insert_ID();
 

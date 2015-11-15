@@ -1433,7 +1433,6 @@ abstract class ContentBase
                                      (int) $this->mId
                                      ));
 
-        debug_display($db->sql);
         /*
 		if ($this->mOldParentId != $this->mParentId) {
 			// Fix the item_order if necessary
@@ -1763,7 +1762,7 @@ abstract class ContentBase
 			// the alias param may not exist (depending upon permissions)
 			// this method will set the alias to the supplied value if it is set
 			// or auto-generate one, when adding a new page.
-			$this->SetAlias($tmp);
+            if( !$this->Alias() || $tmp ) $this->SetAlias($tmp);
 		}
 
 		// target

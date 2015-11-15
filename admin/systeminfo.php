@@ -169,10 +169,12 @@ if( defined('E_DEPRECATED') ) {
     $tmp[0]['E_DEPRECATED'] =  testIntegerMask(0,lang('test_error_edeprecated'), 'error_reporting',E_DEPRECATED,lang('test_edeprecated_failed'),true,true,false);
   }
 
-$tmp[0]['test_file_timedifference'] = _testTimeSettings1();
-$tmp[0]['test_db_timedifference'] = _testTimeSettings2();
+$_tmp = _testTimeSettings1();
+$tmp[0]['test_file_timedifference'] = ($_tmp->value) ? testDummy('test_file_timedifference',lang('msg_notimedifference2'),'green') : testDummy('test_file_timedifference',lang('error_timedifference2'),'red');
+$_tmp = _testTimeSettings2();
+$tmp[0]['test_db_timedifference'] = ($_tmp->value) ? testDummy('test_db_timedifference',lang('msg_notimedifference2'),'green') : testDummy('test_file_timedifference',lang('error_timedifference2'),'red');
 
-$tmp[1]['create_dir_and_file'] = testCreateDirAndFile(0, '', '');
+$tmp[0]['create_dir_and_file'] = testCreateDirAndFile(0, '', '');
 
 list($minimum, $recommended) = getTestValues('memory_limit');
 $tmp[0]['memory_limit'] = testRange(0, 'memory_limit', 'memory_limit', '', $minimum, $recommended, true, true, -1, 'memory_limit_range');
@@ -180,7 +182,7 @@ $tmp[0]['memory_limit'] = testRange(0, 'memory_limit', 'memory_limit', '', $mini
 list($minimum, $recommended) = getTestValues('max_execution_time');
 $tmp[0]['max_execution_time'] = testRange(0, 'max_execution_time', 'max_execution_time', '', $minimum, $recommended, true, false, 0, 'max_execution_time_range');
 
-$tmp[1]['register_globals'] = testBoolean(0, lang('register_globals'), 'register_globals', '', true, true, 'register_globals_enabled');
+$tmp[0]['register_globals'] = testBoolean(0, lang('register_globals'), 'register_globals', '', true, true, 'register_globals_enabled');
 
 $ob = ini_get('output_buffering');
 if( strtolower($ob) == 'off' || strtolower($ob) == 'on' )
@@ -192,11 +194,11 @@ else
     $tmp[0]['output_buffering'] = testInteger(0, lang('output_buffering'), 'output_buffering', '', true, true, 'output_buffering_disabled');
   }
 
-$tmp[1]['disable_functions'] = testString(0, lang('disable_functions'), 'disable_functions', '', true, 'green', 'yellow', 'disable_functions_not_empty');
+$tmp[0]['disable_functions'] = testString(0, lang('disable_functions'), 'disable_functions', '', true, 'green', 'yellow', 'disable_functions_not_empty');
 
-$tmp[1]['open_basedir'] = testString(0, lang('open_basedir'), $open_basedir, '', false, 'green', 'yellow', 'open_basedir_enabled');
+$tmp[0]['open_basedir'] = testString(0, lang('open_basedir'), $open_basedir, '', false, 'green', 'yellow', 'open_basedir_enabled');
 
-$tmp[1]['test_remote_url'] = testRemoteFile(0, 'test_remote_url', '', lang('test_remote_url_failed'));
+$tmp[0]['test_remote_url'] = testRemoteFile(0, 'test_remote_url', '', lang('test_remote_url_failed'));
 
 $tmp[0]['file_uploads'] = testBoolean(0, 'file_uploads', 'file_uploads', '', true, false, 'Function_file_uploads_disabled');
 
@@ -229,7 +231,7 @@ $tmp[0]['xmlreader_class'] = testBoolean(1,'xmlreader_class',class_exists('XMLRe
 $_log_errors_max_len = (ini_get('log_errors_max_len')) ? ini_get('log_errors_max_len').'0' : '99';
 ini_set('log_errors_max_len', $_log_errors_max_len);
 $result = (ini_get('log_errors_max_len') == $_log_errors_max_len);
-$tmp[1]['check_ini_set'] = testBoolean(0, 'check_ini_set', $result, lang('check_ini_set_off'), false, false, 'ini_set_disabled');
+$tmp[0]['check_ini_set'] = testBoolean(0, 'check_ini_set', $result, lang('check_ini_set_off'), false, false, 'ini_set_disabled');
 
 $hascurl = 0;
 $curlgood = 0;
@@ -248,10 +250,10 @@ if( in_array('curl',get_loaded_extensions()) ) {
     }
 }
 if( !$hascurl ) {
-    $tmp[1]['curl'] = testDummy('curl',lang('off'),'yellow','','curl_not_available','');
+    $tmp[0]['curl'] = testDummy('curl',lang('off'),'yellow','','curl_not_available','');
 }
 else {
-    $tmp[1]['curl'] = testDummy('curl',lang('on'),'green');
+    $tmp[0]['curl'] = testDummy('curl',lang('on'),'green');
     if( $curlgood ) {
         $tmp[1]['curlversion'] = testDummy('curlversion',
                                            lang('curl_versionstr',$curl_version,$min_curlversion),
@@ -271,9 +273,9 @@ $smarty->assign('php_information', $tmp);
 
 $tmp = array(0=>array(), 1=>array());
 
-$tmp[1]['server_software'] = testDummy('', $_SERVER['SERVER_SOFTWARE'], '');
+$tmp[0]['server_software'] = testDummy('', $_SERVER['SERVER_SOFTWARE'], '');
 $tmp[0]['server_api'] = testDummy('', PHP_SAPI, '');
-$tmp[1]['server_os'] = testDummy('', PHP_OS . ' ' . php_uname('r') .' '. lang('on') .' '. php_uname('m'), '');
+$tmp[0]['server_os'] = testDummy('', PHP_OS . ' ' . php_uname('r') .' '. lang('on') .' '. php_uname('m'), '');
 
 switch($config['dbms']) { //workaround: ServerInfo() is unsupported in adodblite
  case 'mysqli':
@@ -310,17 +312,6 @@ switch($config['dbms']) { //workaround: ServerInfo() is unsupported in adodblite
    break;
 }
 
-{
-  $fn = TMP_CACHE_LOCATION.'/test_time.dat';
-  @touch($fn);
-  $mtime = filemtime($fn);
-  @unlink($fn);
-  if( abs($mtime - time()) > 3 ) {
-    $tmp[0]['server_time_diff'] = testDummy('time_diff',lang('error_timedifference'),'red');
-  } else {
-    $tmp[0]['server_time_diff'] = testDummy('time_diff',lang('msg_notimedifference'),'green');
-  }
-}
 
 $smarty->assign('count_server_info', count($tmp[0]));
 $smarty->assign('server_info', $tmp);
@@ -329,26 +320,26 @@ $smarty->assign('server_info', $tmp);
 $tmp = array(0=>array(), 1=>array());
 
 $dir = $config['root_path'] . DIRECTORY_SEPARATOR . 'tmp';
-$tmp[1]['tmp'] = testDirWrite(0, $dir, $dir);
+$tmp[0]['tmp'] = testDirWrite(0, $dir, $dir);
 
 $dir = TMP_CACHE_LOCATION;
-$tmp[1]['tmp_cache'] = testDirWrite(0, $dir, $dir);
+$tmp[0]['tmp_cache'] = testDirWrite(0, $dir, $dir);
 
 $dir = TMP_TEMPLATES_C_LOCATION;
-$tmp[1]['templates_c'] = testDirWrite(0, $dir, $dir);
+$tmp[0]['templates_c'] = testDirWrite(0, $dir, $dir);
 
 $dir = $config['root_path'] . DIRECTORY_SEPARATOR . 'modules';
-$tmp[1]['modules'] = testDirWrite(0, $dir, $dir);
+$tmp[0]['modules'] = testDirWrite(0, $dir, $dir);
 
 $dir = $config['uploads_path'];
-$tmp[1]['uploads'] = testDirWrite(0, $dir, $dir);
+$tmp[0]['uploads'] = testDirWrite(0, $dir, $dir);
 
 $global_umask = get_site_preference('global_umask', '022');
-$tmp[1][lang('global_umask')] = testUmask(0, lang('global_umask'), $global_umask);
+$tmp[0][lang('global_umask')] = testUmask(0, lang('global_umask'), $global_umask);
 
 $result = is_writable(CONFIG_FILE_LOCATION);
 #$tmp[1]['config_file'] = testFileWritable(0, lang('config_writable'), CONFIG_FILE_LOCATION, '');
-$tmp[1]['config_file'] = testDummy('', substr(sprintf('%o', fileperms(CONFIG_FILE_LOCATION)), -4), (($result) ? 'red' : 'green'), (($result) ? lang('config_writable') : ''));
+$tmp[0]['config_file'] = testDummy('', substr(sprintf('%o', fileperms(CONFIG_FILE_LOCATION)), -4), (($result) ? 'red' : 'green'), (($result) ? lang('config_writable') : ''));
 
 $smarty->assign('count_permission_info', count($tmp[0]));
 $smarty->assign('permission_info', $tmp);

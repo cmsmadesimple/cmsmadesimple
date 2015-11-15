@@ -14,13 +14,13 @@ tinymce.init({
         statusbar : {mt_jsbool($mt_profile.showstatusbar)},
         menubar : {mt_jsbool($mt_profile.menubar)},
         filepicker_title : '{$MT->Lang('filepickertitle')}',
-        filepicker_url : '{cms_action_url module='MicroTiny' action='filepicker' forjs=1}&showtemplate=false&field=',
+        filepicker_url : '{$filepicker_url}&field=',
         filebrowser_title : '{$MT->Lang('title_cmsms_filebrowser')}',
         linker_text : '{$MT->Lang('cmsms_linker')}',
         linker_title : '{$MT->Lang('title_cmsms_linker')}',
         linker_image : '{$MT->GetModuleURLPath()}/lib/images/cmsmslink.gif',
-        linker_url : '{cms_action_url module='MicroTiny' action=linker forjs=1}&showtemplate=false',
-        linker_autocomplete_url : '{cms_action_url action='ajax_getpages' module='MicroTiny' forjs=1}&showtemplate=false',
+        linker_url : '{$linker_url}',
+        linker_autocomplete_url : '{$getpages_url}',
         prompt_page : '{$MT->Lang('prompt_linker')}',
         prompt_page_info : '{$MT->Lang('info_linker_autocomplete')}',
         prompt_alias : '{$MT->Lang('prompt_selectedalias')}',
@@ -49,11 +49,11 @@ tinymce.init({
 {/if}
 {if $isfrontend}
     toolbar: 'undo | bold italic underline | alignleft aligncenter alignright alignjustify | bullist numlist | link{if $mt_profile.allowimages} | image{/if}',
-    plugins: ['autolink link anchor wordcount {if $mt_profile.allowimages} media image{/if}'],
+    plugins: ['autolink paste link anchor wordcount {if $mt_profile.allowimages} media image{/if}'],
 {else}
     image_advtab: true,
     toolbar: 'undo redo | cut copy paste | styleselect | bold italic underline | alignleft aligncenter alignright alignjustify | bullist numlist | anchor link unlink cmsms_linker{if $mt_profile.allowimages} | image cmsms_filebrowser{/if}',
-    plugins: ['autolink link cmsms_linker charmap anchor searchreplace wordcount code fullscreen insertdatetime {if $mt_profile.allowimages}media image cmsms_filepicker cmsms_filebrowser{/if}'],
+    plugins: ['paste autolink link cmsms_linker charmap anchor searchreplace wordcount code fullscreen insertdatetime {if $mt_profile.allowimages}media image cmsms_filepicker cmsms_filebrowser{/if}'],
 {/if}
     // callback functions
     urlconverter_callback: function(url, elm, onsave, name) {
@@ -83,5 +83,6 @@ tinymce.init({
         editor.on('change', function(e) {
             $(document).trigger('cmsms_formchange');
         });
-    }
+    },
+    paste_as_text: true,
 });

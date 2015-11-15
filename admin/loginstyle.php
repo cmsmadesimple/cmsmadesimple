@@ -19,6 +19,7 @@
 #$Id: login.php 4251 2007-11-15 21:34:40Z calguy1000 $
 
 $CMS_ADMIN_PAGE=1;
+$CMS_LOGIN_PAGE=1;
 
 require_once("../lib/include.php");
 require_once("../lib/classes/class.user.inc.php");

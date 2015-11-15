@@ -51,15 +51,6 @@ try {
     if( isset($params['content_id']) ) $content_id = (int)$params['content_id'];
 
     if( isset($params['cancel']) ) {
-        try {
-            if( $content_id ) {
-                $lock_id = CmsLockOperations::is_locked('content',$content_id);
-                CmsLockOperations::unlock($lock_id,'content',$content_id);
-            }
-        }
-        catch( Exception $e ) {
-            // do nothing.
-        }
         unset($_SESSION['__cms_copy_obj__']);
         $this->SetMessage($this->Lang('msg_cancelled'));
         $this->RedirectToAdminTab();
@@ -90,6 +81,7 @@ try {
     if( $content_id == 'copy' && isset($_SESSION['__cms_copy_obj__']) ) {
         // we're copying a content object.
         $content_obj = unserialize($_SESSION['__cms_copy_obj__']);
+        $content_type = $content_obj->Type();
     }
     else if( $content_id < 1 ) {
         // creating a new content object
@@ -177,21 +169,10 @@ try {
         }
         else if( isset($params['submit']) || isset($params['apply']) ) {
             $content_obj->SetLastModifiedBy(get_userid());
-            debug_display($content_obj->id());
             $content_obj->Save();
             unset($_SESSION['__cms_copy_obj__']);
             audit($content_obj->Id(),'Content Item: '.$content_obj->Name(),' Edited');
             if( isset($params['submit']) ) {
-                try {
-                    if( $content_id ) {
-                        // unconditionally unlock, even if locking is not enabled.
-                        $lock_id = CmsLockOperations::is_locked('content',$content_id);
-                        CmsLockOperations::unlock($lock_id,'content',$content_id);
-                    }
-                }
-                catch( Exception $e ) {
-                    // do nothing.
-                }
                 $this->SetMessage($this->Lang('msg_editpage_success'));
                 $this->RedirectToAdminTab();
             }
@@ -205,22 +186,13 @@ try {
         else if( isset($params['preview']) && $content_obj->HasPreview() ) {
             $_SESSION['__cms_preview__'] = serialize($content_obj);
             $_SESSION['__cms_preview_type__'] = $content_type;
+            debug_to_log($_SESSION,'before preview');
             exit;
         }
     }
 }
 catch( CmsEditContentException $e ) {
     if( isset($params['submit']) ) {
-        try {
-            if( $content_id ) {
-                // unconditionally unlock, even if locking is not enabled.
-                $lock_id = CmsLockOperations::is_locked('content',$content_id);
-                CmsLockOperations::unlock($lock_id,'content',$content_id);
-            }
-        }
-        catch( Exception $e ) {
-            // do nothing.
-        }
         $this->SetError($e->getMessage());
         $this->RedirectToAdminTab();
     };
@@ -255,10 +227,6 @@ if( $content_id && CmsContentManagerUtils::locking_enabled() ) {
             if( !$lock->expired() ) throw new CmsLockException('CMSEX_L010');
             CmsLockOperations::unlock($lock_id,'content',$content_id);
         }
-        // get a new lock.
-        $lock = new CmsLock('content',$content_id, (int) $this->GetPreference('lock_timeout'));
-        $lock->save();
-        $smarty->assign('lock',$lock);
     }
     catch( CmsException $e ) {
         $this->SetError($e->getMessage());
