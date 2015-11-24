@@ -3,17 +3,17 @@
 class microtiny_profile implements ArrayAccess
 {
   private static $_keys = array('menubar','allowimages','showstatusbar','allowresize','formats','name','label','system',
-				'dfltstylesheet','allowcssoverride');
+                                'dfltstylesheet','allowcssoverride','allowtables');
   private static $_module;
   private $_data = array();
 
   public function __construct($data = null)
   {
-    if( is_array($data) && count($data) ) {
-      foreach( $data as $key => $value ) {
-	$this[$key] = $value;
+      if( is_array($data) && count($data) ) {
+          foreach( $data as $key => $value ) {
+              $this[$key] = $value;
+          }
       }
-    }
   }
 
   public function OffsetGet($key)
@@ -21,6 +21,7 @@ class microtiny_profile implements ArrayAccess
     switch( $key ) {
     case 'menubar':
     case 'allowimages':
+    case 'allowtables':
     case 'showstatusbar':
     case 'allowresize':
     case 'allowcssoverride':
@@ -50,6 +51,7 @@ class microtiny_profile implements ArrayAccess
   {
     switch( $key ) {
     case 'menubar':
+    case 'allowtables':
     case 'allowimages':
     case 'showstatusbar':
     case 'allowresize':
@@ -78,6 +80,7 @@ class microtiny_profile implements ArrayAccess
   {
     switch( $key ) {
     case 'menubar':
+    case 'allowtables':
     case 'allowimages':
     case 'showstatusbar':
     case 'allowresize':
@@ -98,6 +101,7 @@ class microtiny_profile implements ArrayAccess
   {
     switch( $key ) {
     case 'menubar':
+    case 'allowtables':
     case 'allowimages':
     case 'showstatusbar':
     case 'allowresize':
@@ -163,7 +167,7 @@ class microtiny_profile implements ArrayAccess
     $data = self::_get_module()->GetPreference('profile_'.$name);
     if( !$data ) throw new CmsInvalidDataException('Unknown microtiny profile '.$name);
 
-    $obj = new microtiny_profile;
+    $obj = new self();
     $obj->_data = unserialize($data);
     return $obj;
   }

@@ -82,7 +82,7 @@ $lang['help'] = <<<EOT
       <p>The intent and purpose of this module is to provide a WYSIWYG-like environment where editors can insert and edit content within specific blocks with limited formatting capabilities that will not interfere with, or override the styling of the page template.  It is not intended and for will not be supported as a general HTML editor or layout manipulator.</p>
       <p>Website developers should understand the points above, assume that content editors can and WILL be editing within a WYSIWYG area and ensure that only simple content is there.  If advanced layout techniques are needed for a specific area, then developers should modify the appropriate templates so that the restricted functionality editor will work properly.</p>
     </li>
-  
+
     <li>Separation of Logic, Functionality and Design from Content.
       <p>This editor is built with the assumption that content for a specific area of a page (or a blog article, news article, or product description, ...) is data.  The data is styled by the appropriate templates, and should not be mixed with design elements, or functionality of the website.</p>
       <p>As a simple example.  If you are insisting that editors use certain classes for images, layout their images in a certain manner, or insert block elements such as &lt;div&gt; or &lt;section&gt; into their content for proper styling then this is not the editor module for you.  Such styling concerns should be taken care of in stylesheets and templates, such that your editor can enter text without having to remember rules.</p>
@@ -171,6 +171,7 @@ $lang['msg_cancelled'] = 'Operation cancelled';
 $lang['mthelp_allowcssoverride'] = 'If enabled, then any code that initializes a MicroTiny WYSIWYG area will be able to specify the name of a stylesheet to use instead of the default stylesheet specified above.';
 $lang['mthelp_dfltstylesheet'] = 'Associate a stylesheet with editors using this profile.  This allows the WYSIWYG editor to appear similar to the website appearance.';
 $lang['mthelp_profileallowimages'] = 'Allow the editor to embed images and videos into the text area.  For very tightly controlled designs the content editors may only be able to select images, or videos for specific areas of a web page.';
+$lang['mthelp_profileallowtables'] = 'Allow the editor to embed and manipulate tables for tabular data.  Note:  This should not be used for controlling page layout, but only for tabular data.';
 $lang['mthelp_profilelabel'] = 'A description for this profile.  The description cannot be edited for system profiles.';
 $lang['mthelp_profilename'] = 'The name for this profile.  The name of system profiles cannot be edited.';
 $lang['mthelp_profilemenubar'] = 'Indicates if the menubar should be enabled in the viewable profiles.  The menubar typically has more options than the toolbar';
@@ -194,6 +195,7 @@ $lang['profile_admin'] = 'Admin Editors';
 $lang['profile_allowcssoverride'] = 'Allow blocks to override the selected stylesheet';
 $lang['profile_allowimages'] = 'Allow images';
 $lang['profile_allowresize'] = 'Allow resize';
+$lang['profile_allowtables'] = 'Allow tables';
 $lang['profile_dfltstylesheet'] = 'Stylesheet for editor';
 $lang['profile_frontend'] = 'Frontend Editors';
 $lang['profile_label'] = 'Label';
