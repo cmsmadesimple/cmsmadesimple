@@ -78,7 +78,7 @@ class User
 	/**
 	 * Generic constructor.  Runs the SetInitialValues fuction.
 	 */
-	function User()
+	function __construct()
 	{
 		$this->SetInitialValues();
 	}
