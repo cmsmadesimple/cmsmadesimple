@@ -6,7 +6,7 @@ class SearchItemCollection
   var $_ary;
   var $maxweight;
 
-  function SearchItemCollection()
+  function __construct()
   {
     $this->_ary = array();
     $this->maxweight = 1;
