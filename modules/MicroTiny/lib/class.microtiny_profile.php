@@ -129,15 +129,15 @@ class microtiny_profile implements ArrayAccess
 
   public function delete()
   {
-    if( $this['name'] == '' ) continue;
-    self::_get_module()->RemovePreference('profile_'.$this['name']);
-    unset($this->_data['name']);
+      if( $this['name'] == '' ) return;
+      self::_get_module()->RemovePreference('profile_'.$this['name']);
+      unset($this->_data['name']);
   }
 
   private static function &_load_from_data($data)
   {
     if( !is_array($data) || !count($data) ) throw new CmsInvalidDataException('Invalid data passed to '.__CLASS__.'::'.__METHOD__);
-    
+
     $obj = new microtiny_profile;
     foreach( $data as $key => $value ) {
       if( !in_array($key,self::$_keys) ) throw new CmsInvalidDataException('Invalid key '.$key.' for data in .'.__CLASS__);
