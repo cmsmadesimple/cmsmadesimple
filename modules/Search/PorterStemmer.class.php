@@ -33,7 +33,7 @@
         */
         var $regex_vowel;
 
-	function PorterStemmer()
+	function __construct()
 	{
 		$this->regex_consonant = '(?:[bcdfghjklmnpqrstvwxz]|(?<=[aeiou])y|^y)';
 		$this->regex_vowel = '(?:[aeiou]|(?<![aeiou])y)';
