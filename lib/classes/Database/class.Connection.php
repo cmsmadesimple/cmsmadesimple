@@ -130,7 +130,7 @@ namespace CMSMS\Database {
                 $data = array();
                 $key = null;
                 while (!$result->EOF) {
-                    $row = $result->fields();
+                    $row = $result->Fields();
                     if( !$key ) $key = array_keys($row)[0];
                     $data[] = ($trim) ? trim($row[$key]) : $row[$key];
                     $result->MoveNext();
@@ -142,13 +142,13 @@ namespace CMSMS\Database {
         public function GetRow($sql, $inputarr = null)
         {
             $rs = $this->SelectLimit( $sql, 1, -1, $inputarr );
-            return $rs->fields();
+            return $rs->Fields();
         }
 
         public function GetOne($sql, $inputarr = null)
         {
             $rs =  $this->SelectLimit( $sql, 1, -1, $inputarr );
-            $res = $rs->fields();
+            $res = $rs->Fields();
             if( !$res ) return;
             $key = array_keys($res)[0];
             return $res[$key];

@@ -1225,6 +1225,9 @@ function cms_get_jquery($exclude = '',$ssl = null,$cdn = false,$append = '',$cus
 function setup_session($cachable = FALSE)
 {
     global $CMS_INSTALL_PAGE, $CMS_ADMIN_PAGE;
+    static $_setup_already = false;
+    if( $_setup_already ) return;
+
     $_f = $_l = null;
     if( headers_sent( $_f, $_l) ) throw new \LogicException("Attempt to set headers, but headers were already sent at: $_f::$_l");
 
@@ -1265,6 +1268,7 @@ function setup_session($cachable = FALSE)
         }
     }
     if(!@session_id()) session_start();
+    $_setup_already = true;
 }
 
 ?>

@@ -23,6 +23,8 @@ Core - General
 - Improvements to the system information page, particularly the bbcode output.
 - cms_init_editor, form_start, and cms_action_url plugins are no longer cachable.
 - Adds the 'adminonly' option to the {content}, {content_image}, and {content_module} tags to allow only members of the 'Admin' group to manipulate the values of that block.
+- Add a trivial check to the sitedown message to make sure that it is not empty.
+- Minor fixes for PHP 7
 
 MicroTiny v2.0.2
 - Now add page hierarchy to autocomplete text when using the linker.
@@ -30,11 +32,13 @@ MicroTiny v2.0.2
 - Now explicitly assign urls so that they do not get caced by smarty.
 - Slightly tweak the default HTML content in the example tab.
 - Updated tinymce to the latest 4.2.7 version, included the 'paste' plugin, and turned on 'paste_as_text'.
+- Added the ability to enable the table plugin, now distribute the table plugin
 
 CMSContentManager v1.0.2
 - Fix problem with pagedefault metadata.
 - Fixes for handling no listable templates for a design
 - More work with locking.  With only one exception all locking and unlocking is initiated via javascript.
+- Minor fix to copycontent
 
 DesignManager v1.1
 - Adds ability to toggle the listability of a template.
@@ -44,7 +48,10 @@ DesignManager v1.1
 News v2.50.3
 - Fixes minor issue with pagination in News admin console.
 - Fix errors in the default form template.
+- Fixed URL to long issues on redirection after adding/editing article.
 
+Search v1.50.2
+- Minor PHP7 fixes.
 
 Version 2.0.1.1 - Adelaide
 ----------------------------------
@@ -73,7 +80,7 @@ Core - General
 - Adds a globally available cms_busy() JavaScript function for the Admin.
 - Fix problem with html entitites in email addresses in user settings.
 - Fix problem with {content cssname=string} and quotes.
-- Chaged cmsms plugins to use $smarty->getTemplateVars() instead of $smarty->get_template_vars() because of scope issues.
+- Changed cmsms plugins to use $smarty->getTemplateVars() instead of $smarty->get_template_vars() because of scope issues.
 - Minor fix to {form_start} when not used in a module.
 - Improved error handling for cms_stylesheet.  Now will generate a message in the Admin log, and an html comment on error.
 

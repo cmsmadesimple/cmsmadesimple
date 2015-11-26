@@ -27,8 +27,8 @@ $(document).ready(function(){
 	    console.debug('lost lock handler');
             $('[name$=cancel]').fadeOut().attr('value','{$mod->Lang('cancel')}').fadeIn();
             $('#form_editcss').dirtyForm('option','dirty',false);
-            $('#submit-btn, #applybtn').attr('disabled','disabled');
-            $('#submit-btn, #applybtn').button({ 'disabled' : true });
+            $('#submitbtn, #applybtn').attr('disabled','disabled');
+            $('#submitbtn, #applybtn').button({ 'disabled' : true });
             $('.lock-warning').removeClass('hidden-item');
             alert('{$mod->Lang('msg_lostlock')|escape:'javascript'}');
         }
@@ -40,8 +40,36 @@ $(document).ready(function(){
         $('#form_editcss').dirtyForm('option','dirty',true);
     });
 
-    $(document).on('click','[name$=apply],[name$=submit],[name$=cancel]',function(){
+    $(document).on('click','[name$=apply],[name$=submit]',function(){
         $('#form_editcss').dirtyForm('option','dirty',false);
+    });
+
+    $(document).on('click', '#submitbtn', function(ev){
+       if( do_locking ) {
+	  // unlock the item, and submit the form
+	  var self = this;
+	  ev.preventDefault();
+	  var form = $(this).closest('form');
+	  $('#form_editcss').lockManager('unlock').done(function(){
+ 	     var el = $('<input type="hidden"/>');
+             el.attr('name',$(self).attr('name')).val($(self).val()).appendTo(form);
+	     form.submit();
+	  });
+       }
+    });
+
+    $(document).on('click', '#cancelbtn', function(ev){
+       if( do_locking ) {
+	  // unlock the item, and submit the form
+	  var self = this;
+	  ev.preventDefault();
+	  var form = $(this).closest('form');
+	  $('#form_editcss').lockManager('unlock').done(function(){
+ 	     var el = $('<input type="hidden"/>');
+             el.attr('name',$(self).attr('name')).val($(self).val()).appendTo(form);
+	     form.submit();
+	  });
+       }
     });
 
     $(document).on('click', '#applybtn', function(e){
@@ -51,7 +79,6 @@ $(document).ready(function(){
             data = $('#form_editcss').serializeArray();
 
         $.post(url, data, function(data,textStatus,jqXHR) {
-
             var $response = $('<aside/>').addClass('message');
             if (data.status === 'success') {
 
@@ -123,7 +150,7 @@ $(document).ready(function(){
     <div class="grid_6">
         <div class="pageoverflow">
             <p class="pageinput">
-                <input type="submit" id="submit-btn" name="{$actionid}submit" value="{$mod->Lang('submit')}"{$disable|strip}/>
+                <input type="submit" id="submitbtn" name="{$actionid}submit" value="{$mod->Lang('submit')}"{$disable|strip}/>
                 <input type="submit" id="cancelbtn" name="{$actionid}cancel" value="{$mod->Lang('cancel')}"/>
                 {if $css->get_id()}
                 <input type="submit" id="applybtn" name="{$actionid}apply" value="{$mod->Lang('apply')}"{$disable|strip}/>

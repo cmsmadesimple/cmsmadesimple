@@ -270,7 +270,7 @@ if (isset($params['submit']) || isset($params['apply'])) {
     if (!isset($params['apply']) && !$error) {
         // redirect out of here.
 		$this->SetMessage($this->Lang('articlesubmitted'));
-        $this->Redirect($id, 'defaultadmin', $returnid, $params);
+        $this->Redirect($id, 'defaultadmin', $returnid);
         return;
     }
 
@@ -457,7 +457,7 @@ if ($author_id > 0) {
 }
 
 $smarty->assign('formid', $id);
-$smarty->assign('startform', $this->CreateFormStart($id, 'editarticle', $returnid, 'post', 'multipart/form-data'));
+$smarty->assign('startform', $this->CreateFormStart($id, 'editarticle', $returnid, 'POST', 'multipart/form-data'));
 $smarty->assign('endform', $this->CreateFormEnd());
 $smarty->assign('hide_summary_field', $this->GetPreference('hide_summary_field', '0'));
 $smarty->assign('authortext', $this->Lang('author'));

@@ -78,43 +78,43 @@ function search_StemPhrase(&$module,$phrase)
 
 function search_AddWords(&$obj, $module = 'Search', $id = -1, $attr = '', $content = '', $expires = NULL)
 {
-  $obj->DeleteWords($module, $id, $attr);
-  $db = $obj->GetDb();
+    $obj->DeleteWords($module, $id, $attr);
+    $db = $obj->GetDb();
 
-  $non_indexable = strpos($content, NON_INDEXABLE_CONTENT);
-  if( $non_indexable !== FALSE ) return;
+    $non_indexable = strpos($content, NON_INDEXABLE_CONTENT);
+    if( $non_indexable !== FALSE ) return;
 
-  @$obj->SendEvent('SearchItemAdded', array($module, $id, $attr, &$content, $expires));
+    @$obj->SendEvent('SearchItemAdded', array($module, $id, $attr, &$content, $expires));
 
-  if ($content != "") {
-      //Clean up the content
-      $stemmed_words = $obj->StemPhrase($content);
-      $words = array_count_values($stemmed_words);
+    if ($content != "") {
+        //Clean up the content
+        $stemmed_words = $obj->StemPhrase($content);
+        $words = array_count_values($stemmed_words);
 
-      $q = "SELECT id FROM ".CMS_DB_PREFIX.'module_search_items WHERE module_name=?';
-      $parms = array($module);
+        $q = "SELECT id FROM ".CMS_DB_PREFIX.'module_search_items WHERE module_name=?';
+        $parms = array($module);
 
-      if( $id != -1 ) {
-	$q .= " AND content_id=?";
-	$parms[] = $id;
-      }
-      if( $attr != '' ) {
-	$q .= " AND extra_attr=?";
-	$parms[] = $attr;
-      }
-      $dbresult = $db->Execute($q, $parms);
+        if( $id != -1 ) {
+            $q .= " AND content_id=?";
+            $parms[] = $id;
+        }
+        if( $attr != '' ) {
+            $q .= " AND extra_attr=?";
+            $parms[] = $attr;
+        }
+        $dbresult = $db->Execute($q, $parms);
 
-      if ($dbresult && $dbresult->RecordCount() > 0 && $row = $dbresult->FetchRow()) {
-	$itemid = $row['id'];
-      }
-      else {
-	$itemid = $db->GenID(CMS_DB_PREFIX."module_search_items_seq");
-	$db->Execute('INSERT INTO '.CMS_DB_PREFIX.'module_search_items (id, module_name, content_id, extra_attr, expires) VALUES (?,?,?,?,?)', array($itemid, $module, $id, $attr, ($expires != NULL ? trim($db->DBTimeStamp($expires), "'") : NULL) ));
-      }
+        if ($dbresult && $dbresult->RecordCount() > 0 && $row = $dbresult->FetchRow()) {
+            $itemid = $row['id'];
+        }
+        else {
+            $itemid = $db->GenID(CMS_DB_PREFIX."module_search_items_seq");
+            $db->Execute('INSERT INTO '.CMS_DB_PREFIX.'module_search_items (id, module_name, content_id, extra_attr, expires) VALUES (?,?,?,?,?)', array($itemid, $module, $id, $attr, ($expires != NULL ? trim($db->DBTimeStamp($expires), "'") : NULL) ));
+        }
 
-      foreach ($words as $word=>$count) {
-	$db->Execute('INSERT INTO '.CMS_DB_PREFIX.'module_search_index (item_id, word, count) VALUES (?,?,?)', array($itemid, $word, $count));
-      }
+        foreach ($words as $word=>$count) {
+            $db->Execute('INSERT INTO '.CMS_DB_PREFIX.'module_search_index (item_id, word, count) VALUES (?,?,?)', array($itemid, $word, $count));
+        }
     }
 }
 

@@ -143,6 +143,8 @@ abstract class DataDictionary
     protected function _DBType() { return $this->connection->DbType(); }
 
 	abstract protected function MetaType($t,$len=-1,$fieldobj=false);
+    abstract public function MetaTables();
+    abstract public function MetaColumns($table);
 	abstract protected function ActualType($meta);
 
 	protected function NameQuote($name = NULL,$allowBrackets=false)

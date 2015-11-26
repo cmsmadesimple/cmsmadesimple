@@ -5,7 +5,7 @@ if (!isset($gCms))
 if (!$this->CheckPermission('Modify News'))
     return;
 
-if (isset($params['cancel'])) 
+if (isset($params['cancel']))
     $this->Redirect($id, 'defaultadmin', $returnid);
 
 /*--------------------
@@ -222,7 +222,7 @@ if (isset($params['submit'])) {
             // put mention into the admin log
             audit($articleid, 'News: ' . $title, 'Article added');
 			$this->SetMessage($this->Lang('articleadded'));
-            $this->Redirect($id, 'defaultadmin', $returnid, $params);
+            $this->Redirect($id, 'defaultadmin', $returnid);
         } // if !$error
     } // outer if !$error
 // end submit

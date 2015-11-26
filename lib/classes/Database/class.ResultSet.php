@@ -11,9 +11,18 @@ abstract class Resultset
 
     abstract public function MoveFirst();
     abstract public function MoveNext();
-    abstract public function MoveLast();
+    abstract protected function Move($idx);
 
-    abstract public function GetArray();
+    public function GetArray()
+    {
+        $results = array();
+        while( !$this->EOF() ) {
+            $results[] = $this->fields();
+            $this->MoveNext();
+        }
+        return $results;
+    }
+
     public function GetRows() { return $this->GetArray(); }
     public function GetAll() { return $this->GetArray(); }
     public function GetAssoc() { return $this->GetArray(); }
@@ -21,7 +30,7 @@ abstract class Resultset
     abstract public function EOF();
     abstract public function Close();
     abstract public function RecordCount();
-    abstract public function fields( $field = null );
+    abstract public function Fields( $field = null );
     public function FetchRow() {
         if( $this->EOF() ) return false;
         $out = $this->fields();
@@ -29,12 +38,12 @@ abstract class Resultset
         return $out;
     }
 
-
     abstract protected function fetch_row();
 
     public function __get($key)
     {
         if( $key == 'EOF' ) return $this->EOF();
-        if( $key == 'fields' ) return $this->fields();
+        if( $key == 'fields' ) return $this->Fields();
     }
+
 }

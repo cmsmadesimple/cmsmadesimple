@@ -6,7 +6,9 @@ $(document).ready(function(){
   // initialize the dirtyform stuff.
   $('#Edit_Content').dirtyForm({
     beforeUnload: function(is_dirty) {
-      if( do_locking ) $('#Edit_Content').lockManager('unlock');
+      if( do_locking ) $('#Edit_Content').lockManager('unlock').done(function(){
+         console.log('after unlock');
+      });
     },
     unloadCancel: function(){
       if( do_locking ) $('#Edit_Content').lockManager('relock');
@@ -66,10 +68,9 @@ $(document).ready(function(){
     });
 {/if}
 
-// here we want to disable the dirtyform stuff when these fields are changed
-
     // submit the form if disable wysiwyg, template id, and/or content-type fields are changed.
     $('#id_disablewysiwyg, #template_id, #content_type').on('change', function () {
+        // disable the dirty form stuff, and unlock because we're gonna relockit on reload.
         var self = this;
         $('#Edit_Content').dirtyForm('disable');
 	{if $content_id > 0}
@@ -82,22 +83,43 @@ $(document).ready(function(){
     });
 
     // handle cancel/close ... and unlock
-    $(document).on('click', '[name$=cancel]', function () {
-        var tmp = $(this).val();
-        if( do_locking ) $('#Edit_Content').lockManager('unlock');
-    });
-
-    $('#Edit_Content').on('click','[name$=apply],[name$=submit],[name$=cancel]',function(event){
+    $(document).on('click', '[name$=cancel]', function (ev) {
+        // turn off all required elements, we're cancelling
         $('#Edit_Content :hidden').removeAttr('required');
-	if( do_locking ) $('#Edit_Content').lockManager('unlock');
+	// do not touch the dirty flag, so that theunload handler stuff can warn us.
+        if( do_locking ) {
+	  // unlock the item, and submit the form.
+	  var self = this;
+	  var form = $(this).closest('form');
+	  ev.preventDefault();
+	  $('#Edit_Content').lockManager('unlock').done(function(){
+	     var el = $('<input type="hidden"/>');
+	     el.attr('name',$(self).attr('name')).val($(self).val()).appendTo(form);
+	     form.submit();
+	  });
+	}
     });
 
-    $(document).on('click', '[name$=submit]', function () {
-      $('#Edit_Content').dirtyForm('option','dirty',false);
+    $(document).on('click', '[name$=submit]', function (ev) {
+        // set the form to not dirty.
+        $('#Edit_Content').dirtyForm('option','dirty',false);
+    	if( do_locking ) {
+	    // unlock the item, and submit the form
+	    var self = this;
+	    ev.preventDefault();
+	    var form = $(this).closest('form');
+	    $('#Edit_Content').lockManager('unlock').done(function(){
+ 	    	var el = $('<input type="hidden"/>');
+            	el.attr('name',$(self).attr('name')).val($(self).val()).appendTo(form);
+	    	form.submit();
+	    });
+	}
+	if( do_locking ) $('#Edit_Content').lockManager('unlock');
     });
 
     // handle apply (ajax submit)
     $(document).on('click', '[name$=apply]', function () {
+        // apply does not do an unlock.
         if( typeof tinyMCE != 'undefined') tinyMCE.triggerSave(); // TODO this needs better approach, create a common "ajax save" function that can be reused
         var data = $('#Edit_Content').find('input:not([type=submit]), select, textarea').serializeArray();
         data.push({
@@ -217,7 +239,6 @@ $(document).ready(function(){
   {foreach $tab_names as $key => $tabname}
     {tab_start name=$key}
       {if isset($tab_message_array[$key])}{$tab_message_array[$key]}{/if}
-
       {if isset($tab_contents_array[$key])}
         {foreach $tab_contents_array.$key as $fld}
         <div class="pageoverflow">

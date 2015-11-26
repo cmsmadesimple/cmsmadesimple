@@ -33,7 +33,7 @@ class ResultSet extends \CMSMS\Database\ResultSet
         $this->_fields = $this->resultId = null;
     }
 
-    public function fields( $key = null )
+    public function Fields( $key = null )
     {
         $key = (string) $key;
         if( empty($key) ) return $this->_fields;
@@ -75,11 +75,6 @@ class ResultSet extends \CMSMS\Database\ResultSet
         return $this->Move($this->_pos+1);
     }
 
-    public function MoveLast()
-    {
-        return $this->Move($this->_nrows - 1);
-    }
-
     protected function fetch_row()
     {
         if( !$this->EOF() ) {
@@ -87,13 +82,4 @@ class ResultSet extends \CMSMS\Database\ResultSet
         }
     }
 
-    public function GetArray()
-    {
-        $results = array();
-        while( !$this->EOF() ) {
-            $results[] = $this->fields();
-            $this->MoveNext();
-        }
-        return $results;
-    }
 } // end of class

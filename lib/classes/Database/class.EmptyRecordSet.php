@@ -6,7 +6,6 @@ class EmptyResultset extends Resultset
 {
     public function MoveFirst() {}
     public function MoveNext() {}
-    public function MoveLast() {}
 
     public function GetArray() {}
     public function GetRows() {}

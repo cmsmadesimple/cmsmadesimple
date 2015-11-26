@@ -415,16 +415,30 @@ class Content extends ContentBase
 		}
     }
 
+    private function _get_param($in,$key,$dflt = null)
+    {
+        if( !is_array($in) ) return $dflt;
+        if( is_array($key) ) return $dflt;
+        if( !isset($in[$key]) ) return $dflt;
+        return $in[$key];
+    }
+
 	/**
 	 * @ignore
 	 */
 	private function _display_text_block($blockInfo,$value,$adding)
 	{
 		$ret = '';
-		$oneline = cms_to_bool(get_parameter_value($blockInfo,'oneline'));
-		$required = cms_to_bool(get_parameter_value($blockInfo,'required'));
-		$placeholder = get_parameter_value($blockInfo,'placeholder');
-		$maxlength = get_parameter_value($blockInfo,'maxlength',255);
+		$oneline = cms_to_bool($this->_get_param($blockInfo,'oneline'));
+		$required = cms_to_bool($this->_get_param($blockInfo,'required'));
+		$placeholder = trim($this->_get_param($blockInfo,'placeholder'));
+		$maxlength = (int) $this->_get_param($blockInfo,'maxlength',255);
+        $adminonly = cms_to_bool($this->_get_param($blockInfo,'adminonly',0));
+        if( $adminonly ) {
+            $uid = get_userid(FALSE);
+            $res = \UserOperations::get_instance()->UserInGroup($uid,1);
+            if( !$res ) return;
+        }
         $adminonly = cms_to_bool(get_parameter_value($blockInfo,'adminonly',0));
         if( $adminonly ) {
             $uid = get_userid(FALSE);
@@ -432,7 +446,7 @@ class Content extends ContentBase
             if( !$res ) return;
         }
 		if ($oneline) {
-			$size = get_parameter_value($blockInfo,'size',50);
+			$size = (int) $this->_get_param($blockInfo,'size',50);
 			$ret = '<input type="text" size="'.$size.'" maxlength="'.$maxlength.'" name="'.$blockInfo['id'].'" value="'.cms_htmlentities($value, ENT_NOQUOTES, CmsNlsOperations::get_encoding('')).'"';
 			if( $required ) $ret .= " required=\"required\"";
 			if( $placeholder ) $ret .= " placeholder=\"{$placeholder}\"";
@@ -453,8 +467,8 @@ class Content extends ContentBase
 						   'value'=>$value,'id'=>$blockInfo['id']);
 			if( $required ) $parms['required'] = 'required';
 			if( $placeholder ) $parms['placeholder'] = $placeholder;
-			$parms['width'] = get_parameter_value($blockInfo,'width',80);
-			$parms['height'] = get_parameter_value($blockInfo,'height',10);
+			$parms['width'] = (int) $this->_get_param($blockInfo,'width',80);
+			$parms['height'] = (int) $this->_get_param($blockInfo,'height',10);
 			if( isset($blockInfo['cssname']) && $blockInfo['cssname'] ) $parms['cssname'] = $blockInfo['cssname'];
 			if( (!isset($parms['cssname']) || $parms['cssname'] == '') && cms_siteprefs::get('content_cssnameisblockname',1) ) {
 				$parms['cssname'] = $blockInfo['id'];
@@ -469,7 +483,7 @@ class Content extends ContentBase
 	 */
 	private function _display_image_block($blockInfo,$value,$adding)
 	{
-        $adminonly = cms_to_bool(get_parameter_value($blockInfo,'adminonly',0));
+        $adminonly = cms_to_bool($this->_get_param($blockInfo,'adminonly',0));
         if( $adminonly ) {
             $uid = get_userid(FALSE);
             $res = \UserOperations::get_instance()->UserInGroup($uid,1);
@@ -504,7 +518,7 @@ class Content extends ContentBase
 	 */
 	private function _display_module_block($blockName,$blockInfo,$value,$adding)
 	{
-        $adminonly = cms_to_bool(get_parameter_value($blockInfo,'adminonly',0));
+        $adminonly = cms_to_bool($this->_get_param($blockInfo,'adminonly',0));
         if( $adminonly ) {
             $uid = get_userid(FALSE);
             $res = \UserOperations::get_instance()->UserInGroup($uid,1);
@@ -531,14 +545,14 @@ class Content extends ContentBase
 	{
 		// it'd be nice if the content block was an object..
 		// but I don't have the time to do it at the moment.
-        $noedit = cms_to_bool(get_parameter_value($blockInfo,'noedit','false'));
+        $noedit = cms_to_bool($this->_get_param($blockInfo,'noedit','false'));
         if( $noedit ) return;
 
 		$field = '';
 		$help = '';
-		$label = trim(get_parameter_value($blockInfo,'label'));
+		$label = trim($this->_get_param($blockInfo,'label'));
 		if( $label == '' ) $label = $blockName;
-		$required = cms_to_bool(get_parameter_value($blockInfo,'required','false'));
+		$required = cms_to_bool($this->_get_param($blockInfo,'required','false'));
 		if( $blockName == 'content_en' && $label == $blockName ) {
 			$help = '&nbsp;'.cms_admin_utils::get_help_tag('core','help_content_content_en',lang('help_title_maincontent'));
 			$label = lang('content');

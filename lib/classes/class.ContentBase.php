@@ -2284,7 +2284,7 @@ abstract class ContentBase
 		case 'menutext':
 			$help = '&nbsp;'.cms_admin_utils::get_help_tag('core','help_content_menutext',lang('help_title_content_menutext'));
 			return array('<label for="in_menutext">*'.lang('menutext').':</label>'.$help,
-						 '<input type="text" name="menutext" id="in_menutext" required="required" value="'.cms_htmlentities($this->mMenuText).'" />');
+						 '<input type="text" name="menutext" id="in_menutext" value="'.cms_htmlentities($this->mMenuText).'" />');
 
 		case 'parent':
 			$contentops = ContentOperations::get_instance();

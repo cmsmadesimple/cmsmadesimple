@@ -76,6 +76,7 @@ while( $trycount < 2 ) {
     $trycount++;
     try {
         if( $page == -100) {
+            setup_session(false);
             if( !isset($_SESSION['__cms_preview__']) ) throw new CmsException('preview selected, but temp data not found');
 
             // todo: get the content type, and load it.
@@ -270,7 +271,7 @@ if( $debug || (isset($config['show_performance_info']) && ($showtemplate == true
     $memory_peak = (function_exists('memory_get_peak_usage')?memory_get_peak_usage():0);
     $endtime = microtime();
 
-    $txt = microtime_diff($starttime,$endtime).' / '.$db->query_time_total.' / '.(isset($db->query_count)?$db->query_count:'')." / {$memory} / {$memory_peak}";
+    $txt = microtime_diff($starttime,$endtime).' / '.round($db->query_time_total,7).' / '.(isset($db->query_count)?$db->query_count:'')." / {$memory} / {$memory_peak}";
     debug_display($txt);
     //$txt = strftime('%x %X').' :: '.$txt;
 }
