@@ -106,7 +106,7 @@ $(document).ready(function(){
 	    {/if}
           {/if}
           {if isset($item.e_status)}
-            {capture assign='op'}{$tmp='status_'|cat:$item.e_status}<span {if $item.e_status == 'db_newer'}class="important"{/if} title="{$ModuleManager->Lang($tmp)}">{$ModuleManager->Lang($item.e_status)}</span>{/capture}{$ops[]=$op}
+            {capture assign='op'}{$tmp='status_'|cat:$item.e_status}<span {if $item.e_status == 'db_newer'}class="important"{/if} title="{$ModuleManager->Lang($tmp)}" style="color: orange;">{$ModuleManager->Lang($item.e_status)}</span>{/capture}{$ops[]=$op}
           {/if}
 	  {if !$item.ver_compatible}
             {capture assign='op'}<span class="important" title="{$ModuleManager->Lang('title_notcompatible')}">{$ModuleManager->Lang('notcompatible')}</span>{/capture}{$ops[]=$op}
