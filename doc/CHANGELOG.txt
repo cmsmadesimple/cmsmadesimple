@@ -1,4 +1,4 @@
-Version 2.1 - NO NAME SET
+Version 2.1 - Bahamas
 ----------------------------------
 Core - General
 - Minor performance tweaks to sample htaccess.txt
