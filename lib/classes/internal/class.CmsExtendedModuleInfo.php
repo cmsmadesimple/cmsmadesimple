@@ -27,6 +27,7 @@ class CmsExtendedModuleInfo extends CmsModuleInfo
             $this->_edata['can_deactivate'] = ($this['name'] == 'ModuleManager') ? FALSE : TRUE;
             $this->_edata['can_uninstall'] = ($this['name'] == 'ModuleManager') ? FALSE : TRUE;
 
+            // dependants is the list of modules that use this module (i.e:  CGBlog uses CGExtensions)
             if( isset($minfo[$module_name]['dependants']) ) $this['dependants'] = $minfo[$module_name]['dependants'];
         }
     }

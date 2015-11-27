@@ -150,7 +150,7 @@ $(document).ready(function(){
       </td>
       <td>
 	{* active column *}
-        {if !isset($item.dependants) && $item.can_deactivate}
+        {if $item.can_uninstall}
           {if $item.active}
             <a class="modop mod_inactive" href="{cms_action_url action='local_active' mod=$item.name state=0}" title="{$ModuleManager->Lang('toggle_inactive')}">{admin_icon icon='true.gif'}</a>
           {else}

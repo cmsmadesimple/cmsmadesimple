@@ -53,6 +53,9 @@ News v2.50.3
 Search v1.50.2
 - Minor PHP7 fixes.
 
+ModuleManager 2.0.1
+- Minor fix to which modules could be uninstalled and deactivated.
+
 Version 2.0.1.1 - Adelaide
 ----------------------------------
 Fix to the $this->smarty magic method in the module class to resolve to the action template or the global smarty.
