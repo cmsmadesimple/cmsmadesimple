@@ -73,13 +73,13 @@ $(document).ready(function(){
         // disable the dirty form stuff, and unlock because we're gonna relockit on reload.
         var self = this;
         $('#Edit_Content').dirtyForm('disable');
-	{if $content_id > 0}
-	  $('#Edit_Content').lockManager('unlock').done(function(){
+	if( do_locking ) {
+	  if( do_locking) $('#Edit_Content').lockManager('unlock').done(function(){
             $(self).closest('form').submit();
 	  });
-	{else}
+        } else {
           $(self).closest('form').submit();
-	{/if}
+        }
     });
 
     // handle cancel/close ... and unlock
