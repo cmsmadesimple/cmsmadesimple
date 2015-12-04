@@ -89,7 +89,11 @@ function search_AddWords(&$obj, $module = 'Search', $id = -1, $attr = '', $conte
     if ($content != "") {
         //Clean up the content
         $stemmed_words = $obj->StemPhrase($content);
-        $words = array_count_values($stemmed_words);
+        $tmp = array_count_values($stemmed_words);
+        $words = array();
+        foreach( $tmp as $key => $val ) {
+            $words[] = array('word'=>$key,'count'=>$val);
+        }
 
         $q = "SELECT id FROM ".CMS_DB_PREFIX.'module_search_items WHERE module_name=?';
         $parms = array($module);
@@ -105,15 +109,18 @@ function search_AddWords(&$obj, $module = 'Search', $id = -1, $attr = '', $conte
         $dbresult = $db->Execute($q, $parms);
 
         if ($dbresult && $dbresult->RecordCount() > 0 && $row = $dbresult->FetchRow()) {
-            $itemid = $row['id'];
+            $itemid = (int) $row['id'];
         }
         else {
-            $itemid = $db->GenID(CMS_DB_PREFIX."module_search_items_seq");
+            $itemid = (int) $db->GenID(CMS_DB_PREFIX."module_search_items_seq");
             $db->Execute('INSERT INTO '.CMS_DB_PREFIX.'module_search_items (id, module_name, content_id, extra_attr, expires) VALUES (?,?,?,?,?)', array($itemid, $module, $id, $attr, ($expires != NULL ? trim($db->DBTimeStamp($expires), "'") : NULL) ));
         }
 
-        foreach ($words as $word=>$count) {
-            $db->Execute('INSERT INTO '.CMS_DB_PREFIX.'module_search_index (item_id, word, count) VALUES (?,?,?)', array($itemid, $word, $count));
+        $stmt = $db->Prepare('INSERT INTO '.CMS_DB_PREFIX."module_search_index (item_id, word, count) VALUES ($itemid,?,?)");
+        $stmt->Bind($words);
+        while( !$stmt->EOF() ) {
+            $stmt->Execute();
+            $stmt->MoveNext();
         }
     }
 }

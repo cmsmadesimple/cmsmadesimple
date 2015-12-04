@@ -1,4 +1,4 @@
-Version 2.1 - NO NAME SET
+Version 2.1 - Bahamas
 ----------------------------------
 Core - General
 - Minor performance tweaks to sample htaccess.txt
@@ -52,6 +52,9 @@ News v2.50.3
 
 Search v1.50.2
 - Minor PHP7 fixes.
+
+ModuleManager 2.0.1
+- Minor fix to which modules could be uninstalled and deactivated.
 
 Version 2.0.1.1 - Adelaide
 ----------------------------------

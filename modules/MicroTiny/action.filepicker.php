@@ -25,8 +25,6 @@ if( !check_login(FALSE) ) exit; // admin only.... but any admin
 //
 // initialization
 //
-debug_to_log(__FILE__);
-debug_to_log($_GET);
 $field = trim(get_parameter_value($_GET,'field'));
 $type = 'any';
 $filemanager = cms_utils::get_module('FileManager');

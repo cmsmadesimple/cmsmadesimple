@@ -1,11 +1,11 @@
 <?php
 #BEGIN_LICENSE
 #-------------------------------------------------------------------------
-# Module: ModuleManager (c) 2013 by Robert Campbell 
+# Module: ModuleManager (c) 2013 by Robert Campbell
 #         (calguy1000@cmsmadesimple.org)
 #  An addon module for CMS Made Simple to allow browsing remotely stored
 #  modules, viewing information about them, and downloading or upgrading
-# 
+#
 #-------------------------------------------------------------------------
 # CMS - CMS Made Simple is (c) 2005 by Ted Kulp (wishy@cmsmadesimple.org)
 # Visit our homepage at: http://www.cmsmadesimple.org
@@ -20,7 +20,7 @@
 # However, as a special exception to the GPL, this software is distributed
 # as an addon module to CMS Made Simple.  You may not use this software
 # in any Non GPL version of CMS Made simple, or in any version of CMS
-# Made simple that does not indicate clearly and obviously in its admin 
+# Made simple that does not indicate clearly and obviously in its admin
 # section that the site was built with CMS Made simple.
 #
 # This program is distributed in the hope that it will be useful,
@@ -44,7 +44,7 @@ class ModuleManager extends CMSModule
 
   function GetName() { return get_class($this); }
   function GetFriendlyName() { return $this->Lang('friendlyname'); }
-  function GetVersion() { return '2.0'; }
+  function GetVersion() { return '2.0.1'; }
   function GetHelp() { return $this->Lang('help'); }
   function GetAuthor() { return 'calguy1000'; }
   function GetAuthorEmail() { return 'calguy1000@hotmail.com'; }
@@ -65,12 +65,12 @@ class ModuleManager extends CMSModule
   {
     $this->smarty->assign('title_error', $this->Lang('error'));
     $this->smarty->assign_by_ref('message', $message);
-    $this->smarty->assign('link_back',$this->CreateLink($id,'defaultadmin',$returnid, $this->Lang('back_to_module_manager')));	
+    $this->smarty->assign('link_back',$this->CreateLink($id,'defaultadmin',$returnid, $this->Lang('back_to_module_manager')));
 
     // Display the populated template
     echo $this->ProcessTemplate('error.tpl');
   }
-	
+
   function Install()
   {
     $this->SetPreference('module_repository',ModuleManager::_dflt_request_url);
@@ -84,10 +84,10 @@ class ModuleManager extends CMSModule
   function DoAction($action, $id, $params, $returnid=-1)
   {
     @set_time_limit(9999);
-	
+
 	$smarty = cmsms()->GetSmarty();
-	$smarty->assignByRef($this->GetName(), $this);	
-	
+	$smarty->assignByRef($this->GetName(), $this);
+
     parent::DoAction( $action, $id, $params, $returnid );
   }
 
