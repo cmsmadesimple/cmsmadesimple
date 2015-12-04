@@ -1,14 +1,60 @@
 <?php
+#BEGIN_LICENSE
+#-------------------------------------------------------------------------
+# Module: \CMSMS\Database\DataDictionary (c) 2015 by Robert Campbell
+#         (calguy1000@cmsmadesimple.org)
+#  A class to define methods of interacting with database tables.
+#
+#-------------------------------------------------------------------------
+# CMS - CMS Made Simple is (c) 2005 by Ted Kulp (wishy@cmsmadesimple.org)
+# Visit our homepage at: http://www.cmsmadesimple.org
+#
+#-------------------------------------------------------------------------
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# However, as a special exception to the GPL, this software is distributed
+# as an addon module to CMS Made Simple.  You may not use this software
+# in any Non GPL version of CMS Made simple, or in any version of CMS
+# Made simple that does not indicate clearly and obviously in its admin
+# section that the site was built with CMS Made simple.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+# Or read it online: http://www.gnu.org/licenses/licenses.html#GPL
+#
+#-------------------------------------------------------------------------
+#END_LICENSE
+
+/**
+ * This file defines the DataDictionary class.
+ *
+ * @package CMS
+ */
 
 namespace CMSMS\Database;
 
 // shouldn't need this.
 if (!function_exists('ctype_alnum')) {
+    /**
+     * @ignore
+     */
 	function ctype_alnum($text) {
 		return preg_match('/^[a-z0-9]*$/i', $text);
 	}
 }
 
+/**
+ * @ignore
+ */
 function _array_change_key_case($an_array)
 {
 	if (is_array($an_array)) {
@@ -22,6 +68,9 @@ function _array_change_key_case($an_array)
 	return $an_array;
 }
 
+/**
+ * @ignore
+ */
 function Lens_ParseArgs($args,$endstmtchar=',',$tokenchars='_.-')
 {
 	$pos = 0;
@@ -120,29 +169,94 @@ function Lens_ParseArgs($args,$endstmtchar=',',$tokenchars='_.-')
 	return $tokens;
 }
 
+
+/**
+ * A class defining methods to work directly with database tables.
+ *
+ * @package CMS
+ * @author Robert Campbell
+ * @copyright Copyright (c) 2015, Robert Campbell <calguy1000@cmsmadesimple.org>
+ * @since 2.2
+ */
 abstract class DataDictionary
 {
+    /**
+     * @ignore
+     */
 	protected $connection;
+
+    /**
+     * @ignore
+     */
 	protected $dropTable = 'DROP TABLE %s';
+
+    /**
+     * @ignore
+     */
 	protected $renameTable = 'RENAME TABLE %s TO %s';
+
+    /**
+     * @ignore
+     */
 	protected $dropIndex = 'DROP INDEX %s';
+
+    /**
+     * @ignore
+     */
 	protected $addCol = ' ADD';
+
+    /**
+     * @ignore
+     */
 	protected $alterCol = ' ALTER COLUMN';
+
+    /**
+     * @ignore
+     */
 	protected $dropCol = ' DROP COLUMN';
+
+    /**
+     * @ignore
+     */
 	protected $renameColumn = 'ALTER TABLE %s RENAME COLUMN %s TO %s';	// table, old-column, new-column, column-definitions (not used by default)
+
+    /**
+     * @ignore
+     */
 	protected $nameRegex = '\w';
+
+    /**
+     * @ignore
+     */
 	protected $nameRegexBrackets = 'a-zA-Z0-9_\(\)';
+
+    /**
+     * @ignore
+     */
 	protected $autoIncrement = false;
+
+    /**
+     * @ignore
+     */
 	protected $invalidResizeTypes4 = array('CLOB','BLOB','TEXT','DATE','TIME'); // for changetablesql
 
+    /**
+     * Constructor
+     *
+     * @param \CMSMS\Database\Connection $conn
+     */
     public function __construct(Connection $conn)
     {
         $this->connection = $conn;
     }
 
+    /**
+     * @ignore
+     */
     protected function _DBType() { return $this->connection->DbType(); }
 
 	abstract protected function MetaType($t,$len=-1,$fieldobj=false);
+
     abstract public function MetaTables();
     abstract public function MetaColumns($table);
 	abstract protected function ActualType($meta);

@@ -41,6 +41,11 @@ class Connection extends \CMSMS\Database\Connection
         }
     }
 
+    public function &get_inner_mysql()
+    {
+        return $this->_mysql;
+    }
+
     public function IsConnected()
     {
         return is_object($this->_mysql);
@@ -70,6 +75,7 @@ class Connection extends \CMSMS\Database\Connection
 
     public function qstr($str)
     {
+        // note... this could be a two way tcp/ip or socket communication
         return "'".$this->_mysql->escape_string($str)."'";
     }
 
@@ -101,6 +107,12 @@ class Connection extends \CMSMS\Database\Connection
         $this->add_debug_query($sql);
         $resultset = new ResultSet( $this->_mysql, $resultid, $sql );
         return $resultset;
+    }
+
+    public function &Prepare($sql)
+    {
+        $stmt = new Statement($this,$sql);
+        return $stmt;
     }
 
     public function BeginTrans()
