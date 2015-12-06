@@ -1,3 +1,8 @@
+Version 2.2 - NO NAME SET
+----------------------------------
+Core - General
+- Fix the template compiler so that content blocks can be placed within sub templates and detected with the {include} tag.
+
 Version 2.1 - Bahamas
 ----------------------------------
 Core - General
