@@ -32,6 +32,8 @@
         <ignore>nls/*</ignore>
         <ignore>phpmailer/*</ignore>
         <ignore>smarty/*</ignore>
+        <ignore>lib/include.php</ignore>
+        <ignore>lib/version.php</ignore>
         <ignore>lib/tasks/*</ignore>
         <ignore>lib/classes/internal/*</ignore>
         <ignore>lib/classes/contenttypes/*</ignore>

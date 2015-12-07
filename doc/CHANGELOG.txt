@@ -2,6 +2,7 @@ Version 2.2 - NO NAME SET
 ----------------------------------
 Core - General
 - Fix the template compiler so that content blocks can be placed within sub templates and detected with the {include} tag.
+- Fix minor problem with checksum verification.
 
 CMSContentmanager v1.0.3
 - Minor template changes in edit content wrt. locking
