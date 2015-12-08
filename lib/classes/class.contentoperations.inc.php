@@ -489,12 +489,13 @@ class ContentOperations
             /* $_n++; */
 			if( is_array($changed) ) {
 				$db->Execute($usql, array($changed['hierarchy'], $changed['id_hierarchy'], $changed['hierarchy_path'], $changed['content_id']));
+                debug_display($db->sql);
 			}
 		}
 
 		// clear the content cache again.
 		cms_content_cache::clear();
-        cms_cache_handler::get_instance()->clear('contentcache');
+        cms_cache_handler::get_instance()->erase('contentcache');
 		//CmsApp::get_instance()->clear_cached_files();
 	}
 
