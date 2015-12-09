@@ -447,7 +447,6 @@ class ContentOperations
         $b = ($idhier == $saved_row['id_hierarchy']);
         $c = ($pathhier == $saved_row['hierarchy_path']);
         if( !$a || !$b || !$c ) {
-            //debug_display($saved_row); debug_display("$hier -- $idhier -- $pathhier"); die();
             $_cnt++;
 			$saved_row['hierarchy'] = $hier;
 			$saved_row['id_hierarchy'] = $idhier;
@@ -478,24 +477,20 @@ class ContentOperations
 			$hash[$row['content_id']] = $row;
 		}
 		unset($list);
-        //stack_trace(); die();
 
 		// would be nice to use a transaction here.
-        static $_n;
+                static $_n;
 		$usql = "UPDATE ".cms_db_prefix()."content SET hierarchy = ?, id_hierarchy = ?, hierarchy_path = ? WHERE content_id = ?";
 		foreach( $hash as $content_id => $row ) {
 			$changed = $this->_set_hierarchy_position($content_id,$hash);
-            /* if( $_n > 1 ) { debug_display($changed); die(); } */
-            /* $_n++; */
 			if( is_array($changed) ) {
 				$db->Execute($usql, array($changed['hierarchy'], $changed['id_hierarchy'], $changed['hierarchy_path'], $changed['content_id']));
-                debug_display($db->sql);
 			}
 		}
 
 		// clear the content cache again.
 		cms_content_cache::clear();
-        cms_cache_handler::get_instance()->erase('contentcache');
+                cms_cache_handler::get_instance()->erase('contentcache');
 		//CmsApp::get_instance()->clear_cached_files();
 	}
 
