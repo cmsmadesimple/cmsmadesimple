@@ -36,6 +36,7 @@ if( strlen($advancedmode) > 1 ) $advancedmode = 0;
       $dh = opendir($startdir);
       while( false !== ($entry = readdir($dh)) ) {
           if( $entry == '.' ) continue;
+          if( $entry == '..' ) continue;
           $full = filemanager_utils::join_path($startdir,$entry);
           if( !is_dir($full) ) continue;
           if( !$showhiddenfiles && ($entry[0] == '.' || $entry[0] == '_') ) continue;
