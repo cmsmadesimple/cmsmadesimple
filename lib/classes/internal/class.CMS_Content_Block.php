@@ -335,8 +335,11 @@ final class CMS_Content_Block
 
         $out = null;
         if( startswith(realpath($dir),realpath($basename)) ) {
-            if( $img != -1 && !empty($img) ) {
+            if( ($img == -1 || empty($img)) && isset($params['default']) && $params['default'] ) {
+                $img = $params['default'];
+            }
 
+            if( $img != -1 && !empty($img) ) {
                 // create the absolute url.
                 if( startswith($img,$basename) ) {
                     // old style url.

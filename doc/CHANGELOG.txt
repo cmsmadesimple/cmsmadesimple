@@ -6,6 +6,7 @@ Core - General
 - Fix to the cms_cache_handler class
 - Minor fix to SetAllPageHierarchies()
 - Correct location where session was started in frontend displays.
+- Fix the default option for {content_image}
 
 CMSContentmanager v1.0.3
 - Minor template changes in edit content wrt. locking
