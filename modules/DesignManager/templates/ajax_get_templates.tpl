@@ -113,7 +113,7 @@ $('#tpl_selall').cmsms_checkall();
 	  </td>
 
 	  {* edit/copy iconsm, or steal icons *}
-	  {if !$template->locked()}
+	  {if !$lock_timeout || !$template->locked()}
 	    <td><a href="{$edit_tpl}" data-tpl-id="{$template->get_id()}" class="edit_tpl" title="{$mod->Lang('edit_template')}">{admin_icon icon='edit.gif' title=$mod->Lang('prompt_edit')}</a></td>
 	    {if $has_add_right}
 	      <td><a href="{$copy_tpl}" title="{$mod->Lang('copy_template')}">{admin_icon icon='copy.gif' title=$mod->Lang('prompt_copy_template')}</a></td>

@@ -7,9 +7,11 @@ Core - General
 - Minor fix to SetAllPageHierarchies()
 - Correct location where session was started in frontend displays.
 - Fix the default option for {content_image}
+- Modify the locker to use a beacon if supported, when unlocking.
 
-CMSContentmanager v1.0.3
+CMSContentmanager v1.1
 - Minor template changes in edit content wrt. locking
+- Adds ability to clear content locks
 
 DesignManager v1.1.1
 - Minor template changes in edit content wrt. locking

@@ -151,7 +151,11 @@
           $('tr.selected').css('background', 'yellow');
       });
 
-      $('a#ordercontent').click(function(e){
+      $(document).on('click','a#clearlocks',function(){
+         return confirm('{$mod->Lang('confirm_clearlocks')}');
+      });
+
+      $(document).on('click','a#ordercontent',function(e){
           var have_locks = {$have_locks};
           if( !have_locks ) {
               // double check to see if anything is locked

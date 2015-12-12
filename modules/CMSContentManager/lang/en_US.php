@@ -57,6 +57,7 @@ $lang['colhdr_url'] = 'URL';
 $lang['coltitle_url'] = 'The unique URL (relative to the root URL) that can be used to browse to the page';
 $lang['colhdr_view'] = 'View';
 $lang['coltitle_view'] = 'The icon in this column allows viewing the page in a new browser tab.';
+$lang['confirm_clearlocks'] = 'Clearing locks could interrupt a working edit session.  Are you sure you want to continue?';
 $lang['confirm_delete_page'] = 'Are you sure you want to delete this content item?';
 $lang['confirm_expandall'] = 'Are you sure you want to expand all content?  On large sites this may cause problems.  Please use caution';
 $lang['confirm_reorder'] = 'Are you sure you want to save the content in this order';
@@ -148,6 +149,7 @@ $lang['moddescription'] = 'A module for managing content within CMSMS';
 $lang['msg_bulk_successful'] = 'Bulk content operation successful';
 $lang['msg_editpage_success'] = 'Content Updated';
 $lang['msg_cancelled'] = 'Operation Cancelled';
+$lang['msg_lockscleared'] = 'Locks cleared';
 $lang['msg_lostlock'] = 'The lock on this content page has expired and been lost.  You can no longer save changes to this content page.  Please return to the content list and re-edit this page.';
 $lang['msg_prefs_saved'] = 'Preferences saved';
 
@@ -172,6 +174,7 @@ $lang['prompt_bulk_delete_content'] = 'Bulk Delete Content Pages';
 $lang['prompt_bulk_delete_content2'] = 'These pages are due to be deleted';
 $lang['prompt_bulk_setdesign'] = 'Bulk Change Template and Design';
 $lang['prompt_cachable'] = 'Cachable';
+$lang['prompt_clearlocks'] = 'Remove content locks';
 $lang['prompt_collapseall'] = 'Collapse all pages';
 $lang['prompt_confirm_operation'] = 'Confirm Operation';
 $lang['prompt_confirm1'] = 'Yes, I am sure I want to do this';
@@ -250,6 +253,7 @@ $lang['select_all'] = 'Select All';
 $lang['submit'] = 'Submit';
 
 #T
+$lang['title_clearlocks'] = 'Clear all content locks';
 $lang['title_contentmanager_settings'] = 'Settings - Content Manager';
 $lang['title_editpage_apply'] = 'Save the changes to this content page, and continue editing';
 $lang['title_editpage_cancel'] = 'Abandon all unsaved changes to this page, and return to the content list';

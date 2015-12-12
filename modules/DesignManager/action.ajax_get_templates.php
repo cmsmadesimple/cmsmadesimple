@@ -50,6 +50,7 @@ try {
         $smarty->assign('list_types',$tmp2);
     }
 
+    $smarty->assign('lock_timeout', $this->GetPreference('lock_timeout'));
     $smarty->assign('coretypename',CmsLayoutTemplateType::CORE);
     $smarty->assign('manage_templates',$this->CheckPermission('Modify Templates'));
     $smarty->assign('manage_designs',$this->CheckPermission('Manage Designs'));

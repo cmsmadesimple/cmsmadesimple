@@ -18,16 +18,29 @@
 #
 #$Id: moduleinterface.php 8558 2012-12-10 00:59:49Z calguy1000 $
 
+$handlers = ob_list_handlers();
+for ($cnt = 0; $cnt < sizeof($handlers); $cnt++) { ob_end_clean(); }
+
 $CMS_ADMIN_PAGE=1;
 require_once("../lib/include.php");
-$ruid = get_userid();
+$ruid = get_userid(FALSE);
 
-$opt = get_parameter_value($_REQUEST,'opt','setup');
-$type = get_parameter_value($_REQUEST,'type');
-$oid = get_parameter_value($_REQUEST,'oid');
-$uid = get_parameter_value($_REQUEST,'uid');
-$lock_id = get_parameter_value($_REQUEST,'lock_id');
-$lifetime = (int) get_parameter_value($_REQUEST,'lifetime',cms_siteprefs::get('lock_timeout',60));
+debug_to_log(__FILE__);
+debug_to_log($_REQUEST);
+$fh = fopen('php://input','r');
+$txt = fread($fh,8192);
+$data = null;
+if( $txt ) $data = json_decode($txt,TRUE);
+if( !is_array($data) ) {
+    $data = $_REQUEST;
+}
+
+$opt = get_parameter_value($data,'opt','setup');
+$type = get_parameter_value($data,'type');
+$oid = get_parameter_value($data,'oid');
+$uid = get_parameter_value($data,'uid');
+$lock_id = get_parameter_value($data,'lock_id');
+$lifetime = (int) get_parameter_value($data,'lifetime',cms_siteprefs::get('lock_timeout',60));
 
 $out = array();
 $out['status'] = 'success';
@@ -106,6 +119,9 @@ catch( Exception $e ) {
   $out['status'] = 'error';
   $out['error'] = array('type'=>'othererror','msg'=>$e->GetMessage());
 }
+
+debug_to_log(__FILE__);
+debug_to_log($out);
 
 if( $out['status'] != 'error' && isset($out['lock_id']) && $out['lock_id'] != 0 ) $out['locked'] = 1;
 

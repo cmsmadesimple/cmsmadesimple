@@ -126,6 +126,7 @@ $smarty->assign('have_locks',$have_locks);
 $pagelimits = array(10=>10,25=>25,100=>100,250=>250,500=>500);
 $smarty->assign('pagelimits',$pagelimits);
 $smarty->assign('pagelimit',$pagelimit);
+$smarty->assign('locking',CmsContentManagerUtils::locking_enabled());
 if( $error ) $smarty->assign('error',$error);
 
 $res = $this->ProcessTemplate('defaultadmin.tpl');
