@@ -136,6 +136,9 @@ try {
         $tmpobj->SetName($content_obj->Name());
         $tmpobj->SetMenuText($content_obj->MenuText());
         $tmpobj->SetTemplateId($content_obj->TemplateId());
+        if( $tmpobj->TemplateId() < 1 ) $tmpobj->SetTemplateId($pagedefaults['template_id']);
+        if( $tmpobj->GetPropertyValue('design_id') < 1 ) $tmpobj->SetPropertyValue('design_id',$pagedefaults['design_id']);
+
         $tmpobj->SetParentId($content_obj->ParentId());
         $tmpobj->SetAlias($content_obj->Alias());
         $tmpobj->SetOwner($content_obj->Owner());
