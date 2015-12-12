@@ -57,9 +57,9 @@ final class CMSSmartySecurityPolicy extends Smarty_Security
                 // this should allow most stuff that does modification to data or formatting.
                 // i.e: string searches, array searches, string comparison, sorting, etc.
                 $this->php_functions = array('isset', 'implode','explode','empty','count', 'sizeof','in_array', 'is_array','time','lang',
-                                             'is_string','strpos','substr','strtolower','strtoupper','strcmp','strcasecmp','strlen','array_search','sort','ksort','asort',
+                                             'str_replace','is_string','strpos','substr','strtolower','strtoupper','strcmp','strcasecmp','strlen','array_search','sort','ksort','asort',
                                              'nl2br','file_exists', 'is_object', 'is_file','is_dir','print_r','var_dump',
-                                             'debug_display','debug_to_log', 'startswith', 'endswidth' ,
+                                             'debug_display','debug_to_log', 'startswith', 'endswidth', 'urlencode',
                                              'htmlspecialchars','htmlspecialchars_decode','cms_html_entity_decode');
             }
         }
