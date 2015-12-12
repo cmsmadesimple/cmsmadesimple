@@ -152,7 +152,7 @@
       });
 
       $(document).on('click','a#clearlocks',function(){
-         return confirm('{$mod->Lang('confirm_clearlocks')}');
+         return confirm('{$mod->Lang('confirm_clearlocks')|escape:'javascript'}');
       });
 
       $(document).on('click','a#ordercontent',function(e){

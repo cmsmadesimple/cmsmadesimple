@@ -46,7 +46,7 @@ if( $is_admin ) {
     audit('',$this->GetName(),'Cleared all content locks');
 } else {
     // clear only my locks
-    CmsLockOperations::delete_for_user();
+    CmsLockOperations::delete_for_user($type);
     audit('',$this->GetName(),'Cleared his own content locks');
 }
 

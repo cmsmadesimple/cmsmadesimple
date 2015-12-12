@@ -11,10 +11,11 @@ Core - General
 
 CMSContentmanager v1.1
 - Minor template changes in edit content wrt. locking
-- Adds ability to clear content locks
+- Adds ability to clear content locks (admins can clear all locks, regular users can only clear their locks)
 
 DesignManager v1.1.1
 - Minor template changes in edit content wrt. locking
+- Adds ability to clear template and css locks (admins can clear all locks, regular users can only clear their locks)
 
 
 Version 2.1 - Bahamas

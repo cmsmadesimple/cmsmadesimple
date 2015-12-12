@@ -50,6 +50,8 @@ try {
         $smarty->assign('list_types',$tmp2);
     }
 
+    $locks = \CmsLockOperations::get_locks('template');
+    $smarty->assign('have_locks',count($locks));
     $smarty->assign('lock_timeout', $this->GetPreference('lock_timeout'));
     $smarty->assign('coretypename',CmsLayoutTemplateType::CORE);
     $smarty->assign('manage_templates',$this->CheckPermission('Modify Templates'));
