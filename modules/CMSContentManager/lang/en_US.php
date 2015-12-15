@@ -236,6 +236,7 @@ $lang['prompt_preview'] = 'Preview';
 $lang['prompt_secure'] = 'Secure';
 $lang['prompt_settings'] = 'Settings';
 $lang['prompt_showinmenu'] = 'Shown in Navigations';
+$lang['prompt_showmore'] = 'Show more';
 $lang['prompt_steal_lock_edit'] = 'Steal this lock and edit the page';
 $lang['prompt_template'] = 'Template';
 $lang['prompt_template_list_mode'] = 'Template list mode';
