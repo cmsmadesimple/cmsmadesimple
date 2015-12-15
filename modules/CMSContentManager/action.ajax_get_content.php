@@ -79,6 +79,7 @@ try {
     $smarty->assign('indent',cms_userprefs::get('indent',1));
     $locks = $builder->get_locks();
     $have_locks = (is_array($locks) && count($locks))?1:0;
+    $smarty->assign('locking',CmsContentManagerUtils::locking_enabled());
     $smarty->assign('have_locks',$have_locks);
     $smarty->assign('pagelimit',$pagelimit);
     $smarty->assign('pagelist',$pagelist);

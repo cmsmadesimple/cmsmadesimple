@@ -1,7 +1,7 @@
 <?php
 #-------------------------------------------------------------------------
-# Module: AdminSearch - A CMSMS addon module to provide template management.
-# (c) 2012 by Robert Campbell <calguy1000@cmsmadesimple.org>
+# Module: DesignManager - A CMSMS addon module to provide template management.
+# (c) 2014 by Robert Campbell <calguy1000@cmsmadesimple.org>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -197,6 +197,7 @@ $smarty->assign('manage_templates',$this->CheckPermission('Modify Templates'));
 $smarty->assign('manage_designs',$this->CheckPermission('Manage Designs'));
 $smarty->assign('import_url',$this->create_url($id,'admin_import_template'));
 $smarty->assign('admin_url',$config['admin_url']);
+$smarty->assign('lock_timeout', $this->GetPreference('lock_timeout'));
 $url = $this->create_url($id,'ajax_get_templates');
 $smarty->assign('ajax_templates_url',str_replace('amp;','',$url));
 $url = $this->create_url($id,'ajax_get_stylesheets');

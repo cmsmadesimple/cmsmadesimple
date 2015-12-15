@@ -158,12 +158,17 @@ final class CmsLockOperations
   /**
    * Delete all the locks for the current user
    */
-  public static function delete_for_user()
+  public static function delete_for_user($type = null)
   {
     $uid = get_userid(FALSE);
     $db = CmsApp::get_instance()->GetDb();
+    $parms = array($uid);
     $query = 'DELETE FROM '.CMS_DB_PREFIX.CmsLock::LOCK_TABLE.' WHERE uid = ?';
-    $db->Execute($query,array($uid));
+    if( $type ) {
+        $query .= ' AND type = ?';
+        $parms[] = trim($type);
+    }
+    $db->Execute($query,$parms);
   }
 
 } // end of class

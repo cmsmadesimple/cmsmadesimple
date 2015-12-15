@@ -13,6 +13,9 @@ $('#tpl_selall').cmsms_checkall();
             <li><a id="addtemplate" accesskey="a" title="{$mod->Lang('create_template')}">{admin_icon icon='newobject.gif' alt=$mod->Lang('create_template')}&nbsp;{$mod->Lang('create_template')}</a></li>
           {/if}
           <li><a id="edittplfilter" accesskey="f" title="{$mod->Lang('prompt_editfilter')}">{admin_icon icon='edit.gif' alt=$mod->Lang('prompt_editfilter')}&nbsp;{$mod->Lang('filter')}</a></li>
+	  {if $have_locks}
+	  <li><a id="clearlocks" accesskey="l" title="{$mod->Lang('title_clearlocks')}" href="{cms_action_url action=admin_clearlocks type=template}">{admin_icon icon='run.gif' alt=''}&nbsp;{$mod->Lang('prompt_clearlocks')}</a></li>
+	  {/if}
         </ul>
       </li>
       {if !empty($tpl_filter[0])}
@@ -113,7 +116,7 @@ $('#tpl_selall').cmsms_checkall();
 	  </td>
 
 	  {* edit/copy iconsm, or steal icons *}
-	  {if !$template->locked()}
+	  {if !$lock_timeout || !$template->locked()}
 	    <td><a href="{$edit_tpl}" data-tpl-id="{$template->get_id()}" class="edit_tpl" title="{$mod->Lang('edit_template')}">{admin_icon icon='edit.gif' title=$mod->Lang('prompt_edit')}</a></td>
 	    {if $has_add_right}
 	      <td><a href="{$copy_tpl}" title="{$mod->Lang('copy_template')}">{admin_icon icon='copy.gif' title=$mod->Lang('prompt_copy_template')}</a></td>

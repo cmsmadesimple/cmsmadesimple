@@ -4,6 +4,10 @@ $(document).ready(function(){
     var n = $(this).attr('name');
     $('#'+n).dialog();
   });
+
+  $(document).on('click','#clearlocks,#cssclearlocks',function(){
+     return confirm('{$mod->Lang('confirm_clearlocks')|escape:'javascript'}');
+  });
 });
 </script>
 

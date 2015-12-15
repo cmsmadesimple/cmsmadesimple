@@ -16,7 +16,7 @@ if [ -z $_exe ]; then
   echo "FATAL: phpdoc must be installed";
   exit 1
 fi
-if [ ! -r config.php -o ! -r version.php ]; then
+if [ ! -r config.php -o ! -r lib/version.php ]; then
   echo "FATAL: This script must be executed from the CMSMS root path";
   exit 1
 fi

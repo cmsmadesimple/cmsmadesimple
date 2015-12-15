@@ -93,6 +93,11 @@ while( $trycount < 2 ) {
             throw new CmsError404Exception('Page '.$page.' not found');
         }
 
+        // session stuff is needed from here on.
+        $cachable = $contentobj->Cachable();
+        if( $page == __CMS_PREVIEW_PAGE__ ) $cachable = false;
+        setup_session($cachable);
+
         // from here in, we're assured to have a content object
         if( !$contentobj->IsViewable() ) {
             $url = $contentobj->GetURL();
@@ -108,10 +113,6 @@ while( $trycount < 2 ) {
         if( !$contentobj->IsPermitted() ) {
             throw new CmsError403Exception('Permission denied');
         }
-
-        $cachable = $contentobj->Cachable();
-        if( $page == __CMS_PREVIEW_PAGE__ ) $cachable = false;
-        setup_session($cachable);
 
         $_app->set_content_object($contentobj);
         $smarty->assignGlobal('content_obj',$contentobj);

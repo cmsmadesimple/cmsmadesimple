@@ -1,3 +1,10 @@
+<script type="text/javascript">
+$(document).ready(function(){
+   $('#showmore_ctl').click(function(){
+      $(this).closest('form').submit();
+   });
+});
+</script>
 <h3>{$mod->Lang('prompt_bulk_setdesign')}:</h3>
 
 {form_start multicontent=$multicontent}
@@ -24,7 +31,17 @@
 	<p class="pageinput">
 		<select id="template_ctl" name="{$actionid}template">
 			{html_options options=$alltemplates selected=$dflt_tpl_id}
-		</select></p>
+		</select>
+	</p>
+</div>
+
+<div class="pageoverflow">
+	<p class="pageinput">
+	        <label>
+		   <input type="hidden" name="{$actionid}showmore" value="0"/>
+		   <input type="checkbox" id="showmore_ctl" name="{$actionid}showmore" value="1" {if $showmore}checked{/if}/>
+		   {$mod->Lang('prompt_showmore')}</label>
+	</p>
 </div>
 
 <div class="pageoverflow">
@@ -38,7 +55,6 @@
 </div>
 
 <div class="pageoverflow">
-	<p class="pagetext"></p>
 	<p class="pageinput">
 		<input type="submit" name="{$actionid}submit" value="{$mod->Lang('submit')}"/>
 		<input type="submit" name="{$actionid}cancel" value="{$mod->Lang('cancel')}"/>

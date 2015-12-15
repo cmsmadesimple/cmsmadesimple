@@ -21,8 +21,8 @@ $(document).ready(function(){
       type: 'content',
       oid: {$content_id|default:-1},
       uid: {get_userid(FALSE)},
-      lock_timeout: {$lock_timeout},
-      lock_refresh: {$lock_refresh},
+      lock_timeout: {$lock_timeout|default:0},
+      lock_refresh: {$lock_refresh|default:0},
       error_handler: function (err) {
           alert('got error ' + err.type + ' // ' + err.msg);
       },

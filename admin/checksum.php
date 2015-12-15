@@ -66,7 +66,7 @@ function check_checksum_data(&$report)
 
   $gCms = cmsms();
   $config = $gCms->GetConfig();
-  $salt = md5_file($config['root_path']."/version.php").md5_file($config['root_path']."/index.php");
+  $salt = md5_file($config['root_path']."/lib/version.php").md5_file($config['root_path']."/index.php");
   $filenotfound = array();
   $notreadable = 0;
   $md5failed = 0;

@@ -9,6 +9,9 @@ $('#css_selall').cmsms_checkall();
         <ul id="popupcsscontents">
            <li><a id="addcss" accesskey="a" href="{cms_action_url action='admin_edit_css'}" title="{$mod->Lang('create_stylesheet')}">{admin_icon icon='newobject.gif'} {$mod->Lang('create_stylesheet')}</a></li>
            <li><a id="editcssfilter" accesskey="f" title="{$mod->Lang('prompt_editfilter')}">{admin_icon icon='edit.gif' alt=$mod->Lang('prompt_editfilter')} {$mod->Lang('filter')}</a></li>
+           {if $have_css_locks}
+           <li><a id="cssclearlocks" accesskey="l" title="{$mod->Lang('title_clearlocks')}" href="{cms_action_url action=admin_clearlocks type=stylesheet}">{admin_icon icon='run.gif' alt=''}&nbsp;{$mod->Lang('prompt_clearlocks')}</a></li>
+           {/if}
         </ul>
       </li>
       {if $css_filter != '' && $css_filter.design != ''}
