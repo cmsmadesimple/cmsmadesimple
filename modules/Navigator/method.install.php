@@ -118,7 +118,7 @@ try {
     if( file_exists( $fn ) ) {
         $template = @file_get_contents($fn);
         $tpl = new CmsLayoutTemplate();
-        $tpl->set_name('cssmenu_ulshadow');
+        $tpl->set_name(CmsLayoutTemplate::generate_unique_name('cssmenu_ulshadow'));
         $tpl->set_owner($uid);
         $tpl->set_content($template);
         $tpl->set_type($menu_template_type);
@@ -130,7 +130,7 @@ try {
     if( file_exists( $fn ) ) {
         $template = @file_get_contents($fn);
         $tpl = new CmsLayoutTemplate();
-        $tpl->set_name('minimal_menu');
+        $tpl->set_name(CmsLayoutTemplate::generate_unique_name('minimal_menu'));
         $tpl->set_owner($uid);
         $tpl->set_content($template);
         $tpl->set_type($menu_template_type);
@@ -145,7 +145,7 @@ try {
         if( file_exists( $fn ) ) {
             $template = @file_get_contents($fn);
             $tpl = new CmsLayoutTemplate();
-            $tpl->set_name('Simplex Main Navigation');
+            $tpl->set_name(CmsLayoutTemplate::generate_unique_name('Simplex Main Navigation'));
             $tpl->set_owner($uid);
             $tpl->set_content($template);
             $tpl->set_type($menu_template_type);
@@ -158,7 +158,7 @@ try {
         if( file_exists( $fn ) ) {
             $template = @file_get_contents($fn);
             $tpl = new CmsLayoutTemplate();
-            $tpl->set_name('Simplex Footer Navigation');
+            $tpl->set_name(CmsLayoutTemplate::generate_unique_name('Simplex Footer Navigation'));
             $tpl->set_owner($uid);
             $tpl->set_content($template);
             $tpl->set_type($menu_template_type);
