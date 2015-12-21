@@ -1,3 +1,8 @@
+Version 2.1.2
+----------------------------------
+ModuleManager v2.0.2
+- Minor fix for some notices in install and upgrade modules.
+
 Version 2.1.1 - Nicholls Town
 ----------------------------------
 Core - General
@@ -13,6 +18,7 @@ Core - General
 CMSContentmanager v1.1
 - Minor template changes in edit content wrt. locking
 - Adds ability to clear content locks (admins can clear all locks, regular users can only clear their locks)
+- Enhancements to the action to bulk set designs to show only page templates by default, but to optionally show more.
 
 DesignManager v1.1.1
 - Minor template changes in edit content wrt. locking

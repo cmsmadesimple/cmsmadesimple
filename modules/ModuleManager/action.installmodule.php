@@ -190,6 +190,11 @@ try {
     }
 
     // here, if alldeps is empty... we have nothing to do.
+    if( !count($alldeps) ) {
+        $this->SetError($this->Lang('err_nothingtodo'));
+        $this->RedirectToAdminTab();
+    }
+
     $smarty->assign('return_url',$this->create_url($id,'defaultadmin',$returnid, array('__activetab'=>'modules')));
     $parms = array('name'=>$module_name,'version'=>$module_version,'filename'=>$module_filename,'size'=>$module_size);
     $smarty->assign('form_start',$this->CreateFormStart($id, 'installmodule', $returnid, 'post', '', FALSE, '', $parms).
