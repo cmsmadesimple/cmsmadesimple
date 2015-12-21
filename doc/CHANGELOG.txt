@@ -3,6 +3,9 @@ Version 2.1.2
 ModuleManager v2.0.2
 - Minor fix for some notices in install and upgrade modules.
 
+MenuManager  v1.50.2
+- make sure that uninstall cleans up properly.
+
 Version 2.1.1 - Nicholls Town
 ----------------------------------
 Core - General
