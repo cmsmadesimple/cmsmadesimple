@@ -20,7 +20,7 @@ $datadir = $rootdir.'/data';
 $outdir = $rootdir."/out";
 $exclude_patterns = array('/\.svn\//','/^ext\//','/^build\/.*/','/.*~$/','/tmp\/.*/','/\.\#.*/','/\#.*/','/^out\//','/^README*TXT/');
 $exclude_from_zip = array('*~','tmp/','.#*','#*'.'*.bak');
-$src_excludes = array('/\/config\.php$/', '/\/find-mime$/', '/\/install\//', '/^\/tmp\/.*/', '/^#.*/', '/^\/scripts\/.*/', '/\.git/', '/\.svn/', '/svn-.*/',
+$src_excludes = array('/\/phar_installer\//','/\/config\.php$/', '/\/find-mime$/', '/\/install\//', '/^\/tmp\/.*/', '/^#.*/', '/^\/scripts\/.*/', '/\.git/', '/\.svn/', '/svn-.*/',
                       '/^\/tests\/.*/', '/^\/build\/.*/', '/^\.htaccess/', '/\.svn/', '/^config.php$/','/.*~$/', '/\.\#.*/', '/\#.*/');
 $priv_file = dirname(__FILE__).'/priv.pem';
 $pub_file = dirname(__FILE__).'/pub.pem';
