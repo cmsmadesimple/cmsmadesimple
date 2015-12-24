@@ -63,7 +63,7 @@ catch( CmsException $e ) {
 try {
     $bc_template_type = new CmsLayoutTemplateType();
     $bc_template_type->set_originator($this->GetName());
-    $bc_template_type->set_name(CmsLayoutTemplate::generate_unique_name('breadcrumbs'));
+    $bc_template_type->set_name('breadcrumbs');
     $bc_template_type->set_dflt_flag(TRUE);
     $bc_template_type->set_lang_callback('Navigator::page_type_lang_callback');
     $bc_template_type->set_content_callback('Navigator::reset_page_type_defaults');
@@ -118,7 +118,7 @@ try {
     if( file_exists( $fn ) ) {
         $template = @file_get_contents($fn);
         $tpl = new CmsLayoutTemplate();
-        $tpl->set_name('cssmenu_ulshadow');
+        $tpl->set_name(CmsLayoutTemplate::generate_unique_name('cssmenu_ulshadow'));
         $tpl->set_owner($uid);
         $tpl->set_content($template);
         $tpl->set_type($menu_template_type);
@@ -130,7 +130,7 @@ try {
     if( file_exists( $fn ) ) {
         $template = @file_get_contents($fn);
         $tpl = new CmsLayoutTemplate();
-        $tpl->set_name('minimal_menu');
+        $tpl->set_name(CmsLayoutTemplate::generate_unique_name('minimal_menu'));
         $tpl->set_owner($uid);
         $tpl->set_content($template);
         $tpl->set_type($menu_template_type);
@@ -145,7 +145,7 @@ try {
         if( file_exists( $fn ) ) {
             $template = @file_get_contents($fn);
             $tpl = new CmsLayoutTemplate();
-            $tpl->set_name('Simplex Main Navigation');
+            $tpl->set_name(CmsLayoutTemplate::generate_unique_name('Simplex Main Navigation'));
             $tpl->set_owner($uid);
             $tpl->set_content($template);
             $tpl->set_type($menu_template_type);
@@ -158,7 +158,7 @@ try {
         if( file_exists( $fn ) ) {
             $template = @file_get_contents($fn);
             $tpl = new CmsLayoutTemplate();
-            $tpl->set_name('Simplex Footer Navigation');
+            $tpl->set_name(CmsLayoutTemplate::generate_unique_name('Simplex Footer Navigation'));
             $tpl->set_owner($uid);
             $tpl->set_content($template);
             $tpl->set_type($menu_template_type);

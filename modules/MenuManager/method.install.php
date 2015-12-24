@@ -29,7 +29,7 @@ try {
   if( file_exists( $fn ) ) {
     $template = @file_get_contents($fn);
     $tpl = new CmsLayoutTemplate();
-    $tpl->set_name('Simple Navigation Menu');
+    $tpl->set_name(CmsLayoutTemplate::generate_unique_name('Simple Navigation Menu'));
     $tpl->set_owner($uid);
     $tpl->set_content($template);
     $tpl->set_type($menu_template_type);

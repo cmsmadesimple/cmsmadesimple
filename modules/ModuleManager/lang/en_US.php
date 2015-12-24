@@ -51,6 +51,7 @@ $lang['downloads'] = 'Downloads';
 // E
 $lang['entersearchterm'] = 'Enter search term';
 $lang['error'] = 'Error!';
+$lang['err_nothingtodo'] = 'Nothing to do';
 $lang['error_active_failed'] = 'The operation to toggle the active state of a module failed';
 $lang['error_checksum'] = 'Checksum error.  This probably indicates a corrupt file, either when it was uploaded to the repository, or a problem in transit down to your machine. (expected %s and got %s)';
 $lang['error_chmodfailed'] = 'One or more problems encountered when changing permissions of files';
