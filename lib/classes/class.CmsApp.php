@@ -287,24 +287,9 @@ final class CmsApp {
 	 * @ignore
 	 * @param ADOConnection $connection
 	 */
-	final public function _setDb(ADOConnection $conn,$dbprefix = null)
+	final public function _setDb(\CMSMS\Database\Connection $conn)
 	{
 		$this->db = $conn;
-        if( $dbprefix )	$this->_setDbPrefix($dbprefix);
-	}
-
-	/**
-	 * Override the database prefix.
-	 *
-	 * @final
-	 * @internal
-	 * @ignore
-	 * @param string database prefix.
-	 */
-	final public function _setDbPrefix($str = null)
-	{
-		$str = trim($str);
-		if( $str ) $this->dbprefix = $str;
 	}
 
 	/**

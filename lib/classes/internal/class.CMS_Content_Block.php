@@ -248,6 +248,7 @@ final class CMS_Content_Block
                         unset($parms['priority']);
                         unset($parms['placeholder']);
                         unset($parms['assign']);
+                        unset($parms['adminonly']);
                         $parms = array_merge($parms, $modops->GetModuleParameters($id));
                         $returnid = '';
                         if (isset($parms['returnid'])) {
