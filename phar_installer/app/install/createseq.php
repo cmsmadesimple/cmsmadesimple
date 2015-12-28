@@ -18,10 +18,8 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
     status_msg(ilang('install_update_sequences'));
     foreach ($table_ids as $tablename => $tableinfo)
     {
-        $max = $db->Execute(
-            'SELECT max(' . $tableinfo['id'] . ') AS maxid FROM '.CMS_DB_PREFIX.$tablename
-        );
-        $max = ($max && $row = $max->FetchRow()) ? $row['maxid']+1 : 1;
+        $sql = 'SELECT COALESCE(MAX(?),0) AS maxid FROM '.CMS_DB_PREFIX.$tablename;
+        $max = $db->GetOne($sql,array($tableinfo['id']));
         $tableinfo['seq'] = isset($tableinfo['seq']) ? $tableinfo['seq'] : $tablename . '_seq';
         verbose_msg(ilang('install_updateseq',$tableinfo['seq']));
         $db->CreateSequence(CMS_DB_PREFIX.$tableinfo['seq'], $max);

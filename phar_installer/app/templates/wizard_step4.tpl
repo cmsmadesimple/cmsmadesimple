@@ -54,7 +54,7 @@
                 <label>{'prompt_dbuser'|tr}</label>
             </div>
             <div class="eight-col">
-                <input class="form-field required full-width" type="text" name="dbuser" value="{$config.dbuser}" required="required" />
+                <input class="form-field required full-width" type="text" name="dbuser" value="{$config.dbuser}" required="required" autocomplete="off"/>
                 <div class="corner red">
                     <i class="icon-asterisk"></i>
                 </div>
