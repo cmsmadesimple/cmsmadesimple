@@ -11,6 +11,36 @@ class wizard_step8 extends \cms_autoinstaller\wizard_step
         // nothing here
     }
 
+    private function &db_connect($destconfig)
+    {
+        $spec = new \CMSMS\Database\ConnectionSpec;
+        if( isset($destconfig['dbms']) ) {
+            $spec->type = $destconfig['dbms'];
+            $spec->host = $destconfig['db_hostname'];
+            $spec->username = $destconfig['db_username'];
+            $spec->password = $destconfig['db_password'];
+            $spec->dbname = $destconfig['db_name'];
+            $spec->prefix = $destconfig['db_prefix'];
+        }
+        else {
+            $spec->type = $destconfig['dbtype'];
+            $spec->host = $destconfig['dbhost'];
+            $spec->username = $destconfig['dbuser'];
+            $spec->password = $destconfig['dbpass'];
+            $spec->dbname = $destconfig['dbname'];
+            $spec->port = isset($destconfig['dbport']) ? $destconfig['dbport'] : null;
+            $spec->prefix = $destconfig['db_prefix'];
+        }
+        if( !defined('CMS_DB_PREFIX')) define('CMS_DB_PREFIX',$spec->prefix);
+        $db = \CMSMS\Database\Connection::initialize($spec);
+        $obj =& $this;
+        $db->SetErrorHandler(function() { /* do nohing */ });
+        $db->Execute("SET NAMES 'utf8'");
+        \CMSMS\Database\compatibility::noop();
+        \CmsApp::get_instance()->_setDb($db);
+        return $db;
+    }
+
     private function do_install()
     {
         global $CMS_INSTALL_PAGE, $DONT_LOAD_DB, $DONT_LOAD_SMARTY, $CMS_VERSION, $CMS_PHAR_INSTALLER;
@@ -30,7 +60,6 @@ class wizard_step8 extends \cms_autoinstaller\wizard_step
 
         $destconfig = $this->get_wizard()->get_data('config');
         if( !$destconfig ) throw new \Exception(\__appbase\lang('error_internal',703));
-        define('CMS_DB_PREFIX',$destconfig['dbprefix']);
 
         $siteinfo = $this->get_wizard()->get_data('siteinfo');
         if( !$siteinfo ) throw new \Exception(\__appbase\lang('error_internal',704));
@@ -44,20 +73,8 @@ class wizard_step8 extends \cms_autoinstaller\wizard_step
             include_once($destdir.'/lib/include.php');
         }
 
-        $spec = new \CMSMS\Database\ConnectionSpec;
-        $spec->type = $destconfig['dbtype'];
-        $spec->host = $destconfig['dbhost'];
-        $spec->username = $destconfig['dbuser'];
-        $spec->password = $destconfig['dbpass'];
-        $spec->dbname = $destconfig['dbname'];
-        $spec->port = isset($destconfig['dbport']) ? $destconfig['dbport'] : null;
-        $spec->prefix = CMS_DB_PREFIX;
-        $db = \CMSMS\Database\Connection::initialize($spec);
-        $obj =& $this;
-        $db->SetErrorHandler(function() { /* do nohing */ });
-        $db->Execute("SET NAMES 'utf8'");
-        \CMSMS\Database\compatibility::noop();
-        \CmsApp::get_instance()->_setDb($db);
+        // connect to the database
+        $db = $this->db_connect($destconfig);
 
         include_once(__DIR__.'/msg_functions.php');
 
@@ -70,7 +87,7 @@ class wizard_step8 extends \cms_autoinstaller\wizard_step
             // install the schema
             $this->message(\__appbase\lang('install_schema'));
             $fn = $dir.'/schema.php';
-            if( !file_exists($fn) ) throw new \Exception(\__appbase\lang('error_internal',703));
+            if( !file_exists($fn) ) throw new \Exception(\__appbase\lang('error_internal',705));
 
             global $CMS_INSTALL_DROP_TABLES, $CMS_INSTALL_CREATE_TABLES;
             $CMS_INSTALL_DROP_TABLES=1;
@@ -130,7 +147,6 @@ class wizard_step8 extends \cms_autoinstaller\wizard_step
 
         }
         catch( \Exception $e ) {
-            var_dump($e); die();
             $this->error($e->GetMessage());
         }
     }
@@ -156,18 +172,10 @@ class wizard_step8 extends \cms_autoinstaller\wizard_step
         if( !$dh ) throw new \Exception(\__appbase\lang('error_internal',712));
         while( ($file = readdir($dh)) !== false ) {
             if( $file == '.' || $file == '..' ) continue;
-            if( is_dir($dir.'/'.$file) || !file_exists("$dir/$file/MANIFEST.DAT") ) $versions[] = $file;
+            if( is_dir($dir.'/'.$file) && (is_file("$dir/$file/MANIFEST.DAT") || is_file("$dir/$file/MANIFEST.DAT.gz")) ) $versions[] = $file;
         }
         closedir($dh);
         if( count($versions) ) usort($versions,'version_compare');
-
-        // setup database connection
-        $cfg = $version_info['config'];
-        $db = \__appbase\new_db_connection($cfg['dbms']);
-        $res = $db->Connect($cfg['db_hostname'],$cfg['db_username'],$cfg['db_password'],$cfg['db_name']);
-        if( !$res ) throw new \Exception(\__appbase\lang('error_dbconnect'));
-        $db->Execute("SET NAMES 'utf8'");
-        if( !defined('CMS_DB_PREFIX')) define('CMS_DB_PREFIX',$cfg['db_prefix']);
 
         // setup and initialize the cmsms API's
         if( is_file("$destdir/include.php") ) {
@@ -175,7 +183,11 @@ class wizard_step8 extends \cms_autoinstaller\wizard_step
         } else {
             include_once($destdir.'/lib/include.php');
         }
-        \CmsApp::get_instance()->_setDb($db);
+
+        // setup database connection
+        $cfg = $version_info['config'];
+        $db = $this->db_connect($cfg);
+
         include_once(__DIR__.'/msg_functions.php');
 
         try {
@@ -184,12 +196,13 @@ class wizard_step8 extends \cms_autoinstaller\wizard_step
             $current_version = $version_info['version'];
             foreach( $versions as $ver ) {
                 $fn = "$dir/$ver/upgrade.php";
-                if( version_compare($current_version,$ver) < 0 && file_exists($fn) ) {
-                    @include_once($fn);
+                if( version_compare($current_version,$ver) < 0 && is_file($fn) ) {
+                    include_once($fn);
                 }
             }
         }
         catch( \Exception $e ) {
+            die('got error');
             $this->error($e->GetMessage());
         }
     }
