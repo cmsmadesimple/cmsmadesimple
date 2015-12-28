@@ -29,7 +29,7 @@ class wizard_step8 extends \cms_autoinstaller\wizard_step
             $spec->password = $destconfig['dbpass'];
             $spec->dbname = $destconfig['dbname'];
             $spec->port = isset($destconfig['dbport']) ? $destconfig['dbport'] : null;
-            $spec->prefix = $destconfig['db_prefix'];
+            $spec->prefix = $destconfig['dbprefix'];
         }
         if( !defined('CMS_DB_PREFIX')) define('CMS_DB_PREFIX',$spec->prefix);
         $db = \CMSMS\Database\Connection::initialize($spec);
