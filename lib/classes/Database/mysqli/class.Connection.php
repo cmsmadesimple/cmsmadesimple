@@ -94,9 +94,27 @@ class Connection extends \CMSMS\Database\Connection
 
     public function do_sql($sql)
     {
+        $queries = array();
+        $sql = trim($sql);
+        if( strpos($sql,';') !== FALSE )  {
+            $tmp = preg_split("/;+(?=([^'|^\\\']*['|\\\'][^'|^\\\']*['|\\\'])*[^'|^\\\']*[^'|^\\\']$)/", $sql);
+            foreach ($tmp as $query) {
+                $query = trim($query);
+                if( $query ) $queries[] = $query;
+            }
+        } else {
+            if( !$sql ) throw new \LogicException('Empty query passed to '.__METHOD__);
+            $queries[] = $sql;
+        }
+
+        // execute all queries, but only need the resultset from the last one.
+        // this is for compound statements ... maybe setting variables, or beginning transactions etc.
         $this->sql = $sql;
         $time_start = array_sum(explode(' ',microtime()));
-        $resultid = $this->_mysql->query( $sql );
+        $resultid = null;
+        foreach( $queries as $query ) {
+            $resultid = $this->_mysql->query( $query );
+        }
         $time_total = (array_sum(explode(' ', microtime())) - $time_start);
         $this->query_time_total += $time_total;
         if( !$resultid ) {
@@ -147,7 +165,7 @@ class Connection extends \CMSMS\Database\Connection
             return FALSE;
         }
 
-        $this->Execute('ROLLBACK; SET AUTOCOMMIT=1');
+        $this->Execute('ROLLBACK; SET AUTOCOMMIT=1;');
         $this->_in_transaction = FALSE;
         return TRUE;
     }
