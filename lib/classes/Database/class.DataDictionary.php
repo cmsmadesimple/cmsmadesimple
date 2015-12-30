@@ -448,23 +448,22 @@ abstract class DataDictionary
 
 	public function CreateTableSQL($tabname, $flds, $tableoptions=false)
 	{
-	  // if no table options specified, force MyISAM table type for mysql and mysqli
-	  $str = 'ENGINE MyISAM CHARACTER SET utf8 COLLATE utf8_general_ci';
-	  $stdtableoptions = array('mysql' => $str, 'mysqli' => $str);
-	  if( !$tableoptions ) {
-	    $tableoptions = $stdtableoptions;
-	  }
-	  else {
-	    $tableoptions = array_merge($stdtableoptions,$tableoptions);
-	  }
-	  $str = substr($this->_DBType(),0,5);
-	  if( isset($tableoptions[$str]) && strpos($tableoptions[$str],'CHARACTER') === FALSE &&
-	      strpos($tableoptions[$str],'COLLATE') === FALSE ) {
-	    // if no character set and collate options specified, force UTF8
-	    $tableoptions[$str] .= "  CHARACTER SET utf8 COLLATE utf8_general_ci";
-	  }
-
-		list($lines,$pkey) = $this->_GenFields($flds, true);
+        // if no table options specified, force MyISAM table type for mysql and mysqli
+        $str = 'ENGINE MyISAM CHARACTER SET utf8 COLLATE utf8_general_ci';
+        $stdtableoptions = array('mysql' => $str, 'mysqli' => $str);
+        if( !$tableoptions ) {
+            $tableoptions = $stdtableoptions;
+        }
+        else {
+            $tableoptions = array_merge($stdtableoptions,$tableoptions);
+        }
+        $str = substr($this->_DBType(),0,5);
+        if( isset($tableoptions[$str]) && strpos($tableoptions[$str],'CHARACTER') === FALSE &&
+            strpos($tableoptions[$str],'COLLATE') === FALSE ) {
+            // if no character set and collate options specified, force UTF8
+            $tableoptions[$str] .= "  CHARACTER SET utf8 COLLATE utf8_general_ci";
+        }
+        list($lines,$pkey) = $this->_GenFields($flds, true);
 
 		$taboptions = $this->_Options($tableoptions);
 		$tabname = $this->TableName ($tabname);
@@ -752,8 +751,14 @@ abstract class DataDictionary
 		Sanitize options, so that array elements with no keys are promoted to keys
 	*/
 
+    protected function _ProcessOptions($opts)
+    {
+        return $opts;
+    }
+
 	protected function _Options($opts)
 	{
+        $opts = $this->_ProcessOptions($opts);
 		if (!is_array($opts)) return array();
 		$newopts = array();
 		foreach($opts as $k => $v) {
