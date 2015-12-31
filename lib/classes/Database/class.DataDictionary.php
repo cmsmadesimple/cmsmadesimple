@@ -271,7 +271,7 @@ abstract class DataDictionary
      *
      * @param \CMSMS\Database\Connection $conn
      */
-    public function __construct(Connection $conn)
+    protected function __construct(Connection $conn)
     {
         $this->connection = $conn;
     }
@@ -600,6 +600,7 @@ abstract class DataDictionary
 			$flds0 = Lens_ParseArgs($txt,',');
 			$hasparam = false;
 			foreach($flds0 as $f0) {
+                if( !count($f0) ) break;
 				$f1 = array();
 				foreach($f0 as $token) {
 					switch (strtoupper($token)) {
@@ -615,7 +616,6 @@ abstract class DataDictionary
 					}
 				}
 				$flds[] = $f1;
-
 			}
 		}
 		$this->autoIncrement = false;
@@ -698,6 +698,7 @@ abstract class DataDictionary
 			//--------------------
 			// VALIDATE FIELD INFO
 			if (!strlen($fname)) {
+                die('failed');
 				return false;
 			}
 
@@ -790,13 +791,10 @@ abstract class DataDictionary
 
 		if ( isset($idxoptions['REPLACE']) || isset($idxoptions['DROP']) ) {
 			$sql[] = sprintf ($this->dropIndex, $idxname);
-			if ( isset($idxoptions['DROP']) )
-				return $sql;
+			if ( isset($idxoptions['DROP']) ) return $sql;
 		}
 
-		if ( empty ($flds) ) {
-			return $sql;
-		}
+		if ( empty ($flds) ) return $sql;
 
 		$unique = isset($idxoptions['UNIQUE']) ? ' UNIQUE' : '';
 
@@ -805,8 +803,7 @@ abstract class DataDictionary
 		if ( isset($idxoptions[$this->upperName]) )
 			$s .= $idxoptions[$this->upperName];
 
-		if ( is_array($flds) )
-			$flds = implode(', ',$flds);
+		if ( is_array($flds) )	$flds = implode(', ',$flds);
 		$s .= '(' . $flds . ')';
 		$sql[] = $s;
 
@@ -948,9 +945,7 @@ abstract class DataDictionary
 					$mt = &$this->MetaType($c->type,$ml);
 					if ($ml == -1) $ml = '';
 					if ($mt == 'X') $ml = $v['SIZE'];
-					if (($mt != $v['TYPE']) ||  $ml != $v['SIZE']) {
-						$holdflds[$k] = $v;
-					}
+					if (($mt != $v['TYPE']) ||  $ml != $v['SIZE']) $holdflds[$k] = $v;
 				} else {
 					$holdflds[$k] = $v;
 				}
