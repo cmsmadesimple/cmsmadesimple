@@ -183,7 +183,7 @@ final class CmsPermission
 		$row = null;
 		if( (int)$name > 0 ) {
 			$query = 'SELECT * FROM '.CMS_DB_PREFIX.'permissions WHERE permission_id = ?';
-			$row = $dbr->GetRow($query,array((int)$name));
+			$row = $db->GetRow($query,array((int)$name));
 		}
 		else {
 			$query = 'SELECT * FROM '.CMS_DB_PREFIX.'permissions WHERE permission_name = ?';
