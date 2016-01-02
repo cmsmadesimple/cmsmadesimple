@@ -45,6 +45,16 @@ namespace CMSMS\Database {
     /**
      * A class defining a database connection, and mechanisms for working with a database.
      *
+     * This library is largely compatible with adodb_lite with the pear,extended,transaction plugins with a few
+     * notable differences:
+     *
+     * Differences:
+     * <ul>
+     *  <li>GenID will not automatically create a sequence table.
+     *    <p>We encourage you to not use sequence tables and use auto-increment fields instead.</p>
+     *  </li>
+     * </ul>
+     *
      * @package CMS
      * @author Robert Campbell
      * @copyright Copyright (c) 2015, Robert Campbell <calguy1000@cmsmadesimple.org>
@@ -442,6 +452,8 @@ namespace CMSMS\Database {
 
         /**
          * For use with sequence tables, this method will generate a new ID value.
+         *
+         * This function will not automatically create the sequence table if not specified.
          *
          * @param string $seqname The name of the sequence table.
          * @return int

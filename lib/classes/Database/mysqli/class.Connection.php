@@ -70,7 +70,8 @@ class Connection extends \CMSMS\Database\Connection
 
     public function Insert_ID()
     {
-        return $this->_mysql->insert_id;
+        $res =  $this->_mysql->insert_id;
+        return $res;
     }
 
     public function qstr($str)
@@ -217,18 +218,19 @@ class Connection extends \CMSMS\Database\Connection
         return FALSE;
     }
 
-    public function GenID($seqname)
+    public function GenID($seqname,$start_id = 1)
     {
-        $getnext = sprintf('UPDATE %s SET id=LAST_INSERT_id(id+1);',$seqname);
-        $this->Execute($getnext);
-        return $this->_mysql->insert_id;
+        $sql = sprintf('UPDATE %s SET id=id+1;',$seqname);
+        $this->Execute($sql);
+        $sql = sprintf('SELECT id FROM %s',$seqname);
+        return (int) $this->GetOne($sql);
     }
 
     public function CreateSequence($seqname,$startID=1)
     {
         $out = array();
         $out[] = sprintf('CREATE TABLE %s (id int not null) ENGINE MyISAM',$seqname);
-        $out[] = sprintf('INSERT INTO %s values (%s)',$seqname,$startID);
+        $out[] = sprintf('INSERT INTO %s (id) values (%s)',$seqname,$startID);
         $dict = $this->NewDataDictionary();
         $dict->ExecuteSQLArray($out);
         return TRUE;
