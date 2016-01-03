@@ -371,7 +371,12 @@ final class cms_config implements ArrayAccess
 		  }
 		  $prefix = 'http://';
 		  if( CmsApp::get_instance()->is_https_request() ) $prefix = 'https://';
-		  $str = $prefix.$_SERVER['HTTP_HOST'].$path;
+		  if( isset($_SERVER['HTTP_HOST']) ) { 
+                      $str = $prefix.$_SERVER['HTTP_HOST'].$path;
+                  }
+                  else {
+                      $str = $prefix.$path;
+                  }
 		  $this->_cache[$key] = $str;
 		  return $str;
 		  break;

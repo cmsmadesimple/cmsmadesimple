@@ -93,8 +93,21 @@ class Connection extends \CMSMS\Database\Connection
         return " IFNULL($field, $ifNull)";
     }
 
+    protected function do_multisql($sql)
+    {
+        // no error checking for this stuff
+        // and no return data
+        $_t = $this->_mysql->multi_query($sql);
+        if( $_t ) {
+            do {
+                $res = $this->_mysql->store_result();
+            } while( $this->_mysql->next_result() );
+        }
+    }
+
     public function do_sql($sql)
     {
+        /*
         $queries = array();
         $sql = trim($sql);
         if( strpos($sql,';') !== FALSE )  {
@@ -107,18 +120,19 @@ class Connection extends \CMSMS\Database\Connection
             if( !$sql ) throw new \LogicException('Empty query passed to '.__METHOD__);
             $queries[] = $sql;
         }
+        */
 
         // execute all queries, but only need the resultset from the last one.
         // this is for compound statements ... maybe setting variables, or beginning transactions etc.
         $this->sql = $sql;
         $time_start = array_sum(explode(' ',microtime()));
-        $resultid = null;
-        foreach( $queries as $query ) {
-            $resultid = $this->_mysql->query( $query );
-        }
+        $resultid = $this->_mysql->query( $sql );
         $time_total = (array_sum(explode(' ', microtime())) - $time_start);
         $this->query_time_total += $time_total;
         if( !$resultid ) {
+            stack_trace();
+	    debug_display($sql);
+            debug_display($db->sql); die('fail '.$this->_mysql->error);
             $this->FailTrans();
             $this->OnError(self::ERROR_EXECUTE,$this->_mysql->errno, $this->_mysql->error);
             return;
@@ -142,7 +156,7 @@ class Connection extends \CMSMS\Database\Connection
         }
         $this->_in_transaction = TRUE;
         $this->_transaction_failed = FALSE;
-        $this->Execute('SET AUTOCOMMIT=0; BEGIN');
+        $this->do_multisql('SET AUTOCOMMIT=0; BEGIN');
         return TRUE;
     }
 
@@ -166,7 +180,7 @@ class Connection extends \CMSMS\Database\Connection
             return FALSE;
         }
 
-        $this->Execute('ROLLBACK; SET AUTOCOMMIT=1;');
+        $this->do_multisql('ROLLBACK; SET AUTOCOMMIT=1;');
         $this->_in_transaction = FALSE;
         return TRUE;
     }
@@ -183,7 +197,7 @@ class Connection extends \CMSMS\Database\Connection
             return FALSE;
         }
 
-		$this->Execute('COMMIT; SET AUTOCOMMIT=1');
+		$this->do_multisql('COMMIT; SET AUTOCOMMIT=1');
         $this->_in_transaction = FALSE;
 		return TRUE;
 	}
