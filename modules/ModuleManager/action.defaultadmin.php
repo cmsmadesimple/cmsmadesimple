@@ -75,7 +75,7 @@ try {
   $newversions = modulerep_client::get_newmoduleversions();
 }
 catch( Exception $e ) {
-  echo $this->ShowError($e->GetMessage());
+  echo $this->ShowErrors($e->GetMessage());
 }
 
 echo $this->StartTabHeaders();
