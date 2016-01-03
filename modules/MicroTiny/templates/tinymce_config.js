@@ -48,7 +48,7 @@ tinymce.init({
     content_css : '{cms_stylesheet name=$mt_cssname nolinks=1}',
 {/if}
 {if $isfrontend}
-    toolbar: 'undo | bold italic underline | alignleft aligncenter alignright alignjustify | bullist numlist | link{if $mt_profile.allowmages} | image{/if}',
+    toolbar: 'undo | bold italic underline | alignleft aligncenter alignright alignjustify | bullist numlist | link{if $mt_profile.allowimages} | image{/if}',
     plugins: ['autolink paste link anchor wordcount {if $mt_profile.allowimages} media image{/if} {if $mt_profile.allowtables}table{/if}'],
 {else}
     image_advtab: true,
