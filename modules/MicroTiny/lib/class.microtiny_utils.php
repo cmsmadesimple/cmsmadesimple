@@ -32,7 +32,7 @@ class microtiny_utils
    *
    * @internal
    */
-  public static function WYSIWYGGenerateHeader($selector=null, $cssname='')
+  public static function WYSIWYGGenerateHeader($selector=null, $css_name='')
   {
       static $first_time = true;
 
@@ -45,16 +45,37 @@ class microtiny_utils
       $languageid = self::GetLanguageId($frontend);
       $mtime = time() - 300; // by defaul cache for 5 minutes ??
 
-      // get the latest modification time of this cssname
-      // if fn does not exist or is older than the modification time, save the config.
-      if( $cssname ) {
+      // get the cssname that we're going to use (either passed in, or from profile)
+      try {
+          $profile = null;
+          if( $frontend ) {
+              $profile = microtiny_profile::load(MicroTiny::PROFILE_FRONTEND);
+          }
+          else {
+              $profile = microtiny_profile::load(MicroTiny::PROFILE_ADMIN);
+          }
+
+          if( !$profile['allowcssoverride'] ) {
+              // not allowwing override
+              $css_name = null;
+              $css_id = (int) $profile['dfltstylesheet'];
+              if( $css_id > 0 ) $css_name = $css_id;
+          }
+      }
+      catch( \Exception $e ) {
+          // do nothing.
+      }
+
+      // if we have a stylesheet name, use it's modification time as our mtime
+      if( $css_name ) {
           try {
-              $css = CmsLayoutStylesheet::load($cssname);
+              $css = CmsLayoutStylesheet::load($css_name);
+              $css_name = $css->get_name();
               $mtime = $css->get_modified();
           }
           catch( Exception $e ) {
               // couldn't load the stylesheet for some reason.
-              $cssname = null;
+              $css_name = null;
           }
       }
 
@@ -64,7 +85,7 @@ class microtiny_utils
       if( $module == $mod->GetName() ) $mtime = time() + 60;
 
       // also disable caching if told to by the config.php
-      if( isset($config['mt_disable_cache']) && cms_to_bool($config['mt_disable_cache']) ) $mtime = time()+60;
+      if( isset($config['mt_disable_cache']) && cms_to_bool($config['mt_disable_cache']) ) $mtime = time() + 60;
 
       $output = '';
       if( $first_time ) {
@@ -73,10 +94,10 @@ class microtiny_utils
           $output .= '<script type="text/javascript" src="'.$config->smart_root_url().'/modules/MicroTiny/lib/js/tinymce/tinymce.min.js"></script>';
       }
 
-      $fn = cms_join_path(PUBLIC_CACHE_LOCATION,'mt_'.md5(__DIR__.session_id().$frontend.$selector.$cssname.$languageid).'.js');
+      $fn = cms_join_path(PUBLIC_CACHE_LOCATION,'mt_'.md5(__DIR__.session_id().$frontend.$selector.$css_name.$languageid).'.js');
       if( !file_exists($fn) || filemtime($fn) < $mtime ) {
           // we have to generate an mt config js file.
-          self::_save_static_config($fn,$frontend,$selector,$cssname,$languageid);
+          self::_save_static_config($fn,$frontend,$selector,$css_name,$languageid);
       }
 
       //$configurl = $config->smart_root_url().'/tmp/cache/'.$fn.'?t='.time();
@@ -131,7 +152,7 @@ class microtiny_utils
       if( $selector ) $tpl_ob->assign('mt_selector',$selector);
 
       try {
-          $p1rofile = null;
+          $profile = null;
           if( $frontend ) {
               $profile = microtiny_profile::load(MicroTiny::PROFILE_FRONTEND);
           }
@@ -140,10 +161,7 @@ class microtiny_utils
           }
 
           $tpl_ob->assign('mt_profile',$profile);
-          $stylesheet = (int)$profile['dfltstylesheet'];
-          if( $stylesheet < 1 ) $stylesheet = null;
-          if( $profile['allowcssoverride'] && $css_name ) $stylesheet = $css_name;
-          if( $stylesheet ) $tpl_ob->assign('mt_cssname',$stylesheet);
+          if( $css_name ) $tpl_ob->assign('mt_cssname',$css_name);
       }
       catch( Exception $e ) {
           // oops, we gots a problem.

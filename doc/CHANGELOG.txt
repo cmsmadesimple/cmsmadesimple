@@ -10,6 +10,7 @@ MenuManager  v1.50.2
 
 MicroTiny v2.0.3
 - minor template fix.
+- fixes for stylesheet overrides.
 
 Version 2.1.1 - Nicholls Town
 ----------------------------------
