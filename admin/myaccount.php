@@ -159,7 +159,7 @@ if (isset($_POST['submit_prefs']) && check_permission($userid,'Manage My Setting
   $date_format_string = trim(strip_tags($_POST['date_format_string']));
   $default_parent = '';
   if (isset($_POST['parent_id'])) $default_parent = (int)$_POST['parent_id'];
-  $homepage = cms_htmlentities(cleanValue($_POST['homepage']));
+  $homepage = cleanValue($_POST['homepage']);
   $hide_help_links = (isset($_POST['hide_help_links']) ? 1 : 0);
   $ignoredmodules = array();
   if (isset($_POST['ignoredmodules'])) {

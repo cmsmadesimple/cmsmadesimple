@@ -27,7 +27,10 @@
  */
 
 /**
- * An abstract class for building queries and managing results
+ * An abstract class for building queries and managing results.
+ *
+ * This class is capable of managing a resultset, and encapsulates conversionof database rows into
+ * application objects.
  *
  * @since 2.0
  * @package CMS
@@ -197,17 +200,22 @@ abstract class CmsDbQueryBase
     }
 
     /**
-     * Get the object for the current item
+     * Get the object for the current matching database row.
      *
+     * @see $this->fields
      * @return mixed
      */
     abstract public function &GetObject();
 
 	/**
-	 * Return an array of matched objects
+	 * Return an array of matched objects.
+     *
+     * This method will iterate through all of the rows of the resultset, and convert each resulting
+     * row into an object.
 	 *
 	 * The output of this method depends on the derived class.
 	 *
+     * @see GetObject()
 	 * @return array|null
 	 */
     public function GetMatches()

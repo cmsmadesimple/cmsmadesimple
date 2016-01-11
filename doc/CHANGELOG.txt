@@ -1,5 +1,10 @@
 Version 2.1.2
 ----------------------------------
+Core - General
+- Minor fix to missing lang string stuff
+- Fixes to home page preferences
+- API documentation fixes (minor)
+
 ModuleManager v2.0.2
 - Minor fix for some notices in install and upgrade modules.
 - Minor typo fixes.
@@ -10,6 +15,7 @@ MenuManager  v1.50.2
 
 MicroTiny v2.0.3
 - minor template fix.
+- fixes for stylesheet overrides.
 
 Version 2.1.1 - Nicholls Town
 ----------------------------------
