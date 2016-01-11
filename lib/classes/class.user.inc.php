@@ -21,15 +21,16 @@
 
 /**
  * User class definition
+ *
  * @package CMS
  * @license GPL
  */
 
 /**
- * Generic user class.  This can be used for any logged in user or user related function.
+ * Generic admin user class.  This can be used for any logged in user or user related function.
  *
- * @since 0.6.1
  * @package CMS
+ * @since 0.6.1
  * @license GPL
  */
 class User

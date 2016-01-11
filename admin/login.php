@@ -163,27 +163,28 @@ else if ( isset($_SESSION['redirect_url']) ) {
   unset($_SESSION["t_redirect_url"]);
 
   if (true == $is_logged_in) {
-    $userid = get_userid();
-    $homepage = cms_userprefs::get_for_user($userid,'homepage'.'index.php');
-    $homepage = CmsAdminUtils::get_session_url($homepage);
+      $userid = get_userid();
+      $homepage = cms_userprefs::get_for_user($userid,'homepage'.'index.php');
+      $homepage = CmsAdminUtils::get_session_url($homepage);
 
-    $homepage = str_replace('&amp;','&',$homepage);
-    $tmp = explode('?',$homepage);
-    if( !file_exists($tmp[0]) ) $tmp[0] = 'index.php';
-    $tmp2 = array();
-    if( isset($tmp[1]) ) {
-      parse_str($tmp[1],$tmp2);
-      if( in_array('_s_',array_keys($tmp2)) ) unset($tmp2['_s_']);
-      if( in_array('sp_',array_keys($tmp2)) ) unset($tmp2['sp_']);
-    }
-    $tmp2[CMS_SECURE_PARAM_NAME] = $_SESSION[CMS_USER_KEY];
-    $tmp3 = array();
-    foreach( $tmp2 as $k => $v ) {
-      $tmp3[] = $k.'='.$v;
-    }
-    $homepage = $tmp[0].'?'.implode('&amp;',$tmp3);
-    $homepage = html_entity_decode($homepage);
-    redirect($homepage);
+      $homepage = str_replace('&amp;','&',$homepage);
+      $tmp = explode('?',$homepage);
+      if( !file_exists($tmp[0]) ) $tmp[0] = 'index.php';
+      $tmp2 = array();
+      if( isset($tmp[1]) ) {
+          parse_str($tmp[1],$tmp2);
+          if( in_array('_s_',array_keys($tmp2)) ) unset($tmp2['_s_']);
+          if( in_array('sp_',array_keys($tmp2)) ) unset($tmp2['sp_']);
+      }
+      $tmp2[CMS_SECURE_PARAM_NAME] = $_SESSION[CMS_USER_KEY];
+      $tmp3 = array();
+      foreach( $tmp2 as $k => $v ) {
+          $tmp3[] = $k.'='.$v;
+      }
+      $homepage = $tmp[0].'?'.implode('&amp;',$tmp3);
+      $homepage = html_entity_decode($homepage);
+      if( !startswith($homepage,'http') && startswith($homepage,'/') ) $homepage = $config->smart_root_url().$homepage;
+      redirect($homepage);
   }
 }
 if (isset($_POST["logincancel"])) {
@@ -250,39 +251,40 @@ if (isset($_POST["username"]) && isset($_POST["password"])) {
       unset($_SESSION["redirect_url"]);
     }
     else {
-      if (isset($config) and $config['debug'] == true) {
-	$url = 'index.php?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
-	echo "Debug is on.  Redirecting disabled...  Please click this link to continue.<br />";
-	echo "<a href=\"{$url}\">{$url}</a><br />";
-	$arr = $gCms->get_errors();
-	foreach ($arr as $globalerror) {
-	  echo $globalerror;
-	}
-      }
-      else {
-	$homepage = cms_userprefs::get_for_user($oneuser->id,'homepage');
-	if( $homepage ) {
-	  // quick hacks to remove old secure param name from homepage url
-	  // and replace with the correct one.
-	  $homepage = str_replace('&amp;','&',$homepage);
-	  $tmp = explode('?',$homepage);
-	  @parse_str($tmp[1],$tmp2);
-	  if( in_array('_s_',array_keys($tmp2)) ) unset($tmp2['_s_']);
-	  if( in_array('sp_',array_keys($tmp2)) ) unset($tmp2['sp_']);
-	  $tmp2[CMS_SECURE_PARAM_NAME] = $_SESSION[CMS_USER_KEY];
-	  foreach( $tmp2 as $k => $v ) {
-	    $tmp3[] = $k.'='.$v;
-	  }
-	  $homepage = $tmp[0].'?'.implode('&amp;',$tmp3);
+        if (isset($config) and $config['debug'] == true) {
+            $url = 'index.php?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
+            echo "Debug is on.  Redirecting disabled...  Please click this link to continue.<br />";
+            echo "<a href=\"{$url}\">{$url}</a><br />";
+            $arr = $gCms->get_errors();
+            foreach ($arr as $globalerror) {
+                echo $globalerror;
+            }
+        }
+        else {
+            $homepage = cms_userprefs::get_for_user($oneuser->id,'homepage');
+            if( $homepage ) {
+                // quick hacks to remove old secure param name from homepage url
+                // and replace with the correct one.
+                $homepage = str_replace('&amp;','&',$homepage);
+                $tmp = explode('?',$homepage);
+                @parse_str($tmp[1],$tmp2);
+                if( in_array('_s_',array_keys($tmp2)) ) unset($tmp2['_s_']);
+                if( in_array('sp_',array_keys($tmp2)) ) unset($tmp2['sp_']);
+                $tmp2[CMS_SECURE_PARAM_NAME] = $_SESSION[CMS_USER_KEY];
+                foreach( $tmp2 as $k => $v ) {
+                    $tmp3[] = $k.'='.$v;
+                }
+                $homepage = $tmp[0].'?'.implode('&amp;',$tmp3);
 
-	  // and redirect.
-	  $homepage = html_entity_decode($homepage);
-	}
-	else {
-	  $homepage = $config['admin_url'];
-	}
-	redirect($homepage);
-      }
+                // and redirect.
+                $homepage = html_entity_decode($homepage);
+                if( !startswith($homepage,'http') && startswith($homepage,'/') ) $homepage = $config->smart_root_url().$homepage;
+            }
+            else {
+                $homepage = $config['admin_url'];
+            }
+            redirect($homepage);
+        }
     }
     return;
   }

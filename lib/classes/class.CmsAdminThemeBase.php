@@ -1275,7 +1275,6 @@ abstract class CmsAdminThemeBase
 	public function GetAdminPageDropdown($name,$selected,$id = '')
 	{
 		$opts = $this->GetAdminPages();
-
         $attrs = array('name'=>trim((string)$name));
         if( $id ) $attrs['id'] = trim((string)$id);
         $output = '<select ';
