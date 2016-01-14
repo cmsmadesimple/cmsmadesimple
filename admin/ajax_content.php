@@ -104,11 +104,11 @@ case 'pagepeers':
 
         // get the parent pages
         $db = cmsms()->GetDb();
-        $query = 'SELECT parent_id FROM '.cms_db_prefix().'content WHERE content_id IN ('.implode(',',$peers).')';
+        $query = 'SELECT content_id,parent_id FROM '.cms_db_prefix().'content WHERE content_id IN ('.implode(',',$peers).')';
         $tmp = $db->GetArray($query);
         $parents = array();
         foreach( $tmp as $one ) {
-            $parents[] = $one['parent_id'];
+            $parents[$one['content_id']] = $one['parent_id'];
         }
 
         if( count($parents) != count($peers) || count($peers) == 0 || count($parents) == 0 ) {
@@ -130,8 +130,8 @@ case 'pagepeers':
 
             $out = array();
             for( $i = 0; $i < count($peers); $i++ ) {
-                $parent = $parents[$i];
                 $peer = $peers[$i];
+                $parent = $parents[$peer];
                 $out[$peer] = $data[$parent];
             }
         }
