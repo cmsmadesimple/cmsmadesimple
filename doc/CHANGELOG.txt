@@ -5,6 +5,7 @@ Core - General
 - Fixes to home page preferences
 - API documentation fixes (minor)
 - Fixes for ajax_content (the ajax routine behind the parent selector in edit content) to handle ordering inconsistencies.
+- Remove die statement in is_email
 
 ModuleManager v2.0.2
 - Minor fix for some notices in install and upgrade modules.
