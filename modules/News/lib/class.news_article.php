@@ -174,7 +174,7 @@ class news_article
                     if( $key == $obj->alias ) return $obj->value;
                 }
             }
-            //throw new Exception('Requesting indvlid data from News article object '.$key);
+            //throw new Exception('Requesting invalid data from News article object '.$key);
         }
     }
 
@@ -217,7 +217,7 @@ class news_article
             break;
 
         default:
-            throw new Exception('Requesting indvlid data from News article object '.$key);
+            throw new Exception('Requesting invalid data from News article object '.$key);
         }
 
         return FALSE;
@@ -262,7 +262,7 @@ class news_article
             break;
 
         default:
-            throw new Exception('Modifying indvlid data in News article object '.$key);
+            throw new Exception('Modifying invalid data in News article object '.$key);
 
         }
     }
