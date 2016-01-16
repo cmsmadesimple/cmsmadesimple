@@ -58,6 +58,7 @@ $lang['error_chmodfailed'] = 'One or more problems encountered when changing per
 $lang['error_connectnomodules'] = 'It appears that no modules match your search criteria.';
 $lang['error_downloadxml'] = 'A problem occurred downloading the XML FILE: %s';
 $lang['error_dependencynotfound'] = 'One or more dependencies could not be found in the forge';
+$lang['error_dependencynotfound2'] = 'The module %s could not be found in the forge, but it is a dependency.  Please ensure that it is installed correctly, then retry this operation';
 $lang['error_fileupload'] = 'A problem occurred uploading the file';
 $lang['error_getmodule'] = 'A problem occurred instantiating %s';
 $lang['error_internal'] = 'Internal Error... Please report this to your system administrator';

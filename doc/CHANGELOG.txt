@@ -8,6 +8,7 @@ Core - General
 - Remove die statement in is_email
 
 ModuleManager v2.0.2
+- Revamp module dependency calculations when installing a module.
 - Minor fix for some notices in install and upgrade modules.
 - Minor typo fixes.
 - Minor fixes for PHP7

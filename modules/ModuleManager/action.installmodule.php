@@ -89,35 +89,97 @@ try {
         }
     }
 
-    // recursive function to resolve dependencies
-    $resolve_deps = function($module_name,$module_version,&$alldeps,$depth = 0) use (&$resolve_deps) {
-        $deps = null;
-        try {
-            list($res,$deps) = modulerep_client::get_module_dependencies($module_name,$module_version);
-        }
-        catch( \RuntimeException $e ) {
-            // module not found in the repository
-            // maybe it's a core module dependency.
-        }
+    // recursive function to resolve dependencies given a module name and a module version
+    $mod = $this;
+    $resolve_deps = function($module_name,$module_version,$uselatest,$depth = 0) use (&$resolve_deps,&$mod) {
 
-        if( is_array($deps) && count($deps) ) {
-            foreach( $deps as $row ) {
-                $resolve_deps($row['name'],$row['version'],$alldeps,$depth + 1);
-
-                // filter out the duplicates (by greater version number)
-                if( !isset($alldeps[$row['name']]) ) {
-                    $alldeps[$row['name']] = $row;
+        $array_to_hash = function($in,$key) {
+            $out = array();
+            $idx = 0;
+            foreach( $in as $rec ) {
+                if( isset($rec[$key]) ) {
+                    $out[$rec[$key]] = $rec;
+                } else {
+                    $out[$idx++] = $rec;
                 }
-                else {
-                    if( version_compare($alldeps[$row['name']]['version'],$row['version']) < 0 ) $alldeps[$row['name']] = $row;
+            }
+            return $out;
+        };
+
+        $extract_member = function($in,$key) {
+            $out = array();
+            foreach( $in as $rec ) {
+                if( isset($rec[$key]) ) $out[] = $rec[$key];
+            }
+            if( count($out) ) {
+                $out = array_unique($out);
+                return $out;
+            }
+        };
+
+        $update_latest_deps = function($indeps,$latest) use (&$mod) {
+            $out = array();
+            foreach( $indeps as $name => $onedep ) {
+                if( isset($latest[$name]) ) {
+                    $out[$name] = $latest[$name];
+                } else {
+                    // module not found in forge?? could be a system module,
+                    // but it's still a dependency.
+                    if( !ModuleOperations::get_instance()->IsSystemModule($name) ) throw new \CmsInvalidDataException($mod->Lang('error_dependencynotfound2',$name));
+                    $out[$name] = $onedep;
+                }
+            }
+            return $out;
+        };
+
+        $deps = null;
+        list($res,$deps) = modulerep_client::get_module_dependencies($module_name,$module_version);
+        if( is_array($deps) && count($deps) ) {
+
+            if( $uselatest ) {
+                // we want the latest of all of the dependencies.
+                $deps = $array_to_hash($deps,'name');
+                $dep_module_names = $extract_member($deps,'name');
+                $latest = modulerep_client::get_modulelatest($dep_module_names);
+                if( !$latest ) throw new CmsInvalidDataException($this->Lang('error_dependencynotfound'));
+                $latest = $array_to_hash($latest,'name');
+                $deps = $update_latest_deps($deps,$latest);
+            }
+
+            foreach( $deps as $row ) {
+                // now see if these dependencies, have dependencies.
+                $child_deps = $resolve_deps($row['name'],$row['version'],$uselatest,$depth + 1);
+
+                // grab the latest version of any duplicates
+                if( $child_deps ) {
+                    foreach( $child_deps as $child_name => $child_row ) {
+                        if( !isset($deps[$child_name]) ) {
+                            $deps[$child_name] = $child_row;
+                        } else {
+                            if( version_compare($deps[$child_name]['version'],$child_row['version']) < 0 ) $deps[$child_name] = $child_row;
+                        }
+                    }
                 }
             }
         }
+
+        return $deps;
     };
+
+    // algorithm
+    // given a desired module name, module version, and wether we want latest versions
+    // get module dependencies for the target module version
+    // if we want latest versions of dependants
+    //   get latest version info for all dependencies
+    //   get module dependencies again as they may have changed
+    //   merge results
+    // else
+    //   get module info for all dependencies
 
     // recursively (depth first) get the dependencies for the module+version we specified.
     $alldeps = array();
-    $resolve_deps($module_name,$module_version,$alldeps);
+    $uselatest = (int) $this->GetPreference('latestdepends',1);
+    $alldeps = $resolve_deps($module_name,$module_version,$uselatest);
 
     // get information for all dependencies, and make sure that they are all there.
     if( is_array($alldeps) && count($alldeps) ) {
@@ -126,6 +188,7 @@ try {
             if( $this->GetPreference('latestdepends',1) ) {
                 // get the latest version of dependency (but not necessarily of the module we're installing)
                 $res = modulerep_client::get_modulelatest(array_keys($alldeps));
+                $new_deps = array();
             }
             else {
                 // get the info for all dependencies
@@ -134,6 +197,7 @@ try {
         }
         catch( \ModuleNoDataException $e ) {
             // at least one of the dependencies could not be found on the server.
+            // may be a system module... if it is not a system module, throw an exception
             audit('',$this->GetVersion(),'At least one requested module was not available on the forge');
         }
 

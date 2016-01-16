@@ -298,8 +298,8 @@ final class modulerep_client
     $qparms['clientcmsversion'] = CMS_VERSION;
     $url .= '/upgradelistgetall';
 
-    $req = new cms_http_request();
-    $req->execute($url,'','POST',$qparms);
+    $req = new modmgr_cached_request();
+    $req->execute($url,$qparms);
     $status = $req->getStatus();
     $result = $req->getResult();
     if( $status != 200 ) throw new CmsCommunicationException($mod->Lang('error_request_problem'));
