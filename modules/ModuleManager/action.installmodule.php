@@ -125,7 +125,7 @@ try {
                 } else {
                     // module not found in forge?? could be a system module,
                     // but it's still a dependency.
-                    if( !ModuleOperations::get_instance()->IsSystemModule($name) ) throw new \CmsInvalidDataException($mod->Lang('error_dependencynotfound2',$name));
+                    if( !ModuleOperations::get_instance()->IsSystemModule($name) ) throw new \CmsInvalidDataException($mod->Lang('error_dependencynotfound2',$name,$onedep['version']));
                     $out[$name] = $onedep;
                 }
             }
@@ -136,14 +136,19 @@ try {
         list($res,$deps) = modulerep_client::get_module_dependencies($module_name,$module_version);
         if( is_array($deps) && count($deps) ) {
 
+            $deps = $array_to_hash($deps,'name');
+            $dep_module_names = $extract_member($deps,'name');
+
             if( $uselatest ) {
                 // we want the latest of all of the dependencies.
-                $deps = $array_to_hash($deps,'name');
-                $dep_module_names = $extract_member($deps,'name');
                 $latest = modulerep_client::get_modulelatest($dep_module_names);
                 if( !$latest ) throw new CmsInvalidDataException($this->Lang('error_dependencynotfound'));
                 $latest = $array_to_hash($latest,'name');
                 $deps = $update_latest_deps($deps,$latest);
+            } else {
+                $info = modulerep_client::get_multiple_moduleinfo($deps);
+                $info = $array_to_hash($info,'name');
+                $deps = $update_latest_deps($deps,$info);
             }
 
             foreach( $deps as $row ) {

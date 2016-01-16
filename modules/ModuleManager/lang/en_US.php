@@ -57,8 +57,8 @@ $lang['error_checksum'] = 'Checksum error.  This probably indicates a corrupt fi
 $lang['error_chmodfailed'] = 'One or more problems encountered when changing permissions of files';
 $lang['error_connectnomodules'] = 'It appears that no modules match your search criteria.';
 $lang['error_downloadxml'] = 'A problem occurred downloading the XML FILE: %s';
-$lang['error_dependencynotfound'] = 'One or more dependencies could not be found in the forge';
-$lang['error_dependencynotfound2'] = 'The module %s could not be found in the forge, but it is a dependency.  Please ensure that it is installed correctly, then retry this operation';
+$lang['error_dependencynotfound'] = 'One or more dependencies could not be found in the repository';
+$lang['error_dependencynotfound2'] = 'The module %s (%s) could not be found in the repository, but it is a dependency.<br/>This module may no longer be available in the module repository, or may require manual installation.<br/>Please ensure that it is installed correctly, then retry this operation.';
 $lang['error_fileupload'] = 'A problem occurred uploading the file';
 $lang['error_getmodule'] = 'A problem occurred instantiating %s';
 $lang['error_internal'] = 'Internal Error... Please report this to your system administrator';
@@ -95,7 +95,7 @@ $lang['export'] = 'Export';
 $lang['friendlyname'] = 'Module Manager';
 
 // G
-$lang['general_notice'] = 'The versions displayed here represent the latest XML files uploaded to the CMSMS Forge.  They may or may not represent the latest available versions.';
+$lang['general_notice'] = 'The versions displayed here represent the latest XML files uploaded to the CMSMS module repository.  They may or may not represent the latest available versions. Additionally, the module repository may only contain modules released within the last few months';
 
 // H
 $lang['help'] = '<h3>What Does This Do?</h3>
