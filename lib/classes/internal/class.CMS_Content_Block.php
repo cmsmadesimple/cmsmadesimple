@@ -401,6 +401,13 @@ final class CMS_Content_Block
         if( is_object($content_obj) ) {
             $result = $content_obj->GetPropertyValue($block);
             if( $result == -1 ) $result = '';
+            $module = isset($params['module']) ? trim($params['module']) : null;
+            if( $module ) {
+                $mod = \cms_utils::get_module($module);
+                if( is_object($mod) ) {
+                    $result = $mod->RenderContentBlockField($block,$result,$params,$content_obj);
+                }
+            }
         }
 
         if( isset($params['assign']) ) {

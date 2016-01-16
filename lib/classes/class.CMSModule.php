@@ -941,6 +941,23 @@ abstract class CMSModule
     }
 
     /**
+     * Render the value of a module content block on the frontend of the website.
+     * This gives modules the opportunity to render data stored in content blocks differently.
+     *
+     * @abstract
+     * @since 2.2
+     * @param string $blockName Content block name
+     * @param string $value     Content block value as stored in the database
+     * @param array  $blockparams Content block parameters
+     * @param ContentBase $content_obj The content object that is currently being displayed
+     * @return string
+     */
+    function RenderContentBlockField($blockName,$value,$blockparams,ContentBase $content_obj)
+    {
+        return $value;
+    }
+
+    /**
      * Register a bulk content action
      *
      * For use in the CMSMS content list this method allows a module to

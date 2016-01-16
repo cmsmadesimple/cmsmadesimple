@@ -33,6 +33,27 @@ $clean = 0;
 $checksums = 1;
 $version_num = null;
 
+// find our repository path... todo: clean this up.
+$cmd = "svn info | grep '^URL'";
+$out = trim(@exec($cmd));
+if( !startswith($out,'URL') ) throw new Exception("Could not get repository root from shell");
+list($junk,$url) = explode(' ',$out);
+$url = trim($url);
+if( !startswith($url,$repos_root) ) throw new Exception("Invalid repository root detected");
+$bn1 = $bn2 = null;
+$start_dir = __DIR__;
+$out_url = $start_url = $url;
+while( 1 ) {
+    $out_url = $start_url;
+    $bn1 = basename($start_dir);
+    $bn2 = basename($start_url);
+    $start_dir = dirname($start_dir);
+    $start_url = dirname($start_url);
+    if( $bn1 != $bn2 ) break;
+}
+if( !startswith($out_url,$repos_root) ) throw new Exception("Could not find valid repository root url");
+$svn_url = $out_url;
+
 $options = getopt('ab:nckhrvozs:',array('archive','branch:','help','clean','checksums','verbose','src:','rename','nobuild','out:','zip'));
 if( is_array($options) && count($options) ) {
   foreach( $options as $k => $v ) {
@@ -45,6 +66,7 @@ if( is_array($options) && count($options) ) {
       case 'b':
       case 'branch':
           $repos_branch = $v;
+          $svn_url = "$repos_root/$repos_branch";
           break;
 
       case 'c':
@@ -91,7 +113,6 @@ if( is_array($options) && count($options) ) {
       }
   }
 }
-$svn_url = "$repos_root/$repos_branch";
 
 function output_usage()
 {
@@ -112,7 +133,7 @@ function output_usage()
 
 function startswith($haystack,$needle)
 {
-    return (substr($haystack,strlen($needle)) == $needle);
+    return (substr($haystack,0,strlen($needle)) == $needle);
 }
 
 function endswith($haystack,$needle)
