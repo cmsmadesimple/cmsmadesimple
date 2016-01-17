@@ -55,8 +55,17 @@ final class CmsContentManagerUtils
 
   public static function get_pagedefaults()
   {
-      $tpl = CmsLayoutTemplate::load_dflt_by_type(CmsLayoutTemplateType::CORE.'::page');
-      $tpl_id = $tpl->get_id();
+      $tpl_id = null;
+      try {
+          $tpl = CmsLayoutTemplate::load_dflt_by_type(CmsLayoutTemplateType::CORE.'::page');
+          $tpl_id = $tpl->get_id();
+      }
+      catch( \CmsDataNotFoundException $e ) {
+          $type = CmsLayoutTemplateType::load(CmsLayoutTemplateType::CORE.'::page');
+          $list = CmsLayoutTemplate::load_all_by_type($type);
+          $tpl = $list[0];
+          $tpl_id = $tpl->get_id();
+      }
 
       $page_prefs = array('contenttype'=>'content', // string
                           'disallowed_types'=>'', // array of strings
