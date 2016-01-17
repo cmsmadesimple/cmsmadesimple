@@ -101,7 +101,7 @@ class Connection extends \CMSMS\Database\Connection
         if( $_t ) {
             do {
                 $res = $this->_mysql->store_result();
-            } while( $this->_mysql->next_result() );
+            } while( $this->_mysql->more_results() && $this->_mysql->next_result() );
         }
     }
 
