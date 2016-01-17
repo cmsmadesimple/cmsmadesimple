@@ -1,3 +1,11 @@
+Version 2.2
+----------------------------------
+Core - General
+- Implement new database abstraction library that is compatible with (functionality wise) but improves apon adodb-lite
+
+DesignManager
+- Implement sorting in edit design.
+
 Version 2.1.2
 ----------------------------------
 Core - General
