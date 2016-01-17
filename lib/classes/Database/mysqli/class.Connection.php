@@ -130,9 +130,6 @@ class Connection extends \CMSMS\Database\Connection
         $time_total = (array_sum(explode(' ', microtime())) - $time_start);
         $this->query_time_total += $time_total;
         if( !$resultid ) {
-            stack_trace();
-	    debug_display($sql);
-            debug_display($db->sql); die('fail '.$this->_mysql->error);
             $this->FailTrans();
             $this->OnError(self::ERROR_EXECUTE,$this->_mysql->errno, $this->_mysql->error);
             return;

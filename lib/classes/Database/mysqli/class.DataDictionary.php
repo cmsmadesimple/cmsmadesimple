@@ -238,9 +238,11 @@ class DataDictionary extends \CMSMS\Database\DataDictionary
     function _ProcessOptions($opts)
     {
         // fixes for old TYPE= stuff in tabopts.
-        foreach( $opts as $key => &$val ) {
-            if( startswith(strtolower($key),'mysql') ) {
-                $val = preg_replace('/TYPE\s?=/i','ENGINE=',$val);
+        if( is_array($opts) && count($opts) ) {
+            foreach( $opts as $key => &$val ) {
+                if( startswith(strtolower($key),'mysql') ) {
+                    $val = preg_replace('/TYPE\s?=/i','ENGINE=',$val);
+                }
             }
         }
     }
