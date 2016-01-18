@@ -7,6 +7,9 @@ Core - General
 - Fixes for ajax_content (the ajax routine behind the parent selector in edit content) to handle ordering inconsistencies.
 - Remove die statement in is_email
 
+News v2.50.4
+- Now all field definitions can be deleted 
+
 ModuleManager v2.0.2
 - Revamp module dependency calculations when installing a module.
 - Minor fix for some notices in install and upgrade modules.
