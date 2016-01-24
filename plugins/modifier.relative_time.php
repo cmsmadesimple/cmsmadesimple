@@ -27,7 +27,9 @@ function smarty_modifier_relative_time($timestamp)
 {
   if(!$timestamp) return;
 
-  if( (int)$timestamp == 0 ) $timestamp = (int)strtotime($timestamp);
+  if( (string) (int) $timestamp !== $timestamp ) {
+     $timestamp = (int) strtotime($timestamp);
+  }
   $difference = time() - $timestamp;
   $periods = array("sec", "min", "hour", "day", "week","month", "year", "decade");
   $lengths = array("60","60","24","7","4.35","12","10");
