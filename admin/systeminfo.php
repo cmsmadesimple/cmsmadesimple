@@ -88,6 +88,7 @@ $smarty->assign('cms_version', $GLOBALS['CMS_VERSION']);
 
 $query = "SELECT * FROM ".cms_db_prefix()."modules WHERE active=1";
 $modules = $db->GetArray($query);
+asort($modules);
 $smarty->assign('installed_modules', $modules);
 
 clearstatcache();
