@@ -8,6 +8,7 @@ Core - General
 - Remove die statement in is_email
 - Minor fix to the relative_time modifier.
 - Upgrade PHPMailer to 5.2.14
+- Now do a check for E_ALL in the system info
 
 News v2.50.4
 - Now all field definitions can be deleted 

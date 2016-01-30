@@ -842,6 +842,7 @@ $lang['extensionsdescription'] = "Modules, plugin tags and other features to exp
 $lang['extra1'] = "Extra Page Attribute 1";
 $lang['extra2'] = "Extra Page Attribute 2";
 $lang['extra3'] = "Extra Page Attribute 3";
+$lang['E_ALL'] = 'Is E_ALL enabled in error_reporting';
 $lang['E_DEPRECATED'] = "Is E_DEPRECATED disabled in error_reporting";
 $lang['E_STRICT'] = "Is E_STRICT disabled in error_reporting";
 
@@ -1487,6 +1488,8 @@ $lang['test_curlversion'] = "Test Curl Version";
 $lang['test_db_timedifference'] = "Testing for time difference in the database";
 $lang['test_db_timedifference_msg'] = "Detected a difference of at least %d seconds.  This may effect the system dramatically";
 $lang['test_edeprecated_failed'] = "E_DEPRECATED is enabled";
+$lang['test_eall_failed'] = 'E_ALL is not enabled in error reporting, this could mean that you may not see important problems in your error log.';
+$lang['test_error_eall'] = 'Testing if E_ALL is enabled in php.ini error_reporting';
 $lang['test_error_edeprecated'] = "Testing if E_DEPRECATED is enabled in php.ini error_reporting";
 $lang['test_error_estrict'] = "Testing if E_STRICT is enabled in php.ini error_reporting";
 $lang['test_estrict_failed'] = "E_STRICT is enabled in the error_reporting";
