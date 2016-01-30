@@ -57,7 +57,7 @@ class cms_mailer
   public function __construct($exceptions = true)
   {
     $dir = dirname(__DIR__).'/phpmailer/';
-    require_once($dir.'/PHPMailerAutoload');
+    require_once($dir.'/PHPMailerAutoload.php');
 
     $this->_mailer = new PHPMailer($exceptions);
     $this->reset();
