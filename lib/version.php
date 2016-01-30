@@ -19,8 +19,8 @@
 #
 #$Id: version.php 10177 2015-09-11 15:02:02Z calguy1000 $
 
-$CMS_VERSION = "2.1.1";
-$CMS_VERSION_NAME = "Nicholls Town";
+$CMS_VERSION = "2.1.2";
+$CMS_VERSION_NAME = "Andros Town";
 $CMS_SCHEMA_VERSION = '201';
 
 define('CMS_VERSION', $CMS_VERSION);
