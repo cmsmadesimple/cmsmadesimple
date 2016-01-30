@@ -64,7 +64,7 @@ class ModuleManager extends CMSModule
   protected function _DisplayErrorPage($id, &$params, $returnid, $message='')
   {
     $this->smarty->assign('title_error', $this->Lang('error'));
-    $this->smarty->assign_by_ref('message', $message);
+    $this->smarty->assign('message', $message);
     $this->smarty->assign('link_back',$this->CreateLink($id,'defaultadmin',$returnid, $this->Lang('back_to_module_manager')));
 
     // Display the populated template
@@ -84,10 +84,6 @@ class ModuleManager extends CMSModule
   function DoAction($action, $id, $params, $returnid=-1)
   {
     @set_time_limit(9999);
-
-	$smarty = cmsms()->GetSmarty();
-	$smarty->assignByRef($this->GetName(), $this);
-
     parent::DoAction( $action, $id, $params, $returnid );
   }
 

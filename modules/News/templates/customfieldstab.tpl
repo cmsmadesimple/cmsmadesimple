@@ -18,6 +18,13 @@
 #
 #$Id$
 *}
+<script type="text/javascript">
+$(document).ready(function(){
+  $('a.del_fielddef').click(function(){
+    return confirm('{$mod->Lang('areyousure')}');
+  })
+})
+</script>
 
 {if $itemcount > 0}
 <table class="pagetable">
@@ -40,7 +47,7 @@
 			<td>{$entry->uplink}</td>
 	                <td>{$entry->downlink}</td>
 			<td>{$entry->editlink}</td>
-			<td>{$entry->deletelink|default:''}</td>
+			<td><a href="{$entry->delete_url}" class="del_fielddef">{admin_icon icon='delete.gif' alt=$mod->Lang('delete')}</a></td>
 		</tr>
 {/foreach}
 	</tbody>

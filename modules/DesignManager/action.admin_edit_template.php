@@ -71,7 +71,7 @@ try {
                 $tpl_obj->set_additional_editors($params['addt_editors']);
             }
             if (isset($params['category_id'])) $tpl_obj->set_category($params['category_id']);
-            $tpl_obj->set_listable($params['listable']);
+            $tpl_obj->set_listable(isset($params['listable'])?$params['listable']:1);
             $tpl_obj->set_content($params['contents']);
             $tpl_obj->set_name($params['name']);
 
