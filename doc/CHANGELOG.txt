@@ -2,6 +2,7 @@ Version 2.2
 ----------------------------------
 Core - General
 - Implement new database abstraction library that is compatible with (functionality wise) but improves apon adodb-lite
+- Implement protocol-less URL's in the config
 
 DesignManager
 - Implement sorting in edit design.

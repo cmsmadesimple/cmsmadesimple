@@ -152,6 +152,7 @@ final class cms_config implements ArrayAccess
 	$this->_types['public_cache_location'] = self::TYPE_STRING;
     $this->_types['assets_path'] = self::TYPE_STRING;
     $this->_types['permissive_smarty'] = self::TYPE_BOOL;
+    $this->_types['smart_urls'] = self::TYPE_BOOL;
 
     $config = array();
     if (defined('CONFIG_FILE_LOCATION') && is_file(CONFIG_FILE_LOCATION)) {
@@ -337,9 +338,10 @@ final class cms_config implements ArrayAccess
 		  return 'page';
 
       case 'permissive_smarty':
-	  case 'persist_db_conn':
+      case 'persist_db_conn':
 		  return false;
 
+      case 'smart_urls':
 	  case 'set_names':
 		  return true;
 
@@ -371,18 +373,18 @@ final class cms_config implements ArrayAccess
 		  }
 		  $prefix = 'http://';
 		  if( CmsApp::get_instance()->is_https_request() ) $prefix = 'https://';
-		  if( isset($_SERVER['HTTP_HOST']) ) { 
-                      $str = $prefix.$_SERVER['HTTP_HOST'].$path;
-                  }
-                  else {
-                      $str = $prefix.$path;
-                  }
+          if( $this->offsetGet('smart_urls') ) $prefix = '//';
+		  $str = $prefix.$_SERVER['HTTP_HOST'].$path;
 		  $this->_cache[$key] = $str;
 		  return $str;
 		  break;
 
 	  case 'ssl_url':
-		  $this->_cache[$key] = str_replace('http://','https://',$this->offsetGet('root_url'));
+          if( $this->offsetGet('smart_urls') ) {
+              $this->_cache[$key] = $this->offsetGet('root_url');
+          } else {
+              $this->_cache[$key] = str_replace('http://','https://',$this->offsetGet('root_url'));
+          }
 		  return $this->_cache[$key];
 
 	  case 'uploads_path':
@@ -394,7 +396,11 @@ final class cms_config implements ArrayAccess
 		  return $this->_cache[$key];
 
 	  case 'ssl_uploads_url':
-		  $this->_cache[$key] = str_replace('http://','https://',$this->offsetGet('uploads_url'));
+          if( $this->offsetGet('smart_urls') ) {
+              $this->_cache[$key] = $this->offsetGet('root_url');
+          } else {
+              $this->_cache[$key] = str_replace('http://','https://',$this->offsetGet('uploads_url'));
+          }
 		  return $this->_cache[$key];
 
 	  case 'image_uploads_path':
@@ -406,7 +412,11 @@ final class cms_config implements ArrayAccess
 		  return $this->_cache[$key];
 
 	  case 'ssl_image_uploads_url':
-		  $this->_cache[$key] = str_replace('http://','https://',$this->offsetGet('image_uploads_url'));
+          if( $this->offsetGet('smart_urls') ) {
+              $this->_cache[$key] = $this->offsetGet('root_url');
+          } else {
+              $this->_cache[$key] = str_replace('http://','https://',$this->offsetGet('image_uploads_url'));
+          }
 		  return $this->_cache[$key];
 
 	  case 'previews_path':
@@ -563,6 +573,7 @@ final class cms_config implements ArrayAccess
    */
   public function smart_root_url()
   {
+      if( $this->offsetGet('smart_urls') ) return $this->offsetGet('root_url');
 	  if( CmsApp::get_instance()->is_https_request() ) return $this->offsetGet('ssl_url');
 	  return $this->offsetGet('root_url');
   }
@@ -572,6 +583,7 @@ final class cms_config implements ArrayAccess
    */
   public function smart_uploads_url()
   {
+      if( $this->offsetGet('smart_urls') ) return $this->offsetGet('uploads_url');
 	  if(CmsApp::get_instance()->is_https_request() ) return $this->offsetGet('ssl_uploads_url');
 	  return $this->offsetGet('uploads_url');
   }
@@ -581,6 +593,7 @@ final class cms_config implements ArrayAccess
    */
   public function smart_image_uploads_url()
   {
+      if( $this->offsetGet('smart_urls') ) return $this->offsetGet('image_uploads_url');
 	  if(CmsApp::get_instance()->is_https_request() ) return $this->offsetGet('ssl_image_uploads_url');
 	  return $this->offsetGet('image_uploads_url');
   }
