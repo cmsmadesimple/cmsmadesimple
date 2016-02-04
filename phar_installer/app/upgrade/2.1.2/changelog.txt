@@ -1,0 +1,24 @@
+Core - General
+- Minor fix to missing lang string stuff
+- Fixes to home page preferences
+- API documentation fixes (minor)
+- Fixes for ajax_content (the ajax routine behind the parent selector in edit content) to handle ordering inconsistencies.
+- Remove die statement in is_email
+- Minor fix to the relative_time modifier.
+- Upgrade PHPMailer to 5.2.14
+
+News v2.50.4
+- Now all field definitions can be deleted 
+
+ModuleManager v2.0.2
+- Revamp module dependency calculations when installing a module.
+- Minor fix for some notices in install and upgrade modules.
+- Minor typo fixes.
+- Minor fixes for PHP7
+
+MenuManager  v1.50.2
+- make sure that uninstall cleans up properly.
+
+MicroTiny v2.0.3
+- minor template fix.
+- fixes for stylesheet overrides.

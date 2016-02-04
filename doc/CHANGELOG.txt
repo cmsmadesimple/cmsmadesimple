@@ -7,32 +7,34 @@ Core - General
 DesignManager
 - Implement sorting in edit design.
 
-Version 2.1.2
+Version 2.1.2 - Andros Town
 ----------------------------------
 Core - General
-- Minor fix to missing lang string stuff
+- Minor fix to missing language string stuff
 - Fixes to home page preferences
 - API documentation fixes (minor)
-- Fixes for ajax_content (the ajax routine behind the parent selector in edit content) to handle ordering inconsistencies.
+- Fixes for ajax_content (the Ajax routine behind the parent selector in edit content) to handle ordering inconsistencies
 - Remove die statement in is_email
 - Minor fix to the relative_time modifier.
-- Upgrade PHPMailer to 5.2.14
+- Upgrade CMSMailer to 6.2.14
+- Now do a check for E_ALL in the system info
 
 News v2.50.4
 - Now all field definitions can be deleted 
 
 ModuleManager v2.0.2
-- Revamp module dependency calculations when installing a module.
-- Minor fix for some notices in install and upgrade modules.
-- Minor typo fixes.
+- Revamp module dependency calculations when installing a module
+- Minor fix for some notices in install and upgrade modules
+- Minor typo fixes
 - Minor fixes for PHP7
 
 MenuManager  v1.50.2
-- make sure that uninstall cleans up properly.
+- make sure that uninstall cleans up properly
 
 MicroTiny v2.0.3
-- minor template fix.
-- fixes for stylesheet overrides.
+- minor template fix
+- fixes for stylesheet overrides
+
 
 Version 2.1.1 - Nicholls Town
 ----------------------------------
@@ -48,12 +50,12 @@ Core - General
 
 CMSContentmanager v1.1
 - Minor template changes in edit content wrt. locking
-- Adds ability to clear content locks (admins can clear all locks, regular users can only clear their locks)
+- Adds ability to clear content locks (Admins can clear all locks, regular users can only clear their locks)
 - Enhancements to the action to bulk set designs to show only page templates by default, but to optionally show more.
 
 DesignManager v1.1.1
 - Minor template changes in edit content wrt. locking
-- Adds ability to clear template and css locks (admins can clear all locks, regular users can only clear their locks)
+- Adds ability to clear template and CSS locks (Admins can clear all locks, regular users can only clear their locks)
 
 
 Version 2.1 - Bahamas
@@ -72,7 +74,7 @@ Core - General
 - Fixes a problem with styling of the login form if tasks must be run AND a module needs upgrading.
 - Fixes to the cloning of templates in CmsLayoutTemplate
 - Fixes problem with SetAllHierarchyPositions that cleared the entire cache instead of only the necessary part of it.
-- Adds the unloadCancel handler to the lockManager jquery plugin.
+- Adds the unloadCancel handler to the lockManager jQuery plugin.
 - Moves version.php and include.php inside the lib directory so that they are easier to protect from unwanted direct access.
 - Fixes to page alias tests when manually entering a page alias.
 - Missing language strings are no longer output to Admin log, but to the debug log.
@@ -101,10 +103,10 @@ CMSContentManager v1.0.2
 DesignManager v1.1
 - Adds ability to toggle the listability of a template.
 - Fixes problems with lost changes if there is a syntax error in the template.
-- More work with locking.  With only one exception all locking and unlocking is initiated via javascript.
+- More work with locking.  With only one exception all locking and unlocking is initiated via JavaScript.
 
 News v2.50.3
-- Fixes minor issue with pagination in News admin console.
+- Fixes minor issue with pagination in News Admin console.
 - Fix errors in the default form template.
 - Fixed URL to long issues on redirection after adding/editing article.
 
@@ -114,9 +116,10 @@ Search v1.50.2
 ModuleManager 2.0.1
 - Minor fix to which modules could be uninstalled and deactivated.
 
+
 Version 2.0.1.1 - Adelaide
 ----------------------------------
-Fix to the $this->smarty magic method in the module class to resolve to the action template or the global smarty.
+Fix to the $this->smarty magic method in the module class to resolve to the action template or the global Smarty.
 
 
 Version 2.0.1 - Adelaide
