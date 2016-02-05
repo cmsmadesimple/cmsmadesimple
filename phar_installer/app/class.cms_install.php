@@ -319,6 +319,8 @@ class cms_install extends \__appbase\app
             $request = \__appbase\request::get();
             if( isset($request['nofiles']) && $request['nofiles'] ) {
                 $wizard->set_data('nofiles',(int)$request['nofiles']);
+            } else if( isset($request['no_files']) && $request['no_files'] ) {
+                $wizard->set_data('nofiles',(int)$request['nofiles']);
             }
 
             $res = $wizard->process();
