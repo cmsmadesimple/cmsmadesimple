@@ -150,6 +150,13 @@ A: A Phar is a single, self contained, executable PHP Archive.  It allows us to 
 Q: Why is there a .php file inside the archive, and not a .phar?
 A: Most web servers are not configured to treat files ending with .phar as executable PHP scripts.  Therefore we have renamed the file as a .php file so that web servers will know to execute the script.  Please note however, that this is a binary file and must be treated as such.
 
+Q:  How do I upload this thing via FTP?
+A:  We do not recommend FTP as a file transfer mechanism.  In fact, we highly discourage it.
+
+    If your only mechanism to transfer files is via FTP because your host does not support shell/sftp or does not provide a reasonable web control panel with upload and unzip capabilities, then that could indicate that the host is not running up-to-date software, and you may have further difficulties.  Consider evaluating and moving to a different host.
+
+    If you still insist on using FTP then use a decent FTP client (such as filezilla) and ensure that you transfer ALL files in binary mode.
+
 Q: I get a message saying: "unable to create temporary file for decompression of gzipped phar archive"
 A: Some hosts have restricted PHP's write access to the system temporary directory, which the installer needs to expand archives.  However there is a mechanism to use a different temporary directory for the installer.
    You can add a TMPDIR=/absolute/path/to/writable/directory argument to the URL on the first page.  If this directory is writable it will be used for storing temporary files throughout the execution of the installation assistant.
@@ -168,9 +175,5 @@ A: A white screen indicates an error of some sort.  It can be caused by an incom
 Q:  I still get a white screen, and I've enabled debug mode... now what?
 A:  This could indicate that either your installer upload is corrupted OR that your host does not allow you to change debug settings in the standard way.   You will probably have to contact your host in order to get at the actual error.
 
-Q:  How do I upload this thing via FTP?
-A:  We do not recommend FTP as a file transfer mechanism.  In fact, we highly discourage it.
-
-    If your only mechanism to transfer files is via FTP because your host does not support shell/sftp or does not provide a reasonable web control panel with upload and unzip capabilities, then that could indicate that the host is not running up-to-date software, and you may have further difficulties.  Consider evaluating and moving to a different host.
-
-    If you still insist on using FTP then use a decent FTP client (such as filezilla) and ensure that you transfer ALL files in binary mode.
+Q:  I Get a redirection loop, what can I do?
+A:  Some hosting environments (nginx, and litespeed) particularly can cause redirection loops when executing even the simplest of phar archives.  This is due to one or more bugs in php.  Specifically: https://bugs.php.net/bug.php?id=71465 and https://bugs.php.net/bug.php?id=67587 (though more may exist).  For these environments we recommend that you use the expanded installer.  Be sure you read it's README file in it's entirety.
