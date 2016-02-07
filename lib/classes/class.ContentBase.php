@@ -1003,27 +1003,25 @@ abstract class ContentBase
 			// auto generate an alias
 			$tolower = true;
 			$alias = munge_string_to_url($alias, $tolower);
+        }
 
+        if( $alias ) {
 			// Make sure auto-generated new alias is not already in use on a different page, if it does, add "-2" to the alias
 			$contentops = ContentOperations::get_instance();
 			$error = $contentops->CheckAliasError($alias, $this->Id());
-			if ($error !== FALSE) {
-				if (FALSE == empty($alias)) {
-					$alias_num_add = 2;
-					// If a '-2' version of the alias already exists
-					// Check the '-3' version etc.
-					while ($contentops->CheckAliasError($alias.'-'.$alias_num_add) !== FALSE) {
-						if( $alias_num_add > 100 ) {
-							$tmp = $contentops->CheckAliasError($alias.'-'.$alias_num_add);
-						}
-						$alias_num_add++;
-					}
-					$alias .= '-'.$alias_num_add;
-				}
-				else {
-					$alias = '';
-				}
-			}
+			if( $error !== FALSE ) {
+                // If a '-2' version of the alias already exists
+                // Check the '-3' version etc.
+                $prefix = $alias;
+                if( endswith($prefix,'-') ) $prefix = substr($prefix,0,strlen($prefix)-1);
+                $test = null;
+                for( $alias_num = 2; $alias_num < 100; $alias_num++ ) {
+                    $test = $prefix.'-'.$alias_num;
+                    if( ($tmp = $contentops->CheckAliasError($test)) === FALSE ) break;
+                }
+                if( $alias_num >= 100 ) throw new \CmsException('Could not find a valid alias');
+                $alias = $test;
+            }
 		}
 
 		$this->mAlias = $alias;
