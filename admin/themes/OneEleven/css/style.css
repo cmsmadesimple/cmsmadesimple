@@ -1765,6 +1765,9 @@ textarea.pageextrasmalltextarea {
 #page_tabs div:hover {
 	color: #147fdb
 }
+#page_tabs div:focus {
+	color: #147fdb
+}
 #page_tabs div.active {
 	color: #fff;
 	text-shadow: -1px -1px 0 #054882;
