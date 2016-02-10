@@ -11,10 +11,6 @@ $(document).ready(function(){
 });
 </script>
 
-{if $manage_designs}
-	{tab_header name='designs' label=$mod->Lang('prompt_designs')}
-{/if}
-
 {* always display templates tab *}
 {tab_header name='templates' label=$mod->Lang('prompt_templates')}
 
@@ -22,14 +18,13 @@ $(document).ready(function(){
 	{tab_header name='stylesheets' label=$mod->Lang('prompt_stylesheets')}
 {/if}
 
+{if $manage_designs}
+	{tab_header name='designs' label=$mod->Lang('prompt_designs')}
+{/if}
+
 {if $manage_templates}
 	{tab_header name='types' label=$mod->Lang('prompt_templatetypes')}
 	{tab_header name='categories' label=$mod->Lang('prompt_categories')}
-{/if}
-
-{if $manage_designs}
-	{tab_start name='designs'}
-	{include file='module_file_tpl:DesignManager;admin_defaultadmin_designs.tpl' scope='root'}
 {/if}
 
 {* templates tab displayed at all times*}
@@ -39,6 +34,11 @@ $(document).ready(function(){
 {if $manage_stylesheets}
 	{tab_start name='stylesheets'}
 	{include file='module_file_tpl:DesignManager;admin_defaultadmin_stylesheets.tpl' scope='root'}
+{/if}
+
+{if $manage_designs}
+	{tab_start name='designs'}
+	{include file='module_file_tpl:DesignManager;admin_defaultadmin_designs.tpl' scope='root'}
 {/if}
 
 {if $manage_templates}
