@@ -6,8 +6,9 @@ Core - General
 - page tabs are now focussable (you can tab through page tabs and use enter to select one).
 
 DesignManager
+- Move the designs tab of the main interface into third position.
 - Implement sorting in edit design.
-
+- Modify the template list functionality in edit-design to allow using keyboard control.   space or + to select an item on the left, and right arrow to move
 
 Version 2.1.2 - Andros Town
 ----------------------------------

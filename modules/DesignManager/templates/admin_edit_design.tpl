@@ -4,7 +4,8 @@
 <h3>{$mod->Lang('create_design')}</h3>
 {/if}
 
-{form_start}<input type="hidden" name="{$actionid}design" value="{$design->get_id()}"/>
+{form_start id="admin_edit_design"}<input type="hidden" name="{$actionid}design" value="{$design->get_id()}"/>
+<input type="hidden" name="{$actionid}ajax" id="ajax"/>
 
 <fieldset>
   <div style="width: 49%; float: left;">
@@ -62,6 +63,24 @@
 {/strip}</div>
 
 <script type="text/javascript">
+var __changed=0;
+function set_changed() {
+   __changed=1;
+   console.debug('design is changed');
+}
+function save_design() {
+   var form = $('#admin_edit_design');
+   var action = form.attr('action');
+
+   $('#ajax').val(1);
+   return $.ajax({
+      url: action,
+      data: form.serialize()
+   })
+}
+$(document).on('change',':input',function(){
+   set_changed();
+});
 $(document).ready(function(){
     $('.sortable-list input[type="checkbox"]').hide();
     $('ul.available-items').on('click', 'li', function () {

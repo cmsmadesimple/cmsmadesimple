@@ -38,7 +38,7 @@ try {
     }
 
 	try {
-		if( isset($params['submit']) || isset($params['apply']) ) {
+		if( isset($params['submit']) || isset($params['apply']) || (isset($params['ajax']) && $params['ajax'] == '1') ) {
 			$design->set_name($params['name']);
 			$design->set_description($params['description']);
 			$tpl_assoc = array();
@@ -86,6 +86,8 @@ try {
 		$smarty->assign('all_stylesheets',$out2);
 	}
 
+    $smarty->assign('manage_stylesheets',$this->CheckPermission('Manage Stylesheets'));
+    $smarty->assign('manage_templates',$this->CheckPermission('Modify Templates'));
     $smarty->assign('design',$design);
     echo $this->ProcessTemplate('admin_edit_design.tpl');
 }
