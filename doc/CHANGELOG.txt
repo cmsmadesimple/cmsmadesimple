@@ -4,6 +4,7 @@ Core - General
 - Implement new database abstraction library that is compatible with (functionality wise) but improves apon adodb-lite
 - Implement protocol-less URL's in the config
 - page tabs are now focussable (you can tab through page tabs and use enter to select one).
+- Minor accessibility tweaks to the OneEleven theme.
 
 DesignManager
 - Move the designs tab of the main interface into third position.

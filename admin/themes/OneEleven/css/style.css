@@ -1115,6 +1115,10 @@ nav ul#oe_pagemenu li.current li a,
 nav ul#oe_pagemenu li li a:hover {
 	color: #147fdb;
 }
+nav ul#oe_pagemenu li a:focus {
+        color: #147fdb !important;
+        border: 1px solid #147fdb;
+}
 nav ul#oe_pagemenu li a.main {
 	background-position: -10px -484px
 }
@@ -1818,6 +1822,9 @@ textarea.pageextrasmalltextarea {
 .dashboard-box h3 {
 	text-shadow: 0 1px 0 #fff;
 	margin:0 0 5px 0
+}
+.dashboard-box h3 a:focus {
+        border: 1px solid #147fdb;
 }
 .dashboard-box span.description {
 	color: #585858;
