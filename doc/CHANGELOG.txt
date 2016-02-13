@@ -11,6 +11,9 @@ DesignManager
 - Implement sorting in edit design.
 - Modify the template list functionality in edit-design to allow using keyboard control.   space or + to select an item on the left, and right arrow to move
 
+News v2.50.5
+- Minor fix to add category.
+
 Version 2.1.2 - Andros Town
 ----------------------------------
 Core - General
