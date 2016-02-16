@@ -47,7 +47,7 @@ function smarty_function_form_start($params, &$smarty)
 
             $tagparms['action'] = 'moduleinterface.php';
             if( !isset($mactparms['action']) ) $mactparms['action'] = 'default';
-            if( !isset($mactparms['id']) ) $mactparms['mid'] = 'cntnt01';
+            if( !isset($mactparms['mid']) ) $mactparms['mid'] = 'cntnt01';
         }
     }
 
