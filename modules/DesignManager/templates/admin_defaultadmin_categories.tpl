@@ -35,8 +35,7 @@ $(document).ready(function () {
 
 <div class="pagecontainer">
 	{cms_action_url action='admin_edit_category' assign='url'}
-	<a href="{$url}" title="{$mod->Lang('create_category')}">{admin_icon icon='newobject.gif'}</a>&nbsp;
-	<a href="{$url}" title="{$mod->Lang('create_category')}">{$mod->Lang('create_category')}</a>
+	<a id="addcategory" href="{$url}" title="{$mod->Lang('create_category')}">{admin_icon icon='newobject.gif'} {$mod->Lang('create_category')}</a>
 </div>
 
 {if isset($list_categories)}

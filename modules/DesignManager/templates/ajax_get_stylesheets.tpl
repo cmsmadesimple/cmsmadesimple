@@ -4,18 +4,13 @@ $('#css_selall').cmsms_checkall();
 
 <div class="row">
   <div class="pageoptions options-menu half">
-    <ul class="options-menu">
-      <li class="parent">{admin_icon icon='run.gif' alt=$mod->Lang('prompt_options')}&nbsp;{$mod->lang('prompt_options')}
-        <ul id="popupcsscontents">
-           <li><a id="addcss" accesskey="a" href="{cms_action_url action='admin_edit_css'}" title="{$mod->Lang('create_stylesheet')}">{admin_icon icon='newobject.gif'} {$mod->Lang('create_stylesheet')}</a></li>
-           <li><a id="editcssfilter" accesskey="f" title="{$mod->Lang('prompt_editfilter')}">{admin_icon icon='edit.gif' alt=$mod->Lang('prompt_editfilter')} {$mod->Lang('filter')}</a></li>
-           {if $have_css_locks}
-           <li><a id="cssclearlocks" accesskey="l" title="{$mod->Lang('title_clearlocks')}" href="{cms_action_url action=admin_clearlocks type=stylesheet}">{admin_icon icon='run.gif' alt=''}&nbsp;{$mod->Lang('prompt_clearlocks')}</a></li>
-           {/if}
-        </ul>
-      </li>
+      <a id="addcss" accesskey="a" href="{cms_action_url action='admin_edit_css'}" title="{$mod->Lang('create_stylesheet')}">{admin_icon icon='newobject.gif'} {$mod->Lang('create_stylesheet')}</a>&nbsp;&nbsp;
+      <a id="editcssfilter" accesskey="f" title="{$mod->Lang('prompt_editfilter')}">{admin_icon icon='view.gif' alt=$mod->Lang('prompt_editfilter')} {$mod->Lang('filter')}</a>&nbsp;&nbsp;
+      {if $have_css_locks}
+         <a id="cssclearlocks" accesskey="l" title="{$mod->Lang('title_clearlocks')}" href="{cms_action_url action=admin_clearlocks type=stylesheet}">{admin_icon icon='run.gif' alt=''}&nbsp;{$mod->Lang('prompt_clearlocks')}</a>&nbsp;&nbsp;
+      {/if}
       {if $css_filter != '' && $css_filter.design != ''}
-      <li><span style="color: green;" title="{$mod->Lang('title_filterapplied')}">{$mod->Lang('filterapplied')}</span></li>
+      <span style="color: green;" title="{$mod->Lang('title_filterapplied')}">{$mod->Lang('filterapplied')}</span>
       {/if}
     </ul>
   </div>
