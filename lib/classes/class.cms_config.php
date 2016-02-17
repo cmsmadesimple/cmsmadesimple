@@ -266,7 +266,8 @@ final class cms_config implements ArrayAccess
            *
            * @return string
            */
-          @define('CMS_DB_PREFIX',self::$_instance['db_prefix']);
+          global $CMS_INSTALL_PAGE;
+          if( !isset($CMS_INSTALL_PAGE) ) @define('CMS_DB_PREFIX',self::$_instance['db_prefix']);
 	  }
     }
 

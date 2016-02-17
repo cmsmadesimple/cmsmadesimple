@@ -15,16 +15,24 @@ class Connection extends \CMSMS\Database\Connection
     {
         if( !class_exists('\mysqli') ) throw new \LogicException("Configuration error... mysqli functions are not available");
 
-        $this->_mysql = new \mysqli( $this->_connectionSpec->host, $this->_connectionSpec->username,
-                                     $this->_connectionSpec->password,
-                                     $this->_connectionSpec->dbname,
-                                     (int) $this->_connectionSpec->port );
-        if( $this->_mysql->connect_error ) {
+        mysqli_report(MYSQLI_REPORT_STRICT);
+        try {
+            $this->_mysql = new \mysqli( $this->_connectionSpec->host, $this->_connectionSpec->username,
+                                         $this->_connectionSpec->password,
+                                         $this->_connectionSpec->dbname,
+                                         (int) $this->_connectionSpec->port );
+            if( $this->_mysql->connect_error ) {
+                $this->_mysql = null;
+                $this->OnError(self::ERROR_CONNECT,mysqli_connect_errno(),mysqli_connect_error());
+                return FALSE;
+            }
+            return TRUE;
+        }
+        catch( \Exception $e ) {
             $this->_mysql = null;
             $this->OnError(self::ERROR_CONNECT,mysqli_connect_errno(),mysqli_connect_error());
             return FALSE;
         }
-        return TRUE;
     }
 
     public function &NewDataDictionary()

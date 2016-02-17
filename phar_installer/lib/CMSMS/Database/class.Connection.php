@@ -626,7 +626,7 @@ namespace CMSMS\Database {
 
             switch( $errtype ) {
             case self::ERROR_CONNECT:
-                throw new DatabaseConnectionException($error_message,$error_number,$this->sql,$this->_connnectionSpec);
+                throw new DatabaseConnectionException($error_message,$error_number);
 
             case self::ERROR_EXECUTE:
                 throw new DatabaseException($error_message,$error_number,$this->sql,$this->_connectionSpec);

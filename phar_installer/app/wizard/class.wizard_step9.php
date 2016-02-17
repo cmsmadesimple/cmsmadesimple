@@ -206,6 +206,10 @@ class wizard_step9 extends \cms_autoinstaller\wizard_step
         } else {
             include_once($destdir.'/lib/include.php');
         }
+        $config = \cms_config::get_instance();
+
+        // we do this here, because the config.php class may not set the define when in an installer.
+        if( !defined('CMS_DB_PREFIX')) define('CMS_DB_PREFIX',$config['db_prefix']);
     }
 
     protected function display()

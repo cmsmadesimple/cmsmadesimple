@@ -191,9 +191,6 @@ if (!isset($DONT_LOAD_DB)) {
   $_app->GetDb();
   debug_buffer('Done Initializing Database');
 
-  // Set a umask
-  $global_umask = cms_siteprefs::get('global_umask','');
-  if( $global_umask != '' ) umask( octdec($global_umask) );
 }
 
 #Fix for IIS (and others) to make sure REQUEST_URI is filled in
@@ -204,6 +201,10 @@ if (!isset($_SERVER['REQUEST_URI'])) {
 
 #Load all installed module code
 if (! isset($CMS_INSTALL_PAGE)) {
+  // Set a umask
+  $global_umask = cms_siteprefs::get('global_umask','');
+  if( $global_umask != '' ) umask( octdec($global_umask) );
+
   debug_buffer('','Loading Modules');
   $modops = ModuleOperations::get_instance();
   $modops->LoadModules(isset($LOAD_ALL_MODULES), !isset($CMS_ADMIN_PAGE));
