@@ -2,7 +2,11 @@
 if (!function_exists("cmsms")) exit;
 if (!$this->CheckPermission('Modify Site Preferences')) exit;
 
-$advancedmode = $this->GetPreference('advancedmode',0);
+$advancedmode=$this->GetPreference("advancedmode",0);
+$showhiddenfiles=$this->GetPreference("showhiddenfiles",0);
+$showthumbnails=$this->GetPreference("showthumbnails",1);
+$iconsize=$this->GetPreference("iconsize",0);
+$permissionstyle=$this->GetPreference("permissionstyle","xxx");
 
 //$smarty->assign('path',$this->CreateInputHidden($id,"path",$path)); //why?
 

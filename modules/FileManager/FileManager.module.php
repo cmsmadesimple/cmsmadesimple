@@ -28,7 +28,7 @@ final class FileManager extends CMSModule {
   function GetChangeLog() { return $this->ProcessTemplate('changelog.tpl'); }
   function GetHeaderHTML() { return $this->_output_header_javascript(); }
   function GetFriendlyName() { return $this->Lang('friendlyname'); }
-  function GetVersion() { return '1.5.2'; }
+  function GetVersion() { return '1.6'; }
   function GetHelp() { return $this->Lang('help'); }
   function GetAuthor() { return 'Morten Poulsen (Silmarillion)'; }
   function GetAuthorEmail() { return 'morten@poulsen.org'; }
@@ -237,6 +237,28 @@ final class FileManager extends CMSModule {
 
   protected function decodefilename($encodedfilename) {
     return base64_decode($encodedfilename."==");
+  }
+
+  public function GetAdminMenuItems()
+  {
+      $out = array();
+
+      if( $this->CheckPermission('Modify Files') ) {
+          $out[] = CmsAdminMenuItem::from_module($this);
+      }
+
+      if( $this->CheckPermission('Modify Site Preferences') ) {
+          $obj = new CmsAdminMenuItem();
+          $obj->module = $this->GetName();
+          $obj->section = 'siteadmin';
+          $obj->title = $this->Lang('title_filemanager_settings');
+          $obj->description = $this->Lang('desc_filemanager_settings');
+          $obj->action = 'admin_settings';
+          $obj->url = $this->create_url('m1_',$obj->action);
+          $out[] = $obj;
+      }
+
+      return $out;
   }
 } // end of class
 ?>

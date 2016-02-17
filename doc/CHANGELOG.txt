@@ -16,6 +16,9 @@ DesignManager
 News v2.50.5
 - Minor fix to add category.
 
+FileManager v1.6
+- Move settings to it's own menu item under site-admin
+
 Version 2.1.2 - Andros Town
 ----------------------------------
 Core - General
@@ -29,7 +32,7 @@ Core - General
 - Now do a check for E_ALL in the system info
 
 News v2.50.4
-- Now all field definitions can be deleted 
+- Now all field definitions can be deleted
 
 ModuleManager v2.0.2
 - Revamp module dependency calculations when installing a module
