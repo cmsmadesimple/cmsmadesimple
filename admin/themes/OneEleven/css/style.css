@@ -1476,6 +1476,9 @@ table.pagetable th a {
 table.pagetable th.active {
 	color: #147fdb
 }
+table.pagetable th input:focus {
+        outline: 2px solid #fa8004;
+}
 table.pagetable th.active a,
 table.pagetable th a:hover {
 	color: #147fdb;
@@ -1491,6 +1494,9 @@ table.pagetable td {
 }
 table.pagetable a {
 	color: #232323
+}
+table.pagetable td a:focus {
+        color: #147fdb;
 }
 /*
 table.pagetable a.tooltip {
