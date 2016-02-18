@@ -66,6 +66,9 @@
             </div>
             <div class="eight-col">
                 <input class="form-field required full-width" type="password" name="dbpass" value="" autocomplete="off" required="required"/>
+                <div class="corner red">
+                    <i class="icon-asterisk"></i>
+                </div>
             </div>
         </div>
         {if $verbose}
