@@ -139,7 +139,7 @@ class wizard_step4 extends \cms_autoinstaller\wizard_step
             $url = $this->get_wizard()->next_url();
             $action = $this->get_wizard()->get_data('action');
             if( $action == 'freshen' ) $url = $this->get_wizard()->step_url(6);
-            if( $action == 'freshen' ) $url = $this->get_wizard()->step_url(7);
+            if( $action == 'upgrade' ) $url = $this->get_wizard()->step_url(7);
             \__appbase\utils::redirect($url);
         }
         catch( \Exception $e ) {

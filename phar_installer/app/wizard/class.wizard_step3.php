@@ -325,6 +325,8 @@ class wizard_step3 extends \cms_autoinstaller\wizard_step
         $smarty->assign('retry_url',$_SERVER['REQUEST_URI']);
         if( $verbose ) $smarty->assign('information',$informational);
         if( count($tests) )	$smarty->assign('tests',$tests);
+        $url = $this->get_wizard()->next_url();
+        $smarty->assign('next_url',$url);
 
         // todo: urls for retry, and enable verbose mode.
         $smarty->display('wizard_step3.tpl');

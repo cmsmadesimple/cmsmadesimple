@@ -118,24 +118,7 @@ class wizard_step8 extends \cms_autoinstaller\wizard_step
             $this->verbose(\__appbase\lang('install_setsitename'));
             \cms_siteprefs::set('sitename',$siteinfo['sitename']);
 
-            // create new config file.
-            // this step has to go here.... as config file has to exist in step9
-            // so that CMSMS can connect to the database.
-            $this->message(\__appbase\lang('install_createconfig'));
-            $newconfig = cmsms()->GetConfig();
-            $newconfig['dbms'] = trim($destconfig['dbtype']);
-            $newconfig['db_hostname'] = trim($destconfig['dbhost']);
-            $newconfig['db_username'] = trim($destconfig['dbuser']);
-            $newconfig['db_password'] = trim($destconfig['dbpass']);
-            $newconfig['db_name'] = trim($destconfig['dbname']);
-            $newconfig['db_prefix'] = trim($destconfig['dbprefix']);
-            $newconfig['timezone'] = trim($destconfig['timezone']);
-            if( $destconfig['query_var'] ) $newconfig['query_var'] = trim($destconfig['query_var']);
-            if( isset($destconfig['dbport']) ) {
-                $num = (int)$destconfig['dbport'];
-                if( $num > 0 ) $newconfig['db_port'] = $num;
-            }
-            $newconfig->save();
+            $this->write_config();
 
             // update all hierarchy positioss
             $this->message(\__appbase\lang('install_updatehierarchy'));
@@ -144,7 +127,6 @@ class wizard_step8 extends \cms_autoinstaller\wizard_step
 
             // todo: install default preferences
             set_site_preference('global_umask','022');
-
         }
         catch( \Exception $e ) {
             $this->error($e->GetMessage());
@@ -177,6 +159,9 @@ class wizard_step8 extends \cms_autoinstaller\wizard_step
         closedir($dh);
         if( count($versions) ) usort($versions,'version_compare');
 
+        $destconfig = $this->get_wizard()->get_data('config');
+        if( !$destconfig ) throw new \Exception(\__appbase\lang('error_internal',703));
+
         // setup and initialize the cmsms API's
         if( is_file("$destdir/include.php") ) {
             include_once($destdir.'/include.php');
@@ -185,8 +170,7 @@ class wizard_step8 extends \cms_autoinstaller\wizard_step
         }
 
         // setup database connection
-        $cfg = $version_info['config'];
-        $db = $this->db_connect($cfg);
+        $db = $this->db_connect($destconfig);
 
         include_once(__DIR__.'/msg_functions.php');
 
@@ -200,16 +184,59 @@ class wizard_step8 extends \cms_autoinstaller\wizard_step
                     include_once($fn);
                 }
             }
+
+            $this->write_config();
+
+            $this->message(\__appbase\lang('done'));
         }
         catch( \Exception $e ) {
-            die('got error');
             $this->error($e->GetMessage());
         }
     }
 
     private function do_freshen()
     {
-        // nothing here
+        try {
+            $this->write_config();
+        }
+        catch( \Exception $e ) {
+            $this->error($e->GetMessage());
+        }
+    }
+
+    private function write_config()
+    {
+        $destconfig = $this->get_wizard()->get_data('config');
+        if( !$destconfig ) throw new \Exception(\__appbase\lang('error_internal',703));
+
+        $destdir = \__appbase\get_app()->get_destdir();
+        if( !$destdir ) throw new \Exception(\__appbase\lang('error_internal',700));
+
+        // create new config file.
+        // this step has to go here.... as config file has to exist in step9
+        // so that CMSMS can connect to the database.
+        $fn = $destdir."/config.php";
+        if( file_exists($fn) ) {
+            $this->verbose(\__appbase\lang('install_backupconfig'));
+            $destfn = $destdir.'/bak.config.php';
+            if( !copy($fn,$destfn) ) throw new \Exception(\__appbase\lang('error_backupconfig'));
+        }
+
+        $this->message(\__appbase\lang('install_createconfig'));
+        $newconfig = cmsms()->GetConfig();
+        $newconfig['dbms'] = trim($destconfig['dbtype']);
+        $newconfig['db_hostname'] = trim($destconfig['dbhost']);
+        $newconfig['db_username'] = trim($destconfig['dbuser']);
+        $newconfig['db_password'] = trim($destconfig['dbpass']);
+        $newconfig['db_name'] = trim($destconfig['dbname']);
+        $newconfig['db_prefix'] = trim($destconfig['dbprefix']);
+        $newconfig['timezone'] = trim($destconfig['timezone']);
+        if( $destconfig['query_var'] ) $newconfig['query_var'] = trim($destconfig['query_var']);
+        if( isset($destconfig['dbport']) ) {
+            $num = (int)$destconfig['dbport'];
+            if( $num > 0 ) $newconfig['db_port'] = $num;
+        }
+        $newconfig->save();
     }
 
     protected function display()
