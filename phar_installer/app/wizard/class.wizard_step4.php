@@ -34,7 +34,7 @@ class wizard_step4 extends \cms_autoinstaller\wizard_step
         if( !count($this->_dbms_options) ) throw new \Exception(\__appbase\lang('error_nodatabases'));
 
         $action = $this->get_wizard()->get_data('action');
-        if( $action == 'freshen' ) {
+        if( $action == 'freshen' || $action == 'upgrade' ) {
             // read config data from config.php for freshen action.
             $app = \__appbase\get_app();
             $destdir = $app->get_destdir();
@@ -139,6 +139,7 @@ class wizard_step4 extends \cms_autoinstaller\wizard_step
             $url = $this->get_wizard()->next_url();
             $action = $this->get_wizard()->get_data('action');
             if( $action == 'freshen' ) $url = $this->get_wizard()->step_url(6);
+            if( $action == 'freshen' ) $url = $this->get_wizard()->step_url(7);
             \__appbase\utils::redirect($url);
         }
         catch( \Exception $e ) {

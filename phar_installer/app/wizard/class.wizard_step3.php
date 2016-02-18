@@ -326,19 +326,6 @@ class wizard_step3 extends \cms_autoinstaller\wizard_step
         if( $verbose ) $smarty->assign('information',$informational);
         if( count($tests) )	$smarty->assign('tests',$tests);
 
-        $action = $this->get_wizard()->get_data('action');
-        $tmp = $this->get_wizard()->get_data('version_info');
-        if( $action == 'upgrade' && $tmp ) {
-            // go to step 6 if we're upgrading... no need to enter db credentials or site info
-            $smarty->assign('next_url',$this->get_wizard()->step_url(7));
-        }
-        else if( $action == 'freshen' || $action == 'install' ) {
-            $smarty->assign('next_url',$this->get_wizard()->next_url());
-        }
-        else {
-            throw new \Exception(\__appbase\lang('error_internal',301));
-        }
-
         // todo: urls for retry, and enable verbose mode.
         $smarty->display('wizard_step3.tpl');
         $this->finish();
