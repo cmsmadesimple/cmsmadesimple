@@ -19,6 +19,11 @@ News v2.50.5
 FileManager v1.6
 - Move settings to it's own menu item under site-admin
 
+Phar Installer v1.2
+- A database account password is now required
+- Upgrade routine now asks for, and tests database credentials
+- Upgrade routine now rewrites the config.php file (but keeps a backup)
+
 Version 2.1.2 - Andros Town
 ----------------------------------
 Core - General
