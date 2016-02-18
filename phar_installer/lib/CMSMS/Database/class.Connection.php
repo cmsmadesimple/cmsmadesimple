@@ -644,7 +644,7 @@ namespace CMSMS\Database {
          */
         public static function &Initialize(ConnectionSpec $spec)
         {
-            if( !$spec->valid() ) throw new ConnectionSpecException();
+            if( !$spec->valid() ) throw new ConnectionSpecException('Invalid, or insufficient database connection information');
             $connection_class = '\\CMSMS\\Database\\'.$spec->type.'\\Connection';
             if( !class_exists($connection_class) ) throw new \LogicException('Could not find a database abstraction layer named '.$spec->type);
 
