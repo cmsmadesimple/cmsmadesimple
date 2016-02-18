@@ -65,7 +65,7 @@
                 <label>{'prompt_dbpass'|tr}</label>
             </div>
             <div class="eight-col">
-                <input class="form-field full-width" type="password" name="dbpass" value="" autocomplete="off" />
+                <input class="form-field required full-width" type="password" name="dbpass" value="" autocomplete="off" required="required"/>
             </div>
         </div>
         {if $verbose}

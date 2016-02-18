@@ -58,7 +58,7 @@ class wizard_step4 extends \cms_autoinstaller\wizard_step
         if( !isset($config['dbhost']) || !$config['dbhost'] ) throw new \Exception(\__appbase\lang('error_nodbhost'));
         if( !isset($config['dbname']) || !$config['dbname'] ) throw new \Exception(\__appbase\lang('error_nodbname'));
         if( !isset($config['dbuser']) || !$config['dbuser'] ) throw new \Exception(\__appbase\lang('error_nodbuser'));
-        //if( !isset($config['dbpass']) || !$config['dbpass'] ) throw new \Exception(\__appbase\lang('error_nodbpass'));
+        if( !isset($config['dbpass']) || !$config['dbpass'] ) throw new \Exception(\__appbase\lang('error_nodbpass'));
         if( !isset($config['dbprefix']) || !$config['dbprefix'] ) throw new \Exception(\__appbase\lang('error_nodbprefix'));
         if( !isset($config['timezone']) || !$config['timezone'] ) throw new \Exception(\__appbase\lang('error_notimezone'));
 
