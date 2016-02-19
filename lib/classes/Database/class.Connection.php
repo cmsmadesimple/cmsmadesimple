@@ -249,7 +249,7 @@ namespace CMSMS\Database {
          * @internal
          * @param string $sql The SQL query
          */
-        abstract public function do_sql($sql);
+        abstract public function &do_sql($sql);
 
         /**
          * Create a prepared statement object.
@@ -317,7 +317,7 @@ namespace CMSMS\Database {
          * @param array $inputarr Any parameters marked as placeholders in the SQL statement.
          * @return \CMSMS\Database\ResultSet
          */
-        public function Execute($sql, $inputarr = null)
+        public function &Execute($sql, $inputarr = null)
         {
             $rs = $this->SelectLimit($sql, -1, -1, $inputarr );
             return $rs;
