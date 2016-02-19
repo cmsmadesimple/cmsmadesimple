@@ -1,4 +1,4 @@
-<div class="row c_full">
+<div class="row c_full middle">
   <div class="pageoptions grid_8">
       {if $can_add_content}
         <a href="{cms_action_url action=admin_editcontent}" accesskey="n" title="{$mod->Lang('addcontent')}" class="pageoptions">{admin_icon icon='newobject.gif' alt=$mod->Lang('addcontent')}&nbsp;{$mod->Lang('addcontent')}</a>
@@ -245,7 +245,7 @@
 {if isset($content_list)}
   <div class="row c_full">
     {if $can_add_content}
-      <div class="pageoptions grid_6">
+      <div class="pageoptions grid_6" style="margin-top: 8px;">
         <a  href="{cms_action_url action=admin_editcontent}" accesskey="n" title="{$mod->Lang('addcontent')}" class="pageoptions">{admin_icon icon='newobject.gif' alt=$mod->Lang('addcontent')}&nbsp;{$mod->Lang('addcontent')}</a>
       </div>
     {/if}
