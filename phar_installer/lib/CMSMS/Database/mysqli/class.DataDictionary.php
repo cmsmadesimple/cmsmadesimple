@@ -235,6 +235,18 @@ class DataDictionary extends \CMSMS\Database\DataDictionary
 		return $suffix;
 	}
 
+    function _ProcessOptions($opts)
+    {
+        // fixes for old TYPE= stuff in tabopts.
+        if( is_array($opts) && count($opts) ) {
+            foreach( $opts as $key => &$val ) {
+                if( startswith(strtolower($key),'mysql') ) {
+                    $val = preg_replace('/TYPE\s?=/i','ENGINE=',$val);
+                }
+            }
+        }
+    }
+
 	function _IndexSQL($idxname, $tabname, $flds, $idxoptions)
 	{
 		$sql = array();

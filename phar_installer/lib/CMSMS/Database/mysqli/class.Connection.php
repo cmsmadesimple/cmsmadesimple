@@ -78,7 +78,8 @@ class Connection extends \CMSMS\Database\Connection
 
     public function Insert_ID()
     {
-        return $this->_mysql->insert_id;
+        $res =  $this->_mysql->insert_id;
+        return $res;
     }
 
     public function qstr($str)
@@ -100,12 +101,25 @@ class Connection extends \CMSMS\Database\Connection
         return " IFNULL($field, $ifNull)";
     }
 
-    public function do_sql($sql)
+    protected function do_multisql($sql)
     {
+        // no error checking for this stuff
+        // and no return data
+        $_t = $this->_mysql->multi_query($sql);
+        if( $_t ) {
+            do {
+                $res = $this->_mysql->store_result();
+            } while( $this->_mysql->more_results() && $this->_mysql->next_result() );
+        }
+    }
+
+    public function &do_sql($sql)
+    {
+        // execute all queries, but only need the resultset from the last one.
         $this->sql = $sql;
-        $time_start = array_sum(explode(' ',microtime()));
+        $time_start = microtime(TRUE);
         $resultid = $this->_mysql->query( $sql );
-        $time_total = (array_sum(explode(' ', microtime())) - $time_start);
+        $time_total = microtime(TRUE) - $time_start;
         $this->query_time_total += $time_total;
         if( !$resultid ) {
             $this->FailTrans();
@@ -131,7 +145,7 @@ class Connection extends \CMSMS\Database\Connection
         }
         $this->_in_transaction = TRUE;
         $this->_transaction_failed = FALSE;
-        $this->Execute('SET AUTOCOMMIT=0; BEGIN');
+        $this->do_multisql('SET AUTOCOMMIT=0; BEGIN');
         return TRUE;
     }
 
@@ -155,7 +169,7 @@ class Connection extends \CMSMS\Database\Connection
             return FALSE;
         }
 
-        $this->Execute('ROLLBACK; SET AUTOCOMMIT=1');
+        $this->do_multisql('ROLLBACK; SET AUTOCOMMIT=1;');
         $this->_in_transaction = FALSE;
         return TRUE;
     }
@@ -172,7 +186,7 @@ class Connection extends \CMSMS\Database\Connection
             return FALSE;
         }
 
-		$this->Execute('COMMIT; SET AUTOCOMMIT=1');
+		$this->do_multisql('COMMIT; SET AUTOCOMMIT=1');
         $this->_in_transaction = FALSE;
 		return TRUE;
 	}
@@ -207,18 +221,19 @@ class Connection extends \CMSMS\Database\Connection
         return FALSE;
     }
 
-    public function GenID($seqname)
+    public function GenID($seqname,$start_id = 1)
     {
-        $getnext = sprintf('UPDATE %s SET id=LAST_INSERT_id(id+1);',$seqname);
-        $this->Execute($getnext);
-        return $this->_mysql->insert_id;
+        $sql = sprintf('UPDATE %s SET id=id+1;',$seqname);
+        $this->Execute($sql);
+        $sql = sprintf('SELECT id FROM %s',$seqname);
+        return (int) $this->GetOne($sql);
     }
 
     public function CreateSequence($seqname,$startID=1)
     {
         $out = array();
         $out[] = sprintf('CREATE TABLE %s (id int not null) ENGINE MyISAM',$seqname);
-        $out[] = sprintf('INSERT INTO %s values (%s)',$seqname,$startID);
+        $out[] = sprintf('INSERT INTO %s (id) values (%s)',$seqname,$startID);
         $dict = $this->NewDataDictionary();
         $dict->ExecuteSQLArray($out);
         return TRUE;

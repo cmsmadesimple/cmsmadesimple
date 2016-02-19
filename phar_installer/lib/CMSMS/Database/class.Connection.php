@@ -45,6 +45,16 @@ namespace CMSMS\Database {
     /**
      * A class defining a database connection, and mechanisms for working with a database.
      *
+     * This library is largely compatible with adodb_lite with the pear,extended,transaction plugins with a few
+     * notable differences:
+     *
+     * Differences:
+     * <ul>
+     *  <li>GenID will not automatically create a sequence table.
+     *    <p>We encourage you to not use sequence tables and use auto-increment fields instead.</p>
+     *  </li>
+     * </ul>
+     *
      * @package CMS
      * @author Robert Campbell
      * @copyright Copyright (c) 2015, Robert Campbell <calguy1000@cmsmadesimple.org>
@@ -112,7 +122,7 @@ namespace CMSMS\Database {
          * @internal
          * @param string $sql
          */
-        protected $sql;
+        public $sql;
 
         /**
          * Accumulated sql query time.
@@ -239,7 +249,7 @@ namespace CMSMS\Database {
          * @internal
          * @param string $sql The SQL query
          */
-        abstract public function do_sql($sql);
+        abstract public function &do_sql($sql);
 
         /**
          * Create a prepared statement object.
@@ -307,7 +317,7 @@ namespace CMSMS\Database {
          * @param array $inputarr Any parameters marked as placeholders in the SQL statement.
          * @return \CMSMS\Database\ResultSet
          */
-        public function Execute($sql, $inputarr = null)
+        public function &Execute($sql, $inputarr = null)
         {
             $rs = $this->SelectLimit($sql, -1, -1, $inputarr );
             return $rs;
@@ -442,6 +452,8 @@ namespace CMSMS\Database {
 
         /**
          * For use with sequence tables, this method will generate a new ID value.
+         *
+         * This function will not automatically create the sequence table if not specified.
          *
          * @param string $seqname The name of the sequence table.
          * @return int
@@ -644,7 +656,7 @@ namespace CMSMS\Database {
          */
         public static function &Initialize(ConnectionSpec $spec)
         {
-            if( !$spec->valid() ) throw new ConnectionSpecException('Invalid, or insufficient database connection information');
+            if( !$spec->valid() ) throw new ConnectionSpecException('Invalid or incorrect configuration information');
             $connection_class = '\\CMSMS\\Database\\'.$spec->type.'\\Connection';
             if( !class_exists($connection_class) ) throw new \LogicException('Could not find a database abstraction layer named '.$spec->type);
 

@@ -140,6 +140,14 @@ abstract class Resultset
     abstract public function RecordCount();
 
     /**
+     * Alias for the RecordCount() method.
+     *
+     * @see RecordCount();
+     * @return int
+     */
+    public function NumRows() { return $this->RecordCount(); }
+
+    /**
      * Return the fields of the current resultset, or a single field of it.
      *
      * @param string $field An optional field name, if not specified, the entire row will be returned.
