@@ -66,7 +66,7 @@ $smarty = $_app->GetSmarty();
 $smarty->params = $params;
 $page = get_pageid_or_alias_from_url();
 $contentops = ContentOperations::get_instance();
-$contentobj = '';
+$contentobj = null;
 $trycount = 0;
 
 cms_content_cache::get_instance();
@@ -89,9 +89,7 @@ while( $trycount < 2 ) {
             $contentobj = $contentops->LoadContentFromAlias($page,true);
         }
 
-        if( !is_object($contentobj) ) {
-            throw new CmsError404Exception('Page '.$page.' not found');
-        }
+        if( !is_object($contentobj) ) throw new CmsError404Exception('Page '.$page.' not found');
 
         // session stuff is needed from here on.
         $cachable = $contentobj->Cachable();
@@ -110,19 +108,13 @@ while( $trycount < 2 ) {
             redirect($contentobj->GetURL()); // if this page is marked to be secure, make sure we redirect to the secure page
         }
 
-        if( !$contentobj->IsPermitted() ) {
-            throw new CmsError403Exception('Permission denied');
-        }
+        if( !$contentobj->IsPermitted() ) throw new CmsError403Exception('Permission denied');
 
         $_app->set_content_object($contentobj);
         $smarty->assignGlobal('content_obj',$contentobj);
         $smarty->assignGlobal('content_id', $contentobj->Id());
         $smarty->assignGlobal('page_id', $page);
         $smarty->assignGlobal('page_alias', $contentobj->Alias());
-
-        if( $contentobj->Secure() && !$_app->is_https_request() ) {
-            redirect($contentobj->GetURL()); // if this page is marked to be secure, make sure we redirect to the secure page
-        }
 
         CmsNlsOperations::set_language(); // <- NLS detection for frontend
         $smarty->assignGlobal('lang',CmsNlsOperations::get_current_language());
@@ -139,7 +131,7 @@ while( $trycount < 2 ) {
 
         $smarty->set_global_cacheid('p'.$contentobj->Id());
         $uid = get_userid(FALSE);
-        if( $contentobj->Cachable() && $showtemplate && !$uid && cms_siteprefs::get('use_smartycache',0) &&
+        if( !$uid && $showtemplate && $contentobj->Cachable() && cms_siteprefs::get('use_smartycache',0) &&
             $_SERVER['REQUEST_METHOD'] != 'POST' ) {
             $smarty->setCaching(Smarty::CACHING_LIFETIME_CURRENT);
         }
@@ -203,7 +195,7 @@ while( $trycount < 2 ) {
 
     catch (CmsError403Exception $e) // <- Catch CMSMS 403 error
     {
-        //debug_display('handle 404 exception '.$e->getFile().' at '.$e->getLine().' -- '.$e->getMessage());
+        //debug_display('handle 403 exception '.$e->getFile().' at '.$e->getLine().' -- '.$e->getMessage());
         // 404 error thrown... gotta do this process all over again.
         $page = 'error403';
         $showtemplate = true;
@@ -215,8 +207,7 @@ while( $trycount < 2 ) {
 
         // specified page not found, load the 404 error page.
         $contentobj = $contentops->LoadContentFromAlias('error403',true);
-        if( is_object($contentobj) )
-        {
+        if( is_object($contentobj) ) {
             // we have a 403 error page.
             header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
             header("Cache-Control: no-store, no-cache, must-revalidate");
@@ -224,8 +215,7 @@ while( $trycount < 2 ) {
             header("HTTP/1.0 403 Forbidden");
             header("Status: 403 Forbidden");
         }
-        else
-        {
+        else {
             @ob_end_clean();
             header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
             header("Cache-Control: no-store, no-cache, must-revalidate");
