@@ -67,7 +67,7 @@ public static function get_categories($id,$params,$returnid=-1)
 
     // get counts.
     $depth = 1;
-    $db = cmsms()->GetDb();
+    $db = CmsApp::get_instance()->GetDb();
     $counts = array();
     $now = $db->DbTimeStamp(time());
 
@@ -121,7 +121,7 @@ public static function get_categories($id,$params,$returnid=-1)
 public static function get_all_categories()
 {
     if( !self::$_categories_loaded ) {
-        $db = cmsms()->GetDb();
+        $db = CmsApp::get_instance()->GetDb();
         $query = "SELECT * FROM ".CMS_DB_PREFIX."module_news_categories ORDER BY hierarchy";
         $dbresult = $db->GetArray($query);
         if( $dbresult ) self::$_cached_categories = $dbresult;
@@ -169,7 +169,7 @@ public static function get_category_name_from_id($id)
 public static function get_fielddefs($publiconly = TRUE)
 {
     if( !is_array(self::$_cached_fielddefs) ) {
-        $db = cmsms()->GetDb();
+        $db = CmsApp::get_instance()->GetDb();
         $query = 'SELECT * FROM '.CMS_DB_PREFIX.'module_news_fielddefs WHERE public = 1 ORDER BY item_order';
         if( !$publiconly ) {
             $query = 'SELECT * FROM '.CMS_DB_PREFIX.'module_news_fielddefs ORDER BY item_order';
@@ -344,7 +344,7 @@ static private function &get_article_from_row($row,$get_fields = 'PUBLIC')
 
 static public function &get_latest_article($for_display = TRUE)
 {
-    $db = cmsms()->GetDb();
+    $db = CmsApp::get_instance()->GetDb();
     $now = $db->DbTimeStamp(time());
     $query = "SELECT mn.*, mnc.news_category_name FROM ".CMS_DB_PREFIX."module_news mn LEFT OUTER JOIN ".CMS_DB_PREFIX."module_news_categories mnc ON mnc.news_category_id = mn.news_category_id WHERE status = 'published' AND ";
     $query .= "(".$db->IfNull('start_time',$db->DBTimeStamp(1))." < $now) AND ";
@@ -358,7 +358,7 @@ static public function &get_latest_article($for_display = TRUE)
 
 static public function &get_article_by_id($article_id,$for_display = TRUE,$allow_expired = FALSE)
 {
-    $db = cmsms()->GetDb();
+    $db = CmsApp::Get_instance()->GetDb();
     $query = 'SELECT mn.*, mnc.news_category_name FROM '.CMS_DB_PREFIX.'module_news mn
               LEFT OUTER JOIN '.CMS_DB_PREFIX.'module_news_categories mnc ON mnc.news_category_id = mn.news_category_id
               WHERE status = \'published\' AND news_id = ?
@@ -392,7 +392,7 @@ public static function preloadFieldData($ids)
     $fielddefs = self::get_fielddefs();
     if( !count($fielddefs) ) return;
 
-    $db = cmsms()->GetDb();
+    $db = CmsApp::get_instance()->GetDb();
     $query = 'SELECT A.news_id,A.fielddef_id,A.value FROM '.CMS_DB_PREFIX.'module_news_fieldvals A
               INNER JOIN '.CMS_DB_PREFIX.'module_news_fielddefs B
               ON A.fielddef_id = B.id
