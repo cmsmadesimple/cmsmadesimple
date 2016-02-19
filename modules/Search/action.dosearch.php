@@ -3,75 +3,75 @@ if (!isset($gCms)) exit;
 
 class SearchItemCollection
 {
-  var $_ary;
-  var $maxweight;
+    var $_ary;
+    var $maxweight;
 
-  function __construct()
-  {
-    $this->_ary = array();
-    $this->maxweight = 1;
-  }
-
-  function AddItem($title, $url, $txt, $weight = 1, $module = '', $modulerecord = 0)
-  {
-    if( $txt == '' ) $txt = $url;
-    $exists = false;
-
-    foreach ($this->_ary as $oneitem) {
-      if ($url == $oneitem->url) {
-	$exists = true;
-	break;
-      }
+    function __construct()
+    {
+        $this->_ary = array();
+        $this->maxweight = 1;
     }
 
-    if (!$exists) {
-      $newitem = new StdClass();
-      $newitem->url = $url;
-      $newitem->urltxt = search_CleanupText($txt);
-      $newitem->title = $title;
-      $newitem->intweight = intval($weight);
-      if (intval($weight) > $this->maxweight) $this->maxweight = intval($weight);
-      if (!empty($module) ) {
-	$newitem->module = $module;
-	if( intval($modulerecord) > 0 )	$newitem->modulerecord = $modulerecord;
-      }
-      $this->_ary[] = $newitem;
+    function AddItem($title, $url, $txt, $weight = 1, $module = '', $modulerecord = 0)
+    {
+        if( $txt == '' ) $txt = $url;
+        $exists = false;
+
+        foreach ($this->_ary as $oneitem) {
+            if ($url == $oneitem->url) {
+                $exists = true;
+                break;
+            }
+        }
+
+        if (!$exists) {
+            $newitem = new StdClass();
+            $newitem->url = $url;
+            $newitem->urltxt = search_CleanupText($txt);
+            $newitem->title = $title;
+            $newitem->intweight = intval($weight);
+            if (intval($weight) > $this->maxweight) $this->maxweight = intval($weight);
+            if (!empty($module) ) {
+                $newitem->module = $module;
+                if( intval($modulerecord) > 0 )	$newitem->modulerecord = $modulerecord;
+            }
+            $this->_ary[] = $newitem;
+        }
     }
-  }
 
-  function CalculateWeights()
-  {
-    reset($this->_ary);
-    while (list($key) = each($this->_ary)) {
-      $oneitem =& $this->_ary[$key];
-      $oneitem->weight = intval(($oneitem->intweight / $this->maxweight) * 100);
+    function CalculateWeights()
+    {
+        reset($this->_ary);
+        while (list($key) = each($this->_ary)) {
+            $oneitem =& $this->_ary[$key];
+            $oneitem->weight = intval(($oneitem->intweight / $this->maxweight) * 100);
+        }
     }
-  }
 
-  function Sort()
-  {
-    $fn = function($a,$b) {
-      if ($a->urltxt == $b->urltxt) return 0;
-      return ($a->urltxt < $b->urltxt ? -1 : 1);
-    };
+    function Sort()
+    {
+        $fn = function($a,$b) {
+            if ($a->urltxt == $b->urltxt) return 0;
+            return ($a->urltxt < $b->urltxt ? -1 : 1);
+        };
 
-    usort($this->_ary, $fn);
-  }
+        usort($this->_ary, $fn);
+    }
 } // end of class
 
 /////////////////////////////////////////////////////////////////////////////////////
 
 $template = null;
 if( isset($params['resulttemplate']) ) {
-  $template = trim($params['resulttemplate']);
+    $template = trim($params['resulttemplate']);
 }
 else {
-  $tpl = CmsLayoutTemplate::load_dflt_by_type('Search::searchresults');
-  if( !is_object($tpl) ) {
-    audit('',$this->GetName(),'No default summary template found');
-    return;
-  }
-  $template = $tpl->get_name();
+    $tpl = CmsLayoutTemplate::load_dflt_by_type('Search::searchresults');
+    if( !is_object($tpl) ) {
+        audit('',$this->GetName(),'No default summary template found');
+        return;
+    }
+    $template = $tpl->get_name();
 }
 $tpl_ob = $smarty->CreateTemplate($this->GetTemplateResource($template),null,null);
 
@@ -156,9 +156,7 @@ if ($params['searchinput'] != '') {
                 $node = $hm->sureGetNodeById($result->fields['content_id']);
                 if (isset($node)) {
                     $content = $node->GetContent();
-                    if (isset($content) && $content->Active()) {
-                        $col->AddItem($content->Name(), $content->GetURL(), $content->Name(), $result->fields['total_weight']);
-                    }
+                    if (isset($content) && $content->Active()) $col->AddItem($content->Name(), $content->GetURL(), $content->Name(), $result->fields['total_weight']);
                 }
             }
         }
@@ -258,5 +256,3 @@ $tpl_ob->assign('searchresultsfor', $this->Lang('searchresultsfor'));
 $tpl_ob->assign('noresultsfound', $this->Lang('noresultsfound'));
 $tpl_ob->assign('timetaken', $this->Lang('timetaken'));
 $tpl_ob->display();
-
-?>

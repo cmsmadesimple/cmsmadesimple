@@ -7,6 +7,8 @@ Core - General
 - Minor accessibility tweaks to the OneEleven theme.
 - Minor fix to the {form_start} plugin
 - Minor change to the {admin_icon} plugin (default image class).
+- Cache more items that are queried from the database, to reduce mysql load.
+- Minor change to tree operations functionality to reduce memory usage
 
 DesignManager
 - Move the designs tab of the main interface into third position.
@@ -24,6 +26,10 @@ Phar Installer v1.2
 - A database account password is now required
 - Upgrade routine now asks for, and tests database credentials
 - Upgrade routine now rewrites the config.php file (but keeps a backup)
+
+Search
+- Convert to store all data using the InnoDB engine
+- Use transactions for the addwords and deletewords stuff for performance.
 
 Version 2.1.2 - Andros Town
 ----------------------------------
