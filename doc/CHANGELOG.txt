@@ -6,6 +6,7 @@ Core - General
 - page tabs are now focussable (you can tab through page tabs and use enter to select one).
 - Minor accessibility tweaks to the OneEleven theme.
 - Minor fix to the {form_start} plugin
+- Minor change to the {admin_icon} plugin (default image class).
 
 DesignManager
 - Move the designs tab of the main interface into third position.
