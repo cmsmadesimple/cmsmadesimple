@@ -81,6 +81,37 @@ class ContentOperations
 	}
 
 
+    public static function setup_cache()
+    {
+        // two caches, the flat list, and the tree
+        $obj = new \CMSMS\internal\global_cachable('content_flatlist',
+                                                   function(){
+                                                       $query = 'SELECT content_id,parent_id,item_order,content_alias,active FROM '.CMS_DB_PREFIX.'content ORDER BY hierarchy ASC';
+                                                       $db = \CmsApp::get_instance()->GetDb();
+                                                       return $db->GetArray($query);
+                                                   });
+        \CMSMS\internal\global_cache::add_cachable($obj);
+
+        // two caches, the flat list, and the tree
+        $obj = new \CMSMS\internal\global_cachable('content_tree',
+                                                   function(){
+                                                       $flatlist = \CMSMS\internal\global_cache::get('content_flatlist');
+
+                                                       // todo, embed this herer
+                                                       $tree = \cms_tree_operations::load_from_list($flatlist);
+                                                       return $tree;
+                                                   });
+        \CMSMS\internal\global_cache::add_cachable($obj);
+
+        // two caches, the flat list, and the tree
+        $obj = new \CMSMS\internal\global_cachable('content_quicklist',
+                                                   function(){
+                                                       $tree = \CMSMS\internal\global_cache::get('content_tree');
+                                                       return $tree->getFlatList();
+                                                   });
+        \CMSMS\internal\global_cache::add_cachable($obj);
+    }
+
 	/**
 	 * Return a content object for the currently requested page.
 	 *
@@ -204,38 +235,13 @@ class ContentOperations
 	{
 		if( cms_content_cache::content_exists($alias) ) return cms_content_cache::get_content($alias);
 
-		$db = CmsApp::get_instance()->GetDb();
-
-		$row = '';
-		if (is_numeric($alias) && strpos($alias,'.') === FALSE && strpos($alias,',') === FALSE) {
-			$query = "SELECT * FROM ".CMS_DB_PREFIX."content WHERE content_id = ?";
-			if ($only_active == true) $query .= " AND active = 1";
-			$row = $db->GetRow($query, array($alias));
-		}
-		else {
-			$query = "SELECT * FROM ".CMS_DB_PREFIX."content WHERE content_alias = ?";
-			if ($only_active == true) $query .= " AND active = 1";
-			$row = $db->GetRow($query, array($alias));
-		}
-
-		if ($row) {
-			// Make sure the type exists.  If so, instantiate and load
-			if (in_array($row['type'], array_keys($this->ListContentTypes()))) {
-				$classtype = strtolower($row['type']);
-				$contentobj = $this->CreateNewContent($classtype);
-				$contentobj->LoadFromData($row, TRUE);
-				cms_content_cache::add_content($row['content_id'],$row['content_alias'],$contentobj);
-				return $contentobj;
-			}
-			else {
-				$tmp = NULL;
-				return $tmp;
-			}
-		}
-		else {
-			$tmp = NULL;
-			return $tmp;
-		}
+        $hm = Cmsapp::get_instance()->GetHierarchyManager();
+        $node = $hm->sureGetNodeByAlias($alias);
+        $out = null;
+        if( !$node ) return $out;
+        if( $only_active && !$node->get_tag('active') ) return $out;
+        $out = $this->LoadContentFromId($node->get_tag('id'));
+        return $out;
 	}
 
 
@@ -483,10 +489,7 @@ class ContentOperations
 			}
 		}
 
-		// clear the content cache again.
-		cms_content_cache::clear();
-                cms_cache_handler::get_instance()->erase('contentcache');
-		//CmsApp::get_instance()->clear_cached_files();
+        $this->SetContentModified();
 	}
 
 
@@ -511,6 +514,10 @@ class ContentOperations
 	{
         \CMSMS\internal\global_cache::clear('latest_content_modification');
         \CMSMS\internal\global_cache::clear('default_content');
+        \CMSMS\internal\global_cache::clear('content_flatlist');
+        \CMSMS\internal\global_cache::clear('content_tree');
+        \CMSMS\internal\global_cache::clear('content_quicklist');
+		cms_content_cache::clear();
 	}
 
 	/**
@@ -518,37 +525,11 @@ class ContentOperations
 	 *
 	 * @param bool $loadcontent If false, only create the nodes in the tree, don't load the content objects
 	 * @return cms_content_tree The cached tree of content
+     * @deprecated
 	 */
 	function &GetAllContentAsHierarchy($loadcontent = false)
 	{
-		debug_buffer('', 'starting tree');
-
-		$db = CmsApp::get_instance()->GetDb();;
-		$tree = null;
-		$loadedcache = false;
-		if( ($tmp = cms_cache_handler::get_instance()->get('contentcache')) ) {
-			list($mtime,$data) = unserialize($tmp);
-			if( $mtime > $this->GetLastContentModification() ) {
-				if( get_class($data) == 'cms_content_tree' ) {
-					$tree = $data;
-					$loadedcache = true;
-				}
-			}
-		}
-
-		if (!$loadedcache) {
-			debug_buffer('', 'Start loading content tree from database and serializing');
-			$query = 'SELECT content_id,parent_id,item_order,content_alias FROM '.CMS_DB_PREFIX.'content ORDER BY hierarchy ASC';
-			$nodes = $db->GetArray($query);
-			$tree = cms_tree_operations::load_from_list($nodes);
-			$data = serialize(array(time(),$tree));
-			cms_cache_handler::get_instance()->set('contentcache',$data);
-			debug_buffer('', 'End content loading tree from database and serializing');
-		}
-
-		if( $loadcontent ) $this->LoadChildren(-1, true, true);
-
-		debug_buffer('', 'ending tree');
+        $tree = \CMSMS\internal\global_cache::get('content_tree');
 		return $tree;
 	}
 
@@ -708,20 +689,21 @@ class ContentOperations
 
 		// build the content objects
 		for( $i = 0, $n = count($contentrows); $i < $n; $i++ ) {
-		    $row = $contentrows[$i];
+		    $row =& $contentrows[$i];
 		    $id = $row['content_id'];
 
 		    if (!in_array($row['type'], array_keys($this->ListContentTypes()))) continue;
+            $contentobj = new Content();
 		    $contentobj = $this->CreateNewContent($row['type']);
 
 		    if ($contentobj) {
 				$contentobj->LoadFromData($row, false);
 				if( $loadprops && $contentprops && isset($contentprops[$id]) ) {
 					// load the properties from local cache.
-					$props = $contentprops[$id];
-					foreach( $props as $oneprop ) {
+					foreach( $contentprops[$id] as $oneprop ) {
 						$contentobj->SetPropertyValueNoLoad($oneprop['prop_name'],$oneprop['content']);
 					}
+                    unset($contentprops[$id]);
 				}
 
 				// cache the content objects
@@ -829,88 +811,6 @@ class ContentOperations
 		$out .= "<script type=\"text/javascript\">$(function(){ $('#$id').hierselector($str) });</script>";
 		return $out;
 	}
-// 	function CreateHierarchyDropdown($current = '', $parent = '', $name = 'parent_id', $allowcurrent = 0,
-// 									 $use_perms = 0, $ignore_current = 0, $allow_all = false, $use_name = null)
-// 	{
-// 		$result = '';
-// 		$userid = -1;
-
-// 		if( is_null($use_name) ) {
-// 			$use_name = get_site_preference('listcontent_showtitle',true);
-// 		}
-
-// 		$allcontent = $this->GetAllContent(false);
-// 		if ($allcontent !== FALSE && count($allcontent) > 0) {
-// 			if( $use_perms ) {
-// 			    $userid = get_userid();
-// 			}
-// 			if( ($userid > 0 && check_permission($userid,'Manage All Content')) ||
-// 			    $userid == -1 || $parent == -1 ) {
-// 			    $result .= '<option value="-1">'.lang('none').'</option>';
-// 			}
-// 			$curhierarchy = '';
-
-// 			foreach ($allcontent as $one) {
-// 				if( !is_object($one) ) continue;
-// 				$value = $one->Id();
-// 				if ($value == $current) {
-// 					// Grab hierarchy just in case we need to check children
-// 					// (which will always be after)
-// 					$curhierarchy = $one->Hierarchy();
-
-// 					if( !$allowcurrent ) {
-// 						// Then jump out.  We don't want ourselves in the list.
-// 						continue;
-// 					}
-// 					$value = -1;
-// 			    }
-
-// 				// If it doesn't have a valid link...
-// 				// don't include it.
-// 				if( !$allow_all && !$one->HasUsableLink() ) {
-// 					continue;
-// 			    }
-
-// 				// If it's a child of the current, we don't want to show it as it
-// 				// could cause a deadlock.
-// 				if (!$allowcurrent && $curhierarchy != '' &&
-// 					strstr($one->Hierarchy() . '.', $curhierarchy . '.') == $one->Hierarchy() . '.') {
-// 					continue;
-// 			    }
-
-// 				// If we have a valid userid... only include pages where this user
-// 				// has write access... or is an admin user... or has appropriate permission.
-// 				if( $userid > 0 && $one->Id() != $parent) {
-// 					if( !check_permission($userid,'Manage All Content') && !check_authorship($userid,$one->Id()) ) {
-// 						continue;
-// 					}
-// 			    }
-
-// 				// Don't include content types that do not want children either...
-// 				if (!$one->WantsChildren()) continue;
-// 			    $result .= '<option value="'.$value.'"';
-
-// 			    // Select current parent if it exists
-// 			    if ($one->Id() == $parent) {
-// 					$result .= ' selected="selected"';
-// 				}
-// 			    $txt=$use_name?$one->Name():$one->MenuText();
-// 			    if( ($value == -1) && ($ignore_current == 0) ) {
-// 					$result .= '>'.$one->Hierarchy().'. - '.$txt.' ('.lang('invalid').')</option>';
-// 				}
-// 			    else {
-// 					$result .= '>'.$one->Hierarchy().'. - '.$txt.'</option>';
-// 				}
-// 			}
-// 		}
-
-// 		if( !empty($result) ) {
-// 			$result = '<select name="'.$name.'" id="'.$name.'">'.$result.'</select>';
-// 		}
-
-// 		return $result;
-// 	}
-
 
 	/**
 	 * Gets the content id of the page marked as default
@@ -1216,14 +1116,8 @@ class ContentOperations
 	 */
 	public function quickfind_node_by_id($id)
 	{
-		if( !is_array($this->_quickfind) ) {
-			$hm = CmsApp::get_instance()->GetHierarchyManager();
-			$tmp = $hm->getFlatList();
-			$this->_quickfind = array();
-			if( is_array($tmp) && count($tmp) ) $this->_quickfind = $tmp;
-		}
-
-		if( isset($this->_quickfind[$id]) ) return $this->_quickfind[$id];
+        $list = \CMSMS\internal\global_cache::get('content_quicklist');
+		if( isset($list[$id]) ) return $list[$id];
 	}
 }
 

@@ -370,7 +370,6 @@ function create_textarea($enablewysiwyg, $text, $name, $classname = '', $id = ''
   if( $classname ) $parms['class'] = $classname;
   if( $id ) $parms['id'] = $id;
   if( $encoding ) $parms['encoding'] = $encoding;
-  //  if( $stylesheet ) $parms['stylesheet'] = $stylesheet; // ignored
   if( $width ) $parms['rows'] = $height;
   if( $height ) $parms['cols'] = $width;
   if( $forcewysiwyg ) $parms['forcemodule'] = $forcewysiwyg;
@@ -488,9 +487,9 @@ function create_file_dropdown($name,$dir,$value,$allowed_extensions,$optprefix='
 function get_pageid_or_alias_from_url()
 {
     $gCms = CmsApp::get_instance();
-    $config = $gCms->GetConfig();
+    $config = \cms_config::get_instance();
     $contentops = ContentOperations::get_instance();
-    $smarty = $gCms->GetSmarty();
+    $smarty = \Smarty_CMS::get_instance();
 
     $params = $_REQUEST;
     if (isset($params['mact'])) {
@@ -499,8 +498,7 @@ function get_pageid_or_alias_from_url()
     }
 
     $page = '';
-    $query_var = get_parameter_value($config,'query_var');
-    if( !$query_var ) $query_var = 'page'; // safety.
+    $query_var = $config['query_var'];
     if (isset($smarty->id) && isset($params[$smarty->id . 'returnid'])) {
         // get page from returnid parameter in module action
         $page = (int)$params[$smarty->id . 'returnid'];
@@ -583,7 +581,7 @@ function get_pageid_or_alias_from_url()
             }
 
             //Get a decent returnid
-            if ($matches['returnid'] == '') $matches['returnid'] = $contentops->GetDefaultPageID();
+            if ($matches['returnid'] == '') $matches['returnid'] = $contentops->GetDefaultContent();
 
             // Put the resulting mact into the request so that the subsequent smarty plugins
             // can grab it...
@@ -601,5 +599,3 @@ function get_pageid_or_alias_from_url()
     if( empty($page) ) $page = $contentops->GetDefaultContent(); // maybe it's the home page.
     return $page;
 }
-
-?>

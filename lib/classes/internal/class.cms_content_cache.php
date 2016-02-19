@@ -125,7 +125,7 @@ final class cms_content_cache
 		if( !CmsApp::get_instance()->is_frontend_request() ) return;
 		if( !$this->_key ) return;
 
-		$list = self::get_instance()->get_loaded_page_ids();
+		$list = $this->get_loaded_page_ids();
 		if( is_array($list) && count($list) ) {
 			$dirty = false;
 			if( !is_array($this->_preload_cache) || count($this->_preload_cache) == 0 ) {
@@ -149,7 +149,7 @@ final class cms_content_cache
 						break;
 					}
 				}
-                $deep = ($deep && count($ndeep) > (count($list) / 2)) ? TRUE : FALSE;
+                $deep = ($deep && count($ndeep) > (count($list) / 4)) ? TRUE : FALSE;
 				$tmp = array(time(),$deep,$list);
 				cms_cache_handler::get_instance()->set($this->_key,serialize($tmp),__CLASS__);
 			}
@@ -344,7 +344,6 @@ final class cms_content_cache
 		  if( $alias !== FALSE && $id != FALSE ) {
 			  unset(self::$_id_map[$id]);
 			  unset(self::$_alias_map[$alias]);
-			  self::$_content_cache[$hash] = null;
 			  unset(self::$_content_cache[$hash]);
 		  }
 	  }

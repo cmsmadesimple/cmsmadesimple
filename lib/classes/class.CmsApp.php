@@ -458,14 +458,9 @@ final class CmsApp {
 	{
 		/* Check to see if a HierarchyManager has been instantiated yet,
 		  and, if not, go ahead an create the instance. */
-        if (!isset($this->hrinstance)) {
-			debug_buffer('', 'Start Loading Hierarchy Manager');
-			$contentops = ContentOperations::get_instance();
-			$this->hrinstance = $contentops->GetAllContentAsHierarchy(false);
-			debug_buffer('', 'End Loading Hierarchy Manager');
-		}
-
-        return $this->hrinstance;
+        if( is_null($this->_hrinstance) )
+            $this->_hrinstance = \CMSMS\internal\global_cache::get('content_tree');
+        return $this->_hrinstance;
 	}
 
 	/**

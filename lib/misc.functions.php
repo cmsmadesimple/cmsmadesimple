@@ -364,7 +364,8 @@ function debug_display($var, $title="", $echo_to_screen = true, $use_html = true
  */
 function debug_output($var, $title="")
 {
-    if(CmsApp::get_instance()->config["debug"] == true) debug_display($var, $title, true);
+    $config = \cms_config::get_instance();
+    if( $config["debug"] == true) debug_display($var, $title, true);
 }
 
 
@@ -379,11 +380,12 @@ function debug_output($var, $title="")
  */
 function debug_to_log($var, $title='',$filename = '')
 {
-    if( CmsApp::get_instance()->config['debug_to_log'] || (function_exists('check_login') && check_login(TRUE)) ) {
+    $config = \cms_config::get_instance();
+    if( $config['debug_to_log'] || (function_exists('check_login') && check_login(TRUE)) ) {
         if( $filename == '' ) {
             $filename = TMP_CACHE_LOCATION . '/debug.log';
-            $x = @filemtime($filename);
-            if( $x !== FALSE && $x < (time() - 24 * 3600) ) @unlink($filename);
+            $x = (is_file($filename)) ? @filemtime($filename) : time();
+            if( $x !== FALSE && $x < (time() - 24 * 3600) ) unlink($filename);
         }
         $errlines = explode("\n",debug_display($var, $title, false, false, true));
         foreach ($errlines as $txt) {
@@ -405,23 +407,6 @@ function debug_buffer($var, $title="")
     if( !defined('CMS_DEBUG') || CMS_DEBUG == 0 ) return;
     CmsApp::get_instance()->add_error(debug_display($var, $title, false, true));
 }
-
-
-
-/**
- * Debug an sql command.
- *
- * @internal
- * @param string SQL query
- * @param bool (unused)
- * Rolf: only used in lib/adodb.functions.php
- */
-function debug_sql($str, $newline = false)
-{
-    if( !defined('CMS_DEBUG') || CMS_DEBUG == 0 ) return;
-    CmsApp::get_instance()->add_error(debug_display($str, '', false, true));
-}
-
 
 
 /**
@@ -588,8 +573,9 @@ function is_directory_writable( $path )
 {
     if ( substr ( $path , strlen ( $path ) - 1 ) != '/' ) $path .= '/' ;
 
+    if( !is_dir($path) ) return FALSE;
     $result = TRUE;
-    if( $handle = @opendir( $path ) ) {
+    if( $handle = opendir( $path ) ) {
         while( false !== ( $file = readdir( $handle ) ) ) {
             if( $file == '.' || $file == '..' ) continue;
 
@@ -601,7 +587,7 @@ function is_directory_writable( $path )
                 if( !$result ) return FALSE;
             }
         }
-        @closedir( $handle );
+        closedir( $handle );
         return TRUE;
     }
     return FALSE;
@@ -620,28 +606,29 @@ function is_directory_writable( $path )
  */
 function get_matching_files($dir,$extensions = '',$excludedot = true,$excludedir = true, $fileprefix='',$excludefiles=1)
 {
-  $dh = @opendir($dir);
-  if( !$dh ) return false;
+    if( !is_dir($dir) ) return false;
+    $dh = opendir($dir);
+    if( !$dh ) return false;
 
-  if( !empty($extensions) ) $extensions = explode(',',strtolower($extensions));
-  $results = array();
-  while( false !== ($file = readdir($dh)) ) {
-    if( $file == '.' || $file == '..' ) continue;
-    if( startswith($file,'.') && $excludedot ) continue;
-    if( is_dir(cms_join_path($dir,$file)) && $excludedir ) continue;
-    if( !empty($fileprefix) ) {
-      if( $excludefiles == 1 && startswith($file,$fileprefix) ) continue;
-      if( $excludefiles == 0 && !startswith($file,$fileprefix) ) continue;
+    if( !empty($extensions) ) $extensions = explode(',',strtolower($extensions));
+    $results = array();
+    while( false !== ($file = readdir($dh)) ) {
+        if( $file == '.' || $file == '..' ) continue;
+        if( startswith($file,'.') && $excludedot ) continue;
+        if( is_dir(cms_join_path($dir,$file)) && $excludedir ) continue;
+        if( !empty($fileprefix) ) {
+            if( $excludefiles == 1 && startswith($file,$fileprefix) ) continue;
+            if( $excludefiles == 0 && !startswith($file,$fileprefix) ) continue;
+        }
+
+        $ext = strtolower(substr($file,strrpos($file,'.')+1));
+        if( is_array($extensions) && count($extensions) && !in_array($ext,$extensions) ) continue;
+
+        $results[] = $file;
     }
-
-    $ext = strtolower(substr($file,strrpos($file,'.')+1));
-    if( is_array($extensions) && count($extensions) && !in_array($ext,$extensions) ) continue;
-
-    $results[] = $file;
-  }
-  closedir($dh);
-  if( !count($results) ) return false;
-  return $results;
+    closedir($dh);
+    if( !count($results) ) return false;
+    return $results;
 }
 
 
@@ -1226,9 +1213,7 @@ function setup_session($cachable = FALSE)
     if( $cachable ) {
         if( $_SERVER['REQUEST_METHOD'] != 'GET' || isset($CMS_ADMIN_PAGE) || isset($CMS_INSTALL_PAGE) ) $cachable = FALSE;
     }
-    if( $cachable ) {
-        $cachable = (int) cms_siteprefs::get('allow_browser_cache',0);
-    }
+    if( $cachable ) $cachable = (int) cms_siteprefs::get('allow_browser_cache',0);
     if( !$cachable ) {
         // admin pages can't be cached... period, at all.. never.
         @session_cache_limiter('nocache');
@@ -1239,8 +1224,6 @@ function setup_session($cachable = FALSE)
         @session_cache_expire($expiry);
         @session_cache_limiter('public');
         @header_remove('Last-Modified');
-		//header('Expires: '.gmdate("D, d M Y H:i:s",time() + $expiry * 60).' GMT');
-        //header('Cache-Control: public, max_age='.($expiry*60));
     }
 
     #Setup session with different id and start it
@@ -1262,5 +1245,3 @@ function setup_session($cachable = FALSE)
     if(!@session_id()) session_start();
     $_setup_already = true;
 }
-
-?>

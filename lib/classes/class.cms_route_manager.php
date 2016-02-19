@@ -384,7 +384,7 @@ final class cms_route_manager
 		if( is_array($data) && count($data) ) {
 			self::$_routes = array();
 			for( $i = 0, $n = count($data); $i < $n; $i++ ) {
-				$obj = @unserialize($data[$i]['data']);
+				$obj = unserialize($data[$i]['data']);
 				self::$_routes[$obj->signature()] = $obj;
 			}
 			self::$_routes_loaded = TRUE;

@@ -1027,7 +1027,9 @@ abstract class ContentBase
 		}
 
 		$this->mAlias = $alias;
-		cms_cache_handler::get_instance()->erase('contentcache');
+        \CMSMS\internal\global_cache::clear('content_quicklist');
+        \CMSMS\internal\global_cache::clear('content_tree');
+        \CMSMS\internal\global_cache::clear('content_flatlist');
 	}
 
 	/**
@@ -1896,7 +1898,8 @@ abstract class ContentBase
                   WHERE content_id = ?';
 			$db->Execute($query,array($this->Id()));
 		}
-		cms_cache_handler::get_instance()->erase('contentcache');
+        \CMSMS\internal\global_cache::clear('content_tree');
+        \CMSMS\internal\global_cache::clear('content_flatlist');
 	}
 
 	/**
@@ -2209,10 +2212,10 @@ abstract class ContentBase
 	protected function AddProperty($name,$priority,$tab = self::TAB_MAIN,$required = FALSE)
 	{
 		$ob = new StdClass;
-		$ob->name = $name;
-		$ob->priority = $priority;
-		$ob->tab = $tab;
-		$ob->required = $required;
+		$ob->name = (string) $name;
+		$ob->priority = (int) $priority;
+		$ob->tab = (string) $tab;
+		$ob->required = (bool) $required;
 
 		if( !is_array($this->_attributes) ) $this->_attributes = array();
 		$this->_attributes[] = $ob;

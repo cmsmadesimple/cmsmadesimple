@@ -153,6 +153,7 @@ $obj = new \CMSMS\internal\global_cachable('module_deps',
 cms_siteprefs::setup();
 Events::setup();
 UserTagOperations::setup();
+ContentOperations::setup_cache();
 
 #Set the timezone
 if( $config['timezone'] != '' ) @date_default_timezone_set(trim($config['timezone']));
