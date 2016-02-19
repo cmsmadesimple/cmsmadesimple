@@ -119,7 +119,7 @@ class cms_tree_operations
 
           // add it.
           $parent_node->add_node($node);
-          $sorted[$row['content_id']] = $node;
+          $sorted[$row['content_id']] =& $node;
       }
       return $tree;
   }
