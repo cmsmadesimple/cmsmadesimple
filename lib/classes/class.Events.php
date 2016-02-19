@@ -56,6 +56,7 @@ final class Events
 			$id = $db->GenID( CMS_DB_PREFIX."events_seq" );
 			$q = "INSERT INTO ".CMS_DB_PREFIX."events values (?,?,?)";
 			$db->Execute( $q, array( $modulename, $eventname, $id ));
+            \CMSMS\internal\global_cache::clear(__CLASS__);
 		}
 	}
 
@@ -72,8 +73,7 @@ final class Events
 	 */
 	static public function RemoveEvent( $modulename, $eventname )
 	{
-		$gCms = CmsApp::get_instance();
-		$db = $gCms->GetDb();
+		$db = CmsApp::get_instance()->GetDb();
 
 		// get the id
 		$q = "SELECT event_id FROM ".CMS_DB_PREFIX."events WHERE
@@ -95,6 +95,8 @@ final class Events
 		$q = "DELETE FROM ".CMS_DB_PREFIX."events WHERE
 		event_id = ?";
 		$db->Execute( $q, array( $id ) );
+
+        \CMSMS\internal\global_cache::clear(__CLASS__);
 	}
 
 
@@ -110,7 +112,6 @@ final class Events
 	{
 		global $CMS_INSTALL_PAGE;
 		if( isset($CMS_INSTALL_PAGE) ) return;
-		$gCms = CmsApp::get_instance();
 
 		$results = Events::ListEventHandlers($modulename, $eventname);
 
@@ -120,6 +121,7 @@ final class Events
 			foreach( $results as $row ) {
 				if( isset( $row['tag_name'] ) && $row['tag_name'] != '' ) {
 					debug_buffer('calling user tag ' . $row['tag_name'] . ' from event ' . $eventname);
+                    $gCms = CmsApp::get_instance();
 					$usertagops = $gCms->GetUserTagOperations();
 					$usertagops->CallUserTag( $row['tag_name'], $params );
 				}
@@ -140,6 +142,19 @@ final class Events
 	}
 
 
+    static public function setup()
+    {
+        $obj = new \CMSMS\internal\global_cachable(__CLASS__,function(){
+                $db = \CmsApp::get_instance()->GetDb();
+                $q = "SELECT eh.tag_name, eh.module_name, e.originator, e.event_name, eh.handler_order, eh.handler_id, eh.removable
+                      FROM ".CMS_DB_PREFIX."event_handlers eh
+				      INNER JOIN ".CMS_DB_PREFIX."events e ON e.event_id = eh.event_id
+				      ORDER BY eh.handler_order ASC";
+                return $db->GetArray($q);
+            });
+        \CMSMS\internal\global_cache::add_cachable($obj);
+    }
+
 	/**
 	 * Return the list of event handlers for a particular event.
 	 *
@@ -151,21 +166,8 @@ final class Events
 	 */
 	static public function ListEventHandlers( $modulename, $eventname )
 	{
-		$gCms = CmsApp::get_instance();
-		$db = $gCms->GetDb();
-
-		$params['module'] = $modulename;
-		$params['event'] = $eventname;
+        self::$_handlercache = \CMSMS\internal\global_cache::get(__CLASS__);
 		$handlers = array();
-
-		if( !is_array(self::$_handlercache) ) {
-			$q = "SELECT eh.tag_name, eh.module_name, e.originator, e.event_name, eh.handler_order, eh.handler_id, eh.removable
-                  FROM ".CMS_DB_PREFIX."event_handlers eh
-				  INNER JOIN ".CMS_DB_PREFIX."events e ON e.event_id = eh.event_id
-				  ORDER BY eh.handler_order ASC";
-
-			self::$_handlercache = $db->GetArray( $q );
-		}
 
 		if( is_array(self::$_handlercache) && count(self::$_handlercache) ) {
 			foreach (self::$_handlercache as $row) {
@@ -185,8 +187,7 @@ final class Events
 	 */
 	static public function ListEvents()
 	{
-		$gCms = CmsApp::get_instance();
-		$db = $gCms->GetDb();
+		$db = CmsApp::get_instance()->GetDb();
 
 		$q = 'SELECT e.*, count(eh.event_id) as usage_count FROM '.CMS_DB_PREFIX.
 			'events e left outer join '.CMS_DB_PREFIX.
@@ -220,8 +221,7 @@ final class Events
 		if( $tag_name == false && $module_handler == false ) return false;
 		if( $tag_name != false && $module_handler != false ) return false;
 
-		$gCms = CmsApp::get_instance();
-		$db = $gCms->GetDb();
+		$db = CmsApp::get_instance()->GetDb();
 
 		// find the id
 		$q = "SELECT event_id FROM ".CMS_DB_PREFIX."events WHERE originator = ? AND event_name = ?";
@@ -275,6 +275,7 @@ final class Events
 		$params[] = $order;
 		$params[] = $handler_id;
 		$dbresult = $db->Execute( $q, $params );
+        \CMSMS\internal\global_cache::clear(__CLASS__);
 		if( $dbresult != false ) return true;
 		return false;
 	}
@@ -295,8 +296,7 @@ final class Events
 		$field = 'handler_name';
 		if( $module_handler != false ) $field = 'module_handler';
 
-		$gCms = CmsApp::get_instance();
-		$db = $gCms->GetDb();
+		$db = CmsApp::get_instance()->GetDb();
 
 		// find the id
 		$q = "SELECT event_id FROM ".CMS_DB_PREFIX."events WHERE originator = ? AND event_name = ?";
@@ -320,6 +320,7 @@ final class Events
 			$params[] = $tag_name;
 		}
 		$dbresult = $db->Execute( $query, $params );
+        \CMSMS\internal\global_cache::clear(__CLASS__);
 		if( $dbresult == false ) return true;
 		return false;
 	}
@@ -334,8 +335,7 @@ final class Events
 	 */
 	static public function RemoveAllEventHandlers( $modulename, $eventname )
 	{
-		$gCms = CmsApp::get_instance();
-		$db = $gCms->GetDb();
+		$db = CmsApp::get_instance()->GetDb();
 
 		// find the id
 		$q = "SELECT event_id FROM ".CMS_DB_PREFIX."events WHERE
@@ -349,8 +349,8 @@ final class Events
 		$id = $row['event_id'];
 
 		// and delete the handlers
-		$q = "DELETE FROM ".CMS_DB_PREFIX."event_handlers
-		WHERE event_id = ?";
+        \CMSMS\internal\global_cache::clear(__CLASS__);
+		$q = "DELETE FROM ".CMS_DB_PREFIX."event_handlers WHERE event_id = ?";
 		$dbresult = $db->Execute( $q, array( $id ) );
 		if( $dbresult == false ) return true;
 		return false;

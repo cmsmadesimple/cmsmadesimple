@@ -122,7 +122,7 @@ namespace CMSMS\Database {
          * @internal
          * @param string $sql
          */
-        protected $sql;
+        public $sql;
 
         /**
          * Accumulated sql query time.

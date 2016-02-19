@@ -49,35 +49,6 @@ define('CMS_USER_KEY','_userkey_');
 
 global $CMS_INSTALL_PAGE,$CMS_ADMIN_PAGE,$CMS_LOGIN_PAGE,$DONT_LOAD_DB,$DONT_LOAD_SMARTY;
 
-/*
-$session_name = 'CMSSESSID'.substr(md5($dirname), 0, 12);
-if( !isset($CMS_INSTALL_PAGE) ) {
-    @session_name($session_name);
-    @ini_set('url_rewriter.tags', '');
-    @ini_set('session.use_trans_sid', 0);
-}
-
-#Setup session with different id and start it
-if( (isset($CMS_ADMIN_PAGE) || isset($CMS_INSTALL_PAGE)) && !headers_sent() ) {
-    // admin pages can't be cached... period, at all.. never.
-    @session_cache_limiter('nocache');
-    header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
-}
-else {
-    @session_cache_limiter('public');
-}
-
-if( isset($_COOKIE[$session_name]) ) {
-    // validate the contents of the cookie.
-    if (!preg_match('/^[a-zA-Z0-9,\-]{22,40}$/', $_COOKIE[$session_name]) ) {
-        session_id( uniqid() );
-        session_start();
-        session_regenerate_id();
-    }
-}
-if(!@session_id()) session_start();
-*/
-
 // minimum stuff to get started (autoloader needs the cmsms() and the config stuff.
 if( !defined('CONFIG_FILE_LOCATION') ) define('CONFIG_FILE_LOCATION',dirname(__DIR__).'/config.php');
 
@@ -158,7 +129,30 @@ $obj = new \CMSMS\internal\global_cachable('default_content',
                                                return $tmp;
                                            });
 \CMSMS\internal\global_cache::add_cachable($obj);
+$obj = new \CMSMS\internal\global_cachable('modules',
+                                           function(){
+                                               $db = \CmsApp::get_instance()->GetDb();
+                                               $query = 'SELECT * FROM '.CmsApp::get_instance()->GetDbPrefix().'modules ORDER BY module_name';
+                                               $tmp = $db->GetArray($query);
+                                               return $tmp;
+                                           });
+\CMSMS\internal\global_cache::add_cachable($obj);
+$obj = new \CMSMS\internal\global_cachable('module_deps',
+                                           function(){
+                                               $db = \CmsApp::get_instance()->GetDb();
+                                               $query = 'SELECT parent_module,child_module,minimum_version FROM '.CmsApp::get_instance()->GetDbPrefix().'module_deps ORDER BY parent_module';
+                                               $tmp = $db->GetArray($query);
+                                               if( !is_array($tmp) || !count($tmp) ) return;
+                                               $out = array();
+                                               foreach( $tmp as $row ) {
+                                                   $out[$row['child_module']][$row['parent_module']] = $row['minimum_version'];
+                                               }
+                                               return $out;
+                                           });
+\CMSMS\internal\global_cache::add_cachable($obj);
 cms_siteprefs::setup();
+Events::setup();
+UserTagOperations::setup();
 
 #Set the timezone
 if( $config['timezone'] != '' ) @date_default_timezone_set(trim($config['timezone']));
@@ -218,10 +212,7 @@ if( !isset($DONT_LOAD_SMARTY) ) {
   debug_buffer('Initialize Smarty');
   $smarty = $_app->GetSmarty();
   debug_buffer('Done Initialiing Smarty');
-  if( defined('CMS_DEBUG') && CMS_DEBUG ) {
-    $smarty->debugging = true;
-    $smarty->error_reporting = 'E_ALL';
-  }
+  if( defined('CMS_DEBUG') && CMS_DEBUG ) $smarty->error_reporting = 'E_ALL';
   $smarty->assignGlobal('sitename', cms_siteprefs::get('sitename', 'CMSMS Site'));
 }
 

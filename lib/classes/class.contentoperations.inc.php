@@ -70,11 +70,6 @@ class ContentOperations
 	private $_ownedpages;
 
 	/**
-	 * @ignore
-	 */
-	private $_last_modified;
-
-	/**
 	 * Return a reference to the only allowed instance of this singleton object
 	 *
 	 * @return ContentOperations
@@ -665,18 +660,7 @@ class ContentOperations
 		$contentrows = null;
 		if( is_array($explicit_ids) && count($explicit_ids) ) {
 			$loaded_ids = cms_content_cache::get_loaded_page_ids();
-			if( is_array($loaded_ids) && count($loaded_ids) ) {
-                $explicit_ids = array_diff($explicit_ids,$loaded_ids);
-                /*
-				$tmp = array();
-				foreach( $explicit_ids as $one ) {
-					if( in_array($one,$loaded_ids) ) continue;
-					$tmp[] = $one;
-				}
-				if( count($tmp) == 0 ) return;
-				$explicit_ids = $tmp;
-                */
-			}
+			if( is_array($loaded_ids) && count($loaded_ids) ) $explicit_ids = array_diff($explicit_ids,$loaded_ids);
 
 			$expr = 'content_id IN ('.implode(',',$explicit_ids).')';
 			if( !$all ) $expr .= ' AND active = 1';
@@ -742,7 +726,6 @@ class ContentOperations
 
 				// cache the content objects
 				cms_content_cache::add_content($id,$contentobj->Alias(),$contentobj);
-				$contentobj = null;
 				unset($contentobj);
 			}
 		}

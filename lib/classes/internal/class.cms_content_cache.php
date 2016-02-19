@@ -137,6 +137,7 @@ final class cms_content_cache
 			}
 
 			if( $dirty ) {
+                $ndeep = array();
 				$deep = FALSE;
 				foreach( $list as $one ) {
 					$obj = self::get_content($one);
@@ -144,9 +145,11 @@ final class cms_content_cache
 					$tmp = $obj->Properties();
 					if( is_array($tmp) && count($tmp) ) {
 						$deep = TRUE;
+                        $ndeep[] = $one;
 						break;
 					}
 				}
+                $deep = ($deep && count($ndeep) > (count($list) / 2)) ? TRUE : FALSE;
 				$tmp = array(time(),$deep,$list);
 				cms_cache_handler::get_instance()->set($this->_key,serialize($tmp),__CLASS__);
 			}
@@ -230,7 +233,7 @@ final class cms_content_cache
    * @param ContentBase The content object.
    * @return bool
    */
-  private static function _add_content($id,$alias,&$obj)
+  private static function _add_content($id,$alias,ContentBase& $obj)
   {
     if( !$id) return FALSE;
     if( !self::$_alias_map ) self::$_alias_map = array();

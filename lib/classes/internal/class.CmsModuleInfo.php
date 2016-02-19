@@ -2,31 +2,31 @@
 
 class CmsModuleInfo implements ArrayAccess
 {
-  private static $_keys = array('name','version','depends','mincmsversion', 'author', 'authoremail', 'help', 'about',
-				'lazyloadadmin', 'lazyloadfrontend', 'changelog','ver_compatible','dir','writable',
-				'description','has_meta');
-  private $_data = array();
+    private static $_keys = array('name','version','depends','mincmsversion', 'author', 'authoremail', 'help', 'about',
+                                  'lazyloadadmin', 'lazyloadfrontend', 'changelog','ver_compatible','dir','writable',
+                                  'description','has_meta','has_custom');
+    private $_data = array();
 
-  public function OffsetGet($key)
-  {
-    if( !in_array($key,self::$_keys) ) throw new CmsLogicException('CMSEX_INVALIDMEMBER',null,$key);
-    switch( $key ) {
-    case 'about':
-      break;
+    public function OffsetGet($key)
+    {
+        if( !in_array($key,self::$_keys) ) throw new CmsLogicException('CMSEX_INVALIDMEMBER',null,$key);
+        switch( $key ) {
+        case 'about':
+            break;
 
-    case 'ver_compatible':
-      return version_compare($this['mincmsversion'],CMS_VERSION,'<=');
+        case 'ver_compatible':
+        return version_compare($this['mincmsversion'],CMS_VERSION,'<=');
 
-    case 'dir':
-      return cms_join_path(CMS_ROOT_PATH,'modules',$this['name']);
+        case 'dir':
+            return cms_join_path(CMS_ROOT_PATH,'modules',$this['name']);
 
-    case 'writable':
-      return is_directory_writable($this['dir']);
+        case 'writable':
+        return is_directory_writable($this['dir']);
 
-    default:
-      if( isset($this->_data[$key]) ) return $this->_data[$key];
-      break;
-    }
+        default:
+            if( isset($this->_data[$key]) ) return $this->_data[$key];
+            break;
+        }
   }
 
   public function OffsetSet($key,$value)
@@ -36,6 +36,7 @@ class CmsModuleInfo implements ArrayAccess
     if( $key == 'ver_compatible' ) throw new CmsLogicException('CMSEX_INVALIDMEMBERSET',$key);
     if( $key == 'dir' ) throw new CmsLogicException('CMSEX_INVALIDMEMBERSET',$key);
     if( $key == 'writable' ) throw new CmsLogicException('CMSEX_INVALIDMEMBERSET',$key);
+    if( $key == 'has_custom' ) throw new CmsLogicException('CMSEX_INVALIDMEMBERSET',$key);
     $this->_data[$key] = $value;
   }
 
@@ -57,6 +58,17 @@ class CmsModuleInfo implements ArrayAccess
       $res = $this->_read_from_module($module_name);
       if( !$res ) throw new CmsLogicException('CMSEX_MODULENOTFOUND',$module_name);
     }
+    $this->_check_modulecustom($module_name);
+  }
+
+  private function _check_modulecustom($module_name)
+  {
+      $config = \cms_config::get_instance();
+      $dir = $config['root_path']."/module_custom/$module_name";
+      $files1 = glob($dir."/templates/*.tpl");
+      $files2 = glob($dir."/lang/??_??.php");
+      $this->_data['has_custom'] = false;
+      if( count($files1) || count($files2) ) $this->_data['has_custom'] = TRUE;
   }
 
   private function _read_from_module_meta($module_name)

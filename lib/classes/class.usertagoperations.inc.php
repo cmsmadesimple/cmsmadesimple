@@ -72,23 +72,35 @@ final class UserTagOperations
 		$this->CallUserTag($name,$arguments);
 	}
 
+    /**
+     * @ignore
+     * @internal
+     */
+    public static function setup()
+    {
+        $obj = new \CMSMS\internal\global_cachable(__CLASS__,function(){
+                $db = CmsApp::get_instance()->GetDb();
+
+                $query = 'SELECT * FROM '.CMS_DB_PREFIX.'userplugins'.' ORDER BY userplugin_name';
+                $data = $db->GetArray($query);
+                if( is_array($data) ) {
+                    $out = array();
+                    foreach( $data as $row ) {
+                        $out[$row['userplugin_name']] = $row;
+                    }
+                    return $out;
+                }
+            });
+        \CMSMS\internal\global_cache::add_cachable($obj);
+    }
+
 	/**
 	 * Load all the information about user tags
 	 */
-	public function LoadUserTags()
-	{
-		if( count($this->_cache) == 0 ) {
-			$db = CmsApp::get_instance()->GetDb();
-
-			$query = 'SELECT * FROM '.CMS_DB_PREFIX.'userplugins'.' ORDER BY userplugin_name';
-			$data = $db->GetArray($query);
-			if( is_array($data) ) {
-				foreach( $data as $row ) {
-					$this->_cache[$row['userplugin_name']] = $row;
-				}
-			}
-		}
-	}
+    public function LoadUserTags()
+    {
+        $this->_cache = \CMSMS\internal\global_cache::get(__CLASS__);
+    }
 
 
 	/**

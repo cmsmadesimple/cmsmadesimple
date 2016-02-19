@@ -56,7 +56,7 @@ class Smarty_CMS extends SmartyBC
     $this->assignGlobal('app_name','CMSMS');
 
     if (CMS_DEBUG == true) {
-        $this->debugging = false;
+        //$this->debugging = false;
         $this->error_reporting = 'E_ALL';
     }
 
@@ -450,7 +450,7 @@ class Smarty_CMS extends SmartyBC
     $this->force_compile = true;
 
     # do not show smarty debug console popup to users not logged in
-    $this->debugging = check_login(true);;
+    //$this->debugging = check_login(true);;
 
     $this->assign('e_line', $e->getLine());
     $this->assign('e_file', $e->getFile());

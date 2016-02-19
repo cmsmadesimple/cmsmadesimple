@@ -65,12 +65,6 @@ final class ModuleOperations
 	/**
 	 * @ignore
 	 */
-	private $_moduledeps;
-
-
-	/**
-	 * @ignore
-	 */
 	private $xml_exclude_files = array('^\.svn' , '^CVS$' , '^\#.*\#$' , '~$', '\.bak$', '^\.git');
 
 	/**
@@ -488,10 +482,12 @@ final class ModuleOperations
     private function &_get_module_info()
     {
         if( !is_array($this->_moduleinfo) || count($this->_moduleinfo) == 0 ) {
+            $tmp = \CMSMS\internal\global_cache::get('modules');
+            /*
             $db = CmsApp::get_instance()->GetDb();
             $query = 'SELECT * FROM '.CMS_DB_PREFIX.'modules ORDER BY module_name';
             $tmp = $db->GetArray($query);
-
+            */
             if( is_array($tmp) ) {
                 $dir = dirname(dirname(__DIR__)).DIRECTORY_SEPARATOR."modules";
                 $this->_moduleinfo = array();
@@ -1036,28 +1032,7 @@ final class ModuleOperations
      */
     private function _get_all_module_dependencies()
     {
-        if( !is_array($this->_moduledeps) ) {
-            $fn = TMP_CACHE_LOCATION.'/f'.md5(__FILE__.'deps').'.dat';
-            if( file_exists($fn) ) {
-                $data = file_get_contents($fn);
-                $this->_moduledeps = unserialize($data);
-            }
-            else {
-                $this->_moduledeps = array();
-                $db = CmsApp::get_instance()->GetDb();
-                $query = 'SELECT parent_module,child_module,minimum_version FROM '.CMS_DB_PREFIX.'module_deps ORDER BY parent_module';
-                $dbr = $db->GetArray($query);
-                if( is_array($dbr) && count($dbr) ) {
-                    foreach( $dbr as $row ) {
-                        if( !isset($this->_moduledeps[$row['child_module']]) ) $this->_moduledeps[$row['child_module']] = array();
-                        $this->_moduledeps[$row['child_module']][$row['parent_module']] = $row['minimum_version'];
-                    }
-                }
-                global $CMS_INSTALL_PAGE;
-                if( isset($CMS_INSTALL_PAGE) ) file_put_contents($fn,serialize($this->_moduledeps));
-            }
-        }
-        return $this->_moduledeps;
+        return \CMSMS\internal\global_cache::get('module_deps');
     }
 
     /**
