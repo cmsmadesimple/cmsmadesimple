@@ -363,7 +363,7 @@ class cms_content_tree extends cms_tree
                 if( $children[$i]->has_children() ) {
                     $tmp = $children[$i]->_buildFlatList();
                     foreach( $tmp as $key => $node ) {
-                        if( $key > 0 ) $result[$key] =& $node;
+                        if( $key > 0 ) $result[$key] = $node;
                     }
                 }
             }
