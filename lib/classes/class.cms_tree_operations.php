@@ -103,8 +103,7 @@ class cms_tree_operations
               $parent_node = $tree->find_by_tag('id',$row['parent_id'],FALSE,FALSE);
               if( !$parent_node ) {
                   // ruh-roh
-                  debug_display($row); flush();
-                  die('foo2');
+                  throw new \LogicException('Problem with internal content organization... could not get a parent node for content with id '.$row['content_id']);
               }
           }
 

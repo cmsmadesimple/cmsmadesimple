@@ -120,10 +120,11 @@ try {
     $opts = bulkcontentoperations::get_operation_list();
     if( is_array($opts) && count($opts) ) $smarty->assign('bulk_options',$opts);
 
-    $out = $this->ProcessTEmplate('ajax_get_content.tpl');
+    $out = $this->ProcessTemplate('ajax_get_content.tpl');
     echo $out;
 }
 catch( \Exception $e ) {
+    echo '<div class="red">'.$e->GetMessage().'</div>';
     debug_to_log($e);
 }
 exit;
