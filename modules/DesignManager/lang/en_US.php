@@ -33,6 +33,7 @@ $lang['confirm_delete_template_2'] = 'Yes, I am <strong>really</strong> sure I w
 $lang['confirm_import'] = 'Confirm Import Design';
 $lang['confirm_import_1'] = 'Yes, I am sure I want to import this design';
 $lang['confirm_reset_type'] = 'Reset the default content of this type to the version distributed with the system (or module)?\n\nResetting this will only effect newly created templates of this type.  No existing templates will be adjusted.';
+$lang['confirm_save_design'] = 'This design has been changed.  Continuing will save the design, and allow you to edit the item.\nDo you want to continue?';
 $lang['confirm_setall_1'] = 'Please confirm that you wish to set all content pages to use this template';
 $lang['confirm_setall_2'] = 'Yes, I am sure';
 $lang['confirm_setall_3'] = 'Yes, I am <strong>really</strong> sure';

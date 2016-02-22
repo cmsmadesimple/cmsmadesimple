@@ -166,7 +166,7 @@ $(function() {
 	      $(_el).removeClass('selected ui-state-hover')
 	               .attr('tabindex',-1)
                        .addClass('unsaved no-sort')
-                       .append($('<a href="#"/>').addClass('ui-icon ui-icon-trash sortable-remove').text('Remove'))
+                       .append($('<a href="#"/>').addClass('ui-icon ui-icon-trash sortable-remove').text('{$mod->Lang('remove')}').attr('title','{$mod->Lang('remove')}'))
                        .find('input[type="checkbox"]').attr('checked', true);
 	      $('#selected-templates > ul').append(_el);
 	      $(this).remove();
