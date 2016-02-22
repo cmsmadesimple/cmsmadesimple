@@ -10,6 +10,9 @@ Core - General
 - Cache more items that are queried from the database, to reduce mysql load.
 - Minor change to tree operations functionality to reduce memory usage
 
+Content Manager
+- Minor tweak to bulk delete pages.
+
 DesignManager
 - Move the designs tab of the main interface into third position.
 - Implement sorting in edit design.
@@ -30,6 +33,7 @@ Phar Installer v1.2
 Search
 - Convert to store all data using the InnoDB engine
 - Use transactions for the addwords and deletewords stuff for performance.
+- Fix problem with query and record expiry.
 
 Version 2.1.2 - Andros Town
 ----------------------------------

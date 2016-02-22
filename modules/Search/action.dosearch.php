@@ -77,7 +77,7 @@ $tpl_ob = $smarty->CreateTemplate($this->GetTemplateResource($template),null,nul
 
 if ($params['searchinput'] != '') {
     // Fix to prevent XSS like behaviour. See: http://www.securityfocus.com/archive/1/455417/30/0/threaded
-    $params['searchinput'] = cms_html_entity_decode($params['searchinput']);
+    $params['searchinput'] = cms_html_entity_decode($params['searchinput'],ENT_COMPAT,'UTF-8');
     $params['searchinput'] = strip_tags($params['searchinput']);
     @$this->SendEvent('SearchInitiated', array(trim($params['searchinput'])));
 
@@ -129,7 +129,12 @@ if ($params['searchinput'] != '') {
         }
     }
 
-    $query = "SELECT DISTINCT i.module_name, i.content_id, i.extra_attr, COUNT(*) AS nb, SUM(idx.count) AS total_weight FROM ".CMS_DB_PREFIX."module_search_items i INNER JOIN ".CMS_DB_PREFIX."module_search_index idx ON idx.item_id = i.id WHERE (".$searchphrase.") AND  (".$db->IfNull('i.expires',$db->DBTimeStamp(100 * 100 * 100 * 100 * 25))." > ".$db->DBTimeStamp(time()).") ";
+    $val = 100 * 100 * 100 * 100 * 25;
+    debug_display($val);
+    debug_display($db->DbTimeStamp($val)); die();
+    $query = "SELECT DISTINCT i.module_name, i.content_id, i.extra_attr, COUNT(*) AS nb, SUM(idx.count) AS total_weight FROM ".CMS_DB_PREFIX."module_search_items i INNER JOIN ".CMS_DB_PREFIX."module_search_index idx ON idx.item_id = i.id WHERE (".$searchphrase.") AND (COALESCE(i.expires,NOW()) >= NOW())';
+
+".$db->IfNull('i.expires',$db->DBTimeStamp(100 * 100 * 100 * 100 * 25))." >= ".$db->DBTimeStamp(time()).") ";
     if( isset( $params['modules'] ) ) {
         $modules = explode(",",$params['modules']);
         for( $i = 0; $i < count($modules); $i++ ) {
