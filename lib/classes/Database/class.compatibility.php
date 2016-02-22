@@ -84,7 +84,7 @@ namespace CMSMS\Database {
             if( count($tmp) ) $spec->auto_exec = 'SET '.implode(',',$tmp);
 
             $obj = Connection::Initialize($spec);
-            if( $spec->debug ) $OBJ->SetDebugCallback('debug_buffer');
+            if( $spec->debug ) $obj->SetDebugCallback('debug_buffer');
             return $obj;
         }
 
