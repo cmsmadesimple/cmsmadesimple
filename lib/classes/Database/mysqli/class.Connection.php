@@ -116,7 +116,6 @@ class Connection extends \CMSMS\Database\Connection
     public function &do_sql($sql)
     {
         // execute all queries, but only need the resultset from the last one.
-        // this is for compound statements ... maybe setting variables, or beginning transactions etc.
         $this->sql = $sql;
         $time_start = microtime(TRUE);
         $resultid = $this->_mysql->query( $sql );
