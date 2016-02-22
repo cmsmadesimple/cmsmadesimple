@@ -664,6 +664,10 @@ namespace CMSMS\Database {
             if( !($obj instanceof Connection ) ) throw new \LogicException("$connection_class is not derived from the primary database class.");
             if( $spec->debug ) $obj->SetDebugMode();
             $obj->Connect();
+
+            if( $spec->auto_exec ) {
+                $obj->Execute($spec->auto_exec);
+            }
             return $obj;
         }
 

@@ -66,7 +66,8 @@ class ConnectionSpec
      * @ignore
      */
     private $_data = array('type'=>null,'host'=>null,'username'=>null,'password'=>null,
-                           'dbname'=>null,'prefix'=>null,'port'=>null,'persistent'=>false,'debug'=>false);
+                           'dbname'=>null,'prefix'=>null,'port'=>null,'persistent'=>false,'debug'=>false,
+                           'auto_exec'=>null);
 
     /**
      * @ignore
