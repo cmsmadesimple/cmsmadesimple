@@ -58,30 +58,15 @@ RewriteRule ^(.+)$ index.php?page=$1 [QSA]
 #
 # The following are higly reommended security settings for files in your CMSMS install that should not be browsed directly
 #
-<Files ~ "\.htaccess">
-  Order allow,deny
-  Deny from all
-</Files>
-<Files ~ "\.ini$">
-  Order allow,deny
-  Deny from all
-</Files>
-<Files ~ "\.log$">
-  Order allow,deny
-  Deny from all
-</Files>
-<Files ~ "config\.php">
-  Order allow,deny
-  Deny from all
-</Files>
-<Files ~ "/lib/*php">
-  Order allow,deny
-  Deny from all
-</Files>
-
+RedirectMatch 403 ^/.*\.htaccess$
+RedirectMatch 403 ^/.*\.log$
+RedirectMatch 403 ^/.*\.ini$
+RedirectMatch 403 ^/.*config\.php$
 RedirectMatch 403 ^.*/lib/.*\.php$
 RedirectMatch 403 ^.*/tmp/.*\.php$
+RedirectMatch 403 ^.*/doc/.*\.php$
 RedirectMatch 403 ^.*/modules/.*\.php$
+RedirectMatch 403 ^.*/plugins/.*\.php$
 RedirectMatch 403 ^.*/uploads/.*\.php$
 
 
