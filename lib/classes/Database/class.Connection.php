@@ -77,7 +77,7 @@ namespace CMSMS\Database {
         /**
          * This constant defines an error with a transaction.
          */
-        const ERROR_TRANSACT = 'TRANSACTION';
+        const ERROR_TRANSACTION = 'TRANSACTION';
 
         /**
          * This constant defines an error in a datadictionary command.
