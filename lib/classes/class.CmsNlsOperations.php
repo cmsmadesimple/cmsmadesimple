@@ -220,7 +220,7 @@ final class CmsNlsOperations
   protected static function get_frontend_language()
   {
 	  if( is_object(self::$_fe_language_detector) ) return self::$_fe_language_detector->find_language();
-	  $x = trim(get_site_preference('frontendlang'));
+	  $x = trim(cms_siteprefs::get('frontendlang'));
 	  if( !$x ) $x = 'en_US';
 	  return $x;
   }

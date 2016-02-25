@@ -18,12 +18,11 @@
 
 function smarty_function_sitename($params, &$smarty)
 {
-	$result = get_site_preference('sitename', 'CMSMS Site');
-	
-	if( isset($params['assign']) )
-    {
-      $smarty->assign(trim($params['assign']),$result);
-      return;
+	$result = cms_siteprefs::get('sitename', 'CMSMS Site');
+
+	if( isset($params['assign']) ) {
+        $smarty->assign(trim($params['assign']),$result);
+        return;
     }
 	return $result;
 }

@@ -18,12 +18,11 @@
 
 function smarty_function_metadata($params, &$smarty)
 {
-  $gCms = CmsApp::get_instance();
+    $gCms = CmsApp::get_instance();
 	$config = $gCms->GetConfig();
 	$content_obj = $gCms->get_content_object();
 
 	$result = '';
-
 	$showbase = true;
 
 	// Show a base tag unless showbase is false in config.php
@@ -41,7 +40,7 @@ function smarty_function_metadata($params, &$smarty)
 		$result .= "\n<base href=\"".$base."/\" />\n";
 	}
 
-	$result .= get_site_preference('metadata', '');
+	$result .= cms_siteprefs::get('metadata', '');
 
 	if (is_object($content_obj) && $content_obj->Metadata() != '') $result .= "\n" . $content_obj->Metadata();
 

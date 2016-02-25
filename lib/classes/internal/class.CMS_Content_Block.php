@@ -25,7 +25,7 @@
 /**
  * Helper class to deal with parsing or fetching content blocks.
  *
- * @author              Robert Campbell <calguy1000@cmsmadesimple.org>
+ * @author      Robert Campbell <calguy1000@cmsmadesimple.org>
  * @since		1.11
  * @ignore
  * @internal
@@ -35,18 +35,23 @@ final class CMS_Content_Block
 {
     private static $_priority;
     private static $_contentBlocks;
+    private static $_primary_content;
     private function __construct() {}
 
     private static function content_return($result, &$params, &$smarty)
     {
         // this is a smarty tempalte, not the global smarty instance
-        if ( empty($params['assign']) ) {
-            echo $result;
+        if ( !empty($params['assign']) ) {
+            $smarty->assign(trim($params['assign']), $result);
         }
         else {
-            $smarty->assign(trim($params['assign']), $result);
-            return;
+            echo $result;
         }
+    }
+
+    public static function set_primary_content($txt)
+    {
+        self::$_primary_content = $txt;
     }
 
     public static function get_content_blocks()
@@ -74,10 +79,7 @@ final class CMS_Content_Block
             if( isset($rec[$key]) ) $rec[$key] = $value;
         }
 
-        if( !$rec['name'] ) {
-            $rec['name'] = 'content_en';
-            $rec['id'] = 'content_en';
-        }
+        if( !$rec['name'] ) $rec['name'] = $rec['id'] = 'content_en';
         if( !$rec['id'] ) $rec['id'] = str_replace(' ','_',$rec['name']);
         if( !$rec['priority'] ) {
             if( !self::$_priority ) self::$_priority = 100;
@@ -86,7 +88,6 @@ final class CMS_Content_Block
 
         // check for duplicate.
         if( isset(self::$_contentBlocks[$rec['name']]) ) throw new CmsEditContentException('Duplicate content block: '.$rec['name']);
-
         if( !is_array(self::$_contentBlocks) ) self::$_contentBlocks = array();
         self::$_contentBlocks[$rec['name']] = $rec;
     }
@@ -95,12 +96,9 @@ final class CMS_Content_Block
     {
         // todo: should be in page_template_parser
         // {content_image} tag encountered.
-        if( !isset($params['block']) || empty($params['block']) ) {
-            throw new CmsEditContentException('{content_image} tag requires block parameter');
-        }
+        if( !isset($params['block']) || empty($params['block']) ) throw new CmsEditContentException('{content_image} tag requires block parameter');
 
-        $rec = array('type'=>'image','id'=>'','name'=>'','label'=>'','upload'=>true,'dir'=>'','default'=>'','tab'=>'',
-                     'exclude'=>'','sort'=>0);
+        $rec = array('type'=>'image','id'=>'','name'=>'','label'=>'','upload'=>true,'dir'=>'','default'=>'','tab'=>'','exclude'=>'','sort'=>0);
         foreach( $params as $key => $value ) {
             if( $key == 'type' ) continue;
             if( $key == 'block' ) $key = 'name';
@@ -114,10 +112,7 @@ final class CMS_Content_Block
         if( !$rec['id'] ) $rec['id'] = str_replace(' ','_',$rec['name']);
 
         // check for duplicate.
-        if( isset(self::$_contentBlocks[$rec['name']]) ) {
-            throw new CmsEditContentException('Duplicate content block: '.$rec['name']);
-        }
-
+        if( isset(self::$_contentBlocks[$rec['name']]) ) throw new CmsEditContentException('Duplicate content block: '.$rec['name']);
         if( !is_array(self::$_contentBlocks) ) self::$_contentBlocks = array();
         self::$_contentBlocks[$rec['name']] = $rec;
     }
@@ -126,9 +121,7 @@ final class CMS_Content_Block
     {
         // todo: should be in page_template_parser
         // {content_module} tag encountered.
-        if( !isset($params['block']) || empty($params['block']) ) {
-            throw new CmsEditContentException('{content_module} tag requires block parameter');
-        }
+        if( !isset($params['block']) || empty($params['block']) ) throw new CmsEditContentException('{content_module} tag requires block parameter');
 
         $rec = array('type'=>'module','id'=>'','name'=>'','module'=>'','label'=>'', 'blocktype'=>'','tab'=>'');
         $parms = array();
@@ -150,15 +143,10 @@ final class CMS_Content_Block
         }
         if( !$rec['id'] ) $rec['id'] = str_replace(' ','_',$rec['name']);
         $rec['params'] = $parms;
-        if( $rec['module'] == '' ) {
-            throw new CmsEditContentException('Missing module param for content_module tag');
-        }
+        if( $rec['module'] == '' ) throw new CmsEditContentException('Missing module param for content_module tag');
 
         // check for duplicate.
-        if( isset(self::$_contentBlocks[$rec['name']]) ) {
-            throw new CmsEditContentException('Duplicate content block: '.$rec['name']);
-        }
-
+        if( isset(self::$_contentBlocks[$rec['name']]) ) throw new CmsEditContentException('Duplicate content block: '.$rec['name']);
         if( !is_array(self::$_contentBlocks) ) self::$_contentBlocks = array();
         self::$_contentBlocks[$rec['name']] = $rec;
     }
@@ -184,9 +172,8 @@ final class CMS_Content_Block
      */
     public static function smarty_internal_fetch_contentblock($params,&$smarty)
     {
-        $gCms = CmsApp::get_instance();
-
         $contentobj = CmsApp::get_instance()->get_content_object();
+        $result = null;
         if (is_object($contentobj)) {
             if( !$contentobj->IsPermitted() ) throw new CmsError403Exception();
             $id = '';
@@ -208,71 +195,41 @@ final class CMS_Content_Block
             //   1. $id is cntnt01
             //   2. or inline is false
 
-            if (!isset($params['block']) &&
-                ($id == 'cntnt01' || $id == '_preview_' || ($id != '' && $inline == false))) {
-                // todo, would be neat here if we could get a list of only frontend modules.
-                $modops = ModuleOperations::get_instance();
-                $installedmodules = $modops->GetInstalledModules();
-                if( count($installedmodules) ) {
-                    // case insensitive module match.
-                    foreach( $installedmodules  as $key ) {
-                        if( !strcasecmp($modulename,$key) ) $modulenae = $key;
-                    }
+            if (!isset($params['block']) && ($id == 'cntnt01' || $id == '_preview_' || ($id != '' && $inline == false))) {
 
-                    if (!isset($modulename) || empty($modulename) ) {
-                        // no module specified.
-                        @trigger_error("Module $modulename requested but is not installed");
-                        throw new \CmsError404Exception("Module $modulename requested, but is not installed");
-                        //return self::content_return('', $params, $smarty);
-                    }
-
+                if( !empty(self::$_primary_content) ) {
+                    $result = self::$_primary_content;
+                }
+                else {
+                    $modops = ModuleOperations::get_instance();
                     $modobj = $modops->get_module_instance($modulename);
                     if( !$modobj ) {
                         // module not found... couldn't even autoload it.
                         @trigger_error('Attempt to access module '.$modulename.' which could not be found (is it properly installed and configured?');
                         throw new \CmsError404Exception('Attempt to access module '.$modulename.' which could not be found (is it properly installed and configured?');
-                        //return self::content_return('', $params, $smarty);
                     }
 
-                    if ($modobj->IsPluginModule() ) {
-                        @ob_start();
-                        $parms = $params;
-                        unset($parms['block']);
-                        unset($parms['label']);
-                        unset($parms['wysiwyg']);
-                        unset($parms['oneline']);
-                        unset($parms['default']);
-                        unset($parms['size']);
-                        unset($parms['tab']);
-                        unset($parms['required']);
-                        unset($parms['priority']);
-                        unset($parms['placeholder']);
-                        unset($parms['assign']);
-                        unset($parms['adminonly']);
-                        $parms = array_merge($parms, $modops->GetModuleParameters($id));
-                        $returnid = '';
-                        if (isset($parms['returnid'])) {
-                            $returnid = $parms['returnid'];
-                        }
-                        else {
-                            $returnid = $contentobj->Id();
-                        }
-
-                        $oldcache = $smarty->caching;
-                        $smarty->caching = false;
-                        $result = $modobj->DoActionBase($action, $id, $parms, $returnid,$smarty);
-                        $smarty->caching = $oldcache;
-
-                        if ($result !== FALSE) echo $result;
-                        $modresult = @ob_get_contents();
-                        @ob_end_clean();
-
-                        return self::content_return($modresult, $params, $smarty);
-                    }
-                    else {
+                    if (!$modobj->IsPluginModule() ) {
                         @trigger_error('Attempt to access module '.$key.' which could not be found (is it properly installed and configured?');
                         return self::content_return("<!-- Not a tag module -->\n", $params, $smarty);
                     }
+
+                    @ob_start();
+                    $parms = $params;
+                    unset($parms['block'],$parms['label'],$parms['wysiwyg'],$parms['oneline'],$parms['default'],$parms['size']);
+                    unset($parms['tab'],$parms['required'],$parms['priority'],$parms['placeholder'],$parms['assign'],$parms['adminonly']);
+                    $parms = array_merge($parms, $modops->GetModuleParameters($id));
+                    $returnid = $contentobj->Id();
+                    if (isset($parms['returnid'])) $returnid = $parms['returnid'];
+
+                    $oldcache = $smarty->caching;
+                    $smarty->caching = false;
+                    $result = $modobj->DoActionBase($action, $id, $parms, $returnid,$smarty);
+                    $smarty->caching = $oldcache;
+
+                    if( $result !== FALSE ) echo $result;
+                    $result = @ob_get_contents();
+                    @ob_end_clean();
                 }
             }
             else {
@@ -290,17 +247,13 @@ final class CMS_Content_Block
                     $result = $smarty->fetch(str_replace(' ', '_', 'content:' . $block), '|'.$block, $contentobj->Id().$block);
                 }
                 $smarty->caching = $oldvalue;
-
-                return self::content_return($result, $params, $smarty);
             }
         }
-        return self::content_return('', $params, $smarty);
+        return self::content_return($result, $params, $smarty);
     }
 
     public static function smarty_fetch_pagedata($params,&$smarty)
     {
-        $gCms = CmsApp::get_instance();
-
         $contentobj = CmsApp::get_instance()->get_content_object();
         if( !is_object($contentobj) || $contentobj->Id() <= 0 ) return self::content_return('', $params, $smarty);
 
@@ -315,12 +268,11 @@ final class CMS_Content_Block
     public static function smarty_fetch_imageblock($params,&$smarty)
     {
         $gCms = CmsApp::get_instance();
-        $config = $gCms->GetConfig();
-
         $contentobj = $gCms->get_content_object();
         if( !is_object($contentobj) || $contentobj->Id() <= 0 ) return self::content_return('', $params, $smarty);
 
-        $adddir = get_site_preference('contentimage_path');
+        $config = \cms_config::get_instance();
+        $adddir = \cms_siteprefs::get('contentimage_path');
         if( isset($params['dir']) && $params['dir'] != '' ) $adddir = $params['dir'];
         $dir = cms_join_path($config['uploads_path'],$adddir);
         $basename = basename($config['uploads_path']);
@@ -336,20 +288,16 @@ final class CMS_Content_Block
 
         $out = null;
         if( startswith(realpath($dir),realpath($basename)) ) {
-            if( ($img == -1 || empty($img)) && isset($params['default']) && $params['default'] ) {
-                $img = $params['default'];
-            }
+            if( ($img == -1 || empty($img)) && isset($params['default']) && $params['default'] ) $img = $params['default'];
 
             if( $img != -1 && !empty($img) ) {
                 // create the absolute url.
+                $img = $config['uploads_url'] . '/'.$adddir.'/'.$img;
                 if( startswith($img,$basename) ) {
                     // old style url.
                     if( !startswith($img,'http') ) $img = str_replace('//','/',$img);
                     $img = substr($img,strlen($basename.'/'));
                     $img = $config['uploads_url'] . '/'.$img;
-                }
-                else {
-                    $img = $config['uploads_url'] . '/'.$adddir.'/'.$img;
                 }
 
                 $alt = '';
@@ -404,9 +352,7 @@ final class CMS_Content_Block
             $module = isset($params['module']) ? trim($params['module']) : null;
             if( $module ) {
                 $mod = \cms_utils::get_module($module);
-                if( is_object($mod) ) {
-                    $result = $mod->RenderContentBlockField($block,$result,$params,$content_obj);
-                }
+                if( is_object($mod) ) $result = $mod->RenderContentBlockField($block,$result,$params,$content_obj);
             }
         }
 
@@ -414,7 +360,6 @@ final class CMS_Content_Block
             $smarty->assign($params['assign'],$result);
             return;
         }
-
         return $result;
     }
 

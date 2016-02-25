@@ -153,6 +153,7 @@ final class cms_config implements ArrayAccess
     $this->_types['assets_path'] = self::TYPE_STRING;
     $this->_types['permissive_smarty'] = self::TYPE_BOOL;
     $this->_types['smart_urls'] = self::TYPE_BOOL;
+    $this->_types['startup_mact_processing'] = self::TYPE_BOOL;
 
     $config = array();
     if (defined('CONFIG_FILE_LOCATION') && is_file(CONFIG_FILE_LOCATION)) {
@@ -301,7 +302,7 @@ final class cms_config implements ArrayAccess
 		  return FALSE;
 
 	  case 'default_upload_permission':
-		  $mask = octdec(get_site_preference('global_umask','0022'));
+		  $mask = octdec(cms_siteprefs::get('global_umask','0022'));
 		  $val = 0666 & ~$mask;
           return sprintf('%o',$val);
 
@@ -344,6 +345,7 @@ final class cms_config implements ArrayAccess
 
       case 'smart_urls':
 	  case 'set_names':
+      case 'startup_mact_processing':
 		  return true;
 
 	  case 'root_path':
@@ -352,6 +354,7 @@ final class cms_config implements ArrayAccess
 		  return $out;
 
 	  case 'root_url':
+          if( !isset($_SERVER['HTTP_HOST']) ) return;
 		  $parts = parse_url($_SERVER['PHP_SELF']);
 		  $path = '';
 		  if( !empty($parts['path']) ) {
@@ -378,7 +381,6 @@ final class cms_config implements ArrayAccess
 		  $str = $prefix.$_SERVER['HTTP_HOST'].$path;
 		  $this->_cache[$key] = $str;
 		  return $str;
-		  break;
 
 	  case 'ssl_url':
           if( $this->offsetGet('smart_urls') ) {
@@ -599,8 +601,3 @@ final class cms_config implements ArrayAccess
 	  return $this->offsetGet('image_uploads_url');
   }
 } // end of class
-
-#
-# EOF
-#
-?>

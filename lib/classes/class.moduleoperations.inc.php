@@ -884,8 +884,7 @@ final class ModuleOperations
                 }
 
                 $db->Execute('DELETE FROM '.CMS_DB_PREFIX.'module_smarty_plugins where module=?',array($module));
-                $db->Execute('DELETE FROM '.CMS_DB_PREFIX."siteprefs WHERE sitepref_name LIKE '".
-                             str_replace("'",'',$db->qstr($module))."_mapi_pref%'");
+                $db->Execute('DELETE FROM '.CMS_DB_PREFIX."siteprefs WHERE sitepref_name LIKE '". str_replace("'",'',$db->qstr($module))."_mapi_pref%'");
                 $db->Execute('DELETE FROM '.CMS_DB_PREFIX.'routes WHERE key1 = ?',array($module));
                 $db->Execute('DELETE FROM '.CMS_DB_PREFIX.'module_smarty_plugins WHERE module = ?',array($module));
             }
@@ -1147,7 +1146,7 @@ final class ModuleOperations
         $obj = null;
         if( !$module_name ) {
             if( CmsApp::get_instance()->is_frontend_request() ) {
-                $module_name = get_site_preference('frontendwysiwyg');
+                $module_name = cms_siteprefs::get('frontendwysiwyg');
             }
             else {
                 $module_name = cms_userprefs::get_for_user(get_userid(FALSE),'wysiwyg');
@@ -1175,7 +1174,7 @@ final class ModuleOperations
     public function &GetSearchModule()
     {
         $obj = null;
-        $module_name = get_site_preference('searchmodule','Search');
+        $module_name = cms_siteprefs::get('searchmodule','Search');
         if( $module_name && $module_name != 'none' && $module_name != '-1' ) $obj = $this->get_module_instance($module_name);
         return $obj;
     }

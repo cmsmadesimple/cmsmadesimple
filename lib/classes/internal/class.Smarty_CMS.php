@@ -55,14 +55,10 @@ class Smarty_CMS extends SmartyBC
     $this->setCacheDir(TMP_CACHE_LOCATION);
     $this->assignGlobal('app_name','CMSMS');
 
-    if (CMS_DEBUG == true) {
-        //$this->debugging = false;
-        $this->error_reporting = 'E_ALL';
-    }
+    if (CMS_DEBUG == true) $this->error_reporting = 'E_ALL';
 
     // set our own template class with some funky stuff in it
     // note, can get rid of the CMS_Smarty_Template class and the Smarty_Parser classes.
-    //$this->template_class = 'CMS_Smarty_Template';
 
     // Set plugins dirs
     $this->addPluginsDir(cms_join_path(CMS_ROOT_PATH,'plugins'));
@@ -118,7 +114,7 @@ class Smarty_CMS extends SmartyBC
         $this->autoloadFilters();
 
         // compile check can only be enabled, if using smarty cache... just for safety.
-        if( get_site_preference('use_smartycache',0) ) $this->setCompileCheck(get_site_preference('use_smartycompilecheck',1));
+        if( \cms_siteprefs::get('use_smartycache',0) ) $this->setCompileCheck(\cms_siteprefs::get('use_smartycompilecheck',1));
 
         // Enable security object
         if( !$config['permissive_smarty'] ) $this->enableSecurity('CMSSmartySecurityPolicy');

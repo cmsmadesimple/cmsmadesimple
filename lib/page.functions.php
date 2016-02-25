@@ -599,3 +599,38 @@ function get_pageid_or_alias_from_url()
     if( empty($page) ) $page = $contentops->GetDefaultContent(); // maybe it's the home page.
     return $page;
 }
+
+function preprocess_mact($returnid)
+{
+    $config = \cms_config::get_instance();
+    if( !$config['startup_mact_processing'] ) return;
+    if( !isset($_REQUEST['mact']) ) return;
+
+    list($module,$id,$action,$inline) = explode(',',$_REQUEST['mact'],4);
+    if( !$module || $inline || $id != 'cntnt01' ) return;
+
+    $modops = ModuleOperations::get_instance();
+    $module_obj = $modops->get_module_instance($module);
+    if( !$module_obj ) {
+        // module not found... couldn't even autoload it.
+        @trigger_error('Attempt to access module '.$module.' which could not be found (is it properly installed and configured?');
+        throw new \CmsError404Exception('Attempt to access module '.$modulename.' which could not be found (is it properly installed and configured?');
+    }
+    if( !$module_obj->IsPluginModule() ) {
+        @trigger_error('Attempt to access module '.$module.' on a frontend request, which is not a plugin module');
+        throw new \CmsError404Exception('Attempt to access module '.$modulename.' which could not be found (is it properly installed and configured?');
+    }
+
+    $smarty = \Smarty_CMS::get_instance();
+    @ob_start();
+    $parms = $modops->GetModuleParameters($id);
+    $oldcache = $smarty->caching;
+    $smarty->caching = false;
+    $result = $module_obj->DoActionBase($action, $id, $parms, $returnid, $smarty);
+    $smarty->caching = $oldcache;
+
+    if( $result !== FALSE ) echo $result;
+    $result = @ob_get_contents();
+    @ob_end_clean();
+    \CMS_Content_Block::set_primary_content($result);
+}

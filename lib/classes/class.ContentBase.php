@@ -1616,10 +1616,10 @@ abstract class ContentBase
 		}
 
 		$auto_type = content_assistant::auto_create_url();
-		if( $this->mURL == '' && get_site_preference('content_autocreate_urls') ) {
+		if( $this->mURL == '' && cms_siteprefs::get('content_autocreate_urls') ) {
 			// create a valid url.
 			if( !$this->DefaultContent() ) {
-				if( get_site_preference('content_autocreate_flaturls',0) ) {
+				if( cms_siteprefs::get('content_autocreate_flaturls',0) ) {
 					// the default url is the alias... but not synced to the alias.
 					$this->mURL = $this->mAlias;
 				}
@@ -1654,7 +1654,7 @@ abstract class ContentBase
 				}
 			}
 		}
-		if( $this->mURL == '' && get_site_preference('content_mandatory_urls') && !$this->mDefaultContent &&
+		if( $this->mURL == '' && cms_siteprefs::get('content_mandatory_urls') && !$this->mDefaultContent &&
 			$this->HasUsableLink() ) {
 			// page url is empty and mandatory
 			$errors[] = lang('content_mandatory_urls');
@@ -1907,7 +1907,7 @@ abstract class ContentBase
 	 * If no proeprty name is specified 'content_en' is assumed
 	 *
 	 * @abstract
-	 * @param string $propname An optional property name to display.
+	 * @param string $propname An optional property name to display.  If none specified, the system should assume content_en.
 	 * @return string
 	 */
 	public function Show($propname = 'content_en')
@@ -2291,7 +2291,7 @@ abstract class ContentBase
 
 		case 'parent':
 			$contentops = ContentOperations::get_instance();
-			$tmp = $contentops->CreateHierarchyDropdown($this->mId, $this->mParentId, 'parent_id', 0, 1, 0, 1,get_site_preference('listcontent_showtitle',true) );
+			$tmp = $contentops->CreateHierarchyDropdown($this->mId, $this->mParentId, 'parent_id', 0, 1, 0, 1,cms_siteprefs::get('listcontent_showtitle',true) );
 			if( empty($tmp) && !check_permission(get_userid(),'Manage All Content') ) {
 				return array('','<input type="hidden" name="parent_id" value="'.$this->mParentId.'" />');
             }
@@ -2340,7 +2340,7 @@ abstract class ContentBase
 				if ($pretty_urls != 0) {
 					$str = '<input type="text" name="page_url" id="page_url" value="'.$this->mURL.'" size="50" maxlength="255"/>';
 					$prompt = '<label for="page_url">'.lang('page_url').':</label>';
-					if( get_site_preference('content_mandatory_urls',0) ) $prompt = '*'.$prompt;
+					if( cms_siteprefs::get('content_mandatory_urls',0) ) $prompt = '*'.$prompt;
 					$help = '&nbsp;'.cms_admin_utils::get_help_tag('core','help_page_url',lang('help_title_page_url'));
 					return array($prompt.$help,$str);
 				}
@@ -2348,7 +2348,7 @@ abstract class ContentBase
 			break;
 
 		case 'image':
-			$dir = cms_join_path($config['image_uploads_path'],get_site_preference('content_imagefield_path'));
+			$dir = cms_join_path($config['image_uploads_path'],cms_siteprefs::get('content_imagefield_path'));
 			$data = $this->GetPropertyValue('image');
 			$dropdown = create_file_dropdown('image',$dir,$data,'jpg,jpeg,png,gif','',true,'','thumb_',1,1);
 			if( !$dropdown ) return;
@@ -2356,7 +2356,7 @@ abstract class ContentBase
 			return array('<label for="image">'.lang('image').':</label>'.$help,$dropdown);
 
 		case 'thumbnail':
-			$dir = cms_join_path($config['image_uploads_path'],get_site_preference('content_thumbnailfield_path'));
+			$dir = cms_join_path($config['image_uploads_path'],cms_siteprefs::get('content_thumbnailfield_path'));
 			$data = $this->GetPropertyValue('thumbnail');
 			$dropdown = create_file_dropdown('thumbnail',$dir,$data,'jpg,jpeg,png,gif','',true,'','thumb_',0,1);
 			if( !$dropdown ) return FALSE;

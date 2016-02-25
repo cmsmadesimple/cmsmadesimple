@@ -75,6 +75,7 @@ $_tpl_cache = new CmsTemplateCache();
 while( $trycount < 2 ) {
     $trycount++;
     try {
+        // pre-process mact
         if( $page == -100) {
             setup_session(false);
             if( !isset($_SESSION['__cms_preview__']) ) throw new CmsException('preview selected, but temp data not found');
@@ -109,6 +110,8 @@ while( $trycount < 2 ) {
         }
 
         if( !$contentobj->IsPermitted() ) throw new CmsError403Exception('Permission denied');
+
+        preprocess_mact($contentobj->Id());
 
         $_app->set_content_object($contentobj);
         $smarty->assignGlobal('content_obj',$contentobj);

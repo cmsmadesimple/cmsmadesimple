@@ -371,7 +371,7 @@ class ContentOperations
 	function ListContentTypes($byclassname = false,$allowed = false,$system = FALSE)
 	{
 		$disallowed_a = array();
-		$tmp = get_site_preference('disallowed_contenttypes');
+		$tmp = cms_siteprefs::get('disallowed_contenttypes');
 		if( $tmp ) $disallowed_a = explode(',',$tmp);
 
 		$this->_get_content_types();

@@ -184,11 +184,7 @@ final class cms_content_cache
 	  $hash = self::content_exists($identifier);
 	  if( $hash === FALSE ) {
 		  // content doesn't exist...
-		  if( is_numeric($identifier) ) {
-			  // so add a null object, so we don't request it from the database again.
-			  self::_add_content($identifier,'',$res);
-			  return $res;
-		  }
+          return $res;
 	  }
 
 	  return self::get_content_obj($hash);
