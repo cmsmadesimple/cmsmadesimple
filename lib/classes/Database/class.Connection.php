@@ -665,9 +665,7 @@ namespace CMSMS\Database {
             if( $spec->debug ) $obj->SetDebugMode();
             $obj->Connect();
 
-            if( $spec->auto_exec ) {
-                $obj->Execute($spec->auto_exec);
-            }
+            if( $spec->auto_exec ) $obj->Execute($spec->auto_exec);
             return $obj;
         }
 
