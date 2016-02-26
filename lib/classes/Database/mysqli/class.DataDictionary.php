@@ -245,6 +245,7 @@ class DataDictionary extends \CMSMS\Database\DataDictionary
                 }
             }
         }
+        return $opts;
     }
 
 	function _IndexSQL($idxname, $tabname, $flds, $idxoptions)
