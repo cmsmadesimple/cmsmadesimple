@@ -2,22 +2,24 @@
 Creating a CMSMS Release
 ------------------------
 
+
 Creating a CMSMS release involves these steps:
-  a: Create the <installer root>/app/upgrade/<version> directory and it's appropriate files
+  a: Do all of the required changes to the CMSMS branch in question (change the version.php, update the changelog, make sure those files are committed)
+  b: Create the <installer root>/app/upgrade/<version> directory and it's appropriate files
      MANIFEST.DAT -- this file is created with the 'create_manifest.php' script (see below)
+     (a MANIFEST.DAT.GZ file is acceptable too)
      upgrade.php  -- (optional) the script to do any changes to the database or settings
         note: when this script is executed $db is available, the CMSMS api is created, however smarty is not available.
      readme.txt   -- (optional) readme file for display in the upgrade assistant
   
-  b: optionally delete directories from <installer root>/app/upgrade that are no longer necessary.
+  c: optionally delete directories from <installer root>/app/upgrade that are no longer necessary.
 
-  c: build the release packages
+  d: build the release packages
 
 ---------------------
 Building the manifest
 ---------------------
-  a: change directories to the <installer root>/app/upgrade/<to version> directory as created above.  
-  b: execute the create_manifest.php script 
+  a: execute the create_manifest.php script 
      - this requires the php-cli package
      - requires subversion installed
      - assumes unix/linux
@@ -28,6 +30,7 @@ Building the manifest
          to subpath:      trunk
      - the script exports the two directories, and (accounting for files that need to be excluded) compares the directories to
        find files that have been added/changed/deleted.
+  b: copy the generated MANIFEST.DAT.GZ file into the <root>/app/upgrade/<version> directory
 
 -----------------------------
 Building the release packages
