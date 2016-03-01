@@ -131,20 +131,22 @@ class utils
 
                 // ignore dotfiles, except .htaccess.
                 if( $ignore_specialfiles ) {
-                    if( $file[0] == '.' ) continue;
-                    if( fnmatch('php.ini*',$file) ) continue;
+                    if( $file[0] == '.' && $file != '.htaccess' ) continue;
+                    if( $file == 'php.ini' ) continue;
                 }
 
                 $p = $path.$file;
                 if( !@is_writable( $p ) ) {
                     self::$_writable_error[] = $p;
+                    @closedir( $handle );
                     return FALSE;
                 }
 
                 if( @is_dir( $p ) ) {
-                    $result = self::is_directory_writable( $p );
+                    $result = self::is_directory_writable( $p, $ignore_specialfiles );
                     if( !$result ) {
                         self::$_writable_error[] = $p;
+                        @closedir( $handle );
                         return FALSE;
                     }
                 }
