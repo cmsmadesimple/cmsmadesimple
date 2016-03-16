@@ -9,6 +9,7 @@ Core - General
 - Minor change to the {admin_icon} plugin (default image class).
 - Cache more items that are queried from the database, to reduce mysql load.
 - Minor change to tree operations functionality to reduce memory usage
+- Fixed problem with order of content blocks when using {content_module} stuff.
 
 Content Manager
 - Minor tweak to bulk delete pages.
@@ -34,6 +35,9 @@ Search
 - Convert to store all data using the InnoDB engine
 - Use transactions for the addwords and deletewords stuff for performance.
 - Fix problem with query and record expiry.
+
+AdminSearch v1.0.1
+- Fixes problem with use of 'Use Admin Search' permission.
 
 Version 2.1.2 - Andros Town
 ----------------------------------

@@ -81,13 +81,16 @@ final class CMS_Content_Block
 
         if( !$rec['name'] ) $rec['name'] = $rec['id'] = 'content_en';
         if( !$rec['id'] ) $rec['id'] = str_replace(' ','_',$rec['name']);
+
+        // check for duplicate.
+        if( isset(self::$_contentBlocks[$rec['name']]) ) throw new CmsEditContentException('Duplicate content block: '.$rec['name']);
+
+        // set priority
         if( !$rec['priority'] ) {
             if( !self::$_priority ) self::$_priority = 100;
             $rec['priority'] = self::$_priority++;
         }
 
-        // check for duplicate.
-        if( isset(self::$_contentBlocks[$rec['name']]) ) throw new CmsEditContentException('Duplicate content block: '.$rec['name']);
         if( !is_array(self::$_contentBlocks) ) self::$_contentBlocks = array();
         self::$_contentBlocks[$rec['name']] = $rec;
     }
@@ -113,6 +116,13 @@ final class CMS_Content_Block
 
         // check for duplicate.
         if( isset(self::$_contentBlocks[$rec['name']]) ) throw new CmsEditContentException('Duplicate content block: '.$rec['name']);
+
+        // set priority
+        if( !$rec['priority'] ) {
+            if( !self::$_priority ) self::$_priority = 100;
+            $rec['priority'] = self::$_priority++;
+        }
+
         if( !is_array(self::$_contentBlocks) ) self::$_contentBlocks = array();
         self::$_contentBlocks[$rec['name']] = $rec;
     }
@@ -147,6 +157,13 @@ final class CMS_Content_Block
 
         // check for duplicate.
         if( isset(self::$_contentBlocks[$rec['name']]) ) throw new CmsEditContentException('Duplicate content block: '.$rec['name']);
+
+        // set priority
+        if( !$rec['priority'] ) {
+            if( !self::$_priority ) self::$_priority = 100;
+            $rec['priority'] = self::$_priority++;
+        }
+
         if( !is_array(self::$_contentBlocks) ) self::$_contentBlocks = array();
         self::$_contentBlocks[$rec['name']] = $rec;
     }
