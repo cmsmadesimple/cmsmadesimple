@@ -143,6 +143,17 @@ $(document).ready(function(){
                 <input id="tpl_name" type="text" name="{$actionid}name" size="50" maxlength="90" value="{$template->get_name()}" {if !$has_manage_right}readonly="readonly"{/if} placeholder="{$mod->Lang('new_template')}"/>
             </p>
         </div>
+
+	{$usage_str=$template->get_usage_string()}
+	{if !empty($usage_str)}
+        <div class="pageoverflow">
+            <p class="pagetext"><label>{$mod->Lang('prompt_usage')}:</label>&nbsp;{cms_help key2='help_tpl_usage' title=$mod->Lang('prompt_usage')}</p>
+            <p class="pageinput">
+                {$usage_str}
+            </p>
+        </div>
+	{/if}
+
     </div>{* column *}
     <div class="grid_6">
     {if $template->get_id()}

@@ -35,7 +35,7 @@
 #END_LICENSE
 
 /**
- * This class contains classes and functions that define a template type.
+ * This file contains classes and functions that define a template type.
  * @package CMS
  * @license GPL
  */
@@ -46,7 +46,6 @@
  * @package CMS
  * @license GPL
  * @since 2.0
- * @license 2.0
  * @author Robert Campbell <calguy1000@gmail.com>
  */
 class CmsLayoutTemplateType
@@ -80,6 +79,11 @@ class CmsLayoutTemplateType
 	 * @ignore
 	 */
 	private static $_name_cache;
+
+    /**
+     * @ignore
+     */
+    private $_assistant;
 
     /**
      * Get the template type id
@@ -687,9 +691,48 @@ class CmsLayoutTemplateType
 	{
 		if( is_array(self::$_cache) )	return array_keys(self::$_cache);
 	}
+
+    /**
+     * Get the assistant object with utility methods for this template type (if such an assistant object can be instantiated)
+     *
+     * @return \CMSMS\Layout\TemplateTypeAssistant
+     * @since 2.2
+     */
+    public function &get_assistant()
+    {
+        if( !$this->_assistant ) {
+            $classnames = [];
+            $classnames[] = '\\CMSMS\\Layout\\'.$this->get_originator().$this->get_name().'_Type_Assistant';
+            $classnames[] = $this->get_originator().'_'.$this->get_name().'_Type_Assistant';
+            foreach( $classnames as $cn ) {
+                if( class_exists($cn) ) {
+                    $tmp = new $cn;
+                    if( is_a($tmp,'\CMSMS\Layout\TemplateTypeAssistant') ) {
+                        $this->_assistant = $tmp;
+                        break;
+                    }
+                }
+            }
+        }
+
+        return $this->_assistant;
+    }
+
+    /**
+     * @since 2.2
+     */
+    public function get_usage_string($name)
+    {
+        $name = trim($name);
+        if( !$name ) return;
+
+        $assistant = $this->get_assistant();
+        if( !$assistant ) return;
+
+        return $assistant->get_usage_string($name);
+    }
 } // end of class
 
 #
 # EOF
 #
-?>

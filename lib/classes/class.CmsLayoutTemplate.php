@@ -1138,9 +1138,34 @@ class CmsLayoutTemplate
 		}
 		throw new CmsLogicException('Could not generate a template name for '.$prototype);
 	}
+
+    /**
+     * Return the template type object for this template.
+     *
+     * @return CmsLayoutTemplateType
+     * @since 2.2
+     */
+    public function &get_type()
+    {
+        $obj = null;
+        $tid = $this->get_type_id();
+        if( $tid > 0 ) $obj = \CmsLayoutTemplateType::load($this->get_type_id());
+        return $obj;
+    }
+
+    /**
+     * Get the usage string (if any) for this template.
+     *
+     * @return string A sample usage string for this template.
+     * @since 2.2
+     */
+    public function get_usage_string()
+    {
+        $type = $this->get_type();
+        return $type->get_usage_string($this->get_name());
+    }
 } // end of class
 
 #
 # EOF
 #
-?>

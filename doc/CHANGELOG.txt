@@ -10,6 +10,7 @@ Core - General
 - Cache more items that are queried from the database, to reduce mysql load.
 - Minor change to tree operations functionality to reduce memory usage
 - Fixed problem with order of content blocks when using {content_module} stuff.
+- Adds get_usage_string and the concept of a type assistant to template types.
 
 Content Manager
 - Minor tweak to bulk delete pages.
@@ -20,6 +21,8 @@ DesignManager
 - Implement sorting in edit design.
 - Remove option menus (for now) from templates, stylesheets, and designs tab.
 - Modify the template list functionality in edit-design to allow using keyboard control.   space or + to select an item on the left, and right arrow to move
+- Generic templates now display a usage string.
+- When creating a new template, associate the new template with the default design.
 
 News v2.50.5
 - Minor fix to add category.
