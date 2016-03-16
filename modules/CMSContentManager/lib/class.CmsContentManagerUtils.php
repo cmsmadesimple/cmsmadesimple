@@ -101,11 +101,11 @@ final class CmsContentManagerUtils
   public static function get_pagenav_display()
   {
     $userid = get_userid(FALSE);
-    $mod = cms_utils::get_module('CMSContentManager');
     $pref = cms_userprefs::get($userid,'ce_navdisplay');
     if( !$pref ) {
-      $pref = $mod->GetPreference('list_namecolumn');
-      if( !$pref ) $pref = 'title';
+        $mod = cms_utils::get_module('CMSContentManager');
+        $pref = $mod->GetPreference('list_namecolumn');
+        if( !$pref ) $pref = 'title';
     }
     return $pref;
   }

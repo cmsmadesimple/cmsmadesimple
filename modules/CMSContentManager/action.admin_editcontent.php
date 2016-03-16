@@ -47,6 +47,7 @@ try {
     $pagedefaults = CmsContentManagerUtils::get_pagedefaults();
     $content_type = $pagedefaults['contenttype'];
     $error = null;
+    $active_tab = null;
 
     if( isset($params['content_id']) ) $content_id = (int)$params['content_id'];
 
@@ -159,9 +160,9 @@ try {
         $content_obj->FillParams($_POST,($content_id > 0));
     }
 
+    $active_tab = isset($params['active_tab']) ? trim($params['active_tab']) : null;
     if( isset($params['submit']) || isset($params['apply']) || isset($params['preview']) ) {
         $error = $content_obj->ValidateData();
-
         if( $error ) {
             if( isset($params['ajax']) ) {
                 $tmp = array('response'=>'Error','details'=>$error);
@@ -303,6 +304,8 @@ $smarty->assign('apply_ajax_url',$url);
 $smarty->assign('preview_ajax_url',$this->create_url($id,'admin_editcontent',$returnid,array('preview'=>1)));
 $smarty->assign('lock_timeout',$this->GetPreference('locktimeout'));
 $smarty->assign('lock_refresh',$this->GetPreference('lockrefresh'));
+$smarty->assign('options_tab_name',$content_obj::TAB_OPTIONS);
+$smarty->assign('active_tab',$active_tab);
 $smarty->assign('content_id',$content_id);
 $smarty->assign('content_obj',$content_obj);
 $smarty->assign('tab_names',$tab_names);

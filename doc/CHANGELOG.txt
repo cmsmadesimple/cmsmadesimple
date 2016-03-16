@@ -13,6 +13,7 @@ Core - General
 
 Content Manager
 - Minor tweak to bulk delete pages.
+- Minor fix to the active tab when changing a template or design.
 
 DesignManager
 - Move the designs tab of the main interface into third position.
