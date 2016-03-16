@@ -25,6 +25,7 @@ News v2.50.5
 
 FileManager v1.6
 - Move settings to it's own menu item under site-admin
+- Fix minor problem with moving a directory.
 
 Phar Installer v1.2
 - A database account password is now required

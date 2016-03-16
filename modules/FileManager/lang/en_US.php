@@ -83,6 +83,7 @@ $lang['filedeletesuccess'] = 'was successfully deleted';
 $lang['fileexistsdest'] = '%s already exists at the destination';
 $lang['fileimagetype'] = 'Cannot perform this action on this type of image';
 $lang['fileinfo'] = 'File info';
+$lang['filemovesame'] = 'Cannot move a directory';
 $lang['filename'] = 'File name';
 $lang['fileno'] = 'File no.';
 $lang['filenotfound'] = 'File not found';
