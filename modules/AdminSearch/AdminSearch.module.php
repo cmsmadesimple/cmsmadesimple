@@ -23,7 +23,7 @@ if( !isset($gCms) ) exit;
 final class AdminSearch extends CMSModule
 {
   function GetFriendlyName()  { return $this->Lang('friendlyname');  }
-  function GetVersion()  { return '1.0'; }
+  function GetVersion()  { return '1.0.1'; }
   function MinimumCMSVersion()  { return '1.12-alpha0';  }
   function LazyLoadAdmin() { return TRUE; }
   function LazyLoadFrontend() { return TRUE; }
@@ -35,7 +35,7 @@ final class AdminSearch extends CMSModule
   function GetHelp() { return $this->Lang('help'); }
   function GetChangeLog() { return file_get_contents(dirname(__FILE__).'/changelog.inc'); }
   function GetAdminDescription() { return $this->Lang('moddescription'); }
-  
+
   function VisibleToAdminUser()
   {
     return $this->can_search();
@@ -43,11 +43,7 @@ final class AdminSearch extends CMSModule
 
   protected function can_search()
   {
-    $perms = array('Modify Templates','Modify Stylesheets','Manage All Content','Modify Any Page',
-		   'Modify User-defined Tags','Modify Site Preferences');
-    foreach( $perms as $perm ) {
-      if( $this->CheckPermission($perm) ) return TRUE;
-    }
+      return $this->CheckPermission('Use Admin Search');
   }
 
   function InstallPostMessage()
@@ -69,7 +65,7 @@ final class AdminSearch extends CMSModule
 
   public function HasCapability($capability,$params=array())
   {
-    if( $capability == CmsCoreCapabilities::ADMINSEARCH ) return TRUE; 
+    if( $capability == CmsCoreCapabilities::ADMINSEARCH ) return TRUE;
     return FALSE;
   }
 
