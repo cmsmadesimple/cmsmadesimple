@@ -178,11 +178,12 @@ class ContentOperations
      */
 	function &LoadContentFromId($id,$loadprops=false)
 	{
+		$result = FALSE;
+        $id = (int) $id;
+        if( $id < 1 ) $id = $this->GetDefaultContent();
 		if( cms_content_cache::content_exists($id) ) return cms_content_cache::get_content($id);
 
-		$result = FALSE;
 		$db = CmsApp::get_instance()->GetDb();
-
 		$query = "SELECT * FROM ".CMS_DB_PREFIX."content WHERE content_id = ?";
 		$row = $db->GetRow($query, array($id));
 		if ($row) {
