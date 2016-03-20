@@ -882,7 +882,7 @@ class ContentOperations
 
 		$error = FALSE;
 		$tmp = munge_string_to_url($alias,TRUE);
-		if( $tmp != strtolower($alias) ) {
+		if( $tmp != mb_strtolower($alias) ) {
 			$error = lang('invalidalias');
 		}
 		else {
