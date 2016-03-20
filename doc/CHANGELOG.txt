@@ -11,6 +11,7 @@ Core - General
 - Minor change to tree operations functionality to reduce memory usage
 - Fixed problem with order of content blocks when using {content_module} stuff.
 - Adds get_usage_string and the concept of a type assistant to template types.
+- Minor change to auto-alias determination routine.
 
 Content Manager
 - Minor tweak to bulk delete pages.
@@ -55,6 +56,7 @@ Core - General
 - Minor fix to the relative_time modifier.
 - Upgrade CMSMailer to 6.2.14
 - Now do a check for E_ALL in the system info
+- Optimize LoadContentFromId() to be typesafe, and use default page, if the id passed in is invalid.
 
 News v2.50.4
 - Now all field definitions can be deleted
