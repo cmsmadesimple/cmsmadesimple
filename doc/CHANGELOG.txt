@@ -12,7 +12,8 @@ Core - General
 - Optimize LoadContentFromId() to be typesafe, and use default page, if the id passed in is invalid.
 
 News v2.50.4
-- Now all field definitions can be deleted 
+- Now all field definitions can be deleted
+- Minor fix to default action if no results were returned...
 
 ModuleManager v2.0.2
 - Revamp module dependency calculations when installing a module
