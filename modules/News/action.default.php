@@ -244,7 +244,7 @@ if( !$tpl_ob->IsCached() ) {
     $dbresult = $db->Execute($query1);
   }
 
-  if( is_object(4dbresult) ) {
+  if( is_object($dbresult) ) {
       // build a list of news id's so we can preload stuff from other tables.
       $result_ids = array();
       while( $dbresult && !$dbresult->EOF ) {
