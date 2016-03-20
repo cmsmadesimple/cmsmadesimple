@@ -167,12 +167,12 @@ try {
             $tpl->save();
         }
     }
-    catch( CmsException $e ) {
+    catch( \Exception $e ) {
         // if we got here, it's prolly because default content was not installed.
         audit('',$this->GetName(),'Installation Error: '.$e->GetMessage());
     }
 }
-catch( CmsException $e ) {
+catch( \Exception $e ) {
   debug_to_log(__FILE__.':'.__LINE__.' '.$e->GetMessage());
   audit('',$this->GetName(),'Installation Error: '.$e->GetMessage());
   return $e->GetMessage();
