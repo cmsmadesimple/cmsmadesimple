@@ -244,86 +244,86 @@ if( !$tpl_ob->IsCached() ) {
     $dbresult = $db->Execute($query1);
   }
 
-  {
-    // build a list of news id's so we can preload stuff from other tables.
-    $result_ids = array();
-    while( $dbresult && !$dbresult->EOF ) {
-      $result_ids[] = $dbresult->fields['news_id'];
-      $dbresult->MoveNext();
-    }
-    $dbresult->MoveFirst();
-    news_ops::preloadFieldData($result_ids);
-  }
-
-  while( $dbresult && !$dbresult->EOF ) {
-    $row = $dbresult->fields;
-    $onerow = new stdClass();
-
-    $onerow->author_id = $row['author_id'];
-    if( $onerow->author_id > 0 ) {
-      $onerow->author = $row['username'];
-      $onerow->authorname = $row['first_name'].' '.$row['last_name'];
-    }
-    else if( $onerow->author_id == 0 ) {
-      $onerow->author = $this->Lang('anonymous');
-      $onerow->authorname = $this->Lang('unknown');
-    }
-    else {
-      $feu = $this->GetModuleInstance('FrontEndUsers');
-      if( $feu ) {
-	$uinfo = $feu->GetUserInfo($onerow->author_id * -1);
-	if( $uinfo[0] ) $onerow->author = $uinfo[1]['username'];
+  if( is_object(4dbresult) ) {
+      // build a list of news id's so we can preload stuff from other tables.
+      $result_ids = array();
+      while( $dbresult && !$dbresult->EOF ) {
+          $result_ids[] = $dbresult->fields['news_id'];
+          $dbresult->MoveNext();
       }
-    }
-    $onerow->id = $row['news_id'];
-    $onerow->title = $row['news_title'];
-    $onerow->content = $row['news_data'];
-    $onerow->summary = (trim($row['summary'])!='<br/>'?$row['summary']:'');
-    $onerow->postdate = $row['news_date'];
-    if( FALSE == empty($row['news_extra']) ) $onerow->extra = $row['news_extra'];
-    $onerow->postdate = $row['news_date'];
-    $onerow->startdate = $row['start_time'];
-    $onerow->enddate = $row['end_time'];
-    $onerow->create_date = $row['create_date'];
-    $onerow->modified_date = $row['modified_date'];
-    $onerow->category = $row['news_category_name'];
+      $dbresult->MoveFirst();
+      news_ops::preloadFieldData($result_ids);
 
-    //
-    // Handle the custom fields
-    //
-    $onerow->fields = news_ops::get_fields($row['news_id'],TRUE);
-    $onerow->fieldsbyname = $onerow->fields; // dumb, I know.
-    $onerow->file_location = $gCms->config['uploads_url'].'/news/id'.$row['news_id'];
+      while( $dbresult && !$dbresult->EOF ) {
+          $row = $dbresult->fields;
+          $onerow = new stdClass();
 
-    $moretext = isset($params['moretext'])?$params['moretext']:$this->Lang('more');
-    $sendtodetail = array('articleid'=>$row['news_id']);
-    if (isset($params['showall'])) $sendtodetail['showall'] = $params['showall'];
-    if (isset($params['detailpage'])) $sendtodetail['origid'] = $returnid;
-    if (isset($params['detailtemplate'])) $sendtodetail['detailtemplate'] = $params['detailtemplate'];
+          $onerow->author_id = $row['author_id'];
+          if( $onerow->author_id > 0 ) {
+              $onerow->author = $row['username'];
+              $onerow->authorname = $row['first_name'].' '.$row['last_name'];
+          }
+          else if( $onerow->author_id == 0 ) {
+              $onerow->author = $this->Lang('anonymous');
+              $onerow->authorname = $this->Lang('unknown');
+          }
+          else {
+              $feu = $this->GetModuleInstance('FrontEndUsers');
+              if( $feu ) {
+                  $uinfo = $feu->GetUserInfo($onerow->author_id * -1);
+                  if( $uinfo[0] ) $onerow->author = $uinfo[1]['username'];
+              }
+          }
+          $onerow->id = $row['news_id'];
+          $onerow->title = $row['news_title'];
+          $onerow->content = $row['news_data'];
+          $onerow->summary = (trim($row['summary'])!='<br/>'?$row['summary']:'');
+          $onerow->postdate = $row['news_date'];
+          if( FALSE == empty($row['news_extra']) ) $onerow->extra = $row['news_extra'];
+          $onerow->postdate = $row['news_date'];
+          $onerow->startdate = $row['start_time'];
+          $onerow->enddate = $row['end_time'];
+          $onerow->create_date = $row['create_date'];
+          $onerow->modified_date = $row['modified_date'];
+          $onerow->category = $row['news_category_name'];
 
-    $prettyurl = $row['news_url'];
-    if( $prettyurl == '' ) {
-      $aliased_title = munge_string_to_url($row['news_title']);
-      $prettyurl = 'news/'.$row['news_id'].'/'.($detailpage!=''?$detailpage:$returnid)."/$aliased_title";
-      if (isset($sendtodetail['detailtemplate'])) $prettyurl .= '/d,' . $sendtodetail['detailtemplate'];
-    }
+          //
+          // Handle the custom fields
+          //
+          $onerow->fields = news_ops::get_fields($row['news_id'],TRUE);
+          $onerow->fieldsbyname = $onerow->fields; // dumb, I know.
+          $onerow->file_location = $gCms->config['uploads_url'].'/news/id'.$row['news_id'];
 
-    if (isset($params['lang'])) $sendtodetail['lang'] = $params['lang'];
-    if (isset($params['category_id'])) $sendtodetail['category_id'] = $params['category_id'];
-    if (isset($params['pagelimit'])) $sendtodetail['pagelimit'] = $params['pagelimit'];
+          $moretext = isset($params['moretext'])?$params['moretext']:$this->Lang('more');
+          $sendtodetail = array('articleid'=>$row['news_id']);
+          if (isset($params['showall'])) $sendtodetail['showall'] = $params['showall'];
+          if (isset($params['detailpage'])) $sendtodetail['origid'] = $returnid;
+          if (isset($params['detailtemplate'])) $sendtodetail['detailtemplate'] = $params['detailtemplate'];
 
-    $onerow->link = $this->CreateLink($id, 'detail', $detailpage!=''?$detailpage:$returnid, '', $sendtodetail,'', true, false, '', true,
-				      $prettyurl);
-    $onerow->titlelink = $this->CreateLink($id, 'detail', $detailpage!=''?$detailpage:$returnid, $row['news_title'], $sendtodetail, '',
-					   false, false, '', true, $prettyurl);
-    $onerow->morelink = $this->CreateLink($id, 'detail', $detailpage!=''?$detailpage:$returnid, $moretext, $sendtodetail, '', false,
-					  false, '', true, $prettyurl);
-    $onerow->moreurl = $this->CreateLink($id, 'detail', $detailpage!=''?$detailpage:$returnid, $moretext, $sendtodetail, '', true, false, '',
-					 true, $prettyurl);
+          $prettyurl = $row['news_url'];
+          if( $prettyurl == '' ) {
+              $aliased_title = munge_string_to_url($row['news_title']);
+              $prettyurl = 'news/'.$row['news_id'].'/'.($detailpage!=''?$detailpage:$returnid)."/$aliased_title";
+              if (isset($sendtodetail['detailtemplate'])) $prettyurl .= '/d,' . $sendtodetail['detailtemplate'];
+          }
 
-    $entryarray[]= $onerow;
-    $dbresult->MoveNext();
-  }
+          if (isset($params['lang'])) $sendtodetail['lang'] = $params['lang'];
+          if (isset($params['category_id'])) $sendtodetail['category_id'] = $params['category_id'];
+          if (isset($params['pagelimit'])) $sendtodetail['pagelimit'] = $params['pagelimit'];
+
+          $onerow->link = $this->CreateLink($id, 'detail', $detailpage!=''?$detailpage:$returnid, '', $sendtodetail,'', true, false, '', true,
+                                            $prettyurl);
+          $onerow->titlelink = $this->CreateLink($id, 'detail', $detailpage!=''?$detailpage:$returnid, $row['news_title'], $sendtodetail, '',
+                                                 false, false, '', true, $prettyurl);
+          $onerow->morelink = $this->CreateLink($id, 'detail', $detailpage!=''?$detailpage:$returnid, $moretext, $sendtodetail, '', false,
+                                                false, '', true, $prettyurl);
+          $onerow->moreurl = $this->CreateLink($id, 'detail', $detailpage!=''?$detailpage:$returnid, $moretext, $sendtodetail, '', true, false, '',
+                                               true, $prettyurl);
+
+          $entryarray[]= $onerow;
+          $dbresult->MoveNext();
+      }
+  } // if
 
   $tpl_ob->assign('itemcount', count($entryarray));
   $tpl_ob->assign('items', $entryarray);
