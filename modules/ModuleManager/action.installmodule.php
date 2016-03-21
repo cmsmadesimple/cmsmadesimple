@@ -231,6 +231,8 @@ try {
     if( count($alldeps) ) {
         $allmoduleinfo = ModuleManagerModuleInfo::get_all_module_info(FALSE);
         foreach( $alldeps as $name => &$rec ) {
+            $rec['has_custom'] = FALSE;
+            if( isset($allmoduleinfo[$name]) ) $rec['has_custom'] = ($allmoduleinfo[$name]['has_custom']) ? TRUE : FALSE;
             if( !isset($allmoduleinfo[$name]) ) {
                 // install
                 $rec['action']='i';

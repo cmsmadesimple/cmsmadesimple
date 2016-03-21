@@ -68,7 +68,9 @@ class CmsModuleInfo implements ArrayAccess
       $files1 = glob($dir."/templates/*.tpl");
       $files2 = glob($dir."/lang/??_??.php");
       $this->_data['has_custom'] = false;
-      if( count($files1) || count($files2) ) $this->_data['has_custom'] = TRUE;
+      if( count($files1) || count($files2) ) {
+          $this->_data['has_custom'] = TRUE;
+      }
   }
 
   private function _read_from_module_meta($module_name)

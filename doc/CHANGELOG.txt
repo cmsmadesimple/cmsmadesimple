@@ -12,6 +12,7 @@ Core - General
 - Fixed problem with order of content blocks when using {content_module} stuff.
 - Adds get_usage_string and the concept of a type assistant to template types.
 - Minor change to auto-alias determination routine.
+- Detect module_custom enhancements in the CmsModuleInfo stuff.
 
 Content Manager
 - Minor tweak to bulk delete pages.
@@ -44,6 +45,10 @@ Search
 
 AdminSearch v1.0.1
 - Fixes problem with use of 'Use Admin Search' permission.
+
+ModuleManager
+- Now detect if module_custom directories exist and are populated and warn about this before upgrading a module.
+- Minor string changes.
 
 Version 2.1.2 - Andros Town
 ----------------------------------

@@ -40,6 +40,7 @@ $lang['compatibility_disclaimer'] = 'The modules displayed here are contributed 
 $lang['db_newer'] = 'Database Version Newer';
 $lang['dependstxt'] = 'Dependencies';
 $lang['depend_activate'] = 'Module %s will be activated.';
+$lang['depend_customization'] = '<strong>Warning:</strong> This module has customized templates and/or long strings.  Continuing may generate errors or you may have difficulty with new functionality.';
 $lang['depend_install'] = 'Module %s (version %s) will be installed.';
 $lang['depend_upgrade'] = 'Module %s will be upgraded to version %s.';
 $lang['depends_upon'] = 'Depends on';
@@ -203,7 +204,7 @@ $lang['success'] = 'Success';
 
 // T
 $lang['tab_newversions'] = 'Upgrades Available';
-$lang['time_warning'] = 'Installing modules is a data and memory intensive operation. Depending upon the network bandwidth, server load, and installation tasks that need to be performed this could take several minutes.';
+$lang['time_warning'] = 'Installing modules is a data and memory intensive operation. Depending upon the network bandwidth, server load, and installation tasks that need to be performed this could take several minutes.  Also, installing modules may cause problems with a working installation.  It is recommended that you have a verified backup of your site before proceeding.';
 $lang['title_advancedsearch'] = 'Enable advanced search functionality';
 $lang['title_cantremove'] = 'The file system permissions on this module directory do not permit deleting the files';
 $lang['title_cantuninstall'] = 'Other installed modules depend on this module, therefore you cannot uninstall it at this time.';
@@ -272,6 +273,7 @@ $lang['vertext'] = 'Version';
 // W
 $lang['warning'] = 'Warning';
 $lang['warn_dependencies'] = 'The module you selected to install or upgrade depends on one or more additional modules that must also be installed or upgraded.';
+$lang['warn_modulecustom'] = 'The following modules have customizations in the &lt;root&gt;/module_custom directory of your installation.  These customizations may or may not cause errors after the upgrade.  You may need to remove or revise these customizations to restore proper functionality.  Proceed with caution.';
 // X
 $lang['xmltext'] = 'XML File';
 
