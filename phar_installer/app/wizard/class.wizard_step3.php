@@ -39,12 +39,12 @@ class wizard_step3 extends \cms_autoinstaller\wizard_step
             $list = glob($app->get_destdir().'/*');
             foreach( $list as $one ) {
                 $basename = basename($one);
-                $relative = substr($one,strlen($app->get_destdir())+1);
                 if( is_file($one) ) {
+                    $relative = substr($one,strlen($app->get_destdir())+1);
                     if( !is_writable($one) ) $failed[] = $relative;
                 }
                 else if( in_array($basename,$dirs) ) {
-                    $b = \__appbase\utils::is_directory_writable($one);
+                    $b = \__appbase\utils::is_directory_writable($one,TRUE);
                     if( !$b ) {
                         $tmp = \__appbase\utils::get_writable_error();
                         $failed = array_merge($failed,\__appbase\utils::get_writable_error());
