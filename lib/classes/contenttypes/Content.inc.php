@@ -337,11 +337,16 @@ class Content extends ContentBase
 		case 'design_id':
 			// get the dflt/current design id.
 			try {
-				$dflt_design = CmsLayoutCollection::load_default();
-				$dflt_design_id = $dflt_design->get_id();
 				$design_id = $this->GetPropertyValue('design_id');
-				if( $design_id < 1 ) $design_id = $dflt_design_id;
-
+                if( $design_id < 1 ) {
+                    try {
+                        $dflt_design = CmsLayoutCollection::load_default();
+                        $design_id = $dflt_design->get_id();
+                    }
+                    catch( \Exception $e ) {
+                        audit('','CMSContentManager','No default design found');
+                    }
+                }
 				$out = '';
 				if( is_array($_designlist) && count($_designlist) ) {
 					$out = CmsFormUtils::create_dropdown('design_id',$_designlist,$this->GetPropertyValue('design_id'),
@@ -357,9 +362,16 @@ class Content extends ContentBase
 
 		case 'template':
 			try {
-				$dflt_tpl = CmsLayoutTemplate::load_dflt_by_type(CmsLayoutTemplateType::CORE.'::page');
 				$template_id = $this->TemplateId();
-				if( $template_id < 1 ) $template_id = $dflt_tpl->get_id();
+				if( $template_id < 1 ) {
+                    try {
+                        $dflt_tpl = CmsLayoutTemplate::load_dflt_by_type(CmsLayoutTemplateType::CORE.'::page');
+                        $template_id = $dflt_tpl->get_id();
+                    }
+                    catch( \Exception $e ) {
+                        audit('','CMSContentManager','No default page template found');
+                    }
+                }
 				$out = CmsFormUtils::create_dropdown('template_id',$_templates,$template_id,array('id'=>'template_id'));
 				$help = '&nbsp;'.cms_admin_utils::get_help_tag('core','info_editcontent_template',lang('help_title_editcontent_template'));
 				return array('<label for="template_id">*'.lang('template').':</label>'.$help,$out);
