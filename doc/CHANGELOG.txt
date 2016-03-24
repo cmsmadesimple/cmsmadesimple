@@ -65,6 +65,7 @@ Core - General
 
 News v2.50.4
 - Now all field definitions can be deleted
+- Minor fix to default action if no results were returned...
 
 ModuleManager v2.0.2
 - Revamp module dependency calculations when installing a module
