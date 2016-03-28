@@ -110,6 +110,57 @@ final class cms_config implements ArrayAccess
   /**
    * @ignore
    */
+  private function calculate_request_hostname()
+  {
+	  if( $_SERVER['HTTP_HOST'] === $_SERVER['SERVER_NAME'] ) return $_SERVER['SERVER_NAME'];
+
+	  // $_SERVER['HTTP_HOST'] can be spoofed... so if a root_url is not specified
+	  // we determine if the requested host is in a whitelist.
+	  // if all else fails, we use $_SERVER['SERVER_NAME']
+	  $whitelist = (isset($this['host_whitelist'])) ? $this['host_whitelist'] : null;
+	  if( !$whitelist ) return $_SERVER['SERVER_NAME'];
+	  $requested = $_SERVER['HTTP_HOST'];
+
+	  $out = null;
+	  if( is_callable($whitelist) ) {
+		  $out = call_user_func($whitelist,$requested);
+	  }
+	  else if( is_array($whitelist) ) {
+		  // could use array_search here, but can't rely on the quality of the input (empty strings, whitespace etc).
+		  for( $i = 0, $n = count($whitelist); $i < $n; $i++ ) {
+			  $item = $whitelist[$i];
+			  if( !is_string($item) ) continue;
+			  if( !$item ) continue;
+			  if( strcasecmp($requested,$item) == 0 ) {
+				  $out = $item;
+				  break;
+			  }
+		  }
+	  }
+	  else if( is_string($whitelist) ) {
+		  $whitelist = explode(',',$whitelist);
+		  // could use array_search here, but can't rely on the quality of the input (empty strings, whitespace etc).
+		  for( $i = 0, $n = count($whitelist); $i < $n; $i++ ) {
+			  $item = $whitelist[$i];
+			  if( !is_string($item) ) continue;
+			  $item = strtolower(trim($item));
+			  if( !$item ) continue;
+			  if( strcasecmp($requested,$item) == 0 ) {
+				  $out = $item;
+				  break;
+			  }
+		  }
+	  }
+	  if( !$out ) {
+		  trigger_error('HTTP_HOST attack prevention: The host value of '.$requested.' is not whitelisted.  Using '.$_SERVER['SERVER_NAME']);
+		  $out = $_SERVER['SERVER_NAME'];
+	  }
+	  return $out;
+  }
+
+  /**
+   * @ignore
+   */
   private function load_config()
   {
     $this->_types = array();
@@ -349,6 +400,7 @@ final class cms_config implements ArrayAccess
 		  return $out;
 
 	  case 'root_url':
+		  // here we determine a root url, if not specifieed in the config.
 		  $parts = parse_url($_SERVER['PHP_SELF']);
 		  $path = '';
 		  if( !empty($parts['path']) ) {
@@ -370,11 +422,10 @@ final class cms_config implements ArrayAccess
 			  if( ($pos = strpos($path,'/index.php')) !== FALSE ) $path = substr($path,0,$pos);
 		  }
 		  $prefix = 'http://';
-		  if( CmsApp::get_instance()->is_https_request() ) $prefix = 'https://';
-		  $str = $prefix.$_SERVER['HTTP_HOST'].$path;
+		  if( cmsms()->is_https_request() ) $prefix = 'https://';
+		  $str = $prefix.$this->calculate_request_hostname().$path;
 		  $this->_cache[$key] = $str;
 		  return $str;
-		  break;
 
 	  case 'ssl_url':
 		  $this->_cache[$key] = str_replace('http://','https://',$this->offsetGet('root_url'));

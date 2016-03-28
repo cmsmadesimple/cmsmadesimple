@@ -49,38 +49,14 @@ define('CMS_USER_KEY','_userkey_');
 
 global $CMS_INSTALL_PAGE,$CMS_ADMIN_PAGE,$CMS_LOGIN_PAGE,$DONT_LOAD_DB,$DONT_LOAD_SMARTY;
 
-/*
-$session_name = 'CMSSESSID'.substr(md5($dirname), 0, 12);
-if( !isset($CMS_INSTALL_PAGE) ) {
-    @session_name($session_name);
-    @ini_set('url_rewriter.tags', '');
-    @ini_set('session.use_trans_sid', 0);
-}
-
-#Setup session with different id and start it
-if( (isset($CMS_ADMIN_PAGE) || isset($CMS_INSTALL_PAGE)) && !headers_sent() ) {
-    // admin pages can't be cached... period, at all.. never.
-    @session_cache_limiter('nocache');
-    header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
-}
-else {
-    @session_cache_limiter('public');
-}
-
-if( isset($_COOKIE[$session_name]) ) {
-    // validate the contents of the cookie.
-    if (!preg_match('/^[a-zA-Z0-9,\-]{22,40}$/', $_COOKIE[$session_name]) ) {
-        session_id( uniqid() );
-        session_start();
-        session_regenerate_id();
-    }
-}
-if(!@session_id()) session_start();
-*/
-
 // minimum stuff to get started (autoloader needs the cmsms() and the config stuff.
 if( !defined('CONFIG_FILE_LOCATION') ) define('CONFIG_FILE_LOCATION',dirname(__DIR__).'/config.php');
 
+// sanitize $_SERVER and $_GET
+$_SERVER = filter_var_array($_SERVER, FILTER_SANITIZE_STRING);
+$_GET = filter_var_array($_GET, FILTER_SANITIZE_STRING);
+
+// include some stuff
 require_once($dirname.DIRECTORY_SEPARATOR.'compat.functions.php');
 require_once($dirname.DIRECTORY_SEPARATOR.'classes'.DIRECTORY_SEPARATOR.'class.CmsException.php');
 require_once($dirname.DIRECTORY_SEPARATOR.'classes'.DIRECTORY_SEPARATOR.'class.cms_config.php');
@@ -97,16 +73,6 @@ if( cms_to_bool(ini_get('register_globals')) ) {
 }
 
 if( isset($CMS_ADMIN_PAGE) ) setup_session();
-
-// sanitize $_GET and $_SERVER
-{
-    $sanitize = function(&$value,$key) {
-        $value = preg_replace('/\<\/?script[^\>]*\>/i', '', $value);
-        $value = str_ireplace('script:', '', $value);
-    };
-    array_walk_recursive($_GET,$sanitize);
-    array_walk_recursive($_SERVER,$sanitize);
-}
 
 #Grab the current configuration
 $_app = CmsApp::get_instance(); // for use in this file only.
