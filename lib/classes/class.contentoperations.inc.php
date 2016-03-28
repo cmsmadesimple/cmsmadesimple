@@ -468,7 +468,7 @@ class ContentOperations
 	{
 		// load some data about all pages into memory... and convert into a hash.
 		$db = CmsApp::get_instance()->GetDb();
-		$sql = 'SELECT content_id, parent_id, item_order, content_alias AS alias, hierarchy, id_hierarchy, hierarchy_path FROM '.cms_db_prefix().'content ORDER BY hierarchy';
+		$sql = 'SELECT content_id, parent_id, item_order, content_alias AS alias, hierarchy, id_hierarchy, hierarchy_path FROM '.CMS_DB_PREFIX.'content ORDER BY hierarchy';
 		$list = $db->GetArray($sql);
 		if( !count($list) ) {
 			// nothing to do, get outa here.
@@ -482,7 +482,7 @@ class ContentOperations
 
 		// would be nice to use a transaction here.
                 static $_n;
-		$usql = "UPDATE ".cms_db_prefix()."content SET hierarchy = ?, id_hierarchy = ?, hierarchy_path = ? WHERE content_id = ?";
+		$usql = "UPDATE ".CMS_DB_PREFIX."content SET hierarchy = ?, id_hierarchy = ?, hierarchy_path = ? WHERE content_id = ?";
 		foreach( $hash as $content_id => $row ) {
 			$changed = $this->_set_hierarchy_position($content_id,$hash);
 			if( is_array($changed) ) {
