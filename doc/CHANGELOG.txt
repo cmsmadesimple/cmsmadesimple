@@ -1,14 +1,15 @@
 Version 2.1.3 - NO NAME YET
 ----------------------------------
 Core - General
+  - Security fix to prevent HTTP_HOST attacks. Many thanks to I-TRACING (www.i-tracing.com) for reporting it!!
   - Remove stub .htaccess files from subdirectories
   - Update the included sample htaccess.txt file for security
   - Fix for endless loop when calculating a page alias in utf-8 environments 
   - Fix for endless loop when calculating a page alias and a page name/title ended with -
   - Fixes a notice on the login page
-  - Optimize LoadContentFromId() to be typesafe, and use default page, if the id passed in is invalid.
-  - Fix error condition if there were no default default design, or default page template.
-   
+  - Optimize LoadContentFromId() to be typesafe, and use default page, if the id passed in is invalid
+  - Fix error condition if there were no default default design, or default page template
+
 Navigator v1.0.3
   - Improved exception handling on install 
 
@@ -16,7 +17,7 @@ News v2.50.5
   - Fix error condition if no results were returned
 
 Installation Assistant v1.0.3.1
-  - Tweaks to README files.
+  - Tweaks to README files
   - Improved error handling in some circumstances
 
  
@@ -28,7 +29,7 @@ Core - General
 - API documentation fixes (minor)
 - Fixes for ajax_content (the Ajax routine behind the parent selector in edit content) to handle ordering inconsistencies
 - Remove die statement in is_email
-- Minor fix to the relative_time modifier.
+- Minor fix to the relative_time modifier
 - Upgrade CMSMailer to 6.2.14
 - Now do a check for E_ALL in the system info
 
@@ -53,19 +54,19 @@ MicroTiny v2.0.3
 Version 2.1.1 - Nicholls Town
 ----------------------------------
 Core - General
-- Fix the template compiler so that content blocks can be placed within sub templates and detected with the {include} tag.
-- Fix minor problem with checksum verification.
+- Fix the template compiler so that content blocks can be placed within sub templates and detected with the {include} tag
+- Fix minor problem with checksum verification
 - Fix to the cms_cache_handler class
 - Minor fix to SetAllPageHierarchies()
-- Correct location where session was started in frontend displays.
+- Correct location where session was started in frontend displays
 - Fix the default option for {content_image}
-- Modify the locker to use a beacon if supported, when unlocking.
+- Modify the locker to use a beacon if supported, when unlocking
 - Fix missing permissions when a 1.12 site was upgraded (installation assistant)
 
 CMSContentmanager v1.1
 - Minor template changes in edit content wrt. locking
 - Adds ability to clear content locks (Admins can clear all locks, regular users can only clear their locks)
-- Enhancements to the action to bulk set designs to show only page templates by default, but to optionally show more.
+- Enhancements to the action to bulk set designs to show only page templates by default, but to optionally show more
 
 DesignManager v1.1.1
 - Minor template changes in edit content wrt. locking
