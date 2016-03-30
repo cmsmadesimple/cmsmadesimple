@@ -270,6 +270,8 @@ namespace CMSMS\Database {
         public function &SelectLimit( $sql, $nrows = -1, $offset = -1, $inputarr = null )
         {
             $limit = null;
+            $nrows = (int) $nrows;
+            $offset = (int) $offset;
             if( $nrows >= 0 || $offset >= 0 ) {
                 $offset = ($offset >= 0) ? $offset . "," : '';
                 $nrows = ($nrows >= 0) ? $nrows : '18446744073709551615';
@@ -301,7 +303,10 @@ namespace CMSMS\Database {
                         $i += 1;
                     }
                     $sql .= $sqlarr[$i];
-                    if ($i+1 != sizeof($sqlarr)) return $false;
+                    if ($i+1 != sizeof($sqlarr)) {
+                        $false = null;
+                        return $false;
+                    }
                 }
             }
             $sql .= $limit;
