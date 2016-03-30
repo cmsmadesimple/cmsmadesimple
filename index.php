@@ -111,8 +111,6 @@ while( $trycount < 2 ) {
 
         if( !$contentobj->IsPermitted() ) throw new CmsError403Exception('Permission denied');
 
-        preprocess_mact($contentobj->Id());
-
         $_app->set_content_object($contentobj);
         $smarty->assignGlobal('content_obj',$contentobj);
         $smarty->assignGlobal('content_id', $contentobj->Id());
@@ -122,6 +120,8 @@ while( $trycount < 2 ) {
         CmsNlsOperations::set_language(); // <- NLS detection for frontend
         $smarty->assignGlobal('lang',CmsNlsOperations::get_current_language());
         $smarty->assignGlobal('encoding',CmsNlsOperations::get_encoding());
+
+        preprocess_mact($contentobj->Id());
 
         $html = '';
         $showtemplate = true;
@@ -210,6 +210,8 @@ while( $trycount < 2 ) {
 
         // specified page not found, load the 404 error page.
         $contentobj = $contentops->LoadContentFromAlias('error403',true);
+        $msg = $e->GetMessage();
+        if( !$msg ) $msg = '<p>We are sorry, but you do not have the appropriate permission to view this item.</p>';
         if( is_object($contentobj) ) {
             // we have a 403 error page.
             header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
@@ -229,8 +231,7 @@ while( $trycount < 2 ) {
 <html><head>
 <title>403 Forbidden</title>
 </head><body>
-<h1>Forbidden</h1>
-<p>We are sorry, but you do not have the appropriate permission to view this item.</p>
+<h1>Forbidden</h1>'.$msg.'
 </body></html>';
             exit();
         }
