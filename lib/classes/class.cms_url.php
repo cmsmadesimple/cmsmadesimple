@@ -358,10 +358,10 @@ class cms_url
         if( $path && $path[0] != '/' ) $path = '/'.$path;
 
 		$parts = $this->_parts;
-		$url = ((isset($parts['scheme'])) ? $parts['scheme'] . '://' : '');
-		if( isset($parts['user']) ) {
+		$url = ((isset($parts['scheme']) && $parts['scheme']) ? $parts['scheme'] . '://' : '');
+		if( isset($parts['user']) && $parts['user'] ) {
 			$url .= $parts['user'];
-			if( isset($parts['pass']) ) $url .= ':'.$parts['pass'];
+			if( isset($parts['pass']) && $parts['pass'] ) $url .= ':'.$parts['pass'];
 			$url .= '@';
 		}
 		if( isset($parts['host']) ) $url .= $parts['host'];
