@@ -242,7 +242,6 @@ else if( isset($_POST['loginsubmit']) ) {
 cms_admin_sendheaders();
 header("Content-Language: " . \CmsNlsOperations::get_current_language());
 
-debug_display($_SESSION);
 $themeObject = \cms_utils::get_theme_object();
 $vars = array('error'=>$error);
 if( isset($warningLogin) ) $vars['warningLogin'] = $warningLogin;
