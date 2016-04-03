@@ -52,6 +52,11 @@ global $CMS_INSTALL_PAGE,$CMS_ADMIN_PAGE,$CMS_LOGIN_PAGE,$DONT_LOAD_DB,$DONT_LOA
 // minimum stuff to get started (autoloader needs the cmsms() and the config stuff.
 if( !defined('CONFIG_FILE_LOCATION') ) define('CONFIG_FILE_LOCATION',dirname(__DIR__).'/config.php');
 
+// sanitize $_SERVER and $_GET
+$_SERVER = filter_var_array($_SERVER, FILTER_SANITIZE_STRING);
+$_GET = filter_var_array($_GET, FILTER_SANITIZE_STRING);
+
+// include some stuff
 require_once($dirname.DIRECTORY_SEPARATOR.'compat.functions.php');
 require_once($dirname.DIRECTORY_SEPARATOR.'classes'.DIRECTORY_SEPARATOR.'class.CmsException.php');
 require_once($dirname.DIRECTORY_SEPARATOR.'classes'.DIRECTORY_SEPARATOR.'class.cms_config.php');
@@ -68,16 +73,6 @@ if( cms_to_bool(ini_get('register_globals')) ) {
 }
 
 if( isset($CMS_ADMIN_PAGE) ) setup_session();
-
-// sanitize $_GET and $_SERVER
-{
-    $sanitize = function(&$value,$key) {
-        $value = preg_replace('/\<\/?script[^\>]*\>/i', '', $value);
-        $value = str_ireplace('script:', '', $value);
-    };
-    array_walk_recursive($_GET,$sanitize);
-    array_walk_recursive($_SERVER,$sanitize);
-}
 
 #Grab the current configuration
 $_app = CmsApp::get_instance(); // for use in this file only.
