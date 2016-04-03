@@ -235,15 +235,18 @@ final class CmsNlsOperations
    */
   protected static function get_admin_language()
   {
-	  $uid = get_userid(false);
-	  $lang = '';
-	  if( $uid ) {
-		  $lang = cms_userprefs::get_for_user($uid,'default_cms_language');
-		  if( $lang ) {
-			  self::_load_nls();
-			  if( !isset(self::$_nls[$lang]) ) $lang = '';
-		  }
-	  }
+      global $CMS_LOGIN_PAGE;
+      $uid = $lang = null;
+      if( !isset($CMS_LOGIN_PAGE) ) {
+          $uid = get_userid(false);
+          if( $uid ) {
+              $lang = cms_userprefs::get_for_user($uid,'default_cms_language');
+              if( $lang ) {
+                  self::_load_nls();
+                  if( !isset(self::$_nls[$lang]) ) $lang = null;
+              }
+          }
+      }
 
 	  if( !$lang ) $lang = self::detect_browser_language();
 

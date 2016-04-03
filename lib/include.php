@@ -90,18 +90,6 @@ if( isset($CMS_ADMIN_PAGE) ) {
         // Language shizzle
         header("Content-Type: $content_type; charset=$charset");
     }
-
-    if( !isset($_SESSION[CMS_USER_KEY]) ) {
-        if( cms_cookies::exists(CMS_SECURE_PARAM_NAME) ) {
-            $_SESSION[CMS_USER_KEY] = cms_cookies::get(CMS_SECURE_PARAM_NAME);
-        }
-        else {
-            // maybe change this algorithm.
-            $key = substr(str_shuffle(sha1($dirname.time().session_id())),-16);
-            $_SESSION[CMS_USER_KEY] = $key;
-            cms_cookies::set(CMS_SECURE_PARAM_NAME,$key);
-        }
-    }
 }
 
 // new for 2.0 ... this creates a mechanism whereby items can be cached automatically, and fetched (or calculated) via the use of a callback

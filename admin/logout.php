@@ -19,27 +19,6 @@
 #$Id$
 
 $CMS_ADMIN_PAGE=1;
-
 require_once("../lib/include.php");
-
-$userid = "";
-if( isset($_SESSION['cms_admin_user_id'])) {
-	$userid = $_SESSION['cms_admin_user_id'];
-}
-
-$username= "";
-if( isset($_SESSION['login_user_username'])) {
-	$username = $_SESSION['login_user_username'];
-}
-
-#Now call the event
-Events::SendEvent('Core', 'LogoutPost');
-
 $_SESSION['logout_user_now'] = "1";
-// put mention into the admin log
-audit($userid, "Admin Username: ".$username, 'Logged Out');
-
 redirect("login.php");
-
-
-?>

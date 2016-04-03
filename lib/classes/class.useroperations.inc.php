@@ -161,7 +161,7 @@ class UserOperations
 	 * @return mixed If successful, the filled User object.  If it fails, it returns false.
 	 * @since 0.6.1
 	 */
-	function &LoadUserByUsername($username, $password = '', $activeonly = true, $adminaccessonly = false)
+	function LoadUserByUsername($username, $password = '', $activeonly = true, $adminaccessonly = false)
 	{
 		// note: does not use cache
 		$result = false;

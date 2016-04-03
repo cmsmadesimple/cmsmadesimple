@@ -25,8 +25,6 @@
 		<link href="{$config.admin_url}/themes/OneEleven/css/default-cmsms/jquery-ui-1.10.4.custom.min.css" rel="stylesheet" />
 		<!-- THIS IS WHERE HEADER STUFF SHOULD GO -->
 	 	{$headertext|default:''}
-		{module_available name='FileManager' assign='fmgood'}
-		{if (isset($fmgood) && $fmgood && $pagealias != 'File-nbsp-Manager')}{cms_module module=FileManager action='javascript'}{/if}
 	</head>
 	<body lang="{$lang|truncate:'2':''}" id="{$pagetitle|md5}" class="oe_{$pagealias}">
 		<!-- start container -->
@@ -82,7 +80,6 @@
 				<div id="oe_mainarea" class="cf">
 					{strip}
 					{include file='messages.tpl'}
-					{if isset($fmgood) && $fmgood}{cms_module module=FileManager action='dropzone' id='dropzone' assign='droparea'}{/if}
 					<article role="main" class="content-inner">
 						<header class="pageheader{if isset($is_ie)} drop-hidden{/if} cf">
 							{if isset($module_icon_url) or isset($pagetitle)}
