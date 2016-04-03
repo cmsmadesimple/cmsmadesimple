@@ -194,7 +194,7 @@ class UserOperations
 		if( !empty($where) ) $query .= ' WHERE '.implode(' AND ',$where);
 
 		$id = $db->GetOne($query,$params);
-		if( $id ) return self::LoadUserByID($id);
+		if( $id ) $result = self::LoadUserByID($id);
 
 		return $result;
 	}
