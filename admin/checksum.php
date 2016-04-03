@@ -19,6 +19,7 @@
 #$Id: supportinfo.php 4216 2007-10-06 19:28:55Z wishy $
 
 $CMS_ADMIN_PAGE=1;
+$CMS_ADMIN_TITLE = 'system_verification';
 $orig_memory = (function_exists('memory_get_usage')?memory_get_usage():0);
 
 require_once("../lib/include.php");
@@ -27,9 +28,7 @@ $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 
 $userid = get_userid();
 $access = check_permission($userid, "Modify Site Preferences");
-if (!$access) {
-  die('Permission Denied');
-}
+if (!$access) die('Permission Denied');
 
 
 include_once("header.php");
@@ -64,8 +63,8 @@ function check_checksum_data(&$report)
   }
 
 
-  $gCms = cmsms();
-  $config = $gCms->GetConfig();
+
+  $config = \cms_config::get_instance();
   $salt = md5_file($config['root_path']."/lib/version.php").md5_file($config['root_path']."/index.php");
   $filenotfound = array();
   $notreadable = 0;
@@ -74,57 +73,57 @@ function check_checksum_data(&$report)
   $filespassed = 0;
   $errorlines = 0;
   while( !feof($fh) ) {
-    // get a line
-    $line = fgets($fh,4096);
+      // get a line
+      $line = fgets($fh,4096);
 
-    // strip out comments
-    $pos = strpos($line,'#');
-    if( $pos !== FALSE ) $line = substr($line,0,$pos);
+      // strip out comments
+      $pos = strpos($line,'#');
+      if( $pos !== FALSE ) $line = substr($line,0,$pos);
 
-    // trim the line
-    $line = trim($line);
+      // trim the line
+      $line = trim($line);
 
-    // skip empty line
-    if( empty($line) ) continue;
+      // skip empty line
+      if( empty($line) ) continue;
 
-    // split it into fields
-    if( strstr($line,'--::--') === FALSE ) {
-        $errorlines++;
-        continue;
-    }
-    list($md5sum,$file) = explode('--::--',$line,2);
+      // split it into fields
+      if( strstr($line,'--::--') === FALSE ) {
+          $errorlines++;
+          continue;
+      }
+      list($md5sum,$file) = explode('--::--',$line,2);
 
-    if( !$md5sum || !$file ) {
-      $errorlines++;
-      continue;
-    }
+      if( !$md5sum || !$file ) {
+          $errorlines++;
+          continue;
+      }
 
-    $md5sum = trim($md5sum);
-    $file = trim($file);
+      $md5sum = trim($md5sum);
+      $file = trim($file);
 
-    $fn = cms_join_path($config['root_path'],$file);
-    if( !file_exists( $fn ) ) {
-      $filenotfound[] = $file;
-      continue;
-    }
+      $fn = cms_join_path($config['root_path'],$file);
+      if( !file_exists( $fn ) ) {
+          $filenotfound[] = $file;
+          continue;
+      }
 
-    if( is_dir( $fn ) ) continue;
+      if( is_dir( $fn ) ) continue;
 
-    if( !is_readable( $fn ) ) {
-      $notreadable++;
-      continue;
-    }
+      if( !is_readable( $fn ) ) {
+          $notreadable++;
+          continue;
+      }
 
-    $md5 = md5($salt.md5_file($fn));
-    if( !$md5 ) {
-      $md5failed++;
-      continue;
-    }
+      $md5 = md5($salt.md5_file($fn));
+      if( !$md5 ) {
+          $md5failed++;
+          continue;
+      }
 
-    if( $md5sum != $md5 )  $filesfailed[] = $file;
+      if( $md5sum != $md5 )  $filesfailed[] = $file;
 
-    // it passed.
-    $filespassed++;
+      // it passed.
+      $filespassed++;
   }
   fclose($fh);
 
@@ -161,7 +160,7 @@ function generate_checksum_file(&$report)
   $gCms = cmsms();
   $config = $gCms->GetConfig();
   $output = '';
-  $salt = md5_file($config['root_path']."/version.php").md5_file($config['root_path']."/index.php");
+  $salt = md5_file($config['root_path']."/lib/version.php").md5_file($config['root_path']."/index.php");
 
   $excludes = array('^\.svn' , '^CVS$' , '^\#.*\#$' , '~$', '\.bak$', '^uploads$', '^tmp$', '^captchas$' );
   $tmp = get_recursive_file_list( $config['root_path'], $excludes);
@@ -193,7 +192,8 @@ function generate_checksum_file(&$report)
 }
 
 // Get ready
-$gCms = cmsms();
+$gCms = \CmsApp::get_instance();
+$theme = \cms_utils::get_theme_object();
 $smarty = $gCms->GetSmarty();
 $smarty->register_function('lang','checksum_lang');
 $smarty->caching = false;

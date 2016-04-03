@@ -9,6 +9,7 @@ Core - General
   - Fixes a notice on the login page
   - Optimize LoadContentFromId() to be typesafe, and use default page, if the id passed in is invalid
   - Fix error condition if there were no default default design, or default page template
+  - Fix problem with system verification.
   
   - #10825 - Admin-account settings don't remember startpage if you set one
   - #10874 - When creating a page and the title has specific characters, CMSMS stops responding
