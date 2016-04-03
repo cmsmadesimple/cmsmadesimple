@@ -9,6 +9,12 @@ Core - General
   - Fixes a notice on the login page
   - Optimize LoadContentFromId() to be typesafe, and use default page, if the id passed in is invalid
   - Fix error condition if there were no default default design, or default page template
+  
+  - #10825 - Admin-account settings don't remember startpage if you set one
+  - #10874 - When creating a page and the title has specific characters, CMSMS stops responding
+  - #10910 - content and content_module order incorrect Admin page
+  - #10911 - 'Use Admin Search' permission not being used in 2.1.2
+  - #10921 - Content Field to Display in Name Column not used
 
 Navigator v1.0.3
   - Improved exception handling on install 
@@ -19,7 +25,9 @@ News v2.50.5
 Installation Assistant v1.0.3.1
   - Tweaks to README files
   - Improved error handling in some circumstances
-
+  
+FileManager
+  - #10871 - Filemanager moving folder
  
 Version 2.1.2 - Andros Town
 ----------------------------------
