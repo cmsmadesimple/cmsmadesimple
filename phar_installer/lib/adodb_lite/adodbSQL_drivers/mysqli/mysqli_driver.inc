@@ -14,7 +14,7 @@ class mysqli_driver_ADOConnection extends ADOConnection
 	var $sysDate = 'CURDATE()';
 	var $sysTimeStamp = 'NOW()';
 
-	function mysqli_driver_ADOConnection()
+	function __construct()
 	{
 		$this->dbtype = 'mysqli';
 		$this->dataProvider = 'mysql';
