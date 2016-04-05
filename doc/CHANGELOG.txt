@@ -26,6 +26,7 @@ News v2.50.5
 Installation Assistant v1.0.3.1
   - Tweaks to README files
   - Improved error handling in some circumstances
+  - Fix some PHP7 issues.
   
 FileManager
   - #10871 - Filemanager moving folder
