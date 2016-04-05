@@ -56,7 +56,7 @@ RewriteRule ^(.+)$ index.php?page=$1 [QSA]
 
 
 #
-# The following are higly reommended security settings for files in your CMSMS install that should not be browsed directly
+# The following are higly recommended security settings for files in your CMSMS install that should not be browsed directly
 #
 <Files ~ "\.htaccess">
   Order allow,deny
