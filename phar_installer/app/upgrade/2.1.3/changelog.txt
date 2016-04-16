@@ -17,6 +17,9 @@ Core - General
   - #10911 - 'Use Admin Search' permission not being used in 2.1.2
   - #10921 - Content Field to Display in Name Column not used
 
+AdminSearch v1.0.1
+  - Minor fix to permissions checks.
+
 Navigator v1.0.3
   - Improved exception handling on install
 
