@@ -75,7 +75,7 @@ $_tpl_cache = new CmsTemplateCache();
 while( $trycount < 2 ) {
     $trycount++;
     try {
-        // pre-process mact
+        // preview
         if( $page == -100) {
             setup_session(false);
             if( !isset($_SESSION['__cms_preview__']) ) throw new CmsException('preview selected, but temp data not found');
@@ -94,7 +94,8 @@ while( $trycount < 2 ) {
 
         // session stuff is needed from here on.
         $cachable = $contentobj->Cachable();
-        if( $page == __CMS_PREVIEW_PAGE__ ) $cachable = false;
+        $uid = get_userid(FALSE);
+        if( $page == __CMS_PREVIEW_PAGE__ || $uid || $_SERVER['REQUEST_METHOD'] != 'GET' ) $cachable = false;
         setup_session($cachable);
 
         // from here in, we're assured to have a content object
@@ -121,6 +122,7 @@ while( $trycount < 2 ) {
         $smarty->assignGlobal('lang',CmsNlsOperations::get_current_language());
         $smarty->assignGlobal('encoding',CmsNlsOperations::get_encoding());
 
+        // if the request has a mact in it, process and cache the output.
         preprocess_mact($contentobj->Id());
 
         $html = '';
@@ -133,9 +135,7 @@ while( $trycount < 2 ) {
         }
 
         $smarty->set_global_cacheid('p'.$contentobj->Id());
-        $uid = get_userid(FALSE);
-        if( !$uid && $showtemplate && $contentobj->Cachable() && cms_siteprefs::get('use_smartycache',0) &&
-            $_SERVER['REQUEST_METHOD'] != 'POST' ) {
+        if( $cachable && $showtemplate && $contentobj->Cachable() && cms_siteprefs::get('use_smartycache',0) ) {
             $smarty->setCaching(Smarty::CACHING_LIFETIME_CURRENT);
         }
 
