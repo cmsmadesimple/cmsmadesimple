@@ -25,7 +25,7 @@ final class MenuManager extends CMSModule
   function GetFriendlyName() { return $this->Lang('menumanager'); }
   function IsPluginModule() { return true; }
   function HasAdmin() { return false; }
-  function GetVersion() { return '1.50.2'; }
+  function GetVersion() { return '1.50.3'; }
   function MinimumCMSVersion() { return '1.99-alpha0'; }
   function GetAdminDescription() { return $this->Lang('description'); }
   function GetAdminSection() { return 'layout'; }
@@ -224,9 +224,9 @@ final class MenuManager extends CMSModule
     $onenode->parent = false;
     $count++;
 
-    $gCms = cmsms();
+    $gCms = \CmsApp::get_instance();
     if( $deep ) {
-      $config = cmsms()->GetConfig();
+        $config = \cms_config::get_instance();
       $onenode->extra1 = $content->GetPropertyValue('extra1');
       $onenode->extra2 = $content->GetPropertyValue('extra2');
       $onenode->extra3 = $content->GetPropertyValue('extra3');
