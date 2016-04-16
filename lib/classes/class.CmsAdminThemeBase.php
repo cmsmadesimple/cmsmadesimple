@@ -204,7 +204,7 @@ abstract class CmsAdminThemeBase
 	{
 		$newurl = $url;
 		if( strpos($url,CMS_SECURE_PARAM_NAME) !== FALSE ) {
-			$from = '/'.CMS_SECURE_PARAM_NAME.'=[a-zA-Z0-9]{16}/i';
+			$from = '/'.CMS_SECURE_PARAM_NAME.'=[a-zA-Z0-9]{19}/i';
 			$to = CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 			$newurl = preg_replace($from,$to,$url);
 		}
@@ -543,12 +543,9 @@ abstract class CmsAdminThemeBase
 									'description'=>lang('ecommerce_desc'),
 									'show_in_menu'=>true);
 
-		// adjust all the urls to include the session key
+		// adjust all the existing urls to be 'system' items.
 		// and set an icon if we can. also mark them as system items.
 		foreach( $this->_menuItems as $sectionKey => $sectionArray ) {
-			if( isset($sectionArray['url']) && (!isset($sectionArray['type']) || $sectionArray['type'] != 'external' )) {
-				$this->_menuItems[$sectionKey]['url'] = $this->_fix_url_userkey($this->_menuItems[$sectionKey]['url']);
-			}
 			$this->_menuItems[$sectionKey]['system'] = 1;
 		}
 
@@ -632,6 +629,10 @@ abstract class CmsAdminThemeBase
 			}
 			if( !$found ) unset($this->_menuItems[$oneparent]);
 		}
+
+        if( isset($sectionArray['url']) && (!isset($sectionArray['type']) || $sectionArray['type'] != 'external' )) {
+            $this->_menuItems[$sectionKey]['url'] = $this->_fix_url_userkey($this->_menuItems[$sectionKey]['url']);
+        }
 
 		// sort the menu items by root level, system, priority, and then name (case insensitive)
 		$fn = function($a,$b) {
