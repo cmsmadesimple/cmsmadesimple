@@ -55,7 +55,7 @@ class Bookmark
 	/**
 	 * Generic constructor.  Runs the SetInitialValues fuction.
 	 */
-	function Bookmark()
+	function __construct()
 	{
 		$this->SetInitialValues();
 	}
