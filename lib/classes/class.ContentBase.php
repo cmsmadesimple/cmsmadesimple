@@ -993,9 +993,7 @@ abstract class ContentBase
 	 */
 	public function SetAlias($alias = null, $doAutoAliasIfEnabled = true)
 	{
-		$gCms = CmsApp::get_instance();
-		$config = $gCms->GetConfig();
-
+        $config = \cms_config::get_instance();
 		if ($alias == '' && $doAutoAliasIfEnabled && $config['auto_alias_content'] == true) {
 			$alias = trim($this->mMenuText);
 			if ($alias == '') $alias = trim($this->mName);
@@ -1762,7 +1760,7 @@ abstract class ContentBase
 			// the alias param may not exist (depending upon permissions)
 			// this method will set the alias to the supplied value if it is set
 			// or auto-generate one, when adding a new page.
-            if( !$this->Alias() || $tmp ) $this->SetAlias($tmp);
+            $this->SetAlias($tmp);
 		}
 
 		// target
