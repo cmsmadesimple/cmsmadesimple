@@ -17,23 +17,21 @@
 
 function smarty_cms_function_cms_yesno($params, &$smarty)
 {
-  $opts = array(0=>lang('no'),1=>lang('yes'));
+    $opts = array(0=>lang('no'),1=>lang('yes'));
 
-  $out = '';
-  foreach( $opts as $k => $v ) {
-    $out .= '<option value="'.$k.'"';
-    if( isset($params['selected']) && $k == $params['selected'] ) {
-      $out .= ' selected="selected"';
+    $out = '';
+    foreach( $opts as $k => $v ) {
+        $out .= '<option value="'.$k.'"';
+        if( isset($params['selected']) && $k == $params['selected'] ) $out .= ' selected="selected"';
+        $out .= '>'.$v.'</option>';
     }
-    $out .= '>'.$v.'</option>';
-  }
-  $out .= "\n";
+    $out .= "\n";
 
-  if( isset($params['assign']) ) {
-    $smarty->assign(trim($params['assign']),$out);
-    return;
-  }
-  return $out;
+    if( isset($params['assign']) ) {
+        $smarty->assign(trim($params['assign']),$out);
+        return;
+    }
+    return $out;
 }
 
 #

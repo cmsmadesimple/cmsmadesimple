@@ -19,7 +19,7 @@
 function smarty_function_metadata($params, &$smarty)
 {
     $gCms = CmsApp::get_instance();
-	$config = $gCms->GetConfig();
+	$config = \cms_config::get_instance();
 	$content_obj = $gCms->get_content_object();
 
 	$result = '';
@@ -40,7 +40,7 @@ function smarty_function_metadata($params, &$smarty)
 		$result .= "\n<base href=\"".$base."/\" />\n";
 	}
 
-	$result .= cms_siteprefs::get('metadata', '');
+	$result .= get_site_preference('metadata', '');
 
 	if (is_object($content_obj) && $content_obj->Metadata() != '') $result .= "\n" . $content_obj->Metadata();
 

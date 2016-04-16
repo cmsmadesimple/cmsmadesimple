@@ -19,20 +19,18 @@
   // this method is deprecated and should be removed.
   // it is redundant.
 function smarty_cms_function_current_date($params, &$smarty) {
-  $format = '%b %c, %Y';
-  if( isset($params['format']) && !empty($params['format']) )
-    $format = trim($params['format']);
-  
-  $string = strftime($format,time());  
-  if(isset($params['ucwords']) && $params['ucwords'] != '') $string = ucwords($string);
-  
-  $out = cms_htmlentities($string);
-  if( isset($params['assign']) )
-    {
-      $smarty->assign(trim($params['assign']),$out);
-      return;
+    $format = '%b %c, %Y';
+    if( isset($params['format']) && !empty($params['format']) ) $format = trim($params['format']);
+
+    $string = strftime($format,time());
+    if(isset($params['ucwords']) && $params['ucwords'] != '') $string = ucwords($string);
+
+    $out = cms_htmlentities($string);
+    if( isset($params['assign']) ) {
+        $smarty->assign(trim($params['assign']),$out);
+        return;
     }
-  return $out;
+    return $out;
 }
 
 function smarty_cms_about_function_current_date() {

@@ -37,21 +37,19 @@
 
 function smarty_function_cms_selflink($params, &$smarty)
 {
-	$gCms = CmsApp::get_instance();
+    $gCms = \CmsApp::get_instance();
+	$manager = $gCms->GetHierarchyManager();
 	$url = '';
 	$urlparam = '';
 	$label_side = 'left';
 	$label = '';
 	$urlonly = 0;
-	$manager = $gCms->GetHierarchyManager();
 	$node = null;
 	$dir = null;
 	$pageid = null;
 
 	$rellink = (isset($params['rellink']) && $params['rellink'] == '1' ? true : false);
-	if ( isset($params['urlparam']) && ( strlen($params['urlparam']) > 0 ) ) {
-		$urlparam = trim($params['urlparam']);
-	}
+	if ( isset($params['urlparam']) && ( strlen($params['urlparam']) > 0 ) ) $urlparam = trim($params['urlparam']);
 
 	if (isset($params['page']) or isset($params['href'])) {
 		$page = null;
@@ -303,5 +301,3 @@ function smarty_function_cms_selflink($params, &$smarty)
 function smarty_cms_help_function_cms_selflink() {
 		echo lang_by_realm('tags','help_function_cms_selflink');
 }
-
-?>

@@ -18,7 +18,7 @@
 
 function smarty_function_sitename($params, &$smarty)
 {
-	$result = cms_siteprefs::get('sitename', 'CMSMS Site');
+	$result = get_site_preference('sitename', 'CMSMS Site');
 
 	if( isset($params['assign']) ) {
         $smarty->assign(trim($params['assign']),$result);
