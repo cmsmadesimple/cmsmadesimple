@@ -58,13 +58,18 @@ $_GET = filter_var_array($_GET, FILTER_SANITIZE_STRING);
 
 // include some stuff
 require_once($dirname.DIRECTORY_SEPARATOR.'compat.functions.php');
+require_once($dirname.DIRECTORY_SEPARATOR.'misc.functions.php');
+require_once($dirname.DIRECTORY_SEPARATOR.'version.php');
 require_once($dirname.DIRECTORY_SEPARATOR.'classes'.DIRECTORY_SEPARATOR.'class.CmsException.php');
 require_once($dirname.DIRECTORY_SEPARATOR.'classes'.DIRECTORY_SEPARATOR.'class.cms_config.php');
 require_once($dirname.DIRECTORY_SEPARATOR.'classes'.DIRECTORY_SEPARATOR.'class.CmsApp.php');
+
+#Grab the current configuration
+$_app = CmsApp::get_instance(); // for use in this file only.
+$config = $_app->GetConfig();
+
 require_once($dirname.DIRECTORY_SEPARATOR.'autoloader.php');
-require_once($dirname.DIRECTORY_SEPARATOR.'misc.functions.php');
 require_once($dirname.DIRECTORY_SEPARATOR.'module.functions.php');
-require_once($dirname.DIRECTORY_SEPARATOR.'version.php');
 debug_buffer('done loading required files');
 
 if( cms_to_bool(ini_get('register_globals')) ) {
@@ -72,13 +77,10 @@ if( cms_to_bool(ini_get('register_globals')) ) {
     die();
 }
 
-if( isset($CMS_ADMIN_PAGE) ) setup_session();
-
-#Grab the current configuration
-$_app = CmsApp::get_instance(); // for use in this file only.
-$config = $_app->GetConfig();
 
 if( isset($CMS_ADMIN_PAGE) ) {
+    setup_session();
+
     function cms_admin_sendheaders($content_type = 'text/html',$charset = '') {
         if( !$charset ) $charset = get_encoding();
 

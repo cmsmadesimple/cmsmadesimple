@@ -8,6 +8,7 @@ Developers Past and Present
 - Morten Poulsen <morten [AT] poulsen [DOT] org>
 - Ronny Krijt - <ronnyk [AT] cmsmadesimple [DOT] org>
 - Ted Kulp <wishy [AT] cmsmadesimple [DOT] org>
+- Fernando Morgado -- fjmorgado {AT] gmail {DOT] com
 
 - Nuno Costa <nuno [AT] criacaoweb [DOT] net>
 - Alberto Benati <alberto [DOT] benati [AT] gmail [DOT] com>
