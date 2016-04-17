@@ -51,7 +51,7 @@ ModuleManager
 - Now detect if module_custom directories exist and are populated and warn about this before upgrading a module.
 - Minor string changes.
 
-Version 2.1.3 - NO NAME YET
+Version 2.1.3 - Black Point
 ----------------------------------
 Core - General
   - Security fix to prevent HTTP_HOST attacks. Many thanks to I-TRACING (www.i-tracing.com) for reporting it!!
@@ -70,6 +70,9 @@ Core - General
   - #10911 - 'Use Admin Search' permission not being used in 2.1.2
   - #10921 - Content Field to Display in Name Column not used
 
+AdminSearch v1.0.1
+  - Minor fix to permissions checks.
+
 Navigator v1.0.3
   - Improved exception handling on install
 
@@ -79,7 +82,12 @@ News v2.50.5
 Installation Assistant v1.0.3.1
   - Tweaks to README files
   - Improved error handling in some circumstances
+<<<<<<< .working
 
+=======
+  - Fix some PHP7 issues.
+  
+>>>>>>> .merge-right.r10552
 FileManager
   - #10871 - Filemanager moving folder
 
