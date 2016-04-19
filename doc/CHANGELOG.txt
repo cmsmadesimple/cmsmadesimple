@@ -14,6 +14,8 @@ Core - General
 - Minor change to auto-alias determination routine.
 - Detect module_custom enhancements in the CmsModuleInfo stuff.
 - Refactor admin authentication.
+- More fixes to the cms_url class
+- Optimize the include.php file
 
 Content Manager
 - Minor tweak to bulk delete pages.
