@@ -2,7 +2,7 @@
 #BEGIN_LICENSE CMSMS
 #CMS - CMS Made Simple
 #(c)2004-2011 by Ted Kulp (wishy@users.sf.net)
-#(c)2011-2014 by The CMSMS Dev Team
+#(c)2011-2016 by The CMSMS Dev Team
 #Visit our homepage at: http://www.cmsmadesimple.org
 #
 #This program is free software; you can redistribute it and/or modify

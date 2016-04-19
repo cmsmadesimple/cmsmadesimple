@@ -1,6 +1,7 @@
 <?php
 #CMS - CMS Made Simple
 #(c)2004-2013 by Ted Kulp (wishy@users.sf.net)
+#(c)2011-2014 by The CMSMS Dev Team
 #Visit our homepage at: http://www.cmsmadesimple.org
 #
 #This program is free software; you can redistribute it and/or modify
@@ -140,10 +141,10 @@ Events::setup();
 UserTagOperations::setup();
 ContentOperations::setup_cache();
 
-#Set the timezone
+// Set the timezone
 if( $config['timezone'] != '' ) @date_default_timezone_set(trim($config['timezone']));
 
-#Attempt to override the php memory limit
+// Attempt to override the php memory limit
 if( isset($config['php_memory_limit']) && !empty($config['php_memory_limit'])  ) ini_set('memory_limit',trim($config['php_memory_limit']));
 
 if ($config["debug"] == true) {
@@ -165,45 +166,49 @@ require_once($dirname.DIRECTORY_SEPARATOR.'html_entity_decode_php4.php');
 
 debug_buffer('done loading files');
 
-#Load them into the usual variables.  This'll go away a little later on.
+// Load them into the usual variables.  This'll go away a little later on.
 if (!isset($DONT_LOAD_DB)) {
-  debug_buffer('Initialize Database');
-  $_app->GetDb();
-  debug_buffer('Done Initializing Database');
-
+    debug_buffer('Initialize Database');
+    $_app->GetDb();
+    debug_buffer('Done Initializing Database');
 }
 
 #Fix for IIS (and others) to make sure REQUEST_URI is filled in
 if (!isset($_SERVER['REQUEST_URI'])) {
-  $_SERVER['REQUEST_URI'] = $_SERVER['SCRIPT_NAME'];
-  if(isset($_SERVER['QUERY_STRING'])) $_SERVER['REQUEST_URI'] .= '?'.$_SERVER['QUERY_STRING'];
+    $_SERVER['REQUEST_URI'] = $_SERVER['SCRIPT_NAME'];
+    if(isset($_SERVER['QUERY_STRING'])) $_SERVER['REQUEST_URI'] .= '?'.$_SERVER['QUERY_STRING'];
 }
 
 #Load all installed module code
 if (! isset($CMS_INSTALL_PAGE)) {
-  // Set a umask
-  $global_umask = cms_siteprefs::get('global_umask','');
-  if( $global_umask != '' ) umask( octdec($global_umask) );
+    // Set a umask
+    $global_umask = cms_siteprefs::get('global_umask','');
+    if( $global_umask != '' ) umask( octdec($global_umask) );
 
-  debug_buffer('','Loading Modules');
-  $modops = ModuleOperations::get_instance();
-  $modops->LoadModules(isset($LOAD_ALL_MODULES), !isset($CMS_ADMIN_PAGE));
-  debug_buffer('', 'End of Loading Modules');
+    debug_buffer('','Loading Modules');
+    $modops = ModuleOperations::get_instance();
+    $modops->LoadModules(isset($LOAD_ALL_MODULES), !isset($CMS_ADMIN_PAGE));
+    debug_buffer('', 'End of Loading Modules');
+
+    // test for cron.
+    // we hardcode CmsJobManager here until such a point as we need to abstract it.
+    $cmsjobmgr = $modops->get_module_instance('CmsJobManager');
+    if( is_object($cmsjobmgr) ) {
+        $cmsjobmgr->trigger_async_processing();
+    }
 }
 
 #Setup language stuff.... will auto-detect languages (Launch only to admin at this point)
 if(isset($CMS_ADMIN_PAGE)) CmsNlsOperations::set_language();
 
 if( !isset($DONT_LOAD_SMARTY) ) {
-  debug_buffer('Initialize Smarty');
-  $smarty = $_app->GetSmarty();
-  debug_buffer('Done Initialiing Smarty');
-  if( defined('CMS_DEBUG') && CMS_DEBUG ) $smarty->error_reporting = 'E_ALL';
-  $smarty->assignGlobal('sitename', cms_siteprefs::get('sitename', 'CMSMS Site'));
+    debug_buffer('Initialize Smarty');
+    $smarty = $_app->GetSmarty();
+    debug_buffer('Done Initialiing Smarty');
+    if( defined('CMS_DEBUG') && CMS_DEBUG ) $smarty->error_reporting = 'E_ALL';
+    $smarty->assignGlobal('sitename', cms_siteprefs::get('sitename', 'CMSMS Site'));
 }
 
 
 #Do auto task stuff.
 if (!isset($CMS_INSTALL_PAGE) && !isset($CMS_LOGIN_PAGE)) CmsRegularTaskHandler::handle_tasks();
-
-?>
