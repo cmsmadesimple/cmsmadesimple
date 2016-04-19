@@ -28,7 +28,7 @@ final class LoginOperations
 
     protected function __construct()
     {
-        $this->_loginkey = md5(__FILE__.__CLASS__.CMS_VERSION.$_SERVER['HTTP_USER_AGENT']);
+        $this->_loginkey = md5(__FILE__.__CLASS__.CMS_VERSION);
     }
 
     public static function &get_instance()
