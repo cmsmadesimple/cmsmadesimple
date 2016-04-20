@@ -400,361 +400,378 @@ abstract class CmsAdminThemeBase
     private function _populate_admin_navigation($subtitle='')
     {
         if (count($this->_menuItems) > 0) return;
-		// note: it would be interesting if we could cache these menuItems in the session
-		// then clear this data when the cache is cleared (for when modules become available)
+		$uid = get_userid(FALSE);
+        if( ($data = \cms_cache_handler::get_instance()->get('adminnav'.$uid)) ) {
+            $data = base64_decode($data);
+            $this->_menuItems = unserialize($data);
 
-		debug_buffer('before populate admin navigation');
-		if( $subtitle ) $this->_subtitle = $subtitle;
-
-		$this->_SetModuleAdminInterfaces();
-
-		debug_buffer('before menu items');
-		$this->_menuItems = array();
-		$items =& $this->_menuItems;
-		// base main menu ---------------------------------------------------------
-		$items['main'] = array('url'=>'index.php','parent'=>-1,'title'=>'CMS','priority'=>1,'description'=>'','show_in_menu'=>true);
-		$items['home'] = array('url'=>'index.php','parent'=>'main','priority'=>1,'title'=>$this->_FixSpaces(lang('home')),
-							   'description'=>'','show_in_menu'=>true);
-		$items['viewsite'] = array('url'=>CMS_ROOT_URL.'/index.php','parent'=>'main',
-								   'title'=>$this->_FixSpaces(lang('viewsite')),'type'=>'external','priority'=>2,
-								   'description'=>'','show_in_menu'=>true, 'target'=>'_blank');
-		$items['logout'] = array('url'=>'logout.php','parent'=>'main','title'=>$this->_FixSpaces(lang('logout')),'priority'=>3,
-								 'description'=>'','show_in_menu'=>true);
-		// base content menu ---------------------------------------------------------
-		$items['content'] = array('url'=>'index.php?section=content','parent'=>-1,'priority'=>2,
-								 'title'=>$this->_FixSpaces(lang('content')),'description'=>lang('contentdescription'),
-								  'show_in_menu'=>$this->HasPerm('contentPerms'));
-
-		// base layout menu ---------------------------------------------------------
-		$items['layout'] = array('url'=>'index.php?section=layout','parent'=>-1,'priority'=>3,
-								 'title'=>$this->_FixSpaces(lang('layout')),'description'=>lang('layoutdescription'),
-								 'show_in_menu'=>$this->HasPerm('layoutPerms'));
-
-		// base filest menu --------------------------------------------------------------
-		$items['files'] = array('url'=>'index.php?section=files','parent'=>-1,'priority'=>4,
-							     'title'=>$this->_FixSpaces(lang('files')),'description'=>lang('filesdescription'),
-								 'show_in_menu'=>$this->HasPerm('filePerms'));
-
-		// base user/groups menu ---------------------------------------------------------
-		$items['usersgroups'] = array('url'=>'index.php?section=usersgroups','parent'=>-1,
-									  'title'=>$this->_FixSpaces(lang('usersgroups')),'priority'=>5,
-									  'description'=>lang('usersgroupsdescription'),'show_in_menu'=>$this->HasPerm('usersGroupsPerms'));
-		$items['users'] = array('url'=>'listusers.php','parent'=>'usersgroups',
-								'title'=>$this->_FixSpaces(lang('users')),'description'=>lang('usersdescription'),
-								'show_in_menu'=>$this->HasPerm('userPerms'));
-		$items['adduser'] = array('url'=>'adduser.php','parent'=>'users',
-								  'title'=>$this->_FixSpaces(lang('adduser')),
-								  'description'=>lang('adduser'),'show_in_menu'=>false);
-		$items['edituser'] = array('url'=>'edituser.php','parent'=>'users',
-								   'title'=>$this->_FixSpaces(lang('edituser')),
-								   'description'=>lang('edituser'),'show_in_menu'=>false);
-		$items['groups'] = array('url'=>'listgroups.php','parent'=>'usersgroups',
-								 'title'=>$this->_FixSpaces(lang('groups')),
-								 'description'=>lang('groupsdescription'),
-								 'show_in_menu'=>$this->HasPerm('groupPerms'));
-		$items['addgroup'] = array('url'=>'addgroup.php','parent'=>'groups',
-								   'title'=>$this->_FixSpaces(lang('addgroup')),
-								   'description'=>lang('addgroup'),'show_in_menu'=>false);
-		$items['editgroup'] = array('url'=>'editgroup.php','parent'=>'groups',
-									'title'=>$this->_FixSpaces(lang('editgroup')),
-									'description'=>lang('editgroup'),'show_in_menu'=>false);
-		$items['groupmembers'] = array('url'=>'changegroupassign.php',
-									   'parent'=>'usersgroups',
-									   'title'=>$this->_FixSpaces(lang('groupassignments')),
-									   'description'=>lang('groupassignmentdescription'),
-									   'show_in_menu'=>$this->HasPerm('groupPerms'));
-		$items['groupperms'] = array('url'=>'changegroupperm.php','parent'=>'usersgroups',
-									 'title'=>$this->_FixSpaces(lang('groupperms')),
-									 'description'=>lang('grouppermsdescription'),
-									 'show_in_menu'=>$this->HasPerm('groupPerms'));
-		// base extensions menu ---------------------------------------------------------
-		$items['extensions'] = array('url'=>'index.php?section=extensions','parent'=>-1,'priority'=>6,
-									 'title'=>$this->_FixSpaces(lang('extensions')),
-									 'description'=>lang('extensionsdescription'),
-									 'show_in_menu'=>$this->HasPerm('extensionsPerms'));
-		$items['tags'] = array('url'=>'listtags.php','parent'=>'extensions',
-							   'title'=>$this->_FixSpaces(lang('tags')),
-							   'description'=>lang('tagdescription'),
-							   'show_in_menu'=>$this->HasPerm('taghelpPerms'));
-		$items['usertags'] = array('url'=>'listusertags.php','parent'=>'extensions',
-								   'title'=>$this->_FixSpaces(lang('usertags')),
-								   'description'=>lang('usertagdescription'),
-								   'show_in_menu'=>$this->HasPerm('codeBlockPerms'));
-		$items['eventhandlers'] = array('url'=>'eventhandlers.php','parent'=>'extensions',
-										'title'=>$this->_FixSpaces(lang('eventhandlers')),
-										'description'=>lang('eventhandlerdescription'),
-										'show_in_menu'=>$this->HasPerm('eventPerms'));
-		$items['editeventhandler'] = array('url'=>'editevent.php','parent'=>'eventhandlers',
-										   'title'=>$this->_FixSpaces(lang('editeventhandler')),
-										   'description'=>lang('editeventhandlerdescription'),
-										   'show_in_menu'=>false);
-		$items['editusertag'] = array('url'=>'editusertag.php','parent'=>'usertags',
-									  'title'=>$this->_FixSpaces(lang('editusertag')),
-									  'description'=>lang('editusertag'),'show_in_menu'=>false);
-		// base admin menu ---------------------------------------------------------
-		$items['siteadmin'] = array('url'=>'index.php?section=siteadmin','parent'=>-1,
-									'title'=>$this->_FixSpaces(lang('admin')),'priority'=>7,
-									'description'=>lang('admindescription'),
-									'show_in_menu'=>$this->HasPerm('siteAdminPerms'));
-		$items['siteprefs'] = array('url'=>'siteprefs.php','parent'=>'siteadmin','priority'=>1,
-									'title'=>$this->_FixSpaces(lang('globalconfig')),
-									'description'=>lang('preferencesdescription'),
-									'show_in_menu'=>$this->HasPerm('sitePrefPerms'));
-		$items['systeminfo'] = array('url' => 'systeminfo.php', 'parent' => 'siteadmin','priority'=>2,
-									 'title' => $this->_FixSpaces(lang('systeminfo')),
-									 'description' => lang('systeminfodescription'),
-									 'show_in_menu' => $this->HasPerm('adminPerms'));
-		$items['systemmaintenance'] = array('url' => 'systemmaintenance.php','priority'=>1,'parent' => 'siteadmin',
-											'title' => $this->_FixSpaces(lang('systemmaintenance')),
-											'description' => lang('systemmaintenancedescription'),
-											'show_in_menu' => $this->HasPerm('adminPerms'));
-		$items['checksum'] = array('url' => 'checksum.php', 'parent' => 'siteadmin','priority'=>4,
-								   'title' => $this->_FixSpaces(lang('system_verification')),
-								   'description' => lang('checksumdescription'),
-								   'show_in_menu' => $this->HasPerm('adminPerms'));
-		$items['adminlog'] = array('url'=>'adminlog.php','parent'=>'siteadmin','priority'=>10,
-								   'title'=>$this->_FixSpaces(lang('adminlog')),
-								   'description'=>lang('adminlogdescription'),
-								   'show_in_menu'=>$this->HasPerm('adminPerms'));
-		// base my prefs menu ---------------------------------------------------------
-		$items['myprefs'] = array('url'=>'index.php?section=myprefs','parent'=>-1,'priority'=>8,
-								  'title'=>$this->_FixSpaces(lang('myprefs')),
-								  'description'=>lang('myprefsdescription'),'show_in_menu'=>$this->_perms['myprefs']);
-		$items['myaccount'] = array('url'=>'myaccount.php','parent'=>'myprefs',
-									'title'=>$this->_FixSpaces(lang('myaccount')),
-									'description'=>lang('myaccountdescription'),
-									'show_in_menu'=>$this->_perms['myaccount']);
-		$items['managebookmarks'] = array('url'=>'listbookmarks.php','parent'=>'myprefs',
-										  'title'=>$this->_FixSpaces(lang('managebookmarks')),
-										  'description'=>lang('managebookmarksdescription'),
-										  'show_in_menu'=>$this->_perms['bookmarks']);
-		$items['addbookmark'] = array('url'=>'addbookmark.php','parent'=>'myprefs',
-									  'title'=>$this->_FixSpaces(lang('addbookmark')),
-									  'description'=>lang('addbookmark'),'show_in_menu'=>false);
-		$items['editbookmark'] = array('url'=>'editbookmark.php','parent'=>'myprefs',
-									   'title'=>$this->_FixSpaces(lang('editbookmark')),
-									   'description'=>lang('editbookmark'),'show_in_menu'=>false);
-
-		debug_buffer('after menu items');
-
-		// slightly cleaner syntax
-		$items['ecommerce'] = array('url'=>'index.php?section=ecommerce','parent'=>-1,'priority'=>9,
-									'title'=>$this->_FixSpaces(lang('ecommerce')),
-									'description'=>lang('ecommerce_desc'),
-									'show_in_menu'=>true);
-
-		// adjust all the existing urls to be 'system' items.
-		// and set an icon if we can. also mark them as system items.
-		foreach( $this->_menuItems as $sectionKey => $sectionArray ) {
-			$this->_menuItems[$sectionKey]['system'] = 1;
-		}
-
-		debug_buffer('before system modules');
-
-		// add in all of the 'system' modules next
-		$moduleops = ModuleOperations::get_instance();
-		// todo: cleanup
-		foreach ($this->_menuItems as $sectionKey=>$sectionArray) {
-			if( !isset($this->_modulesBySection[$sectionKey]) ) continue;
-			$tmpArray = $this->_modulesBySection[$sectionKey];
-
-			foreach ($tmpArray as $menuItem) {
-				if( !$menuItem->system ) continue;
-				// don't clobber existing keys
-				$key = $menuItem->module;
-				if (array_key_exists($key,$this->_menuItems)) {
-				    $counter = 2;
-					while (array_key_exists($key,$this->_menuItems)) {
-						$key = $menuItem->module.$counter;
-						$counter++;
-					}
-				}
-
-				$this->_menuItems[$key]=array('url'=>$menuItem->url,'parent'=>$sectionKey,'title'=>$this->_FixSpaces($menuItem->title),
-											  'description'=>$menuItem->description,'show_in_menu'=>true,'system'=>1,
-											  'module'=>$menuItem->module,'priority'=>1);
-			}
-		}
-
-		debug_buffer('before non system module menu items');
-
-		// add in all of the non system modules
-		// non system modules cannot have a priority less than 2
-		// todo: cleanup
-        foreach ($this->_menuItems as $sectionKey=>$sectionArray) {
-			if( !isset($this->_modulesBySection[$sectionKey]) ) continue;
-			$tmpArray = $this->_modulesBySection[$sectionKey];
-
-			foreach ($tmpArray as $menuItem) {
-				if( $menuItem->system ) continue;
-
-				// don't clobber existing keys
-				$key = $menuItem->module;
-				if (array_key_exists($key,$this->_menuItems)) {
-				    $counter = 2;
-					while (array_key_exists($key,$this->_menuItems)) {
-						$key = $menuItem->module.$counter;
-						$counter++;
-					}
-				}
-
-				$this->_menuItems[$key]=array('url'=>$menuItem->url,'parent'=>$sectionKey,'title'=>$this->_FixSpaces($menuItem->title),
-											  'description'=>$menuItem->description, 'show_in_menu'=>true,'module'=>$menuItem->module,
-											  'priority'=>($menuItem->priority > 0)?max(2,$menuItem->priority):999);
-			}
-		}
-
-		debug_buffer('after non system module menu items');
-
-		// remove any menu items that don't fit into our valid sections
-		foreach ($this->_menuItems as $sectionKey=>$sectionArray) {
-			if( isset($sectionArray['system']) && $sectionArray['system'] ) continue;
-			if( $sectionArray['parent'] == -1 && in_array($sectionKey,$this->_valid_sections) ) continue;
-			if( isset($sectionArray['parent']) && in_array($sectionArray['parent'],$this->_valid_sections) ) continue;
-			unset($this->_menuItems[$sectionKey]);
-		}
-
-		// remove any top level items that don't have children
-		$parents = array();
-		foreach ($this->_menuItems as $sectionKey=>$sectionArray) {
-			if( $this->_menuItems[$sectionKey]['parent'] == -1 ) $parents[] = $sectionKey;
-		}
-		foreach( $parents as $oneparent ) {
-			$found = 0;
-			foreach ($this->_menuItems as $sectionKey=>$sectionArray) {
-				if( $sectionArray['parent'] == $oneparent) {
-					$found = 1;
-					break;
-				}
-			}
-			if( !$found ) unset($this->_menuItems[$oneparent]);
-		}
-
-        // fix up url keys on any url.
-        foreach( $this->_menuItems as $sectionKey => $sectionArray ) {
-            if( isset($sectionArray['url']) && (!isset($sectionArray['type']) || $sectionArray['type'] != 'external' )) {
-                $this->_menuItems[$sectionKey]['url'] = $this->_fix_url_userkey($this->_menuItems[$sectionKey]['url']);
-            }
-        }
-
-		// sort the menu items by root level, system, priority, and then name (case insensitive)
-		$fn = function($a,$b) {
-			$a1 = (int)$a['parent'];
-			$a2 = (int)$b['parent'];
-			if( $a1 < $a2 ) return -1;
-			if( $a1 > $a2 ) return 1;
-
-			$sa = isset($a['system'])?$a['system']:0;
-			$sb = isset($b['system'])?$b['system']:0;
-			if( $sa && !$sb ) return -1;
-			if( $sb && !$sa ) return 1;
-
-			$pa = isset($a['priority'])?$a['priority']:999;
-			$pb = isset($b['priority'])?$b['priority']:999;
-			if( $pa < $pb ) return -1;
-			if( $pa > $pb ) return 1;
-
-			return strnatcmp($a['title'],$b['title']);
-		};
-		uasort($this->_menuItems,$fn);
-
-		// set everything to be not selected.
-		// resolve the tree to be doubly-linked,
-		foreach ($this->_menuItems as $sectionKey=>$sectionArray) {
-			$this->_menuItems[$sectionKey]['selected'] = FALSE;
-			$this->_menuItems[$sectionKey]['children'] = array();
-
-			// link the children to the parents; a little clumsy.
-			foreach ($this->_menuItems as $subsectionKey=>$subsectionArray) {
-				if ($subsectionArray['parent'] == $sectionKey) {
-					$this->_menuItems[$sectionKey]['children'][] = $subsectionKey;
-				}
-			}
-		}
-
-        // find the selected menu item.
-        $selected_key = null;
-        $pending_selected_key = null;
-        $req_url = new cms_url($_SERVER['REQUEST_URI']);
-        $req_vars = array();
-        if( $_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['mact']) && !isset($_GET['mact']) ) {
-            // if mact is available via post and not via get we fake it, so that comparisons
-            // can get the mact from the query
-            $req_url->set_queryvar('mact',$_REQUEST['mact']);
-            $req_url = new cms_url((string)$req_url);
-        }
-        parse_str($req_url->get_query(),$req_vars);
-
-		foreach ($this->_menuItems as $sectionKey=>$sectionArray) {
-			if( strstr($_SERVER['REQUEST_URI'],'moduleinterface.php') !== FALSE &&
-				isset($_REQUEST['mact']) &&
-				isset($sectionArray['module']) && $sectionArray['module'] ) {
-
-                // note, this is kludgy
-                // we compare each and every menu item against the request.
-                // if the mact is set for both, and the module portion of the mact
-                // are the same, we add a reference to the option to our 'matches'
-                // list.  at the end, we re-compare
-				$u1 = new cms_url($sectionArray['url']);
-				$v1 = array();
-				parse_str($u1->get_query(),$v1);
-				if( $u1->get_path() == $req_url->get_path() &&
-					isset($v1['mact']) && isset($req_vars['mact']) ) {
-
-                    $t1 = explode(',',$v1['mact']);
-                    $t2 = explode(',',$req_vars['mact']);
-                    if( $t1[0] == $t2[0] ) {
-                        if( $t1[1] == $t2[1] && $t1[2] == $t2[2] ) {
-                            // requested action is for the same module and same action, we're done.
-                            $selected_key = $sectionKey;
-                            break;
-                        }
-                        else if( !$pending_selected_key ) {
-                            // requested action is for the same module, but different actions
-                            // we continue, but set a pending key (only once)
-                            $pending_selected_key = $sectionKey;
-                        }
-                    }
-				}
-			}
-			else if (strstr($_SERVER['REQUEST_URI'],$sectionArray['url']) !== FALSE &&
-					 (!isset($sectionArray['type']) || $sectionArray['type'] != 'external')) {
-                // this handles selecting internal actions that are not part of modules
-                // i.e (admin/somefile.php stuff)
-                $selected_key = $sectionKey;
-                break;
-            }
-        }
-
-        if( $selected_key || $pending_selected_key ) {
-            // if we only have a pending key, we use it... not ideal.
-            if( !$selected_key && $pending_selected_key ) $selected_key = $pending_selected_key;
-
-            // we have the sectionKey of the selected match
-            // now set it active, and set the parent all the way to the top
-            // and build breadcrumbs
-            $item =& $this->_menuItems[$selected_key];
-            $item['selected'] = TRUE;
-            $this->_title .= $item['title'];
-            $this->_active_item = $selected_key;
-            $this->_breadcrumbs[] = array('title'=>$item['title'],'url'=>$item['url']);
-            if( $item['parent'] != -1 ) {
-                $parent = $item['parent'];
-                // walk up to the root.
-                while( $parent != -1 ) {
-                    $this->_menuItems[$parent]['selected'] = TRUE;
-                    $this->_breadcrumbs[] = array('title'=>$this->_menuItems[$parent]['title'],
-                                                  'url'=>$this->_menuItems[$parent]['url']);
-                    $parent = $this->_menuItems[$parent]['parent'];
+            // fix up url keys on any url.
+            foreach( $this->_menuItems as $sectionKey => $sectionArray ) {
+                if( isset($sectionArray['url']) && (!isset($sectionArray['type']) || $sectionArray['type'] != 'external' )) {
+                    $this->_menuItems[$sectionKey]['url'] = $this->_fix_url_userkey($this->_menuItems[$sectionKey]['url']);
                 }
             }
-            $this->_breadcrumbs = array_reverse($this->_breadcrumbs);
+        }
+        else {
+            // note: it would be interesting if we could cache these menuItems in the session
+            // then clear this data when the cache is cleared (for when modules become available)
+
+            debug_buffer('before populate admin navigation');
+            if( $subtitle ) $this->_subtitle = $subtitle;
+
+            $this->_SetModuleAdminInterfaces();
+
+            debug_buffer('before menu items');
+            $this->_menuItems = array();
+            $items =& $this->_menuItems;
+            // base main menu ---------------------------------------------------------
+            $items['main'] = array('url'=>'index.php','parent'=>-1,'title'=>'CMS','priority'=>1,'description'=>'','show_in_menu'=>true);
+            $items['home'] = array('url'=>'index.php','parent'=>'main','priority'=>1,'title'=>$this->_FixSpaces(lang('home')),
+                                   'description'=>'','show_in_menu'=>true);
+            $items['viewsite'] = array('url'=>CMS_ROOT_URL.'/index.php','parent'=>'main',
+                                       'title'=>$this->_FixSpaces(lang('viewsite')),'type'=>'external','priority'=>2,
+                                       'description'=>'','show_in_menu'=>true, 'target'=>'_blank');
+            $items['logout'] = array('url'=>'logout.php','parent'=>'main','title'=>$this->_FixSpaces(lang('logout')),'priority'=>3,
+                                     'description'=>'','show_in_menu'=>true);
+            // base content menu ---------------------------------------------------------
+            $items['content'] = array('url'=>'index.php?section=content','parent'=>-1,'priority'=>2,
+                                      'title'=>$this->_FixSpaces(lang('content')),'description'=>lang('contentdescription'),
+                                      'show_in_menu'=>$this->HasPerm('contentPerms'));
+
+            // base layout menu ---------------------------------------------------------
+            $items['layout'] = array('url'=>'index.php?section=layout','parent'=>-1,'priority'=>3,
+                                     'title'=>$this->_FixSpaces(lang('layout')),'description'=>lang('layoutdescription'),
+                                     'show_in_menu'=>$this->HasPerm('layoutPerms'));
+
+            // base filest menu --------------------------------------------------------------
+            $items['files'] = array('url'=>'index.php?section=files','parent'=>-1,'priority'=>4,
+                                    'title'=>$this->_FixSpaces(lang('files')),'description'=>lang('filesdescription'),
+                                    'show_in_menu'=>$this->HasPerm('filePerms'));
+
+            // base user/groups menu ---------------------------------------------------------
+            $items['usersgroups'] = array('url'=>'index.php?section=usersgroups','parent'=>-1,
+                                          'title'=>$this->_FixSpaces(lang('usersgroups')),'priority'=>5,
+                                          'description'=>lang('usersgroupsdescription'),'show_in_menu'=>$this->HasPerm('usersGroupsPerms'));
+            $items['users'] = array('url'=>'listusers.php','parent'=>'usersgroups',
+                                    'title'=>$this->_FixSpaces(lang('users')),'description'=>lang('usersdescription'),
+                                    'show_in_menu'=>$this->HasPerm('userPerms'));
+            $items['adduser'] = array('url'=>'adduser.php','parent'=>'users',
+                                      'title'=>$this->_FixSpaces(lang('adduser')),
+                                      'description'=>lang('adduser'),'show_in_menu'=>false);
+            $items['edituser'] = array('url'=>'edituser.php','parent'=>'users',
+                                       'title'=>$this->_FixSpaces(lang('edituser')),
+                                       'description'=>lang('edituser'),'show_in_menu'=>false);
+            $items['groups'] = array('url'=>'listgroups.php','parent'=>'usersgroups',
+                                     'title'=>$this->_FixSpaces(lang('groups')),
+                                     'description'=>lang('groupsdescription'),
+                                     'show_in_menu'=>$this->HasPerm('groupPerms'));
+            $items['addgroup'] = array('url'=>'addgroup.php','parent'=>'groups',
+                                       'title'=>$this->_FixSpaces(lang('addgroup')),
+                                       'description'=>lang('addgroup'),'show_in_menu'=>false);
+            $items['editgroup'] = array('url'=>'editgroup.php','parent'=>'groups',
+                                        'title'=>$this->_FixSpaces(lang('editgroup')),
+                                        'description'=>lang('editgroup'),'show_in_menu'=>false);
+            $items['groupmembers'] = array('url'=>'changegroupassign.php',
+                                           'parent'=>'usersgroups',
+                                           'title'=>$this->_FixSpaces(lang('groupassignments')),
+                                           'description'=>lang('groupassignmentdescription'),
+                                           'show_in_menu'=>$this->HasPerm('groupPerms'));
+            $items['groupperms'] = array('url'=>'changegroupperm.php','parent'=>'usersgroups',
+                                         'title'=>$this->_FixSpaces(lang('groupperms')),
+                                         'description'=>lang('grouppermsdescription'),
+                                         'show_in_menu'=>$this->HasPerm('groupPerms'));
+            // base extensions menu ---------------------------------------------------------
+            $items['extensions'] = array('url'=>'index.php?section=extensions','parent'=>-1,'priority'=>6,
+                                         'title'=>$this->_FixSpaces(lang('extensions')),
+                                         'description'=>lang('extensionsdescription'),
+                                         'show_in_menu'=>$this->HasPerm('extensionsPerms'));
+            $items['tags'] = array('url'=>'listtags.php','parent'=>'extensions',
+                                   'title'=>$this->_FixSpaces(lang('tags')),
+                                   'description'=>lang('tagdescription'),
+                                   'show_in_menu'=>$this->HasPerm('taghelpPerms'));
+            $items['usertags'] = array('url'=>'listusertags.php','parent'=>'extensions',
+                                       'title'=>$this->_FixSpaces(lang('usertags')),
+                                       'description'=>lang('usertagdescription'),
+                                       'show_in_menu'=>$this->HasPerm('codeBlockPerms'));
+            $items['eventhandlers'] = array('url'=>'eventhandlers.php','parent'=>'extensions',
+                                            'title'=>$this->_FixSpaces(lang('eventhandlers')),
+                                            'description'=>lang('eventhandlerdescription'),
+                                            'show_in_menu'=>$this->HasPerm('eventPerms'));
+            $items['editeventhandler'] = array('url'=>'editevent.php','parent'=>'eventhandlers',
+                                               'title'=>$this->_FixSpaces(lang('editeventhandler')),
+                                               'description'=>lang('editeventhandlerdescription'),
+                                               'show_in_menu'=>false);
+            $items['editusertag'] = array('url'=>'editusertag.php','parent'=>'usertags',
+                                          'title'=>$this->_FixSpaces(lang('editusertag')),
+                                          'description'=>lang('editusertag'),'show_in_menu'=>false);
+            // base admin menu ---------------------------------------------------------
+            $items['siteadmin'] = array('url'=>'index.php?section=siteadmin','parent'=>-1,
+                                        'title'=>$this->_FixSpaces(lang('admin')),'priority'=>7,
+                                        'description'=>lang('admindescription'),
+                                        'show_in_menu'=>$this->HasPerm('siteAdminPerms'));
+            $items['siteprefs'] = array('url'=>'siteprefs.php','parent'=>'siteadmin','priority'=>1,
+                                        'title'=>$this->_FixSpaces(lang('globalconfig')),
+                                        'description'=>lang('preferencesdescription'),
+                                        'show_in_menu'=>$this->HasPerm('sitePrefPerms'));
+            $items['systeminfo'] = array('url' => 'systeminfo.php', 'parent' => 'siteadmin','priority'=>2,
+                                         'title' => $this->_FixSpaces(lang('systeminfo')),
+                                         'description' => lang('systeminfodescription'),
+                                         'show_in_menu' => $this->HasPerm('adminPerms'));
+            $items['systemmaintenance'] = array('url' => 'systemmaintenance.php','priority'=>1,'parent' => 'siteadmin',
+                                                'title' => $this->_FixSpaces(lang('systemmaintenance')),
+                                                'description' => lang('systemmaintenancedescription'),
+                                                'show_in_menu' => $this->HasPerm('adminPerms'));
+            $items['checksum'] = array('url' => 'checksum.php', 'parent' => 'siteadmin','priority'=>4,
+                                       'title' => $this->_FixSpaces(lang('system_verification')),
+                                       'description' => lang('checksumdescription'),
+                                       'show_in_menu' => $this->HasPerm('adminPerms'));
+            $items['adminlog'] = array('url'=>'adminlog.php','parent'=>'siteadmin','priority'=>10,
+                                       'title'=>$this->_FixSpaces(lang('adminlog')),
+                                       'description'=>lang('adminlogdescription'),
+                                       'show_in_menu'=>$this->HasPerm('adminPerms'));
+            // base my prefs menu ---------------------------------------------------------
+            $items['myprefs'] = array('url'=>'index.php?section=myprefs','parent'=>-1,'priority'=>8,
+                                      'title'=>$this->_FixSpaces(lang('myprefs')),
+                                      'description'=>lang('myprefsdescription'),'show_in_menu'=>$this->_perms['myprefs']);
+            $items['myaccount'] = array('url'=>'myaccount.php','parent'=>'myprefs',
+                                        'title'=>$this->_FixSpaces(lang('myaccount')),
+                                        'description'=>lang('myaccountdescription'),
+                                        'show_in_menu'=>$this->_perms['myaccount']);
+            $items['managebookmarks'] = array('url'=>'listbookmarks.php','parent'=>'myprefs',
+                                              'title'=>$this->_FixSpaces(lang('managebookmarks')),
+                                              'description'=>lang('managebookmarksdescription'),
+                                              'show_in_menu'=>$this->_perms['bookmarks']);
+            $items['addbookmark'] = array('url'=>'addbookmark.php','parent'=>'myprefs',
+                                          'title'=>$this->_FixSpaces(lang('addbookmark')),
+                                          'description'=>lang('addbookmark'),'show_in_menu'=>false);
+            $items['editbookmark'] = array('url'=>'editbookmark.php','parent'=>'myprefs',
+                                           'title'=>$this->_FixSpaces(lang('editbookmark')),
+                                           'description'=>lang('editbookmark'),'show_in_menu'=>false);
+
+            debug_buffer('after menu items');
+
+            // slightly cleaner syntax
+            $items['ecommerce'] = array('url'=>'index.php?section=ecommerce','parent'=>-1,'priority'=>9,
+                                        'title'=>$this->_FixSpaces(lang('ecommerce')),
+                                        'description'=>lang('ecommerce_desc'),
+                                        'show_in_menu'=>true);
+
+            // adjust all the existing urls to be 'system' items.
+            // and set an icon if we can. also mark them as system items.
+            foreach( $this->_menuItems as $sectionKey => $sectionArray ) {
+                $this->_menuItems[$sectionKey]['system'] = 1;
+            }
+
+            debug_buffer('before system modules');
+
+            // add in all of the 'system' modules next
+            $moduleops = ModuleOperations::get_instance();
+            // todo: cleanup
+            foreach ($this->_menuItems as $sectionKey=>$sectionArray) {
+                if( !isset($this->_modulesBySection[$sectionKey]) ) continue;
+                $tmpArray = $this->_modulesBySection[$sectionKey];
+
+                foreach ($tmpArray as $menuItem) {
+                    if( !$menuItem->system ) continue;
+                    // don't clobber existing keys
+                    $key = $menuItem->module;
+                    if (array_key_exists($key,$this->_menuItems)) {
+                        $counter = 2;
+                        while (array_key_exists($key,$this->_menuItems)) {
+                            $key = $menuItem->module.$counter;
+                            $counter++;
+                        }
+                    }
+
+                    $this->_menuItems[$key]=array('url'=>$menuItem->url,'parent'=>$sectionKey,'title'=>$this->_FixSpaces($menuItem->title),
+                                                  'description'=>$menuItem->description,'show_in_menu'=>true,'system'=>1,
+                                                  'module'=>$menuItem->module,'priority'=>1);
+                }
+            }
+
+            debug_buffer('before non system module menu items');
+
+            // add in all of the non system modules
+            // non system modules cannot have a priority less than 2
+            // todo: cleanup
+            foreach ($this->_menuItems as $sectionKey=>$sectionArray) {
+                if( !isset($this->_modulesBySection[$sectionKey]) ) continue;
+                $tmpArray = $this->_modulesBySection[$sectionKey];
+
+                foreach ($tmpArray as $menuItem) {
+                    if( $menuItem->system ) continue;
+
+                    // don't clobber existing keys
+                    $key = $menuItem->module;
+                    if (array_key_exists($key,$this->_menuItems)) {
+                        $counter = 2;
+                        while (array_key_exists($key,$this->_menuItems)) {
+                            $key = $menuItem->module.$counter;
+                            $counter++;
+                        }
+                    }
+
+                    $this->_menuItems[$key]=array('url'=>$menuItem->url,'parent'=>$sectionKey,'title'=>$this->_FixSpaces($menuItem->title),
+                                                  'description'=>$menuItem->description, 'show_in_menu'=>true,'module'=>$menuItem->module,
+                                                  'priority'=>($menuItem->priority > 0)?max(2,$menuItem->priority):999);
+                }
+            }
+
+            debug_buffer('after non system module menu items');
+
+            // remove any menu items that don't fit into our valid sections
+            foreach ($this->_menuItems as $sectionKey=>$sectionArray) {
+                if( isset($sectionArray['system']) && $sectionArray['system'] ) continue;
+                if( $sectionArray['parent'] == -1 && in_array($sectionKey,$this->_valid_sections) ) continue;
+                if( isset($sectionArray['parent']) && in_array($sectionArray['parent'],$this->_valid_sections) ) continue;
+                unset($this->_menuItems[$sectionKey]);
+            }
+
+            // remove any top level items that don't have children
+            $parents = array();
+            foreach ($this->_menuItems as $sectionKey=>$sectionArray) {
+                if( $this->_menuItems[$sectionKey]['parent'] == -1 ) $parents[] = $sectionKey;
+            }
+            foreach( $parents as $oneparent ) {
+                $found = 0;
+                foreach ($this->_menuItems as $sectionKey=>$sectionArray) {
+                    if( $sectionArray['parent'] == $oneparent) {
+                        $found = 1;
+                        break;
+                    }
+                }
+                if( !$found ) unset($this->_menuItems[$oneparent]);
+            }
+
+            // fix up url keys on any url.
+            foreach( $this->_menuItems as $sectionKey => $sectionArray ) {
+                if( isset($sectionArray['url']) && (!isset($sectionArray['type']) || $sectionArray['type'] != 'external' )) {
+                    $this->_menuItems[$sectionKey]['url'] = $this->_fix_url_userkey($this->_menuItems[$sectionKey]['url']);
+                }
+            }
+
+            // sort the menu items by root level, system, priority, and then name (case insensitive)
+            $fn = function($a,$b) {
+                $a1 = (int)$a['parent'];
+                $a2 = (int)$b['parent'];
+                if( $a1 < $a2 ) return -1;
+                if( $a1 > $a2 ) return 1;
+
+                $sa = isset($a['system'])?$a['system']:0;
+                $sb = isset($b['system'])?$b['system']:0;
+                if( $sa && !$sb ) return -1;
+                if( $sb && !$sa ) return 1;
+
+                $pa = isset($a['priority'])?$a['priority']:999;
+                $pb = isset($b['priority'])?$b['priority']:999;
+                if( $pa < $pb ) return -1;
+                if( $pa > $pb ) return 1;
+
+                return strnatcmp($a['title'],$b['title']);
+            };
+            uasort($this->_menuItems,$fn);
+
+            // set everything to be not selected.
+            // resolve the tree to be doubly-linked,
+            foreach ($this->_menuItems as $sectionKey=>$sectionArray) {
+                $this->_menuItems[$sectionKey]['selected'] = FALSE;
+                $this->_menuItems[$sectionKey]['children'] = array();
+
+                // link the children to the parents; a little clumsy.
+                foreach ($this->_menuItems as $subsectionKey=>$subsectionArray) {
+                    if ($subsectionArray['parent'] == $sectionKey) {
+                        $this->_menuItems[$sectionKey]['children'][] = $subsectionKey;
+                    }
+                }
+            }
+
+            // find the selected menu item.
+            $selected_key = null;
+            $pending_selected_key = null;
+            $req_url = new cms_url($_SERVER['REQUEST_URI']);
+            $req_vars = array();
+            if( $_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['mact']) && !isset($_GET['mact']) ) {
+                // if mact is available via post and not via get we fake it, so that comparisons
+                // can get the mact from the query
+                $req_url->set_queryvar('mact',$_REQUEST['mact']);
+                $req_url = new cms_url((string)$req_url);
+            }
+            parse_str($req_url->get_query(),$req_vars);
+
+            foreach ($this->_menuItems as $sectionKey=>$sectionArray) {
+                if( strstr($_SERVER['REQUEST_URI'],'moduleinterface.php') !== FALSE &&
+                    isset($_REQUEST['mact']) &&
+                    isset($sectionArray['module']) && $sectionArray['module'] ) {
+
+                    // note, this is kludgy
+                    // we compare each and every menu item against the request.
+                    // if the mact is set for both, and the module portion of the mact
+                    // are the same, we add a reference to the option to our 'matches'
+                    // list.  at the end, we re-compare
+                    $u1 = new cms_url($sectionArray['url']);
+                    $v1 = array();
+                    parse_str($u1->get_query(),$v1);
+                    if( $u1->get_path() == $req_url->get_path() &&
+                        isset($v1['mact']) && isset($req_vars['mact']) ) {
+
+                        $t1 = explode(',',$v1['mact']);
+                        $t2 = explode(',',$req_vars['mact']);
+                        if( $t1[0] == $t2[0] ) {
+                            if( $t1[1] == $t2[1] && $t1[2] == $t2[2] ) {
+                                // requested action is for the same module and same action, we're done.
+                                $selected_key = $sectionKey;
+                                break;
+                            }
+                            else if( !$pending_selected_key ) {
+                                // requested action is for the same module, but different actions
+                                // we continue, but set a pending key (only once)
+                                $pending_selected_key = $sectionKey;
+                            }
+                        }
+                    }
+                }
+                else if (strstr($_SERVER['REQUEST_URI'],$sectionArray['url']) !== FALSE &&
+                         (!isset($sectionArray['type']) || $sectionArray['type'] != 'external')) {
+                    // this handles selecting internal actions that are not part of modules
+                    // i.e (admin/somefile.php stuff)
+                    $selected_key = $sectionKey;
+                    break;
+                }
+            }
+
+            if( $selected_key || $pending_selected_key ) {
+                // if we only have a pending key, we use it... not ideal.
+                if( !$selected_key && $pending_selected_key ) $selected_key = $pending_selected_key;
+
+                // we have the sectionKey of the selected match
+                // now set it active, and set the parent all the way to the top
+                // and build breadcrumbs
+                $item =& $this->_menuItems[$selected_key];
+                $item['selected'] = TRUE;
+                $this->_title .= $item['title'];
+                $this->_active_item = $selected_key;
+                $this->_breadcrumbs[] = array('title'=>$item['title'],'url'=>$item['url']);
+                if( $item['parent'] != -1 ) {
+                    $parent = $item['parent'];
+                    // walk up to the root.
+                    while( $parent != -1 ) {
+                        $this->_menuItems[$parent]['selected'] = TRUE;
+                        $this->_breadcrumbs[] = array('title'=>$this->_menuItems[$parent]['title'],
+                                                      'url'=>$this->_menuItems[$parent]['url']);
+                        $parent = $this->_menuItems[$parent]['parent'];
+                    }
+                }
+                $this->_breadcrumbs = array_reverse($this->_breadcrumbs);
+            }
         }
 
 		// fix subtitle, if any
 		if ($subtitle != '') $this->_title .= ': '.$subtitle;
 
+        $data = base64_encode(serialize($this->_menuItems));
+        \cms_cache_handler::get_instance()->set('adminnav'.$uid,$data);
 		debug_buffer('after populate admin navigation');
+        return $this->_menuitems;
     }
 
 
