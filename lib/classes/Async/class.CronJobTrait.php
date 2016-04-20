@@ -34,7 +34,12 @@ trait CronJobTrait
         case 'frequency':
             switch( $val ) {
             case self::RECUR_NONE:
+            case self::RECUR_15M:
+            case self::RECUR_30M:
             case self::RECUR_HOURLY:
+            case self::RECUR_2H:
+            case self::RECUR_3H:
+            case self::RECUR_12H:
             case self::RECUR_DAILY:
             case self::RECUR_WEEKLY:
             case self::RECUR_MONTHLY:

@@ -208,7 +208,3 @@ if( !isset($DONT_LOAD_SMARTY) ) {
     if( defined('CMS_DEBUG') && CMS_DEBUG ) $smarty->error_reporting = 'E_ALL';
     $smarty->assignGlobal('sitename', cms_siteprefs::get('sitename', 'CMSMS Site'));
 }
-
-
-#Do auto task stuff.
-if (!isset($CMS_INSTALL_PAGE) && !isset($CMS_LOGIN_PAGE)) CmsRegularTaskHandler::handle_tasks();

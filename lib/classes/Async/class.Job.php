@@ -13,6 +13,7 @@ abstract class Job
 {
     const MODULE_NAME = 'CmsJobManager';
     private $_id;
+    private $_name;
     private $_created;
     private $_module;
     private $_start;
@@ -20,7 +21,9 @@ abstract class Job
 
     public function __construct()
     {
-        $this->_created = $this->_start = time();
+        $now = time();
+        $this->_created = $this->_start = $now;
+        $this->_name = md5(__FILE__.CMS_VERSION.get_class($this).rand(0,999)); // a pretty random name to this job
     }
 
     public function __get($key)
@@ -33,6 +36,7 @@ abstract class Job
         case 'errors':
             return (int) $this->$tkey;
 
+        case 'name':
         case 'module':
             return trim($this->$tkey);
 
@@ -45,6 +49,7 @@ abstract class Job
     {
         $tkey = '_'.$key;
         switch( $key ) {
+        case 'name':
         case 'module':
             $this->$tkey = trim($val);
             break;

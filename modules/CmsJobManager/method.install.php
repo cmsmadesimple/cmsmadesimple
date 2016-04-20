@@ -8,6 +8,7 @@ $taboptarray = array('mysql' => 'TYPE=MyISAM');
 $dict = NewDataDictionary($db);
 
 $flds = "id I KEY AUTO NOTNULL,
+         name C(255) NOTNULL,
          created I NOTNULL,
          module C(255) NOTNULL,
          errors I NOTNULL DEFAULT 0,

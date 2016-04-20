@@ -89,6 +89,21 @@ final class CmsJobManager extends \CMSModule
         return $tpl;
     }
 
+    /**
+     * @ignore
+     * @internal
+     */
+    public function &get_current_job()
+    {
+        return $this->_current_job;
+    }
+
+    protected function set_current_job($job = null)
+    {
+        if( !is_null($job) && !$job instanceof \CMSMS\Async\Job ) throw new \LogicException('Invalid data passed to '.__METHOD__);
+        $this->_current_job = $job;
+    }
+
     //////////////////////////////////////////////////////////////////////////
     // THIS STUFF SHOULD PROBABLY GO INTO A TRAIT, or atleast an interface
     //////////////////////////////////////////////////////////////////////////
@@ -126,8 +141,8 @@ final class CmsJobManager extends \CMSModule
         }
         $db = $this->GetDb();
         if( !$job->id ) {
-            $sql = 'INSERT INTO '.self::table_name().' (created,module,errors,start,recurs,until,data) VALUES (?,?,?,?,?,?,?)';
-            $dbr = $db->Execute($sql,array($job->created,$job->module,$job->errors,$job->start,$recurs,$until,serialize($job)));
+            $sql = 'INSERT INTO '.self::table_name().' (name,created,module,errors,start,recurs,until,data) VALUES (?,?,?,?,?,?,?,?)';
+            $dbr = $db->Execute($sql,array($job->name,$job->created,$job->module,$job->errors,$job->start,$recurs,$until,serialize($job)));
             $new_id = $db->Insert_ID();
             $job->set_id($new_id);
             return $new_id;
@@ -176,25 +191,87 @@ final class CmsJobManager extends \CMSModule
         return FALSE;
     }
 
-    protected function get_jobs($limit = null)
+    protected function check_for_jobs_or_tasks()
+    {
+        // this is cheaper.
+        $out = $this->get_jobs(1);
+        if( count($out) ) return TRUE;
+
+        // gotta check for tasks, which is more expensive
+        $now = time();
+        $lastcheck = (int) $this->GetPreference('tasks_lastcheck');
+        //if( $lastcheck >= $now - 900 ) return FALSE; // hardcoded, only check tasks every 15 minutes.
+        $this->SetPreference('tasks_lastcheck',$now);
+        $tasks = $this->create_jobs_from_eligible_tasks();
+        if( count($tasks) ) return TRUE;
+        return FALSE;
+    }
+
+    protected function create_jobs_from_eligible_tasks()
+    {
+        // this creates jobs out of CmsRegularTask objects that we find,and that need to be executed.
+        $now = time();
+        $res = false;
+
+		// 1.  Get task objects from files.
+		$dir = CMS_ROOT_PATH.'/lib/tasks';
+
+        // fairly expensive as we have to iterate a directory and load files and create objects.
+		$tmp = new DirectoryIterator($dir);
+		$iterator = new RegexIterator($tmp,'/class\..+task\.php$/');
+		foreach( $iterator as $match ) {
+			$tmp = explode('.',basename($match->current()));
+			if( is_array($tmp) && count($tmp) == 4 ) {
+				$classname = $tmp[1].'Task';
+				require_once($dir.'/'.$match->current());
+				$obj = new $classname;
+				if( !$obj instanceof CmsRegularTask ) continue;
+                if( !$obj->test($now) ) continue;
+                $job = new \CMSMS\Async\RegularTask($obj);
+                $job->save();
+                $res = true;
+			}
+		}
+
+		// 2.  Get task objects from modules.
+		$opts = ModuleOperations::get_instance();
+		$modules = $opts->get_modules_with_capability('tasks');
+		if (!$modules) return;
+		foreach( $modules as $one ) {
+			if( !is_object($one) ) $one = \cms_utils::get_module($one);
+			if( !method_exists($one,'get_tasks') ) continue;
+
+			$tasks = $one->get_tasks();
+			if( !$tasks ) continue;
+            if( !is_array($tasks) ) $tasks = array($tasks);
+
+            foreach( $tasks as $onetask ) {
+                if( ! is_object($onetask) ) continue;
+                if( ! $onetask instanceof CmsRegularTask ) continue;
+                if( ! $onetask->test() ) continue;
+                $job = new \CMSMS\Async\RegularTask($onetask);
+                $job->module = $one->GetName();
+                $job->save();
+                $res = true;
+            }
+		}
+
+        return $res;
+    }
+
+    protected function get_jobs($check_only = FALSE)
     {
         $db = $this->GetDb();
         $now = time();
-
-        /*
-        $lastclean = (int) $this->GetPreference(self::CLEANPREF);
-        if( $lastclean < $now - 600 ) { // hardcoded to 10 minutes
-            $sql = 'DELETE FROM '.self::tabe_name().' WHERE start < ?';
-            $db->Execute($sql,array($lastclean));
-            $this->SetPreference(self::CLEANPREF,$now);
-        }
-        */
+        $limit = 100; // hardcoded.... should never be more than 100 jobs in the queue for a site.
+        if( $check_only ) $limit = 1;
 
         if( !$limit ) $limit = 100;
         $limit = max(1,(int)$limit);
         $sql = 'SELECT * FROM '.self::table_name().' WHERE start < UNIX_TIMESTAMP() AND created < UNIX_TIMESTAMP() ORDER BY errors ASC,created ASC LIMIT ?';
         $list = $db->GetArray($sql,array($limit));
         if( !is_array($list) || count($list) == 0 ) return;
+        if( $check_only ) return TRUE;
 
         $out = [];
         foreach( $list as $row ) {
@@ -202,6 +279,7 @@ final class CmsJobManager extends \CMSModule
             $obj->set_id($row['id']);
             $out[] = $obj;
         }
+
         return $out;
     }
 
@@ -219,8 +297,20 @@ final class CmsJobManager extends \CMSModule
         switch( $job->frequency ) {
         case $job::RECUR_NONE:
             return $out;
+        case $job::RECUR_15M:
+            $out = $job->start + 15 * 60;
+            break;
+        case $job::RECUR_30M:
+            $out = $job->start + 30 * 60;
+            break;
         case $job::RECUR_HOURLY:
             $out = $job->start + 3600;
+            break;
+        case $job::RECUR_2H:
+            $out = $job->start + 2 * 3600;
+            break;
+        case $job::RECUR_3H:
+            $out = $job->start + 3 * 3600;
             break;
         case $job::RECUR_DAILY:
             $out = $job->start + 3600 * 24;
@@ -246,14 +336,15 @@ final class CmsJobManager extends \CMSModule
         // if this function was called because we are actually processing a cron request... stop
         if( isset($_REQUEST['cms_cron']) ) return;
 
-        // if we triggered the thing less than 3 minutes ago... do nothing
+        // if we triggered the thing less than N minutes ago... do nothing
         $now = time();
         $last_trigger = (int) $this->GetPreference('last_async_trigger');
         // if( $last_trigger >= $now - 180 ) return; // debug
 
-        $jobs = $this->get_jobs(1);
+        $jobs = $this->check_for_jobs_or_tasks();
         if( !count($jobs) ) return; // nothing to do.
 
+        // this could go into a function...
         $url_str = html_entity_decode($this->create_url('__','process',$_returnid));
         $url_ob = new \cms_url($url_str);
         $url_ob->set_queryvar('cms_cron',1);
@@ -289,18 +380,4 @@ final class CmsJobManager extends \CMSModule
         }
     }
 
-    /**
-     * @ignore
-     * @internal
-     */
-    public function &get_current_job()
-    {
-        return $this->_current_job;
-    }
-
-    protected function set_current_job($job = null)
-    {
-        if( !is_null($job) && !$job instanceof \CMSMS\Async\Job ) throw new \LogicException('Invalid data passed to '.__METHOD__);
-        $this->_current_job = $job;
-    }
 } // class CGSmartNav
