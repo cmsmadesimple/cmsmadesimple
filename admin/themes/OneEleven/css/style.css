@@ -1328,9 +1328,6 @@ footer#oe_footer a:hover, footer#oe_footer a:active {
 	color: #232323;
 	font-size: 12px
 }
-#oe_mainarea header.pageheader span.helptext {
-	margin-right: 270px
-}
 #oe_mainarea header.pageheader.drop-hidden span.helptext {
 	margin-right: 0
 }
