@@ -271,6 +271,89 @@ abstract class CmsAdminThemeBase
 	}
 
 
+    private function _SetActiveMenuItem()
+    {
+        // find the selected menu item.
+        // and build the breadcrumbs
+        if( !count($this->_menuItems) ) return;
+
+        $selected_key = null;
+        $pending_selected_key = null;
+        $req_url = new cms_url($_SERVER['REQUEST_URI']);
+        $req_vars = array();
+        if( $_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['mact']) && !isset($_GET['mact']) ) {
+            // if mact is available via post and not via get we fake it, so that comparisons
+            // can get the mact from the query
+            $req_url->set_queryvar('mact',$_REQUEST['mact']);
+            $req_url = new cms_url((string)$req_url);
+        }
+        parse_str($req_url->get_query(),$req_vars);
+
+        foreach ($this->_menuItems as $sectionKey=>$sectionArray) {
+            if( isset($_REQUEST['mact']) && isset($sectionArray['module']) && $sectionArray['module'] &&
+                strstr($_SERVER['REQUEST_URI'],'moduleinterface.php') !== FALSE ) {
+                // note, this is kludgy
+                // we compare each and every menu item against the request.
+                // if the mact is set for both, and the module portion of the mact
+                // are the same, we add a reference to the option to our 'matches'
+                // list.  at the end, we re-compare
+                $u1 = new cms_url($sectionArray['url']);
+                $v1 = array();
+                parse_str($u1->get_query(),$v1);
+                if( isset($v1['mact']) && isset($req_vars['mact']) &&
+                    $u1->get_path() == $req_url->get_path() ) {
+
+                    $t1 = explode(',',$v1['mact']);
+                    $t2 = explode(',',$req_vars['mact']);
+                    if( $t1[0] == $t2[0] ) {
+                        if( $t1[1] == $t2[1] && $t1[2] == $t2[2] ) {
+                            // requested action is for the same module and same action, we're done.
+                            $selected_key = $sectionKey;
+                            break;
+                        }
+                        else if( !$pending_selected_key ) {
+                            // requested action is for the same module, but different actions
+                            // we continue, but set a pending key (only once)
+                            $pending_selected_key = $sectionKey;
+                        }
+                    }
+                }
+            }
+            else if (strstr($_SERVER['REQUEST_URI'],$sectionArray['url']) !== FALSE &&
+                     (!isset($sectionArray['type']) || $sectionArray['type'] != 'external')) {
+                // this handles selecting internal actions that are not part of modules
+                // i.e (admin/somefile.php stuff)
+                $selected_key = $sectionKey;
+                break;
+            }
+        }
+
+        if( $selected_key || $pending_selected_key ) {
+            // if we only have a pending key, we use it... not ideal.
+            if( !$selected_key && $pending_selected_key ) $selected_key = $pending_selected_key;
+
+            // we have the sectionKey of the selected match
+            // now set it active, and set the parent all the way to the top
+            // and build breadcrumbs
+            $item =& $this->_menuItems[$selected_key];
+            $item['selected'] = TRUE;
+            $this->_title .= $item['title'];
+            $this->_active_item = $selected_key;
+            $this->_breadcrumbs[] = array('title'=>$item['title'],'url'=>$item['url']);
+            if( $item['parent'] != -1 ) {
+                $parent = $item['parent'];
+                // walk up to the root.
+                while( $parent != -1 ) {
+                    $this->_menuItems[$parent]['selected'] = TRUE;
+                    $this->_breadcrumbs[] = array('title'=>$this->_menuItems[$parent]['title'],
+                                                  'url'=>$this->_menuItems[$parent]['url']);
+                    $parent = $this->_menuItems[$parent]['parent'];
+                }
+            }
+            $this->_breadcrumbs = array_reverse($this->_breadcrumbs);
+        }
+    }
+
     /**
      * _SetModuleAdminInterfaces
      *
@@ -304,7 +387,7 @@ abstract class CmsAdminThemeBase
 				if (! isset($this->_sectionCount[$section])) $this->_sectionCount[$section] = 0;
 
 				// fix up the session key stuff.
-				$obj->url = $this->_fix_url_userkey($obj->url);
+				//$obj->url = $this->_fix_url_userkey($obj->url);
 
 				// find an icon for this thing.
 				if( $obj->icon == '' ) {
@@ -404,13 +487,6 @@ abstract class CmsAdminThemeBase
         if( ($data = \cms_cache_handler::get_instance()->get('adminnav'.$uid)) ) {
             $data = base64_decode($data);
             $this->_menuItems = unserialize($data);
-
-            // fix up url keys on any url.
-            foreach( $this->_menuItems as $sectionKey => $sectionArray ) {
-                if( isset($sectionArray['url']) && (!isset($sectionArray['type']) || $sectionArray['type'] != 'external' )) {
-                    $this->_menuItems[$sectionKey]['url'] = $this->_fix_url_userkey($this->_menuItems[$sectionKey]['url']);
-                }
-            }
         }
         else {
             // note: it would be interesting if we could cache these menuItems in the session
@@ -643,13 +719,6 @@ abstract class CmsAdminThemeBase
                 if( !$found ) unset($this->_menuItems[$oneparent]);
             }
 
-            // fix up url keys on any url.
-            foreach( $this->_menuItems as $sectionKey => $sectionArray ) {
-                if( isset($sectionArray['url']) && (!isset($sectionArray['type']) || $sectionArray['type'] != 'external' )) {
-                    $this->_menuItems[$sectionKey]['url'] = $this->_fix_url_userkey($this->_menuItems[$sectionKey]['url']);
-                }
-            }
-
             // sort the menu items by root level, system, priority, and then name (case insensitive)
             $fn = function($a,$b) {
                 $a1 = (int)$a['parent'];
@@ -685,91 +754,22 @@ abstract class CmsAdminThemeBase
                 }
             }
 
-            // find the selected menu item.
-            $selected_key = null;
-            $pending_selected_key = null;
-            $req_url = new cms_url($_SERVER['REQUEST_URI']);
-            $req_vars = array();
-            if( $_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['mact']) && !isset($_GET['mact']) ) {
-                // if mact is available via post and not via get we fake it, so that comparisons
-                // can get the mact from the query
-                $req_url->set_queryvar('mact',$_REQUEST['mact']);
-                $req_url = new cms_url((string)$req_url);
-            }
-            parse_str($req_url->get_query(),$req_vars);
+            $data = base64_encode(serialize($this->_menuItems));
+            \cms_cache_handler::get_instance()->set('adminnav'.$uid,$data);
+        }
 
-            foreach ($this->_menuItems as $sectionKey=>$sectionArray) {
-                if( strstr($_SERVER['REQUEST_URI'],'moduleinterface.php') !== FALSE &&
-                    isset($_REQUEST['mact']) &&
-                    isset($sectionArray['module']) && $sectionArray['module'] ) {
-
-                    // note, this is kludgy
-                    // we compare each and every menu item against the request.
-                    // if the mact is set for both, and the module portion of the mact
-                    // are the same, we add a reference to the option to our 'matches'
-                    // list.  at the end, we re-compare
-                    $u1 = new cms_url($sectionArray['url']);
-                    $v1 = array();
-                    parse_str($u1->get_query(),$v1);
-                    if( $u1->get_path() == $req_url->get_path() &&
-                        isset($v1['mact']) && isset($req_vars['mact']) ) {
-
-                        $t1 = explode(',',$v1['mact']);
-                        $t2 = explode(',',$req_vars['mact']);
-                        if( $t1[0] == $t2[0] ) {
-                            if( $t1[1] == $t2[1] && $t1[2] == $t2[2] ) {
-                                // requested action is for the same module and same action, we're done.
-                                $selected_key = $sectionKey;
-                                break;
-                            }
-                            else if( !$pending_selected_key ) {
-                                // requested action is for the same module, but different actions
-                                // we continue, but set a pending key (only once)
-                                $pending_selected_key = $sectionKey;
-                            }
-                        }
-                    }
-                }
-                else if (strstr($_SERVER['REQUEST_URI'],$sectionArray['url']) !== FALSE &&
-                         (!isset($sectionArray['type']) || $sectionArray['type'] != 'external')) {
-                    // this handles selecting internal actions that are not part of modules
-                    // i.e (admin/somefile.php stuff)
-                    $selected_key = $sectionKey;
-                    break;
-                }
-            }
-
-            if( $selected_key || $pending_selected_key ) {
-                // if we only have a pending key, we use it... not ideal.
-                if( !$selected_key && $pending_selected_key ) $selected_key = $pending_selected_key;
-
-                // we have the sectionKey of the selected match
-                // now set it active, and set the parent all the way to the top
-                // and build breadcrumbs
-                $item =& $this->_menuItems[$selected_key];
-                $item['selected'] = TRUE;
-                $this->_title .= $item['title'];
-                $this->_active_item = $selected_key;
-                $this->_breadcrumbs[] = array('title'=>$item['title'],'url'=>$item['url']);
-                if( $item['parent'] != -1 ) {
-                    $parent = $item['parent'];
-                    // walk up to the root.
-                    while( $parent != -1 ) {
-                        $this->_menuItems[$parent]['selected'] = TRUE;
-                        $this->_breadcrumbs[] = array('title'=>$this->_menuItems[$parent]['title'],
-                                                      'url'=>$this->_menuItems[$parent]['url']);
-                        $parent = $this->_menuItems[$parent]['parent'];
-                    }
-                }
-                $this->_breadcrumbs = array_reverse($this->_breadcrumbs);
+        // fix up url keys on any url.
+        foreach( $this->_menuItems as $sectionKey => $sectionArray ) {
+            if( isset($sectionArray['url']) && (!isset($sectionArray['type']) || $sectionArray['type'] != 'external' )) {
+                $this->_menuItems[$sectionKey]['url'] = $this->_fix_url_userkey($this->_menuItems[$sectionKey]['url']);
             }
         }
+
+        $this->_SetActiveMenuItem();
 
 		// fix subtitle, if any
 		if ($subtitle != '') $this->_title .= ': '.$subtitle;
 
-        $data = base64_encode(serialize($this->_menuItems));
-        \cms_cache_handler::get_instance()->set('adminnav'.$uid,$data);
 		debug_buffer('after populate admin navigation');
         return $this->_menuitems;
     }
