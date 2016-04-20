@@ -630,8 +630,11 @@ abstract class CmsAdminThemeBase
 			if( !$found ) unset($this->_menuItems[$oneparent]);
 		}
 
-        if( isset($sectionArray['url']) && (!isset($sectionArray['type']) || $sectionArray['type'] != 'external' )) {
-            $this->_menuItems[$sectionKey]['url'] = $this->_fix_url_userkey($this->_menuItems[$sectionKey]['url']);
+        // fix up url keys on any url.
+        foreach( $this->_menuItems as $sectionKey => $sectionArray ) {
+            if( isset($sectionArray['url']) && (!isset($sectionArray['type']) || $sectionArray['type'] != 'external' )) {
+                $this->_menuItems[$sectionKey]['url'] = $this->_fix_url_userkey($this->_menuItems[$sectionKey]['url']);
+            }
         }
 
 		// sort the menu items by root level, system, priority, and then name (case insensitive)
