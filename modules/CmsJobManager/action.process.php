@@ -77,10 +77,7 @@ try {
     $this->clear_bad_jobs();
 
     $jobs = $this->get_jobs();
-    if( !is_array($jobs) || !count($jobs) ) {
-        debug_to_log('got no jobs');
-        return; // nothing to do.
-    }
+    if( !is_array($jobs) || !count($jobs) ) return; // nothing to do.
 
     $time_limit = (int) $config['cmsjobmanager_timelimit'];
     if( !$time_limit ) $time_limit = (int) ini_get('max_execution_time');

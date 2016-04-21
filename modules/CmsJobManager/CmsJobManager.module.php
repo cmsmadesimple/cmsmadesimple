@@ -66,10 +66,6 @@ final class CmsJobManager extends \CMSModule
     {
         $this->RegisterModulePlugin();
         $this->RestrictUnknownParams();
-
-        \CGSmartNav\smarty_plugins::init();
-        $this->SetParameterType('nav',CLEAN_STRING);
-        $this->SetParameterType('template',CLEAN_STRING);
     }
 
     public function GetEventHelp( $name )
