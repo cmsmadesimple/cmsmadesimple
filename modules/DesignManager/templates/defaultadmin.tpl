@@ -24,7 +24,7 @@ $(document).ready(function(){
 
 {if $manage_templates}
 	{tab_header name='types' label=$mod->Lang('prompt_templatetypes')}
-	{*tab_header name='categories' label=$mod->Lang('prompt_categories')*}
+	{tab_header name='categories' label=$mod->Lang('prompt_categories')}
 {/if}
 
 {* templates tab displayed at all times*}
@@ -44,8 +44,8 @@ $(document).ready(function(){
 {if $manage_templates}
 	{tab_start name='types'}
 	{include file='module_file_tpl:DesignManager;admin_defaultadmin_types.tpl' scope='root'}
-	{*tab_start name='categories'}
-	{include file='module_file_tpl:DesignManager;admin_defaultadmin_categories.tpl' scope='root'*}
+	{tab_start name='categories'}
+	{include file='module_file_tpl:DesignManager;admin_defaultadmin_categories.tpl' scope='root'}
 {/if}
 
 {tab_end}

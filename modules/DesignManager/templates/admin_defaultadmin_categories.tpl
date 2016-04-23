@@ -30,9 +30,13 @@ $(document).ready(function () {
 });
 </script>
 
-<div class="pagewarning" style="display: block;">{$mod->Lang('warning_category_dragdrop')}</div>
+{if count($list_categories) > 1}
+  <div class="pagewarning" style="display: block;">{$mod->Lang('warning_category_dragdrop')}</div>
 {/if}
 
+{/if}
+
+<div class="information">{$mod->lang('info_about_categories')}</div>
 <div class="pagecontainer">
 	{cms_action_url action='admin_edit_category' assign='url'}
 	<a id="addcategory" href="{$url}" title="{$mod->Lang('create_category')}">{admin_icon icon='newobject.gif'} {$mod->Lang('create_category')}</a>

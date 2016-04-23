@@ -264,6 +264,7 @@ $lang['help_type_reqcontentblocks'] = 'This field indicates whether templates of
 $lang['import_design'] = 'Import Design';
 $lang['import_design_step1'] = 'Import Design Step 1';
 $lang['import_design_step2'] = 'Import Design Step 2';
+$lang['info_about_categories'] = 'Categories provide an additional, useful method of sorting and organizing templates.  A template can belong to multiple categories and filtering on categories is permitted in the template list.  Examples of categories may include &quot;landing page templates&quot; or &quot;base templates&quot; when utilizing template inheritance.';
 $lang['info_copy_css'] = '<strong>Note:</strong><br />Copying a stylesheet will copy the stylesheet contents, as well as the description, media query, and media types.  However, the new stylesheet will not be associated with any designs';
 $lang['info_editcss_mediatype_tab'] = '<strong>Warning:</strong> This functionality is deprecated and will be removed at a later date.  If both the media type and media query are specified, then the media query will take preference when rendering stylesheets';
 $lang['info_editcss_mediaquery_tab'] = '<strong>Warning:</strong> If both the media type and media query are specified, then the media query will take preference when rendering stylesheets';
