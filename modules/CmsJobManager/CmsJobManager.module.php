@@ -42,6 +42,7 @@ use \CMSMS\Async\CronJobTrait;
 final class CmsJobManager extends \CMSModule
 {
     const LOCKPREF = 'lock';
+    const ASYNCFREQ_PREF = 'asyncfreq';
     const MANAGE_JOBS = 'Manage Jobs';
     const EVT_ONFAILEDJOB = 'OnJobFailed';
 
@@ -100,74 +101,6 @@ final class CmsJobManager extends \CMSModule
         $this->_current_job = $job;
     }
 
-    //////////////////////////////////////////////////////////////////////////
-    // THIS STUFF SHOULD PROBABLY GO INTO A TRAIT, or atleast an interface
-    //////////////////////////////////////////////////////////////////////////
-
-    protected function clear_bad_jobs()
-    {
-        $now = time();
-        $lastrun = (int) $this->GetPreference('last_badjob_run');
-        if( $lastrun + 3600 >= $now ) return; // hardcoded
-
-        $db = $this->GetDb();
-        $sql = 'SELECT * FROM '.self::table_name().' WHERE errors >= ?';
-        $list = $db->GetArray($sql,array(10));  // hardcoded
-        if( is_array($list) && count($list) ) {
-            $idlist = [];
-            foreach( $list as $row ) {
-                $obj = unserialize($row);
-                $obj->set_id($row['id']);
-                $idlist[] = (int) $row['id'];
-                $this->SendEvent($this::EVT_ONFAILEDJOB,array('job'=>$obj));
-            }
-            $sql = 'DELETE FROM '.self::table_name().' WHERE id IN ('.implode(',',$idlist).')';
-            $db->Execute($sql);
-            audit('',$this->GetName(),'Cleared '.count($idlist).' bad jobs');
-        }
-        $this->SetPreference('last_badjob_run',$now);
-    }
-
-    public function save_job(Job &$job)
-    {
-        $recurs = $until = null;
-        if( $this->job_recurs($job) ) {
-            $recurs = $job->frequency;
-            $until = $job->until;
-        }
-        $db = $this->GetDb();
-        if( !$job->id ) {
-            $sql = 'INSERT INTO '.self::table_name().' (name,created,module,errors,start,recurs,until,data) VALUES (?,?,?,?,?,?,?,?)';
-            $dbr = $db->Execute($sql,array($job->name,$job->created,$job->module,$job->errors,$job->start,$recurs,$until,serialize($job)));
-            $new_id = $db->Insert_ID();
-            $job->set_id($new_id);
-            return $new_id;
-        } else {
-            // note... we do not at any time play with the module, the data, or recus/until stuff for existing jobs.
-            $sql = 'UPDATE '.self::table_name().' SET start = ? WHERE id = ?';
-            $db->Execute($sql,array($job->start,$job->id));
-            return $job->id;
-        }
-    }
-
-    public function delete_job(Job &$job)
-    {
-        if( !$job->id ) throw new \LogicException('Cannot delete a job that has no id');
-        $db = $this->GetDb();
-        $sql = 'DELETE FROM '.self::table_name().' WHERE id = ?';
-        $db->Execute($sql,array($job->id));
-    }
-
-    public function is_processing()
-    {
-        return $this->_processing;
-    }
-
-    public function set_processing($flag)
-    {
-        $this->_processing = (bool) $flag;
-    }
-
     protected function lock()
     {
         $this->_lock = time();
@@ -183,14 +116,14 @@ final class CmsJobManager extends \CMSModule
     protected function lock_expired()
     {
         $this->_lock = (int) $this->GetPreference(self::LOCKPREF);
-        if( $this->_lock < time() - 180 ) return TRUE; // hardcoded, locks expire in 3 minutes
+        if( $this->_lock < time() - \CmsJobManager\utils::get_async_freq() ) return TRUE;
         return FALSE;
     }
 
     protected function check_for_jobs_or_tasks()
     {
         // this is cheaper.
-        $out = $this->get_jobs(1);
+        $out = \CmsJobManager\JobQueue::get_jobs(1);
         if( count($out) ) return TRUE;
 
         // gotta check for tasks, which is more expensive
@@ -255,70 +188,40 @@ final class CmsJobManager extends \CMSModule
         return $res;
     }
 
-    protected function get_jobs($check_only = FALSE)
+
+    //////////////////////////////////////////////////////////////////////////
+    // THIS STUFF SHOULD PROBABLY GO INTO A TRAIT, or atleast an interface
+    //////////////////////////////////////////////////////////////////////////
+
+
+    public function save_job(Job &$job)
     {
+        $recurs = $until = null;
+        if( \CmsJobManager\utils::job_recurs($job) ) {
+            $recurs = $job->frequency;
+            $until = $job->until;
+        }
         $db = $this->GetDb();
-        $now = time();
-        $limit = 100; // hardcoded.... should never be more than 100 jobs in the queue for a site.
-        if( $check_only ) $limit = 1;
-
-        if( !$limit ) $limit = 100;
-        $limit = max(1,(int)$limit);
-        $sql = 'SELECT * FROM '.self::table_name().' WHERE start < UNIX_TIMESTAMP() AND created < UNIX_TIMESTAMP() ORDER BY errors ASC,created ASC LIMIT ?';
-        $list = $db->GetArray($sql,array($limit));
-        if( !is_array($list) || count($list) == 0 ) return;
-        if( $check_only ) return TRUE;
-
-        $out = [];
-        foreach( $list as $row ) {
-            $obj = unserialize($row['data']);
-            $obj->set_id($row['id']);
-            $out[] = $obj;
+        if( !$job->id ) {
+            $sql = 'INSERT INTO '.self::table_name().' (name,created,module,errors,start,recurs,until,data) VALUES (?,?,?,?,?,?,?,?)';
+            $dbr = $db->Execute($sql,array($job->name,$job->created,$job->module,$job->errors,$job->start,$recurs,$until,serialize($job)));
+            $new_id = $db->Insert_ID();
+            $job->set_id($new_id);
+            return $new_id;
+        } else {
+            // note... we do not at any time play with the module, the data, or recus/until stuff for existing jobs.
+            $sql = 'UPDATE '.self::table_name().' SET start = ? WHERE id = ?';
+            $db->Execute($sql,array($job->start,$job->id));
+            return $job->id;
         }
-
-        return $out;
     }
 
-    protected function job_recurs(Job $job)
+    public function delete_job(Job &$job)
     {
-        if( ! $job instanceof \CMSMS\Async\CronJobInterface ) return FALSE;
-        if( $job->frequency == $job::RECUR_NONE ) return FALSE;
-        return TRUE;
-    }
-
-    protected function calculate_next_start_time(Job $job)
-    {
-        $out = null;
-        if( !$this->job_recurs($job) ) return $out;
-        switch( $job->frequency ) {
-        case $job::RECUR_NONE:
-            return $out;
-        case $job::RECUR_15M:
-            $out = $job->start + 15 * 60;
-            break;
-        case $job::RECUR_30M:
-            $out = $job->start + 30 * 60;
-            break;
-        case $job::RECUR_HOURLY:
-            $out = $job->start + 3600;
-            break;
-        case $job::RECUR_2H:
-            $out = $job->start + 2 * 3600;
-            break;
-        case $job::RECUR_3H:
-            $out = $job->start + 3 * 3600;
-            break;
-        case $job::RECUR_DAILY:
-            $out = $job->start + 3600 * 24;
-            break;
-        case $job::RECUR_WEEKLY:
-            $out = strtotime('+1 week',$job->start);
-            break;
-        case $job::RECUR_MONTHLY:
-            $out = strtotime('+1 month',$job->start);
-            break;
-        }
-        if( !$job->until || $out <= $job->until ) return $out;
+        if( !$job->id ) throw new \LogicException('Cannot delete a job that has no id');
+        $db = $this->GetDb();
+        $sql = 'DELETE FROM '.self::table_name().' WHERE id = ?';
+        $db->Execute($sql,array($job->id));
     }
 
     public function trigger_async_processing()
@@ -335,7 +238,7 @@ final class CmsJobManager extends \CMSModule
         // if we triggered the thing less than N minutes ago... do nothing
         $now = time();
         $last_trigger = (int) $this->GetPreference('last_async_trigger');
-        // if( $last_trigger >= $now - 180 ) return; // debug
+        if( $last_trigger >= $now - \CmsJobManager\utils::get_async_freq() ) return; // do nothing
 
         $jobs = $this->check_for_jobs_or_tasks();
         if( !count($jobs) ) return; // nothing to do.

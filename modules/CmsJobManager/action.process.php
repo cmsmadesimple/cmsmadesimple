@@ -73,17 +73,21 @@ function _cmsjobmgr_errorhandler()
 register_shutdown_function('_cmsjobmgr_errorhandler');
 
 try {
-    _cmsjobmgr_process_errors();
-    $this->clear_bad_jobs();
+    $now = time();
+    $last_run = (int) $this->GetPreference('last_processing');
+    if( $last_run >= $now - \CmsJobManager\utils::get_async_freq() ) return;
 
-    $jobs = $this->get_jobs();
+    _cmsjobmgr_process_errors();
+    \CmsJobManager\JobQueue::clear_bad_jobs();
+
+    $jobs = \CmsJobManager\JobQueue::get_jobs();
     if( !is_array($jobs) || !count($jobs) ) return; // nothing to do.
 
     $time_limit = (int) $config['cmsjobmanager_timelimit'];
     if( !$time_limit ) $time_limit = (int) ini_get('max_execution_time');
     $time_limit = max(30,min(1800,$time_limit)); // no stupid time limit values
     set_time_limit($time_limit);
-    $started_at = time();
+    $started_at = $now;
     if( $this->lock_expired() ) {
         debug_to_log($this->GetName().': Removing an expired lock (probably an error occurred)');
         audit('',$this->GetName(),'Removing an expired lock.. An error probably occurred with a previous job.');
@@ -97,12 +101,12 @@ try {
     $this->lock(); // get a new lock.
     foreach( $jobs as $job ) {
         // make sure we are not out of time.
-        if( time() - $time_limit >= $started_at ) break;
+        if( $now - $time_limit >= $started_at ) break;
         try {
             $this->set_current_job($job);
             $job->execute();
-            if( $this->job_recurs($job) ) {
-                $job->start = $this->calculate_next_start_time($job);
+            if( \CmsJobManager\utils::job_recurs($job) ) {
+                $job->start = \CmsJobManager\utils::calculate_next_start_time($job);
                 if( $job->start ) {
                     $this->errors = 0;
                     $this->save_job($job);
@@ -113,6 +117,7 @@ try {
                 $this->delete_job($job);
             }
             $this->set_current_job(null);
+            audit('','CmsJobManager','Finished Job '.$job->name);
         }
         catch( \Exception $e ) {
             $job = $this->get_current_job();
@@ -120,6 +125,7 @@ try {
         }
     }
     $this->unlock();
+    $this->GetPreference('last_processing',$now);
 }
 catch( \Exception $e ) {
     // some other error occurred, not processing jobs.
