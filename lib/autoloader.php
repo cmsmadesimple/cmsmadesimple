@@ -115,6 +115,15 @@ function cms_autoloader($classname)
         return;
     }
 
+    if( endswith($classname,'Task') ) {
+        $class = substr($classname,0,-4);
+        $fn = CMS_ROOT_PATH."/lib/tasks/class.{$class}.task.php";
+        if( is_file($fn) ) {
+            require_once($fn);
+            return;
+        }
+    }
+
     $list = ModuleOperations::get_instance()->GetLoadedModules();
     if( is_array($list) && count($list) ) {
         foreach( array_keys($list) as $modname ) {
@@ -122,6 +131,26 @@ function cms_autoloader($classname)
             if( is_file( $fn ) ) {
                 require_once($fn);
                 return;
+            }
+        }
+
+        // handle \ModuleName\<path>\Class
+        $tmp = ltrim(str_replace('\\','/',$classname),'/');
+        $p1 = strpos($tmp,'/');
+        if( $p1 !== FALSE ) {
+            $modname = substr($tmp,0,strpos($tmp,'/'));
+            $tmp = substr($tmp,$p1+1);
+            if( isset($list[$modname]) ) {
+                $p2 = strrpos($tmp,'/');
+                $class = basename($tmp);
+                $path = substr($tmp,0,$p2);
+                $fn = CMS_ROOT_PATH."/modules/$modname/lib/";
+                if( $path ) $fn .= $path.'/';
+                $fn .= "class.$class.php";
+                if( is_file($fn) ) {
+                    require_once($fn);
+                    return;
+                }
             }
         }
     }
