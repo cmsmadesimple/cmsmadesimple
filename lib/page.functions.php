@@ -31,14 +31,14 @@
  * Gets the userid of the currently logged in user.
  *
  * @since 0.1
- * @param  boolean $check Redirect to the admin login page if the user is not logged in.
+ * @param  boolean $redirect Redirect to the admin login page if the user is not logged in.
  * @return integer The UID of the logged in administrator, otherwise FALSE
  */
-function get_userid($check = true)
+function get_userid($redirect = true)
 {
     $login_ops = \CMSMS\LoginOperations::get_instance();
     $uid = $login_ops->get_loggedin_uid();
-    if( !$uid && $check ) {
+    if( !$uid && $redirect ) {
         $config = \cms_config::get_instance();
         redirect($config['admin_url']."/login.php");
     }
