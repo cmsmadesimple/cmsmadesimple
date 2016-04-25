@@ -446,12 +446,13 @@ class Smarty_CMS extends SmartyBC
     $this->force_compile = true;
 
     # do not show smarty debug console popup to users not logged in
-    //$this->debugging = check_login(true);;
+    //$this->debugging = get_userid(FALSE);
 
     $this->assign('e_line', $e->getLine());
     $this->assign('e_file', $e->getFile());
     $this->assign('e_message', $e->getMessage());
     $this->assign('e_trace', htmlentities($e->getTraceAsString()));
+    $this->assign('loggedin',get_userid(FALSE));
 
     // put mention into the admin log
     audit('', 'An error has occurred', substr( $e->getMessage(),0 ,200 ) );
