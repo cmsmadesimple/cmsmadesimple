@@ -436,6 +436,7 @@ $lang['prompt_with_selected'] = 'With Selected';
 
 
 #R
+$lang['reset'] = 'Reset';
 $lang['reset_factory'] = 'Reset to Factory Defaults';
 $lang['remove'] = 'Remove';
 

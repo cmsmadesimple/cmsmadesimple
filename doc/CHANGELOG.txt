@@ -26,8 +26,10 @@ DesignManager
 - Implement sorting in edit design.
 - Remove option menus (for now) from templates, stylesheets, and designs tab.
 - Modify the template list functionality in edit-design to allow using keyboard control.   space or + to select an item on the left, and right arrow to move
+- Modify the edit-design functionality to allow clicking on an attached template or stylesheet to edit it.
 - Generic templates now display a usage string.
 - When creating a new template, associate the new template with the default design.
+- Add reset buttons to the filter forms.
 
 News v2.50.5
 - Minor fix to add category.
