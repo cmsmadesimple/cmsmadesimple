@@ -528,11 +528,11 @@ function preprocess_mact($returnid)
     if( !$module_obj ) {
         // module not found... couldn't even autoload it.
         @trigger_error('Attempt to access module '.$module.' which could not be found (is it properly installed and configured?');
-        throw new \CmsError404Exception('Attempt to access module '.$modulename.' which could not be found (is it properly installed and configured?');
+        throw new \CmsError404Exception('Attempt to access module '.$module.' which could not be found (is it properly installed and configured?');
     }
     if( !$module_obj->IsPluginModule() ) {
         @trigger_error('Attempt to access module '.$module.' on a frontend request, which is not a plugin module');
-        throw new \CmsError404Exception('Attempt to access module '.$modulename.' which could not be found (is it properly installed and configured?');
+        throw new \CmsError404Exception('Attempt to access module '.$module.' which could not be found (is it properly installed and configured?');
     }
 
     $smarty = \Smarty_CMS::get_instance();
