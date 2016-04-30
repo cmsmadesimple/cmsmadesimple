@@ -133,6 +133,18 @@ if( count($types) ) {
 			$originators['o:'.$types[$i]->get_originator()] = $types[$i]->get_originator(TRUE);
 		}
     }
+    usort($tmp3,function($a,$b){
+            // core always beets alphabetic type
+            // then sort by originator and then name.
+            $ao = $a->get_originator();
+            $bo = $b->get_originator();
+            if( $ao == $a::CORE && $bo ==  $a::CORE ) return strcasecmp($a->get_name(),$b->get_name());
+            if( $ao == $a::CORE ) return -1;
+            if( $bo == $b::CORE ) return 1;
+            $r = strcasecmp($ao,$bo);
+            if( $r != 0 ) return $r;
+            return strcasecmp($a->get_name(),$b->get_name());
+        });
     $smarty->assign('list_all_types',$tmp3);
     $smarty->assign('list_types',$tmp2);
     $opts[$this->Lang('tpl_types')] = $tmp;
