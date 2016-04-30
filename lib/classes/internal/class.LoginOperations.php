@@ -134,6 +134,8 @@ final class LoginOperations
 
         // validate the key in the request against what we have in the session.
         if( $v != $_SESSION[CMS_USER_KEY] ) {
+            debug_display($v,strlen($v));
+            debug_display($_SESSION[CMS_USER_KEY],strlen($_SESSION[CMS_USER_KEY])); die();
             $config = \cms_config::get_instance();
             if( !isset($config['stupidly_ignore_xss_vulnerability']) ) return FALSE;
         }

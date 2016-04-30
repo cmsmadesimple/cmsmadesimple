@@ -101,6 +101,19 @@ final class CmsJobManager extends \CMSModule
         $this->_current_job = $job;
     }
 
+    protected function is_locked()
+    {
+        $this->_lock = (int) $this->GetPreference(self::LOCKPREF);
+        return ($this->_lock > 0);
+    }
+
+    protected function lock_expired()
+    {
+        $this->_lock = (int) $this->GetPreference(self::LOCKPREF);
+        if( $this->_lock && $this->_lock < time() - \CmsJobManager\utils::get_async_freq() ) return TRUE;
+        return FALSE;
+    }
+
     protected function lock()
     {
         $this->_lock = time();
@@ -111,13 +124,6 @@ final class CmsJobManager extends \CMSModule
     {
         $this->_unlock = null;
         $this->RemovePreference(self::LOCKPREF);
-    }
-
-    protected function lock_expired()
-    {
-        $this->_lock = (int) $this->GetPreference(self::LOCKPREF);
-        if( $this->_lock < time() - \CmsJobManager\utils::get_async_freq() ) return TRUE;
-        return FALSE;
     }
 
     protected function check_for_jobs_or_tasks()
@@ -247,6 +253,7 @@ final class CmsJobManager extends \CMSModule
         $url_str = html_entity_decode($this->create_url('__','process',$_returnid));
         $url_ob = new \cms_url($url_str);
         $url_ob->set_queryvar('cms_cron',1);
+        $url_ob->set_queryvar('showtemplate','false');
         $scheme = $url_ob->get_scheme();
         if( !$scheme ) {
             $url_ob->set_scheme('http');
@@ -259,10 +266,10 @@ final class CmsJobManager extends \CMSModule
         }
 
         $endpoint = $url_ob->get_path();
-        $query = $url_ob->get_query();
+        $query = urldecode($url_ob->get_query());
         if( $query ) $endpoint .= '?'.$query;
-        $post_string = $url_ob->get_query();
-        $out = "GET: ".$endpoint." HTTP/1.1\r\n";
+        $post_string = $query;
+        $out = "GET ".$endpoint." HTTP/1.1\r\n";
         $out .= 'Host: '.$url_ob->get_host()."\r\n";
         $out .= "Connection: Close\r\n\r\n";  // two lines
 

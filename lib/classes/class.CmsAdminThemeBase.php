@@ -1273,7 +1273,6 @@ abstract class CmsAdminThemeBase
 						continue;
 					}
 
-					//$opts['&nbsp;&nbsp;'.$menuChild['title']] = cms_htmlentities($menuChild['url']);
 					$url = $menuChild['url'];
 					$url = CmsAdminUtils::get_generic_url($url);
 					$opts['&nbsp;&nbsp;'.$menuChild['title']] = $url;

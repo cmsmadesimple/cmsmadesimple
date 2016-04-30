@@ -16,6 +16,11 @@ Core - General
 - Refactor admin authentication.
 - More fixes to the cms_url class
 - Optimize the include.php file
+- Adds built-in asynchronous task processing system
+- Adds the ability to reduce redundant mentions in the admin log (runs asynchronously)
+
+CmsJobManager
+- New core module to handle queued asynchronous tasks.
 
 Content Manager
 - Minor tweak to bulk delete pages.
@@ -90,7 +95,7 @@ Installation Assistant v1.0.3.1
 
 =======
   - Fix some PHP7 issues.
-  
+
 >>>>>>> .merge-right.r10552
 FileManager
   - #10871 - Filemanager moving folder
