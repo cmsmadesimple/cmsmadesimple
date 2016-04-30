@@ -7,3 +7,4 @@ $dict->ExecuteSQLArray($sqlarray);
 
 $this->RemovePermission(\CmsJobManager::MANAGE_JOBS);
 $this->RemoveEvent(\CmsJobManager::EVT_ONFAILEDJOB);
+$this->RemoveEventHandler('Core','ModuleUninstalled');

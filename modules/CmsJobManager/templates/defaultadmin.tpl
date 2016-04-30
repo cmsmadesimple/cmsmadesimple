@@ -19,7 +19,7 @@
     {foreach $jobs as $job}
       <tr class="{cycle values='row1,row2'}">
         <td>{$job->name}</td>
-	<td>{$job->module}</td>
+	<td>{$job->module|default:''}</td>
 	<td>{$job->frequency}</td>
 	<td>{$job->created|relative_time}</td>
 	<td>{$job->start|relative_time}</td>

@@ -21,7 +21,7 @@ final class utils
         return TRUE;
     }
 
-    public static function calculate_next_start_time(Job $job)
+    public static function calculate_next_start_time(\CMSMS\Async\CronJob $job)
     {
         $out = null;
         if( !self::job_recurs($job) ) return $out;

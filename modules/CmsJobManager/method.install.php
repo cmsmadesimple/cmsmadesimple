@@ -3,6 +3,7 @@ if( !isset($gCms) ) exit;
 
 $this->CreatePermission(\CmsJobManager::MANAGE_JOBS,\CmsJobManager::MANAGE_JOBS);
 $this->CreateEvent(\CmsJobManager::EVT_ONFAILEDJOB);
+$this->AddEventHandler('Core','ModuleUninstalled',FALSE);
 
 $taboptarray = array('mysql' => 'TYPE=MyISAM');
 $dict = NewDataDictionary($db);

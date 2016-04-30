@@ -48,6 +48,7 @@ final class CmsJobManager extends \CMSModule
 
     private $_current_job;
     private $_lock;
+    public static function table_name() { return cms_db_prefix().'mod_cmsjobmgr'; }
 
     function GetFriendlyName() { return $this->Lang('friendlyname'); }
     function GetVersion() { return '0.1'; }
@@ -61,7 +62,7 @@ final class CmsJobManager extends \CMSModule
     function LazyLoadFrontend() { return FALSE; }
     function LazyLoadAdmin() { return FALSE; }
     function VisibleToAdminUser() { return $this->CheckPermission(\CmsJobManager::MANAGE_JOBS); }
-    public static function table_name() { return cms_db_prefix().'mod_cmsjobmgr'; }
+    public function HandlesEvents() { return TRUE; }
 
     public function InitializeFrontend()
     {
@@ -199,7 +200,6 @@ final class CmsJobManager extends \CMSModule
     // THIS STUFF SHOULD PROBABLY GO INTO A TRAIT, or atleast an interface
     //////////////////////////////////////////////////////////////////////////
 
-
     public function save_job(Job &$job)
     {
         $recurs = $until = null;
@@ -228,6 +228,16 @@ final class CmsJobManager extends \CMSModule
         $db = $this->GetDb();
         $sql = 'DELETE FROM '.self::table_name().' WHERE id = ?';
         $db->Execute($sql,array($job->id));
+    }
+
+    public function delete_jobs_by_module($module_name)
+    {
+        $module_name = trim($module_name);
+        if( !$module_name ) throw new \LogicException('Invalid module name passed to '.__METHOD__);
+
+        $db = $this->GetDb();
+        $sql = 'DELETE FROM '.self::table_name().' WHERE module = ?';
+        $db->Execute($sql,array($module_name));
     }
 
     public function trigger_async_processing()
