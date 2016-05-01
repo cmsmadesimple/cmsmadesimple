@@ -455,7 +455,7 @@ class Smarty_CMS extends SmartyBC
     $this->assign('loggedin',get_userid(FALSE));
 
     // put mention into the admin log
-    audit('', 'An error has occurred', substr( $e->getMessage(),0 ,200 ) );
+    audit('', 'Smarty Error', substr( $e->getMessage(),0 ,200 ) );
 
     $output = $this->fetch('cmsms-error-console.tpl');
 
