@@ -867,6 +867,7 @@ $lang['files_not_found'] = "Files Not found";
 $lang['file_get_contents'] = "Test file_get_contents";
 $lang['file_uploads'] = "File uploads";
 $lang['file_url'] = "Link to file (instead of URL)";
+$lang['filter'] = 'Filter';
 $lang['filteraction'] = "Action contains";
 $lang['filterapplied'] = "Current Filter";
 $lang['filterapply'] = "Apply filters";
@@ -1048,6 +1049,7 @@ $lang['ip_addr'] = "IP Address";
 $lang['irc'] = "IRC";
 $lang['itemid'] = "Item ID";
 $lang['itemname'] = "Item Name";
+$lang['item_name_contains'] = 'Item Name Contains';
 $lang['itsbeensincelogin'] = "It has been %s since you last logged in";
 
 ## J
@@ -1331,6 +1333,7 @@ $lang['remove'] = "Remove";
 //$lang['removecssassociation'] = "Remove Stylesheet Association";
 $lang['reorder'] = "Reorder";
 $lang['reorderpages'] = "Reorder Pages";
+$lang['reset'] = 'Reset';
 $lang['results'] = "Results";
 $lang['revert'] = "Revert all changes";
 $lang['root'] = "Root";

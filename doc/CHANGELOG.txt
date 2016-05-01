@@ -18,6 +18,7 @@ Core - General
 - Optimize the include.php file
 - Adds built-in asynchronous task processing system
 - Adds the ability to reduce redundant mentions in the admin log (runs asynchronously)
+- Refactor the adminlog page to allow for better filtering and pagination.
 
 CmsJobManager
 - New core module to handle queued asynchronous tasks.
