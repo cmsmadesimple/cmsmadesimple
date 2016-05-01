@@ -193,10 +193,11 @@ final class UserTagOperations
 			$new_usertag_id = $db->GenID(CMS_DB_PREFIX."userplugins_seq");
 			$query = "INSERT INTO ".CMS_DB_PREFIX."userplugins (userplugin_id, userplugin_name, code, description, create_date, modified_date) VALUES (?,?,?,?,".$db->DBTimeStamp(time()).",".$db->DBTimeStamp(time()).")";
 			$result = $db->Execute($query, array($new_usertag_id, $name, $text, $description));
-			if ($result)
-				return true;
-			else
-				return false;
+			if ($result) {
+                \CMSMS\internal\global_cache::clear(__CLASS__);
+                return true;
+            }
+            return false;
 		}
 		else {
 			$this->_cache = array(); // reset the cache.
@@ -209,7 +210,10 @@ final class UserTagOperations
 			$query .= ', modified_date = '.$db->DBTimeStamp(time()).' WHERE userplugin_name = ?';
 			$parms[] = $name;
 			$result = $db->Execute($query, $parms);
-			if ($result) return true;
+			if ($result) {
+                \CMSMS\internal\global_cache::clear(__CLASS__);
+                return true;
+            }
 			return false;
 		}
 	}
@@ -230,7 +234,10 @@ final class UserTagOperations
 		$result = &$db->Execute($query, array($name));
 
 		$this->_cache = array();
-		if ($result) return true;
+		if ($result) {
+            \CMSMS\internal\global_cache::clear(__CLASS__);
+            return true;
+        }
 
 		return false;
 	}
