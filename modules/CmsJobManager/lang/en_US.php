@@ -1,4 +1,5 @@
 <?php
+$lang['info_background_jobs'] = 'This panel lists information about all currently known background jobs.  It is normal for jobs to appear and disappear on this list frequently.  If a jub has a high error count OR never started it may mean that you need to investigate the reasons for that error.';
 $lang['until'] = 'Until';
 $lang['info_no_jobs'] = 'There are currently no jobs in the queue';
 $lang['frequency'] = 'Frequency';
