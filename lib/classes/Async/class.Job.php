@@ -54,6 +54,7 @@ abstract class Job
             $this->$tkey = trim($val);
             break;
 
+        case 'start':
         case 'errors':
             $this->$tkey = (int) $val;
             break;

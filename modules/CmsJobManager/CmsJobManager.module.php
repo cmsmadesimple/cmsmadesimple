@@ -228,6 +228,7 @@ final class CmsJobManager extends \CMSModule
         $db = $this->GetDb();
         $sql = 'DELETE FROM '.self::table_name().' WHERE id = ?';
         $db->Execute($sql,array($job->id));
+        debug_to_log($db->sql);
     }
 
     public function delete_jobs_by_module($module_name)
@@ -238,6 +239,7 @@ final class CmsJobManager extends \CMSModule
         $db = $this->GetDb();
         $sql = 'DELETE FROM '.self::table_name().' WHERE module = ?';
         $db->Execute($sql,array($module_name));
+        debug_to_log($db->sql);
     }
 
     public function trigger_async_processing()

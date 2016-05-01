@@ -24,35 +24,37 @@ final class utils
     public static function calculate_next_start_time(\CMSMS\Async\CronJob $job)
     {
         $out = null;
+        $now = time();
         if( !self::job_recurs($job) ) return $out;
         switch( $job->frequency ) {
         case $job::RECUR_NONE:
             return $out;
         case $job::RECUR_15M:
-            $out = $job->start + 15 * 60;
+            $out = $now + 15 * 60;
             break;
         case $job::RECUR_30M:
-            $out = $job->start + 30 * 60;
+            $out = $now + 30 * 60;
             break;
         case $job::RECUR_HOURLY:
-            $out = $job->start + 3600;
+            $out = $now + 3600;
             break;
         case $job::RECUR_2H:
-            $out = $job->start + 2 * 3600;
+            $out = $now + 2 * 3600;
             break;
         case $job::RECUR_3H:
-            $out = $job->start + 3 * 3600;
+            $out = $now + 3 * 3600;
             break;
         case $job::RECUR_DAILY:
-            $out = $job->start + 3600 * 24;
+            $out = $now + 3600 * 24;
             break;
         case $job::RECUR_WEEKLY:
-            $out = strtotime('+1 week',$job->start);
+            $out = strtotime('+1 week',$now);
             break;
         case $job::RECUR_MONTHLY:
-            $out = strtotime('+1 month',$job->start);
+            $out = strtotime('+1 month',$now);
             break;
         }
+        debug_to_log("adjusted to {$out} -- {$now} // {$job->until}");
         if( !$job->until || $out <= $job->until ) return $out;
     }
 

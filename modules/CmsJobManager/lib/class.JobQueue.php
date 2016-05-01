@@ -11,6 +11,28 @@ final class JobQueue
         return self::get_jobs(TRUE);
     }
 
+    public static function get_all_jobs()
+    {
+        $db = \CmsApp::get_instance()->GetDb();
+
+        $now = time();
+        $limit = 50; // hardcoded.... should never be more than 100 jobs in the queue for a site.
+
+        $sql = 'SELECT * FROM '.\CmsJobManager::table_name().' WHERE created < UNIX_TIMESTAMP() ORDER BY created ASC LIMIT ?';
+        $list = $db->GetArray($sql,array($limit));
+        if( !is_array($list) || count($list) == 0 ) return;
+
+        $out = [];
+        foreach( $list as $row ) {
+            $obj = unserialize($row['data']);
+            $obj->set_id($row['id']);
+            $obj->start = $row['start']; // in case this job was modified.
+            $out[] = $obj;
+        }
+
+        return $out;
+    }
+
     public static function get_jobs($check_only = fALSE)
     {
         $db = \CmsApp::get_instance()->GetDb();
@@ -28,6 +50,7 @@ final class JobQueue
         foreach( $list as $row ) {
             $obj = unserialize($row['data']);
             $obj->set_id($row['id']);
+            $obj->start = $row['start']; // in case this job was modified.
             $out[] = $obj;
         }
 
@@ -60,6 +83,7 @@ final class JobQueue
             }
             $sql = 'DELETE FROM '.\CmsJobManager::table_name().' WHERE id IN ('.implode(',',$idlist).')';
             $db->Execute($sql);
+            debug_to_log($db->sql);
             audit('',$mod->GetName(),'Cleared '.count($idlist).' bad jobs');
         }
         $mod->SetPreference('last_badjob_run',$now);

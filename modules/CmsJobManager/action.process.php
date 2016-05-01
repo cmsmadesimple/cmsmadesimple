@@ -84,8 +84,6 @@ try {
     $jobs = \CmsJobManager\JobQueue::get_jobs();
     if( !is_array($jobs) || !count($jobs) ) return; // nothing to do.
 
-    debug_to_log(__FILE__);
-    debug_to_log($jobs,'JOBS');
     if( $this->is_locked() ) {
         if( $this->lock_expired() ) {
             debug_to_log($this->GetName().': Removing an expired lock (probably an error occurred)');
@@ -112,18 +110,23 @@ try {
             $this->set_current_job($job);
             $job->execute();
             if( \CmsJobManager\utils::job_recurs($job) ) {
+                debug_to_log('adjusting start time');
                 $job->start = \CmsJobManager\utils::calculate_next_start_time($job);
                 if( $job->start ) {
+                    debug_to_log('saving job '.$job->name);
+                    debug_to_log('starts in '.($job->start - $now).' seconds');
                     $this->errors = 0;
                     $this->save_job($job);
                 } else {
+                    debug_to_log('deleting job '.$job->name);
                     $this->delete_job($job);
                 }
             } else {
+                debug_to_log('deleting job 2 '.$job->name);
                 $this->delete_job($job);
             }
             $this->set_current_job(null);
-            audit('','CmsJobManager','Finished Job '.$job->name);
+            audit('','CmsJobManager','Processed Job '.$job->name);
         }
         catch( \Exception $e ) {
             $job = $this->get_current_job();
