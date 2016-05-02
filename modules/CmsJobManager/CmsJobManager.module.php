@@ -145,7 +145,6 @@ final class CmsJobManager extends \CMSModule
 
     protected function create_jobs_from_eligible_tasks()
     {
-        debug_to_log(strftime('%x %X').' - testing to see if we have any tasks');
         // this creates jobs out of CmsRegularTask objects that we find,and that need to be executed.
         $now = time();
         $res = false;
@@ -229,7 +228,6 @@ final class CmsJobManager extends \CMSModule
         $db = $this->GetDb();
         $sql = 'DELETE FROM '.self::table_name().' WHERE id = ?';
         $db->Execute($sql,array($job->id));
-        debug_to_log($db->sql);
     }
 
     public function delete_jobs_by_module($module_name)
@@ -240,7 +238,6 @@ final class CmsJobManager extends \CMSModule
         $db = $this->GetDb();
         $sql = 'DELETE FROM '.self::table_name().' WHERE module = ?';
         $db->Execute($sql,array($module_name));
-        debug_to_log($db->sql);
     }
 
     public function trigger_async_processing()

@@ -94,7 +94,6 @@ final class JobQueue
             }
             $sql = 'DELETE FROM '.\CmsJobManager::table_name().' WHERE id IN ('.implode(',',$idlist).')';
             $db->Execute($sql);
-            debug_to_log($db->sql);
             audit('',$mod->GetName(),'Cleared '.count($idlist).' bad jobs');
         }
         $mod->SetPreference('last_badjob_run',$now);
