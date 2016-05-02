@@ -514,8 +514,8 @@
             OE.helper.setStorageValue('sidebar-pref', 'sidebar-off', 60);
         },
 
-	_handleAlert : function() {
-		var _row = $(this).closest('.alert-box');
+	_handleAlert : function(target) {
+    	        var _row = $(target).closest('.alert-box');
 		var _alert_name = _row.data('alert-name');
 		if( ! _alert_name ) return;
 		return $.ajax({
@@ -536,7 +536,7 @@
 		}).fail(function(xhr,status,msg){
 		    console.debug('problem deleting an alert: '+msg);
 		})
-	}
+	},
 
 
 	/**
@@ -545,15 +545,16 @@
          * @function _showAlerts()
          */
 	setupAlerts : function() {
+            var _this = this;
 	    $('.alert-msg a').click(function(ev){
 		ev.preventDefault();
-		_this._handleAlert().done(function(){
+		OE.view.handleAlert(ev.target).done(function(){
 		    return true;
 		})
 	    })
 	    $('.alert-icon,.alert-remove').click(function(ev){
 		ev.preventDefault();
-		_this._handleAlert();
+		_this._handleAlert(ev.target);
 	    })
 	},
     };

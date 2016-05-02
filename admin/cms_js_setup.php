@@ -30,6 +30,7 @@ $config = \cms_config::get_instance();
 
 $data = array();
 $data['ajax_help_url'] = 'ajax_help.php'.$urlext;
+$data['ajax_alerts_url'] = 'ajax_alerts.php'.$urlext;
 $data['title_help'] = lang('help');
 $data['lang_alert'] = lang('alert');
 $data['lang_error'] = lang('error');
