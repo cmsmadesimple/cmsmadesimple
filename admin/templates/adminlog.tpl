@@ -17,12 +17,12 @@ $(document).ready(function(){
     <div id="adminlog_filters" style="display: none;" title="{lang('filter')}">
         <form id="adminlog_filter" method="post" action="adminlog.php?{$SECURE_PARAM_NAME}={$CMS_USER_KEY}">
           <div class="c_full">
-            <label>{lang('item_name_contains')}</label>
+            <label>{$langfilteraction}</label>
             <input type="text" name="filteraction" value="{$filter->action}" class="grid_10"/>
 	    <div class="clearb"></div>
           </div>
           <div class="c_full">
-            <label>{$langfilteraction}</label>
+            <label>{lang('item_name_contains')}</label>
             <input type="text" name="filteritem" value="{$filter->item_name}" class="grid_10"/>
 	    <div class="clearb"></div>
           </div>

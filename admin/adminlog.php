@@ -77,7 +77,7 @@ if (check_permission($userid, 'Modify Site Preferences')) {
     $from = ($page-1) * $limit;
     $orig_filter = new StdClass;
     $orig_filter->user = $orig_filter->action = $orig_filter->item_name = null;
-    $filter = $orig_filter;
+    $filter = clone $orig_filter;
     if( !empty($_SESSION['adminlog_filter']) ) $_filter = $_SESSION['adminlog_filter'];
 
     // handle filtering dialog.
