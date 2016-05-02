@@ -884,6 +884,13 @@ final class ModuleOperations
                     }
                 }
 
+                $alerts = \CMSMS\AdminAlerta\alert::load_all();
+                if( count($alerts) ) {
+                    foreach( $alerts as $alert ) {
+                        if( $alert->module == $module ) $alert->delete();
+                    }
+                }
+
                 $db->Execute('DELETE FROM '.CMS_DB_PREFIX.'module_smarty_plugins where module=?',array($module));
                 $db->Execute('DELETE FROM '.CMS_DB_PREFIX."siteprefs WHERE sitepref_name LIKE '". str_replace("'",'',$db->qstr($module))."_mapi_pref%'");
                 $db->Execute('DELETE FROM '.CMS_DB_PREFIX.'routes WHERE key1 = ?',array($module));

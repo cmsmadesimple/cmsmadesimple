@@ -21,7 +21,7 @@
 		<![endif]-->
 		<!-- custom jQueryUI Theme 1.10.04 see link in UI Stylesheet for color reference //-->
 		<link rel="stylesheet" href="style.php?{$secureparam}" />
-		{cms_jquery append="`$config.admin_url`/themes/OneEleven/includes/standard.min.js" include_css=0}
+		{cms_jquery append="`$config.admin_url`/themes/OneEleven/includes/standard.js" include_css=0}
 		<link href="{$config.admin_url}/themes/OneEleven/css/default-cmsms/jquery-ui-1.10.4.custom.min.css" rel="stylesheet" />
 		<!-- THIS IS WHERE HEADER STUFF SHOULD GO -->
 	 	{$headertext|default:''}
@@ -65,11 +65,12 @@
 				</div>
 				<!-- start sidebar -->
 				<div id="oe_sidebar">
-					<aside>
-						{assign var='is_notifications' value=$theme->get_notifications()}
-						<span title="{'open'|lang}/{'close'|lang}" class="toggle-button close{if empty($is_notifications)} top{/if}">{'open'|lang}/{'close'|lang}</span>
+				  <aside>
+				    {$my_alerts=$theme->get_my_alerts()}
+						{$is_notifications=count($my_alerts)}
+						<span title="{'open'|lang}/{'close'|lang}" class="toggle-button close">{'open'|lang}/{'close'|lang}</span>
 						<!-- notifications -->
-						{include file='notifications.tpl' items=$theme->get_notifications()}
+						{include file='notifications.tpl' items=$my_alerts}
 							<!-- start navigation -->
 						{include file='navigation.tpl' nav=$theme->get_navigation_tree()}
 						<!-- end navigation //-->

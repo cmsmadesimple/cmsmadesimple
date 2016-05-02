@@ -269,5 +269,10 @@ class OneElevenTheme extends CmsAdminThemeBase {
 		$smarty->template_dir = $otd;
 		return $_contents;
 	}
+
+    public function get_my_alerts()
+    {
+        return \CMSMS\AdminAlerts\Alert::load_my_alerts();
+    }
 }
 ?>

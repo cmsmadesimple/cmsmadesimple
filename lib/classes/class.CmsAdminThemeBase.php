@@ -59,11 +59,6 @@ abstract class CmsAdminThemeBase
 	/**
 	 * @ignore
 	 */
-	private $_notifications;
-
-	/**
-	 * @ignore
-	 */
 	private $_breadcrumbs;
 
 	/**
@@ -1202,19 +1197,23 @@ abstract class CmsAdminThemeBase
 
 	/**
 	 * A public function to add a notification for display in the theme.
+     *
+     * This method no longer does anything.
 	 *
+	 * @deprecated
 	 * @param CmsAdminThemeNotification $notification A reference to the new notification
 	 */
 	public function add_notification(CmsAdminThemeNotification& $notification)
 	{
-		if( !is_array($this->_notifications) ) $this->_notifications = array();
-		$this->_notifications[] = $notification;
+        // do nothing
 	}
 
 	/**
 	 * A public function to add a notification for display in the theme.
 	 * This is simply a compatibility wrapper around the add_notification method.
 	 *
+     * This method no longer does anything.
+     *
 	 * @deprecated
 	 * @param int $priority priority level between 1 and 3
 	 * @param string $module The module name.
@@ -1222,22 +1221,20 @@ abstract class CmsAdminThemeBase
 	 */
 	public function AddNotification($priority,$module,$html)
 	{
-	  $notification = new CmsAdminThemeNotification;
-	  $notification->priority = max(1,min(3,$priority));
-	  $notification->module = $module;
-	  $notification->html = $html;
-	  $this->add_notification($notification);
+        // do nothing.
 	}
 
 
 	/**
 	 * Retrieve the current list of notifications.
 	 *
+     * This method no longer does anything.
+     *
 	 * @return Array Array of CmsAdminThemeNotification objects
 	 */
 	public function get_notifications()
 	{
-		return $this->_notifications;
+        // do nothing
 	}
 
 

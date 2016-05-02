@@ -3178,20 +3178,6 @@ abstract class CMSModule
         Events::SendEvent($this->GetName(), $eventname, $params);
     }
 
-    /**
-     * Returns the output the module wants displayed in the notification area
-     *
-     * @abstract
-     * @param int $priority Notification priority between 1 and 3
-     * @return mixed  A stdClass object with two properties.... priority (1->3)... and
-     * html, which indicates the text to display for the Notification.
-     * Also supports returning an array of stdclass objects.
-     */
-    public function GetNotificationOutput($priority=2)
-    {
-        return '';
-    }
-
 } // end of class
 
 

@@ -968,7 +968,7 @@ header .shortcuts li.favorites a {
 }
 #oe_sidebar nav.navigation {
 	height: auto;
-	margin-top: 45px;
+	padding-top: 45px;
 	position: relative
 }
 /* toggle sidebar */
@@ -981,7 +981,7 @@ header .shortcuts li.favorites a {
 	height: 25px;
 	position: absolute;
 	right: -1px;
-	top: 75px
+	top: 15px
 }
 #oe_sidebar .toggle-button.top {
 	top: -33px
@@ -1410,8 +1410,17 @@ img.systemicon {
 div.alert-dialog ul li {
 	margin: 10px 0
 }
+div.alert-dialog .alert-icon {
+    float: left;
+    cursor: pointer;
+    margin-right: 4px;
+}
+div.alert-dialog .alert-remove {
+    float: right;
+    cursor: pointer;
+    margin-left: 4px;
+}
 div.alert-dialog span.ui-icon {
-	float:left
 }
 div.dialog h3 {
 	margin:5px 0;

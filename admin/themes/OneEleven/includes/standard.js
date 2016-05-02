@@ -235,9 +235,7 @@
             var _this = this,
                 $sidebar_toggle = $('.toggle-button'), // object for sidebar toggle
                 $container = $('#oe_container'), // page container
-                $menu = $('#oe_pagemenu'), // page menu
-                $toggle_dropzone = $('.toggle-dropzone'), // dropzone toggle trigger
-                $dropzone = $('.pageheader'); // dropzone container
+                $menu = $('#oe_pagemenu'); // page menu
 
             // fix footer, breaks when max-width 1024 kicks in and there is less content then height of menu
             $('#oe_admin-content').css('min-height', ($('#oe_sidebar').height()));
@@ -253,14 +251,14 @@
                 }
             });
 
-            // trigger hide/reveal dropzone
-            _this.toggleDropzone($toggle_dropzone, $dropzone);
             // toggle hide/reveal menu children
             _this.toggleSubMenu($menu, 50);
             // handle notifications
             _this.showNotifications();
             // apply jQueryUI buttons
             _this.setUIButtons();
+	    // setup alert handlers
+	    _this.setupAlerts();
             // handle functions that need window resize
             _this.updateDisplay();
 
@@ -325,34 +323,6 @@
                     }
                 }
             });
-        },
-
-        /**
-         * @description Handles open/close state of FileManager dropzone in OneEleven theme
-         * @function toggleDropzone()
-         * @param {object} trigger - click event handler
-         * @param {object} obj
-         * @memberof OE.view
-         */
-        toggleDropzone : function(trigger, obj) {
-
-            trigger.click(function(e) {
-                e.preventDefault();
-
-                $('.drop-inner').toggleClass('hidden');
-
-                if ($('.drop-inner').hasClass('hidden')) {
-                    OE.helper.setStorageValue('dropzone-pref', 'hidden', 60);
-                } else {
-                    OE.helper.removeStorageValue('dropzone-pref');
-                }
-            });
-
-            if (OE.helper.getStorageValue('dropzone-pref') === 'hidden') {
-                $('.drop-inner').addClass('hidden');
-            } else {
-                $('.drop-inner').removeClass('hidden');
-            }
         },
 
         /**
@@ -544,5 +514,47 @@
             OE.helper.setStorageValue('sidebar-pref', 'sidebar-off', 60);
         },
 
+	_handleAlert : function() {
+		var _row = $(this).closest('.alert-box');
+		var _alert_name = _row.data('alert-name');
+		if( ! _alert_name ) return;
+		return $.ajax({
+		    method: 'POST',
+		    url:  cms_data.ajax_alerts_url,
+		    data: {
+			op: 'delete',
+			alert: _alert_name
+		    }
+		}).done(function(){
+		    _row.slideUp(1000);
+		    var _parent = _row.parent();
+		    if ( _parent.children().length <= 1 ) {
+  		        _row.closest('div.ui-dialog-content').dialog('close');
+			$('#admin-alerts').hide();
+		    }
+		    _row.remove();
+		}).fail(function(xhr,status,msg){
+		    console.debug('problem deleting an alert: '+msg);
+		})
+	}
+
+
+	/**
+         * @description Handles popping up the notification area
+         * @private
+         * @function _showAlerts()
+         */
+	setupAlerts : function() {
+	    $('.alert-msg a').click(function(ev){
+		ev.preventDefault();
+		_this._handleAlert().done(function(){
+		    return true;
+		})
+	    })
+	    $('.alert-icon,.alert-remove').click(function(ev){
+		ev.preventDefault();
+		_this._handleAlert();
+	    })
+	},
     };
 } )(this, jQuery);
