@@ -145,6 +145,7 @@ final class CmsJobManager extends \CMSModule
 
     protected function create_jobs_from_eligible_tasks()
     {
+        debug_to_log(strftime('%x %X').' - testing to see if we have any tasks');
         // this creates jobs out of CmsRegularTask objects that we find,and that need to be executed.
         $now = time();
         $res = false;

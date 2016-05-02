@@ -9,7 +9,7 @@ class Test1Cron extends CronJob
         parent::__construct();
         $this->module = 'CmsJobManager';
         $this->frequency = self::RECUR_HOURLY;
-        $this->until = strtotime('+1 week');
+        $this->until = strtotime('+1 day');
     }
 
     public function execute()

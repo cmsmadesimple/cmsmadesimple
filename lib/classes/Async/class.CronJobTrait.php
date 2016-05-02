@@ -112,7 +112,13 @@ trait CronJobTrait
             }
             break;
 
+        case 'force_start':
+            // internal use only.
+            $this->_data['start'] = (int) $val;
+            break;
+
         case 'start':
+            // this start overrides the one in the base class.
             $val = (int) $val;
             if( $val < time() - 60 ) throw new \LogicException('Cannot adjust a start value to the past');
             // fall through.

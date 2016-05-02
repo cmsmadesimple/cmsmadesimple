@@ -137,6 +137,11 @@ abstract class Job
             $this->$tkey = trim($val);
             break;
 
+        case 'force_start':
+            // internal use only.
+            $this->_start = (int) $val;
+            break;
+
         case 'start':
         case 'errors':
             $this->$tkey = (int) $val;

@@ -24,9 +24,13 @@ final class JobQueue
 
         $out = [];
         foreach( $list as $row ) {
+            if( !empty($row['module']) ) {
+                $mod = \cms_utils::get_module($row['module']);
+                if( !is_object($mod) ) throw new \RuntimeException('Job '.$row['name'].' requires module '.$row['module'].' That could not be loaded');
+            }
             $obj = unserialize($row['data']);
             $obj->set_id($row['id']);
-            $obj->start = $row['start']; // in case this job was modified.
+            $obj->force_start = $row['start']; // in case this job was modified.
             $out[] = $obj;
         }
 
@@ -48,9 +52,16 @@ final class JobQueue
 
         $out = [];
         foreach( $list as $row ) {
+            if( !empty($row['module']) ) {
+                $mod = \cms_utils::get_module($row['module']);
+                if( !is_object($mod) ) {
+                    audit('','CmsJobManager',sprintf('Could not load module %s required by job %s',$row['module'],$row['name']));
+                    continue;
+                }
+            }
             $obj = unserialize($row['data']);
             $obj->set_id($row['id']);
-            $obj->start = $row['start']; // in case this job was modified.
+            $obj->force_start = $row['start']; // in case this job was modified.
             $out[] = $obj;
         }
 
