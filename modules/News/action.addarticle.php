@@ -13,6 +13,7 @@ if (isset($params['cancel']))
  ---------------------*/
 
 $status       = 'draft';
+if ($this->CheckPermission('Approve News'))  $status = 'published';
 $userid       = get_userid();
 $postdate     = time();
 $startdate    = time();
@@ -32,8 +33,6 @@ if ($ndays == 0)
 
 $enddate      = strtotime(sprintf("+%d days", $ndays), time());
 
-if ($this->CheckPermission('Approve News'))
-    $status = 'published';
 
 if (isset($params['postdate_Month'])) {
     $postdate = mktime($params['postdate_Hour'], $params['postdate_Minute'], $params['postdate_Second'], $params['postdate_Month'], $params['postdate_Day'], $params['postdate_Year']);

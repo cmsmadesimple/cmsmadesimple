@@ -11,6 +11,7 @@ if (isset($params['cancel']))
 /*--------------------
  * Variables
  ---------------------*/
+if ($this->CheckPermission('Approve News'))  $status = 'published';
 
 $status       = 'draft';
 $postdate     = time();
@@ -20,16 +21,13 @@ $articleid    = isset($params['articleid']) ? $params['articleid'] : '';
 $content      = isset($params['content']) ? $params['content'] : '';
 $summary      = isset($params['summary']) ? $params['summary'] : '';
 $news_url     = isset($params['news_url']) ? $params['news_url'] : '';
-$status       = isset($params['status']) ? $params['status'] : $status;
 $usedcategory = isset($params['category']) ? $params['category'] : '';
 $author_id    = isset($params['author_id']) ? $params['author_id'] : '-1';
 $useexp       = isset($params['useexp']) ? 1: 0;
 $extra        = isset($params['extra']) ? trim($params['extra']) : '';
 $searchable   = isset($params['searchable']) ? (int)$params['searchable'] : 1;
 $title        = isset($params['title']) ? $params['title'] : '';
-
-if ($this->CheckPermission('Approve News'))
-    $status = 'published';
+$status       = isset($params['status']) ? $params['status'] : $status;
 
 if (isset($params['postdate_Month'])) {
     $postdate = mktime($params['postdate_Hour'], $params['postdate_Minute'], $params['postdate_Second'], $params['postdate_Month'], $params['postdate_Day'], $params['postdate_Year']);
