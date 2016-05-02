@@ -7,6 +7,14 @@
 
 <fieldset>
 <legend>{$title_submission_settings}:</legend>
+        <div class="pageoverflow">
+	    <p class="pagetext"><label for="alert_drafts">{$mod->Lang('prompt_alert_drafts')}:</label> {cms_help key='help_opt_alert_drafts' title=$mod->Lang('prompt_alert_drafts')}</p>
+	    <p class="pageinput">
+	        <select id="alert_drafts" name="{$actionid}alert_drafts">
+		{cms_yesno selected=$alert_drafts}
+		</select>
+	    </p>
+	</div>
 	<div class="pageoverflow">
 		<p class="pagetext"><label for="dfltcat">{$title_default_category}:</label> {cms_help key='help_opt_dflt_category' title=$title_submission_settings}</p>
 		<p class="pageinput">

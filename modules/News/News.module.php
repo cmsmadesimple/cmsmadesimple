@@ -233,6 +233,14 @@ class News extends CMSModule
         return $this->CreateInputDropdown($id, $name, array_flip($items), -1, $selected);
     }
 
+    public function get_tasks()
+    {
+        if( !$this->GetPreference('alert_drafts',1) ) return;
+        $out = array();
+        $out[] = new \News\CreateDraftAlertTask();
+        return $out;
+    }
+
     function GetNotificationOutput($priority = 2)
     {
         // if this user has permission to change News articles from
@@ -262,7 +270,7 @@ class News extends CMSModule
     {
         cms_route_manager::del_static('',$this->GetName());
 
-        $db = cmsms()->GetDb();
+        $db = \CmsApp::get_instance()->GetDb();
         $str = $this->GetName();
         $c = strtoupper($str[0]);
         $x = substr($str,1);
@@ -329,6 +337,7 @@ class News extends CMSModule
         switch( $capability ) {
         case CmsCoreCapabilities::PLUGIN_MODULE:
         case CmsCoreCapabilities::ADMINSEARCH:
+        case CmsCoreCapabilities::TASKS:
             return TRUE;
         }
         return FALSE;

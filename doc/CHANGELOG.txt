@@ -19,6 +19,10 @@ Core - General
 - Adds built-in asynchronous task processing system
 - Adds the ability to reduce redundant mentions in the admin log (runs asynchronously)
 - Refactor the adminlog page to allow for better filtering and pagination.
+- Notification functions in the CmsAdminThemeBase function are now just stubs and do nothing.  Will be removed at a later date.
+- Removed the GetNotificationOutput() method from the module API.
+- Adds classes for creating Alerts.. this is much more advanced than te old Notifications system.
+- Refactored the OneEleven admin theme to use new Alerts classes instead of old Notifications
 
 CmsJobManager
 - New core module to handle queued asynchronous tasks.
@@ -39,6 +43,9 @@ DesignManager
 
 News v2.50.5
 - Minor fix to add category.
+- Removes GetNotificationOutput method.
+- adda a task that runs at least every 15 minutes to detect draft articles... create an alert for this.
+- add an option to never create alerts about draft News articles.
 
 FileManager v1.6
 - Move settings to it's own menu item under site-admin
@@ -53,6 +60,7 @@ Search
 - Convert to store all data using the InnoDB engine
 - Use transactions for the addwords and deletewords stuff for performance.
 - Fix problem with query and record expiry.
+- todo: create async job to reindex all output
 
 AdminSearch v1.0.1
 - Fixes problem with use of 'Use Admin Search' permission.
