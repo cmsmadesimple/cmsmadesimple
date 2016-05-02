@@ -50,7 +50,7 @@ class CreateDraftAlertTask implements \CmsRegularTask
     {
         $mod = \cms_utils::get_module('News');
         $lastrun = (int) $mod->GetPreference('task1_lastrun');
-        if( $lastrun < time() - 15 * 60 - 2 ) return FALSE; // hardcoded.
+        if( $lastrun >= time() - 15 * 60 - 2 ) return FALSE; // hardcoded to 15 minutes
         return TRUE;
     }
 
