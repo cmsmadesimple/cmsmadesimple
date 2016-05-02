@@ -94,7 +94,7 @@ if (check_permission($userid, 'Modify Site Preferences')) {
         $page = 1;
         unset($_SESSION['adminlog_page']);
     }
-    $filter_applied = ($filter === $orig_filter) ? FALSE : TRUE;
+    $filter_applied = ($filter == $orig_filter) ? FALSE : TRUE;
 
     // now do the query
     $sql = 'SELECT * FROM '.cms_db_prefix().'adminlog ';
