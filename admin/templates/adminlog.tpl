@@ -1,5 +1,12 @@
 <script type="text/javascript">
 $(document).ready(function(){
+  $('#clearlog').click(function(ev){
+     ev.preventDefault();
+     var _hr = $(this).attr('href');
+     cms_confirm('{$sysmain_confirmclearlog|escape:'javascript'}').done(function(){
+         window.location.href = _hr;
+     })
+  })
   $('#pagesel').change(function(){
      $(this).closest('form').submit();
   })
@@ -51,7 +58,7 @@ $(document).ready(function(){
         {if $clearicon != ''}
           &nbsp;
           <a href="adminlog.php{$urlext}&amp;clear=true">{$clearicon}</a>
-          <a href="adminlog.php{$urlext}&amp;clear=true" onclick="return confirm('{$sysmain_confirmclearlog|escape:'javascript'}')">{$langclear}</a>
+          <a id="clearlog" href="adminlog.php{$urlext}&amp;clear=true">{$langclear}</a>
         {/if}
       </div>
       {if !empty($pagelist)}

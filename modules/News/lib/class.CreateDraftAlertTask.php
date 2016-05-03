@@ -73,15 +73,8 @@ class CreateDraftAlertTask implements \CmsRegularTask
         $count = $db->GetOne($query);
         if( !$count ) return TRUE;
 
+        debug_to_log('found '.$count.' draft entries ',__METHOD__);
         $alert = new DraftMessageAlert($count);
-        try {
-            $alert = $alert->load();
-            $alert->delete();
-        }
-        catch( \Exception $e ) {
-            // not an error if the alert object does not exist.
-        }
-
         $alert->n_draft = $count;
         $alert->save();
         return TRUE;

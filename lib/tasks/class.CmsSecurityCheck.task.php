@@ -18,7 +18,8 @@ class CmsSecurityCheckTask implements CmsRegularTask
         // do we need to do this task.
         // we only do it daily.
         if( !$time ) $time = time();
-        $last_execute = \cms_siteprefs::get(self::LASTEXECUTE_SITEPREF,0);
+        $last_execute = (int) \cms_siteprefs::get(self::LASTEXECUTE_SITEPREF);
+        debug_to_log($last_execute,__METHOD__);
         if( $last_execute > ($time - 24*60*60) ) return FALSE;
         return TRUE;
     }
@@ -60,6 +61,7 @@ class CmsSecurityCheckTask implements CmsRegularTask
             $alert->title = lang('config_issue');
             $alert->save();
         }
+        return TRUE;
     }
 
     public function on_success($time = '')

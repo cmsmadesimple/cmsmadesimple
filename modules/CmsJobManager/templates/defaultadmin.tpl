@@ -1,3 +1,12 @@
+<script type="text/javascript">
+$(document).ready(function(){
+  $('#simple1').click(function(ev){
+     ev.preventDefault();
+     cms_confirm('woot it works');
+  });
+});
+</script>
+
 <div class="information">{$mod->Lang('info_background_jobs')}</div>
 
 {if !count($jobs)}
@@ -43,5 +52,5 @@
 {/if}
 
 {* delete me before distributing *}
-<a href="{cms_action_url action=test1}">Simple Derived Class Test</a><br/>
+<a id="simple1" href="{cms_action_url action=test1}">Simple Derived Class Test</a><br/>
 <a href="{cms_action_url action=test2}">Simple Derived Cron Test</a>

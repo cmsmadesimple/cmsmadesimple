@@ -1,9 +1,12 @@
 <div class="pagecontainer">
-
 <script type="text/javascript">
 $(document).ready(function(){
-  $(document).on('click','[name=submit]',function(){
-    return confirm('{lang('siteprefs_confirm')|escape:'javascript'}');
+  $('[name=submit]').click(function(ev){
+    ev.preventDefault();
+    var _btn = $(this);
+    cms_confirm('{lang('siteprefs_confirm')|escape:'javascript'}').done(function(){
+       _btn.unbind('click').click();
+    });
   });
 });
 </script>

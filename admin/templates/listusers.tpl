@@ -3,16 +3,20 @@ $(document).ready(function() {
 
     $('#sel_all').cmsms_checkall();
 
-    $('.toggleactive').click(function(){
-        return confirm('{lang('confirm_toggleuseractive')|escape:'javascript'}');
+    $('.toggleactive').click(function(ev){
+        ev.preventDefault();
+	var _href = $(this).attr('href');
+        cms_confirm('{lang('confirm_toggleuseractive')|escape:'javascript'}').done(function(){
+	    window.location.href = _href;
+	});
     });
 
-    $(document).on('click', '#bulksubmit', function(){
-        return confirm('{lang('confirm_bulkuserop')|escape:'javascript'}');
-    });
-
-    $(document).on('click', '.js-delete', function(){
-        return confirm('{lang('confirm_delete_user')|escape:'javascript'}');
+    $(document).on('click', '.js-delete', function(ev){
+        ev.preventDefault();
+	var _href = $(this).attr('href');
+        cms_confirm('{lang('confirm_delete_user')|escape:'javascript'}').done(function(){
+	    window.location.href = _href;
+	});
     });
 
     $('#withselected, #bulksubmit').attr('disabled','disabled');
@@ -29,13 +33,30 @@ $(document).ready(function() {
         }
     });
 
+    $('#listusers').submit(function(ev){
+        ev.preventDefault();
+	console.debug('foo');
+        var v = $('#withselected').val();
+	if( v === 'delete' ) {
+	    cms_confirm('{lang('confirm_delete_user')|escape:'javascript'}').done(function(){
+	        $('#listusers').unbind('submit');
+		$('#bulksubmit').click();
+	    }).fail(function() {
+	        return false;
+	    });
+	} else {
+            cms_confirm('{lang('confirm_bulkuserop')|escape:'javascript'}').done(function(){
+	        alert('ok');
+	        return true;
+	    });
+	}
+    });
+
     $('#withselected').change(function(){
         var v = $(this).val();
 
         if (v === 'copyoptions') {
             $('#userlist').show();
-        } else if  (v === 'delete') {
-            return confirm('{lang('confirm_delete_user')|escape:'javascript'}');
         } else {
             $('#userlist').hide();
         }
@@ -46,7 +67,7 @@ $(document).ready(function() {
 
 <h3 class="invisible">{lang('currentusers')}</h3>
 
-{form_start url='listusers.php'}
+{form_start url='listusers.php' id="listusers"}
 
     <div class="pageoptions">
         <a href="adduser.php{$urlext}" title="{lang('info_adduser')}">{admin_icon icon='newobject.gif' class='systemicon'}&nbsp;{lang('adduser')}</a>

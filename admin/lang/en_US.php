@@ -159,6 +159,7 @@ $lang['confirmdeletedir'] = "Are you sure you want to delete this directory and 
 $lang['confirm_bulkuserop'] = "Use caution when performing options on multiple users simultaneously.\nAre you sure that you want to continue?";
 $lang['confirm_edituser'] = "Are you sure you want to apply changes to this user account";
 $lang['confirm_delete_user'] = "Are you sure you want to delete this user account";
+$lang['confirm_deleteusertag'] = 'Are you sure you want to delete this user defined tag?';
 $lang['confirm_runusertag'] = 'Running a UDT may have adverse effects on your website.  Please use caution!\n\nAre you sure you want to continue?';
 $lang['confirm_set_template_1'] = "Are you sure you want to set all of these pages to use this template";
 $lang['confirm_set_template_2'] = "Yes, I am sure.";
