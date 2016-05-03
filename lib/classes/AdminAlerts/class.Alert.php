@@ -163,9 +163,10 @@ abstract class Alert
     {
         if( !$this->name ) throw new \LogicException('A '.__CLASS__.' object must have a name');
         if( !$this->title ) throw new \LogicException('A '.__CLASS__.' object must have a title');
-        $tmp = \cms_siteprefs::get($this->get_prefname());
+
         // can only save if preference does not already exist
-        if( $tmp ) throw new \LogicException('Cannot save a class that has already been saved '.$this->get_prefname());
+        //$tmp = \cms_siteprefs::get($this->get_prefname());
+        //if( $tmp ) throw new \LogicException('Cannot save a class that has already been saved '.$this->get_prefname());
         \cms_siteprefs::set($this->get_prefname(),self::encode_object($this));
     }
 
@@ -173,5 +174,4 @@ abstract class Alert
     {
         \cms_siteprefs::remove($this->get_prefname());
     }
-
 }

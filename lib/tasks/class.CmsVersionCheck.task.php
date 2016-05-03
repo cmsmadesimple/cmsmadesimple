@@ -1,7 +1,7 @@
 <?php
 class CmsVersionCheckTask implements CmsRegularTask
 {
-    const  LASTEXECUTE_SITEPREF   = __CLASS__.'2';
+    const  LASTEXECUTE_SITEPREF   = __CLASS__;
 
     public function get_name()
     {

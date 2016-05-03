@@ -519,25 +519,10 @@ $(document).ready(function(){
 					<p class="pageinput"><input type="submit" name="testumask" value="{lang('test')}" class="pagebutton"  /></p>
 				</div>
 				<div class="pageoverflow">
-					<p class="pagetext"><label for="notifications">{lang('admin_enablenotifications')}:</label></p>
+					<p class="pagetext"><label for="lock_timeout">{lang('admin_lock_timeout')}:</label></p>
 					<p class="pageinput">
-						<select id="notifications" name="enablenotifications">
-							{cms_yesno selected=$enablenotifications}
-						</select>&nbsp;{cms_help key2='settings_enablenotifications' title=lang('admin_enablenotifications')}
-				</div>
-				<div class="pageoverflow">
-					<p class="pagetext"><label for="notifications">{lang('admin_lock_timeout')}:</label></p>
-					<p class="pageinput">
-					        <input type="text" name="lock_timeout" size="3" value="{$lock_timeout}"/>
+					        <input type="text" id="lock_timeout" name="lock_timeout" size="3" value="{$lock_timeout}"/>
 						&nbsp;{cms_help key2='settings_lock_timeout' title=lang('admin_lock_timeout')}
-				</div>
-				<div class="pageoverflow">
-					<p class="pagetext"><label for="pseudocron">{lang('pseudocron_granularity')}:</label></p>
-					<p class="pageinput">
-						<select id="pseudocron" name="pseudocron_granularity">
-							{html_options options=$pseudocron_options selected=$pseudocron_granularity}
-						</select>&nbsp;{cms_help key2='settings_pseudocron_granularity' title=lang('pseudocron_granularity')}
-					</p>
 				</div>
 				<div class="pageoverflow">
 					<p class="pagetext"><label for="adminlog">{lang('adminlog_lifetime')}:</label></p>

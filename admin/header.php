@@ -22,32 +22,6 @@ else {
     // should be controlled by preferences or something
     $ignoredmodules = explode(',',cms_userprefs::get_for_user($userid,'ignoredmodules'));
     if( cms_siteprefs::get('enablenotifications',1) && cms_userprefs::get_for_user($userid,'enablenotifications',1) ) {
-        debug_buffer('before notifications');
-        if( ($data = cms_siteprefs::get('__NOTIFICATIONS__')) ) {
-            $data = unserialize($data);
-            if( is_array($data) && count($data) ) {
-                foreach( $data as $item ) {
-                    $old = $item->html;
-                    $regex = '/'.CMS_SECURE_PARAM_NAME.'\=[0-9a-z]{16}/';
-                    $to = CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
-                    $new = preg_replace($regex,$to,$old);
-
-                    $themeObject->AddNotification($item->priority,$item->name,$item->html);
-                }
-            }
-        }
-
-        if( is_writable(CONFIG_FILE_LOCATION) ) $themeObject->AddNotification(1,'Core',lang('config_writable'));
-
-        $pattern = cms_join_path(CMS_ROOT_PATH,'cmsms-*-install.php');
-        $files = glob($pattern);
-        if( is_array($files) && count($files) > 0 ) {
-            $fn = basename($files[0]);
-            $themeObject->AddNotification(1,'Core',lang('installfileexists',basename($fn)));
-        }
-
-        if(  !cms_siteprefs::get('mail_is_set',0) ) $themeObject->AddNotification(1,'Core',lang('info_mail_notset'));
-
         // Display a warning sitedownwarning
         $sitedown_message = lang('sitedownwarning', TMP_CACHE_LOCATION . '/SITEDOWN');
         $sitedown_file = TMP_CACHE_LOCATION . '/SITEDOWN';

@@ -34,7 +34,7 @@ jQuery(document).ready(function(){
         <input type="password" id="password" name="password" maxlength="25" value="" />&nbsp;{lang('info_edituser_password')}
       </p>
     </div>
-		
+
     <div class="pageoverflow">
       <p class="pagetext"><label for="passwordagain">{lang('passwordagain')}:</label>&nbsp;{cms_help key2='help_myaccount_passwordagain' title=lang('passwordagain')}</p>
       <p class="pageinput"><input type="password" id="passwordagain" name="passwordagain" maxlength="25" value="" class="standard" />&nbsp;{lang('info_edituser_passwordagain')}</p>
@@ -66,8 +66,8 @@ jQuery(document).ready(function(){
       <div class="invisible">
       <input type="hidden" name="edituserprefs" value="true" />
       <input type="hidden" name="old_default_cms_lang" value="{$old_default_cms_lang}" />
-      </div>	
-      <p class="pageinput">			
+      </div>
+      <p class="pageinput">
         <input type="submit" name="submit_prefs" value="{'submit'|lang}" class="pagebutton" />
         <input type="submit" name="cancel" value="{'cancel'|lang}" class="pagebutton" />
       </p>
@@ -136,7 +136,7 @@ jQuery(document).ready(function(){
 	  {'indent'|lang}
 	</p>
       </div>
-      <!-- content display //-->								
+      <!-- content display //-->
     </fieldset>
 
     <fieldset>
@@ -173,35 +173,18 @@ jQuery(document).ready(function(){
 	</p>
       </div>
 
-      <div class="pageoverflow">
-        <p class="pagetext"><label for="notifications">{'enablenotifications'|lang}:</label>&nbsp;{cms_help key2='help_myaccount_enablenotifications' title='enablenotifications'|lang}</p>
-	<p class="pageinput">
-	  <input class="pagenb" type="checkbox" id="notifications" name="enablenotifications" {if $enablenotifications == 1}checked="checked"{/if} />
-	</p>
-      </div>
-
-      <div class="pageoverflow">
-	<p class="pagetext"><label for="ignoremodules">{'ignorenotificationsfrommodules'|lang}:</label>&nbsp;{cms_help key2='help_myaccount_ignoremodules' title='ignorenotificationsfrommodules'|lang}</p>
-	<p class="pageinput">
-	  <select id="ignoremodules" name="ignoredmodules[]" multiple="multiple" size="5">
-	    {html_options options=$module_opts selected=$ignoredmodules}
-	  </select>
-	</p>
-      </div>
-    </fieldset>
-
    <div class="pageoverflow">
      <div class="invisible">
 	<input type="hidden" name="edituserprefs" value="true" />
 	<input type="hidden" name="old_default_cms_lang" value="{$old_default_cms_lang}" />
      </div>
-     <p class="pageinput">				
+     <p class="pageinput">
 	<input type="submit" name="submit_prefs" value="{'submit'|lang}" class="pagebutton" />
 	<input type="submit" name="cancel" value="{'cancel'|lang}" class="pagebutton" />
      </p>
-   </div>		
+   </div>
  </form>
-	
+
 {$tab_end}
 {/if}
 

@@ -23,6 +23,8 @@ Core - General
 - Removed the GetNotificationOutput() method from the module API.
 - Adds classes for creating Alerts.. this is much more advanced than te old Notifications system.
 - Refactored the OneEleven admin theme to use new Alerts classes instead of old Notifications
+- Removed notification settings from MyAccount and global settings
+- Removed pseudocron granularity preferences
 
 CmsJobManager
 - New core module to handle queued asynchronous tasks.
