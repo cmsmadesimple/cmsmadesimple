@@ -69,6 +69,20 @@ namespace CMSMS\Database {
             $spec->dbname = $config['db_name'];
             $spec->port = $config['db_port'];
             $spec->debug = CMS_DEBUG;
+
+            $tmp = [];
+            if( $config['set_names'] ) $tmp[] = "NAMES 'utf8'";
+            if( $config['set_db_timezone'] ) {
+                $dt = new DateTime();
+                $dtz = new DateTimeZone($config['timezone']);
+                $offset = timezone_offset_get($dtz,$dt);
+                $symbol = ($offset < 0) ? '-' : '+';
+                $hrs = abs((int)($offset / 3600));
+                $mins = abs((int)($offset % 3600));
+                $tmp[] = sprintf("time_zone = '%s%d:%02d'",$symbol,$hrs,$mins);
+            }
+            if( count($tmp) ) $spec->auto_exec = 'SET '.implode(',',$tmp);
+
             $obj = Connection::Initialize($spec);
             if( $spec->debug ) $obj->SetDebugCallback('debug_buffer');
             return $obj;

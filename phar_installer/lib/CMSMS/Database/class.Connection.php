@@ -77,7 +77,7 @@ namespace CMSMS\Database {
         /**
          * This constant defines an error with a transaction.
          */
-        const ERROR_TRANSACT = 'TRANSACTION';
+        const ERROR_TRANSACTION = 'TRANSACTION';
 
         /**
          * This constant defines an error in a datadictionary command.
@@ -270,6 +270,8 @@ namespace CMSMS\Database {
         public function &SelectLimit( $sql, $nrows = -1, $offset = -1, $inputarr = null )
         {
             $limit = null;
+            $nrows = (int) $nrows;
+            $offset = (int) $offset;
             if( $nrows >= 0 || $offset >= 0 ) {
                 $offset = ($offset >= 0) ? $offset . "," : '';
                 $nrows = ($nrows >= 0) ? $nrows : '18446744073709551615';
@@ -301,7 +303,10 @@ namespace CMSMS\Database {
                         $i += 1;
                     }
                     $sql .= $sqlarr[$i];
-                    if ($i+1 != sizeof($sqlarr)) return $false;
+                    if ($i+1 != sizeof($sqlarr)) {
+                        $false = null;
+                        return $false;
+                    }
                 }
             }
             $sql .= $limit;
@@ -664,6 +669,8 @@ namespace CMSMS\Database {
             if( !($obj instanceof Connection ) ) throw new \LogicException("$connection_class is not derived from the primary database class.");
             if( $spec->debug ) $obj->SetDebugMode();
             $obj->Connect();
+
+            if( $spec->auto_exec ) $obj->Execute($spec->auto_exec);
             return $obj;
         }
 
