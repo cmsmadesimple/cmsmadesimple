@@ -116,6 +116,7 @@ class Connection extends \CMSMS\Database\Connection
     public function &do_sql($sql)
     {
         // execute all queries, but only need the resultset from the last one.
+        $resultset = null;
         $this->sql = $sql;
         $time_start = microtime(TRUE);
         $resultid = $this->_mysql->query( $sql );
@@ -124,7 +125,7 @@ class Connection extends \CMSMS\Database\Connection
         if( !$resultid ) {
             $this->FailTrans();
             $this->OnError(self::ERROR_EXECUTE,$this->_mysql->errno, $this->_mysql->error);
-            return;
+            return $resultset;
         }
         $this->add_debug_query($sql);
         $resultset = new ResultSet( $this->_mysql, $resultid, $sql );
