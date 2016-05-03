@@ -25,6 +25,7 @@ Core - General
 - Refactored the OneEleven admin theme to use new Alerts classes instead of old Notifications
 - Removed notification settings from MyAccount and global settings
 - Removed pseudocron granularity preferences
+- cms_alert() and the new cms_confirm() javascript functions now return promises.
 
 CmsJobManager
 - New core module to handle queued asynchronous tasks.

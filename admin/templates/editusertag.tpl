@@ -1,45 +1,46 @@
 <script type="text/javascript">
 // <![CDATA[
 $(document).ready(function(){
-  $(document).on('click', '#runbtn', function(){
+  $(document).on('click', '#runbtn', function(ev){
     // get the data
-    if( !confirm('{lang('confirm_runusertag')|strip|escape:'quotes'}') ) return false;
+    ev.preventDefault();
+    cms_confirm('{lang('confirm_runusertag')|strip|escape:'quotes'}').done(function(){
+        var code = $('#udtcode').val();
+    	if( code.length == 0 ) {
+            var d = '{lang('noudtcode')}';
+	    txt = '<div class="pageerrorcontainer"><ul class="pageerror">' + d + '<\/ul><\/div>';
+      	    $('#edit_userplugin_result').html( txt );
+      	    return false;
+    	}
+	var data = $('#edit_userplugin').find('input:not([type=submit]), select, textarea').serializeArray();
+	data.push({ 'name': 'code', 'value': code });
+	data.push({ 'name': 'run', 'value': 1 });
+	data.push({ 'name': 'apply', 'value': 1 });
+	data.push({ 'name': 'ajax', 'value': 1 });
+	$.post('{$smarty.server.REQUEST_URI}',data,function(resultdata,text) {
+      	    var r,d,e;
+	    try {
+	        var x = $.parseJSON(resultdata);
+		if( typeof x.response != 'undefined' ) {
+		    r = x.response;
+		    d = x.details;
+	        } else {
+		    d = resultdata;
+		}
+           } catch( e ) {
+	       r = '_error';
+	       d = resultdata;
+	   }
 
-    var code = $('#udtcode').val();
-    if( code.length == 0 ) {
-      var d = '{lang('noudtcode')}';
-      txt = '<div class="pageerrorcontainer"><ul class="pageerror">' + d + '<\/ul><\/div>';
-      $('#edit_userplugin_result').html( txt );
-      return false;
-    }
-    var data = $('#edit_userplugin').find('input:not([type=submit]), select, textarea').serializeArray();
-    data.push({ 'name': 'code', 'value': code });
-    data.push({ 'name': 'run', 'value': 1 });
-    data.push({ 'name': 'apply', 'value': 1 });
-    data.push({ 'name': 'ajax', 'value': 1 });
-    $.post('{$smarty.server.REQUEST_URI}',data,function(resultdata,text) {
-      var r,d,e;
-      try {
-        var x = $.parseJSON(resultdata);
-        if( typeof x.response != 'undefined' ) {
-          r = x.response;
-          d = x.details;
-        } else {
-          d = resultdata;
-        }
-      }
-      catch( e ) {
-        r = '_error';
-	d = resultdata;
-      }
-
-
-      e = $('<div />').text(d).html(); // quick tip for entity encoding.
-      if( r = '_error' ) e = d;
-      $('#edit_userplugin_runout').html(e);
-      $('#edit_userplugin_runout').dialog({ modal: true, width: 'auto' });
-    });
-    return false;
+	   e = $('<div />').text(d).html(); // quick tip for entity encoding.
+	   if( r = '_error' ) e = d;
+	   $('#edit_userplugin_runout').html(e);
+	   $('#edit_userplugin_runout').dialog({ modal: true, width: 'auto' });
+        });
+    	return false;
+    }).fail(function(){
+       return false;
+    })
   });
 
   $(document).on('click', '#applybtn', function(){
