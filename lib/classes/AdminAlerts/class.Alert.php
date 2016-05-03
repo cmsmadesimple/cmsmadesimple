@@ -76,7 +76,7 @@ abstract class Alert
 
     abstract public function get_icon();
 
-    protected function get_prefname()
+    public function get_prefname()
     {
         return 'adminalert_'.md5($this->name);
     }

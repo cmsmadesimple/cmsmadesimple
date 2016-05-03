@@ -18,7 +18,7 @@ class CmsVersionCheckTask implements CmsRegularTask
         // do we need to do this task.
         // we only do it daily.
         if( !$time ) $time = time();
-        $last_execute = get_site_preference(self::LASTEXECUTE_SITEPREF,0);
+        $last_execute = \cms_siteprefs::get(self::LASTEXECUTE_SITEPREF,0);
         if( ($time - 24*60*60) >= $last_execute ) return TRUE;
         return FALSE;
     }
@@ -35,7 +35,6 @@ class CmsVersionCheckTask implements CmsRegularTask
                 list($tmp,$remote_ver) = explode(':',$remote_ver,2);
                 $remote_ver = trim($remote_ver);
             }
-            cms_siteprefs::set('last_remotever',$remote_ver);
         }
         return $remote_ver;
     }
@@ -46,12 +45,12 @@ class CmsVersionCheckTask implements CmsRegularTask
 
         // do the task.
         $remote_ver = $this->fetch_latest_cmsms_ver();
-        $latest_ver = '3.0'; // debug me
         if( version_compare(CMS_VERSION,$remote_ver) < 0 ) {
-            $alert = new \CMSMS\AdminAlerts\SimpleAlert('Modify Site Preferences');
+            $alert = new \CMSMS\AdminAlerts\SimpleAlert(array('Modify Site Preferences'));
             $alert->name = 'CMSMS Version Check';
             $alert->title = lang('new_version_avail_title');
             $alert->msg = lang('new_version_avail2',CMS_VERSION,$remote_ver);
+            $alert->save();
             audit('','Core','CMSMS version '.$remote_ver.' is available');
         }
         return TRUE;
@@ -60,7 +59,7 @@ class CmsVersionCheckTask implements CmsRegularTask
     public function on_success($time = '')
     {
         if( !$time ) $time = time();
-        set_site_preference(self::LASTEXECUTE_SITEPREF,$time);
+        \cms_siteprefs::set(self::LASTEXECUTE_SITEPREF,$time);
     }
 
     public function on_failure($time = '')
