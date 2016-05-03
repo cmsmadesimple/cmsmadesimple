@@ -78,6 +78,11 @@ class DraftMessageAlert extends \CMSMS\AdminAlerts\Alert
         return $_mod;
     }
 
+    public function &load()
+    {
+        return self::load_by_name($this->get_prefname());
+    }
+
     protected function is_for($uid)
     {
         return check_permission($uid,'Approve News');

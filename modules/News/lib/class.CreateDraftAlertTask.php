@@ -69,19 +69,20 @@ class CreateDraftAlertTask implements \CmsRegularTask
         if( !$time ) $time = time();
 
         $query = 'SELECT count(news_id) FROM '.CMS_DB_PREFIX.'module_news n WHERE status != \'published\'
-                  AND (end_time IS NULL OR end_time > NOw())';
+                  AND (end_time IS NULL OR end_time > NOW())';
         $count = $db->GetOne($query);
         if( !$count ) return TRUE;
 
+        $alert = new DraftMessageAlert($count);
         try {
-            $alert = DraftMessageAlert::load_by_name('DraftMessageAlert');
+            $alert = $alert->load();
             $alert->delete();
         }
         catch( \Exception $e ) {
             // not an error if the alert object does not exist.
         }
 
-        $alert = new DraftMessageAlert($count);
+        $alert->n_draft = $count;
         $alert->save();
         return TRUE;
     }

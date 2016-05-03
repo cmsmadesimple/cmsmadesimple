@@ -52,28 +52,6 @@ else {
         $sitedown_message = lang('sitedownwarning', TMP_CACHE_LOCATION . '/SITEDOWN');
         $sitedown_file = TMP_CACHE_LOCATION . '/SITEDOWN';
         if (file_exists($sitedown_file)) $themeObject->AddNotification(1,'Core',$sitedown_message);
-
-        // Display an upgrade notification
-        // but only do a check once per day
-        if( cms_siteprefs::get('checkversion') ) {
-            if( CmsAdminUtils::site_needs_updating() ) {
-                $remote_ver = CmsAdminUtils::fetch_latest_cmsms_ver();
-                $themeObject->AddNotification(1,'Core',lang('new_version_available'));
-                // only audit once per day
-                if( cms_siteprefs::get('last_versioncheck') < (time() - 3600 * 24) ) {
-                    cms_siteprefs::set('last_versioncheck',time());
-                    audit('','Core','CMSMS version '.$remote_ver.' is available');
-                }
-            }
-            else {
-                // only audit once per day
-                if( cms_siteprefs::get('last_versioncheck') < (time() - 3600 * 24) ) {
-                    cms_siteprefs::set('last_versioncheck',time());
-                    audit('','Core','Tested for newer CMSMS Version. None Available.');
-                }
-            }
-
-        }
     }
 
     $themeObject->do_header();

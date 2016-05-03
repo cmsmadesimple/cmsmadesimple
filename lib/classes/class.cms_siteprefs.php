@@ -161,8 +161,7 @@ final class cms_siteprefs
 			$key .= '%';
 		}
 		$db = CmsApp::get_instance()->GetDb();
-		$db->Execute($query,array($key));
-        unset(self::$_prefs[$key]);
+        $db->Execute($query,array($key));
 		self::_reset();
 	}
 

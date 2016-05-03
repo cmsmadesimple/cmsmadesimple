@@ -78,7 +78,7 @@ abstract class Alert
 
     protected function get_prefname()
     {
-        return 'adminalert_'.$this->name;
+        return 'adminalert_'.md5($this->name);
     }
 
     protected static function &decode_object($serialized)
@@ -106,8 +106,7 @@ abstract class Alert
     {
         $name = trim($name);
         if( !$name ) throw new \LogicException('Invalid alert name passed to '.__METHOD__);
-        $prefname = 'adminalert_'.$name;
-        $tmp = \cms_siteprefs::get($prefname);
+        $tmp = \cms_siteprefs::get($name);
         if( !$tmp ) throw new \LogicException('Could not find an alert with the name '.$name);
 
         $obj = self::decode_object($tmp);
