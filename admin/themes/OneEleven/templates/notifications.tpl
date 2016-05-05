@@ -9,7 +9,7 @@
 		<ul>
 		{foreach $items as $one}
 			<li class="alert-box" data-alert-name="{$one->get_prefname()}">
-				<div class="alert-head ui-corner-all {if $one->priority == '_high'}ui-state-error red{elseif $one->priority == '_normal'}ui-state-highlight orange{else}ui-state-highlightblue{/if}"><strong>
+				<div class="alert-head ui-corner-all {if $one->priority == '_high'}ui-state-error red{elseif $one->priority == '_normal'}ui-state-highlight orange{else}ui-state-highlightblue{/if}">
 				   {$icon=$one->get_icon()}
 				   {if $icon}
 				     <img class="alert-icon ui-icon" alt="" src="{$icon}" title="{lang('remove_alert')}"/>

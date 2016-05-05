@@ -237,9 +237,6 @@
                 $container = $('#oe_container'), // page container
                 $menu = $('#oe_pagemenu'); // page menu
 
-            // fix footer, breaks when max-width 1024 kicks in and there is less content then height of menu
-            $('#oe_admin-content').css('min-height', ($('#oe_sidebar').height()));
-
             // handle navigation sidebar toggling
             $sidebar_toggle.on('click', function(e) {
 
@@ -263,7 +260,6 @@
             _this.updateDisplay();
 
             $(window).resize(function() {
-                $('.dashboard-inner').css('height', 'auto');
                 _this.updateDisplay();
             });
         },
@@ -287,43 +283,6 @@
             }
         },
 
-        /**
-         * @description Sets sidebar menu to fixed position on scroll
-         * @function stickyMenu()
-         * @param {object} obj
-         * @memberof OE.view
-         */
-        stickyMenu : function(obj) {
-            var viewportWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth,
-                viewportHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight,
-                offset = obj.offset(),
-                topOffset = offset.top,
-                leftOffset = offset.left,
-                scrollTop = $(window).scrollTop();
-
-            $(window).scroll(function() {
-                if (viewportWidth < 768) {
-                    obj.css({
-                        marginTop : '45px',
-                        position : 'relative'
-                    });
-                } else if (( viewportWidth >= 768 ) && ( viewportHeight >= obj.height() )) {
-                    scrollTop = $(window).scrollTop();
-
-                    if (scrollTop >= topOffset) {
-                        obj.css({
-                            marginTop : '-100px',
-                            position : 'fixed'
-                        });
-                    } else if (scrollTop < topOffset) {
-                        obj.css({
-                            marginTop : '45px',
-                            position : 'relative'
-                        });
-                    }
-                }
-            });
-        },
 
         /**
          * @description Handles toggling of main menu child items
@@ -333,15 +292,20 @@
          * @memberof OE.view
          */
         toggleSubMenu : function(obj, duration) {
+	    var _this = this;
             obj.find('li.current span').addClass('open-sub');
-            obj .find('> li > span').click(function() {
+            obj.find('> li > span').click(function() {
                 var ul = $(this).next();
 
+		var _p = [];
                 if (ul.is(':visible') === false) {
-                    obj.find('ul').slideUp(duration);
+                    _p.push(obj.find('ul').slideUp(duration));
                 }
 
-                ul.slideToggle(duration);
+                _p.push(ul.slideToggle(duration));
+		$.when.apply($,_p).done(function(){
+		    _this.updateDisplay();
+		})
             });
         },
 
@@ -467,21 +431,20 @@
          * @function updateDisplay()
          */
         updateDisplay : function() {
-            var _this = this,
-                viewportWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth,
-                $sidebar_toggle = $('.toggle-button'), // toggle trigger object
-                $container = $('#oe_container'), // page container object
-                $menu_container = $('#oe_menu'), // menu container object
-                $group = $('.dashboard-inner'); // object for equalHeight(obj) function
-
-                // set sidebar visibility
-                _this.handleSidebar($sidebar_toggle, $container);
-                // handle equal height blocks
-                OE.helper.equalHeight($group);
-                // handle sticky menu if it's not mobile device
-                if (!OE.helper._isMobileDevice()) {
-                    _this.stickyMenu($menu_container);
-                }
+	    var $menu = $('#oe_menu');
+	    var $alert_box = $('#admin-alerts');
+	    var offset = $alert_box.outerHeight() + $alert_box.offset().top;
+	    if( $menu.outerHeight() + offset < $(window).height() ) {
+		$menu.css({ 'position': 'fixed', 'top': offset });
+	    } else {
+		$menu.css({ 'position': '', 'top': '' });
+	        if( $menu.offset().top < $(window).scrollTop() ) {
+		    //if the top of the menu is not visible, scroll to it.
+   		   $('html, body').animate({
+		      scrollTop: $("#oe_menu").offset().top
+		   }, 1000);
+		}
+	    }
         },
 
         /**

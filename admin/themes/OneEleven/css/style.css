@@ -968,7 +968,7 @@ header .shortcuts li.favorites a {
 }
 #oe_sidebar nav.navigation {
 	height: auto;
-	padding-top: 45px;
+	/* padding-top: 45px; */
 	position: relative
 }
 /* toggle sidebar */
