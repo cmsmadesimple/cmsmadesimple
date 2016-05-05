@@ -239,7 +239,6 @@
 
             // handle navigation sidebar toggling
             $sidebar_toggle.on('click', function(e) {
-
                 e.preventDefault();
                 if ($container.hasClass('sidebar-on')) {
                     _this._closeSidebar($container, $menu);
@@ -256,10 +255,12 @@
             _this.setUIButtons();
 	    // setup alert handlers
 	    _this.setupAlerts();
-            // handle functions that need window resize
+            // handle updating the display.
             _this.updateDisplay();
-
+	    // handles the initial state of the sidebar (collapsed or expanded)
+	    _this.handleSidebar($container);
             $(window).resize(function() {
+		_this.handleSidebar($container);
                 _this.updateDisplay();
             });
         },
@@ -271,15 +272,15 @@
          * @param {object} container
          * @memberof OE.view
          */
-        handleSidebar : function(trigger, container) {
+        handleSidebar : function(container) {
             var viewportWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
 
-            if (OE.helper.getStorageValue('sidebar-pref') === 'sidebar-off' && viewportWidth > 768) {
+            if (OE.helper.getStorageValue('sidebar-pref') === 'sidebar-off' || viewportWidth <= 768) {
                 container.addClass('sidebar-off').removeClass('sidebar-on');
-                trigger.addClass('open-sidebar');
+                //trigger.addClass('open-sidebar');
             } else {
                 container.addClass('sidebar-on').removeClass('sidebar-off');
-                trigger.addClass('close-sidebar');
+                //trigger.addClass('close-sidebar');
             }
         },
 
@@ -433,7 +434,9 @@
         updateDisplay : function() {
 	    var $menu = $('#oe_menu');
 	    var $alert_box = $('#admin-alerts');
-	    var offset = $alert_box.outerHeight() + $alert_box.offset().top;
+	    var $header = $('header.header');
+	    var offset = $header.outerHeight() + $header.offset().top;
+	    if( $alert_box.length ) offset = $alert_box.outerHeight() + $alert_box.offset().top;
 	    if( $menu.outerHeight() + offset < $(window).height() ) {
 		$menu.css({ 'position': 'fixed', 'top': offset });
 	    } else {

@@ -26,7 +26,9 @@ Core - General
 - Removed notification settings from MyAccount and global settings
 - Removed pseudocron granularity preferences
 - cms_alert() and the new cms_confirm() javascript functions now return promises.
-- fix problems with the OneEleven theme - fixed sidenav now works properly.  if sidenav is larger than viewport then don't use fixed... easy
+- fix problems with the OneEleven theme
+   - fixed sidenav now works properly.  if sidenav is larger than viewport then don't use fixed... easy
+   - now revert to small sidebar navigation (still floating) if screen is too narrow.
 
 CmsJobManager
 - New core module to handle queued asynchronous tasks.

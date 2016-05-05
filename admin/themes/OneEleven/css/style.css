@@ -974,13 +974,13 @@ header .shortcuts li.favorites a {
 /* toggle sidebar */
 #oe_sidebar .toggle-button {
 	text-indent: -9999em;
-	z-index: 60;
+	z-index: 99;
 	display: block;
 	cursor: pointer;
 	width: 24px;
 	height: 25px;
 	position: absolute;
-	right: -1px;
+	right: -10px;
 	top: 15px
 }
 #oe_sidebar .toggle-button.top {
@@ -2271,7 +2271,7 @@ a.toggle-dropzone:focus {
 	/* change tabs to full width on smaller screen size */
 	.sidebar-on #page_tabs div {
 		text-align: left;
-		float: none;
+		/* float: none; */
 		border-radius: 0;
 		margin-right: 0
 	}
@@ -2407,7 +2407,6 @@ a.toggle-dropzone:focus {
 		border: none;
 		width: 100%;
 		background: #ddd;
-		position: static
 	}
 	#oe_sidebar aside {
 		padding: 0
@@ -2416,7 +2415,7 @@ a.toggle-dropzone:focus {
 		width: auto
 	}
 	.sidebar-off #oe_sidebar nav.navigation {
-		width: auto;
+	        width: 40px
 		overflow: hidden
 	}
 	header.header {
