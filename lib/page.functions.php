@@ -77,9 +77,12 @@ function check_login($no_redirect = false)
 {
     $do_redirect = !$no_redirect;
     $uid = get_userid(!$no_redirect);
-    if( $uid < 1 ) return FALSE;
-    $login_ops = \CMSMS\LoginOperations::get_instance();
-    $res = $login_ops->validate_requestkey();
+    $res = false;
+    if( $uid > 0 ) {
+        $res = true;
+        $login_ops = \CMSMS\LoginOperations::get_instance();
+        $res = $login_ops->validate_requestkey();
+    }
     if( !$res ) {
         // logged in, but no url key on the request
         if( $do_redirect ) {

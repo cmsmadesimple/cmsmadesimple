@@ -1,5 +1,6 @@
 <?php
 if( !isset($gCms) ) exit;
+debug_to_log('in process');
 if( !isset($_REQUEST['cms_cron']) ) exit();
 
 while(ob_get_level()) @ob_end_clean();
@@ -9,6 +10,7 @@ $tout = 'Processing....';
 $size = strlen($tout);
 header("Content-Length: $size");
 header($tout);
+
 
 if( !function_exists('_cmsjobmgr_errorhandler') ) {
     // on cleanup, put this cruft into a utils class..

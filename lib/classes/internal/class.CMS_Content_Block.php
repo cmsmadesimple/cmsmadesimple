@@ -36,6 +36,7 @@ final class CMS_Content_Block
     private static $_priority;
     private static $_contentBlocks;
     private static $_primary_content;
+    private static $_primary_content_flag;
     private function __construct() {}
 
     private static function content_return($result, &$params, &$smarty)
@@ -52,6 +53,7 @@ final class CMS_Content_Block
     public static function set_primary_content($txt)
     {
         self::$_primary_content = $txt;
+        self::$_primary_content_flag = 1;
     }
 
     public static function get_content_blocks()
@@ -214,7 +216,7 @@ final class CMS_Content_Block
 
             if (!isset($params['block']) && ($id == 'cntnt01' || $id == '_preview_' || ($id != '' && $inline == false))) {
 
-                if( !empty(self::$_primary_content) ) {
+                if( self::$_primary_content_flag ) {
                     $result = self::$_primary_content;
                 }
                 else {

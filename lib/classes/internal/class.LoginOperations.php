@@ -25,6 +25,7 @@ final class LoginOperations
 {
     private static $_instance;
     private $_loginkey;
+    private $_data;
 
     protected function __construct()
     {
@@ -90,6 +91,8 @@ final class LoginOperations
 
     protected function _get_data()
     {
+        if( $this->_data ) return $this->_data;
+
         // using session, and-or cookie data see if we are authenticated
         $private_data = null;
         if( isset($_SESSION[$this->_loginkey]) ) {
@@ -107,6 +110,7 @@ final class LoginOperations
         if( empty($private_data['cksum']) ) return;
 
         // now authenticate the passhash
+        // requires a database query
         if( !$this->_check_passhash($private_data['uid'],$private_data['cksum']) ) return;
 
         // if we get here, the user is authenticated.
@@ -115,7 +119,8 @@ final class LoginOperations
             if( \cms_cookies::exists(CMS_SECURE_PARAM_NAME) ) $_SESSION[CMS_USER_KEY] = \cms_cookies::get(CMS_SECURE_PARAM_NAME);
         }
 
-        return $private_data;
+        $this->_data = $private_data;
+        return $this->_data;
     }
 
     public function validate_requestkey()
@@ -125,17 +130,10 @@ final class LoginOperations
         if( !isset($_SESSION[CMS_USER_KEY]) ) throw new \LogicException('Internal: User key not found in session.');
 
         $v = '<no$!tgonna!$happen>';
-        if( isset($_GET[CMS_SECURE_PARAM_NAME]) ) {
-            $v = $_GET[CMS_SECURE_PARAM_NAME];
-        }
-        else if( isset($_POST[CMS_SECURE_PARAM_NAME]) ) {
-            $v = $_POST[CMS_SECURE_PARAM_NAME];
-        }
+        if( isset($_REQUEST[CMS_SECURE_PARAM_NAME]) ) $v = $_REQUEST[CMS_SECURE_PARAM_NAME];
 
         // validate the key in the request against what we have in the session.
         if( $v != $_SESSION[CMS_USER_KEY] ) {
-            debug_display($v,strlen($v));
-            debug_display($_SESSION[CMS_USER_KEY],strlen($_SESSION[CMS_USER_KEY])); die();
             $config = \cms_config::get_instance();
             if( !isset($config['stupidly_ignore_xss_vulnerability']) ) return FALSE;
         }

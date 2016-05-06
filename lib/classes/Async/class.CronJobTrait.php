@@ -61,15 +61,6 @@ trait CronJobTrait
     private $_data = [ 'start'=>null, 'frequency' => self::RECUR_NONE, 'until'=>null  ];
 
     /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        parent::__construct();
-        $this->_data['start'] = time();
-    }
-
-    /**
      * @ignore
      */
     public function __get($key)

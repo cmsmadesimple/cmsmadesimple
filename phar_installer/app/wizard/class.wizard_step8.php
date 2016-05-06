@@ -41,7 +41,7 @@ class wizard_step8 extends \cms_autoinstaller\wizard_step
         return $db;
     }
 
-    private function do_install()
+    private function connect_to_cmsms($destdir)
     {
         global $CMS_INSTALL_PAGE, $DONT_LOAD_DB, $DONT_LOAD_SMARTY, $CMS_VERSION, $CMS_PHAR_INSTALLER;
         $CMS_INSTALL_PAGE = 1;
@@ -50,6 +50,19 @@ class wizard_step8 extends \cms_autoinstaller\wizard_step
         $CMS_PHAR_INSTALLER = 1;
         $CMS_VERSION = $this->get_wizard()->get_data('destversion');
 
+        // setup and initialize the cmsms API's
+        // note DONT_LOAD_DB and DONT_LOAD_SMARTY are used.
+        if( is_file("$destdir/include.php") ) {
+            include_once($destdir.'/include.php');
+        }
+        else {
+            include_once($destdir.'/lib/include.php');
+        }
+
+    }
+
+    private function do_install()
+    {
         $dir = \__appbase\get_app()->get_appdir().'/install';
 
         $destdir = \__appbase\get_app()->get_destdir();
@@ -64,14 +77,7 @@ class wizard_step8 extends \cms_autoinstaller\wizard_step
         $siteinfo = $this->get_wizard()->get_data('siteinfo');
         if( !$siteinfo ) throw new \Exception(\__appbase\lang('error_internal',704));
 
-        // setup and initialize the cmsms API's
-        // note DONT_LOAD_DB and DONT_LOAD_SMARTY are used.
-        if( is_file("$destdir/include.php") ) {
-            include_once($destdir.'/include.php');
-        }
-        else {
-            include_once($destdir.'/lib/include.php');
-        }
+        $this->connect_to_cmsms($destdir);
 
         // connect to the database
         $db = $this->db_connect($destconfig);
@@ -222,8 +228,10 @@ class wizard_step8 extends \cms_autoinstaller\wizard_step
             if( !copy($fn,$destfn) ) throw new \Exception(\__appbase\lang('error_backupconfig'));
         }
 
+        $this->connect_to_cmsms($destdir);
+
         $this->message(\__appbase\lang('install_createconfig'));
-        $newconfig = cmsms()->GetConfig();
+        $newconfig = \cms_config::get_instance();
         $newconfig['dbms'] = trim($destconfig['dbtype']);
         $newconfig['db_hostname'] = trim($destconfig['dbhost']);
         $newconfig['db_username'] = trim($destconfig['dbuser']);

@@ -406,6 +406,8 @@ final class ModuleOperations
             // install returned nothing, or FALSE, a successful installation
             $query = 'DELETE FROM '.CMS_DB_PREFIX.'modules WHERE module_name = ?';
             $dbr = $db->Execute($query,array($module_obj->GetName()));
+            $query = 'DELETE FROM '.CMS_DB_PREFIX.'module_deps WHERE child_module = ?';
+            $dbr = $db->Execute($query,array($module_obj->GetName()));
 
             $lazyload_fe    = (method_exists($module_obj,'LazyLoadFrontend') && $module_obj->LazyLoadFrontend())?1:0;
             $lazyload_admin = (method_exists($module_obj,'LazyLoadAdmin') && $module_obj->LazyLoadAdmin())?1:0;
@@ -431,7 +433,6 @@ final class ModuleOperations
 
             Events::SendEvent('Core', 'ModuleInstalled', array('name' => $module_obj->GetName(), 'version' => $module_obj->GetVersion()));
             audit('', 'Module', 'Installed '.$module_obj->GetName().' version '.$module_obj->GetVersion());
-
             return array(TRUE,$module_obj->InstallPostMessage());
         }
 
