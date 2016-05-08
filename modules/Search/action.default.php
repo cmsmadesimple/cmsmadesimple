@@ -48,7 +48,7 @@ if( !$tpl_ob->IsCached() ) {
     $tpl_ob->assign('searchtext',$searchtext);
     $tpl_ob->assign('destpage',$returnid);
     $tpl_ob->assign('form_method',$is_method);
-    $tpl_ob->assign('inline,$inline');
+    $tpl_ob->assign('inline',$inline');
     $tpl_ob->assign('startform', $this->CreateFormStart($id, 'dosearch', $returnid, $is_method, '', $inline ));
     $tpl_ob->assign('label', '<label for="'.$id.'searchinput">'.$this->Lang('search').'</label>');
     $tpl_ob->assign('searchprompt',$this->Lang('search'));
