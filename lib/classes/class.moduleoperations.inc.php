@@ -429,7 +429,7 @@ final class ModuleOperations
             }
 
             $this->_moduleinfo = array();
-            $gCms->clear_cached_files();
+            $gCms->clear_cached_files(0);
 
             Events::SendEvent('Core', 'ModuleInstalled', array('name' => $module_obj->GetName(), 'version' => $module_obj->GetVersion()));
             audit('', 'Module', 'Installed '.$module_obj->GetName().' version '.$module_obj->GetVersion());
@@ -806,7 +806,7 @@ final class ModuleOperations
             }
 
             $this->_moduleinfo = array();
-            $gCms->clear_cached_files();
+            $gCms->clear_cached_files(0);
             audit('','Module', 'Upgraded module '.$module_obj->GetName().' to version '.$module_obj->GetVersion());
             Events::SendEvent('Core', 'ModuleUpgraded', array('name' => $module_obj->GetName(), 'oldversion' => $dbversion, 'newversion' => $module_obj->GetVersion()));
 
@@ -899,7 +899,7 @@ final class ModuleOperations
             }
 
             // clear the cache.
-            $gCms->clear_cached_files();
+            $gCms->clear_cached_files(0);
 
             // Removing module from info
             $this->_moduleinfo = array();
