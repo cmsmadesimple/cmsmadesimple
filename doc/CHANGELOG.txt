@@ -29,6 +29,11 @@ Core - General
 - fix problems with the OneEleven theme
    - fixed sidenav now works properly.  if sidenav is larger than viewport then don't use fixed... easy
    - now revert to small sidebar navigation (still floating) if screen is too narrow.
+- Fixes to the cache clearing methodology
+
+Installation Assistant v1.2.1
+- Only create dummy index.html files in subdirectories we created.
+- Clear cache after step 9
 
 CmsJobManager
 - New core module to handle queued asynchronous tasks.

@@ -83,6 +83,9 @@ class wizard_step9 extends \cms_autoinstaller\wizard_step
         // write protect config.php
         @chmod("$destdir/config.php",0444);
 
+        // clear the cache
+        \cmsms()->clear_cached_files();
+
         // todo: set initial preferences.
 
         // todo: write history
