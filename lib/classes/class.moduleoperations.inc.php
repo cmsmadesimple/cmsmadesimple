@@ -885,7 +885,7 @@ final class ModuleOperations
                     }
                 }
 
-                $alerts = \CMSMS\AdminAlerta\alert::load_all();
+                $alerts = \CMSMS\AdminAlerts\Alert::load_all();
                 if( count($alerts) ) {
                     foreach( $alerts as $alert ) {
                         if( $alert->module == $module ) $alert->delete();
@@ -906,7 +906,7 @@ final class ModuleOperations
 
             Events::SendEvent('Core', 'ModuleUninstalled', array('name' => $module));
             audit('','Module','Uninstalled module '.$module);
-            return TRUE;
+            return array(TRUE);
         }
 
         audit('','Module','Uninstall failed: '.$module);
