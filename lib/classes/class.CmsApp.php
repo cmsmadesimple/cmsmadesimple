@@ -491,8 +491,9 @@ final class CmsApp {
 	 * @ignore
 	 * @access private
 	 */
-	final public function clear_cached_files($age_days = -100)
+	final public function clear_cached_files($age_days = 0)
 	{
+        $age_days = max(-1,(int) $age_days);
 		global $CMS_LOGIN_PAGE, $CMS_INSTALL_PAGE;
 		if( isset($CMS_LOGIN_PAGE) || isset($CMS_INSTALL_PAGE) ) return;
 		if( !defined('TMP_CACHE_LOCATION') ) return;
