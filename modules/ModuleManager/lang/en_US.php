@@ -27,12 +27,12 @@ $lang['cantdownload'] = 'Cannot Download';
 $lang['cantremove'] = 'Cannot Remove';
 $lang['cantuninstall'] = 'Cannot Uninstall';
 $lang['changeperms'] = 'Change Permissions';
+$lang['confirm_action'] = 'Yes, I am sure';
 $lang['confirm_chmod'] = 'Continuing will attempt to change the permissions on this modules files.  Are you sure you want to continue?';
 $lang['confirm_resetcache'] = 'Are you sure you want to clear the local cache?';
 $lang['confirm_reseturl'] = 'Are you sure you want to reset the repository URL?';
 $lang['confirm_settings'] = 'Are you sure you want to save these settings?';
 $lang['confirm_remove'] = 'Are you sure you want to remove this modules files from the file system';
-$lang['confirm_uninstall'] = 'Continuing will remove all data associated with this module, but not remove the module files from the file system.  Are you sure you want to continue?';
 $lang['confirm_upgrade'] = 'Are you sure you want to upgrade this module?';
 $lang['compatibility_disclaimer'] = 'The modules displayed here are contributed by both the CMSMS Developers and independent third parties.  We make no guarantees that the modules available here are functional, tested, or compatible with your system.  You are encouraged to read the information found in the help and about links for each module before attempting the installation.';
 
@@ -81,6 +81,7 @@ $lang['error_nomatchingmodules'] = 'Error: could not find any matching modules i
 $lang['error_nomodules'] = 'Error: could not retrieve list of installed modules';
 $lang['error_norepositoryurl'] = 'The URL for the Module Repository has not been specified';
 $lang['error_noresults'] = 'We expected some results to be available from queued operations, but none were found. Please try to reproduce this experience, and provide sufficient information to support personnel for diagnoses.';
+$lang['error_notconfirmed'] = 'The operation was not confirmed';
 $lang['error_nothingtodo'] = 'Oops.  You requested an action, but we didn\'t calculate anything to do.  This probably means some kind of bug.';
 $lang['error_notxmlfile'] = 'The file uploaded was not an xml file';
 $lang['error_permissions'] = '<strong><em>WARNING:</em></strong> Insufficient directory permissions to install modules.  You may also be experiencing problems with PHP Safe mode.  Please ensure that safe mode is disabled, and that file system permissions are sufficient.';
@@ -131,6 +132,8 @@ $lang['instcount'] = 'Modules currently installed';
 
 // L
 $lang['latestdepends'] = 'Always install the newest dependency module';
+$lang['lbl_module'] = 'Module';
+$lang['lbl_version'] = 'Version';
 
 // M
 $lang['minversion'] = 'Minimum Version';
@@ -147,6 +150,7 @@ $lang['msg_module_exported'] = 'Module %s exported to XML';
 $lang['msg_module_imported'] = 'Module imported';
 $lang['msg_module_installed'] = 'Module %s successfully installed';
 $lang['msg_module_removed'] = 'Module files permanently removed';
+$lang['msg_module_uninstall'] = '<strong>Warning:</strong> Uninstalling a module typically deletes all of the data owned by that module, along with all preferences and templates.  Please use extreme caution.';
 $lang['msg_module_uninstalled'] = 'Module %s successfully uninstalled. Templates and data associated with this module has been deleted';
 $lang['msg_module_upgraded'] = 'Module %s successfully upgraded';
 $lang['msg_nodependencies'] = 'This file has not listed any dependencies';
@@ -246,6 +250,7 @@ $lang['title_searchterm'] = 'Enter a natural language search term.  If advanced 
 $lang['title_stale'] = 'This module is marked &quot;Stale&quot; (Last release over two years ago) This means it may work fine, but it has not had any recent development. Use your own discretion when using this module!';
 $lang['title_star'] = 'This icon indicates that a newer version of this module is available in the repository';
 $lang['title_system'] = 'This icon identifies a CMS Made Simple&trade; system module (module distributed with the CMSMS core)';
+$lang['title_uninstall_module'] = 'Uninstall Module';
 $lang['title_uninstall'] = 'Uninstall this module. This action may destroy data and templates associated with the module';
 $lang['title_upgrade'] = 'Upgrade this module';
 $lang['title_warning'] = 'This module was released some time ago. Use caution!';

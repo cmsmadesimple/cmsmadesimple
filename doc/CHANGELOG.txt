@@ -80,6 +80,7 @@ ModuleManager
 - Now detect if module_custom directories exist and are populated and warn about this before upgrading a module.
 - Minor string changes.
 - Improvements to error handling in the new versions tab.
+- Write a confirmation form for uninstalling a module that displays the UninstallPreMessage or uses a default.
 
 Version 2.1.3 - Black Point
 ----------------------------------

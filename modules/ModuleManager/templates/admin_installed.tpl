@@ -3,7 +3,6 @@ $(document).ready(function(){
   $('a.mod_upgrade').click( function(){ return confirm('{$ModuleManager->Lang('confirm_upgrade')|escape:'javascript'}'); });
   $('a.mod_remove').click( function(){ return confirm('{$ModuleManager->Lang('confirm_remove')|escape:'javascript'}'); });
   $('a.mod_chmod').click( function(){ return confirm('{$ModuleManager->Lang('confirm_chmod')|escape:'javascript'}'); });
-  $('a.mod_uninstall').click( function(){ return confirm('{$ModuleManager->Lang('confirm_uninstall')|escape:'javascript'}'); });
 
   $('#importbtn').click(function(){
     $('#importdlg').dialog({
