@@ -1,4 +1,19 @@
 <?php
+$lang['help'] = <<<EOT
+<h3>What does this do?</h3>
+<p>This is a CMSMS core module that provides functionality for processing jobs asynchronously (in the background) as the website is handling requests.</p>
+<p>CMSMS and third party modules can create jobs to perform tasks that do not need direct user intervention or that can take some time to process.  This module provides the processing capability for those jobs.</p>
+<h3>How do I use it?</h3>
+<p>This module has no interaction of its own.  It does provide a simple job report that lists jobs that the manager currently has in it's queue.  Jobs may regularly pop on to, and off of this queue so refreshing the page from time to time may give you an indication as to what is happening in the background of your site.</p>
+<p>This module will only process jobs at most every minute, and at least every ten minutes.  Though the default is 3 minutes.  This infrequent processing is to ensure reasonable performance on most websites.</p>
+<p>You can adjust the frequency by adding a cmsjobmgr_asyncfreq variable into the config.php file for your site containing an integer value between 0 and 10.</p>
+<pre>i.e: <code>\$config["cmsjobmgr_asyncfreq"] = 5;</code>.</pre>
+<p><strong>Note:</strong> It is not possible to disable asynchronous processing completely.  This is because some functioning of the CMSMS core relieas on this functionality.</p>
+
+<h3>What about problem jobs.</h3>
+<p>From time to time some applications may create jobs that fail, exiting with some sort of error.  CmsJobManager will remove the job after the job has failed a number of times.  At which time the originating code can re-create the job.  If you encounter a problematic job that continues to fail this is a bug that should be diagnosed, and reported in detail to the appropriate developers.</p>
+
+EOT;
 $lang['evtdesc_OnJobFailed'] = 'An event that is triggered when a job is removed from the job queue after failing too many times';
 $lang['evthelp_OnJobFailed'] = '<h4>Parameters:</h4>
 <ul>

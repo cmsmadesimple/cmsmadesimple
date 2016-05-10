@@ -9,7 +9,9 @@ final class utils
     public static function get_async_freq()
     {
         $config = \cms_config::get_instance();
-        $freq = (int) $config['cmsjobmgr_asyncfreq'] * 60; // config entry is in minutes.
+        $minutes = $config['cmsjobmgr_asyncfreq'];
+        if( empty($minutes) && $minutes !== '0' ) $minutes = 3;
+        $freq = (int) $minutes * 60; // config entry is in minutes.
         $freq = max(30,min(600,$freq));
         return $freq;
     }
