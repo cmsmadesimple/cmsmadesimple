@@ -128,17 +128,22 @@ if (check_permission($userid, 'Modify Site Preferences')) {
         }
         else {
             // first 5
-            for( $i = 0; $i < 5; $i++ ) {
-                $pagelist[$i+1] = $i+1;
+            for( $i = 0; $i <= 5; $i++ ) {
+                $pagelist[$i] = $i;
             }
-            // 3 around current page
-            for( $i = $page - 2; $i <= min($page + 2,$npages); $i++ ) {
-                if( !isset($pagelist[$i+1]) ) $pagelist[$i+1] = $i+1;
+            $tpage = $page;
+            if( $tpage <= 5 || $tpage >= ($npages - 5) ) $tpage = $npages / 2;
+            $x1 = max(1,(int)($tpage - 5 / 2));
+            $x2 = min($npages,(int)($tpage + 5 / 2));
+            for( $i = $x1; $i <= $x2; $i++ ) {
+                $pagelist[] = $i;
             }
-            // last 5
-            for( $i = $npages - 5; $i < $npages; $i++ ) {
-                if( !isset($pagelist[$i+1]) ) $pagelist[$i+1] = $i+1;
+            for( $i = max(1,$npages - 5); $i <= $npages; $i++ ) {
+                $pagelist[] = $i;
             }
+            $pagelist = array_unique($pagelist);
+            sort($pagelist);
+            $pagelist = array_combine($pagelist,$pagelist);
         }
         $smarty->assign('page',$page);
         $smarty->assign('pagelist',$pagelist);
