@@ -45,10 +45,15 @@ class global_cache
 
     public static function save()
     {
+        global $CMS_INSTALL_PAGE;
+        if( !empty($CMS_INSTALL_PAGE) ) return;
         $driver = self::_get_driver();
         $keys = array_keys(self::$_types);
         foreach( $keys as $key ) {
-            if( isset(self::$_dirty[$key]) && self::$_dirty[$key] && isset(self::$_cache[$key]) ) $driver->set($key,self::$_cache[$key]);
+            if( !empty(self::$_dirty[$key]) && isset(self::$_cache[$key]) ) {
+                $driver->set($key,self::$_cache[$key]);
+                unset(self::$_dirty[$key]);
+            }
         }
     }
 
