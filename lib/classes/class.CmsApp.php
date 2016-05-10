@@ -491,7 +491,7 @@ final class CmsApp {
 	 * @ignore
 	 * @access private
 	 */
-	final public function clear_cached_files($age_days = 0)
+	final public function clear_cached_files($age_days = -1)
 	{
         $age_days = max(-1,(int) $age_days);
 		global $CMS_LOGIN_PAGE, $CMS_INSTALL_PAGE;

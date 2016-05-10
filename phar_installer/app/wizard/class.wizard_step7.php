@@ -39,8 +39,8 @@ class wizard_step7 extends \cms_autoinstaller\wizard_step
 
         $destdir = \__appbase\get_app()->get_destdir();
         if( !$destdir ) throw new \Exception(\__appbase\lang('error_internal',751));
-        $phardata = new \PharData($archive);
         $archive = \__appbase\get_app()->get_archive();
+        $phardata = new \PharData($archive);
         $archive = basename($archive);
         foreach( new \RecursiveIteratorIterator($phardata) as $file => $it ) {
             if( ($p = strpos($file,$archive)) === FALSE ) continue;
