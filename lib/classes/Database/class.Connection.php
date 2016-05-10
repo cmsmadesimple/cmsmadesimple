@@ -618,10 +618,8 @@ namespace CMSMS\Database {
         protected function add_debug_query($sql)
         {
             $this->_query_count++;
-            if( $this->_debug && $this->_debug_cb ) {
-                $this->_queries[] = trim($sql);
-                call_user_func($this->_debug_cb,$sql);
-            }
+            $this->_queries[] = trim($sql);
+            if( $this->_debug && $this->_debug_cb ) call_user_func($this->_debug_cb,$sql);
         }
 
         /**
@@ -670,7 +668,10 @@ namespace CMSMS\Database {
             if( $spec->debug ) $obj->SetDebugMode();
             $obj->Connect();
 
-            if( $spec->auto_exec ) $obj->Execute($spec->auto_exec);
+            if( $spec->auto_exec ) {
+                $obj->Execute($spec->auto_exec);
+                $obj->add_debug_query($spec->auto_exec);
+            }
             return $obj;
         }
 

@@ -185,7 +185,9 @@ class CmsLayoutStylesheetQuery extends CmsDbQueryBase
             $tmp[] = $this->fields['id'];
             $this->MoveNext();
         }
-        return CmsLayoutStylesheet::load_bulk($tmp);
+
+        $deep = (!empty($this->_args['deep']) && $this->_args['deep']) ? TRUE : FALSE;
+        return CmsLayoutStylesheet::load_bulk($tmp,$deep);
     }
 } // end of class
 
