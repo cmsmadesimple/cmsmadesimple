@@ -30,6 +30,7 @@ Core - General
    - fixed sidenav now works properly.  if sidenav is larger than viewport then don't use fixed... easy
    - now revert to small sidebar navigation (still floating) if screen is too narrow.
 - Fixes to the cache clearing methodology
+- No longer check for duplicate content blocks in templates... Needs testing.
 
 Installation Assistant v1.2.1
 - Only create dummy index.html files in subdirectories we created.
@@ -51,6 +52,7 @@ DesignManager
 - Generic templates now display a usage string.
 - When creating a new template, associate the new template with the default design.
 - Add reset buttons to the filter forms.
+- No longer check for default content block in a template.
 
 News v2.50.5
 - Minor fix to add category.

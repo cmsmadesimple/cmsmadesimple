@@ -96,9 +96,11 @@ try {
                 if (!is_array($contentBlocks) || count($contentBlocks) == 0) {
                     throw new CmsEditContentException('No content blocks defined in template');
                 }
+                /*
                 if (!isset($contentBlocks['content_en'])) {
                     throw new CmsEditContentException('No default content block {content} or {content block=\'content_en\'} defined in template');
                 }
+                */
             }
 
             // if we got here, we're golden.
