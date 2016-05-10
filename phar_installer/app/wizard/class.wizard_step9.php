@@ -83,14 +83,6 @@ class wizard_step9 extends \cms_autoinstaller\wizard_step
         // write protect config.php
         @chmod("$destdir/config.php",0444);
 
-        // clear the cache
-        \cmsms()->clear_cached_files();
-        $this->message(\__appbase\lang('msg_clearedcache'));
-
-        // todo: set initial preferences.
-
-        // todo: write history
-
         $adminacct = $this->get_wizard()->get_data('adminaccount');
         $root_url = $app->get_root_url();
         if( !endswith($root_url,'/') ) $root_url .= '/';
@@ -120,7 +112,15 @@ class wizard_step9 extends \cms_autoinstaller\wizard_step
             catch( \Exception $e ) {
                 $this->error(\__appbase\lang('error_sendingmail').': '.$e->GetMessage());
             }
+
         }
+
+        // todo: set initial preferences.
+
+        // todo: write history
+
+        \cmsms()->clear_cached_files();
+        $this->message(\__appbase\lang('msg_clearedcache'));
 
         // set the finished message.
         if( !$root_url || !$app->in_phar() ) {
