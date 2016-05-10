@@ -85,6 +85,7 @@ class wizard_step9 extends \cms_autoinstaller\wizard_step
 
         // clear the cache
         \cmsms()->clear_cached_files();
+        $this->message(\__appbase\lang('msg_clearedcache'));
 
         // todo: set initial preferences.
 
