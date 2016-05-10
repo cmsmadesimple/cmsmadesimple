@@ -130,11 +130,7 @@ if ($params['searchinput'] != '') {
     }
 
     $val = 100 * 100 * 100 * 100 * 25;
-    debug_display($val);
-    debug_display($db->DbTimeStamp($val)); die();
-    $query = "SELECT DISTINCT i.module_name, i.content_id, i.extra_attr, COUNT(*) AS nb, SUM(idx.count) AS total_weight FROM ".CMS_DB_PREFIX."module_search_items i INNER JOIN ".CMS_DB_PREFIX."module_search_index idx ON idx.item_id = i.id WHERE (".$searchphrase.") AND (COALESCE(i.expires,NOW()) >= NOW())';
-
-".$db->IfNull('i.expires',$db->DBTimeStamp(100 * 100 * 100 * 100 * 25))." >= ".$db->DBTimeStamp(time()).") ";
+    $query = "SELECT DISTINCT i.module_name, i.content_id, i.extra_attr, COUNT(*) AS nb, SUM(idx.count) AS total_weight FROM ".CMS_DB_PREFIX."module_search_items i INNER JOIN ".CMS_DB_PREFIX."module_search_index idx ON idx.item_id = i.id WHERE (".$searchphrase.") AND (COALESCE(i.expires,NOW()) >= NOW())";
     if( isset( $params['modules'] ) ) {
         $modules = explode(",",$params['modules']);
         for( $i = 0; $i < count($modules); $i++ ) {

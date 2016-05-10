@@ -18,7 +18,7 @@ try {
         $this->RedirectToAdminTab();
     }
 
-    if( isset($params['cacnel']) ) {
+    if( isset($params['cancel']) ) {
         $this->RedirectToAdminTab();
     }
 
