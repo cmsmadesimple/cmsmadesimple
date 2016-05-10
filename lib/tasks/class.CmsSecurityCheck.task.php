@@ -19,7 +19,6 @@ class CmsSecurityCheckTask implements CmsRegularTask
         // we only do it daily.
         if( !$time ) $time = time();
         $last_execute = (int) \cms_siteprefs::get(self::LASTEXECUTE_SITEPREF);
-        debug_to_log($last_execute,__METHOD__);
         if( $last_execute > ($time - 24*60*60) ) return FALSE;
         return TRUE;
     }

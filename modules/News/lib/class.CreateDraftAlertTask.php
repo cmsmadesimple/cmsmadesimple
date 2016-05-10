@@ -48,9 +48,10 @@ class CreateDraftAlertTask implements \CmsRegularTask
 
     public function test($time = '')
     {
+        IF( !$time ) $time = time();
         $mod = \cms_utils::get_module('News');
         $lastrun = (int) $mod->GetPreference('task1_lastrun');
-        if( $lastrun >= (time() - 900) ) return FALSE; // hardcoded to 15 minutes
+        if( $lastrun >= ($time - 900) ) return FALSE; // hardcoded to 15 minutes
         return TRUE;
     }
 
@@ -73,7 +74,6 @@ class CreateDraftAlertTask implements \CmsRegularTask
         $count = $db->GetOne($query);
         if( !$count ) return TRUE;
 
-        debug_to_log('found '.$count.' draft entries ',__METHOD__);
         $alert = new DraftMessageAlert($count);
         $alert->n_draft = $count;
         $alert->save();
