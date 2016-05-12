@@ -685,11 +685,11 @@ class CmsLayoutTemplateType
 	/**
 	 * Return the names of all loaded template types
 	 *
-	 * @return array Array of loaded type names
+	 * @return array Associative array of loaded type objects.
 	 */
 	public static function get_loaded_types()
 	{
-		if( is_array(self::$_cache) )	return array_keys(self::$_cache);
+		if( is_array(self::$_cache) ) return array_keys(self::$_cache);
 	}
 
     /**
