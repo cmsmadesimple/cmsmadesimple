@@ -69,6 +69,7 @@ Phar Installer v1.2
 - A database account password is now required
 - Upgrade routine now asks for, and tests database credentials
 - Upgrade routine now rewrites the config.php file (but keeps a backup)
+- Set a few more preferences to reasonable defaults on install.. specifically related to site cleanup and performance.
 
 Search
 - Convert to store all data using the InnoDB engine
