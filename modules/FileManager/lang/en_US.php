@@ -65,6 +65,14 @@ $lang['error_dirnotempty'] = 'Directory %s is not empty';
 $lang['error_notwritable'] = 'No write permission to %s';
 $lang['error_thumbnotwritable'] = '%s has a thumbnail that does not have write permission';
 
+$lang['eventdesc_OnFileDeleted'] = 'Sent after a file is deleted';
+$lang['eventhelp_OnFileDeleted'] = <<<EOT
+<h4>Parameters:</h4>
+<ul>
+<li>"file" - The complete file specification to the deleted file</li>
+<li>"thumb" - If it previously existed, the complete file specification to the deleted thumbnail</li>
+</ul>
+EOT;
 $lang['eventdesc_OnFileUploaded'] = 'Sent when a file is uploaded';
 $lang['eventhelp_OnFileUploaded'] = <<<EOT
 <h4>Parameters:</h4>

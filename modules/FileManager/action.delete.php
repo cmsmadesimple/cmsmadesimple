@@ -57,6 +57,11 @@ if( isset($params['submit']) ) {
       @unlink($fn);
     }
     if( $thumb != '' ) @unlink($thumb);
+
+    $parms = array('file'=>$fn);
+    if( $thumb ) $parms['thumb'] = $thumb;
+    $this->SendEvent('OnFileDeleted',$parms);
+
     $this->Audit('',"File Manager", "Removed file: ".$fn);
   } // foreach
 

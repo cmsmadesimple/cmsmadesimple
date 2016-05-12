@@ -61,9 +61,10 @@ News v2.50.5
 - adda a task that runs at least every 15 minutes to detect draft articles... create an alert for this.
 - add an option to never create alerts about draft News articles.
 
-FileManager v1.6
+FileManager v1.6.2
 - Move settings to it's own menu item under site-admin
 - Fix minor problem with moving a directory.
+- Adds OnFileDeleted event.
 
 Phar Installer v1.2
 - A database account password is now required
