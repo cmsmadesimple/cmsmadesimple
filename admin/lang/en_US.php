@@ -425,6 +425,7 @@ $lang['event_desc_contenteditpre'] = "Sent before edits to content are saved";
 $lang['event_desc_contentpostcompile'] = "Sent after content has been processed by smarty";
 $lang['event_desc_contentpostrender'] = "Sent before the combined html is sent to the browser";
 $lang['event_desc_contentprecompile'] = "Sent before content is sent to smarty for processing";
+$lang['event_desc_contentprerender'] = "Sent before any smarty processing is performed.";
 $lang['event_desc_contentstylesheet'] = "Sent before the stylesheet is sent to the browser";
 $lang['event_desc_deletedesignpost'] = "Sent just after a design/theme is removed";
 $lang['event_desc_deletedesignpre'] = "Sent just prior to a design/theme being removed";
@@ -463,6 +464,8 @@ $lang['event_desc_globalcontentprecompile'] = "Sent before a global content bloc
 $lang['event_desc_loginfailed'] = "Sent after a user failed to login into the Admin panel";
 $lang['event_desc_loginpost'] = "Sent after a user logs into the Admin panel";
 $lang['event_desc_logoutpost'] = "Sent after a user logs out of the Admin panel";
+$lang['event_desc_lostpassword'] = 'Sent when the lost password form is submitted';
+$lang['event_desc_lostpasswordreset'] = 'Sent when the lost password form is submitted';
 $lang['event_desc_moduleinstalled'] = "Sent after a module is installed";
 $lang['event_desc_moduleuninstalled'] = "Sent after a module is uninstalled";
 $lang['event_desc_moduleupgraded'] = "Sent after a module is upgraded";
@@ -470,6 +473,7 @@ $lang['event_desc_smartypostcompile'] = "Sent after any content destined for sma
 $lang['event_desc_smartyprecompile'] = "Sent before any content destined for smarty is sent for processing";
 $lang['event_desc_stylesheetpostcompile'] = "Sent after a stylesheet is compiled through smarty";
 $lang['event_desc_stylesheetprecompile'] = "Sent before a stylesheet is compiled through smarty";
+$lang['event_desc_stylesheetpostrender'] = 'Sent after a stylesheet is passed through smarty, but before cached to disk';
 $lang['event_desc_templatepostcompile'] = "Sent after a template has been processed by smarty";
 $lang['event_desc_templateprecompile'] = "Sent before a template is sent to smarty for processing";
 $lang['event_desc_templateprefetch'] = "Sent before a template is fetched from smarty";
@@ -597,6 +601,11 @@ $lang['event_help_contentpostrender'] = "<h4>Parameters</h4>
 $lang['event_help_contentprecompile'] = "<h4>Parameters</h4>
 <ul>
 <li>'content' - Reference to the affected content text.</li>
+</ul>
+";
+$lang['event_help_contentprerender'] = "<h4>Parameters</h4>
+<ul>
+<li>'content' - Reference to the affected content object..</li>
 </ul>
 ";
 $lang['event_help_contentstylesheet'] = "<h4>Parameters</h4>
@@ -784,6 +793,18 @@ $lang['event_help_logoutpost'] = "<h4>Parameters</h4>
 <li>'user' - Reference to the affected user object.</li>
 </ul>
 ";
+$lang['event_help_lostpassword'] = "<h4>Parameters</h4>
+<ul>
+<li>'username' - The username entered in the lostpassword form.</li>
+</ul>
+";
+$lang['event_help_lostpasswordreset'] = "<h4>Parameters</h4>
+<ul>
+<li>'uid' - The integer userid for the account.</li>
+<li>'username' - The username for the reset account.</li>
+<li>'ip' - The IP address of the client that performend the reset.</li>
+</ul>
+";
 $lang['event_help_moduleinstalled'] = "<h4>Parameters</h4>
 <ul>
 <li>None</li>
@@ -812,6 +833,11 @@ $lang['event_help_smartyprecompile'] = "<h4>Parameters</h4>
 $lang['event_help_stylesheetpostcompile'] = "<h4>Parameters</h4>
 <ul>
 <li>None</li>
+</ul>
+";
+$lang['event_help_stylesheetpostrender'] = "<h4>Parameters</h4>
+<ul>
+<li>'content' - Reference to the stylesheet text.</li>
 </ul>
 ";
 $lang['event_help_stylesheetprecompile'] = "<h4>Parameters</h4>
