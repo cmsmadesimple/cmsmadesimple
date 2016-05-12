@@ -1,4 +1,4 @@
-<div class="row c_full middle">
+<div class="row cf middle">
   <div class="pageoptions grid_8">
       {if $can_add_content}
         <a href="{cms_action_url action=admin_editcontent}" accesskey="n" title="{$mod->Lang('addcontent')}" class="pageoptions">{admin_icon icon='newobject.gif' alt=$mod->Lang('addcontent')}&nbsp;{$mod->Lang('addcontent')}</a>
@@ -17,7 +17,7 @@
       {/if}
   </div>
 
-  <div class="pageoptions options-form grid_4">
+  <div class="pageoptions options-form grid_4" style="float: right;">
     {if isset($content_list)}
     <span><label for="ajax_find">{$mod->Lang('find')}:</label>&nbsp;<input type="text" id="ajax_find" name="ajax_find" title="{$mod->Lang('title_listcontent_find')}" value="" size="25"/></span>
     {/if}
@@ -44,7 +44,7 @@
     {function do_content_row}
       {foreach $columns as $column => $flag}
         {if !$flag}{continue}{/if}
-	<td>
+	<td class="{$column}">
 	  {if $column == 'expand'}
 	    {if $row.expand == 'open'}
 	    <a href="{cms_action_url action='defaultadmin' collapse=$row.id}" class="page_collapse" accesskey="C" title="{$mod->Lang('prompt_page_collapse')}">
@@ -211,7 +211,7 @@
       <tr>
         {foreach from=$columns key='column' item='flag'}
 	{if $flag}
-	  <th{if $flag=='icon'} class="pageicon"{/if}><!-- {$column} -->
+	  <th class="{$column} {if $flag=='icon'}pageicon{/if}"><!-- {$column} -->
 	  {if $column == 'expand' or $column == 'hier' or $column == 'icon1' or $column == 'view' or $column == 'copy' or $column == 'edit' or $column == 'delete'}
             <span title="{$mod->Lang("coltitle_{$column}")}">&nbsp;</span>{* no column header *}
   	  {elseif $column == 'multiselect'}
