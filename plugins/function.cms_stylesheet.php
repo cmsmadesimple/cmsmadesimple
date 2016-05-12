@@ -266,6 +266,8 @@ function cms_stylesheet_writeCache($filename, $list, $trimbackground, &$smarty)
 		$_contents = preg_replace('/(\w*?background.*?\:\w*?).*?(;.*?)/', '', $_contents);
 	}
 
+    $_contents = Events::SendEvent('Core','StylesheetPostRender',array('content'=>&$_contents));
+
 	// Write file
 	$fh = fopen($filename,'w');
 	fwrite($fh, $_contents);

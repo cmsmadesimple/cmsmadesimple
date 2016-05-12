@@ -40,23 +40,23 @@ $changepwhash = "";
  * @param string the username
  * @return results from the attempt to send a message.
  */
-function send_recovery_email($username)
+function send_recovery_email(\User $user)
 {
-    $gCms = CmsApp::get_instance();
+    $gCms = \CmsApp::get_instance();
     $config = $gCms->GetConfig();
     $userops = $gCms->GetUserOperations();
-    $user = $userops->LoadUserByUsername($username);
 
-    $obj = new cms_mailer;
+    $obj = new \cms_mailer;
+    $obj->IsHTML(TRUE);
     $obj->AddAddress($user->email, html_entity_decode($user->firstname . ' ' . $user->lastname));
     $obj->SetSubject(lang('lostpwemailsubject',html_entity_decode(get_site_preference('sitename','CMSMS Site'))));
 
     $url = $config['admin_url'] . '/login.php?recoverme=' . md5(md5($config['root_path'] . '--' . $user->username . md5($user->password)));
-    $body = lang('lostpwemail',html_entity_decode(get_site_preference('sitename','CMSMS Site')), $user->username, $url);
+    $body = lang('lostpwemail',html_entity_decode(get_site_preference('sitename','CMSMS Site')), $user->username, $url, $url);
 
     $obj->SetBody($body);
 
-    audit('','Core','Sent Lost Password Email for '.$username);
+    audit('','Core','Sent Lost Password Email for '.$user->username);
     return $obj->Send();
 }
 
@@ -90,13 +90,17 @@ if ((isset($_REQUEST['forgotpwform']) || isset($_REQUEST['forgotpwchangeform']))
 }
 else if (isset($_REQUEST['forgotpwform']) && isset($_REQUEST['forgottenusername'])) {
     $userops = $gCms->GetUserOperations();
-    $oneuser = $userops->LoadUserByUsername($_REQUEST['forgottenusername']);
+    $forgot_username = cms_html_entity_decode($_REQUEST['forgottenusername']);
+    unset($_REQUEST['forgottenusername'],$_POST['forgottenusername']);
+    \Events::SendEvent('Core','LostPassword',array('username'=>$forgot_username));
+    $oneuser = $userops->LoadUserByUsername($forgot_username);
+    unset($_REQUEST['loginsubmit'],$_POST['loginsubmit']);
 
     if ($oneuser != null) {
         if ($oneuser->email == '') {
             $error = lang('nopasswordforrecovery');
         }
-        else if (send_recovery_email($_REQUEST['forgottenusername'])) {
+        else if (send_recovery_email($oneuser)) {
             $warningLogin = lang('recoveryemailsent');
         }
         else {
@@ -105,7 +109,7 @@ else if (isset($_REQUEST['forgotpwform']) && isset($_REQUEST['forgottenusername'
     }
     else {
         unset($_POST['username'],$_POST['password'],$_REQUEST['username'],$_REQUEST['password']);
-        Events::SendEvent('Core','LoginFailed',array('user'=>$_REQUEST['forgottenusername']));
+        \Events::SendEvent('Core','LoginFailed',array('user'=>$forgot_username));
         $error = lang('usernotfound');
     }
 }
@@ -224,6 +228,7 @@ else if( isset($_POST['loginsubmit']) ) {
         }
     }
     catch( \Exception $e ) {
+        debug_display($e); die();
         $error = $e->GetMessage();
         debug_buffer("Login failed.  Error is: " . $error);
         unset($_POST['password'],$_REQUEST['password']);

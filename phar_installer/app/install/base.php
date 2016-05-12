@@ -108,6 +108,8 @@ verbose_msg(ilang('install_initevents'));
 Events::CreateEvent('Core','LoginPost');
 Events::CreateEvent('Core','LogoutPost');
 Events::CreateEvent('Core','LoginFailed');
+Events::CreateEvent('Core','LostPassword');
+Events::CreateEvent('Core','LostPasswordReset');
 
 Events::CreateEvent('Core','AddUserPre');
 Events::CreateEvent('Core','AddUserPost');
@@ -169,6 +171,7 @@ Events::CreateEvent('Core','ModuleUninstalled');
 Events::CreateEvent('Core','ModuleUpgraded');
 Events::CreateEvent('Core','ContentPreCompile');
 Events::CreateEvent('Core','ContentPostCompile');
+Events::CreateEvent('Core','ContentPreRender'); // 2.2
 Events::CreateEvent('Core','ContentPostRender');
 Events::CreateEvent('Core','SmartyPreCompile');
 Events::CreateEvent('Core','SmartyPostCompile');
@@ -176,6 +179,7 @@ Events::CreateEvent('Core','ChangeGroupAssignPre');
 Events::CreateEvent('Core','ChangeGroupAssignPost');
 Events::CreateEvent('Core','StylesheetPreCompile');
 Events::CreateEvent('Core','StylesheetPostCompile');
+Events::CreateEvent('Core','StylesheetPostRender');
 
 
 ?>

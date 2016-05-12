@@ -1102,10 +1102,11 @@ $lang['login_info_params'] = "<ol>
 $lang['login_info_title'] = "Information";
 $lang['logout'] = "Logout";
 $lang['lostpw'] = "Forgot your password?";
-$lang['lostpwemail'] = "You are receiving this e-mail because a request has been made to change the (%s) password associated with this user account (%s).  If you would like to reset the password for this account simply click on the link below or paste it into the URL field on your favourite browser:
-%s
-
-If you feel this is incorrect or made in error, simply ignore the email and nothing will change.";
+$lang['lostpwemail'] = '
+<h3>Hello</h3>
+<p>You are receiving this e-mail because a request has been made to change the (%s) password associated with this user account (%s).  If you would like to reset the password for this account simply click on the recovery link below or paste it into the URL field on your favourite browser:</p>
+<p><a href="%s">%s</a></p>
+<p>If you feel this is incorrect or made in error, simply ignore the email and nothing will change.</p>';
 $lang['lostpwemailsubject'] = "[%s] Password Recovery";
 
 ## M

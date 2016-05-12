@@ -122,9 +122,6 @@ while( $trycount < 2 ) {
         $smarty->assignGlobal('lang',CmsNlsOperations::get_current_language());
         $smarty->assignGlobal('encoding',CmsNlsOperations::get_encoding());
 
-        // if the request has a mact in it, process and cache the output.
-        preprocess_mact($contentobj->Id());
-
         $html = '';
         $showtemplate = true;
 
@@ -138,6 +135,11 @@ while( $trycount < 2 ) {
         if( $cachable && $showtemplate && $contentobj->Cachable() && cms_siteprefs::get('use_smartycache',0) ) {
             $smarty->setCaching(Smarty::CACHING_LIFETIME_CURRENT);
         }
+
+        Events::SendEvent('Core', 'ContentPreRender', array('content' => &$contentobj));
+
+        // if the request has a mact in it, process and cache the output.
+        preprocess_mact($contentobj->Id());
 
         if( !$showtemplate ) {
             $smarty->setCaching(false);

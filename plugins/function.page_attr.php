@@ -21,6 +21,7 @@ function smarty_function_page_attr($params, &$smarty)
     $key = trim(get_parameter_value($params,'key'));
     $page = trim(get_parameter_value($params,'page'));
     $assign = trim(get_parameter_value($params,'assign'));
+    $inactive = \cms_to_bool(get_parameter_value($params,'inactive',0));
     $contentobj = null;
 
     if( $page ) {
@@ -29,12 +30,12 @@ function smarty_function_page_attr($params, &$smarty)
             // it's an id
             $hm = CmsApp::get_instance()->GetHierarchyManager();
             $node = $hm->find_by_tag('id',$page);
-            if( $node ) $contentobj = $node->getContent(TRUE);
+            if( $node ) $contentobj = $node->getContent(TRUE,true,$inactive);
         }
         else {
             // this is quicker if using an alias
             $content_ops = ContentOperations::get_instance();
-            $contentobj = $content_ops->LoadContentFromAlias($page,TRUE);
+            $contentobj = $content_ops->LoadContentFromAlias($page,!$inactive);
         }
     }
     else {
@@ -45,8 +46,15 @@ function smarty_function_page_attr($params, &$smarty)
     if( $contentobj && $key ) {
         switch( $key ) {
         case '_dflt_':
-            $key = 'content_en';
-            $result = $contentobj->GetPropertyValue($key);
+            $result = $contentobj->GetPropertyValue('content_en');
+            break;
+
+        case 'alias':
+            $result = $contentobj->Alias();
+            break;
+
+        case 'id':
+            $result = $contentobj->Id();
             break;
 
         case 'title':
