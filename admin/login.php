@@ -135,7 +135,7 @@ else if (isset($_REQUEST['forgotpwchangeform']) && $_REQUEST['forgotpwchangeform
                 // put mention into the admin log
                 $ip_passw_recovery = \cms_utils::get_real_ip();
                 audit('','Core','Completed lost password recovery for: '.$user->username.' (IP: '.$ip_passw_recovery.')');
-                \Events::SendEvent('Core','LostPasswordReset',array('uid'=>$user->id,'username'=>$user->username,'ip'->$ip_passw_recovery));
+                \Events::SendEvent('Core','LostPasswordReset',array('uid'=>$user->id,'username'=>$user->username,'ip'=>$ip_passw_recovery));
                 $acceptLogin = lang('passwordchangedlogin');
                 $changepwhash = '';
             }
