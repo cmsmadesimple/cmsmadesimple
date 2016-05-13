@@ -194,7 +194,10 @@ abstract class Job
 
     /**
      * Abstract function to execute the job.
-     * Note, all jobs should be able to execute properly within one HTTP request.
+     *
+     * <strong>Note:</strong> all jobs should be able to execute properly within one HTTP request.
+     * Jobs cannot count on administrator or data stored in session variables.  Any data that is needed for the job to process
+     * should either be stored with the job object, or stored in the database in a user-independant format.
      */
     abstract public function execute();
 }
