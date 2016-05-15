@@ -40,9 +40,6 @@
         {if $rec.action == 'i'}{$ModuleManager->Lang('depend_install',$rec.name,$rec.version)}
         {elseif $rec.action == 'u'}{$ModuleManager->Lang('depend_upgrade',$rec.name,$rec.version)}
         {elseif $rec.action == 'a'}{$ModuleManager->Lang('depend_activate',$rec.name)}{/if}
-	{if $rec.has_custom}
-	<br/><span>{$ModuleManager->Lang('depend_customizations')}</span>
-	{/if}
       </li>
     {/foreach}
     </ul>
