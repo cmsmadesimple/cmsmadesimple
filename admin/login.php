@@ -204,27 +204,24 @@ else if( isset($_POST['loginsubmit']) ) {
         } else {
             // find the users homepage, if any, and redirect there.
             $homepage = \cms_userprefs::get_for_user($oneuser->id,'homepage');
-            if( $homepage ) {
-                // quick hacks to remove old secure param name from homepage url
-                // and replace with the correct one.
-                $homepage = str_replace('&amp;','&',$homepage);
-                $tmp = explode('?',$homepage);
-                @parse_str($tmp[1],$tmp2);
-                if( in_array('_s_',array_keys($tmp2)) ) unset($tmp2['_s_']);
-                if( in_array('sp_',array_keys($tmp2)) ) unset($tmp2['sp_']);
-                $tmp2[CMS_SECURE_PARAM_NAME] = $_SESSION[CMS_USER_KEY];
-                foreach( $tmp2 as $k => $v ) {
-                    $tmp3[] = $k.'='.$v;
-                }
-                $homepage = $tmp[0].'?'.implode('&amp;',$tmp3);
+            if( !$homepage ) $homepage = $config['admin_url'];
 
-                // and redirect.
-                $homepage = html_entity_decode($homepage);
-                if( !startswith($homepage,'http') && startswith($homepage,'/') ) $homepage = $config->smart_root_url().$homepage;
+            // quick hacks to remove old secure param name from homepage url
+            // and replace with the correct one.
+            $homepage = str_replace('&amp;','&',$homepage);
+            $tmp = explode('?',$homepage);
+            @parse_str($tmp[1],$tmp2);
+            if( in_array('_s_',array_keys($tmp2)) ) unset($tmp2['_s_']);
+            if( in_array('sp_',array_keys($tmp2)) ) unset($tmp2['sp_']);
+            $tmp2[CMS_SECURE_PARAM_NAME] = $_SESSION[CMS_USER_KEY];
+            foreach( $tmp2 as $k => $v ) {
+                $tmp3[] = $k.'='.$v;
             }
-            else {
-                $homepage = $config['admin_url'];
-            }
+            $homepage = $tmp[0].'?'.implode('&amp;',$tmp3);
+
+            // and redirect.
+            $homepage = html_entity_decode($homepage);
+            if( !startswith($homepage,'http') && !startswith($homepage,'//') && startswith($homepage,'/') ) $homepage = $config->smart_root_url().$homepage;
             redirect($homepage);
         }
     }
