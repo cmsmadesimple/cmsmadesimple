@@ -1,8 +1,26 @@
 <script type="text/javascript">
 $(document).ready(function(){
-  $('a.mod_upgrade').click( function(){ return confirm('{$ModuleManager->Lang('confirm_upgrade')|escape:'javascript'}'); });
-  $('a.mod_remove').click( function(){ return confirm('{$ModuleManager->Lang('confirm_remove')|escape:'javascript'}'); });
-  $('a.mod_chmod').click( function(){ return confirm('{$ModuleManager->Lang('confirm_chmod')|escape:'javascript'}'); });
+  $('a.mod_upgrade').click( function(ev){
+      ev.preventDefault();
+      var self = this;
+      cms_confirm('{$ModuleManager->Lang('confirm_upgrade')|escape:'javascript'}').done(function(){
+         window.location.href = self.attr('href');
+      })
+  });
+  $('a.mod_remove').click( function(ev){
+      ev.preventDefault();
+      var self = $(this);
+      cms_confirm('{$ModuleManager->Lang('confirm_remove')|escape:'javascript'}').done(function(){
+         window.location.href = self.attr('href');
+      })
+  });
+  $('a.mod_chmod').click( function(ev){
+      ev.preventDefault();
+      var self = this;
+      cms_confirm('{$ModuleManager->Lang('confirm_chmod')|escape:'javascript'}').done(function(){
+         window.location.href = self.attr('href');
+      })
+  });
 
   $('#importbtn').click(function(){
     $('#importdlg').dialog({
