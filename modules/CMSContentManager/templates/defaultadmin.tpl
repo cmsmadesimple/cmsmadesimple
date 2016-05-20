@@ -4,16 +4,23 @@
   function cms_CMloadUrl(link, lang) {
       $(document).on('click', link, function (e) {
           var url = $(this).attr('href') + '&showtemplate=false&{$actionid}ajax=1';
-          if (typeof lang == 'string' && lang.length > 0) {
-              if (!confirm(lang)) return false;
+
+          var _do_ajax = function() {
+	     $.ajax({
+	        url: url,
+	     }).done(function(){
+ 	        $('#content_area').autoRefresh('refresh');
+	     })
 	  }
+
+	  e.preventDefault();
 	  $('#ajax_find').val('');
-	  $.ajax({
-	    url: url,
-	  }).done(function(){
- 	    $('#content_area').autoRefresh('refresh');
-	  })
-          e.preventDefault();
+
+          if (typeof lang == 'string' && lang.length > 0) {
+	      cms_confirm(lang).done(_do_ajax);
+	  } else {
+	     _do_ajax();
+	  }
       });
   }
 
@@ -85,13 +92,12 @@
 
       $('a.steal_lock').on('click',function(e) {
           // we're gonna confirm stealing this lock.
-          var v = confirm('{$mod->Lang('confirm_steal_lock')|escape:'javascript'}');
-          $(this).data('steal_lock',v);
-          if( v ) {
-              var url = $(this).attr('href');
-              url = url + '{$actionid}steal=1';
-              $(this).attr('href',url);
-          }
+	  e.preventDefault();
+	  var self = $(this);
+	  var url = $(this).attr('href')+'{$actionid}steal=1';
+          cms_confirm('{$mod->Lang('confirm_steal_lock')|escape:'javascript'}').done(function(){
+	      window.location.href = url;
+	  });
       });
 
       $('a.page_edit').on('click',function(event) {
