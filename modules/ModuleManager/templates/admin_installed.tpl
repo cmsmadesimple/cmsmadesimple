@@ -2,23 +2,23 @@
 $(document).ready(function(){
   $('a.mod_upgrade').click( function(ev){
       ev.preventDefault();
-      var self = this;
+      var href = $(this).attr('href');
       cms_confirm('{$ModuleManager->Lang('confirm_upgrade')|escape:'javascript'}').done(function(){
-         window.location.href = self.attr('href');
+          window.location.href = href;
       })
   });
   $('a.mod_remove').click( function(ev){
       ev.preventDefault();
-      var self = $(this);
+      var href = $(this).attr('href');
       cms_confirm('{$ModuleManager->Lang('confirm_remove')|escape:'javascript'}').done(function(){
-         window.location.href = self.attr('href');
+          window.location.href = href;
       })
   });
   $('a.mod_chmod').click( function(ev){
       ev.preventDefault();
-      var self = this;
+      var href = $(this).attr('href');
       cms_confirm('{$ModuleManager->Lang('confirm_chmod')|escape:'javascript'}').done(function(){
-         window.location.href = self.attr('href');
+          window.location.href = href;
       })
   });
 
@@ -153,15 +153,15 @@ $(document).ready(function(){
             {capture assign='op'}<a class="modop mod_chmod" href="{cms_action_url action='local_chmod' mod=$item.name}" title="{$ModuleManager->Lang('title_chmod')}">{$ModuleManager->Lang('changeperms')}</a>{/capture}{$ops[]=$op}
           {/if}
         {else}
+          {if $item.e_status == 'need_upgrade' }
+              {capture assign='op'}<a class="modop mod_upgrade" href="{cms_action_url action='local_upgrade' mod=$item.name}" title="{$ModuleManager->Lang('title_upgrade')}">{$ModuleManager->Lang('upgrade')}</a>{/capture}
+	      {$ops[]=$op}
+          {/if}
 	  {if $item.can_uninstall}
             {if $item.name != 'ModuleManager' || $allow_modman_uninstall}
               {capture assign='op'}<a class="modop mod_uninstall" href="{cms_action_url action='local_uninstall' mod=$item.name}" title="{$ModuleManager->Lang('title_uninstall')}">{$ModuleManager->Lang('uninstall')}</a>{/capture}{$ops[]=$op}
 	    {/if}
 	  {/if}
-          {if $item.e_status == 'need_upgrade' }
-              {capture assign='op'}<a class="modop mod_upgrade" href="{cms_action_url action='local_upgrade' mod=$item.name}" title="{$ModuleManager->Lang('title_upgrade')}">{$ModuleManager->Lang('upgrade')}</a>{/capture}
-	      {$ops[]=$op}
-          {/if}
         {/if}
         {'<br/>'|implode:$ops}
       </td>
@@ -182,7 +182,7 @@ $(document).ready(function(){
         <a class="modop mod_about" href="{cms_action_url action='local_about' mod=$item.name}" title="{$ModuleManager->Lang('title_moduleabout')}">{$ModuleManager->Lang('abouttxt')}</a>
       </td>
       {if $allow_export}<td>
-        {if $item.active && $item.writable}
+        {if $item.active && $item.writable && $item.e_status != 'need_upgrade' }
           <a class="modop mod_export" href="{cms_action_url action='local_export' mod=$item.name}" title="{$ModuleManager->Lang('title_moduleexport')}">{admin_icon icon='xml_rss.gif'}</a>
         {/if}
       </td>{/if}
