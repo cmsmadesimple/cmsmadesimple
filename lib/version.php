@@ -19,7 +19,7 @@
 #
 #$Id: version.php 10177 2015-09-11 15:02:02Z calguy1000 $
 
-$CMS_VERSION = "2.1.3";
+$CMS_VERSION = "2.1.4-alpha1";
 $CMS_VERSION_NAME = "Black Point";
 $CMS_SCHEMA_VERSION = '201';
 
