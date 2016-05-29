@@ -14,7 +14,7 @@ class mysql_driver_ADOConnection extends ADOConnection
 	var $sysDate = 'CURDATE()';
 	var $sysTimeStamp = 'NOW()';
 
-	function mysql_driver_ADOConnection()
+	function __construct()
 	{
 		$this->dbtype = 'mysql';
 		$this->dataProvider = 'mysql';
@@ -420,7 +420,7 @@ class mysql_driver_ResultSet
 	 * @param string $resultId 
 	 */
 
-	function mysql_driver_ResultSet( $resultId, $connectionId )
+	function __construct( $resultId, $connectionId )
 	{
 		$this->fields = array();
 		$this->connectionId = $connectionId;
