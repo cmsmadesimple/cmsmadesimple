@@ -410,7 +410,7 @@ class mysqli_driver_ResultSet
 	 * @param string $resultId 
 	 */
 
-	function mysqli_driver_ResultSet( $resultId, $connectionId )
+	function __construct( $resultId, $connectionId )
 	{
 		$this->fields = array();
 		$this->connectionId = $connectionId;
