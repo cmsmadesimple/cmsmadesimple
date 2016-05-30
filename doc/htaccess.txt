@@ -74,6 +74,10 @@ RewriteRule ^(.+)$ index.php?page=$1 [QSA]
   Order allow,deny
   Deny from all
 </Files>
+<Files ~ "/doc/*">
+  Order allow,deny
+  Deny from all
+</Files>
 <Files ~ "/lib/*php">
   Order allow,deny
   Deny from all
