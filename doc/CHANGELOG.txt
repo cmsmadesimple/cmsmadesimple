@@ -32,6 +32,8 @@ Core - General
 - Fixes to the cache clearing methodology
 - No longer check for duplicate content blocks in templates... Needs testing.
 - New core events: ContentPreRender,LostPassword,LostPasswordReset,StylesheetPostRender
+- Fix problem with the default parameter to the {content} tag.
+- Fix problem with the use_smartycache thing in system information.
 
 Installation Assistant v1.2.1
 - Only create dummy index.html files in subdirectories we created.
@@ -43,6 +45,7 @@ CmsJobManager
 Content Manager
 - Minor tweak to bulk delete pages.
 - Minor fix to the active tab when changing a template or design.
+- Now listen to the 'default parent page' user preference.
 
 DesignManager
 - Move the designs tab of the main interface into third position.

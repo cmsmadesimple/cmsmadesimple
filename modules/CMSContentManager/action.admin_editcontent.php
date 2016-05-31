@@ -103,6 +103,9 @@ try {
         $content_obj->SetPropertyValue('extra2',$pagedefaults['extra2']);
         $content_obj->SetPropertyValue('extra3',$pagedefaults['extra3']);
         $content_obj->SetAdditionalEditors($pagedefaults['addteditors']);
+	$dflt_parent = (int) \cms_userprefs::get('default_parent');
+	$dflt_parent = max(-1,$dflt_parent);
+        $content_obj->SetParentId($dflt_parent);
     }
     else {
         // editint an existing content object

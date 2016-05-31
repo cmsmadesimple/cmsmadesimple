@@ -459,6 +459,9 @@ class Content extends ContentBase
             $res = \UserOperations::get_instance()->UserInGroup($uid,1);
             if( !$res ) return;
         }
+	if( $this->Id() < 1 && empty($value) ) {
+	    $value = trim($this->_get_param($blockInfo,'default'));
+	}
 		if ($oneline) {
 			$size = (int) $this->_get_param($blockInfo,'size',50);
 			$ret = '<input type="text" size="'.$size.'" maxlength="'.$maxlength.'" name="'.$blockInfo['id'].'" value="'.cms_htmlentities($value, ENT_NOQUOTES, CmsNlsOperations::get_encoding('')).'"';
@@ -559,7 +562,7 @@ class Content extends ContentBase
 	{
 		// it'd be nice if the content block was an object..
 		// but I don't have the time to do it at the moment.
-        $noedit = cms_to_bool($this->_get_param($blockInfo,'noedit','false'));
+               $noedit = cms_to_bool($this->_get_param($blockInfo,'noedit','false'));
         if( $noedit ) return;
 
 		$field = '';
