@@ -1,4 +1,4 @@
-Version 2.1.4 - FreeTown
+Version 2.1.4 - Freetown
 ----------------------------------
 Core - General
   - Fix to the clear_cached_file() method which should fix problems with module installation.
