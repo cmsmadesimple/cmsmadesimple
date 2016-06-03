@@ -34,6 +34,7 @@ Core - General
 - New core events: ContentPreRender,LostPassword,LostPasswordReset,StylesheetPostRender
 - Fix problem with the default parameter to the {content} tag.
 - Fix problem with the use_smartycache thing in system information.
+- Fix notice in useroperations
 
 Installation Assistant v1.2.1
 - Only create dummy index.html files in subdirectories we created.
