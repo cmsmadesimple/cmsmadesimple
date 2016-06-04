@@ -672,8 +672,8 @@ final class ContentListBuilder
           $rec['depth'] = $node->get_level();
           $rec['hasusablelink'] = $content->HasUsableLink();
           $rec['hastemplate'] = $content->HasTemplate();
-          $rec['menutext'] = $content->MenuText();
-          $rec['title'] = $content->Name();
+          $rec['menutext'] = strip_tags($content->MenuText());
+          $rec['title'] = strip_tags($content->Name());
           $rec['template_id'] = $content->TemplateId();
           $rec['can_edit_tpl'] = $mod->CheckPermission('Modify Templates');
           $rec['id'] = $content->Id();
@@ -690,7 +690,7 @@ final class ContentListBuilder
           }
           if( $page_id == $this->_seek_to ) $rec['selected'] = 1;
           if( $content->LastModifiedBy() > 0 && isset($users[$content->LastModifiedBy()]) ) {
-              $rec['lastmodifiedby'] = $users[$content->LastModifiedBy()]->username;
+              $rec['lastmodifiedby'] = strip_tags($users[$content->LastModifiedBy()]->username);
           }
           $rec['can_edit'] = ($mod->CheckPermission('Modify Any Page') || $mod->CheckPermission('Manage All Content') ||
                               $this->_check_authorship($rec['id'])) && !$this->_is_locked($page_id);
@@ -717,17 +717,17 @@ final class ContentListBuilder
 
               case 'page':
                   if( $content->MenuText() == CMS_CONTENT_HIDDEN_NAME ) continue;
-                  $rec[$column] = $content->MenuText();
-                  if( CmsContentManagerUtils::get_pagenav_display() == 'title' ) $rec[$column] = $content->Name();
+                  $rec[$column] = strip_tags($content->MenuText());
+                  if( CmsContentManagerUtils::get_pagenav_display() == 'title' ) $rec[$column] = strip_tags($content->Name());
                   break;
 
               case 'alias':
-                  if( $content->HasUsableLink() && $content->Alias() != '' ) $rec[$column] = $content->Alias();
+                  if( $content->HasUsableLink() && $content->Alias() != '' ) $rec[$column] = strip_tags($content->Alias());
                   break;
 
               case 'url':
                   $rec[$column] = '';
-                  if( $content->HasUsableLink() && $content->URL() != '' ) $rec[$column] = $content->URL();
+                  if( $content->HasUsableLink() && $content->URL() != '' ) $rec[$column] = strip_tags($content->URL());
                   break;
 
               case 'template':
@@ -748,7 +748,7 @@ final class ContentListBuilder
                   break;
 
               case 'owner':
-                  if( $content->Owner() > 0 ) $rec[$column] = $users[$content->Owner()]->username;
+                  if( $content->Owner() > 0 ) $rec[$column] = strip_tags($users[$content->Owner()]->username);
                   break;
 
               case 'active':

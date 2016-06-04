@@ -47,6 +47,7 @@ Content Manager
 - Minor tweak to bulk delete pages.
 - Minor fix to the active tab when changing a template or design.
 - Now listen to the 'default parent page' user preference.
+- Fix minor XSS problem in the admin if some loser puts javascript into the title field or alias field or menu text field.
 
 DesignManager
 - Move the designs tab of the main interface into third position.
