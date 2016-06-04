@@ -1,0 +1,9 @@
+Version 2.1.4 - FreeTown
+----------------------------------
+Core - General
+  - Fix to the clear_cached_file() method which should fix problems with module installation.
+  - Minor tweak to distributed sample htaccess.txt file
+
+Phar Installer
+  - Fixes issues with respect to hanging on step7 when suhosin PHP addon was installed.
+  - Minor PHP7 Fixes.

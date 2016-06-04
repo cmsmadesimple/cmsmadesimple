@@ -241,7 +241,13 @@ class cms_install extends \__appbase\app
             $tmp = substr($file,$p);
             if( !\__appbase\endswith($tmp,'.php') ) continue;
             $found = true;
-            if( preg_match('/\.nls\.php$/',$tmp) ) include($file);
+            if( preg_match('/\.nls\.php$/',$tmp) ) {
+               $tmpdir = $this->get_tmpdir();
+               $fn = "$tmpdir/tmp_".basename($file);
+               @copy($file,$fn);
+               include($fn);
+               unlink($fn);
+            }
         }
         if( !$found ) throw new \Exception(\__appbase\lang('error_nlsnotfound'));
         $this->_nls = $nls;
