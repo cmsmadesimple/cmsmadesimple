@@ -144,7 +144,7 @@ class Content extends ContentBase
 			//pick up the template id before we do parameters
 			if (isset($params['template_id'])) {
 				if ($this->mTemplateId != $params['template_id']) $this->_contentBlocks = null;
-				$this->mTemplateId = $params['template_id'];
+				$this->mTemplateId = (int) $params['template_id'];
 			}
 
 			// add content blocks

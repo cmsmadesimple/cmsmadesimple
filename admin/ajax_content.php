@@ -56,8 +56,8 @@ case 'childrenof':
                     $content = $child->getContent(FALSE);
                     if( !is_object($content) ) continue;
                     $res = $content->ToData();
-                    $res['display'] = $res['menu_text'];
-                    if( $display == 'title' ) $res['display'] = $res['content_name'];
+                    $res['display'] = strip_tags($res['menu_text']);
+                    if( $display == 'title' ) $res['display'] = strip_tags($res['content_name']);
                     $out[] = $res;
                 }
             }
