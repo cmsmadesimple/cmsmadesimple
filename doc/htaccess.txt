@@ -62,13 +62,11 @@ RedirectMatch 403 ^/.*\.htaccess$
 RedirectMatch 403 ^/.*\.log$
 RedirectMatch 403 ^/.*\.ini$
 RedirectMatch 403 ^/.*config\.php$
-RedirectMatch 403 ^.*/doc/.*\.php$
-RedirectMatch 403 ^.*/doc/.*\.php$
+RedirectMatch 403 ^.*/doc/.*$
 RedirectMatch 403 ^.*/lib/.*\.php$
 RedirectMatch 403 ^.*/tmp/.*\.php$
 RedirectMatch 403 ^.*/plugins/.*\.php$
-RedirectMatch 403 ^.*/modules/(?!TinyMCE/responsive_filemanager/filemanager/).*\.php$
-RedirectMatch 403 ^.*/plugins/.*\.php$
+RedirectMatch 403 ^.*/modules/.*\.php$
 RedirectMatch 403 ^.*/uploads/.*\.php$
 
 
