@@ -1,3 +1,11 @@
+Version 2.1.5
+----------------------------------
+Core - General
+  - Fix fatal error if an extcss stylesheet was placed in the admin theme
+
+Design Manager
+  - Fix problem with resetting a template back to factory defaults, or creating a new template from factory defaults.
+
 Version 2.1.4 - Freetown
 ----------------------------------
 Core - General
