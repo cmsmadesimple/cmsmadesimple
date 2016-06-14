@@ -348,7 +348,7 @@ $lang['username'] = 'User name';
 
 # W
 $lang['warn_disable_functions'] = 'Note: one or more PHP core functions are disabled. This can have negative impact on your CMSMS installation, particularly with third party extensions. Please keep an eye on your error log. Your disabled functions are: <br /><br />%s';
-$lang['warn_max_execution_time'] = 'Although your max execution time of %s exceeds the minimum value of %s, we recommend you increase it to %s or greater';
+$lang['warn_max_execution_time'] = 'Although your max execution time of %s meets or exceeds the minimum value of %s, we recommend you increase it to %s or greater';
 $lang['warn_memory_limit'] = 'Your memory limit value is %s, which is above the minimum of %s. However, %s is recommended';
 $lang['warn_open_basedir'] = 'open_basedir is enabled in your php configuration.  Although you may continue, CMSMS will not support installs with open_basedir restrictions.';
 $lang['warn_post_max_size'] = 'Your post max size value is %s, which is above the minimum of %s, however %s is recommended. Also, please ensure that this value is larger than the upload_max_filesize';

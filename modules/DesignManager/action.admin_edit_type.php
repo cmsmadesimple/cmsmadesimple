@@ -37,7 +37,8 @@ try {
   $type = CmsLayoutTemplateType::load($params['type']);
 
   if( isset($params['reset']) ) {
-    $type->reset_content_to_factory();
+      $type->reset_content_to_factory();
+      $type->save();
   }
   else if( isset($params['submit']) ) {
     if( isset($params['dflt_contents']) ) {

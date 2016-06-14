@@ -27,19 +27,26 @@ require_once("../lib/classes/class.user.inc.php");
 $themeObject = cms_utils::get_theme_object();
 $theme = $themeObject->themeName;
 
+$cms_readfile = function($filename) {
+  @ob_start();
+  echo file_get_contents($filename);
+  $result = @ob_get_contents();
+  @ob_end_clean();
+  if( !empty($result) ) {
+    echo $result;
+    return TRUE;
+  }
+  return FALSE;
+};
+
 header("Content-type: text/css; charset=" . get_encoding());
-if (file_exists(dirname(__FILE__)."/themes/$theme/css/style.css"))
-  {
+if (file_exists(dirname(__FILE__)."/themes/$theme/css/style.css")) {
     echo file_get_contents(dirname(__FILE__)."/themes/$theme/css/style.css");
-  }
-else
-  {
+}
+else {
     echo file_get_contents(dirname(__FILE__)."/themes/OneEleven/css/style.css");
-  }
+}
 
-if (file_exists(dirname(__FILE__)."/themes/".$theme."/extcss/style.css"))
-  {
-    cms_readfile(dirname(__FILE__)."/themes/".$theme."/extcss/style.css");
-  }
-
-?>
+if (file_exists(dirname(__FILE__)."/themes/".$theme."/extcss/style.css")) {
+    $cms_readfile(dirname(__FILE__)."/themes/".$theme."/extcss/style.css");
+}

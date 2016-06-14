@@ -1016,7 +1016,7 @@ class CmsLayoutTemplate
 			$t2 = CmsLayoutTemplateType::load($t);
 		}
 		else if( is_object($t) && is_a($t,'CmsLayoutTemplateType') ) {
-			$t2 = t;
+			$t2 = $t;
 		}
 
 		if( !$t2 ) throw new CmsInvalidDataException('Invalid data passed to CmsLayoutTemplate::create_by_type()');
@@ -1057,7 +1057,7 @@ class CmsLayoutTemplate
 		$db = CmsApp::get_instance()->GetDb();
 		$query = 'SELECT * FROM '.CMS_DB_PREFIX.self::TABLENAME.' WHERE type_id = ? AND type_dflt = ?';
 		$tmp = $db->GetRow($query,array($t2->get_id(),1));
-		if( !is_array($tmp) || count($tmp) == 0 ) throw new CmsDataNotFoundException('Could not find default CmsLayoutTemplate row for type '.$t);
+		if( !is_array($tmp) || count($tmp) == 0 ) throw new CmsDataNotFoundException('Could not find default CmsLayoutTemplate row for type '.$t2->get_name());
 
 		return self::_load_from_data($tmp);
 	}
