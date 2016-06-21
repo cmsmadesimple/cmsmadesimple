@@ -1797,6 +1797,10 @@ textarea.pageextrasmalltextarea {
 	border-top: 3px solid #ddd
 }
 /*** topcontent - dashboard ***/
+#topcontent_wrap {
+    display: flex;
+    flex-wrap: wrap;
+}
 .dashboard-box {
 	min-height: 100px;
 	width: 31.513%;

@@ -1,5 +1,5 @@
 {strip}
-
+<div id="topcontent_wrap">
 {foreach from=$nodes item='node' name='box'}
 {assign var='icon' value="themes/OneEleven/images/icons/topfiles/`$node.name`"}
 {assign var='module' value="../modules/`$node.name`/images/icon"}
@@ -39,5 +39,5 @@
 	{/if}
 	{/if}
 {/foreach}
-
+</div>
 {/strip}

@@ -144,6 +144,7 @@ class OneElevenTheme extends CmsAdminThemeBase {
 		$smarty->template_dir = __DIR__ . '/templates';
 		if ($section_name) {
 			$smarty->assign('section_name', $section_name);
+			$smarty->assign('pagetitle', lang($section_name));
 			$smarty->assign('nodes', $this->get_navigation_tree($section_name, -1, FALSE));
 		} else {
 			$nodes = $this->get_navigation_tree(-1, 2, FALSE);
@@ -208,7 +209,7 @@ class OneElevenTheme extends CmsAdminThemeBase {
 		  }
 		}
         // page title and alias
-		$smarty->assign('pagetitle', $title);
+		if( $title ) $smarty->assign('pagetitle', $title);
         $smarty->assign('pagealias', munge_string_to_url($alias));
 
 		// module name?

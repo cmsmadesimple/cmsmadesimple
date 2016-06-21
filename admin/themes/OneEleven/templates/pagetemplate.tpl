@@ -92,7 +92,7 @@
 							{/if}
 							{* filemanager dropzone *}
 							{if isset($droparea) && !isset($is_ie)}
-								{$droparea}
+							  {$droparea}
 							{/if}
 						</header>
 						<section class="cf">
