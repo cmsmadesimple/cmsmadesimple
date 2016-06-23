@@ -691,7 +691,7 @@ abstract class CmsAdminThemeBase
                 // if the mact is set for both, and the module portion of the mact
                 // are the same, we add a reference to the option to our 'matches'
                 // list.  at the end, we re-compare
-				$u1 = new cms_url($sectionArray['url']);
+				$u1 = new cms_url(cms_html_entity_decode($sectionArray['url']));
 				$v1 = array();
 				parse_str($u1->get_query(),$v1);
 				if( $u1->get_path() == $req_url->get_path() &&

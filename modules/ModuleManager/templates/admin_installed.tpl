@@ -165,7 +165,7 @@ $(document).ready(function(){
         <a class="modop mod_about" href="{cms_action_url action='local_about' mod=$item.name}" title="{$ModuleManager->Lang('title_moduleabout')}">{$ModuleManager->Lang('abouttxt')}</a>
       </td>
       {if $allow_export}<td>
-        {if $item.active && $item.writable}
+        {if $item.active && $item.root_writable}
           <a class="modop mod_export" href="{cms_action_url action='local_export' mod=$item.name}" title="{$ModuleManager->Lang('title_moduleexport')}">{admin_icon icon='xml_rss.gif'}</a>
         {/if}
       </td>{/if}

@@ -206,7 +206,7 @@ class UserOperations
 	 * @return mixed If successful, the filled User object.  If it fails, it returns false.
 	 * @since 0.6.1
 	 */
-	function LoadUserByID($id)
+	function &LoadUserByID($id)
 	{
 		$id = (int)$id;
 		if( $id < 1 ) return false;
