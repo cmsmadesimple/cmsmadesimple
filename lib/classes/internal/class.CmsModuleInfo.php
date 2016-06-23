@@ -3,7 +3,7 @@
 class CmsModuleInfo implements ArrayAccess
 {
     private static $_keys = array('name','version','depends','mincmsversion', 'author', 'authoremail', 'help', 'about',
-                                  'lazyloadadmin', 'lazyloadfrontend', 'changelog','ver_compatible','dir','writable',
+                                  'lazyloadadmin', 'lazyloadfrontend', 'changelog','ver_compatible','dir','writable','root_writable',
                                   'description','has_meta','has_custom');
     private $_data = array();
 
@@ -15,13 +15,16 @@ class CmsModuleInfo implements ArrayAccess
             break;
 
         case 'ver_compatible':
-        return version_compare($this['mincmsversion'],CMS_VERSION,'<=');
+            return version_compare($this['mincmsversion'],CMS_VERSION,'<=');
 
         case 'dir':
             return cms_join_path(CMS_ROOT_PATH,'modules',$this['name']);
 
         case 'writable':
-        return is_directory_writable($this['dir']);
+            return is_directory_writable($this['dir']);
+
+        case 'root_writable':
+            return is_writable($this['dir']);
 
         default:
             if( isset($this->_data[$key]) ) return $this->_data[$key];
@@ -31,13 +34,14 @@ class CmsModuleInfo implements ArrayAccess
 
   public function OffsetSet($key,$value)
   {
-    if( !in_array($key,self::$_keys) ) throw new CmsLogicException('CMSEX_INVALIDMEMBER',null,$key);
-    if( $key == 'about' ) throw new CmsLogicException('CMSEX_INVALIDMEMBERSET',$key);
-    if( $key == 'ver_compatible' ) throw new CmsLogicException('CMSEX_INVALIDMEMBERSET',$key);
-    if( $key == 'dir' ) throw new CmsLogicException('CMSEX_INVALIDMEMBERSET',$key);
-    if( $key == 'writable' ) throw new CmsLogicException('CMSEX_INVALIDMEMBERSET',$key);
-    if( $key == 'has_custom' ) throw new CmsLogicException('CMSEX_INVALIDMEMBERSET',$key);
-    $this->_data[$key] = $value;
+      if( !in_array($key,self::$_keys) ) throw new CmsLogicException('CMSEX_INVALIDMEMBER',null,$key);
+      if( $key == 'about' ) throw new CmsLogicException('CMSEX_INVALIDMEMBERSET',$key);
+      if( $key == 'ver_compatible' ) throw new CmsLogicException('CMSEX_INVALIDMEMBERSET',$key);
+      if( $key == 'dir' ) throw new CmsLogicException('CMSEX_INVALIDMEMBERSET',$key);
+      if( $key == 'writable' ) throw new CmsLogicException('CMSEX_INVALIDMEMBERSET',$key);
+      if( $key == 'root_writable' ) throw new CmsLogicException('CMSEX_INVALIDMEMBERSET',$key);
+      if( $key == 'has_custom' ) throw new CmsLogicException('CMSEX_INVALIDMEMBERSET',$key);
+      $this->_data[$key] = $value;
   }
 
   public function OffsetExists($key)
@@ -68,9 +72,7 @@ class CmsModuleInfo implements ArrayAccess
       $files1 = glob($dir."/templates/*.tpl");
       $files2 = glob($dir."/lang/??_??.php");
       $this->_data['has_custom'] = false;
-      if( count($files1) || count($files2) ) {
-          $this->_data['has_custom'] = TRUE;
-      }
+      if( count($files1) || count($files2) ) $this->_data['has_custom'] = TRUE;
   }
 
   private function _read_from_module_meta($module_name)

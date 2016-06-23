@@ -413,7 +413,8 @@ abstract class CMSModule
      */
     public function GetName()
     {
-        return get_class($this);
+        $tmp = get_class($this);
+        return basename(str_replace('\\','/',$tmp));
     }
 
     /**

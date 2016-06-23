@@ -53,6 +53,16 @@ final class ModuleOperations
 	 */
 	static private $_instance = null;
 
+    /**
+     * @ignore
+     */
+    const CLASSMAP_PREF = 'module_classmap';
+
+    /**
+     * @ignore
+     */
+    static private $_classmap = null;
+
 	/**
 	 * @ignore
 	 */
@@ -66,7 +76,7 @@ final class ModuleOperations
 	/**
 	 * @ignore
 	 */
-	private $xml_exclude_files = array('^\.svn' , '^CVS$' , '^\#.*\#$' , '~$', '\.bak$', '^\.git');
+	private $xml_exclude_files = array('^\.svn' , '^CVS$' , '^\#.*\#$' , '~$', '\.bak$', '^\.git', '^\.tmp$');
 
 	/**
 	 * @ignore
@@ -116,12 +126,43 @@ final class ModuleOperations
     }
 
 
-    public function set_module_classname($module,$classname)
+    protected static function get_module_classmap()
     {
-        if( !$module || !$classname ) return;
-        if( !isset($this->_module_class_map[$module]) ) {
-            $this->_module_class_map[(string)$module] = (string)$classname;
+        if( !is_array(self::$_classmap) ) {
+            self::$_classmap = [];
+            $tmp = \cms_siteprefs::get(self::CLASSMAP_PREF);
+            if( $tmp ) self::$_classmap = unserialize($tmp);
         }
+        return self::$_classmap;
+    }
+
+    protected static function get_module_classname($module)
+    {
+        $module = trim($module);
+        if( !$module ) return;
+        $map = self::get_module_classmap();
+        if( isset($map[$module]) ) return $map[$module];
+        return $module;
+    }
+
+    protected static function get_module_filename($module)
+    {
+        $module = trim($module);
+        if( !$module ) return;
+        $map = self::get_module_classmap();
+        $config = \cms_config::get_instance();
+        return cms_join_path($config['root_path'],'modules',$module,"$module.module.php");
+    }
+
+    public static function set_module_classname($module,$classname)
+    {
+        $module = trim($module);
+        $classname = trim($classname);
+        if( !$module || !$classname ) return;
+
+        self::get_module_classmap();
+        self::$_classmap[$module] = $classname;
+        \cms_siteprefs::set(self::CLASSMAP_PREF, serialize(self::$_classmap));
     }
 
     /**
@@ -131,7 +172,7 @@ final class ModuleOperations
     private function _generate_moduleinfo( CMSModule &$modinstance )
     {
         $dir = dirname(dirname(__DIR__)).DIRECTORY_SEPARATOR."modules".DIRECTORY_SEPARATOR.$modinstance->GetName();
-        if( !is_writable( $dir ) && $brief == 0 ) throw new CmsFileSystemException(lang('errordirectorynotwritable'));
+        if( !is_writable( $dir ) ) throw new CmsFileSystemException(lang('errordirectorynotwritable'));
 
         $fh = fopen($dir."/moduleinfo.ini",'w');
         fputs($fh,"[module]\n");
@@ -170,7 +211,7 @@ final class ModuleOperations
         $CMSMS_GENERATING_XML = 1;
         $filecount = 0;
         $dir = dirname(dirname(__DIR__)).DIRECTORY_SEPARATOR."modules".DIRECTORY_SEPARATOR.$modinstance->GetName();
-        if( !is_writable( $dir ) && $brief == 0 ) throw new CmsFileSystemException(lang('errordirectorynotwritable'));
+        if( !is_writable( $dir ) ) throw new CmsFileSystemException(lang('errordirectorynotwritable'));
 
         // generate the moduleinfo.ini file
         $this->_generate_moduleinfo($modinstance);
@@ -182,7 +223,7 @@ final class ModuleOperations
         $xmltxt .= "	<dtdversion>".MODULE_DTD_VERSION."</dtdversion>\n";
         $xmltxt .= "	<name>".$modinstance->GetName()."</name>\n";
         $xmltxt .= "	<version>".$modinstance->GetVersion()."</version>\n";
-        $xmltxt .= "  <mincmsversion>".$modinstance->MinimumCMSVersion()."</mincmsversion>\n";
+        $xmltxt .= "    <mincmsversion>".$modinstance->MinimumCMSVersion()."</mincmsversion>\n";
         $xmltxt .= "	<help><![CDATA[".base64_encode($modinstance->GetHelpPage())."]]></help>\n";
         $xmltxt .= "	<about><![CDATA[".base64_encode($modinstance->GetAbout())."]]></about>\n";
         $desc = $modinstance->GetAdminDescription();
@@ -495,7 +536,8 @@ final class ModuleOperations
                 $this->_moduleinfo = array();
                 for( $i = 0, $n = count($tmp); $i < $n; $i++ ) {
                     $name = $tmp[$i]['module_name'];
-                    if( is_file($dir."/$name/$name.module.php") ) {
+                    $filename = self::get_module_filename($name);
+                    if( is_file($filename) ) {
                         if( !isset($this->_moduleinfo[$name]) ) $this->_moduleinfo[$name] = $tmp[$i];
                     }
                 }
@@ -555,9 +597,10 @@ final class ModuleOperations
             }
         }
 
+
         // now load the module itself.
         if( !class_exists($module_name) ) {
-            $fname = $dir."/$module_name/$module_name.module.php";
+            $fname = self::get_module_filename($module_name);
             if( !is_file($fname) ) {
                 debug_buffer("Cannot load $module_name because the module file does not exist");
                 return FALSE;
@@ -568,9 +611,9 @@ final class ModuleOperations
         }
 
         $obj = null;
-        if( class_exists($module_name) ) $obj = new $module_name;
-        if( !$obj && isset($this->_module_class_map[$module_name]) ) $obj = new $this->_module_class_map[$module_name];
-        if( !is_object($obj) ) {
+        $classname = self::get_module_classname($module_name);
+        $obj = new $classname;
+        if( !is_object($obj) || ! $obj instanceof \CMSModule ) {
             // oops, some problem loading.
             audit('','Module',"Cannot load module $module_name ... some problem instantiating the class");
             debug_buffer("Cannot load $module_name ... some problem instantiating the class");
@@ -730,7 +773,7 @@ final class ModuleOperations
         if( $loadall ) $this->_load_all_modules();
         global $CMS_ADMIN_PAGE;
         global $CMS_STYLESHEET;
-        $config = CmsApp::get_instance()->GetConfig();
+        $config = \cms_config::get_instance();
         $allinfo = $this->_get_module_info();
         if( !is_array($allinfo) ) return; // no modules installed, probably an empty database... edge case.
 

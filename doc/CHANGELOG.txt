@@ -1,4 +1,4 @@
-Version 2.2
+Version 1.2
 ----------------------------------
 Core - General
 - Implement new database abstraction library that is compatible with (functionality wise) but improves apon adodb-lite
@@ -35,6 +35,9 @@ Core - General
 - Fix problem with the default parameter to the {content} tag.
 - Fix problem with the use_smartycache thing in system information.
 - Fix notice in useroperations
+  - Fixes problems where all files (including dot files) had to be writable before creating a module XML file.
+  - Fixes minor notice in user operations.  
+  - Fixes for namespaced modules.
 
 Installation Assistant v1.2.1
 - Only create dummy index.html files in subdirectories we created.
@@ -103,6 +106,8 @@ Phar Installer
   - Fixes issues with respect to hanging on step 7 when suhosin PHP addon was installed.
   - Minor PHP7 Fixes.
 
+Module Manager
+  - Fixes problems where all files (including dot files) had to be writable before creating a module XML file.
 
 Version 2.1.3 - Black Point
 ----------------------------------
