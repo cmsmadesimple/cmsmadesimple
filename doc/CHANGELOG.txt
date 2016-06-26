@@ -6,6 +6,8 @@ Core - General
   - Fixes problems where all files (including dot files) had to be writable before creating a module XML file.
   - Fixes minor notice in user operations.  
   - Fixes for namespaced modules.
+  - Fixes an issue in CmsLayoutTemplate when creating a template from a type.
+  - More fixes to cms_url class.
 
 Design Manager
   - Fix problem with resetting a template back to factory defaults, or creating a new template from factory defaults.
