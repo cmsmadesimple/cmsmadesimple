@@ -66,6 +66,7 @@ class cms_mailer
   /**
    * __call
    *
+   * @ignore
    * @param string $method Call method to call from PHP Mailer
    * @param array $args Arguments passed to PHP Mailer method
    */
