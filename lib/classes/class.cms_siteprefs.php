@@ -159,7 +159,7 @@ final class cms_siteprefs
 		if( $like ) {
 			$query = 'DELETE FROM '.CMS_DB_PREFIX.'siteprefs WHERE sitepref_name LIKE ?';
 			$key .= '%';
-		}
+		};
 		$db = CmsApp::get_instance()->GetDb();
         $db->Execute($query,array($key));
 		self::_reset();
