@@ -205,6 +205,9 @@ $lang['profile_showstatusbar'] = 'Show statusbar';
 $lang['prompt_name'] = 'Name';
 $lang['prompt_target'] = 'Target';
 $lang['prompt_class'] = 'Class attribute';
+$lang['prompt_email'] = 'Email address';
+$lang['prompt_insertmailto'] = 'Insert/edit a mail link';
+$lang['prompt_anchortext'] = 'Anchor text';
 $lang['prompt_rel'] = 'Rel attribute';
 $lang['prompt_texttodisplay'] = 'Text to display';
 

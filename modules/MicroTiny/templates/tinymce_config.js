@@ -29,6 +29,9 @@ tinymce.init({
         prompt_class : '{$MT->Lang('prompt_class')}',
         prompt_rel : '{$MT->Lang('prompt_rel')}',
         prompt_target : '{$MT->Lang('prompt_target')}',
+        prompt_insertmailto : '{$MT->Lang('prompt_insertmailto')}',
+        prompt_email : '{$MT->Lang('prompt_email')}',
+        prompt_anchortext : '{$MT->Lang('prompt_anchortext')}',
         tab_general : '{$MT->Lang('tab_general_title')}',
         tab_advanced : '{$MT->Lang('tab_advanced_title')}',
         target_none : '{$MT->Lang('none')}',
@@ -48,12 +51,12 @@ tinymce.init({
     content_css : '{cms_stylesheet name=$mt_cssname nolinks=1}',
 {/if}
 {if $isfrontend}
-    toolbar: 'undo | bold italic underline | alignleft aligncenter alignright alignjustify indent outdent | bullist numlist | link{if $mt_profile.allowimages} | image{/if}',
-    plugins: ['autolink paste link anchor wordcount {if $mt_profile.allowimages} media image{/if} {if $mt_profile.allowtables}table{/if}'],
+    toolbar: 'undo | bold italic underline | alignleft aligncenter alignright alignjustify indent outdent | bullist numlist | link mailto{if $mt_profile.allowimages} | image{/if}',
+    plugins: ['autolink paste link mailto anchor wordcount {if $mt_profile.allowimages} media image{/if} {if $mt_profile.allowtables}table{/if}'],
 {else}
     image_advtab: true,
-    toolbar: 'undo redo | cut copy paste | styleselect | bold italic underline | alignleft aligncenter alignright alignjustify indent outdent | bullist numlist | anchor link unlink cmsms_linker{if $mt_profile.allowimages} | image cmsms_filebrowser{/if}',
-    plugins: ['paste autolink link cmsms_linker charmap anchor searchreplace wordcount code fullscreen insertdatetime {if $mt_profile.allowtables}table{/if} {if $mt_profile.allowimages}media image cmsms_filepicker cmsms_filebrowser{/if}'],
+    toolbar: 'undo redo | cut copy paste | styleselect | bold italic underline | alignleft aligncenter alignright alignjustify indent outdent | bullist numlist | anchor link mailto unlink cmsms_linker{if $mt_profile.allowimages} | image cmsms_filebrowser{/if}',
+    plugins: ['paste autolink link mailto cmsms_linker charmap anchor searchreplace wordcount code fullscreen insertdatetime {if $mt_profile.allowtables}table{/if} {if $mt_profile.allowimages}media image cmsms_filepicker cmsms_filebrowser{/if}'],
 {/if}
     // callback functions
     urlconverter_callback: function(url, elm, onsave, name) {
