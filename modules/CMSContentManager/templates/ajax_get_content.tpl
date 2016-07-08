@@ -211,7 +211,7 @@
       <tr>
         {foreach from=$columns key='column' item='flag'}
 	{if $flag}
-	  <th class="{$column} {if $flag=='icon'}pageicon{/if}"><!-- {$column} -->
+	  <th class="{*$column TODO Rolf *} {if $flag=='icon'}pageicon{/if}"><!-- {$column} -->
 	  {if $column == 'expand' or $column == 'hier' or $column == 'icon1' or $column == 'view' or $column == 'copy' or $column == 'edit' or $column == 'delete'}
             <span title="{$mod->Lang("coltitle_{$column}")}">&nbsp;</span>{* no column header *}
   	  {elseif $column == 'multiselect'}
