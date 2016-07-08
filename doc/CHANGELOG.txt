@@ -1,99 +1,99 @@
-Version 1.2
+Version 2.2 - No Name Set
 ----------------------------------
 Core - General
-- Implement new database abstraction library that is compatible with (functionality wise) but improves apon adodb-lite
-- Implement protocol-less URL's in the config
-- page tabs are now focussable (you can tab through page tabs and use enter to select one).
-- Minor accessibility tweaks to the OneEleven theme.
-- Minor fix to the {form_start} plugin
-- Minor change to the {admin_icon} plugin (default image class).
-- Cache more items that are queried from the database, to reduce mysql load.
-- Minor change to tree operations functionality to reduce memory usage
-- Fixed problem with order of content blocks when using {content_module} stuff.
-- Adds get_usage_string and the concept of a type assistant to template types.
-- Minor change to auto-alias determination routine.
-- Detect module_custom enhancements in the CmsModuleInfo stuff.
-- Refactor admin authentication.
-- More fixes to the cms_url class
-- Optimize the include.php file
-- Adds built-in asynchronous task processing system
-- Adds the ability to reduce redundant mentions in the admin log (runs asynchronously)
-- Refactor the adminlog page to allow for better filtering and pagination.
-- Notification functions in the CmsAdminThemeBase function are now just stubs and do nothing.  Will be removed at a later date.
-- Removed the GetNotificationOutput() method from the module API.
-- Adds classes for creating Alerts.. this is much more advanced than te old Notifications system.
-- Refactored the OneEleven admin theme to use new Alerts classes instead of old Notifications
-- Removed notification settings from MyAccount and global settings
-- Removed pseudocron granularity preferences
-- cms_alert() and the new cms_confirm() javascript functions now return promises.
-- fix problems with the OneEleven theme
-   - fixed sidenav now works properly.  if sidenav is larger than viewport then don't use fixed... easy
-   - now revert to small sidebar navigation (still floating) if screen is too narrow.
-- Fixes to the cache clearing methodology
-- No longer check for duplicate content blocks in templates... Needs testing.
-- New core events: ContentPreRender,LostPassword,LostPasswordReset,StylesheetPostRender
-- Fix problem with the default parameter to the {content} tag.
-- Fix problem with the use_smartycache thing in system information.
-- Fix notice in useroperations
+  - Implement new database abstraction library that is compatible with (functionality wise) but improves apon adodb-lite.
+  - Implement protocol-less URL's in the config.
+  - Page tabs are now focusable (you can tab through page tabs and use enter to select one).
+  - Minor accessibility tweaks to the OneEleven theme.
+  - Minor fix to the {form_start} plugin.
+  - Minor change to the {admin_icon} plugin (default image class).
+  - Cache more items that are queried from the database, to reduce mysql load.
+  - Minor change to tree operations functionality to reduce memory usage.
+  - Fixed problem with order of content blocks when using {content_module} stuff.
+  - Adds get_usage_string and the concept of a type assistant to template types.
+  - Minor change to auto-alias determination routine.
+  - Detect module_custom enhancements in the CmsModuleInfo stuff.
+  - Refactor Admin authentication.
+  - More fixes to the cms_url class.
+  - Optimize the include.php file.
+  - Adds built-in asynchronous task processing system.
+  - Adds the ability to reduce redundant mentions in the Admin log (runs asynchronously).
+  - Refactor the Admin log page to allow for better filtering and pagination.
+  - Notification functions in the CmsAdminThemeBase function are now just stubs and do nothing. Will be removed at a later date.
+  - Removed the GetNotificationOutput() method from the module API.
+  - Adds classes for creating Alerts. This is much more advanced than the old Notifications system.
+  - Refactored the OneEleven Admin theme to use new Alerts classes instead of old Notifications.
+  - Removed notification settings from MyAccount and Global Settings.
+  - Removed pseudocron granularity preferences.
+  - cms_alert() and the new cms_confirm() JavaScript functions now return promises.
+  - Fix problems with the OneEleven theme.
+  - Fixed sidenav now works properly. If sidenav is larger than viewport then don't use fixed... easy.
+  - Now revert to small sidebar navigation (still floating) if screen is too narrow.
+  - Fixes to the cache clearing methodology.
+  - No longer check for duplicate content blocks in templates... NEEDS TESTING
+  - New core events: ContentPreRender, LostPassword, LostPasswordReset, StylesheetPostRender.
+  - Fix problem with the default parameter to the {content} tag.
+  - Fix problem with the use_smartycache thing in system information.
+  - Fix notice in useroperations.
   - Fixes problems where all files (including dot files) had to be writable before creating a module XML file.
   - Fixes minor notice in user operations.  
   - Fixes for namespaced modules.
 
 Installation Assistant v1.2.1
-- Only create dummy index.html files in subdirectories we created.
-- Clear cache after step 9
+  - Only create dummy index.html files in subdirectories we created.
+  - Clear cache after step 9.
 
 CmsJobManager
-- New core module to handle queued asynchronous tasks.
+  - New core module to handle queued asynchronous tasks.
 
 Content Manager
-- Minor tweak to bulk delete pages.
-- Minor fix to the active tab when changing a template or design.
-- Now listen to the 'default parent page' user preference.
-- Fix minor XSS problem in the admin if some loser puts javascript into the title field or alias field or menu text field.
+  - Minor tweak to bulk delete pages.
+  - Minor fix to the active tab when changing a template or design.
+  - Now listen to the 'default parent page' user preference.
+  - Fix minor XSS problem in the Admin if some loser puts JavaScript into the title field or alias field or menu text field.
 
 DesignManager
-- Move the designs tab of the main interface into third position.
-- Implement sorting in edit design.
-- Remove option menus (for now) from templates, stylesheets, and designs tab.
-- Modify the template list functionality in edit-design to allow using keyboard control.   space or + to select an item on the left, and right arrow to move
-- Modify the edit-design functionality to allow clicking on an attached template or stylesheet to edit it.
-- Generic templates now display a usage string.
-- When creating a new template, associate the new template with the default design.
-- Add reset buttons to the filter forms.
-- No longer check for default content block in a template.
+  - Move the designs tab of the main interface into third position.
+  - Implement sorting in edit design.
+  - Remove option menus (for now) from templates, stylesheets, and designs tab.
+  - Modify the template list functionality in edit-design to allow using keyboard control. Space or + to select an item on the left, and right arrow to move.
+  - Modify the edit-design functionality to allow clicking on an attached template or stylesheet to edit it.
+  - Generic templates now display a usage string.
+  - When creating a new template, associate the new template with the default design.
+  - Add reset buttons to the filter forms.
+  - No longer check for default content block in a template.
 
 News v2.50.5
-- Minor fix to add category.
-- Removes GetNotificationOutput method.
-- adda a task that runs at least every 15 minutes to detect draft articles... create an alert for this.
-- add an option to never create alerts about draft News articles.
+  - Minor fix to add category.
+  - Removes GetNotificationOutput method.
+  - Add a task that runs at least every 15 minutes to detect draft articles... create an alert for this.
+  - Add an option to never create alerts about draft News articles.
 
 FileManager v1.6.2
-- Move settings to it's own menu item under site-admin
-- Fix minor problem with moving a directory.
-- Adds OnFileDeleted event.
+  - Move settings to it's own menu item under Site Admin.
+  - Fix minor problem with moving a directory.
+  - Adds OnFileDeleted event.
 
 Phar Installer v1.2
-- A database account password is now required
-- Upgrade routine now asks for, and tests database credentials
-- Upgrade routine now rewrites the config.php file (but keeps a backup)
-- Set a few more preferences to reasonable defaults on install.. specifically related to site cleanup and performance.
+  - A database account password is now required.
+  - Upgrade routine now asks for, and tests database credentials.
+  - Upgrade routine now rewrites the config.php file (but keeps a backup).
+  - Set a few more preferences to reasonable defaults on install.. specifically related to site cleanup and performance.
 
 Search
-- Convert to store all data using the InnoDB engine
-- Use transactions for the addwords and deletewords stuff for performance.
-- Fix problem with query and record expiry.
-- todo: create async job to reindex all output
+  - Convert to store all data using the InnoDB engine.
+  - Use transactions for the addwords and deletewords stuff for performance.
+  - Fix problem with query and record expiry.
+  - TODO: Create async job to re-index all output.
 
 AdminSearch v1.0.1
-- Fixes problem with use of 'Use Admin Search' permission.
+  - Fixes problem with use of 'Use Admin Search' permission.
 
 ModuleManager
-- Now detect if module_custom directories exist and are populated and warn about this before upgrading a module.
-- Minor string changes.
-- Improvements to error handling in the new versions tab.
-- Write a confirmation form for uninstalling a module that displays the UninstallPreMessage or uses a default.
+  - Now detect if module_custom directories exist and are populated and warn about this before upgrading a module.
+  - Minor string changes.
+  - Improvements to error handling in the new versions tab.
+  - Write a confirmation form for uninstalling a module that displays the UninstallPreMessage or uses a default.
 
 
 Version 2.1.4 - Freetown
@@ -109,6 +109,7 @@ Phar Installer
 Module Manager
   - Fixes problems where all files (including dot files) had to be writable before creating a module XML file.
 
+  
 Version 2.1.3 - Black Point
 ----------------------------------
 Core - General
