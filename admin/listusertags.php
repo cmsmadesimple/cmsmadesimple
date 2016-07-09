@@ -35,7 +35,7 @@ function listudt_summarize($str,$numwords,$ets='...')
 {
     $str = strip_tags($str);
     $stringarray = explode(" ",$str);
-    $numwords = min(1,max(100,$numwords));
+    $numwords = min(max($numwords,1),100);
     if( $numwords >= count($stringarray) ) return $str;
     $tmp = array_slice($stringarray,0,$numwords);
     $tmp = implode(' ',$tmp).$ets;
