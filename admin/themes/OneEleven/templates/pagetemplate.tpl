@@ -82,7 +82,7 @@
 					{strip}
 					{include file='messages.tpl'}
 					<article role="main" class="content-inner">
-						<header class="pageheader{if isset($is_ie)} drop-hidden{/if} cf">
+						<header class="pageheader{if isset($is_ie)} drop-hidden{/if} cf"> {* TODO remove drop hidden *}
 							{if isset($module_icon_url) or isset($pagetitle)}
 							<h1>{if isset($module_icon_url)}<img src="{$module_icon_url}" alt="{$module_name|default:''}" class="module-icon" />{/if}
 							{$pagetitle|default:''}
@@ -90,7 +90,7 @@
 							{if isset($module_help_url) or isset($wiki_url)} <span class="helptext"> {if isset($module_help_url)}<a href="{$module_help_url}">{'module_help'|lang}</a>{/if}
 								{if isset($wiki_url)}<a href="{$wiki_url}" class="external" target="_blank">{'help'|lang}</a> <em>({'new_window'|lang})</em>{/if} </span> {/if}
 							{/if}
-							{* filemanager dropzone *}
+							{* filemanager dropzone TODO remove? *}
 							{if isset($droparea) && !isset($is_ie)}
 							  {$droparea}
 							{/if}
