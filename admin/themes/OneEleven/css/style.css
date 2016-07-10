@@ -968,7 +968,7 @@ header .shortcuts li.favorites a {
 }
 #oe_sidebar nav.navigation {
 	height: auto;
-	/* padding-top: 45px; */
+	padding-top: 45px;
 	position: relative
 }
 /* toggle sidebar */
@@ -980,8 +980,8 @@ header .shortcuts li.favorites a {
 	width: 24px;
 	height: 25px;
 	position: absolute;
-	right: -10px;
-	top: 15px
+	right: -1px;
+	top: 75px
 }
 #oe_sidebar .toggle-button.top {
 	top: -33px
