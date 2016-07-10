@@ -1807,7 +1807,7 @@ textarea.pageextrasmalltextarea {
 	float: left;
 	border-radius: 4px;
 	margin-right: 2.29%;
-	margin-bottom: 1%;
+	margin-bottom: 10px;
 	background: #d5d5d5 url(themes/OneEleven/images/layout/sprite_repeatx.png) 214px -339px repeat-x;
 	border: 1px solid #ddd
 }
