@@ -24,33 +24,41 @@ $(document).ready(function(){
         <th>{$mod->Lang('frequency')}</th>
         <th>{$mod->Lang('until')}</th>
         <th>{$mod->Lang('errors')}</th>
-	<th class="pageicon"></th>
+		<th class="pageicon"></th>
       </tr>
     </thead>
     <tbody>
     {foreach $jobs as $job}
       <tr class="{cycle values='row1,row2'}">
         <td>{$job->name}</td>
-	<td>{$job->module|default:''}</td>
-	<td>{$job->created|relative_time}</td>
-	<td>
-	   {if $job->start < $smarty.now - $async_freq}<span style="color: red;">
-           {elseif $job->start < $smarty.now + async_freq}<span style="color: green;">
-	   {else}<span>
-	   {/if}
-	     {$job->start|relative_time}
-	   </span>
-	</td>
-	<td>{$recur_list[$job->frequency]}</td>
-	<td>{if $job->until}{$job->until|date_format:'%x %X'}{/if}</td>
-	<td>{if $job->errors > 0}<span style="color: red;">{$job->errors}</span>{/if}</td>
-	<td></td>
+		<td>{$job->module|default:''}</td>
+		<td>{$job->created|relative_time}</td>
+		<td>
+		   {if $job->start < $smarty.now - $async_freq}<span style="color: red;">
+			   {elseif $job->start < $smarty.now + async_freq}<span style="color: green;">
+		   {else}<span>
+		   {/if}
+			 {$job->start|relative_time}
+		   </span>
+		</td>
+		<td>{$recur_list[$job->frequency]}</td>
+		<td>{if $job->until}{$job->until|date_format:'%x %X'}{/if}</td>
+		<td>{if $job->errors > 0}<span style="color: red;">{$job->errors}</span>{/if}</td>
+		<td></td>
       </tr>
     {/foreach}
     </tbody>
   </table>
 {/if}
 
-{* delete me before distributing *}
-<a id="simple1" href="{cms_action_url action=test1}">Simple Derived Class Test</a><br/>
-<a href="{cms_action_url action=test2}">Simple Derived Cron Test</a>
+{* delete me before distributing - TODO ?? *}
+
+<a id="simple1" href="{cms_action_url action=test1}" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-icon-primary">
+<span class="ui-button-icon-primary ui-icon ui-icon-circle-check"></span>
+<span class="ui-button-text">Simple Derived Class Test</span>
+</a>
+
+<a href="{cms_action_url action=test2}" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-icon-primary">
+<span class="ui-button-icon-primary ui-icon ui-icon-circle-check"></span>
+<span class="ui-button-text">Simple Derived Cron Test</span>
+</a>
