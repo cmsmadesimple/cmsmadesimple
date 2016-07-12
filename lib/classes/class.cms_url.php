@@ -358,20 +358,20 @@ class cms_url
         if( $path && $path[0] != '/' ) $path = '/'.$path;
 
 		$parts = $this->_parts;
-		$url = ((isset($parts['scheme']) && $parts['scheme']) ? $parts['scheme'] . '://' : '');
-		if( isset($parts['user']) && $parts['user'] ) {
+		$url = ((!empty($parts['scheme'])) ? $parts['scheme'] . '://' : '');
+		if( !empty($parts['user']) ) {
 			$url .= $parts['user'];
-			if( isset($parts['pass']) && $parts['pass'] ) $url .= ':'.$parts['pass'];
+			if( !empty($parts['pass']) ) $url .= ':'.$parts['pass'];
 			$url .= '@';
 		}
-		if( isset($parts['host']) ) $url .= $parts['host'];
-		if( isset($parts['port']) && $parts['port'] > 0 ) $url .= ':'.$parts['port'];
-		if( isset($parts['path']) ) {
+		if( !empty($parts['host']) ) $url .= $parts['host'];
+		if( !empty($params['port']) && $parts['port'] > 0 ) $url .= ':'.$parts['post'];
+		if( !empty($parts['path']) ) {
 			if( !startswith($parts['path'],'/') ) $url .= '/';
 			$url .= $parts['path'];
 		}
-		if( isset($parts['query']) ) $url .= '?'.$parts['query'];
-		if( isset($parts['fragment']) ) $url .= '#'.$parts['fragment'];
+		if( !empty($parts['query']) ) $url .= '?'.$parts['query'];
+		if( !empty($parts['fragment']) ) $url .= '#'.$parts['fragment'];
 		return $url;
     }
 } // end of class
