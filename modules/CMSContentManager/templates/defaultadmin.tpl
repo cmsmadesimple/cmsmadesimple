@@ -143,7 +143,12 @@
           });
       });
 
-      $('#ajax_find').keypress(function (e) {
+      $(document).on('change','#selectall,input.multicontent',function() {
+          $('#content_area').autoRefresh('reset');
+      });
+
+      $(document).on('keypress','#ajax_find',function (e) {
+          $('#content_area').autoRefresh('reset');
           if (e.which == 13) e.preventDefault();
       });
 
