@@ -4,17 +4,18 @@
         <a href="{cms_action_url action=admin_editcontent}" accesskey="n" title="{$mod->Lang('addcontent')}" class="pageoptions">{admin_icon icon='newobject.gif' alt=$mod->Lang('addcontent')}&nbsp;{$mod->Lang('addcontent')}</a>
       {/if}
 
-      {if isset($content_list)}
+      {if !$have_filter && isset($content_list)}
         <a class="expandall" href="{cms_action_url action='defaultadmin' expandall=1}" accesskey="e" title="{$mod->Lang('prompt_expandall')}">{admin_icon icon='expandall.gif' alt=$mod->Lang('expandall')}&nbsp;{$mod->Lang('expandall')}</a>
 	<a class="collapseall" href="{cms_action_url action='defaultadmin' collapseall=1}" accesskey="c" title="{$mod->Lang('prompt_collapseall')}">{admin_icon icon='contractall.gif' alt=$mod->Lang('contractall')}&nbsp;{$mod->Lang('contractall')}</a>
 	{if $can_reorder_content}
 	  <a id="ordercontent" href="{cms_action_url action=admin_ordercontent}" accesskey="r" title="{$mod->Lang('prompt_ordercontent')}">{admin_icon icon='reorder.gif' alt=$mod->Lang('reorderpages')}&nbsp;{$mod->Lang('reorderpages')}</a>
 	{/if}
-	<a id="myoptions" accesskey="o" title="{$mod->Lang('prompt_settings')}">{admin_icon icon='edit.gif' alt=$mod->Lang('prompt_settings')}&nbsp;{$mod->lang('prompt_settings')}</a>
 	{if $have_locks}
 	  <a id="clearlocks" href="{cms_action_url action=admin_clearlocks}" accesskey="l" title="{$mod->Lang('title_clearlocks')}">{admin_icon icon='run.gif' alt=''}&nbsp;{$mod->Lang('prompt_clearlocks')}</a>
 	{/if}
       {/if}
+      <a id="myoptions" accesskey="o" title="{$mod->Lang('prompt_settings')}">{admin_icon icon='edit.gif' alt=$mod->Lang('prompt_settings')}&nbsp;{$mod->lang('prompt_settings')}</a>
+      {if !empty($have_filter)}<span style="color: red;"><em>({$mod->Lang('filter_applied')})</em></span>{/if}
   </div>
 
   <div class="pageoptions options-form grid_4" style="float: right;">
@@ -40,6 +41,11 @@
 
 {form_start action='defaultadmin' id='listform'}
   <div id="contentlist">{* everything from here down is part of the ajax stuff *}
+  {* error container *}
+  {if isset($error)}
+  <div id="error_cont" class="red" style="color: red; width: 80%; margin-left: 2%; margin-right: 10%; text-align: center; vertical-align: middle;">{$error}</div>
+  {/if}
+
   {if isset($content_list)}
     {function do_content_row}
       {foreach $columns as $column => $flag}
@@ -201,11 +207,6 @@
       {/foreach}
     {/function}
 
-  {* error container *}
-  <div id="error_cont" class="error" style="color: red; text-align: center; vertical-align: middle; display: none;">
-    {$error|default:''}
-  </div>
-
   {strip}<table id="contenttable" class="pagetable" width="100%">
     <thead>
       <tr>
@@ -239,8 +240,10 @@
       {/foreach}
     </tbody>
   </table>{/strip}
-{/if}
-</div>{* #contentlist *}
+  {else}
+
+  {/if}
+  </div>{* #contentlist *}
 
 {if isset($content_list)}
   <div class="row c_full">

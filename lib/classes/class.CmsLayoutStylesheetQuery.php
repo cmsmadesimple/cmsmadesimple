@@ -167,6 +167,7 @@ class CmsLayoutStylesheetQuery extends CmsDbQueryBase
         if( !$this->_rs ) throw new CmsLogicException('Cannot get stylesheet from invalid stylesheet query object');
         $id = (int) $this->fields['id'];
         $obj = CmsLayoutStylesheet::load($id);
+        return $obj;
     }
 
 	/**

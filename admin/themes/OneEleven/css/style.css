@@ -968,7 +968,7 @@ header .shortcuts li.favorites a {
 }
 #oe_sidebar nav.navigation {
 	height: auto;
-	padding-top: 45px;
+/*	padding-top: 45px; */
 	position: relative
 }
 /* toggle sidebar */
@@ -981,7 +981,7 @@ header .shortcuts li.favorites a {
 	height: 25px;
 	position: absolute;
 	right: -1px;
-	top: 75px
+	top: 15px
 }
 #oe_sidebar .toggle-button.top {
 	top: -33px
@@ -1000,7 +1000,7 @@ header .shortcuts li.favorites a {
 #oe_sidebar .notification a {
 	text-decoration: none;
 	display: block;
-	height: 35px;
+	height: 30px;
 	background: url(themes/OneEleven/images/layout/sprite_norepeat.png) -10px -446px no-repeat;
 	color: #fff
 }
@@ -1009,8 +1009,8 @@ header .shortcuts li.favorites a {
 }
 #oe_sidebar .notification {
 	overflow: hidden;
-	height: 35px;
-	line-height: 35px;
+	height: 30px;
+	line-height: 30px;
 	position: relative;
 	padding: 14px 10px;
 	background: #232323 url(themes/OneEleven/images/layout/sprite_repeatx.png) 122px -175px repeat-x;
@@ -1239,7 +1239,7 @@ nav ul#oe_pagemenu li.current li a:active  {
 	padding: 0 20px 0 25px
 }
 #oe_mainarea header.pageheader {
-	height: 63px;
+	max-height: 63px;
 	margin-bottom: 15px;
 	position: relative;
 	border-bottom: 1px solid #fa8004

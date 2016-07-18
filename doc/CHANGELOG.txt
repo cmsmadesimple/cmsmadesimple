@@ -54,6 +54,9 @@ Content Manager
   - Minor fix to the active tab when changing a template or design.
   - Now listen to the 'default parent page' user preference.
   - Fix minor XSS problem in the Admin if some loser puts JavaScript into the title field or alias field or menu text field.
+  - Now allow filtering pages by owner, editor, template, or design.  Only for admins with Modify any page, or Manage all content permissions.
+  - Fix problems with auto-refresh being too fast for some operations
+  - Now auto scroll to the first matched page in a find.
 
 DesignManager
   - Move the designs tab of the main interface into third position.

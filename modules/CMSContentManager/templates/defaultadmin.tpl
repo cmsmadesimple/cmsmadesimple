@@ -9,7 +9,9 @@
 	     $.ajax({
 	        url: url,
 	     }).done(function(){
- 	        $('#content_area').autoRefresh('refresh');
+ 	        $('#content_area').autoRefresh('refresh').done(function(){
+		    console.debug('after refresh');
+		});
 	     })
 	  }
 
@@ -54,17 +56,19 @@
                         },
 			change: function (event, ui)  {
 			    // goes back to the full list, no options
-			    console.debug('in autocomplete change');
 			    $('#ajax_find').val('');
     		            $('#content_area').autoRefresh('option','url','{$ajax_get_content}');
 			},
                         select: function (event, ui) {
-			    console.debug('in autocomplete select');
                             event.preventDefault();
                             $(this).val(ui.item.label);
                             var url = '{cms_action_url action=ajax_get_content forjs=1}&showtemplate=false&{$actionid}seek=' + ui.item.value;
-			    console.debug('url is '+url);
-			    $('#content_area').autoRefresh('option','url',url);
+			    $('#content_area').autoRefresh('option','url',url).autoRefresh('refresh').done(function(){
+			       console.debug('after seek');
+			       $('html,body').animate({
+			          scrollTop: $('#row_'+ui.item.value).offset().top
+			       });
+			    })
                         }
                 });
 	  }
@@ -128,8 +132,25 @@
 	  });
       });
 
+      // filter dialog
+      $('#filter_type').change(function(){
+         var map = {
+	    'DESIGN_ID': '#filter_design',
+	    'TEMPLATE_ID': '#filter_template',
+	    'OWNER_UID': '#filter_owner',
+	    'EDITOR_UID': '#filter_editor'
+	 }
+         var v = $(this).val();
+	 console.debug('value is '+v);
+	 console.debug('selector is '+map[v]);
+	 $('.filter_fld').hide();
+	 $(map[v]).show();
+      })
+      $('#filter_type').trigger('change');
       $(document).on('click', '#myoptions', function () {
           $('#useroptions').dialog({
+	      minWidth: '600',
+	      minHeight: 225,
               resizable: false,
               buttons: {
                   '{$mod->Lang('submit')|escape:'javascript'}': function () {
@@ -143,6 +164,7 @@
           });
       });
 
+      // other events
       $(document).on('change','#selectall,input.multicontent',function() {
           $('#content_area').autoRefresh('reset');
       });
@@ -196,15 +218,53 @@
 
   <div id="useroptions" style="display: none;" title="{$mod->Lang('title_userpageoptions')}">
     {form_start action='defaultadmin' id='myoptions_form'}
-      <div class="pageoverflow">
+      <div class="c_full cf">
         <input type="hidden" name="{$actionid}setoptions" value="1"/>
-	<p class="pagetext">{$mod->Lang('prompt_pagelimit')}:</p>
-	<p class="pageinput">
-	  <select name="{$actionid}pagelimit">
-	    {html_options options=$pagelimits selected=$pagelimit}
-	  </select>
-	</p>
+	<label class="grid_4">{$mod->Lang('prompt_pagelimit')}:</label>
+        <select name="{$actionid}pagelimit" class="grid_7">
+          {html_options options=$pagelimits selected=$pagelimit}
+        </select>
       </div>
+      {if $can_manage_content}
+         {$type=''}{$expr=''}
+	 {$opts=[]}
+	 {$opts['']=$mod->Lang('none')}
+	 {$opts['DESIGN_ID']=$mod->Lang('prompt_design')}
+	 {$opts['TEMPLATE_ID']=$mod->Lang('prompt_template')}
+	 {$opts['OWNER_UID']=$mod->Lang('prompt_owner')}
+	 {$opts['EDITOR_UID']=$mod->Lang('prompt_editor')}
+	 {if $filter}{$type=$filter->type}{$expr=$filter->expr}{/if}
+      <div class="c_full cf">
+        <label class="grid_4">{$mod->Lang('prompt_filter_type')}:</label>
+	<select name="{$actionid}filter_type" class="grid_7" id="filter_type">
+	   {html_options options=$opts selected=$type}
+	</select>
+      </div>
+      <div class="c_full cf filter_fld" id="filter_design">
+        <label class="grid_4">{$mod->Lang('prompt_design')}:</label>
+	<select name="{$actionid}filter_design">
+	   {html_options options=$design_list selected=$expr}
+	</select>
+      </div>
+      <div class="c_full cf filter_fld" id="filter_template">
+        <label class="grid_4">{$mod->Lang('prompt_template')}:</label>
+	<select name="{$actionid}filter_template">
+	   {html_options options=$template_list selected=$expr}
+	</select>
+      </div>
+      <div class="c_full cf filter_fld" id="filter_owner">
+        <label class="grid_4">{$mod->Lang('prompt_owner')}:</label>
+	<select name="{$actionid}filter_owner">
+	   {html_options options=$user_list selected=$expr}
+	</select>
+      </div>
+      <div class="c_full cf filter_fld" id="filter_editor">
+        <label class="grid_4">{$mod->Lang('prompt_editor')}:</label>
+	<select name="{$actionid}filter_editor">
+	   {html_options options=$user_list selected=$expr}
+	</select>
+      </div>
+      {/if}
     {form_end}
   </div>
   <div class="clearb"></div>
