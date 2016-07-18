@@ -83,6 +83,11 @@ tinymce.init({
         return url;
     },
     setup: function(editor) {
+        editor.addMenuItem('mailto',{
+           text: cmsms_tiny.prompt_insertmailto,
+           cmd:  'mailto',
+           context: 'insert',
+        })
         editor.on('change', function(e) {
             $(document).trigger('cmsms_formchange');
         });
