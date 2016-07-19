@@ -110,7 +110,7 @@ class cms_tree_operations
               if( !isset($sorted[$row['parent_id']]) ) {
                   // ruh-roh
                   debug_display($row); flush();
-                  die('foo2');
+                  die('Error Page Hierarchy');
               }
               else {
                   $parent_node = $sorted[$row['parent_id']];
