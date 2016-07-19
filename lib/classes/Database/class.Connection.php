@@ -618,10 +618,7 @@ namespace CMSMS\Database {
         protected function add_debug_query($sql)
         {
             $this->_query_count++;
-            if( $this->_debug && $this->_debug_cb ) {
-                $this->_queries[] = trim($sql);
-                call_user_func($this->_debug_cb,$sql);
-            }
+            if( $this->_debug && $this->_debug_cb ) call_user_func($this->_debug_cb,$sql);
         }
 
         /**

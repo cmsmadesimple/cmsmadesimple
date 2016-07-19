@@ -107,13 +107,13 @@ $htmlresult = str_replace('<!-- THIS IS WHERE HEADER STUFF SHOULD GO -->', $head
 echo $htmlresult;
 
 if( isset($gCms->config['show_performance_info']) ) {
-  $db = cmsms()->GetDb();
-  $endtime = microtime();
-  $memory = (function_exists('memory_get_usage')?memory_get_usage():0);
-  $memory_net = 'n/a';
-  if( isset($orig_memory) ) $memory_net = $memory - $orig_memory;
-  $memory_peak = (function_exists('memory_get_peak_usage')?memory_get_peak_usage():0);
-  echo "<div>".microtime_diff($starttime,$endtime)." / ".(isset($db->query_count)?$db->query_count:'')." / {$memory_net} / {$memory} / {$memory_peak}</div>\n";
+    $db = \Cmsapp::get_instance()->GetDb();
+    $endtime = microtime();
+    $memory = (function_exists('memory_get_usage')?memory_get_usage():0);
+    $memory_net = 'n/a';
+    if( isset($orig_memory) ) $memory_net = $memory - $orig_memory;
+    $memory_peak = (function_exists('memory_get_peak_usage')?memory_get_peak_usage():0);
+    echo '<div style="clear: both;">'.microtime_diff($starttime,$endtime)." / ".(isset($db->query_count)?$db->query_count:'')." / {$memory_net} / {$memory} / {$memory_peak}</div>\n";
 }
 
 ?>

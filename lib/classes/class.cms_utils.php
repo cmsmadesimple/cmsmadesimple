@@ -142,7 +142,7 @@ final class cms_utils
 	 */
 	final public static function & get_db()
 	{
-		return CmsApp::get_instance()->GetDb();
+		return \CmsApp::get_instance()->GetDb();
 	}
 
 
@@ -155,7 +155,7 @@ final class cms_utils
 	 */
 	final public static function & get_config()
 	{
-		return cms_config::get_instance();
+		return \cms_config::get_instance();
 	}
 
 
@@ -169,7 +169,7 @@ final class cms_utils
 	 */
 	final public static function & get_smarty()
 	{
-		return CmsApp::get_instance()->GetSmarty();
+		return \Smarty_CMS::get_instance();
 	}
 
 

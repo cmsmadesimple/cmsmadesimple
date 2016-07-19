@@ -46,8 +46,7 @@ if( !$tpl_ob->IsCached() ) {
                 u.username,
                 u.first_name,
                 u.last_name
-            FROM " .
-        CMS_DB_PREFIX . "module_news mn
+            FROM " .CMS_DB_PREFIX . "module_news mn
             LEFT OUTER JOIN " . CMS_DB_PREFIX . "module_news_categories mnc
             ON mnc.news_category_id = mn.news_category_id
             LEFT OUTER JOIN " . CMS_DB_PREFIX . "users u

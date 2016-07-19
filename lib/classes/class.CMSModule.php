@@ -166,10 +166,10 @@ abstract class CMSModule
             /* deprecated */
             $tpl = $this->GetActionTemplateObject();
             if( $tpl ) return $tpl;
-            return CmsApp::get_instance()->GetSmarty();
+            return \Smarty_CMS::get_instance();
 
         case 'config':
-            return CmsApp::get_instance()->GetConfig();
+            return \cms_config::get_instance();
 
         case 'db':
             return CmsApp::get_instance()->GetDb();
@@ -858,7 +858,7 @@ abstract class CMSModule
      */
     final public function &GetConfig()
     {
-        return CmsApp::get_instance()->GetConfig();
+        return \cms_config::get_instance();
     }
 
     /**
@@ -3222,5 +3222,3 @@ define('CLEAN_FILE','CLEAN_FILE');
  * @ignore
  */
 define('CLEANED_FILENAME','BAD_FILE');
-
-?>

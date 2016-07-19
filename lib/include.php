@@ -71,7 +71,7 @@ $config = $_app->GetConfig();
 
 require_once($dirname.DIRECTORY_SEPARATOR.'autoloader.php');
 require_once($dirname.DIRECTORY_SEPARATOR.'module.functions.php');
-debug_buffer('done loading required files');
+debug_buffer('done loading basic files');
 
 if( cms_to_bool(ini_get('register_globals')) ) {
     echo 'FATAL ERROR: For security reasons register_globals must not be enabled for any CMSMS install.  Please adjust your PHP configuration settings to disable this feature.';
@@ -185,17 +185,16 @@ if (! isset($CMS_INSTALL_PAGE)) {
     $global_umask = cms_siteprefs::get('global_umask','');
     if( $global_umask != '' ) umask( octdec($global_umask) );
 
-    debug_buffer('','Loading Modules');
+    debug_buffer('Loading Modules');
     $modops = ModuleOperations::get_instance();
     $modops->LoadModules(isset($LOAD_ALL_MODULES), !isset($CMS_ADMIN_PAGE));
-    debug_buffer('', 'End of Loading Modules');
+    debug_buffer('End of Loading Modules');
 
     // test for cron.
     // we hardcode CmsJobManager here until such a point as we need to abstract it.
     $cmsjobmgr = $modops->get_module_instance('CmsJobManager');
-    if( is_object($cmsjobmgr) ) {
-        $cmsjobmgr->trigger_async_processing();
-    }
+    if( is_object($cmsjobmgr) ) $cmsjobmgr->trigger_async_processing();
+    debug_buffer('finished triggering async processing');
 }
 
 #Setup language stuff.... will auto-detect languages (Launch only to admin at this point)

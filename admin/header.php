@@ -5,7 +5,7 @@ $starttime = microtime();
 if (!(isset($USE_OUTPUT_BUFFERING) && $USE_OUTPUT_BUFFERING == false)) @ob_start();
 
 $userid = get_userid();
-$smarty = cmsms()->GetSmarty();
+$smarty = \Smarty_CMS::get_instance();
 
 if (isset($USE_THEME) && $USE_THEME == false) {
     //echo '<!-- admin theme disabled -->';
@@ -30,4 +30,3 @@ else {
 
     $themeObject->do_header();
 }
-?>

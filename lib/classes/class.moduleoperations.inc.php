@@ -526,11 +526,6 @@ final class ModuleOperations
     {
         if( !is_array($this->_moduleinfo) || count($this->_moduleinfo) == 0 ) {
             $tmp = \CMSMS\internal\global_cache::get('modules');
-            /*
-            $db = CmsApp::get_instance()->GetDb();
-            $query = 'SELECT * FROM '.CMS_DB_PREFIX.'modules ORDER BY module_name';
-            $tmp = $db->GetArray($query);
-            */
             if( is_array($tmp) ) {
                 $dir = dirname(dirname(__DIR__)).DIRECTORY_SEPARATOR."modules";
                 $this->_moduleinfo = array();

@@ -310,9 +310,7 @@ abstract class ContentBase
 	 * @abstract
 	 * @internal
 	 */
-	protected function SetInitialValues()
-	{
-	}
+	protected function SetInitialValues() {}
 
 	/**
 	 * Subclasses should override this to set their property types using a lot
@@ -934,7 +932,7 @@ abstract class ContentBase
      */
     public function IsPermitted()
     {
-      return TRUE;
+        return TRUE;
     }
 
 	/**
@@ -1432,14 +1430,14 @@ abstract class ContentBase
                                      ));
 
         /*
-		if ($this->mOldParentId != $this->mParentId) {
-			// Fix the item_order if necessary
-			$query = "UPDATE ".CMS_DB_PREFIX."content SET item_order = item_order - 1 WHERE parent_id = ? AND item_order > ?";
-			$result = $db->Execute($query, array($this->mOldParentId,$this->mOldItemOrder));
+          if ($this->mOldParentId != $this->mParentId) {
+          // Fix the item_order if necessary
+          $query = "UPDATE ".CMS_DB_PREFIX."content SET item_order = item_order - 1 WHERE parent_id = ? AND item_order > ?";
+          $result = $db->Execute($query, array($this->mOldParentId,$this->mOldItemOrder));
 
-			$this->mOldParentId = $this->mParentId;
-			$this->mOldItemOrder = $this->mItemOrder;
-		}
+          $this->mOldParentId = $this->mParentId;
+          $this->mOldItemOrder = $this->mItemOrder;
+          }
         */
 
 		if (isset($this->mAdditionalEditors)) {

@@ -506,7 +506,7 @@ class Content extends ContentBase
             $res = \UserOperations::get_instance()->UserInGroup($uid,1);
             if( !$res ) return;
         }
-		$config = CmsApp::get_instance()->GetConfig();
+		$config = \cms_config::get_instance();
 		$adddir = get_site_preference('contentimage_path');
 		if( $blockInfo['dir'] != '' ) $adddir = $blockInfo['dir'];
 		$dir = cms_join_path($config['uploads_path'],$adddir);

@@ -41,7 +41,7 @@
  */
 
 if( !CmsApp::get_instance()->test_state(CmsApp::STATE_ADMIN_PAGE) )
-  throw new CmsLogicException('Attempt to use cms_admin_utils class from an invalid request');
+    throw new CmsLogicException('Attempt to use cms_admin_utils class from an invalid request');
 
 /**
  * A Simple static class providing various convenience utilities for admin requests.
@@ -70,7 +70,7 @@ final class cms_admin_utils
 		$theme = cms_utils::get_theme_object();
 		if( !is_object($theme) ) return;
 
-		$smarty = CmsApp::get_instance()->GetSmarty();
+		$smarty = \Smarty_CMS::get_instance();
 		$module = $smarty->get_template_vars('actionmodule');
 
 		$dirs = array();
@@ -78,14 +78,12 @@ final class cms_admin_utils
 			$obj = cms_utils::get_module($module);
 			if( is_object($obj) ) {
 				$img = basename($icon);
-				$dirs[] = array(cms_join_path($obj->GetModulePath(),'icons',"{$img}"),
-								$obj->GetModuleURLPath()."/icons/{$img}");
-				$dirs[] = array(cms_join_path($obj->GetModulePath(),'images',"{$img}"),
-								$obj->GetModuleURLPath()."/images/{$img}");
+				$dirs[] = array(cms_join_path($obj->GetModulePath(),'icons',"{$img}"),$obj->GetModuleURLPath()."/icons/{$img}");
+				$dirs[] = array(cms_join_path($obj->GetModulePath(),'images',"{$img}"),$obj->GetModuleURLPath()."/images/{$img}");
 			}
 		}
 		if( basename($icon) == $icon ) $icon = "icons/system/{$icon}";
-		$config = CmsApp::get_instance()->GetConfig();
+		$config = \cms_config::get_instance();
 		$dirs[] = array(cms_join_path($config['root_path'],$config['admin_dir'],"themes/{$theme->themeName}/images/{$icon}"),
 						$config['admin_url']."/themes/{$theme->themeName}/images/{$icon}");
 
@@ -154,7 +152,7 @@ final class cms_admin_utils
 		}
 
 		if( !$key1 ) {
-			$smarty = CmsApp::get_instance()->GetSmarty();
+			$smarty = \Smarty_CMS::get_instance();
 			$module = $smarty->get_template_vars('actionmodule');
 			if( $module ) {
 				$key1 = $module;
@@ -178,6 +176,4 @@ final class cms_admin_utils
 } // end of class
 
 #
-#
 # EOF
-?>

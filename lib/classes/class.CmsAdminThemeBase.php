@@ -810,7 +810,7 @@ abstract class CmsAdminThemeBase
 	 */
 	protected function get_admin_navigation()
 	{
-		$smarty = CmsApp::get_instance()->GetSmarty();
+        $smarty = \Smarty_CMS::get_instance();
 		$smarty->assign('secureparam', CMS_SECURE_PARAM_NAME . '=' . $_SESSION[CMS_USER_KEY]);
 		$this->_populate_admin_navigation();
 		return $this->_menuItems;
@@ -1041,7 +1041,7 @@ abstract class CmsAdminThemeBase
 				$imageName = substr($imageName,strrpos($imageName,'/')+1);
 			}
 
-			$config = CmsApp::get_instance()->GetConfig();
+			$config = \cms_config::get_instance();
 			$str = dirname(CMS_ROOT_PATH.'/'.$config['admin_dir']."/themes/{$this->themeName}/images/{$imagePath}{$imageName}");
 			if (file_exists("{$str}/{$imageName}")) {
 				$str = "themes/{$this->themeName}/images/{$imagePath}{$imageName}";
@@ -1119,7 +1119,7 @@ abstract class CmsAdminThemeBase
 	 */
 	static public function GetAvailableThemes()
 	{
-		$config = CmsApp::get_instance()->GetConfig();
+		$config = \cms_config::get_instance();
 
 		$files = glob(cms_join_path($config['admin_path'],'themes').'/*');
 		if( is_array($files) && count($files) ) {

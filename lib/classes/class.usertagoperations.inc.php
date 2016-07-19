@@ -152,7 +152,7 @@ final class UserTagOperations
 	function SmartyTagExists($name,$check_functions = true)
 	{
 		// get the list of smarty plugins that are known.
-		$config = CmsApp::get_instance()->GetConfig();
+		$config = \cms_config::get_instance();
 		$phpfiles = glob(CMS_ROOT_PATH.'/plugins/function.*.php');
 		if( is_array($phpfiles) && count($phpfiles) ) {
 			for( $i = 0; $i < count($phpfiles); $i++ ) {
@@ -167,7 +167,7 @@ final class UserTagOperations
 
 		if( $check_functions ) {
 			// registered by something else... maybe a module.
-			$smarty = CmsApp::get_instance()->GetSmarty();
+            $smarty = \Smarty_CMS::get_instance();
 			if( $smarty->is_registered($name) ) return TRUE;
 		}
 
@@ -272,7 +272,7 @@ final class UserTagOperations
 		$row = $this->_get_from_cache($name);
 		$result = FALSE;
 		if( $row ) {
-			$smarty = CmsApp::get_instance()->GetSmarty();
+            $smarty = \Smarty_CMS::get_instance();
 			$functionname = $this->CreateTagFunction($name);
 			$result = call_user_func_array($functionname, array(&$params, &$smarty));
 		}

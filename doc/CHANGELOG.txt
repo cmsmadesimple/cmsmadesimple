@@ -41,6 +41,10 @@ Core - General
   - Fixes an issue in CmsLayoutTemplate when creating a template from a type.
   - Fixes an issue where a 404 handler error page would not be rendered correctly if for some reason the route did not specify a page id to load.
   - More fixes to cms_url class.
+  - Numerous minor optimizations
+
+Navigator v1.0.4
+  - Minor optimizations
 
 Installation Assistant v1.2.1
   - Only create dummy index.html files in subdirectories we created.
@@ -69,11 +73,12 @@ DesignManager
   - Add reset buttons to the filter forms.
   - No longer check for default content block in a template.
 
-News v2.50.5
+News v2.50.6
   - Minor fix to add category.
   - Removes GetNotificationOutput method.
   - Add a task that runs at least every 15 minutes to detect draft articles... create an alert for this.
   - Add an option to never create alerts about draft News articles.
+  - Minor optimizations
 
 FileManager v1.6.2
   - Move settings to it's own menu item under Site Admin.

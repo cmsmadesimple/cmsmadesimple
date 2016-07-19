@@ -219,9 +219,7 @@ final class CmsApp {
 	 */
 	public function set_content_object(ContentBase &$content)
 	{
-        if( !$this->_current_content_page || $content instanceof ErrorPage ) {
-            $this->_current_content_page = $content;
-        }
+        if( !$this->_current_content_page || $content instanceof ErrorPage ) $this->_current_content_page = $content;
 	}
 
 	/**
@@ -305,7 +303,8 @@ final class CmsApp {
 	final public function &GetDb()
 	{
 		/* Check to see if we have a valid instance.
-		 * If not, build the connection */
+		 * If not, build the connection
+         */
 		if (isset($this->db)) return $this->db;
 		global $DONT_LOAD_DB;
 
@@ -460,8 +459,7 @@ final class CmsApp {
 	{
 		/* Check to see if a HierarchyManager has been instantiated yet,
 		  and, if not, go ahead an create the instance. */
-        if( is_null($this->_hrinstance) )
-            $this->_hrinstance = \CMSMS\internal\global_cache::get('content_tree');
+        if( is_null($this->_hrinstance) ) $this->_hrinstance = \CMSMS\internal\global_cache::get('content_tree');
         return $this->_hrinstance;
 	}
 

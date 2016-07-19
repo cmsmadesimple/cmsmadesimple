@@ -559,7 +559,7 @@ class CmsLayoutTemplate
 	 */
 	public function process()
 	{
-		$smarty = CmsApp::get_instance()->GetSmarty();
+		$smarty = \Smarty_CMS::get_instance();
 		return $smarty->fetch('cms_template:id='.$this->get_id());
 	}
 
@@ -1090,7 +1090,7 @@ class CmsLayoutTemplate
 	 */
 	public static function process_by_name($name)
 	{
-		$smarty = CmsApp::get_instance()->GetSmarty();
+		$smarty = \Smarty_CMS::get_instance();
 		return $smarty->fetch('cms_template:name='.$this->get_name());
 	}
 
