@@ -432,7 +432,7 @@ try {
 
             echo "INFO: zipping phar file into $outfile\n";
             $arch = new ZipArchive;
-            $arch->open($outfile,ZipArchive::OVERWRITE);
+            $arch->open($outfile,ZipArchive::OVERWRITE | ZipArchive::CREATE );
             $arch->addFile($infile,basename($infile));
             $arch->addFile("$rootdir/README-PHAR.TXT",'README-PHAR.TXT');
             $arch->close();
@@ -445,7 +445,7 @@ try {
             chdir($rootdir);
             $outfile = "$outdir/$basename.expanded.zip";
             echo "INFO: zipping install directory into $outfile\n";
-            $cmd = "zip -q -r -x@{$tmpfile} $outfile README.TXT index.php app lib data >/dev/null";
+            $cmd = "zip -q -r -x@{$tmpfile} $outfile README.TXT index.php app lib data";
             $cmd = escapeshellcmd($cmd);
             system($cmd);
             unlink($tmpfile);
