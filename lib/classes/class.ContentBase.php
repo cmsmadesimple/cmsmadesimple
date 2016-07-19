@@ -310,7 +310,9 @@ abstract class ContentBase
 	 * @abstract
 	 * @internal
 	 */
-	protected function SetInitialValues() {}
+	protected function SetInitialValues()
+	{
+	}
 
 	/**
 	 * Subclasses should override this to set their property types using a lot
@@ -932,7 +934,7 @@ abstract class ContentBase
      */
     public function IsPermitted()
     {
-        return TRUE;
+      return TRUE;
     }
 
 	/**
@@ -1430,14 +1432,14 @@ abstract class ContentBase
                                      ));
 
         /*
-          if ($this->mOldParentId != $this->mParentId) {
-          // Fix the item_order if necessary
-          $query = "UPDATE ".CMS_DB_PREFIX."content SET item_order = item_order - 1 WHERE parent_id = ? AND item_order > ?";
-          $result = $db->Execute($query, array($this->mOldParentId,$this->mOldItemOrder));
+		if ($this->mOldParentId != $this->mParentId) {
+			// Fix the item_order if necessary
+			$query = "UPDATE ".CMS_DB_PREFIX."content SET item_order = item_order - 1 WHERE parent_id = ? AND item_order > ?";
+			$result = $db->Execute($query, array($this->mOldParentId,$this->mOldItemOrder));
 
-          $this->mOldParentId = $this->mParentId;
-          $this->mOldItemOrder = $this->mItemOrder;
-          }
+			$this->mOldParentId = $this->mParentId;
+			$this->mOldItemOrder = $this->mItemOrder;
+		}
         */
 
 		if (isset($this->mAdditionalEditors)) {
@@ -1825,8 +1827,7 @@ abstract class ContentBase
 	 */
 	public function GetURL($rewrite = true)
 	{
-		$gCms = CmsApp::get_instance();
-		$config = $gCms->GetConfig();
+		$config = \cms_config::get_instance();
 		$url = "";
 		$alias = ($this->mAlias != ''?$this->mAlias:$this->mId);
 
@@ -1927,9 +1928,9 @@ abstract class ContentBase
 				$basic_attributes = array_merge($tmp_basic_attributes,$basic_attributes);
 			}
 
-			$out = array();
+			$out = [];
 			foreach( $this->_attributes as $one ) {
-				if( in_array($one->name,$basic_attributes) ) $out[] = $one;
+				if( $one->basic || in_array($one->name,$basic_attributes) ) $out[] = $one;
 			}
 			return $out;
 		}
@@ -2064,8 +2065,7 @@ abstract class ContentBase
 	public function GetAdditionalEditors()
 	{
 		if (!isset($this->mAdditionalEditors)) {
-			$gCms = CmsApp::get_instance();
-			$db = $gCms->GetDb();
+			$db = \CmsApp::get_instance()->GetDb();
 			$this->mAdditionalEditors = array();
 
 			$query = "SELECT user_id FROM ".CMS_DB_PREFIX."additional_users WHERE content_id = ?";
@@ -2161,12 +2161,22 @@ abstract class ContentBase
 	}
 
     /**
+     * Handles setting the value (by member) of a base (not addon property) property of the content object
+     * for base properties that have been removed from the form.
+     *
 	 * @ignore
 	 */
 	private function _handleRemovedBaseProperty($name,$member)
 	{
 		if( !is_array($this->_attributes) ) return FALSE;
-		if( !in_array($name,$this->_attributes) ) {
+        $fnd = false;
+        foreach( $this->_attributes as $attr ) {
+            if( $attr->name == $name ) {
+                $fnd = true;
+                break;
+            }
+        }
+		if( !$fnd ) {
 			if( isset($this->_prop_defaults[$name]) ) {
 				$this->$member = $this->_prop_defaults[$name];
 				return TRUE;
@@ -2199,17 +2209,19 @@ abstract class ContentBase
 	 *
 	 * @since 1.11
 	 * @param string $name The property name
-	 * @param int $priority The property priority
+	 * @param int $priority The property priority, for sorting.
 	 * @param string $tab The tab for the property (see tab constants)
 	 * @param bool $required (whether the property is required)
+     * @param bool $basic Whether or not the property is a basic property (editable by even restricted editors)
 	 */
-	protected function AddProperty($name,$priority,$tab = self::TAB_MAIN,$required = FALSE)
+	protected function AddProperty($name,$priority,$tab = self::TAB_MAIN,$required = FALSE,$basic = FALSE)
 	{
 		$ob = new StdClass;
 		$ob->name = (string) $name;
 		$ob->priority = (int) $priority;
 		$ob->tab = (string) $tab;
 		$ob->required = (bool) $required;
+        $ob->basic = $basic;
 
 		if( !is_array($this->_attributes) ) $this->_attributes = array();
 		$this->_attributes[] = $ob;
@@ -2264,8 +2276,7 @@ abstract class ContentBase
 	 */
 	protected function display_single_element($one,$adding)
 	{
-		$gCms = CmsApp::get_instance();
-		$config = $gCms->GetConfig();
+		$config = \cms_config::get_instance();
 
 		switch( $one ) {
 		case 'cachable':

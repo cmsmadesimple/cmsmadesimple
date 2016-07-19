@@ -57,8 +57,8 @@ class PageLink extends ContentBase
 		$this->RemoveProperty('cachable',1);
 		//$this->RemoveProperty('showinmenu',1);
 		$this->RemoveProperty('secure',0);
-		$this->AddProperty('page',3,self::TAB_MAIN);
-		$this->AddProperty('params',4,self::TAB_OPTIONS);
+		$this->AddProperty('page',3,self::TAB_MAIN,TRUE,TRUE);
+		$this->AddProperty('params',4,self::TAB_OPTIONS,TRUE,TRUE);
 
 		//Turn off caching
 		$this->mCachable = false;

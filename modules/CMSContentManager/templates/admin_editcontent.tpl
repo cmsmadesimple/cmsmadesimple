@@ -7,7 +7,7 @@ $(document).ready(function(){
   $('#Edit_Content').dirtyForm({
     beforeUnload: function(is_dirty) {
       if( do_locking ) $('#Edit_Content').lockManager('unlock').done(function(){
-         console.log('after unlock');
+         console.log('after dirtyform unlock');
       });
     },
     unloadCancel: function(){
@@ -75,7 +75,7 @@ $(document).ready(function(){
         $('#Edit_Content').dirtyForm('disable');
 	$('#active_tab').val('{$options_tab_name}');
 	if( do_locking ) {
-	  if( do_locking) $('#Edit_Content').lockManager('unlock').done(function(){
+	  if( do_locking) $('#Edit_Content').lockManager('unlock',1).done(function(){
             $(self).closest('form').submit();
 	  });
         } else {
@@ -93,7 +93,7 @@ $(document).ready(function(){
 	  var self = this;
 	  var form = $(this).closest('form');
 	  ev.preventDefault();
-	  $('#Edit_Content').lockManager('unlock').done(function(){
+	  $('#Edit_Content').lockManager('unlock',1).done(function(){
 	     var el = $('<input type="hidden"/>');
 	     el.attr('name',$(self).attr('name')).val($(self).val()).appendTo(form);
 	     form.submit();
@@ -109,7 +109,7 @@ $(document).ready(function(){
 	    var self = this;
 	    ev.preventDefault();
 	    var form = $(this).closest('form');
-	    $('#Edit_Content').lockManager('unlock').done(function(){
+	    $('#Edit_Content').lockManager('unlock',1).done(function(){
  	    	var el = $('<input type="hidden"/>');
             	el.attr('name',$(self).attr('name')).val($(self).val()).appendTo(form);
 	    	form.submit();

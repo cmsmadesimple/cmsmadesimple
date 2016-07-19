@@ -47,7 +47,7 @@ class Link extends ContentBase
 		parent::SetProperties();
 		$this->RemoveProperty('secure',0);
 		$this->RemoveProperty('cachable',true);
-		$this->AddProperty('url',3,self::TAB_MAIN);
+		$this->AddProperty('url',3,self::TAB_MAIN,TRUE,TRUE);
     }
 
     function FillParams($params,$editing = false)

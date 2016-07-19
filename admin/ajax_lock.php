@@ -26,7 +26,6 @@ require_once("../lib/include.php");
 $ruid = get_userid(FALSE);
 
 debug_to_log(__FILE__);
-debug_to_log($_REQUEST);
 $fh = fopen('php://input','r');
 $txt = fread($fh,8192);
 $data = null;
@@ -34,6 +33,7 @@ if( $txt ) $data = json_decode($txt,TRUE);
 if( !is_array($data) ) {
     $data = $_REQUEST;
 }
+debug_to_log($data,'INPUT');
 
 $opt = get_parameter_value($data,'opt','setup');
 $type = get_parameter_value($data,'type');

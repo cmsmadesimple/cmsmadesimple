@@ -53,8 +53,8 @@ try {
     if( $filter ) {
         $filter = unserialize($filter);
         $builder->set_filter($filter);
-        $smarty->assign('have_filter',is_object($filter));
     }
+    $smarty->assign('have_filter',is_object($filter));
 
 
     //

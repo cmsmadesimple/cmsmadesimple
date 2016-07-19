@@ -103,8 +103,8 @@ try {
         $content_obj->SetPropertyValue('extra2',$pagedefaults['extra2']);
         $content_obj->SetPropertyValue('extra3',$pagedefaults['extra3']);
         $content_obj->SetAdditionalEditors($pagedefaults['addteditors']);
-	$dflt_parent = (int) \cms_userprefs::get('default_parent');
-	$dflt_parent = max(-1,$dflt_parent);
+        $dflt_parent = (int) \cms_userprefs::get('default_parent');
+        $dflt_parent = max(-1,$dflt_parent);
         $content_obj->SetParentId($dflt_parent);
     }
     else {
@@ -262,20 +262,18 @@ try {
         $contentarray = $content_obj->GetTabElements($currenttab);
         if( $currenttab == $content_obj::TAB_MAIN ) {
             // first tab... add the content type selector.
-            $help = '&nbsp;'.cms_admin_utils::get_help_tag(array('key'=>'help_content_type','title'=>$this->Lang('help_title_content_type')));
-            $tmp = array('<label for="content_type">*'.$this->Lang('prompt_editpage_contenttype').':</label>'.$help);
-            $tmp2 = "<select id=\"content_type\" name=\"{$id}content_type\">";
-            foreach( $existingtypes as $type => $label ) {
-                if( $type == 'errorpage' && !$this->CheckPermission('Manage All Content') ) {
-                    // this is ugly... we should know if the type is a system type.
-                    continue;
+            if( $this->CheckPermission('Manage All Content') || $content_obj->Owner() == $user_id )  {
+                // if you're only an additional editor on this page... you don't get to change this.
+                $help = '&nbsp;'.cms_admin_utils::get_help_tag(array('key'=>'help_content_type','title'=>$this->Lang('help_title_content_type')));
+                $tmp = array('<label for="content_type">*'.$this->Lang('prompt_editpage_contenttype').':</label>'.$help);
+                $tmp2 = "<select id=\"content_type\" name=\"{$id}content_type\">";
+                foreach( $existingtypes as $type => $label ) {
+                    $tmp2 .= CmsFormUtils::create_option(array('value'=>$type,'label'=>$label),$content_type);
                 }
-                $tmp2 .= CmsFormUtils::create_option(array('value'=>$type,'label'=>$label),$content_type);
+                $tmp2 .= '</select>';
+                $tmp[] = $tmp2;
+                $contentarray = array_merge(array($tmp),$contentarray);
             }
-            $tmp2 .= '</select>';
-            $tmp[] = $tmp2;
-
-            $contentarray = array_merge(array($tmp),$contentarray);
         }
         $tab_contents_array[$currenttab] = $contentarray;
     }

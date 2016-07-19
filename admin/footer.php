@@ -113,7 +113,7 @@ if( isset($gCms->config['show_performance_info']) ) {
     $memory_net = 'n/a';
     if( isset($orig_memory) ) $memory_net = $memory - $orig_memory;
     $memory_peak = (function_exists('memory_get_peak_usage')?memory_get_peak_usage():0);
-    echo '<div style="clear: both;">'.microtime_diff($starttime,$endtime)." / ".(isset($db->query_count)?$db->query_count:'')." / {$memory_net} / {$memory} / {$memory_peak}</div>\n";
+    echo '<div style="clear: both;">'.microtime_diff($starttime,$endtime)." / ".(isset($db->query_count)?$db->query_count:'')." queries / Net Memory: {$memory_net} / End: {$memory} / Peak: {$memory_peak}</div>\n";
 }
 
 ?>

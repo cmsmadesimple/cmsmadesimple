@@ -380,7 +380,7 @@ class UserOperations
             foreach( $list as $uid => $username ) {
                 $result .= '<option value="'.$uid;
                 if( $uid == $currentuserid ) $result .= ' selected="selected"';
-				$result .= '>'.$username.'</option>';
+				$result .= '">'.$username.'</option>';
             }
 			$result .= '</select>';
         }

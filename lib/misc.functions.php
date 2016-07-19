@@ -298,7 +298,7 @@ function debug_bt()
 */
 function debug_display($var, $title="", $echo_to_screen = true, $use_html = true,$showtitle = TRUE)
 {
-    global $starttime;
+    global $starttime, $orig_memory;
     if( !$starttime ) $starttime = microtime();
 
     ob_start();
@@ -307,7 +307,10 @@ function debug_display($var, $title="", $echo_to_screen = true, $use_html = true
         $titleText = "Debug: ";
         if($title) $titleText = "Debug display of '$title':";
         $titleText .= '(' . microtime_diff($starttime,microtime()) . ')';
-        if (function_exists('memory_get_usage')) $titleText .= ' - (usage: '.memory_get_usage().')';
+        if (function_exists('memory_get_usage')) {
+            $net = memory_get_usage() - $orig_memory;
+            $titleText .= ' - (net usage: '.$net.')';
+        }
 
         $memory_peak = (function_exists('memory_get_peak_usage')?memory_get_peak_usage():'');
         if( $memory_peak ) $titleText .= ' - (peak: '.$memory_peak.')';

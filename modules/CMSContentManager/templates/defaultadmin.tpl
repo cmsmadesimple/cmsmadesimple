@@ -64,7 +64,6 @@
                             $(this).val(ui.item.label);
                             var url = '{cms_action_url action=ajax_get_content forjs=1}&showtemplate=false&{$actionid}seek=' + ui.item.value;
 			    $('#content_area').autoRefresh('option','url',url).autoRefresh('refresh').done(function(){
-			       console.debug('after seek');
 			       $('html,body').animate({
 			          scrollTop: $('#row_'+ui.item.value).offset().top
 			       });
@@ -141,8 +140,6 @@
 	    'EDITOR_UID': '#filter_editor'
 	 }
          var v = $(this).val();
-	 console.debug('value is '+v);
-	 console.debug('selector is '+map[v]);
 	 $('.filter_fld').hide();
 	 $(map[v]).show();
       })
