@@ -28,7 +28,7 @@
 #Welsh (Wales)
 
 #Native language name
-$nls['language']['en_CY'] = 'Wales';
+$nls['language']['en_CY'] = 'Welsh';
 $nls['englishlang']['en_CY'] = 'Welsh';
 
 #Possible aliases for language

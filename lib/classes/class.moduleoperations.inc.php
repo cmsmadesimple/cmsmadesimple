@@ -182,9 +182,8 @@ final class ModuleOperations
         fputs($fh,"author = ".$modinstance->GetAuthor()."\n");
         fputs($fh,"authoremail = ".$modinstance->GetAuthorEmail()."\n");
         fputs($fh,"mincmsversion = ".$modinstance->MinimumCMSVersion()."\n");
-        fputs($fh,"lazyloadadmin = ".($modinstance->LazyLoadAdmin())?'1':'0'."\n");
-        fputs($fh,"lazyloadfrontend = ".$modinstance->LazyLoadFrontend()?'1':'0'."\n");
-
+        fputs($fh,"lazyloadadmin = ".($modinstance->LazyLoadAdmin()?'1':'0')."\n");
+        fputs($fh,"lazyloadfrontend = ".($modinstance->LazyLoadFrontend()?'1':'0')."\n");
         $depends = $modinstance->GetDependencies();
         if( is_array($depends) && count($depends) ) {
             fputs($fh,"[depends]\n");
@@ -192,6 +191,7 @@ final class ModuleOperations
                 fputs($fh,"$key = $val\n");
             }
         }
+        fclose($fh);
     }
 
     /**

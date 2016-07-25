@@ -199,11 +199,20 @@ try {
     }
 }
 catch( CmsEditContentException $e ) {
+    /*
     if( isset($params['submit']) ) {
         $this->SetError($e->getMessage());
         $this->RedirectToAdminTab();
     };
-
+    */
+    $error = $e->GetMessage();
+    if( isset($params['ajax']) ) {
+        $tmp = array('response'=>'Error','details'=>$error);
+        echo json_encode($tmp);
+        exit;
+    }
+}
+catch( CmsContentException $e ) {
     $error = $e->GetMessage();
     if( isset($params['ajax']) ) {
         $tmp = array('response'=>'Error','details'=>$error);

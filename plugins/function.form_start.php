@@ -37,7 +37,7 @@ function smarty_function_form_start($params, &$smarty)
             $tagparms['action'] = 'moduleinterface.php';
             if( !isset($mactparms['action']) ) $mactparms['action'] = 'defaultadmin';
             $mactparms['returnid'] = '';
-            if( !isset($mactparms['id']) ) $mactparms['mid'] = 'm1_';
+            if( !$mactparms['mid'] ) $mactparms['mid'] = 'm1_';
         }
     }
     else if( $gCms->is_frontend_request() ) {
@@ -46,17 +46,13 @@ function smarty_function_form_start($params, &$smarty)
             if( is_array($tmp) && isset($tmp['action']) ) $mactparms['action'] = $tmp['action'];
 
             $tagparms['action'] = 'moduleinterface.php';
-            if( !isset($mactparms['action']) ) $mactparms['action'] = 'default';
-            if( !isset($mactparms['id']) ) $mactparms['mid'] = 'cntnt01';
-        }
-    }
-
-    if( $mactparms['returnid'] != '' ) {
-        $hm = $gCms->GetHierarchyManager();
-        $node = $hm->sureGetNodeById($mactparms['returnid']);
-        if( $node ) {
-            $content_obj = $node->getContent();
-            if( $content_obj ) $tagparms['action'] = $content_obj->GetURL();
+            if( !$mactparms['returnid'] ) $mactparms['returnid'] = CmsApp::get_instance()->get_content_id();
+            $hm = $gCms->GetHierarchyManager();
+            $node = $hm->sureGetNodeById($mactparms['returnid']);
+            if( $node ) {
+                $content_obj = $node->getContent();
+                if( $content_obj ) $tagparms['action'] = $content_obj->GetURL();
+            }
         }
     }
 
