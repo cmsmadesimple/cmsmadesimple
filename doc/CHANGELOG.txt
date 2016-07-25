@@ -12,6 +12,7 @@ Core - General
   - Improve the way page aliases are munged when they are supplied.
   - Improve the error generated when a page alias cannot be generated
   - Minor fixes to the form_start plugin.
+  - Minor fixes to generation of moduleinfo.ini
 
 Content Manager
   - Improve error handling in edit content.
