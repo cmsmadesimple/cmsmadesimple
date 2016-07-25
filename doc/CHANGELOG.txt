@@ -4,7 +4,7 @@ Core - General
   - Fix fatal error if an extcss stylesheet was placed in the admin theme
   - Another minor fix to clearing cached files.
   - Fixes problems where all files (including dot files) had to be writable before creating a module XML file.
-  - Fixes minor notice in user operations.  
+  - Fixes minor notice in user operations.
   - Fixes for namespaced modules.
   - Fixes an issue in CmsLayoutTemplate when creating a template from a type.
   - Fixes an issue where a 404 handler error page would not be rendered correctly if for some reason the route did not specify a page id to load.
@@ -13,9 +13,11 @@ Core - General
   - Improve the error generated when a page alias cannot be generated
   - Minor fixes to the form_start plugin.
   - Minor fixes to generation of moduleinfo.ini
+  - Fix an error message in the autorefresh javascript class.
 
 Content Manager
   - Improve error handling in edit content.
+  - Fix a problem with the call to GetTabElements.
 
 Design Manager
   - Fix problem with resetting a template back to factory defaults, or creating a new template from factory defaults.

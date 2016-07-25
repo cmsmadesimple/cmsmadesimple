@@ -264,7 +264,7 @@ try {
         $tmp = $content_obj->GetTabMessage($currenttab);
         if( $tmp ) $tab_message_array[$currenttab] = $tmp;
 
-        $contentarray = $content_obj->GetTabElements($currenttab);
+        $contentarray = $content_obj->GetTabElements($currenttab, $content_obj->Id() > 0 );
         if( $currenttab == $content_obj::TAB_MAIN ) {
             // first tab... add the content type selector.
             $help = '&nbsp;'.cms_admin_utils::get_help_tag(array('key'=>'help_content_type','title'=>$this->Lang('help_title_content_type')));
