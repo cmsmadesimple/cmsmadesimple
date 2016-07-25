@@ -20,6 +20,9 @@ Content Manager
 Design Manager
   - Fix problem with resetting a template back to factory defaults, or creating a new template from factory defaults.
 
+Module Manager
+  - Improve the way modules with dependencies are installed and upgraded. (got rid of the queue stuff).
+
 Version 2.1.4 - Freetown
 ----------------------------------
 Core - General
