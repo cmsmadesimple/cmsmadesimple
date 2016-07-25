@@ -72,15 +72,29 @@ try {
                 if( $rec['action'] != 'i' && $rec['action'] != 'u' ) continue;
                 $xml_filename = modmgr_utils::get_module_xml($rec['filename'],$rec['size'],(isset($rec['md5sum']))?$rec['md5sum']:'');
                 $res = $ops->ExpandXMLPackage( $xml_filename, 1 );
-                $ops->QueueForInstall($key);
+                //$ops->QueueForInstall($key);
             }
 
+            // instal, upgrade the modules that need to be installed or upgraded.
             foreach( $modlist as $name => $rec ) {
-
                 switch( $rec['action'] ) {
-                case 'a': // activate
-                    $ops->ActivateModule($name);
+                case 'i': // install
+                    $res = $ops->InstallModule($name);
+                case 'u': // upgrade
+                    $res = $ops->UpgradeModule($name);
                     break;
+                case 'a': // activate
+                    $res = $ops->ActivateModule($name);
+                    $res = [ $res ];
+                    break;
+                }
+
+                if( !is_array($res) || !$res[0] ) {
+                    audit('',$this->GetName(),' Problem installing, upgrading or activating '.$name);
+                    debug_buffer('ERROR: problem installing/upgrading/activating '.$name);
+                    debug_buffer($rec,'action record');
+                    debug_buffer($res,'error info');
+                    throw new CmsException( (isset($res[1])) ? $res[1] : 'Error processing module '.$name);
                 }
             }
 
