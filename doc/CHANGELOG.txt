@@ -11,6 +11,7 @@ Core - General
   - More fixes to cms_url class.
   - Improve the way page aliases are munged when they are supplied.
   - Improve the error generated when a page alias cannot be generated
+  - Minor fixes to the form_start plugin.
 
 Content Manager
   - Improve error handling in edit content.
