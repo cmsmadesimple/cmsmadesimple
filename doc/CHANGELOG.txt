@@ -44,9 +44,11 @@ Core - General
   - Numerous minor optimizations
   - Add the ability to content types the ability to set basic attributes for properties from within the page type definition.
   - Fixes problems with pagelink and link content types not being properly editable by additional editors.
+  - Pass an explicit cacheid in to createtemplate in index.php
 
 Navigator v1.0.4
   - Minor optimizations
+  - Now use pagie in calculations of cacheid.
 
 Installation Assistant v1.2.1
   - Only create dummy index.html files in subdirectories we created.

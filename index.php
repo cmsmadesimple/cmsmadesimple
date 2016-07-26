@@ -131,6 +131,7 @@ while( $trycount < 2 ) {
             $showtemplate = false;
         }
 
+        $cache_id = 'p'.$contentobj->Id();
         $smarty->set_global_cacheid('p'.$contentobj->Id());
         if( $cachable && $showtemplate && $contentobj->Cachable() && cms_siteprefs::get('use_smartycache',0) ) {
             $smarty->setCaching(Smarty::CACHING_LIFETIME_CURRENT);
@@ -150,13 +151,13 @@ while( $trycount < 2 ) {
         else {
             debug_buffer('process template top');
             $tpl_id = $contentobj->TemplateId();
-            $tpl = $smarty->createTemplate('tpl_top:'.$tpl_id);
+            $tpl = $smarty->createTemplate('tpl_top:'.$tpl_id,$cache_id);
             $top  = $tpl->fetch();
             unset($tpl);
-            $tpl = $smarty->createTemplate('tpl_body:'.$tpl_id);
+            $tpl = $smarty->createTemplate('tpl_body:'.$tpl_id,$cache_id);
             $body  = $tpl->fetch();
             unset($tpl);
-            $tpl = $smarty->createTemplate('tpl_head:'.$tpl_id);
+            $tpl = $smarty->createTemplate('tpl_head:'.$tpl_id,$cache_id);
             $head = $tpl->fetch();
             unset($tpl);
             $html = $top.$head.$body;

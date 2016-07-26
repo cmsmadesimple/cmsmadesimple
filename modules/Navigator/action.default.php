@@ -60,7 +60,7 @@ else {
     $template = $tpl->get_name();
 }
 
-$cache_id = '|nav'.md5(serialize($params));
+$cache_id = '|nav'.md5(serialize($params).$returnid);
 $compile_id = '';
 
 $tpl = $smarty->CreateTemplate($this->GetTemplateResource($template),$cache_id,$compile_id,$smarty);
