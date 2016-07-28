@@ -110,6 +110,7 @@ ModuleManager
   - Minor string changes.
   - Improvements to error handling in the new versions tab.
   - Write a confirmation form for uninstalling a module that displays the UninstallPreMessage or uses a default.
+  - Now don't allow disabling / uninstalling myself.
 
 
 Version 2.1.4 - Freetown
