@@ -176,7 +176,7 @@ else if( isset($_POST['loginsubmit']) ) {
 
     $userops = $gCms->GetUserOperations();
 
-    class CmsLoginError extends \Exception {}
+    class CmsLoginError extends \CmsException {}
 
     try {
         if( !$password ) throw new \LogicException(lang('usernameincorrect'));
@@ -226,7 +226,6 @@ else if( isset($_POST['loginsubmit']) ) {
         }
     }
     catch( \Exception $e ) {
-        debug_display($e); die();
         $error = $e->GetMessage();
         debug_buffer("Login failed.  Error is: " . $error);
         unset($_POST['password'],$_REQUEST['password']);
