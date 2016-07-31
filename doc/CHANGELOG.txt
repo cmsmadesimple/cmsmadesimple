@@ -14,6 +14,7 @@ Core - General
   - Minor fixes to the form_start plugin.
   - Minor fixes to generation of moduleinfo.ini
   - Fix an error message in the autorefresh javascript class.
+  - Fix problems that could result in uid=1 becomming inactive, and not a member of other groups when edited by another user
 
 Content Manager
   - Improve error handling in edit content.
