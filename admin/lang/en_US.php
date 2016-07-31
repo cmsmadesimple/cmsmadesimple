@@ -127,6 +127,7 @@ $lang['clearcache_taskdescription'] = "Executed daily, this task will clear cach
 $lang['clearcache_taskname'] = "Clear Cached Files";
 $lang['clearusersettings'] = "Clear all settings";
 $lang['close'] = "Close";
+$lang['CMSEX_C001'] = 'Sorry, we could not create a valid page alias from the input supplied';
 $lang['CMSEX_F001'] = "File system permissions problem";
 $lang['CMSEX_G001'] = "Attempt to set invalid property into object";
 $lang['CMSEX_L001'] = "Attempt to delete a non expired lock owned by another user";

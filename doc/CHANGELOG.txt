@@ -45,6 +45,8 @@ Core - General
   - Add the ability to content types the ability to set basic attributes for properties from within the page type definition.
   - Fixes problems with pagelink and link content types not being properly editable by additional editors.
   - Pass an explicit cacheid in to createtemplate in index.php
+  - Fix an error message in the autorefresh javascript class.
+  - Fix problems that could result in uid=1 becomming inactive, and not a member of other groups when edited by another user
 
 Navigator v1.0.4
   - Minor optimizations
@@ -66,6 +68,7 @@ Content Manager
   - Fix problems with auto-refresh being too fast for some operations
   - Now auto scroll to the first matched page in a find.
   - Additional editors of a page cannot change the content type.  Only owners, or users with the Manage all Content permissions.
+  - Fix a problem with the call to GetTabElements.
 
 DesignManager
   - Move the designs tab of the main interface into third position.

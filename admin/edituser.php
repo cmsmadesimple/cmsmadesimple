@@ -23,8 +23,7 @@ require_once ('../lib/include.php');
 check_login();
 $userid = get_userid();
 
-if (!check_permission($userid, 'Manage Users'))
-    die('Permission Denied');
+if (!check_permission($userid, 'Manage Users')) die('Permission Denied');
 
 /*--------------------
  * Variables
@@ -76,8 +75,7 @@ if (isset($_POST['cancel'])) {
 
 if (isset($_POST["submit"])) {
 
-    if ($user_id != $userid)
-        $active = !isset($_POST['active']) ? 0 : 1;
+    if( $access_user && isset($_POST['active']) ) $active = (int) $_POST['active'];
 
     $adminaccess = !isset($_POST["adminaccess"]) ? 0 : 1;
     $validinfo   = true;
@@ -193,19 +191,17 @@ if (isset($_POST["submit"])) {
 
 include_once ('header.php');
 
-if (false == empty($error))
-    echo $themeObject->ShowErrors('<ul class="error">' . $error . '</ul>');
+if (false == empty($error)) echo $themeObject->ShowErrors('<ul class="error">' . $error . '</ul>');
 
 $out      = array(-1 => lang('none'));
 $userlist = UserOperations::get_instance()->LoadUsers();
 
 foreach ($userlist as $one) {
-    if ($one->id == $user_id)
-        continue;
+    if ($one->id == $user_id) continue;
     $out[$one->id] = $one->username;
 }
 
-if ($assign_group_perm && !$access_user && ($user_id != 1)) {
+if ($assign_group_perm && !$access_user) {
     $groups = GroupOperations::get_instance()->LoadGroups();
     $smarty->assign('groups', $groups);
     $smarty->assign('membergroups', UserOperations::get_instance()->GetMemberGroups($user_id));

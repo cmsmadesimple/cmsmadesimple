@@ -98,7 +98,7 @@ $(document).ready(function(){
             </p>
         </div>
 
-        {if !$access_user && ($user_id != 1)}
+        {if !$access_user}
         <div class="pageoverflow">
             <p class="pagetext">
                 <label for="active">{lang('active')}:</label>&nbsp;{cms_help realm='admin' key='info_user_active' title=lang('active')}
