@@ -52,7 +52,7 @@ class CmsLayoutStylesheetQuery extends CmsDbQueryBase
     public function execute()
     {
         if( !is_null($this->_rs) ) return;
-        $query = 'SELECT SQL_CALC_FOUND_ROWS DISTINCT S.id FROM '.CMS_DB_PREFIX.CmsLayoutStylesheet::TABLENAME.' S';
+        $query = 'SELECT SQL_CALC_FOUND_ROWS S.id FROM '.CMS_DB_PREFIX.CmsLayoutStylesheet::TABLENAME.' S';
 
         // if we are using a design id argument
         // we do join, and sort by item order in the design
