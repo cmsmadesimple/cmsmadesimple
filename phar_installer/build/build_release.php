@@ -432,7 +432,7 @@ try {
 
             echo "INFO: zipping phar file into $outfile\n";
             $arch = new ZipArchive;
-            $arch->open($outfile,ZipArchive::OVERWRITE);
+            $arch->open($outfile,ZipArchive::OVERWRITE | ZipArchive::CREATE);
             $arch->addFile($infile,basename($infile));
             $arch->addFile("$rootdir/README-PHAR.TXT",'README-PHAR.TXT');
             $arch->close();
