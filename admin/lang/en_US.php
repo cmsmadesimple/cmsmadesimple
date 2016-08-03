@@ -523,11 +523,11 @@ $lang['event_help_addtemplatepre'] = "<h4>Parameters</h4>
 ";
 $lang['event_help_addtemplatetypepost'] = "<h4>Parameters</h4>
 <ul>
-  <li>'CmsLayoutTemplateType' - Reference to the effected template type object.</li>
+  <li>'CmsLayoutTemplateType' - Reference to the affected template type object.</li>
 </ul>";
 $lang['event_help_addtemplatetypepre'] = "<h4>Parameters</h4>
 <ul>
-  <li>'CmsLayoutTemplateType' - Reference to the effected template type object.</li>
+  <li>'CmsLayoutTemplateType' - Reference to the affected template type object.</li>
 </ul>";
 $lang['event_help_adduserdefinedtagpost'] = "<h4>Parameters</h4>
 <ul>
@@ -653,11 +653,11 @@ $lang['event_help_deletetemplatepre'] = "<h4>Parameters</h4>
 ";
 $lang['event_help_deletetemplatetypepost'] = "<h4>Parameters</h4>
 <ul>
-  <li>'CmsLayoutTemplateType' - Reference to the effected template type object.</li>
+  <li>'CmsLayoutTemplateType' - Reference to the affected template type object.</li>
 </ul>";
 $lang['event_help_deletetemplatetypepre'] = "<h4>Parameters</h4>
 <ul>
-  <li>'CmsLayoutTemplateType' - Reference to the effected template type object.</li>
+  <li>'CmsLayoutTemplateType' - Reference to the affected template type object.</li>
 </ul>";
 $lang['event_help_deleteuserdefinedtagpost'] = "<h4>Parameters</h4>
 <ul>
@@ -731,11 +731,11 @@ $lang['event_help_edittemplatepre'] = "<h4>Parameters</h4>
 ";
 $lang['event_help_edittemplatetypepost'] = "<h4>Parameters</h4>
 <ul>
-  <li>'CmsLayoutTemplateType' - Reference to the effected template type object.</li>
+  <li>'CmsLayoutTemplateType' - Reference to the affected template type object.</li>
 </ul>";
 $lang['event_help_edittemplatetypepre'] = "<h4>Parameters</h4>
 <ul>
-  <li>'CmsLayoutTemplateType' - Reference to the effected template type object.</li>
+  <li>'CmsLayoutTemplateType' - Reference to the affected template type object.</li>
 </ul>";
 $lang['event_help_edituserdefinedtagpost'] = "<h4>Parameters</h4>
 <ul>
