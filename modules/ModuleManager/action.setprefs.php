@@ -44,7 +44,7 @@ if( isset($config['developer_mode']) && isset($params['reseturl']) ) {
   $this->SetMessage($this->Lang('msg_urlreset'));
   $this->RedirectToAdminTab();
 }
-if( isset($params['dl_chunksize']) ) $this->SetPreference('dl_chunksize',trim($params['dl_chunksize']));
+if( isset($params['dl_chunksize']) ) $this->SetPreference('dl_chunksize',(int)trim($params['dl_chunksize']));
 $latestdepends = (int)get_parameter_value($params,'latestdepends');
 $this->SetPreference('latestdepends',$latestdepends);
 
