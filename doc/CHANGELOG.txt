@@ -1,7 +1,7 @@
-Version 2.1.5
+Version 2.1.5 - No Name Set
 ----------------------------------
 Core - General
-  - Fix fatal error if an extcss stylesheet was placed in the admin theme
+  - Fix fatal error if an extcss stylesheet was placed in the Admin theme.
   - Another minor fix to clearing cached files.
   - Fixes problems where all files (including dot files) had to be writable before creating a module XML file.
   - Fixes minor notice in user operations.
@@ -10,12 +10,15 @@ Core - General
   - Fixes an issue where a 404 handler error page would not be rendered correctly if for some reason the route did not specify a page id to load.
   - More fixes to cms_url class.
   - Improve the way page aliases are munged when they are supplied.
-  - Improve the error generated when a page alias cannot be generated
+  - Improve the error generated when a page alias cannot be generated.
   - Minor fixes to the form_start plugin.
-  - Minor fixes to generation of moduleinfo.ini
+  - Minor fixes to generation of moduleinfo.ini.
   - Fix an error message in the autorefresh javascript class.
-  - Fix problems that could result in uid=1 becomming inactive, and not a member of other groups when edited by another user
-  - Fix query problem in CmsLayoutStylesheetQuery with Mysql 5.7
+  - Fix problems that could result in uid=1 becoming inactive, and not a member of other groups when edited by another user.
+  - Fix query problem in CmsLayoutStylesheetQuery with Mysql 5.7.
+  
+  - #11080 - Parameter $adding in GetContentBlockFieldInput always FALSE.
+  - #11093 - Bad error message in jquery.cmsms_autorefresh.js.
 
 Content Manager
   - Improve error handling in edit content.
@@ -25,8 +28,9 @@ Design Manager
   - Fix problem with resetting a template back to factory defaults, or creating a new template from factory defaults.
 
 Module Manager
-  - Improve the way modules with dependencies are installed and upgraded. (got rid of the queue stuff).
+  - Improve the way modules with dependencies are installed and upgraded. (Got rid of the queue stuff).
 
+  
 Version 2.1.4 - Freetown
 ----------------------------------
 Core - General
@@ -40,13 +44,14 @@ Phar Installer
 Module Manager
   - Fixes problems where all files (including dot files) had to be writable before creating a module XML file.
 
+  
 Version 2.1.3 - Black Point
 ----------------------------------
 Core - General
   - Security fix to prevent HTTP_HOST attacks. Many thanks to I-TRACING (www.i-tracing.com) for reporting it!!
-  - Remove stub .htaccess files from subdirectories
-  - Update the included sample htaccess.txt file for security
-  - Fix for endless loop when calculating a page alias in utf-8 environments
+  - Remove stub .htaccess files from subdirectories.
+  - Update the included sample htaccess.txt file for security.
+  - Fix for endless loop when calculating a page alias in utf-8 environments.
   - Fix for endless loop when calculating a page alias and a page name/title ended with -
   - Fixes a notice on the login page.
   - Optimize LoadContentFromId() to be typesafe, and use default page, if the id passed in is invalid.
@@ -63,7 +68,7 @@ AdminSearch v1.0.1
   - Minor fix to permissions checks.
 
 Navigator v1.0.3
-  - Improved exception handling on install .
+  - Improved exception handling on install.
 
 News v2.50.5
   - Fix error condition if no results were returned.
@@ -74,8 +79,9 @@ Installation Assistant v1.0.3.1
   - Fix some PHP7 issues.
 
 FileManager
-  - #10871 - Filemanager moving folder.
+  - #10871 - FileManager moving folder.
 
+  
 Version 2.1.2 - Andros Town
 ----------------------------------
 Core - General
