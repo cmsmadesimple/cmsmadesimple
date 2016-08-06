@@ -80,6 +80,7 @@ try {
                 switch( $rec['action'] ) {
                 case 'i': // install
                     $res = $ops->InstallModule($name);
+		    break;
                 case 'u': // upgrade
                     $res = $ops->UpgradeModule($name);
                     break;
