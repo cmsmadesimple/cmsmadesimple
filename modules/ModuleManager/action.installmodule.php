@@ -80,9 +80,9 @@ try {
                 switch( $rec['action'] ) {
                 case 'i': // install
                     $res = $ops->InstallModule($name);
-		    break;
+                    break;
                 case 'u': // upgrade
-                    $res = $ops->UpgradeModule($name);
+                    $res = $ops->UpgradeModule($name,$rec['version']);
                     break;
                 case 'a': // activate
                     $res = $ops->ActivateModule($name);
