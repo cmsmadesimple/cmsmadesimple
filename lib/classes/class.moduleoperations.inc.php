@@ -827,7 +827,7 @@ final class ModuleOperations
 
             $query = 'UPDATE '.CMS_DB_PREFIX.'modules SET version = ?, active = 1, allow_fe_lazyload = ?, allow_admin_lazyload = ?
                     WHERE module_name = ?';
-            $dbr = $db->Execute($query,array($module_obj->GetVersion(),$lazyload_fe,$lazyload_admin,$module_obj->GetName()));
+            $dbr = $db->Execute($query,array($to_version,$lazyload_fe,$lazyload_admin,$module_obj->GetName()));
 
             // upgrade dependencies
             $query = 'DELETE FROM '.CMS_DB_PREFIX.'module_deps WHERE child_module = ?';
