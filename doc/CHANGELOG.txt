@@ -30,6 +30,11 @@ Design Manager
 Module Manager
   - Improve the way modules with dependencies are installed and upgraded. (Got rid of the queue stuff).
 
+AdminSearch 
+  - Use 'Manage Stylesheets' permission, not 'Modify Stylesheets' when searching stylesheets.
+
+Phar Installer
+  - Adds missing 'Manage Stylesheets' permission that would not be created on upgrade from 1.12.
   
 Version 2.1.4 - Freetown
 ----------------------------------
