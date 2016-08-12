@@ -13,7 +13,7 @@ Core - General
   - Improve the error generated when a page alias cannot be generated.
   - Minor fixes to the form_start plugin.
   - Minor fixes to generation of moduleinfo.ini.
-  - Fix an error message in the autorefresh javascript class.
+  - Fix an error message in the autorefresh JavaScript class.
   - Fix problems that could result in uid=1 becoming inactive, and not a member of other groups when edited by another user.
   - Fix query problem in CmsLayoutStylesheetQuery with Mysql 5.7.
   
@@ -21,7 +21,7 @@ Core - General
   - #11093 - Bad error message in jquery.cmsms_autorefresh.js.
 
 Content Manager
-  - Improve error handling in edit content.
+  - Improve error handling in Edit Content.
   - Fix a problem with the call to GetTabElements.
 
 Design Manager
@@ -35,6 +35,7 @@ AdminSearch
 
 Phar Installer
   - Adds missing 'Manage Stylesheets' permission that would not be created on upgrade from 1.12.
+  
   
 Version 2.1.4 - Freetown
 ----------------------------------
