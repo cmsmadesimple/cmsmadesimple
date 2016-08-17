@@ -1,5 +1,7 @@
 #!/usr/bin/php
 <?php
+// WARNING: this is certainly not my best code.
+// todo: make this interactive via cli.
 
 //  check to make sure we are in the correct directory.
 $owd = getcwd();
@@ -10,8 +12,6 @@ if( ini_get('phar.readonly') ) throw new Exception('phar.readonly must be turned
 $script_file = basename($argv[0]);
 $owd = getcwd();
 if( !file_exists("$owd/$script_file") ) throw new Exception('This script must be executed from the same directory as the '.$script_file.' script');
-
-// todo: make this interactive via cli.
 $rootdir = dirname(dirname(__FILE__));
 $repos_root='http://svn.cmsmadesimple.org/svn/cmsmadesimple';
 $repos_branch="/trunk";
@@ -22,7 +22,7 @@ $outdir = $rootdir."/out";
 $exclude_patterns = array('/\.svn\//','/^ext\//','/^build\/.*/','/.*~$/','/tmp\/.*/','/\.\#.*/','/\#.*/','/^out\//','/^README*TXT/');
 $exclude_from_zip = array('*~','tmp/','.#*','#*'.'*.bak');
 $src_excludes = array('/\/phar_installer\//','/\/config\.php$/', '/\/find-mime$/', '/\/install\//', '/^\/tmp\/.*/', '/^#.*/', '/^\/scripts\/.*/', '/\.git/', '/\.svn/', '/svn-.*/',
-                      '/^\/tests\/.*/', '/^\/build\/.*/', '/^\.htaccess/', '/\.svn/', '/^config.php$/','/.*~$/', '/\.\#.*/', '/\#.*/');
+                      '/^\/tests\/.*/', '/^\/build\/.*/', '/^\.htaccess/', '/\.svn/', '/^config\.php$/','/.*~$/', '/\.\#.*/', '/\#.*/', '/.*\.bak/');
 $priv_file = dirname(__FILE__).'/priv.pem';
 $pub_file = dirname(__FILE__).'/pub.pem';
 $verbose = 0;
@@ -33,29 +33,6 @@ $zip = 1;
 $clean = 0;
 $checksums = 1;
 $version_num = null;
-
-/*
-// find our repository path... todo: clean this up.
-$cmd = "svn info | grep '^URL'";
-$out = trim(@exec($cmd));
-if( !startswith($out,'URL') ) throw new Exception("Could not get repository root from shell");
-list($junk,$url) = explode(' ',$out);
-$url = trim($url);
-if( !startswith($url,$repos_root) ) throw new Exception("Invalid repository root detected");
-$bn1 = $bn2 = null;
-$start_dir = __DIR__;
-$out_url = $start_url = $url;
-while( 1 ) {
-    $out_url = $start_url;
-    $bn1 = basename($start_dir);
-    $bn2 = basename($start_url);
-    $start_dir = dirname($start_dir);
-    $start_url = dirname($start_url);
-    if( $bn1 != $bn2 ) break;
-}
-if( !startswith($out_url,$repos_root) ) throw new Exception("Could not find valid repository root url");
-$svn_url = $out_url;
-*/
 
 $options = getopt('ab:nckhrvozs:',array('archive','branch:','help','clean','checksums','verbose','src:','rename','nobuild','out:','zip'));
 if( is_array($options) && count($options) ) {
@@ -338,7 +315,7 @@ try {
 
     @mkdir($outdir);
     @mkdir($datadir);
-    if( !is_dir($datadir) || !is_dir($outdir) ) throw new Exception('Problem creating working directories: '.$tmpdir.' and '.$outdir);
+    if( !is_dir($datadir) || !is_dir($outdir) ) throw new Exception('Problem creating working directories: '.$datadir.' and '.$outdir);
 
     $tmp = 'cmsms-'.create_source_archive().'-install';
     if( !$archive_only ) {
@@ -416,7 +393,6 @@ try {
         }
 
         $phar->setMetaData(array('bootstrap'=>'index.php'));
-        //$stub = file_get_contents('stub.php'); // debug
         $stub = $phar->createDefaultStub('index.php','index.php');
         $phar->setSignatureAlgorithm(Phar::SHA1);
         $phar->setStub($stub);
@@ -461,5 +437,3 @@ try {
 catch( Exception $e ) {
     echo "ERROR: Problem building phar file ".$outdir.": ".$e->GetMessage()."\n";
 }
-
-?>
