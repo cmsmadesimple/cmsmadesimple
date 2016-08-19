@@ -65,9 +65,9 @@ abstract class app
         return $dir;
     }
 
-    static public function get_config()
+    public function get_config()
     {
-        return self::$_instance->_config;
+        return $this->_config;
     }
 
     static public function clear_cache($do_index_html = TRUE)
