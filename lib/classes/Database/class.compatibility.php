@@ -44,6 +44,8 @@ namespace CMSMS\Database {
 
     /**
      * A class for providing some compatibility functionality with older module code
+     *
+     * @todo: move this class to a different function and rename.
      */
     final class compatibility
     {

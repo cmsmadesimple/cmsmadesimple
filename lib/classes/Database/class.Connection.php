@@ -655,6 +655,7 @@ namespace CMSMS\Database {
          *
          * @param \CMSMS\Database\Connectionspec $spec An object describing the database to connect to.
          * @return \CMSMS\Database\Connection
+	 * @todo  Move this into a factory class
          */
         public static function &Initialize(ConnectionSpec $spec)
         {
