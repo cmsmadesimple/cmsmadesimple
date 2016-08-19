@@ -151,7 +151,6 @@ class cms_install extends \__appbase\app
         $config = array_merge(parent::get_config(), $tmp);
         $this->_orig_tz = $config['timezone'] = @date_default_timezone_get();
         if( !$this->_orig_tz ) $this->_orig_tz = $config['timezone'] = 'UTC';
-
         $config['dest'] = realpath(getcwd());
         return $config;
     }
@@ -172,6 +171,7 @@ class cms_install extends \__appbase\app
         $request = \__appbase\request::get();
         $list = [ 'TMPDIR', 'tmpdir', 'timezone', 'tz', 'dest', 'destdir', 'debug', 'nofiles', 'no_files', 'nobase' ];
         foreach( $list as $key ) {
+	    if( !isset($request[$key]) ) continue;
             $val = $request[$key];
             switch( $key ) {
             case 'TMPDIR':
@@ -198,6 +198,7 @@ class cms_install extends \__appbase\app
                 break;
             }
         }
+	return $config;
     }
 
     protected function check_config($config)
@@ -220,7 +221,9 @@ class cms_install extends \__appbase\app
                     if( !@file_put_contents($dir.'/__cmsms',$txt) ) throw new \RuntimeException('We could not create a file in the temporary directory we just created (is safe mode on?).');
                     $this->set_config_val('tmpdir',$dir);
                     $this->_custom_tmpdir = $dir;
+		    $val = $dir;
                 }
+                $config[$key] = $val;
                 break;
             case 'dest':
                 if( !is_dir($val) || !is_writable($val) ) {
@@ -234,6 +237,7 @@ class cms_install extends \__appbase\app
                 break;
             }
         }
+	return $config;
     }
 
     public function get_config()
@@ -245,7 +249,7 @@ class cms_install extends \__appbase\app
 
         // gotta load the config, then store it in the session
         $config = $this->load_config();
-        $this->check_config($config);
+        $config = $this->check_config($config);
         $sess['config'] = $config;
         return $config;
     }
@@ -385,6 +389,7 @@ class cms_install extends \__appbase\app
 
         // and do our stuff.
         try {
+	    $config = $this->get_config();
             $tmp = 'm'.substr(md5(realpath(getcwd()).session_id()),0,8);
             $wizard = \__appbase\wizard::get_instance(__DIR__.'/wizard','\cms_autoinstaller');
             // this sets a custom step variable for each instance
