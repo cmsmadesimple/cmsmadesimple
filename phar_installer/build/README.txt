@@ -11,10 +11,11 @@ Creating a CMSMS release involves these steps:
      upgrade.php  -- (optional) the script to do any changes to the database or settings
         note: when this script is executed $db is available, the CMSMS api is created, however smarty is not available.
      readme.txt   -- (optional) readme file for display in the upgrade assistant
-  
   c: optionally delete directories from <installer root>/app/upgrade that are no longer necessary.
-
-  d: build the release packages
+  d: commit those changes to SVN
+  e: build the release packages
+  f: ** Begin distribution process **
+     - remember to create an svn tag if distributing
 
 ---------------------
 Building the manifest
@@ -36,6 +37,7 @@ Building the manifest
 Building the release packages
 -----------------------------
 1.  Change dir into the build directory
+    Note:  You only need the phar_installer directory to do a build... but use caution that it is from the proper branch of cmsms.
 
 2.  Executebuild_release.php
     -- execute build_release.php -h for help
@@ -57,7 +59,7 @@ Building the release packages
  
     ** This script executes multiple steps
 
-    a: Export the CMSMS svn from the path specified in the svn_url at the top of the script
+    a: Exports the CMSMS svn from the path specified in the svn_url at the top of the script
        The path is hard coded to the cmsmadesimple trunk (for now)
 
     b: It will then clean all of the files that do not belong in the release
