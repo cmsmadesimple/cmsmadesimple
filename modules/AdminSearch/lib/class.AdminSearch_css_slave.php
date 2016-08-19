@@ -17,7 +17,7 @@ final class AdminSearch_css_slave extends AdminSearch_slave
   public function check_permission()
   {
     $userid = get_userid();
-    return check_permission($userid,'Modify Stylesheets');
+    return check_permission($userid,'Manage Stylesheets');
   }
 
   public function get_matches()

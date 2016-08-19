@@ -159,6 +159,7 @@ Phar Installer
   - Adds missing 'Manage Stylesheets' permission that would not be created on upgrade from 1.12.
 
 
+  
 Version 2.1.4 - Freetown
 ----------------------------------
 Core - General
