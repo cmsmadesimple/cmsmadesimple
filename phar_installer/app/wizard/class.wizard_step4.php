@@ -36,7 +36,6 @@ class wizard_step4 extends \cms_autoinstaller\wizard_step
         $action = $this->get_wizard()->get_data('action');
         if( $action == 'freshen' || $action == 'upgrade' ) {
             // read config data from config.php for freshen action.
-            $app = \__appbase\get_app();
             $destdir = $app->get_destdir();
             $config_file = $destdir.'/config.php';
             include_once($config_file);

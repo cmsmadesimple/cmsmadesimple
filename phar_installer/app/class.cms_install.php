@@ -52,7 +52,6 @@ class cms_install extends \__appbase\app
         // initialize the session.
         $sess = \__appbase\session::get();
         $junk = $sess[__CLASS__]; // this is junk, but triggers session to start.
-
         $config = $this->get_config();
 
         // setup autoload
@@ -221,7 +220,7 @@ class cms_install extends \__appbase\app
                     if( !@file_put_contents($dir.'/__cmsms',$txt) ) throw new \RuntimeException('We could not create a file in the temporary directory we just created (is safe mode on?).');
                     $this->set_config_val('tmpdir',$dir);
                     $this->_custom_tmpdir = $dir;
-		    $val = $dir;
+                    $val = $dir;
                 }
                 $config[$key] = $val;
                 break;
@@ -237,7 +236,7 @@ class cms_install extends \__appbase\app
                 break;
             }
         }
-	return $config;
+        return $config;
     }
 
     public function get_config()
@@ -389,7 +388,7 @@ class cms_install extends \__appbase\app
 
         // and do our stuff.
         try {
-	    $config = $this->get_config();
+            $config = $this->get_config();
             $tmp = 'm'.substr(md5(realpath(getcwd()).session_id()),0,8);
             $wizard = \__appbase\wizard::get_instance(__DIR__.'/wizard','\cms_autoinstaller');
             // this sets a custom step variable for each instance
@@ -398,7 +397,6 @@ class cms_install extends \__appbase\app
             // nuke anything (even though database creds are stored in the session
             // so are all the other parameters.
             $wizard->set_step_var($tmp);
-            $wizard->set_data('nofiles',(int)$config['nofiles']);
             $res = $wizard->process();
         }
         catch( \Exception $e ) {

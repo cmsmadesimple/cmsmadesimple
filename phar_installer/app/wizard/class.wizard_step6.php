@@ -34,6 +34,7 @@ class wizard_step6 extends \cms_autoinstaller\wizard_step
     {
         $app = \__appbase\get_app();
         $config = $app->get_config();
+
         if( isset($_POST['sitename']) ) $this->_siteinfo['sitename'] = trim(\__appbase\utils::clean_string($_POST['sitename']));
         if( isset($_POST['languages']) ) {
             $tmp = array();
