@@ -124,8 +124,8 @@
               if( data.status == 'success' ) {
                   if( data.locked ) {
                       // gotta display a message.
-	              alert('{$mod->Lang('error_contentlocked')|escape:'javascript'}');
 		      event.preventDefault();
+	              cms_alert('{$mod->Lang('error_contentlocked')|escape:'javascript'}');
                   }
               }
 	  });
