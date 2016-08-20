@@ -330,38 +330,39 @@ final class ContentListBuilder
    */
   public function delete_content($page_id)
   {
-    $page_id = (int)$page_id;
-    if( $page_id < 1 ) return $this->_module->Lang('error_invalidpageid');
+      $page_id = (int)$page_id;
+      if( $page_id < 1 ) return $this->_module->Lang('error_invalidpageid');
 
-    $test = FALSE;
-    if( $this->_module->CheckPermission('Manage All Content') ) {
-      $test = TRUE;
-    }
-    else if( $this->_module->CheckPermission('Remove Pages') && check_authorship($this->_userid,$page_id) ) {
-      $test = TRUE;
-    }
+      $test = FALSE;
+      if( $this->_module->CheckPermission('Manage All Content') ) {
+          $test = TRUE;
+      }
+      else if( $this->_module->CheckPermission('Remove Pages') && check_authorship($this->_userid,$page_id) ) {
+          $test = TRUE;
+      }
 
-    if( !$test ) return $this->_module->Lang('error_delete_permission');
+      if( !$test ) return $this->_module->Lang('error_delete_permission');
 
-    $contentops = ContentOperations::get_instance();
-    $node = $contentops->quickfind_node_by_id($page_id);
-    if( !$node ) return $this->_module->Lang('error_invalidpageid');
-    if( $node->has_children() ) return $this->_module->Lang('error_delete_haschildren');
+      $contentops = ContentOperations::get_instance();
+      $node = $contentops->quickfind_node_by_id($page_id);
+      if( !$node ) return $this->_module->Lang('error_invalidpageid');
+      if( $node->has_children() ) return $this->_module->Lang('error_delete_haschildren');
 
-    $parent = $node->get_parent();
-    $parent_id = $node->get_tag('id');
-    $childcount = 0;
-    if( $parent ) $childcount = $parent->count_children();
+      $parent = $node->get_parent();
+      $parent_id = $node->get_tag('id');
+      $childcount = 0;
+      if( $parent ) $childcount = $parent->count_children();
 
-    $content = $node->GetContent(FALSE,FALSE,FALSE);
-    if( $content->DefaultContent() ) return $this->_module->Lang('error_delete_defaultcontent');
+      $content = $node->GetContent(FALSE,FALSE,FALSE);
+      if( $content->DefaultContent() ) return $this->_module->Lang('error_delete_defaultcontent');
 
-    $content->Delete();
+      $content->Delete();
+      audit($page_id,'Core','Deleted content page');
 
-    if( $childcount == 1 && $parent_id > -1 ) $this->collapse_section($parent_id);
-    $this->collapse_section($page_id);
+      if( $childcount == 1 && $parent_id > -1 ) $this->collapse_section($parent_id);
+      $this->collapse_section($page_id);
 
-    $contentops->SetAllHierarchyPositions();
+      $contentops->SetAllHierarchyPositions();
   }
 
   public function pretty_urls_configured()
