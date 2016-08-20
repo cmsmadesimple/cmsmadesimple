@@ -62,14 +62,14 @@ require_once($dirname.DIRECTORY_SEPARATOR.'compat.functions.php');
 require_once($dirname.DIRECTORY_SEPARATOR.'misc.functions.php');
 require_once($dirname.DIRECTORY_SEPARATOR.'version.php'); // tells us where the config file is and other things.
 require_once($dirname.DIRECTORY_SEPARATOR.'classes'.DIRECTORY_SEPARATOR.'class.CmsException.php');
+require_once($dirname.DIRECTORY_SEPARATOR.'classes'.DIRECTORY_SEPARATOR.'class.cms_config.php');
 require_once($dirname.DIRECTORY_SEPARATOR.'classes'.DIRECTORY_SEPARATOR.'class.CmsApp.php');
-require_once($dirname.DIRECTORY_SEPARATOR.'autoloader.php');
 
-$_app = new CmsApp();
 #Grab the current configuration
-//$_app = CmsApp::get_instance(); // for use in this file only.
+$_app = CmsApp::get_instance(); // for use in this file only.
 $config = $_app->GetConfig();
 
+require_once($dirname.DIRECTORY_SEPARATOR.'autoloader.php');
 require_once($dirname.DIRECTORY_SEPARATOR.'module.functions.php');
 debug_buffer('done loading basic files');
 
