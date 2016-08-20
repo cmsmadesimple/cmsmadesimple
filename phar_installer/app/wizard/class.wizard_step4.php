@@ -22,7 +22,7 @@ class wizard_step4 extends \cms_autoinstaller\wizard_step
 
         // get saved date
         $tmp = $this->get_wizard()->get_data('config');
-        if( is_array($tmp) && count($tmp) ) $this->_config = $tmp;
+        if( $tmp ) $this->_config = array_merge($this->_config,$tmp);
         $tmp = $this->get_wizard()->get_data('samplecontent');
         if( $tmp === 0 || $tmp === 1 ) $this->_samplecontent = $tmp;
 
@@ -157,9 +157,7 @@ class wizard_step4 extends \cms_autoinstaller\wizard_step
         if( !is_array($tmp) ) throw new \Exception(\__appbase\lang('error_tzlist'));
         $tmp2 = array_combine(array_values($tmp),array_values($tmp));
         $smarty->assign('timezones',array_merge(array(''=>\__appbase\lang('none')),$tmp2));
-
         $smarty->assign('dbtypes',$this->_dbms_options);
-
         $smarty->assign('action',$this->get_wizard()->get_data('action'));
         $smarty->assign('verbose',$this->get_wizard()->get_data('verbose',0));
         $smarty->assign('config',$this->_config);

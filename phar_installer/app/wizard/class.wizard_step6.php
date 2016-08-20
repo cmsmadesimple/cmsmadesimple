@@ -10,7 +10,6 @@ class wizard_step6 extends \cms_autoinstaller\wizard_step
     public function run()
     {
         $app = \__appbase\get_app();
-        $config = $app->get_config();
 
         $tz = date_default_timezone_get();
         if( !$tz ) @date_default_timezone_set('UTC');
@@ -33,6 +32,8 @@ class wizard_step6 extends \cms_autoinstaller\wizard_step
 
     protected function process()
     {
+        $app = \__appbase\get_app();
+        $config = $app->get_config();
         if( isset($_POST['sitename']) ) $this->_siteinfo['sitename'] = trim(\__appbase\utils::clean_string($_POST['sitename']));
         if( isset($_POST['languages']) ) {
             $tmp = array();
@@ -46,7 +47,7 @@ class wizard_step6 extends \cms_autoinstaller\wizard_step
         try {
             $this->validate($this->_siteinfo);
             $url = $this->get_wizard()->next_url();
-            if( $this->get_wizard()->get_data('nofiles',0) ) $url = $this->get_wizard()->step_url(8);
+            if( $config['nofiles'] ) $url = $this->get_wizard()->step_url(8);
             \__appbase\utils::redirect($url);
         }
         catch( \Exception $e ) {
