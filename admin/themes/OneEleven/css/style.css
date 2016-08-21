@@ -1118,6 +1118,7 @@ nav ul#oe_pagemenu li li a:hover {
 nav ul#oe_pagemenu li a:focus {
         color: #147fdb !important;
         border: 1px solid #147fdb;
+        margin-right: 10px;
 }
 nav ul#oe_pagemenu li a.main {
 	background-position: -10px -484px

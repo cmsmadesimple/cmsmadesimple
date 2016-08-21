@@ -1254,6 +1254,12 @@ nav ul#oe_pagemenu li li a:hover {
 	color: #147fdb;
 }
 
+nav ul#oe_pagemenu li a:focus {
+        color: #147fdb !important;
+        border: 1px solid #147fdb;
+        margin-right: 10px;
+}
+
 nav ul#oe_pagemenu li a.main {
 	background: url(themes/OneEleven/images/layout/home-off.png) right no-repeat;
 }
