@@ -120,7 +120,7 @@ ModuleManager
   - Now don't allow disabling / uninstalling myself.
   
 
-  Version 2.1.5 - High Rock
+Version 2.1.5 - High Rock
 ----------------------------------
 Core - General
   - Fix fatal error if an extcss stylesheet was placed in the Admin theme.
