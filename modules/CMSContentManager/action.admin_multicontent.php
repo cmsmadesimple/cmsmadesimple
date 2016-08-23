@@ -101,7 +101,7 @@ switch( $bulkaction ) {
    break;
 
  case 'setnoncachable':
-   $parms['cachable'] = 1;
+   $parms['cachable'] = 0;
    $this->Redirect($id,'admin_bulk_cachable',$returnid,$parms);
    break;
 
