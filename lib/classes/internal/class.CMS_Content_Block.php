@@ -78,6 +78,10 @@ final class CMS_Content_Block
             if( $key == 'type' ) continue;
             if( $key == 'block' ) $key = 'name';
             if( $key == 'wysiwyg' ) $key = 'usewysiwyg';
+            if( startswith( $key, 'data-') ) {
+                $rec[$key] = $value;
+                continue;
+            }
             if( isset($rec[$key]) ) $rec[$key] = $value;
         }
 

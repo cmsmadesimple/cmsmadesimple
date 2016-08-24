@@ -459,9 +459,9 @@ class Content extends ContentBase
             $res = \UserOperations::get_instance()->UserInGroup($uid,1);
             if( !$res ) return;
         }
-	if( $this->Id() < 1 && empty($value) ) {
-	    $value = trim($this->_get_param($blockInfo,'default'));
-	}
+        if( $this->Id() < 1 && empty($value) ) {
+            $value = trim($this->_get_param($blockInfo,'default'));
+        }
 		if ($oneline) {
 			$size = (int) $this->_get_param($blockInfo,'size',50);
 			$ret = '<input type="text" size="'.$size.'" maxlength="'.$maxlength.'" name="'.$blockInfo['id'].'" value="'.cms_htmlentities($value, ENT_NOQUOTES, CmsNlsOperations::get_encoding('')).'"';
@@ -480,8 +480,7 @@ class Content extends ContentBase
 				$block_wysiwyg = $blockInfo['usewysiwyg'] == 'false'?false:true;
 			}
 
-			$parms = array('name'=>$blockInfo['id'],'enablewysiwyg'=>$block_wysiwyg,
-						   'value'=>$value,'id'=>$blockInfo['id']);
+			$parms = [ 'name'=>$blockInfo['id'],'enablewysiwyg'=>$block_wysiwyg,'value'=>$value,'id'=>$blockInfo['id'] ];
 			if( $required ) $parms['required'] = 'required';
 			if( $placeholder ) $parms['placeholder'] = $placeholder;
 			$parms['width'] = (int) $this->_get_param($blockInfo,'width',80);
@@ -490,6 +489,10 @@ class Content extends ContentBase
 			if( (!isset($parms['cssname']) || $parms['cssname'] == '') && cms_siteprefs::get('content_cssnameisblockname',1) ) {
 				$parms['cssname'] = $blockInfo['id'];
 			}
+            foreach( $blockInfo as $key => $val ) {
+                if( !startswith($key,'data-') ) continue;
+                $parms[$key] = $val;
+            }
 			$ret = CmsFormUtils::create_textarea($parms);
 		}
 		return $ret;

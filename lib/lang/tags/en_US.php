@@ -871,6 +871,9 @@ $lang['help_function_content'] = <<<EOT
         <li><em>(optional)</em> tab (string) - The desired tab to display this field on in the edit form..</li>
         <li><em>(optional)</em> cssname (string) - A hint to the WYSIWYG editor module to use the specified stylesheet name for extended styles.</li>
         <li><em>(optional)</em> noedit (true/false) - If set to true, then the content block will not be available for editing in the content editing form.  This is useful for outputting a content block to page content that was created via a third party module.</li>
+        <li><em>(optional)</em> data-xxxx (string) - Allows passing data attributes to the generated textarea for use by syntax hilighter and WYSIWYG modules.
+            <p>i.e.: <code>{content data-foo="bar"}</code></p>
+        </li>
         <li><em>(optional)</em> adminonly (true/false) - If set to true, only members of the special &quot;Admin&quot; group (gid==1) will be able to edit this content block.</li>
 		<li><em>(optional)</em> assign - Assigns the content to a smarty parameter, which you can then use in other areas of the page, or use to test whether content exists in it or not.
 <p>Example of passing page content to a User Defined Tag as a parameter:</p></li>
