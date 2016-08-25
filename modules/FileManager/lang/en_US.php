@@ -148,6 +148,7 @@ $lang['info_rotate'] = 'The saved image will not appear identical to the rotated
 $lang['info_rotate_slider'] = 'Drag this slider to the desired rotation angle';
 $lang['installed'] = 'FileManager version %s installed';
 $lang['insufficientpermission'] = 'Insufficient permission to %s';
+$lang['invalidchdir'] = 'Attempt to set working directory to an invalid location: %s';
 $lang['internalerror'] = 'Internal error (meaning something didn\'t make sense at all, please report what you did)';
 $lang['invaliddestname'] = 'Destination name specified is empty or invalid';
 $lang['invalidmovedir'] = 'The destination directory specified is invalid';
