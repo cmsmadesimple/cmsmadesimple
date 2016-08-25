@@ -48,9 +48,12 @@ Core - General
   - Fix an error message in the autorefresh javascript class.
   - Fix problems that could result in uid=1 becoming inactive, and not a member of other groups when edited by another user.
   - Fix query problem in CmsLayoutStylesheetQuery with Mysql 5.7.
-  
+  - the {content} tag now supports passing data attributes to the generated textarea, for use by syntax hilighter and WYSIWYG modules.
+    i.e: {content data-foo="bar"}
+
   - #11080 - Parameter $adding in GetContentBlockFieldInput always FALSE.
   - #11093 - Bad error message in jquery.cmsms_autorefresh.js.
+  - #11133 - is_email() fails on domain check
 
 Navigator v1.0.4
   - Minor optimizations
@@ -92,10 +95,12 @@ News v2.50.6
   - Add an option to never create alerts about draft News articles.
   - Minor optimizations
 
-FileManager v1.6.2
+FileManager v1.6.3
   - Move settings to it's own menu item under Site Admin.
   - Fix minor problem with moving a directory.
   - Adds OnFileDeleted event.
+  - Adds 'view raw file' icon in each viewable row.
+  - Minor formatting changes in file list.
 
 Phar Installer v1.2
   - A database account password is now required.
@@ -118,7 +123,7 @@ ModuleManager
   - Improvements to error handling in the new versions tab.
   - Write a confirmation form for uninstalling a module that displays the UninstallPreMessage or uses a default.
   - Now don't allow disabling / uninstalling myself.
-  
+
 
 Version 2.1.5 - High Rock
 ----------------------------------
@@ -138,7 +143,7 @@ Core - General
   - Fix an error message in the autorefresh JavaScript class.
   - Fix problems that could result in uid=1 becoming inactive, and not a member of other groups when edited by another user.
   - Fix query problem in CmsLayoutStylesheetQuery with Mysql 5.7.
-  
+
   - #11080 - Parameter $adding in GetContentBlockFieldInput always FALSE.
   - #11093 - Bad error message in jquery.cmsms_autorefresh.js.
 
@@ -152,14 +157,14 @@ Design Manager
 Module Manager
   - Improve the way modules with dependencies are installed and upgraded. (Got rid of the queue stuff).
 
-AdminSearch 
+AdminSearch
   - Use 'Manage Stylesheets' permission, not 'Modify Stylesheets' when searching stylesheets.
 
 Phar Installer
   - Adds missing 'Manage Stylesheets' permission that would not be created on upgrade from 1.12.
 
 
-  
+
 Version 2.1.4 - Freetown
 ----------------------------------
 Core - General

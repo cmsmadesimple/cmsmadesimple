@@ -289,6 +289,7 @@ $lang['title_filefield'] = 'Select one or more files they will automatically beg
 $lang['title_filemanager_settings'] = 'Settings - File Manager';
 $lang['title_move'] = 'Move the selected item to another folder';
 $lang['title_newdir'] = 'Create a new directory';
+$lang['title_rawurl'] = 'View this item natively in the browser';
 $lang['title_rename'] = 'Rename the selected item';
 $lang['title_resizecrop'] = 'Resize and/or Crop the selected image';
 $lang['title_rotate'] = 'Rotate the selected image';

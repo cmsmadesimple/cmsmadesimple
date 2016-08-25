@@ -153,8 +153,9 @@ $(document).ready(function () {
 				<th class="pageicon" title="{$mod->Lang('title_col_fileowner')}">{$fileownertext}</th>
 				<th class="pageicon" title="{$mod->Lang('title_col_fileperms')}">{$filepermstext}</th>
 				<th class="pageicon" title="{$mod->Lang('title_col_filesize')}" style="text-align:right;">{$filesizetext}</th>
-				<th class="pageicon">&nbsp;</th>
+				<th class="pageicon"></th>
 				<th class="pageicon" title="{$mod->Lang('title_col_filedate')}">{$filedatetext}</th>
+				<th class="pageicon"></th>
 				<th class="pageicon">
 					<input type="checkbox" name="tagall" value="tagall" id="tagall" title="{$mod->Lang('title_tagall')}"/>
 				</th>
@@ -167,12 +168,14 @@ $(document).ready(function () {
 				<td valign="middle">{if isset($file->thumbnail) && $file->thumbnail!=''}{$file->thumbnail}{else}{$file->iconlink}{/if}</td>
 				<td class="clickable" valign="middle">{$file->txtlink}</td>
 				<td class="clickable" valign="middle">{$file->mime}</td>
-				<td class="clickable" style="padding-right:8px;" valign="middle">{$file->fileinfo}</td>
-				<td class="clickable" style="padding-right:8px;" valign="middle">{if isset($file->fileowner)}{$file->fileowner}{else}&nbsp;{/if}</td>
+				<td class="clickable" style="padding-right:8px;white-space:pre;" valign="middle">{$file->fileinfo}</td>
+				<td class="clickable" style="padding-right:8px;white-space:pre;" valign="middle">{if isset($file->fileowner)}{$file->fileowner}{else}&nbsp;{/if}</td>
 				<td class="clickable" style="padding-right:8px;" valign="middle">{$file->filepermissions}</td>
-				<td class="clickable" style="padding-right:2px;text-align:right;" valign="middle">{$file->filesize}</td>
+				<td class="clickable" style="padding-right:8px;white-space:pre;text-align:right;" valign="middle">{$file->filesize}</td>
 				<td class="clickable" style="padding-right:8px;" valign="middle">{if isset($file->filesizeunit)}{$file->filesizeunit}{else}&nbsp;{/if}</td>
-				<td class="clickable" style="padding-right:8px;" valign="middle">{$file->filedate|cms_date_format|replace:" ":"&nbsp;"|replace:"-":"&minus;"}</td>
+				<td class="clickable" style="padding-right:8px;white-space:pre;" valign="middle">{$file->filedate|cms_date_format|replace:" ":"&nbsp;"|replace:"-":"&minus;"}</td>
+				<td>
+				   {if !empty($file->url)}<a href="{$file->url}" title="{$mod->Lang('title_rawurl')}">{admin_icon icon='view.gif'}</a>{/if}</td>
 				<td>
 				{if !isset($file->noCheckbox)}
 					<label for="x_{$file->urlname}" style="display: none;">{$mod->Lang('toggle')}</label>
