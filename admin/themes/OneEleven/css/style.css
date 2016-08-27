@@ -931,7 +931,8 @@ header .shortcuts li a {
 	height: 25px;
 	text-indent: -9999em;
 	background: url(themes/OneEleven/images/layout/sprite_norepeat.png) no-repeat;
-	overflow: hidden
+	overflow: hidden;
+	cursor: pointer;
 }
 header .shortcuts li.help a {
 	background-position: -10px -737px
@@ -944,6 +945,9 @@ header .shortcuts li.logout a {
 }
 header .shortcuts li.view-site a {
 	background-position: -10px -124px
+}
+header .shortcuts li.notifications a {
+    background-position: -10px -1058px
 }
 header .shortcuts li.favorites a {
 	background-position: -10px -48px
@@ -981,7 +985,7 @@ header .shortcuts li.favorites a {
 	height: 25px;
 	position: absolute;
 	right: -1px;
-	top: 75px
+	top: 12px
 }
 #oe_sidebar .toggle-button.top {
 	top: -33px

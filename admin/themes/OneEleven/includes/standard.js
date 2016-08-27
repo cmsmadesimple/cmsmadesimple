@@ -277,10 +277,8 @@
 
             if (OE.helper.getStorageValue('sidebar-pref') === 'sidebar-off' || viewportWidth <= 768) {
                 container.addClass('sidebar-off').removeClass('sidebar-on');
-                //trigger.addClass('open-sidebar');
             } else {
                 container.addClass('sidebar-on').removeClass('sidebar-off');
-                //trigger.addClass('close-sidebar');
             }
         },
 
@@ -481,6 +479,7 @@
         },
 
 	_handleAlert : function(target) {
+	    alert('handleAlert');
     	        var _row = $(target).closest('.alert-box');
 		var _alert_name = _row.data('alert-name');
 		if( ! _alert_name ) return;
@@ -512,6 +511,10 @@
          */
 	setupAlerts : function() {
             var _this = this;
+	    $('a#notifications').click(function(ev){
+		ev.preventDefault();
+		$('#alert-dialog').dialog();
+	    })
 	    $('.alert-msg a').click(function(ev){
 		ev.preventDefault();
 		OE.view.handleAlert(ev.target).done(function(){

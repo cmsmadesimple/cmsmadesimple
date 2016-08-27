@@ -66,15 +66,9 @@
 				<!-- start sidebar -->
 				<div id="oe_sidebar">
 				  <aside>
-				    {$my_alerts=$theme->get_my_alerts()}
-						{$is_notifications=count($my_alerts)}
-						<span title="{'open'|lang}/{'close'|lang}" class="toggle-button close">{'open'|lang}/{'close'|lang}</span>
-						<!-- notifications -->
-						{include file='notifications.tpl' items=$my_alerts}
-							<!-- start navigation -->
-						{include file='navigation.tpl' nav=$theme->get_navigation_tree()}
-						<!-- end navigation //-->
-					</aside>
+				    <span title="{'open'|lang}/{'close'|lang}" class="toggle-button close">{'open'|lang}/{'close'|lang}</span>
+ 			            {include file='navigation.tpl' nav=$theme->get_navigation_tree()}
+				    </aside>
 				</div>
 				<!-- end sidebar //-->
 				<!-- start main -->
@@ -82,18 +76,13 @@
 					{strip}
 					{include file='messages.tpl'}
 					<article role="main" class="content-inner">
-						<header class="pageheader{if isset($is_ie)} drop-hidden{/if} cf"> {* TODO remove drop hidden *}
+						<header class="pageheader{if isset($is_ie)} drop-hidden{/if} cf">
 							{if isset($module_icon_url) or isset($pagetitle)}
 							<h1>{if isset($module_icon_url)}<img src="{$module_icon_url}" alt="{$module_name|default:''}" class="module-icon" />{/if}
 							{$pagetitle|default:''}
 							</h1>
-							{if isset($module_help_url) or isset($wiki_url)} <span class="helptext"> {if isset($module_help_url)}<a href="{$module_help_url}">{'module_help'|lang}</a>{/if}
-								{if isset($wiki_url)}<a href="{$wiki_url}" class="external" target="_blank">{'help'|lang}</a> <em>({'new_window'|lang})</em>{/if} </span> {/if}
 							{/if}
-							{* filemanager dropzone TODO remove? *}
-							{if isset($droparea) && !isset($is_ie)}
-							  {$droparea}
-							{/if}
+							{if isset($module_help_url)} <span class="helptext"><a href="{$module_help_url}">{'module_help'|lang}</a></span>{/if}
 						</header>
 						<section class="cf">
 							{$content}
