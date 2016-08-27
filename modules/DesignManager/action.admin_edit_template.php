@@ -147,6 +147,12 @@ try {
     }
 
     $type_obj = CmsLayoutTemplateType::load($tpl_obj->get_type_id());
+    if( $tpl_obj->get_id() > 0 ) {
+        \CmsAdminThemeBase::GetThemeObject()->SetSubTitle($this->Lang('edit_template'));
+    } else {
+        \CmsAdminThemeBase::GetThemeObject()->SetSubTitle($this->Lang('create_template'));
+    }
+
     $smarty->assign('type_obj', $type_obj);
     $smarty->assign('extraparms', $extraparms);
     $smarty->assign('template', $tpl_obj);

@@ -112,12 +112,6 @@ $(document).ready(function(){
     {if isset($get_lock) && ({get_userid(false)} != $get_lock.uid)}disabled="disabled"{/if}
 {/capture}
 
-{if !$template->get_id()}
-    <h3>{$mod->Lang('create_template')}</h3>
-{else}
-    <h3>{$mod->Lang('edit_template')}: {$template->get_name()} ({$template->get_id()})</h3>
-{/if}
-
 {if isset($get_lock)}
 	<div class="warning lock-warning">
 		{$mod->Lang('lock_warning')}
