@@ -205,8 +205,8 @@
               });
           }
           if( have_locks ) {
-              alert('{$mod->Lang('error_action_contentlocked')|escape:'javascript'}');
 	      e.preventDefault();
+              cms_alert('{$mod->Lang('error_action_contentlocked')|escape:'javascript'}');
           }
       })
   });
