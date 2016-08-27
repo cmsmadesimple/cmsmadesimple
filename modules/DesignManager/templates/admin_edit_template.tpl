@@ -19,7 +19,7 @@ $(document).ready(function(){
         lock_timeout: {$lock_timeout|default:0},
         lock_refresh: {$lock_refresh|default:0},
         error_handler: function(err) {
-            alert('got error '+err.type+' // '+err.msg);
+            cms_alert('got error '+err.type+' // '+err.msg);
         },
         lostlock_handler: function(err) {
             // we lost the lock on this content... make sure we can't save anything.
@@ -29,7 +29,7 @@ $(document).ready(function(){
             $('#submitbtn, #applybtn').attr('disabled','disabled');
             $('#submitbtn, #applybtn').button({ 'disabled' : true });
             $('.lock-warning').removeClass('hidden-item');
-            alert('{$mod->Lang('msg_lostlock')|escape:'javascript'}');
+            cms_alert('{$mod->Lang('msg_lostlock')|escape:'javascript'}');
         }
       });
     } // do_locking
