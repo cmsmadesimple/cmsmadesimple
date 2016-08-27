@@ -111,7 +111,8 @@ for ($i = 0; $i < count($filelist); $i++) {
   } else {
       $countfiles++;
       $countfilesize+=$filelist[$i]["size"];
-      $url = $this->create_url($id,'view','',array('file'=>$this->encodefilename($filelist[$i]['name'])));
+      //$url = $this->create_url($id,'view','',array('file'=>$this->encodefilename($filelist[$i]['name'])));
+      $url = $onerow->url;
       //$onerow->txtlink = "<a href='" . $filelist[$i]["url"] . "' target='_blank' title=\"".$this->Lang('title_view_newwindow')."\">" . $link . "</a>";
       $onerow->txtlink = "<a href='" . $url . "' target='_blank' title=\"".$this->Lang('title_view_newwindow')."\">" . $link . "</a>";
   }
