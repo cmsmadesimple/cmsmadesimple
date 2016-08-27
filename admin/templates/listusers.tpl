@@ -35,7 +35,6 @@ $(document).ready(function() {
 
     $('#listusers').submit(function(ev){
         ev.preventDefault();
-	console.debug('foo');
         var v = $('#withselected').val();
 	if( v === 'delete' ) {
 	    cms_confirm('{lang('confirm_delete_user')|escape:'javascript'}').done(function(){
@@ -46,7 +45,6 @@ $(document).ready(function() {
 	    });
 	} else {
             cms_confirm('{lang('confirm_bulkuserop')|escape:'javascript'}').done(function(){
-	        alert('ok');
 	        return true;
 	    });
 	}
