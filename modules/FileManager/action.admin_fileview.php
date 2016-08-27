@@ -107,14 +107,14 @@ for ($i = 0; $i < count($filelist); $i++) {
           $onerow->noCheckbox = 1;
       }
       $url = $this->create_url($id,'changedir','',array("newdir" => $filelist[$i]["name"], "path" => $path, "sortby" => $sortby));
-      $onerow->txtlink = "<a href=\"{$url}\" title=\"{$this->Lang('title_changedir')}\">{$link}</a>";
+      $onerow->txtlink = "<a class=\"dirlink\" href=\"{$url}\" title=\"{$this->Lang('title_changedir')}\">{$link}</a>";
   } else {
       $countfiles++;
       $countfilesize+=$filelist[$i]["size"];
       //$url = $this->create_url($id,'view','',array('file'=>$this->encodefilename($filelist[$i]['name'])));
       $url = $onerow->url;
       //$onerow->txtlink = "<a href='" . $filelist[$i]["url"] . "' target='_blank' title=\"".$this->Lang('title_view_newwindow')."\">" . $link . "</a>";
-      $onerow->txtlink = "<a href='" . $url . "' target='_blank' title=\"".$this->Lang('title_view_newwindow')."\">" . $link . "</a>";
+      $onerow->txtlink = "<a class=\"filelink\" href='" . $url . "' target='_blank' title=\"".$this->Lang('title_view_newwindow')."\">" . $link . "</a>";
   }
   if( $filelist[$i]['archive']  ) $onerow->type[] = 'archive';
 

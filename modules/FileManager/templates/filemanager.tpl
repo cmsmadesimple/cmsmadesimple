@@ -1,4 +1,9 @@
 {if !isset($noform)}
+<style type="text/css">
+a.filelink:visited {
+   color: #000;
+}
+</style>
 <script type="text/javascript">
 var refresh_url = '{$refresh_url}'+'&showtemplate=false';
 refresh_url = refresh_url.replace(/amp;/g,'');
