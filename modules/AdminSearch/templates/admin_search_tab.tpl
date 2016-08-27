@@ -22,10 +22,10 @@
  $(document).on('click','#searchbtn',function(){
    var l = $('#filter_box :checkbox.filter_toggle:checked').length;
    if( l == 0 ) {
-     alert('{$mod->Lang('error_select_slave')|escape:'javascript'}');
-     return false;
+     cms_alert('{$mod->Lang('error_select_slave')|escape:'javascript'}');
+   } else {
+     $('#searchresults').html('');
    }
-   $('#searchresults').html('');
  });
 </script>
 <script type="text/javascript" src="{$js_url}"></script>
