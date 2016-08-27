@@ -181,8 +181,12 @@
           $('tr.selected').css('background', 'yellow');
       });
 
-      $(document).on('click','a#clearlocks',function(){
-         return confirm('{$mod->Lang('confirm_clearlocks')|escape:'javascript'}');
+      $(document).on('click','a#clearlocks',function(ev){
+         var self = $(this);
+	 ev.preventDefault();
+         cms_confirm('{$mod->Lang('confirm_clearlocks')|escape:'javascript'}').done(function(){
+	    window.location = self.attr('href');
+	 });
       });
 
       $(document).on('click','a#ordercontent',function(e){
