@@ -1,8 +1,11 @@
 <!doctype html>
 <html lang="{$lang|truncate:'2':''}" dir="{$lang_dir}">
-	<head>
+  <head>
+    {$thetitle=$pagetitle}
+    {if $thetitle && $subtitle}{$thetitle="{$thetitle} - {$subtitle}"}{/if}
+    {if $thetitle}{$thetitle="{$thetitle} - "}{/if}
 		<meta charset="utf-8" />
-		<title>{if !empty($pagetitle)}{$pagetitle} - {/if}{sitename}</title>
+		<title>{$thetitle}{sitename}</title>
 		<base href="{$config.admin_url}/" />
 		<meta name="generator" content="CMS Made Simple - Copyright (C) 2004-14 Ted Kulp. All rights reserved." />
 		<meta name="robots" content="noindex, nofollow" />
@@ -38,7 +41,7 @@
 						<a href="http://www.cmsmadesimple.org" rel="external"><img src="{$config.admin_url}/themes/OneEleven/images/layout/cmsms-logo.jpg" width="205" height="69" alt="CMS Made Simple" title="CMS Made Simple" /></a>
 					</div>
 					<!-- title -->
-					<span class="admin-title"> {'adminpaneltitle'|lang} - {sitename}{if !empty($pagetitle)} - {$pagetitle}{/if}</span>
+					<span class="admin-title"> {'adminpaneltitle'|lang} - {sitename}</span>
 				</div>
 				<div class='clear'></div>
 				<!-- end header-top //-->
@@ -76,15 +79,16 @@
 					{strip}
 					{include file='messages.tpl'}
 					<article role="main" class="content-inner">
-						<header class="pageheader{if isset($is_ie)} drop-hidden{/if} cf">
+					  <header class="pageheader{if isset($is_ie)} drop-hidden{/if} cf">
 							{if isset($module_icon_url) or isset($pagetitle)}
 							<h1>{if isset($module_icon_url)}<img src="{$module_icon_url}" alt="{$module_name|default:''}" class="module-icon" />{/if}
 							{$pagetitle|default:''}
 							</h1>
 							{/if}
-							{if isset($module_help_url)} <span class="helptext"><a href="{$module_help_url}">{'module_help'|lang}</a></span>{/if}
+						  {if isset($module_help_url)} <span class="helptext"><a href="{$module_help_url}">{'module_help'|lang}</a></span>{/if}
 						</header>
 						<section class="cf">
+							{if $pagetitle && $subtitle}<h3>{$subtitle}</h3>{/if}
 							{$content}
 						</section>
 					</article>
