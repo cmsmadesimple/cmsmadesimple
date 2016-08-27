@@ -156,14 +156,14 @@
     $(document).on('click','a.edit_css',function(ev){
        if( __changed ) {
            ev.preventDefault();
-      	  if( !confirm('{$mod->Lang('confirm_save_design')}') ) return false;
-          // save and redirect
           var url = $(this).attr('href');
-          save_design().done(function(){
-             window.location.href = url;
-          })
+      	  cms_confirm('{$mod->Lang('confirm_save_design')}').done(function(){
+             // save and redirect
+	     save_design().done(function(){
+	        window.location.href = url;
+	     });
+	  });
        }
-       // normal default link behavior.
     });
 
   });

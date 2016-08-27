@@ -26,8 +26,7 @@ $(document).ready(function(){
 
     $(document).on('click','a.steal_tpl_lock',function(e) {
       // we're gonna confirm stealing this lock.
-      var v = confirm('{$mod->Lang('confirm_steal_lock')|escape:'javascript'}');
-      return v;
+      return confirm('{$mod->Lang('confirm_steal_lock')|escape:'javascript'}');
     });
 
     $(document).on('click','a.sedit_tpl',function(e) {
@@ -58,7 +57,6 @@ $(document).ready(function(){
                 cms_alert('{$mod->Lang('error_nothingselected')|escape:'javascript'}');
                 return false;
             }
-            //return confirm('{$mod->Lang('confirm_bulk_tmplop')|escape:'javascript'}');
         });
 
     $('#template_area').on('click', '#edittplfilter', function () {

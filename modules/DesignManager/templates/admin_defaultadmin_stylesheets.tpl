@@ -26,8 +26,7 @@ $(document).ready(function(){
 
     $('a.steal_css_lock').on('click',function(e) {
       // we're gonna confirm stealing this lock.
-      var v = confirm('{$mod->Lang('confirm_steal_lock')|escape:'javascript'}');
-      return v;
+      return confirm('{$mod->Lang('confirm_steal_lock')|escape:'javascript'}');
     });
 
     $('#stylesheet_area').on('click','#editcssfilter',function(){
