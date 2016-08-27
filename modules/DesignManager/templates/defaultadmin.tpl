@@ -5,8 +5,12 @@ $(document).ready(function(){
     $('#'+n).dialog();
   });
 
-  $(document).on('click','#clearlocks,#cssclearlocks',function(){
-     return confirm('{$mod->Lang('confirm_clearlocks')|escape:'javascript'}');
+  $(document).on('click','#clearlocks,#cssclearlocks',function(ev){
+     var url = $(this).attr('href');
+     ev.preventDefault();
+     cms_confirm('{$mod->Lang('confirm_clearlocks')|escape:'javascript'}').done(function(){
+       window.location = url;
+     })
   });
 });
 </script>
