@@ -29,16 +29,18 @@ $(document).ready(function(){
         {$ModuleManager->Lang('submit')}: function() {
           var file = $('#xml_upload').val();
           if( file.length == 0 ) {
-            alert('{$ModuleManager->Lang('error_nofileuploaded')|escape:'javascript'}');
-            return;
+            cms_alert('{$ModuleManager->Lang('error_nofileuploaded')|escape:'javascript'}');
           }
-          var ext  = file.split('.').pop().toLowerCase();
-          if($.inArray(ext, ['xml','cmsmod']) == -1) {
-            alert('{$ModuleManager->Lang('error_invaliduploadtype')|escape:'javascript'}');
-            return;
-          }
-          $(this).dialog('close');
-          $('#local_import').submit();
+	  else {
+            var ext  = file.split('.').pop().toLowerCase();
+            if($.inArray(ext, ['xml','cmsmod']) == -1) {
+              cms_alert('{$ModuleManager->Lang('error_invaliduploadtype')|escape:'javascript'}');
+            }
+	    else {
+              $(this).dialog('close');
+              $('#local_import').submit();
+	    }
+	  }
         },
         {$ModuleManager->Lang('cancel')}: function() {
           $(this).dialog('close');
