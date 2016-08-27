@@ -10,8 +10,13 @@ $(document).ready(function(){
 	     modal:  true
 	   });
 	});
-        $('a.delete_article').click(function(){
-        	return confirm('{$mod->Lang('areyousure')|escape:'javascript'}');
+        $('a.delete_article').click(function(ev){
+	        var self = $(this);
+	        ev.preventDefault();
+        	cms_confirm('{$mod->Lang('areyousure')|escape:'javascript'}').done(function(){
+		    window.location = self.attr('href');
+		    return true;
+		});
         });
 	$('#articlelist').on('cms_checkall_toggle','[type=checkbox]',function(){
 		var l = $('#articlelist :checked').length;
@@ -33,8 +38,12 @@ $(document).ready(function(){
 		}
 	});
 
-	$('#bulkactions').on('click','#submit_bulkaction',function(){
-		return confirm('{$mod->Lang('areyousure_multiple')|escape:'javascript'}');
+	$('#bulkactions').on('click','#submit_bulkaction',function(ev){
+		var form = $(this).closest('form');
+	        ev.preventDefault();
+		cms_confirm('{$mod->Lang('areyousure_multiple')|escape:'javascript'}').done(function(){
+		    form.submit();
+		});
 	});
 });
 //]]>

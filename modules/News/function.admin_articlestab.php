@@ -3,7 +3,7 @@ if( !isset($gCms) ) exit;
 
 $smarty->assign('formstart',$this->CreateFormStart($id,'defaultadmin'));
 
-if (isset($params['submit_bulkaction']) && isset($params['bulk_action']) ) {
+if (isset($params['bulk_action']) ) {
     if( !isset($params['sel']) || !is_array($params['sel']) || count($params['sel']) == 0 ) {
         echo $this->ShowErrors($this->Lang('error_noarticlesselected'));
     }

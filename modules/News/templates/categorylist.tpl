@@ -1,7 +1,11 @@
 <script type="text/javascript">
 $(document).ready(function(){
-  $('a.del_cat').click(function(){
-    return confirm('{$mod->Lang('areyousure')|escape:'javascript'}');
+  $('a.del_cat').click(function(ev){
+    var self = $(this);
+    ev.preventDefault();
+    cms_confirm('{$mod->Lang('areyousure')|escape:'javascript'}').done(function(){
+      window.location = self.attr('href');
+    });
   });
 });
 </script>
