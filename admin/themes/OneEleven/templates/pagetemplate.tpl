@@ -86,9 +86,9 @@
 							</h1>
 							{/if}
 						  {if isset($module_help_url)} <span class="helptext"><a href="{$module_help_url}">{'module_help'|lang}</a></span>{/if}
-						</header>
+					</header>
+					{if $pagetitle && $subtitle}<header class="subheader"><h3 class="subtitle">{$subtitle}</h3></header>{/if}
 						<section class="cf">
-							{if $pagetitle && $subtitle}<h3>{$subtitle}</h3>{/if}
 							{$content}
 						</section>
 					</article>
