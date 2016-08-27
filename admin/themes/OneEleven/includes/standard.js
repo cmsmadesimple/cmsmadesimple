@@ -479,7 +479,6 @@
         },
 
 	_handleAlert : function(target) {
-	    alert('handleAlert');
     	        var _row = $(target).closest('.alert-box');
 		var _alert_name = _row.data('alert-name');
 		if( ! _alert_name ) return;
