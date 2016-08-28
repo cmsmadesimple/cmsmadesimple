@@ -56,6 +56,7 @@ Core - General
   - Fix query problem in CmsLayoutStylesheetQuery with Mysql 5.7.
   - The {content} tag now supports passing data attributes to the generated textarea, for use by syntax hilighter and WYSIWYG modules. i.e: {content data-foo="bar"}
   - Refactoring of the amdin login code to be cleaner, more efficient, more secure.
+  - No longer allow any modules to auto-upgrade on frontend requests.
 
   - #11080 - Parameter $adding in GetContentBlockFieldInput always FALSE.
   - #11093 - Bad error message in jquery.cmsms_autorefresh.js.

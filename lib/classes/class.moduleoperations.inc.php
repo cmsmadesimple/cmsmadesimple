@@ -641,16 +641,16 @@ final class ModuleOperations
             }
         }
 
-        $tmp = CmsApp::get_instance()->get_installed_schema_version();
+        $tmp = $gCms->get_installed_schema_version();
         if( $tmp == CMS_SCHEMA_VERSION ) {
             // can't auto upgrade modules if cmsms schema versions don't match.
             // check to see if an upgrade is needed.
             allow_admin_lang(TRUE); // isn't this ugly.
             if( isset($info[$module_name]) && $info[$module_name]['status'] == 'installed' ) {
-                // looks like upgrade is needed
                 $dbversion = $info[$module_name]['version'];
                 if( version_compare($dbversion, $obj->GetVersion()) == -1 ) {
-                    if( in_array($module_name,$this->cmssystemmodules) || $this->IsQueuedForInstall($module_name) ) {
+                    // looks like upgrade is needed
+                    if( in_array($module_name,$this->cmssystemmodules) || $this->IsQueuedForInstall($module_name) && !$gCms->is_frontend_request() ) {
                         // we're allowed to upgrade
                         $res = $this->_upgrade_module($obj);
                         $this->_unqueue_install($module_name);
