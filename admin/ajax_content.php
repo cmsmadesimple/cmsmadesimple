@@ -25,6 +25,7 @@ $ruid = get_userid();
 $op = 'pageinfo';
 if( isset($_REQUEST['op']) ) $op = trim($_REQUEST['op']);
 $contentops = cmsms()->GetContentOperations();
+$nonactive = (isset($_REQUEST['nonactive']) && (int) $_REQUEST['nonactive']) ? 1 : 0;
 
 $display = 'title';
 $mod = cms_utils::get_module('CMSContentManager');
@@ -49,12 +50,14 @@ case 'childrenof':
             $node = $contentops->quickfind_node_by_id($page);
         }
         if( $node ) {
-            $children = $node->getChildren(FALSE,TRUE);
+            $children = $node->getChildren(FALSE,$nonactive);
             if( is_array($children) && count($children) ) {
                 $out = array();
                 foreach( $children as $child ) {
                     $content = $child->getContent(FALSE);
                     if( !is_object($content) ) continue;
+                    if( !$nonactive && !$content->Active() ) continue;
+                    if( !$content->WantsChildren() ) continue;
                     $res = $content->ToData();
                     $res['display'] = strip_tags($res['menu_text']);
                     if( $display == 'title' ) $res['display'] = strip_tags($res['content_name']);
@@ -98,10 +101,37 @@ case 'pagepeers':
         $tmp = array();
         foreach( $_REQUEST['pages'] as $one ) {
             $one = (int)$one;
+            // discard negative values
             if( $one > 0 ) $tmp[] = $one;
         }
         $peers = array_unique($tmp);
 
+        $hm = cmsms()->GetHierarchyManager();
+        $parents = $out = [];
+        foreach( $peers as $one ) {
+            $node = $hm->find_by_tag('id',$one);
+            if( !$node ) continue;
+
+            // get the parent
+            $parent_node = $node->get_parent();
+            $parent_id = $parent_node->get_tag('id');
+            $parents[$one] = $parent_id;
+
+            // and get it's children
+            $out[$one] = [];
+            $children = $parent_node->getChildren(FALSE,$nonactive);
+            for( $i = 0, $n = count($children); $i < $n; $i++ ) {
+                $content_obj = $children[$i]->getContent(FALSE);
+                if( !$content_obj->WantsChildren() ) continue;
+                $rec = [];
+                $rec['content_id'] = $content_obj->Id();
+                $rec['id_hierarchy'] = $content_obj->IdHierarchy();
+                $rec['display'] = ($display == 'title') ? $content_obj->Name() : $content_obj->MenuText();
+                $out[$one][] = $rec;
+            }
+        }
+
+        /*
         // get the parent pages
         $db = cmsms()->GetDb();
         $query = 'SELECT content_id,parent_id FROM '.cms_db_prefix().'content WHERE content_id IN ('.implode(',',$peers).')';
@@ -122,6 +152,7 @@ case 'pagepeers':
             $prev_parent_id = -1;
             for( $i = 0; $i < count($tmp); $i++ ) {
                 $row = $tmp[$i];
+                if( !$nonactive && !$row['active'] ) continue;
                 if( !isset($data[$row['parent_id']]) ) $data[$row['parent_id']] = array();
                 $row['display'] = $row['menu_text'];
                 if( $display == 'title' ) $row['display'] = $row['content_name'];
@@ -135,6 +166,7 @@ case 'pagepeers':
                 $out[$peer] = $data[$parent];
             }
         }
+        */
     }
     break;
 }
