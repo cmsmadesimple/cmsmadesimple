@@ -117,6 +117,7 @@ class Content extends ContentBase
       $this->AddProperty('disable_wysiwyg',60,self::TAB_OPTIONS);
       $this->AddProperty('pagemetadata',1,self::TAB_LOGIC);
       $this->AddProperty('pagedata',2,self::TAB_LOGIC);
+      $this->AddProperty('wantschildren',10,self::TAB_OPTIONS);
     }
 
 	/**
@@ -130,6 +131,15 @@ class Content extends ContentBase
 		return TRUE;
 	}
 
+    public function WantsChildren()
+    {
+        // an empty/null response defaults to true.
+        $tmp = $this->GetPropertyValue('wantschildren');
+        if( $tmp === '0' ) return FALSE;
+        return TRUE;
+    }
+
+
 	/**
 	 * Set content attribute values (from parameters received from admin add/edit form)
 	 *
@@ -139,7 +149,7 @@ class Content extends ContentBase
     function FillParams($params,$editing = false)
     {
 		if (isset($params)) {
-			$parameters = array('pagedata','searchable','disable_wysiwyg','design_id');
+			$parameters = array('pagedata','searchable','disable_wysiwyg','design_id','wantschildren');
 
 			//pick up the template id before we do parameters
 			if (isset($params['template_id'])) {
@@ -165,7 +175,17 @@ class Content extends ContentBase
 
 			// do the content property parameters
 			foreach ($parameters as $oneparam) {
-				if (isset($params[$oneparam])) $this->SetPropertyValue($oneparam, $params[$oneparam]);
+                if( !isset($params[$oneparam]) ) continue;
+                $val = $params[$oneparm];
+                switch( $oneparam ) {
+                case 'pagedata':
+                    // nothing
+                    break;
+                default:
+                    $val = (int) $val;
+                    break;
+                }
+                $this->SetPropertyValue($oneparam,$val);
 			}
 
 			// metadata
@@ -410,8 +430,14 @@ class Content extends ContentBase
 			$help = '&nbsp;'.cms_admin_utils::get_help_tag('core','help_page_disablewysiwyg',lang('help_title_page_disablewysiwyg'));
 			return array('<label for="id_disablewysiwyg">'.lang('disable_wysiwyg').':</label>'.$help,
 						 '<input type="hidden" name="disable_wysiwyg" value="0" />
-             <input id="id_disablewysiwyg" type="checkbox" name="disable_wysiwyg" value="1"  '.($disable_wysiwyg==1?'checked="checked"':'').'/>');
-			break;
+                          <input id="id_disablewysiwyg" type="checkbox" name="disable_wysiwyg" value="1"  '.($disable_wysiwyg==1?'checked="checked"':'').'/>');
+
+        case 'wantschildren':
+            $wantschildren = $this->WantsChildren();
+            $help = '&nbsp;'.cms_admin_utils::get_help_tag('core','help_page_wantschildren',lang('help_title_page_wantschildren'));
+            return array('<label for="id_wantschildren">'.lang('wantschildren').':</label>'.$help,
+                         '<input type="hidden" name="wantschildren" value="0"/>
+                          <input id="id_wantschildren" type="checkbox" name="wantschildren" value="1" '.($wantschildren?'checked="checked"':'').'/>');
 
 		default:
 			// check if it's content block

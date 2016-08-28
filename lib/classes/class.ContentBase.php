@@ -1332,6 +1332,7 @@ abstract class ContentBase
 		$out['last_modified_by'] = $this->mLastModifiedBy;
 		$out['create_date'] = $this->mCreationDate;
 		$out['modified_date'] = $this->mModifiedDate;
+        $out['wants_children'] = $this->WantsChildren();
 		return $out;
 	}
 
@@ -1735,7 +1736,7 @@ abstract class ContentBase
 		if (isset($params['title'])) $this->mName = $params['title'];
 
 		// menu text
-		if (isset($params['menutext'])) $this->mMenuText = $params['menutext'];
+		if (isset($params['menutext'])) $this->mMenuText = cleanValue(strip_tags(trim($params['menutext'])));
 
 		// parent id
 		if( isset($params['parent_id']) ) {
@@ -1744,7 +1745,7 @@ abstract class ContentBase
 				$this->mHierarchy = '';
 				$this->mItemOrder = -1;
 			}
-			$this->mParentId = $params['parent_id'];
+			$this->mParentId = (int) $params['parent_id'];
 		}
 
 		// active
@@ -1758,7 +1759,7 @@ abstract class ContentBase
 
 		// alias
 		$tmp = null;
-		if( isset($params['alias']) ) $tmp = trim($params['alias']);
+		if( isset($params['alias']) ) $tmp = strip_tags(trim($params['alias']));
 		if( !$editing || $tmp || ($this->Alias() && !$tmp) ) {
 			// the alias param may not exist (depending upon permissions)
 			// this method will set the alias to the supplied value if it is set
@@ -1768,7 +1769,7 @@ abstract class ContentBase
 
 		// target
 		if (isset($params['target'])) {
-			$val = $params['target'];
+			$val = strip_tags($params['target']);
 			if( $val == '---' ) $val = '';
 			$this->SetPropertyValue('target', $val);
 		}
@@ -1784,7 +1785,7 @@ abstract class ContentBase
 
 		// cachable
 		if (isset($params['cachable'])) {
-			$this->mCachable = $params['cachable'];
+			$this->mCachable = (int) $params['cachable'];
 		}
 		else {
 			$this->_handleRemovedBaseProperty('cachable','mCachable');
@@ -1792,7 +1793,7 @@ abstract class ContentBase
 
 		// secure
 		if (isset($params['secure'])) {
-			$this->mSecure = $params['secure'];
+			$this->mSecure = (int) $params['secure'];
 		}
 		else {
 			$this->_handleRemovedBaseProperty('secure','mSecure');
@@ -1800,21 +1801,21 @@ abstract class ContentBase
 
 		// url
 		if (isset($params['page_url'])) {
-			$this->mURL = $params['page_url'];
+			$this->mURL = trim($params['page_url']);
 		}
 		else {
 			$this->_handleRemovedBaseProperty('page_url','mURL');
 		}
 
 		// owner
-		if (isset($params["ownerid"])) $this->SetOwner($params["ownerid"]);
+		if (isset($params["ownerid"])) $this->SetOwner((int) $params["ownerid"]);
 
 		// additional editors
 		if (isset($params["additional_editors"])) {
 			$addtarray = array();
 			if( is_array($params['additional_editors']) ) {
 				foreach ($params["additional_editors"] as $addt_user_id) {
-					$addtarray[] = $addt_user_id;
+					$addtarray[] = (int) $addt_user_id;
 				}
 			}
 			$this->SetAdditionalEditors($addtarray);
