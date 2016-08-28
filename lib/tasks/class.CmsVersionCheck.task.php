@@ -46,10 +46,11 @@ class CmsVersionCheckTask implements CmsRegularTask
         // do the task.
         $remote_ver = $this->fetch_latest_cmsms_ver();
         if( version_compare(CMS_VERSION,$remote_ver) < 0 ) {
-            $alert = new \CMSMS\AdminAlerts\SimpleAlert(array('Modify Site Preferences'));
+            $alert = new \CMSMS\AdminAlerts\TranslatableAlert(['Modify Site Preferences']);
             $alert->name = 'CMSMS Version Check';
-            $alert->title = lang('new_version_avail_title');
-            $alert->msg = lang('new_version_avail2',CMS_VERSION,$remote_ver);
+            $alert->titlekey = 'new_version_avail_title';
+            $alert->msgkey = 'new_version_avail2';
+            $alert->msgargs = [ CMS_VERSION, $remote_ver ];
             $alert->save();
             audit('','Core','CMSMS version '.$remote_ver.' is available');
         }

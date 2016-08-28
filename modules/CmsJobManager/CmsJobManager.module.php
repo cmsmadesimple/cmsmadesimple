@@ -137,10 +137,12 @@ final class CmsJobManager extends \CMSModule
         // gotta check for tasks, which is more expensive
         $now = time();
         $lastcheck = (int) $this->GetPreference('tasks_lastcheck');
-        //if( $lastcheck >= $now - 900 ) return FALSE; // hardcoded, only check tasks every 15 minutes.
-        $this->SetPreference('tasks_lastcheck',$now);
-        $tasks = $this->create_jobs_from_eligible_tasks();
-        if( count($tasks) ) return TRUE;
+        if( $lastcheck < $now - 900 ) {
+            $this->SetPreference('tasks_lastcheck',$now);
+            $tasks = $this->create_jobs_from_eligible_tasks();
+            if( count($tasks) ) return TRUE;
+        }
+        audit('','CmsJobManager','Found nothing to do');
         return FALSE;
     }
 
@@ -263,17 +265,25 @@ final class CmsJobManager extends \CMSModule
         // this could go into a function...
         $url_str = html_entity_decode($this->create_url('__','process',$_returnid));
         $url_ob = new \cms_url($url_str);
+            // gotta determine a scheme
         $url_ob->set_queryvar('cms_cron',1);
         $url_ob->set_queryvar('showtemplate','false');
         $scheme = $url_ob->get_scheme();
+        $prefix_scheme = null;
         if( !$scheme ) {
             $url_ob->set_scheme('http');
-            if( CmsApp::get_instance()->is_https_request() ) $url_ob->set_scheme('https');
+            $scheme = 'http';
+            if( CmsApp::get_instance()->is_https_request() ) {
+                $url_ob->set_scheme('https');
+                $scheme = $prefix_scheme = 'ssl://';
+            }
         }
         $port = $url_ob->get_port();
         if( !$port) {
             $url_ob->set_port(80);
-            if( strtolower($scheme) == 'https' ) $url_ob->set_port(443);
+            if( strtolower($url_ob->get_scheme()) == 'https' ) {
+                $url_ob->set_port(443);
+            }
         }
 
         $endpoint = $url_ob->get_path();
@@ -287,12 +297,17 @@ final class CmsJobManager extends \CMSModule
         $this->SetPreference('last_async_trigger',$now+1);
 
         try {
-            $fp = fsockopen($url_ob->get_host(),$url_ob->get_port(),$errno,$errstr,3);
+            $fp = fsockopen($prefix_scheme.$url_ob->get_host(),$url_ob->get_port(),$errno,$errstr,3);
             if( !$fp ) throw new \RuntimeException('Could n ot connect to the async processing action');
             fwrite($fp,$out);
+            $code = null;
+            $data = fgets($fp);
+            $code = (int) substr($data,9,3);
             fclose($fp);
+            if( $code != 200 ) audit('',$this->GetName(),'Received '.$code.' response when trying to trigger async processing');
         }
         catch( \Exception $e ) {
+            debug_to_log('exception '.$e->GetMessage());
             // do nothing
         }
     }

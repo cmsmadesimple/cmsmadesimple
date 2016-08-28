@@ -1,26 +1,6 @@
 <?php
-#CMS - CMS Made Simple
-#(c)2004-2013 by Ted Kulp (ted@cmsmadesimple.org)
-#(c)2016 by the CMSMS Dev Team
-#Visit our homepage at: http://www.cmsmadesimple.org
-#
-#This program is free software; you can redistribute it and/or modify
-#it under the terms of the GNU General Public License as published by
-#the Free Software Foundation; either version 2 of the License, or
-#(at your option) any later version.
-#
-#This program is distributed in the hope that it will be useful,
-#but WITHOUT ANY WARRANTY; without even the implied warranty of
-#MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#GNU General Public License for more details.
-#You should have received a copy of the GNU General Public License
-#along with this program; if not, write to the Free Software
-#Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-#
-#$Id$
-
 /**
- * This file contains the definition for a simple alert class that uses pre-defined values.
+ * This file contains the definition for a simple alert class that provides for translatable messages and titles.
  *
  * @package CMS
  * @license GPL
@@ -30,7 +10,10 @@
 namespace CMSMS\AdminAlerts;
 
 /**
- * The SimpleAlert class is a type of alert that allows the developer to create alerts with pre-defined titles, messages, icons, and permissions.
+ * The TranslatableAlert object is an alert that supports translatable language keys.
+ *
+ * This class will use the module that is associated with the alert to translate the key.  If the module name is empty, or the special value 'core' then the global 'lang' function will
+ * be used to read translations from the admin lang file.
  *
  * @since 2.2
  * @package CMS
@@ -38,9 +21,12 @@ namespace CMSMS\AdminAlerts;
  * @author Robert Campbell (calguy1000@cmsmadesimple.org)
  * @prop string[] $perms An array of permission names.  The logged in user must have at least one of these permissions to see the alert.
  * @prop string $icon The complete URL to an icon to associate with this alert
- * @prop string $msg The message to display.  Note: Since alerts are stored in the database, and can be created asynchronously you cannot rely on language strings for the message or title when using this class.
+ * @prop string $titlekey The language key (relative to the module) for the alert title.
+ * @prop string $msgkey The language key (relative to the module) for the alert message.
+ * @prop mixed  $msgargs Either an array of arguments to pass to the language function or a single string or value.
+ * @see \CmsSecurityCheckTask
  */
-class SimpleAlert extends Alert
+class TranslatableAlert extends Alert
 {
     /**
      * @ignore
@@ -55,12 +41,17 @@ class SimpleAlert extends Alert
     /**
      * @ignore
      */
-    private $_title;
+    private $_titlekey;
 
     /**
      * @ignore
      */
-    private $_msg;
+    private $_msgkey;
+
+    /**
+     * @ignore
+     */
+    private $_msgargs;
 
     /**
      * Constructor
@@ -90,10 +81,12 @@ class SimpleAlert extends Alert
             return $this->_perms;
         case 'icon':
             return $this->_icon;
-        case 'title':
-            return $this->_title;
-        case 'msg':
-            return $this->_msg;
+        case 'titlekey':
+            return $this->_titlekey;
+        case 'msgkey':
+            return $this->_msgkey;
+        case 'msgargs':
+            return $this->_msgargs;
         default:
             return parent::__get($key);
         }
@@ -113,11 +106,15 @@ class SimpleAlert extends Alert
         case 'icon':
             $this->_icon = trim($val);
             break;
-        case 'title':
-            $this->_title = trim($val);
+        case 'titlekey':
+            $this->_titlekey = trim($val);
             break;
-        case 'msg':
-            $this->_msg = trim($val);
+        case 'msgkey':
+            $this->_msgkey = trim($val);
+            break;
+        case 'msgargs':
+            if( !is_array( $val ) ) $val = [ $val ];
+            $this->_msgargs = $val; // accept string or array...
             break;
         case 'perms':
             if( !is_array($val) || !count($val) ) throw new \InvalidArgumentExcecption('perms must be an array of permission name strings');
@@ -144,6 +141,8 @@ class SimpleAlert extends Alert
      */
     protected function is_for($admin_uid)
     {
+        debug_to_log('checking for '.$admin_uid,__METHOD__);
+        debug_to_log($this->_perms,'permissions');
         $admin_uid = (int) $admin_uid;
         if( !count($this->_perms) ) return FALSE;
         $userops = \UserOperations::get_instance();
@@ -156,29 +155,39 @@ class SimpleAlert extends Alert
     }
 
     /**
-     * Return the alert title.
+     * Givent he title key, translate the key into a displayable string.
      *
      * @return string
      */
     public function get_title()
     {
-        return $this->_title;
+        $modname = $this->module;
+        if( !$modname || strtolower($modname) == 'core' ) {
+            return call_user_func('lang', $this->_titlekey );;
+        }
+        $mod = \cms_utils::get_module($modname);
+        if( $mod ) return call_user_func( [ $mod, 'Lang'], $this->_titlekey );
     }
 
     /**
-     * Return the alert message
+     * Given the message key and the message args (if any) translate the key and arguments into a displayable striing.
      *
      * @return string
      */
     public function get_message()
     {
-        return $this->_msg;
+        $modname = $this->module;
+        $args = [ $this->_msgkey ];
+        if( $this->_msgargs ) $args = array_merge( $args, $this->_msgargs );
+        if( !$modname || strtolower($modname) == 'core' ) {
+            return call_user_func_array('lang',$args);;
+        }
+        $mod = \cms_utils::get_module($modname);
+        if( $mod ) return call_user_func_array([ $mod, 'Lang'], $args);
     }
 
     /**
-     * Return the alert icon URL (if any)
-     *
-     * @return string
+     * @ignore
      */
     public function get_icon()
     {

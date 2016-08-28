@@ -34,67 +34,16 @@
 
 namespace News;
 
-class DraftMessageAlert extends \CMSMS\AdminAlerts\Alert
+class DraftMessageAlert extends \CMSMS\AdminAlerts\TranslatableAlert
 {
-    private $_ndraft;
-
     public function __construct($count)
     {
-        $this->_ndraft = (int) $count;
-        $this->name = basename(__CLASS__);
-        $mod = \cms_utils::get_module('News');
-        $this->title = $mod->Lang('title_draft_entries');
+        parent::__construct([ 'Approve News'] );
+        $this->name = __CLASS__;
         $this->priority = self::PRIORITY_LOW;
+        $this->titlekey = 'title_draft_entries';
         $this->module = 'News';
-    }
-
-    public function __get($key)
-    {
-        switch( $key ) {
-        case 'n_draft':
-            return (int) $this->_ndraft;
-
-        default:
-            return parent::__get($key);
-        }
-    }
-
-    public function __set($key,$val)
-    {
-        switch( $key ) {
-        case 'n_draft':
-            $this->_ndraft = max(0,(int) $val);
-            break;
-
-        default:
-            return parent::__set($key,$val);
-        }
-    }
-
-    protected function &get_module()
-    {
-        static $_mod;
-        if( !$_mod ) $_mod = \cms_utils::get_module('News');
-        return $_mod;
-    }
-
-    public function &load()
-    {
-        return self::load_by_name($this->get_prefname());
-    }
-
-    protected function is_for($uid)
-    {
-        return check_permission($uid,'Approve News');
-    }
-
-    public function get_icon()
-    {
-        // nothing here
-    }
-
-    public function get_message()
-    {
-        return $this->get_module()->Lang('notify_n_draft_items',(int) $this->_ndraft);
+        $this->msgkey = 'notify_n_draft_items';
+        $this->msgargs = $count;
     }
 }

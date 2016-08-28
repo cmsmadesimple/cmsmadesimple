@@ -29,9 +29,9 @@ class CmsSecurityCheckTask implements CmsRegularTask
 
         // check if config is writable
         if( is_writable(CONFIG_FILE_LOCATION) ) {
-            $alert = new \CMSMS\AdminAlerts\SimpleAlert('Modify Site Preferences');
-            $alert->name = __CLASS__.'config';
-            $alert->msg = lang('config_writable');
+            $alert = new \CMSMS\AdminAlerts\TranslatableAlert('Modify Site Preferences');
+            $alert->name = __CLASS__.'config'; // so that there can only ever be one alert of this type at a time.
+            $alert->msgkey = 'config_writable';
             $alert->priority = $alert::PRIORITY_HIGH;
             $alert->title = lang('security_issue');
             $alert->save();
@@ -42,9 +42,10 @@ class CmsSecurityCheckTask implements CmsRegularTask
         $files = glob($pattern);
         if( is_array($files) && count($files) > 0 ) {
             $fn = basename($files[0]);
-            $alert = new \CMSMS\AdminAlerts\SimpleAlert('Modify Site Preferences');
+            $alert = new \CMSMS\AdminAlerts\TranslatableAlert('Modify Site Preferences');
             $alert->name = __CLASS__.'install';
-            $alert->msg = lang('installfileexists',$fn);
+            $alert->msgkey = 'installfileexists';
+            $alert->msgargs = $fn;
             $alert->priority = $alert::PRIORITY_HIGH;
             $alert->title = lang('security_issue');
             $alert->save();
@@ -53,9 +54,9 @@ class CmsSecurityCheckTask implements CmsRegularTask
         // check if mail is configured
         // not really a security issue... but meh, it saves another class.
         if(  !cms_siteprefs::get('mail_is_set',0) ) {
-            $alert = new \CMSMS\AdminAlerts\SimpleAlert('Modify Site Preferences');
+            $alert = new \CMSMS\AdminAlerts\TranslatableAlert('Modify Site Preferences');
             $alert->name = __CLASS__.'mail';
-            $alert->msg = lang('info_mail_notset');
+            $alert->msgkey = 'info_mail_notset';
             $alert->priority = $alert::PRIORITY_HIGH;
             $alert->title = lang('config_issue');
             $alert->save();
