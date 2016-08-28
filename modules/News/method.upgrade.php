@@ -2,14 +2,14 @@
 if (!isset($gCms)) exit;
 $db = $this->GetDb();
 
-$uid = null;
-if( cmsms()->test_state(CmsApp::STATE_INSTALL) ) {
-  $uid = 1; // hardcode to first user
-} else {
-  $uid = get_userid();
-}
-
 if( version_compare($oldversion,'2.50') < 0 ) {
+    $uid = null;
+    if( cmsms()->test_state(CmsApp::STATE_INSTALL) ) {
+        $uid = 1; // hardcode to first user
+    } else {
+        $uid = get_userid();
+    }
+
     $_fix_name = function($str) {
         if( CmsAdminUtils::is_valid_itemname($str) ) return $str;
         $orig = $str;
