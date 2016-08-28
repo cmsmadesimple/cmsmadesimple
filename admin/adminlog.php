@@ -160,11 +160,11 @@ if (check_permission($userid, 'Modify Site Preferences')) {
         while ($row = $result->FetchRow()) {
             $one=array();
             $one['ip_addr'] = $row['ip_addr'];
-            $one["username"]=$row["username"];
-            $one["itemid"]=($row["item_id"]!=-1?$row["item_id"]:"&nbsp;");
-            $one["itemname"]=$row["item_name"];
-            $one["action"]=$row["action"];
-            $one["date"]=strftime($dateformat,$row['timestamp']);
+            $one["username"] = $row["username"];
+            $one["itemid"] = ($row["item_id"]!=-1?$row["item_id"]:"&nbsp;");
+            $one["itemname"] = cleanValue($row["item_name"]);
+            $one["action"] = cleanValue($row["action"]);
+            $one["date"] = $row['timestamp'];
 
             $loglines[]=$one;
         }
