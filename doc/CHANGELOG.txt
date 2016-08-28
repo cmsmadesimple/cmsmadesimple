@@ -27,12 +27,13 @@ Core - General
   - Refactored the OneEleven Admin theme to use new Alerts classes instead of old Notifications.
   - Refactor the OneElevent Admintheme to display an alert icon in the shortcut bar, instead of in the navigation area.
   - Fix the subtitle functionality within the Oneeleven admin theme.
+  - Fix problems with the OneEleven theme.
+  - Fixed sidenav in the one OneEleven theme now works properly. If sidenav is larger than viewport then don't use fixed... easy.
+  - In OneEleven Now revert to small sidebar navigation (still floating) if screen is too narrow.
   - Removed notification settings from MyAccount and Global Settings.
   - Removed pseudocron granularity preferences.
   - cms_alert() and the new cms_confirm() JavaScript functions now return promises.
-  - Fix problems with the OneEleven theme.
-  - Fixed sidenav now works properly. If sidenav is larger than viewport then don't use fixed... easy.
-  - Now revert to small sidebar navigation (still floating) if screen is too narrow.
+  - Revises much code to use cms_alert and cms_confirm() instead of the standard, but browser specific functions.
   - Fixes to the cache clearing methodology.
   - No longer check for duplicate content blocks in templates... NEEDS TESTING
   - New core events: ContentPreRender, LostPassword, LostPasswordReset, StylesheetPostRender.
@@ -53,8 +54,8 @@ Core - General
   - Fix an error message in the autorefresh javascript class.
   - Fix problems that could result in uid=1 becoming inactive, and not a member of other groups when edited by another user.
   - Fix query problem in CmsLayoutStylesheetQuery with Mysql 5.7.
-  - the {content} tag now supports passing data attributes to the generated textarea, for use by syntax hilighter and WYSIWYG modules.
-    i.e: {content data-foo="bar"}
+  - The {content} tag now supports passing data attributes to the generated textarea, for use by syntax hilighter and WYSIWYG modules. i.e: {content data-foo="bar"}
+  - Refactoring of the amdin login code to be cleaner, more efficient, more secure.
 
   - #11080 - Parameter $adding in GetContentBlockFieldInput always FALSE.
   - #11093 - Bad error message in jquery.cmsms_autorefresh.js.
@@ -67,6 +68,10 @@ Navigator v1.0.4
 Installation Assistant v1.2.1
   - Only create dummy index.html files in subdirectories we created.
   - Clear cache after step 9.
+  - A database account password is now required.
+  - Upgrade routine now asks for, and tests database credentials.
+  - Upgrade routine now rewrites the config.php file (but keeps a backup).
+  - Set a few more preferences to reasonable defaults on install.. specifically related to site cleanup and performance.
 
 CmsJobManager
   - New core module to handle queued asynchronous tasks.
@@ -107,12 +112,6 @@ FileManager v1.6.3
   - Adds 'view raw file' icon in each viewable row.
   - Minor formatting changes in file list.
   - Now display clickable path entries for easier navigation.
-
-Phar Installer v1.2
-  - A database account password is now required.
-  - Upgrade routine now asks for, and tests database credentials.
-  - Upgrade routine now rewrites the config.php file (but keeps a backup).
-  - Set a few more preferences to reasonable defaults on install.. specifically related to site cleanup and performance.
 
 Search
   - Convert to store all data using the InnoDB engine.
