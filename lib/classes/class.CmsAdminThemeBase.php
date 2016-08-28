@@ -179,7 +179,7 @@ abstract class CmsAdminThemeBase
 		}
 		if( $key == 'userid' ) return get_userid();
 		if( $key == 'title' ) return $this->_title;
-		if( $key == 'subtitle' ) return $this->_title;
+		if( $key == 'subtitle' ) return $this->_subtitle;
 	}
 
     /**
@@ -749,7 +749,6 @@ abstract class CmsAdminThemeBase
 
 		// fix subtitle, if any
 		if ($subtitle != '') $this->_title .= ': '.$subtitle;
-
 		debug_buffer('after populate admin navigation');
     }
 
