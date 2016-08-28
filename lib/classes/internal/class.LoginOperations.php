@@ -155,7 +155,7 @@ final class LoginOperations
     {
         $data = $this->_get_data();
         if( !$data ) return;
-        return (int) $data['username'];
+        return trim($data['username']);
     }
 
 }

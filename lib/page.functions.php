@@ -181,27 +181,16 @@ function author_pages($userid)
 function audit($itemid, $itemname, $action)
 {
     if( !isset($action) ) $action = '-- unset --';
+    $app = CmsApp::get_instance();
     $db = CmsApp::get_instance()->GetDb();
 
-    $userid = 0;
-    $username = '';
-    $ip_addr = '';
+    $userid = get_userid(FALSE);
+    $username = get_username(FALSE);
+    $ip_addr = null;
     if( $itemid == '' ) $itemid = -1;
+    if( $userid < 1 ) $userid = 0;
 
-    if (isset($_SESSION["cms_admin_user_id"])) {
-        $userid = $_SESSION["cms_admin_user_id"];
-        $ip_addr = cms_utils::get_real_ip();
-    }
-    else {
-        if (isset($_SESSION['login_user_id'])) {
-            $userid = $_SESSION['login_user_id'];
-            $username = $_SESSION['login_user_username'];
-        }
-    }
-
-    if (isset($_SESSION["cms_admin_username"])) $username = $_SESSION["cms_admin_username"];
-
-    if (!isset($userid) || $userid == "") $userid = 0;
+    if( $userid > 0 ) $ip_addr = cms_utils::get_real_ip();
 
     $query = "INSERT INTO ".CMS_DB_PREFIX."adminlog (timestamp, user_id, username, item_id, item_name, action, ip_addr) VALUES (?,?,?,?,?,?,?)";
     $db->Execute($query,array(time(),$userid,$username,$itemid,$itemname,$action,$ip_addr));
