@@ -93,7 +93,7 @@ $(document).ready(function(){
           <td>{$line.itemid}</td>
           <td>{$line.itemname}</td>
           <td>{$line.action}</td>
-          <td>{$line.date}</td>
+          <td>{$line.date|cms_date_format}</td>
         </tr>
         {/foreach}
 
