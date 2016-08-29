@@ -57,6 +57,7 @@ Core - General
   - The {content} tag now supports passing data attributes to the generated textarea, for use by syntax hilighter and WYSIWYG modules. i.e: {content data-foo="bar"}
   - Refactoring of the admin login code to be cleaner, more efficient, more secure.
   - No longer allow any modules to auto-upgrade on frontend requests.
+  - Fix problem with cms_filecache_driver::clear()
 
   - #11080 - Parameter $adding in GetContentBlockFieldInput always FALSE.
   - #11093 - Bad error message in jquery.cmsms_autorefresh.js.
