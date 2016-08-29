@@ -540,14 +540,14 @@ class CmsLayoutStylesheet
     public function save()
     {
         if( $this->get_id() ) {
-            Events::SendEvent('Core','EditStylesheetPre',array(get_class($this)=>&$this));
+            \CMSMS\HookManager::do_hook('Core::EditStylesheetPre',array(get_class($this)=>&$this));
             $this->_update();
-            Events::SendEvent('Core','EditStylesheetPost',array(get_class($this)=>&$this));
+            \CMSMS\HookManager::do_hook('Core::EditStylesheetPost',array(get_class($this)=>&$this));
             return;
         }
-        Events::SendEvent('Core','AddStylesheetPre',array(get_class($this)=>&$this));
+        \CMSMS\HookManager::do_hook('Core::AddStylesheetPre',array(get_class($this)=>&$this));
         $this->_insert();
-        Events::SendEvent('Core','AddStylesheetPost',array(get_class($this)=>&$this));
+        \CMSMS\HookManager::do_hook('Core::AddStylesheetPost',array(get_class($this)=>&$this));
     }
 
 	/**
@@ -561,7 +561,7 @@ class CmsLayoutStylesheet
     {
         if( !$this->get_id() ) return;
 
-		Events::SendEvent('Core','DeleteStylesheetPre',array(get_class($this)=>&$this));
+        \CMSMS\HookManager::do_hook('Core::DeleteStylesheetPre',array(get_class($this)=>&$this));
         $db = CmsApp::get_instance()->GetDb();
         $query = 'DELETE FROM '.CMS_DB_PREFIX.CmsLayoutCollection::CSSTABLE.' WHERE css_id = ?';
         $dbr = $db->Execute($query,array($this->get_id()));
@@ -571,7 +571,8 @@ class CmsLayoutStylesheet
 
         CmsTemplateCache::clear_cache();
         audit($this->get_id(),'CMSMS','Stylesheet '.$this->get_name().' Deleted');
-		Events::SendEvent('Core','DeleteStylesheetPost',array(get_class($this)=>&$this));
+		// Events::SendEvent('Core','DeleteStylesheetPost',array(get_class($this)=>&$this));
+        \CMSMS\HookManager::do_hook('Core::DeleteStylesheetPost',array(get_class($this)=>&$this));
         unset($this->_data['id']);
         $this->_dirty = TRUE;
     }

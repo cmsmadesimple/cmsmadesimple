@@ -1447,6 +1447,7 @@ abstract class CMSModule
                     if( isset($params[$key]) ) continue;
                     $params[$key] = $value;
                 }
+                unset($hints);
             }
 
             // used to try to avert XSS flaws, this will

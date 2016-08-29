@@ -57,7 +57,7 @@ class global_cache
         }
     }
 
-    private static function &_get_driver()
+    private static function _get_driver()
     {
         static $_driver = null;
         if( !$_driver ) {

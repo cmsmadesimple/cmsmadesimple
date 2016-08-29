@@ -86,7 +86,7 @@ function smarty_cms_function_cms_stylesheet($params, &$smarty)
             $query = new CmsLayoutStylesheetQuery(array('name'=>$params['name']) );
         } else if( $design_id > 0 ) {
             // stylesheet by design id
-            $query = new CmsLayoutStylesheetQuery(array('design'=>$design_id));
+            $query = new \CMSMS\Internal\CachedStylesheetsInDesignQuery($design_id);
         }
         if( !$query ) throw new \RuntimeException('Problem: Could not build a stylesheet query with the provided data');
 

@@ -1,7 +1,7 @@
 <?php
 #CMS - CMS Made Simple
 #(c)2004-2013 by Ted Kulp (wishy@users.sf.net)
-#(c)2011-2014 by The CMSMS Dev Team
+#(c)2011-2016 by The CMSMS Dev Team
 #Visit our homepage at: http://www.cmsmadesimple.org
 #
 #This program is free software; you can redistribute it and/or modify
@@ -62,6 +62,7 @@ require_once($dirname.DIRECTORY_SEPARATOR.'compat.functions.php');
 require_once($dirname.DIRECTORY_SEPARATOR.'misc.functions.php');
 require_once($dirname.DIRECTORY_SEPARATOR.'version.php'); // tells us where the config file is and other things.
 require_once($dirname.DIRECTORY_SEPARATOR.'classes'.DIRECTORY_SEPARATOR.'class.CmsException.php');
+require_once($dirname.DIRECTORY_SEPARATOR.'classes'.DIRECTORY_SEPARATOR.'class.HookManager.php');
 require_once($dirname.DIRECTORY_SEPARATOR.'classes'.DIRECTORY_SEPARATOR.'class.cms_config.php');
 require_once($dirname.DIRECTORY_SEPARATOR.'classes'.DIRECTORY_SEPARATOR.'class.CmsApp.php');
 
@@ -71,6 +72,7 @@ $config = $_app->GetConfig();
 
 require_once($dirname.DIRECTORY_SEPARATOR.'autoloader.php');
 require_once($dirname.DIRECTORY_SEPARATOR.'module.functions.php');
+
 debug_buffer('done loading basic files');
 
 if( cms_to_bool(ini_get('register_globals')) ) {
@@ -88,6 +90,8 @@ if( isset($CMS_ADMIN_PAGE) ) {
         header("Content-Type: $content_type; charset=$charset");
     }
 }
+
+require_once($dirname.DIRECTORY_SEPARATOR.'std_hooks.php');
 
 // new for 2.0 ... this creates a mechanism whereby items can be cached automatically, and fetched (or calculated) via the use of a callback
 // if the cache is too old, or the cached value has been cleared or not yet been saved.
