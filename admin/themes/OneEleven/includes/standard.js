@@ -494,7 +494,8 @@
 		    var _parent = _row.parent();
 		    if ( _parent.children().length <= 1 ) {
   		        _row.closest('div.ui-dialog-content').dialog('close');
-			$('#admin-alerts').hide();
+			$('#alert-noalerts').show();
+			$('a#alerts').closest('li').remove();
 		    }
 		    _row.remove();
 		}).fail(function(xhr,status,msg){
@@ -510,15 +511,13 @@
          */
 	setupAlerts : function() {
             var _this = this;
-	    $('a#notifications').click(function(ev){
+	    $('a#alerts').click(function(ev){
 		ev.preventDefault();
 		$('#alert-dialog').dialog();
 	    })
 	    $('.alert-msg a').click(function(ev){
 		ev.preventDefault();
-		OE.view.handleAlert(ev.target).done(function(){
-		    return true;
-		})
+		OE.view.handleAlert(ev.target);
 	    })
 	    $('.alert-icon,.alert-remove').click(function(ev){
 		ev.preventDefault();

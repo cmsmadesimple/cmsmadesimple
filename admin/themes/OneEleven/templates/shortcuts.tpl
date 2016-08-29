@@ -26,7 +26,7 @@
 		{if $num_alerts > 0}
 		   {if $num_alerts > 10}{$txt='&#2295'}{else}{$num=9311+$num_alerts}{$txt="&#{$num}"}{/if}
  		   <li class="notifications">
-			<a id="notifications" title="{lang('notifications_to_handle2',$num_alerts)}"><span class="bubble">{$txt}</span></a>
+			<a id="alerts" title="{lang('notifications_to_handle2',$num_alerts)}"><span class="bubble">{$txt}</span></a>
 		   </li>
 		{/if}
 		<li class="logout">
@@ -73,6 +73,7 @@
 	</li>
     {/foreach}
   </ul>
+  <div id="alert-noalerts" class="information" style="display: none;">{lang('info_noalerts')}</div>
 </div>
 {/if}
 <!-- alerts-end -->
