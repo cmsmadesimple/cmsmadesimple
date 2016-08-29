@@ -472,8 +472,8 @@ final class ModuleOperations
             $this->_moduleinfo = array();
             $gCms->clear_cached_files();
 
-            Events::SendEvent('Core', 'ModuleInstalled', array('name' => $module_obj->GetName(), 'version' => $module_obj->GetVersion()));
             audit('', 'Module', 'Installed '.$module_obj->GetName().' version '.$module_obj->GetVersion());
+            \CMSMS\HookManager::do_hook('Core::ModuleInstalled', [ 'name' => $module_obj->GetName(), 'version' => $module_obj->GetVersion() ] );
             return array(TRUE,$module_obj->InstallPostMessage());
         }
 
@@ -686,6 +686,7 @@ final class ModuleOperations
         if( (isset($info[$module_name]) && $info[$module_name]['status'] == 'installed') ||
             $force_load ) {
             if( is_object($obj) ) $this->_modules[$module_name] = $obj;
+            \CMSMS\HookManager::do_hook('Core::ModuleLoaded', [ 'name' => $module_name ] );
             return TRUE;
         }
 
@@ -846,8 +847,7 @@ final class ModuleOperations
             $this->_moduleinfo = array();
             $gCms->clear_cached_files();
             audit('','Module', 'Upgraded module '.$module_obj->GetName().' to version '.$module_obj->GetVersion());
-            Events::SendEvent('Core', 'ModuleUpgraded', array('name' => $module_obj->GetName(), 'oldversion' => $dbversion, 'newversion' => $module_obj->GetVersion()));
-
+            \CMSMS\HookManager::do_hook('Core::ModuleUpgraded', [ 'name' => $module_obj->GetName(), 'oldversion' => $dbversion, 'newversion' => $module_obj->GetVersion() ] );
             return array(TRUE);
         }
 
@@ -942,8 +942,8 @@ final class ModuleOperations
             // Removing module from info
             $this->_moduleinfo = array();
 
-            Events::SendEvent('Core', 'ModuleUninstalled', array('name' => $module));
             audit('','Module','Uninstalled module '.$module);
+            \CMSMS\HookManager::do_hook('Core::ModuleUninstalled', [ 'name' => $module ] );
             return array(TRUE);
         }
 
