@@ -1,4 +1,31 @@
 <?php
+#CMS - CMS Made Simple
+#(c)2004-2012 by Ted Kulp (ted@cmsmadesimple.org)
+#(c)2013-2016 by The CMSMS Dev Team
+#Visit our homepage at: http://cmsmadesimple.org
+#
+#This program is free software; you can redistribute it and/or modify
+#it under the terms of the GNU General Public License as published by
+#the Free Software Foundation; either version 2 of the License, or
+#(at your option) any later version.
+#
+#This program is distributed in the hope that it will be useful,
+#but WITHOUT ANY WARRANTY; without even the implied warranty of
+#MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#GNU General Public License for more details.
+#You should have received a copy of the GNU General Public License
+#along with this program; if not, write to the Free Software
+#Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+#
+#$Id: class.global.inc.php 6939 2011-03-06 00:12:54Z calguy1000 $
+
+/**
+ * Contains classes and utilities for working with CMSMS hooks.
+ * @package CMS
+ * @license GPL
+ * @since 2.2
+ */
+
 /**
  * @IGNORE
  */
@@ -39,17 +66,52 @@ namespace CMSMS\Hooks {
 
 namespace CMSMS {
 
+    /**
+     * A class to manage hooks, and to call hook handlers.
+     *
+     * This class is capable of managing a flexible list of hooks, registering handlers for those hooks, and calling the handlers
+     * and/or related events.
+     *
+     * @package CMS
+     * @license GPL
+     * @since 2.0
+     * @author Robert Campbell <calguy1000@gmail.com>
+     */
     class HookManager
     {
+        /**
+         * High priority handler
+         */
         const PRIORITY_HIGH = 1;
+
+        /**
+         * Indicates a normal priority handler
+         */
         const PRIORITY_NORMAL = 2;
+
+        /**
+         * Indicates a low priority handler
+         */
         const PRIORITY_LOW = 3;
 
+        /**
+         * @ignore
+         */
         private static $_hooks;
+
+        /**
+         * @ignore
+         */
         private static $_in_process = [];
 
+        /**
+         * @ignore
+         */
         private function __construct() {}
 
+        /**
+         * @ignore
+         */
         private static function calc_hash($in)
         {
             if( is_object($in) ) {
@@ -59,6 +121,13 @@ namespace CMSMS {
             }
         }
 
+        /**
+         * Add a handler to a hook
+         *
+         * @param string $name The hook name.  If the hook does not already exist, it is added.
+         * @param callable $callable A callable function, or a string representing a callable function.  Closures are also supported.
+         * @param int $priority The priority of the handler.
+         */
         public static function add_hook($name,$callable,$priority = self::PRIORITY_NORMAL)
         {
             $name = trim($name);
@@ -68,12 +137,26 @@ namespace CMSMS {
             self::$_hooks[$name]->handlers[$hash] = new Hooks\HookHandler($callable,$priority);
         }
 
+        /**
+         * Test if we are currently handling a hook or not.
+         *
+         * @param null|string $name The hook name to test for.  If null is provided, the system will return true if any hook is being processed.
+         * @return bool
+         */
         public static function in_hook($name = null)
         {
             if( !$name ) return (count(self::$_in_process) > 0);
             return in_array($name,self::$_in_process);
         }
 
+        /**
+         * Trigger a hook.
+         *
+         * This method accepts variable arguments.  The first argument (required) is the name of the hook to execute.
+         * Further arguments will be passed to the various handlers.
+         *
+         * This method does n ot return a value.
+         */
         public static function do_hook()
         {
             $is_assoc = function($in) {
@@ -92,16 +175,27 @@ namespace CMSMS {
             list($module,$eventname) = explode('::',$name);
             if( $module && $eventname ) $is_event = true;
 
-            if( !isset(self::$_hooks[$name]) ) return; // nothing to do.
-            if( !count(self::$_hooks[$name]->handlers) ) return; // nothing to do.
+
+            if( $is_event && (!isset(self::$_hooks[$name]) || !self::$_hooks[$name]->sorted) ) {
+                // insert a hook to handle the event, be sure we only do this once.
+                $event_caller = function($params) use ($module,$eventname) {
+                    $tmp = $module.'::'.$eventname;
+                    \Events::SendEvent($module,$eventname,$params);
+                };
+                if( !isset(self::$_hooks[$name]) ) self::add_hook($name,$event_caller);
+            }
+
+            if( !isset(self::$_hooks[$name]) || !count(self::$_hooks[$name]->handlers)  ) return; // nothing to do.
 
             // sort the handlers.
-            if( !self::$_hooks[$name]->sorted && count(self::$_hooks[$name]->handlers) > 1 ) {
-                usort(self::$_hooks[$name]->handlers,function($a,$b){
-                        if( $a->priority < $b->priority ) return -1;
-                        if( $a->priority > $b->priority ) return 1;
-                        return 0;
-                    });
+            if( !self::$_hooks[$name]->sorted ) {
+                if( count(self::$_hooks[$name]->handlers) > 1 ) {
+                    usort(self::$_hooks[$name]->handlers,function($a,$b){
+                            if( $a->priority < $b->priority ) return -1;
+                            if( $a->priority > $b->priority ) return 1;
+                            return 0;
+                        });
+                }
                 self::$_hooks[$name]->sorted = TRUE;
             }
 
@@ -109,6 +203,7 @@ namespace CMSMS {
             $prev_priority = 0;
             foreach( self::$_hooks[$name]->handlers as $obj ) {
                 if( $is_event && $obj->priority == self::PRIORITY_LOW && $prev_priority = self::PRIORITY_NORMAL ) {
+                    die('sending event handlers');
                     $tmp = $args;
                     $tmp['from_hook'] = 1;
                     \Events::SendEvent($module,$eventname,$tmp);

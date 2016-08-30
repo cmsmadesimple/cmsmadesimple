@@ -67,7 +67,7 @@ if (isset($_GET["userplugin_id"])) {
 		$result = $db->Execute($query,array($userplugin_id));
 		if ($result) {
             \CMSMS\internal\global_cache::clear(get_class(UserTagOperations::get_instance()));
-            \CMSMS\HookManger::do_hook('Core::DeleteUserDefinedTagPost', [ 'id'=>$userplugin_id, 'name'=>&$userplugin_name ]);
+            \CMSMS\HookManager::do_hook('Core::DeleteUserDefinedTagPost', [ 'id'=>$userplugin_id, 'name'=>&$userplugin_name ]);
 			// put mention into the admin log
 			audit($userplugin_id, 'User Defined Tag: '.$userplugin_name, 'Deleted');
 		}

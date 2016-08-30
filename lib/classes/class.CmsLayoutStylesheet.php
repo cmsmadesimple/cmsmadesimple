@@ -1,6 +1,7 @@
 <?php
 #CMS - CMS Made Simple
 #(c)2004-2012 by Ted Kulp (ted@cmsmadesimple.org)
+#(c)2013-2016 by The CMSMS Dev Team
 #Visit our homepage at: http://cmsmadesimple.org
 #
 #This program is free software; you can redistribute it and/or modify

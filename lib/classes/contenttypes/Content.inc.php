@@ -176,13 +176,18 @@ class Content extends ContentBase
 			// do the content property parameters
 			foreach ($parameters as $oneparam) {
                 if( !isset($params[$oneparam]) ) continue;
-                $val = $params[$oneparm];
+                $val = $params[$oneparam];
                 switch( $oneparam ) {
                 case 'pagedata':
                     // nothing
                     break;
                 default:
-                    $val = (int) $val;
+                    if( count($blocks) && isset($blocks[$oneparam]) ) {
+                        // it's a content block.
+                        $val = $val;
+                    } else {
+                        $val = (int) $val;
+                    }
                     break;
                 }
                 $this->SetPropertyValue($oneparam,$val);
