@@ -34,7 +34,7 @@ function smarty_function_metadata($params, &$smarty)
 		if ($params['showbase'] == 'false')	$showbase = false;
 	}
 
-    \CMSMS\HookManager::do_hook('metadata_postrender', [ 'content_id'=>$content_obj->Id(), 'showbase'=>&$showbase, 'html'=>&$result ]);
+    \CMSMS\HookManager::do_hook('metadata_prerender', [ 'content_id'=>$content_obj->Id(), 'showbase'=>&$showbase, 'html'=>&$result ]);
 
 	if ($showbase)	{
         $base = CMS_ROOT_URL;

@@ -16,6 +16,8 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
+use \CMSMS\HookManager;
+
 function smarty_postfilter_postcompilefunc($tpl_output, &$smarty)
 {
 	$result = explode(':', $smarty->_current_file);
@@ -24,22 +26,18 @@ function smarty_postfilter_postcompilefunc($tpl_output, &$smarty)
 		switch ($result[0])	{
         case 'cms_stylesheet':
         case 'stylesheet':
-            Events::SendEvent('Core','StylesheetPostCompile',array('stylesheet'=>&$tpl_output));
+            HookManager::do_hook('Core::StylesheetPostCompile',array('stylesheet'=>&$tpl_output));
             break;
 
         case "content":
-            Events::SendEvent('Core', 'ContentPostCompile', array('content' => &$tpl_output));
+            HookManager::do_hook('Core::ContentPostCompile', array('content' => &$tpl_output));
             break;
 
         case "template":
         case 'tpl_top':
         case 'tpl_body':
         case 'tpl_head':
-            Events::SendEvent('Core','TemplatePostCompile',array('template'=>&$tpl_output,'type'=>$result[0]));
-            break;
-
-        case "globalcontent":
-            Events::SendEvent('Core', 'GlobalContentPostCompile', array('global_content' => &$tpl_output));
+            HookManager::do_hook('Core::TemplatePostCompile',array('template'=>&$tpl_output,'type'=>$result[0]));
             break;
 
         default:
@@ -47,7 +45,7 @@ function smarty_postfilter_postcompilefunc($tpl_output, &$smarty)
 		}
 	}
 
-	Events::SendEvent('Core', 'SmartyPostCompile', array('content' => &$tpl_output));
+	HookManager::do_hook('Core::SmartyPostCompile', array('content' => &$tpl_output));
 
 	return $tpl_output;
 }

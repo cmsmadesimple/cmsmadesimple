@@ -16,6 +16,8 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
+use \CMSMS\HookManager;
+
 function smarty_prefilter_precompilefunc($tpl_output, &$smarty)
 {
 	$result = explode(':', $smarty->_current_file);
@@ -26,22 +28,18 @@ function smarty_prefilter_precompilefunc($tpl_output, &$smarty)
 		switch ($result[0]) {
         case 'cms_stylesheet':
         case 'stylesheet':
-            Events::SendEvent('Core','StylesheetPreCompile',array('stylesheet'=>&$tpl_output));
+            HookManager::do_hook('Core::StylesheetPreCompile',array('stylesheet'=>&$tpl_output));
             break;
 
         case "content":
-            Events::SendEvent('Core', 'ContentPreCompile', array('content' => &$tpl_output));
+            HookManager::do_hook('Core::ContentPreCompile', array('content' => &$tpl_output));
             break;
 
         case 'tpl_top':
         case 'tpl_body':
         case 'tpl_head':
         case "template":
-            Events::SendEvent('Core', 'TemplatePreCompile', array('template' => &$tpl_output,'type'=>$result[0]));
-            break;
-
-        case "globalcontent":
-            Events::SendEvent('Core', 'GlobalContentPreCompile', array('global_content' => &$tpl_output));
+            HookManager::do_hook('Core::TemplatePreCompile', array('template' => &$tpl_output,'type'=>$result[0]));
             break;
 
         default:
@@ -49,8 +47,7 @@ function smarty_prefilter_precompilefunc($tpl_output, &$smarty)
 		}
 	}
 
-	Events::SendEvent('Core', 'SmartyPreCompile', array('content' => &$tpl_output));
+    HookManager::do_hook('Core::SmartyPreCompile', array('content' => &$tpl_output));
 
 	return $tpl_output;
 }
-?>
