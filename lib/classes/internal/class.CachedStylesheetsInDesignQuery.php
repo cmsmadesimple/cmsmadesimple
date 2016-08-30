@@ -55,8 +55,6 @@ class CachedStylesheetsInDesignQuery
                 $out = $query->GetMatches();
                 if( !$out ) $out = [];
                 $this->_data = $out;
-                debug_display(__METHOD__);
-                debug_display(get_class(self::_get_driver()));
                 self::_get_driver()->set($this->_design_id,$out);
             }
         }
