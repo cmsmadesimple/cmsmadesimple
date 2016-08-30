@@ -76,12 +76,18 @@ namespace CMSMS {
 
         public static function do_hook()
         {
+            $is_assoc = function($in) {
+                $keys = array_keys($in);
+                $n = 0;
+                for( $n = 0; $n < count($keys); $n++ ) {
+                    if( $keys[$n] != $n ) return FALSE;
+                }
+                return TRUE;
+            };
             $args = func_get_args();
             $name = array_shift($args);
             $name = trim($name);
-            if( is_array($args) && count($args) == 1 && is_array($args[0]) ) {
-                $args = $args[0];
-            }
+            if( is_array($args) && count($args) == 1 && is_array($args[0]) && !$is_assoc($args[0]) ) $args = $args[0];
             $is_event = false;
             list($module,$eventname) = explode('::',$name);
             if( $module && $eventname ) $is_event = true;

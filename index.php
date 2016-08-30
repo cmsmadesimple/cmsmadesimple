@@ -137,7 +137,7 @@ while( $trycount < 2 ) {
             $smarty->setCaching(Smarty::CACHING_LIFETIME_CURRENT);
         }
 
-        Events::SendEvent('Core', 'ContentPreRender', array('content' => &$contentobj));
+        \CMSMS\HookManager::do_hook('Core::ContentPreRender', [ 'content' => &$contentobj ] );
 
         // if the request has a mact in it, process and cache the output.
         preprocess_mact($contentobj->Id());
@@ -249,7 +249,7 @@ while( $trycount < 2 ) {
     }
 } // end while trycount
 
-Events::SendEvent('Core', 'ContentPostRender', array('content' => &$html));
+\CMSMS\HookManager::do_hook( 'Core::ContentPostRender', [ 'content' => &$html ] );
 
 if( !headers_sent() ) {
     $ct = $_app->get_content_type();
