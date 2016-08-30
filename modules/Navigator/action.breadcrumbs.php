@@ -106,6 +106,7 @@ if( !$tpl->isCached() ) {
     $tpl->assign('nodelist',array_reverse($pagestack));
 }
 $tpl->display();
+unset($tpl);
 
 debug_buffer('End Navigator breadcrumbs action');
 

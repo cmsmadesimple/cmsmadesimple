@@ -44,7 +44,7 @@ final class CmsJobManager extends \CMSModule
     const LOCKPREF = 'lock';
     const ASYNCFREQ_PREF = 'asyncfreq';
     const MANAGE_JOBS = 'Manage Jobs';
-    const EVT_ONFAILEDJOB = 'OnJobFailed';
+    const EVT_ONFAILEDJOB = 'CmsJobManager::OnJobFailed';
 
     private $_current_job;
     private $_lock;

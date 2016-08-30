@@ -234,7 +234,7 @@ if (isset($params['submit']) || isset($params['apply'])) {
             }
         }
 
-        @$this->SendEvent('NewsArticleEdited', array(
+        \CMSMS\HookManager::do_hook('News::NewsArticleEdited', array(
             'news_id' => $articleid,
             'category_id' => $usedcategory,
             'title' => $title,

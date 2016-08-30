@@ -206,18 +206,17 @@ if (isset($params['submit'])) {
         }
 
         if (!$error) {
-            $this->SendEvent('NewsArticleAdded', array(
-                'news_id' => $articleid,
-                'category_id' => $usedcategory,
-                'title' => $title,
-                'content' => $content,
-                'summary' => $summary,
-                'status' => $status,
-                'start_time' => $startdate,
-                'end_time' => $enddate,
-                'useexp' => $useexp,
-                'extra' => $extra
-            ));
+            \CMSMS\HookManager::do_hook('News::NewsArticleAdded',
+                                        array('news_id' => $articleid,
+                                              'category_id' => $usedcategory,
+                                              'title' => $title,
+                                              'content' => $content,
+                                              'summary' => $summary,
+                                              'status' => $status,
+                                              'start_time' => $startdate,
+                                              'end_time' => $enddate,
+                                              'useexp' => $useexp,
+                                              'extra' => $extra ));
             // put mention into the admin log
             audit($articleid, 'News: ' . $title, 'Article added');
 			$this->SetMessage($this->Lang('articleadded'));

@@ -264,5 +264,6 @@ if( !$tpl->isCached() ) {
 
 $tpl->display();
 debug_buffer('End Navigator default action');
+unset($tpl);
 #
 # EOF

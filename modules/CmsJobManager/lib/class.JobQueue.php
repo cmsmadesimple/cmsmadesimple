@@ -90,7 +90,7 @@ final class JobQueue
                 }
                 $obj->set_id($row['id']);
                 $idlist[] = (int) $row['id'];
-                $mod->SendEvent(\CmsJobManager::EVT_ONFAILEDJOB,array('job'=>$obj));
+                \CMSMS\HookManager::do_hook(\CmsJobManager::EVT_ONFAILEDJOB, [ 'job' => $obj ]);
             }
             $sql = 'DELETE FROM '.\CmsJobManager::table_name().' WHERE id IN ('.implode(',',$idlist).')';
             $db->Execute($sql);

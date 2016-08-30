@@ -67,7 +67,7 @@ if( isset($params['submit']) ) {
 
       news_admin_ops::UpdateHierarchyPositions();
 
-      @$this->SendEvent('NewsCategoryEdited', array('category_id' => $catid, 'name' => $name, 'origname' => $origname));
+      \CMSMS\HookManager::do_hook('News::NewsCategoryEdited', [ 'category_id'=>$catid, 'name'=>$name, 'origname'=>$origname ] );
       // put mention into the admin log
       audit($catid, 'News category: '.$name, ' Category edited');
 

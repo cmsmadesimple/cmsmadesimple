@@ -84,7 +84,7 @@ function search_AddWords(&$obj, $module = 'Search', $id = -1, $attr = '', $conte
     $non_indexable = strpos($content, NON_INDEXABLE_CONTENT);
     if( $non_indexable !== FALSE ) return;
 
-    @$obj->SendEvent('SearchItemAdded', array($module, $id, $attr, &$content, $expires));
+    \CMSMS\HookManager::do_hook( 'Search::SearchItemAdded', [ $module, $id, $attr, &$content, $expires ]);
 
     if ($content != "") {
         //Clean up the content
@@ -144,7 +144,7 @@ function search_DeleteWords(&$obj, $module = 'Search', $id = -1, $attr = '')
     $db->Execute($q, $parms);
     $db->Execute('DELETE FROM '.CMS_DB_PREFIX.'module_search_index WHERE item_id NOT IN (SELECT id FROM '.CMS_DB_PREFIX.'module_search_items)');
     $db->CommitTrans();
-    @$obj->SendEvent('SearchItemDeleted', array($module, $id, $attr));
+    \CMSMS\HookManager::do_hook('Search::SearchItemDeleted', [ $module, $id, $attr ] );
 }
 
 

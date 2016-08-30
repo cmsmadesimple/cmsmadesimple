@@ -79,7 +79,7 @@ if ($params['searchinput'] != '') {
     // Fix to prevent XSS like behaviour. See: http://www.securityfocus.com/archive/1/455417/30/0/threaded
     $params['searchinput'] = cms_html_entity_decode($params['searchinput'],ENT_COMPAT,'UTF-8');
     $params['searchinput'] = strip_tags($params['searchinput']);
-    @$this->SendEvent('SearchInitiated', array(trim($params['searchinput'])));
+    \CMSMS\HookManager::do_hook('Search::SearchInitiated', [ trim($params['searchinput'])] );
 
     $searchstarttime = microtime();
 
@@ -236,7 +236,7 @@ if ($params['searchinput'] != '') {
     }
     $col->_ary = $newresults;
 
-    @$this->SendEvent('SearchCompleted', array(&$params['searchinput'], &$col->_ary));
+    \CMSMS\HookManager::do_hook( 'Search::SearchCompleted', [ &$params['searchinput'], &$col->_ary ] );
 
     $tpl_ob->assign('searchwords',$words);
     $tpl_ob->assign('results', $col->_ary);

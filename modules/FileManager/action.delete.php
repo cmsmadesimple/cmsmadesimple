@@ -60,9 +60,8 @@ if( isset($params['submit']) ) {
 
     $parms = array('file'=>$fn);
     if( $thumb ) $parms['thumb'] = $thumb;
-    $this->SendEvent('OnFileDeleted',$parms);
-
-    $this->Audit('',"File Manager", "Removed file: ".$fn);
+    audit('',"File Manager", "Removed file: ".$fn);
+    \CMSMS\HookManager::do_hook('FileManager::OnFileDeleted', $params );
   } // foreach
 
   if( count($errors) == 0 ) {
