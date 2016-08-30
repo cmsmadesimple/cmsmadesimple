@@ -34,6 +34,8 @@
 #-------------------------------------------------------------------------
 #END_LICENSE
 
+use \CMSMS\HookManager;
+
 /**
  * This file contains classes and functions that define a template type.
  * @package CMS
@@ -432,14 +434,14 @@ class CmsLayoutTemplateType
     public function save()
     {
         if( !$this->get_id() ) {
-			Events::SendEvent('Core','AddTemplateTypePre',array(get_class($this)=>&$this));
+            HookManager::do_hook('Core::AddTemplateTypePre', [ get_class($this) => &$this ]);
             $this->_insert();
-			Events::SendEvent('Core','AddTemplateTypePost',array(get_class($this)=>&$this));
+            HookManager::do_hook('Core::AddTemplateTypePost', [ get_class($this) => &$this ]);
 			return;
         }
-		Events::SendEvent('Core','EditTemplateTypePre',array(get_class($this)=>&$this));
+        HookManager::do_hook('Core::EditTemplateTypePre', [ get_class($this) => &$this ]);
         $this->_update();
-		Events::SendEvent('Core','EditTemplateTypePost',array(get_class($this)=>&$this));
+        HookManager::do_hook('Core::EditTemplateTypePost', [ get_class($this) => &$this ]);
     }
 
     /**
@@ -463,7 +465,7 @@ class CmsLayoutTemplateType
     {
         if( !$this->get_id() ) return;
 
-		Events::SendEvent('Core','DeleteTemplateTypePre',array(get_class($this)=>&$this));
+        HookManager::do_hook('Core::DeleteTemplateTypePre', [ get_class($this) => &$this ]);
 		$tmp = CmsLayoutTemplate::template_query(array('t:'.$this->get_id()));
         if( is_array($tmp) && count($tmp) ) throw new CmsInvalidDataException('Cannot delete a template type with existing templates');
         $db = CmsApp::get_instance()->GetDb();
@@ -474,7 +476,7 @@ class CmsLayoutTemplateType
         $this->_dirty = TRUE;
 		CmsTemplateCache::clear_cache();
 		audit($this->get_id(),'CMSMS','Template Type '.$this->get_name().' Deleted');
-		Events::SendEvent('Core','DeleteTemplateTypePost',array(get_class($this)=>&$this));
+        HookManager::do_hook('Core::DeleteTemplateTypePost', [ get_class($this) => &$this ]);
         unset($this->_data['id']);
     }
 

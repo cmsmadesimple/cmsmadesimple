@@ -1,6 +1,8 @@
 <?php
 #Visit our homepage at: http://cmsmadesimple.org
 
+use \CMSMS\HookManager;
+
 /**
  * This file contails the classes and methods to define the LayoutTemplate functionality
  * @package CMS
@@ -703,14 +705,14 @@ class CmsLayoutTemplate
 	public function save()
 	{
 		if( $this->get_id() ) {
-			Events::SendEvent('Core','EditTemplatePre',array(get_class($this)=>&$this));
+            HookManager::do_hook('Core::EditTemplatePre', [ get_class($this) => &$this ] );
 			$this->_update();
-			Events::SendEvent('Core','EditTemplatePost',array(get_class($this)=>&$this));
+            HookManager::do_hook('Core::EditTemplatePost', [ get_class($this) => &$this ] );
 			return;
 		}
-		Events::SendEvent('Core','AddTemplatePre',array(get_class($this)=>&$this));
+        HookManager::do_hook('Core::AddTemplatePre', [ get_class($this) => &$this ] );
 		$this->_insert();
-		Events::SendEvent('Core','AddTemplatePost',array(get_class($this)=>&$this));
+        HookManager::do_hook('Core::AddTemplatePost', [ get_class($this) => &$this ] );
 	}
 
 	/**
@@ -720,7 +722,7 @@ class CmsLayoutTemplate
 	{
         if( !$this->get_id() ) return;
 
-		Events::SendEvent('Core','DeleteTemplatePre',array(get_class($this)=>&$this));
+        HookManager::do_hook('Core::DeleteTemplatePre', [ get_class($this) => &$this ] );
 		$db = CmsApp::get_instance()->GetDb();
 		$query = 'DELETE FROM '.CMS_DB_PREFIX.CmsLayoutCollection::TPLTABLE.' WHERE tpl_id = ?';
 		$dbr = $db->Execute($query,array($this->get_id()));
@@ -730,7 +732,7 @@ class CmsLayoutTemplate
 
 		CmsTemplateCache::clear_cache();
 		audit($this->get_id(),'CMSMS','Template '.$this->get_name().' Deleted');
-		Events::SendEvent('Core','DeleteTemplatePost',array(get_class($this)=>&$this));
+        HookManager::do_hook('Core::DeleteTemplatePost', [ get_class($this) => &$this ] );
 		unset($this->_data['id']);
 		$this->_dirty = TRUE;
 	}

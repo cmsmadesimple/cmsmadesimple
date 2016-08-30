@@ -333,7 +333,7 @@ class Smarty_CMS extends SmartyBC
     // send an event before fetching...this allows us to change template stuff.
     if( CmsApp::get_instance()->is_frontend_request() ) {
         $parms = array('template'=>&$template,'cache_id'=>&$cache_id,'compile_id'=>&$compile_id,'display'=>&$display);
-        Events::SendEvent('Core','TemplatePreFetch',$parms);
+        \CMSMS\HookManager::do_hook( 'Core::TemplatePrefetch', $parms );
     }
 
     if( !$parent ) {
