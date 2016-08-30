@@ -151,15 +151,26 @@ while( $trycount < 2 ) {
         else {
             debug_buffer('process template top');
             $tpl_id = $contentobj->TemplateId();
+            $top = $body = $head = null;
+
+            \CMSMS\HookManager::do_hook('Core::PageTopPreRender', [ 'content'=>&$contentobj, 'html'=>&$top ]);
             $tpl = $smarty->createTemplate('tpl_top:'.$tpl_id,$cache_id);
-            $top  = $tpl->fetch();
+            $top .= $tpl->fetch();
             unset($tpl);
+            \CMSMS\HookManager::do_hook('Core::PageTopPostRender', [ 'content'=>&$contentobj, 'html'=>&$top ]);
+
+            \CMSMS\HookManager::do_hook('Core::PageBodyPreRender', [ 'content'=>&$contentobj, 'html'=>&$body ]);
             $tpl = $smarty->createTemplate('tpl_body:'.$tpl_id,$cache_id);
-            $body  = $tpl->fetch();
+            $body .= $tpl->fetch();
             unset($tpl);
+            \CMSMS\HookManager::do_hook('Core::PageBodyPostRender', [ 'content'=>&$contentobj, 'html'=>&$body ]);
+
+            \CMSMS\HookManager::do_hook('Core::PageHeadPreRender', [ 'content'=>&$contentobj, 'html'=>&$head ]);
             $tpl = $smarty->createTemplate('tpl_head:'.$tpl_id,$cache_id);
-            $head = $tpl->fetch();
+            $head .= $tpl->fetch();
             unset($tpl);
+            \CMSMS\HookManager::do_hook('Core::PageHeadPostRender', [ 'content'=>&$contentobj, 'html'=>&$head ]);
+
             $html = $top.$head.$body;
             $trycount = 99; // no more iterations
         }

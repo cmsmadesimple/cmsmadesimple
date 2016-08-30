@@ -34,6 +34,8 @@ function smarty_function_metadata($params, &$smarty)
 		if ($params['showbase'] == 'false')	$showbase = false;
 	}
 
+    \CMSMS\HookManager::do_hook('metadata_postrender', [ 'content_id'=>$content_obj->Id(), 'showbase'=>&$showbase, 'html'=>&$result ]);
+
 	if ($showbase)	{
         $base = CMS_ROOT_URL;
         if( $gCms->is_https_request() ) $base = $config['ssl_url'];
@@ -48,6 +50,7 @@ function smarty_function_metadata($params, &$smarty)
         $result = $smarty->fetch('string:'.$result);
     }
 
+    \CMSMS\HookManager::do_hook('metadata_postrender', [ 'content_id'=>$content_obj->Id(), 'html'=>&$result ]);
 	if( isset($params['assign']) )	{
 		$smarty->assign(trim($params['assign']),$result);
 		return;
