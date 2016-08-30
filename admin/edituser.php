@@ -122,7 +122,7 @@ if (isset($_POST["submit"])) {
             if ($password != '')
                 $thisuser->SetPassword($password);
 
-            Events::SendEvent('Core', 'EditUserPre', array('user' => &$thisuser));
+            \CMSMS\HookManager::do_hook('Core::EditUserPre', [ 'user'=>&$thisuser ] );
 
             $result = $thisuser->save();
             if ($assign_group_perm && isset($_POST['groups'])) {
@@ -163,7 +163,7 @@ if (isset($_POST["submit"])) {
             }
 
             // put mention into the admin log
-            Events::SendEvent('Core', 'EditUserPost', array('user' => &$thisuser));
+            \CMSMS\HookManager::do_hook('Core::EditUserPost', [ 'user'=>&$thisuser ] );
             $gCms->clear_cached_files();
             $url = 'listusers.php?' . $urlext;
             if ($message) {

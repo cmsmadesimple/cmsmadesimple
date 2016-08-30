@@ -55,12 +55,12 @@ if ($access) {
             $groupobj->description = $description;
             $groupobj->active = $active;
 
-            Events::SendEvent('Core', 'AddGroupPre', array('group' => &$groupobj));
+            \CMSMS\HookManager::do_hook('Core::AddGroupPre', [ 'group'=>&$groupobj ] );
 
             $result = $groupobj->save();
             if( !$result ) throw new \RuntimeException(lang('errorinsertinggroup'));
 
-            Events::SendEvent('Core', 'AddGroupPost', array('group' => &$groupobj));
+            \CMSMS\HookManager::do_hook('Core::AddGroupPost', [ 'group'=>&$groupobj ] );
             // put mention into the admin log
             audit($groupobj->id, 'Admin User Group: '.$groupobj->name, 'Added');
             redirect("listgroups.php".$urlext);

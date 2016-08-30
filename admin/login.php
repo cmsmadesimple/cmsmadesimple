@@ -92,7 +92,7 @@ else if (isset($_REQUEST['forgotpwform']) && isset($_REQUEST['forgottenusername'
     $userops = $gCms->GetUserOperations();
     $forgot_username = cms_html_entity_decode($_REQUEST['forgottenusername']);
     unset($_REQUEST['forgottenusername'],$_POST['forgottenusername']);
-    \Events::SendEvent('Core','LostPassword',array('username'=>$forgot_username));
+    \CMSMS\HookManager::do_hook('Core::LostPassword', [ 'username'=>$forgot_username] );
     $oneuser = $userops->LoadUserByUsername($forgot_username);
     unset($_REQUEST['loginsubmit'],$_POST['loginsubmit']);
 
@@ -109,7 +109,7 @@ else if (isset($_REQUEST['forgotpwform']) && isset($_REQUEST['forgottenusername'
     }
     else {
         unset($_POST['username'],$_POST['password'],$_REQUEST['username'],$_REQUEST['password']);
-        \Events::SendEvent('Core','LoginFailed',array('user'=>$forgot_username));
+        \CMSMS\HookManager::do_hook('Core::LoginFailed', [ 'user'=>$forgot_username ] );
         $error = lang('usernotfound');
     }
 }
@@ -135,7 +135,7 @@ else if (isset($_REQUEST['forgotpwchangeform']) && $_REQUEST['forgotpwchangeform
                 // put mention into the admin log
                 $ip_passw_recovery = \cms_utils::get_real_ip();
                 audit('','Core','Completed lost password recovery for: '.$user->username.' (IP: '.$ip_passw_recovery.')');
-                \Events::SendEvent('Core','LostPasswordReset',array('uid'=>$user->id,'username'=>$user->username,'ip'=>$ip_passw_recovery));
+                \CMSMS\HookManager::do_hook('Core::LostPasswordReset', [ 'uid'=>$user_id, 'username'=>$user->username, 'ip'=>$ip_passw_recorvery ] );
                 $acceptLogin = lang('passwordchangedlogin');
                 $changepwhash = '';
             }
@@ -157,8 +157,9 @@ if (isset($_SESSION['logout_user_now'])) {
     debug_buffer("Logging out.  Cleaning cookies and session variables.");
     $userid = $login_ops->get_loggedin_uid();
     $username = $login_ops->get_loggedin_username();
+    \CMSMS\HookManager::do_hook('Core::LogoutPre', [ 'uid'=>$userid, 'username'=>$username ] );
     $login_ops->deauthenticate(); // unset all the cruft needed to make sure we're logged in.
-    \Events::SendEvent('Core', 'LogoutPost');
+    \CMSMS\HookManager::do_hook('Core::LogoutPost');
     audit($userid, "Admin Username: ".$username, 'Logged Out');
 }
 
@@ -189,7 +190,7 @@ else if( isset($_POST['loginsubmit']) ) {
 
         // send the post login event
         unset($_POST['username'],$_POST['password'],$_REQUEST['username'],$_REQUEST['password']);
-        \Events::SendEvent('Core', 'LoginPost', array('user' => &$oneuser));
+        \CMSMS\HookManager::do_hook('Core::LoginPost', [ 'user'=>&$oneuser ] );
 
         // redirect outa hre somewhere
         if( isset($_SESSION['login_redirect_to']) ) {
@@ -229,7 +230,7 @@ else if( isset($_POST['loginsubmit']) ) {
         $error = $e->GetMessage();
         debug_buffer("Login failed.  Error is: " . $error);
         unset($_POST['password'],$_REQUEST['password']);
-        \Events::SendEvent('Core','LoginFailed',array('user'=>$_POST['username']));;
+        \CMSMS\HookManager::do_hook('Core::LoginFailed', [ 'user'=>$_POST['username'] ] );
         // put mention into the admin log
         $ip_login_failed = \cms_utils::get_real_ip();
         audit('', '(IP: ' . $ip_login_failed . ') ' . "Admin Username: " . $username, 'Login Failed');

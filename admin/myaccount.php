@@ -123,16 +123,16 @@ if (isset($_POST['submit_account']) && check_permission($userid,'Manage My Accou
     $userobj->email = $email;
     if ($password != '') $userobj->SetPassword($password);
 
-    Events::SendEvent('Core', 'EditUserPre', array('user' => &$userobj));
+    \CMSMS\HookManager::do_hook('Core::EditUserPre', [ 'user'=>&$userobj ] );
     $result = $userobj->Save();
 
     if($result) {
       // put mention into the admin log
-      audit($userid, 'Admin Username: '.$userobj->username, 'Edited');
-      Events::SendEvent('Core', 'EditUserPost', array('user' => &$userobj));
-      $message = lang('accountupdated');
+        audit($userid, 'Admin Username: '.$userobj->username, 'Edited');
+        \CMSMS\HookManager::do_hook('Core::EditUserPost', [ 'user'=>&$userobj ] );
+        $message = lang('accountupdated');
     } else {
-      // throw exception? update just failed.
+        // throw exception? update just failed.
     }
   }
 } // end of account submit

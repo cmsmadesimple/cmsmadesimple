@@ -24,8 +24,7 @@ require_once ('../lib/include.php');
 check_login();
 $userid = get_userid();
 
-if (!check_permission($userid, 'Manage Users'))
-    die('Permission Denied');
+if (!check_permission($userid, 'Manage Users')) die('Permission Denied');
 
 /*--------------------
  * Variables
@@ -98,12 +97,12 @@ if (isset($_POST["submit"])) {
         $newuser->adminaccess = $adminaccess;
         $newuser->SetPassword($password);
 
-        Events::SendEvent('Core', 'AddUserPre', array('user' => &$newuser));
+        \CMSMS\HookManager::do_hook('Core::AddUserPre', [ 'user'=>&$newuser ] );
 
         $result = $newuser->save();
 
         if ($result) {
-            Events::SendEvent('Core', 'AddUserPost', array('user' => &$newuser));
+            \CMSMS\HookManager::do_hook('Core::AddUserPost', [ 'user'=>&$newuser ] );
 
             // set some default preferences, based on the user creating this user
             $adminid = get_userid();

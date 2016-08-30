@@ -27,25 +27,22 @@ $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 check_login();
 
 $group_id = -1;
-if (isset($_GET["group_id"]))
-{
+if (isset($_GET["group_id"])) {
 	$group_id = $_GET["group_id"];
 
-	if( $group_id == 1 )
-	  {
+	if( $group_id == 1 ) {
 	    // can't delete this group
 	    redirect("listgroups.php".$urlext);
-	  }
+    }
 
 	$group_name = "";
 	$userid = get_userid();
 	$access = check_permission($userid, 'Manage Groups');
 
-	# you can't delete admin group (also admin group it's the first group)
-	if (!$access)
-	{
-	    // no access
-	    redirect("listgroups.php".$urlext);
+	if( !$access ) {
+        // you can't delete admin group (also admin group it's the first group)
+        // no access
+        redirect("listgroups.php".$urlext);
 	}
 
 	$result = false;
@@ -56,31 +53,23 @@ if (isset($_GET["group_id"]))
 	$groupobj = $groupops->LoadGroupByID($group_id);
 	$group_name = $groupobj->name;
 
-        # check to make sure we're not a member of this group
-	if( $userops->UserInGroup($userid,$group_id) )
-	  {
-	    # can't delete a group we're a member of.
-	    redirect("listgroups.php".$urlext);
-	  }
+	if( $userops->UserInGroup($userid,$group_id) ) {
+        // check to make sure we're not a member of this group
+        // can't delete a group we're a member of.
+        redirect("listgroups.php".$urlext);
+    }
 
 	// now do the work.
-	Events::SendEvent('Core', 'DeleteGroupPre', array('group' => &$groupobj));
+    \CMSMS\HookManager::do_hook('Core::DeleteGroupPre', [ 'group'=>&$groupobj ] );
 
-	if ($groupobj)
-	  {
-	    $result = $groupobj->Delete();
-	  }
+	if ($groupobj) $result = $groupobj->Delete();
 
-	Events::SendEvent('Core', 'DeleteGroupPost', array('group' => &$groupobj));
+    \CMSMS\HookManager::do_hook('Core::DeleteGroupPost', [ 'group'=>&$groupobj ] );
 
-	if ($result == true)
-	  {
-	    // put mention into the admin log
-		audit($group_id, 'Admin User Group: '.$group_name, 'Deleted');
-	  }
+	if ($result == true) {
+        // put mention into the admin log
+        audit($group_id, 'Admin User Group: '.$group_name, 'Deleted');
+    }
 }
 
 redirect("listgroups.php".$urlext);
-
-
-?>
