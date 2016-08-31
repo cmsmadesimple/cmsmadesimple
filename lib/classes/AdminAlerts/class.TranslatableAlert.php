@@ -60,7 +60,7 @@ class TranslatableAlert extends Alert
      */
     public function __construct($perms = null)
     {
-        if( $perms && (!is_array($perms) || !count($perms)) ) \InvalidArgumentExcecption('perms must be an array of permission name strings');
+        if( $perms && (!is_array($perms) || !count($perms)) ) throw new \InvalidArgumentException('perms must be an array of permission name strings');
         $this->_perms = $perms;
         parent::__construct();
     }
