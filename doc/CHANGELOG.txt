@@ -1,5 +1,8 @@
 Version 2.1.6 -
 ----------------------------------
+Core - General
+  - Now attempt to detect if a template name passed into CmsModule::GetTemplateResource() is already a resource string.
+
 Content Manager v1.1.3
   - Fix bulk set-non-cachable functionality.
 

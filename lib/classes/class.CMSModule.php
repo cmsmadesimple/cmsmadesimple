@@ -2495,6 +2495,7 @@ abstract class CMSModule
      */
     final public function GetTemplateResource($template)
     {
+        if( strpos($template,':') !== FALSE ) return $template;
         if( endswith($template,'.tpl') ) return 'module_file_tpl:'.$this->GetName().';'.$template;
         return 'cms_template:'.$template;
     }
