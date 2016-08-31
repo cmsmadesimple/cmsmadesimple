@@ -139,9 +139,8 @@ final class cms_siteprefs
 			$key .= '%';
 		};
 		$db = CmsApp::get_instance()->GetDb();
-        $db->Execute($query,array($key));
-        debug_to_log('remove '.$keye,__METHOD__);
-        global_cache::clear(__CLASS__);
+        	$db->Execute($query,array($key));
+        	global_cache::clear(__CLASS__);
 	}
 
 	/**
