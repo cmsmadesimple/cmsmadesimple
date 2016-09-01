@@ -172,7 +172,8 @@ namespace CMSMS {
             $name = trim($name);
             if( is_array($args) && count($args) == 1 && is_array($args[0]) && !$is_assoc($args[0]) ) $args = $args[0];
             $is_event = false;
-            list($module,$eventname) = explode('::',$name);
+            $module = $eventname = null;
+            if( strpos($name,':') !== FALSE ) list($module,$eventname) = explode('::',$name);
             if( $module && $eventname ) $is_event = true;
 
 
@@ -202,12 +203,6 @@ namespace CMSMS {
             self::$_in_process[] = $name;
             $prev_priority = 0;
             foreach( self::$_hooks[$name]->handlers as $obj ) {
-                if( $is_event && $obj->priority == self::PRIORITY_LOW && $prev_priority = self::PRIORITY_NORMAL ) {
-                    die('sending event handlers');
-                    $tmp = $args;
-                    $tmp['from_hook'] = 1;
-                    \Events::SendEvent($module,$eventname,$tmp);
-                }
                 call_user_func_array($obj->callable,$args);
                 $prev_priority = $obj->priority;
             }
