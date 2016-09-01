@@ -66,7 +66,7 @@ function get_username($check = true)
 
 
 /**
- * Checks to see if the user is logged in and the request has the proper key.   If not, redirects the browser
+ * Checks to see if the user is logged in and the request has the proper key.  If not, redirects the browser
  * to the admin login.
  *
  * @since 0.1

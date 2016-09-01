@@ -223,7 +223,7 @@ function cms_htmlentities($val, $param=ENT_QUOTES, $charset="UTF-8", $convert_si
  */
 function debug_bt_to_log()
 {
-    if( CmsApp::get_instance()->config['debug_to_log'] || (function_exists('check_login') && check_login(TRUE)) ) {
+    if( CmsApp::get_instance()->config['debug_to_log'] || (function_exists('get_userid') && get_userid(FALSE)) ) {
         $bt=debug_backtrace();
         $file = $bt[0]['file'];
         $line = $bt[0]['line'];
