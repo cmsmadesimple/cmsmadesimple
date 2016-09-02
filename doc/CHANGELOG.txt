@@ -59,6 +59,8 @@ Core - General
   - No longer allow any modules to auto-upgrade on frontend requests.
   - Fix problem with cms_filecache_driver::clear()
   - Introduces the new Hook mechanism to allow optimizing cms_stylesheet a bit further. All core SendEvent calls are now implemented as hooks  
+  - changegroupperms can now localize permission names,  and add an info string for each permission. (the listpermissions hook)
+  - 
 
   - #11080 - Parameter $adding in GetContentBlockFieldInput always FALSE.
   - #11093 - Bad error message in jquery.cmsms_autorefresh.js.

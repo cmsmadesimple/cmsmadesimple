@@ -141,6 +141,14 @@ final class CmsLangOperations
         return $str;
     }
 
+    /**
+     * Given a realm name, and a key test if the language string exists in the realm.
+     *
+     * @since 2.2
+     * @param string $realm The realm name (required)
+     * @param string $key The language key (required)
+     * @return bool
+     */
     public static function lang_key_exists()
     {
         $args = func_get_args();
