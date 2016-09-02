@@ -120,7 +120,6 @@ final class cms_siteprefs
 			$query = 'UPDATE '.CMS_DB_PREFIX.'siteprefs SET sitepref_value = ? WHERE sitepref_name = ?';
 			$dbr = $db->Execute($query,array($value,$key));
 		}
-        debug_to_log('set '.$key.' = '.$value,__METHOD__);
         global_cache::clear(__CLASS__);
 	}
 
