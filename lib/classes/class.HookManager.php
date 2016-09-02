@@ -170,7 +170,7 @@ namespace CMSMS {
             $args = func_get_args();
             $name = array_shift($args);
             $name = trim($name);
-            if( is_array($args) && count($args) == 1 && is_array($args[0]) && !$is_assoc($args[0]) ) $args = $args[0];
+            //if( is_array($args) && count($args) == 1 && is_array($args[0]) && !$is_assoc($args[0]) ) $args = $args[0];
             $is_event = false;
             $module = $eventname = null;
             if( strpos($name,':') !== FALSE ) list($module,$eventname) = explode('::',$name);
@@ -200,13 +200,15 @@ namespace CMSMS {
                 self::$_hooks[$name]->sorted = TRUE;
             }
 
+            $value = $args;
             self::$_in_process[] = $name;
             $prev_priority = 0;
             foreach( self::$_hooks[$name]->handlers as $obj ) {
-                call_user_func_array($obj->callable,$args);
+                $value = call_user_func_array($obj->callable,$value);
                 $prev_priority = $obj->priority;
             }
             array_pop(self::$_in_process);
+            return $value;
         }
     } // end of class
 

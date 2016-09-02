@@ -46,7 +46,9 @@
   {foreach from=$perms item=perm}
     {cycle values='row1,row2' assign='currow'}
     <tr class="{$currow}">
- 		<td>{$perm->name}</td>
+ 		<td><strong>{$perm->name}</strong>
+		  {if !empty($perm->description)}<div class="description">{$perm->description}</div>{/if}
+		</td>
 		{foreach from=$group_list item=thisgroup}
 			{if $thisgroup->id != -1}
 			{assign var="gid" value=$thisgroup->id}

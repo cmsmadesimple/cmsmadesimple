@@ -141,6 +141,32 @@ final class CmsLangOperations
         return $str;
     }
 
+    public static function lang_key_exists()
+    {
+        $args = func_get_args();
+        if( count($args) == 1 && is_array($args[0]) ) $args = $args[0];
+        if( count($args) < 2 ) return;
+
+        $realm  = $args[0];
+        $key    = $args[1];
+        if( !$realm || !$key ) return;
+
+        global $CMS_ADMIN_PAGE;
+        global $CMS_STYLESHEET;
+        global $CMS_INSTALL_PAGE;
+        if (self::CMSMS_ADMIN_REALM == $realm && !isset($CMS_ADMIN_PAGE) &&
+            !isset($CMS_STYLESHEET) && !isset($CMS_INSTALL_PAGE) &&
+            !self::$_allow_nonadmin_lang ) {
+            trigger_error('Attempt to load admin realm from non admin action');
+            return '';
+        }
+
+        $curlang = CmsNlsOperations::get_current_language();
+        self::_load_realm($realm);
+        if( isset(self::$_langdata[$curlang][$realm][$key]) ) return TRUE;
+        return FALSE;
+    }
+
     /**
      * Given a realm name, a key, and optional parameters return a translated string
      * This function accepts variable arguments.  If no key/realm combination can be found

@@ -133,6 +133,20 @@ $query = "SELECT p.permission_id, p.permission_text, up.group_id FROM ".
 
 $result = $db->Execute($query);
 
+\CMSMS\HookManager::add_hook('listpermissions',function($perm_struct){
+        foreach( $perm_struct as &$one ) {
+            $key = 'perm_'.$one->name;
+            if( \CmsLangOperations::lang_key_exists('admin',$key) ) $one->label = \CmsLangOperations::lang_from_realm('admin',$key);
+            $key = 'permdesc_'.$one->name;
+            if( \CmsLangOperations::lang_key_exists('admin',$key) ) $one->description = \CmsLangOperations::lang_from_realm('admin',$key);
+        }
+        usort($perm_struct,function($a,$b) {
+                return strcmp($a->label,$b->label) ;
+            });
+        return $perm_struct;
+
+    },\CMSMS\HookManager::PRIORITY_HIGH);
+
 $perm_struct = array();
 while($result && $row = $result->FetchRow()) {
   if (isset($perm_struct[$row['permission_id']])) {
@@ -144,10 +158,12 @@ while($result && $row = $result->FetchRow()) {
     $thisPerm->group = array();
     if (!empty($row['group_id'])) $thisPerm->group[$row['group_id']] = 1;
     $thisPerm->id = $row['permission_id'];
-    $thisPerm->name = $row['permission_text'];
+    $thisPerm->name = $thisPerm->label = $row['permission_text'];
     $perm_struct[$row['permission_id']] = $thisPerm;
   }
 }
+$perm_struct = \CMSMS\HookManager::do_hook('listpermissions', $perm_struct );
+
 $smarty->assign('perms',$perm_struct);
 $smarty->assign('cms_secure_param_name',CMS_SECURE_PARAM_NAME);
 $smarty->assign('cms_user_key',$_SESSION[CMS_USER_KEY]);
