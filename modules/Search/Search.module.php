@@ -171,7 +171,7 @@ EOT;
         $db->Execute('TRUNCATE '.CMS_DB_PREFIX.'module_search_index');
         $db->Execute('TRUNCATE '.CMS_DB_PREFIX.'module_search_items');
 
-        \CMSMS\HookManager::do_hook('Search::SearchAllItemsDeleted', [ $module, $id, $attr] );
+        \CMSMS\HookManager::do_hook('Search::SearchAllItemsDeleted' );
     }
 
     public function RegisterEvents()
