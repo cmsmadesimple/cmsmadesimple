@@ -4,6 +4,7 @@ Core - General
   - Now attempt to detect if a template name passed into CmsModule::GetTemplateResource() is already a resource string.
   - endswith is now an accepted function in smarty templates (fixes typo in security policy)
   - Fixes for CmsNlsOperations when using a language detector
+  - Fixes warnings in useroperations.
 
 Content Manager v1.1.3
   - Fix bulk set-non-cachable functionality.
