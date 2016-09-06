@@ -145,7 +145,8 @@ final class CmsNlsOperations
   {
 	  $curlang = '';
 	  if( self::$_cur_lang != '') $curlang = self::$_cur_lang;
-	  if( $lang != '' ) $lang = self::find_nls_match($lang);
+	  if( $lang == '' && \CmsApp::get_instance()->is_frontend_request() && is_object(self::$_fe_language_detector) ) $lang = self::$_fe_language_detector->find_language();
+	  if( $lang != '' ) $lang = self::find_nls_match($lang); // resolve input string
 	  if( $lang == '' ) $lang = self::get_default_language();
 	  if( $curlang == $lang ) return TRUE; // nothing to do.
 
@@ -171,6 +172,7 @@ final class CmsNlsOperations
   public static function get_current_language()
   {
 	  if( isset(self::$_cur_lang) ) return self::$_cur_lang;
+	  if( is_object(self::$_fe_language_detector) && \CmsApp::get_instance()->is_frontend_request() ) return self::$_fe_language_detector->find_language();
 	  return self::get_default_language();
   }
 
@@ -219,7 +221,6 @@ final class CmsNlsOperations
    */
   protected static function get_frontend_language()
   {
-	  if( is_object(self::$_fe_language_detector) ) return self::$_fe_language_detector->find_language();
 	  $x = trim(get_site_preference('frontendlang'));
 	  if( !$x ) $x = 'en_US';
 	  return $x;
