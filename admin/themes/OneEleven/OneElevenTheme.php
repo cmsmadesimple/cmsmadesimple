@@ -241,8 +241,8 @@ class OneElevenTheme extends CmsAdminThemeBase {
 			$smarty->assign('marks', $marks);
 		}
 
-		$headtext = $this->get_value('headertext');
-		$smarty->assign('headertext',$headtext);
+		$smarty->assign('headertext',$this->get_headtext());
+        $smarty->assign('footertext',$this->get_footertext());
 
 		// and some other common variables
 		$smarty->assign('content', str_replace('</body></html>', '', $html));

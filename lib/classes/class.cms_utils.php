@@ -293,7 +293,7 @@ final class cms_utils
 	 * @since 1.11
 	 * @returns CmsAdminThemeBase derived object, or null
 	 */
-	public static function &get_theme_object()
+	public static function get_theme_object()
 	{
 		return CmsAdminThemeBase::GetThemeObject();
 	}

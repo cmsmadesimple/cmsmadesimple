@@ -487,10 +487,9 @@ function get_pageid_or_alias_from_url()
             }
 
             //Get a decent returnid
-            if ($matches['returnid'] == '') $matches['returnid'] = $contentops->GetDefaultContent();
+            if( $matches['returnid'] == '' ) $matches['returnid'] = $contentops->GetDefaultContent();
 
-            // Put the resulting mact into the request so that the subsequent smarty plugins
-            // can grab it...
+            // Put the resulting mact into the request so that the subsequent smarty plugins can grab it...
             $_REQUEST['mact'] = $matches['module'] . ',' . $matches['id'] . ',' . $matches['action'] . ',' . $matches['inline'];
 
             $page = $matches['returnid'];

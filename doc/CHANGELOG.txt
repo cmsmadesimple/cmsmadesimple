@@ -60,7 +60,9 @@ Core - General
   - Fix problem with cms_filecache_driver::clear()
   - Introduces the new Hook mechanism to allow optimizing cms_stylesheet a bit further. All core SendEvent calls are now implemented as hooks  
   - changegroupperms can now localize permission names,  and add an info string for each permission. (the listpermissions hook)
-  - 
+  - Adds add_headtext(), get_headtext(),  add_footertext(), get_footertext() methods to the admin theme class
+  - minor refactoring of admin/index.php, admin/header.php, admin/footer.php and admin/moduleinterface.php
+  - now use hooks so that loaded modules can now add text to the head area of any admin page output.
 
   - #11080 - Parameter $adding in GetContentBlockFieldInput always FALSE.
   - #11093 - Bad error message in jquery.cmsms_autorefresh.js.

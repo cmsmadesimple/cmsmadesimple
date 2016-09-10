@@ -36,5 +36,13 @@ check_login();
 
 include_once("header.php");
 $section = (isset($_GET['section'])) ? trim($_GET['section']) : '';
+// todo: we should just be getting the html, and giving it to the theme. mmaybe
 $themeObject->do_toppage($section);
+$out = \CMSMS\HookManager::do_hook_accumulate('admin_add_headtext');
+if( count($out) ) {
+    foreach( $out as $one ) {
+        $one = trim($one);
+        if( $one ) $themeObject->add_headtext($one);
+    }
+}
 include_once("footer.php");

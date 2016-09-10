@@ -16,8 +16,6 @@ else {
     $smarty->assign('secureparam', CMS_SECURE_PARAM_NAME . '=' . $_SESSION[CMS_USER_KEY]);
     debug_buffer('after theme load');
 
-    if( isset($headtext) && $headtext != '' ) $themeObject->set_value('headertext',$headtext);
-
     // Display notification stuff from modules
     // should be controlled by preferences or something
     $ignoredmodules = explode(',',cms_userprefs::get_for_user($userid,'ignoredmodules'));

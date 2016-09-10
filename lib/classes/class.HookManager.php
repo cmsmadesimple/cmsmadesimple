@@ -74,7 +74,7 @@ namespace CMSMS {
      *
      * @package CMS
      * @license GPL
-     * @since 2.0
+     * @since 2.2
      * @author Robert Campbell <calguy1000@gmail.com>
      */
     class HookManager
@@ -150,12 +150,12 @@ namespace CMSMS {
         }
 
         /**
-         * Trigger a hook.
+         * Trigger a hook, progressively altering the value of the input.
          *
          * This method accepts variable arguments.  The first argument (required) is the name of the hook to execute.
          * Further arguments will be passed to the various handlers.
          *
-         * This method does n ot return a value.
+         * @return mixed The output of this method depends on the hook.
          */
         public static function do_hook()
         {
@@ -202,13 +202,73 @@ namespace CMSMS {
 
             $value = $args;
             self::$_in_process[] = $name;
-            $prev_priority = 0;
             foreach( self::$_hooks[$name]->handlers as $obj ) {
+                if( !is_array( $value ) ) $value = [ $value ];
                 $value = call_user_func_array($obj->callable,$value);
-                $prev_priority = $obj->priority;
             }
             array_pop(self::$_in_process);
             return $value;
+        }
+
+        /**
+         * Trigger a hook, accumulating the results of each hook handler into an array.
+         *
+         * This method accepts variable arguments.  The first argument (required) is the name of the hook to execute.
+         * Further arguments will be passed to the various handlers.
+         *
+         * @return array
+         */
+        public static function do_hook_accumulate()
+        {
+            $is_assoc = function($in) {
+                $keys = array_keys($in);
+                $n = 0;
+                for( $n = 0; $n < count($keys); $n++ ) {
+                    if( $keys[$n] != $n ) return FALSE;
+                }
+                return TRUE;
+            };
+            $args = func_get_args();
+            $name = array_shift($args);
+            $name = trim($name);
+            //if( is_array($args) && count($args) == 1 && is_array($args[0]) && !$is_assoc($args[0]) ) $args = $args[0];
+            $is_event = false;
+            $module = $eventname = null;
+            if( strpos($name,':') !== FALSE ) list($module,$eventname) = explode('::',$name);
+            if( $module && $eventname ) $is_event = true;
+
+            if( $is_event && (!isset(self::$_hooks[$name]) || !self::$_hooks[$name]->sorted) ) {
+                // insert a hook to handle the event, be sure we only do this once.
+                $event_caller = function($params) use ($module,$eventname) {
+                    $tmp = $module.'::'.$eventname;
+                    \Events::SendEvent($module,$eventname,$params);
+                };
+                if( !isset(self::$_hooks[$name]) ) self::add_hook($name,$event_caller);
+            }
+
+            if( !isset(self::$_hooks[$name]) || !count(self::$_hooks[$name]->handlers)  ) return; // nothing to do.
+
+            // sort the handlers.
+            if( !self::$_hooks[$name]->sorted ) {
+                if( count(self::$_hooks[$name]->handlers) > 1 ) {
+                    usort(self::$_hooks[$name]->handlers,function($a,$b){
+                            if( $a->priority < $b->priority ) return -1;
+                            if( $a->priority > $b->priority ) return 1;
+                            return 0;
+                        });
+                }
+                self::$_hooks[$name]->sorted = TRUE;
+            }
+
+            $out = [];
+            $value = $args;
+            if( !is_array( $value ) ) $value = [ $value ];
+            self::$_in_process[] = $name;
+            foreach( self::$_hooks[$name]->handlers as $obj ) {
+                $out[] = call_user_func_array($obj->callable,$value);
+            }
+            array_pop(self::$_in_process);
+            return $out;
         }
     } // end of class
 

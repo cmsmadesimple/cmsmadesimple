@@ -103,6 +103,7 @@
 			<!-- start footer -->
 			{include file='footer.tpl'}
 			<!-- end footer //-->
+			{$footertext|default:''}
 		</div>
 		<!-- end container //-->
 		</body>
