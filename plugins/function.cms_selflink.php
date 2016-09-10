@@ -174,7 +174,7 @@ function smarty_function_cms_selflink($params, &$smarty)
 			// parent page.
 			$node = $manager->find_by_tag('id',$startpage);
 			if( !$node ) return;
-			$node->get_parent();
+			$node = $node->get_parent();
 			if( !$node ) return;
 			$content = $node->GetContent();
 			if( !$content ) return;
