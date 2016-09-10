@@ -99,6 +99,13 @@ if( is_array($list) && count($list) ) {
     }
 }
 
+$out = \CMSMS\HookManager::do_hook_accumulate('admin_add_footertext');
+if( count($out) ) {
+    foreach( $out as $one ) {
+        $one = trim($one);
+        if( $one ) $themeObject->add_footertext($one);
+    }
+}
 
 $bodycontent = $themeObject->postprocess($bodycontent);
 echo $bodycontent;
