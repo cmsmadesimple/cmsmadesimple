@@ -215,6 +215,7 @@ if (isset($params['submit'])) {
                                               'status' => $status,
                                               'start_time' => $startdate,
                                               'end_time' => $enddate,
+                                              'postdate' => $postdate,
                                               'useexp' => $useexp,
                                               'extra' => $extra ));
             // put mention into the admin log

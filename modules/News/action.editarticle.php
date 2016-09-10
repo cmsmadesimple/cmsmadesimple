@@ -243,6 +243,7 @@ if (isset($params['submit']) || isset($params['apply'])) {
             'status' => $status,
             'start_time' => $startdate,
             'end_time' => $enddate,
+            'post_time' => $postdate,
             'extra' => $extra,
             'useexp' => $useexp,
             'news_url' => $news_url
