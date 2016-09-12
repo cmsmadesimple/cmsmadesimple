@@ -16,6 +16,7 @@ final class session implements \ArrayAccess
           $session_key = substr(md5(__DIR__),0,10);
           @session_name('CMSIC'.$session_key);
           @session_cache_limiter('nocache');
+	  $res = null;
           if( !@session_id() ) $res = @session_start();
           if( !$res ) throw new \RuntimeException('Problem starting the session (system configuration problem?)');
           self::$_session_id = session_id();
