@@ -161,7 +161,7 @@ $(document).ready(function(){
 			</p>
 		</div>
 		<div class="pageoverflow">
-			<p class="pagetext"><label for="basic_attributes">{lang('basic_attributes')}:</label>&nbsp;{cms_help key2='settings_basicattribs' title=lang('basic_attributes')}</p>
+			<p class="pagetext"><label for="basic_attributes">{lang('basic_attributes')}:</label>&nbsp;{cms_help key2='settings_basicattribs2' title=lang('basic_attributes')}</p>
 			<p class="pageinput">
 				<select id="basic_attributes" class="multicolumn" name="basic_attributes[]" multiple="multiple" size="5">
 					{cms_html_options options=$all_attributes selected=$basic_attributes}

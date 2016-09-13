@@ -63,6 +63,7 @@ Core - General
   - Adds add_headtext(), get_headtext(),  add_footertext(), get_footertext() methods to the admin theme class
   - minor refactoring of admin/index.php, admin/header.php, admin/footer.php and admin/moduleinterface.php
   - now use hooks so that loaded modules can now add text to the head area of any admin page output.
+  - Change the help for the basic attributes.
 
   - #11080 - Parameter $adding in GetContentBlockFieldInput always FALSE.
   - #11093 - Bad error message in jquery.cmsms_autorefresh.js.
