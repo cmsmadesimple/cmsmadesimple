@@ -49,12 +49,28 @@ $userops      = UserOperations::get_instance();
  * Logic
  ---------------------*/
 
-if (isset($_GET["toggleactive"])) {
+if( isset($_GET['switchuser']) ) {
+    // switch user functionality is only allowed to members of the admin group
+    if( !\UserOperations::get_instance()->UserInGroup($userid,1) ) {
+        $error .= '<li>'.lang('permissiondenied').'</li>';
+    } else {
+        $to_uid = (int) $_GET['switchuser'];
+        $to_user = $userops->LoadUserByID($to_uid);
+        if( !$to_user ) {
+            $error .= '<li>'.lang('usernotfound');
+        }
+        else {
+            CMSMS\LoginOperations::get_instance()->set_effective_user($to_user);
+            $urlext       = '?' . CMS_SECURE_PARAM_NAME . '=' . $_SESSION[CMS_USER_KEY];
+            redirect('index.php'.$urlext);
+        }
+    }
+}
+else if (isset($_GET["toggleactive"])) {
     if ($_GET["toggleactive"] == 1) {
         $error .= "<li>" . lang('errorupdatinguser') . "</li>";
     } else {
 
-        $thisuser = $userops->LoadUserByID($_GET["toggleactive"]);
 
         if ($thisuser) {
 
@@ -222,6 +238,7 @@ if (false == empty($message)) echo '<div class="pagemcontainer"><p class="pageme
 $out      = array();
 $offset   = ((int)$page - 1) * $limit;
 $userlist = $userops->LoadUsers($limit, $offset);
+$is_admin = $userops->UserInGroup($userid,1);
 
 foreach ($userlist as $one) {
     $out[$one->id] = $one->username;
@@ -234,6 +251,7 @@ foreach ($userlist as &$oneuser) {
     $oneuser->pagecount = $userops->CountPageOwnershipById($oneuser->id);
 }
 
+$smarty->assign('is_admin',$is_admin);
 $smarty->assign('users', $userlist);
 $smarty->assign('my_userid', get_userid());
 $smarty->assign('urlext', $urlext);

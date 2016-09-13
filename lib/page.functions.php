@@ -30,6 +30,9 @@
 /**
  * Gets the userid of the currently logged in user.
  *
+ * If an effective uid has been set in the session, AND the primary user is a member of the admin group
+ * then allow emulating that effective uid.
+ *
  * @since 0.1
  * @param  boolean $redirect Redirect to the admin login page if the user is not logged in.
  * @return integer The UID of the logged in administrator, otherwise FALSE
@@ -37,7 +40,7 @@
 function get_userid($redirect = true)
 {
     $login_ops = \CMSMS\LoginOperations::get_instance();
-    $uid = $login_ops->get_loggedin_uid();
+    $uid = $login_ops->get_effective_uid();
     if( !$uid && $redirect ) {
         $config = \cms_config::get_instance();
         redirect($config['admin_url']."/login.php");
@@ -49,6 +52,9 @@ function get_userid($redirect = true)
 /**
  * Gets the username of the currently logged in user.
  *
+ * If an effective username has been set in the session, AND the primary user is a member of the admin group
+ * then return the effective username.
+ *
  * @since 2.0
  * @param  boolean $check Redirect to the admin login page if the user is not logged in.
  * @return string the username of the logged in user.
@@ -56,7 +62,7 @@ function get_userid($redirect = true)
 function get_username($check = true)
 {
     $login_ops = \CMSMS\LoginOperations::get_instance();
-    $uname = $login_ops->get_loggedin_username();
+    $uname = $login_ops->get_effective_username();
     if( !$uname && $check ) {
         $config = \cms_config::get_instance();
         redirect($config['admin_url']."/login.php");
@@ -113,7 +119,7 @@ function check_login($no_redirect = false)
  */
 function check_permission($userid, $permname)
 {
-  return UserOperations::get_instance()->CheckPermission($userid,$permname);
+    return UserOperations::get_instance()->CheckPermission($userid,$permname);
 }
 
 
@@ -129,11 +135,11 @@ function check_permission($userid, $permname)
  */
 function check_ownership($userid, $contentid = '')
 {
-  $userops = UserOperations::get_instance();
-  $adminuser = $userops->UserInGroup($userid,1);
-  if( $adminuser ) return true;
+    $userops = UserOperations::get_instance();
+    $adminuser = $userops->UserInGroup($userid,1);
+    if( $adminuser ) return true;
 
-  return ContentOperations::get_instance()->CheckPageOwnership($userid,$contentid);
+    return ContentOperations::get_instance()->CheckPageOwnership($userid,$contentid);
 }
 
 
@@ -150,7 +156,7 @@ function check_ownership($userid, $contentid = '')
  */
 function check_authorship($userid, $contentid = '')
 {
-  return ContentOperations::get_instance()->CheckPageAuthorship($userid,$contentid);
+    return ContentOperations::get_instance()->CheckPageAuthorship($userid,$contentid);
 }
 
 
@@ -164,7 +170,7 @@ function check_authorship($userid, $contentid = '')
  */
 function author_pages($userid)
 {
-  return ContentOperations::get_instance()->GetPageAccessForUser($userid);
+    return ContentOperations::get_instance()->GetPageAccessForUser($userid);
 }
 
 

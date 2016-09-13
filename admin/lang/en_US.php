@@ -165,6 +165,7 @@ $lang['confirm_runusertag'] = 'Running a UDT may have adverse effects on your we
 $lang['confirm_set_template_1'] = "Are you sure you want to set all of these pages to use this template";
 $lang['confirm_set_template_2'] = "Yes, I am sure.";
 $lang['confirm_set_template_3'] = "Yes, I am <strong>really</strong> sure.";
+$lang['confirm_switchuser'] = 'Are you sure you want to switch the effective UID to this user?  You will need to logout from the admin console and re-login to resume normal operations under your user account.';
 $lang['confirm_toggleuseractive'] = "Are you sure you want to toggle the active state of this user?";
 $lang['confirm_uploadmodule'] = "Are you sure you would like to upload the selected XML file. Incorrectly uploading a module file may break a functioning website";
 $lang['connection_error'] = "Outgoing HTTP connections do not appear to work! There is a firewall or some ACL for external connections? This will result in module manager, and potentially other functionality failing.";

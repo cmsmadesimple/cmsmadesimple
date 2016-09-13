@@ -69,7 +69,7 @@ final class LoginOperations
         return unserialize(base64_decode(str_rot13($data)));
     }
 
-    public function save_authentication(\User $user)
+    public function save_authentication(\User $user,\User $effective_user = null)
     {
         // saves session/cookie data
         if( $user->id < 1 || empty($user->password) ) throw new \LogicException('User information invalid for '.__METHOD__);
@@ -81,12 +81,20 @@ final class LoginOperations
         $private_data['uid'] = $user->id;
         $private_data['username'] = $user->username;
         $private_data['cksum'] = $tmp;
+        $private_data['eff_uid'] = null;
+        $private_data['eff_username'] = null;
+        if( $effective_user && $effective_user->id > 0 && $effective_user->id != $user->id ) {
+            $private_data['eff_uid'] = $effective_user->id;
+            $private_data['eff_username'] = $effective_user->username;
+        }
         $_SESSION[$this->_loginkey] = $this->_encrypt($private_data);
         \cms_cookies::set($this->_loginkey,$_SESSION[$this->_loginkey]);
 
         $key = substr(str_shuffle(sha1(__DIR__.$user->id.time().session_id())),-19);
         $_SESSION[CMS_USER_KEY] = $key;
         \cms_cookies::set(CMS_SECURE_PARAM_NAME,$key);
+        unset($this->_data);
+        return $key;
     }
 
     protected function _get_data()
@@ -154,4 +162,36 @@ final class LoginOperations
         return trim($data['username']);
     }
 
+    public function get_loggedin_user()
+    {
+        $uid = $this->get_loggedin_uid();
+        if( $uid < 1 ) return;
+        $user = \UserOperations::get_instance()->LoadUserByID($uid);
+        return $user;
+    }
+
+    public function get_effective_uid()
+    {
+        $data = $this->_get_data();
+        if( !$data ) return;
+        if( isset($data['eff_uid']) && $data['eff_uid'] ) return $data['eff_uid'];
+        return $this->get_loggedin_uid();
+    }
+
+    public function get_effective_username()
+    {
+        $data = $this->_get_data();
+        if( !$data ) return;
+        if( isset($data['eff_username']) && $data['eff_username'] ) return $data['eff_username'];
+        return $this->get_loggedin_username();
+    }
+
+    public function set_effective_user(\User $e_user = null)
+    {
+        $li_user = $this->get_loggedin_user();
+        if( $e_user && $e_user->id == $li_user->id ) return;
+
+        $new_key = $this->save_authentication($li_user,$e_user);
+        return $new_key;
+    }
 }

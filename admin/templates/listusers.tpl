@@ -3,6 +3,14 @@ $(document).ready(function() {
 
     $('#sel_all').cmsms_checkall();
 
+    $('.switchuser').click(function(ev){
+	ev.preventDefault();
+	var _href = $(this).attr('href');
+	cms_confirm('{lang('confirm_switchuser')|escape:'javascript'}').done(function(){
+	    window.location.href = _href;
+	});
+    });
+
     $('.toggleactive').click(function(ev){
         ev.preventDefault();
 	var _href = $(this).attr('href');
@@ -76,6 +84,7 @@ $(document).ready(function() {
             <tr>
                 <th>{lang('username')}</th>
                 <th style="text-align: center;">{lang('active')}</th>
+		{if $is_admin}<th class="pageicon"></th>{/if}
                 <th class="pageicon"></th>
                 <th class="pageicon"></th>
                 <th class="pageicon"><input type="checkbox" id="sel_all" value="1" title="{lang('selectall')}"/></th>
@@ -95,6 +104,7 @@ $(document).ready(function() {
                         <span title="{lang('info_noedituser')}">{$user->username}</span>
                     {/if}
                 </td>
+
                 <td style="text-align: center;">
                     {if $can_edit && $user->id != $my_userid}
                         <a href="listusers.php{$urlext}&amp;toggleactive={$user->id}" title="{lang('info_user_active2')}" class="toggleactive">
@@ -102,6 +112,17 @@ $(document).ready(function() {
                         </a>
                     {/if}
                 </td>
+
+		{if $is_admin}
+		<td>
+		  {if $user->id != $my_userid}
+		  <a href="listusers.php{$urlext}&amp;switchuser={$user->id}" title="{lang('info_user_switch')}" class="switchuser">
+		     {admin_icon icon='run.gif'}
+		  </a>
+		  {/if}
+		</td>
+		{/if}
+
                 <td>
                     {if $can_edit}
                         <a href="edituser.php{$urlext}&amp;user_id={$user->id}" title="{lang('edituser')}">{admin_icon icon='edit.gif'}</a>
