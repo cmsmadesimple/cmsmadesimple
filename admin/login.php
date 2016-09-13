@@ -159,7 +159,7 @@ if (isset($_SESSION['logout_user_now'])) {
     $username = $login_ops->get_loggedin_username();
     \CMSMS\HookManager::do_hook('Core::LogoutPre', [ 'uid'=>$userid, 'username'=>$username ] );
     $login_ops->deauthenticate(); // unset all the cruft needed to make sure we're logged in.
-    \CMSMS\HookManager::do_hook('Core::LogoutPost');
+    \CMSMS\HookManager::do_hook('Core::LogoutPost', [ 'uid'=>$userid, 'username'=>$username ] );
     audit($userid, "Admin Username: ".$username, 'Logged Out');
 }
 
