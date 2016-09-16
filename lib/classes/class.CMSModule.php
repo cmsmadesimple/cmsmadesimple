@@ -1470,6 +1470,12 @@ abstract class CMSModule
         $id = cms_htmlentities($id);
         $name = cms_htmlentities($name);
 
+        if( $returnid != '' ) {
+            $tmp = $params;
+            $tmp['module'] = $this->GetName();
+            \CMSMS\HookManager::do_hook('module_action', $tmp);
+        }
+
         $gCms = CmsApp::get_instance(); // in scope for compatibility reasons.
         //$smarty = $gCms->GetSmarty(); // use the passed in template.
         $smarty->assign('actionid',$id);
@@ -2501,6 +2507,7 @@ abstract class CMSModule
      */
     final public function GetTemplateResource($template)
     {
+        if( strpos($template,':') !== FALSE ) return $template;
         if( endswith($template,'.tpl') ) return 'module_file_tpl:'.$this->GetName().';'.$template;
         return 'cms_template:'.$template;
     }

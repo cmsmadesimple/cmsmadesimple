@@ -174,7 +174,7 @@ function smarty_function_cms_selflink($params, &$smarty)
 			// parent page.
 			$node = $manager->find_by_tag('id',$startpage);
 			if( !$node ) return;
-			$node->get_parent();
+			$node = $node->get_parent();
 			if( !$node ) return;
 			$content = $node->GetContent();
 			if( !$content ) return;
@@ -303,3 +303,5 @@ function smarty_function_cms_selflink($params, &$smarty)
 function smarty_cms_help_function_cms_selflink() {
 		echo lang_by_realm('tags','help_function_cms_selflink');
 }
+
+?>

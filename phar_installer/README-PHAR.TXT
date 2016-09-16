@@ -113,7 +113,7 @@ Step 9:
 ---------------------------
 Afterwards
 ---------------------------
-After successful completion of the installation assistant, you should, using either the command line or your web hosts file manager,
+After successful completion of the installation assistant, you should delete the installation assistant .php file.
 It is important for security purposes that you delete the installation assistant .php file and this text file from your server after verifying that the operation has succeeded.
 
 ---------------------------

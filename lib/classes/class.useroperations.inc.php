@@ -86,7 +86,7 @@ class UserOperations
 	 * @returns array An array of User objects
 	 * @since 0.6.1
 	 */
-	function &LoadUsers($limit = 10000,$offset = 0)
+	function LoadUsers($limit = 10000,$offset = 0)
 	{
 		if( !is_array($this->_users) ) {
 			$gCms = CmsApp::get_instance();
@@ -125,7 +125,7 @@ class UserOperations
 	 * @param mixed $groupid Group for the loaded users
 	 * @return array An array of User objects
 	 */
-	function &LoadUsersInGroup($groupid)
+	function LoadUsersInGroup($groupid)
 	{
 		$gCms = CmsApp::get_instance();
 		$db = $gCms->GetDb();
@@ -164,7 +164,7 @@ class UserOperations
 	function LoadUserByUsername($username, $password = '', $activeonly = true, $adminaccessonly = false)
 	{
 		// note: does not use cache
-		$result = false;
+		$result = null;
 		$gCms = CmsApp::get_instance();
 		$db = $gCms->GetDb();
 
