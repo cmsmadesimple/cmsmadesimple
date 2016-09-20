@@ -91,6 +91,7 @@
 {/if}
 
 <div id="NewsPostDetailContent">
+        {* note, for security purposes we do not pass the content through smarty before displaying it.  This is incase your articles can come from untrusted sources. *}
 	{$entry->content}
 </div>
 

@@ -58,6 +58,7 @@
 {/if}
 
 {if $entry->summary}
+        {* note, for security purposes, incase News articles can come from untrused sources, we do not pass the summary or content through smarty in the default templates *} 
 	<div class="NewsSummarySummary">
 		{$entry->summary}
 	</div>
@@ -67,7 +68,7 @@
 	</div>
 
 {else if $entry->content}
-
+        {* note, for security purposes, incase News articles can come from untrused sources, we do not pass the summary or content through smarty in the default templates *} 
 	<div class="NewsSummaryContent">
 		{$entry->content}
 	</div>
