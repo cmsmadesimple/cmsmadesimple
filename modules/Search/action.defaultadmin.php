@@ -105,8 +105,10 @@ $smarty->assign('input_alpharesults',
 
 $contentops = $gCms->GetContentOperations();
 $smarty->assign('prompt_resultpage',$this->Lang('prompt_resultpage'));
+/*
 $smarty->assign('input_resultpage',
                 $contentops->CreateHierarchyDropdown('',$this->GetPreference('resultpage',-1),$id.'resultpage',1));
+*/
 
 $smarty->assign('submit',$this->CreateInputSubmit($id, 'submit', $this->Lang('submit')));
 $smarty->assign('formend',$this->CreateFormEnd());

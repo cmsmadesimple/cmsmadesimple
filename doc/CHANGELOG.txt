@@ -65,6 +65,11 @@ Core - General
   - now use hooks so that loaded modules can now add text to the head area of any admin page output.
   - Change the help for the basic attributes.
   - Adds new 'switch user' functionality for members of the admin group.
+  - Re-factor the content page selector ... now supports two modes (one for a simple list, and the previous dynamic one that is faster for large sites)
+    the simple list mode is used for users with limited edit capabilities on pages.
+  - Adds a new smarty plugin {page_selector} to the admin lib.
+  - New arguments to the CreateHierarchyDropdown function (deprecated) and adjust documentation.
+  - Content pages now have the ability to control whether or not the page wants any more children.
 
   - #11080 - Parameter $adding in GetContentBlockFieldInput always FALSE.
   - #11093 - Bad error message in jquery.cmsms_autorefresh.js.

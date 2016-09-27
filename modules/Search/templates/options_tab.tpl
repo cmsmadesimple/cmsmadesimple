@@ -23,7 +23,7 @@
 </div>
 <div class="pageoverflow">
   <p class="pagetext">{$prompt_resultpage}:</p>
-  <p class="pageinput">{$input_resultpage}</p>
+  <p class="pageinput">{page_selector name="{$actionid}resultpage" value=$mod->GetPreference('resultpage')}</p>
 </div>
 <div class="pageoverflow">
   <p class="pagetext"></p>

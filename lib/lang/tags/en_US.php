@@ -1,4 +1,19 @@
 <?php
+$lang['help_function_page_selector'] = <<<EOT
+<h3>What does this do?</h3>
+<p>This admin plugin provides a control to allow selecting a content page, or other item.  This is suitable for allowing a site administrator to select a page that will be stored in a preference.</p>
+<h3>Usage:</h3>
+<pre><code>{page_selector name=dfltpage value=\$currentpage}</code></pre>
+<h3>What Parameters Does it Take?</h3>
+<ul>
+  <li>name - <em>(string)</em> - The name of the input field.</p>
+  <li>value - <em>(int)</em> - The id of the currently selected page.</p>
+  <li>allowcurrent - <em>(bool)</em> - Whether or not to allow the currently selected item to be re-selected.  The default value is false.</li>
+  <li>allow_all - <em>(bool)</em> - Whether or not to allow inactive content items, or content items that do not have usable links to be selected. The default value is false</li>
+  <li>for_child - <em>(bool)</em> - Indicates that we are selecting a parent page for a new content item.  The default value is false.</p>
+  </li>
+</ul>
+EOT;
 $lang['help_function_cms_html_options'] = <<<EOT
 <h3>What does this do?</h3>
 <p>This is a powerful plugin to render options for select elements into html &lt;option&gt; and &lt;optgroup&gt; tags.  Each option can have child elements, it's own title tag, and it's own class attribute.</p>

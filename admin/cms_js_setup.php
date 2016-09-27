@@ -40,6 +40,7 @@ $data['lang_confirm'] = lang('confirm');
 $data['lang_yes'] = lang('yes');
 $data['lang_no'] = lang('no');
 $data['lang_none'] = lang('none');
+$data['lang_disabled'] = lang('disabled');
 $data['lang_hierselect_title'] = lang('title_hierselect_select');
 $data['lang_filetobig'] = lang('upload_filetobig');
 $data['lang_largeupload'] = lang('upload_largeupload');
@@ -60,10 +61,8 @@ $out .= <<<EOT
 function cms_lang(key) {
     'use strict';
     key = 'lang_'+key;
-    if( typeof(cms_data[key]) !== 'undefined' ) {
-      return cms_data[key];
-    }
-    alert('notset');
+    if( typeof(cms_data[key]) !== 'undefined' ) return cms_data[key];
+    alert('lang key '+key+' notset');
 }
 EOT;
 header('Pragma: public');

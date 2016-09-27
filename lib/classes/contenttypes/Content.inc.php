@@ -438,11 +438,15 @@ class Content extends ContentBase
                           <input id="id_disablewysiwyg" type="checkbox" name="disable_wysiwyg" value="1"  '.($disable_wysiwyg==1?'checked="checked"':'').'/>');
 
         case 'wantschildren':
-            $wantschildren = $this->WantsChildren();
-            $help = '&nbsp;'.cms_admin_utils::get_help_tag('core','help_page_wantschildren',lang('help_title_page_wantschildren'));
-            return array('<label for="id_wantschildren">'.lang('wantschildren').':</label>'.$help,
-                         '<input type="hidden" name="wantschildren" value="0"/>
-                          <input id="id_wantschildren" type="checkbox" name="wantschildren" value="1" '.($wantschildren?'checked="checked"':'').'/>');
+			$showadmin = ContentOperations::get_instance()->CheckPageOwnership(get_userid(), $this->Id());
+			if ( check_permission(get_userid(),'Manage All Content') || $showadmin ) {
+                $wantschildren = $this->WantsChildren();
+                $help = '&nbsp;'.cms_admin_utils::get_help_tag('core','help_page_wantschildren',lang('help_title_page_wantschildren'));
+                return array('<label for="id_wantschildren">'.lang('wantschildren').':</label>'.$help,
+                             '<input type="hidden" name="wantschildren" value="0"/>
+                              <input id="id_wantschildren" type="checkbox" name="wantschildren" value="1" '.($wantschildren?'checked="checked"':'').'/>');
+            }
+            break;
 
 		default:
 			// check if it's content block

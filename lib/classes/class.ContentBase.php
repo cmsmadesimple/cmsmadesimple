@@ -1300,6 +1300,8 @@ abstract class ContentBase
 
 	/**
 	 * Convert the current object to an array.
+     *
+     * This can be considered a simple DTO (Data Transfer Object)
 	 *
 	 * @since 2.0
 	 * @author Robert Campbell
@@ -1333,6 +1335,7 @@ abstract class ContentBase
 		$out['create_date'] = $this->mCreationDate;
 		$out['modified_date'] = $this->mModifiedDate;
         $out['wants_children'] = $this->WantsChildren();
+        $out['has_usable_link'] = $this->HasUsableLink();
 		return $out;
 	}
 
@@ -2300,7 +2303,7 @@ abstract class ContentBase
 
 		case 'parent':
 			$contentops = ContentOperations::get_instance();
-			$tmp = $contentops->CreateHierarchyDropdown($this->mId, $this->mParentId, 'parent_id', 0, 1, 0, 1,cms_siteprefs::get('listcontent_showtitle',true) );
+			$tmp = $contentops->CreateHierarchyDropdown($this->mId, $this->mParentId, 'parent_id', 1, 1, 0, 1, 1);
 			if( empty($tmp) && !check_permission(get_userid(),'Manage All Content') ) {
 				return array('','<input type="hidden" name="parent_id" value="'.$this->mParentId.'" />');
             }
@@ -2380,7 +2383,7 @@ abstract class ContentBase
 		case 'accesskey':
 			$help = '&nbsp;'.cms_admin_utils::get_help_tag('core','help_content_accesskey',lang('help_title_content_accesskey'));
 			return array('<label for="accesskey">'.lang('accesskey').':</label>'.$help,
-						 '<input type="text" name="accesskey" id="accesskey" maxlength="5" value="'.cms_htmlentities($this->mAccessKey).'" />');
+						 '<input type="text" name=accesskey" id="accesskey" maxlength="5" value="'.cms_htmlentities($this->mAccessKey).'" />');
 
 		case 'tabindex':
 			$help = '&nbsp;'.cms_admin_utils::get_help_tag('core','help_content_tabindex',lang('help_title_content_tabindex'));
@@ -2404,8 +2407,8 @@ abstract class ContentBase
 
 		case 'owner':
 			$showadmin = ContentOperations::get_instance()->CheckPageOwnership(get_userid(), $this->Id());
-			$userops = UserOperations::get_instance();
 			if (!$adding && (check_permission(get_userid(),'Manage All Content') || $showadmin) ) {
+                $userops = UserOperations::get_instance();
 				$help = '&nbsp;'.cms_admin_utils::get_help_tag('core','help_content_owner',lang('help_title_content_owner'));
 				return array('<label for="owner">'.lang('owner').':</label>'.$help, $userops->GenerateDropdown($this->Owner()));
 			}

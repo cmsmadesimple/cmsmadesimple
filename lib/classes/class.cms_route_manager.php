@@ -286,7 +286,7 @@ final class cms_route_manager
 	 * @param CmsRoute $route The dynamic route object to add
 	 * @return bool.
 	 */
-	public static function add_dynamic(CmsRoute& $route)
+	public static function add_dynamic(CmsRoute $route)
 	{
 		if( self::route_exists($route) ) return FALSE;
 		if( !is_array(self::$_dynamic_routes) ) self::$_dynamic_routes = array();

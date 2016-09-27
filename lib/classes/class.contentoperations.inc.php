@@ -772,37 +772,41 @@ class ContentOperations
 	 * in the admin and various modules.  If $current or $parent variables are passed, care is taken
 	 * to make sure that children which could cause a loop are hidden, in cases of when you're creating
 	 * a dropdown for changing a content object's parent.
+     *
+     * This method was rewritten for 2.0 to use the jquery hierselector plugin to better accommodate larger websites.
+     *
+     * Since many parameters are now ignored, A new method needs to be writtent o replace this archaic method...
+     * so consider this method to be deprecateed.
 	 *
-	 * @param string $current The currently selected content object.  If none is given, we show all items.
-	 * @param string $parent The parent of the currently selected content object. If none is given, we show all items.
-	 * @param string $name The html name of the dropdown
+     * @deprecated
+	 * @param string $current The currently selected content object.  If none is given, we show all items (ignored since 2.0).
+	 * @param string $value The id of the currently selected content object.
+	 * @param string $name The html name of the dropdown.
 	 * @param bool $allowcurrent Overrides the logic if $current and/or $parent are passed. Defaults to false.
-	 * @param bool $use_perms If true, checks authorship permissions on pages and only shows those the current
-	 *                user has access to.
-	 * @param bool $ignore_current Ignores the value of $current totally by not marking any items as invalid.
-	 * @param bool $allow_all If true, show all items, even if the content object
-	 *                           doesn't have a valid link. Defaults to false.
-	 * @param bool $use_name if true use Name() else use MenuText() Defaults to using the system preference.
-	 * @return string The html dropdown of the hierarchy
+	 * @param bool $use_perms If true, checks authorship permissions on pages and only shows those the current user has authorship of (can edit)
+	 * @param bool $ignore_current (ignored as of 2.0)
+         (Before 2.2 this parameter was called ignore_current and
+	 * @param bool $allow_all If true, show all items, even if the content object doesn't have a valid link. Defaults to false.
+     * @param bool $for_child If true, assume that we want to add a new child and obey the WantsChildren flag of each content page. (new in 2.2).
+	 * @return string The html dropdown of the hierarchy.
 	 */
-	function CreateHierarchyDropdown($current = '', $parent = '', $name = 'parent_id', $allowcurrent = 0,
-									 $use_perms = 0, $ignore_current = 0, $allow_all = false, $use_name = null)
+	function CreateHierarchyDropdown($ignored = '', $value = '', $name = 'parent_id', $allowcurrent = 0,
+									 $use_perms = 0, $ignore_current = 0, $allow_all = false, $for_child = false )
 	{
 		static $count = 0;
 		$count++;
 		$id = 'cms_hierdropdown'.$count;
-		$value = $parent;
+        $value = (int) $value;
+        $uid = get_userid(FALSE);
 
 		$out = "<input type=\"text\" title=\"".lang('title_hierselect')."\" name=\"{$name}\" id=\"{$id}\" class=\"cms_hierdropdown\" value=\"{$value}\" size=\"50\" maxlength=\"50\"/>";
 		$opts = array();
-		//$opts['value'] = $parent;
-		$opts['current'] = $current;
-		$opts['parent'] = $parent;
+		$opts['current'] = $value;
 		$opts['allowcurrent'] = ($allowcurrent)?'true':'false';
-		$opts['use_perms'] = ($use_perms)?'true':'false';
-		$opts['ignore_current'] = ($ignore_current)?'true':'false';
 		$opts['allow_all'] = ($allow_all)?'true':'false';
-		$opts['use_name'] = ($use_name)?'true':'false';
+		$opts['use_perms'] = ($use_perms)?'true':'false';
+        $opts['for_child'] = ($for_child)?'true':'false';
+        $opts['use_simple'] = !(check_permission($uid,'Manage All Content') || check_permission($uid,'Modify Any Page'));
 		$str = '{';
 		foreach($opts as $key => $val) {
 			if( $val == '' ) continue;
@@ -1034,7 +1038,7 @@ class ContentOperations
 	 * @since 2.0
 	 * @author Robert Campbell <calguy1000@hotmail.com>
 	 * @param int $userid The userid
-	 * @return array Array of page id's
+	 * @return int[] Array of page id's
 	 */
 	public function GetPageAccessForUser($userid)
 	{

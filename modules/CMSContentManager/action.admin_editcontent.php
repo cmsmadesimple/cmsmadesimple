@@ -105,6 +105,12 @@ try {
         $content_obj->SetAdditionalEditors($pagedefaults['addteditors']);
         $dflt_parent = (int) \cms_userprefs::get('default_parent');
         $dflt_parent = max(-1,$dflt_parent);
+        if( !$this->CheckPermission('Modify Any Page') || !$this->CheckPermission('Manage All Content') ) {
+            // we get the list of pages that this user has access to.
+            // if he is not an editor of the default page, then we use the first page the user has access to, or -1
+            $list = $contentops->GetPageAccessForUser($user_id);
+            if( count($list) && !in_array($dflt_parent,$list) ) $dflt_parent = $list[0];
+        }
         $content_obj->SetParentId($dflt_parent);
     }
     else {
