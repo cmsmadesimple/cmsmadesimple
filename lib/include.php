@@ -80,9 +80,10 @@ $config = $_app->GetConfig();
 
 if( isset($CMS_ADMIN_PAGE) ) {
     function cms_admin_sendheaders($content_type = 'text/html',$charset = '') {
-        if( !$charset ) $charset = get_encoding();
+	header('Referrer-Policy: same-origin');
 
         // Language shizzle
+        if( !$charset ) $charset = get_encoding();
         header("Content-Type: $content_type; charset=$charset");
     }
 

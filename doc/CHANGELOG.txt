@@ -6,6 +6,7 @@ Core - General
   - Fixes for CmsNlsOperations when using a language detector
   - Fixes warnings in useroperations.
   - Fixes problem with cms_selflink dir='up' since 2013
+  - Set Referrer-Policy header for all admin requests.
 
 Content Manager v1.1.3
   - Fix bulk set-non-cachable functionality.
