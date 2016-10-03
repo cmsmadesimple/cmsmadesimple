@@ -210,6 +210,10 @@ if (isset($_POST["username"]) && isset($_POST["password"])) {
     generate_user_object($oneuser->id);
     $_SESSION['login_user_id'] = $oneuser->id;
     $_SESSION['login_user_username'] = $oneuser->username;
+    // maybe change this algorithm.
+    $key = substr(str_shuffle(sha1($dirname.time().session_id())),-16);
+    $_SESSION[CMS_USER_KEY] = $key;
+    cms_cookies::set(CMS_SECURE_PARAM_NAME,$key);
     // put mention into the admin log
     audit($oneuser->id, "Admin Username: ".$oneuser->username, 'Logged In');
 

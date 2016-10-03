@@ -79,26 +79,22 @@ function check_login($no_redirect = false)
     if( ($config['debug'] === false) && isset($CMS_ADMIN_PAGE) ) {
         if( !isset($_SESSION[CMS_USER_KEY]) ) {
             // it's not in the session, try to grab something from cookies
+            // this is part of our retained-login functionality
             if( cms_cookies::exists(CMS_SECURE_PARAM_NAME) ) $_SESSION[CMS_USER_KEY] = cms_cookies::get(CMS_SECURE_PARAM_NAME);
+        }
+        if( !isset($_SESSION[CMS_USER_KEY]) || !$_SESSION[CMS_USER_KEY] ) {
+            // still not set?  return false.
+            return false;
         }
 
         // now we've got to check the request
         // and make sure it matches the session key
-        if( !isset($_SESSION[CMS_USER_KEY]) ||
-            !isset($_GET[CMS_SECURE_PARAM_NAME]) ||
-            !isset($_POST[CMS_SECURE_PARAM_NAME]) ) {
-            $v = '<no$!tgonna!$happen>';
-            if( isset($_GET[CMS_SECURE_PARAM_NAME]) ) {
-                $v = $_GET[CMS_SECURE_PARAM_NAME];
-            }
-            else if( isset($_POST[CMS_SECURE_PARAM_NAME]) ) {
-                $v = $_POST[CMS_SECURE_PARAM_NAME];
-            }
-
-            if( $v != $_SESSION[CMS_USER_KEY] && !isset($config['stupidly_ignore_xss_vulnerability']) ) {
-                if (false == $no_redirect) redirect($config['admin_url'].'/login.php');
-                return false;
-            }
+        $v = '<no$!tgonna!$happen>';
+        if( isset($_GET[CMS_SECURE_PARAM_NAME]) ) $v = $_GET[CMS_SECURE_PARAM_NAME];
+        if( isset($_POST[CMS_SECURE_PARAM_NAME]) ) $v = $_POST[CMS_SECURE_PARAM_NAME];
+        if( $v != $_SESSION[CMS_USER_KEY] && !isset($config['stupidly_ignore_xss_vulnerability']) ) {
+            if (false == $no_redirect) redirect($config['admin_url'].'/login.php');
+            return false;
         }
     }
     return true;

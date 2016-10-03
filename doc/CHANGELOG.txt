@@ -6,7 +6,8 @@ Core - General
   - Fixes for CmsNlsOperations when using a language detector
   - Fixes warnings in useroperations.
   - Fixes problem with cms_selflink dir='up' since 2013
-  - Set Referrer-Policy header for all admin requests.
+  - Modifies the OneEleven theme to set the meta referrer attribute for security purposes
+  - Modifies the functionality of the CSRF tokens to be more secure (only set the cookie in one location, only set the session variable from the cookie)
 
 Content Manager v1.1.3
   - Fix bulk set-non-cachable functionality.

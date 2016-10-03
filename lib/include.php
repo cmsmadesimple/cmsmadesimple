@@ -80,22 +80,15 @@ $config = $_app->GetConfig();
 
 if( isset($CMS_ADMIN_PAGE) ) {
     function cms_admin_sendheaders($content_type = 'text/html',$charset = '') {
-	header('Referrer-Policy: same-origin');
-
         // Language shizzle
         if( !$charset ) $charset = get_encoding();
         header("Content-Type: $content_type; charset=$charset");
     }
 
+    // ugly hack, this shouldn't be necessary here.
     if( !isset($_SESSION[CMS_USER_KEY]) ) {
         if( cms_cookies::exists(CMS_SECURE_PARAM_NAME) ) {
             $_SESSION[CMS_USER_KEY] = cms_cookies::get(CMS_SECURE_PARAM_NAME);
-        }
-        else {
-            // maybe change this algorithm.
-            $key = substr(str_shuffle(sha1($dirname.time().session_id())),-16);
-            $_SESSION[CMS_USER_KEY] = $key;
-            cms_cookies::set(CMS_SECURE_PARAM_NAME,$key);
         }
     }
 }

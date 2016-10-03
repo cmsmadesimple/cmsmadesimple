@@ -23,32 +23,29 @@ class cms_install extends \__appbase\app
         // because phar uses tmpfile() we need to set the TMPDIR environment variable
         // with whatever directory we find.
         try {
+            $path = null;
             $sess = \__appbase\session::get();
+
+            // if there was a TMPDIR setting in the URL, that we stored in the session, use it.
+            if( !$path && isset($sess['tmpdir']) && $sess['tmpdir'] ) {
+                $path = $sess['tmpdir'];
+            }
 
             // check if there is a TMPDIR setting in the request
             $request = \__appbase\request::get();
-            if( isset($request['TMPDIR']) && $request['TMPDIR'] != '' ) {
+            if( !$path && isset($request['TMPDIR']) && $request['TMPDIR'] != '' ) {
                 $path = realpath($request['TMPDIR']);
                 if( is_dir($path) && is_writable($path) ) {
-                    // store it in the session for later.
+                    // store it in the session for later requests.
                     $sess['tmpdir'] = $path;
-                    putenv("TMPDIR=$path");
-                    return $path;
-                }
-            }
-
-            // if there was a TMPDIR setting in the URL, that we stored in the session
-            // use it.
-            if( isset($sess['tmpdir']) && $sess['tmpdir'] ) {
-                $path = $sess['tmpdir'];
-                if( is_dir($path) && is_writable($path) ) {
-                    putenv("TMPDIR=$path");
-                    return $path;
                 }
             }
 
             // try other methods to get the tmpdir
-            $path = parent::get_tmpdir();
+            if( !$path ) {
+                $path = parent::get_tmpdir();
+            }
+
             putenv("TMPDIR=$path");
             return $path;
         }
