@@ -1088,13 +1088,14 @@ nav ul#oe_pagemenu li a {
 	background: url(themes/OneEleven/images/layout/sprite_norepeat.png) no-repeat;
 	color: #232323;
 	outline: 0;
-	margin-left: 10px;
-	height: 35px;
+	margin-left: 9px;
+	height: 33px;
 	font-weight: bold;
 	display: block;
 	text-shadow: 1px 1px 0px #fff;
 	padding-left: 30px;
-	text-decoration: none
+	text-decoration: none;
+	border: 1px solid transparent;
 }
 nav ul#oe_pagemenu li.current li a {
 	color: #232323
