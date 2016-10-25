@@ -1,4 +1,4 @@
-Version 2.1.6 -
+Version 2.1.6 - Spanish Wells
 ----------------------------------
 Core - General
   - Now attempt to detect if a template name passed into CmsModule::GetTemplateResource() is already a resource string.
@@ -11,6 +11,10 @@ Core - General
 
 Content Manager v1.1.3
   - Fix bulk set-non-cachable functionality.
+
+Installation Assistant v1.0.4
+  - Adds recommended check for ZipArchive
+  - Improves method of determining a temp directory
 
 Version 2.1.5 - High Rock
 ----------------------------------

@@ -111,6 +111,7 @@ $lang['fail_func_json'] = 'json functionality was not found';
 $lang['fail_func_gzopen'] = 'gzopen function was not found';
 $lang['fail_func_md5'] = 'md5 functionality was not found';
 $lang['fail_func_tempnam'] = 'The tempnam function does not exist. It is a required function for CMSMS functionality';
+$lang['fail_func_ziparchive'] = 'ZipArchive functionality was not found.  This may limit functionality';
 $lang['fail_ini_set'] = 'It appears that we cannot change ini settings. This could cause problems in third party modules (or when enabling debug mode)';
 $lang['fail_magic_quotes_runtime'] = 'It appears that magic quotes are enabled in your configuration. Please disable them and retry';
 $lang['fail_max_execution_time'] = 'Your max execution time of %s does not meet the minimum value of %s.  We recommend you increase it to %s or greater';

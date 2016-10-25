@@ -19,8 +19,8 @@
 #
 #$Id: version.php 10177 2015-09-11 15:02:02Z calguy1000 $
 
-$CMS_VERSION = "2.1.5";
-$CMS_VERSION_NAME = "High Rock";
+$CMS_VERSION = "2.1.6";
+$CMS_VERSION_NAME = "Spanish Wells";
 $CMS_SCHEMA_VERSION = '201';
 
 define('CMS_VERSION', $CMS_VERSION);
