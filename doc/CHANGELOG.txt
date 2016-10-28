@@ -6,6 +6,7 @@ Core - General
   - Fixes for CmsNlsOperations when using a language detector
   - Fixes warnings in useroperations.
   - Fixes problem with cms_selflink dir='up' since 2013
+  - Fixes problem with cms_selflink with aliases that starts with a numeric sign (BR #11198)
   - Modifies the OneEleven theme to set the meta referrer attribute for security purposes
   - Modifies the functionality of the CSRF tokens to be more secure (only set the cookie in one location, only set the session variable from the cookie)
 

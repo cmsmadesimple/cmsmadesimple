@@ -64,7 +64,7 @@ function smarty_function_cms_selflink($params, &$smarty)
 		}
 
 		if( $page ) {
-            if( (int)$page > 0 ) {
+            if( is_numeric($page) ) {
                 $pageid = (int)$page;
             }
             else {
