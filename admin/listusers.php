@@ -38,7 +38,7 @@ $gCms         = cmsms();
 $db           = $gCms->GetDb();
 $templateuser = cms_siteprefs::get('template_userid');
 $page         = 1;
-$limit        = 20;
+$limit        = 100;
 $message      = '';
 $error        = '';
 $userops      = UserOperations::get_instance();
@@ -56,7 +56,7 @@ if (isset($_GET["toggleactive"])) {
 
         if ($thisuser) {
 
-            //modify users, is this enough?
+            // modify users, is this enough?
             $userid = get_userid();
 
             $result = false;
@@ -263,4 +263,5 @@ $smarty->assign('userlist', $out);
 $smarty->display('listusers.tpl');
 
 include_once ('footer.php');
+
 ?>

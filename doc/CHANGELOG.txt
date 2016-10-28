@@ -2,21 +2,24 @@ Version 2.1.6 - Spanish Wells
 ----------------------------------
 Core - General
   - Now attempt to detect if a template name passed into CmsModule::GetTemplateResource() is already a resource string.
-  - endswith is now an accepted function in smarty templates (fixes typo in security policy)
-  - Fixes for CmsNlsOperations when using a language detector
+  - endswith is now an accepted function in Smarty templates (fixes typo in security policy)
+  - Fixes for CmsNlsOperations when using a language detector.
   - Fixes warnings in useroperations.
-  - Fixes problem with cms_selflink dir='up' since 2013
-  - Fixes problem with cms_selflink with aliases that starts with a numeric sign (BR #11198)
-  - Modifies the OneEleven theme to set the meta referrer attribute for security purposes
-  - Modifies the functionality of the CSRF tokens to be more secure (only set the cookie in one location, only set the session variable from the cookie)
+  - Fixes problem with cms_selflink dir='up' since 2013.
+  - Modifies the OneEleven theme to set the meta referrer attribute for security purposes.
+  - Modifies the functionality of the CSRF tokens to be more secure (only set the cookie in one location, only set the session variable from the cookie).
+  - Increase Admin users list limit.
+  
+  - #11198 - Fixes problem with cms_selflink with aliases that starts with a numeric sign.
 
 Content Manager v1.1.3
   - Fix bulk set-non-cachable functionality.
 
 Installation Assistant v1.0.4
-  - Adds recommended check for ZipArchive
-  - Improves method of determining a temp directory
+  - Adds recommended check for ZipArchive.
+  - Improves method of determining a temp directory.
 
+  
 Version 2.1.5 - High Rock
 ----------------------------------
 Core - General
