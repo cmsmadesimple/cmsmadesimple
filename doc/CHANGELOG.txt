@@ -9,6 +9,7 @@ Core - General
   - Modifies the OneEleven theme to set the meta referrer attribute for security purposes.
   - Modifies the functionality of the CSRF tokens to be more secure (only set the cookie in one location, only set the session variable from the cookie).
   - Increase Admin users list limit.
+  - Reduce time limit for daily version check to 3 seconds.
   
   - #11198 - Fixes problem with cms_selflink with aliases that starts with a numeric sign.
 
