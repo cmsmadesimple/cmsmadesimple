@@ -1,12 +1,8 @@
 <?php
-if (!isset($gCms))
-    exit ;
+if (!isset($gCms))  exit ;
 
-if (!$this->CheckPermission('Modify News'))
-    return;
-
-if (isset($params['cancel']))
-    $this->Redirect($id, 'defaultadmin', $returnid);
+if (!$this->CheckPermission('Modify News'))  return;
+if (isset($params['cancel'])) $this->Redirect($id, 'defaultadmin', $returnid);
 
 /*--------------------
  * Variables
@@ -28,8 +24,9 @@ $extra        = isset($params['extra']) ? trim($params['extra']) : '';
 $searchable   = isset($params['searchable']) ? (int)$params['searchable'] : 1;
 $title        = isset($params['title']) ? $params['title'] : '';
 
-if ($this->CheckPermission('Approve News'))
-    $status = 'published';
+if ($this->CheckPermission('Approve News')) {
+    $status = isset($params['status']) ? trim($params['status']) : $status;
+}
 
 if (isset($params['postdate_Month'])) {
     $postdate = mktime($params['postdate_Hour'], $params['postdate_Minute'], $params['postdate_Second'], $params['postdate_Month'], $params['postdate_Day'], $params['postdate_Year']);
