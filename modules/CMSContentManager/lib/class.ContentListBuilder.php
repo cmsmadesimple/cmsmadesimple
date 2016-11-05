@@ -718,7 +718,7 @@ final class ContentListBuilder
 
               case 'page':
                   if( $content->MenuText() == CMS_CONTENT_HIDDEN_NAME ) continue;
-                  $rec[$column] = $content->MenuText();
+                  $rec[$column] = cleanValue( $content->MenuText() );
                   if( CmsContentManagerUtils::get_pagenav_display() == 'title' ) $rec[$column] = $content->Name();
                   break;
 
