@@ -2,7 +2,7 @@ Version 2.1.6 - Spanish Wells
 ----------------------------------
 Core - General
   - Now attempt to detect if a template name passed into CmsModule::GetTemplateResource() is already a resource string.
-  - endswith is now an accepted function in Smarty templates (fixes typo in security policy)
+  - endswith is now an accepted function in Smarty templates (fixes typo in security policy).
   - Fixes for CmsNlsOperations when using a language detector.
   - Fixes warnings in useroperations.
   - Fixes problem with cms_selflink dir='up' since 2013.
@@ -10,7 +10,7 @@ Core - General
   - Modifies the functionality of the CSRF tokens to be more secure (only set the cookie in one location, only set the session variable from the cookie).
   - Increase Admin users list limit.
   - Reduce time limit for daily version check to 3 seconds.
-  - cleanValues in admin log.
+  - cleanValues in Admin log.
   
   - #11198 - Fixes problem with cms_selflink with aliases that starts with a numeric sign.
 
@@ -25,8 +25,9 @@ ModuleManager v2.0.5
   - Improves functionality if ModuleRepository is not available.
 
 News v2.50.6
-  - Minor fix to editing news articles from the admin interface.
-  
+  - Minor fix to editing news articles from the Admin interface.
+
+
 Version 2.1.5 - High Rock
 ----------------------------------
 Core - General
