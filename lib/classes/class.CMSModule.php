@@ -2699,8 +2699,9 @@ abstract class CMSModule
 
     /**
      * Set the current tab for the action.
+     *
      * Used for the various template forms, this method can be used to control the tab that is displayed by default
-     * when redirecting to an action that displays multiple tabs.
+     * when redirecting to an admin action that displays multiple tabs.
      *
      * @final
      * @since 1.11
@@ -2715,7 +2716,8 @@ abstract class CMSModule
 
 
     /**
-     * Output a string suitable for staring tab headers
+     * Output a string suitable for staring tab headers.
+     *
      * i.e:  echo $this->StartTabHeaders();
      *
      * @final
@@ -2728,6 +2730,7 @@ abstract class CMSModule
 
     /**
      * Set a specific tab header.
+     *
      * i.e:  echo $this->SetTabHeader('preferences',$this->Lang('preferences'));
      *
      * @final

@@ -116,7 +116,7 @@ final class CmsAdminUtils
         $remote_ver = cms_siteprefs::get('last_remotever');
         if( $last_fetch < (time() - 24 * 3600) ) {
             $req = new cms_http_request();
-            $req->setTimeout(10);
+            $req->setTimeout(3);
             $req->execute(CMS_DEFAULT_VERSIONCHECK_URL);
             if( $req->getStatus() == 200 ) {
                 $remote_ver = trim($req->getResult());

@@ -65,17 +65,21 @@ echo '<h3>'.$this->Lang('use_at_your_own_risk')."</h3>\n";
 echo '<p>'.$this->Lang('compatibility_disclaimer')."</p></div>\n";
 
 $connection_ok = modmgr_utils::is_connection_ok();
-if( !$connection_ok ) echo $this->ShowErrors($this->Lang('error_request_problem'));
+if( !$connection_ok ) {
+    echo $this->ShowErrors($this->Lang('error_request_problem'));
+}
 
 // this is a bit ugly.
 modmgr_utils::get_images();
 
 $newversions = null;
+if( $connection_ok ) {
 try {
   $newversions = modulerep_client::get_newmoduleversions();
 }
 catch( Exception $e ) {
   echo $this->ShowErrors($e->GetMessage());
+}
 }
 
 echo $this->StartTabHeaders();

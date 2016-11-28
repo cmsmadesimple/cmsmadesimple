@@ -62,10 +62,8 @@ function smarty_function_cms_selflink($params, &$smarty)
 		}
 
 		if( $page ) {
-            $tmp = (int)$page;
-            if( $tmp > 0 && (string)$tmp == $page ) {
-                // handle cases like page=4x4 or page=12stories
-                $pageid = (int)$tmp;
+            if( (int)$page > 0 && is_numeric($page) ) {
+                $pageid = (int)$page;
             }
             else {
                 $node = $manager->find_by_tag('alias',$page);

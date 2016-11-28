@@ -71,8 +71,8 @@
 	      {* the tooltip *}
 	      {capture assign='tooltip_pageinfo'}{strip}
 	        <strong>{$mod->Lang('prompt_content_id')}:</strong> {$row.id}<br/>
-	        <strong>{$mod->Lang('prompt_title')}:</strong> {$row.title}<br/>
-	        <strong>{$mod->Lang('prompt_name')}:</strong> {$row.menutext}<br/>
+	        <strong>{$mod->Lang('prompt_title')}:</strong> {$row.title|escape}<br/>
+	        <strong>{$mod->Lang('prompt_name')}:</strong> {$row.menutext|escape}<br/>
 	        {if isset($row.alias)}<strong>{$mod->Lang('prompt_alias')}:</strong> {$row.alias}<br/>{/if}
 	        {if $row.secure}<strong>{$mod->Lang('prompt_secure')}:</strong> {$mod->Lang('yes')}<br/>{/if}
 	        <strong>{$mod->Lang('prompt_cachable')}:</strong> {if $row.cachable}{$mod->Lang('yes')}{else}{$mod->Lang('no')}{/if}<br/>

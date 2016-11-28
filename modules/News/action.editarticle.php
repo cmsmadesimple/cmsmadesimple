@@ -1,12 +1,8 @@
 <?php
-if (!isset($gCms))
-    exit ;
+if (!isset($gCms))  exit ;
 
-if (!$this->CheckPermission('Modify News'))
-    return;
-
-if (isset($params['cancel']))
-    $this->Redirect($id, 'defaultadmin', $returnid);
+if (!$this->CheckPermission('Modify News'))  return;
+if (isset($params['cancel'])) $this->Redirect($id, 'defaultadmin', $returnid);
 
 /*--------------------
  * Variables
