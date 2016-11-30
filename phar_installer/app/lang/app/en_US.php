@@ -146,6 +146,7 @@ $lang['func_json'] = 'Checking for json encoding and decoding functionality';
 $lang['func_md5'] = 'Checking for md5 functionality';
 $lang['func_tempnam'] = 'Check for tempnam function';
 $lang['func_gzopen'] = 'Check for gzopen function';
+$lang['func_ziparchive'] = 'Check for ziparchive function';
 
 # G
 $lang['gd_version'] = 'GD Version';
