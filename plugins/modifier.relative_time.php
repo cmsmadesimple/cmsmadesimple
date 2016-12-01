@@ -4,7 +4,7 @@
  * @package Smarty
  * @subpackage plugins
  */
- 
+
 /**
  * Smarty relative date / time plugin
  *
@@ -27,21 +27,21 @@ function smarty_modifier_relative_time($timestamp)
 {
   if(!$timestamp) return;
 
-  if( (string) (int) $timestamp !== $timestamp ) {
+  if( !preg_match('/^[0-9]+$/',$timestamp) ) {
      $timestamp = (int) strtotime($timestamp);
   }
   $difference = time() - $timestamp;
   $periods = array("sec", "min", "hour", "day", "week","month", "year", "decade");
   $lengths = array("60","60","24","7","4.35","12","10");
   $total_lengths = count($lengths);
- 
+
   if ($difference > 0) { // this was in the past
     $ending = lang('period_ago');
   } else { // this was in the future
     $difference = -$difference;
     $ending = lang('period_fromnow');
   }
-  
+
   for($j = 0; $difference > $lengths[$j] && $total_lengths > $j; $j++) {
     $difference /= $lengths[$j];
   }
