@@ -234,9 +234,9 @@ abstract class CmsAdminThemeBase
 		$uid = get_userid(FALSE);
 		if( ($data = cms_cache_handler::get_instance()->get('themeinfo'.$uid)) ) {
 			$data = base64_decode($data);
-			$data = unserialize($data);
+			$data = @unserialize($data);
 		}
-		else {
+        if( !$data ) {
 			// data doesn't exist.. gotta build it.
 			$allmodules = ModuleOperations::get_instance()->GetInstalledModules();
 			$usermoduleinfo = array();
