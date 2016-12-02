@@ -15,8 +15,9 @@ Core - General
   - Change new version check to timeout after 3 seconds..
   - minor fix to the relative_time plugin.
 
-Content Manager v1.1.3
+Content Manager v1.1.4
   - Fix bulk set-non-cachable functionality.
+  - Fix a bug wrt content blocks and the adding flag.
 
 Installation Assistant v1.0.4
   - Adds recommended check for ZipArchive.
