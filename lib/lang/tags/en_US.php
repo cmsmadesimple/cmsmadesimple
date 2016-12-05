@@ -286,6 +286,7 @@ $lang['help_function_content_module'] = <<<EOT
  <li><em>(optional)</em>label - A label for the content block for use when editing the page.</li>
  <li><em>(optional)</em> required - Allows specifying that the content block must contain some text.</em></li>
  <li><em>(optional)</em> tab - The desired tab to display this field on in the edit form..</li>
+ <li><em>(optional)</em> priority (integer) - Allows specifying an integer priority for the block within the tab.</li>
  <li><em>(optional)</em> assign (string) - Assign the results to a smarty variable with that name.</li>
  </ul>
 </p>
@@ -411,6 +412,7 @@ $lang['help_function_content_image'] = <<<EOT
   <li><em>(optional)</em> tab='' - The desired tab to display this field on in the edit form..</li>
   <li><em>(optional)</em> exclude='' - Specify a prefix of files to exclude.  i.e: thumb_</li>
   <li><em>(optional)</em> sort='' - optionally sort the options. Default is to not sort.</li>
+  <li><em>(optional)</em> priority (integer) - Allows specifying an integer priority for the block within the tab.</li>
   <li><em>(optional)</em> assign='' (string) - Assign the results to a smarty variable with that name.</li>
 </ul>
 EOT;

@@ -100,7 +100,7 @@ final class CMS_Content_Block
         }
 
         $rec = array('type'=>'image','id'=>'','name'=>'','label'=>'','upload'=>true,'dir'=>'','default'=>'','tab'=>'',
-                     'exclude'=>'','sort'=>0);
+                     'priority'=>'','exclude'=>'','sort'=>0);
         foreach( $params as $key => $value ) {
             if( $key == 'type' ) continue;
             if( $key == 'block' ) $key = 'name';
@@ -112,6 +112,10 @@ final class CMS_Content_Block
             $rec['id'] = $rec['name'] = 'image_'+$n;
         }
         if( !$rec['id'] ) $rec['id'] = str_replace(' ','_',$rec['name']);
+        if( !$rec['priority'] ) {
+            if( !self::$_priority ) self::$_priority = 100;
+            $rec['priority'] = self::$_priority++;
+        }
 
         // check for duplicate.
         if( isset(self::$_contentBlocks[$rec['name']]) ) {
@@ -130,7 +134,7 @@ final class CMS_Content_Block
             throw new CmsEditContentException('{content_module} tag requires block parameter');
         }
 
-        $rec = array('type'=>'module','id'=>'','name'=>'','module'=>'','label'=>'', 'blocktype'=>'','tab'=>'');
+        $rec = array('type'=>'module','id'=>'','name'=>'','module'=>'','label'=>'', 'blocktype'=>'','tab'=>'','priority'=>'');
         $parms = array();
         foreach( $params as $key => $value ) {
             if( $key == 'block' ) $key = 'name';
@@ -152,6 +156,10 @@ final class CMS_Content_Block
         $rec['params'] = $parms;
         if( $rec['module'] == '' ) {
             throw new CmsEditContentException('Missing module param for content_module tag');
+        }
+        if( !$rec['priority'] ) {
+            if( !self::$_priority ) self::$_priority = 100;
+            $rec['priority'] = self::$_priority++;
         }
 
         // check for duplicate.
