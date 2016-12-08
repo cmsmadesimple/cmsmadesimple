@@ -11,11 +11,11 @@ Core - General
   - Increase Admin users list limit.
   - Reduce time limit for daily version check to 3 seconds.
   - cleanValues in Admin log and List Content.
-  - #11198 - Fixes problem with cms_selflink with aliases that starts with a numeric sign.
-  - Change new version check to timeout after 3 seconds..
-  - minor fix to the relative_time plugin.
-  - Admin menu item urls can now be built from the remaining members of the object, if not specified.
+  - Minor fix to the relative_time plugin.
+  - Admin menu item URLs can now be built from the remaining members of the object, if not specified.
   - {content_image} and {content_module} now preserve order properly and support the priority attribute.
+  
+  - #11198 - Fixes problem with cms_selflink with aliases that starts with a numeric sign.
 
 Content Manager v1.1.4
   - Fix bulk set-non-cachable functionality.
