@@ -74,6 +74,7 @@ Core - General
   - #11080 - Parameter $adding in GetContentBlockFieldInput always FALSE.
   - #11093 - Bad error message in jquery.cmsms_autorefresh.js.
   - #11133 - is_email() fails on domain check
+  - #11235 - munge_string_to_url leaves trailing dashes at the end of munged url
 
 Navigator v1.0.4
   - Minor optimizations
