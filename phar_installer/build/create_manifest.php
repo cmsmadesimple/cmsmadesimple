@@ -116,7 +116,11 @@ foreach( $opts as $key => $val ) {
   }
 }
 
-// interactive mode
+// if we don't have a repos_to branch, find our current one.
+if( !$_config['repos_to'] ) {
+    $_config['repos_to'] =  get_svn_branch();
+}
+
 if( $_compress ) {
     if( !endswith( $_config['outfile'], '.gz' ) ) $_config['outfile'] = $_config['outfile'] . '.gz';
 }
@@ -124,6 +128,7 @@ else {
     if( endswith( $_config['outfile'], '.gz' ) ) $_config['outfile'] = substr($_config['outfile'], 0, -3);
 }
 
+// interactive mode
 if( $_interactive ) {
   $_done = false;
   $_config['repos_root'] = ask_string("Enter repository root",$_config['repos_root']);
@@ -330,6 +335,13 @@ EOT;
   function endswith($haystack,$needle)
   {
     return (substr($haystack,-1*strlen($needle)) == $needle);
+  }
+
+  function get_svn_branch()
+  {
+    $cmd = "svn info | grep '^URL:' | egrep -o '(tags|branches)/[^/]+|trunk'";
+    $out = exec($cmd);
+    return $out;
   }
 
   function rrmdir($dir)

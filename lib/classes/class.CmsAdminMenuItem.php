@@ -38,9 +38,9 @@
  * @property string $section The admin section (from CMSModule::GetAdminSection)
  * @property string $title The title of the menu item
  * @property string $action The module action
- * @property string $url The actual URL for the menu item link
+ * @property string $url The actual URL for the menu item link.  If this is not specified, it is created from the module and action.
  * @property string $icon The URL to the icon to associate with this action
- * @property int    $priority Priority for the menu item (minimum of 2)
+ * @property int $priority Priority for the menu item (minimum of 2)
  */
 final class CmsAdminMenuItem
 {
@@ -62,7 +62,22 @@ final class CmsAdminMenuItem
     public function __get($k)
     {
         if( !in_array($k,self::$_keys) ) throw new CmsException('Invalid key: '.$k.' for '.__CLASS__.' object');
-        if( isset($this->_data[$k]) ) return $this->_data[$k];
+        switch( $k ) {
+        case 'url':
+            if( isset($this->_data[$k]) && $this->_data[$k] ) return $this->_data[$k];
+            // url can be dynamically generated... maybe
+            if( $this->module && $this->action ) {
+                $mod = \cms_utils::get_module($this->module);
+                if( $mod ) {
+                    $url = $mod->create_url('m1_',$this->action);
+                    return $url;
+                }
+            }
+            break;
+
+        default:
+            if( isset($this->_data[$k]) ) return $this->_data[$k];
+        }
     }
 
 
@@ -100,7 +115,7 @@ final class CmsAdminMenuItem
     public function valid()
     {
         foreach( self::$_keys as $ok ) {
-            if( $ok == 'icon' || $ok == 'system' || $ok == 'priority' ) continue;  // we don't care if this is set.
+            if( $ok == 'icon' || $ok == 'system' || $ok == 'priority' || $ok == 'url' ) continue;  // we don't care if this is set.
             if( !isset($this->_data[$ok]) ) return FALSE;
         }
         return TRUE;
@@ -112,7 +127,7 @@ final class CmsAdminMenuItem
      * @internal
      * @param CMSModule $mod
      */
-    public static function &from_module(CMSModule $mod)
+    public static function &from_module(\CMSModule $mod)
     {
         $obj = null;
         if( $mod->HasAdmin() ) {
@@ -122,7 +137,7 @@ final class CmsAdminMenuItem
             $obj->title   = $mod->GetFriendlyName();
             $obj->description = $mod->GetAdminDescription();
             $obj->action = 'defaultadmin';
-            $obj->url = $mod->create_url('m1_',$obj->action);
+            //$obj->url = $mod->create_url('m1_',$obj->action);
         }
         return $obj;
     }
@@ -131,4 +146,3 @@ final class CmsAdminMenuItem
 #
 # EOF
 #
-?>

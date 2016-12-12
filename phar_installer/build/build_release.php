@@ -15,6 +15,7 @@ if( !file_exists("$owd/$script_file") ) throw new Exception('This script must be
 $rootdir = dirname(dirname(__FILE__));
 $repos_root='http://svn.cmsmadesimple.org/svn/cmsmadesimple';
 $repos_branch="/trunk";
+$repos_branch = null;
 $srcdir = $rootdir;
 $tmpdir = $rootdir.'/tmp';
 $datadir = $rootdir.'/data';
@@ -92,8 +93,12 @@ if( is_array($options) && count($options) ) {
       }
   }
 }
-$svn_url = "$repos_root/$repos_branch";
 
+if( !$repos_branch ) {
+    // attempt to get repository branch from cwd.
+    $repos_branch = get_svn_branch();
+}
+$svn_url = "$repos_root/$repos_branch";
 
 function output_usage()
 {
@@ -144,6 +149,13 @@ function export_source_files()
     $cmd = escapeshellcmd($cmd);
 
     system($cmd);
+}
+
+function get_svn_branch()
+{
+    $cmd = "svn info | grep '^URL:' | egrep -o '(tags|branches)/[^/]+|trunk'";
+    $out = exec($cmd);
+    return $out;
 }
 
 function copy_source_files()

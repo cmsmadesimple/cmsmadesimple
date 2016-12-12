@@ -36,71 +36,58 @@
 
 final class CMSContentManager extends CMSModule
 {
-  function GetFriendlyName() { return $this->Lang('friendlyname'); }
-  function GetVersion() { return '1.1.3'; }
-  function GetHelp() { return CmsLangOperations::lang_from_realm('help','help_cmscontentmanager_help'); }
-  function GetAuthor() { return 'calguy1000'; }
-  function GetAuthorEmail() { return 'calguy1000@cmsmadesimple.org'; }
-  function GetChangeLog() { return @file_get_contents(dirname(__FILE__).'/changelog.inc'); }
-  function IsPluginModule() { return FALSE; }
-  function HasAdmin() { return TRUE; }
-  function LazyLoadAdmin() { return TRUE; }
-  function LazyLoadFrontend() { return TRUE; }
-  function GetAdminSection() { return 'content'; }
-  function GetAdminDescription() { return $this->Lang('moddescription'); }
-  function MinimumCMSVersion() { return "1.99-alpha0"; }
-  function InstallPostMessage() { return $this->Lang('postinstall'); }
-  function UninstallPostMessage() { return $this->Lang('postuninstall'); }
-  function UninstallPreMessage() { return $this->Lang('preuninstall'); }
+    function GetFriendlyName() { return $this->Lang('friendlyname'); }
+    function GetVersion() { return '1.1.4'; }
+    function GetHelp() { return CmsLangOperations::lang_from_realm('help','help_cmscontentmanager_help'); }
+    function GetAuthor() { return 'calguy1000'; }
+    function GetAuthorEmail() { return 'calguy1000@cmsmadesimple.org'; }
+    function GetChangeLog() { return @file_get_contents(dirname(__FILE__).'/changelog.inc'); }
+    function IsPluginModule() { return FALSE; }
+    function HasAdmin() { return TRUE; }
+    function LazyLoadAdmin() { return TRUE; }
+    function LazyLoadFrontend() { return TRUE; }
+    function GetAdminSection() { return 'content'; }
+    function GetAdminDescription() { return $this->Lang('moddescription'); }
+    function MinimumCMSVersion() { return "1.99-alpha0"; }
+    function InstallPostMessage() { return $this->Lang('postinstall'); }
+    function UninstallPostMessage() { return $this->Lang('postuninstall'); }
+    function UninstallPreMessage() { return $this->Lang('preuninstall'); }
 
-  /**
-   * Tests wether the currently logged in user has the ability to edit ANY content page
-   */
-  public function CanEditContent($content_id = -1)
-  {
-    if( $this->CheckPermission('Manage All Content') ) return TRUE;
-    if( $this->CheckPermission('Modify Any Page') ) return TRUE;
+    /**
+     * Tests wether the currently logged in user has the ability to edit ANY content page
+     */
+    public function CanEditContent($content_id = -1)
+    {
+        if( $this->CheckPermission('Manage All Content') ) return TRUE;
+        if( $this->CheckPermission('Modify Any Page') ) return TRUE;
 
-    $pages = author_pages(get_userid(FALSE));
-    if( count($pages) == 0 ) return FALSE;
+        $pages = author_pages(get_userid(FALSE));
+        if( count($pages) == 0 ) return FALSE;
 
-    if( $content_id > 0 && !in_array($content_id,$pages) ) return FALSE;
-    return TRUE;
-  }
-
-//   public function VisibleToAdminUser()
-//   {
-//     $x = $this->CheckPermission('Add Pages') ||
-//       $this->CheckPermission('Remove Pages') ||
-//       $this->CheckPermission('Modify Site Preferences');
-//     if( $x ) return TRUE;
-
-//     return $this->CanEditContent();
-//   }
-
-  public function GetAdminMenuItems()
-  {
-    $out = array();
-
-    // user is entitled to see the main page in the navigation.
-    if( $this->CheckPermission('Add Pages') || $this->CheckPermission('Remove Pages') || $this->CanEditContent() ) {
-      $obj = CmsAdminMenuItem::from_module($this);
-      $out[] = $obj;
+        if( $content_id > 0 && !in_array($content_id,$pages) ) return FALSE;
+        return TRUE;
     }
 
-    if( $this->CheckPermission('Modify Site Preferences') ) {
-      $obj = new CmsAdminMenuItem();
-      $obj->module = $this->GetName();
-      $obj->section = 'siteadmin';
-      $obj->title = $this->Lang('title_contentmanager_settings');
-      $obj->description = $this->Lang('desc_contentmanager_settings');
-      $obj->action = 'admin_settings';
-      $obj->url = $this->create_url('m1_',$obj->action);
-      $out[] = $obj;
+    public function GetAdminMenuItems()
+    {
+        $out = array();
+
+        // user is entitled to see the main page in the navigation.
+        if( $this->CheckPermission('Add Pages') || $this->CheckPermission('Remove Pages') || $this->CanEditContent() ) {
+            $obj = CmsAdminMenuItem::from_module($this);
+            $out[] = $obj;
+        }
+
+        if( $this->CheckPermission('Modify Site Preferences') ) {
+            $obj = new CmsAdminMenuItem();
+            $obj->module = $this->GetName();
+            $obj->section = 'siteadmin';
+            $obj->title = $this->Lang('title_contentmanager_settings');
+            $obj->description = $this->Lang('desc_contentmanager_settings');
+            $obj->action = 'admin_settings';
+            $out[] = $obj;
+        }
+        return $out;
     }
-    return $out;
-  }
 
 } // class
-
-?>
