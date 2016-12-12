@@ -41,3 +41,5 @@ $lang['help'] = <<<EOT
 <h3>What about problem jobs.</h3>
 <p>From time to time some applications may create jobs that fail, exiting with some sort of error.  CmsJobManager will remove the job after the job has failed a number of times.  At which time the originating code can re-create the job.  If you encounter a problematic job that continues to fail this is a bug that should be diagnosed, and reported in detail to the appropriate developers.</p>
 EOT;
+
+?>
