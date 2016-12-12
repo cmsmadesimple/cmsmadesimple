@@ -178,6 +178,7 @@ $(document).ready(function () {
 				<td class="clickable" style="padding-right:8px;white-space:pre;text-align:right;" valign="middle">{$file->filesize}</td>
 				<td class="clickable" style="padding-right:8px;" valign="middle">{if isset($file->filesizeunit)}{$file->filesizeunit}{else}&nbsp;{/if}</td>
 				<td class="clickable" style="padding-right:8px;white-space:pre;" valign="middle">{$file->filedate|cms_date_format|replace:" ":"&nbsp;"|replace:"-":"&minus;"}</td>
+				<td>
 				{if !isset($file->noCheckbox)}
 					<label for="x_{$file->urlname}" style="display: none;">{$mod->Lang('toggle')}</label>
 					<input type="checkbox" title="{$mod->Lang('toggle')}" id="x_{$file->urlname}" name="{$actionid}selall[]" value="{$file->urlname}" class="fileselect {implode(' ',$file->type)}" {if isset($file->checked)}checked="checked"{/if}/>
