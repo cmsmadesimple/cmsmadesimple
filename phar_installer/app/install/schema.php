@@ -498,6 +498,8 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
          lang_cb     C(255),
          dflt_content_cb C(255),
          requires_contentblocks I1,
+         help_content_cb C(255),
+         one_only I1,
          owner   I,
          created I,
          modified I";
