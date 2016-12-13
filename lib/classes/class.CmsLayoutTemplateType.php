@@ -508,6 +508,27 @@ class CmsLayoutTemplateType
         return CmsLayoutTemplate::load_dflt_by_type($this);
     }
 
+    /**
+     * Get HTML text for help with respect to the variables available in this template type.
+     */
+    public function get_template_helptext()
+    {
+        $originator = $this->get_originator();
+        $name = $this->get_name();
+        $text = null;
+        if( $originator == self::CORE ) {
+            // it's a core page template, or generic
+        } else {
+            $module = \cms_utils::get_module($orignator);
+            if( $module ) {
+                if( method_exists($module,'get_templatetype_help') ) {
+                    $text = $module->get_templatetype_help($name);
+                }
+            }
+        }
+        return $text;
+    }
+
 	/**
 	 * Get a translated/pretty displayable name for this template type
 	 * including the originator.
