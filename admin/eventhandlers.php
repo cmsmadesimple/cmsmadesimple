@@ -160,7 +160,7 @@ switch( $action ) {
 					echo "    <td>";
 if ($access)
 {
-					echo "<a href=\"editevent.php".$urlext."&amp;action=edit&amp;module=".$oneevent['originator']."&amp;event=".$oneevent['event_name']."\">";
+					echo "<a href=\"editevent.php".$urlext."&amp;action=edit&amp;module=".$oneevent['originator']."&amp;event=".$oneevent['event_name']."\" title=\"".lang('edit')."\">";
 }
 					echo $oneevent['event_name'];
 if ($access)
@@ -171,7 +171,7 @@ if ($access)
 					echo "    <td>";
 					if ($oneevent['usage_count'] > 0)
 						{
-						echo "<a href=\"eventhandlers.php".$urlext."&amp;action=showeventhelp&amp;module=".$oneevent['originator']."&amp;event=".$oneevent['event_name']."\">".
+						echo "<a href=\"eventhandlers.php".$urlext."&amp;action=showeventhelp&amp;module=".$oneevent['originator']."&amp;event=".$oneevent['event_name']."\" title=\"".lang('help')."\">".
 							$oneevent['usage_count']."</a>";
 						}
 					echo "</td>\n";
