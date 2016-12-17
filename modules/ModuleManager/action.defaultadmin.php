@@ -85,8 +85,8 @@ catch( Exception $e ) {
 echo $this->StartTabHeaders();
 if( $this->CheckPermission('Modify Modules') ) {
   echo $this->SetTabHeader('installed',$this->Lang('installed'));
-  if( $connection_ok ) {
-    if( is_array($newversions) && count($newversions) ) echo $this->SetTabHeader('newversions',$this->Lang('tab_newversions'));
+  if( $connection_ok ) { 
+	echo $this->SetTabHeader('newversions',count($newversions).' '.$this->Lang('tab_newversions') );
     echo $this->SetTabHeader('search',$this->Lang('search'));
     echo $this->SetTabHeader('modules',$this->Lang('availmodules'));
   }
@@ -101,11 +101,9 @@ if( $this->CheckPermission('Modify Modules') ) {
   echo $this->EndTab();
 
   if( $connection_ok ) {
-    if( is_array($newversions) && count($newversions) ) {
-      echo $this->StartTab('newversions',$params);
-      include(dirname(__FILE__).'/function.newversionstab.php');
-      echo $this->EndTab();
-    }
+	echo $this->StartTab('newversions',$params);
+	include(dirname(__FILE__).'/function.newversionstab.php');
+	echo $this->EndTab();
 
     echo $this->StartTab('search',$params);
     include(dirname(__FILE__).'/function.search.php');
@@ -122,6 +120,5 @@ if( $this->CheckPermission('Modify Site Preferences') ) {
   echo $this->EndTab();
 }
 echo $this->EndTabContent();
-
 
 ?>
