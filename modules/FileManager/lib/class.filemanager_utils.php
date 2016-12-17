@@ -24,7 +24,7 @@ final class filemanager_utils
 {
   static private $_can_do_advanced = -1;
 
-  protected function __construct() {} 
+  protected function __construct() {}
 
   public static function is_valid_filename($name)
   {
@@ -33,25 +33,23 @@ final class filemanager_utils
     if( strpos($name,'\\') !== false ) return FALSE;
     if( strpos($name,'..') !== false ) return FALSE;
     if( $name[0] == '.' || $name[0] == ' ' ) return FALSE;
-    if( preg_match('/[\n\r\t\[\]\&\?\<\>\!\@\#\$\%\*\(\)\{\}\|\"\'\:\;\+]/',$name) ) {
-      return FALSE;
-    }
+    if( preg_match('/[\n\r\t\[\]\&\?\<\>\!\@\#\$\%\*\(\)\{\}\|\"\'\:\;\+]/',$name) ) return FALSE;
     return TRUE;
   }
 
   public static function can_do_advanced()
   {
-    if( self::$_can_do_advanced < 0 ) {
-      $filemod = cms_utils::get_module('FileManager');
-      $config = cmsms()->GetConfig();
-      if( startswith($config['uploads_path'],$config['root_path']) && $filemod->AdvancedAccessAllowed() ) {
-	self::$_can_do_advanced = 1;
+      if( self::$_can_do_advanced < 0 ) {
+          $filemod = cms_utils::get_module('FileManager');
+          $config = cmsms()->GetConfig();
+          if( startswith($config['uploads_path'],$config['root_path']) && $filemod->AdvancedAccessAllowed() ) {
+              self::$_can_do_advanced = 1;
+          }
+          else {
+              self::$_can_do_advanced = 0;
+          }
       }
-      else {
-	self::$_can_do_advanced = 0;
-      }
-    }
-    return self::$_can_do_advanced;
+      return self::$_can_do_advanced;
   }
 
   public static function check_advanced_mode()
@@ -81,7 +79,7 @@ final class filemanager_utils
     $gCms = cmsms();
     $config = $gCms->GetConfig();
     $advancedmode=filemanager_utils::check_advanced_mode();
-    
+
     $prefix = $config['root_path'];
     $path = self::join_path($prefix,$path);
     $path=realpath($path);
@@ -111,7 +109,7 @@ final class filemanager_utils
   {
     $config = cmsms()->GetConfig();
     if( startswith($path,$config['root_path']) ) $path = substr($path,strlen($config['root_path'])+1);
-    $advancedmode = self::check_advanced_mode();      
+    $advancedmode = self::check_advanced_mode();
 
     // validate the path.
     $prefix = $config['root_path'];
@@ -206,12 +204,12 @@ final class filemanager_utils
 	  if (($showhiddenfiles!=1) || (!$advancedmode)) continue;
 	}
       }
-			
+
       if (substr($file,0,6)=='thumb_') {
 	//Ignore thumbnail files of showing thumbnails is off
 	if ($filemod->GetPreference('showthumbnails','1')=='1') continue;
       }
-				
+
       // build the file info array.
       $fullname = self::join_path($realpath,$file);
       $info=array();
@@ -258,10 +256,10 @@ final class filemanager_utils
 	  $info['permissions']='R';
 	}
       }
-			
+
       $result[]=$info;
     }
-    
+
     $tmp = usort($result,'filemanager_utils::_FileManagerCompareFiles');
     return $result;
   }
@@ -278,7 +276,7 @@ final class filemanager_utils
     if ($a["dir"] XOR $b["dir"]) {
       if ($a["dir"]) return -1; else return 1;
     }
-	  
+
     switch($sortby) {
     case "nameasc" : return strncasecmp($a["name"],$b["name"],strlen($a["name"]));
     case "namedesc" : return strncasecmp($b["name"],$a["name"],strlen($b["name"]));
@@ -290,7 +288,7 @@ final class filemanager_utils
       if ($a["dir"] && $b["dir"]) return self::_FileManagerCompareFiles($a,$b,"nameasc");
       return ($b["size"]>$a["size"]);
     }
-    default : strncasecmp($a["name"],$b["name"],strlen($a["name"]));				
+    default : strncasecmp($a["name"],$b["name"],strlen($a["name"]));
     }
     return 0;
   }
@@ -383,8 +381,8 @@ final class filemanager_utils
             return '';
         }
       }
-    }   
-    
+    }
+
     // Now we can call this function
     return mime_content_type($filename);
   }
@@ -531,14 +529,14 @@ final class filemanager_utils
       return $owner.$group.$others;
 
     case 'xxxxxxxxx':
-      $owner="";					
+      $owner="";
       if ($mode & 0400) $owner.="r"; else $owner.="-";
       if ($mode & 0200) $owner.="w"; else $owner.="-";
-      if ($mode & 0100) $owner.="x"; else $owner.="-";					
+      if ($mode & 0100) $owner.="x"; else $owner.="-";
       $group="";
       if ($mode & 0040) $group.="r"; else $group.="-";
       if ($mode & 0020) $group.="w"; else $group.="-";
-      if ($mode & 0010) $group.="x"; else $group.="-";					
+      if ($mode & 0010) $group.="x"; else $group.="-";
       $others="";
       if ($mode & 0004) $others.="r"; else $others.="-";
       if ($mode & 0002) $others.="w"; else $others.="-";
