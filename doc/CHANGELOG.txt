@@ -70,15 +70,17 @@ Core - General
   - Adds a new smarty plugin {page_selector} to the Admin lib.
   - New arguments to the CreateHierarchyDropdown function (deprecated) and adjust documentation.
   - Content pages now have the ability to control whether or not the page wants any more children.
+  - The TemplateType class now has a help callback to optionally allow retrieving help for templates of a particular type
 
   - #11080 - Parameter $adding in GetContentBlockFieldInput always FALSE.
   - #11093 - Bad error message in jquery.cmsms_autorefresh.js.
   - #11133 - is_email() fails on domain check.
   - #11235 - munge_string_to_url leaves trailing dashes at the end of munged URL.
 
-Navigator v1.0.4
+Navigator v1.0.5
   - Minor optimizations.
   - Now use pageid in calculations of cacheid.
+  - Now output template help to Navigator
 
 Installation Assistant v1.2.1
   - Only create dummy index.html files in subdirectories we created.
@@ -113,13 +115,14 @@ DesignManager
   - Add reset buttons to the filter forms.
   - No longer check for default content block in a template.
 
-News v2.50.6
+News v2.50.8
   - Minor fix to add category.
   - Removes GetNotificationOutput method.
   - Add a task that runs at least every 15 minutes to detect draft articles... create an alert for this.
   - Add an option to never create alerts about draft News articles.
   - Minor optimizations.
   - Adds postdate as parameters in events.
+  - now output template help to Navigator.
 
 FileManager v1.6.3
   - Move settings to it's own menu item under Site Admin.
