@@ -1,7 +1,7 @@
 Version 2.2 - No Name Set
 ----------------------------------
 Core - General
-  - Implement new database abstraction library that is compatible with (functionality wise) but improves apon adodb-lite.
+  - Implement new database abstraction library that is compatible with (functionality wise) but improves upon adodb-lite.
   - Implement protocol-less URL's in the config.
   - Page tabs are now focusable (you can tab through page tabs and use enter to select one).
   - Minor fix to the {form_start} plugin.
@@ -23,10 +23,10 @@ Core - General
   - Removed the GetNotificationOutput() method from the module API.
   - Adds classes for creating Alerts. This is much more advanced than the old Notifications system.
   - Minor accessibility tweaks to the OneEleven theme.
-  - Fixed long time error wrt. Subtitle in admin theme class
+  - Fixed long time error wrt. Subtitle in Admin theme class.
   - Refactored the OneEleven Admin theme to use new Alerts classes instead of old Notifications.
-  - Refactor the OneElevent Admintheme to display an alert icon in the shortcut bar, instead of in the navigation area.
-  - Fix the subtitle functionality within the Oneeleven admin theme.
+  - Refactor the OneEleven Admin theme to display an alert icon in the shortcut bar, instead of in the navigation area.
+  - Fix the subtitle functionality within the Oneeleven Admin theme.
   - Fix problems with the OneEleven theme.
   - Fixed sidenav in the one OneEleven theme now works properly. If sidenav is larger than viewport then don't use fixed... easy.
   - In OneEleven Now revert to small sidebar navigation (still floating) if screen is too narrow.
@@ -46,38 +46,38 @@ Core - General
   - Fixes an issue in CmsLayoutTemplate when creating a template from a type.
   - Fixes an issue where a 404 handler error page would not be rendered correctly if for some reason the route did not specify a page id to load.
   - More fixes to cms_url class.
-  - Numerous minor optimizations
+  - Numerous minor optimizations.
   - Add to content types the ability to set basic attributes for properties from within the page type definition.
   - Fixes problems with pagelink and link content types not being properly editable by additional editors.
   - Adds more type and content cleaning into the content types FillParams method(s).
   - Pass an explicit cacheid in to createtemplate in index.php
-  - Fix an error message in the autorefresh javascript class.
+  - Fix an error message in the autorefresh JavaScript class.
   - Fix problems that could result in uid=1 becoming inactive, and not a member of other groups when edited by another user.
   - Fix query problem in CmsLayoutStylesheetQuery with Mysql 5.7.
-  - The {content} tag now supports passing data attributes to the generated textarea, for use by syntax hilighter and WYSIWYG modules. i.e: {content data-foo="bar"}
-  - Refactoring of the admin login code to be cleaner, more efficient, more secure.
+  - The {content} tag now supports passing data attributes to the generated textarea, for use by syntax highlighter and WYSIWYG modules. i.e: {content data-foo="bar"}.
+  - Refactoring of the Admin login code to be cleaner, more efficient, more secure.
   - No longer allow any modules to auto-upgrade on frontend requests.
-  - Fix problem with cms_filecache_driver::clear()
-  - Introduces the new Hook mechanism to allow optimizing cms_stylesheet a bit further. All core SendEvent calls are now implemented as hooks  
-  - changegroupperms can now localize permission names,  and add an info string for each permission. (the listpermissions hook)
-  - Adds add_headtext(), get_headtext(),  add_footertext(), get_footertext() methods to the admin theme class
-  - minor refactoring of admin/index.php, admin/header.php, admin/footer.php and admin/moduleinterface.php
-  - now use hooks so that loaded modules can now add text to the head area of any admin page output.
+  - Fix problem with cms_filecache_driver::clear().
+  - Introduces the new Hook mechanism to allow optimizing cms_stylesheet a bit further. All core SendEvent calls are now implemented as hooks . 
+  - changegroupperms can now localize permission names,  and add an info string for each permission. (the listpermissions hook).
+  - Adds add_headtext(), get_headtext(),  add_footertext(), get_footertext() methods to the Admin theme class.
+  - minor refactoring of admin/index.php, admin/header.php, admin/footer.php and admin/moduleinterface.php.
+  - now use hooks so that loaded modules can now add text to the head area of any Admin page output.
   - Change the help for the basic attributes.
-  - Adds new 'switch user' functionality for members of the admin group.
+  - Adds new 'switch user' functionality for members of the Admin group.
   - Re-factor the content page selector ... now supports two modes (one for a simple list, and the previous dynamic one that is faster for large sites)
     the simple list mode is used for users with limited edit capabilities on pages.
-  - Adds a new smarty plugin {page_selector} to the admin lib.
+  - Adds a new smarty plugin {page_selector} to the Admin lib.
   - New arguments to the CreateHierarchyDropdown function (deprecated) and adjust documentation.
   - Content pages now have the ability to control whether or not the page wants any more children.
 
   - #11080 - Parameter $adding in GetContentBlockFieldInput always FALSE.
   - #11093 - Bad error message in jquery.cmsms_autorefresh.js.
-  - #11133 - is_email() fails on domain check
-  - #11235 - munge_string_to_url leaves trailing dashes at the end of munged url
+  - #11133 - is_email() fails on domain check.
+  - #11235 - munge_string_to_url leaves trailing dashes at the end of munged URL.
 
 Navigator v1.0.4
-  - Minor optimizations
+  - Minor optimizations.
   - Now use pagie in calculations of cacheid.
 
 Installation Assistant v1.2.1
@@ -86,7 +86,7 @@ Installation Assistant v1.2.1
   - A database account password is now required.
   - Upgrade routine now asks for, and tests database credentials.
   - Upgrade routine now rewrites the config.php file (but keeps a backup).
-  - Set a few more preferences to reasonable defaults on install.. specifically related to site cleanup and performance.
+  - Set a few more preferences to reasonable defaults on install. Specifically related to site cleanup and performance.
 
 CmsJobManager
   - New core module to handle queued asynchronous tasks.
@@ -96,10 +96,10 @@ Content Manager
   - Minor fix to the active tab when changing a template or design.
   - Now listen to the 'default parent page' user preference.
   - Fix minor XSS problem in the Admin if some loser puts JavaScript into the title field or alias field or menu text field.
-  - Now allow filtering pages by owner, editor, template, or design.  Only for admins with Modify any page, or Manage all content permissions.
-  - Fix problems with auto-refresh being too fast for some operations
+  - Now allow filtering pages by owner, editor, template, or design.  Only for Administrators with Modify any page, or Manage all content permissions.
+  - Fix problems with auto-refresh being too fast for some operations.
   - Now auto scroll to the first matched page in a find.
-  - Additional editors of a page cannot change the content type.  Only owners, or users with the Manage all Content permissions.
+  - Additional editors of a page cannot change the content type. Only owners, or users with the Manage all Content permissions.
   - Fix a problem with the call to GetTabElements.
 
 DesignManager
@@ -118,8 +118,8 @@ News v2.50.6
   - Removes GetNotificationOutput method.
   - Add a task that runs at least every 15 minutes to detect draft articles... create an alert for this.
   - Add an option to never create alerts about draft News articles.
-  - Minor optimizations
-  - Adds postdate as parameters in events
+  - Minor optimizations.
+  - Adds postdate as parameters in events.
 
 FileManager v1.6.3
   - Move settings to it's own menu item under Site Admin.
@@ -144,6 +144,7 @@ ModuleManager
   - Improvements to error handling in the new versions tab.
   - Write a confirmation form for uninstalling a module that displays the UninstallPreMessage or uses a default.
   - Now don't allow disabling / uninstalling myself.
+  - Don't hide the upgrades tab when there are no upgrades, but show the number of upgrades in the tab title instead.
 
 
 Version 2.1.6 - Spanish Wells
