@@ -1,8 +1,8 @@
 <?php
 $lang['created'] = 'Created';
 $lang['errors'] = 'Errors';
-$lang['evtdesc_OnJobFailed'] = 'An event that is triggered when a job is removed from the job queue after failing too many times';
-$lang['evthelp_OnJobFailed'] = '<h4>Parameters:</h4>
+$lang['evtdesc_CmsJobManager::OnJobFailed'] = 'Sent after a job is removed from the job queue after failing too many times';
+$lang['evthelp_CmsJobManager::OnJobFailed'] = '<h4>Parameters:</h4>
 <ul>
   <li>"job" - A reference to the \CMSMS\Async\Job job object that has failed</li>
 </ul';
