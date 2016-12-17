@@ -224,7 +224,6 @@ class wizard_step9 extends \cms_autoinstaller\wizard_step
             $this->finish();
         }
         catch( \Exception $e ) {
-            debug_display($e); die();
             $this->error($e->GetMessage());
         }
 

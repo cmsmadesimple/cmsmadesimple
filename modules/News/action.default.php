@@ -229,7 +229,7 @@ if( !$tpl_ob->IsCached() ) {
             $onerow->author_id = $row['author_id'];
             if( $onerow->author_id > 0 ) {
                 $onerow->author = $row['username'];
-                $onerow->authorname = $row['first_name'].' '.$row['last_name'];
+                $onerow->authorname = trim($row['first_name'].' '.$row['last_name']);
             }
             else if( $onerow->author_id == 0 ) {
                 $onerow->author = $this->Lang('anonymous');
@@ -246,7 +246,6 @@ if( !$tpl_ob->IsCached() ) {
             $onerow->title = $row['news_title'];
             $onerow->content = $row['news_data'];
             $onerow->summary = (trim($row['summary'])!='<br/>'?$row['summary']:'');
-            $onerow->postdate = $row['news_date'];
             if( FALSE == empty($row['news_extra']) ) $onerow->extra = $row['news_extra'];
             $onerow->postdate = $row['news_date'];
             $onerow->startdate = $row['start_time'];
@@ -279,6 +278,7 @@ if( !$tpl_ob->IsCached() ) {
             if (isset($params['category_id'])) $sendtodetail['category_id'] = $params['category_id'];
             if (isset($params['pagelimit'])) $sendtodetail['pagelimit'] = $params['pagelimit'];
 
+            $onerow->detail_url = $this->create_url( $id, 'detail', $detailpage!=''?$detailpage:$returnid, $sendtodetail );
             $onerow->link = $this->CreateLink($id, 'detail', $detailpage!=''?$detailpage:$returnid, '', $sendtodetail,'', true, false, '', true,
                                               $prettyurl);
             $onerow->titlelink = $this->CreateLink($id, 'detail', $detailpage!=''?$detailpage:$returnid, $row['news_title'], $sendtodetail, '',

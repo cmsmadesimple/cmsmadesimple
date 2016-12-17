@@ -149,6 +149,13 @@ class CmsTemplateResource extends CMS_Fixed_Resource_Custom
 		return $contents;
 	}
 
+    public static function template_help_callback($typename)
+    {
+        $typename = trim($typename);
+        if( $typename == 'generic' ) return;
+        $key = 'tplhelp_'.$typename;
+        return lang($key);
+    }
 } // end of class
 
 #

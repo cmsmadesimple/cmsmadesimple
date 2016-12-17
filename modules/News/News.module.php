@@ -25,7 +25,7 @@ class News extends CMSModule
     function GetFriendlyName() { return $this->Lang('news'); }
     function IsPluginModule() { return true; }
     function HasAdmin() { return true; }
-    function GetVersion() { return '2.50.7'; }
+    function GetVersion() { return '2.50.8'; }
     function MinimumCMSVersion() { return '1.12-alpha0'; }
     function GetAdminDescription() { return $this->Lang('description'); }
     function GetAdminSection() { return 'content'; }
@@ -306,6 +306,16 @@ class News extends CMSModule
         if( is_object($mod) ) return $mod->Lang('type_'.$str);
     }
 
+    public static function template_help_callback($str)
+    {
+        $str = trim($str);
+        $mod = cms_utils::get_module('News');
+        if( is_object($mod) ) {
+            $file = $mod->GetModulePath().'/doc/tpltype_'.$str.'.inc';
+            if( is_file($file) ) return file_get_contents($file);
+        }
+    }
+
     public static function reset_page_type_defaults(CmsLayoutTemplateType $type)
     {
         if( $type->get_originator() != 'News' ) throw new CmsLogicException('Cannot reset contents for this template type');
@@ -360,7 +370,6 @@ class News extends CMSModule
             $obj->title = $this->Lang('title_news_settings');
             $obj->description = $this->Lang('desc_news_settings');
             $obj->action = 'admin_settings';
-            $obj->url = $this->create_url('m1_',$obj->action);
             $out[] = $obj;
         }
         return $out;

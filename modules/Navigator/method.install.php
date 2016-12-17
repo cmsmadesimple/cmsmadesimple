@@ -50,6 +50,7 @@ try {
     $menu_template_type->set_dflt_flag(TRUE);
     $menu_template_type->set_lang_callback('Navigator::page_type_lang_callback');
     $menu_template_type->set_content_callback('Navigator::reset_page_type_defaults');
+    $menu_template_type->set_help_callback('Navigator::template_help_callback');
     $menu_template_type->reset_content_to_factory();
     $menu_template_type->save();
 }
@@ -67,6 +68,7 @@ try {
     $bc_template_type->set_dflt_flag(TRUE);
     $bc_template_type->set_lang_callback('Navigator::page_type_lang_callback');
     $bc_template_type->set_content_callback('Navigator::reset_page_type_defaults');
+    $bc_template_type->set_help_callback('Navigator::template_help_callback');
     $bc_template_type->reset_content_to_factory();
     $bc_template_type->save();
 }

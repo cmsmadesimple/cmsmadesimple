@@ -103,9 +103,20 @@ $(document).ready(function(){
             $('#content').focus();
         });
     });
+
+    $(document).on('click','#a_helptext',function(e){
+        e.preventDefault();
+	$('#helptext_dlg').dialog({ 'width': 'auto' });
+    });
 });
 </script>
 
+{$helptext=$type_obj->get_template_helptext($type_obj->get_name())}
+{if !empty($helptext)}
+  <div id="helptext_dlg" title="{$mod->Lang('prompt_template_help')}" style="display: none;">
+  {$helptext}
+  </div>
+{/if}
 {$get_lock = $template->get_lock()}
 
 {capture assign='disable'}
@@ -181,16 +192,19 @@ $(document).ready(function(){
 {/if}
 
 {tab_start name='template'}
-<!-- template -->
 <div class="pageoverflow">
-    <p class="pagetext"><label for="contents">{$mod->Lang('prompt_template')}:</label>&nbsp;{cms_help key2=help_template_contents title=$mod->Lang('prompt_template')}</p>
+    <p class="pagetext">
+      <label for="contents">{$mod->Lang('prompt_template_content')}:</label>&nbsp;{cms_help key2=help_template_contents title=$mod->Lang('prompt_template_content')}
+      {if !empty($helptext)}
+        <a id="a_helptext" href="#" style="float: right;">{$mod->Lang('prompt_template_help')}</a>
+      {/if}
+    </p>
     <p class="pageinput">
-        {cms_textarea id='content' prefix=$actionid name=contents value=$template->get_content() type='smarty' rows=20 cols=80}
+        {cms_textarea id='content' prefix=$actionid name=contents value=$template->get_content() type='smarty' rows=20}
     </p>
 </div>
 
 {tab_start name='description'}
-<!-- description -->
 <div class="pageoverflow">
     <p class="pagetext"><label for="description">{$mod->Lang('prompt_description')}:</label>&nbsp;{cms_help key2=help_template_description title=$mod->Lang('prompt_description')}</p>
     <p class="pageinput">
@@ -200,7 +214,6 @@ $(document).ready(function(){
 
 {if $has_themes_right}
     {tab_start name='designs'}
-    <!-- designs -->
     <div class="pageoverflow">
         <p class="pagetext"><label for="designlist">{$mod->Lang('prompt_designs')}:</label>&nbsp;{cms_help key2=help_template_designlist title=$mod->Lang('prompt_designs')}</p>
         <p class="pageinput">
@@ -213,7 +226,6 @@ $(document).ready(function(){
 
 {if $has_manage_right}
     {tab_start name='advanced'}
-    <!-- advanced -->
         <div class="pageoverflow">
             <p class="pagetext"><label for="tpl_listable">{$mod->Lang('prompt_listable')}:</label>&nbsp;{cms_help key2=help_template_listable title=$mod->Lang('prompt_listable')}</p>
             <p class="pageinput">
@@ -255,7 +267,6 @@ $(document).ready(function(){
 
 {if $template->get_owner_id() == get_userid() or $has_manage_right}
     {tab_start name='permissions'}
-    <!-- permissions -->
     {if isset($user_list)}
     <div class="pageoverflow">
         <p class="pagetext"><label for="tpl_owner">{$mod->Lang('prompt_owner')}:</label>&nbsp;{cms_help key2=help_template_owner title=$mod->Lang('prompt_owner')}</p>

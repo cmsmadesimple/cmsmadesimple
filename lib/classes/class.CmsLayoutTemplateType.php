@@ -213,7 +213,7 @@ class CmsLayoutTemplateType
     {
         $this->_data['description'] = $str;
         $this->_dirty = TRUE;
-    }
+     }
 
     /**
      * Get the owner of this template type.
@@ -281,6 +281,50 @@ class CmsLayoutTemplateType
     public function get_lang_callback()
     {
         if( isset($this->_data['lang_callback']) ) return $this->_data['lang_callback'];
+    }
+
+    /**
+     * Set a callback to be used to display help for this template when editing.
+     *
+     * @param callable $callback A static function name, or an array of a class name and member name.
+     */
+    public function set_help_callback($callback)
+    {
+        $this->_data['help_callback'] = $callback;
+        $this->_dirty = TRUE;
+    }
+
+    /**
+     * Return the callback used to retrieve help for this template type.
+     *
+     * @return mixed
+     */
+    public function get_help_callback()
+    {
+        if( isset($this->_data['help_callback']) ) return $this->_data['help_callback'];
+    }
+
+    /**
+     * Set the flag indicating that a maximum of one template of this type is permitted.
+     *
+     * @throws CmsInvalidDataException
+     * @param bool $flag
+     */
+    public function set_oneonly_flag($flag = TRUE)
+    {
+        if( !is_bool($flag) ) throw new CmsInvalidDataException('value is invalid for set_oneonly_flag');
+        $this->_data['one_only'] = $flag;
+        $this->_dirty = true();
+    }
+
+    /**
+     * Get the flag indicating that a maximum of one template of this type is permitted.
+     *
+     * @return bool
+     */
+    public function get_oneonly_flag()
+    {
+        if( isset($this->_data['one_only']) ) return $this->_data['one_only'];
     }
 
     /**
@@ -382,11 +426,13 @@ class CmsLayoutTemplateType
         $db = CmsApp::get_instance()->GetDb();
         $now = time();
         $query = 'INSERT INTO '.CMS_DB_PREFIX.self::TABLENAME.'
-                (originator,name,has_dflt,dflt_contents,description,
-                 lang_cb,dflt_content_cb,requires_contentblocks,owner,created,modified)
-                VALUES (?,?,?,?,?,?,?,?,?,?,?)';
-        $dbr = $db->Execute($query,array($this->get_originator(), $this->get_name(), $this->get_dflt_flag(),
-                                         $this->get_dflt_contents(), $this->get_description(), serialize($this->get_lang_callback()),
+                (originator,name,has_dflt,one_only,dflt_contents,description,
+                 lang_cb,help_content_cb,dflt_content_cb,requires_contentblocks,owner,created,modified)
+                VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)';
+        $dbr = $db->Execute($query,array($this->get_originator(), $this->get_name(), $this->get_dflt_flag(), $this->get_oneonly_flag(),
+                                         $this->get_dflt_contents(), $this->get_description(),
+                                         serialize($this->get_lang_callback()),
+                                         serialize($this->get_help_callback()),
                                          serialize($this->get_content_callback()), $this->get_content_block_flag() ? 1 : 0,
                                          $this->get_owner(), $now,$now));
         if( !$dbr ) throw new CmsSQLErrorException($db->sql.' -- '.$db->ErrorMsg());
@@ -414,11 +460,12 @@ class CmsLayoutTemplateType
         $now = time();
 
         $query = 'UPDATE '.CMS_DB_PREFIX.self::TABLENAME.'
-                SET originator = ?, name = ?, has_dflt = ?, dflt_contents = ?, description = ?,
-                    lang_cb = ?, dflt_content_cb = ?, requires_contentblocks = ?, owner = ?, modified = ?
+                SET originator = ?, name = ?, has_dflt = ?, one_only = ?, dflt_contents = ?, description = ?,
+                    lang_cb = ?, help_content_cb = ?, dflt_content_cb = ?, requires_contentblocks = ?, owner = ?, modified = ?
                 WHERE id = ?';
-        $dbr = $db->Execute($query,array($this->get_originator(),$this->get_name(),$this->get_dflt_flag(),
-                                         $this->get_dflt_contents(),$this->get_description(),serialize($this->get_lang_callback()),
+        $dbr = $db->Execute($query,array($this->get_originator(),$this->get_name(),$this->get_dflt_flag(),$this->get_oneonly_flag(),
+                                         $this->get_dflt_contents(),$this->get_description(),
+                                         serialize($this->get_lang_callback()),serialize($this->get_help_callback()),
                                          serialize($this->get_content_callback()),$this->get_content_block_flag() ? 1 : 0,
                                          $this->get_owner(), $now, $this->get_id()));
         if( !$dbr ) throw new CmsSQLErrorException($db->ErrorMsg());
@@ -513,9 +560,17 @@ class CmsLayoutTemplateType
      */
     public function get_template_helptext()
     {
+        $text = null;
+        $cb = $this->get_help_callback();
         $originator = $this->get_originator();
         $name = $this->get_name();
-        $text = null;
+        if( $cb && is_callable($cb) ) {
+            $text = call_user_func($cb,$name);
+            return $text;
+        }
+
+        // no callback specified, see if this originator is a loadable module.
+        $name = $this->get_name();
         if( $originator == self::CORE ) {
             // it's a core page template, or generic
         } else {
@@ -573,6 +628,7 @@ class CmsLayoutTemplateType
     private static function &_load_from_data($row)
     {
         $row['lang_callback'] = unserialize($row['lang_cb']);
+        $row['help_callback'] = unserialize($row['help_content_cb']);
         unset($row['lang_cb']);
         $row['content_callback'] = unserialize($row['dflt_content_cb']);
         unset($row['dflt_content_cb']);

@@ -63,6 +63,7 @@ try {
         $this->SetError($this->Lang('error_missingparam'));
         $this->RedirectToAdminTab();
     }
+    $type_obj = CmsLayoutTemplateType::load($tpl_obj->get_type_id());
 
     try {
         if (isset($params['submit']) || isset($params['apply']) ) {
@@ -84,8 +85,6 @@ try {
                 if (isset($params['design_list'])) $design_list = $params['design_list'];
                 $tpl_obj->set_designs($design_list);
             }
-
-            $type_obj = CmsLayoutTemplateType::load($tpl_obj->get_type_id());
 
             // lastly, check for errors in the template before we save.
             cms_utils::set_app_data('tmp_template', $params['contents']);
@@ -146,7 +145,6 @@ try {
         echo $this->ShowErrors($message);
     }
 
-    $type_obj = CmsLayoutTemplateType::load($tpl_obj->get_type_id());
     if( $tpl_obj->get_id() > 0 ) {
         \CmsAdminThemeBase::GetThemeObject()->SetSubTitle($this->Lang('edit_template'));
     } else {
@@ -223,4 +221,3 @@ try {
 #
 # EOF
 #
-?>
