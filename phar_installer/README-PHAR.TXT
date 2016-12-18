@@ -142,6 +142,10 @@ The installation assistant supports the following URL based options:
     Allow specifying a custom destination directory (must be an absolute path).
 5.  nofiles=1
     Do not overwrite files.  This is useful when needing to setup the database when the files have been manually extracted from the source code repository.
+6.  clear=1
+    Usable only on the first step, this will ensure that all preset config information is cleared from the session (for development purposes only).
+
+
 
 ---------------------------
 Frequently Asked Questions

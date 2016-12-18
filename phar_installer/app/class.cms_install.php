@@ -52,6 +52,13 @@ class cms_install extends \__appbase\app
         // initialize the session.
         $sess = \__appbase\session::get();
         $junk = $sess[__CLASS__]; // this is junk, but triggers session to start.
+
+        // get the request
+        $request = \__appbase\request::get();
+        if( isset($request['clear']) ) {
+            $sess->reset();
+        }
+
         $config = $this->get_config();
 
         // setup autoload
@@ -70,15 +77,11 @@ class cms_install extends \__appbase\app
         if( file_exists($fn) ) $build = parse_ini_file($fn);
         if( isset($build['build_time']) ) $smarty->assign('build_time',$build['build_time']);
 
-        // get the request
-        $request = \__appbase\request::get();
-
         // handle debug mode
         if( $config['debug'] ) {
             @ini_set('display_errors',1);
             @error_reporting(E_ALL);
         }
-
 
         if( $this->in_phar() && !$config['nobase'] ) {
             $base_href = $_SERVER['SCRIPT_NAME'];
@@ -197,7 +200,7 @@ class cms_install extends \__appbase\app
                 break;
             }
         }
-	return $config;
+        return $config;
     }
 
     protected function check_config($config)
@@ -243,6 +246,7 @@ class cms_install extends \__appbase\app
     {
         $sess = \__appbase\session::get();
         if( isset($sess['config']) ) {
+            // already set once... so you must close and re-open the browser to reset it.
             return $sess['config'];
         }
 
@@ -336,9 +340,9 @@ class cms_install extends \__appbase\app
 
     public function get_root_url()
     {
-        $prefix = 'http';
-        if( isset($_SERVER['HTTPS']) && !empty($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) != 'off' ) $prefix = 'https';
-        $prefix .= '://'.$_SERVER['HTTP_HOST'];
+        $prefix = null;
+        //if( isset($_SERVER['HTTPS']) && !empty($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) != 'off' ) $prefix = 'https';
+        $prefix .= '//'.$_SERVER['HTTP_HOST'];
 
         // if we are putting files somewhere else, we cannot determine the root url of the site
         // via the $_SERVER variables.
@@ -357,6 +361,7 @@ class cms_install extends \__appbase\app
             $tmp = basename($_SERVER['SCRIPT_NAME']);
             if( ($p = strpos($b,$tmp)) !== FALSE ) $b = substr($b,0,$p);
         }
+
         $b = str_replace('\\','/',$b); // cuz windows blows.
         if( !\__appbase\endswith($prefix,'/') && !\__appbase\startswith($b,'/') ) $prefix .= '/';
         return $prefix.$b;
@@ -388,7 +393,6 @@ class cms_install extends \__appbase\app
 
         // and do our stuff.
         try {
-            $config = $this->get_config();
             $tmp = 'm'.substr(md5(realpath(getcwd()).session_id()),0,8);
             $wizard = \__appbase\wizard::get_instance(__DIR__.'/wizard','\cms_autoinstaller');
             // this sets a custom step variable for each instance

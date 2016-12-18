@@ -150,6 +150,10 @@ ModuleManager
   - Now don't allow disabling / uninstalling myself.
   - Don't hide the upgrades tab when there are no upgrades, but show the number of upgrades in the tab title instead.
 
+Installation Assistant
+  - Now displays if files are going to be skipped
+  - Adds clear option for development purposes.
+  - No longer ask to save database password.
 
 Version 2.1.6 - Spanish Wells
 ----------------------------------

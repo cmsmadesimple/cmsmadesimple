@@ -304,6 +304,7 @@ $lang['step2_hdr_upgradeinfo'] = 'Version information';
 $lang['step2_info_upgradeinfo'] = 'Below are the available release notes and changelog information for each release. The buttons below will display detailed information as to what has changed in each version of CMS Made Simple. There may be further instructions or warnings in each version that could affect the upgrade process.';
 $lang['step2_minupgradever'] = 'The minimum version that this application can upgrade from is: %s. You may need to upgrade your application to a newer version in stages, using another method before completing the upgrade process. Please ensure that you have a complete, verified backup before using any upgrade method.';
 $lang['step2_nocmsms'] = 'We did not find an installation of CMS Made Simple in this directory. It looks like this is a new installation';
+$lang['step2_nofiles'] = 'As requested, CMSMS Core files will not be processed during this process';
 $lang['step2_passed'] = 'Passed';
 $lang['step2_pwd'] = 'Your current working directory';
 $lang['step2_schemaver'] = 'Database Schema version';

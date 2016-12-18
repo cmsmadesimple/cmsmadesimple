@@ -72,6 +72,7 @@ class wizard_step2 extends \cms_autoinstaller\wizard_step
         $wizard = $this->get_wizard();
         $smarty = \__appbase\smarty();
         $smarty->assign('pwd',$rpwd);
+        $smarty->assign('nofiles',$config['nofiles']);
 
         if( $info ) {
             // its an upgrade
