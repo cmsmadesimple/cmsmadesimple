@@ -68,7 +68,6 @@ final class DesignManager extends CMSModule
       $obj->title = $this->Lang('title_designmanager_settings');
       $obj->description = $this->Lang('desc_designmanager_settings');
       $obj->action = 'admin_settings';
-      $obj->url = $this->create_url('m1_',$obj->action);
       $out[] = $obj;
     }
     return $out;
