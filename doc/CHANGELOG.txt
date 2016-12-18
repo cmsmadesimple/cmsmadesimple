@@ -58,7 +58,7 @@ Core - General
   - Refactoring of the Admin login code to be cleaner, more efficient, more secure.
   - No longer allow any modules to auto-upgrade on frontend requests.
   - Fix problem with cms_filecache_driver::clear().
-  - Introduces the new Hook mechanism to allow optimizing cms_stylesheet a bit further. All core SendEvent calls are now implemented as hooks . 
+  - Introduces the new Hook mechanism to allow optimizing cms_stylesheet a bit further. All core SendEvent calls are now implemented as hooks .
   - changegroupperms can now localize permission names,  and add an info string for each permission. (the listpermissions hook).
   - Adds add_headtext(), get_headtext(),  add_footertext(), get_footertext() methods to the Admin theme class.
   - minor refactoring of admin/index.php, admin/header.php, admin/footer.php and admin/moduleinterface.php.
@@ -86,11 +86,13 @@ Navigator v1.0.5
 Installation Assistant v1.3
   - Only create dummy index.html files in subdirectories we created.
   - Clear cache after step 9.
-  - A database account password is now required.
   - Upgrade routine now asks for, and tests database credentials.
   - Upgrade routine now rewrites the config.php file (but keeps a backup).
   - Set a few more preferences to reasonable defaults on install. Specifically related to site cleanup and performance.
   - On installation, now insure that tmp/cache and tmp/templates_c directories are empty.
+  - Now displays if files are going to be skipped
+  - Adds clear option for development purposes.
+  - No longer ask to save database password.
 
 CmsJobManager
   - New core module to handle queued asynchronous tasks.
@@ -151,10 +153,6 @@ ModuleManager
   - Now don't allow disabling / uninstalling myself.
   - Don't hide the upgrades tab when there are no upgrades, but show the number of upgrades in the tab title instead.
 
-Installation Assistant
-  - Now displays if files are going to be skipped
-  - Adds clear option for development purposes.
-  - No longer ask to save database password.
 
 Version 2.1.6 - Spanish Wells
 ----------------------------------
@@ -172,7 +170,7 @@ Core - General
   - Minor fix to the relative_time plugin.
   - Admin menu item URLs can now be built from the remaining members of the object, if not specified.
   - {content_image} and {content_module} now preserve order properly and support the priority attribute.
-  
+
   - #11198 - Fixes problem with cms_selflink with aliases that starts with a numeric sign.
 
 Content Manager v1.1.4
