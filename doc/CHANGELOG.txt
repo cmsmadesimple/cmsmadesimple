@@ -71,6 +71,7 @@ Core - General
   - New arguments to the CreateHierarchyDropdown function (deprecated) and adjust documentation.
   - Content pages now have the ability to control whether or not the page wants any more children.
   - The TemplateType class now has a help callback to optionally allow retrieving help for templates of a particular type
+  - Permissions are now grouped logically by module/originator in ChangeGroupPermissions.
 
   - #11080 - Parameter $adding in GetContentBlockFieldInput always FALSE.
   - #11093 - Bad error message in jquery.cmsms_autorefresh.js.

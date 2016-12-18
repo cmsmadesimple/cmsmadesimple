@@ -43,11 +43,15 @@
  </tr>
   </thead>
   <tbody>
-  {foreach from=$perms item=perm}
+  {foreach $perms as $section => $list}
+    <tr>
+      <td colspan="{count($group_list)+1}"><h3>{$section}</h3></td>
+    </tr>
+    {foreach $list as $perm}
     {cycle values='row1,row2' assign='currow'}
     <tr class="{$currow}">
- 		<td><strong>{$perm->name}</strong>
-		  {if !empty($perm->description)}<div class="description">{$perm->description}</div>{/if}
+ 		<td>&nbsp;&nbsp;&nbsp;<strong>{$perm->name}</strong>
+		  {if !empty($perm->description)}<div class="description">&nbsp;&nbsp;&nbsp;{$perm->description}</div>{/if}
 		</td>
 		{foreach from=$group_list item=thisgroup}
 			{if $thisgroup->id != -1}
@@ -56,6 +60,7 @@
 			{/if}
 		{/foreach}
     </tr>
+    {/foreach}
   {/foreach}
   </tbody>
 </table>
