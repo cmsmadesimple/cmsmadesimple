@@ -129,6 +129,7 @@ $lang['fail_session_save_path_exists'] = 'The session save path variable value i
 $lang['fail_session_save_path_writable'] = 'The session save path directory is not writeable';
 $lang['fail_session_use_cookies'] = 'CMSMS requires that PHP be configured to store the session key in a cookie';
 $lang['fail_tmpfile'] = 'The system tmpfile() function is not functioning. This is required to allow us to extract archives. The optional TMPDIR url argument can be provided to the installer to specify a writeable directory. See the README file that should be in included in this directory.';
+$lang['fail_tmp_dirs_empty'] = 'The CMSMS Temporary directories <em>(tmp/cache and tmp/templates_c) exist, and are not empty.  Please remove or empty them';
 $lang['fail_xml_functions'] = 'The XML extension was not found. Please enable this in your PHP environment';
 $lang['failed'] = 'failed';
 $lang['file_get_contents'] = 'Testing for the file_get_contents function';
@@ -338,6 +339,7 @@ $lang['title_api_docs'] = 'Official API Documentation';
 $lang['to'] = 'to';
 $lang['title_share'] = 'Share your experience with your friends.';
 $lang['tmpfile'] = 'Checking for working tmpfile()';
+$lang['tmp_dirs_empty'] = 'Ensure that temporary directories are empty or do not exist';
 
 # U
 $lang['upgrade'] = 'Upgrade';

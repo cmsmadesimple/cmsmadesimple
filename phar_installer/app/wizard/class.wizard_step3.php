@@ -73,6 +73,28 @@ class wizard_step3 extends \cms_autoinstaller\wizard_step
             $obj->required = true;
             $obj->fail_key = 'fail_config_writable';
             $tests[] = $obj;
+        } else {
+            $is_dir_empty = function($dir) {
+                $dir = trim($dir);
+                if( !$dir ) return FALSE;  // fail on invalid dir
+                if( !is_dir($dir) ) return TRUE; // pass on dir not existing yet
+                $files = glob($dir.'/*' );
+                if( !count($files) ) return TRUE; // no files yet.
+                if( count($files) > 1 ) return FALSE; // morre than one file
+                // trivial check for index.html
+                $bn = strtolower(basename($files[0]));
+                if( fnmatch('index.htm*',$bn) ) return TRUE;
+                return FALSE;
+            };
+            $res = true;
+            $dest = $app->get_destdir();
+            if( $res && !$is_dir_empty($dest.'/tmp/cache') ) $res = false;
+            if( $res && !$is_dir_empty($dest.'/tmp/templates_c') ) $res = false;
+
+            $obj = new _tests_\boolean_test('tmp_dirs_empty',$res);
+            $obj->required = true;
+            $obj->fail_key = 'fail_tmp_dirs_empty';
+            $tests[] = $obj;
         }
 
         // required test... gd version 2

@@ -83,13 +83,14 @@ Navigator v1.0.5
   - Now use pageid in calculations of cacheid.
   - Now output template help to Navigator
 
-Installation Assistant v1.2.1
+Installation Assistant v1.3
   - Only create dummy index.html files in subdirectories we created.
   - Clear cache after step 9.
   - A database account password is now required.
   - Upgrade routine now asks for, and tests database credentials.
   - Upgrade routine now rewrites the config.php file (but keeps a backup).
   - Set a few more preferences to reasonable defaults on install. Specifically related to site cleanup and performance.
+  - On installation, now insure that tmp/cache and tmp/templates_c directories are empty.
 
 CmsJobManager
   - New core module to handle queued asynchronous tasks.
