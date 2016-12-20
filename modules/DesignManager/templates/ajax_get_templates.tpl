@@ -37,6 +37,7 @@ $('#tpl_selall').cmsms_checkall();
 	<th class="pageicon"></th>
 	<th title="{$mod->Lang('title_tpl_name')}">{$mod->Lang('prompt_name')}</th>
 	<th title="{$mod->Lang('title_tpl_type')}">{$mod->Lang('prompt_type')}</th>
+	<th tytle="{$mod->Lang('title_filename')}">{$mod->Lang('prompt_filename')}</th>
 	<th title="{$mod->Lang('title_tpl_design')}">{$mod->Lang('prompt_design')}</th>
 	<th title="{$mod->Lang('title_tpl_dflt')}" class="pageicon">{$mod->Lang('prompt_dflt')}</th>{* dflt *}
 	<th class="pageicon"></th>{* edit *}
@@ -74,6 +75,13 @@ $('#tpl_selall').cmsms_checkall();
 	    {$type_id=$template->get_type_id()}
 	    {include file='module_file_tpl:DesignManager;admin_defaultadmin_tpltype_tooltip.tpl' assign='tpltype_tooltip'}
 	    <span class="tooltip" data-cms-description='{$tpltype_tooltip}'>{$list_types.$type_id}</span>
+	  </td>
+
+	  {* filename column *}
+	  <td>
+	     {if $template->has_content_file()}
+	       {basename($template->get_content_filename())}
+	     {/if}
 	  </td>
 
 	  {* design column *}
@@ -152,7 +160,9 @@ $('#tpl_selall').cmsms_checkall();
       <p class="pageinput" style="text-align: right;">
         <label for="tpl_bulk_action">{$mod->Lang('prompt_with_selected')}:</label>&nbsp;
         <select name="{$actionid}bulk_action" id="tpl_bulk_action" class="tpl_bulk_action" title="{$mod->Lang('title_tpl_bulkaction')}">
-          <option value="delete" title="{$mod->Lang('title_delete')}">{$mod->lang('prompt_delete')}</option>
+          <option value="delete">{$mod->lang('prompt_delete')}</option>
+          <option value="export">{$mod->lang('export')}</option>
+          <option value="import">{$mod->lang('import')}</option>
         </select>
         <input id="tpl_bulk_submit" class="tpl_bulk_action" type="submit" name="{$actionid}submit_bulk" value="{$mod->Lang('submit')}"/>&nbsp;{cms_help key2='help_bulk_templates' title=$mod->lang('prompt_delete')}
       </p>

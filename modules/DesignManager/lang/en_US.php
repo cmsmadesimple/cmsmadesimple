@@ -12,6 +12,8 @@ $lang['available_templates'] = 'Available Templates';
 #B
 $lang['bulk_action_delete'] = 'Bulk Deletion of Templates';
 $lang['bulk_action_delete_css'] = 'Bulk Deletion of Stylesheets';
+$lang['bulk_action_export'] = 'Export multiple templates to files';
+$lang['bulk_action_import'] = 'Import multiple templates from files';
 
 #C
 $lang['cancel'] = 'Cancel';
@@ -67,6 +69,10 @@ $lang['edit_design'] = 'Edit Design';
 $lang['edit_stylesheet'] = 'Edit Stylesheet';
 $lang['edit_template'] = 'Edit Template';
 $lang['edit_type'] = 'Edit Template Type';
+$lang['error_assets_writeperm'] = 'Sorry, the templates directory under your assets path or some of the files within it, either do not exist or are not writable.';
+$lang['error_assets_readwriteperm'] = 'Sorry, the template file for import either does not exist, or has permissions problems.';
+$lang['error_bulkexport_noneprocessed'] = 'Sorry, all of these templates were already exported.';
+$lang['error_bulkimport_noneprocessed'] = 'Sorry, none of those templates had files to import.';
 $lang['error_contentlocked'] = 'Sorry, This content is already locked by another user.  Please refresh the page.';
 $lang['error_create_tempfile'] = 'Error creating temporary file';
 $lang['error_direxists'] = 'Directory %s already exists';
@@ -85,6 +91,7 @@ $lang['error_uploading'] = 'Problem uploading file (perhaps it is too large)';
 $lang['error_upload_filetype'] = 'The file uploaded is not of the proper type (%s)';
 $lang['error_xmlstructure'] = 'Error in the structure of the XML File';
 $lang['error_nophysicalfile'] = 'An error occurred parsing the stylesheets, and/or templates of the design.  The url %s could not be located as a physical file.  This probably indicates that the template and/or stylesheets of this theme are using advanced logic that the design manager cannot process.';
+$lang['export'] = 'Export';
 $lang['export_design'] = 'Export Design to XML';
 
 #F
@@ -261,6 +268,7 @@ $lang['help_type_originator'] = 'The originator <em>(usually the module name)</e
 $lang['help_type_reqcontentblocks'] = 'This field indicates whether templates of this content type are required to have content blocks within them.';
 
 #I
+$lang['import'] = 'Import';
 $lang['import_design'] = 'Import Design';
 $lang['import_design_step1'] = 'Import Design Step 1';
 $lang['import_design_step2'] = 'Import Design Step 2';
@@ -283,6 +291,7 @@ Delete an attached stylesheet by clicking the trash icon.';
 $lang['info_import_xml_step1'] = 'Step 1: Choose a Design XML File to import';
 $lang['info_import_xml_step2'] = 'Step 2: Read information about this design before importing it to your CMSMS installation.';
 $lang['info_nodescription'] = 'There is no description entered for this item';
+$lang['info_template_content_file'] = 'The contents of this template are stored in a file.  You can edit this template by editing <strong>%s</strong> with your favorite editor.';
 $lang['info_template_delete'] = 'This template may be used by a working system.  Deleting it may break an otherwise working website.  Use caution!';
 
 #J
@@ -369,6 +378,7 @@ $lang['prompt_dflt'] = 'Default';
 $lang['prompt_dflt_tpl'] = 'This is the default template for its type';
 $lang['prompt_edit'] = 'Edit';
 $lang['prompt_editfilter'] = 'Edit Template Filter';
+$lang['prompt_filename'] = 'Filename';
 $lang['prompt_filter'] = 'Filter';
 $lang['prompt_firstpage'] = 'First page';
 $lang['prompt_has_dflt'] = 'Has Default Template Contents';
@@ -459,6 +469,7 @@ $lang['title_css_selectall'] = 'Select <em>(or deselect)</em> all visible styles
 $lang['title_delete'] = 'Delete the selected items';
 $lang['title_designmanager_settings'] = 'Settings - Design Manager';
 $lang['title_designs_default'] = 'The default design is automatically selected when creating new content pages.';
+$lang['title_filename'] = 'When templates are stored in a file this column displays the filename within the assets/templates directory';
 $lang['title_filter'] = 'Select an item in this list to reduce the number of visible templates';
 $lang['title_filter_design'] = 'Optionally filter the displayed stylesheet by the associated design/theme';
 $lang['title_filterapplied'] = 'A filter has been selected which limits the number of templates listed';

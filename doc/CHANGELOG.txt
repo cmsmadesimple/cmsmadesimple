@@ -93,6 +93,8 @@ Installation Assistant v1.3
   - Now displays if files are going to be skipped
   - Adds clear option for development purposes.
   - No longer ask to save database password.
+  - On install now create the assets directory structure
+  - On upgrade (for 2.2) now create the assets directory structure and move tmp/configs, tmp/templates, module_custom, adin/custom, etc. within it.
 
 CmsJobManager
   - New core module to handle queued asynchronous tasks.
@@ -118,6 +120,10 @@ DesignManager
   - When creating a new template, associate the new template with the default design.
   - Add reset buttons to the filter forms.
   - No longer check for default content block in a template.
+  - Adds the ability to export a template to a file within the assets directory, and to import from the assets directory
+  - If a file exists in the assets/templates directory corresponding to a template name, do not allow in-browser editing
+  - Add bulk actions to allow importing and exporting multiple templates.
+  - In the template list, if a file exists for a template... display it in the filename column.
 
 News v2.50.8
   - Minor fix to add category.

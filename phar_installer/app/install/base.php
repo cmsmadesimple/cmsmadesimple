@@ -184,5 +184,43 @@ Events::CreateEvent('Core','StylesheetPreCompile');
 Events::CreateEvent('Core','StylesheetPostCompile');
 Events::CreateEvent('Core','StylesheetPostRender');
 
+$create_private_dir = function($relative_dir) {
+    $app = \__appbase\get_app();
+    $destdir = $app->get_destdir();
+    $relative_dir = trim($relative_dir);
+    if( !$relative_dir ) return;
 
-?>
+    $dir = $destdir.'/'.$relative_dir;
+    if( !is_dir($dir) ) {
+        @mkdir($dir,0777,true);
+    }
+    @touch($dir.'/index.html');
+};
+
+/*
+$move_directory_files = function($srcdir,$destdir) {
+    $srcdir = trim($srcdir);
+    $destdir = trim($destdir);
+    if( !is_dir($srcdir) ) return;
+
+    $files = glob($srcdir.'/*');
+    if( !count($files) ) return;
+
+    foreach( $files as $src ) {
+        $bn = basename($src);
+        $dest = $destdir.'/'.$bn;
+        rename($src,$dest);
+    }
+    @touch($dir.'/index.html');
+};
+*/
+
+// create the assets directory structure
+verbose_msg('Creating assets structure');
+$create_private_dir('assets/templates');
+$create_private_dir('assets/configs');
+$create_private_dir('assets/admin_custom');
+$create_private_dir('assets/module_custom');
+$create_private_dir('assets/plugins');
+$create_private_dir('assets/images');
+$create_private_dir('assets/css');

@@ -68,7 +68,7 @@ class CmsModuleInfo implements ArrayAccess
   private function _check_modulecustom($module_name)
   {
       $config = \cms_config::get_instance();
-      $dir = $config['root_path']."/module_custom/$module_name";
+      $dir = $config['assets_path']."/module_custom/$module_name";
       $files1 = glob($dir."/templates/*.tpl");
       $files2 = glob($dir."/lang/??_??.php");
       $this->_data['has_custom'] = false;

@@ -150,6 +150,7 @@ final class cms_config implements ArrayAccess
 	$this->_types['tmp_cache_location'] = self::TYPE_STRING;
 	$this->_types['tmp_templates_c_location'] = self::TYPE_STRING;
 	$this->_types['public_cache_location'] = self::TYPE_STRING;
+    $this->_types['assets_dir'] = self::TYPE_STRING;
     $this->_types['assets_path'] = self::TYPE_STRING;
     $this->_types['permissive_smarty'] = self::TYPE_BOOL;
     $this->_types['smart_urls'] = self::TYPE_BOOL;
@@ -434,8 +435,12 @@ final class cms_config implements ArrayAccess
 	  case 'timezone':
 		  return '';
 
+      case 'assets_dir':
+          return 'assets';
+
       case 'assets_path':
-          return $this->OffsetGet('root_path').'/tmp';
+          $path = $this->OffsetGet('root_path').'/'.$this->OffsetGet('assets_dir');
+          return $path;
 
 	  case 'db_port':
 		  return '';

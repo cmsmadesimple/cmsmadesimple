@@ -123,7 +123,7 @@ class CmsLayoutTemplate
 	 */
 	public function get_content()
 	{
-		if( isset($this->_data['content']) ) return $this->_data['content'];
+        if( isset($this->_data['content']) ) return $this->_data['content'];
 	}
 
 	/**
@@ -798,6 +798,11 @@ class CmsLayoutTemplate
 	{
 		$ob = new CmsLayoutTemplate();
 		$ob->_data = $row;
+        $fn = $ob->get_content_filename();
+        if( is_file($fn) && is_readable($fn) ) {
+            $ob->_data['content'] = file_get_contents($fn);
+            $ob->_data['modified'] = filemtime($fn);
+        }
 		if( is_array($design_list) ) $ob->_design_assoc = $design_list;
 
 		self::$_obj_cache[$ob->get_id()] = $ob;
@@ -1165,6 +1170,30 @@ class CmsLayoutTemplate
     {
         $type = $this->get_type();
         return $type->get_usage_string($this->get_name());
+    }
+
+    /**
+     * Get the filename that will be used to read template contents from file.
+     *
+     * @since 2.2
+     * @return string
+     */
+    public function get_content_filename()
+    {
+        $config = \cms_config::get_instance();
+        return cms_join_path($config['assets_path'],'templates',$this->get_name().'.tpl');
+    }
+
+    /**
+     * Does this template have an associated file.
+     *
+     * @since 2.2
+     * @return bool
+     */
+    public function has_content_file()
+    {
+        $fn = $this->get_content_filename();
+        if( is_file($fn) && is_readable($fn) ) return TRUE;
     }
 } // end of class
 

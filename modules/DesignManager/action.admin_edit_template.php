@@ -111,7 +111,28 @@ try {
             }
 
         }
-    } catch( Exception $e ) {
+        else if( isset($params['export']) ) {
+            $outfile = $tpl_obj->get_content_filename();
+            $dn = dirname($outfile);
+            if( !is_dir($dn) || !is_writable($dn) ) {
+                throw new \RuntimeException($this->Lang('error_assets_writeperm'));
+            }
+            if( is_file($outfile) && !is_writable($outfile) ) {
+                throw new \RuntimeException($this->Lang('error_assets_writeperm'));
+            }
+            file_put_contents($outfile,$tpl_obj->get_content());
+        }
+        else if( isset($params['import']) ) {
+            $infile = $tpl_obj->get_content_filename();
+            if( !is_file($infile) || !is_readable($infile) || !is_writable($infile) ) {
+                throw new \RuntimeException($this->Lang('error_assets_readwriteperm'));
+            }
+            $data = file_get_contents($infile);
+            unlink($infile);
+            $tpl_obj->set_content($data);
+            $tpl_obj->save();
+        }
+    } catch( \Exception $e ) {
         $message = $e->GetMessage();
         $response = 'error';
     }

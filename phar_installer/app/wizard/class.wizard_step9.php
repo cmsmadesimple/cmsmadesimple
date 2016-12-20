@@ -10,6 +10,7 @@ class wizard_step9 extends \cms_autoinstaller\wizard_step
         // nothing here
     }
 
+
     private function do_upgrade($version_info)
     {
         $app = \__appbase\get_app();

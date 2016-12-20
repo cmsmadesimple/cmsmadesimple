@@ -113,12 +113,12 @@ final class CmsLangOperations
 
         // now load the custom stuff.
         if( $realm == self::CMSMS_ADMIN_REALM ) {
-            $files[] = cms_join_path(CMS_ROOT_PATH,$config['admin_dir'],'custom','lang',$curlang.'.php');
+            $files[] = cms_join_path($config['assets_path'],'admin_custom','lang',$curlang.'.php');
         }
         else {
             if( $is_module ) {
-                $files[] = cms_join_path(CMS_ROOT_PATH,'module_custom',$realm,'lang',$curlang.'.php');
-                $files[] = cms_join_path(CMS_ROOT_PATH,'module_custom',$realm,'lang','ext',$curlang.'.php');
+                $files[] = cms_join_path($config['assets_path'],'module_custom',$realm,'lang',$curlang.'.php');
+                $files[] = cms_join_path($config['assets_path'],'module_custom',$realm,'lang','ext',$curlang.'.php');
             }
         }
 

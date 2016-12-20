@@ -34,7 +34,7 @@ class wizard_step3 extends \cms_autoinstaller\wizard_step
 
         // required test... check if most files are writable.
         {
-            $dirs = array('modules','lib','plugins','admin','uploads','doc','scripts','install','tmp');
+            $dirs = array('modules','lib','plugins','admin','uploads','doc','scripts','install','tmp','assets');
             $failed = array();
             $list = glob($app->get_destdir().'/*');
             foreach( $list as $one ) {
@@ -51,10 +51,6 @@ class wizard_step3 extends \cms_autoinstaller\wizard_step
                     }
                 }
             }
-            $obj = new _tests_\boolean_test('dest_writable',!count($failed));
-            $obj->required = true;
-            if( count($failed) ) $obj->fail_msg = \__appbase\lang('fail_pwd_writable2',implode(', ',$failed));
-            $tests[] = $obj;
         }
 
         // required test... tmpfile
@@ -73,6 +69,13 @@ class wizard_step3 extends \cms_autoinstaller\wizard_step
             $obj->required = true;
             $obj->fail_key = 'fail_config_writable';
             $tests[] = $obj;
+
+            $dir = $app->get_destdir().'/assets';
+            if( is_dir($dir) ) {
+                $obj = new _tests_\boolean_test('assets_dir',FALSE);
+                $obj->fail_key = 'fail_assets_dir';
+                $tests[] = $obj;
+            }
         } else {
             $is_dir_empty = function($dir) {
                 $dir = trim($dir);
@@ -116,11 +119,11 @@ class wizard_step3 extends \cms_autoinstaller\wizard_step
         $obj->fail_key = 'fail_func_gzopen';
         $tests[] = $obj;
 
-	// recommended test ... ZipArchive
-	$obj = new _tests_\boolean_test('func_ziparchive',class_exists('ZipArchive'));
-	$obj->required = false;
-	$obj->fail_key = 'fail_func_ziparchive';
-	$tests[] = $obj;
+        // recommended test ... ZipArchive
+        $obj = new _tests_\boolean_test('func_ziparchive',class_exists('ZipArchive'));
+        $obj->required = false;
+        $obj->fail_key = 'fail_func_ziparchive';
+        $tests[] = $obj;
 
         // required test...  magic_quotes_runtime
         $obj = new _tests_\boolean_test('magic_quotes_runtime',!get_magic_quotes_runtime());

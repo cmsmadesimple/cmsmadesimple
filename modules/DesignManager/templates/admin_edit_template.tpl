@@ -199,9 +199,13 @@ $(document).ready(function(){
         <a id="a_helptext" href="#" style="float: right;">{$mod->Lang('prompt_template_help')}</a>
       {/if}
     </p>
+    {if $template->has_content_file()}
+      <div class="information">{$mod->Lang('info_template_content_file',$template->get_content_filename())}</div>
+    {else}
     <p class="pageinput">
         {cms_textarea id='content' prefix=$actionid name=contents value=$template->get_content() type='smarty' rows=20}
     </p>
+    {/if}
 </div>
 
 {tab_start name='description'}
@@ -247,8 +251,9 @@ $(document).ready(function(){
             <div class="pageoverflow">
                 <p class="pagetext"><label for="tpl_dflt">{$mod->Lang('prompt_default')}:</label>&nbsp;{cms_help key2=help_template_dflt title=$mod->Lang('prompt_default')}</p>
                 <p class="pageinput">
-                    <input type="hidden" name="{$actionid}default" value="{if $template->get_type_dflt()}1{else}0{/if}"/>
-                    <input id="tpl_dflt" type="checkbox" name="{$actionid}default" value="1" {if $template->get_type_dflt()}checked="checked" disabled="disabled"{/if}/>
+		    <select id="tpl_dflt" name="{$actionid}default" {if $template->get_type_dflt()}disabled{/if}>
+		      {cms_yesno selected=$template->get_type_dflt()}
+		    </select>
                 </p>
             </div>
             {/if}
@@ -263,6 +268,13 @@ $(document).ready(function(){
             </p>
         </div>
         {/if}
+        <div class="pageoverflow">
+	       {if $template->has_content_file()}
+	         <input type="submit" name="{$actionid}import" value="{$mod->Lang('import')}"/>
+	       {else}
+	         <input type="submit" name="{$actionid}export" value="{$mod->Lang('export')}"/>
+	       {/if}
+        </div>
 {/if}
 
 {if $template->get_owner_id() == get_userid() or $has_manage_right}
