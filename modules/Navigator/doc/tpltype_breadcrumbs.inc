@@ -32,7 +32,7 @@ ul {
   <li><code>titleattribute</code> (string) - A string that may contain a description that can be used as the title attribute of a generated link.</li>
   <li><code>modified</code> (string) - The date the content item was last modified.</li>
   <li><code>created</code> (string) - The date the content item was initially created.</li>
-  <li><code>depth</code> (string) - An integer representing the depth of the content item within the current resultset <em>(note, the depth is not necessarily from the root, but only from the current resultset.</li>
+  <li><code>depth</code> (string) - An integer representing the depth of the content item within the current resultset (note, the depth is not necessarily from the root, but only from the current resultset.</li>
   <li><code>menutext</code> (string) - The string to use in the text portion of the navigation.  This string has been converted to HTML entities and is suitable for display in a web page.</li>
   <li><code>raw_menutext</code> (string) - The raw menu text (not entity encoded) of the content item.</li>
   <li><code>alias</code> (string) - The human readable alias of the content item (if any).</li>
