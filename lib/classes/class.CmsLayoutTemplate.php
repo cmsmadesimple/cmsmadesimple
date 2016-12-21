@@ -730,6 +730,8 @@ class CmsLayoutTemplate
 		$query = 'DELETE FROM '.CMS_DB_PREFIX.self::TABLENAME.' WHERE id = ?';
 		$dbr = $db->Execute($query,array($this->get_id()));
 
+        @unlink($this->get_content_filename());
+
 		CmsTemplateCache::clear_cache();
 		audit($this->get_id(),'CMSMS','Template '.$this->get_name().' Deleted');
         HookManager::do_hook('Core::DeleteTemplatePost', [ get_class($this) => &$this ] );

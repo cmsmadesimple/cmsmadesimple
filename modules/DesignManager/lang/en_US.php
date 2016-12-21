@@ -10,8 +10,10 @@ $lang['available_stylesheets'] = 'Available Stylesheets';
 $lang['available_templates'] = 'Available Templates';
 
 #B
-$lang['bulk_action_delete'] = 'Bulk Deletion of Templates';
-$lang['bulk_action_delete_css'] = 'Bulk Deletion of Stylesheets';
+$lang['bulk_action_delete'] = 'Bulk deletion of templates';
+$lang['bulk_action_delete_css'] = 'Bulk Deletion of stylesheets';
+$lang['bulk_action_export_css'] = 'Export multiple stylesheets to Files';
+$lang['bulk_action_import_css'] = 'Import multiple stylesheets from Files';
 $lang['bulk_action_export'] = 'Export multiple templates to files';
 $lang['bulk_action_import'] = 'Import multiple templates from files';
 
@@ -274,6 +276,7 @@ $lang['import_design_step1'] = 'Import Design Step 1';
 $lang['import_design_step2'] = 'Import Design Step 2';
 $lang['info_about_categories'] = 'Categories provide an additional, useful method of sorting and organizing templates.  A template can belong to multiple categories and filtering on categories is permitted in the template list.  Examples of categories may include &quot;landing page templates&quot; or &quot;base templates&quot; when utilizing template inheritance.';
 $lang['info_copy_css'] = '<strong>Note:</strong><br />Copying a stylesheet will copy the stylesheet contents, as well as the description, media query, and media types.  However, the new stylesheet will not be associated with any designs';
+$lang['info_css_content_file'] = 'The contents of this stylesheet are stored in a file.  You can edit this item by editing <strong>%s</strong> with your favorite editor.';
 $lang['info_editcss_mediatype_tab'] = '<strong>Warning:</strong> This functionality is deprecated and will be removed at a later date.  If both the media type and media query are specified, then the media query will take preference when rendering stylesheets';
 $lang['info_editcss_mediaquery_tab'] = '<strong>Warning:</strong> If both the media type and media query are specified, then the media query will take preference when rendering stylesheets';
 $lang['info_edittemplate_templates_tab'] = 'Here you can select the templates that should be attached to the design.<br />

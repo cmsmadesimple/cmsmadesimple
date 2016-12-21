@@ -24,14 +24,14 @@
 {form_start allparms=$allparms}
 {if $bulk_op == 'bulk_action_delete'}
   <div class="pagewarning">{$mod->Lang('warn_bulk_delete_templates')}</div>
+  <div class="pageoverflow">
+    <p class="pagetext"></p>
+    <p class="pageinput">
+      <input id="check1" type="checkbox" name="{$actionid}check1" value="1"/>&nbsp;<label for="check1">{$mod->Lang('confirm_bulk_css_1')}</label><br/>
+      <input id="check2" type="checkbox" name="{$actionid}check2" value="1"/>&nbsp;<label for="check2">{$mod->Lang('confirm_bulk_css_2')}</label>
+    </p>
+  </div>
 {/if}
-<div class="pageoverflow">
-  <p class="pagetext"></p>
-  <p class="pageinput">
-    <input id="check1" type="checkbox" name="{$actionid}check1" value="1"/>&nbsp;<label for="check1">{$mod->Lang('confirm_bulk_css_1')}</label><br/>
-    <input id="check2" type="checkbox" name="{$actionid}check2" value="1"/>&nbsp;<label for="check2">{$mod->Lang('confirm_bulk_css_2')}</label>
-  </p>
-</div>
 <div class="pageoverflow">
   <p class="pagetext"></p>
   <p class="pageinput">

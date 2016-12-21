@@ -124,6 +124,10 @@ DesignManager
   - If a file exists in the assets/templates directory corresponding to a template name, do not allow in-browser editing
   - Add bulk actions to allow importing and exporting multiple templates.
   - In the template list, if a file exists for a template... display it in the filename column.
+  - Adds the ability to export a stylesheet to a file within the assets directory, and to import from the assets directory
+  - If a file exists in the assets/css directory corresponding to a stylesheet name, do not allow in-browser editing
+  - Add bulk actions to allow importing and exporting multiple stylesheets.
+  - In the stylesheet list, if a file exists for a stylesheet.. display it in the filename column.
 
 News v2.50.8
   - Minor fix to add category.

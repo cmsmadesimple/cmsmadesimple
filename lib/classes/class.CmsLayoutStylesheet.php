@@ -570,6 +570,8 @@ class CmsLayoutStylesheet
         $query = 'DELETE FROM '.CMS_DB_PREFIX.self::TABLENAME.' WHERE id = ?';
         $dbr = $db->Execute($query,array($this->get_id()));
 
+        @unlink($this->get_content_filename());
+
         CmsTemplateCache::clear_cache();
         audit($this->get_id(),'CMSMS','Stylesheet '.$this->get_name().' Deleted');
 		// Events::SendEvent('Core','DeleteStylesheetPost',array(get_class($this)=>&$this));
@@ -640,6 +642,11 @@ class CmsLayoutStylesheet
         $ob = new CmsLayoutStylesheet();
         $row['media_type'] = explode(',',$row['media_type']);;
         $ob->_data = $row;
+        $fn = $ob->get_content_filename();
+        if( is_file($fn) && is_readable($fn) ) {
+            $ob->_data['content'] = file_get_contents($fn);
+            $ob->_data['modified'] = filemtime($fn);
+        }
         if( is_array($design_list) ) $ob->_design_assoc = $design_list;
 
         self::$_css_cache[$row['id']] = $ob;
@@ -834,6 +841,29 @@ class CmsLayoutStylesheet
 		throw new CmsLogicException('Could not generate a template name for '.$prototype);
 	}
 
+    /**
+     * Get the filename that will be used to read template contents from file.
+     *
+     * @since 2.2
+     * @return string
+     */
+    public function get_content_filename()
+    {
+        $config = \cms_config::get_instance();
+        return cms_join_path($config['assets_path'],'css',$this->get_name().'.css');
+    }
+
+    /**
+     * Does this template have an associated file.
+     *
+     * @since 2.2
+     * @return bool
+     */
+    public function has_content_file()
+    {
+        $fn = $this->get_content_filename();
+        if( is_file($fn) && is_readable($fn) ) return TRUE;
+    }
 } // end of class
 
 #

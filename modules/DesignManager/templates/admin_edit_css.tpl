@@ -189,15 +189,19 @@ $(document).ready(function(){
 {if $has_designs_right}
     {tab_header name='designs' label=$mod->Lang('prompt_designs')}
 {/if}
+{tab_header name='advanced' label=$mod->Lang('prompt_advanced')}
 
 {tab_start name='content'}
-<!-- stylesheet -->
-<div class="pageoverflow">
-    <p class="pagetext"><label for="stylesheet">{$mod->Lang('prompt_stylesheet')}:</label>&nbsp;{cms_help key2=help_stylesheet_content title=$mod->Lang('prompt_stylesheet')}</p>
-    <p class="pageinput">
-        {cms_textarea id='stylesheet' prefix=$actionid name=content value=$css->get_content() type=css rows=20 cols=80}
-    </p>
-</div>
+{if $css->has_content_file()}
+  <div class="information">{$mod->Lang('info_css_content_file',$css->get_content_filename())}</div>
+{else}
+  <div class="pageoverflow">
+      <p class="pagetext"><label for="stylesheet">{$mod->Lang('prompt_stylesheet')}:</label>&nbsp;{cms_help key2=help_stylesheet_content title=$mod->Lang('prompt_stylesheet')}</p>
+      <p class="pageinput">
+          {cms_textarea id='stylesheet' prefix=$actionid name=content value=$css->get_content() type=css rows=20 cols=80}
+      </p>
+  </div>
+{/if}
 
 {tab_start name='media_type'}
 <!-- media -->
@@ -219,7 +223,6 @@ $(document).ready(function(){
 </div>
 
 {tab_start name='media_query'}
-<!-- media query -->
 <div class="pagewarning">{$mod->Lang('info_editcss_mediaquery_tab')}</div>
 <div class="pageoverflow">
     <p class="pagetext"><label for="mediaquery">{$mod->Lang('prompt_media_query')}:</label>&nbsp;{cms_help key2=help_css_mediaquery title=$mod->Lang('prompt_media_query')}</p>
@@ -229,7 +232,6 @@ $(document).ready(function(){
 </div>
 
 {tab_start name='description'}
-<!-- description -->
 <div class="pageoverflow">
     <p class="pagetext"><label for="txt_description">{$mod->Lang('prompt_description')}:</label>&nbsp;{cms_help key2=help_css_description title=$mod->Lang('prompt_description')}</p>
     <p class="pageinput">
@@ -249,6 +251,18 @@ $(document).ready(function(){
 		</p>
 	</div>
 {/if}
+
+{tab_start name='advanced'}
+<div class="pageoverflow">
+  <p class="pageinput">
+    {if $css->has_content_file()}
+       <input type="submit" name="{$actionid}import" value="{$mod->Lang('import')}"/>
+    {else}
+       <input type="submit" name="{$actionid}export" value="{$mod->Lang('export')}"/>
+    {/if}
+  </p>
+</div>
+
 
 {tab_end}
 
