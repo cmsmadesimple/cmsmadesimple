@@ -56,11 +56,14 @@ class TranslatableAlert extends Alert
     /**
      * Constructor
      *
-     * @param string[] $perms An array of permission names.  Or null.
+     * @param mixed $perms A single permission name, or an An array of permission names, or null.
      */
     public function __construct($perms = null)
     {
-        if( $perms && (!is_array($perms) || !count($perms)) ) throw new \InvalidArgumentException('perms must be an array of permission name strings');
+	if( $perms ) { 
+            if( is_string($perms) ) $perms = [ $perms ];
+	    if( !is_array($perms) || !count($perms)) ) throw new \InvalidArgumentException('perms must be an array of permission name strings');
+        }
         $this->_perms = $perms;
         parent::__construct();
     }
