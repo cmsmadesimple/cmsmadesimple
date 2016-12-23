@@ -97,8 +97,6 @@ if( $USE_THEME ) {
     // this is hackish
     echo '<div class="pagecontainer">';
     echo '<div class="pageoverflow">';
-
-    // this is hackish
     $title = $themeObject->title;
     $module_help_type = 'both';
     if( $title ) $module_help_type = null;

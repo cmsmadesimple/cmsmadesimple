@@ -77,9 +77,11 @@ if( is_array($slaves) && count($slaves) ) {
         $obj->set_params($searchparams);
         $results = $obj->get_matches();
         if( is_array($results) && count($results) ) {
+            debug_to_log($results,'results');
             begin_section($one_slave['class'],$obj->get_name(),$obj->get_section_description());
             foreach( $results as $one ) {
                 $text = isset($one['text'])?$one['text']:'';
+                if( $text ) $text = addslashes($text);
                 add_result($one_slave['class'],$one['title'],
                            isset($one['description'])?$one['description']:'',
                            isset($one['edit_url'])?$one['edit_url']:'',$text);

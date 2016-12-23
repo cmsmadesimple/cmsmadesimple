@@ -46,7 +46,7 @@ class wizard_step7 extends \cms_autoinstaller\wizard_step
             if( ($p = strpos($file,$archive)) === FALSE ) continue;
             $fn = substr($file,$p+strlen($archive));
             $dn = $destdir.dirname($fn);
-            if( $dn == $destdir.'/' ) continue;
+            if( $dn == $destdir || $dn == $destdir.'/' ) continue;
             if( $dn == "$destdir/admin" ) continue;
             $idxfile = $dn.'/index.html';
             if( is_dir($dn) && !is_file($idxfile) )  $this->_createIndexHTML($idxfile);

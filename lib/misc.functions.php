@@ -178,7 +178,30 @@ function cms_join_path()
     return implode(DIRECTORY_SEPARATOR,$args);
 }
 
+/**
+ * Return the relative portion of a path
+ *
+ * @since 2.2
+ * @author Robert Campbell
+ * @param string $in The input path or file specification
+ * @param string $relative_to,  The optional path to compute relative to.  If not supplied the cmsms root path will be used.
+ * @return string The relative portion of the input string.
+ */
+function cms_relative_path($in,$relative_to = null)
+{
+    $in = realpath(trim($in));
+    if( !$relative_to ) {
+        $config = \cms_config::get_instance();
+        $relative_to = $config['root_path'];
+    }
+    $to = realpath(trim($relative_to));
 
+    if( !$in ) return;
+    if( !$to ) return;
+    if( !startswith($in,$to) ) return;
+
+    return substr($in,strlen($to));
+}
 
 /**
  * Perform HTML entity conversion on a string.
@@ -794,7 +817,7 @@ function munge_string_to_url($alias, $tolower = false, $withslash = false)
   $expr = '/[^\p{L}_\-\.\ \d]/u';
   if( $withslash ) $expr = '/[^\p{L}_\.\-\ \d\/]/u';
   $tmp = trim( preg_replace($expr,'',$alias) );
-  
+
   // remove extra dashes and spaces.
   $tmp = str_replace(' ','-',$tmp);
   $tmp = str_replace('---','-',$tmp);

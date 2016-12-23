@@ -1,4 +1,4 @@
-<style type="text/css">
+<style type="text/css" scoped>
 #status_area,#searchresults_cont,#workarea {
   display: none;
 }
