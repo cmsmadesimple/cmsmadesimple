@@ -44,7 +44,7 @@
 
 $dirname = __DIR__;
 
-define('CMS_DEFAULT_VERSIONCHECK_URL','http://www.cmsmadesimple.org/latest_version.php');
+define('CMS_DEFAULT_VERSIONCHECK_URL','https://www.cmsmadesimple.org/latest_version.php');
 define('CMS_SECURE_PARAM_NAME','_sk_');
 define('CMS_USER_KEY','_userkey_');
 

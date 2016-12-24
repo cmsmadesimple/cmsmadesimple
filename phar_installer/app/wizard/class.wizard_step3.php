@@ -284,7 +284,7 @@ class wizard_step3 extends \cms_autoinstaller\wizard_step
         $tests[] = $obj;
 
         // recommended test... remote_url
-        $obj = new _tests_\boolean_test('remote_url',_tests_\test_remote_file('http://www.cmsmadesimple.org/latest_version.php',3,'cmsmadesimple'));
+        $obj = new _tests_\boolean_test('remote_url',_tests_\test_remote_file('https://www.cmsmadesimple.org/latest_version.php',3,'cmsmadesimple'));
         $obj->fail_key = 'fail_remote_url';
         $obj->warn_key = 'fail_remote_url';
         $tests[] = $obj;
