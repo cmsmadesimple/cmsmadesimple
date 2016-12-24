@@ -269,11 +269,14 @@ $(document).ready(function(){
         </div>
         {/if}
         <div class="pageoverflow">
-	       {if $template->has_content_file()}
-	         <input type="submit" name="{$actionid}import" value="{$mod->Lang('import')}"/>
-	       {else}
-	         <input type="submit" name="{$actionid}export" value="{$mod->Lang('export')}"/>
-	       {/if}
+			<p class="pagetext">File Template</p>
+			<p class="pageinput">
+			{if $template->has_content_file()}
+				<input type="submit" name="{$actionid}import" value="{$mod->Lang('import')}"/>
+			{else}
+				<input type="submit" name="{$actionid}export" value="{$mod->Lang('export')}"/>
+			{/if}
+		   </p>
         </div>
 {/if}
 

@@ -254,16 +254,15 @@ $(document).ready(function(){
 
 {tab_start name='advanced'}
 <div class="pageoverflow">
-  <p class="pageinput">
-    {if $css->has_content_file()}
-       <input type="submit" name="{$actionid}import" value="{$mod->Lang('import')}"/>
-    {else}
-       <input type="submit" name="{$actionid}export" value="{$mod->Lang('export')}"/>
-    {/if}
-  </p>
+	<p class="pagetext">File CSS</p>
+	<p class="pageinput">
+		{if $css->has_content_file()}
+			<input type="submit" name="{$actionid}import" value="{$mod->Lang('import')}"/>
+		{else}
+			<input type="submit" name="{$actionid}export" value="{$mod->Lang('export')}"/>
+		{/if}
+	</p>
 </div>
-
-
 {tab_end}
 
 {form_end}
