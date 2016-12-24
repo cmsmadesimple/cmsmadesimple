@@ -1,26 +1,22 @@
 <style type="text/css">
-h4 {
-  padding: 0;
-  font-weiight: bold;
-  margin-bottom: 0.5em;
-}
-ul {
-  list-style-type: disc;
-  margin-left: 1em;
-  margin-bottom: 1em;
-}
+	ul.helptext {
+	  list-style-type: disc;
+	  margin-left: 1em;
+	  margin-bottom: 1em;
+	}
 </style>
 
 <h2>News module entry object reference:</h2>
+
 <p>The News module's detail view exports the following variables:</p>
-<ul>
+<ul class="helptext">
   <li>$entry - A simple object that contains information about the one entry.</li>
   <li>$category_name - (string) the category name for the category that this article belongs to.</li>
   <li>$category_link - (string) (deprecated) A link to a summary view for articles in this category.</li>
 </ul>
 
 <h3>$entry Object Reference</h3>
-<ul>
+<ul class="helptext">
   <li>id <em>(integer)</em> - The unique article id.</li>
   <li>author_id <em>(integer)</em> - The userid of the author who created the article.  This value may be negative to indicate an FEU userid.</li>
   <li>title <em>(string)</em> - The title of the article.</li>
@@ -42,13 +38,14 @@ ul {
   <li>useexp (integer)       = A flag indicating wether this article is using the expiry information.</li>
   <li>file_location (string) = A url containing the location where files attached the article are stored... the field value should be appended to this url.</li>
 </ul>
+
 <p>Members can be displayed by the following syntax: {$entry->membername} or assigned to another smarty variable using {assign var='foo' value=$entry->membername}.</p>
 <p>The following members are available in the entry array:<br/></p>
 
 
 <h3>field Object Reference</h3>
 <p>The news_field object contains data about the fields and their values that are associated with a particular news article.</p>
-<ul>
+<ul class="helptext">
   <li>id (integer)  = The id of the field definition</li>
   <li>name (string) = The name of the field</li>
   <li>type (string) = The type of field</li>
@@ -57,9 +54,3 @@ ul {
   <li>public (integer) = A flag indicating wether the field is public or not</li>
   <li>value (mixed)    = The value of the field.</li>
 </ul>
-
-
-
-   ====
-   Below, you will find the normal detail template information.  Modify this template as desired.
-*}

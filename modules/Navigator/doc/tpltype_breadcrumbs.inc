@@ -1,29 +1,24 @@
 <style type="text/css">
-h4 {
-  padding: 0;
-  font-weiight: bold;
-  margin-bottom: 0.5em;
-}
-ul {
-  list-style-type: disc;
-  margin-left: 1em;
-  margin-bottom: 1em;
-}
+	ul.helptext {
+	  list-style-type: disc;
+	  margin-left: 1em;
+	  margin-bottom: 1em;
+	}
 </style>
 
-
 <h2>Navigator breadcrumbs template help</h2>
+
 <p>The breadcrumbs template outputs a flat array of Node objects representing the path from the current page, to the top of the page hierarchy.</p>
 
 <h3>Available Smarty Variables</h3>
-<ul>
+<ul class="helptext">
   <li><code>starttext</code> (string) - An introductory start text for the breadcrumb.  Usually, this is something like: &quot;You are here&quot;</li>
   <li><code>nodelist</code> (NavigatorNode[]) - An array of Nodes.</li>
 </ul>
 
 <h3>Nodes:</h3>
 <p>Each node is an object of type NavigatorNode. Each NavigatorNode object represents a single content page.  The nodes in the breadcrumb view are different than the nodes in the Navigation view in that child information is not available.  Each node has the following read-only properties:</p>
-<ul>
+<ul class="helptext">
   <li><code>id</code> (int) - The integer id of the content item being represented.</li>
   <li><code>url</code> (string) - The public, canonical URL of the content item (if any).</li>
   <li><code>accesskey</code> (string) - The access key specified for the content item.</li>
@@ -41,8 +36,9 @@ ul {
   <li><code>parent</code> (bool) - Whether or not this node represents a parent of the content item currently being displayed.</li>
   <li><code>children_exist</code> (bool) - Whether or not the content item represented by this node has any children what-so-ever.</li>
 </ul>
+
 <p>The following properties are only ever available if &quot;deep&quot; mode is enabled:</p>
-<ul>
+<ul class="helptext">
   <li><code>target</code> (string) - The target attribute of the content item.</li>
   <li><code>extra1</code> (string) - The extra1 field associated with the content item.</li>
   <li><code>extra2</code> (string) - The extra2 field associated with the content item.</li>

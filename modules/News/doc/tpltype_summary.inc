@@ -1,21 +1,15 @@
 <style type="text/css">
-h4 {
-  padding: 0;
-  font-weiight: bold;
-  margin-bottom: 0.5em;
-}
-ul {
-  list-style-type: disc;
-  margin-left: 1em;
-  margin-bottom: 1em;
-}
+	ul.helptext {
+	  list-style-type: disc;
+	  margin-left: 1em;
+	  margin-bottom: 1em;
+	}
 </style>
-
 
 <h2>News summary template help</h2>
 
 <h3>Assigned Variables</h3>
-<ul>
+<ul class="helptext">
   <li>$prevpage (string) - If the current page number is one, this is a translated string for the 'prevpage' key.  Otherwise, it is a link that will result in a summary view displaying the previous page</li>
   <li>$prevurl (string) - If the current page number is one, this is not defined/empty.  Otherwise it is a URL that when placed in an &lt;a&gt; tag and clicked on will result in a summary view displaying the previous page.</li>
   <li>$fisstpage (string) - If the current page number is one, this is a translated string for the 'fistpage' key.  Otherwise, it is a link that will result in a summary view displaying the fist page</li>
@@ -37,7 +31,7 @@ ul {
 <h3>News article objects</h3>
 <p>The $items array contains an array of news article objects.  Below are the members.</p>
 <p>Because the news article objects, are objects, you address them like: {$entry->id} etc.</li>
-<ul>
+<ul class="helptext">
   <li>author_id (int) - The uid of the author.  If greater than 0 an admin user account is assumed.  If less than zero an FEU user account is assumed.  A value of 0 indicates an anonymous user.</li>
   <li>author (string) The username of the author... or unknown</li>
   <li>authorname (string) - For admin user ids, this is a concatenation of the users first and last names, if they exist.  This is undefined for FEU entries.</li>
@@ -66,7 +60,7 @@ ul {
 <p>The following section illustrates the important elements of the category array.  Other items exist but are used for internal organizational purposes.</p>
 <p>This information is deprecated, as it could be retrieved by calling the browsecat action.</li>
 <p>Note, each of the members of the $cats array is an associiative array of it's own.  You address it like {$cats[0]['news_category_name']} etc.</p>
-<ul>
+<ul class="helptext">
    <li>news_category_id (int) - The id of this category entry.</li>
    <li>news_category_name (string) - The name of this category entry.</li>
    <li>parent_id (int) - The id of the parent of this entry.  -1 indicates no parent.</li>

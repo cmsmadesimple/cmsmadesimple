@@ -1,23 +1,20 @@
 <style type="text/css">
-h4 {
-  padding: 0;
-  font-weiight: bold;
-  margin-bottom: 0.5em;
-}
-ul {
-  list-style-type: disc;
-  margin-left: 1em;
-  margin-bottom: 1em;
-}
+	ul.helptext {
+	  list-style-type: disc;
+	  margin-left: 1em;
+	  margin-bottom: 1em;
+	}
 </style>
 
 
 <h2>Navigator menu template help</h2>
+
 <p>The Navigator template outputs an array of Nodes representing pages that match the criteria specified on the call to the Navigator module.  This is a nested array of nodes that should be displayed using a recursive algorithhm.</p>
 
 <h3>Nodes:</h3>
 <p>Each node is an object of type NavigatorNode. Each NavigatorNode object represents a single content page, and potentially its children.  It has the following read-only properties:</p>
-<ul>
+
+<ul class="helptext">
   <li><code>id</code> (int) - The integer id of the content item being represented.</li>
   <li><code>url</code> (string) - The public, canonical URL of the content item (if any).</li>
   <li><code>accesskey</code> (string) - The access key specified for the content item.</li>
@@ -37,8 +34,9 @@ ul {
   <li><code>has_children</code> (bool) Whether or not this node has children that can be displayed.</li>
   <li><code>children</code> (NavigatorNode[]) - An array of Navigator node objects represnenting the children of this node that are displayable.  May not exist, or be empty.</li>
 </ul>
+
 <p>The following properties are only ever available if &quot;deep&quot; mode is enabled:</p>
-<ul>
+<ul class="helptext">
   <li><code>target</code> (string) - The target attribute of the content item.</li>
   <li><code>extra1</code> (string) - The extra1 field associated with the content item.</li>
   <li><code>extra2</code> (string) - The extra2 field associated with the content item.</li>

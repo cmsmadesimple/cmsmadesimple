@@ -1,21 +1,15 @@
 <style type="text/css">
-h4 {
-  padding: 0;
-  font-weiight: bold;
-  margin-bottom: 0.5em;
-}
-ul {
-  list-style-type: disc;
-  margin-left: 1em;
-  margin-bottom: 1em;
-}
+	ul.helptext {
+	  list-style-type: disc;
+	  margin-left: 1em;
+	  margin-bottom: 1em;
+	}
 </style>
-
 
 <h2>Browse category template help</h2>
 
 <h3>Assigned Variables</h3>
-<ul>
+<ul class="helptext">
   <li><code>cats</code> (array) - A flat array of records (each record is itself an array) that contains information about that category.
      <h4>Record Details:</h4>
      <ul>

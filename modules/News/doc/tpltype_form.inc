@@ -1,22 +1,17 @@
 <style type="text/css">
-h4 {
-  padding: 0;
-  font-weiight: bold;
-  margin-bottom: 0.5em;
-}
-ul {
-  list-style-type: disc;
-  margin-left: 1em;
-  margin-bottom: 1em;
-}
+	ul.helptext {
+	  list-style-type: disc;
+	  margin-left: 1em;
+	  margin-bottom: 1em;
+	}
 </style>
 
-
 <h2>News form template help</h2>
+
 <div class="information">Templates of this type are used by the fesubmit action of the News module. <strong>Note: This action is deprecated</strong>.</div>
 
 <h3>Assigned Variables</h3>
-<ul>
+<ul class="helptext">
   <li><code>mod</code> (News) - A reference to the News module object.</li>
   <li><code>actionid</code> (string) - The action identifier string.</li>
   <li><code>message</code> (string) - After submission, this variable will contain a message to display to the user.</li>
