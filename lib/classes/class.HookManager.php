@@ -178,7 +178,8 @@ namespace CMSMS {
 
             if( $is_event && (!isset(self::$_hooks[$name]) || !self::$_hooks[$name]->sorted) ) {
                 // insert a hook to handle the event, be sure we only do this once.
-                $event_caller = function($params) use ($module,$eventname) {
+                $event_caller = function($params = null) use ($module,$eventname) {
+		    if( !$params ) $params = [];
                     $tmp = $module.'::'.$eventname;
                     \Events::SendEvent($module,$eventname,$params);
                 };

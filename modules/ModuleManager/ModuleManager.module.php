@@ -40,7 +40,7 @@ define('MINIMUM_REPOSITORY_VERSION','1.5');
 
 class ModuleManager extends CMSModule
 {
-  const _dflt_request_url = 'http://www.cmsmadesimple.org/ModuleRepository/request/v2/';
+  const _dflt_request_url = 'https://www.cmsmadesimple.org/ModuleRepository/request/v2/';
 
   function GetName() { return get_class($this); }
   function GetFriendlyName() { return $this->Lang('friendlyname'); }

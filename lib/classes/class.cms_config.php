@@ -150,6 +150,7 @@ final class cms_config implements ArrayAccess
 	$this->_types['tmp_cache_location'] = self::TYPE_STRING;
 	$this->_types['tmp_templates_c_location'] = self::TYPE_STRING;
 	$this->_types['public_cache_location'] = self::TYPE_STRING;
+	$this->_types['public_cache_url'] = self::TYPE_STRING;
     $this->_types['assets_dir'] = self::TYPE_STRING;
     $this->_types['assets_path'] = self::TYPE_STRING;
     $this->_types['permissive_smarty'] = self::TYPE_BOOL;
@@ -232,6 +233,13 @@ final class cms_config implements ArrayAccess
            * @return string
            */
 		  define('PUBLIC_CACHE_LOCATION',self::$_instance['public_cache_location']);
+
+          /**
+           * A constant to indicate the public address for cachable files.
+           *
+           * @return string
+           */
+		  define('PUBLIC_CACHE_URL',self::$_instance['public_cache_url']);
 
           /**
            * A constant containing the smarty template compile directory.
@@ -478,7 +486,7 @@ final class cms_config implements ArrayAccess
 		  return PUBLIC_CACHE_LOCATION.'/';
 
 	  case 'css_url':
-		  return $this->offsetGet('root_url').'/tmp/cache/';
+          return PUBLIC_CACHE_URL;
 
 	  case 'ssl_css_url':
 		  return $this->offsetGet('ssl_url').'/tmp/cache/';
@@ -486,6 +494,9 @@ final class cms_config implements ArrayAccess
 	  case 'tmp_cache_location':
 	  case 'public_cache_location':
 		  return cms_join_path($this->offsetGet('root_path'),'tmp','cache');
+
+      case 'public_cache_url':
+          return $this->offsetGet('root_url').'/tmp/cache';
 
 	  case 'tmp_templates_c_location':
 		  return cms_join_path($this->offsetGet('root_path'),'tmp','templates_c');
