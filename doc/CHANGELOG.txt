@@ -74,6 +74,7 @@ Core - General
   - Permissions are now grouped logically by module/originator in ChangeGroupPermissions.
   - Now use HTTPS for the latest version check
   - Adds the public_cache_url config entry,  and make sure that the css_url uses that by default.
+  - Adds many core hooks
 
   - #11080 - Parameter $adding in GetContentBlockFieldInput always FALSE.
   - #11093 - Bad error message in jquery.cmsms_autorefresh.js.
@@ -166,6 +167,7 @@ ModuleManager
   - Now don't allow disabling / uninstalling myself.
   - Don't hide the upgrades tab when there are no upgrades, but show the number of upgrades in the tab title instead.
   - Now use HTTPS for requests to ModuleRepository
+  - Trigger a hook before exporting a module to XML
 
 
 Version 2.1.6 - Spanish Wells
