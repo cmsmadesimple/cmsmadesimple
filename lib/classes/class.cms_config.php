@@ -15,8 +15,6 @@
 #You should have received a copy of the GNU General Public License
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-#
-#$Id$
 
 /**
  * This file contains the class that manages the CMSMS config.php file
@@ -392,6 +390,7 @@ final class cms_config implements ArrayAccess
 		  return $str;
 
 	  case 'ssl_url':
+          // deprecated
           if( $this->offsetGet('smart_urls') ) {
               $this->_cache[$key] = $this->offsetGet('root_url');
           } else {
@@ -408,10 +407,11 @@ final class cms_config implements ArrayAccess
 		  return $this->_cache[$key];
 
 	  case 'ssl_uploads_url':
+          // deprecated
           if( $this->offsetGet('smart_urls') ) {
-              $this->_cache[$key] = $this->offsetGet('root_url');
+              $this->_cache[$key] = $this->offsetGet('uploads_url');
           } else {
-              $this->_cache[$key] = str_replace('http://','https://',$this->offsetGet('uploads_url'));
+              $this->_cache[$key] = $this->offsetGet('ssl_url').'/uploads';
           }
 		  return $this->_cache[$key];
 
@@ -425,9 +425,9 @@ final class cms_config implements ArrayAccess
 
 	  case 'ssl_image_uploads_url':
           if( $this->offsetGet('smart_urls') ) {
-              $this->_cache[$key] = $this->offsetGet('root_url');
+              $this->_cache[$key] = $this->offsetGet('uploads_url').'/images';
           } else {
-              $this->_cache[$key] = str_replace('http://','https://',$this->offsetGet('image_uploads_url'));
+              $this->_cache[$key] = $this->offsetGet('ssl_uploads_url').'/images';
           }
 		  return $this->_cache[$key];
 
@@ -447,15 +447,16 @@ final class cms_config implements ArrayAccess
           return 'assets';
 
       case 'assets_path':
-          $path = $this->OffsetGet('root_path').'/'.$this->OffsetGet('assets_dir');
-          return $path;
+          $this->_cache[$key] = $this->OffsetGet('root_path').'/'.$this->OffsetGet('assets_dir');
+          return $this->_cache[$key];
 
 	  case 'db_port':
 		  return '';
 
 	  case 'max_upload_size':
 	  case 'upload_max_filesize':
-		  return $this->get_upload_size();
+		  $this->_cache[$key] = $this->get_upload_size();
+          return $this->_cache[$key];
 
 	  case 'auto_alias_content':
 		  return true;
@@ -474,10 +475,12 @@ final class cms_config implements ArrayAccess
 		  return 'utf-8';
 
 	  case 'admin_path':
-		  return cms_join_path($this->offsetGet('root_path'),$this->offsetGet('admin_dir'));
+		  $this->_cache[$key] = cms_join_path($this->offsetGet('root_path'),$this->offsetGet('admin_dir'));
+          return $this->_cache[$key];
 
 	  case 'admin_url':
-		  return $this->offsetGet('root_url').'/'.$this->offsetGet('admin_dir');
+		  $this->_cache[$key] = $this->offsetGet('root_url').'/'.$this->offsetGet('admin_dir');
+          return $this->_cache[$key];
 
 	  case 'ignore_lazy_load':
 		  return false;
@@ -489,17 +492,22 @@ final class cms_config implements ArrayAccess
           return PUBLIC_CACHE_URL;
 
 	  case 'ssl_css_url':
-		  return $this->offsetGet('ssl_url').'/tmp/cache/';
+          // deprecated
+		  $this->_cache[$key] =  $this->offsetGet('ssl_url').'/tmp/cache/';
+          return $this->_cache[$key];
 
 	  case 'tmp_cache_location':
 	  case 'public_cache_location':
-		  return cms_join_path($this->offsetGet('root_path'),'tmp','cache');
+		  $this->_cache[$key] = cms_join_path($this->offsetGet('root_path'),'tmp','cache');
+          return $this->_cache[$key];
 
       case 'public_cache_url':
-          return $this->offsetGet('root_url').'/tmp/cache';
+          $this->_cache[$key] = $this->offsetGet('root_url').'/tmp/cache';
+          return $this->_cache[$key];
 
 	  case 'tmp_templates_c_location':
-		  return cms_join_path($this->offsetGet('root_path'),'tmp','templates_c');
+		  $this->_cache[$key] = cms_join_path($this->offsetGet('root_path'),'tmp','templates_c');
+          return $this->_cache[$key];
 
 	  default:
 		  // not a mandatory key for the config.php file... and one we don't understand.
@@ -560,7 +568,7 @@ final class cms_config implements ArrayAccess
    *
    *
    * @param bool $verbose indicates whether comments should be stored in the config.php file.
-   * @param string  $filename An optional complete file specification.  If not specified the standard config file location will be used.
+   * @param string $filename An optional complete file specification.  If not specified the standard config file location will be used.
    */
   public function save($verbose = true,$filename = '')
   {
@@ -589,6 +597,9 @@ final class cms_config implements ArrayAccess
 
   /**
    * Returns either the http root url or the https root url depending upon the request mode.
+   *
+   * @deprecated
+   * @return string
    */
   public function smart_root_url()
   {
@@ -599,6 +610,9 @@ final class cms_config implements ArrayAccess
 
   /**
    * Returns either the http uploads url or the https uploads url depending upon the request mode.
+   *
+   * @deprecated
+   * @return string
    */
   public function smart_uploads_url()
   {
@@ -609,6 +623,9 @@ final class cms_config implements ArrayAccess
 
   /**
    * Returns either the http image uploads url or the https image uploads url depending upon the request mode.
+   *
+   * @deprecated
+   * @return string
    */
   public function smart_image_uploads_url()
   {

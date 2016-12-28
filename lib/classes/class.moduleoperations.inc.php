@@ -730,29 +730,6 @@ final class ModuleOperations
 
 
     /**
-     * Finds all modules in the filesystem, and builds a database about them
-     *
-     * @since 1.10
-     * @ignore
-     */
-    private function _load_all_modules()
-    {
-        $this->_moduleinfo = array();
-        $info = $this->_get_module_info();
-        $names = $this->FindAllModules();
-        foreach( $names as $name ) {
-            if( isset($this->_moduleinfo[$name]) ) continue; // already know about this module.
-
-            // this module isn't in the database, but is in the filesystem... make up some dummy info.
-            $rec = array('module_name'=>$name,'status'=>'not installed','version'=>'0.0',
-                         'admin_only'=>0,'active'=>0,'allow_fe_lazyload'=>0,'allow_admin_lazyload'=>0);
-            $this->_moduleinfo[$name] = $rec;
-        }
-        ksort($this->_moduleinfo);
-    }
-
-
-    /**
      * Finds all modules that are available to be loaded...
      * this method uses the information in the database to load the modules that are necessary to load
      * it also, will go through any queued installs/upgrades and force those modules to load, which
@@ -760,13 +737,10 @@ final class ModuleOperations
      *
      * @access public
      * @internal
-     * @param loadall boolean indicates wether ALL modules in the filesystem should be loaded, default is false
      * @param noadmin boolean indicates that modules marked as admin_only in the database should not be loaded, default is false
-     * @param no_lazyload boolean indicates that modules marked as lazy_loadable should be loaded anywayz, default is falze
      */
-    public function LoadModules($loadall = false,$noadmin = false, $no_lazyload = false)
+    public function LoadModules($noadmin = false)
     {
-        if( $loadall ) $this->_load_all_modules();
         global $CMS_ADMIN_PAGE;
         global $CMS_STYLESHEET;
         $config = \cms_config::get_instance();

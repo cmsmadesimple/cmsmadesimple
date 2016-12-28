@@ -39,7 +39,6 @@
  * CMS_PHAR_INSTALLER - Indicates that the file was included from the CMSMS PHAR based installer (note: CMS_INSTALL_PAGE will also be set).
  * CMS_ADMIN_PAGE - Indicates that the file was included from an admin side request.
  * CMS_LOGIN_PAGE - Indicates that the file was included from the admin login form.
- * LOAD_ALL_MODULES - Indicates that all available modules should be loaded (deprecated)
  */
 
 $dirname = __DIR__;
@@ -47,11 +46,16 @@ $dirname = __DIR__;
 define('CMS_DEFAULT_VERSIONCHECK_URL','https://www.cmsmadesimple.org/latest_version.php');
 define('CMS_SECURE_PARAM_NAME','_sk_');
 define('CMS_USER_KEY','_userkey_');
-
+define('CONFIG_FILE_LOCATION',dirname(__DIR__).'/config.php');
 global $CMS_INSTALL_PAGE,$CMS_ADMIN_PAGE,$CMS_LOGIN_PAGE,$DONT_LOAD_DB,$DONT_LOAD_SMARTY;
 
-// minimum stuff to get started (autoloader needs the cmsms() and the config stuff.
-if( !defined('CONFIG_FILE_LOCATION') ) define('CONFIG_FILE_LOCATION',dirname(__DIR__).'/config.php');
+if (!isset($_SERVER['REQUEST_URI']) && isset($_SERVER['QUERY_STRING'])) {
+	$_SERVER['REQUEST_URI'] = $_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING'];
+}
+
+if (!file_exists(CONFIG_FILE_LOCATION) || filesize(CONFIG_FILE_LOCATION) < 100) {
+    die ('FATAL ERROR: config.php file not found or invalid');
+}
 
 // sanitize $_SERVER and $_GET
 $_SERVER = filter_var_array($_SERVER, FILTER_SANITIZE_STRING);
@@ -65,25 +69,23 @@ require_once($dirname.DIRECTORY_SEPARATOR.'classes'.DIRECTORY_SEPARATOR.'class.C
 require_once($dirname.DIRECTORY_SEPARATOR.'classes'.DIRECTORY_SEPARATOR.'class.HookManager.php');
 require_once($dirname.DIRECTORY_SEPARATOR.'classes'.DIRECTORY_SEPARATOR.'class.cms_config.php');
 require_once($dirname.DIRECTORY_SEPARATOR.'classes'.DIRECTORY_SEPARATOR.'class.CmsApp.php');
+require_once($dirname.DIRECTORY_SEPARATOR.'autoloader.php');
+require_once($dirname.DIRECTORY_SEPARATOR.'module.functions.php');
+require_once($dirname.DIRECTORY_SEPARATOR.'page.functions.php');
+require_once($dirname.DIRECTORY_SEPARATOR.'content.functions.php');
+require_once($dirname.DIRECTORY_SEPARATOR.'translation.functions.php');
+require_once($dirname.DIRECTORY_SEPARATOR.'html_entity_decode_php4.php');
+
+debug_buffer('done loading basic files');
 
 #Grab the current configuration
 $_app = CmsApp::get_instance(); // for use in this file only.
 $config = $_app->GetConfig();
 
-require_once($dirname.DIRECTORY_SEPARATOR.'autoloader.php');
-require_once($dirname.DIRECTORY_SEPARATOR.'module.functions.php');
-
-debug_buffer('done loading basic files');
-
 if ($config["debug"] == true) {
     @ini_set('display_errors',1);
     @error_reporting(E_ALL);
-    \CMSMS\HookManager::do_hook('Core::InitDebugMode' );
 }
-if( $config['developer_mode'] ) {
-    \CMSMS\HookManager::do_hook('Core::InitDeveloperMode' );
-}
-
 
 if( cms_to_bool(ini_get('register_globals')) ) {
     echo 'FATAL ERROR: For security reasons register_globals must not be enabled for any CMSMS install.  Please adjust your PHP configuration settings to disable this feature.';
@@ -159,20 +161,6 @@ if( $config['timezone'] != '' ) @date_default_timezone_set(trim($config['timezon
 // Attempt to override the php memory limit
 if( isset($config['php_memory_limit']) && !empty($config['php_memory_limit'])  ) ini_set('memory_limit',trim($config['php_memory_limit']));
 
-debug_buffer('loading page functions');
-require_once($dirname.DIRECTORY_SEPARATOR.'page.functions.php');
-
-debug_buffer('loading content functions');
-require_once($dirname.DIRECTORY_SEPARATOR.'content.functions.php');
-
-debug_buffer('loading translation functions');
-require_once($dirname.DIRECTORY_SEPARATOR.'translation.functions.php');
-
-debug_buffer('loading php4 entity decode functions');
-require_once($dirname.DIRECTORY_SEPARATOR.'html_entity_decode_php4.php');
-
-debug_buffer('done loading files');
-
 // Load them into the usual variables.  This'll go away a little later on.
 if (!isset($DONT_LOAD_DB)) {
     debug_buffer('Initialize Database');
@@ -194,7 +182,7 @@ if (! isset($CMS_INSTALL_PAGE)) {
 
     debug_buffer('Loading Modules');
     $modops = ModuleOperations::get_instance();
-    $modops->LoadModules(isset($LOAD_ALL_MODULES), !isset($CMS_ADMIN_PAGE));
+    $modops->LoadModules(!isset($CMS_ADMIN_PAGE));
     debug_buffer('End of Loading Modules');
 
     // test for cron.

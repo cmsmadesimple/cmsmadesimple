@@ -29,16 +29,8 @@ $orig_memory = (function_exists('memory_get_usage')?memory_get_usage():0);
  */
 
 clearstatcache();
-define('CONFIG_FILE_LOCATION',__DIR__.'/config.php');
 
-if (!isset($_SERVER['REQUEST_URI']) && isset($_SERVER['QUERY_STRING'])) {
-	$_SERVER['REQUEST_URI'] = $_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING'];
-}
-
-if (!file_exists(CONFIG_FILE_LOCATION) || filesize(CONFIG_FILE_LOCATION) < 100) {
-    die ('FATAL ERROR: config.php file not found or invalid');
-}
-
+if (!isset($_SERVER['REQUEST_URI']) && isset($_SERVER['QUERY_STRING'])) $_SERVER['REQUEST_URI'] = $_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING'];
 require_once(__DIR__.'/lib/include.php');
 
 if (file_exists(TMP_CACHE_LOCATION.'/SITEDOWN')) {
@@ -292,10 +284,7 @@ if( $debug || isset($config['log_performance_info']) || (isset($config['show_per
     }
 }
 
-if( $debug || is_sitedown() ) {
-    $smarty->clear_compiled_tpl();
-}
-
+if( $debug || is_sitedown() ) $smarty->clear_compiled_tpl();
 if ( $debug && !is_sitedown() ) {
     $arr = $_app->get_errors();
     foreach ($arr as $error) {
@@ -304,5 +293,3 @@ if ( $debug && !is_sitedown() ) {
 }
 
 exit();
-
-?>
