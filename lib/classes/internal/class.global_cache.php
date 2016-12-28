@@ -1,5 +1,4 @@
 <?php
-
 namespace CMSMS\internal;
 
 class global_cache
@@ -19,7 +18,8 @@ class global_cache
 
     public static function get($type)
     {
-        if( !isset(self::$_types[$type]) ) throw new \LogicException('Unknown type '.$type);
+        // if( !isset(self::$_types[$type]) ) throw new \LogicException('Unknown type '.$type);
+        if( !isset(self::$_types[$type]) ) return;
         if( !is_array(self::$_cache) ) self::_load();
 
         if( !isset(self::$_cache[$type]) ) {
@@ -87,6 +87,3 @@ class global_cache
     }
 
 } // end of class
-
-
-?>

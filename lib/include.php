@@ -31,7 +31,7 @@
  */
 
 /**
- * Special vairables that may be set before this file is included which will influence its behavior.
+ * Special variables that may be set before this file is included which will influence its behavior.
  *
  * DONT_LOAD_DB = Indicates that the database should not be initialized and any database related functions should not be called
  * DONT_LOAD_SMARTY = Indicates that smarty should not be initialized, and no smarty related variables assigned.
@@ -74,6 +74,16 @@ require_once($dirname.DIRECTORY_SEPARATOR.'autoloader.php');
 require_once($dirname.DIRECTORY_SEPARATOR.'module.functions.php');
 
 debug_buffer('done loading basic files');
+
+if ($config["debug"] == true) {
+    @ini_set('display_errors',1);
+    @error_reporting(E_ALL);
+    \CMSMS\HookManager::do_hook('Core::InitDebugMode' );
+}
+if( $config['developer_mode'] ) {
+    \CMSMS\HookManager::do_hook('Core::InitDeveloperMode' );
+}
+
 
 if( cms_to_bool(ini_get('register_globals')) ) {
     echo 'FATAL ERROR: For security reasons register_globals must not be enabled for any CMSMS install.  Please adjust your PHP configuration settings to disable this feature.';
@@ -148,11 +158,6 @@ if( $config['timezone'] != '' ) @date_default_timezone_set(trim($config['timezon
 
 // Attempt to override the php memory limit
 if( isset($config['php_memory_limit']) && !empty($config['php_memory_limit'])  ) ini_set('memory_limit',trim($config['php_memory_limit']));
-
-if ($config["debug"] == true) {
-    @ini_set('display_errors',1);
-    @error_reporting(E_ALL);
-}
 
 debug_buffer('loading page functions');
 require_once($dirname.DIRECTORY_SEPARATOR.'page.functions.php');

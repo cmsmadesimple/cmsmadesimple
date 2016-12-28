@@ -56,7 +56,7 @@ final class Events
 			$id = $db->GenID( CMS_DB_PREFIX."events_seq" );
 			$q = "INSERT INTO ".CMS_DB_PREFIX."events values (?,?,?)";
 			$db->Execute( $q, array( $modulename, $eventname, $id ));
-            \CMSMS\internal\global_cache::clear(__CLASS__);
+            		\CMSMS\internal\global_cache::clear(__CLASS__);
 		}
 	}
 
@@ -96,7 +96,7 @@ final class Events
 		event_id = ?";
 		$db->Execute( $q, array( $id ) );
 
-        \CMSMS\internal\global_cache::clear(__CLASS__);
+        	\CMSMS\internal\global_cache::clear(__CLASS__);
 	}
 
 
