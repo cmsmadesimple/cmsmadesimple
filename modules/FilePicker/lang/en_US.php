@@ -2,6 +2,10 @@
 
 $lang['add_profile'] = 'Add Profile';
 
+$lang['delete_profile'] = 'TODO';
+
+$lang['edit_profile'] = 'TODO';
+
 $lang['friendlyname'] = 'File Picker';
 
 $lang['help'] = 'TODO';
@@ -15,6 +19,7 @@ $lang['HelpPopupTitle_groups'] = 'TODO';
 $lang['HelpPopupTitle_include_prefix'] = 'TODO';
 $lang['HelpPopupTitle_include_suffix'] = 'TODO';
 $lang['HelpPopupTitle_mode'] = 'TODO';
+$lang['HelpPopupTitle_ProfileName'] = 'TODO';
 $lang['HelpPopupTitle_show_thumbs'] = 'TODO';
 $lang['HelpPopupTitle_upload'] = 'TODO';
 $lang['HelpPopup_can_delete'] = 'TODO';
@@ -29,6 +34,7 @@ $lang['HelpPopup_mode'] = 'TODO';
 $lang['HelpPopup_show_thumbs'] = 'TODO';
 $lang['HelpPopup_upload'] = 'TODO';
 
+$lang['msg_success'] = 'TODO';
 $lang['ModeOptions_Browser'] = 'Browser';   
 $lang['ModeOptions_Dropdown'] = 'Dropdown';  
 
