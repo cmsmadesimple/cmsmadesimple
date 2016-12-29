@@ -42,6 +42,7 @@ $lang['HelpPopup_upload'] = 'TODO';
 $lang['moddescription'] = 'TODO';
 $lang['ModeOptions_Browser'] = 'Browser';   
 $lang['ModeOptions_Dropdown'] = 'Dropdown';
+$lang['msg_delete_success'] = 'TODO';
 $lang['msg_success'] = 'TODO';
 
 // P
