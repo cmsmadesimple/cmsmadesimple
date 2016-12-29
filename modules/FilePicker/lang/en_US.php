@@ -59,7 +59,7 @@ $lang['Profile_show_thumbs'] = 'Show Thumbnails';
 $lang['Profile_upload'] = 'Allow Upload';  
 
 // T
-$lang['tab_defaults'] = 'Default Settings';
+$lang['tab_defaults'] = 'Default Profile Settings';
 $lang['tab_preferences'] = 'Preferences';  
 $lang['tab_profiles'] = 'Profiles';
 
