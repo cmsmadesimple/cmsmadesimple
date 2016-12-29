@@ -11,7 +11,7 @@
   {/if}
   
   {if isset($content)}
-    {$content}
+    <br />{$content}
   {elseif isset($error)}
     <div class="pageerrorcontainer"><div class="pageoverflow"><ul class="pageerror"><li>{$error}</li></ul></div></div>
   {elseif isset($plugins)}
