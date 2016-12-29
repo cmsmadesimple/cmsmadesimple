@@ -146,7 +146,7 @@ final class Events
     {
         $obj = new \CMSMS\internal\global_cachable(__CLASS__,function(){
                 $db = \CmsApp::get_instance()->GetDb();
-                $q = "SELECT eh.tag_name, eh.module_name, e.originator, e.event_name, eh.handler_order, eh.handler_id, eh.removable
+                $q = "SELECT e.event_id, eh.tag_name, eh.module_name, e.originator, e.event_name, eh.handler_order, eh.handler_id, eh.removable
                       FROM ".CMS_DB_PREFIX."event_handlers eh
 				      INNER JOIN ".CMS_DB_PREFIX."events e ON e.event_id = eh.event_id
 				      ORDER BY eh.handler_order ASC";
@@ -179,6 +179,18 @@ final class Events
 		return false;
 	}
 
+
+    static public function GetEventHandler( $handler_id )
+    {
+        self::$_handlercache = \CMSMS\internal\global_cache::get(__CLASS__);
+
+        $out = [];
+		if( is_array(self::$_handlercache) && count(self::$_handlercache) ) {
+            foreach( self::$_handlercache as $row ) {
+                if( $row['handler_id'] == $handler_id ) return $row;
+            }
+        }
+    }
 
 	/**
 	 * Get a list of all of the known events.
@@ -280,6 +292,35 @@ final class Events
 		return false;
 	}
 
+    /**
+     * @ignore
+     */
+    static protected function InternalRemoveHandler( array $handler )
+    {
+		$db = CmsApp::get_instance()->GetDb();
+        $id = $handler['event_id'];
+
+        // update any subsequent handlers
+        $sql = 'UPDATE '.CMS_DB_PREFIX.'event_handlers SET handler_order = handler_order - 1 WHERE event_id = ? AND handler_order > ?';
+        $db->Execute( $sql, [ $id, $handler['handler_order']] );
+
+        // now delete this record
+        $sql = 'DELETE FROM '.CMS_DB_PREFIX.'event_handlers WHERE event_id = ? AND handler_id = ?';
+        $db->Execute( $sql, [ $id, $handler['handler_id']  ] );
+
+        \CMSMS\internal\global_cache::clear(__CLASS__);
+    }
+
+    /**
+     * Remove an event handler given its id
+     *
+     * @param int $handler_id
+     */
+    static public function RemoveEventHandlerById( $handler_id )
+    {
+        $handler = self::GetEventHandler( $handler_id );
+        if( $handler ) self::InternalRemoveHandler( $handler );
+    }
 
 	/**
 	 * Remove an event handler for a particular event.
@@ -298,31 +339,30 @@ final class Events
 
 		$db = CmsApp::get_instance()->GetDb();
 
-		// find the id
-		$q = "SELECT event_id FROM ".CMS_DB_PREFIX."events WHERE originator = ? AND event_name = ?";
-		$dbresult = $db->Execute( $q, array( $modulename, $eventname ) );
-		if( $dbresult == false || $dbresult->RecordCount() == 0 ) {
+		// find the event id
+		$sql = "SELECT event_id FROM ".CMS_DB_PREFIX."events WHERE originator = ? AND event_name = ?";
+        $id = (int) $db->GetOne( $sql, [ $modulename, $eventname ] );
+        if( $id < 1 ) {
 			// query failed, event not found
 			return false;
 		}
-		$row = $dbresult->FetchRow();
-		$id = $row['event_id'];
 
-		// delete the record
-		$params = array( $id );
-		$query = "DELETE FROM ".CMS_DB_PREFIX."event_handlers WHERE event_id = ? AND ";
-		if( $modulename != false ) {
-			$query .= 'module_name = ?';
+        // find the handler
+        $sql = 'SELECT * FROM '.CMS_DB_PREFIX.'event_handlers WHERE event_id = ? AND ';
+		$params = [ $id ];
+		if( $module_handler != false ) {
+			$sql .= 'module_name = ?';
 			$params[] = $module_handler;
 		}
 		else {
-			$query .= 'tag_name = ?';
+			$sql .= 'tag_name = ?';
 			$params[] = $tag_name;
 		}
-		$dbresult = $db->Execute( $query, $params );
-        \CMSMS\internal\global_cache::clear(__CLASS__);
-		if( $dbresult == false ) return true;
-		return false;
+        $row = $db->GetRow( $sql, $params );
+        if( !is_array($row) || !count($row) ) return false;
+
+        self::InternalRemoveHandler( $row );
+        return TRUE;
 	}
 
 
@@ -349,13 +389,53 @@ final class Events
 		$id = $row['event_id'];
 
 		// and delete the handlers
-        \CMSMS\internal\global_cache::clear(__CLASS__);
 		$q = "DELETE FROM ".CMS_DB_PREFIX."event_handlers WHERE event_id = ?";
 		$dbresult = $db->Execute( $q, array( $id ) );
+        \CMSMS\internal\global_cache::clear(__CLASS__);
 		if( $dbresult == false ) return true;
 		return false;
 	}
 
+
+    /**
+     * Move an event handler (by id) up in its event...
+     *
+     * @param int $handler_id
+     */
+    static public function OrderHandlerUp( $handler_id )
+    {
+        $handler = self::GetEventHandler( $handler_id );
+        if( !$handler ) return;
+
+        if( $handler['handler_order'] < 2 ) return;
+
+		$db = CmsApp::get_instance()->GetDb();
+        $sql = 'UPDATE '.CMS_DB_PREFIX.'event_handlers SET handler_order = handler_order + 1 WHERE event_id = ? AND handler_order = ?';
+        $db->Execute( $sql, [ $handler['event_id'], $handler['handler_order'] - 1 ] );
+        $sql = 'UPDATE '.CMS_DB_PREFIX.'event_handlers SET handler_order = handler_order - 1 WHERE event_id = ? AND handler_id = ?';
+        $db->Execute( $sql, [ $handler['event_id'], $handler['handler_id'] ] );
+        \CMSMS\internal\global_cache::clear(__CLASS__);
+    }
+
+    /**
+     * Move an event handler (by id) up in its event...
+     *
+     * @param int $handler_id
+     */
+    static public function OrderHandlerDown( $handler_id )
+    {
+        $handler = self::GetEventHandler( $handler_id );
+        if( !$handler ) return;
+
+        if( $handler['handler_order'] < 2 ) return;
+
+		$db = CmsApp::get_instance()->GetDb();
+        $sql = 'UPDATE '.CMS_DB_PREFIX.'event_handlers SET handler_order = handler_order - 1 WHERE event_id = ? AND handler_order = ?';
+        $db->Execute( $sql, [ $handler['event_id'], $handler['handler_order'] + 1 ] );
+        $sql = 'UPDATE '.CMS_DB_PREFIX.'event_handlers SET handler_order = handler_order + 1 WHERE event_id = ? AND handler_id = ?';
+        $db->Execute( $sql, [ $handler['event_id'], $handler['handler_id'] ] );
+        \CMSMS\internal\global_cache::clear(__CLASS__);
+    }
 
 	/**
 	 * Place to handle the help messages for core events.  Basically just going to

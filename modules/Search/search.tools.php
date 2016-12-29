@@ -90,6 +90,7 @@ function search_AddWords(&$obj, $module = 'Search', $id = -1, $attr = '', $conte
         //Clean up the content
         $stemmed_words = $obj->StemPhrase($content);
         $tmp = array_count_values($stemmed_words);
+	if( !is_array($tmp) || !count($tmp) ) return;
         $words = array();
         foreach( $tmp as $key => $val ) {
             $words[] = array('word'=>$key,'count'=>$val);
