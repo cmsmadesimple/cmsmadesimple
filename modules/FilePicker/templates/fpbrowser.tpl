@@ -22,7 +22,7 @@
     <pre>{$file|print_r:1}</pre>
       {cycle values="row1,row2" assign=rowclass}
       <tr class="{$rowclass}">
-        <td valign="middle">{if isset($file->thumbnail) && $file->thumbnail!='TODO'}{$file->thumbnail}{else}{$file->iconlink}{/if}</td>
+        <td valign="middle">{if isset($file->thumbnail) && $file->thumbnail!=''}{$file->thumbnail}{else}{$file->iconlink}{/if}</td>
         <td class="clickable" valign="middle">{$file->txtlink}</td>
         <td class="clickable" valign="middle">{$file->mime}</td>
         <td class="clickable" style="padding-right:8px;white-space:pre;" valign="middle">{$file->fileinfo}</td>

@@ -515,7 +515,7 @@
         _initIframeSettings: function (options) {
             var targetHost = $('<a></a>').prop('href', options.url).prop('host');
             // Setting the dataType to iframe enables the iframe transport:
-            options.dataType = 'iframe ' + (options.dataType || 'TODO');
+            options.dataType = 'iframe ' + (options.dataType || '');
             // The iframe transport accepts a serialized array as form data:
             options.formData = this._getFormData(options);
             // Add redirect url to form data on cross-domain uploads:
@@ -538,7 +538,7 @@
                 if (options.postMessage) {
                     // Setting the dataType to postmessage enables the
                     // postMessage transport:
-                    options.dataType = 'postmessage ' + (options.dataType || 'TODO');
+                    options.dataType = 'postmessage ' + (options.dataType || '');
                 }
             } else {
                 this._initIframeSettings(options);
@@ -586,7 +586,7 @@
             // The HTTP request method must be "POST" or "PUT":
             options.type = (options.type ||
                 ($.type(options.form.prop('method')) === 'string' &&
-                    options.form.prop('method')) || 'TODO'
+                    options.form.prop('method')) || ''
                 ).toUpperCase();
             if (options.type !== 'POST' && options.type !== 'PUT' &&
                     options.type !== 'PATCH') {
@@ -1109,7 +1109,7 @@
                     }, errorHandler);
                 },
                 dirReader, entries = [];
-            path = path || 'TODO';
+            path = path || '';
             if (entry.isFile) {
                 if (entry._file) {
                     // Workaround for Chrome bug #149735
@@ -1190,7 +1190,7 @@
                 // If the files property is not available, the browser does not
                 // support the File API and we add a pseudo File object with
                 // the input value as name with path information removed:
-                files = [{name: value.replace(/^.*\\/, 'TODO')}];
+                files = [{name: value.replace(/^.*\\/, '')}];
             } else if (files[0].name === undefined && files[0].fileName) {
                 // File normalization for Safari 4 and Firefox 3:
                 $.each(files, function (index, file) {
