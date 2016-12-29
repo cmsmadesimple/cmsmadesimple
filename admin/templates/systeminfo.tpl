@@ -1,11 +1,18 @@
 <div class="pagecontainer">
 {if empty($smarty.get.cleanreport)}
-	<p class="pageshowrows"><a href="{$systeminfo_cleanreport}">{si_lang a=copy_paste_forum}</a></p>
+	<p class="pageshowrows">
+		<span class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-icon-primary">
+			<a href="{$systeminfo_cleanreport}">
+				<span class="ui-button-icon-primary ui-icon ui-icon-circle-zoomin"></span>
+				<span class="ui-button-text">{si_lang a=copy_paste_forum}</span>
+			</a>
+		</span>
+	</p>
 {/if}
-{$showheader}
+{*$showheader*} {* TODO Rolf 29-12-16 *}
 
 <div class="pageoverflow">
-	<div class="pageoverflow">
+	<div class="information">
 		<p>{si_lang a=help_systeminformation}</p>
 	</div>
 <hr/>
@@ -106,7 +113,7 @@
     		<td width="45%">{si_lang a=$key} ({$key})</td>
 			<td width="5%">{if isset($test->res)}<img class="systemicon" src="themes/{$themename}/images/icons/extra/{$test->res}.gif" title="{$test->res_text|default:''}" alt="{$test->res_text|default:''}" />{/if}</td>
 			<td width="50%">
-	{if isset($test->value) && $test->display_value != 0}&nbsp;{$test->value}{/if}
+	{if isset($test->value) && $test->display_value != 0}{$test->value}{/if}
 	{if isset($test->secondvalue)}({$test->secondvalue}){/if}
 	{if isset($test->error_fragment)}<a class="external" rel="external" href="{$cms_install_help_url}#{$test->error_fragment}"><img src="themes/{$themename}/images/icons/system/info-external.gif" title="?" alt="?" /></a>{/if}
 	{if isset($test->message)}{$test->message}{/if}

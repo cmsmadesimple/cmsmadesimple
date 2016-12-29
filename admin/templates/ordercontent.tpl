@@ -1,5 +1,5 @@
 <div class="pagecontainer">
-{$showheader}
+{*$showheader*} {* TODO Rolf 29-12-16 *}
 <script type="text/javascript">
 var ajax_url = 'ordercontent.php{$urlext}';
 {literal}
