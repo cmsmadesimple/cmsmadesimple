@@ -5,7 +5,7 @@
 		{if isset($module_help_url)}
 			<a href="{$module_help_url}" title="{'module_help'|lang}">{'module_help'|lang}</a>
 		{else}
-			<a href="http://docs.cmsmadesimple.org/" rel="external" title="{'documentation'|lang}">{'documentation'|lang}</a>
+			<a href="https://docs.cmsmadesimple.org/" rel="external" title="{'documentation'|lang}">{'documentation'|lang}</a>
 		{/if}
 		</li>
                 {if isset($myaccount)}
@@ -46,8 +46,8 @@
     {/if}
     <h3>{'help'|lang}</h3>
     <ul>
-      <li><a rel="external" class="external" href="http://docs.cmsmadesimple.org" title="{'documentation'|lang}">{'documentation'|lang}</a></li>
-      <li><a rel="external" class="external" href="http://forum.cmsmadesimple.org" title="{'forums'|lang}">{'forums'|lang}</a></li>
+      <li><a rel="external" class="external" href="https://docs.cmsmadesimple.org" title="{'documentation'|lang}">{'documentation'|lang}</a></li>
+      <li><a rel="external" class="external" href="https://forum.cmsmadesimple.org" title="{'forums'|lang}">{'forums'|lang}</a></li>
       <li><a rel="external" class="external" href="http://cmsmadesimple.org/main/support/IRC">{'irc'|lang}</a></li>
     </ul>
 </div>

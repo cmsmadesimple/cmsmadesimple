@@ -3,7 +3,7 @@ CMS Made Simple Version 2.0
 
 NOTE: This is a major upgrade and a significant amount of code has changed in this version.
 NOTE: Many sites will not upgrade cleanly.  You may need to spend some time resolving various errors.
-NOTE: The CMSMS Forum at http://forum.cmsmadesimple.org is an important resource to help you in determining how to solve problems prior to and after upgrading your site.
+NOTE: The CMSMS Forum at https://forum.cmsmadesimple.org is an important resource to help you in determining how to solve problems prior to and after upgrading your site.
 
 
 ----------------
@@ -107,7 +107,7 @@ Solution:  From within the ModuleManager module, install the CMSMailer module.
 WHAT HAS CHANGED
 ----------------
 Note:  This is only a brief list of the major items that changed in CMSMS 2.0.  For more information you are encouraged to view the CMSMS docs site at
-http://docs.cmsmadesimple.org and the forum at http://forum.cmsmadesimple.org
+https://docs.cmsmadesimple.org and the forum at https://forum.cmsmadesimple.org
 
 1.  New Smarty
     - Introduces variable scopes

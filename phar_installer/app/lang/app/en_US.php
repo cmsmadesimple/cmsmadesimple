@@ -67,7 +67,7 @@ $lang['error_adminacct_emailaddrrequired'] = 'You have selected to email the acc
 $lang['error_adminacct_password'] = 'The password you specified is invalid (must be at least six characters long)';
 $lang['error_adminacct_repeatpw'] = 'The passwords you entered did not match.';
 $lang['error_adminacct_username'] = 'The username you specified is invalid. Please try again';
-$lang['error_admindirrenamed'] = 'It appears that, for security reasons, you may have renamed your CMSMS Admin directory. You must reverse <a href="http://docs.cmsmadesimple.org/general-information/securing-cmsms#renaming-admin-folder" target="_blank" class="external">this process</a> in order to proceed!<br/><br/>Once you have reverted the admin directory name to its original location, please reload this page.';
+$lang['error_admindirrenamed'] = 'It appears that, for security reasons, you may have renamed your CMSMS Admin directory. You must reverse <a href="https://docs.cmsmadesimple.org/general-information/securing-cmsms#renaming-admin-folder" target="_blank" class="external">this process</a> in order to proceed!<br/><br/>Once you have reverted the admin directory name to its original location, please reload this page.';
 $lang['error_backupconfig'] = 'We could not properly backup the config file';
 $lang['error_checksum'] = 'Extracted file checksum does not match original';
 $lang['error_cmstablesexist'] = 'It appears that there is already a CMS installation on this database. Please enter different database information. If you would like to use a different table prefix you may need to restart the installation process and enable advanced mode.';

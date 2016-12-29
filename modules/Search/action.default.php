@@ -41,7 +41,7 @@ if( !$tpl_ob->IsCached() ) {
     // donot remove this line (calguy1000)
     if( !$inline ) $id = 'cntnt01';
 
-    // Variable named hogan in honor of moorezilla's Rhodesian Ridgeback :) http://forum.cmsmadesimple.org/index.php/topic,9580.0.html
+    // Variable named hogan in honor of moorezilla's Rhodesian Ridgeback :) https://forum.cmsmadesimple.org/index.php/topic,9580.0.html
     $submittext = (isset($params['submit'])) ? $params['submit'] : $this->Lang('searchsubmit');
     $searchtext = (isset($params['searchtext'])) ? $params['searchtext'] : $this->GetPreference('searchtext','');
     $tpl_ob->assign('search_actionid',$id);

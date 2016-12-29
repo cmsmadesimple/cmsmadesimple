@@ -251,7 +251,7 @@ $lang['help'] = '<h3>What Does This Do?</h3>
 <p>This module does not include commercial support. However, there are a number of resources available to help you with it:</p>
 <ul>
 <li>For the latest version of this module, FAQs, or to file a Bug Report or buy commercial support, please visit calguys homepage at <a href=\'http://techcom.dyndns.org\'>techcom.dyndns.org</a>.</li>
-<li>Additional discussion of this module may also be found in the <a href=\'http://forum.cmsmadesimple.org\'>CMS Made Simple Forums</a>.</li>
+<li>Additional discussion of this module may also be found in the <a href=\'https://forum.cmsmadesimple.org\'>CMS Made Simple Forums</a>.</li>
 <li>The author, calguy1000, can often be found in the <a href=\'irc://irc.freenode.net/#cms\'>CMS IRC Channel</a>.</li>
 <li>Lastly, you may have some success emailing the author directly.</li>  
 </ul>

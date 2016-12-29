@@ -78,7 +78,7 @@ $smarty->assign('backurl', $themeObject->BackUrl());
 $smarty->assign('systeminfo_cleanreport', 'systeminfo.php'.$urlext.'&amp;cleanreport=1');
 
 /* Default help url */
-$smarty->assign('cms_install_help_url', 'http://docs.cmsmadesimple.org/installation/installing/permissions-and-php-settings');
+$smarty->assign('cms_install_help_url', 'https://docs.cmsmadesimple.org/installation/installing/permissions-and-php-settings');
 
 
 /* CMS Install Information */
