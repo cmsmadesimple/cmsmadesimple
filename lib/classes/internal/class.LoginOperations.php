@@ -99,7 +99,7 @@ final class LoginOperations
 
     protected function _get_data()
     {
-        if( $this->_data ) return $this->_data;
+        if( !empty($this->_data) ) return $this->_data;
 
         // using session, and-or cookie data see if we are authenticated
         $private_data = null;
