@@ -38,7 +38,7 @@ $('#css_selall').cmsms_checkall();
  	<th class="pageicon"></th>
  	<th title="{$mod->Lang('title_css_name')}">{$mod->Lang('prompt_name')}</th>
   	<th title="{$mod->Lang('title_css_designs')}">{$mod->Lang('prompt_design')}</th>
-	<th>{$mod->Lang('prompt_filename')}</th>
+	<th title="{$mod->Lang('title_css_filename')}">{$mod->Lang('prompt_filename')}</th>
 	<th title="{$mod->Lang('title_css_modified')}">{$mod->Lang('prompt_modified')}</th>
 	<th class="pageicon"></th>{* edit *}
 	<th class="pageicon"></th>{* copy *}

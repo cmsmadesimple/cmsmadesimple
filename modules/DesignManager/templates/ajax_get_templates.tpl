@@ -34,18 +34,18 @@ $('#tpl_selall').cmsms_checkall();
     <thead>
       <tr>
         <th title="{$mod->Lang('title_tpl_id')}">{$mod->Lang('prompt_id')}</th>
-	<th class="pageicon"></th>
-	<th title="{$mod->Lang('title_tpl_name')}">{$mod->Lang('prompt_name')}</th>
-	<th title="{$mod->Lang('title_tpl_type')}">{$mod->Lang('prompt_type')}</th>
-	<th tytle="{$mod->Lang('title_filename')}">{$mod->Lang('prompt_filename')}</th>
-	<th title="{$mod->Lang('title_tpl_design')}">{$mod->Lang('prompt_design')}</th>
-	<th title="{$mod->Lang('title_tpl_dflt')}" class="pageicon">{$mod->Lang('prompt_dflt')}</th>{* dflt *}
-	<th class="pageicon"></th>{* edit *}
-	{if $has_add_right}
-	  <th class="pageicon"></th>{* copy *}
-	{/if}
-	<th class="pageicon"></th>{* delete *}
-	<th class="pageicon"><input type="checkbox" value="1" id="tpl_selall" title="{$mod->Lang('prompt_select_all')}"/></th>{* checkbox *}
+		<th class="pageicon"></th>
+		<th title="{$mod->Lang('title_tpl_name')}">{$mod->Lang('prompt_name')}</th>
+		<th title="{$mod->Lang('title_tpl_type')}">{$mod->Lang('prompt_type')}</th>
+		<th title="{$mod->Lang('title_tpl_filename')}">{$mod->Lang('prompt_filename')}</th>
+		<th title="{$mod->Lang('title_tpl_design')}">{$mod->Lang('prompt_design')}</th>
+		<th title="{$mod->Lang('title_tpl_dflt')}" class="pageicon">{$mod->Lang('prompt_dflt')}</th>{* dflt *}
+		<th class="pageicon"></th>{* edit *}
+		{if $has_add_right}
+			<th class="pageicon"></th>{* copy *}
+		{/if}
+		<th class="pageicon"></th>{* delete *}
+		<th class="pageicon"><input type="checkbox" value="1" id="tpl_selall" title="{$mod->Lang('prompt_select_all')}"/></th>{* checkbox *}
       </tr>
     </thead>
     <tbody>
