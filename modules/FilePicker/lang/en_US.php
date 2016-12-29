@@ -1,15 +1,18 @@
 <?php
 
+// A
 $lang['add_profile'] = 'Add Profile';
 
-$lang['delete_profile'] = 'TODO';
+// D
+$lang['delete_profile'] = 'Delete Profile';
 
-$lang['edit_profile'] = 'TODO';
+// E
+$lang['edit_profile'] = 'Edit Profile';
 
+// F
 $lang['friendlyname'] = 'File Picker';
 
-$lang['help'] = 'TODO';
-
+// H
 $lang['HelpPopupTitle_can_delete'] = 'TODO';
 $lang['HelpPopupTitle_dir'] = 'TODO';
 $lang['HelpPopupTitle_exclude_prefix'] = 'TODO';
@@ -31,13 +34,17 @@ $lang['HelpPopup_groups'] = 'TODO';
 $lang['HelpPopup_include_prefix'] = 'TODO';
 $lang['HelpPopup_include_suffix'] = 'TODO';
 $lang['HelpPopup_mode'] = 'TODO';
+$lang['HelpPopup_ProfileName'] = 'TODO';
 $lang['HelpPopup_show_thumbs'] = 'TODO';
 $lang['HelpPopup_upload'] = 'TODO';
 
-$lang['msg_success'] = 'TODO';
+// M
+$lang['moddescription'] = 'TODO';
 $lang['ModeOptions_Browser'] = 'Browser';   
-$lang['ModeOptions_Dropdown'] = 'Dropdown';  
+$lang['ModeOptions_Dropdown'] = 'Dropdown';
+$lang['msg_success'] = 'TODO';
 
+// P
 $lang['ProfileName'] = 'Profile Name';  
 $lang['Profile_can_delete'] = 'Profile can delete';
 $lang['Profile_dir'] = 'Directory';  
@@ -51,8 +58,25 @@ $lang['Profile_mode'] = 'Mode';
 $lang['Profile_show_thumbs'] = 'Show Thumbnails';  
 $lang['Profile_upload'] = 'Allow Upload';  
 
+// T
 $lang['tab_defaults'] = 'Default Settings';
 $lang['tab_preferences'] = 'Preferences';  
-$lang['tab_profiles'] = 'Profiles';  
+$lang['tab_profiles'] = 'Profiles';
+
+// HELP TEXT
+$lang['help'] = <<<EOT
+<h3>What does this do?</h3>
+<p></p>
+
+<h3>How Do I Use It</h3>
+<p></p>
+
+<h3>Support</h3>
+<p>As per the GPL, this software is provided as-is. Please read the text of the license for the full disclaimer.</p>
+
+<h3>Copyright and License</h3>
+<p>Copyright &copy; 2017, JoMorg and calguy1000. All Rights Are Reserved.</p>
+<p>This module has been released under the <a href="http://www.gnu.org/licenses/licenses.html#GPL">GNU Public License</a>. You must agree to this license before using the module.</p>
+EOT;
 
 ?>

@@ -42,7 +42,7 @@ final class FilePicker extends \CMSModule
   var $_params_list = array(
                               'profile'         => array(
                                                           'type' => 0, 
-                                                          'value' => 'TODO',
+                                                          'value' => '',
                                                           'options' => array()
                                                         ),
                               'mode'            => array(
@@ -62,27 +62,27 @@ final class FilePicker extends \CMSModule
                                                         ),
                               'exclude_prefix'  => array(
                                                           'type' => 0, 
-                                                          'value' => 'TODO',
+                                                          'value' => '',
                                                           'options' => array()
                                                         ),
                               'include_prefix'  => array(
                                                           'type' => 0, 
-                                                          'value' => 'TODO',
+                                                          'value' => '',
                                                           'options' => array()
                                                         ),
                               'exclude_suffix'   => array(
                                                           'type' => 0, 
-                                                          'value' => 'TODO',
+                                                          'value' => '',
                                                           'options' => array()
                                                         ),
                               'include_suffix'   => array(
                                                           'type' => 0, 
-                                                          'value' => 'TODO',
+                                                          'value' => '',
                                                           'options' => array()
                                                         ),
                               'file_extensions' => array(
                                                           'type' => 0, 
-                                                          'value' => 'TODO',
+                                                          'value' => '',
                                                           'options' => array()
                                                         ),
                               'show_thumbs'     => array(
