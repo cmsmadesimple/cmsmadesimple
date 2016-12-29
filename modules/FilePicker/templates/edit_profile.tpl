@@ -4,8 +4,8 @@
 <div class="pageoverflow">
   <p class="pageinput">
     <input type="submit" id="submit" name="{$actionid}submit" value="{lang('submit')}"/>
+	<input type="submit" id="cancel" name="{$actionid}cancel" value="{lang('cancel')}"/>
     <input type="submit" id="apply" name="{$actionid}apply" value="{lang('apply')}"/>
-    <input type="submit" id="cancel" name="{$actionid}cancel" value="{lang('cancel')}"/>
   </p>
 </div>
 <div class="pageoverflow">
@@ -40,8 +40,8 @@
 <div class="pageoverflow">
   <p class="pageinput">
     <input type="submit" id="submit" name="{$actionid}submit" value="{lang('submit')}"/>
-    <input type="submit" id="apply" name="{$actionid}apply" value="{lang('apply')}"/>
     <input type="submit" id="cancel" name="{$actionid}cancel" value="{lang('cancel')}"/>
+	<input type="submit" id="apply" name="{$actionid}apply" value="{lang('apply')}"/>
   </p>
 </div>
 {form_end}

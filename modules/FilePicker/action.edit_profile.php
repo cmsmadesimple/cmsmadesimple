@@ -52,7 +52,7 @@ else
   # new one
   $profile = new stdClass();
   $profile->id = -1;
-  $profile->name = '';
+  $profile->name = 'TODO';
   $profile->params = $this->_get_profile_data();
 }
 
@@ -61,7 +61,7 @@ if( isset($params['submit']) || isset($params['apply']) )
   $profile->id = $profile_id;
   $profile->name = $this->_conform_profile_name($params['name']);
   
-  foreach($this->_get_profile_data('') as $k => $v)
+  foreach($this->_get_profile_data('TODO') as $k => $v)
   {
     if($profile->params[$k]['type'] == ProfileParameter::TYPE_CHECKBOX)
     {

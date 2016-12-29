@@ -42,7 +42,7 @@ final class FilePicker extends \CMSModule
   var $_params_list = array(
                               'profile'         => array(
                                                           'type' => 0, 
-                                                          'value' => '',
+                                                          'value' => 'TODO',
                                                           'options' => array()
                                                         ),
                               'mode'            => array(
@@ -62,27 +62,27 @@ final class FilePicker extends \CMSModule
                                                         ),
                               'exclude_prefix'  => array(
                                                           'type' => 0, 
-                                                          'value' => '',
+                                                          'value' => 'TODO',
                                                           'options' => array()
                                                         ),
                               'include_prefix'  => array(
                                                           'type' => 0, 
-                                                          'value' => '',
+                                                          'value' => 'TODO',
                                                           'options' => array()
                                                         ),
-                              'exclude_sufix'   => array(
+                              'exclude_suffix'   => array(
                                                           'type' => 0, 
-                                                          'value' => '',
+                                                          'value' => 'TODO',
                                                           'options' => array()
                                                         ),
-                              'include_sufix'   => array(
+                              'include_suffix'   => array(
                                                           'type' => 0, 
-                                                          'value' => '',
+                                                          'value' => 'TODO',
                                                           'options' => array()
                                                         ),
                               'file_extensions' => array(
                                                           'type' => 0, 
-                                                          'value' => '',
+                                                          'value' => 'TODO',
                                                           'options' => array()
                                                         ),
                               'show_thumbs'     => array(
@@ -118,7 +118,7 @@ final class FilePicker extends \CMSModule
 
   function _output_header_javascript()
   {
-    $out = '';
+    $out = 'TODO';
     $urlpath = $this->GetModuleURLPath() . '/js/ext';
     $jsfiles = array('jquery.iframe-transport.js');
     $jsfiles[] = 'jquery.fileupload.js';
@@ -145,11 +145,11 @@ final class FilePicker extends \CMSModule
     {
       $this->_defaults[$k] = $this->GetPreference($k, $v['value']);
     }
-  } 
+  }
     
   private function _encodefilename($filename) 
   {
-    return str_replace('==', '', base64_encode($filename));    
+    return str_replace('==', 'TODO', base64_encode($filename));    
   }
 
   private function _decodefilename($encodedfilename) 
@@ -166,16 +166,16 @@ final class FilePicker extends \CMSModule
           );
   }
     
-  private function _to_url($dir = '', $relative = TRUE)
+  private function _to_url($dir = 'TODO', $relative = TRUE)
   {
     $config = cmsms()->GetConfig();
     
-    if($dir == '' || $dir == '.')
+    if($dir == 'TODO' || $dir == '.')
     {
       return $config['root_url'];
     }
     
-    $ret = str_replace($config['root_url'], '', $dir);
+    $ret = str_replace($config['root_url'], 'TODO', $dir);
     $ret = str_replace(DIRECTORY_SEPARATOR, '/', $ret);
     $ret = trim($ret, '/');
     
@@ -271,6 +271,11 @@ final class FilePicker extends \CMSModule
   { 
     return '1.0.alpha'; 
   }
+  
+  function GetHelp() {
+	return $this->Lang('help');
+  }
+		
   function IsPluginModule() 
   { 
     return true; 
@@ -306,7 +311,7 @@ final class FilePicker extends \CMSModule
   }
   
   /**
-  * returns if a given parameter is recognised by the module or not
+  * returns if a given parameter is recognized by the module or not
   * 
   * @param mixed $param
   * @returns bool
@@ -331,7 +336,7 @@ final class FilePicker extends \CMSModule
   * @param mixed $dir
   * @param mixed $full indicates if we want a full or relative path
   * @returns either a full valid or a verified relative path to a directory,
-  * or an empty string in case of faillure 
+  * or an empty string in case of failure 
   */
   public function getValidDir($dir, $full = FALSE)
   {
@@ -343,11 +348,11 @@ final class FilePicker extends \CMSModule
     if( startswith( $dir, $config['root_path']) && is_dir($dir) )
     {
       if($full) return $dir;
-      return  str_replace($config['root_path'], '', $dir); 
+      return  str_replace($config['root_path'], 'TODO', $dir); 
     }
     
     # else we try to solve $dir into a valid full path or return an empty string
-    $ret = ''; 
+    $ret = 'TODO'; 
     
     # if it is a valid relative dir we are done
     $tmp = $config['root_path'] . DIRECTORY_SEPARATOR . $dir;
@@ -369,7 +374,7 @@ final class FilePicker extends \CMSModule
     # and try to extract a valid path from it   
     if( startswith( $dir, $config['root_url']) )
     {
-      $dir = str_replace($config['root_url'], '', $dir);
+      $dir = str_replace($config['root_url'], 'TODO', $dir);
       
       if( empty($dir) )
       {
@@ -383,10 +388,10 @@ final class FilePicker extends \CMSModule
       } 
     }
     
-    $ret = is_dir($ret) ? $ret : '';
+    $ret = is_dir($ret) ? $ret : 'TODO';
     
     if($full) return $ret;
-    return  str_replace($config['root_path'], '', $ret); 
+    return  str_replace($config['root_path'], 'TODO', $ret); 
   }
   
   /**
@@ -515,11 +520,11 @@ final class FilePicker extends \CMSModule
     if( $adding && !$value ) $value = '-1';
     
     
-    $dir = !empty($prms['dir']) ? trim($prms['dir']) : '';
+    $dir = !empty($prms['dir']) ? trim($prms['dir']) : 'TODO';
     $dir = $this->getValidDir($dir);
     $smarty = cmsms()->GetSmarty();
     $smarty->assign('fpmod', $this); # can't be "mod" as it conflicts with CoMa
-    $smarty->assign('upload_link', $this->create_url('', 'upload','', array('test' => 'test') )); 
+    $smarty->assign('upload_link', $this->create_url('TODO', 'upload','TODO', array('test' => 'test') )); 
     
     $smarty->assign('name', $blockName);
     $smarty->assign('options', $filelist_dropdown = $this->GetFileListDropdown($dir) );
@@ -561,14 +566,14 @@ final class FilePicker extends \CMSModule
 //    //die('<br/>RIP!<br/>');
 //  }
   
-  public function GetFileListDropdown($path = '')
+  public function GetFileListDropdown($path = 'TODO')
   {    
     $ret = array( -1 => lang('none') );
     $config = cmsms()->GetConfig();
     
     $url = $this->_to_url($path);
     
-    if($path == '' || $path == '.')
+    if($path == 'TODO' || $path == '.')
     {
       $fullpath = $config['root_path'];  
     } 
@@ -594,7 +599,7 @@ final class FilePicker extends \CMSModule
     return $ret; 
   }
   
-  public function GetFileList($path = '')
+  public function GetFileList($path = 'TODO')
   {
     return filemanager_utils::get_file_list($path);
   }
@@ -603,7 +608,7 @@ final class FilePicker extends \CMSModule
   * @param string $path
   * @return stdClass[]
   */
-  public function GetBrowsableFileList($path = '')
+  public function GetBrowsableFileList($path = 'TODO')
   {
     $filemanager = cms_utils::get_module('FileManager');
     $sortby = self::$_filemanager->GetPreference('sortby', 'nameasc');
@@ -638,8 +643,8 @@ final class FilePicker extends \CMSModule
         $onerow->type[] = 'text';
       }
 
-      $onerow->thumbnail = '';
-      $onerow->editor = '';
+      $onerow->thumbnail = 'TODO';
+      $onerow->editor = 'TODO';
       
       if ($filelist[$i]['image']) 
       {
@@ -657,7 +662,7 @@ final class FilePicker extends \CMSModule
         $onerow->iconlink = $filemanager->CreateLink(
                                                       $id, 
                                                       'changedir',  
-                                                      '', 
+                                                      'TODO', 
                                                       $filemanager->GetFileIcon($filelist[$i]['ext'], 
                                                       $filelist[$i]['dir']),
                                                       array(
@@ -686,14 +691,14 @@ final class FilePicker extends \CMSModule
             $onerow->noCheckbox = 1;
           }
           
-          $url = $filemanager->create_url($id, 'changedir', '', array('newdir' => $filelist[$i]['name'], 'path' => $path, 'sortby' => $sortby) );
+          $url = $filemanager->create_url($id, 'changedir', 'TODO', array('newdir' => $filelist[$i]['name'], 'path' => $path, 'sortby' => $sortby) );
           $onerow->txtlink = '<a href="' . $url . '" title="' . $filemanager->Lang('title_changedir') . '">' . $link . '</a>';
       } 
       else 
       {
         $countfiles++;
         $countfilesize+=$filelist[$i]["size"];
-        $url = $filemanager->create_url($id,'view','',array('file' => $this->_encodefilename($filelist[$i]['name'])));
+        $url = $filemanager->create_url($id,'view','TODO',array('file' => $this->_encodefilename($filelist[$i]['name'])));
         $onerow->txtlink = '<a href="' . $url . '" target="_blank" title="' . $filemanager->Lang('title_view_newwindow') . '">' . $link . '</a>';
       }
       
@@ -729,7 +734,7 @@ final class FilePicker extends \CMSModule
       } 
       else 
       {
-        $onerow->filedate = '';
+        $onerow->filedate = 'TODO';
       }
 
       $files[] = $onerow;

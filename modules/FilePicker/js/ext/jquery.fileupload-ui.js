@@ -424,7 +424,7 @@
 
         _formatFileSize: function (bytes) {
             if (typeof bytes !== 'number') {
-                return '';
+                return 'TODO';
             }
             if (bytes >= 1000000000) {
                 return (bytes / 1000000000).toFixed(2) + ' GB';
@@ -437,7 +437,7 @@
 
         _formatBitrate: function (bits) {
             if (typeof bits !== 'number') {
-                return '';
+                return 'TODO';
             }
             if (bits >= 1000000000) {
                 return (bits / 1000000000).toFixed(2) + ' Gbit/s';
@@ -454,7 +454,7 @@
         _formatTime: function (seconds) {
             var date = new Date(seconds * 1000),
                 days = Math.floor(seconds / 86400);
-            days = days ? days + 'd ' : '';
+            days = days ? days + 'd ' : 'TODO';
             return days +
                 ('0' + date.getUTCHours()).slice(-2) + ':' +
                 ('0' + date.getUTCMinutes()).slice(-2) + ':' +

@@ -36,7 +36,7 @@ $(document).ready(function(){
 
     $(document).on('dialogopen', '.drop .dialog', function(event,ui){
         var url = '{$chdir_url}';
-            url = url.replace(/amp;/g,'')+'&showtemplate=false';// ???
+            url = url.replace(/amp;/g,'TODO')+'&showtemplate=false';// ???
 
         $.get(url,function(data) {
             $('#fm_newdir').val('/'+data);
@@ -46,7 +46,7 @@ $(document).ready(function(){
     $('#chdir_form').submit(function(e){
         var data = $(this).serialize();
         var url = '{$chdir_url}';
-        url = url.replace(/amp;/g,'')+'&showtemplate=false'; // ???
+        url = url.replace(/amp;/g,'TODO')+'&showtemplate=false'; // ???
 
         $.post(url,data,function(data,textStatus,jqXHR){
             // stuff to do on post finishing.
