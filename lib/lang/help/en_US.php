@@ -674,7 +674,7 @@ $lang['settings_mailprefs_smtptimeout'] = 'When using the SMTP mailer, this opti
 $lang['settings_mailprefs_smtpusername'] = 'This is the username for connecting to the SMTP server if SMTP authentication is enabled.';
 $lang['settings_mailtest_testaddress'] = 'Specify a valid email address that will receive the test email';
 $lang['settings_mandatory_urls'] = 'If SEF/pretty URLs are enabled, this option indicates whether page URLS are a required field in the content editor.';
-$lang['settings_nosefurl'] = 'To configure <strong>S</strong>each <strong>E</strong>ngine <strong>F</strong>riendly <em>(pretty)</em> URLs you need to edit a few lines in your config.php file and possibly to edit a .htaccess file or your web servers configuration.   You can read more about configuring pretty URLS <a href="http://docs.cmsmadesimple.org/configuration/pretty-url" class="external" target="blank"><u>here</u></a> &raquo;';
+$lang['settings_nosefurl'] = 'To configure <strong>S</strong>each <strong>E</strong>ngine <strong>F</strong>riendly <em>(pretty)</em> URLs you need to edit a few lines in your config.php file and possibly to edit a .htaccess file or your web servers configuration.   You can read more about configuring pretty URLS <a href="https://docs.cmsmadesimple.org/configuration/pretty-url" class="external" target="blank"><u>here</u></a> &raquo;';
 $lang['settings_pseudocron_granularity'] = 'This setting indicates how often the system will attempt to handle regularly scheduled tasks.';
 $lang['settings_searchmodule'] = 'Select the module that should be used to index words for searching, and will provide the site search capabilities';
 $lang['settings_sitedownexcludeadmins'] = 'Do show the website to Admin users logged in to the CMSMS Admin console';
