@@ -45,6 +45,9 @@ $lang['ModeOptions_Dropdown'] = 'Dropdown';
 $lang['msg_delete_success'] = 'TODO';
 $lang['msg_success'] = 'TODO';
 
+// N
+$lang['no_profiles'] = 'No profiles defined yet. You can add them by clicking the button above.';
+
 // P
 $lang['ProfileName'] = 'Profile Name';  
 $lang['Profile_can_delete'] = 'Profile can delete';
@@ -63,6 +66,11 @@ $lang['Profile_upload'] = 'Allow Upload';
 $lang['tab_defaults'] = 'Default Profile Settings';
 $lang['tab_preferences'] = 'Preferences';  
 $lang['tab_profiles'] = 'Profiles';
+$lang['th_created'] = 'Created';
+$lang['th_id'] = 'ID';
+$lang['th_last_edited'] = 'Last Edited';
+$lang['th_tag'] = 'Tag';
+
 
 // HELP TEXT
 $lang['help'] = <<<EOT
