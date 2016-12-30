@@ -75,7 +75,7 @@ $lang['th_tag'] = 'Tag';
 // HELP TEXT
 $lang['help'] = <<<EOT
 <h3>What does this do?</h3>
-<p></p>
+<p>FilePicker is a CMS Made Simple add-on module to provide file picking capabilities.</p>
 
 <h3>How Do I Use It</h3>
 <p></p>

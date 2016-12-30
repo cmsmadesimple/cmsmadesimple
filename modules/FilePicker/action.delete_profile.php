@@ -27,6 +27,7 @@
 #-------------------------------------------------------------------------
 # END_LICENSE
 #-------------------------------------------------------------------------
+
 if( !defined('CMS_VERSION') ) exit;
 
 $profile_id = isset($params['id']) ? $params['id'] : NULL; 
@@ -38,4 +39,8 @@ if( !$this->_delete_profile($profile_id) )
 }
 
 $this->Redirect($id, 'defaultadmin', $returnid, array('msg' => $this->Lang('msg_delete_success') ) );
+
+#
+# EOF
+#
 ?>

@@ -27,8 +27,14 @@
 #-------------------------------------------------------------------------
 # END_LICENSE
 #-------------------------------------------------------------------------
+
 if( !defined('CMS_VERSION') ) exit;
+
 $this->_set_default_preferences($params);
 $params = array('active_tab' => 'defaults');
 $this->Redirect($id, 'defaultadmin', $returnid, $params);
+
+#
+# EOF
+#
 ?>

@@ -27,8 +27,14 @@
 #-------------------------------------------------------------------------
 # END_LICENSE
 #-------------------------------------------------------------------------
+
 if( !defined('CMS_VERSION') ) exit;
+
 /**
 * @todo -o JoMorg task: Preferences not possible to be overridden by profiles or tags parameters go here 
 */
+
+#
+# EOF
+#
 ?>

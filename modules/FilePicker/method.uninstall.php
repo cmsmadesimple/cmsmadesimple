@@ -27,8 +27,13 @@
 #-------------------------------------------------------------------------
 # END_LICENSE
 #-------------------------------------------------------------------------
+
 $db = $this->GetDb();
 $dict = NewDataDictionary( $db );
 $sqlarray = $dict->DropTableSQL(cms_db_prefix() . 'module_filepicker_profiles');
 $dict->ExecuteSQLArray($sqlarray);
+
+#
+# EOF
+#
 ?>

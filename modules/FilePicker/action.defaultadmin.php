@@ -48,4 +48,7 @@ $smarty->assign('active_tab', $active_tab);
 
 echo $this->ProcessTemplate('defaultadmin.tpl');
 
+#
+# EOF
+#
 ?>

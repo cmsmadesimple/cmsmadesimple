@@ -27,11 +27,12 @@
 #-------------------------------------------------------------------------
 # END_LICENSE
 #-------------------------------------------------------------------------
+
 if( !defined('CMS_VERSION') ) exit;
 
 if( isset($params['cancel']) )
 {
-  $this->Redirect($id, 'defaultadmin', $returnid, array() );
+	$this->Redirect($id, 'defaultadmin', $returnid, array() );
 }
 
 $profile_id = isset($params['id']) ? $params['id'] : NULL; 
@@ -40,58 +41,63 @@ $profile_id = isset($params['_id']) ? $params['_id'] : $profile_id;
 
 if( !empty($profile_id) && (int)$profile_id > -1)
 {
-  # we are editing
-  $tmp = $this->_get_profile_by_id($profile_id);  
-  $profile = new stdClass();
-  $profile->id = $profile_id;
-  $profile->name = $tmp['name'];
-  $profile->params = $this->_get_profile_data($tmp['data']);
+	# we are editing
+	$tmp = $this->_get_profile_by_id($profile_id);  
+	$profile = new stdClass();
+	$profile->id = $profile_id;
+	$profile->name = $tmp['name'];
+	$profile->params = $this->_get_profile_data($tmp['data']);
 }
 else
 {
-  # new one
-  $profile = new stdClass();
-  $profile->id = -1;
-  $profile->name = '';
-  $profile->params = $this->_get_profile_data();
+	# new one
+	$profile = new stdClass();
+	$profile->id = -1;
+	$profile->name = '';
+	$profile->params = $this->_get_profile_data();
 }
 
 if( isset($params['submit']) || isset($params['apply']) )
 {
-  $profile->id = $profile_id;
-  $profile->name = $this->_conform_profile_name($params['name']);
+	$profile->id = $profile_id;
+	$profile->name = $this->_conform_profile_name($params['name']);
   
-  foreach($this->_get_profile_data('') as $k => $v)
-  {
-    if($profile->params[$k]['type'] == ProfileParameter::TYPE_CHECKBOX)
-    {
-      if(isset( $params[$k]) )
-      $profile->params[$k]['value'] = (bool)$params[$k];
-      continue;
-    }
-    
-    if($profile->params[$k]['type'] == ProfileParameter::TYPE_MULTISELECT)
-    {
-      if(isset( $params[$k]) )
-      $profile->params[$k]['value'] = implode(',', $params[$k]);
-      continue;
-    }
-    
-    $profile->params[$k]['value'] = $params[$k];
-  }
+	foreach($this->_get_profile_data('') as $k => $v)
+	{
+		if($profile->params[$k]['type'] == ProfileParameter::TYPE_CHECKBOX)
+		{
+			if(isset( $params[$k]) )
+			$profile->params[$k]['value'] = (bool)$params[$k];
+			continue;
+		}
+		
+		if($profile->params[$k]['type'] == ProfileParameter::TYPE_MULTISELECT)
+		{
+			if(isset( $params[$k]) )
+			$profile->params[$k]['value'] = implode(',', $params[$k]);
+			continue;
+		}
+		
+		$profile->params[$k]['value'] = $params[$k];
+	}
   
-  $this->_save_profile($profile);
+	$this->_save_profile($profile);
   
-  if( isset($params['submit']) )
-  {
-    $this->Redirect($id, 'defaultadmin', $returnid, array('msg' => $this->Lang('msg_success') ) );
-  }
-  else
-  {
-    $this->ShowMessage( $this->Lang('msg_success') );
-  }
+	if( isset($params['submit']) )
+	{
+		$this->Redirect($id, 'defaultadmin', $returnid, array('msg' => $this->Lang('msg_success') ) );
+	}
+	else
+	{
+		$this->ShowMessage( $this->Lang('msg_success') );
+	}
 }
 
 $smarty->assign('profile', $profile);
+
 echo $this->ProcessTemplate('edit_profile.tpl');
+
+#
+# EOF
+#
 ?>

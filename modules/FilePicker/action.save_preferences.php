@@ -29,15 +29,17 @@
 #-------------------------------------------------------------------------
 if( !defined('CMS_VERSION') ) exit;
 
-#---------------------
-# Check params
-#---------------------
 if( isset($params['cancel']) ) 
 {
-  $params = array('active_tab' => 'preferences');
-  $this->Redirect($id, 'defaultadmin', $returnid, $params);
+	$params = array('active_tab' => 'preferences');
+	$this->Redirect($id, 'defaultadmin', $returnid, $params);
 }
+
 /**
 * @todo -o JoMorg task: Preferences not possible to be overridden by profiles or tags parameters go here 
 */
+
+#
+# EOF
+#
 ?>

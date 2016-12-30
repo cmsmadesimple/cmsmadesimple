@@ -27,7 +27,9 @@
 #-------------------------------------------------------------------------
 # END_LICENSE
 #-------------------------------------------------------------------------
+
 if( !defined('CMS_VERSION') ) exit;
+
 # just for tests purposes
 #this will be handled differently 
 $fn = cms_join_path($this->GetModulePath(), 'lib',  'ext', 'UploadHandler.php');
@@ -45,22 +47,25 @@ header('Access-Control-Allow-Headers: X-File-Name, X-File-Type, X-File-Size');
 
 switch ($_SERVER['REQUEST_METHOD']) 
 {
-  case 'OPTIONS':
+	case 'OPTIONS':
         break;
-  case 'HEAD':
-  case 'GET':
+	case 'HEAD':
+	case 'GET':
         $UploadHandler->get();
         break;
-  case 'POST':
+	case 'POST':
         $UploadHandler->post();
         break;
-  case 'DELETE':
+	case 'DELETE':
         $UploadHandler->delete();
         break;
-  default:
+	default:
         header('HTTP/1.1 405 Method Not Allowed');
 }
 
 exit;
 
+#
+# EOF
+#
 ?>

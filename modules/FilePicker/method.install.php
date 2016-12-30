@@ -27,28 +27,33 @@
 #-------------------------------------------------------------------------
 # END_LICENSE
 #-------------------------------------------------------------------------
+
 $db = $this->GetDb();
 $taboptarray = array('mysql' => 'TYPE=MyISAM');
 $dict = NewDataDictionary($db);
 
 # profiles
 $flds = '
-id I AUTO PRIMARY KEY,
-name C(100) NOTNULL,
-data X,
-create_date ' . CMS_ADODB_DT . ',
-modified_date ' . CMS_ADODB_DT
-;
+	id I AUTO PRIMARY KEY,
+	name C(100) NOTNULL,
+	data X,
+	create_date ' . CMS_ADODB_DT . ',
+	modified_date ' . CMS_ADODB_DT
+	;
 
 $sqlarray = $dict->CreateTableSQL(cms_db_prefix() . 'module_filepicker_profiles', $flds, $taboptarray);
 
 try
 {
-  $dict->ExecuteSQLArray($sqlarray);
-}
-catch(Exception $e)
-{
-  return $e->getMessage();
+	$dict->ExecuteSQLArray($sqlarray);
 }
 
+catch(Exception $e)
+{
+	return $e->getMessage();
+}
+
+#
+# EOF
+#
 ?>

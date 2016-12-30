@@ -27,6 +27,7 @@
 #-------------------------------------------------------------------------
 # END_LICENSE
 #-------------------------------------------------------------------------
+
 final class FilePicker extends \CMSModule
 {
 /*
@@ -801,7 +802,8 @@ final class FilePicker extends \CMSModule
         {
           $data[$one] = (bool)$profile->params[$one]['value'];
           continue;
-        }}
+        }
+	  }
       
       $data[$one] = $profile->params[$one]['value'];
     }
@@ -913,4 +915,8 @@ final class FilePicker extends \CMSModule
   }
   
 }
+
+#
+# EOF
+#
 ?>
