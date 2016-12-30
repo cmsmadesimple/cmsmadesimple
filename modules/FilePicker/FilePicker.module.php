@@ -112,7 +112,7 @@ final class FilePicker extends \CMSModule
                                                   );
     
     $this->_params_list['groups']['options'] = $this->_get_groups_list();                                           
-    $this->_load_default_preferenses();
+    $this->_load_default_preferences();
     parent::__construct();
   }
 
@@ -139,7 +139,7 @@ final class FilePicker extends \CMSModule
     return $out;
   }
   
-  private function _load_default_preferenses()
+  private function _load_default_preferences()
   {
     foreach($this->_params_list as $k => $v)
     {
@@ -249,7 +249,7 @@ final class FilePicker extends \CMSModule
   * 
   * @param mixed $params
   */
-  public function _set_default_preferenses( $params = array() )
+  public function _set_default_preferences( $params = array() )
   {
     foreach($this->_params_list as $k => $v)
     {
