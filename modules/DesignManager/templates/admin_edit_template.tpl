@@ -273,7 +273,7 @@ $(document).ready(function(){
 			<p class="pageinput">
 			{if $template->has_content_file()}
 				<input type="submit" name="{$actionid}import" value="{$mod->Lang('import')}"/>
-			{else}
+			{elseif $template->get_id() > 0}
 				<input type="submit" name="{$actionid}export" value="{$mod->Lang('export')}"/>
 			{/if}
 		   </p>

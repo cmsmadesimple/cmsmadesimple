@@ -850,7 +850,8 @@ class CmsLayoutStylesheet
     public function get_content_filename()
     {
         $config = \cms_config::get_instance();
-        return cms_join_path($config['assets_path'],'css',$this->get_name().'.css');
+        $name = munge_string_to_url($this->get_name()).'.'.$this->get_id().'.css';
+        return cms_join_path($config['assets_path'],'css',$name);
     }
 
     /**

@@ -85,11 +85,9 @@ try {
             $css_ob->set_content($data);
             $css_ob->save();
         }
-    } catch( CmsException $e ) {
+    } catch( \Exception $e ) {
         $message = $e->GetMessage();
         $response = 'error';
-
-        if (!$apply) echo $this->ShowErrors($message);
     }
 
     //
