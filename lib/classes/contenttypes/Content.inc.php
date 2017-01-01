@@ -557,15 +557,25 @@ class Content extends ContentBase
             return '<div class="red">'.$err.'</div>';
         }
 
-		$optprefix = '';
 		$inputname = $blockInfo['id'];
 		if( isset($blockInfo['inputname']) ) $inputname = $blockInfo['inputname'];
 		$prefix = '';
+        if( isset($blockInfo['sort']) ) $sort = (int)$blockInfo['sort'];
 		if( isset($blockInfo['exclude']) ) $prefix = $blockInfo['exclude'];
-		if( isset($blockInfo['sort']) ) $sort = (int)$blockInfo['sort'];
-		$dropdown = create_file_dropdown($inputname,$dir,$value,'jpg,jpeg,png,gif',$optprefix,true,'',$prefix,1,$sort);
-		if( $dropdown === false ) $dropdown = lang('error_retrieving_file_list');
-		return $dropdown;
+        $filepicker = \cms_utils::get_filepicker_module();
+        if( $filepicker ) {
+            $profile = $filepicker->get_default_profile();
+            $parms = ['top'=>$dir, 'type'=>'image' ];
+            if( $sort ) $parms['sort'] = TRUE;
+            if( $prefix ) $parms['exclude_prefix'] = $prefix;
+            $profile = $profile->overrideWith( $parms );
+            $input = $filepicker->get_html( $inputname, $value, $profile);
+            return $input;
+        } else {
+            $dropdown = create_file_dropdown($inputname,$dir,$value,'jpg,jpeg,png,gif','',true,'',$prefix,1,$sort);
+            if( $dropdown === false ) $dropdown = lang('error_retrieving_file_list');
+            return $dropdown;
+        }
 	}
 
 	/**

@@ -102,7 +102,8 @@ $accept_file = function(\CMSMS\FilePickerProfile $profile,$cwd,$path,$filename) 
     if( (startswith($filename,'.') || startswith($filename,'_')) && !$profile->show_hidden ) return FALSE;
     if( is_dir($fullpath) && $assistant->is_relative($fullpath) ) return TRUE;
 
-    if( $profile->prefix && !startswith( $filename, $profile->match_prefix) ) return FALSE;
+    if( $profile->match_prefix && !startswith( $filename, $profile->match_prefix) ) return FALSE;
+    if( $profile->exclude_prefix && startswith( $filename, $profile->exclude_prefix) ) return FALSE;
     switch( $profile->type ) {
     case 'image':
         if( $is_image($filename) ) return TRUE;

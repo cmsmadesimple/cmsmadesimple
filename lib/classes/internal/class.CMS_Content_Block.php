@@ -110,7 +110,7 @@ final class CMS_Content_Block
         if( !isset($params['block']) || empty($params['block']) ) throw new CmsEditContentException('{content_image} tag requires block parameter');
 
         $rec = array('type'=>'image','id'=>'','name'=>'','label'=>'','upload'=>true,'dir'=>'','default'=>'','tab'=>'',
-                     'priority'=>'','exclude'=>'','sort'=>0);
+                     'priority'=>'','exclude'=>'','sort'=>0, 'profile'=>'');
         foreach( $params as $key => $value ) {
             if( $key == 'type' ) continue;
             if( $key == 'block' ) $key = 'name';
