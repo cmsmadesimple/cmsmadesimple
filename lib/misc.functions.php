@@ -1194,7 +1194,7 @@ function cms_get_jquery($exclude = '',$ssl = null,$cdn = false,$append = '',$cus
   if(!empty($append)) {
       $append_list = explode(",", trim(str_replace(' ','',$append)));
       foreach($append_list as $key => $item) {
-          $scripts['user_'+$key] = array('local'=>$item);
+          $scripts['user_'.$key] = array('local'=>$item);
       }
   }
 
