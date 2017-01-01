@@ -1201,6 +1201,23 @@ final class ModuleOperations
 
 
     /**
+     * Return the current filepicker module object.
+     *
+     * This method returns module object for the currently selected search module.
+     *
+     * @return \CMSMS\FilePickerInterface
+     * @since 2.2
+     */
+    public function &GetFilePickerModule()
+    {
+        $obj = null;
+        $module_name = cms_siteprefs::get('filepickermodule','FilePicker');
+        if( $module_name && $module_name != 'none' && $module_name != '-1' ) $obj = $this->get_module_instance($module_name);
+        return $obj;
+    }
+
+
+    /**
      * Alias for the GetSyntaxHiglighter method.
      *
      * @see ModuleOperations::GetSyntaxHighlighter

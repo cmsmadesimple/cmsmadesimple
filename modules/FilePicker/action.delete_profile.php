@@ -5,7 +5,7 @@
 # (c) 2016 by Robert Campbell <calguy1000@cmsmadesimple.org>
 #-------------------------------------------------------------------------
 # CMS - CMS Made Simple is (c) 2006 by Ted Kulp (wishy@cmsmadesimple.org)
-# This project's homepage is: http://www.cmsmadesimple.org
+# This projects homepage is: http://www.cmsmadesimple.org
 #-------------------------------------------------------------------------
 #-------------------------------------------------------------------------
 # BEGIN_LICENSE
@@ -27,20 +27,20 @@
 #-------------------------------------------------------------------------
 # END_LICENSE
 #-------------------------------------------------------------------------
-
+use FilePicker\ProfileDAO;
+use FilePicker\Profile;
 if( !defined('CMS_VERSION') ) exit;
 
-$profile_id = isset($params['id']) ? $params['id'] : NULL; 
-$profile_id = isset($params['_id']) ? $params['_id'] : $profile_id; 
+try {
+    $profile_id = (int) get_parameter_value($params,'pid');
+    if( $profile_id < 1 ) throw new \LogicException('Invalid profile id passed to delete_profile action');
 
-if( !$this->_delete_profile($profile_id) )
-{
-  $this->Redirect($id, 'defaultadmin', $returnid, array('msg' => $this->Lang('msg_delete_error') ) );
+    $profile = $this->_dao->loadById( $profile_id );
+    if( !$profile ) throw new \LogicException('Invalid profile id passed to delete_profile action');
+
+    $this->_dao->delete( $profile );
 }
-
-$this->Redirect($id, 'defaultadmin', $returnid, array('msg' => $this->Lang('msg_delete_success') ) );
-
-#
-# EOF
-#
-?>
+catch( \Exception $e ) {
+    $this->SetError( $e->GetMessage() );
+}
+$this->RedirectToAdminTab();

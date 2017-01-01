@@ -2362,18 +2362,42 @@ abstract class ContentBase
 		case 'image':
 			$dir = cms_join_path($config['image_uploads_path'],cms_siteprefs::get('content_imagefield_path'));
 			$data = $this->GetPropertyValue('image');
+            $filepicker = \cms_utils::get_filepicker_module();
+            if( $filepicker ) {
+                $profile = $filepicker->get_default_profile();
+                $profile = $profile->overrideWith( ['top'=>$dir, 'type'=>'image'] );
+                $input = $filepicker->get_html( 'image', $data, $profile);
+            }
+            else {
+                $input = create_file_dropdown('image',$dir,$data,'jpg,jpeg,png,gif','',true,'','thumb_',0,1);
+            }
+			if( !$input ) return FALSE;
+			$help = '&nbsp;'.cms_admin_utils::get_help_tag('core','help_content_image',lang('help_title_content_image'));
+			return array('<label for="image">'.lang('image').':</label>'.$help,$input);
+/*
+			$dir = cms_join_path($config['image_uploads_path'],cms_siteprefs::get('content_imagefield_path'));
+			$data = $this->GetPropertyValue('image');
 			$dropdown = create_file_dropdown('image',$dir,$data,'jpg,jpeg,png,gif','',true,'','thumb_',1,1);
 			if( !$dropdown ) return;
 			$help = '&nbsp;'.cms_admin_utils::get_help_tag('core','help_content_image',lang('help_title_content_image'));
 			return array('<label for="image">'.lang('image').':</label>'.$help,$dropdown);
+*/
 
 		case 'thumbnail':
 			$dir = cms_join_path($config['image_uploads_path'],cms_siteprefs::get('content_thumbnailfield_path'));
 			$data = $this->GetPropertyValue('thumbnail');
-			$dropdown = create_file_dropdown('thumbnail',$dir,$data,'jpg,jpeg,png,gif','',true,'','thumb_',0,1);
-			if( !$dropdown ) return FALSE;
+            $filepicker = \cms_utils::get_filepicker_module();
+            if( $filepicker ) {
+                $profile = $filepicker->get_default_profile();
+                $profile = $profile->overrideWith( ['top'=>$dir, 'type'=>'image', 'match_prefix'=>'thumb_' ] );
+                $input = $filepicker->get_html( 'thumbnail', $data, $profile);
+            }
+            else {
+                $input = create_file_dropdown('thumbnail',$dir,$data,'jpg,jpeg,png,gif','',true,'','thumb_',0,1);
+            }
+			if( !$input ) return FALSE;
 			$help = '&nbsp;'.cms_admin_utils::get_help_tag('core','help_content_thumbnail',lang('help_title_content_thumbnail'));
-			return array('<label for="thumbnail">'.lang('thumbnail').':</label>'.$help,$dropdown);
+			return array('<label for="thumbnail">'.lang('thumbnail').':</label>'.$help,$input);
 
 		case 'titleattribute':
             $help = '&nbsp;'.cms_admin_utils::get_help_tag('core','help_content_titleattribute',lang('help_title_content_ta'));

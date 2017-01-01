@@ -5,7 +5,7 @@
 # (c) 2016 by Robert Campbell <calguy1000@cmsmadesimple.org>
 #-------------------------------------------------------------------------
 # CMS - CMS Made Simple is (c) 2006 by Ted Kulp (wishy@cmsmadesimple.org)
-# This project's homepage is: http://www.cmsmadesimple.org
+# This projects homepage is: http://www.cmsmadesimple.org
 #-------------------------------------------------------------------------
 #-------------------------------------------------------------------------
 # BEGIN_LICENSE
@@ -27,538 +27,195 @@
 #-------------------------------------------------------------------------
 # END_LICENSE
 #-------------------------------------------------------------------------
+use \FilePicker\TemporaryProfileStorage;
 
-final class FilePicker extends \CMSModule
+require_once(__DIR__.'/lib/class.ProfileDAO.php');
+
+final class FilePicker extends \CMSModule implements \CMSMS\FilePickerInterface
 {
-/*
-  reference for type:
-  
-  - \CMSMSFilePicker\ProfileParameter::TYPE_TEXTINPUT    = 0;
-  - \CMSMSFilePicker\ProfileParameter::TYPE_TEXTAREA     = 1;
-  - \CMSMSFilePicker\ProfileParameter::TYPE_DROPDOWN     = 2;
-  - \CMSMSFilePicker\ProfileParameter::TYPE_MULTISELECT  = 3;
-  - \CMSMSFilePicker\ProfileParameter::TYPE_CHECKBOX     = 4;
-*/
- 
-  var $_params_list = array(
-                              'profile'         => array(
-                                                          'type' => 0, 
-                                                          'value' => '',
-                                                          'options' => array()
-                                                        ),
-                              'mode'            => array(
-                                                          'type' => 2, 
-                                                          'value' => 'dropdown',
-                                                          'options' => array()
-                                                        ),
-                              'dir'             => array(
-                                                          'type' => 0, 
-                                                          'value' => 'uploads',
-                                                          'options' => array()
-                                                        ),
-                              'upload'          => array(
-                                                          'type' => 4,
-                                                          'value' => FALSE,
-                                                          'options' => array()
-                                                        ),
-                              'exclude_prefix'  => array(
-                                                          'type' => 0, 
-                                                          'value' => '',
-                                                          'options' => array()
-                                                        ),
-                              'include_prefix'  => array(
-                                                          'type' => 0, 
-                                                          'value' => '',
-                                                          'options' => array()
-                                                        ),
-                              'exclude_suffix'   => array(
-                                                          'type' => 0, 
-                                                          'value' => '',
-                                                          'options' => array()
-                                                        ),
-                              'include_suffix'   => array(
-                                                          'type' => 0, 
-                                                          'value' => '',
-                                                          'options' => array()
-                                                        ),
-                              'file_extensions' => array(
-                                                          'type' => 0, 
-                                                          'value' => '',
-                                                          'options' => array()
-                                                        ),
-                              'show_thumbs'     => array(
-                                                          'type' => 4, 
-                                                          'value' => FALSE,
-                                                          'options' => array()
-                                                        ),
-                              'can_delete'      => array(
-                                                          'type' => 4, 
-                                                          'value' => FALSE,
-                                                          'options' => array()
-                                                        ),
-                              'groups'          => array(
-                                                          'type' => 3, 
-                                                          'value' => 1,
-                                                          'options' => array()
-                                                        )
-                            );
-                                
-  private $_defaults = array();
-  
-  function __construct()
-  {
-    $this->_params_list['mode']['options'] = array(
-                                                    'dropdown' => $this->Lang('ModeOptions_Dropdown'),
-                                                    'browser' => $this->Lang('ModeOptions_Browser')
-                                                  );
-    
-    $this->_params_list['groups']['options'] = $this->_get_groups_list();                                           
-    $this->_load_default_preferences();
-    parent::__construct();
-  }
+    protected $_dao;
 
-  function _output_header_javascript()
-  {
-    $out = '';
-    $urlpath = $this->GetModuleURLPath() . '/js/ext';
-    $jsfiles = array('jquery.iframe-transport.js');
-    $jsfiles[] = 'jquery.fileupload.js';
-
-    $fmt = '<script type="text/javascript" src="%s/%s"></script>';
-    foreach( $jsfiles as $one ) 
+    public function __construct()
     {
-      $out .= sprintf($fmt, $urlpath, $one) . "\n";
+        parent::__construct();
+        $this->_dao = new \FilePicker\ProfileDAO( \CmsApp::get_instance()->GetDb() );
     }
 
-//    $fmt = '<link rel="stylesheet" type="text/css" href="%s/%s"/>';
-//    $cssfiles = array('jrac/style.jrac.css');
-//    foreach($cssfiles as $one) 
-//    {
-//      $out .= sprintf($fmt, $urlpath, $one);
-//    }
+    private function _encodefilename($filename)
+    {
+        return str_replace('==', '', base64_encode($filename));
+    }
 
-    return $out;
-  }
-  
-  private function _load_default_preferences()
-  {
-    foreach($this->_params_list as $k => $v)
+    private function _decodefilename($encodedfilename)
     {
-      $this->_defaults[$k] = $this->GetPreference($k, $v['value']);
+        return base64_decode($encodedfilename . '==');
     }
-  }
-    
-  private function _encodefilename($filename) 
-  {
-    return str_replace('==', '', base64_encode($filename));    
-  }
 
-  private function _decodefilename($encodedfilename) 
-  {
-    return base64_decode($encodedfilename . '==');
-  }
-  
-  function VisibleToAdminUser()
-  {
-    return( 
-            $this->CheckPermission('Modify Any Page') || 
-            $this->CheckPermission('Manage All Content') ||
-            $this->CheckPermission('Modify Templates')
-          );
-  }
-    
-  private function _to_url($dir = '', $relative = TRUE)
-  {
-    $config = cmsms()->GetConfig();
-    
-    if($dir == '' || $dir == '.')
+    function VisibleToAdminUser()
     {
-      return $config['root_url'];
+        return $this->CheckPermission('Modify Site Preferences');
     }
-    
-    $ret = str_replace($config['root_url'], '', $dir);
-    $ret = str_replace(DIRECTORY_SEPARATOR, '/', $ret);
-    $ret = trim($ret, '/');
-    
-    return $ret;
-  }
-  
-  private function _GetTemplateObject()
-  {
-    $ret = $this->GetActionTemplateObject();    
-    if( is_object($ret) ) return $ret;  
-    return CmsApp::get_instance()->GetSmarty();
-  }
-  
-  private function _validate_profile_name($string = 'profile')
-  {
-    $ret = $string;
-    $cnt = 0;
-    
-    while($this->profile_name_exists($ret))
-    {
-      $ret = $string . '-' . $cnt++;
-    }
-    
-    return $ret;
-  }
-  
-      private function _create_profile($name, $data = array() )
-  {
-    if( empty($name) ) return FALSE;
-    
-    $data = serialize($data);
-    $db = cmsms()->GetDb();
-    $now = $db->DbTimeStamp( time() );     
-    $table = cms_db_prefix() . 'module_filepicker_profiles';
-    $q = 'INSERT INTO ' . $table . " (name,data,create_date,modified_date) VALUES (?,?,$now,$now)";
-    $r = $db->Execute($q, array($name, $data) );
-    return TRUE;
-  }
-    
-  private function _update_profile($id, $name, $data = array() )
-  {
-    if( !$this->profile_id_exists($id) ) return FALSE;
-    if( empty($name) ) return FALSE;
-        
-    $data = serialize($data);
-    $db = cmsms()->GetDb();
-    $now = $db->DbTimeStamp( time() );  
-    $table = cms_db_prefix() . 'module_filepicker_profiles';
-    $q = $q = 'UPDATE ' . $table . " SET name=?,data=?,modified_date=$now  WHERE id = ?";
-    $r = $db->Execute($q, array($name, $data, $id) );    
-    return TRUE;
-  }
-  
-  private function &_get_all_profiles()
-  {
-    $db = cmsms()->GetDb();
-    $table = cms_db_prefix() . 'module_filepicker_profiles';
-    $q = 'SELECT * FROM ' . $table;
-    $row = $db->GetAll($q);
-    foreach($row as &$one) $one['data'] = unserialize($one['data']);
-    return $row;
-  }
-  
-  /**
-  * end of private methods  
-  */
-  
-  /**
-  * uses the given $params array
-  * otherwise gets hardcoded defaults
-  * 
-  * @param mixed $params
-  */
-  public function _set_default_preferences( $params = array() )
-  {
-    foreach($this->_params_list as $k => $v)
-    {
-      $value = isset($params[$k]) ? $params[$k] : $v['value'];
-      if($v['type'] == ProfileParameter::TYPE_MULTISELECT)
-        $value = implode(',', $value);  
-      if($v['type'] == ProfileParameter::TYPE_CHECKBOX)
-        $value = (bool)$value;
-      $this->SetPreference($k, $value);
-    }
-  }
-  
-  function GetFriendlyName() 
-  { 
-    return $this->Lang('friendlyname');  
-  }
-  
-  function GetVersion() 
-  { 
-    return '1.0.alpha'; 
-  }
-  
-  function GetHelp() {
-	return $this->Lang('help');
-  }
-		
-  function IsPluginModule() 
-  { 
-    return true; 
-  }
-  
-  function HasAdmin()
-  {
-    return true;
-    //return $this->CheckPermission('Manage FilePicker');
-  }
-  
-  function GetAdminSection() 
-  { 
-    return 'extensions'; 
-  }
-  
-  function HasCapability( $capability, $params = array() )
-  {
-    switch( $capability )
-    {
-      case 'contentblocks':
-      case 'filepicker':
-      case 'upload':
-         return TRUE;
-      default:
-        return FALSE;
-    }
-  }
-  
-  function GetHeaderHTML() 
-  {
-    return $this->_output_header_javascript();
-  }
-  
-  /**
-  * returns if a given parameter is recognized by the module or not
-  * 
-  * @param mixed $param
-  * @returns bool
-  */
-  public function IsValidParam($param)
-  {
-    return in_array($param, $this->_params_list);
-  }
-    
-  /**
-  * A function to try to extract a valid full path to a directory.
-  * It accepts full paths (to validate them)
-  * or relative paths.
-  * It also accepts full or relative URLs
-  * and tries to extract a valid full path from them.
-  * The only condition it that they must be children 
-  * of the root dir where CMSMS is installed
-  * otherwise it returns an empty string
-  * 
-  * @todo we can expand it to accept directories outside CMSMS root
-  * 
-  * @param mixed $dir
-  * @param mixed $full indicates if we want a full or relative path
-  * @returns either a full valid or a verified relative path to a directory,
-  * or an empty string in case of failure 
-  */
-  public function getValidDir($dir, $full = FALSE)
-  {
-    $config = cmsms()->GetConfig();
-    
-    if($dir == '.') $dir = $config['root_path']; 
-    
-    # we have a valid dir... 
-    if( startswith( $dir, $config['root_path']) && is_dir($dir) )
-    {
-      if($full) return $dir;
-      return  str_replace($config['root_path'], '', $dir); 
-    }
-    
-    # else we try to solve $dir into a valid full path or return an empty string
-    $ret = ''; 
-    
-    # if it is a valid relative dir we are done
-    $tmp = $config['root_path'] . DIRECTORY_SEPARATOR . $dir;
-    
-    if( is_dir($tmp) )
-    {
-      if($full) return $tmp;
-      return $dir;
-    }
-    
-    # remove protocols if they exist in cases that dir is a full URL
-    $tmp = explode(':', $dir);
-        
-    if($tmp[0] == 'http' ||  $tmp[0] == 'https' )
-    {
-      $dir = $tmp[1];
-    }
-    
-    # and try to extract a valid path from it   
-    if( startswith( $dir, $config['root_url']) )
-    {
-      $dir = str_replace($config['root_url'], '', $dir);
-      
-      if( empty($dir) )
-      {
-        # it's CMSMS root
-        $ret = $config['root_path'];
-      }
-      else
-      {
-        $dir = implode( DIRECTORY_SEPARATOR, explode('/', trim($dir, '/') ) );        
-        $ret = cms_join_path($config['root_path'] , $dir);
-      } 
-    }
-    
-    $ret = is_dir($ret) ? $ret : '';
-    
-    if($full) return $ret;
-    return  str_replace($config['root_path'], '', $ret); 
-  }
-  
-  /**
-  * @internal
-  * 
-  * note: probably should be private
-  */
-  function &_get_groups_list()
-  {
-    $ret = array();
 
-    // get a hash of all of the groups and ids.
-    $tmp = cmsms()->GetGroupOperations()->LoadGroups();
-        
-    if( !is_array($tmp) || count($tmp) == 0 ) return FALSE; // no groups?
-    
-    foreach( $tmp as $one ) 
+    private function _to_url($dir = '', $relative = TRUE)
     {
-      if( !$one->active ) continue;
-      $ret[$one->id] = $one->name;
+        $config = \cms_config::get_instance();
+
+        if($dir == '' || $dir == '.') return $config['root_url'];
+
+        $ret = str_replace($config['root_url'], '', $dir);
+        $ret = str_replace(DIRECTORY_SEPARATOR, '/', $ret);
+        $ret = trim($ret, '/');
+
+        return $ret;
     }
-    
-    return $ret;
-  }
-  
-  /**
-  * @internal
-  * 
-  * note: probably should be private
-  */
-  function _is_user_from_groups( $uid = -1, $groups = array() )
-  {
-    $ret = FALSE; // user is not a member of any of the specified groups as a default
-    
-    foreach($groups as $gid) 
+
+    private function _GetTemplateObject()
     {
-      $users = cmsms()->GetUserOperations()->LoadUsersInGroup($gid);
-      
-      if( !is_array($users) || !count($users) ) continue;
-      
-      foreach( $users as $user ) 
-      {
-        if($user->id == $uid) 
-        {
-          $ret = TRUE;
-          break;
+        $ret = $this->GetActionTemplateObject();
+        if( is_object($ret) ) return $ret;
+        return CmsApp::get_instance()->GetSmarty();
+    }
+
+    /**
+     * end of private methods
+     */
+
+    function GetFriendlyName() { return $this->Lang('friendlyname');  }
+    function GetVersion() { return '1.0.alpha'; }
+    function GetHelp() { return $this->Lang('help'); }
+    function IsPluginModule() { return FALSE; }
+    function HasAdmin() { return TRUE; }
+    function GetAdminSection() { return 'extensions'; }
+
+    function HasCapability( $capability, $params = array() )
+    {
+        switch( $capability ) {
+        case 'contentblocks':
+        case 'filepicker':
+        case 'upload':
+            return TRUE;
+        default:
+            return FALSE;
         }
-      }
-      
-      if($ret) break;
     }
 
-    return $ret;
-  }
-  
-  function GetContentBlockFieldInput($blockName, $value, $params, $adding, ContentBase $content_obj)
-  {
-    if( empty($blockName) ) return FALSE;
-    $uid = get_userid(FALSE);
-    if( $uid <= 0 ) return FALSE; // not loggedin?
-
-    $adding = (bool)( $adding || ($content_obj->Id() < 1) ); // hack for the core. Have to ask why though (JM)
-
-    # handle profile if there is one
-    $profile_data = array();
-    
-    if( isset($params['profile']) )
+    function GetHeaderHTML()
     {
-      $profile = $this->_get_profile_by_name( trim($params['profile']) );
- 
-      if( !empty($profile) )
-        $profile_data = &$profile['data'];
+        return $this->_output_header_javascript();
     }
-        
-    $prms = array();
-    
-    # handle overrides
-    # a parameter set explicitly on the tag overrides the profile
-    # if all else fails use defaults preferences
-    foreach($this->_params_list as $k => $v)
-    { 
-      if('profile' == $k) continue; # profile parameter won't be needed here
-      $prms[$k] = isset($profile_data[$k]) ? $profile_data[$k] : $this->_defaults[$k];
-      $prms[$k] = isset($params[$k]) ? $params[$k] : $prms[$k];
-    }
-    
-    # now $prms array should hold a complete set of valid parameters 
-        
-    # handle users permission
-    #make sure the user has permissions
-    $groups = $this->_get_groups_list();
-    
-    $tmp = explode(',', $prms['groups']);
-    
-    $valid_groups = array();
-    foreach( $tmp as $one ) 
+
+    /**
+     * A function to try to extract a valid full path to a directory.
+     * It accepts full paths (to validate them)
+     * or relative paths.
+     * It also accepts full or relative URLs
+     * and tries to extract a valid full path from them.
+     * The only condition it that they must be children
+     * of the root dir where CMSMS is installed
+     * otherwise it returns an empty string
+     *
+     * @todo we can expand it to accept directories outside CMSMS root
+     *
+     * @param mixed $dir
+     * @param mixed $full indicates if we want a full or relative path
+     * @returns either a full valid or a verified relative path to a directory,
+     * or an empty string in case of failure
+     */
+    public function getValidDir($dir, $full = FALSE)
     {
-      $one = trim($one);
-      
-      if($one) 
-      { 
-        if( in_array($one, $groups) )
-        {
-          $flp = array_flip($groups);
-          $valid_groups[] = $flp[$one];
+        $config = \cms_config::get_instance();
+
+        if($dir == '.') $dir = $config['root_path'];
+
+        # we have a valid dir...
+        if( startswith( $dir, $config['root_path']) && is_dir($dir) ) {
+            if($full) return $dir;
+            return  str_replace($config['root_path'], '', $dir);
         }
-        elseif( in_array($one, array_keys($groups) ) )
-        {
-          $valid_groups[] = $one;
+
+        # else we try to solve $dir into a valid full path or return an empty string
+        $ret = '';
+
+        # if it is a valid relative dir we are done
+        $tmp = $config['root_path'] . DIRECTORY_SEPARATOR . $dir;
+
+        if( is_dir($tmp) ) {
+            if($full) return $tmp;
+            return $dir;
         }
-      }
+
+        # remove protocols if they exist in cases that dir is a full URL
+        $tmp = explode(':', $dir);
+
+        if($tmp[0] == 'http' ||  $tmp[0] == 'https' ) $dir = $tmp[1];
+
+        # and try to extract a valid path from it
+        if( startswith( $dir, $config['root_url']) ) {
+            $dir = str_replace($config['root_url'], '', $dir);
+
+            if( empty($dir) ) {
+                // it's CMSMS root
+                $ret = $config['root_path'];
+            }
+            else {
+                $dir = implode( DIRECTORY_SEPARATOR, explode('/', trim($dir, '/') ) );
+                $ret = cms_join_path($config['root_path'] , $dir);
+            }
+        }
+
+        $ret = is_dir($ret) ? $ret : '';
+
+        if($full) return $ret;
+        return  str_replace($config['root_path'], '', $ret);
     }
-    
-    if( count($valid_groups) == 0 ) 
+
+    /**
+     * @internal
+     *
+     * note: probably should be private
+     */
+    function _is_user_from_groups( $uid = -1, $groups = array() )
     {
-      // no valid groups specified... user has to be an administrator
-      $valid_groups[] = 1;
+        $ret = FALSE; // user is not a member of any of the specified groups as a default
+
+        foreach($groups as $gid) {
+            $users = cmsms()->GetUserOperations()->LoadUsersInGroup($gid);
+
+            if( !is_array($users) || !count($users) ) continue;
+
+            foreach( $users as $user ) {
+                if($user->id == $uid) {
+                    $ret = TRUE;
+                    break;
+                }
+            }
+
+            if($ret) break;
+        }
+
+        return $ret;
     }
-    
-    $valid_groups = array_unique($valid_groups);
-    if( !$this->_is_user_from_groups($uid, $valid_groups) ) return FALSE;
-    
-    #user is valid, handle the rest    
-    
-    // for adding situations, if we do not have a value, but have one in the field definition... use it.
-    if( $adding && !$value ) $value = '-1';
-    
-    
-    $dir = !empty($prms['dir']) ? trim($prms['dir']) : '';
-    $dir = $this->getValidDir($dir);
-    $smarty = cmsms()->GetSmarty();
-    $smarty->assign('fpmod', $this); # can't be "mod" as it conflicts with CoMa
-    $smarty->assign('upload_link', $this->create_url('', 'upload','', array('test' => 'test') )); 
-    
-    $smarty->assign('name', $blockName);
-    $smarty->assign('options', $filelist_dropdown = $this->GetFileListDropdown($dir) );
-    $smarty->assign('value', $value);
-    $smarty->assign('actionurl', str_replace('&amp;', '&', $this->create_url('m1_', 'upload') ) );
-    return $this->ProcessTemplate('filepicker.tpl');
-    /*
-    switch ($prms['mode']) 
+
+    function GetContentBlockFieldInput($blockName, $value, $params, $adding, ContentBase $content_obj)
     {
-       case 'dropdown': #dropdown
-              $smarty->assign('name', $blockName);
-              $smarty->assign('options', $filelist_dropdown = $this->GetFileListDropdown($dir) );
-              $smarty->assign('value', $value);
-              return $this->ProcessTemplate('fpdropdown.tpl');
-    
-         break;
-       case 'browser': #browser
-              $smarty->assign('name', $blockName);
-              $smarty->assign('options', $filelist_dropdown = $this->GetFileListDropdown($dir) );
-              $smarty->assign('value', $value);
-              return $this->ProcessTemplate('fpdropdown.tpl');
-         break;
-       
-       default:
-                return FALSE;
+        if( empty($blockName) ) return FALSE;
+        $uid = get_userid(FALSE);
+        //$adding = (bool)( $adding || ($content_obj->Id() < 1) ); // hack for the core. Have to ask why though (JM)
+
+        $profile = $this->get_default_profile();
+        $profile_name = get_parameter_value($params,'profile');
+        if( $profile_name ) {
+            $tmp = $this->get_profile($profile);
+            if( $tmp ) $profile = $tmp;
+        }
+        // todo: optionally allow further overriding the profile
+        $out = $this->get_html($blockName, $value, $profile);
+        return $out;
     }
-    */
-  }
-  
 
 //  function ValidateContentBlockFieldValue($blockName,$value,$blockparams,ContentBase $content_obj)
 //  {
-//    echo('<br/>:::::::::::::::::::::<br/>');  
+//    echo('<br/>:::::::::::::::::::::<br/>');
 //    debug_display($blockName, '$blockName');
 //    debug_display($value, '$value');
 //    debug_display($blockparams, '$blockparams');
@@ -566,357 +223,67 @@ final class FilePicker extends \CMSModule
 //    echo('<br/>' . __FILE__ . ' : (' . __CLASS__ . ' :: ' . __FUNCTION__ . ') : ' . __LINE__ . '<br/>');
 //    //die('<br/>RIP!<br/>');
 //  }
-  
-  public function GetFileListDropdown($path = '')
-  {    
-    $ret = array( -1 => lang('none') );
-    $config = cmsms()->GetConfig();
-    
-    $url = $this->_to_url($path);
-    
-    if($path == '' || $path == '.')
+
+    public function GetFileListDropdown($path = '')
     {
-      $fullpath = $config['root_path'];  
-    } 
-    else
-    {
-      $fullpath = $this->getValidDir($path, TRUE); 
-    }
-    
-    $files = $this->GetFileList($path);
-        
-    if( is_array($files) )
-    {
-      foreach($files as $file)
-      {
-        if(!$file['dir']) 
-        {
-          $val = $url . '/' . $file['name'];
-          $ret[$val] = $file['name'];
+        $ret = array( -1 => lang('none') );
+        $config = \cms_config::get_instance();
+
+        $url = $this->_to_url($path);
+
+        if($path == '' || $path == '.') {
+            $fullpath = $config['root_path'];
         }
-      }
-    }
-    
-    return $ret; 
-  }
-  
-  public function GetFileList($path = '')
-  {
-    return filemanager_utils::get_file_list($path);
-  }
-  
-  /**
-  * @param string $path
-  * @return stdClass[]
-  */
-  public function GetBrowsableFileList($path = '')
-  {
-    $filemanager = cms_utils::get_module('FileManager');
-    $sortby = self::$_filemanager->GetPreference('sortby', 'nameasc');
-    $filelist = filemanager_utils::get_file_list($path);
-    
-    $countdirs = 0;
-    $countfiles = 0;
-    $countfilesize = 0;
-    $files = array();
-
-    for ($i = 0; $i < count($filelist); $i++)
-    {
-      $onerow = new stdClass();
-      
-      if( isset($filelist[$i]['url']) ) 
-      {
-        $onerow->url = $filelist[$i]['url'];
-      }
-      
-      $onerow->name = $filelist[$i]['name'];
-      $onerow->urlname = $this->_encodefilename($filelist[$i]['name']);
-      $onerow->type = array('file');
-      $onerow->mime = $filelist[$i]['mime'];
-      
-      if( isset($params[$onerow->urlname]) ) 
-      {
-        $onerow->checked = true;
-      }
-
-      if( strpos($onerow->mime,'text') !== FALSE ) 
-      {
-        $onerow->type[] = 'text';
-      }
-
-      $onerow->thumbnail = '';
-      $onerow->editor = '';
-      
-      if ($filelist[$i]['image']) 
-      {
-        $onerow->type[] = 'image';
-        $params['imagesrc'] = $path . '/' . $filelist[$i]['name'];
-        
-        if($filemanager->GetPreference('showthumbnails', 0) == 1) 
-        {
-          $onerow->thumbnail = $filemanager->GetThumbnailLink($filelist[$i], $path);
+        else {
+            $fullpath = $this->getValidDir($path, TRUE);
         }
-      }
 
-      if ($filelist[$i]['dir']) 
-      {
-        $onerow->iconlink = $filemanager->CreateLink(
-                                                      $id, 
-                                                      'changedir',  
-                                                      '', 
-                                                      $filemanager->GetFileIcon($filelist[$i]['ext'], 
-                                                      $filelist[$i]['dir']),
-                                                      array(
-                                                              'newdir' => $filelist[$i]['name'], 
-                                                              'path' => $path, 
-                                                              'sortby' => $sortby
-                                                            )
-                                                    );
-      } 
-      else 
-      {
-        $onerow->iconlink = '<a href="' . $filelist[$i]['url'] . '" target="_blank">' . $filemanager->GetFileIcon($filelist[$i]['ext']) . '</a>';
-      }
+        $files = $this->GetFileList($path);
 
-      $link = $filelist[$i]['name'];
-      
-      if ($filelist[$i]['dir']) 
-      {
-          if( $filelist[$i]['name'] != '..' ) 
-          {
-            $countdirs++;
-            $onerow->type = array('dir');
-          }
-          else 
-          {
-            $onerow->noCheckbox = 1;
-          }
-          
-          $url = $filemanager->create_url($id, 'changedir', '', array('newdir' => $filelist[$i]['name'], 'path' => $path, 'sortby' => $sortby) );
-          $onerow->txtlink = '<a href="' . $url . '" title="' . $filemanager->Lang('title_changedir') . '">' . $link . '</a>';
-      } 
-      else 
-      {
-        $countfiles++;
-        $countfilesize+=$filelist[$i]["size"];
-        $url = $filemanager->create_url($id,'view','',array('file' => $this->_encodefilename($filelist[$i]['name'])));
-        $onerow->txtlink = '<a href="' . $url . '" target="_blank" title="' . $filemanager->Lang('title_view_newwindow') . '">' . $link . '</a>';
-      }
-      
-      if( $filelist[$i]['archive']  ) $onerow->type[] = 'archive';
-
-      $onerow->fileinfo = trim($filelist[$i]['fileinfo']);
-      
-      if ($filelist[$i]['name'] == '..') 
-      {
-        $onerow->fileaction = '&nbsp;';
-        $onerow->filepermissions = '&nbsp;';
-      } 
-      else 
-      {
-        $onerow->fileowner = $filelist[$i]['fileowner'];
-        $onerow->filepermissions = $filelist[$i]['permissions'];
-      }
-      
-      if ($filelist[$i]['dir']) 
-      {
-        $onerow->filesize = '&nbsp;';
-      }
-      else 
-      {
-        $filesize = filemanager_utils::format_filesize($filelist[$i]['size']);
-        $onerow->filesize = $filesize['size'];
-        $onerow->filesizeunit = $filesize['unit'];
-      }
-
-      if (!$filelist[$i]['dir']) 
-      {
-        $onerow->filedate = $filelist[$i]['date'];
-      } 
-      else 
-      {
-        $onerow->filedate = '';
-      }
-
-      $files[] = $onerow;
-    }
-    
-    return $files;
-  }
-   
-  /**
-  * @internal
-  * 
-  * note: should be private
-  */  
-  public function &_get_profile_data($data = array() )
-  {
-    $ret_data = array(); 
-         
-    foreach($this->_params_list as $k => $v)
-    {
-      $pre_params = array(); 
-      if('profile' == $k) continue; # profile parameter won't be needed here
-
-      $pre_params['name'] = $k;
-      $pre_params['options'] = $v['options'];
-            
-      if( isset($data[$k]) )
-      {
-        $pre_params['type'] = $v['type'];
-        $pre_params['value'] = $data[$k];
-      }
-      else
-      {
-        $pre_params['type'] = $v['type'];
-        $pre_params['value'] = $this->_defaults[$k]; 
-      }
-      
-      $ret_data [$k] = new ProfileParameter($pre_params);
-    }
-  
-    return $ret_data;
-  }
-
-  public function _conform_profile_name($string = 'profile')
-  {
-    return preg_replace('/[^a-z0-9_-]+/i', '-', $string);
-  }
-  
-  public function _save_profile($profile)
-  { 
-        
-    if( !is_object($profile) || empty($profile->name ) ) return FALSE;
-    
-    $profile->name = $this->_validate_profile_name($profile->name);
-        
-    $data = array();
-    
-    foreach(array_keys($this->_params_list) as $one) 
-    {
-      if($one == 'profile') continue;
-      
-      if( isset($profile->params[$one]) )
-      {
-        if($profile->params[$one]['type'] == ProfileParameter::TYPE_CHECKBOX)
-        {
-          $data[$one] = (bool)$profile->params[$one]['value'];
-          continue;
+        if( is_array($files) ) {
+            foreach($files as $file) {
+                if(!$file['dir']) {
+                    $val = $url . '/' . $file['name'];
+                    $ret[$val] = $file['name'];
+                }
+            }
         }
-	  }
-      
-      $data[$one] = $profile->params[$one]['value'];
-    }
-    
-    if($profile->id > -1)
-    {
-      return $this->_update_profile($profile->id, $profile->name, $data);
+
+        return $ret;
     }
 
-    return $this->_create_profile($profile->name, $data);
-  }
-  
-  # db stuff
-  # profiles
-  
-  public function profile_id_exists($id)
-  {
-    return (bool)$this->_get_profile_by_id($id);
-  } 
-   
-  public function profile_name_exists($name)
-  {
-    return (bool)$this->_get_profile_by_name($name);
-  }
-  
-  public function &GetProfiles()
-  {
-    $tmp = $this->_get_all_profiles();
-    
-    $profiles = array();
-    foreach($tmp as $one)
+    public function GetFileList($path = '')
     {
-      $profile = new stdClass();
-      $profile->id = $one['id'];
-      $profile->name = $one['name'];
-      $profile->create_date = $one['create_date'];
-      $profile->modified_date = $one['modified_date'];
-      $profile->params = $this->_get_profile_data($one['data']);
-      $profiles[] = $profile;
+        return filemanager_utils::get_file_list($path);
     }
-    
-    return $profiles;
-  }
-  
-  /**
-  * @internal
-  * 
-  * note: probably should be private
-  *       or be in a lib class
-  */
-  public function &_get_profile_by_id($id)
-  {
-    $db = cmsms()->GetDb();
-    $table = cms_db_prefix() . 'module_filepicker_profiles';
-    $q = 'SELECT * FROM ' . $table . ' WHERE id = ?';
-    $row = $db->GetRow( $q, array($id) );
-    
-    if(!$row)
-    {
-      $ret = FALSE;
-      return $ret;
-    }
-    
-    $row['data'] = unserialize($row['data']);
-    return $row;
-  }  
-  
-  /**
-  * @internal
-  * 
-  * note: probably should be private
-  *       or be in a lib class  * 
-  */
-  public function &_get_profile_by_name($name)
-  {
-    $db = cmsms()->GetDb();
-    $table = cms_db_prefix() . 'module_filepicker_profiles';
-    $q = 'SELECT * FROM ' . $table . ' WHERE name = ?';
-    $row = $db->GetRow( $q, array($name) );
-    
-    if(!$row)
-    {
-      $ret = FALSE;
-      return $ret;
-    }
-    
-    $row['data'] = unserialize($row['data']);
-    return $row;
-  }
-  
-  
-  /**
-  * @internal
-  * 
-  * note: probably should be private
-  *       or be in a lib class  * 
-  */    
-  public function _delete_profile($id)
-  {
-    if( !$this->profile_id_exists($id) ) return FALSE;
-        
-    $data = serialize($data);
-    $db = cmsms()->GetDb();
-    $now = $db->DbTimeStamp( time() );  
-    $table = cms_db_prefix() . 'module_filepicker_profiles';
-    $q = $q = 'DELETE FROM ' . $table . " WHERE id = ?"; 
-    $r = $db->Execute($q, array($id) );  
-    return TRUE;
-  }
-  
-}
 
-#
-# EOF
-#
-?>
+    public function get_default_profile()
+    {
+        // todo:  allow some defaults here, or load something from a rpeference
+        $profile = new \CMSMS\FilePickerProfile;
+        return $profile;
+    }
+
+    public function get_browser_url()
+    {
+        return $this->create_url('m1_','filepicker');
+    }
+
+    public function get_html( $name, $value, \CMSMS\FilePickerProfile $profile )
+    {
+        $_instance = 'i'.uniqid();
+        if( $value === '-1' ) $value = null;
+
+        // store the profile as a 'useonce' and add it's signature to the params on the url
+        $sig = TemporaryProfileStorage::set( $profile );
+        $smarty = \cms_utils::get_smarty(); // $this->_GetTemplateObject();
+        $tpl_ob = $smarty->CreateTemplate($this->GetTemplateResource('contentblock.tpl'),null,null,$smarty);
+        $tpl_ob->assign('sig',$sig);
+        $tpl_ob->assign('blockName',$name);;
+        $tpl_ob->assign('value',$value);
+        $tpl_ob->assign('instance',$_instance);
+        $tpl_ob->assign('profile',$profile);
+        $out = $tpl_ob->fetch();
+        return $out;
+    }
+} // end of class

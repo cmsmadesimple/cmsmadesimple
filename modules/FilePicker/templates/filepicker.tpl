@@ -1,110 +1,111 @@
-<style>
-.fileinput-button {
-  position: relative;
-  overflow: hidden;
-  display: inline-block;
-}
-.fileinput-button input {
-  position: absolute;
-  top: 0;
-  right: 0;
-  margin: 0;
-  opacity: 0;
-  -ms-filter: 'alpha(opacity=0)';
-  font-size: 200px !important;
-  direction: ltr;
-  cursor: pointer;
-}
-#dropzone {
-    background: palegreen;
-    width: 150px;
-    height: 50px;
-    line-height: 50px;
-    text-align: center;
-    font-weight: bold;
-}
-#dropzone.in {
-    width: 600px;
-    height: 200px;
-    line-height: 200px;
-    font-size: larger;
-}
-#dropzone.hover {
-    background: lawngreen;
-}
-#dropzone.fade {
-    -webkit-transition: all 0.3s ease-out;
-    -moz-transition: all 0.3s ease-out;
-    -ms-transition: all 0.3s ease-out;
-    -o-transition: all 0.3s ease-out;
-    transition: all 0.3s ease-out;
-    opacity: 1;
-}
-</style>
-{html_options name=$name options=$options selected=$value}&nbsp;
-{*
-<input id="myfileupload" type="file" name="files[]" data-url="server/php/" multiple>
-<div id="dropzone" class="fade well">Drop files here</div>
-*}
-<!-- The fileinput-button span is used to style the file input field as button -->
-    <span class="btn btn-success fileinput-button">
-        <i class="glyphicon glyphicon-plus"></i>
-        <span>Select files...</span>
-        <!-- The file input field used as target for the file upload widget -->
-        <input id="fileupload" name="files[]" multiple="" type="file">
-    </span>
-    <br>
-    <br>
-    <!-- The global progress bar -->
-    <div id="progress" class="progress">
-        <div class="progress-bar progress-bar-success"></div>
-    </div>
-    <!-- The container for the uploaded files -->
-    <div id="files" class="files"></div>
-
-<script>
-/*
-$(function () {
-    $('#fileupload').fileupload({
-        url: '{$actionurl}',  
-        dataType: 'json',
-        done: function (e, data) {
-            $.each(data.result.files, function (index, file) {
-                $('<p/>').text(file.name).appendTo(document.body);
-            });
-        }
-    });
-});
-*/
-/*
-$( document ).ready(function() {
-    console.log( "ready!" );
-    $('#myfileupload').fileupload({
-      
-    });
-});
-*/
-
-$(function () {
-      $(document).bind('drop dragover', function (e) {
-        e.preventDefault();
-    });
-    $('#fileupload').fileupload({
-        dataType: 'json',
-        url: '{$actionurl}',
-        dropZone: $('#dropzone'),
-        done: function (e, data) {
-            $.each(data.result.files, function (index, file) {
-                $('<p/>').text(file.name).appendTo(document.body);
-            });
-        },
-      progressall: function (e, data) {
-          var progress = parseInt(data.loaded / data.total * 100, 10);
-          $('#progress .bar').css(
-              'width',
-              progress + '%'
-          );
-      }
-    });
-});
-</script>
+<!doctype html>
+<html lang="en" data-cmsfp-inst="{$inst}">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="Content-type" content="text/html;charset=utf-8"/>
+		<title>{$mod->Lang('filepickertitle')}</title>
+		<link rel="stylesheet" type="text/css" href="{$mod->GetModuleURLPath()}/lib/css/filepicker.min.css" />
+	</head>
+	{strip}
+	<body class="cmsms-filepicker">
+		<div id="full-fp">
+			<div class="filepicker-navbar">
+				<div class="filepicker-navbar-inner">
+					<div class="filepicker-view-option">
+						<p><span class="filepicker-option-title">{$mod->Lang('fileview')}:&nbsp;</span>
+							<span class="js-trigger view-list filepicker-button" title="{$mod->Lang('switchlist')}"><i class="cmsms-fp-th-list"></i></span>&nbsp;
+							<span class="js-trigger view-grid filepicker-button active" title="{$mod->Lang('switchgrid')}"><i class="cmsms-fp-th"></i></span>
+						</p>
+					</div>
+					{$type=$profile->type|default:'any'}{if $type == 'any'}
+					<div class="filepicker-type-filter">
+						<p><span class="filepicker-option-title">{$mod->Lang('filterby')}:&nbsp;</span>
+							<span class="js-trigger filepicker-button" data-fb-type='image' title="{$mod->Lang('switchimage')}"><i class="cmsms-fp-picture"></i></span>&nbsp;
+							<span class="js-trigger filepicker-button" data-fb-type='video' title="{$mod->Lang('switchvideo')}"><i class="cmsms-fp-film"></i></span>&nbsp;
+							<span class="js-trigger filepicker-button" data-fb-type='audio' title="{$mod->Lang('switchaudio')}"><i class="cmsms-fp-music"></i></span>&nbsp;
+							<span class="js-trigger filepicker-button" data-fb-type='archive' title="{$mod->Lang('switcharchive')}"><i class="cmsms-fp-zip"></i></span>&nbsp;
+							<span class="js-trigger filepicker-button" data-fb-type='file' title="{$mod->Lang('switchfiles')}"><i class="cmsms-fp-file"></i></span>&nbsp;
+							<span class="js-trigger filepicker-button active" data-fb-type='reset' title="{$mod->Lang('switchreset')}"><i class="cmsms-fp-reorder"></i></span>
+						</p>
+					</div>
+					{/if}
+				</div>
+			</div>
+			<div class="filepicker-container">
+				<div class="filepicker-breadcrumb">
+					<p title="{$mod->Lang('youareintext')}:"><i class="cmsms-fp-folder-open filepicker-icon"></i> {$cwd_for_display}</p>
+				</div>
+				<div id="filelist">
+					<ul class="filepicker-list" id="filepicker-items">
+						<li class="filepicker-item filepicker-item-heading">
+							<div class="filepicker-thumb no-background">&nbsp;</div>
+							<div class="filepicker-file-information">
+								<h4 class="filepicker-file-title">{$mod->Lang('filename')}</h4>
+							</div>
+							<div class="filepicker-file-details">
+								<span class="filepicker-file-dimension">
+									{$mod->Lang('dimension')}
+								</span>
+								<span class="filepicker-file-size">
+									{$mod->Lang('size')}
+								</span>
+								<span class="filepicker-file-ext">
+									{$mod->Lang('type')}
+								</span>
+							</div>
+						</li>
+						{foreach $files as $file}
+						<li class="filepicker-item{if $file.isdir} dir{else} {$file.filetype}{/if}" title="{if $file.isdir}{$mod->Lang('dirinfo')}: {/if}{$file.name}" data-fb-ext='{$file.ext}'>
+							<div class="filepicker-thumb{if (isset($file.thumbnail) && $file.thumbnail != '') || $file.isdir || $file.is_thumb} no-background{/if}">
+							{if $profile->show_thumbs && isset($file.thumbnail) && $file.thumbnail != ''}
+								<a class="filepicker-file-action js-trigger-insert" href="{$file.relurl}" title="{if $file.isdir}{$mod->Lang('dirinfo')}: {/if}{$file.name}">{$file.thumbnail}</a>
+							{elseif $profile->show_thumbs && $file.is_thumb}
+								<a class="filepicker-file-action js-trigger-insert" href="{$file.relurl}" title="{if $file.isdir}{$mod->Lang('dirinfo')}: {/if}{$file.name}"><img src="{$file.fullurl}" alt="{$file.name}"/></a>
+							{elseif $file.isdir}
+								<a class="icon-no-thumb" href="{$file.chdir_url}" title="{if $file.isdir}{$mod->Lang('dirinfo')}: {/if}{$file.name}"><i class="cmsms-fp-folder-close"></i></a>
+							{else}
+								<a class="filepicker-file-action js-trigger-insert icon-no-thumb" title="{if $file.isdir}{$mod->Lang('dirinfo')}: {/if}{$file.name}" href="{$file.relurl}">
+									{if $file.filetype == 'image'}
+										<i class="cmsms-fp-picture"></i>
+									{elseif $file.filetype == 'video'}
+										<i class="cmsms-fp-facetime-video"></i>
+									{elseif $file.filetype == 'audio'}
+										<i class="cmsms-fp-music"></i>
+									{elseif $file.filetype == 'archive'}
+										<i class="cmsms-fp-zip"></i>
+									{else}
+										<i class="cmsms-fp-file"></i>
+									{/if}
+								</a>
+							{/if}
+							</div>
+							<div class="filepicker-file-information">
+								<h4 class="filepicker-file-title">
+								{if $file.isdir}
+									<a class="filepicker-dir-action" href="{$file.chdir_url}" title="{if $file.isdir}{$mod->Lang('dirinfo')}: {/if}{$file.name}">{$file.name}</a>
+								{else}
+									<a class="filepicker-file-action js-trigger-insert" href="{$file.relurl}" title="{if $file.isdir}{$mod->Lang('dirinfo')}: {/if}{$file.name}" data-fb-filetype='{$file.filetype}'>{$file.name}</a>
+								{/if}
+								</h4>
+							</div>
+							<div class="filepicker-file-details visuallyhidden">
+								<span class="filepicker-file-dimension">
+									{$file.dimensions}
+								</span>
+								<span class="filepicker-file-size">
+									{if !$file.isdir}{$file.size}{/if}
+								</span>
+								<span class="filepicker-file-ext">
+									{if !$file.isdir}{$file.ext}{else}dir{/if}
+								</span>
+							</div>
+						</li>
+						{/foreach}
+					</ul>
+				</div>
+			</div>
+		</div>
+	</body>
+	{/strip}
+	{cms_jquery exclude='cms_js_setup,ui_touch_punch,nestedSortable,json,migrate,cms_admin,cms_autorefresh,cms_dirtyform,cms_hiersel,cms_lock,cms_filepicker' append="`$mod->GetModuleURLPath()`/lib/js/cmsms_filebrowser/filebrowser.js"}
+</html>

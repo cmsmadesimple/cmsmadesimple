@@ -10,6 +10,8 @@ $lang['delete_profile'] = 'Delete Profile';
 $lang['edit_profile'] = 'Edit Profile';
 
 // F
+$lang['filterby'] = 'Filter By';
+$lang['fileview'] = 'File View';
 $lang['friendlyname'] = 'File Picker';
 
 // H
@@ -40,7 +42,7 @@ $lang['HelpPopup_upload'] = 'TODO';
 
 // M
 $lang['moddescription'] = 'TODO';
-$lang['ModeOptions_Browser'] = 'Browser';   
+$lang['ModeOptions_Browser'] = 'Browser';
 $lang['ModeOptions_Dropdown'] = 'Dropdown';
 $lang['msg_delete_success'] = 'TODO';
 $lang['msg_success'] = 'TODO';
@@ -49,22 +51,22 @@ $lang['msg_success'] = 'TODO';
 $lang['no_profiles'] = 'No profiles defined yet. You can add them by clicking the button above.';
 
 // P
-$lang['ProfileName'] = 'Profile Name';  
+$lang['ProfileName'] = 'Profile Name';
 $lang['Profile_can_delete'] = 'Profile can delete';
-$lang['Profile_dir'] = 'Directory';  
-$lang['Profile_exclude_prefix'] = 'Exclude Prefixes';  
-$lang['Profile_exclude_suffix'] = 'Exclude Suffixes';  
-$lang['Profile_file_extensions'] = 'Allowed Extensions';  
+$lang['Profile_dir'] = 'Directory';
+$lang['Profile_exclude_prefix'] = 'Exclude Prefixes';
+$lang['Profile_exclude_suffix'] = 'Exclude Suffixes';
+$lang['Profile_file_extensions'] = 'Allowed Extensions';
 $lang['Profile_groups'] = 'Profile Groups';
-$lang['Profile_include_prefix'] = 'Include Prefixes';  
-$lang['Profile_include_suffix'] = 'Include Suffixes';  
-$lang['Profile_mode'] = 'Mode';  
-$lang['Profile_show_thumbs'] = 'Show Thumbnails';  
-$lang['Profile_upload'] = 'Allow Upload';  
+$lang['Profile_include_prefix'] = 'Include Prefixes';
+$lang['Profile_include_suffix'] = 'Include Suffixes';
+$lang['Profile_mode'] = 'Mode';
+$lang['Profile_show_thumbs'] = 'Show Thumbnails';
+$lang['Profile_upload'] = 'Allow Upload';
 
 // T
 $lang['tab_defaults'] = 'Default Profile Settings';
-$lang['tab_preferences'] = 'Preferences';  
+$lang['tab_preferences'] = 'Preferences';
 $lang['tab_profiles'] = 'Profiles';
 $lang['th_created'] = 'Created';
 $lang['th_id'] = 'ID';

@@ -5,7 +5,7 @@
 # (c) 2016 by Robert Campbell <calguy1000@cmsmadesimple.org>
 #-------------------------------------------------------------------------
 # CMS - CMS Made Simple is (c) 2006 by Ted Kulp (wishy@cmsmadesimple.org)
-# This project's homepage is: http://www.cmsmadesimple.org
+# This projects homepage is: http://www.cmsmadesimple.org
 #-------------------------------------------------------------------------
 #-------------------------------------------------------------------------
 # BEGIN_LICENSE
@@ -27,33 +27,25 @@
 #-------------------------------------------------------------------------
 # END_LICENSE
 #-------------------------------------------------------------------------
+use \FilePicker\ProfileDAO;
 
 $db = $this->GetDb();
 $taboptarray = array('mysql' => 'TYPE=MyISAM');
 $dict = NewDataDictionary($db);
 
-# profiles
-$flds = '
-	id I AUTO PRIMARY KEY,
-	name C(100) NOTNULL,
-	data X,
-	create_date ' . CMS_ADODB_DT . ',
-	modified_date ' . CMS_ADODB_DT
-	;
+try {
+    $flds = '
+        id I AUTO PRIMARY KEY,
+        name C(100) NOTNULL,
+        data X,
+        create_date I,
+        modified_date i';
 
-$sqlarray = $dict->CreateTableSQL(cms_db_prefix() . 'module_filepicker_profiles', $flds, $taboptarray);
-
-try
-{
-	$dict->ExecuteSQLArray($sqlarray);
+    $sqlarray = $dict->CreateTableSQL(ProfileDAO::table_name(), $flds, $taboptarray);
+    $dict->ExecuteSQLArray($sqlarray);
+    $sqlarray = $dict->CreateIndexSQL(CMS_DB_PREFIX.'cmsfp_idx0', ProfileDAO::table_name(), 'name', [ 'UNIQUE' ] );
+    $dict->ExecuteSQLArray($sqlarray);
 }
-
-catch(Exception $e)
-{
-	return $e->getMessage();
+catch(Exception $e) {
+    return $e->getMessage();
 }
-
-#
-# EOF
-#
-?>

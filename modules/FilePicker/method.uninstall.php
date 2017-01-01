@@ -27,13 +27,8 @@
 #-------------------------------------------------------------------------
 # END_LICENSE
 #-------------------------------------------------------------------------
+use \FilePicker\ProfileDAO;
 
-$db = $this->GetDb();
 $dict = NewDataDictionary( $db );
-$sqlarray = $dict->DropTableSQL(cms_db_prefix() . 'module_filepicker_profiles');
+$sqlarray = $dict->DropTableSQL(ProfileDAO::table_name());
 $dict->ExecuteSQLArray($sqlarray);
-
-#
-# EOF
-#
-?>

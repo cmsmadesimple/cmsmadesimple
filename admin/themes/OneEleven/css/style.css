@@ -2582,3 +2582,13 @@ a.toggle-dropzone:focus {
 .mce-container-body iframe {
 	max-width: none !important;
 }
+
+.cmsfp_dlg {
+    padding: 0 !important;
+}
+.cmsfp_dlg iframe {
+    width: 100% !important;
+    height: 100% !important;
+    max-width: none !important;
+    border: none;
+}

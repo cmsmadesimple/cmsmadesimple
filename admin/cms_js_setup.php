@@ -25,7 +25,6 @@ $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 check_login();
 $config = \cms_config::get_instance();
 
-
 // get some urls and preset language strings.
 
 $data = array();
@@ -42,12 +41,23 @@ $data['lang_no'] = lang('no');
 $data['lang_none'] = lang('none');
 $data['lang_disabled'] = lang('disabled');
 $data['lang_hierselect_title'] = lang('title_hierselect_select');
+$data['lang_select_file'] = lang('select_file');
+$data['lang_choose'] = lang('choose');
 $data['lang_filetobig'] = lang('upload_filetobig');
 $data['lang_largeupload'] = lang('upload_largeupload');
 $data['max_upload_size'] = $config['max_upload_size'];
 $data['admin_url'] = $config['admin_url'];
+$data['root_url'] = $config['root_url'];
+$data['uploads_url'] = $config['uploads_url'];
 $data['secure_param_name'] = CMS_SECURE_PARAM_NAME;
 $data['user_key'] = $_SESSION[CMS_USER_KEY];
+
+// todo: use  apreference
+$fp = ModuleOperations::get_instance()->GetFilePickerModule();
+if( $fp ) {
+    $data['filepicker_url'] = $fp->get_browser_url();
+    $data['filepicker_url'] = str_replace('&amp;','&',$data['filepicker_url']).'&showtemplate=false';
+}
 
 // output some javascript
 $out = 'cms_data = {};'."\n";

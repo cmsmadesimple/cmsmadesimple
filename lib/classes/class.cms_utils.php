@@ -263,6 +263,18 @@ final class cms_utils
 	}
 
 	/**
+	 * A convenience method to get the currently selected filepicker module.
+	 *
+	 * @since 2.2
+	 * @author calguy1000
+	 * @return CMSModule
+	 */
+	public static function &get_filepicker_module()
+	{
+		return ModuleOperations::get_instance()->GetFilePickerModule();
+	}
+
+	/**
 	 * Attempt to retreive the IP address of the connected user.
 	 * This function attempts to compensate for proxy servers.
 	 *

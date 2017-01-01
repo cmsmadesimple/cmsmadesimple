@@ -1170,6 +1170,7 @@ function cms_get_jquery($exclude = '',$ssl = null,$cdn = false,$append = '',$cus
       $scripts['cms_hiersel'] = array('local'=>$basePath.'/lib/jquery/js/jquery.cmsms_hierselector.js');
       $scripts['cms_autorefresh'] = array('local'=>$basePath.'/lib/jquery/js/jquery.cmsms_autorefresh.js');
       $scripts['ui_touch_punch'] = array('local'=>$basePath.'/lib/jquery/js/jquery.ui.touch-punch.min.js');
+      $scripts['cms_filepicker'] = [ 'local'=>$basePath.'/lib/jquery/js/jquery.cmsms_filepicker.js' ];
   }
 
   // Check if we need to exclude some script
@@ -1204,7 +1205,7 @@ function cms_get_jquery($exclude = '',$ssl = null,$cdn = false,$append = '',$cus
   if(!empty($append)) {
       $append_list = explode(",", trim(str_replace(' ','',$append)));
       foreach($append_list as $key => $item) {
-          $scripts['user_'+$key] = array('local'=>$item);
+          $scripts['user_'.$key] = array('local'=>$item);
       }
   }
 

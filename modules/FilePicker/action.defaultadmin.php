@@ -27,28 +27,10 @@
 #-------------------------------------------------------------------------
 # END_LICENSE
 #-------------------------------------------------------------------------
-
+use FilePicker\ProfileDAO;
 if( !defined('CMS_VERSION') ) exit;
+if( !$this->VisibleToAdminUser() ) return;
 
-$admintheme = cms_utils::get_theme_object();
-
-if( isset($params['msg']) )
-{
-  $this->ShowMessage($params['msg']);
-}
-
-$active_tab = isset($params['active_tab']) ? $params['active_tab'] : 'profiles';
-
-include( cms_join_path( dirname(__FILE__), 'function.admin_profiles_tab.php') );
-include( cms_join_path( dirname(__FILE__), 'function.admin_defaults_tab.php') );
-include( cms_join_path( dirname(__FILE__), 'function.admin_preferences_tab.php') );
-
-$smarty->assign('mod', $this);
-$smarty->assign('active_tab', $active_tab);
-
+$profiles = $this->_dao->loadAll();
+$smarty->assign('profiles',$profiles);
 echo $this->ProcessTemplate('defaultadmin.tpl');
-
-#
-# EOF
-#
-?>

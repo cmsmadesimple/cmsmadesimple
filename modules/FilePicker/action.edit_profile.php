@@ -5,7 +5,7 @@
 # (c) 2016 by Robert Campbell <calguy1000@cmsmadesimple.org>
 #-------------------------------------------------------------------------
 # CMS - CMS Made Simple is (c) 2006 by Ted Kulp (wishy@cmsmadesimple.org)
-# This project's homepage is: http://www.cmsmadesimple.org
+# This projects homepage is: http://www.cmsmadesimple.org
 #-------------------------------------------------------------------------
 #-------------------------------------------------------------------------
 # BEGIN_LICENSE
@@ -27,77 +27,36 @@
 #-------------------------------------------------------------------------
 # END_LICENSE
 #-------------------------------------------------------------------------
-
+use FilePicker\ProfileDAO;
+use FilePicker\Profile;
 if( !defined('CMS_VERSION') ) exit;
+if( !$this->VisibleToAdminUser() ) exit;
 
-if( isset($params['cancel']) )
-{
-	$this->Redirect($id, 'defaultadmin', $returnid, array() );
+if( isset($params['cancel']) ) $this->RedirectToAdminTab();
+
+try {
+    $profile_id = (int) get_parameter_value($params,'pid');
+    $profile = new Profile();
+
+    if( $profile_id > 0 ) {
+        $profile = $this->_dao->loadById( $profile_id );
+        if( !$profile ) throw new \LogicException('Invalid profile id passed to edit_profile action');
+    }
+
+    if( isset($params['submit']) ) {
+        $profile = $profile->withParams( $params );
+        $this->_dao->save( $profile );
+        $this->RedirectToAdminTab();
+    }
+
+    $smarty->assign('profile',$profile);
+    echo $this->ProcessTemplate('edit_profile.tpl');
 }
-
-$profile_id = isset($params['id']) ? $params['id'] : NULL; 
-$profile_id = isset($params['_id']) ? $params['_id'] : $profile_id; 
-
-
-if( !empty($profile_id) && (int)$profile_id > -1)
-{
-	# we are editing
-	$tmp = $this->_get_profile_by_id($profile_id);  
-	$profile = new stdClass();
-	$profile->id = $profile_id;
-	$profile->name = $tmp['name'];
-	$profile->params = $this->_get_profile_data($tmp['data']);
+catch( \CmsInvalidDataException $e ) {
+    $this->SetError( $this->Lang( $e->GetMessage() ) );
+    $this->RedirectToAdminTab();
 }
-else
-{
-	# new one
-	$profile = new stdClass();
-	$profile->id = -1;
-	$profile->name = '';
-	$profile->params = $this->_get_profile_data();
+catch( \Exception $e ) {
+    $this->SetError( $e->GetMessage() );
+    $this->RedirectToAdminTab();
 }
-
-if( isset($params['submit']) || isset($params['apply']) )
-{
-	$profile->id = $profile_id;
-	$profile->name = $this->_conform_profile_name($params['name']);
-  
-	foreach($this->_get_profile_data('') as $k => $v)
-	{
-		if($profile->params[$k]['type'] == ProfileParameter::TYPE_CHECKBOX)
-		{
-			if(isset( $params[$k]) )
-			$profile->params[$k]['value'] = (bool)$params[$k];
-			continue;
-		}
-		
-		if($profile->params[$k]['type'] == ProfileParameter::TYPE_MULTISELECT)
-		{
-			if(isset( $params[$k]) )
-			$profile->params[$k]['value'] = implode(',', $params[$k]);
-			continue;
-		}
-		
-		$profile->params[$k]['value'] = $params[$k];
-	}
-  
-	$this->_save_profile($profile);
-  
-	if( isset($params['submit']) )
-	{
-		$this->Redirect($id, 'defaultadmin', $returnid, array('msg' => $this->Lang('msg_success') ) );
-	}
-	else
-	{
-		$this->ShowMessage( $this->Lang('msg_success') );
-	}
-}
-
-$smarty->assign('profile', $profile);
-
-echo $this->ProcessTemplate('edit_profile.tpl');
-
-#
-# EOF
-#
-?>
