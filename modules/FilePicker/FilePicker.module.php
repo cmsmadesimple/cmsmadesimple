@@ -56,19 +56,6 @@ final class FilePicker extends \CMSModule implements \CMSMS\FilePickerInterface
         return $this->CheckPermission('Modify Site Preferences');
     }
 
-    private function _to_url($dir = '', $relative = TRUE)
-    {
-        $config = \cms_config::get_instance();
-
-        if($dir == '' || $dir == '.') return $config['root_url'];
-
-        $ret = str_replace($config['root_url'], '', $dir);
-        $ret = str_replace(DIRECTORY_SEPARATOR, '/', $ret);
-        $ret = trim($ret, '/');
-
-        return $ret;
-    }
-
     private function _GetTemplateObject()
     {
         $ret = $this->GetActionTemplateObject();
@@ -99,103 +86,6 @@ final class FilePicker extends \CMSModule implements \CMSMS\FilePickerInterface
         }
     }
 
-    function GetHeaderHTML()
-    {
-        return $this->_output_header_javascript();
-    }
-
-    /**
-     * A function to try to extract a valid full path to a directory.
-     * It accepts full paths (to validate them)
-     * or relative paths.
-     * It also accepts full or relative URLs
-     * and tries to extract a valid full path from them.
-     * The only condition it that they must be children
-     * of the root dir where CMSMS is installed
-     * otherwise it returns an empty string
-     *
-     * @todo we can expand it to accept directories outside CMSMS root
-     *
-     * @param mixed $dir
-     * @param mixed $full indicates if we want a full or relative path
-     * @returns either a full valid or a verified relative path to a directory,
-     * or an empty string in case of failure
-     */
-    public function getValidDir($dir, $full = FALSE)
-    {
-        $config = \cms_config::get_instance();
-
-        if($dir == '.') $dir = $config['root_path'];
-
-        # we have a valid dir...
-        if( startswith( $dir, $config['root_path']) && is_dir($dir) ) {
-            if($full) return $dir;
-            return  str_replace($config['root_path'], '', $dir);
-        }
-
-        # else we try to solve $dir into a valid full path or return an empty string
-        $ret = '';
-
-        # if it is a valid relative dir we are done
-        $tmp = $config['root_path'] . DIRECTORY_SEPARATOR . $dir;
-
-        if( is_dir($tmp) ) {
-            if($full) return $tmp;
-            return $dir;
-        }
-
-        # remove protocols if they exist in cases that dir is a full URL
-        $tmp = explode(':', $dir);
-
-        if($tmp[0] == 'http' ||  $tmp[0] == 'https' ) $dir = $tmp[1];
-
-        # and try to extract a valid path from it
-        if( startswith( $dir, $config['root_url']) ) {
-            $dir = str_replace($config['root_url'], '', $dir);
-
-            if( empty($dir) ) {
-                // it's CMSMS root
-                $ret = $config['root_path'];
-            }
-            else {
-                $dir = implode( DIRECTORY_SEPARATOR, explode('/', trim($dir, '/') ) );
-                $ret = cms_join_path($config['root_path'] , $dir);
-            }
-        }
-
-        $ret = is_dir($ret) ? $ret : '';
-
-        if($full) return $ret;
-        return  str_replace($config['root_path'], '', $ret);
-    }
-
-    /**
-     * @internal
-     *
-     * note: probably should be private
-     */
-    function _is_user_from_groups( $uid = -1, $groups = array() )
-    {
-        $ret = FALSE; // user is not a member of any of the specified groups as a default
-
-        foreach($groups as $gid) {
-            $users = cmsms()->GetUserOperations()->LoadUsersInGroup($gid);
-
-            if( !is_array($users) || !count($users) ) continue;
-
-            foreach( $users as $user ) {
-                if($user->id == $uid) {
-                    $ret = TRUE;
-                    break;
-                }
-            }
-
-            if($ret) break;
-        }
-
-        return $ret;
-    }
-
     function GetContentBlockFieldInput($blockName, $value, $params, $adding, ContentBase $content_obj)
     {
         if( empty($blockName) ) return FALSE;
@@ -223,34 +113,6 @@ final class FilePicker extends \CMSModule implements \CMSMS\FilePickerInterface
 //    echo('<br/>' . __FILE__ . ' : (' . __CLASS__ . ' :: ' . __FUNCTION__ . ') : ' . __LINE__ . '<br/>');
 //    //die('<br/>RIP!<br/>');
 //  }
-
-    public function GetFileListDropdown($path = '')
-    {
-        $ret = array( -1 => lang('none') );
-        $config = \cms_config::get_instance();
-
-        $url = $this->_to_url($path);
-
-        if($path == '' || $path == '.') {
-            $fullpath = $config['root_path'];
-        }
-        else {
-            $fullpath = $this->getValidDir($path, TRUE);
-        }
-
-        $files = $this->GetFileList($path);
-
-        if( is_array($files) ) {
-            foreach($files as $file) {
-                if(!$file['dir']) {
-                    $val = $url . '/' . $file['name'];
-                    $ret[$val] = $file['name'];
-                }
-            }
-        }
-
-        return $ret;
-    }
 
     public function GetFileList($path = '')
     {
