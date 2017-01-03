@@ -44,15 +44,7 @@ tinymce.PluginManager.add('cmsms_filepicker', function(editor) {
 	    mywin.close();
 	}
 
-	/*
-	$(cms_data).on('cmsfp:change',function(ev,inst,file){
-	    console.debug('got change event '+inst+' '+file);
-	    alert('got change');
-            mywin.close();
-	});
-*/
-
-	var url = cmsms_tiny.filepicker_url + '&inst=' + inst;
+	var url = cmsms_tiny.filepicker_url + '&inst=' + inst + '&type='+meta.filetype;
         mywin = tinymce.activeEditor.windowManager.open({
             title : cmsms_tiny.filepicker_title,
             file : url,

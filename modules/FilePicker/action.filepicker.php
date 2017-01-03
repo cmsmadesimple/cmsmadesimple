@@ -31,9 +31,13 @@ if( !check_login(FALSE) ) exit; // admin only.... but any admin
 //
 $inst = get_parameter_value($_GET,'inst');
 $sig = trim(cleanValue(get_parameter_value($_GET,'sig')));
+$type = trim(cleanValue(get_parameter_value($_GET,'type')));
 $profile = null;
 if( $sig ) $profile = TemporaryProfileStorage::get($sig);
 if( !$sig ) $profile = $this->get_default_profile();
+if( $type && $profile ) {
+    $profile = $profile->overrideWith( [ 'type'=>$type ] );
+}
 
 $filemanager = cms_utils::get_module('FileManager');
 
