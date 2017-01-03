@@ -122,9 +122,7 @@ $opts[''] = $this->Lang('prompt_none');
 $types = CmsLayoutTemplateType::get_all();
 $originators = array();
 if( count($types) ) {
-    $tmp = array();
-    $tmp2 = array();
-	$tmp3 = array();
+    $tmp = $tmp2 = $tmp3 = [];
     for( $i = 0; $i < count($types); $i++ ) {
         $tmp['t:'.$types[$i]->get_id()] = $types[$i]->get_langified_display_value();
         $tmp2[$types[$i]->get_id()] = $types[$i]->get_langified_display_value();
@@ -145,6 +143,10 @@ if( count($types) ) {
             if( $r != 0 ) return $r;
             return strcasecmp($a->get_name(),$b->get_name());
         });
+    asort($tmp);
+    asort($tmp2);
+    asort($tmp3);
+    asort($originators);
     $smarty->assign('list_all_types',$tmp3);
     $smarty->assign('list_types',$tmp2);
     $opts[$this->Lang('tpl_types')] = $tmp;
@@ -167,6 +169,8 @@ if( count($designs) ) {
         $tmp['d:'.$designs[$i]->get_id()] = $designs[$i]->get_name();
         $tmp2[$designs[$i]->get_id()] = $designs[$i]->get_name();
     }
+    asort($tmp);
+    asort($tmp2);
     $smarty->assign('design_names',$tmp2);
     $opts[$this->Lang('prompt_design')] = $tmp;
 }
@@ -179,6 +183,8 @@ if( $this->CheckPermission('Manage Designs') ) {
         $tmp['u:'.$allusers[$i]->id] = $allusers[$i]->username;
         $users[$allusers[$i]->id] = $allusers[$i]->username;
     }
+    asort($tmp);
+    asort($users);
     $smarty->assign('list_users',$users);
     $opts[$this->Lang('prompt_user')] = $tmp;
 }
