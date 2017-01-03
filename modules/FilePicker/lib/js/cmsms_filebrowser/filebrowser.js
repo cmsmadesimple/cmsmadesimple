@@ -26,13 +26,27 @@
 
             e.preventDefault();
 
-	    var inst = $('html').data('cmsfp-inst');
-	    console.log('inst is '+inst);
-	    var selector = '[data-cmsfp-instance="'+inst+'"]';
-	    console.debug('selector is '+selector);
-	    var elem = parent.$(selector);
-	    if( elem ) {
-		elem.trigger('cmsfp:change',file);
+	    var selector;
+	    var instance = $('html').data('cmsfp-inst');
+	    console.debug('got instance '+instance);
+	    var o = {
+		name: 'cmsfp:change',
+		target: instance,
+		file: file
+	    };
+	    if( top.document.CMSFileBrowser && top.document.CMSFileBrowser.onselect ) {
+		top.document.CMSFileBrowser.onselect(instance,file);
+		return;
+	    }
+
+	    var selector = '[data-cmsfp-instance="'+instance+'"]';
+	    var target = parent.$(selector);
+	    if( target && target.length ) {
+		if( target.is(':input') ) {
+		    target.val(file);
+		    target.trigger('change');
+		};
+		target.trigger('cmsfp:change',file);
 	    }
         });
     };

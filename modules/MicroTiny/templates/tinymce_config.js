@@ -55,8 +55,8 @@ tinymce.init({
     plugins: ['autolink paste link mailto anchor wordcount {if $mt_profile.allowimages} media image{/if} {if $mt_profile.allowtables}table{/if}'],
 {else}
     image_advtab: true,
-    toolbar: 'undo redo | cut copy paste | styleselect | bold italic underline | alignleft aligncenter alignright alignjustify indent outdent | bullist numlist | anchor link mailto unlink cmsms_linker{if $mt_profile.allowimages} | image cmsms_filebrowser{/if}',
-    plugins: ['paste autolink link mailto cmsms_linker charmap anchor searchreplace wordcount code fullscreen insertdatetime {if $mt_profile.allowtables}table{/if} {if $mt_profile.allowimages}media image cmsms_filepicker cmsms_filebrowser{/if}'],
+    toolbar: 'undo redo | cut copy paste | styleselect | bold italic underline | alignleft aligncenter alignright alignjustify indent outdent | bullist numlist | anchor link mailto unlink cmsms_linker{if $mt_profile.allowimages} | image {/if}',
+    plugins: ['paste autolink link mailto cmsms_linker charmap anchor searchreplace wordcount code fullscreen insertdatetime {if $mt_profile.allowtables}table{/if} {if $mt_profile.allowimages}media image cmsms_filepicker {/if}'],
 {/if}
     // callback functions
     urlconverter_callback: function(url, elm, onsave, name) {
