@@ -3,7 +3,7 @@ global $admin_user;
 
 status_msg(ilang('install_requireddata'));
 
-$query = 'INSERT INTO '.CMS_DB_PREFIX.'version VALUES (201)';
+$query = 'INSERT INTO '.CMS_DB_PREFIX.'version VALUES (202)';
 $db->Execute($query);
 verbose_msg(ilang('install_setschemaver'));
 
