@@ -29,6 +29,7 @@ if( !check_login(FALSE) ) exit; // admin only.... but any admin
 //
 // initialization
 //
+$sesskey = md5(__FILE__);
 $inst = get_parameter_value($_GET,'inst');
 $sig = trim(cleanValue(get_parameter_value($_GET,'sig')));
 $type = trim(cleanValue(get_parameter_value($_GET,'type')));
@@ -51,20 +52,20 @@ $topdir = $profile->top;
 if( !$topdir ) $topdir = $config['uploads_path'];
 $assistant = new PathAssistant($config,$topdir);
 
-// get our current working directory relative to root path.
+// get our current working directory relative to $topdir
 // use cwd stored in session first... then if necessary the profile topdir, then if necessary, the absolute topdir
-$cwd = TemporaryInstanceStorage::get($inst);
-if( !$cwd && $profile->top) $cwd = $assistant->to_relative($profile->top);
-if( !$cwd ) ''; // relative to topdir
+$cwd = '';
+if( isset($_SESSION[$sesskey]) ) $cwd = trim($_SESSION[$sesskey]);
+if( !$cwd && $profile->top ) $cwd = $assistant->to_relative($profile->top);
 if( !$nosub && isset($_GET['subdir']) ) {
     $cwd .= '/' . trim(cleanValue($_GET['subdir']));
     $cwd = $assistant->to_relative($assistant->to_absolute($cwd));
-    TemporaryInstanceStorage::set($inst,$cwd);
 }
 // failsave, if we don't have a valid working directory, set it to the top
 if( $cwd && !$assistant->is_valid_relative_path( $cwd ) ) {
     $cwd = '';
 }
+$_SESSION[$sesskey] = $cwd;
 
 // now we're set to go.
 $starturl = $assistant->relative_path_to_url($cwd);
