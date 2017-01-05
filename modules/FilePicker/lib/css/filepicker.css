@@ -248,6 +248,7 @@ img {
 }
 
 .filepicker-list .filepicker-thumb {
+        position: relative;
 	width: 139px;
 	overflow: hidden;
 	height: 90px;
@@ -416,6 +417,18 @@ img {
 
 .list-view .filepicker-file-details span.filepicker-file-ext {
 	width: 30px;
+}
+
+.dlg-options {
+    text-align: right;
+    padding-top: 0.5em;
+}
+
+.filepicker-thumb .filepicker-cmd {
+    cursor: pointer;
+    position: absolute;
+    top: 0;
+    right: 0;
 }
 
 @media screen and (max-width: 430px) {

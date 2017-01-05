@@ -8,10 +8,13 @@
         CMSFileBrowser.load();
     });
 
+    CMSFileBrowser.settings = top.document.CMSFileBrowser;
+
     CMSFileBrowser.load = function() {
         CMSFileBrowser.enable_sendValue();
         CMSFileBrowser.enable_toggleGrid();
         CMSFileBrowser.enable_filetypeFilter();
+        CMSFileBrowser.enable_commands();
     };
 
     CMSFileBrowser.enable_sendValue = function() {
@@ -28,7 +31,6 @@
 
 	    var selector;
 	    var instance = $('html').data('cmsfp-inst');
-	    console.debug('got instance '+instance);
 	    var o = {
 		name: 'cmsfp:change',
 		target: instance,
@@ -96,4 +98,71 @@
         });
     };
 
+    CMSFileBrowser.enable_commands = function(ev) {
+	if( ($('.filepicker-cmd').length < 1 ) ) return;
+
+	$('.filepicker-cmd').on('click',function(ev) {
+	    var $trigger = $(this), $data = $trigger.data();
+	    var fun = '_cmd_'+$data.cmd;
+	    if( typeof(CMSFileBrowser[fun]) != 'undefined' ) CMSFileBrowser[fun](ev);
+	});
+    };
+
+    CMSFileBrowser._ajax_cmd = function(cmd,val)
+    {
+	return $.ajax({
+	    url: top.document.CMSFileBrowser.cmd_url,
+	    method: 'POST',
+	    data: {
+		'cmd': cmd,
+		'val': val,
+		'cwd': top.document.CMSFileBrowser.cwd,
+		'inst': top.document.CMSFileBrowser.inst,
+		'sig': top.document.CMSFileBrowser.sig,
+	    }
+	})
+    };
+
+    CMSFileBrowser._cmd_del = function(ev)
+    {
+	ev.preventDefault();
+	var target = ev.target.closest('.filepicker-item');
+	var file = $(target).data('fb-fname');
+	if( confirm(this.settings.lang.confirm_delete) ) {
+	    CMSFileBrowser._ajax_cmd('del',file).done(function(msg){
+		var url = window.location.href+'&nosub=1';
+		window.location.href = url;
+	    }).fail(function(jqXHR,textStatus,msg){
+		alert('fail ajax '+msg);
+	    })
+	}
+    };
+
+    CMSFileBrowser._cmd_mkdir = function()
+    {
+	$('#mkdir_dlg').dialog({
+	    modal: true,
+	    width: 'auto',
+	    buttons: [
+		 {
+		     text: CMSFileBrowser.settings.oklbl,
+		     icons: {
+			 primary: 'ui-icon-check'
+		     },
+		     click: function() {
+			 var val = $('#fld_mkdir').val().trim();
+			 CMSFileBrowser._ajax_cmd('mkdir',val).done(function(msg){
+			     var url = window.location.href+'&nosub=1';
+			     window.location.href = url;
+			 }).fail(function(jqXHR,textStatus,msg){
+			     alert('fail ajax '+msg);
+			 })
+			 // ajax call to create the directory
+			 // then ajax call to refresh the screen
+			 // then close the dialog.
+		     }
+		}
+	    ]
+	});
+    }
 })(jQuery);

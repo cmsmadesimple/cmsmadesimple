@@ -32,11 +32,16 @@ if( !check_login(FALSE) ) exit; // admin only.... but any admin
 $inst = get_parameter_value($_GET,'inst');
 $sig = trim(cleanValue(get_parameter_value($_GET,'sig')));
 $type = trim(cleanValue(get_parameter_value($_GET,'type')));
+$nosub = (int) get_parameter_value($_GET,'nosub');
 $profile = null;
 if( $sig ) $profile = TemporaryProfileStorage::get($sig);
 if( !$sig ) $profile = $this->get_default_profile();
 if( $type && $profile ) {
     $profile = $profile->overrideWith( [ 'type'=>$type ] );
+}
+if( !$this->CheckPermission('Modify Files') ) {
+    $parms = ['can_upload'=>FALSE, 'can_delete'=>FALSE, 'can_mkdir'=>FALSE ];
+    $profile = $profile->overrideWith( $parms );
 }
 
 $filemanager = cms_utils::get_module('FileManager');
@@ -51,7 +56,7 @@ $assistant = new PathAssistant($config,$topdir);
 $cwd = TemporaryInstanceStorage::get($inst);
 if( !$cwd && $profile->top) $cwd = $assistant->to_relative($profile->top);
 if( !$cwd ) ''; // relative to topdir
-if( isset($_GET['subdir']) ) {
+if( !$nosub && isset($_GET['subdir']) ) {
     $cwd .= '/' . trim(cleanValue($_GET['subdir']));
     $cwd = $assistant->to_relative($assistant->to_absolute($cwd));
     TemporaryInstanceStorage::set($inst,$cwd);
@@ -180,7 +185,9 @@ while( false !== ($filename = $dh->read()) ) {
     $file['fullpath'] = $fullname;
     $file['fullurl'] = $starturl.'/'.$filename;
     $file['isdir'] = is_dir($fullname);
+    $file['isparent'] = false;
     if( $file['isdir'] ) {
+        if( $filename == '..' ) $file['isparent'] = true;
         $file['relurl'] = $file['fullurl'];
     } else {
         $file['relurl'] = $assistant->to_relative($fullname);
@@ -205,6 +212,7 @@ while( false !== ($filename = $dh->read()) ) {
     }
     if( $file['isdir'] ) {
         $url = $this->create_url($id,'filepicker',$returnid)."&showtemplate=false&subdir=$filename&inst=$inst&sig=$sig";
+        if( $type ) $url .= "&type=$type";
         $file['chdir_url'] = str_replace('&amp;','&',$url);
     }
     $files[] = $file;
@@ -215,12 +223,31 @@ usort($files,$sortfiles);
 $cwd_for_display = null;
 $assistant2 = new PathAssistant($config,$config['root_path']);
 $cwd_for_display = $assistant2->to_relative( $startdir );
+$css_files = [ '/lib/css/filepicker.css', '/lib/css/filepicker.min.css' ];
+$mtime = -1;
+$sel_file = null;
+foreach( $css_files as $file ) {
+    $fp = $this->GetModulePath().'/'.$file;
+    if( is_file($fp) ) {
+        $fmt = filemtime($fp);
+        if( $fmt > $mtime ) {
+            $mtime = $fmt;
+            $sel_file = $file;
+        }
+    }
+}
+$smarty->assign('cssurl',$this->GetModuleURLPath().'/'.$sel_file);
 $smarty->assign('cwd_for_display',$cwd_for_display);
+$smarty->assign('cwd',$cwd);
 $smarty->assign('files',$files);
 $smarty->assign('sig',$sig);
 $smarty->assign('inst',$inst);
 $smarty->assign('mod',$this);
 $smarty->assign('profile',$profile);
+$lang = [];
+$lang['confirm_delete'] = $this->Lang('confirm_delete');
+$lang['ok'] = $this->Lang('ok');
+$smarty->assign('lang_js',json_encode($lang));
 echo $this->ProcessTemplate('filepicker.tpl');
 
 #

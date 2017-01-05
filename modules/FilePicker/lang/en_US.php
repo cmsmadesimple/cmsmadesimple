@@ -8,6 +8,10 @@ $lang['delete_profile'] = 'Delete Profile';
 
 // E
 $lang['edit_profile'] = 'Edit Profile';
+$lang['error_ajax_invalidfilename'] = 'Sorry, that filename is invalid';
+$lang['error_ajax_fileexists'] = 'Sorry, a file or directory with that name already exists';
+$lang['error_ajax_mkdir'] = 'A problem occurred creating a the directory %s';
+$lang['error_ajax_writepermission'] = 'Sorry, you do not have permission to write to this directory';
 
 // F
 $lang['filterby'] = 'Filter By';
@@ -48,7 +52,11 @@ $lang['msg_delete_success'] = 'TODO';
 $lang['msg_success'] = 'TODO';
 
 // N
+$lang['name'] = 'Name';
 $lang['no_profiles'] = 'No profiles defined yet. You can add them by clicking the button above.';
+
+// O
+$lang['ok'] = 'Ok';
 
 // P
 $lang['ProfileName'] = 'Profile Name';
@@ -72,6 +80,7 @@ $lang['th_created'] = 'Created';
 $lang['th_id'] = 'ID';
 $lang['th_last_edited'] = 'Last Edited';
 $lang['th_tag'] = 'Tag';
+$lang['title_mkdir'] = 'Create Directory';
 
 
 // HELP TEXT
