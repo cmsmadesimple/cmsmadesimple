@@ -13,8 +13,8 @@ class FilePickerProfile
     const FLAG_YES = 1;
     const FLAG_BYGROUP = 2;
 
-    private $_data = [ 'top'=>null, 'type'=>self::TYPE_ANY, 'can_upload'=>self::FLAG_NONE, 'show_thumbs'=>1, 'can_delete'=>self::FLAG_NONE,
-                       'match_prefix'=>null, 'show_hidden'=>FALSE, 'exclude_prefix'=>null, 'sort'=>FALSE ];
+    private $_data = [ 'top'=>null, 'type'=>self::TYPE_ANY, 'can_upload'=>self::FLAG_YES, 'show_thumbs'=>1, 'can_delete'=>self::FLAG_YES,
+                       'match_prefix'=>null, 'show_hidden'=>FALSE, 'exclude_prefix'=>null, 'sort'=>TRUE, 'can_mkdir'=>TRUE ];
 
     protected function setValue( $key, $val )
     {
@@ -48,15 +48,18 @@ class FilePickerProfile
             }
             break;
 
+        case 'can_mkdir':
         case 'can_delete':
         case 'can_upload':
             $val = (int) $val;
             switch( $val ) {
-            case FLAG_NONE:
-            case FLAG_YES:
-            case FLAG_BYGROUP:
+            case self::FLAG_NONE:
+            case self::FLAG_YES:
+            case self::FLAG_BYGROUP:
                 $this->_data[$key] = $val;
+                break;
             default:
+                die('val is '.$val);
                 throw new \CmsInvalidDataException("$val is an invalid value for $key in ".__CLASS__);
             }
             break;
@@ -86,6 +89,7 @@ class FilePickerProfile
         case 'exclude_prefix':
             return trim($this->_data[$key]);
 
+        case 'can_mkdir':
         case 'can_upload':
         case 'can_delete':
             return (int) $this->_data[$key];
@@ -105,4 +109,5 @@ class FilePickerProfile
         }
         return $obj;
     }
+
 } // end of class
