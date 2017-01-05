@@ -44,7 +44,7 @@ try {
     }
 
     if( isset($params['submit']) ) {
-        $profile = $profile->withParams( $params );
+        $profile = $profile->overrideWith( $params );
         $this->_dao->save( $profile );
         $this->RedirectToAdminTab();
     }

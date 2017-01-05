@@ -28,6 +28,7 @@
 # END_LICENSE
 #-------------------------------------------------------------------------
 use \FilePicker\TemporaryProfileStorage;
+use \CMSMS\FilePickerProfile as Profile;
 
 require_once(__DIR__.'/lib/class.ProfileDAO.php');
 

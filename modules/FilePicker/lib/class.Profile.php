@@ -1,10 +1,9 @@
 <?php
 namespace FilePicker;
 
-class Profile
+class Profile extends \CMSMS\FilePickerProfile
 {
     private $_data = [ 'id'=>null, 'name'=>null, 'create_date'=>null, 'modified_date'=>null ];
-    private $_params = [ 'dir'=>null, 'file_extensions'=>null, 'show_thumbs'=>null, 'can_upload'=>null, 'can_delete'=>null ];
 
     public function __construct(array $in = null)
     {
@@ -18,16 +17,9 @@ class Profile
             case 'name':
                 $this->_data[$key] = trim($value);
                 break;
-            case 'create_date':
-            case 'modified_date':
-                $this->_data[$key] = (int) $value;
+            default:
+                $this->setValue( $key, $value );
                 break;
-            case 'data':
-                if( is_array($value) && isset($value['dir']) ) {
-                    $this->_params = $value;
-                } else if( is_string($value) ) {
-                    $this->_params = unserialize($value);
-                }
             }
         }
     }
@@ -45,20 +37,8 @@ class Profile
         case 'modified_date':
             return (int) $this->_data[$key];
 
-        case 'file_extensions':
-        case 'dir':
-            return trim($this->_params[$key]);
-
-        case 'data':
-            return serialize($this->_params);
-
-        case 'show_thumbs':
-        case 'can_upload':
-        case 'can_delete':
-            return (bool) $this->_params[$key];
-
         default:
-            throw new \LogicException("$key is not a gettable member of ".__CLASS__);
+            return parent::__get($key);
         }
     }
 
@@ -79,24 +59,21 @@ class Profile
         return $obj;
     }
 
-    public function withParams( array $params )
+    public function overrideWith( array $params )
     {
         $obj = clone( $this );
         foreach( $params as $key => $val ) {
             switch( $key ) {
+            case 'id':
+                // cannot set a new id this way
+                break;
+
             case 'name':
                 $obj->_data[$key] = trim($val);
                 break;
 
-            case 'file_extensions':
-            case 'dir':
-                $obj->_params[$key] = trim($val);
-                break;
-
-            case 'show_thumbs':
-            case 'can_upload':
-            case 'can_delete':
-                $obj->_params[$key] = (bool) $val;
+            default:
+                $obj->setValue($key,$val);
                 break;
             }
         }
