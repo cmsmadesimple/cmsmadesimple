@@ -1,7 +1,12 @@
 <?php
 
 // A
-$lang['add_profile'] = 'Add Profile';
+$lang['add_profile'] = 'Add a new Profile';
+
+// C
+$lang['can_delete'] = 'Allow file deletion';
+$lang['can_mkdir'] = 'Allow directory creation';
+$lang['can_upload'] = 'Uploads allowed';
 
 // D
 $lang['delete_profile'] = 'Delete Profile';
@@ -14,42 +19,14 @@ $lang['error_ajax_mkdir'] = 'A problem occurred creating a the directory %s';
 $lang['error_ajax_writepermission'] = 'Sorry, you do not have permission to write to this directory';
 
 // F
-$lang['filterby'] = 'Filter By';
-$lang['fileview'] = 'File View';
+$lang['fileextensions'] = 'Allowed file extensions';
+$lang['filterby'] = 'Filter by';
+$lang['fileview'] = 'File view';
 $lang['friendlyname'] = 'File Picker';
 
 // H
-$lang['HelpPopupTitle_can_delete'] = 'TODO';
-$lang['HelpPopupTitle_dir'] = 'TODO';
-$lang['HelpPopupTitle_exclude_prefix'] = 'TODO';
-$lang['HelpPopupTitle_exclude_suffix'] = 'TODO';
-$lang['HelpPopupTitle_file_extensions'] = 'TODO';
-$lang['HelpPopupTitle_groups'] = 'TODO';
-$lang['HelpPopupTitle_include_prefix'] = 'TODO';
-$lang['HelpPopupTitle_include_suffix'] = 'TODO';
-$lang['HelpPopupTitle_mode'] = 'TODO';
-$lang['HelpPopupTitle_ProfileName'] = 'TODO';
-$lang['HelpPopupTitle_show_thumbs'] = 'TODO';
-$lang['HelpPopupTitle_upload'] = 'TODO';
-$lang['HelpPopup_can_delete'] = 'TODO';
-$lang['HelpPopup_dir'] = 'TODO';
-$lang['HelpPopup_exclude_prefix'] = 'TODO';
-$lang['HelpPopup_exclude_suffix'] = 'TODO';
-$lang['HelpPopup_file_extensions'] = 'TODO';
-$lang['HelpPopup_groups'] = 'TODO';
-$lang['HelpPopup_include_prefix'] = 'TODO';
-$lang['HelpPopup_include_suffix'] = 'TODO';
-$lang['HelpPopup_mode'] = 'TODO';
-$lang['HelpPopup_ProfileName'] = 'TODO';
-$lang['HelpPopup_show_thumbs'] = 'TODO';
-$lang['HelpPopup_upload'] = 'TODO';
-
-// M
-$lang['moddescription'] = 'TODO';
-$lang['ModeOptions_Browser'] = 'Browser';
-$lang['ModeOptions_Dropdown'] = 'Dropdown';
-$lang['msg_delete_success'] = 'TODO';
-$lang['msg_success'] = 'TODO';
+$lang['hdr_add_profile'] = 'Add profile';
+$lang['hdr_edit_profile'] = 'Edit profile';
 
 // N
 $lang['name'] = 'Name';
@@ -58,29 +35,18 @@ $lang['no_profiles'] = 'No profiles defined yet. You can add them by clicking th
 // O
 $lang['ok'] = 'Ok';
 
-// P
-$lang['ProfileName'] = 'Profile Name';
-$lang['Profile_can_delete'] = 'Profile can delete';
-$lang['Profile_dir'] = 'Directory';
-$lang['Profile_exclude_prefix'] = 'Exclude Prefixes';
-$lang['Profile_exclude_suffix'] = 'Exclude Suffixes';
-$lang['Profile_file_extensions'] = 'Allowed Extensions';
-$lang['Profile_groups'] = 'Profile Groups';
-$lang['Profile_include_prefix'] = 'Include Prefixes';
-$lang['Profile_include_suffix'] = 'Include Suffixes';
-$lang['Profile_mode'] = 'Mode';
-$lang['Profile_show_thumbs'] = 'Show Thumbnails';
-$lang['Profile_upload'] = 'Allow Upload';
+
+// S
+$lang['show_thumbs'] = 'Show thumbnails';
 
 // T
-$lang['tab_defaults'] = 'Default Profile Settings';
-$lang['tab_preferences'] = 'Preferences';
-$lang['tab_profiles'] = 'Profiles';
 $lang['th_created'] = 'Created';
 $lang['th_id'] = 'ID';
 $lang['th_last_edited'] = 'Last Edited';
+$lang['th_name'] = 'Name';
 $lang['th_tag'] = 'Tag';
 $lang['title_mkdir'] = 'Create Directory';
+$lang['topdir'] = 'Top Directory';
 
 
 // HELP TEXT
@@ -98,5 +64,3 @@ $lang['help'] = <<<EOT
 <p>Copyright &copy; 2017, JoMorg and calguy1000. All Rights Are Reserved.</p>
 <p>This module has been released under the <a href="http://www.gnu.org/licenses/licenses.html#GPL">GNU Public License</a>. You must agree to this license before using the module.</p>
 EOT;
-
-?>

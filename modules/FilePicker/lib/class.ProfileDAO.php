@@ -12,16 +12,24 @@ class ProfileDAO
         $this->_db = $db;
     }
 
+    protected function profile_from_row(array $row)
+    {
+        $data = unserialize($row['data']);
+        $data['name'] = $row['name'];
+        $data['id'] = $row['id'];
+        $data['create_date'] = $row['create_date'];
+        $data['modified_date'] = $row['modified_date'];
+        $obj = new Profile($data);
+        return $obj;
+    }
+
     public function loadById( $id )
     {
         $id = (int) $id;
         if( $id < 1 ) throw new \LogicException('Invalid id passed to '.__METHOD__);
         $sql = 'SELECT * FROM '.self::table_name().' WHERE id = ?';
         $row = $this->_db->GetRow($sql,[ $id ]);
-        if( is_array($row) && count($row) ) {
-            $obj = new Profile($row);
-            return $obj;
-        }
+        if( is_array($row) && count($row) ) return $this->profile_from_row($row);
     }
 
     public function loadByName( $name )
@@ -30,10 +38,7 @@ class ProfileDAO
         if( !$name ) throw new \LogicException('Invalid name passed to '.__METHOD__);
         $sql = 'SELECT * FROM '.self::table_name().' WHERE name = ?';
         $row = $this->_db->GetRow($sql,[ $name ]);
-        if( is_array($row) && count($row) ) {
-            $obj = new Profile($row);
-            return $obj;
-        }
+        if( is_array($row) && count($row) ) return $this->profile_from_row($row);
     }
 
     public function delete( Profile $profile )
@@ -54,7 +59,7 @@ class ProfileDAO
         if( $tmp ) throw new \CmsInvalidDataException('err_profilename_exists');
 
         $sql = 'INSERT INTO '.self::table_name().' (name, data, create_date, modified_date) VALUES (?, ?, UNIX_TIMESTAMP(), UNIX_TIMESTAMP())';
-        $dbr = $this->_db->Execute( $sql, [ $profile->name, $profile->data ] );
+        $dbr = $this->_db->Execute( $sql, [ $profile->name, serialize($profile->getRawData()) ] );
         if( !$dbr ) throw new \RuntimeException('Problem inserting profile record');
 
         $new_id = $this->_db->Insert_ID();
@@ -68,8 +73,8 @@ class ProfileDAO
         $tmp = $this->_db->GetOne( $sql, [ $profile->name, $profile->id ] );
         if( $tmp ) throw new \CmsInvalidDataException('err_profilename_exists');
 
-        $sql = 'UPDATE '.self::table_name().' SET name = ?, data = ?, modified_date = UNIX_TIMESTAMP()';
-        $dbr = $this->_db->Execute( $sql, [ $profile->name, $profile->data ] );
+        $sql = 'UPDATE '.self::table_name().' SET name = ?, data = ?, modified_date = UNIX_TIMESTAMP() WHERE id = ?';
+        $dbr = $this->_db->Execute( $sql, [ $profile->name, serialize($profile->getRawData()) ] );
         if( !$dbr ) throw new \RuntimeException('Problem updating profile record');
 
         $obj = $profile->markModified();
@@ -94,7 +99,7 @@ class ProfileDAO
 
         $out = [];
         foreach( $list as $row ) {
-            $out[] = new Profile($row);
+            $out[] = $this->profile_from_row($row);
         }
         return $out;
     }

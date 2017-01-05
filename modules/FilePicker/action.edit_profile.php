@@ -45,6 +45,7 @@ try {
 
     if( isset($params['submit']) ) {
         $profile = $profile->overrideWith( $params );
+        debug_display($profile,'profile');
         $this->_dao->save( $profile );
         $this->RedirectToAdminTab();
     }
@@ -53,10 +54,12 @@ try {
     echo $this->ProcessTemplate('edit_profile.tpl');
 }
 catch( \CmsInvalidDataException $e ) {
+    debug_display($e); die();
     $this->SetError( $this->Lang( $e->GetMessage() ) );
     $this->RedirectToAdminTab();
 }
 catch( \Exception $e ) {
+    debug_display($e); die();
     $this->SetError( $e->GetMessage() );
     $this->RedirectToAdminTab();
 }

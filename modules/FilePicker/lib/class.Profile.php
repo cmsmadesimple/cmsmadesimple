@@ -3,7 +3,24 @@ namespace FilePicker;
 
 class Profile extends \CMSMS\FilePickerProfile
 {
-    private $_data = [ 'id'=>null, 'name'=>null, 'create_date'=>null, 'modified_date'=>null ];
+    private $_data = [ 'id'=>null, 'name'=>null, 'create_date'=>null, 'modified_date'=>null, 'file_extensions'=>null ];
+
+    protected function setValue( $key, $val )
+    {
+        switch( $key ) {
+        case 'name':
+        case 'file_extensions':
+            $this->_data[$key] = trim($val);
+            break;
+        case 'create_date':
+        case 'modified_date':
+            $this->_data[$key] = (int) $val;
+            break;
+        default:
+            parent::setValue( $key, $val );
+            break;
+        }
+    }
 
     public function __construct(array $in = null)
     {
@@ -13,9 +30,6 @@ class Profile extends \CMSMS\FilePickerProfile
             switch( $key ) {
             case 'id':
                 $this->_data[$key] = (int) $value;
-                break;
-            case 'name':
-                $this->_data[$key] = trim($value);
                 break;
             default:
                 $this->setValue( $key, $value );
@@ -31,6 +45,7 @@ class Profile extends \CMSMS\FilePickerProfile
             return (int) $this->_data[$key];
 
         case 'name':
+        case 'file_extensions':
             return trim($this->_data[$key]);
 
         case 'create_date':
@@ -68,10 +83,6 @@ class Profile extends \CMSMS\FilePickerProfile
                 // cannot set a new id this way
                 break;
 
-            case 'name':
-                $obj->_data[$key] = trim($val);
-                break;
-
             default:
                 $obj->setValue($key,$val);
                 break;
@@ -85,5 +96,12 @@ class Profile extends \CMSMS\FilePickerProfile
         $obj = clone $this;
         $obj->_data['modified_date'] = time();
         return $obj;
+    }
+
+    public function getRawData()
+    {
+        $data = parent::getRawData();
+        $data = array_merge($data,$this->_data);
+        return $data;
     }
 } // end of class
