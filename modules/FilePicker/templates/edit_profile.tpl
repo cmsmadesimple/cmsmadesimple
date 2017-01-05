@@ -20,7 +20,7 @@
 </div>
 <div class="c_full cf">
   <label for="profile_top" class="grid_2">{$mod->Lang('topdir')}:</label>
-  <p class="grid_9"><input type="text" id="profile_top" name="{$actionid}top" value="{$profile->top}" size="80"/>
+  <p class="grid_9"><input type="text" id="profile_top" name="{$actionid}top" value="{$profile->reltop}" size="80"/>
   &nbsp;{cms_help key2='HelpPopup_ProfileDir' title=$mod->Lang('HelpPopupTitle_ProfileDir')}
   </p>
 </div>
@@ -43,13 +43,13 @@
   </p>
 </div>
 <div class="c_full cf">
-  <label class="grid_2">{$mod->Lang('can_delete')}:</label>
+  <label for="profile_candelete" class="grid_2">{$mod->Lang('can_delete')}:</label>
   <p class="grid_9"><select id="profile_candelete" name="{$actionid}can_delete">{cms_yesno selected=$profile->can_delete}</select>
   &nbsp;{cms_help key2='HelpPopup_ProfileCan_Delete' title=$mod->Lang('HelpPopupTitle_ProfileCan_Delete')}
   </p>
 </div>
 <div class="c_full cf">
-  <label class="grid_2">{$mod->Lang('can_mkdir')}:</label>
+  <label for="profile_canmkdir" class="grid_2">{$mod->Lang('can_mkdir')}:</label>
   <p class="grid_9"><select id="profile_canmkdir" name="{$actionid}can_mkdir">{cms_yesno selected=$profile->can_mkdir}</select>
   &nbsp;{cms_help key2='HelpPopup_ProfileCan_Mkdir' title=$mod->Lang('HelpPopupTitle_ProfileCan_Mkdir')}
   </p>

@@ -1,6 +1,8 @@
 <?php
 namespace FilePicker;
 
+class ProfileException extends \Exception {}
+
 class Profile extends \CMSMS\FilePickerProfile
 {
     private $_data = [ 'id'=>null, 'name'=>null, 'create_date'=>null, 'modified_date'=>null, 'file_extensions'=>null ];
@@ -52,6 +54,29 @@ class Profile extends \CMSMS\FilePickerProfile
         case 'modified_date':
             return (int) $this->_data[$key];
 
+        case 'relative_top':
+        case 'reltop':
+            // parent top is checked for relative or absolute
+            // return relative to uploads path
+            $val = parent::__get('top');
+            if( startswith($val,'/') ) {
+                $config = \cms_config::get_instance();
+                $uploads_path = $config['uploads_path'];
+                if( startswith( $val, $uploads_path ) ) $val = substr($val,strlen($uploads_path));
+                if( startswith( $val, '/') ) $val = substr($val,1);
+            }
+            return $val;
+
+        case 'top':
+            // parent top is checked for relative or absolute
+            // if relative, prepend uploads path
+            $val = parent::__get('top');
+            if( !startswith($val,'/') ) {
+                $config = \cms_config::get_instance();
+                $val = $config['uploads_path'].'/'.$val;
+            }
+            return $val;
+
         default:
             return parent::__get($key);
         }
@@ -59,7 +84,8 @@ class Profile extends \CMSMS\FilePickerProfile
 
     public function validate()
     {
-        if( !$this->name ) throw new \RuntimeException( 'err_profile_name' );
+        if( !$this->name ) throw new ProfileException( 'err_profile_name' );
+        if( $this->reltop && !is_dir($this->top) ) throw new ProfileException('err_profile_topdir');
     }
 
     public function withNewId( $new_id = null )

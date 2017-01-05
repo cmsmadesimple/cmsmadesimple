@@ -3,13 +3,16 @@ namespace FilePicker;
 
 class ProfileDAO
 {
+    private $_mod;
     private $_db;
+    const DFLT_PREF = 'ProfileDAO_defaultProfileId';
 
     public static function table_name() { return CMS_DB_PREFIX.'mod_filepicker_profiles'; }
 
-    public function __construct( $db )
+    public function __construct( \FilePicker $mod )
     {
-        $this->_db = $db;
+        $this->_mod = $mod;
+        $this->_db = $mod->GetDb();
     }
 
     protected function profile_from_row(array $row)
@@ -21,6 +24,30 @@ class ProfileDAO
         $data['modified_date'] = $row['modified_date'];
         $obj = new Profile($data);
         return $obj;
+    }
+
+    public function getDefaultProfileId()
+    {
+        return (int) $this->_mod->GetPreference(self::DFLT_PREF);
+    }
+
+    public function clearDefault()
+    {
+        $this->_mod->RemovePreference(self::DFLT_PREF);
+    }
+
+    public function setDefault( Profile $profile )
+    {
+        if( $profile->id < 1 ) throw new \LogicException('Cannot set a profile as default if it is not yet saved');
+        $this->_mod->SetPreference(self::DFLT_PREF,$profile->id);
+    }
+
+    public function loadDefault()
+    {
+        $dflt_id = $this->getDefaultProfileId();
+        if( !$dflt_id < 1 ) return;
+
+        return $this->loadById( $dflt_id );
     }
 
     public function loadById( $id )
@@ -74,7 +101,7 @@ class ProfileDAO
         if( $tmp ) throw new \CmsInvalidDataException('err_profilename_exists');
 
         $sql = 'UPDATE '.self::table_name().' SET name = ?, data = ?, modified_date = UNIX_TIMESTAMP() WHERE id = ?';
-        $dbr = $this->_db->Execute( $sql, [ $profile->name, serialize($profile->getRawData()) ] );
+        $dbr = $this->_db->Execute( $sql, [ $profile->name, serialize($profile->getRawData()), $profile->id ] );
         if( !$dbr ) throw new \RuntimeException('Problem updating profile record');
 
         $obj = $profile->markModified();

@@ -27,7 +27,6 @@
 #-------------------------------------------------------------------------
 # END_LICENSE
 #-------------------------------------------------------------------------
-use FilePicker\ProfileDAO;
 use FilePicker\Profile;
 if( !defined('CMS_VERSION') ) exit;
 if( !$this->VisibleToAdminUser() ) exit;
@@ -44,22 +43,24 @@ try {
     }
 
     if( isset($params['submit']) ) {
-        $profile = $profile->overrideWith( $params );
-        debug_display($profile,'profile');
-        $this->_dao->save( $profile );
-        $this->RedirectToAdminTab();
+        try {
+            $profile = $profile->overrideWith( $params );
+            $this->_dao->save( $profile );
+            $this->RedirectToAdminTab();
+        }
+        catch( \FilePicker\ProfileException $e ) {
+            echo $this->ShowErrors($this->Lang($e->GetMessage()));
+        }
     }
 
     $smarty->assign('profile',$profile);
     echo $this->ProcessTemplate('edit_profile.tpl');
 }
 catch( \CmsInvalidDataException $e ) {
-    debug_display($e); die();
     $this->SetError( $this->Lang( $e->GetMessage() ) );
     $this->RedirectToAdminTab();
 }
 catch( \Exception $e ) {
-    debug_display($e); die();
     $this->SetError( $e->GetMessage() );
     $this->RedirectToAdminTab();
 }

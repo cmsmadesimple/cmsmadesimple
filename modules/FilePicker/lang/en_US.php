@@ -17,6 +17,7 @@ $lang['error_ajax_invalidfilename'] = 'Sorry, that filename is invalid';
 $lang['error_ajax_fileexists'] = 'Sorry, a file or directory with that name already exists';
 $lang['error_ajax_mkdir'] = 'A problem occurred creating a the directory %s';
 $lang['error_ajax_writepermission'] = 'Sorry, you do not have permission to write to this directory';
+$lang['err_profile_topdir'] = 'The top directory specified does not exist';
 
 // F
 $lang['fileextensions'] = 'Allowed file extensions';
@@ -41,10 +42,11 @@ $lang['show_thumbs'] = 'Show thumbnails';
 
 // T
 $lang['th_created'] = 'Created';
+$lang['th_default'] = 'Default';
 $lang['th_id'] = 'ID';
 $lang['th_last_edited'] = 'Last Edited';
 $lang['th_name'] = 'Name';
-$lang['th_tag'] = 'Tag';
+$lang['th_reltop'] = 'Top Directory';
 $lang['title_mkdir'] = 'Create Directory';
 $lang['topdir'] = 'Top Directory';
 

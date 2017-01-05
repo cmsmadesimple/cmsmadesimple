@@ -37,6 +37,11 @@ try {
     $profile = $this->_dao->loadById( $profile_id );
     if( !$profile ) throw new \LogicException('Invalid profile id passed to delete_profile action');
 
+    $dflt_id = $this->_dao->getDefaultProfileId();
+    if( $dflt_id == $profile->id ) {
+        $this->_dao->clearDefault();
+    }
+
     $this->_dao->delete( $profile );
 }
 catch( \Exception $e ) {

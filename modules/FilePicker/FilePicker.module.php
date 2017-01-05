@@ -39,7 +39,7 @@ final class FilePicker extends \CMSModule implements \CMSMS\FilePickerInterface
     public function __construct()
     {
         parent::__construct();
-        $this->_dao = new \FilePicker\ProfileDAO( \CmsApp::get_instance()->GetDb() );
+        $this->_dao = new \FilePicker\ProfileDAO( $this );
     }
 
     private function _encodefilename($filename)
@@ -122,7 +122,9 @@ final class FilePicker extends \CMSModule implements \CMSMS\FilePickerInterface
 
     public function get_default_profile()
     {
-        // todo:  allow some defaults here, or load something from a rpeference
+        $profile = $this->_dao->getDefault();
+        if( $profile ) return $profile;
+
         $profile = new \CMSMS\FilePickerProfile;
         return $profile;
     }

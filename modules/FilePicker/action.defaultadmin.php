@@ -32,5 +32,6 @@ if( !defined('CMS_VERSION') ) exit;
 if( !$this->VisibleToAdminUser() ) return;
 
 $profiles = $this->_dao->loadAll();
+$smarty->assign('dflt_profile_id',$this->_dao->getDefaultProfileId());
 $smarty->assign('profiles',$profiles);
 echo $this->ProcessTemplate('defaultadmin.tpl');
