@@ -21,7 +21,6 @@ class FilePickerProfile
         switch( $key ) {
         case 'top':
             $val = trim($val);
-            if( $val && !is_dir($val) ) throw new \CmsInvalidDataException("$val is an invalid directory for top in ".__CLASS__);
             $this->_data[$key] = $val;
             break;
 

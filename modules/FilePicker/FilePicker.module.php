@@ -93,12 +93,9 @@ final class FilePicker extends \CMSModule implements \CMSMS\FilePickerInterface
         $uid = get_userid(FALSE);
         //$adding = (bool)( $adding || ($content_obj->Id() < 1) ); // hack for the core. Have to ask why though (JM)
 
-        $profile = $this->get_default_profile();
         $profile_name = get_parameter_value($params,'profile');
-        if( $profile_name ) {
-            $tmp = $this->get_profile($profile);
-            if( $tmp ) $profile = $tmp;
-        }
+        $profile = $this->get_profile_or_default($profile_name);
+
         // todo: optionally allow further overriding the profile
         $out = $this->get_html($blockName, $value, $profile);
         return $out;
@@ -120,9 +117,18 @@ final class FilePicker extends \CMSModule implements \CMSMS\FilePickerInterface
         return filemanager_utils::get_file_list($path);
     }
 
+    public function get_profile_or_default( $profile_name )
+    {
+        $profile_name = trim($profile_name);
+        $profile = null;
+        if( $profile_name ) $profile = $this->_dao->loadByName( $profile_name );
+        if( !$profile ) $profile = $this->get_default_profile();
+        return $profile;
+    }
+
     public function get_default_profile()
     {
-        $profile = $this->_dao->getDefault();
+        $profile = $this->_dao->loadDefault();
         if( $profile ) return $profile;
 
         $profile = new \CMSMS\FilePickerProfile;

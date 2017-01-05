@@ -41,6 +41,7 @@ tinymce.PluginManager.add('cmsms_filepicker', function(editor) {
 		*/
 	    }
 	    callback(file, opts);
+	    top.document.CMSFileBrowser.onselect = null;
 	    mywin.close();
 	}
 
