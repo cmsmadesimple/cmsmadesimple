@@ -21,7 +21,7 @@ class FilePickerProfile
         switch( $key ) {
         case 'top':
             $val = trim($val);
-            if( !is_dir($val) ) throw new \CmsInvalidDataException("$val is an invalid directory for top in ".__CLASS__);
+            if( $val && !is_dir($val) ) throw new \CmsInvalidDataException("$val is an invalid directory for top in ".__CLASS__);
             $this->_data[$key] = $val;
             break;
 
@@ -110,4 +110,8 @@ class FilePickerProfile
         return $obj;
     }
 
+    public function getRawData()
+    {
+        return $this->_data;
+    }
 } // end of class
