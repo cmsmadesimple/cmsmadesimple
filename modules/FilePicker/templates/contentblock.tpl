@@ -4,7 +4,6 @@
   <script type="text/javascript">
 $(document).ready(function(){
    var sel = '[data-cmsfp-instance="{$instance}"]';
-   console.debug('create selector is '+sel);
    $(sel).filepicker({
       param_sig: '{$sig}',
    });

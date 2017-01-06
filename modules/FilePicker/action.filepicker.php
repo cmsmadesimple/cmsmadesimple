@@ -61,11 +61,12 @@ if( !$nosub && isset($_GET['subdir']) ) {
     $cwd .= '/' . trim(cleanValue($_GET['subdir']));
     $cwd = $assistant->to_relative($assistant->to_absolute($cwd));
 }
-// failsave, if we don't have a valid working directory, set it to the top
+// failsave, if we don't have a valid working directory, set it to the $topdir;
 if( $cwd && !$assistant->is_valid_relative_path( $cwd ) ) {
     $cwd = '';
 }
-$_SESSION[$sesskey] = $cwd;
+if( $cwd ) $_SESSION[$sesskey] = $cwd;
+
 
 // now we're set to go.
 $starturl = $assistant->relative_path_to_url($cwd);
@@ -237,7 +238,7 @@ foreach( $css_files as $file ) {
         }
     }
 }
-$smarty->assign('cssurl',$this->GetModuleURLPath().'/'.$sel_file);
+$smarty->assign('cssurl',$this->GetModuleURLPath().$sel_file);
 $smarty->assign('cwd_for_display',$cwd_for_display);
 $smarty->assign('cwd',$cwd);
 $smarty->assign('files',$files);

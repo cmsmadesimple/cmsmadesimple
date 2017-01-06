@@ -18,23 +18,24 @@
 
 function smarty_function_page_image($params, &$smarty)
 {
-	$result = '';
+	$result = null;
+    $full = false;
 	$propname = 'image';
 
-	if( isset($params['thumbnail']) )
-    {
-		$propname = 'thumbnail';
-    }
+    if( isset($params['full']) ) $full = 1;
+	if( isset($params['thumbnail']) ) $propname = 'thumbnail';
 
 	$contentobj = cms_utils::get_current_content();
-	if( is_object($contentobj) )
-    {
+	if( is_object($contentobj) ) {
 		$result = $contentobj->GetPropertyValue($propname);
 		if( $result == -1 ) $result = '';
     }
+    if( $result && $full ) {
+        $config = \cms_config::get_instance();
+        $result = $config['image_uploads_url'].'/'.$result;
+    }
 
-	if( isset($params['assign']) )
-    {
+	if( isset($params['assign']) ) {
 		$smarty->assign($params['assign'],$result);
 		return;
     }
@@ -48,6 +49,7 @@ function smarty_cms_about_function_page_image() {
 	<p>Change History:</p>
 	<ul>
 		<li>Fix for CMSMS 1.9</li>
+        <li>Jan 2016 <em>(calguy1000)</em> - Adds the full param for CMSMS 2.2</li>
 	</ul>
 <?php
 }

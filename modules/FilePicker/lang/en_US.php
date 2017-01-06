@@ -9,6 +9,7 @@ $lang['can_mkdir'] = 'Allow directory creation';
 $lang['can_upload'] = 'Uploads allowed';
 
 // D
+$lang['delete'] = 'Delete';
 $lang['delete_profile'] = 'Delete Profile';
 
 // E

@@ -2364,7 +2364,7 @@ abstract class ContentBase
 			$data = $this->GetPropertyValue('image');
             $filepicker = \cms_utils::get_filepicker_module();
             if( $filepicker ) {
-                $profile = $filepicker->get_default_profile();
+                $profile = $filepicker->get_default_profile( $dir, get_userid() );
                 $profile = $profile->overrideWith( ['top'=>$dir, 'type'=>'image'] );
                 $input = $filepicker->get_html( 'image', $data, $profile);
             }
@@ -2388,7 +2388,7 @@ abstract class ContentBase
 			$data = $this->GetPropertyValue('thumbnail');
             $filepicker = \cms_utils::get_filepicker_module();
             if( $filepicker ) {
-                $profile = $filepicker->get_default_profile();
+                $profile = $filepicker->get_default_profile( $dir, get_userid() );
                 $profile = $profile->overrideWith( ['top'=>$dir, 'type'=>'image', 'match_prefix'=>'thumb_' ] );
                 $input = $filepicker->get_html( 'thumbnail', $data, $profile);
             }

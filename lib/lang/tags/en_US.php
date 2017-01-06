@@ -382,7 +382,8 @@ $lang['help_function_page_image'] = <<<EOT
 <p>Insert the tag into the template like: <code>{page_image}</code>.</p>
 <h3>What parameters does it take?</h3>
 <ul>
-  <li>thumbnail - Optionally display the value of the thumbnail property instead of the image property.</li>
+  <li><em>(optional)</em> thumbnail - Optionally display the value of the thumbnail property instead of the image property.</li>
+  <li><em>(optional)</em> full - Optionally output the full URL to the image relative to the image uploads path.</li>
   <li><em>(optional)</em> assign (string) - Assign the results to a smarty variable with that name.</li>
 </ul>
 EOT;

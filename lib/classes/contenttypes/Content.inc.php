@@ -565,7 +565,7 @@ class Content extends ContentBase
         $filepicker = \cms_utils::get_filepicker_module();
         if( $filepicker ) {
             $profile_name = get_parameter_value($blockInfo,'profile');
-            $profile = $filepicker->get_profile_or_default($profile_name);
+            $profile = $filepicker->get_profile_or_default($profile_name, $dir, get_userid() );
             $parms = ['top'=>$dir, 'type'=>'image' ];
             if( $sort ) $parms['sort'] = TRUE;
             if( $prefix ) $parms['exclude_prefix'] = $prefix;

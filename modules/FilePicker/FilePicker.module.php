@@ -117,17 +117,18 @@ final class FilePicker extends \CMSModule implements \CMSMS\FilePickerInterface
         return filemanager_utils::get_file_list($path);
     }
 
-    public function get_profile_or_default( $profile_name )
+    public function get_profile_or_default( $profile_name, $dir = null, $uid = null )
     {
         $profile_name = trim($profile_name);
         $profile = null;
         if( $profile_name ) $profile = $this->_dao->loadByName( $profile_name );
-        if( !$profile ) $profile = $this->get_default_profile();
+        if( !$profile ) $profile = $this->get_default_profile( $dir, $uid );
         return $profile;
     }
 
-    public function get_default_profile()
+    public function get_default_profile( $dir = null, $uid = null )
     {
+        /* $dir is absolute */
         $profile = $this->_dao->loadDefault();
         if( $profile ) return $profile;
 
