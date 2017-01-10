@@ -45,7 +45,7 @@ class ProfileDAO
     public function loadDefault()
     {
         $dflt_id = $this->getDefaultProfileId();
-        if( !$dflt_id < 1 ) return;
+        if( $dflt_id < 1 ) return;
 
         return $this->loadById( $dflt_id );
     }
