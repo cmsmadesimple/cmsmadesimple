@@ -146,7 +146,6 @@ The installation assistant supports the following URL based options:
     Usable only on the first step, this will ensure that all preset config information is cleared from the session (for development purposes only).
 
 
-
 ---------------------------
 Frequently Asked Questions
 ---------------------------

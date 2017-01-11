@@ -6,7 +6,6 @@ use \__appbase;
 class wizard_step4 extends \cms_autoinstaller\wizard_step
 {
     private $_config;
-    private $_samplecontent;
     private $_dbms_options;
 
     public function __construct()
@@ -17,14 +16,12 @@ class wizard_step4 extends \cms_autoinstaller\wizard_step
         if( !$tz ) @date_default_timezone_set('UTC');
         $this->_config = array('dbtype'=>'','dbhost'=>'localhost','dbname'=>'','dbuser'=>'',
                                'dbpass'=>'','dbprefix'=>'cms_','dbport'=>'',
+                               'samplecontent'=>TRUE,
                                'query_var'=>'','timezone'=>$tz);
-        $this->_samplecontent = TRUE;
 
         // get saved date
         $tmp = $this->get_wizard()->get_data('config');
         if( $tmp ) $this->_config = array_merge($this->_config,$tmp);
-        $tmp = $this->get_wizard()->get_data('samplecontent');
-        if( $tmp === 0 || $tmp === 1 ) $this->_samplecontent = $tmp;
 
         $databases = array('mysqli'=>'MySQLi (4.1+)');
         $this->_dbms_options = array();
@@ -129,10 +126,8 @@ class wizard_step4 extends \cms_autoinstaller\wizard_step
         if( isset($_POST['dbport']) ) $this->_config['dbport'] = trim(\__appbase\utils::clean_string($_POST['dbport']));
         if( isset($_POST['dbprefix']) ) $this->_config['dbprefix'] = trim(\__appbase\utils::clean_string($_POST['dbprefix']));
         if( isset($_POST['query_var']) ) $this->_config['query_var'] = trim(\__appbase\utils::clean_string($_POST['query_var']));
-        if( isset($_POST['samplecontent']) ) $this->_samplecontent = (int)$_POST['samplecontent'];
-
+        if( isset($_POST['samplecontent']) ) $this->_config['samplecontent'] = (int)$_POST['samplecontent'];
         $this->get_wizard()->set_data('config',$this->_config);
-        $this->get_wizard()->set_data('samplecontent',$this->_samplecontent);
 
         try {
             $app = \__appbase\get_app();
@@ -169,7 +164,6 @@ class wizard_step4 extends \cms_autoinstaller\wizard_step
         $smarty->assign('action',$this->get_wizard()->get_data('action'));
         $smarty->assign('verbose',$this->get_wizard()->get_data('verbose',0));
         $smarty->assign('config',$this->_config);
-        $smarty->assign('samplecontent',$this->_samplecontent);
         $smarty->assign('yesno',array('0'=>\__appbase\lang('no'),'1'=>\__appbase\lang('yes')));
         $smarty->display('wizard_step4.tpl');
         $this->finish();

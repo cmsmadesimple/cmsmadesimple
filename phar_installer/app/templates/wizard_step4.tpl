@@ -123,7 +123,7 @@
     <div class="row form-row">
         <label>{'prompt_installcontent'|tr}</label>
         <select class="form-field" name="samplecontent">
-            {html_options options=$yesno selected=$samplecontent}
+            {html_options options=$yesno selected=$config.samplecontent}
         </select>
     </div>
     {/if}

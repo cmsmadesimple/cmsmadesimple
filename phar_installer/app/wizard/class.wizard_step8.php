@@ -118,7 +118,7 @@ class wizard_step8 extends \cms_autoinstaller\wizard_step
 
             $this->message(\__appbase\lang('install_defaultcontent'));
             $fn = $dir.'/initial.php';
-            if( $this->get_wizard()->get_data('samplecontent') ) $fn = $dir.'/extra.php';
+            if( $destconfig['samplecontent'] ) $fn = $dir.'/extra.php';
             include_once($fn);
 
             $this->verbose(\__appbase\lang('install_setsitename'));

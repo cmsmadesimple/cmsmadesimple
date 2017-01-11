@@ -13,9 +13,12 @@ class wizard_step6 extends \cms_autoinstaller\wizard_step
 
         $tz = date_default_timezone_get();
         if( !$tz ) @date_default_timezone_set('UTC');
-        $this->_siteinfo = array('sitename'=>'','languages'=>array());
+
+        $this->_siteinfo = array( 'sitename'=>'','languages'=>[] );
+        $tmp = $this->get_wizard()->get_data('config');
+        if( $tmp ) $this->_siteinfo = array_merge($this->_siteinfo,$tmp);
         $lang = \__appbase\translator()->get_selected_language();
-        if( $lang != 'en_US' ) $this->_siteinfo['languages'] = array($lang);
+        if( $lang != 'en_US' ) $this->_siteinfo['languages'] = [ $lang ];
 
         $tmp = $this->get_wizard()->get_data('siteinfo');
         if( is_array($tmp) && count($tmp) ) $this->_siteinfo = $tmp;

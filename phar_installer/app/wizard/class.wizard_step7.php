@@ -99,7 +99,10 @@ class wizard_step7 extends \cms_autoinstaller\wizard_step
                 // open the manifest
                 // check the to version info
                 $manifest = new manifest_reader("$upgrade_dir/$one_version");
-                if( $one_version != $manifest->to_version() ) throw new \Exception(\__appbase\lang('error_internal',712));
+                if( $one_version != $manifest->to_version() ) {
+                    die("a = $one_version b = ".$manifest->to_version());
+                    throw new \Exception(\__appbase\lang('error_internal',712));
+                }
 
                 // delete all 'deleted' files
                 // if they are supposed to be in the installation, the copy from the archive
@@ -186,5 +189,3 @@ class wizard_step7 extends \cms_autoinstaller\wizard_step
     }
 
 } // end of class
-
-?>

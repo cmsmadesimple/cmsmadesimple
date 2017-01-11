@@ -166,7 +166,7 @@ class cms_install extends \__appbase\app
         $config_file = realpath(getcwd()).'/custom_config.ini';
         if( is_file($config_file) && is_readable($config_file) ) {
             $tmp = parse_ini_file($config_file);
-            if( is_array($tmp) && count($tmp) ) $config = array_merge($tmp,$config);
+            if( is_array($tmp) && count($tmp) ) $config = array_merge($config,$tmp);
         }
 
         // override current config with url params
@@ -276,12 +276,15 @@ class cms_install extends \__appbase\app
         return $config['dest'];
     }
 
-    public function set_custom_destdir($destdir) {
-        $this->_custom_destdir = 1;
+    public function set_destdir($destdir) {
         $this->set_config_val('dest',$destdir);
     }
 
-    public function has_custom_destdir() { return $this->_custom_destdir; }
+    public function has_custom_destdir() {
+        $p1 = realpath(getcwd());
+        $p2 = realpath($this->get_destdir());
+        return ($p1 != $p2);
+    }
 
     public function get_archive() { return $this->_archive; }
 
