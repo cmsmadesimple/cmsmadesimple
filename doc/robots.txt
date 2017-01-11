@@ -6,5 +6,6 @@ Disallow: /lib/
 Disallow: /modules/
 Disallow: /plugins/
 Disallow: /tmp/
+Disallow: /assets/
 
 Allow: /tmp/cache/
