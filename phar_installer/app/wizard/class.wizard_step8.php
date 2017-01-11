@@ -222,7 +222,7 @@ class wizard_step8 extends \cms_autoinstaller\wizard_step
         // this step has to go here.... as config file has to exist in step9
         // so that CMSMS can connect to the database.
         $fn = $destdir."/config.php";
-        if( file_exists($fn) ) {
+        if( is_file($fn) ) {
             $this->verbose(\__appbase\lang('install_backupconfig'));
             $destfn = $destdir.'/bak.config.php';
             if( !copy($fn,$destfn) ) throw new \Exception(\__appbase\lang('error_backupconfig'));
