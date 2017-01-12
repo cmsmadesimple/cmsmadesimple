@@ -34,14 +34,14 @@ $error = "";
 $dropdown = "";
 
 $group = "";
-if (isset($_POST["group"])) $group = $_POST["group"];
+if (isset($_POST["group"])) $group = cleanValue($_POST["group"]);
 
 $description = "";
-if (isset($_POST["description"])) $description = $_POST["description"];
+if (isset($_POST["description"])) $description = cleanValue($_POST["description"]);
 
 $group_id = -1;
-if (isset($_POST["group_id"])) $group_id = $_POST["group_id"];
-else if (isset($_GET["group_id"])) $group_id = $_GET["group_id"];
+if (isset($_POST["group_id"])) $group_id = (int) $_POST["group_id"];
+else if (isset($_GET["group_id"])) $group_id = (int) $_GET["group_id"];
 
 $active = 1;
 if (!isset($_POST["active"]) && isset($_POST["editgroup"]) && $group_id != 1) $active = 0;

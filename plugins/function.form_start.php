@@ -25,6 +25,7 @@ function smarty_function_form_start($params, &$smarty)
     $mactparms['mid'] = $smarty->getTemplateVars('actionid');
     $mactparms['returnid'] = $smarty->getTemplateVars('returnid');
     $mactparms['inline'] = 0;
+    $mactparms['action'] = null;
 
     $tagparms['method'] = 'post';
     $tagparms['enctype'] = 'multipart/form-data';
@@ -44,6 +45,9 @@ function smarty_function_form_start($params, &$smarty)
         if( $mactparms['module'] ) {
             $tmp = $smarty->getTemplateVars('actionparams');
             if( is_array($tmp) && isset($tmp['action']) ) $mactparms['action'] = $tmp['action'];
+            if( !$mactparms['action'] ) {
+                $mactparms['action'] = $smarty->getTemplateVars('actionname');
+            }
 
             $tagparms['action'] = 'moduleinterface.php';
             if( !$mactparms['returnid'] ) $mactparms['returnid'] = CmsApp::get_instance()->get_content_id();

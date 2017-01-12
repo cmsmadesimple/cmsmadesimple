@@ -1,3 +1,21 @@
+Version 2.1.7 
+----------------------------------
+Core - General
+  - Change default version check URL to use HTTPS
+  - Minor value cleaning in the admin group/user/tags pages
+  - Fix issue with deactivating users in the edit user form.
+  - Fix issue with change group assign.
+  - A bit more intelligence to the {form_start} plugin wrt. detecting the action.
+
+ModuleManager v2.0.5.1
+  - Modify default repository to use HTTPS
+
+DesignManager v1.1.2
+  - No longer cache url for menu items.
+
+News v2.56.7
+  - No longer cache url for menu items.
+
 Version 2.1.6 - Spanish Wells
 ----------------------------------
 Core - General

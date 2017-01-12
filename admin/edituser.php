@@ -75,7 +75,7 @@ if (isset($_POST['cancel'])) {
 
 if (isset($_POST["submit"])) {
 
-    if( $access_user && isset($_POST['active']) ) $active = (int) $_POST['active'];
+    if( !$access_user && isset($_POST['active']) ) $active = (int) $_POST['active'];
 
     $adminaccess = !isset($_POST["adminaccess"]) ? 0 : 1;
     $validinfo   = true;

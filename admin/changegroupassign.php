@@ -93,42 +93,37 @@ foreach ($group_list as $thisGroup)
 }
 $smarty->assign('groupidlist',implode(',',$groupidlist));
 
+if ($submitted == 1) {
+    foreach($groups as $thisGroup) {
+        if( $thisGroup->id <= 0 ) continue;
 
-if ($submitted == 1)
-  {
+        // Send the ChangeGroupAssignPre event
+        Events::SendEvent('Core', 'ChangeGroupAssignPre',
+                          array('group' => $thisGroup,
+                                'users' => $userops->LoadUsersInGroup($thisGroup->id)));
+        $query = "DELETE FROM ".cms_db_prefix()."user_groups WHERE group_id = ? AND user_id != ?";
+        $result = $db->Execute($query, array($thisGroup->id,$userid));
+        $iquery = "INSERT INTO ".cms_db_prefix().
+            "user_groups (group_id, user_id, create_date, modified_date) VALUES (?,?,NOW(),NOW())";
 
-    foreach($groups as $thisGroup)
-      {
-	if( $thisGroup->id <= 0 ) continue;
+        foreach ($_POST as $key=>$value)
+        {
+            if (strpos($key,"ug") == 0 && strpos($key,"ug") !== false)
+            {
+                $keyparts = explode('_',$key);
+                if ($keyparts[2] == $thisGroup->id && $value == '1')
+                {
+                    $result = $db->Execute($iquery, array($thisGroup->id, (int) $keyparts[1]) );
+                }
+            }
+        }
 
-	// Send the ChangeGroupAssignPre event
-	Events::SendEvent('Core', 'ChangeGroupAssignPre',
-			  array('group' => $thisGroup,
-				'users' => $userops->LoadUsersInGroup($thisGroup->id)));
-	$query = "DELETE FROM ".cms_db_prefix()."user_groups WHERE group_id = ? AND user_id != ?";
-	$result = $db->Execute($query, array($thisGroup->id,$userid));
-	$iquery = "INSERT INTO ".cms_db_prefix().
-	  "user_groups (group_id, user_id, create_date, modified_date) VALUES (?,?,?,?)";
-
-	foreach ($_POST as $key=>$value)
-	  {
-	    if (strpos($key,"ug") == 0 && strpos($key,"ug") !== false)
-	      {
-		$keyparts = explode('_',$key);
-		if ($keyparts[2] == $thisGroup->id && $value == '1')
-		  {
-		    $result = $db->Execute($iquery, array($thisGroup->id,
-							  $keyparts[1],$db->DBTimeStamp(time()),$db->DBTimeStamp(time())));
-		  }
-	      }
-	  }
-
-	Events::SendEvent('Core', 'ChangeGroupAssignPost',
-			  array('group' => $thisGroup,
-				'users' => $userops->LoadUsersInGroup($thisGroup->id)));
-	// put mention into the admin log
-	audit($group_id, 'Assignment Group ID: '.$group_id, 'Changed');
-      }
+        Events::SendEvent('Core', 'ChangeGroupAssignPost',
+                          array('group' => $thisGroup,
+                                'users' => $userops->LoadUsersInGroup($thisGroup->id)));
+        // put mention into the admin log
+        audit($group_id, 'Assignment Group ID: '.$group_id, 'Changed');
+    }
 
     // put mention into the admin log
 	audit($userid, 'Assignment User ID: '.$userid, 'Changed');

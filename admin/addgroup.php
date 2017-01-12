@@ -29,10 +29,10 @@ check_login();
 $error = "";
 
 $group= "";
-if (isset($_POST["group"])) $group = $_POST["group"];
+if (isset($_POST["group"])) $group = cleanValue($_POST["group"]);
 
 $description= "";
-if (isset($_POST["description"])) $description = $_POST["description"];
+if (isset($_POST["description"])) $description = cleanValue($_POST["description"]);
 
 $active = 1;
 if (!isset($_POST["active"]) && isset($_POST["addgroup"])) $active = 0;
