@@ -53,7 +53,7 @@ if (!isset($_SERVER['REQUEST_URI']) && isset($_SERVER['QUERY_STRING'])) {
 	$_SERVER['REQUEST_URI'] = $_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING'];
 }
 
-if (!file_exists(CONFIG_FILE_LOCATION) || filesize(CONFIG_FILE_LOCATION) < 100) {
+if (!isset($CMS_INSTALL_PAGE) && (!file_exists(CONFIG_FILE_LOCATION) || filesize(CONFIG_FILE_LOCATION) < 100)) {
     die ('FATAL ERROR: config.php file not found or invalid');
 }
 
@@ -174,12 +174,12 @@ if (!isset($_SERVER['REQUEST_URI'])) {
     if(isset($_SERVER['QUERY_STRING'])) $_SERVER['REQUEST_URI'] .= '?'.$_SERVER['QUERY_STRING'];
 }
 
-#Load all installed module code
 if (! isset($CMS_INSTALL_PAGE)) {
     // Set a umask
     $global_umask = cms_siteprefs::get('global_umask','');
     if( $global_umask != '' ) umask( octdec($global_umask) );
 
+    // Load all eligible modules
     debug_buffer('Loading Modules');
     $modops = ModuleOperations::get_instance();
     $modops->LoadModules(!isset($CMS_ADMIN_PAGE));
