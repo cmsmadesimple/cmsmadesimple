@@ -415,29 +415,26 @@ $lang['help_function_content_image'] = <<<EOT
 <p>Just insert the tag into your page template like: <code>{content_image block='image1'}</code>.</p>
 <h3>What parameters does it take?</h3>
 <ul>
-  <li><strong>(required)</strong> block='' - The name for this additional content block.
-  <p>Example:</p>
-  <pre>{content_image block='image1'}</pre><br/>
+  <li><strong>(required)</strong> block (string) - The name for this additional content block.
+    <p>Example:</p>
+    <pre>{content_image block='image1'}</pre><br/>
   </li>
-  <li><em>(optional)</em> label='' - A label or prompt for this content block in the edit content page.  If not specified, the block name will be used.</li>
-  <li><em>(optional)</em> dir='' - The name of a directory (relative to the uploads directory, from which to select image files. If not specified, the preference from the global settings page will be used.  If that preference is empty, the uploads directory will be used.
+  <li><em>(optional)</em> label (sring) - A label or prompt for this content block in the edit content page.  If not specified, the block name will be used.</li>
+  <li><em>(optional)</em> dir (string) - The name of a directory (relative to the uploads directory, from which to select image files. If not specified, the preference from the global settings page will be used.  If that preference is empty, the uploads directory will be used.
   <p>Example: use images from the uploads/images directory.</p>
-  <pre>{content_image block='image1' dir='images'}</pre><br/>
+  <pre><code>{content_image block='image1' dir='images'}</code></pre><br/>
   </li>
-  <li><em>(optional)</em> class='' - The css class name to use on the img tag in frontend display.</li>
-  <li><em>(optional)</em> default='' - Use to set a default image used when no image is selected.</li>
-  <li><em>(optional)</em> id='' - The id name to use on the img tag in frontend display.</li>
-  <li><em>(optional)</em> name='' - The tag name to use on the img tag in frontend display.</li>
-  <li><em>(optional)</em> width='' - The desired width of the image.</li>
-  <li><em>(optional)</em> height='' - The desired height of the image.</li>
-  <li><em>(optional)</em> alt='' - Alternative text if the image cannot be found.</li>
-  <li><em>(optional)</em> urlonly='' - output only the url to the image, ignoring all parameters like id, name, width, height, etc.</li>
-  <li><em>(optional)</em> tab='' - The desired tab to display this field on in the edit form..</li>
-  <li><em>(optional)</em> exclude='' - Specify a prefix of files to exclude.  i.e: thumb_</li>
-  <li><em>(optional)</em> sort='' - optionally sort the options. Default is to not sort.</li>
+  <li><em>(optional)</em> default (string) - Use to set a default image used when no image is selected.</li>
+  <li><em>(optional)</em> urlonly (bool) - output only the url to the image, ignoring all parameters like id, name, width, height, etc.</li>
+  <li><em>(optional)</em> tab (string) The desired tab to display this field on in the edit form..</li>
+  <li><em>(optional)</em> exclude (string) - Specify a prefix of files to exclude.  i.e: thumb_ </li>
+  <li><em>(optional)</em> sort (bool) - optionally sort the options. Default is to not sort.</li>
   <li><em>(optional)</em> priority (integer) - Allows specifying an integer priority for the block within the tab.</li>
-  <li><em>(optional)</em> assign='' (string) - Assign the results to a smarty variable with that name.</li>
+  <li><em>(optional)</em> assign (string) - Assign the results to a smarty variable with that name.</li>
 </ul>
+<h3>More...</h3>
+<p><strong>Note:</strong> As of version 2.2, if this content block contains no value, then no output is generated.</p>
+                                                            <p>In addition to the arguments listed above, this plugin will accept any number of additional arguments and forward them directly to the generated img tag if any.  i.e: <code>{content_image block='img1' id="id_img1" class="page-image" title='an image block' data-foo=bar}</code>
 EOT;
 
 $lang['help_function_process_pagedata'] = <<<EOT

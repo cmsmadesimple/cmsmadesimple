@@ -109,8 +109,8 @@ final class CMS_Content_Block
         // {content_image} tag encountered.
         if( !isset($params['block']) || empty($params['block']) ) throw new CmsEditContentException('{content_image} tag requires block parameter');
 
-        $rec = array('type'=>'image','id'=>'','name'=>'','label'=>'','upload'=>true,'dir'=>'','default'=>'','tab'=>'',
-                     'priority'=>'','exclude'=>'','sort'=>0, 'profile'=>'');
+        $rec = [ 'type'=>'image','name'=>'','label'=>'','upload'=>true,'dir'=>'','default'=>'','tab'=>'',
+                 'priority'=>'','exclude'=>'','sort'=>0, 'profile'=>'' ];
         foreach( $params as $key => $value ) {
             if( $key == 'type' ) continue;
             if( $key == 'block' ) $key = 'name';
@@ -119,9 +119,9 @@ final class CMS_Content_Block
 
         if( !$rec['name'] ) {
             $n = count(self::$_contentBlocks)+1;
-            $rec['id'] = $rec['name'] = 'image_'+$n;
+            $rec['name'] = 'image_'+$n;
         }
-        if( !$rec['id'] ) $rec['id'] = str_replace(' ','_',$rec['name']);
+        if( empty($rec['id']) ) $rec['id'] = str_replace(' ','_',$rec['name']);
         if( !$rec['priority'] ) {
             if( !self::$_priority ) self::$_priority = 100;
             $rec['priority'] = self::$_priority++;
@@ -305,6 +305,7 @@ final class CMS_Content_Block
 
     public static function smarty_fetch_imageblock($params,&$smarty)
     {
+        $ignored = [ 'block','type','name','label','upload','dir','default','tab','priority','exclude','sort', 'profile', 'urlonly','assign' ];
         $gCms = CmsApp::get_instance();
         $contentobj = $gCms->get_content_object();
         if( !is_object($contentobj) || $contentobj->Id() <= 0 ) return self::content_return('', $params, $smarty);
@@ -325,44 +326,41 @@ final class CMS_Content_Block
         $img = $result;
 
         $out = null;
-        if( startswith(realpath($dir),realpath($basename)) ) {
+        if( $img && startswith(realpath($dir),realpath($basename)) ) {
             if( ($img == -1 || empty($img)) && isset($params['default']) && $params['default'] ) $img = $params['default'];
 
             if( $img != -1 && !empty($img) ) {
                 // create the absolute url.
-                $img = $config['uploads_url'] . '/'.$adddir.'/'.$img;
+                $orig_val = $img;
+                $img = $config['uploads_url'].'/'.$img;
+                /*
                 if( startswith($img,$basename) ) {
                     // old style url.
                     if( !startswith($img,'http') ) $img = str_replace('//','/',$img);
                     $img = substr($img,strlen($basename.'/'));
-                    $img = $config['uploads_url'] . '/'.$img;
+                    $img = $config['uploads_url'] . $img;
                 }
+                */
 
-                $alt = '';
-                $width = '';
-                $height = '';
-                $urlonly = false;
-                $xid = '';
-                $class = '';
-                if( isset($params['class']) ) $class = $params['class'];
-                if( isset($params['id']) ) $xid = $params['id'];
-                if( isset($params['alt']) ) $alt = $params['alt'];
-                if( isset($params['width']) ) $width = $params['width'];
-                if( isset($params['height']) ) $height = $params['height'];
-                if( isset($params['urlonly']) ) $urlonly = true;
-                if( !isset($params['alt']) ) $alt = $img;
-
-                $out = '';
+                $urlonly = cms_to_bool(get_parameter_value($params,'urlonly'));
                 if( $urlonly ) {
                     $out = $img;
                 }
                 else {
-                    $out = '<img src="'.$img.'" ';
-                    if( !empty($class) ) $out .= 'class="'.$class.'" ';
-                    if( !empty($xid) ) $out .= 'id="'.$xid.'" ';
-                    if( !empty($width) ) $out .= 'width="'.$width.'" ';
-                    if( !empty($height) ) $out .= 'height="'.$height.'" ';
-                    if( !empty($alt) ) $out .= 'alt="'.$alt.'" ';
+                    $tagparms = [];
+                    foreach( $params as $key => $val ) {
+                        $key = trim($key);
+                        if( !$key ) continue;
+                        $val = trim($val);
+                        if( !$val ) continue;
+                        if( in_array($key,$ignored) ) continue;
+                        $tagparms[$key] = $val;
+                    }
+
+                    $out = "<img src=\"$img\"";
+                    foreach( $tagparms as $key => $val ) {
+                        $out .= " $key=\"$val\"";
+                    }
                     $out .= '/>';
                 }
             }
