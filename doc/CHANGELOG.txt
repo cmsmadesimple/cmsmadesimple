@@ -75,6 +75,7 @@ Core - General
   - Now use HTTPS for the latest version check
   - Adds the public_cache_url config entry,  and make sure that the css_url uses that by default.
   - Adds many core hooks
+  - Enhance the page_image tag to optionally output a full HTML img tag if there is a value for the respective property.
 
   - #11080 - Parameter $adding in GetContentBlockFieldInput always FALSE.
   - #11093 - Bad error message in jquery.cmsms_autorefresh.js.

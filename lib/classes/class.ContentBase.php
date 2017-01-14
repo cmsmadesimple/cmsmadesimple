@@ -606,7 +606,9 @@ abstract class ContentBase
 	 */
 	public function SetParentId($parentid)
 	{
-		$this->mParentId = (int)$parentid;
+        $parentid = (int) $parentid;
+        if( $parentid < 1 ) $parentid = -1;
+		$this->mParentId = $parentid;
 	}
 
 	/**

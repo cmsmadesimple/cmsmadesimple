@@ -18,28 +18,55 @@
 
 function smarty_function_page_image($params, &$smarty)
 {
-	$result = null;
-    $full = false;
-	$propname = 'image';
+    $get_bool = function(array $params,$key,$dflt) {
+        if( !isset($params[$key]) ) return (bool) $dflt;
+        if( empty($params[$key]) ) return (bool) $dflt;
+        return (bool) cms_to_bool($params[$key]);
+    };
 
-    if( isset($params['full']) ) $full = 1;
-	if( isset($params['thumbnail']) ) $propname = 'thumbnail';
+    $full = $get_bool($params,'full',false);
+    $thumbnail = $get_bool($params,'thumbnail',false);
+    $tag = $get_bool($params,'tag',false);
+    $assign = trim(get_parameter_value($params,'assign'));
+    unset($params['full'], $params['thumbnail'], $params['tag'], $params['assign']);
+
+	$propname = 'image';
+    if( $thumbnail ) $propname = 'thumbnail';
+    if( $tag ) $full = true;
 
 	$contentobj = cms_utils::get_current_content();
+    $val = null;
 	if( is_object($contentobj) ) {
-		$result = $contentobj->GetPropertyValue($propname);
-		if( $result == -1 ) $result = '';
-    }
-    if( $result && $full ) {
-        $config = \cms_config::get_instance();
-        $result = $config['image_uploads_url'].'/'.$result;
+		$val = $contentobj->GetPropertyValue($propname);
+		if( $val == -1 ) $val = null;
     }
 
-	if( isset($params['assign']) ) {
-		$smarty->assign($params['assign'],$result);
+    $out = null;
+    if( $val ) {
+        $orig_val = $val;
+        $config = \cms_config::get_instance();
+        if( $full ) $val = $config['image_uploads_url'].'/'.$val;
+        if( ! $tag ) {
+            $out = $val;
+        } else {
+            if( !isset($params['alt']) ) $params['alt'] = $orig_val;
+            // build a tag.
+            $out = "<img src=\"$val\"";
+            foreach( $params as $key => $val ) {
+                $key = trim($key);
+                $val = trim($val);
+                if( !$key ) continue;
+                $out .= " $key=\"$val\"";
+            }
+            $out .= "/>";
+        }
+    }
+
+	if( $assign ) {
+		$smarty->assign($assign,$out);
 		return;
     }
-	return $result;
+	return $out;
 }
 
 function smarty_cms_about_function_page_image() {

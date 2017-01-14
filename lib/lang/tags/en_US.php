@@ -382,10 +382,14 @@ $lang['help_function_page_image'] = <<<EOT
 <p>Insert the tag into the template like: <code>{page_image}</code>.</p>
 <h3>What parameters does it take?</h3>
 <ul>
-  <li><em>(optional)</em> thumbnail - Optionally display the value of the thumbnail property instead of the image property.</li>
-  <li><em>(optional)</em> full - Optionally output the full URL to the image relative to the image uploads path.</li>
+  <li><em>(optional)</em> thumbnail (bool) - Optionally display the value of the thumbnail property instead of the image property.</li>
+  <li><em>(optional)</em> full (bool)- Optionally output the full URL to the image relative to the image uploads path.</li>
+   <li><em>(optional)</em> tag (bool) - Optionally output a full image tag, if the property value is not empty.  If the tag argument is enabled, full is implied.</li>
   <li><em>(optional)</em> assign (string) - Assign the results to a smarty variable with that name.</li>
 </ul>
+<h3>More...</h3>
+<p>If the tag argument is enabled, and the property value is not empty, this will trigger a full HTML img tag to be output.  Any arguments to the plugin not listed above will automatically be included in the resulting img tag.  i.e:  <code>{page_image tag=true class="pageimage" id="someid" title="testing"}</code>.</p>
+<p>If the plugin is outputting a full img tag, and the alt argument has not been provided, then the value of the property will be used for the alt attribute of the img tag.</p>
 EOT;
 
 $lang['help_function_dump'] = <<<EOT
