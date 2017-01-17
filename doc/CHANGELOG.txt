@@ -77,6 +77,7 @@ Core - General
   - Adds many core hooks
   - Enhance the {page_image} plugin to optionally output a full HTML img tag if there is a value for the respective property.
   - Improve the {content_image} plugin to output nothing if there is no value for the property, and to output any non-internal arguments as attributes to the HTML img tag.
+  - Upgrade to an un-modified version of smarty v3.1.31
 
   - #11080 - Parameter $adding in GetContentBlockFieldInput always FALSE.
   - #11093 - Bad error message in jquery.cmsms_autorefresh.js.
