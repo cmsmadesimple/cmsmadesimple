@@ -660,9 +660,11 @@ function returnBytes( $val )
 {
 	if(is_string($val) && $val != '') {
 		$val = trim($val);
-		$last = strtolower(substr($val, strlen($val/1), 1));
+		$last = strtolower($val[strlen($val)-1]);
+		if( $last < '<' || $last > 9 ) $val = substr($val,0,-1);
+		$val = (int) $val;
 		switch($last) {
-			case 'g':
+		 	case 'g':
 				$val *= 1024;
 			case 'm':
 				$val *= 1024;

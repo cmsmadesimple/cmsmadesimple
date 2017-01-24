@@ -115,7 +115,7 @@ final class CmsAdminMenuItem
     public function valid()
     {
         foreach( self::$_keys as $ok ) {
-            if( $ok == 'icon' || $ok == 'system' || $ok == 'priority' || $ok == 'url' ) continue;  // we don't care if this is set.
+            if( $ok == 'icon' || $ok == 'system' || $ok == 'priority' || $ok == 'description' || $ok == 'url' ) continue;  // we don't care if this is set.
             if( !isset($this->_data[$ok]) ) return FALSE;
         }
         return TRUE;
