@@ -1047,6 +1047,7 @@ $lang['info_group_inactive'] = "This group is inactive.  Members of this group w
 $lang['info_mailtest'] = "This form will send a pre formatted email to the address you specify.<br/>If you do not receive the mail you may need to re-check your settings.<br/><strong>Note:</strong> you may also want to check your spam folder.";
 $lang['info_mail_notset'] = "Mail settings have not yet been saved. Please ensure the information in Site Admin >> Settings - Global Settings >> Mail Settings tab is correct for your server.";
 $lang['info_membergroups'] = "A user may be a member of zero or more groups.  A user who is not a member of any groups will still be able to login to the Admin console";
+$lang['info_noalerts'] = 'There are no alerts at this time';
 $lang['info_noedituser'] = "Although this user account exists, your permissions do not permit you to manage that account";
 $lang['info_pagealias'] = "Specify a unique alias for this page.";
 $lang['info_pagedefaults'] = "This form allows specifying various options as to the initial settings when creating new content pages.  The items in this page have no effect when editing existing pages";
