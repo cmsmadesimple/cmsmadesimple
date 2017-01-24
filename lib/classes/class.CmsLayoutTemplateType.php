@@ -574,7 +574,7 @@ class CmsLayoutTemplateType
         if( $originator == self::CORE ) {
             // it's a core page template, or generic
         } else {
-            $module = \cms_utils::get_module($orignator);
+            $module = \cms_utils::get_module($originator);
             if( $module ) {
                 if( method_exists($module,'get_templatetype_help') ) {
                     $text = $module->get_templatetype_help($name);
