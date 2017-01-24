@@ -33,7 +33,7 @@ class CmsSecurityCheckTask implements CmsRegularTask
             $alert->name = __CLASS__.'config'; // so that there can only ever be one alert of this type at a time.
             $alert->msgkey = 'config_writable';
             $alert->priority = $alert::PRIORITY_HIGH;
-            $alert->title = lang('security_issue');
+            $alert->titlekey = 'security_issue';
             $alert->save();
         }
 
@@ -47,7 +47,7 @@ class CmsSecurityCheckTask implements CmsRegularTask
             $alert->msgkey = 'installfileexists';
             $alert->msgargs = $fn;
             $alert->priority = $alert::PRIORITY_HIGH;
-            $alert->title = lang('security_issue');
+            $alert->titlekey = 'security_issue';
             $alert->save();
         }
 
@@ -58,7 +58,7 @@ class CmsSecurityCheckTask implements CmsRegularTask
             $alert->name = __CLASS__.'mail';
             $alert->msgkey = 'info_mail_notset';
             $alert->priority = $alert::PRIORITY_HIGH;
-            $alert->title = lang('config_issue');
+            $alert->titlekey = 'config_issue';
             $alert->save();
         }
         return TRUE;
