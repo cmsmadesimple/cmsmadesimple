@@ -7,6 +7,8 @@ $lang['add_profile'] = 'Add a new Profile';
 $lang['can_delete'] = 'Allow file deletion';
 $lang['can_mkdir'] = 'Allow directory creation';
 $lang['can_upload'] = 'Uploads allowed';
+$lang['changedir'] = 'Change directory to';
+$lang['create_dir'] = 'Create a new folder';
 
 // D
 $lang['delete'] = 'Delete';
@@ -39,7 +41,10 @@ $lang['ok'] = 'Ok';
 
 
 // S
+$lang['select_upload_files'] = 'Select files to upload';
 $lang['show_thumbs'] = 'Show thumbnails';
+$lang['switchgrid'] = 'Display files in a grid';
+$lang['switchlist'] = 'Display files as a list';
 
 // T
 $lang['th_created'] = 'Created';
@@ -51,6 +56,11 @@ $lang['th_reltop'] = 'Top Directory';
 $lang['title_mkdir'] = 'Create Directory';
 $lang['topdir'] = 'Top Directory';
 
+// U
+$lang['upload'] = 'Upload';
+
+// Y
+$lang['youareintext'] = 'The current working directory (relative to the top of the installation)';
 
 // HELP TEXT
 $lang['help'] = <<<EOT
