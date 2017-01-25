@@ -393,7 +393,9 @@ final class filemanager_utils
     {
         if(is_string($val) && $val != '') {
             $val = trim($val);
-            $last = strtolower(substr($val, strlen($val/1), 1));
+            $last = strtolower($val[strlen($val)-1]);
+            if( $last < '<' || $last > 9 ) $val = substr($val,0,-1);
+            $val = (int) $val;
             switch($last) {
             case 'g':
                 $val *= 1024;
@@ -409,7 +411,7 @@ final class filemanager_utils
 
     public static function get_dirlist()
     {
-        $config = cmsms()->GetConfig();
+        $config = CmsApp::get_instance()->GetConfig();
         $mod = cms_utils::get_module('FileManager');
         $showhiddenfiles = $mod->GetPreference('showhiddenfiles');
         $startdir = $config['uploads_path'];
@@ -440,8 +442,15 @@ final class filemanager_utils
 
         $output = fmutils_get_dirs($startdir,'/');
         if( is_array($output) && count($output) ) {
-            $output['/'.basename($startdir)] = '/'.basename($startdir);
             ksort($output);
+            $tmp = [];
+            if( $advancedmode ) {
+                $tmp['/'] = '/'.basename($startdir).' ('.$mod->Lang('site_root').')';
+            }
+            else {
+                $tmp['/'] = '/'.basename($startdir).' ('.$mod->Lang('top').')';
+            }
+            $output = array_merge($tmp,$output);
         }
         return $output;
     }

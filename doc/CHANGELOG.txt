@@ -151,6 +151,7 @@ FileManager v1.6.3
   - Adds 'view raw file' icon in each viewable row.
   - Minor formatting changes in file list.
   - Now display clickable path entries for easier navigation.
+  - Minor fix to move file functionality.
 
 Search
   - Convert to store all data using the InnoDB engine.

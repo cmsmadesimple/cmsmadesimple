@@ -270,6 +270,7 @@ $lang['singledirdeletefail'] = 'An error occurred when trying to delete the dire
 $lang['singledirdeletesuccess'] = 'The directory  was successfully deleted';
 $lang['singlefiledeletefail'] = 'An error occurred when trying to delete the file';
 $lang['singlefiledeletesuccess'] = 'The file was successfully deleted';
+$lang['site_root'] = 'Root';
 $lang['smallicons'] = 'Small icons';
 $lang['space'] = 'space';
 $lang['subdir'] = 'subdirectory';
@@ -304,6 +305,7 @@ $lang['thumberror'] = 'Problem creating thumbnail';
 $lang['thumbnail'] = 'Create Thumbnail';
 $lang['thumbsuccess'] = 'Thumbnail successfully created';
 $lang['toggle'] = 'Toggle selection';
+$lang['top'] = 'Top';
 
 // U
 $lang['uninstalled'] = 'The FileManager module is uninstalled';
