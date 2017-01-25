@@ -17,6 +17,22 @@
 							<span class="js-trigger view-grid filepicker-button active" title="{$mod->Lang('switchgrid')}"><i class="cmsms-fp-th"></i></span>
 						</p>
 					</div>
+					<div class="filepicker-options">
+						<p>
+							{if $profile->can_mkdir}
+							<span class="filepicker-button make-dir filepicker-cmd" data-cmd="mkdir" title="{$mod->Lang('create_dir')}">
+								<span class="filepicker-icon-stack">
+									<i class="cmsms-fp-folder-close filepicker-icon-stack-1x"></i>
+									<i class="cmsms-fp-folder-plus filepicker-icon-stack-1x">+</i>
+								</span>
+							</span>
+							{/if}
+							<span class="filepicker-button upload-file btn-file">
+							   <i class="cmsms-fp-upload"></i> {$mod->Lang('upload')}
+							   <input id="filepicker-file-upload" type="file" multiple="" title="{$mod->Lang('select_upload_files')}">
+							</span>
+						</p>
+					</div>
 					{$type=$profile->type|default:'any'}{if $type == 'any'}
 					<div class="filepicker-type-filter">
 						<p><span class="filepicker-option-title">{$mod->Lang('filterby')}:&nbsp;</span>
@@ -34,9 +50,7 @@
 			<div class="filepicker-container">
 				<div class="filepicker-breadcrumb">
 					<p title="{$mod->Lang('youareintext')}:"><i class="cmsms-fp-folder-open filepicker-icon"></i> {$cwd_for_display}</p>
-					{if $profile->can_mkdir}
-					<span class="filepicker-button filepicker-cmd" data-cmd="mkdir"><i class="cmsms-fp-mkdir">MD</i></span>
-					{/if}
+
 				</div>
 				<div id="filelist">
 					<ul class="filepicker-list" id="filepicker-items">
@@ -60,7 +74,11 @@
 						{foreach $files as $file}
 						<li class="filepicker-item{if $file.isdir} dir{else} {$file.filetype}{/if}" title="{if $file.isdir}{$mod->Lang('dirinfo')}: {/if}{$file.name}" data-fb-ext='{$file.ext}' data-fb-fname="{$file.name}">
 							<div class="filepicker-thumb{if (isset($file.thumbnail) && $file.thumbnail != '') || $file.isdir || $file.is_thumb} no-background{/if}">
-							{if $profile->can_delete && !$file.isparent}<span class="filepicker-cmd cmsms-fp-delete" data-cmd="del" title="{$mod->Lang('delete')}">[x]</span>{/if}
+							{if $profile->can_delete && !$file.isparent}
+								<span class="filepicker-delete filepicker-cmd cmsms-fp-delete" data-cmd="del" title="{$mod->Lang('delete')}">
+									<i class="cmsms-fp-close"></i>
+								</span>
+							{/if}
 							{if $profile->show_thumbs && isset($file.thumbnail) && $file.thumbnail != ''}
 								<a class="filepicker-file-action js-trigger-insert" href="{$file.relurl}" title="{if $file.isdir}{$mod->Lang('dirinfo')}: {/if}{$file.name}">{$file.thumbnail}</a>
 							{elseif $profile->show_thumbs && $file.is_thumb}
@@ -104,6 +122,11 @@
 								<span class="filepicker-file-ext">
 									{if !$file.isdir}{$file.ext}{else}dir{/if}
 								</span>
+								{if $profile->can_delete && !$file.isparent}
+									<span class="filepicker-delete filepicker-cmd cmsms-fp-delete" data-cmd="del" title="{$mod->Lang('delete')}">
+										<i class="cmsms-fp-close"></i>
+									</span>
+								{/if}
 							</div>
 						</li>
 						{/foreach}
@@ -114,18 +137,19 @@
 	</body>
 	{/strip}
 	{cms_jquery exclude='cms_js_setup,ui_touch_punch,nestedSortable,json,migrate,cms_admin,cms_autorefresh,cms_dirtyform,cms_hiersel,cms_lock,cms_filepicker' append="`$mod->GetModuleURLPath()`/lib/js/cmsms_filebrowser/filebrowser.js"}
-        <script type="text/javascript">
-	if( !top.document.CMSFileBrowser ) top.document.CMSFileBrowser = {};
-	top.document.CMSFileBrowser.cmd_url = '{cms_action_url action=ajax_cmd forjs=1}&showtemplate=false';
-	top.document.CMSFileBrowser.cwd = '{$cwd}';
-	top.document.CMSFileBrowser.sig = '{$sig}';
-	top.document.CMSFileBrowser.inst = '{$inst}';
-        top.document.CMSFileBrowser.lang = {$lang_js};
-        </script>
+  	<script type="text/javascript">
+		if( !top.document.CMSFileBrowser ) top.document.CMSFileBrowser = {};
+		top.document.CMSFileBrowser.cmd_url = '{cms_action_url action=ajax_cmd forjs=1}&showtemplate=false';
+		top.document.CMSFileBrowser.cwd = '{$cwd}';
+		top.document.CMSFileBrowser.sig = '{$sig}';
+		top.document.CMSFileBrowser.inst = '{$inst}';
+      top.document.CMSFileBrowser.lang = {$lang_js};
+  	</script>
 
-        <div id="mkdir_dlg" title="{$mod->Lang('title_mkdir')}" style="display: none;" data-oklbl="{$mod->Lang('ok')}">
-	  <div class="dlg-options">
-             <label>{$mod->Lang('name')}: <input type="text" id="fld_mkdir"size="40"/>
-          </div>
-        </div>
+  	<div id="mkdir_dlg" title="{$mod->Lang('title_mkdir')}" style="display: none;" data-oklbl="{$mod->Lang('ok')}">
+		<div class="dlg-options">
+       	<label>{$mod->Lang('name')}: <input type="text" id="fld_mkdir" size="40"/>
+    	</div>
+  	</div>
+
 </html>

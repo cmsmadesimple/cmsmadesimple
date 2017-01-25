@@ -145,7 +145,7 @@
 	    width: 'auto',
 	    buttons: [
 		 {
-		     text: CMSFileBrowser.settings.oklbl,
+		     text: $('#mkdir_dlg').data('oklbl'),
 		     icons: {
 			 primary: 'ui-icon-check'
 		     },
@@ -165,4 +165,5 @@
 	    ]
 	});
     }
+
 })(jQuery);
