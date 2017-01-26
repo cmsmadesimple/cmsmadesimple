@@ -214,9 +214,10 @@ abstract class Alert
      *
      * @return string
      */
-    public function get_prefname()
+    public function get_prefname($name = null)
     {
-        return 'adminalert_'.md5($this->name);
+        if( !$name ) $name = $this->name;
+        return 'adminalert_'.md5($name);
     }
 
     /**
@@ -263,7 +264,7 @@ abstract class Alert
     {
         $name = trim($name);
         if( !$name ) throw new \InvalidArgumentException('Invalid alert name passed to '.__METHOD__);
-        $tmp = \cms_siteprefs::get($name);
+        $tmp = \cms_siteprefs::get($this->get_prefname($name));
         if( !$tmp ) throw new \LogicException('Could not find an alert with the name '.$name);
 
         $obj = self::decode_object($tmp);

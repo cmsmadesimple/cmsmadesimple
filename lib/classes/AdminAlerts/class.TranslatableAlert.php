@@ -144,8 +144,6 @@ class TranslatableAlert extends Alert
      */
     protected function is_for($admin_uid)
     {
-        debug_to_log('checking for '.$admin_uid,__METHOD__);
-        debug_to_log($this->_perms,'permissions');
         $admin_uid = (int) $admin_uid;
         if( !count($this->_perms) ) return FALSE;
         $userops = \UserOperations::get_instance();
