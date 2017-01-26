@@ -6,12 +6,16 @@ Core - General
   - Fix issue with deactivating users in the edit user form.
   - Fix issue with change group assign.
   - A bit more intelligence to the {form_start} plugin wrt. detecting the action.
+  - Minor fix to the cms_admin jquery plugin.
 
 ModuleManager v2.0.5.1
   - Modify default repository to use HTTPS
 
 DesignManager v1.1.2
   - No longer cache url for menu items.
+
+CMSContentManager v1.1.5
+  - Minor fixes to expand/collapse functionality.
 
 News v2.56.7
   - No longer cache url for menu items.
