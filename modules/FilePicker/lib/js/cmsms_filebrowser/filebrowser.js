@@ -93,6 +93,9 @@
 		    'cwd': settings.cwd,
 		    'inst': settings.inst,
 		    'sig': settings.sig,
+		},
+		stop: function(ev,data) {
+                    alert('upload complete');
 		}
 	    });
 	};
@@ -130,7 +133,7 @@
 		    var url = window.location.href+'&nosub=1';
 		    window.location.href = url;
 		}).fail(function(jqXHR,textStatus,msg){
-		    alert('fail ajax '+msg);
+		    console.debug('filepicker command failed: '+msg);
 		})
 	    }
 	};
@@ -152,7 +155,7 @@
 				var url = window.location.href+'&nosub=1';
 				window.location.href = url;
 			    }).fail(function(jqXHR,textStatus,msg){
-				alert('fail ajax '+msg);
+				console.debug('filepicker mkdir failed: '+msg);
 			    })
 			    // ajax call to create the directory
 			    // then ajax call to refresh the screen
