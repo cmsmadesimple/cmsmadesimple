@@ -606,6 +606,7 @@ final class ModuleOperations
 
         $obj = null;
         $classname = self::get_module_classname($module_name);
+
         $obj = new $classname;
         if( !is_object($obj) || ! $obj instanceof \CMSModule ) {
             // oops, some problem loading.
@@ -902,6 +903,9 @@ final class ModuleOperations
                         if( $alert->module == $module ) $alert->delete();
                     }
                 }
+
+                $jobmgr = \ModuleOperations::get_instance()->get_module_instance('CmsJobManager');
+                if( $jobmgr ) $jobmgr->delete_jobs_by_module( $module );
 
                 $db->Execute('DELETE FROM '.CMS_DB_PREFIX.'module_smarty_plugins where module=?',array($module));
                 $db->Execute('DELETE FROM '.CMS_DB_PREFIX."siteprefs WHERE sitepref_name LIKE '". str_replace("'",'',$db->qstr($module))."_mapi_pref%'");
