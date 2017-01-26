@@ -1,5 +1,6 @@
     /*jslint nomen: true , devel: true*/
     function CMSFileBrowser(_settings) {
+        this.self = this;
 	var self = this;
 	var settings = _settings;
 	if( top.document.CMSFileBrowser ) {
@@ -126,7 +127,7 @@
 	    $('.filepicker-cmd').on('click',function(ev) {
 		var $trigger = $(this), $data = $trigger.data();
 		var fun = '_cmd_'+$data.cmd;
-		if( typeof(fun) != 'undefined' ) fun(ev);
+		if( typeof(self[fun]) != 'undefined' ) self[fun](ev);
 	    });
 	};
 
@@ -144,7 +145,7 @@
 	    })
 	};
 
-	function _cmd_del(ev) {
+	this._cmd_del = function(ev) {
 	    ev.preventDefault();
 	    var target = ev.target.closest('.filepicker-item');
 	    var file = $(target).data('fb-fname');
@@ -158,7 +159,7 @@
 	    }
 	};
 
-	function _cmd_mkdir(ev) {
+	this._cmd_mkdir = function(ev) {
 	    ev.preventDefault();
 	    $('#mkdir_dlg').dialog({
 		modal: true,
