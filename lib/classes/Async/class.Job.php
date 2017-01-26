@@ -1,9 +1,7 @@
 <?php
 #BEGIN_LICENSE
 #-------------------------------------------------------------------------
-# Module: \CMSMS\Database\Connection (c) 2016 by Robert Campbell
-#         (calguy1000@cmsmadesimple.org)
-#  A class to define interaction with a database.
+# \CMSMS\Async\Job (c) 2016 by Robert Campbell (calguy1000@cmsmadesimple.org)
 #
 #-------------------------------------------------------------------------
 # CMS - CMS Made Simple is (c) 2005 by Ted Kulp (wishy@cmsmadesimple.org)
@@ -47,7 +45,7 @@ namespace CMSMS\Async;
  *
  * @package CMS
  * @author Robert Campbell
- * @copyright Copyright (c) 2015, Robert Campbell <calguy1000@cmsmadesimple.org>
+ * @copyright Copyright (c) 2017, Robert Campbell <calguy1000@cmsmadesimple.org>
  * @since 2.2
  * @property-read int $id A unique integer id for this job (generated on save).
  * @property string $name The name of this job.  If not specified a unique random name will be generated.
