@@ -2,18 +2,11 @@
 namespace CMSMS;
 class FilePickerProfile
 {
-    const TYPE_IMAGE = 'image';
-    const TYPE_AUDIO = 'audio';
-    const TYPE_VIDEO = 'video';
-    const TYPE_XML   = 'xml';
-    const TYPE_DOCUMENT = 'document';
-    const TYPE_ARCHIVE = 'archive';
-    const TYPE_ANY = 'any';
     const FLAG_NONE = 0;
     const FLAG_YES = 1;
     const FLAG_BYGROUP = 2;
 
-    private $_data = [ 'top'=>null, 'type'=>self::TYPE_ANY, 'can_upload'=>self::FLAG_YES, 'show_thumbs'=>1, 'can_delete'=>self::FLAG_YES,
+    private $_data = [ 'top'=>null, 'type'=>FileType::TYPE_ANY, 'can_upload'=>self::FLAG_YES, 'show_thumbs'=>1, 'can_delete'=>self::FLAG_YES,
                        'match_prefix'=>null, 'show_hidden'=>FALSE, 'exclude_prefix'=>null, 'sort'=>TRUE, 'can_mkdir'=>TRUE ];
 
     protected function setValue( $key, $val )
@@ -32,13 +25,13 @@ class FilePickerProfile
         case 'type':
             $val = trim($val);
             switch( $val ) {
-            case self::TYPE_IMAGE:
-            case self::TYPE_AUDIO:
-            case self::TYPE_VIDEO:
-            case self::TYPE_XML:
-            case self::TYPE_DOCUMENT:
-            case self::TYPE_ARCHIVE:
-            case self::TYPE_ANY:
+            case FileType::TYPE_IMAGE:
+            case FileType::TYPE_AUDIO:
+            case FileType::TYPE_VIDEO:
+            case FileType::TYPE_XML:
+            case FileType::TYPE_DOCUMENT:
+            case FileType::TYPE_ARCHIVE:
+            case FileType::TYPE_ANY:
                 $this->_data[$key] = $val;
                 break;
             default:

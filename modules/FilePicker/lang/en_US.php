@@ -12,6 +12,7 @@ $lang['confirm_delete'] = 'Are you sure you want to delete this?';
 $lang['create_dir'] = 'Create a new folder';
 
 // D
+$lang['dimension'] = 'Dimensions';
 $lang['delete'] = 'Delete';
 $lang['delete_profile'] = 'Delete Profile';
 
@@ -21,10 +22,17 @@ $lang['error_ajax_invalidfilename'] = 'Sorry, that filename is invalid';
 $lang['error_ajax_fileexists'] = 'Sorry, a file or directory with that name already exists';
 $lang['error_ajax_mkdir'] = 'A problem occurred creating a the directory %s';
 $lang['error_ajax_writepermission'] = 'Sorry, you do not have permission to write to this directory';
+$lang['error_failed_ajax'] = 'A problem occurred with an ajax request';
+$lang['error_problem_upload'] = 'Sorry, a problem occurred uploading';
+$lang['error_upload_acceptFileTypes'] = 'Files of this type cannot be uploaded';
+$lang['error_upload_maxFileSize'] = 'The file is too large';
+$lang['error_upload_minFileSize'] = 'The file is too small';
+$lang['error_upload_maxNumberOfFiles'] = 'You are uploading too many files at once';
 $lang['err_profile_topdir'] = 'The top directory specified does not exist';
 
 // F
 $lang['fileextensions'] = 'Allowed file extensions';
+$lang['filename'] = 'Filename';
 $lang['filterby'] = 'Filter by';
 $lang['fileview'] = 'File view';
 $lang['friendlyname'] = 'File Picker';
@@ -44,6 +52,7 @@ $lang['ok'] = 'Ok';
 // S
 $lang['select_upload_files'] = 'Select files to upload';
 $lang['show_thumbs'] = 'Show thumbnails';
+$lang['size'] = 'Size';
 $lang['switchgrid'] = 'Display files in a grid';
 $lang['switchlist'] = 'Display files as a list';
 
@@ -56,6 +65,7 @@ $lang['th_name'] = 'Name';
 $lang['th_reltop'] = 'Top Directory';
 $lang['title_mkdir'] = 'Create Directory';
 $lang['topdir'] = 'Top Directory';
+$lang['type'] = 'Type';
 
 // U
 $lang['upload'] = 'Upload';

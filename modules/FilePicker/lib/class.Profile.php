@@ -130,4 +130,24 @@ class Profile extends \CMSMS\FilePickerProfile
         $data = array_merge($data,$this->_data);
         return $data;
     }
+
+    public function is_filename_acceptable( $filename )
+    {
+        if( !parent::is_filename_acceptable( $filename) ) return FALSE;
+        if( !$this->file_extensions ) return FALSE;
+
+        // file must have this extension
+        $ext = strtolower(substr(strrchr($file_name, '.'), 1));
+        if( !$ext ) return FALSE; // uploaded file has no extension.
+        $list = explode(',',$this->_profile->file_extensions);
+
+        foreach( $list as $one ) {
+            $one = strtolower(trim($one));
+            if( !$one ) continue;
+            if( startswith( $one, '.') ) $one = substr($one,1);
+            if( $ext == $one ) return TRUE;
+        }
+        debug_to_log('file type is not accebptable');
+        return FALSE;
+    }
 } // end of class

@@ -20,6 +20,7 @@ use \FilePicker\TemporaryInstanceStorage;
 use \FilePicker\TemporaryProfileStorage;
 use \FilePicker\PathAssistant;
 use \FilePicker\utils;
+use \CMSMS\FileType;
 if( !isset($gCms) ) exit;
 if( !check_login(FALSE) ) exit; // admin only.... but any admin
 
@@ -37,8 +38,9 @@ $nosub = (int) get_parameter_value($_GET,'nosub');
 $profile = null;
 if( $sig ) $profile = TemporaryProfileStorage::get($sig);
 if( !$sig ) $profile = $this->get_default_profile();
-if( $type && $profile ) {
+if( !$sig && $type && $profile ) {
     $profile = $profile->overrideWith( [ 'type'=>$type ] );
+    $sig = TemporaryProfileStorage::set($profile);
 }
 if( !$this->CheckPermission('Modify Files') ) {
     $parms = ['can_upload'=>FALSE, 'can_delete'=>FALSE, 'can_mkdir'=>FALSE ];
@@ -72,38 +74,13 @@ $_SESSION[$sesskey] = $cwd;
 $starturl = $assistant->relative_path_to_url($cwd);
 $startdir = $assistant->to_absolute($cwd);
 
-$is_image = function($filename) {
-    $ext = strtolower(substr($filename,strrpos($filename,'.')+1));
-    if( in_array($ext,array('jpg','jpeg','bmp','wbmp','gif','png','webp')) ) return TRUE;
-    return FALSE;
-};
-
-
-$is_media = function($filename) {
-    $ext = strtolower(substr($filename,strrpos($filename,'.')+1));
-    if( in_array($ext,array('swf','dcr','mov','qt','mpg','mp3','mp4','ogg','mpeg','wmp','avi','wmv',
-                            'wm','asf','asx','wmx','rm','ra','ram')) ) {
-        return TRUE;
-    }
-    return FALSE;
-};
-
-$is_archive = function($filename) {
-    $list = ['.zip', '.tar.gz', '.tar.bz2' ];
-    $filename = strtolower($filename);
-    foreach( $list as $one ) {
-        if( endswith( $filename, $one ) ) return TRUE;
-    }
-    return FALSE;
-};
-
 $sortfiles = function($file1,$file2) {
     if ($file1["isdir"] && !$file2["isdir"]) return -1;
     if (!$file1["isdir"] && $file2["isdir"]) return 1;
     return strnatcasecmp($file1["name"],$file2["name"]);
 };
 
-$accept_file = function(\CMSMS\FilePickerProfile $profile,$cwd,$path,$filename) use (&$filemanager,&$assistant,&$is_image,&$is_media,&$is_archive) {
+$accept_file = function(\CMSMS\FilePickerProfile $profile,$cwd,$path,$filename) use (&$filemanager,&$assistant) {
     if( $filename == '.' ) return FALSE;
     $fullpath = cms_join_path($path,$filename);
     if( $filename == '..' ) {
@@ -113,26 +90,7 @@ $accept_file = function(\CMSMS\FilePickerProfile $profile,$cwd,$path,$filename) 
     if( (startswith($filename,'.') || startswith($filename,'_')) && !$profile->show_hidden ) return FALSE;
     if( is_dir($fullpath) && $assistant->is_relative($fullpath) ) return TRUE;
 
-    if( $profile->match_prefix && !startswith( $filename, $profile->match_prefix) ) return FALSE;
-    if( $profile->exclude_prefix && startswith( $filename, $profile->exclude_prefix) ) return FALSE;
-    switch( $profile->type ) {
-    case 'image':
-        if( $is_image($filename) ) return TRUE;
-        return FALSE;
-
-    case 'archive':
-        if( $is_archive($filename) ) return TRUE;
-        return FALSE;
-
-    case 'media':
-        if( $is_media($filename) ) return TRUE;
-        return FALSE;
-
-    case 'file':
-    case 'any':
-    default:
-        return TRUE;
-    }
+    return $this->is_acceptable_filename( $profile, $filename );
 };
 
 $get_thumbnail_tag = function($file,$path,$url) {
@@ -155,7 +113,7 @@ $get_filetype = function($filename) use (&$is_image,&$is_archive) {
 	$audioext = array('mp3', 'm4a', 'ac3', 'aiff', 'mid', 'wav'); // audio
 	$archiveext = array('zip', 'rar', 'gz', 'tar', 'iso', 'dmg'); // archives
 
-	if( $is_image($filename) ) {
+	if( $this->_typehelper->is_image($filename) ) {
 		$filetype = 'image';
 	} elseif(in_array($ext, $videoext)) {
 		$filetype = 'video';
@@ -167,11 +125,6 @@ $get_filetype = function($filename) use (&$is_image,&$is_archive) {
 
 	return $filetype;
 };
-
-$is_thumb = function($filename) use (&$is_image) {
-    return ($is_image($filename) && startswith($filename,'thumb_'));
-};
-
 
 //
 // get our file list
@@ -195,10 +148,10 @@ while( false !== ($filename = $dh->read()) ) {
         $file['relurl'] = $assistant->to_relative($fullname);
     }
     $file['ext'] = strtolower(substr($filename,strrpos($filename,".")+1));
-    $file['is_image'] = $is_image($filename);
+    $file['is_image'] = $this->_typehelper->is_image($fullname);
     $file['icon'] = $filemanager->GetFileIcon('.'.$file['ext'],$file['isdir']);
-    $file['filetype'] = $get_filetype($filename);
-    $file['is_thumb'] = $is_thumb($filename);
+    $file['filetype'] = $this->_typehelper->get_file_type($fullname);
+    $file['is_thumb'] = $this->_typehelper->is_thumb($filename);
     $file['dimensions'] = '';
     if( $file['is_image'] && !$file['is_thumb'] ) {
         $file['thumbnail'] = $get_thumbnail_tag($filename,$startdir,$starturl);
@@ -249,6 +202,8 @@ $smarty->assign('profile',$profile);
 $lang = [];
 $lang['confirm_delete'] = $this->Lang('confirm_delete');
 $lang['ok'] = $this->Lang('ok');
+$lang['error_problem_upload'] = $this->Lang('error_problem_upload');
+$lang['error_failed_ajax'] = $this->Lang('error_failed_ajax');
 $smarty->assign('lang_js',json_encode($lang));
 echo $this->ProcessTemplate('filepicker.tpl');
 

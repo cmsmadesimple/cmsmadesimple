@@ -35,11 +35,13 @@ require_once(__DIR__.'/lib/class.ProfileDAO.php');
 final class FilePicker extends \CMSModule implements \CMSMS\FilePickerInterface
 {
     protected $_dao;
+    protected $_typehelper;
 
     public function __construct()
     {
         parent::__construct();
         $this->_dao = new \FilePicker\ProfileDAO( $this );
+        $this->_typehelper = new \CMSMS\FileTypeHelper( \cms_config::get_instance() );
     }
 
     private function _encodefilename($filename)
@@ -157,5 +159,49 @@ final class FilePicker extends \CMSModule implements \CMSMS\FilePickerInterface
         $tpl_ob->assign('profile',$profile);
         $out = $tpl_ob->fetch();
         return $out;
+    }
+
+    // INTERNAL UTILITY FUNCTION
+    public function is_acceptable_filename( \CMSMS\FilePickerProfile $profile, $filename )
+    {
+        $filename = trim($filename);
+        $filename = basename($filename);  // incase it's a path
+        if( !$filename ) return FALSE;
+
+        if( $profile->match_prefix && !startswith( $filename, $profile->match_prefix) ) return FALSE;
+        if( $profile->exclude_prefix && startswith( $filename, $profile->exclude_prefix) ) return FALSE;
+
+        switch( $profile->type ) {
+        case \CMSMS\FileType::TYPE_IMAGE:
+            if( $this->_typehelper->is_image( $filename ) ) return TRUE;
+            return FALSE;
+
+        case \CMSMS\FileType::TYPE_AUDIO:
+            if( $this->_typehelper->is_audio( $filename ) ) return TRUE;
+            return FALSE;
+
+        case \CMSMS\FileType::TYPE_VIDEO:
+            if( $this->_typehelper->is_video( $filename ) ) return TRUE;
+            return FALSE;
+
+        case \CMSMS\FileType::TYPE_MEDIA:
+            if( $this->_typehelper->is_media( $filename) ) return TRUE;
+            return FALSE;
+
+        case \CMSMS\FileType::TYPE_XML:
+            if( $this->_typehelper->is_xml( $filename) ) return TRUE;
+            return FALSE;
+
+        case \CMSMS\FileType::TYPE_DOCUMENT:
+            if( $this->_typehelper->is_document( $filename) ) return TRUE;
+            return FALSE;
+
+        case \CMSMS\FileType::TYPE_ARCHIVE:
+            if( $this->_typehelper->is_archive( $filename ) ) return TRUE;
+            return FALSE;
+        }
+
+        // passed
+        return TRUE;
     }
 } // end of class

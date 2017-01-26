@@ -88,14 +88,34 @@
 	    $('#filepicker-file-upload').fileupload({
 		url: settings.cmd_url,
 		dropZone: dropzone,
+		dataType: 'json',
+		maxChunkSize: 1800000,
 		formData: {
 		    'cmd': 'upload',
 		    'cwd': settings.cwd,
 		    'inst': settings.inst,
 		    'sig': settings.sig,
 		},
-		stop: function(ev,data) {
-                    alert('upload complete');
+		done: function(ev,data) {
+		    if( data.result.length == 0 ) return;
+		    var n_errors = 0;
+		    for( var i = 0; i < data.result.length; i++ ) {
+			res = data.result[i];
+			if( res.error != undefined ) {
+			    n_errors++;
+			    var msg = settings.lang.error_problem_upload+' '+res.name;
+			    if( res.errormsg != undefined ) msg += '.\n'+res.errormsg;
+			    alert(msg); // can't use cms_alert
+			}
+		    }
+		    if( n_errors < data.result.length ) {
+		        var url = window.location.href+'&nosub=1';
+		        window.location.href = url;
+		    }
+		},
+		fail: function(xhr,txtstatus,msg) {
+		    console.debug('problem with ajax upload: '+msg);
+		    alert(settings.lang.error_failed_ajax);
 		}
 	    });
 	};

@@ -15,8 +15,12 @@ try {
     $cwd = cleanValue(get_parameter_value($_POST,'cwd'));
 
     // get the profile.
+    debug_to_log($_POST,'post');
     $profile = null;
-    if( $sig ) $profile = TemporaryProfileStorage::get($sig);
+    if( $sig ) {
+        $profile = TemporaryProfileStorage::get($sig);
+        debug_to_log($profile,'got profile from storage');
+    }
     if( !$profile ) $profile = $this->get_default_profile();
 
     // check the cwd make sure it is okay
@@ -29,6 +33,7 @@ try {
 
     switch( $cmd ) {
     case 'mkdir':
+        if( !$profile->can_mkdir ) throw new \LogicException('Internal error: mkdir command executed, but profile says we cannot do this');
         if( startswith($val,'.') || startswith($val,'_') ) throw new \RuntimeException($this->Lang('error_ajax_invalidfilename'));
         if( !is_writable($fullpath) ) throw new \RuntimeException($this->Lang('error_ajax_writepermission'));
         $destpath = $fullpath.'/'.$val;
@@ -37,6 +42,7 @@ try {
         break;
 
     case 'del':
+        if( !$profile->can_delete ) throw new \LogicException('Internal error: del command executed, but profile says we cannot do this');
         if( startswith($val,'.') || startswith($val,'_') ) throw new \RuntimeException($this->Lang('error_ajax_invalidfilename'));
         //if( !is_writable($fullpath) ) throw new \RuntimeException($this->Lang('error_ajax_writepermission'));
         $destpath = $fullpath.'/'.$val;
@@ -51,9 +57,11 @@ try {
         break;
 
     case 'upload':
+        debug_to_log('got_uupload');
+        debug_to_log($profile,'profile');
+        if( !$profile->can_upload ) throw new \LogicException('Internal error: upload command executed, but profile says we cannot upload');
         // todo: checks for upload functionality
-        $opts = ['destdir'=>$fullpath ];
-        $upload_handler = new UploadHandler();
+        $upload_handler = new UploadHandler( $this, $profile, $fullpath );
 
         header('Pragma: no-cache');
         header('Cache-Control: private, no-cache');
