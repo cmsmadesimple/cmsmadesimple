@@ -233,7 +233,6 @@ if( $error ) {
     $out = array('status'=>'error','message'=>lang($error));
 }
 else {
-    debug_to_log($out,'success');
     $out = array('status'=>'success','op'=>$op,'data'=>$out);
 }
 
