@@ -17,9 +17,10 @@ tinymce.PluginManager.add('cmsms_filepicker', function(editor) {
             }
         } )(window);
 
+	// generate a uniquie id for the active editor so we can access it later.
 	var inst = 'i'+(new Date().getTime()).toString(16);
-	console.debug('saved instance '+inst);
 	tinymce.activeEditor.dom.setAttrib(tinyMCE.activeEditor.dom.select('html'),'data-cmsfp-instance',inst);
+
 	if( !top.document.CMSFileBrowser ) top.document.CMSFileBrowser = {};
 	top.document.CMSFileBrowser.onselect = function(inst,file) {
 	    file = cms_data.uploads_url + '/' + file;
