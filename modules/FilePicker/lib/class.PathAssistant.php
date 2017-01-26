@@ -37,8 +37,8 @@ class PathAssistant
     {
         $path_a = realpath( $path_a );
         $path_b = realpath( $path_b );
-        if( !is_dir($path_a) && !is_file($path_a) ) throw new \LogicException('Invalid path_a passed to '.__METHOD__);
-        if( !is_dir($path_b) ) throw new \LogicException('Invalid path_b passed to '.__METHOD__);
+        if( !is_dir($path_a) && !is_file($path_a) ) throw new \LogicException('Invalid path_a passed to '.__METHOD__.': '.$path_a);
+        if( !is_dir($path_b) ) throw new \LogicException('Invalid path_b passed to '.__METHOD__.': '.$path_b);
 
         if( !$this->is_relative_to( $path_a, $path_b ) ) throw new \LogicException("$path_a is not relative to $path_b");
         $out = substr($path_a,strlen($path_b));

@@ -65,8 +65,8 @@ if( !$nosub && isset($_GET['subdir']) ) {
 if( $cwd && !$assistant->is_valid_relative_path( $cwd ) ) {
     $cwd = '';
 }
-if( $cwd ) $_SESSION[$sesskey] = $cwd;
-
+//if( $cwd ) $_SESSION[$sesskey] = $cwd;
+$_SESSION[$sesskey] = $cwd;
 
 // now we're set to go.
 $starturl = $assistant->relative_path_to_url($cwd);

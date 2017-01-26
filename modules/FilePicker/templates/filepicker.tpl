@@ -136,14 +136,19 @@
 		</div>
 	</body>
 	{/strip}
-	{cms_jquery exclude='cms_js_setup,ui_touch_punch,nestedSortable,json,migrate,cms_admin,cms_autorefresh,cms_dirtyform,cms_hiersel,cms_lock,cms_filepicker' append="`$mod->GetModuleURLPath()`/lib/js/cmsms_filebrowser/filebrowser.js"}
+	{cms_jquery exclude='cms_js_setup,ui_touch_punch,nestedSortable,json,migrate,cms_admin,cms_autorefresh,cms_dirtyform,cms_hiersel,cms_lock,cms_filepicker'}
+        <script type="text/javascript" src="{$mod->GetModuleURLPath()}/js/ext/jquery.fileupload.js"></script>
+        <script type="text/javascript" src="{$mod->GetModuleURLPath()}/lib/js/cmsms_filebrowser/filebrowser.js"></script>
   	<script type="text/javascript">
-		if( !top.document.CMSFileBrowser ) top.document.CMSFileBrowser = {};
-		top.document.CMSFileBrowser.cmd_url = '{cms_action_url action=ajax_cmd forjs=1}&showtemplate=false';
-		top.document.CMSFileBrowser.cwd = '{$cwd}';
-		top.document.CMSFileBrowser.sig = '{$sig}';
-		top.document.CMSFileBrowser.inst = '{$inst}';
-      top.document.CMSFileBrowser.lang = {$lang_js};
+          $(document).ready(function(){
+            var options = {};
+            options.cmd_url = '{cms_action_url action=ajax_cmd forjs=1}&showtemplate=false';
+            options.cwd = '{$cwd}';
+	    options.sig = '{$sig}';
+	    options.inst = '{$inst}';
+            options.lang = {$lang_js};
+            var filepicker = new CMSFileBrowser(options);
+          })
   	</script>
 
   	<div id="mkdir_dlg" title="{$mod->Lang('title_mkdir')}" style="display: none;" data-oklbl="{$mod->Lang('ok')}">
@@ -151,5 +156,4 @@
        	<label>{$mod->Lang('name')}: <input type="text" id="fld_mkdir" size="40"/>
     	</div>
   	</div>
-
 </html>
