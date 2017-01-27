@@ -128,7 +128,7 @@ $get_filetype = function($filename) use (&$is_image,&$is_archive) {
 //
 // get our file list
 //
-$files = array();
+$files = $thumbs = [];
 $dh = dir($startdir);
 while( false !== ($filename = $dh->read()) ) {
     if( !$accept_file( $profile, $cwd, $startdir, $filename ) ) continue;
@@ -154,6 +154,7 @@ while( false !== ($filename = $dh->read()) ) {
     $file['dimensions'] = '';
     if( $file['is_image'] && !$file['is_thumb'] ) {
         $file['thumbnail'] = $get_thumbnail_tag($filename,$startdir,$starturl);
+        $thumbs[] = 'thumb_'.$filename;
         $imgsize = @getimagesize($fullname);
         if( $imgsize ) $file['dimensions'] = $imgsize[0].' x '.$imgsize[1];
     }
@@ -173,7 +174,13 @@ while( false !== ($filename = $dh->read()) ) {
         if( $type ) $url .= "&type=$type";
         $file['chdir_url'] = str_replace('&amp;','&',$url);
     }
-    $files[] = $file;
+    $files[$filename] = $file;
+}
+if( $profile->show_thumbs && count($thumbs) ) {
+    // remove thumbnails that are not orphaned from the list
+    foreach( $thumbs as $thumb ) {
+        if( isset($files[$thumb]) ) unset($files[$thumb]);
+    }
 }
 // done the loop, now sort
 usort($files,$sortfiles);

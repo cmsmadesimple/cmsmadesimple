@@ -48,6 +48,12 @@ try {
             if( count(scandir($destpath)) > 2 ) throw new \RuntimeException($this->Lang('error_ajax_dirnotempty'));
             @rmdir($destpath);
         } else {
+            if( $this->is_image( $destpath ) ) {
+                $thumbnail = $fullpath.'/thumb_'.$val;
+                if( is_file($thumbnail) ) {
+                    @unlink($thumbnail);
+                }
+            }
             @unlink($destpath);
         }
         break;
