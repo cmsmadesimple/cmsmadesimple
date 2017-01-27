@@ -6,6 +6,7 @@ $(document).ready(function(){
    var sel = '[data-cmsfp-instance="{$instance}"]';
    $(sel).filepicker({
       param_sig: '{$sig}',
+      title: '{$title}',
    });
 })
   </script>

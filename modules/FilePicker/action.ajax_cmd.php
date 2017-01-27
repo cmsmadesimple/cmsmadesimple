@@ -11,16 +11,12 @@ try {
 
     $sig = cleanValue(get_parameter_value($_POST,'sig'));
     $cmd = cleanValue(get_parameter_value($_POST,'cmd'));
-    $val = cleanValue(get_parameter_value($_POST,'val'));
+    $val = get_parameter_value($_POST,'val');
     $cwd = cleanValue(get_parameter_value($_POST,'cwd'));
 
     // get the profile.
-    debug_to_log($_POST,'post');
     $profile = null;
-    if( $sig ) {
-        $profile = TemporaryProfileStorage::get($sig);
-        debug_to_log($profile,'got profile from storage');
-    }
+    if( $sig ) $profile = TemporaryProfileStorage::get($sig);
     if( !$profile ) $profile = $this->get_default_profile();
 
     // check the cwd make sure it is okay

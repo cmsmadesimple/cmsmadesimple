@@ -29,6 +29,7 @@
 #-------------------------------------------------------------------------
 use \FilePicker\TemporaryProfileStorage;
 use \CMSMS\FilePickerProfile as Profile;
+use \CMSMS\FileType;
 
 require_once(__DIR__.'/lib/class.ProfileDAO.php');
 
@@ -157,6 +158,33 @@ final class FilePicker extends \CMSModule implements \CMSMS\FilePickerInterface
         $tpl_ob->assign('value',$value);
         $tpl_ob->assign('instance',$_instance);
         $tpl_ob->assign('profile',$profile);
+        switch( $profile->type ) {
+        case FileType::TYPE_IMAGE:
+            $tpl_ob->assign('title',$this->Lang('select_an_image'));
+            break;
+        case FileType::TYPE_AUDIO:
+            $tpl_ob->assign('title',$this->Lang('select_an_audio_file'));
+            break;
+        case FileType::TYPE_VIDEO:
+            $tpl_ob->assign('title',$this->Lang('select_a_video_file'));
+            break;
+        case FileType::TYPE_MEDIA:
+            $tpl_ob->assign('title',$this->Lang('select_a_media_file'));
+            break;
+        case FileType::TYPE_XML:
+            $tpl_ob->assign('title',$this->Lang('select_an_xml_file'));
+            break;
+        case FileType::TYPE_DOCUMENT:
+            $tpl_ob->assign('title',$this->Lang('select_a_document'));
+            break;
+        case FileType::TYPE_ARCHIVE:
+            $tpl_ob->assign('title',$this->Lang('select_an_archive_file'));
+            break;
+        case FileType::TYPE_ANY:
+        default:
+            $tpl_ob->assign('title',$this->Lang('select_a_file'));
+            break;
+        }
         $out = $tpl_ob->fetch();
         return $out;
     }

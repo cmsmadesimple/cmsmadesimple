@@ -28,11 +28,15 @@ class FilePickerProfile
             case FileType::TYPE_IMAGE:
             case FileType::TYPE_AUDIO:
             case FileType::TYPE_VIDEO:
+            case FileType::TYPE_MEDIA:
             case FileType::TYPE_XML:
             case FileType::TYPE_DOCUMENT:
             case FileType::TYPE_ARCHIVE:
             case FileType::TYPE_ANY:
                 $this->_data[$key] = $val;
+                break;
+            case 'file':
+                $this->_data[$key] = FileType::TYPE_ANY;
                 break;
             default:
                 throw new \CmsInvalidDataException("$val is an invalid value for type in ".__CLASS__);

@@ -1,7 +1,9 @@
     /*jslint nomen: true , devel: true*/
     function CMSFileBrowser(_settings) {
-        this.self = this;
 	var self = this;
+	var container = $('#filepicker-items');
+	var gridview_btn = $('.filepicker-view-option .view-grid');
+	var listview_btn = $('.filepicker-view-option .view-list');
 	var settings = _settings;
 	if( top.document.CMSFileBrowser ) {
 	    settings = $.extend( {}, top.document.CMSFileBrowser, settings );
@@ -42,6 +44,21 @@
 	};
 
 	function enable_toggleGrid() {
+	    gridview_btn.on('click',function(){
+		container.removeClass('list-view').addClass('grid-view');
+		$('.filepicker-file-details').addClass('visuallyhidden');
+		localStorage.setItem('view-type','grid');
+		listview_btn.removeClass('active');
+		$(this).addClass('active');
+	    });
+	    listview_btn.on('click',function(){
+		container.addClass('list-view').removeClass('grid-view');
+		$('.filepicker-file-details').removeClass('visuallyhidden');
+		localStorage.setItem('view-type','list');
+		gridview_btn.removeClass('active');
+		$(this).addClass('active');
+	    });
+	    /*
 	    $('.filepicker-view-option .js-trigger').on('click', function(e) {
 		var $trigger = $(this),
 		    $container = $('#filepicker-items'),
@@ -49,7 +66,6 @@
 
 		$('.filepicker-view-option .js-trigger').removeClass('active');
 		$trigger.addClass('active');
-
 		if ($trigger.hasClass('view-grid')) {
                     $container.removeClass('list-view').addClass('grid-view');
                     $info.addClass('visuallyhidden');
@@ -58,6 +74,7 @@
                     $info.removeClass('visuallyhidden');
 		}
             });
+            */
 	};
 
 	function enable_filetypeFilter() {
@@ -86,10 +103,10 @@
 
 	function enable_upload() {
 	    var dropzone = $('body.cmsms-filepicker');
+	    var n_errors;
 	    $('#filepicker-file-upload').fileupload({
 		url: settings.cmd_url,
 		dropZone: dropzone,
-		dataType: 'json',
 		maxChunkSize: 1800000,
 		formData: {
 		    'cmd': 'upload',
@@ -97,9 +114,17 @@
 		    'inst': settings.inst,
 		    'sig': settings.sig,
 		},
+		start: function(ev) {
+		    n_errors = 0;
+		    console.debug('in upload stop');
+		},
+		progressall: function(ev,data) {
+		    var percent = parseInt(data.loaded / data.total * 100,10);
+		    console.debug('progress '+percent);
+		},
 		done: function(ev,data) {
+		    console.debug('in upload done');
 		    if( data.result.length == 0 ) return;
-		    var n_errors = 0;
 		    for( var i = 0; i < data.result.length; i++ ) {
 			res = data.result[i];
 			if( res.error != undefined ) {
@@ -109,14 +134,12 @@
 			    alert(msg); // can't use cms_alert
 			}
 		    }
-		    if( n_errors < data.result.length ) {
+		},
+		stop: function(ev) {
+		    if( n_errors == 0 ) {
 		        var url = window.location.href+'&nosub=1';
 		        window.location.href = url;
 		    }
-		},
-		fail: function(xhr,txtstatus,msg) {
-		    console.debug('problem with ajax upload: '+msg);
-		    alert(settings.lang.error_failed_ajax);
 		}
 	    });
 	};
@@ -130,6 +153,16 @@
 		if( typeof(self[fun]) != 'undefined' ) self[fun](ev);
 	    });
 	};
+
+	function setup_view() {
+	    var view_type = localStorage.getItem('view-type');
+	    if( !view_type ) view_type = 'grid';
+	    if( view_type == 'list' ) {
+		listview_btn.trigger('click');
+	    } else {
+		gridview_btn.trigger('click');
+	    }
+	}
 
 	function _ajax_cmd(cmd,val) {
 	    return $.ajax({
@@ -192,4 +225,5 @@
         enable_filetypeFilter();
         enable_commands();
 	enable_upload();
+	setup_view()
     } /* object */
