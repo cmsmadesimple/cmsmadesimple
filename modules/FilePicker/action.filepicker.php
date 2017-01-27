@@ -158,10 +158,6 @@ while( false !== ($filename = $dh->read()) ) {
         $imgsize = @getimagesize($fullname);
         if( $imgsize ) $file['dimensions'] = $imgsize[0].' x '.$imgsize[1];
     }
-    if( $file['is_thumb'] && $profile->show_thumbs ) {
-        // this is a thumbnail... don't need to display it.
-        continue;
-    }
     $info = @stat($fullname);
     $filesizename = array(" Bytes", " KB", " MB");
     if( $info && $info['size'] > 0) {
@@ -176,6 +172,7 @@ while( false !== ($filename = $dh->read()) ) {
     }
     $files[$filename] = $file;
 }
+
 if( $profile->show_thumbs && count($thumbs) ) {
     // remove thumbnails that are not orphaned from the list
     foreach( $thumbs as $thumb ) {

@@ -75,20 +75,20 @@
 						</li>
 						{foreach $files as $file}
 						<li class="filepicker-item{if $file.isdir} dir{else} {$file.filetype}{/if}" title="{if $file.isdir}{$mod->Lang('changedir')}: {/if}{$file.name}" data-fb-ext='{$file.ext}' data-fb-fname="{$file.name}">
-							<div class="filepicker-thumb{if (isset($file.thumbnail) && $file.thumbnail != '') || $file.isdir || $file.is_thumb} no-background{/if}">
+							<div class="filepicker-thumb{if ($profile->show_thumbs && isset($file.thumbnail) && $file.thumbnail != '') || $file.isdir || ($profile->show_thumbs && $file.is_thumb)} no-background{/if}">
 							{if !$file.isdir && $profile->can_delete && !$file.isparent}
 								<span class="filepicker-delete filepicker-cmd cmsms-fp-delete" data-cmd="del" title="{$mod->Lang('delete')}">
 									<i class="cmsms-fp-close"></i>
 								</span>
 							{/if}
-							{if $profile->show_thumbs && isset($file.thumbnail) && $file.thumbnail != ''}
-								<a class="filepicker-file-action js-trigger-insert" href="{$file.relurl}" title="{if $file.isdir}{$mod->Lang('changedir')}: {/if}{$file.name}">{$file.thumbnail}</a>
-							{elseif $profile->show_thumbs && $file.is_thumb}
-								<a class="filepicker-file-action js-trigger-insert" href="{$file.relurl}" title="{if $file.isdir}{$mod->Lang('changedir')}: {/if}{$file.name}"><img src="{$file.fullurl}" alt="{$file.name}"/></a>
-							{elseif $file.isdir}
+							{if $file.isdir}
 								<a class="icon-no-thumb" href="{$file.chdir_url}" title="{if $file.isdir}{$mod->Lang('changedir')}: {/if}{$file.name}"><i class="cmsms-fp-folder-close"></i></a>
+							{elseif $profile->show_thumbs && isset($file.thumbnail) && $file.thumbnail != ''}
+								<a class="filepicker-file-action js-trigger-insert" href="{$file.relurl}" title="{$file.name}">{$file.thumbnail}</a>
+							{elseif $profile->show_thumbs && $file.is_thumb}
+								<a class="filepicker-file-action js-trigger-insert" href="{$file.relurl}" title="{$file.name}"><img src="{$file.fullurl}" alt="{$file.name}"/></a>
 							{else}
-								<a class="filepicker-file-action js-trigger-insert icon-no-thumb" title="{if $file.isdir}{$mod->Lang('changedir')}: {/if}{$file.name}" href="{$file.relurl}">
+								<a class="filepicker-file-action js-trigger-insert icon-no-thumb" title="{$file.name}" href="{$file.relurl}">
 									{if $file.filetype == 'image'}
 										<i class="cmsms-fp-picture"></i>
 									{elseif $file.filetype == 'video'}
