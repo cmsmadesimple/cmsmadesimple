@@ -27,10 +27,12 @@
 								</span>
 							</span>
 							{/if}
+                                                        {if $profile->can_upload}
 							<span class="filepicker-button upload-file btn-file">
 							   <i class="cmsms-fp-upload"></i> {$mod->Lang('upload')}
 							   <input id="filepicker-file-upload" type="file" multiple="" title="{$mod->Lang('select_upload_files')}">
 							</span>
+                                                        {/if}
 						</p>
 					</div>
 					{$type=$profile->type|default:'any'}{if $type == 'any'}
