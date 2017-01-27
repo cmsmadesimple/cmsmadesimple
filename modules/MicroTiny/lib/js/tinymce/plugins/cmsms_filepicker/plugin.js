@@ -23,7 +23,7 @@ tinymce.PluginManager.add('cmsms_filepicker', function(editor) {
 
 	if( !top.document.CMSFileBrowser ) top.document.CMSFileBrowser = {};
 	top.document.CMSFileBrowser.onselect = function(inst,file) {
-	    file = cms_data.uploads_url + '/' + file;
+ 	    file = cms_data.uploads_url + '/' + file;
    	    function basename(str) {
                 var base = new String(str).substring(str.lastIndexOf('/') + 1);
                 if(base.lastIndexOf(".") != -1)
@@ -56,9 +56,7 @@ tinymce.PluginManager.add('cmsms_filepicker', function(editor) {
             inline : 1,
             resizable : true,
             maximizable : true,
-	    calguy: 1000,
         }, {
-	    calguy: 1000,
 	    onFileSelected: function(filename) {
 		console.debug('woot got callback with '+filename);
 	    }

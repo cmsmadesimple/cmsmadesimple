@@ -187,9 +187,7 @@ if (! isset($CMS_INSTALL_PAGE)) {
 
     // test for cron.
     // we hardcode CmsJobManager here until such a point as we need to abstract it.
-    $cmsjobmgr = $modops->get_module_instance('CmsJobManager');
-    if( is_object($cmsjobmgr) ) $cmsjobmgr->trigger_async_processing();
-    debug_buffer('finished triggering async processing');
+    \CMSMS\Async\JobManager::get_instance()->trigger_async_processing();
 }
 
 #Setup language stuff.... will auto-detect languages (Launch only to admin at this point)
