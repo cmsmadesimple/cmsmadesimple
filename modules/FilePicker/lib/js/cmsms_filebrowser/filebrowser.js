@@ -4,6 +4,9 @@
 	var container = $('#filepicker-items');
 	var gridview_btn = $('.filepicker-view-option .view-grid');
 	var listview_btn = $('.filepicker-view-option .view-list');
+	var progress_bar = $('#filepicker-progress');
+	var progress_text = $('#filepicker-progress-text');
+
 	var settings = _settings;
 	if( top.document.CMSFileBrowser ) {
 	    settings = $.extend( {}, top.document.CMSFileBrowser, settings );
@@ -117,10 +120,15 @@
 		start: function(ev) {
 		    n_errors = 0;
 		    console.debug('in upload stop');
+		    progress_bar.children().hide();
+		    progress_bar.progressbar({ max: 100 });
+		    progress_text.show();
 		    cms_busy();
 		},
 		progressall: function(ev,data) {
 		    var percent = parseInt(data.loaded / data.total * 100,10);
+		    progress_bar.progressbar('value',percent);
+		    progress_text.text(percent+'%');
 		    console.debug('progress '+percent);
 		},
 		done: function(ev,data) {
@@ -137,6 +145,9 @@
 		     }
 		},
 		stop: function(ev) {
+		    progress_bar.children().show();
+		    progress_text.hide();
+		    progress_bar.progressbar('destroy');
 		    cms_busy(false);
 		    if( n_errors == 0 ) {
 		        var url = window.location.href+'&nosub=1';
