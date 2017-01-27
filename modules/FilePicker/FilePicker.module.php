@@ -190,12 +190,23 @@ final class FilePicker extends \CMSModule implements \CMSMS\FilePickerInterface
     }
 
     // INTERNAL UTILITY FUNCTION
+    public function is_image( $filespec )
+    {
+        $filespec = trim($filespec);
+        if( !$filespec ) return;
+
+        return $this->_typehelper->is_image( $filespec );
+    }
+
+
+    // INTERNAL UTILITY FUNCTION
     public function is_acceptable_filename( \CMSMS\FilePickerProfile $profile, $filename )
     {
         $filename = trim($filename);
         $filename = basename($filename);  // incase it's a path
         if( !$filename ) return FALSE;
 
+        if( !$profile->show_hidden && (startswith($filename,'.') || startswith($filename,'_')) ) return FALSE;
         if( $profile->match_prefix && !startswith( $filename, $profile->match_prefix) ) return FALSE;
         if( $profile->exclude_prefix && startswith( $filename, $profile->exclude_prefix) ) return FALSE;
 

@@ -117,6 +117,7 @@
 		start: function(ev) {
 		    n_errors = 0;
 		    console.debug('in upload stop');
+		    cms_busy();
 		},
 		progressall: function(ev,data) {
 		    var percent = parseInt(data.loaded / data.total * 100,10);
@@ -131,11 +132,12 @@
 			    n_errors++;
 			    var msg = settings.lang.error_problem_upload+' '+res.name;
 			    if( res.errormsg != undefined ) msg += '.\n'+res.errormsg;
-			    alert(msg); // can't use cms_alert
+			    cms_alert(msg);
 			}
-		    }
+		     }
 		},
 		stop: function(ev) {
+		    cms_busy(false);
 		    if( n_errors == 0 ) {
 		        var url = window.location.href+'&nosub=1';
 		        window.location.href = url;
@@ -182,14 +184,14 @@
 	    ev.preventDefault();
 	    var target = ev.target.closest('.filepicker-item');
 	    var file = $(target).data('fb-fname');
-	    if( confirm(settings.lang.confirm_delete) ) {
+	    cms_confirm(settings.lang.confirm_delete).done(function(){
 		_ajax_cmd('del',file).done(function(msg){
 		    var url = window.location.href+'&nosub=1';
 		    window.location.href = url;
 		}).fail(function(jqXHR,textStatus,msg){
 		    console.debug('filepicker command failed: '+msg);
 		})
-	    }
+	    });
 	};
 
 	this._cmd_mkdir = function(ev) {

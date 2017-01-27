@@ -54,7 +54,6 @@ try {
 
     case 'upload':
         debug_to_log('got_uupload');
-        debug_to_log($profile,'profile');
         if( !$profile->can_upload ) throw new \LogicException('Internal error: upload command executed, but profile says we cannot upload');
         // todo: checks for upload functionality
         $upload_handler = new UploadHandler( $this, $profile, $fullpath );

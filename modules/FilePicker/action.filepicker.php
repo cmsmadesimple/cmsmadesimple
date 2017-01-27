@@ -87,7 +87,6 @@ $accept_file = function(\CMSMS\FilePickerProfile $profile,$cwd,$path,$filename) 
         if( !$assistant->is_relative($fullpath) ) return FALSE;
         return TRUE;
     }
-    if( (startswith($filename,'.') || startswith($filename,'_')) && !$profile->show_hidden ) return FALSE;
     if( is_dir($fullpath) && $assistant->is_relative($fullpath) ) return TRUE;
 
     return $this->is_acceptable_filename( $profile, $filename );
@@ -157,6 +156,10 @@ while( false !== ($filename = $dh->read()) ) {
         $file['thumbnail'] = $get_thumbnail_tag($filename,$startdir,$starturl);
         $imgsize = @getimagesize($fullname);
         if( $imgsize ) $file['dimensions'] = $imgsize[0].' x '.$imgsize[1];
+    }
+    if( $file['is_thumb'] && $profile->show_thumbs ) {
+        // this is a thumbnail... don't need to display it.
+        continue;
     }
     $info = @stat($fullname);
     $filesizename = array(" Bytes", " KB", " MB");

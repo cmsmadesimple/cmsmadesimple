@@ -37,6 +37,14 @@ abstract class jquery_upload_handler
                 $this->options[$key] = $value;
             }
         }
+
+        // tweak some headers (done because we're using an older version of this class)
+        if( !isset($_SERVER['HTTP_X_FILE_SIZE']) && isset($_SERVER['HTTP_CONTENT_RANGE']) ) {
+            $tmp = explode('/',trim($_SERVER['HTTP_CONTENT_RANGE']));
+            if( count($tmp) == 2 ) {
+                $_SERVER['HTTP_X_FILE_SIZE'] = (int) $tmp[1];
+            }
+        }
     }
 
     function getFullUrl() {
@@ -323,7 +331,6 @@ abstract class jquery_upload_handler
 	    $info[] = $res;
         }
 
-        debug_to_log($info,'filepicker res');
         header('Vary: Accept');
         $json = json_encode($info);
         $redirect = isset($_REQUEST['redirect']) ?
