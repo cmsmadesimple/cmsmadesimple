@@ -3,6 +3,7 @@ tinymce.PluginManager.add('cmsms_filepicker', function(editor) {
     tinymce.activeEditor.settings.file_picker_types = 'file image media';
     tinymce.activeEditor.settings.file_picker_callback = function(callback, value, meta) {
 
+	if( typeof top.filepicker != 'undefined' ) alert('woot');
         var height, width, mywin;
 	var self = this;
 
@@ -46,6 +47,8 @@ tinymce.PluginManager.add('cmsms_filepicker', function(editor) {
 	    mywin.close();
 	}
 
+
+	// here we open the filepicker window.
 	var url = cmsms_tiny.filepicker_url + '&inst=' + inst + '&type='+meta.filetype;
         mywin = tinymce.activeEditor.windowManager.open({
             title : cmsms_tiny.filepicker_title,
