@@ -3,10 +3,11 @@ class ClearCacheTask implements CmsRegularTask
 {
     const  LASTEXECUTE_SITEPREF   = 'ClearCache_lastexecute';
     const  CACHEDFILEAGE_SITEPREF = 'auto_clear_cache_age';
+    private $_age_days;
 
     public function get_name()
     {
-        return get_class();
+        return get_class($this);
     }
 
     public function get_description()
@@ -16,14 +17,19 @@ class ClearCacheTask implements CmsRegularTask
 
     public function test($time = '')
     {
-        $age_days = (int)get_site_preference(self::CACHEDFILEAGE_SITEPREF,0);
-        if( $age_days == 0 ) return FALSE;
+        $this->_age_days = (int)cms_siteprefs::get(self::CACHEDFILEAGE_SITEPREF,0);
+        if( $this->_age_days == 0 ) return FALSE;
 
         // do we need to do this task.
         // we only do it daily.
         if( !$time ) $time = time();
-        $last_execute = get_site_preference(self::LASTEXECUTE_SITEPREF,0);
-        if( ($time - 24*60*60) >= $last_execute ) return TRUE;
+        $last_execute = (int)cms_siteprefs::get(self::LASTEXECUTE_SITEPREF,0);
+        if( ($time - 24*60*60) >= $last_execute ) {
+            // set this preference here... prevents multiple requests at or about the same time from getting here.
+            cms_siteprefs::set(self::LASTEXECUTE_SITEPREF,$time);
+            return TRUE;
+        }
+
         return FALSE;
     }
 
@@ -32,21 +38,21 @@ class ClearCacheTask implements CmsRegularTask
         if( !$time ) $time = time();
 
         // do the task.
-        $age_days = (int)get_site_preference(self::CACHEDFILEAGE_SITEPREF,0);
-        $gCms = cmsms();
-        $gCms->clear_cached_files($age_days);
+        $gCms = CmsApp::get_instance();
+        $gCms->clear_cached_files($this->_age_days);
         return TRUE;
     }
 
     public function on_success($time = '')
     {
         if( !$time ) $time = time();
-        set_site_preference(self::LASTEXECUTE_SITEPREF,$time);
+        cms_siteprefs::set(self::LASTEXECUTE_SITEPREF,$time);
     }
 
     public function on_failure($time = '')
     {
+        // if we failed,  we can do this again at the next request.
         if( !$time ) $time = time();
-        // nothing here.
+        cms_siteprefs::remove(self::LASTEXECUTE_SITEPREF);
     }
-}
+} // end of class
