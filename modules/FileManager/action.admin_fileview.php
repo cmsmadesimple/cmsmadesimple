@@ -18,7 +18,7 @@ $titlelink = $this->Lang("filename");
 $newsort = "";
 if ($sortby == "nameasc") {
   $newsort = "namedesc";
-  $titlelink.="+";
+  $titlelink .= "+";
 } else {
   $newsort = "nameasc";
   if ($sortby == "namedesc") $titlelink.="-";
@@ -31,10 +31,10 @@ $titlelink = $this->Lang("filesize");
 $newsort = "";
 if ($sortby == "sizeasc") {
   $newsort = "sizedesc";
-  $titlelink.="+";
+  $titlelink .= "+";
 } else {
   $newsort = "sizeasc";
-  if ($sortby == "sizedesc") $titlelink.="-";
+  if ($sortby == "sizedesc") $titlelink .= "-";
 }
 $params["newsort"] = $newsort;
 //}
