@@ -87,9 +87,10 @@ $accept_file = function(\CMSMS\FilePickerProfile $profile,$cwd,$path,$filename) 
         if( !$assistant->is_relative($fullpath) ) return FALSE;
         return TRUE;
     }
-    if( is_dir($fullpath) && $assistant->is_relative($fullpath) ) return TRUE;
-
-    return $this->is_acceptable_filename( $profile, $filename );
+    $res = $this->is_acceptable_filename( $profile, $filename );
+    if( !$res ) return FALSE;
+    if( is_dir($fullpath) && !$assistant->is_relative($fullpath) ) return FALSE;
+    return TRUE;
 };
 
 $get_thumbnail_tag = function($file,$path,$url) {
