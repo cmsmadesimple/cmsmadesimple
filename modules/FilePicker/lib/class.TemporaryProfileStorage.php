@@ -11,15 +11,15 @@ class TemporaryProfileStorage
     public static function set(\CMSMS\FilePickerProfile $profile)
     {
         $key = md5(__FILE__);
-        $sig = md5(__FILE__.serialize($profile).microtime(TRUE));
-        $_SESSION[$key][$sig] = $profile;
+        $sig = md5(__FILE__.serialize($profile).microtime(TRUE).'1');
+        $_SESSION[$key][$sig] = serialize($profile);
         return $sig;
     }
 
     public static function get($sig)
     {
         $key = md5(__FILE__);
-        if( isset($_SESSION[$key][$sig]) ) return $_SESSION[$key][$sig];
+        if( isset($_SESSION[$key][$sig]) ) return unserialize($_SESSION[$key][$sig]);
     }
 
     public static function clear($sig)
