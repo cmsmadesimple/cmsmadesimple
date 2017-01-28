@@ -2324,6 +2324,7 @@ abstract class CMSModule
      * @param string $tab The tab name.  If empty, the current tab is used.
      * @param mixed|null  $params An assoiciative array of params, or null
      * @param string $action The action name (if not specified, defaultadmin is assumed)
+     * @see CMSModule::SetCurrentTab
      */
     public function RedirectToAdminTab($tab = '',$params = '',$action = '')
     {
@@ -2707,6 +2708,7 @@ abstract class CMSModule
      * @since 1.11
      * @author calguy1000
      * @param string $tab The tab name
+     * @see CMSModule::RedirectToAdminTab();)
      */
     public function SetCurrentTab($tab)
     {
