@@ -124,8 +124,14 @@ class wizard_step7 extends \cms_autoinstaller\wizard_step
                         }
                         else {
                             if( is_dir($fn) ) {
-                                \__appbase\utils::rrmdir($fn);
-                                $this->verbose('removed directory: '.$fn);
+                                $res = @rmdir($fn);
+				if( !$res ) {
+				    $this->error('problem removing directory: '.$fn);
+				    $nfailed++;
+ 				} else {
+                                    $this->verbose('removed directory: '.$fn);
+                                    $ndeleted++;
+				}
                             }
                             else {
                                 $res = @unlink($fn);
@@ -142,7 +148,7 @@ class wizard_step7 extends \cms_autoinstaller\wizard_step
                     }
                 }
 
-                $this->message($ndeleted.' files deleted for version '.$one_version.": ".$nmissing.' missing, '.$nfailed.' failed');
+                $this->message($ndeleted.' files/folders deleted for version '.$one_version.": ".$nmissing.' missing, '.$nfailed.' failed');
             }
         }
     }
