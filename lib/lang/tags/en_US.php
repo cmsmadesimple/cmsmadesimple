@@ -730,6 +730,7 @@ $lang['help_function_image'] = <<<EOT
   <h3>What does this do?</h3>
   <p>Creates an image tag to an image stored within your images directory</p>
   <h3>How do I use it?</h3>
+  <p class="warning">This plugin is deprecated and will be removed from the core at a later date.</p>
   <p>Just insert the tag into your template/page like: <code>{image src="something.jpg"}</code></p>
   <h3>What parameters does it take?</h3>
   <ul>

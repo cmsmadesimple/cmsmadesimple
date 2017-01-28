@@ -39,148 +39,155 @@ $userid = get_userid();
 $access = check_permission($userid, "View Tag Help");
 
 if (!$access) {
-  die('Permission Denied');
-  return;
+    die('Permission Denied');
+    return;
 }
 
+$dirs = [];
+$dirs[] = $config['root_path'].'/assets/plugins/*php';
+$dirs[] = $config['root_path'].'/plugins/*php';
+$dirs[] = $config['root_path'].'/lib/plugins/*php';
+$dirs[] = $config['admin_path'].'/plugins/*php';
 $config = cmsms()->GetConfig();
+
+$find_file = function($filename) use ($dirs) {
+    foreach( $dirs as $dir ) {
+        $fn = "$dir/$filename";
+        if( is_file($fn) ) return $fn;
+    }
+};
 
 include_once("header.php");
 $smarty = cmsms()->GetSmarty();
 $smarty->assign('header',$themeObject->ShowHeader('tags'));
 
 if ($action == "showpluginhelp") {
-  $content = '';
-  $file = $config['root_path']."/plugins/$type.$plugin.php";
-  if( file_exists($file) ) require_once($file);
+    $content = '';
+    $file = $find_file("$type.$plugin.php");
+    if( is_file($file) ) require_once($file);
 
-  if( function_exists('smarty_cms_help_'.$type.'_'.$plugin) ) {
-    // Get and display the plugin's help
-    @ob_start();
-    call_user_func_array('smarty_cms_help_'.$type.'_'.$plugin, array());
-    $content = @ob_get_contents();
-    @ob_end_clean();
-  }
-  else if( CmsLangOperations::key_exists("help_{$type}_{$plugin}",'tags') ) {
-    $content = CmsLangOperations::lang_from_realm('tags',"help_{$type}_{$plugin}");
-  }
-  else if( CmsLangOperations::key_exists("help_{$type}_{$plugin}") ) {
-    $content = lang("help_{$type}_{$plugin}");
-  }
+    if( function_exists('smarty_cms_help_'.$type.'_'.$plugin) ) {
+        // Get and display the plugin's help
+        @ob_start();
+        call_user_func_array('smarty_cms_help_'.$type.'_'.$plugin, array());
+        $content = @ob_get_contents();
+        @ob_end_clean();
+    }
+    else if( CmsLangOperations::key_exists("help_{$type}_{$plugin}",'tags') ) {
+        $content = CmsLangOperations::lang_from_realm('tags',"help_{$type}_{$plugin}");
+    }
+    else if( CmsLangOperations::key_exists("help_{$type}_{$plugin}") ) {
+        $content = lang("help_{$type}_{$plugin}");
+    }
 
-  if( $content ) {
-    $smarty->assign('subheader',lang('pluginhelp',array($plugin)));
-    $smarty->assign('content',$content);
-  }
-  else {
-    $smarty->assign('error',lang('nopluginhelp'));
-  }
+    if( $content ) {
+        $smarty->assign('subheader',lang('pluginhelp',array($plugin)));
+        $smarty->assign('content',$content);
+    }
+    else {
+        $smarty->assign('error',lang('nopluginhelp'));
+    }
 }
 else if ($action == "showpluginabout") {
-  $file = $config['root_path']."/plugins/$type.$plugin.php";
-  if( file_exists($file) ) require_once($file);
+    $file = $config['root_path']."/plugins/$type.$plugin.php";
+    if( file_exists($file) ) require_once($file);
 
-  $smarty->assign('subheader',lang('pluginabout',$plugin));
-  if (function_exists('smarty_cms_about_'.$type.'_'.$plugin)) {
-    @ob_start();
-    call_user_func_array('smarty_cms_about_'.$type.'_'.$plugin, array());
-    $content = @ob_get_contents();
-    @ob_end_clean();
-    $smarty->assign('content',$content);
-  }
-  else {
-    $smarty->assign('error',lang('nopluginabout'));
-  }
+    $smarty->assign('subheader',lang('pluginabout',$plugin));
+    if (function_exists('smarty_cms_about_'.$type.'_'.$plugin)) {
+        @ob_start();
+        call_user_func_array('smarty_cms_about_'.$type.'_'.$plugin, array());
+        $content = @ob_get_contents();
+        @ob_end_clean();
+        $smarty->assign('content',$content);
+    }
+    else {
+        $smarty->assign('error',lang('nopluginabout'));
+    }
 }
 else {
-  $config = cmsms()->GetConfig();
-  $dirs = array($config['root_path'].'/plugins/*php');
-  $dirs[] = $config['admin_path'].'/plugins/*php';
+    $config = cmsms()->GetConfig();
 
-  $files = array();
-  foreach( $dirs as $one ) {
-      $files = array_merge($files,glob($one));
-  }
+    $files = array();
+    foreach( $dirs as $one ) {
+        $files = array_merge($files,glob($one));
+    }
 
-  if( is_array($files) && count($files) ) {
-      $file_array = array();
-      foreach($files as $onefile) {
-          $file = basename($onefile);
-          $parts = explode('.',$file);
-          if( !is_array($parts) || count($parts) != 3 ) continue;
+    if( is_array($files) && count($files) ) {
+        $file_array = array();
+        foreach($files as $onefile) {
+            $file = basename($onefile);
+            $parts = explode('.',$file);
+            if( !is_array($parts) || count($parts) != 3 ) continue;
 
-          $rec = array();
-          $rec['type'] = $parts[0];
-          $rec['name'] = $parts[1];
-          $rec['admin'] = 0;
-          if( startswith($onefile,$config['admin_path']) ) $rec['admin'] = 1;
+            $rec = array();
+            $rec['type'] = $parts[0];
+            $rec['name'] = $parts[1];
+            $rec['admin'] = 0;
+            if( startswith($onefile,$config['admin_path']) ) $rec['admin'] = 1;
 
-          include_once($onefile);
+            include_once($onefile);
 
-          if( !function_exists('smarty_'.$rec['type'].'_'.$rec['name']) &&
-              !function_exists('smarty_cms_'.$rec['type'].'_'.$rec['name']) ) continue;
+            if( !function_exists('smarty_'.$rec['type'].'_'.$rec['name']) &&
+                !function_exists('smarty_cms_'.$rec['type'].'_'.$rec['name']) ) continue;
 
-          $rec['cachable'] = 'n_a';
-          if( $rec['type'] == 'function' && $rec['admin'] == 0 ) {
-              if( function_exists('smarty_cms_'.$rec['type'].'_'.$rec['name']) ) {
-                  $rec['cachable'] = 'no';
-              }
-              else if( function_exists('smarty_'.$rec['type'].'_'.$rec['name']) ) {
-                  $rec['cachable'] = 'yes';
-              }
-          }
+            $rec['cachable'] = 'n_a';
+            if( $rec['type'] == 'function' && $rec['admin'] == 0 ) {
+                if( function_exists('smarty_cms_'.$rec['type'].'_'.$rec['name']) ) {
+                    $rec['cachable'] = 'no';
+                }
+                else if( function_exists('smarty_'.$rec['type'].'_'.$rec['name']) ) {
+                    $rec['cachable'] = 'yes';
+                }
+            }
 
-          if( function_exists("smarty_cms_help_".$rec['type']."_".$rec['name']) ) {
-              $rec['help_url'] = 'listtags.php'.$urlext.'&amp;action=showpluginhelp&amp;plugin='.$rec['name'].'&amp;type='.$rec['type'];
-          }
-          else if( CmsLangOperations::key_exists('help_'.$rec['type'].'_'.$rec['name'],'tags') ) {
-              $rec['help_url'] = 'listtags.php'.$urlext.'&amp;action=showpluginhelp&amp;plugin='.$rec['name'].'&amp;type='.$rec['type'];
-          }
-          else if( CmsLangOperations::key_exists('help_'.$rec['type'].'_'.$rec['name']) ) {
-              $rec['help_url'] = 'listtags.php'.$urlext.'&amp;action=showpluginhelp&amp;plugin='.$rec['name'].'&amp;type='.$rec['type'];
-          }
+            if( function_exists("smarty_cms_help_".$rec['type']."_".$rec['name']) ) {
+                $rec['help_url'] = 'listtags.php'.$urlext.'&amp;action=showpluginhelp&amp;plugin='.$rec['name'].'&amp;type='.$rec['type'];
+            }
+            else if( CmsLangOperations::key_exists('help_'.$rec['type'].'_'.$rec['name'],'tags') ) {
+                $rec['help_url'] = 'listtags.php'.$urlext.'&amp;action=showpluginhelp&amp;plugin='.$rec['name'].'&amp;type='.$rec['type'];
+            }
+            else if( CmsLangOperations::key_exists('help_'.$rec['type'].'_'.$rec['name']) ) {
+                $rec['help_url'] = 'listtags.php'.$urlext.'&amp;action=showpluginhelp&amp;plugin='.$rec['name'].'&amp;type='.$rec['type'];
+            }
 
-          if( function_exists("smarty_cms_about_".$rec['type']."_".$rec['name']) ) {
-              $rec['about_url'] = 'listtags.php'.$urlext.'&amp;action=showpluginabout&amp;plugin='.$rec['name'].'&amp;type='.$rec['type'];
-          }
+            if( function_exists("smarty_cms_about_".$rec['type']."_".$rec['name']) ) {
+                $rec['about_url'] = 'listtags.php'.$urlext.'&amp;action=showpluginabout&amp;plugin='.$rec['name'].'&amp;type='.$rec['type'];
+            }
 
-          $file_array[] = $rec;
-      }
-  }
+            $file_array[] = $rec;
+        }
+    }
 
-  // add in standard tags...
-  $rec = array('type'=>'function','name'=>'content');
-  $rec['help_url'] = 'listtags.php'.$urlext.'&amp;action=showpluginhelp&amp;plugin='.$rec['name'].'&amp;type='.$rec['type'];
-  $rec['cachable'] = 'no';
-  $file_array[] = $rec;
+    // add in standard tags...
+    $rec = array('type'=>'function','name'=>'content');
+    $rec['help_url'] = 'listtags.php'.$urlext.'&amp;action=showpluginhelp&amp;plugin='.$rec['name'].'&amp;type='.$rec['type'];
+    $rec['cachable'] = 'no';
+    $file_array[] = $rec;
 
-  $rec = array('type'=>'function','name'=>'content_image');
-  $rec['help_url'] = 'listtags.php'.$urlext.'&amp;action=showpluginhelp&amp;plugin='.$rec['name'].'&amp;type='.$rec['type'];
-  $rec['cachable'] = 'no';
-  $file_array[] = $rec;
+    $rec = array('type'=>'function','name'=>'content_image');
+    $rec['help_url'] = 'listtags.php'.$urlext.'&amp;action=showpluginhelp&amp;plugin='.$rec['name'].'&amp;type='.$rec['type'];
+    $rec['cachable'] = 'no';
+    $file_array[] = $rec;
 
-  $rec = array('type'=>'function','name'=>'content_module');
-  $rec['help_url'] = 'listtags.php'.$urlext.'&amp;action=showpluginhelp&amp;plugin='.$rec['name'].'&amp;type='.$rec['type'];
-  $rec['cachable'] = 'no';
-  $file_array[] = $rec;
+    $rec = array('type'=>'function','name'=>'content_module');
+    $rec['help_url'] = 'listtags.php'.$urlext.'&amp;action=showpluginhelp&amp;plugin='.$rec['name'].'&amp;type='.$rec['type'];
+    $rec['cachable'] = 'no';
+    $file_array[] = $rec;
 
-  $rec = array('type'=>'function','name'=>'process_pagedata');
-  $rec['help_url'] = 'listtags.php'.$urlext.'&amp;action=showpluginhelp&amp;plugin='.$rec['name'].'&amp;type='.$rec['type'];
-  $rec['cachable'] = 'no';
-  $file_array[] = $rec;
+    $rec = array('type'=>'function','name'=>'process_pagedata');
+    $rec['help_url'] = 'listtags.php'.$urlext.'&amp;action=showpluginhelp&amp;plugin='.$rec['name'].'&amp;type='.$rec['type'];
+    $rec['cachable'] = 'no';
+    $file_array[] = $rec;
 
-  function listtags_plugin_sort($a,$b)
-  {
-      return strcmp($a['name'],$b['name']);
-  }
+    function listtags_plugin_sort($a,$b)
+    {
+        return strcmp($a['name'],$b['name']);
+    }
 
-  usort($file_array,'listtags_plugin_sort');
+    usort($file_array,'listtags_plugin_sort');
 
-  $smarty->assign('plugins',$file_array);
+    $smarty->assign('plugins',$file_array);
 }
 
 echo $smarty->fetch('listtags.tpl');
 include_once("footer.php");
-
-
-?>
