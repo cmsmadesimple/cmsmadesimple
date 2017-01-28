@@ -8,6 +8,7 @@ $lang['can_delete'] = 'Allow file deletion';
 $lang['can_mkdir'] = 'Allow directory creation';
 $lang['can_upload'] = 'Uploads allowed';
 $lang['changedir'] = 'Change directory to';
+$lang['clear'] = 'Clear';
 $lang['confirm_delete'] = 'Are you sure you want to delete this?';
 $lang['create_dir'] = 'Create a new folder';
 

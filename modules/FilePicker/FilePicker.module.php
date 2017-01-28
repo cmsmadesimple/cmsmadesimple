@@ -144,7 +144,7 @@ final class FilePicker extends \CMSModule implements \CMSMS\FilePickerInterface
         return $this->create_url('m1_','filepicker');
     }
 
-    public function get_html( $name, $value, \CMSMS\FilePickerProfile $profile )
+    public function get_html( $name, $value, \CMSMS\FilePickerProfile $profile, $required = false )
     {
         $_instance = 'i'.uniqid();
         if( $value === '-1' ) $value = null;
@@ -153,11 +153,13 @@ final class FilePicker extends \CMSModule implements \CMSMS\FilePickerInterface
         $sig = TemporaryProfileStorage::set( $profile );
         $smarty = \cms_utils::get_smarty(); // $this->_GetTemplateObject();
         $tpl_ob = $smarty->CreateTemplate($this->GetTemplateResource('contentblock.tpl'),null,null,$smarty);
+        $tpl_ob->assign('mod',$this);
         $tpl_ob->assign('sig',$sig);
         $tpl_ob->assign('blockName',$name);;
         $tpl_ob->assign('value',$value);
         $tpl_ob->assign('instance',$_instance);
         $tpl_ob->assign('profile',$profile);
+        $tpl_ob->assign('required',$required);
         switch( $profile->type ) {
         case FileType::TYPE_IMAGE:
             $tpl_ob->assign('title',$this->Lang('select_an_image'));

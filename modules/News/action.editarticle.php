@@ -373,16 +373,13 @@ $query = 'SELECT * FROM ' . CMS_DB_PREFIX . 'module_news_fielddefs ORDER BY item
 $dbr = $db->Execute($query);
 $custom_flds = array();
 while ($dbr && ($row = $dbr->FetchRow())) {
-    if (isset($row['extra']) && $row['extra'])
-        $row['extra'] = unserialize($row['extra']);
+    if (isset($row['extra']) && $row['extra']) $row['extra'] = unserialize($row['extra']);
 
     $options = null;
-    if (isset($row['extra']['options']))
-        $options = $row['extra']['options'];
+    if (isset($row['extra']['options'])) $options = $row['extra']['options'];
 
     $value = '';
-    if (isset($fieldvals[$row['id']]))
-        $value = $fieldvals[$row['id']]['value'];
+    if (isset($fieldvals[$row['id']])) $value = $fieldvals[$row['id']]['value'];
     $value = isset($params['customfield'][$row['id']]) && in_array($params['customfield'][$row['id']], $params['customfield']) ? $params['customfield'][$row['id']] : $value;
 
     if ($row['type'] == 'file') {
@@ -539,4 +536,3 @@ try {
 
 // and display the template.
 echo $this->ProcessTemplate('editarticle.tpl');
-?>

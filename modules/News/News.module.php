@@ -25,7 +25,7 @@ class News extends CMSModule
     function GetFriendlyName() { return $this->Lang('news'); }
     function IsPluginModule() { return true; }
     function HasAdmin() { return true; }
-    function GetVersion() { return '2.50.8'; }
+    function GetVersion() { return '2.51'; }
     function MinimumCMSVersion() { return '1.12-alpha0'; }
     function GetAdminDescription() { return $this->Lang('description'); }
     function GetAdminSection() { return 'content'; }
@@ -222,8 +222,12 @@ class News extends CMSModule
 
     public function GetFieldTypes()
     {
-        $items = array('textbox'=>$this->Lang('textbox'), 'checkbox'=>$this->Lang('checkbox'), 'textarea'=>$this->Lang('textarea'),
-                       'dropdown'=>$this->Lang('dropdown'), 'file'=>$this->Lang('file'));
+        $items = [ 'textbox'=>$this->Lang('textbox'),
+                   'checkbox'=>$this->Lang('checkbox'),
+                   'textarea'=>$this->Lang('textarea'),
+                   'dropdown'=>$this->Lang('dropdown'),
+                   'linkedfile'=>$this->Lang('linkedfile'),
+                   'file'=>$this->Lang('file') ];
         return $items;
     }
 

@@ -3,7 +3,6 @@
 #-------------------------------------------------------------------------
 # Module: cms_content_tree (c) 2010 by Robert Campbell
 #         (calguy1000@cmsmadesimple.org)
-#  A caching tree for CMSMS content objects.
 #
 #-------------------------------------------------------------------------
 # CMS - CMS Made Simple is (c) 2005 by Ted Kulp (wishy@cmsmadesimple.org)

@@ -191,10 +191,16 @@
                 {elseif $field->type == 'file'}
                     {if !empty($field->value)}{$field->value}<br />{/if} <input type="file" id="{$field->idattr}" name="{$field->nameattr}" />{if !empty($field->value)} {$delete_field_val} <input type="checkbox" name="{$field->delete}" value="delete" />{/if}
                 {elseif $field->type == 'dropdown'}
-                <select id="{$field->idattr}" name="{$field->nameattr}">
-                    <option value="-1">{$select_option}</option>
-                    {html_options options=$field->options selected=$field->value}
-                </select>
+                    <select id="{$field->idattr}" name="{$field->nameattr}">
+                        <option value="-1">{$select_option}</option>
+                        {html_options options=$field->options selected=$field->value}
+                    </select>
+		{elseif $field->type == 'linkedfile'}
+		    {if $field->value}
+		       {thumbnail_url file=$field->value assign=tmp}
+		       {if $tmp}<img src="{$tmp}" alt="{$field->value}"/>{/if}
+		    {/if}
+                    {cms_filepicker name="{$field->nameattr}" value=$field->value}
                 {/if}
             </p>
         </div>
@@ -321,9 +327,6 @@
     {/if}
 
     <div class="pageoverflow">
-        <p class="pagetext">
-            &nbsp;
-        </p>
         <p class="pageinput">
             <input type="submit" name="{$actionid}submit" value="{$mod->Lang('submit')}"/>&nbsp;
             <input type="submit" id="{$actionid}cancel" name="{$actionid}cancel" value="{$mod->Lang('cancel')}"/>

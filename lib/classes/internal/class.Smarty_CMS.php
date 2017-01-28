@@ -127,8 +127,11 @@ class Smarty_CMS extends SmartyBC
         $this->addConfigDir($config['assets_path'].'/configs');
         $this->addPluginsDir($config['assets_path'].'/plugins');
 
-        // Set plugins dirs
+        // use this for any third party plugins that somebody has added, and is in an upgrade.
         $this->addPluginsDir(cms_join_path(CMS_ROOT_PATH,'plugins'));
+
+        // Set core plugins dir
+        $this->addPluginsDir(cms_join_path(CMS_ROOT_PATH,'lib','plugins'));
 
         // Add lib/assets tpl dir to scope
         $this->addTemplateDir(cms_join_path(CMS_ROOT_PATH, 'lib', 'assets', 'templates'));
@@ -229,7 +232,7 @@ class Smarty_CMS extends SmartyBC
         debug_buffer('',"Start Load Smarty Plugin $name/$type");
 
         $cachable = TRUE;
-        $fn = cms_join_path(CMS_ROOT_PATH,'plugins',$type.'.'.$name.'.php');
+        $fn = cms_join_path(CMS_ROOT_PATH,'lib','plugins',$type.'.'.$name.'.php');
         if( file_exists($fn) ) {
             // plugins with the smarty_cms_function
             require_once($fn);
