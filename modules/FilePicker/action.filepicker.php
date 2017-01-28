@@ -87,6 +87,11 @@ $accept_file = function(\CMSMS\FilePickerProfile $profile,$cwd,$path,$filename) 
         if( !$assistant->is_relative($fullpath) ) return FALSE;
         return TRUE;
     }
+    if( is_dir($fullpath) ) {
+        if( !$profile->show_hidden && ( startswith($filename,'.') || startswith($filename,'_') ) ) return FALSE;
+        if( !$assistant->is_relative( $fullpath ) ) return FALSE;
+        return TRUE;
+    }
     $res = $this->is_acceptable_filename( $profile, $filename );
     if( !$res ) return FALSE;
     if( is_dir($fullpath) && !$assistant->is_relative($fullpath) ) return FALSE;
