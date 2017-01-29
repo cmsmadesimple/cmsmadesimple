@@ -2,6 +2,7 @@
 class CmsVersionCheckTask implements CmsRegularTask
 {
     const  LASTEXECUTE_SITEPREF   = __CLASS__;
+    const  ENABLED_SITEPREF = 'checkversion';
 
     public function get_name()
     {
@@ -18,6 +19,9 @@ class CmsVersionCheckTask implements CmsRegularTask
         // do we need to do this task.
         // we only do it daily.
         if( !$time ) $time = time();
+        $enabled = \cms_siteprefs::get(self::ENABLED_SITEPREF,1);
+        if( !$enabled ) return FALSE;
+
         $last_execute = \cms_siteprefs::get(self::LASTEXECUTE_SITEPREF,0);
         if( ($time - 24*60*60) >= $last_execute ) return TRUE;
         return FALSE;
