@@ -273,20 +273,38 @@ img {
 	padding: 55px 15px 8px 15px;
 }
 
-.filepicker-breadcrumb {
+#filepicker-progress.filepicker-breadcrumb {
+	position:relative;
+	height:22px;
 	margin-bottom: 10px;
-	padding: 10px;
+	padding: 7px 10px;
 	background: #fefefe;
 	-webkit-box-shadow: 0 1px 4px rgba(0,0,0,.065);
 	-moz-box-shadow: 0 1px 4px rgba(0,0,0,.065);
 	box-shadow: 0 1px 4px rgba(0,0,0,.065);
+	border:0;
 	border-bottom: 1px solid #c5c5c5;
 }
 
 .filepicker-breadcrumb p {
 	padding: 0;
 	margin: 0;
+	line-height:22px;
 }
+
+#filepicker-progress-text {
+	position: absolute;
+	left: 48%;
+	top:8px;
+	font-size:13px;
+	font-weight:bold;
+	text-shadow:1px 1px 0 #fff;
+}
+
+#filepicker-progress .ui-progressbar-value {
+	height:22px;
+	margin-top:0;
+	border:0;}
 
 .filepicker-list {
 	width: 100%;
@@ -552,7 +570,6 @@ img {
     text-align: right;
     padding-top: 0.5em;
 }
-
 
 
 @media screen and (max-width: 430px) {
