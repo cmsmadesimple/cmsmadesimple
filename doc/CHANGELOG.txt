@@ -80,6 +80,7 @@ Core - General
   - Upgrade to an un-modified version of smarty v3.1.31
   - Move plugins directory to lib/plugins since we now have the assets/plugins directory for custom plugins.  The upgrader should preserve any custom plugins in the /plugins directory.
   - Add new plugins {thumbnail_url}, {file_url} and {cms_filepicker) TODO: document them.
+  - Add more intelligence to the tableoption handling for DataDictionary::CreateTableSQL
 
   - #11080 - Parameter $adding in GetContentBlockFieldInput always FALSE.
   - #11093 - Bad error message in jquery.cmsms_autorefresh.js.
