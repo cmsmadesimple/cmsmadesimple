@@ -565,7 +565,6 @@ abstract class DataDictionary
             $tableoptions = [ $dbtype => $tableoptions ];
         }
 
-        debug_display($tableoptions); die();
         list($lines,$pkey) = $this->_GenFields($flds, true);
 		$taboptions = $this->_Options($tableoptions);
 		$tabname = $this->TableName ($tabname);
