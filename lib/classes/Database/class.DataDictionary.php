@@ -555,28 +555,18 @@ abstract class DataDictionary
      *
      * @param string $tabname The table name
      * @param string $flds a comma separated list of field definitions using datadictionary syntax.
-     * @param assoc  $tableoptions An associative array of table options
+     * @param mixed  $tableoptions A string specifying table options (database driver specific) for the table creation command.  Or an associative array of table options, keys being the database type (as available).
      * @return string[] An array of strings suitable for use with the ExecuteSQLArray method
      */
 	public function CreateTableSQL($tabname, $flds, $tableoptions=false)
 	{
-        // if no table options specified, force MyISAM table type for mysql and mysqli
-        $str = 'ENGINE MyISAM CHARACTER SET utf8 COLLATE utf8_general_ci';
-        $stdtableoptions = array('mysql' => $str, 'mysqli' => $str);
-        if( !$tableoptions ) {
-            $tableoptions = $stdtableoptions;
+        if( $tableoptions && is_string($tableoptions)) {
+            $dbtype = $this->_DBType();
+            $tableoptions = [ $dbtype => $tableoptions ];
         }
-        else {
-            $tableoptions = array_merge($stdtableoptions,$tableoptions);
-        }
-        $str = substr($this->_DBType(),0,5);
-        if( isset($tableoptions[$str]) && strpos($tableoptions[$str],'CHARACTER') === FALSE &&
-            strpos($tableoptions[$str],'COLLATE') === FALSE ) {
-            // if no character set and collate options specified, force UTF8
-            $tableoptions[$str] .= "  CHARACTER SET utf8 COLLATE utf8_general_ci";
-        }
-        list($lines,$pkey) = $this->_GenFields($flds, true);
 
+        debug_display($tableoptions); die();
+        list($lines,$pkey) = $this->_GenFields($flds, true);
 		$taboptions = $this->_Options($tableoptions);
 		$tabname = $this->TableName ($tabname);
 		$sql = $this->_TableSQL($tabname,$lines,$pkey,$taboptions);

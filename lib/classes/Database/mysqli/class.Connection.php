@@ -244,4 +244,4 @@ class Connection extends \CMSMS\Database\Connection
     {
         return $this->Execute(sprintf('DROP TABLE %s',$seqname));
     }
-} //
+} // end of class

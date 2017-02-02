@@ -285,13 +285,34 @@ class DataDictionary extends \CMSMS\Database\DataDictionary
 
 	function CreateTableSQL($tabname, $flds, $tableoptions=false)
 	{
-        $tableoptions = $this->_Options($tableoptions);
-        foreach( $tableoptions as $key => &$value ) {
-            $value = str_replace('TYPE=MyISAM','ENGINE=MyISAM',$value);
+        debug_display($tableoptions,'tableoptions');
+        $str = 'ENGINE=MyISAM CHARACTER SET utf8 COLLATE utf8_general_ci';
+        $dbtype = $this->_DBType();
+
+        // clean up input tableoptions
+        if( !$tableoptions ) {
+            $tableoptions = [ $dbtype => $str ];
         }
-        if( isset($tableoptions['MYSQL']) && !isset($tableoptions['MYSQLI']) ) $tableoptions['MYSQLI'] = $tableoptions['MYSQL'];
+        else if( is_string($tableoptions) ) {
+            $tableoptions = [ $dbtype => $tableoptions ];
+        }
+        else if( is_array($tableoptions) && !isset($tableoptions[$dbtype]) && isset($tableoptions['mysql']) ) {
+            $tableoptions[$dbtype] = $tableoptions['mysql'];
+        }
+        else if( is_array($tableoptions) && !isset($tableoptions[$dbtype]) && isset($tableoptions['MYSQL']) ) {
+            $tableoptions[$dbtype] = $tableoptions['MYSQL'];
+        }
+
+        foreach( $tableoptions as $key => &$val ) {
+            if( strpos($val,'TYPE=') !== FALSE ) $val = str_replace('TYPE=','ENGINE=',$val);
+        }
+        if( isset($tableoptions[$dbtype]) && strpos($tableoptions[$dbtype],'CHARACTER') === FALSE &&
+            strpos($tableoptions[$dbtype],'COLLATE') === FALSE ) {
+            // if no character set and collate options specified, force UTF8
+            $tableoptions[$dbtype] .= " CHARACTER SET utf8 COLLATE utf8_general_ci";
+        }
+
         return parent::CreateTableSQL($tabname, $flds, $tableoptions);
 	}
 
 } // end of class
-?>
