@@ -40,7 +40,7 @@
 namespace CMSMS\Async;
 
 /**
- * A class defining a manager for asyncrhonous jobs.
+ * A singleton class defining a manager for asyncrhonous jobs.
  *
  * In reality, this is a simple proxy for methods in the CmsJobManager module.
  *
@@ -51,42 +51,88 @@ namespace CMSMS\Async;
  */
 final class JobManager
 {
+    /**
+     * @ignore
+     */
     const MANAGER_MODULE = 'CmsJobManager';
+
+    /**
+     * @ignore
+     */
     private $_mod;
+
+    /**
+     * @ignore
+     */
     private static $_instance;
 
+    /**
+     * @ignore
+     */
     protected function __construct() {}
 
+    /**
+     * Get the sole permitted instance of this object
+     *
+     * @return \CMSMS\JobManager
+     */
     public static function get_instance()
     {
         if( !self::$_instance ) self::$_instance = new self();
         return self::$_instance;
     }
 
+    /**
+     * Get the module that handles job requests.
+     *
+     * @internal
+     * @return CmsModule
+     */
     protected function get_mod()
     {
         if( !$this->_mod ) $this->_mod = \CmsApp::get_instance()->GetModuleInstance(self::MANAGER_MODULE);
         return $this->_mod;
     }
 
+    /**
+     * Trigger asynchronous processing.
+     *
+     * @internal
+     */
     public function trigger_async_processing()
     {
         $mod = $this->get_mod();
         if( $mod ) return $mod->trigger_async_processing();
     }
 
+    /**
+     * Save a job to the queue.
+     *
+     * @param Job $job
+     * @return int The id of the job.
+     */
     public function save_job( Job &$job )
     {
         $mod = $this->get_mod();
         if( $mod ) return $mod->save_job($job);
     }
 
+    /**
+     * Remove a job from the queue
+     *
+     * @pram Job $job
+     */
     public function delete_job( Job &$job )
     {
         $mod = $this->get_mod();
         if( $mod ) return $mod->delete_job($job);
     }
 
+    /**
+     * Remove all of the jbos originating from a specific module
+     *
+     * @param string $module_name
+     */
     public function delete_jobs_by_module( $module_name )
     {
         $mod = $this->get_mod();

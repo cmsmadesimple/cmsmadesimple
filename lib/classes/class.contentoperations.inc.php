@@ -81,6 +81,9 @@ class ContentOperations
 	}
 
 
+    /**
+     * @ignore
+     */
     public static function setup_cache()
     {
         // two caches, the flat list, and the tree
@@ -791,7 +794,7 @@ class ContentOperations
      * @param bool $for_child If true, assume that we want to add a new child and obey the WantsChildren flag of each content page. (new in 2.2).
 	 * @return string The html dropdown of the hierarchy.
 	 */
-	function CreateHierarchyDropdown($ignored = '', $value = '', $name = 'parent_id', $allowcurrent = 0,
+	function CreateHierarchyDropdown($current = '', $value = '', $name = 'parent_id', $allowcurrent = 0,
 									 $use_perms = 0, $ignore_current = 0, $allow_all = false, $for_child = false )
 	{
 		static $count = 0;

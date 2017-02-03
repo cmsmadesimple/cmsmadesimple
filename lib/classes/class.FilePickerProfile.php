@@ -1,14 +1,60 @@
 <?php
+
+/**
+ * A class that defines a base profile of information needed to display a filepicker
+ * @package CMS
+ * @license GPL
+ *
+ */
+
 namespace CMSMS;
+
+/**
+ * A simple class that defines a profile of information used by the filepicker to indicate how it should
+ * behave and what functionality should be provided.
+ *
+ * This is an immutable class.
+ *
+ * The constructor and overrideWith methods of this class accept an associative array of parameters (see the properties below)
+ * to allow building or altering a profile object.  Ths is the only time when properties of a profile can be adjusted.
+ *
+ * ```php
+ * $obj = new \CMSMS\FilePickerProfile( [ 'type'=>FileType::TYPE_IMAGE, 'exclude_prefix'=>'foo' ] );
+ * ```php
+ *
+ * @package CMS
+ * @license GPL
+ * @author Robert Campbell <calguy1000@cmsmadesimple.org>
+ * @since  2.2
+ * @property-read string $top The top directory for the filepicker (relative to the CMSMS uploads directory)
+ * @property-read FileType $type The CMSMS FileType representing what files can be selected.
+ * @property-read string $match_prefix List only files/items that have the specified prefix.
+ * @property-read string exclude_prefix  Exclude any files/items that have the specified prefix.
+ * @property-read bool $can_mkdir  Users of the filepicker can create new directories.
+ * @property-read bool $can_upload  Users of the filepicker can upload new files (of the specified type)
+ * @property-read bool $can_delete  Users of the filepicker can remove files.
+ * @property-read bool $show_thumbs Whether thumbnail images should be shown in place of normal icons for images.
+ * @property-read bool $show_hidden Indicates that hidden files should be shown in the filepicker.
+ * @property-read bool $sort Indicates whether files should be sorted before listing them in the filepicker.
+ */
 class FilePickerProfile
 {
     const FLAG_NONE = 0;
     const FLAG_YES = 1;
     const FLAG_BYGROUP = 2;
 
+    /**
+     * @ignore
+     */
     private $_data = [ 'top'=>null, 'type'=>FileType::TYPE_ANY, 'can_upload'=>self::FLAG_YES, 'show_thumbs'=>1, 'can_delete'=>self::FLAG_YES,
                        'match_prefix'=>null, 'show_hidden'=>FALSE, 'exclude_prefix'=>null, 'sort'=>TRUE, 'can_mkdir'=>TRUE ];
 
+    /**
+     * Set a value into this profile
+     *
+     * @param string $key The key to set
+     * @param mixed $val The value to set.
+     */
     protected function setValue( $key, $val )
     {
         switch( $key ) {
@@ -68,6 +114,11 @@ class FilePickerProfile
         }
     }
 
+    /**
+     * Constructor
+     *
+     * @param array $params An associative array of params suitable for hte setValue method.
+     */
     public function __construct( array $params = null )
     {
         if( !is_array($params) || !count($params) ) return;
@@ -76,6 +127,9 @@ class FilePickerProfile
         }
     }
 
+    /**
+     * @ignore
+     */
     public function __get($key)
     {
         switch( $key ) {
@@ -97,6 +151,12 @@ class FilePickerProfile
         }
     }
 
+    /**
+     * Create a new profile object based on the current one, with various aadjusments.
+     *
+     * @param array $params Associative array of paramaters for the setValue method.
+     * @return FilePickerProfile
+     */
     public function overrideWith( array $params )
     {
         $obj = clone $this;
@@ -106,6 +166,12 @@ class FilePickerProfile
         return $obj;
     }
 
+    /**
+     * Get the raw data of the profile.
+     *
+     * @internal
+     * @return array
+     */
     public function getRawData()
     {
         return $this->_data;

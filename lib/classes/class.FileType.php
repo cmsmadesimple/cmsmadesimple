@@ -1,6 +1,21 @@
 <?php
+
+/**
+ * This file defines constants for file types
+ * @package CMS
+ * @license GPL
+ */
+
 namespace CMSMS;
 
+/**
+ * A simple abstract class that defines constants for numerous file types.
+ *
+ * @package CMS
+ * @license GPL
+ * @author Robert Campbell <calguy1000@cmsmadesimple.org>
+ * @since  2.2
+ */
 abstract class FileType
 {
     const TYPE_IMAGE = 'image';

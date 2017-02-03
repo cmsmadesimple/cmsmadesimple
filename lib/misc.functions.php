@@ -184,7 +184,7 @@ function cms_join_path()
  * @since 2.2
  * @author Robert Campbell
  * @param string $in The input path or file specification
- * @param string $relative_to,  The optional path to compute relative to.  If not supplied the cmsms root path will be used.
+ * @param string $relative_to The optional path to compute relative to.  If not supplied the cmsms root path will be used.
  * @return string The relative portion of the input string.
  */
 function cms_relative_path($in,$relative_to = null)

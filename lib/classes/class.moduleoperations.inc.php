@@ -124,7 +124,9 @@ final class ModuleOperations
         return self::$_instance;
     }
 
-
+    /**
+     * @ignore
+     */
     protected static function get_module_classmap()
     {
         if( !is_array(self::$_classmap) ) {
@@ -135,6 +137,9 @@ final class ModuleOperations
         return self::$_classmap;
     }
 
+    /**
+     * @ignore
+     */
     protected static function get_module_classname($module)
     {
         $module = trim($module);
@@ -144,6 +149,9 @@ final class ModuleOperations
         return $module;
     }
 
+    /**
+     * @ignore
+     */
     protected static function get_module_filename($module)
     {
         $module = trim($module);
@@ -153,6 +161,12 @@ final class ModuleOperations
         return cms_join_path($config['root_path'],'modules',$module,"$module.module.php");
     }
 
+    /**
+     * Allow setting the classname for a module... useful when the module class file itself is within a namespace.
+     *
+     * @param string $module The module name
+     * @param string $classname The class name.
+     */
     public static function set_module_classname($module,$classname)
     {
         $module = trim($module);

@@ -25,6 +25,8 @@
     </transformations>
     <files>
         <directory>lib</directory>
+        <ignore>*~</ignore>
+        <ignore>.#*</ignore>
         <ignore>adodb_lite/*</ignore>
         <ignore>filemanager/*</ignore>
         <ignore>jquery/*</ignore>
@@ -32,6 +34,7 @@
         <ignore>nls/*</ignore>
         <ignore>phpmailer/*</ignore>
         <ignore>smarty/*</ignore>
+        <ignore>plugins/*</ignore>
         <ignore>lib/include.php</ignore>
         <ignore>lib/version.php</ignore>
         <ignore>lib/tasks/*</ignore>

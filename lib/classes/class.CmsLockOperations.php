@@ -157,6 +157,8 @@ final class CmsLockOperations
 
   /**
    * Delete all the locks for the current user
+   *
+   * @param string $type An optional type name.
    */
   public static function delete_for_user($type = null)
   {

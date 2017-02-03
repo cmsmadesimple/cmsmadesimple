@@ -60,6 +60,7 @@ class cms_content_tree extends cms_tree
 	 * @param string $tag_name The tag name to search for
 	 * @param mixed  $value The tag value to search for
 	 * @param bool $case_insensitive Wether the value should be treated as case insensitive.
+     * @param bool $usequick Optionally, when searching by id... uise the quickfind method if possible.
 	 * @return cms_tree
 	 */
 	public function &find_by_tag($tag_name,$value,$case_insensitive = FALSE,$usequick = TRUE)

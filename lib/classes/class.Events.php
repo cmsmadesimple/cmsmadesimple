@@ -142,6 +142,9 @@ final class Events
 	}
 
 
+    /**
+     * @ignore
+     */
     static public function setup()
     {
         $obj = new \CMSMS\internal\global_cachable(__CLASS__,function(){
@@ -180,6 +183,9 @@ final class Events
 	}
 
 
+    /**
+     * @ignore
+     */
     static public function GetEventHandler( $handler_id )
     {
         self::$_handlercache = \CMSMS\internal\global_cache::get(__CLASS__);

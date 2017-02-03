@@ -212,6 +212,7 @@ abstract class Alert
     /**
      * Get the name of the preference that this alert will be stored as.
      *
+     * @param string $name optionaly provide a name for the alert.  If not specified the current alert name will be used.
      * @return string
      */
     public function get_prefname($name = null)
@@ -244,9 +245,10 @@ abstract class Alert
     /**
      * Encode an alert into a format suitable for storing
      *
+     * @param Alert $obj The object to be ecoded.
      * @return string A serialized array, containing an optional module name that must be loaded, and the serrialized alert object.
      */
-    protected static function encode_object($obj)
+    protected static function encode_object(Alert $obj)
     {
         $tmp = array('module'=>$obj->module,'data'=>serialize($obj));
         return serialize($tmp);

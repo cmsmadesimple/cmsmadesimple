@@ -1,13 +1,13 @@
 <?php
 #Visit our homepage at: http://cmsmadesimple.org
 
-use \CMSMS\HookManager;
-
 /**
  * This file contails the classes and methods to define the LayoutTemplate functionality
  * @package CMS
  * @license GPL
  */
+
+use \CMSMS\HookManager;
 
 /**
  * A class to represent a smarty template.
@@ -546,6 +546,7 @@ class CmsLayoutTemplate
     /**
      * Get wether this template is listable in public template lists.
      *
+     * @param bool $flag The value for the listable attribute.
      * @return bool
      * @since 2.1
      */

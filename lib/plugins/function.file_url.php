@@ -11,7 +11,6 @@ function smarty_function_file_url($params,&$template)
         trigger_error('file_url plugin: invalid file parameter');
         return;
     }
-
     if( $add_dir ) {
         if( startswith( $add_dir, '/') ) $add_dir = substr($add_dir,1);
         $dir = $dir.'/'.$add_dir;
@@ -21,6 +20,8 @@ function smarty_function_file_url($params,&$template)
         }
     }
 
+    $out = null;
+    if( $file ) {}
     $fullpath = $dir.'/'.$file;
     if( !is_file($fullpath) || !is_readable($fullpath) ) {
         // no error log here.

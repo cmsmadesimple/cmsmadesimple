@@ -1,11 +1,14 @@
 <?php
 
-namespace CMSMS\Layout;
+/**
+ * @ignore
+ */
+namespace CMSMS\internal;
 
 /**
  * @since 2.2
  */
-class __CORE__generic_Type_Assistant extends TemplateTypeAssistant
+class __CORE__generic_Type_Assistant extends \CMSMS\Layout\TemplateTypeAssistant
 {
     public function &get_type()
     {

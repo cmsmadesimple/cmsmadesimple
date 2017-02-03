@@ -511,6 +511,9 @@ function get_pageid_or_alias_from_url()
     return $page;
 }
 
+/**
+ * @ignore
+ */
 function preprocess_mact($returnid)
 {
     $config = \cms_config::get_instance();

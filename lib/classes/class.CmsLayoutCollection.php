@@ -18,13 +18,13 @@
 #
 #$Id: class.global.inc.php 6939 2011-03-06 00:12:54Z calguy1000 $
 
-use \CMSMS\HookManager;
-
 /**
  * This class defines classes and utility functions for a Theme or Collection.
  * @package CMS
  * @license GPL
  */
+
+use \CMSMS\HookManager;
 
 /**
  * A class to manage a collection (or theme) of Templates and Stylesheets

@@ -34,13 +34,13 @@
 #-------------------------------------------------------------------------
 #END_LICENSE
 
-use \CMSMS\HookManager;
-
 /**
  * This file contains classes and functions that define a template type.
  * @package CMS
  * @license GPL
  */
+
+use \CMSMS\HookManager;
 
 /**
  * A class to manage template types
@@ -781,6 +781,7 @@ class CmsLayoutTemplateType
     {
         if( !$this->_assistant ) {
             $classnames = [];
+            $classnames[] = '\\CMSMS\\internal\\'.$this->get_originator().$this->get_name().'_Type_Assistant';
             $classnames[] = '\\CMSMS\\Layout\\'.$this->get_originator().$this->get_name().'_Type_Assistant';
             $classnames[] = $this->get_originator().'_'.$this->get_name().'_Type_Assistant';
             foreach( $classnames as $cn ) {
@@ -798,7 +799,11 @@ class CmsLayoutTemplateType
     }
 
     /**
+     * Get a usage string for this template type.
+     *
      * @since 2.2
+     * @param string $name The name of the template object.
+     * @return string
      */
     public function get_usage_string($name)
     {
