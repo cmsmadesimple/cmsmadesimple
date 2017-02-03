@@ -32,7 +32,6 @@ $lang['error_upload_maxNumberOfFiles'] = 'You are uploading too many files at on
 $lang['err_profile_topdir'] = 'The top directory specified does not exist';
 
 // F
-$lang['fileextensions'] = 'Allowed file extensions';
 $lang['filename'] = 'Filename';
 $lang['filterby'] = 'Filter by';
 $lang['fileview'] = 'File view';
@@ -41,6 +40,18 @@ $lang['friendlyname'] = 'File Picker';
 // H
 $lang['hdr_add_profile'] = 'Add profile';
 $lang['hdr_edit_profile'] = 'Edit profile';
+$lang['HelpPopupTitle_ProfileName'] = 'Profile Name';
+$lang['HelpPopup_ProfileName'] = 'Each profile should have a simple, unique name.  Names should only contain alphanumeric characters, and/or the Underscore character.';
+$lang['HelpPopupTitle_ProfileCan_Delete'] = 'Allow deleting files';
+$lang['HelpPopup_ProfileCan_Delete'] = 'Optionally allow users to delete files during the selection process';
+$lang['HelpPopupTitle_ProfileCan_Mkdir'] = 'Allow deleting files';
+$lang['HelpPopup_ProfileCan_Mkdir'] = 'Optionally allow users to create new directories (below the specified top directory) during the selection process.';
+$lang['HelpPopupTitle_ProfileCan_Upload'] = 'Allow uploading';
+$lang['HelpPopup_ProfileCan_Upload'] = 'Optionally allow users to upload files during the selection process';
+$lang['HelpPopupTitle_ProfileDir'] = 'Top Directory';
+$lang['HelpPopup_ProfileDir'] = 'Optionally enter the relative path of a directory (relative to the uploads path) to restrict operations to.';
+$lang['HelpPopupTitle_ProfileShowthumbs'] = 'Show Thumbnails';
+$lang['HelpPopup_ProfileShowthumbs'] = 'If enabled, thumbnails will be visible for image files for which thumbnails are generated.';
 
 $lang['HelpPopup_ProfileCan_Delete'] = 'TODO';
 $lang['HelpPopup_ProfileCan_Mkdir'] = 'TODO';

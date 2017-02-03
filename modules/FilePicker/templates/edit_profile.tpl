@@ -37,12 +37,6 @@
   </p>
 </div>
 <div class="c_full cf">
-  <label for="profile_extensions" class="grid_2">&nbsp;&nbsp;&nbsp;{$mod->Lang('fileextensions')}:</label>
-  <p class="grid_9"><input id="profile_extensions" type="text" name="{$actionid}file_extensions" value="{$profile->file_extensions}" size="80"/>
-  &nbsp;{cms_help key2='HelpPopup_ProfileFileExtensions' title=$mod->Lang('HelpPopupTitle_ProfileFileExtensions')}
-  </p>
-</div>
-<div class="c_full cf">
   <label for="profile_candelete" class="grid_2">{$mod->Lang('can_delete')}:</label>
   <p class="grid_9"><select id="profile_candelete" name="{$actionid}can_delete">{cms_yesno selected=$profile->can_delete}</select>
   &nbsp;{cms_help key2='HelpPopup_ProfileCan_Delete' title=$mod->Lang('HelpPopupTitle_ProfileCan_Delete')}

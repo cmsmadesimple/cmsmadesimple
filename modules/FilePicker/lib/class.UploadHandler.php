@@ -35,22 +35,17 @@ class UploadHandler extends jquery_upload_handler
 
     public function after_uploaded_file( $fileobject )
     {
-        debug_to_log('test1',__METHOD__);
         if( !$this->_profile->show_thumbs ) return;
 
         $complete_path = $this->_path.$fileobject->name;
         if( !is_file($complete_path) ) return;
-        debug_to_log('test1.1 '.$complete_path,__METHOD__);
         if( !$this->_mod->is_image( $complete_path ) ) return;
-        debug_to_log('test1.2 '.$complete_path,__METHOD__);
         $info = getimagesize($complete_path);
         if( !$info || !isset($info['mime']) ) return;
-        debug_to_log('test2',__METHOD__);
 
         // gott create a thumbnail
         $width = (int) \cms_siteprefs::get('thumbnail_width',96);
         $height = (int) \cms_siteprefs::get('thumbnail_height',96);
-        debug_to_log("test3 $width x $height",__METHOD__);
         if( $width < 1 || $height < 1 ) return;
 
         $complete_thumb = $this->_path.'thumb_'.$fileobject->name;
@@ -75,6 +70,5 @@ class UploadHandler extends jquery_upload_handler
             $res = imagejpeg($i_dest,$complete_thumb,100);
             break;
         }
-        debug_to_log('test4 '.$complete_thumb,__METHOD__);
     }
 }
