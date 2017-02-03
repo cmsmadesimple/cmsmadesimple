@@ -1078,6 +1078,60 @@ $lang['help_function_cms_jquery'] = <<<EOT
 	</ul>
 EOT;
 
+$lang['help_function_cms_filepicker'] = <<<EOT
+<h3>What does this do?</h3>
+<p>This plugin will create an input field that is controlled by the <em>(current)</em> file picker module to allow selecting a file.  This is an admin only plugin useful for module templates, and other admin forms.</p>
+<p>This plugin should be used in a module's admin template, and the output created by selecting a file should be handled in the normal way in the modules action php file.</p>
+<p>Note: This plugin will detect (using internal mechanisms) the currently preferred filepicker module, which may be different than the CMSMS core file picker module, and that filepicker module may ignore some of these parameters.</p>
+<h3>Usage:</h3>
+<ul>
+  <li>name - <strong>required</strong> string - The name for the input field.</li>
+  <li>prefix - <em>(optional)</em> string - A prefix for the name of the input field.</li>
+  <li>value - <em>(optional)</em> string - The current value for the input field..</li>
+  <li>profile - <em>(optional)</em> string - The name of the profile to use.  The profile must exist within the selected file picker module, or a default profile may be used.</li>
+  <li>top - <em>(optional)</em> string - A top directory, relative to the uploads directory.  This should override any top value already specified in the profile.</li>
+  <li>type - <em>(optional)</em> string - An indication of the file type that can be selected.
+      <p>Possible values are: image,audio,video,media,xml,document,archive,any</p>
+  </li>
+  <li>required - <em>(optional)</em> boolean - Indicates whether or not the input field is required.</li>
+</ul>
+<h3>Example:</h3>
+<p>Create a filepicker field to allow selecting images in the images/apples directory.</p>
+<pre><code>{cms_filepicker prefix=\$actionid name=article_image top='images/apples' type='image'}</code></pre>
+EOT;
+
+$lang['help_function_thumbnail_url'] = <<<EOT
+<h3>What does this do?</h3>
+<p>This tag generates a URL to a thumbnail image when an actual image file relative to the uploads directory is specified .</p>
+<p>This tag will return an empty string if the file specified does not exist, the thumbnail does not exist,  or there are permissions propblems.</p>
+<h3>Usage:</h3>
+<ul>
+  <li>file - <strong>required</strong> - The filename and path relative to the uploads directory.</li>
+  <li>dir - <em>(optional)</em> - An optional directory prefix to prepend to the filename.</li>
+  <li>assign - <em>(optional)</em> - Optionally assign the output to the named smarty variable.</li>
+</ul>
+<h3>Example:</h3>
+<pre><code>&lt;img src="{thumbnail_url file='images/something.jpg'}" alt="something.jpg"/&gt;</code></pre>
+<h3>Tip:</h3>
+<p>It is a trivial process to create a generic template or smarty function that will use the <code>{file_url}</code> and <code>{thumbnail_url}</code> plugins to generate a thumbnail and link to a larger image.</p>
+EOT;
+
+$lang['help_function_file_url'] = <<<EOT
+<h3>What does this do?</h3>
+<p>This tag generates a URL to a file within the uploads path of the CMSMS installation.</p>
+<p>This tag will return an empty string if the file specified does not exist or there are permissions propblems.</p>
+<h3>Usage:</h3>
+<ul>
+  <li>file - <strong>required</strong> - The filename and path relative to the uploads directory.</li>
+  <li>dir - <em>(optional)</em> - An optional directory prefix to prepend to the filename.</li>
+  <li>assign - <em>(optional)</em> - Optionally assign the output to the named smarty variable.</li>
+</ul>
+<h3>Example:</h3>
+<pre><code>&lt;a href="{file_url file='images/something.jpg'}"&gt;view file&lt;/a&gt;</code></pre>
+<h3>Tip:</h3>
+<p>It is a trivial process to create a generic template or smarty function that will use the <code>{file_url}</code> and <code>{thumbnail_url}</code> plugins to generate a thumbnail and link to a larger image.</p>
+EOT;
+
 $lang['help_function_form_end'] = <<<EOT
 <h3>What does this do?</h3>
 <p>This tag creates an end form tag.</p>
