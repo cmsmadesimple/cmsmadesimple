@@ -217,6 +217,7 @@ $dbr = $db->Execute($query);
 $customfields = array();
 $customfieldsbyname = array();
 while( $dbr && ($row = $dbr->FetchRow()) ) {
+  if( $row['type'] == 'linkedfile' ) continue;
   $obj = new StdClass();
   $obj->name = $row['name'];
   $obj->type = $row['type'];
