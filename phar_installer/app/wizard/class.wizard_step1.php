@@ -19,7 +19,7 @@ class wizard_step1 extends \cms_autoinstaller\wizard_step
 
         if( isset($_POST['destdir']) ) {
             $app = \__appbase\get_app();
-            $app->set_custom_destdir($_POST['destdir']);
+            $app->set_destdir($_POST['destdir']);
         }
 
         $verbose = 0;
