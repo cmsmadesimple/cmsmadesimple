@@ -19,8 +19,8 @@ namespace CMSMS;
  * to allow building or altering a profile object.  Ths is the only time when properties of a profile can be adjusted.
  *
  * ```php
- * $obj = new \CMSMS\FilePickerProfile( [ 'type'=>FileType::TYPE_IMAGE, 'exclude_prefix'=>'foo' ] );
- * ```php
+ * $obj = new \CMSMS\FilePickerProfile( [ 'type'=>FileType::TYPE_IMAGE,
+ *    'exclude_prefix'=>'foo' ] );
  *
  * @package CMS
  * @license GPL

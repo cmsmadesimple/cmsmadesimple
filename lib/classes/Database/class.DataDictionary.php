@@ -392,7 +392,7 @@ abstract class DataDictionary
      * Create the SQL commands that will result in a database being created.
      *
      * @param string $dbname
-     * @param assoc  An associative array of database options.
+     * @param array  An associative array of database options.
      * @return string[] An array of strings suitable for use with the ExecuteSQLArray method
      */
 	public function CreateDatabase($dbname,$options=false)
@@ -413,8 +413,8 @@ abstract class DataDictionary
      *
      * @param string $idxname The index name
      * @param string $tabname The table name
-     * @param string[] $flds A list of the table fields to create the index with
-     * @param assoc An associative array of options
+     * @param string|string[] $flds A list of the table fields to create the index with.  Either an array of strings or a comma separated list.
+     * @param array An associative array of options
      * @return string[] An array of strings suitable for use with the ExecuteSQLArray method
 	*/
 	public function CreateIndexSQL($idxname, $tabname, $flds, $idxoptions = false)
@@ -445,8 +445,9 @@ abstract class DataDictionary
      * Generate the SQL to add columns to a table.
      *
      * @param string $tabname The Table name.
-     * @param string The column definitions (using DataDictionary meta types)
+     * @param string $flds The column definitions (using DataDictionary meta types)
      * @return string[] An array of strings suitable for use with the ExecuteSQLArray method
+     * @see CreateTableSQL
      */
 	public function AddColumnSQL($tabname, $flds)
 	{
@@ -463,11 +464,8 @@ abstract class DataDictionary
 	/**
 	 * Change the definition of one column
 	 *
-	 * As some DBM's can't do that on there own, you need to supply the complete defintion of the new table,
-	 * to allow, recreating the table and copying the content over to the new table
-     *
 	 * @param string $tabname table-name
-	 * @param string $flds column-name and type for the changed column
+	 * @param string $flds column-name and type for the changed column.
 	 * @param string $tableflds complete defintion of the new table, eg. for postgres, default ''
 	 * @param array/string $tableoptions options for the new table see CreateTableSQL, default ''
      * @return string[] An array of strings suitable for use with the ExecuteSQLArray method
@@ -485,9 +483,8 @@ abstract class DataDictionary
 	}
 
 	/**
-	 * Rename one column
+	 * Rename one column in a table.
 	 *
-	 * Some DBM's can only do this together with changeing the type of the column (even if that stays the same, eg. mysql)
 	 * @param string $tabname table-name
 	 * @param string $oldcolumn column-name to be renamed
 	 * @param string $newcolumn new column-name
@@ -506,10 +503,8 @@ abstract class DataDictionary
 	}
 
 	/**
-	 * Drop one column
+	 * Drop one column from a table.
 	 *
-	 * Some DBM's can't do that on there own, you need to supply the complete defintion of the new table,
-	 * to allow, recreating the table and copying the content over to the new table
 	 * @param string $tabname table-name
 	 * @param string $flds column-name and type for the changed column
 	 * @param string $tableflds complete defintion of the new table, eg. for postgres, default ''
@@ -553,6 +548,65 @@ abstract class DataDictionary
 
 	/**
      * Generate the SQL to create a new table.
+     *
+     * The flds string is a comma separated of field definitions, where each definition is of the form
+     *    fieldname type columnsize otheroptions
+     *
+     * The type fields are codes that map to real database types as follows:
+     * <dl>
+     *  <dt>C</dt>
+     *  <dd>Varchar, capped to 255 characters.</dd>
+     *  <dt>X</dt>
+     *  <dd>Text</dd>
+     *  <dt>XL</dt>
+     *  <dd>LongText</dd>
+     *  <dt>C2</dt>
+     *  <dd>Varchar, capped to 255 characters</dd>
+     *  <dt>XL</dt>
+     *  <dd>LongText</dd>
+     *  <dt>B</dt>
+     *  <dd>LongBlob</dd>
+     *  <dt>D</dt>
+     *  <dd>Date</dd>
+     *  <dt>DT</dt>
+     *  <dd>DateTime</dd>
+     *  <dt>T</dt>
+     *  <dd>Time</dd>
+     *  <dt>TS</dt>
+     *  <dd>Timestamp</dd>
+     *  <dt>L</dt>
+     *  <dd>TinyInt</dd>
+     *  <dt>R / I4 / I</dt>
+     *  <dd>Integer</dd>
+     *  <dt>I1</dt>
+     *  <dd>TinyInt</dd>
+     *  <dt>I2</dt>
+     *  <dd>SmallInt</dd>
+     *  <dt>I4</dt>
+     *  <dd>BigInt</dd>
+     *  <dt>F</dt>
+     *  <dd>Double</dd>
+     *  <dt>N</dt>
+     *  <dd>Numeric</dd>
+     *</dl>
+     *
+     * The otheroptions field includes the following options:
+     *<dl>
+     *  <dt>AUTO</dt>
+     *  <dd>Auto increment. Also sets NOTNULL.</dd>
+     *  <dt>AUTOINCREMENT</dt>
+     *  <dd>Same as AUTO</dd>
+     *  <dt>KEY</dt>
+     *  <dd>Primary key field.  Also sets NOTNULL. Compound keys are supported.</dd>
+     *  <dt>PRImARY</dt>
+     *  <dd>Same as KEY</dd>
+     *  <dt>DEFAULT</dt>
+     *  <dd>The default value.  Character strings are auto-quoted unless the string begins with a space.  i.e: ' SYSDATE '.</dd>
+     *  <dt>DEF</dt>
+     *  <dd>Same as DEFAULT</dd>
+     *  <dt>CONSTRAINTS</dt>
+     *  <dd>Additional constraints defined at the end of the field definition.</dd>
+     *</dl>
      *
      * @param string $tabname The table name
      * @param string $flds a comma separated list of field definitions using datadictionary syntax.
@@ -911,7 +965,7 @@ abstract class DataDictionary
      *
      * @param string $tablename The table name
      * @param string $flds The field definitions
-     * @param assoc  $tableoptions Table options
+     * @param array  $tableoptions Table options
      * @return string[] An array of strings suitable for use with the ExecuteSQLArray method
      */
 	public function ChangeTableSQL($tablename, $flds, $tableoptions = false)
