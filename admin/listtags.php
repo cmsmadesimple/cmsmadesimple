@@ -27,13 +27,13 @@ $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 check_login();
 
 $plugin = "";
-if (isset($_GET["plugin"])) $plugin = cms_htmlentities($_GET["plugin"]);
+if (isset($_GET["plugin"])) $plugin = cleanValue($_GET["plugin"]);
 
 $type = "";
-if (isset($_GET["type"])) $type = cms_htmlentities($_GET["type"]);
+if (isset($_GET["type"])) $type = cleanValue($_GET["type"]);
 
 $action = "";
-if (isset($_GET["action"])) $action = cms_htmlentities($_GET["action"]);
+if (isset($_GET["action"])) $action = cleanValue($_GET["action"]);
 
 $userid = get_userid();
 $access = check_permission($userid, "View Tag Help");

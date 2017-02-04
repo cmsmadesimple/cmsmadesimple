@@ -104,6 +104,7 @@ $(document).ready(function(){
                 <label for="active">{lang('active')}:</label>&nbsp;{cms_help realm='admin' key='info_user_active' title=lang('active')}
             </p>
             <p class="pageinput">
+	        <input type="hidden" name="active" value="0"/>
                 <input id="active" type="checkbox" class="pagecheckbox" name="active" value="1"{if $active == 1} checked="checked"{/if}/>
                 <br />
                 {lang('info_user_active')}

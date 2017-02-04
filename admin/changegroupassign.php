@@ -35,7 +35,7 @@ else if (isset($_GET["submitted"])) $submitted = $_GET["submitted"];
 $group_name="";
 
 if (isset($_POST["cancel"])) {
-redirect("changegroupassign.php".$urlext);
+    redirect("changegroupassign.php".$urlext);
 return;
 }
 
@@ -85,34 +85,27 @@ foreach ($group_list as $thisGroup) {
 }
 $smarty->assign('groupidlist',implode(',',$groupidlist));
 
-
 if ($submitted == 1) {
-
     foreach($groups as $thisGroup) {
         if( $thisGroup->id <= 0 ) continue;
 
         // Send the ChangeGroupAssignPre event
         \CMSMS\HookManager::do_hook( 'Core::ChangeGroupAssignPre',
-                          array('group' => $thisGroup,
-                                'users' => $userops->LoadUsersInGroup($thisGroup->id)));
+                                     [ 'group' => $thisGroup, 'users' => $userops->LoadUsersInGroup($thisGroup->id) ] );
         $query = "DELETE FROM ".cms_db_prefix()."user_groups WHERE group_id = ? AND user_id != ?";
         $result = $db->Execute($query, array($thisGroup->id,$userid));
         $iquery = "INSERT INTO ".cms_db_prefix().
-            "user_groups (group_id, user_id, create_date, modified_date) VALUES (?,?,?,?)";
+            "user_groups (group_id, user_id, create_date, modified_date) VALUES (?,?,NOW(),NOW())";
 
         foreach ($_POST as $key=>$value) {
             if (strpos($key,"ug") == 0 && strpos($key,"ug") !== false) {
                 $keyparts = explode('_',$key);
-                if ($keyparts[2] == $thisGroup->id && $value == '1') {
-                    $result = $db->Execute($iquery, array($thisGroup->id,
-                                                          $keyparts[1],$db->DBTimeStamp(time()),$db->DBTimeStamp(time())));
-                }
+                if ($keyparts[2] == $thisGroup->id && $value == '1') $result = $db->Execute($iquery, [ $thisGroup->id,$keyparts[1] ] );
             }
         }
 
         \CMSMS\HookManager::do_hook( 'Core::ChangeGroupAssignPost',
-                          array('group' => $thisGroup,
-                                'users' => $userops->LoadUsersInGroup($thisGroup->id)));
+                                     [ 'group' => $thisGroup, 'users' => $userops->LoadUsersInGroup($thisGroup->id) ] );
         // put mention into the admin log
         audit($group_id, 'Assignment Group ID: '.$group_id, 'Changed');
     }
@@ -145,8 +138,7 @@ while($result && $row = $result->FetchRow()) {
         $user_struct[$row['user_id']] = $thisUser;
     }
 }
-$smarty->assign_by_ref('users',$user_struct);
-
+$smarty->assign('users',$user_struct);
 
 if( $adminuser ) $smarty->assign('adminuser',1);
 $smarty->assign('disp_group',$disp_group);

@@ -240,13 +240,18 @@ catch( ContentException $e ) {
 //
 if( $content_id && CmsContentManagerUtils::locking_enabled() ) {
     try {
-        // check if this thing is already locked.
-        $lock_id = CmsLockOperations::is_locked('content',$content_id);
-        $lock = null;
+        $lock_id = null;
+        for( $i = 0; $i < 3; $i++ ) {
+            // check if this thing is already locked.
+            $lock_id = CmsLockOperations::is_locked('content',$content_id);
+            if( $lock_id == 0 ) break;
+            usleep(500);
+        }
         if( $lock_id > 0 ) {
             // it's locked... by somebody, make sure it's expired before we allow stealing it.
             $lock = CmsLock::load('content',$content_id);
             if( !$lock->expired() ) throw new CmsLockException('CMSEX_L010');
+            // lock is expired, we can just remove it.
             CmsLockOperations::unlock($lock_id,'content',$content_id);
         }
     }

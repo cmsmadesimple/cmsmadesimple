@@ -567,7 +567,7 @@ final class ContentListBuilder
   {
       // build a display list
       // 1.  add in top level items (items with parent == -1) which cannot be closed
-      // 2.  for reach item in opened array
+      // 2.  forr each item in opened array
       //       for each parent
       //         if not in opened array break
       //     if got to root, add items children
@@ -590,6 +590,16 @@ final class ContentListBuilder
       else if( $this->_use_perms && $modify_any_page ) {
           // we can display anything
 
+          $is_opened = function( $node, $opened_array ) {
+              while( $node && $node->get_tag('id') > 0 ) {
+                  if( $node && $node->get_tag('id') > 0 ) {
+                      if( !in_array($node->get_tag('id'),$opened_array) ) return FALSE;
+                  }
+                  $node = $node->get_parent();
+              }
+              return TRUE;
+          };
+
           // add in top level items.
           $children = $hm->get_children();
           if( count($children) ) {
@@ -599,26 +609,21 @@ final class ContentListBuilder
           }
 
           // add children of opened_array items to the list.
-          $list = array();
+          // add
           foreach( $this->_opened_array as $one ) {
               $node = $contentops->quickfind_node_by_id($one);
               if( !$node ) continue;
-              // ignore if the parents are not also in the opened array
-              $parent = $node->get_parent();
-              $parent_id = $parent->get_tag('id');
-              if( $parent_id != '' && !in_array($parent_id,$this->_opened_array) ) continue;
-              while( $node ) {
-                  $children = $node->get_children();
-                  if( $children && count($children) ) {
-                      foreach( $children as $child ) {
-                          $list[] = $child->get_tag('id');
-                      }
+
+              if( ! $is_opened( $node, $this->_opened_array ) ) continue;
+              $display[] = $one;
+
+              $children = $node->get_children();
+              if( $children && count($children) ) {
+                  foreach( $children as $child ) {
+                      $display[] = $child->get_tag('id');
                   }
-                  $node = $node->get_parent();
               }
           }
-          if( is_array($list) && count($list) ) $display = array_merge($display,$list);
-          $display = array_unique($display);
       }
       else {
           //
