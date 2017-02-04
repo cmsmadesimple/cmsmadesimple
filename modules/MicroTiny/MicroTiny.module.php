@@ -25,7 +25,7 @@ class MicroTiny extends CMSModule
   public function __construct() { parent::__construct(); }
   public function GetName() { return 'MicroTiny'; }
   public function GetFriendlyName() { return $this->Lang("friendlyname"); }
-  public function GetVersion(){ return '2.0.4-dev0'; }
+  public function GetVersion(){ return '2.1'; }
   public function HasAdmin() { return TRUE; }
   public function IsPluginModule() { return TRUE; }
   public function LazyLoadFrontend() { return TRUE; }

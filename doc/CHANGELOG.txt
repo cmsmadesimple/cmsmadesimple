@@ -179,6 +179,10 @@ ModuleManager
   - Now use HTTPS for requests to ModuleRepository
   - Trigger a hook before exporting a module to XML
 
+MicroTiny v2.1
+  - New version of the tinymce wysiwyg editor
+  - Adds a mailto plugin
+  - Now use the FilePicker module for a filepicker, required rewriting the cmsms_filepicker tinymce plugin
 
 Version 2.1.6 - Spanish Wells
 ----------------------------------
