@@ -19,7 +19,7 @@
 #
 #$Id: version.php 10177 2015-09-11 15:02:02Z calguy1000 $
 
-$CMS_VERSION = "2.2-alpha1-test";
+$CMS_VERSION = "2.2-alpha2";
 $CMS_VERSION_NAME = "NO NAME";
 $CMS_SCHEMA_VERSION = '201';
 
