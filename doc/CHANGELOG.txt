@@ -86,6 +86,7 @@ Core - General
   - #11093 - Bad error message in jquery.cmsms_autorefresh.js.
   - #11133 - is_email() fails on domain check.
   - #11235 - munge_string_to_url leaves trailing dashes at the end of munged URL.
+  - #11287 - Password reset form's password fields have different lengths
 
 Navigator v1.0.5
   - Minor optimizations.

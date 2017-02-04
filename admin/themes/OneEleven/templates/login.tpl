@@ -28,11 +28,11 @@
 					<h2>{'login_info_title'|lang}</h2>
 						<p>{'login_info'|lang}</p>
 							{'login_info_params'|lang}
-							<p><strong>({$smarty.server.HTTP_HOST})</strong></p>					
+							<p><strong>({$smarty.server.HTTP_HOST})</strong></p>
 						<p class="warning">{'warn_admin_ipandcookies'|lang}</p>
 					</aside>
 					<a href="#" title="{'open'|lang}/{'close'|lang}" class="toggle-info">{'open'|lang}/{'close'|lang}</a>
-					</div>					
+					</div>
 					<header>
 						<h1>{'logintitle'|lang}</h1>
 					</header>
@@ -49,9 +49,9 @@
 							<label for="lbpassword">{'password'|lang}</label>
 							<input id="lbpassword"{if !isset($smarty.post.lbpassword) or isset($error)} class="focus"{/if} placeholder="{'password'|lang}" name="password" type="password" size="15" maxlength="100"/>
 						{/if}
-						{if isset($changepwhash) && !empty($changepwhash)} 
+						{if isset($changepwhash) && !empty($changepwhash)}
 							<label for="lbpasswordagain">{'passwordagain'|lang}</label>
-							<input id="lbpasswordagain"  name="passwordagain" type="password" size="15" placeholder="{'passwordagain'|lang}" maxlength="25" onpaste="return false;"/>
+							<input id="lbpasswordagain"  name="passwordagain" type="password" size="15" placeholder="{'passwordagain'|lang}" maxlength="100" />
 							<input type="hidden" name="forgotpwchangeform" value="1" />
 							<input type="hidden" name="changepwhash" value="{$changepwhash}" />
 						{/if}
@@ -87,7 +87,7 @@
 					<p class="forgotpw">
 						<a href="login.php?forgotpw=1">{'lostpw'|lang}</a>
 					</p>
-				</div>			
+				</div>
 				<footer>
 					<small class="copyright">Copyright &copy; <a rel="external" href="http://www.cmsmadesimple.org">CMS Made Simple&trade;</a></small>
 				</footer>
