@@ -321,7 +321,7 @@ $lang['help_function_cms_stylesheet'] = <<<EOT
   <li><em>(optional)</em> nocombine - (boolean, default false) If enabled, and there are multiple stylesheets associated with the template, the stylesheets will be output as separate tags rather than combined into a single tag.</li>
   <li><em>(optional)</em> nolinks - (boolean, default false) If enabled, the stylesheets will be output as a URL without &lt;link&gt; tag.</li>
   <li><em>(optional)</em> https - (boolean, default false) indicates wether the ssl_url config entry should be used to prefix stylesheet urls.  If not specified, the system will attempt to determine the proper root url based on the secure flag of the page being displayed.</li>
-  <li><em>(optional)</em> templateid - If templateid is defined, this will return stylesheets associated with that template instead of the current one.</li>
+  <li><em>(optional)</em> designid - If designid is defined, this will return stylesheets associated with that design instead of the current one.</li>
   <li><em>(optional)</em> media - <strong>[deprecated]</strong> - When used in conjunction with the name parameter this parameter will allow you to override the media type for that stylesheet.  When used in conjunction with the templateid parameter, the media parameter will only output stylesheet tags for those stylesheets that are marked as compatible with the specified media type.</li>
   </ul>
   <h3>Smarty Processing</h3>
