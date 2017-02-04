@@ -191,6 +191,21 @@ final class CmsJobManager extends \CMSModule
     // THIS STUFF SHOULD PROBABLY GO INTO A TRAIT, or atleast an interface
     //////////////////////////////////////////////////////////////////////////
 
+    public function load_job_by_id( $job_id )
+    {
+        $job_id = (int) $job_id;
+        if( $job_id < 1 ) throw new \LogicException('Invalid job_id passed to '.__METHOD__);
+
+        $db = $this->GetDb();
+        $sql = 'SELECT * FROM '.self::table_name().' WHERE id = ?';
+        $row = $db->GetRow( $sql, [ $job_id] );
+        if( !is_array($row) || !count($row) ) return;
+
+        $obj = unserialize($row['data']);
+        $obj->set_id( $row['id'] );
+        return $obj;
+    }
+
     public function save_job(Job &$job)
     {
         $recurs = $until = null;

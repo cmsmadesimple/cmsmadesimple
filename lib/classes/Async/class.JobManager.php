@@ -106,6 +106,18 @@ final class JobManager
     }
 
     /**
+     * Given an integer job id, load the job.
+     *
+     * @param int $job_id
+     * @return Job
+     */
+    public function load_job( $job_id )
+    {
+        $mod = $this->get_mod();
+        if( $mod ) return $mod->load_job_by_id( $job_id );
+    }
+
+    /**
      * Save a job to the queue.
      *
      * @param Job $job
@@ -120,7 +132,9 @@ final class JobManager
     /**
      * Remove a job from the queue
      *
-     * @pram Job $job
+     * Note: After calling this method, the job object itself is invalid and cannot be saved.
+     *
+     * @param Job $job
      */
     public function delete_job( Job &$job )
     {

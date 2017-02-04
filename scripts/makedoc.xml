@@ -21,7 +21,7 @@
         </paths>
     </logging>
     <transformations>
-        <template name="cmsms" />
+        <template name="/usr/share/php/phpDocumentor/data/templates/cmsms" />
     </transformations>
     <files>
         <directory>lib</directory>
@@ -37,9 +37,11 @@
         <ignore>plugins/*</ignore>
         <ignore>lib/include.php</ignore>
         <ignore>lib/version.php</ignore>
+        <ignore>lib/std_hooks.php</ignore>
         <ignore>lib/tasks/*</ignore>
         <ignore>lib/classes/internal/*</ignore>
         <ignore>lib/classes/contenttypes/*</ignore>
+        <ignore>lib/classes/Database/mysqli/*</ignore>
         <ignore>xajax/*</ignore>
         <ignore>html_entity_decode_php4.php</ignore>
         <ignore>html_entity_decode_utf8.php</ignore>

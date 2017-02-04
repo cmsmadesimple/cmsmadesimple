@@ -305,6 +305,7 @@ abstract class DataDictionary
     /**
      * Return the list of columns in a table within the currently connected database.
      *
+     * @param string $table The table name.
      * @return string[]
      */
     abstract public function MetaColumns($table);
@@ -467,8 +468,8 @@ abstract class DataDictionary
      *
 	 * @param string $tabname table-name
 	 * @param string $flds column-name and type for the changed column
-	 * @param string $tableflds='' complete defintion of the new table, eg. for postgres, default ''
-	 * @param array/string $tableoptions='' options for the new table see CreateTableSQL, default ''
+	 * @param string $tableflds complete defintion of the new table, eg. for postgres, default ''
+	 * @param array/string $tableoptions options for the new table see CreateTableSQL, default ''
      * @return string[] An array of strings suitable for use with the ExecuteSQLArray method
 	 */
 	public function AlterColumnSQL($tabname, $flds, $tableflds='',$tableoptions='')
@@ -490,7 +491,7 @@ abstract class DataDictionary
 	 * @param string $tabname table-name
 	 * @param string $oldcolumn column-name to be renamed
 	 * @param string $newcolumn new column-name
-	 * @param string $flds='' complete column-defintion-string like for AddColumnSQL, only used by mysql atm., default=''
+	 * @param string $flds complete column-defintion-string like for AddColumnSQL, only used by mysql atm., default=''
      * @return string[] An array of strings suitable for use with the ExecuteSQLArray method
 	 */
 	public function RenameColumnSQL($tabname,$oldcolumn,$newcolumn,$flds='')
@@ -511,8 +512,8 @@ abstract class DataDictionary
 	 * to allow, recreating the table and copying the content over to the new table
 	 * @param string $tabname table-name
 	 * @param string $flds column-name and type for the changed column
-	 * @param string $tableflds='' complete defintion of the new table, eg. for postgres, default ''
-	 * @param array/string $tableoptions='' options for the new table see CreateTableSQL, default ''
+	 * @param string $tableflds complete defintion of the new table, eg. for postgres, default ''
+	 * @param array/string $tableoptions options for the new table see CreateTableSQL, default ''
      * @return string[] An array of strings suitable for use with the ExecuteSQLArray method
 	 */
 	public function DropColumnSQL($tabname, $flds, $tableflds='',$tableoptions='')
@@ -550,7 +551,7 @@ abstract class DataDictionary
 		return array (sprintf($this->renameTable, $this->TableName($tabname),$this->TableName($newname)));
 	}
 
-	/*
+	/**
      * Generate the SQL to create a new table.
      *
      * @param string $tabname The table name
@@ -740,9 +741,10 @@ abstract class DataDictionary
 		return array($lines,$pkey);
 	}
 
-	/*
+	/**
      * Generate the size part of the datatype.
      *
+     * @ignore
      * @internal
      */
 	protected function _GetSize($ftype, $ty, $fsize, $fprec)

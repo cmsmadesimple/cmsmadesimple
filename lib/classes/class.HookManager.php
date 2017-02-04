@@ -27,19 +27,33 @@
  */
 
 /**
- * @IGNORE
+ * @ignore
  */
 namespace CMSMS\Hooks {
 
     use \CMSMS\HookManager;
+
     /**
+     * An internal class to represent a hook handler.
+     *
+     * @internal
      * @ignore
      */
     class HookHandler
     {
+        /**
+         * @ignore
+         */
         public $callable;
+
+        /**
+         * @ignore
+         */
         public $priority;
 
+        /**
+         * @ignore
+         */
         public function __construct($callable,$priority)
         {
             // todo: test if is callable.
@@ -49,14 +63,29 @@ namespace CMSMS\Hooks {
     }
 
     /**
+     * An internal class to represent a hook.
+     *
+     * @internal
      * @ignore
      */
     class HookDefn
     {
+        /**
+         * @ignore
+         */
         public $name;
+        /**
+         * @ignore
+         */
         public $handlers = [];
+        /**
+         * @ignore
+         */
         public $sorted;
 
+        /**
+         * @ignore
+         */
         public function __construct($name)
         {
             $this->name = $name;

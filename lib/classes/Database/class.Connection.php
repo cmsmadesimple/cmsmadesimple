@@ -254,6 +254,7 @@ namespace CMSMS\Database {
         /**
          * Create a prepared statement object.
          *
+         * @param string $sql The SQL query
          * @return Statement
          */
         abstract public function &Prepare($sql);
