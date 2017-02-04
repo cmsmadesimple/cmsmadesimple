@@ -86,8 +86,18 @@ namespace CMSMS\Database {
             if( count($tmp) ) $spec->auto_exec = 'SET '.implode(',',$tmp);
 
             $obj = Connection::Initialize($spec);
+            $obj->SetErrorHandler( '\\CMSMS\Database\\compatibility::on_error' );
             if( $spec->debug ) $obj->SetDebugCallback('debug_buffer');
             return $obj;
+        }
+
+        public static function on_error( Connection $conn, $errtype, $error_number, $error_msg )
+        {
+            if( !defined('CMS_DEBUG') || CMS_DEBUG == 0 ) return;
+
+            debug_to_log("Database Error: $errtype($error_number) - $error_msg");
+            debug_bt_to_log();
+            CmsApp::get_instance()->add_error(debug_display($str, '', false, true));
         }
 
         /**
