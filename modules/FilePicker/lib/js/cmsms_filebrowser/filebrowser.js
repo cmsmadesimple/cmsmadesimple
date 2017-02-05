@@ -107,6 +107,13 @@
 	function enable_upload() {
 	    var dropzone = $('body.cmsms-filepicker');
 	    var n_errors;
+	    dropzone.on('dragover',function(e){
+		console.debug('dragover');
+		$(this).addClass('dragging');
+	    }).on('dragleave',function(e){
+		$(this).removeClass('dragging');
+		console.debug('dragleave');
+	    });
 	    $('#filepicker-file-upload').fileupload({
 		url: settings.cmd_url,
 		dropZone: dropzone,

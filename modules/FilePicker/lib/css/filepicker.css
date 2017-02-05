@@ -76,6 +76,10 @@ body.cmsms-filepicker {
 	font-size: 14px;
 }
 
+body.dragging {
+    background-color: lightcyan;
+}
+
 a img,
 img {
 	border: none;
