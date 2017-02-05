@@ -268,6 +268,7 @@ $(document).ready(function(){
             </p>
         </div>
         {/if}
+	{if $template->get_id() > 0}
         <div class="pageoverflow">
 			<p class="pagetext">File Template</p>
 			<p class="pageinput">
@@ -278,6 +279,7 @@ $(document).ready(function(){
 			{/if}
 		   </p>
         </div>
+	{/if}
 {/if}
 
 {if $template->get_owner_id() == get_userid() or $has_manage_right}
