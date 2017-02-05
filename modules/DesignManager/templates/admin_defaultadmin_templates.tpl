@@ -80,6 +80,7 @@ $(document).ready(function(){
     });
     $(document).on('click','#addtemplate', function () {
       $('#addtemplatedialog').dialog({
+        width: 'auto',
         buttons: {
           '{$mod->Lang('submit')|escape:'javascript'}': function () {
             $(this).dialog('close');
