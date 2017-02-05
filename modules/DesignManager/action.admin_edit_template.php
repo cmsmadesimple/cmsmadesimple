@@ -58,6 +58,7 @@ try {
         $type_is_readonly = true;
     } else if (isset($params['tpl'])) {
         $tpl_obj = CmsLayoutTemplate::load($params['tpl']);
+        $tpl_obj->get_designs();
         $extraparms['tpl'] = $params['tpl'];
     } else {
         $this->SetError($this->Lang('error_missingparam'));
@@ -77,7 +78,7 @@ try {
             }
             if (isset($params['category_id'])) $tpl_obj->set_category($params['category_id']);
             $tpl_obj->set_listable(isset($params['listable'])?$params['listable']:1);
-            $tpl_obj->set_content($params['contents']);
+            if( isset($params['contents']) ) $tpl_obj->set_content($params['contents']);
             $tpl_obj->set_name($params['name']);
 
             if ($this->CheckPermission('Manage Designs')) {
@@ -87,19 +88,16 @@ try {
             }
 
             // lastly, check for errors in the template before we save.
-            cms_utils::set_app_data('tmp_template', $params['contents']);
-            $parser = new \CMSMS\internal\page_template_parser('cms_template:appdata;tmp_template',$smarty);
-            $parser->compileTemplateSource();
-            if ($type_obj->get_content_block_flag()) {
-                $contentBlocks = CMS_Content_Block::get_content_blocks();
-                if (!is_array($contentBlocks) || count($contentBlocks) == 0) {
-                    throw new CmsEditContentException('No content blocks defined in template');
+            if( isset($params['contents']) ) {
+                cms_utils::set_app_data('tmp_template', $params['contents']);
+                $parser = new \CMSMS\internal\page_template_parser('cms_template:appdata;tmp_template',$smarty);
+                $parser->compileTemplateSource();
+                if ($type_obj->get_content_block_flag()) {
+                    $contentBlocks = CMS_Content_Block::get_content_blocks();
+                    if (!is_array($contentBlocks) || count($contentBlocks) == 0) {
+                        throw new CmsEditContentException('No content blocks defined in template');
+                    }
                 }
-                /*
-                if (!isset($contentBlocks['content_en'])) {
-                    throw new CmsEditContentException('No default content block {content} or {content block=\'content_en\'} defined in template');
-                }
-                */
             }
 
             // if we got here, we're golden.
