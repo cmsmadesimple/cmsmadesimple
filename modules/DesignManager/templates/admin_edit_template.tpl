@@ -1,6 +1,6 @@
 <script type="text/javascript">
 $(document).ready(function(){
-    var do_locking = {if $tpl_id > 0 && isset($lock_timeout) && $lock_timeout > 0}1{else}0{/if};
+    var do_locking = {if !empty($tpl_id) && $tpl_id > 0 && isset($lock_timeout) && $lock_timeout > 0}1{else}0{/if};
     $('#form_edittemplate').dirtyForm({
         beforeUnload: function(is_dirty) {
 	    if( do_locking ) $('#form_edittemplate').lockManager('unlock');
@@ -14,7 +14,7 @@ $(document).ready(function(){
     if( do_locking ) {
       $('#form_edittemplate').lockManager({
         type: 'template',
-        oid: {$tpl_id},
+        oid: {$tpl_id|default:0},
         uid: {get_userid(FALSE)},
         lock_timeout: {$lock_timeout|default:0},
         lock_refresh: {$lock_refresh|default:0},
