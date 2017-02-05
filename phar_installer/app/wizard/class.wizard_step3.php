@@ -14,6 +14,7 @@ class wizard_step3 extends \cms_autoinstaller\wizard_step
     {
         $app = \__appbase\get_app();
         $version_info = $this->get_wizard()->get_data('version_info');
+        $action = $this->get_wizard()->get_data('action');
         $informational = array();
         $tests = array();
 
@@ -70,11 +71,14 @@ class wizard_step3 extends \cms_autoinstaller\wizard_step
             $obj->fail_key = 'fail_config_writable';
             $tests[] = $obj;
 
-            $dir = $app->get_destdir().'/assets';
-            if( is_dir($dir) ) {
-                $obj = new _tests_\boolean_test('assets_dir',FALSE);
-                $obj->fail_key = 'fail_assets_dir';
-                $tests[] = $obj;
+            if( $action == 'upgrade' ) {
+                $dir = $app->get_destdir().'/assets';
+                if( is_dir($dir) ) {
+                    $obj = new _tests_\boolean_test('assets_dir_exists',FALSE);
+                    $obj->fail_key = 'fail_assets_dir';
+                    $obj->fail_msg = 'fail_assets_msg';
+                    $tests[] = $obj;
+                }
             }
         } else {
             $is_dir_empty = function($dir) {
