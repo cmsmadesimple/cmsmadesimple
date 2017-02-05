@@ -26,8 +26,6 @@ if( isset($_REQUEST['op']) ) $op = trim($_REQUEST['op']);
 $gCms = \CmsApp::get_instance();
 $hm = $gCms->GetHierarchyManager();
 $contentops = $gCms->GetContentOperations();
-debug_to_log(__FILE__);
-debug_to_log($_REQUEST);
 $allow_all = (isset($_REQUEST['allow_all']) && cms_to_bool($_REQUEST['allow_all'])) ? 1 : 0;
 $allow_all = 1;
 $for_child = (isset($_REQUEST['for_child']) && cms_to_bool($_REQUEST['for_child'])) ? 1 : 0;

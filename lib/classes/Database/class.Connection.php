@@ -501,10 +501,9 @@ namespace CMSMS\Database {
 
             // strlen(14) allows YYYYMMDDHHMMSS format
             if( is_string($timestamp) ) {
-                if( !preg_match('/[0-9-\s:]*/',$timestamp) ) return;
+                if( !preg_match('/[0-9-\s:]*/',$timestamp) ) return 'null';
                 $tmp = strtotime($timestamp);
                 if( $tmp < 1 ) return;
-                debug_to_log('converted '.$timestamp.' to '.$tmp);
                 $timestamp = $tmp;
             }
             return date("'Y-m-d H:i:s'",$timestamp);
