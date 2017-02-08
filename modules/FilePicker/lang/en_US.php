@@ -53,22 +53,6 @@ $lang['HelpPopup_ProfileDir'] = 'Optionally enter the relative path of a directo
 $lang['HelpPopupTitle_ProfileShowthumbs'] = 'Show Thumbnails';
 $lang['HelpPopup_ProfileShowthumbs'] = 'If enabled, thumbnails will be visible for image files for which thumbnails are generated.';
 
-$lang['HelpPopup_ProfileCan_Delete'] = 'TODO';
-$lang['HelpPopup_ProfileCan_Mkdir'] = 'TODO';
-$lang['HelpPopup_ProfileCan_Upload'] = 'TODO';
-$lang['HelpPopup_ProfileDir'] = 'TODO';
-$lang['HelpPopup_ProfileFileExtensions'] = 'TODO';
-$lang['HelpPopup_ProfileName'] = 'TODO';
-$lang['HelpPopup_ProfileShowthumbs'] = 'TODO';
-
-$lang['HelpPopupTitle_ProfileCan_Delete'] = 'Allow File Deletion';
-$lang['HelpPopupTitle_ProfileCan_Mkdir'] = 'Allow Directory Creation';
-$lang['HelpPopupTitle_ProfileCan_Upload'] = 'Uploads Allowed';
-$lang['HelpPopupTitle_ProfileDir'] = 'Top Directory';
-$lang['HelpPopupTitle_ProfileFileExtensions'] = 'Allowed File Extensions';
-$lang['HelpPopupTitle_ProfileName'] = 'Profile Name';
-$lang['HelpPopupTitle_ProfileShowthumbs'] = 'Show Thumbnails';
-
 // N
 $lang['name'] = 'Name';
 $lang['no_profiles'] = 'No profiles defined yet. You can add them by clicking the button above.';
