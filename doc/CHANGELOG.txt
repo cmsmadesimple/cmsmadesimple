@@ -23,11 +23,9 @@ Core - General
   - Removed the GetNotificationOutput() method from the module API.
   - Adds classes for creating Alerts. This is much more advanced than the old Notifications system.
   - Minor accessibility tweaks to the OneEleven theme.
-  - Fixed long time error wrt. Subtitle in Admin theme class.
+  - Fix numerous minor problems with the OneEleven theme.
   - Refactored the OneEleven Admin theme to use new Alerts classes instead of old Notifications.
   - Refactor the OneEleven Admin theme to display an alert icon in the shortcut bar, instead of in the navigation area.
-  - Fix the subtitle functionality within the OneEleven Admin theme.
-  - Fix problems with the OneEleven theme.
   - Fixed sidenav in the one OneEleven theme now works properly. If sidenav is larger than viewport then don't use fixed... easy.
   - In OneEleven Now revert to small sidebar navigation (still floating) if screen is too narrow.
   - Removed notification settings from MyAccount and Global Settings.
@@ -79,8 +77,9 @@ Core - General
   - Improve the {content_image} plugin to output nothing if there is no value for the property, and to output any non-internal arguments as attributes to the HTML img tag.
   - Upgrade to an un-modified version of smarty v3.1.31
   - Move plugins directory to lib/plugins since we now have the assets/plugins directory for custom plugins.  The upgrader should preserve any custom plugins in the /plugins directory.
-  - Add new plugins {thumbnail_url}, {file_url} and {cms_filepicker) TODO: document them.
+  - Add new plugins {thumbnail_url}, {file_url} and {cms_filepicker)
   - Add more intelligence to the tableoption handling for DataDictionary::CreateTableSQL
+  - Minor improvements to the asynchronous behaviour of the locking functionality
 
   - #11080 - Parameter $adding in GetContentBlockFieldInput always FALSE.
   - #11093 - Bad error message in jquery.cmsms_autorefresh.js.
@@ -153,17 +152,16 @@ News v2.51
 FileManager v1.6.3
   - Move settings to it's own menu item under Site Admin.
   - Fix minor problem with moving a directory.
+  - Minor fix to move file functionality.
   - Adds OnFileDeleted event.
   - Adds 'view raw file' icon in each viewable row.
   - Minor formatting changes in file list.
   - Now display clickable path entries for easier navigation.
-  - Minor fix to move file functionality.
 
 Search
   - Convert to store all data using the InnoDB engine.
   - Use transactions for the addwords and deletewords stuff for performance.
   - Fix problem with query and record expiry.
-  - TODO: Create async job to re-index all output.
 
 AdminSearch v1.0.3
   - Fixes problem with use of 'Use Admin Search' permission.
