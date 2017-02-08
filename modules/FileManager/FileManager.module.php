@@ -49,13 +49,10 @@ final class FileManager extends CMSModule {
 
     public function GetFileIcon($extension,$isdir=false) {
         if (empty($extension)) $extension = '---'; // hardcode extension to something.
-        if ($extension[0]==".") $extension=substr($extension,1);
-        $config = cmsms()->GetConfig();
+        if ($extension[0] == ".") $extension = substr($extension,1);
+        $config = \cms_config::get_instance();
         $iconsize=$this->GetPreference("iconsize","32px");
-        //for valid xhtml
         $iconsizeHeight=str_replace("px","",$iconsize);
-        //end
-        if ($extension[0]=='.') $extension=substr($extension, 1);
 
         $result="";
         if ($isdir) {

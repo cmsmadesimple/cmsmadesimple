@@ -506,7 +506,7 @@ namespace CMSMS\Database {
                 if( $tmp < 1 ) return;
                 $timestamp = $tmp;
             }
-            return date("'Y-m-d H:i:s'",$timestamp);
+            if( $timestamp > 0 ) return date("'Y-m-d H:i:s'",$timestamp);
         }
 
         /**
