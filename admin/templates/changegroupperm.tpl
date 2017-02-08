@@ -55,7 +55,7 @@
 					{cycle values='row1,row2' assign='currow'}
 					<tr class="{$currow}">
 						<td>
-							&nbsp;&nbsp;&nbsp;<strong>{$perm->name}</strong>
+							&nbsp;&nbsp;&nbsp;<strong>{$perm->label}</strong>
 							{if !empty($perm->description)}<div class="description">&nbsp;&nbsp;&nbsp;{$perm->description}</div>{/if}
 						</td>
 						{foreach from=$group_list item=thisgroup}
