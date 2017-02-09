@@ -44,32 +44,18 @@ $(document).ready(function(){
         $('#form_editcss').dirtyForm('option','dirty',false);
     });
 
-    $(document).on('click', '#submitbtn', function(ev){
-       if( do_locking ) {
-	  // unlock the item, and submit the form
-	  var self = this;
-	  ev.preventDefault();
-	  var form = $(this).closest('form');
-	  $('#form_editcss').lockManager('unlock').done(function(){
- 	     var el = $('<input type="hidden"/>');
-             el.attr('name',$(self).attr('name')).val($(self).val()).appendTo(form);
-	     form.submit();
-	  });
-       }
-    });
+    $(document).on('click', '#submitbtn, #cancelbtn, #importbtn, #exportbtn', function(ev){
+       if( ! do_locking ) return;
 
-    $(document).on('click', '#cancelbtn', function(ev){
-       if( do_locking ) {
-	  // unlock the item, and submit the form
-	  var self = this;
-	  ev.preventDefault();
-	  var form = $(this).closest('form');
-	  $('#form_editcss').lockManager('unlock').done(function(){
- 	     var el = $('<input type="hidden"/>');
-             el.attr('name',$(self).attr('name')).val($(self).val()).appendTo(form);
-	     form.submit();
-	  });
-       }
+       // unlock the item, and submit the form
+       var self = this;
+       ev.preventDefault();
+       var form = $(this).closest('form');
+       $('#form_editcss').lockManager('unlock').done(function(){
+           var el = $('<input type="hidden"/>');
+           el.attr('name',$(self).attr('name')).val($(self).val()).appendTo(form);
+           form.submit();
+       });
     });
 
     $(document).on('click', '#applybtn', function(e){
@@ -257,9 +243,9 @@ $(document).ready(function(){
 	<p class="pagetext">File CSS</p>
 	<p class="pageinput">
 		{if $css->has_content_file()}
-			<input type="submit" name="{$actionid}import" value="{$mod->Lang('import')}"/>
+			<input type="submit" id="importbtn" name="{$actionid}import" value="{$mod->Lang('import')}"/>
 		{elseif $css->get_id() > 0}
-			<input type="submit" name="{$actionid}export" value="{$mod->Lang('export')}"/>
+			<input type="submit" id="exportbtn" name="{$actionid}export" value="{$mod->Lang('export')}"/>
 		{/if}
 	</p>
 </div>
