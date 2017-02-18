@@ -627,10 +627,10 @@ class CmsLayoutTemplateType
 	 */
     private static function &_load_from_data($row)
     {
-        $row['lang_callback'] = unserialize($row['lang_cb']);
-        $row['help_callback'] = unserialize($row['help_content_cb']);
+        if( $row['lang_callback'] ) $row['lang_callback'] = unserialize($row['lang_cb']);
         unset($row['lang_cb']);
-        $row['content_callback'] = unserialize($row['dflt_content_cb']);
+        if( $row['help_callback'] ) $row['help_callback'] = unserialize($row['help_content_cb']);
+        if( $row['dflt_content_cb'] ) $row['content_callback'] = unserialize($row['dflt_content_cb']);
         unset($row['dflt_content_cb']);
 
         $ob = new CmsLayoutTemplateType;
