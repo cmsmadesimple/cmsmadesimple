@@ -24,7 +24,7 @@ $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 $userid = get_userid();
 if( !check_permission($userid, 'Modify User-defined Tags') ) return;
 $tagops = cmsms()->GetUserTagOperations();
-$themeObject = null;
+$themeObject = $userplugin_id = null;
 
 if( !isset($_POST['ajax']) ) {
     include_once('header.php');
@@ -49,6 +49,11 @@ if( isset($_POST['submit']) || isset($_POST['apply']) ) {
     $record['userplugin_name'] = trim(cleanValue($_POST['userplugin_name']));
     $record['code'] = trim($_POST['code']);
     $record['description'] = trim(cleanValue($_POST['description']));
+
+    if( isset($_POST['userplugin_id']) ) {
+        $userplugin_id = (int) $_POST['userplugin_id'];
+        if( $userplugin_id < 1 ) $userplugin_id = null;
+    }
 
     // validate
     if( $record['userplugin_name'] == '' ) {
@@ -97,7 +102,7 @@ if( isset($_POST['submit']) || isset($_POST['apply']) ) {
     }
 
     if( count($error) == 0 ) {
-        $res = $tagops->SetUserTag($record['userplugin_name'],$record['code'],$record['description']);
+        $res = $tagops->SetUserTag($record['userplugin_name'],$record['code'],$record['description'],$userplugin_id);
         if( !$res ) $error = lang('errorupdatingusertag');
     }
 
