@@ -192,13 +192,30 @@ $return = $dbdict->ExecuteSQLArray($sqlarray);
 
 // create initial types.
 $page_template_type = $gcb_template_type = null;
-try {
-    $page_template_type = CmsLayoutTemplateType::load(CmsLayoutTemplateType::CORE.'::page');
-    $gcb_template_type = CmsLayoutTemplateType::load(CmsLayoutTemplateType::CORE.'::generic');
-}
-catch( \CmsDataNotFoundException $e ) {
-    verbose_msg('create initial template types');
+for( $tries = 0; $tries < 2; $tries++ ) {
+    try {
+        $page_template_type = CmsLayoutTemplateType::load(CmsLayoutTemplateType::CORE.'::page');
+        $gcb_template_type = CmsLayoutTemplateType::load(CmsLayoutTemplateType::CORE.'::generic');
+        break;
+    }
+    catch( \CmsDataNotFoundException $e ) {
+        // we insert the records manually... because later versions of the template type
+        // add different columns... and the save() method won't work.
+        verbose_msg('create initial template types');
 
+        $contents = \CmsTemplateResource::reset_page_type_defaults();
+        $sql = 'INSERT INTO '.CMS_DB_PREFIX.\CmsLayoutTemplateType::TABLENAME.' (originator,name,has_dflt,dflt_contents,description,
+                    lang_cb, dflt_content_cb, requires_contentblocks, owner, created, modified)
+                VALUES (?,?,?,?,?,?,?,?,?,UNIX_TIMESTAMP(),UNIX_TIMESTAMP())';
+        $dbr = $db->Execute( $sql, [ \CmsLayoutTemplateType::CORE, 'page', TRUE, $contents, null,
+                                     serialize('CmsTemplateResource::page_type_lang_callback'),serialize('CmsTemplateResource::reset_page_type_default'), TRUE, null ] );
+        $contents = null;
+        $dbr = $db->Execute( $sql, [ \CmsLayoutTemplateType::CORE, 'generic', FALSE, null, null,
+                                     serialize('CmsTemplateResource::generic_type_lang_callback'), null, FALSE, null ] );
+    }
+} // tries
+
+    /*
     // if we got here.... the type does not exist.
     $page_template_type = new CmsLayoutTemplateType();
     $page_template_type->set_originator(CmsLayoutTemplateType::CORE);
@@ -215,10 +232,7 @@ catch( \CmsDataNotFoundException $e ) {
     $gcb_template_type->set_name('generic');
     $gcb_template_type->set_lang_callback('CmsTemplateResource::generic_type_lang_callback');
     $gcb_template_type->save();
-}
-catch( \Exception $e ) {
-    verbose_msg($e->GetMessage());
-}
+    */
 if( !is_object($page_template_type) || !is_object($gcb_template_type) ) {
     error_msg('The page template type and/or GCB template type could not be found or created');
     throw new \LogicException('This is bad');

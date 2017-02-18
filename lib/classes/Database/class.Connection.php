@@ -339,6 +339,7 @@ namespace CMSMS\Database {
         public function GetArray($sql, $inputarr = null)
         {
             $result = $this->SelectLimit( $sql, -1, -1, $inputarr );
+            if( !$result ) return;
             $data = $result->GetArray();
             return $data;
         }

@@ -40,6 +40,7 @@ tinymce.init({
     },
     document_base_url: cmsms_tiny.base_url,
     relative_urls: true,
+    image_title: true,
     mysamplesetting: 'foobar',
     menubar: cmsms_tiny.menubar,
     statusbar: cmsms_tiny.statusbar,
