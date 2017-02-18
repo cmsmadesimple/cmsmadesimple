@@ -80,7 +80,7 @@ Core - General
   - Add new plugins {thumbnail_url}, {file_url} and {cms_filepicker)
   - Add more intelligence to the tableoption handling for DataDictionary::CreateTableSQL
   - Minor improvements to the asynchronous behaviour of the locking functionality
-
+  - #11295 - Cannot change the name of a UDT, always creates new UDT.
   - #11080 - Parameter $adding in GetContentBlockFieldInput always FALSE.
   - #11093 - Bad error message in jquery.cmsms_autorefresh.js.
   - #11133 - is_email() fails on domain check.

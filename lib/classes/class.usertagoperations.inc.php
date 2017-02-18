@@ -181,13 +181,20 @@ final class UserTagOperations
 	 * @param string $name User defined tag name
 	 * @param string $text Body of user defined tag
 	 * @param string $description Description for the user defined tag.
+     * @param int    $id ID of existing user tag (for updates).
 	 * @return bool
 	 */
-	function SetUserTag( $name, $text, $description )
+	function SetUserTag( $name, $text, $description, $id = null )
 	{
 		$db = CmsApp::get_instance()->GetDb();
 
-		$existing = $this->GetUserTag($name);
+        $existing = false;
+        if( $id > 0 ) {
+            // make sure we can find it.
+            $usertag = $this->_get_from_cache( $id );
+            if( !$usertag ) return false;
+            $existing = true;
+        }
 		if (!$existing) {
 			$this->_cache = array(); // reset the cache.
 			$new_usertag_id = $db->GenID(CMS_DB_PREFIX."userplugins_seq");
@@ -201,14 +208,14 @@ final class UserTagOperations
 		}
 		else {
 			$this->_cache = array(); // reset the cache.
-			$query = 'UPDATE '.CMS_DB_PREFIX.'userplugins SET code = ?';
-            $parms = array($text);
+			$query = 'UPDATE '.CMS_DB_PREFIX.'userplugins SET code = ?, userplugin_name = ?';
+            $parms = [ $text, $name ];
 			if( $description ) {
 				$query .= ', description = ?';
 				$parms[] = $description;
 			}
-			$query .= ', modified_date = '.$db->DBTimeStamp(time()).' WHERE userplugin_name = ?';
-			$parms[] = $name;
+			$query .= ', modified_date = NOW() WHERE userplugin_id = ?';
+			$parms[] = $id;
 			$result = $db->Execute($query, $parms);
 			if ($result) {
                 \CMSMS\internal\global_cache::clear(__CLASS__);
