@@ -378,9 +378,9 @@ class UserOperations
         if( count($list) ) {
 			$result .= '<select name="'.$name.'">';
             foreach( $list as $uid => $username ) {
-                $result .= '<option value="'.$uid;
+                $result .= '<option value="'.$uid.'"';
                 if( $uid == $currentuserid ) $result .= ' selected="selected"';
-				$result .= '">'.$username.'</option>';
+				$result .= '>'.$username.'</option>';
             }
 			$result .= '</select>';
         }
