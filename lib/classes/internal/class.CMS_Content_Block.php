@@ -233,8 +233,8 @@ final class CMS_Content_Block
             //   1. $id is cntnt01
             //   2. or inline is false
 
-            if (!isset($params['block']) && ($id == 'cntnt01' || $id == '_preview_' || ($id != '' && $inline == false))) {
-
+            $block = (isset($params['block']))?$params['block']:'content_en';
+            if ($block == 'content_en' && ($id == 'cntnt01' || $id == '_preview_' || ($id != '' && $inline == false))) {
                 if( self::$_primary_content_flag ) {
                     $result = self::$_primary_content;
                 }
@@ -271,7 +271,6 @@ final class CMS_Content_Block
                 }
             }
             else {
-                $block = (isset($params['block']))?$params['block']:'content_en';
                 $result = '';
 
                 $oldvalue = $smarty->caching;
