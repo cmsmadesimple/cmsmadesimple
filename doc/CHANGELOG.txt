@@ -8,6 +8,7 @@ Core - General
   - A bit more intelligence to the {form_start} plugin wrt. detecting the action.
   - Minor fix to the cms_admin jquery plugin.
   - Fix #11295 - Cannot change the name of a UDT, always creates new UDT.
+  - Fix issue with module actions if 'content_en' block name was given on the default content block.
 
 ModuleManager v2.0.5.1
   - Modify default repository to use HTTPS

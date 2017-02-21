@@ -216,7 +216,8 @@ final class CMS_Content_Block
             //   1. $id is cntnt01
             //   2. or inline is false
 
-            if (!isset($params['block']) &&
+            $block = (isset($params['block']))?$params['block']:'content_en';
+            if ($block == 'content_en' &&
                 ($id == 'cntnt01' || $id == '_preview_' || ($id != '' && $inline == false))) {
                 // todo, would be neat here if we could get a list of only frontend modules.
                 $modops = ModuleOperations::get_instance();
@@ -284,7 +285,6 @@ final class CMS_Content_Block
                 }
             }
             else {
-                $block = (isset($params['block']))?$params['block']:'content_en';
                 $result = '';
 
                 $oldvalue = $smarty->caching;
