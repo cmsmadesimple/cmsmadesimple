@@ -1,5 +1,3 @@
-{* first get MicroTiny module, we don't need wrong variables and strings *}
-{$MT = cms_utils::get_module('MicroTiny')}
 // define cmsms_tiny object
 var cmsms_tiny = {};
 

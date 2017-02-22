@@ -22,6 +22,9 @@ CMSContentManager v1.1.5
 News v2.56.7
   - No longer cache url for menu items.
 
+MicroTiny v2.0.4
+  - Remove call to {cms_utils::get_module} from tinymce template
+
 Version 2.1.6 - Spanish Wells
 ----------------------------------
 Core - General
