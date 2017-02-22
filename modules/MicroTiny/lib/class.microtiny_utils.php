@@ -136,6 +136,7 @@ class microtiny_utils
       $smarty = $_gCms->GetSmarty();
       $page_id = ($_gCms->is_frontend_request()) ? $smarty->getTemplateVars('content_id') : '';
       $tpl_ob = $smarty->CreateTemplate('module_file_tpl:MicroTiny;tinymce_config.js',null,null,$smarty); // child of the global smarty
+      $tpl_ob->assign('MT',$mod);
       $tpl_ob->assign('MicroTiny',$mod);
       $tpl_ob->clear_assign('mt_profile');
       $tpl_ob->clear_assign('mt_selector');
