@@ -72,8 +72,9 @@ $(document).ready(function(){
     $('#id_disablewysiwyg, #template_id, #content_type').on('change', function () {
         // disable the dirty form stuff, and unlock because we're gonna relockit on reload.
         var self = this;
+	var this_id = $(this).attr('id');
         $('#Edit_Content').dirtyForm('disable');
-	$('#active_tab').val('{$options_tab_name}');
+	if( this_id != 'content_type') $('#active_tab').val('{$options_tab_name}');
 	if( do_locking ) {
 	  if( do_locking) $('#Edit_Content').lockManager('unlock',1).done(function(){
             $(self).closest('form').submit();
