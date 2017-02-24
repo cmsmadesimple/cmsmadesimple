@@ -949,8 +949,28 @@ header .shortcuts li.logout a {
 header .shortcuts li.view-site a {
 	background-position: -10px -124px
 }
+header .shortcuts li.notifications {
+        position: relative;
+}
 header .shortcuts li.notifications a {
         background-position: -10px -1058px
+}
+header .shortcuts li.notifications span.bubble {
+	position: absolute;
+	top: 0;
+	right: 0;
+	margin-right: 0;
+	text-align: center;
+	width: 1.2em;
+	height: 1.2em;
+	border-radius: 0.8em;
+	-moz-border-radius: 0.8em;
+	-webkit-border-radius: 0.8em;
+	background: #990000;
+	color: #ffffff !important; /* may need to force this with !important */
+	font-size: .9em;
+	line-height: 1.2em;
+	font-weight: bold;
 }
 header .shortcuts li.favorites a {
 	background-position: -10px -48px
