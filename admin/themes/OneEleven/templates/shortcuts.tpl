@@ -24,7 +24,7 @@
 		{$my_alerts=$theme->get_my_alerts()}
 		{$num_alerts=count($my_alerts)}
 		{if $num_alerts > 0}
-		   {if $num_alerts > 10}{$txt='&#2295'}{else}{$num=9311+$num_alerts}{$txt="&#{$num}"}{/if}
+		   {if $num_alerts > 10}{$txt='&#2295'}{else}{$num=1+$num_alerts}{$txt="{$num}"}{/if}
  		   <li class="notifications">
 			<a id="alerts" title="{lang('notifications_to_handle2',$num_alerts)}"><span class="bubble">{$txt}</span></a>
 		   </li>
