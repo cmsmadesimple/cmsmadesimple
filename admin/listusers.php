@@ -57,7 +57,10 @@ if( isset($_GET['switchuser']) ) {
         $to_uid = (int) $_GET['switchuser'];
         $to_user = $userops->LoadUserByID($to_uid);
         if( !$to_user ) {
-            $error .= '<li>'.lang('usernotfound');
+            $error .= '<li>'.lang('usernotfound').'</li>';
+        }
+        if( $to_user->active ) {
+            $error .= '<li>'.lang('userdisabled').'</li>';
         }
         else {
             CMSMS\LoginOperations::get_instance()->set_effective_user($to_user);
@@ -70,10 +73,8 @@ else if (isset($_GET["toggleactive"])) {
     if ($_GET["toggleactive"] == 1) {
         $error .= "<li>" . lang('errorupdatinguser') . "</li>";
     } else {
-
-
+        $thisuser = $userops->LoadUserByID((int)$_GET['toggleactive']);
         if ($thisuser) {
-
             // modify users, is this enough?
             $userid = get_userid();
 
@@ -260,5 +261,3 @@ $smarty->assign('userlist', $out);
 $smarty->display('listusers.tpl');
 
 include_once ('footer.php');
-
-?>

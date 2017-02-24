@@ -1626,6 +1626,7 @@ $lang['userprefs'] = "User Preferences";
 $lang['users'] = "Backend Users";
 $lang['usersassignedtogroup'] = "Users Assigned to Group %s";
 $lang['usersdescription'] = "Here you can manage Admin users.";
+$lang['userdisabled'] = 'User account disabled';
 $lang['usersettings'] = "User Settings";
 $lang['usersgroups'] = "User Management";
 $lang['usersgroupsdescription'] = "User and Group related items.";

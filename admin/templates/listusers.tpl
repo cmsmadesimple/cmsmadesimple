@@ -115,7 +115,7 @@ $(document).ready(function() {
 
 		{if $is_admin}
 		<td>
-		  {if $user->id != $my_userid}
+		  {if $user->active && $user->id != $my_userid}
 		  <a href="listusers.php{$urlext}&amp;switchuser={$user->id}" title="{lang('info_user_switch')}" class="switchuser">
 		     {admin_icon icon='run.gif'}
 		  </a>
