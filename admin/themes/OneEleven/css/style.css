@@ -953,7 +953,8 @@ header .shortcuts li.notifications {
         position: relative;
 }
 header .shortcuts li.notifications a {
-        background-position: -10px -1058px
+        background-position: -10px -1058px;
+        color: #fff !important;
 }
 header .shortcuts li.notifications span.bubble {
 	position: absolute;
@@ -967,10 +968,10 @@ header .shortcuts li.notifications span.bubble {
 	-moz-border-radius: 0.8em;
 	-webkit-border-radius: 0.8em;
 	background: #990000;
-	color: #ffffff !important; /* may need to force this with !important */
 	font-size: .9em;
 	line-height: 1.2em;
 	font-weight: bold;
+	text-indent: initial;
 }
 header .shortcuts li.favorites a {
 	background-position: -10px -48px
