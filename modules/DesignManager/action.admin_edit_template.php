@@ -92,12 +92,14 @@ try {
                 cms_utils::set_app_data('tmp_template', $params['contents']);
                 $parser = new \CMSMS\internal\page_template_parser('cms_template:appdata;tmp_template',$smarty);
                 $parser->compileTemplateSource();
+                    /*
                 if ($type_obj->get_content_block_flag()) {
                     $contentBlocks = CMS_Content_Block::get_content_blocks();
                     if (!is_array($contentBlocks) || count($contentBlocks) == 0) {
                         throw new CmsEditContentException('No content blocks defined in template');
                     }
                 }
+                    */
             }
 
             // if we got here, we're golden.
@@ -131,6 +133,7 @@ try {
             $tpl_obj->save();
         }
     } catch( \Exception $e ) {
+        debug_display($e->getTraceAsString()); die();
         $message = $e->GetMessage();
         $response = 'error';
     }
