@@ -59,7 +59,7 @@ if( isset($_GET['switchuser']) ) {
         if( !$to_user ) {
             $error .= '<li>'.lang('usernotfound').'</li>';
         }
-        if( $to_user->active ) {
+        if( ! $to_user->active ) {
             $error .= '<li>'.lang('userdisabled').'</li>';
         }
         else {
