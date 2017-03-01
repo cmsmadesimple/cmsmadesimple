@@ -266,7 +266,7 @@ abstract class Alert
     {
         $name = trim($name);
         if( !$name ) throw new \InvalidArgumentException('Invalid alert name passed to '.__METHOD__);
-        $tmp = \cms_siteprefs::get($this->get_prefname($name));
+        $tmp = \cms_siteprefs::get($name);
         if( !$tmp ) throw new \LogicException('Could not find an alert with the name '.$name);
 
         $obj = self::decode_object($tmp);
