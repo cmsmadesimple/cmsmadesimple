@@ -239,16 +239,18 @@ $(document).ready(function(){
 {/if}
 
 {tab_start name='advanced'}
-<div class="pageoverflow">
+{if $css->get_id() > 0}
+  <div class="pageoverflow">
 	<p class="pagetext">File CSS</p>
 	<p class="pageinput">
 		{if $css->has_content_file()}
 			<input type="submit" id="importbtn" name="{$actionid}import" value="{$mod->Lang('import')}"/>
-		{elseif $css->get_id() > 0}
+		{else}
 			<input type="submit" id="exportbtn" name="{$actionid}export" value="{$mod->Lang('export')}"/>
 		{/if}
 	</p>
-</div>
+  </div>
+{/if}
 {tab_end}
 
 {form_end}
