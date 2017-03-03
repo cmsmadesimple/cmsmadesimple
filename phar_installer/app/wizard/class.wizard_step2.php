@@ -92,14 +92,25 @@ class wizard_step2 extends \cms_autoinstaller\wizard_step
         }
         else {
             // looks like a new install
-            // double check for
+            // double check for the phar stuff.
             if( is_dir($rpwd.'/app') && is_file($rpwd.'/index.php') && is_dir($rpwd.'/lib') && is_file($rpwd.'/app/class.cms_install.php') ) {
                 // should never happen except if you're working on this project.
                 throw new \Exception(\__appbase\lang('error_invalid_directory'));
             }
-            else {
-                $wizard->clear_data('version_info');
-            }
+
+            $is_dir_empty = function($dir) {
+                if( !$dir ) return FALSE;
+                if( !is_dir($dir) ) return FALSE;
+                $files = glob($dir.'/*');
+                if( !count($files) ) return TRUE;
+                if( count($files) > 1 ) return FALSE;
+                // trivial check for index.html
+                $bn = strtolower(basename($files[0]));
+                if( fnmatch('index.htm*',$bn) ) return TRUE;
+                return FALSE;
+            };
+            $smarty->assign('install_empty_dir',$is_dir_empty($rpwd));
+            $wizard->clear_data('version_info');
         }
 
         $smarty->assign('retry_url',$_SERVER['REQUEST_URI']);

@@ -28,7 +28,10 @@ $(document).ready(function(){
 	{/if}
 
         {if !isset($cmsms_info)}
-          <div class="message yellow">{'step2_nocmsms'|tr}</div>
+            <div class="message yellow">{'step2_nocmsms'|tr}</div>
+	    {if !$install_empty_dir}
+              <div class="message red">{'step2_install_dirnotempty'|tr}</div>
+	    {/if}
         {else}
 	    {* its an upgrade or freshen *}
             {if isset($cmsms_info.error_status)}

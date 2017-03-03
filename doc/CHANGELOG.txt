@@ -105,6 +105,8 @@ Installation Assistant v1.3
   - No longer ask to save database password.
   - On install now create the assets directory structure
   - On upgrade (for 2.2) now create the assets directory structure and move tmp/configs, tmp/templates, module_custom, adin/custom, etc. within it.
+  - When using the expanded installer allow changing the destination directory on step 1
+  - Check for existing files in the installation directory for new installations.
 
 CmsJobManager
   - New core module to handle queued asynchronous tasks.

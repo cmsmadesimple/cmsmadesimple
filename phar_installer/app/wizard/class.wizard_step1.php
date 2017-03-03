@@ -148,13 +148,12 @@ class wizard_step1 extends \cms_autoinstaller\wizard_step
         $smarty = \__appbase\smarty();
         $app = \__appbase\get_app();
         if( !$app->in_phar() ) {
-            $custom_destdir = $app->has_custom_destdir();
             // get the list of directories we can install to
-            if( ! $custom_destdir ) {
-                $dirlist = $this->get_valid_install_dirs();
-                if( !$dirlist ) throw new \Exception('No possible installation directories found.  This could be a permissions issue');
-                $smarty->assign('dirlist',$dirlist);
-            }
+            $dirlist = $this->get_valid_install_dirs();
+            if( !$dirlist ) throw new \Exception('No possible installation directories found.  This could be a permissions issue');
+            $smarty->assign('dirlist',$dirlist);
+
+            $custom_destdir = $app->has_custom_destdir();
             $smarty->assign('custom_destdir',$custom_destdir);
             $smarty->assign('destdir',$app->get_destdir());
         }
