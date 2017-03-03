@@ -111,8 +111,7 @@ $bodycontent = $themeObject->postprocess($bodycontent);
 echo $bodycontent;
 
 if (!isset($USE_THEME) || $USE_THEME != false) {
-    echo '</body>';
-    echo '</html>';
+    if( strpos($bodycontent,'</body') === FALSE ) echo '</body></html>';
 }
 
 if (!isset($USE_THEME) || $USE_THEME != false) {
