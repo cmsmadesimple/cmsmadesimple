@@ -163,9 +163,14 @@ if( isset($config['php_memory_limit']) && !empty($config['php_memory_limit'])  )
 
 // Load them into the usual variables.  This'll go away a little later on.
 if (!isset($DONT_LOAD_DB)) {
-    debug_buffer('Initialize Database');
-    $_app->GetDb();
-    debug_buffer('Done Initializing Database');
+    try {
+        debug_buffer('Initialize Database');
+        $_app->GetDb();
+        debug_buffer('Done Initializing Database');
+    }
+    catch( \CMSMS\Database\DatabaseConnectionException $e ) {
+        die('Sorry, something has gone wrong.  Please contact a site administrtor. <em>('.get_class($e).')</em>');
+    }
 }
 
 #Fix for IIS (and others) to make sure REQUEST_URI is filled in
