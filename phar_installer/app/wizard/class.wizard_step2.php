@@ -98,18 +98,27 @@ class wizard_step2 extends \cms_autoinstaller\wizard_step
                 throw new \Exception(\__appbase\lang('error_invalid_directory'));
             }
 
-            $is_dir_empty = function($dir) {
+            $is_dir_empty = function($dir,$phar_url) {
                 if( !$dir ) return FALSE;
                 if( !is_dir($dir) ) return FALSE;
                 $files = glob($dir.'/*');
                 if( !count($files) ) return TRUE;
-                if( count($files) > 1 ) return FALSE;
+                if( count($files) > 3 ) return FALSE;
                 // trivial check for index.html
-                $bn = strtolower(basename($files[0]));
-                if( fnmatch('index.htm*',$bn) ) return TRUE;
-                return FALSE;
+                foreach( $files as $file ) {
+                    $bn = strtolower(basename($file));
+                    if( fnmatch('index.htm*',$bn) ) continue; // this is okay
+                    if( fnmatch('readme*.txt',$bn) ) continue; // this is okay
+                    if( $phar_url ) {
+                        $phar_bn = basename( $phar_url );
+                        if( fnmatch( $phar_bn, $bn ) ) continue; // this is okay
+                    }
+                    // found a not-okay file.
+                    return FALSE;
+                }
+                return TRUE;
             };
-            $smarty->assign('install_empty_dir',$is_dir_empty($rpwd));
+            $smarty->assign('install_empty_dir',$is_dir_empty($rpwd,$app->get_phar()));
             $wizard->clear_data('version_info');
         }
 
