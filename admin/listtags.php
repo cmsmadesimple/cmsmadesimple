@@ -30,7 +30,7 @@ $plugin = "";
 if (isset($_GET["plugin"])) $plugin = cleanValue($_GET["plugin"]);
 
 $type = "";
-if (isset($_GET["type"])) $type = cleanValue($_GET["type"]);
+if (isset($_GET["type"])) $type = basename(cleanValue($_GET["type"]));
 
 $action = "";
 if (isset($_GET["action"])) $action = cleanValue($_GET["action"]);
