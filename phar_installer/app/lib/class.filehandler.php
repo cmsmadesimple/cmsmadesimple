@@ -81,11 +81,20 @@ abstract class filehandler
     return @mkdir($tmp,0777,TRUE);
   }
 
+  protected function is_imagefile($filespec)
+  {
+      // this method uses (ugly) extensions because we cannot rely on finfo_open being available.
+      $image_exts = ['bmp','jpg','jpeg','gif','png','svg','webp','ico'];
+      $ext = strtolower(substr(strrchr($filespec, '.'), 1));
+      return in_array($ext,$image_exts);
+  }
+
   protected function is_langfile($filespec)
   {
     $filespec = trim($filespec);
     if( !$filespec ) throw new \Exception(\__appbase\lang('error_invalidparam','filespec'));
 
+    if( $this->is_imagefile($filespec) ) return FALSE;
     $bn = basename($filespec);
     $dn = dirname($filespec);
     $fnmatch = 0;
