@@ -35,15 +35,3 @@ function smarty_function_cms_jquery($params, &$smarty)
 	return $out;
 }
 
-function smarty_cms_about_function_cms_jquery()
-{
-?>
-	<p>Author: Tapio L&ouml;ytty &lt;tapsa@blackmilk.fi&gt;</p>
-
-	<p>Change History:</p>
-	<ul>
-		<li>None</li>
-	</ul>
-<?php
-}
-?>

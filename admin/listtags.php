@@ -27,10 +27,10 @@ $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 check_login();
 
 $plugin = "";
-if (isset($_GET["plugin"])) $plugin = cleanValue($_GET["plugin"]);
+if (isset($_GET["plugin"])) $plugin = basename(cleanValue($_GET["plugin"]));
 
 $type = "";
-if (isset($_GET["type"])) $type = cleanValue($_GET["type"]);
+if (isset($_GET["type"])) $type = basename(cleanValue($_GET["type"]));
 
 $action = "";
 if (isset($_GET["action"])) $action = cleanValue($_GET["action"]);
@@ -44,10 +44,10 @@ if (!$access) {
 }
 
 $dirs = [];
-$dirs[] = $config['root_path'].'/assets/plugins/*php';
-$dirs[] = $config['root_path'].'/plugins/*php';
-$dirs[] = $config['root_path'].'/lib/plugins/*php';
-$dirs[] = $config['admin_path'].'/plugins/*php';
+$dirs[] = $config['root_path'].'/assets/plugins';
+$dirs[] = $config['root_path'].'/plugins';
+$dirs[] = $config['root_path'].'/lib/plugins';
+$dirs[] = $config['admin_path'].'/plugins';
 $config = cmsms()->GetConfig();
 
 $find_file = function($filename) use ($dirs) {
@@ -89,13 +89,14 @@ if ($action == "showpluginhelp") {
     }
 }
 else if ($action == "showpluginabout") {
-    $file = $config['root_path']."/plugins/$type.$plugin.php";
+    $file = $find_file("$type.$plugin.php");
     if( file_exists($file) ) require_once($file);
 
     $smarty->assign('subheader',lang('pluginabout',$plugin));
-    if (function_exists('smarty_cms_about_'.$type.'_'.$plugin)) {
+    $func_name = 'smarty_cms_about_'.$type.'_'.$plugin;
+    if (function_exists($func_name)) {
         @ob_start();
-        call_user_func_array('smarty_cms_about_'.$type.'_'.$plugin, array());
+        call_user_func_array($func_name, array());
         $content = @ob_get_contents();
         @ob_end_clean();
         $smarty->assign('content',$content);
@@ -105,11 +106,9 @@ else if ($action == "showpluginabout") {
     }
 }
 else {
-    $config = cmsms()->GetConfig();
-
     $files = array();
     foreach( $dirs as $one ) {
-        $files = array_merge($files,glob($one));
+        $files = array_merge($files,glob($one.'/*.php'));
     }
 
     if( is_array($files) && count($files) ) {
