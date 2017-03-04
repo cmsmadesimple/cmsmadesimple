@@ -25,6 +25,7 @@ check_login();
 
 $gCms = \CmsApp::get_instance();
 $db = $gCms->GetDb();
+$themeObject = \cms_utils::get_theme_object();
 
 $dateformat = trim(cms_userprefs::get_for_user(get_userid(),'date_format_string','%x %X'));
 if( empty($dateformat) ) $dateformat = '%x %X';
