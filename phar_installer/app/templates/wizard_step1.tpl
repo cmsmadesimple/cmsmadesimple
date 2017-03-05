@@ -21,20 +21,17 @@ function redirect_langchange() {
 
 <div class="installer-form">
 {wizard_form_start}
-    {if !$custom_destdir && isset($dirlist)}
+    {if isset($dirlist)}
       <h3>{'step1_destdir'|tr}</h3>
 
       <p class="message yellow">{'step1_info_destdir'|tr}</p>
 
-      {if isset($dirlist)}
-        <div class="row message yellow">
-          <label>{'destination_directory'|tr}:</label>
-          <select class="form-field" name="destdir">
-	    {html_options options=$dirlist selected=$destdir|default:''}
-          </select>
-        </div>
-      {/if}
-
+      <div class="row message yellow">
+        <label>{'destination_directory'|tr}:</label>
+        <select class="form-field" name="destdir">
+          {html_options options=$dirlist selected=$destdir|default:''}
+        </select>
+      </div>
       <hr />
     {/if}
 
