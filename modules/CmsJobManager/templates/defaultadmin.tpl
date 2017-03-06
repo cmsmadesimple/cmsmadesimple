@@ -51,7 +51,7 @@ $(document).ready(function(){
   </table>
 {/if}
 
-{* delete me before distributing - TODO ?? *}
+{* delete me before distributing - TODO ?? 
 
 <a id="simple1" href="{cms_action_url action=test1}" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-icon-primary">
 <span class="ui-button-icon-primary ui-icon ui-icon-circle-check"></span>
@@ -62,3 +62,5 @@ $(document).ready(function(){
 <span class="ui-button-icon-primary ui-icon ui-icon-circle-check"></span>
 <span class="ui-button-text">Simple Derived Cron Test</span>
 </a>
+
+*}
