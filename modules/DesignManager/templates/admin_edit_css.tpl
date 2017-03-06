@@ -241,7 +241,7 @@ $(document).ready(function(){
 {tab_start name='advanced'}
 {if $css->get_id() > 0}
   <div class="pageoverflow">
-	<p class="pagetext">File CSS</p>
+	<p class="pagetext">{$mod->Lang('prompt_cssfile')}:</p>
 	<p class="pageinput">
 		{if $css->has_content_file()}
 			<input type="submit" id="importbtn" name="{$actionid}import" value="{$mod->Lang('import')}"/>

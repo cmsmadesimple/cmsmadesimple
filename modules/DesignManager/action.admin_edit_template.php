@@ -133,7 +133,6 @@ try {
             $tpl_obj->save();
         }
     } catch( \Exception $e ) {
-        debug_display($e->getTraceAsString()); die();
         $message = $e->GetMessage();
         $response = 'error';
     }

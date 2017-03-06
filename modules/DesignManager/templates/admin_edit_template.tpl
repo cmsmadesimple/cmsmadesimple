@@ -256,7 +256,7 @@ $(document).ready(function(){
         {/if}
 	{if $template->get_id() > 0}
         <div class="pageoverflow">
-			<p class="pagetext">File Template</p>
+			<p class="pagetext">{$mod->Lang('prompt_filetemplate')}:</p>
 			<p class="pageinput">
 			{if $template->has_content_file()}
 				<input type="submit" id="importbtn" name="{$actionid}import" value="{$mod->Lang('import')}"/>
