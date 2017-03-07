@@ -1,12 +1,12 @@
 {strip}
-
+<div id="topcontent_wrap">
 {foreach from=$nodes item='node' name='box'}
 {assign var='icon' value="themes/OneEleven/images/icons/topfiles/`$node.name`"}
 {assign var='module' value="../modules/`$node.name`/images/icon"}
 	{if $node.show_in_menu && $node.url && $node.title}
 	<div class="dashboard-box{if $smarty.foreach.box.index % 3 == 2} last{/if}">
 		<nav class="dashboard-inner cf">
-			<a href="{$node.url}"{if isset($node.target)} target="{$node.target}"{/if}{if $node.selected} class="selected"{/if}>
+			<a href="{$node.url}"{if isset($node.target)} target="{$node.target}"{/if}{if $node.selected} class="selected"{/if} tabindex="-1">
 			{if file_exists($module|cat:'.png')}
 			<img src="{$module}.png" width="48" height="48" alt="{$node.title}"{if $node.description} title="{$node.description|strip_tags}"{/if} />
 			{elseif file_exists($module|cat:'.gif')}
@@ -39,5 +39,5 @@
 	{/if}
 	{/if}
 {/foreach}
-
+</div>
 {/strip}

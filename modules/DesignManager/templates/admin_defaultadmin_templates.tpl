@@ -26,8 +26,7 @@ $(document).ready(function(){
 
     $(document).on('click','a.steal_tpl_lock',function(e) {
       // we're gonna confirm stealing this lock.
-      var v = confirm('{$mod->Lang('confirm_steal_lock')|escape:'javascript'}');
-      return v;
+      return confirm('{$mod->Lang('confirm_steal_lock')|escape:'javascript'}');
     });
 
     $(document).on('click','a.sedit_tpl',function(e) {
@@ -58,7 +57,6 @@ $(document).ready(function(){
                 cms_alert('{$mod->Lang('error_nothingselected')|escape:'javascript'}');
                 return false;
             }
-            //return confirm('{$mod->Lang('confirm_bulk_tmplop')|escape:'javascript'}');
         });
 
     $('#template_area').on('click', '#edittplfilter', function () {
@@ -69,6 +67,11 @@ $(document).ready(function(){
             $(this).dialog('close');
             $('#filterdialog_form').submit();
           },
+          '{$mod->Lang('reset')|escape:'javascript'}': function () {
+            $(this).dialog('close');
+	    $('#submit_filter_tpl').val('-1');
+            $('#filterdialog_form').submit();
+          },
           '{$mod->Lang('cancel')|escape:'javascript'}': function () {
             $(this).dialog('close');
           },
@@ -77,6 +80,7 @@ $(document).ready(function(){
     });
     $(document).on('click','#addtemplate', function () {
       $('#addtemplatedialog').dialog({
+        width: 'auto',
         buttons: {
           '{$mod->Lang('submit')|escape:'javascript'}': function () {
             $(this).dialog('close');
@@ -93,45 +97,37 @@ $(document).ready(function(){
 
 <div id="filterdialog" style="display: none;" title="{$mod->Lang('tpl_filter')|escape:'javascript'}">
   {form_start action='defaultadmin' id='filterdialog_form' __activetab='templates'}
-    <input type="hidden" name="{$actionid}submit_filter_tpl" value="1"/>
-    <div class="pageoverflow">
-      <p class="pagetext"><label for="filter_tpl">{$mod->Lang('prompt_options')}:</label></p>
-      <p class="pageinput">
-        <select id="filter_tpl" name="{$actionid}filter_tpl" title="{$mod->Lang('title_filter')}">
+    <input type="hidden" id="submit_filter_tpl" name="{$actionid}submit_filter_tpl" value="1"/>
+    <div class="c_full">
+      <label for="filter_tpl" class="grid_2 text-right">{$mod->Lang('prompt_options')}:</label>
+      <select id="filter_tpl" name="{$actionid}filter_tpl" title="{$mod->Lang('title_filter')}" class="grid_10">
   	  {html_options options=$filter_tpl_options selected=$tpl_filter.tpl}
-        </select>
-      </p>
+      </select>
     </div>
-    <div class="pageoverflow">
-      <p class="pagetext"><label for="filter_sortby">{$mod->Lang('prompt_sortby')}:</label></p>
-      <p class="pageinput">
-        <select id="filter_sortby" name="{$actionid}filter_sortby" title="{$mod->Lang('title_sortby')}">
+    <div class="c_full">
+      <label for="filter_sortby" class="grid_2 text-right">{$mod->Lang('prompt_sortby')}:</label>
+      <select id="filter_sortby" name="{$actionid}filter_sortby" title="{$mod->Lang('title_sortby')}" class="grid_10">
           <option value="name"{if $tpl_filter.sortby == 'name'} selected="selected"{/if}>{$mod->Lang('name')}</option>
           <option value="type"{if $tpl_filter.sortby == 'type'} selected="selected"{/if}>{$mod->Lang('type')}</option>
           <option value="created"{if $tpl_filter.sortby == 'created'} selected="selected"{/if}>{$mod->Lang('created')}</option>
           <option value="modified"{if $tpl_filter.sortby == 'modified'} selected="selected"{/if}>{$mod->Lang('modified')}</option>
-        </select>
-      </p>
+      </select>
     </div>
-    <div class="pageoverflow">
-      <p class="pagetext"><label for="filter_sortorder">{$mod->Lang('prompt_sortorder')}:</label></p>
-      <p class="pageinput">
-        <select id="filter_sortorder" name="{$actionid}filter_sortorder" title="{$mod->Lang('title_sortorder')}">
+    <div class="c_full">
+      <label for="filter_sortorder" class="grid_2 text-right">{$mod->Lang('prompt_sortorder')}:</label>
+      <select id="filter_sortorder" name="{$actionid}filter_sortorder" title="{$mod->Lang('title_sortorder')}" class="grid_10">
           <option value="asc"{if $tpl_filter.sortorder == 'asc'} selected="selected"{/if}>{$mod->Lang('asc')}</option>
           <option value="desc"{if $tpl_filter.sortorder == 'desc'} selected="selected"{/if}>{$mod->Lang('desc')}</option>
-        </select>
-      </p>
+      </select>
     </div>
-    <div class="pageoverflow">
-      <p class="pagetext"><label for="filter_limit">{$mod->Lang('prompt_limit')}:</label></p>
-      <p class="pageinput">
-        <select id="filter_limit" name="{$actionid}filter_limit_tpl" title="{$mod->Lang('title_filterlimit')}">
+    <div class="c_full">
+      <label for="filter_limit" class="grid_2 text-right">{$mod->Lang('prompt_limit')}:</label>
+      <select id="filter_limit" name="{$actionid}filter_limit_tpl" title="{$mod->Lang('title_filterlimit')}" class="grid_10">
 	  <option value="10"{if $tpl_filter.limit == 10} selected="selected"{/if}>10</option>
 	  <option value="25"{if $tpl_filter.limit == 25} selected="selected"{/if}>25</option>
 	  <option value="50"{if $tpl_filter.limit == 50} selected="selected"{/if}>50</option>
 	  <option value="100"{if $tpl_filter.limit == 100} selected="selected"{/if}>100</option>
-        </select>
-      </p>
+      </select>
     </div>
   {form_end}
 </div>{* #filterdialog *}

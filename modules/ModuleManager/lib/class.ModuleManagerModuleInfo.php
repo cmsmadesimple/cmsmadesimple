@@ -111,6 +111,8 @@ class ModuleManagerModuleInfo extends CmsExtendedModuleInfo
 
             // check for installed modules that are dependent upon this one
             $name = $this['name'];
+            if( $name == 'ModuleManager' ) return FALSE;
+
             foreach( self::$_minfo as $mname => $minfo ) {
                 if( is_array($minfo['dependants']) && count($minfo['dependants']) ) {
                     if( in_array($name,$minfo['dependants']) ) return FALSE;

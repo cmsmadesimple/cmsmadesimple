@@ -10,23 +10,10 @@ class wizard_step7 extends \cms_autoinstaller\wizard_step
         // nothing here
     }
 
-    private function _createIndexHTML()
+    private function _createIndexHTML($filename)
     {
-        $this->message(\__appbase\lang('install_dummyindexhtml'));
-        $destdir = \__appbase\get_app()->get_destdir();
-        $iter = new \RecursiveIteratorIterator(
-            new \RecursiveDirectoryIterator($destdir, \RecursiveDirectoryIterator::SKIP_DOTS),
-            \RecursiveIteratorIterator::SELF_FIRST,
-            \RecursiveIteratorIterator::CATCH_GET_CHILD // Ignore "Permission denied"
-            );
-
         $str = '<!-- DUMMY HTML FILE -->';
-        foreach( $iter as $path => $dir ) {
-            if( !$dir->isDir() ) continue;
-            if( file_exists($path.'/index.php') || file_exists($path.'/index.html') ) continue;
-
-            file_put_contents($path.'/index.html',$str);
-        }
+        file_put_contents($filename,$str);
     }
 
     private function detect_languages()
@@ -44,6 +31,26 @@ class wizard_step7 extends \cms_autoinstaller\wizard_step
             $one = substr($fn,0,strlen($fn)-strlen('.nls.php'));
         }
         return $files;
+    }
+
+    private function do_index_html()
+    {
+        $this->message(\__appbase\lang('install_dummyindexhtml'));
+
+        $destdir = \__appbase\get_app()->get_destdir();
+        if( !$destdir ) throw new \Exception(\__appbase\lang('error_internal',751));
+        $archive = \__appbase\get_app()->get_archive();
+        $phardata = new \PharData($archive);
+        $archive = basename($archive);
+        foreach( new \RecursiveIteratorIterator($phardata) as $file => $it ) {
+            if( ($p = strpos($file,$archive)) === FALSE ) continue;
+            $fn = substr($file,$p+strlen($archive));
+            $dn = $destdir.dirname($fn);
+            if( $dn == $destdir || $dn == $destdir.'/' ) continue;
+            if( $dn == "$destdir/admin" ) continue;
+            $idxfile = $dn.'/index.html';
+            if( is_dir($dn) && !is_file($idxfile) )  $this->_createIndexHTML($idxfile);
+        }
     }
 
     private function do_files($langlist = null)
@@ -92,7 +99,10 @@ class wizard_step7 extends \cms_autoinstaller\wizard_step
                 // open the manifest
                 // check the to version info
                 $manifest = new manifest_reader("$upgrade_dir/$one_version");
-                if( $one_version != $manifest->to_version() ) throw new \Exception(\__appbase\lang('error_internal',712));
+                if( $one_version != $manifest->to_version() ) {
+                    die("a = $one_version b = ".$manifest->to_version());
+                    throw new \Exception(\__appbase\lang('error_internal',712));
+                }
 
                 // delete all 'deleted' files
                 // if they are supposed to be in the installation, the copy from the archive
@@ -105,7 +115,7 @@ class wizard_step7 extends \cms_autoinstaller\wizard_step
                     foreach( $deleted as $rec ) {
                         $fn = "{$destdir}{$rec['filename']}";
                         if( !file_exists($fn) ) {
-                            $this->error("file $fn does not exist... but we were gonna delete it anyways");
+                            $this->error("file $fn does not exist... but we planned to delete it anyway");
                             $nmissing++;
                         }
                         else if( !is_writable($fn) ) {
@@ -114,8 +124,14 @@ class wizard_step7 extends \cms_autoinstaller\wizard_step
                         }
                         else {
                             if( is_dir($fn) ) {
-                                \__appbase\utils::rrmdir($fn);
-                                $this->verbose('removed directory: '.$fn);
+                                $res = @rmdir($fn);
+				if( !$res ) {
+				    $this->error('problem removing directory: '.$fn);
+				    $nfailed++;
+ 				} else {
+                                    $this->verbose('removed directory: '.$fn);
+                                    $ndeleted++;
+				}
                             }
                             else {
                                 $res = @unlink($fn);
@@ -132,7 +148,7 @@ class wizard_step7 extends \cms_autoinstaller\wizard_step
                     }
                 }
 
-                $this->message($ndeleted.' files deleted for version '.$one_version.": ".$nmissing.' missing, '.$nfailed.' failed');
+                $this->message($ndeleted.' files/folders deleted for version '.$one_version.": ".$nmissing.' missing, '.$nfailed.' failed');
             }
         }
     }
@@ -169,7 +185,7 @@ class wizard_step7 extends \cms_autoinstaller\wizard_step
                 throw new \Exception(\__appbase\lang('error_internal',705));
             }
 
-            $this->_createIndexHTML();
+            $this->do_index_html();
         }
         catch( \Exception $e ) {
             $this->error($e->GetMessage());
@@ -179,5 +195,3 @@ class wizard_step7 extends \cms_autoinstaller\wizard_step
     }
 
 } // end of class
-
-?>

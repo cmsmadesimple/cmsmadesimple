@@ -7,7 +7,7 @@ $(document).ready(function(){
   $('#Edit_Content').dirtyForm({
     beforeUnload: function(is_dirty) {
       if( do_locking ) $('#Edit_Content').lockManager('unlock').done(function(){
-         console.log('after unlock');
+         console.log('after dirtyform unlock');
       });
     },
     unloadCancel: function(){
@@ -24,14 +24,14 @@ $(document).ready(function(){
       lock_timeout: {$lock_timeout|default:0},
       lock_refresh: {$lock_refresh|default:0},
       error_handler: function (err) {
-          alert('got error ' + err.type + ' // ' + err.msg);
+          cms_alert('Locking error: ' + err.type + ' -- ' + err.msg);
       },
       lostlock_handler: function (err) {
           // we lost the lock on this content... make sure we can't save anything.
           // and display a nice message.
           $('[name$=cancel]').fadeOut().attr('value', '{$mod->Lang('close')}').fadeIn();
           $('#Edit_Content').dirtyForm('option', 'dirty', false);
-          alert('{$mod->Lang('msg_lostlock')|escape:'javascript'}');
+          cms_alert('{$mod->Lang('msg_lostlock')|escape:'javascript'}');
       }
     });
   }
@@ -72,9 +72,11 @@ $(document).ready(function(){
     $('#id_disablewysiwyg, #template_id, #content_type').on('change', function () {
         // disable the dirty form stuff, and unlock because we're gonna relockit on reload.
         var self = this;
+	var this_id = $(this).attr('id');
         $('#Edit_Content').dirtyForm('disable');
+	if( this_id != 'content_type') $('#active_tab').val('{$options_tab_name}');
 	if( do_locking ) {
-	  if( do_locking) $('#Edit_Content').lockManager('unlock').done(function(){
+	  if( do_locking) $('#Edit_Content').lockManager('unlock',1).done(function(){
             $(self).closest('form').submit();
 	  });
         } else {
@@ -92,7 +94,7 @@ $(document).ready(function(){
 	  var self = this;
 	  var form = $(this).closest('form');
 	  ev.preventDefault();
-	  $('#Edit_Content').lockManager('unlock').done(function(){
+	  $('#Edit_Content').lockManager('unlock',1).done(function(){
 	     var el = $('<input type="hidden"/>');
 	     el.attr('name',$(self).attr('name')).val($(self).val()).appendTo(form);
 	     form.submit();
@@ -108,7 +110,7 @@ $(document).ready(function(){
 	    var self = this;
 	    ev.preventDefault();
 	    var form = $(this).closest('form');
-	    $('#Edit_Content').lockManager('unlock').done(function(){
+	    $('#Edit_Content').lockManager('unlock',1).done(function(){
  	    	var el = $('<input type="hidden"/>');
             	el.attr('name',$(self).attr('name')).val($(self).val()).appendTo(form);
 	    	form.submit();
@@ -168,7 +170,7 @@ $(document).ready(function(){
 	  }
 	  if( !first ) {
 	    $('#design_id').val(lastValue);
-	    alert('{$mod->Lang('warn_notemplates_for_design')}');
+	    cms_alert('{$mod->Lang('warn_notemplates_for_design')}');
 	  }
 	  else {
   	    $('#template_id').val('');
@@ -224,11 +226,12 @@ $(document).ready(function(){
 <div id="Edit_Content_Result"></div>
 <div id="Edit_Content">
 {form_start content_id=$content_id}
+  <input type="hidden" id="active_tab" name="{$actionid}active_tab"/>
   {submit_buttons}
 
   {* tab headers *}
   {foreach $tab_names as $key => $tabname}
-    {tab_header name=$key label=$tabname}
+    {tab_header name=$key label=$tabname active=$active_tab}
   {/foreach}
   {if $content_obj->HasPreview()}
     {tab_header name='_preview_' label=$mod->Lang('prompt_preview')}

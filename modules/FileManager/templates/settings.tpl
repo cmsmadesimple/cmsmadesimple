@@ -52,7 +52,6 @@
   </p>
 </div>
 <div class="pageoverflow">
-  <p class="pagetext">&nbsp;</p>
   <p class="pageinput">
     <input type="submit" name="{$actionid}submit" value="{$mod->Lang('submit')}"/>
   </p>

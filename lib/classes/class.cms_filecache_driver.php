@@ -370,7 +370,7 @@ class cms_filecache_driver extends cms_cache_driver
         if( !$group ) $group = $this->_group;
 
         $mask = $dir.'/cache_*_*.cg';
-        if( $group ) $mask = $dir.'/cache_'.md5($group).'_*.cg';
+        if( $group ) $mask = $dir.'/cache_'.md5(__DIR__.$group).'_*.cg';
 
         $files = glob($mask);
         if( !is_array($files) ) return 0;
@@ -394,7 +394,6 @@ class cms_filecache_driver extends cms_cache_driver
                 }
             }
         }
-
         return $nremoved;
     }
 

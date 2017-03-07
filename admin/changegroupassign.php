@@ -35,15 +35,15 @@ else if (isset($_GET["submitted"])) $submitted = $_GET["submitted"];
 $group_name="";
 
 if (isset($_POST["cancel"])) {
-	redirect("changegroupassign.php".$urlext);
-	return;
+    redirect("changegroupassign.php".$urlext);
+return;
 }
 
 $userid = get_userid();
 $access = check_permission($userid, 'Manage Groups');
 if (!$access) {
-  die('Permission Denied');
-  return;
+    die('Permission Denied');
+    return;
 }
 $gCms = cmsms();
 $userops = $gCms->GetUserOperations();
@@ -70,26 +70,18 @@ $tmp->id=-1;
 $allgroups = array($tmp);
 $groups = array($tmp);
 $group_list = $groupops->LoadGroups();
-foreach( $group_list as $onegroup )
-{
-  if( $onegroup->id == 1 && $adminuser == false )
-    {
-      continue;
-    }
-  $allgroups[] = $onegroup;
-  if( $disp_group == -1 || $disp_group == $onegroup->id )
-    {
-      $groups[] = $onegroup;
-    }
+foreach( $group_list as $onegroup ) {
+    if( $onegroup->id == 1 && $adminuser == false ) continue;
+    $allgroups[] = $onegroup;
+    if( $disp_group == -1 || $disp_group == $onegroup->id ) $groups[] = $onegroup;
 }
 $smarty->assign('group_list',$groups);
 $smarty->assign('allgroups',$allgroups);
 
 // because it's easier in PHP than Javascript:
 $groupidlist = array();
-foreach ($group_list as $thisGroup)
-{
-  $groupidlist[] = $thisGroup->id;
+foreach ($group_list as $thisGroup) {
+    $groupidlist[] = $thisGroup->id;
 }
 $smarty->assign('groupidlist',implode(',',$groupidlist));
 
@@ -98,29 +90,22 @@ if ($submitted == 1) {
         if( $thisGroup->id <= 0 ) continue;
 
         // Send the ChangeGroupAssignPre event
-        Events::SendEvent('Core', 'ChangeGroupAssignPre',
-                          array('group' => $thisGroup,
-                                'users' => $userops->LoadUsersInGroup($thisGroup->id)));
+        \CMSMS\HookManager::do_hook( 'Core::ChangeGroupAssignPre',
+                                     [ 'group' => $thisGroup, 'users' => $userops->LoadUsersInGroup($thisGroup->id) ] );
         $query = "DELETE FROM ".cms_db_prefix()."user_groups WHERE group_id = ? AND user_id != ?";
         $result = $db->Execute($query, array($thisGroup->id,$userid));
         $iquery = "INSERT INTO ".cms_db_prefix().
             "user_groups (group_id, user_id, create_date, modified_date) VALUES (?,?,NOW(),NOW())";
 
-        foreach ($_POST as $key=>$value)
-        {
-            if (strpos($key,"ug") == 0 && strpos($key,"ug") !== false)
-            {
+        foreach ($_POST as $key=>$value) {
+            if (strpos($key,"ug") == 0 && strpos($key,"ug") !== false) {
                 $keyparts = explode('_',$key);
-                if ($keyparts[2] == $thisGroup->id && $value == '1')
-                {
-                    $result = $db->Execute($iquery, array($thisGroup->id, (int) $keyparts[1]) );
-                }
+                if ($keyparts[2] == $thisGroup->id && $value == '1') $result = $db->Execute($iquery, [ $thisGroup->id,$keyparts[1] ] );
             }
         }
 
-        Events::SendEvent('Core', 'ChangeGroupAssignPost',
-                          array('group' => $thisGroup,
-                                'users' => $userops->LoadUsersInGroup($thisGroup->id)));
+        \CMSMS\HookManager::do_hook( 'Core::ChangeGroupAssignPost',
+                                     [ 'group' => $thisGroup, 'users' => $userops->LoadUsersInGroup($thisGroup->id) ] );
         // put mention into the admin log
         audit($group_id, 'Assignment Group ID: '.$group_id, 'Changed');
     }
@@ -129,45 +114,37 @@ if ($submitted == 1) {
 	audit($userid, 'Assignment User ID: '.$userid, 'Changed');
     $message = lang('assignmentchanged');
     $gCms->clear_cached_files();
-  }
+}
 
 
 
 $query = "SELECT u.user_id, u.username, ug.group_id FROM ".
-  cms_db_prefix()."users u LEFT JOIN ".cms_db_prefix().
-  "user_groups ug ON u.user_id = ug.user_id ORDER BY u.username";
+    cms_db_prefix()."users u LEFT JOIN ".cms_db_prefix().
+    "user_groups ug ON u.user_id = ug.user_id ORDER BY u.username";
 $result = $db->Execute($query);
 
 $user_struct = array();
-while($result && $row = $result->FetchRow())
-  {
-    if (isset($user_struct[$row['user_id']]))
-      {
-	$str = &$user_struct[$row['user_id']];
-	$str->group[$row['group_id']]=1;
-      }
-    else
-      {
-	$thisUser = new stdClass();
-	$thisUser->group = array();
-	if (!empty($row['group_id']))
-	  {
-	    $thisUser->group[$row['group_id']] = 1;
-	  }
-	$thisUser->id = $row['user_id'];
-	$thisUser->name = $row['username'];
-	$user_struct[$row['user_id']] = $thisUser;
-      }
-  }
-$smarty->assign_by_ref('users',$user_struct);
-
+while($result && $row = $result->FetchRow()) {
+    if (isset($user_struct[$row['user_id']])) {
+        $str = &$user_struct[$row['user_id']];
+        $str->group[$row['group_id']]=1;
+    }
+    else {
+        $thisUser = new stdClass();
+        $thisUser->group = array();
+        if (!empty($row['group_id'])) $thisUser->group[$row['group_id']] = 1;
+        $thisUser->id = $row['user_id'];
+        $thisUser->name = $row['username'];
+        $user_struct[$row['user_id']] = $thisUser;
+    }
+}
+$smarty->assign('users',$user_struct);
 
 if( $adminuser ) $smarty->assign('adminuser',1);
 $smarty->assign('disp_group',$disp_group);
 $smarty->assign('user_id',$userid);
 $smarty->assign('cms_secure_param_name',CMS_SECURE_PARAM_NAME);
 $smarty->assign('cms_user_key',$_SESSION[CMS_USER_KEY]);
-//$smarty->assign('admin_group_warning',$themeObject->ShowErrors(lang('adminspecialgroup')));
 $smarty->assign('form_start','<form id="groupname" method="post" action="changegroupassign.php">');
 $smarty->assign('filter_action','changegroupassign.php');
 $smarty->assign('form_end','</form>');
@@ -175,24 +152,15 @@ $smarty->assign('apply',lang('apply'));
 $smarty->assign('selectgroup',lang('selectgroup'));
 $smarty->assign('title_user',lang('user'));
 $smarty->assign('hidden','<input type="hidden" name="submitted" value="1" />');
-$smarty->assign('submit','<input type="submit" name="changegrp" value="'.lang('submit').
-	'" class="pagebutton" />');
-$smarty->assign('cancel','<input type="submit" name="cancel" value="'.lang('cancel').
-	'" class="pagebutton" />');
+$smarty->assign('submit','<input type="submit" name="changegrp" value="'.lang('submit').'" class="pagebutton" />');
+$smarty->assign('cancel','<input type="submit" name="cancel" value="'.lang('cancel').'" class="pagebutton" />');
 
 
 # begin output
-if( !empty($message) )
-  {
-    echo $themeObject->ShowMessage($message);
-  }
+if( !empty($message) ) echo $themeObject->ShowMessage($message);
 echo '<div class="pagecontainer">';
 echo $themeObject->ShowHeader('groupassignments',array($group_name));
 echo $smarty->fetch('changeusergroup.tpl');
 echo '</div>';
 
-
 include_once("footer.php");
-
-
-?>

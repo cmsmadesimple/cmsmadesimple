@@ -24,6 +24,8 @@
  * @license GPL
  */
 
+use \CMSMS\HookManager;
+
 /**
  * A class to manage a collection (or theme) of Templates and Stylesheets
  *
@@ -493,14 +495,14 @@ class CmsLayoutCollection
     public function save()
     {
         if( $this->get_id() ) {
-			Events::SendEvent('Core','EditDesignPre',array(get_class($this)=>&$this));
+            HookManager::do_hook('Core::EditDesignPre', [ get_class($this) => &$this ] );
             $this->_update();
-			Events::SendEvent('Core','EditDesignPost',array(get_class($this)=>&$this));
+            HookManager::do_hook('Core::EditDesignPost', [ get_class($this) => &$this ] );
 			return;
         }
-		Events::SendEvent('Core','AddDesignPre',array(get_class($this)=>&$this));
+        HookManager::do_hook('Core::AddDesignPre', [ get_class($this) => &$this ] );
         $this->_insert();
-		Events::SendEvent('Core','AddDesignPost',array(get_class($this)=>&$this));
+        HookManager::do_hook('Core::AddDesignPost', [ get_class($this) => &$this ] );
     }
 
 	/**
@@ -516,7 +518,7 @@ class CmsLayoutCollection
 
         if( !$force && $this->has_templates() ) throw new CmsLogicException('Cannot Delete a Design that has Templates Attached');
 
-		Events::SendEvent('Core','DeleteDesignPre',array(get_class($this)=>&$this));
+        HookManager::do_hook('Core::DeleteDesignPre', [ get_class($this) => &$this ] );
 		$db = CmsApp::get_instance()->GetDb();
         if( count($this->_css_assoc) ) {
             $query = 'DELETE FROM '.CMS_DB_PREFIX.self::CSSTABLE.' WHERE design_id = ?';
@@ -536,7 +538,7 @@ class CmsLayoutCollection
         $dbr = $db->Execute($query,array($this->get_id()));
 
 		audit($this->get_id(),'CMSMS','Design '.$this->get_name().' deleted');
-		Events::SendEvent('Core','DeleteDesignPost',array(get_class($this)=>&$this));
+        HookManager::do_hook('Core::DeleteDesignPost', [ get_class($this) => &$this ] );
         unset($this->_data['id']);
         $this->_dirty = TRUE;
     }

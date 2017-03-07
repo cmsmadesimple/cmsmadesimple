@@ -6,22 +6,16 @@ $('#tpl_selall').cmsms_checkall();
 
 <div class="row">
   <div class="pageoptions options-menu half">
-    <ul class="options-menu">
-      <li class="parent">{admin_icon icon='run.gif' alt=$mod->Lang('prompt_options')}&nbsp;{$mod->lang('prompt_options')}
-        <ul id="popuptplcontents">
-          {if $has_add_right}
-            <li><a id="addtemplate" accesskey="a" title="{$mod->Lang('create_template')}">{admin_icon icon='newobject.gif' alt=$mod->Lang('create_template')}&nbsp;{$mod->Lang('create_template')}</a></li>
-          {/if}
-          <li><a id="edittplfilter" accesskey="f" title="{$mod->Lang('prompt_editfilter')}">{admin_icon icon='edit.gif' alt=$mod->Lang('prompt_editfilter')}&nbsp;{$mod->Lang('filter')}</a></li>
-	  {if $have_locks}
-	  <li><a id="clearlocks" accesskey="l" title="{$mod->Lang('title_clearlocks')}" href="{cms_action_url action=admin_clearlocks type=template}">{admin_icon icon='run.gif' alt=''}&nbsp;{$mod->Lang('prompt_clearlocks')}</a></li>
-	  {/if}
-        </ul>
-      </li>
-      {if !empty($tpl_filter[0])}
-        <li><span style="color: green;" title="{$mod->Lang('title_filterapplied')}">{$mod->Lang('filterapplied')}</span></li>
-      {/if}
-    </ul>
+    {if $has_add_right}
+      <a id="addtemplate" accesskey="a" title="{$mod->Lang('create_template')}">{admin_icon icon='newobject.gif' alt=$mod->Lang('create_template')}&nbsp;{$mod->Lang('create_template')}</a>&nbsp;&nbsp;
+    {/if}
+    <a id="edittplfilter" accesskey="f" title="{$mod->Lang('prompt_editfilter')}">{admin_icon icon='view.gif' alt=$mod->Lang('prompt_editfilter')}&nbsp;{$mod->Lang('filter')}</a>&nbsp;&nbsp;
+    {if $have_locks}
+      <a id="clearlocks" accesskey="l" title="{$mod->Lang('title_clearlocks')}" href="{cms_action_url action=admin_clearlocks type=template}">{admin_icon icon='run.gif' alt=''}&nbsp;{$mod->Lang('prompt_clearlocks')}</a>&nbsp;&nbsp;
+    {/if}
+    {if !empty($tpl_filter[0])}
+      <span style="color: green;" title="{$mod->Lang('title_filterapplied')}">{$mod->Lang('filterapplied')}</span>
+    {/if}
   </div>
 
   {if isset($tpl_nav) && $tpl_nav.numpages > 1}
@@ -40,17 +34,18 @@ $('#tpl_selall').cmsms_checkall();
     <thead>
       <tr>
         <th title="{$mod->Lang('title_tpl_id')}">{$mod->Lang('prompt_id')}</th>
-	<th class="pageicon"></th>
-	<th title="{$mod->Lang('title_tpl_name')}">{$mod->Lang('prompt_name')}</th>
-	<th title="{$mod->Lang('title_tpl_type')}">{$mod->Lang('prompt_type')}</th>
-	<th title="{$mod->Lang('title_tpl_design')}">{$mod->Lang('prompt_design')}</th>
-	<th title="{$mod->Lang('title_tpl_dflt')}" class="pageicon">{$mod->Lang('prompt_dflt')}</th>{* dflt *}
-	<th class="pageicon"></th>{* edit *}
-	{if $has_add_right}
-	  <th class="pageicon"></th>{* copy *}
-	{/if}
-	<th class="pageicon"></th>{* delete *}
-	<th class="pageicon"><input type="checkbox" value="1" id="tpl_selall" title="{$mod->Lang('prompt_select_all')}"/></th>{* checkbox *}
+		<th class="pageicon"></th>
+		<th title="{$mod->Lang('title_tpl_name')}">{$mod->Lang('prompt_name')}</th>
+		<th title="{$mod->Lang('title_tpl_type')}">{$mod->Lang('prompt_type')}</th>
+		<th title="{$mod->Lang('title_tpl_filename')}">{$mod->Lang('prompt_filename')}</th>
+		<th title="{$mod->Lang('title_tpl_design')}">{$mod->Lang('prompt_design')}</th>
+		<th title="{$mod->Lang('title_tpl_dflt')}" class="pageicon">{$mod->Lang('prompt_dflt')}</th>{* dflt *}
+		<th class="pageicon"></th>{* edit *}
+		{if $has_add_right}
+			<th class="pageicon"></th>{* copy *}
+		{/if}
+		<th class="pageicon"></th>{* delete *}
+		<th class="pageicon"><input type="checkbox" value="1" id="tpl_selall" title="{$mod->Lang('prompt_select_all')}"/></th>{* checkbox *}
       </tr>
     </thead>
     <tbody>
@@ -80,6 +75,13 @@ $('#tpl_selall').cmsms_checkall();
 	    {$type_id=$template->get_type_id()}
 	    {include file='module_file_tpl:DesignManager;admin_defaultadmin_tpltype_tooltip.tpl' assign='tpltype_tooltip'}
 	    <span class="tooltip" data-cms-description='{$tpltype_tooltip}'>{$list_types.$type_id}</span>
+	  </td>
+
+	  {* filename column *}
+	  <td>
+	     {if $template->has_content_file()}
+	       {basename($template->get_content_filename())}
+	     {/if}
 	  </td>
 
 	  {* design column *}
@@ -158,7 +160,9 @@ $('#tpl_selall').cmsms_checkall();
       <p class="pageinput" style="text-align: right;">
         <label for="tpl_bulk_action">{$mod->Lang('prompt_with_selected')}:</label>&nbsp;
         <select name="{$actionid}bulk_action" id="tpl_bulk_action" class="tpl_bulk_action" title="{$mod->Lang('title_tpl_bulkaction')}">
-          <option value="delete" title="{$mod->Lang('title_delete')}">{$mod->lang('prompt_delete')}</option>
+          <option value="delete">{$mod->lang('prompt_delete')}</option>
+          <option value="export">{$mod->lang('export')}</option>
+          <option value="import">{$mod->lang('import')}</option>
         </select>
         <input id="tpl_bulk_submit" class="tpl_bulk_action" type="submit" name="{$actionid}submit_bulk" value="{$mod->Lang('submit')}"/>&nbsp;{cms_help key2='help_bulk_templates' title=$mod->lang('prompt_delete')}
       </p>

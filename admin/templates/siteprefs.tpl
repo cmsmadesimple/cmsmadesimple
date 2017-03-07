@@ -1,9 +1,12 @@
 <div class="pagecontainer">
-
 <script type="text/javascript">
 $(document).ready(function(){
-  $(document).on('click','[name=submit]',function(){
-    return confirm('{lang('siteprefs_confirm')|escape:'javascript'}');
+  $('[name=submit]').click(function(ev){
+    ev.preventDefault();
+    var _btn = $(this);
+    cms_confirm('{lang('siteprefs_confirm')|escape:'javascript'}').done(function(){
+       _btn.unbind('click').click();
+    });
   });
 });
 </script>
@@ -158,7 +161,7 @@ $(document).ready(function(){
 			</p>
 		</div>
 		<div class="pageoverflow">
-			<p class="pagetext"><label for="basic_attributes">{lang('basic_attributes')}:</label>&nbsp;{cms_help key2='settings_basicattribs' title=lang('basic_attributes')}</p>
+			<p class="pagetext"><label for="basic_attributes">{lang('basic_attributes')}:</label>&nbsp;{cms_help key2='settings_basicattribs2' title=lang('basic_attributes')}</p>
 			<p class="pageinput">
 				<select id="basic_attributes" class="multicolumn" name="basic_attributes[]" multiple="multiple" size="5">
 					{cms_html_options options=$all_attributes selected=$basic_attributes}
@@ -519,25 +522,10 @@ $(document).ready(function(){
 					<p class="pageinput"><input type="submit" name="testumask" value="{lang('test')}" class="pagebutton"  /></p>
 				</div>
 				<div class="pageoverflow">
-					<p class="pagetext"><label for="notifications">{lang('admin_enablenotifications')}:</label></p>
+					<p class="pagetext"><label for="lock_timeout">{lang('admin_lock_timeout')}:</label></p>
 					<p class="pageinput">
-						<select id="notifications" name="enablenotifications">
-							{cms_yesno selected=$enablenotifications}
-						</select>&nbsp;{cms_help key2='settings_enablenotifications' title=lang('admin_enablenotifications')}
-				</div>
-				<div class="pageoverflow">
-					<p class="pagetext"><label for="notifications">{lang('admin_lock_timeout')}:</label></p>
-					<p class="pageinput">
-					        <input type="text" name="lock_timeout" size="3" value="{$lock_timeout}"/>
+					        <input type="text" id="lock_timeout" name="lock_timeout" size="3" value="{$lock_timeout}"/>
 						&nbsp;{cms_help key2='settings_lock_timeout' title=lang('admin_lock_timeout')}
-				</div>
-				<div class="pageoverflow">
-					<p class="pagetext"><label for="pseudocron">{lang('pseudocron_granularity')}:</label></p>
-					<p class="pageinput">
-						<select id="pseudocron" name="pseudocron_granularity">
-							{html_options options=$pseudocron_options selected=$pseudocron_granularity}
-						</select>&nbsp;{cms_help key2='settings_pseudocron_granularity' title=lang('pseudocron_granularity')}
-					</p>
 				</div>
 				<div class="pageoverflow">
 					<p class="pagetext"><label for="adminlog">{lang('adminlog_lifetime')}:</label></p>

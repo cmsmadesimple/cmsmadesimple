@@ -11,5 +11,5 @@ $this->SetPreference("permissionstyle",$params["permissionstyle"]);
 
 $this->SetMessage($this->Lang('settingssaved'));
 $this->SetCurrentTab('settings');
-$this->RedirectToAdminTab();
+$this->Redirect($id,'admin_settings',$returnid);
 ?>

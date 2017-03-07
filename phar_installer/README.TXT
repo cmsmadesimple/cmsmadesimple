@@ -1,7 +1,7 @@
 ---------------------------------------
-CMS Made Simple Installation Assistant
+CMS Made Simple Expanded Installation Assistant
 ---------------------------------------
-This document describes using the CMS Made Simple installation assistant.
+This document describes using the expanded CMS Made Simple installation assistant.
 
 As opposed to the PHAR based installation assistant, this version is not compressed into a single archive file
 and contains numerous files and directories.  It is useful for installing, upgrading and freshening CMSMS installs
@@ -24,8 +24,9 @@ WARNINGS:
 Requirements:
 -------------------
 1.  The installation assistant requires a PHP environment with a minimum version of PHP 5.4.0.
-2.  For new installations of CMS Made Simple you should create a new mysql database and database user.  The database user
-    must have ALL PRIVILEGES to all tables within the new database.
+2.  For new installations of CMS Made Simple you should create a new mysql database and database user.
+    - The database user must have ALL PRIVILEGES to all tables within the new database.
+    - Your database user account must have a password.
 3.  CMS Made Simple itself requires at least PHP 5.4.11 with numerous libraries enabled (the install assistant will
     check for these) including json, tokenizer, xml, and gd.
 4.  Your PHP environment must include the PHAR extension (yes, even for the expanded installer).  This is for expanding the archive(s) included within the installation assistant.
@@ -163,6 +164,8 @@ The installation assistant supports the following URL based options
     Allow specifying a custom destination directory (must be an absolute path).
 5.  nofiles=1
     Do not overwrite files.  This is useful when needing to setup the database when the files have been manually extracted from the source code repository.
+6.  clear=1
+    Usable only on the first step, this will ensure that all preset config information is cleared from the session (for development purposes only).
 
 ----
 FAQ:

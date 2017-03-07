@@ -97,6 +97,7 @@ try {
   $summary_template_type->set_dflt_flag(TRUE);
   $summary_template_type->set_lang_callback('News::page_type_lang_callback');
   $summary_template_type->set_content_callback('News::reset_page_type_defaults');
+  $summary_template_type->set_help_callback('News::template_help_callback');
   $summary_template_type->reset_content_to_factory();
   $summary_template_type->save();
 }
@@ -154,6 +155,7 @@ try {
   $detail_template_type->set_lang_callback('News::page_type_lang_callback');
   $detail_template_type->set_content_callback('News::reset_page_type_defaults');
   $detail_template_type->reset_content_to_factory();
+  $detail_template_type->set_help_callback('News::template_help_callback');
   $detail_template_type->save();
 }
 catch( CmsException $e ) {
@@ -210,6 +212,7 @@ try {
   $form_template_type->set_lang_callback('News::page_type_lang_callback');
   $form_template_type->set_content_callback('News::reset_page_type_defaults');
   $form_template_type->reset_content_to_factory();
+  $form_template_type->set_help_callback('News::template_help_callback');
   $form_template_type->save();
 }
 catch( CmsException $e ) {
@@ -247,6 +250,7 @@ try {
   $browsecat_template_type->set_lang_callback('News::page_type_lang_callback');
   $browsecat_template_type->set_content_callback('News::reset_page_type_defaults');
   $browsecat_template_type->reset_content_to_factory();
+  $browsecat_template_type->set_help_callback('News::template_help_callback');
   $browsecat_template_type->save();
 }
 catch( CmsException $e ) {

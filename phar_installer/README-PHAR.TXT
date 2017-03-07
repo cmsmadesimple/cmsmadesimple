@@ -15,7 +15,9 @@ The PHAR based installation assistant is a binary file and must be transferred i
 Requirements
 ---------------------------
 1.  The installation assistant requires a PHP environment with a minimum version of PHP 5.4.0 with the Phar library enabled.
-2.  For new installations of CMS Made Simple you should create a new mysql database and database user.  The database user must have ALL PRIVILEGES to all tables within the new database.
+2.  For new installations of CMS Made Simple you should create a new mysql database and database user.
+    - The database user must have ALL PRIVILEGES to all tables within the new database.
+    - Your database user account must have a password.
 3.  CMS Made Simple itself requires at least PHP 5.4.11 with numerous libraries enabled (the install assistant will check for these) including json, tokenizer, xml, and gd.
 4.  Your PHP environment must include the PHAR extension
 
@@ -140,6 +142,9 @@ The installation assistant supports the following URL based options:
     Allow specifying a custom destination directory (must be an absolute path).
 5.  nofiles=1
     Do not overwrite files.  This is useful when needing to setup the database when the files have been manually extracted from the source code repository.
+6.  clear=1
+    Usable only on the first step, this will ensure that all preset config information is cleared from the session (for development purposes only).
+
 
 ---------------------------
 Frequently Asked Questions

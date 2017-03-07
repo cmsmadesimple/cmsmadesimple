@@ -50,15 +50,21 @@ try {
     if (isset($params['import_type'])) {
         $tpl_obj = CmsLayoutTemplate::create_by_type($params['import_type']);
         $tpl_obj->set_owner(get_userid());
+        $design = CmsLayoutCollection::load_default();
+        if( $design ) {
+            $tpl_obj->add_design($design);
+        }
         $extraparms['import_type'] = $params['import_type'];
         $type_is_readonly = true;
     } else if (isset($params['tpl'])) {
         $tpl_obj = CmsLayoutTemplate::load($params['tpl']);
+        $tpl_obj->get_designs();
         $extraparms['tpl'] = $params['tpl'];
     } else {
         $this->SetError($this->Lang('error_missingparam'));
         $this->RedirectToAdminTab();
     }
+    $type_obj = CmsLayoutTemplateType::load($tpl_obj->get_type_id());
 
     try {
         if (isset($params['submit']) || isset($params['apply']) ) {
@@ -72,7 +78,7 @@ try {
             }
             if (isset($params['category_id'])) $tpl_obj->set_category($params['category_id']);
             $tpl_obj->set_listable(isset($params['listable'])?$params['listable']:1);
-            $tpl_obj->set_content($params['contents']);
+            if( isset($params['contents']) ) $tpl_obj->set_content($params['contents']);
             $tpl_obj->set_name($params['name']);
 
             if ($this->CheckPermission('Manage Designs')) {
@@ -81,20 +87,19 @@ try {
                 $tpl_obj->set_designs($design_list);
             }
 
-            $type_obj = CmsLayoutTemplateType::load($tpl_obj->get_type_id());
-
             // lastly, check for errors in the template before we save.
-            cms_utils::set_app_data('tmp_template', $params['contents']);
-            $parser = new \CMSMS\internal\page_template_parser('cms_template:appdata;tmp_template',$smarty);
-            $parser->compileTemplateSource();
-            if ($type_obj->get_content_block_flag()) {
-                $contentBlocks = CMS_Content_Block::get_content_blocks();
-                if (!is_array($contentBlocks) || count($contentBlocks) == 0) {
-                    throw new CmsEditContentException('No content blocks defined in template');
+            if( isset($params['contents']) ) {
+                cms_utils::set_app_data('tmp_template', $params['contents']);
+                /*
+                $parser = new \CMSMS\internal\page_template_parser('cms_template:appdata;tmp_template',$smarty);
+                $parser->compileTemplateSource();
+                if ($type_obj->get_content_block_flag()) {
+                    $contentBlocks = CMS_Content_Block::get_content_blocks();
+                    if (!is_array($contentBlocks) || count($contentBlocks) == 0) {
+                        throw new CmsEditContentException('No content blocks defined in template');
+                    }
                 }
-                if (!isset($contentBlocks['content_en'])) {
-                    throw new CmsEditContentException('No default content block {content} or {content block=\'content_en\'} defined in template');
-                }
+                */
             }
 
             // if we got here, we're golden.
@@ -106,7 +111,28 @@ try {
             }
 
         }
-    } catch( Exception $e ) {
+        else if( isset($params['export']) ) {
+            $outfile = $tpl_obj->get_content_filename();
+            $dn = dirname($outfile);
+            if( !is_dir($dn) || !is_writable($dn) ) {
+                throw new \RuntimeException($this->Lang('error_assets_writeperm'));
+            }
+            if( is_file($outfile) && !is_writable($outfile) ) {
+                throw new \RuntimeException($this->Lang('error_assets_writeperm'));
+            }
+            file_put_contents($outfile,$tpl_obj->get_content());
+        }
+        else if( isset($params['import']) ) {
+            $infile = $tpl_obj->get_content_filename();
+            if( !is_file($infile) || !is_readable($infile) || !is_writable($infile) ) {
+                throw new \RuntimeException($this->Lang('error_assets_readwriteperm'));
+            }
+            $data = file_get_contents($infile);
+            unlink($infile);
+            $tpl_obj->set_content($data);
+            $tpl_obj->save();
+        }
+    } catch( \Exception $e ) {
         $message = $e->GetMessage();
         $response = 'error';
     }
@@ -140,7 +166,12 @@ try {
         echo $this->ShowErrors($message);
     }
 
-    $type_obj = CmsLayoutTemplateType::load($tpl_obj->get_type_id());
+    if( $tpl_obj->get_id() > 0 ) {
+        \CmsAdminThemeBase::GetThemeObject()->SetSubTitle($this->Lang('edit_template'));
+    } else {
+        \CmsAdminThemeBase::GetThemeObject()->SetSubTitle($this->Lang('create_template'));
+    }
+
     $smarty->assign('type_obj', $type_obj);
     $smarty->assign('extraparms', $extraparms);
     $smarty->assign('template', $tpl_obj);
@@ -211,4 +242,3 @@ try {
 #
 # EOF
 #
-?>

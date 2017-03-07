@@ -7,6 +7,8 @@
  * @license GPL
  */
 
+use \CMSMS\HookManager;
+
 /**
  * A class to represent a smarty template.
  *
@@ -121,7 +123,7 @@ class CmsLayoutTemplate
 	 */
 	public function get_content()
 	{
-		if( isset($this->_data['content']) ) return $this->_data['content'];
+        if( isset($this->_data['content']) ) return $this->_data['content'];
 	}
 
 	/**
@@ -544,6 +546,7 @@ class CmsLayoutTemplate
     /**
      * Get wether this template is listable in public template lists.
      *
+     * @param bool $flag The value for the listable attribute.
      * @return bool
      * @since 2.1
      */
@@ -559,7 +562,7 @@ class CmsLayoutTemplate
 	 */
 	public function process()
 	{
-		$smarty = CmsApp::get_instance()->GetSmarty();
+		$smarty = \Smarty_CMS::get_instance();
 		return $smarty->fetch('cms_template:id='.$this->get_id());
 	}
 
@@ -703,14 +706,14 @@ class CmsLayoutTemplate
 	public function save()
 	{
 		if( $this->get_id() ) {
-			Events::SendEvent('Core','EditTemplatePre',array(get_class($this)=>&$this));
+            HookManager::do_hook('Core::EditTemplatePre', [ get_class($this) => &$this ] );
 			$this->_update();
-			Events::SendEvent('Core','EditTemplatePost',array(get_class($this)=>&$this));
+            HookManager::do_hook('Core::EditTemplatePost', [ get_class($this) => &$this ] );
 			return;
 		}
-		Events::SendEvent('Core','AddTemplatePre',array(get_class($this)=>&$this));
+        HookManager::do_hook('Core::AddTemplatePre', [ get_class($this) => &$this ] );
 		$this->_insert();
-		Events::SendEvent('Core','AddTemplatePost',array(get_class($this)=>&$this));
+        HookManager::do_hook('Core::AddTemplatePost', [ get_class($this) => &$this ] );
 	}
 
 	/**
@@ -720,7 +723,7 @@ class CmsLayoutTemplate
 	{
         if( !$this->get_id() ) return;
 
-		Events::SendEvent('Core','DeleteTemplatePre',array(get_class($this)=>&$this));
+        HookManager::do_hook('Core::DeleteTemplatePre', [ get_class($this) => &$this ] );
 		$db = CmsApp::get_instance()->GetDb();
 		$query = 'DELETE FROM '.CMS_DB_PREFIX.CmsLayoutCollection::TPLTABLE.' WHERE tpl_id = ?';
 		$dbr = $db->Execute($query,array($this->get_id()));
@@ -728,9 +731,11 @@ class CmsLayoutTemplate
 		$query = 'DELETE FROM '.CMS_DB_PREFIX.self::TABLENAME.' WHERE id = ?';
 		$dbr = $db->Execute($query,array($this->get_id()));
 
+        @unlink($this->get_content_filename());
+
 		CmsTemplateCache::clear_cache();
 		audit($this->get_id(),'CMSMS','Template '.$this->get_name().' Deleted');
-		Events::SendEvent('Core','DeleteTemplatePost',array(get_class($this)=>&$this));
+        HookManager::do_hook('Core::DeleteTemplatePost', [ get_class($this) => &$this ] );
 		unset($this->_data['id']);
 		$this->_dirty = TRUE;
 	}
@@ -796,6 +801,11 @@ class CmsLayoutTemplate
 	{
 		$ob = new CmsLayoutTemplate();
 		$ob->_data = $row;
+        $fn = $ob->get_content_filename();
+        if( is_file($fn) && is_readable($fn) ) {
+            $ob->_data['content'] = file_get_contents($fn);
+            $ob->_data['modified'] = filemtime($fn);
+        }
 		if( is_array($design_list) ) $ob->_design_assoc = $design_list;
 
 		self::$_obj_cache[$ob->get_id()] = $ob;
@@ -1090,7 +1100,7 @@ class CmsLayoutTemplate
 	 */
 	public static function process_by_name($name)
 	{
-		$smarty = CmsApp::get_instance()->GetSmarty();
+		$smarty = \Smarty_CMS::get_instance();
 		return $smarty->fetch('cms_template:name='.$this->get_name());
 	}
 
@@ -1138,9 +1148,59 @@ class CmsLayoutTemplate
 		}
 		throw new CmsLogicException('Could not generate a template name for '.$prototype);
 	}
+
+    /**
+     * Return the template type object for this template.
+     *
+     * @return CmsLayoutTemplateType
+     * @since 2.2
+     */
+    public function &get_type()
+    {
+        $obj = null;
+        $tid = $this->get_type_id();
+        if( $tid > 0 ) $obj = \CmsLayoutTemplateType::load($this->get_type_id());
+        return $obj;
+    }
+
+    /**
+     * Get the usage string (if any) for this template.
+     *
+     * @return string A sample usage string for this template.
+     * @since 2.2
+     */
+    public function get_usage_string()
+    {
+        $type = $this->get_type();
+        return $type->get_usage_string($this->get_name());
+    }
+
+    /**
+     * Get the filename that will be used to read template contents from file.
+     *
+     * @since 2.2
+     * @return string
+     */
+    public function get_content_filename()
+    {
+        $config = \cms_config::get_instance();
+        $name = munge_string_to_url($this->get_name()).'.'.$this->get_id().'.tpl';
+        return cms_join_path($config['assets_path'],'templates',$name);
+    }
+
+    /**
+     * Does this template have an associated file.
+     *
+     * @since 2.2
+     * @return bool
+     */
+    public function has_content_file()
+    {
+        $fn = $this->get_content_filename();
+        if( is_file($fn) && is_readable($fn) ) return TRUE;
+    }
 } // end of class
 
 #
 # EOF
 #
-?>

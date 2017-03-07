@@ -26,6 +26,7 @@ require_once("../lib/include.php");
 $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 @set_time_limit(9999); // this may not work on all hosts
 
+check_login();
 $userid = get_userid();
 $access = check_permission($userid, "Modify Site Preferences");
 if (!$access) die('Permission Denied');

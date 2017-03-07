@@ -170,5 +170,3 @@ final class Nav_utils
 
 #
 # EOF
-#
-?>

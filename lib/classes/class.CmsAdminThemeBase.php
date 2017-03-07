@@ -138,6 +138,11 @@ abstract class CmsAdminThemeBase
 	 */
 	private $_subtitle;
 
+    /**
+     * @ignore
+     */
+    private $_headtext;
+
 	/**
 	 * @ignore
 	 */
@@ -179,7 +184,7 @@ abstract class CmsAdminThemeBase
 		}
 		if( $key == 'userid' ) return get_userid();
 		if( $key == 'title' ) return $this->_title;
-		if( $key == 'subtitle' ) return $this->_title;
+		if( $key == 'subtitle' ) return $this->_subtitle;
 	}
 
     /**
@@ -204,7 +209,7 @@ abstract class CmsAdminThemeBase
 	{
 		$newurl = $url;
 		if( strpos($url,CMS_SECURE_PARAM_NAME) !== FALSE ) {
-			$from = '/'.CMS_SECURE_PARAM_NAME.'=[a-zA-Z0-9]{16}/i';
+			$from = '/'.CMS_SECURE_PARAM_NAME.'=[a-zA-Z0-9]{16,19}/i';
 			$to = CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 			$newurl = preg_replace($from,$to,$url);
 		}
@@ -749,7 +754,6 @@ abstract class CmsAdminThemeBase
 
 		// fix subtitle, if any
 		if ($subtitle != '') $this->_title .= ': '.$subtitle;
-
 		debug_buffer('after populate admin navigation');
     }
 
@@ -810,7 +814,7 @@ abstract class CmsAdminThemeBase
 	 */
 	protected function get_admin_navigation()
 	{
-		$smarty = CmsApp::get_instance()->GetSmarty();
+        $smarty = \Smarty_CMS::get_instance();
 		$smarty->assign('secureparam', CMS_SECURE_PARAM_NAME . '=' . $_SESSION[CMS_USER_KEY]);
 		$this->_populate_admin_navigation();
 		return $this->_menuItems;
@@ -850,10 +854,9 @@ abstract class CmsAdminThemeBase
 	 * @since 1.11
 	 * @param string $parent Indicates the parent to start at.  use a value of -1 to indicate the top node.
 	 * @param int $maxdepth The maximum depth of the tree.  -1 indicates no maximum depth
-	 * @param bool $usecache Indicates wether the cache should be used.  This should be FALSE when not retrieving the whole tree.
 	 * @return array A nested array of menu nodes.  The children member represents the nesting.
 	 */
-	public function get_navigation_tree($parent = -1,$maxdepth = -1,$usecache = TRUE)
+	public function get_navigation_tree($parent = -1,$maxdepth = -1)
 	{
 		$nodes = $this->_get_navigation_tree_sub($parent,$maxdepth);
 		return $nodes;
@@ -1041,7 +1044,7 @@ abstract class CmsAdminThemeBase
 				$imageName = substr($imageName,strrpos($imageName,'/')+1);
 			}
 
-			$config = CmsApp::get_instance()->GetConfig();
+			$config = \cms_config::get_instance();
 			$str = dirname(CMS_ROOT_PATH.'/'.$config['admin_dir']."/themes/{$this->themeName}/images/{$imagePath}{$imageName}");
 			if (file_exists("{$str}/{$imageName}")) {
 				$str = "themes/{$this->themeName}/images/{$imagePath}{$imageName}";
@@ -1119,7 +1122,7 @@ abstract class CmsAdminThemeBase
 	 */
 	static public function GetAvailableThemes()
 	{
-		$config = CmsApp::get_instance()->GetConfig();
+		$config = \cms_config::get_instance();
 
 		$files = glob(cms_join_path($config['admin_path'],'themes').'/*');
 		if( is_array($files) && count($files) ) {
@@ -1142,7 +1145,7 @@ abstract class CmsAdminThemeBase
 	 * @param string $name optional theme name.
 	 * @return CmsAdminThemeBase Reference to the initialized admin theme.
 	 */
-	static public function &GetThemeObject($name = '')
+	static public function GetThemeObject($name = '')
 	{
 		if( is_object(self::$_instance) ) return self::$_instance;
 
@@ -1316,6 +1319,62 @@ abstract class CmsAdminThemeBase
 		return 'index.php'.$urlext;
 	}
 
+    /**
+     * Add text to the head section of the output
+     *
+     * The CMSMS core code calls this method to add text and javascript to output in the head section required for various functionality.
+     *
+     * @param string $txt The text to add to the head section.
+     * @since 2.2
+     * @author Robert Campbell
+     */
+    public function add_headtext($txt)
+    {
+        $txt = trim($txt);
+        if( $txt ) $this->_headtext .= "\n".$txt;
+    }
+
+    /**
+     * Get text that needs to be injected into the head section of the output.
+     *
+     * This method is typically called by the admin theme itself to get the text to render.
+     *
+     * @return string
+     * @since 2.2
+     * @author Robert Campbell
+     */
+    public function get_headtext()
+    {
+        return $this->_headtext;
+    }
+
+    /**
+     * Add text to the footer of the output, immediately before the </body> tag.
+     *
+     * @param string $txt The text to add to the end of the output.
+     * @since 2.2
+     * @author Robert Campbell
+     */
+    public function add_footertext($txt)
+    {
+        $txt = trim($txt);
+        if( $txt ) $this->_footertext .= "\n".$txt;
+    }
+
+    /**
+     * Get text that needs to be injected into the footer section of the output.
+     *
+     * This method is typically called by the admin theme itself to get the text to render.
+     *
+     * @return string
+     * @since 2.2
+     * @author Robert Campbell
+     */
+    public function get_footertext()
+    {
+        return $this->_footertext;
+    }
+
 	/**
 	 * An abstract function to output the header html
 	 * This function may not display anything, but may store data for use in the postprocess mechanism
@@ -1323,6 +1382,7 @@ abstract class CmsAdminThemeBase
 	 * and all admin navigation etc.  Many admin themes may not do anything here.
 	 *
 	 * @return string html contents.
+     * @deprecated
 	 */
 	abstract public function do_header();
 

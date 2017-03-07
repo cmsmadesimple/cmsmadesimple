@@ -166,10 +166,10 @@ abstract class CMSModule
             /* deprecated */
             $tpl = $this->GetActionTemplateObject();
             if( $tpl ) return $tpl;
-            return CmsApp::get_instance()->GetSmarty();
+            return \Smarty_CMS::get_instance();
 
         case 'config':
-            return CmsApp::get_instance()->GetConfig();
+            return \cms_config::get_instance();
 
         case 'db':
             return CmsApp::get_instance()->GetDb();
@@ -440,7 +440,12 @@ abstract class CMSModule
      */
     final public function GetModuleURLPath($use_ssl=false)
     {
-        return ($use_ssl?$this->config['ssl_url']:CMS_ROOT_URL) . '/modules/' . $this->GetName();
+        $config = \cms_config::get_instance();
+        if( $use_ssl ) {
+            return $this->config['ssl_url'].'/modules/'.$this->GetName();
+        } else {
+            return $config->smart_root_url().'/modules/'.$this->GetName();
+        }
     }
 
     /**
@@ -853,7 +858,7 @@ abstract class CMSModule
      */
     final public function &GetConfig()
     {
-        return CmsApp::get_instance()->GetConfig();
+        return \cms_config::get_instance();
     }
 
     /**
@@ -1442,6 +1447,7 @@ abstract class CMSModule
                     if( isset($params[$key]) ) continue;
                     $params[$key] = $value;
                 }
+                unset($hints);
             }
 
             // used to try to avert XSS flaws, this will
@@ -1463,6 +1469,12 @@ abstract class CMSModule
         $returnid = cms_htmlentities($returnid);
         $id = cms_htmlentities($id);
         $name = cms_htmlentities($name);
+
+        if( $returnid != '' ) {
+            $tmp = $params;
+            $tmp['module'] = $this->GetName();
+            \CMSMS\HookManager::do_hook('module_action', $tmp);
+        }
 
         $gCms = CmsApp::get_instance(); // in scope for compatibility reasons.
         //$smarty = $gCms->GetSmarty(); // use the passed in template.
@@ -2312,6 +2324,7 @@ abstract class CMSModule
      * @param string $tab The tab name.  If empty, the current tab is used.
      * @param mixed|null  $params An assoiciative array of params, or null
      * @param string $action The action name (if not specified, defaultadmin is assumed)
+     * @see CMSModule::SetCurrentTab
      */
     public function RedirectToAdminTab($tab = '',$params = '',$action = '')
     {
@@ -2695,6 +2708,7 @@ abstract class CMSModule
      * @since 1.11
      * @author calguy1000
      * @param string $tab The tab name
+     * @see CMSModule::RedirectToAdminTab();)
      */
     public function SetCurrentTab($tab)
     {
@@ -3178,20 +3192,6 @@ abstract class CMSModule
         Events::SendEvent($this->GetName(), $eventname, $params);
     }
 
-    /**
-     * Returns the output the module wants displayed in the notification area
-     *
-     * @abstract
-     * @param int $priority Notification priority between 1 and 3
-     * @return mixed  A stdClass object with two properties.... priority (1->3)... and
-     * html, which indicates the text to display for the Notification.
-     * Also supports returning an array of stdclass objects.
-     */
-    public function GetNotificationOutput($priority=2)
-    {
-        return '';
-    }
-
 } // end of class
 
 
@@ -3235,5 +3235,3 @@ define('CLEAN_FILE','CLEAN_FILE');
  * @ignore
  */
 define('CLEANED_FILENAME','BAD_FILE');
-
-?>

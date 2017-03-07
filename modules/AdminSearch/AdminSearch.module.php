@@ -23,7 +23,7 @@ if( !isset($gCms) ) exit;
 final class AdminSearch extends CMSModule
 {
   function GetFriendlyName()  { return $this->Lang('friendlyname');  }
-  function GetVersion()  { return '1.0.2'; }
+  function GetVersion()  { return '1.0.3'; }
   function MinimumCMSVersion()  { return '1.12-alpha0';  }
   function LazyLoadAdmin() { return TRUE; }
   function LazyLoadFrontend() { return TRUE; }

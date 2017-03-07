@@ -60,12 +60,12 @@ else {
     $template = $tpl->get_name();
 }
 
-$cache_id = '|nav'.md5(serialize($params));
+$cache_id = '|nav'.md5(serialize($params).$returnid);
 $compile_id = '';
-$hm = $gCms->GetHierarchyManager();
 
 $tpl = $smarty->CreateTemplate($this->GetTemplateResource($template),$cache_id,$compile_id,$smarty);
 if( !$tpl->isCached() ) {
+    $hm = $gCms->GetHierarchyManager();
     foreach( $params as $key => $value ) {
         switch( $key ) {
         case 'loadprops':
@@ -94,7 +94,7 @@ if( !$tpl->isCached() ) {
                 if( count($list) ) {
                     $flatlist = $hm->getFlatList();
                     if( is_array($flatlist) && count($flatlist) ) {
-                        $tmp = array();
+                        $tmp = [];
                         foreach( $flatlist as $id => &$node ) {
                             $alias = $node->get_tag('alias');
                             foreach( $list as $t1 ) {
@@ -175,7 +175,7 @@ if( !$tpl->isCached() ) {
 
     if( $items ) $collapse = FALSE;
 
-    $rootnodes = array();
+    $rootnodes = [];
     if( $start_element ) {
         // get an alias... from a hierarchy level.
         $tmp = $hm->getNodeByHierarchy($start_element);
@@ -186,10 +186,7 @@ if( !$tpl->isCached() ) {
             else {
                 $tmp = $tmp->getParent();
                 if( is_object($tmp) && $tmp->has_children() ) {
-                    $children = $tmp->get_children();
-                    foreach( $children as $one ) {
-                        $rootnodes[] = $one;
-                    }
+                    $rootnodes = $tmp->get_children();
                 }
             }
         }
@@ -203,10 +200,7 @@ if( !$tpl->isCached() ) {
             else {
                 $tmp = $tmp->getParent();
                 if( is_object($tmp) && $tmp->has_children() ) {
-                    $children = $tmp->get_children();
-                    foreach( $children as $one ) {
-                        $rootnodes[] = $one;
-                    }
+                    $rootnodes = $tmp->get_children();
                 }
             }
         }
@@ -214,8 +208,7 @@ if( !$tpl->isCached() ) {
     else if( $start_level > 1 ) {
         $tmp = $hm->sureGetNodeById($gCms->get_content_id());
         if( $tmp ) {
-            $arr = array();
-            $arr2 = array();
+            $arr = $arr2 = [];
             while( $tmp ) {
                 $id = $tmp->get_tag('id');
                 if( !$id ) break;
@@ -229,10 +222,7 @@ if( !$tpl->isCached() ) {
                 $tmp = $arr[$id];
                 if( $tmp->has_children() ) {
                     // do childrenof this element
-                    $children = $tmp->get_children();
-                    foreach( $children as $one ) {
-                        $rootnodes[] = $one;
-                    }
+                    $rootnodes = $tmp->get_children();
                 }
             }
         }
@@ -240,12 +230,7 @@ if( !$tpl->isCached() ) {
     else if( $childrenof ) {
         $tmp = $hm->sureGetNodeByAlias(trim($childrenof));
         if( is_object($tmp) ) {
-            if( $tmp->has_children() ) {
-                $children = $tmp->get_children();
-                foreach( $children as $one ) {
-                    $rootnodes[] = $one;
-                }
-            }
+            if( $tmp->has_children() ) $rootnodesn = $tmp->get_children();
         }
     }
     else if( $items ) {
@@ -260,21 +245,13 @@ if( !$tpl->isCached() ) {
     }
     else {
         // start at the top
-        if( $hm->has_children() ) {
-            $children = $hm->get_children();
-            for( $i = 0; $i < count($children); $i++ ) {
-                $rootnodes[] = $children[$i];
-            }
-        }
+        if( $hm->has_children() ) $rootnodes = $hm->get_children();
     }
 
     if( count($rootnodes) == 0 ) return; // nothing to do.
 
-    // preload all active content
-    //if( !cms_content_cache::have_preloaded() ) ContentOperations::get_instance()->LoadAllContent($deep,$show_all);
-
     // ready to fill the nodes
-    $outtree = array();
+    $outtree = [];
     foreach( $rootnodes as $node ) {
         if( Nav_utils::is_excluded($node->get_tag('alias')) ) continue;
         $tmp = Nav_utils::fill_node($node,$deep,$nlevels,$show_all,$collapse);
@@ -287,7 +264,6 @@ if( !$tpl->isCached() ) {
 
 $tpl->display();
 debug_buffer('End Navigator default action');
+unset($tpl);
 #
 # EOF
-#
-?>

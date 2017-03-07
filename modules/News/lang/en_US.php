@@ -255,6 +255,7 @@ $lang['help_fielddef_options'] = 'Here you may specify the valid options for dro
 $lang['help_fielddef_public'] = 'Specify if the field definition is public or not.  Public field definitions are viewable in frontend views, and can be entered by the fesubmit action.  Custom fields that are not public can only be edited in the Admin interface by authorized administrators.';
 $lang['help_fielddef_type'] = 'Each custom field can be of a different type for different purposes.  Select the field type that best matches the purpose of the field.';
 $lang['help_idlist'] = 'Applicable only to the default action (summary view).  This parameter accepts a comma separated list of numeric article ids and allows further filtering articles to only the article ids specified.  The actual list of articles output is still subject to article status, expiry date, and other parameters.';
+$lang['help_opt_alert_drafts'] = 'If enabled, you will receive notifications (alerts) indicating that one or more news articles needs to be reviewed and published.';
 $lang['help_opt_allowed_upload_types'] = 'For custom fields of type &quot;file&quot; This setting indicates a comma separated list of file extensions that are valid for the article editor to upload.';
 $lang['help_opt_dflt_category'] = 'This option allows specifying the default category for new news articles.';
 $lang['help_opt_hide_summary'] = 'This option allows disabling the summary field when adding and/or editing a news article <em>(including with the fesubmit action)</em>';
@@ -280,6 +281,7 @@ $lang['info_sysdefault2'] = '<strong>Note:</strong> This tab contains text areas
 // L
 $lang['lastpage'] = '&gt;&gt;';
 $lang['lbl_adminsearch'] = 'Search News Articles';
+$lang['linkedfile'] = 'Linked file';
 
 // M
 $lang['maxlength'] = 'Maximum Length';
@@ -328,6 +330,7 @@ $lang['post_date_desc'] = 'Post Date Descending';
 $lang['preview'] = 'Preview';
 $lang['prevpage'] = '&lt;';
 $lang['print'] = 'Print';
+$lang['prompt_alert_drafts'] = 'Alert on Unapproved Articles';
 $lang['prompt_allow_fesubmit'] = 'Allow news articles to be submitted by the frontend';
 $lang['prompt_default'] = 'Default';
 $lang['prompt_go'] = 'Go';
@@ -389,6 +392,7 @@ $lang['title_detail_returnid'] = 'Default page to use for detail views';
 $lang['title_detail_settings'] = 'Detail View Settings';
 $lang['title_detail_sysdefault'] = 'Default Detail Template';
 $lang['title_detail_template'] = 'Detail Template Editor';
+$lang['title_draft_entries'] = 'Unapproved News articles';
 $lang['title_fesubmit_form'] = 'Submit news article';
 $lang['title_fesubmit_settings'] = 'Frontend Submit Settings';
 $lang['title_filter'] = 'Filters';

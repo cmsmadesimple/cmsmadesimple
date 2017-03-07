@@ -219,9 +219,7 @@ final class CmsApp {
 	 */
 	public function set_content_object(ContentBase &$content)
 	{
-        if( !$this->_current_content_page || $content instanceof ErrorPage ) {
-            $this->_current_content_page = $content;
-        }
+        if( !$this->_current_content_page || $content instanceof ErrorPage ) $this->_current_content_page = $content;
 	}
 
 	/**
@@ -289,24 +287,9 @@ final class CmsApp {
 	 * @ignore
 	 * @param ADOConnection $connection
 	 */
-	final public function _setDb(ADOConnection $conn,$dbprefix = null)
+	final public function _setDb(\CMSMS\Database\Connection $conn)
 	{
 		$this->db = $conn;
-        if( $dbprefix )	$this->_setDbPrefix($dbprefix);
-	}
-
-	/**
-	 * Override the database prefix.
-	 *
-	 * @final
-	 * @internal
-	 * @ignore
-	 * @param string database prefix.
-	 */
-	final public function _setDbPrefix($str = null)
-	{
-		$str = trim($str);
-		if( $str ) $this->dbprefix = $str;
 	}
 
 	/**
@@ -320,16 +303,14 @@ final class CmsApp {
 	final public function &GetDb()
 	{
 		/* Check to see if we have a valid instance.
-		 * If not, build the connection */
+		 * If not, build the connection
+         */
 		if (isset($this->db)) return $this->db;
-
 		global $DONT_LOAD_DB;
-		global $CMS_INSTALL_PAGE;
 
-		if( !isset($DONT_LOAD_DB) && !function_exists('load_adodb') ) {
-			require(dirname(__DIR__).'/adodb.functions.php');
-			load_adodb();
-			$this->db = adodb_connect();
+		if( !isset($DONT_LOAD_DB) ) {
+            $config = \cms_config::get_instance();
+            $this->db = \CMSMS\Database\compatibility::init($config);
 		}
 
 		return $this->db;
@@ -478,14 +459,8 @@ final class CmsApp {
 	{
 		/* Check to see if a HierarchyManager has been instantiated yet,
 		  and, if not, go ahead an create the instance. */
-        if (!isset($this->hrinstance)) {
-			debug_buffer('', 'Start Loading Hierarchy Manager');
-			$contentops = ContentOperations::get_instance();
-			$this->hrinstance = $contentops->GetAllContentAsHierarchy(false);
-			debug_buffer('', 'End Loading Hierarchy Manager');
-		}
-
-        return $this->hrinstance;
+        if( is_null($this->_hrinstance) ) $this->_hrinstance = \CMSMS\internal\global_cache::get('content_tree');
+        return $this->_hrinstance;
 	}
 
 	/**
@@ -518,10 +493,12 @@ final class CmsApp {
 	 */
 	final public function clear_cached_files($age_days = 0)
 	{
+        $age_days = max(-1,(int) $age_days);
 		global $CMS_LOGIN_PAGE, $CMS_INSTALL_PAGE;
 		if( isset($CMS_LOGIN_PAGE) || isset($CMS_INSTALL_PAGE) ) return;
 		if( !defined('TMP_CACHE_LOCATION') ) return;
-        	$age_days = max(0,(int)$age_days);
+        $age_days = max(0,(int)$age_days);
+        \CMSMS\HookManager::do_hook('clear_cached_files', [ 'older_than' => $age_days ]);
 		$the_time = time() - $age_days * 24*60*60;
 
 		$dirs = array(TMP_CACHE_LOCATION,PUBLIC_CACHE_LOCATION,TMP_TEMPLATES_C_LOCATION);

@@ -50,14 +50,14 @@ if( is_object($search) ) {
 	}
       }
 
-      $search->AddWords($this->GetName(), $articleid, 'article', $text, 
+      $search->AddWords($this->GetName(), $articleid, 'article', $text,
 			($useexp == 1 && $this->GetPreference('expired_searchable',0) == 0) ? $t_end : NULL);
     }
   }
 }
-      
+
 $db->Execute($uquery,array($status,$articleid));
-$this->SendEvent('NewsArticleEdited',array('news_id'=>$articleid,'status'=>$status));
+\CMSMS\HookManager::do_hook('News::NewsArticleEdited', [ 'news_id'=>$articleid, 'status'=>$status ] );
 $this->SetMessage($this->Lang('msg_success'));
 $this->RedirectToAdminTab();
 ?>

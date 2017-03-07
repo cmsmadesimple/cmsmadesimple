@@ -37,7 +37,7 @@ class FileManagerUploadHandler extends jquery_upload_handler
       if( isset($params['thumb']) ) $str .= ' and a thumbnail was generated';
       audit('',$mod->GetName(),$str);
 
-      $mod->SendEvent('OnFileUploaded',$parms);
+      \CMSMS\HookManager::do_hook( 'FileManager::OnFileUploaded', $parms );
     }
   }
 }

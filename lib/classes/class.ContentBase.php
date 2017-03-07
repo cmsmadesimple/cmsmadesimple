@@ -606,7 +606,9 @@ abstract class ContentBase
 	 */
 	public function SetParentId($parentid)
 	{
-		$this->mParentId = (int)$parentid;
+        $parentid = (int) $parentid;
+        if( $parentid < 1 ) $parentid = -1;
+		$this->mParentId = $parentid;
 	}
 
 	/**
@@ -993,9 +995,7 @@ abstract class ContentBase
 	 */
 	public function SetAlias($alias = null, $doAutoAliasIfEnabled = true)
 	{
-		$gCms = CmsApp::get_instance();
-		$config = $gCms->GetConfig();
-
+        $config = \cms_config::get_instance();
 		if ($alias == '' && $doAutoAliasIfEnabled && $config['auto_alias_content'] == true) {
 			$alias = trim($this->mMenuText);
 			if ($alias == '') $alias = trim($this->mName);
@@ -1028,7 +1028,9 @@ abstract class ContentBase
 		}
 
 		$this->mAlias = $alias;
-		cms_cache_handler::get_instance()->erase('contentcache');
+        \CMSMS\internal\global_cache::clear('content_quicklist');
+        \CMSMS\internal\global_cache::clear('content_tree');
+        \CMSMS\internal\global_cache::clear('content_flatlist');
 	}
 
 	/**
@@ -1300,6 +1302,8 @@ abstract class ContentBase
 
 	/**
 	 * Convert the current object to an array.
+     *
+     * This can be considered a simple DTO (Data Transfer Object)
 	 *
 	 * @since 2.0
 	 * @author Robert Campbell
@@ -1332,6 +1336,8 @@ abstract class ContentBase
 		$out['last_modified_by'] = $this->mLastModifiedBy;
 		$out['create_date'] = $this->mCreationDate;
 		$out['modified_date'] = $this->mModifiedDate;
+        $out['wants_children'] = $this->WantsChildren();
+        $out['has_usable_link'] = $this->HasUsableLink();
 		return $out;
 	}
 
@@ -1352,7 +1358,7 @@ abstract class ContentBase
 	 */
 	public function Save()
 	{
-		Events::SendEvent('Core', 'ContentEditPre', array('content' => &$this));
+        \CMSMS\HookManager::do_hook('Core::ContentEditPre', [ 'content' => &$this ] );
 
 		if( !is_array($this->_props) ) {
 			debug_buffer('save is loading properties');
@@ -1369,7 +1375,7 @@ abstract class ContentBase
         $contentops = ContentOperations::get_instance();
         $contentops->SetContentModified();
         $contentops->SetAllHierarchyPositions();
-		Events::SendEvent('Core', 'ContentEditPost', array('content' => &$this));
+        \CMSMS\HookManager::do_hook('Core::ContentEditPost', [ 'content' => &$this ] );
 	}
 
 	/**
@@ -1615,10 +1621,10 @@ abstract class ContentBase
 		}
 
 		$auto_type = content_assistant::auto_create_url();
-		if( $this->mURL == '' && get_site_preference('content_autocreate_urls') ) {
+		if( $this->mURL == '' && cms_siteprefs::get('content_autocreate_urls') ) {
 			// create a valid url.
 			if( !$this->DefaultContent() ) {
-				if( get_site_preference('content_autocreate_flaturls',0) ) {
+				if( cms_siteprefs::get('content_autocreate_flaturls',0) ) {
 					// the default url is the alias... but not synced to the alias.
 					$this->mURL = $this->mAlias;
 				}
@@ -1653,7 +1659,7 @@ abstract class ContentBase
 				}
 			}
 		}
-		if( $this->mURL == '' && get_site_preference('content_mandatory_urls') && !$this->mDefaultContent &&
+		if( $this->mURL == '' && cms_siteprefs::get('content_mandatory_urls') && !$this->mDefaultContent &&
 			$this->HasUsableLink() ) {
 			// page url is empty and mandatory
 			$errors[] = lang('content_mandatory_urls');
@@ -1679,7 +1685,7 @@ abstract class ContentBase
 	function Delete()
 	{
 		$gCms = CmsApp::get_instance();
-		Events::SendEvent('Core', 'ContentDeletePre', array('content' => &$this));
+        \CMSMS\HookManager::do_hook('Core::ContentDeletePre', [ 'content' => &$this ] );
 		$db = $gCms->GetDb();
 		$result = false;
 
@@ -1705,7 +1711,7 @@ abstract class ContentBase
 			if( $this->mURL != '' ) cms_route_manager::del_static($this->mURL);
 		}
 
-		Events::SendEvent('Core', 'ContentDeletePost', array('content' => &$this));
+        \CMSMS\HookManager::do_hook('Core::ContentDeletePost', [ 'content' => &$this ] );
 		$this->mId = -1;
 		$this->mItemOrder = -1;
 		$this->mOldItemOrder = -1;
@@ -1735,7 +1741,7 @@ abstract class ContentBase
 		if (isset($params['title'])) $this->mName = $params['title'];
 
 		// menu text
-		if (isset($params['menutext'])) $this->mMenuText = $params['menutext'];
+		if (isset($params['menutext'])) $this->mMenuText = cleanValue(strip_tags(trim($params['menutext'])));
 
 		// parent id
 		if( isset($params['parent_id']) ) {
@@ -1744,7 +1750,7 @@ abstract class ContentBase
 				$this->mHierarchy = '';
 				$this->mItemOrder = -1;
 			}
-			$this->mParentId = $params['parent_id'];
+			$this->mParentId = (int) $params['parent_id'];
 		}
 
 		// active
@@ -1758,17 +1764,17 @@ abstract class ContentBase
 
 		// alias
 		$tmp = null;
-		if( isset($params['alias']) ) $tmp = trim($params['alias']);
+		if( isset($params['alias']) ) $tmp = strip_tags(trim($params['alias']));
 		if( !$editing || $tmp || ($this->Alias() && !$tmp) ) {
 			// the alias param may not exist (depending upon permissions)
 			// this method will set the alias to the supplied value if it is set
 			// or auto-generate one, when adding a new page.
-            if( !$this->Alias() || $tmp ) $this->SetAlias($tmp);
+            $this->SetAlias($tmp);
 		}
 
 		// target
 		if (isset($params['target'])) {
-			$val = $params['target'];
+			$val = strip_tags($params['target']);
 			if( $val == '---' ) $val = '';
 			$this->SetPropertyValue('target', $val);
 		}
@@ -1784,7 +1790,7 @@ abstract class ContentBase
 
 		// cachable
 		if (isset($params['cachable'])) {
-			$this->mCachable = $params['cachable'];
+			$this->mCachable = (int) $params['cachable'];
 		}
 		else {
 			$this->_handleRemovedBaseProperty('cachable','mCachable');
@@ -1792,7 +1798,7 @@ abstract class ContentBase
 
 		// secure
 		if (isset($params['secure'])) {
-			$this->mSecure = $params['secure'];
+			$this->mSecure = (int) $params['secure'];
 		}
 		else {
 			$this->_handleRemovedBaseProperty('secure','mSecure');
@@ -1800,21 +1806,21 @@ abstract class ContentBase
 
 		// url
 		if (isset($params['page_url'])) {
-			$this->mURL = $params['page_url'];
+			$this->mURL = trim($params['page_url']);
 		}
 		else {
 			$this->_handleRemovedBaseProperty('page_url','mURL');
 		}
 
 		// owner
-		if (isset($params["ownerid"])) $this->SetOwner($params["ownerid"]);
+		if (isset($params["ownerid"])) $this->SetOwner((int) $params["ownerid"]);
 
 		// additional editors
 		if (isset($params["additional_editors"])) {
 			$addtarray = array();
 			if( is_array($params['additional_editors']) ) {
 				foreach ($params["additional_editors"] as $addt_user_id) {
-					$addtarray[] = $addt_user_id;
+					$addtarray[] = (int) $addt_user_id;
 				}
 			}
 			$this->SetAdditionalEditors($addtarray);
@@ -1830,8 +1836,7 @@ abstract class ContentBase
 	 */
 	public function GetURL($rewrite = true)
 	{
-		$gCms = CmsApp::get_instance();
-		$config = $gCms->GetConfig();
+		$config = \cms_config::get_instance();
 		$url = "";
 		$alias = ($this->mAlias != ''?$this->mAlias:$this->mId);
 
@@ -1897,7 +1902,8 @@ abstract class ContentBase
                   WHERE content_id = ?';
 			$db->Execute($query,array($this->Id()));
 		}
-		cms_cache_handler::get_instance()->erase('contentcache');
+        \CMSMS\internal\global_cache::clear('content_tree');
+        \CMSMS\internal\global_cache::clear('content_flatlist');
 	}
 
 	/**
@@ -1905,7 +1911,7 @@ abstract class ContentBase
 	 * If no proeprty name is specified 'content_en' is assumed
 	 *
 	 * @abstract
-	 * @param string $propname An optional property name to display.
+	 * @param string $propname An optional property name to display.  If none specified, the system should assume content_en.
 	 * @return string
 	 */
 	public function Show($propname = 'content_en')
@@ -1931,9 +1937,9 @@ abstract class ContentBase
 				$basic_attributes = array_merge($tmp_basic_attributes,$basic_attributes);
 			}
 
-			$out = array();
+			$out = [];
 			foreach( $this->_attributes as $one ) {
-				if( in_array($one->name,$basic_attributes) ) $out[] = $one;
+				if( $one->basic || in_array($one->name,$basic_attributes) ) $out[] = $one;
 			}
 			return $out;
 		}
@@ -2068,8 +2074,7 @@ abstract class ContentBase
 	public function GetAdditionalEditors()
 	{
 		if (!isset($this->mAdditionalEditors)) {
-			$gCms = CmsApp::get_instance();
-			$db = $gCms->GetDb();
+			$db = \CmsApp::get_instance()->GetDb();
 			$this->mAdditionalEditors = array();
 
 			$query = "SELECT user_id FROM ".CMS_DB_PREFIX."additional_users WHERE content_id = ?";
@@ -2165,12 +2170,22 @@ abstract class ContentBase
 	}
 
     /**
+     * Handles setting the value (by member) of a base (not addon property) property of the content object
+     * for base properties that have been removed from the form.
+     *
 	 * @ignore
 	 */
 	private function _handleRemovedBaseProperty($name,$member)
 	{
 		if( !is_array($this->_attributes) ) return FALSE;
-		if( !in_array($name,$this->_attributes) ) {
+        $fnd = false;
+        foreach( $this->_attributes as $attr ) {
+            if( $attr->name == $name ) {
+                $fnd = true;
+                break;
+            }
+        }
+		if( !$fnd ) {
 			if( isset($this->_prop_defaults[$name]) ) {
 				$this->$member = $this->_prop_defaults[$name];
 				return TRUE;
@@ -2203,17 +2218,19 @@ abstract class ContentBase
 	 *
 	 * @since 1.11
 	 * @param string $name The property name
-	 * @param int $priority The property priority
+	 * @param int $priority The property priority, for sorting.
 	 * @param string $tab The tab for the property (see tab constants)
 	 * @param bool $required (whether the property is required)
+     * @param bool $basic Whether or not the property is a basic property (editable by even restricted editors)
 	 */
-	protected function AddProperty($name,$priority,$tab = self::TAB_MAIN,$required = FALSE)
+	protected function AddProperty($name,$priority,$tab = self::TAB_MAIN,$required = FALSE,$basic = FALSE)
 	{
 		$ob = new StdClass;
-		$ob->name = $name;
-		$ob->priority = $priority;
-		$ob->tab = $tab;
-		$ob->required = $required;
+		$ob->name = (string) $name;
+		$ob->priority = (int) $priority;
+		$ob->tab = (string) $tab;
+		$ob->required = (bool) $required;
+        $ob->basic = $basic;
 
 		if( !is_array($this->_attributes) ) $this->_attributes = array();
 		$this->_attributes[] = $ob;
@@ -2268,8 +2285,7 @@ abstract class ContentBase
 	 */
 	protected function display_single_element($one,$adding)
 	{
-		$gCms = CmsApp::get_instance();
-		$config = $gCms->GetConfig();
+		$config = \cms_config::get_instance();
 
 		switch( $one ) {
 		case 'cachable':
@@ -2289,7 +2305,7 @@ abstract class ContentBase
 
 		case 'parent':
 			$contentops = ContentOperations::get_instance();
-			$tmp = $contentops->CreateHierarchyDropdown($this->mId, $this->mParentId, 'parent_id', 0, 1, 0, 1,get_site_preference('listcontent_showtitle',true) );
+			$tmp = $contentops->CreateHierarchyDropdown($this->mId, $this->mParentId, 'parent_id', 1, 1, 0, 1, 1);
 			if( empty($tmp) && !check_permission(get_userid(),'Manage All Content') ) {
 				return array('','<input type="hidden" name="parent_id" value="'.$this->mParentId.'" />');
             }
@@ -2338,7 +2354,7 @@ abstract class ContentBase
 				if ($pretty_urls != 0) {
 					$str = '<input type="text" name="page_url" id="page_url" value="'.$this->mURL.'" size="50" maxlength="255"/>';
 					$prompt = '<label for="page_url">'.lang('page_url').':</label>';
-					if( get_site_preference('content_mandatory_urls',0) ) $prompt = '*'.$prompt;
+					if( cms_siteprefs::get('content_mandatory_urls',0) ) $prompt = '*'.$prompt;
 					$help = '&nbsp;'.cms_admin_utils::get_help_tag('core','help_page_url',lang('help_title_page_url'));
 					return array($prompt.$help,$str);
 				}
@@ -2346,20 +2362,44 @@ abstract class ContentBase
 			break;
 
 		case 'image':
-			$dir = cms_join_path($config['image_uploads_path'],get_site_preference('content_imagefield_path'));
+			$dir = cms_join_path($config['image_uploads_path'],cms_siteprefs::get('content_imagefield_path'));
+			$data = $this->GetPropertyValue('image');
+            $filepicker = \cms_utils::get_filepicker_module();
+            if( $filepicker ) {
+                $profile = $filepicker->get_default_profile( $dir, get_userid() );
+                $profile = $profile->overrideWith( ['top'=>$dir, 'type'=>'image'] );
+                $input = $filepicker->get_html( 'image', $data, $profile);
+            }
+            else {
+                $input = create_file_dropdown('image',$dir,$data,'jpg,jpeg,png,gif','',true,'','thumb_',0,1);
+            }
+			if( !$input ) return FALSE;
+			$help = '&nbsp;'.cms_admin_utils::get_help_tag('core','help_content_image',lang('help_title_content_image'));
+			return array('<label for="image">'.lang('image').':</label>'.$help,$input);
+/*
+			$dir = cms_join_path($config['image_uploads_path'],cms_siteprefs::get('content_imagefield_path'));
 			$data = $this->GetPropertyValue('image');
 			$dropdown = create_file_dropdown('image',$dir,$data,'jpg,jpeg,png,gif','',true,'','thumb_',1,1);
 			if( !$dropdown ) return;
 			$help = '&nbsp;'.cms_admin_utils::get_help_tag('core','help_content_image',lang('help_title_content_image'));
 			return array('<label for="image">'.lang('image').':</label>'.$help,$dropdown);
+*/
 
 		case 'thumbnail':
-			$dir = cms_join_path($config['image_uploads_path'],get_site_preference('content_thumbnailfield_path'));
+			$dir = cms_join_path($config['image_uploads_path'],cms_siteprefs::get('content_thumbnailfield_path'));
 			$data = $this->GetPropertyValue('thumbnail');
-			$dropdown = create_file_dropdown('thumbnail',$dir,$data,'jpg,jpeg,png,gif','',true,'','thumb_',0,1);
-			if( !$dropdown ) return FALSE;
+            $filepicker = \cms_utils::get_filepicker_module();
+            if( $filepicker ) {
+                $profile = $filepicker->get_default_profile( $dir, get_userid() );
+                $profile = $profile->overrideWith( ['top'=>$dir, 'type'=>'image', 'match_prefix'=>'thumb_' ] );
+                $input = $filepicker->get_html( 'thumbnail', $data, $profile);
+            }
+            else {
+                $input = create_file_dropdown('thumbnail',$dir,$data,'jpg,jpeg,png,gif','',true,'','thumb_',0,1);
+            }
+			if( !$input ) return FALSE;
 			$help = '&nbsp;'.cms_admin_utils::get_help_tag('core','help_content_thumbnail',lang('help_title_content_thumbnail'));
-			return array('<label for="thumbnail">'.lang('thumbnail').':</label>'.$help,$dropdown);
+			return array('<label for="thumbnail">'.lang('thumbnail').':</label>'.$help,$input);
 
 		case 'titleattribute':
             $help = '&nbsp;'.cms_admin_utils::get_help_tag('core','help_content_titleattribute',lang('help_title_content_ta'));
@@ -2369,7 +2409,7 @@ abstract class ContentBase
 		case 'accesskey':
 			$help = '&nbsp;'.cms_admin_utils::get_help_tag('core','help_content_accesskey',lang('help_title_content_accesskey'));
 			return array('<label for="accesskey">'.lang('accesskey').':</label>'.$help,
-						 '<input type="text" name="accesskey" id="accesskey" maxlength="5" value="'.cms_htmlentities($this->mAccessKey).'" />');
+						 '<input type="text" name=accesskey" id="accesskey" maxlength="5" value="'.cms_htmlentities($this->mAccessKey).'" />');
 
 		case 'tabindex':
 			$help = '&nbsp;'.cms_admin_utils::get_help_tag('core','help_content_tabindex',lang('help_title_content_tabindex'));
@@ -2393,8 +2433,8 @@ abstract class ContentBase
 
 		case 'owner':
 			$showadmin = ContentOperations::get_instance()->CheckPageOwnership(get_userid(), $this->Id());
-			$userops = UserOperations::get_instance();
 			if (!$adding && (check_permission(get_userid(),'Manage All Content') || $showadmin) ) {
+                $userops = UserOperations::get_instance();
 				$help = '&nbsp;'.cms_admin_utils::get_help_tag('core','help_content_owner',lang('help_title_content_owner'));
 				return array('<label for="owner">'.lang('owner').':</label>'.$help, $userops->GenerateDropdown($this->Owner()));
 			}

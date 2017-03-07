@@ -25,6 +25,7 @@ $page_template_type->set_name('page');
 $page_template_type->set_dflt_flag(TRUE);
 $page_template_type->set_lang_callback('CmsTemplateResource::page_type_lang_callback');
 $page_template_type->set_content_callback('CmsTemplateResource::reset_page_type_defaults');
+$page_template_type->set_help_callback('CmsTemplateResource::template_help_callback');
 $page_template_type->reset_content_to_factory();
 $page_template_type->set_content_block_flag(TRUE);
 $page_template_type->save();
@@ -33,6 +34,7 @@ $gcb_template_type = new CmsLayoutTemplateType();
 $gcb_template_type->set_originator(CmsLayoutTemplateType::CORE);
 $gcb_template_type->set_name('generic');
 $gcb_template_type->set_lang_callback('CmsTemplateResource::generic_type_lang_callback');
+$gcb_template_type->set_help_callback('CmsTemplateResource::template_help_callback');
 $gcb_template_type->save();
 
 //
@@ -44,11 +46,11 @@ $gcb_template_type->save();
 //
 $app = \__appbase\get_app();
 
-$fn = $app->get_destdir() 
+$fn = $app->get_destdir()
     . DIRECTORY_SEPARATOR . 'admin'
     . DIRECTORY_SEPARATOR . 'templates'
     . DIRECTORY_SEPARATOR . 'orig_page_template.tpl';
-    
+
 $txt = file_get_contents($fn);
 $template = new CmsLayoutTemplate();
 $template->set_name('Default');

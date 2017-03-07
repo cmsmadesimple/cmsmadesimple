@@ -24,20 +24,24 @@ if( !$this->VisibleToAdminUser() ) return;
 $filter_tpl_rec = array('tpl'=>'','limit'=>100,'offset'=>0,'sortby'=>'name','sortorder'=>'asc');
 $filter_css_rec = array('limit'=>100,'offset'=>0,'sortby'=>'name','sortorder'=>'asc','design'=>'');
 if( isset($params['submit_filter_tpl']) ) {
-	$filter_tpl_rec['tpl'] = $params['filter_tpl'];
-	$filter_tpl_rec['sortby'] = trim($params['filter_sortby']);
-	$filter_tpl_rec['sortorder'] = trim($params['filter_sortorder']);
-	$filter_tpl_rec['limit'] = (int)$params['filter_limit_tpl'];
-	$filter_tpl_rec['limit'] = max(2,min(100,$filter_tpl_rec['limit']));
-	unset($_SESSION[$this->GetName().'tpl_page']);
+    if( $params['submit_filter_tpl'] == 1 ) {
+        $filter_tpl_rec['tpl'] = $params['filter_tpl'];
+        $filter_tpl_rec['sortby'] = trim($params['filter_sortby']);
+        $filter_tpl_rec['sortorder'] = trim($params['filter_sortorder']);
+        $filter_tpl_rec['limit'] = (int)$params['filter_limit_tpl'];
+        $filter_tpl_rec['limit'] = max(2,min(100,$filter_tpl_rec['limit']));
+    }
+    unset($_SESSION[$this->GetName().'tpl_page']);
     cms_userprefs::set($this->GetName().'template_filter',serialize($filter_tpl_rec));
 }
 else if( isset($params['submit_filter_css']) ) {
-	$this->SetCurrentTab('stylesheets');
-	$filter_css_rec['design'] = trim($params['filter_css_design']);
-	$filter_css_rec['sortby'] = trim($params['filter_css_sortby']);
-	$filter_css_rec['sortorder'] = trim($params['filter_css_sortorder']);
-	$filter_css_rec['limit'] = max(2,min(100,(int)$params['filter_limit_css']));
+    if( $params['submit_filter_css'] == 1 ) {
+        $filter_css_rec['design'] = trim($params['filter_css_design']);
+        $filter_css_rec['sortby'] = trim($params['filter_css_sortby']);
+        $filter_css_rec['sortorder'] = trim($params['filter_css_sortorder']);
+        $filter_css_rec['limit'] = max(2,min(100,(int)$params['filter_limit_css']));
+    }
+    $this->SetCurrentTab('stylesheets');
 	unset($_SESSION[$this->GetName().'tpl_page']);
     cms_userprefs::set($this->GetName().'css_filter',serialize($filter_css_rec));
 }
@@ -118,9 +122,7 @@ $opts[''] = $this->Lang('prompt_none');
 $types = CmsLayoutTemplateType::get_all();
 $originators = array();
 if( count($types) ) {
-    $tmp = array();
-    $tmp2 = array();
-	$tmp3 = array();
+    $tmp = $tmp2 = $tmp3 = [];
     for( $i = 0; $i < count($types); $i++ ) {
         $tmp['t:'.$types[$i]->get_id()] = $types[$i]->get_langified_display_value();
         $tmp2[$types[$i]->get_id()] = $types[$i]->get_langified_display_value();
@@ -129,6 +131,22 @@ if( count($types) ) {
 			$originators['o:'.$types[$i]->get_originator()] = $types[$i]->get_originator(TRUE);
 		}
     }
+    usort($tmp3,function($a,$b){
+            // core always beets alphabetic type
+            // then sort by originator and then name.
+            $ao = $a->get_originator();
+            $bo = $b->get_originator();
+            if( $ao == $a::CORE && $bo ==  $a::CORE ) return strcasecmp($a->get_name(),$b->get_name());
+            if( $ao == $a::CORE ) return -1;
+            if( $bo == $b::CORE ) return 1;
+            $r = strcasecmp($ao,$bo);
+            if( $r != 0 ) return $r;
+            return strcasecmp($a->get_name(),$b->get_name());
+        });
+    asort($tmp);
+    asort($tmp2);
+    asort($tmp3);
+    asort($originators);
     $smarty->assign('list_all_types',$tmp3);
     $smarty->assign('list_types',$tmp2);
     $opts[$this->Lang('tpl_types')] = $tmp;
@@ -151,6 +169,8 @@ if( count($designs) ) {
         $tmp['d:'.$designs[$i]->get_id()] = $designs[$i]->get_name();
         $tmp2[$designs[$i]->get_id()] = $designs[$i]->get_name();
     }
+    asort($tmp);
+    asort($tmp2);
     $smarty->assign('design_names',$tmp2);
     $opts[$this->Lang('prompt_design')] = $tmp;
 }
@@ -163,6 +183,8 @@ if( $this->CheckPermission('Manage Designs') ) {
         $tmp['u:'.$allusers[$i]->id] = $allusers[$i]->username;
         $users[$allusers[$i]->id] = $allusers[$i]->username;
     }
+    asort($tmp);
+    asort($users);
     $smarty->assign('list_users',$users);
     $opts[$this->Lang('prompt_user')] = $tmp;
 }

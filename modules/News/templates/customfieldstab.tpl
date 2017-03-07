@@ -20,8 +20,12 @@
 *}
 <script type="text/javascript">
 $(document).ready(function(){
-  $('a.del_fielddef').click(function(){
-    return confirm('{$mod->Lang('areyousure')}');
+  $('a.del_fielddef').click(function(ev){
+    var self = $(this);
+    ev.preventDefault();
+    cms_confirm('{$mod->Lang('areyousure')}').done(function(){
+       window.location = self.attr('href');
+    })
   })
 })
 </script>

@@ -136,7 +136,7 @@ class microtiny_utils
       $smarty = $_gCms->GetSmarty();
       $page_id = ($_gCms->is_frontend_request()) ? $smarty->getTemplateVars('content_id') : '';
       $tpl_ob = $smarty->CreateTemplate('module_file_tpl:MicroTiny;tinymce_config.js',null,null,$smarty); // child of the global smarty
-      $tpl_ob->assign('MT',$mod); 
+      $tpl_ob->assign('MT',$mod);
       $tpl_ob->assign('MicroTiny',$mod);
       $tpl_ob->clear_assign('mt_profile');
       $tpl_ob->clear_assign('mt_selector');
@@ -144,8 +144,11 @@ class microtiny_utils
       $tpl_ob->assign('isfrontend',$frontend);
       $tpl_ob->assign('languageid',$languageid);
       $tpl_ob->assign('root_url',$config->smart_root_url());
-      $url = $mod->create_url('m1_','filepicker',$page_id);
-      $tpl_ob->assign('filepicker_url',$ajax_url($url));
+      $fp = \cms_utils::get_filepicker_module();
+      if( $fp ) {
+          $url = $fp->get_browser_url();
+          $tpl_ob->assign('filepicker_url',$ajax_url($url));
+      }
       $url = $mod->create_url('m1_','linker',$page_id);
       $tpl_ob->assign('linker_url',$ajax_url($url));
       $url = $mod->create_url('m1_','ajax_getpages',$page_id);

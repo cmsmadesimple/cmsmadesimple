@@ -59,10 +59,11 @@ $lang['adminspecialgroup'] = "Warning: Members of this group automatically have 
 $lang['adminsystemtitle'] = "CMSMS Admin System";
 $lang['admintheme'] = "Administration Theme";
 $lang['admin_enablenotifications'] = "Allow users to view notifications<br /><em>(notifications will be displayed on all Admin pages)</em>";
-$lang['admin_layout_legend'] = "Admin lay-out settings";
+$lang['admin_layout_legend'] = "Admin layout settings";
 $lang['admin_lock_timeout'] = 'Lock timeout';
 $lang['advanced'] = "Advanced";
 $lang['alert'] = "Alert";
+$lang['alerts'] = "Alerts";
 $lang['alias'] = "Alias";
 $lang['aliasalreadyused'] = 'The supplied "Page Alias" is already in use on another page. Change the "Page Alias" to something else.';
 $lang['aliasmustbelettersandnumbers'] = "Alias must be all letters and numbers";
@@ -71,6 +72,7 @@ $lang['allow_browser_cache'] = "Allow Browser to Cache Pages";
 $lang['allpagesmodified'] = "All pages modified!";
 $lang['all_groups'] = "All Groups";
 $lang['always'] = "Always";
+$lang['applied'] = 'Applied';
 $lang['apply'] = "Apply";
 $lang['applydescription'] = "Save changes and continue to edit";
 $lang['assignmentchanged'] = "Group Assignments have been updated.";
@@ -118,6 +120,7 @@ $lang['checksum_passed'] = "All checksums match those in the uploaded file";
 $lang['checkversion'] = "Allow periodic checks for new versions";
 $lang['check_ini_set'] = "Test ini_set";
 $lang['check_ini_set_off'] = "You may have difficulty with some functionality without this capability. This test may fail if safe_mode is enabled";
+$lang['choose'] = 'Choose';
 $lang['clear'] = "Clear";
 $lang['clearadminlog'] = "Clear Admin Log";
 $lang['clearcache'] = "Clear Cache";
@@ -150,6 +153,7 @@ $lang['cms_version'] = "CMSMS Version";
 $lang['code'] = "Code";
 $lang['config_information'] = "CMS Made Simple Config Settings";
 $lang['config_writable'] = "config.php writeable. It is more safe if you change permission to read-only";
+$lang['config_issue'] = 'Configuration Issue';
 $lang['confirm'] = "Confirm";
 $lang['confirmcancel'] = "Are you sure you want to discard your changes? Click OK to discard all changes. Click Cancel to continue editing.";
 $lang['confirmdefault'] = "Are you sure you want to set - %s - as site default page?";
@@ -157,10 +161,12 @@ $lang['confirmdeletedir'] = "Are you sure you want to delete this directory and 
 $lang['confirm_bulkuserop'] = "Use caution when performing options on multiple users simultaneously.\nAre you sure that you want to continue?";
 $lang['confirm_edituser'] = "Are you sure you want to apply changes to this user account";
 $lang['confirm_delete_user'] = "Are you sure you want to delete this user account";
+$lang['confirm_deleteusertag'] = 'Are you sure you want to delete this user defined tag?';
 $lang['confirm_runusertag'] = 'Running a UDT may have adverse effects on your website.  Please use caution!\n\nAre you sure you want to continue?';
 $lang['confirm_set_template_1'] = "Are you sure you want to set all of these pages to use this template";
 $lang['confirm_set_template_2'] = "Yes, I am sure.";
 $lang['confirm_set_template_3'] = "Yes, I am <strong>really</strong> sure.";
+$lang['confirm_switchuser'] = 'Are you sure you want to switch the effective UID to this user?  You will need to logout from the admin console and re-login to resume normal operations under your user account.';
 $lang['confirm_toggleuseractive'] = "Are you sure you want to toggle the active state of this user?";
 $lang['confirm_uploadmodule'] = "Are you sure you would like to upload the selected XML file. Incorrectly uploading a module file may break a functioning website";
 $lang['connection_error'] = "Outgoing HTTP connections do not appear to work! There is a firewall or some ACL for external connections? This will result in module manager, and potentially other functionality failing.";
@@ -269,6 +275,7 @@ $lang['destination_page'] = "Destination Page";
 $lang['directoryabove'] = "directory above current level";
 $lang['directoryexists'] = "This directory already exists.";
 $lang['disable'] = "Disable";
+$lang['disabled'] = "Disabled";
 $lang['disablesafemodewarning'] = "Disable Admin safe mode warning";
 $lang['disable_functions'] = "disable_functions in PHP";
 $lang['disable_wysiwyg'] = "Disable WYSIWYG editor on this page (regardless of template or user settings)";
@@ -326,7 +333,7 @@ $lang['errordeletingcontent'] = "Error deleting content (either this page has ch
 //$lang['errordeletingcss'] = "Error deleting CSS";
 $lang['errordeletingdirectory'] = "Could not delete directory. Permissions problem?";
 $lang['errordeletingfile'] = "Could not delete file. Permissions Problem?";
-$lang['error_deletespecialgroup'] = 'You cannot delete the special admin group';
+$lang['error_deletespecialgroup'] = 'You cannot delete the special Admin group';
 $lang['errordirectorynotwritable'] = "No permission to write in directory.  This could be caused by file permissions and ownership.  Safe mode may also be in effect.";
 $lang['errorgettingcontent'] = "Could not retrieve information for the specified content object";
 $lang['errorgroupexists'] = 'A group already exists with this name';
@@ -385,7 +392,7 @@ $lang['error_portinvalid'] = "Port number is invalid";
 $lang['error_retrieving_file_list'] = "Error retrieving file list";
 //$lang['error_setusersettings_self'] = "Cannot set the template user to this account";
 $lang['error_sitedownmessage'] = 'It appears that your sitedown message is empty.  Please at least display some text to inform visitors that your website is down for maintenance';
-$lang['error_timedifference2'] = "A discrepency in time with the PHP environment was detected. This may cause problems when publishing i.e. news articles.";
+$lang['error_timedifference2'] = "A discrepancy in time with the PHP environment was detected. This may cause problems when publishing i.e. news articles.";
 $lang['error_timeoutinvalid'] = "The time-out specified is invalid (must be between 1 and 3600 seconds)";
 $lang['error_type'] = "Error Type";
 $lang['error_udt_name_chars'] = "A valid UDT name starts with a letter or underscore, followed by any number of letters, numbers, or underscores.";
@@ -419,9 +426,10 @@ $lang['event_desc_contentdeletepost'] = "Sent after content is deleted from the 
 $lang['event_desc_contentdeletepre'] = "Sent before content is deleted from the system";
 $lang['event_desc_contenteditpost'] = "Sent after edits to content are saved";
 $lang['event_desc_contenteditpre'] = "Sent before edits to content are saved";
-$lang['event_desc_contentpostcompile'] = "Sent after content has been processed by smarty";
-$lang['event_desc_contentpostrender'] = "Sent before the combined html is sent to the browser";
-$lang['event_desc_contentprecompile'] = "Sent before content is sent to smarty for processing";
+$lang['event_desc_contentpostcompile'] = "Sent after content has been processed by Smarty";
+$lang['event_desc_contentpostrender'] = "Sent before the combined HTML is sent to the browser";
+$lang['event_desc_contentprecompile'] = "Sent before content is sent to Smarty for processing";
+$lang['event_desc_contentprerender'] = "Sent before any Smarty processing is performed.";
 $lang['event_desc_contentstylesheet'] = "Sent before the stylesheet is sent to the browser";
 $lang['event_desc_deletedesignpost'] = "Sent just after a design/theme is removed";
 $lang['event_desc_deletedesignpre'] = "Sent just prior to a design/theme being removed";
@@ -455,21 +463,24 @@ $lang['event_desc_edituserdefinedtagpost'] = "Sent after a user defined tag is u
 $lang['event_desc_edituserdefinedtagpre'] = "Sent prior to a user defined tag update";
 $lang['event_desc_edituserpost'] = "Sent after edits to a user are saved";
 $lang['event_desc_edituserpre'] = "Sent before edits to a user are saved";
-$lang['event_desc_globalcontentpostcompile'] = "Sent after a global content block has been processed by smarty";
-$lang['event_desc_globalcontentprecompile'] = "Sent before a global content block is sent to smarty for processing";
+$lang['event_desc_globalcontentpostcompile'] = "Sent after a global content block has been processed by Smarty";
+$lang['event_desc_globalcontentprecompile'] = "Sent before a global content block is sent to Smarty for processing";
 $lang['event_desc_loginfailed'] = "Sent after a user failed to login into the Admin panel";
 $lang['event_desc_loginpost'] = "Sent after a user logs into the Admin panel";
 $lang['event_desc_logoutpost'] = "Sent after a user logs out of the Admin panel";
+$lang['event_desc_lostpassword'] = 'Sent when the lost password form is submitted';
+$lang['event_desc_lostpasswordreset'] = 'Sent when the lost password form is submitted';
 $lang['event_desc_moduleinstalled'] = "Sent after a module is installed";
 $lang['event_desc_moduleuninstalled'] = "Sent after a module is uninstalled";
 $lang['event_desc_moduleupgraded'] = "Sent after a module is upgraded";
-$lang['event_desc_smartypostcompile'] = "Sent after any content destined for smarty has been processed";
-$lang['event_desc_smartyprecompile'] = "Sent before any content destined for smarty is sent for processing";
-$lang['event_desc_stylesheetpostcompile'] = "Sent after a stylesheet is compiled through smarty";
-$lang['event_desc_stylesheetprecompile'] = "Sent before a stylesheet is compiled through smarty";
-$lang['event_desc_templatepostcompile'] = "Sent after a template has been processed by smarty";
-$lang['event_desc_templateprecompile'] = "Sent before a template is sent to smarty for processing";
-$lang['event_desc_templateprefetch'] = "Sent before a template is fetched from smarty";
+$lang['event_desc_smartypostcompile'] = "Sent after any content destined for Smarty has been processed";
+$lang['event_desc_smartyprecompile'] = "Sent before any content destined for Smarty is sent for processing";
+$lang['event_desc_stylesheetpostcompile'] = "Sent after a stylesheet is compiled through Smarty";
+$lang['event_desc_stylesheetprecompile'] = "Sent before a stylesheet is compiled through Smarty";
+$lang['event_desc_stylesheetpostrender'] = 'Sent after a stylesheet is passed through Smarty, but before cached to disk';
+$lang['event_desc_templatepostcompile'] = "Sent after a template has been processed by Smarty";
+$lang['event_desc_templateprecompile'] = "Sent before a template is sent to Smarty for processing";
+$lang['event_desc_templateprefetch'] = "Sent before a template is fetched from Smarty";
 $lang['event_help_adddesignpost'] = "Sent just after a new design/theme is saved to the database";
 $lang['event_help_adddesignpre'] = "<h4>Parameters</h4>
 <ul>
@@ -594,6 +605,11 @@ $lang['event_help_contentpostrender'] = "<h4>Parameters</h4>
 $lang['event_help_contentprecompile'] = "<h4>Parameters</h4>
 <ul>
 <li>'content' - Reference to the affected content text.</li>
+</ul>
+";
+$lang['event_help_contentprerender'] = "<h4>Parameters</h4>
+<ul>
+<li>'content' - Reference to the affected content object..</li>
 </ul>
 ";
 $lang['event_help_contentstylesheet'] = "<h4>Parameters</h4>
@@ -781,6 +797,18 @@ $lang['event_help_logoutpost'] = "<h4>Parameters</h4>
 <li>'user' - Reference to the affected user object.</li>
 </ul>
 ";
+$lang['event_help_lostpassword'] = "<h4>Parameters</h4>
+<ul>
+<li>'username' - The username entered in the lostpassword form.</li>
+</ul>
+";
+$lang['event_help_lostpasswordreset'] = "<h4>Parameters</h4>
+<ul>
+<li>'uid' - The integer userid for the account.</li>
+<li>'username' - The username for the reset account.</li>
+<li>'ip' - The IP address of the client that performed the reset.</li>
+</ul>
+";
 $lang['event_help_moduleinstalled'] = "<h4>Parameters</h4>
 <ul>
 <li>None</li>
@@ -809,6 +837,11 @@ $lang['event_help_smartyprecompile'] = "<h4>Parameters</h4>
 $lang['event_help_stylesheetpostcompile'] = "<h4>Parameters</h4>
 <ul>
 <li>None</li>
+</ul>
+";
+$lang['event_help_stylesheetpostrender'] = "<h4>Parameters</h4>
+<ul>
+<li>'content' - Reference to the stylesheet text.</li>
 </ul>
 ";
 $lang['event_help_stylesheetprecompile'] = "<h4>Parameters</h4>
@@ -868,6 +901,7 @@ $lang['files_not_found'] = "Files Not found";
 $lang['file_get_contents'] = "Test file_get_contents";
 $lang['file_uploads'] = "File uploads";
 $lang['file_url'] = "Link to file (instead of URL)";
+$lang['filter'] = 'Filter';
 $lang['filteraction'] = "Action contains";
 $lang['filterapplied'] = "Current Filter";
 $lang['filterapply'] = "Apply filters";
@@ -920,14 +954,14 @@ $lang['help_content_active'] = "Inactive pages cannot be displayed, or appear in
 $lang['help_content_addteditor'] = "This field allows you to specify other Admin users who will be able to edit this content page.  This field is useful when editors have limited access privileges, and need the ability to edit different pages.";
 $lang['help_content_cachable'] = "This toggle indicates whether the content of this page should be cached on the server, and on the browser.  If a page is not cachable, then it must be regenerated on each and every request.  Setting a page to be cachable can be a significant performance boost for most websites.";
 $lang['help_content_content_en'] = "This is the default content block.  Here you enter the content that will be most prominently displayed on the content page";
-$lang['help_content_disablewysiwyg'] = "This checkbox is used to indicate that regardless of settings in the page template, or user settings no WYSIWYG editor should be used at all in any text area on this page.  This is useful when the page uses a standard site page template, but contains either hard coded HTML, smarty logic, or only displays the output of a third party module";
+$lang['help_content_disablewysiwyg'] = "This checkbox is used to indicate that regardless of settings in the page template, or user settings no WYSIWYG editor should be used at all in any text area on this page.  This is useful when the page uses a standard site page template, but contains either hard coded HTML, Smarty logic, or only displays the output of a third party module";
 $lang['help_content_extra1'] = "This field is used for advanced navigations or template logic. Consult your site developer to see if you need to edit this value when managing content";
 $lang['help_content_extra2'] = "This field is used for advanced navigations or template logic. Consult your site developer to see if you need to edit this value when managing content";
 $lang['help_content_extra3'] = "This field is used for advanced navigations or template logic. Consult your site developer to see if you need to edit this value when managing content";
 $lang['help_content_image'] = "This field allows you to associate an image with the content page.  The images must have already been uploaded to the website in a directory specified by the website designer.  The image may optionally be displayed on the page, or used when building a navigation";
 $lang['help_content_menutext'] = "This is the text that represents this page in the navigation.  The menu text is also used to create a page alias if none is specified.";
 $lang['help_content_owner'] = "This field allows you to adjust the owner of this content item.  It is useful when giving access to this page to an editor with less access privileges";
-$lang['help_content_pagedata'] = "This is a field where you can enter smarty tags or logic that are specific to this content page, will probably not generate any direct output, and must be processed before anything else on the page";
+$lang['help_content_pagedata'] = "This is a field where you can enter Smarty tags or logic that are specific to this content page, will probably not generate any direct output, and must be processed before anything else on the page";
 $lang['help_content_pagemeta'] = "In this field you can enter HTML meta tags. They will be merged with the default meta tags and inserted in the head section of the generated HTML page.";
 $lang['help_content_parent'] = "Select an existing page in the content hierarchy which will be the parent page for this content page.  This relationship is used when building a navigation";
 $lang['help_content_secure'] = "Specify whether this page should be accessed via a secure (encrypted) connection.  i.e: via HTTPS";
@@ -936,6 +970,7 @@ $lang['help_systeminformation'] = "The information displayed below is collected 
 $lang['hidefrommenu'] = "Hide From Menu";
 $lang['hide_help_links'] = "Hide module help links";
 $lang['hide_help_links_help'] = "Disable the module help link in page headers.";
+$lang['help_page_wantschildren'] = 'TODO';
 $lang['help_title_content_accesskey'] = 'Access key field';
 $lang['help_title_content_active'] = 'Active toggle';
 $lang['help_title_content_addteditor'] = 'Additional editors';
@@ -963,6 +998,7 @@ $lang['help_title_page_alias'] = 'Page Alias field';
 $lang['help_title_page_disablewysiwyg'] = 'WYSIWYG toggle';
 $lang['help_title_page_searchable'] = 'Searchable toggle';
 $lang['help_title_page_url'] = 'Page URL field';
+$lang['help_title_page_wantschildren'] = 'Page wants children';
 $lang['home'] = "Home";
 $lang['homepage'] = "Homepage";
 $lang['hostname'] = "Host name";
@@ -970,11 +1006,11 @@ $lang['hour'] = "hour";
 $lang['hours'] = "hours";
 //$lang['htmlblobdescription'] = "Global Content Blocks are chunks of content you can place in your pages or templates.";
 //$lang['htmlblobs'] = "Global Content Blocks";
-$lang['h_udtcode'] = 'Enter your PHP code here.  Keep in mind that a UDT <em>(User Defined Tag)</em> is in fact a smarty function plugin.  It has limited scope.<br/>
+$lang['h_udtcode'] = 'Enter your PHP code here.  Keep in mind that a UDT <em>(User Defined Tag)</em> is in fact a Smarty function plugin.  It has limited scope.<br/>
 <ul>
-  <li><strong>Note:</strong> You have access to the full <a href=\"http://www.cmsmadesimple.org/APIDOC\">CMSMS API</a> to interact with the system and with modules.</li>
+  <li><strong>Note:</strong> You have access to the full <a href=\"http://www.cmsmadesimple.org/APIDOC2_0\">CMSMS API</a> to interact with the system and with modules.</li>
   <li>Tip: Parameters passed to the UDT i.e: <code>{myudt param1=value1 param2=value2}</code> are available via the $params associative array, which is in scope.</li>
-  <li>Tip: It is best to do calculations and processing and return the results to smarty for formatting via the $smarty->assign() method.  The smarty object is also in scope.</li>
+  <li>Tip: It is best to do calculations and processing and return the results to Smarty for formatting via the $smarty->assign() method.  The Smarty object is also in scope.</li>
   <li>Tip: It is best to keep UDTs short, with a single and small piece of functionality.</li>
 </ul>';
 $lang['h_udtdesc'] = "This field allows you to enter details and notes about the UDT for future reference when debugging or transforming the tag.  More details are better than less";
@@ -994,8 +1030,8 @@ $lang['informationmissing'] = "Information missing";
 $lang['info_adduser'] = "Add a administrative new user account";
 $lang['info_adduser_username'] = "The username field must consist of alphanumeric characters,, the dot (.), underscore, or space";
 $lang['info_autoalias'] = "If this field is empty, an alias will be created automatically.";
-$lang['info_changegroupperms'] = "This page allows specifying which Admin user groups have which permission.  Keep in mind that an individual Admin user can belong to multiple Admin groups.<br/><strong>Note:</strong> the &quot;Admin&quot; group is a special group and is automatically granted all permissions.";
-$lang['info_changeusergroup'] = "This page allows specifying the member groups for each Admin user.  Group membership determines the permissions the user has, and therefore his capabilities in the Admin console.<br/><strong>Note:</strong> the &quot;Admin&quot; group is a special group and is automatically granted all permissions.";
+$lang['info_changegroupperms'] = "This page allows specifying which Admin user groups have which permission.  Keep in mind that an individual Admin user can belong to multiple Admin groups.<br /><strong>Note:</strong> the &quot;Admin&quot; group is a special group and is automatically granted all permissions.";
+$lang['info_changeusergroup'] = "This page allows specifying the member groups for each Admin user.  Group membership determines the permissions the user has, and therefore his capabilities in the Admin console.<br /><strong>Note:</strong> the &quot;Admin&quot; group is a special group and is automatically granted all permissions.";
 $lang['info_clearusersettings'] = "This will remove all user settings from the database, setting every preference back to defaults";
 $lang['info_copyusersettings'] = "Ensure that this users settings and preferences are identical to that of another existing user";
 $lang['info_default_contenttype'] = "Applicable when adding new content objects, this control specifies the type that is selected by default.  Please ensure that the selected item is not one of the &quot;disallowed types&quot;.";
@@ -1011,10 +1047,11 @@ $lang['info_group_inactive'] = "This group is inactive.  Members of this group w
 $lang['info_mailtest'] = "This form will send a pre formatted email to the address you specify.<br/>If you do not receive the mail you may need to re-check your settings.<br/><strong>Note:</strong> you may also want to check your spam folder.";
 $lang['info_mail_notset'] = "Mail settings have not yet been saved. Please ensure the information in Site Admin >> Settings - Global Settings >> Mail Settings tab is correct for your server.";
 $lang['info_membergroups'] = "A user may be a member of zero or more groups.  A user who is not a member of any groups will still be able to login to the Admin console";
+$lang['info_noalerts'] = 'There are no alerts at this time';
 $lang['info_noedituser'] = "Although this user account exists, your permissions do not permit you to manage that account";
 $lang['info_pagealias'] = "Specify a unique alias for this page.";
 $lang['info_pagedefaults'] = "This form allows specifying various options as to the initial settings when creating new content pages.  The items in this page have no effect when editing existing pages";
-$lang['info_preview_notice'] = "Warning: This preview panel behaves much like a browser window allowing you to navigate away from the initially previewed page. However, if you do that, you may experience unexpected behaviour. If you navigate away from the initial display and return, you may not see the un-committed content until you make a change to the content in the main tab, and then reload this tab. When adding content, if you navigate away from this page, you will be unable to return, and must refresh this panel.";
+$lang['info_preview_notice'] = "Warning: This preview panel behaves much like a browser window allowing you to navigate away from the initially previewed page. However, if you do that, you may experience unexpected behavior. If you navigate away from the initial display and return, you may not see the un-committed content until you make a change to the content in the main tab, and then reload this tab. When adding content, if you navigate away from this page, you will be unable to return, and must refresh this panel.";
 $lang['info_selectuser'] = "Toggle selection to perform actions on multiple users at once";
 $lang['info_settings_sitedown'] = "These options allow you to toggle the website as &quot;down for maintenance&quot; for website visitor.";
 //$lang['info_setusersettings'] = "Set this users settings to be a template for newly created users and to effect other users";
@@ -1022,7 +1059,7 @@ $lang['info_sitedownexcludes'] = "This parameter allows listing a comma separate
 1. xxx.xxx.xxx.xxx -- (exact IP address)<br />
 2. xxx.xxx.xxx.[yyy-zzz] -- (IP address range)<br />
 3. xxx.xxx.xxx.xxx/nn -- (nnn = number of bits, cisco style.  i.e:  192.168.0.100/24 = entire 192.168.0 class C subnet)";
-$lang['info_smarty_cachemodules'] = "Select how to cache tags in various templates that call module actions.  If enabled, all module calls will be cached.  This may have negative effects on some modules, or modules with forms.  <em>(note: you can override this using the nocache option as described in the smarty manual)</em>.  If disabled no module calls will be cached which may have an effect on performance.   If you select to allow the module to decide, the default is that caching is not performed.  The module can override this, and you can disable caching using the nocache parameter when calling the module.";
+$lang['info_smarty_cachemodules'] = "Select how to cache tags in various templates that call module actions.  If enabled, all module calls will be cached.  This may have negative effects on some modules, or modules with forms.  <em>(note: you can override this using the nocache option as described in the Smarty manual)</em>.  If disabled no module calls will be cached which may have an effect on performance.   If you select to allow the module to decide, the default is that caching is not performed.  The module can override this, and you can disable caching using the nocache parameter when calling the module.";
 $lang['info_smarty_cacheudt'] = "If enabled, all calls to user defined tags will be cached.  This will be useful for tags that display the output of database queries.  You can disable caching using the nocache parameter in the UDT call.  i.e: <code>{myusertag nocache}</code>";
 $lang['info_smarty_options'] = "The following options have effect only when the above caching options are enabled";
 $lang['info_target'] = "This option may used by the Menu Manager to indicate when and how new frames or windows should be opened.  Some menu manager templates may ignore this option.";
@@ -1030,6 +1067,7 @@ $lang['info_templateuser'] = "This account is the template user account.  New us
 $lang['info_this_templateuser'] = "This account is set as the template user.  New accounts will inherit this users settings, and you can copy this users settings to any user account";
 $lang['info_user_active'] = "Toggle this checkbox off to preserve the user information, but prevent the user from logging in to the Admin console";
 $lang['info_user_active2'] = "Toggle this flag to preserve the user information, but prevent the user from logging in to the Admin console";
+$lang['info_user_switch'] = "Test as this user";
 $lang['info_validation'] = "This function will compare the checksums found in the uploaded file with the files on the current installation.  It can assist in finding problems with uploads, or exactly what files were modified if your system has been hacked.";
 $lang['insecure'] = "Insecure (HTTP)";
 //$lang['install'] = "Install";
@@ -1044,11 +1082,12 @@ $lang['invalidcode_brace_missing'] = "Uneven amount of braces";
 $lang['invalidemail'] = "The email address entered is invalid";
 $lang['invalidparent'] = "You must select a parent page (contact your administrator if you do not see this option).";
 //$lang['invalidtemplate'] = "The template is not valid";
-$lang['invalid_test'] = "Invalid test param value!";
+$lang['invalid_test'] = "Invalid test parameter value!";
 $lang['ip_addr'] = "IP Address";
 $lang['irc'] = "IRC";
 $lang['itemid'] = "Item ID";
 $lang['itemname'] = "Item Name";
+$lang['item_name_contains'] = 'Item Name Contains';
 $lang['itsbeensincelogin'] = "It has been %s since you last logged in";
 
 ## J
@@ -1097,10 +1136,11 @@ $lang['login_info_params'] = "<ol>
 $lang['login_info_title'] = "Information";
 $lang['logout'] = "Logout";
 $lang['lostpw'] = "Forgot your password?";
-$lang['lostpwemail'] = "You are receiving this e-mail because a request has been made to change the (%s) password associated with this user account (%s).  If you would like to reset the password for this account simply click on the link below or paste it into the URL field on your favourite browser:
-%s
-
-If you feel this is incorrect or made in error, simply ignore the email and nothing will change.";
+$lang['lostpwemail'] = '
+<h3>Hello</h3>
+<p>You are receiving this e-mail because a request has been made to change the (%s) password associated with this user account (%s).  If you would like to reset the password for this account simply click on the recovery link below or paste it into the URL field on your favorite browser:</p>
+<p><a href="%s">%s</a></p>
+<p>If you feel this is incorrect or made in error, simply ignore the email and nothing will change.</p>';
 $lang['lostpwemailsubject'] = "[%s] Password Recovery";
 
 ## M
@@ -1194,7 +1234,8 @@ $lang['needpermissionto'] = "You need the '%s' permission to perform that functi
 $lang['never'] = "Never";
 //$lang['newstylesheetname'] = "New Stylesheet Name";
 //$lang['newtemplatename'] = "New Template Name";
-$lang['new_version_available'] = "<em>Notice:</em> A new version of CMS Made Simple&trade; is available.  Please notify your administrator.";
+$lang['new_version_avail_title'] = 'Your CMSMS Version is out of date';
+$lang['new_version_avail2'] = '<strong>Notice:</strong> You are currently running CMSMS version %s. version %s is available.  Please upgrad soon.';
 $lang['new_window'] = "new window";
 $lang['next'] = "Next";
 $lang['no'] = "No";
@@ -1215,8 +1256,7 @@ $lang['nopluginhelp'] = "No help available for this plugin";
 $lang['norealdirectory'] = "No real directory given";
 $lang['norealfile'] = "No real file given";
 $lang['notifications'] = "Notifications";
-$lang['notifications_to_handle'] = "You have <b>%d</b> unhandled notifications";
-$lang['notification_to_handle'] = "You have <b>%d</b> unhandled notification";
+$lang['notifications_to_handle2'] = "You have %d unhandled notification(s)";
 $lang['notinstalled'] = "Not installed";
 $lang['notspecified'] = "Not specified / Empty";
 $lang['noudtcode'] = "No code specified for the User Defined Tag";
@@ -1296,6 +1336,36 @@ $lang['permission'] = "Permission";
 $lang['permissions'] = "Permissions";
 $lang['permissionschanged'] = "Permissions have been updated.";
 $lang['permission_information'] = "Permission Information";
+$lang['perm_Add Pages'] = 'Add Pages';
+$lang['perm_Add Templates'] = 'Add Templates';
+$lang['perm_Advanced usage of the File Manager module'] = 'Advanced usage of the File Manager module';
+$lang['perm_Approve News For Frontend Display'] = 'Approve News for Frontend Display'; // should go in News
+$lang['perm_Clear Admin Log'] = 'Clear Admin Log';
+$lang['perm_Delete News Articles'] = 'Delete News Articles'; // should go in News
+$lang['perm_Manage All Content'] = 'Manage All Content';
+$lang['permdesc_Manage All Content'] = 'A user with this permission can perform all tasks on any and all content pages';
+$lang['perm_Manage Designs'] = 'Manage Designs';
+$lang['perm_Manage Groups'] = 'Manage Groups';
+$lang['perm_Manage_Jobs'] = 'Manage Asynchronous Jobs'; // should be in CmsJobManager
+$lang['perm_Manage My Account'] = 'Manage My Account';
+$lang['perm_Manage My Bookmarks'] = 'Manage My Bookmarks';
+$lang['perm_Manage My Settings'] = 'Manage My Settings';
+$lang['perm_Modify_News'] = 'Modify News Articles'; // should go in News.
+$lang['perm_Manage_Stylesheets'] = 'Manage Stylesheets';
+$lang['perm_Manage Users'] = 'Manage Users';
+$lang['perm_Modify Any Page'] = 'Modify Any Page';
+$lang['permdesc_Modify Any Page'] = 'A user with this permission has additional editor privileges on all content pages';
+$lang['perm_Modify Events'] = 'Modify Events';
+$lang['perm_Modify Files'] = 'Modify Files';
+$lang['perm_Modify Modules'] = 'Modify Modules';
+$lang['perm_Modify Permissions'] = 'Modify Permissions';
+$lang['perm_Modify Site Preferences'] = 'Modify Site Preferences';
+$lang['perm_Modify Templates'] = 'Modify Templates';
+$lang['perm_Modify User-defined Tags'] = 'Modify User-defined Tags';
+$lang['perm_Remove Pages'] = 'Remove Pages';
+$lang['perm_Reorder Content'] = 'Reorder Content';
+$lang['perm_Use Admin Search'] = 'Use Admin Search';
+$lang['perm_View Tag Help'] = 'View Tag Help';
 $lang['phpversion'] = "Current PHP Version";
 $lang['php_information'] = "PHP Information";
 $lang['php_opcache'] = 'PHP 5.5+ Opcode Cache';
@@ -1328,10 +1398,12 @@ $lang['remote_response_404'] = "Remote response: not found!";
 $lang['remote_response_error'] = "Remote response: error!";
 $lang['remote_response_ok'] = "Remote response: OK!";
 $lang['remove'] = "Remove";
+$lang['remove_alert'] = 'Remove this alert';
 //$lang['removeconfirm'] = "This action will permanently remove the files making up this module from this installation.\nAre you sure you want to proceed?";
 //$lang['removecssassociation'] = "Remove Stylesheet Association";
 $lang['reorder'] = "Reorder";
 $lang['reorderpages'] = "Reorder Pages";
+$lang['reset'] = 'Reset';
 $lang['results'] = "Results";
 $lang['revert'] = "Revert all changes";
 $lang['root'] = "Root";
@@ -1348,9 +1420,11 @@ $lang['search_module'] = "Search module";
 $lang['search_string_find'] = "Connection ok!";
 $lang['secure'] = "Secure (HTTPS)";
 $lang['secure_page'] = "Use HTTPS for this page";
+$lang['security_issue'] = 'Security Issue';
 $lang['selectall'] = "Select All";
 $lang['selecteditems'] = "With Selected";
 $lang['selectgroup'] = "Select Group";
+$lang['select_file'] = 'Select File';
 $lang['send'] = "Send";
 $lang['sendmail_settings'] = "Sendmail Settings";
 $lang['sendtest'] = "Send";
@@ -1499,7 +1573,7 @@ $lang['test_file_timedifference_msg'] = "Detected a difference of at least %d se
 $lang['test_remote_url'] = "Test for remote URL";
 $lang['test_remote_url_failed'] = "You will probably not be able to open a file on a remote web server.";
 $lang['test_smarty_cacheudt'] = "Caching user defined tags can have serious performance benefits.  Use caution";
-$lang['test_smarty_caching'] = "Enabling smarty caching can have serious performance benefits for most websites.";
+$lang['test_smarty_caching'] = "Enabling Smarty caching can have serious performance benefits for most websites.";
 $lang['text_changeowner'] = "Set Selected Pages to a different User";
 $lang['text_settemplate'] = "Set Selected Pages to a different Template";
 $lang['theme'] = "Theme";
@@ -1555,12 +1629,13 @@ $lang['userprefs'] = "User Preferences";
 $lang['users'] = "Backend Users";
 $lang['usersassignedtogroup'] = "Users Assigned to Group %s";
 $lang['usersdescription'] = "Here you can manage Admin users.";
+$lang['userdisabled'] = 'User account disabled';
 $lang['usersettings'] = "User Settings";
 $lang['usersgroups'] = "User Management";
 $lang['usersgroupsdescription'] = "User and Group related items.";
 $lang['usertagadded'] = "The User Defined Tag was successfully added";
 $lang['usertagdeleted'] = "The User Defined Tag was successfully removed.";
-$lang['usertagdescription'] = "Tags that you can create and modify yourself to perform specific tasks, right from your browser.";
+$lang['usertagdescription'] = "User Defined Tags (UDT's) that you can create and modify yourself to perform specific tasks, right from your browser.";
 $lang['usertagexists'] = "A User Defined Tag with this name already exists. Please choose another.";
 $lang['usertags'] = "User Defined Tags";
 $lang['usertagupdated'] = "The User Defined Tag was successfully updated.";
@@ -1579,6 +1654,7 @@ $lang['viewsite'] = "View Site";
 $lang['view_page'] = "View this page in a new window";
 
 ## W
+$lang['wantschildren'] = 'Wants Children';
 $lang['warning_mail_settings'] = 'Your mail settings have not been configured.  This could interfere with the ability of your website to send email messages. You should go to <a href="%s">Extensions >> CMSMailer</a> and configure the mail settings with the information provided by your host.';
 $lang['warning_safe_mode'] = "<strong><em>WARNING:</em></strong> PHP Safe mode is enabled. This will cause difficulty with files uploaded via the web browser interface, including images, theme and module XML packages.  You are advised to contact your site administrator to see about disabling safe mode.";
 $lang['warning_upgrade'] = "<em><strong>Warning:</strong></em> CMSMS is in need of an upgrade!";

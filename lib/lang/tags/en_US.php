@@ -1,4 +1,19 @@
 <?php
+$lang['help_function_page_selector'] = <<<EOT
+<h3>What does this do?</h3>
+<p>This admin plugin provides a control to allow selecting a content page, or other item.  This is suitable for allowing a site administrator to select a page that will be stored in a preference.</p>
+<h3>Usage:</h3>
+<pre><code>{page_selector name=dfltpage value=\$currentpage}</code></pre>
+<h3>What Parameters Does it Take?</h3>
+<ul>
+  <li>name - <em>(string)</em> - The name of the input field.</p>
+  <li>value - <em>(int)</em> - The id of the currently selected page.</p>
+  <li>allowcurrent - <em>(bool)</em> - Whether or not to allow the currently selected item to be re-selected.  The default value is false.</li>
+  <li>allow_all - <em>(bool)</em> - Whether or not to allow inactive content items, or content items that do not have usable links to be selected. The default value is false</li>
+  <li>for_child - <em>(bool)</em> - Indicates that we are selecting a parent page for a new content item.  The default value is false.</p>
+  </li>
+</ul>
+EOT;
 $lang['help_function_cms_html_options'] = <<<EOT
 <h3>What does this do?</h3>
 <p>This is a powerful plugin to render options for select elements into html &lt;option&gt; and &lt;optgroup&gt; tags.  Each option can have child elements, it's own title tag, and it's own class attribute.</p>
@@ -306,7 +321,7 @@ $lang['help_function_cms_stylesheet'] = <<<EOT
   <li><em>(optional)</em> nocombine - (boolean, default false) If enabled, and there are multiple stylesheets associated with the template, the stylesheets will be output as separate tags rather than combined into a single tag.</li>
   <li><em>(optional)</em> nolinks - (boolean, default false) If enabled, the stylesheets will be output as a URL without &lt;link&gt; tag.</li>
   <li><em>(optional)</em> https - (boolean, default false) indicates wether the ssl_url config entry should be used to prefix stylesheet urls.  If not specified, the system will attempt to determine the proper root url based on the secure flag of the page being displayed.</li>
-  <li><em>(optional)</em> templateid - If templateid is defined, this will return stylesheets associated with that template instead of the current one.</li>
+  <li><em>(optional)</em> designid - If designid is defined, this will return stylesheets associated with that design instead of the current one.</li>
   <li><em>(optional)</em> media - <strong>[deprecated]</strong> - When used in conjunction with the name parameter this parameter will allow you to override the media type for that stylesheet.  When used in conjunction with the templateid parameter, the media parameter will only output stylesheet tags for those stylesheets that are marked as compatible with the specified media type.</li>
   </ul>
   <h3>Smarty Processing</h3>
@@ -336,9 +351,11 @@ $lang['help_function_page_attr'] = <<<EOT
   <li><strong>key [required]</strong> The key to return the attribute of.
     <p>The key can either be a block name, or from a set of standard properties associated with a content page.  The accepted standard properties are:</p>
     <ul>
-      <li>_dflt_ - (string) The value for the default content block (also known as content_en).</li>
+      <li>_dflt_ - (string) The value for the default content block (an alias for content_en).</li>
       <li>title</li>
       <li>description</li>
+      <li>alias - (string) The unique page alias.</li>
+      <li>id - (int) The unique page id.</li>
       <li>created_date - (string date) Date of the creation of the content object.</li>
       <li>modified_date - (string date) Date of the last modification of the content object.</li>
       <li>last_modified_by - (int) UID of the user who last modified the page.</li>
@@ -350,6 +367,7 @@ $lang['help_function_page_attr'] = <<<EOT
       <li>extra3 - (string) The value of the extra3 attribute.</li>
     </ul>
   </li>
+  <li><em>(optional)</em> inactive (boolean) - Allows reading page attributes from inactive pages.</li>
   <li><em>(optional)</em> assign (string) - Assign the results to a smarty variable with that name.</li>
 </ul>
 <h3>Returns:</h3>
@@ -364,9 +382,14 @@ $lang['help_function_page_image'] = <<<EOT
 <p>Insert the tag into the template like: <code>{page_image}</code>.</p>
 <h3>What parameters does it take?</h3>
 <ul>
-  <li>thumbnail - Optionally display the value of the thumbnail property instead of the image property.</li>
+  <li><em>(optional)</em> thumbnail (bool) - Optionally display the value of the thumbnail property instead of the image property.</li>
+  <li><em>(optional)</em> full (bool)- Optionally output the full URL to the image relative to the image uploads path.</li>
+   <li><em>(optional)</em> tag (bool) - Optionally output a full image tag, if the property value is not empty.  If the tag argument is enabled, full is implied.</li>
   <li><em>(optional)</em> assign (string) - Assign the results to a smarty variable with that name.</li>
 </ul>
+<h3>More...</h3>
+<p>If the tag argument is enabled, and the property value is not empty, this will trigger a full HTML img tag to be output.  Any arguments to the plugin not listed above will automatically be included in the resulting img tag.  i.e:  <code>{page_image tag=true class="pageimage" id="someid" title="testing"}</code>.</p>
+<p>If the plugin is outputting a full img tag, and the alt argument has not been provided, then the value of the property will be used for the alt attribute of the img tag.</p>
 EOT;
 
 $lang['help_function_dump'] = <<<EOT
@@ -392,29 +415,26 @@ $lang['help_function_content_image'] = <<<EOT
 <p>Just insert the tag into your page template like: <code>{content_image block='image1'}</code>.</p>
 <h3>What parameters does it take?</h3>
 <ul>
-  <li><strong>(required)</strong> block='' - The name for this additional content block.
-  <p>Example:</p>
-  <pre>{content_image block='image1'}</pre><br/>
+  <li><strong>(required)</strong> block (string) - The name for this additional content block.
+    <p>Example:</p>
+    <pre>{content_image block='image1'}</pre><br/>
   </li>
-  <li><em>(optional)</em> label='' - A label or prompt for this content block in the edit content page.  If not specified, the block name will be used.</li>
-  <li><em>(optional)</em> dir='' - The name of a directory (relative to the uploads directory, from which to select image files. If not specified, the preference from the global settings page will be used.  If that preference is empty, the uploads directory will be used.
+  <li><em>(optional)</em> label (sring) - A label or prompt for this content block in the edit content page.  If not specified, the block name will be used.</li>
+  <li><em>(optional)</em> dir (string) - The name of a directory (relative to the uploads directory, from which to select image files. If not specified, the preference from the global settings page will be used.  If that preference is empty, the uploads directory will be used.
   <p>Example: use images from the uploads/images directory.</p>
-  <pre>{content_image block='image1' dir='images'}</pre><br/>
+  <pre><code>{content_image block='image1' dir='images'}</code></pre><br/>
   </li>
-  <li><em>(optional)</em> class='' - The css class name to use on the img tag in frontend display.</li>
-  <li><em>(optional)</em> default='' - Use to set a default image used when no image is selected.</li>
-  <li><em>(optional)</em> id='' - The id name to use on the img tag in frontend display.</li>
-  <li><em>(optional)</em> name='' - The tag name to use on the img tag in frontend display.</li>
-  <li><em>(optional)</em> width='' - The desired width of the image.</li>
-  <li><em>(optional)</em> height='' - The desired height of the image.</li>
-  <li><em>(optional)</em> alt='' - Alternative text if the image cannot be found.</li>
-  <li><em>(optional)</em> urlonly='' - output only the url to the image, ignoring all parameters like id, name, width, height, etc.</li>
-  <li><em>(optional)</em> tab='' - The desired tab to display this field on in the edit form..</li>
-  <li><em>(optional)</em> exclude='' - Specify a prefix of files to exclude.  i.e: thumb_</li>
-  <li><em>(optional)</em> sort='' - optionally sort the options. Default is to not sort.</li>
+  <li><em>(optional)</em> default (string) - Use to set a default image used when no image is selected.</li>
+  <li><em>(optional)</em> urlonly (bool) - output only the url to the image, ignoring all parameters like id, name, width, height, etc.</li>
+  <li><em>(optional)</em> tab (string) The desired tab to display this field on in the edit form..</li>
+  <li><em>(optional)</em> exclude (string) - Specify a prefix of files to exclude.  i.e: thumb_ </li>
+  <li><em>(optional)</em> sort (bool) - optionally sort the options. Default is to not sort.</li>
   <li><em>(optional)</em> priority (integer) - Allows specifying an integer priority for the block within the tab.</li>
-  <li><em>(optional)</em> assign='' (string) - Assign the results to a smarty variable with that name.</li>
+  <li><em>(optional)</em> assign (string) - Assign the results to a smarty variable with that name.</li>
 </ul>
+<h3>More...</h3>
+<p><strong>Note:</strong> As of version 2.2, if this content block contains no value, then no output is generated.</p>
+                                                            <p>In addition to the arguments listed above, this plugin will accept any number of additional arguments and forward them directly to the generated img tag if any.  i.e: <code>{content_image block='img1' id="id_img1" class="page-image" title='an image block' data-foo=bar}</code>
 EOT;
 
 $lang['help_function_process_pagedata'] = <<<EOT
@@ -710,6 +730,7 @@ $lang['help_function_image'] = <<<EOT
   <h3>What does this do?</h3>
   <p>Creates an image tag to an image stored within your images directory</p>
   <h3>How do I use it?</h3>
+  <p class="warning">This plugin is deprecated and will be removed from the core at a later date.</p>
   <p>Just insert the tag into your template/page like: <code>{image src="something.jpg"}</code></p>
   <h3>What parameters does it take?</h3>
   <ul>
@@ -870,6 +891,9 @@ $lang['help_function_content'] = <<<EOT
         <li><em>(optional)</em> tab (string) - The desired tab to display this field on in the edit form..</li>
         <li><em>(optional)</em> cssname (string) - A hint to the WYSIWYG editor module to use the specified stylesheet name for extended styles.</li>
         <li><em>(optional)</em> noedit (true/false) - If set to true, then the content block will not be available for editing in the content editing form.  This is useful for outputting a content block to page content that was created via a third party module.</li>
+        <li><em>(optional)</em> data-xxxx (string) - Allows passing data attributes to the generated textarea for use by syntax hilighter and WYSIWYG modules.
+            <p>i.e.: <code>{content data-foo="bar"}</code></p>
+        </li>
         <li><em>(optional)</em> adminonly (true/false) - If set to true, only members of the special &quot;Admin&quot; group (gid==1) will be able to edit this content block.</li>
 		<li><em>(optional)</em> assign - Assigns the content to a smarty parameter, which you can then use in other areas of the page, or use to test whether content exists in it or not.
 <p>Example of passing page content to a User Defined Tag as a parameter:</p></li>
@@ -1052,6 +1076,60 @@ $lang['help_function_cms_jquery'] = <<<EOT
 	<li><em>(optional) </em><tt>include_css <em>(boolean)</em></tt> - use to prevent css from being included with the output.  Default value is true.</li>
 	<li><em>(optional)</em> <tt>assign</tt> - Assign the results to the named smarty variable.</li>
 	</ul>
+EOT;
+
+$lang['help_function_cms_filepicker'] = <<<EOT
+<h3>What does this do?</h3>
+<p>This plugin will create an input field that is controlled by the <em>(current)</em> file picker module to allow selecting a file.  This is an admin only plugin useful for module templates, and other admin forms.</p>
+<p>This plugin should be used in a module's admin template, and the output created by selecting a file should be handled in the normal way in the modules action php file.</p>
+<p>Note: This plugin will detect (using internal mechanisms) the currently preferred filepicker module, which may be different than the CMSMS core file picker module, and that filepicker module may ignore some of these parameters.</p>
+<h3>Usage:</h3>
+<ul>
+  <li>name - <strong>required</strong> string - The name for the input field.</li>
+  <li>prefix - <em>(optional)</em> string - A prefix for the name of the input field.</li>
+  <li>value - <em>(optional)</em> string - The current value for the input field..</li>
+  <li>profile - <em>(optional)</em> string - The name of the profile to use.  The profile must exist within the selected file picker module, or a default profile may be used.</li>
+  <li>top - <em>(optional)</em> string - A top directory, relative to the uploads directory.  This should override any top value already specified in the profile.</li>
+  <li>type - <em>(optional)</em> string - An indication of the file type that can be selected.
+      <p>Possible values are: image,audio,video,media,xml,document,archive,any</p>
+  </li>
+  <li>required - <em>(optional)</em> boolean - Indicates whether or not the input field is required.</li>
+</ul>
+<h3>Example:</h3>
+<p>Create a filepicker field to allow selecting images in the images/apples directory.</p>
+<pre><code>{cms_filepicker prefix=\$actionid name=article_image top='images/apples' type='image'}</code></pre>
+EOT;
+
+$lang['help_function_thumbnail_url'] = <<<EOT
+<h3>What does this do?</h3>
+<p>This tag generates a URL to a thumbnail image when an actual image file relative to the uploads directory is specified .</p>
+<p>This tag will return an empty string if the file specified does not exist, the thumbnail does not exist,  or there are permissions propblems.</p>
+<h3>Usage:</h3>
+<ul>
+  <li>file - <strong>required</strong> - The filename and path relative to the uploads directory.</li>
+  <li>dir - <em>(optional)</em> - An optional directory prefix to prepend to the filename.</li>
+  <li>assign - <em>(optional)</em> - Optionally assign the output to the named smarty variable.</li>
+</ul>
+<h3>Example:</h3>
+<pre><code>&lt;img src="{thumbnail_url file='images/something.jpg'}" alt="something.jpg"/&gt;</code></pre>
+<h3>Tip:</h3>
+<p>It is a trivial process to create a generic template or smarty function that will use the <code>{file_url}</code> and <code>{thumbnail_url}</code> plugins to generate a thumbnail and link to a larger image.</p>
+EOT;
+
+$lang['help_function_file_url'] = <<<EOT
+<h3>What does this do?</h3>
+<p>This tag generates a URL to a file within the uploads path of the CMSMS installation.</p>
+<p>This tag will return an empty string if the file specified does not exist or there are permissions propblems.</p>
+<h3>Usage:</h3>
+<ul>
+  <li>file - <strong>required</strong> - The filename and path relative to the uploads directory.</li>
+  <li>dir - <em>(optional)</em> - An optional directory prefix to prepend to the filename.</li>
+  <li>assign - <em>(optional)</em> - Optionally assign the output to the named smarty variable.</li>
+</ul>
+<h3>Example:</h3>
+<pre><code>&lt;a href="{file_url file='images/something.jpg'}"&gt;view file&lt;/a&gt;</code></pre>
+<h3>Tip:</h3>
+<p>It is a trivial process to create a generic template or smarty function that will use the <code>{file_url}</code> and <code>{thumbnail_url}</code> plugins to generate a thumbnail and link to a larger image.</p>
 EOT;
 
 $lang['help_function_form_end'] = <<<EOT

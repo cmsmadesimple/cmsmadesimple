@@ -35,10 +35,12 @@
 #END_LICENSE
 
 /**
- * This class contains classes and functions that define a template type.
+ * This file contains classes and functions that define a template type.
  * @package CMS
  * @license GPL
  */
+
+use \CMSMS\HookManager;
 
 /**
  * A class to manage template types
@@ -46,7 +48,6 @@
  * @package CMS
  * @license GPL
  * @since 2.0
- * @license 2.0
  * @author Robert Campbell <calguy1000@gmail.com>
  */
 class CmsLayoutTemplateType
@@ -80,6 +81,11 @@ class CmsLayoutTemplateType
 	 * @ignore
 	 */
 	private static $_name_cache;
+
+    /**
+     * @ignore
+     */
+    private $_assistant;
 
     /**
      * Get the template type id
@@ -207,7 +213,7 @@ class CmsLayoutTemplateType
     {
         $this->_data['description'] = $str;
         $this->_dirty = TRUE;
-    }
+     }
 
     /**
      * Get the owner of this template type.
@@ -275,6 +281,50 @@ class CmsLayoutTemplateType
     public function get_lang_callback()
     {
         if( isset($this->_data['lang_callback']) ) return $this->_data['lang_callback'];
+    }
+
+    /**
+     * Set a callback to be used to display help for this template when editing.
+     *
+     * @param callable $callback A static function name, or an array of a class name and member name.
+     */
+    public function set_help_callback($callback)
+    {
+        $this->_data['help_callback'] = $callback;
+        $this->_dirty = TRUE;
+    }
+
+    /**
+     * Return the callback used to retrieve help for this template type.
+     *
+     * @return mixed
+     */
+    public function get_help_callback()
+    {
+        if( isset($this->_data['help_callback']) ) return $this->_data['help_callback'];
+    }
+
+    /**
+     * Set the flag indicating that a maximum of one template of this type is permitted.
+     *
+     * @throws CmsInvalidDataException
+     * @param bool $flag
+     */
+    public function set_oneonly_flag($flag = TRUE)
+    {
+        if( !is_bool($flag) ) throw new CmsInvalidDataException('value is invalid for set_oneonly_flag');
+        $this->_data['one_only'] = $flag;
+        $this->_dirty = true();
+    }
+
+    /**
+     * Get the flag indicating that a maximum of one template of this type is permitted.
+     *
+     * @return bool
+     */
+    public function get_oneonly_flag()
+    {
+        if( isset($this->_data['one_only']) ) return $this->_data['one_only'];
     }
 
     /**
@@ -376,11 +426,13 @@ class CmsLayoutTemplateType
         $db = CmsApp::get_instance()->GetDb();
         $now = time();
         $query = 'INSERT INTO '.CMS_DB_PREFIX.self::TABLENAME.'
-                (originator,name,has_dflt,dflt_contents,description,
-                 lang_cb,dflt_content_cb,requires_contentblocks,owner,created,modified)
-                VALUES (?,?,?,?,?,?,?,?,?,?,?)';
-        $dbr = $db->Execute($query,array($this->get_originator(), $this->get_name(), $this->get_dflt_flag(),
-                                         $this->get_dflt_contents(), $this->get_description(), serialize($this->get_lang_callback()),
+                (originator,name,has_dflt,one_only,dflt_contents,description,
+                 lang_cb,help_content_cb,dflt_content_cb,requires_contentblocks,owner,created,modified)
+                VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)';
+        $dbr = $db->Execute($query,array($this->get_originator(), $this->get_name(), $this->get_dflt_flag(), $this->get_oneonly_flag(),
+                                         $this->get_dflt_contents(), $this->get_description(),
+                                         serialize($this->get_lang_callback()),
+                                         serialize($this->get_help_callback()),
                                          serialize($this->get_content_callback()), $this->get_content_block_flag() ? 1 : 0,
                                          $this->get_owner(), $now,$now));
         if( !$dbr ) throw new CmsSQLErrorException($db->sql.' -- '.$db->ErrorMsg());
@@ -408,11 +460,12 @@ class CmsLayoutTemplateType
         $now = time();
 
         $query = 'UPDATE '.CMS_DB_PREFIX.self::TABLENAME.'
-                SET originator = ?, name = ?, has_dflt = ?, dflt_contents = ?, description = ?,
-                    lang_cb = ?, dflt_content_cb = ?, requires_contentblocks = ?, owner = ?, modified = ?
+                SET originator = ?, name = ?, has_dflt = ?, one_only = ?, dflt_contents = ?, description = ?,
+                    lang_cb = ?, help_content_cb = ?, dflt_content_cb = ?, requires_contentblocks = ?, owner = ?, modified = ?
                 WHERE id = ?';
-        $dbr = $db->Execute($query,array($this->get_originator(),$this->get_name(),$this->get_dflt_flag(),
-                                         $this->get_dflt_contents(),$this->get_description(),serialize($this->get_lang_callback()),
+        $dbr = $db->Execute($query,array($this->get_originator(),$this->get_name(),$this->get_dflt_flag(),$this->get_oneonly_flag(),
+                                         $this->get_dflt_contents(),$this->get_description(),
+                                         serialize($this->get_lang_callback()),serialize($this->get_help_callback()),
                                          serialize($this->get_content_callback()),$this->get_content_block_flag() ? 1 : 0,
                                          $this->get_owner(), $now, $this->get_id()));
         if( !$dbr ) throw new CmsSQLErrorException($db->ErrorMsg());
@@ -428,14 +481,14 @@ class CmsLayoutTemplateType
     public function save()
     {
         if( !$this->get_id() ) {
-			Events::SendEvent('Core','AddTemplateTypePre',array(get_class($this)=>&$this));
+            HookManager::do_hook('Core::AddTemplateTypePre', [ get_class($this) => &$this ]);
             $this->_insert();
-			Events::SendEvent('Core','AddTemplateTypePost',array(get_class($this)=>&$this));
+            HookManager::do_hook('Core::AddTemplateTypePost', [ get_class($this) => &$this ]);
 			return;
         }
-		Events::SendEvent('Core','EditTemplateTypePre',array(get_class($this)=>&$this));
+        HookManager::do_hook('Core::EditTemplateTypePre', [ get_class($this) => &$this ]);
         $this->_update();
-		Events::SendEvent('Core','EditTemplateTypePost',array(get_class($this)=>&$this));
+        HookManager::do_hook('Core::EditTemplateTypePost', [ get_class($this) => &$this ]);
     }
 
     /**
@@ -459,7 +512,7 @@ class CmsLayoutTemplateType
     {
         if( !$this->get_id() ) return;
 
-		Events::SendEvent('Core','DeleteTemplateTypePre',array(get_class($this)=>&$this));
+        HookManager::do_hook('Core::DeleteTemplateTypePre', [ get_class($this) => &$this ]);
 		$tmp = CmsLayoutTemplate::template_query(array('t:'.$this->get_id()));
         if( is_array($tmp) && count($tmp) ) throw new CmsInvalidDataException('Cannot delete a template type with existing templates');
         $db = CmsApp::get_instance()->GetDb();
@@ -470,7 +523,7 @@ class CmsLayoutTemplateType
         $this->_dirty = TRUE;
 		CmsTemplateCache::clear_cache();
 		audit($this->get_id(),'CMSMS','Template Type '.$this->get_name().' Deleted');
-		Events::SendEvent('Core','DeleteTemplateTypePost',array(get_class($this)=>&$this));
+        HookManager::do_hook('Core::DeleteTemplateTypePost', [ get_class($this) => &$this ]);
         unset($this->_data['id']);
     }
 
@@ -500,6 +553,35 @@ class CmsLayoutTemplateType
     public function get_dflt_template()
     {
         return CmsLayoutTemplate::load_dflt_by_type($this);
+    }
+
+    /**
+     * Get HTML text for help with respect to the variables available in this template type.
+     */
+    public function get_template_helptext()
+    {
+        $text = null;
+        $cb = $this->get_help_callback();
+        $originator = $this->get_originator();
+        $name = $this->get_name();
+        if( $cb && is_callable($cb) ) {
+            $text = call_user_func($cb,$name);
+            return $text;
+        }
+
+        // no callback specified, see if this originator is a loadable module.
+        $name = $this->get_name();
+        if( $originator == self::CORE ) {
+            // it's a core page template, or generic
+        } else {
+            $module = \cms_utils::get_module($originator);
+            if( $module ) {
+                if( method_exists($module,'get_templatetype_help') ) {
+                    $text = $module->get_templatetype_help($name);
+                }
+            }
+        }
+        return $text;
     }
 
 	/**
@@ -545,12 +627,12 @@ class CmsLayoutTemplateType
 	 */
     private static function &_load_from_data($row)
     {
-        $row['lang_callback'] = unserialize($row['lang_cb']);
-        unset($row['lang_cb']);
-        $row['content_callback'] = unserialize($row['dflt_content_cb']);
-        unset($row['dflt_content_cb']);
+        if( isset($row['lang_cb']) && $row['lang_cb'] ) $row['lang_callback'] = unserialize($row['lang_cb']);
+        if( isset($row['help_content_cb']) && $row['help_content_cb'] ) $row['help_callback'] = unserialize($row['help_content_cb']);
+        if( isset($row['dflt_content_cb']) && $row['dflt_content_cb'] ) $row['content_callback'] = unserialize($row['dflt_content_cb']);
+        unset($row['lang_cb'],$row['help_content_cb'],$row['dflt_content_cb']);
 
-        $ob = new CmsLayoutTemplateType;
+        $ob = new self();
         $ob->_data = $row;
         $ob->_dirty = FALSE;
 
@@ -681,15 +763,59 @@ class CmsLayoutTemplateType
 	/**
 	 * Return the names of all loaded template types
 	 *
-	 * @return array Array of loaded type names
+	 * @return array Associative array of loaded type objects.
 	 */
 	public static function get_loaded_types()
 	{
-		if( is_array(self::$_cache) )	return array_keys(self::$_cache);
+		if( is_array(self::$_cache) ) return array_keys(self::$_cache);
 	}
+
+    /**
+     * Get the assistant object with utility methods for this template type (if such an assistant object can be instantiated)
+     *
+     * @return \CMSMS\Layout\TemplateTypeAssistant
+     * @since 2.2
+     */
+    public function &get_assistant()
+    {
+        if( !$this->_assistant ) {
+            $classnames = [];
+            $classnames[] = '\\CMSMS\\internal\\'.$this->get_originator().$this->get_name().'_Type_Assistant';
+            $classnames[] = '\\CMSMS\\Layout\\'.$this->get_originator().$this->get_name().'_Type_Assistant';
+            $classnames[] = $this->get_originator().'_'.$this->get_name().'_Type_Assistant';
+            foreach( $classnames as $cn ) {
+                if( class_exists($cn) ) {
+                    $tmp = new $cn;
+                    if( is_a($tmp,'\CMSMS\Layout\TemplateTypeAssistant') ) {
+                        $this->_assistant = $tmp;
+                        break;
+                    }
+                }
+            }
+        }
+
+        return $this->_assistant;
+    }
+
+    /**
+     * Get a usage string for this template type.
+     *
+     * @since 2.2
+     * @param string $name The name of the template object.
+     * @return string
+     */
+    public function get_usage_string($name)
+    {
+        $name = trim($name);
+        if( !$name ) return;
+
+        $assistant = $this->get_assistant();
+        if( !$assistant ) return;
+
+        return $assistant->get_usage_string($name);
+    }
 } // end of class
 
 #
 # EOF
 #
-?>

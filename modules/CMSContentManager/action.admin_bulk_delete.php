@@ -58,25 +58,25 @@ function cmscm_admin_bulk_delete_can_delete($node)
 
 function cmscm_get_deletable_pages($node)
 {
-  $out = array();
-  if( cmscm_admin_bulk_delete_can_delete($node) ) {
-    // we can delete the parent node.
-    $out[] = $node->get_tag('id');
-    if( $node->has_children() ) {
-      // it has children.
-      $children = $node->get_children();
-      foreach( $children as $child_node ) {
-	$tmp = cmscm_get_deletable_pages($child_node);
-	$out = array_merge($out,$tmp);
-      }
+    $out = array();
+    if( cmscm_admin_bulk_delete_can_delete($node) ) {
+        // we can delete the parent node.
+        $out[] = $node->get_tag('id');
+        if( $node->has_children() ) {
+            // it has children.
+            $children = $node->get_children();
+            foreach( $children as $child_node ) {
+                $tmp = cmscm_get_deletable_pages($child_node);
+                $out = array_merge($out,$tmp);
+            }
+        }
     }
-  }
   return $out;
 }
 
 if( isset($params['cancel']) ) {
-  $this->SetMessage($this->Lang('msg_cancelled'));
-  $this->RedirectToAdminTab();
+    $this->SetMessage($this->Lang('msg_cancelled'));
+    $this->RedirectToAdminTab();
 }
 if( isset($params['submit']) ) {
 
@@ -123,18 +123,19 @@ if( isset($params['submit']) ) {
 //
 $multicontent = unserialize(base64_decode($params['multicontent']));
 if( count($multicontent) == 0 ) {
-  $this->SetError($this->Lang('error_missingparam'));
-  $this->RedirectToAdminTab();
+    $this->SetError($this->Lang('error_missingparam'));
+    $this->RedirectToAdminTab();
 }
 
 $contentops = ContentOperations::get_instance();
 $pagelist = array();
 foreach( $multicontent as $pid ) {
-  $node = $contentops->quickfind_node_by_id($pid);
-  if( !$node ) continue;
-  $tmp = cmscm_get_deletable_pages($node);
-  $pagelist = array_merge($pagelist,$tmp);
+    $node = $contentops->quickfind_node_by_id($pid);
+    if( !$node ) continue;
+    $tmp = cmscm_get_deletable_pages($node);
+    $pagelist = array_merge($pagelist,$tmp);
 }
+$pagelist = array_unique($pagelist);
 
 //
 // build the confirmation display

@@ -42,7 +42,6 @@ $message = '';
 /**
  * Get preferences
  */
-$ignoredmodules = explode(',', cms_userprefs::get_for_user($userid, 'ignoredmodules'));
 $wysiwyg = cms_userprefs::get_for_user($userid, 'wysiwyg');
 $ce_navdisplay = cms_userprefs::get_for_user($userid,'ce_navdisplay');
 $syntaxhighlighter = cms_userprefs::get_for_user($userid, 'syntaxhighlighter');
@@ -51,7 +50,6 @@ $old_default_cms_lang = $default_cms_language;
 $admintheme = cms_userprefs::get_for_user($userid, 'admintheme', CmsAdminThemeBase::GetDefaultTheme());
 $bookmarks = cms_userprefs::get_for_user($userid, 'bookmarks', 0);
 $indent = cms_userprefs::get_for_user($userid, 'indent', true);
-$enablenotifications = cms_userprefs::get_for_user($userid, 'enablenotifications', 1);
 $paging = cms_userprefs::get_for_user($userid, 'paging', 0);
 $date_format_string = cms_userprefs::get_for_user($userid, 'date_format_string', '%x %X');
 $default_parent = cms_userprefs::get_for_user($userid, 'default_parent', -2);
@@ -125,16 +123,16 @@ if (isset($_POST['submit_account']) && check_permission($userid,'Manage My Accou
     $userobj->email = $email;
     if ($password != '') $userobj->SetPassword($password);
 
-    Events::SendEvent('Core', 'EditUserPre', array('user' => &$userobj));
+    \CMSMS\HookManager::do_hook('Core::EditUserPre', [ 'user'=>&$userobj ] );
     $result = $userobj->Save();
 
     if($result) {
       // put mention into the admin log
-      audit($userid, 'Admin Username: '.$userobj->username, 'Edited');
-      Events::SendEvent('Core', 'EditUserPost', array('user' => &$userobj));
-      $message = lang('accountupdated');
+        audit($userid, 'Admin Username: '.$userobj->username, 'Edited');
+        \CMSMS\HookManager::do_hook('Core::EditUserPost', [ 'user'=>&$userobj ] );
+        $message = lang('accountupdated');
     } else {
-      // throw exception? update just failed.
+        // throw exception? update just failed.
     }
   }
 } // end of account submit
@@ -154,18 +152,12 @@ if (isset($_POST['submit_prefs']) && check_permission($userid,'Manage My Setting
   $admintheme = cleanValue($_POST['admintheme']);
   $bookmarks = (isset($_POST['bookmarks']) ? 1 : 0);
   $indent = (isset($_POST['indent']) ? true : false);
-  $enablenotifications = (isset($_POST['enablenotifications']) ? 1 : 0);
   $paging = (isset($_POST['paging']) ? 1 : 0);
   $date_format_string = trim(strip_tags($_POST['date_format_string']));
   $default_parent = '';
   if (isset($_POST['parent_id'])) $default_parent = (int)$_POST['parent_id'];
   $homepage = cleanValue($_POST['homepage']);
   $hide_help_links = (isset($_POST['hide_help_links']) ? 1 : 0);
-  $ignoredmodules = array();
-  if (isset($_POST['ignoredmodules'])) {
-    $ignoredmodules = cleanValue($_POST['ignoredmodules']);
-    if (in_array('**none**', $ignoredmodules)) $ignoredmodules = array();
-  }
 
   // Set prefs
   cms_userprefs::set_for_user($userid, 'wysiwyg', $wysiwyg);
@@ -176,12 +168,10 @@ if (isset($_POST['submit_prefs']) && check_permission($userid,'Manage My Setting
   cms_userprefs::set_for_user($userid, 'bookmarks', $bookmarks);
   cms_userprefs::set_for_user($userid, 'hide_help_links', $hide_help_links);
   cms_userprefs::set_for_user($userid, 'indent', $indent);
-  cms_userprefs::set_for_user($userid, 'enablenotifications', $enablenotifications);
   cms_userprefs::set_for_user($userid, 'paging', $paging);
   cms_userprefs::set_for_user($userid, 'date_format_string', $date_format_string);
   cms_userprefs::set_for_user($userid, 'default_parent', $default_parent);
   cms_userprefs::set_for_user($userid, 'homepage', $homepage);
-  cms_userprefs::set_for_user($userid, 'ignoredmodules', implode(',', $ignoredmodules));
 
   // Audit, message, cleanup
   audit($userid, 'Admin Username: '.$userobj->username, 'Edited');
@@ -263,14 +253,12 @@ $smarty->assign('bookmarks', $bookmarks);
 $smarty->assign('admintheme', $admintheme);
 $smarty->assign('hide_help_links', $hide_help_links);
 $smarty->assign('indent', $indent);
-$smarty->assign('enablenotifications', $enablenotifications);
 $smarty->assign('paging', $paging);
 $smarty->assign('date_format_string', $date_format_string);
 $smarty->assign('default_parent', $contentops->CreateHierarchyDropdown(0, $default_parent, 'parent_id', 0, 1));
 $smarty->assign('homepage', $themeObject->GetAdminPageDropdown('homepage', $homepage, 'homepage'));
 $tmp = array(10 => 10, 20 => 20, 50 => 50, 100 => 100);
 $smarty->assign('pagelimit_opts', $tmp);
-$smarty->assign('ignoredmodules', $ignoredmodules);
 $smarty->assign('backurl', $themeObject -> backUrl());
 $smarty->assign('formurl', $thisurl);
 $smarty->assign('userobj', $userobj);

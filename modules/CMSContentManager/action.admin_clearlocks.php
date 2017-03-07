@@ -35,7 +35,7 @@
 #END_LICENSE
 if( !isset($gCms) ) exit;
 
-$userid = get_userid();
+$uid = get_userid();
 $is_admin = UserOperations::get_instance($uid,1);
 
 if( $is_admin ) {

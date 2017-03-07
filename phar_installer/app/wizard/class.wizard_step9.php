@@ -10,6 +10,7 @@ class wizard_step9 extends \cms_autoinstaller\wizard_step
         // nothing here
     }
 
+
     private function do_upgrade($version_info)
     {
         $app = \__appbase\get_app();
@@ -36,9 +37,6 @@ class wizard_step9 extends \cms_autoinstaller\wizard_step
         // clear the cache
         \cmsms()->clear_cached_files();
         $this->message(\__appbase\lang('msg_clearedcache'));
-
-        // write protect config.php
-        @chmod("$destdir/config.php",0444);
 
         // todo: write history
 
@@ -86,10 +84,6 @@ class wizard_step9 extends \cms_autoinstaller\wizard_step
         // write protect config.php
         @chmod("$destdir/config.php",0444);
 
-        // todo: set initial preferences.
-
-        // todo: write history
-
         $adminacct = $this->get_wizard()->get_data('adminaccount');
         $root_url = $app->get_root_url();
         if( !endswith($root_url,'/') ) $root_url .= '/';
@@ -119,7 +113,15 @@ class wizard_step9 extends \cms_autoinstaller\wizard_step
             catch( \Exception $e ) {
                 $this->error(\__appbase\lang('error_sendingmail').': '.$e->GetMessage());
             }
+
         }
+
+        // todo: set initial preferences.
+
+        // todo: write history
+
+        \cmsms()->clear_cached_files();
+        $this->message(\__appbase\lang('msg_clearedcache'));
 
         // set the finished message.
         if( !$root_url || !$app->in_phar() ) {
@@ -144,36 +146,10 @@ class wizard_step9 extends \cms_autoinstaller\wizard_step
         @mkdir($destdir.'/tmp/cache',0777,TRUE);
         @mkdir($destdir.'/tmp/templates_c',0777,TRUE);
 
-        $fn = $destdir."/config.php";
-        if( file_exists($fn) ) {
-            $this->message(\__appbase\lang('install_backupconfig'));
-            $destfn = $destdir.'/bak.config.php';
-            if( !copy($fn,$destfn) ) throw new \Exception(\__appbase\lang('error_backupconfig'));
-        }
-
-        $this->message(\__appbase\lang('install_createconfig'));
-        $config = $this->get_wizard()->get_data('config');
-
-        $this->connect_to_cmsms();
         // clear the cache
+        $this->connect_to_cmsms();
         \cmsms()->clear_cached_files();
         $this->message(\__appbase\lang('msg_clearedcache'));
-
-        $newconfig = \cmsms()->GetConfig();
-        $newconfig['dbms'] = trim($config['dbtype']);
-        $newconfig['db_hostname'] = trim($config['dbhost']);
-        $newconfig['db_username'] = trim($config['dbuser']);
-        $newconfig['db_password'] = trim($config['dbpass']);
-        $newconfig['db_name'] = trim($config['dbname']);
-        $newconfig['db_prefix'] = trim($config['dbprefix']);
-        $newconfig['timezone'] = trim($config['timezone']);
-        if( $config['query_var'] ) $newconfig['query_var'] = trim($config['query_var']);
-        if( isset($config['dbport']) ) {
-            $num = (int)$config['dbport'];
-            if( $num > 0 ) $newconfig['db_port'] = $num;
-        }
-        $newconfig->save();
-        @chmod("$destdir/config.php",0444);
 
         // todo: write history
 
@@ -206,6 +182,10 @@ class wizard_step9 extends \cms_autoinstaller\wizard_step
         } else {
             include_once($destdir.'/lib/include.php');
         }
+        $config = \cms_config::get_instance();
+
+        // we do this here, because the config.php class may not set the define when in an installer.
+        if( !defined('CMS_DB_PREFIX')) define('CMS_DB_PREFIX',$config['db_prefix']);
     }
 
     protected function display()

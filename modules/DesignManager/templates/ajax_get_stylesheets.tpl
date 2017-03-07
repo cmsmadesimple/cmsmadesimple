@@ -4,18 +4,13 @@ $('#css_selall').cmsms_checkall();
 
 <div class="row">
   <div class="pageoptions options-menu half">
-    <ul class="options-menu">
-      <li class="parent">{admin_icon icon='run.gif' alt=$mod->Lang('prompt_options')}&nbsp;{$mod->lang('prompt_options')}
-        <ul id="popupcsscontents">
-           <li><a id="addcss" accesskey="a" href="{cms_action_url action='admin_edit_css'}" title="{$mod->Lang('create_stylesheet')}">{admin_icon icon='newobject.gif'} {$mod->Lang('create_stylesheet')}</a></li>
-           <li><a id="editcssfilter" accesskey="f" title="{$mod->Lang('prompt_editfilter')}">{admin_icon icon='edit.gif' alt=$mod->Lang('prompt_editfilter')} {$mod->Lang('filter')}</a></li>
-           {if $have_css_locks}
-           <li><a id="cssclearlocks" accesskey="l" title="{$mod->Lang('title_clearlocks')}" href="{cms_action_url action=admin_clearlocks type=stylesheet}">{admin_icon icon='run.gif' alt=''}&nbsp;{$mod->Lang('prompt_clearlocks')}</a></li>
-           {/if}
-        </ul>
-      </li>
+      <a id="addcss" accesskey="a" href="{cms_action_url action='admin_edit_css'}" title="{$mod->Lang('create_stylesheet')}">{admin_icon icon='newobject.gif'} {$mod->Lang('create_stylesheet')}</a>&nbsp;&nbsp;
+      <a id="editcssfilter" accesskey="f" title="{$mod->Lang('prompt_editfilter')}">{admin_icon icon='view.gif' alt=$mod->Lang('prompt_editfilter')} {$mod->Lang('filter')}</a>&nbsp;&nbsp;
+      {if $have_css_locks}
+         <a id="cssclearlocks" accesskey="l" title="{$mod->Lang('title_clearlocks')}" href="{cms_action_url action=admin_clearlocks type=stylesheet}">{admin_icon icon='run.gif' alt=''}&nbsp;{$mod->Lang('prompt_clearlocks')}</a>&nbsp;&nbsp;
+      {/if}
       {if $css_filter != '' && $css_filter.design != ''}
-      <li><span style="color: green;" title="{$mod->Lang('title_filterapplied')}">{$mod->Lang('filterapplied')}</span></li>
+      <span style="color: green;" title="{$mod->Lang('title_filterapplied')}">{$mod->Lang('filterapplied')}</span>
       {/if}
     </ul>
   </div>
@@ -43,6 +38,7 @@ $('#css_selall').cmsms_checkall();
  	<th class="pageicon"></th>
  	<th title="{$mod->Lang('title_css_name')}">{$mod->Lang('prompt_name')}</th>
   	<th title="{$mod->Lang('title_css_designs')}">{$mod->Lang('prompt_design')}</th>
+	<th title="{$mod->Lang('title_css_filename')}">{$mod->Lang('prompt_filename')}</th>
 	<th title="{$mod->Lang('title_css_modified')}">{$mod->Lang('prompt_modified')}</th>
 	<th class="pageicon"></th>{* edit *}
 	<th class="pageicon"></th>{* copy *}
@@ -92,6 +88,13 @@ $('#css_selall').cmsms_checkall();
 	    <a class="tooltip text-red" data-cms-description='{$tooltip_designs|htmlentities}' title="{$mod->Lang('help_stylesheet_multiple_designs')}">{$mod->Lang('prompt_multiple')} ({count($t1)})
 	  {/if}
 	</td>
+
+	<td>
+	   {if $css->has_content_file()}
+	     {basename($css->get_content_filename())}
+	   {/if}
+	</td>
+
 	<td>{$css->get_modified()|date_format:'%x %X'}</td>
 
 	{if !$css->locked()}
@@ -124,6 +127,8 @@ $('#css_selall').cmsms_checkall();
       <label for="css_bulk_action">{$mod->Lang('prompt_with_selected')}:</label>&nbsp;
       <select name="{$actionid}css_bulk_action" id="css_bulk_action" class="cssx_bulk_action">
         <option value="delete" title="{$mod->Lang('title_delete')}">{$mod->lang('prompt_delete')}</option>
+        <option value="export">{$mod->lang('export')}</option>
+        <option value="import">{$mod->lang('import')}</option>
       </select>
       <input id="css_bulk_submit" class="css_bulk_action" type="submit" name="{$actionid}submit_bulk_css" value="{$mod->Lang('submit')}"/>&nbsp;{cms_help key2='help_css_bulk' title=$mod->lang('prompt_delete')}
     </div>

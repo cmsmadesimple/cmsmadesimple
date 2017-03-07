@@ -22,96 +22,43 @@ $CMS_ADMIN_PAGE=1;
 
 require_once("../lib/include.php");
 $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
-
-check_login();
-$plugin = '';
-if (isset($_GET['plugin'])) $plugin = $_GET['plugin'];
-
-$action = '';
-if (isset($_GET['action'])) $action = $_GET['action'];
-
 $userid = get_userid();
 $access = check_permission($userid, 'Modify User-defined Tags');
 if (!$access) {
-  die('Permission Denied');
-  return;
+    die('Permission Denied');
+    return;
 }
-$smarty = cmsms()->GetSmarty();
+
 include_once("header.php");
 
 function listudt_summarize($str,$numwords,$ets='...')
 {
-  $str = strip_tags($str);
-  $stringarray = explode(" ",$str);
-  if( $numwords >= count($stringarray) )
-    {
-      return $str;
+    $str = strip_tags($str);
+    $stringarray = explode(" ",$str);
+    $numwords = min(max($numwords,1),100);
+    if( $numwords >= count($stringarray) ) return $str;
+    $tmp = array_slice($stringarray,0,$numwords);
+    $tmp = implode(' ',$tmp).$ets;
+    return $tmp;
+}
+
+if (FALSE == empty($_GET['message'])) echo $themeObject->ShowMessage(lang($_GET['message']));
+
+$list = UserTagOperations::get_instance()->ListUserTags();
+$tags = null;
+if( count($list) ) {
+    foreach( $list as $id => $label ) {
+        $tag = UserTagOperations::get_instance()->GetUserTag($id);
+        $rec = array();
+        $rec['id'] = $id;
+        $rec['name'] = $label;
+        $rec['description'] = listudt_summarize($tag['description'],20);
+        $tags[$id] = $rec;
     }
-  $tmp = array_slice($stringarray,0,$numwords);
-  $tmp = implode(' ',$tmp).$ets;
-  return $tmp;
 }
-
-if (FALSE == empty($_GET['message'])) {
-    echo $themeObject->ShowMessage(lang($_GET['message']));
-}
-
-echo '<div class="pagecontainer">';
-echo '<div class="pageoverflow">';
-echo $themeObject->ShowHeader('userdefinedtags');
-echo "<table class=\"pagetable\">\n";
-echo '<thead>';
-echo "<tr>\n";
-echo "<th>".lang('name')."</th>\n";
-echo "<th>".lang('description')."</th>\n";
-echo "<th class=\"pageicon\">&nbsp;</th>\n";
-echo "<th class=\"pageicon\">&nbsp;</th>\n";
-echo "</tr>\n";
-echo '</thead>';
-echo '<tbody>';
-
-$curclass = "row1";
-
-$tags = UserTagOperations::get_instance()->ListUserTags();
-if( count($tags) )
-  {
-    foreach( $tags as $oneplugin => $label  )
-      {
-	$tag = UserTagOperations::get_instance()->GetUserTag($oneplugin);
-
-	echo "<tr class=\"".$curclass."\">\n";
-	echo "<td><a href=\"editusertag.php".$urlext."&amp;userplugin_id=".$oneplugin."\">$label</a></td>\n";
-	echo "<td>".listudt_summarize($tag['description'],20)."</td>\n";
-	echo "<td class=\"icons_wide\"><a href=\"editusertag.php".$urlext."&amp;userplugin_id=".$oneplugin."\">";
-	echo $themeObject->DisplayImage('icons/system/edit.gif', lang('edit'),'','','systemicon');
-	echo "</a></td>\n";
-	echo "<td class=\"icons_wide\"><a href=\"deleteuserplugin.php".$urlext."&amp;userplugin_id=".$oneplugin."\" onclick=\"return confirm('".cms_html_entity_decode(lang('deleteconfirm', $label) )."');\">";
-	echo $themeObject->DisplayImage('icons/system/delete.gif', lang('delete'),'','','systemicon');
-	echo "</a></td>\n";
-	echo "</tr>\n";
-
-	($curclass=="row1"?$curclass="row2":$curclass="row1");
-      }
-  }
-
-	?>
-	</tbody>
-</table>
-	<div class="pageoptions">
-		<p class="pageoptions">
-			<a href="editusertag.php<?php echo $urlext; ?>">
-				<?php
-					echo $themeObject->DisplayImage('icons/system/newobject.gif', lang('addusertag'),'','','systemicon').'</a>';
-					echo ' <a class="pageoptions" href="editusertag.php'.$urlext.'">'.lang("addusertag");
-				?>
-			</a>
-		</p>
-	</div>
-</div>
-</div>
-<?php
-
+$smarty = \Smarty_CMS::get_instance();
+$smarty->assign('tags',$tags);
+$smarty->assign('addurl','editusertag.php'.$urlext);
+$smarty->assign('urlext',$urlext);
+echo $smarty->display('listusertags.tpl');
 include_once("footer.php");
-
-
-?>

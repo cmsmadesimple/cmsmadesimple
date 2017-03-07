@@ -28,7 +28,51 @@
 
 
 /**
- * Checks to see if the user is logged in.   If not, redirects the browser
+ * Gets the userid of the currently logged in user.
+ *
+ * If an effective uid has been set in the session, AND the primary user is a member of the admin group
+ * then allow emulating that effective uid.
+ *
+ * @since 0.1
+ * @param  boolean $redirect Redirect to the admin login page if the user is not logged in.
+ * @return integer The UID of the logged in administrator, otherwise FALSE
+ */
+function get_userid($redirect = true)
+{
+    $login_ops = \CMSMS\LoginOperations::get_instance();
+    $uid = $login_ops->get_effective_uid();
+    if( !$uid && $redirect ) {
+        $config = \cms_config::get_instance();
+        redirect($config['admin_url']."/login.php");
+    }
+    return $uid;
+}
+
+
+/**
+ * Gets the username of the currently logged in user.
+ *
+ * If an effective username has been set in the session, AND the primary user is a member of the admin group
+ * then return the effective username.
+ *
+ * @since 2.0
+ * @param  boolean $check Redirect to the admin login page if the user is not logged in.
+ * @return string the username of the logged in user.
+ */
+function get_username($check = true)
+{
+    $login_ops = \CMSMS\LoginOperations::get_instance();
+    $uname = $login_ops->get_effective_username();
+    if( !$uname && $check ) {
+        $config = \cms_config::get_instance();
+        redirect($config['admin_url']."/login.php");
+    }
+    return $uname;
+}
+
+
+/**
+ * Checks to see if the user is logged in and the request has the proper key.  If not, redirects the browser
  * to the admin login.
  *
  * @since 0.1
@@ -37,148 +81,31 @@
  */
 function check_login($no_redirect = false)
 {
-    $config = CmsApp::get_instance()->GetConfig();
-
-    //Handle a current login if one is in queue in the SESSION
-    if (isset($_SESSION['login_user_id'])) {
-        debug_buffer("Found login_user_id.  Going to generate the user object.");
-        generate_user_object($_SESSION['login_user_id']);
-        unset($_SESSION['login_user_id']);
+    $do_redirect = !$no_redirect;
+    $uid = get_userid(!$no_redirect);
+    $res = false;
+    if( $uid > 0 ) {
+        $res = true;
+        $login_ops = \CMSMS\LoginOperations::get_instance();
+        $res = $login_ops->validate_requestkey();
     }
-
-    if (isset($_SESSION['login_cms_language'])) {
-        debug_buffer('Setting language to: ' . $_SESSION['login_cms_language']);
-        cms_cookies::set('cms_language', $_SESSION['login_cms_language']);
-        unset($_SESSION['login_cms_language']);
-    }
-
-    if (!isset($_SESSION["cms_admin_user_id"])) {
-        debug_buffer('No session found.  Now check for cookies');
-        if( cms_cookies::exists('cms_admin_user_id') && cms_cookies::exists('cms_passhash') ) {
-            debug_buffer('Cookies found, do a passhash check');
-            if (check_passhash(cms_cookies::get('cms_admin_user_id'), cms_cookies::get('cms_passhash'))) {
-                debug_buffer('passhash check succeeded...  creating session object');
-                generate_user_object(cms_cookies::get('cms_admin_user_id'));
+    if( !$res ) {
+        // logged in, but no url key on the request
+        if( $do_redirect ) {
+            // redirect to the admin login.php
+            // use SCRIPT_FILENAME and make sure it validates with the root_path
+            $config = \cms_config::get_instance();
+            if( startswith($_SERVER['SCRIPT_FILENAME'],$config['root_path']) ) {
+                $_SESSION['login_redirect_to'] = $_SERVER['REQUEST_URI'];
             }
-            else {
-                debug_buffer('passhash check failed...  redirect to login');
-                $_SESSION["redirect_url"] = $_SERVER["REQUEST_URI"];
-                if (false == $no_redirect) redirect($config['admin_url']."/login.php");
-                return false;
-            }
-        }
-        else {
-            debug_buffer('No cookies found.  Redirect to login.');
-            $_SESSION["redirect_url"] = $_SERVER["REQUEST_URI"];
-            if (false == $no_redirect) redirect($config['admin_url']."/login.php");
-            return false;
+            $login_ops->deauthenticate();
+            $config = \cms_config::get_instance();
+            redirect($config['admin_url']."/login.php");
         }
     }
-
-    global $CMS_ADMIN_PAGE;
-    if( ($config['debug'] === false) && isset($CMS_ADMIN_PAGE) ) {
-        if( !isset($_SESSION[CMS_USER_KEY]) ) {
-            // it's not in the session, try to grab something from cookies
-            // this is part of our retained-login functionality
-            if( cms_cookies::exists(CMS_SECURE_PARAM_NAME) ) $_SESSION[CMS_USER_KEY] = cms_cookies::get(CMS_SECURE_PARAM_NAME);
-        }
-        if( !isset($_SESSION[CMS_USER_KEY]) || !$_SESSION[CMS_USER_KEY] ) {
-            // still not set?  return false.
-            return false;
-        }
-
-        // now we've got to check the request
-        // and make sure it matches the session key
-        $v = '<no$!tgonna!$happen>';
-        if( isset($_GET[CMS_SECURE_PARAM_NAME]) ) $v = $_GET[CMS_SECURE_PARAM_NAME];
-        if( isset($_POST[CMS_SECURE_PARAM_NAME]) ) $v = $_POST[CMS_SECURE_PARAM_NAME];
-        if( $v != $_SESSION[CMS_USER_KEY] && !isset($config['stupidly_ignore_xss_vulnerability']) ) {
-            if (false == $no_redirect) redirect($config['admin_url'].'/login.php');
-            return false;
-        }
-    }
-    return true;
+    return TRUE;
 }
 
-
-/**
- * Gets the userid of the currently logged in user.
- *
- * @since 0.1
- * @param  boolean $check Redirect to the admin login page if the user is not logged in.
- * @return integer The UID of the logged in administrator, otherwise FALSE
- */
-function get_userid($check = true)
-{
-    if ($check) check_login(); //It'll redirect out to login if it fails
-    if (isset($_SESSION["cms_admin_user_id"])) return $_SESSION["cms_admin_user_id"];
-    return false;
-}
-
-/**
- * Gets the username of the currently logged in user.
- *
- * @since 2.0
- * @param  boolean $check Redirect to the admin login page if the user is not logged in.
- * @return integer The UID of the logged in administrator, otherwise FALSE
- */
-function get_username($check = true)
-{
-    if ($check) check_login(); //It'll redirect out to login if it fails
-    if (isset($_SESSION["cms_admin_username"])) return $_SESSION["cms_admin_username"];
-    return false;
-}
-
-
-/**
- * A function to check if the checksum provided can be used to validate the user to this site
- *
- * @internal
- * @access private
- * @param int The admin userid.
- * @param string The checksum variable
- * @return boolean
- */
-function check_passhash($userid, $checksum)
-{
-    $userops = UserOperations::get_instance();
-    $oneuser = $userops->LoadUserByID((int) $userid);
-    if( !$oneuser ) return FALSE;
-
-    $tmp = array(md5(__FILE__),$oneuser->password,cms_utils::get_real_ip(),$_SERVER['HTTP_USER_AGENT']);
-    $tmp = md5(serialize($tmp));
-    if ($oneuser && (string)$checksum != '' && $checksum == $tmp ) return TRUE;
-    return FALSE;
-}
-
-
-/**
- * Regenerates the user session information from a userid.  This is basically used
- * so that if the session expires, but the cookie still remains (site is left along
- * for 20+ minutes with no interaction), the user won't have to relogin to regenerate
- * the details.
- *
- * @internal
- * @ignore
- * @access private
- * @since 0.5
- * @param integer The admin user id
- * @return void
- */
-function generate_user_object($userid)
-{
-  $userops = UserOperations::get_instance();
-  $oneuser = $userops->LoadUserByID($userid);
-
-  if ($oneuser) {
-      $_SESSION['cms_admin_user_id'] = $userid;
-      $_SESSION['cms_admin_username'] = $oneuser->username;
-      cms_cookies::set('cms_admin_user_id', $oneuser->id);
-      $tmp = array(md5(__FILE__),$oneuser->password,cms_utils::get_real_ip(),$_SERVER['HTTP_USER_AGENT']);
-      $tmp = md5(serialize($tmp));
-      cms_cookies::set('cms_passhash', $tmp);
-  }
-}
 
 
 /**
@@ -192,7 +119,7 @@ function generate_user_object($userid)
  */
 function check_permission($userid, $permname)
 {
-  return UserOperations::get_instance()->CheckPermission($userid,$permname);
+    return UserOperations::get_instance()->CheckPermission($userid,$permname);
 }
 
 
@@ -208,11 +135,11 @@ function check_permission($userid, $permname)
  */
 function check_ownership($userid, $contentid = '')
 {
-  $userops = UserOperations::get_instance();
-  $adminuser = $userops->UserInGroup($userid,1);
-  if( $adminuser ) return true;
+    $userops = UserOperations::get_instance();
+    $adminuser = $userops->UserInGroup($userid,1);
+    if( $adminuser ) return true;
 
-  return ContentOperations::get_instance()->CheckPageOwnership($userid,$contentid);
+    return ContentOperations::get_instance()->CheckPageOwnership($userid,$contentid);
 }
 
 
@@ -229,7 +156,7 @@ function check_ownership($userid, $contentid = '')
  */
 function check_authorship($userid, $contentid = '')
 {
-  return ContentOperations::get_instance()->CheckPageAuthorship($userid,$contentid);
+    return ContentOperations::get_instance()->CheckPageAuthorship($userid,$contentid);
 }
 
 
@@ -243,7 +170,7 @@ function check_authorship($userid, $contentid = '')
  */
 function author_pages($userid)
 {
-  return ContentOperations::get_instance()->GetPageAccessForUser($userid);
+    return ContentOperations::get_instance()->GetPageAccessForUser($userid);
 }
 
 
@@ -260,27 +187,16 @@ function author_pages($userid)
 function audit($itemid, $itemname, $action)
 {
     if( !isset($action) ) $action = '-- unset --';
+    $app = CmsApp::get_instance();
     $db = CmsApp::get_instance()->GetDb();
 
-    $userid = 0;
-    $username = '';
-    $ip_addr = '';
+    $userid = get_userid(FALSE);
+    $username = get_username(FALSE);
+    $ip_addr = null;
     if( $itemid == '' ) $itemid = -1;
+    if( $userid < 1 ) $userid = 0;
 
-    if (isset($_SESSION["cms_admin_user_id"])) {
-        $userid = $_SESSION["cms_admin_user_id"];
-        $ip_addr = cms_utils::get_real_ip();
-    }
-    else {
-        if (isset($_SESSION['login_user_id'])) {
-            $userid = $_SESSION['login_user_id'];
-            $username = $_SESSION['login_user_username'];
-        }
-    }
-
-    if (isset($_SESSION["cms_admin_username"])) $username = $_SESSION["cms_admin_username"];
-
-    if (!isset($userid) || $userid == "") $userid = 0;
+    if( $userid > 0 ) $ip_addr = cms_utils::get_real_ip();
 
     $query = "INSERT INTO ".CMS_DB_PREFIX."adminlog (timestamp, user_id, username, item_id, item_name, action, ip_addr) VALUES (?,?,?,?,?,?,?)";
     $db->Execute($query,array(time(),$userid,$username,$itemid,$itemname,$action,$ip_addr));
@@ -366,7 +282,6 @@ function create_textarea($enablewysiwyg, $text, $name, $classname = '', $id = ''
   if( $classname ) $parms['class'] = $classname;
   if( $id ) $parms['id'] = $id;
   if( $encoding ) $parms['encoding'] = $encoding;
-  //  if( $stylesheet ) $parms['stylesheet'] = $stylesheet; // ignored
   if( $width ) $parms['rows'] = $height;
   if( $height ) $parms['cols'] = $width;
   if( $forcewysiwyg ) $parms['forcemodule'] = $forcewysiwyg;
@@ -484,9 +399,9 @@ function create_file_dropdown($name,$dir,$value,$allowed_extensions,$optprefix='
 function get_pageid_or_alias_from_url()
 {
     $gCms = CmsApp::get_instance();
-    $config = $gCms->GetConfig();
+    $config = \cms_config::get_instance();
     $contentops = ContentOperations::get_instance();
-    $smarty = $gCms->GetSmarty();
+    $smarty = \Smarty_CMS::get_instance();
 
     $params = $_REQUEST;
     if (isset($params['mact'])) {
@@ -495,8 +410,7 @@ function get_pageid_or_alias_from_url()
     }
 
     $page = '';
-    $query_var = get_parameter_value($config,'query_var');
-    if( !$query_var ) $query_var = 'page'; // safety.
+    $query_var = $config['query_var'];
     if (isset($smarty->id) && isset($params[$smarty->id . 'returnid'])) {
         // get page from returnid parameter in module action
         $page = (int)$params[$smarty->id . 'returnid'];
@@ -579,10 +493,9 @@ function get_pageid_or_alias_from_url()
             }
 
             //Get a decent returnid
-            if ($matches['returnid'] == '') $matches['returnid'] = $contentops->GetDefaultPageID();
+            if( $matches['returnid'] == '' ) $matches['returnid'] = $contentops->GetDefaultContent();
 
-            // Put the resulting mact into the request so that the subsequent smarty plugins
-            // can grab it...
+            // Put the resulting mact into the request so that the subsequent smarty plugins can grab it...
             $_REQUEST['mact'] = $matches['module'] . ',' . $matches['id'] . ',' . $matches['action'] . ',' . $matches['inline'];
 
             $page = $matches['returnid'];
@@ -598,4 +511,40 @@ function get_pageid_or_alias_from_url()
     return $page;
 }
 
-?>
+/**
+ * @ignore
+ */
+function preprocess_mact($returnid)
+{
+    $config = \cms_config::get_instance();
+    if( !$config['startup_mact_processing'] ) return;
+    if( !isset($_REQUEST['mact']) ) return;
+
+    list($module,$id,$action,$inline) = explode(',',$_REQUEST['mact'],4);
+    if( !$module || $inline || $id != 'cntnt01' ) return;
+
+    $modops = ModuleOperations::get_instance();
+    $module_obj = $modops->get_module_instance($module);
+    if( !$module_obj ) {
+        // module not found... couldn't even autoload it.
+        @trigger_error('Attempt to access module '.$module.' which could not be found (is it properly installed and configured?');
+        throw new \CmsError404Exception('Attempt to access module '.$module.' which could not be found (is it properly installed and configured?');
+    }
+    if( !$module_obj->IsPluginModule() ) {
+        @trigger_error('Attempt to access module '.$module.' on a frontend request, which is not a plugin module');
+        throw new \CmsError404Exception('Attempt to access module '.$module.' which could not be found (is it properly installed and configured?');
+    }
+
+    $smarty = \Smarty_CMS::get_instance();
+    @ob_start();
+    $parms = $modops->GetModuleParameters($id);
+    $oldcache = $smarty->caching;
+    $smarty->caching = false;
+    $result = $module_obj->DoActionBase($action, $id, $parms, $returnid, $smarty);
+    $smarty->caching = $oldcache;
+
+    if( $result !== FALSE ) echo $result;
+    $result = @ob_get_contents();
+    @ob_end_clean();
+    \CMS_Content_Block::set_primary_content($result);
+}

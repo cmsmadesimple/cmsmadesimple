@@ -25,7 +25,7 @@ class News extends CMSModule
     function GetFriendlyName() { return $this->Lang('news'); }
     function IsPluginModule() { return true; }
     function HasAdmin() { return true; }
-    function GetVersion() { return '2.50.7'; }
+    function GetVersion() { return '2.51'; }
     function MinimumCMSVersion() { return '1.12-alpha0'; }
     function GetAdminDescription() { return $this->Lang('description'); }
     function GetAdminSection() { return 'content'; }
@@ -148,7 +148,7 @@ class News extends CMSModule
 
     function SearchResultWithParams($returnid, $articleid, $attr = '', $params = '')
     {
-        $gCms = cmsms();
+        $gCms = CmsApp::get_instance();
         $result = array();
 
         if ($attr == 'article') {
@@ -222,8 +222,12 @@ class News extends CMSModule
 
     public function GetFieldTypes()
     {
-        $items = array('textbox'=>$this->Lang('textbox'), 'checkbox'=>$this->Lang('checkbox'), 'textarea'=>$this->Lang('textarea'),
-                       'dropdown'=>$this->Lang('dropdown'), 'file'=>$this->Lang('file'));
+        $items = [ 'textbox'=>$this->Lang('textbox'),
+                   'checkbox'=>$this->Lang('checkbox'),
+                   'textarea'=>$this->Lang('textarea'),
+                   'dropdown'=>$this->Lang('dropdown'),
+                   'linkedfile'=>$this->Lang('linkedfile'),
+                   'file'=>$this->Lang('file') ];
         return $items;
     }
 
@@ -231,6 +235,14 @@ class News extends CMSModule
     {
         $items = $this->GetFieldTypes();
         return $this->CreateInputDropdown($id, $name, array_flip($items), -1, $selected);
+    }
+
+    public function get_tasks()
+    {
+        if( !$this->GetPreference('alert_drafts',1) ) return;
+        $out = array();
+        $out[] = new \News\CreateDraftAlertTask();
+        return $out;
     }
 
     function GetNotificationOutput($priority = 2)
@@ -262,7 +274,7 @@ class News extends CMSModule
     {
         cms_route_manager::del_static('',$this->GetName());
 
-        $db = cmsms()->GetDb();
+        $db = \CmsApp::get_instance()->GetDb();
         $str = $this->GetName();
         $c = strtoupper($str[0]);
         $x = substr($str,1);
@@ -298,6 +310,16 @@ class News extends CMSModule
         if( is_object($mod) ) return $mod->Lang('type_'.$str);
     }
 
+    public static function template_help_callback($str)
+    {
+        $str = trim($str);
+        $mod = cms_utils::get_module('News');
+        if( is_object($mod) ) {
+            $file = $mod->GetModulePath().'/doc/tpltype_'.$str.'.inc';
+            if( is_file($file) ) return file_get_contents($file);
+        }
+    }
+
     public static function reset_page_type_defaults(CmsLayoutTemplateType $type)
     {
         if( $type->get_originator() != 'News' ) throw new CmsLogicException('Cannot reset contents for this template type');
@@ -329,6 +351,7 @@ class News extends CMSModule
         switch( $capability ) {
         case CmsCoreCapabilities::PLUGIN_MODULE:
         case CmsCoreCapabilities::ADMINSEARCH:
+        case CmsCoreCapabilities::TASKS:
             return TRUE;
         }
         return FALSE;
@@ -355,5 +378,4 @@ class News extends CMSModule
         }
         return $out;
     }
-
-}
+} // end of class

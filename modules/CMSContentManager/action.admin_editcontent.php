@@ -47,6 +47,7 @@ try {
     $pagedefaults = CmsContentManagerUtils::get_pagedefaults();
     $content_type = $pagedefaults['contenttype'];
     $error = null;
+    $active_tab = null;
 
     if( isset($params['content_id']) ) $content_id = (int)$params['content_id'];
 
@@ -102,6 +103,15 @@ try {
         $content_obj->SetPropertyValue('extra2',$pagedefaults['extra2']);
         $content_obj->SetPropertyValue('extra3',$pagedefaults['extra3']);
         $content_obj->SetAdditionalEditors($pagedefaults['addteditors']);
+        $dflt_parent = (int) \cms_userprefs::get('default_parent');
+        if( $dflt_parent < 1 ) $dflt_parent = -1;
+        if( !$this->CheckPermission('Modify Any Page') || !$this->CheckPermission('Manage All Content') ) {
+            // we get the list of pages that this user has access to.
+            // if he is not an editor of the default page, then we use the first page the user has access to, or -1
+            $list = $contentops->GetPageAccessForUser($user_id);
+            if( count($list) && !in_array($dflt_parent,$list) ) $dflt_parent = $list[0];
+        }
+        $content_obj->SetParentId($dflt_parent);
     }
     else {
         // editint an existing content object
@@ -159,9 +169,9 @@ try {
         $content_obj->FillParams($_POST,($content_id > 0));
     }
 
+    $active_tab = isset($params['active_tab']) ? trim($params['active_tab']) : null;
     if( isset($params['submit']) || isset($params['apply']) || isset($params['preview']) ) {
         $error = $content_obj->ValidateData();
-
         if( $error ) {
             if( isset($params['ajax']) ) {
                 $tmp = array('response'=>'Error','details'=>$error);
@@ -272,20 +282,18 @@ try {
         $contentarray = $content_obj->GetTabElements($currenttab, $content_obj->Id() == 0 );
         if( $currenttab == $content_obj::TAB_MAIN ) {
             // first tab... add the content type selector.
-            $help = '&nbsp;'.cms_admin_utils::get_help_tag(array('key'=>'help_content_type','title'=>$this->Lang('help_title_content_type')));
-            $tmp = array('<label for="content_type">*'.$this->Lang('prompt_editpage_contenttype').':</label>'.$help);
-            $tmp2 = "<select id=\"content_type\" name=\"{$id}content_type\">";
-            foreach( $existingtypes as $type => $label ) {
-                if( $type == 'errorpage' && !$this->CheckPermission('Manage All Content') ) {
-                    // this is ugly... we should know if the type is a system type.
-                    continue;
+            if( $this->CheckPermission('Manage All Content') || $content_obj->Owner() == $user_id )  {
+                // if you're only an additional editor on this page... you don't get to change this.
+                $help = '&nbsp;'.cms_admin_utils::get_help_tag(array('key'=>'help_content_type','title'=>$this->Lang('help_title_content_type')));
+                $tmp = array('<label for="content_type">*'.$this->Lang('prompt_editpage_contenttype').':</label>'.$help);
+                $tmp2 = "<select id=\"content_type\" name=\"{$id}content_type\">";
+                foreach( $existingtypes as $type => $label ) {
+                    $tmp2 .= CmsFormUtils::create_option(array('value'=>$type,'label'=>$label),$content_type);
                 }
-                $tmp2 .= CmsFormUtils::create_option(array('value'=>$type,'label'=>$label),$content_type);
+                $tmp2 .= '</select>';
+                $tmp[] = $tmp2;
+                $contentarray = array_merge(array($tmp),$contentarray);
             }
-            $tmp2 .= '</select>';
-            $tmp[] = $tmp2;
-
-            $contentarray = array_merge(array($tmp),$contentarray);
         }
         $tab_contents_array[$currenttab] = $contentarray;
     }
@@ -317,6 +325,8 @@ $smarty->assign('apply_ajax_url',$url);
 $smarty->assign('preview_ajax_url',$this->create_url($id,'admin_editcontent',$returnid,array('preview'=>1)));
 $smarty->assign('lock_timeout',$this->GetPreference('locktimeout'));
 $smarty->assign('lock_refresh',$this->GetPreference('lockrefresh'));
+$smarty->assign('options_tab_name',$content_obj::TAB_OPTIONS);
+$smarty->assign('active_tab',$active_tab);
 $smarty->assign('content_id',$content_id);
 $smarty->assign('content_obj',$content_obj);
 $smarty->assign('tab_names',$tab_names);

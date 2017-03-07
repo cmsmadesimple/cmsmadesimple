@@ -100,7 +100,8 @@ function cms_module_plugin($params,&$smarty)
 
     class_exists($modulename);
     $module = cms_utils::get_module($modulename);
-    if( $module && $module->isPluginModule() ) {
+    global $CMS_ADMIN_PAGE, $CMS_LOGIN_PAGE, $CMS_INSTALL;
+    if( $module && ($module->isPluginModule() || (isset($CMS_ADMIN_PAGE) && !isset($CMS_INSTALL) && !isset($CMS_LOGIN_PAGE) ) ) ) {
         @ob_start();
         $result = $module->DoActionBase($action, $id, $params, $returnid,$smarty);
         if ($result !== FALSE) echo $result;

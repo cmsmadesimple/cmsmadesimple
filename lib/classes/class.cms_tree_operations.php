@@ -65,14 +65,8 @@ class cms_tree_operations
    */
   public static function add_key($key)
   {
-    if( !is_array(self::$_keys) )
-      {
-	self::$_keys = array();
-      }
-    if( !in_array($key,self::$_keys) )
-      {
-	self::$_keys[] = $key;
-      }
+    if( !is_array(self::$_keys) ) self::$_keys = array();
+    if( !in_array($key,self::$_keys) ) self::$_keys[] = $key;
   }
 
 
@@ -93,13 +87,12 @@ class cms_tree_operations
       // create a tree object
       $tree = new cms_content_tree();
       $sorted = array();
-      $contentops = ContentOperations::get_instance();
 
       for( $i = 0, $n = count($data); $i < $n; $i++ ) {
           $row = $data[$i];
 
           // create new node.
-          $node = new cms_content_tree(array('id'=>$row['content_id'],'alias'=>$row['content_alias']));
+          $node = new cms_content_tree(array('id'=>$row['content_id'],'alias'=>$row['content_alias'],'active'=>$row['active']));
 
           // find where to insert it.
           $parent_node = null;
@@ -107,19 +100,15 @@ class cms_tree_operations
               $parent_node = $tree;
           }
           else {
-              if( !isset($sorted[$row['parent_id']]) ) {
+              $parent_node = $tree->find_by_tag('id',$row['parent_id'],FALSE,FALSE);
+              if( !$parent_node ) {
                   // ruh-roh
-                  debug_display($row); flush();
-                  die('Error Page Hierarchy');
-              }
-              else {
-                  $parent_node = $sorted[$row['parent_id']];
+                  throw new \LogicException('Problem with internal content organization... could not get a parent node for content with id '.$row['content_id']);
               }
           }
 
           // add it.
           $parent_node->add_node($node);
-          $sorted[$row['content_id']] = $node;
       }
       return $tree;
   }

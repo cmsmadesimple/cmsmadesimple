@@ -177,6 +177,11 @@ class Group
         return $obj;
     }
 
+    /**
+     * Load all groups
+     *
+     * @return array Array of group records.
+     */
     public static function load_all()
     {
 		$db = CmsApp::get_instance()->GetDb();

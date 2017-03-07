@@ -142,7 +142,7 @@ final class cms_utils
 	 */
 	final public static function & get_db()
 	{
-		return CmsApp::get_instance()->GetDb();
+		return \CmsApp::get_instance()->GetDb();
 	}
 
 
@@ -155,7 +155,7 @@ final class cms_utils
 	 */
 	final public static function & get_config()
 	{
-		return cms_config::get_instance();
+		return \cms_config::get_instance();
 	}
 
 
@@ -169,7 +169,7 @@ final class cms_utils
 	 */
 	final public static function & get_smarty()
 	{
-		return CmsApp::get_instance()->GetSmarty();
+		return \Smarty_CMS::get_instance();
 	}
 
 
@@ -263,6 +263,18 @@ final class cms_utils
 	}
 
 	/**
+	 * A convenience method to get the currently selected filepicker module.
+	 *
+	 * @since 2.2
+	 * @author calguy1000
+	 * @return CMSModule
+	 */
+	public static function &get_filepicker_module()
+	{
+		return ModuleOperations::get_instance()->GetFilePickerModule();
+	}
+
+	/**
 	 * Attempt to retreive the IP address of the connected user.
 	 * This function attempts to compensate for proxy servers.
 	 *
@@ -293,7 +305,7 @@ final class cms_utils
 	 * @since 1.11
 	 * @returns CmsAdminThemeBase derived object, or null
 	 */
-	public static function &get_theme_object()
+	public static function get_theme_object()
 	{
 		return CmsAdminThemeBase::GetThemeObject();
 	}

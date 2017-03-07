@@ -1,5 +1,15 @@
 <script type="text/javascript">
 $(document).ready(function(){
+  $('#clearlog').click(function(ev){
+     ev.preventDefault();
+     var _hr = $(this).attr('href');
+     cms_confirm('{$sysmain_confirmclearlog|escape:'javascript'}').done(function(){
+         window.location.href = _hr;
+     })
+  })
+  $('#pagesel').change(function(){
+     $(this).closest('form').submit();
+  })
   $('#toggle_filters').click(function(){
     $('#adminlog_filters').dialog({
       modal: true,
@@ -11,37 +21,36 @@ $(document).ready(function(){
 
 <div class="pagecontainer">
   <div class="pageoverflow">
-    {if isset($filteruser) && $filteruser != '' or $filteraction != ''}
-    <fieldset>
-      <legend>{'filterapplied'|lang}:</legend>
-      {if $filteruser != ''}<p class="pageinput">{'user'|lang} = {$filteruser}</p>{/if}
-      {if $filteraction != ''}<p class="pageinput">{'actioncontains'|lang}: {$filteraction}</p>{/if}
-    </fieldset>
-    {/if}
-
-    <div id="adminlog_filters" style="display: none;" title="{$langfilters}">
+    <div id="adminlog_filters" style="display: none;" title="{lang('filter')}">
         <form id="adminlog_filter" method="post" action="adminlog.php?{$SECURE_PARAM_NAME}={$CMS_USER_KEY}">
-          <div class="pageoverflow">
-            <p class="pagetext">{$langfilteruser}</p>
-            <p class="pageinput"><input type="text" name="filteruser" value="{$filteruservalue}"/></p>
+          <div class="c_full">
+            <label>{$langfilteraction}</label>
+            <input type="text" name="filteraction" value="{$filter->action}" class="grid_10"/>
+	    <div class="clearb"></div>
+          </div>
+          <div class="c_full">
+            <label>{lang('item_name_contains')}</label>
+            <input type="text" name="filteritem" value="{$filter->item_name}" class="grid_10"/>
+	    <div class="clearb"></div>
+          </div>
+          <div class="c_full">
+	    <label>{$langfilteruser}:</label>
+            <input type="text" name="filteruser" value="{$filter->user}" class="grid_10"/>
+	    <div class="clearb"></div>
           </div>
           <div class="pageoverflow">
-            <p class="pagetext">{$langfilteraction}</p>
-            <p class="pageinput"><input type="text" name="filteraction" value="{$filteractionvalue}"/></p>
-          </div>
-          <div class="pageoverflow">
-            <p class="pagetext"></p>
             <p class="pageinput">
 	      <input type="submit" name="filterapply" value="{lang('apply')}"/>
-	      <input type="submit" name="filterreset" value="{lang('filterreset')}"/>
+	      <input type="submit" name="filterreset" value="{lang('reset')}"/>
 	    </p>
           </div>
         </form>
     </div>
 
     <div class="c_full">
-      <div class="grid_6">
-        <a id="toggle_filters">{admin_icon icon='view.gif' alt="{$langshowfilters}"} {$langshowfilters}</a>
+      <div class="grid_8" style="padding-top: 8px;">
+        <a id="toggle_filters">{admin_icon icon='view.gif' alt=""} {lang('filter')}</a>
+	{if $filter_applied}<span style="color: green;"><em>({lang('applied')})</em></span>{/if}
         {if isset($downloadlink)}
           <a href="adminlog.php{$urlext}&amp;download=1">{$downloadlink}</a>&nbsp;
           <a href="adminlog.php{$urlext}&amp;download=1">{$langdownload}</a>
@@ -49,10 +58,17 @@ $(document).ready(function(){
         {if $clearicon != ''}
           &nbsp;
           <a href="adminlog.php{$urlext}&amp;clear=true">{$clearicon}</a>
-          <a href="adminlog.php{$urlext}&amp;clear=true" onclick="return confirm('{$sysmain_confirmclearlog|escape:'javascript'}')">{$langclear}</a>
+          <a id="clearlog" href="adminlog.php{$urlext}&amp;clear=true">{$langclear}</a>
         {/if}
       </div>
-      {if isset($pagestring)}<div class="grid_6" style="text-align: right;">{$pagestring}</div>{/if}
+      {if !empty($pagelist)}
+        <div class="grid_4" style="text-align: right;">
+           <form method="post" action="adminlog.php?{$SECURE_PARAM_NAME}={$CMS_USER_KEY}">
+  	     {lang('page')}:&nbsp;
+	     <select id="pagesel" name="page">{html_options options=$pagelist selected=$page}</select>
+	   </form>
+	</div>
+      {/if}
       <div class="clear"></div>
   </div>
 
@@ -77,7 +93,7 @@ $(document).ready(function(){
           <td>{$line.itemid}</td>
           <td>{$line.itemname}</td>
           <td>{$line.action}</td>
-          <td>{$line.date}</td>
+          <td>{$line.date|date_format:'%e %h. %Y %H:%M:%S'}</td>
         </tr>
         {/foreach}
 
@@ -88,31 +104,4 @@ $(document).ready(function(){
   {/if}
 
   </div>
-
-
-  <table>
-  <tr>
-    <td>
-      <div class="pageoptions">
-        <p class="pageoptions">
-	{if isset($downloadlink)}
-          <a href="adminlog.php{$urlext}&amp;download=1">{$downloadlink}</a>
-          <a href="adminlog.php{$urlext}&amp;download=1">{$langdownload}</a>
-        {/if}
-        </p>
-      </div>
-    </td>
-  {if $clearicon!=""}
-    <td>
-      <div class="pageoptions">
-        <p class="pageoptions">
-          <a href="adminlog.php{$urlext}&amp;clear=true">{$clearicon}</a>
-          <a class="pageoptions" href="adminlog.php{$urlext}&amp;clear=true" onclick="return confirm('{$sysmain_confirmclearlog|escape:'javascript'}')">{$langclear}</a>
-        </p>
-      </div>
-    </td></tr>
-  {/if}
-  </table>
-
-
 </div>

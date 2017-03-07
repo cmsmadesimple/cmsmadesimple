@@ -74,35 +74,33 @@ class CmsTemplateCache
 
   public function __destruct()
   {
-    // update the cache;
-    $dirty = FALSE;
-    $t1 = CmsLayoutTemplate::get_loaded_templates();
-    if( is_array($t1) ) {
-		$t2 = array();
-		if( isset($this->_cache[$this->_key]['templates']) ) {
-			$t2 = $this->_cache[$this->_key]['templates'];
-		}
-		$x = array_diff($t1,$t2);
-		if( is_array($x) && count($x) ) {
-			$this->_cache[$this->_key]['templates'] = $t1;
-			$dirty = TRUE;
-		}
-    }
+      // update the cache;
+      if( !CmsApp::get_instance()->is_frontend_request() ) return;
 
-    $t1 = CmsLayoutTemplateType::get_loaded_types();
-    if( is_array($t1) ) {
-		$t2 = array();
-		if( isset($this->_cache[$this->_key]['types']) ) {
-			$t2 = $this->_cache[$this->_key]['types'];
-		}
-		$x = array_diff($t1,$t2);
-		if( is_array($x) && count($x) ) {
-			$this->_cache[$this->_key]['types'] = $t1;
-			$dirty = TRUE;
-		}
-    }
+      $dirty = FALSE;
+      $t1 = CmsLayoutTemplate::get_loaded_templates();
+      if( is_array($t1) ) {
+          $t2 = array();
+          if( isset($this->_cache[$this->_key]['templates']) ) $t2 = $this->_cache[$this->_key]['templates'];
+          $x = array_diff($t1,$t2);
+          if( is_array($x) && count($x) ) {
+              $this->_cache[$this->_key]['templates'] = $t1;
+              $dirty = TRUE;
+          }
+      }
 
-    if( $dirty ) cms_cache_handler::get_instance()->set('template_cache',serialize($this->_cache));
+      $t1 = CmsLayoutTemplateType::get_loaded_types();
+      if( is_array($t1) ) {
+          $t2 = array();
+          if( isset($this->_cache[$this->_key]['types']) ) $t2 = $this->_cache[$this->_key]['types'];
+          $x = array_diff($t1,$t2);
+          if( is_array($x) && count($x) ) {
+              $this->_cache[$this->_key]['types'] = $t1;
+              $dirty = TRUE;
+          }
+      }
+
+      if( $dirty ) cms_cache_handler::get_instance()->set('template_cache',serialize($this->_cache));
   }
 
   public static function clear_cache()

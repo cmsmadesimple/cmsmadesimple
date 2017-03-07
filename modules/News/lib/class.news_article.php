@@ -127,7 +127,7 @@ class news_article
             return $this->_getdata($key);
 
         case 'file_location':
-            $config = cmsms()->GetConfig();
+            $config = \cms_config::get_instance();
             $url = $config['uploads_url'].'/news/id'.$this->id;
             return $url;
 

@@ -4,16 +4,25 @@
   function cms_CMloadUrl(link, lang) {
       $(document).on('click', link, function (e) {
           var url = $(this).attr('href') + '&showtemplate=false&{$actionid}ajax=1';
-          if (typeof lang == 'string' && lang.length > 0) {
-              if (!confirm(lang)) return false;
+
+          var _do_ajax = function() {
+	     $.ajax({
+	        url: url,
+	     }).done(function(){
+ 	        $('#content_area').autoRefresh('refresh').done(function(){
+		    console.debug('after refresh');
+		});
+	     })
 	  }
+
+	  e.preventDefault();
 	  $('#ajax_find').val('');
-	  $.ajax({
-	    url: url,
-	  }).done(function(){
- 	    $('#content_area').autoRefresh('refresh');
-	  })
-          e.preventDefault();
+
+          if (typeof lang == 'string' && lang.length > 0) {
+	      cms_confirm(lang).done(_do_ajax);
+	  } else {
+	     _do_ajax();
+	  }
       });
   }
 
@@ -47,17 +56,18 @@
                         },
 			change: function (event, ui)  {
 			    // goes back to the full list, no options
-			    console.debug('in autocomplete change');
 			    $('#ajax_find').val('');
     		            $('#content_area').autoRefresh('option','url','{$ajax_get_content}');
 			},
                         select: function (event, ui) {
-			    console.debug('in autocomplete select');
                             event.preventDefault();
                             $(this).val(ui.item.label);
                             var url = '{cms_action_url action=ajax_get_content forjs=1}&showtemplate=false&{$actionid}seek=' + ui.item.value;
-			    console.debug('url is '+url);
-			    $('#content_area').autoRefresh('option','url',url);
+			    $('#content_area').autoRefresh('option','url',url).autoRefresh('refresh').done(function(){
+			       $('html,body').animate({
+			          scrollTop: $('#row_'+ui.item.value).offset().top
+			       });
+			    })
                         }
                 });
 	  }
@@ -85,13 +95,12 @@
 
       $('a.steal_lock').on('click',function(e) {
           // we're gonna confirm stealing this lock.
-          var v = confirm('{$mod->Lang('confirm_steal_lock')|escape:'javascript'}');
-          $(this).data('steal_lock',v);
-          if( v ) {
-              var url = $(this).attr('href');
-              url = url + '{$actionid}steal=1';
-              $(this).attr('href',url);
-          }
+	  e.preventDefault();
+	  var self = $(this);
+	  var url = $(this).attr('href')+'{$actionid}steal=1';
+          cms_confirm('{$mod->Lang('confirm_steal_lock')|escape:'javascript'}').done(function(){
+	      window.location.href = url;
+	  });
       });
 
       $('a.page_edit').on('click',function(event) {
@@ -115,15 +124,30 @@
               if( data.status == 'success' ) {
                   if( data.locked ) {
                       // gotta display a message.
-	              alert('{$mod->Lang('error_contentlocked')|escape:'javascript'}');
 		      event.preventDefault();
+	              cms_alert('{$mod->Lang('error_contentlocked')|escape:'javascript'}');
                   }
               }
 	  });
       });
 
+      // filter dialog
+      $('#filter_type').change(function(){
+         var map = {
+	    'DESIGN_ID': '#filter_design',
+	    'TEMPLATE_ID': '#filter_template',
+	    'OWNER_UID': '#filter_owner',
+	    'EDITOR_UID': '#filter_editor'
+	 }
+         var v = $(this).val();
+	 $('.filter_fld').hide();
+	 $(map[v]).show();
+      })
+      $('#filter_type').trigger('change');
       $(document).on('click', '#myoptions', function () {
           $('#useroptions').dialog({
+	      minWidth: '600',
+	      minHeight: 225,
               resizable: false,
               buttons: {
                   '{$mod->Lang('submit')|escape:'javascript'}': function () {
@@ -137,7 +161,13 @@
           });
       });
 
-      $('#ajax_find').keypress(function (e) {
+      // other events
+      $(document).on('change','#selectall,input.multicontent',function() {
+          $('#content_area').autoRefresh('reset');
+      });
+
+      $(document).on('keypress','#ajax_find',function (e) {
+          $('#content_area').autoRefresh('reset');
           if (e.which == 13) e.preventDefault();
       });
 
@@ -151,8 +181,12 @@
           $('tr.selected').css('background', 'yellow');
       });
 
-      $(document).on('click','a#clearlocks',function(){
-         return confirm('{$mod->Lang('confirm_clearlocks')|escape:'javascript'}');
+      $(document).on('click','a#clearlocks',function(ev){
+         var self = $(this);
+	 ev.preventDefault();
+         cms_confirm('{$mod->Lang('confirm_clearlocks')|escape:'javascript'}').done(function(){
+	    window.location = self.attr('href');
+	 });
       });
 
       $(document).on('click','a#ordercontent',function(e){
@@ -175,28 +209,67 @@
               });
           }
           if( have_locks ) {
-              alert('{$mod->Lang('error_action_contentlocked')|escape:'javascript'}');
 	      e.preventDefault();
+              cms_alert('{$mod->Lang('error_action_contentlocked')|escape:'javascript'}');
           }
       })
   });
   //]]>
   </script>
 
-  <div id="useroptions" style="display: none;" title="{$mod->Lang('title_userpageoptions')}">
+	<div id="useroptions" style="display: none;" title="{$mod->Lang('title_userpageoptions')}">
     {form_start action='defaultadmin' id='myoptions_form'}
-      <div class="pageoverflow">
-        <input type="hidden" name="{$actionid}setoptions" value="1"/>
-	<p class="pagetext">{$mod->Lang('prompt_pagelimit')}:</p>
-	<p class="pageinput">
-	  <select name="{$actionid}pagelimit">
-	    {html_options options=$pagelimits selected=$pagelimit}
-	  </select>
-	</p>
-      </div>
+		<div class="c_full cf">
+			<input type="hidden" name="{$actionid}setoptions" value="1"/>
+			<label class="grid_4">{$mod->Lang('prompt_pagelimit')}:</label>
+			<select name="{$actionid}pagelimit" class="grid_7">
+				{html_options options=$pagelimits selected=$pagelimit}
+			</select>
+		</div>
+		{if $can_manage_content}
+			{$type=''}{$expr=''}
+			{$opts=[]}
+			{$opts['']=$mod->Lang('none')}
+			{$opts['DESIGN_ID']=$mod->Lang('prompt_design')}
+			{$opts['TEMPLATE_ID']=$mod->Lang('prompt_template')}
+			{$opts['OWNER_UID']=$mod->Lang('prompt_owner')}
+			{$opts['EDITOR_UID']=$mod->Lang('prompt_editor')}
+			{if $filter}{$type=$filter->type}{$expr=$filter->expr}{/if}
+			<div class="c_full cf">
+				<label class="grid_4">{$mod->Lang('prompt_filter_type')}:</label>
+				<select name="{$actionid}filter_type" class="grid_7" id="filter_type">
+					{html_options options=$opts selected=$type}
+				</select>
+			</div>
+			<div class="c_full cf filter_fld" id="filter_design">
+				<label class="grid_4">{$mod->Lang('prompt_design')}:</label>
+				<select name="{$actionid}filter_design" class="grid_7">
+					{html_options options=$design_list selected=$expr}
+				</select>
+			</div>
+			<div class="c_full cf filter_fld" id="filter_template">
+				<label class="grid_4">{$mod->Lang('prompt_template')}:</label>
+				<select name="{$actionid}filter_template" class="grid_7">
+					{html_options options=$template_list selected=$expr}
+				</select>
+			</div>
+			<div class="c_full cf filter_fld" id="filter_owner">
+				<label class="grid_4">{$mod->Lang('prompt_owner')}:</label>
+				<select name="{$actionid}filter_owner" class="grid_7">
+					{html_options options=$user_list selected=$expr}
+				</select>
+			</div>
+			<div class="c_full cf filter_fld" id="filter_editor">
+				<label class="grid_4">{$mod->Lang('prompt_editor')}:</label>
+				<select name="{$actionid}filter_editor" class="grid_7">
+					{html_options options=$user_list selected=$expr}
+				</select>
+			</div>
+		{/if}
     {form_end}
-  </div>
-  <div class="clearb"></div>
+	</div>
+	<div class="clearb"></div>
+
 {/if}{* ajax *}
 
 

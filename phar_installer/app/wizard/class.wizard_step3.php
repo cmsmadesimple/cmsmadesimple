@@ -14,6 +14,7 @@ class wizard_step3 extends \cms_autoinstaller\wizard_step
     {
         $app = \__appbase\get_app();
         $version_info = $this->get_wizard()->get_data('version_info');
+        $action = $this->get_wizard()->get_data('action');
         $informational = array();
         $tests = array();
 
@@ -34,7 +35,7 @@ class wizard_step3 extends \cms_autoinstaller\wizard_step
 
         // required test... check if most files are writable.
         {
-            $dirs = array('modules','lib','plugins','admin','uploads','doc','scripts','install','tmp');
+            $dirs = array('modules','lib','plugins','admin','uploads','doc','scripts','install','tmp','assets');
             $failed = array();
             $list = glob($app->get_destdir().'/*');
             foreach( $list as $one ) {
@@ -51,10 +52,6 @@ class wizard_step3 extends \cms_autoinstaller\wizard_step
                     }
                 }
             }
-            $obj = new _tests_\boolean_test('dest_writable',!count($failed));
-            $obj->required = true;
-            if( count($failed) ) $obj->fail_msg = \__appbase\lang('fail_pwd_writable2',implode(', ',$failed));
-            $tests[] = $obj;
         }
 
         // required test... tmpfile
@@ -72,6 +69,38 @@ class wizard_step3 extends \cms_autoinstaller\wizard_step
             $obj = new _tests_\boolean_test('config_writable',is_writable($version_info['config_file']));
             $obj->required = true;
             $obj->fail_key = 'fail_config_writable';
+            $tests[] = $obj;
+
+            if( $action == 'upgrade' ) {
+                $dir = $app->get_destdir().'/assets';
+                if( is_dir($dir) ) {
+                    $obj = new _tests_\boolean_test('assets_dir_exists',FALSE);
+                    $obj->fail_key = 'fail_assets_dir';
+                    $obj->fail_msg = 'fail_assets_msg';
+                    $tests[] = $obj;
+                }
+            }
+        } else {
+            $is_dir_empty = function($dir) {
+                $dir = trim($dir);
+                if( !$dir ) return FALSE;  // fail on invalid dir
+                if( !is_dir($dir) ) return TRUE; // pass on dir not existing yet
+                $files = glob($dir.'/*' );
+                if( !count($files) ) return TRUE; // no files yet.
+                if( count($files) > 1 ) return FALSE; // morre than one file
+                // trivial check for index.html
+                $bn = strtolower(basename($files[0]));
+                if( fnmatch('index.htm*',$bn) ) return TRUE;
+                return FALSE;
+            };
+            $res = true;
+            $dest = $app->get_destdir();
+            if( $res && !$is_dir_empty($dest.'/tmp/cache') ) $res = false;
+            if( $res && !$is_dir_empty($dest.'/tmp/templates_c') ) $res = false;
+
+            $obj = new _tests_\boolean_test('tmp_dirs_empty',$res);
+            $obj->required = true;
+            $obj->fail_key = 'fail_tmp_dirs_empty';
             $tests[] = $obj;
         }
 
@@ -94,11 +123,11 @@ class wizard_step3 extends \cms_autoinstaller\wizard_step
         $obj->fail_key = 'fail_func_gzopen';
         $tests[] = $obj;
 
-	// recommended test ... ZipArchive
-	$obj = new _tests_\boolean_test('func_ziparchive',class_exists('ZipArchive'));
-	$obj->required = false;
-	$obj->fail_key = 'fail_func_ziparchive';
-	$tests[] = $obj;
+        // recommended test ... ZipArchive
+        $obj = new _tests_\boolean_test('func_ziparchive',class_exists('ZipArchive'));
+        $obj->required = false;
+        $obj->fail_key = 'fail_func_ziparchive';
+        $tests[] = $obj;
 
         // required test...  magic_quotes_runtime
         $obj = new _tests_\boolean_test('magic_quotes_runtime',!get_magic_quotes_runtime());
@@ -259,7 +288,7 @@ class wizard_step3 extends \cms_autoinstaller\wizard_step
         $tests[] = $obj;
 
         // recommended test... remote_url
-        $obj = new _tests_\boolean_test('remote_url',_tests_\test_remote_file('http://www.cmsmadesimple.org/latest_version.php',3,'cmsmadesimple'));
+        $obj = new _tests_\boolean_test('remote_url',_tests_\test_remote_file('https://www.cmsmadesimple.org/latest_version.php',3,'cmsmadesimple'));
         $obj->fail_key = 'fail_remote_url';
         $obj->warn_key = 'fail_remote_url';
         $tests[] = $obj;
@@ -331,19 +360,8 @@ class wizard_step3 extends \cms_autoinstaller\wizard_step
         $smarty->assign('retry_url',$_SERVER['REQUEST_URI']);
         if( $verbose ) $smarty->assign('information',$informational);
         if( count($tests) )	$smarty->assign('tests',$tests);
-
-        $action = $this->get_wizard()->get_data('action');
-        $tmp = $this->get_wizard()->get_data('version_info');
-        if( $action == 'upgrade' && $tmp ) {
-            // go to step 6 if we're upgrading... no need to enter db credentials or site info
-            $smarty->assign('next_url',$this->get_wizard()->step_url(7));
-        }
-        else if( $action == 'freshen' || $action == 'install' ) {
-            $smarty->assign('next_url',$this->get_wizard()->next_url());
-        }
-        else {
-            throw new \Exception(\__appbase\lang('error_internal',301));
-        }
+        $url = $this->get_wizard()->next_url();
+        $smarty->assign('next_url',$url);
 
         // todo: urls for retry, and enable verbose mode.
         $smarty->display('wizard_step3.tpl');

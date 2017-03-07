@@ -103,13 +103,13 @@ class CmsRoute implements ArrayAccess
 	 * Static convenience function to create a new route.
 	 *
 	 * @param string $term The route string (or regular expression)
-	 * @param string $key1 The first key. Usually a module name.
-	 * @param array  $defaults An array of parameter defaults for this module.  Only applicable when the destination is a module.
-	 * @param bool $is_absolute Flag indicating wether the term is a regular expression or an absolute string.
-	 * @param string $key2 The second key.
-	 * @param string $key3 The second key.
+	 * @param string $key1 The first key. Usually a module name
+	 * @param string $key2 The second key
+	 * @param array  $defaults An array of parameter defaults for this module.  Only applicable when the destination is a module
+	 * @param bool $is_absolute Flag indicating wether the term is a regular expression or an absolute string
+	 * @param string $key3 The second key
 	 */
-	public static function &new_builder($term,$key1,$key2 = '',$defaults = '',$is_absolute = FALSE,$key3 = null)
+	public static function &new_builder($term,$key1,$key2 = '',$defaults = null,$is_absolute = FALSE,$key3 = '')
 	{
 		$obj = new CmsRoute($term,$key1,$defaults,$is_absolute,$key2,$key3);
 		return $obj;

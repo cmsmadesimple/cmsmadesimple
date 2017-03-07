@@ -27,16 +27,26 @@ $(document).ready(function () {
             });
     	}
     });
+    $('#categorylist a.del_cat').click(function(ev){
+       var self = $(this);
+       ev.preventDefault();
+       cms_confirm('{$mod->Lang('confirm_delete_category')|escape:'javascript'}').done(function(){
+          window.location = self.attr('href');
+       });
+    });
 });
 </script>
 
-<div class="pagewarning" style="display: block;">{$mod->Lang('warning_category_dragdrop')}</div>
+{if count($list_categories) > 1}
+  <div class="pagewarning" style="display: block;">{$mod->Lang('warning_category_dragdrop')}</div>
 {/if}
 
-<div class="pagecontainer">
+{/if}
+
+<div class="information">{$mod->lang('info_about_categories')}</div>
+<div class="pageoptions">
 	{cms_action_url action='admin_edit_category' assign='url'}
-	<a href="{$url}" title="{$mod->Lang('create_category')}">{admin_icon icon='newobject.gif'}</a>&nbsp;
-	<a href="{$url}" title="{$mod->Lang('create_category')}">{$mod->Lang('create_category')}</a>
+	<a id="addcategory" href="{$url}" title="{$mod->Lang('create_category')}">{admin_icon icon='newobject.gif'} {$mod->Lang('create_category')}</a>
 </div>
 
 {if isset($list_categories)}
@@ -57,7 +67,7 @@ $(document).ready(function () {
 			<td><a href="{$edit_url}" title="{$mod->Lang('prompt_edit')}">{$category->get_id()}</a></td>
 			<td><a href="{$edit_url}" title="{$mod->Lang('prompt_edit')}">{$category->get_name()}</a></td>
 			<td><a href="{$edit_url}" title="{$mod->Lang('prompt_edit')}">{admin_icon icon='edit.gif'}</a></td>
-			<td>{cms_action_url action='admin_delete_category' cat=$category->get_id() assign='delete_url'}<a href="{$delete_url}" title="{$mod->Lang('prompt_delete')}" onclick="return confirm('{$mod->Lang('confirm_delete_category')|escape:'javascript'}');">{admin_icon icon='delete.gif'}</a></td>
+			<td>{cms_action_url action='admin_delete_category' cat=$category->get_id() assign='delete_url'}<a href="{$delete_url}" class="del_cat" title="{$mod->Lang('prompt_delete')}">{admin_icon icon='delete.gif'}</a></td>
 		</tr>
 	{/foreach}
 	</tbody>

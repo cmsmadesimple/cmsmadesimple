@@ -72,6 +72,7 @@ class wizard_step2 extends \cms_autoinstaller\wizard_step
         $wizard = $this->get_wizard();
         $smarty = \__appbase\smarty();
         $smarty->assign('pwd',$rpwd);
+        $smarty->assign('nofiles',$config['nofiles']);
 
         if( $info ) {
             // its an upgrade
@@ -91,14 +92,34 @@ class wizard_step2 extends \cms_autoinstaller\wizard_step
         }
         else {
             // looks like a new install
-            // double check for
+            // double check for the phar stuff.
             if( is_dir($rpwd.'/app') && is_file($rpwd.'/index.php') && is_dir($rpwd.'/lib') && is_file($rpwd.'/app/class.cms_install.php') ) {
                 // should never happen except if you're working on this project.
                 throw new \Exception(\__appbase\lang('error_invalid_directory'));
             }
-            else {
-                $wizard->clear_data('version_info');
-            }
+
+            $is_dir_empty = function($dir,$phar_url) {
+                if( !$dir ) return FALSE;
+                if( !is_dir($dir) ) return FALSE;
+                $files = glob($dir.'/*');
+                if( !count($files) ) return TRUE;
+                if( count($files) > 3 ) return FALSE;
+                // trivial check for index.html
+                foreach( $files as $file ) {
+                    $bn = strtolower(basename($file));
+                    if( fnmatch('index.htm*',$bn) ) continue; // this is okay
+                    if( fnmatch('readme*.txt',$bn) ) continue; // this is okay
+                    if( $phar_url ) {
+                        $phar_bn = basename( $phar_url );
+                        if( fnmatch( $phar_bn, $bn ) ) continue; // this is okay
+                    }
+                    // found a not-okay file.
+                    return FALSE;
+                }
+                return TRUE;
+            };
+            $smarty->assign('install_empty_dir',$is_dir_empty($rpwd,$app->get_phar()));
+            $wizard->clear_data('version_info');
         }
 
         $smarty->assign('retry_url',$_SERVER['REQUEST_URI']);

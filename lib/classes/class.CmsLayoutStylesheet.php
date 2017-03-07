@@ -1,6 +1,7 @@
 <?php
 #CMS - CMS Made Simple
 #(c)2004-2012 by Ted Kulp (ted@cmsmadesimple.org)
+#(c)2013-2016 by The CMSMS Dev Team
 #Visit our homepage at: http://cmsmadesimple.org
 #
 #This program is free software; you can redistribute it and/or modify
@@ -540,14 +541,14 @@ class CmsLayoutStylesheet
     public function save()
     {
         if( $this->get_id() ) {
-            Events::SendEvent('Core','EditStylesheetPre',array(get_class($this)=>&$this));
+            \CMSMS\HookManager::do_hook('Core::EditStylesheetPre',array(get_class($this)=>&$this));
             $this->_update();
-            Events::SendEvent('Core','EditStylesheetPost',array(get_class($this)=>&$this));
+            \CMSMS\HookManager::do_hook('Core::EditStylesheetPost',array(get_class($this)=>&$this));
             return;
         }
-        Events::SendEvent('Core','AddStylesheetPre',array(get_class($this)=>&$this));
+        \CMSMS\HookManager::do_hook('Core::AddStylesheetPre',array(get_class($this)=>&$this));
         $this->_insert();
-        Events::SendEvent('Core','AddStylesheetPost',array(get_class($this)=>&$this));
+        \CMSMS\HookManager::do_hook('Core::AddStylesheetPost',array(get_class($this)=>&$this));
     }
 
 	/**
@@ -561,7 +562,7 @@ class CmsLayoutStylesheet
     {
         if( !$this->get_id() ) return;
 
-		Events::SendEvent('Core','DeleteStylesheetPre',array(get_class($this)=>&$this));
+        \CMSMS\HookManager::do_hook('Core::DeleteStylesheetPre',array(get_class($this)=>&$this));
         $db = CmsApp::get_instance()->GetDb();
         $query = 'DELETE FROM '.CMS_DB_PREFIX.CmsLayoutCollection::CSSTABLE.' WHERE css_id = ?';
         $dbr = $db->Execute($query,array($this->get_id()));
@@ -569,9 +570,12 @@ class CmsLayoutStylesheet
         $query = 'DELETE FROM '.CMS_DB_PREFIX.self::TABLENAME.' WHERE id = ?';
         $dbr = $db->Execute($query,array($this->get_id()));
 
+        @unlink($this->get_content_filename());
+
         CmsTemplateCache::clear_cache();
         audit($this->get_id(),'CMSMS','Stylesheet '.$this->get_name().' Deleted');
-		Events::SendEvent('Core','DeleteStylesheetPost',array(get_class($this)=>&$this));
+		// Events::SendEvent('Core','DeleteStylesheetPost',array(get_class($this)=>&$this));
+        \CMSMS\HookManager::do_hook('Core::DeleteStylesheetPost',array(get_class($this)=>&$this));
         unset($this->_data['id']);
         $this->_dirty = TRUE;
     }
@@ -638,6 +642,11 @@ class CmsLayoutStylesheet
         $ob = new CmsLayoutStylesheet();
         $row['media_type'] = explode(',',$row['media_type']);;
         $ob->_data = $row;
+        $fn = $ob->get_content_filename();
+        if( is_file($fn) && is_readable($fn) ) {
+            $ob->_data['content'] = file_get_contents($fn);
+            $ob->_data['modified'] = filemtime($fn);
+        }
         if( is_array($design_list) ) $ob->_design_assoc = $design_list;
 
         self::$_css_cache[$row['id']] = $ob;
@@ -787,7 +796,7 @@ class CmsLayoutStylesheet
 		else {
 			$query = 'SELECT id FROM '.CMS_DB_PREFIX.self::TABLENAME.' ORDER BY modified DESC';
 			$ids = $db->GetCol($query);
-			return self::load_bulk($ids);
+			return self::load_bulk($ids,FALSE);
 		}
     }
 
@@ -832,6 +841,30 @@ class CmsLayoutStylesheet
 		throw new CmsLogicException('Could not generate a template name for '.$prototype);
 	}
 
+    /**
+     * Get the filename that will be used to read template contents from file.
+     *
+     * @since 2.2
+     * @return string
+     */
+    public function get_content_filename()
+    {
+        $config = \cms_config::get_instance();
+        $name = munge_string_to_url($this->get_name()).'.'.$this->get_id().'.css';
+        return cms_join_path($config['assets_path'],'css',$name);
+    }
+
+    /**
+     * Does this template have an associated file.
+     *
+     * @since 2.2
+     * @return bool
+     */
+    public function has_content_file()
+    {
+        $fn = $this->get_content_filename();
+        if( is_file($fn) && is_readable($fn) ) return TRUE;
+    }
 } // end of class
 
 #

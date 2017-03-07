@@ -107,13 +107,15 @@ final class CmsLockOperations
    */
   public static function is_locked($type,$oid)
   {
-    try {
-      $lock = CmsLock::load($type,$oid);
-      return $lock['id'];
-    }
-    catch( CmsNoLockException $e ) {
-      return FALSE;
-    }
+      try {
+          $lock = CmsLock::load($type,$oid);
+          sleep(1); // wait for potential asynhronous requests to complete.
+          $lock = CmsLock::load($type,$oid);
+          return $lock['id'];
+      }
+      catch( CmsNoLockException $e ) {
+          return FALSE;
+      }
   }
 
   /**
@@ -157,6 +159,8 @@ final class CmsLockOperations
 
   /**
    * Delete all the locks for the current user
+   *
+   * @param string $type An optional type name.
    */
   public static function delete_for_user($type = null)
   {

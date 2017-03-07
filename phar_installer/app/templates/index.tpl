@@ -74,7 +74,7 @@
         </div>
         <footer class="row footer-section">
             <div class="footer-info">
-                <a href="http://forum.cmsmadesimple.org" target="_blank">{'title_forum'|tr}</a> &bull; <a href="http://docs.cmsmadesimple.org" target="_blank">{'title_docs'|tr}</a> &bull; <a href="http://apidoc.cmsmadesimple.org" target="_blank">{'title_api_docs'|tr}</a>
+                <a href="https://forum.cmsmadesimple.org" target="_blank">{'title_forum'|tr}</a> &bull; <a href="https://docs.cmsmadesimple.org" target="_blank">{'title_docs'|tr}</a> &bull; <a href="http://apidoc.cmsmadesimple.org" target="_blank">{'title_api_docs'|tr}</a>
             </div>
             <small>
                 &copy; Copyright {$smarty.now|date_format:'%Y'} <a href="http://www.cmsmadesimple.org">CMS Made Simple&trade;</a>. All rights reserved{if isset($installer_version)} - {'installer_ver'|tr}:&nbsp;{$installer_version}{/if}{if isset($build_time)} - {'build_date'|tr}:&nbsp;{$build_time|date_format:'%x %X'}{/if}

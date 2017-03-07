@@ -24,6 +24,8 @@
  * @license GPL
  */
 
+use \CMSMS\internal\global_cache;
+
 /**
  * A class for working with site preferences
  *
@@ -37,11 +39,6 @@ final class cms_siteprefs
 	/**
 	 * @ignore
 	 */
-	private static $_prefs;
-
-	/**
-	 * @ignore
-	 */
 	private function __construct() {}
 
     /**
@@ -51,10 +48,9 @@ final class cms_siteprefs
     public static function setup()
     {
         $obj = new \CMSMS\internal\global_cachable(__CLASS__,function(){
-                self::_read();
-                return self::$_prefs;
+                return self::_read();
             });
-        \CMSMS\internal\global_cache::add_cachable($obj);
+        global_cache::add_cachable($obj);
     }
 
 	/**
@@ -63,37 +59,19 @@ final class cms_siteprefs
 	 */
 	private static function _read()
 	{
-		if( is_array(self::$_prefs) ) return;
 		$db = CmsApp::get_instance()->GetDb();
 
 		if( !$db ) return;
 		$query = 'SELECT sitepref_name,sitepref_value FROM '.CMS_DB_PREFIX.'siteprefs';
 		$dbr = $db->GetArray($query);
 		if( is_array($dbr) ) {
-			self::$_prefs = array();
+			$_prefs = array();
 			for( $i = 0, $n = count($dbr); $i < $n; $i++ ) {
 				$row = $dbr[$i];
-				self::$_prefs[$row['sitepref_name']] = $row['sitepref_value'];
+				$_prefs[$row['sitepref_name']] = $row['sitepref_value'];
 			}
+            return $_prefs;
 		}
-	}
-
-	/**
-	 * @ignore
-     * @internal
-	 */
-    private static function _restore()
-    {
-        self::$_prefs = \CMSMS\internal\global_cache::get(__CLASS__);
-    }
-
-	/**
-	 * @ignore
-	 */
-	private static function _reset()
-	{
-		self::$_prefs = null;
-        \CMSMS\internal\global_cache::clear(__CLASS__);
 	}
 
 	/**
@@ -105,8 +83,8 @@ final class cms_siteprefs
 	 */
 	public static function get($key,$dflt = '')
 	{
-        self::_restore();
-		if( isset(self::$_prefs[$key]) )  return self::$_prefs[$key];
+        $prefs = global_cache::get(__CLASS__);
+		if( isset($prefs[$key]) )  return $prefs[$key];
 		return $dflt;
 	}
 
@@ -119,8 +97,8 @@ final class cms_siteprefs
 	 */
 	public static function exists($key)
 	{
-        self::_restore();
-		if( is_array(self::$_prefs) && in_array($key,array_keys(self::$_prefs)) ) return TRUE;
+        $prefs = global_cache::get(__CLASS__);
+		if( is_array($prefs) && in_array($key,array_keys($prefs)) ) return TRUE;
 		return FALSE;
 	}
 
@@ -142,8 +120,7 @@ final class cms_siteprefs
 			$query = 'UPDATE '.CMS_DB_PREFIX.'siteprefs SET sitepref_value = ? WHERE sitepref_name = ?';
 			$dbr = $db->Execute($query,array($value,$key));
 		}
-		self::$_prefs[$key] = $value;
-        \CMSMS\internal\global_cache::clear(__CLASS__);
+        global_cache::clear(__CLASS__);
 	}
 
 
@@ -159,10 +136,10 @@ final class cms_siteprefs
 		if( $like ) {
 			$query = 'DELETE FROM '.CMS_DB_PREFIX.'siteprefs WHERE sitepref_name LIKE ?';
 			$key .= '%';
-		}
+		};
 		$db = CmsApp::get_instance()->GetDb();
-		$db->Execute($query,array($key));
-		self::_reset();
+        	$db->Execute($query,array($key));
+        	global_cache::clear(__CLASS__);
 	}
 
 	/**
@@ -184,5 +161,3 @@ final class cms_siteprefs
 
 #
 # EOF
-#
-?>

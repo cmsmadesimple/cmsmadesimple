@@ -54,7 +54,7 @@
                 <label>{'prompt_dbuser'|tr}</label>
             </div>
             <div class="eight-col">
-                <input class="form-field required full-width" type="text" name="dbuser" value="{$config.dbuser}" required="required" />
+                <input class="form-field required full-width" type="text" name="dbuser" value="{$config.dbuser}" required="required" autocomplete="off"/>
                 <div class="corner red">
                     <i class="icon-asterisk"></i>
                 </div>
@@ -65,7 +65,10 @@
                 <label>{'prompt_dbpass'|tr}</label>
             </div>
             <div class="eight-col">
-                <input class="form-field full-width" type="password" name="dbpass" value="" autocomplete="off" />
+                <input class="form-field required full-width" type="password" name="dbpass" value="" autocomplete="false" required="required"/>
+                <div class="corner red">
+                    <i class="icon-asterisk"></i>
+                </div>
             </div>
         </div>
         {if $verbose}
@@ -120,7 +123,7 @@
     <div class="row form-row">
         <label>{'prompt_installcontent'|tr}</label>
         <select class="form-field" name="samplecontent">
-            {html_options options=$yesno selected=$samplecontent}
+            {html_options options=$yesno selected=$config.samplecontent}
         </select>
     </div>
     {/if}

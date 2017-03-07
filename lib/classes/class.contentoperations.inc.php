@@ -70,11 +70,6 @@ class ContentOperations
 	private $_ownedpages;
 
 	/**
-	 * @ignore
-	 */
-	private $_last_modified;
-
-	/**
 	 * Return a reference to the only allowed instance of this singleton object
 	 *
 	 * @return ContentOperations
@@ -85,6 +80,40 @@ class ContentOperations
 		return self::$_instance;
 	}
 
+
+    /**
+     * @ignore
+     */
+    public static function setup_cache()
+    {
+        // two caches, the flat list, and the tree
+        $obj = new \CMSMS\internal\global_cachable('content_flatlist',
+                                                   function(){
+                                                       $query = 'SELECT content_id,parent_id,item_order,content_alias,active FROM '.CMS_DB_PREFIX.'content ORDER BY hierarchy ASC';
+                                                       $db = \CmsApp::get_instance()->GetDb();
+                                                       return $db->GetArray($query);
+                                                   });
+        \CMSMS\internal\global_cache::add_cachable($obj);
+
+        // two caches, the flat list, and the tree
+        $obj = new \CMSMS\internal\global_cachable('content_tree',
+                                                   function(){
+                                                       $flatlist = \CMSMS\internal\global_cache::get('content_flatlist');
+
+                                                       // todo, embed this herer
+                                                       $tree = \cms_tree_operations::load_from_list($flatlist);
+                                                       return $tree;
+                                                   });
+        \CMSMS\internal\global_cache::add_cachable($obj);
+
+        // two caches, the flat list, and the tree
+        $obj = new \CMSMS\internal\global_cachable('content_quicklist',
+                                                   function(){
+                                                       $tree = \CMSMS\internal\global_cache::get('content_tree');
+                                                       return $tree->getFlatList();
+                                                   });
+        \CMSMS\internal\global_cache::add_cachable($obj);
+    }
 
 	/**
 	 * Return a content object for the currently requested page.
@@ -210,38 +239,13 @@ class ContentOperations
 	{
 		if( cms_content_cache::content_exists($alias) ) return cms_content_cache::get_content($alias);
 
-		$db = CmsApp::get_instance()->GetDb();
-
-		$row = '';
-		if (is_numeric($alias) && strpos($alias,'.') === FALSE && strpos($alias,',') === FALSE) {
-			$query = "SELECT * FROM ".CMS_DB_PREFIX."content WHERE content_id = ?";
-			if ($only_active == true) $query .= " AND active = 1";
-			$row = $db->GetRow($query, array($alias));
-		}
-		else {
-			$query = "SELECT * FROM ".CMS_DB_PREFIX."content WHERE content_alias = ?";
-			if ($only_active == true) $query .= " AND active = 1";
-			$row = $db->GetRow($query, array($alias));
-		}
-
-		if ($row) {
-			// Make sure the type exists.  If so, instantiate and load
-			if (in_array($row['type'], array_keys($this->ListContentTypes()))) {
-				$classtype = strtolower($row['type']);
-				$contentobj = $this->CreateNewContent($classtype);
-				$contentobj->LoadFromData($row, TRUE);
-				cms_content_cache::add_content($row['content_id'],$row['content_alias'],$contentobj);
-				return $contentobj;
-			}
-			else {
-				$tmp = NULL;
-				return $tmp;
-			}
-		}
-		else {
-			$tmp = NULL;
-			return $tmp;
-		}
+        $hm = Cmsapp::get_instance()->GetHierarchyManager();
+        $node = $hm->sureGetNodeByAlias($alias);
+        $out = null;
+        if( !$node ) return $out;
+        if( $only_active && !$node->get_tag('active') ) return $out;
+        $out = $this->LoadContentFromId($node->get_tag('id'));
+        return $out;
 	}
 
 
@@ -371,7 +375,7 @@ class ContentOperations
 	function ListContentTypes($byclassname = false,$allowed = false,$system = FALSE)
 	{
 		$disallowed_a = array();
-		$tmp = get_site_preference('disallowed_contenttypes');
+		$tmp = cms_siteprefs::get('disallowed_contenttypes');
 		if( $tmp ) $disallowed_a = explode(',',$tmp);
 
 		$this->_get_content_types();
@@ -467,7 +471,7 @@ class ContentOperations
 	{
 		// load some data about all pages into memory... and convert into a hash.
 		$db = CmsApp::get_instance()->GetDb();
-		$sql = 'SELECT content_id, parent_id, item_order, content_alias AS alias, hierarchy, id_hierarchy, hierarchy_path FROM '.cms_db_prefix().'content ORDER BY hierarchy';
+		$sql = 'SELECT content_id, parent_id, item_order, content_alias AS alias, hierarchy, id_hierarchy, hierarchy_path FROM '.CMS_DB_PREFIX.'content ORDER BY hierarchy';
 		$list = $db->GetArray($sql);
 		if( !count($list) ) {
 			// nothing to do, get outa here.
@@ -481,7 +485,7 @@ class ContentOperations
 
 		// would be nice to use a transaction here.
                 static $_n;
-		$usql = "UPDATE ".cms_db_prefix()."content SET hierarchy = ?, id_hierarchy = ?, hierarchy_path = ? WHERE content_id = ?";
+		$usql = "UPDATE ".CMS_DB_PREFIX."content SET hierarchy = ?, id_hierarchy = ?, hierarchy_path = ? WHERE content_id = ?";
 		foreach( $hash as $content_id => $row ) {
 			$changed = $this->_set_hierarchy_position($content_id,$hash);
 			if( is_array($changed) ) {
@@ -489,10 +493,7 @@ class ContentOperations
 			}
 		}
 
-		// clear the content cache again.
-		cms_content_cache::clear();
-                cms_cache_handler::get_instance()->erase('contentcache');
-		//CmsApp::get_instance()->clear_cached_files();
+        $this->SetContentModified();
 	}
 
 
@@ -517,6 +518,10 @@ class ContentOperations
 	{
         \CMSMS\internal\global_cache::clear('latest_content_modification');
         \CMSMS\internal\global_cache::clear('default_content');
+        \CMSMS\internal\global_cache::clear('content_flatlist');
+        \CMSMS\internal\global_cache::clear('content_tree');
+        \CMSMS\internal\global_cache::clear('content_quicklist');
+		cms_content_cache::clear();
 	}
 
 	/**
@@ -524,37 +529,11 @@ class ContentOperations
 	 *
 	 * @param bool $loadcontent If false, only create the nodes in the tree, don't load the content objects
 	 * @return cms_content_tree The cached tree of content
+     * @deprecated
 	 */
 	function &GetAllContentAsHierarchy($loadcontent = false)
 	{
-		debug_buffer('', 'starting tree');
-
-		$db = CmsApp::get_instance()->GetDb();;
-		$tree = null;
-		$loadedcache = false;
-		if( ($tmp = cms_cache_handler::get_instance()->get('contentcache')) ) {
-			list($mtime,$data) = unserialize($tmp);
-			if( $mtime > $this->GetLastContentModification() ) {
-				if( get_class($data) == 'cms_content_tree' ) {
-					$tree = $data;
-					$loadedcache = true;
-				}
-			}
-		}
-
-		if (!$loadedcache) {
-			debug_buffer('', 'Start loading content tree from database and serializing');
-			$query = 'SELECT content_id,parent_id,item_order,content_alias FROM '.CMS_DB_PREFIX.'content ORDER BY hierarchy ASC';
-			$nodes = $db->GetArray($query);
-			$tree = cms_tree_operations::load_from_list($nodes);
-			$data = serialize(array(time(),$tree));
-			cms_cache_handler::get_instance()->set('contentcache',$data);
-			debug_buffer('', 'End content loading tree from database and serializing');
-		}
-
-		if( $loadcontent ) $this->LoadChildren(-1, true, true);
-
-		debug_buffer('', 'ending tree');
+        $tree = \CMSMS\internal\global_cache::get('content_tree');
 		return $tree;
 	}
 
@@ -666,19 +645,9 @@ class ContentOperations
 		$contentrows = null;
 		if( is_array($explicit_ids) && count($explicit_ids) ) {
 			$loaded_ids = cms_content_cache::get_loaded_page_ids();
-			if( is_array($loaded_ids) && count($loaded_ids) ) {
-                $explicit_ids = array_diff($explicit_ids,$loaded_ids);
-                /*
-				$tmp = array();
-				foreach( $explicit_ids as $one ) {
-					if( in_array($one,$loaded_ids) ) continue;
-					$tmp[] = $one;
-				}
-				if( count($tmp) == 0 ) return;
-				$explicit_ids = $tmp;
-                */
-			}
-
+			if( is_array($loaded_ids) && count($loaded_ids) ) $explicit_ids = array_diff($explicit_ids,$loaded_ids);
+        }
+		if( is_array($explicit_ids) && count($explicit_ids) ) {
 			$expr = 'content_id IN ('.implode(',',$explicit_ids).')';
 			if( !$all ) $expr .= ' AND active = 1';
 
@@ -725,25 +694,25 @@ class ContentOperations
 
 		// build the content objects
 		for( $i = 0, $n = count($contentrows); $i < $n; $i++ ) {
-		    $row = $contentrows[$i];
+		    $row =& $contentrows[$i];
 		    $id = $row['content_id'];
 
 		    if (!in_array($row['type'], array_keys($this->ListContentTypes()))) continue;
+            $contentobj = new Content();
 		    $contentobj = $this->CreateNewContent($row['type']);
 
 		    if ($contentobj) {
 				$contentobj->LoadFromData($row, false);
 				if( $loadprops && $contentprops && isset($contentprops[$id]) ) {
 					// load the properties from local cache.
-					$props = $contentprops[$id];
-					foreach( $props as $oneprop ) {
+					foreach( $contentprops[$id] as $oneprop ) {
 						$contentobj->SetPropertyValueNoLoad($oneprop['prop_name'],$oneprop['content']);
 					}
+                    unset($contentprops[$id]);
 				}
 
 				// cache the content objects
 				cms_content_cache::add_content($id,$contentobj->Alias(),$contentobj);
-				$contentobj = null;
 				unset($contentobj);
 			}
 		}
@@ -807,37 +776,41 @@ class ContentOperations
 	 * in the admin and various modules.  If $current or $parent variables are passed, care is taken
 	 * to make sure that children which could cause a loop are hidden, in cases of when you're creating
 	 * a dropdown for changing a content object's parent.
+     *
+     * This method was rewritten for 2.0 to use the jquery hierselector plugin to better accommodate larger websites.
+     *
+     * Since many parameters are now ignored, A new method needs to be writtent o replace this archaic method...
+     * so consider this method to be deprecateed.
 	 *
-	 * @param string $current The currently selected content object.  If none is given, we show all items.
-	 * @param string $parent The parent of the currently selected content object. If none is given, we show all items.
-	 * @param string $name The html name of the dropdown
+     * @deprecated
+	 * @param string $current The currently selected content object.  If none is given, we show all items (ignored since 2.0).
+	 * @param string $value The id of the currently selected content object.
+	 * @param string $name The html name of the dropdown.
 	 * @param bool $allowcurrent Overrides the logic if $current and/or $parent are passed. Defaults to false.
-	 * @param bool $use_perms If true, checks authorship permissions on pages and only shows those the current
-	 *                user has access to.
-	 * @param bool $ignore_current Ignores the value of $current totally by not marking any items as invalid.
-	 * @param bool $allow_all If true, show all items, even if the content object
-	 *                           doesn't have a valid link. Defaults to false.
-	 * @param bool $use_name if true use Name() else use MenuText() Defaults to using the system preference.
-	 * @return string The html dropdown of the hierarchy
+	 * @param bool $use_perms If true, checks authorship permissions on pages and only shows those the current user has authorship of (can edit)
+	 * @param bool $ignore_current (ignored as of 2.0)
+         (Before 2.2 this parameter was called ignore_current and
+	 * @param bool $allow_all If true, show all items, even if the content object doesn't have a valid link. Defaults to false.
+     * @param bool $for_child If true, assume that we want to add a new child and obey the WantsChildren flag of each content page. (new in 2.2).
+	 * @return string The html dropdown of the hierarchy.
 	 */
-	function CreateHierarchyDropdown($current = '', $parent = '', $name = 'parent_id', $allowcurrent = 0,
-									 $use_perms = 0, $ignore_current = 0, $allow_all = false, $use_name = null)
+	function CreateHierarchyDropdown($current = '', $value = '', $name = 'parent_id', $allowcurrent = 0,
+									 $use_perms = 0, $ignore_current = 0, $allow_all = false, $for_child = false )
 	{
 		static $count = 0;
 		$count++;
 		$id = 'cms_hierdropdown'.$count;
-		$value = $parent;
+        $value = (int) $value;
+        $uid = get_userid(FALSE);
 
 		$out = "<input type=\"text\" title=\"".lang('title_hierselect')."\" name=\"{$name}\" id=\"{$id}\" class=\"cms_hierdropdown\" value=\"{$value}\" size=\"50\" maxlength=\"50\"/>";
 		$opts = array();
-		//$opts['value'] = $parent;
-		$opts['current'] = $current;
-		$opts['parent'] = $parent;
+		$opts['current'] = $value;
 		$opts['allowcurrent'] = ($allowcurrent)?'true':'false';
-		$opts['use_perms'] = ($use_perms)?'true':'false';
-		$opts['ignore_current'] = ($ignore_current)?'true':'false';
 		$opts['allow_all'] = ($allow_all)?'true':'false';
-		$opts['use_name'] = ($use_name)?'true':'false';
+		$opts['use_perms'] = ($use_perms)?'true':'false';
+        $opts['for_child'] = ($for_child)?'true':'false';
+        $opts['use_simple'] = !(check_permission($uid,'Manage All Content') || check_permission($uid,'Modify Any Page'));
 		$str = '{';
 		foreach($opts as $key => $val) {
 			if( $val == '' ) continue;
@@ -847,88 +820,6 @@ class ContentOperations
 		$out .= "<script type=\"text/javascript\">$(function(){ $('#$id').hierselector($str) });</script>";
 		return $out;
 	}
-// 	function CreateHierarchyDropdown($current = '', $parent = '', $name = 'parent_id', $allowcurrent = 0,
-// 									 $use_perms = 0, $ignore_current = 0, $allow_all = false, $use_name = null)
-// 	{
-// 		$result = '';
-// 		$userid = -1;
-
-// 		if( is_null($use_name) ) {
-// 			$use_name = get_site_preference('listcontent_showtitle',true);
-// 		}
-
-// 		$allcontent = $this->GetAllContent(false);
-// 		if ($allcontent !== FALSE && count($allcontent) > 0) {
-// 			if( $use_perms ) {
-// 			    $userid = get_userid();
-// 			}
-// 			if( ($userid > 0 && check_permission($userid,'Manage All Content')) ||
-// 			    $userid == -1 || $parent == -1 ) {
-// 			    $result .= '<option value="-1">'.lang('none').'</option>';
-// 			}
-// 			$curhierarchy = '';
-
-// 			foreach ($allcontent as $one) {
-// 				if( !is_object($one) ) continue;
-// 				$value = $one->Id();
-// 				if ($value == $current) {
-// 					// Grab hierarchy just in case we need to check children
-// 					// (which will always be after)
-// 					$curhierarchy = $one->Hierarchy();
-
-// 					if( !$allowcurrent ) {
-// 						// Then jump out.  We don't want ourselves in the list.
-// 						continue;
-// 					}
-// 					$value = -1;
-// 			    }
-
-// 				// If it doesn't have a valid link...
-// 				// don't include it.
-// 				if( !$allow_all && !$one->HasUsableLink() ) {
-// 					continue;
-// 			    }
-
-// 				// If it's a child of the current, we don't want to show it as it
-// 				// could cause a deadlock.
-// 				if (!$allowcurrent && $curhierarchy != '' &&
-// 					strstr($one->Hierarchy() . '.', $curhierarchy . '.') == $one->Hierarchy() . '.') {
-// 					continue;
-// 			    }
-
-// 				// If we have a valid userid... only include pages where this user
-// 				// has write access... or is an admin user... or has appropriate permission.
-// 				if( $userid > 0 && $one->Id() != $parent) {
-// 					if( !check_permission($userid,'Manage All Content') && !check_authorship($userid,$one->Id()) ) {
-// 						continue;
-// 					}
-// 			    }
-
-// 				// Don't include content types that do not want children either...
-// 				if (!$one->WantsChildren()) continue;
-// 			    $result .= '<option value="'.$value.'"';
-
-// 			    // Select current parent if it exists
-// 			    if ($one->Id() == $parent) {
-// 					$result .= ' selected="selected"';
-// 				}
-// 			    $txt=$use_name?$one->Name():$one->MenuText();
-// 			    if( ($value == -1) && ($ignore_current == 0) ) {
-// 					$result .= '>'.$one->Hierarchy().'. - '.$txt.' ('.lang('invalid').')</option>';
-// 				}
-// 			    else {
-// 					$result .= '>'.$one->Hierarchy().'. - '.$txt.'</option>';
-// 				}
-// 			}
-// 		}
-
-// 		if( !empty($result) ) {
-// 			$result = '<select name="'.$name.'" id="'.$name.'">'.$result.'</select>';
-// 		}
-
-// 		return $result;
-// 	}
-
 
 	/**
 	 * Gets the content id of the page marked as default
@@ -1151,7 +1042,7 @@ class ContentOperations
 	 * @since 2.0
 	 * @author Robert Campbell <calguy1000@hotmail.com>
 	 * @param int $userid The userid
-	 * @return array Array of page id's
+	 * @return int[] Array of page id's
 	 */
 	public function GetPageAccessForUser($userid)
 	{
@@ -1234,14 +1125,8 @@ class ContentOperations
 	 */
 	public function quickfind_node_by_id($id)
 	{
-		if( !is_array($this->_quickfind) ) {
-			$hm = CmsApp::get_instance()->GetHierarchyManager();
-			$tmp = $hm->getFlatList();
-			$this->_quickfind = array();
-			if( is_array($tmp) && count($tmp) ) $this->_quickfind = $tmp;
-		}
-
-		if( isset($this->_quickfind[$id]) ) return $this->_quickfind[$id];
+        $list = \CMSMS\internal\global_cache::get('content_quicklist');
+		if( isset($list[$id]) ) return $list[$id];
 	}
 }
 

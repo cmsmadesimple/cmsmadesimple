@@ -19,7 +19,7 @@ class wizard_step1 extends \cms_autoinstaller\wizard_step
 
         if( isset($_POST['destdir']) ) {
             $app = \__appbase\get_app();
-            $app->set_custom_destdir($_POST['destdir']);
+            $app->set_destdir($_POST['destdir']);
         }
 
         $verbose = 0;
@@ -64,6 +64,8 @@ class wizard_step1 extends \cms_autoinstaller\wizard_step
                 if( is_dir("$dir/cache") ) return FALSE;
                 break;
 
+            case 'phar_installer':
+            case 'doc':
             case 'build':
             case 'admin':
             case 'module_custom':
@@ -71,7 +73,7 @@ class wizard_step1 extends \cms_autoinstaller\wizard_step
                 return FALSE;
 
             case 'lib':
-                if( is_dir("$dir/adodb_lite") ) return FALSE;
+                if( is_dir("$dir/smarty") ) return FALSE;
                 break;
 
             case 'app':
@@ -91,7 +93,8 @@ class wizard_step1 extends \cms_autoinstaller\wizard_step
 
         $_get_annotation = function($dir) {
             if( !is_dir($dir) || !is_readable($dir) ) return;
-            if( is_file("$dir/version.php" ) ) {
+            $bn = basename($dir);
+            if( $bn != 'lib' && is_file("$dir/version.php" ) ) {
                 @include("$dir/version.php"); // defines in this file can throw notices
                 if( isset($CMS_VERSION) ) return "CMSMS $CMS_VERSION";
             } else if( is_file("$dir/lib/version.php") ) {
@@ -133,6 +136,7 @@ class wizard_step1 extends \cms_autoinstaller\wizard_step
         if( $_is_valid_dir($parent) ) $out[$parent] = $parent;
         $tmp = $_find_dirs($parent);
         if( count($tmp) ) $out = array_merge($out,$tmp);
+        asort($out);
         return $out;
     }
 
@@ -148,6 +152,9 @@ class wizard_step1 extends \cms_autoinstaller\wizard_step
             $dirlist = $this->get_valid_install_dirs();
             if( !$dirlist ) throw new \Exception('No possible installation directories found.  This could be a permissions issue');
             $smarty->assign('dirlist',$dirlist);
+
+            $custom_destdir = $app->has_custom_destdir();
+            $smarty->assign('custom_destdir',$custom_destdir);
             $smarty->assign('destdir',$app->get_destdir());
         }
         $smarty->assign('verbose',$this->get_wizard()->get_data('verbose',0));

@@ -29,16 +29,16 @@ if( isset($params['cancel']) ) {
 
 $design = null;
 try {
-  if( !isset($params['design']) || $params['design'] == '' ) {
-    $design= new CmsLayoutCollection;
-    $design->set_name('New Design');
-  }
-  else {
-    $design = CmsLayoutCollection::load($params['design']);
-  }
+    if( !isset($params['design']) || $params['design'] == '' ) {
+        $design= new CmsLayoutCollection;
+        $design->set_name('New Design');
+    }
+    else {
+        $design = CmsLayoutCollection::load($params['design']);
+    }
 
 	try {
-		if( isset($params['submit']) || isset($params['apply']) ) {
+		if( isset($params['submit']) || isset($params['apply']) || (isset($params['ajax']) && $params['ajax'] == '1') ) {
 			$design->set_name($params['name']);
 			$design->set_description($params['description']);
 			$tpl_assoc = array();
@@ -63,11 +63,19 @@ try {
 		echo $this->ShowErrors($e->GetMessage());
 	}
 
-  $templates = CmsLayoutTemplate::get_editable_templates(get_userid());
-  if( count($templates) ) $smarty->assign('all_templates',$templates);
+    $templates = CmsLayoutTemplate::get_editable_templates(get_userid());
+    if( count($templates) ) {
+        usort($templates,function($a,$b) {
+                return strcasecmp($a->get_name(),$b->get_name());
+            });
+        $smarty->assign('all_templates',$templates);
+    }
 
 	$stylesheets = CmsLayoutStylesheet::get_all();
 	if( is_array($stylesheets) && count($stylesheets) ) {
+        usort($stylesheets,function($a,$b){
+                return strcasecmp($a->get_name(),$b->get_name());
+            });
 		$out = array();
 		$out2 = array();
 		for( $i = 0; $i < count($stylesheets); $i++ ) {
@@ -78,8 +86,10 @@ try {
 		$smarty->assign('all_stylesheets',$out2);
 	}
 
-  $smarty->assign('design',$design);
-  echo $this->ProcessTemplate('admin_edit_design.tpl');
+    $smarty->assign('manage_stylesheets',$this->CheckPermission('Manage Stylesheets'));
+    $smarty->assign('manage_templates',$this->CheckPermission('Modify Templates'));
+    $smarty->assign('design',$design);
+    echo $this->ProcessTemplate('admin_edit_design.tpl');
 }
 catch( CmsException $e ) {
   $this->SetError($e->GetMessage());

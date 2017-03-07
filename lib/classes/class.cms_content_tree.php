@@ -60,11 +60,12 @@ class cms_content_tree extends cms_tree
 	 * @param string $tag_name The tag name to search for
 	 * @param mixed  $value The tag value to search for
 	 * @param bool $case_insensitive Wether the value should be treated as case insensitive.
+     * @param bool $usequick Optionally, when searching by id... uise the quickfind method if possible.
 	 * @return cms_tree
 	 */
-	public function &find_by_tag($tag_name,$value,$case_insensitive = FALSE)
+	public function &find_by_tag($tag_name,$value,$case_insensitive = FALSE,$usequick = TRUE)
 	{
-		if( $tag_name == 'id' && $case_insensitive == FALSE && ($this->get_parent() == null || $this->get_tag('id') == '') ) {
+		if( $usequick && $tag_name == 'id' && $case_insensitive == FALSE && ($this->get_parent() == null || $this->get_tag('id') == '') ) {
 			$res = ContentOperations::get_instance()->quickfind_node_by_id($value);
 			return $res;
 		}
@@ -359,7 +360,7 @@ class cms_content_tree extends cms_tree
         if( $this->has_children() ) {
             $children = $this->get_children();
             for( $i = 0, $n = count($children); $i < $n; $i++ ) {
-                $result[$children[$i]->get_tag('id')] = $children[$i];
+                $result[$children[$i]->get_tag('id')] =& $children[$i];
                 if( $children[$i]->has_children() ) {
                     $tmp = $children[$i]->_buildFlatList();
                     foreach( $tmp as $key => $node ) {

@@ -1,0 +1,597 @@
+@font-face {
+	font-family: 'cmsms-filepicker';
+	src:  url('../fonts/cmsms-filepicker.eot');
+	src:  url('../fonts/cmsms-filepicker.eot?#iefix') format('embedded-opentype'),
+		   url('../fonts/cmsms-filepicker.ttf') format('truetype'),
+		   url('../fonts/cmsms-filepicker.woff') format('woff'),
+		   url('../fonts/cmsms-filepicker.svg') format('svg');
+	font-weight: normal;
+	font-style: normal;
+}
+
+[class^="cmsms-fp-"], [class*=" cmsms-fp-"] {
+  font-family: 'cmsms-filepicker' !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.cmsms-fp-music:before {
+	content: "\e600";
+}
+.cmsms-fp-th:before {
+	content: "\e601";
+}
+.cmsms-fp-th-list:before {
+	content: "\e602";
+}
+.cmsms-fp-file:before {
+	content: "\e603";
+}
+.cmsms-fp-folder-open:before {
+	content: "\e605";
+}
+.cmsms-fp-folder-close:before {
+	content: "\e606";
+}
+.cmsms-fp-facetime-video:before {
+	content: "\e607";
+}
+.cmsms-fp-picture:before {
+	content: "\e608";
+}
+.cmsms-fp-reorder:before {
+	content: "\e609";
+}
+.cmsms-fp-film:before {
+	content: "\e60a";
+}
+.cmsms-fp-zip:before {
+	content: "\e604";
+}
+.cmsms-fp-file-content:before {
+	content: "\e60b";
+}
+.cmsms-fp-plus:before {
+   content: "\e60c";
+}
+.cmsms-fp-close:before {
+   content: "\e60d";
+}
+.cmsms-fp-upload:before {
+  content: "\e60e";
+}
+
+body.cmsms-filepicker {
+	margin: 0;
+	padding: 0;
+	background-color: #f0f0f0;
+	color: #444;
+	font-family: sans-serif;
+	font-size: 14px;
+}
+
+body.dragging {
+    background-color: lightcyan;
+}
+
+a img,
+img {
+	border: none;
+	text-decoration: none;
+}
+
+.visuallyhidden {
+	border: 0;
+	clip: rect(0 0 0 0);
+	height: 1px;
+	margin: -1px;
+	overflow: hidden;
+	padding: 0;
+	position: absolute;
+	width: 1px;
+}
+
+.filepicker-icon {
+	margin-right: 10px;
+}
+
+.filepicker-icon-stack {
+	position:relative;
+	display:inline-block;
+	width:2em;
+	height:2em;
+	line-height:2em;
+	vertical-align:middle;
+}
+.filepicker-icon-stack-1x, .filepicker-icon-stack-2x, .filepicker-icon-stack-text {
+	position:absolute;
+	left:0;
+	width:100%;
+	text-align:center;
+}
+.filepicker-icon-stack-1x, .filepicker-icon-stack-text {
+	line-height:inherit;
+}
+.filepicker-icon-stack-2x {
+	font-size:2em;
+}
+.filepicker-button.make-dir .filepicker-icon-stack {
+	width:1em;
+	height:18px;
+	line-height:18px;
+}
+.filepicker-button.make-dir .filepicker-icon-stack-1x {
+   left:-1px;
+   top:-1px;
+   width:100%;
+   font-size:18px;
+}
+.filepicker-button.make-dir .cmsms-fp-folder-plus {
+	left:1px;
+   top:-1px;
+	color:#FFF;
+	text-shadow:none;
+	font-size:14px;
+   font-weight:bold;
+}
+
+.cmsms-filepicker .btn-file {
+	position: relative;
+	overflow: hidden;
+}
+
+.cmsms-filepicker .btn-file input[type=file] {
+	position: absolute;
+	top: 0;
+	right: 0;
+	min-width: 100%;
+	min-height: 100%;
+	font-size: 100px;
+	text-align: right;
+	filter: alpha(opacity=0);
+	opacity: 0;
+	outline: none;
+	background: white;
+	cursor: inherit;
+	display: block;
+}
+
+.cmsms-fp-upload {
+	margin-right:4px;
+   font-size:18px;
+}
+
+
+.filepicker-navbar {
+	position: fixed;
+	width: 100%;
+	z-index: 99;
+	-webkit-box-shadow: 0 1px 10px rgba(0,0,0,.1);
+	-moz-box-shadow: 0 1px 10px rgba(0,0,0,.1);
+	box-shadow: 0 1px 10px rgba(0,0,0,.1);
+	background-color: #fafafa;
+	background-image: -moz-linear-gradient(top,#fff,#f2f2f2);
+	background-image: -webkit-gradient(linear,0 0,0 100%,from(#fff),to(#f2f2f2));
+	background-image: -webkit-linear-gradient(top,#fff,#f2f2f2);
+	background-image: -o-linear-gradient(top,#fff,#f2f2f2);
+	background-image: linear-gradient(to bottom,#fff,#f2f2f2);
+	background-repeat: repeat-x;
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffffff',endColorstr='#fff2f2f2',GradientType=0);
+	-webkit-box-shadow: 0 1px 4px rgba(0,0,0,.1);
+	-moz-box-shadow: 0 1px 4px rgba(0,0,0,.1);
+	box-shadow: 0 1px 4px rgba(0,0,0,.1);
+	height: 42px;
+	border-bottom: 1px solid #c5c5c5;
+}
+
+.filepicker-navbar-inner {
+	position: relative;
+	padding: 6px 15px;
+}
+
+.filepicker-navbar-inner p {
+	margin: 0;
+	margin-top: 2px;
+	font-size: 11px;
+}
+
+.filepicker-view-option {
+	display: inline-block;
+	max-width: 35%;
+}
+
+.filepicker-options {
+	display: inline-block;
+	max-width: 35%;
+}
+
+.filepicker-type-filter {
+	display: inline-block;
+	max-width: 65%;
+	position: absolute;
+	right: 15px;
+	text-align: right;
+}
+
+.filepicker-button {
+	text-shadow: 1px 1px #fff;
+	display: inline-block;
+	margin-right:3px;
+	padding: 3px 8px 2px 8px;
+	font-size: 14px;
+	line-height: 20px;
+	color: #444;
+	text-align: center;
+	text-shadow: 0 1px 1px rgba(255,255,255,0.75);
+	vertical-align: middle;
+	cursor: pointer;
+	background-color: #f5f5f5;
+	background-image: -moz-linear-gradient(top,#fff,#e6e6e6);
+	background-image: -webkit-gradient(linear,0 0,0 100%,from(#fff),to(#e6e6e6));
+	background-image: -webkit-linear-gradient(top,#fff,#e6e6e6);
+	background-image: -o-linear-gradient(top,#fff,#e6e6e6);
+	background-image: linear-gradient(to bottom,#fff,#e6e6e6);
+	background-repeat: repeat-x;
+	border: 1px solid #ccc;
+	border-color: #e6e6e6 #e6e6e6 #bfbfbf;
+	border-color: rgba(0,0,0,0.1) rgba(0,0,0,0.1) rgba(0,0,0,0.25);
+	border-bottom-color: #b3b3b3;
+	-webkit-border-radius: 2px;
+	-moz-border-radius: 2px;
+	border-radius: 2px;
+	zoom: 1;
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffffff',endColorstr='#ffe6e6e6',GradientType=0);
+	filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
+	-webkit-box-shadow: inset 0 1px 0 rgba(255,255,255,0.2),0 1px 2px rgba(0,0,0,0.05);
+	-moz-box-shadow: inset 0 1px 0 rgba(255,255,255,0.2),0 1px 2px rgba(0,0,0,0.05);
+	box-shadow: inset 0 1px 0 rgba(255,255,255,0.2),0 1px 2px rgba(0,0,0,0.05);
+}
+
+.filepicker-button:hover {
+	background-color: #f5f5f5;
+	background-image: none;
+}
+
+.filepicker-button.active {
+	border: 1px solid #b1b1b1;
+	background-color: #d6d6d6;
+	background-image: -moz-linear-gradient(top, #e6e6e6, #c0c0c0);
+	background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#e6e6e6), to(#c0c0c0));
+	background-image: -webkit-linear-gradient(top, #e6e6e6, #c0c0c0);
+	background-image: -o-linear-gradient(top, #e6e6e6, #c0c0c0);
+	background-image: linear-gradient(to bottom, #e6e6e6, #c0c0c0);
+	background-repeat: repeat-x;
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffe6e6e6', endColorstr='#ffc0c0c0', GradientType=0);
+	-webkit-box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.15), 0 1px 2px rgba(0, 0, 0, 0.05);
+	-moz-box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.15), 0 1px 2px rgba(0, 0, 0, 0.05);
+	box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.15), 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.filepicker-container {
+	padding: 55px 15px 8px 15px;
+}
+
+#filepicker-progress.filepicker-breadcrumb {
+	position:relative;
+	height:36px;
+	margin-bottom: 10px;
+	padding:0;
+	background:#fefefe;
+	-webkit-box-shadow: 0 1px 4px rgba(0,0,0,.065);
+	-moz-box-shadow: 0 1px 4px rgba(0,0,0,.065);
+	box-shadow: 0 1px 4px rgba(0,0,0,.065);
+	border:0;
+	border-bottom: 1px solid #c5c5c5;
+}
+
+.filepicker-breadcrumb p {
+	margin:0;
+	padding:7px 10px;
+	line-height:22px;
+}
+
+#filepicker-progress-text {
+	position: absolute;
+	left: 48%;
+	top:1px;
+	font-size:13px;
+	font-weight:bold;
+	text-shadow:1px 1px 0 #fff;
+}
+
+#filepicker-progress .ui-progressbar-value {
+	height:36px;
+	margin:0;
+	border:0;
+	border-radius:0;
+}
+
+.filepicker-list {
+	width: 100%;
+	margin: 0 0 1em 0;
+	list-style: none;
+	padding: 0;
+}
+
+#filepicker-items > li {
+	border-bottom: 1px solid #ddd;
+	border-right: 1px solid #ddd;
+	background-color: #fff;
+	width: 134px;
+	margin: 3px;
+	display: inline-block;
+}
+
+#filepicker-items > li.visible {
+	display: inline-block !important;
+}
+
+.filepicker-list > li img {
+	max-width: 100%;
+	line-height: 0;
+	border: none;
+}
+
+#filepicker-items > li:nth-child(odd)  {
+	background-color: #fcfcfc;
+}
+
+#filepicker-items > li.filepicker-item-heading {
+	display: none;
+}
+
+.filepicker-list .filepicker-thumb {
+        position: relative;
+	width: 139px;
+	overflow: hidden;
+	height: 90px;
+	display: table-cell;
+	text-align: center;
+	vertical-align: middle;
+	background-color: #F79838;
+}
+
+.filepicker-list .filepicker-thumb.no-background {
+	background-color: #f9f9f9;
+}
+
+.filepicker-list .filepicker-thumb .icon-no-thumb {
+	font-size: 60px;
+	color: #fff;
+}
+
+.filepicker-list .filepicker-thumb.no-background .icon-no-thumb {
+	color: #777;
+}
+
+.filepicker-list .filepicker-thumb * {
+	vertical-align: middle;
+}
+
+.filepicker-list .filepicker-file-information {
+	padding: 4px;
+	font-size: 12px;
+	background-color: #fff;
+}
+
+.filepicker-list .filepicker-file-title {
+	height: 18px;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	font-weight: normal;
+	font-size: 12px;
+	margin: 0;
+	padding: 0;
+	text-align: center;
+}
+
+.filepicker-list .filepicker-file-details {
+	color: #777;
+	font-size: 11px;
+}
+
+.filepicker-list a {
+	display:block;
+	color: #147fdb;
+	text-decoration: none;
+}
+
+
+/* List view overrides */
+
+#filepicker-items.list-view > li {
+	border-bottom: 1px solid #ddd;
+	border-right: none;
+	background-color: #fff;
+	width: 100%;
+	margin: 0;
+	display: block;
+	position: relative;
+}
+
+#filepicker-items.list-view > li.filepicker-item-heading {
+	display: block;
+	height: 30px;
+	background-color: #777;
+	border-bottom: 1px solid #444;
+}
+
+#filepicker-items.list-view > li.visible {
+	display: block !important;
+}
+
+
+.list-view > li.filepicker-item-heading .filepicker-thumb,
+.list-view > li.filepicker-item-heading .filepicker-file-information,
+.list-view > li.filepicker-item-heading .filepicker-file-details,
+.list-view > li.filepicker-item-heading .filepicker-file-details span {
+	height: 30px;
+	line-height: 30px;
+}
+
+.list-view .filepicker-item-heading .filepicker-file-details,
+.list-view .filepicker-item-heading h4 {
+	color: #fff;
+	text-shadow: 0 -1px 1px #666;
+	font-size: 12px;
+}
+
+.list-view .filepicker-thumb {
+	overflow: hidden;
+	display: inline-block;
+	text-align: center;
+	vertical-align: middle;
+	width: 50px;
+	height: 45px;
+	background-color: transparent;
+	position: absolute;
+	left: 0;
+	top: 0;
+}
+
+.list-view .filepicker-thumb a {
+	display: block;
+	line-height: 45px;
+}
+
+.list-view .filepicker-thumb.no-background {
+	background-color: transparent;
+}
+
+.list-view .filepicker-thumb .icon-no-thumb {
+	font-size: 18px;
+	color: #777;
+}
+
+.filepicker-thumb .filepicker-cmd {
+    cursor: pointer;
+    position: absolute;
+    top: 0;
+    right: 0px;
+    width: 20px;
+    height: 20px;
+    line-height: 14px;
+    opacity: 0.6;
+}
+
+.list-view  .filepicker-file-information {
+	padding: 0 0 0 15px;
+	font-size: 12px;
+	background-color: transparent;
+	width: 60%;
+	display: inline-block;
+	position: relative;
+	overflow: hidden;
+	z-index: 1;
+	height: 45px;
+	line-height: 45px;
+	margin-left: 50px;
+}
+
+.list-view .filepicker-file-title {
+	display: block;
+	height: auto;
+	overflow: hidden;
+	font-weight: normal;
+	font-size: 12px;
+	margin: 0;
+	padding: 0;
+	text-align: left;
+}
+
+.list-view .filepicker-file-details {
+	display: inline-block;
+	width: 235px;
+	height: 45px;
+	position: absolute;
+	right: 15px;
+	top: 0;
+}
+
+.list-view .filepicker-file-details span {
+	display: inline-block;
+	width: 90px;
+	height: 45px;
+	line-height: 45px;
+	overflow: hidden;
+}
+
+.list-view .filepicker-file-details span.filepicker-file-size {
+	width: 80px;
+}
+
+.list-view .filepicker-file-details span.filepicker-file-ext {
+	width: 30px;
+}
+
+.list-view.filepicker-list a:hover {
+	text-decoration:underline;
+}
+
+
+.filepicker-delete {
+	cursor:pointer;
+	opacity:0.7;
+}
+
+.filepicker-delete:hover {
+	color:#FFF;
+	opacity:1;
+	background-color:#454545;
+}
+
+.filepicker-thumb .filepicker-delete {
+	position:absolute;
+	top:1px;
+	right:1px;
+	width:18px;
+	height:18px;
+	line-height:12px;
+	border-radius:3px;
+}
+
+.list-view .filepicker-file-details span.filepicker-delete {
+	width:30px;
+   text-align: right;
+   font-size: 16px;
+   background-color:transparent;
+}
+
+.list-view .filepicker-delete:hover {
+	color:#000;
+}
+
+.list-view .filepicker-thumb .filepicker-delete {
+	display:none;
+}
+
+.dlg-options {
+    text-align: right;
+    padding-top: 0.5em;
+}
+
+
+@media screen and (max-width: 430px) {
+	.list-view .filepicker-file-details span.filepicker-file-ext  {
+		display: none;
+	}
+
+	.list-view .filepicker-file-details {
+		width: 170px;
+	}
+
+	.list-view  .filepicker-file-information {
+		padding-right: 185px;
+	}
+
+	.filepicker-option-title {
+		display: none;
+	}
+}

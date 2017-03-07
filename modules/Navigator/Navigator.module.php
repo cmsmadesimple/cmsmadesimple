@@ -45,8 +45,8 @@ final class Navigator extends CMSModule
     function GetFriendlyName() { return $this->Lang('friendlyname'); }
     function IsPluginModule() { return true; }
     function HasAdmin() { return false; }
-    function GetVersion() { return '1.0.3'; }
-    function MinimumCMSVersion() { return '1.12-alpha0'; }
+    function GetVersion() { return '1.0.6'; }
+    function MinimumCMSVersion() { return '2.1.99'; }
     function GetAdminDescription() { return $this->Lang('description'); }
     function GetAdminSection() { return 'layout'; }
     function LazyLoadFrontend() { return TRUE; }
@@ -113,9 +113,7 @@ final class Navigator extends CMSModule
 
     public static function reset_page_type_defaults(CmsLayoutTemplateType $type)
     {
-        if( $type->get_originator() != __CLASS__ ) {
-            throw new CmsLogicException('Cannot reset contents for this template type');
-        }
+        if( $type->get_originator() != __CLASS__ ) throw new CmsLogicException('Cannot reset contents for this template type');
 
         $fn = null;
         switch( $type->get_name() ) {
@@ -130,6 +128,16 @@ final class Navigator extends CMSModule
         $fn = cms_join_path(dirname(__FILE__),'templates',$fn);
         if( file_exists($fn) ) return @file_get_contents($fn);
     }
-} // End of class
 
-?>
+    public static function template_help_callback($str)
+    {
+        $str = trim($str);
+        $mod = cms_utils::get_module('Navigator');
+        if( is_object($mod) ) {
+            $file = $mod->GetModulePath().'/doc/tpltype_'.$str.'.inc';
+            if( is_file($file) ) return file_get_contents($file);
+        }
+    }
+
+
+} // End of class

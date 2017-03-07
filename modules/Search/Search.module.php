@@ -24,83 +24,83 @@ define( "NON_INDEXABLE_CONTENT", "<!-- pageAttribute: NotSearchable -->" );
 
 class Search extends CMSModule
 {
-  private $_tools_loaded;
+    private $_tools_loaded;
 
-  public function __construct()
-  {
-    parent::__construct();
-    $this->_tools_loaded = false;
-  }
-
-  private function load_tools()
-  {
-    if( !$this->_tools_loaded ) {
-      $fn = dirname(__FILE__).'/search.tools.php';
-      include_once($fn);
-      $this->_tools_loaded = true;
+    public function __construct()
+    {
+        parent::__construct();
+        $this->_tools_loaded = false;
     }
-  }
 
-  public function LazyLoadFrontend() { return TRUE; }
-  public function LazyLoadAdmin() { return TRUE; }
-  public function GetName() { return 'Search'; }
-  public function GetFriendlyName() { return $this->Lang('search'); }
-  public function IsPluginModule() { return true; }
-  public function HasAdmin() { return true; }
-  public function HandlesEvents () { return true; }
-  public function GetVersion() { return '1.50.2'; }
-  public function MinimumCMSVersion() { return '1.12-alpha0'; }
-  public function GetAdminDescription() { return $this->Lang('description'); }
-  public function VisibleToAdminUser() { return $this->CheckPermission('Modify Site Preferences'); }
-  public function GetHelp($lang='en_US') { return $this->Lang('help'); }
-  public function GetAuthor() { return 'Ted Kulp'; }
-  public function GetAuthorEmail() { return 'ted@cmsmadesimple.org'; }
-  public function GetChangeLog() { return @file_get_contents(dirname(__FILE__).'/changelog.inc'); }
-  public function GetEventDescription( $eventname ) { return $this->lang('eventdesc-' . $eventname); }
-  public function GetEventHelp( $eventname ) { return $this->lang('eventhelp-' . $eventname); }
+    private function load_tools()
+    {
+        if( !$this->_tools_loaded ) {
+            $fn = dirname(__FILE__).'/search.tools.php';
+            include_once($fn);
+            $this->_tools_loaded = true;
+        }
+    }
 
-  public function InitializeAdmin()
-  {
-    $this->CreateParameter('inline','false',$this->Lang('param_inline'));
-    $this->CreateParameter('passthru_*','null',$this->Lang('param_passthru'));
-    $this->CreateParameter('modules','null',$this->Lang('param_modules'));
-    $this->CreateParameter('resultpage', 'null', $this->Lang('param_resultpage'));
-    $this->CreateParameter('searchtext','null',$this->Lang('param_searchtext'));
-    $this->CreateParameter('detailpage','null',$this->Lang('param_detailpage'));
-    $this->CreateParameter('submit',$this->Lang('searchsubmit'),$this->Lang('param_submit'));
-    $this->CreateParameter('action','default',$this->Lang('param_action'));
-    $this->CreateParameter('pageid','null',$this->Lang('param_pageid'));
-    $this->CreateParameter('count','null',$this->Lang('param_count'));
-    $this->CreateParameter('use_or','true',$this->Lang('param_useor'));
-    $this->CreateParameter('search_method','get',$this->Lang('search_method'));
-    $this->CreateParameter('formtemplate','',$this->Lang('param_formtemplate'));
-    $this->CreateParameter('resulttemplate','',$this->Lang('param_resulttemplate'));
-  }
+    public function LazyLoadFrontend() { return TRUE; }
+    public function LazyLoadAdmin() { return TRUE; }
+    public function GetName() { return 'Search'; }
+    public function GetFriendlyName() { return $this->Lang('search'); }
+    public function IsPluginModule() { return true; }
+    public function HasAdmin() { return true; }
+    public function HandlesEvents () { return true; }
+    public function GetVersion() { return '1.51.1'; }
+    public function MinimumCMSVersion() { return '1.12-alpha0'; }
+    public function GetAdminDescription() { return $this->Lang('description'); }
+    public function VisibleToAdminUser() { return $this->CheckPermission('Modify Site Preferences'); }
+    public function GetHelp($lang='en_US') { return $this->Lang('help'); }
+    public function GetAuthor() { return 'Ted Kulp'; }
+    public function GetAuthorEmail() { return 'ted@cmsmadesimple.org'; }
+    public function GetChangeLog() { return @file_get_contents(dirname(__FILE__).'/changelog.inc'); }
+    public function GetEventDescription( $eventname ) { return $this->lang('eventdesc-' . $eventname); }
+    public function GetEventHelp( $eventname ) { return $this->lang('eventhelp-' . $eventname); }
 
-  public function InitializeFrontend()
-  {
-    $this->RestrictUnknownParams();
+    public function InitializeAdmin()
+    {
+        $this->CreateParameter('inline','false',$this->Lang('param_inline'));
+        $this->CreateParameter('passthru_*','null',$this->Lang('param_passthru'));
+        $this->CreateParameter('modules','null',$this->Lang('param_modules'));
+        $this->CreateParameter('resultpage', 'null', $this->Lang('param_resultpage'));
+        $this->CreateParameter('searchtext','null',$this->Lang('param_searchtext'));
+        $this->CreateParameter('detailpage','null',$this->Lang('param_detailpage'));
+        $this->CreateParameter('submit',$this->Lang('searchsubmit'),$this->Lang('param_submit'));
+        $this->CreateParameter('action','default',$this->Lang('param_action'));
+        $this->CreateParameter('pageid','null',$this->Lang('param_pageid'));
+        $this->CreateParameter('count','null',$this->Lang('param_count'));
+        $this->CreateParameter('use_or','true',$this->Lang('param_useor'));
+        $this->CreateParameter('search_method','get',$this->Lang('search_method'));
+        $this->CreateParameter('formtemplate','',$this->Lang('param_formtemplate'));
+        $this->CreateParameter('resulttemplate','',$this->Lang('param_resulttemplate'));
+    }
 
-    $this->SetParameterType('inline',CLEAN_STRING);
-    $this->SetParameterType(CLEAN_REGEXP.'/passthru_.*/',CLEAN_STRING);
-    $this->SetParameterType('modules',CLEAN_STRING);
-    $this->SetParameterType('resultpage',CLEAN_STRING);
-    $this->SetParameterType('detailpage',CLEAN_STRING);
-    $this->SetParameterType('searchtext',CLEAN_STRING);
-    $this->SetParameterType('searchinput',CLEAN_STRING);
-    $this->SetParameterType('submit',CLEAN_STRING);
-    $this->SetParameterType('origreturnid',CLEAN_INT);
-    $this->SetParameterType('pageid',CLEAN_INT);
-    $this->SetParameterType('count',CLEAN_INT);
-    $this->SetParameterType('use_or',CLEAN_INT);
-    $this->SetParameterType('search_method',CLEAN_STRING);
-    $this->SetParameterType('formtemplate',CLEAN_STRING);
-    $this->SetParameterType('resulttemplate',CLEAN_STRING);
-  }
+    public function InitializeFrontend()
+    {
+        $this->RestrictUnknownParams();
 
-  protected function GetSearchHtmlTemplate()
-  {
-    return '
+        $this->SetParameterType('inline',CLEAN_STRING);
+        $this->SetParameterType(CLEAN_REGEXP.'/passthru_.*/',CLEAN_STRING);
+        $this->SetParameterType('modules',CLEAN_STRING);
+        $this->SetParameterType('resultpage',CLEAN_STRING);
+        $this->SetParameterType('detailpage',CLEAN_STRING);
+        $this->SetParameterType('searchtext',CLEAN_STRING);
+        $this->SetParameterType('searchinput',CLEAN_STRING);
+        $this->SetParameterType('submit',CLEAN_STRING);
+        $this->SetParameterType('origreturnid',CLEAN_INT);
+        $this->SetParameterType('pageid',CLEAN_INT);
+        $this->SetParameterType('count',CLEAN_INT);
+        $this->SetParameterType('use_or',CLEAN_INT);
+        $this->SetParameterType('search_method',CLEAN_STRING);
+        $this->SetParameterType('formtemplate',CLEAN_STRING);
+        $this->SetParameterType('resulttemplate',CLEAN_STRING);
+    }
+
+    protected function GetSearchHtmlTemplate()
+    {
+        return '
 {$startform}
 <label for="{$search_actionid}searchinput">{$searchprompt}:&nbsp;</label><input type="text" class="search-input" id="{$search_actionid}searchinput" name="{$search_actionid}searchinput" size="20" maxlength="50" placeholder="{$searchtext}"/>
 {*
@@ -110,11 +110,11 @@ class Search extends CMSModule
 <input class="search-button" name="submit" value="{$submittext}" type="submit" />
 {if isset($hidden)}{$hidden}{/if}
 {$endform}';
-  }
+    }
 
-  protected function GetResultsHtmlTemplate()
-  {
-    $text = <<<EOT
+    protected function GetResultsHtmlTemplate()
+    {
+        $text = <<<EOT
 <h3>{\$searchresultsfor} &quot;{\$phrase}&quot;</h3>
 {if \$itemcount > 0}
 <ul>
@@ -133,98 +133,98 @@ class Search extends CMSModule
   <p><strong>{\$noresultsfound}</strong></p>
 {/if}
 EOT;
-    return $text;
-  }
-
-  protected function DefaultStopWords()
-  {
-    return $this->Lang('default_stopwords');
-  }
-
-  public function RemoveStopWordsFromArray($words)
-  {
-    $stop_words = preg_split("/[\s,]+/", $this->GetPreference('stopwords', $this->DefaultStopWords()));
-    return array_diff($words, $stop_words);
-  }
-
-  public function StemPhrase($phrase)
-  {
-    $this->load_tools();
-    return search_StemPhrase($this,$phrase);
-  }
-
-  public function AddWords($module = 'Search', $id = -1, $attr = '', $content = '', $expires = NULL)
-  {
-    $this->load_tools();
-    return search_AddWords($this,$module,$id,$attr,$content,$expires);
-  }
-
-  public function DeleteWords($module = 'Search', $id = -1, $attr = '')
-  {
-    $this->load_tools();
-    return search_DeleteWords($this,$module,$id,$attr);
-  }
-
-  public function DeleteAllWords($module = 'Search', $id = -1, $attr = '')
-  {
-    $db = $this->GetDb();
-    $db->Execute('TRUNCATE '.CMS_DB_PREFIX.'module_search_index');
-    $db->Execute('TRUNCATE '.CMS_DB_PREFIX.'module_search_items');
-
-    @$this->SendEvent('SearchAllItemsDeleted',array($module, $id, $attr));
-  }
-
-  public function RegisterEvents()
-  {
-    $this->AddEventHandler( 'Core', 'ContentEditPost', false );
-    $this->AddEventHandler( 'Core', 'ContentDeletePost', false );
-    $this->AddEventHandler( 'Core', 'AddTemplatePost', false );
-    $this->AddEventHandler( 'Core', 'EditTemplatePost', false );
-    $this->AddEventHandler( 'Core', 'DeleteTemplatePost', false );
-    $this->AddEventHandler( 'Core', 'ModuleUninstalled', false );
-  }
-
-  public function Reindex()
-  {
-    $this->load_tools();
-    return search_Reindex($this);
-  }
-
-  function DoEvent($originator,$eventname,&$params)
-  {
-    $this->load_tools();
-    return search_DoEvent($this, $originator, $eventname, $params);
-  }
-
-  public function HasCapability($capability,$params = array())
-  {
-    switch( $capability ) {
-    case CmsCoreCapabilities::SEARCH_MODULE:
-    case CmsCoreCapabilities::PLUGIN_MODULE:
-      return true;
+        return $text;
     }
-    return FALSE;
-  }
 
-  public static function page_type_lang_callback($str)
-  {
-    $mod = cms_utils::get_module('Search');
-    if( is_object($mod) ) return $mod->Lang('type_'.$str);
-  }
-
-  public static function reset_page_type_defaults(CmsLayoutTemplateType $type)
-  {
-    if( $type->get_originator() != 'Search' ) throw new CmsLogicException('Cannot reset contents for this template type');
-
-    $mod = cms_utils::get_module('Search');
-    if( !is_object($mod) ) return;
-    switch( $type->get_name() ) {
-    case 'searchform':
-      return $mod->GetSearchHtmlTemplate();
-    case 'searchresults':
-      return $mod->GetResultsHtmlTemplate();
+    protected function DefaultStopWords()
+    {
+        return $this->Lang('default_stopwords');
     }
-  }
+
+    public function RemoveStopWordsFromArray($words)
+    {
+        $stop_words = preg_split("/[\s,]+/", $this->GetPreference('stopwords', $this->DefaultStopWords()));
+        return array_diff($words, $stop_words);
+    }
+
+    public function StemPhrase($phrase)
+    {
+        $this->load_tools();
+        return search_StemPhrase($this,$phrase);
+    }
+
+    public function AddWords($module = 'Search', $id = -1, $attr = '', $content = '', $expires = NULL)
+    {
+        $this->load_tools();
+        return search_AddWords($this,$module,$id,$attr,$content,$expires);
+    }
+
+    public function DeleteWords($module = 'Search', $id = -1, $attr = '')
+    {
+        $this->load_tools();
+        return search_DeleteWords($this,$module,$id,$attr);
+    }
+
+    public function DeleteAllWords($module = 'Search', $id = -1, $attr = '')
+    {
+        $db = $this->GetDb();
+        $db->Execute('TRUNCATE '.CMS_DB_PREFIX.'module_search_index');
+        $db->Execute('TRUNCATE '.CMS_DB_PREFIX.'module_search_items');
+
+        \CMSMS\HookManager::do_hook('Search::SearchAllItemsDeleted' );
+    }
+
+    public function RegisterEvents()
+    {
+        $this->AddEventHandler( 'Core', 'ContentEditPost', false );
+        $this->AddEventHandler( 'Core', 'ContentDeletePost', false );
+        $this->AddEventHandler( 'Core', 'AddTemplatePost', false );
+        $this->AddEventHandler( 'Core', 'EditTemplatePost', false );
+        $this->AddEventHandler( 'Core', 'DeleteTemplatePost', false );
+        $this->AddEventHandler( 'Core', 'ModuleUninstalled', false );
+    }
+
+    public function Reindex()
+    {
+        $this->load_tools();
+        return search_Reindex($this);
+    }
+
+    function DoEvent($originator,$eventname,&$params)
+    {
+        $this->load_tools();
+        return search_DoEvent($this, $originator, $eventname, $params);
+    }
+
+    public function HasCapability($capability,$params = array())
+    {
+        switch( $capability ) {
+        case CmsCoreCapabilities::SEARCH_MODULE:
+        case CmsCoreCapabilities::PLUGIN_MODULE:
+            return true;
+        }
+        return FALSE;
+    }
+
+    public static function page_type_lang_callback($str)
+    {
+        $mod = cms_utils::get_module('Search');
+        if( is_object($mod) ) return $mod->Lang('type_'.$str);
+    }
+
+    public static function reset_page_type_defaults(CmsLayoutTemplateType $type)
+    {
+        if( $type->get_originator() != 'Search' ) throw new CmsLogicException('Cannot reset contents for this template type');
+
+        $mod = cms_utils::get_module('Search');
+        if( !is_object($mod) ) return;
+        switch( $type->get_name() ) {
+        case 'searchform':
+            return $mod->GetSearchHtmlTemplate();
+        case 'searchresults':
+            return $mod->GetResultsHtmlTemplate();
+        }
+    }
 }
 
 

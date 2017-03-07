@@ -1,11 +1,11 @@
 <?php
-
 namespace CMSMS\internal;
 
 class global_cache
 {
     const TIMEOUT = 604800;
     private static $_types = array();
+    private static $_dirty;
     private static $_cache;
 
     private function __construct() {}
@@ -18,14 +18,21 @@ class global_cache
 
     public static function get($type)
     {
-        if( !isset(self::$_types[$type]) ) throw new \LogicException('Unknown type '.$type);
+        // if( !isset(self::$_types[$type]) ) throw new \LogicException('Unknown type '.$type);
+        if( !isset(self::$_types[$type]) ) return;
         if( !is_array(self::$_cache) ) self::_load();
 
         if( !isset(self::$_cache[$type]) ) {
             self::$_cache[$type] = self::$_types[$type]->fetch();
+            self::$_dirty[$type] = 1;
             self::save();
         }
         return self::$_cache[$type];
+    }
+
+    public static function release($type)
+    {
+        if( isset(self::$_cache[$type]) ) unset(self::$_cache[$type]);
     }
 
     public static function clear($type)
@@ -38,10 +45,15 @@ class global_cache
 
     public static function save()
     {
+        global $CMS_INSTALL_PAGE;
+        if( !empty($CMS_INSTALL_PAGE) ) return;
         $driver = self::_get_driver();
         $keys = array_keys(self::$_types);
         foreach( $keys as $key ) {
-            if( isset(self::$_cache[$key]) ) $driver->set($key,self::$_cache[$key]);
+            if( !empty(self::$_dirty[$key]) && isset(self::$_cache[$key]) ) {
+                $driver->set($key,self::$_cache[$key]);
+                unset(self::$_dirty[$key]);
+            }
         }
     }
 
@@ -56,13 +68,16 @@ class global_cache
 
     private static function _load()
     {
+        debug_buffer('initialize internal global cache');
         $driver = self::_get_driver();
         $keys = array_keys(self::$_types);
         self::$_cache = array();
         foreach( $keys as $key ) {
             $tmp = $driver->get($key);
             self::$_cache[$key] = $tmp;
+            unset($tmp);
         }
+        debug_buffer('done initializing global cache');
     }
 
     public static function clear_all()
@@ -72,6 +87,3 @@ class global_cache
     }
 
 } // end of class
-
-
-?>

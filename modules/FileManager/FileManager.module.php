@@ -28,7 +28,7 @@ final class FileManager extends CMSModule {
     public function GetChangeLog() { return $this->ProcessTemplate('changelog.tpl'); }
     public function GetHeaderHTML() { return $this->_output_header_javascript(); }
     public function GetFriendlyName() { return $this->Lang('friendlyname'); }
-    public function GetVersion() { return '1.5.3'; }
+    public function GetVersion() { return '1.6.3'; }
     public function GetHelp() { return $this->Lang('help'); }
     public function GetAuthor() { return 'Morten Poulsen (Silmarillion)'; }
     public function GetAuthorEmail() { return 'morten@poulsen.org'; }
@@ -49,13 +49,10 @@ final class FileManager extends CMSModule {
 
     public function GetFileIcon($extension,$isdir=false) {
         if (empty($extension)) $extension = '---'; // hardcode extension to something.
-        if ($extension[0]==".") $extension=substr($extension,1);
-        $config = cmsms()->GetConfig();
+        if ($extension[0] == ".") $extension = substr($extension,1);
+        $config = \cms_config::get_instance();
         $iconsize=$this->GetPreference("iconsize","32px");
-        //for valid xhtml
         $iconsizeHeight=str_replace("px","",$iconsize);
-        //end
-        if ($extension[0]=='.') $extension=substr($extension, 1);
 
         $result="";
         if ($isdir) {
@@ -238,4 +235,26 @@ final class FileManager extends CMSModule {
     protected function decodefilename($encodedfilename) {
         return base64_decode($encodedfilename."==");
     }
+
+  public function GetAdminMenuItems()
+  {
+      $out = array();
+
+      if( $this->CheckPermission('Modify Files') ) {
+          $out[] = CmsAdminMenuItem::from_module($this);
+      }
+
+      if( $this->CheckPermission('Modify Site Preferences') ) {
+          $obj = new CmsAdminMenuItem();
+          $obj->module = $this->GetName();
+          $obj->section = 'siteadmin';
+          $obj->title = $this->Lang('title_filemanager_settings');
+          $obj->description = $this->Lang('desc_filemanager_settings');
+          $obj->action = 'admin_settings';
+          $obj->url = $this->create_url('m1_',$obj->action);
+          $out[] = $obj;
+      }
+
+      return $out;
+  }
 } // end of class

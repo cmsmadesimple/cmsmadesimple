@@ -1,6 +1,5 @@
 <?php
 if (!isset($gCms)) exit;
-$config = $gCms->GetConfig();
 
 //
 // initialization

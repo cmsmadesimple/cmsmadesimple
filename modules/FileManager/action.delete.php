@@ -57,7 +57,11 @@ if( isset($params['submit']) ) {
       @unlink($fn);
     }
     if( $thumb != '' ) @unlink($thumb);
-    $this->Audit('',"File Manager", "Removed file: ".$fn);
+
+    $parms = array('file'=>$fn);
+    if( $thumb ) $parms['thumb'] = $thumb;
+    audit('',"File Manager", "Removed file: ".$fn);
+    \CMSMS\HookManager::do_hook('FileManager::OnFileDeleted', $parms );
   } // foreach
 
   if( count($errors) == 0 ) {

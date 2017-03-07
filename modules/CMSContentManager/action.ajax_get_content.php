@@ -42,13 +42,20 @@ for ($cnt = 0; $cnt < sizeof($handlers); $cnt++) { ob_end_clean(); }
 try {
     $smarty->assign('can_add_content',$this->CheckPermission('Add Pages') || $this->CheckPermission('Manage All Content'));
     $smarty->assign('can_reorder_content',$this->CheckPermission('Manage All Content'));
+    $smarty->assign('template_list',CmsLayoutTemplate::template_query(array('as_list'=>1))); // this is just to aide loading.
 
     // load all the content that this user can display...
     // organize it into a tree
     $builder = new ContentListBuilder($this);
     $curpage = (isset($_SESSION[$this->GetName().'_curpage']) && !isset($params['seek'])) ? (int) $_SESSION[$this->GetName().'_curpage'] : 1;
     if( isset($params['curpage']) ) $curpage = (int)$params['curpage'];
-    $smarty->assign('prettyurls_ok',$builder->pretty_urls_configured());
+    $filter = cms_userprefs::get($this->GetName().'_userfilter');
+    if( $filter ) {
+        $filter = unserialize($filter);
+        $builder->set_filter($filter);
+    }
+    $smarty->assign('have_filter',is_object($filter));
+
 
     //
     // handle all of the possible ajaxy/sub actions.
@@ -57,6 +64,7 @@ try {
     //
     // build the display
     //
+    $smarty->assign('prettyurls_ok',$builder->pretty_urls_configured());
 
     if( isset($params['setoptions']) ) cms_userprefs::set($this->GetName().'_pagelimit',(int)$params['pagelimit']);
     $pagelimit = cms_userprefs::get($this->GetName().'_pagelimit',100);
@@ -76,7 +84,7 @@ try {
         $pagelist[$i+1] = $i+1;
     }
 
-    $smarty->assign('indent',cms_userprefs::get('indent',1));
+    $smarty->assign('indent',!$filter && cms_userprefs::get('indent',1));
     $locks = $builder->get_locks();
     $have_locks = (is_array($locks) && count($locks))?1:0;
     $smarty->assign('locking',CmsContentManagerUtils::locking_enabled());
@@ -99,6 +107,9 @@ try {
         $smarty->assign('coltitle_page',$this->Lang('coltitle_menutext'));
     }
     if( $editinfo ) $smarty->assign('content_list',$editinfo);
+    if( $filter && !$editinfo ) {
+        $smarty->assign('error',$this->Lang('err_nomatchingcontent'));
+    }
 
     $opts = array();
     if( $this->CheckPermission('Remove Pages') && $this->CheckPermission('Modify Any Page') ) {
@@ -120,10 +131,11 @@ try {
     $opts = bulkcontentoperations::get_operation_list();
     if( is_array($opts) && count($opts) ) $smarty->assign('bulk_options',$opts);
 
-    $out = $this->ProcessTEmplate('ajax_get_content.tpl');
+    $out = $this->ProcessTemplate('ajax_get_content.tpl');
     echo $out;
 }
 catch( \Exception $e ) {
+    echo '<div class="red">'.$e->GetMessage().'</div>';
     debug_to_log($e);
 }
 exit;

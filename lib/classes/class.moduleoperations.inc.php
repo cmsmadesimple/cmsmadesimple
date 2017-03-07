@@ -45,7 +45,7 @@ final class ModuleOperations
 	 * @access private
 	 * @internal
 	 */
-	protected $cmssystemmodules =  array( 'AdminSearch', 'CMSContentManager', 'DesignManager', 'FileManager','MenuManager','ModuleManager','Search','News','MicroTiny','Navigator' );
+	protected $cmssystemmodules =  array( 'AdminSearch', 'CMSContentManager', 'DesignManager', 'FileManager', 'MenuManager', 'ModuleManager', 'Search','News', 'MicroTiny', 'Navigator', 'CmsJobManager', 'FilePicker' );
 
 	/**
 	 * @ignore
@@ -71,12 +71,6 @@ final class ModuleOperations
 	 * @ignore
 	 */
 	private $_moduleinfo;
-
-	/**
-	 * @ignore
-	 */
-	private $_moduledeps;
-
 
 	/**
 	 * @ignore
@@ -130,7 +124,9 @@ final class ModuleOperations
         return self::$_instance;
     }
 
-
+    /**
+     * @ignore
+     */
     protected static function get_module_classmap()
     {
         if( !is_array(self::$_classmap) ) {
@@ -141,6 +137,9 @@ final class ModuleOperations
         return self::$_classmap;
     }
 
+    /**
+     * @ignore
+     */
     protected static function get_module_classname($module)
     {
         $module = trim($module);
@@ -150,6 +149,9 @@ final class ModuleOperations
         return $module;
     }
 
+    /**
+     * @ignore
+     */
     protected static function get_module_filename($module)
     {
         $module = trim($module);
@@ -159,6 +161,12 @@ final class ModuleOperations
         return cms_join_path($config['root_path'],'modules',$module,"$module.module.php");
     }
 
+    /**
+     * Allow setting the classname for a module... useful when the module class file itself is within a namespace.
+     *
+     * @param string $module The module name
+     * @param string $classname The class name.
+     */
     public static function set_module_classname($module,$classname)
     {
         $module = trim($module);
@@ -452,6 +460,8 @@ final class ModuleOperations
             // install returned nothing, or FALSE, a successful installation
             $query = 'DELETE FROM '.CMS_DB_PREFIX.'modules WHERE module_name = ?';
             $dbr = $db->Execute($query,array($module_obj->GetName()));
+            $query = 'DELETE FROM '.CMS_DB_PREFIX.'module_deps WHERE child_module = ?';
+            $dbr = $db->Execute($query,array($module_obj->GetName()));
 
             $lazyload_fe    = (method_exists($module_obj,'LazyLoadFrontend') && $module_obj->LazyLoadFrontend())?1:0;
             $lazyload_admin = (method_exists($module_obj,'LazyLoadAdmin') && $module_obj->LazyLoadAdmin())?1:0;
@@ -475,9 +485,8 @@ final class ModuleOperations
             $this->_moduleinfo = array();
             $gCms->clear_cached_files();
 
-            Events::SendEvent('Core', 'ModuleInstalled', array('name' => $module_obj->GetName(), 'version' => $module_obj->GetVersion()));
             audit('', 'Module', 'Installed '.$module_obj->GetName().' version '.$module_obj->GetVersion());
-
+            \CMSMS\HookManager::do_hook('Core::ModuleInstalled', [ 'name' => $module_obj->GetName(), 'version' => $module_obj->GetVersion() ] );
             return array(TRUE,$module_obj->InstallPostMessage());
         }
 
@@ -529,10 +538,7 @@ final class ModuleOperations
     private function &_get_module_info()
     {
         if( !is_array($this->_moduleinfo) || count($this->_moduleinfo) == 0 ) {
-            $db = CmsApp::get_instance()->GetDb();
-            $query = 'SELECT * FROM '.CMS_DB_PREFIX.'modules ORDER BY module_name';
-            $tmp = $db->GetArray($query);
-
+            $tmp = \CMSMS\internal\global_cache::get('modules');
             if( is_array($tmp) ) {
                 $dir = dirname(dirname(__DIR__)).DIRECTORY_SEPARATOR."modules";
                 $this->_moduleinfo = array();
@@ -614,6 +620,7 @@ final class ModuleOperations
 
         $obj = null;
         $classname = self::get_module_classname($module_name);
+
         $obj = new $classname;
         if( !is_object($obj) || ! $obj instanceof \CMSModule ) {
             // oops, some problem loading.
@@ -648,16 +655,16 @@ final class ModuleOperations
             }
         }
 
-        $tmp = CmsApp::get_instance()->get_installed_schema_version();
+        $tmp = $gCms->get_installed_schema_version();
         if( $tmp == CMS_SCHEMA_VERSION ) {
             // can't auto upgrade modules if cmsms schema versions don't match.
             // check to see if an upgrade is needed.
             allow_admin_lang(TRUE); // isn't this ugly.
             if( isset($info[$module_name]) && $info[$module_name]['status'] == 'installed' ) {
-                // looks like upgrade is needed
                 $dbversion = $info[$module_name]['version'];
                 if( version_compare($dbversion, $obj->GetVersion()) == -1 ) {
-                    if( in_array($module_name,$this->cmssystemmodules) || $this->IsQueuedForInstall($module_name) ) {
+                    // looks like upgrade is needed
+                    if( in_array($module_name,$this->cmssystemmodules) || $this->IsQueuedForInstall($module_name) && !$gCms->is_frontend_request() ) {
                         // we're allowed to upgrade
                         $res = $this->_upgrade_module($obj);
                         $this->_unqueue_install($module_name);
@@ -693,6 +700,7 @@ final class ModuleOperations
         if( (isset($info[$module_name]) && $info[$module_name]['status'] == 'installed') ||
             $force_load ) {
             if( is_object($obj) ) $this->_modules[$module_name] = $obj;
+            \CMSMS\HookManager::do_hook('Core::ModuleLoaded', [ 'name' => $module_name ] );
             return TRUE;
         }
 
@@ -736,29 +744,6 @@ final class ModuleOperations
 
 
     /**
-     * Finds all modules in the filesystem, and builds a database about them
-     *
-     * @since 1.10
-     * @ignore
-     */
-    private function _load_all_modules()
-    {
-        $this->_moduleinfo = array();
-        $info = $this->_get_module_info();
-        $names = $this->FindAllModules();
-        foreach( $names as $name ) {
-            if( isset($this->_moduleinfo[$name]) ) continue; // already know about this module.
-
-            // this module isn't in the database, but is in the filesystem... make up some dummy info.
-            $rec = array('module_name'=>$name,'status'=>'not installed','version'=>'0.0',
-                         'admin_only'=>0,'active'=>0,'allow_fe_lazyload'=>0,'allow_admin_lazyload'=>0);
-            $this->_moduleinfo[$name] = $rec;
-        }
-        ksort($this->_moduleinfo);
-    }
-
-
-    /**
      * Finds all modules that are available to be loaded...
      * this method uses the information in the database to load the modules that are necessary to load
      * it also, will go through any queued installs/upgrades and force those modules to load, which
@@ -766,13 +751,10 @@ final class ModuleOperations
      *
      * @access public
      * @internal
-     * @param loadall boolean indicates wether ALL modules in the filesystem should be loaded, default is false
      * @param noadmin boolean indicates that modules marked as admin_only in the database should not be loaded, default is false
-     * @param no_lazyload boolean indicates that modules marked as lazy_loadable should be loaded anywayz, default is falze
      */
-    public function LoadModules($loadall = false,$noadmin = false, $no_lazyload = false)
+    public function LoadModules($noadmin = false)
     {
-        if( $loadall ) $this->_load_all_modules();
         global $CMS_ADMIN_PAGE;
         global $CMS_STYLESHEET;
         $config = \cms_config::get_instance();
@@ -853,8 +835,7 @@ final class ModuleOperations
             $this->_moduleinfo = array();
             $gCms->clear_cached_files();
             audit('','Module', 'Upgraded module '.$module_obj->GetName().' to version '.$module_obj->GetVersion());
-            Events::SendEvent('Core', 'ModuleUpgraded', array('name' => $module_obj->GetName(), 'oldversion' => $dbversion, 'newversion' => $module_obj->GetVersion()));
-
+            \CMSMS\HookManager::do_hook('Core::ModuleUpgraded', [ 'name' => $module_obj->GetName(), 'oldversion' => $dbversion, 'newversion' => $module_obj->GetVersion() ] );
             return array(TRUE);
         }
 
@@ -930,9 +911,18 @@ final class ModuleOperations
                     }
                 }
 
+                $alerts = \CMSMS\AdminAlerts\Alert::load_all();
+                if( count($alerts) ) {
+                    foreach( $alerts as $alert ) {
+                        if( $alert->module == $module ) $alert->delete();
+                    }
+                }
+
+                $jobmgr = \ModuleOperations::get_instance()->get_module_instance('CmsJobManager');
+                if( $jobmgr ) $jobmgr->delete_jobs_by_module( $module );
+
                 $db->Execute('DELETE FROM '.CMS_DB_PREFIX.'module_smarty_plugins where module=?',array($module));
-                $db->Execute('DELETE FROM '.CMS_DB_PREFIX."siteprefs WHERE sitepref_name LIKE '".
-                             str_replace("'",'',$db->qstr($module))."_mapi_pref%'");
+                $db->Execute('DELETE FROM '.CMS_DB_PREFIX."siteprefs WHERE sitepref_name LIKE '". str_replace("'",'',$db->qstr($module))."_mapi_pref%'");
                 $db->Execute('DELETE FROM '.CMS_DB_PREFIX.'routes WHERE key1 = ?',array($module));
                 $db->Execute('DELETE FROM '.CMS_DB_PREFIX.'module_smarty_plugins WHERE module = ?',array($module));
             }
@@ -943,9 +933,9 @@ final class ModuleOperations
             // Removing module from info
             $this->_moduleinfo = array();
 
-            Events::SendEvent('Core', 'ModuleUninstalled', array('name' => $module));
             audit('','Module','Uninstalled module '.$module);
-            return TRUE;
+            \CMSMS\HookManager::do_hook('Core::ModuleUninstalled', [ 'name' => $module ] );
+            return array(TRUE);
         }
 
         audit('','Module','Uninstall failed: '.$module);
@@ -1079,28 +1069,7 @@ final class ModuleOperations
      */
     private function _get_all_module_dependencies()
     {
-        if( !is_array($this->_moduledeps) ) {
-            $fn = TMP_CACHE_LOCATION.'/f'.md5(__FILE__.'deps').'.dat';
-            if( file_exists($fn) ) {
-                $data = file_get_contents($fn);
-                $this->_moduledeps = unserialize($data);
-            }
-            else {
-                $this->_moduledeps = array();
-                $db = CmsApp::get_instance()->GetDb();
-                $query = 'SELECT parent_module,child_module,minimum_version FROM '.CMS_DB_PREFIX.'module_deps ORDER BY parent_module';
-                $dbr = $db->GetArray($query);
-                if( is_array($dbr) && count($dbr) ) {
-                    foreach( $dbr as $row ) {
-                        if( !isset($this->_moduledeps[$row['child_module']]) ) $this->_moduledeps[$row['child_module']] = array();
-                        $this->_moduledeps[$row['child_module']][$row['parent_module']] = $row['minimum_version'];
-                    }
-                }
-                global $CMS_INSTALL_PAGE;
-                if( isset($CMS_INSTALL_PAGE) ) file_put_contents($fn,serialize($this->_moduledeps));
-            }
-        }
-        return $this->_moduledeps;
+        return \CMSMS\internal\global_cache::get('module_deps');
     }
 
     /**
@@ -1215,7 +1184,7 @@ final class ModuleOperations
         $obj = null;
         if( !$module_name ) {
             if( CmsApp::get_instance()->is_frontend_request() ) {
-                $module_name = get_site_preference('frontendwysiwyg');
+                $module_name = cms_siteprefs::get('frontendwysiwyg');
             }
             else {
                 $module_name = cms_userprefs::get_for_user(get_userid(FALSE),'wysiwyg');
@@ -1243,7 +1212,24 @@ final class ModuleOperations
     public function &GetSearchModule()
     {
         $obj = null;
-        $module_name = get_site_preference('searchmodule','Search');
+        $module_name = cms_siteprefs::get('searchmodule','Search');
+        if( $module_name && $module_name != 'none' && $module_name != '-1' ) $obj = $this->get_module_instance($module_name);
+        return $obj;
+    }
+
+
+    /**
+     * Return the current filepicker module object.
+     *
+     * This method returns module object for the currently selected search module.
+     *
+     * @return \CMSMS\FilePickerInterface
+     * @since 2.2
+     */
+    public function &GetFilePickerModule()
+    {
+        $obj = null;
+        $module_name = cms_siteprefs::get('filepickermodule','FilePicker');
         if( $module_name && $module_name != 'none' && $module_name != '-1' ) $obj = $this->get_module_instance($module_name);
         return $obj;
     }

@@ -13,11 +13,15 @@ switch($current_version) {
 }
 
 if( version_compare($oldversion,'1.3.1') < 0 ) {
-  $this->CreateEvent('OnFileUploaded');
+    $this->CreateEvent('OnFileUploaded');
 }
+if( version_compare($oldversion,'1.6.2') < 0 ) {
+    $this->CreateEvent('OnFileDeleted');
+}
+
+
+// do this stuff for all upgrades.
 $this->SetPreference('advancedmode',0);
 $this->RemovePermission('Use Filemanager');
 $this->RegisterModulePlugin(true);
 $this->RemovePreference('uploadboxes');
-
-?>

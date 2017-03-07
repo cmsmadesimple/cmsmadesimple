@@ -3,16 +3,28 @@ $(document).ready(function() {
 
     $('#sel_all').cmsms_checkall();
 
-    $('.toggleactive').click(function(){
-        return confirm('{lang('confirm_toggleuseractive')|escape:'javascript'}');
+    $('.switchuser').click(function(ev){
+	ev.preventDefault();
+	var _href = $(this).attr('href');
+	cms_confirm('{lang('confirm_switchuser')|escape:'javascript'}').done(function(){
+	    window.location.href = _href;
+	});
     });
 
-    $(document).on('click', '#bulksubmit', function(){
-        return confirm('{lang('confirm_bulkuserop')|escape:'javascript'}');
+    $('.toggleactive').click(function(ev){
+        ev.preventDefault();
+	var _href = $(this).attr('href');
+        cms_confirm('{lang('confirm_toggleuseractive')|escape:'javascript'}').done(function(){
+	    window.location.href = _href;
+	});
     });
 
-    $(document).on('click', '.js-delete', function(){
-        return confirm('{lang('confirm_delete_user')|escape:'javascript'}');
+    $(document).on('click', '.js-delete', function(ev){
+        ev.preventDefault();
+	var _href = $(this).attr('href');
+        cms_confirm('{lang('confirm_delete_user')|escape:'javascript'}').done(function(){
+	    window.location.href = _href;
+	});
     });
 
     $('#withselected, #bulksubmit').attr('disabled','disabled');
@@ -29,13 +41,28 @@ $(document).ready(function() {
         }
     });
 
+    $('#listusers').submit(function(ev){
+        ev.preventDefault();
+        var v = $('#withselected').val();
+	if( v === 'delete' ) {
+	    cms_confirm('{lang('confirm_delete_user')|escape:'javascript'}').done(function(){
+	        $('#listusers').unbind('submit');
+		$('#bulksubmit').click();
+	    }).fail(function() {
+	        return false;
+	    });
+	} else {
+            cms_confirm('{lang('confirm_bulkuserop')|escape:'javascript'}').done(function(){
+	        return true;
+	    });
+	}
+    });
+
     $('#withselected').change(function(){
         var v = $(this).val();
 
         if (v === 'copyoptions') {
             $('#userlist').show();
-        } else if  (v === 'delete') {
-            return confirm('{lang('confirm_delete_user')|escape:'javascript'}');
         } else {
             $('#userlist').hide();
         }
@@ -46,7 +73,7 @@ $(document).ready(function() {
 
 <h3 class="invisible">{lang('currentusers')}</h3>
 
-{form_start url='listusers.php'}
+{form_start url='listusers.php' id="listusers"}
 
     <div class="pageoptions">
         <a href="adduser.php{$urlext}" title="{lang('info_adduser')}">{admin_icon icon='newobject.gif' class='systemicon'}&nbsp;{lang('adduser')}</a>
@@ -57,6 +84,7 @@ $(document).ready(function() {
             <tr>
                 <th>{lang('username')}</th>
                 <th style="text-align: center;">{lang('active')}</th>
+		{if $is_admin}<th class="pageicon"></th>{/if}
                 <th class="pageicon"></th>
                 <th class="pageicon"></th>
                 <th class="pageicon"><input type="checkbox" id="sel_all" value="1" title="{lang('selectall')}"/></th>
@@ -76,6 +104,7 @@ $(document).ready(function() {
                         <span title="{lang('info_noedituser')}">{$user->username}</span>
                     {/if}
                 </td>
+
                 <td style="text-align: center;">
                     {if $can_edit && $user->id != $my_userid}
                         <a href="listusers.php{$urlext}&amp;toggleactive={$user->id}" title="{lang('info_user_active2')}" class="toggleactive">
@@ -83,6 +112,17 @@ $(document).ready(function() {
                         </a>
                     {/if}
                 </td>
+
+		{if $is_admin}
+		<td>
+		  {if $user->active && $user->id != $my_userid}
+		  <a href="listusers.php{$urlext}&amp;switchuser={$user->id}" title="{lang('info_user_switch')}" class="switchuser">
+		     {admin_icon icon='run.gif'}
+		  </a>
+		  {/if}
+		</td>
+		{/if}
+
                 <td>
                     {if $can_edit}
                         <a href="edituser.php{$urlext}&amp;user_id={$user->id}" title="{lang('edituser')}">{admin_icon icon='edit.gif'}</a>

@@ -41,6 +41,9 @@ $error = '';
 
 $builder = new ContentListBuilder($this);
 $pagelimit = cms_userprefs::get($this->GetName().'_pagelimit',500);
+$filter = cms_userprefs::get($this->GetName().'_userfilter');
+if( $filter ) $filter = unserialize($filter);
+
 $ajax = 0;
 if( isset($params['ajax']) ) $ajax = 1;
 if( isset($params['curpage']) ) {
@@ -58,6 +61,34 @@ else if( isset($params['collapseall']) || isset($_GET['collapseall']) ) {
 if( isset($params['setoptions']) ) {
     $pagelimit = max(1,min(500,(int)$params['pagelimit']));
     cms_userprefs::set($this->GetName().'_pagelimit',$pagelimit);
+
+    $filter = null;
+    $filter_type = (isset($params['filter_type'])) ? $params['filter_type'] : null;
+    switch( $filter_type ) {
+    case ContentListFilter::EXPR_DESIGN:
+        $filter = new ContentListFilter;
+        $filter->type = ContentListFilter::EXPR_DESIGN;
+        $filter->expr = $params['filter_design'];
+        break;
+    case ContentListFilter::EXPR_TEMPLATE:
+        $filter = new ContentListFilter;
+        $filter->type = ContentListFilter::EXPR_TEMPLATE;
+        $filter->expr = $params['filter_template'];
+        break;
+    case ContentListFilter::EXPR_OWNER:
+        $filter = new ContentListFilter;
+        $filter->type = ContentListFilter::EXPR_OWNER;
+        $filter->expr = $params['filter_owner'];
+        break;
+    case ContentListFilter::EXPR_EDITOR:
+        $filter = new ContentListFilter;
+        $filter->type = ContentListFilter::EXPR_EDITOR;
+        $filter->expr = $params['filter_editor'];
+        break;
+    default:
+        cms_userprefs::remove($this->GetName().'_userfilter');
+    }
+    if( $filter ) cms_userprefs::set($this->GetName().'_userfilter',serialize($filter));
     $curpage = 1;
 }
 if( isset($params['expand']) ) {
@@ -118,8 +149,9 @@ $url = $this->create_url($id,'ajax_get_content',$returnid);
 $smarty->assign('ajax_get_content',str_replace('amp;','',$url));
 $smarty->assign('ajax',$ajax);
 $smarty->assign('can_add_content',$this->CheckPermission('Add Pages') || $this->CheckPermission('Manage All Content'));
-$smarty->assign('can_reorder_content',$this->CheckPermission('Manage All Content'));
+$smarty->assign('can_manage_content',$this->CheckPermission('Manage All Content'));
 $smarty->assign('admin_url',$config['admin_url']);
+$smarty->assign('filter',$filter);
 $locks = $builder->get_locks();
 $have_locks = (is_array($locks) && count($locks))?1:0;
 $smarty->assign('have_locks',$have_locks);
@@ -127,6 +159,12 @@ $pagelimits = array(10=>10,25=>25,100=>100,250=>250,500=>500);
 $smarty->assign('pagelimits',$pagelimits);
 $smarty->assign('pagelimit',$pagelimit);
 $smarty->assign('locking',CmsContentManagerUtils::locking_enabled());
+// get a list of admin users
+$smarty->assign('user_list',UserOperations::get_instance()->GetList());
+$smarty->assign('design_list',\CmsLayoutCollection::get_list());
+// get a list of templates
+$smarty->assign('template_list',CmsLayoutTemplate::template_query(array('as_list'=>1)));
+// get a list of designs
 if( $error ) $smarty->assign('error',$error);
 
 $res = $this->ProcessTemplate('defaultadmin.tpl');

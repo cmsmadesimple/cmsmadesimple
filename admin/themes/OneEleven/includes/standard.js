@@ -235,16 +235,10 @@
             var _this = this,
                 $sidebar_toggle = $('.toggle-button'), // object for sidebar toggle
                 $container = $('#oe_container'), // page container
-                $menu = $('#oe_pagemenu'), // page menu
-                $toggle_dropzone = $('.toggle-dropzone'), // dropzone toggle trigger
-                $dropzone = $('.pageheader'); // dropzone container
-
-            // fix footer, breaks when max-width 1024 kicks in and there is less content then height of menu
-            $('#oe_admin-content').css('min-height', ($('#oe_sidebar').height()));
+                $menu = $('#oe_pagemenu'); // page menu
 
             // handle navigation sidebar toggling
             $sidebar_toggle.on('click', function(e) {
-
                 e.preventDefault();
                 if ($container.hasClass('sidebar-on')) {
                     _this._closeSidebar($container, $menu);
@@ -253,19 +247,20 @@
                 }
             });
 
-            // trigger hide/reveal dropzone
-            _this.toggleDropzone($toggle_dropzone, $dropzone);
             // toggle hide/reveal menu children
             _this.toggleSubMenu($menu, 50);
             // handle notifications
             _this.showNotifications();
             // apply jQueryUI buttons
             _this.setUIButtons();
-            // handle functions that need window resize
+	    // setup alert handlers
+	    _this.setupAlerts();
+            // handle updating the display.
             _this.updateDisplay();
-
+	    // handles the initial state of the sidebar (collapsed or expanded)
+	    _this.handleSidebar($container);
             $(window).resize(function() {
-                $('.dashboard-inner').css('height', 'auto');
+		_this.handleSidebar($container);
                 _this.updateDisplay();
             });
         },
@@ -277,83 +272,16 @@
          * @param {object} container
          * @memberof OE.view
          */
-        handleSidebar : function(trigger, container) {
+        handleSidebar : function(container) {
             var viewportWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
 
-            if (OE.helper.getStorageValue('sidebar-pref') === 'sidebar-off' && viewportWidth > 768) {
+            if (OE.helper.getStorageValue('sidebar-pref') === 'sidebar-off' || viewportWidth <= 768) {
                 container.addClass('sidebar-off').removeClass('sidebar-on');
-                trigger.addClass('open-sidebar');
             } else {
                 container.addClass('sidebar-on').removeClass('sidebar-off');
-                trigger.addClass('close-sidebar');
             }
         },
 
-        /**
-         * @description Sets sidebar menu to fixed position on scroll
-         * @function stickyMenu()
-         * @param {object} obj
-         * @memberof OE.view
-         */
-        stickyMenu : function(obj) {
-            var viewportWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth,
-                viewportHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight,
-                offset = obj.offset(),
-                topOffset = offset.top,
-                leftOffset = offset.left,
-                scrollTop = $(window).scrollTop();
-
-            $(window).scroll(function() {
-                if (viewportWidth < 768) {
-                    obj.css({
-                        marginTop : '45px',
-                        position : 'relative'
-                    });
-                } else if (( viewportWidth >= 768 ) && ( viewportHeight >= obj.height() )) {
-                    scrollTop = $(window).scrollTop();
-
-                    if (scrollTop >= topOffset) {
-                        obj.css({
-                            marginTop : '-100px',
-                            position : 'fixed'
-                        });
-                    } else if (scrollTop < topOffset) {
-                        obj.css({
-                            marginTop : '45px',
-                            position : 'relative'
-                        });
-                    }
-                }
-            });
-        },
-
-        /**
-         * @description Handles open/close state of FileManager dropzone in OneEleven theme
-         * @function toggleDropzone()
-         * @param {object} trigger - click event handler
-         * @param {object} obj
-         * @memberof OE.view
-         */
-        toggleDropzone : function(trigger, obj) {
-
-            trigger.click(function(e) {
-                e.preventDefault();
-
-                $('.drop-inner').toggleClass('hidden');
-
-                if ($('.drop-inner').hasClass('hidden')) {
-                    OE.helper.setStorageValue('dropzone-pref', 'hidden', 60);
-                } else {
-                    OE.helper.removeStorageValue('dropzone-pref');
-                }
-            });
-
-            if (OE.helper.getStorageValue('dropzone-pref') === 'hidden') {
-                $('.drop-inner').addClass('hidden');
-            } else {
-                $('.drop-inner').removeClass('hidden');
-            }
-        },
 
         /**
          * @description Handles toggling of main menu child items
@@ -363,15 +291,20 @@
          * @memberof OE.view
          */
         toggleSubMenu : function(obj, duration) {
+	    var _this = this;
             obj.find('li.current span').addClass('open-sub');
-            obj .find('> li > span').click(function() {
+            obj.find('> li > span').click(function() {
                 var ul = $(this).next();
 
+		var _p = [];
                 if (ul.is(':visible') === false) {
-                    obj.find('ul').slideUp(duration);
+                    _p.push(obj.find('ul').slideUp(duration));
                 }
 
-                ul.slideToggle(duration);
+                _p.push(ul.slideToggle(duration));
+		$.when.apply($,_p).done(function(){
+		    _this.updateDisplay();
+		})
             });
         },
 
@@ -497,21 +430,22 @@
          * @function updateDisplay()
          */
         updateDisplay : function() {
-            var _this = this,
-                viewportWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth,
-                $sidebar_toggle = $('.toggle-button'), // toggle trigger object
-                $container = $('#oe_container'), // page container object
-                $menu_container = $('#oe_menu'), // menu container object
-                $group = $('.dashboard-inner'); // object for equalHeight(obj) function
-
-                // set sidebar visibility
-                _this.handleSidebar($sidebar_toggle, $container);
-                // handle equal height blocks
-                OE.helper.equalHeight($group);
-                // handle sticky menu if it's not mobile device
-                if (!OE.helper._isMobileDevice()) {
-                    _this.stickyMenu($menu_container);
-                }
+	    var $menu = $('#oe_menu');
+	    var $alert_box = $('#admin-alerts');
+	    var $header = $('header.header');
+	    var offset = $header.outerHeight() + $header.offset().top;
+	    if( $alert_box.length ) offset = $alert_box.outerHeight() + $alert_box.offset().top;
+	    if( $menu.outerHeight() + offset < $(window).height() ) {
+		$menu.css({ 'position': 'fixed', 'top': offset });
+	    } else {
+		$menu.css({ 'position': '', 'top': '' });
+	        if( $menu.offset().top < $(window).scrollTop() ) {
+		    //if the top of the menu is not visible, scroll to it.
+   		   $('html, body').animate({
+		      scrollTop: $("#oe_menu").offset().top
+		   }, 1000);
+		}
+	    }
         },
 
         /**
@@ -544,5 +478,51 @@
             OE.helper.setStorageValue('sidebar-pref', 'sidebar-off', 60);
         },
 
+	_handleAlert : function(target) {
+    	        var _row = $(target).closest('.alert-box');
+		var _alert_name = _row.data('alert-name');
+		if( ! _alert_name ) return;
+		return $.ajax({
+		    method: 'POST',
+		    url:  cms_data.ajax_alerts_url,
+		    data: {
+			op: 'delete',
+			alert: _alert_name
+		    }
+		}).done(function(){
+		    _row.slideUp(1000);
+		    var _parent = _row.parent();
+		    if ( _parent.children().length <= 1 ) {
+  		        _row.closest('div.ui-dialog-content').dialog('close');
+			$('#alert-noalerts').show();
+			$('a#alerts').closest('li').remove();
+		    }
+		    _row.remove();
+		}).fail(function(xhr,status,msg){
+		    console.debug('problem deleting an alert: '+msg);
+		})
+	},
+
+
+	/**
+         * @description Handles popping up the notification area
+         * @private
+         * @function _showAlerts()
+         */
+	setupAlerts : function() {
+            var _this = this;
+	    $('a#alerts').click(function(ev){
+		ev.preventDefault();
+		$('#alert-dialog').dialog();
+	    })
+	    $('.alert-msg a').click(function(ev){
+		ev.preventDefault();
+		OE.view.handleAlert(ev.target);
+	    })
+	    $('.alert-icon,.alert-remove').click(function(ev){
+		ev.preventDefault();
+		_this._handleAlert(ev.target);
+	    })
+	},
     };
 } )(this, jQuery);

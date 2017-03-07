@@ -1,33 +1,24 @@
-<div class="row c_full">
-  <div class="pageoptions grid_6">
-    <ul class="options-menu">
-
+<div class="row c_full cf">
+  <div class="pageoptions grid_8" style="margin-top: 8px;">
       {if $can_add_content}
-      <li>
-        <a  href="{cms_action_url action=admin_editcontent}" accesskey="n" title="{$mod->Lang('addcontent')}" class="pageoptions">{admin_icon icon='newobject.gif' alt=$mod->Lang('addcontent')}&nbsp;{$mod->Lang('addcontent')}</a>
-      </li>
+        <a href="{cms_action_url action=admin_editcontent}" accesskey="n" title="{$mod->Lang('addcontent')}" class="pageoptions">{admin_icon icon='newobject.gif' alt=$mod->Lang('addcontent')}&nbsp;{$mod->Lang('addcontent')}</a>
       {/if}
 
-      {if isset($content_list)}
-        <li class="parent">{admin_icon icon='run.gif' alt=$mod->Lang('prompt_options')}&nbsp;{$mod->Lang('prompt_options')}
-        <ul id="popupmenucontents">
-          <li><a class="expandall" href="{cms_action_url action='defaultadmin' expandall=1}" accesskey="e" title="{$mod->Lang('prompt_expandall')}">{admin_icon icon='expandall.gif' alt=$mod->Lang('expandall')}&nbsp;{$mod->Lang('expandall')}</a></li>
-	    <li><a class="collapseall" href="{cms_action_url action='defaultadmin' collapseall=1}" accesskey="c" title="{$mod->Lang('prompt_collapseall')}">{admin_icon icon='contractall.gif' alt=$mod->Lang('contractall')}&nbsp;{$mod->Lang('contractall')}</a></li>
-
-	  {if $can_reorder_content}
-	    <li><a id="ordercontent" href="{cms_action_url action=admin_ordercontent}" accesskey="r" title="{$mod->Lang('prompt_ordercontent')}">{admin_icon icon='reorder.gif' alt=$mod->Lang('reorderpages')}&nbsp;{$mod->Lang('reorderpages')}</a></li>
-	  {/if}
-	  <li><a id="myoptions" accesskey="o" title="{$mod->Lang('prompt_settings')}">{admin_icon icon='edit.gif' alt=$mod->Lang('prompt_settings')}&nbsp;{$mod->lang('prompt_settings')}</a></li>
-	  {if $have_locks}
-	    <li><a id="clearlocks" href="{cms_action_url action=admin_clearlocks}" accesskey="l" title="{$mod->Lang('title_clearlocks')}">{admin_icon icon='run.gif' alt=''}&nbsp;{$mod->Lang('prompt_clearlocks')}</a></li>
-	  {/if}
-	</ul>
-        </li>
+      {if !$have_filter && isset($content_list)}
+        <a class="expandall" href="{cms_action_url action='defaultadmin' expandall=1}" accesskey="e" title="{$mod->Lang('prompt_expandall')}">{admin_icon icon='expandall.gif' alt=$mod->Lang('expandall')}&nbsp;{$mod->Lang('expandall')}</a>
+	<a class="collapseall" href="{cms_action_url action='defaultadmin' collapseall=1}" accesskey="c" title="{$mod->Lang('prompt_collapseall')}">{admin_icon icon='contractall.gif' alt=$mod->Lang('contractall')}&nbsp;{$mod->Lang('contractall')}</a>
+	{if $can_reorder_content}
+	  <a id="ordercontent" href="{cms_action_url action=admin_ordercontent}" accesskey="r" title="{$mod->Lang('prompt_ordercontent')}">{admin_icon icon='reorder.gif' alt=$mod->Lang('reorderpages')}&nbsp;{$mod->Lang('reorderpages')}</a>
+	{/if}
+	{if $have_locks}
+	  <a id="clearlocks" href="{cms_action_url action=admin_clearlocks}" accesskey="l" title="{$mod->Lang('title_clearlocks')}">{admin_icon icon='run.gif' alt=''}&nbsp;{$mod->Lang('prompt_clearlocks')}</a>
+	{/if}
       {/if}
-    </ul>
+      <a id="myoptions" accesskey="o" title="{$mod->Lang('prompt_settings')}">{admin_icon icon='edit.gif' alt=$mod->Lang('prompt_settings')}&nbsp;{$mod->lang('prompt_settings')}</a>
+      {if !empty($have_filter)}<span style="color: red;"><em>({$mod->Lang('filter_applied')})</em></span>{/if}
   </div>
 
-  <div class="pageoptions options-form grid_6">
+  <div class="pageoptions options-form grid_4" style="float: right;">
     {if isset($content_list)}
     <span><label for="ajax_find">{$mod->Lang('find')}:</label>&nbsp;<input type="text" id="ajax_find" name="ajax_find" title="{$mod->Lang('title_listcontent_find')}" value="" size="25"/></span>
     {/if}
@@ -50,11 +41,16 @@
 
 {form_start action='defaultadmin' id='listform'}
   <div id="contentlist">{* everything from here down is part of the ajax stuff *}
+  {* error container *}
+  {if isset($error)}
+  <div id="error_cont" class="red" style="color: red; width: 80%; margin-left: 2%; margin-right: 10%; text-align: center; vertical-align: middle;">{$error}</div>
+  {/if}
+
   {if isset($content_list)}
     {function do_content_row}
       {foreach $columns as $column => $flag}
         {if !$flag}{continue}{/if}
-	<td>
+	<td class="{$column}">
 	  {if $column == 'expand'}
 	    {if $row.expand == 'open'}
 	    <a href="{cms_action_url action='defaultadmin' collapse=$row.id}" class="page_collapse" accesskey="C" title="{$mod->Lang('prompt_page_collapse')}">
@@ -80,7 +76,8 @@
 	        {if isset($row.alias)}<strong>{$mod->Lang('prompt_alias')}:</strong> {$row.alias}<br/>{/if}
 	        {if $row.secure}<strong>{$mod->Lang('prompt_secure')}:</strong> {$mod->Lang('yes')}<br/>{/if}
 	        <strong>{$mod->Lang('prompt_cachable')}:</strong> {if $row.cachable}{$mod->Lang('yes')}{else}{$mod->Lang('no')}{/if}<br/>
-	        <strong>{$mod->Lang('prompt_showinmenu')}:</strong> {if $row.showinmenu}{$mod->Lang('yes')}{else}{$mod->Lang('no')}{/if}
+	        <strong>{$mod->Lang('prompt_showinmenu')}:</strong> {if $row.showinmenu}{$mod->Lang('yes')}{else}{$mod->Lang('no')}{/if}<br/>
+	        <strong>{lang('wantschildren')}:</strong> {if $row.wantschildren|default:1}{$mod->Lang('yes')}{else}{$mod->Lang('no')}{/if}
 	      {/strip}{/capture}
 
 	      <a href="{cms_action_url action='admin_editcontent' content_id=$row.id}" class="page_edit tooltip" accesskey="e" data-cms-content='{$row.id}' data-cms-description='{$tooltip_pageinfo|cms_htmlentities}'>{$row.page|default:''}</a>
@@ -211,17 +208,12 @@
       {/foreach}
     {/function}
 
-  {* error container *}
-  <div id="error_cont" class="error" style="color: red; text-align: center; vertical-align: middle; display: none;">
-    {$error|default:''}
-  </div>
-
   {strip}<table id="contenttable" class="pagetable" width="100%">
     <thead>
       <tr>
         {foreach from=$columns key='column' item='flag'}
 	{if $flag}
-	  <th{if $flag=='icon'} class="pageicon"{/if}><!-- {$column} -->
+	  <th class="{*$column TODO Rolf *} {if $flag=='icon'}pageicon{/if}"><!-- {$column} -->
 	  {if $column == 'expand' or $column == 'hier' or $column == 'icon1' or $column == 'view' or $column == 'copy' or $column == 'edit' or $column == 'delete'}
             <span title="{$mod->Lang("coltitle_{$column}")}">&nbsp;</span>{* no column header *}
   	  {elseif $column == 'multiselect'}
@@ -249,16 +241,16 @@
       {/foreach}
     </tbody>
   </table>{/strip}
-{/if}
-</div>{* #contentlist *}
+  {else}
+
+  {/if}
+  </div>{* #contentlist *}
 
 {if isset($content_list)}
-  <div class="row c_full">
+  <div class="row c_full cf">
     {if $can_add_content}
-      <div class="pageoptions grid_6">
-        <ul class="options-menu">
-          <li><a  href="{cms_action_url action=admin_editcontent}" accesskey="n" title="{$mod->Lang('addcontent')}" class="pageoptions">{admin_icon icon='newobject.gif' alt=$mod->Lang('addcontent')}&nbsp;{$mod->Lang('addcontent')}</a></li>
-	</ul>
+      <div class="pageoptions grid_6" style="margin-top: 8px;">
+        <a  href="{cms_action_url action=admin_editcontent}" accesskey="n" title="{$mod->Lang('addcontent')}" class="pageoptions">{admin_icon icon='newobject.gif' alt=$mod->Lang('addcontent')}&nbsp;{$mod->Lang('addcontent')}</a>
       </div>
     {/if}
     {if $multiselect && isset($bulk_options)}

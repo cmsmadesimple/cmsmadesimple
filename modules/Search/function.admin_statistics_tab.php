@@ -13,15 +13,8 @@ $smarty->assign('clearwordcount',
 $query = 'SELECT * FROM '.CMS_DB_PREFIX.'module_search_words ORDER BY count DESC';
 $results = array();
 $dbr = $db->SelectLimit($query,50,0);
-while( $dbr && $row = $dbr->FetchRow() )
-  {
+while( $dbr && $row = $dbr->FetchRow() ) {
     $results[] = $row;
-  }
-if( count($results) )
-  {
-    $smarty->assign('topwords',$results);
-  }
-
+}
+if( count($results) ) $smarty->assign('topwords',$results);
 echo $this->ProcessTemplate('admin_statistics_tab.tpl');
-
-?>

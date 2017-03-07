@@ -194,7 +194,7 @@ class UserOperations
 		if( !empty($where) ) $query .= ' WHERE '.implode(' AND ',$where);
 
 		$id = $db->GetOne($query,$params);
-		if( $id ) return self::LoadUserByID($id);
+		if( $id ) $result = self::LoadUserByID($id);
 
 		return $result;
 	}
@@ -347,6 +347,23 @@ class UserOperations
 		return $result;
 	}
 
+    /**
+     * Generate an array of admin userids to usernames, suitable for use in a dropdown.
+     *
+     * @return array
+     * @since 2.2
+     */
+    public function GetList()
+    {
+        $allusers = $this->LoadUsers();
+        if( !count($allusers) ) return;
+
+        foreach( $allusers as $oneuser ) {
+            $out[$oneuser->id] = $oneuser->username;
+        }
+        return $out;
+    }
+
 	/**
 	 * Generate an HTML select element containing a user list
 	 *
@@ -356,20 +373,18 @@ class UserOperations
 	 */
 	function GenerateDropdown($currentuserid=null, $name='ownerid')
 	{
-		$result = '';
-		$allusers = $this->LoadUsers();
-
-		if (count($allusers) > 0) {
+        $result = null;
+        $list = $this->GetList();
+        if( count($list) ) {
 			$result .= '<select name="'.$name.'">';
-			foreach ($allusers as $oneuser) {
-				$result .= '<option value="'.$oneuser->id.'"';
-				if ($oneuser->id == $currentuserid) $result .= ' selected="selected"';
-				$result .= '>'.$oneuser->username.'</option>';
-			}
+            foreach( $list as $uid => $username ) {
+                $result .= '<option value="'.$uid.'"';
+                if( $uid == $currentuserid ) $result .= ' selected="selected"';
+				$result .= '>'.$username.'</option>';
+            }
 			$result .= '</select>';
-		}
-
-		return $result;
+        }
+        return $result;
 	}
 
 

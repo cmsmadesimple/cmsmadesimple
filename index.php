@@ -1,8 +1,7 @@
 <?php
-#BEGIN_LICENSE CMSMS
 #CMS - CMS Made Simple
 #(c)2004-2011 by Ted Kulp (wishy@users.sf.net)
-#(c)2011-2014 by The CMSMS Dev Team
+#(c)2011-2017 by The CMSMS Dev Team
 #Visit our homepage at: http://www.cmsmadesimple.org
 #
 #This program is free software; you can redistribute it and/or modify
@@ -17,7 +16,7 @@
 #You should have received a copy of the GNU General Public License
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-#END_LICENSE
+#
 #$Id$
 
 $starttime = microtime();
@@ -30,16 +29,8 @@ $orig_memory = (function_exists('memory_get_usage')?memory_get_usage():0);
  */
 
 clearstatcache();
-define('CONFIG_FILE_LOCATION',__DIR__.'/config.php');
 
-if (!isset($_SERVER['REQUEST_URI']) && isset($_SERVER['QUERY_STRING'])) {
-	$_SERVER['REQUEST_URI'] = $_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING'];
-}
-
-if (!file_exists(CONFIG_FILE_LOCATION) || filesize(CONFIG_FILE_LOCATION) < 100) {
-    die ('FATAL ERROR: config.php file not found or invalid');
-}
-
+if (!isset($_SERVER['REQUEST_URI']) && isset($_SERVER['QUERY_STRING'])) $_SERVER['REQUEST_URI'] = $_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING'];
 require_once(__DIR__.'/lib/include.php');
 
 if (file_exists(TMP_CACHE_LOCATION.'/SITEDOWN')) {
@@ -66,7 +57,7 @@ $smarty = $_app->GetSmarty();
 $smarty->params = $params;
 $page = get_pageid_or_alias_from_url();
 $contentops = ContentOperations::get_instance();
-$contentobj = '';
+$contentobj = null;
 $trycount = 0;
 
 cms_content_cache::get_instance();
@@ -75,6 +66,7 @@ $_tpl_cache = new CmsTemplateCache();
 while( $trycount < 2 ) {
     $trycount++;
     try {
+        // preview
         if( $page == -100) {
             setup_session(false);
             if( !isset($_SESSION['__cms_preview__']) ) throw new CmsException('preview selected, but temp data not found');
@@ -89,13 +81,12 @@ while( $trycount < 2 ) {
             $contentobj = $contentops->LoadContentFromAlias($page,true);
         }
 
-        if( !is_object($contentobj) ) {
-            throw new CmsError404Exception('Page '.$page.' not found');
-        }
+        if( !is_object($contentobj) ) throw new CmsError404Exception('Page '.$page.' not found');
 
         // session stuff is needed from here on.
         $cachable = $contentobj->Cachable();
-        if( $page == __CMS_PREVIEW_PAGE__ ) $cachable = false;
+        $uid = get_userid(FALSE);
+        if( $page == __CMS_PREVIEW_PAGE__ || $uid || $_SERVER['REQUEST_METHOD'] != 'GET' ) $cachable = false;
         setup_session($cachable);
 
         // from here in, we're assured to have a content object
@@ -110,19 +101,13 @@ while( $trycount < 2 ) {
             redirect($contentobj->GetURL()); // if this page is marked to be secure, make sure we redirect to the secure page
         }
 
-        if( !$contentobj->IsPermitted() ) {
-            throw new CmsError403Exception('Permission denied');
-        }
+        if( !$contentobj->IsPermitted() ) throw new CmsError403Exception('Permission denied');
 
         $_app->set_content_object($contentobj);
         $smarty->assignGlobal('content_obj',$contentobj);
         $smarty->assignGlobal('content_id', $contentobj->Id());
         $smarty->assignGlobal('page_id', $page);
         $smarty->assignGlobal('page_alias', $contentobj->Alias());
-
-        if( $contentobj->Secure() && !$_app->is_https_request() ) {
-            redirect($contentobj->GetURL()); // if this page is marked to be secure, make sure we redirect to the secure page
-        }
 
         CmsNlsOperations::set_language(); // <- NLS detection for frontend
         $smarty->assignGlobal('lang',CmsNlsOperations::get_current_language());
@@ -137,12 +122,16 @@ while( $trycount < 2 ) {
             $showtemplate = false;
         }
 
+        $cache_id = 'p'.$contentobj->Id();
         $smarty->set_global_cacheid('p'.$contentobj->Id());
-        $uid = get_userid(FALSE);
-        if( $contentobj->Cachable() && $showtemplate && !$uid && cms_siteprefs::get('use_smartycache',0) &&
-            $_SERVER['REQUEST_METHOD'] != 'POST' ) {
+        if( $cachable && $showtemplate && $contentobj->Cachable() && cms_siteprefs::get('use_smartycache',0) ) {
             $smarty->setCaching(Smarty::CACHING_LIFETIME_CURRENT);
         }
+
+        \CMSMS\HookManager::do_hook('Core::ContentPreRender', [ 'content' => &$contentobj ] );
+
+        // if the request has a mact in it, process and cache the output.
+        preprocess_mact($contentobj->Id());
 
         if( !$showtemplate ) {
             $smarty->setCaching(false);
@@ -153,15 +142,26 @@ while( $trycount < 2 ) {
         else {
             debug_buffer('process template top');
             $tpl_id = $contentobj->TemplateId();
-            $tpl = $smarty->createTemplate('tpl_top:'.$tpl_id);
-            $top  = $tpl->fetch();
+            $top = $body = $head = null;
+
+            \CMSMS\HookManager::do_hook('Core::PageTopPreRender', [ 'content'=>&$contentobj, 'html'=>&$top ]);
+            $tpl = $smarty->createTemplate('tpl_top:'.$tpl_id,$cache_id);
+            $top .= $tpl->fetch();
             unset($tpl);
-            $tpl = $smarty->createTemplate('tpl_body:'.$tpl_id);
-            $body  = $tpl->fetch();
+            \CMSMS\HookManager::do_hook('Core::PageTopPostRender', [ 'content'=>&$contentobj, 'html'=>&$top ]);
+
+            \CMSMS\HookManager::do_hook('Core::PageBodyPreRender', [ 'content'=>&$contentobj, 'html'=>&$body ]);
+            $tpl = $smarty->createTemplate('tpl_body:'.$tpl_id,$cache_id);
+            $body .= $tpl->fetch();
             unset($tpl);
-            $tpl = $smarty->createTemplate('tpl_head:'.$tpl_id);
-            $head = $tpl->fetch();
+            \CMSMS\HookManager::do_hook('Core::PageBodyPostRender', [ 'content'=>&$contentobj, 'html'=>&$body ]);
+
+            \CMSMS\HookManager::do_hook('Core::PageHeadPreRender', [ 'content'=>&$contentobj, 'html'=>&$head ]);
+            $tpl = $smarty->createTemplate('tpl_head:'.$tpl_id,$cache_id);
+            $head .= $tpl->fetch();
             unset($tpl);
+            \CMSMS\HookManager::do_hook('Core::PageHeadPostRender', [ 'content'=>&$contentobj, 'html'=>&$head ]);
+
             $html = $top.$head.$body;
             $trycount = 99; // no more iterations
         }
@@ -203,7 +203,7 @@ while( $trycount < 2 ) {
 
     catch (CmsError403Exception $e) // <- Catch CMSMS 403 error
     {
-        //debug_display('handle 404 exception '.$e->getFile().' at '.$e->getLine().' -- '.$e->getMessage());
+        //debug_display('handle 403 exception '.$e->getFile().' at '.$e->getLine().' -- '.$e->getMessage());
         // 404 error thrown... gotta do this process all over again.
         $page = 'error403';
         $showtemplate = true;
@@ -215,8 +215,9 @@ while( $trycount < 2 ) {
 
         // specified page not found, load the 404 error page.
         $contentobj = $contentops->LoadContentFromAlias('error403',true);
-        if( is_object($contentobj) )
-        {
+        $msg = $e->GetMessage();
+        if( !$msg ) $msg = '<p>We are sorry, but you do not have the appropriate permission to view this item.</p>';
+        if( is_object($contentobj) ) {
             // we have a 403 error page.
             header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
             header("Cache-Control: no-store, no-cache, must-revalidate");
@@ -224,8 +225,7 @@ while( $trycount < 2 ) {
             header("HTTP/1.0 403 Forbidden");
             header("Status: 403 Forbidden");
         }
-        else
-        {
+        else {
             @ob_end_clean();
             header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
             header("Cache-Control: no-store, no-cache, must-revalidate");
@@ -236,8 +236,7 @@ while( $trycount < 2 ) {
 <html><head>
 <title>403 Forbidden</title>
 </head><body>
-<h1>Forbidden</h1>
-<p>We are sorry, but you do not have the appropriate permission to view this item.</p>
+<h1>Forbidden</h1>'.$msg.'
 </body></html>';
             exit();
         }
@@ -252,7 +251,7 @@ while( $trycount < 2 ) {
     }
 } // end while trycount
 
-Events::SendEvent('Core', 'ContentPostRender', array('content' => &$html));
+\CMSMS\HookManager::do_hook( 'Core::ContentPostRender', [ 'content' => &$html ] );
 
 if( !headers_sent() ) {
     $ct = $_app->get_content_type();
@@ -265,27 +264,32 @@ echo $html;
 if( $page == __CMS_PREVIEW_PAGE__ && isset($_SESSION['__cms_preview__']) ) unset($_SESSION['__cms_preview__']);
 
 $debug = (defined('CMS_DEBUG') && CMS_DEBUG)?TRUE:FALSE;
-if( $debug || (isset($config['show_performance_info']) && ($showtemplate == true)) ) {
-    $db = $_app->GetDb();
+if( $debug || isset($config['log_performance_info']) || (isset($config['show_performance_info']) && ($showtemplate == true)) ) {
     $memory = (function_exists('memory_get_usage')?memory_get_usage():0);
     $memory = $memory - $orig_memory;
-    $memory_peak = (function_exists('memory_get_peak_usage')?memory_get_peak_usage():0);
+    $db = $_app->GetDb();
+    $sql_time = round($db->query_time_total,5);
+    $sql_queries = $db->query_count;
+    $memory_peak = (function_exists('memory_get_peak_usage')?memory_get_peak_usage():'n/a');
     $endtime = microtime();
+    $time = microtime_diff($starttime,$endtime);
 
-    $txt = microtime_diff($starttime,$endtime).' / '.round($db->query_time_total,7).' / '.(isset($db->query_count)?$db->query_count:'')." / {$memory} / {$memory_peak}";
-    debug_display($txt);
-    //$txt = strftime('%x %X').' :: '.$txt;
+    if( isset($config['log_performance_info']) ) {
+        $out = [ time(), $_SERVER['REQUEST_URI'], $_SERVER['REQUEST_METHOD'], $time, $sql_time, $queries, $memory, $memory_peak ];
+        $filename = TMP_CACHE_LOCATION.'/performance.log';
+        error_log(implode('|',$out)."\n", 3, $filename);
+    } else {
+        $txt = "Time: $time / SQL: {$sql_time}s for $sql_queries queries / Net Memory: {$memory} / Peak: {$memory_peak}";
+        echo '<div style="clear: both;"><pre><code>'.$txt.'</code></pre></div>';
+    }
 }
 
-if( $debug || is_sitedown() ) {
-    $smarty->clear_compiled_tpl();
-}
-
+if( $debug || is_sitedown() ) $smarty->clear_compiled_tpl();
 if ( $debug && !is_sitedown() ) {
     $arr = $_app->get_errors();
     foreach ($arr as $error) {
         echo $error;
     }
 }
+
 exit();
-?>

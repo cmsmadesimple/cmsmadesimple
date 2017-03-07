@@ -8,8 +8,26 @@
   <h3>{$ModuleManager->Lang('notice')}:</h3>
   <p>{$ModuleManager->Lang('time_warning')}</p>
 </div>
+<div class="clearb"></div>
 
 {if isset($dependencies)}
+  {$has_custom=0}
+  {foreach $dependencies as $name => $rec}
+     {if $rec.has_custom}{$has_custom=1}{/if}
+  {/foreach}
+  {if $has_custom}
+    <div class="warning">
+      <h3>{$ModuleManager->Lang('warning')}</h3>
+      <p>{$mod->Lang('warn_modulecustom')}</p>
+      <ul>
+        {foreach $dependencies as $name => $rec}
+          {if $rec.has_custom}<li>{$name}</li>{/if}
+	{/foreach}
+      </ul>
+    </div>
+    <div class="clearb"></div>
+  {/if}
+
   {if count($dependencies) > 1}
     <div class="warning">
       <h3>{$ModuleManager->Lang('warning')}</h3>

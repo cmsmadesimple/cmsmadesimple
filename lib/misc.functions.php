@@ -178,7 +178,30 @@ function cms_join_path()
     return implode(DIRECTORY_SEPARATOR,$args);
 }
 
+/**
+ * Return the relative portion of a path
+ *
+ * @since 2.2
+ * @author Robert Campbell
+ * @param string $in The input path or file specification
+ * @param string $relative_to The optional path to compute relative to.  If not supplied the cmsms root path will be used.
+ * @return string The relative portion of the input string.
+ */
+function cms_relative_path($in,$relative_to = null)
+{
+    $in = realpath(trim($in));
+    if( !$relative_to ) {
+        $config = \cms_config::get_instance();
+        $relative_to = $config['root_path'];
+    }
+    $to = realpath(trim($relative_to));
 
+    if( !$in ) return;
+    if( !$to ) return;
+    if( !startswith($in,$to) ) return;
+
+    return substr($in,strlen($to));
+}
 
 /**
  * Perform HTML entity conversion on a string.
@@ -223,7 +246,7 @@ function cms_htmlentities($val, $param=ENT_QUOTES, $charset="UTF-8", $convert_si
  */
 function debug_bt_to_log()
 {
-    if( CmsApp::get_instance()->config['debug_to_log'] || (function_exists('check_login') && check_login(TRUE)) ) {
+    if( CmsApp::get_instance()->config['debug_to_log'] || (function_exists('get_userid') && get_userid(FALSE)) ) {
         $bt=debug_backtrace();
         $file = $bt[0]['file'];
         $line = $bt[0]['line'];
@@ -298,7 +321,7 @@ function debug_bt()
 */
 function debug_display($var, $title="", $echo_to_screen = true, $use_html = true,$showtitle = TRUE)
 {
-    global $starttime;
+    global $starttime, $orig_memory;
     if( !$starttime ) $starttime = microtime();
 
     ob_start();
@@ -307,7 +330,10 @@ function debug_display($var, $title="", $echo_to_screen = true, $use_html = true
         $titleText = "Debug: ";
         if($title) $titleText = "Debug display of '$title':";
         $titleText .= '(' . microtime_diff($starttime,microtime()) . ')';
-        if (function_exists('memory_get_usage')) $titleText .= ' - (usage: '.memory_get_usage().')';
+        if (function_exists('memory_get_usage')) {
+            $net = memory_get_usage() - $orig_memory;
+            $titleText .= ' - (net usage: '.$net.')';
+        }
 
         $memory_peak = (function_exists('memory_get_peak_usage')?memory_get_peak_usage():'');
         if( $memory_peak ) $titleText .= ' - (peak: '.$memory_peak.')';
@@ -364,7 +390,8 @@ function debug_display($var, $title="", $echo_to_screen = true, $use_html = true
  */
 function debug_output($var, $title="")
 {
-    if(CmsApp::get_instance()->config["debug"] == true) debug_display($var, $title, true);
+    $config = \cms_config::get_instance();
+    if( $config["debug"] == true) debug_display($var, $title, true);
 }
 
 
@@ -379,11 +406,12 @@ function debug_output($var, $title="")
  */
 function debug_to_log($var, $title='',$filename = '')
 {
-    if( CmsApp::get_instance()->config['debug_to_log'] || (function_exists('check_login') && check_login(TRUE)) ) {
+    $config = \cms_config::get_instance();
+    if( $config['debug_to_log'] || (function_exists('check_login') && check_login(TRUE)) ) {
         if( $filename == '' ) {
             $filename = TMP_CACHE_LOCATION . '/debug.log';
-            $x = @filemtime($filename);
-            if( $x !== FALSE && $x < (time() - 24 * 3600) ) @unlink($filename);
+            $x = (is_file($filename)) ? @filemtime($filename) : time();
+            if( $x !== FALSE && $x < (time() - 24 * 3600) ) unlink($filename);
         }
         $errlines = explode("\n",debug_display($var, $title, false, false, true));
         foreach ($errlines as $txt) {
@@ -405,23 +433,6 @@ function debug_buffer($var, $title="")
     if( !defined('CMS_DEBUG') || CMS_DEBUG == 0 ) return;
     CmsApp::get_instance()->add_error(debug_display($var, $title, false, true));
 }
-
-
-
-/**
- * Debug an sql command.
- *
- * @internal
- * @param string SQL query
- * @param bool (unused)
- * Rolf: only used in lib/adodb.functions.php
- */
-function debug_sql($str, $newline = false)
-{
-    if( !defined('CMS_DEBUG') || CMS_DEBUG == 0 ) return;
-    CmsApp::get_instance()->add_error(debug_display($str, '', false, true));
-}
-
 
 
 /**
@@ -588,28 +599,24 @@ function is_directory_writable( $path )
 {
     if ( substr ( $path , strlen ( $path ) - 1 ) != '/' ) $path .= '/' ;
 
+    if( !is_dir($path) ) return FALSE;
     $result = TRUE;
-    if( $handle = @opendir( $path ) ) {
+    if( $handle = opendir( $path ) ) {
         while( false !== ( $file = readdir( $handle ) ) ) {
             if( $file == '.' || $file == '..' ) continue;
 
             $p = $path.$file;
-            if( !@is_writable( $p ) ) {
-                return FALSE;
-            }
+            if( !@is_writable( $p ) ) return FALSE;
 
             if( @is_dir( $p ) ) {
                 $result = is_directory_writable( $p );
                 if( !$result ) return FALSE;
             }
         }
-        @closedir( $handle );
+        closedir( $handle );
+        return TRUE;
     }
-    else {
-        return FALSE;
-    }
-
-    return TRUE;
+    return FALSE;
 }
 
 
@@ -625,28 +632,29 @@ function is_directory_writable( $path )
  */
 function get_matching_files($dir,$extensions = '',$excludedot = true,$excludedir = true, $fileprefix='',$excludefiles=1)
 {
-  $dh = @opendir($dir);
-  if( !$dh ) return false;
+    if( !is_dir($dir) ) return false;
+    $dh = opendir($dir);
+    if( !$dh ) return false;
 
-  if( !empty($extensions) ) $extensions = explode(',',strtolower($extensions));
-  $results = array();
-  while( false !== ($file = readdir($dh)) ) {
-    if( $file == '.' || $file == '..' ) continue;
-    if( startswith($file,'.') && $excludedot ) continue;
-    if( is_dir(cms_join_path($dir,$file)) && $excludedir ) continue;
-    if( !empty($fileprefix) ) {
-      if( $excludefiles == 1 && startswith($file,$fileprefix) ) continue;
-      if( $excludefiles == 0 && !startswith($file,$fileprefix) ) continue;
+    if( !empty($extensions) ) $extensions = explode(',',strtolower($extensions));
+    $results = array();
+    while( false !== ($file = readdir($dh)) ) {
+        if( $file == '.' || $file == '..' ) continue;
+        if( startswith($file,'.') && $excludedot ) continue;
+        if( is_dir(cms_join_path($dir,$file)) && $excludedir ) continue;
+        if( !empty($fileprefix) ) {
+            if( $excludefiles == 1 && startswith($file,$fileprefix) ) continue;
+            if( $excludefiles == 0 && !startswith($file,$fileprefix) ) continue;
+        }
+
+        $ext = strtolower(substr($file,strrpos($file,'.')+1));
+        if( is_array($extensions) && count($extensions) && !in_array($ext,$extensions) ) continue;
+
+        $results[] = $file;
     }
-
-    $ext = strtolower(substr($file,strrpos($file,'.')+1));
-    if( is_array($extensions) && count($extensions) && !in_array($ext,$extensions) ) continue;
-
-    $results[] = $file;
-  }
-  closedir($dh);
-  if( !count($results) ) return false;
-  return $results;
+    closedir($dh);
+    if( !count($results) ) return false;
+    return $results;
 }
 
 
@@ -808,7 +816,7 @@ function munge_string_to_url($alias, $tolower = false, $withslash = false)
   // remove invalid chars
   $expr = '/[^\p{L}_\-\.\ \d]/u';
   if( $withslash ) $expr = '/[^\p{L}_\.\-\ \d\/]/u';
-  $tmp = preg_replace($expr,'',$alias);
+  $tmp = trim( preg_replace($expr,'',$alias) );
 
   // remove extra dashes and spaces.
   $tmp = str_replace(' ','-',$tmp);
@@ -1059,7 +1067,9 @@ function is_email( $email, $checkDNS=false )
 {
    if( !filter_var($email,FILTER_VALIDATE_EMAIL) ) return FALSE;
    if ($checkDNS && function_exists('checkdnsrr')) {
-     if (!(checkdnsrr($domain, 'A') || checkdnsrr($domain, 'MX'))) return FALSE;	// Domain doesn't actually exist
+       list($user,$domain) = explode('@',$email,2);
+       if( !$domain ) return FALSE;
+       if ( !(checkdnsrr($domain, 'A') || checkdnsrr($domain, 'MX'))) return FALSE;	// Domain doesn't actually exist
    }
 
    return TRUE;
@@ -1160,6 +1170,7 @@ function cms_get_jquery($exclude = '',$ssl = null,$cdn = false,$append = '',$cus
       $scripts['cms_hiersel'] = array('local'=>$basePath.'/lib/jquery/js/jquery.cmsms_hierselector.js');
       $scripts['cms_autorefresh'] = array('local'=>$basePath.'/lib/jquery/js/jquery.cmsms_autorefresh.js');
       $scripts['ui_touch_punch'] = array('local'=>$basePath.'/lib/jquery/js/jquery.ui.touch-punch.min.js');
+      $scripts['cms_filepicker'] = [ 'local'=>$basePath.'/lib/jquery/js/jquery.cmsms_filepicker.js' ];
   }
 
   // Check if we need to exclude some script
@@ -1231,9 +1242,7 @@ function setup_session($cachable = FALSE)
     if( $cachable ) {
         if( $_SERVER['REQUEST_METHOD'] != 'GET' || isset($CMS_ADMIN_PAGE) || isset($CMS_INSTALL_PAGE) ) $cachable = FALSE;
     }
-    if( $cachable ) {
-        $cachable = (int) cms_siteprefs::get('allow_browser_cache',0);
-    }
+    if( $cachable ) $cachable = (int) cms_siteprefs::get('allow_browser_cache',0);
     if( !$cachable ) {
         // admin pages can't be cached... period, at all.. never.
         @session_cache_limiter('nocache');
@@ -1244,12 +1253,10 @@ function setup_session($cachable = FALSE)
         @session_cache_expire($expiry);
         @session_cache_limiter('public');
         @header_remove('Last-Modified');
-		//header('Expires: '.gmdate("D, d M Y H:i:s",time() + $expiry * 60).' GMT');
-        //header('Cache-Control: public, max_age='.($expiry*60));
     }
 
     #Setup session with different id and start it
-    $session_name = 'CMSSESSID'.substr(md5(__DIR__), 0, 12);
+    $session_name = 'CMSSESSID'.substr(md5(__DIR__.CMS_VERSION), 0, 12);
     if( !isset($CMS_INSTALL_PAGE) ) {
         @session_name($session_name);
         @ini_set('url_rewriter.tags', '');
@@ -1267,5 +1274,3 @@ function setup_session($cachable = FALSE)
     if(!@session_id()) session_start();
     $_setup_already = true;
 }
-
-?>

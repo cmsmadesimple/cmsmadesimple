@@ -6,7 +6,6 @@ use \__appbase;
 class wizard_step4 extends \cms_autoinstaller\wizard_step
 {
     private $_config;
-    private $_samplecontent;
     private $_dbms_options;
 
     public function __construct()
@@ -17,16 +16,14 @@ class wizard_step4 extends \cms_autoinstaller\wizard_step
         if( !$tz ) @date_default_timezone_set('UTC');
         $this->_config = array('dbtype'=>'','dbhost'=>'localhost','dbname'=>'','dbuser'=>'',
                                'dbpass'=>'','dbprefix'=>'cms_','dbport'=>'',
+                               'samplecontent'=>TRUE,
                                'query_var'=>'','timezone'=>$tz);
-        $this->_samplecontent = TRUE;
 
         // get saved date
         $tmp = $this->get_wizard()->get_data('config');
-        if( is_array($tmp) && count($tmp) ) $this->_config = $tmp;
-        $tmp = $this->get_wizard()->get_data('samplecontent');
-        if( $tmp === 0 || $tmp === 1 ) $this->_samplecontent = $tmp;
+        if( $tmp ) $this->_config = array_merge($this->_config,$tmp);
 
-        $databases = array('mysqli'=>'MySQLi (4.1+)', 'mysql'=>'MySQL (compatibility');
+        $databases = array('mysqli'=>'MySQLi (4.1+)');
         $this->_dbms_options = array();
         foreach ($databases as $db => $lbl) {
             if( extension_loaded($db) ) $this->_dbms_options[$db] = $lbl;
@@ -34,7 +31,7 @@ class wizard_step4 extends \cms_autoinstaller\wizard_step
         if( !count($this->_dbms_options) ) throw new \Exception(\__appbase\lang('error_nodatabases'));
 
         $action = $this->get_wizard()->get_data('action');
-        if( $action == 'freshen' ) {
+        if( $action == 'freshen' || $action == 'upgrade' ) {
             // read config data from config.php for freshen action.
             $app = \__appbase\get_app();
             $destdir = $app->get_destdir();
@@ -58,7 +55,7 @@ class wizard_step4 extends \cms_autoinstaller\wizard_step
         if( !isset($config['dbhost']) || !$config['dbhost'] ) throw new \Exception(\__appbase\lang('error_nodbhost'));
         if( !isset($config['dbname']) || !$config['dbname'] ) throw new \Exception(\__appbase\lang('error_nodbname'));
         if( !isset($config['dbuser']) || !$config['dbuser'] ) throw new \Exception(\__appbase\lang('error_nodbuser'));
-        //if( !isset($config['dbpass']) || !$config['dbpass'] ) throw new \Exception(\__appbase\lang('error_nodbpass'));
+        if( !isset($config['dbpass']) || !$config['dbpass'] ) throw new \Exception(\__appbase\lang('error_nodbpass'));
         if( !isset($config['dbprefix']) || !$config['dbprefix'] ) throw new \Exception(\__appbase\lang('error_nodbprefix'));
         if( !isset($config['timezone']) || !$config['timezone'] ) throw new \Exception(\__appbase\lang('error_notimezone'));
 
@@ -69,25 +66,50 @@ class wizard_step4 extends \cms_autoinstaller\wizard_step
         }
 
         // try a test connection
-        $db = \__appbase\new_db_connection($config['dbtype']);
-        IF( $config['dbport'] ) $db->port = (int) $config['dbport'];
-        $res = $db->Connect($config['dbhost'],$config['dbuser'],$config['dbpass'],$config['dbname']);
-        if( !$res ) throw new \Exception(\__appbase\lang('error_dbconnect'));
+        $spec = new \CMSMS\Database\ConnectionSpec;
+        $spec->type = $config['dbtype'];
+        $spec->host = $config['dbhost'];
+        $spec->username = $config['dbuser'];
+        $spec->password = $config['dbpass'];
+        $spec->dbname = $config['dbname'];
+        $spec->port = isset($config['dbport']) ? $config['dbport'] : null;
+        $spec->prefix = $config['dbprefix'];
+        $db = \CMSMS\Database\Connection::initialize($spec);
         $db->Execute("SET NAMES 'utf8'");
 
         // see if we can create and drop a table.
-        $res = $db->Execute('CREATE TABLE '.$config['dbprefix'].'_dummyinstall (i int)');
-        if( !$res ) throw new \Exception(\__appbase\lang('error_createtable'));
-        $res = $db->Execute('DROP TABLE '.$config['dbprefix'].'_dummyinstall');
-        if( !$res ) throw new \Exception(\__appbase\lang('error_droptable'));
+        $action = $this->get_wizard()->get_data('action');
+        try {
+            $db->Execute('CREATE TABLE '.$config['dbprefix'].'_dummyinstall (i int)');
+        }
+        catch( \Exception $e ) {
+            throw new \Exception(\__appbase\lang('error_createtable'));
+        }
+
+        try {
+            $db->Execute('DROP TABLE '.$config['dbprefix'].'_dummyinstall');
+        }
+        catch( \Exception $e ) {
+            throw new \Exception(\__appbase\lang('error_droptable'));
+        }
 
         // see if a smartering of core tables exist
-        $action = $this->get_wizard()->get_data('action');
         if( $action == 'install' ) {
-            $res = $db->GetOne('SELECT content_id FROM '.$config['dbprefix'].'content');
-            if( $res > 0 ) throw new \Exception(\__appbase\lang('error_cmstablesexist'));
-            $res = $db->GetOne('SELECT module_name FROM '.$config['dbprefix'].'modules');
-            if( $res > 0 ) throw new \Exception(\__appbase\lang('error_cmstablesexist'));
+            try {
+                $res = $db->GetOne('SELECT content_id FROM '.$config['dbprefix'].'content');
+                if( $res > 0 ) throw new \Exception(\__appbase\lang('error_cmstablesexist'));
+            }
+            catch( \CMSMS\Database\DatabaseException $e ) {
+                // if this fails it's not a problem
+            }
+
+            try {
+                $db->GetOne('SELECT module_name FROM '.$config['dbprefix'].'modules');
+                if( $res > 0 ) throw new \Exception(\__appbase\lang('error_cmstablesexist'));
+            }
+            catch( \CMSMS\Database\DatabaseException $e ) {
+                // if this fails it's not a problem.
+            }
         }
     }
 
@@ -104,16 +126,23 @@ class wizard_step4 extends \cms_autoinstaller\wizard_step
         if( isset($_POST['dbport']) ) $this->_config['dbport'] = trim(\__appbase\utils::clean_string($_POST['dbport']));
         if( isset($_POST['dbprefix']) ) $this->_config['dbprefix'] = trim(\__appbase\utils::clean_string($_POST['dbprefix']));
         if( isset($_POST['query_var']) ) $this->_config['query_var'] = trim(\__appbase\utils::clean_string($_POST['query_var']));
-        if( isset($_POST['samplecontent']) ) $this->_samplecontent = (int)$_POST['samplecontent'];
-
+        if( isset($_POST['samplecontent']) ) $this->_config['samplecontent'] = (int)$_POST['samplecontent'];
         $this->get_wizard()->set_data('config',$this->_config);
-        $this->get_wizard()->set_data('samplecontent',$this->_samplecontent);
 
         try {
+            $app = \__appbase\get_app();
+            $config = $app->get_config();
             $this->validate($this->_config);
             $url = $this->get_wizard()->next_url();
             $action = $this->get_wizard()->get_data('action');
             if( $action == 'freshen' ) $url = $this->get_wizard()->step_url(6);
+            if( $action == 'upgrade' ) {
+                if( $config['nofiles'] ) {
+                    $url = $this->get_wizard()->step_url(8);
+                } else {
+                    $url = $this->get_wizard()->step_url(7);
+                }
+            }
             \__appbase\utils::redirect($url);
         }
         catch( \Exception $e ) {
@@ -131,18 +160,13 @@ class wizard_step4 extends \cms_autoinstaller\wizard_step
         if( !is_array($tmp) ) throw new \Exception(\__appbase\lang('error_tzlist'));
         $tmp2 = array_combine(array_values($tmp),array_values($tmp));
         $smarty->assign('timezones',array_merge(array(''=>\__appbase\lang('none')),$tmp2));
-
         $smarty->assign('dbtypes',$this->_dbms_options);
-
         $smarty->assign('action',$this->get_wizard()->get_data('action'));
         $smarty->assign('verbose',$this->get_wizard()->get_data('verbose',0));
         $smarty->assign('config',$this->_config);
-        $smarty->assign('samplecontent',$this->_samplecontent);
         $smarty->assign('yesno',array('0'=>\__appbase\lang('no'),'1'=>\__appbase\lang('yes')));
         $smarty->display('wizard_step4.tpl');
         $this->finish();
     }
 
 } // end of class
-
-?>

@@ -65,9 +65,9 @@ abstract class app
         return $dir;
     }
 
-    static public function get_config()
+    public function get_config()
     {
-        return self::$_instance->_config;
+        return $this->_config;
     }
 
     static public function clear_cache($do_index_html = TRUE)
@@ -89,11 +89,14 @@ abstract class app
 
     static public function autoload($classname)
     {
+        $dirsuffix = dirname(str_replace('\\','/',$classname));
         $classname = basename(str_replace('\\','/',$classname));
+        $dirsuffix = str_replace('__appbase','.',$dirsuffix);
+        //if( $dirsuffix == "__appbase" ) $dirsuffix = '.';
 
-        $dirs = array(__DIR__,dirname(__DIR__),dirname(__DIR__).'/tests',dirname(__DIR__).'/base');
+        $dirs = array(__DIR__,dirname(__DIR__),dirname(__DIR__).'/tests',dirname(__DIR__).'/base',dirname(dirname(__DIR__)) );
         foreach( $dirs as $dir ) {
-            $fn = $dir."/class.$classname.php";
+            $fn = "$dir/$dirsuffix/class.$classname.php";
             if( file_exists($fn) ) {
                 include_once($fn);
                 return;

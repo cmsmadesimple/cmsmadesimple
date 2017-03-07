@@ -72,23 +72,35 @@ final class UserTagOperations
 		$this->CallUserTag($name,$arguments);
 	}
 
+    /**
+     * @ignore
+     * @internal
+     */
+    public static function setup()
+    {
+        $obj = new \CMSMS\internal\global_cachable(__CLASS__,function(){
+                $db = CmsApp::get_instance()->GetDb();
+
+                $query = 'SELECT * FROM '.CMS_DB_PREFIX.'userplugins'.' ORDER BY userplugin_name';
+                $data = $db->GetArray($query);
+                if( is_array($data) ) {
+                    $out = array();
+                    foreach( $data as $row ) {
+                        $out[$row['userplugin_name']] = $row;
+                    }
+                    return $out;
+                }
+            });
+        \CMSMS\internal\global_cache::add_cachable($obj);
+    }
+
 	/**
 	 * Load all the information about user tags
 	 */
-	public function LoadUserTags()
-	{
-		if( count($this->_cache) == 0 ) {
-			$db = CmsApp::get_instance()->GetDb();
-
-			$query = 'SELECT * FROM '.CMS_DB_PREFIX.'userplugins'.' ORDER BY userplugin_name';
-			$data = $db->GetArray($query);
-			if( is_array($data) ) {
-				foreach( $data as $row ) {
-					$this->_cache[$row['userplugin_name']] = $row;
-				}
-			}
-		}
-	}
+    public function LoadUserTags()
+    {
+        $this->_cache = \CMSMS\internal\global_cache::get(__CLASS__);
+    }
 
 
 	/**
@@ -140,7 +152,7 @@ final class UserTagOperations
 	function SmartyTagExists($name,$check_functions = true)
 	{
 		// get the list of smarty plugins that are known.
-		$config = CmsApp::get_instance()->GetConfig();
+		$config = \cms_config::get_instance();
 		$phpfiles = glob(CMS_ROOT_PATH.'/plugins/function.*.php');
 		if( is_array($phpfiles) && count($phpfiles) ) {
 			for( $i = 0; $i < count($phpfiles); $i++ ) {
@@ -155,7 +167,7 @@ final class UserTagOperations
 
 		if( $check_functions ) {
 			// registered by something else... maybe a module.
-			$smarty = CmsApp::get_instance()->GetSmarty();
+            $smarty = \Smarty_CMS::get_instance();
 			if( $smarty->is_registered($name) ) return TRUE;
 		}
 
@@ -188,10 +200,11 @@ final class UserTagOperations
 			$new_usertag_id = $db->GenID(CMS_DB_PREFIX."userplugins_seq");
 			$query = "INSERT INTO ".CMS_DB_PREFIX."userplugins (userplugin_id, userplugin_name, code, description, create_date, modified_date) VALUES (?,?,?,?,".$db->DBTimeStamp(time()).",".$db->DBTimeStamp(time()).")";
 			$result = $db->Execute($query, array($new_usertag_id, $name, $text, $description));
-			if ($result)
-				return true;
-			else
-				return false;
+			if ($result) {
+                \CMSMS\internal\global_cache::clear(__CLASS__);
+                return true;
+            }
+            return false;
 		}
 		else {
 			$this->_cache = array(); // reset the cache.
@@ -204,7 +217,10 @@ final class UserTagOperations
 			$query .= ', modified_date = NOW() WHERE userplugin_id = ?';
 			$parms[] = $id;
 			$result = $db->Execute($query, $parms);
-			if ($result) return true;
+			if ($result) {
+                \CMSMS\internal\global_cache::clear(__CLASS__);
+                return true;
+            }
 			return false;
 		}
 	}
@@ -225,7 +241,10 @@ final class UserTagOperations
 		$result = &$db->Execute($query, array($name));
 
 		$this->_cache = array();
-		if ($result) return true;
+		if ($result) {
+            \CMSMS\internal\global_cache::clear(__CLASS__);
+            return true;
+        }
 
 		return false;
 	}
@@ -260,7 +279,7 @@ final class UserTagOperations
 		$row = $this->_get_from_cache($name);
 		$result = FALSE;
 		if( $row ) {
-			$smarty = CmsApp::get_instance()->GetSmarty();
+            $smarty = \Smarty_CMS::get_instance();
 			$functionname = $this->CreateTagFunction($name);
 			$result = call_user_func_array($functionname, array(&$params, &$smarty));
 		}

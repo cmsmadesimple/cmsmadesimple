@@ -315,8 +315,8 @@ html, body {
 body {
 	min-width: 900px;
 	color: #232323;
-	line-height: 1.3;
-	font-size: 13px;
+	line-height: 1.4;
+	font-size: 14px;
 	background: #f6f6f6
 }
 ins {
@@ -392,7 +392,7 @@ h6 {
 	font-size: 12px
 }
 p {
-	font-size: 13px;
+	font-size: 14px;
 	margin: 2px 0
 }
 table,
@@ -404,6 +404,7 @@ form {
 	margin: 0px;
 	display: inline
 }
+a,
 a:link,
 a:visited {
 	color: #147fdb;
@@ -465,7 +466,7 @@ pre, code, samp, kbd {
 	text-align: left;
 	color: #232323;
 	height: auto;
-	font-size: 13px
+	font-size: 14px
 	}
 pre code {
 
@@ -510,7 +511,7 @@ textarea,
 select,
 menu {
 	font-family: sans-serif;
-	font-size: 13px;
+	font-size: 14px;
 	margin: 2px 5px 2px 0;
 	padding: 4px 5px;
 	border: 1px solid #aaa;
@@ -567,7 +568,8 @@ input[type="submit"],
 }
 .ui-button-text {
 	font-size: 13px;
-	margin-right: 2px
+	margin-right: 2px;
+	text-transform: uppercase
 }
 button.ui-button.ui-state-active {
 	border: 1px solid #d3d3d3;
@@ -619,7 +621,7 @@ table.pagetable a.text-red {
 .information {
 	display: inline-block;
 	width: auto;
-	font-size: 12px;
+	font-size: 14px;
 	padding: 10px 40px 10px 10px;
 	margin: 10px 0
 }
@@ -680,7 +682,7 @@ table.pagetable a.text-red {
 .message p {
 	color: #232323;
 	margin: 0;
-	font-size: 12px
+	font-size: 14px
 }
 .pagewarning h3 {
 	margin: 2px 0;
@@ -1123,7 +1125,7 @@ header .shortcuts li.favorites a {
 	height: 25px;
 	position: absolute;
 	left: -1px;
-	top: 75px
+	top: 12px
 }
 #oe_sidebar .toggle-button.top {
 	top: -33px
@@ -1252,6 +1254,12 @@ nav ul#oe_pagemenu li.current li a:active,
 nav ul#oe_pagemenu li.current li a,
 nav ul#oe_pagemenu li li a:hover {
 	color: #147fdb;
+}
+
+nav ul#oe_pagemenu li a:focus {
+        color: #147fdb !important;
+        border: 1px solid #147fdb;
+        margin-right: 10px;
 }
 
 nav ul#oe_pagemenu li a.main {
@@ -1581,7 +1589,7 @@ table tr:last-child td:last-child {
 	}
 table.pagetable {
 	border-collapse: inherit;
-	font-size: 12px;
+	font-size: 14px;
 	border: 1px solid #ddd;
 	width: 100%;
 	direction: rtl;
@@ -1786,7 +1794,7 @@ div.pagecontainer .pagetext {
 }
 div.pagecontainer .pageshowrows {
 	color: #585858;
-	font-size: 12px;
+	font-size: 14px;
 	text-align: right;
 	margin-bottom: 5px
 }
@@ -1835,7 +1843,7 @@ div.pagecontainer legend {
 }
 div.pagecontainer p.pageinput,
 div.pagecontainer .pageinput label {
-	font-size: 12px
+	font-size: 14px
 }
 p.pageinputwysiwyg {
 	padding-top: 5px
@@ -1914,7 +1922,7 @@ textarea.pageextrasmalltextarea {
 	float: right;
 	border-radius: 4px;
 	margin-left: 2.29%;
-	margin-bottom: 1%;
+	margin-bottom: 10px;
 	background: #d5d5d5 url(themes/OneEleven/images/layout/sprite_repeatx.png) 214px -339px repeat-x;
 	border: 1px solid #ddd
 }
@@ -1952,7 +1960,7 @@ textarea.pageextrasmalltextarea {
 }
 .dashboard-box h4 {
 	margin: 5px 0;
-	font-size: 12px;
+	font-size: 13px;
 	color: #232323
 }
 #oe_mainarea .dashboard-box ul.subitems {
@@ -1966,7 +1974,7 @@ textarea.pageextrasmalltextarea {
 	float:left
 }
 .dashboard-box ul.subitems li a {
-	font-size: 12px;
+	font-size: 13px;
 	text-decoration: underline
 }
 /*** reorder pages ***/

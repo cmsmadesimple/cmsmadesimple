@@ -110,4 +110,5 @@ $smarty->assign('hidden',
 		$this->CreateInputHidden($id, 'fdid', $fdid).
 		$this->CreateInputHidden($id, 'origname', $origname));
 echo $this->ProcessTemplate('editfielddef.tpl');
-?>
+
+// EOF

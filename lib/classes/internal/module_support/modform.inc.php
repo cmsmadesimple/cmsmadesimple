@@ -618,7 +618,7 @@ function cms_module_CreateLink(&$modinstance, $id, $action, $returnid='', $conte
 function cms_module_create_url(&$modinstance,$id,$action,$returnid='',$params=array(),
 							   $inline=false,$targetcontentonly=false,$prettyurl='')
 {
-	$config = CmsApp::get_instance()->GetConfig();
+	$config = \cms_config::get_instance();
 
 	$text = '';
 	if( empty($prettyurl) && $config['url_rewriting'] != 'none' ) {

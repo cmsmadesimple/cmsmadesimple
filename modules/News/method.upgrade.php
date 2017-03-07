@@ -2,14 +2,14 @@
 if (!isset($gCms)) exit;
 $db = $this->GetDb();
 
-$uid = null;
-if( cmsms()->test_state(CmsApp::STATE_INSTALL) ) {
-  $uid = 1; // hardcode to first user
-} else {
-  $uid = get_userid();
-}
-
 if( version_compare($oldversion,'2.50') < 0 ) {
+    $uid = null;
+    if( cmsms()->test_state(CmsApp::STATE_INSTALL) ) {
+        $uid = 1; // hardcode to first user
+    } else {
+        $uid = get_userid();
+    }
+
     $_fix_name = function($str) {
         if( CmsAdminUtils::is_valid_itemname($str) ) return $str;
         $orig = $str;
@@ -153,6 +153,23 @@ if( version_compare($oldversion,'2.50') < 0 ) {
   $this->RegisterModulePlugin(TRUE);
   $this->RegisterSmartyPlugin('news','function','function_plugin');
   $this->CreateStaticRoutes();
+}
+
+if( version_compare($oldversion,'2.50.8') < 0 ) {
+    try {
+        $types = CmsLayoutTemplateType::load_all_by_originator($this->GetName());
+        if( is_array($types) && count($types) ) {
+            foreach( $types as $type_obj ) {
+                $type_obj->set_help_callback('News::template_help_callback');
+                $type_obj->save();
+            }
+        }
+    }
+    catch( Exception $e ) {
+        // log it
+        audit('',$this->GetName(),'Uninstall Error: '.$e->GetMessage());
+        return FALSE;
+    }
 }
 
 ?>

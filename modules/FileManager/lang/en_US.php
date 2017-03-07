@@ -26,7 +26,7 @@ $lang['confirmdeleteselected'] = 'Are you sure the selected files should be dele
 $lang['confirmselected'] = 'Are you sure?';
 $lang['confirmsingledelete'] = 'Are you sure?';
 $lang['confirmsingledirdelete'] = 'Are you sure this directory should be deleted?';
-$lang['confirm_unpack'] = 'Are you sure you want to unpack this archive?';
+$lang['confirm_delete'] = 'Are you sure you want to remove this file?';
 $lang['copiedto'] = 'copied to';
 $lang['copy'] = 'Copy';
 $lang['copyfailed'] = 'Copy operation failed on %s';
@@ -48,6 +48,7 @@ $lang['delete'] = 'Delete';
 $lang['deleteselected'] = 'Delete the selected files/directories';
 $lang['deleteselectedcancelled'] = 'Deletion of selected files canceled';
 $lang['deletesuccess'] = 'Items successfully deleted';
+$lang['desc_filemanager_settings'] = 'Edit Filemanager Settings';
 $lang['dirchmodfailmulti'] = 'Changing permissions on the directory failed, some of it\'s content may have gotten new permissions, though.';
 $lang['dirchmodfailure'] = 'Changing permissions of the directory failed';
 $lang['dirchmodsuccess'] = 'The directory successfully got new permissions';
@@ -64,6 +65,14 @@ $lang['error_dirnotempty'] = 'Directory %s is not empty';
 $lang['error_notwritable'] = 'No write permission to %s';
 $lang['error_thumbnotwritable'] = '%s has a thumbnail that does not have write permission';
 
+$lang['eventdesc_OnFileDeleted'] = 'Sent after a file is deleted';
+$lang['eventhelp_OnFileDeleted'] = <<<EOT
+<h4>Parameters:</h4>
+<ul>
+<li>"file" - The complete file specification to the deleted file</li>
+<li>"thumb" - If it previously existed, the complete file specification to the deleted thumbnail</li>
+</ul>
+EOT;
 $lang['eventdesc_OnFileUploaded'] = 'Sent when a file is uploaded';
 $lang['eventhelp_OnFileUploaded'] = <<<EOT
 <h4>Parameters:</h4>
@@ -82,6 +91,7 @@ $lang['filedeletesuccess'] = 'was successfully deleted';
 $lang['fileexistsdest'] = '%s already exists at the destination';
 $lang['fileimagetype'] = 'Cannot perform this action on this type of image';
 $lang['fileinfo'] = 'File info';
+$lang['filemovesame'] = 'Cannot move a directory';
 $lang['filename'] = 'File name';
 $lang['fileno'] = 'File no.';
 $lang['filenotfound'] = 'File not found';
@@ -138,6 +148,7 @@ $lang['info_rotate'] = 'The saved image will not appear identical to the rotated
 $lang['info_rotate_slider'] = 'Drag this slider to the desired rotation angle';
 $lang['installed'] = 'FileManager version %s installed';
 $lang['insufficientpermission'] = 'Insufficient permission to %s';
+$lang['invalidchdir'] = 'Attempt to set working directory to an invalid location: %s';
 $lang['internalerror'] = 'Internal error (meaning something didn\'t make sense at all, please report what you did)';
 $lang['invaliddestname'] = 'Destination name specified is empty or invalid';
 $lang['invalidmovedir'] = 'The destination directory specified is invalid';
@@ -259,6 +270,7 @@ $lang['singledirdeletefail'] = 'An error occurred when trying to delete the dire
 $lang['singledirdeletesuccess'] = 'The directory  was successfully deleted';
 $lang['singlefiledeletefail'] = 'An error occurred when trying to delete the file';
 $lang['singlefiledeletesuccess'] = 'The file was successfully deleted';
+$lang['site_root'] = 'Root';
 $lang['smallicons'] = 'Small icons';
 $lang['space'] = 'space';
 $lang['subdir'] = 'subdirectory';
@@ -276,8 +288,10 @@ $lang['title_copy'] = 'Copy the selected item';
 $lang['title_delete'] = 'Delete the selected item';
 $lang['title_dropzone'] = 'You can drop files here from your file manager to automatically begin uploading';
 $lang['title_filefield'] = 'Select one or more files they will automatically begin uploading';
+$lang['title_filemanager_settings'] = 'Settings - File Manager';
 $lang['title_move'] = 'Move the selected item to another folder';
 $lang['title_newdir'] = 'Create a new directory';
+$lang['title_rawurl'] = 'View this item natively in the browser';
 $lang['title_rename'] = 'Rename the selected item';
 $lang['title_resizecrop'] = 'Resize and/or Crop the selected image';
 $lang['title_rotate'] = 'Rotate the selected image';
@@ -291,6 +305,7 @@ $lang['thumberror'] = 'Problem creating thumbnail';
 $lang['thumbnail'] = 'Create Thumbnail';
 $lang['thumbsuccess'] = 'Thumbnail successfully created';
 $lang['toggle'] = 'Toggle selection';
+$lang['top'] = 'Top';
 
 // U
 $lang['uninstalled'] = 'The FileManager module is uninstalled';

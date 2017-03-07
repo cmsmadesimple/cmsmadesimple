@@ -144,6 +144,7 @@ class OneElevenTheme extends CmsAdminThemeBase {
 		$smarty->template_dir = __DIR__ . '/templates';
 		if ($section_name) {
 			$smarty->assign('section_name', $section_name);
+			$smarty->assign('pagetitle', lang($section_name));
 			$smarty->assign('nodes', $this->get_navigation_tree($section_name, -1, FALSE));
 		} else {
 			$nodes = $this->get_navigation_tree(-1, 2, FALSE);
@@ -209,6 +210,7 @@ class OneElevenTheme extends CmsAdminThemeBase {
 		}
         // page title and alias
 		$smarty->assign('pagetitle', $title);
+        $smarty->assign('subtitle',$this->subtitle);
         $smarty->assign('pagealias', munge_string_to_url($alias));
 
 		// module name?
@@ -239,8 +241,8 @@ class OneElevenTheme extends CmsAdminThemeBase {
 			$smarty->assign('marks', $marks);
 		}
 
-		$headtext = $this->get_value('headertext');
-		$smarty->assign('headertext',$headtext);
+		$smarty->assign('headertext',$this->get_headtext());
+        $smarty->assign('footertext',$this->get_footertext());
 
 		// and some other common variables
 		$smarty->assign('content', str_replace('</body></html>', '', $html));
@@ -269,5 +271,10 @@ class OneElevenTheme extends CmsAdminThemeBase {
 		$smarty->template_dir = $otd;
 		return $_contents;
 	}
+
+    public function get_my_alerts()
+    {
+        return \CMSMS\AdminAlerts\Alert::load_my_alerts();
+    }
 }
 ?>

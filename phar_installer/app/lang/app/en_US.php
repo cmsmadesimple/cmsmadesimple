@@ -5,6 +5,7 @@ $lang['action_install'] = 'Creating a new CMSMS %s website';
 $lang['action_upgrade'] = 'Upgrading a CMSMS Website to version %s';
 $lang['advanced_mode'] = 'Enable advanced mode';
 $lang['apptitle'] = 'Installation and upgrade assistant';
+$lang['assets_dir_exists'] = 'Assets directory exists';
 $lang['available_languages'] = 'Available languages';
 
 # B
@@ -17,6 +18,7 @@ $lang['config_writable'] = 'Check for writeable config file';
 $lang['confirm_freshen'] = 'Are you sure you want to freshen (repair) the existing installation of CMSMS? Use with extreme caution!';
 $lang['confirm_upgrade'] = 'Are you sure you want to begin the upgrade process';
 $lang['curl_extension'] = 'Checking for the Curl extension';
+$lang['create_assets_structure'] = 'Creating a location for file rsources';
 
 # D
 $lang['database_support'] = 'Check for compatible database drivers';
@@ -66,7 +68,7 @@ $lang['error_adminacct_emailaddrrequired'] = 'You have selected to email the acc
 $lang['error_adminacct_password'] = 'The password you specified is invalid (must be at least six characters long)';
 $lang['error_adminacct_repeatpw'] = 'The passwords you entered did not match.';
 $lang['error_adminacct_username'] = 'The username you specified is invalid. Please try again';
-$lang['error_admindirrenamed'] = 'It appears that, for security reasons, you may have renamed your CMSMS Admin directory. You must reverse <a href="http://docs.cmsmadesimple.org/general-information/securing-cmsms#renaming-admin-folder" target="_blank" class="external">this process</a> in order to proceed!<br/><br/>Once you have reverted the admin directory name to its original location, please reload this page.';
+$lang['error_admindirrenamed'] = 'It appears that, for security reasons, you may have renamed your CMSMS Admin directory. You must reverse <a href="https://docs.cmsmadesimple.org/general-information/securing-cmsms#renaming-admin-folder" target="_blank" class="external">this process</a> in order to proceed!<br/><br/>Once you have reverted the admin directory name to its original location, please reload this page.';
 $lang['error_backupconfig'] = 'We could not properly backup the config file';
 $lang['error_checksum'] = 'Extracted file checksum does not match original';
 $lang['error_cmstablesexist'] = 'It appears that there is already a CMS installation on this database. Please enter different database information. If you would like to use a different table prefix you may need to restart the installation process and enable advanced mode.';
@@ -102,6 +104,7 @@ $lang['edeprecated_enabled'] = 'E_DEPRECATED is enabled in the PHPs error_report
 $lang['estrict_enabled'] = 'E_STRICT is enabled in the PHPs error_reporting. Though this will not prevent CMSMS from operating, it may result in warnings being displayed in the HTML output, particularly from older, third party modules';
 
 # F
+$lang['fail_assets_msg'] = 'An assets directory already exists.  This application may write to this directory to rationalize the location of files.  Please ensure that you have a backup';
 $lang['fail_config_writable'] = 'The HTTP process cannot write to the config.php file. Please try to change the permissions on this file to 777 until the upgrade process is complete';
 $lang['fail_curl_extension'] = 'The curl extension was not found. Though not a critical issue, this may cause problems with some third party modules';
 $lang['fail_database_support'] = 'No compatible database drivers found';
@@ -129,6 +132,7 @@ $lang['fail_session_save_path_exists'] = 'The session save path variable value i
 $lang['fail_session_save_path_writable'] = 'The session save path directory is not writeable';
 $lang['fail_session_use_cookies'] = 'CMSMS requires that PHP be configured to store the session key in a cookie';
 $lang['fail_tmpfile'] = 'The system tmpfile() function is not functioning. This is required to allow us to extract archives. The optional TMPDIR url argument can be provided to the installer to specify a writeable directory. See the README file that should be in included in this directory.';
+$lang['fail_tmp_dirs_empty'] = 'The CMSMS Temporary directories <em>(tmp/cache and tmp/templates_c) exist, and are not empty.  Please remove or empty them';
 $lang['fail_xml_functions'] = 'The XML extension was not found. Please enable this in your PHP environment';
 $lang['failed'] = 'failed';
 $lang['file_get_contents'] = 'Testing for the file_get_contents function';
@@ -300,10 +304,12 @@ $lang['step2_errorsamever'] = 'The selected directory appears to contain a CMSMS
 $lang['step2_errortoonew'] = 'The selected directory appears to contain a CMSMS installation with a newer version that is included in this script. Unable to proceed';
 $lang['step2_info_freshen'] = 'Freshening the installation involves replacing all core files and recreating the configuration. You will be asked basic configuration information, however the database will not be touched.';
 $lang['step2_installdate'] = 'Approximate installation date';
+$lang['step2_install_dirnotempty'] = 'This folder already contains some files and/or subfolders.  Though it is possible to install CMSMS here, it may inadvertantely corrupt an existing application.  Please double check the contents of this folder.';
 $lang['step2_hdr_upgradeinfo'] = 'Version information';
 $lang['step2_info_upgradeinfo'] = 'Below are the available release notes and changelog information for each release. The buttons below will display detailed information as to what has changed in each version of CMS Made Simple. There may be further instructions or warnings in each version that could affect the upgrade process.';
 $lang['step2_minupgradever'] = 'The minimum version that this application can upgrade from is: %s. You may need to upgrade your application to a newer version in stages, using another method before completing the upgrade process. Please ensure that you have a complete, verified backup before using any upgrade method.';
 $lang['step2_nocmsms'] = 'We did not find an installation of CMS Made Simple in this directory. It looks like this is a new installation';
+$lang['step2_nofiles'] = 'As requested, CMSMS Core files will not be processed during this process';
 $lang['step2_passed'] = 'Passed';
 $lang['step2_pwd'] = 'Your current working directory';
 $lang['step2_schemaver'] = 'Database Schema version';
@@ -337,6 +343,7 @@ $lang['title_api_docs'] = 'Official API Documentation';
 $lang['to'] = 'to';
 $lang['title_share'] = 'Share your experience with your friends.';
 $lang['tmpfile'] = 'Checking for working tmpfile()';
+$lang['tmp_dirs_empty'] = 'Ensure that temporary directories are empty or do not exist';
 
 # U
 $lang['upgrade'] = 'Upgrade';

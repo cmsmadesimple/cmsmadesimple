@@ -72,11 +72,11 @@ if ($access) {
             $groupobj->name = $group;
             $groupobj->description = $description;
             $groupobj->active = $active;
-            Events::SendEvent('Core', 'EditGroupPre', array('group' => &$groupobj));
+            \CMSMS\HookManager::do_hook('Core::EditGroupPre', [ 'group'=>&$groupobj ] );
 
             $result = $groupobj->save();
             if ($result) {
-                Events::SendEvent('Core', 'EditGroupPost', array('group' => &$groupobj));
+                \CMSMS\HookManager::do_hook('Core::EditGroupPost', [ 'group'=>&$groupobj ] );
 
                 // put mention into the admin log
                 audit($groupobj->id, 'Admin User Group: '.$groupobj->name, 'Edited');

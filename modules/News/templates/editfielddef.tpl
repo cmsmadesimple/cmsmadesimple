@@ -26,7 +26,7 @@ function handle_change(){
     $('#area_maxlen').hide('slow');
     $('#area_options').show('slow');
   }
-  else if( val == 'checkbox' || val == 'file' ) {
+  else if( val == 'checkbox' || val == 'file' || val == 'linkedfile' ) {
     $('#area_maxlen').hide('slow');
     $('#area_options').hide('slow');
   }

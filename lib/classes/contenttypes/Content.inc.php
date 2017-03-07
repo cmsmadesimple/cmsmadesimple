@@ -117,6 +117,7 @@ class Content extends ContentBase
       $this->AddProperty('disable_wysiwyg',60,self::TAB_OPTIONS);
       $this->AddProperty('pagemetadata',1,self::TAB_LOGIC);
       $this->AddProperty('pagedata',2,self::TAB_LOGIC);
+      $this->AddProperty('wantschildren',10,self::TAB_OPTIONS);
     }
 
 	/**
@@ -130,6 +131,15 @@ class Content extends ContentBase
 		return TRUE;
 	}
 
+    public function WantsChildren()
+    {
+        // an empty/null response defaults to true.
+        $tmp = $this->GetPropertyValue('wantschildren');
+        if( $tmp === '0' ) return FALSE;
+        return TRUE;
+    }
+
+
 	/**
 	 * Set content attribute values (from parameters received from admin add/edit form)
 	 *
@@ -139,12 +149,12 @@ class Content extends ContentBase
     function FillParams($params,$editing = false)
     {
 		if (isset($params)) {
-			$parameters = array('pagedata','searchable','disable_wysiwyg','design_id');
+			$parameters = array('pagedata','searchable','disable_wysiwyg','design_id','wantschildren');
 
 			//pick up the template id before we do parameters
 			if (isset($params['template_id'])) {
 				if ($this->mTemplateId != $params['template_id']) $this->_contentBlocks = null;
-				$this->mTemplateId = $params['template_id'];
+				$this->mTemplateId = (int) $params['template_id'];
 			}
 
 			// add content blocks
@@ -165,7 +175,22 @@ class Content extends ContentBase
 
 			// do the content property parameters
 			foreach ($parameters as $oneparam) {
-				if (isset($params[$oneparam])) $this->SetPropertyValue($oneparam, $params[$oneparam]);
+                if( !isset($params[$oneparam]) ) continue;
+                $val = $params[$oneparam];
+                switch( $oneparam ) {
+                case 'pagedata':
+                    // nothing
+                    break;
+                default:
+                    if( count($blocks) && isset($blocks[$oneparam]) ) {
+                        // it's a content block.
+                        $val = $val;
+                    } else {
+                        $val = (int) $val;
+                    }
+                    break;
+                }
+                $this->SetPropertyValue($oneparam,$val);
 			}
 
 			// metadata
@@ -410,8 +435,18 @@ class Content extends ContentBase
 			$help = '&nbsp;'.cms_admin_utils::get_help_tag('core','help_page_disablewysiwyg',lang('help_title_page_disablewysiwyg'));
 			return array('<label for="id_disablewysiwyg">'.lang('disable_wysiwyg').':</label>'.$help,
 						 '<input type="hidden" name="disable_wysiwyg" value="0" />
-             <input id="id_disablewysiwyg" type="checkbox" name="disable_wysiwyg" value="1"  '.($disable_wysiwyg==1?'checked="checked"':'').'/>');
-			break;
+                          <input id="id_disablewysiwyg" type="checkbox" name="disable_wysiwyg" value="1"  '.($disable_wysiwyg==1?'checked="checked"':'').'/>');
+
+        case 'wantschildren':
+			$showadmin = ContentOperations::get_instance()->CheckPageOwnership(get_userid(), $this->Id());
+			if ( check_permission(get_userid(),'Manage All Content') || $showadmin ) {
+                $wantschildren = $this->WantsChildren();
+                $help = '&nbsp;'.cms_admin_utils::get_help_tag('core','help_page_wantschildren',lang('help_title_page_wantschildren'));
+                return array('<label for="id_wantschildren">'.lang('wantschildren').':</label>'.$help,
+                             '<input type="hidden" name="wantschildren" value="0"/>
+                              <input id="id_wantschildren" type="checkbox" name="wantschildren" value="1" '.($wantschildren?'checked="checked"':'').'/>');
+            }
+            break;
 
 		default:
 			// check if it's content block
@@ -453,6 +488,15 @@ class Content extends ContentBase
             $res = \UserOperations::get_instance()->UserInGroup($uid,1);
             if( !$res ) return;
         }
+        $adminonly = cms_to_bool(get_parameter_value($blockInfo,'adminonly',0));
+        if( $adminonly ) {
+            $uid = get_userid(FALSE);
+            $res = \UserOperations::get_instance()->UserInGroup($uid,1);
+            if( !$res ) return;
+        }
+        if( $this->Id() < 1 && empty($value) ) {
+            $value = trim($this->_get_param($blockInfo,'default'));
+        }
 		if ($oneline) {
 			$size = (int) $this->_get_param($blockInfo,'size',50);
 			$ret = '<input type="text" size="'.$size.'" maxlength="'.$maxlength.'" name="'.$blockInfo['id'].'" value="'.cms_htmlentities($value, ENT_NOQUOTES, CmsNlsOperations::get_encoding('')).'"';
@@ -471,8 +515,7 @@ class Content extends ContentBase
 				$block_wysiwyg = $blockInfo['usewysiwyg'] == 'false'?false:true;
 			}
 
-			$parms = array('name'=>$blockInfo['id'],'enablewysiwyg'=>$block_wysiwyg,
-						   'value'=>$value,'id'=>$blockInfo['id']);
+			$parms = [ 'name'=>$blockInfo['id'],'enablewysiwyg'=>$block_wysiwyg,'value'=>$value,'id'=>$blockInfo['id'] ];
 			if( $required ) $parms['required'] = 'required';
 			if( $placeholder ) $parms['placeholder'] = $placeholder;
 			$parms['width'] = (int) $this->_get_param($blockInfo,'width',80);
@@ -481,6 +524,10 @@ class Content extends ContentBase
 			if( (!isset($parms['cssname']) || $parms['cssname'] == '') && cms_siteprefs::get('content_cssnameisblockname',1) ) {
 				$parms['cssname'] = $blockInfo['id'];
 			}
+            foreach( $blockInfo as $key => $val ) {
+                if( !startswith($key,'data-') ) continue;
+                $parms[$key] = $val;
+            }
 			$ret = CmsFormUtils::create_textarea($parms);
 		}
 		return $ret;
@@ -497,7 +544,7 @@ class Content extends ContentBase
             $res = \UserOperations::get_instance()->UserInGroup($uid,1);
             if( !$res ) return;
         }
-		$config = CmsApp::get_instance()->GetConfig();
+		$config = \cms_config::get_instance();
 		$adddir = get_site_preference('contentimage_path');
 		if( $blockInfo['dir'] != '' ) $adddir = $blockInfo['dir'];
 		$dir = cms_join_path($config['uploads_path'],$adddir);
@@ -510,15 +557,26 @@ class Content extends ContentBase
             return '<div class="red">'.$err.'</div>';
         }
 
-		$optprefix = '';
 		$inputname = $blockInfo['id'];
 		if( isset($blockInfo['inputname']) ) $inputname = $blockInfo['inputname'];
 		$prefix = '';
+        if( isset($blockInfo['sort']) ) $sort = (int)$blockInfo['sort'];
 		if( isset($blockInfo['exclude']) ) $prefix = $blockInfo['exclude'];
-		if( isset($blockInfo['sort']) ) $sort = (int)$blockInfo['sort'];
-		$dropdown = create_file_dropdown($inputname,$dir,$value,'jpg,jpeg,png,gif',$optprefix,true,'',$prefix,1,$sort);
-		if( $dropdown === false ) $dropdown = lang('error_retrieving_file_list');
-		return $dropdown;
+        $filepicker = \cms_utils::get_filepicker_module();
+        if( $filepicker ) {
+            $profile_name = get_parameter_value($blockInfo,'profile');
+            $profile = $filepicker->get_profile_or_default($profile_name, $dir, get_userid() );
+            $parms = ['top'=>$dir, 'type'=>'image' ];
+            if( $sort ) $parms['sort'] = TRUE;
+            if( $prefix ) $parms['exclude_prefix'] = $prefix;
+            $profile = $profile->overrideWith( $parms );
+            $input = $filepicker->get_html( $inputname, $value, $profile);
+            return $input;
+        } else {
+            $dropdown = create_file_dropdown($inputname,$dir,$value,'jpg,jpeg,png,gif','',true,'',$prefix,1,$sort);
+            if( $dropdown === false ) $dropdown = lang('error_retrieving_file_list');
+            return $dropdown;
+        }
 	}
 
 	/**
@@ -553,7 +611,7 @@ class Content extends ContentBase
 	{
 		// it'd be nice if the content block was an object..
 		// but I don't have the time to do it at the moment.
-        $noedit = cms_to_bool($this->_get_param($blockInfo,'noedit','false'));
+               $noedit = cms_to_bool($this->_get_param($blockInfo,'noedit','false'));
         if( $noedit ) return;
 
 		$field = '';

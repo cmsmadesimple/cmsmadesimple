@@ -118,8 +118,6 @@ $(function() {
 	}
 {/literal}</style>
 
-<h3>{$currentpath} {$path}</h3>
-
 {$formstart}
 <input type="hidden" name="disable_buffer" value="1"/>
 <fieldset>

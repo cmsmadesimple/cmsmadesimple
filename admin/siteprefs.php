@@ -91,7 +91,6 @@ $mail_is_set = cms_siteprefs::get('mail_is_set',0);
 $testresults = lang('untested');
 $thumbnail_width = 96;
 $thumbnail_height = 96;
-$enablenotifications = 1;
 $sitedownexcludes = '';
 $sitedownexcludeadmins = '';
 $disallowed_contenttypes = '';
@@ -114,7 +113,6 @@ $backendwysiwyg = '';
 $auto_clear_cache_age = 0;
 $allow_browser_cache = 0;
 $browser_cache_expiry = 60;
-$pseudocron_granularity = 60;
 $content_autocreate_urls = 0;
 $content_autocreate_flaturls = 0;
 $content_mandatory_urls = 0;
@@ -123,7 +121,7 @@ $content_imagefield_path = '';
 $content_thumbnailfield_path = '';
 $content_cssnameisblockname = 1;
 $contentimage_path = '';
-$adminlog_lifetime = (60*60*24*31);
+$adminlog_lifetime = (3600*24*31);
 $search_module = 'Search';
 $use_smartycache = 0;
 $use_smartycompilecheck = 1;
@@ -148,7 +146,6 @@ if (isset($_POST["cancel"])) {
 /**
  * Get preferences
  */
-$pseudocron_granularity = cms_siteprefs::get('pseudocron_granularity',$pseudocron_granularity);
 $allow_browser_cache = cms_siteprefs::get('allow_browser_cache',$allow_browser_cache);
 $browser_cache_expiry = cms_siteprefs::get('browser_cache_expiry',$browser_cache_expiry);
 $auto_clear_cache_age = cms_siteprefs::get('auto_clear_cache_age',$auto_clear_cache_age);
@@ -167,7 +164,6 @@ $logintheme = cms_siteprefs::get('logintheme',$logintheme);
 $backendwysiwyg = cms_siteprefs::get('backendwysiwyg',$backendwysiwyg);
 $metadata = cms_siteprefs::get('metadata',$metadata);
 $sitename = cms_siteprefs::get('sitename',$sitename);
-$enablenotifications = cms_siteprefs::get('enablenotifications',$enablenotifications);
 $lock_timeout = (int)cms_siteprefs::get('lock_timeout',$lock_timeout);
 $sitedownexcludes = cms_siteprefs::get('sitedownexcludes',$sitedownexcludes);
 $sitedownexcludeadmins = cms_siteprefs::get('sitedownexcludeadmins',$sitedownexcludeadmins);
@@ -385,7 +381,6 @@ if (isset($_POST["editsiteprefs"])) {
             break;
 
         case 'setup':
-            if (isset($_POST["enablenotifications"])) $enablenotifications = (int)$_POST['enablenotifications'];
             if (isset($_POST["lock_timeout"])) $lock_timeout = (int)$_POST['lock_timeout'];
             if (isset($_POST["xmlmodulerepository"])) $xmlmodulerepository = cleanValue($_POST["xmlmodulerepository"]);
             if (isset($_POST["checkversion"])) $checkversion = (int) $_POST["checkversion"];
@@ -393,7 +388,6 @@ if (isset($_POST["editsiteprefs"])) {
             cms_siteprefs::set('global_umask', $global_umask);
             cms_siteprefs::set('xmlmodulerepository', $xmlmodulerepository);
             cms_siteprefs::set('checkversion', $checkversion);
-            cms_siteprefs::set('enablenotifications',$enablenotifications);
             cms_siteprefs::set('lock_timeout',$lock_timeout);
             if( isset($_POST['allow_browser_cache']) ) {
                 $allow_browser_cache = (int)$_POST['allow_browser_cache'];
@@ -406,10 +400,6 @@ if (isset($_POST["editsiteprefs"])) {
             if( isset($_POST['auto_clear_cache_age']) ) {
                 $auto_clear_cache_age = (int)$_POST['auto_clear_cache_age'];
                 cms_siteprefs::set('auto_clear_cache_age',$auto_clear_cache_age);
-            }
-            if( isset($_POST['pseudocron_granularity']) ) {
-                $pseudocron_granularity = (int)$_POST['pseudocron_granularity'];
-                cms_siteprefs::set('pseudocron_granularity',$pseudocron_granularity);
             }
             if (isset($_POST["adminlog_lifetime"])) {
                 $adminlog_lifetime = (int)$_POST["adminlog_lifetime"];
@@ -527,7 +517,6 @@ $smarty->assign('use_wysiwyg',$use_wysiwyg);
 $smarty->assign('textarea_sitedownmessage',create_textarea($use_wysiwyg,$sitedownmessage,'sitedownmessage','pagesmalltextarea'));
 $smarty->assign('checkversion',$checkversion);
 $smarty->assign('defaultdateformat',$defaultdateformat);
-$smarty->assign('enablenotifications',$enablenotifications);
 $smarty->assign('lock_timeout',$lock_timeout);
 $smarty->assign('sitedownexcludes',$sitedownexcludes);
 $smarty->assign('sitedownexcludeadmins',$sitedownexcludeadmins);
@@ -538,7 +527,6 @@ $smarty->assign('thumbnail_height',$thumbnail_height);
 $smarty->assign('allow_browser_cache',$allow_browser_cache);
 $smarty->assign('browser_cache_expiry',$browser_cache_expiry);
 $smarty->assign('auto_clear_cache_age',$auto_clear_cache_age);
-$smarty->assign('pseudocron_granularity',$pseudocron_granularity);
 $smarty->assign('content_autocreate_urls',$content_autocreate_urls);
 $smarty->assign('content_autocreate_flaturls',$content_autocreate_flaturls);
 $smarty->assign('content_mandatory_urls',$content_mandatory_urls);
@@ -550,14 +538,6 @@ $smarty->assign('adminlog_lifetime',$adminlog_lifetime);
 $smarty->assign('search_module',$search_module);
 $smarty->assign('use_smartycache',$use_smartycache);
 $smarty->assign('use_smartycompilecheck',$use_smartycompilecheck);
-
-$tmp = array(15=>lang('cron_15m'),30=>lang('cron_30m'),
-	     60=>lang('cron_60m'),120=>lang('cron_120m'),
-	     180=>lang('cron_3h'),360=>lang('cron_6h'),
-	     12*60=>lang('cron_12h'),
-	     24*60=>lang('cron_24h'),
-	     -1=>lang('cron_request'));
-$smarty->assign('pseudocron_options',$tmp);
 
 $tmp = array(
          60*60*24=>lang('adminlog_1day'),

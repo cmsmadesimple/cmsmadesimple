@@ -25,12 +25,12 @@ $CMS_ADMIN_PAGE=1;
 require_once("../lib/include.php");
 $ruid = get_userid(FALSE);
 
-debug_to_log(__FILE__);
-debug_to_log($_REQUEST);
 $fh = fopen('php://input','r');
 $txt = fread($fh,8192);
 $data = null;
-if( $txt ) $data = json_decode($txt,TRUE);
+if( $txt ) {
+    $data = json_decode($txt,TRUE);
+}
 if( !is_array($data) ) {
     $data = $_REQUEST;
 }
@@ -120,9 +120,6 @@ catch( Exception $e ) {
   $out['error'] = array('type'=>'othererror','msg'=>$e->GetMessage());
 }
 
-debug_to_log(__FILE__);
-debug_to_log($out);
-
 if( $out['status'] != 'error' && isset($out['lock_id']) && $out['lock_id'] != 0 ) $out['locked'] = 1;
 
 header("Expires: Tue, 01 Jan 2000 00:00:00 GMT");
@@ -137,5 +134,3 @@ exit;
 
 #
 # EOF
-#
-?>

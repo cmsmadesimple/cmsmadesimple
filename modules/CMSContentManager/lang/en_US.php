@@ -95,9 +95,11 @@ $lang['error_setactive'] = 'Could not activate this page.  This could be a datab
 $lang['error_setdefault'] = 'Could not change the default content page.  This could be a database problem, or a permissions issue.';
 $lang['error_setinactive'] = 'Could not deactivate this page.  This could be a database problem, or a permissions issue.';
 $lang['error_template_notavailable'] = 'Either there is no template associated with this object, or it is not available for edit.  Perhaps it has been deleted?';
+$lang['err_nomatchingcontent'] = 'Sorry... there does not appear to be any content that matches your criteria';
 $lang['expandall'] = 'Expand All';
 
 #F
+$lang['filter_applied'] = 'Filter Applied';
 $lang['find'] = 'Find';
 $lang['friendlyname'] = 'Content Manager';
 
@@ -155,6 +157,7 @@ $lang['msg_prefs_saved'] = 'Preferences saved';
 
 #N
 $lang['no'] = 'No';
+$lang['none'] = 'None';
 
 #O
 $lang['opt_alltemplates'] = 'All templates';
@@ -182,11 +185,13 @@ $lang['prompt_confirm2'] = 'Yes, I am really sure I want to do this';
 $lang['prompt_content_id'] = 'Content ID';
 $lang['prompt_created'] = 'Created';
 $lang['prompt_design'] = 'Design';
+$lang['prompt_editor'] = 'Editor';
 $lang['prompt_editpage_addcontent']= 'Add Content Page';
 $lang['prompt_editpage_contenttype'] = 'Content Type';
 $lang['prompt_editpage_editcontent']= 'Edit Content Page';
 $lang['prompt_editsettings']= 'Edit Settings';
 $lang['prompt_expandall'] = 'Expand all content pages';
+$lang['prompt_filter_type'] = 'Filter Type';
 $lang['prompt_general'] = 'General';
 $lang['prompt_inactive'] = 'Inactive';
 $lang['prompt_locktimeout'] = 'Locking Expiration Time-out (minutes)';

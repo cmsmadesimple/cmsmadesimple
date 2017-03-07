@@ -80,9 +80,12 @@ if( is_array($slaves) && count($slaves) ) {
             begin_section($one_slave['class'],$obj->get_name(),$obj->get_section_description());
             foreach( $results as $one ) {
                 $text = isset($one['text'])?$one['text']:'';
+                if( $text ) $text = addslashes($text);
+                $url = isset($one['edit_url'])?$one['edit_url']:'';
+                if( $url ) $url = str_replace('&amp;','&',$url);
                 add_result($one_slave['class'],$one['title'],
                            isset($one['description'])?$one['description']:'',
-                           isset($one['edit_url'])?$one['edit_url']:'',$text);
+                           $url,$text);
             }
         }
         end_section();

@@ -25,43 +25,42 @@ $orig_memory = (function_exists('memory_get_usage')?memory_get_usage():0);
 $starttime = microtime();
 
 require_once("../lib/include.php");
-debug_buffer("original memory is ".$orig_memory);
 $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 
 check_login();
 $userid = get_userid();
 if( isset($_SESSION['cms_passthru']) ) {
-  $_REQUEST = array_merge($_REQUEST,$_SESSION['cms_passthru']);
-  unset($_SESSION['cms_passthru']);
+    // remove me, this is a hack for something
+    $_REQUEST = array_merge($_REQUEST,$_SESSION['cms_passthru']);
+    unset($_SESSION['cms_passthru']);
 }
 
 $smarty = \Smarty_CMS::get_instance();
-$smarty->assign('date_format_string',cms_userprefs::get_for_user($userid,'date_format_string','%x %X'));
+// $smarty->assign('date_format_string',cms_userprefs::get_for_user($userid,'date_format_string','%x %X'));
 
 $id = 'm1_';
 $module = '';
 $action = 'defaultadmin';
 $suppressOutput = false;
 if (isset($_REQUEST['mact'])) {
-  $ary = explode(',', cms_htmlentities($_REQUEST['mact']), 4);
-  $module = (isset($ary[0])?$ary[0]:'');
-  $id = (isset($ary[1])?$ary[1]:'m1_');
-  $action = (isset($ary[2])?$ary[2]:'');
+    $ary = explode(',', cms_htmlentities($_REQUEST['mact']), 4);
+    $module = (isset($ary[0])?$ary[0]:'');
+    $id = (isset($ary[1])?$ary[1]:'m1_');
+    $action = (isset($ary[2])?$ary[2]:'');
 }
 
 $modinst = ModuleOperations::get_instance()->get_module_instance($module);
 if( !$modinst ) {
-  trigger_error('Module '.$module.' not found in memory. This could indicate that the module is in need of upgrade or that there are other problems');
-  redirect('index.php'.$urlext);
+    trigger_error('Module '.$module.' not found in memory. This could indicate that the module is in need of upgrade or that there are other problems');
+    redirect('index.php'.$urlext);
 }
 
 $USE_THEME = true;
 if( isset($_REQUEST['showtemplate']) && ($_REQUEST['showtemplate'] == 'false')) {
-  // for simplicity and compatibility with the frontend.
-  $USE_THEME = false;
+    // for simplicity and compatibility with the frontend.
+    $USE_THEME = false;
 }
-
-if( $modinst->SuppressAdminOutput($_REQUEST) != false || isset($_REQUEST['suppressoutput']) ) {
+if( $USE_THEME && $modinst->SuppressAdminOutput($_REQUEST) != false || isset($_REQUEST['suppressoutput']) ) {
     $USE_THEME = false;
 }
 
@@ -72,18 +71,30 @@ if( $USE_THEME ) {
     $themeObject = cms_utils::get_theme_object();
     $themeObject->set_action_module($module);
 
+    // get module output
     @ob_start();
     echo  $modinst->DoActionBase($action, $id, $params, '', $smarty);
     $content = @ob_get_contents();
     @ob_end_clean();
 
-    cms_admin_sendheaders();
+    // deprecate this.
     $txt = $modinst->GetHeaderHTML($action);
-    if( $txt !== false ) $headtext = $txt; // headtext is a global
+    if( $txt ) $themeObject->add_headtext($txt);
+
+    // call admin_add_headtext to get any admin data to add to the <head>
+    $out = \CMSMS\HookManager::do_hook_accumulate('admin_add_headtext');
+    if( count($out) ) {
+        foreach( $out as $one ) {
+            $one = trim($one);
+            if( $one ) $themeObject->add_headtext($one);
+        }
+    }
 
     if (FALSE == empty($params['module_message'])) echo $themeObject->ShowMessage($params['module_message']);
     if (FALSE == empty($params['module_error'])) echo $themeObject->ShowErrors($params['module_error']);
     include_once("header.php");
+
+    // this is hackish
     echo '<div class="pagecontainer">';
     echo '<div class="pageoverflow">';
     $title = $themeObject->title;
@@ -93,13 +104,8 @@ if( $USE_THEME ) {
     if( !$title ) $title = $modinst->GetFriendlyName();
     echo $themeObject->ShowHeader($title,'','',$module_help_type).'</div>';
     echo $content;
+    echo '</div>';
+    include_once("footer.php");
 } else {
     echo $modinst->DoActionBase($action, $id, $params, '', $smarty);
 }
-
-if( $USE_THEME ) {
-    echo '</div>';
-    include_once("footer.php");
-}
-
-?>

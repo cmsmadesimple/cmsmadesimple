@@ -20,123 +20,211 @@
 
 $CMS_ADMIN_PAGE=1;
 require_once("../lib/include.php");
-$ruid = get_userid();
 
 $op = 'pageinfo';
 if( isset($_REQUEST['op']) ) $op = trim($_REQUEST['op']);
-$contentops = cmsms()->GetContentOperations();
+$gCms = \CmsApp::get_instance();
+$hm = $gCms->GetHierarchyManager();
+$contentops = $gCms->GetContentOperations();
+$allow_all = (isset($_REQUEST['allow_all']) && cms_to_bool($_REQUEST['allow_all'])) ? 1 : 0;
+$allow_all = 1;
+$for_child = (isset($_REQUEST['for_child']) && cms_to_bool($_REQUEST['for_child'])) ? 1 : 0;
 
 $display = 'title';
 $mod = cms_utils::get_module('CMSContentManager');
 if( $mod ) $display = CmsContentManagerUtils::get_pagenav_display();
 
-$out = null;
-$error = null;
-switch( $op ) {
-case 'childrenof':
-    if( !isset($_REQUEST['page']) ) {
-        $error = 'missingparams';
-    }
-    else {
+try {
+    $ruid = get_userid(FALSE);
+    if( $ruid < 1 ) throw new \Exception('permissiondenied'); // should throw a 403
+    $can_edit_any = check_permission($ruid,'Manage All Content') || check_permission($ruid,'Modify Any Page');
+
+    $out = null;
+    $error = null;
+    switch( $op ) {
+    case 'userlist':
+    case 'userpages':
+        $tmplist = $contentops->GetPageAccessForUser($ruid);
+        if( count($tmplist) ) {
+            $display = $pagelist = [];
+            foreach( $tmplist as $item ) {
+                // get all the parents
+                $parents = [];
+                $startnode = $node = $contentops->quickfind_node_by_id($item);
+                while( $node && $node->get_tag('id') > 0 ) {
+                    $content = $node->getContent(FALSE);
+                    $rec = $content->ToData();
+                    $rec['can_edit'] = $can_edit_any || $contentops->CheckPageAuthorship($ruid,$content->Id());
+                    $rec['display'] = strip_tags($rec['menu_text']);
+                    if( $display == 'title' ) $rec['display'] = strip_tags($rec['content_name']);
+                    $rec['has_children'] = $node->has_children();
+                    $parents[] = $rec;
+                    $node = $node->get_parent();
+                }
+                // start at root
+                // push items from list on the stack if they are root, or the previous item is in the opened array.
+                $parents = array_reverse($parents);
+                for( $i = 0; $i < count($parents); $i++ ) {
+                    $content_id = $parents[$i]['content_id'];
+                    if( !in_array($content_id,$pagelist) ) {
+                        $pagelist[] = $content_id;
+                        $display[] = $parents[$i];
+                    }
+                }
+                unset($parents);
+            }
+            usort($display,function($a,$b) {
+                    return strcmp($a['hierarchy'],$b['hierarchy']);
+                });
+            $out = $display;
+            unset($display);
+        }
+        break;
+
+    case 'here_up':
+        // given a page id, get all of the info for all of the parents, and their peers.
+        // as well as the info of my current children.
+        if( !isset($_REQUEST['page']) ) throw new \Exception('missingparams');
+
+        $children_to_data = function($node) use ($display,$allow_all,$for_child,$ruid,$contentops,$can_edit_any) {
+            $children = $node->getChildren(false,$allow_all);
+            if( empty($children) ) return;
+
+            $child_info = [];
+            foreach( $children as $child ) {
+                $content = $child->getContent(FALSE);
+                if( !is_object($content) ) continue;
+                if( !$allow_all && !$content->Active() ) continue;
+                if( !$allow_all && !$content->HasUsableLink() ) continue;
+                $rec = $content->ToData();
+                $rec['can_edit'] = $can_edit_any || $contentops->CheckPageAuthorship($ruid,$content->Id());
+                $rec['display'] = strip_tags($rec['menu_text']);
+                if( $display == 'title' ) $rec['display'] = strip_tags($rec['content_name']);
+                $rec['has_children'] = $child->has_children();
+                $child_info[] = $rec;
+            }
+            return $child_info;
+        };
+
+        $out = [];
         $page = (int)$_REQUEST['page'];
         if( $page < 1 ) $page = -1;
-        $hm = cmsms()->GetHierarchyManager();
-        $node = null;
+        $node = $thiscontent = null;
         if( $page == -1 ) {
-            $node = $hm;
-        }
-        else {
+            $node = $hm; // root
+        } else {
             $node = $contentops->quickfind_node_by_id($page);
         }
-        if( $node ) {
-            $children = $node->getChildren(FALSE,TRUE);
-            if( is_array($children) && count($children) ) {
-                $out = array();
-                foreach( $children as $child ) {
-                    $content = $child->getContent(FALSE);
-                    if( !is_object($content) ) continue;
-                    $res = $content->ToData();
-                    $res['display'] = $res['menu_text'];
-                    if( $display == 'title' ) $res['display'] = $res['content_name'];
-                    $out[] = $res;
-                }
-            }
-        }
-    }
-    break;
+        do {
+            $out[] = $children_to_data($node);
+            $node = $node->get_parent();
+        } while( $node );
+        $out = array_reverse($out);
+        break;
 
-case 'pageinfo':
-    if( !isset($_REQUEST['page']) ) {
-        $error = 'missingparams';
-    }
-    else {
-        $page = (int)$_REQUEST['page'];
-        if( $page < 1 ) {
+    case 'childrenof':
+        if( !isset($_REQUEST['page']) ) {
             $error = 'missingparams';
         }
         else {
-            // get the page info.
-            $contentobj = $contentops->LoadContentFromId($page);
-            if( !is_object($contentobj) ) {
-                $error = 'errorgettingcontent';
+            $page = (int)$_REQUEST['page'];
+            if( $page < 1 ) $page = -1;
+            $node = null;
+            if( $page == -1 ) {
+                $node = $hm;
             }
             else {
-                $out = $contentobj->ToData();
-                $out['display'] = $out['menu_text'];
-                if( $display == 'title' ) $out['display'] = $out['content_name'];
+                $node = $contentops->quickfind_node_by_id($page);
+            }
+            if( $node ) {
+                $children = $node->getChildren(FALSE,$allow_all);
+                if( is_array($children) && count($children) ) {
+                    $out = array();
+                    foreach( $children as $child ) {
+                        $content = $child->getContent(FALSE);
+                        if( !is_object($content) ) continue;
+                        if( !$allow_all && !$content->Active() ) continue;
+                        $res = $content->ToData();
+                        $rec['can_edit'] = check_permission($ruid,'Manage All Content') || $contentops->CheckPageAuthorship($ruid,$content->Id());
+                        $res['display'] = strip_tags($res['menu_text']);
+                        if( $display == 'title' ) $res['display'] = strip_tags($res['content_name']);
+                        $out[] = $res;
+                    }
+                }
             }
         }
-    }
-    break;
+        break;
 
-case 'pagepeers':
-    if( !isset($_REQUEST['pages']) || !is_array($_REQUEST['pages']) ) {
-        $error = 'missingparams';
-    }
-    else {
-        // clean up the data a bit
-        $tmp = array();
-        foreach( $_REQUEST['pages'] as $one ) {
-            $one = (int)$one;
-            if( $one > 0 ) $tmp[] = $one;
-        }
-        $peers = array_unique($tmp);
-
-        // get the parent pages
-        $db = cmsms()->GetDb();
-        $query = 'SELECT content_id,parent_id FROM '.cms_db_prefix().'content WHERE content_id IN ('.implode(',',$peers).')';
-        $tmp = $db->GetArray($query);
-        $parents = array();
-        foreach( $tmp as $one ) {
-            $parents[$one['content_id']] = $one['parent_id'];
-        }
-
-        if( count($parents) != count($peers) || count($peers) == 0 || count($parents) == 0 ) {
-            $error = 'internalerror';
+    case 'pageinfo':
+        if( !isset($_REQUEST['page']) ) {
+            $error = 'missingparams';
         }
         else {
-            // get the peers for all of these as one huge list
-            $query = 'SELECT * FROM '.cms_db_prefix().'content WHERE parent_id IN ('.implode(',',$parents).') ORDER BY hierarchy';
-            $tmp = $db->GetArray($query);
-            $data = array();
-            $prev_parent_id = -1;
-            for( $i = 0; $i < count($tmp); $i++ ) {
-                $row = $tmp[$i];
-                if( !isset($data[$row['parent_id']]) ) $data[$row['parent_id']] = array();
-                $row['display'] = $row['menu_text'];
-                if( $display == 'title' ) $row['display'] = $row['content_name'];
-                $data[$row['parent_id']][] = $row;
+            $page = (int)$_REQUEST['page'];
+            if( $page < 1 ) {
+                $error = 'missingparams';
             }
-
-            $out = array();
-            for( $i = 0; $i < count($peers); $i++ ) {
-                $peer = $peers[$i];
-                $parent = $parents[$peer];
-                $out[$peer] = $data[$parent];
+            else {
+                // get the page info.
+                $contentobj = $contentops->LoadContentFromId($page);
+                if( !is_object($contentobj) ) {
+                    $error = 'errorgettingcontent';
+                }
+                else {
+                    $out = $contentobj->ToData();
+                    $out['display'] = $out['menu_text'];
+                    if( $display == 'title' ) $out['display'] = $out['content_name'];
+                }
             }
         }
+        break;
+
+    case 'pagepeers':
+        if( !isset($_REQUEST['pages']) || !is_array($_REQUEST['pages']) ) {
+            $error = 'missingparams';
+        }
+        else {
+            // clean up the data a bit
+            $tmp = array();
+            foreach( $_REQUEST['pages'] as $one ) {
+                $one = (int)$one;
+                // discard negative values
+                if( $one > 0 ) $tmp[] = $one;
+            }
+            $peers = array_unique($tmp);
+
+            $out = [];
+            foreach( $peers as $one ) {
+                $node = $hm->find_by_tag('id',$one);
+                if( !$node ) continue;
+
+                // get the parent
+                $parent_node = $node->get_parent();
+
+                // and get it's children
+                $out[$one] = [];
+                $children = $parent_node->getChildren(FALSE,$allow_all);
+                for( $i = 0, $n = count($children); $i < $n; $i++ ) {
+                    $content_obj = $children[$i]->getContent(FALSE);
+                    if( ! $content_obj->IsViewable() ) continue;
+                    $rec = [];
+                    $rec['content_id'] = $content_obj->Id();
+                    $rec['id_hierarchy'] = $content_obj->IdHierarchy();
+                    $rec['wants_children'] = $content_obj->WantsChildren();
+                    $rec['has_children'] = $children[$i]->has_children();
+                    $rec['display'] = ($display == 'title') ? $content_obj->Name() : $content_obj->MenuText();
+                    $out[$one][] = $rec;
+                }
+            }
+        }
+        break;
+
+    default:
+        throw new \Exception('missingparam');
     }
-    break;
+}
+catch( \Exception $e ) {
+    $error = $e->GetMessage();
 }
 
 if( $error ) {
@@ -157,4 +245,3 @@ exit;
 #
 # EOF
 #
-?>

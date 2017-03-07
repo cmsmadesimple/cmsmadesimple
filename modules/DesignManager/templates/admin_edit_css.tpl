@@ -19,7 +19,7 @@ $(document).ready(function(){
         lock_timeout: {$lock_timeout|default:0},
         lock_refresh: {$lock_refresh|default:0},
         error_handler: function(err) {
-            alert('got error '+err.type+' // '+err.msg);
+            cms_alert('got error '+err.type+' // '+err.msg);
         },
         lostlock_handler: function(err) {
             // we lost the lock on this stylesheet... make sure we can't save anything.
@@ -30,7 +30,7 @@ $(document).ready(function(){
             $('#submitbtn, #applybtn').attr('disabled','disabled');
             $('#submitbtn, #applybtn').button({ 'disabled' : true });
             $('.lock-warning').removeClass('hidden-item');
-            alert('{$mod->Lang('msg_lostlock')|escape:'javascript'}');
+            cms_alert('{$mod->Lang('msg_lostlock')|escape:'javascript'}');
         }
       });
     }
@@ -44,32 +44,18 @@ $(document).ready(function(){
         $('#form_editcss').dirtyForm('option','dirty',false);
     });
 
-    $(document).on('click', '#submitbtn', function(ev){
-       if( do_locking ) {
-	  // unlock the item, and submit the form
-	  var self = this;
-	  ev.preventDefault();
-	  var form = $(this).closest('form');
-	  $('#form_editcss').lockManager('unlock').done(function(){
- 	     var el = $('<input type="hidden"/>');
-             el.attr('name',$(self).attr('name')).val($(self).val()).appendTo(form);
-	     form.submit();
-	  });
-       }
-    });
+    $(document).on('click', '#submitbtn, #cancelbtn, #importbtn, #exportbtn', function(ev){
+       if( ! do_locking ) return;
 
-    $(document).on('click', '#cancelbtn', function(ev){
-       if( do_locking ) {
-	  // unlock the item, and submit the form
-	  var self = this;
-	  ev.preventDefault();
-	  var form = $(this).closest('form');
-	  $('#form_editcss').lockManager('unlock').done(function(){
- 	     var el = $('<input type="hidden"/>');
-             el.attr('name',$(self).attr('name')).val($(self).val()).appendTo(form);
-	     form.submit();
-	  });
-       }
+       // unlock the item, and submit the form
+       var self = this;
+       ev.preventDefault();
+       var form = $(this).closest('form');
+       $('#form_editcss').lockManager('unlock').done(function(){
+           var el = $('<input type="hidden"/>');
+           el.attr('name',$(self).attr('name')).val($(self).val()).appendTo(form);
+           form.submit();
+       });
     });
 
     $(document).on('click', '#applybtn', function(e){
@@ -189,15 +175,19 @@ $(document).ready(function(){
 {if $has_designs_right}
     {tab_header name='designs' label=$mod->Lang('prompt_designs')}
 {/if}
+{tab_header name='advanced' label=$mod->Lang('prompt_advanced')}
 
 {tab_start name='content'}
-<!-- stylesheet -->
-<div class="pageoverflow">
-    <p class="pagetext"><label for="stylesheet">{$mod->Lang('prompt_stylesheet')}:</label>&nbsp;{cms_help key2=help_stylesheet_content title=$mod->Lang('prompt_stylesheet')}</p>
-    <p class="pageinput">
-        {cms_textarea id='stylesheet' prefix=$actionid name=content value=$css->get_content() type=css rows=20 cols=80}
-    </p>
-</div>
+{if $css->has_content_file()}
+  <div class="information">{$mod->Lang('info_css_content_file',$css->get_content_filename())}</div>
+{else}
+  <div class="pageoverflow">
+      <p class="pagetext"><label for="stylesheet">{$mod->Lang('prompt_stylesheet')}:</label>&nbsp;{cms_help key2=help_stylesheet_content title=$mod->Lang('prompt_stylesheet')}</p>
+      <p class="pageinput">
+          {cms_textarea id='stylesheet' prefix=$actionid name=content value=$css->get_content() type=css rows=20 cols=80}
+      </p>
+  </div>
+{/if}
 
 {tab_start name='media_type'}
 <!-- media -->
@@ -219,7 +209,6 @@ $(document).ready(function(){
 </div>
 
 {tab_start name='media_query'}
-<!-- media query -->
 <div class="pagewarning">{$mod->Lang('info_editcss_mediaquery_tab')}</div>
 <div class="pageoverflow">
     <p class="pagetext"><label for="mediaquery">{$mod->Lang('prompt_media_query')}:</label>&nbsp;{cms_help key2=help_css_mediaquery title=$mod->Lang('prompt_media_query')}</p>
@@ -229,7 +218,6 @@ $(document).ready(function(){
 </div>
 
 {tab_start name='description'}
-<!-- description -->
 <div class="pageoverflow">
     <p class="pagetext"><label for="txt_description">{$mod->Lang('prompt_description')}:</label>&nbsp;{cms_help key2=help_css_description title=$mod->Lang('prompt_description')}</p>
     <p class="pageinput">
@@ -250,6 +238,19 @@ $(document).ready(function(){
 	</div>
 {/if}
 
+{tab_start name='advanced'}
+{if $css->get_id() > 0}
+  <div class="pageoverflow">
+	<p class="pagetext">{$mod->Lang('prompt_cssfile')}:</p>
+	<p class="pageinput">
+		{if $css->has_content_file()}
+			<input type="submit" id="importbtn" name="{$actionid}import" value="{$mod->Lang('import')}"/>
+		{else}
+			<input type="submit" id="exportbtn" name="{$actionid}export" value="{$mod->Lang('export')}"/>
+		{/if}
+	</p>
+  </div>
+{/if}
 {tab_end}
 
 {form_end}

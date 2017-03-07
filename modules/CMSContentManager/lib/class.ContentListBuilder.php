@@ -39,6 +39,127 @@
  */
 
 /**
+ * A simple class for defining a content filter
+ *
+ */
+final class ContentListFilter
+{
+    const EXPR_OWNER = 'OWNER_UID';
+    const EXPR_EDITOR = 'EDITOR_UID';
+    const EXPR_TEMPLATE = 'TEMPLATE_ID';
+    const EXPR_DESIGN = 'DESIGN_ID';
+
+    private $_type;
+    private $_expr; // string
+
+    public function __get($key)
+    {
+        switch( $key ) {
+        case 'type':
+        case 'expr':
+            $key = '_'.$key;
+            return $this->$key;
+
+        default:
+            throw new \LogicException("$key is not a gettable member of ".__CLASS__);
+        }
+    }
+
+    public function __set($key,$val)
+    {
+        switch( $key ) {
+        case 'type':
+            switch( $val ) {
+            case self::EXPR_OWNER:
+            case self::EXPR_EDITOR:
+            case self::EXPR_TEMPLATE:
+            case self::EXPR_DESIGN:
+                $this->_type = $val;
+                break;
+            default:
+                throw new \LogicException("$val is an invalid type for ".__CLASS__);
+            }
+            break;
+
+        case 'expr':
+            $this->_expr = trim($val);
+            break;
+
+        default:
+            throw new \LogicException("$key is not a settable member of ".__CLASS__);
+        }
+    }
+} // end of class
+
+
+final class ContentListQuery extends CmsDbQueryBase
+{
+    protected $_filter;
+
+    public function __construct(ContentListFilter $filter)
+    {
+        $this->_filter = $filter;
+        $this->_limit = 1000;
+        $this->_offset = 0;
+    }
+
+    public function set_limit(int $limit)
+    {
+        $this->_limit = max(1,$offset);
+    }
+
+    public function set_offset(int $offset)
+    {
+        $this->_offset = max(0,$offset);
+    }
+
+    public function execute()
+    {
+        if( $this->_rs ) return;
+
+        $sql = 'SELECT SQL_CALC_FOUND_ROWS C.content_id FROM '.cms_db_prefix().'content C';
+        $where = $parms = [];
+        switch( $this->_filter->type ) {
+        case ContentListFilter::EXPR_OWNER:
+            $where[] = 'C.owner_id = ?';
+            $parms[] = (int) $this->_filter->expr;
+            break;
+        case ContentListFilter::EXPR_EDITOR:
+            $sql .= ' INNER JOIN '.cms_db_prefix().'additional_users A ON C.content_id = A.content_id AND A.user_id = ?';
+            $parms[] = (int) $this->_filter->expr;
+            break;
+        case ContentListFilter::EXPR_TEMPLATE:
+            $where[] = 'C.template_id = ?';
+            $parms[] = (int) $this->_filter->expr;
+            break;
+        case ContentListFilter::EXPR_DESIGN:
+            $sql .= ' INNER JOIN '.cms_db_prefix().'content_props P ON C.content_id = P.content_id AND P.prop_name = ?';
+            $parms[] = 'design_id';
+            $where[] = 'P.content = ?';
+            $parms[] = (int) $this->_filter->expr;
+            break;
+        }
+
+        if( count($where) ) $sql .= ' WHERE '.implode(' AND ',$where);
+        $sql .= ' ORDER BY C.id_hierarchy';
+
+        $db = \cms_utils::get_db();
+        $this->_rs = $db->SelectLimit($sql,$this->_limit,$this->_offset,$parms);
+        if( $db->ErrorMsg() != '' ) throw new CmsSQLErrorException($db->sql.' -- '.$db->ErrorMsg());
+        $this->_totalmatchingrows = $db->GetOne('SELECT FOUND_ROWS()');
+    }
+
+    public function &GetObject()
+    {
+        $this->execute();
+        if( !$this->_rs ) throw new CmsLogicException('Cannot get stylesheet from invalid stylesheet query object');
+
+        $out = (int) $this->_rs->fields['content_id'];
+        return $out;
+    }
+}
+
+/**
  * A simple class for building, and managing content lists.
  *
  * This is an internal class.  Not intended for use by external third parties.
@@ -55,6 +176,7 @@ final class ContentListBuilder
   private $_module;
   private $_userid;
   private $_use_perms = TRUE;
+  private $_filter = null;
   private $_pagelimit = 500;
   private $_offset    = 0;
   private $_pagelist;
@@ -176,6 +298,16 @@ final class ContentListBuilder
     $content->SetActive($state);
     $content->Save();
     return TRUE;
+  }
+
+  /**
+   * Set the filter
+   *
+   * @param ContentListFilter $filter an optional filter.  Use null to invalidate any filter.
+   */
+  public function set_filter(ContentListFilter $filter = null)
+  {
+      $this->_filter = $filter;
   }
 
   /**
@@ -385,7 +517,7 @@ final class ContentListBuilder
       $cols = explode(',',$mod->GetPreference('list_visiblecolumns',$dflt));
 
       $columnstodisplay = array();
-      $columnstodisplay['expand'] = in_array('expand',$cols) ? 'icon' : null;
+      $columnstodisplay['expand'] = (!$this->_filter && in_array('expand',$cols)) ? 'icon' : null;
       $columnstodisplay['icon1'] = in_array('icon1',$cols) ? 'icon' : null;
       $columnstodisplay['hier'] = in_array('hier',$cols) ? 'normal' : null;
       $columnstodisplay['page'] = in_array('page',$cols) ? 'normal' : null;
@@ -443,10 +575,19 @@ final class ContentListBuilder
 
       $contentops = ContentOperations::get_instance();
       $hm = CmsApp::get_instance()->GetHierarchyManager();
-      $display = array();
+      $display = [];
 
       // filter the display list by what we're authorized to view.
-      if( $this->_use_perms && ($this->_module->CheckPermission('Manage All Content') || $this->_module->CheckPermission('Modify Any Page')) ) {
+      $modify_any_page = $this->_module->CheckPermission('Manage All Content') || $this->_module->CheckPermission('Modify Any Page');
+      if( $this->_filter && $modify_any_page ) {
+          // we display only the pages matching the filter
+          $query = new ContentListQuery($this->_filter);
+          while( !$query->EOF() ) {
+              $display[] = $query->GetObject();
+              $query->MoveNext();
+          }
+      }
+      else if( $this->_use_perms && $modify_any_page ) {
           // we can display anything
 
           $is_opened = function( $node, $opened_array ) {
@@ -678,8 +819,8 @@ final class ContentListBuilder
           $rec['depth'] = $node->get_level();
           $rec['hasusablelink'] = $content->HasUsableLink();
           $rec['hastemplate'] = $content->HasTemplate();
-          $rec['menutext'] = $content->MenuText();
-          $rec['title'] = $content->Name();
+          $rec['menutext'] = strip_tags($content->MenuText());
+          $rec['title'] = strip_tags($content->Name());
           $rec['template_id'] = $content->TemplateId();
           $rec['can_edit_tpl'] = $mod->CheckPermission('Modify Templates');
           $rec['id'] = $content->Id();
@@ -688,6 +829,7 @@ final class ContentListBuilder
           $rec['secure'] = $content->Secure();
           $rec['cachable'] = $content->Cachable();
           $rec['showinmenu'] = $content->ShowInMenu();
+          $rec['wantschildren'] = $content->WantsChildren();
           $rec['viewable'] = $content->IsViewable();
           if( $this->_is_locked($page_id) ) {
               $lock = $this->_locks[$page_id];
@@ -696,7 +838,7 @@ final class ContentListBuilder
           }
           if( $page_id == $this->_seek_to ) $rec['selected'] = 1;
           if( $content->LastModifiedBy() > 0 && isset($users[$content->LastModifiedBy()]) ) {
-              $rec['lastmodifiedby'] = $users[$content->LastModifiedBy()]->username;
+              $rec['lastmodifiedby'] = strip_tags($users[$content->LastModifiedBy()]->username);
           }
           $rec['can_edit'] = ($mod->CheckPermission('Modify Any Page') || $mod->CheckPermission('Manage All Content') ||
                               $this->_check_authorship($rec['id'])) && !$this->_is_locked($page_id);
@@ -723,17 +865,17 @@ final class ContentListBuilder
 
               case 'page':
                   if( $content->MenuText() == CMS_CONTENT_HIDDEN_NAME ) continue;
-                  $rec[$column] = cleanValue( $content->MenuText() );
-                  if( CmsContentManagerUtils::get_pagenav_display() == 'title' ) $rec[$column] = $content->Name();
+                  $rec[$column] = strip_tags($content->MenuText());
+                  if( CmsContentManagerUtils::get_pagenav_display() == 'title' ) $rec[$column] = strip_tags($content->Name());
                   break;
 
               case 'alias':
-                  if( $content->HasUsableLink() && $content->Alias() != '' ) $rec[$column] = $content->Alias();
+                  if( $content->HasUsableLink() && $content->Alias() != '' ) $rec[$column] = strip_tags($content->Alias());
                   break;
 
               case 'url':
                   $rec[$column] = '';
-                  if( $content->HasUsableLink() && $content->URL() != '' ) $rec[$column] = $content->URL();
+                  if( $content->HasUsableLink() && $content->URL() != '' ) $rec[$column] = strip_tags($content->URL());
                   break;
 
               case 'template':
@@ -754,7 +896,7 @@ final class ContentListBuilder
                   break;
 
               case 'owner':
-                  if( $content->Owner() > 0 ) $rec[$column] = $users[$content->Owner()]->username;
+                  if( $content->Owner() > 0 ) $rec[$column] = strip_tags($users[$content->Owner()]->username);
                   break;
 
               case 'active':
@@ -868,4 +1010,3 @@ final class ContentListBuilder
 #
 # EOF
 #
-?>

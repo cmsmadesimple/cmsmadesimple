@@ -167,7 +167,7 @@ if( isset( $params['submit'] ) ) {
             $do_redirect = true;
 
             // send an event
-            @$this->SendEvent('NewsArticleAdded',
+            \CMSMS\HookManager::do_hook('News::NewsArticleAdded',
                               array('news_id' => $articleid,
                                     'category_id' => $category_id,
                                     'title' => $title,
@@ -217,6 +217,7 @@ $dbr = $db->Execute($query);
 $customfields = array();
 $customfieldsbyname = array();
 while( $dbr && ($row = $dbr->FetchRow()) ) {
+  if( $row['type'] == 'linkedfile' ) continue;
   $obj = new StdClass();
   $obj->name = $row['name'];
   $obj->type = $row['type'];

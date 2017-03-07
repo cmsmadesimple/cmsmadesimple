@@ -125,7 +125,7 @@ final class cms_content_cache
 		if( !CmsApp::get_instance()->is_frontend_request() ) return;
 		if( !$this->_key ) return;
 
-		$list = self::get_instance()->get_loaded_page_ids();
+		$list = $this->get_loaded_page_ids();
 		if( is_array($list) && count($list) ) {
 			$dirty = false;
 			if( !is_array($this->_preload_cache) || count($this->_preload_cache) == 0 ) {
@@ -137,6 +137,7 @@ final class cms_content_cache
 			}
 
 			if( $dirty ) {
+                $ndeep = array();
 				$deep = FALSE;
 				foreach( $list as $one ) {
 					$obj = self::get_content($one);
@@ -144,9 +145,11 @@ final class cms_content_cache
 					$tmp = $obj->Properties();
 					if( is_array($tmp) && count($tmp) ) {
 						$deep = TRUE;
+                        $ndeep[] = $one;
 						break;
 					}
 				}
+                $deep = ($deep && count($ndeep) > (count($list) / 4)) ? TRUE : FALSE;
 				$tmp = array(time(),$deep,$list);
 				cms_cache_handler::get_instance()->set($this->_key,serialize($tmp),__CLASS__);
 			}
@@ -181,11 +184,7 @@ final class cms_content_cache
 	  $hash = self::content_exists($identifier);
 	  if( $hash === FALSE ) {
 		  // content doesn't exist...
-		  if( is_numeric($identifier) ) {
-			  // so add a null object, so we don't request it from the database again.
-			  self::_add_content($identifier,'',$res);
-			  return $res;
-		  }
+          return $res;
 	  }
 
 	  return self::get_content_obj($hash);
@@ -230,7 +229,7 @@ final class cms_content_cache
    * @param ContentBase The content object.
    * @return bool
    */
-  private static function _add_content($id,$alias,&$obj)
+  private static function _add_content($id,$alias,ContentBase& $obj)
   {
     if( !$id) return FALSE;
     if( !self::$_alias_map ) self::$_alias_map = array();
@@ -341,7 +340,6 @@ final class cms_content_cache
 		  if( $alias !== FALSE && $id != FALSE ) {
 			  unset(self::$_id_map[$id]);
 			  unset(self::$_alias_map[$alias]);
-			  self::$_content_cache[$hash] = null;
 			  unset(self::$_content_cache[$hash]);
 		  }
 	  }

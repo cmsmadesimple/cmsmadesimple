@@ -57,12 +57,6 @@ try {
                 if (isset($params['design_list'])) $design_list = $params['design_list'];
                 $css_ob->set_designs($design_list);
             }
-            //$css_ob->set_designs(array());
-            //if( isset($params['design_list']) ) $css_ob->set_designs($params['design_list']);
-
-            // set the name last as it is the most likely to generate an error.
-            // this allows us to preserve as much data as possible.
-
             $css_ob->save();
 
             if (!$apply) {
@@ -70,14 +64,30 @@ try {
                 $this->RedirectToAdminTab();
             }
         }
-    } catch( CmsException $e ) {
+        else if( isset($params['export']) ) {
+            $outfile = $css_ob->get_content_filename();
+            $dn = dirname($outfile);
+            if( !is_dir($dn) || !is_writable($dn) ) {
+                throw new \RuntimeException($this->Lang('error_assets_writeperm'));
+            }
+            if( is_file($outfile) && !is_writable($outfile) ) {
+                throw new \RuntimeException($this->Lang('error_assets_writeperm'));
+            }
+            file_put_contents($outfile,$css_ob->get_content());
+        }
+        else if( isset($params['import']) ) {
+            $infile = $css_ob->get_content_filename();
+            if( !is_file($infile) || !is_readable($infile) || !is_writable($infile) ) {
+                throw new \RuntimeException($this->Lang('error_assets_readwriteperm'));
+            }
+            $data = file_get_contents($infile);
+            unlink($infile);
+            $css_ob->set_content($data);
+            $css_ob->save();
+        }
+    } catch( \Exception $e ) {
         $message = $e->GetMessage();
         $response = 'error';
-
-        if (!$apply) {
-            $this->SetMessage($message);
-            $this->RedirectToAdminTab();
-        }
     }
 
     //
@@ -136,4 +146,3 @@ try {
 #
 # EOF
 #
-?>

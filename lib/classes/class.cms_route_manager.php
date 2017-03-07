@@ -286,7 +286,7 @@ final class cms_route_manager
 	 * @param CmsRoute $route The dynamic route object to add
 	 * @return bool.
 	 */
-	public static function add_dynamic(CmsRoute& $route)
+	public static function add_dynamic(CmsRoute $route)
 	{
 		if( self::route_exists($route) ) return FALSE;
 		if( !is_array(self::$_dynamic_routes) ) self::$_dynamic_routes = array();
@@ -384,7 +384,7 @@ final class cms_route_manager
 		if( is_array($data) && count($data) ) {
 			self::$_routes = array();
 			for( $i = 0, $n = count($data); $i < $n; $i++ ) {
-				$obj = @unserialize($data[$i]['data']);
+				$obj = unserialize($data[$i]['data']);
 				self::$_routes[$obj->signature()] = $obj;
 			}
 			self::$_routes_loaded = TRUE;

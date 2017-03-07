@@ -10,8 +10,13 @@ $(document).ready(function(){
 	     modal:  true
 	   });
 	});
-        $('a.delete_article').click(function(){
-        	return confirm('{$mod->Lang('areyousure')|escape:'javascript'}');
+        $('a.delete_article').click(function(ev){
+	        var self = $(this);
+	        ev.preventDefault();
+        	cms_confirm('{$mod->Lang('areyousure')|escape:'javascript'}').done(function(){
+		    window.location = self.attr('href');
+		    return true;
+		});
         });
 	$('#articlelist').on('cms_checkall_toggle','[type=checkbox]',function(){
 		var l = $('#articlelist :checked').length;
@@ -33,8 +38,12 @@ $(document).ready(function(){
 		}
 	});
 
-	$('#bulkactions').on('click','#submit_bulkaction',function(){
-		return confirm('{$mod->Lang('areyousure_multiple')|escape:'javascript'}');
+	$('#bulkactions').on('click','#submit_bulkaction',function(ev){
+		var form = $(this).closest('form');
+	        ev.preventDefault();
+		cms_confirm('{$mod->Lang('areyousure_multiple')|escape:'javascript'}').done(function(){
+		    form.submit();
+		});
 	});
 });
 //]]>
@@ -80,19 +89,16 @@ $(document).ready(function(){
 </div>
 {/if}
 
-<div class="row">
-  <div class="pageoptions half" style="margin-top: 8px;">
-    <a id="toggle_filter" {if $curcategory != ''} style="font-weight: bold; color: green;"{/if}>{admin_icon icon='view.gif' alt=$mod->Lang('viewfilter')} {if $curcategory != ''}*{/if}{$mod->Lang('viewfilter')}</a>
-    {if isset($addlink)}&nbsp;{$addlink}{/if}
+<div class="row c_full">
+  <div class="pageoptions grid_6" style="margin-top: 8px;">
+    {if $can_add}
+      <a href="{cms_action_url action=addarticle}">{admin_icon icon='newobject.gif' alt=$mod->Lang('addarticle')} {$mod->Lang('addarticle')}</a>&nbsp;
+    {/if}
+    <a id="toggle_filter" {if $curcategory != ''} style="font-weight: bold; color: green;"{/if}>{admin_icon icon='view.gif' alt=$mod->Lang('viewfilter')} {if $curcategory != ''}*{/if}
+    {$mod->Lang('viewfilter')}</a>
   </div>
-</div>
-
-<div style="clear:both"></div>
-
-{if $itemcount > 0}
-<div class="row">
-  {if $pagecount > 1}
-    <div class="pageoptions" style="text-align: right;">
+  {if $itemcount > 0 && $pagecount > 1}
+    <div class="pageoptions grid_6" style="text-align: right;">
       {form_start}
       {$mod->Lang('prompt_page')}&nbsp;
       <select name="{$actionid}pagenumber">
@@ -104,6 +110,7 @@ $(document).ready(function(){
   {/if}
 </div>{* .row *}
 
+{if $itemcount > 0}
 {$form2start}
 <table class="pagetable" id="articlelist">
 	<thead>

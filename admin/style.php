@@ -18,7 +18,7 @@
 #
 #$Id$
 
-$CMS_ADMIN_PAGE = TRUE;
+$CMS_ADMIN_PAGE = 1;
 $CMS_STYLESHEET = TRUE;
 
 require_once("../lib/include.php");

@@ -23,10 +23,17 @@ $(document).ready(function(){
     {wizard_form_start}
     {$label='install'|tr}
 
+        {if $nofiles}
+          <div class="message yellow">{'step2_nofiles'|tr}</div>
+	{/if}
+
         {if !isset($cmsms_info)}
-          <div class="message yellow">{'step2_nocmsms'|tr}</div>
+            <div class="message yellow">{'step2_nocmsms'|tr}</div>
+	    {if !$install_empty_dir}
+              <div class="message red">{'step2_install_dirnotempty'|tr}</div>
+	    {/if}
         {else}
-	    {* its an upgrade *}
+	    {* its an upgrade or freshen *}
             {if isset($cmsms_info.error_status)}
                 {if $cmsms_info.error_status == 'too_old'}
                     <div class="message red">{'step2_cmsmsfoundnoupgrade'|tr}</div>

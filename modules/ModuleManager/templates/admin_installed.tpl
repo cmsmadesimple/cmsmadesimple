@@ -1,9 +1,26 @@
 <script type="text/javascript">
 $(document).ready(function(){
-  $('a.mod_upgrade').click( function(){ return confirm('{$ModuleManager->Lang('confirm_upgrade')|escape:'javascript'}'); });
-  $('a.mod_remove').click( function(){ return confirm('{$ModuleManager->Lang('confirm_remove')|escape:'javascript'}'); });
-  $('a.mod_chmod').click( function(){ return confirm('{$ModuleManager->Lang('confirm_chmod')|escape:'javascript'}'); });
-  $('a.mod_uninstall').click( function(){ return confirm('{$ModuleManager->Lang('confirm_uninstall')|escape:'javascript'}'); });
+  $('a.mod_upgrade').click( function(ev){
+      ev.preventDefault();
+      var href = $(this).attr('href');
+      cms_confirm('{$ModuleManager->Lang('confirm_upgrade')|escape:'javascript'}').done(function(){
+          window.location.href = href;
+      })
+  });
+  $('a.mod_remove').click( function(ev){
+      ev.preventDefault();
+      var href = $(this).attr('href');
+      cms_confirm('{$ModuleManager->Lang('confirm_remove')|escape:'javascript'}').done(function(){
+          window.location.href = href;
+      })
+  });
+  $('a.mod_chmod').click( function(ev){
+      ev.preventDefault();
+      var href = $(this).attr('href');
+      cms_confirm('{$ModuleManager->Lang('confirm_chmod')|escape:'javascript'}').done(function(){
+          window.location.href = href;
+      })
+  });
 
   $('#importbtn').click(function(){
     $('#importdlg').dialog({
@@ -12,16 +29,18 @@ $(document).ready(function(){
         {$ModuleManager->Lang('submit')}: function() {
           var file = $('#xml_upload').val();
           if( file.length == 0 ) {
-            alert('{$ModuleManager->Lang('error_nofileuploaded')|escape:'javascript'}');
-            return;
+            cms_alert('{$ModuleManager->Lang('error_nofileuploaded')|escape:'javascript'}');
           }
-          var ext  = file.split('.').pop().toLowerCase();
-          if($.inArray(ext, ['xml','cmsmod']) == -1) {
-            alert('{$ModuleManager->Lang('error_invaliduploadtype')|escape:'javascript'}');
-            return;
-          }
-          $(this).dialog('close');
-          $('#local_import').submit();
+	  else {
+            var ext  = file.split('.').pop().toLowerCase();
+            if($.inArray(ext, ['xml','cmsmod']) == -1) {
+              cms_alert('{$ModuleManager->Lang('error_invaliduploadtype')|escape:'javascript'}');
+            }
+	    else {
+              $(this).dialog('close');
+              $('#local_import').submit();
+	    }
+	  }
         },
         {$ModuleManager->Lang('cancel')}: function() {
           $(this).dialog('close');
@@ -136,15 +155,15 @@ $(document).ready(function(){
             {capture assign='op'}<a class="modop mod_chmod" href="{cms_action_url action='local_chmod' mod=$item.name}" title="{$ModuleManager->Lang('title_chmod')}">{$ModuleManager->Lang('changeperms')}</a>{/capture}{$ops[]=$op}
           {/if}
         {else}
+          {if $item.e_status == 'need_upgrade' }
+              {capture assign='op'}<a class="modop mod_upgrade" href="{cms_action_url action='local_upgrade' mod=$item.name}" title="{$ModuleManager->Lang('title_upgrade')}">{$ModuleManager->Lang('upgrade')}</a>{/capture}
+	      {$ops[]=$op}
+          {/if}
 	  {if $item.can_uninstall}
             {if $item.name != 'ModuleManager' || $allow_modman_uninstall}
               {capture assign='op'}<a class="modop mod_uninstall" href="{cms_action_url action='local_uninstall' mod=$item.name}" title="{$ModuleManager->Lang('title_uninstall')}">{$ModuleManager->Lang('uninstall')}</a>{/capture}{$ops[]=$op}
 	    {/if}
 	  {/if}
-          {if $item.e_status == 'need_upgrade' }
-              {capture assign='op'}<a class="modop mod_upgrade" href="{cms_action_url action='local_upgrade' mod=$item.name}" title="{$ModuleManager->Lang('title_upgrade')}">{$ModuleManager->Lang('upgrade')}</a>{/capture}
-	      {$ops[]=$op}
-          {/if}
         {/if}
         {'<br/>'|implode:$ops}
       </td>
@@ -165,7 +184,7 @@ $(document).ready(function(){
         <a class="modop mod_about" href="{cms_action_url action='local_about' mod=$item.name}" title="{$ModuleManager->Lang('title_moduleabout')}">{$ModuleManager->Lang('abouttxt')}</a>
       </td>
       {if $allow_export}<td>
-        {if $item.active && $item.root_writable}
+        {if $item.active && $item.root_writable && $item.e_status != 'need_upgrade' }
           <a class="modop mod_export" href="{cms_action_url action='local_export' mod=$item.name}" title="{$ModuleManager->Lang('title_moduleexport')}">{admin_icon icon='xml_rss.gif'}</a>
         {/if}
       </td>{/if}

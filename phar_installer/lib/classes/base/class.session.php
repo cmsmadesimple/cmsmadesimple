@@ -12,14 +12,16 @@ final class session implements \ArrayAccess
 
   private static function start()
   {
-    if( !self::$_key ) {
-      $session_key = substr(md5(__DIR__),0,10);
-      @session_name('CMSIC'.$session_key);
-      if( !@session_id() ) $res = @session_start();
-      if( !$res ) throw new \RuntimeException('Problem starting the session (system configuration problem?)');
-      self::$_session_id = session_id();
-      self::$_key = 'k'.md5(self::$_session_id);
-    }
+      if( !self::$_key ) {
+          $session_key = substr(md5(__DIR__),0,10);
+          @session_name('CMSIC'.$session_key);
+          @session_cache_limiter('nocache');
+          $res = null;
+          if( !@session_id() ) $res = @session_start();
+          if( !$res ) throw new \RuntimeException('Problem starting the session (system configuration problem?)');
+          self::$_session_id = session_id();
+          self::$_key = 'k'.md5(self::$_session_id);
+      }
   }
 
   private function _collapse()
@@ -34,7 +36,9 @@ final class session implements \ArrayAccess
     self::start();
     if( !is_array($this->_data) ) {
       $this->_data = array();
-      if( isset($_SESSION[self::$_key]) )  $this->_data = unserialize($_SESSION[self::$_key]);
+      if( isset($_SESSION[self::$_key]) ) {
+          $this->_data = unserialize($_SESSION[self::$_key]);
+      }
     }
   }
 
@@ -48,6 +52,12 @@ final class session implements \ArrayAccess
   {
     if( !self::$_instance ) self::$_instance = new session;
     return self::$_instance;
+  }
+
+  public function reset()
+  {
+      self::clear();
+      $this->_expand();
   }
 
   public function offsetExists($key)

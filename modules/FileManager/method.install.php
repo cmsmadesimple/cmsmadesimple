@@ -9,6 +9,7 @@ $this->SetPreference('showthumbnails',1);
 $this->SetPreference('permissionstyle','xxx');
 
 $this->CreateEvent('OnFileUploaded');
+$this->CreateEvent('OnFileDeleted');
 $this->RegisterModulePlugin(true);
 
 ?>

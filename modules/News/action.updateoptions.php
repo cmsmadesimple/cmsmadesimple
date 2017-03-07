@@ -16,6 +16,7 @@ $this->SetPreference('fesubmit_status', $params['fesubmit_status']);
 $this->SetPreference('fesubmit_redirect', trim($params['fesubmit_redirect']));
 $this->SetPreference('detail_returnid',(int)$params['detail_returnid']);
 $this->SetPreference('allow_fesubmit',(int)$params['allow_fesubmit']);
+$this->SetPreference('alert_drafts',(int)$params['alert_drafts']);
 
 $this->CreateStaticRoutes();
 $params = array('tab_message'=> 'optionsupdated', 'active_tab' => 'options');
