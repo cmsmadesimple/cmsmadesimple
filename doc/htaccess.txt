@@ -82,6 +82,8 @@ RedirectMatch 403 ^.*/assets/.*\.tpl$
 
 #
 # The following allows the browser to cache images, scripts, stylesheets and videos. If the expires module is enabled on the server.
+# Note, this applies to admin directory stuff too.
+# however, for php files in the admin directory we explicitly st the header to not expire
 #
 <IfModule mod_expires.c>
 	ExpiresActive On
