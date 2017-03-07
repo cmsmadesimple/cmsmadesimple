@@ -118,7 +118,21 @@ class wizard_step2 extends \cms_autoinstaller\wizard_step
                 }
                 return TRUE;
             };
-            $smarty->assign('install_empty_dir',$is_dir_empty($rpwd,$app->get_phar()));
+            $list_files = function($dir,$n = 5) {
+                $n = max(1,min(100,$n));
+                if( !$dir ) return;
+                if( !is_dir($dir) ) return;
+                $files = glob($dir.'/*');
+                $files = array_slice($files,0,$n);
+                foreach( $files as &$file ) {
+                    $file = basename($file);
+                }
+                return $files;
+            };
+            $empty_dir = $is_dir_empty($rpwd,$app->get_phar());
+            $existing_files = $list_files($rpwd);
+            $smarty->assign('install_empty_dir',$empty_dir);
+            $smarty->assign('existing_files',$existing_files);
             $wizard->clear_data('version_info');
         }
 
