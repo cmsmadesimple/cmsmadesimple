@@ -136,7 +136,7 @@ class wizard_step3 extends \cms_autoinstaller\wizard_step
         $tests[] = $obj;
 
         // required test... multibyte extensions
-        $obj = new _tests_\boolean_test('multibyte_support',_tests_\test_extension_loaded('mbstring'));
+        $obj = new _tests_\boolean_test('multibyte_support',_tests_\test_extension_loaded('mbstring') && function_exists('mb_get_info'));
         $obj->required = 1;
         $obj->fail_key = 'fail_multibyte_support';
         $tests[] = $obj;
