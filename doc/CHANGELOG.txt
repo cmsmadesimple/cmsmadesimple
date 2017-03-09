@@ -87,6 +87,7 @@ Core - General
   - #11235 - munge_string_to_url leaves trailing dashes at the end of munged URL.
   - #11287 - Password reset form's password fields have different lengths
   - Fix issue with module actions if 'content_en' block name was given on the default content block.
+  - No longer distribute the config.php reference PDF, it is now available online.
 
 Navigator v1.0.5
   - Minor optimizations.
