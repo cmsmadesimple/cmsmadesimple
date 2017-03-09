@@ -30,7 +30,15 @@ $(document).ready(function(){
         {if !isset($cmsms_info)}
             <div class="message yellow">{'step2_nocmsms'|tr}</div>
 	    {if !$install_empty_dir}
-              <div class="message red">{'step2_install_dirnotempty'|tr}</div>
+              <div class="message red">{'step2_install_dirnotempty2'|tr}
+	      {if !empty($existing_files)}
+	        <ul>
+		   {foreach $existing_files as $one}
+		   <li>{$one}</li>
+		   {/foreach}
+		</ul>
+              {/if}
+	      </div>
 	    {/if}
         {else}
 	    {* its an upgrade or freshen *}

@@ -14,8 +14,10 @@
   {else}
     <div class="message yellow">{'sometests_failed'|tr}</div>
   {/if}
+{/if}
 
-<table class="table zebra-table bordered-table installer-test-information">
+{if $tests_failed || $verbose}
+  <table class="table zebra-table bordered-table installer-test-information">
     <thead class="tbhead">
         <tr>
             <th>{'th_status'|tr}</th>
@@ -24,25 +26,23 @@
     </thead>
     <tbody>
     {foreach from=$tests item='test'}
-    {cycle values='odd,even' assign='rowclass'}
+        {cycle values='odd,even' assign='rowclass'}
         <tr class="{$rowclass}{if $test->status == 'test_fail'} error{/if}{if $test->status == 'test_warn'} warning{/if}">
             <td class="{$test->status}">{if $test->status == 'test_fail'}<i title="{'test_failed'|tr}" class="icon-cancel-circle red"></i>{elseif $test->status == 'test_warn'}<i title="{'test_warning'|tr}" class="icon-warning yellow"></i>{else}<i title="{'test_passed'|tr|strip_tags}" class="icon-checkmark-circle green"></i>{/if}</td>
             <td>
                 {$test->name|tr}
                 {$str = $test->msg()}
                 {if $str != '' && ($verbose || $test->status != 'test_pass')}
-                <br />
-                <span class="tests-infotext">{$str}</span>
+                  <br />
+                  <span class="tests-infotext">{$str}</span>
                 {/if}
             </td>
         </tr>
     {/foreach}
     </tbody>
-</table>
+  </table>
 {else}
-
-<div class="message green">{'step3_passed'|tr}</div>
-
+  <div class="message green">{'step3_passed'|tr}</div>
 {/if}
 
 <table class="table bordered-table installer-test-legend small-font">
