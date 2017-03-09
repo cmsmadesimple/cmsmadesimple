@@ -301,13 +301,16 @@ final class CmsJobManager extends \CMSModule
 
         try {
             $fp = fsockopen($prefix_scheme.$url_ob->get_host(),$url_ob->get_port(),$errno,$errstr,3);
-            if( !$fp ) throw new \RuntimeException('Could n ot connect to the async processing action');
+            if( !$fp ) throw new \RuntimeException('Could not connect to the async processing action');
             fwrite($fp,$out);
             $code = null;
             $data = fgets($fp);
             $code = (int) substr($data,9,3);
             fclose($fp);
-            if( $code != 200 ) audit('',$this->GetName(),'Received '.$code.' response when trying to trigger async processing');
+            if( $code != 200 ) {
+                debug_to_log($data,'Trigger async processing');
+                audit('',$this->GetName(),'Received '.$code.' response when trying to trigger async processing');
+            }
         }
         catch( \Exception $e ) {
             debug_to_log('exception '.$e->GetMessage());
