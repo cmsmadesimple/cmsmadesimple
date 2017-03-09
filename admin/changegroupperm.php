@@ -60,13 +60,13 @@ $load_perms = function() use ($db) {
 
     // use hooks to localize permissions.
     \CMSMS\HookManager::add_hook('localizeperm',function($perm_name){
-            $key = 'perm_'.$perm_name;
+            $key = 'perm_'.str_replace(' ','_',$perm_name);
             if( \CmsLangOperations::lang_key_exists('admin',$key) ) return \CmsLangOperations::lang_from_realm('admin',$key);
             return $perm_name;
         },\CMSMS\HookManager::PRIORITY_HIGH);
 
     \CMSMS\HookManager::add_hook('getperminfo',function($perm_name){
-            $key = 'permdesc_'.$perm_name;
+            $key = 'permdesc_'.str_replace(' ','_',$perm_name);
             if( \CmsLangOperations::lang_key_exists('admin',$key) ) return \CmsLangOperations::lang_from_realm('admin',$key);
         },\CMSMS\HookManager::PRIORITY_HIGH);
 
