@@ -115,7 +115,7 @@ class wizard_step7 extends \cms_autoinstaller\wizard_step
                     foreach( $deleted as $rec ) {
                         $fn = "{$destdir}{$rec['filename']}";
                         if( !file_exists($fn) ) {
-                            $this->error("file $fn does not exist... but we planned to delete it anyway");
+                            $this->verbose("file $fn does not exist... but we planned to delete it anyway");
                             $nmissing++;
                         }
                         else if( !is_writable($fn) ) {
