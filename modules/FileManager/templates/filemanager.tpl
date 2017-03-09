@@ -168,6 +168,7 @@ $(document).ready(function () {
 		<tbody>
 		{foreach from=$files item=file}
 			{cycle values="row1,row2" assign=rowclass}
+			{$thedate=str_replace(' ','&nbsp;',$file->filedate|cms_date_format)}{$thedate=str_replace('-','&minus;',$thedate)}
 			<tr class="{$rowclass}">
 				<td valign="middle">{if isset($file->thumbnail) && $file->thumbnail!=''}{$file->thumbnail}{else}{$file->iconlink}{/if}</td>
 				<td class="clickable" valign="middle">{$file->txtlink}</td>
@@ -177,7 +178,7 @@ $(document).ready(function () {
 				<td class="clickable" style="padding-right:8px;" valign="middle">{$file->filepermissions}</td>
 				<td class="clickable" style="padding-right:8px;white-space:pre;text-align:right;" valign="middle">{$file->filesize}</td>
 				<td class="clickable" style="padding-right:8px;" valign="middle">{if isset($file->filesizeunit)}{$file->filesizeunit}{else}&nbsp;{/if}</td>
-				<td class="clickable" style="padding-right:8px;white-space:pre;" valign="middle">{$file->filedate|cms_date_format|replace:" ":"&nbsp;"|replace:"-":"&minus;"}</td>
+				<td class="clickable" style="padding-right:8px;white-space:pre;" valign="middle">{$thedate}</td>
 				<td>
 				{if !isset($file->noCheckbox)}
 					<label for="x_{$file->urlname}" style="display: none;">{$mod->Lang('toggle')}</label>
