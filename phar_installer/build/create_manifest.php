@@ -194,6 +194,7 @@ $obj->ignore('#*');
 $obj->ignore('tmp');
 $obj->ignore('scripts');
 $obj->ignore('install');
+$obj->ignore('phar_installer');
 $obj->ignore('config.php');
 
 // begin output of manifest
