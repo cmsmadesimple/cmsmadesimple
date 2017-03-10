@@ -75,8 +75,8 @@ namespace CMSMS\Database {
             $tmp = [];
             if( $config['set_names'] ) $tmp[] = "NAMES 'utf8'";
             if( $config['set_db_timezone'] ) {
-                $dt = new DateTime();
-                $dtz = new DateTimeZone($config['timezone']);
+                $dt = new \DateTime();
+                $dtz = new \DateTimeZone($config['timezone']);
                 $offset = timezone_offset_get($dtz,$dt);
                 $symbol = ($offset < 0) ? '-' : '+';
                 $hrs = abs((int)($offset / 3600));

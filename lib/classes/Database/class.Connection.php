@@ -478,7 +478,7 @@ namespace CMSMS\Database {
          * @return bool
          * @deprecated
          */
-        abstract public function CreateSequence($seqname,$startID=1);
+        abstract public function CreateSequence($seqname,$startID=0);
 
         /**
          * Drop a sequence table
