@@ -48,7 +48,7 @@ Core - General
   - Add to content types the ability to set basic attributes for properties from within the page type definition.
   - Fixes problems with pagelink and link content types not being properly editable by additional editors.
   - Adds more type and content cleaning into the content types FillParams method(s).
-  - Pass an explicit cacheid in to createtemplate in index.php
+  - Pass an explicit cacheid in to createtemplate in index.php.
   - Fix an error message in the autorefresh JavaScript class.
   - Fix problems that could result in uid=1 becoming inactive, and not a member of other groups when edited by another user.
   - Fix query problem in CmsLayoutStylesheetQuery with Mysql 5.7.
@@ -56,7 +56,7 @@ Core - General
   - Refactoring of the Admin login code to be cleaner, more efficient, more secure.
   - No longer allow any modules to auto-upgrade on frontend requests.
   - Fix problem with cms_filecache_driver::clear().
-  - Introduces the new Hook mechanism to allow optimizing cms_stylesheet a bit further. All core SendEvent calls are now implemented as hooks .
+  - Introduces the new Hook mechanism to allow optimizing cms_stylesheet a bit further. All core SendEvent calls are now implemented as hooks.
   - changegroupperms can now localize permission names,  and add an info string for each permission. (the listpermissions hook).
   - Adds add_headtext(), get_headtext(),  add_footertext(), get_footertext() methods to the Admin theme class.
   - minor refactoring of admin/index.php, admin/header.php, admin/footer.php and admin/moduleinterface.php.
@@ -65,34 +65,33 @@ Core - General
   - Adds new 'switch user' functionality for members of the Admin group.
   - Re-factor the content page selector ... now supports two modes (one for a simple list, and the previous dynamic one that is faster for large sites)
     the simple list mode is used for users with limited edit capabilities on pages.
-  - Adds a new smarty plugin {page_selector} to the Admin lib.
+  - Adds a new Smarty plugin {page_selector} to the Admin lib.
   - New arguments to the CreateHierarchyDropdown function (deprecated) and adjust documentation.
   - Content pages now have the ability to control whether or not the page wants any more children.
-  - The TemplateType class now has a help callback to optionally allow retrieving help for templates of a particular type
+  - The TemplateType class now has a help callback to optionally allow retrieving help for templates of a particular type.
   - Permissions are now grouped logically by module/originator in ChangeGroupPermissions.
-  - Now use HTTPS for the latest version check
+  - Now use HTTPS for the latest version check.
   - Adds the public_cache_url config entry,  and make sure that the css_url uses that by default.
-  - Adds many core hooks
+  - Adds many core hooks.
   - Enhance the {page_image} plugin to optionally output a full HTML img tag if there is a value for the respective property.
   - Improve the {content_image} plugin to output nothing if there is no value for the property, and to output any non-internal arguments as attributes to the HTML img tag.
-  - Upgrade to an un-modified version of smarty v3.1.31
-  - Move plugins directory to lib/plugins since we now have the assets/plugins directory for custom plugins.  The upgrader should preserve any custom plugins in the /plugins directory.
-  - Add new plugins {thumbnail_url}, {file_url} and {cms_filepicker)
-  - Add more intelligence to the tableoption handling for DataDictionary::CreateTableSQL
-  - Minor improvements to the asynchronous behaviour of the locking functionality
+  - Upgrade to an un-modified version of smarty v3.1.31.
+  - Move plugins directory to lib/plugins since we now have the assets/plugins directory for custom plugins.  Upgrading should preserve any custom plugins in the /plugins directory.
+  - Add new plugins {thumbnail_url}, {file_url} and {cms_filepicker).
+  - Add more intelligence to the tableoption handling for DataDictionary::CreateTableSQL.
+  - Minor improvements to the asynchronous behaviour of the locking functionality.
   - #11295 - Cannot change the name of a UDT, always creates new UDT.
   - #11080 - Parameter $adding in GetContentBlockFieldInput always FALSE.
   - #11093 - Bad error message in jquery.cmsms_autorefresh.js.
   - #11133 - is_email() fails on domain check.
   - #11235 - munge_string_to_url leaves trailing dashes at the end of munged URL.
-  - #11287 - Password reset form's password fields have different lengths
+  - #11287 - Password reset form's password fields have different lengths.
   - Fix issue with module actions if 'content_en' block name was given on the default content block.
-  - No longer distribute the config.php reference PDF, it is now available online.
 
 Navigator v1.0.5
   - Minor optimizations.
   - Now use pageid in calculations of cacheid.
-  - Now output template help to Navigator
+  - Now output template help to Navigator.
 
 Installation Assistant v1.3
   - Only create dummy index.html files in subdirectories we created.
@@ -101,12 +100,12 @@ Installation Assistant v1.3
   - Upgrade routine now rewrites the config.php file (but keeps a backup).
   - Set a few more preferences to reasonable defaults on install. Specifically related to site cleanup and performance.
   - On installation, now insure that tmp/cache and tmp/templates_c directories are empty.
-  - Now displays if files are going to be skipped
+  - Now displays if files are going to be skipped.
   - Adds clear option for development purposes.
   - No longer ask to save database password.
-  - On install now create the assets directory structure
-  - On upgrade (for 2.2) now create the assets directory structure and move tmp/configs, tmp/templates, module_custom, adin/custom, etc. within it.
-  - When using the expanded installer allow changing the destination directory on step 1
+  - On install now create the assets directory structure.
+  - On upgrade (for 2.2) now create the assets directory structure and move tmp/configs, tmp/templates, module_custom, admin/custom, etc. within it.
+  - When using the expanded installer allow changing the destination directory on step 1.
   - Check for existing files in the installation directory for new installations.
 
 CmsJobManager
@@ -133,14 +132,14 @@ DesignManager
   - When creating a new template, associate the new template with the default design.
   - Add reset buttons to the filter forms.
   - No longer check for default content block in a template.
-  - Adds the ability to export a template to a file within the assets directory, and to import from the assets directory
-  - If a file exists in the assets/templates directory corresponding to a template name, do not allow in-browser editing
+  - Adds the ability to export a template to a file within the assets directory, and to import from the assets directory.
+  - If a file exists in the assets/templates directory corresponding to a template name, do not allow in-browser editing.
   - Add bulk actions to allow importing and exporting multiple templates.
   - In the template list, if a file exists for a template... display it in the filename column.
-  - Adds the ability to export a stylesheet to a file within the assets directory, and to import from the assets directory
-  - If a file exists in the assets/css directory corresponding to a stylesheet name, do not allow in-browser editing
+  - Adds the ability to export a stylesheet to a file within the assets directory, and to import from the assets directory.
+  - If a file exists in the assets/css directory corresponding to a stylesheet name, do not allow in-browser editing.
   - Add bulk actions to allow importing and exporting multiple stylesheets.
-  - In the stylesheet list, if a file exists for a stylesheet.. display it in the filename column.
+  - In the stylesheet list, if a file exists for a stylesheet display it in the filename column.
 
 News v2.51
   - Minor fix to add category.
@@ -150,8 +149,8 @@ News v2.51
   - Minor optimizations.
   - Adds postdate as parameters in events.
   - now output template help to Navigator.
-  - Adds new 'linked file' type field that allows selecting a file using the filepicker
-  - Changes the default summary and detail templates to support the linked_file field type, and uses {thumbnail_url} and {file_url}
+  - Adds new 'linked file' type field that allows selecting a file using the filepicker.
+  - Changes the default summary and detail templates to support the linked_file field type, and uses {thumbnail_url} and {file_url}.
 
 FileManager v1.6.3
   - Move settings to it's own menu item under Site Admin.
@@ -178,15 +177,16 @@ ModuleManager
   - Write a confirmation form for uninstalling a module that displays the UninstallPreMessage or uses a default.
   - Now don't allow disabling / uninstalling myself.
   - Don't hide the upgrades tab when there are no upgrades, but show the number of upgrades in the tab title instead.
-  - Now use HTTPS for requests to ModuleRepository
-  - Trigger a hook before exporting a module to XML
+  - Now use HTTPS for requests to ModuleRepository.
+  - Trigger a hook before exporting a module to XML.
 
 MicroTiny v2.1
-  - New version of the tinymce wysiwyg editor
-  - Adds a mailto plugin
-  - Now use the FilePicker module for a filepicker, required rewriting the cmsms_filepicker tinymce plugin
-  - Enable the title attribute on the image plugin
+  - New version of the tinymce wysiwyg editor.
+  - Adds a mailto plugin.
+  - Now use the FilePicker module for a filepicker, required rewriting the cmsms_filepicker tinymce plugin.
+  - Enable the title attribute on the image plugin.
 
+  
 Version 2.1.6 - Spanish Wells
 ----------------------------------
 Core - General
