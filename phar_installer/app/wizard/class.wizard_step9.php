@@ -145,6 +145,9 @@ class wizard_step9 extends \cms_autoinstaller\wizard_step
         $this->message(\__appbase\lang('install_createtmpdirs'));
         @mkdir($destdir.'/tmp/cache',0777,TRUE);
         @mkdir($destdir.'/tmp/templates_c',0777,TRUE);
+        
+        // write protect config.php
+        @chmod("$destdir/config.php",0444);
 
         // clear the cache
         $this->connect_to_cmsms();
