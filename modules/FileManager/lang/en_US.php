@@ -27,6 +27,7 @@ $lang['confirmselected'] = 'Are you sure?';
 $lang['confirmsingledelete'] = 'Are you sure?';
 $lang['confirmsingledirdelete'] = 'Are you sure this directory should be deleted?';
 $lang['confirm_delete'] = 'Are you sure you want to remove this file?';
+$lang['confirm_unpack'] = 'Are you sure you want to unpack this file?';
 $lang['copiedto'] = 'copied to';
 $lang['copy'] = 'Copy';
 $lang['copyfailed'] = 'Copy operation failed on %s';
@@ -48,7 +49,7 @@ $lang['delete'] = 'Delete';
 $lang['deleteselected'] = 'Delete the selected files/directories';
 $lang['deleteselectedcancelled'] = 'Deletion of selected files canceled';
 $lang['deletesuccess'] = 'Items successfully deleted';
-$lang['desc_filemanager_settings'] = 'Edit Filemanager Settings';
+$lang['desc_filemanager_settings'] = 'Edit File Manager Settings';
 $lang['dirchmodfailmulti'] = 'Changing permissions on the directory failed, some of it\'s content may have gotten new permissions, though.';
 $lang['dirchmodfailure'] = 'Changing permissions of the directory failed';
 $lang['dirchmodsuccess'] = 'The directory successfully got new permissions';
@@ -215,10 +216,9 @@ $lang['pie_crop_x'] = 'crop x';
 $lang['pie_crop_y'] = 'crop y';
 $lang['pie_crop_w'] = 'crop width';
 $lang['pie_crop_h'] = 'crop height';
-$lang['pie_warn_action'] = 'Are you sure? There is no CTRL+z down here..';
+$lang['pie_warn_action'] = 'Are you sure? There is no CTRL+Z down here..';
 $lang['pie_warn_reset'] = 'Are you sure? It will reset your current modifications';
 $lang['postinstall'] = 'FileManager module was installed';
-$lang['postletexists'] = 'Warning! Please remove the modules/FileManager/postlet directory completely. The CMS doesn\'t use it anymore.';
 $lang['postrotate'] = 'Action for after image rotation';
 $lang['predefined'] = 'Predefined Angles';
 $lang['prompt_copy'] = 'Copy one or more Items';
@@ -226,7 +226,7 @@ $lang['prompt_dropfiles'] = 'Drop files here to upload';
 $lang['prompt_move'] = 'Move Items to Another Directory';
 
 // Q
-$lang['quickmode'] = 'Quick chmod (like 777)';
+$lang['quickmode'] = 'Quick CHMOD (like 777)';
 
 // R
 $lang['really_uninstall'] = 'Are you sure the File Manager module should be uninstalled?';
