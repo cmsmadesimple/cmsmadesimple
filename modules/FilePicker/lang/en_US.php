@@ -34,6 +34,7 @@ $lang['err_profile_topdir'] = 'The top directory specified does not exist';
 // F
 $lang['filename'] = 'Filename';
 $lang['filterby'] = 'Filter by';
+$lang['filepickertitle'] = 'CMSMS File Picker';
 $lang['fileview'] = 'File view';
 $lang['friendlyname'] = 'File Picker';
 
@@ -71,8 +72,14 @@ $lang['select_an_image'] = 'Select an image';
 $lang['select_upload_files'] = 'Select files to upload';
 $lang['show_thumbs'] = 'Show thumbnails';
 $lang['size'] = 'Size';
+$lang['switcharchive'] = 'Only show archive files';
+$lang['switchaudio'] = 'Only show audio files';
+$lang['switchfiles'] = 'Only show regular files';
 $lang['switchgrid'] = 'Display files in a grid';
+$lang['switchimage'] = 'Only show image files';
 $lang['switchlist'] = 'Display files as a list';
+$lang['switchreset'] = 'Show all files';
+$lang['switchvideo'] = 'Only show video files';
 
 // T
 $lang['th_created'] = 'Created';
