@@ -44,11 +44,11 @@ catch( CmsException $e ) {
 
 try {
   if( isset($params['submit']) ) {
-    $category->set_name($params['name']);
-    $category->set_description($params['description']);
-    $category->save();
-    $this->SetMessage($this->Lang('category_saved'));
-    $this->RedirectToAdminTab();
+      $category->set_name(strip_tags($params['name']));
+      $category->set_description(strip_tags($params['description']));
+      $category->save();
+      $this->SetMessage($this->Lang('category_saved'));
+      $this->RedirectToAdminTab();
   }
 }
 catch( CmsException $e ) {
