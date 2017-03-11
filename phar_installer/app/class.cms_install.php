@@ -166,7 +166,10 @@ class cms_install extends \__appbase\app
         $config_file = realpath(getcwd()).'/custom_config.ini';
         if( is_file($config_file) && is_readable($config_file) ) {
             $tmp = parse_ini_file($config_file);
-            if( is_array($tmp) && count($tmp) ) $config = array_merge($config,$tmp);
+            if( is_array($tmp) && count($tmp) ) {
+                $config = array_merge($config,$tmp);
+                if( isset($tmp['dest']) ) $this->_custom_destdir = $tmp['dest'];
+            }
         }
 
         // override current config with url params
@@ -187,6 +190,7 @@ class cms_install extends \__appbase\app
             case 'dest':
             case 'destdir':
                 $this->_custom_destdir = $config['dest'] = trim($val);
+
                 break;
             case 'debug':
                 $config['debug'] = utils::to_bool($val);
@@ -282,7 +286,7 @@ class cms_install extends \__appbase\app
 
     public function has_custom_destdir() {
         $p1 = realpath(getcwd());
-        $p2 = realpath($this->get_destdir());
+        $p2 = realpath($this->_custom_destdir);
         return ($p1 != $p2);
     }
 
@@ -349,11 +353,9 @@ class cms_install extends \__appbase\app
 
         // if we are putting files somewhere else, we cannot determine the root url of the site
         // via the $_SERVER variables.
-        if( $this->has_custom_destdir() ) {
-            $b = $this->get_destdir();
-            if( \__appbase\startswith($b,$_SERVER['DOCUMENT_ROOT']) ) {
-                $b = substr($b,strlen($_SERVER['DOCUMENT_ROOT']));
-            }
+        $b = $this->get_destdir();
+        if( $b != getcwd() ) {
+            if( \__appbase\startswith($b,$_SERVER['DOCUMENT_ROOT']) ) $b = substr($b,strlen($_SERVER['DOCUMENT_ROOT']));
             $b = str_replace('\\','/',$b); // cuz windows blows
             if( !\__appbase\endswith($prefix,'/') && !\__appbase\startswith($b,'/') ) $prefix .= '/';
             return $prefix.$b;

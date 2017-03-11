@@ -56,6 +56,7 @@ final class session implements \ArrayAccess
 
   public function reset()
   {
+      $this->_data = null;
       self::clear();
       $this->_expand();
   }
