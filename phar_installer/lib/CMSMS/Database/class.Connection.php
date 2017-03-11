@@ -254,6 +254,7 @@ namespace CMSMS\Database {
         /**
          * Create a prepared statement object.
          *
+         * @param string $sql The SQL query
          * @return Statement
          */
         abstract public function &Prepare($sql);
@@ -477,7 +478,7 @@ namespace CMSMS\Database {
          * @return bool
          * @deprecated
          */
-        abstract public function CreateSequence($seqname,$startID=1);
+        abstract public function CreateSequence($seqname,$startID=0);
 
         /**
          * Drop a sequence table
@@ -499,12 +500,14 @@ namespace CMSMS\Database {
         {
             if (empty($timestamp) && $timestamp !== 0) return 'null';
 
-            # strlen(14) allows YYYYMMDDHHMMSS format
-            if (is_string($timestamp) && is_numeric($timestamp) && strlen($timestamp)<14) {
-                // todo: test me.
-                $timestamp = strtotime($timestamp);
+            // strlen(14) allows YYYYMMDDHHMMSS format
+            if( is_string($timestamp) ) {
+                if( !preg_match('/[0-9-\s:]*/',$timestamp) ) return 'null';
+                $tmp = strtotime($timestamp);
+                if( $tmp < 1 ) return;
+                $timestamp = $tmp;
             }
-            return date("'Y-m-d H:i:s'",$timestamp);
+            if( $timestamp > 0 ) return date("'Y-m-d H:i:s'",$timestamp);
         }
 
         /**
@@ -619,10 +622,7 @@ namespace CMSMS\Database {
         protected function add_debug_query($sql)
         {
             $this->_query_count++;
-            if( $this->_debug && $this->_debug_cb ) {
-                $this->_queries[] = trim($sql);
-                call_user_func($this->_debug_cb,$sql);
-            }
+            if( $this->_debug && $this->_debug_cb ) call_user_func($this->_debug_cb,$sql);
         }
 
         /**
@@ -659,6 +659,7 @@ namespace CMSMS\Database {
          *
          * @param \CMSMS\Database\Connectionspec $spec An object describing the database to connect to.
          * @return \CMSMS\Database\Connection
+	 * @todo  Move this into a factory class
          */
         public static function &Initialize(ConnectionSpec $spec)
         {

@@ -93,7 +93,7 @@ class Statement extends \CMSMS\Database\Statement
         $this->_pos = 0;
     }
 
-    public function Bind($data)
+    public function Bind(array $data)
     {
         parent::Bind($data);
         $first = $data[0];

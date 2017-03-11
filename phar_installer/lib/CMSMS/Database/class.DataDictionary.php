@@ -305,6 +305,7 @@ abstract class DataDictionary
     /**
      * Return the list of columns in a table within the currently connected database.
      *
+     * @param string $table The table name.
      * @return string[]
      */
     abstract public function MetaColumns($table);
@@ -391,7 +392,7 @@ abstract class DataDictionary
      * Create the SQL commands that will result in a database being created.
      *
      * @param string $dbname
-     * @param assoc  An associative array of database options.
+     * @param array  An associative array of database options.
      * @return string[] An array of strings suitable for use with the ExecuteSQLArray method
      */
 	public function CreateDatabase($dbname,$options=false)
@@ -412,8 +413,8 @@ abstract class DataDictionary
      *
      * @param string $idxname The index name
      * @param string $tabname The table name
-     * @param string[] $flds A list of the table fields to create the index with
-     * @param assoc An associative array of options
+     * @param string|string[] $flds A list of the table fields to create the index with.  Either an array of strings or a comma separated list.
+     * @param array An associative array of options
      * @return string[] An array of strings suitable for use with the ExecuteSQLArray method
 	*/
 	public function CreateIndexSQL($idxname, $tabname, $flds, $idxoptions = false)
@@ -444,8 +445,9 @@ abstract class DataDictionary
      * Generate the SQL to add columns to a table.
      *
      * @param string $tabname The Table name.
-     * @param string The column definitions (using DataDictionary meta types)
+     * @param string $flds The column definitions (using DataDictionary meta types)
      * @return string[] An array of strings suitable for use with the ExecuteSQLArray method
+     * @see CreateTableSQL
      */
 	public function AddColumnSQL($tabname, $flds)
 	{
@@ -462,13 +464,10 @@ abstract class DataDictionary
 	/**
 	 * Change the definition of one column
 	 *
-	 * As some DBM's can't do that on there own, you need to supply the complete defintion of the new table,
-	 * to allow, recreating the table and copying the content over to the new table
-     *
 	 * @param string $tabname table-name
-	 * @param string $flds column-name and type for the changed column
-	 * @param string $tableflds='' complete defintion of the new table, eg. for postgres, default ''
-	 * @param array/string $tableoptions='' options for the new table see CreateTableSQL, default ''
+	 * @param string $flds column-name and type for the changed column.
+	 * @param string $tableflds complete defintion of the new table, eg. for postgres, default ''
+	 * @param array/string $tableoptions options for the new table see CreateTableSQL, default ''
      * @return string[] An array of strings suitable for use with the ExecuteSQLArray method
 	 */
 	public function AlterColumnSQL($tabname, $flds, $tableflds='',$tableoptions='')
@@ -484,13 +483,12 @@ abstract class DataDictionary
 	}
 
 	/**
-	 * Rename one column
+	 * Rename one column in a table.
 	 *
-	 * Some DBM's can only do this together with changeing the type of the column (even if that stays the same, eg. mysql)
 	 * @param string $tabname table-name
 	 * @param string $oldcolumn column-name to be renamed
 	 * @param string $newcolumn new column-name
-	 * @param string $flds='' complete column-defintion-string like for AddColumnSQL, only used by mysql atm., default=''
+	 * @param string $flds complete column-defintion-string like for AddColumnSQL, only used by mysql atm., default=''
      * @return string[] An array of strings suitable for use with the ExecuteSQLArray method
 	 */
 	public function RenameColumnSQL($tabname,$oldcolumn,$newcolumn,$flds='')
@@ -505,14 +503,12 @@ abstract class DataDictionary
 	}
 
 	/**
-	 * Drop one column
+	 * Drop one column from a table.
 	 *
-	 * Some DBM's can't do that on there own, you need to supply the complete defintion of the new table,
-	 * to allow, recreating the table and copying the content over to the new table
 	 * @param string $tabname table-name
 	 * @param string $flds column-name and type for the changed column
-	 * @param string $tableflds='' complete defintion of the new table, eg. for postgres, default ''
-	 * @param array/string $tableoptions='' options for the new table see CreateTableSQL, default ''
+	 * @param string $tableflds complete defintion of the new table, eg. for postgres, default ''
+	 * @param array/string $tableoptions options for the new table see CreateTableSQL, default ''
      * @return string[] An array of strings suitable for use with the ExecuteSQLArray method
 	 */
 	public function DropColumnSQL($tabname, $flds, $tableflds='',$tableoptions='')
@@ -550,33 +546,81 @@ abstract class DataDictionary
 		return array (sprintf($this->renameTable, $this->TableName($tabname),$this->TableName($newname)));
 	}
 
-	/*
+	/**
      * Generate the SQL to create a new table.
+     *
+     * The flds string is a comma separated of field definitions, where each definition is of the form
+     *    fieldname type columnsize otheroptions
+     *
+     * The type fields are codes that map to real database types as follows:
+     * <dl>
+     *  <dt>C</dt>
+     *  <dd>Varchar, capped to 255 characters.</dd>
+     *  <dt>X</dt>
+     *  <dd>Text</dd>
+     *  <dt>XL</dt>
+     *  <dd>LongText</dd>
+     *  <dt>C2</dt>
+     *  <dd>Varchar, capped to 255 characters</dd>
+     *  <dt>XL</dt>
+     *  <dd>LongText</dd>
+     *  <dt>B</dt>
+     *  <dd>LongBlob</dd>
+     *  <dt>D</dt>
+     *  <dd>Date</dd>
+     *  <dt>DT</dt>
+     *  <dd>DateTime</dd>
+     *  <dt>T</dt>
+     *  <dd>Time</dd>
+     *  <dt>TS</dt>
+     *  <dd>Timestamp</dd>
+     *  <dt>L</dt>
+     *  <dd>TinyInt</dd>
+     *  <dt>R / I4 / I</dt>
+     *  <dd>Integer</dd>
+     *  <dt>I1</dt>
+     *  <dd>TinyInt</dd>
+     *  <dt>I2</dt>
+     *  <dd>SmallInt</dd>
+     *  <dt>I4</dt>
+     *  <dd>BigInt</dd>
+     *  <dt>F</dt>
+     *  <dd>Double</dd>
+     *  <dt>N</dt>
+     *  <dd>Numeric</dd>
+     *</dl>
+     *
+     * The otheroptions field includes the following options:
+     *<dl>
+     *  <dt>AUTO</dt>
+     *  <dd>Auto increment. Also sets NOTNULL.</dd>
+     *  <dt>AUTOINCREMENT</dt>
+     *  <dd>Same as AUTO</dd>
+     *  <dt>KEY</dt>
+     *  <dd>Primary key field.  Also sets NOTNULL. Compound keys are supported.</dd>
+     *  <dt>PRImARY</dt>
+     *  <dd>Same as KEY</dd>
+     *  <dt>DEFAULT</dt>
+     *  <dd>The default value.  Character strings are auto-quoted unless the string begins with a space.  i.e: ' SYSDATE '.</dd>
+     *  <dt>DEF</dt>
+     *  <dd>Same as DEFAULT</dd>
+     *  <dt>CONSTRAINTS</dt>
+     *  <dd>Additional constraints defined at the end of the field definition.</dd>
+     *</dl>
      *
      * @param string $tabname The table name
      * @param string $flds a comma separated list of field definitions using datadictionary syntax.
-     * @param assoc  $tableoptions An associative array of table options
+     * @param mixed  $tableoptions A string specifying table options (database driver specific) for the table creation command.  Or an associative array of table options, keys being the database type (as available).
      * @return string[] An array of strings suitable for use with the ExecuteSQLArray method
      */
 	public function CreateTableSQL($tabname, $flds, $tableoptions=false)
 	{
-        // if no table options specified, force MyISAM table type for mysql and mysqli
-        $str = 'ENGINE MyISAM CHARACTER SET utf8 COLLATE utf8_general_ci';
-        $stdtableoptions = array('mysql' => $str, 'mysqli' => $str);
-        if( !$tableoptions ) {
-            $tableoptions = $stdtableoptions;
+        if( $tableoptions && is_string($tableoptions)) {
+            $dbtype = $this->_DBType();
+            $tableoptions = [ $dbtype => $tableoptions ];
         }
-        else {
-            $tableoptions = array_merge($stdtableoptions,$tableoptions);
-        }
-        $str = substr($this->_DBType(),0,5);
-        if( isset($tableoptions[$str]) && strpos($tableoptions[$str],'CHARACTER') === FALSE &&
-            strpos($tableoptions[$str],'COLLATE') === FALSE ) {
-            // if no character set and collate options specified, force UTF8
-            $tableoptions[$str] .= "  CHARACTER SET utf8 COLLATE utf8_general_ci";
-        }
-        list($lines,$pkey) = $this->_GenFields($flds, true);
 
+        list($lines,$pkey) = $this->_GenFields($flds, true);
 		$taboptions = $this->_Options($tableoptions);
 		$tabname = $this->TableName ($tabname);
 		$sql = $this->_TableSQL($tabname,$lines,$pkey,$taboptions);
@@ -751,9 +795,10 @@ abstract class DataDictionary
 		return array($lines,$pkey);
 	}
 
-	/*
+	/**
      * Generate the size part of the datatype.
      *
+     * @ignore
      * @internal
      */
 	protected function _GetSize($ftype, $ty, $fsize, $fprec)
@@ -920,7 +965,7 @@ abstract class DataDictionary
      *
      * @param string $tablename The table name
      * @param string $flds The field definitions
-     * @param assoc  $tableoptions Table options
+     * @param array  $tableoptions Table options
      * @return string[] An array of strings suitable for use with the ExecuteSQLArray method
      */
 	public function ChangeTableSQL($tablename, $flds, $tableoptions = false)

@@ -44,6 +44,8 @@ namespace CMSMS\Database {
 
     /**
      * A class for providing some compatibility functionality with older module code
+     *
+     * @todo: move this class to a different function and rename.
      */
     final class compatibility
     {
@@ -73,8 +75,8 @@ namespace CMSMS\Database {
             $tmp = [];
             if( $config['set_names'] ) $tmp[] = "NAMES 'utf8'";
             if( $config['set_db_timezone'] ) {
-                $dt = new DateTime();
-                $dtz = new DateTimeZone($config['timezone']);
+                $dt = new \DateTime();
+                $dtz = new \DateTimeZone($config['timezone']);
                 $offset = timezone_offset_get($dtz,$dt);
                 $symbol = ($offset < 0) ? '-' : '+';
                 $hrs = abs((int)($offset / 3600));
@@ -84,8 +86,17 @@ namespace CMSMS\Database {
             if( count($tmp) ) $spec->auto_exec = 'SET '.implode(',',$tmp);
 
             $obj = Connection::Initialize($spec);
+            $obj->SetErrorHandler( '\\CMSMS\Database\\compatibility::on_error' );
             if( $spec->debug ) $obj->SetDebugCallback('debug_buffer');
             return $obj;
+        }
+
+        public static function on_error( Connection $conn, $errtype, $error_number, $error_msg )
+        {
+            debug_to_log("Database Error: $errtype($error_number) - $error_msg");
+            debug_bt_to_log();
+            if( !defined('CMS_DEBUG') || CMS_DEBUG == 0 ) return;
+            CmsApp::get_instance()->add_error(debug_display($str, '', false, true));
         }
 
         /**

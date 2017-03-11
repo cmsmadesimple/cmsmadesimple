@@ -77,9 +77,7 @@ class ResultSet extends \CMSMS\Database\ResultSet
 
     protected function fetch_row()
     {
-        if( !$this->EOF() ) {
-            $this->_fields = mysqli_fetch_array($this->_resultId, MYSQLI_ASSOC);
-        }
+        if( !$this->EOF() ) $this->_fields = mysqli_fetch_array($this->_resultId, MYSQLI_ASSOC);
     }
 
 } // end of class

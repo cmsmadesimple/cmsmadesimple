@@ -46,7 +46,6 @@ namespace CMSMS\Database;
  * A class defining a resultset and how to interact with results from a database query.
  *
  * @package CMS
- * @package CMS
  * @author Robert Campbell
  * @copyright Copyright (c) 2015, Robert Campbell <calguy1000@cmsmadesimple.org>
  * @since 2.2

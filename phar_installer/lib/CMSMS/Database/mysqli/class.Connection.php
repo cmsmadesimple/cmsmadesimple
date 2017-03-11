@@ -222,7 +222,7 @@ class Connection extends \CMSMS\Database\Connection
         return FALSE;
     }
 
-    public function GenID($seqname,$start_id = 1)
+    public function GenID($seqname)
     {
         $sql = sprintf('UPDATE %s SET id=id+1;',$seqname);
         $this->Execute($sql);
@@ -230,9 +230,10 @@ class Connection extends \CMSMS\Database\Connection
         return (int) $this->GetOne($sql);
     }
 
-    public function CreateSequence($seqname,$startID=1)
+    public function CreateSequence($seqname,$startID=0)
     {
         $out = array();
+        $startID = (int) $startID;
         $out[] = sprintf('CREATE TABLE %s (id int not null) ENGINE MyISAM',$seqname);
         $out[] = sprintf('INSERT INTO %s (id) values (%s)',$seqname,$startID);
         $dict = $this->NewDataDictionary();
@@ -244,4 +245,4 @@ class Connection extends \CMSMS\Database\Connection
     {
         return $this->Execute(sprintf('DROP TABLE %s',$seqname));
     }
-} //
+} // end of class
