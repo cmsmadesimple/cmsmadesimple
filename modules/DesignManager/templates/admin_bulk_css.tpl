@@ -22,7 +22,7 @@
 {/if}
 
 {form_start allparms=$allparms}
-{if $bulk_op == 'bulk_action_delete'}
+{if $bulk_op == 'bulk_action_delete_css'}
   <div class="pagewarning">{$mod->Lang('warn_bulk_delete_templates')}</div>
   <div class="pageoverflow">
     <p class="pagetext"></p>
