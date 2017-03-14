@@ -86,7 +86,7 @@ function smarty_cms_function_cms_stylesheet($params, &$smarty)
             $query = new CmsLayoutStylesheetQuery(array('name'=>$params['name']) );
         } else if( $design_id > 0 ) {
             // stylesheet by design id
-            $query = new \CMSMS\Internal\CachedStylesheetsInDesignQuery($design_id);
+            $query = new \CmsLayoutStylesheetQuery( [ 'design'=>$design_id ] );
         }
         if( !$query ) throw new \RuntimeException('Problem: Could not build a stylesheet query with the provided data');
 
@@ -155,7 +155,7 @@ function smarty_cms_function_cms_stylesheet($params, &$smarty)
                     $media_query = $onemedia[0]->get_media_query();
                     $media_type = implode(',',$onemedia[0]->get_media_types());
 
-                    if( !file_exists($fn) ) {
+                    if( !is_file($fn) ) {
                         $list = array();
 
                         foreach( $onemedia as $one ) {

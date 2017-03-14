@@ -20,10 +20,3 @@
 #$Id$
 
 use \CMSMS\HooKmanager as HookMgr;
-
-HookMgr::add_hook('Core::AddStylesheetPost','\CMSMS\Internal\CachedStylesheetsInDesignQuery::reset');
-HookMgr::add_hook('Core::EditStylesheetPost','\CMSMS\Internal\CachedStylesheetsInDesignQuery::reset');
-HookMgr::add_hook('Core::DeleteStylesheetPost','\CMSMS\Internal\CachedStylesheetsInDesignQuery::reset');
-HookMgr::add_hook('Core::EditDesignPost','\CMSMS\Internal\CachedStylesheetsInDesignQuery::reset');
-HookMgr::add_hook('Core::AddDesignPost','\CMSMS\Internal\CachedStylesheetsInDesignQuery::reset');
-HookMgr::add_hook('Core::DeleteDesignPost','\CMSMS\Internal\CachedStylesheetsInDesignQuery::reset');
