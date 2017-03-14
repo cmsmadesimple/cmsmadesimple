@@ -52,7 +52,7 @@
                     <h1>{if isset($title)}{$title}{else}{'install_upgrade'|tr}{/if}</h1>
 		    {if isset($subtitle)}<h3>{$subtitle}</h3>{/if}
 
-                    {if isset($dir)}
+                    {if isset($dir) && ($in_phar || $cur_step > 1)}
                     <div class="message blue icon">
                         <i class="icon-folder-open message-icon"></i>
                         <div class="content"><strong>{'prompt_dir'|tr}:</strong> <br />{$dir}</div>

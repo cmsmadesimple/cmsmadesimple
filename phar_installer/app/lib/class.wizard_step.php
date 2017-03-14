@@ -20,6 +20,8 @@ abstract class wizard_step extends \__appbase\wizard_step
     \__appbase\smarty()->assign('version',\__appbase\get_app()->get_dest_version());
     \__appbase\smarty()->assign('version_name',\__appbase\get_app()->get_dest_name());
     \__appbase\smarty()->assign('dir',\__appbase\get_app()->get_destdir());
+    \__appbase\smarty()->assign('in_phar',\__appbase\get_app()->in_phar());
+    \__appbase\smarty()->assign('cur_step',$this->cur_step());
   }
 
   public function fn_wizard_form_start($params, $smarty)
