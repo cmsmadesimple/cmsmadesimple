@@ -167,6 +167,8 @@ $lang['info_linker_autocomplete'] = 'This is an auto complete field. Begin by ty
 $lang['loading_info'] = 'Loading...';
 
 // M
+$lang['mailto_text'] = 'Create a mail link';
+$lang['mailto_title'] = 'Create a mail link';
 $lang['msg_cancelled'] = 'Operation cancelled';
 $lang['mthelp_allowcssoverride'] = 'If enabled, then any code that initializes a MicroTiny WYSIWYG area will be able to specify the name of a stylesheet to use instead of the default stylesheet specified above.';
 $lang['mthelp_dfltstylesheet'] = 'Associate a stylesheet with editors using this profile.  This allows the WYSIWYG editor to appear similar to the website appearance.';
@@ -187,6 +189,7 @@ $lang['ok'] = 'Ok';
 
 // P
 $lang['prompt_linker'] = 'Enter Page title';
+$lang['prompt_linktext'] = 'Link Text';
 $lang['prompt_profiles'] = 'Profiles';
 $lang['prompt_selectedalias'] = 'Selected Page alias';
 $lang['profiledesc___admin__'] = 'This profile is used by all users who are authorized to use this editor, and have chosen this editor as their WYSIWYG editor';
