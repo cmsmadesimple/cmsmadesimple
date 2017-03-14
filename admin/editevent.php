@@ -76,7 +76,7 @@ if ($access) {
         if( isset( $_GET['event'] ) && $_GET['event'] != '' ) $event = trim(cleanValue($_GET['event']));
         if( isset( $_GET['handler'] ) && $_GET['handler'] != '' ) $handler = (int)$_GET['handler'];
         if( isset( $_GET['order'] ) && $_GET['order'] != '' ) $cur_order = (int)$_GET['order'];
-        if( $handler == "" || $module == "" || $event == "" || $action == "" ) {
+        if( $module == "" || $event == "" || $action == "" ) {
             display_error( lang("missingparams" ) );
             return;
         }
@@ -85,7 +85,7 @@ if ($access) {
         case 'up':
             // move an item up (decrease the order)
             // increases the previous order, and decreases the current handler id
-            if( $cur_order < 1 ) {
+            if( !$handler || $cur_order < 1 ) {
                 display_error( lang("missingparams" ) );
                 return;
             }
@@ -96,7 +96,7 @@ if ($access) {
             // move an item down (increase the order)
             // move an item up (decrease the order)
             // increases the previous order, and decreases the current handler id
-            if( $cur_order < 1 ) {
+            if( !$handler || $cur_order < 1 ) {
                 display_error( lang("missingparams" ) );
                 return;
             }
@@ -104,6 +104,10 @@ if ($access) {
             break;
 
         case 'delete':
+            if( !$handler ) {
+                display_error( lang("missingparams" ) );
+                return;
+            }
             Events::RemoveEventHandlerById( $handler );
             break;
 
@@ -232,8 +236,7 @@ if ($access) {
     echo "</form>\n";
     echo "</div>\n";
 }
-else
-{
+else {
     display_error(lang('noaccessto', array(lang('editeventhandler'))));
 }
 include_once("footer.php");
