@@ -1038,7 +1038,7 @@ $lang['help_function_redirect_page'] = <<<EOT
 <h3>What does this do?</h3>
  <p>This plugin allows you to easily redirect to another page.  It is handy inside of smarty conditional logic (for example, redirect to a login page if the user is not logged in.)</p>
 <h3>How do I use it?</h3>
-<p>Simply insert this tage into your page or template: <code>{redirect_page page='some-page-alias'}</code></p>
+<p>Simply insert this tag into your page or template: <code>{redirect_page page='some-page-alias'}</code></p>
 EOT;
 
 
@@ -1059,11 +1059,11 @@ $lang['help_function_cms_jquery'] = <<<EOT
 
 <h3>>Known Scripts:</h3>
 <ul>
-	<li><tt>jQuery</tt><em>(1.11.1)</em></li>
-	<li><tt>jQuery-UI</tt><em>(1.8.21)</em></li>
-	<li><tt>nestedSortable</tt><em>(1.3.4)</em></li>
-	<li><tt>json</tt><em>(2.3)</em></li>
-	<li><tt>migrate</tt><em>(2.3)</em></li>
+	<li><tt>jQuery</tt></li>
+	<li><tt>jQuery-UI</tt></li>
+	<li><tt>nestedSortable</tt></li>
+	<li><tt>json</tt></li>
+	<li><tt>migrate</tt></li>
 </ul>
 
 <h3>What parameters does it take?</h3>
