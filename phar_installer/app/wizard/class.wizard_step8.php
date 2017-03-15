@@ -23,17 +23,17 @@ class wizard_step8 extends \cms_autoinstaller\wizard_step
         $dir = \__appbase\get_app()->get_appdir().'/install';
 
         $destdir = \__appbase\get_app()->get_destdir();
-        if( !$destdir ) throw new \Exception(\__appbase\lang('error_internal',700));
+        if( !$destdir ) throw new \Exception(\__appbase\lang('error_internal',800));
 
         $adminaccount = $this->get_wizard()->get_data('adminaccount');
-        if( !$adminaccount ) throw new \Exception(\__appbase\lang('error_internal',701));
+        if( !$adminaccount ) throw new \Exception(\__appbase\lang('error_internal',801));
 
         $destconfig = $this->get_wizard()->get_data('config');
-        if( !$destconfig ) throw new \Exception(\__appbase\lang('error_internal',703));
+        if( !$destconfig ) throw new \Exception(\__appbase\lang('error_internal',803));
         define('CMS_DB_PREFIX',$destconfig['dbprefix']);
 
         $siteinfo = $this->get_wizard()->get_data('siteinfo');
-        if( !$siteinfo ) throw new \Exception(\__appbase\lang('error_internal',704));
+        if( !$siteinfo ) throw new \Exception(\__appbase\lang('error_internal',804));
 
         // setup database connection
         $db = \__appbase\new_db_connection($destconfig['dbtype']);
@@ -61,7 +61,7 @@ class wizard_step8 extends \cms_autoinstaller\wizard_step
             // install the schema
             $this->message(\__appbase\lang('install_schema'));
             $fn = $dir.'/schema.php';
-            if( !file_exists($fn) ) throw new \Exception(\__appbase\lang('error_internal',703));
+            if( !file_exists($fn) ) throw new \Exception(\__appbase\lang('error_internal',803));
 
             global $CMS_INSTALL_DROP_TABLES, $CMS_INSTALL_CREATE_TABLES;
             $CMS_INSTALL_DROP_TABLES=1;
@@ -137,13 +137,13 @@ class wizard_step8 extends \cms_autoinstaller\wizard_step
         // get the list of all available versions that this upgrader knows about
         $app = \__appbase\get_app();
         $dir =  $app->get_appdir().'/upgrade';
-        if( !is_dir($dir) ) throw new \Exception(\__appbase\lang('error_internal',710));
+        if( !is_dir($dir) ) throw new \Exception(\__appbase\lang('error_internal',810));
         $destdir = $app->get_destdir();
-        if( !$destdir ) throw new \Exception(\__appbase\lang('error_internal',711));
+        if( !$destdir ) throw new \Exception(\__appbase\lang('error_internal',811));
 
         $dh = opendir($dir);
         $versions = array();
-        if( !$dh ) throw new \Exception(\__appbase\lang('error_internal',712));
+        if( !$dh ) throw new \Exception(\__appbase\lang('error_internal',812));
         while( ($file = readdir($dh)) !== false ) {
             if( $file == '.' || $file == '..' ) continue;
             if( is_dir($dir.'/'.$file) || !file_exists("$dir/$file/MANIFEST.DAT") ) $versions[] = $file;
@@ -209,7 +209,7 @@ class wizard_step8 extends \cms_autoinstaller\wizard_step
                 $this->do_install();
             }
             else {
-                throw new \Exception(\__appbase\lang('error_internal',705));
+                throw new \Exception(\__appbase\lang('error_internal',805));
             }
         }
         catch( \Exception $e ) {
