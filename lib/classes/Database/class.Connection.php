@@ -393,6 +393,7 @@ namespace CMSMS\Database {
         public function GetRow($sql, $inputarr = null)
         {
             $rs = $this->SelectLimit( $sql, 1, -1, $inputarr );
+	    if( !$rs ) return;
             return $rs->Fields();
         }
 
