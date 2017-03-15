@@ -51,7 +51,7 @@ $test->extractTar('./toto.Tar', './new/');
 		$src = array_map('realpath', $src);
 		foreach ($src as $item)
 			$Tar .= $this->addTarItem($item.((is_dir($item) && substr($item, -1)!='/')?'/':''), dirname($item).'/');
-		
+
 		$Tar = str_pad($Tar, floor((strlen($Tar) + 10240 - 1) / 10240) * 10240, "\0");
 		if (empty($dest)) return $Tar;
 		elseif (file_put_contents($dest, $Tar)) return $dest;
@@ -68,12 +68,14 @@ $test->extractTar('./toto.Tar', './new/');
 		while (!feof($ptr))
 		{
 			$infos = $this->readTarHeader ($ptr);
-			if ($infos['type']=='5' && @mkdir($dest.$infos['name'], 0775, true))
-			  $result[]=$dest.$infos['name'];
-			elseif (($infos['type']=='0' || $infos['type']==chr(0)) && file_put_contents($dest.$infos['name'], $infos['data']))
-			  $result[]=$dest.$infos['name'];
+            $name = trim($infos['name']);
+			if ($infos['type']=='5' && @mkdir($dest.$name, 0775, true)) {
+                $result[]=$dest.$infos['name'];
+            }
+			elseif (($infos['type']=='0' || $infos['type']==chr(0)) && file_put_contents($dest.$name, $infos['data']))
+			  $result[]=$dest.$name;
 			if ($infos)
-			  chmod($dest.$infos['name'], 0775);
+			  chmod($dest.$name, 0775);
 // 				chmod(, $infos['mode']);
 // 				chgrp(, $infos['uname']);
 // 				chown(, $infos['gname']);
