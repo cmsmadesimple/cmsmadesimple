@@ -144,7 +144,6 @@ EOT;
                                              function($matches) use ($ob,$type,&$is_same_host) {
                                                  $config = cmsms()->GetConfig();
                                                  $url = $matches[2];
-                                                 debug_display('test '.$url);
                                                  $root_url = new cms_url($config['root_url']);
                                                  $the_url = new cms_url($url);
                                                  if( !startswith($url,'ignore::') && $is_same_host($root_url,$the_url) ) {
@@ -434,8 +433,10 @@ EOT;
 
     private function _xml_output_file($key,$value,$lvl = 0)
     {
+        $config = \cms_config::get_instance();
         if( !startswith($key,'__') || !endswith($key,'__') ) return; // invalid
-        $p = strpos($key,':');
+        debug_display('output file '.$key.' value is '.$value.' lvl is '.$lvl);
+        $p = strpos($key,',,');
         $nkey = substr($key,0,$p);
         $nkey = substr($nkey,2);
 
@@ -463,16 +464,15 @@ EOT;
 
             // now, it should be a full URL, or start at /
             // gotta convert it to a file.
-            $config = cmsms()->GetConfig();
             // assumes it's a filename relative to root.
             $fn = cms_join_path($config['root_path'],$nvalue);
-            if( startswith($nvalue,'/') ) {
+            if( startswith($nvalue,'/') && !startswith($nvalue,'//') ) {
                 $fn = cms_join_path($config['root_path'],$nvalue);
             } elseif( startswith($nvalue,$config['root_url']) ) {
                 $fn = str_replace($config['root_url'],$config['root_path'],$nvalue);
             }
 
-            if( !file_exists($fn) ) throw new CmsException($mod->Lang('error_nophysicalfile',$value));
+            if( !is_file($fn) ) throw new CmsException($mod->Lang('error_nophysicalfile',$value));
 
             $data = file_get_contents($fn);
             if( strlen($data) == 0 ) throw new CmsException('No data found for '.$value);
@@ -501,7 +501,7 @@ EOT;
             break;
 
         default:
-            return;
+            break;
         }
         $output .= $this->_close_tag('file',$lvl);
         return $output;
