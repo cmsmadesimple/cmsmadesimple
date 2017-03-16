@@ -174,6 +174,7 @@ $lang['ini_set'] = 'Testing if we can change INI settings';
 $lang['install'] = 'Install';
 $lang['install_attachstylesheets'] = 'Attach stylesheets to themes';
 $lang['install_backupconfig'] = 'Backing up the config file';
+$lang['install_createassets'] = 'Create assets structure';
 $lang['install_created_index'] = 'Created index %s ... %s';
 $lang['install_create_tables'] = 'Create database tables';
 $lang['install_createconfig'] = 'Create new config file';

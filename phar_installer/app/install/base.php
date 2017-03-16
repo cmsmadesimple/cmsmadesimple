@@ -216,7 +216,7 @@ $move_directory_files = function($srcdir,$destdir) {
 */
 
 // create the assets directory structure
-verbose_msg('Creating assets structure');
+verbose_msg(ilang('install_createassets'));
 $create_private_dir('assets/templates');
 $create_private_dir('assets/configs');
 $create_private_dir('assets/admin_custom');
