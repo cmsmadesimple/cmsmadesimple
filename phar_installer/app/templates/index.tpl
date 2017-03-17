@@ -1,4 +1,4 @@
-{block name='logic'}{$title = 'CMS Automatic Installer'}{/block}<!DOCTYPE html>
+{block name='logic'}{/block}<!DOCTYPE html>
 <!--[if IE 8]>         <html lang="en" class="lt-ie9"> <![endif]-->
 <!--[if gt IE 8]><!--> <html lang="en"> <!--<![endif]-->
     <head>
@@ -11,7 +11,15 @@
         <script src="app/assets/vendor/jquery-1.11.2.min.js"></script>
         <script src="app/assets/vendor/jquery-ui/jquery-ui.min.js"></script>
         <link rel="stylesheet" type="text/css" href="app/assets/vendor/jquery-ui/jquery-ui.min.css"/>
-        <title>{$title nocache} - CMS Made Simple&trade; {'apptitle'|tr}</title>
+        <title>
+	  {if !empty($browser_title)}
+  	    {$browser_title}
+	  {elseif !empty($title)}
+  	    {$title nocache} - CMS Made Simple&trade; {'apptitle'|tr}
+	  {else}
+	    CMS Made Simple&trade; {'apptitle'|tr}}
+	  {/if}
+	 </title>
         <!--[if lt IE 9]>
             <script src="app/assets/js/html5.js"></script>
             <script src="app/assets/js/css3-mediaqueries.js"></script>
