@@ -80,24 +80,25 @@ class OneElevenTheme extends CmsAdminThemeBase {
 		if (is_array($extra_lang_params) && count($extra_lang_params)) $this->set_value('extra_lang_params', $extra_lang_params);
 		$this->set_value('module_help_type', $module_help_type);
 
-		// get the image url.
 		$config = cms_config::get_instance();
-		if ($module_help_type) {
-			// help for a module.
-			$module = '';
-			if (isset($_REQUEST['module'])) {
-				$module = $_REQUEST['module'];
-			} else if (isset($_REQUEST['mact'])) {
-				$tmp = explode(',', $_REQUEST['mact']);
-				$module = $tmp[0];
-			}
-			$icon = "modules/{$module}/images/icon.gif";
-			$path = cms_join_path($config['root_path'], $icon);
-			if (file_exists($path)) {
-				$url = $config->smart_root_url() . '/' . $icon;
-				$this->set_value('module_icon_url', $url);
-			}
 
+        $module = '';
+        if (isset($_REQUEST['module'])) {
+            $module = $_REQUEST['module'];
+        } else if (isset($_REQUEST['mact'])) {
+            $tmp = explode(',', $_REQUEST['mact']);
+            $module = $tmp[0];
+        }
+
+		// get the image url.
+        $icon = "modules/{$module}/images/icon.gif";
+        $path = cms_join_path($config['root_path'], $icon);
+        if (file_exists($path)) {
+            $url = $config->smart_root_url() . '/' . $icon;
+            $this->set_value('module_icon_url', $url);
+        }
+
+		if ($module_help_type) {
 			// set the module help url (this should be supplied TO the theme)
 			$module_help_url = $this->get_module_help_url();
 			$this->set_value('module_help_url', $module_help_url);
@@ -225,9 +226,9 @@ class OneElevenTheme extends CmsAdminThemeBase {
 
 		// module_help_url
 		if( !cms_userprefs::get_for_user(get_userid(),'hide_help_links',0) ) {
-		  if (($module_help_url = $this->get_value('module_help_url'))) {
-		    $smarty->assign('module_help_url', $module_help_url);
-		  }
+            if (($module_help_url = $this->get_value('module_help_url'))) {
+                $smarty->assign('module_help_url', $module_help_url);
+            }
 		}
 
 		// my preferences
