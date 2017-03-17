@@ -12,6 +12,7 @@ Core - General
 
 ModuleManager v2.0.5.1
   - Modify default repository to use HTTPS
+  - No longer need 'Modify Modules' permission to view the local help for a module.
 
 DesignManager v1.1.2
   - No longer cache url for menu items.
