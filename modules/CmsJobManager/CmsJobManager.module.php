@@ -271,23 +271,16 @@ final class CmsJobManager extends \CMSModule
             // gotta determine a scheme
         $url_ob->set_queryvar('cms_cron',1);
         $url_ob->set_queryvar('showtemplate','false');
-        $scheme = $url_ob->get_scheme();
         $prefix_scheme = null;
-        if( !$scheme ) {
+        if( !$url_ob->get_scheme() ) {
             $url_ob->set_scheme('http');
-            $scheme = 'http';
-            if( CmsApp::get_instance()->is_https_request() ) {
-                $url_ob->set_scheme('https');
-                $scheme = $prefix_scheme = 'ssl://';
-            }
+            if( CmsApp::get_instance()->is_https_request() ) $url_ob->set_scheme('https');
         }
-        $port = $url_ob->get_port();
-        if( !$port) {
+        if( !$url_ob->get_port() ) {
             $url_ob->set_port(80);
-            if( strtolower($url_ob->get_scheme()) == 'https' ) {
-                $url_ob->set_port(443);
-            }
+            if( strtolower($url_ob->get_scheme()) == 'https' ) $url_ob->set_port(443);
         }
+        if( strtolower($url_ob->get_scheme()) == 'https' ) $prefix_scheme = 'ssl://';
 
         $endpoint = $url_ob->get_path();
         $query = urldecode($url_ob->get_query());
