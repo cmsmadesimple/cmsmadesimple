@@ -1925,6 +1925,9 @@ ul.sortableList div.label {
 	font-weight: bold;
 	color: #585858
 }
+ul.sortableList li.no-nest div.label {
+    color: orange !important;
+}
 ul.sortableList li div.label em {
 	display: block;
 	text-indent: 10px;
