@@ -273,6 +273,7 @@ final class modulerep_client
     $req->execute($url,array('json'=>json_encode($qparms)));
     $status = $req->getStatus();
     $result = $req->getResult();
+    if( $status == 200 && $result == ''  ) return array(TRUE,null); // no results.
     if( $status != 200 || $result == '' ) return array(FALSE,$mod->Lang('error_request_problem'));
 
     $data = json_decode($result,true);
