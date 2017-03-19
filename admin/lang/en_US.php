@@ -1008,7 +1008,7 @@ $lang['hours'] = "hours";
 //$lang['htmlblobs'] = "Global Content Blocks";
 $lang['h_udtcode'] = 'Enter your PHP code here.  Keep in mind that a UDT <em>(User Defined Tag)</em> is in fact a Smarty function plugin.  It has limited scope.<br/>
 <ul>
-  <li><strong>Note:</strong> You have access to the full <a href=\"http://www.cmsmadesimple.org/APIDOC2_0\">CMSMS API</a> to interact with the system and with modules.</li>
+  <li><strong>Note:</strong> You have access to the full <a href=\"https://www.cmsmadesimple.org/APIDOC2_0\">CMSMS API</a> to interact with the system and with modules.</li>
   <li>Tip: Parameters passed to the UDT i.e: <code>{myudt param1=value1 param2=value2}</code> are available via the $params associative array, which is in scope.</li>
   <li>Tip: It is best to do calculations and processing and return the results to Smarty for formatting via the $smarty->assign() method.  The Smarty object is also in scope.</li>
   <li>Tip: It is best to keep UDTs short, with a single and small piece of functionality.</li>
