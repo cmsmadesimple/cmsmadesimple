@@ -407,6 +407,7 @@ namespace CMSMS\Database {
         public function GetOne($sql, $inputarr = null)
         {
             $rs =  $this->SelectLimit( $sql, 1, -1, $inputarr );
+            if( !$rs ) return;	
             $res = $rs->Fields();
             if( !$res ) return;
             $key = array_keys($res)[0];
