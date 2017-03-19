@@ -367,7 +367,7 @@ namespace CMSMS\Database {
          */
         public function GetCol($sql, $inputarr = null, $trim = false)
         {
-            $data = false;
+            $data = null;
             $result = $this->SelectLimit($sql, -1, -1, $inputarr);
             if ($result) {
                 $data = array();
