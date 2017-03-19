@@ -67,6 +67,8 @@ class Content extends ContentBase
         return ($this->GetPropertyValue('searchable') == 0)?FALSE:TRUE;
     }
 
+	public function HasSearchableContent() { return TRUE; }
+
     /**
      * Indicates wether ths page type uses a template.
      * Content pages do use a template.

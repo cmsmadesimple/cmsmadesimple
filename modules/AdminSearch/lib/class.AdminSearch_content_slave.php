@@ -41,6 +41,7 @@ final class AdminSearch_content_slave extends AdminSearch_slave
 
                 $content_obj = cmsms()->GetContentOperations()->LoadContentFromId($content_id);
                 if( !is_object($content_obj) ) continue;
+		if( !$content_obj->HasSearchableContent() ) continue;
 
                 // here we could actually have a smarty template to build the description.
                 $pos = strpos($row['content'],$this->get_text());

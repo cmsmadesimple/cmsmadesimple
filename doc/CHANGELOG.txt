@@ -169,6 +169,7 @@ Search
 AdminSearch v1.0.3
   - Fixes problem with use of 'Use Admin Search' permission.
   - Now searches for matching strings within templates and stylesheets that are stored as files.
+  - Now listens to the HasSearchableContent metod when searching content pages.
 
 ModuleManager
   - Now detect if module_custom directories exist and are populated and warn about this before upgrading a module.
