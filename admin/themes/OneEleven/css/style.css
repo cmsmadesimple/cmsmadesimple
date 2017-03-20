@@ -574,6 +574,7 @@ input[type="submit"],
 	font-size: 12px
 }
 .ui-button {
+	outline: none;
 	margin: 4px 0
 }
 .ui-button-text {
@@ -1924,9 +1925,6 @@ ul.sortableList div.label {
 	text-shadow: 0 1px 0 #fff;
 	font-weight: bold;
 	color: #585858
-}
-ul.sortableList li.no-nest div.label {
-    color: orange !important;
 }
 ul.sortableList li div.label em {
 	display: block;

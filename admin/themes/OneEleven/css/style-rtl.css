@@ -559,8 +559,8 @@ input[type="password"] {
 }
 input[type="button"],
 input[type="submit"],
-.ui-button
- {
+.ui-button  {
+    outline: none;
 	cursor: pointer;
 	height: 28px;
 	font-size: 13px;
