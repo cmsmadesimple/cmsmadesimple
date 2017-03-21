@@ -116,6 +116,7 @@ else {
         foreach($files as $onefile) {
             $file = basename($onefile);
             $parts = explode('.',$file);
+	    if( startswith($file,'prefilter.') || startswith($file,'postfilter.') ) continue;
             if( !is_array($parts) || count($parts) != 3 ) continue;
 
             $rec = array();
