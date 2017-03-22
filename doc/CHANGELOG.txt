@@ -9,6 +9,7 @@ Core - General
   - Minor fix to the cms_admin jquery plugin.
   - Fix #11295 - Cannot change the name of a UDT, always creates new UDT.
   - Fix issue with module actions if 'content_en' block name was given on the default content block.
+  - Minor tweak to form validity testing wrt the size of uploaded files.
 
 ModuleManager v2.0.5.1
   - Modify default repository to use HTTPS
