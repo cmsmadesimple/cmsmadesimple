@@ -279,7 +279,6 @@ namespace CMSMS\Database {
                 $limit = ' LIMIT ' . $offset . ' ' . $nrows;
             }
 
-
             if ($inputarr && is_array($inputarr)) {
                 $sqlarr = explode('?',$sql);
                 if( !is_array(reset($inputarr)) ) $inputarr = array($inputarr);
@@ -367,7 +366,7 @@ namespace CMSMS\Database {
          */
         public function GetCol($sql, $inputarr = null, $trim = false)
         {
-            $data = false;
+            $data = null;
             $result = $this->SelectLimit($sql, -1, -1, $inputarr);
             if ($result) {
                 $data = array();
@@ -392,7 +391,10 @@ namespace CMSMS\Database {
          */
         public function GetRow($sql, $inputarr = null)
         {
-            $rs = $this->SelectLimit( $sql, 1, -1, $inputarr );
+            $nrows = 1;
+            if( stripos( $sql, 'LIMIT' ) !== FALSE ) $nrows = -1;
+            $rs = $this->SelectLimit( $sql, $nrows, -1, $inputarr );
+            if( !$rs ) return;
             return $rs->Fields();
         }
 
@@ -405,8 +407,7 @@ namespace CMSMS\Database {
          */
         public function GetOne($sql, $inputarr = null)
         {
-            $rs =  $this->SelectLimit( $sql, 1, -1, $inputarr );
-            $res = $rs->Fields();
+            $res = $this->Getrow( $sql, $inputarr );
             if( !$res ) return;
             $key = array_keys($res)[0];
             return $res[$key];
