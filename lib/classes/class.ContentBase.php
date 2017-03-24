@@ -1738,10 +1738,10 @@ abstract class ContentBase
 		// setting them from params
 
 		// title
-		if (isset($params['title'])) $this->mName = $params['title'];
+		if (isset($params['title'])) $this->mName = strip_tags($params['title']);
 
 		// menu text
-		if (isset($params['menutext'])) $this->mMenuText = cleanValue(strip_tags(trim($params['menutext'])));
+		if (isset($params['menutext'])) $this->mMenuText = strip_tags(trim($params['menutext']));
 
 		// parent id
 		if( isset($params['parent_id']) ) {
@@ -1755,12 +1755,12 @@ abstract class ContentBase
 
 		// active
 		if (isset($params['active'])) {
-			$this->mActive = $params['active'];
+			$this->mActive = (int) $params['active'];
 			if( $this->DefaultContent() ) $this->mActive = 1;
 		}
 
 		// show in menu
-		if (isset($params['showinmenu'])) $this->mShowInMenu = $params['showinmenu'];
+		if (isset($params['showinmenu'])) $this->mShowInMenu = (int) $params['showinmenu'];
 
 		// alias
 		$tmp = null;
@@ -1780,13 +1780,13 @@ abstract class ContentBase
 		}
 
 		// title attribute
-		if (isset($params['titleattribute'])) $this->mTitleAttribute = $params['titleattribute'];
+		if (isset($params['titleattribute'])) $this->mTitleAttribute = trim(strip_tags($params['titleattribute']));
 
 		// accesskey
-		if (isset($params['accesskey'])) $this->mAccessKey = $params['accesskey'];
+		if (isset($params['accesskey'])) $this->mAccessKey = strip_tags($params['accesskey']);
 
 		// tab index
-		if (isset($params['tabindex'])) $this->mTabIndex = $params['tabindex'];
+		if (isset($params['tabindex'])) $this->mTabIndex = (int) $params['tabindex'];
 
 		// cachable
 		if (isset($params['cachable'])) {
@@ -1806,7 +1806,7 @@ abstract class ContentBase
 
 		// url
 		if (isset($params['page_url'])) {
-			$this->mURL = trim($params['page_url']);
+			$this->mURL = trim(strip_tags($params['page_url']));
 		}
 		else {
 			$this->_handleRemovedBaseProperty('page_url','mURL');
