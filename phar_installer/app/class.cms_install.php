@@ -41,7 +41,7 @@ class cms_install extends \__appbase\app
         if( (!is_dir($sys_tmpdir) || !is_writable($sys_tmpdir)) && $sys_tmpdir != $config['tmpdir'] ) {
             @putenv('TMPDIR='.$config['tmpdir']);
             $try1 = getenv('TMPDIR');
-            if( $tmp != $config['tmpdir'] ) throw new \RuntimeException('Sorry, putenv does not work on this system, and your system temporary directory is not set properly.');
+            if( $try1 != $config['tmpdir'] ) throw new \RuntimeException('Sorry, putenv does not work on this system, and your system temporary directory is not set properly.');
         }
     }
 
