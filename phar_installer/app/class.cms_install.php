@@ -34,11 +34,9 @@ class cms_install extends \__appbase\app
         // then we attempt to putenv the TMPDIR environment variable
         // so that tmpfile() will work as it uses the system temporary directory which can read from environment variables
         $sys_tmpdir = null;
-        if( function_exists('sys_get_temp_dir') ) {
-            $sys_tmpdir = rtrim(sys_get_temp_dir(),'\\/');
-        }
+        if( function_exists('sys_get_temp_dir') ) $sys_tmpdir = rtrim(sys_get_temp_dir(),'\\/');
         $config = $this->get_config();
-        if( (!is_dir($sys_tmpdir) || !is_writable($sys_tmpdir)) && $sys_tmpdir != $config['tmpdir'] ) {
+        if( (!$sys_tmpdir || !is_dir($sys_tmpdir) || !is_writable($sys_tmpdir)) && $sys_tmpdir != $config['tmpdir'] ) {
             @putenv('TMPDIR='.$config['tmpdir']);
             $try1 = getenv('TMPDIR');
             if( $try1 != $config['tmpdir'] ) throw new \RuntimeException('Sorry, putenv does not work on this system, and your system temporary directory is not set properly.');
