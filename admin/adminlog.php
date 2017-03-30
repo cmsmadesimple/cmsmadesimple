@@ -44,6 +44,7 @@ $access = check_permission($userid, 'Clear Admin Log');
 if (isset($_GET['clear']) && $access) {
     $query = "DELETE FROM ".cms_db_prefix()."adminlog";
     $db->Execute($query);
+    unset($_SESSIION['adminlog_page']);
     echo $themeObject->ShowMessage(lang('adminlogcleared'));
     // put mention into the admin log
     audit('', 'Admin Log', 'Cleared');
