@@ -112,7 +112,8 @@ class Link extends ContentBase
 
     function GetURL($rewrite = true)
     {
-		return cms_htmlentities($this->GetPropertyValue('url'));
+		return $this->GetPropertyValue('url');
+		//return cms_htmlentities($this->GetPropertyValue('url'));
     }
 }
 
