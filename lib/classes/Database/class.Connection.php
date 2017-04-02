@@ -202,6 +202,20 @@ namespace CMSMS\Database {
         //// utilities
 
         /**
+         * Quote a string magically using the magic quotes flag.
+         * This method is now just a deprecated alias for the qstr flag
+         * as we now require magic quotes to be disabled.
+         *
+         * @deprecated
+         * @param string $str
+         * @return string
+         */
+        public function QMagic($str)
+        {
+            return $this->qstr($str);
+        }
+
+        /**
          * Quote a string in a database agnostic manner.
          * Warning: This method may require two way traffic with the database depending upon the database.
          * @param string $str
@@ -356,6 +370,20 @@ namespace CMSMS\Database {
         }
 
         /**
+         * A method to return an associative array.
+         *
+         * @deprecated
+         * @see Pear::getAssoc()
+         */
+        public function GetAssoc( $sql, $inputarr = null, $force_array = false, $first2cols = false )
+        {
+            $data = null;
+            $result = $this->SelectLimit($sql, -1, -1, $inputarr );
+            if( $result ) $data = $result->GetAssoc($force_array,$first2cols);
+            return $data;
+        }
+
+        /**
          * Execute an SQL statement that returns one column, and return all of the
          * matches as an array.
          *
@@ -369,7 +397,7 @@ namespace CMSMS\Database {
             $data = null;
             $result = $this->SelectLimit($sql, -1, -1, $inputarr);
             if ($result) {
-                $data = array();
+                $data = [];
                 $key = null;
                 while (!$result->EOF) {
                     $row = $result->Fields();
