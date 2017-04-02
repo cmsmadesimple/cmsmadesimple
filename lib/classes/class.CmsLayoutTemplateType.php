@@ -537,7 +537,9 @@ class CmsLayoutTemplateType
      */
     public function &create_new_template($name = '')
     {
-        $ob = self::create_by_type($this);
+        $ob = new CmsLayoutTemplate();
+        $ob->set_type( $this );
+        $ob->set_content( $this->get_dflt_contents() );
         if( $name ) $ob->set_name($ob);
         return $ob;
     }
