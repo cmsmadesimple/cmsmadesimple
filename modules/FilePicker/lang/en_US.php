@@ -101,10 +101,12 @@ $lang['youareintext'] = 'The current working directory (relative to the top of t
 // HELP TEXT
 $lang['help'] = <<<EOT
 <h3>What does this do?</h3>
-<p>FilePicker is a CMS Made Simple add-on module to provide file picking capabilities.</p>
+<p>This module provides the generic ability to allow an authorized admin editor to select a file.  I.e:  to select an image for use in a WYSIWYG field, or to associate an image or thumbnail with a page, or attach a PDF file to a news article.  The module also has a small amount of ancillary functionality to allow authorized users to upload and delete files, or to create and remove subdirectories.</p>
+<p>This module also allows for the creation of multiple profiles with different capabilities.  Profiles can be used by the <code>{cms_filepicker}</code> plugin or by the module's &quot;select&quot; action when definining how the picker should behave.   Other module parameters, or user permissions can override the settings defined in the profile.</p>
 
 <h3>How Do I Use It</h3>
-<p></p>
+<p>This module is intended to be used in the core or third party modules via various core API's.  And via the {cms_filepicker} plugin.</p>
+<p>Additionally, this module can be called directly via the <code>{cms_module module=FilePicker action=select name=string [profile=string] [type=string] [value=string]}</code> tag, but this is not recommended.   See the {cms_filepicker} tag for information about the type, and other parameters.</p>
 
 <h3>Support</h3>
 <p>As per the GPL, this software is provided as-is. Please read the text of the license for the full disclaimer.</p>
