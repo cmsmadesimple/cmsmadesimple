@@ -89,6 +89,7 @@ Core - General
   - Fix issue with module actions if 'content_en' block name was given on the default content block.
   - Better security when saving content pages.  Most primary fields are cast to their appropriate data type (int, bool, etc).  MenuText, and TitleAttribute can no longer contain html tags like <strong>foo</strong>.
   - Fixes issue with entities in redirecting links
+  - The href/page argument to {cms_selflink} is now decoded before resolving to a page id.
 
 Navigator v1.0.5
   - Minor optimizations.
