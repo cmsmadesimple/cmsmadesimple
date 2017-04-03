@@ -68,6 +68,7 @@ function smarty_function_cms_selflink($params, &$smarty)
                 $pageid = (int)$page;
             }
             else {
+		$page = cms_html_entity_decode( $page ); // for when using cms_selflinik inside WYSIWYG and alias may resolve to entities.
                 $node = $manager->find_by_tag('alias',$page);
                 if( $node ) $pageid = $node->get_tag('id');
             }
