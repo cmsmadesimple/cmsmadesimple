@@ -374,6 +374,10 @@ namespace CMSMS\Database {
          *
          * @deprecated
          * @see Pear::getAssoc()
+	 * @param string $sql The SQL statement to execute
+         * @param array $inputarr Any parameters marked as placeholders in the SQL statement.
+         * @param bool $force_array Force each element of the output to be an associative array.
+         * @param bool $first2cols Only output the first 2 columns in an associative array.  Does not work with force_array. 
          */
         public function GetAssoc( $sql, $inputarr = null, $force_array = false, $first2cols = false )
         {
