@@ -13,6 +13,9 @@ Core - General
   - Fix issue where a fatal error could occur in the ajax locking routines.
   - cms_selflink now decodes entities for the page/href argument.
 
+Navigator v1.0.3.1
+  - Minor help fixes.
+
 ModuleManager v2.0.5.1
   - Modify default repository to use HTTPS
   - No longer need 'Modify Modules' permission to view the local help for a module.
