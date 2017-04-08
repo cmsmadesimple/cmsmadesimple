@@ -73,7 +73,6 @@ class CreateDraftAlertTask implements \CmsRegularTask
                   AND (end_time IS NULL OR end_time > NOW())';
         $count = $db->GetOne($query);
         if( !$count ) return TRUE;
-        debug_to_log('detected '.$count.' draft messages',__METHOD__);
 
         $alert = new DraftMessageAlert($count);
         $alert->save();
