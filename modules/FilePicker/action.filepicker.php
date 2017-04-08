@@ -31,6 +31,12 @@ if( !check_login(FALSE) ) exit; // admin only.... but any admin
 // initialization
 //
 $sesskey = md5(__FILE__);
+if( isset($_GET['_enc']) ) {
+   $parms = unserialize(base64_decode($_GET['_enc']));
+   $_GET = array_merge($_GET,$parms);
+   unset($_GET['_enc']);
+}
+
 $inst = get_parameter_value($_GET,'inst');
 $sig = trim(cleanValue(get_parameter_value($_GET,'sig')));
 $type = trim(cleanValue(get_parameter_value($_GET,'type')));
@@ -60,7 +66,7 @@ $cwd = '';
 if( isset($_SESSION[$sesskey]) ) $cwd = trim($_SESSION[$sesskey]);
 if( !$cwd && $profile->top ) $cwd = $assistant->to_relative($profile->top);
 if( !$nosub && isset($_GET['subdir']) ) {
-    $cwd .= '/' . trim(cleanValue($_GET['subdir']));
+    $cwd .= '/' . cms_html_entity_decode(trim(cleanValue($_GET['subdir'])));
     $cwd = $assistant->to_relative($assistant->to_absolute($cwd));
 }
 // failsave, if we don't have a valid working directory, set it to the $topdir;
@@ -172,9 +178,10 @@ while( false !== ($filename = $dh->read()) ) {
         $file['size'] = null;
     }
     if( $file['isdir'] ) {
-        $url = $this->create_url($id,'filepicker',$returnid)."&showtemplate=false&subdir=$filename&inst=$inst&sig=$sig";
-        if( $type ) $url .= "&type=$type";
-        $file['chdir_url'] = str_replace('&amp;','&',$url);
+        $parms = [ 'subdir'=>$filename, 'inst'=>$inst, 'sig'=>$sig ];
+        if( $type ) $parms['type'] = $type;
+        $url = $this->create_url($id,'filepicker',$returnid)."&showtemplate=false&_enc=".base64_encode(serialize($parms));
+	$file['chdir_url'] = $url;
     }
     $files[$filename] = $file;
 }
