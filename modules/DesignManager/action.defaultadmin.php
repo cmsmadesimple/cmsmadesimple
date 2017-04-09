@@ -139,13 +139,10 @@ if( count($types) ) {
             if( $ao == $a::CORE && $bo ==  $a::CORE ) return strcasecmp($a->get_name(),$b->get_name());
             if( $ao == $a::CORE ) return -1;
             if( $bo == $b::CORE ) return 1;
-            $r = strcasecmp($ao,$bo);
-            if( $r != 0 ) return $r;
-            return strcasecmp($a->get_name(),$b->get_name());
+            return strcasecmp($a->get_langified_display_value(),$b->get_langified_display_value());
         });
     asort($tmp);
     asort($tmp2);
-    asort($tmp3);
     asort($originators);
     $smarty->assign('list_all_types',$tmp3);
     $smarty->assign('list_types',$tmp2);
