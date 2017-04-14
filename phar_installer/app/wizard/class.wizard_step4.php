@@ -59,6 +59,14 @@ class wizard_step4 extends \cms_autoinstaller\wizard_step
         if( !isset($config['dbprefix']) || !$config['dbprefix'] ) throw new \Exception(\__appbase\lang('error_nodbprefix'));
         if( !isset($config['timezone']) || !$config['timezone'] ) throw new \Exception(\__appbase\lang('error_notimezone'));
 
+        $re = '/^[a-zA-Z0-9_\.]*$/';
+        if( isset($config['query_var']) && $config['query_var'] && !preg_match($re,$config['query_var']) ) {
+            throw new \Exception(\__appbase\lang('error_invalidqueryvar'));
+        }
+
+        $all_timezones = timezone_identifiers_list();
+        if( !in_array($config['timezone'],$all_timezones) ) throw new \Exception(\__appbase\lang('error_invalidtimezone'));
+
         if( $config['dbpass'] ) {
             if( strpos($config['dbpass'],"'") !== FALSE || strpos($config['dbpass'],'\\') !== FALSE ) {
                 throw new \Exception(\__appbase\lang('error_invaliddbpassword'));
@@ -93,7 +101,7 @@ class wizard_step4 extends \cms_autoinstaller\wizard_step
             throw new \Exception(\__appbase\lang('error_droptable'));
         }
 
-        // see if a smartering of core tables exist
+        // see if a smatering of core tables exist
         if( $action == 'install' ) {
             try {
                 $res = $db->GetOne('SELECT content_id FROM '.$config['dbprefix'].'content');
