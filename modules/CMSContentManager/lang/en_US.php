@@ -1,4 +1,5 @@
 <?php
+
 #A
 $lang['addcontent'] = 'Add New Content';
 $lang['apply'] = 'Apply';
@@ -62,7 +63,7 @@ $lang['confirm_delete_page'] = 'Are you sure you want to delete this content ite
 $lang['confirm_expandall'] = 'Are you sure you want to expand all content?  On large sites this may cause problems.  Please use caution';
 $lang['confirm_reorder'] = 'Are you sure you want to save the content in this order';
 $lang['confirm_setdefault'] = 'Are you sure you want to change the default content page for this website?';
-$lang['confirm_setinactive'] = 'Are you sure you want to set this page inactive? This page will not be viewable, and may affect the behaviour of a working website?';
+$lang['confirm_setinactive'] = 'Are you sure you want to set this page inactive? This page will not be viewable, and may affect the behavior of a working website?';
 $lang['confirm_steal_lock'] = 'This page is locked.  Although you may steal this lock it is not always a nice thing to do.  The other party may lose valuable content edits.\n\n Are you sure you want to continue?';
 $lang['confirm_viewpage'] = 'Are you sure you want to open a new window to view this page?';
 $lang['contractall'] = 'Collapse All';
@@ -75,7 +76,7 @@ $lang['desc_contentmanager_settings'] = 'Adjust settings related to listing, or 
 $lang['editcontent_confirm_cancel'] = 'Are you sure you want to cancel this operation?  Any changes will be lost!';
 $lang['error_action_contentlocked'] = 'This operation cannot be performed while there is locked content';
 $lang['error_bulk_permission'] = 'You do not have permission to perform this bulk action';
-$lang['error_contentlocked'] = 'It appears that this content is already locked.  Try to refresh this page to see up-todate information';
+$lang['error_contentlocked'] = 'It appears that this content is already locked. Try to refresh this page to see up-to-date information';
 $lang['error_contenttype_disallowed'] = 'Default Content Type is also set to Disallowed';
 $lang['error_copy_permission'] = 'You do not have permission to copy this content page';
 $lang['error_delete_defaultcontent'] = 'You cannot delete the default content page';
@@ -108,7 +109,7 @@ $lang['go'] = 'Go';
 
 #H
 $lang['help_content_type'] = 'The content type controls the overall function of an item.  Some content types are used for building HTML pages, while others are for building links or other navigation functions.';
-$lang['help_general_lockrefresh'] = 'Specify the number of seconds (at most) at which a lock should be refreshed.  Setting a value of 0 will disable refreshing of locks.<br/><strong>Note:</strong> Locks are not refreshed unless there are some changes in the form.<br/>The minimum value for this field (other than 0) is 30.';
+$lang['help_general_lockrefresh'] = 'Specify the number of seconds (at most) at which a lock should be refreshed.  Setting a value of 0 will disable refreshing of locks.<br/><strong>Note:</strong> Locks are not refreshed unless there are some changes in the form.<br />The minimum value for this field (other than 0) is 30.';
 $lang['help_general_locktimeout'] = 'Specify the number of minutes after which a non-refreshed lock will expire.  Specifying a value of 0 will disable locking all together.  The minimum value for this field is 5 and the maximum value is 480.';
 $lang['help_general_templatelistmode'] = 'This option controls how templates will be listed in the add/edit content form.';
 $lang['help_listsettings_namecolumn'] = 'Specify what text should be displayed in the &quot;Name&quot; column of the content list view.  Choose either the page title, or menu text';
@@ -133,7 +134,7 @@ $lang['help_title_content_type'] = 'Content Type Selector';
 $lang['info_javascript_required'] = '<strong>Warning:</strong> In order to operate correctly, this module requires a browser with JavaScript support enabled.';
 $lang['info_ordercontent'] = 'Drag and drop elements to adjust their order in the content tree.  <strong>Note: </strong> Some content items, such as separators do not accept children';
 $lang['info_pagedflt'] = 'This panel allows setting default values for various content properties when creating a new page of type &quot;Content&quot; <em>or its derived types.  These settings will have no effect on existing pages, and user settings may override some settings.</em>';
-$lang['info_preview_notice'] = '<strong>Warning:</strong> This preview panel behaves much like a browser window allowing you to navigate away from the initially previewed page. However, if you do that, you may experience unexpected behaviour. If you navigate away from the initial display and return, you may not see the un-committed content until you make a change to the content in the main tab, and then reload this tab. When adding content, if you navigate away from this page, you will be unable to return, and must refresh this panel.';
+$lang['info_preview_notice'] = '<strong>Warning:</strong> This preview panel behaves much like a browser window allowing you to navigate away from the initially previewed page. However, if you do that, you may experience unexpected behavior. If you navigate away from the initial display and return, you may not see the un-committed content until you make a change to the content in the main tab, and then reload this tab. When adding content, if you navigate away from this page, you will be unable to return, and must refresh this panel.';
 
 #J
 
@@ -150,7 +151,7 @@ $lang['lock_expires'] = 'Expires';
 $lang['moddescription'] = 'A module for managing content within CMSMS';
 $lang['msg_bulk_successful'] = 'Bulk content operation successful';
 $lang['msg_editpage_success'] = 'Content Updated';
-$lang['msg_cancelled'] = 'Operation Cancelled';
+$lang['msg_cancelled'] = 'Operation Canceled';
 $lang['msg_lockscleared'] = 'Locks cleared';
 $lang['msg_lostlock'] = 'The lock on this content page has expired and been lost.  You can no longer save changes to this content page.  Please return to the content list and re-edit this page.';
 $lang['msg_prefs_saved'] = 'Preferences saved';

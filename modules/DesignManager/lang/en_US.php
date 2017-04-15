@@ -1,4 +1,5 @@
 <?php
+
 #A
 $lang['additional_editors'] = 'Additional Editors';
 $lang['apply'] = 'Apply';
@@ -252,7 +253,7 @@ $lang['help_template_description'] = 'You may provide a text description for thi
 $lang['help_template_designlist'] = 'Specify the designs (zero or more) that this template is attached to.  Attaching a template to a design is used for quickly finding templates, and when exporting a design for sharing.  You can select or deselect multiple designs by holding the CTRL button down when clicking';
 $lang['help_template_designs'] = 'A template can belong to zero or more designs.  If a template is attached to a design then that template can be chosen for a content page, or exported with the template to an XML file';
 $lang['help_template_dflt'] = 'Some templates (depending on their type) can be the &quot;default&quot; template for that type.  The &quot;default&quot; template for a type is typically used when a request is made for a specific template type, but without specifying a template name.';
-$lang['help_template_listable'] = 'Indicate wether this template should appear in public lists (specifically the content manager).  This is particularly used when a template should not be selectable by a content editor.';
+$lang['help_template_listable'] = 'Indicate whether this template should appear in public lists (specifically the content manager).  This is particularly used when a template should not be selectable by a content editor.';
 $lang['help_template_multiple_designs'] = 'This template is attached to multiple designs';
 $lang['help_template_name'] = 'Specify a name for this template.  The name must contain only alphanumeric characters, and must be unique to the system';
 $lang['help_template_no_designs'] = 'This template is not attached to any designs';
