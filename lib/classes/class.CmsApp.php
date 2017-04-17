@@ -495,10 +495,9 @@ final class CmsApp {
 	{
         $age_days = max(-1,(int) $age_days);
 		global $CMS_LOGIN_PAGE, $CMS_INSTALL_PAGE;
-		if( isset($CMS_LOGIN_PAGE) || isset($CMS_INSTALL_PAGE) ) return;
 		if( !defined('TMP_CACHE_LOCATION') ) return;
-        $age_days = max(0,(int)$age_days);
-        \CMSMS\HookManager::do_hook('clear_cached_files', [ 'older_than' => $age_days ]);
+        	$age_days = max(0,(int)$age_days);
+        	\CMSMS\HookManager::do_hook('clear_cached_files', [ 'older_than' => $age_days ]);
 		$the_time = time() - $age_days * 24*60*60;
 
 		$dirs = array(TMP_CACHE_LOCATION,PUBLIC_CACHE_LOCATION,TMP_TEMPLATES_C_LOCATION);
@@ -508,7 +507,7 @@ final class CmsApp {
 			foreach( $dirContents as $one ) {
 				if( $one->isFile() && $one->getMTime() <= $the_time ) @unlink($one->getPathname());
 			}
-            @touch(cms_join_path($start_dir,'index.html'));
+            		@touch(cms_join_path($start_dir,'index.html'));
 		}
 	}
 
