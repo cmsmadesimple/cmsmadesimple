@@ -37,7 +37,7 @@ class wizard_step9 extends \cms_autoinstaller\wizard_step
         }
 
         // clear the cache
-        global CMS_INSTAL_PAGE;
+        global $CMS_INSTALL_PAGE;
         unset($CMS_INSTALL_PAGE);
         \cmsms()->clear_cached_files();
         $this->message(\__appbase\lang('msg_clearedcache'));
@@ -124,7 +124,7 @@ class wizard_step9 extends \cms_autoinstaller\wizard_step
 
         // todo: write history
 
-        global CMS_INSTAL_PAGE;
+        global $CMS_INSTALL_PAGE;
         unset($CMS_INSTALL_PAGE);
         \cmsms()->clear_cached_files();
         $this->message(\__appbase\lang('msg_clearedcache'));
@@ -157,7 +157,7 @@ class wizard_step9 extends \cms_autoinstaller\wizard_step
 
         // clear the cache
         $this->connect_to_cmsms();
-        global CMS_INSTAL_PAGE;
+        global $CMS_INSTALL_PAGE;
         unset($CMS_INSTALL_PAGE);
         \cmsms()->clear_cached_files();
         $this->message(\__appbase\lang('msg_clearedcache'));
