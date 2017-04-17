@@ -15,7 +15,7 @@ class wizard_step9 extends \cms_autoinstaller\wizard_step
     {
         $app = \__appbase\get_app();
         $destdir = $app->get_destdir();
-        if( !$destdir ) throw new \Exception(\__appbase\lang('error_internal',800));
+        if( !$destdir ) throw new \Exception(\__appbase\lang('error_internal',900));
 
         $this->connect_to_cmsms();
 
@@ -30,11 +30,15 @@ class wizard_step9 extends \cms_autoinstaller\wizard_step
             if( $modops->IsSystemModule($name) || $modops->IsQueuedForInstall($name) ) {
                 $this->verbose(\__appbase\lang('msg_upgrade_module',$name));
                 $module = $modops->get_module_instance($name,'',TRUE);
-                if( !is_object($module) ) die('could not get module '.$name);
+                if( !is_object($module) ) {
+                    $this->error("FATAL ERROR: could not load module {$name} for upgrade");
+                }
             }
         }
 
         // clear the cache
+        global CMS_INSTAL_PAGE;
+        unset($CMS_INSTALL_PAGE);
         \cmsms()->clear_cached_files();
         $this->message(\__appbase\lang('msg_clearedcache'));
 
@@ -59,13 +63,13 @@ class wizard_step9 extends \cms_autoinstaller\wizard_step
         // create tmp directories
         $app = \__appbase\get_app();
         $destdir = \__appbase\get_app()->get_destdir();
-        if( !$destdir ) throw new \Exception(\__appbase\lang('error_internal',801));
+        if( !$destdir ) throw new \Exception(\__appbase\lang('error_internal',901));
         $this->message(\__appbase\lang('install_createtmpdirs'));
         @mkdir($destdir.'/tmp/cache',0777,TRUE);
         @mkdir($destdir.'/tmp/templates_c',0777,TRUE);
 
         $siteinfo = $this->get_wizard()->get_data('siteinfo');
-        if( !$siteinfo ) throw new \Exception(\__appbase\lang('error_internal',802));
+        if( !$siteinfo ) throw new \Exception(\__appbase\lang('error_internal',902));
 
         // install modules
         $this->message(\__appbase\lang('install_modules'));
@@ -120,6 +124,8 @@ class wizard_step9 extends \cms_autoinstaller\wizard_step
 
         // todo: write history
 
+        global CMS_INSTAL_PAGE;
+        unset($CMS_INSTALL_PAGE);
         \cmsms()->clear_cached_files();
         $this->message(\__appbase\lang('msg_clearedcache'));
 
@@ -141,16 +147,18 @@ class wizard_step9 extends \cms_autoinstaller\wizard_step
         // create tmp directories
         $app = \__appbase\get_app();
         $destdir = \__appbase\get_app()->get_destdir();
-        if( !$destdir ) throw new \Exception(\__appbase\lang('error_internal',801));
+        if( !$destdir ) throw new \Exception(\__appbase\lang('error_internal',901));
         $this->message(\__appbase\lang('install_createtmpdirs'));
         @mkdir($destdir.'/tmp/cache',0777,TRUE);
         @mkdir($destdir.'/tmp/templates_c',0777,TRUE);
-        
+
         // write protect config.php
         @chmod("$destdir/config.php",0444);
 
         // clear the cache
         $this->connect_to_cmsms();
+        global CMS_INSTAL_PAGE;
+        unset($CMS_INSTALL_PAGE);
         \cmsms()->clear_cached_files();
         $this->message(\__appbase\lang('msg_clearedcache'));
 
@@ -201,7 +209,7 @@ class wizard_step9 extends \cms_autoinstaller\wizard_step
         $smarty->assign('back_url',$this->get_wizard()->prev_url());
         $smarty->display('wizard_step9.tpl');
         $destdir = $app->get_destdir();
-        if( !$destdir ) throw new \Exception(\__appbase\lang('error_internal',803));
+        if( !$destdir ) throw new \Exception(\__appbase\lang('error_internal',903));
 
 
         // here, we do either the upgrade, or the install stuff.
@@ -218,7 +226,7 @@ class wizard_step9 extends \cms_autoinstaller\wizard_step
                 $this->do_install();
             }
             else {
-                throw new \Exception(\__appbase\lang('error_internal',810));
+                throw new \Exception(\__appbase\lang('error_internal',910));
             }
 
             // clear the session.
