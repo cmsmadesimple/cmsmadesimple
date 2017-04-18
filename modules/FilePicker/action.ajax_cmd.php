@@ -61,7 +61,6 @@ try {
     case 'upload':
         if( !$profile->can_upload ) throw new \LogicException('Internal error: upload command executed, but profile says we cannot upload');
         // todo: checks for upload functionality
-	debug_to_log($profile,'upload profile');
         $upload_handler = new UploadHandler( $this, $profile, $fullpath );
 
         header('Pragma: no-cache');
