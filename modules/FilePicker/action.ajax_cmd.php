@@ -12,7 +12,7 @@ try {
     $sig = cleanValue(get_parameter_value($_POST,'sig'));
     $cmd = cleanValue(get_parameter_value($_POST,'cmd'));
     $val = get_parameter_value($_POST,'val');
-    $cwd = cleanValue(get_parameter_value($_POST,'cwd'));
+    $cwd = strip_tags(get_parameter_value($_POST,'cwd'));
 
     // get the profile.
     $profile = null;
@@ -59,9 +59,9 @@ try {
         break;
 
     case 'upload':
-        debug_to_log('got_uupload');
         if( !$profile->can_upload ) throw new \LogicException('Internal error: upload command executed, but profile says we cannot upload');
         // todo: checks for upload functionality
+	debug_to_log($profile,'upload profile');
         $upload_handler = new UploadHandler( $this, $profile, $fullpath );
 
         header('Pragma: no-cache');
@@ -96,7 +96,8 @@ try {
 }
 catch( \Exception $e ) {
     // throw a 500 error
-    \cge_utils::log_exception($e);
+    debug_to_log('Exception: '.$e->GetMessage());
+    debug_to_log($e->GetTraceAsString());
     header("HTTP/1.1 500 ".$e->GetMessage());
 }
 exit();

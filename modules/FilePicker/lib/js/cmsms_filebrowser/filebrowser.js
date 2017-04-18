@@ -10,7 +10,6 @@
 	var settings = _settings;
 	if( top.document.CMSFileBrowser ) {
 	    settings = $.extend( {}, top.document.CMSFileBrowser, settings );
-	    console.debug('got global settings');
 	}
 
 	function enable_sendValue() {
@@ -108,11 +107,9 @@
 	    var dropzone = $('body.cmsms-filepicker');
 	    var n_errors;
 	    dropzone.on('dragover',function(e){
-		console.debug('dragover');
 		$(this).addClass('dragging');
 	    }).on('dragleave',function(e){
 		$(this).removeClass('dragging');
-		console.debug('dragleave');
 	    });
 	    $('#filepicker-file-upload').fileupload({
 		url: settings.cmd_url,
@@ -127,7 +124,6 @@
 		},
 		start: function(ev) {
 		    n_errors = 0;
-		    console.debug('in upload stop');
 		    progress_bar.children().hide();
 		    progress_bar.progressbar({ max: 100 });
 		    progress_text.show();
@@ -137,10 +133,8 @@
 		    var percent = parseInt(data.loaded / data.total * 100,10);
 		    progress_bar.progressbar('value',percent);
 		    progress_text.text(percent+'%');
-		    console.debug('progress '+percent);
 		},
 		done: function(ev,data) {
-		    console.debug('in upload done');
 		    if( data.result.length == 0 ) return;
 		    for( var i = 0; i < data.result.length; i++ ) {
 			res = data.result[i];
