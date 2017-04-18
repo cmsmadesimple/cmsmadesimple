@@ -1,6 +1,5 @@
 <?php
 if( !isset($gCms) ) exit;
-debug_to_log('in process');
 if( !isset($_REQUEST['cms_cron']) ) exit();
 
 while(ob_get_level()) @ob_end_clean();
