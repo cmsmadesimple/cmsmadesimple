@@ -346,10 +346,11 @@ try {
 
         // change permissions
         echo "RECURSIVELY changing permissions to be more restrictive\n";
-        $cmd = "chmod -R g-w {$srcdir} >/dev/null";
+        $cmd = "chmod -R g-w,o-w {$srcdir}";
         echo "DEBUG: $cmd\n";
+        $junk = null;
         $cmd = escapeshellcmd($cmd);
-        system($cmd);
+        exec($cmd,$junk);
 
         // a brand new phar file.
         $phar = new Phar("$outdir/$destname");
@@ -426,7 +427,9 @@ try {
             $arch = new ZipArchive;
             $arch->open($outfile,ZipArchive::OVERWRITE | ZipArchive::CREATE );
             $arch->addFile($infile,basename($infile));
+            $arch->setExternalAttributesName(basename($infile), ZipArchive::OPSYS_UNIX, 0644 << 16);
             $arch->addFile("$rootdir/README-PHAR.TXT",'README-PHAR.TXT');
+            $arch->setExternalAttributesName('README-PHAR.TXT', ZipArchive::OPSYS_UNIX, 0644 << 16);
             $arch->close();
             @unlink($infile);
 

@@ -180,10 +180,12 @@ A: Some hosts have restricted PHP's write access to the system temporary directo
    You can add a TMPDIR=/absolute/path/to/writable/directory argument to the URL on the first page.  If this directory is writable it will be used for storing temporary files throughout the execution of the installation assistant.
 
 Q: I Get a white screen, what can I do?
-A: A white screen indicates an error of some sort.  It can be caused by an incompatible host, or something else.  There are three things to try:
-   1.  Rename your .htaccess file(s) out of the way.  (Rewrite rules and bad configuration options in the .htaccess file can cause 500 errors).
-   2.  Enable and find your php error logs so that you can find an actual error message to aide in further diagnosis.
-   3.  Add ?debug=1 to the URL for the installer.  This will attempt to enable a simple debug mode.  This, depending on your host configuration may allow you to see error messages.
+A: A white screen indicates an error of some sort.  It can be caused by permissions problems, an incompatible host, or something else.  There are a few things to try:
+   1.  Try to browse to the README-PHAR.TXT file with your browser.  If that also generates a white screen then it is indicative of permissions or .htaccess limitations.
+       Note:  Depending upon host configuration, Some hosts do not allow browseable files to be writable, or even readable by users other than the file owner.  You can try changing the permissions of the extracted files to 600.
+   2.  Rename your .htaccess file(s) out of the way.  (Rewrite rules and bad configuration options in the .htaccess file can cause 500 errors).
+   3.  Enable and find your php error logs so that you can find an actual error message to aide in further diagnosis.
+   4.  Add ?debug=1 to the URL for the installer.  This will attempt to enable a simple debug mode.  This, depending on your host configuration may allow you to see error messages.
 
 Q:  I still get a white screen, and I've enabled debug mode... now what?
 A:  This could indicate that either your installer upload is corrupted OR that your host does not allow you to change debug settings in the standard way.   You will probably have to contact your host in order to get at the actual error.
