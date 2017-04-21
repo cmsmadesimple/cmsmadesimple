@@ -110,6 +110,8 @@ Installation Assistant v1.3
   - On upgrade (for 2.2) now create the assets directory structure and move tmp/configs, tmp/templates, module_custom, admin/custom, etc. within it.
   - When using the expanded installer allow changing the destination directory on step 1.
   - Check for existing files in the installation directory for new installations.
+  - Added more notes to aide in diagnosing white screens
+  - Modify package .zip files so that extracted files will usually have 644 permission (depends on the unzip routine used).
 
 CmsJobManager
   - New core module to handle queued asynchronous tasks.
