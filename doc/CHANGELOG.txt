@@ -1,6 +1,9 @@
 Version 2.2 - No Name Set
 ----------------------------------
 Core - General
+  - Automatically turn on file locking for cached files to attempt to mitigate race conditions.
+    NOTE:  On systems using archaic filesystems such as FAT and FAT32 CMSMS may no longer operate.
+  - cms_filecache_driver now caches for 2 hours by default and has an improved cooperative locking test
   - Implement new database abstraction library that is compatible with (functionality wise) but improves upon adodb-lite.
   - Implement protocol-less URL's in the config.
   - Page tabs are now focusable (you can tab through page tabs and use enter to select one).
