@@ -1,9 +1,6 @@
 Version 2.1.7 
 ----------------------------------
 Core - General
-  - Automatically turn on file locking for cached files to attempt to mitigate race conditions.
-    NOTE:  On systems using archaic filesystems such as FAT and FAT32 CMSMS may no longer operate.
-  - cms_filecache_driver now caches for 2 hours by default and has an improved cooperative locking test
   - Change default version check URL to use HTTPS
   - Minor value cleaning in the admin group/user/tags pages
   - Fix issue with deactivating users in the edit user form.
