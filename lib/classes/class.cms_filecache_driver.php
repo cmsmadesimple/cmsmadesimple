@@ -77,12 +77,12 @@ class cms_filecache_driver extends cms_cache_driver
     /**
      * @ignore
      */
-    private $_lifetime = 3600;
+    private $_lifetime = 7200;
 
     /**
      * @ignore
      */
-    private $_locking = false;
+    private $_locking = true;
 
     /**
      * @ignore
@@ -271,7 +271,7 @@ class cms_filecache_driver extends cms_cache_driver
         for( $n = 0; $n < 5; $n++ ) {
             $res = flock($res,$mode);
             if( $res ) return TRUE;
-            $tl = rand(1,300);
+            $tl = rand(5,300);
             usleep($tl);
         }
         return FALSE;
