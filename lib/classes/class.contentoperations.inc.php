@@ -811,6 +811,7 @@ class ContentOperations
 		$opts['use_perms'] = ($use_perms)?'true':'false';
         $opts['for_child'] = ($for_child)?'true':'false';
         $opts['use_simple'] = !(check_permission($uid,'Manage All Content') || check_permission($uid,'Modify Any Page'));
+        $opts['is_manager'] = !$opts['use_simple'];
 		$str = '{';
 		foreach($opts as $key => $val) {
 			if( $val == '' ) continue;
