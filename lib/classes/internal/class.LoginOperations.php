@@ -42,7 +42,7 @@ final class LoginOperations
     {
         \cms_cookies::erase($this->_loginkey);
         \cms_cookies::erase(CMS_USER_KEY);
-        unset($_SESSION[$this->_loginkey]);
+        unset($_SESSION[$this->_loginkey],$_SESSION[CMS_USER_KEY]);
     }
 
     protected function _check_passhash($uid,$checksum)
