@@ -67,6 +67,10 @@ function smarty_function_form_start($params, &$smarty)
             $mactparms[$key] = trim($value);
             break;
 
+	case 'inline':
+            $mactparms[$key] = (bool) $value;
+	    break;
+	 
         case 'prefix':
             $mactparms['mid'] = trim($value);
             break;
@@ -112,7 +116,7 @@ function smarty_function_form_start($params, &$smarty)
     }
     $out .= '><div class="hidden">';
     if( $mactparms['module'] && $mactparms['action'] ) {
-        $mact = $mactparms['module'].','.$mactparms['mid'].','.$mactparms['action'].','.$mactparms['inline'];
+        $mact = $mactparms['module'].','.$mactparms['mid'].','.$mactparms['action'].','.(int)$mactparms['inline'];
         $out .= '<input type="hidden" name="mact" value="'.$mact.'"/>';
         if( $mactparms['returnid'] != '' ) {
             $out .= '<input type="hidden" name="'.$mactparms['mid'].'returnid" value="'.$mactparms['returnid'].'"/>';
