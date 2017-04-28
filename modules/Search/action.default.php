@@ -38,8 +38,6 @@ if( !$tpl_ob->IsCached() ) {
     }
     //Pretty Urls Compatibility
     $is_method = isset($params['search_method'])?'post':'get';
-    // donot remove this line (calguy1000)
-    if( !$inline ) $id = 'cntnt01';
 
     // Variable named hogan in honor of moorezilla's Rhodesian Ridgeback :) https://forum.cmsmadesimple.org/index.php/topic,9580.0.html
     $submittext = (isset($params['submit'])) ? $params['submit'] : $this->Lang('searchsubmit');
