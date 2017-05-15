@@ -448,6 +448,7 @@ class Content extends ContentBase
 		$placeholder = trim($this->_get_param($blockInfo,'placeholder'));
 		$maxlength = (int) $this->_get_param($blockInfo,'maxlength',255);
         $adminonly = cms_to_bool($this->_get_param($blockInfo,'adminonly',0));
+        if( !strlen($value) && isset($blockInfo['default']) && strlen($blockInfo['default']) ) $value = $blockInfo['default'];
         if( $adminonly ) {
             $uid = get_userid(FALSE);
             $res = \UserOperations::get_instance()->UserInGroup($uid,1);

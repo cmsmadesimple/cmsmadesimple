@@ -269,8 +269,8 @@ class cms_filecache_driver extends cms_cache_driver
         // non blocking lock
         $mode = $mode | LOCK_NB;
         for( $n = 0; $n < 5; $n++ ) {
-            $res = flock($res,$mode);
-            if( $res ) return TRUE;
+            $res2 = flock($res,$mode);
+            if( $res2 ) return TRUE;
             $tl = rand(1,300);
             usleep($tl);
         }
