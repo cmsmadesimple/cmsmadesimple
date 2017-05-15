@@ -18,7 +18,6 @@
 #
 #$Id: moduleinterface.php 8558 2012-12-10 00:59:49Z calguy1000 $
 
-use \CmsLock;
 $handlers = ob_list_handlers();
 for ($cnt = 0; $cnt < sizeof($handlers); $cnt++) { ob_end_clean(); }
 
