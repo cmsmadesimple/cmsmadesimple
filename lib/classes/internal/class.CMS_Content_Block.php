@@ -331,15 +331,9 @@ final class CMS_Content_Block
             if( $img != -1 && !empty($img) ) {
                 // create the absolute url.
                 $orig_val = $img;
-                $img = $config['uploads_url'].'/'.$img;
-                /*
-                if( startswith($img,$basename) ) {
-                    // old style url.
-                    if( !startswith($img,'http') ) $img = str_replace('//','/',$img);
-                    $img = substr($img,strlen($basename.'/'));
-                    $img = $config['uploads_url'] . $img;
-                }
-                */
+                $img = $config['uploads_url'].'/';
+                if( $adddir ) $img .= $adddir.'/';
+                $img .= $orig_val;
 
                 $urlonly = cms_to_bool(get_parameter_value($params,'urlonly'));
                 if( $urlonly ) {
