@@ -230,7 +230,7 @@ if( !$tpl->isCached() ) {
     else if( $childrenof ) {
         $tmp = $hm->sureGetNodeByAlias(trim($childrenof));
         if( is_object($tmp) ) {
-            if( $tmp->has_children() ) $rootnodesn = $tmp->get_children();
+            if( $tmp->has_children() ) $rootnodes = $tmp->get_children();
         }
     }
     else if( $items ) {
