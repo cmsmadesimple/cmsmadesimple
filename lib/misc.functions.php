@@ -35,6 +35,7 @@
  *
  * @author http://www.edoceo.com/
  * @since 0.1
+ * @package CMS
  * @param string $to The url to redirect to
  */
 function redirect($to)
