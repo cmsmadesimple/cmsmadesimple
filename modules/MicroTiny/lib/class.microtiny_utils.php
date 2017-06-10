@@ -101,7 +101,7 @@ class microtiny_utils
       }
 
       //$configurl = $config->smart_root_url().'/tmp/cache/'.$fn.'?t='.time();
-      $configurl = $config->smart_root_url().'/tmp/cache/'.basename($fn);
+      $configurl = PUBLIC_CACHE_LOCATION.'/'.basename($fn);
       $output.='<script type="text/javascript" src="'.$configurl.'" defer="defer"></script>';
 
       return $output;
