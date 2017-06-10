@@ -1,4 +1,4 @@
-Version 2.2 - No Name Set
+Version 2.2 - Canada
 ----------------------------------
 Core - General
   - Automatically turn on file locking for cached files to attempt to mitigate race conditions.
@@ -194,6 +194,7 @@ MicroTiny v2.1
   - Adds a mailto plugin.
   - Now use the FilePicker module for a filepicker, required rewriting the cmsms_filepicker tinymce plugin.
   - Enable the title attribute on the image plugin.
+  - Now uses PUBLIC_CACHE_LOCATION for cache files instead of hardcoding tmp/cache
 
   
 Version 2.1.6 - Spanish Wells
