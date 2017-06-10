@@ -1,6 +1,9 @@
-Version 2.2 - No Name Set
+Version 2.2 - Canada
 ----------------------------------
 Core - General
+  - Automatically turn on file locking for cached files to attempt to mitigate race conditions.
+    NOTE:  On systems using archaic filesystems such as FAT and FAT32 CMSMS may no longer operate.
+  - cms_filecache_driver now caches for 2 hours by default and has an improved cooperative locking test
   - Implement new database abstraction library that is compatible with (functionality wise) but improves upon adodb-lite.
   - Implement protocol-less URL's in the config.
   - Page tabs are now focusable (you can tab through page tabs and use enter to select one).
@@ -191,3 +194,4 @@ MicroTiny v2.1
   - Adds a mailto plugin.
   - Now use the FilePicker module for a filepicker, required rewriting the cmsms_filepicker tinymce plugin.
   - Enable the title attribute on the image plugin.
+  - Now uses PUBLIC_CACHE_LOCATION for cache files instead of hardcoding tmp/cache
