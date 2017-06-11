@@ -34,7 +34,6 @@ foreach( $files as $src_name ) {
     $bn = basename($src_name);
     $dest_name = $plugins_to.'/'.$bn;
     if( ! is_file($dest_name) && !is_dir($dest_name) ) {
-        status_msg("DEBUG MOVE $src_name to $dest_name");
         rename( $src_name, $dest_name );
     }
     $remove( $src_name );
