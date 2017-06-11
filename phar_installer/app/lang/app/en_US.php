@@ -34,7 +34,7 @@ $lang['desc_wizard_step9'] = 'Install and/or Upgrade modules as necessary, write
 $lang['destination_directory'] = 'Destination Directory';
 $lang['dest_writable'] = 'Write permission in destination directory';
 $lang['disable_functions'] = 'Checking disabled functions';
-$lang['done'] = 'done';
+$lang['done'] = 'Done';
 
 # E
 $lang['email_accountinfo_message'] = <<<EOT
