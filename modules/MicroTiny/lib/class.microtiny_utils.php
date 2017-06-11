@@ -100,8 +100,7 @@ class microtiny_utils
           self::_save_static_config($fn,$frontend,$selector,$css_name,$languageid);
       }
 
-      //$configurl = $config->smart_root_url().'/tmp/cache/'.$fn.'?t='.time();
-      $configurl = PUBLIC_CACHE_LOCATION.'/'.basename($fn);
+      $configurl = $config['public_cache_url'].'/'.basename($fn);
       $output.='<script type="text/javascript" src="'.$configurl.'" defer="defer"></script>';
 
       return $output;
