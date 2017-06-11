@@ -1,7 +1,7 @@
 Version 2.2.1 - NO NAME SET
 ----------------------------------
 Core - General
- - 
+ - Improve the smarty plugin loading to handle non-cachable plugins in the /assets/plugins and /plugins directories. 
 
 Installation Assistant v1.3.1 
  - On upgrade to 2.2.1 move all files from /plugins to /assets/plugins (they should only be third party plugins at this point)

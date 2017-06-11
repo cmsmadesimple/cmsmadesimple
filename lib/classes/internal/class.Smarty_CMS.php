@@ -231,14 +231,24 @@ class Smarty_CMS extends SmartyBC
     {
         debug_buffer('',"Start Load Smarty Plugin $name/$type");
 
+        // plugins with the smarty_cms_function
         $cachable = TRUE;
-        $fn = cms_join_path(CMS_ROOT_PATH,'lib','plugins',$type.'.'.$name.'.php');
-        if( file_exists($fn) ) {
-            // plugins with the smarty_cms_function
+        $dirs = [];
+        $dirs[] = cms_join_path(CMS_ROOT_PATH,'assets','plugins',$type.'.'.$name.'.php');
+        $dirs[] = cms_join_path(CMS_ROOT_PATH,'plugins',$type.'.'.$name.'.php');
+        $dirs[] = cms_join_path(CMS_ROOT_PATH,'lib','plugins',$type.'.'.$name.'.php');
+        foreach( $dirs as $fn ) {
+            if( !is_file($fn) ) continue;
+
             require_once($fn);
-            $func = 'smarty_cms_'.$type.'_'.$name;
             $script = $fn;
-            if( function_exists($func) ) {
+
+            $funcs = [];
+            $funcs[] = 'smarty_nocache_'.$type.'_'.$name;
+            $funcs[] = 'smarty_cms_'.$type.'_'.$name;
+            foreach( $funcs as $func ) {
+                if( !function_exists($func) ) continue;
+
                 $callback = $func;
                 $cachable = FALSE;
                 debug_buffer('',"End Load Smarty Plugin $name/$type");
