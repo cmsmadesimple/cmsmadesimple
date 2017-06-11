@@ -40,6 +40,9 @@ class wizard_step9 extends \cms_autoinstaller\wizard_step
         \cmsms()->clear_cached_files();
         $this->message(\__appbase\lang('msg_clearedcache'));
 
+        // write protect config.php
+        @chmod("$destdir/config.php",0444);
+
         // todo: write history
 
         // set the finished message.

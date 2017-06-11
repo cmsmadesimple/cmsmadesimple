@@ -2,8 +2,12 @@ Version 2.2.1 - NO NAME SET
 ----------------------------------
 Core - General
  - 
- 
- MicroTiny
+
+Installation Assistant v1.3.1 
+ - On upgrade to 2.2.1 move all files from /plugins to /assets/plugins (they should only be third party plugins at this point)
+ - On upgrade chmod the config.php to 444
+
+MicroTiny v2.1.1
  - Fix temporary JS call URL.
 
 
