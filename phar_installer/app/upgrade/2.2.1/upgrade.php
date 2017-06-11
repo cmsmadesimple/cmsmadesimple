@@ -31,16 +31,19 @@ $remove = function( $in ) {
 
 // move the files
 foreach( $files as $src_name ) {
-    $bn = basename($src_file);
+    $bn = basename($src_name);
     $dest_name = $plugins_to.'/'.$bn;
-    if( ! is_file($dest_name) && !is_dir($dest_name) ) rename( $src_name, $dest_name );
+    if( ! is_file($dest_name) && !is_dir($dest_name) ) {
+        status_msg("DEBUG MOVE $src_name to $dest_name");
+        rename( $src_name, $dest_name );
+    }
     $remove( $src_name );
 }
 
 // maybe remove the directory
 $files = glob($plugins_from.'/*');
 $do_remove = false;
-if( count($files) == 0 ) $remove = true;
+if( count($files) == 0 ) $do_remove = true;
 if( count($files) == 1 ) {
     $bn = strtolower(basename($files[0]));
     if( $bn == 'index.html' ) $do_remove == true;
