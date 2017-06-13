@@ -426,7 +426,7 @@ namespace CMSMS\Database {
             $nrows = 1;
             if( stripos( $sql, 'LIMIT' ) !== FALSE ) $nrows = -1;
             $rs = $this->SelectLimit( $sql, $nrows, -1, $inputarr );
-            if( !$rs ) return;
+            if( !$rs ) return FALSE;
             return $rs->Fields();
         }
 
@@ -440,7 +440,7 @@ namespace CMSMS\Database {
         public function GetOne($sql, $inputarr = null)
         {
             $res = $this->Getrow( $sql, $inputarr );
-            if( !$res ) return;
+            if( !$res ) return FALSE;
             $key = array_keys($res)[0];
             return $res[$key];
         }
