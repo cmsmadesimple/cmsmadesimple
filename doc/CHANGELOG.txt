@@ -1,4 +1,4 @@
-Version 2.2.1 - NO NAME SET
+Version 2.2.1 - Hearts Desire
 ----------------------------------
 Core - General
  - Improve the smarty plugin loading to handle non-cachable plugins in the /assets/plugins and /plugins directories. 
@@ -10,6 +10,9 @@ Installation Assistant v1.3.1
 
 MicroTiny v2.1.1
  - Fix temporary JS call URL.
+
+News v2.51.1
+ - Fix frontend pagination
 
 
 Version 2.2 - Canada
