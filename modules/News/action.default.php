@@ -161,16 +161,6 @@ if( !$tpl_ob->IsCached() ) {
     $startelement = 0;
     $pagenumber = 1;
 
-    $dbresult = $db->SelectLimit( $query1, $pagelimit, $startelement );
-    $count = (int) $db->GetOne('SELECT FOUND_ROWS()');
-
-    {
-        // determine a number of pages
-        if( isset( $params['start'] ) ) $count -= (int)$params['start'];
-        $pagecount = (int)($count / $pagelimit);
-        if( ($count % $pagelimit) != 0 ) $pagecount++;
-    }
-
     if( isset( $params['pagenumber'] ) && $params['pagenumber'] != '' ) {
         // if given a page number, determine a start element
         $pagenumber = (int)$params['pagenumber'];
@@ -179,6 +169,16 @@ if( !$tpl_ob->IsCached() ) {
     if( isset( $params['start'] ) ) {
         // given a start element, determine a page number
         $startelement = $startelement + (int)$params['start'];
+    }
+
+    $dbresult = $db->SelectLimit( $query1, $pagelimit, $startelement );
+    $count = (int) $db->GetOne('SELECT FOUND_ROWS()');
+
+    {
+        // determine a number of pages
+        if( isset( $params['start'] ) ) $count -= (int)$params['start'];
+        $pagecount = (int)($count / $pagelimit);
+        if( ($count % $pagelimit) != 0 ) $pagecount++;
     }
 
     // Assign some pagination variables to smarty
