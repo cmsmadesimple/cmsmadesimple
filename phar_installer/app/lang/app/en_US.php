@@ -18,7 +18,7 @@ $lang['config_writable'] = 'Check for writeable config file';
 $lang['confirm_freshen'] = 'Are you sure you want to freshen (repair) the existing installation of CMSMS? Use with extreme caution!';
 $lang['confirm_upgrade'] = 'Are you sure you want to begin the upgrade process';
 $lang['curl_extension'] = 'Checking for the Curl extension';
-$lang['create_assets_structure'] = 'Creating a location for file rsources';
+$lang['create_assets_structure'] = 'Creating a location for file resources';
 
 # D
 $lang['database_support'] = 'Check for compatible database drivers';
