@@ -1275,3 +1275,15 @@ function setup_session($cachable = FALSE)
     if(!@session_id()) session_start();
     $_setup_already = true;
 }
+
+/**
+ * Test if a string is a base64 encoded string
+ *
+ * @since 2.2
+ * @param string $s The input string
+ * @return bool
+ */
+function is_base64($s)
+{
+      return (bool) preg_match('/^[a-zA-Z0-9\/\r\n+]*={0,2}$/', $s);
+}

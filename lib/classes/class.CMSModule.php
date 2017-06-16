@@ -2501,6 +2501,8 @@ abstract class CMSModule
      * A function to return a resource identifier to a module specific template
      * if the template specified ends in .tpl then a file template is assumed.
      *
+     * Note: Since 2.2.1 This function will throw a logic exception if a string or eval resource is supplied.
+     *
      * @since 2.0
      * @author calguy1000
      * @param string $template The template name.
@@ -2508,7 +2510,12 @@ abstract class CMSModule
      */
     final public function GetTemplateResource($template)
     {
-        if( strpos($template,':') !== FALSE ) return $template;
+        if( strpos($template,':') !== FALSE ) {
+            if( startswith($template,'string:') || startswith($template,'eval:') ) {
+                throw new \LogicException('Invalid smarty resource specified for a module template.');
+            }
+            return $template;
+        }
         if( endswith($template,'.tpl') ) return 'module_file_tpl:'.$this->GetName().';'.$template;
         return 'cms_template:'.$template;
     }
