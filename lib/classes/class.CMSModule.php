@@ -2511,7 +2511,7 @@ abstract class CMSModule
     final public function GetTemplateResource($template)
     {
         if( strpos($template,':') !== FALSE ) {
-            if( startswith($template,'string:') || startswith($template,'eval:') ) {
+            if( startswith($template,'string:') || startswith($template,'eval:') || startswith($template,'extends:') ) {
                 throw new \LogicException('Invalid smarty resource specified for a module template.');
             }
             return $template;
