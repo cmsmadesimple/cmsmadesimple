@@ -136,6 +136,7 @@ final class CmsAdminMenuItem
             $obj->section = $mod->GetAdminSection();
             $obj->title   = $mod->GetFriendlyName();
             $obj->description = $mod->GetAdminDescription();
+            $obj->priority = 50;
             $obj->action = 'defaultadmin';
             //$obj->url = $mod->create_url('m1_',$obj->action);
         }
