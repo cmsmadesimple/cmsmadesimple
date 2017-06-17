@@ -19,8 +19,8 @@
 #
 #$Id: version.php 10177 2015-09-11 15:02:02Z calguy1000 $
 
-$CMS_VERSION = "2.2.1";
-$CMS_VERSION_NAME = "Hearts Desire";
+$CMS_VERSION = "2.2.2";
+$CMS_VERSION_NAME = "Hearts Content";
 $CMS_SCHEMA_VERSION = '202';
 
 define('CMS_VERSION', $CMS_VERSION);
