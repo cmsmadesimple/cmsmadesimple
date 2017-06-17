@@ -17,7 +17,7 @@
         $('#fld11').click(function () {
             $('#expiryinfo').toggle('slow');
         });
-        $('#{$actionid}cancel').click(function () {
+        $('[name$=cancel]').click(function () {
             $(this).closest('form').attr('novalidate', 'novalidate');
         });
     });

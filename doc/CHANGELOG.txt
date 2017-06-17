@@ -14,6 +14,8 @@ MicroTiny v2.2
  - Upgrade tinymce to v4.6.x.
  - Adds new tabfocus and hr plugins.
 
+News v2.51.2
+ - Fixes so that all cancel buttons work properly on new news articles
 
 Version 2.2.1 - Hearts Desire
 ----------------------------------
