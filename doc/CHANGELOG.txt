@@ -1,36 +1,39 @@
 Version 2.2.2 - Hearts Content
 ----------------------------------
 Core - General
- - Additional security improvement in CMSModule::GetTemplateResource()
- - Now Smarty_CMS is no longer derived from SmartyBC (uses our own wrapper class) which prevents all occurances of {php} tags from running.
+ - Additional security improvement in CMSModule::GetTemplateResource().
+ - Now Smarty_CMS is no longer derived from SmartyBC (uses our own wrapper class) which prevents all occurrences of {php} tags from running.
 
 AdminSearch v1.0.3
  - Now search the metadata field of content pages.
 
 DesignManager v1.1.3
- - Set title attribute tags for edit/create template,stylesheet,design
+ - Set title attribute tags for edit/create template, stylesheet, design.
 
 MicroTiny v2.2
- - Upgrade tinymce to v4.6.x
- - Adds new tabfocus and hr plugins
+ - Upgrade tinymce to v4.6.x.
+ - Adds new tabfocus and hr plugins.
+
 
 Version 2.2.1 - Hearts Desire
 ----------------------------------
 Core - General
- - Improve the smarty plugin loading to handle non-cachable plugins in the /assets/plugins and /plugins directories.
+ - Improve the Smarty plugin loading to handle non-cachable plugins in the /assets/plugins and /plugins directories.
  - Fixes to transaction functions in database abstraction library.
  - Fix CMSModule::GetTemplateResource to no longer accept eval or string resources.
  - Fix CMSSmartySecurityPolicy so that debug_to_log is no longer an allowed function.
+   
+   Many thanks to Daniel Le Gall from SCRT SA, Switzerland for reporting the vulnerabilities.
 
 Installation Assistant v1.3.1
- - On upgrade to 2.2.1 move all files from /plugins to /assets/plugins (they should only be third party plugins at this point)
- - On upgrade chmod the config.php to 444
+ - On upgrade to 2.2.1 move all files from /plugins to /assets/plugins (they should only be third party plugins at this point).
+ - On upgrade chmod the config.php to 444.
 
 MicroTiny v2.1.1
  - Fix temporary JS call URL.
 
 News v2.51.1
- - Fix frontend pagination
+ - Fix frontend pagination.
 
 
 Version 2.2 - Canada
