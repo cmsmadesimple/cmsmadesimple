@@ -10,6 +10,10 @@ AdminSearch v1.0.3
 DesignManager v1.1.3
  - Set title attribute tags for edit/create template,stylesheet,design
 
+MicroTiny v2.2
+ - Upgrade tinymce to v4.6.x
+ - Adds new tabfocus and hr plugins
+
 Version 2.2.1 - Hearts Desire
 ----------------------------------
 Core - General
