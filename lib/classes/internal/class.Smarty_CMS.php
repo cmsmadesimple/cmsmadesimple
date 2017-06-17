@@ -22,15 +22,13 @@
  * @package CMS
  */
 
-require_once(dirname(dirname(__DIR__)).'/smarty/SmartyBC.class.php');
-
 /**
  * Extends the Smarty class for content.
  *
  * @package CMS
  * @since 0.1
  */
-class Smarty_CMS extends SmartyBC
+class Smarty_CMS extends CMSSmartyBase
 {
     public $id; // <- triggers error without | do search why this is needed
     public $params; // <- triggers error without | do search why this is needed
@@ -144,7 +142,9 @@ class Smarty_CMS extends SmartyBC
      */
     public static function &get_instance()
     {
-        if( !is_object(self::$_instance) ) self::$_instance = new self;
+        if( !self::$_instance ) {
+            self::$_instance = new \Smarty_CMS;
+        }
         return self::$_instance;
     }
 
@@ -556,3 +556,4 @@ class Smarty_CMS extends SmartyBC
     }
 
 } // end of class
+

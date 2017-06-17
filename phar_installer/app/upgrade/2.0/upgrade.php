@@ -16,7 +16,7 @@ $taboptarray = array('mysql' => 'TYPE=MyISAM');
 verbose_msg('updating structure of content tabless');
 $sqlarray = $dbdict->DropColumnSQL(CMS_DB_PREFIX.'content',array('collaapsed','markup'));
 $return = $dbdict->ExecuteSQLArray($sqlarray);
-$sqlarray = $dbdict->AlterColumnSQL(CMS_DB_PREFIX.'content_props','content X2');
+$sqlarray = $dbdict->AlterColumnSQL(CMS_DB_PREFIX.'content_props', 'content X2');
 $return = $dbdict->ExecuteSQLArray($sqlarray);
 $sqlarray = $dbdict->CreateIndexSQL(CMS_DB_PREFIX.'idx_content_by_modified', CMS_DB_PREFIX."content", 'modified_date');
 $return = $dbdict->ExecuteSQLArray($sqlarray);

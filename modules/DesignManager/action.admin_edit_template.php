@@ -7,7 +7,7 @@
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation; either version 2 of the License, or
 # (at your option) any later version.
-#
+
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -166,8 +166,8 @@ try {
         echo $this->ShowErrors($message);
     }
 
-    if( $tpl_obj->get_id() > 0 ) {
-        \CmsAdminThemeBase::GetThemeObject()->SetSubTitle($this->Lang('edit_template'));
+    if( ($tpl_id = $tpl_obj->get_id()) > 0 ) {
+        \CmsAdminThemeBase::GetThemeObject()->SetSubTitle($this->Lang('edit_template').': '.$tpl_obj->get_name()." ($tpl_id)");
     } else {
         \CmsAdminThemeBase::GetThemeObject()->SetSubTitle($this->Lang('create_template'));
     }

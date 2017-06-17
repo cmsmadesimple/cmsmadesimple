@@ -86,6 +86,12 @@ try {
 		$smarty->assign('all_stylesheets',$out2);
 	}
 
+    if( $design->get_id() > 0 ) {
+        \CmsAdminThemeBase::GetThemeObject()->SetSubTitle($this->Lang('edit_design').': '.$design->get_name()." ({$design->get_id()})");
+    } else {
+        \CmsAdminThemeBase::GetThemeObject()->SetSubTitle($this->Lang('create_design'));
+    }
+
     $smarty->assign('manage_stylesheets',$this->CheckPermission('Manage Stylesheets'));
     $smarty->assign('manage_templates',$this->CheckPermission('Modify Templates'));
     $smarty->assign('design',$design);

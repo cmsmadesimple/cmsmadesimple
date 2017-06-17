@@ -119,11 +119,13 @@ $(document).ready(function(){
     {if isset($get_lock) && ({get_userid(false)} != $get_lock.uid)}disabled="disabled"{/if}
 {/capture}
 
+{*
 {if !$css->get_id()}
 	<h3>{$mod->Lang('create_stylesheet')}</h3>
 {else}
 	<h3>{$mod->Lang('edit_stylesheet')}: {$css->get_name()} ({$css->get_id()})</h3>
 {/if}
+*}
 
 {if isset($get_lock)}
 	<div class="warning lock-warning">

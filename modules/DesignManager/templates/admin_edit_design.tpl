@@ -1,9 +1,3 @@
-{if $design->get_id()}
-<h3>{$mod->Lang('edit_design')}: {$design->get_name()} ({$design->get_id()})</h3>
-{else}
-<h3>{$mod->Lang('create_design')}</h3>
-{/if}
-
 {form_start id="admin_edit_design"}<input type="hidden" name="{$actionid}design" value="{$design->get_id()}"/>
 <input type="hidden" name="{$actionid}ajax" id="ajax"/>
 
