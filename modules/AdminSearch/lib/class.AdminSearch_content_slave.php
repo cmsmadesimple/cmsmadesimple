@@ -25,8 +25,10 @@ final class AdminSearch_content_slave extends AdminSearch_slave
 
         $content_manager = cms_utils::get_module('CMSContentManager');
         $db = cmsms()->GetDb();
-        $query = 'SELECT DISTINCT content_id,prop_name,content FROM '.CMS_DB_PREFIX.'content_props WHERE content LIKE ?';
-        $dbr = $db->GetArray($query,array('%'.$this->get_text().'%'));
+        $query = 'SELECT DISTINCT C.content_id FROM cms_content C LEFT JOIN cms_content_props P ON C.content_id = P.content_id WHERE P.content LIKE ? OR C.metadata LIKE ?';
+        //$query = 'SELECT DISTINCT content_id,prop_name,content FROM '.CMS_DB_PREFIX.'content_props WHERE content LIKE ?';
+        $txt = '%'.$this->get_text().'%';
+        $dbr = $db->GetArray($query, [ $txt, $txt ] );
         if( is_array($dbr) && count($dbr) ) {
             $output = array();
             $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
@@ -41,7 +43,7 @@ final class AdminSearch_content_slave extends AdminSearch_slave
 
                 $content_obj = cmsms()->GetContentOperations()->LoadContentFromId($content_id);
                 if( !is_object($content_obj) ) continue;
-		if( !$content_obj->HasSearchableContent() ) continue;
+                if( !$content_obj->HasSearchableContent() ) continue;
 
                 // here we could actually have a smarty template to build the description.
                 $pos = strpos($row['content'],$this->get_text());
