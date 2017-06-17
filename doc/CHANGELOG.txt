@@ -3,6 +3,7 @@ Version 2.2.2 - Hearts Content
 Core - General
  - Additional security improvement in CMSModule::GetTemplateResource().
  - Now Smarty_CMS is no longer derived from SmartyBC (uses our own wrapper class) which prevents all occurrences of {php} tags from running.
+ - Adds an admin directory .htaccess file to explicitly disable browser caching of any resources.
 
 AdminSearch v1.0.3
  - Now search the metadata field of content pages.
