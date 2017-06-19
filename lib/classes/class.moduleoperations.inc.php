@@ -191,7 +191,7 @@ final class ModuleOperations
         fputs($fh,"[module]\n");
         fputs($fh,"name = ".$modinstance->GetName()."\n");
         fputs($fh,"version = ".$modinstance->GetVersion()."\n");
-        fputs($fh,"description = ".$modinstance->GetDescription()."\n");
+        fputs($fh,"description = \"".$modinstance->GetDescription()."\"\n");
         fputs($fh,"author = ".$modinstance->GetAuthor()."\n");
         fputs($fh,"authoremail = ".$modinstance->GetAuthorEmail()."\n");
         fputs($fh,"mincmsversion = ".$modinstance->MinimumCMSVersion()."\n");

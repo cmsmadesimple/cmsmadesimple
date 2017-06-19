@@ -6,6 +6,7 @@ Core - General
  - Adds an admin directory .htaccess file to explicitly disable browser caching of any resources.
  - Fixes a relative path vulnerability in module_file_tpl resource.
  - Fixes a path building issue in CmsModuleInfo
+ - Fixes to parsing and generating moduleinfo.ini files.
 
 AdminSearch v1.0.3
  - Now search the metadata field of content pages.

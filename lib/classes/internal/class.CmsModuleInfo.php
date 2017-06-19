@@ -78,10 +78,10 @@ class CmsModuleInfo implements ArrayAccess
   private function _read_from_module_meta($module_name)
   {
     $config = \cms_config::get_instance();
-    $fn = $config['root_path']."/modules/$module_name/moduleinfo.ini";
-    if( !file_exists($fn) ) return FALSE;
-    $inidata = parse_ini_file($fn,TRUE);
-
+    $dir = $config['root_path']."/modules/$module_name";
+    $fn = cms_join_path($dir,'moduleinfo.ini'); 
+    if( !is_file($fn) ) return FALSE;
+    $inidata = @parse_ini_file($fn,TRUE);
     if( $inidata === FALSE || count($inidata) == 0 ) return FALSE;
     if( !isset($inidata['module']) ) return FALSE;
 
@@ -154,7 +154,7 @@ class CmsModuleInfo implements ArrayAccess
           $res .= $_write_ini($val,'',$depth+1);
 	}
 	else {
-	  if( is_numeric($val) ) {
+	  if( is_numeric($val) && strpos($val,' ') === FALSE ) {
 	    $res .= "$key = $value".PHP_EOL;
 	  }
 	  else {
