@@ -77,8 +77,8 @@ class CmsModuleInfo implements ArrayAccess
 
   private function _read_from_module_meta($module_name)
   {
-    $dir = dirname(dirname(__DIR__))."/modules/$module_name";
-    $fn = cms_join_path($dir,'moduleinfo.ini');
+    $config = \cms_config::get_instance();
+    $fn = $config['root_path']."/modules/$module_name/moduleinfo.ini";
     if( !file_exists($fn) ) return FALSE;
     $inidata = parse_ini_file($fn,TRUE);
 
