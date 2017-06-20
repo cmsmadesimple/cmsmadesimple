@@ -277,8 +277,9 @@ final class CMS_Content_Block
                 $smarty->caching = false;
                 if( isset($_SESSION['__cms_preview__']) && $contentobj->Id() == __CMS_PREVIEW_PAGE__ ) {
                     // note: content precompile/postcompile events will not be triggererd in preview.
-                    $val = $contentobj->Show($block);
-                    $result = $smarty->fetch('eval:'.$val);
+                    //$val = $contentobj->Show($block);
+                    //$result = $smarty->fetch('eval:'.$val);
+                    $result = $smarty->fetch(str_replace(' ', '_', 'content:' . $block), '|'.$block, $contentobj->Id().$block);
                 }
                 else {
                     $result = $smarty->fetch(str_replace(' ', '_', 'content:' . $block), '|'.$block, $contentobj->Id().$block);
