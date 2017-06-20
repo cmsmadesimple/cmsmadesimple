@@ -386,25 +386,12 @@ class Smarty_CMS extends CMSSmartyBase
         return $tmp;
     }
 
-    /*
-      public function createTemplate($template, $cache_id = null, $compile_id = null, $parent = null, $do_clone = true)
-      {
-      $saved_tpl_vars = array();
-      if ($parent instanceof Smarty) {
-      $saved_tpl_vars = $parent->tpl_vars;
-      $saved_config_vars = $parent->config_vars;
-      }
-      $tpl = parent::createTemplate($template, $cache_id, $compile_id, $parent, $do_clone);
-      if (!empty(Smarty::$global_tpl_vars)) $saved_tpl_vars = array_merge(Smarty::$global_tpl_vars, $saved_tpl_vars);
-      if ($parent instanceof Smarty) {
-      $parent->tpl_vars = $saved_tpl_vars;
-      $parent->config_vars = $saved_config_vars;
-      $tpl->tpl_vars = &$parent->tpl_vars;
-      $tpl->config_vars = &$parent->config_vars;
-      }
-      return $tpl;
-      }
-    */
+    public function createTemplate($template, $cache_id = null, $compile_id = null, $parent = null, $do_clone = true)
+    {
+        if( ($pos = strpos($template,'*')) > 0 ) throw new \LogicException("$template is an invalid CMSMS resource specification");
+        if( ($pos = strpos($template,'/')) > 0 ) throw new \LogicException("$template is an invalid CMSMS resource specification");
+        return parent::createTemplate($template, $cache_id, $compile_id, $parent, $do_clone );
+    }
 
     /**
      * clearCache method
@@ -556,4 +543,3 @@ class Smarty_CMS extends CMSSmartyBase
     }
 
 } // end of class
-
