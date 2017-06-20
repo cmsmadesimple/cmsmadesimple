@@ -8,9 +8,10 @@ Core - General
  - Fixes a path building issue in CmsModuleInfo
  - Fixes to parsing and generating moduleinfo.ini files.
  - Disallow any resource specifications with a * or a /
+     * This also means that no file resource specifications with path information will be permitted. 
  - Move mact preprocessing to AFTER the template_top has been processed.  So order of processing (for module actions on the frontend is)
      a:  template top
-     b:  mact preprocessing
+     b:  mact preprocessing (if enabled, which is the default)
      c:  template body
      d:  template head
 
