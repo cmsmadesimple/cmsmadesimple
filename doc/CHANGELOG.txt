@@ -7,7 +7,12 @@ Core - General
  - Fixes a relative path vulnerability in module_file_tpl resource.
  - Fixes a path building issue in CmsModuleInfo
  - Fixes to parsing and generating moduleinfo.ini files.
- - Disallow any resource specifications with a * or a / 
+ - Disallow any resource specifications with a * or a /
+ - Move mact preprocessing to AFTER the template_top has been processed.  So order of processing (for module actions on the frontend is)
+     a:  template top
+     b:  mact preprocessing
+     c:  template body
+     d:  template head
 
 AdminSearch v1.0.3
  - Now search the metadata field of content pages.
@@ -29,7 +34,7 @@ Core - General
  - Fixes to transaction functions in database abstraction library.
  - Fix CMSModule::GetTemplateResource to no longer accept eval or string resources.
  - Fix CMSSmartySecurityPolicy so that debug_to_log is no longer an allowed function.
-   
+
    Many thanks to Daniel Le Gall from SCRT SA, Switzerland for reporting the vulnerabilities.
 
 Installation Assistant v1.3.1

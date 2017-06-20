@@ -130,9 +130,6 @@ while( $trycount < 2 ) {
 
         \CMSMS\HookManager::do_hook('Core::ContentPreRender', [ 'content' => &$contentobj ] );
 
-        // if the request has a mact in it, process and cache the output.
-        preprocess_mact($contentobj->Id());
-
         if( !$showtemplate ) {
             $smarty->setCaching(false);
             // in smarty 3, we could use eval:{content} I think
@@ -149,6 +146,9 @@ while( $trycount < 2 ) {
             $top .= $tpl->fetch();
             unset($tpl);
             \CMSMS\HookManager::do_hook('Core::PageTopPostRender', [ 'content'=>&$contentobj, 'html'=>&$top ]);
+
+            // if the request has a mact in it, process and cache the output.
+            preprocess_mact($contentobj->Id());
 
             \CMSMS\HookManager::do_hook('Core::PageBodyPreRender', [ 'content'=>&$contentobj, 'html'=>&$body ]);
             $tpl = $smarty->createTemplate('tpl_body:'.$tpl_id,$cache_id);
