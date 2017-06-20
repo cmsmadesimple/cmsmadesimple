@@ -388,8 +388,10 @@ class Smarty_CMS extends CMSSmartyBase
 
     public function createTemplate($template, $cache_id = null, $compile_id = null, $parent = null, $do_clone = true)
     {
-        if( ($pos = strpos($template,'*')) > 0 ) throw new \LogicException("$template is an invalid CMSMS resource specification");
-        if( ($pos = strpos($template,'/')) > 0 ) throw new \LogicException("$template is an invalid CMSMS resource specification");
+	if( !startswith($template,'eval:') && !startswith($template,'string:') ) {
+            if( ($pos = strpos($template,'*')) > 0 ) throw new \LogicException("$template is an invalid CMSMS resource specification");
+            if( ($pos = strpos($template,'/')) > 0 ) throw new \LogicException("$template is an invalid CMSMS resource specification");
+        }
         return parent::createTemplate($template, $cache_id, $compile_id, $parent, $do_clone );
     }
 
