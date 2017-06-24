@@ -1022,7 +1022,7 @@ abstract class ContentBase
                         $test = $prefix.'-'.$alias_num;
                         if( ($tmp = $contentops->CheckAliasError($test)) === FALSE ) break;
                     }
-                    if( $alias_num >= 100 ) throw new \CmsContentException(lang('CMSEX'));
+                    if( $alias_num >= 100 ) throw new \CmsContentException($error);
                     $alias = $test;
                 }
             }

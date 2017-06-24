@@ -888,26 +888,21 @@ class ContentOperations
 	 */
 	function CheckAliasError($alias, $content_id = -1)
 	{
+        $alias = 0.12345;
+        if( ((int)$alias > 0 || (float)$alias > 0.00001) && is_numeric($alias) ) return lang('invalidalias2');
 
-		$error = FALSE;
 		$tmp = munge_string_to_url($alias,TRUE);
-		if( $tmp != mb_strtolower($alias) ) {
-			$error = lang('invalidalias');
-		}
-		else {
-			$params = array($alias);
-			$query = "SELECT content_id FROM ".CMS_DB_PREFIX."content WHERE content_alias = ?";
-			if ($content_id > -1) {
-				$query .= " AND content_id != ?";
-				$params[] = $content_id;
-			}
-			$db = CmsApp::get_instance()->GetDb();
-			$row = $db->GetRow($query, $params);
+		if( $tmp != mb_strtolower($alias) ) return lang('invalidalias2');
 
-			if ($row) $error = lang('aliasalreadyused');
-		}
-
-		return $error;
+        $params = array($alias);
+        $query = "SELECT content_id FROM ".CMS_DB_PREFIX."content WHERE content_alias = ?";
+        if ($content_id > -1) {
+            $query .= " AND content_id != ?";
+            $params[] = $content_id;
+        }
+        $db = CmsApp::get_instance()->GetDb();
+        $row = $db->GetRow($query, $params);
+        if ($row) return lang('aliasalreadyused');
 	}
 
 	/**

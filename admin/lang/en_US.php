@@ -1077,6 +1077,7 @@ $lang['installed'] = "Installed";
 $lang['installed_modules'] = "Installed Modules";
 $lang['invalid'] = "Invalid";
 $lang['invalidalias'] = "The alias entered contains invalid characters. White space, / . and other punctuation characters are not permitted.";
+$lang['invalidalias2'] = "The alias entered contains invalid characters. Numeric values, White space, / . or other punctuation characters are not permitted.";
 $lang['invalidcode'] = "Invalid code entered.";
 $lang['invalidcode_brace_missing'] = "Uneven amount of braces";
 $lang['invalidemail'] = "The email address entered is invalid";
