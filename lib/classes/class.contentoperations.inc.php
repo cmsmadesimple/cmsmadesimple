@@ -888,9 +888,7 @@ class ContentOperations
 	 */
 	function CheckAliasError($alias, $content_id = -1)
 	{
-        $alias = 0.12345;
         if( ((int)$alias > 0 || (float)$alias > 0.00001) && is_numeric($alias) ) return lang('invalidalias2');
-
 		$tmp = munge_string_to_url($alias,TRUE);
 		if( $tmp != mb_strtolower($alias) ) return lang('invalidalias2');
 
@@ -903,6 +901,8 @@ class ContentOperations
         $db = CmsApp::get_instance()->GetDb();
         $row = $db->GetRow($query, $params);
         if ($row) return lang('aliasalreadyused');
+
+        return FALSE;
 	}
 
 	/**
