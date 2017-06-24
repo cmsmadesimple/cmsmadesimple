@@ -248,7 +248,7 @@ function cms_stylesheet_writeCache($filename, $list, $trimbackground, &$smarty)
         // why not just re-throw the exception as it may have a smarty error in it.
         debug_to_log('Error Processing Stylesheet');
         debug_to_log($e->GetMessage());
-        audit('','Plugin: cms_stylesheet', 'Smarty Compile process failed, unable to write cache file');
+        audit('','Plugin: cms_stylesheet', 'Smarty Compile process failed, an error in the template?');
         return;
 	}
 

@@ -113,7 +113,7 @@ class cms_content_tree extends cms_tree
 	public function sureGetNodeByAlias($alias)
 	{
 		if( $alias == '' ) return;
-		if( (int)$alias > 0 ) return $this->find_by_tag('id',$alias,true);
+		if( (int)$alias > 0 && is_numeric($alias) ) return $this->find_by_tag('id',$alias,true);
 		return $this->find_by_tag('alias',$alias,true);
 	}
 

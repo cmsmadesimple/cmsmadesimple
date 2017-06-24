@@ -54,11 +54,11 @@ function smarty_function_cms_selflink($params, &$smarty)
 	if (isset($params['page']) or isset($params['href'])) {
 		$page = null;
 		if (isset($params['href'])) {
-			$page = $params['href'];
+			$page = trim($params['href']);
 			$urlonly = 1;
 		}
 		else {
-			$page = $params['page'];
+			$page = trim($params['page']);
 		}
 
 		if( $page ) {
@@ -300,7 +300,7 @@ function smarty_function_cms_selflink($params, &$smarty)
 }
 
 function smarty_cms_help_function_cms_selflink() {
-		echo lang_by_realm('tags','help_function_cms_selflink');
+    echo lang_by_realm('tags','help_function_cms_selflink');
 }
 
 ?>

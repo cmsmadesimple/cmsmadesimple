@@ -1003,6 +1003,7 @@ abstract class ContentBase
 			// auto generate an alias
 			$tolower = true;
 			$alias = munge_string_to_url($alias, $tolower);
+            if( (int)$alias > 0 && is_numeric($alias) ) $alias = 'p'.$alias;
         }
 
         if( $alias ) {

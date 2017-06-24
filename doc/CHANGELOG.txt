@@ -14,6 +14,8 @@ Core - General
      b:  mact preprocessing (if enabled, which is the default)
      c:  template body
      d:  template head
+ - Fix sureGetNodeByAlias to check if the input is numeric.  if it is, assume that it is a page id, not an alias
+ - Fix alias generation in the ContentBase class to check if the input page title is numeric... if it is, prepend a character to it to ensure that integer casting will return 0.
 
 AdminSearch v1.0.3
  - Now search the metadata field of content pages.
