@@ -67,10 +67,10 @@ function smarty_function_form_start($params, &$smarty)
             $mactparms[$key] = trim($value);
             break;
 
-	case 'inline':
+        case 'inline':
             $mactparms[$key] = (bool) $value;
-	    break;
-	 
+            break;
+
         case 'prefix':
             $mactparms['mid'] = trim($value);
             break;
@@ -101,18 +101,28 @@ function smarty_function_form_start($params, &$smarty)
                 }
             }
             break;
+
         case 'assign':
             break;
 
         default:
-            $parms[$key] = $value;
+            if( startswith($key,'form-') ) {
+                $key = substr($key,5);
+                $tagparms[$key] = $value;
+            } else {
+                $parms[$key] = $value;
+            }
             break;
         }
     }
 
     $out = '<form';
     foreach( $tagparms as $key => $value ) {
-        if( $value ) $out .= " $key=\"$value\"";
+        if( $value ) {
+            $out .= " $key=\"$value\"";
+        } else {
+            $out .= " $key";
+        }
     }
     $out .= '><div class="hidden">';
     if( $mactparms['module'] && $mactparms['action'] ) {
@@ -138,4 +148,3 @@ function smarty_function_form_start($params, &$smarty)
     }
     return $out;
 }
-?>

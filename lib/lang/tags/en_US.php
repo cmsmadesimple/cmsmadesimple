@@ -1188,6 +1188,9 @@ $lang['help_function_form_start'] = <<<EOT
     <p>Assign the output of the tag to the named smarty variable.</p>
   </li>
 </ul>
+<p>You may also provide extra attributes to the &lt;form&gt; tag by prepending the attribute with the &quot;form-&quot;prefix.  i.e:</p>
+<pre><code>{form_start form-data-foo="bar" form-novalidate=""}</code></pre>
+<p><strong>Note:</strong> Smarty shorthand attributes are not permitted.  Each attribute provided must have a value, even if it is empty.</p>
 <h3>Usage:</h3>
 <p>In a module template the following code will generate a form tag to the current action.</p>
 <pre><code>{form_start}</code></pre>

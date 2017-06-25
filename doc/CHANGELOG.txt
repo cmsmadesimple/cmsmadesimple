@@ -8,7 +8,7 @@ Core - General
  - Fixes a path building issue in CmsModuleInfo
  - Fixes to parsing and generating moduleinfo.ini files.
  - Disallow any resource specifications with a * or a /
-     * This also means that no file resource specifications with path information will be permitted. 
+     * This also means that no file resource specifications with path information will be permitted.
  - Move mact preprocessing to AFTER the template_top has been processed.  So order of processing (for module actions on the frontend is)
      a:  template top
      b:  mact preprocessing (if enabled, which is the default)
@@ -17,6 +17,7 @@ Core - General
  - Fix sureGetNodeByAlias to check if the input is numeric.  if it is, assume that it is a page id, not an alias
  - Fix alias generation in the ContentBase class to check if the input page title is numeric... if it is, prepend a character to it to ensure that integer casting will return 0.
  - Fix listtags to show tags using smarty_nocache_  function name prefix.
+ - Improvements to the {form_start} plugin.
 
 AdminSearch v1.0.3
  - Now search the metadata field of content pages.
