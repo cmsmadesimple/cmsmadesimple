@@ -995,6 +995,7 @@ abstract class ContentBase
 	 */
 	public function SetAlias($alias = null, $doAutoAliasIfEnabled = true)
 	{
+        $contentops = ContentOperations::get_instance();
         $config = \cms_config::get_instance();
 		if ($alias == '' && $doAutoAliasIfEnabled && $config['auto_alias_content'] == true) {
 			$alias = trim($this->mMenuText);
@@ -1003,14 +1004,42 @@ abstract class ContentBase
 			// auto generate an alias
 			$tolower = true;
 			$alias = munge_string_to_url($alias, $tolower);
-            if( (int)$alias > 0 && is_numeric($alias) ) $alias = 'p'.$alias;
+            $res = $contentops->CheckAliasValid($alias);
+            if( !$res ) {
+                $alias = 'p'.$alias;
+                $res = $contentops->CheckAliasValid($alias);
+                if( !$res ) throw new \CmsContentException(lang('invalidalias2'));
+            }
         }
 
         if( $alias ) {
 			// Make sure auto-generated new alias is not already in use on a different page, if it does, add "-2" to the alias
-			$contentops = ContentOperations::get_instance();
-			$error = $contentops->CheckAliasError($alias, $this->Id());
+
+            // make sure we start with a valid alias.
+            $res = $contentops->CheckAliasValid($alias);
+            if( !$res ) throw new \CmsContentException(lang('invalidalias2'));
+
+            // now auto-increment the alias.
+            $prefix = $alias;
+            $num = 1;
+            if( preg_match('/(.*)-([0-9]*)$/',$alias,$matches) ) {
+                $prefix = $matches[1];
+                $num = (int) $matches[2];
+            }
+            $test = $alias;
+            do {
+                if( !$contentops->CheckAliasUsed($test,$this->Id()) ) {
+                    $alias = $test;
+                    break;
+                }
+                $num++;
+                $test = $prefix.'-'.$num;
+            } while( $num < 100 );
+            if( $num >= 100 ) throw new \CmsContentException(lang('aliasalreadyused'));
+
+            /*
 			if( $error !== FALSE ) {
+                // check for duplicates.
                 $alias = munge_string_to_url($alias);
                 $error = $contentops->CheckAliasError($alias, $this->Id());
                 if( $error !== FALSE ) {
@@ -1026,6 +1055,7 @@ abstract class ContentBase
                     $alias = $test;
                 }
             }
+            */
 		}
 
 		$this->mAlias = $alias;

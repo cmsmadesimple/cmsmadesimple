@@ -879,29 +879,56 @@ class ContentOperations
 	}
 
 
-	/**
-	 * Checks to see if a content alias is valid and not in use.
-	 *
-	 * @param string $alias The content alias to check
-	 * @param string $content_id The id of the current page, for used alias checks on existing pages
-	 * @return string The error, if any.  If there is no error, returns FALSE.
-	 */
-	function CheckAliasError($alias, $content_id = -1)
-	{
-        if( ((int)$alias > 0 || (float)$alias > 0.00001) && is_numeric($alias) ) return lang('invalidalias2');
-		$tmp = munge_string_to_url($alias,TRUE);
-		if( $tmp != mb_strtolower($alias) ) return lang('invalidalias2');
+    /**
+     * Check if a content alias is used
+     *
+     * @param string $alias The alias to check
+     * @param int $content_id The id of hte current page, if any
+     * @return bool
+     * @since 2.2.2
+     */
+    public function CheckAliasUsed($alias,$content_id = -1)
+    {
+        $alias = trim($alias);
+        $content_id = (int) $content_id;
 
-        $params = array($alias);
+        $params = [ $alias ];
         $query = "SELECT content_id FROM ".CMS_DB_PREFIX."content WHERE content_alias = ?";
-        if ($content_id > -1) {
+        if ($content_id > 0) {
             $query .= " AND content_id != ?";
             $params[] = $content_id;
         }
         $db = CmsApp::get_instance()->GetDb();
-        $row = $db->GetRow($query, $params);
-        if ($row) return lang('aliasalreadyused');
+        $out = $db->GetOne($query, $params);
+        if( $out ) return TRUE;
+    }
 
+    /**
+     * Check if a potential alias is valid.
+     *
+     * @param string $alias The alias to check
+     * @return bool
+     * @since 2.2.2
+     */
+    public function CheckAliasValid($alias)
+    {
+        if( ((int)$alias > 0 || (float)$alias > 0.00001) && is_numeric($alias) ) return FALSE;
+		$tmp = munge_string_to_url($alias,TRUE);
+		if( $tmp != mb_strtolower($alias) ) return FALSE;
+        return TRUE;
+    }
+
+	/**
+	 * Checks to see if a content alias is valid and not in use.
+	 *
+	 * @param string $alias The content alias to check
+	 * @param int $content_id The id of the current page, for used alias checks on existing pages
+	 * @return string The error, if any.  If there is no error, returns FALSE.
+	 */
+	function CheckAliasError($alias, $content_id = -1)
+	{
+        if( !$this->CheckAliasValid($alias) ) return lang('invalidalias2');
+        if ($this->CheckAliasUsed($alias,$content_id)) return lang('aliasalreadyused');
         return FALSE;
 	}
 
