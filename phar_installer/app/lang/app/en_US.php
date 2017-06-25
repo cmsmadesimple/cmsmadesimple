@@ -98,6 +98,7 @@ $lang['error_nodbuser'] = 'Please enter a valid username for authenticating to t
 $lang['error_nodestdir'] = 'Destination directory not set';
 $lang['error_nositename'] = 'Sitename is a required parameter. Please enter a suitable name for your website.';
 $lang['error_notimezone'] = 'Please enter a valid timezone for this server';
+$lang['error_overwrite'] = 'Permissions problem: cannot overwrite %s';
 $lang['error_sendingmail'] = 'Error sending mail';
 $lang['error_tzlist'] = 'A problem occurred retrieving the timezone identifiers list';
 $lang['errorlevel_estrict'] = 'Checking for E_STRICT';
