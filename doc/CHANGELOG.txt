@@ -33,6 +33,8 @@ MicroTiny v2.2
 News v2.51.2
  - Fixes so that all cancel buttons work properly on new news articles.
 
+Navigator v1.0.7
+ - Adds a silly __get() method to the NavigatorNode class squash some notifications in the error logs.
 
 Version 2.2.1 - Hearts Desire
 ----------------------------------
