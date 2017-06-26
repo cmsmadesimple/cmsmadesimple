@@ -711,7 +711,8 @@ function get_recursive_file_list ( $path , $excludes, $maxdepth = -1 , $mode = "
 function recursive_delete( $dirname )
 {
     // all subdirectories and contents:
-    if(is_dir($dirname))$dir_handle=opendir($dirname);
+    if( !is_dir($dirname) ) return true;
+    $dir_handle=opendir($dirname);
     while($file=readdir($dir_handle)) {
         if($file!="." && $file!="..") {
             if(!is_dir($dirname."/".$file)) {

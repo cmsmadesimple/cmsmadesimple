@@ -18,6 +18,7 @@ Core - General
  - Fix alias generation in the ContentBase class to check if the input page title is numeric... If it is, prepend a character to it to ensure that integer casting will return 0.
  - Fix listtags to show tags using smarty_nocache_  function name prefix.
  - Improvements to the {form_start} plugin.
+ - Fix silly, old issue in recursive_delete function.
 
 AdminSearch v1.0.3
  - Now search the metadata field of content pages.
