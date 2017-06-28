@@ -48,12 +48,16 @@ try {
     $module_version  = get_parameter_value($params,'version');
     $module_filename  = get_parameter_value($params,'filename');
     $module_size = get_parameter_value($params,'size');
-    if( $module_name == '' || $module_version == '' || $module_filename == '' || $module_size < 100 ) {
-        throw new CmsInvalidDataException( $this->Lang('error_missingparams') );
+    if( !isset($params['doinstall']) ) {
+        if( $module_name == '' || $module_version == '' || $module_filename == '' || $module_size < 100 ) {
+            throw new CmsInvalidDataException( $this->Lang('error_missingparams') );
+        }
     }
 
     if( isset($params['submit']) ) {
+        // phase one... organize and download
         set_time_limit(9999);
+        echo 'DEBUG: downloading...<br/>';
         if( isset($params['modlist']) && $params['modlist'] != '' ) {
             $modlist = unserialize(base64_decode($params['modlist']));
             if( !is_array($modlist) || count($modlist) == 0 ) throw new CmsInvalidDataException( $this->Lang('error_missingparams') );
@@ -68,40 +72,56 @@ try {
 
             // expand all of the xml files.
             $ops = cmsms()->GetModuleOperations();
-            foreach( $modlist as $key => $rec ) {
+            foreach( $modlist as $key => &$rec ) {
                 if( $rec['action'] != 'i' && $rec['action'] != 'u' ) continue;
                 $xml_filename = modmgr_utils::get_module_xml($rec['filename'],$rec['size'],(isset($rec['md5sum']))?$rec['md5sum']:'');
+                $rec['tmpfile'] = $xml_filename;
                 $res = $ops->ExpandXMLPackage( $xml_filename, 1 );
-                //$ops->QueueForInstall($key);
             }
 
-            // instal, upgrade the modules that need to be installed or upgraded.
-            foreach( $modlist as $name => $rec ) {
-                switch( $rec['action'] ) {
-                case 'i': // install
-                    $res = $ops->InstallModule($name);
-                    break;
-                case 'u': // upgrade
-                    $res = $ops->UpgradeModule($name,$rec['version']);
-                    break;
-                case 'a': // activate
-                    $res = $ops->ActivateModule($name);
-                    $res = [ $res ];
-                    break;
-                }
-
-                if( !is_array($res) || !$res[0] ) {
-                    audit('',$this->GetName(),' Problem installing, upgrading or activating '.$name);
-                    debug_buffer('ERROR: problem installing/upgrading/activating '.$name);
-                    debug_buffer($rec,'action record');
-                    debug_buffer($res,'error info');
-                    throw new CmsException( (isset($res[1])) ? $res[1] : 'Error processing module '.$name);
-                }
-            }
-
-            // done, rest will be done when the module is loaded.
-            $this->RedirectToAdminTab();
+            // now put this data into the session and redirect for the install part
+            $key = '_'.md5(__FILE__.time());
+            $_SESSION[$key] = $modlist;
+            $this->Redirect($id,'installmodule',$returnid,['doinstall'=>$key]);
         }
+    }
+
+    if( isset($params['doinstall']) ) {
+        $key = trim($params['doinstall']);
+        if( !isset($_SESSION[$key]) ) throw new \LogicException('No doinstall data found in the session');
+
+        set_time_limit(999);
+        $modlist = $_SESSION[$key];
+        if( !is_array($modlist) || !count($modlist) ) throw new \LogicException('Invalid modlist data found in session');
+        unset($_SESSION[$key]);
+
+        // install/upgrade the modules that need to be installed or upgraded.
+        $ops = cmsms()->GetModuleOperations();
+        foreach( $modlist as $name => $rec ) {
+            switch( $rec['action'] ) {
+            case 'i': // install
+                $res = $ops->InstallModule($name);
+                break;
+            case 'u': // upgrade
+                $res = $ops->UpgradeModule($name,$rec['version']);
+                break;
+            case 'a': // activate
+                $res = $ops->ActivateModule($name);
+                $res = [ $res ];
+                break;
+            }
+
+            if( !is_array($res) || !$res[0] ) {
+                audit('',$this->GetName(),' Problem installing, upgrading or activating '.$name);
+                debug_buffer('ERROR: problem installing/upgrading/activating '.$name);
+                debug_buffer($rec,'action record');
+                debug_buffer($res,'error info');
+                throw new CmsException( (isset($res[1])) ? $res[1] : 'Error processing module '.$name);
+            }
+        }
+
+        // done, rest will be done when the module is loaded.
+        $this->RedirectToAdminTab();
     }
 
     // recursive function to resolve dependencies given a module name and a module version

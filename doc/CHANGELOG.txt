@@ -36,6 +36,9 @@ News v2.51.2
 Navigator v1.0.7
  - Adds a silly __get() method to the NavigatorNode class squash some notifications in the error logs.
 
+ModuleManager v2.1.1
+ - Now handlle remote module installs upgrades, and activates via a 2 request process to allow new module versions to be read into memory.
+
 Version 2.2.1 - Hearts Desire
 ----------------------------------
 Core - General
