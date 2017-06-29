@@ -19,6 +19,7 @@ Core - General
  - Fix listtags to show tags using smarty_nocache_  function name prefix.
  - Improvements to the {form_start} plugin.
  - Fix silly, old issue in recursive_delete function.
+ - Clean up more parameters from the content tag before passing to module action.
 
 AdminSearch v1.0.3
  - Now search the metadata field of content pages.

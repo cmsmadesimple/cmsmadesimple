@@ -253,9 +253,28 @@ final class CMS_Content_Block
                     }
 
                     @ob_start();
-                    $parms = $params;
-                    unset($parms['block'],$parms['label'],$parms['wysiwyg'],$parms['oneline'],$parms['default'],$parms['size']);
-                    unset($parms['tab'],$parms['required'],$parms['priority'],$parms['placeholder'],$parms['assign'],$parms['adminonly']);
+                    $parms = [];
+                    foreach( $params as $key => $value ) {
+                        switch( $key ) {
+                        case 'block':
+                        case 'label':
+                        case 'wysiwyg':
+                        case 'oneline':
+                        case 'default':
+                        case 'size':
+                        case 'cssname':
+                        case 'tab':
+                        case 'required':
+                        case 'priority':
+                        case 'placeholder':
+                        case 'assign':
+                        case 'adminonly':
+                            break;
+                        default:
+                            if( startswith($key,'data-') ) break;
+                            $parms[$key] = $val;
+                        }
+                    }
                     $parms = array_merge($parms, $modops->GetModuleParameters($id));
                     $returnid = $contentobj->Id();
                     if (isset($parms['returnid'])) $returnid = $parms['returnid'];
