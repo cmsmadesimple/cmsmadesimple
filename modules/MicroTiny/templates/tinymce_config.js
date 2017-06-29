@@ -55,11 +55,11 @@ tinymce.init({
 {/if}
 {if $isfrontend}
     toolbar: 'undo | bold italic underline | alignleft aligncenter alignright alignjustify indent outdent | bullist numlist | link mailto{if $mt_profile.allowimages} | image{/if}',
-    plugins: ['tabfocus hr autolink paste link mailto anchor wordcount {if $mt_profile.allowimages} media image{/if} {if $mt_profile.allowtables}table{/if}'],
+    plugins: ['tabfocus hr autolink paste link mailto anchor wordcount lists {if $mt_profile.allowimages} media image{/if} {if $mt_profile.allowtables}table{/if}'],
 {else}
     image_advtab: true,
     toolbar: 'undo redo | cut copy paste | styleselect | bold italic underline | alignleft aligncenter alignright alignjustify indent outdent | bullist numlist | anchor link mailto unlink cmsms_linker{if $mt_profile.allowimages} | image {/if}',
-    plugins: ['tabfocus hr paste autolink link mailto cmsms_linker charmap anchor searchreplace wordcount code fullscreen insertdatetime {if $mt_profile.allowtables}table{/if} {if $mt_profile.allowimages}media image cmsms_filepicker {/if}'],
+    plugins: ['tabfocus hr paste autolink link lists importcss mailto cmsms_linker charmap anchor searchreplace wordcount code fullscreen insertdatetime {if $mt_profile.allowtables}table{/if} {if $mt_profile.allowimages}media image cmsms_filepicker {/if}'],
 {/if}
     // callback functions
     urlconverter_callback: function(url, elm, onsave, name) {
