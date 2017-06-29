@@ -40,6 +40,9 @@ Navigator v1.0.7
 ModuleManager v2.1.1
  - Now handlle remote module installs upgrades, and activates via a 2 request process to allow new module versions to be read into memory.
 
+Installation Assistant v1.3.2
+ - Correction to assets warning
+
 Version 2.2.1 - Hearts Desire
 ----------------------------------
 Core - General

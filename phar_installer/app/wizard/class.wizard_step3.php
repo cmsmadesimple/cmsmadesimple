@@ -71,7 +71,7 @@ class wizard_step3 extends \cms_autoinstaller\wizard_step
             $obj->fail_key = 'fail_config_writable';
             $tests[] = $obj;
 
-            if( $action == 'upgrade' ) {
+            if( $action == 'upgrade' && version_compare($version_info['version'],'2.2') < 0 ) {
                 $dir = $app->get_destdir().'/assets';
                 if( is_dir($dir) ) {
                     $obj = new _tests_\boolean_test('assets_dir_exists',FALSE);
