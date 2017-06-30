@@ -813,10 +813,11 @@ final class ModuleOperations
         if( !isset($result) || $result === FALSE ) {
             $lazyload_fe    = (method_exists($module_obj,'LazyLoadFrontend') && $module_obj->LazyLoadFrontend())?1:0;
             $lazyload_admin = (method_exists($module_obj,'LazyLoadAdmin') && $module_obj->LazyLoadAdmin())?1:0;
+            $admin_only = ($module_obj->IsAdminOnly())?1:0;
 
-            $query = 'UPDATE '.CMS_DB_PREFIX.'modules SET version = ?, active = 1, allow_fe_lazyload = ?, allow_admin_lazyload = ?
-                    WHERE module_name = ?';
-            $dbr = $db->Execute($query,array($to_version,$lazyload_fe,$lazyload_admin,$module_obj->GetName()));
+            $query = 'UPDATE '.CMS_DB_PREFIX.'modules SET version = ?, active = 1, allow_fe_lazyload = ?, allow_admin_lazyload = ?, admin_only = ?
+                      WHERE module_name = ?';
+            $dbr = $db->Execute($query,array($to_version,$lazyload_fe,$lazyload_admin,$admin_only,$module_obj->GetName()));
 
             // upgrade dependencies
             $query = 'DELETE FROM '.CMS_DB_PREFIX.'module_deps WHERE child_module = ?';
@@ -825,7 +826,7 @@ final class ModuleOperations
             $deps = $module_obj->GetDependencies();
             if( is_array($deps) && count($deps) ) {
                 $query = 'INSERT INTO '.CMS_DB_PREFIX.'module_deps (parent_module,child_module,minimum_version,create_date,modified_date)
-                       VALUES (?,?,?,NOW(),NOW())';
+                          VALUES (?,?,?,NOW(),NOW())';
                 foreach( $deps as $depname => $depversion ) {
                     if( !$depname || !$depversion ) continue;
                     $dbr = $db->Execute($query,array($depname,$module_obj->GetName(),$depversion));
