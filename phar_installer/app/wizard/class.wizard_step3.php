@@ -76,7 +76,8 @@ class wizard_step3 extends \cms_autoinstaller\wizard_step
                 if( is_dir($dir) ) {
                     $obj = new _tests_\boolean_test('assets_dir_exists',FALSE);
                     $obj->fail_key = 'fail_assets_dir';
-                    $obj->fail_msg = 'fail_assets_msg';
+                    $obj->warn_key = 'fail_assets_dir';
+                    $obj->required = 0;
                     $tests[] = $obj;
                 }
             }
