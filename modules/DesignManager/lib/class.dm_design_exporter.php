@@ -435,7 +435,6 @@ EOT;
     {
         $config = \cms_config::get_instance();
         if( !startswith($key,'__') || !endswith($key,'__') ) return; // invalid
-        debug_display('output file '.$key.' value is '.$value.' lvl is '.$lvl);
         $p = strpos($key,',,');
         $nkey = substr($key,0,$p);
         $nkey = substr($nkey,2);

@@ -26,6 +26,7 @@ AdminSearch v1.0.3
 
 DesignManager v1.1.3
  - Set title attribute tags for edit/create template, stylesheet, design.
+ - Remove debug statements.
 
 MicroTiny v2.2
  - Upgrade tinymce to v4.6.x.
