@@ -88,6 +88,7 @@ function search_AddWords(&$obj, $module = 'Search', $id = -1, $attr = '', $conte
 
     if ($content != "") {
         //Clean up the content
+	$content = html_entity_decode($content);
         $stemmed_words = $obj->StemPhrase($content);
         $tmp = array_count_values($stemmed_words);
 	if( !is_array($tmp) || !count($tmp) ) return;
