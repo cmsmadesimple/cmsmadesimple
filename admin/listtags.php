@@ -51,6 +51,7 @@ $dirs[] = $config['admin_path'].'/plugins';
 $config = cmsms()->GetConfig();
 
 $find_file = function($filename) use ($dirs) {
+    $filename = basename($filename); // no sneaky paths
     foreach( $dirs as $dir ) {
         $fn = "$dir/$filename";
         if( is_file($fn) ) return $fn;

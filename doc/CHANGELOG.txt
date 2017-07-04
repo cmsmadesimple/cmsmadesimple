@@ -20,6 +20,7 @@ Core - General
  - Improvements to the {form_start} plugin.
  - Fix silly, old issue in recursive_delete function.
  - Clean up more parameters from the content tag before passing to module action.
+ - Fix local file inclusion vulnerability in listtags.
 
 AdminSearch v1.0.3
  - Now search the metadata field of content pages.
