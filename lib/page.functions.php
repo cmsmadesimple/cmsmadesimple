@@ -75,6 +75,9 @@ function get_username($check = true)
  * Checks to see if the user is logged in and the request has the proper key.  If not, redirects the browser
  * to the admin login.
  *
+ * Note: Because this method validates that the secret key is in the URL and matches the one that is in the session
+ * this method should only be called from admin actions.
+ *
  * @since 0.1
  * @param string $no_redirect If true, then don't redirect if not logged in
  * @return boolean
