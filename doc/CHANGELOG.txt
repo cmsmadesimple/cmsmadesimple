@@ -21,6 +21,7 @@ Core - General
  - Fix silly, old issue in recursive_delete function.
  - Clean up more parameters from the content tag before passing to module action.
  - Fix local file inclusion vulnerability in listtags.
+ - now call get_userid() in debug_to_log instead of check_login()
 
 AdminSearch v1.0.3
  - Now search the metadata field of content pages.

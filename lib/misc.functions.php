@@ -408,7 +408,7 @@ function debug_output($var, $title="")
 function debug_to_log($var, $title='',$filename = '')
 {
     $config = \cms_config::get_instance();
-    if( $config['debug_to_log'] || (function_exists('check_login') && check_login(TRUE)) ) {
+    if( $config['debug_to_log'] || (function_exists('get_userid') && get_userid(FALSE)) ) {
         if( $filename == '' ) {
             $filename = TMP_CACHE_LOCATION . '/debug.log';
             $x = (is_file($filename)) ? @filemtime($filename) : time();
