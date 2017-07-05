@@ -24,6 +24,7 @@ Core - General
 
 AdminSearch v1.0.3
  - Now search the metadata field of content pages.
+ - Fixes for single quotes in search results.
 
 DesignManager v1.1.3
  - Set title attribute tags for edit/create template, stylesheet, design.
