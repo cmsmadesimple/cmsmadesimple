@@ -32,7 +32,8 @@ function status_msg($msg)
 }
 
 function begin_section($id,$txt,$desc = '')
-{
+{	
+   $txt = addslashes($txt);
    $desc = addslashes($desc);
   echo "<script type=\"text/javascript\">parent.begin_section('{$id}','{$txt}','{$desc}')</script>";
 }
