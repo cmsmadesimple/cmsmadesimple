@@ -47,7 +47,7 @@ final class News_AdminSearch_slave extends AdminSearch_slave
 
     // build the query.
     $query = 'SELECT '.implode(',',$fields).' FROM '.CMS_DB_PREFIX.'module_news N';
-    if( count($joins) ) $query .= ' ' . implode(' ',$joines);
+    if( count($joins) ) $query .= ' ' . implode(' ',$joins);
     if( count($where) ) $query .= ' WHERE '.implode(' OR ',$where);
     $query .= ' ORDER BY N.modified_date DESC';
 
