@@ -25,7 +25,7 @@ final class AdminSearch_content_slave extends AdminSearch_slave
 
         $content_manager = cms_utils::get_module('CMSContentManager');
         $db = cmsms()->GetDb();
-        $query = 'SELECT DISTINCT C.content_id FROM cms_content C LEFT JOIN cms_content_props P ON C.content_id = P.content_id WHERE P.content LIKE ? OR C.metadata LIKE ?';
+        $query = 'SELECT DISTINCT C.content_id, P.content FROM '.CMS_DB_PREFIX.'content C LEFT JOIN '.CMS_DB_PREFIX.'content_props P ON C.content_id = P.content_id WHERE P.content LIKE ? OR C.metadata LIKE ?';
         //$query = 'SELECT DISTINCT content_id,prop_name,content FROM '.CMS_DB_PREFIX.'content_props WHERE content LIKE ?';
         $txt = '%'.$this->get_text().'%';
         $dbr = $db->GetArray($query, [ $txt, $txt ] );

@@ -27,25 +27,25 @@ function add_result(listid,content,title,url,text) {
     $('#searchresults_cont').show();
     var html = $('<li/>');
     if( url.length == 0 ) {
-	console.debug('url is empty');
-	html.html(content);
+  console.debug('url is empty');
+  html.html(content);
     }
     else {
-	var _a = $('<a/>').attr('href',url).attr('target','_blacnk').attr('title',title).text(content);
-	html.append(_a);
-	if( text.length > 0 ) html.append('<p>'+text+'</p>');
+  var _a = $('<a/>').attr('href',url).attr('target','_blank').attr('title',title).text(content);
+  html.append(_a);
+  if( text.length > 0 ) html.append('<p>'+text+'</p>');
     }
     $('ul#'+listid).append(html);
     var c = $('ul#'+listid).children().length;
     $('ul#'+listid).closest('li.section').find('span.section_count').html(c);
 
     $('#searchresults').find('a').each(function(){
-	var t = $(this).data('events');
-	if( t == undefined || t.length == 0 ) {
-	    $(this).bind('click',function(e){
-		return confirm(clickthru_msg);
-	    });
-	}
+  var t = $(this).data('events');
+  if( t == undefined || t.length == 0 ) {
+      $(this).bind('click',function(e){
+    return confirm(clickthru_msg);
+      });
+  }
     });
 }
 function end_section() {
