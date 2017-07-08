@@ -98,7 +98,10 @@ while( $trycount < 2 ) {
         }
 
         if( $contentobj->Secure() && !$_app->is_https_request() ) {
-            redirect($contentobj->GetURL()); // if this page is marked to be secure, make sure we redirect to the secure page
+	    $url = $contentobj->GetURL();
+	    if( startswith($url,'http://') ) str_replace('http://','https://',$url);
+	    if( startswith($url,'//') ) $url = 'https:'.$url;
+            redirect($url); // if this page is marked to be secure, make sure we redirect to the secure page
         }
 
         if( !$contentobj->IsPermitted() ) throw new CmsError403Exception('Permission denied');
