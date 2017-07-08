@@ -20,13 +20,16 @@ Core - General
  - Improvements to the {form_start} plugin.
  - Fix silly, old issue in recursive_delete function.
  - Clean up more parameters from the content tag before passing to module action.
- - Fix long existing bug in the ModuleOperations::_upgrade_module() method.
+ - Fix local file inclusion vulnerability in listtags.
+ - now call get_userid() in debug_to_log instead of check_login()
 
 AdminSearch v1.0.3
  - Now search the metadata field of content pages.
+ - Fixes for single quotes in search results.
 
 DesignManager v1.1.3
  - Set title attribute tags for edit/create template, stylesheet, design.
+ - Remove debug statements.
 
 MicroTiny v2.2
  - Upgrade tinymce to v4.6.x.
@@ -43,4 +46,6 @@ ModuleManager v2.1.1
 
 Installation Assistant v1.3.2
  - Correction to assets warning
- - Fix missing "Manage Users" permission.
+
+Search v1.51.2
+ - Now do an html entity decode on all content added to AddWords.
