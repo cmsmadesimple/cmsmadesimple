@@ -231,17 +231,6 @@ $(document).ready(function(){
 				</select>
 		</div>
 		<div class="pageoverflow">
-			<p class="pagetext"><label for="usewysiwyg">{lang('enablewysiwyg')}:</label> {cms_help key2='settings_enablewysiwyg' title=lang('enablewysiwyg')}</p>
-			<p class="pageinput">
-				<select id="enablewysiwyg" name="use_wysiwyg">
-					{cms_yesno selected=$use_wysiwyg}
-				</select>
-		</div>
-		<div class="pageoverflow">
-			<p class="pagetext">{lang('sitedownmessage')}: {cms_help key2='settings_sitedownmessage' title=lang('sitedownmessage')}</p>
-			<p class="pageinput">{$textarea_sitedownmessage}</p>
-		</div>
-		<div class="pageoverflow">
 			<p class="pagetext">{lang('sitedownexcludeadmins')}: {cms_help key2='settings_sitedownexcludeadmins' title=lang('sitedownexcludeadmins')}</p>
 			<p class="pageinput">
 				<select id="sitedownexcludeadmins" name="sitedownexcludeadmins">

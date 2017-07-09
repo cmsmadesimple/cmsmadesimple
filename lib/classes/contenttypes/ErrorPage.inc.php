@@ -43,7 +43,8 @@ class ErrorPage extends Content
         global $CMS_ADMIN_PAGE;
         if( isset($CMS_ADMIN_PAGE) ) {
             $this->error_types = array('404' => lang('404description'),
-                                       '403'=>lang('403description') );
+                                       '403' => lang('403description'),
+                                       '503' => lang('503description') );
         }
         $this->doAliasCheck = false;
         $this->doAutoAliasIfEnabled = false;

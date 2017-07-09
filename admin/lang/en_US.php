@@ -3,6 +3,7 @@
 ## 4
 $lang['403description'] = 'Page Forbidden';
 $lang['404description'] = "Page Not Found";
+$lang['503description'] = "Site down for Maintenance / Temporarily Unavailable";
 
 ## A
 $lang['aa_main_tab__'] = "Main";

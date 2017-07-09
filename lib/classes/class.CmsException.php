@@ -221,6 +221,15 @@ class CmsError404Exception extends CmsException {}
 class CmsError403Exception extends CmsException {}
 
 /**
+ * A special exception indicating that the install is temporarily unavailable (down for maintenance)
+ *
+ * @package CMS
+ * @author Robert Campbell (calguy1000@cmsmadesimple.org)
+ * @since 1.12
+ */
+class CmsError503Exception extends CmsException {}
+
+/**
  * A special exception indicating an error with a content object
  *
  * @package CMS

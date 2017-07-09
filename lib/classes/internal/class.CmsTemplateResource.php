@@ -57,17 +57,6 @@ class CmsTemplateResource extends CMS_Fixed_Resource_Custom
 
 	protected function fetch($name,&$source,&$mtime)
 	{
-		if( is_sitedown() && CmsApp::get_instance()->is_frontend_request() ) {
-			$source = '';
-			$mtime = time();
-			if( $this->_section == 'body' ) {
-				header('HTTP/1.0 503 Service Unavailable');
-				header('Status: 503 Service Unavailable');
-				$source = get_site_preference('sitedownmessage');
-			}
-			return;
-		}
-
 		if( $name == 'notemplate' ) {
 			$source = '{content}';
 			$mtime = time(); // never cache...

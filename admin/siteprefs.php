@@ -100,7 +100,6 @@ $checkversion = 1;
 $defaultdateformat = "";
 $enablesitedownmessage = "0";
 $lock_timeout = 60;
-$use_wysiwyg = 1;
 $sitedownmessage = "<p>Site is currently down.  Check back later.</p>";
 $sitedownmessagetemplate = "-1";
 $metadata = '';
@@ -155,8 +154,6 @@ $global_umask = cms_siteprefs::get('global_umask',$global_umask);
 $frontendlang = cms_siteprefs::get('frontendlang',$frontendlang);
 $frontendwysiwyg = cms_siteprefs::get('frontendwysiwyg',$frontendwysiwyg);
 $enablesitedownmessage = cms_siteprefs::get('enablesitedownmessage',$enablesitedownmessage);
-$use_wysiwyg = cms_siteprefs::get('sitedown_use_wysiwyg',$use_wysiwyg);
-$sitedownmessage = cms_siteprefs::get('sitedownmessage',$sitedownmessage);
 $xmlmodulerepository = cms_siteprefs::get('xmlmodulerepository',$xmlmodulerepository);
 $checkversion = cms_siteprefs::get('checkversion',$checkversion);
 $defaultdateformat = cms_siteprefs::get('defaultdateformat',$defaultdateformat);
@@ -322,7 +319,6 @@ if (isset($_POST["editsiteprefs"])) {
             $prevsitedown = $enablesitedownmessage;
             if (isset($_POST["enablesitedownmessage"])) $enablesitedownmessage=$_POST['enablesitedownmessage'];
             if (isset($_POST["sitedownmessage"])) $sitedownmessage = $_POST["sitedownmessage"];
-            if (isset($_POST["use_wysiwyg"])) $use_wysiwyg = $_POST["use_wysiwyg"];
             if( !$prevsitedown && $enablesitedownmessage ) {
                 audit('','Global Settings','Sitedown enabled');
             }
@@ -332,8 +328,6 @@ if (isset($_POST["editsiteprefs"])) {
             $tmp = trim(strip_tags($sitedownmessage));
             if( !$tmp ) $error .= lang('error_sitedownmessage');
             if( !$error ) cms_siteprefs::set('enablesitedownmessage', $enablesitedownmessage);
-            cms_siteprefs::set('sitedown_use_wysiwyg', $use_wysiwyg);
-            cms_siteprefs::set('sitedownmessage', $sitedownmessage);
             cms_siteprefs::set('sitedownexcludes',$sitedownexcludes);
             cms_siteprefs::set('sitedownexcludeadmins',$sitedownexcludeadmins);
             break;
@@ -513,8 +507,6 @@ $smarty->assign('frontendwysiwyg',$frontendwysiwyg);
 $smarty->assign('backendwysiwyg',$backendwysiwyg);
 $smarty->assign('metadata',$metadata);
 $smarty->assign('enablesitedownmessage',$enablesitedownmessage);
-$smarty->assign('use_wysiwyg',$use_wysiwyg);
-$smarty->assign('textarea_sitedownmessage',create_textarea($use_wysiwyg,$sitedownmessage,'sitedownmessage','pagesmalltextarea'));
 $smarty->assign('checkversion',$checkversion);
 $smarty->assign('defaultdateformat',$defaultdateformat);
 $smarty->assign('lock_timeout',$lock_timeout);

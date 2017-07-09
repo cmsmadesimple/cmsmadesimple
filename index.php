@@ -33,11 +33,6 @@ clearstatcache();
 if (!isset($_SERVER['REQUEST_URI']) && isset($_SERVER['QUERY_STRING'])) $_SERVER['REQUEST_URI'] = $_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING'];
 require_once(__DIR__.'/lib/include.php');
 
-if (file_exists(TMP_CACHE_LOCATION.'/SITEDOWN')) {
-    echo "<html><head><title>Maintenance</title></head><body><p>Site down for maintenance.</p></body></html>";
-    exit;
-}
-
 if (!is_writable(TMP_TEMPLATES_C_LOCATION) || !is_writable(TMP_CACHE_LOCATION)) {
     echo '<html><title>Error</title></head><body>';
     echo '<p>The following directories must be writable by the web server:<br />';
@@ -66,6 +61,9 @@ $_tpl_cache = new CmsTemplateCache();
 while( $trycount < 2 ) {
     $trycount++;
     try {
+        if( $trycount < 2 && is_file(TMP_CACHE_LOCATION.'/SITEDOWN') ) throw new \CmsError503Exception('Site down for maintenance');
+        if( $trycount < 2 && is_sitedown() ) throw new \CmsError503Exception('Site down for maintenance');
+
         // preview
         if( $page == -100) {
             setup_session(false);
@@ -233,6 +231,44 @@ while( $trycount < 2 ) {
 <title>403 Forbidden</title>
 </head><body>
 <h1>Forbidden</h1>'.$msg.'
+</body></html>';
+            exit();
+        }
+    }
+
+    catch (CmsError503Exception $e) { // <- Catch CMSMS 503 error
+        $page = 'error503';
+        $showtemplate = true;
+        unset($_REQUEST['mact']);
+        unset($_REQUEST['module']);
+        unset($_REQUEST['action']);
+        $handlers = ob_list_handlers();
+        for ($cnt = 0; $cnt < sizeof($handlers); $cnt++) { ob_end_clean(); }
+
+        // specified page not found, load the 404 error page.
+        $contentobj = $contentops->LoadContentFromAlias('error503',true);
+        $msg = $e->GetMessage();
+        if( !$msg ) $msg = '<p>We are sorry, but you do not have the appropriate permission to view this item.</p>';
+        if( is_object($contentobj) ) {
+            // we have a 503 error page.
+            header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
+            header("Cache-Control: no-store, no-cache, must-revalidate");
+            header("Cache-Control: post-check=0, pre-check=0", false);
+            header("HTTP/1.0 503 Temporarily unavailable");
+            header("Status: 503 Temporarily unavailable");
+        }
+        else {
+            @ob_end_clean();
+            header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
+            header("Cache-Control: no-store, no-cache, must-revalidate");
+            header("Cache-Control: post-check=0, pre-check=0", false);
+            header("HTTP/1.0 503 Temporarily unavailable");
+            //header("Status: 503 Temporarily unavailable");
+            echo '<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
+<html><head>
+<title>503 Site down for maintenance./title>
+</head><body>
+<h1>Sorry, down for maintenance.  Check back shortly.</h1>'.$msg.'
 </body></html>';
             exit();
         }
