@@ -18,9 +18,7 @@
 
 function smarty_function_uploads_url($params, &$smarty)
 {
-	$config = CmsApp::get_instance()->GetConfig();
-
-    $out = $config->smart_uploads_url();
+    $out = CMS_UPLOADS_URL;
 	if( isset($params['assign']) ) {
 		$smarty->assign(trim($params['assign']),$out);
 		return;

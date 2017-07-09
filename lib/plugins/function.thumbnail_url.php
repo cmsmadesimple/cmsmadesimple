@@ -26,7 +26,7 @@ function smarty_function_thumbnail_url($params,&$template)
     $fullpath = $dir.'/'.$file;
     if( is_file($fullpath) && is_readable($fullpath) ) {
         // convert it to a url
-        $out = $config['uploads_url'].'/';
+        $out = CMS_UPLOADS_URL.'/';
         if( $add_dir ) $out .= $add_dir.'/';
         $out .= $file;
     }

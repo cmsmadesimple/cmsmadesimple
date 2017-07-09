@@ -29,7 +29,7 @@ function smarty_function_file_url($params,&$template)
     }
 
     // convert it to a url
-    $out = $config['uploads_url'].'/';
+    $out = CMS_UPLOADS_URL.'/';
     if( $add_dir ) $out .= $add_dir.'/';
     $out .= $file;
 

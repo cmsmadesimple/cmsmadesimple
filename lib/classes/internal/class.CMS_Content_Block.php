@@ -351,7 +351,7 @@ final class CMS_Content_Block
             if( $img != -1 && !empty($img) ) {
                 // create the absolute url.
                 $orig_val = $img;
-                $img = $config['uploads_url'].'/';
+                $img = CMS_UPLOADS_URL.'/';
                 if( $adddir ) $img .= $adddir.'/';
                 $img .= $orig_val;
 

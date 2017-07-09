@@ -7,6 +7,17 @@ Core - General
   - $config['ssl_uploads_url'] is now just an alias for uploads_url and is deprecated
   - $config['ssl_image_uploads_url'] is now just an alias for image_uploads_url and is deprecated
   - $config['ssl_css_url'] is no longer used.
+  - $config->smart_root_url() is no longer used, and outputs deprecated messages to log.
+  - $config->smart_uploads_url() is no longer used, and outputs deprecated messages to log.
+  - $config->smart_image_uploads_url() is no longer used, and outputs deprecated messages to log.
+  - new define in cms_config class CMS_UPLOADS_URL
+
+CMSContentManager - remember to bump version
+  - Gets rid of secure options, flag output and bulk functionaltiy
+  - modified to use CMS_ROOT_URL
+
+FileManager - remember to bump version
+  - modified to use CMS_ROOT_URL
 
 Version 2.2.2 - Hearts Content
 ----------------------------------

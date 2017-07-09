@@ -269,6 +269,15 @@ final class cms_config implements ArrayAccess
                  */
                 define('CMS_ROOT_URL',self::$_instance['root_url']);
 
+
+                /**
+                 * A cnstant containing the CMSMS uploads url.
+                 * If the uploads_url is not specified in the config file, then CMSMS will calculate one from the root url.
+                 *
+                 * @return string
+                 */
+                define('CMS_UPLOADS_URL',self::$_instance['uploads_url']);
+
                 /**
                  * A constant containing the CMSMS database table prefix to be used on all queries.
                  *
