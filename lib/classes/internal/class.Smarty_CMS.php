@@ -80,8 +80,11 @@ class Smarty_CMS extends CMSSmartyBase
             }
         }
 
+        $config = cms_config::get_instance();
+        $this->addConfigDir($config['assets_path'].'/configs');
+        $this->addPluginsDir($config['assets_path'].'/plugins');
+
         if( $_gCms->is_frontend_request()) {
-            $config = cms_config::get_instance();
             $this->addTemplateDir($config['assets_path'].'/templates');
 
             // Check if we are at install page, don't register anything if so, cause nothing below is needed.
@@ -122,8 +125,6 @@ class Smarty_CMS extends CMSSmartyBase
             $this->setConfigDir($admin_dir.'/configs');;
         }
 
-        $this->addConfigDir($config['assets_path'].'/configs');
-        $this->addPluginsDir($config['assets_path'].'/plugins');
 
         // use this for any third party plugins that somebody has added, and is in an upgrade.
         $this->addPluginsDir(cms_join_path(CMS_ROOT_PATH,'plugins'));
@@ -185,7 +186,6 @@ class Smarty_CMS extends CMSSmartyBase
                 }
             }
         }
-
         $this->autoload_filters = array('pre'=>$pre,'post'=>$post,'output'=>$output);
     }
 

@@ -1,3 +1,9 @@
+Version 2.2.3 - 
+----------------------------------
+Core - General
+  - Fixed a redirect loop problem on mixed HTTP/HTTPS sites when the secure flag was set on some pages.
+  - Fixed a problem with prefilters and postfilters not working if placed in /assets/plugins
+
 Version 2.2.2 - Hearts Content
 ----------------------------------
 Core - General
