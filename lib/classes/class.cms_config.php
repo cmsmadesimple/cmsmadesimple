@@ -119,15 +119,13 @@ final class cms_config implements ArrayAccess
         $this->_types['db_port'] = self::TYPE_INT;
         $this->_types['db_prefix'] = self::TYPE_STRING;
         $this->_types['root_url'] = self::TYPE_STRING;
-        $this->_types['ssl_url'] = self::TYPE_STRING;
+        $this->_types['pr_root_url'] = self::TYPE_STRING;
         $this->_types['root_path'] = self::TYPE_STRING;
         $this->_types['admin_dir'] = self::TYPE_STRING;
         $this->_types['uploads_path'] = self::TYPE_STRING;
         $this->_types['uploads_url'] = self::TYPE_STRING;
-        $this->_types['ssl_uploads_url'] = self::TYPE_STRING;
         $this->_types['image_uploads_path'] = self::TYPE_STRING;
         $this->_types['image_uploads_url'] = self::TYPE_STRING;
-        $this->_types['ssl_image_uploads_url'] = self::TYPE_STRING;
         $this->_types['debug'] = self::TYPE_BOOL;
         $this->_types['debug_to_log'] = self::TYPE_BOOL;
         $this->_types['timezone'] = self::TYPE_STRING;
@@ -393,8 +391,18 @@ final class cms_config implements ArrayAccess
             }
             $prefix = 'http://';
             if( CmsApp::get_instance()->is_https_request() ) $prefix = 'https://';
-            if( $this->offsetGet('smart_urls') ) $prefix = '//';
             $str = $prefix.$_SERVER['HTTP_HOST'].$path;
+            $this->_cache[$key] = $str;
+            return $str;
+
+        case 'pr_root_url':
+            $str = $this->offsetGet('root_url');
+            if( startswith($str,'http:') ) {
+                $str = substr($str,5);
+            }
+            else if( startswith($str,'https:') ) {
+                $str = substr($str,6);
+            }
             $this->_cache[$key] = $str;
             return $str;
 

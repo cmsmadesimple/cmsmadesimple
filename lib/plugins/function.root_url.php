@@ -19,30 +19,9 @@
 function smarty_function_root_url($params, &$smarty)
 {
     $str = CMS_ROOT_URL;
-
-	if( !isset($params['autossl']) || $params['autossl'] != 0 )	{
-        $config = CmsApp::get_instance()->GetConfig();
-		$str = CMS_ROOT_URL;
-	}
-
     if( isset($params['assign']) ) {
 		$smarty->assign(trim($params['assign']),$str);
 		return;
     }
-
 	return $str;
 }
-
-function smarty_cms_about_function_root_url() {
-?>
-	<p>Author: Ted Kulp&lt;ted@cmsmadesimple.org&gt;</p>
-
-	<p>Change History:</p>
-	<ul>
-		<li>Initial Version</li>
-		<li>Added assign parameter for CMSMS 1.10</li>
-		<li>Added autossl parameter for CMSMS 1.10</li>
-    </ul>
-<?php
-}
-?>
