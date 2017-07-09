@@ -12,6 +12,7 @@ Core - General
   - $config->smart_image_uploads_url() is no longer used, and outputs deprecated messages to log.
   - new define in cms_config class CMS_UPLOADS_URL
   - Remove GUI functionality for managing UDT's (udt's will be replaced by simple_plugins)
+  - Replace OneEleven admin theme with the Marigold fork that uses fontawesome.
 
 CMSContentManager - remember to bump version
   - Gets rid of secure options, flag output and bulk functionaltiy
