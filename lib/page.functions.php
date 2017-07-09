@@ -218,7 +218,7 @@ function audit($itemid, $itemname, $action)
  */
 function get_site_preference($prefname, $defaultvalue = '')
 {
-  return cms_siteprefs::get($prefname,$defaultvalue);
+    return cms_siteprefs::get($prefname,$defaultvalue);
 }
 
 
@@ -233,7 +233,7 @@ function get_site_preference($prefname, $defaultvalue = '')
  */
 function remove_site_preference($prefname,$uselike=false)
 {
-  return cms_siteprefs::remove($prefname,$uselike);
+    return cms_siteprefs::remove($prefname,$uselike);
 }
 
 
@@ -249,7 +249,7 @@ function remove_site_preference($prefname,$uselike=false)
  */
 function set_site_preference($prefname, $value)
 {
-  return cms_siteprefs::set($prefname,$value);
+    return cms_siteprefs::set($prefname,$value);
 }
 
 
@@ -278,72 +278,28 @@ function set_site_preference($prefname, $value)
  */
 function create_textarea($enablewysiwyg, $text, $name, $classname = '', $id = '', $encoding = '', $stylesheet = '', $width = '80', $height = '15', $forcewysiwyg = '', $wantedsyntax = '', $addtext = '')
 {
-  $parms = array();
-  $parms['enablewysiwyg'] = $enablewysiwyg;
-  $parms['text'] = $text;
-  $parms['name'] = $name;
-  if( $classname ) $parms['class'] = $classname;
-  if( $id ) $parms['id'] = $id;
-  if( $encoding ) $parms['encoding'] = $encoding;
-  if( $width ) $parms['rows'] = $height;
-  if( $height ) $parms['cols'] = $width;
-  if( $forcewysiwyg ) $parms['forcemodule'] = $forcewysiwyg;
-  if( $wantedsyntax ) $parms['wantedsyntax'] = $wantedsyntax;
-  if( $addtext ) $parms['addtext'] = $addtext;
+    $parms = array();
+    $parms['enablewysiwyg'] = $enablewysiwyg;
+    $parms['text'] = $text;
+    $parms['name'] = $name;
+    if( $classname ) $parms['class'] = $classname;
+    if( $id ) $parms['id'] = $id;
+    if( $encoding ) $parms['encoding'] = $encoding;
+    if( $width ) $parms['rows'] = $height;
+    if( $height ) $parms['cols'] = $width;
+    if( $forcewysiwyg ) $parms['forcemodule'] = $forcewysiwyg;
+    if( $wantedsyntax ) $parms['wantedsyntax'] = $wantedsyntax;
+    if( $addtext ) $parms['addtext'] = $addtext;
 
-  try {
-    return CmsFormUtils::create_textarea($parms);
-  }
-  catch( CmsException $e ) {
-    // do nothing.
-    return '';
-  }
+    try {
+        return CmsFormUtils::create_textarea($parms);
+    }
+    catch( CmsException $e ) {
+        // do nothing.
+        return '';
+    }
 }
 
-
-/**
- * Creates a string containing links to all the pages.
- *
- * @deprecated
- * @internal
- * @ignore
- * @param page - the current page to display
- * @param totalrows - the amount of items being listed
- * @param limit - the amount of items to list per page
- * @return a string containing links to all the pages (ex. next 1,2 prev)
- */
-function pagination($page, $totalrows, $limit)
-{
-   $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
-   $page_string = "";
-   $from = ($page * $limit) - $limit;
-   $numofpages = (int)($totalrows / $limit);
-   if( ($totalrows % $limit) != 0 ) ++$numofpages;
-   if ($numofpages > 1) {
-     if($page != 1) {
-       $pageprev = $page-1;
-       $page_string .= '<a href="'.$_SERVER['PHP_SELF'].$urlext.'&amp;page=1">'.lang('first').'</a>&nbsp;';
-       $page_string .= "<a href=\"".$_SERVER['PHP_SELF'].$urlext."&amp;page=$pageprev\">".lang('previous')."</a>&nbsp;";
-     }
-     else {
-       $page_string .= lang('first')." ";
-       $page_string .= lang('previous')." ";
-     }
-
-     $page_string .= '&nbsp;'.lang('page')."&nbsp;$page&nbsp;".lang('of')."&nbsp;$numofpages&nbsp;";
-
-     if(($totalrows - ($limit * $page)) > 0) {
-       $pagenext = $page+1;
-       $page_string .= "<a href=\"".$_SERVER['PHP_SELF'].$urlext."&amp;page=$pagenext\">".lang('next')."</a>&nbsp;";
-       $page_string .= '<a href="'.$_SERVER['PHP_SELF'].$urlext.'&amp;page='.$numofpages.'">'.lang('last').'</a>';
-     }
-     else {
-       $page_string .= lang('next')." ";
-       $page_string .= lang('last')." ";
-     }
-   }
-   return $page_string;
- }
 
 
 /**

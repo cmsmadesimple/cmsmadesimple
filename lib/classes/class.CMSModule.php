@@ -1803,6 +1803,7 @@ abstract class CMSModule
      * @param string $name The html name of the input field
      * @param string $value The predefined value of the textbox, if any
      * @param string $addttext Any additional text that should be added into the tag when rendered
+     * @deprecated
      * @return string
      */
     function CreateInputNumber($id, $name, $value='', $addttext='')
@@ -2654,44 +2655,6 @@ abstract class CMSModule
         return cms_module_ProcessTemplateFromDatabase($this, $tpl_name, $designation, $cache, $modulename);
     }
 
-
-    /**
-     * ------------------------------------------------------------------
-     * User defined tag methods.
-     * ------------------------------------------------------------------
-     */
-
-    /**
-     * Return a list of user defined tags
-     *
-     * @final
-     * @return array
-     * @deprecated
-     */
-    final public function ListUserTags()
-    {
-        $gCms = CmsApp::get_instance();
-        $usertagops = $gCms->GetUserTagOperations();
-        return $usertagops->ListUserTags();
-    }
-
-    /**
-     * Call a specific user defined tag
-     *
-     * @final
-     * @deprecated
-     * @param string $name   Name of the user defined tag
-     * @param array  $params Parameters for the user defined tag.
-     * @return array
-     */
-    final public function CallUserTag($name, $params = array())
-    {
-        $gCms = CmsApp::get_instance();
-        $usertagops = $gCms->GetUserTagOperations();
-        return $usertagops->CallUserTag($name, $params);
-    }
-
-
     /**
      * ------------------------------------------------------------------
      * Tab Functions
@@ -2966,7 +2929,6 @@ abstract class CMSModule
         catch( Exception $e ) {
             // ignored.
         }
-        cms_mapi_remove_permission($permission_name);
     }
 
     /**

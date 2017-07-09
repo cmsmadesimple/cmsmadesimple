@@ -593,7 +593,6 @@ final class cms_config implements ArrayAccess
      */
     public function smart_root_url()
     {
-        debug_to_log('DEPRECATED FUNCTION CALLED: '.__METHOD__);
         return $this->offsetGet('root_url');
     }
 
@@ -605,7 +604,6 @@ final class cms_config implements ArrayAccess
      */
     public function smart_uploads_url()
     {
-        debug_to_log('DEPRECATED FUNCTION CALLED: '.__METHOD__);
         return $this->offsetGet('uploads_url');
     }
 
@@ -617,7 +615,6 @@ final class cms_config implements ArrayAccess
      */
     public function smart_image_uploads_url()
     {
-        debug_to_log('DEPRECATED FUNCTION CALLED: '.__METHOD__);
         return $this->offsetGet('image_uploads_url');
     }
 } // end of class

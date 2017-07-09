@@ -119,7 +119,8 @@ final class LoginOperations
 
         // now authenticate the passhash
         // requires a database query
-        if( !\CmsApp::get_instance()->is_frontend_request() && !$this->_check_passhash($private_data['uid'],$private_data['cksum']) ) return;
+        if( \CmsApp::get_instance()->is_frontend_request() ) return;
+        if( !$this->_check_passhash($private_data['uid'],$private_data['cksum']) ) return;
 
         // if we get here, the user is authenticated.
         // set the session key for all URL from the cookie if it exists.

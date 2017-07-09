@@ -71,12 +71,18 @@ class Smarty_CMS extends CMSSmartyBase
         // Load User Defined Tags
         $_gCms = CmsApp::get_instance();
         if( !$_gCms->test_state(CmsApp::STATE_INSTALL) ) {
-            $utops = UserTagOperations::get_instance();
-            $usertags = $utops->ListUserTags();
-
-            foreach( $usertags as $id => $name ) {
-                $function = $utops->CreateTagFunction($name);
-                $this->registerPlugin('function',$name,$function,false);
+            $mgr = CmsApp::get_instance()->GetSimplePluginOperations();
+            $list = $mgr->get_list();
+            if( count($list) ) {
+                foreach( $list as $plugin_name ) {
+                    try {
+                        $function = $mgr->load_plugin( $plugin_name );
+                        if( $function ) $this->registerPlugin('function',$plugin_name,$function,false);
+                    }
+                    catch( \LogicException $e ) {
+                        audit('','Core','Problem loading simple plugin '.$plugin_name);
+                    }
+                }
             }
         }
 
@@ -248,7 +254,6 @@ class Smarty_CMS extends CMSSmartyBase
             $funcs[] = 'smarty_cms_'.$type.'_'.$name;
             foreach( $funcs as $func ) {
                 if( !function_exists($func) ) continue;
-
                 $callback = $func;
                 $cachable = FALSE;
                 debug_buffer('',"End Load Smarty Plugin $name/$type");
@@ -265,8 +270,6 @@ class Smarty_CMS extends CMSSmartyBase
                 return TRUE;
             }
         }
-
-        return FALSE;
     }
 
     /**
@@ -479,7 +482,7 @@ class Smarty_CMS extends CMSSmartyBase
      *
      * @param string $plugin_name    class plugin name to load
      * @param bool   $check          check if already loaded
-     * @return string |boolean filepath of loaded file or false
+     * @return string|boolean filepath of loaded file or false
      */
     public function loadPlugin($plugin_name, $check = true)
     {
@@ -540,7 +543,7 @@ class Smarty_CMS extends CMSSmartyBase
                 }
             }
         }
-        // no plugin loaded
+
         return false;
     }
 

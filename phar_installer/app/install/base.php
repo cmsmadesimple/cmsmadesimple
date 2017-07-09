@@ -11,7 +11,6 @@ verbose_msg(ilang('install_setschemaver'));
 // site preferences
 //
 verbose_msg(ilang('install_initsiteprefs'));
-cms_siteprefs::set('sitedownmessage','<p>Site is currently down for maintenance</p>');
 cms_siteprefs::set('metadata',"<meta name=\"Generator\" content=\"CMS Made Simple - Copyright (C) 2004-" . date('Y') . ". All rights reserved.\" />\r\n<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />\r\n");
 cms_siteprefs::set('global_umask','022');
 cms_siteprefs::set('auto_clear_cache_age',60); // cache files for only 60 days by default
@@ -89,20 +88,6 @@ $admin_user->password = md5($sitemask.$adminaccount['password']);
 $admin_user->Save();
 UserOperations::get_instance()->AddMemberGroup($admin_user->id,$admin_group->id);
 cms_userprefs::set_for_user($admin_user->id,'wysiwyg','MicroTiny'); // the one, and only user preference we need.
-
-//
-// User Tags
-//
-verbose_msg(ilang('install_initsiteusertags'));
-UserTagOperations::get_instance()->SetUserTag('user_agent',
-  "//Code to show the users user agent information.
-echo \$_SERVER['HTTP_USER_AGENT'];",
-  'Code to show the user\'s user agent information');
-
-$txt = <<<EOT
-//set start to date your site was published\n\$startCopyRight='2004';\n\n// check if start year is this year\nif(date('Y') == \$startCopyRight){\n// it was, just print this year\n    echo \$startCopyRight;\n}else{\n// it wasnt, print startyear and this year delimited with a dash\n    echo \$startCopyRight.'-'. date('Y');\n}
-EOT;
-UserTagOperations::get_instance()->SetUserTag('custom_copyright',$txt,'Code to output copyright information');
 
 //
 // Events

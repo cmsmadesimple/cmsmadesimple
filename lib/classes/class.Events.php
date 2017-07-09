@@ -120,10 +120,10 @@ final class Events
             $params['_eventname'] = $eventname;
 			foreach( $results as $row ) {
 				if( isset( $row['tag_name'] ) && $row['tag_name'] != '' ) {
-					debug_buffer('calling user tag ' . $row['tag_name'] . ' from event ' . $eventname);
+					debug_buffer('calling simple plugin ' . $row['tag_name'] . ' from event ' . $eventname);
                     $gCms = CmsApp::get_instance();
-					$usertagops = $gCms->GetUserTagOperations();
-					$usertagops->CallUserTag( $row['tag_name'], $params );
+                    $mgr = $gCms->GetSimplePluginOperations();
+                    $mgr->call_plugin( $row['tag_name']);
 				}
 				else if( isset( $row['module_name'] ) && $row['module_name'] != '' ) {
 					// here's a quick check to make sure that we're not calling the module

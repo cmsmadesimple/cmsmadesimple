@@ -97,7 +97,7 @@ if( isset($CMS_ADMIN_PAGE) ) {
 
     function cms_admin_sendheaders($content_type = 'text/html',$charset = '') {
         // Language shizzle
-        if( !$charset ) $charset = get_encoding();
+        if( !$charset ) $charset = \CmsNlsOperations::get_encoding();
         header("Content-Type: $content_type; charset=$charset");
     }
 }
@@ -152,7 +152,6 @@ $obj = new \CMSMS\internal\global_cachable('module_deps',
 \CMSMS\internal\global_cache::add_cachable($obj);
 cms_siteprefs::setup();
 Events::setup();
-UserTagOperations::setup();
 ContentOperations::setup_cache();
 
 // Set the timezone

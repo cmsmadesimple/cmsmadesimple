@@ -278,8 +278,6 @@ function debug_bt_to_log()
     }
 }
 
-
-
 /**
  * A function to generate a backtrace in a readable format.
  *
@@ -537,57 +535,6 @@ function get_parameter_value($parameters, $value, $default_value = '', $session_
     if($session_key != '') $_SESSION['parameter_values'][$session_key] = $return_value;
     return $return_value;
 }
-
-
-
-/**
- * A method to remove a permission from the database.
- *
- * @internal
- * @ignore
- * @access private
- * @param string The permission name
- * @deprecated
- */
-function cms_mapi_remove_permission($permission_name)
-{
-    try {
-        $perm = CmsPermission::load($permission_name);
-        $perm->delete();
-    }
-    catch( Exception $e ) {
-    }
-}
-
-
-
-/**
- * A method to add a permission to the CMSMS permissions table.
- *
- * @internal
- * @ignore
- * @access private
- * @param unknown (ignored)
- * @param string  The permission name
- * @param string  The permission human readable text.
- * @deprecated
- */
-function cms_mapi_create_permission($cms, $permission_name, $permission_text)
-{
-    try {
-        $perm = new CmsPermission();
-        $perm->originator = 'Other';
-        $perm->name = $permission_name;
-        $perm->text = $permission_text;
-        $perm->save();
-        return true;
-    }
-    catch( Exception $e ) {
-        return false;
-    }
-}
-
-
 
 /**
  * Check the permissions of a directory recursively to make sure that

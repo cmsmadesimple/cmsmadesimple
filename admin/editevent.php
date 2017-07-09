@@ -117,9 +117,6 @@ if ($access) {
         } // switch
     } // else
 
-    // get the event description
-    $usertagops = $gCms->GetUserTagOperations();
-
     $description = '';
     $modulename = '';
     if ($module == 'Core') {
@@ -136,11 +133,14 @@ if ($access) {
     $handlers = Events::ListEventHandlers( $module, $event );
 
     // and the list of all available handlers
-    $allhandlers = array();
+    $allhandlers = null;
     // we get the list of user tags, and add them to the list
-    $usertags = $usertagops->ListUserTags();
-    foreach( $usertags as $key => $value ) {
-        $allhandlers[$value] = $value;
+    $mgr = $gCms->GetSimplePluginOperations();
+    $plugins = $mgr->get_list();
+    if( count($plugins) ) {
+        foreach($plugins as $plugin_name) {
+            $allhandlers[$plugin_name] = $plugin_name;
+        }
     }
 
     // and the list of modules, and add them

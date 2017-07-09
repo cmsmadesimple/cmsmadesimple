@@ -30,32 +30,6 @@
  */
 
 /**
- * Temporarily override the current frontend language.
- *
- * @param string $lang The language to set.  If empty, the system will be restored to the default frontend language.
- * @see CmsNlsOperations::set_language()
- * @deprecated
- */
-function cms_set_frontend_language($lang = '')
-{
-  return CmsNlsOperations::set_language($lang);
-}
-
-
-/**
- * A function to return the current language for the current request.
- *
- * @internal
- * @deprecated
- * @return string
- */
-function cms_current_language()
-{
-  return CmsNlsOperations::get_current_language();
-}
-
-
-/**
  * Retrieve a translation for a specific string in a specific realm.
  * Called with the realm first, followed by the key, this method will attempt
  * to load the specific realm data if necessary before doing translation.
@@ -108,24 +82,13 @@ function lang($key)
   return CmsLangOperations::lang($args);
 }
 
-
-/**
- * Get the encoding of the current language.
- *
- * @return string
- * @deprecated
- * @see CmsNlsOperations::get_encoding();
- */
-function get_encoding()
-{
-  return CmsNlsOperations::get_encoding();
-}
-
 /**
  * Retrieve a list of installed languages that is suitable for use in a dropdown.
  *
  * @param boolean $allow_none Optionally adds 'none' (translated to current language) to the top of the list.
  * @return associative array of lang keys and display strings.
+ * @internal
+ * @deeprecated
  */
 function get_language_list($allow_none = true)
 {
@@ -143,5 +106,3 @@ function get_language_list($allow_none = true)
 
   return $tmp;
 }
-
-?>

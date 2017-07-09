@@ -52,7 +52,7 @@ namespace \CMSMS\Async;
  * @copyright Copyright (c) 2015, Robert Campbell <calguy1000@cmsmadesimple.org>
  * @since 2.2
  * @property string $function The callback function name.
- * @property bool $is_udt Indicates that the function is a UDT name.
+ * @property bool $is_udt Indicates that the function is the name of a simple plugin.
  */
 class ExternalHandlerJob extends Job
 {
@@ -108,9 +108,8 @@ class ExternalHandlerJob extends Job
     public function execute()
     {
         if( $this->is_udt ) {
-            // execute the UDT, pass in this
-            $tmp = $this->function;
-            UserTagOperations::get_instance()->$tmp();
+            $mgr = \CmsApp::get_instance()->GetSimplePluginOperations();
+            $mgr->call_plugin( $this->function );
         }
         else {
             // call the function, pass in this.

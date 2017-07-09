@@ -106,6 +106,12 @@ final class CmsApp {
 	 */
 	private $errors = array();
 
+    /**
+     * Get the simple plugin operations class
+     * @ignore
+     */
+    private $simple_plugin_manager;
+
 	/**
 	 * @ignore
 	 */
@@ -347,13 +353,25 @@ final class CmsApp {
 	* @final
 	* @see ModuleOperations
 	* @return ModuleOperations handle to the ModuleOperations object
-    * @deprecated
 	*/
 	public function & GetModuleOperations()
 	{
 		return ModuleOperations::get_instance();
 	}
 
+
+    /**
+     * Get the simple plugin operations object.
+     *
+     * @return \CMSMS\simple_plugin_operations
+     */
+    public function GetSimplePluginOperations()
+    {
+        if( !$this->_simple_plugin_manager ) {
+            $this->_simple_plugin_manager = new \CMSMS\simple_plugin_operations;
+        }
+        return $this->_simple_plugin_manager;
+    }
 
 	/**
 	* Get a handle to the CMS UserOperations singleton object.
@@ -509,20 +527,6 @@ final class CmsApp {
 			}
             		@touch(cms_join_path($start_dir,'index.html'));
 		}
-	}
-
-
-	/**
-	 * Get handle to the Smarty parser object, meant for template parsing.
-	 *
-	 * @internal
-	 * @since 1.11.3
-	 * @return Smarty_Parser handle to the Smarty object
-         * @deprecated
-	 */
-	final public function &get_template_parser()
-	{
-		return Smarty_Parser::get_instance();
 	}
 
 	/**

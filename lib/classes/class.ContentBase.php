@@ -655,6 +655,7 @@ abstract class ContentBase
 	 * Returns the OldItemOrder.
 	 * The OldItemOrder is used to specify the item order before changes were done
 	 *
+     * @internal
 	 * @deprecated
 	 * @return int
 	 */
