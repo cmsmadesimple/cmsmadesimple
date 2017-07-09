@@ -30,14 +30,12 @@ function smarty_cms_function_cms_stylesheet($params, &$smarty)
 	$CMS_STYLESHEET = 1;
 	$name = null;
 	$design_id = -1;
-	$use_https = 0;
 	$cache_dir = $config['css_path'];
 	$stylesheet = '';
 	$combine_stylesheets = true;
 	$fnsuffix = '';
 	$trimbackground = FALSE;
 	$root_url = $config['css_url'];
-	$auto_https = 1;
 
 	#---------------------------------------------
 	# Trivial Exclusion
@@ -59,16 +57,11 @@ function smarty_cms_function_cms_stylesheet($params, &$smarty)
             $content_obj = $gCms->get_content_object();
             if( !is_object($content_obj) ) return;
             $design_id = (int) $content_obj->GetPropertyValue('design_id');
-            $use_https = (int) $content_obj->Secure();
         }
         if( !$name && $design_id < 1 ) throw new \RuntimeException('Invalid parameters, or there is no design attached to the content page');
 
         // @todo: change this stuff to just use // instead of protocol specific URL.
-        if( isset($params['auto_https']) && $params['auto_https'] == 0 ) $auto_https = 0;
-        if( isset($params['https']) ) $use_https = cms_to_bool($params['https']);
-        if( $auto_https && $gCms->is_https_request() ) $use_https = 1;
 
-        if($use_https && isset($config['ssl_url'])) $root_url = $config['ssl_css_url'];
         if( isset($params['nocombine']) ) $combine_stylesheets = !cms_to_bool($params['nocombine']);
 
         if( isset($params['stripbackground']) )	{
@@ -129,7 +122,7 @@ function smarty_cms_function_cms_stylesheet($params, &$smarty)
                 // media parameter is deprecated.
 
                 // combine all matches into one stylesheet
-                $filename = 'stylesheet_combined_'.md5($design_id.$use_https.serialize($params).serialize($all_timestamps).$fnsuffix).'.css';
+                $filename = 'stylesheet_combined_'.md5($design_id.serialize($params).serialize($all_timestamps).$fnsuffix).'.css';
                 $fn = cms_join_path($cache_dir,$filename);
 
                 if( !file_exists($fn) ) {
@@ -148,7 +141,7 @@ function smarty_cms_function_cms_stylesheet($params, &$smarty)
                 foreach($all_media as $hash=>$onemedia) {
 
                     // combine all matches into one stylesheet.
-                    $filename = 'stylesheet_combined_'.md5($design_id.$use_https.serialize($params).serialize($all_timestamps[$hash]).$fnsuffix).'.css';
+                    $filename = 'stylesheet_combined_'.md5($design_id.serialize($params).serialize($all_timestamps[$hash]).$fnsuffix).'.css';
                     $fn = cms_join_path($cache_dir,$filename);
 
                     // Get media_type and media_query
@@ -182,7 +175,7 @@ function smarty_cms_function_cms_stylesheet($params, &$smarty)
                     $media_type  = implode(',',$one->get_media_types());
                 }
 
-                $filename = 'stylesheet_'.md5('single'.$one->get_id().$use_https.$one->get_modified().$fnsuffix).'.css';
+                $filename = 'stylesheet_'.md5('single'.$one->get_id().$one->get_modified().$fnsuffix).'.css';
                 $fn = cms_join_path($cache_dir,$filename);
 
                 if (!file_exists($fn) ) cms_stylesheet_writeCache($fn, $one->get_name(), $trimbackground, $smarty);

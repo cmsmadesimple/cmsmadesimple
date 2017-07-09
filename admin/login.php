@@ -222,7 +222,7 @@ else if( isset($_POST['loginsubmit']) ) {
 
             // and redirect.
             $homepage = html_entity_decode($homepage);
-            if( !startswith($homepage,'http') && !startswith($homepage,'//') && startswith($homepage,'/') ) $homepage = $config->smart_root_url().$homepage;
+            if( !startswith($homepage,'http') && !startswith($homepage,'//') && startswith($homepage,'/') ) $homepage = CMS_ROOT_URL.$homepage;
             redirect($homepage);
         }
     }

@@ -2,6 +2,11 @@ Version 2.3 - NO NAME SET
 ----------------------------------
 Core - General
   - MenuManager is no longer distributed with CMSMS Core.  and it is no longer considered a system module.
+  - Remove secure option from content pages
+  - $config['ssl_url'] is deprecated, and now just an alias for root url
+  - $config['ssl_uploads_url'] is now just an alias for uploads_url and is deprecated
+  - $config['ssl_image_uploads_url'] is now just an alias for image_uploads_url and is deprecated
+  - $config['ssl_css_url'] is no longer used.
 
 Version 2.2.2 - Hearts Content
 ----------------------------------

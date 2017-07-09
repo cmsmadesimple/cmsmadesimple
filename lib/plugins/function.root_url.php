@@ -22,7 +22,7 @@ function smarty_function_root_url($params, &$smarty)
 
 	if( !isset($params['autossl']) || $params['autossl'] != 0 )	{
         $config = CmsApp::get_instance()->GetConfig();
-		$str = $config->smart_root_url();
+		$str = CMS_ROOT_URL;
 	}
 
     if( isset($params['assign']) ) {

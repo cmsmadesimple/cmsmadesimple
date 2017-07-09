@@ -425,9 +425,7 @@ abstract class CMSModule
      */
     final public function GetModulePath()
     {
-        if (is_subclass_of($this, 'CMSModule')) {
-            return cms_join_path(CMS_ROOT_PATH, 'modules' , $this->GetName());
-        }
+        if (is_subclass_of($this, 'CMSModule')) return cms_join_path(CMS_ROOT_PATH, 'modules' , $this->GetName());
         return __DIR__;
     }
 
@@ -440,12 +438,7 @@ abstract class CMSModule
      */
     final public function GetModuleURLPath($use_ssl=false)
     {
-        $config = \cms_config::get_instance();
-        if( $use_ssl ) {
-            return $this->config['ssl_url'].'/modules/'.$this->GetName();
-        } else {
-            return $config->smart_root_url().'/modules/'.$this->GetName();
-        }
+        return CMS_ROOT_URL.'/modules/'.$this->GetName();
     }
 
     /**

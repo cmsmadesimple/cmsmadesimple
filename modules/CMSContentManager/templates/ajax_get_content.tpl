@@ -74,7 +74,6 @@
 	        <strong>{$mod->Lang('prompt_title')}:</strong> {$row.title|escape}<br/>
 	        <strong>{$mod->Lang('prompt_name')}:</strong> {$row.menutext|escape}<br/>
 	        {if isset($row.alias)}<strong>{$mod->Lang('prompt_alias')}:</strong> {$row.alias}<br/>{/if}
-	        {if $row.secure}<strong>{$mod->Lang('prompt_secure')}:</strong> {$mod->Lang('yes')}<br/>{/if}
 	        <strong>{$mod->Lang('prompt_cachable')}:</strong> {if $row.cachable}{$mod->Lang('yes')}{else}{$mod->Lang('no')}{/if}<br/>
 	        <strong>{$mod->Lang('prompt_showinmenu')}:</strong> {if $row.showinmenu}{$mod->Lang('yes')}{else}{$mod->Lang('no')}{/if}<br/>
 	        <strong>{lang('wantschildren')}:</strong> {if $row.wantschildren|default:1}{$mod->Lang('yes')}{else}{$mod->Lang('no')}{/if}

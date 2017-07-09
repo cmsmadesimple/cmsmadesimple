@@ -91,7 +91,7 @@ class microtiny_utils
       if( $first_time ) {
           // only once per request.
           $first_time = FALSE;
-          $output .= '<script type="text/javascript" src="'.$config->smart_root_url().'/modules/MicroTiny/lib/js/tinymce/tinymce.min.js"></script>';
+          $output .= '<script type="text/javascript" src="'.CMS_ROOT_URL.'/modules/MicroTiny/lib/js/tinymce/tinymce.min.js"></script>';
       }
 
       $fn = cms_join_path(PUBLIC_CACHE_LOCATION,'mt_'.md5(__DIR__.session_id().$frontend.$selector.$css_name.$languageid).'.js');
@@ -142,7 +142,7 @@ class microtiny_utils
       $tpl_ob->assign('mt_actionid','m1_');
       $tpl_ob->assign('isfrontend',$frontend);
       $tpl_ob->assign('languageid',$languageid);
-      $tpl_ob->assign('root_url',$config->smart_root_url());
+      $tpl_ob->assign('root_url',CMS_ROOT_URL);
       $fp = \cms_utils::get_filepicker_module();
       if( $fp ) {
           $url = $fp->get_browser_url();

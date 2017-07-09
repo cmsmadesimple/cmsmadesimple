@@ -634,7 +634,6 @@ function cms_module_create_url(&$modinstance,$id,$action,$returnid='',$params=ar
 	// get the destination content object
 	if( $returnid != '' ) {
 		$content_obj = CmsApp::get_instance()->GetContentOperations()->LoadContentFromId($returnid);
-		if( is_object($content_obj) && $content_obj->Secure() ) $base_url = $config['ssl_url'];
 	}
 
 	if ($prettyurl != '' && $config['url_rewriting'] == 'mod_rewrite') {

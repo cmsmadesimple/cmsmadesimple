@@ -38,13 +38,6 @@
 	<p class="pageinput">		<textarea id="content" name="{$actionid}content" rows="5" cols="80">{$page_prefs.content}</textarea></p>
 </div>
 <div class="pageoverflow">
-	<p class="pagetext"><label for="secure">{$mod->Lang('prompt_pagedflt_secure')}:</label>&nbsp;{cms_help key2='help_pagedflt_secure' title=$mod->Lang('prompt_pagedflt_secure')}</p>
-	<p class="pageinput">
-		<select id="secure" name="{$actionid}secure">
-			{cms_yesno selected=$page_prefs.secure}
-		</select></p>
-</div>
-<div class="pageoverflow">
 	<p class="pagetext"><label for="cachable">{$mod->Lang('prompt_pagedflt_cachable')}:</label>&nbsp;{cms_help key2='help_pagedflt_cachable' title=$mod->Lang('prompt_pagedflt_cachable')}</p>
 	<p class="pageinput">
 		<select id="cachable" name="{$actionid}cachable">

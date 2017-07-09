@@ -1144,7 +1144,7 @@ function cms_get_jquery($exclude = '',$ssl = null,$cdn = false,$append = '',$cus
 {
   $config = cms_config::get_instance();
   $scripts = array();
-  $base_url = $config->smart_root_url();
+  $base_url = CMS_ROOT_URL;
   if( $ssl === true || $ssl === TRUE ) $base_url = $config['ssl_url'];
   $basePath=$custom_root!=''?trim($custom_root,'/'):$base_url;
 

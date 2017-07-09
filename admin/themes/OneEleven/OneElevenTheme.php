@@ -94,7 +94,7 @@ class OneElevenTheme extends CmsAdminThemeBase {
         $icon = "modules/{$module}/images/icon.gif";
         $path = cms_join_path($config['root_path'], $icon);
         if (file_exists($path)) {
-            $url = $config->smart_root_url() . '/' . $icon;
+            $url = CMS_ROOT_URL . '/' . $icon;
             $this->set_value('module_icon_url', $url);
         }
 

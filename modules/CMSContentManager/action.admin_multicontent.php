@@ -105,16 +105,6 @@ switch( $bulkaction ) {
    $this->Redirect($id,'admin_bulk_cachable',$returnid,$parms);
    break;
 
- case 'secure':
-   $parms['secure'] = 1;
-   $this->Redirect($id,'admin_bulk_secure',$returnid,$parms);
-   break;
-
- case 'insecure':
-   $parms['secure'] = 0;
-   $this->Redirect($id,'admin_bulk_secure',$returnid,$parms);
-   break;
-
  case 'showinmenu':
    $parms['showinmenu'] = 1;
    $this->Redirect($id,'admin_bulk_showinmenu',$returnid,$parms);

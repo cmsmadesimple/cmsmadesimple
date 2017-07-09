@@ -826,7 +826,6 @@ final class ContentListBuilder
           $rec['id'] = $content->Id();
           $rec['lastmodified'] = $content->GetModifiedDate();
           $rec['created'] = $content->GetCreationDate();
-          $rec['secure'] = $content->Secure();
           $rec['cachable'] = $content->Cachable();
           $rec['showinmenu'] = $content->ShowInMenu();
           $rec['wantschildren'] = $content->WantsChildren();

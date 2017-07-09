@@ -176,7 +176,7 @@ final class FileManager extends CMSModule {
         $config = $gCms->GetConfig();
         $advancedmode = filemanager_utils::check_advanced_mode();
         $basedir = $config['root_path'];
-        $baseurl = $config->smart_root_url();
+        $baseurl = $config['root_url'];
 
         $filepath=$basedir.'/'.$path;
         $url=$baseurl.'/'.$path;

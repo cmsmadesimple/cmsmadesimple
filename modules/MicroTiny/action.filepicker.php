@@ -42,7 +42,7 @@ if( isset($_GET['subdir']) ) {
 }
 $cwd = filemanager_utils::get_cwd();
 
-$starturl = $config->smart_root_url().'/'.$cwd;
+$starturl = CMS_ROOT_URL.'/'.$cwd;
 $startdir = filemanager_utils::join_path($config['root_path'],$cwd);
 
 $is_image = function($filename) {

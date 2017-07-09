@@ -217,13 +217,6 @@ abstract class ContentBase
 	protected $mCachable;
 
 	/**
-	 * Secure?
-	 *
-	 * @internal
-	 */
-	protected $mSecure = 0;
-
-	/**
 	 * URL
 	 *
 	 * @internal
@@ -335,7 +328,6 @@ abstract class ContentBase
 
 		$this->AddProperty('alias',1,self::TAB_OPTIONS);
 		$this->AddProperty('active',2,self::TAB_OPTIONS);
-		$this->AddProperty('secure',3,self::TAB_OPTIONS);
 		$this->AddProperty('cachable',4,self::TAB_OPTIONS);
 		$this->AddProperty('image',5,self::TAB_OPTIONS);
 		$this->AddProperty('thumbnail',6,self::TAB_OPTIONS);
@@ -835,27 +827,6 @@ abstract class ContentBase
 		$this->mCachable = (bool) $cachable;
 	}
 
-	/**
-	 * Return whether this page should be accessed via a secure protocol.
-	 * The secure flag effects whether the ssl protocol and appropriate config entries are used when generating urls to this page.
-	 *
-	 * @return bool
-	 */
-	public function Secure()
-	{
-		return $this->mSecure;
-	}
-
-	/**
-	 * Set whether this page should be accessed via a secure protocol.
-	 * The secure flag effectsw whether the ssl protocol and appropriate config entries are used when generating urls to this page.
-	 *
-	 * @param bool $secure
-	 */
-	public function SetSecure($secure)
-	{
-		$this->mSecure = $secure;
-	}
 
 	/**
 	 * Return the page url (if any) associated with this content page.
@@ -1314,7 +1285,6 @@ abstract class ContentBase
 		$this->mActive                     = ($data["active"] == 1          ? true : false);
 		$this->mShowInMenu                 = ($data["show_in_menu"] == 1    ? true : false);
 		$this->mCachable                   = ($data["cachable"] == 1        ? true : false);
-		if( isset($data['secure']) ) $this->mSecure = $data["secure"];
 		if( isset($data['page_url']) ) $this->mURL  = $data["page_url"];
 		$this->mLastModifiedBy             = $data["last_modified_by"];
 		$this->mCreationDate               = $data["create_date"];
@@ -1362,7 +1332,6 @@ abstract class ContentBase
 		$out['active'] = ($this->mActive)?1:0;
 		$out['show_in_menu'] = ($this->mShowInMenu)?1:0;
 		$out['cachable'] = ($this->mCachable)?1:0;
-		$out['secure'] = ($this->mSecure)?1:0;
 		$out['page_url'] = ($this->mURL)?1:0;
 		$out['last_modified_by'] = $this->mLastModifiedBy;
 		$out['create_date'] = $this->mCreationDate;
@@ -1446,7 +1415,7 @@ abstract class ContentBase
 
 		$this->mModifiedDate = trim($db->DBTimeStamp(time()), "'");
 
-		$query = "UPDATE ".CMS_DB_PREFIX."content SET content_name = ?, owner_id = ?, type = ?, template_id = ?, parent_id = ?, active = ?, default_content = ?, show_in_menu = ?, cachable = ?, secure = ?, page_url = ?, menu_text = ?, content_alias = ?, metadata = ?, titleattribute = ?, accesskey = ?, tabindex = ?, modified_date = ?, item_order = ?, last_modified_by = ? WHERE content_id = ?";
+		$query = "UPDATE ".CMS_DB_PREFIX."content SET content_name = ?, owner_id = ?, type = ?, template_id = ?, parent_id = ?, active = ?, default_content = ?, show_in_menu = ?, cachable = ?, page_url = ?, menu_text = ?, content_alias = ?, metadata = ?, titleattribute = ?, accesskey = ?, tabindex = ?, modified_date = ?, item_order = ?, last_modified_by = ? WHERE content_id = ?";
 		$dbresult = $db->Execute($query, array(
                                      $this->mName,
                                      $this->mOwner,
@@ -1457,7 +1426,6 @@ abstract class ContentBase
                                      ($this->mDefaultContent == true ? 1 : 0),
                                      ($this->mShowInMenu == true     ? 1 : 0),
                                      ($this->mCachable == true       ? 1 : 0),
-                                     $this->mSecure,
                                      $this->mURL,
                                      $this->mMenuText,
                                      $this->mAlias,
@@ -1548,7 +1516,7 @@ abstract class ContentBase
 
 		$this->mModifiedDate = $this->mCreationDate = trim($db->DBTimeStamp(time()), "'");
 
-		$query = "INSERT INTO ".CMS_DB_PREFIX."content (content_id, content_name, content_alias, type, owner_id, parent_id, template_id, item_order, hierarchy, id_hierarchy, active, default_content, show_in_menu, cachable, secure, page_url, menu_text, metadata, titleattribute, accesskey, tabindex, last_modified_by, create_date, modified_date) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+		$query = "INSERT INTO ".CMS_DB_PREFIX."content (content_id, content_name, content_alias, type, owner_id, parent_id, template_id, item_order, hierarchy, id_hierarchy, active, default_content, show_in_menu, cachable, page_url, menu_text, metadata, titleattribute, accesskey, tabindex, last_modified_by, create_date, modified_date) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
 		$dbresult = $db->Execute($query, array(
                                      $newid,
@@ -1565,7 +1533,6 @@ abstract class ContentBase
                                      ($this->mDefaultContent == true ? 1 : 0),
                                      ($this->mShowInMenu == true     ? 1 : 0),
                                      ($this->mCachable == true       ? 1 : 0),
-                                     $this->mSecure,
                                      $this->mURL,
                                      $this->mMenuText,
                                      $this->mMetadata,
@@ -1827,14 +1794,6 @@ abstract class ContentBase
 			$this->_handleRemovedBaseProperty('cachable','mCachable');
 		}
 
-		// secure
-		if (isset($params['secure'])) {
-			$this->mSecure = (int) $params['secure'];
-		}
-		else {
-			$this->_handleRemovedBaseProperty('secure','mSecure');
-		}
-
 		// url
 		if (isset($params['page_url'])) {
 			$this->mURL = trim(strip_tags($params['page_url']));
@@ -1872,7 +1831,6 @@ abstract class ContentBase
 		$alias = ($this->mAlias != ''?$this->mAlias:$this->mId);
 
 		$base_url = CMS_ROOT_URL;
-		if( $this->Secure() ) $base_url = $config['ssl_url'];
 
 		/* use root_url for default content */
 		if($this->DefaultContent()) {
@@ -2370,14 +2328,6 @@ abstract class ContentBase
 			$help = '&nbsp;'.cms_admin_utils::get_help_tag('core','help_page_alias',lang('help_title_page_alias'));
 			return array('<label for="alias">'.lang('pagealias').':</label>'.$help,
 						 '<input type="text" name="alias" id="alias" value="'.$this->mAlias.'" />');
-
-		case 'secure':
-			$opt = '';
-			if( $this->mSecure ) $opt = ' checked="checked"';
-			$str  = '<input type="hidden" name="secure" value="0"/>';
-			$str .= '<input type="checkbox" name="secure" id="secure" value="1"'.$opt.'/>';
-			$help = '&nbsp;'.cms_admin_utils::get_help_tag('core','help_content_secure',lang('help_title_content_secure'));
-			return array('<label for="secure">'.lang('secure_page').':</label>'.$help,$str);
 
 		case 'page_url':
 			if( !$this->DefaultContent() ) {

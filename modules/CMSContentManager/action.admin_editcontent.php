@@ -91,7 +91,6 @@ try {
         $content_obj->SetOwner($user_id);
         $content_obj->SetLastModifiedBy($user_id);
         $content_obj->SetActive($pagedefaults['active']);
-        $content_obj->SetSecure($pagedefaults['secure']);
         $content_obj->SetCachable($pagedefaults['cachable']);
         $content_obj->SetShowInMenu($pagedefaults['showinmenu']);
         $content_obj->SetPropertyValue('design_id',$pagedefaults['design_id']);

@@ -123,8 +123,6 @@ try {
         bulkcontentoperations::register_function($this->Lang('bulk_noncachable'),'setnoncachable');
         bulkcontentoperations::register_function($this->Lang('bulk_showinmenu'),'showinmenu');
         bulkcontentoperations::register_function($this->Lang('bulk_hidefrommenu'),'hidefrommenu');
-        bulkcontentoperations::register_function($this->Lang('bulk_secure'),'secure');
-        bulkcontentoperations::register_function($this->Lang('bulk_insecure'),'insecure');
         bulkcontentoperations::register_function($this->Lang('bulk_setdesign'),'setdesign');
         bulkcontentoperations::register_function($this->Lang('bulk_changeowner'),'changeowner');
     }

@@ -97,10 +97,6 @@ while( $trycount < 2 ) {
             throw new CmsError404Exception('Cannot view an unviewable page');
         }
 
-        if( $contentobj->Secure() && !$_app->is_https_request() ) {
-            redirect($contentobj->GetURL()); // if this page is marked to be secure, make sure we redirect to the secure page
-        }
-
         if( !$contentobj->IsPermitted() ) throw new CmsError403Exception('Permission denied');
 
         $_app->set_content_object($contentobj);
