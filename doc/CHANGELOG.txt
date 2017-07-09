@@ -4,6 +4,9 @@ Core - General
   - Fixed a redirect loop problem on mixed HTTP/HTTPS sites when the secure flag was set on some pages.
   - Fixed a problem with prefilters and postfilters not working if placed in /assets/plugins
 
+CmsJobManager v0.1.1
+  - Removed audit statement if there were no jobs to perform.
+
 Version 2.2.2 - Hearts Content
 ----------------------------------
 Core - General
