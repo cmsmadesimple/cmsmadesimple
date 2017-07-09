@@ -481,10 +481,6 @@ abstract class CmsAdminThemeBase
 							   'title'=>$this->_FixSpaces(lang('tags')),
 							   'description'=>lang('tagdescription'),
 							   'show_in_menu'=>$this->HasPerm('taghelpPerms'));
-		$items['usertags'] = array('url'=>'listusertags.php','parent'=>'extensions',
-								   'title'=>$this->_FixSpaces(lang('usertags')),
-								   'description'=>lang('usertagdescription'),
-								   'show_in_menu'=>$this->HasPerm('codeBlockPerms'));
 		$items['eventhandlers'] = array('url'=>'eventhandlers.php','parent'=>'extensions',
 										'title'=>$this->_FixSpaces(lang('eventhandlers')),
 										'description'=>lang('eventhandlerdescription'),
@@ -493,9 +489,6 @@ abstract class CmsAdminThemeBase
 										   'title'=>$this->_FixSpaces(lang('editeventhandler')),
 										   'description'=>lang('editeventhandlerdescription'),
 										   'show_in_menu'=>false);
-		$items['editusertag'] = array('url'=>'editusertag.php','parent'=>'usertags',
-									  'title'=>$this->_FixSpaces(lang('editusertag')),
-									  'description'=>lang('editusertag'),'show_in_menu'=>false);
 		// base admin menu ---------------------------------------------------------
 		$items['siteadmin'] = array('url'=>'index.php?section=siteadmin','parent'=>-1,
 									'title'=>$this->_FixSpaces(lang('admin')),'priority'=>7,
