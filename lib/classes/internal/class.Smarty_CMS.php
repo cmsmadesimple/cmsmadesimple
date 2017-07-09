@@ -83,6 +83,9 @@ class Smarty_CMS extends CMSSmartyBase
         $config = cms_config::get_instance();
         $this->addConfigDir($config['assets_path'].'/configs');
         $this->addPluginsDir($config['assets_path'].'/plugins');
+        $this->addPluginsDir(cms_join_path(CMS_ROOT_PATH,'plugins')); // deprecated
+        $this->addPluginsDir(cms_join_path(CMS_ROOT_PATH,'lib','plugins'));
+        $this->addTemplateDir(cms_join_path(CMS_ROOT_PATH, 'lib', 'assets', 'templates'));
 
         if( $_gCms->is_frontend_request()) {
             $this->addTemplateDir($config['assets_path'].'/templates');
@@ -124,16 +127,6 @@ class Smarty_CMS extends CMSSmartyBase
             $this->setTemplateDir($admin_dir.'/templates');
             $this->setConfigDir($admin_dir.'/configs');;
         }
-
-
-        // use this for any third party plugins that somebody has added, and is in an upgrade.
-        $this->addPluginsDir(cms_join_path(CMS_ROOT_PATH,'plugins'));
-
-        // Set core plugins dir
-        $this->addPluginsDir(cms_join_path(CMS_ROOT_PATH,'lib','plugins'));
-
-        // Add lib/assets tpl dir to scope
-        $this->addTemplateDir(cms_join_path(CMS_ROOT_PATH, 'lib', 'assets', 'templates'));
     }
 
     /**
@@ -186,6 +179,7 @@ class Smarty_CMS extends CMSSmartyBase
                 }
             }
         }
+
         $this->autoload_filters = array('pre'=>$pre,'post'=>$post,'output'=>$output);
     }
 

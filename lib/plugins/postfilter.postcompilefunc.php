@@ -18,7 +18,7 @@
 
 use \CMSMS\HookManager;
 
-function smarty_postfilter_postcompilefunc($tpl_output, &$smarty)
+function smarty_postfilter_postcompilefunc($tpl_output, $smarty)
 {
 	$result = explode(':', $smarty->_current_file);
 
@@ -33,12 +33,13 @@ function smarty_postfilter_postcompilefunc($tpl_output, &$smarty)
             HookManager::do_hook('Core::ContentPostCompile', array('content' => &$tpl_output));
             break;
 
+        case 'cms_template':
         case "template":
         case 'tpl_top':
         case 'tpl_body':
         case 'tpl_head':
             HookManager::do_hook('Core::TemplatePostCompile',array('template'=>&$tpl_output,'type'=>$result[0]));
-            break;
+        break;
 
         default:
             break;
