@@ -15,7 +15,7 @@ Core - General
   - Replace OneEleven admin theme with the Marigold fork that uses fontawesome.
   - Sitedown mode now throws a 503 exception and outputs a 503 error code
   - The 503 error handler (maintenance mode) is now an Error Page.
-  - Removed some previously deprecated and seldom used methods.
+  - Removed many previously deprecated and seldom used methods.
   - UserTagOperations class is now merely a compatibility stub
   - Impement new simple_plugin API.
   - CHANGE: Adds the new pr_root_url config entry.  to return the protocol relative root URI. root_url will always include the protocol.
