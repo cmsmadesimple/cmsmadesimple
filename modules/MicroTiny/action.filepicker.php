@@ -22,6 +22,7 @@ if( !check_login(FALSE) ) exit; // admin only.... but any admin
 //$handlers = ob_list_handlers();
 //for ($cnt = 0; $cnt < sizeof($handlers); $cnt++) { ob_end_clean(); }
 
+debug_to_log(__FILE__);
 //
 // initialization
 //

@@ -18,7 +18,7 @@
 
 use \CMSMS\HookManager;
 
-function smarty_prefilter_precompilefunc($tpl_output, &$smarty)
+function smarty_prefilter_precompilefunc($tpl_output, $smarty)
 {
 	$result = explode(':', $smarty->_current_file);
 
@@ -35,12 +35,13 @@ function smarty_prefilter_precompilefunc($tpl_output, &$smarty)
             HookManager::do_hook('Core::ContentPreCompile', array('content' => &$tpl_output));
             break;
 
+        case "cms_template":
         case 'tpl_top':
         case 'tpl_body':
         case 'tpl_head':
         case "template":
             HookManager::do_hook('Core::TemplatePreCompile', array('template' => &$tpl_output,'type'=>$result[0]));
-            break;
+        break;
 
         default:
             break;

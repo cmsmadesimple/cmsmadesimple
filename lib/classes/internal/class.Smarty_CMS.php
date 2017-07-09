@@ -57,6 +57,7 @@ class Smarty_CMS extends CMSSmartyBase
 
         // set our own template class with some funky stuff in it
         // note, can get rid of the CMS_Smarty_Template class and the Smarty_Parser classes.
+        $this->template_class = 'CMS_Smarty_Template';
 
         // common resources.
         $this->registerResource('module_db_tpl',new CMSModuleDbTemplateResource());
@@ -86,8 +87,14 @@ class Smarty_CMS extends CMSSmartyBase
             }
         }
 
+        $config = cms_config::get_instance();
+        $this->addConfigDir($config['assets_path'].'/configs');
+        $this->addPluginsDir($config['assets_path'].'/plugins');
+        $this->addPluginsDir(cms_join_path(CMS_ROOT_PATH,'plugins')); // deprecated
+        $this->addPluginsDir(cms_join_path(CMS_ROOT_PATH,'lib','plugins'));
+        $this->addTemplateDir(cms_join_path(CMS_ROOT_PATH, 'lib', 'assets', 'templates'));
+
         if( $_gCms->is_frontend_request()) {
-            $config = cms_config::get_instance();
             $this->addTemplateDir($config['assets_path'].'/templates');
 
             // Check if we are at install page, don't register anything if so, cause nothing below is needed.
@@ -127,18 +134,6 @@ class Smarty_CMS extends CMSSmartyBase
             $this->setTemplateDir($admin_dir.'/templates');
             $this->setConfigDir($admin_dir.'/configs');;
         }
-
-        $this->addConfigDir($config['assets_path'].'/configs');
-        $this->addPluginsDir($config['assets_path'].'/plugins');
-
-        // use this for any third party plugins that somebody has added, and is in an upgrade.
-        $this->addPluginsDir(cms_join_path(CMS_ROOT_PATH,'plugins'));
-
-        // Set core plugins dir
-        $this->addPluginsDir(cms_join_path(CMS_ROOT_PATH,'lib','plugins'));
-
-        // Add lib/assets tpl dir to scope
-        $this->addTemplateDir(cms_join_path(CMS_ROOT_PATH, 'lib', 'assets', 'templates'));
     }
 
     /**
@@ -325,73 +320,9 @@ class Smarty_CMS extends CMSSmartyBase
         return $parent;
     }
 
-    /**
-     * fetch method
-     * NOTE: Overwrites parent
-     *
-     * @param mixed $template
-     * @param int $cache_id
-     * @param mixed $parent
-     * @param bool $display
-     * @param bool $merge_tpl_vars
-     * @param bool $no_output_filter
-     * @return mixed
-     */
-    public function fetch($template = null,$cache_id = null, $compile_id = null, $parent = null, $display = false, $merge_tpl_vars = true, $no_output_filter = false)
-    {
-        $name = $template; if( startswith($name,'string:') ) $name = 'string:';
-        debug_buffer('','Fetch '.$name.' start');
-        if( is_null($cache_id) || $cache_id === '' ) {
-            $cache_id = $this->_global_cache_id;
-        }
-        else if( $cache_id[0] == '|' ) {
-            $cache_id = $this->_global_cache_id . $cache_id;
-        }
-
-        // send an event before fetching...this allows us to change template stuff.
-        if( CmsApp::get_instance()->is_frontend_request() ) {
-            $parms = array('template'=>&$template,'cache_id'=>&$cache_id,'compile_id'=>&$compile_id,'display'=>&$display);
-            \CMSMS\HookManager::do_hook( 'Core::TemplatePrefetch', $parms );
-        }
-
-        if( !$parent ) {
-            $parent = $this->get_template_parent();
-        }
-        if( is_object($template) ) {
-            $_tpl = $template;
-        } else {
-            $_tpl = $this->CreateTemplate($template,$cache_id,$compile_id,$parent);
-        }
-
-        /*
-          if( $parent ) {
-          // copy template variables from the parent, and global variables into this scope.
-          $_tpl->tpl_vars = array_merge(self::$global_tpl_vars,$parent->tpl_vars);
-          }
-        */
-
-        //put the item onto thee stack, and do our work, to handle recursive calls.
-        $this->_tpl_stack[] = $_tpl;
-        $tmp = null;
-        if( $display ) {
-            $_tpl->display();
-        } else {
-            $tmp = $_tpl->fetch();
-        }
-
-        // and pop off the stack again.
-        array_pop($this->_tpl_stack);
-
-        // admin requests are a bit fugged up... lots of stuff relies on a single smarty scope.
-        // gotta fix that.
-        //$tmp = parent::fetch($template,$cache_id,$compile_id,$parent,$display,$merge_tpl_vars,$no_output_filter);
-        debug_buffer('','Fetch '.$name.' end');
-        return $tmp;
-    }
-
     public function createTemplate($template, $cache_id = null, $compile_id = null, $parent = null, $do_clone = true)
     {
-	if( !startswith($template,'eval:') && !startswith($template,'string:') ) {
+        if( !startswith($template,'eval:') && !startswith($template,'string:') ) {
             if( ($pos = strpos($template,'*')) > 0 ) throw new \LogicException("$template is an invalid CMSMS resource specification");
             if( ($pos = strpos($template,'/')) > 0 ) throw new \LogicException("$template is an invalid CMSMS resource specification");
         }

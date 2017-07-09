@@ -39,7 +39,7 @@ final class CmsJobManager extends \CMSModule
     public static function table_name() { return cms_db_prefix().'mod_cmsjobmgr'; }
 
     function GetFriendlyName() { return $this->Lang('friendlyname'); }
-    function GetVersion() { return '0.1'; }
+    function GetVersion() { return '0.1.1'; }
     function MinimumCMSVersion() { return '2.1.99'; }
     function GetAuthor() { return 'Calguy1000'; }
     function GetAuthorEmail() { return 'calguy1000@cmsmadesimple.org'; }
@@ -130,7 +130,6 @@ final class CmsJobManager extends \CMSModule
             $tasks = $this->create_jobs_from_eligible_tasks();
             if( count($tasks) ) return TRUE;
         }
-        audit('','CmsJobManager','Found nothing to do');
         return FALSE;
     }
 
@@ -301,7 +300,6 @@ final class CmsJobManager extends \CMSModule
             $code = (int) substr($data,9,3);
             fclose($fp);
             if( $code != 200 ) {
-                debug_to_log($data,'Trigger async processing');
                 audit('',$this->GetName(),'Received '.$code.' response when trying to trigger async processing');
             }
         }
