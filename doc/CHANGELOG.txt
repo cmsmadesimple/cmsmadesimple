@@ -8,6 +8,9 @@ Core - General
 CmsJobManager v0.1.1
   - Removed audit statement if there were no jobs to perform.
 
+MicroTiny v2.2.1
+  - Minor fix for filepicker plugin.
+
 Version 2.2.2 - Hearts Content
 ----------------------------------
 Core - General
