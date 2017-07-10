@@ -4,6 +4,7 @@ Core - General
   - Fixed a redirect loop problem on mixed HTTP/HTTPS sites when the secure flag was set on some pages.
   - Fixed a problem with prefilters and postfilters not working if placed in /assets/plugins
   - Now use our own derivitive of Smarty Internal Template so that we can send hooks, etc.
+  - Improved error message if there was an error parsing the template (or a duplicate content block).
 
 CmsJobManager v0.1.1
   - Removed audit statement if there were no jobs to perform.
