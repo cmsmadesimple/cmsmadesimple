@@ -1,4 +1,4 @@
-Version 2.2.3 - 
+Version 2.2.3 -
 ----------------------------------
 Core - General
   - Fixed a redirect loop problem on mixed HTTP/HTTPS sites when the secure flag was set on some pages.
@@ -11,6 +11,9 @@ CmsJobManager v0.1.1
 
 MicroTiny v2.2.1
   - Minor fix for filepicker plugin.
+
+News v2.51.3
+  - No longer urldecode the detailtemplate param in detail view.
 
 Version 2.2.2 - Hearts Content
 ----------------------------------
