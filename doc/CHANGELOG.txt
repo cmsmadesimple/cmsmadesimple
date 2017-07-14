@@ -5,6 +5,7 @@ Core - General
   - Fixed a problem with prefilters and postfilters not working if placed in /assets/plugins
   - Now use our own derivitive of Smarty Internal Template so that we can send hooks, etc.
   - Improved error message if there was an error parsing the template (or a duplicate content block).
+  - Fixes content blocks, image blocks, module blocks containign whitespace in the name.
 
 CmsJobManager v0.1.1
   - Removed audit statement if there were no jobs to perform.
