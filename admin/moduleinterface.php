@@ -29,14 +29,8 @@ $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 
 check_login();
 $userid = get_userid();
-if( isset($_SESSION['cms_passthru']) ) {
-    // remove me, this is a hack for something
-    $_REQUEST = array_merge($_REQUEST,$_SESSION['cms_passthru']);
-    unset($_SESSION['cms_passthru']);
-}
 
 $smarty = \Smarty_CMS::get_instance();
-// $smarty->assign('date_format_string',cms_userprefs::get_for_user($userid,'date_format_string','%x %X'));
 
 $id = 'm1_';
 $module = '';

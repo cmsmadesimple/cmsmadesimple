@@ -19,6 +19,7 @@ Core - General
   - UserTagOperations class is now merely a compatibility stub
   - Impement new simple_plugin API.
   - CHANGE: Adds the new pr_root_url config entry.  to return the protocol relative root URI. root_url will always include the protocol.
+  - Remove long deprecated passthru parameters to effect $_REQUEST because of potential security vulnerabilities.
 
 CMSContentManager - remember to bump version
   - Gets rid of secure options, flag output and bulk functionaltiy
