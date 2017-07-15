@@ -16,6 +16,9 @@ MicroTiny v2.2.1
 News v2.51.3
   - No longer urldecode the detailtemplate param in detail view.
 
+ModuleManager v2.1.2
+  - Now sort modules in the installed tab a bit better.
+
 Version 2.2.2 - Hearts Content
 ----------------------------------
 Core - General

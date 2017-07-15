@@ -44,7 +44,7 @@ class ModuleManager extends CMSModule
 
   function GetName() { return get_class($this); }
   function GetFriendlyName() { return $this->Lang('friendlyname'); }
-  function GetVersion() { return '2.1.1'; }
+  function GetVersion() { return '2.1.2'; }
   function GetHelp() { return $this->Lang('help'); }
   function GetAuthor() { return 'calguy1000'; }
   function GetAuthorEmail() { return 'calguy1000@hotmail.com'; }
