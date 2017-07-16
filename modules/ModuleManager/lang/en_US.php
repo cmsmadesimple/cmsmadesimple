@@ -278,7 +278,7 @@ $lang['vertext'] = 'Version';
 // W
 $lang['warning'] = 'Warning';
 $lang['warn_dependencies'] = 'The module you selected to install or upgrade depends on one or more additional modules that must also be installed or upgraded.';
-$lang['warn_modulecustom'] = 'The following modules have customizations in the &lt;root&gt;/module_custom directory of your installation.  These customizations may or may not cause errors after the upgrade.  You may need to remove or revise these customizations to restore proper functionality.  Proceed with caution.';
+$lang['warn_modulecustom'] = 'The following modules have customizations in the &lt;root&gt;/assets/module_custom directory of your installation.  These customizations may or may not cause errors after the upgrade.  You may need to remove or revise these customizations to restore proper functionality.  Proceed with caution.';
 // X
 $lang['xmltext'] = 'XML File';
 
