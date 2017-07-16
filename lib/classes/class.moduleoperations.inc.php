@@ -481,7 +481,7 @@ final class ModuleOperations
                     $dbr = $db->Execute($query,array($depname,$module_obj->GetName(),$depversion));
                 }
             }
-
+            $this->_generate_moduleinfo( $module_obj );
             $this->_moduleinfo = array();
             $gCms->clear_cached_files();
 
@@ -832,7 +832,7 @@ final class ModuleOperations
                     $dbr = $db->Execute($query,array($depname,$module_obj->GetName(),$depversion));
                 }
             }
-
+            $this->_generate_moduleinfo( $module_obj );
             $this->_moduleinfo = array();
             $gCms->clear_cached_files();
             audit('','Module', 'Upgraded module '.$module_obj->GetName().' to version '.$module_obj->GetVersion());
