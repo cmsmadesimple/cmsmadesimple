@@ -13,7 +13,7 @@ $compile_id = 'nd'.$articleid;
 
 $template = null;
 if (isset($params['detailtemplate'])) {
-    $template = urldecode(trim($params['detailtemplate']));
+    $template = trim($params['detailtemplate']);
 }
 else {
     $tpl = CmsLayoutTemplate::load_dflt_by_type('News::detail');

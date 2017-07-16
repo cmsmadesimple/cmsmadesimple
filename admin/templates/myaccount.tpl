@@ -31,13 +31,13 @@ jQuery(document).ready(function(){
     <div class="pageoverflow">
       <p class="pagetext"><label for="password">{lang('password')}:</label>&nbsp;{cms_help key2='help_myaccount_password' title=lang('password')}</p>
       <p class="pageinput">
-        <input type="password" id="password" name="password" maxlength="25" value="" />&nbsp;{lang('info_edituser_password')}
+        <input type="password" id="password" name="password" maxlength="100" value="" />&nbsp;{lang('info_edituser_password')}
       </p>
     </div>
 
     <div class="pageoverflow">
       <p class="pagetext"><label for="passwordagain">{lang('passwordagain')}:</label>&nbsp;{cms_help key2='help_myaccount_passwordagain' title=lang('passwordagain')}</p>
-      <p class="pageinput"><input type="password" id="passwordagain" name="passwordagain" maxlength="25" value="" class="standard" />&nbsp;{lang('info_edituser_passwordagain')}</p>
+      <p class="pageinput"><input type="password" id="passwordagain" name="passwordagain" maxlength="100" value="" class="standard" />&nbsp;{lang('info_edituser_passwordagain')}</p>
     </div>
 
     <div class="pageoverflow">

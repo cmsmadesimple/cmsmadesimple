@@ -86,6 +86,10 @@ final class CMS_Content_Block
         }
 
         if( !$rec['name'] ) $rec['name'] = $rec['id'] = 'content_en';
+        if( strpos($rec['name'],' ') !== FALSE ) {
+            if( !$rec['label'] ) $rec['label'] = $rec['name'];
+            $rec['name'] = str_replace(' ','_',$rec['name']);
+        }
         if( !$rec['id'] ) $rec['id'] = str_replace(' ','_',$rec['name']);
 
         /*
@@ -120,6 +124,10 @@ final class CMS_Content_Block
         if( !$rec['name'] ) {
             $n = count(self::$_contentBlocks)+1;
             $rec['name'] = 'image_'+$n;
+        }
+        if( strpos($rec['name'],' ') !== FALSE ) {
+            if( !$rec['label'] ) $rec['label'] = $rec['name'];
+            $rec['name'] = str_replace(' ','_',$rec['name']);
         }
         if( empty($rec['id']) ) $rec['id'] = str_replace(' ','_',$rec['name']);
         if( !$rec['priority'] ) {
@@ -165,6 +173,10 @@ final class CMS_Content_Block
         if( !$rec['name'] ) {
             $n = count(self::$_contentBlocks)+1;
             $rec['id'] = $rec['name'] = 'module_'+$n;
+        }
+        if( strpos($rec['name'],' ') !== FALSE ) {
+            if( !$rec['label'] ) $rec['label'] = $rec['name'];
+            $rec['name'] = str_replace(' ','_',$rec['name']);
         }
         if( !$rec['id'] ) $rec['id'] = str_replace(' ','_',$rec['name']);
         $rec['params'] = $parms;

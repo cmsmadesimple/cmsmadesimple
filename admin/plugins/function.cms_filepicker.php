@@ -18,9 +18,7 @@ function smarty_function_cms_filepicker($params,&$template)
     $parms = [];
     if( $top ) $parms['top'] = $top;
     if( $type ) $parms['type'] = $type;
-    if( count($parms) ) {
-        $profile = $profile->adjustWith( $parms );
-    }
+    if( count($parms) ) $profile = $profile->overrideWith( $parms );
 
     // todo: something with required.
     $out = $filepicker->get_html( $name, $value, $profile, $required );

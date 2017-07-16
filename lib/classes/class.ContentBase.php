@@ -104,17 +104,6 @@ abstract class ContentBase
 	protected $mParentId = -2;
 
 	/**
-	 * The old parent id...
-	 *
-     * Used to be used only on update to detect reparenting... now since SetAllHierarchyPositions is efficient
-     * it is not needed.
-     *
-	 * @internal
-     * @deprecated
-	 */
-	protected $mOldParentId = -1;
-
-	/**
 	 * This is used too often to not be part of the base class
 	 *
 	 * @internal
@@ -126,13 +115,6 @@ abstract class ContentBase
 	 * Integer
 	 */
 	protected $mItemOrder = -1;
-
-	/**
-	 * The old item order... only used on update
-	 *
-	 * @internal
-	 */
-	protected $mOldItemOrder = -1;
 
 	/**
 	 * The metadata (head tags) for this content
@@ -351,7 +333,6 @@ abstract class ContentBase
 	{
 		$this->mId = -1;
 		$this->mItemOrder = -1;
-		$this->mOldItemOrder = -1;
 		$this->mURL = '';
 		$this->mAlias = '';
 	}
@@ -414,19 +395,6 @@ abstract class ContentBase
 	public function Alias()
 	{
 		return $this->mAlias;
-	}
-
-	/**
-	 * Returns the OldAlias
-	 * The old alias is used when editing pages to detect changes in page alias
-	 *
-	 * @internal
-	 * @deprecated
-	 * @return string
-	 */
-	public function OldAlias()
-	{
-		return $this->mOldAlias;
 	}
 
 	/**
@@ -648,34 +616,6 @@ abstract class ContentBase
 	{
 		$itemorder = (int)$itemorder;
 		if( $itemorder > 0 || $itemorder == -1 ) $this->mItemOrder = $itemorder;
-	}
-
-
-	/**
-	 * Returns the OldItemOrder.
-	 * The OldItemOrder is used to specify the item order before changes were done
-	 *
-     * @internal
-	 * @deprecated
-	 * @return int
-	 */
-	public function OldItemOrder()
-	{
-		return $this->mItemOrder;
-	}
-
-	/**
-	 * Sets the ItemOrder
-	 * The ItemOrder is used to specify the order of this page within the parent.
-	 * The OldItemOrder is used when editing pages.
-	 *
-	 * @internal
-	 * @deprecated
-	 * @param int the itemorder.
-	 */
-	public function SetOldItemOrder($itemorder)
-	{
-		$this->mOldItemOrder = $itemorder;
 	}
 
 	/**
@@ -1008,26 +948,6 @@ abstract class ContentBase
                 $test = $prefix.'-'.$num;
             } while( $num < 100 );
             if( $num >= 100 ) throw new \CmsContentException(lang('aliasalreadyused'));
-
-            /*
-			if( $error !== FALSE ) {
-                // check for duplicates.
-                $alias = munge_string_to_url($alias);
-                $error = $contentops->CheckAliasError($alias, $this->Id());
-                if( $error !== FALSE ) {
-                    // If a '-2' version of the alias already exists, Check the '-3' version etc.
-                    $prefix = $alias;
-                    if( endswith($prefix,'-') ) $prefix = substr($prefix,0,strlen($prefix)-1);
-                    $test = null;
-                    for( $alias_num = 2; $alias_num < 100; $alias_num++ ) {
-                        $test = $prefix.'-'.$alias_num;
-                        if( ($tmp = $contentops->CheckAliasError($test)) === FALSE ) break;
-                    }
-                    if( $alias_num >= 100 ) throw new \CmsContentException($error);
-                    $alias = $test;
-                }
-            }
-            */
 		}
 
 		$this->mAlias = $alias;
@@ -1270,10 +1190,8 @@ abstract class ContentBase
 		$this->mOldAlias                   = $data["content_alias"];
 		$this->mOwner                      = $data["owner_id"];
 		$this->mParentId                   = $data["parent_id"];
-		$this->mOldParentId                = $data["parent_id"];
 		$this->mTemplateId                 = $data["template_id"];
 		$this->mItemOrder                  = $data["item_order"];
-		$this->mOldItemOrder               = $data["item_order"];
 		$this->mMetadata                   = $data['metadata'];
 		$this->mHierarchy                  = $data["hierarchy"];
 		$this->mIdHierarchy                = $data["id_hierarchy"];
@@ -1439,17 +1357,6 @@ abstract class ContentBase
                                      $this->mLastModifiedBy,
                                      (int) $this->mId
                                      ));
-
-        /*
-		if ($this->mOldParentId != $this->mParentId) {
-			// Fix the item_order if necessary
-			$query = "UPDATE ".CMS_DB_PREFIX."content SET item_order = item_order - 1 WHERE parent_id = ? AND item_order > ?";
-			$result = $db->Execute($query, array($this->mOldParentId,$this->mOldItemOrder));
-
-			$this->mOldParentId = $this->mParentId;
-			$this->mOldItemOrder = $this->mItemOrder;
-		}
-        */
 
 		if (isset($this->mAdditionalEditors)) {
 			$query = "DELETE FROM ".CMS_DB_PREFIX."additional_users WHERE content_id = ?";
@@ -1710,10 +1617,9 @@ abstract class ContentBase
 			if( $this->mURL != '' ) cms_route_manager::del_static($this->mURL);
 		}
 
-        \CMSMS\HookManager::do_hook('Core::ContentDeletePost', [ 'content' => &$this ] );
+        	\CMSMS\HookManager::do_hook('Core::ContentDeletePost', [ 'content' => &$this ] );
 		$this->mId = -1;
 		$this->mItemOrder = -1;
-		$this->mOldItemOrder = -1;
 	}
 
 	/**
@@ -2435,5 +2341,3 @@ abstract class ContentBase
 		}
 	}
 } // end of class
-
-?>

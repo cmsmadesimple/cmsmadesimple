@@ -159,8 +159,13 @@ class ModuleManagerModuleInfo extends CmsExtendedModuleInfo
         // first pass...
         $out = array();
         foreach( $allknownmodules as $module_name ) {
-            $info = new ModuleManagerModuleInfo($module_name,TRUE,$can_check_forge);
-            $out[$module_name] = $info;
+            try {
+                $info = new ModuleManagerModuleInfo($module_name,TRUE,$can_check_forge);
+                $out[$module_name] = $info;
+            }
+            catch( \Exception $e ) {
+                debug_display($e->GetMessage(),$module_name);
+            }
         }
 
         self::$_minfo = $out;

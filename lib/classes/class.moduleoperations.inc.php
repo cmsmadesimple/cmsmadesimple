@@ -481,7 +481,7 @@ final class ModuleOperations
                     $dbr = $db->Execute($query,array($depname,$module_obj->GetName(),$depversion));
                 }
             }
-
+            $this->_generate_moduleinfo( $module_obj );
             $this->_moduleinfo = array();
             $gCms->clear_cached_files();
 
@@ -535,7 +535,7 @@ final class ModuleOperations
     /**
      * @ignore
      */
-    private function &_get_module_info()
+    private function _get_module_info()
     {
         if( !is_array($this->_moduleinfo) || count($this->_moduleinfo) == 0 ) {
             $tmp = \CMSMS\internal\global_cache::get('modules');
@@ -832,7 +832,7 @@ final class ModuleOperations
                     $dbr = $db->Execute($query,array($depname,$module_obj->GetName(),$depversion));
                 }
             }
-
+            $this->_generate_moduleinfo( $module_obj );
             $this->_moduleinfo = array();
             $gCms->clear_cached_files();
             audit('','Module', 'Upgraded module '.$module_obj->GetName().' to version '.$module_obj->GetVersion());

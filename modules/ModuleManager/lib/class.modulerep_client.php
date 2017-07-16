@@ -339,7 +339,7 @@ final class modulerep_client
 
         $out = array();
         foreach( $versions as $row ) {
-            $info = new CmsExtendedModuleInfo($row['name']);
+            $info = ModuleManagerModuleInfo::get_module_info( $row['name'] );
             if( version_compare($row['version'],$info['version']) > 0 ) {
                 $data = array();
                 $out[$row['name']] = $row;

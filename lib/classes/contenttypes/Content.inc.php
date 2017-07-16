@@ -329,7 +329,7 @@ class Content extends ContentBase
         }
         catch( SmartyException $e ) {
             // smarty exceptions here could be a bad template, or missing template, or something else.
-            throw new CmsContentException(lang('error_parsing_content_blocks'));
+            throw new CmsContentException(lang('error_parsing_content_blocks').': '.$e->GetMessage());
         }
         return $this->_contentBlocks;
     }
