@@ -17,7 +17,9 @@ MicroTiny v2.2.1
   - Minor fix for filepicker plugin.
 
 News v2.51.3
-  - No longer urldecode the detailtemplate param in detail view.
+  - For security, No longer urldecode the detailtemplate param in detail view.
+    This may have some implications for people that are specifying the detailtemplate parameter (with a template with special characters) from within a WYSIWYG
+    (which is not recommended behavior).
 
 ModuleManager v2.1.2
   - Now sort modules in the installed tab a bit better.
