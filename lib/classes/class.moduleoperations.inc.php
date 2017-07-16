@@ -535,7 +535,7 @@ final class ModuleOperations
     /**
      * @ignore
      */
-    private function &_get_module_info()
+    private function _get_module_info()
     {
         if( !is_array($this->_moduleinfo) || count($this->_moduleinfo) == 0 ) {
             $tmp = \CMSMS\internal\global_cache::get('modules');

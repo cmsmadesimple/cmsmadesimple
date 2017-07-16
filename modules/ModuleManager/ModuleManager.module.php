@@ -55,7 +55,7 @@ class ModuleManager extends CMSModule
   function GetAdminSection() { return 'siteadmin'; }
   function GetAdminDescription() { return $this->Lang('admindescription'); }
   function LazyLoadAdmin() { return TRUE; }
-  function MinimumCMSVersion() { return '2.1.4'; }
+  function MinimumCMSVersion() { return '2.2.3'; }
   function InstallPostMessage() { return $this->Lang('postinstall'); }
   function UninstallPostMessage() { return $this->Lang('postuninstall'); }
   function UninstallPreMessage() { return $this->Lang('really_uninstall'); }

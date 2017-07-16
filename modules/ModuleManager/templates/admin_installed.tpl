@@ -89,14 +89,16 @@ $(document).ready(function(){
     <tr class="{$rowclass}" id="_{$item.name}">
       <td>{if $item.system_module}{$system_img}{/if}
            {if $item.e_status == 'newer_available'}{$star_img}{/if}
-	   {if $item.missing_deps}{$missingdep_img}{/if}
+	   {if $item.missing_deps || $item.notavailable}{$missingdep_img}{/if}
            {if $item.deprecated}{$deprecated_img}{/if}
       </td>
       <td>
           {if !$item.installed || $item.e_status == 'need_upgrade'}
             <span title="{$item.description}" class="important">{$item.name}</span>
-          {elseif $item.deprecated}
+	  {elseif $item.notavailable}
             <span title="{$item.description}" style="color: red;">{$item.name}</span>
+          {elseif $item.deprecated}
+            <span title="{$item.description}" style="color: orange;">{$item.name}</span>
           {else}
             <span title="{$item.description}" {if $item.system_module} style="color: green;"{/if}>{$item.name}</span>
           {/if}
@@ -109,7 +111,9 @@ $(document).ready(function(){
       </td>
       <td>{* status column *}
           {$ops=[]}
-          {if !$item.installed}
+	  {if $item.notavailable}
+	    {capture assign='op'}<strong title="{$ModuleManager->Lang('title_notavailable')}" style="color: red;">{$ModuleManager->Lang('notavailable')}</strong>{/capture}{$ops[]=$op}
+          {elseif !$item.installed}
             {if $item.can_install}
               {capture assign='op'}<strong title="{$ModuleManager->Lang('title_notinstalled')}">{$ModuleManager->Lang('notinstalled')}</strong>{/capture}{$ops[]=$op}
 	    {else if $item.missing_deps}
@@ -124,6 +128,7 @@ $(document).ready(function(){
               {capture assign='op'}<span title="{$ModuleManager->Lang('title_cantuninstall')}">{$ModuleManager->Lang('cantuninstall')}</span>{/capture}{$ops[]=$op}
 	    {/if}
           {/if}
+
           {if isset($item.e_status)}
             {capture assign='op'}{$tmp='status_'|cat:$item.e_status}<span {if $item.e_status == 'db_newer'}class="important"{/if} title="{$ModuleManager->Lang($tmp)}" style="color: orange;">{$ModuleManager->Lang($item.e_status)}</span>{/capture}{$ops[]=$op}
           {/if}
@@ -140,6 +145,7 @@ $(document).ready(function(){
 	    {/foreach}
             {capture assign='op'}<span title="{$ModuleManager->Lang('title_depends_upon')}">{$ModuleManager->Lang('depends_upon')}</span>: {implode(', ',$tmp)}{/capture}{$ops[]=$op}
           {/if}
+
           {'<br/>'|implode:$ops}
       </td>
       <td>

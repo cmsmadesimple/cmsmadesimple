@@ -7,6 +7,7 @@ Core - General
   - Improved error message if there was an error parsing the template (or a duplicate content block).
   - Fixes content blocks, image blocks, module blocks containign whitespace in the name.
   - Minor fix to {cms_filepicker} plugin.
+  - Improve the CmsModuleInfo class such that if the module class file is newer it will be loaded.
 
 CmsJobManager v0.1.1
   - Removed audit statement if there were no jobs to perform.
@@ -19,6 +20,7 @@ News v2.51.3
 
 ModuleManager v2.1.2
   - Now sort modules in the installed tab a bit better.
+  - Now handle module 'not available' a bit better.
 
 Version 2.2.2 - Hearts Content
 ----------------------------------
