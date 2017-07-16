@@ -11,9 +11,11 @@ Creating a CMSMS release involves these steps:
      upgrade.php  -- (optional) the script to do any changes to the database or settings
         note: when this script is executed $db is available, the CMSMS api is created, however smarty is not available.
      readme.txt   -- (optional) readme file for display in the upgrade assistant
+     changelog.txt -- (recommended) a text file describing specific changes to that version
   c: optionally delete directories from <installer root>/app/upgrade that are no longer necessary.
+  d: optionally changing <installer root>/app/config.ini to specify the minimum upgrade version.
   d: commit those changes to SVN
-  e: build the release packages
+  e: build the release packages (see below)
   f: ** Begin distribution process **
      - remember to create an svn tag if distributing
 
