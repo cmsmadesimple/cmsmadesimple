@@ -6,6 +6,7 @@ Core - General
   - Now use our own derivitive of Smarty Internal Template so that we can send hooks, etc.
   - Improved error message if there was an error parsing the template (or a duplicate content block).
   - Fixes content blocks, image blocks, module blocks containign whitespace in the name.
+  - Minor fix to {cms_filepicker} plugin.
 
 CmsJobManager v0.1.1
   - Removed audit statement if there were no jobs to perform.
