@@ -11,7 +11,7 @@ Core - General
   - Now generate the moduleinfo.ini file automatically on intall or upgrade of a module.
 
 CmsJobManager v0.1.1
-  - Removed audit statement if there were no jobs to perform.
+  - Optimization of audit logging.
 
 MicroTiny v2.2.1
   - Minor fix for filepicker plugin.
