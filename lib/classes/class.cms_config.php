@@ -259,6 +259,13 @@ final class cms_config implements ArrayAccess
                 define('CMS_ROOT_PATH',self::$_instance['root_path']);
 
                 /**
+                 * A constant containing the directory where CMSMS third party assets are stored.
+                 *
+                 * @return string
+                 */
+                define('CMS_ASSETS_PATH',self::$_instance['assets_path']);
+
+                /**
                  * A constant containing the CMSMS root url.
                  * If the root_url variable is not specified in the config file, then
                  * CMSMS will attempt to calculate one.
