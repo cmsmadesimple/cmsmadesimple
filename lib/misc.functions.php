@@ -1233,5 +1233,18 @@ function setup_session($cachable = FALSE)
  */
 function is_base64($s)
 {
-      return (bool) preg_match('/^[a-zA-Z0-9\/\r\n+]*={0,2}$/', $s);
+    return (bool) preg_match('/^[a-zA-Z0-9\/\r\n+]*={0,2}$/', $s);
+}
+
+
+/**
+ * Create a unique GUID.
+ *
+ * @since 2.3
+ * @return string
+ */
+function cms_create_guid()
+{
+    if (function_exists('com_create_guid') === true) return trim(com_create_guid(), '{}');
+    return sprintf('%04X%04X-%04X-%04X-%04X-%04X%04X%04X', mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(16384, 20479), mt_rand(32768, 49151), mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(0, 65535));
 }
