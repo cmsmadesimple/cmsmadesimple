@@ -45,19 +45,6 @@ if( isset($params['modulehelp']) ) {
 }
 
 if( !$this->VisibleToAdminUser() ) exit;
-$tmp = ModuleOperations::get_instance()->GetQueueResults();
-if( is_array($tmp) && count($tmp) ) {
-    $tmp2 = array();
-    foreach( $tmp as $key => $data ) {
-        $msg = $data[1];
-        if( !$msg ) {
-            $msg = $this->Lang('unknown');
-            if( $data[0] ) $msg = $this->Lang('success');
-        }
-        $tmp2[] = $key.': '.$msg;
-    }
-    echo $this->ShowMessage($tmp2);
-}
 
 echo '<div class="pagewarning">'."\n";
 echo '<h3>'.$this->Lang('notice')."</h3>\n";

@@ -6,8 +6,8 @@ if( !isset($params['mod']) ) {
     $this->SetError($this->Lang('error_missingparam'));
     $this->RedirectToAdminTab();
 }
-$module = get_parameter_value($params,'mod');
-$lang = get_parameter_value($params,'lang');
+$module = strip_tags(get_parameter_value($params,'mod'));
+$lang = strip_tags(get_parameter_value($params,'lang'));
 
 // get the module instance... force it to load if necessary.
 $ops = ModuleOperations::get_instance();
