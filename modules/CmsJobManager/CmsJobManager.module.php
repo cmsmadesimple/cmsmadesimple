@@ -292,7 +292,7 @@ final class CmsJobManager extends \CMSModule
         $this->SetPreference('last_async_trigger',$now+1);
 
         try {
-            $fp = fsockopen($prefix_scheme.$url_ob->get_host(),$url_ob->get_port(),$errno,$errstr,3);
+            $fp = fsockopen($prefix_scheme.$url_ob->get_host(),$url_ob->get_port(),$errno,$errstr,1);
             if( !$fp ) throw new \RuntimeException('Could not connect to the async processing action');
             fwrite($fp,$out);
             $code = null;
