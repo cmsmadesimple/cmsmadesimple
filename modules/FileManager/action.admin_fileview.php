@@ -100,14 +100,20 @@ for ($i = 0; $i < count($filelist); $i++) {
 
   $link = $filelist[$i]["name"];
   if ($filelist[$i]["dir"]) {
+      $parms = [ 'newdir'=>$filelist[$i]['name'], 'path'=>$path, 'sortby'=>$sortby ];
+      $url = $this->create_url($id,'changedir','',$parms);
       if( $filelist[$i]['name'] != '..' ) {
           $countdirs++;
           $onerow->type = array('dir');
+          $onerow->txtlink = "<a class=\"dirlink\" href=\"{$url}\" title=\"{$this->Lang('title_changedir')}\">{$link}</a>";
       } else {
+          // for the parent directory
           $onerow->noCheckbox = 1;
+          $icon = $this->GetModuleURLPath().'/icons/themes/default/actions/dir_up.gif';
+          $img_tag = '<img src="'.$icon.'" width="32" title="'.$this->Lang('title_changeupdir').'"/>';
+          $onerow->iconlink = $this->CreateLink($id,'changedir', '', $img_tag, $parms );
+          $onerow->txtlink = "<a class=\"dirlink\" href=\"{$url}\" title=\"{$this->Lang('title_changeupdir')}\">{$link}</a>";
       }
-      $url = $this->create_url($id,'changedir','',array("newdir" => $filelist[$i]["name"], "path" => $path, "sortby" => $sortby));
-      $onerow->txtlink = "<a class=\"dirlink\" href=\"{$url}\" title=\"{$this->Lang('title_changedir')}\">{$link}</a>";
   } else {
       $countfiles++;
       $countfilesize+=$filelist[$i]["size"];

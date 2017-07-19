@@ -28,6 +28,9 @@ ModuleManager v2.1.2
   - Now sort modules in the installed tab a bit better.
   - Now handle module 'not available' a bit better.
 
+FileManager v1.6.4
+  - Add a different icon for navigating up one level.
+
 Version 2.2.2 - Hearts Content
 ----------------------------------
 Core - General
