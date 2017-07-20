@@ -11,6 +11,8 @@ Core - General
   - Now generate the moduleinfo.ini file automatically on intall or upgrade of a module.
   - Increase the maxlength attribute for password input boxes in myaccount.
   - Adds a StartsWith javascript shiv for IE11.
+  - Revert the protocol-less URI for root_url (more changes coming for 2.3).
+  - get rid of the smart_url config option.
 
 CmsJobManager v0.1.1
   - Optimization of audit logging.
