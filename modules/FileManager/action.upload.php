@@ -19,26 +19,36 @@ class FileManagerUploadHandler extends jquery_upload_handler
     parent::__construct($options);
   }
 
+  protected function is_file_acceptable( $file )
+  {
+      $config = \cms_config::get_instance();
+      if( !$config['developer_mode'] ) {
+          $ext = strtolower(substr(strrchr($file, '.'), 1));
+          if( startswith($ext,'php') || endswith($ext,'php') ) return FALSE;
+      }
+      return TRUE;
+  }
+
   protected function after_uploaded_file($fileobject)
   {
       // here we may do image handling, and other cruft.
-    if( is_object($fileobject) && $fileobject->name != '' ) {
+      if( is_object($fileobject) && $fileobject->name != '' ) {
 
-      $mod = cms_utils::get_module('FileManager');
-      $parms = array();
-      $parms['file'] = filemanager_utils::join_path(filemanager_utils::get_full_cwd(),$fileobject->name);
+          $mod = cms_utils::get_module('FileManager');
+          $parms = array();
+          $parms['file'] = filemanager_utils::join_path(filemanager_utils::get_full_cwd(),$fileobject->name);
 
-      if( $mod->GetPreference('create_thumbnails') ) {
-          $thumb = filemanager_utils::create_thumbnail($parms['file']);
-          if( $thumb ) $params['thumb'] = $thumb;
+          if( $mod->GetPreference('create_thumbnails') ) {
+              $thumb = filemanager_utils::create_thumbnail($parms['file']);
+              if( $thumb ) $params['thumb'] = $thumb;
+          }
+
+          $str = $fileobject->name.' uploaded to '.filemanager_utils::get_full_cwd();
+          if( isset($params['thumb']) ) $str .= ' and a thumbnail was generated';
+          audit('',$mod->GetName(),$str);
+
+          \CMSMS\HookManager::do_hook( 'FileManager::OnFileUploaded', $parms );
       }
-
-      $str = $fileobject->name.' uploaded to '.filemanager_utils::get_full_cwd();
-      if( isset($params['thumb']) ) $str .= ' and a thumbnail was generated';
-      audit('',$mod->GetName(),$str);
-
-      \CMSMS\HookManager::do_hook( 'FileManager::OnFileUploaded', $parms );
-    }
   }
 }
 

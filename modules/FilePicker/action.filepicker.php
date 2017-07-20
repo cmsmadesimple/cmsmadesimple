@@ -39,12 +39,12 @@ if( isset($_GET['_enc']) ) {
 
 $inst = get_parameter_value($_GET,'inst');
 $sig = trim(cleanValue(get_parameter_value($_GET,'sig')));
-$type = trim(cleanValue(get_parameter_value($_GET,'type')));
+//$type = trim(cleanValue(get_parameter_value($_GET,'type')));
 $nosub = (int) get_parameter_value($_GET,'nosub');
 $profile = null;
 if( $sig ) $profile = TemporaryProfileStorage::get($sig);
 if( !$sig ) $profile = $this->get_default_profile();
-if( !$sig && $type && $profile ) {
+if( !$sig && $profile ) {
     $profile = $profile->overrideWith( [ 'type'=>$type ] );
     $sig = TemporaryProfileStorage::set($profile);
 }
@@ -179,7 +179,7 @@ while( false !== ($filename = $dh->read()) ) {
     }
     if( $file['isdir'] ) {
         $parms = [ 'subdir'=>$filename, 'inst'=>$inst, 'sig'=>$sig ];
-        if( $type ) $parms['type'] = $type;
+        //if( $type ) $parms['type'] = $type;
         $url = $this->create_url($id,'filepicker',$returnid)."&showtemplate=false&_enc=".base64_encode(serialize($parms));
 	$file['chdir_url'] = $url;
     }

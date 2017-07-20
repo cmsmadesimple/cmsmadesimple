@@ -72,7 +72,7 @@ final class FilePicker extends \CMSModule implements \CMSMS\FilePickerInterface
      */
 
     function GetFriendlyName() { return $this->Lang('friendlyname');  }
-    function GetVersion() { return '1.0'; }
+    function GetVersion() { return '1.0.1'; }
     function GetHelp() { return $this->Lang('help'); }
     function IsPluginModule() { return FALSE; }
     function HasAdmin() { return TRUE; }
@@ -240,6 +240,14 @@ final class FilePicker extends \CMSModule implements \CMSMS\FilePickerInterface
         case \CMSMS\FileType::TYPE_ARCHIVE:
             if( $this->_typehelper->is_archive( $filename ) ) return TRUE;
             return FALSE;
+
+        default:
+            $config = \cms_config::get_instance();
+            if( !$config['developer_mode'] ) {
+                $ext = strtolower($this->_typehelper->get_extension( $filename ) );
+                if( startswith($ext,'php') || endswith($ext,'php') ) return FALSE;
+            }
+            break;
         }
 
         // passed

@@ -127,9 +127,14 @@ abstract class jquery_upload_handler
         return $success;
     }
 
+    protected function is_file_acceptable( $filename ) { return TRUE; }
+
     private function has_error($uploaded_file, $file, $error) {
         if ($error) {
             return $error;
+        }
+        if( !$this->is_file_acceptable( $file->name ) ) {
+            return 'acceptFileName';
         }
         if (!preg_match($this->options['accept_file_types'], $file->name)) {
             return 'acceptFileTypes';

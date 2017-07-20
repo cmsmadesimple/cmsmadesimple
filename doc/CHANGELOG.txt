@@ -15,6 +15,7 @@ Core - General
 CmsJobManager v0.1.1
   - Optimization of audit logging.
   - Change connection timeout to 1 second.
+  - Change processing to be a little more friendly to some environments wrt. content-size header.
 
 MicroTiny v2.2.1
   - Minor fix for filepicker plugin.
@@ -30,6 +31,12 @@ ModuleManager v2.1.2
 
 FileManager v1.6.4
   - Add a different icon for navigating up one level.
+  - No longer allow uploading any php (or derivative) file
+  - No longer allow renaming any file to have a .php extension (or a derivative)
+
+FilePicker v1.0.1
+  - No longer allow overriding the filepicker type on the URL
+  - No longer allow uploading any .php files
 
 Version 2.2.2 - Hearts Content
 ----------------------------------

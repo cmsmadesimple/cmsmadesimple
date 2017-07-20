@@ -5,10 +5,8 @@ if( !isset($_REQUEST['cms_cron']) ) exit();
 while(ob_get_level()) @ob_end_clean();
 ignore_user_abort();
 header('Connection: close');
-$tout = 'X-CMSMS: Processing';
-$size = strlen($tout);
-header("Content-Length: $size");
-header($tout);
+header('X-CMSMS: Processing');
+echo ' '; // single character
 flush();
 
 if( !function_exists('_cmsjobmgr_errorhandler') ) {

@@ -33,6 +33,8 @@ final class filemanager_utils
         if( strpos($name,'\\') !== false ) return FALSE;
         if( strpos($name,'..') !== false ) return FALSE;
         if( $name[0] == '.' || $name[0] == ' ' ) return FALSE;
+        $ext = strtolower(substr(strrchr($name, '.'), 1));
+        if( startswith($ext,'php') || endswith($ext,'php') ) return FALSE;
         if( preg_match('/[\n\r\t\[\]\&\?\<\>\!\@\#\$\%\*\(\)\{\}\|\"\'\:\;\+]/',$name) ) {
             return FALSE;
         }
