@@ -899,8 +899,8 @@ class ContentOperations
             $params[] = $content_id;
         }
         $db = CmsApp::get_instance()->GetDb();
-        $out = $db->GetOne($query, $params);
-        if( $out ) return TRUE;
+        $out = (int) $db->GetOne($query, $params);
+        if( $out > 0 ) return TRUE;
     }
 
     /**

@@ -13,6 +13,7 @@ Core - General
   - Adds a StartsWith javascript shiv for IE11.
   - Revert the protocol-less URI for root_url (more changes coming for 2.3).
   - get rid of the smart_url config option.
+  - Fix a problem when testing for duplicate aliases of the form string-###  where the suffix integer was greather than 100.
 
 CmsJobManager v0.1.1
   - Optimization of audit logging.

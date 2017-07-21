@@ -1027,6 +1027,7 @@ abstract class ContentBase
                 $num = (int) $matches[2];
             }
             $test = $alias;
+            $testnum = 1;
             do {
                 if( !$contentops->CheckAliasUsed($test,$this->Id()) ) {
                     $alias = $test;
@@ -1034,8 +1035,8 @@ abstract class ContentBase
                 }
                 $num++;
                 $test = $prefix.'-'.$num;
-            } while( $num < 100 );
-            if( $num >= 100 ) throw new \CmsContentException(lang('aliasalreadyused'));
+            } while( $testnum < 100 );
+            if( $testnum >= 100 && $test != $alias ) throw new \CmsContentException(lang('aliasalreadyused'));
 
             /*
 			if( $error !== FALSE ) {
