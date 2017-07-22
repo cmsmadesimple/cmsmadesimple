@@ -34,14 +34,15 @@
 #
 #-------------------------------------------------------------------------
 #END_LICENSE
+namespace ModuleManager;
 
-final class modmgr_utils
+final class utils
 {
     protected function __construct() {}
 
     public static function get_installed_modules($include_inactive = FALSE, $as_hash = FALSE)
     {
-        $modops = ModuleOperations::get_instance();
+        $modops = \ModuleOperations::get_instance();
         $module_list = $modops->GetInstalledModules($include_inactive);
 
         $results = array();
@@ -102,7 +103,7 @@ final class modmgr_utils
         // sort
         uasort( $xmldetails, array('modmgr_utils','uasort_cmp_details') );
 
-        $mod = cms_utils::get_module('ModuleManager');
+        $mod = \cms_utils::get_module('ModuleManager');
 
         //
         // Process the xmldetails, and only keep the latest version
@@ -175,16 +176,16 @@ final class modmgr_utils
 
     public static function get_module_xml($filename,$size,$md5sum = null)
     {
-        $mod = cms_utils::get_module('ModuleManager');
+        $mod = \cms_utils::get_module('ModuleManager');
         $xml_filename = modulerep_client::get_repository_xml($filename,$size);
-        if( !$xml_filename ) throw new CmsCommunicationException($mod->Lang('error_downloadxml',$filename));
+        if( !$xml_filename ) throw new \CmsCommunicationException($mod->Lang('error_downloadxml',$filename));
 
         if( !$md5sum ) $md5sum = modulerep_client::get_module_md5($filename);
         $dl_md5 = md5_file($xml_filename);
 
         if( $md5sum != $dl_md5 ) {
             @unlink($xml_filename);
-            throw new CmsInvalidDataException($mod->Lang('error_checksum',array($server_md5,$dl_md5)));
+            throw new \CmsInvalidDataException($mod->Lang('error_checksum',array($server_md5,$dl_md5)));
         }
 
         return $xml_filename;
@@ -195,11 +196,11 @@ final class modmgr_utils
         static $ok = -1;
         if( $ok != -1 ) return $ok;
 
-        $mod = cms_utils::get_module('ModuleManager');
+        $mod = \cms_utils::get_module('ModuleManager');
         $url = $mod->GetPreference('module_repository');
         if( $url ) {
             $url .= '/version';
-            $req = new modmgr_cached_request($url);
+            $req = new \modmgr_cached_request($url);
             $req->setTimeout(3);
             $req->execute($url);
             if( $req->getStatus() == 200 ) {
@@ -238,9 +239,8 @@ final class modmgr_utils
     public static function get_images()
     {
         // this is a bit ugly.
-        $mod = cms_utils::get_module('ModuleManager');
+        $mod = \cms_utils::get_module('ModuleManager');
         $smarty = cmsms()->GetSmarty();
-
 
         $stale_img=$mod->GetModuleURLPath().'/images/error.png';
         $stale_img = '<img src="'.$stale_img.'" title="'.$mod->Lang('title_stale').'" alt="stale" height="16"/>';

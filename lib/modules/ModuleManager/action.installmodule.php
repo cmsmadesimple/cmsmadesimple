@@ -34,13 +34,14 @@
 #
 #-------------------------------------------------------------------------
 #END_LICENSE
+use \ModuleManager\utils as modmgr_utils;
 if (!isset($gCms)) exit;
 if( !$this->CheckPermission('Modify Modules') ) return;
 $this->SetCurrentTab('modules');
 
 if( isset($params['cancel']) ) {
-  $this->SetMessage($this->Lang('msg_cancelled'));
-  $this->RedirectToAdminTab();
+    $this->SetMessage($this->Lang('msg_cancelled'));
+    $this->RedirectToAdminTab();
 }
 
 try {

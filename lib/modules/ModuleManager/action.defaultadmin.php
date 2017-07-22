@@ -34,6 +34,7 @@
 #
 #-------------------------------------------------------------------------
 #END_LICENSE
+use \ModuleManager\utils as modmgr_utils;
 if( !isset($gCms) ) exit;
 
 if( isset($params['modulehelp']) ) {
