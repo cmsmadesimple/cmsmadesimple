@@ -40,59 +40,67 @@ define('MINIMUM_REPOSITORY_VERSION','1.5');
 
 class ModuleManager extends CMSModule
 {
-  const _dflt_request_url = 'https://www.cmsmadesimple.org/ModuleRepository/request/v2/';
+    const _dflt_request_url = 'https://www.cmsmadesimple.org/ModuleRepository/request/v2/';
+    private $_operations;
 
-  function GetName() { return get_class($this); }
-  function GetFriendlyName() { return $this->Lang('friendlyname'); }
-  function GetVersion() { return '2.1.2'; }
-  function GetHelp() { return $this->Lang('help'); }
-  function GetAuthor() { return 'calguy1000'; }
-  function GetAuthorEmail() { return 'calguy1000@hotmail.com'; }
-  function GetChangeLog() { return file_get_contents(dirname(__FILE__).'/changelog.inc'); }
-  function IsPluginModule() { return FALSE; }
-  function HasAdmin() { return TRUE; }
-  function IsAdminOnly() { return TRUE; }
-  function GetAdminSection() { return 'siteadmin'; }
-  function GetAdminDescription() { return $this->Lang('admindescription'); }
-  function LazyLoadAdmin() { return TRUE; }
-  function MinimumCMSVersion() { return '2.2.3'; }
-  function InstallPostMessage() { return $this->Lang('postinstall'); }
-  function UninstallPostMessage() { return $this->Lang('postuninstall'); }
-  function UninstallPreMessage() { return $this->Lang('really_uninstall'); }
-  function VisibleToAdminUser() { return ($this->CheckPermission('Modify Site Preferences') || $this->CheckPermission('Modify Modules')); }
+    function GetName() { return get_class($this); }
+    function GetFriendlyName() { return $this->Lang('friendlyname'); }
+    function GetVersion() { return '2.2'; }
+    function GetHelp() { return $this->Lang('help'); }
+    function GetAuthor() { return 'calguy1000'; }
+    function GetAuthorEmail() { return 'calguy1000@hotmail.com'; }
+    function GetChangeLog() { return file_get_contents(dirname(__FILE__).'/changelog.inc'); }
+    function IsPluginModule() { return FALSE; }
+    function HasAdmin() { return TRUE; }
+    function IsAdminOnly() { return TRUE; }
+    function GetAdminSection() { return 'siteadmin'; }
+    function GetAdminDescription() { return $this->Lang('admindescription'); }
+    function LazyLoadAdmin() { return TRUE; }
+    function MinimumCMSVersion() { return '2.2.3'; }
+    function InstallPostMessage() { return $this->Lang('postinstall'); }
+    function UninstallPostMessage() { return $this->Lang('postuninstall'); }
+    function UninstallPreMessage() { return $this->Lang('really_uninstall'); }
+    function VisibleToAdminUser() { return ($this->CheckPermission('Modify Site Preferences') || $this->CheckPermission('Modify Modules')); }
 
-  protected function _DisplayErrorPage($id, &$params, $returnid, $message='')
-  {
-    $this->smarty->assign('title_error', $this->Lang('error'));
-    $this->smarty->assign('message', $message);
-    $this->smarty->assign('link_back',$this->CreateLink($id,'defaultadmin',$returnid, $this->Lang('back_to_module_manager')));
+    protected function get_operations()
+    {
+        if( !$this->_operations ) $this->_operations = new \ModuleManager\operations( $this );
+        return $this->_operations;
+    }
 
-    // Display the populated template
-    echo $this->ProcessTemplate('error.tpl');
-  }
+    protected function _DisplayErrorPage($id, &$params, $returnid, $message='')
+    {
+        $this->smarty->assign('title_error', $this->Lang('error'));
+        $this->smarty->assign('message', $message);
+        $this->smarty->assign('link_back',$this->CreateLink($id,'defaultadmin',$returnid, $this->Lang('back_to_module_manager')));
 
-  function Install()
-  {
-    $this->SetPreference('module_repository',ModuleManager::_dflt_request_url);
-  }
+        // Display the populated template
+        echo $this->ProcessTemplate('error.tpl');
+    }
 
-  function Upgrade($oldversion, $newversion)
-  {
-    $this->SetPreference('module_repository',ModuleManager::_dflt_request_url);
-  }
+    function Install()
+    {
+        $this->SetPreference('module_repository',ModuleManager::_dflt_request_url);
+    }
 
-  function DoAction($action, $id, $params, $returnid=-1)
-  {
-    @set_time_limit(9999);
-    $smarty = \Smarty_CMS::get_instance();
-    $smarty->assign($this->GetName(), $this);
-    $smarty->assign('mod', $this);
-    parent::DoAction( $action, $id, $params, $returnid );
-  }
+    function Upgrade($oldversion, $newversion)
+    {
+        $this->SetPreference('module_repository',ModuleManager::_dflt_request_url);
+    }
+
+    function DoAction($action, $id, $params, $returnid=-1)
+    {
+        @set_time_limit(9999);
+        /*
+          $smarty = \Smarty_CMS::get_instance();
+          $smarty->assign($this->GetName(), $this);
+          $smarty->assign('mod', $this);
+        */
+        parent::DoAction( $action, $id, $params, $returnid );
+    }
 
 } // end of class
 
 #
 # EOF
 #
-?>

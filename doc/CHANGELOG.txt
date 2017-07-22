@@ -41,6 +41,8 @@ FileManager - remember to bump version
 Installation Assistant - remember to bump version
   - Now require at least version 2.0.1 to upgrade
 
+ModuleManaver v2.2
+  - XML import code now lives here.
 
 Version 2.2.2 - Hearts Content
 ----------------------------------
