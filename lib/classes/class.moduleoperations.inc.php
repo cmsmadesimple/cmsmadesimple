@@ -26,11 +26,6 @@
  */
 
 /**
- * @ignore
- */
-define( "MODULE_DTD_VERSION", "1.3" );
-
-/**
  * A singleton utility class to allow for working with modules.
  *
  * @since		0.9
@@ -71,33 +66,6 @@ final class ModuleOperations
 	 * @ignore
 	 */
 	private $_moduleinfo;
-
-	/**
-	 * @ignore
-	 */
-	private $xml_exclude_files = array('^\.svn' , '^CVS$' , '^\#.*\#$' , '~$', '\.bak$', '^\.git', '^\.tmp$');
-
-	/**
-	 * @ignore
-	 */
-	private $xmldtd = '
-<!DOCTYPE module [
-  <!ELEMENT module (dtdversion,name,version,description*,help*,about*,requires*,file+)>
-  <!ELEMENT dtdversion (#PCDATA)>
-  <!ELEMENT name (#PCDATA)>
-  <!ELEMENT version (#PCDATA)>
-  <!ELEMENT mincmsversion (#PCDATA)>
-  <!ELEMENT description (#PCDATA)>
-  <!ELEMENT help (#PCDATA)>
-  <!ELEMENT about (#PCDATA)>
-  <!ELEMENT requires (requiredname,requiredversion)>
-  <!ELEMENT requiredname (#PCDATA)>
-  <!ELEMENT requiredversion (#PCDATA)>
-  <!ELEMENT file (filename,isdir,data)>
-  <!ELEMENT filename (#PCDATA)>
-  <!ELEMENT isdir (#PCDATA)>
-  <!ELEMENT data (#PCDATA)>
-]>';
 
     /**
      * @ignore
@@ -373,19 +341,16 @@ final class ModuleOperations
             if( is_array($deps) && count($deps) ) {
                 foreach( $deps as $name => $ver ) {
                     if( $name == $module_name ) continue; // a module cannot depend on itself.
-                    // this is the start of a recursive routine.
-                    // get_module_instance may call _load_module.
+                    // this is the start of a recursive routine. get_module_instance() may call _load_module
                     $obj2 = $this->get_module_instance($name,$ver);
                     if( !is_object($obj2) ) {
                         audit('','Core',"Cannot load module $module_name ... Problem loading dependent module $name version $ver");
                         debug_buffer("Cannot load $module_name... cannot load it's dependants.");
-                        unset($obj);
                         return FALSE;
                     }
                 }
             }
         }
-
 
         // now load the module itself.
         if( !class_exists($module_name) ) {
@@ -395,7 +360,7 @@ final class ModuleOperations
                 return FALSE;
             }
 
-            debug_buffer('loading module '.$module_name);
+            debug_buffer('including source for module '.$module_name);
             require_once($fname);
         }
 
@@ -421,9 +386,9 @@ final class ModuleOperations
         if( is_object($obj) ) $this->_modules[$module_name] = $obj;
 
         $tmp = $gCms->get_installed_schema_version();
-        if( $tmp == CMS_SCHEMA_VERSION ) {
-            if( (!isset($info[$module_name]) || $info[$module_name]['status'] != 'installed')
-                && isset($CMS_INSTALL_PAGE) && in_array($module_name,$this->cmssystemmodules) ) {
+        if( $tmp == CMS_SCHEMA_VERSION && isset($CMS_INSTALL_PAGE) && in_array($module_name, $this->cmssystemmodule) ) {
+            // during the phar installer, we can use get_module_instance() to install or upgrade core modules
+            if( !isset($info[$module_name]) || $info[$module_name]['status'] != 'installed' ) {
                 $res = $this->_install_module($obj);
                 if( $res[0] == FALSE ) {
                     // nope, can't auto install...
@@ -434,25 +399,15 @@ final class ModuleOperations
 
             // can't auto upgrade modules if cmsms schema versions don't match.
             // check to see if an upgrade is needed.
-            allow_admin_lang(TRUE); // isn't this ugly.
             if( isset($info[$module_name]) && $info[$module_name]['status'] == 'installed' ) {
                 $dbversion = $info[$module_name]['version'];
                 if( version_compare($dbversion, $obj->GetVersion()) == -1 ) {
                     // looks like upgrade is needed
-                    if( in_array($module_name,$this->cmssystemmodules) && !$gCms->is_frontend_request() ) {
-                        // we're allowed to upgrade
-                        $res = $this->_upgrade_module($obj);
-                        if( !$res ) {
-                            // upgrade failed
-                            allow_admin_lang(FALSE); // isn't this ugly.
-                            debug_buffer("Automatic upgrade of $module_name failed");
-                            unset($obj,$this->_modules[$module_name]);
-                            return FALSE;
-                        }
-                    }
-                    else if( !$force_load ) {
-                        // nope, can't auto upgrade either
+                    $res = $this->_upgrade_module($obj);
+                    if( !$res ) {
+                        // upgrade failed
                         allow_admin_lang(FALSE); // isn't this ugly.
+                        debug_buffer("Automatic upgrade of $module_name failed");
                         unset($obj,$this->_modules[$module_name]);
                         return FALSE;
                     }
@@ -462,6 +417,8 @@ final class ModuleOperations
 
         if( (isset($info[$module_name]) && $info[$module_name]['status'] == 'installed') || $force_load ) {
             if( is_object($obj) ) $this->_modules[$module_name] = $obj;
+
+            // we're all done.
             \CMSMS\HookManager::do_hook('Core::ModuleLoaded', [ 'name' => $module_name ] );
             return TRUE;
         }

@@ -4,6 +4,34 @@ namespace ModuleManager;
 class operations
 {
     private $_mod;
+    const MODULE_DTD_VERSION = '1.3';
+
+	/**
+	 * @ignore
+	 */
+	private $xml_exclude_files = array('^\.svn' , '^CVS$' , '^\#.*\#$' , '~$', '\.bak$', '^\.git', '^\.tmp$');
+
+	/**
+	 * @ignore
+	 */
+	private $xmldtd = '
+<!DOCTYPE module [
+  <!ELEMENT module (dtdversion,name,version,description*,help*,about*,requires*,file+)>
+  <!ELEMENT dtdversion (#PCDATA)>
+  <!ELEMENT name (#PCDATA)>
+  <!ELEMENT version (#PCDATA)>
+  <!ELEMENT mincmsversion (#PCDATA)>
+  <!ELEMENT description (#PCDATA)>
+  <!ELEMENT help (#PCDATA)>
+  <!ELEMENT about (#PCDATA)>
+  <!ELEMENT requires (requiredname,requiredversion)>
+  <!ELEMENT requiredname (#PCDATA)>
+  <!ELEMENT requiredversion (#PCDATA)>
+  <!ELEMENT file (filename,isdir,data)>
+  <!ELEMENT filename (#PCDATA)>
+  <!ELEMENT isdir (#PCDATA)>
+  <!ELEMENT data (#PCDATA)>
+]>';
 
     public function __construct( \ModuleManager $mod )
     {
@@ -51,7 +79,7 @@ class operations
 
                 case 'DTDVERSION':
                     $reader->read();
-                    if( $reader->value != MODULE_DTD_VERSION ) throw new \CmsInvalidDataException($this->_mod->Lang('err_xml_dtdmismatch'));
+                    if( $reader->value != self::MODULE_DTD_VERSION ) throw new \CmsInvalidDataException($this->_mod->Lang('err_xml_dtdmismatch'));
                     $havedtdversion = true;
                     break;
 
@@ -190,7 +218,7 @@ class operations
         $xmltxt  = '<?xml version="1.0" encoding="ISO-8859-1"?>';
         $xmltxt .= $this->xmldtd."\n";
         $xmltxt .= "<module>\n";
-        $xmltxt .= "	<dtdversion>".MODULE_DTD_VERSION."</dtdversion>\n";
+        $xmltxt .= "	<dtdversion>".self::MODULE_DTD_VERSION."</dtdversion>\n";
         $xmltxt .= "	<name>".$modinstance->GetName()."</name>\n";
         $xmltxt .= "	<version>".$modinstance->GetVersion()."</version>\n";
         $xmltxt .= "    <mincmsversion>".$modinstance->MinimumCMSVersion()."</mincmsversion>\n";
