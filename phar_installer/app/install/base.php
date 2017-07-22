@@ -188,6 +188,7 @@ $create_private_dir('assets/templates');
 $create_private_dir('assets/configs');
 $create_private_dir('assets/admin_custom');
 $create_private_dir('assets/module_custom');
+$create_private_dir('assets/modules');
 $create_private_dir('assets/plugins');
 $create_private_dir('assets/simple_plugins');
 $create_private_dir('assets/images');
