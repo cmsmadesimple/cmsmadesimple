@@ -44,10 +44,12 @@ $nosub = (int) get_parameter_value($_GET,'nosub');
 $profile = null;
 if( $sig ) $profile = TemporaryProfileStorage::get($sig);
 if( !$sig ) $profile = $this->get_default_profile();
+/*
 if( !$sig && $profile ) {
-    $profile = $profile->overrideWith( [ 'type'=>$type ] );
+    //$profile = $profile->overrideWith( [ 'type'=>$type ] );
     $sig = TemporaryProfileStorage::set($profile);
 }
+*/
 if( !$this->CheckPermission('Modify Files') ) {
     $parms = ['can_upload'=>FALSE, 'can_delete'=>FALSE, 'can_mkdir'=>FALSE ];
     $profile = $profile->overrideWith( $parms );
