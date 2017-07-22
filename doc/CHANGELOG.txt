@@ -27,6 +27,9 @@ Core - General
   - Now generate the moduleinfo.ini file automatically on intall or upgrade of a module.
   - Increase the maxlength attribute for password input boxes in myaccount.
   - Added new CMS_ADMIN_PATH define from the config class.
+  - Move system modules to /lib/modules
+  - Now look for third party modules in /assets/modules
+  - Remove un-necessary moduleinterface.php from the root directory.
 
 CMSContentManager - remember to bump version
   - Gets rid of secure options, flag output and bulk functionaltiy
@@ -34,6 +37,9 @@ CMSContentManager - remember to bump version
 
 FileManager - remember to bump version
   - modified to use CMS_ROOT_URL
+
+Installation Assistant - remember to bump version
+  - Now require at least version 2.0.1 to upgrade
 
 
 Version 2.2.2 - Hearts Content
