@@ -654,7 +654,7 @@ final class ModuleOperations
         $tmp = $gCms->get_installed_schema_version();
         if( $tmp == CMS_SCHEMA_VERSION ) {
             if( (!isset($info[$module_name]) || $info[$module_name]['status'] != 'installed')
-                && isset($CMS_INSTALL_PAGE) && in_array($module_name,$this->cmssytemmodules) ) {
+                && isset($CMS_INSTALL_PAGE) && in_array($module_name,$this->cmssystemmodules) ) {
                 $res = $this->_install_module($obj);
                 if( $res[0] == FALSE ) {
                     // nope, can't auto install...
