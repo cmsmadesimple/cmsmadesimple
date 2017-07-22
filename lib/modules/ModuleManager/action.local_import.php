@@ -19,7 +19,9 @@ if( $file['type'] != 'text/xml' ) {
 }
 
 try {
+    \CMSMS\HookManager::do_hook('ModuleManager::BeforeModuleImport', [ 'file'=>$file['name']] );
     $this->get_operations()->expand_xml_package( $file['tmp_name'], true, false );
+    \CMSMS\HookManager::do_hook('ModuleManager::AfterModuleImport', [ 'file'=>$file['name']] );
 
     audit('',$this->GetName(),'Imported Module '.$file['name']);
     $this->Setmessage($this->Lang('msg_module_imported'));
