@@ -997,7 +997,7 @@ abstract class CMSModule
      */
     public function Install()
     {
-        $filename = $this->GetModulePaht().'/method.install.php';
+        $filename = $this->GetModulePath().'/method.install.php';
         if (@is_file($filename)) {
             $gCms = CmsApp::get_instance();
             $db = $gCms->GetDb();
