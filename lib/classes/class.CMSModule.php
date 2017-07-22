@@ -323,7 +323,6 @@ abstract class CMSModule
      * @see can_cache_output
      * @param bool $forcedb Indicate wether this registration should be forced to be entered in the database. Default value is false (for compatibility)
      * @param bool|null $cachable Indicate wether this plugins output should be cachable.  If null, use the site preferences, and the can_cache_output method.  Otherwise a bool is expected.
-     * @deprecated
      */
     final public function RegisterModulePlugin($forcedb = FALSE,$cachable = false)
     {
@@ -346,32 +345,6 @@ abstract class CMSModule
             return cms_module_smarty_plugin_manager::addStatic($this->GetName(),$this->GetName(), 'function', 'function_plugin',$cachable);
             return TRUE;
         }
-    }
-
-    /**
-     * Callback to determine if the output from a call to the module can be cached by smarty.
-     *
-     * @since 1.11
-     * @author Robert Campbell
-     * @return bool
-     */
-    final public function can_cache_output()
-    {
-        global $CMS_ADMIN_PAGE, $CMS_INSTALL_PAGE, $CMS_STYLESHEET;
-        if( isset($CMS_ADMIN_PAGE) || isset($CMS_INSTALL_PAGE) || isset($CMS_STYLESHEET) ) return FALSE;
-        return $this->AllowSmartyCaching();
-    }
-
-    /**
-     * Callback to determine if the output from a call to the module can be cached by smarty.
-     *
-     * @since 1.11
-     * @author Robert Campbell
-     * @return bool
-     */
-    public function AllowSmartyCaching()
-    {
-        return FALSE;
     }
 
     /**
@@ -849,7 +822,7 @@ abstract class CMSModule
      * @deprecated
      * @return array The config hash.
      */
-    final public function &GetConfig()
+    final public function GetConfig()
     {
         return \cms_config::get_instance();
     }
@@ -1498,47 +1471,6 @@ abstract class CMSModule
      */
 
     /**
-     * Returns the xhtml equivalent of a tooltip help link.
-     *
-     * @final
-     * @param string $helptext The help text to be shown on mouse over
-     * @param string $linktext The text to be shown as the link, default to a simple question mark
-     * @param string $forcewidth Forces another width of the popupbox than the one set in admin css
-     * @param string $classname An alternative classname for the a-link of the tooltip
-     * @param string $href The URL or url portion to use in the href portion of the generated link.
-     * @deprecated
-     * @return string
-     */
-    final function CreateTooltip($helptext, $linktext="?", $forcewidth="", $classname="admin-tooltip admin-tooltip-box", $href="")
-    {
-        $result='<a class="'.$classname.'"';
-        if ($href!='') $result.=' href="'.$href.'"';
-        $result.='>'.$linktext.'<span';
-        if ($forcewidth!="" && is_numeric($forcewidth)) $result.=' style="width:'.$forcewidth.'px"';
-        $result.='>'.htmlentities($helptext)."</span></a>\n";
-        return $result;
-    }
-
-    /**
-     * Returns the xhtml equivalent of a tooltip-enabled href link	 This is basically a nice little wrapper
-     * to make sure that id's are placed in names and also that it's xhtml compliant.
-     *
-     * @final
-     * @param string $id The id given to the module on execution
-     * @param string $action The action that this form should do when the link is clicked
-     * @param string $returnid The id to eventually return to when the module is finished it's task
-     * @param string $contents The text that will have to be clicked to follow the link
-     * @param string $tooltiptext The helptext to be shown as tooltip-popup
-     * @param string $params An array of params that should be inlucded in the URL of the link.	 These should be in a $key=>$value format.
-     * @deprecated
-     * @return string
-     */
-    final function CreateTooltipLink($id, $action, $returnid, $contents, $tooltiptext, $params=array())
-    {
-        return $this->CreateTooltip($tooltiptext,$contents,"","admin-tooltip",$this->CreateLink($id,$action,$returnid,"admin-tooltip",$params,"",true) );
-    }
-
-    /**
      * Returns the xhtml equivalent of an fieldset and legend.  This is basically a nice little wrapper
      * to make sure that id's are placed in names and also that it's xhtml compliant.
      *
@@ -1656,28 +1588,6 @@ abstract class CMSModule
         $this->_loadFormMethods();
         return cms_module_CreateLabelForInput($this, $id, $name, $labeltext, $addttext);
     }
-
-    /**
-     * Returns the xhtml equivalent of an input textbox with label.  This is basically a nice little wrapper
-     * to make sure that id's are placed in names and also that it's xhtml compliant.
-     *
-     * @param string $id The id given to the module on execution
-     * @param string $name The html name of the textbox
-     * @param string $value The predefined value of the textbox, if any
-     * @param string $size The number of columns wide the textbox should be displayed
-     * @param string $maxlength The maximum number of characters that should be allowed to be entered
-     * @param string $addttext Any additional text that should be added into the tag when rendered
-     * @param string $label The text for label
-     * @param string $labeladdtext Any additional text that should be added into the tag when rendered
-     * @deprecated
-     * @return string
-     */
-    function CreateInputTextWithLabel($id, $name, $value='', $size='10', $maxlength='255', $addttext='', $label='', $labeladdtext='')
-    {
-        $this->_loadFormMethods();
-        return cms_module_CreateInputTextWithLabel($this, $id, $name, $value, $size, $maxlength, $addttext, $label, $labeladdtext);
-    }
-
 
     /**
      * Returns the xhtml equivalent of a file-selector field.  This is basically a nice little wrapper
