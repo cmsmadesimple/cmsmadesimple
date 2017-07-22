@@ -87,15 +87,15 @@ class Smarty_CMS extends CMSSmartyBase
             }
         }
 
-        $config = cms_config::get_instance();
-        $this->addConfigDir($config['assets_path'].'/configs');
-        $this->addPluginsDir($config['assets_path'].'/plugins');
-        $this->addPluginsDir(cms_join_path(CMS_ROOT_PATH,'plugins')); // deprecated
-        $this->addPluginsDir(cms_join_path(CMS_ROOT_PATH,'lib','plugins'));
+        $this->addConfigDir(CMS_ASSETS_PATH.'/configs');
+        $this->addPluginsDir(CMS_ASSETS_PATH.'/plugins');
+        $this->addPluginsDir(CMS_ROOT_PATH.'/plugins'); // deprecated
+        $this->addPluginsDir(CMS_ROOT_PATH.'/lib/plugins');
         $this->addTemplateDir(cms_join_path(CMS_ROOT_PATH, 'lib', 'assets', 'templates'));
 
+        $config = cms_config::get_instance();
         if( $_gCms->is_frontend_request()) {
-            $this->addTemplateDir($config['assets_path'].'/templates');
+            $this->addTemplateDir(CMS_ASSETS_PATH.'/templates');
 
             // Check if we are at install page, don't register anything if so, cause nothing below is needed.
             if(isset($CMS_INSTALL_PAGE)) return;
@@ -128,7 +128,6 @@ class Smarty_CMS extends CMSSmartyBase
         }
         else if($_gCms->test_state(CmsApp::STATE_ADMIN_PAGE)) {
             $this->setCaching(false);
-            $config = cms_config::get_instance();
             $admin_dir = $config['admin_path'];
             $this->addPluginsDir($admin_dir.'/plugins');
             $this->setTemplateDir($admin_dir.'/templates');
@@ -143,14 +142,12 @@ class Smarty_CMS extends CMSSmartyBase
      */
     public static function &get_instance()
     {
-        if( !self::$_instance ) {
-            self::$_instance = new \Smarty_CMS;
-        }
+        if( !self::$_instance ) self::$_instance = new \Smarty_CMS;
         return self::$_instance;
     }
 
     /**
-     * Load filters from CMSMS plugins folder
+     * Load filters from CMSMS plugins folders
      *
      * @return void
      */
@@ -192,9 +189,7 @@ class Smarty_CMS extends CMSSmartyBase
 
     public function registerClass($a,$b)
     {
-        if( $this->security_policy ) {
-            $this->security_policy->static_classes[] = $a;
-        }
+        if( $this->security_policy ) $this->security_policy->static_classes[] = $a;
         parent::registerClass($a,$b);
     }
 
@@ -236,7 +231,7 @@ class Smarty_CMS extends CMSSmartyBase
         $cachable = TRUE;
         $dirs = [];
         $dirs[] = cms_join_path(CMS_ROOT_PATH,'assets','plugins',$type.'.'.$name.'.php');
-        $dirs[] = cms_join_path(CMS_ROOT_PATH,'plugins',$type.'.'.$name.'.php');
+        $dirs[] = cms_join_path(CMS_ROOT_PATH,'plugins',$type.'.'.$name.'.php'); // deprecated
         $dirs[] = cms_join_path(CMS_ROOT_PATH,'lib','plugins',$type.'.'.$name.'.php');
         foreach( $dirs as $fn ) {
             if( !is_file($fn) ) continue;
@@ -264,6 +259,17 @@ class Smarty_CMS extends CMSSmartyBase
                 $callback = $row['callback'][0].'::'.$row['callback'][1];
                 return TRUE;
             }
+        }
+
+        // next simple plugins
+        // only of type plugin.
+        $_gCms = CmsApp::get_instance();
+        $ops = $_gCms->GetSimplePluginOperations();
+        $res = $ops->load_plugin($name);
+        if( $rers && is_callable($res) ) {
+            $cachable = FALSE;
+            $callback = $res;
+            return TRUE;
         }
     }
 
@@ -385,7 +391,7 @@ class Smarty_CMS extends CMSSmartyBase
 
         # do not show smarty debug console popup to users not logged in
         //$this->debugging = get_userid(FALSE);
-
+        debug_display($e); die();
         $this->assign('e_line', $e->getLine());
         $this->assign('e_file', $e->getFile());
         $this->assign('e_message', $e->getMessage());

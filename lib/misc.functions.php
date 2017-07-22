@@ -818,62 +818,6 @@ function cleanValue($val) {
 }
 
 
-
-/**
- * A function to test if permissions, and php configuration is setup correctly
- * to allow an administrator to upload files to CMSMS.
- *
- * @internal
- * @return bool
- */
-function can_admin_upload()
-{
-  # first, check to see if safe mode is enabled
-  # if it is, then check to see the owner of the index.php, moduleinterface.php
-  # and the uploads and modules directory.  if they all match, then we
-  # can upload files.
-  # if safe mode is off, then we just have to check the permissions.
-  $config = CmsApp::get_instance()->GetConfig();
-  $file_index = CMS_ROOT_PATH.DIRECTORY_SEPARATOR.'index.php';
-  $file_moduleinterface = CMS_ROOT_PATH.DIRECTORY_SEPARATOR.
-    $config['admin_dir'].DIRECTORY_SEPARATOR.'moduleinterface.php';
-  $dir_uploads = $config['uploads_path'];
-  $dir_modules = CMS_ROOT_PATH.DIRECTORY_SEPARATOR.'modules';
-
-  $stat_index = @stat($file_index);
-  $stat_moduleinterface = @stat($file_moduleinterface);
-  $stat_uploads = @stat($dir_uploads);
-  $stat_modules = @stat($dir_modules);
-
-  $my_uid = @getmyuid();
-
-  if( $my_uid === FALSE || $stat_index == FALSE ||
-      $stat_moduleinterface == FALSE || $stat_uploads == FALSE ||
-      $stat_modules == FALSE ) {
-    // couldn't get some necessary information.
-    return FALSE;
-  }
-
-  $safe_mode = ini_get_boolean('safe_mode');
-  if( $safe_mode ) {
-    // we're in safe mode.
-    if( ($stat_moduleinterface[4] != $stat_modules[4]) ||
-	($stat_moduleinterface[4] != $stat_uploads[4]) ||
-	($my_uid != $stat_moduleinterface[4]) ) {
-      // owners don't match
-      return FALSE;
-    }
-  }
-
-  // now check to see if we can write to the directories
-  if( !is_writable( $dir_modules ) ) return FALSE;
-  if( !is_writable( $dir_uploads ) ) return FALSE;
-
-  // It all worked.
-  return TRUE;
-}
-
-
 /**
  * A convenience function to return a bool variable given a php ini key that represents a bool.
  *

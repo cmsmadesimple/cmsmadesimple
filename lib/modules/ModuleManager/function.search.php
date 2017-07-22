@@ -37,11 +37,8 @@
 if( !isset($gCms) ) exit;
 
 global $CMS_VERSION;
-$caninstall = true;
-if( FALSE == can_admin_upload() ) {
-    echo '<div class="pageerrorcontainer"><div class="pageoverflow"><p class="pageerror">'.$this->Lang('error_permissions').'</p></div></div>';
-    $caninstall = false;
-}
+$dir = CMS_ASSETS_PATH.'/modules';
+$caninstall = (is_dir($dir) && is_writable($dir));
 
 // see if there are saved results
 $search_data = null;

@@ -46,7 +46,7 @@ try {
 
     // load all the content that this user can display...
     // organize it into a tree
-    $builder = new ContentListBuilder($this);
+    $builder = new \CMSContentManager\ContentListBuilder($this);
     $curpage = (isset($_SESSION[$this->GetName().'_curpage']) && !isset($params['seek'])) ? (int) $_SESSION[$this->GetName().'_curpage'] : 1;
     if( isset($params['curpage']) ) $curpage = (int)$params['curpage'];
     $filter = cms_userprefs::get($this->GetName().'_userfilter');

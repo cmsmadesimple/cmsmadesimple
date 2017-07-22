@@ -425,8 +425,8 @@ abstract class CMSModule
      */
     final public function GetModulePath()
     {
-        if (is_subclass_of($this, 'CMSModule')) return cms_join_path(CMS_ROOT_PATH, 'modules' , $this->GetName());
-        return __DIR__;
+        $modops = \ModuleOperations::get_instance();
+        return $modops->get_module_path( $this->GetName() );
     }
 
     /**
@@ -438,7 +438,12 @@ abstract class CMSModule
      */
     final public function GetModuleURLPath($use_ssl=false)
     {
-        return CMS_ROOT_URL.'/modules/'.$this->GetName();
+        $modops = \ModuleOperations::get_instance();
+        if( $modops->IsSystemModule( $this->GetName() ) ) {
+            return CMS_ROOT_URL . '/lib/modules/' . $this->GetName();
+        } else {
+            return CMS_ROOT_URL . '/assets/modules/' . $this->GetName();
+        }
     }
 
     /**
@@ -1396,6 +1401,7 @@ abstract class CMSModule
 
             $filename = $this->GetModulePath().'/action.' . $name . '.php';
             if( !is_file($filename) ) {
+                die($filename);
                 @trigger_error("$name is an unknown acton of module ".$this->GetName());
                 throw new \CmsError404Exception("Module action not found");
             }

@@ -28,13 +28,13 @@ final class FileManager extends CMSModule {
     public function GetChangeLog() { return $this->ProcessTemplate('changelog.tpl'); }
     public function GetHeaderHTML() { return $this->_output_header_javascript(); }
     public function GetFriendlyName() { return $this->Lang('friendlyname'); }
-    public function GetVersion() { return '1.6.3'; }
+    public function GetVersion() { return '1.7'; }
     public function GetHelp() { return $this->Lang('help'); }
     public function GetAuthor() { return 'Morten Poulsen (Silmarillion)'; }
     public function GetAuthorEmail() { return 'morten@poulsen.org'; }
-    public function IsPluginModule() { return true; }
-    public function HasAdmin() { return true; }
-    public function IsAdminOnly() { return false; }
+    public function IsPluginModule() { return FALSE; }
+    public function HasAdmin() { return TRUE; }
+    public function IsAdminOnly() { return TRUE; }
     public function GetAdminSection() { return 'content'; }
     public function GetAdminDescription() { return $this->Lang('moddescription'); }
     public function MinimumCMSVersion() { return "1.11=alpha0"; }
@@ -56,18 +56,18 @@ final class FileManager extends CMSModule {
 
         $result="";
         if ($isdir) {
-            $result="<img height=\"".$iconsizeHeight."\" style=\"border:0;\" src=\"".$config["root_url"]."/modules/FileManager/icons/themes/default/extensions/".$iconsize."/dir.png\" ".
+            $result="<img height=\"".$iconsizeHeight."\" style=\"border:0;\" src=\"".$this->GetModuleURLPath()."/icons/themes/default/extensions/".$iconsize."/dir.png\" ".
                 "alt=\"directory\" ".
                 "align=\"middle\" />";
             return $result;
         }
 
-        if (file_exists($config["root_path"]."/modules/FileManager/icons/themes/default/extensions/".$iconsize."/".strtolower($extension).".png")) {
-            $result="<img height='".$iconsizeHeight."' style='border:0;' src='".$config["root_url"]."/modules/FileManager/icons/themes/default/extensions/".$iconsize."/".strtolower($extension).".png' ".
+        if( is_file($this->GetModulePath()."/icons/themes/default/extensions/".$iconsize."/".strtolower($extension).".png")) {
+            $result="<img height='".$iconsizeHeight."' style='border:0;' src='".$this->GetModuleURLPath()."/icons/themes/default/extensions/".$iconsize."/".strtolower($extension).".png' ".
                 "alt='".$extension."-file' ".
                 "align='middle' />";
         } else {
-            $result="<img height='".$iconsizeHeight."' style='border:0;' src='".$config["root_url"]."/modules/FileManager/icons/themes/default/extensions/".$iconsize."/0.png' ".
+            $result="<img height='".$iconsizeHeight."' style='border:0;' src='".$this->GetModuleURLPath()."/icons/themes/default/extensions/".$iconsize."/0.png' ".
                 "alt=".$extension."-file' ".
                 "align='middle' />";
         }

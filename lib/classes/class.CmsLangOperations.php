@@ -89,11 +89,15 @@ final class CmsLangOperations
             $files[] = cms_join_path(CMS_ROOT_PATH,$config['admin_dir'],'lang','en_US.php');
         }
         else {
-            if( is_dir(cms_join_path(CMS_ROOT_PATH,'modules',$realm)) ) {
+            if( is_dir(cms_join_path(CMS_ROOT_PATH,'lib','modules',$realm)) ) {
                 $is_module = true;
-                $files[] = cms_join_path(CMS_ROOT_PATH,'modules',$realm,'lang','en_US.php');
+                $files[] = cms_join_path(CMS_ROOT_PATH,'lib','modules',$realm,'lang','en_US.php');
             }
-            $files[] = cms_join_path(CMS_ROOT_PATH,'lib','lang',$realm,'en_US.php');
+            if( is_dir(cms_join_path(CMS_ASSETS_PATH,'modules',$realm)) ) {
+                $is_module = true;
+                $files[] = cms_join_path(CMS_ROOT_PATH,'lib','modules',$realm,'lang','en_US.php');
+            }
+            //$files[] = cms_join_path(CMS_ROOT_PATH,'lib','lang',$realm,'en_US.php');
         }
 
         // now handle other lang files.

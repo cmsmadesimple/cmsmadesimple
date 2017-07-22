@@ -16,7 +16,6 @@ if (isset($CMS_INSTALL_DROP_TABLES)) {
   $db->DropSequence(CMS_DB_PREFIX."module_templates_seq");
   $db->DropSequence(CMS_DB_PREFIX."permissions_seq");
   $db->DropSequence(CMS_DB_PREFIX."users_seq");
-  $db->DropSequence(CMS_DB_PREFIX."userplugins_seq");
 
   $dbdict = NewDataDictionary($db);
 
@@ -58,8 +57,6 @@ if (isset($CMS_INSTALL_DROP_TABLES)) {
   $sqlarray = $dbdict->DropTableSQL(CMS_DB_PREFIX."userprefs");
   $dbdict->ExecuteSQLArray($sqlarray);
   $sqlarray = $dbdict->DropTableSQL(CMS_DB_PREFIX."users");
-  $dbdict->ExecuteSQLArray($sqlarray);
-  $sqlarray = $dbdict->DropTableSQL(CMS_DB_PREFIX."userplugins");
   $dbdict->ExecuteSQLArray($sqlarray);
   $sqlarray = $dbdict->DropTableSQL(CMS_DB_PREFIX."version");
   $dbdict->ExecuteSQLArray($sqlarray);
@@ -428,21 +425,6 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 	$return = $dbdict->ExecuteSQLArray($sqlarray);
 	$ado_ret = ($return == 2) ? ilang('done') : ilang('failed');
 	verbose_msg(ilang('install_created_table', 'users', $ado_ret));
-
-
-
-	$flds = "
-		userplugin_id I KEY,
-		userplugin_name C(255),
-		code X,
-		description X,
-		create_date DT,
-		modified_date DT
-	";
-	$sqlarray = $dbdict->CreateTableSQL(CMS_DB_PREFIX."userplugins", $flds, $taboptarray);
-	$return = $dbdict->ExecuteSQLArray($sqlarray);
-	$ado_ret = ($return == 2) ? ilang('done') : ilang('failed');
-	verbose_msg(ilang('install_created_table', 'userplugins', $ado_ret));
 
 
 

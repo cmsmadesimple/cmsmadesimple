@@ -149,16 +149,31 @@ final class ModuleOperations
         return $module;
     }
 
+
     /**
      * @ignore
      */
-    protected static function get_module_filename($module)
+    public static function get_module_filename($module)
     {
         $module = trim($module);
         if( !$module ) return;
-        $map = self::get_module_classmap();
         $config = \cms_config::get_instance();
-        return cms_join_path($config['root_path'],'modules',$module,"$module.module.php");
+        $paths = [ CMS_ASSETS_PATH.'/modules', CMS_ROOT_PATH.'/lib/modules' ];
+        foreach( $paths as $path ) {
+            $fn = $path."/$module/$module.module.php";
+            if( is_file($fn) ) {
+                return $fn;
+            }
+        }
+    }
+
+    /**
+     * @ignore
+     */
+    public static function get_module_path( $module )
+    {
+        $fn = self::get_module_filename( $module );
+        if( $fn ) return dirname( $fn );
     }
 
     /**
@@ -184,7 +199,7 @@ final class ModuleOperations
      */
     private function _generate_moduleinfo( CMSModule &$modinstance )
     {
-        $dir = dirname(dirname(__DIR__)).DIRECTORY_SEPARATOR."modules".DIRECTORY_SEPARATOR.$modinstance->GetName();
+        $dir = self::get_module_path( $modinstance->GetName() );
         if( !is_writable( $dir ) ) throw new CmsFileSystemException(lang('errordirectorynotwritable'));
 
         $fh = fopen($dir."/moduleinfo.ini",'w');
@@ -223,7 +238,7 @@ final class ModuleOperations
         global $CMSMS_GENERATING_XML;
         $CMSMS_GENERATING_XML = 1;
         $filecount = 0;
-        $dir = dirname(dirname(__DIR__)).DIRECTORY_SEPARATOR."modules".DIRECTORY_SEPARATOR.$modinstance->GetName();
+        $dir = self::get_module_path( $modinstance->GetName() );
         if( !is_writable( $dir ) ) throw new CmsFileSystemException(lang('errordirectorynotwritable'));
 
         // generate the moduleinfo.ini file
@@ -276,7 +291,6 @@ final class ModuleOperations
         return $xmltxt;
     }
 
-
     /**
      * Unpackage a module from an xml string
      * does not touch the database
@@ -290,7 +304,7 @@ final class ModuleOperations
     function ExpandXMLPackage( $xmluri, $overwrite = 0, $brief = 0 )
     {
         // first make sure that we can actually write to the module directory
-        $dir = dirname(dirname(__DIR__)).DIRECTORY_SEPARATOR."modules";
+        $dir = CMS_ASSETS_PATH.'/modules';
 
         if( !is_writable( $dir ) && $brief == 0 ) throw new CmsFileSystemException(lang('errordirectorynotwritable'));
 
@@ -540,7 +554,6 @@ final class ModuleOperations
         if( !is_array($this->_moduleinfo) || count($this->_moduleinfo) == 0 ) {
             $tmp = \CMSMS\internal\global_cache::get('modules');
             if( is_array($tmp) ) {
-                $dir = dirname(dirname(__DIR__)).DIRECTORY_SEPARATOR."modules";
                 $this->_moduleinfo = array();
                 for( $i = 0, $n = count($tmp); $i < $n; $i++ ) {
                     $name = $tmp[$i]['module_name'];
@@ -572,7 +585,6 @@ final class ModuleOperations
     private function _load_module($module_name,$force_load = FALSE,$dependents = TRUE)
     {
         $gCms = CmsApp::get_instance(); // backwards compatibility... set the global.
-        $dir = CMS_ROOT_PATH.'/modules';
 
         $info = $this->_get_module_info();
         if( !isset($info[$module_name]) && !$force_load ) {
@@ -639,24 +651,18 @@ final class ModuleOperations
 
         if( is_object($obj) ) $this->_modules[$module_name] = $obj;
 
-        if( (!isset($info[$module_name]) || $info[$module_name]['status'] != 'installed') &&
-            (isset($CMS_INSTALL_PAGE) || $this->IsQueuedForInstall($module_name)) ) {
-            // not installed, can we auto-install it?
-            if( in_array($module_name,$this->cmssystemmodules) || $this->IsQueuedForInstall($module_name) ) {
-                $res = $this->_install_module($obj);
-                if( !isset($_SESSION['moduleoperations_result']) ) $_SESSION['moduleoperations_result'] = array();
-                $_SESSION['moduleoperations_result'][$module_name] = $res;
-                $this->_unqueue_install($module_name);
-            }
-            else {
-                // nope, can't auto install...
-                unset($obj,$this->_modules[$module_name]);
-                return FALSE;
-            }
-        }
-
         $tmp = $gCms->get_installed_schema_version();
         if( $tmp == CMS_SCHEMA_VERSION ) {
+            if( (!isset($info[$module_name]) || $info[$module_name]['status'] != 'installed')
+                && isset($CMS_INSTALL_PAGE) && in_array($module_name,$this->cmssytemmodules) ) {
+                $res = $this->_install_module($obj);
+                if( $res[0] == FALSE ) {
+                    // nope, can't auto install...
+                    unset($obj,$this->_modules[$module_name]);
+                    return FALSE;
+                }
+            }
+
             // can't auto upgrade modules if cmsms schema versions don't match.
             // check to see if an upgrade is needed.
             allow_admin_lang(TRUE); // isn't this ugly.
@@ -664,21 +670,9 @@ final class ModuleOperations
                 $dbversion = $info[$module_name]['version'];
                 if( version_compare($dbversion, $obj->GetVersion()) == -1 ) {
                     // looks like upgrade is needed
-                    if( in_array($module_name,$this->cmssystemmodules) || $this->IsQueuedForInstall($module_name) && !$gCms->is_frontend_request() ) {
+                    if( in_array($module_name,$this->cmssystemmodules) && !$gCms->is_frontend_request() ) {
                         // we're allowed to upgrade
                         $res = $this->_upgrade_module($obj);
-                        $this->_unqueue_install($module_name);
-                        if( !isset($_SESSION['moduleoperations_result']) ) $_SESSION['moduleoperations_result'] = array();
-                        if( $res ) {
-                            // upgrade succeeded
-                            $res2 = array(TRUE,lang('moduleupgraded'));
-                            $_SESSION['moduleoperations_result'][$module_name] = $res2;
-                        }
-                        else {
-                            // upgrade failed
-                            $res2 = array(FALSE,lang('moduleupgradeerror'));
-                            $_SESSION['moduleoperations_result'][$module_name] = $res2;
-                        }
                         if( !$res ) {
                             // upgrade failed
                             allow_admin_lang(FALSE); // isn't this ugly.
@@ -697,8 +691,7 @@ final class ModuleOperations
             }
         }
 
-        if( (isset($info[$module_name]) && $info[$module_name]['status'] == 'installed') ||
-            $force_load ) {
+        if( (isset($info[$module_name]) && $info[$module_name]['status'] == 'installed') || $force_load ) {
             if( is_object($obj) ) $this->_modules[$module_name] = $obj;
             \CMSMS\HookManager::do_hook('Core::ModuleLoaded', [ 'name' => $module_name ] );
             return TRUE;
@@ -716,13 +709,16 @@ final class ModuleOperations
      */
     public function FindAllModules()
     {
-        $dir = dirname(dirname(__DIR__)).DIRECTORY_SEPARATOR."modules";
-
-        $result = array();
-        if( $handle = @opendir($dir) ) {
-            while( ($file = readdir($handle)) !== false ) {
-                $fn = "$dir/$file/$file.module.php";
-                if( @is_file($fn) ) $result[] = $file;
+        $result = [];
+        $paths = [ CMS_ASSETS_PATH.'/modules', CMS_ROOT_PATH.'/lib/modules' ];
+        foreach( $paths as $dir ) {
+            if( !is_dir($dir) ) continue;
+            if( is_dir($dir) && $handle = @opendir($dir) ) {
+                while( ($file = readdir($handle)) !== false ) {
+                    if( $file == '..' || $file == '.' ) continue;
+                    $fn = "$dir/$file/$file.module.php";
+                    if( @is_file($fn) && !in_array($file,$result) ) $result[] = $file;
+                }
             }
         }
 
@@ -745,9 +741,7 @@ final class ModuleOperations
 
     /**
      * Finds all modules that are available to be loaded...
-     * this method uses the information in the database to load the modules that are necessary to load
-     * it also, will go through any queued installs/upgrades and force those modules to load, which
-     * will in turn do the upgrading and installing if necessary.
+     * this method uses the information in the database to load the modules that are necessary to load.
      *
      * @access public
      * @internal
@@ -760,23 +754,6 @@ final class ModuleOperations
         $config = \cms_config::get_instance();
         $allinfo = $this->_get_module_info();
         if( !is_array($allinfo) ) return; // no modules installed, probably an empty database... edge case.
-
-        if( isset($_SESSION['moduleoperations']) ) {
-            // this will load (and thereby install/upgrade all modules that the ModuleManager queued up)
-            set_time_limit(9999);
-            foreach( $_SESSION['moduleoperations'] as $module_name => $info ) {
-                if( !isset($allinfo[$module_name]) ) {
-                    // no info about this module in the database yet.
-                    // make up some dummy info.
-                    $rec = array('module_name'=>$module_name,'status'=>'not installed','version'=>'0.0',
-                                 'admin_only'=>0,'active'=>0,'allow_fe_lazyload'=>0,'allow_admin_lazyload'=>0);
-                    $this->_moduleinfo[$module_name] = $rec;
-                }
-                // get the module instance, this will trigger the install, or the upgrade
-                $this->get_module_instance($module_name,'',TRUE);
-            }
-            unset($_SESSION['moduleoperations']);
-        }
 
         foreach( $allinfo as $module_name => $info ) {
             if( $info['status'] != 'installed' ) continue;
@@ -805,7 +782,7 @@ final class ModuleOperations
         if( $to_version == '' ) $to_version = $module_obj->GetVersion();
         $dbversion = $info[$module_name]['version'];
         if( version_compare($dbversion, $to_version) != -1 ) {
-          return array(TRUE); // nothing to do.
+            return array(TRUE); // nothing to do.
         }
 
         $db = $gCms->GetDb();
@@ -1248,67 +1225,6 @@ final class ModuleOperations
     public function &GetSyntaxModule($module_name = '')
     {
         return $this->GetSyntaxHighlighter($module_name);
-    }
-
-
-    /**
-     * Check if a module is queued for install.
-     *
-     * This is an internal method, subject to change in later releases.  It should never be called for upgrading arbitrary modules.
-     * Any use of this function by third party code will not be supported.  Use at your own risk and do not report bugs or issues
-     * related to your use of this module.
-     *
-     * @ignore
-     */
-    public function IsQueuedForInstall($module_name)
-    {
-        $module_name = trim((string)$module_name);
-        if( !$module_name ) return;
-        if( !isset($_SESSION['moduleoperations']) ) return FALSE;
-        if( !isset($_SESSION['moduleoperations'][$module_name]) ) return FALSE;
-        return TRUE;
-    }
-
-    /**
-     * @ignore
-     */
-    private function _unqueue_install($module_name)
-    {
-        $module_name = trim((string)$module_name);
-        if( !$module_name ) return;
-        if( isset($_SESSION['moduleoperations'][$module_name]) ) unset($_SESSION['moduleoperations'][$module_name]);
-    }
-
-    /**
-     * Queue a module for install
-     *
-     * @internal
-     * @since 1.10
-     * @param string $module_name
-     */
-    public function QueueForInstall($module_name)
-    {
-        $module_name = trim((string)$module_name);
-        if( !$module_name ) return;
-        if( !isset($_SESSION['moduleoperations']) ) $_SESSION['moduleoperations'] = array();
-        if( !isset($_SESSION['moduleoperations'][$module_name]) ) $_SESSION['moduleoperations'][$module_name] = 1;
-    }
-
-
-    /**
-     * Get list of modules queued for install.
-     *
-     * @internal
-     * @since 1.10
-     * @param string $module_name
-     */
-    public function GetQueueResults()
-    {
-        if( isset($_SESSION['moduleoperations_result']) ) {
-            $data = $_SESSION['moduleoperations_result'];
-            unset($_SESSION['moduleoperations_result']);
-            return $data;
-        }
     }
 
 

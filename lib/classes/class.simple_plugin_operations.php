@@ -6,7 +6,19 @@ final class simple_plugin_operations
     /**
      * @ignore
      */
+    private static $_instance;
     private $_loaded = [];
+
+    public function __construct()
+    {
+        if( self::$_instance ) throw new \LogicException('Cannot create more than one instance of '.__CLASS__);
+        self::$_instance = $this;
+    }
+
+    protected static function get_instance()
+    {
+        return self::$_instance;
+    }
 
     /**
      * List all known simple plugins.
@@ -55,35 +67,34 @@ final class simple_plugin_operations
 
     public function load_plugin($name)
     {
+        // test if the simple plugin exists
+        // output is a string like: '\\CMSMS\\simple_plugin::the_name';
+        // uses callstatic to  invoke,  which finds the file and includes it.
         $name = trim($name);
         if( !$this->is_valid_plugin_name( $name ) ) throw new \LogicException("Invalid name passed to ".__METHOD__);
         if( !isset($this->_loaded[$name]) ) {
             $file_name = $this->get_plugin_filename( $name );
             if( !is_file($file_name) ) throw new \RuntimeException('Could not find simple plugin named '.$name);
-            $function_name = 'cms_simple_plugin_'.$name;
 
             $code = trim(file_get_contents($file_name));
-            if( startswith( $code, '<?php' ) ) $code = substr($code,5);
-			if( endswith($code,'?>') ) $code = substr($code,0,-2);
-            $code = trim($code);
-            if( !$code ) throw new \RuntimeException('Empty simple_plugin named '.$name);
-            $code = 'function '.$function_name.'($params,&$template) {'.$code."\n}";
-            @eval($code);
-            $this->_loaded[$name] = $function_name;
+            if( !startswith( $code, '<?php' ) ) throw new \RuntimeException('Invalid format for simple plugin '.$name);
+
+            $this->_loaded[$name] = "\\CMSMS\\simple_plugin_operations::$name";
         }
         return $this->_loaded[$name];
     }
 
-    /*
-    public function call_plugin($name,array $params,\CMS_Smarty_Template &$template)
+    public static function __callStatic($name,$args)
     {
-        if( !$this->is_valid_plugin_name( $name ) ) throw new \LogicException("Invalid name passed to ".__METHOD__);
+        // invoking simple_plugin_operations::call_abcdefg
+        // get the appropriate filename
+        // include it.
+        $fn = self::get_instance()->get_plugin_filename( $name );
+        if( !is_file($fn) ) throw new \RuntimeException('Could not find simple plugin named '.$name);
 
-        $function_name = $this->load_plugin( $name );
-        if( $function_name ) {
-            $result = call_user_func_array($function_name, array($params, $template));
-            return $result;
-        }
+        // these variables are created for plugins to use in scope.
+        $params = $args[0];
+        $smarty = $args[1];
+        include( $fn );
     }
-    */
 } // end of filex

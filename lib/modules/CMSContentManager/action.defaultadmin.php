@@ -39,7 +39,7 @@ if( !isset($gCms) ) exit;
 echo '<noscript><h3 style="color: red; text-align: center;">'.$this->Lang('info_javascript_required').'</h3></noscript>'."\n";
 $error = '';
 
-$builder = new ContentListBuilder($this);
+$builder = new \CMSContentManager\ContentListBuilder($this);
 $pagelimit = cms_userprefs::get($this->GetName().'_pagelimit',500);
 $filter = cms_userprefs::get($this->GetName().'_userfilter');
 if( $filter ) $filter = unserialize($filter);

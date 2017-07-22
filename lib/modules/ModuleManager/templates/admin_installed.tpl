@@ -135,7 +135,7 @@ $(document).ready(function(){
 	  {if !$item.ver_compatible}
             {capture assign='op'}<span class="important" title="{$ModuleManager->Lang('title_notcompatible')}">{$ModuleManager->Lang('notcompatible')}</span>{/capture}{$ops[]=$op}
           {/if}
-          {if !$item.writable}
+          {if !$item.system_module && !$item.writable}
             {capture assign='op'}<span title="{$ModuleManager->Lang('title_cantremove')}">{$ModuleManager->Lang('cantremove')}</span>{/capture}{$ops[]=$op}
           {/if}
           {if isset($item.dependants)}
@@ -155,11 +155,13 @@ $(document).ready(function(){
           {if $item.can_install}
             {capture assign='op'}<a class="modop mod_install" href="{cms_action_url action='local_install' mod=$item.name}" title="{$ModuleManager->Lang('title_install')}">{$ModuleManager->Lang('install')}</a>{/capture}{$ops[]=$op}
           {/if}
-          {if $item.writable}
-            {capture assign='op'}<a class="modop mod_remove" href="{cms_action_url action='local_remove' mod=$item.name}" title="{$ModuleManager->Lang('title_remove')}">{$ModuleManager->Lang('remove')}</a>{/capture}{$ops[]=$op}
-          {else}
-            {capture assign='op'}<a class="modop mod_chmod" href="{cms_action_url action='local_chmod' mod=$item.name}" title="{$ModuleManager->Lang('title_chmod')}">{$ModuleManager->Lang('changeperms')}</a>{/capture}{$ops[]=$op}
-          {/if}
+	  {if !$item.system_module}
+            {if $item.writable}
+              {capture assign='op'}<a class="modop mod_remove" href="{cms_action_url action='local_remove' mod=$item.name}" title="{$ModuleManager->Lang('title_remove')}">{$ModuleManager->Lang('remove')}</a>{/capture}{$ops[]=$op}
+            {else}
+              {capture assign='op'}<a class="modop mod_chmod" href="{cms_action_url action='local_chmod' mod=$item.name}" title="{$ModuleManager->Lang('title_chmod')}">{$ModuleManager->Lang('changeperms')}</a>{/capture}{$ops[]=$op}
+            {/if}
+	  {/if}
         {else}
           {if $item.e_status == 'need_upgrade' }
               {capture assign='op'}<a class="modop mod_upgrade" href="{cms_action_url action='local_upgrade' mod=$item.name}" title="{$ModuleManager->Lang('title_upgrade')}">{$ModuleManager->Lang('upgrade')}</a>{/capture}

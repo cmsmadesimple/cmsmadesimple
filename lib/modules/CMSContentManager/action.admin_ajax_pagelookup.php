@@ -60,7 +60,7 @@ if( isset($_REQUEST['term']) ) {
 
   $list = $db->GetArray($query,$parms);
   if( is_array($list) && count($list) ) {
-    $builder = new ContentListBuilder($this);
+    $builder = new \CMSContentManager\ContentListBuilder($this);
     $builder->expand_all(); // it'd be cool to open all parents to each item.
     $contentops = ContentOperations::get_instance();
     foreach( $list as $row ) {

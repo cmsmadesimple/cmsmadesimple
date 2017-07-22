@@ -367,9 +367,7 @@ final class CmsApp {
      */
     public function GetSimplePluginOperations()
     {
-        if( !$this->_simple_plugin_manager ) {
-            $this->_simple_plugin_manager = new \CMSMS\simple_plugin_operations;
-        }
+        if( !$this->_simple_plugin_manager ) $this->_simple_plugin_manager = new \CMSMS\simple_plugin_operations;
         return $this->_simple_plugin_manager;
     }
 

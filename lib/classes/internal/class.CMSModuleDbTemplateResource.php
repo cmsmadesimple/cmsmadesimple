@@ -83,14 +83,14 @@ class CMSModuleFileTemplateResource extends CMS_Fixed_Resource_Custom
         if( count($params) != 2 ) return;
 
         $module_name = trim($params[0]);
-        $filename = basename(trim($params[1]));
-        $config = \cms_config::get_instance();
-        $files = array();
-        $files[] = cms_join_path($config['assets_path'],'module_custom',$module_name,'templates',$filename);
+        $filename = trim($params[1]);
+        $module = \ModuleOperations::get_instance()->get_module_instance($module_name);
+        $files = [ CMS_ASSETS_PATH."/module_custom/$module_name/templates/$filename" ];
+        $files[] = $module->GetModulePath()."/templates/$filename";
         $files[] = cms_join_path(CMS_ROOT_PATH,'modules',$module_name,'templates',$filename);
 
         foreach( $files as $one ) {
-            if( file_exists($one) ) {
+            if( is_file($one) ) {
                 $source = @file_get_contents($one);
                 $mtime = @filemtime($one);
                 break;

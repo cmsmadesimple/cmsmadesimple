@@ -43,7 +43,7 @@ function cms_module_CreateFormStart(&$modinstance, $id, $action='default', $retu
 
 	if ($idsuffix == '') $idsuffix = $_formcount++;
 
-	$goto = 'moduleinterface.php';
+	$goto = 'index.php'; 
 	if( $returnid != '' ) {
 	  $hm = $gCms->GetHierarchyManager();
 	  $node = $hm->sureGetNodeById($returnid);

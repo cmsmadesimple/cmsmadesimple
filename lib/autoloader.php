@@ -109,12 +109,7 @@ function cms_autoloader($classname)
         return;
     }
 
-    $fn = CMS_ROOT_PATH."/modules/{$classname}/{$classname}.module.php";
-    if( is_file($fn) ) {
-        require_once($fn);
-        return;
-    }
-
+    // standard tasks
     if( endswith($classname,'Task') ) {
         $class = substr($classname,0,-4);
         $fn = CMS_ROOT_PATH."/lib/tasks/class.{$class}.task.php";
@@ -124,37 +119,63 @@ function cms_autoloader($classname)
         }
     }
 
-    $list = ModuleOperations::get_instance()->GetLoadedModules();
+    $modops = \ModuleOperations::get_instance();
+    if( $modops->IsSystemModule( $classname ) ) {
+        $fn = CMS_ROOT_PATH."/lib/modules/{$classname}/{$classname}.module.php";
+    } else {
+        $fn = CMS_ASSETS_PATH."/modules/{$classname}/{$classname}.module.php";
+    }
+    if( is_file($fn) ) {
+        require_once($fn);
+        return;
+    }
+
+    // loaded module classes.
+    $modules = $modops->GetLoadedModules();
+    if( is_null($modules) ) return;
+    $list = array_keys($modules);
+    $tmp = ltrim(str_replace('\\','/',$classname),'/');
+    $class_base = basename($tmp);
+    $dirname = dirname($tmp);
     if( is_array($list) && count($list) ) {
-        foreach( array_keys($list) as $modname ) {
-            $fn = CMS_ROOT_PATH."/modules/$modname/lib/class.$classname.php";
+        if( in_array($dirname,$list) ) {
+            $modpath = $modops->get_module_path( $dirname );
+            $fn = "$modpath/lib/class.$class_base.php";
             if( is_file( $fn ) ) {
                 require_once($fn);
                 return;
             }
+
         }
 
         // handle \ModuleName\<path>\Class
         $tmp = ltrim(str_replace('\\','/',$classname),'/');
         $p1 = strpos($tmp,'/');
         if( $p1 !== FALSE ) {
+            $pos1 = strpos($tmp,'/');
             $modname = substr($tmp,0,strpos($tmp,'/'));
-            $tmp = substr($tmp,$p1+1);
-            if( isset($list[$modname]) ) {
-                $p2 = strrpos($tmp,'/');
+            if( in_array($modname,$list) ) {
+                $modpath = $modops->get_module_path( $modname );
+                $subpath = substr($tmp,$pos1+1);
                 $class = basename($tmp);
-                $path = substr($tmp,0,$p2);
-                $fn = CMS_ROOT_PATH."/modules/$modname/lib/";
-                if( $path ) $fn .= $path.'/';
-                $fn .= "class.$class.php";
+                $fn = "$modpath/lib/$subpath/class.$classname.php";
                 if( is_file($fn) ) {
                     require_once($fn);
                     return;
                 }
             }
         }
+
+        // handle class Foo (search in loaded modules)
+        foreach( $list as $modname ) {
+            $modpath = $modops->get_module_path( $modname );
+            $fn = "$modpath/lib/class.$classname.php";
+            if( is_file($fn) ) {
+                require_once($fn);
+                return;
+            }
+        }
     }
-    // module classes
 }
 
 spl_autoload_register('cms_autoloader');
@@ -162,4 +183,3 @@ spl_autoload_register('cms_autoloader');
 #
 # EOF
 #
-?>

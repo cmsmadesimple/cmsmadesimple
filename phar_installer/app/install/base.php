@@ -182,24 +182,6 @@ $create_private_dir = function($relative_dir) {
     @touch($dir.'/index.html');
 };
 
-/*
-$move_directory_files = function($srcdir,$destdir) {
-    $srcdir = trim($srcdir);
-    $destdir = trim($destdir);
-    if( !is_dir($srcdir) ) return;
-
-    $files = glob($srcdir.'/*');
-    if( !count($files) ) return;
-
-    foreach( $files as $src ) {
-        $bn = basename($src);
-        $dest = $destdir.'/'.$bn;
-        rename($src,$dest);
-    }
-    @touch($dir.'/index.html');
-};
-*/
-
 // create the assets directory structure
 verbose_msg(ilang('install_createassets'));
 $create_private_dir('assets/templates');
@@ -207,5 +189,6 @@ $create_private_dir('assets/configs');
 $create_private_dir('assets/admin_custom');
 $create_private_dir('assets/module_custom');
 $create_private_dir('assets/plugins');
+$create_private_dir('assets/simple_plugins');
 $create_private_dir('assets/images');
 $create_private_dir('assets/css');

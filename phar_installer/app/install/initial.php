@@ -67,8 +67,6 @@ $template->save();
 // Extra global tempaltes
 //
 
-#
-
 //
 // Default Content Object
 //

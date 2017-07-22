@@ -4,7 +4,7 @@ class CmsModuleInfo implements ArrayAccess
 {
     private static $_keys = array('name','version','depends','mincmsversion', 'author', 'authoremail', 'help', 'about',
                                   'lazyloadadmin', 'lazyloadfrontend', 'changelog','ver_compatible','dir','writable','root_writable',
-                                  'description','has_meta','has_custom','notavailable');
+                                  'description','has_meta','has_custom','notavailable','is_system_module');
     private $_data = array();
 
     public function OffsetGet($key)
@@ -26,6 +26,9 @@ class CmsModuleInfo implements ArrayAccess
         case 'root_writable':
             // move this into ModuleManagerModuleInfo
             return is_writable($this['dir']);
+
+        case 'is_system_module':
+            return ModuleOperations::get_instance()->IsSystemModule( $this->_data['name'] );
 
         default:
             if( isset($this->_data[$key]) ) return $this->_data[$key];
@@ -58,15 +61,15 @@ class CmsModuleInfo implements ArrayAccess
 
     private function _get_module_meta_file( $module_name )
     {
-        $config = \cms_config::get_instance();
-        $fn = $config['root_path']."/modules/$module_name/moduleinfo.ini";
-        return $fn;
+        $modops = \ModuleOperations::get_instance();
+        $path = $modops->get_module_path( $module_name );
+        return $path;
     }
 
     private function _get_module_file( $module_name )
     {
-        $config = \cms_config::get_instance();
-        $fn = $config['root_path']."/modules/$module_name/$module_name.module.php";
+        $modops = \ModuleOperations::get_instance();
+        $fn = $modops->get_module_filename( $module_name );
         return $fn;
     }
 

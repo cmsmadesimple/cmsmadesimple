@@ -70,7 +70,7 @@ $smarty->assign('can_reorder_content',$this->CheckPermission('Manage All Content
 
 // load all the content that this user can display... 
 // organize it into a tree
-$builder = new ContentListBuilder($this);
+$builder = new \CMSContentManager\ContentListBuilder($this);
 $curpage = 1;
 if( isset($params['curpage']) ) $curpage = (int)$params['curpage'];
 
