@@ -997,7 +997,7 @@ abstract class CMSModule
      */
     public function Install()
     {
-        $filename = dirname(dirname(__DIR__)) . '/modules/'.$this->GetName().'/method.install.php';
+        $filename = $this->GetModulePaht().'/method.install.php';
         if (@is_file($filename)) {
             $gCms = CmsApp::get_instance();
             $db = $gCms->GetDb();
@@ -1038,7 +1038,7 @@ abstract class CMSModule
      */
     public function Uninstall()
     {
-        $filename = dirname(dirname(__DIR__)) . '/modules/'.$this->GetName().'/method.uninstall.php';
+        $filename = $this->GetModulePath().'/method.uninstall.php';
         if (@is_file($filename)) {
             $gCms = CmsApp::get_instance();
             $db = $gCms->GetDb();
@@ -1110,7 +1110,7 @@ abstract class CMSModule
      */
     public function Upgrade($oldversion, $newversion)
     {
-        $filename = dirname(dirname(__DIR__)) . '/modules/'.$this->GetName().'/method.upgrade.php';
+        $filename = $this->GetModulePath().'/method.upgrade.php';
         if (@is_file($filename)) {
             $gCms = CmsApp::get_instance();
             $db = $gCms->GetDb();
@@ -2793,15 +2793,13 @@ abstract class CMSModule
     public function DoEvent( $originator, $eventname, &$params )
     {
         if ($originator != '' && $eventname != '') {
-            $filename = dirname(dirname(__DIR__)) . '/modules/'.$this->GetName().'/event.'
-                . $originator . "." . $eventname . '.php';
+            $filename = $this->GetModulePath().'/event.' . $originator . "." . $eventname . '.php';
 
             if (@is_file($filename)) {
                 $gCms = CmsApp::get_instance();
                 $db = $gCms->GetDb();
                 $config = $gCms->GetConfig();
                 $smarty = $gCms->GetSmarty();
-
                 include($filename);
             }
         }
