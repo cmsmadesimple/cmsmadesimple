@@ -60,7 +60,7 @@ class operations
                     $moduledetails['version'] = $reader->value;
                     $tmpinst = $modops->get_module_instance($moduledetails['name']);
                     if( $tmpinst && $brief == 0 ) {
-                       $version = $tmpinst->GetVersion();
+                        $version = $tmpinst->GetVersion();
                         if( version_compare($moduledetails['version'],$version) < 0 ) {
                             throw new \RuntimeException($this->_mod->Lang('err_xml_oldermodule'));
                         }
@@ -113,7 +113,6 @@ class operations
 				break;
 
 			case \XMLReader::END_ELEMENT:
-			{
 				switch( strtoupper($reader->localName) ) {
                 case 'REQUIRES':
                     if( count($requires) != 2 ) continue;
@@ -161,7 +160,6 @@ class operations
                     break;
 				}
 				break;
-			}
             }
         } // while
 
@@ -177,4 +175,61 @@ class operations
 
         return $moduledetails;
     }
+
+    function create_xml_package( \CMSModule $modinstance, &$message, &$filecount )
+    {
+        // get a file list
+        $filecount = 0;
+        $dir = $modinstance->GetModulePath();
+        if( !is_directory_writable( $dir ) ) throw new \CmsFileSystemException(lang('errordirectorynotwritable'));
+
+        // generate the moduleinfo.ini file
+        \ModuleOperations::get_instance()->generate_moduleinfo($modinstance);
+        $files = get_recursive_file_list( $dir, $this->xml_exclude_files );
+
+        $xmltxt  = '<?xml version="1.0" encoding="ISO-8859-1"?>';
+        $xmltxt .= $this->xmldtd."\n";
+        $xmltxt .= "<module>\n";
+        $xmltxt .= "	<dtdversion>".MODULE_DTD_VERSION."</dtdversion>\n";
+        $xmltxt .= "	<name>".$modinstance->GetName()."</name>\n";
+        $xmltxt .= "	<version>".$modinstance->GetVersion()."</version>\n";
+        $xmltxt .= "    <mincmsversion>".$modinstance->MinimumCMSVersion()."</mincmsversion>\n";
+        $xmltxt .= "	<help><![CDATA[".base64_encode($modinstance->GetHelpPage())."]]></help>\n";
+        $xmltxt .= "	<about><![CDATA[".base64_encode($modinstance->GetAbout())."]]></about>\n";
+        $desc = $modinstance->GetAdminDescription();
+        if( $desc != '' ) $xmltxt .= "	<description><![CDATA[".$desc."]]></description>\n";
+
+        $depends = $modinstance->GetDependencies();
+        foreach( $depends as $key=>$val ) {
+            $xmltxt .= "	<requires>\n";
+            $xmltxt .= "	  <requiredname>$key</requiredname>\n";
+            $xmltxt .= "	  <requiredversion>$val</requiredversion>\n";
+            $xmltxt .= "	</requires>\n";
+        }
+        foreach( $files as $file ) {
+            // strip off the beginning
+            if (substr($file,0,strlen($dir)) == $dir) $file = substr($file,strlen($dir));
+            if( $file == '' ) continue;
+
+            $xmltxt .= "	<file>\n";
+            $filespec = $dir.DIRECTORY_SEPARATOR.$file;
+            $xmltxt .= "	  <filename>$file</filename>\n";
+            if( @is_dir( $filespec ) ) {
+                $xmltxt .= "	  <isdir>1</isdir>\n";
+            }
+            else {
+                $xmltxt .= "	  <isdir>0</isdir>\n";
+                $data = base64_encode(file_get_contents($filespec));
+                $xmltxt .= "	  <data><![CDATA[".$data."]]></data>\n";
+            }
+
+            $xmltxt .= "	</file>\n";
+            ++$filecount;
+        }
+        $xmltxt .= "</module>\n";
+        $message = 'XML package of '.strlen($xmltxt).' bytes created for '.$modinstance->GetName();
+        $message .= ' including '.$filecount.' files';
+        return $xmltxt;
+    }
+
 } // end of class

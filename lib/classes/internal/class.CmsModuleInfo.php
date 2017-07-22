@@ -18,7 +18,7 @@ class CmsModuleInfo implements ArrayAccess
             return version_compare($this['mincmsversion'],CMS_VERSION,'<=');
 
         case 'dir':
-            return cms_join_path(CMS_ROOT_PATH,'modules',$this['name']);
+            return ModuleOperations::get_instance()->get_module_path( $this->_data['name'] );
 
         case 'writable':
             return is_directory_writable($this['dir']);
@@ -107,8 +107,7 @@ class CmsModuleInfo implements ArrayAccess
 
     private function _check_modulecustom($module_name)
     {
-        $config = \cms_config::get_instance();
-        $dir = $config['assets_path']."/module_custom/$module_name";
+        $dir = CMS_ASSETS_PATH."/module_custom/$module_name";
         $files1 = glob($dir."/templates/*.tpl");
         $files2 = glob($dir."/lang/??_??.php");
 
@@ -125,8 +124,7 @@ class CmsModuleInfo implements ArrayAccess
 
     private function _read_from_module_meta($module_name)
     {
-        $config = \cms_config::get_instance();
-        $dir = $config['root_path']."/modules/$module_name";
+        $dir = \ModuleOperations::get_instance()->get_module_path( $module_name );
         $fn = $this->_get_module_meta_file( $module_name );
         if( !is_file($fn) ) return;
         $inidata = @parse_ini_file($fn,TRUE);
@@ -183,64 +181,4 @@ class CmsModuleInfo implements ArrayAccess
         return $arr;
     }
 
-    /**
-     * @internal
-     * @ignore
-     * @return bool
-     */
-    public function write_meta()
-    {
-        if( !$this['writable'] ) return FALSE;
-
-        $_write_ini = function($input,$filename,$depth = 0) use(&$_write_ini) {
-            if( !is_array($input) ) return;
-
-            $res = '';
-            foreach($input as $key => $val) {
-                if( is_array($val) ) {
-                    $res .= "[$key]".PHP_EOL;
-                    $res .= $_write_ini($val,'',$depth+1);
-                }
-                else {
-                    if( is_numeric($val) && strpos($val,' ') === FALSE ) {
-                        $res .= "$key = $value".PHP_EOL;
-                    }
-                    else {
-                        $res .= "$key = \"$value\"".PHP_EOL;
-                    }
-                }
-            }
-            if( $filename ) {
-                file_put_contents($filename,$str);
-            }
-            else {
-                return $str;
-            }
-        }; // _write_ini
-
-        $dir = dirname(dirname(__DIR__))."/modules/$module_name";
-        $fn = cms_join_path($dir,'moduleinfo.ini');
-        if( !file_exists($fn) ) {
-            $out = array();
-            $out['name'] = $this['name'];
-            $out['version'] = $this['version'];
-            $out['description'] = $this['description'];
-            $out['author'] = $this['author'];
-            $out['authoremail'] = $this['authoremail'];
-            $out['mincmsversion'] = $this['mincmsversion'];
-            $out['lazyloadadmin'] = $this['lazyloadadmin'];
-            $out['lazyloadfrontend'] = $this['lazyloadfrontend'];
-            $_write_ini_file($out,$fn);
-        }
-
-        $fn = cms_join_path($dir,'changelog.inc');
-        if( !file_exists($fn) ) file_put_contents($fn2,$this['changelog']);
-
-        $fn = cms_join_path($dir,'help.inc');
-        if( !file_exists($fn) ) file_put_contents($fn2,$this['help']);
-
-        return TRUE;
-    }
-}
-
-?>
+} // end of class

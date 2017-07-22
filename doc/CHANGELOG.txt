@@ -43,6 +43,7 @@ Installation Assistant - remember to bump version
 
 ModuleManaver v2.2
   - XML import code now lives here.
+  - XML export code now lives here.
 
 Version 2.2.2 - Hearts Content
 ----------------------------------
