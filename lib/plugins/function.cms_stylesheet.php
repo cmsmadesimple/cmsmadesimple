@@ -197,7 +197,7 @@ function smarty_cms_function_cms_stylesheet($params, &$smarty)
             }
         }
     } catch( \Exception $e ) {
-        audit('','cms_stylesheet',$e->GetMessage());
+        cms_error('cms_stylesheet',$e->GetMessage());
         $stylesheet = '<!-- cms_stylesheet error: '.$e->GetMessage().' -->';
     }
 
@@ -239,9 +239,7 @@ function cms_stylesheet_writeCache($filename, $list, $trimbackground, &$smarty)
 	}
 	catch (SmartyException $e) {
         // why not just re-throw the exception as it may have a smarty error in it.
-        debug_to_log('Error Processing Stylesheet');
-        debug_to_log($e->GetMessage());
-        audit('','Plugin: cms_stylesheet', 'Smarty Compile process failed, an error in the template?');
+        cms_error('cms_stylesheet: Smarty Compile process failed, an error in the template?');
         return;
 	}
 

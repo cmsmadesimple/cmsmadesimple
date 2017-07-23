@@ -37,6 +37,8 @@ Core - General
   - Adds new root functions cms_notice, cms_warning, and cms_notice
   - Revise many places where audit() was being called to call the new methods.
   - audit() method now uses the AuditManager class
+  - CMSModule::SetError() and CMSModule::SetMessage() now set session variables, and the strings will no longer be on the array
+  - Adds new CMSModule::AddAdminHeadText() method to allow module actions to add dynamic text to the head section of admin requests.
 
 CMSContentManager - remember to bump version
   - Gets rid of secure options, flag output and bulk functionaltiy

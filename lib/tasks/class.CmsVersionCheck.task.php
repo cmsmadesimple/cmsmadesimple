@@ -56,7 +56,7 @@ class CmsVersionCheckTask implements CmsRegularTask
             $alert->msgkey = 'new_version_avail2';
             $alert->msgargs = [ CMS_VERSION, $remote_ver ];
             $alert->save();
-            audit('','Core','CMSMS version '.$remote_ver.' is available');
+            cms_notice('CMSMS version '.$remote_ver.' is available');
         }
         return TRUE;
     }

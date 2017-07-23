@@ -22,6 +22,5 @@ function smarty_cms_function_breadcrumbs($params, &$smarty)
 echo '<span style="font-weight: bold; color: #f00;">WARNING:<br />The &#123breadcrumbs&#125 tag is removed from CMSMS Core<br />Instead, now use in your HTML template: &#123nav_breadcrumbs&#125 !</span>';
 
 // put mention into the admin log
-audit('', '&#123breadcrumbs&#125 tag', 'is removed from CMSMS Core. Instead, now use in your HTML template: &#123nav_breadcrumbs&#125 !');
+cms_error('', '&#123breadcrumbs&#125 tag', 'is removed from CMSMS Core. Instead, now use in your HTML template: &#123nav_breadcrumbs&#125 !');
 }
-?>
