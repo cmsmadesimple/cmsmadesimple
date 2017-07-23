@@ -30,6 +30,7 @@ Core - General
   - Move system modules to /lib/modules
   - Now look for third party modules in /assets/modules
   - Remove un-necessary moduleinterface.php from the root directory.
+  - Adds a new hook method to the HookManager class. 
 
 CMSContentManager - remember to bump version
   - Gets rid of secure options, flag output and bulk functionaltiy

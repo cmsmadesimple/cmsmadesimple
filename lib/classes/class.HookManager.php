@@ -244,6 +244,72 @@ namespace CMSMS {
         }
 
         /**
+         * Trigger a hook, returning the first non empty value.
+         *
+         * This method accepts variable arguments.  The first argument (required) is the name of the hook to execute.
+         * Further arguments will be passed to the various handlers.
+         *
+         * This method will always pass the same input arguments to each hook handler.
+         *
+         * @return mixed The output of this method depends on the hook.
+         */
+        public static function get_first_hook_result()
+        {
+            $is_assoc = function($in) {
+                $keys = array_keys($in);
+                $n = 0;
+                for( $n = 0; $n < count($keys); $n++ ) {
+                    if( $keys[$n] != $n ) return FALSE;
+                }
+                return TRUE;
+            };
+            $args = func_get_args();
+            $name = array_shift($args);
+            $name = trim($name);
+            $is_event = false;
+            $module = $eventname = null;
+            if( strpos($name,':') !== FALSE ) list($module,$eventname) = explode('::',$name);
+            if( $module && $eventname ) $is_event = true;
+
+
+            if( $is_event && (!isset(self::$_hooks[$name]) || !self::$_hooks[$name]->sorted) ) {
+                // insert a hook to handle the event, be sure we only do this once.
+                $event_caller = function($params = null) use ($module,$eventname) {
+		    if( !$params ) $params = [];
+                    $tmp = $module.'::'.$eventname;
+                    \Events::SendEvent($module,$eventname,$params);
+                };
+                if( !isset(self::$_hooks[$name]) ) self::add_hook($name,$event_caller);
+            }
+
+            if( !isset(self::$_hooks[$name]) || !count(self::$_hooks[$name]->handlers)  ) return; // nothing to do.
+
+            // sort the handlers.
+            if( !self::$_hooks[$name]->sorted ) {
+                if( count(self::$_hooks[$name]->handlers) > 1 ) {
+                    usort(self::$_hooks[$name]->handlers,function($a,$b){
+                            if( $a->priority < $b->priority ) return -1;
+                            if( $a->priority > $b->priority ) return 1;
+                            return 0;
+                        });
+                }
+                self::$_hooks[$name]->sorted = TRUE;
+            }
+
+            self::$_in_process[] = $name;
+            foreach( self::$_hooks[$name]->handlers as $obj ) {
+                $value = $args;
+                if( !empty($value) && !is_array( $value ) ) $value = [ $value ];
+                if( empty($value) ) {
+                    $out = call_user_func($obj->callable);
+                } else {
+                    $out = call_user_func_array($obj->callable,$value);
+                }
+                if( !empty($out) ) return $out;
+            }
+        }
+
+        /**
          * Trigger a hook, accumulating the results of each hook handler into an array.
          *
          * This method accepts variable arguments.  The first argument (required) is the name of the hook to execute.
