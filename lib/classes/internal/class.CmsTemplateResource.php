@@ -77,7 +77,7 @@ class CmsTemplateResource extends CMS_Fixed_Resource_Custom
 			if( !is_object($tpl) ) return;
 		}
 		catch( Exception $e ) {
-			audit('','Core','Missing Template: '.$name);
+			cms_error('Missing Template: '.$name);
 			return;
 		}
 

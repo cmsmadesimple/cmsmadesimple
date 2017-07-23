@@ -130,12 +130,12 @@ function redirect_to_alias($alias)
   $node = $manager->sureGetNodeByAlias($alias);
   if( !$node ) {
 	// put mention into the admin log
-    audit('','Core','Attempt to redirect to invalid alias: '.$alias);
+    cms_warning('Core: Attempt to redirect to invalid alias: '.$alias);
     return;
   }
   $content = $node->GetContent();
   if (!is_object($content)) {
-    audit('','Core','Attempt to redirect to invalid alias: '.$alias);
+    cms_warning('Core: Attempt to redirect to invalid alias: '.$alias);
     return;
   }
   if ($content->GetURL() != '') redirect($content->GetURL());

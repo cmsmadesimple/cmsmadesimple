@@ -371,7 +371,7 @@ class Content extends ContentBase
                         $design_id = $dflt_design->get_id();
                     }
                     catch( \Exception $e ) {
-                        audit('','CMSContentManager','No default design found');
+                        cms_error('No default design specified');
                     }
                 }
 				$out = '';
@@ -396,7 +396,7 @@ class Content extends ContentBase
                         $template_id = $dflt_tpl->get_id();
                     }
                     catch( \Exception $e ) {
-                        audit('','CMSContentManager','No default page template found');
+                        cms_error('No default page template found');
                     }
                 }
 				$out = CmsFormUtils::create_dropdown('template_id',$_templates,$template_id,array('id'=>'template_id'));

@@ -100,24 +100,6 @@ abstract class CMSModule
      * @access private
      * @ignore
      */
-    private $__errors;
-
-    /**
-     * @access private
-     * @ignore
-     */
-    private $__messages;
-
-    /**
-     * @access private
-     * @ignore
-     */
-    private $__current_tab;
-
-    /**
-     * @access private
-     * @ignore
-     */
     private $_action_tpl;
 
     /**
@@ -149,7 +131,7 @@ abstract class CMSModule
             $this->InitializeFrontend();
         }
         else if( isset($CMS_ADMIN_PAGE) && !isset($CMS_STYLESHEET) && !isset($CMS_INSTALL_PAGE) ) {
-            $this->InitializeAdmin();
+            if( \ModuleOperations::get_instance()->IsModuleActive( $this->GetName() ) ) $this->InitializeAdmin();
         }
     }
 
@@ -472,6 +454,20 @@ abstract class CMSModule
     public function GetHeaderHTML()
     {
         return '';
+    }
+
+    /**
+     * Dynamically add header text to go between the <head> tags when the modle is called from an admin side action.
+     * This is a convenient way of including javascript libraries, or custom styles for your actions.
+     *
+     * @since 2.3
+     * @param string $text the complete XHTML text.
+     */
+    public function AddAdminHeaderText($text)
+    {
+        $text = trim($text);
+        $obj = \cms_utils::get_theme_object();
+        if( $obj ) $obj->add_headtext( $text );
     }
 
     /**
@@ -1355,11 +1351,17 @@ abstract class CMSModule
     public function DoAction($name, $id, $params, $returnid='')
     {
         if( $returnid == '' ) {
-            if( isset($params['__activetab']) ) $this->SetCurrentTab(trim($params['__activetab']));
-            if( isset($params['__errors']) ) $this->__errors = explode('::err::',$params['__errors']);
-            if( isset($params['__messages']) ) $this->__messages = explode('::msg::',$params['__messages']);
-            if( is_array($this->__errors) && count($this->__errors) ) echo $this->ShowErrors($this->__errors);
-            if( is_array($this->__messages) && count($this->__messages) ) echo $this->ShowMessage($this->__messages[0]);
+            $key = $this->GetName().'::activetab';
+            if( isset($_SESSION[$key]) ) {
+                $this->SetCurrentTab($_SESSION[$key]);
+                unset($_SESSION[$key]);
+            }
+            if( ($errs = $this->GetErrors()) ) {
+                echo $this->ShowErrors();
+            }
+            if( ($msg = $this->GetMessage()) ) {
+                echo $this->Showmessage($msg);
+            }
         }
 
         if ($name != '') {
@@ -1404,7 +1406,7 @@ abstract class CMSModule
         if( $returnid != '' ) {
             if( !$this->restrict_unknown_params ) {
                 // put mention into the admin log
-                audit('',$this->GetName(),'Module is not properly cleaning input params');
+                cms_warning($this->GetName().' is not properly cleaning input params');
             }
 
             // merge in params from module hints.
@@ -1967,9 +1969,8 @@ abstract class CMSModule
      */
     public function RedirectToAdminTab($tab = '',$params = '',$action = '')
     {
-        if( $tab == '' ) if( $this->__current_tab ) $tab = $this->__current_tab;
         if( $params == '' ) $params = array();
-        if( $tab != '' ) $params['__activetab'] = $tab;
+        if( $tab != '' ) $this->SetCurrentTab($tab);
         if( empty($action) ) $action = 'defaultadmin';
         $this->Redirect('m1_',$action,'',$params,FALSE);
     }
@@ -2000,11 +2001,6 @@ abstract class CMSModule
      */
     public function Redirect($id, $action, $returnid='', $params=array(), $inline=false)
     {
-        if( $returnid == '' ) {
-            if( is_array($this->__errors) && count($this->__errors) ) $params['__errors'] = implode('::err::',$this->__errors);
-            if( is_array($this->__messages) && count($this->__messages) ) $params['__messages'] = implode('::msg::',$this->__messages);
-        }
-
         $this->_loadRedirectMethods();
         return cms_module_Redirect($this, $id, $action, $returnid, $params, $inline);
     }
@@ -2129,6 +2125,7 @@ abstract class CMSModule
      * @author calguy1000
      * @param string $template The template name.
      * @return string
+     * @deprecated
      */
     final public function GetDatabaseResource($template)
     {
@@ -2167,6 +2164,7 @@ abstract class CMSModule
      * @author calguy1000
      * @param string $template The template name.
      * @return string
+     * @deprecated
      */
     final public function GetFileResource($template)
     {
@@ -2320,7 +2318,7 @@ abstract class CMSModule
      */
     public function SetCurrentTab($tab)
     {
-        $this->__current_tab = $tab;
+        $_SESSION[$this->GetName().'::activetab'] = $tab;
         cms_admin_tabs::set_current_tab($tab);
     }
 
@@ -2458,6 +2456,35 @@ abstract class CMSModule
     }
 
     /**
+     * @internal
+     * @ignore
+     */
+    protected function GetErrors()
+    {
+        $key = $this->GetName().'::errors';
+        if( !isset( $_SESSION[$key] ) ) return;
+
+        $data = $_SESSION[$key];
+        unset($_SESSION[$key]);
+        return $data;
+    }
+
+    /**
+     * @internal
+     * @ignore
+     */
+    protected function GetMessage()
+    {
+        $key = $this->GetName().'::message';
+        if( !isset( $_SESSION[$key] ) ) return;
+
+        $msg = $_SESSION[$key];
+        if( !$msg ) $msg = null;
+        unset($_SESSION[$key]);
+        return $msg;
+    }
+
+    /**
      * ShowMessage
      * Returns a formatted page status message
      *
@@ -2473,7 +2500,7 @@ abstract class CMSModule
     }
 
     /**
-     * Set a display  message.
+     * Set a display message.
      *
      * @since 1.11
      * @author Robert Campbell
@@ -2481,9 +2508,8 @@ abstract class CMSModule
      */
     public function SetMessage($str)
     {
-        if( !is_array($this->__messages) ) $this->__messages = array();
-        if( !is_array($str) ) $str = array($str);
-        $this->__messages = array_merge($this->__messages,$str);
+        if( is_string($str) ) $str = [$str];
+        $_SESSION[$this->GetName().'::message'] = $str;
     }
 
     /**
@@ -2510,9 +2536,8 @@ abstract class CMSModule
      */
     public function SetError($str)
     {
-        if( !is_array($this->__errors) ) $this->__errors = array();
-        if( !is_array($str) ) $str = array($str);
-        $this->__errors = array_merge($this->__errors,$str);
+        $key = $this->GetName().'::errors';
+        $_SSSION[$key][] = $str;
     }
 
 

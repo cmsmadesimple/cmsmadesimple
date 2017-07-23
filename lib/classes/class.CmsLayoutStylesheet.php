@@ -490,7 +490,7 @@ class CmsLayoutStylesheet
         }
 
         CmsTemplateCache::clear_cache();
-        audit($this->get_id(),'CMSMS','Stylesheet '.$this->get_name().' Updated');
+        cms_notice('Stylesheet '.$this->get_name().' Updated');
         $this->_dirty = FALSE;
     }
 
@@ -523,7 +523,7 @@ class CmsLayoutStylesheet
 
         $this->_dirty = FALSE;
         CmsTemplateCache::clear_cache();
-        audit($this->get_id(),'CMSMS','Stylesheet '.$this->get_name().' Created');
+        cms_notice('Stylesheet '.$this->get_name().' Created');
     }
 
 	/**
@@ -573,7 +573,7 @@ class CmsLayoutStylesheet
         @unlink($this->get_content_filename());
 
         CmsTemplateCache::clear_cache();
-        audit($this->get_id(),'CMSMS','Stylesheet '.$this->get_name().' Deleted');
+        cms_notice('Stylesheet '.$this->get_name().' Deleted');
 		// Events::SendEvent('Core','DeleteStylesheetPost',array(get_class($this)=>&$this));
         \CMSMS\HookManager::do_hook('Core::DeleteStylesheetPost',array(get_class($this)=>&$this));
         unset($this->_data['id']);

@@ -32,6 +32,11 @@ Core - General
   - Remove un-necessary moduleinterface.php from the root directory.
   - Adds a new hook method to the HookManager class to allow returning the first nonempty value.
   - Changes to changegroupperm localization technique.
+  - Adds new AuditManager class that is enabled within include.php allows for swapping out auditing methods.
+  - By default, the audit manager will output mesages to the HTTP error log, but a module can override this.
+  - Adds new root functions cms_notice, cms_warning, and cms_notice
+  - Revise many places where audit() was being called to call the new methods.
+  - audit() method now uses the AuditManager class
 
 CMSContentManager - remember to bump version
   - Gets rid of secure options, flag output and bulk functionaltiy

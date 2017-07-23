@@ -81,6 +81,8 @@ debug_buffer('done loading basic files');
 #Grab the current configuration
 $_app = CmsApp::get_instance(); // for use in this file only.
 $config = $_app->GetConfig();
+\CMSMS\AuditManager::init();
+//\CMSMS\AuditManager::get_instance();  // initialize the audit manager.
 
 if ($config["debug"] == true) {
     @ini_set('display_errors',1);
@@ -142,7 +144,7 @@ $obj = new \CMSMS\internal\global_cachable('module_deps',
                                                $db = \CmsApp::get_instance()->GetDb();
                                                $query = 'SELECT parent_module,child_module,minimum_version FROM '.CmsApp::get_instance()->GetDbPrefix().'module_deps ORDER BY parent_module';
                                                $tmp = $db->GetArray($query);
-                                               if( !is_array($tmp) || !count($tmp) ) return;
+                                               if( !is_array($tmp) || !count($tmp) ) return '-';  // special value so that we actually return something to cache.
                                                $out = array();
                                                foreach( $tmp as $row ) {
                                                    $out[$row['child_module']][$row['parent_module']] = $row['minimum_version'];

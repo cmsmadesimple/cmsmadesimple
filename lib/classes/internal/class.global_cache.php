@@ -68,7 +68,6 @@ class global_cache
 
     private static function _load()
     {
-        debug_buffer('initialize internal global cache');
         $driver = self::_get_driver();
         $keys = array_keys(self::$_types);
         self::$_cache = array();
@@ -77,7 +76,6 @@ class global_cache
             self::$_cache[$key] = $tmp;
             unset($tmp);
         }
-        debug_buffer('done initializing global cache');
     }
 
     public static function clear_all()

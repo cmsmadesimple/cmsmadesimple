@@ -178,35 +178,6 @@ function author_pages($userid)
 
 
 /**
- * Put an event into the audit (admin) log.  This should be
- * done on most admin events for consistency.
- *
- * @since 0.3
- * @param integer $itemid The item id (perhaps a content id, or a record id from a module)
- * @param string  $itemname The item name (perhaps Content, or the module name)
- * @param string  $action The action that needs to be audited
- * @return void
- */
-function audit($itemid, $itemname, $action)
-{
-    if( !isset($action) ) $action = '-- unset --';
-    $app = CmsApp::get_instance();
-    $db = CmsApp::get_instance()->GetDb();
-
-    $userid = get_userid(FALSE);
-    $username = get_username(FALSE);
-    $ip_addr = null;
-    if( $itemid == '' ) $itemid = -1;
-    if( $userid < 1 ) $userid = 0;
-
-    if( $userid > 0 ) $ip_addr = cms_utils::get_real_ip();
-
-    $query = "INSERT INTO ".CMS_DB_PREFIX."adminlog (timestamp, user_id, username, item_id, item_name, action, ip_addr) VALUES (?,?,?,?,?,?,?)";
-    $db->Execute($query,array(time(),$userid,$username,$itemid,$itemname,$action,$ip_addr));
-}
-
-
-/**
  * Gets the given site prefernce
  *
  * @deprecated
@@ -251,9 +222,6 @@ function set_site_preference($prefname, $value)
 {
     return cms_siteprefs::set($prefname,$value);
 }
-
-
-
 
 /**
  * A method to create a text area control

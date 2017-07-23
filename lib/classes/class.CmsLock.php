@@ -268,12 +268,12 @@ final class CmsLock implements ArrayAccess
 
         $uid = get_userid(FALSE);
         if( !$this->expired() && $uid != $this->_data['uid'] ) {
-            audit($uid,'Locking','Attempt to delete a non expired lock owned by another user');
+            cms_warning('Attempt to delete a non expired lock owned by user '.$uid);
             throw new CmsLockOwnerException('CMSEX_L001');
         }
 
         if( $uid != $this->_data['uid'] ) {
-            audit($uid,'Locking',sprintf("Lock %s (%s/%d) owned by uid %s deleted by non owner",
+            cms_notice(sprintf("Lock %s (%s/%d) owned by uid %s deleted by non owner",
                                          $this->_data['id'],$this->_data['type'],$this->_data['oid'],$this->_data['uid']));
         }
 

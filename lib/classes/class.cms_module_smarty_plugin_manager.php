@@ -166,7 +166,7 @@ final class cms_module_smarty_plugin_manager
 				}
 				else {
 					// an array with only one item?
-					audit('','cms_module_smarty_plugin_manager','Cannot load plugin '.$row['name'].' from module '.$row['module'].' because of errors in the callback');
+					cms_errort('Cannot load plugin '.$row['name'].' from module '.$row['module'].' because of errors in the callback');
 					return;
 				}
 			}
@@ -181,7 +181,7 @@ final class cms_module_smarty_plugin_manager
 		}
 		if( !is_callable($row['callback']) ) {
 			// it's in the db... but not callable.
-			audit('','cms_module_smarty_plugin_manager','Cannot load plugin '.$row['name'].' from module '.$row['module'].' because callback not callable (module disabled?)');
+			cms_error('Cannot load plugin '.$row['name'].' from module '.$row['module'].' because callback not callable (module disabled?)');
 			$row['callback'] = array($row['module'],'function_plugin');
 			return $row;
 		}

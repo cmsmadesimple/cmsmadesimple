@@ -71,6 +71,7 @@ class Smarty_CMS extends CMSSmartyBase
 
         // Load User Defined Tags
         $_gCms = CmsApp::get_instance();
+        /*
         if( !$_gCms->test_state(CmsApp::STATE_INSTALL) ) {
             $mgr = CmsApp::get_instance()->GetSimplePluginOperations();
             $list = $mgr->get_list();
@@ -81,11 +82,12 @@ class Smarty_CMS extends CMSSmartyBase
                         if( $function ) $this->registerPlugin('function',$plugin_name,$function,false);
                     }
                     catch( \LogicException $e ) {
-                        audit('','Core','Problem loading simple plugin '.$plugin_name);
+                        cms_error('Problem loading simple plugin '.$plugin_name);
                     }
                 }
             }
         }
+        */
 
         $this->addConfigDir(CMS_ASSETS_PATH.'/configs');
         $this->addPluginsDir(CMS_ASSETS_PATH.'/plugins');
@@ -399,7 +401,7 @@ class Smarty_CMS extends CMSSmartyBase
         $this->assign('loggedin',get_userid(FALSE));
 
         // put mention into the admin log
-        audit('', 'Smarty Error', substr( $e->getMessage(),0 ,200 ) );
+        cms_error('Smarty Error: '. substr( $e->getMessage(),0 ,200 ) );
 
         $output = $this->fetch('cmsms-error-console.tpl');
 

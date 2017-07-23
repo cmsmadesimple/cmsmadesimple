@@ -191,8 +191,8 @@ final class ModuleOperations
             }
         }
         fputs($fh,"[meta]\n");
-        fputs($fn,"generated = ".time()."\n");
-        fputs($fn,"cms_ver = ".CMS_VERSION."\n");
+        fputs($fh,"generated = ".time()."\n");
+        fputs($fh,"cms_ver = ".CMS_VERSION."\n");
         fclose($fh);
     }
 
@@ -236,7 +236,7 @@ final class ModuleOperations
             $this->_moduleinfo = array();
             $gCms->clear_cached_files();
 
-            audit('', 'Module', 'Installed '.$module_obj->GetName().' version '.$module_obj->GetVersion());
+            cms_notice('Installed module '.$module_obj->GetName().' version '.$module_obj->GetVersion());
             \CMSMS\HookManager::do_hook('Core::ModuleInstalled', [ 'name' => $module_obj->GetName(), 'version' => $module_obj->GetVersion() ] );
             return array(TRUE,$module_obj->InstallPostMessage());
         }
@@ -277,7 +277,7 @@ final class ModuleOperations
         if( $res[0] == FALSE && $res[1] == '') {
             $res[1] = lang('errorinstallfailed');
             // put mention into the admin log
-            audit('', $module . ' module','Install failed');
+            cms_error('Installation of module '.$module.' failed');
         }
         return $res;
     }
@@ -344,7 +344,7 @@ final class ModuleOperations
                     // this is the start of a recursive routine. get_module_instance() may call _load_module
                     $obj2 = $this->get_module_instance($name,$ver);
                     if( !is_object($obj2) ) {
-                        audit('','Core',"Cannot load module $module_name ... Problem loading dependent module $name version $ver");
+                        cms_warning("Cannot load module $module_name ... Problem loading dependent module $name version $ver");
                         debug_buffer("Cannot load $module_name... cannot load it's dependants.");
                         return FALSE;
                     }
@@ -370,14 +370,14 @@ final class ModuleOperations
         $obj = new $classname;
         if( !is_object($obj) || ! $obj instanceof \CMSModule ) {
             // oops, some problem loading.
-            audit('','Module',"Cannot load module $module_name ... some problem instantiating the class");
+            cms_error("Cannot load module $module_name ... some problem instantiating the class");
             debug_buffer("Cannot load $module_name ... some problem instantiating the class");
             return FALSE;
         }
 
         if (version_compare($obj->MinimumCMSVersion(),CMS_VERSION) == 1 ) {
             // oops, not compatible.... can't load.
-            audit('','Module','Cannot load module '.$module_name.' it is not compatible wth this version of CMSMS');
+            cms_error('Cannot load module '.$module_name.' it is not compatible wth this version of CMSMS');
             debug_buffer("Cannot load $module_name... It is not compatible with this version of CMSMS");
             unset($obj);
             return FALSE;
@@ -538,12 +538,12 @@ final class ModuleOperations
             $this->generate_moduleinfo( $module_obj );
             $this->_moduleinfo = array();
             $gCms->clear_cached_files();
-            audit('','Module', 'Upgraded module '.$module_obj->GetName().' to version '.$module_obj->GetVersion());
+            cms_notice('Upgraded module '.$module_obj->GetName().' to version '.$module_obj->GetVersion());
             \CMSMS\HookManager::do_hook('Core::ModuleUpgraded', [ 'name' => $module_obj->GetName(), 'oldversion' => $dbversion, 'newversion' => $module_obj->GetVersion() ] );
             return array(TRUE);
         }
 
-        audit('','Module','Upgrade failed for module '.$module_obj->GetName());
+        cms_error('Upgrade failed for module '.$module_obj->GetName());
         return array(FALSE,$result);
     }
 
@@ -637,12 +637,12 @@ final class ModuleOperations
             // Removing module from info
             $this->_moduleinfo = array();
 
-            audit('','Module','Uninstalled module '.$module);
+            cms_notice('Uninstalled module '.$module);
             \CMSMS\HookManager::do_hook('Core::ModuleUninstalled', [ 'name' => $module ] );
             return array(TRUE);
         }
 
-        audit('','Module','Uninstall failed: '.$module);
+        cms_error('Uninstall failed: '.$module);
         return array(FALSE,$result);
     }
 
@@ -684,11 +684,19 @@ final class ModuleOperations
             $info[$module_name]['active'] = 0;
         }
         if( $info[$module_name]['active'] != $o_state ) {
+            \CMSMS\HookManager::do_hook( 'Core::BeforeModuleActivated', [ 'name'=>$module_name, 'activated'=>$activate ] );
             $db = CmsApp::get_instance()->GetDb();
             $query = 'UPDATE '.CMS_DB_PREFIX.'modules SET active = ? WHERE module_name = ?';
             $dbr = $db->Execute($query,array($info[$module_name]['active'],$module_name));
             $this->_moduleinfo = array();
-            audit('','Module','Activated '.$module_name);
+            cmsms()->clear_cached_files();
+            \CMSMS\HookManager::do_hook( 'Core::AfterModuleActivated', [ 'name'=>$module_name, 'activated'=>$activate ] );
+            if( $activate ) {
+                cms_notice("Module $module_name activated");
+            }
+            else {
+                cms_notice("Module $module_name deactivated");
+            }
         }
         return TRUE;
     }
@@ -773,7 +781,9 @@ final class ModuleOperations
      */
     private function _get_all_module_dependencies()
     {
-        return \CMSMS\internal\global_cache::get('module_deps');
+        $out = \CMSMS\internal\global_cache::get('module_deps');
+        if( $out === '-' ) return;
+        return $out;
     }
 
     /**

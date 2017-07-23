@@ -439,7 +439,7 @@ class CmsLayoutCollection
         }
 
 		$this->_dirty = FALSE;
-		audit($this->get_id(),'CMSMS','Design '.$this->get_name().' created');
+		cms_notice('Design '.$this->get_name().' created');
     }
 
 	/**
@@ -484,7 +484,7 @@ class CmsLayoutCollection
         }
 
 		$this->_dirty = FALSE;
-		audit($this->get_id(),'CMSMS','Design '.$this->get_name().' updated');
+		cms_notice('Design '.$this->get_name().' updated');
     }
 
 	/**
@@ -537,7 +537,7 @@ class CmsLayoutCollection
         $query = 'DELETE FROM '.CMS_DB_PREFIX.self::TABLENAME.' WHERE id = ?';
         $dbr = $db->Execute($query,array($this->get_id()));
 
-		audit($this->get_id(),'CMSMS','Design '.$this->get_name().' deleted');
+		cms_notice('Design '.$this->get_name().' deleted');
         HookManager::do_hook('Core::DeleteDesignPost', [ get_class($this) => &$this ] );
         unset($this->_data['id']);
         $this->_dirty = TRUE;
