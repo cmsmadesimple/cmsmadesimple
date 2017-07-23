@@ -59,13 +59,13 @@ $load_perms = function() use ($db) {
     $result = $db->Execute($query);
 
     // use hooks to localize permissions.
-    \CMSMS\HookManager::add_hook('localizeperm',function($perm_name){
+    \CMSMS\HookManager::add_hook('localizeperm',function($perm_source,$perm_name){
             $key = 'perm_'.str_replace(' ','_',$perm_name);
             if( \CmsLangOperations::lang_key_exists('admin',$key) ) return \CmsLangOperations::lang_from_realm('admin',$key);
             return $perm_name;
         },\CMSMS\HookManager::PRIORITY_HIGH);
 
-    \CMSMS\HookManager::add_hook('getperminfo',function($perm_name){
+    \CMSMS\HookManager::add_hook('getperminfo',function($perm_source,$perm_name){
             $key = 'permdesc_'.str_replace(' ','_',$perm_name);
             if( \CmsLangOperations::lang_key_exists('admin',$key) ) return \CmsLangOperations::lang_from_realm('admin',$key);
         },\CMSMS\HookManager::PRIORITY_HIGH);
@@ -83,8 +83,8 @@ $load_perms = function() use ($db) {
             $thisPerm->id = $row['permission_id'];
             $thisPerm->name = $thisPerm->label = $row['permission_text'];
             $thisPerm->source = $row['permission_source'];
-            $thisPerm->label = \CMSMS\HookManager::do_hook('localizeperm',$thisPerm->name);
-            $thisPerm->description = \CMSMS\HookManager::do_hook('getperminfo',$thisPerm->name);
+            $thisPerm->label = \CMSMS\HookManager::get_first_hook_result('localizeperm',$thisPerm->source,$thisPerm->name);
+            $thisPerm->description = \CMSMS\HookManager::get_first_hook_result('getperminfo',$thisPerm->source,$thisPerm->name);
             $perm_struct[$row['permission_id']] = $thisPerm;
         }
     }
