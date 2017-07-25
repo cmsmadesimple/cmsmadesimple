@@ -14,6 +14,7 @@ Core - General
   - Revert the protocol-less URI for root_url (more changes coming for 2.3).
   - Get rid of the smart_url config option.
   - Fix a problem when testing for duplicate aliases of the form string-###  where the suffix integer was greater than 100.
+  - More fixes to mact preprocessing if {content} was in the top of the template.
 
 CmsJobManager v0.1.1
   - Optimization of audit logging.

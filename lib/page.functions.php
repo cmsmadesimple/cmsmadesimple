@@ -519,6 +519,7 @@ function get_pageid_or_alias_from_url()
  */
 function preprocess_mact($returnid)
 {
+    if( \CMS_Content_Block::has_primary_content() ) return;
     $config = \cms_config::get_instance();
     if( !$config['startup_mact_processing'] ) return;
     if( !isset($_REQUEST['mact']) ) return;
