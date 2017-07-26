@@ -17,6 +17,7 @@
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 #$Id: content.functions.php 6863 2011-01-18 02:34:48Z calguy1000 $
+namespace CMSMS\internal;
 
 /**
  * This file contains a class that fixes a problem with the Smarty_Resource_Custom class
@@ -32,9 +33,9 @@
  * @ignore
  * @package CMS
  */
-abstract class CMS_Fixed_Resource_Custom extends Smarty_Resource_Custom
+abstract class fixed_smarty_custom_resource extends \Smarty_Resource_Custom
 {
-    public function populate(Smarty_Template_Source $source, Smarty_Internal_Template $_template = null)
+    public function populate(\Smarty_Template_Source $source, \Smarty_Internal_Template $_template = null)
     {
         $source->filepath = $source->type . ':' . $source->name;
         $source->uid = sha1($source->type . ':' . $source->name);

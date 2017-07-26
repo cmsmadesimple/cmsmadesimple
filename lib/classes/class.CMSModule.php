@@ -47,14 +47,6 @@ abstract class CMSModule
      */
 
     /**
-     * A hash of the parameters passed in to the module action
-     *
-     * @access private
-     * @ignore
-     */
-    private $params = array();
-
-    /**
      * @access private
      * @ignore
      */
@@ -1472,37 +1464,6 @@ abstract class CMSModule
      * ------------------------------------------------------------------
      */
 
-    /**
-     * Returns the xhtml equivalent of an fieldset and legend.  This is basically a nice little wrapper
-     * to make sure that id's are placed in names and also that it's xhtml compliant.
-     *
-     * @final
-     * @param string $id The id given to the module on execution (not really used yet, but might be later)
-     * @param string $name The html name of the textbox (not really used yet, but might be later on)
-     * @param string $legend_text The legend_text for this fieldset, if applicaple
-     * @param string $addtext Any additional text that should be added into the tag when rendered
-     * @param string $addtext_legend Any additional text that should be added into the legend tag when rendered
-     * @deprecated
-     * @return string
-     */
-    final function CreateFieldsetStart( $id, $name, $legend_text='', $addtext='', $addtext_legend='' )
-    {
-        $this->_loadFormMethods();
-        return cms_module_CreateFieldsetStart($this, $id, $name, $legend_text, $addtext, $addtext_legend);
-    }
-
-    /**
-     * Returns the end of the fieldset in a  form.  This is basically just a wrapper around </form>, but
-     * could be extended later on down the road.  It's here mainly for consistency.
-     *
-     * @final
-     * @deprecated
-     * @return string
-     */
-    final function CreateFieldsetEnd()
-    {
-        return '</fieldset>'."\n";
-    }
 
     /**
      * Returns the start of a module form, optimized for frontend use

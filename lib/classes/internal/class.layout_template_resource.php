@@ -17,6 +17,7 @@
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 #$Id: content.functions.php 6863 2011-01-18 02:34:48Z calguy1000 $
+namespace CMSMS\internal;
 
 /**
  * @package CMS
@@ -32,7 +33,7 @@
  * @copyright Copyright (c) 2012, Robert Campbell <calguy1000@cmsmadesimple.org>
  * @since 1.12
  */
-class CmsTemplateResource extends CMS_Fixed_Resource_Custom
+class layout_template_resource extends fixed_smarty_custom_resource
 {
 	private $_section;
 
@@ -48,8 +49,8 @@ class CmsTemplateResource extends CMS_Fixed_Resource_Custom
 
 	private function &get_template($name)
 	{
-		$obj = CmsLayoutTemplate::load($name);
-		$ret = new StdClass;
+		$obj = \CmsLayoutTemplate::load($name);
+		$ret = new \StdClass;
 		$ret->modified = $obj->get_modified();
 		$ret->content = $obj->get_content();
 		return $ret;

@@ -80,10 +80,7 @@ final class CmsAdminUtils
         $in_p = '+'.CMS_SECURE_PARAM_NAME.'\=[A-Za-z0-9]{'.$len.'}+';
         $out_p = '_CMSKEY_='.str_repeat('X',$len);
         $out = preg_replace($in_p,$out_p,$in_url);
-        $config = \cms_config::get_instance();
-        if( startswith($out,$config['root_url']) ) {
-            $out = str_replace($config['root_url'],'',$out);
-        }
+        if( startswith($out,CMS_ROOT_URL) ) $out = str_replace(CMS_ROOT_URL,'',$out);
         return $out;
     }
 
@@ -148,4 +145,3 @@ final class CmsAdminUtils
     }
 
 }
-?>

@@ -1,6 +1,8 @@
 <?php
+namespace CMSMS\internal;
+use \ModuleOperations;
 
-class CmsModuleInfo implements ArrayAccess
+class module_info implements \ArrayAccess
 {
     private static $_keys = array('name','version','depends','mincmsversion', 'author', 'authoremail', 'help', 'about',
                                   'lazyloadadmin', 'lazyloadfrontend', 'changelog','ver_compatible','dir','writable','root_writable',

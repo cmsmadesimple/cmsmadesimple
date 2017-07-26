@@ -17,6 +17,7 @@
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 #$Id: content.functions.php 6863 2011-01-18 02:34:48Z calguy1000 $
+namespace CMSMS\internal;
 
 /**
  * @package CMS
@@ -31,9 +32,9 @@
  * @internal
  * @ignore
  */
-final class CMSSmartySecurityPolicy extends Smarty_Security
+final class smarty_security_policy extends \Smarty_Security
 {
-    public $php_handling = Smarty::PHP_REMOVE;
+    public $php_handling = \Smarty::PHP_REMOVE;
 
     public $secure_dir = null; // this is the magic that stops stuff from happening outside of the specified directories.
     public $php_modifiers = array();
@@ -47,7 +48,7 @@ final class CMSSmartySecurityPolicy extends Smarty_Security
     {
         parent::__construct($smarty);
         $this->allow_php_tag = FALSE;
-        $gCms = CmsApp::get_instance();
+        $gCms = \CmsApp::get_instance();
         if($gCms->is_frontend_request() ) {
             $this->static_classes = array(); // allow all static classes
             $this->php_functions = array(); // allow any php functions

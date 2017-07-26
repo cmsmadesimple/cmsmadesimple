@@ -25,21 +25,23 @@
  * @author    Rodney Rehm
  * @package   Smarty
  */
-require_once(dirname(dirname(__DIR__)).'/smarty/Smarty.class.php');
+namespace CMSMS\internal;
+require_once(CMS_ROOT_PATH.'/lib/smarty/Smarty.class.php');
+
 
 /**
  * Smarty Backward Compatibility Wrapper Class
  *
  * @package Smarty
  */
-class CMSSmartyBase extends \Smarty
+class smarty_base_template extends \Smarty
 {
     /**
      * Smarty 2 BC
      *
      * @var string
      */
-    public $_version = Smarty::SMARTY_VERSION;
+    public $_version = \Smarty::SMARTY_VERSION;
 
     /**
      * This is an array of directories where trusted php scripts reside.

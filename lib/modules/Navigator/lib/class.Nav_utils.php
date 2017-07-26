@@ -141,7 +141,7 @@ final class Nav_utils
                 if( is_array($children) && count($children) ) {
                     foreach( $children as $node ) {
                         $id = $node->get_tag('id');
-                        if( cms_content_cache::content_exists($id) ) {
+                        if( \CMSMS\internal\content_cache::content_exists($id) ) {
                             $obj->children_exist = TRUE;
                             break;
                         }

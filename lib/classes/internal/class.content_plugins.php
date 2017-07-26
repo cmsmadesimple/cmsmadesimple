@@ -17,6 +17,7 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 #$Id: class.content.inc.php 6905 2011-02-20 22:23:40Z calguy1000 $
+namespace CMSMS\internal;
 
 /**
  * @package CMS
@@ -31,7 +32,7 @@
  * @internal
  * @package		CMS
  */
-final class CMS_Content_Block
+final class content_plugins
 {
     private static $_priority;
     private static $_contentBlocks;
@@ -206,7 +207,7 @@ final class CMS_Content_Block
         }
         $ptext .= implode(',',$tmp);
         $ptext .= ')';
-        return '<?php CMS_Content_Block::smarty_internal_fetch_contentblock('.$ptext.',$_smarty_tpl); ?>';
+        return '<?php \CMSMS\\internal\\content_plugins::smarty_internal_fetch_contentblock('.$ptext.',$_smarty_tpl); ?>';
     }
 
     /**
@@ -217,7 +218,7 @@ final class CMS_Content_Block
      */
     public static function smarty_internal_fetch_contentblock($params,&$smarty)
     {
-        $contentobj = CmsApp::get_instance()->get_content_object();
+        $contentobj = \CmsApp::get_instance()->get_content_object();
         $result = null;
         if (is_object($contentobj)) {
             if( !$contentobj->IsPermitted() ) throw new CmsError403Exception();
@@ -319,7 +320,7 @@ final class CMS_Content_Block
 
     public static function smarty_fetch_pagedata($params,&$smarty)
     {
-        $contentobj = CmsApp::get_instance()->get_content_object();
+        $contentobj = \CmsApp::get_instance()->get_content_object();
         if( !is_object($contentobj) || $contentobj->Id() <= 0 ) return self::content_return('', $params, $smarty);
 
         $result = $smarty->fetch('content:pagedata','',$contentobj->Id());
@@ -333,7 +334,7 @@ final class CMS_Content_Block
     public static function smarty_fetch_imageblock($params,&$smarty)
     {
         $ignored = [ 'block','type','name','label','upload','dir','default','tab','priority','exclude','sort', 'profile', 'urlonly','assign' ];
-        $gCms = CmsApp::get_instance();
+        $gCms = \CmsApp::get_instance();
         $contentobj = $gCms->get_content_object();
         if( !is_object($contentobj) || $contentobj->Id() <= 0 ) return self::content_return('', $params, $smarty);
 
@@ -401,7 +402,7 @@ final class CMS_Content_Block
         if( !isset($params['block']) ) return;
         $block = $params['block'];
 
-        $gCms = CmsApp::get_instance();
+        $gCms = \CmsApp::get_instance();
         $content_obj = $gCms->get_content_object();
         if( is_object($content_obj) ) {
             $result = $content_obj->GetPropertyValue($block);

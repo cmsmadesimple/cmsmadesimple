@@ -43,7 +43,7 @@ function cms_module_CreateFormStart(&$modinstance, $id, $action='default', $retu
 
 	if ($idsuffix == '') $idsuffix = $_formcount++;
 
-	$goto = 'index.php'; 
+	$goto = 'index.php';
 	if( $returnid != '' ) {
 	  $hm = $gCms->GetHierarchyManager();
 	  $node = $hm->sureGetNodeById($returnid);
@@ -111,21 +111,6 @@ function cms_module_CreateInputText(&$modinstance, $id, $name, $value='', $size=
 /**
  * @access private
  */
-function cms_module_CreateInputTextWithLabel(&$modinstance, $id, $name, $value='', $size='10', $maxlength='255', $addttext='', $label='', $labeladdtext='')
-{
-  $id = cms_htmlentities($id);
-  $name = cms_htmlentities($name);
-  $value = cms_htmlentities($value);
-  $size = cms_htmlentities($size);
-  $maxlength = cms_htmlentities($maxlength);
-
-  if ($label == '') $label = $name;
-  $text = '<label class="cms_label" for="'.$id.$name.'" '.$labeladdtext.'>'.$label.'</label>'."\n";
-  $text .= $modinstance->CreateInputText($id, $name, $value, $size, $maxlength, $addttext);
-  $text .= "\n";
-  return $text;
-}
-
 /**
  * @access private
  */
@@ -426,12 +411,12 @@ function cms_module_CreateContentLink(&$modinstance, $pageid, $contents='')
 		  return '<!-- ERROR: could not get an alias for pageid='.$pageid.'-->';
 	  }
 	  else {
-		  $text .= $config["root_url"]."/".$alias.(isset($config['page_extension'])?$config['page_extension']:'.shtml');
+		  $text .= CMS_ROOT_URL."/".$alias.(isset($config['page_extension'])?$config['page_extension']:'.shtml');
 	  }
   }
   else {
 	  // not mod rewrite
-	  $text .= $config["root_url"]."/index.php?".$config["query_var"]."=".$pageid;
+	  $text .= CMS_ROOT_URL."/index.php?".$config["query_var"]."=".$pageid;
   }
   $text .= '">'.$contents.'</a>';
   return $text;
@@ -484,21 +469,3 @@ function cms_module_CreateReturnLink(&$modinstance, $id, $returnid, $contents=''
 
   return $text;
 }
-
-/**
- * @access private
- */
-function cms_module_CreateFieldsetStart(&$modinstance, $id, $name, $legend_text='', $addtext='', $addtext_legend='')
-{
-  $id = cms_htmlentities($id);
-  $name = cms_htmlentities($name);
-  $legend_text = cms_htmlentities($legend_text);
-
-  $text = '<fieldset class="cms_fieldset" '. $addtext. '>'."\n";
-  $text .= '<legend class="cms_legend" '. $addtext_legend .'>'."\n";
-  $text .= $legend_text;
-  $text .= '</legend>';
-  return $text;
-}
-
-?>

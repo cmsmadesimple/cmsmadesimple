@@ -1,6 +1,8 @@
 <?php
+namespace CMSMS\internal;
+use \ModuleOperations;
 
-class CmsExtendedModuleInfo extends CmsModuleInfo
+class extended_module_info extends module_info
 {
     private static $_ekeys = array('installed','status','active','system_module','installed_version','admin_only',
                                    'active','allow_fe_lazyload','allow_admin_lazyload','dependants','can_deactivate',

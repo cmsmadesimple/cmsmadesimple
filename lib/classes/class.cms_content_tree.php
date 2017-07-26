@@ -33,6 +33,7 @@
 #
 #-------------------------------------------------------------------------
 #END_LICENSE
+use \CMSMS\internal\content_cache as cms_content_cache;
 
 /**
  * Classes and utilities for managing the CMSMS content tree.

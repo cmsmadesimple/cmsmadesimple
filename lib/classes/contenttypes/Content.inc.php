@@ -318,14 +318,14 @@ class Content extends ContentBase
     {
 		if( is_array($this->_contentBlocks) ) return $this->_contentBlocks;
 
-        CMS_Content_Block::reset();
+        \CMSMS\internal\content_plugins::reset();
         $this->_contentBlocks = array();
         try {
             $smarty = Smarty_CMS::get_instance();
             $parser = new \CMSMS\internal\page_template_parser('cms_template:'.$this->TemplateId(),$smarty);
             $parser->compileTemplateSource();
 
-            $this->_contentBlocks = CMS_Content_Block::get_content_blocks();
+            $this->_contentBlocks = \CMSMS\internal\content_plugins::get_content_blocks();
         }
         catch( SmartyException $e ) {
             // smarty exceptions here could be a bad template, or missing template, or something else.

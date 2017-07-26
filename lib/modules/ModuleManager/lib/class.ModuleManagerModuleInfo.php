@@ -1,6 +1,6 @@
 <?php
 
-class ModuleManagerModuleInfo extends CmsExtendedModuleInfo
+class ModuleManagerModuleInfo extends \CMSMS\internal\extended_module_info
 {
     private static $_minfo;
     private static $_deprecated = array('CMSMailer','MenuManager');

@@ -33,6 +33,7 @@
 #
 #-------------------------------------------------------------------------
 #END_LICENSE
+namespace CMSMS\internal;
 
 /**
  * This file contains a static singleton class to manage caching content objects
@@ -50,7 +51,7 @@
  * @internal
  * @ignore
  */
-final class cms_content_cache
+final class content_cache
 {
 	/**
 	 * @ignore
@@ -88,21 +89,21 @@ final class cms_content_cache
 	 */
 	private function __construct()
 	{
-		if( !CmsApp::get_instance()->is_frontend_request() ) return;
+		if( !\CmsApp::get_instance()->is_frontend_request() ) return;
         debug_buffer('cms_content_cache: begin load needed content objects');
 		$content_ids = null;
 		$deep = FALSE;
 		$this->_key = 'pc'.md5($_SERVER['REQUEST_URI'].serialize($_GET));
-		if( ($data = cms_cache_handler::get_instance()->get($this->_key,__CLASS__)) ) {
+		if( ($data = \cms_cache_handler::get_instance()->get($this->_key,__CLASS__)) ) {
 			list($lastmtime,$deep,$content_ids) = unserialize($data);
-			if( $lastmtime < ContentOperations::get_instance()->GetLastContentModification() ) {
+			if( $lastmtime < \ContentOperations::get_instance()->GetLastContentModification() ) {
 				$deep = null;
 				$content_ids = null;
 			}
 		}
 		if( is_array($content_ids) && count($content_ids) ) {
 			$this->_preload_cache = $content_ids;
-			$contentops = ContentOperations::get_instance();
+			$contentops = \ContentOperations::get_instance();
 			$tmp = $contentops->LoadChildren(null,$deep,false,$content_ids);
 		}
         debug_buffer('cms_content_cache: end loading needed content objects');
@@ -113,7 +114,7 @@ final class cms_content_cache
 	 */
 	public static function &get_instance()
 	{
-		if( !is_object(self::$_instance) ) self::$_instance = new cms_content_cache();
+		if( !is_object(self::$_instance) ) self::$_instance = new self();
 		return self::$_instance;
 	}
 
@@ -122,7 +123,7 @@ final class cms_content_cache
 	 */
 	public function __destruct()
 	{
-		if( !CmsApp::get_instance()->is_frontend_request() ) return;
+		if( !\CmsApp::get_instance()->is_frontend_request() ) return;
 		if( !$this->_key ) return;
 
 		$list = $this->get_loaded_page_ids();
@@ -151,7 +152,7 @@ final class cms_content_cache
 				}
                 $deep = ($deep && count($ndeep) > (count($list) / 4)) ? TRUE : FALSE;
 				$tmp = array(time(),$deep,$list);
-				cms_cache_handler::get_instance()->set($this->_key,serialize($tmp),__CLASS__);
+				\cms_cache_handler::get_instance()->set($this->_key,serialize($tmp),__CLASS__);
 			}
 		}
 	}
@@ -229,7 +230,7 @@ final class cms_content_cache
    * @param ContentBase The content object.
    * @return bool
    */
-  private static function _add_content($id,$alias,ContentBase& $obj)
+  private static function _add_content($id,$alias,\ContentBase& $obj)
   {
     if( !$id) return FALSE;
     if( !self::$_alias_map ) self::$_alias_map = array();
@@ -251,7 +252,7 @@ final class cms_content_cache
    * @param ContentBase The content object.
    * @return bool
    */
-  public static function add_content($id,$alias,ContentBase& $obj)
+  public static function add_content($id,$alias,\ContentBase& $obj)
   {
 	  self::_add_content($id,$alias,$obj);
   }

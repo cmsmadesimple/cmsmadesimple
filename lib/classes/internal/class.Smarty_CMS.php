@@ -28,7 +28,7 @@
  * @package CMS
  * @since 0.1
  */
-class Smarty_CMS extends CMSSmartyBase
+class Smarty_CMS extends \CMSMS\internal\smarty_base_template
 {
     public $id; // <- triggers error without | do search why this is needed
     public $params; // <- triggers error without | do search why this is needed
@@ -57,14 +57,14 @@ class Smarty_CMS extends CMSSmartyBase
 
         // set our own template class with some funky stuff in it
         // note, can get rid of the CMS_Smarty_Template class and the Smarty_Parser classes.
-        $this->template_class = 'CMS_Smarty_Template';
+        $this->template_class = '\\CMSMS\internal\template_wrapper';
 
         // common resources.
-        $this->registerResource('module_db_tpl',new CMSModuleDbTemplateResource());
-        $this->registerResource('module_file_tpl',new CMSModuleFileTemplateResource());
-        $this->registerResource('cms_template',new CmsTemplateResource()); // <- Should proably be global and removed from parser?
-        $this->registerResource('template',new CmsTemplateResource()); // <- Should proably be global and removed from parser? // deprecated
-        $this->registerResource('cms_stylesheet',new CmsStylesheetResource());
+        $this->registerResource('module_db_tpl',new \CMSMS\internal\module_db_template_resource());
+        $this->registerResource('module_file_tpl',new \CMSMS\internal\module_file_template_resource());
+        $this->registerResource('cms_template',new \CMSMS\internal\layout_template_resource());
+        //$this->registerResource('template',new CmsTemplateResource()); // <- Should proably be global and removed from parser? // deprecated
+        $this->registerResource('cms_stylesheet',new \CMSMS\internal\layout_stylesheet_resource());
 
         // register default plugin handler
         $this->registerDefaultPluginHandler(array(&$this, 'defaultPluginHandler'));
@@ -108,16 +108,16 @@ class Smarty_CMS extends CMSSmartyBase
             }
 
             // Load resources
-            $this->registerResource('tpl_top',new CmsTemplateResource('top'));
-            $this->registerResource('tpl_head',new CmsTemplateResource('head'));
-            $this->registerResource('tpl_body',new CmsTemplateResource('body'));
-            $this->registerResource('content',new CMSContentTemplateResource());
+            $this->registerResource('tpl_top',new \CMSMS\internal\layout_template_resource('top'));
+            $this->registerResource('tpl_head',new \CMSMS\internal\layout_template_resource('head'));
+            $this->registerResource('tpl_body',new \CMSMS\internal\layout_template_resource('body'));
+            $this->registerResource('content',new \CMSMS\internal\content_template_resource());
 
             // just for frontend actions.
-            $this->registerPlugin('compiler','content',array('CMS_Content_Block','smarty_compile_fecontentblock'),false);
-            $this->registerPlugin('function','content_image','CMS_Content_Block::smarty_fetch_imageblock',false);
-            $this->registerPlugin('function','content_module','CMS_Content_Block::smarty_fetch_moduleblock',false);
-            $this->registerPlugin('function','process_pagedata','CMS_Content_Block::smarty_fetch_pagedata',false);
+            $this->registerPlugin('compiler','content','\\CMSMS\internal\content_plugins::smarty_compile_fecontentblock',false);
+            $this->registerPlugin('function','content_image','\\CMSMS\\internal\content_plugins::smarty_fetch_imageblock',false);
+            $this->registerPlugin('function','content_module','\\CMSMS\\internal\\content_plugins::smarty_fetch_moduleblock',false);
+            $this->registerPlugin('function','process_pagedata','\\CMSMS\internal\\content_plugins::smarty_fetch_pagedata',false);
 
             // Autoload filters
             $this->autoloadFilters();
@@ -126,7 +126,7 @@ class Smarty_CMS extends CMSSmartyBase
             if( \cms_siteprefs::get('use_smartycache',0) ) $this->setCompileCheck(\cms_siteprefs::get('use_smartycompilecheck',1));
 
             // Enable security object
-            if( !$config['permissive_smarty'] ) $this->enableSecurity('CMSSmartySecurityPolicy');
+            if( !$config['permissive_smarty'] ) $this->enableSecurity('\\CMSMS\\internal\\smarty_security_policy');
         }
         else if($_gCms->test_state(CmsApp::STATE_ADMIN_PAGE)) {
             $this->setCaching(false);
@@ -144,7 +144,7 @@ class Smarty_CMS extends CMSSmartyBase
      */
     public static function &get_instance()
     {
-        if( !self::$_instance ) self::$_instance = new \Smarty_CMS;
+        if( !self::$_instance ) self::$_instance = new Smarty_CMS;
         return self::$_instance;
     }
 

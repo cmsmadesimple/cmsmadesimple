@@ -332,7 +332,7 @@ class cms_http_request
         $this->status       = 0;
         $this->timeout      = '25';
         $this->useCurl      = TRUE;
-        $this->referrer     = $config['root_url'].'::'.CMS_VERSION;
+        $this->referrer     = CMS_ROOT_URL.'::'.CMS_VERSION;
         $this->username     = '';
         $this->password     = '';
         $this->redirect     = FALSE;

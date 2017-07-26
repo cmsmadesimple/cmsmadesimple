@@ -17,6 +17,7 @@
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 #$Id: content.functions.php 6863 2011-01-18 02:34:48Z calguy1000 $
+namespace CMSMS\internal;
 
 /**
  * This file contains a smarty resource handler for content pages.
@@ -38,11 +39,11 @@
  * @copyright Copyright (c) 2012, Robert Campbell <calguy1000@cmsmadesimple.org>
  * @since 1.11
  */
-class CMSContentTemplateResource extends CMS_Fixed_Resource_Custom
+class content_template_resource extends fixed_smarty_custom_resource
 {
     protected function fetch($name,&$source,&$mtime)
     {
-        $gCms = CmsApp::get_instance();
+        $gCms = \CmsApp::get_instance();
         $contentobj = $gCms->get_content_object();
 
         if (!is_object($contentobj)) {

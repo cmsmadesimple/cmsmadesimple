@@ -17,6 +17,7 @@
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 #$Id: content.functions.php 6863 2011-01-18 02:34:48Z calguy1000 $
+namespace CMSMS\internal;
 
 /**
  * @package CMS
@@ -32,7 +33,7 @@
  * @copyright Copyright (c) 2012, Robert Campbell <calguy1000@cmsmadesimple.org>
  * @since 1.12
  */
-class CmsStylesheetResource extends CMS_Fixed_Resource_Custom
+class layout_stylesheet_resource extends fixed_smarty_custom_resource
 {
 	protected function fetch($name,&$source,&$mtime)
 	{
@@ -41,7 +42,7 @@ class CmsStylesheetResource extends CMS_Fixed_Resource_Custom
         if( !$name ) return;
 
         // if called via function.cms_stylesheet, then this stylesheet should be loaded.
-        $obj = CmsLayoutStylesheet::load($name);
+        $obj = \CmsLayoutStylesheet::load($name);
 
         // by now everything should be in memory in the CmsLayoutStylesheet internal cache's
         // put it all together in the order specified.

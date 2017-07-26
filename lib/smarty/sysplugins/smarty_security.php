@@ -627,7 +627,7 @@ class Smarty_Security
             $this->_checkDir($this->smarty->_realpath($filepath, true), $this->_php_resource_dir);
         return true;
     }
-    
+
     /**
      * Check if file is inside a valid directory
      *

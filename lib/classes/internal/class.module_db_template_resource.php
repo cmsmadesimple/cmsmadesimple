@@ -17,6 +17,7 @@
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 #$Id: content.functions.php 6863 2011-01-18 02:34:48Z calguy1000 $
+namespace CMSMS\internal;
 
 /**
  * File contains a custom resource class for smarty
@@ -34,7 +35,7 @@
  * @since 1.11
  * @package CMS
  */
-class CMSModuleDbTemplateResource extends CMS_Fixed_Resource_Custom
+class module_db_template_resource extends fixed_smarty_custom_resource
 {
     protected function fetch($name,&$source,&$mtime)
     {
@@ -73,7 +74,7 @@ class CMSModuleDbTemplateResource extends CMS_Fixed_Resource_Custom
  * @package CMS
  * @since 1.11
  */
-class CMSModuleFileTemplateResource extends CMS_Fixed_Resource_Custom
+class module_file_template_resource extends fixed_smarty_custom_resource
 {
     protected function fetch($name,&$source,&$mtime)
     {
