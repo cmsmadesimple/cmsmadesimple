@@ -18,17 +18,24 @@ if (isset($params["fmerror"]) && $params["fmerror"]!="") {
 
 if (isset($params["newsort"])) $this->SetPreference("sortby",$params["newsort"]);
 
-$path = filemanager_utils::get_cwd();
-$smarty->assign('path',$path);
+$path = trim(ltrim(filemanager_utils::get_cwd(),'/'));
+if( \filemanager_utils::can_do_advanced() && $this->GetPreference('advancedmode',0) ) {
+    $path = '::top::/'.$path;
+}
 $tmp_path_parts = explode('/',$path);
 $path_parts = [];
 for( $i = 0; $i < count($tmp_path_parts); $i++ ) {
     $obj = new StdClass;
+    if( !$tmp_path_parts[$i] ) continue;
     $obj->name = $tmp_path_parts[$i];
-    $obj->rel_path = implode('/',array_slice($tmp_path_parts,0,$i+1));
+    if( $obj->name == '::top::' ) {
+        $obj->name = 'root';
+    }
     if( $i < count($tmp_path_parts) - 1 ) {
         // not the last entry
-        $obj->url = $this->create_url($id,'changedir','',[ 'setdir' => $obj->rel_path ]);
+        $fullpath = implode('/',array_slice($tmp_path_parts,0,$i+1));
+        if( startswith($fullpath,'::top::') ) $fullpath = substr($fullpath,7);
+        $obj->url = $this->create_url( $id, 'changedir', '',[ 'setdir' => $fullpath ] );
     } else {
         // the last entry... no link
     }

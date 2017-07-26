@@ -204,7 +204,7 @@ final class filemanager_utils
             if ($file=='.') continue;
             if ($file=='..') {
                 // can we go up.
-                if( $path == self::get_default_cwd() ) continue;
+                if( $path == self::get_default_cwd() || $path == '/' ) continue;
             } else {
                 if ($file[0]=='.' || $file[0] == '_' || $file[0] == '~') {
                     if (($showhiddenfiles!=1) || (!$advancedmode)) continue;
