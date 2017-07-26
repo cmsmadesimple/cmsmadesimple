@@ -2264,14 +2264,6 @@ abstract class ContentBase
 			if( !$input ) return FALSE;
 			$help = '&nbsp;'.cms_admin_utils::get_help_tag('core','help_content_image',lang('help_title_content_image'));
 			return array('<label for="image">'.lang('image').':</label>'.$help,$input);
-/*
-			$dir = cms_join_path($config['image_uploads_path'],cms_siteprefs::get('content_imagefield_path'));
-			$data = $this->GetPropertyValue('image');
-			$dropdown = create_file_dropdown('image',$dir,$data,'jpg,jpeg,png,gif','',true,'','thumb_',1,1);
-			if( !$dropdown ) return;
-			$help = '&nbsp;'.cms_admin_utils::get_help_tag('core','help_content_image',lang('help_title_content_image'));
-			return array('<label for="image">'.lang('image').':</label>'.$help,$dropdown);
-*/
 
 		case 'thumbnail':
 			$dir = cms_join_path($config['image_uploads_path'],cms_siteprefs::get('content_thumbnailfield_path'));

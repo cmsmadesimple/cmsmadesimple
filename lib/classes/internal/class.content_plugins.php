@@ -129,7 +129,7 @@ final class content_plugins
 
         if( !$rec['name'] ) {
             $n = count(self::$_contentBlocks)+1;
-            $rec['name'] = 'image_'+$n;
+            $rec['name'] = 'image_'.$n;
         }
         if( strpos($rec['name'],' ') !== FALSE ) {
             if( !$rec['label'] ) $rec['label'] = $rec['name'];
@@ -173,7 +173,7 @@ final class content_plugins
 
         if( !$rec['name'] ) {
             $n = count(self::$_contentBlocks)+1;
-            $rec['id'] = $rec['name'] = 'module_'+$n;
+            $rec['id'] = $rec['name'] = 'module_'.$n;
         }
         if( strpos($rec['name'],' ') !== FALSE ) {
             if( !$rec['label'] ) $rec['label'] = $rec['name'];
@@ -421,6 +421,49 @@ final class content_plugins
         return $result;
     }
 
-} // end of class.
+    public static function smarty_fetch_textblock($params,&$smarty)
+    {
+        // never returns content on frontend requests
+        return;
+    }
 
-?>
+    public static function smarty_compile_contenttext($params,$smarty)
+    {
+        // todo: should be in page_template_parser
+        // {content_text} tag encountered.
+        //if( !isset($params['block']) || empty($params['block']) ) throw new \CmsEditContentException('{content_text} smarty block tag requires block parameter');
+
+        $rec = [ 'type'=>'static','name'=>'','label'=>'','upload'=>true,'dir'=>'','default'=>'','tab'=>'',
+                 'priority'=>'','exclude'=>'','sort'=>0, 'profile'=>'', 'text'=>'' ];
+        foreach( $params as $key => $value ) {
+            if( $key == 'type' ) continue;
+            if( $key == 'block' ) $key = 'name';
+            if( isset($rec[$key]) ) $rec[$key] = trim($value,"'\"");
+        }
+
+        if( !$rec['name'] ) {
+            $n = count(self::$_contentBlocks)+1;
+            $rec['name'] = 'static_'.$n;
+        }
+        if( strpos($rec['name'],' ') !== FALSE ) {
+            if( !$rec['label'] ) $rec['label'] = $rec['name'];
+            $rec['name'] = str_replace(' ','_',$rec['name']);
+        }
+        if( empty($rec['id']) ) $rec['id'] = str_replace(' ','_',$rec['name']);
+        if( !$rec['priority'] ) {
+            if( !self::$_priority ) self::$_priority = 100;
+            $rec['priority'] = self::$_priority++;
+        }
+
+        // set priority
+        if( empty($rec['priority']) || $rec['priority'] == 0 ) {
+            if( !self::$_priority ) self::$_priority = 100;
+            $rec['priority'] = self::$_priority++;
+        }
+
+        if( !$rec['text'] ) return; // do nothing.
+        $rec['static_content'] = trim(strip_tags($rec['text']));
+        if( !is_array(self::$_contentBlocks) ) self::$_contentBlocks = array();
+        self::$_contentBlocks[$rec['name']] = $rec;
+    }
+} // end of class.

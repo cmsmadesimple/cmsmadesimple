@@ -81,7 +81,6 @@ class ContentOperations
 		return self::$_instance;
 	}
 
-
     /**
      * @ignore
      */
@@ -998,30 +997,6 @@ class ContentOperations
 	}
 
 	/**
-	 * Grab URLs from the content table and register them with the route manager.
-	 *
-	 * @since 1.9
-	 * @author Robert Campbell <calguy1000@hotmail.com>
-	 * @internal
-	 * @access private
-	 */
-	public function register_routes()
-	{
-		$gCms = CmsApp::get_instance();
- 		$db = $gCms->GetDb();
-
-		$query = 'SELECT content_id,page_url FROM '.CMS_DB_PREFIX.'content
-                   WHERE active = 1 AND default_content = 0 AND page_url != \'\'';
-		$data = $db->GetArray($query);
- 		if( is_array($data) ) {
- 			foreach( $data as $onerow ) {
- 				$route = new CmsRoute($onerow['page_url'],$onerow['content_id'],'',TRUE);
-				cms_route_manager::register($route);
-			}
-		}
-	}
-
-	/**
 	 * Return a list of pages that the user is owner of.
 	 *
 	 * @since 2.0
@@ -1152,15 +1127,4 @@ class ContentOperations
         $list = \CMSMS\internal\global_cache::get('content_quicklist');
 		if( isset($list[$id]) ) return $list[$id];
 	}
-}
-
-/**
- * A simple alias for the ContentOperations class
- * @package CMS
- * @ignore
- */
-class ContentManager extends ContentOperations
-{
-}
-
-?>
+} // end of class

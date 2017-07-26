@@ -535,6 +535,17 @@ class Content extends ContentBase
 		return $ret;
 	}
 
+    /**
+     * @ignore
+     */
+    private function _display_static_text_block($blockInfo)
+    {
+        $out = '<div class="static_text" data-name="'.$blockInfo['name'].'"}>';
+        $out .= $blockInfo['static_content'];
+        $out .= "</div>\n";
+        return [ ' ',$out ];
+    }
+
 	/**
 	 * @ignore
 	 */
@@ -637,6 +648,20 @@ class Content extends ContentBase
 		case 'image':
 			$field = $this->_display_image_block($blockInfo,$value,$adding);
 			break;
+
+        case 'static':
+            $tmp = $this->_display_static_text_block($blockInfo);
+            if( is_array($tmp) ) {
+                $field = $tmp[0];
+                if( count($tmp) == 2 ) {
+                    if( !$label || $label == $blockName ) $label = $tmp[0];
+                    $field = $tmp[1];
+                }
+            }
+            else {
+                $field = $tmp;
+            }
+            break;
 
 		case 'module':
 			$tmp = $this->_display_module_block($blockName,$blockInfo,$value,$adding);

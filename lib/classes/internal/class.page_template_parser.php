@@ -19,6 +19,7 @@ class page_template_parser extends \Smarty_Internal_Template
             $this->registerPlugin('compiler','content','\\CMSMS\\internal\\content_plugins::smarty_compiler_contentblock',false);
             $this->registerPlugin('compiler','content_image','\\CMSMS\\internal\\content_plugins::smarty_compiler_imageblock',false);
             $this->registerPlugin('compiler','content_module','\\CMSMS\\internal\\content_plugins::smarty_compiler_moduleblock',false);
+            $this->registerPlugin('compiler','content_text', '\\CMSMS\\internal\\content_plugins::smarty_compile_contenttext',FALSE);
         }
         catch( \SmartyException $e ) {
             // ignore these... throws an error in Smarty 3.1.16 if plugin is already registered

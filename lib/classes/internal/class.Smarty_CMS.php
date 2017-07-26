@@ -117,6 +117,7 @@ class Smarty_CMS extends \CMSMS\internal\smarty_base_template
             $this->registerPlugin('compiler','content','\\CMSMS\internal\content_plugins::smarty_compile_fecontentblock',false);
             $this->registerPlugin('function','content_image','\\CMSMS\\internal\content_plugins::smarty_fetch_imageblock',false);
             $this->registerPlugin('function','content_module','\\CMSMS\\internal\\content_plugins::smarty_fetch_moduleblock',false);
+            $this->registerPlugin('function','content_text','\\CMSMS\\internal\\content_plugins::smarty_fetch_textblock',false);
             $this->registerPlugin('function','process_pagedata','\\CMSMS\internal\\content_plugins::smarty_fetch_pagedata',false);
 
             // Autoload filters

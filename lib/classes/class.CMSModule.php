@@ -47,6 +47,15 @@ abstract class CMSModule
      */
 
     /**
+     * A hash of the parameters passed in to the module action
+     *
+     * @access private
+     * @ignore
+     */
+    private $params = [];
+
+
+    /**
      * @access private
      * @ignore
      */
