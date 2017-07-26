@@ -74,6 +74,14 @@ function cms_lang(key) {
     if( typeof(cms_data[key]) !== 'undefined' ) return cms_data[key];
     alert('lang key '+key+' notset');
 }
+
+// a silly shiv for IE11. ... remove me ASAP.
+if (!String.prototype.startsWith) {
+    String.prototype.startsWith = function(searchString, position){
+      position = position || 0;
+      return this.substr(position, searchString.length) === searchString;
+  };
+}
 EOT;
 header('Pragma: public');
 header('Expires: 0');

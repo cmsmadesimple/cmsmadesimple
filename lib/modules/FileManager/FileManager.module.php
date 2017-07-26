@@ -28,7 +28,7 @@ final class FileManager extends CMSModule {
     public function GetChangeLog() { return $this->ProcessTemplate('changelog.tpl'); }
     public function GetHeaderHTML() { return $this->_output_header_javascript(); }
     public function GetFriendlyName() { return $this->Lang('friendlyname'); }
-    public function GetVersion() { return '1.7'; }
+    public function GetVersion() { return '1.6.4'; }
     public function GetHelp() { return $this->Lang('help'); }
     public function GetAuthor() { return 'Morten Poulsen (Silmarillion)'; }
     public function GetAuthorEmail() { return 'morten@poulsen.org'; }
@@ -37,7 +37,7 @@ final class FileManager extends CMSModule {
     public function IsAdminOnly() { return TRUE; }
     public function GetAdminSection() { return 'content'; }
     public function GetAdminDescription() { return $this->Lang('moddescription'); }
-    public function MinimumCMSVersion() { return "1.11=alpha0"; }
+    public function MinimumCMSVersion() { return "2.2.2"; }
     public function InstallPostMessage() { return $this->Lang('postinstall'); }
     public function UninstallPostMessage() { return $this->Lang('uninstalled'); }
     public function UninstallPreMessage() { return $this->Lang('really_uninstall'); }

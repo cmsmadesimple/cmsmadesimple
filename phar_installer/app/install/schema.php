@@ -26,8 +26,6 @@ if (isset($CMS_INSTALL_DROP_TABLES)) {
 
   $sqlarray = $dbdict->DropTableSQL(CMS_DB_PREFIX."additional_users");
   $dbdict->ExecuteSQLArray($sqlarray);
-  $sqlarray = $dbdict->DropTableSQL(CMS_DB_PREFIX."adminlog");
-  $dbdict->ExecuteSQLArray($sqlarray);
   $sqlarray = $dbdict->DropTableSQL(CMS_DB_PREFIX."admin_bookmarks");
   $dbdict->ExecuteSQLArray($sqlarray);
   $sqlarray = $dbdict->DropTableSQL(CMS_DB_PREFIX."content");
@@ -125,32 +123,13 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 
 
 	$flds = "
-		timestamp I,
-		user_id I,
-		username C(25),
-		item_id I,
-		item_name C(50),
-		action C(255),
-                ip_addr C(40)
-	";
-	$sqlarray = $dbdict->CreateTableSQL(CMS_DB_PREFIX."adminlog", $flds, $taboptarray);
-	$return = $dbdict->ExecuteSQLArray($sqlarray);
-	$ado_ret = ($return == 2) ? ilang('done') : ilang('failed');
-	if( $return == 2 )
-	  {
-	    $sqlarray = $dbdict->CreateIndexSQL(CMS_DB_PREFIX.'index_adminlog1',CMS_DB_PREFIX."adminlog",'timestamp');
-	    $return = $dbdict->ExecuteSQLArray($sqlarray);
-	  }
-	verbose_msg(ilang('install_created_table', 'adminlog', $ado_ret));
-
-	$flds = "
 		content_id I KEY,
 		content_name C(255),
 		type C(25),
 		owner_id I,
 		parent_id I,
 		template_id I,
-		item_order I,
+		item_order I,`
 		hierarchy C(255),
 		default_content I1,
 		menu_text C(255),

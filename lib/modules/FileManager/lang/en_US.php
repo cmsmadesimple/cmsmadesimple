@@ -280,6 +280,7 @@ $lang['switchtofileview'] = 'Switch to file view';
 
 // T
 $lang['title_changedir'] = 'Change working directory to this directory';
+$lang['title_changeupdir'] = 'Go to the parent folder';
 $lang['title_col_filedate'] = 'This column displays the last modification date of the file';
 $lang['title_col_fileperms'] = 'This column displays the permissions of the file';
 $lang['title_col_filesize'] = 'This column displays the size of the file';

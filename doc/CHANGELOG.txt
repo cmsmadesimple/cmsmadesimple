@@ -21,10 +21,10 @@ Core - General
   - CHANGE: Adds the new pr_root_url config entry.  to return the protocol relative root URI. root_url will always include the protocol.
   - Remove long deprecated passthru parameters to effect $_REQUEST because of potential security vulnerabilities.
   - Improved error message if there was an error parsing the template (or a duplicate content block).
-  - Fixes content blocks, image blocks, module blocks containign whitespace in the name.
+  - Fixes content blocks, image blocks, module blocks containing whitespace in the name.
   - Minor fix to {cms_filepicker} plugin.
   - Improve the CmsModuleInfo class such that if the module class file is newer it will be loaded.
-  - Now generate the moduleinfo.ini file automatically on intall or upgrade of a module.
+  - Now generate the moduleinfo.ini file automatically on install or upgrade of a module.
   - Increase the maxlength attribute for password input boxes in myaccount.
   - Added new CMS_ADMIN_PATH define from the config class.
   - Move system modules to /lib/modules
@@ -43,6 +43,8 @@ Core - General
 CMSContentManager - remember to bump version
   - Gets rid of secure options, flag output and bulk functionaltiy
   - modified to use CMS_ROOT_URL
+  - Change connection timeout to 1 second.
+  - Change processing to be a little more friendly to some environments wrt. content-size header.
 
 FileManager - remember to bump version
   - modified to use CMS_ROOT_URL
@@ -53,6 +55,16 @@ Installation Assistant - remember to bump version
 ModuleManaver v2.2
   - XML import code now lives here.
   - XML export code now lives here.
+
+FileManager v1.6.4
+  - Add a different icon for navigating up one level.
+  - No longer allow uploading any php (or derivative) file.
+  - No longer allow renaming any file to have a .php extension (or a derivative).
+
+FilePicker v1.0.1
+  - No longer allow overriding the filepicker type on the URL.
+  - No longer allow uploading any .php files.
+
 
 Version 2.2.2 - Hearts Content
 ----------------------------------
@@ -65,19 +77,19 @@ Core - General
  - Fixes to parsing and generating moduleinfo.ini files.
  - Disallow any resource specifications with a * or a /.
      * This also means that no file resource specifications with path information will be permitted.
- - Move mact preprocessing to AFTER the template_top has been processed.  So order of processing (for module actions on the frontend is)
+ - Move mact preprocessing to AFTER the template_top has been processed. So order of processing (for module actions on the frontend is)
      a:  template top
      b:  mact preprocessing (if enabled, which is the default)
      c:  template body
      d:  template head
  - Fix sureGetNodeByAlias to check if the input is numeric. If it is, assume that it is a page id, not an alias.
  - Fix alias generation in the ContentBase class to check if the input page title is numeric... If it is, prepend a character to it to ensure that integer casting will return 0.
- - Fix listtags to show tags using smarty_nocache_  function name prefix.
+ - Fix listtags to show tags using smarty_nocache_ function name prefix.
  - Improvements to the {form_start} plugin.
  - Fix silly, old issue in recursive_delete function.
  - Clean up more parameters from the content tag before passing to module action.
  - Fix local file inclusion vulnerability in listtags.
- - now call get_userid() in debug_to_log instead of check_login()
+ - Now call get_userid() in debug_to_log instead of check_login()
 
 AdminSearch v1.0.3
  - Now search the metadata field of content pages.
@@ -92,7 +104,7 @@ MicroTiny v2.2
  - Adds new tabfocus and hr plugins.
 
 News v2.51.2
- - Fixes so that all cancel buttons work properly on new news articles.
+ - Fixes so that all cancel buttons work properly on new News articles.
 
 Navigator v1.0.7
  - Adds a silly __get() method to the NavigatorNode class squash some notifications in the error logs.
@@ -106,6 +118,7 @@ Installation Assistant v1.3.2
 Search v1.51.2
  - Now do an html entity decode on all content added to AddWords.
 
+ 
 Version 2.2.1 - Hearts Desire
 ----------------------------------
 Core - General

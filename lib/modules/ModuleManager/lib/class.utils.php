@@ -54,7 +54,7 @@ final class utils
             $details['name'] = $inst->GetName();
             $details['description'] = $inst->GetDescription();
             $details['version'] = $inst->GetVersion();
-            $details['active'] = $modops->IsModuleActive($module_name);
+            $details['active'] = $modops->IsModuleReady($module_name);
 
             if( $as_hash ) {
                 $results[$module_name] = $details;

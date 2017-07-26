@@ -150,7 +150,6 @@ final class cms_config implements ArrayAccess
         $this->_types['assets_dir'] = self::TYPE_STRING;
         $this->_types['assets_path'] = self::TYPE_STRING;
         $this->_types['permissive_smarty'] = self::TYPE_BOOL;
-        $this->_types['smart_urls'] = self::TYPE_BOOL;
         $this->_types['startup_mact_processing'] = self::TYPE_BOOL;
 
         $config = array();
@@ -179,7 +178,6 @@ final class cms_config implements ArrayAccess
 
         $this->_data = $config;
     }
-
 
     /**
      * @ignore
