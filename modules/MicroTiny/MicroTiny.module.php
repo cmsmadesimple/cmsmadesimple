@@ -30,11 +30,11 @@ class MicroTiny extends CMSModule
   public function IsPluginModule() { return TRUE; }
   public function LazyLoadFrontend() { return TRUE; }
   public function LazyLoadAdmin() { return TRUE; }
-  public function MinimumCMSVersion() { return "1.99-alpha0"; }
+  public function MinimumCMSVersion() { return '2.2.2'; }
   public function GetDependencies() { return array('FileManager'=>'1.5'); }
   public function GetHelp() { return $this->Lang('help'); }
   public function GetAuthor() { return 'Morten Poulsen'; }
-  public function GetAuthorEmail() { return '&lt;morten@poulsen.org&gt;'; }
+  public function GetAuthorEmail() { return 'morten@poulsen.org'; }
   public function GetChangeLog() { return $this->ProcessTemplate('changelog.tpl'); }
   public function VisibleToAdminUser() { return $this->CheckPermission('Modify Site Preferences'); }
   public function GetAdminDescription() { return $this->Lang('admindescription'); }
