@@ -37,7 +37,7 @@ final class FileManager extends CMSModule {
     public function IsAdminOnly() { return false; }
     public function GetAdminSection() { return 'content'; }
     public function GetAdminDescription() { return $this->Lang('moddescription'); }
-    public function MinimumCMSVersion() { return "1.11=alpha0"; }
+    public function MinimumCMSVersion() { return "2.2.2"; }
     public function InstallPostMessage() { return $this->Lang('postinstall'); }
     public function UninstallPostMessage() { return $this->Lang('uninstalled'); }
     public function UninstallPreMessage() { return $this->Lang('really_uninstall'); }
