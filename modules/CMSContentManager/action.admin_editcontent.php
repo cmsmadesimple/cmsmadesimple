@@ -72,8 +72,7 @@ try {
     }
 
     // Get a list of content types and pick a default if necessary
-    $gCms = cmsms();
-    $contentops = $gCms->GetContentOperations();
+    $contentops = \ContentOperations::get_instance();
     $existingtypes = $contentops->ListContentTypes(false,true);
 
     //
@@ -110,6 +109,11 @@ try {
             // if he is not an editor of the default page, then we use the first page the user has access to, or -1
             $list = $contentops->GetPageAccessForUser($user_id);
             if( count($list) && !in_array($dflt_parent,$list) ) $dflt_parent = $list[0];
+        }
+        // double check if this parent is valid... if it is not, we use -1
+        if( $dflt_parent > 0 ) {
+            $node = $contentops->quickfind_node_by_id( $dflt_parent );
+            if( !$node ) $dflt_parent = -1;
         }
         $content_obj->SetParentId($dflt_parent);
     }

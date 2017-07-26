@@ -41,6 +41,8 @@ FilePicker v1.0.1
   - No longer allow overriding the filepicker type on the URL.
   - No longer allow uploading any .php files.
 
+CMSContentmanager v1.1.6
+  - Now double check that the 'default parent' for new pages actually exists.
 
 Version 2.2.2 - Hearts Content
 ----------------------------------
