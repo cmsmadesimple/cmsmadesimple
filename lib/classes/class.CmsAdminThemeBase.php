@@ -510,10 +510,6 @@ abstract class CmsAdminThemeBase
 								   'title' => $this->_FixSpaces(lang('system_verification')),
 								   'description' => lang('checksumdescription'),
 								   'show_in_menu' => $this->HasPerm('adminPerms'));
-		$items['adminlog'] = array('url'=>'adminlog.php','parent'=>'siteadmin','priority'=>10,
-								   'title'=>$this->_FixSpaces(lang('adminlog')),
-								   'description'=>lang('adminlogdescription'),
-								   'show_in_menu'=>$this->HasPerm('adminPerms'));
 		// base my prefs menu ---------------------------------------------------------
 		$items['myprefs'] = array('url'=>'index.php?section=myprefs','parent'=>-1,'priority'=>8,
 								  'title'=>$this->_FixSpaces(lang('myprefs')),
@@ -1581,8 +1577,3 @@ class CmsAdminThemeNotification
 		throw new CmsInvalidDataException('Attempt to set invalid property from CmsAdminThemeNotification');
 	}
 } // end of class
-
-#
-# EOF
-#
-?>
