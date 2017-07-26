@@ -31,7 +31,7 @@ class MicroTiny extends CMSModule
   public function LazyLoadFrontend() { return TRUE; }
   public function LazyLoadAdmin() { return TRUE; }
   public function MinimumCMSVersion() { return '2.2.2'; }
-  public function GetDependencies() { return array('FileManager'=>'1.5'); }
+  public function GetDependencies() { return array('FileManager'=>'1.6.4'); }
   public function GetHelp() { return $this->Lang('help'); }
   public function GetAuthor() { return 'Morten Poulsen'; }
   public function GetAuthorEmail() { return 'morten@poulsen.org'; }
