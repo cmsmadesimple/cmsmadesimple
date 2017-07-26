@@ -77,7 +77,7 @@ class CmsModuleInfo implements ArrayAccess
         $fn2 = $this->_get_module_file( $module_name );
         if( is_file($fn1) ) $ft1 = filemtime($fn1);
         if( is_file($fn2) ) $ft2 = filemtime($fn2);
-        if( $ft2 > $ft1 && $can_load ) {
+        if( $ft2 >= $ft1 && $can_load ) {
             // module file is newer.
             $arr = $this->_read_from_module($module_name);
         }

@@ -36,6 +36,7 @@ FileManager v1.6.4
   - Add a different icon for navigating up one level.
   - No longer allow uploading any php (or derivative) file.
   - No longer allow renaming any file to have a .php extension (or a derivative).
+  - Fixes an issue when improper/invalid values for root path and uploads path are manually specified in the config.php
 
 FilePicker v1.0.1
   - No longer allow overriding the filepicker type on the URL.
@@ -96,7 +97,7 @@ Installation Assistant v1.3.2
 Search v1.51.2
  - Now do an html entity decode on all content added to AddWords.
 
- 
+
 Version 2.2.1 - Hearts Desire
 ----------------------------------
 Core - General

@@ -67,35 +67,37 @@ final class filemanager_utils
 
     public static function get_default_cwd()
     {
-        $config = cmsms()->GetConfig();
+        $config = \cms_config::get_instance();
         $advancedmode=filemanager_utils::check_advanced_mode();
         $dir = $config['uploads_path'];
-        if( !startswith($dir,$config['root_path']) ) $dir = $config['root_path'].'/uploads';
-        if( $advancedmode ) $dir = $config['root_path'];
+        if( !startswith($dir,CMS_ROOT_PATH) ) $dir = self::join_path(CMS_ROOT_PATH, 'uploads');
+        if( $advancedmode ) $dir = CMS_ROOT_PATH;
 
-        $dir = substr($dir,strlen($config['root_path'])+1);
-        if( $dir == '' ) $dir = '/';
+        $dir = cms_relative_path( $dir, CMS_ROOT_PATH );
         return $dir;
     }
 
-    public static function test_invalid_path($path)
+    public static function test_valid_path($path)
     {
-        $gCms = cmsms();
-        $config = $gCms->GetConfig();
-        $advancedmode=filemanager_utils::check_advanced_mode();
+        // returns false if invalid.
+        $config = \cms_config::get_instance();
+        $advancedmode = filemanager_utils::check_advanced_mode();
 
-        $prefix = $config['root_path'];
+        $prefix = CMS_ROOT_PATH;
+        if( $path === '/' ) $path = null;
         $path = self::join_path($prefix,$path);
-        $path=realpath($path);
-        if( $path === FALSE ) return true;
+        $rpath = realpath($path);
+        if( $rpath === FALSE ) return false;
 
         if (!$advancedmode) {
             // uploading in 'non advanced mode', path has to start with the upload dir.
-            if (!startswith($path,$config["uploads_path"])) return true;
+            $uprp = realpath($config['uploads_path']);
+            if (startswith($rpath,$uprp)) return true;
         }
         else {
             // advanced mode, path has to start with the root path.
-            if (!startswith($path,$config["root_path"])) return true;
+            $rprp = realpath($config['root_path']);
+            if (startswith($path,$rprp)) return true;
         }
         return false;
     }
@@ -104,26 +106,27 @@ final class filemanager_utils
     {
         // check the path
         $path = cms_userprefs::get('filemanager_cwd',self::get_default_cwd());
-        if( self::test_invalid_path($path) ) $path = self::get_default_cwd();
+        if( !self::test_valid_path($path) ) {
+            $path = self::get_default_cwd();
+        }
         if( $path == '' ) $path = '/';
         return $path;
     }
 
     public static function set_cwd($path)
     {
-        $config = cmsms()->GetConfig();
-        if( startswith($path,$config['root_path']) ) $path = substr($path,strlen($config['root_path'])+1);
+        if( startswith($path,CMS_ROOT_PATH) ) $path = cms_relative_path($path,CMS_ROOT_PATH);
         $advancedmode = self::check_advanced_mode();
 
         // validate the path.
-        $prefix = $config['root_path'];
-        $tmp = self::join_path($prefix,$path);
+        $tmp = self::join_path(CMS_ROOT_PATH,$path);
         $tmp = realpath($tmp);
-        if( !is_dir($tmp) ) throw new Exception('Cannot set current working directory to an invalid path');
-        if( !self::test_invalid_path($tmp) ) throw new Exception('Cannot set current working directory to an invalid path');
+        if( !$tmp || !is_dir($tmp) ) throw new Exception('Cannot set current working directory to an invalid path');
+        $newpath = cms_relative_path($tmp,CMS_ROOT_PATH);
+        if( !self::test_valid_path($newpath) ) throw new Exception('Cannot set current working directory to an invalid path');
 
-        $path = str_replace('\\','/',substr($tmp,strlen($prefix)+1));
-        cms_userprefs::set('filemanager_cwd',$path);
+        $newpath = str_replace('\\','/',$newpath);
+        cms_userprefs::set('filemanager_cwd',$newpath);
     }
 
 
@@ -148,7 +151,7 @@ final class filemanager_utils
     {
         $path = self::get_cwd();
         $config = cmsms()->GetConfig();
-        if( self::test_invalid_path($path) ) $path = self::get_default_cwd();
+        if( !self::test_valid_path($path) ) $path = self::get_default_cwd();
         $base = $config['root_path'];
         $realpath = self::join_path($base,$path);
         return $realpath;
@@ -158,7 +161,7 @@ final class filemanager_utils
     {
         $path = self::get_cwd();
         $config = cmsms()->GetConfig();
-        if( self::test_invalid_path($path) ) $path = self::get_default_cwd();
+        if( !self::test_valid_path($path) ) $path = self::get_default_cwd();
         $url = $config['root_url'].'/'.$path;
         return $url;
     }

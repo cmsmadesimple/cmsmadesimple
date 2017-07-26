@@ -6,7 +6,7 @@ if(!isset($params["dirname"]) || !isset($params["path"])) {
 	$this->Redirect($id, 'defaultadmin');
 }
 
-if( filemanager_utils::test_invalid_path($params['path']) ) {
+if( !filemanager_utils::test_valid_path($params['path']) ) {
   $this->Redirect($id, 'defaultadmin',$returnid,array("fmerror"=>"fileoutsideuploads"));
 }
 
@@ -27,7 +27,7 @@ function chmodRecursive($path,$newmode,&$module) {
 		}
 	}
 	closedir($dir);
-	return $module->SetMode($newmode,$path);	
+	return $module->SetMode($newmode,$path);
 }
 
 function isEmpty($path) {
@@ -43,7 +43,7 @@ function isEmpty($path) {
 
 $emptydir=isEmpty($fullname);
 
-if (isset($params["newmode"])) {	
+if (isset($params["newmode"])) {
 	if (isset($params["cancel"])) {
 		$this->Redirect($id,"defaultadmin",$returnid,array("path"=>$params["path"],"module_message"=>$this->Lang("chmodcancelled")));
 	} else {
@@ -51,8 +51,8 @@ if (isset($params["newmode"])) {
 		if (isset($params["quickmode"]) && ($params["quickmode"]!="")) {
 			$newmode=$params["quickmode"];
 		}
-		if (isset($params["recurse"]) && $params["recurse"]=="1" && !$emptydir) {			
-			if (chmodRecursive($fullname,$newmode,$this)) {				
+		if (isset($params["recurse"]) && $params["recurse"]=="1" && !$emptydir) {
+			if (chmodRecursive($fullname,$newmode,$this)) {
 				$this->Redirect($id,"defaultadmin",$returnid,array("path"=>$params["path"],"fmmessage"=>"dirchmodsuccessmulti"));
 			} else {
 				$this->Redirect($id,"defaultadmin",$returnid,array("path"=>$params["path"],"fmerror"=>"dirchmodfailmulti"));
@@ -79,10 +79,10 @@ if (isset($params["newmode"])) {
 	$this->smarty->assign('recurseinput', $this->CreateInputCheckbox($id,"recurse","1"));
 
 	$this->smarty->assign('newmode', $this->CreateInputHidden($id,"newmode","newset"));
-	
+
 	$this->smarty->assign('quickmodetext', $this->Lang("quickmode"));
 	$this->smarty->assign('quickmodeinput', $this->CreateInputText($id,"quickmode","",3,3));
-	
+
 	$this->smarty->assign('modetable', $this->GetModeTable($id,$this->GetPermissions($params["path"],$params["dirname"])));
 
 	$this->smarty->assign('submit', $this->CreateInputSubmit($id, 'submit', $this->Lang('setpermissions')));
