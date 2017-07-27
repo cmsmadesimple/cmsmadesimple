@@ -191,10 +191,7 @@ function cms_join_path()
 function cms_relative_path($in,$relative_to = null)
 {
     $in = realpath(trim($in));
-    if( !$relative_to ) {
-        $config = \cms_config::get_instance();
-        $relative_to = $config['root_path'];
-    }
+    if( !$relative_to ) $relative_to = CMS_ROOT_PATH;
     $to = realpath(trim($relative_to));
 
     if( !$in ) return;
