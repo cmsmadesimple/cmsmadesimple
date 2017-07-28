@@ -15,6 +15,7 @@ Core - General
   - Get rid of the smart_url config option.
   - Fix a problem when testing for duplicate aliases of the form string-###  where the suffix integer was greater than 100.
   - More fixes to mact preprocessing if {content} was in the top of the template.
+  - Minor fix to ExpandXMLPackage to not throw an exception in brief mode if module is not compatible with the current version of CMSMS.
 
 CmsJobManager v0.1.1
   - Optimization of audit logging.

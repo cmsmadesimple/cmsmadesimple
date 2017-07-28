@@ -349,7 +349,7 @@ final class ModuleOperations
                 case 'MINCMSVERSION':
                     $name = $reader->localName;
                     $reader->read();
-                    if( version_compare(CMS_VERSION,$reader->value) < 0 ) {
+                    if( $brief == 0 && version_compare(CMS_VERSION,$reader->value) < 0 ) {
                         throw new CmsLogicException(lang('errormoduleversionincompatible'));
                     }
                     $moduledetails[$name] = $reader->value;
