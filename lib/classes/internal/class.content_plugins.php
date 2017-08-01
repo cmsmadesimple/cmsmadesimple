@@ -247,7 +247,7 @@ final class content_plugins
                     $result = self::$_primary_content;
                 }
                 else {
-                    $modops = ModuleOperations::get_instance();
+                    $modops = \ModuleOperations::get_instance();
                     $modobj = $modops->get_module_instance($modulename);
                     if( !$modobj ) {
                         // module not found... couldn't even autoload it.

@@ -38,7 +38,7 @@ class AutoPruneLogTask implements \CmsRegularTask
         if( $lifetime < 1 ) return FALSE;
 
         $last_execute = \cms_siteprefs::get(self::LASTEXECUTE_SITEPREF,0);
-        IF( $last_exeucte < $time - $oneday ) return TRUE;
+        IF( $last_execute < $time - $oneday ) return TRUE;
     }
 
     public function execute($time = '')
