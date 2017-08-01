@@ -102,7 +102,6 @@
     </div>
 
     {if $verbose}
-
     <h3>{'prompt_queryvar'|tr}</h3>
     <p class="info">{'info_queryvar'|tr}</p>
 

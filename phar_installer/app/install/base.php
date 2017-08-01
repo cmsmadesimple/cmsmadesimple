@@ -20,14 +20,15 @@ cms_siteprefs::set('browser_cache_expiry',60); // browser can cache pages for 60
 
 //
 // permissions
+// note: most of these permissions should now be in CmsContentManager and DesignManager install routines.
 //
 verbose_msg(ilang('install_initsiteperms'));
 $all_perms = array();
 $perms = array('Add Pages','Manage Groups','Add Templates','Manage Users','Modify Any Page',
-	       'Modify Permissions','Modify Templates','Remove Pages',
-	       'Modify Modules','Modify Files','Modify Site Preferences',
-	       'Manage Stylesheets','Manage Designs','Modify User-defined Tags','Clear Admin Log',
-	       'Modify Events','View Tag Help','Manage All Content','Reorder Content','Manage My Settings',
+               'Modify Permissions','Modify Templates','Remove Pages',
+               'Modify Modules','Modify Files','Modify Site Preferences',
+               'Manage Stylesheets','Manage Designs',
+               'Modify Events','View Tag Help','Manage All Content','Reorder Content','Manage My Settings',
                'Manage My Account', 'Manage My Bookmarks');
 foreach( $perms as $one_perm ) {
   $permission = new CmsPermission();
@@ -72,7 +73,6 @@ $designer_group->GrantPermission('Manage My Account');
 $designer_group->GrantPermission('Manage My Settings');
 $designer_group->GrantPermission('Manage My Bookmarks');
 $designer_group->GrantPermission('Modify Files');
-$designer_group->GrantPermission('Modify User-defined Tags');
 
 //
 // initial user account
@@ -91,6 +91,7 @@ cms_userprefs::set_for_user($admin_user->id,'wysiwyg','MicroTiny'); // the one, 
 
 //
 // Events
+// Events are deprecated:  hooks are used now.
 //
 verbose_msg(ilang('install_initevents'));
 Events::CreateEvent('Core','LoginPost');
@@ -146,13 +147,6 @@ Events::CreateEvent('Core','ContentEditPre');
 Events::CreateEvent('Core','ContentEditPost');
 Events::CreateEvent('Core','ContentDeletePre');
 Events::CreateEvent('Core','ContentDeletePost');
-
-Events::CreateEvent('Core','AddUserDefinedTagPre');
-Events::CreateEvent('Core','AddUserDefinedTagPost');
-Events::CreateEvent('Core','EditUserDefinedTagPre');
-Events::CreateEvent('Core','EditUserDefinedTagPost');
-Events::CreateEvent('Core','DeleteUserDefinedTagPre');
-Events::CreateEvent('Core','DeleteUserDefinedTagPost');
 
 Events::CreateEvent('Core','ModuleInstalled');
 Events::CreateEvent('Core','ModuleUninstalled');

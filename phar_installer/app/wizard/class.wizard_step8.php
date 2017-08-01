@@ -132,7 +132,7 @@ class wizard_step8 extends \cms_autoinstaller\wizard_step
             $contentops->SetAllHierarchyPositions();
 
             // todo: install default preferences
-            set_site_preference('global_umask','022');
+            \cms_siteprefs::('global_umask','022');
         }
         catch( \Exception $e ) {
             $this->error($e->GetMessage());
