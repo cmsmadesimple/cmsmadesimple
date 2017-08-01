@@ -387,7 +387,7 @@ final class ModuleOperations
         if( is_object($obj) ) $this->_modules[$module_name] = $obj;
 
         $tmp = $gCms->get_installed_schema_version();
-        if( $tmp == CMS_SCHEMA_VERSION && isset($CMS_INSTALL_PAGE) && in_array($module_name, $this->cmssystemmodule) ) {
+        if( $tmp == CMS_SCHEMA_VERSION && isset($CMS_INSTALL_PAGE) && in_array($module_name, $this->cmssystemmodules) ) {
             // during the phar installer, we can use get_module_instance() to install or upgrade core modules
             if( !isset($info[$module_name]) || $info[$module_name]['status'] != 'installed' ) {
                 $res = $this->_install_module($obj);

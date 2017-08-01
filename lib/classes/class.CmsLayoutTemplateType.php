@@ -604,12 +604,12 @@ class CmsLayoutTemplateType
         return $to.'::'.$tn;
     }
 
-	/**
-	 * Reset the default contens of this template type back to factory defaults
+     /**
+     * Reset the default contents of this template type back to factory defaults
      *
      * @throws CmsException
      * @throws CmsDataNotFoundException
-	 */
+     */
     public function reset_content_to_factory()
     {
         if( !$this->get_dflt_flag() ) throw new CmsException('This template type does not have default contents');

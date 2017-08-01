@@ -84,13 +84,13 @@ if (isset($CMS_INSTALL_DROP_TABLES)) {
 
 if (isset($CMS_INSTALL_CREATE_TABLES)) {
 
-  status_msg(ilang('install_createtablesindexes'));
-  if ($db->dbtype == 'mysql' || $db->dbtype == 'mysqli') {
-    @$db->Execute("ALTER DATABASE `" . $db->database . "` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci");
-  }
+    status_msg(ilang('install_createtablesindexes'));
+    if ($db->dbtype == 'mysql' || $db->dbtype == 'mysqli') {
+        @$db->Execute("ALTER DATABASE `" . $db->database . "` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci");
+    }
 
-  $dbdict = NewDataDictionary($db);
-  $taboptarray = array('mysql' => 'ENGINE MyISAM CHARACTER SET utf8 COLLATE utf8_general_ci', 'mysqli' => 'ENGINE MyISAM CHARACTER SET utf8 COLLATE utf8_general_ci');
+    $dbdict = NewDataDictionary($db);
+    $taboptarray = array('mysql' => 'ENGINE MyISAM CHARACTER SET utf8 COLLATE utf8_general_ci', 'mysqli' => 'ENGINE MyISAM CHARACTER SET utf8 COLLATE utf8_general_ci');
 
 	$flds = "
 		additional_users_id I KEY,
@@ -102,7 +102,6 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 	$return = $dbdict->ExecuteSQLArray($sqlarray);
 	$ado_ret = ($return == 2) ? ilang('done') : ilang('failed');
 	verbose_msg(ilang('install_created_table', 'additional_users', $ado_ret));
-
 
 
 	$flds = "
@@ -121,7 +120,6 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 	$ado_ret = ($return == 2) ? ilang('done') : ilang('failed');
 	verbose_msg(ilang('install_creating_index', 'admin_bookmarks', $ado_ret));
 
-
 	$flds = "
 		content_id I KEY,
 		content_name C(255),
@@ -129,7 +127,7 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 		owner_id I,
 		parent_id I,
 		template_id I,
-		item_order I,`
+		item_order I,
 		hierarchy C(255),
 		default_content I1,
 		menu_text C(255),
@@ -147,8 +145,8 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 		last_modified_by I,
 		create_date DT,
 		modified_date DT,
-                secure I1,
-                page_url C(255)
+        secure I1,
+        page_url C(255)
 	";
 	$sqlarray = $dbdict->CreateTableSQL(CMS_DB_PREFIX."content", $flds, $taboptarray);
 	$return = $dbdict->ExecuteSQLArray($sqlarray);
