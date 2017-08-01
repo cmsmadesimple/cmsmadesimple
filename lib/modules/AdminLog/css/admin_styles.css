@@ -1,0 +1,9 @@
+table.pagetable tr.adminlog_notice td {
+    color: blue;
+}
+table.pagetable tr.adminlog_warning td {
+    color: orange;
+}
+table.pagetable tr.adminlog_error td {
+    color: red;
+}

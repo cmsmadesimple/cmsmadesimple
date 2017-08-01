@@ -9,6 +9,9 @@ final class simple_plugin_operations
     private static $_instance;
     private $_loaded = [];
 
+    /**
+     * @ignore
+     */
     public function __construct()
     {
         if( self::$_instance ) throw new \LogicException('Cannot create more than one instance of '.__CLASS__);

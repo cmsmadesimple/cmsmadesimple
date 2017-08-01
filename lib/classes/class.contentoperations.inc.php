@@ -351,7 +351,7 @@ class ContentOperations
 	 * @since 1.9
 	 * @param CmsContentTypePlaceHolder Reference to placeholder object
 	 */
-	public function register_content_type(CmsContentTypePlaceHolder& $obj)
+	public function register_content_type(CmsContentTypePlaceHolder $obj)
 	{
 		$this->_get_content_types();
 		if( isset($this->_content_types[$obj->type]) ) return FALSE;
@@ -400,21 +400,6 @@ class ContentOperations
 			return $result;
 		}
 	}
-
-
-    /**
-     * Updates the hierarchy position of one item
-	 *
-     * @internal
-     * @ignore
-	 * @param int $contentid The content id to update
-	 * @return array|null
-     */
-	private function _SetHierarchyPosition($contentid)
-	{
-        // do nothing
-	}
-
 
     /**
      * Updates the hierarchy position of one item
@@ -531,7 +516,7 @@ class ContentOperations
 	 * @return cms_content_tree The cached tree of content
      * @deprecated
 	 */
-	function &GetAllContentAsHierarchy($loadcontent = false)
+	function GetAllContentAsHierarchy($loadcontent = false)
 	{
         $tree = \CMSMS\internal\global_cache::get('content_tree');
 		return $tree;

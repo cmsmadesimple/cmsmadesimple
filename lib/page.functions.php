@@ -127,26 +127,6 @@ function check_permission($userid, $permname)
 
 
 /**
- * Checks that the given userid is the owner of the given contentid.
- * (members of the admin group have all permission)
- *
- * @internal
- * @since 0.1
- * @param   integer  The User ID
- * @param   integer  The content id
- * @return  boolean
- */
-function check_ownership($userid, $contentid = '')
-{
-    $userops = UserOperations::get_instance();
-    $adminuser = $userops->UserInGroup($userid,1);
-    if( $adminuser ) return true;
-
-    return ContentOperations::get_instance()->CheckPageOwnership($userid,$contentid);
-}
-
-
-/**
  * Checks that the given userid has access to modify the given
  * pageid.  This would mean that they were set as additional
  * authors/editors by the owner.
@@ -190,37 +170,6 @@ function author_pages($userid)
 function get_site_preference($prefname, $defaultvalue = '')
 {
     return cms_siteprefs::get($prefname,$defaultvalue);
-}
-
-
-/**
- * Removes the given site preference
- *
- * @deprecated
- * @see cms_siteprefs::remove
- * @param string $prefname Preference name to remove
- * @param boolean $uselike Wether or not to remove all preferences that are LIKE the supplied name
- * @return void
- */
-function remove_site_preference($prefname,$uselike=false)
-{
-    return cms_siteprefs::remove($prefname,$uselike);
-}
-
-
-/**
- * Sets the given site perference with the given value.
- *
- * @deprecated
- * @see cms_siteprefs::set
- * @since 0.6
- * @param string $prefname The preference name
- * @param mixed  $value The preference value (will be stored as a string)
- * @return void
- */
-function set_site_preference($prefname, $value)
-{
-    return cms_siteprefs::set($prefname,$value);
 }
 
 /**
@@ -325,7 +274,7 @@ function create_file_dropdown($name,$dir,$value,$allowed_extensions,$optprefix='
  */
 function get_pageid_or_alias_from_url()
 {
-    $gCms = CmsApp::get_instance();
+    $gCms = \CmsApp::get_instance();
     $config = \cms_config::get_instance();
     $contentops = ContentOperations::get_instance();
     $smarty = \Smarty_CMS::get_instance();
