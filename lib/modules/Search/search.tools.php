@@ -178,7 +178,7 @@ function search_Reindex(&$module)
             $content_obj = $contentops->LoadContentFromId($one);
             $parms = array('content'=>$content_obj);
             search_DoEvent($module,'Core','ContentEditPost',$parms);
-            cms_content_cache::unload($one);
+            \CMSMS\internal\content_cache::unload($one);
         }
     }
 
