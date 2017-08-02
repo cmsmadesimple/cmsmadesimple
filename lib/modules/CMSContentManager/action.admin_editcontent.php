@@ -183,7 +183,7 @@ try {
             $content_obj->SetLastModifiedBy(get_userid());
             $content_obj->Save();
             unset($_SESSION['__cms_copy_obj__']);
-            audit($content_obj->Id(),'Content Item: '.$content_obj->Name(),' Edited');
+            audit($content_obj->Id(),'Content','Edited content item '.$content_obj->Name());
             if( isset($params['submit']) ) {
                 $this->SetMessage($this->Lang('msg_editpage_success'));
                 $this->RedirectToAdminTab();
@@ -340,4 +340,3 @@ echo $this->ProcessTemplate('admin_editcontent.tpl');
 #
 # EOF
 #
-?>

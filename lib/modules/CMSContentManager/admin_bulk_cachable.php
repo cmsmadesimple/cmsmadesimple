@@ -1,10 +1,10 @@
 <?php
 #BEGIN_LICENSE
 #-------------------------------------------------------------------------
-# Module: Content (c) 2013 by Robert Campbell 
+# Module: Content (c) 2013 by Robert Campbell
 #         (calguy1000@cmsmadesimple.org)
 #  A module for managing content in CMSMS.
-# 
+#
 #-------------------------------------------------------------------------
 # CMS - CMS Made Simple is (c) 2004 by Ted Kulp (wishy@cmsmadesimple.org)
 # Visit our homepage at: http://www.cmsmadesimple.org
@@ -19,7 +19,7 @@
 # However, as a special exception to the GPL, this software is distributed
 # as an addon module to CMS Made Simple.  You may not use this software
 # in any Non GPL version of CMS Made simple, or in any version of CMS
-# Made simple that does not indicate clearly and obviously in its admin 
+# Made simple that does not indicate clearly and obviously in its admin
 # section that the site was built with CMS Made simple.
 #
 # This program is distributed in the hope that it will be useful,
@@ -37,8 +37,8 @@ if( !isset($gCms) ) exit;
 
 $this->SetCurrentTab('pages');
 if( !isset($params['multicontent']) ) {
-  $this->SetError($this->Lang('error_missingparam'));
-  $this->RedirectToAdminTab();
+    $this->SetError($this->Lang('error_missingparam'));
+    $this->RedirectToAdminTab();
 }
 
 $active = 0;
@@ -46,40 +46,39 @@ if( isset($params['active']) ) $active = (int)$params['active'];
 
 $multicontent = array();
 if( $this->CheckPermission('Manage All Content') || $this->CheckPermission('Modify Any Page') ) {
-  $multicontent = unserialize($params['multicontent']);
+    $multicontent = unserialize($params['multicontent']);
 }
 else {
-  foreach( unserialize($params['multicontent']) as $pid ) {
-    if( !check_authorship(get_userid(),$pid) ) continue;
-    $multicontent[] = $pid;
-  }
+    foreach( unserialize($params['multicontent']) as $pid ) {
+        if( !check_authorship(get_userid(),$pid) ) continue;
+        $multicontent[] = $pid;
+    }
 }
 if( count($multicontent) == 0 ) {
-  $this->SetError($this->Lang('error_missingparam'));
-  $this->RedirectToAdminTab();
+    $this->SetError($this->Lang('error_missingparam'));
+    $this->RedirectToAdminTab();
 }
 
 // do the real work
 try {
-  $contentops = ContentOperations::get_instance()->LoadChildren(-1,FALSE,TRUE,$multicontent);
-  $hm = cmsms()->GetHierarchyManager();
-  foreach( $multicontent as $pid ) {
-    $node = $hm->find_by_tag('id',$pid);
-    if( !$node ) continue;
-    $content = $node->getContent(FALSE,FALSE,TRUE);
-    if( !is_object($content) ) continue;
-    $content->SetActive($active);
-    $content->SetLastModifiedBy(get_userid());
-    $content->Save();
-  }
-  audit('','Core','Changed active status on '.count($multicontent).' pages');
-  $this->SetMessage($this->Lang('msg_bulk_successful'));
+    $contentops = ContentOperations::get_instance()->LoadChildren(-1,FALSE,TRUE,$multicontent);
+    $hm = cmsms()->GetHierarchyManager();
+    foreach( $multicontent as $pid ) {
+        $node = $hm->find_by_tag('id',$pid);
+        if( !$node ) continue;
+        $content = $node->getContent(FALSE,FALSE,TRUE);
+        if( !is_object($content) ) continue;
+        $content->SetActive($active);
+        $content->SetLastModifiedBy(get_userid());
+        $content->Save();
+    }
+    audit('','Content','Changed active status on '.count($multicontent).' pages');
+    $this->SetMessage($this->Lang('msg_bulk_successful'));
 }
 catch( Exception $e ) {
-  $this->SetError($e->GetMessage());
+    $this->SetError($e->GetMessage());
 }
 $this->RedirectToAdminTab();
 #
 # EOF
 #
-?>

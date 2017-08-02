@@ -38,7 +38,7 @@ try {
 	$response = 'success';
 }
 catch( CmsException $e ) {
-	audit('','CMSMS','Problem working with category in ajax: '.$e->GetMessage());
+    cms_warning('Problem working with category in ajax: '.$e->GetMessage());
 	$out = 'ERROR: '.$e->GetMessage();
 	$response = 'error';
 }
@@ -47,4 +47,3 @@ $this->GetJSONResponse($response, $out);
 #
 # EOF
 #
-?>

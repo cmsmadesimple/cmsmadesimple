@@ -48,11 +48,11 @@ if( $is_admin ) {
     $db = cmsms()->GetDb();
     $sql = 'DELETE FROM '.CMS_DB_PREFIX().CmsLock::LOCK_TABLE.' WHERE type = ?';
     $db->Execute($sql,array($type));
-    audit('',$this->GetName(),'Cleared all content locks');
+    cms_notice("Cleared all $type locks");
 } else {
     // clear only my locks
     CmsLockOperations::delete_for_user($type);
-    audit('',$this->GetName(),'Cleared his own content locks');
+    cms_notice("Cleared his own $type locks");
 }
 
 $this->SetMessage($this->Lang('msg_lockscleared'));

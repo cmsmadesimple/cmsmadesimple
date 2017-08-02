@@ -55,6 +55,7 @@ try {
                     }
                 }
 
+                audit('',$this->GetName(),'Deleted '.count($stylesheets).' stylesheets');
                 $this->SetMessage($this->Lang('msg_bulkop_complete'));
                 $this->RedirectToAdminTab();
             }
@@ -82,6 +83,7 @@ try {
             }
             if( $n == 0 ) throw new \RuntimeException($this->Lang('error_bulkexport_noneprocessed'));
 
+            audit('',$this->GetName(),'Exported '.count($stylesheets).' stylesheets');
             $this->SetMessage($this->Lang('msg_bulkop_complete'));
             $this->RedirectToAdminTab();
         }
@@ -105,6 +107,7 @@ try {
             }
             if( $n == 0 ) throw new \RuntimeException($this->Lang('error_bulkimport_noneprocessed'));
 
+            audit('',$this->GetName(),'Imported '.count($stylesheets).' stylesheets');
             $this->SetMessage($this->Lang('msg_bulkop_complete'));
             $this->RedirectToAdminTab();
         }

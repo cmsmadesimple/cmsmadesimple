@@ -108,7 +108,7 @@ if( isset($params['orderlist']) && $params['orderlist'] != '' ) {
         }
         $contentops = $gCms->GetContentOperations();
         $contentops->SetAllHierarchyPositions();
-        audit('',$this->GetName(),'Content pages dynamically reordered');
+        audit('','Content','Content pages dynamically reordered');
         $this->RedirectToAdminTab('pages');
     }
 }

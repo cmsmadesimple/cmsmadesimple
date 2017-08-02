@@ -1,10 +1,10 @@
 <?php
 #BEGIN_LICENSE
 #-------------------------------------------------------------------------
-# Module: Content (c) 2013 by Robert Campbell 
+# Module: Content (c) 2013 by Robert Campbell
 #         (calguy1000@cmsmadesimple.org)
 #  A module for managing content in CMSMS.
-# 
+#
 #-------------------------------------------------------------------------
 # CMS - CMS Made Simple is (c) 2004 by Ted Kulp (wishy@cmsmadesimple.org)
 # Visit our homepage at: http://www.cmsmadesimple.org
@@ -19,7 +19,7 @@
 # However, as a special exception to the GPL, this software is distributed
 # as an addon module to CMS Made Simple.  You may not use this software
 # in any Non GPL version of CMS Made simple, or in any version of CMS
-# Made simple that does not indicate clearly and obviously in its admin 
+# Made simple that does not indicate clearly and obviously in its admin
 # section that the site was built with CMS Made simple.
 #
 # This program is distributed in the hope that it will be useful,
@@ -82,14 +82,14 @@ if( isset($params['submit']) ) {
     if( $i != count($pagelist) ) {
       throw new CmsException('Bulk operation to change ownership did not adjust all selected pages');
     }
-    audit('','Core','Changed owner on '.count($pagelist).' pages');
+    audit('','Content','Changed owner on '.count($pagelist).' pages');
     $this->SetMessage($this->Lang('msg_bulk_successful'));
     $this->RedirectToAdminTab();
   }
   catch( Exception $e ) {
-    audit('','Core','Bulk setting changing ownership failed: '.$e->GetMessage());
-    $this->SetError($e->GetMessage());
-    $this->RedirectToAdminTab();
+      cms_warning('Changing ownership on multiple content items faild: '.$e->GetMessage());
+      $this->SetError($e->GetMessage());
+      $this->RedirectToAdminTab();
   }
 }
 
@@ -124,4 +124,3 @@ echo $this->ProcessTemplate('admin_bulk_changeowner.tpl');
 #
 # EOF
 #
-?>

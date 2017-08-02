@@ -102,7 +102,7 @@ if( isset($params['submit']) ) {
         if( $i > 0 ) {
             $contentops->SetAllHierarchyPositions();
             $contentops->SetContentModified();
-            audit('','Core','Deleted '.$i.' pages');
+            audit('','Content','Deleted '.$i.' pages');
             $this->SetMessage($this->Lang('msg_bulk_successful'));
         }
     }
@@ -170,7 +170,7 @@ if( count($displaydata) == 0 ) {
 $smarty->assign('multicontent',base64_encode(serialize($pagelist)));
 $smarty->assign('displaydata',$displaydata);
 echo $this->ProcessTemplate('admin_bulk_delete.tpl');
+
 #
 # EOF
 #
-?>
