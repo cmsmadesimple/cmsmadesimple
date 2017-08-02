@@ -4,16 +4,14 @@
 //
 // some debian based distros don't have gzopen (crappy)
 //
-if (!extension_loaded('zlib'))
-    {
-      die('Abort '.basename(__FILE__).' : Missing zlib extensions');
-    }
-    if (!function_exists('gzopen') && function_exists('gzopen64'))
-    {
-      function gzopen($filename , $mode, $use_include_path = 0) {
+if (!extension_loaded('zlib')) {
+    die('Abort '.basename(__FILE__).' : Missing zlib extensions');
+}
+if (!function_exists('gzopen') && function_exists('gzopen64')) {
+    function gzopen($filename , $mode, $use_include_path = 0) {
         return gzopen64($filename, $mode, $use_include_path);
-      }
     }
+}
 
 //
 // begin application
@@ -28,11 +26,12 @@ $_configfile = get_config_filename();
 $_writecfg = TRUE;
 $_interactive = TRUE;
 $_outfile = STDOUT;
+$_notdeleted = null;
 
 @pcntl_signal(SIGTERM,'sighandler');
 @pcntl_signal(SIGINT,'sighandler');
 
-$opts = getopt('mdc:r:f:t:o:h',array('md5','debug','config:','root:','from:','to:','nowrite','quick','mode','outfile','nocompress'));
+$opts = getopt('mdc:r:f:t:o:h',array('md5','debug','config:','root:','from:','to:','nowrite','quick','mode','outfile','nocompress','dnd:'));
 // parse arguments for config file.
 foreach( $opts as $key => $val ) {
   switch( $key ) {
@@ -109,6 +108,18 @@ foreach( $opts as $key => $val ) {
       $_compress = FALSE;
       break;
 
+  case 'dnd':
+      if( $val ) {
+          $tmp = explode(',',$val);
+          foreach( $tmp as $one ) {
+              $one = trim($one);
+              if( !startswith($one,'/') ) $one = '/'.$one;
+              while( endswith($one,'*') || endswith($one,'/') ) $one = substr($one,0,-1);
+              if( $one ) $_notdeleted[] = $one;
+          }
+      }
+      break;
+
   case 'h':
   case 'help':
     usage();
@@ -130,12 +141,12 @@ else {
 
 // interactive mode
 if( $_interactive ) {
-  $_done = false;
-  $_config['repos_root'] = ask_string("Enter repository root",$_config['repos_root']);
-  $_config['repos_from'] = ask_string("Enter from subpath",$_config['repos_from']);
-  $_config['repos_to'] = ask_string("Enter to subpath",$_config['repos_to']);
-  $_config['mode'] = ask_options("Enter manifest mode (d|n|c|f)",array('d','n','c','f'),$_config['mode']);
-  $_config['outfile'] = ask_string("Enter output file",$_config['outfile']);
+    $_done = false;
+    $_config['repos_root'] = ask_string("Enter repository root",$_config['repos_root']);
+    $_config['repos_from'] = ask_string("Enter from subpath",$_config['repos_from']);
+    $_config['repos_to'] = ask_string("Enter to subpath",$_config['repos_to']);
+    $_config['mode'] = ask_options("Enter manifest mode (d|n|c|f)",array('d','n','c','f'),$_config['mode']);
+    $_config['outfile'] = ask_string("Enter output file",$_config['outfile']);
 }
 
 
@@ -162,8 +173,8 @@ $res = svn_export($_config['repos_root'].$_config['repos_from'],$_fromdir);
 $res = svn_export($_config['repos_root'].$_config['repos_to'],$_todir);
 
 // basic checks
-if( !is_dir($_fromdir."/modules") || !is_readable($_fromdir."/lib/classes/class.CMSModule.php" ) ) fatal("$_fromdir does not appear to be a CMSMS installation");
-if( !is_dir($_todir."/modules") || !is_readable($_todir."/lib/classes/class.CMSModule.php" ) ) fatal("$_todir does not appear to be a CMSMS installation");
+if( !is_file($_fromdir."/lib/version.php") || !is_readable($_fromdir."/lib/classes/class.CMSModule.php" ) ) fatal("$_fromdir does not appear to be a CMSMS installation");
+if( !is_file($_todir."/lib/version.php") || !is_readable($_todir."/lib/classes/class.CMSModule.php" ) ) fatal("$_todir does not appear to be a CMSMS installation");
 
 // get our from version and to version
 $_from_ver = null;
@@ -196,6 +207,11 @@ $obj->ignore('scripts');
 $obj->ignore('install');
 $obj->ignore('phar_installer');
 $obj->ignore('config.php');
+if( $_notdeleted ) {
+    foreach( $_notdeleted as $one ) {
+        $obj->do_not_delete( $one );
+    }
+}
 
 // begin output of manifest
 output('MANIFEST GENERATED: '.time());
@@ -203,6 +219,7 @@ output("MANIFEST FROM VERSION: $_from_ver");
 output("MANIFEST FROM NAME: $_from_name");
 output("MANIFEST TO VERSION: $_to_ver");
 output("MANIFEST TO NAME: $_to_name");
+if( $_notdeleted ) output('MANIFEST SKIPPED: '.implode(', ',$_notdeleted));
 
 if( $_config['mode'] == 'd' || $_config['mode'] == 'f' ) {
     $out = $obj->get_deleted_files();
@@ -236,7 +253,7 @@ if( $_config['mode'] == 'n' || $_config['mode'] == 'f' ) {
 }
 
 $_configfile = get_config_filename(TRUE);
-echo "DEBUG: configfile is $_configfile\n";
+debug("configfile is $_configfile");
 if( $_writecfg && $_configfile && ( !is_file($_configfile) || is_writable($_configfile) ) ) {
     info('Writing INI file to '.$_configfile);
     write_ini_file($_config,$_configfile);
@@ -296,6 +313,9 @@ EOT;
     echo "  --nowrite            = do not save the config file with entered values.\n";
     echo "  --quick              = disable interactive mode\n";
     echo "  --mode (d|n|c|f)     = output deleted/new/changed/full manifest\n";
+    echo "  --dnd <string>       = specify a comma separated list of paths (relative to the CMSMS root) as DO NOT DELETE\n";
+    echo "                         (no delete records will be output into the manifest for matching files)";
+    echo "                         This is useful if files will be moved manually during the upgrade process";
     echo "\n";
   }
 
@@ -330,7 +350,7 @@ EOT;
 
   function startswith($haystack,$needle)
   {
-    return (substr($haystack,strlen($needle)) == $needle);
+      return ( substr($haystack,0,strlen($needle)) == $needle );
   }
 
   function endswith($haystack,$needle)
@@ -447,6 +467,7 @@ EOT;
     private $_has_run = null;
     private $_base_dir;
     private $_ignored = array();
+    private $_donotdelete;
 
     public function __construct($dir_a,$dir_b,$do_md5 = false)
     {
@@ -460,16 +481,21 @@ EOT;
       $this->_do_md5 = (bool)$do_md5;
     }
 
+    public function do_not_delete( $in )
+    {
+        $this->_donotdelete[] = $in;
+    }
+
     public function ignore($str)
     {
-      if( !$str ) return;
-      if( is_string($str) ) $str = array($str);
+        if( !$str ) return;
+        if( is_string($str) ) $str = array($str);
 
-      foreach( $str as $one ) {
-	$one = trim($one);
-	if( !$one ) continue;
-	$this->_ignored[] = $one;
-      }
+        foreach( $str as $one ) {
+            $one = trim($one);
+            if( !$one ) continue;
+            $this->_ignored[] = $one;
+        }
     }
 
     private function _set_base($dir)
@@ -518,8 +544,8 @@ EOT;
 	}
 
 	if( !is_readable($fn) ) {
-	  echo "DEBUG: $fn is not readable\n";
-	  continue;
+        debug("$fn is not readable");
+        continue;
 	}
 
 	$rec = array();
@@ -560,7 +586,27 @@ EOT;
       // get all the files in b that are not in a
       $tmp_a = array_keys($this->_list_a);
       $tmp_b = array_keys($this->_list_b);
-      return array_diff($tmp_a,$tmp_b);
+      $out = array_diff($tmp_a,$tmp_b);
+      if( count($out) && count($this->_donotdelete) ) {
+          foreach( $out as $file ) {
+              $skipped = false;
+              foreach( $this->_donotdelete as $nd ) {
+                  if( startswith( $file, $nd ) ) {
+                      // skip this file at this stage.
+                      $skipped = true;
+                      break;
+                  }
+              }
+              if( !$skipped ) {
+                  $new_out[] = $file;
+              }
+              else {
+                  debug('skipped '.$file.', it is in the notdeleted list');
+              }
+          }
+          $out = $new_out;
+      }
+      return $out;
     }
 
     public function get_changed_files()
