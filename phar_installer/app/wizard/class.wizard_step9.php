@@ -26,8 +26,7 @@ class wizard_step9 extends \cms_autoinstaller\wizard_step
         foreach( $allmodules as $name ) {
             // we force all system modules to be loaded, if it's a system module
             // and needs upgrade, then it should automagically upgrade.
-            // additionally, upgrade any specific modules specified by the upgrade routine.
-            if( $modops->IsSystemModule($name) || $modops->IsQueuedForInstall($name) ) {
+            if( $modops->IsSystemModule($name) ) {
                 $this->verbose(\__appbase\lang('msg_upgrade_module',$name));
                 $module = $modops->get_module_instance($name,'',TRUE);
                 if( !is_object($module) ) {

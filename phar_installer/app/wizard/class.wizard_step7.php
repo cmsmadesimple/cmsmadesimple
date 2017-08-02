@@ -79,6 +79,31 @@ class wizard_step7 extends \cms_autoinstaller\wizard_step
         }
     }
 
+    private function preprocess_files()
+    {
+        $app = \__appbase\get_app();
+        $app_config = $app->get_config();
+        $upgrade_dir =  $app->get_appdir().'/upgrade';
+        if( !is_dir($upgrade_dir) ) throw new \Exception(\__appbase\lang('error_internal',710));
+        $destdir = $app->get_destdir();
+        if( !$destdir ) throw new \Exception(\__appbase\lang('error_internal',711));
+
+        $version_info = $this->get_wizard()->get_data('version_info');
+        $versions = utils::get_upgrade_versions();
+        if( is_array($versions) && count($versions) ) {
+            $this->message(\__appbase\lang('preprocessin_files'));
+            foreach( $versions as $one_version ) {
+                if( version_compare($one_version, $version_info['version']) < 1 ) continue;
+
+                $pre_files = "$upgrade_dir/$one_version/preprocess_files.php";
+                if( !is_file( $pre_files ) ) continue;
+
+                $destdir = $destdir; // make sure it's in scope.
+                include( $pre_files );
+            }
+        }
+    }
+
     private function do_manifests()
     {
         // get the list of all available versions that this upgrader knows about
@@ -92,7 +117,7 @@ class wizard_step7 extends \cms_autoinstaller\wizard_step
         $version_info = $this->get_wizard()->get_data('version_info');
         $versions = utils::get_upgrade_versions();
         if( is_array($versions) && count($versions) ) {
-            $this->message(\__appbase\lang('cleaning_files'));
+            $this->message(\__appbase\lang('processing_file_manifests'));
             foreach( $versions as $one_version ) {
                 if( version_compare($one_version, $version_info['version']) < 1 ) continue;
 
@@ -167,10 +192,12 @@ class wizard_step7 extends \cms_autoinstaller\wizard_step
 
         // create index.html files in directories.
         try {
+            include_once(__DIR__.'/msg_functions.php');
             $action = $this->get_wizard()->get_data('action');
             $tmp = $this->get_wizard()->get_data('version_info');
             if( $action == 'upgrade' && is_array($tmp) && count($tmp) ) {
                 $languages = $this->detect_languages();
+                $this->preprocess_files();
                 $this->do_manifests();
                 $this->do_files($languages);
             }

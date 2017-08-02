@@ -12,6 +12,9 @@ Creating a CMSMS release involves these steps:
         note: when this script is executed $db is available, the CMSMS api is created, however smarty is not available.
      readme.txt   -- (optional) readme file for display in the upgrade assistant
      changelog.txt -- (recommended) a text file describing specific changes to that version
+     preprocess_files.php -- (optional) executed at the start of step 7 (if files step is enabled) to perform various tasks related to files
+       This is useful if files must be moved around within the installation, and the manifest process cannot do it automatically.
+       note: when this script is executed $destdir is available, however the CMSMS api is not.
   c: optionally delete directories from <installer root>/app/upgrade that are no longer necessary.
   d: optionally changing <installer root>/app/config.ini to specify the minimum upgrade version.
   d: commit those changes to SVN
