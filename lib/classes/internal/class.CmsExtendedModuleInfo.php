@@ -37,7 +37,7 @@ class CmsExtendedModuleInfo extends CmsModuleInfo
         if( !in_array($key,self::$_ekeys) ) return parent::OffsetGet($key);
         if( isset($this->_edata[$key]) ) return $this->_edata[$key];
         if( $key == 'missingdeps' ) {
-            $out = array();
+            $out = null;
             $deps = $this['depends'];
             if( is_array($deps) && count($deps) ) {
                 foreach( $deps as $onedepname => $onedepversion ) {
@@ -45,6 +45,7 @@ class CmsExtendedModuleInfo extends CmsModuleInfo
                     if( !$depinfo['installed'] || version_compare($depinfo['version'],$onedepversion) < 0 ) $out[$onedepname] = $onedepversion;
                 }
             }
+            return $out;
         }
     }
 
