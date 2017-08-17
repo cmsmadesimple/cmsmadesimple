@@ -27,6 +27,7 @@ $lang['help'] = <<<EOT
   <p>Each nav template is provided with an array of node objects that match the criteria specified on the tag.  Below is a description of the members of the node object:</p>
 <ul>
   <li>\$node->id -- The content object integer ID.</li>
+  <li>\$node->type -- The type of the node.  i.e: content, link, pagelink, etc.</li>
   <li>\$node->url -- URL to the content object.  This should be used when building links.</li>
   <li>\$node->accesskey -- Access Key, if defined.</li>
   <li>\$node->tabindex -- Tab index, if defined.</li>
