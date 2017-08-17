@@ -16,6 +16,7 @@ Core - General
   - Fix a problem when testing for duplicate aliases of the form string-###  where the suffix integer was greater than 100.
   - More fixes to mact preprocessing if {content} was in the top of the template.
   - Minor fix to ExpandXMLPackage to not throw an exception in brief mode if module is not compatible with the current version of CMSMS.
+  - adds new cms_entities_array function in misc to convert an array recursively to values.
 
 CmsJobManager v0.1.1
   - Optimization of audit logging.
@@ -28,6 +29,7 @@ MicroTiny v2.2.1
 News v2.51.3
   - For security, no longer urldecode the detailtemplate parameter in detail view.
     This may have some implications for people that are specifying the detailtemplate parameter (with a template with special characters) from within a WYSIWYG (which is not recommended behavior).
+  - Convert title and dropdown options and text fields to entities before display.
 
 ModuleManager v2.1.2
   - Now sort modules in the installed tab a bit better.
@@ -45,6 +47,9 @@ FilePicker v1.0.1
 
 CMSContentmanager v1.1.6
   - Now double check that the 'default parent' for new pages actually exists.
+
+Navigator v1.0.8
+  - Minor english documentation correction.
 
 Version 2.2.2 - Hearts Content
 ----------------------------------
