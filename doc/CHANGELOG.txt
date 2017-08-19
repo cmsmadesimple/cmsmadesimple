@@ -51,6 +51,10 @@ CMSContentmanager v1.1.6
 Navigator v1.0.8
   - Minor english documentation correction.
 
+Installation Assistant v1.3.3
+  - Now look for lib/include.php before include.php in step 8 and step 9 when connecting to CMSMS.
+  - Fixes to upgrade routine for 2.1.5 wrt. the 'Manage Stylesheets' permission (ignore an exception)
+
 Version 2.2.2 - Hearts Content
 ----------------------------------
 Core - General

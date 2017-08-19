@@ -185,10 +185,13 @@ class wizard_step9 extends \cms_autoinstaller\wizard_step
         $CMS_VERSION = $this->get_wizard()->get_data('destversion');
         $app = \__appbase\get_app();
         $destdir = $app->get_destdir();
-        if( is_file("$destdir/include.php") ) {
-            include_once($destdir.'/include.php');
-        } else {
+        if( is_file("$destdir/lib/include.php") ) {
             include_once($destdir.'/lib/include.php');
+        }
+        else {
+            // do not need to test /include.php as if it still exists, it is bad... and 
+            // and it should have been deleted by now.
+            throw new \RuntimeException("Could not find $destdir/lib/include.php");
         }
         $config = \cms_config::get_instance();
 
