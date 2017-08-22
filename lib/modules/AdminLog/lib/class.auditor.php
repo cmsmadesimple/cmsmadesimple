@@ -44,7 +44,7 @@ class auditor implements \CMSMS\IAuditManager
             break;
         }
         $sitename = \cms_siteprefs::get('sitename','CMSMS');
-        $msg = "$sitename $sevmg: $msg";
+        $msg = "$sitename $sevmsg: $msg";
         @error_log( $msg, 0 );
     }
 

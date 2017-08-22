@@ -78,6 +78,7 @@ final class AdminLog extends \CMSModule
     public function HasCapability($capability, $params = array())
     {
         if( $capability == \CmsCoreCapabilities::TASKS ) return TRUE;
+        if( $capability == 'clicommands' ) return TRUE;
     }
 
     public function get_tasks()
@@ -85,6 +86,16 @@ final class AdminLog extends \CMSModule
         $out = [];
         $out[] = new \AdminLog\AutoPruneLogTask();
         $out[] = new \AdminLog\ReduceLogTask();
+        return $out;
+    }
+
+    public function get_cli_commands( $app )
+    {
+        if( ! $app instanceof \CMSMS\CLI\App ) throw new \LogicException(__METHOD__.' Called from outside of cmscli');
+        if( !class_exists('\\CMSMS\\CLI\\GetOptExt\\Command') ) throw new \LogicException(__METHOD__.' Called from outside of cmscli');
+
+        $out = [];
+        $out[] = new \AdminLog\ClearLogCommand( $app );
         return $out;
     }
 } // end of class
