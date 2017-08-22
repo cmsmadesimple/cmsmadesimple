@@ -101,6 +101,17 @@ class User
 		$this->adminaccess = false;
 	}
 
+    /**
+     * Sets the user's active state.
+     *
+     * @since 2.3
+     * @param bool $flag The active state.
+     */
+    public function SetActive($flag = true)
+    {
+        $this->active = (bool) $flag;
+    }
+
 	/**
 	 * Encrypts and sets password for the User
 	 *
