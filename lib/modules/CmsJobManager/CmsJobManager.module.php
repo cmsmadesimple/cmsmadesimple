@@ -39,7 +39,7 @@ final class CmsJobManager extends \CMSModule
     public static function table_name() { return cms_db_prefix().'mod_cmsjobmgr'; }
 
     function GetFriendlyName() { return $this->Lang('friendlyname'); }
-    function GetVersion() { return '0.1.1'; }
+    function GetVersion() { return '0.2'; }
     function MinimumCMSVersion() { return '2.1.99'; }
     function GetAuthor() { return 'Calguy1000'; }
     function GetAuthorEmail() { return 'calguy1000@cmsmadesimple.org'; }
@@ -260,18 +260,23 @@ final class CmsJobManager extends \CMSModule
         $now = time();
         $last_trigger = (int) $this->GetPreference('last_async_trigger');
         if( $last_trigger >= $now - \CmsJobManager\utils::get_async_freq() ) return; // do nothing
-
         $jobs = $this->check_for_jobs_or_tasks();
         if( !count($jobs) ) return; // nothing to do.
 
         // this could go into a function...
         $url_str = html_entity_decode($this->create_url('__','process',$_returnid));
         $url_ob = new \cms_url($url_str);
+        if( !$url_ob->get_host() ) {
+            // todo: audit something
+            return;
+        }
+
             // gotta determine a scheme
         $url_ob->set_queryvar('cms_cron',1);
         $url_ob->set_queryvar('showtemplate','false');
         $prefix_scheme = null;
         if( !$url_ob->get_scheme() ) {
+            // protocol relative URI
             $url_ob->set_scheme('http');
             if( CmsApp::get_instance()->is_https_request() ) $url_ob->set_scheme('https');
         }
