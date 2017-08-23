@@ -453,7 +453,7 @@ class UserOperations
 		$query = 'INSERT INTO '.CMS_DB_PREFIX."user_groups
                   (group_id,user_id,create_date,modified_date)
                   VALUES (?,?,$now,$now)";
-		$dbr = $db->Execute($query,array($uid,$gid));
+		$dbr = $db->Execute($query,array($gid,$uid));
 		if( isset(self::$_user_groups[$uid]) ) unset(self::$_user_groups[$uid]);
 	}
 

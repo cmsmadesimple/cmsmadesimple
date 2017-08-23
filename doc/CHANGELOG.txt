@@ -17,6 +17,7 @@ Core - General
   - More fixes to mact preprocessing if {content} was in the top of the template.
   - Minor fix to ExpandXMLPackage to not throw an exception in brief mode if module is not compatible with the current version of CMSMS.
   - adds new cms_entities_array function in misc to convert an array recursively to values.
+  - Fixes transposed arguments in UserOperations::AddMemberGroup() 
 
 CmsJobManager v0.1.1
   - Optimization of audit logging.
