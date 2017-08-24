@@ -99,6 +99,21 @@ class ModuleManager extends CMSModule
         parent::DoAction( $action, $id, $params, $returnid );
     }
 
+    public function HasCapability($capability,$params = array())
+    {
+        if( $capability == 'clicommands' ) return true;
+    }
+
+    public function get_cli_commands( $app )
+    {
+        if( ! $app instanceof \CMSMS\CLI\App ) throw new \LogicException(__METHOD__.' Called from outside of cmscli');
+        if( !class_exists('\\CMSMS\\CLI\\GetOptExt\\Command') ) throw new \LogicException(__METHOD__.' Called from outside of cmscli');
+
+        $out = [];
+        $out[] = new \ModuleManager\PingModuleServerCommand( $app );
+        $out[] = new \ModuleManager\ListModulesCommand( $app );
+        return $out;
+    }
 } // end of class
 
 #
