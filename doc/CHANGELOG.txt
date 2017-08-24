@@ -69,7 +69,13 @@ FilePicker v1.0.1
   - No longer allow overriding the filepicker type on the URL.
   - No longer allow uploading any .php files.
 
+AdminLog 
+  - New core module to replace the adminlog.php file
 
+Search  - remember to bump version
+ - Now exports a command for cmscli
+
+ 
 Version 2.2.2 - Hearts Content
 ----------------------------------
 Core - General

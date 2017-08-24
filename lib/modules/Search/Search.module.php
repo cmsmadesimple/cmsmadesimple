@@ -35,7 +35,7 @@ class Search extends CMSModule
     private function load_tools()
     {
         if( !$this->_tools_loaded ) {
-            $fn = dirname(__FILE__).'/search.tools.php';
+            $fn = __DIR__.'/search.tools.php';
             include_once($fn);
             $this->_tools_loaded = true;
         }
@@ -48,14 +48,14 @@ class Search extends CMSModule
     public function IsPluginModule() { return true; }
     public function HasAdmin() { return true; }
     public function HandlesEvents () { return true; }
-    public function GetVersion() { return '1.51.3'; }
+    public function GetVersion() { return '1.51.4'; }
     public function MinimumCMSVersion() { return '1.12-alpha0'; }
     public function GetAdminDescription() { return $this->Lang('description'); }
     public function VisibleToAdminUser() { return $this->CheckPermission('Modify Site Preferences'); }
     public function GetHelp($lang='en_US') { return $this->Lang('help'); }
     public function GetAuthor() { return 'Ted Kulp'; }
     public function GetAuthorEmail() { return 'ted@cmsmadesimple.org'; }
-    public function GetChangeLog() { return @file_get_contents(dirname(__FILE__).'/changelog.inc'); }
+    public function GetChangeLog() { return @file_get_contents(__DIR__.'/changelog.inc'); }
     public function GetEventDescription( $eventname ) { return $this->lang('eventdesc-' . $eventname); }
     public function GetEventHelp( $eventname ) { return $this->lang('eventhelp-' . $eventname); }
 
@@ -201,6 +201,7 @@ EOT;
         switch( $capability ) {
         case CmsCoreCapabilities::SEARCH_MODULE:
         case CmsCoreCapabilities::PLUGIN_MODULE:
+        case 'clicommands':
             return true;
         }
         return FALSE;
@@ -225,7 +226,15 @@ EOT;
             return $mod->GetResultsHtmlTemplate();
         }
     }
-}
 
+    public function get_cli_commands( $app )
+    {
+        if( ! $app instanceof \CMSMS\CLI\App ) throw new \LogicException(__METHOD__.' Called from outside of cmscli');
+        if( !class_exists('\\CMSMS\\CLI\\GetOptExt\\Command') ) throw new \LogicException(__METHOD__.' Called from outside of cmscli');
 
-?>
+        $out = [];
+        $out[] = new \Search\ReindexCommand( $app );
+        return $out;
+    }
+
+} // class
