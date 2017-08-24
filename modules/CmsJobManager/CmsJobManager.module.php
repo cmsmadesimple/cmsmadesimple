@@ -267,6 +267,11 @@ final class CmsJobManager extends \CMSModule
         // this could go into a function...
         $url_str = html_entity_decode($this->create_url('__','process',$_returnid));
         $url_ob = new \cms_url($url_str);
+        if( !$url_ob->get_host() ) {
+            // todo: audit something.
+            return;
+        }
+
             // gotta determine a scheme
         $url_ob->set_queryvar('cms_cron',1);
         $url_ob->set_queryvar('showtemplate','false');

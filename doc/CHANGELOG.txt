@@ -23,6 +23,7 @@ CmsJobManager v0.1.1
   - Optimization of audit logging.
   - Change connection timeout to 1 second.
   - Change processing to be a little more friendly to some environments wrt. content-size header.
+  - Prevent processing from the CLI when root_url is calculated
 
 MicroTiny v2.2.1
   - Minor fix for filepicker plugin.
