@@ -101,7 +101,7 @@ final class utils
         if( !is_array($xmldetails) ) return;
 
         // sort
-        uasort( $xmldetails, array('modmgr_utils','uasort_cmp_details') );
+        uasort( $xmldetails, 'ModuleManager\\utils::uasort_cmp_details' );
 
         $mod = \cms_utils::get_module('ModuleManager');
 
@@ -170,7 +170,7 @@ final class utils
 
         // now we have everything
         // let's try sorting it
-        uasort( $results, array('modmgr_utils','uasort_cmp_details') );
+        uasort( $results, 'ModuleManager\\utils::uasort_cmp_details' );
         return $results;
     }
 
