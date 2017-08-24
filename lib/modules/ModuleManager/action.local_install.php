@@ -25,6 +25,7 @@ if( !is_object($modinstance) ) {
   $this->RedirectToAdminTab();
 }
 
+audit('',$this->GetName(),'Installed '.$modinstance->GetName().' '.$modinstance->GetVersion());
 $msg = $modinstance->InstallPostMessage();
 if( !$msg ) $msg = $this->Lang('msg_module_installed',$mod);
 $this->SetMessage($msg);

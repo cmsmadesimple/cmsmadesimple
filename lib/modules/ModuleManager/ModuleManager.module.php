@@ -62,7 +62,10 @@ class ModuleManager extends CMSModule
     function UninstallPreMessage() { return $this->Lang('really_uninstall'); }
     function VisibleToAdminUser() { return ($this->CheckPermission('Modify Site Preferences') || $this->CheckPermission('Modify Modules')); }
 
-    protected function get_operations()
+    /**
+     * @internal
+     */
+    public function get_operations()
     {
         if( !$this->_operations ) $this->_operations = new \ModuleManager\operations( $this );
         return $this->_operations;
@@ -111,6 +114,10 @@ class ModuleManager extends CMSModule
 
         $out = [];
         $out[] = new \ModuleManager\PingModuleServerCommand( $app );
+        $out[] = new \ModuleManager\ModuleExistsCommand( $app );
+        $out[] = new \ModuleManager\ModuleExportCommand( $app );
+        $out[] = new \ModuleManager\ModuleImportCommand( $app );
+        $out[] = new \ModuleManager\ModuleInstallCommand( $app );
         $out[] = new \ModuleManager\ListModulesCommand( $app );
         return $out;
     }
