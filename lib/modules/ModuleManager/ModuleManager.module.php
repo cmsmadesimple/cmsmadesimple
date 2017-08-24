@@ -118,6 +118,8 @@ class ModuleManager extends CMSModule
         $out[] = new \ModuleManager\ModuleExportCommand( $app );
         $out[] = new \ModuleManager\ModuleImportCommand( $app );
         $out[] = new \ModuleManager\ModuleInstallCommand( $app );
+        $out[] = new \ModuleManager\ModuleUninstallCommand( $app );
+        $out[] = new \ModuleManager\ModuleRemoveCommand( $app );
         $out[] = new \ModuleManager\ListModulesCommand( $app );
         return $out;
     }
