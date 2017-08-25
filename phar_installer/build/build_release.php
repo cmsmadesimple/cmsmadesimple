@@ -296,6 +296,7 @@ function create_source_archive()
         echo "INFO: found version: $version_num\n";
     }
 
+    // here we would build any externals etc.
     cleanup_source_files();
     create_checksum_dat();
 
