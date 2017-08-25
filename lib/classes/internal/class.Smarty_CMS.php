@@ -34,7 +34,9 @@ class Smarty_CMS extends CMSSmartyBase
     public $params; // <- triggers error without | do search why this is needed
     protected $_global_cache_id;
     private static $_instance;
-    private $_tpl_stack = array();
+
+    // this is deprecated
+    private $_tpl_stack = []; // this is for simulating parent and child scopes while directly using \Smarty_CMS::fetch()
 
     /**
      * Constructor
@@ -276,9 +278,11 @@ class Smarty_CMS extends CMSSmartyBase
     }
 
     /**
-     * get_instance method
+     * Set the global cacheid.
+     * This is a prefix that is used when smarty caching is enabled.
      *
      * @param int $id
+     * @internal
      * @return void
      */
     public function set_global_cacheid($id)
@@ -292,16 +296,28 @@ class Smarty_CMS extends CMSSmartyBase
     }
 
     /**
+     * Get the global cacheid if any.
+     *
+     * @internal
+     * @return int|null
+     */
+    public function get_global_cacheid()
+    {
+        return $this->_global_cache_id;
+    }
+
+    /**
      * Get a suitable parent template for a new template.
      *
      * This method is used when creating new smarty template objects to find a suitable parent.
      * An internal stack of parents is used to find the latest item on the stack.
-     * if there are no parents, then the root smart object is used.
+     * if there are no parents, then the root smarty object is used.
      *
      * i.e:
      * <code>$smarty->CreateSmartyTemplate('somefile.tpl',$cache_id,$compile_id,$smarty->get_template_parent());</code>
      *
      * @since 2.0.1
+     * @deprecated
      * @return \smarty_internal_template
      */
     public function get_template_parent()
@@ -315,6 +331,54 @@ class Smarty_CMS extends CMSSmartyBase
             $parent = $this;
         }
         return $parent;
+    }
+
+    /**
+     * fetch method
+     * NOTE: Overwrites parent
+     *
+     * @deprecated
+     * @param mixed $template
+     * @param int $cache_id
+     * @param mixed $parent
+     * @param bool $display
+     * @param bool $merge_tpl_vars
+     * @param bool $no_output_filter
+     * @return mixed
+     */
+    public function fetch($template = null,$cache_id = null, $compile_id = null, $parent = null, $display = false, $merge_tpl_vars = true, $no_output_filter = false)
+    {
+        $name = $template; if( startswith($name,'string:') ) $name = 'string:';
+        debug_buffer('','Fetch '.$name.' start');
+
+        // we called the root smarty fetch method instead of some template object's fetch method directly.
+        // which is the case for things like Module::ProcessTemplate and Module::ProcessTemplateFromDatabase etc..()
+        if( is_object($template) ) {
+            $_tpl = $template;
+        } else {
+            if( !$parent ) {
+                // get the parent off of the stack.
+                $parent = $this->get_template_parent();
+            }
+            $_tpl = $this->CreateTemplate($template,$cache_id,$compile_id,$parent);
+        }
+
+        //put the new template onto the stack, and do our work, to handle recursive calls.
+        $this->_tpl_stack[] = $_tpl;
+        $tmp = null;
+        if( $display ) {
+            $_tpl->display();
+        } else {
+            $tmp = $_tpl->fetch();
+        }
+
+        // and pop off the stack again.
+        array_pop($this->_tpl_stack);
+
+        // admin requests are a bit fugged up... lots of stuff relies on a single smarty scope.
+        // gotta fix that.
+        debug_buffer('','Fetch '.$name.' end');
+        return $tmp;
     }
 
     public function createTemplate($template, $cache_id = null, $compile_id = null, $parent = null, $do_clone = true)
