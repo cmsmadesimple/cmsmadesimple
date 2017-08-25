@@ -18,6 +18,7 @@ Core - General
   - Minor fix to ExpandXMLPackage to not throw an exception in brief mode if module is not compatible with the current version of CMSMS.
   - adds new cms_entities_array function in misc to convert an array recursively to values.
   - Fixes transposed arguments in UserOperations::AddMemberGroup() 
+  - Better detection of duplicate content blocks.
 
 CmsJobManager v0.1.1
   - Optimization of audit logging.
