@@ -284,6 +284,8 @@ final class modulerep_client
      * returns the latest info about all specified modules
      * on success returns associative array of info about modules
      * on error throws an exception.
+     *
+     * @param string[] $modules The list of modules to get info about.
      * @return array
      */
     public static function get_modulelatest($modules)
