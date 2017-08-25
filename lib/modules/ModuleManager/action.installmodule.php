@@ -58,7 +58,6 @@ try {
     if( isset($params['submit']) ) {
         // phase one... organize and download
         set_time_limit(9999);
-        echo 'DEBUG: downloading...<br/>';
         if( isset($params['modlist']) && $params['modlist'] != '' ) {
             $modlist = unserialize(base64_decode($params['modlist']));
             if( !is_array($modlist) || count($modlist) == 0 ) throw new CmsInvalidDataException( $this->Lang('error_missingparams') );
