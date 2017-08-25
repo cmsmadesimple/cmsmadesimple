@@ -208,11 +208,11 @@ namespace CMSMS {
             if( $is_event && (!isset(self::$_hooks[$name]) || !self::$_hooks[$name]->sorted) ) {
                 // insert a hook to handle the event, be sure we only do this once.
                 $event_caller = function($params = null) use ($module,$eventname) {
-		    if( !$params ) $params = [];
+                    if( !$params ) $params = [];
                     $tmp = $module.'::'.$eventname;
                     \Events::SendEvent($module,$eventname,$params);
                 };
-                if( !isset(self::$_hooks[$name]) ) self::add_hook($name,$event_caller);
+                self::add_hook($name,$event_caller);
             }
 
             if( !isset(self::$_hooks[$name]) || !count(self::$_hooks[$name]->handlers)  ) return; // nothing to do.
@@ -276,7 +276,7 @@ namespace CMSMS {
                     $tmp = $module.'::'.$eventname;
                     \Events::SendEvent($module,$eventname,$params);
                 };
-                if( !isset(self::$_hooks[$name]) ) self::add_hook($name,$event_caller);
+                self::add_hook($name,$event_caller);
             }
 
             if( !isset(self::$_hooks[$name]) || !count(self::$_hooks[$name]->handlers)  ) return; // nothing to do.

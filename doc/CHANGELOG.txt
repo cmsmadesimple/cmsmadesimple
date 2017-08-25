@@ -19,6 +19,8 @@ Core - General
   - adds new cms_entities_array function in misc to convert an array recursively to values.
   - Fixes transposed arguments in UserOperations::AddMemberGroup() 
   - Better detection of duplicate content blocks.
+  - Revert template_stack change to Smarty_CMS from 2.2.2
+  - Improvements to HookManager.
 
 CmsJobManager v0.1.1
   - Optimization of audit logging.
