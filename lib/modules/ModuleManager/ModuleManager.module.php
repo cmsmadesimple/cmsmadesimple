@@ -121,6 +121,7 @@ class ModuleManager extends CMSModule
         $out[] = new \ModuleManager\ModuleUninstallCommand( $app );
         $out[] = new \ModuleManager\ModuleRemoveCommand( $app );
         $out[] = new \ModuleManager\ListModulesCommand( $app );
+        $out[] = new \ModuleManager\ReposListCommand( $app );
         $out[] = new \ModuleManager\ReposGetXMLCommand( $app );
         return $out;
     }
