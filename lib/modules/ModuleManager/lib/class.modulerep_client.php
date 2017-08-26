@@ -168,6 +168,7 @@ final class modulerep_client
         $req->execute($url,array('name'=>$xmlfile));
         $status = $req->getStatus();
         $result = $req->getResult();
+        if( $status == 400 ) return;
         if( $status != 200 || $result == '' ) throw new CmsCommunicationException($mod->Lang('error_request_problem'));
 
         $data = json_decode($result,true);
