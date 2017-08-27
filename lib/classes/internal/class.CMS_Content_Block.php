@@ -299,6 +299,7 @@ final class CMS_Content_Block
                     $result = @ob_get_contents();
                     @ob_end_clean();
                 }
+                self::$_primary_content_flag = true;
             }
             else {
                 $result = '';
@@ -316,7 +317,6 @@ final class CMS_Content_Block
                 }
                 $smarty->caching = $oldvalue;
             }
-            self::$_primary_content_flag = true;
         }
         return self::content_return($result, $params, $smarty);
     }

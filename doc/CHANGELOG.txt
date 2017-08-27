@@ -1,3 +1,8 @@
+Version 2.2.3.1 - Happy Adventure
+----------------------------------
+Core - General
+  - Fix an issue when parsing multiple content blocks.
+
 Version 2.2.3 - Happy Adventure
 ----------------------------------
 Core - General
