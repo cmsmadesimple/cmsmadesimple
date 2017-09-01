@@ -259,6 +259,7 @@ final class UserTagOperations
 	{
 		$this->LoadUserTags();
 		$plugins = array();
+        if( !$this->_cache || !count( $this->_cache  ) ) return;
 		foreach( $this->_cache as $key => $row ) {
 			$plugins[$row['userplugin_id']] = $row['userplugin_name'];
 		}
