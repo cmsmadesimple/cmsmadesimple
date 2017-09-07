@@ -188,7 +188,6 @@ class cms_install extends \__appbase\app
             case 'dest':
             case 'destdir':
                 $this->_custom_destdir = $config['dest'] = trim($val);
-
                 break;
             case 'debug':
                 $config['debug'] = utils::to_bool($val);
@@ -223,7 +222,7 @@ class cms_install extends \__appbase\app
                     if( !@is_dir($dir) && !@mkdir($dir) ) throw new \RuntimeException('Sorry, problem determining a temporary directory, non specified, and we could not create one.');
                     $txt = 'This is temporary directory created for installing CMSMS in punitively restrictive environments.  You may delete this directory and its files once installation is complete.';
                     if( !@file_put_contents($dir.'/__cmsms',$txt) ) throw new \RuntimeException('We could not create a file in the temporary directory we just created (is safe mode on?).');
-                    $this->set_config_val('tmpdir',$dir);
+                    $config[$key] = $dir;
                     $this->_custom_tmpdir = $dir;
                     $val = $dir;
                 }
