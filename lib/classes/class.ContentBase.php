@@ -2337,7 +2337,7 @@ abstract class ContentBase
 
 		case 'parent':
 			$contentops = ContentOperations::get_instance();
-			$tmp = $contentops->CreateHierarchyDropdown($this->mId, $this->mParentId, 'parent_id', 1, 1, 0, 1, 1);
+			$tmp = $contentops->CreateHierarchyDropdown($this->mId, $this->mParentId, 'parent_id', ($this->mId > 0) ? 0 : 1, 1, 0, 1, 1);
 			if( empty($tmp) && !check_permission(get_userid(),'Manage All Content') ) {
 				return array('','<input type="hidden" name="parent_id" value="'.$this->mParentId.'" />');
             }
