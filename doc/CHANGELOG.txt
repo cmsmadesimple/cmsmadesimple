@@ -3,6 +3,10 @@ Version 2.2.4 - NO NAME
 Core - General
   - Improvements to the Hook class.
   - Minor fix to usertagoperations
+  - Changes to the hierarchy selector to disallow circular references.
+
+Installation Assistant v1.3.4
+  - Fixes endless recursion issue with setting a tmpdir.
 
 Version 2.2.3.1 - Happy Adventure
 ----------------------------------
