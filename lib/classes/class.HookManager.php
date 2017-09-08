@@ -151,6 +151,8 @@ namespace CMSMS {
         }
 
         /**
+
+
          * Add a handler to a hook
          *
          * @param string $name The hook name.  If the hook does not already exist, it is added.
@@ -199,6 +201,7 @@ namespace CMSMS {
             $args = func_get_args();
             $name = array_shift($args);
             $name = trim($name);
+
             $is_event = false;
             $module = $eventname = null;
             if( strpos($name,':') !== FALSE ) list($module,$eventname) = explode('::',$name);
@@ -211,6 +214,7 @@ namespace CMSMS {
                     if( !$params ) $params = [];
                     $tmp = $module.'::'.$eventname;
                     \Events::SendEvent($module,$eventname,$params);
+                    return $params;
                 };
                 self::add_hook($name,$event_caller);
             }
@@ -232,7 +236,6 @@ namespace CMSMS {
             $value = $args;
             self::$_in_process[] = $name;
             foreach( self::$_hooks[$name]->handlers as $obj ) {
-                if( !is_array( $value ) ) $value = [ $value ];
                 if( empty($value) ) {
                     $value = call_user_func($obj->callable);
                 } else {
@@ -275,6 +278,7 @@ namespace CMSMS {
                 $event_caller = function($params) use ($module,$eventname) {
                     $tmp = $module.'::'.$eventname;
                     \Events::SendEvent($module,$eventname,$params);
+                    return $params;
                 };
                 self::add_hook($name,$event_caller);
             }
