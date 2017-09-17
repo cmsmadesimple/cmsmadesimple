@@ -8,6 +8,14 @@ Core - General
 Installation Assistant v1.3.4
   - Fixes endless recursion issue with setting a tmpdir.
 
+FilePicker v1.0.2
+  - Now allow specifying a 'useprefix' boolean parameter to the action url which will use the current top directory
+    as a prefix on all returned strings.
+  - Slight modification to the profile class.
+
+MicroTiny v2.2.2
+  - Minor fix for the filepicker if using a default filepicker profile that specifies a top directory.
+
 Version 2.2.3.1 - Happy Adventure
 ----------------------------------
 Core - General

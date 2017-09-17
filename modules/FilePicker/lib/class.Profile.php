@@ -5,7 +5,7 @@ class ProfileException extends \Exception {}
 
 class Profile extends \CMSMS\FilePickerProfile
 {
-    private $_data = [ 'id'=>null, 'name'=>null, 'create_date'=>null, 'modified_date'=>null, 'file_extensions'=>null ];
+    private $_data = [ 'id'=>null, 'name'=>null, 'create_date'=>null, 'modified_date'=>null, 'file_extensions'=>null, 'prefix'=>null ];
 
     protected function setValue( $key, $val )
     {
@@ -17,6 +17,9 @@ class Profile extends \CMSMS\FilePickerProfile
         case 'create_date':
         case 'modified_date':
             $this->_data[$key] = (int) $val;
+            break;
+        case 'prefix':
+            $this->_data[$key] = trim($val);
             break;
         default:
             parent::setValue( $key, $val );
@@ -48,11 +51,13 @@ class Profile extends \CMSMS\FilePickerProfile
 
         case 'name':
         case 'file_extensions':
+        case 'prefix':
             return trim($this->_data[$key]);
 
         case 'create_date':
         case 'modified_date':
             return (int) $this->_data[$key];
+
 
         case 'relative_top':
         case 'reltop':
@@ -147,7 +152,6 @@ class Profile extends \CMSMS\FilePickerProfile
             if( startswith( $one, '.') ) $one = substr($one,1);
             if( $ext == $one ) return TRUE;
         }
-        debug_to_log('file type is not accebptable');
         return FALSE;
     }
 } // end of class

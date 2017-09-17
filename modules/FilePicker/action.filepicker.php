@@ -27,6 +27,12 @@ if( !check_login(FALSE) ) exit; // admin only.... but any admin
 //$handlers = ob_list_handlers();
 //for ($cnt = 0; $cnt < sizeof($handlers); $cnt++) { ob_end_clean(); }
 
+$clean_str = function( $in ) {
+    $in = cleanValue($in);
+    $in = strip_tags($in);
+    return trim($in);
+};
+
 //
 // initialization
 //
@@ -38,8 +44,7 @@ if( isset($_GET['_enc']) ) {
 }
 
 $inst = get_parameter_value($_GET,'inst');
-$sig = trim(cleanValue(get_parameter_value($_GET,'sig')));
-//$type = trim(cleanValue(get_parameter_value($_GET,'type')));
+$sig = $clean_str(get_parameter_value($_GET,'sig'));
 $nosub = (int) get_parameter_value($_GET,'nosub');
 $profile = null;
 if( $sig ) $profile = TemporaryProfileStorage::get($sig);
@@ -53,6 +58,11 @@ if( !$sig && $profile ) {
 if( !$this->CheckPermission('Modify Files') ) {
     $parms = ['can_upload'=>FALSE, 'can_delete'=>FALSE, 'can_mkdir'=>FALSE ];
     $profile = $profile->overrideWith( $parms );
+}
+$useprefix = cms_to_bool(get_parameter_value($_GET,'useprefix'));
+if( $useprefix ) {
+    $prefix = $profile->reltop;
+    $profile = $profile->overrideWith( [ 'prefix'=>$prefix.'/' ] );
 }
 
 $filemanager = cms_utils::get_module('FileManager');

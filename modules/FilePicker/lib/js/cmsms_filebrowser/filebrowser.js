@@ -23,11 +23,7 @@
 		e.preventDefault();
 		var selector;
 		var instance = $('html').data('cmsfp-inst');
-		var o = {
-		    name: 'cmsfp:change',
-		    target: instance,
-		    file: file
-		};
+		if( settings.prefix ) file = settings.prefix + file;
 		if( settings && settings.onselect ) {
 		    settings.onselect(instance,file);
 		    return;

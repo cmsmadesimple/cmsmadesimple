@@ -149,6 +149,7 @@
 	    options.sig = '{$sig}';
 	    options.inst = '{$inst}';
             options.lang = {$lang_js};
+            options.prefix = '{$profile->prefix}';
             var filepicker = new CMSFileBrowser(options);
           })
   	</script>
