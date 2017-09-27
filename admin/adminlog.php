@@ -63,7 +63,7 @@ $from = ($page-1) * $limit;
 $orig_filter = new StdClass;
 $orig_filter->user = $orig_filter->action = $orig_filter->item_name = null;
 $filter = clone $orig_filter;
-if( !empty($_SESSION['adminlog_filter']) ) $_filter = $_SESSION['adminlog_filter'];
+if( !empty($_SESSION['adminlog_filter']) ) $filter = $_SESSION['adminlog_filter'];
 
 // handle filtering dialog.
 if( isset($_POST['filterapply']) ) {
@@ -131,7 +131,7 @@ if ($result && $result->RecordCount() > 0) {
     }
     else {
         // first 5
-        for( $i = 0; $i <= 5; $i++ ) {
+        for( $i = 1; $i <= 5; $i++ ) {
             $pagelist[$i] = $i;
         }
         $tpage = $page;

@@ -5,6 +5,7 @@ Core - General
   - Minor fix to usertagoperations
   - Changes to the hierarchy selector to disallow circular references.
   - Fix problems with additional editors causing page aliases to be regenerated.
+  - Minor fixes to admin log browser.
 
 Installation Assistant v1.3.4
   - Fixes endless recursion issue with setting a tmpdir.
