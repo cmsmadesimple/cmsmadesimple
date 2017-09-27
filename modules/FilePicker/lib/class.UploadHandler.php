@@ -35,15 +35,29 @@ class UploadHandler extends jquery_upload_handler
 
     public function after_uploaded_file( $fileobject )
     {
+        if( !is_object($fileobject) || !$fileobject->name ) return;
         if( !$this->_profile->show_thumbs ) return;
-
         $complete_path = $this->_path.$fileobject->name;
+
+        $parms['file'] = $complete_path;
+        $parms = \CMSMS\HookManager::do_hook( 'FileManager::OnFileUploaded', $parms );
+        $complete_path = $parms['file']; // file name could have changed.
+
         if( !is_file($complete_path) ) return;
         if( !$this->_mod->is_image( $complete_path ) ) return;
+
+        $mod = \cms_utils::get_module('FileManager');
+        $thumb = \filemanager_utils::create_thumbnail( $complete_path );
+
+        $str = basename($complete_path).' uploaded to '.\filemanager_utils::get_full_cwd();
+        if( $thumb ) $str .= ' and a thumbnail was generated';
+        audit('',$this->_mod->GetName(),$str);
+
+        /*
         $info = getimagesize($complete_path);
         if( !$info || !isset($info['mime']) ) return;
 
-        // gott create a thumbnail
+        // gotta create a thumbnail
         $width = (int) \cms_siteprefs::get('thumbnail_width',96);
         $height = (int) \cms_siteprefs::get('thumbnail_height',96);
         if( $width < 1 || $height < 1 ) return;
@@ -70,5 +84,6 @@ class UploadHandler extends jquery_upload_handler
             $res = imagejpeg($i_dest,$complete_thumb,100);
             break;
         }
+        */
     }
 }

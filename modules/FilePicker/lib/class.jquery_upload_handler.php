@@ -298,6 +298,13 @@ abstract class jquery_upload_handler
             return $this->delete();
         }
 
+        $total_file_size = (isset($_SERVER['HTTP_X_FILE_NAME']) && isset($_SERVER['HTTP_X_FILE_SIZE']) ) ? (int) $_SERVER['HTTP_X_FILE_SIZE'] : null;
+        if( !$total_file_size ) {
+            $content_range_header = isset($_SERVER['HTTP_CONTENT_RANGE']) ? trim($_SERVER['HTTP_CONTENT_RANGE']) : null;
+            $content_range = $content_range_header ? preg_split('/[^0-9]+/', $content_range_header) : null;
+            $total_file_size = $content_range[3];
+        }
+
         $upload = isset($_FILES[$this->options['param_name']]) ?
             $_FILES[$this->options['param_name']] : null;
         $info = array();
@@ -307,8 +314,7 @@ abstract class jquery_upload_handler
                     $upload['tmp_name'][$index],
                     isset($_SERVER['HTTP_X_FILE_NAME']) ?
                         $_SERVER['HTTP_X_FILE_NAME'] : $upload['name'][$index],
-                    isset($_SERVER['HTTP_X_FILE_SIZE']) ?
-                        $_SERVER['HTTP_X_FILE_SIZE'] : $upload['size'][$index],
+                    $total_file_size ? $total_file_size : $upload['size'][$index],
                     isset($_SERVER['HTTP_X_FILE_TYPE']) ?
                         $_SERVER['HTTP_X_FILE_TYPE'] : $upload['type'][$index],
                     $upload['error'][$index]
@@ -320,9 +326,7 @@ abstract class jquery_upload_handler
                 isset($upload['tmp_name']) ? $upload['tmp_name'] : null,
                 isset($_SERVER['HTTP_X_FILE_NAME']) ? $_SERVER['HTTP_X_FILE_NAME'] : (isset($upload['name']) ?
                         isset($upload['name']) : null),
-                isset($_SERVER['HTTP_X_FILE_SIZE']) ?
-                    $_SERVER['HTTP_X_FILE_SIZE'] : (isset($upload['size']) ?
-                        isset($upload['size']) : null),
+                $total_file_size ? $total_file_size : $upload['size'],
                 isset($_SERVER['HTTP_X_FILE_TYPE']) ?
                     $_SERVER['HTTP_X_FILE_TYPE'] : (isset($upload['type']) ?
                         isset($upload['type']) : null),
