@@ -17,6 +17,7 @@ FilePicker v1.0.2
 
 FileManager v1.6.5
   - Change upload action to call FileManager::OnFileUploaded hook before creating the thumbnail to allow a hook to rename the uploaded file.
+  - Now enable creation of thumbnails on install.
 
 MicroTiny v2.2.2
   - Minor fix for the filepicker if using a default filepicker profile that specifies a top directory.
