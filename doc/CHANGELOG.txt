@@ -4,6 +4,7 @@ Core - General
   - Improvements to the Hook class.
   - Minor fix to usertagoperations
   - Changes to the hierarchy selector to disallow circular references.
+  - Fix problems with additional editors causing page aliases to be regenerated.
 
 Installation Assistant v1.3.4
   - Fixes endless recursion issue with setting a tmpdir.
@@ -15,6 +16,7 @@ FilePicker v1.0.2
 
 MicroTiny v2.2.2
   - Minor fix for the filepicker if using a default filepicker profile that specifies a top directory.
+  - Re-adds the table plugin (went missing when we upgraded tinymce).
 
 Version 2.2.3.1 - Happy Adventure
 ----------------------------------
