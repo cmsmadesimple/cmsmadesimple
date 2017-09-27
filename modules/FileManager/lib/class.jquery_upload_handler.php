@@ -301,7 +301,7 @@ abstract class jquery_upload_handler
                     $upload['tmp_name'][$index],
                     isset($_SERVER['HTTP_X_FILE_NAME']) ?
                         $_SERVER['HTTP_X_FILE_NAME'] : $upload['name'][$index],
-                    $total_file_size ? $total_file_size : $uploads['size'][$index],
+                    $total_file_size ? $total_file_size : $upload['size'][$index],
                     isset($_SERVER['HTTP_X_FILE_TYPE']) ?
                         $_SERVER['HTTP_X_FILE_TYPE'] : $upload['type'][$index],
                     $upload['error'][$index]
