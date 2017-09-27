@@ -35,19 +35,19 @@ class FileManagerUploadHandler extends jquery_upload_handler
       if( is_object($fileobject) && $fileobject->name != '' ) {
 
           $mod = cms_utils::get_module('FileManager');
-          $parms = array();
-          $parms['file'] = filemanager_utils::join_path(filemanager_utils::get_full_cwd(),$fileobject->name);
+          $file = filemanager_utils::join_path(filemanager_utils::get_full_cwd(),$fileobject->name);
+          $parms['file'] = $file;
+          $parms = \CMSMS\HookManager::do_hook( 'FileManager::OnFileUploaded', $parms );
+          $file = $parms['file']; // file name could have changed.
 
+          $thumb = null;
           if( $mod->GetPreference('create_thumbnails') ) {
-              $thumb = filemanager_utils::create_thumbnail($parms['file']);
-              if( $thumb ) $params['thumb'] = $thumb;
+              $thumb = filemanager_utils::create_thumbnail($file);
           }
 
-          $str = $fileobject->name.' uploaded to '.filemanager_utils::get_full_cwd();
-          if( isset($params['thumb']) ) $str .= ' and a thumbnail was generated';
+          $str = $file.' uploaded to '.filemanager_utils::get_full_cwd();
+          if( $thumb ) $str .= ' and a thumbnail was generated';
           audit('',$mod->GetName(),$str);
-
-          \CMSMS\HookManager::do_hook( 'FileManager::OnFileUploaded', $parms );
       }
   }
 }

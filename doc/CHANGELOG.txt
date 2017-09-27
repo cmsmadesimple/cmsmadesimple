@@ -14,6 +14,9 @@ FilePicker v1.0.2
     as a prefix on all returned strings.
   - Slight modification to the profile class.
 
+FileManager v1.6.5
+  - Change upload action to call FileManager::OnFileUploaded hook before creating the thumbnail to allow a hook to rename the uploaded file.
+
 MicroTiny v2.2.2
   - Minor fix for the filepicker if using a default filepicker profile that specifies a top directory.
   - Re-adds the table plugin (went missing when we upgraded tinymce).
@@ -42,7 +45,7 @@ Core - General
   - More fixes to mact preprocessing if {content} was in the top of the template.
   - Minor fix to ExpandXMLPackage to not throw an exception in brief mode if module is not compatible with the current version of CMSMS.
   - adds new cms_entities_array function in misc to convert an array recursively to values.
-  - Fixes transposed arguments in UserOperations::AddMemberGroup() 
+  - Fixes transposed arguments in UserOperations::AddMemberGroup()
   - Better detection of duplicate content blocks.
   - Revert template_stack change to Smarty_CMS from 2.2.2
   - Improvements to HookManager.
