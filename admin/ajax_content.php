@@ -88,7 +88,7 @@ try {
         // as well as the info of my current children.
         if( !isset($_REQUEST['page']) ) throw new \Exception('missingparams');
 
-        $children_to_data = function($node,$exclude) use ($display,$allow_all,$for_child,$ruid,$contentops,$can_edit_any,$allowcurrent,$current) {
+        $children_to_data = function($node) use ($display,$allow_all,$for_child,$ruid,$contentops,$can_edit_any,$allowcurrent,$current) {
             $children = $node->getChildren(false,$allow_all);
             if( empty($children) ) return;
 
