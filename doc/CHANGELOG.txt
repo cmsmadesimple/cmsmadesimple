@@ -14,6 +14,7 @@ FilePicker v1.0.2
   - Now allow specifying a 'useprefix' boolean parameter to the action url which will use the current top directory
     as a prefix on all returned strings.
   - Slight modification to the profile class.
+  - Now sends the FileManager::OnFileUploaded hook the same way as FileManager does
 
 FileManager v1.6.5
   - Change upload action to call FileManager::OnFileUploaded hook before creating the thumbnail to allow a hook to rename the uploaded file.
@@ -22,6 +23,9 @@ FileManager v1.6.5
 MicroTiny v2.2.2
   - Minor fix for the filepicker if using a default filepicker profile that specifies a top directory.
   - Re-adds the table plugin (went missing when we upgraded tinymce).
+
+ModuleManager v2.1.3
+  - Adds audit line displaying status if cannot connect to ModuleRepository.
 
 Version 2.2.3.1 - Happy Adventure
 ----------------------------------

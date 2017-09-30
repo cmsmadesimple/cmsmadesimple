@@ -202,7 +202,7 @@ final class modmgr_utils
             $req = new modmgr_cached_request($url);
             $req->setTimeout(3);
             $req->execute($url);
-            if( $req->getStatus() == 200 ) {
+            if( ($status = $req->getStatus()) == 200 ) {
                 $tmp = $req->getResult();
                 if( empty($tmp) ) {
                     $req->clearCache();
@@ -218,6 +218,7 @@ final class modmgr_utils
             }
             else {
                 $req->clearCache();
+		audit($status,'ModuleManager','Cannot connect to ModuleRepository');
             }
         }
         $ok = FALSE;
