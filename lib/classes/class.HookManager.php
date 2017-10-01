@@ -211,18 +211,6 @@ namespace CMSMS {
 
             if( !$is_event && ( !isset(self::$_hooks[$name]) || !count(self::$_hooks[$name]->handlers) )  ) return; // nothing to do.
 
-            // sort the handlers.
-            if( !self::$_hooks[$name]->sorted ) {
-                if( count(self::$_hooks[$name]->handlers) > 1 ) {
-                    usort(self::$_hooks[$name]->handlers,function($a,$b){
-                            if( $a->priority < $b->priority ) return -1;
-                            if( $a->priority > $b->priority ) return 1;
-                            return 0;
-                        });
-                }
-                self::$_hooks[$name]->sorted = TRUE;
-            }
-
             // note: $args is an array
             $value = $args;
             self::$_in_process[] = $name;
@@ -232,13 +220,27 @@ namespace CMSMS {
                 \Events::SendEvent($module,$eventname,$data);
                 $value[0] = $data; // transitive.
             }
-            foreach( self::$_hooks[$name]->handlers as $obj ) {
-                // input is passed to the callback, and can be adjusted.
-                // note it's not certain that the same data will be passed out of the handler
-                if( empty($value) || !is_array($value) ) {
-                    $value = call_user_func($obj->callable,$value);
-                } else {
-                    $value = call_user_func_array($obj->callable,$value);
+            if( isset(self::$_hooks[$name]->handlers) && count(self::$_hooks[$name]->handlers) ) {
+                // sort the handlers.
+                if( !self::$_hooks[$name]->sorted ) {
+                    if( count(self::$_hooks[$name]->handlers) > 1 ) {
+                        usort(self::$_hooks[$name]->handlers,function($a,$b){
+                                if( $a->priority < $b->priority ) return -1;
+                                if( $a->priority > $b->priority ) return 1;
+                                return 0;
+                            });
+                    }
+                    self::$_hooks[$name]->sorted = TRUE;
+                }
+
+                foreach( self::$_hooks[$name]->handlers as $obj ) {
+                    // input is passed to the callback, and can be adjusted.
+                    // note it's not certain that the same data will be passed out of the handler
+                    if( empty($value) || !is_array($value) ) {
+                        $value = call_user_func($obj->callable,$value);
+                    } else {
+                        $value = call_user_func_array($obj->callable,$value);
+                    }
                 }
             }
             array_pop(self::$_in_process);
