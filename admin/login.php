@@ -174,13 +174,17 @@ else if( isset($_POST['loginsubmit']) ) {
     $username = $password = null;
     if (isset($_POST["username"])) $username = cleanValue($_POST["username"]);
     if (isset($_POST["password"])) $password = $_POST["password"];
+    unset($_POST['username'],$_POST['password'],$_REQUEST['username'],$_REQUEST['password']);
 
     $userops = $gCms->GetUserOperations();
 
     class CmsLoginError extends \CmsException {}
 
     try {
-        if( !$password ) throw new \LogicException(lang('usernameincorrect'));
+        if( !$username || !$password ) throw new \LogicException(lang('usernameincorrect'));
+
+        \CMSMS\HookManager::do_hook('Core::LoginPre', [ 'user'=>$username ] );
+
         $oneuser = $userops->LoadUserByUsername($username, $password, TRUE, TRUE);
         if( !$oneuser ) throw new CmsLoginError(lang('usernameincorrect'));
         $login_ops->save_authentication($oneuser);
@@ -189,7 +193,6 @@ else if( isset($_POST['loginsubmit']) ) {
         audit($oneuser->id, "Admin Username: ".$oneuser->username, 'Logged In');
 
         // send the post login event
-        unset($_POST['username'],$_POST['password'],$_REQUEST['username'],$_REQUEST['password']);
         \CMSMS\HookManager::do_hook('Core::LoginPost', [ 'user'=>&$oneuser ] );
 
         // redirect outa hre somewhere
@@ -229,8 +232,7 @@ else if( isset($_POST['loginsubmit']) ) {
     catch( \Exception $e ) {
         $error = $e->GetMessage();
         debug_buffer("Login failed.  Error is: " . $error);
-        unset($_POST['password'],$_REQUEST['password']);
-        \CMSMS\HookManager::do_hook('Core::LoginFailed', [ 'user'=>$_POST['username'] ] );
+        \CMSMS\HookManager::do_hook('Core::LoginFailed', [ 'user'=>$username ] );
         // put mention into the admin log
         $ip_login_failed = \cms_utils::get_real_ip();
         audit('', '(IP: ' . $ip_login_failed . ') ' . "Admin Username: " . $username, 'Login Failed');

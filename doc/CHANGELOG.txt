@@ -6,6 +6,9 @@ Core - General
   - Changes to the hierarchy selector to disallow circular references.
   - Fix problems with additional editors causing page aliases to be regenerated.
   - Minor fixes to admin log browser.
+  - Minor fixes to admin login
+  - Add missing call Core::LoginPre hook.
+  - Modify myaccount.php  to call Core::EditUserPre hook BEFORE the password is set.
 
 Installation Assistant v1.3.4
   - Fixes endless recursion issue with setting a tmpdir.
