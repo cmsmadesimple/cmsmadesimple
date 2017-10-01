@@ -223,8 +223,8 @@ function cleanup_source_files()
 
 function get_version_php($startdir)
 {
-    if( file_exists("$startdir/version.php") ) return "$startdir/version.php";
-    if( file_exists("$startdir/lib/version.php") ) return "$startdir/lib/version.php";
+    if( is_file("$startdir/lib/version.php") ) return "$startdir/lib/version.php";
+    if( is_file("$startdir/version.php") ) return "$startdir/version.php";
 }
 
 function create_checksum_dat()
@@ -345,7 +345,7 @@ try {
         fclose($fh);
 
         // change permissions
-        echo "RECURSIVELY changing permissions to be more restrictive\n";
+        echo "INFO: Recursively changing permissions to be more restrictive\n";
         $cmd = "chmod -R g-w,o-w {$srcdir}";
         echo "DEBUG: $cmd\n";
         $junk = null;
@@ -406,7 +406,7 @@ try {
         }
 
         $phar->setMetaData(array('bootstrap'=>'index.php'));
-        $stub = $phar->createDefaultStub('index.php','index.php');
+        $stub = $phar->createDefaultStub('cli.php','index.php');
         $phar->setSignatureAlgorithm(Phar::SHA1);
         $phar->setStub($stub);
         $phar->stopBuffering();
