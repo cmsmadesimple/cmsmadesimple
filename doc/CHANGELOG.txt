@@ -19,6 +19,7 @@ FilePicker v1.0.2
     as a prefix on all returned strings.
   - Slight modification to the profile class.
   - Now sends the FileManager::OnFileUploaded hook the same way as FileManager does
+  - Adds an exception handler around the change working directory stuff.
 
 FileManager v1.6.5
   - Change upload action to call FileManager::OnFileUploaded hook before creating the thumbnail to allow a hook to rename the uploaded file.

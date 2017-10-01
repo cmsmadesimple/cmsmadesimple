@@ -78,8 +78,13 @@ $cwd = '';
 if( isset($_SESSION[$sesskey]) ) $cwd = trim($_SESSION[$sesskey]);
 if( !$cwd && $profile->top ) $cwd = $assistant->to_relative($profile->top);
 if( !$nosub && isset($_GET['subdir']) ) {
-    $cwd .= '/' . cms_html_entity_decode(trim(cleanValue($_GET['subdir'])));
-    $cwd = $assistant->to_relative($assistant->to_absolute($cwd));
+    try {
+        $cwd .= '/' . cms_html_entity_decode(trim(cleanValue($_GET['subdir'])));
+        $cwd = $assistant->to_relative($assistant->to_absolute($cwd));
+    }
+    catch( \Exception $e ) {
+        // ignore
+    }
 }
 // failsave, if we don't have a valid working directory, set it to the $topdir;
 if( $cwd && !$assistant->is_valid_relative_path( $cwd ) ) {
