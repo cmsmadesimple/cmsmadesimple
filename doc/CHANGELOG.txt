@@ -9,6 +9,7 @@ Core - General
   - Minor fixes to admin login
   - Add missing call Core::LoginPre hook.
   - Modify myaccount.php  to call Core::EditUserPre hook BEFORE the password is set.
+  - Fix documentation to CallUserTag
 
 Installation Assistant v1.3.4
   - Fixes endless recursion issue with setting a tmpdir.
