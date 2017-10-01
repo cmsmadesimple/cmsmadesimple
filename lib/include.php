@@ -169,7 +169,7 @@ if (!isset($DONT_LOAD_DB)) {
         debug_buffer('Done Initializing Database');
     }
     catch( \CMSMS\Database\DatabaseConnectionException $e ) {
-        die('Sorry, something has gone wrong.  Please contact a site administrtor. <em>('.get_class($e).')</em>');
+        die('Sorry, something has gone wrong.  Please contact a site administrator. <em>('.get_class($e).')</em>');
     }
 }
 
