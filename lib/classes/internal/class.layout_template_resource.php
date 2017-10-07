@@ -18,6 +18,7 @@
 #
 #$Id: content.functions.php 6863 2011-01-18 02:34:48Z calguy1000 $
 namespace CMSMS\internal;
+use \CmsLayoutTemplateType;
 
 /**
  * @package CMS
