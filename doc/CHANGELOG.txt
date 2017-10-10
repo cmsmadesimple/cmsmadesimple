@@ -13,6 +13,7 @@ Core - General
 
 Installation Assistant v1.3.4
   - Fixes endless recursion issue with setting a tmpdir.
+  - Fix issue with requiring a database prefix on upgrade. 
 
 FilePicker v1.0.2
   - Now allow specifying a 'useprefix' boolean parameter to the action url which will use the current top directory
