@@ -2,24 +2,24 @@ Version 2.2.4 - NO NAME
 ----------------------------------
 Core - General
   - Improvements to the Hook class.
-  - Minor fix to usertagoperations
+  - Minor fix to usertagoperations.
   - Changes to the hierarchy selector to disallow circular references.
   - Fix problems with additional editors causing page aliases to be regenerated.
-  - Minor fixes to admin log browser.
-  - Minor fixes to admin login
+  - Minor fixes to Admin log browser.
+  - Minor fixes to Admin login.
   - Add missing call Core::LoginPre hook.
-  - Modify myaccount.php  to call Core::EditUserPre hook BEFORE the password is set.
-  - Fix documentation to CallUserTag
+  - Modify myaccount.php to call Core::EditUserPre hook BEFORE the password is set.
+  - Fix documentation to CallUserTag.
 
 Installation Assistant v1.3.4
   - Fixes endless recursion issue with setting a tmpdir.
   - Fix issue with requiring a database prefix on upgrade. 
 
 FilePicker v1.0.2
-  - Now allow specifying a 'useprefix' boolean parameter to the action url which will use the current top directory
-    as a prefix on all returned strings.
+  - Now allow specifying a 'useprefix' boolean parameter to the action url which will use the current top directory.
+  - Add a prefix on all returned strings.
   - Slight modification to the profile class.
-  - Now sends the FileManager::OnFileUploaded hook the same way as FileManager does
+  - Now sends the FileManager::OnFileUploaded hook the same way as FileManager does.
   - Adds an exception handler around the change working directory stuff.
 
 FileManager v1.6.5
@@ -33,11 +33,13 @@ MicroTiny v2.2.2
 ModuleManager v2.1.3
   - Adds audit line displaying status if cannot connect to ModuleRepository.
 
+  
 Version 2.2.3.1 - Happy Adventure
 ----------------------------------
 Core - General
   - Fix an issue when parsing multiple content blocks.
 
+  
 Version 2.2.3 - Happy Adventure
 ----------------------------------
 Core - General
@@ -57,7 +59,7 @@ Core - General
   - More fixes to mact preprocessing if {content} was in the top of the template.
   - Minor fix to ExpandXMLPackage to not throw an exception in brief mode if module is not compatible with the current version of CMSMS.
   - adds new cms_entities_array function in misc to convert an array recursively to values.
-  - Fixes transposed arguments in UserOperations::AddMemberGroup()
+  - Fixes transposed arguments in UserOperations::AddMemberGroup().
   - Better detection of duplicate content blocks.
   - Revert template_stack change to Smarty_CMS from 2.2.2
   - Improvements to HookManager.
@@ -66,7 +68,7 @@ CmsJobManager v0.1.1
   - Optimization of audit logging.
   - Change connection timeout to 1 second.
   - Change processing to be a little more friendly to some environments wrt. content-size header.
-  - Prevent processing from the CLI when root_url is calculated
+  - Prevent processing from the CLI when root_url is calculated.
 
 MicroTiny v2.2.1
   - Minor fix for filepicker plugin.
@@ -100,6 +102,7 @@ Installation Assistant v1.3.3
   - Now look for lib/include.php before include.php in step 8 and step 9 when connecting to CMSMS.
   - Fixes to upgrade routine for 2.1.5 wrt. the 'Manage Stylesheets' permission (ignore an exception)
 
+  
 Version 2.2.2 - Hearts Content
 ----------------------------------
 Core - General
