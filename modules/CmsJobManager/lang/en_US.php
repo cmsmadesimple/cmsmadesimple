@@ -37,7 +37,9 @@ $lang['help'] = <<<EOT
 <p>You can adjust the frequency by adding a cmsjobmgr_asyncfreq variable into the config.php file for your site containing an integer value between 0 and 10.</p>
 <pre>i.e: <code>\$config["cmsjobmgr_asyncfreq"] = 5;</code>.</pre>
 <p><strong>Note:</strong> It is not possible to disable asynchronous processing completely.  This is because some functioning of the CMSMS core relies on this functionality.</p>
-
+<h3>Ensuring that background processing occurs.</h3>
+<p>On some low-demand sites where incomming requests may not occur frequently, but you want to ensure that background processing occurs, we recommend that you setup a cron job to regularly (every 3 to 5 minutes) request a URL on the site.   This can be a simple content page with no content of it's own that is not shown in the menu.  i.e.:</p>
+<pre>*/3 * * * * wget -O /dev/null https://www.mysite.com/</pre>
 <h3>What about problem jobs.</h3>
 <p>From time to time some applications may create jobs that fail, exiting with some sort of error.  CmsJobManager will remove the job after the job has failed a number of times.  At which time the originating code can re-create the job.  If you encounter a problematic job that continues to fail this is a bug that should be diagnosed, and reported in detail to the appropriate developers.</p>
 EOT;
