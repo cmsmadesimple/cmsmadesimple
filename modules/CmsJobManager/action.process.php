@@ -86,11 +86,11 @@ try {
     if( $this->is_locked() ) {
         if( $this->lock_expired() ) {
             debug_to_log($this->GetName().': Removing an expired lock (probably an error occurred)');
-            audit('',$this->GetName(),'Removing an expired lock.. An error probably occurred with a previous job.');
+            audit('',$this->GetName(),'Removing an expired lock. An error probably occurred with a previous job.');
             $this->unlock();
         } else {
             debug_to_log($this->GetName().': Processing still locked (probably because of an error)... wait for a bit');
-            audit('',$this->GetName(),'Processing is already occurring..');
+            audit('',$this->GetName(),'Processing is already occurring.');
             exit;
         }
     }
