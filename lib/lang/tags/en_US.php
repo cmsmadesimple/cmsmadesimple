@@ -349,7 +349,7 @@ $lang['help_function_page_attr'] = <<<EOT
 <ul>
   <li><em>(optional)</em> page (int|string) - An optional page id or alias to fetch the content from.  If not specified, the current page is assumed.</li>
   <li><strong>key [required]</strong> The key to return the attribute of.
-    <p>The key can either be a block name, or from a set of standard properties associated with a content page.  The accepted standard properties are:</p>
+    <p>The key can either be a block name, or from a set of standard properties associated with a content page.  Some of the accepted standard properties are:</p>
     <ul>
       <li>_dflt_ - (string) The value for the default content block (an alias for content_en).</li>
       <li>title</li>
@@ -365,7 +365,9 @@ $lang['help_function_page_attr'] = <<<EOT
       <li>extra1 - (string) The value of the extra1 attribute.</li>
       <li>extra2 - (string) The value of the extra2 attribute.</li>
       <li>extra3 - (string) The value of the extra3 attribute.</li>
+      <li>pageattr - (string) The value of the page specific smarty data attribute./li>
     </ul>
+    <p><strong>Note:</strong> The list above is not inclusive.  You can also retrieve the unparsed contents of additional content blocks or properties added by third party modules.  The output is always a string</p>
   </li>
   <li><em>(optional)</em> inactive (boolean) - Allows reading page attributes from inactive pages.</li>
   <li><em>(optional)</em> assign (string) - Assign the results to a smarty variable with that name.</li>

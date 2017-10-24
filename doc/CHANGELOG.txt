@@ -11,6 +11,8 @@ Core - General
   - Modify myaccount.php to call Core::EditUserPre hook BEFORE the password is set.
   - Fix documentation to CallUserTag.
   - Fix to default handling for content_image block.
+  - Improve the help for the {page_attr} plugin.
+  - Fix a potential warning in the {anchor} tag.
 
 Installation Assistant v1.3.4
   - Fixes endless recursion issue with setting a tmpdir.

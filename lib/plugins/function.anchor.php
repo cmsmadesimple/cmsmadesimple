@@ -38,7 +38,8 @@ function smarty_function_anchor($params, &$smarty)
         $tmp =  $url;
     }
     else {
-        $tmp = '<a href="'.$url.'"'.$class.$title.$tabindex.$accesskey.'>'.$params['text'].'</a>';
+	$text = get_parameter_value( $params, 'text','<!-- anchor tag: no text provided -->anchor');
+        $tmp = '<a href="'.$url.'"'.$class.$title.$tabindex.$accesskey.'>'.$text.'</a>';
     }
 
     if( isset($params['assign']) ){
