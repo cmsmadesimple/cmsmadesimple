@@ -13,6 +13,7 @@ Core - General
   - Fix to default handling for content_image block.
   - Improve the help for the {page_attr} plugin.
   - Fix a potential warning in the {anchor} tag.
+  - Fix boolean comparison in LoginOperations.
 
 Installation Assistant v1.3.4
   - Fixes endless recursion issue with setting a tmpdir.

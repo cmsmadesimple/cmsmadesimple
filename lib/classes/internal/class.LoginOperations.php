@@ -53,7 +53,7 @@ final class LoginOperations
 
         $tmp = array(md5(__FILE__),$oneuser->password,$uid,\cms_utils::get_real_ip(),$_SERVER['HTTP_USER_AGENT']);
         $tmp = sha1(serialize($tmp));
-        if ($oneuser && (string)$checksum != '' && $checksum == $tmp ) return TRUE;
+        if ($oneuser && (string)$checksum != '' && $checksum === $tmp ) return TRUE;
         return FALSE;
     }
 
