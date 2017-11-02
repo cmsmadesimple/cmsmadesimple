@@ -1593,6 +1593,7 @@ $lang['title_hierselect_select'] = 'Select a content page. If the selected page 
 $lang['title_mailtest'] = "Mail Test";
 //$lang['toggle'] = "Toggle";
 $lang['tools'] = "Tools";
+$lang['tplhelp_page'] = 'TODO';
 $lang['troubleshooting'] = "(Troubleshooting)";
 $lang['true'] = "True";
 $lang['type'] = "Type";
