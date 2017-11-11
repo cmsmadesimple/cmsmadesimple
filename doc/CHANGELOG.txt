@@ -17,7 +17,7 @@ Core - General
 
 Installation Assistant v1.3.4
   - Fixes endless recursion issue with setting a tmpdir.
-  - Fix issue with requiring a database prefix on upgrade. 
+  - Fix issue with requiring a database prefix on upgrade.
 
 FilePicker v1.0.2
   - Now allow specifying a 'useprefix' boolean parameter to the action url which will use the current top directory.
@@ -37,13 +37,15 @@ MicroTiny v2.2.2
 ModuleManager v2.1.3
   - Adds audit line displaying status if cannot connect to ModuleRepository.
 
-  
+DesignManager v1.1.4
+  - Fixes problems with the cancel button not marking the form as 'clean' (not dirty).
+
 Version 2.2.3.1 - Happy Adventure
 ----------------------------------
 Core - General
   - Fix an issue when parsing multiple content blocks.
 
-  
+
 Version 2.2.3 - Happy Adventure
 ----------------------------------
 Core - General
@@ -106,7 +108,7 @@ Installation Assistant v1.3.3
   - Now look for lib/include.php before include.php in step 8 and step 9 when connecting to CMSMS.
   - Fixes to upgrade routine for 2.1.5 wrt. the 'Manage Stylesheets' permission (ignore an exception)
 
-  
+
 Version 2.2.2 - Hearts Content
 ----------------------------------
 Core - General
