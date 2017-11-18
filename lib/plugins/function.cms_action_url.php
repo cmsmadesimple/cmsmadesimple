@@ -19,7 +19,7 @@
 
 function smarty_cms_function_cms_action_url($params, &$smarty)
 {
-    $module = $smarty->getTemplateVars('actionmodule');
+    $module = $smarty->getTemplateVars('_module');
     $returnid = $smarty->getTemplateVars('returnid');
     $mid = $smarty->getTemplateVars('actionid');
     $action = null;

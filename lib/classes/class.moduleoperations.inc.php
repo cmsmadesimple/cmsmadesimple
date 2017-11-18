@@ -323,7 +323,7 @@ final class ModuleOperations
 
         $info = $this->_get_module_info();
         if( !isset($info[$module_name]) && !$force_load ) {
-            if( $info[$moduel_name]['active'] == 0 ) {
+            if( $info[$module_name]['active'] == 0 ) {
                 cms_warning('Requested deactivated module '.$module_name);
             }
             else {
@@ -874,9 +874,10 @@ final class ModuleOperations
         if( !$module_name ) {
             global $CMS_ADMIN_PAGE;
             if( isset($CMS_ADMIN_PAGE) ) $module_name = cms_userprefs::get_for_user(get_userid(FALSE),'syntaxhighlighter');
+            if( $module_name ) $module_name = html_entity_decode( $module_name ); // for some reason entities may have gotten in there.
         }
 
-        if( !$module_name ) return $obj;
+        if( !$module_name || $module_name == -1 ) return $obj;
         $obj = $this->get_module_instance($module_name);
         if( !$obj ) return $obj;
         if( $obj->HasCapability(CmsCoreCapabilities::SYNTAX_MODULE) ) return $obj;
@@ -907,6 +908,7 @@ final class ModuleOperations
             else {
                 $module_name = cms_userprefs::get_for_user(get_userid(FALSE),'wysiwyg');
             }
+            if( $module_name ) $module_name = html_entity_decode( $module_name );
         }
 
         if( !$module_name || $module_name == -1 ) return $obj;

@@ -221,7 +221,7 @@ final class content_plugins
             // otherwise other block
             $output = null;
             if( $block == 'content_en' ) {
-                $result = self::get_default_content_block_content( $contentobj->Id() );
+                $result = self::get_default_content_block_content( $contentobj->Id(), $smarty );
             }
             if( !$result ) {
                 $oldvalue = $smarty->caching;
@@ -390,38 +390,58 @@ final class content_plugins
         self::$_contentBlocks[$rec['name']] = $rec;
     }
 
-    public static function get_default_content_block_content($returnid)
+    public static function get_default_content_block_content( $page_id, &$smarty)
     {
+        $result = null;
         if( self::$_primary_content ) return self::$_primary_content;
-        if( !isset($_REQUEST['mact']) ) return;
 
-        list($module,$id,$action,$inline) = explode(',',$_REQUEST['mact'],4);
-        // do not process inline content.
-        if( !$module || $inline || $id != 'cntnt01' || $id == '_preview_' ) return;
-
-        $modops = \ModuleOperations::get_instance();
-        $module_obj = $modops->get_module_instance($module);
-        if( !$module_obj ) {
-            // module not found... couldn't even autoload it.
-            @trigger_error('Attempt to access module '.$module.' which could not be found (is it properly installed and configured?');
-            throw new \CmsError404Exception('Attempt to access module '.$module.' which could not be found (is it properly installed and configured?');
-        }
-        if( !$module_obj->IsPluginModule() ) {
-            @trigger_error('Attempt to access module '.$module.' on a frontend request, which is not a plugin module');
-            throw new \CmsError404Exception('Attempt to access module '.$module.' which could not be found (is it properly installed and configured?');
+        $do_mact = $module = $id = $action = $inline = null;
+        if( isset($_REQUEST['mact']) ) {
+            list($module,$id,$action,$inline) = explode(',',$_REQUEST['mact'],4);
+            // do not process inline content.
+            if( $module && !$inline && $id == 'cntnt01' ) $do_mact = true;
         }
 
-        $smarty = \Smarty_CMS::get_instance();
-        @ob_start();
-        $parms = $modops->GetModuleParameters($id);
-        $oldcache = $smarty->caching;
-        $smarty->caching = false;
-        $result = $module_obj->DoActionBase($action, $id, $parms, $returnid, $smarty);
-        $smarty->caching = $oldcache;
+        if( $do_mact ) {
+            $modops = \ModuleOperations::get_instance();
+            $module_obj = $modops->get_module_instance($module);
+            if( !$module_obj ) {
+                // module not found... couldn't even autoload it.
+                @trigger_error('Attempt to access module '.$module.' which could not be found (is it properly installed and configured?');
+                throw new \CmsError404Exception('Attempt to access module '.$module.' which could not be found (is it properly installed and configured?');
+            }
+            if( !$module_obj->IsPluginModule() ) {
+                @trigger_error('Attempt to access module '.$module.' on a frontend request, which is not a plugin module');
+                throw new \CmsError404Exception('Attempt to access module '.$module.' which could not be found (is it properly installed and configured?');
+            }
 
-        if( $result !== FALSE ) echo $result;
-        $result = @ob_get_contents();
-        @ob_end_clean();
+            $smarty = \Smarty_CMS::get_instance();
+            @ob_start();
+            $parms = $modops->GetModuleParameters($id);
+            $oldcache = $smarty->caching;
+            $smarty->caching = false;
+            $result = $module_obj->DoActionBase($action, $id, $parms, $page_id, $smarty);
+            $smarty->caching = $oldcache;
+
+            if( $result !== FALSE ) echo $result;
+            $result = @ob_get_contents();
+            @ob_end_clean();
+        }
+        else {
+            $oldvalue = $smarty->caching;
+            $smarty->caching = false;
+            $block = 'content_en';
+            if( isset($_SESSION['__cms_preview__']) && $contentobj->Id() == __CMS_PREVIEW_PAGE__ ) {
+                // note: content precompile/postcompile events will not be triggererd in preview.
+                //$val = $contentobj->Show($block);
+                //$result = $smarty->fetch('eval:'.$val);
+                $result = $smarty->fetch(str_replace(' ', '_', 'content:' . $block), '|'.$block, $page_id.$block);
+            }
+            else {
+                $result = $smarty->fetch(str_replace(' ', '_', 'content:' . $block), '|'.$block, $page_id.$block);
+            }
+            $smarty->caching = $oldvalue;
+        }
         self::$_primary_content = $result;
         return $result;
     }

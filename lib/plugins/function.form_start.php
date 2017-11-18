@@ -31,8 +31,8 @@ function smarty_function_form_start($params, &$smarty)
     if( $gCms->test_state(CmsApp::STATE_ADMIN_PAGE) ) {
         // check if it's a module action
         if( $mactparms['module'] ) {
-            $tmp = $smarty->getTemplateVars('actionparams');
-            if( is_array($tmp) && isset($tmp['action']) ) $mactparms['action'] = $tmp['action'];
+            $tmp = $smarty->getTemplateVars('_action');
+            if( $tmp ) $mactparms['action'] = $tmp;
 
             $tagparms['action'] = 'moduleinterface.php';
             if( !isset($mactparms['action']) ) $mactparms['action'] = 'defaultadmin';

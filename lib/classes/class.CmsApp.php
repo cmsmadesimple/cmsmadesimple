@@ -72,6 +72,11 @@ final class CmsApp {
 	 */
 	private $_content_type;
 
+    /**
+     * @ignore
+     */
+    private $_showtemplate = true;
+
 	/**
 	 * List of currrent states.
 	 * @ignore
@@ -214,6 +219,33 @@ final class CmsApp {
 		$this->_content_type = null;
 		if( isset($mime_type) ) $this->_content_type = $mime_type;
 	}
+
+    /**
+     * Disable the processing of the page template.
+     * This function controls whether the page template will be processed at all.
+     * It must be called early enough in the content generation process.
+     *
+     * Ideally this method can be called from within a module action that is called from within the default content block
+     * when content_processing is set to 2 (the default) in the config.php
+     *
+     * @return void
+     * @since 2.3
+     */
+    public function disable_template_processing()
+    {
+        $this->_showtemplate = false;
+    }
+
+    /**
+     * Get the flag indicating whether or not template processing is allowed.
+     *
+     * @return bool
+     * @since 2.3
+     */
+    public function template_processing_allowed()
+    {
+        return $this->_showtemplate;
+    }
 
 	/**
 	 * Set the current content page

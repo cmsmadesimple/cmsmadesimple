@@ -150,7 +150,7 @@ final class cms_config implements ArrayAccess
         $this->_types['assets_dir'] = self::TYPE_STRING;
         $this->_types['assets_path'] = self::TYPE_STRING;
         $this->_types['permissive_smarty'] = self::TYPE_BOOL;
-        $this->_types['startup_mact_processing'] = self::TYPE_BOOL;
+        $this->_types['content_processing_mode'] = self::TYPE_INT;
 
         $config = array();
         if (defined('CONFIG_FILE_LOCATION') && is_file(CONFIG_FILE_LOCATION)) {
@@ -364,8 +364,10 @@ final class cms_config implements ArrayAccess
 
         case 'smart_urls':
         case 'set_names':
-        case 'startup_mact_processing':
             return true;
+
+        case 'content_processing_mode':
+            return 2;
 
         case 'root_path':
             $out = dirname(dirname(__DIR__)); // realpath here?

@@ -108,24 +108,29 @@ while( $trycount < 2 ) {
         $smarty->assignGlobal('lang',CmsNlsOperations::get_current_language());
         $smarty->assignGlobal('encoding',CmsNlsOperations::get_encoding());
 
-        $html = '';
-        $showtemplate = true;
         if ( (isset($_REQUEST['showtemplate']) && $_REQUEST['showtemplate'] == 'false') ) {
-            $showtemplate = false;
+            $_app->disable_template_processing();
         }
 
         $cache_id = 'p'.$contentobj->Id();
         $smarty->set_global_cacheid('p'.$contentobj->Id());
-        if( $cachable && $showtemplate && $contentobj->Cachable() && cms_siteprefs::get('use_smartycache',0) ) {
+        if( $cachable && $_app->template_processing_allowed() && $contentobj->Cachable() && cms_siteprefs::get('use_smartycache',0) ) {
             $smarty->setCaching(Smarty::CACHING_LIFETIME_CURRENT);
         }
 
         \CMSMS\HookManager::do_hook('Core::ContentPreRender', [ 'content' => &$contentobj ] );
 
+        if( $config['content_processing_mode'] == 2 ) {
+            debug_buffer('preprocess module action');
+            \CMSMS\internal\content_plugins::get_default_content_block_content( $contentobj->Id(), $smarty );
+        }
+
+        $html = null;
+        $showtemplate = $_app->template_processing_allowed();
         if( !$showtemplate ) {
             $smarty->setCaching(false);
             // in smarty 3, we could use eval:{content} I think
-            $html = $smarty->fetch('cms_template:notemplate')."\n";
+            $html = \CMSMS\internal\content_plugins::get_default_content_block_content( $contentobj->Id(), $smarty );
             $trycount = 99;
         }
         else {
@@ -139,12 +144,12 @@ while( $trycount < 2 ) {
             unset($tpl);
             \CMSMS\HookManager::do_hook('Core::PageTopPostRender', [ 'content'=>&$contentobj, 'html'=>&$top ]);
 
-            // if the request has a mact in it, process and cache the output.
-            if( $config['startup_mact_processing'] ) {
+            if( $config['content_processing_mode'] == 1 ) {
                 debug_buffer('preprocess module action');
                 \CMSMS\internal\content_plugins::get_default_content_block_content( $contentobj->Id() );
             }
 
+            // if the request has a mact in it, process and cache the output.
             debug_buffer('process template body');
             \CMSMS\HookManager::do_hook('Core::PageBodyPreRender', [ 'content'=>&$contentobj, 'html'=>&$body ]);
             $tpl = $smarty->createTemplate('tpl_body:'.$tpl_id,$cache_id);

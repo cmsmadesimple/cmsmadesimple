@@ -1460,10 +1460,11 @@ abstract class CMSModule
         }
 
         $gCms = CmsApp::get_instance(); // in scope for compatibility reasons.
+        $smarty->assign('_action',$name);
+        $smarty->assign('_module',$this->GetName());
         $smarty->assign('actionid',$id);
         $smarty->assign('actionparams',$params);
         $smarty->assign('returnid',$returnid);
-        $smarty->assign('actionmodule',$this->GetName());
         $smarty->assign('mod',$this);
 
         // here it would be nice if... we called a controller class.
