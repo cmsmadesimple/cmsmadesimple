@@ -12,14 +12,11 @@ final class simple_plugin_operations
     /**
      * @ignore
      */
-    public function __construct()
-    {
-        if( self::$_instance ) throw new \LogicException('Cannot create more than one instance of '.__CLASS__);
-        self::$_instance = $this;
-    }
+    protected function __construct() {}
 
-    protected static function get_instance()
+    public static function get_instance()
     {
+        if( !self::$_instance ) self::$_instance = new self();
         return self::$_instance;
     }
 

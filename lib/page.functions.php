@@ -217,7 +217,32 @@ function create_textarea($enablewysiwyg, $text, $name, $classname = '', $id = ''
     }
 }
 
+/**
+ * A convenience function to test if the site is marked as down according to the config panel.
+ * This method includes handling the preference that indicates that site-down behaviour should
+ * be disabled for certain IP address ranges.
+ *
+ * @return boolean
+ */
+function is_sitedown()
+{
+    global $CMS_INSTALL_PAGE;
+    if( isset($CMS_INSTALL_PAGE) ) return TRUE;
 
+    if( cms_siteprefs::get('enablesitedownmessage') !== '1' ) return FALSE;
+
+    $uid = get_userid(FALSE);
+    if( $uid && cms_siteprefs::get('sitedownexcludeadmins') ) return FALSE;
+
+    if( !isset($_SERVER['REMOTE_ADDR']) ) return TRUE;
+    $excludes = cms_siteprefs::get('sitedownexcludes','');
+    if( empty($excludes) ) return TRUE;
+
+    $tmp = explode(',',$excludes);
+    $ret = cms_ipmatches($_SERVER['REMOTE_ADDR'],$excludes);
+    if( $ret ) return FALSE;
+    return TRUE;
+}
 
 /**
  * Create a dropdown form element containing a list of files that match certain conditions
@@ -267,6 +292,8 @@ function create_file_dropdown($name,$dir,$value,$allowed_extensions,$optprefix='
  * This method also handles matching routes and specifying which module
  * should be called with what parameters
  *
+ * This is the main routine to do route dispatching
+ *
  * @internal
  * @ignore
  * @access private
@@ -279,38 +306,29 @@ function get_pageid_or_alias_from_url()
     $contentops = ContentOperations::get_instance();
     $smarty = \Smarty_CMS::get_instance();
 
-    $params = $_REQUEST;
-    if (isset($params['mact'])) {
-        $ary = explode(',', cms_htmlentities((string) $params['mact']), 4);
-        $smarty->id = (isset($ary[1])?$ary[1]:'');
-    }
-
     $page = '';
     $query_var = $config['query_var'];
-    if (isset($smarty->id) && isset($params[$smarty->id . 'returnid'])) {
-        // get page from returnid parameter in module action
-        $page = (int)$params[$smarty->id . 'returnid'];
-    }
-    else if( isset($_REQUEST[$query_var]) ) {
+    if( isset($_GET[$query_var]) ) {
         // using non friendly urls... get the page alias/id from the query var.
         $page = @trim((string) $_REQUEST[$query_var]);
     }
     else {
-        // either we're using pretty urls
-        // or this is the default page.
+        // either we're using internal pretty urls or this is the default page.
         if (isset($_SERVER["REQUEST_URI"]) && !endswith($_SERVER['REQUEST_URI'], 'index.php')) {
             $matches = array();
             if (preg_match('/.*index\.php\/(.*?)$/', $_SERVER['REQUEST_URI'], $matches)) {
                 // pretty urls... grab all the stuff after the index.php
-                $page = $matches[1];
+                $page = trim($matches[1]);
             }
         }
     }
-
     unset($_GET['query_var']);
 
-    // by here, if page is empty, use the default page id
-    if ($page == '') $page = $contentops->GetDefaultContent(); // assume default content
+    $dflt_content = $contentops->GetDefaultContent();
+    if( !$page ) {
+        // by here, if page is empty, use the default page id
+        return $dflt_content;
+    }
 
     // by here, if we're not assuming pretty urls of any sort
     // and we have a value... we're done.
@@ -330,10 +348,14 @@ function get_pageid_or_alias_from_url()
     $page = trim($page, '/');
 
     // see if there's a route that matches.
-    $matched = false;
+    // note: we handle content routing separately at this time.
+    // it'd be cool if contents were just another mact.
     $route = cms_route_manager::find_match($page);
-    if( is_object($route) ) {
-        $matched = true;
+    if( ! $route ) {
+        // if no route matched... assume it is an alias and that the alias begins after the last /
+        if( ($pos = strrpos($page,'/')) !== FALSE ) $page = substr($page, $pos + 1);
+    }
+    else {
         if( $route['key1'] == '__CONTENT__' ) {
             // a route to a page.
             $page = (int)$route['key2'];
@@ -341,87 +363,34 @@ function get_pageid_or_alias_from_url()
         else {
             $matches = $route->get_results();
 
-            // it's a module route
-            //Now setup some assumptions
-            if (!isset($matches['id'])) $matches['id'] = 'cntnt01';
-            if (!isset($matches['action'])) $matches['action'] = 'defaulturl';
-            if (!isset($matches['inline'])) $matches['inline'] = 0;
-            if (!isset($matches['returnid']))	$matches['returnid'] = ''; #Look for default page
-            if (!isset($matches['module'])) $matches['module'] = $route->get_dest();
-
-            //Get rid of numeric matches
-            foreach ($matches as $key=>$val) {
-                if (is_int($key)) {
-                    unset($matches[$key]);
-                }
-                else {
-                    if ($key != 'id') $_REQUEST[$matches['id'] . $key] = $val;
-                }
-            }
-
-            //Now set any defaults that might not have been in the url
+            // it's a module route... setup some default parameters.
+            $arr = ['id'=>'cntnt01', 'action'=>'defaulturl', 'inline'=>false, 'module'=>$route->get_dest() ];
+            $matches = array_merge( $arr, $matches );
             $tmp = $route->get_defaults();
-            if (is_array($tmp) && count($tmp) > 0) {
-                foreach ($tmp as $key=>$val) {
+            if( $tmp ) $matches = array_merge( $dflts, $matches );
+
+            // Get rid of numeric matches, and put the data into the _REQUEST for later processing.
+            foreach ($matches as $key=>$val) {
+                if ( is_int($key)) {
+                    // do nothing
+                }
+                else if ($key != 'id' && $key != 'returnid' && $key != 'action') {
                     $_REQUEST[$matches['id'] . $key] = $val;
-                    if (array_key_exists($key, $matches)) $matches[$key] = $val;
                 }
             }
 
-            //Get a decent returnid
-            if( $matches['returnid'] == '' ) $matches['returnid'] = $contentops->GetDefaultContent();
-
-            // Put the resulting mact into the request so that the subsequent smarty plugins can grab it...
+            // Put the resulting mact into the request for later processing.
+            // this is essentially our translation from pretty URLs to non-pretty URLS.
             $_REQUEST['mact'] = $matches['module'] . ',' . $matches['id'] . ',' . $matches['action'] . ',' . $matches['inline'];
 
-            $page = $matches['returnid'];
-            $smarty->id = $matches['id'];
+            // Get a decent returnid
+            $page = $dflt_content;
+            if( $matches['returnid'] ) {
+                $page = (int) $matches['returnid'];
+                unset( $matches['returnid'] );
+            }
         }
     }
 
-    // if no route matched... grab the alias from the last /
-    if( $matched == false && ($pos = strrpos($page,'/')) !== FALSE ) $page = substr($page, $pos + 1);
-
-    // if there's nothing use the default content.
-    if( empty($page) ) $page = $contentops->GetDefaultContent(); // maybe it's the home page.
     return $page;
-}
-
-/**
- * @ignore
- */
-function preprocess_mact($returnid)
-{
-    if( \CMSMS\internal\content_plugins::has_primary_content() ) return;
-    $config = \cms_config::get_instance();
-    if( !$config['startup_mact_processing'] ) return;
-    if( !isset($_REQUEST['mact']) ) return;
-
-    list($module,$id,$action,$inline) = explode(',',$_REQUEST['mact'],4);
-    if( !$module || $inline || $id != 'cntnt01' ) return;
-
-    $modops = ModuleOperations::get_instance();
-    $module_obj = $modops->get_module_instance($module);
-    if( !$module_obj ) {
-        // module not found... couldn't even autoload it.
-        @trigger_error('Attempt to access module '.$module.' which could not be found (is it properly installed and configured?');
-        throw new \CmsError404Exception('Attempt to access module '.$module.' which could not be found (is it properly installed and configured?');
-    }
-    if( !$module_obj->IsPluginModule() ) {
-        @trigger_error('Attempt to access module '.$module.' on a frontend request, which is not a plugin module');
-        throw new \CmsError404Exception('Attempt to access module '.$module.' which could not be found (is it properly installed and configured?');
-    }
-
-    $smarty = \Smarty_CMS::get_instance();
-    @ob_start();
-    $parms = $modops->GetModuleParameters($id);
-    $oldcache = $smarty->caching;
-    $smarty->caching = false;
-    $result = $module_obj->DoActionBase($action, $id, $parms, $returnid, $smarty);
-    $smarty->caching = $oldcache;
-
-    if( $result !== FALSE ) echo $result;
-    $result = @ob_get_contents();
-    @ob_end_clean();
-    \CMS_Content_Block::set_primary_content($result);
 }

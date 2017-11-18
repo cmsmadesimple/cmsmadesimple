@@ -1,7 +1,7 @@
 <?php
 #BEGIN_LICENSE
 #-------------------------------------------------------------------------
-# Module: cms_content_tree (c) 2010 by Robert Campbell
+# Module: cms_route_manager (c) 2010 by Robert Campbell
 #         (calguy1000@cmsmadesimple.org)
 #  A caching tree for CMSMS content objects.
 #
@@ -89,23 +89,16 @@ final class cms_route_manager
 		// split the haystack into an array of 'absolute' or 'regex' matches
 		$absolute = array();
 		$regex = array();
-		foreach( $haystack as $sig => $rec ) {
+        foreach( $haystack as $rec ) {
 			if( $exact || (isset($rec['absolute']) && $rec['absolute']) ) {
-				$absolute[] = $rec;
+				$absolute[$rec['term']] = $rec;
 			}
 			else {
 				$regex[] = $rec;
 			}
 		}
 
-		// sort the list of absolutes
-		usort($absolute,'__internal_cmp_routes');
-
-		// do a binary search on the absolute routes
-		if( count($absolute) ) {
-			$res = self::route_binarySearch($needle,$absolute,'strcmp');
-			if( $res !== FALSE ) return $absolute[$res];
-		}
+        if( isset( $absolute[$needle] ) ) return $absolute[$neele];
 
 		// do the linear regex thing.
 		for( $i = 0, $n = count($regex); $i < $n; $i++ ) {
@@ -432,5 +425,3 @@ final class cms_route_manager
 		// note: dynamic routes don't get cleared.
 	}
 } // end of class
-
-?>

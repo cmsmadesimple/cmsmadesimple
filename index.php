@@ -47,9 +47,9 @@ if (!is_writable(TMP_TEMPLATES_C_LOCATION) || !is_writable(TMP_CACHE_LOCATION)) 
 
 // initial setup
 $_app = CmsApp::get_instance(); // internal use only, subject to change.
+$config = \cms_config::get_instance();
 $params = array_merge($_GET, $_POST);
 $smarty = $_app->GetSmarty();
-$smarty->params = $params;
 $page = get_pageid_or_alias_from_url();
 $contentops = ContentOperations::get_instance();
 $contentobj = null;
@@ -66,8 +66,8 @@ while( $trycount < 2 ) {
 
         // preview
         if( $page == -100) {
-            setup_session(false);
             if( !isset($_SESSION['__cms_preview__']) ) throw new CmsException('preview selected, but temp data not found');
+            setup_session(false);
 
             // todo: get the content type, and load it.
             $contentops->LoadContentType($_SESSION['__cms_preview_type__']);
@@ -76,10 +76,10 @@ while( $trycount < 2 ) {
             $contentobj->SetId(__CMS_PREVIEW_PAGE__);
         }
         else {
+            // $page could be an integer ID or a string alias
             $contentobj = $contentops->LoadContentFromAlias($page,true);
+            if( !is_object($contentobj) ) throw new CmsError404Exception('Page '.$page.' not found');
         }
-
-        if( !is_object($contentobj) ) throw new CmsError404Exception('Page '.$page.' not found');
 
         // session stuff is needed from here on.
         $cachable = $contentobj->Cachable();
@@ -87,7 +87,8 @@ while( $trycount < 2 ) {
         if( $page == __CMS_PREVIEW_PAGE__ || $uid || $_SERVER['REQUEST_METHOD'] != 'GET' ) $cachable = false;
         setup_session($cachable);
 
-        // from here in, we're assured to have a content object
+        // from here in, we're assured to have a content object of some sort
+
         if( !$contentobj->IsViewable() ) {
             $url = $contentobj->GetURL();
             if( $url != '' && $url != '#' ) redirect($url);
@@ -109,10 +110,7 @@ while( $trycount < 2 ) {
 
         $html = '';
         $showtemplate = true;
-
-        if ((isset($_REQUEST['showtemplate']) && $_REQUEST['showtemplate'] == 'false') ||
-            (isset($smarty->id) && $smarty->id != '' && isset($_REQUEST[$smarty->id.'showtemplate']) &&
-             $_REQUEST[$smarty->id.'showtemplate'] == 'false')) {
+        if ( (isset($_REQUEST['showtemplate']) && $_REQUEST['showtemplate'] == 'false') ) {
             $showtemplate = false;
         }
 
@@ -131,10 +129,10 @@ while( $trycount < 2 ) {
             $trycount = 99;
         }
         else {
-            debug_buffer('process template top');
             $tpl_id = $contentobj->TemplateId();
             $top = $body = $head = null;
 
+            debug_buffer('process template top');
             \CMSMS\HookManager::do_hook('Core::PageTopPreRender', [ 'content'=>&$contentobj, 'html'=>&$top ]);
             $tpl = $smarty->createTemplate('tpl_top:'.$tpl_id,$cache_id);
             $top .= $tpl->fetch();
@@ -142,14 +140,19 @@ while( $trycount < 2 ) {
             \CMSMS\HookManager::do_hook('Core::PageTopPostRender', [ 'content'=>&$contentobj, 'html'=>&$top ]);
 
             // if the request has a mact in it, process and cache the output.
-            preprocess_mact($contentobj->Id());
+            if( $config['startup_mact_processing'] ) {
+                debug_buffer('preprocess module action');
+                \CMSMS\internal\content_plugins::get_default_content_block_content( $contentobj->Id() );
+            }
 
+            debug_buffer('process template body');
             \CMSMS\HookManager::do_hook('Core::PageBodyPreRender', [ 'content'=>&$contentobj, 'html'=>&$body ]);
             $tpl = $smarty->createTemplate('tpl_body:'.$tpl_id,$cache_id);
             $body .= $tpl->fetch();
             unset($tpl);
             \CMSMS\HookManager::do_hook('Core::PageBodyPostRender', [ 'content'=>&$contentobj, 'html'=>&$body ]);
 
+            debug_buffer('process template head');
             \CMSMS\HookManager::do_hook('Core::PageHeadPreRender', [ 'content'=>&$contentobj, 'html'=>&$head ]);
             $tpl = $smarty->createTemplate('tpl_head:'.$tpl_id,$cache_id);
             $head .= $tpl->fetch();
@@ -162,10 +165,10 @@ while( $trycount < 2 ) {
     }
 
     catch (CmsError404Exception $e) {
+        debug_display( 'thrown at '.$e->getFile().':'.$e->getLine() ); die();
         // Catch CMSMS 404 error
         // 404 error thrown... gotta do this process all over again
         $page = 'error404';
-        $showtemplate = true;
         unset($_REQUEST['mact']);
         unset($_REQUEST['module']);
         unset($_REQUEST['action']);
@@ -174,14 +177,13 @@ while( $trycount < 2 ) {
 
         // specified page not found, load the 404 error page
         $contentobj = $contentops->LoadContentFromAlias('error404',true);
-        if( is_object($contentobj) ) {
+        if( $showtemplate && is_object($contentobj) ) {
             // we have a 404 error page
             header("HTTP/1.0 404 Not Found");
             header("Status: 404 Not Found");
         }
         else {
             // no 404 error page
-            @ob_end_clean();
             header("HTTP/1.0 404 Not Found");
             header("Status: 404 Not Found");
             echo '<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
@@ -197,10 +199,7 @@ while( $trycount < 2 ) {
 
     catch (CmsError403Exception $e) // <- Catch CMSMS 403 error
     {
-        //debug_display('handle 403 exception '.$e->getFile().' at '.$e->getLine().' -- '.$e->getMessage());
-        // 404 error thrown... gotta do this process all over again.
         $page = 'error403';
-        $showtemplate = true;
         unset($_REQUEST['mact']);
         unset($_REQUEST['module']);
         unset($_REQUEST['action']);
@@ -210,22 +209,16 @@ while( $trycount < 2 ) {
         // specified page not found, load the 404 error page.
         $contentobj = $contentops->LoadContentFromAlias('error403',true);
         $msg = $e->GetMessage();
-        if( !$msg ) $msg = '<p>We are sorry, but you do not have the appropriate permission to view this item.</p>';
-        if( is_object($contentobj) ) {
+        header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
+        header("Cache-Control: no-store, no-cache, must-revalidate");
+        header("Cache-Control: post-check=0, pre-check=0", false);
+        header("HTTP/1.0 403 Forbidden");
+        header("Status: 403 Forbidden");
+        if( $showtemplate && is_object($contentobj) ) {
             // we have a 403 error page.
-            header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
-            header("Cache-Control: no-store, no-cache, must-revalidate");
-            header("Cache-Control: post-check=0, pre-check=0", false);
-            header("HTTP/1.0 403 Forbidden");
-            header("Status: 403 Forbidden");
         }
         else {
-            @ob_end_clean();
-            header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
-            header("Cache-Control: no-store, no-cache, must-revalidate");
-            header("Cache-Control: post-check=0, pre-check=0", false);
-            header("HTTP/1.0 403 Forbidden");
-            header("Status: 403 Forbidden");
+            if( !$msg ) $msg = '<p>We are sorry, but you do not have the appropriate permission to view this item.</p>';
             echo '<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
 <html><head>
 <title>403 Forbidden</title>
@@ -238,7 +231,6 @@ while( $trycount < 2 ) {
 
     catch (CmsError503Exception $e) { // <- Catch CMSMS 503 error
         $page = 'error503';
-        $showtemplate = true;
         unset($_REQUEST['mact']);
         unset($_REQUEST['module']);
         unset($_REQUEST['action']);
@@ -249,21 +241,16 @@ while( $trycount < 2 ) {
         $contentobj = $contentops->LoadContentFromAlias('error503',true);
         $msg = $e->GetMessage();
         if( !$msg ) $msg = '<p>We are sorry, but you do not have the appropriate permission to view this item.</p>';
-        if( is_object($contentobj) ) {
+        header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
+        header("Cache-Control: no-store, no-cache, must-revalidate");
+        header("Cache-Control: post-check=0, pre-check=0", false);
+        header("HTTP/1.0 503 Temporarily unavailable");
+        header("Status: 503 Temporarily unavailable");
+        if( $showtemplate && is_object($contentobj) ) {
             // we have a 503 error page.
-            header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
-            header("Cache-Control: no-store, no-cache, must-revalidate");
-            header("Cache-Control: post-check=0, pre-check=0", false);
-            header("HTTP/1.0 503 Temporarily unavailable");
-            header("Status: 503 Temporarily unavailable");
         }
         else {
             @ob_end_clean();
-            header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
-            header("Cache-Control: no-store, no-cache, must-revalidate");
-            header("Cache-Control: post-check=0, pre-check=0", false);
-            header("HTTP/1.0 503 Temporarily unavailable");
-            //header("Status: 503 Temporarily unavailable");
             echo '<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
 <html><head>
 <title>503 Site down for maintenance./title>
@@ -278,7 +265,15 @@ while( $trycount < 2 ) {
         // Catch rest of exceptions
         $handlers = ob_list_handlers();
         for ($cnt = 0; $cnt < sizeof($handlers); $cnt++) { ob_end_clean(); }
-        echo $smarty->errorConsole($e);
+        $code = $e->GetCode();
+        if( !$showtemplate && $code >= 400 ) {
+            @ob_end_clean();
+            header("HTTP/1.0 ".$code.' '.$e->GetMessage());
+            header("Status ".$code.' '.$e->GetMessage());
+        }
+        else {
+            echo $smarty->errorConsole($e);
+        }
         exit();
     }
 } // end while trycount

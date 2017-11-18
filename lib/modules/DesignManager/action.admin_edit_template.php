@@ -88,19 +88,7 @@ try {
             }
 
             // lastly, check for errors in the template before we save.
-            if( isset($params['contents']) ) {
-                cms_utils::set_app_data('tmp_template', $params['contents']);
-                /*
-                $parser = new \CMSMS\internal\page_template_parser('cms_template:appdata;tmp_template',$smarty);
-                $parser->compileTemplateSource();
-                if ($type_obj->get_content_block_flag()) {
-                    $contentBlocks = CMS_Content_Block::get_content_blocks();
-                    if (!is_array($contentBlocks) || count($contentBlocks) == 0) {
-                        throw new CmsEditContentException('No content blocks defined in template');
-                    }
-                }
-                */
-            }
+            if( isset($params['contents']) ) cms_utils::set_app_data('tmp_template', $params['contents']);
 
             // if we got here, we're golden.
             $tpl_obj->save();
@@ -114,12 +102,8 @@ try {
         else if( isset($params['export']) ) {
             $outfile = $tpl_obj->get_content_filename();
             $dn = dirname($outfile);
-            if( !is_dir($dn) || !is_writable($dn) ) {
-                throw new \RuntimeException($this->Lang('error_assets_writeperm'));
-            }
-            if( is_file($outfile) && !is_writable($outfile) ) {
-                throw new \RuntimeException($this->Lang('error_assets_writeperm'));
-            }
+            if( !is_dir($dn) || !is_writable($dn) ) throw new \RuntimeException($this->Lang('error_assets_writeperm'));
+            if( is_file($outfile) && !is_writable($outfile) ) throw new \RuntimeException($this->Lang('error_assets_writeperm'));
             file_put_contents($outfile,$tpl_obj->get_content());
         }
         else if( isset($params['import']) ) {

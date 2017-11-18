@@ -95,12 +95,6 @@ abstract class CMSModule
      * @access private
      * @ignore
      */
-    private $restrict_unknown_params = TRUE;
-
-    /**
-     * @access private
-     * @ignore
-     */
     private $_action_tpl;
 
     /**
@@ -652,7 +646,6 @@ abstract class CMSModule
      * @abstract
      * @see SetParameterType
      * @see RegisterRoute
-     * @see RestrictUnknownParams
      * @see RegisterModulePlugin
      */
     protected function InitializeFrontend()
@@ -678,6 +671,8 @@ abstract class CMSModule
      * A method to indicate that the system should drop and optionally
      * generate an error about unknown parameters on frontend actions.
      *
+     * This functionality was removed in 2.4
+     *
      * @see SetParameterType
      * @see CreateParameter
      * @final
@@ -685,7 +680,7 @@ abstract class CMSModule
      */
     final public function RestrictUnknownParams($flag = true)
     {
-        $this->restrict_unknown_params = (bool)$flag;
+        // empty stub.
     }
 
     /**
@@ -1326,9 +1321,26 @@ abstract class CMSModule
 
     /**
      * ------------------------------------------------------------------
-     * Navigation Related Functions
+     * Action Related Functions
      * ------------------------------------------------------------------
      */
+
+    protected function get_controller( $action_name, $actionid, array $params, $returnid )
+    {
+        $ctrl = null;
+        if( isset( $params['controller']) ) {
+            $ctrl = $params['controller'];
+        } else {
+            $action_name .= '_action';
+            $namespace = basename( get_class( $this ) );
+            if( !$namespace ) $namespace = $this->GetName();
+            $ctrl = $namespace."\\Controllers\\$action_name";
+        }
+        if( is_string($ctrl) && class_exists( $ctrl ) ) {
+            $ctrl = new $ctrl( $this, $actionid, $returnid );
+        }
+        if( is_callable( $ctrl ) ) return $ctrl;
+    }
 
     /**
      * Used for navigation between "pages" of a module.	 Forms and links should
@@ -1370,20 +1382,26 @@ abstract class CMSModule
             //See: http://0x6a616d6573.blogspot.com/2010/02/cms-made-simple-166-file-inclusion.html
             $name = preg_replace('/[^A-Za-z0-9\-_+]/', '', $name);
 
-            $filename = $this->GetModulePath().'/action.' . $name . '.php';
-            if( !is_file($filename) ) {
-                die($filename);
-                @trigger_error("$name is an unknown acton of module ".$this->GetName());
-                throw new \CmsError404Exception("Module action not found");
+            if( ($controller = $this->get_controller( $name, $id, $params, $returnid )) ) {
+                if( is_callable( $controller ) ) return $controller( $params );
             }
-
-            // these are included in scope in the included file for convenience.
-            $gCms = CmsApp::get_instance();
-            $db = $gCms->GetDb();
-            $config = $gCms->GetConfig();
-            $smarty = ( $this->_action_tpl ) ? $this->_action_tpl : $smarty = $gCms->GetSmarty()->get_template_parent();
-            include($filename);
+            else {
+                $filename = $this->GetModulePath().'/action.' . $name . '.php';
+                if( is_file($filename) ) {
+                    // these are included in scope in the included file for convenience.
+                    $gCms = CmsApp::get_instance();
+                    $db = $gCms->GetDb();
+                    $config = $gCms->GetConfig();
+                    $smarty = ( $this->_action_tpl ) ? $this->_action_tpl : $smarty = $gCms->GetSmarty()->get_template_parent();
+                    include($filename);
+                    return;
+                }
+            }
         }
+
+        die("not found ".$this->GetName().' action = '.$name);
+        @trigger_error("$name is an unknown acton of module ".$this->GetName());
+        throw new \CmsError404Exception("Module action not found");
     }
 
     /**
@@ -1398,17 +1416,13 @@ abstract class CMSModule
      * @param string $id The action identifier
      * @param array  $params The action params
      * @param int $returnid The current page id.  Empty for admin requests.
-     * @param Smarty_Internal_Template &$smarty The curernt smarty template object.
+     * @param Smarty_Internal_Template &$smarty The currrent smarty template object.
      * @return string The action output.
      */
     final public function DoActionBase($name, $id, $params, $returnid='', &$smarty )
     {
         $name = preg_replace('/[^A-Za-z0-9\-_+]/', '', $name);
         if( $returnid != '' ) {
-            if( !$this->restrict_unknown_params ) {
-                // put mention into the admin log
-                cms_warning($this->GetName().' is not properly cleaning input params');
-            }
 
             // merge in params from module hints.
             $hints = cms_utils::get_app_data('__CMS_MODULE_HINT__'.$this->GetName());
@@ -1423,7 +1437,7 @@ abstract class CMSModule
             // used to try to avert XSS flaws, this will
             // clean as many parameters as possible according
             // to a map specified with the SetParameterType metods.
-            $params = $this->_cleanParamHash($this->GetName(),$params,$this->param_map, !$this->restrict_unknown_params);
+            $params = $this->_cleanParamHash( $this->GetName(),$params,$this->param_map );
         }
 
         // handle the stupid input type='image' problem.
@@ -1434,26 +1448,26 @@ abstract class CMSModule
             }
         }
 
-        if( !isset($params['action']) ) $params['action'] = $name;
-        $params['action'] = cms_htmlentities($params['action']);
-        $returnid = cms_htmlentities($returnid);
+        $returnid = (int) $returnid;
         $id = cms_htmlentities($id);
         $name = cms_htmlentities($name);
 
-        if( $returnid != '' ) {
+        if( $returnid != 0 ) {
             $tmp = $params;
             $tmp['module'] = $this->GetName();
+            $tmp['action'] = $name;
             \CMSMS\HookManager::do_hook('module_action', $tmp);
         }
 
         $gCms = CmsApp::get_instance(); // in scope for compatibility reasons.
-        //$smarty = $gCms->GetSmarty(); // use the passed in template.
         $smarty->assign('actionid',$id);
         $smarty->assign('actionparams',$params);
         $smarty->assign('returnid',$returnid);
         $smarty->assign('actionmodule',$this->GetName());
         $smarty->assign('mod',$this);
 
+        // here it would be nice if... we called a controller class.
+        // how do we know the controller, is it magic.
         $saved_action_tpl = $this->_action_tpl;
         $this->_action_tpl = $smarty;
         $output = $this->DoAction($name, $id, $params, $returnid);

@@ -207,6 +207,16 @@ class CmsDataNotFoundException extends CmsException {}
  * @package CMS
  * @license GPL
  * @author Robert Campbell (calguy1000@cmsmadesimple.org)
+ * @since 2.3
+ */
+class CmsError400Exception extends CmsException {}
+
+/**
+ * A special exception indicating that a 404 error should be supplied.
+ *
+ * @package CMS
+ * @license GPL
+ * @author Robert Campbell (calguy1000@cmsmadesimple.org)
  * @since 1.11
  */
 class CmsError404Exception extends CmsException {}

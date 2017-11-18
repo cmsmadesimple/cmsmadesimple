@@ -38,57 +38,57 @@
 function cms_module_plugin($params,&$smarty)
 {
     //if( get_class($smarty) == 'Smarty_Parser' ) return; // if we are in the parser, we don't process module calls.
-
-    $mid_cache = cms_utils::get_app_data('mid_cache');
-    if( empty($mid_cache) ) $mid_cache = array();
-    for( $i = 0; $i < 10; $i++ ) {
-        $tmp = $i;
-        foreach($params as $key=>$value) {
-            $tmp .= $key.'='.$value;
-        }
-        $id = 'm'.substr(md5($tmp),0,5);
-        if( !isset($mid_cache[$id]) ) {
-            $mid_cache[$id] = $id;
-            break;
-        }
-    }
-    cms_utils::set_app_data('mid_cache',$mid_cache);
-
-    $returnid = CmsApp::get_instance()->get_content_id();
-
     $modulename = '';
     $action = 'default';
     $inline = false;
-    $checkid = '';
-
+    $returnid = CmsApp::get_instance()->get_content_id();
+    $id = null;
     if (isset($params['module'])) {
         $modulename = $params['module'];
+        unset($params['module']);
     }
     else {
         return '<!-- ERROR: module name not specified -->';
     }
 
-    if (isset($params['idprefix'])) $id = trim($params['idprefix']);
+    // get a unique id/prefix for this modle call.
+    if( isset( $params['idprefix']) ) {
+        $id = $params['idprefix'];
+        unset($params['idprefix']);
+    } else {
+        $mid_cache = cms_utils::get_app_data('mid_cache');
+        if( empty($mid_cache) ) $mid_cache = [];
+        $tmp = serialize( $params );
+        for( $i = 0; $i < 10; $i++ ) {
+            $id = 'm'.substr(md5($tmp.$i),0,5);
+            if( !isset($mid_cache[$id]) ) {
+                $mid_cache[$id] = $id;
+                break;
+            }
+        }
+        cms_utils::set_app_data('mid_cache',$mid_cache);
+    }
+
     if (isset($params['action']) && $params['action'] != '') {
         // action was set in the module tag
         $action = $params['action'];
+        unset( $params['action']);
     }
 
     if (isset($_REQUEST['mact'])) {
-        // we're handling an action
+        // we're handling an action.  check if it is for this call.
+        // we may be calling module plugins multiple times in the template,  but a POST or GET mact
+        // canx only be for one of them.
+        $checkid = null;
         $ary = explode(',', cms_htmlentities($_REQUEST['mact']), 4);
         $mactmodulename = (isset($ary[0])?$ary[0]:'');
-        if (!strcasecmp($mactmodulename,$params['module'])) {
+        if( 0 == strcasecmp($mactmodulename,$modulename) ) {
             $checkid = (isset($ary[1])?$ary[1]:'');
             $mactaction = (isset($ary[2])?$ary[2]:'');
-        }
-        $mactinline = (isset($ary[3]) && $ary[3] == 1?true:false);
+            $inline = (isset($ary[3]) && $ary[3] == 1?true:false);
 
-        if ($checkid == $id) {
-            // the action is for this instance of the module
-            $inline = $mactinline;
-            if( $inline == true ) {
-                // and we're inline (the results are supposed to replace
+            if ($checkid == $id && $inline == true ) {
+                // the action is for this instance of the module and we're inline (the results are supposed to replace
                 // the tag, not {content}
                 $action = $mactaction;
                 $params = array_merge($params, ModuleOperations::get_instance()->GetModuleParameters($id));
@@ -96,9 +96,7 @@ function cms_module_plugin($params,&$smarty)
         }
     }
 
-    if( $action == '' ) $action = 'default'; // probably not needed, but safe
-
-    class_exists($modulename);
+    class_exists($modulename); // autoload? why
     $module = cms_utils::get_module($modulename);
     global $CMS_ADMIN_PAGE, $CMS_LOGIN_PAGE, $CMS_INSTALL;
     if( $module && ($module->isPluginModule() || (isset($CMS_ADMIN_PAGE) && !isset($CMS_INSTALL) && !isset($CMS_LOGIN_PAGE) ) ) ) {
@@ -113,11 +111,8 @@ function cms_module_plugin($params,&$smarty)
             return;
         }
         return $modresult;
-
     }
     else {
         return "<!-- $modulename is not a plugin module -->\n";
     }
-}
-
-?>
+} // module_plugin function

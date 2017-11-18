@@ -101,5 +101,6 @@ if( $USE_THEME ) {
     echo '</div>';
     include_once("footer.php");
 } else {
+    // no theme output.
     echo $modinst->DoActionBase($action, $id, $params, '', $smarty);
 }

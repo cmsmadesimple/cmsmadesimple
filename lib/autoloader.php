@@ -119,14 +119,10 @@ function cms_autoloader($classname)
         }
     }
 
+    // if requesting a module..
     $modops = \ModuleOperations::get_instance();
-    if( $modops->IsSystemModule( $classname ) ) {
-        $fn = CMS_ROOT_PATH."/lib/modules/{$classname}/{$classname}.module.php";
-    } else {
-        $fn = CMS_ASSETS_PATH."/modules/{$classname}/{$classname}.module.php";
-    }
-    if( is_file($fn) ) {
-        require_once($fn);
+    if( $modops->get_module_filename( $classname ) ) {
+        $modops->get_module_instance( $classname );
         return;
     }
 
@@ -156,9 +152,9 @@ function cms_autoloader($classname)
             $modname = substr($tmp,0,strpos($tmp,'/'));
             if( in_array($modname,$list) ) {
                 $modpath = $modops->get_module_path( $modname );
-                $subpath = substr($tmp,$pos1+1);
+                $subpath = dirname(substr($tmp,$pos1+1));
                 $class = basename($tmp);
-                $fn = "$modpath/lib/$subpath/class.$classname.php";
+                $fn = "$modpath/lib/$subpath/class.$class.php";
                 if( is_file($fn) ) {
                     require_once($fn);
                     return;

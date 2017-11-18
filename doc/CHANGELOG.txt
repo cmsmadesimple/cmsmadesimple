@@ -42,7 +42,26 @@ Core - General
   - Adds new CMSModule::AddAdminHeadText() method to allow module actions to add dynamic text to the head section of admin requests.
   - Renames a bunch of classes into namespaces, and cleans up a bunch of old, commented out code.
   - Replaces old "admin log" functionality with a new core module that has extra functionality.
-  - Todo:  Migrate the tasks related to the old admin log into AdminLog module.
+  - Refactor mact processing.  get rid of un-necessary variables and duplicated code.
+  - Autoloader will now try to load modules.  Modules can still only be instantiated once.
+  - Improved autoloader now handles namespaced module classes if the module is already loaded.
+  - Adds new CmsError400Exception class.
+  - Improve exception handling in include.php to handle when showtemplate is false.
+  - Note: compatibility change
+    - No longer handle {$actionid}showtemplate=false parameters.
+    - No longer send id, returnid, action parameters in the action $params array.
+    - No longer call LoadModules from include.php.. All modules are now loaded on demand.
+  - Optimize the cms_route_manager for performance
+  - Adds ModuleOperations::is_module_loaded() method
+  - Allow loading action controller classes of the with the name Module/Controllers/<action>_action
+    The constructor is sent the module, the actionid and returnid parameters
+    The invoke method is sent an array of parameters.
+  - Adds CMSModule::get_controller() protected method to allow specifying custom controller mechanisms.
+  - Gets rid of content.functions.php (last remaining function moved to page.functions.php)
+  - Refactor the cms_module_plugin function for performance).
+  - Refactor the route-lookup functionality for performance.
+  - The database connection class now accepts a single scalar for an argument when only one parameter is required in functions like GetOne()
+  - TODO  Migrate the tasks related to the old admin log into AdminLog module.
 
 CMSContentManager - remember to bump version
   - Gets rid of secure options, flag output and bulk functionaltiy
@@ -69,13 +88,13 @@ FilePicker v1.0.1
   - No longer allow overriding the filepicker type on the URL.
   - No longer allow uploading any .php files.
 
-AdminLog 
+AdminLog
   - New core module to replace the adminlog.php file
 
 Search  - remember to bump version
  - Now exports a command for cmscli
 
- 
+
 Version 2.2.2 - Hearts Content
 ----------------------------------
 Core - General
@@ -128,7 +147,7 @@ Installation Assistant v1.3.2
 Search v1.51.2
  - Now do an html entity decode on all content added to AddWords.
 
- 
+
 Version 2.2.1 - Hearts Desire
 ----------------------------------
 Core - General

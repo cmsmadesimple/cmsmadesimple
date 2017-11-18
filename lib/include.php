@@ -72,7 +72,6 @@ require_once($dirname.DIRECTORY_SEPARATOR.'classes'.DIRECTORY_SEPARATOR.'class.C
 require_once($dirname.DIRECTORY_SEPARATOR.'autoloader.php');
 require_once($dirname.DIRECTORY_SEPARATOR.'module.functions.php');
 require_once($dirname.DIRECTORY_SEPARATOR.'page.functions.php');
-require_once($dirname.DIRECTORY_SEPARATOR.'content.functions.php');
 require_once($dirname.DIRECTORY_SEPARATOR.'translation.functions.php');
 require_once($dirname.DIRECTORY_SEPARATOR.'html_entity_decode_php4.php');
 
@@ -185,11 +184,13 @@ if (! isset($CMS_INSTALL_PAGE)) {
     $global_umask = cms_siteprefs::get('global_umask','');
     if( $global_umask != '' ) umask( octdec($global_umask) );
 
+    /*
     // Load all eligible modules
     debug_buffer('Loading Modules');
     $modops = ModuleOperations::get_instance();
     $modops->LoadModules(!isset($CMS_ADMIN_PAGE));
     debug_buffer('End of Loading Modules');
+    */
 
     // test for cron.
     // we hardcode CmsJobManager here until such a point as we need to abstract it.

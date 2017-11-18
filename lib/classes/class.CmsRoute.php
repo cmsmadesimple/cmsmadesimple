@@ -200,7 +200,7 @@ class CmsRoute implements ArrayAccess
 	 */
 	public function get_defaults()
 	{
-		if( isset($this->_data['defaults']) ) return $this->_data['defaults'];
+		if( isset($this->_data['defaults']) && is_array($this->_data['defaults']) ) return $this->_data['defaults'];
 	}
 
 	/**

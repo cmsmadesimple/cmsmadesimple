@@ -96,7 +96,7 @@ final class ModuleOperations
     /**
      * @ignore
      */
-    protected static function get_module_classmap()
+    protected function get_module_classmap()
     {
         if( !is_array(self::$_classmap) ) {
             self::$_classmap = [];
@@ -109,11 +109,11 @@ final class ModuleOperations
     /**
      * @ignore
      */
-    protected static function get_module_classname($module)
+    protected function get_module_classname($module)
     {
         $module = trim($module);
         if( !$module ) return;
-        $map = self::get_module_classmap();
+        $map = $this->get_module_classmap();
         if( isset($map[$module]) ) return $map[$module];
         return $module;
     }
@@ -122,26 +122,23 @@ final class ModuleOperations
     /**
      * @ignore
      */
-    public static function get_module_filename($module)
+    public function get_module_filename($module)
     {
         $module = trim($module);
         if( !$module ) return;
         $config = \cms_config::get_instance();
-        $paths = [ CMS_ASSETS_PATH.'/modules', CMS_ROOT_PATH.'/lib/modules' ];
-        foreach( $paths as $path ) {
-            $fn = $path."/$module/$module.module.php";
-            if( is_file($fn) ) {
-                return $fn;
-            }
-        }
+        $path = CMS_ROOT_PATH.'/lib/modules';
+        if( !self::get_instance()->IsSystemModule( $module ) ) $path = CMS_ASSETS_PATH.'/modules/';
+        $fn = $path."/$module/$module.module.php";
+        if( is_file($fn) ) return $fn;
     }
 
     /**
      * @ignore
      */
-    public static function get_module_path( $module )
+    public function get_module_path( $module )
     {
-        $fn = self::get_module_filename( $module );
+        $fn = $this->get_module_filename( $module );
         if( $fn ) return dirname( $fn );
     }
 
@@ -151,14 +148,14 @@ final class ModuleOperations
      * @param string $module The module name
      * @param string $classname The class name.
      */
-    public static function set_module_classname($module,$classname)
+    public function set_module_classname($module,$classname)
     {
         $module = trim($module);
         $classname = trim($classname);
         if( !$module || !$classname ) return;
 
-        self::get_module_classmap();
-        self::$_classmap[$module] = $classname;
+        $this->get_module_classmap();
+        $this->_classmap[$module] = $classname;
         \cms_siteprefs::set(self::CLASSMAP_PREF, serialize(self::$_classmap));
     }
 
@@ -171,7 +168,7 @@ final class ModuleOperations
      */
     public function generate_moduleinfo( CMSModule $modinstance )
     {
-        $dir = self::get_module_path( $modinstance->GetName() );
+        $dir = $this->get_module_path( $modinstance->GetName() );
         if( !is_writable( $dir ) ) throw new CmsFileSystemException(lang('errordirectorynotwritable'));
 
         $fh = fopen($dir."/moduleinfo.ini",'w');
@@ -292,10 +289,10 @@ final class ModuleOperations
         if( !is_array($this->_moduleinfo) || count($this->_moduleinfo) == 0 ) {
             $tmp = \CMSMS\internal\global_cache::get('modules');
             if( is_array($tmp) ) {
-                $this->_moduleinfo = array();
+                $this->_moduleinfo = [];
                 for( $i = 0, $n = count($tmp); $i < $n; $i++ ) {
                     $name = $tmp[$i]['module_name'];
-                    $filename = self::get_module_filename($name);
+                    $filename = $this->get_module_filename($name);
                     if( is_file($filename) ) {
                         if( !isset($this->_moduleinfo[$name]) ) $this->_moduleinfo[$name] = $tmp[$i];
                     }
@@ -326,11 +323,12 @@ final class ModuleOperations
 
         $info = $this->_get_module_info();
         if( !isset($info[$module_name]) && !$force_load ) {
-            debug_buffer("Nothing is known about $module_name... cant load it");
-            return FALSE;
-        }
-        if( (!isset($info[$module_name]['active']) || $info[$module_name]['active'] == 0) && !$force_load ) {
-            debug_buffer('Requested deactivated module '.$module_name);
+            if( $info[$moduel_name]['active'] == 0 ) {
+                cms_warning('Requested deactivated module '.$module_name);
+            }
+            else {
+                cms_warning("Nothing is known about $module_name... cant load it");
+            }
             return FALSE;
         }
 
@@ -346,7 +344,6 @@ final class ModuleOperations
                     $obj2 = $this->get_module_instance($name,$ver);
                     if( !is_object($obj2) ) {
                         cms_warning("Cannot load module $module_name ... Problem loading dependent module $name version $ver");
-                        debug_buffer("Cannot load $module_name... cannot load it's dependants.");
                         return FALSE;
                     }
                 }
@@ -354,10 +351,11 @@ final class ModuleOperations
         }
 
         // now load the module itself.
-        if( !class_exists($module_name) ) {
-            $fname = self::get_module_filename($module_name);
+        $class_name = $this->get_module_classname($module_name);
+        if( !class_exists($class_name,false) ) {
+            $fname = $this->get_module_filename($module_name);
             if( !is_file($fname) ) {
-                debug_buffer("Cannot load $module_name because the module file does not exist");
+                warning("Cannot load $module_name because the module file does not exist");
                 return FALSE;
             }
 
@@ -366,25 +364,22 @@ final class ModuleOperations
         }
 
         $obj = null;
-        $classname = self::get_module_classname($module_name);
 
-        $obj = new $classname;
+        $obj = new $class_name;
         if( !is_object($obj) || ! $obj instanceof \CMSModule ) {
             // oops, some problem loading.
             cms_error("Cannot load module $module_name ... some problem instantiating the class");
-            debug_buffer("Cannot load $module_name ... some problem instantiating the class");
             return FALSE;
         }
 
         if (version_compare($obj->MinimumCMSVersion(),CMS_VERSION) == 1 ) {
             // oops, not compatible.... can't load.
             cms_error('Cannot load module '.$module_name.' it is not compatible wth this version of CMSMS');
-            debug_buffer("Cannot load $module_name... It is not compatible with this version of CMSMS");
             unset($obj);
             return FALSE;
         }
 
-        if( is_object($obj) ) $this->_modules[$module_name] = $obj;
+        $this->_modules[$module_name] = $obj;
 
         $tmp = $gCms->get_installed_schema_version();
         if( $tmp == CMS_SCHEMA_VERSION && isset($CMS_INSTALL_PAGE) && in_array($module_name, $this->cmssystemmodules) ) {
@@ -416,16 +411,15 @@ final class ModuleOperations
             }
         }
 
-        if( (isset($info[$module_name]) && $info[$module_name]['status'] == 'installed') || $force_load ) {
-            if( is_object($obj) ) $this->_modules[$module_name] = $obj;
-
-            // we're all done.
-            \CMSMS\HookManager::do_hook('Core::ModuleLoaded', [ 'name' => $module_name ] );
-            return TRUE;
+        if( !$force_load && (!isset($info[$module_name]['status']) || $info[$module_name]['status'] != 'installed') ) {
+            debug_buffer('Cannot load an uninstalled module');
+            unset($obj,$this->_modules[$module_name]);
+            return false;
         }
 
-        unset($obj,$this->_modules[$module_name]);
-        return FALSE;
+        // we're all done.
+        \CMSMS\HookManager::do_hook('Core::ModuleLoaded', [ 'name' => $module_name ] );
+        return TRUE;
     }
 
 
@@ -716,6 +710,15 @@ final class ModuleOperations
 
 
     /**
+     * @internal
+     */
+    public function is_module_loaded( $module_name )
+    {
+        $module_name = trim( $module_name );
+        return isset( $this->_modules[$module_name] );
+    }
+
+    /**
      * Return an array of the names of all modules that we currently know about
      *
      * @return array
@@ -987,13 +990,13 @@ final class ModuleOperations
      */
     public function GetModuleParameters($id)
     {
-        $params = array();
+        $params = [];
 
-        if ($id != '') {
+        if( $id ) {
             foreach ($_REQUEST as $key=>$value) {
                 if( startswith($key,$id) ) {
                     $key = substr($key,strlen($id));
-                    if( $key == 'id' || $key == 'returnid' ) $value = (int)$value;
+                    if( $key == 'id' || $key == 'returnid' || $key == 'action' ) continue;
                     $params[$key] = $value;
                 }
             }

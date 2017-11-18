@@ -30,8 +30,6 @@
  */
 class Smarty_CMS extends \CMSMS\internal\smarty_base_template
 {
-    public $id; // <- triggers error without | do search why this is needed
-    public $params; // <- triggers error without | do search why this is needed
     protected $_global_cache_id;
     private static $_instance;
     private $_tpl_stack = array();
@@ -269,7 +267,7 @@ class Smarty_CMS extends \CMSMS\internal\smarty_base_template
         $_gCms = CmsApp::get_instance();
         $ops = $_gCms->GetSimplePluginOperations();
         $res = $ops->load_plugin($name);
-        if( $rers && is_callable($res) ) {
+        if( $res && is_callable($res) ) {
             $cachable = FALSE;
             $callback = $res;
             return TRUE;

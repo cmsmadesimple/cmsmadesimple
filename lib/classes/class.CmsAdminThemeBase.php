@@ -161,7 +161,7 @@ abstract class CmsAdminThemeBase
 			$tmp = explode(',',$_POST['mact']);
 			$this->_query = 'module='.$tmp[0];
 		}
-		if ($this->_query == '' && isset($_POST['module']) && $_POST['module'] != '') $this->_query = 'module='.$_POST['module'];
+		//if ($this->_query == '' && isset($_POST['module']) && $_POST['module'] != '') $this->_query = 'module='.$_POST['module'];
         if (strpos( $this->_url, '/' ) === false) {
 			$this->_script = $this->_url;
 		}

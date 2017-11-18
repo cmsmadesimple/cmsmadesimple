@@ -97,7 +97,7 @@ final class CmsLangOperations
                 $is_module = true;
                 $files[] = cms_join_path(CMS_ROOT_PATH,'lib','modules',$realm,'lang','en_US.php');
             }
-            //$files[] = cms_join_path(CMS_ROOT_PATH,'lib','lang',$realm,'en_US.php');
+            $files[] = cms_join_path(CMS_ROOT_PATH,'lib','lang',$realm,'en_US.php');
         }
 
         // now handle other lang files.

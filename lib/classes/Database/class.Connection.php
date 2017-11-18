@@ -293,7 +293,8 @@ namespace CMSMS\Database {
                 $limit = ' LIMIT ' . $offset . ' ' . $nrows;
             }
 
-            if ($inputarr && is_array($inputarr)) {
+            if( $inputarr ) {
+                $inputarr = (array) $inputarr;
                 $sqlarr = explode('?',$sql);
                 if( !is_array(reset($inputarr)) ) $inputarr = array($inputarr);
                 foreach( $inputarr as $arr ) {
@@ -310,9 +311,12 @@ namespace CMSMS\Database {
 						case 'boolean':
 							$sql .= $v ? 1 : 0;
 							break;
+                        case 'integer':
+                            $sql .= $v;
+                            break;
 						default:
 							if ($v === null) $sql .= 'NULL';
-							else $sql .= $v;
+							else $sql .=$this->qstr( (string) $v );
                         }
                         $i += 1;
                     }
