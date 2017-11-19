@@ -77,10 +77,12 @@ class Smarty_CMS extends CMSSmartyBase
             $utops = UserTagOperations::get_instance();
             $usertags = $utops->ListUserTags();
 
-            foreach( $usertags as $id => $name ) {
-                $function = $utops->CreateTagFunction($name);
-                $this->registerPlugin('function',$name,$function,false);
-            }
+	    if( count( $usertags ) ) {
+            	foreach( $usertags as $id => $name ) {
+                	$function = $utops->CreateTagFunction($name);
+                	$this->registerPlugin('function',$name,$function,false);
+            	}
+	    }	
         }
 
         $config = cms_config::get_instance();
