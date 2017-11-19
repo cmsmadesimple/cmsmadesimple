@@ -25,6 +25,8 @@
  * @license GPL
  */
 
+use \CMSMS\internal\bulkcontentoperations;
+
 /**
  * Base module class.
  *

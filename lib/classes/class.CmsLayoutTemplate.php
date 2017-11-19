@@ -8,6 +8,7 @@
  */
 
 use \CMSMS\HookManager;
+use \CMSMS\internal\TemplateCache;
 
 /**
  * A class to represent a smarty template.
@@ -647,7 +648,7 @@ class CmsLayoutTemplate
 			}
 		}
 
-		CmsTemplateCache::clear_cache();
+		TemplateCache::clear_cache();
 		audit($this->get_id(),'CMSMS','Template '.$this->get_name().' Updated');
 		$this->_dirty = FALSE;
 	}
@@ -696,7 +697,7 @@ class CmsLayoutTemplate
 		}
 
 		$this->_dirty = FALSE;
-		CmsTemplateCache::clear_cache();
+		TemplateCache::clear_cache();
 		audit($this->get_id(),'CMSMS','Template '.$this->get_name().' Created');
 	}
 
@@ -733,7 +734,7 @@ class CmsLayoutTemplate
 
         @unlink($this->get_content_filename());
 
-		CmsTemplateCache::clear_cache();
+		TemplateCache::clear_cache();
 		audit($this->get_id(),'CMSMS','Template '.$this->get_name().' Deleted');
         HookManager::do_hook('Core::DeleteTemplatePost', [ get_class($this) => &$this ] );
 		unset($this->_data['id']);

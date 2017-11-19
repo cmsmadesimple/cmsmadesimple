@@ -56,7 +56,7 @@ $contentobj = null;
 $trycount = 0;
 
 \CMSMS\internal\content_cache::get_instance();
-$_tpl_cache = new CmsTemplateCache();
+$_tpl_cache = new \CMSMS\internal\TemplateCache();
 
 while( $trycount < 2 ) {
     $trycount++;

@@ -278,7 +278,7 @@ final class content_plugins
         $img = $result;
 
         $out = null;
-        if( $img && startswith(realpath($dir),realpath($basename)) ) {
+        if( startswith(realpath($dir),realpath($basename)) ) {
             if( ($img == -1 || empty($img)) && isset($params['default']) && $params['default'] ) $img = $params['default'];
 
             if( $img != -1 && !empty($img) ) {

@@ -19,7 +19,7 @@ $(document).ready(function(){
         lock_timeout: {$lock_timeout|default:0},
         lock_refresh: {$lock_refresh|default:0},
         error_handler: function(err) {
-            cms_alert('got error '+err.type+' // '+err.msg);
+            cms_alert('Lock Error '+err.type+' // '+err.msg);
         },
         lostlock_handler: function(err) {
             // we lost the lock on this content... make sure we can't save anything.
@@ -39,10 +39,12 @@ $(document).ready(function(){
         $('#form_edittemplate').dirtyForm('option','dirty',true);
     });
 
-    $('#form_edittemplate').on('click','[name$=apply],[name$=submit]',function(){
+    $('#form_edittemplate').on('click','[name$=apply],[name$=submit],[$name$=cancel]',function(){
+        // if we manually click on one of these buttons, the form is no longer considered dirty for the purposes of warnings.
         $('#form_edittemplate').dirtyForm('option','dirty',false);
     });
 
+/*
     $(document).on('click', '#submitbtn, #cancelbtn, #importbtn, #exportbtn', function(ev){
        if( ! do_locking ) return;
        // unlock the item, and submit the form
@@ -55,6 +57,7 @@ $(document).ready(function(){
            form.submit();
        });
     });
+*/
 
     $(document).on('click', '#applybtn', function(e){
         e.preventDefault();

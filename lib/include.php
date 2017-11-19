@@ -169,7 +169,7 @@ if (!isset($DONT_LOAD_DB)) {
         debug_buffer('Done Initializing Database');
     }
     catch( \CMSMS\Database\DatabaseConnectionException $e ) {
-        die('Sorry, something has gone wrong.  Please contact a site administrtor. <em>('.get_class($e).')</em>');
+        die('Sorry, something has gone wrong.  Please contact a site administator. <em>('.get_class($e).')</em>');
     }
 }
 
@@ -203,7 +203,9 @@ if(isset($CMS_ADMIN_PAGE)) CmsNlsOperations::set_language();
 if( !isset($DONT_LOAD_SMARTY) ) {
     debug_buffer('Initialize Smarty');
     $smarty = $_app->GetSmarty();
-    debug_buffer('Done Initialiing Smarty');
+    debug_buffer('Done Initializing Smarty');
     if( defined('CMS_DEBUG') && CMS_DEBUG ) $smarty->error_reporting = 'E_ALL';
     $smarty->assignGlobal('sitename', cms_siteprefs::get('sitename', 'CMSMS Site'));
 }
+
+require_once($dirname.'/classes/internal/class_compatibility.php');

@@ -33,6 +33,9 @@
 #
 #-------------------------------------------------------------------------
 #END_LICENSE
+
+use \CMSMS\internal\bulkcontentoperations;
+
 if( !isset($gCms) ) exit;
 $error = '';
 

@@ -1526,7 +1526,7 @@ abstract class ContentBase
 			}
 		}
 
-		$auto_type = content_assistant::auto_create_url();
+		$auto_type = \CMSMS\internal\content_assistant::auto_create_url();
 		if( $this->mURL == '' && cms_siteprefs::get('content_autocreate_urls') ) {
 			// create a valid url.
 			if( !$this->DefaultContent() ) {
@@ -1669,11 +1669,12 @@ abstract class ContentBase
 
 		// alias
 		$tmp = null;
-		if( isset($params['alias']) ) $tmp = strip_tags(trim($params['alias']));
-		if( !$editing || $tmp || ($this->Alias() && !$tmp) ) {
-			// the alias param may not exist (depending upon permissions)
-			// this method will set the alias to the supplied value if it is set
-			// or auto-generate one, when adding a new page.
+        $is_owner = ContentOperations::get_instance()->CheckPageOwnership(get_userid(), $this->Id());
+        $is_admin  = check_permission(get_userid(),'Manage All Content');
+        // if we are adding, set alias to the field value, or calculate one
+        // if we have a new alias, set alias to the provided one (as long as it is okay)
+        // if editing, and we have a current alias AND no new alias AND (we are pages owner or admin of all page), set the alias
+		if( !$editing || $tmp || ($this->Alias() && !$tmp && ($is_owner || $is_admin)) ) {
             $this->SetAlias($tmp);
 		}
 
@@ -2201,7 +2202,7 @@ abstract class ContentBase
 
 		case 'parent':
 			$contentops = ContentOperations::get_instance();
-			$tmp = $contentops->CreateHierarchyDropdown($this->mId, $this->mParentId, 'parent_id', 1, 1, 0, 1, 1);
+			$tmp = $contentops->CreateHierarchyDropdown($this->mId, $this->mParentId, 'parent_id', ($this->mId > 0) ? 0 : 1, 1, 0, 1, 1);
 			if( empty($tmp) && !check_permission(get_userid(),'Manage All Content') ) {
 				return array('','<input type="hidden" name="parent_id" value="'.$this->mParentId.'" />');
             }

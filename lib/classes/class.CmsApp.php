@@ -491,7 +491,7 @@ final class CmsApp {
 			$out = null;
 			return $out;
 		}
-		return \Smarty_CMS::get_instance();
+		return \CMSMS\internal\Smarty::get_instance();
 	}
 
 	/**

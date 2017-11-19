@@ -151,6 +151,8 @@ namespace CMSMS {
         }
 
         /**
+
+
          * Add a handler to a hook
          *
          * @param string $name The hook name.  If the hook does not already exist, it is added.
@@ -179,10 +181,12 @@ namespace CMSMS {
         }
 
         /**
-         * Trigger a hook, progressively altering the value of the input.
+         * Trigger a hook, progressively altering the value of the input.  i.e: a filter.
          *
          * This method accepts variable arguments.  The first argument (required) is the name of the hook to execute.
          * Further arguments will be passed to the various handlers.
+         *
+         * If an event with the same name exists, it will be called first.  Arguments will be passed as the $params array.
          *
          * @return mixed The output of this method depends on the hook.
          */
@@ -199,44 +203,44 @@ namespace CMSMS {
             $args = func_get_args();
             $name = array_shift($args);
             $name = trim($name);
+
             $is_event = false;
             $module = $eventname = null;
             if( strpos($name,':') !== FALSE ) list($module,$eventname) = explode('::',$name);
             if( $module && $eventname ) $is_event = true;
 
+            if( !$is_event && ( !isset(self::$_hooks[$name]) || !count(self::$_hooks[$name]->handlers) )  ) return; // nothing to do.
 
-            if( $is_event && (!isset(self::$_hooks[$name]) || !self::$_hooks[$name]->sorted) ) {
-                // insert a hook to handle the event, be sure we only do this once.
-                $event_caller = function($params = null) use ($module,$eventname) {
-		    if( !$params ) $params = [];
-                    $tmp = $module.'::'.$eventname;
-                    \Events::SendEvent($module,$eventname,$params);
-                };
-                if( !isset(self::$_hooks[$name]) ) self::add_hook($name,$event_caller);
-            }
-
-            if( !isset(self::$_hooks[$name]) || !count(self::$_hooks[$name]->handlers)  ) return; // nothing to do.
-
-            // sort the handlers.
-            if( !self::$_hooks[$name]->sorted ) {
-                if( count(self::$_hooks[$name]->handlers) > 1 ) {
-                    usort(self::$_hooks[$name]->handlers,function($a,$b){
-                            if( $a->priority < $b->priority ) return -1;
-                            if( $a->priority > $b->priority ) return 1;
-                            return 0;
-                        });
-                }
-                self::$_hooks[$name]->sorted = TRUE;
-            }
-
+            // note: $args is an array
             $value = $args;
             self::$_in_process[] = $name;
-            foreach( self::$_hooks[$name]->handlers as $obj ) {
-                if( !is_array( $value ) ) $value = [ $value ];
-                if( empty($value) ) {
-                    $value = call_user_func($obj->callable);
-                } else {
-                    $value = call_user_func_array($obj->callable,$value);
+            if( $is_event && is_array($value) && count($value) == 1 && isset($value[0]) && is_array($value[0]) ) {
+                // attempt to call an event with this data.
+                $data = $value[0];
+                \Events::SendEvent($module,$eventname,$data);
+                $value[0] = $data; // transitive.
+            }
+            if( isset(self::$_hooks[$name]->handlers) && count(self::$_hooks[$name]->handlers) ) {
+                // sort the handlers.
+                if( !self::$_hooks[$name]->sorted ) {
+                    if( count(self::$_hooks[$name]->handlers) > 1 ) {
+                        usort(self::$_hooks[$name]->handlers,function($a,$b){
+                                if( $a->priority < $b->priority ) return -1;
+                                if( $a->priority > $b->priority ) return 1;
+                                return 0;
+                            });
+                    }
+                    self::$_hooks[$name]->sorted = TRUE;
+                }
+
+                foreach( self::$_hooks[$name]->handlers as $obj ) {
+                    // input is passed to the callback, and can be adjusted.
+                    // note it's not certain that the same data will be passed out of the handler
+                    if( empty($value) || !is_array($value) ) {
+                        $value = call_user_func($obj->callable,$value);
+                    } else {
+                        $value = call_user_func_array($obj->callable,$value);
+                    }
                 }
             }
             array_pop(self::$_in_process);
@@ -245,6 +249,7 @@ namespace CMSMS {
 
         /**
          * Trigger a hook, returning the first non empty value.
+         * This method does not call event handlers with similar names.
          *
          * This method accepts variable arguments.  The first argument (required) is the name of the hook to execute.
          * Further arguments will be passed to the various handlers.
@@ -253,7 +258,7 @@ namespace CMSMS {
          *
          * @return mixed The output of this method depends on the hook.
          */
-        public static function get_first_hook_result()
+        public static function do_hook_first_result()
         {
             $is_assoc = function($in) {
                 $keys = array_keys($in);
@@ -266,47 +271,38 @@ namespace CMSMS {
             $args = func_get_args();
             $name = array_shift($args);
             $name = trim($name);
-            $is_event = false;
-            $module = $eventname = null;
-            if( strpos($name,':') !== FALSE ) list($module,$eventname) = explode('::',$name);
-            if( $module && $eventname ) $is_event = true;
-
-
-            if( $is_event && (!isset(self::$_hooks[$name]) || !self::$_hooks[$name]->sorted) ) {
-                // insert a hook to handle the event, be sure we only do this once.
-                $event_caller = function($params = null) use ($module,$eventname) {
-		    if( !$params ) $params = [];
-                    $tmp = $module.'::'.$eventname;
-                    \Events::SendEvent($module,$eventname,$params);
-                };
-                if( !isset(self::$_hooks[$name]) ) self::add_hook($name,$event_caller);
-            }
-
             if( !isset(self::$_hooks[$name]) || !count(self::$_hooks[$name]->handlers)  ) return; // nothing to do.
 
-            // sort the handlers.
-            if( !self::$_hooks[$name]->sorted ) {
-                if( count(self::$_hooks[$name]->handlers) > 1 ) {
-                    usort(self::$_hooks[$name]->handlers,function($a,$b){
-                            if( $a->priority < $b->priority ) return -1;
-                            if( $a->priority > $b->priority ) return 1;
-                            return 0;
-                        });
-                }
-                self::$_hooks[$name]->sorted = TRUE;
-            }
-
+            // note $args is an array
+            $value = $args;
             self::$_in_process[] = $name;
-            foreach( self::$_hooks[$name]->handlers as $obj ) {
-                $value = $args;
-                if( !empty($value) && !is_array( $value ) ) $value = [ $value ];
-                if( empty($value) ) {
-                    $out = call_user_func($obj->callable);
-                } else {
-                    $out = call_user_func_array($obj->callable,$value);
+
+            if( isset(self::$_hooks[$name]->handlers) && count(self::$_hooks[$name]->handlers) ) {
+                // sort the handlers.
+                if( !self::$_hooks[$name]->sorted ) {
+                    if( count(self::$_hooks[$name]->handlers) > 1 ) {
+                        usort(self::$_hooks[$name]->handlers,function($a,$b){
+                                if( $a->priority < $b->priority ) return -1;
+                                if( $a->priority > $b->priority ) return 1;
+                                return 0;
+                            });
+                    }
+                    self::$_hooks[$name]->sorted = TRUE;
                 }
-                if( !empty($out) ) return $out;
+
+                foreach( self::$_hooks[$name]->handlers as $obj ) {
+                    // input is passed to the callback, and can be adjusted.
+                    // note it's not certain that the same data will be passed out of the handler
+                    if( empty($value) || !is_array($value) ) {
+                        $value = call_user_func($obj->callable,$value);
+                    } else {
+                        $value = call_user_func_array($obj->callable,$value);
+                    }
+                    if( !empty( $value ) break;)
+                }
             }
+            array_pop(self::$_in_process);
+            return $value;
         }
 
         /**
@@ -315,7 +311,10 @@ namespace CMSMS {
          * This method accepts variable arguments.  The first argument (required) is the name of the hook to execute.
          * Further arguments will be passed to the various handlers.
          *
-         * @return array
+         * If an event with the same name exists, it will be called first.  Arguments will be passed as the $params array.
+         * The data returned in the $params array will be appended to the output array.
+         *
+         * @return array Mixed data, as it cannot be ascertained what data is passed back from event handlers.
          */
         public static function do_hook_accumulate()
         {
@@ -336,16 +335,7 @@ namespace CMSMS {
             if( strpos($name,':') !== FALSE ) list($module,$eventname) = explode('::',$name);
             if( $module && $eventname ) $is_event = true;
 
-            if( $is_event && (!isset(self::$_hooks[$name]) || !self::$_hooks[$name]->sorted) ) {
-                // insert a hook to handle the event, be sure we only do this once.
-                $event_caller = function($params) use ($module,$eventname) {
-                    $tmp = $module.'::'.$eventname;
-                    \Events::SendEvent($module,$eventname,$params);
-                };
-                if( !isset(self::$_hooks[$name]) ) self::add_hook($name,$event_caller);
-            }
-
-            if( !isset(self::$_hooks[$name]) || !count(self::$_hooks[$name]->handlers)  ) return; // nothing to do.
+            if( !$is_event && ( !isset(self::$_hooks[$name]) || !count(self::$_hooks[$name]->handlers) )  ) return; // nothing to do.
 
             // sort the handlers.
             if( !self::$_hooks[$name]->sorted ) {
@@ -361,10 +351,20 @@ namespace CMSMS {
 
             $out = [];
             $value = $args;
-            if( !is_array( $value ) ) $value = [ $value ];
             self::$_in_process[] = $name;
+            if( $is_event && is_array($value) && count($value) == 1 && isset($value[0]) && is_array($value[0]) ) {
+                $data = $value[0];
+                \Events::SendEvent($module,$eventname,$data);
+                $value[0] = $data; // this may not be the same as input data.
+            }
             foreach( self::$_hooks[$name]->handlers as $obj ) {
-                $out[] = call_user_func_array($obj->callable,$value);
+                // note: we cannot control what is passed out of the hander.
+                if( empty($value) || !is_array($value) ) {
+                    $out[] = call_user_func($obj->callable,$value);
+                }
+                else {
+                    $out[] = call_user_func_array($obj->callable,$value);
+                }
             }
             array_pop(self::$_in_process);
             return $out;

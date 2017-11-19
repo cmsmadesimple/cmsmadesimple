@@ -29,6 +29,8 @@ $contentops = $gCms->GetContentOperations();
 $allow_all = (isset($_REQUEST['allow_all']) && cms_to_bool($_REQUEST['allow_all'])) ? 1 : 0;
 $allow_all = 1;
 $for_child = (isset($_REQUEST['for_child']) && cms_to_bool($_REQUEST['for_child'])) ? 1 : 0;
+$allowcurrent = (isset($_REQUEST['allowcurrent']) && cms_to_bool($_REQUEST['allowcurrent'])) ? 1 : 0;
+$current = (isset($_REQUEST['current']) ) ? (int) $_REQUEST['current'] : null;
 
 $display = 'title';
 $mod = cms_utils::get_module('CMSContentManager');
@@ -86,7 +88,7 @@ try {
         // as well as the info of my current children.
         if( !isset($_REQUEST['page']) ) throw new \Exception('missingparams');
 
-        $children_to_data = function($node) use ($display,$allow_all,$for_child,$ruid,$contentops,$can_edit_any) {
+        $children_to_data = function($node) use ($display,$allow_all,$for_child,$ruid,$contentops,$can_edit_any,$allowcurrent,$current) {
             $children = $node->getChildren(false,$allow_all);
             if( empty($children) ) return;
 
@@ -96,6 +98,7 @@ try {
                 if( !is_object($content) ) continue;
                 if( !$allow_all && !$content->Active() ) continue;
                 if( !$allow_all && !$content->HasUsableLink() ) continue;
+                if( !$allowcurrent && $current == $content->Id() ) continue;
                 $rec = $content->ToData();
                 $rec['can_edit'] = $can_edit_any || $contentops->CheckPageAuthorship($ruid,$content->Id());
                 $rec['display'] = strip_tags($rec['menu_text']);
@@ -116,7 +119,7 @@ try {
             $node = $contentops->quickfind_node_by_id($page);
         }
         do {
-            $out[] = $children_to_data($node);
+            $out[] = $children_to_data($node); // get children of current page.
             $node = $node->get_parent();
         } while( $node );
         $out = array_reverse($out);
