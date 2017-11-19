@@ -18,6 +18,8 @@
 #
 #$Id$
 
+namespace CMSMS\internal;
+
 /**
  * @package CMS
  */

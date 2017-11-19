@@ -18,6 +18,8 @@
 #
 #$Id: content.functions.php 6863 2011-01-18 02:34:48Z calguy1000 $
 
+namespace CMSMS\internal;
+
 /**
  * @package CMS
  */
@@ -28,7 +30,7 @@
  * @package CMS
  * @since 0.1
  */
-class Smarty_CMS extends \CMSMS\internal\smarty_base_template
+class Smarty extends smarty_base_template
 {
     protected $_global_cache_id;
     private static $_instance;
@@ -68,24 +70,7 @@ class Smarty_CMS extends \CMSMS\internal\smarty_base_template
         $this->registerDefaultPluginHandler(array(&$this, 'defaultPluginHandler'));
 
         // Load User Defined Tags
-        $_gCms = CmsApp::get_instance();
-        /*
-        if( !$_gCms->test_state(CmsApp::STATE_INSTALL) ) {
-            $mgr = CmsApp::get_instance()->GetSimplePluginOperations();
-            $list = $mgr->get_list();
-            if( count($list) ) {
-                foreach( $list as $plugin_name ) {
-                    try {
-                        $function = $mgr->load_plugin( $plugin_name );
-                        if( $function ) $this->registerPlugin('function',$plugin_name,$function,false);
-                    }
-                    catch( \LogicException $e ) {
-                        cms_error('Problem loading simple plugin '.$plugin_name);
-                    }
-                }
-            }
-        }
-        */
+        $_gCms = \CmsApp::get_instance();
 
         $this->addConfigDir(CMS_ASSETS_PATH.'/configs');
         $this->addPluginsDir(CMS_ASSETS_PATH.'/plugins');
@@ -93,7 +78,7 @@ class Smarty_CMS extends \CMSMS\internal\smarty_base_template
         $this->addPluginsDir(CMS_ROOT_PATH.'/lib/plugins');
         $this->addTemplateDir(cms_join_path(CMS_ROOT_PATH, 'lib', 'assets', 'templates'));
 
-        $config = cms_config::get_instance();
+        $config = \cms_config::get_instance();
         if( $_gCms->is_frontend_request()) {
             $this->addTemplateDir(CMS_ASSETS_PATH.'/templates');
 
@@ -127,7 +112,7 @@ class Smarty_CMS extends \CMSMS\internal\smarty_base_template
             // Enable security object
             if( !$config['permissive_smarty'] ) $this->enableSecurity('\\CMSMS\\internal\\smarty_security_policy');
         }
-        else if($_gCms->test_state(CmsApp::STATE_ADMIN_PAGE)) {
+        else if($_gCms->test_state(\CmsApp::STATE_ADMIN_PAGE)) {
             $this->setCaching(false);
             $admin_dir = $config['admin_path'];
             $this->addPluginsDir($admin_dir.'/plugins');
@@ -143,7 +128,7 @@ class Smarty_CMS extends \CMSMS\internal\smarty_base_template
      */
     public static function &get_instance()
     {
-        if( !self::$_instance ) self::$_instance = new Smarty_CMS;
+        if( !self::$_instance ) self::$_instance = new self;
         return self::$_instance;
     }
 
@@ -229,6 +214,7 @@ class Smarty_CMS extends \CMSMS\internal\smarty_base_template
         debug_buffer('',"Start Load Smarty Plugin $name/$type");
 
         // plugins with the smarty_cms_function
+        $_gCms = \CmsApp::get_instance();
         $cachable = TRUE;
         $dirs = [];
         $dirs[] = cms_join_path(CMS_ROOT_PATH,'assets','plugins',$type.'.'.$name.'.php');
@@ -252,7 +238,7 @@ class Smarty_CMS extends \CMSMS\internal\smarty_base_template
             }
         }
 
-        if( CmsApp::get_instance()->is_frontend_request() ) {
+        if( $_gCms->is_frontend_request() ) {
             $row = cms_module_smarty_plugin_manager::load_plugin($name,$type);
             if( is_array($row) && is_array($row['callback']) && count($row['callback']) == 2 &&
                 is_string($row['callback'][0]) && is_string($row['callback'][1]) ) {
@@ -264,7 +250,6 @@ class Smarty_CMS extends \CMSMS\internal\smarty_base_template
 
         // next simple plugins
         // only of type plugin.
-        $_gCms = CmsApp::get_instance();
         $ops = $_gCms->GetSimplePluginOperations();
         $res = $ops->load_plugin($name);
         if( $res && is_callable($res) ) {

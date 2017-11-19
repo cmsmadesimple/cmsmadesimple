@@ -17,12 +17,12 @@
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 #$Id: content.functions.php 6863 2011-01-18 02:34:48Z calguy1000 $
+
 namespace CMSMS\internal;
 
 /**
  * @package CMS
  */
-
 
 /**
  * Generic smarty security policy.
