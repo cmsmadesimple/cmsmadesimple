@@ -184,8 +184,6 @@ class Smarty extends smarty_base_template
      */
     public function defaultPluginHandler($name, $type, $template, &$callback, &$script, &$cachable)
     {
-        debug_buffer('',"Start Load Smarty Plugin $name/$type");
-
         // plugins with the smarty_cms_function
         $cachable = TRUE;
         $dirs = [];
@@ -206,17 +204,26 @@ class Smarty extends smarty_base_template
 
                 $callback = $func;
                 $cachable = FALSE;
-                debug_buffer('',"End Load Smarty Plugin $name/$type");
                 return TRUE;
             }
         }
+
+        if( $type != 'function' ) return;
 
         if( \CmsApp::get_instance()->is_frontend_request() ) {
             $row = \cms_module_smarty_plugin_manager::load_plugin($name,$type);
             if( is_array($row) && is_array($row['callback']) && count($row['callback']) == 2 &&
                 is_string($row['callback'][0]) && is_string($row['callback'][1]) ) {
-                $cachable = $row['cachable'];
                 $callback = $row['callback'][0].'::'.$row['callback'][1];
+                $cachable = FALSE;
+                return TRUE;
+            }
+
+            // see if it is a simple plugin
+            $plugin = \CMSMS\simple_plugin_operations::get_instance()->load_plugin( $name );
+            if( $plugin ) {
+                $callback = $plugin;
+                $cachable = FALSE;
                 return TRUE;
             }
         }

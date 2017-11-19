@@ -164,7 +164,6 @@ while( $trycount < 2 ) {
     }
 
     catch (CmsError404Exception $e) {
-        debug_display( 'thrown at '.$e->getFile().':'.$e->getLine() ); die();
         // Catch CMSMS 404 error
         // 404 error thrown... gotta do this process all over again
         $page = 'error404';
@@ -262,8 +261,6 @@ while( $trycount < 2 ) {
 
     catch (Exception $e) {
         // Catch rest of exceptions
-        debug_display( $e );
-        die('exception -- remove me');
         $handlers = ob_list_handlers();
         for ($cnt = 0; $cnt < sizeof($handlers); $cnt++) { ob_end_clean(); }
         $code = $e->GetCode();
