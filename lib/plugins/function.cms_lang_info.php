@@ -27,11 +27,10 @@ function smarty_function_cms_lang_info($params, &$smarty)
 	if( !$info ) return;
 
 	if( isset($params['assign']) )
-    {
+    	{
 		$smarty->assign($params['assign'],$info);
 		return;
-    }
+    	}
 	
 	return $info;
 }
-?>

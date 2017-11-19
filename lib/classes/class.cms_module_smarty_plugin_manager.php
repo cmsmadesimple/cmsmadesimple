@@ -103,6 +103,7 @@ final class cms_module_smarty_plugin_manager
 	private function _load()
 	{
 		if( $this->_loaded == true ) return;
+		// todo: cache this stuff.  does not need to be run on each request
 
 		$this->_loaded = TRUE;
 		$this->_data = array();

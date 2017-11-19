@@ -410,7 +410,6 @@ final class content_plugins
                 throw new \CmsError404Exception('Attempt to access module '.$module.' which could not be found (is it properly installed and configured?');
             }
 
-            $smarty = \Smarty_CMS::get_instance();
             @ob_start();
             $parms = $modops->GetModuleParameters($id);
             $result = $module_obj->DoActionBase($action, $id, $parms, $page_id, $smarty);

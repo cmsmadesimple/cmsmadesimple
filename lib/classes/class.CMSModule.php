@@ -1388,7 +1388,7 @@ abstract class CMSModule
                     $gCms = CmsApp::get_instance();
                     $db = $gCms->GetDb();
                     $config = $gCms->GetConfig();
-                    $smarty = ( $this->_action_tpl ) ? $this->_action_tpl : $smarty = $gCms->GetSmarty()->get_template_parent();
+                    $smarty = $this->_action_tpl; // smarty in scope.
                     include($filename);
                     return;
                 }
@@ -1412,10 +1412,10 @@ abstract class CMSModule
      * @param string $id The action identifier
      * @param array  $params The action params
      * @param int $returnid The current page id.  Empty for admin requests.
-     * @param Smarty_Internal_Template &$smarty The currrent smarty template object.
+     * @param Smarty_Internal_Template &$parent The currrent smarty template object.
      * @return string The action output.
      */
-    final public function DoActionBase($name, $id, $params, $returnid='', &$smarty )
+    final public function DoActionBase($name, $id, $params, $returnid='', &$parent )
     {
         $name = preg_replace('/[^A-Za-z0-9\-_+]/', '', $name);
         if( $returnid != '' ) {
@@ -1456,17 +1456,22 @@ abstract class CMSModule
         }
 
         $gCms = CmsApp::get_instance(); // in scope for compatibility reasons.
-        $smarty->assign('_action',$name);
-        $smarty->assign('_module',$this->GetName());
-        $smarty->assign('actionid',$id);
-        $smarty->assign('actionparams',$params);
-        $smarty->assign('returnid',$returnid);
-        $smarty->assign('mod',$this);
+        if( $gCms->template_processing_allowed() ) {
+            $smarty = $gCms->GetSmarty();
+            $tpl = $smarty->createTemplate( 'string:EMPTY MODULE ACTION TEMPLATE', null, null, $parent );
+            $tpl->assign('_action',$name);
+            $tpl->assign('_module',$this->GetName());
+            $tpl->assign('actionid',$id);
+            $tpl->assign('actionparams',$params);
+            $tpl->assign('returnid',$returnid);
+            $tpl->assign('mod',$this);
 
-        $saved_action_tpl = $this->_action_tpl;
-        $this->_action_tpl = $smarty; // parent smarty template,  which is the global smarty object if this is called directly from a template
+            $this->_action_tpl = $tpl; // parent smarty template,  which is the global smarty object if this is called directly from a template
+        }
         $output = $this->DoAction($name, $id, $params, $returnid);
-        $this->_action_tpl = $saved_action_tpl;
+        if( $gCms->template_processing_allowed() ) {
+            $this->_action_tpl = null;
+        }
 
         if( isset($params['assign']) ) {
             $smarty->assign(cms_htmlentities($params['assign']),$output);
@@ -2230,17 +2235,16 @@ abstract class CMSModule
      * Process A File template through smarty
      *
      * @final
-     * @deprecated
      * @param string  $tpl_name    Template name
-     * @param string  $designation Cache Designation
-     * @param bool $cache       Cache flag
-     * @param string  $cacheid     Unique cache flag
+     * @param string  $designation Cache Designation (ignored)
+     * @param bool    $cache       Cache flag  (ignored)
+     * @param string  $cacheid     Unique cache flag (ignored)
      * @return string
      */
     final public function ProcessTemplate($tpl_name, $designation = '', $cache = false, $cacheid = '')
     {
-        $this->_loadTemplateMethods();
-        return cms_module_ProcessTemplate($this, $tpl_name, $designation, $cache = false, $cacheid);
+        if( strpos($tpl_name, '..') !== false ) return;
+        return $this->_action_tpl->fetch('module_file_tpl:'.$this->GetName().';'.$tpl_name );
     }
 
     /**
@@ -2256,25 +2260,22 @@ abstract class CMSModule
      */
     final public function ProcessTemplateFromData( $data )
     {
-        $this->_loadTemplateMethods();
-        return cms_module_ProcessTemplateFromData($this, $data);
+        return $this->_action_tpl->fetch('string:'.$data);
     }
 
     /**
      * Process a smarty template associated with a module through smarty and return the results
      *
      * @final
-     * @deprecated
      * @param string $tpl_name Template name
-     * @param string $designation (optional) Designation
-     * @param bool $cache (optional) Cachable flag
-     * @param string $modulename (optional) module name, if empty the current module is used.
+     * @param string $designation (optional) Designation (ignored)
+     * @param bool $cache (optional) Cachable flag (ignored)
+     * @param string $modulename (ignored)
      * @return string
      */
     final public function ProcessTemplateFromDatabase($tpl_name, $designation = '', $cache = false, $modulename = '')
     {
-        $this->_loadTemplateMethods();
-        return cms_module_ProcessTemplateFromDatabase($this, $tpl_name, $designation, $cache, $modulename);
+        return $this->_action_tpl->fetch('module_db_tpl:'.$this->GetName().';'.$tpl_name );
     }
 
     /**

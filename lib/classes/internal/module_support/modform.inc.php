@@ -43,14 +43,11 @@ function cms_module_CreateFormStart(&$modinstance, $id, $action='default', $retu
 
 	if ($idsuffix == '') $idsuffix = $_formcount++;
 
-	$goto = 'index.php';
+	$goto = 'moduleinterface.php';
 	if( $returnid != '' ) {
-	  $hm = $gCms->GetHierarchyManager();
-	  $node = $hm->sureGetNodeById($returnid);
-	  if( $node ) {
-	      $content_obj = $node->getContent();
-	      if( $content_obj ) $goto = $content_obj->GetURL();
-	  }
+        $goto = 'index.php';
+        $content_obj = \cms_utils::get_current_content();
+        if( $content_obj ) $goto = $content_obj->GetURL();
 	}
     if( CmsApp::get_instance()->is_https_request() && strpos($goto,':') !== FALSE ) $goto = str_replace('http:','https:',$goto);
 	$goto = ' action="'.$goto.'"';

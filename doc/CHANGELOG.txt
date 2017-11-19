@@ -47,11 +47,12 @@ Core - General
   - Improved autoloader now handles namespaced module classes if the module is already loaded.
   - Adds new CmsError400Exception class.
   - Improve exception handling in include.php to handle when showtemplate is false.
-  - Note: compatibility change
+  - COMPATIBILITY CHANGE
     - No longer handle {$actionid}showtemplate=false parameters.
     - No longer send id, returnid, action parameters in the action $params array.
     - No longer call LoadModules from include.php.. All modules are now loaded on demand.
     - Tthe deprecated $module->smarty property is now removed.
+  - CHANGE:  For performance reasons, plugins functions should be named smarty_xxxxx instead of smarty_cms_xxx
   - Optimize the cms_route_manager for performance
   - Adds ModuleOperations::is_module_loaded() method
   - Allow loading action controller classes of the with the name Module/Controllers/<action>_action
@@ -69,6 +70,9 @@ Core - General
     This config entry controls only when in the rendering, the default content block will be processed.
   - Adds the {disable_template} plugin.  Only really useful when content_processing_mode == 2
   - Remove all options for smarty caching.  HTML caching should now be done with external tools like varnish or cloudfare
+  - All module actions (except for showtemplate=false or other similar requests) create a new smarty template object
+    and destroy it when the action is complete.   This allowes ProcessTemplateFromDatabase and ProcessTemplate and other related methods to be 
+    un-deprecated.
   - TODO  Migrate the tasks related to the old admin log into AdminLog module.
 
 CMSContentManager - remember to bump version

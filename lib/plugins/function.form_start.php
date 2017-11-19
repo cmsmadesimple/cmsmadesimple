@@ -21,7 +21,7 @@ function smarty_function_form_start($params, &$smarty)
     $gCms = CmsApp::get_instance();
     $tagparms = array();
     $mactparms = array();
-    $mactparms['module'] = $smarty->getTemplateVars('actionmodule');
+    $mactparms['module'] = $smarty->getTemplateVars('_module');
     $mactparms['mid'] = $smarty->getTemplateVars('actionid');
     $mactparms['returnid'] = $smarty->getTemplateVars('returnid');
     $mactparms['inline'] = 0;

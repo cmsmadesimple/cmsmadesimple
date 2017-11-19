@@ -40,7 +40,7 @@ class module_db_template_resource extends fixed_smarty_custom_resource
     protected function fetch($name,&$source,&$mtime)
     {
         debug_buffer('','CMSModuleDbTemplateResource start'.$name);
-        $db = CmsApp::get_instance()->GetDb();
+        $db = \CmsApp::get_instance()->GetDb();
 
         $tmp = explode(';',$name);
         $query = "SELECT * from ".CMS_DB_PREFIX."module_templates WHERE module_name = ? and template_name = ?";
@@ -53,7 +53,7 @@ class module_db_template_resource extends fixed_smarty_custom_resource
         else {
             // fallback to the layout stuff.
             try {
-                $obj = CmsLayoutTemplate::load($parts[1]);
+                $obj = \CmsLayoutTemplate::load($parts[1]);
                 $source = $obj->get_content();
                 $mtime = $obj->get_modified();
             }

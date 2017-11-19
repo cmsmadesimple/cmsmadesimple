@@ -33,7 +33,6 @@ namespace CMSMS\internal;
 class Smarty extends smarty_base_template
 {
     private static $_instance;
-    private $_tpl_stack = array();
 
     /**
      * Constructor
@@ -236,32 +235,6 @@ class Smarty extends smarty_base_template
         return isset($this->registered_plugins['function'][$name]);
     }
 
-    /**
-     * Get a suitable parent template for a new template.
-     *
-     * This method is used when creating new smarty template objects to find a suitable parent.
-     * An internal stack of parents is used to find the latest item on the stack.
-     * if there are no parents, then the root smart object is used.
-     *
-     * i.e:
-     * <code>$smarty->CreateSmartyTemplate('somefile.tpl',$cache_id,$compile_id,$smarty->get_template_parent());</code>
-     *
-     * @since 2.0.1
-     * @return \smarty_internal_template
-     */
-    public function get_template_parent()
-    {
-        // no parent specified, see if there is a stack of parents.
-        if( count($this->_tpl_stack) ) {
-            $parent = $this->_tpl_stack[count($this->_tpl_stack)-1];
-        }
-        else {
-            // no stack, so use this (the Smarty_CMS) class.
-            $parent = $this;
-        }
-        return $parent;
-    }
-
     public function createTemplate($template, $cache_id = null, $compile_id = null, $parent = null, $do_clone = true)
     {
         if( !startswith($template,'eval:') && !startswith($template,'string:') ) {
@@ -270,7 +243,6 @@ class Smarty extends smarty_base_template
         }
         return parent::createTemplate($template, $cache_id, $compile_id, $parent, $do_clone );
     }
-
 
     /**
      * Error console
