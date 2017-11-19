@@ -323,12 +323,7 @@ final class ModuleOperations
 
         $info = $this->_get_module_info();
         if( !isset($info[$module_name]) && !$force_load ) {
-            if( $info[$module_name]['active'] == 0 ) {
-                cms_warning('Requested deactivated module '.$module_name);
-            }
-            else {
-                cms_warning("Nothing is known about $module_name... cant load it");
-            }
+            cms_warning("Nothing is known about $module_name... cant load it");
             return FALSE;
         }
 
@@ -350,9 +345,9 @@ final class ModuleOperations
             }
         }
 
-        // now load the module itself.
+        // now load the module itself... recurses into the autoloader if possible.
         $class_name = $this->get_module_classname($module_name);
-        if( !class_exists($class_name,false) ) {
+        if( !class_exists($class_name,true) ) {
             $fname = $this->get_module_filename($module_name);
             if( !is_file($fname) ) {
                 warning("Cannot load $module_name because the module file does not exist");

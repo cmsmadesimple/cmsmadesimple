@@ -54,6 +54,7 @@ $page = get_pageid_or_alias_from_url();
 $contentops = ContentOperations::get_instance();
 $contentobj = null;
 $trycount = 0;
+$showtemplate = true;
 
 \CMSMS\internal\content_cache::get_instance();
 $_tpl_cache = new \CMSMS\internal\TemplateCache();
@@ -112,12 +113,6 @@ while( $trycount < 2 ) {
             $_app->disable_template_processing();
         }
 
-        $cache_id = 'p'.$contentobj->Id();
-        $smarty->set_global_cacheid('p'.$contentobj->Id());
-        if( $cachable && $_app->template_processing_allowed() && $contentobj->Cachable() && cms_siteprefs::get('use_smartycache',0) ) {
-            $smarty->setCaching(Smarty::CACHING_LIFETIME_CURRENT);
-        }
-
         \CMSMS\HookManager::do_hook('Core::ContentPreRender', [ 'content' => &$contentobj ] );
 
         if( $config['content_processing_mode'] == 2 ) {
@@ -128,7 +123,6 @@ while( $trycount < 2 ) {
         $html = null;
         $showtemplate = $_app->template_processing_allowed();
         if( !$showtemplate ) {
-            $smarty->setCaching(false);
             // in smarty 3, we could use eval:{content} I think
             $html = \CMSMS\internal\content_plugins::get_default_content_block_content( $contentobj->Id(), $smarty );
             $trycount = 99;
@@ -139,7 +133,7 @@ while( $trycount < 2 ) {
 
             debug_buffer('process template top');
             \CMSMS\HookManager::do_hook('Core::PageTopPreRender', [ 'content'=>&$contentobj, 'html'=>&$top ]);
-            $tpl = $smarty->createTemplate('tpl_top:'.$tpl_id,$cache_id);
+            $tpl = $smarty->createTemplate('tpl_top:'.$tpl_id);
             $top .= $tpl->fetch();
             unset($tpl);
             \CMSMS\HookManager::do_hook('Core::PageTopPostRender', [ 'content'=>&$contentobj, 'html'=>&$top ]);
@@ -152,14 +146,14 @@ while( $trycount < 2 ) {
             // if the request has a mact in it, process and cache the output.
             debug_buffer('process template body');
             \CMSMS\HookManager::do_hook('Core::PageBodyPreRender', [ 'content'=>&$contentobj, 'html'=>&$body ]);
-            $tpl = $smarty->createTemplate('tpl_body:'.$tpl_id,$cache_id);
+            $tpl = $smarty->createTemplate('tpl_body:'.$tpl_id);
             $body .= $tpl->fetch();
             unset($tpl);
             \CMSMS\HookManager::do_hook('Core::PageBodyPostRender', [ 'content'=>&$contentobj, 'html'=>&$body ]);
 
             debug_buffer('process template head');
             \CMSMS\HookManager::do_hook('Core::PageHeadPreRender', [ 'content'=>&$contentobj, 'html'=>&$head ]);
-            $tpl = $smarty->createTemplate('tpl_head:'.$tpl_id,$cache_id);
+            $tpl = $smarty->createTemplate('tpl_head:'.$tpl_id);
             $head .= $tpl->fetch();
             unset($tpl);
             \CMSMS\HookManager::do_hook('Core::PageHeadPostRender', [ 'content'=>&$contentobj, 'html'=>&$head ]);
@@ -268,6 +262,8 @@ while( $trycount < 2 ) {
 
     catch (Exception $e) {
         // Catch rest of exceptions
+        debug_display( $e );
+        die('exception -- remove me');
         $handlers = ob_list_handlers();
         for ($cnt = 0; $cnt < sizeof($handlers); $cnt++) { ob_end_clean(); }
         $code = $e->GetCode();

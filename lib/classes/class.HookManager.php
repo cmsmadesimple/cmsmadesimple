@@ -298,7 +298,7 @@ namespace CMSMS {
                     } else {
                         $value = call_user_func_array($obj->callable,$value);
                     }
-                    if( !empty( $value ) break;)
+                    if( !empty( $value ) ) break;
                 }
             }
             array_pop(self::$_in_process);

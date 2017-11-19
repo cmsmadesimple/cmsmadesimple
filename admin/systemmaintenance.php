@@ -43,7 +43,6 @@ require_once cms_join_path(CMS_BASE, 'lib', 'test.functions.php');
 
 $gCms = cmsms();
 $smarty = $gCms->GetSmarty();
-$smarty->caching = false;
 $smarty->force_compile = true;
 $db = $gCms->GetDb();
 

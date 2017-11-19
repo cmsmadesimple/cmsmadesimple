@@ -130,14 +130,14 @@ function cms_module_DeleteTemplate(&$modinstance, $tpl_name = '', $modulename = 
  */
 function cms_module_ProcessTemplate(&$modinstance, $tpl_name, $designation = '', $cache = false, $cacheid = '')
 {
-	$ok = (strpos($tpl_name, '..') === false);
-	if (!$ok) return;
+    $ok = (strpos($tpl_name, '..') === false);
+    if (!$ok) return;
 
     $smarty = $modinstance->GetActionTemplateObject();
     if( !$smarty ) $smarty = Smarty_CMS::get_instance();
-	$result = $smarty->fetch('module_file_tpl:'.$modinstance->GetName().';'.$tpl_name, $cacheid, ($designation != ''?$designation:$modinstance->GetName()));
+    $result = $smarty->fetch('module_file_tpl:'.$modinstance->GetName().';'.$tpl_name, $cacheid, ($designation != ''?$designation:$modinstance->GetName()));
 
-	return $result;
+   return $result;
 }
 
 /**

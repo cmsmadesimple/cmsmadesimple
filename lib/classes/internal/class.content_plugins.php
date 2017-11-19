@@ -225,8 +225,6 @@ final class content_plugins
                 $result = self::get_default_content_block_content( $contentobj->Id(), $smarty );
             }
             if( !$result ) {
-                $oldvalue = $smarty->caching;
-                $smarty->caching = false;
                 if( isset($_SESSION['__cms_preview__']) && $contentobj->Id() == __CMS_PREVIEW_PAGE__ ) {
                     // note: content precompile/postcompile events will not be triggererd in preview.
                     //$val = $contentobj->Show($block);
@@ -236,7 +234,6 @@ final class content_plugins
                 else {
                     $result = $smarty->fetch(str_replace(' ', '_', 'content:' . $block), '|'.$block, $contentobj->Id().$block);
                 }
-                $smarty->caching = $oldvalue;
             }
         }
         return self::content_return($result, $params, $smarty);
@@ -270,10 +267,7 @@ final class content_plugins
 
         $result = '';
         if( isset($params['block']) ) {
-            $oldvalue = $smarty->caching;
-            $smarty->caching = false;
             $result = $smarty->fetch(str_replace(' ', '_', 'content:' . $params['block']), '|'.$params['block'], $contentobj->Id().$params['block']);
-            $smarty->caching = $oldvalue;
         }
         $img = $result;
 
@@ -419,18 +413,13 @@ final class content_plugins
             $smarty = \Smarty_CMS::get_instance();
             @ob_start();
             $parms = $modops->GetModuleParameters($id);
-            $oldcache = $smarty->caching;
-            $smarty->caching = false;
             $result = $module_obj->DoActionBase($action, $id, $parms, $page_id, $smarty);
-            $smarty->caching = $oldcache;
 
             if( $result !== FALSE ) echo $result;
             $result = @ob_get_contents();
             @ob_end_clean();
         }
         else {
-            $oldvalue = $smarty->caching;
-            $smarty->caching = false;
             $block = 'content_en';
             if( isset($_SESSION['__cms_preview__']) && $contentobj->Id() == __CMS_PREVIEW_PAGE__ ) {
                 // note: content precompile/postcompile events will not be triggererd in preview.
@@ -441,7 +430,6 @@ final class content_plugins
             else {
                 $result = $smarty->fetch(str_replace(' ', '_', 'content:' . $block), '|'.$block, $page_id.$block);
             }
-            $smarty->caching = $oldvalue;
         }
         self::$_primary_content = $result;
         return $result;

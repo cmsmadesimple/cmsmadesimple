@@ -21,7 +21,6 @@
          <th><span title="{lang_by_realm('tags','tag_name')}">{'name'|lang}</span></th>
          <th><span title="{lang_by_realm('tags','tag_type')}">{'type'|lang}</span></th>
 	 <th class="pagew10"><span title="{lang_by_realm('tags','tag_adminplugin')}">{lang('adminplugin')}</span></th>
-         <th class="pagew10"><span title="{lang_by_realm('tags','tag_cachable')}">{'cachable'|lang}</span></th>
          <th class="pagew10"><span title="{lang_by_realm('tags','tag_help')}">{'help'|lang}</span></th>
          <th class="pagew10"><span title="{lang_by_realm('tags','tag_about')}">{'about'|lang}</span></th>
        </tr>
@@ -45,13 +44,6 @@
               <span title="{lang_by_realm('tags','title_admin')}">{lang('yes')}</span>
             {else}
               <span title="{lang_by_realm('tags','title_notadmin')}">{lang('no')}</span>
-            {/if}
-         </td>
-         <td>
-            {if isset($one.cachable) && $one.cachable == 'yes'}
-              <span title="{lang_by_realm('tags','title_cachable')}">{lang('yes')}</span>
-            {else}
-              <span title="{lang_by_realm('tags','title_notcachable')}">{lang('no')}</span>
             {/if}
          </td>
          <td>

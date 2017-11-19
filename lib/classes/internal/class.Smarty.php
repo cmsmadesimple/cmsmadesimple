@@ -32,7 +32,6 @@ namespace CMSMS\internal;
  */
 class Smarty extends smarty_base_template
 {
-    protected $_global_cache_id;
     private static $_instance;
     private $_tpl_stack = array();
 
@@ -50,7 +49,6 @@ class Smarty extends smarty_base_template
 
         // Set template_c and cache dirs
         $this->setCompileDir(TMP_TEMPLATES_C_LOCATION);
-        $this->setCacheDir(TMP_CACHE_LOCATION);
         $this->assignGlobal('app_name','CMSMS');
 
         if (CMS_DEBUG == true) $this->error_reporting = 'E_ALL';
@@ -67,10 +65,7 @@ class Smarty extends smarty_base_template
         $this->registerResource('cms_stylesheet',new \CMSMS\internal\layout_stylesheet_resource());
 
         // register default plugin handler
-        $this->registerDefaultPluginHandler(array(&$this, 'defaultPluginHandler'));
-
-        // Load User Defined Tags
-        $_gCms = \CmsApp::get_instance();
+        $this->registerDefaultPluginHandler( [ $this, 'defaultPluginHandler' ] );
 
         $this->addConfigDir(CMS_ASSETS_PATH.'/configs');
         $this->addPluginsDir(CMS_ASSETS_PATH.'/plugins');
@@ -78,6 +73,7 @@ class Smarty extends smarty_base_template
         $this->addPluginsDir(CMS_ROOT_PATH.'/lib/plugins');
         $this->addTemplateDir(cms_join_path(CMS_ROOT_PATH, 'lib', 'assets', 'templates'));
 
+        $_gCms = \CmsApp::get_instance();
         $config = \cms_config::get_instance();
         if( $_gCms->is_frontend_request()) {
             $this->addTemplateDir(CMS_ASSETS_PATH.'/templates');
@@ -104,10 +100,7 @@ class Smarty extends smarty_base_template
             $this->registerPlugin('function','process_pagedata','\\CMSMS\internal\\content_plugins::smarty_fetch_pagedata',false);
 
             // Autoload filters
-            $this->autoloadFilters();
-
-            // compile check can only be enabled, if using smarty cache... just for safety.
-            if( \cms_siteprefs::get('use_smartycache',0) ) $this->setCompileCheck(\cms_siteprefs::get('use_smartycompilecheck',1));
+            //$this->autoloadFilters();
 
             // Enable security object
             if( !$config['permissive_smarty'] ) $this->enableSecurity('\\CMSMS\\internal\\smarty_security_policy');
@@ -180,25 +173,6 @@ class Smarty extends smarty_base_template
     }
 
     /**
-     * Registers plugin to be used in templates
-     *
-     * @param string   $type       plugin type
-     * @param string   $tag        name of template tag
-     * @param callback $callback   PHP callback to register
-     * @param bool  $cacheable  if true (default) this fuction is cachable
-     * @param array    $cache_attr caching attributes if any
-     * @return Smarty_Internal_Templatebase current Smarty_Internal_Templatebase (or Smarty or Smarty_Internal_Template) instance for chaining
-     * @throws SmartyException when the plugin tag is invalid
-     */
-    public function registerPlugin($type, $tag, $callback, $cacheable = true, $cache_attr = null)
-    {
-        if (!isset($this->registered_plugins[$type][$tag])) {
-            return parent::registerPlugin($type,$tag,$callback,$cacheable,$cache_attr);
-        }
-        return $this;
-    }
-
-    /**
      * defaultPluginHandler
      * NOTE: Registered in constructor
      *
@@ -214,11 +188,10 @@ class Smarty extends smarty_base_template
         debug_buffer('',"Start Load Smarty Plugin $name/$type");
 
         // plugins with the smarty_cms_function
-        $_gCms = \CmsApp::get_instance();
         $cachable = TRUE;
         $dirs = [];
         $dirs[] = cms_join_path(CMS_ROOT_PATH,'assets','plugins',$type.'.'.$name.'.php');
-        $dirs[] = cms_join_path(CMS_ROOT_PATH,'plugins',$type.'.'.$name.'.php'); // deprecated
+        $dirs[] = cms_join_path(CMS_ROOT_PATH,'plugins',$type.'.'.$name.'.php');
         $dirs[] = cms_join_path(CMS_ROOT_PATH,'lib','plugins',$type.'.'.$name.'.php');
         foreach( $dirs as $fn ) {
             if( !is_file($fn) ) continue;
@@ -227,10 +200,11 @@ class Smarty extends smarty_base_template
             $script = $fn;
 
             $funcs = [];
-            $funcs[] = 'smarty_nocache_'.$type.'_'.$name;
-            $funcs[] = 'smarty_cms_'.$type.'_'.$name;
+            $funcs[] = 'smarty_nocache_'.$type.'_'.$name; // deprecated
+            $funcs[] = 'smarty_cms_'.$type.'_'.$name; // deprecated
             foreach( $funcs as $func ) {
                 if( !function_exists($func) ) continue;
+
                 $callback = $func;
                 $cachable = FALSE;
                 debug_buffer('',"End Load Smarty Plugin $name/$type");
@@ -238,8 +212,8 @@ class Smarty extends smarty_base_template
             }
         }
 
-        if( $_gCms->is_frontend_request() ) {
-            $row = cms_module_smarty_plugin_manager::load_plugin($name,$type);
+        if( \CmsApp::get_instance()->is_frontend_request() ) {
+            $row = \cms_module_smarty_plugin_manager::load_plugin($name,$type);
             if( is_array($row) && is_array($row['callback']) && count($row['callback']) == 2 &&
                 is_string($row['callback'][0]) && is_string($row['callback'][1]) ) {
                 $cachable = $row['cachable'];
@@ -248,15 +222,7 @@ class Smarty extends smarty_base_template
             }
         }
 
-        // next simple plugins
-        // only of type plugin.
-        $ops = $_gCms->GetSimplePluginOperations();
-        $res = $ops->load_plugin($name);
-        if( $res && is_callable($res) ) {
-            $cachable = FALSE;
-            $callback = $res;
-            return TRUE;
-        }
+        return FALSE;
     }
 
     /**
@@ -268,22 +234,6 @@ class Smarty extends smarty_base_template
     public function is_registered($name)
     {
         return isset($this->registered_plugins['function'][$name]);
-    }
-
-    /**
-     * get_instance method
-     *
-     * @param int $id
-     * @return void
-     */
-    public function set_global_cacheid($id)
-    {
-        if( is_null($id) || $id === '' ) {
-            $this->_global_cache_id = null;
-        }
-        else {
-            $this->_global_cache_id = $id;
-        }
     }
 
     /**
@@ -321,48 +271,6 @@ class Smarty extends smarty_base_template
         return parent::createTemplate($template, $cache_id, $compile_id, $parent, $do_clone );
     }
 
-    /**
-     * clearCache method
-     * NOTE: Overwrites parent
-     *
-     * @param mixed $template_name
-     * @param int $cache_id
-     * @param int $compile_id
-     * @param mixed $exp_time
-     * @param mixed $type
-     * @return mixed
-     */
-    public function clearCache($template_name,$cache_id = null,$compile_id = null,$exp_time = null,$type = null)
-    {
-        if( is_null($cache_id) || $cache_id === '' ) {
-            $cache_id = $this->_global_cache_id;
-        }
-        else if( $cache_id[0] == '|' ) {
-            $cache_id = $this->_global_cache_id . $cache_id;
-        }
-        return parent::clearCache($template_name,$cache_id,$compile_id,$exp_time,$type);
-    }
-
-    /**
-     * isCached method
-     * NOTE: Overwrites parent
-     *
-     * @param mixed $template_name
-     * @param int $cache_id
-     * @param int $compile_id
-     * @param mixed $parent
-     * @return mixed
-     */
-    public function isCached($template = null,$cache_id = null,$compile_id = null, $parent = null)
-    {
-        if( is_null($cache_id) || $cache_id === '' ) {
-            $cache_id = $this->_global_cache_id;
-        }
-        else if( $cache_id[0] == '|' ) {
-            $cache_id = $this->_global_cache_id . $cache_id;
-        }
-        return parent::isCached($template,$cache_id,$compile_id,$parent);
-    }
 
     /**
      * Error console
@@ -371,13 +279,12 @@ class Smarty extends smarty_base_template
      * @return html
      * @author Stikki
      */
-    public function errorConsole(Exception $e)
+    public function errorConsole(\Exception $e)
     {
         $this->force_compile = true;
 
         # do not show smarty debug console popup to users not logged in
         //$this->debugging = get_userid(FALSE);
-        debug_display($e); die();
         $this->assign('e_line', $e->getLine());
         $this->assign('e_file', $e->getFile());
         $this->assign('e_message', $e->getMessage());
@@ -402,6 +309,8 @@ class Smarty extends smarty_base_template
      * plugin filename format: plugintype.pluginname.php
      *
      * Note: this method overrides the one in the smarty base class and provides more testing.
+     * We need this function (v2.3+) because the parent method does other checks on the function name
+     * and because we still support smarty_cms_function and smarty_nocache_function...
      *
      * @param string $plugin_name    class plugin name to load
      * @param bool   $check          check if already loaded
@@ -409,7 +318,6 @@ class Smarty extends smarty_base_template
      */
     public function loadPlugin($plugin_name, $check = true)
     {
-        // if function or class exists, exit silently (already loaded)
         if ($check && (is_callable($plugin_name) || class_exists($plugin_name, false))) return true;
 
         // Plugin name is expected to be: Smarty_[Type]_[Name]
@@ -436,8 +344,6 @@ class Smarty extends smarty_base_template
         // plugin filename is expected to be: [type].[name].php
         $_plugin_filename = "{$_name_parts[1]}.{$_name_parts[2]}.php";
 
-        $_stream_resolve_include_path = function_exists('stream_resolve_include_path');
-
         // loop through plugin dirs and find the plugin
         foreach($this->getPluginsDir() as $_plugin_dir) {
             $names = array($_plugin_dir . $_plugin_filename,
@@ -447,26 +353,14 @@ class Smarty extends smarty_base_template
             foreach ($names as $file) {
                 if (file_exists($file)) {
                     require_once($file);
-                    if( is_callable($plugin_name) || class_exists($plugin_name, false) ) return $file;
-                }
-
-                if ($this->use_include_path &&
-                    !preg_match('/^([\/\\\\]|[a-zA-Z]:[\/\\\\])/', $_plugin_dir)) {
-                    // try PHP include_path
-                    if ($_stream_resolve_include_path) {
-                        $file = stream_resolve_include_path($file);
-                    } else {
-                        $file = Smarty_Internal_Get_Include_Path::getIncludePath($file);
-                    }
-
-                    if ($file !== false) {
-                        require_once($file);
-                        if( is_callable($plugin_name) || class_exists($plugin_name, false) ) return $file;
+                    if( is_callable($plugin_name) || class_exists($plugin_name, false) ) {
+                        return $file;
                     }
                 }
             }
         }
 
+        // no plugin loaded
         return false;
     }
 

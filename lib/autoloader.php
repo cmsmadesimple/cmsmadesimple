@@ -120,10 +120,14 @@ function cms_autoloader($classname)
     }
 
     // if requesting a module..
+    // note, if force loading we include the file.
+    // if not forceloading.  we load the module.
     $modops = \ModuleOperations::get_instance();
-    if( $modops->get_module_filename( $classname ) ) {
-        $modops->get_module_instance( $classname );
-        return;
+    if( ($fn = $modops->get_module_filename( $classname )) ) {
+        if( is_file( $fn ) ) {
+            require_once($fn);
+            return;
+        }
     }
 
     // loaded module classes.

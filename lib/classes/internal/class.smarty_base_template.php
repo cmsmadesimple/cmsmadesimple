@@ -30,7 +30,10 @@ require_once(CMS_ROOT_PATH.'/lib/smarty/Smarty.class.php');
 
 
 /**
- * Smarty Backward Compatibility Wrapper Class
+ * Smarty Backward Compatibility Wrapper Class.
+ *
+ * This class was written to replace the SmartyBC class (it was actually a trimmed down copy)
+ * because of problems that the SmartyBC class allowed and we could get rid of.
  *
  * @package Smarty
  */

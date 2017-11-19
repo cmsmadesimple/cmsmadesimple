@@ -559,14 +559,6 @@ $(document).ready(function(){
 		</div>
 
 		<div class="pageoverflow">
-			<p class="pagetext"><label for="smartycache">{lang('prompt_use_smartycaching')}:</label></p>
-			<p class="pageinput">
-				<select id="smartycache" name="use_smartycache">
-					{html_options options=$yesno selected=$use_smartycache}
-				</select>&nbsp;{cms_help key2='settings_smartycaching' title=lang('prompt_use_smartycaching')}
-			</p>
-		</div>
-		<div class="pageoverflow">
 			<p class="pagetext"><label for="compilecheck">{lang('prompt_smarty_compilecheck')}:</label></p>
 			<p class="pageinput">
 				<select for="compilecheck" name="use_smartycompilecheck">

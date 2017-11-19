@@ -141,12 +141,6 @@ abstract class CMSModule
         case 'cms':
             return CmsApp::get_instance();
 
-        case 'smarty':
-            /* deprecated */
-            $tpl = $this->GetActionTemplateObject();
-            if( $tpl ) return $tpl;
-            return \Smarty_CMS::get_instance();
-
         case 'config':
             return \cms_config::get_instance();
 
@@ -1469,10 +1463,8 @@ abstract class CMSModule
         $smarty->assign('returnid',$returnid);
         $smarty->assign('mod',$this);
 
-        // here it would be nice if... we called a controller class.
-        // how do we know the controller, is it magic.
         $saved_action_tpl = $this->_action_tpl;
-        $this->_action_tpl = $smarty;
+        $this->_action_tpl = $smarty; // parent smarty template,  which is the global smarty object if this is called directly from a template
         $output = $this->DoAction($name, $id, $params, $returnid);
         $this->_action_tpl = $saved_action_tpl;
 

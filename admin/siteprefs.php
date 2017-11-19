@@ -123,7 +123,6 @@ $content_cssnameisblockname = 1;
 $contentimage_path = '';
 $adminlog_lifetime = (3600*24*31);
 $search_module = 'Search';
-$use_smartycache = 0;
 $use_smartycompilecheck = 1;
 $mailprefs = array('mailer'=>'mail',
 		   'host'=>'localhost',
@@ -178,7 +177,6 @@ $content_cssnameisblockname = cms_siteprefs::get('content_cssnameisblockname',$c
 $contentimage_path = cms_siteprefs::get('contentimage_path',$contentimage_path);
 $adminlog_lifetime = cms_siteprefs::get('adminlog_lifetime',$adminlog_lifetime);
 $search_module = cms_siteprefs::get('searchmodule',$search_module);
-$use_smartycache = cms_siteprefs::get('use_smartycache',$use_smartycache);
 $use_smartycompilecheck = cms_siteprefs::get('use_smartycompilecheck',$use_smartycompilecheck);
 $tmp = cms_siteprefs::get('mailprefs');
 if( $tmp ) $mailprefs = unserialize($tmp);
@@ -408,10 +406,6 @@ if (isset($_POST["editsiteprefs"])) {
             break;
 
         case 'smarty':
-            if( isset($_POST['use_smartycache']) ) {
-                $use_smartycache = (int)$_POST['use_smartycache'];
-                cms_siteprefs::set('use_smartycache',$use_smartycache);
-            }
             if( isset($_POST['use_smartycompilecheck']) ) {
                 $use_smartycompilecheck = (int)$_POST['use_smartycompilecheck'];
                 cms_siteprefs::set('use_smartycompilecheck',$use_smartycompilecheck);
@@ -536,7 +530,6 @@ $smarty->assign('content_cssnameisblockname',$content_cssnameisblockname);
 $smarty->assign('contentimage_path',$contentimage_path);
 $smarty->assign('adminlog_lifetime',$adminlog_lifetime);
 $smarty->assign('search_module',$search_module);
-$smarty->assign('use_smartycache',$use_smartycache);
 $smarty->assign('use_smartycompilecheck',$use_smartycompilecheck);
 
 $tmp = array(
