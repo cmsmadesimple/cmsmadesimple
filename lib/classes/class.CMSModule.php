@@ -2232,7 +2232,10 @@ abstract class CMSModule
     }
 
     /**
-     * Process A File template through smarty
+     * Process A File template through smarty.
+     *
+     * If called from within a module action, this method will use the action template object.
+     * Otherwise, the global smarty object will be used..
      *
      * @final
      * @param string  $tpl_name    Template name
@@ -2244,7 +2247,9 @@ abstract class CMSModule
     final public function ProcessTemplate($tpl_name, $designation = '', $cache = false, $cacheid = '')
     {
         if( strpos($tpl_name, '..') !== false ) return;
-        return $this->_action_tpl->fetch('module_file_tpl:'.$this->GetName().';'.$tpl_name );
+        $template = $this->_action_tpl;
+        if( !$template ) $template = \CmsApp::get_instance()->GetSmarty();
+        return $template->fetch('module_file_tpl:'.$this->GetName().';'.$tpl_name );
     }
 
     /**

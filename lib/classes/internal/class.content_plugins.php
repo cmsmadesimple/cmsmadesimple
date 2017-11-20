@@ -203,7 +203,10 @@ final class content_plugins
     }
 
     /**
-     * This is handling of the {content} block
+     * This is handling of the {content} blocks.
+     *
+     * once we determine the content block to render, we use the $smarty->fetch() method to request the content: resource
+     * to process the value of the content blocks through smarty.
      *
      * @since 1.11
      * @author calguy1000
@@ -222,6 +225,7 @@ final class content_plugins
             // otherwise other block
             $output = null;
             if( $block == 'content_en' ) {
+		// was the data prefetched ?
                 $result = self::get_default_content_block_content( $contentobj->Id(), $smarty );
             }
             if( !$result ) {

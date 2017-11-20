@@ -123,7 +123,6 @@ while( $trycount < 2 ) {
         $html = null;
         $showtemplate = $_app->template_processing_allowed();
         if( !$showtemplate ) {
-            // in smarty 3, we could use eval:{content} I think
             $html = \CMSMS\internal\content_plugins::get_default_content_block_content( $contentobj->Id(), $smarty );
             $trycount = 99;
         }
@@ -277,7 +276,6 @@ while( $trycount < 2 ) {
 } // end while trycount
 
 \CMSMS\HookManager::do_hook( 'Core::ContentPostRender', [ 'content' => &$html ] );
-
 if( !headers_sent() ) {
     $ct = $_app->get_content_type();
     header("Content-Type: $ct; charset=" . CmsNlsOperations::get_encoding());
@@ -290,13 +288,13 @@ if( $page == __CMS_PREVIEW_PAGE__ && isset($_SESSION['__cms_preview__']) ) unset
 
 $debug = (defined('CMS_DEBUG') && CMS_DEBUG)?TRUE:FALSE;
 if( $debug || isset($config['log_performance_info']) || (isset($config['show_performance_info']) && ($showtemplate == true)) ) {
+    $endtime = microtime();
     $memory = (function_exists('memory_get_usage')?memory_get_usage():0);
     $memory = $memory - $orig_memory;
     $db = $_app->GetDb();
     $sql_time = round($db->query_time_total,5);
     $sql_queries = $db->query_count;
     $memory_peak = (function_exists('memory_get_peak_usage')?memory_get_peak_usage():'n/a');
-    $endtime = microtime();
     $time = microtime_diff($starttime,$endtime);
 
     if( isset($config['log_performance_info']) ) {

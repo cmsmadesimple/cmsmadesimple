@@ -1140,8 +1140,8 @@ function setup_session($cachable = FALSE)
     else {
         // frontend request
         $expiry = (int)max(0,cms_siteprefs::get('browser_cache_expiry',60));
-        @session_cache_expire($expiry);
-        @session_cache_limiter('public');
+        session_cache_expire($expiry);
+        session_cache_limiter('public');
         @header_remove('Last-Modified');
     }
 
