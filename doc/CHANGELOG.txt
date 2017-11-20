@@ -1,4 +1,4 @@
-Version 2.2.4 - NO NAME
+Version 2.2.4 - Little Paradise
 ----------------------------------
 Core - General
   - Improvements to the Hook class.
