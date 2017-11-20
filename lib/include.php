@@ -81,7 +81,9 @@ debug_buffer('done loading basic files');
 $_app = CmsApp::get_instance(); // for use in this file only.
 $config = $_app->GetConfig();
 \CMSMS\AuditManager::init();
-//\CMSMS\AuditManager::get_instance();  // initialize the audit manager.
+
+// Set the timezone
+if( $config['timezone'] != '' ) @date_default_timezone_set(trim($config['timezone']));
 
 if ($config["debug"] == true) {
     @ini_set('display_errors',1);
@@ -154,9 +156,6 @@ $obj = new \CMSMS\internal\global_cachable('module_deps',
 cms_siteprefs::setup();
 Events::setup();
 ContentOperations::setup_cache();
-
-// Set the timezone
-if( $config['timezone'] != '' ) @date_default_timezone_set(trim($config['timezone']));
 
 // Attempt to override the php memory limit
 if( isset($config['php_memory_limit']) && !empty($config['php_memory_limit'])  ) ini_set('memory_limit',trim($config['php_memory_limit']));
