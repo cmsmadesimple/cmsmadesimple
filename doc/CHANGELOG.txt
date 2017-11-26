@@ -76,6 +76,7 @@ Core - General
   - Convert admin passwords to use PHP's builtin password_hash and password_verify methods.  Still backwards compatible with older style for
     upgrades and resetting lost passwords.
   - Change smarty template directories for admin requests to include /assets/templates.
+  - Allow svg files to be cached and deflated in the sample htaccess.txt file
   - TODO  Migrate the tasks related to the old admin log into AdminLog module.
 
 CMSContentManager - 1.2

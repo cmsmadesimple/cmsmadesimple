@@ -76,7 +76,7 @@ RedirectMatch 403 ^.*/assets/.*\.tpl$
 # The following setups compression for content, if compression is enabled on the server.
 #
 <IfModule deflate_module>
-	AddOutputFilterByType DEFLATE text/html text/css text/plain text/html text/xml image/gif image/jpeg image/png image/ico text/javascript application/x-javascript application/javascript application/json application/pdf
+	AddOutputFilterByType DEFLATE text/html text/css text/plain text/html text/xml image/gif image/jpeg image/png image/ico text/javascript application/x-javascript application/javascript application/json application/pdf image/svg+xml
 </IfModule>
 
 #
@@ -92,6 +92,7 @@ RedirectMatch 403 ^.*/assets/.*\.tpl$
 	ExpiresByType image/gif "access plus 1 year"
 	ExpiresByType image/ico "access plus 1 year"
 	ExpiresByType image/png "access plus 1 year"
+	ExpiresByType image/svg+xml "access plus 1 year"
 	ExpiresByType video/x-flv "access plus 1 year"
 	ExpiresByType application/pdf "access plus 1 year"
 	ExpiresByType application/x-shockwave-flash "access plus 1 year"
