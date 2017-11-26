@@ -1,5 +1,6 @@
 <?php
 namespace CMSMS\internal;
+use \CmsLayoutTemplateType;
 
 final class std_layout_template_callbacks
 {

@@ -186,8 +186,7 @@ class MarigoldTheme extends CmsAdminThemeBase {
 		$module_help_type = $this->get_value('module_help_type');
 
 		// get a page title
-		$title = $this->get_value('pagetitle');
-		$alias = $this->get_value('pagetitle');
+		$alias = $title = $this->get_value('pagetitle');
 		if ($title) {
 			if (!$module_help_type) {
 				// if not doing module help, translate the string.
@@ -208,6 +207,7 @@ class MarigoldTheme extends CmsAdminThemeBase {
 		    }
 		  }
 		}
+
         // page title and alias
 		$smarty->assign('pagetitle', $title);
         $smarty->assign('subtitle',$this->subtitle);

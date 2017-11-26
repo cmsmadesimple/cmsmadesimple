@@ -73,7 +73,7 @@
 				  <aside>
 				    <span title="{'open'|lang}/{'close'|lang}" class="toggle-button close"></span>
  			            {include file='navigation.tpl' nav=$theme->get_navigation_tree()}
-				    </aside>
+				  </aside>
 				</div>
 				<!-- end sidebar //-->
 				<!-- start main -->
