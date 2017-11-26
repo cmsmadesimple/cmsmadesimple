@@ -18,6 +18,8 @@
 #
 #$Id$
 
+use \CMSMS\internal\module_meta;
+
 /**
  * Classes and utilities for operationg on and with modules
  *

@@ -34,6 +34,8 @@
 #-------------------------------------------------------------------------
 #END_LICENSE
 
+use \CMSMS\internal\ContentAssistant;
+
 /**
  * An abstract class for building edit content assistant objects.
  */

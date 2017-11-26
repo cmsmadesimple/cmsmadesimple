@@ -78,11 +78,12 @@ Core - General
   - Change smarty template directories for admin requests to include /assets/templates.
   - TODO  Migrate the tasks related to the old admin log into AdminLog module.
 
-CMSContentManager - remember to bump version
+CMSContentManager - 1.2
   - Gets rid of secure options, flag output and bulk functionaltiy
   - modified to use CMS_ROOT_URL
   - Change connection timeout to 1 second.
   - Change processing to be a little more friendly to some environments wrt. content-size header.
+  - Adds expand/functionality into reorder content (TODO: needs styling)
 
 Installation Assistant - remember to bump version
   - Now require at least version 2.0.1 to upgrade

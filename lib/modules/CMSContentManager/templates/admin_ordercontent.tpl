@@ -11,8 +11,7 @@
         return tags;
     }
 
-
-    $(document).ready(function() {
+    $(function(){
         $(document).on('click', '#btn_submit', function(ev) {
 	    ev.preventDefault();
 	    var form = $(this).closest('form');
@@ -22,6 +21,20 @@
                 $('#orderlist').val(tree);
 		form.submit();
             });
+        });
+
+        $(document).on('click', '.haschildren',function(ev) {
+	   ev.preventDefault();
+	   var list = $(this).closest('div.label').next('ul');
+	   if( $(this).hasClass('expanded') ) {
+	       // currently expanded... so now collapse
+	       list.hide();
+	       $(this).removeClass('expanded').addClass('collapsed').text('+');
+           } else {
+	       // currently collapsed... so now expand
+	       list.show();
+	       $(this).removeClass('collapsed').addClass('expanded').text('-');
+	   }
         });
 
         $('ul.sortable').nestedSortable({
@@ -45,6 +58,9 @@
 		<li id="page_{$obj->Id()}" {if !$obj->WantsChildren()}class="no-nest"{/if}>
 			<div class="label" {if !$obj->Active()}style="color: red;"{/if}>
 				<span>&nbsp;</span>{$obj->Hierarchy()}:&nbsp;{$obj->Name()|cms_escape}{if !$obj->Active()}&nbsp;({$mod->Lang('prompt_inactive')}){/if} <em>({$obj->MenuText()|cms_escape})</em>
+				{if $node->has_children()}
+				    <span class="haschildren expanded">-</span>
+				{/if}
 			</div>
 			{if $node->has_children()}
 			<ul>

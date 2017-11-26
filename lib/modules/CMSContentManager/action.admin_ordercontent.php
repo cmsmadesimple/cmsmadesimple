@@ -121,4 +121,3 @@ echo $this->ProcessTemplate('admin_ordercontent.tpl');
 #
 # EOF
 #
-?>

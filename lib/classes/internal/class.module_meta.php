@@ -18,6 +18,10 @@
 #
 #$Id$
 
+namespace CMSMS\internal;
+use \cms_cache_handler;
+use \ModuleOperations;
+
 /**
  * @package CMS
  */
