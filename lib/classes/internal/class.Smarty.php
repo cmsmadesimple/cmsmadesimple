@@ -70,12 +70,12 @@ class Smarty extends smarty_base_template
         $this->addPluginsDir(CMS_ASSETS_PATH.'/plugins');
         $this->addPluginsDir(CMS_ROOT_PATH.'/plugins'); // deprecated
         $this->addPluginsDir(CMS_ROOT_PATH.'/lib/plugins');
-        $this->addTemplateDir(cms_join_path(CMS_ROOT_PATH, 'lib', 'assets', 'templates'));
 
         $_gCms = \CmsApp::get_instance();
         $config = \cms_config::get_instance();
         if( $_gCms->is_frontend_request()) {
             $this->addTemplateDir(CMS_ASSETS_PATH.'/templates');
+            $this->addTemplateDir(CMS_ROOT_PATH.'/lib/assets/templates');
 
             // Check if we are at install page, don't register anything if so, cause nothing below is needed.
             if(isset($CMS_INSTALL_PAGE)) return;
@@ -108,7 +108,8 @@ class Smarty extends smarty_base_template
             $this->setCaching(false);
             $admin_dir = $config['admin_path'];
             $this->addPluginsDir($admin_dir.'/plugins');
-            $this->setTemplateDir($admin_dir.'/templates');
+            $this->addTemplateDir($admin_dir.'/templates');
+            $this->addTemplateDir(CMS_ROOT_PATH.'/lib/assets/templates');
             $this->setConfigDir($admin_dir.'/configs');;
         }
     }
@@ -258,7 +259,7 @@ class Smarty extends smarty_base_template
      * @return html
      * @author Stikki
      */
-    public function errorConsole(\Exception $e)
+    public function errorConsole(\Exception $e, $allow_trace = true)
     {
         $this->force_compile = true;
 
@@ -269,6 +270,7 @@ class Smarty extends smarty_base_template
         $this->assign('e_message', $e->getMessage());
         $this->assign('e_trace', htmlentities($e->getTraceAsString()));
         $this->assign('loggedin',get_userid(FALSE));
+        if( !$allow_trace ) $this->assign('e_trace',null);
 
         // put mention into the admin log
         cms_error('Smarty Error: '. substr( $e->getMessage(),0 ,200 ) );

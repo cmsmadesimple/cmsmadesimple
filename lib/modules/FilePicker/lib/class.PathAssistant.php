@@ -8,7 +8,7 @@ class PathAssistant
 
     public function __construct(\cms_config $config, $topdir)
     {
-        if( !$topdir || !is_dir($topdir) ) throw new \LogicException('Invalid topdir passed to '.__METHOD__);
+        if( !$topdir || !is_dir($topdir) ) throw new \LogicException("Invalid topdir $topdir passed to ".__METHOD__);
         if( !$this->is_relative_to( $topdir, $config['root_path'] ) ) throw new \LogicException('Invalid topdir passed to '.__METHOD__);
 
         if( endswith( $topdir, '/') ) $topdir = substr($topdir,0,-1);

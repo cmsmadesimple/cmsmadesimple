@@ -134,10 +134,12 @@
 						<strong>Message:</strong>
 					</p>
 					<pre>{$e_message}</pre>
-					<p class="message btn">
-						<a id="open" href="javascript:toggle();">View Full Trace &darr;</a>
-					</p>
-					<pre id="show" style="display: none;">{$e_trace}</pre>
+					{if !empty($e_trace)}
+					        <p class="message btn">
+						        <a id="open" href="javascript:toggle();">View Full Trace &darr;</a>
+						</p>
+						<pre id="show" style="display: none;">{$e_trace}</pre>
+					{/if}
 				</div>
 			{/if}
         </div>

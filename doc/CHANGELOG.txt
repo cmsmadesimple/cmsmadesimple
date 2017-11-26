@@ -75,6 +75,7 @@ Core - General
     un-deprecated.
   - Convert admin passwords to use PHP's builtin password_hash and password_verify methods.  Still backwards compatible with older style for
     upgrades and resetting lost passwords.
+  - Change smarty template directories for admin requests to include /assets/templates.
   - TODO  Migrate the tasks related to the old admin log into AdminLog module.
 
 CMSContentManager - remember to bump version
@@ -82,9 +83,6 @@ CMSContentManager - remember to bump version
   - modified to use CMS_ROOT_URL
   - Change connection timeout to 1 second.
   - Change processing to be a little more friendly to some environments wrt. content-size header.
-
-FileManager - remember to bump version
-  - modified to use CMS_ROOT_URL
 
 Installation Assistant - remember to bump version
   - Now require at least version 2.0.1 to upgrade
@@ -94,9 +92,11 @@ ModuleManaver v2.2
   - XML export code now lives here.
 
 FileManager v1.6.4
+  - modified to use CMS_ROOT_URL
   - Add a different icon for navigating up one level.
   - No longer allow uploading any php (or derivative) file.
   - No longer allow renaming any file to have a .php extension (or a derivative).
+  - Now use CMSMS error console when displaying filepicker exceptions (no uncaught exceptions)
 
 FilePicker v1.0.1
   - No longer allow overriding the filepicker type on the URL.
