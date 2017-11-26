@@ -19,21 +19,22 @@
 #
 #-------------------------------------------------------------------------
 if( !isset($gCms) ) exit;
-if( !$this->VisibleToAdminUser() ) exit;
+if( !$this->VisibleToAdminUser() ) return;
 
-// echo $this->StartTabHeaders();
-// if( $this->can_search() ) echo $this->SetTabHeader('search',$this->Lang('search'));
-// echo $this->EndTabHeaders();
+$template = get_parameter_value( $params, 'template', 'defaultadmin.tpl' );
+$url = $this->create_url($id,'admin_search');
+$url = str_replace('&amp;','&',$url).'&showtemplate=false';
+$smarty->assign('ajax_url',$url);
+$smarty->assign('js_url',$this->GetModuleURLPath().'/lib/admin_search_tab.js');
 
-//echo $this->StartTabContent();
-if( $this->can_search() ) {
-  //echo $this->StartTab('search', $params);
-  include(dirname(__FILE__).'/function.admin_search_tab.php');
-  //echo $this->EndTab();
-}
+$userid = get_userid();
+$tmp = get_preference($userid,$this->GetName().'saved_search');
+if( $tmp ) $smarty->assign('saved_search',unserialize($tmp));
 
-//echo $this->EndTabContent();
+$slaves = AdminSearch_tools::get_slave_classes();
+$smarty->assign('slaves',$slaves);
+
+echo $this->ProcessTemplate($template);
 #
 # EOF
 #
-?>

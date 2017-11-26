@@ -31,7 +31,7 @@
 <script type="text/javascript" src="{$js_url}"></script>
 
 <div id="adminsearchform">
-{$formstart}
+{form_start action=admin_search}
 
 <table class="pagetable">
 <tr valign="top">
@@ -75,7 +75,7 @@
     </ul>
   </div>
 </fieldset>
-{$formend}
+{form_end}
 </div>
 
 <iframe id="workarea" name="workarea"></iframe>
