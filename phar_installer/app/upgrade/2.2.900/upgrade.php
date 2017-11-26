@@ -34,6 +34,15 @@ if( count($udt_list) ) {
     $sqlarr = $dict->DropTableSQL(CMS_DB_PREFIX.'userplugins');
     $dict->ExecuteSQLArray($sqlarr);
     status_msg('Converted User Defined Tags to simple_plugin structure');
+
+    $db->Execute( 'ALTER TABLE '.CMS_DB_PREFIX.'users MODIFY username VARCHAR(80)' );
+    $db->Execute( 'ALTER TABLE '.CMS_DB_PREFIX.'users MODIFY password VARCHAR(128)' );
+
+    verbose_msg(ilang('upgrading_schema',202));
+    $query = 'UPDATE '.CMS_DB_PREFIX.'version SET version = 202';
+    $db->Execute($query);
+
+
 }
 
 // 2. Move MenuManager, which is no longer a distributed module,  to /Assets/Plugins
@@ -42,3 +51,15 @@ $to = "$destdir/assets/modules/MenuManager";
 if( is_dir( $fr ) && !is_dir( $to ) ) {
    rename( $fr, $to );
 }
+
+// tweak callbacks for page and generic layout templatet types.
+$page_type = \CMSLayoutTemplateType::load('__CORE__::page');
+$page_type_type->set_lang_callback('\\CMSMS\internal\\std_layout_template_callbacks::page_type_lang_callback');
+$page_type_type->set_content_callback('\\CMSMS\internal\\std_layout_template_callbacks::reset_page_type_defaults');
+$page_type_type->set_help_callback('\\CMSMS\internal\\std_layout_template_callbacks::template_help_callback');
+$page_type->save();
+
+$generic_type = \CMSLayoutTemplateType::load('__CORE__::generic');
+$generic_type_type->set_lang_callback('\\CMSMS\internal\\std_layout_template_callbacks::generic_type_lang_callback');
+$generic_type_type->set_help_callback('\\CMSMS\internal\\std_layout_template_callbacks::template_help_callback');
+$page_type->save();

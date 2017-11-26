@@ -388,8 +388,8 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 
 	$flds = "
 		user_id I KEY,
-		username C(25),
-		password C(40),
+		username C(80),
+		password C(128),
 		admin_access I1,
 		first_name C(50),
 		last_name C(50),

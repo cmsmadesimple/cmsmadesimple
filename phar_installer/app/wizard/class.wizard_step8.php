@@ -103,12 +103,6 @@ class wizard_step8 extends \cms_autoinstaller\wizard_step
             $this->verbose(\__appbase\lang('install_setsequence'));
             include_once($dir.'/createseq.php');
 
-            if( $adminaccount['saltpw'] ) {
-                $this->verbose(\__appbase\lang('install_passwordsalt'));
-                $salt = substr(str_shuffle(md5($destdir).time()),0,16);
-                \cms_siteprefs::set('sitemask',$salt);
-            }
-
             // create tmp directories
             $this->verbose(\__appbase\lang('install_createtmpdirs'));
             @mkdir($destdir.'/tmp/cache',0777,TRUE);

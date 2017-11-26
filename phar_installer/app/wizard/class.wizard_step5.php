@@ -10,7 +10,7 @@ class wizard_step5 extends \cms_autoinstaller\wizard_step
     public function __construct()
     {
         parent::__construct();
-        $this->_adminacct = array('username'=>'admin','emailaddr'=>'','password'=>'','repeatpw'=>'','saltpw'=>1,'emailaccountinfo'=>1);
+        $this->_adminacct = array('username'=>'admin','emailaddr'=>'','password'=>'','repeatpw'=>'','emailaccountinfo'=>1);
         $tmp = $this->get_wizard()->get_data('adminaccount');
         if( is_array($tmp) && count($tmp) ) $this->_adminacct = $tmp;
     }
@@ -38,7 +38,6 @@ class wizard_step5 extends \cms_autoinstaller\wizard_step
         $this->_adminacct['emailaddr'] = trim(\__appbase\utils::clean_string($_POST['emailaddr']));
         $this->_adminacct['password'] = trim(\__appbase\utils::clean_string($_POST['password']));
         $this->_adminacct['repeatpw'] = trim(\__appbase\utils::clean_string($_POST['repeatpw']));
-        if( isset($_POST['saltpw']) ) $this->_adminacct['saltpw'] = (int)$_POST['saltpw'];
         $this->_adminacct['emailaccountinfo'] = 1;
         if( isset($_POST['emailaccountinfo']) ) $this->_adminacct['emailaccountinfo'] = (int)$_POST['emailaccountinfo'];
 

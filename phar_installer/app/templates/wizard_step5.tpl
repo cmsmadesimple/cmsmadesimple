@@ -65,16 +65,6 @@
         {if $verbose}
         <div class="row form-row">
             <div class="four-col">
-                <label>{'saltpasswords'|tr}</label>
-            </div>
-            <div class="eight-col">
-                <select name="saltpw" class="form-field">
-                    {html_options options=$yesno selected=$account.saltpw}
-                </select>
-            </div>
-        </div>
-        <div class="row form-row">
-            <div class="four-col">
                 <label>{'emailaccountinfo'|tr}</label>
             </div>
             <div class="eight-col">

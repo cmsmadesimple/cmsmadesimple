@@ -3,7 +3,7 @@ global $admin_user;
 
 status_msg(ilang('install_requireddata'));
 
-$query = 'INSERT INTO '.CMS_DB_PREFIX.'version VALUES (202)';
+$query = 'INSERT INTO '.CMS_DB_PREFIX.'version VALUES (203)';
 $db->Execute($query);
 verbose_msg(ilang('install_setschemaver'));
 
@@ -84,7 +84,7 @@ $admin_user->username = $adminaccount['username'];
 if( isset($adminaccount['emailaddr']) && $adminaccount['emailaddr'] ) $admin_user->email = $adminaccount['emailaddr'];
 $admin_user->active = 1;
 $admin_user->adminaccess = 1;
-$admin_user->password = md5($sitemask.$adminaccount['password']);
+$admin_user->password = password_hash( $adminaccount['password'], PASSWORD_BCRYPT );
 $admin_user->Save();
 UserOperations::get_instance()->AddMemberGroup($admin_user->id,$admin_group->id);
 cms_userprefs::set_for_user($admin_user->id,'wysiwyg','MicroTiny'); // the one, and only user preference we need.

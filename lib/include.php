@@ -207,4 +207,6 @@ if( !isset($DONT_LOAD_SMARTY) ) {
     $smarty->assignGlobal('sitename', cms_siteprefs::get('sitename', 'CMSMS Site'));
 }
 
-require_once($dirname.'/classes/internal/class_compatibility.php');
+if( !isset($CMS_INSTALL_PAGE) ) {
+    require_once($dirname.'/classes/internal/class_compatibility.php');
+}
