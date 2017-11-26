@@ -109,7 +109,7 @@ $lang['estrict_enabled'] = 'E_STRICT is enabled in the PHPs error_reporting. Tho
 # F
 $lang['fail_assets_dir'] = 'An assets directory already exists.  This application may write to this directory to rationalize the location of files.  Please ensure that you have a backup';
 $lang['fail_assets_msg'] = 'An assets directory already exists.  This application may write to this directory to rationalize the location of files.  Please ensure that you have a backup';
-$lang['fail_config_writable'] = 'The HTTP process cannot write to the config.php file. Please try to change the permissions on this file to 777 until the upgrade process is complete';
+$lang['fail_config_writable'] = 'The HTTP process cannot write to the config.php file. Please try to change the permissions on this file to 777 until the installation assistant is complete';
 $lang['fail_curl_extension'] = 'The curl extension was not found. Though not a critical issue, this may cause problems with some third party modules';
 $lang['fail_database_support'] = 'No compatible database drivers found';
 $lang['fail_file_get_contents'] = 'The file_get_contents function does not exist, or is disabled. CMSMS Cannot continue (even the installer will probably fail)';

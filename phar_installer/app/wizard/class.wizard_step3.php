@@ -82,6 +82,13 @@ class wizard_step3 extends \cms_autoinstaller\wizard_step
                 }
             }
         } else {
+            $dest = $app->get_destdir();
+            $config_file = $dest.'/config.php';
+            $obj = new _tests_\boolean_test('config_writable',!is_file($config_file) || is_writable($config_file));
+            $obj->required = true;
+            $obj->fail_key = 'fail_config_writable';
+            $tests[] = $obj;
+
             $is_dir_empty = function($dir) {
                 $dir = trim($dir);
                 if( !$dir ) return FALSE;  // fail on invalid dir
@@ -95,7 +102,6 @@ class wizard_step3 extends \cms_autoinstaller\wizard_step
                 return FALSE;
             };
             $res = true;
-            $dest = $app->get_destdir();
             if( $res && !$is_dir_empty($dest.'/tmp/cache') ) $res = false;
             if( $res && !$is_dir_empty($dest.'/tmp/templates_c') ) $res = false;
 
