@@ -155,7 +155,7 @@ class UserOperations
 	 * Does not use a cache, so use sparingly.
 	 *
 	 * @param mixed $username Username to load
-	 * @param mixed $password Password to check against
+	 * @param mixed $password Password to check against (ignored)
 	 * @param mixed $activeonly Only load the user if they are active
 	 * @param mixed $adminaccessonly Only load the user if they have admin access
 	 * @return mixed If successful, the filled User object.  If it fails, it returns false.
@@ -175,11 +175,6 @@ class UserOperations
 		$query = "SELECT u.user_id FROM ".CMS_DB_PREFIX."users u";
 		$where[] = 'username = ?';
 		$params[] = $username;
-
-		if ($password != '') {
-			$where[] = 'password = ?';
-			$params[] = md5(get_site_preference('sitemask','').$password);
-		}
 
 		if ($activeonly == true) {
 			$joins[] = CMS_DB_PREFIX."user_groups ug ON u.user_id = ug.user_id";

@@ -180,9 +180,12 @@ else if( isset($_POST['loginsubmit']) ) {
     class CmsLoginError extends \CmsException {}
 
     try {
-        if( !$password ) throw new \LogicException(lang('usernameincorrect'));
+        if( !$password ) throw new CmsLoginError(lang('usernameincorrect'));
         $oneuser = $userops->LoadUserByUsername($username, $password, TRUE, TRUE);
         if( !$oneuser ) throw new CmsLoginError(lang('usernameincorrect'));
+        if( ! $oneuser->Authenticate( $password ) ) {
+            throw new CmsLoginError( lang('usernameincorrect') );
+        }
         $login_ops->save_authentication($oneuser);
 
         // put mention into the admin log

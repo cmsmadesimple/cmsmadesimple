@@ -120,8 +120,26 @@ class User
 	 */
 	function SetPassword($password)
 	{
-		$this->password = md5(get_site_preference('sitemask','').$password);
+        $this->password = password_hash( $password, PASSWORD_BCRYPT );
 	}
+
+    /**
+     * Authenticate a users password.
+     *
+     * @since 2.3
+     * @param string $password The plaintext password.
+     * @author calguy1000
+     */
+    public function Authenticate( $password )
+    {
+        if( strlen($this->password) == 32 && strpos( $this->password, '.') === FALSE ) {
+            // old md5 methodology
+            $hash = md5( get_site_preference('sitemask','').$password);
+            return ($hash == $this->password);
+        } else {
+            return password_verify( $password, $this->password );
+        }
+    }
 
 	/**
 	 * Saves the user to the database.  If no user_id is set, then a new record
