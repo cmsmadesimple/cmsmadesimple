@@ -109,7 +109,7 @@ final class CmsApp {
 	 * Internal error array - So functions/modules can store up debug info and spit it all out at once
 	 * @ignore
 	 */
-	private $errors = array();
+	private $errors = [];
 
     /**
      * Get the simple plugin operations class
@@ -120,7 +120,7 @@ final class CmsApp {
 	/**
 	 * @ignore
 	 */
-	public function __get($key)
+	public function __get(string $key)
 	{
 		switch($key) {
 		case 'config':
@@ -188,9 +188,9 @@ final class CmsApp {
 	 * @access private
 	 * @param string The error message.
 	 */
-	public function add_error($str)
+	public function add_error(string $str)
 	{
-		if( !is_array($this->errors) ) $this->errors = array();
+		if( !is_array($this->errors) ) $this->errors = [];
 		$this->errors[] = $str;
 	}
 
@@ -214,10 +214,10 @@ final class CmsApp {
 	 * @param string $mime_type
 	 * @since 2.0
 	 */
-	public function set_content_type($mime_type = '')
+	public function set_content_type(string $mime_type = null)
 	{
 		$this->_content_type = null;
-		if( isset($mime_type) ) $this->_content_type = $mime_type;
+		if( $mime_type ) $this->_content_type = $mime_type;
 	}
 
     /**
@@ -640,7 +640,7 @@ final class CmsApp {
 	 * @author Robert Campbell
 	 * @param string The state.  We recommend you use the class constants for this.
 	 */
-    public function remove_state($state)
+    public function remove_state(string $state)
     {
 		if( !in_array($state,self::$_statelist) ) throw new CmsInvalidDataException($state.' is an invalid CMSMS state');
 		$this->set_states();

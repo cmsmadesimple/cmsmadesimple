@@ -44,7 +44,7 @@ class layout_template_resource extends fixed_smarty_custom_resource
 		if( in_array($section,array('top','head','body')) ) $this->_section = $section;
 	}
 
-	public function buildUniqueResourceName(Smarty $smarty,$resource_name, $is_config = false)
+	public function buildUniqueResourceName(\Smarty $smarty,$resource_name, $is_config = false)
 	{
 		return parent::buildUniqueResourceName($smarty,$resource_name,$is_config).'--'.$this->_section;
 	}

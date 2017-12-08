@@ -64,7 +64,7 @@ class cms_content_tree extends cms_tree
      * @param bool $usequick Optionally, when searching by id... uise the quickfind method if possible.
 	 * @return cms_tree
 	 */
-	public function &find_by_tag($tag_name,$value,$case_insensitive = FALSE,$usequick = TRUE)
+	public function &find_by_tag(string $tag_name,$value,bool $case_insensitive = FALSE,bool $usequick = TRUE)
 	{
 		if( $usequick && $tag_name == 'id' && $case_insensitive == FALSE && ($this->get_parent() == null || $this->get_tag('id') == '') ) {
 			$res = ContentOperations::get_instance()->quickfind_node_by_id($value);
@@ -81,7 +81,7 @@ class cms_content_tree extends cms_tree
 	 * @param int $id
 	 * @return cms_content_tree
 	 */
-	public function sureGetNodeById($id)
+	public function sureGetNodeById(int $id)
 	{
         return ContentOperations::get_instance()->quickfind_node_by_id($id);
 	}
@@ -96,7 +96,7 @@ class cms_content_tree extends cms_tree
 	 * @param int $id
 	 * @return cms_content_tree
 	 */
-	public function getNodeById($id)
+	public function getNodeById(int $id)
 	{
 		return $this->find_by_tag('id',$id);
 	}
@@ -111,7 +111,7 @@ class cms_content_tree extends cms_tree
 	 * @param string $alias
 	 * @return cms_content_tree
 	 */
-	public function sureGetNodeByAlias($alias)
+	public function sureGetNodeByAlias(string $alias)
 	{
 		if( $alias == '' ) return;
 		if( (int)$alias > 0 && is_numeric($alias) ) return $this->find_by_tag('id',$alias,true);
@@ -128,7 +128,7 @@ class cms_content_tree extends cms_tree
 	 * @param string $alias
 	 * @return cms_content_tree
 	 */
-	public function getNodeByAlias($alias)
+	public function getNodeByAlias(string $alias)
 	{
 		return $this->find_by_tag('alias',$alias,true);
 	}
@@ -140,7 +140,7 @@ class cms_content_tree extends cms_tree
 	 * @param string $position
 	 * @return cms_content_tree or null.
 	 */
-	function getNodeByHierarchy($position)
+	function getNodeByHierarchy(string $position)
 	{
 		$result = null;
 		$id = ContentOperations::get_instance()->GetPageIDFromHierarchy($position);
@@ -174,7 +174,7 @@ class cms_content_tree extends cms_tree
 	 * @param string $key The tag name/key
 	 * @param mixed  $value The tag value
 	 */
-	public function setTag($key,$value)
+	public function setTag(string $key,$value)
 	{
 		return $this->set_tag($key,$value);
 	}
@@ -205,7 +205,7 @@ class cms_content_tree extends cms_tree
 	 * @param  string $key Tag name/key
 	 * @return mixed Node value.
 	 */
-	public function &getTag($key = 'id')
+	public function &getTag(string $key = 'id')
 	{
 		return $this->get_tag($key);
 	}
@@ -252,7 +252,7 @@ class cms_content_tree extends cms_tree
 	 * @param bool $loadsiblings load all the siblings for the selected content object at the same time (a preformance optimization)
 	 * @param bool $loadall If loading siblings, include inactive/disabled pages.
 	 */
-	public function &getContent($deep = false,$loadsiblings = true,$loadall = false)
+	public function &getContent(bool $deep = false,bool $loadsiblings = true,bool $loadall = false)
 	{
 		if( !cms_content_cache::content_exists($this->get_tag('id')) ) {
 			// not in cache
@@ -454,5 +454,3 @@ class cms_content_tree extends cms_tree
 	}
 
 } // end of class.
-
-?>

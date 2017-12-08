@@ -205,7 +205,7 @@ class ContentOperations
      * @param bool $loadprops Also load the properties of that content object. Defaults to false.
      * @return mixed The loaded content object. If nothing is found, returns FALSE.
      */
-	function &LoadContentFromId($id,$loadprops=false)
+	function &LoadContentFromId(int $id,bool $loadprops=false)
 	{
 		$result = FALSE;
         $id = (int) $id;
@@ -235,7 +235,7 @@ class ContentOperations
      * @param bool $only_active If true, only return the object if it's active flag is true. Defaults to false.
      * @return ContentBase The loaded content object. If nothing is found, returns NULL.
      */
-	function &LoadContentFromAlias($alias, $only_active = false)
+	function &LoadContentFromAlias(string $alias, bool $only_active = false)
 	{
 		if( cms_content_cache::content_exists($alias) ) return cms_content_cache::get_content($alias);
 
@@ -333,7 +333,7 @@ class ContentOperations
 	 * @param string The content type name
 	 * @return CmsContentTypePlaceHolder placeholder object.
 	 */
-	private function _get_content_type($name)
+	private function _get_content_type(string $name)
 	{
 		$name = strtolower($name);
 		$this->_get_content_types();
@@ -372,7 +372,7 @@ class ContentOperations
 	 * @param bool $system return only system content types.
 	 * @return array List of content types registered in the system.
 	 */
-	function ListContentTypes($byclassname = false,$allowed = false,$system = FALSE)
+	function ListContentTypes(bool $byclassname = false,bool $allowed = false,bool $system = FALSE)
 	{
 		$disallowed_a = array();
 		$tmp = cms_siteprefs::get('disallowed_contenttypes');
@@ -410,7 +410,7 @@ class ContentOperations
 	 * @param array $hash A hash of all content objects (only certain fields)
 	 * @return array|null
      */
-    private function _set_hierarchy_position($content_id,$hash)
+    private function _set_hierarchy_position(int $content_id,array $hash)
 	{
 		$row = $hash[$content_id];
 		$saved_row = $row;
@@ -516,7 +516,7 @@ class ContentOperations
 	 * @return cms_content_tree The cached tree of content
      * @deprecated
 	 */
-	function GetAllContentAsHierarchy($loadcontent = false)
+	function GetAllContentAsHierarchy(bool $loadcontent = false)
 	{
         $tree = \CMSMS\internal\global_cache::get('content_tree');
 		return $tree;
@@ -531,7 +531,7 @@ class ContentOperations
 	 * @param bool $inactive  Load inactive pages as well
 	 * @param bool $showinmenu Load pages marked as show in menu
 	 */
-	public function LoadAllContent($loadprops = FALSE,$inactive = FALSE,$showinmenu = FALSE)
+	public function LoadAllContent(bool $loadprops = FALSE,bool $inactive = FALSE,bool $showinmenu = FALSE)
 	{
 		static $_loaded = 0;
 		if( $_loaded == 1 ) return;
@@ -623,7 +623,7 @@ class ContentOperations
 	 * @param array   $explicit_ids (optional) array of explicit content ids to load
 	 * @author Ted Kulp
 	 */
-	function LoadChildren($id, $loadprops = false, $all = false, $explicit_ids = array() )
+	function LoadChildren(int $id = null, bool $loadprops = false, bool $all = false, array $explicit_ids = [] )
 	{
 		$db = CmsApp::get_instance()->GetDb();
 
@@ -712,7 +712,7 @@ class ContentOperations
 	 * @param int $id The id to set as default
 	 * @author Ted Kulp
 	 */
-	function SetDefaultContent($id)
+	function SetDefaultContent(int $id)
 	{
 		$db = CmsApp::get_instance()->GetDb();
 		$query = "SELECT content_id FROM ".CMS_DB_PREFIX."content WHERE default_content=1";
@@ -737,7 +737,7 @@ class ContentOperations
 	 * @param bool $loadprops Not implemented
 	 * @return array The array of content objects
 	 */
-	function &GetAllContent($loadprops=true)
+	function &GetAllContent(bool $loadprops=true)
 	{
 		debug_buffer('get all content...');
 		$gCms = CmsApp::get_instance();
@@ -824,7 +824,7 @@ class ContentOperations
 	 * @param string $alias The alias to query
 	 * @return int The resulting id.  null if not found.
 	 */
-	function GetPageIDFromAlias( $alias )
+	function GetPageIDFromAlias( string $alias )
 	{
 		$hm = CmsApp::get_instance()->GetHierarchyManager();
 	    $node = $hm->sureGetNodeByAlias($alias);
@@ -838,7 +838,7 @@ class ContentOperations
 	 * @param string $position The position to query
 	 * @return int The resulting id.  false if not found.
 	 */
-	function GetPageIDFromHierarchy($position)
+	function GetPageIDFromHierarchy( string $position )
 	{
 		$gCms = CmsApp::get_instance();
 		$db = $gCms->GetDb();
@@ -857,7 +857,7 @@ class ContentOperations
 	 * @param int $id The content id to query
 	 * @return string The resulting content alias.  false if not found.
 	 */
-	function GetPageAliasFromID( $id )
+	function GetPageAliasFromID( int $id )
 	{
         $node = $this->quickfind_node_by_id($id);
 		if( $node ) return $node->getTag('alias');
@@ -872,7 +872,7 @@ class ContentOperations
      * @return bool
      * @since 2.2.2
      */
-    public function CheckAliasUsed($alias,$content_id = -1)
+    public function CheckAliasUsed(string $alias,int $content_id = -1)
     {
         $alias = trim($alias);
         $content_id = (int) $content_id;
@@ -895,7 +895,7 @@ class ContentOperations
      * @return bool
      * @since 2.2.2
      */
-    public function CheckAliasValid($alias)
+    public function CheckAliasValid(string $alias)
     {
         if( ((int)$alias > 0 || (float)$alias > 0.00001) && is_numeric($alias) ) return FALSE;
 		$tmp = munge_string_to_url($alias,TRUE);
@@ -910,7 +910,7 @@ class ContentOperations
 	 * @param int $content_id The id of the current page, for used alias checks on existing pages
 	 * @return string The error, if any.  If there is no error, returns FALSE.
 	 */
-	function CheckAliasError($alias, $content_id = -1)
+	function CheckAliasError(string $alias, int $content_id = -1)
 	{
         if( !$this->CheckAliasValid($alias) ) return lang('invalidalias2');
         if ($this->CheckAliasUsed($alias,$content_id)) return lang('aliasalreadyused');
@@ -924,7 +924,7 @@ class ContentOperations
 	 * @param string $position The hierarchy position to convert
 	 * @return string The unfriendly version of the hierarchy string
 	 */
-	function CreateFriendlyHierarchyPosition($position)
+	function CreateFriendlyHierarchyPosition(string $position)
 	{
 		#Change padded numbers back into user-friendly values
 		$tmp = '';
@@ -944,7 +944,7 @@ class ContentOperations
 	 * @param string $position The hierarchy position to convert
 	 * @return string The friendly version of the hierarchy string
 	 */
-	function CreateUnfriendlyHierarchyPosition($position)
+	function CreateUnfriendlyHierarchyPosition(string $position)
 	{
 		#Change user-friendly values into padded numbers
 		$tmp = '';
@@ -966,7 +966,7 @@ class ContentOperations
 	 * @param int $base_id (optional) Page ID to act as the base page.  The current page is used if not specified.
 	 * @return bool
 	 */
-	public function CheckParentage($test_id,$base_id = null)
+	public function CheckParentage(int $test_id,int $base_id = null)
 	{
 		$gCms = CmsApp::get_instance();
 		if( !$base_id ) $base_id = $gCms->get_content_id();
@@ -989,7 +989,7 @@ class ContentOperations
 	 * @param int $userid The userid
 	 * @return array Array of integer page id's
 	 */
-	public function GetOwnedPages($userid)
+	public function GetOwnedPages(int $userid)
 	{
 		if( !is_array($this->_ownedpages) ) {
 			$this->_ownedpages = array();
@@ -1014,7 +1014,7 @@ class ContentOperations
 	 * @param int $pageid
 	 * @return bool
 	 */
-	public function CheckPageOwnership($userid,$pageid)
+	public function CheckPageOwnership(int $userid,int $pageid)
 	{
 		$pagelist = $this->GetOwnedPages($userid);
 		return in_array($pageid,$pagelist);
@@ -1028,7 +1028,7 @@ class ContentOperations
 	 * @param int $userid The userid
 	 * @return int[] Array of page id's
 	 */
-	public function GetPageAccessForUser($userid)
+	public function GetPageAccessForUser(int $userid)
 	{
 		if( !is_array($this->_authorpages) ) {
 			$this->_authorpages = array();
@@ -1066,7 +1066,7 @@ class ContentOperations
 	 * @param int $contentid
 	 * @return bool
 	 */
-	public function CheckPageAuthorship($userid,$contentid)
+	public function CheckPageAuthorship(int $userid,int $contentid)
 	{
 		$author_pages = $this->GetPageAccessForUser($userid);
 		return in_array($contentid,$author_pages);
@@ -1079,7 +1079,7 @@ class ContentOperations
 	 * @param int $contentid
 	 * @return bool
 	 */
-	public function CheckPeerAuthorship($userid,$contentid)
+	public function CheckPeerAuthorship(int $userid,int $contentid)
 	{
 		if( check_permission($userid,'Manage All Content') ) return TRUE;
 
@@ -1107,7 +1107,7 @@ class ContentOperations
 	 * @param int $id The page id
 	 * @return cms_content_tree
 	 */
-	public function quickfind_node_by_id($id)
+	public function quickfind_node_by_id(int $id)
 	{
         $list = \CMSMS\internal\global_cache::get('content_quicklist');
 		if( isset($list[$id]) ) return $list[$id];

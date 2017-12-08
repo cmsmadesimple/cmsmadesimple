@@ -35,7 +35,7 @@ if (isset($params['browsecat']) && $params['browsecat']==1) {
     return;
 }
 
-$entryarray = array();
+$entryarray = [];
 $query1 = "
             SELECT SQL_CALC_FOUND_ROWS
                 mn.*,
@@ -98,7 +98,7 @@ else {
     // we're concerned about start time, end time, and news_date
     if( isset($params['showarchive']) ) {
         // show only expired entries.
-        $query1 .= 'IF(end_time IS NULL,0,end_time < NOw())';
+        $query1 .= 'IF(end_time IS NULL,0,end_time < NOW())';
     }
     else {
         $query1 .= 'IF(start_time IS NULL AND end_time IS NULL,news_date <= NOW(),NOw() BETWEEN start_time AND end_time)';
@@ -170,6 +170,7 @@ if( isset( $params['start'] ) ) {
 }
 
 $dbresult = $db->SelectLimit( $query1, $pagelimit, $startelement );
+debug_display($db->sql);
 $count = (int) $db->GetOne('SELECT FOUND_ROWS()');
 
 {

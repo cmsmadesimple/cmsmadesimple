@@ -72,7 +72,7 @@ class cms_tree
    * @param string $key An optional key for a tag
    * @param mixed  $value An optional value for the tag.
    */
-  public function __construct($key = '',$value = '')
+  public function __construct(string $key = '',$value = '')
   {
 	  if( $key ) {
 		  if( is_string($key) ) {
@@ -95,7 +95,7 @@ class cms_tree
    * @param bool $case_insensitive Wether the value should be treated as case insensitive.
    * @return cms_tree or null on failure.
    */
-  public function &find_by_tag($tag_name,$value,$case_insensitive = FALSE)
+  public function &find_by_tag(string $tag_name,$value,bool $case_insensitive = FALSE)
   {
 	  $res = null;
 	  if( !is_string($tag_name) ) return $res;
@@ -145,7 +145,7 @@ class cms_tree
    * @param string $key Tag name
    * @param mixed  $value Tag value
    */
-  public function set_tag($key,$value)
+  public function set_tag(string $key,$value)
   {
 	  if( !$this->_tags ) $this->_tags = array();
 	  $this->_tags[$key] = $value;
@@ -158,7 +158,7 @@ class cms_tree
    * @param string $key The tag name
    * @return mixed The tag value, or null
    */
-  public function &get_tag($key)
+  public function &get_tag(string $key)
   {
 	  $res = null;
 	  if( !$this->_tags ) return $res;
@@ -181,7 +181,7 @@ class cms_tree
    * @param bool  $search_children Wether to recursively search children.
    * @return bool
    */
-  protected function remove_node(cms_tree &$node, $search_children = false)
+  protected function remove_node(cms_tree &$node, bool $search_children = false)
   {
 	  if( !$this->has_children() ) return FALSE;
 

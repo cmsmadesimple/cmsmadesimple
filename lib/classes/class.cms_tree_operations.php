@@ -63,7 +63,7 @@ class cms_tree_operations
    * @access private
    * @param string key to add
    */
-  public static function add_key($key)
+  public static function add_key(string $key)
   {
     if( !is_array(self::$_keys) ) self::$_keys = array();
     if( !in_array($key,self::$_keys) ) self::$_keys[] = $key;
@@ -82,7 +82,7 @@ class cms_tree_operations
    * @param cms_content_tree (optional) The cms_content_tree node to add generated objects to.
    * @return cms_content_tree
    */
-  public static function load_from_list($data)
+  public static function load_from_list(array $data)
   {
       // create a tree object
       $tree = new cms_content_tree();

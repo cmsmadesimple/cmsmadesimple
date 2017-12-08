@@ -187,12 +187,12 @@ while ($dbresult && $row = $dbresult->FetchRow()) {
         if( $row['status'] == 'published' ) {
             $onerow->approve_link = $this->CreateLink($id,'approvearticle',
                                                       $returnid,
-                                                      $admintheme->DisplayImage('icons/system/true.gif',$this->Lang('revert'),'','','systemicon'),array('approve'=>0,'articleid'=>$row['news_id']));
+                                                      $admintheme->DisplayImage('icons/system/true.gif',$this->Lang('revert'),null,'','systemicon'),array('approve'=>0,'articleid'=>$row['news_id']));
         }
         else {
             $onerow->approve_link = $this->CreateLink($id,'approvearticle',
                                                       $returnid,
-                                                      $admintheme->DisplayImage('icons/system/false.gif',$this->Lang('approve'),'','','systemicon'),array('approve'=>1,'articleid'=>$row['news_id']));
+                                                      $admintheme->DisplayImage('icons/system/false.gif',$this->Lang('approve'),null,'','systemicon'),array('approve'=>1,'articleid'=>$row['news_id']));
         }
     }
     $onerow->category = $row['long_name'];

@@ -110,7 +110,7 @@ final class cms_utils
 	 * @param string $version An optional version string
 	 * @return CmsModule The matching module object or null
 	 */
-	public static function &get_module($name,$version = '')
+	public static function &get_module(string $name,string $version = '')
 	{
 		return ModuleOperations::get_instance()->get_module_instance($name,$version);
 	}
@@ -126,7 +126,7 @@ final class cms_utils
 	 * @param string $name The module name
 	 * @return bool
 	 */
-	final public static function module_available($name)
+	final public static function module_available(string $name)
 	{
 		return ModuleOperations::get_instance()->IsModuleActive($name);
 	}
@@ -230,7 +230,7 @@ final class cms_utils
 	 * @param string $module_name The module name.
 	 * @return CMSModule
 	 */
-	public static function &get_wysiwyg_module($module_name = '')
+	public static function &get_wysiwyg_module(string $module_name = null)
 	{
 		return ModuleOperations::get_instance()->GetWYSIWYGModule($module_name);
 	}

@@ -352,7 +352,7 @@ abstract class ContentBase
 	 * @access private
 	 * @internal
 	 */
-	public function SetId($id)
+	public function SetId(int $id)
 	{
 		$this->mId = $id;
 	}
@@ -382,7 +382,7 @@ abstract class ContentBase
 	 *
 	 * @param string $name The name.
 	 */
-	public function SetName($name)
+	public function SetName(string $name)
 	{
 		$this->mName = $name;
 	}
@@ -423,7 +423,7 @@ abstract class ContentBase
 	 *
 	 * @param int $owner Owner's user id
 	 */
-	public function SetOwner($owner)
+	public function SetOwner(int $owner)
 	{
 		$owner = (int)$owner;
 		if( $owner <= 0 ) return;
@@ -456,7 +456,7 @@ abstract class ContentBase
 	 *
 	 * @param string $metadata The metadata
 	 */
-	public function SetMetadata($metadata)
+	public function SetMetadata(string $metadata)
 	{
 		$this->mMetadata = $metadata;
 	}
@@ -476,7 +476,7 @@ abstract class ContentBase
 	 *
 	 * @param int $tabindex tabindex
 	 */
-	public function SetTabIndex($tabindex)
+	public function SetTabIndex(int $tabindex)
 	{
 		$this->mTabIndex = $tabindex;
 	}
@@ -519,7 +519,7 @@ abstract class ContentBase
 	 *
 	 * @param string $titleattribute The title attribute
 	 */
-	public function SetTitleAttribute($titleattribute)
+	public function SetTitleAttribute(string $titleattribute)
 	{
 		$this->mTitleAttribute = $titleattribute;
 	}
@@ -541,7 +541,7 @@ abstract class ContentBase
 	 * @see http://www.w3schools.com/tags/att_global_accesskey.asp
 	 * @param string $accesskey
 	 */
-	public function SetAccessKey($accesskey)
+	public function SetAccessKey(string $accesskey)
 	{
 		$this->mAccessKey = $accesskey;
 	}
@@ -564,7 +564,7 @@ abstract class ContentBase
 	 *
 	 * @param int $parentid The numeric page parent id.  Use -1 for no parent.
 	 */
-	public function SetParentId($parentid)
+	public function SetParentId(int $parentid)
 	{
         $parentid = (int) $parentid;
         if( $parentid < 1 ) $parentid = -1;
@@ -586,7 +586,7 @@ abstract class ContentBase
 	 *
 	 * @param int $templateid
 	 */
-	public function SetTemplateId($templateid)
+	public function SetTemplateId(int $templateid)
 	{
 		$templateid = (int)$templateid;
 		if( $templateid > 0 ) $this->mTemplateId = $templateid;
@@ -612,7 +612,7 @@ abstract class ContentBase
 	 * @internal
 	 * @param int $itemorder
 	 */
-	public function SetItemOrder($itemorder)
+	public function SetItemOrder(int $itemorder)
 	{
 		$itemorder = (int)$itemorder;
 		if( $itemorder > 0 || $itemorder == -1 ) $this->mItemOrder = $itemorder;
@@ -638,7 +638,7 @@ abstract class ContentBase
 	 * @internal
 	 * @param string $hierarchy
 	 */
-	public function SetHierarchy($hierarchy)
+	public function SetHierarchy(string $hierarchy)
 	{
 		$this->mHierarchy = $hierarchy;
 	}
@@ -741,7 +741,7 @@ abstract class ContentBase
 	 *
 	 * @param bool $defaultcontent
 	 */
-	public function SetDefaultContent($defaultcontent)
+	public function SetDefaultContent(bool $defaultcontent)
 	{
 		$this->mDefaultContent = (bool) $defaultcontent;
 	}
@@ -763,7 +763,7 @@ abstract class ContentBase
 	 *
 	 * @param bool $cachable
 	 */
-	public function SetCachable($cachable)
+	public function SetCachable(bool $cachable)
 	{
 		$this->mCachable = (bool) $cachable;
 	}
@@ -809,7 +809,7 @@ abstract class ContentBase
 	 *
 	 * @param int $lastmodifiedby
 	 */
-	public function SetLastModifiedBy($lastmodifiedby)
+	public function SetLastModifiedBy(int $lastmodifiedby)
 	{
 		$lastmodifiedby = (int)$lastmodifiedby;
 		if( $lastmodifiedby > 0 ) $this->mLastModifiedBy = $lastmodifiedby;
@@ -972,7 +972,7 @@ abstract class ContentBase
 	 *
 	 * @param string $menutext
 	 */
-	public function SetMenuText($menutext)
+	public function SetMenuText(string $menutext)
 	{
 		$this->mMenuText = $menutext;
 	}
@@ -1009,7 +1009,7 @@ abstract class ContentBase
 	 * @param string $name
 	 * @return bool
 	 */
-	public function HasProperty($name)
+	public function HasProperty(string $name)
 	{
 		if( !$name ) return FALSE;
 		if( !is_array($this->_props) ) $this->_load_properties();
@@ -1024,7 +1024,7 @@ abstract class ContentBase
 	 * @param string $name
 	 * @return mixed String value, or null if the property does not exist.
 	 */
-	public function GetPropertyValue($name)
+	public function GetPropertyValue(string $name)
 	{
 		if( $this->HasProperty($name) ) return $this->_props[$name];
 	}
@@ -1085,7 +1085,7 @@ abstract class ContentBase
 	 * @param string $name The property name
 	 * @param string $value The property value.
 	 */
-	public function SetPropertyValue($name, $value)
+	public function SetPropertyValue(string $name, string $value)
 	{
 		if( !is_array($this->_props) ) $this->_load_properties();
 		$this->_props[$name] = $value;
@@ -1098,7 +1098,7 @@ abstract class ContentBase
 	 * @param string $name The property name
 	 * @param string $value The property value.
 	 */
-	public function SetPropertyValueNoLoad($name,$value)
+	public function SetPropertyValueNoLoad(string $name,string $value)
 	{
 		if( !is_array($this->_props) ) $this->_props = array();
 		$this->_props[$name] = $value;
@@ -1181,7 +1181,7 @@ abstract class ContentBase
 	 * @param bool  $loadProperties Optionally load content properties at the same time.
 	 * @returns	bool
 	 */
-	function LoadFromData(&$data, $loadProperties = false)
+	function LoadFromData(array $data, bool $loadProperties = false)
 	{
 		$result = true;
 		$this->mId                         = $data["content_id"];
@@ -1631,7 +1631,7 @@ abstract class ContentBase
 	 * @param bool  $editing Indicates wether this is an edit or add operation.
 	 * @abstract
 	 */
-	public function FillParams($params,$editing = false)
+	public function FillParams(array $params, bool $editing = false)
 	{
 		// content property parameters
 		$parameters = array('extra1','extra2','extra3','image','thumbnail');
@@ -1732,7 +1732,7 @@ abstract class ContentBase
 	 * @param bool $rewrite if true, and mod_rewrite is enabled, build a URL suitable for mod_rewrite.
 	 * @return string
 	 */
-	public function GetURL($rewrite = true)
+	public function GetURL(bool $rewrite = true)
 	{
 		$config = \cms_config::get_instance();
 		$url = "";
@@ -1775,7 +1775,7 @@ abstract class ContentBase
 	 * @since 2.0
 	 * @param int $direction direction. negative value indicates up, positive value indicates down.
 	 */
-	public function ChangeItemOrder($direction)
+	public function ChangeItemOrder(int $direction)
 	{
 		$db = CmsApp::get_instance()->GetDb();
 		$time = $db->DBTimeStamp(time());
@@ -1811,7 +1811,7 @@ abstract class ContentBase
 	 * @param string $propname An optional property name to display.  If none specified, the system should assume content_en.
 	 * @return string
 	 */
-	public function Show($propname = 'content_en')
+	public function Show(string $propname = 'content_en')
 	{
 	}
 
@@ -1847,7 +1847,7 @@ abstract class ContentBase
     /**
      * @ignore
      */
-	private function _SortProperties($props)
+	private function _SortProperties(array $props)
 	{
 		// sort the properties.
 		// sort the attributes by tab, priority, name...
@@ -1927,7 +1927,7 @@ abstract class ContentBase
 	 * @param bool   $adding  Whether this is an add or edit operation.
 	 * @return array An array of arrays.  Index 0 of each element should be a prompt field, and index 1 should be the input field for the prompt.
 	 */
-	public function GetTabElements($key,$adding = FALSE)
+	public function GetTabElements(string $key,bool $adding = FALSE)
 	{
 		$props = $this->_GetEditableProperties();
 		$out = array();
@@ -1945,7 +1945,7 @@ abstract class ContentBase
 	 * @param bool $activeonly Should we test only for active children.
 	 * @return bool
 	 */
-	public function HasChildren($activeonly = false)
+	public function HasChildren(bool $activeonly = false)
 	{
         $node = ContentOperations::get_instance()->quickfind_node_by_id($id);
 		if( !$node->has_children() ) return false;
@@ -2032,7 +2032,7 @@ abstract class ContentBase
 	 * @param int  $owner_id  The current owner of the page.
 	 * @return string HTML output
 	 */
-	static public function GetAdditionalEditorInput($addteditors,$owner_id = -1)
+	static public function GetAdditionalEditorInput(array $addteditors,int $owner_id = -1)
 	{
 		$help = '&nbsp;'.cms_admin_utils::get_help_tag('core','help_content_addteditor',lang('help_title_content_addteditor'));
 		$ret[] = '<label for="addteditors">'.lang('additionaleditors').':</label>'.$help;
@@ -2059,10 +2059,10 @@ abstract class ContentBase
 	 * @return string The input element.
 	 * @see ContentBase::GetAdditionalEditorInput
 	 */
-	public function ShowAdditionalEditors($addteditors = '')
+	public function ShowAdditionalEditors(array $addteditors = null)
 	{
 		$ret = array();
-		if( $addteditors == '' ) $addteditors = $this->GetAdditionalEditors();
+		if( ! $addteditors ) $addteditors = $this->GetAdditionalEditors();
 		return self::GetAdditionalEditorInput($addteditors,$this->Owner());
 	}
 
@@ -2072,7 +2072,7 @@ abstract class ContentBase
      *
 	 * @ignore
 	 */
-	private function _handleRemovedBaseProperty($name,$member)
+	private function _handleRemovedBaseProperty(string $name,string $member)
 	{
 		if( !is_array($this->_attributes) ) return FALSE;
         $fnd = false;
@@ -2098,7 +2098,7 @@ abstract class ContentBase
 	 * @param string $name The property name
 	 * @param string $dflt The default value.
 	 */
-	protected function RemoveProperty($name,$dflt)
+	protected function RemoveProperty(string $name,string $dflt)
 	{
 		if( !is_array($this->_attributes) ) return;
 		$tmp = array();
@@ -2120,7 +2120,7 @@ abstract class ContentBase
 	 * @param bool $required (whether the property is required)
      * @param bool $basic Whether or not the property is a basic property (editable by even restricted editors)
 	 */
-	protected function AddProperty($name,$priority,$tab = self::TAB_MAIN,$required = FALSE,$basic = FALSE)
+	protected function AddProperty(string $name,int $priority,string $tab = self::TAB_MAIN,bool $required = FALSE,bool $basic = FALSE)
 	{
 		$ob = new StdClass;
 		$ob->name = (string) $name;
@@ -2154,7 +2154,7 @@ abstract class ContentBase
 	 * @param string  (optional) unused.
 	 * @deprecated
 	 */
-	protected function AddBaseProperty($name,$priority,$is_required = 0)
+	protected function AddBaseProperty(string $name,int $priority,bool $is_required = false)
 	{
 		$this->AddProperty($name,$priority,self::TAB_OPTIONS,$is_required);
 	}
@@ -2167,7 +2167,7 @@ abstract class ContentBase
 	 * @param bool   $is_required
 	 * @deprecated
 	 */
-	protected function AddContentProperty($name,$priority,$is_required = 0)
+	protected function AddContentProperty(string $name,int $priority,bool $is_required = false)
 	{
 		return $this->AddProperty($name,$priority,self::TAB_OPTIONS,$is_required);
 	}
@@ -2180,7 +2180,7 @@ abstract class ContentBase
 	 * @param bool $adding Whether or not we are in add or edit mode.
 	 * @return array consisting of two elements.  A label, and the input element.
 	 */
-	protected function display_single_element($one,$adding)
+	protected function display_single_element(string $one,bool $adding)
 	{
 		$config = \cms_config::get_instance();
 

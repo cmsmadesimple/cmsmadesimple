@@ -38,7 +38,7 @@
  * @package CMS
  * @param string $to The url to redirect to
  */
-function redirect($to)
+function redirect(string $to)
 {
     $_SERVER['PHP_SELF'] = null;
 
@@ -124,7 +124,7 @@ function redirect($to)
  *
  * @param mixed $alias An integer page id or a string page alias.
  */
-function redirect_to_alias($alias)
+function redirect_to_alias(string $alias)
 {
   $manager = CmsApp::get_instance()->GetHierarchyManager();
   $node = $manager->sureGetNodeByAlias($alias);
@@ -151,10 +151,10 @@ function redirect_to_alias($alias)
  * @param string $b Later microtime value
  * @return int The difference.
  */
-function microtime_diff($a, $b)
+function microtime_diff(string $a, string $b)
 {
-    list($a_dec, $a_sec) = explode(" ", $a);
-    list($b_dec, $b_sec) = explode(" ", $b);
+    list($a_dec, $a_sec) = explode(' ', $a);
+    list($b_dec, $b_sec) = explode(' ', $b);
     return $b_sec - $a_sec + $b_dec - $a_dec;
 }
 
@@ -188,7 +188,7 @@ function cms_join_path()
  * @param string $relative_to The optional path to compute relative to.  If not supplied the cmsms root path will be used.
  * @return string The relative portion of the input string.
  */
-function cms_relative_path($in,$relative_to = null)
+function cms_relative_path(string $in,string $relative_to = null)
 {
     $in = realpath(trim($in));
     if( !$relative_to ) $relative_to = CMS_ROOT_PATH;
@@ -211,7 +211,7 @@ function cms_relative_path($in,$relative_to = null)
  * @param bool $convert_single_quotes A flag indicating wether single quotes should be converted to entities.
  * @return string the converted string.
  */
-function cms_htmlentities($val, $param=ENT_QUOTES, $charset="UTF-8", $convert_single_quotes = false)
+function cms_htmlentities(string $val, string $param=ENT_QUOTES, string $charset="UTF-8", bool $convert_single_quotes = false)
 {
   if ($val == "") return "";
 
@@ -315,7 +315,7 @@ function debug_bt()
 * @param bool $showtitle (optional) flag indicating wether the title field should be displayed in the output.
 * @return string
 */
-function debug_display($var, $title="", $echo_to_screen = true, $use_html = true,$showtitle = TRUE)
+function debug_display($var, string $title="", bool $echo_to_screen = true, bool $use_html = true, bool $showtitle = TRUE)
 {
     global $starttime, $orig_memory;
     if( !$starttime ) $starttime = microtime();
@@ -384,7 +384,7 @@ function debug_display($var, $title="", $echo_to_screen = true, $use_html = true
  * @param mixed $var
  * @param string $title
  */
-function debug_output($var, $title="")
+function debug_output($var, string $title="")
 {
     $config = \cms_config::get_instance();
     if( $config["debug"] == true) debug_display($var, $title, true);
@@ -400,7 +400,7 @@ function debug_output($var, $title="")
  * @param string $title optional title.
  * @param string $filename optional output filename
  */
-function debug_to_log($var, $title='',$filename = '')
+function debug_to_log($var, string $title='',string $filename = '')
 {
     $config = \cms_config::get_instance();
     if( $config['debug_to_log'] || (function_exists('get_userid') && get_userid(FALSE)) ) {
@@ -424,7 +424,7 @@ function debug_to_log($var, $title='',$filename = '')
  * @param mixed $var
  * @param string $title
  */
-function debug_buffer($var, $title="")
+function debug_buffer($var, string $title="")
 {
     if( !defined('CMS_DEBUG') || CMS_DEBUG == 0 ) return;
     CmsApp::get_instance()->add_error(debug_display($var, $title, false, true));
@@ -436,7 +436,7 @@ function debug_buffer($var, $title="")
 * Otherwise return $default_value. Note. Also will trim($value)	if $value is not numeric.
 *
 * @ignore
-* @param string $value
+* @param mixed $value
 * @param mixed $default_value
 * @param mixed $session_key
 * @deprecated
@@ -489,7 +489,7 @@ function _get_value_with_default($value, $default_value = '', $session_key = '')
  * @param string $session_key
  * @return mixed
  */
-function get_parameter_value($parameters, $value, $default_value = '', $session_key = '')
+function get_parameter_value(array $parameters, string $value, $default_value = '', string $session_key = '')
 {
     if($session_key != '') {
         if(isset($_SESSION['parameter_values'][$session_key])) $default_value = $_SESSION['parameter_values'][$session_key];
@@ -540,7 +540,7 @@ function get_parameter_value($parameters, $value, $default_value = '', $session_
  * @param  string  $path Start directory.
  * @return bool
  */
-function is_directory_writable( $path )
+function is_directory_writable( string $path )
 {
     if ( substr ( $path , strlen ( $path ) - 1 ) != '/' ) $path .= '/' ;
 
@@ -570,12 +570,11 @@ function is_directory_writable( $path )
  * performs a non recursive search.
  *
  * @internal
- * @param path - path to search
- * @param extensions - include only files matching these extensions
- *                     case insensitive, comma delimited
+ * @param string $dir path to search
+ * @param string 4extension include only files matching these extensions. case insensitive, comma delimited
  * Rolf: only used in this file
  */
-function get_matching_files($dir,$extensions = '',$excludedot = true,$excludedir = true, $fileprefix='',$excludefiles=1)
+function get_matching_files(string $dir,string $extensions = '',bool $excludedot = true,bool $excludedir = true, string $fileprefix='',bool $excludefiles = true)
 {
     if( !is_dir($dir) ) return false;
     $dh = opendir($dir);
@@ -588,8 +587,8 @@ function get_matching_files($dir,$extensions = '',$excludedot = true,$excludedir
         if( startswith($file,'.') && $excludedot ) continue;
         if( is_dir(cms_join_path($dir,$file)) && $excludedir ) continue;
         if( !empty($fileprefix) ) {
-            if( $excludefiles == 1 && startswith($file,$fileprefix) ) continue;
-            if( $excludefiles == 0 && !startswith($file,$fileprefix) ) continue;
+            if( $excludefiles && startswith($file,$fileprefix) ) continue;
+            if( !$excludefiles && !startswith($file,$fileprefix) ) continue;
         }
 
         $ext = strtolower(substr($file,strrpos($file,'.')+1));
@@ -613,7 +612,7 @@ function get_matching_files($dir,$extensions = '',$excludedot = true,$excludedir
  * @param  d       $d        for internal use only
  * @return string[]
 **/
-function get_recursive_file_list ( $path , $excludes, $maxdepth = -1 , $mode = "FULL" , $d = 0 )
+function get_recursive_file_list ( string $path ,array $excludes, int $maxdepth = -1, string $mode = "FULL" , int $d = 0 )
 {
     $fn = function( $file, $excludes ) {
         // strip the path from the file
@@ -652,7 +651,7 @@ function get_recursive_file_list ( $path , $excludes, $maxdepth = -1 , $mode = "
  * @param string $dirname The directory name
  * @return bool
  */
-function recursive_delete( $dirname )
+function recursive_delete( string $dirname )
 {
     // all subdirectories and contents:
     if( !is_dir($dirname) ) return true;
@@ -685,7 +684,7 @@ function recursive_delete( $dirname )
  * @param int $mode The octal mode
  * Rolf: only used in admin/listmodules.php
  */
-function chmod_r( $path, $mode )
+function chmod_r( string $path, int $mode )
 {
     if( !is_dir( $path ) ) return chmod( $path, $mode );
 
@@ -724,7 +723,7 @@ function chmod_r( $path, $mode )
  * @param string $sub The search string
  * @return bool
  */
-function startswith( $str, $sub )
+function startswith( string $str, string $sub )
 {
     return ( substr( $str, 0, strlen( $sub ) ) == $sub );
 }
@@ -740,7 +739,7 @@ function startswith( $str, $sub )
  * @param string $sub The search string
  * @return bool
  */
-function endswith( $str, $sub )
+function endswith( string $str, string $sub )
 {
   return ( substr( $str, strlen( $str ) - strlen( $sub ) ) == $sub );
 }
@@ -755,7 +754,7 @@ function endswith( $str, $sub )
  * @param bool $withslash Indicates wether slashes should be allowed in the input.
  * @return string
  */
-function munge_string_to_url($alias, $tolower = false, $withslash = false)
+function munge_string_to_url(string $alias, bool $tolower = false, bool $withslash = false)
 {
   if ($tolower == true) $alias = mb_strtolower($alias);
 
@@ -782,7 +781,7 @@ function munge_string_to_url($alias, $tolower = false, $withslash = false)
  * @param string $val input value
  * @return string
  */
-function cleanValue($val) {
+function cleanValue(string $val) {
   if ($val == "") return $val;
   //Replace odd spaces with safe ones
   $val = str_replace(" ", " ", $val);
@@ -821,7 +820,7 @@ function cleanValue($val) {
  * @param string $str The php ini key
  * @return int
  */
-function ini_get_boolean($str)
+function ini_get_boolean(string $str)
 {
   $val1 = ini_get($str);
   $val2 = strtolower($val1);
@@ -860,7 +859,7 @@ function stack_trace()
  * @param string $destination The destination file specification
  * @return bool.
  */
-function cms_move_uploaded_file( $tmpfile, $destination )
+function cms_move_uploaded_file( string $tmpfile, string $destination )
 {
    $config = CmsApp::get_instance()->GetConfig();
 
@@ -884,9 +883,9 @@ function cms_move_uploaded_file( $tmpfile, $destination )
  * @return bool
  * Rolf: only used in lib/content.functions.php
  */
-function cms_ipmatches($ip,$checklist)
+function cms_ipmatches(string $ip,array $checklist)
 {
-  $_testip = function($range,$ip) {
+    $_testip = function($range,$ip) {
     $result = 1;
 
     // IP Pattern Matcher
@@ -953,7 +952,7 @@ function cms_ipmatches($ip,$checklist)
  * @param string  $email
  * @param bool $checkDNS
 */
-function is_email( $email, $checkDNS=false )
+function is_email( string $email, bool $checkDNS=false )
 {
    if( !filter_var($email,FILTER_VALIDATE_EMAIL) ) return FALSE;
    if ($checkDNS && function_exists('checkdnsrr')) {
@@ -993,7 +992,7 @@ function get_secure_param()
  * @param string $str Input string to test.
  * Rolf: only used in lib/classes/contenttypes/Content.inc.php
  */
-function cms_to_bool($str)
+function cms_to_bool(string $str)
 {
   if( is_numeric($str) ) return ((int)$str != 0)?TRUE:FALSE;
 
@@ -1021,6 +1020,7 @@ function cms_to_bool($str)
  *   migrate
  *
  * @since 1.10
+ * @deprecated
  * @param string $exclude A comma separated list of script names or aliases to exclude.
  * @param bool $ssl Force use of the ssl_url for the root url to necessary scripts.
  * @param bool $cdn Force the use of a CDN url for the libraries if one is known
@@ -1028,7 +1028,7 @@ function cms_to_bool($str)
  * @param string  $custom_root A custom root URL for all scripts (when using local mode).  If this is spefied the $ssl param will be ignored.
  * @param bool $include_css Optionally output stylesheet tags for the included javascript libraries.
  */
-function cms_get_jquery($exclude = '',$ssl = null,$cdn = false,$append = '',$custom_root='',$include_css = TRUE)
+function cms_get_jquery(string $exclude = '',bool $ssl = false,bool $cdn = false,string $append = '',string $custom_root='',bool $include_css = TRUE)
 {
   $config = cms_config::get_instance();
   $scripts = array();
@@ -1120,7 +1120,7 @@ function cms_get_jquery($exclude = '',$ssl = null,$cdn = false,$append = '',$cus
  * @ignore
  * @since 2.0.2
  */
-function setup_session($cachable = FALSE)
+function setup_session(bool $cachable = FALSE)
 {
     global $CMS_INSTALL_PAGE, $CMS_ADMIN_PAGE;
     static $_setup_already = false;
@@ -1172,7 +1172,7 @@ function setup_session($cachable = FALSE)
  * @param string $s The input string
  * @return bool
  */
-function is_base64($s)
+function is_base64(string $s)
 {
     return (bool) preg_match('/^[a-zA-Z0-9\/\r\n+]*={0,2}$/', $s);
 }

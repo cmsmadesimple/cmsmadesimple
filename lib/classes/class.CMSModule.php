@@ -469,7 +469,7 @@ abstract class CMSModule
      * @param  array $request The input request.  This can be used to test conditions wether or not admin output should be suppressed.
      * @return bool
      */
-    public function SuppressAdminOutput(&$request)
+    public function SuppressAdminOutput(array $request)
     {
         return false;
     }
@@ -693,9 +693,9 @@ abstract class CMSModule
      * @see SetParameters
      * @final
      * @param string $param Parameter name;
-     * @param define $type  Parameter type;
+     * @param string $type  Parameter type;
      */
-    final public function SetParameterType($param, $type)
+    final public function SetParameterType(string $param, string $type)
     {
         switch($type) {
         case CLEAN_INT:
@@ -726,7 +726,7 @@ abstract class CMSModule
      * @param string $helpstring Help String
      * @param bool $optional Flag indicating wether this parameter is optional or required.
      */
-    final public function CreateParameter($param, $defaultval='', $helpstring='', $optional=true)
+    final public function CreateParameter(string $param, string $defaultval='', string $helpstring='', bool $optional=true)
     {
         array_push($this->params, array('name' => $param,'default' => $defaultval,'help' => $helpstring,
                                         'optional' => $optional ));
@@ -1353,11 +1353,11 @@ abstract class CMSModule
      * @abstract
      * @param string $name The Name of the action to perform
      * @param string $id The ID of the module
-     * @param string $params The parameters targeted for this module
-     * @param int $returnid The current page id that is being displayed.
+     * @param array  $params The parameters targeted for this module
+     * @param int    $returnid The current page id that is being displayed.
      * @return string output XHTML.
      */
-    public function DoAction($name, $id, $params, $returnid='')
+    public function DoAction(string $name, string $id, array $params, int $returnid = null)
     {
         if( $returnid == '' ) {
             $key = $this->GetName().'::activetab';
@@ -1415,7 +1415,7 @@ abstract class CMSModule
      * @param Smarty_Internal_Template &$parent The currrent smarty template object.
      * @return string The action output.
      */
-    final public function DoActionBase($name, $id, $params, $returnid='', &$parent )
+    final public function DoActionBase(string $name, string $id, array $params, int $returnid = null, &$parent )
     {
         $name = preg_replace('/[^A-Za-z0-9\-_+]/', '', $name);
         if( $returnid != '' ) {
@@ -2008,7 +2008,7 @@ abstract class CMSModule
      *
      * @param int $id Content id to redirect to.
      */
-    public function RedirectContent($id)
+    public function RedirectContent(int $id)
     {
         redirect_to_alias($id);
     }
@@ -2026,7 +2026,7 @@ abstract class CMSModule
      * @param string $module The required module name.
      * @return CMSModule The module object, or FALSE
      */
-    static public function &GetModuleInstance($module)
+    static public function &GetModuleInstance(string $module)
     {
         return cms_utils::get_module($module);
     }
@@ -2040,7 +2040,7 @@ abstract class CMSModule
      * @param array  $params further params to get more detailed info about the capabilities. Should be syncronized with other modules of same type
      * @return array
      */
-    final public function GetModulesWithCapability($capability, $params=array())
+    final public function GetModulesWithCapability(string $capability, array $params = [])
     {
         $result=array();
         $tmp = ModuleOperations::get_modules_with_capability($capability,$params);
@@ -2128,7 +2128,7 @@ abstract class CMSModule
      * @param string $template The template name.
      * @return string
      */
-    final public function GetTemplateResource($template)
+    final public function GetTemplateResource(string $template)
     {
         if( strpos($template,':') !== FALSE ) {
             if( startswith($template,'string:') || startswith($template,'eval:') || startswith($template,'extends:') ) {
@@ -2150,7 +2150,7 @@ abstract class CMSModule
      * @return string
      * @deprecated
      */
-    final public function GetFileResource($template)
+    final public function GetFileResource(string $template)
     {
         return 'module_file_tpl:'.$this->GetName().';'.$template;
     }
@@ -2163,7 +2163,7 @@ abstract class CMSModule
      * @param string $modulename If empty the current module name is used.
      * @return array
      */
-    final public function ListTemplates($modulename = '')
+    final public function ListTemplates(string $modulename = null)
     {
         $this->_loadTemplateMethods();
         return cms_module_ListTemplates($this, $modulename);
@@ -2179,7 +2179,7 @@ abstract class CMSModule
      * @param string $modulename  If empty the current module name is used.
      * @return string
      */
-    final public function GetTemplate($tpl_name, $modulename = '')
+    final public function GetTemplate(string $tpl_name, string $modulename = null)
     {
         $this->_loadTemplateMethods();
         return cms_module_GetTemplate($this, $tpl_name, $modulename);
@@ -2193,7 +2193,7 @@ abstract class CMSModule
      * @param string $template_name
      * @return string
      */
-    final public function GetTemplateFromFile($template_name)
+    final public function GetTemplateFromFile(string $template_name)
     {
         $this->_loadTemplateMethods();
         return cms_module_GetTemplateFromFile($this, $template_name);
@@ -2210,7 +2210,7 @@ abstract class CMSModule
      * @param string $modulename The module name, if empty the current module name is used.
      * @return bool
      */
-    final public function SetTemplate($tpl_name, $content, $modulename = '')
+    final public function SetTemplate(string $tpl_name, string $content, string $modulename = '')
     {
         $this->_loadTemplateMethods();
         return cms_module_SetTemplate($this, $tpl_name, $content, $modulename);
@@ -2225,7 +2225,7 @@ abstract class CMSModule
      * @param string $modulename The module name, if empty the current module name is used.
      * @return bool
      */
-    final public function DeleteTemplate($tpl_name = '', $modulename = '')
+    final public function DeleteTemplate(string $tpl_name = null, $modulename = null)
     {
         $this->_loadTemplateMethods();
         return cms_module_DeleteTemplate($this, $tpl_name, $modulename);
@@ -2244,7 +2244,7 @@ abstract class CMSModule
      * @param string  $cacheid     Unique cache flag (ignored)
      * @return string
      */
-    final public function ProcessTemplate($tpl_name, $designation = '', $cache = false, $cacheid = '')
+    final public function ProcessTemplate(string $tpl_name, string $designation = null, $cache = false, $cacheid = '')
     {
         if( strpos($tpl_name, '..') !== false ) return;
         $template = $this->_action_tpl;
@@ -2263,7 +2263,7 @@ abstract class CMSModule
      * @return string
      * @deprecated
      */
-    final public function ProcessTemplateFromData( $data )
+    final public function ProcessTemplateFromData( string $data )
     {
         return $this->_action_tpl->fetch('string:'.$data);
     }
@@ -2278,7 +2278,7 @@ abstract class CMSModule
      * @param string $modulename (ignored)
      * @return string
      */
-    final public function ProcessTemplateFromDatabase($tpl_name, $designation = '', $cache = false, $modulename = '')
+    final public function ProcessTemplateFromDatabase(string $tpl_name, $designation = '', $cache = false, $modulename = '')
     {
         return $this->_action_tpl->fetch('module_db_tpl:'.$this->GetName().';'.$tpl_name );
     }
@@ -2301,7 +2301,7 @@ abstract class CMSModule
      * @param string $tab The tab name
      * @see CMSModule::RedirectToAdminTab();)
      */
-    public function SetCurrentTab($tab)
+    public function SetCurrentTab(string $tab)
     {
         $_SESSION[$this->GetName().'::activetab'] = $tab;
         cms_admin_tabs::set_current_tab($tab);
@@ -2380,7 +2380,7 @@ abstract class CMSModule
      * @see CMSModule::SetTabHeaders()
      * @return string
      */
-    public function StartTab($tabid, $params = array())
+    public function StartTab(string $tabid, array $params = [])
     {
         return cms_admin_tabs::start_tab($tabid,$params);
     }
@@ -2421,7 +2421,7 @@ abstract class CMSModule
      * @abstract
      * @param string $contenttype Value to set the content-type header too
      */
-    public function SetContentType($contenttype)
+    public function SetContentType(string $contenttype)
     {
         CmsApp::get_instance()->set_content_type($contenttype);
     }
@@ -2435,7 +2435,7 @@ abstract class CMSModule
      * @param string $itemname item name
      * @param string $action   action name
      */
-    final public function Audit($itemid = '', $itemname, $action)
+    final public function Audit(string $itemid = '', string $itemname, string $action)
     {
         audit($itemid,$itemname,$action);
     }
@@ -2477,7 +2477,7 @@ abstract class CMSModule
      * @param string $message Message to be shown
      * @return string
      */
-    public function ShowMessage($message)
+    public function ShowMessage(string $message)
     {
         $theme = cms_utils::get_theme_object();
         if( is_object($theme) ) return $theme->ShowMessage($message);
@@ -2540,7 +2540,7 @@ abstract class CMSModule
      * @param string $permission_name Name of the permission to create
      * @param string $permission_text Description of the permission
      */
-    final public function CreatePermission($permission_name, $permission_text = null)
+    final public function CreatePermission(string $permission_name, string $permission_text = null)
     {
         try {
             if( !$permission_text ) $permission_text = $permission_name;
@@ -2562,7 +2562,7 @@ abstract class CMSModule
      * @param string $permission_name The name of the permission to check against the current user
      * @return bool
      */
-    final public function CheckPermission($permission_name)
+    final public function CheckPermission(string $permission_name)
     {
         $userid = get_userid(false);
         return check_permission($userid, $permission_name);
@@ -2575,7 +2575,7 @@ abstract class CMSModule
      * @final
      * @param string $permission_name The name of the permission to remove
      */
-    final public function RemovePermission($permission_name)
+    final public function RemovePermission(string $permission_name)
     {
         try {
             $perm = CmsPermission::load($permission_name);
@@ -2612,7 +2612,7 @@ abstract class CMSModule
      * @param string $preference_name The name of the preference to set
      * @param string $value The value to set it to
      */
-    final public function SetPreference($preference_name, $value)
+    final public function SetPreference(string $preference_name, string $value)
     {
         return cms_siteprefs::set($this->GetName().'_mapi_pref_'.$preference_name, $value);
     }
@@ -2625,9 +2625,9 @@ abstract class CMSModule
      * @param string $preference_name The name of the preference to remove.  If empty all preferences associated with the module are removed.
      * @return bool
      */
-    final public function RemovePreference($preference_name='')
+    final public function RemovePreference(string $preference_name = null)
     {
-        if( $preference_name == '' ) return cms_siteprefs::remove($this->GetName().'_mapi_pref_',true);
+        if( ! $preference_name ) return cms_siteprefs::remove($this->GetName().'_mapi_pref_',true);
         return cms_siteprefs::remove($this->GetName().'_mapi_pref_'.$preference_name);
     }
 
@@ -2639,7 +2639,7 @@ abstract class CMSModule
      * @return string[]|null An array of preference names, or null.
      * @since 2.0
      */
-    final public function ListPreferencesByPrefix($prefix)
+    final public function ListPreferencesByPrefix(string $prefix)
     {
         if( !$prefix ) return;
         $prefix = $this->GetName().'_mapi_pref_'.$prefix;
@@ -2670,9 +2670,10 @@ abstract class CMSModule
      * @param string $modulename       The name of the module sending the event, or 'Core'
      * @param string $eventname       The name of the event
      * @param bool $removable      Can this event be removed from the list?
+     * @deprecated
      * @returns bool
      */
-    final public function AddEventHandler( $modulename, $eventname, $removable = true )
+    final public function AddEventHandler( string $modulename, string $eventname, bool $removable = true )
     {
         Events::AddEventHandler( $modulename, $eventname, false, $this->GetName(), $removable );
     }
@@ -2683,9 +2684,10 @@ abstract class CMSModule
      *
      * @final
      * @param string $eventname The name of the event
+     * @deprecated
      * @returns nothing
      */
-    final public function CreateEvent( $eventname )
+    final public function CreateEvent( string $eventname )
     {
         Events::CreateEvent($this->GetName(), $eventname);
     }
@@ -2703,9 +2705,10 @@ abstract class CMSModule
      * @param string $originator The name of the originating module
      * @param string $eventname The name of the event
      * @param array  $params Array of parameters provided with the event.
+     * @deprecated
      * @return bool
      */
-    public function DoEvent( $originator, $eventname, &$params )
+    public function DoEvent( string $originator, string $eventname, array &$params )
     {
         if ($originator != '' && $eventname != '') {
             $filename = $this->GetModulePath().'/event.' . $originator . "." . $eventname . '.php';
@@ -2728,8 +2731,9 @@ abstract class CMSModule
      * @abstract
      * @param string $eventname The name of the event
      * @return string
+     * @deprecated
      */
-    public function GetEventDescription( $eventname )
+    public function GetEventDescription( string $eventname )
     {
         return "";
     }
@@ -2743,8 +2747,9 @@ abstract class CMSModule
      * @abstract
      * @param string $eventname The name of the event
      * @return string
+     * @deprecated
      */
-    public function GetEventHelp( $eventname )
+    public function GetEventHelp( string $eventname )
     {
         return "";
     }
@@ -2756,6 +2761,7 @@ abstract class CMSModule
      *
      * @abstract
      * @return bool
+     * @deprecated
      */
     public function HandlesEvents()
     {
@@ -2771,8 +2777,9 @@ abstract class CMSModule
      *
      * @final
      * @param string $eventname The name of the event
+     * @deprecated
      */
-    final public function RemoveEvent( $eventname )
+    final public function RemoveEvent( string $eventname )
     {
         Events::RemoveEvent($this->GetName(), $eventname);
     }
@@ -2788,7 +2795,7 @@ abstract class CMSModule
      * @param string $modulename The module name (or Core)
      * @param string $eventname  The name of the event
      */
-    final public function RemoveEventHandler( $modulename, $eventname )
+    final public function RemoveEventHandler( string $modulename, string $eventname )
     {
         Events::RemoveEventHandler($modulename, $eventname, false, $this->GetName());
     }
@@ -2802,7 +2809,7 @@ abstract class CMSModule
      * @param string $eventname The name of the event
      * @param array  $params The parameters associated with this event.
      */
-    final public function SendEvent( $eventname, $params )
+    final public function SendEvent( string $eventname, array $params )
     {
         Events::SendEvent($this->GetName(), $eventname, $params);
     }

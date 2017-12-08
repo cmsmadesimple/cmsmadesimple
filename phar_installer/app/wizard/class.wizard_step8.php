@@ -129,6 +129,7 @@ class wizard_step8 extends \cms_autoinstaller\wizard_step
             \cms_siteprefs::set('global_umask','022');
         }
         catch( \Exception $e ) {
+	    die('got exception');
             $this->error($e->GetMessage());
         }
     }

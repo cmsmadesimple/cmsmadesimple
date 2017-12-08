@@ -111,7 +111,7 @@ final class ModuleOperations
     /**
      * @ignore
      */
-    protected function get_module_classname($module)
+    protected function get_module_classname(string $module)
     {
         $module = trim($module);
         if( !$module ) return;
@@ -124,7 +124,7 @@ final class ModuleOperations
     /**
      * @ignore
      */
-    public function get_module_filename($module)
+    public function get_module_filename(string $module)
     {
         $module = trim($module);
         if( !$module ) return;
@@ -138,7 +138,7 @@ final class ModuleOperations
     /**
      * @ignore
      */
-    public function get_module_path( $module )
+    public function get_module_path( string $module )
     {
         $fn = $this->get_module_filename( $module );
         if( $fn ) return dirname( $fn );
@@ -150,7 +150,7 @@ final class ModuleOperations
      * @param string $module The module name
      * @param string $classname The class name.
      */
-    public function set_module_classname($module,$classname)
+    public function set_module_classname(string $module,string $classname)
     {
         $module = trim($module);
         $classname = trim($classname);
@@ -251,10 +251,9 @@ final class ModuleOperations
      *
      * @internal
      * @param string $module The name of the module to install
-     * @param bool $loadifnecessary If true, loads the module before trying to install it
      * @return array Returns a tuple of whether the install was successful and a message if applicable
      */
-    public function InstallModule($module)
+    public function InstallModule(string $module)
     {
         // get an instance of the object (force it).
         $modinstance = $this->get_module_instance($module,'',TRUE);
@@ -301,7 +300,7 @@ final class ModuleOperations
                 }
 
                 $all_deps = $this->_get_all_module_dependencies();
-                if( count($all_deps) ) {
+                if( $all_deps && count($all_deps) ) {
                     foreach( $all_deps as $mname => $deps ) {
                         if( is_array($deps) && count($deps) && isset($this->_moduleinfo[$mname]) ) {
                             $minfo =& $this->_moduleinfo[$mname];
@@ -319,7 +318,7 @@ final class ModuleOperations
     /**
      * @ignore
      */
-    private function _load_module($module_name,$force_load = FALSE,$dependents = TRUE)
+    private function _load_module(string $module_name,bool $force_load = FALSE,bool $dependents = TRUE)
     {
         $gCms = CmsApp::get_instance(); // backwards compatibility... set the global.
 
@@ -487,7 +486,7 @@ final class ModuleOperations
     /**
      * @ignore
      */
-    private function _upgrade_module( &$module_obj, $to_version = '' )
+    private function _upgrade_module( \CMSModule &$module_obj, string $to_version = '' )
     {
         // we can't upgrade a module if the schema is not up to date.
         $gCms = CmsApp::get_instance();
@@ -552,7 +551,7 @@ final class ModuleOperations
      * @param string $to_version The destination version
      * @return bool Whether or not the upgrade was successful
      */
-    public function UpgradeModule( $module_name, $to_version = '')
+    public function UpgradeModule( string $module_name, string $to_version = '')
     {
         $module_obj = $this->get_module_instance($module_name,'',TRUE);
         if( !is_object($module_obj) ) return array(FALSE,lang('errormodulenotloaded'));
@@ -567,7 +566,7 @@ final class ModuleOperations
      * @param string $module The name of the module to upgrade
      * @return array Returns a tuple of whether the install was successful and a message if applicable
      */
-    public function UninstallModule( $module)
+    public function UninstallModule( string $module )
     {
         $gCms = CmsApp::get_instance();
         $db = $gCms->GetDb();
@@ -645,7 +644,7 @@ final class ModuleOperations
      * @param string $module_name
      * @return bool
      */
-    public function IsModuleActive($module_name)
+    public function IsModuleActive(string $module_name)
     {
         if( !$module_name ) return FALSE;
         $info = $this->_get_module_info();
@@ -662,7 +661,7 @@ final class ModuleOperations
      * @param bool $activate flag indicating wether to activate or deactivate the module
      * @return bool
      */
-    public function ActivateModule($module_name,$activate = true)
+    public function ActivateModule(string $module_name,bool $activate = true)
     {
         if( !$module_name ) return FALSE;
         $info = $this->_get_module_info();
@@ -709,7 +708,7 @@ final class ModuleOperations
     /**
      * @internal
      */
-    public function is_module_loaded( $module_name )
+    public function is_module_loaded(string $module_name)
     {
         $module_name = trim( $module_name );
         return isset( $this->_modules[$module_name] );
@@ -741,7 +740,7 @@ final class ModuleOperations
      * @param bool $include_all Include even inactive modules
      * @return array
      */
-    public function GetInstalledModules($include_all = FALSE)
+    public function GetInstalledModules(bool $include_all = FALSE)
     {
         $result = array();
         $info = $this->_get_module_info();
@@ -764,14 +763,14 @@ final class ModuleOperations
      * @param mixed $args Capability arguments
      * @return array List of all the module objects with that capability
      */
-    public static function get_modules_with_capability($capability, $args= '')
+    public static function get_modules_with_capability(string $capability, $args = null )
     {
         if( !is_array($args) ) {
             if( !empty($args) ) {
-                $args = array($args);
+                $args = [ $args ];;
             }
             else {
-                $args = array();
+                $args = [];
             }
         }
         return module_meta::get_instance()->module_list_by_capability($capability,$args);
@@ -796,7 +795,7 @@ final class ModuleOperations
      * @param string $module_name The module name
      * @return array Hash of module names and dependencies
      */
-    public function get_module_dependencies($module_name)
+    public function get_module_dependencies(string $module_name)
     {
         if( !$module_name ) return;
 
@@ -815,7 +814,7 @@ final class ModuleOperations
      * @param bool $force an optional flag to indicate wether the module should be force loaded if necesary.
      * @return CMSModule
      */
-    public function &get_module_instance($module_name,$version = '',$force = FALSE)
+    public function &get_module_instance(string $module_name,string $version = '',bool $force = FALSE)
     {
         if( empty($module_name) && isset($this->variables['module'])) $module_name = $this->variables['module'];
 
@@ -849,7 +848,7 @@ final class ModuleOperations
      * @param string $module_name The module name
      * @return bool
      */
-    public function IsSystemModule($module_name)
+    public function IsSystemModule(string $module_name)
     {
         return in_array($module_name,$this->cmssystemmodules);
     }
@@ -865,7 +864,7 @@ final class ModuleOperations
      * @return CMSModule
      * @since 1.10
      */
-    public function &GetSyntaxHighlighter($module_name = '')
+    public function &GetSyntaxHighlighter(string $module_name = null)
     {
         $obj = null;
         if( !$module_name ) {
@@ -895,7 +894,7 @@ final class ModuleOperations
      * @since 1.10
      * @deprecated
      */
-    public function &GetWYSIWYGModule($module_name = '')
+    public function &GetWYSIWYGModule(string $module_name = null)
     {
         $obj = null;
         if( !$module_name ) {
@@ -961,7 +960,7 @@ final class ModuleOperations
      * @param string $module_name
      * @return CMSModule
      */
-    public function &GetSyntaxModule($module_name = '')
+    public function &GetSyntaxModule(string $module_name = null)
     {
         return $this->GetSyntaxHighlighter($module_name);
     }
@@ -974,7 +973,7 @@ final class ModuleOperations
      * @since 1.10
      * @param string $module_name
      */
-    public function unload_module($module_name)
+    public function unload_module(string $module_name)
     {
         if( !isset($this->_modules[$module_name]) || !is_object($this->_modules[$module_name]) )  return;
         unset($this->_modules[$module_name]);
@@ -987,7 +986,7 @@ final class ModuleOperations
      * @param string $id
      * @return array
      */
-    public function GetModuleParameters($id)
+    public function GetModuleParameters(string $id)
     {
         $params = [];
 
@@ -1004,5 +1003,3 @@ final class ModuleOperations
         return $params;
     }
 } // end of class
-
-?>

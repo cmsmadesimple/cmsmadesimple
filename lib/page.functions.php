@@ -37,7 +37,7 @@
  * @param  boolean $redirect Redirect to the admin login page if the user is not logged in.
  * @return integer The UID of the logged in administrator, otherwise FALSE
  */
-function get_userid($redirect = true)
+function get_userid(bool $redirect = true)
 {
     $login_ops = \CMSMS\LoginOperations::get_instance();
     $uid = $login_ops->get_effective_uid();
@@ -59,7 +59,7 @@ function get_userid($redirect = true)
  * @param  boolean $check Redirect to the admin login page if the user is not logged in.
  * @return string the username of the logged in user.
  */
-function get_username($check = true)
+function get_username(bool $check = true)
 {
     $login_ops = \CMSMS\LoginOperations::get_instance();
     $uname = $login_ops->get_effective_username();
@@ -82,7 +82,7 @@ function get_username($check = true)
  * @param string $no_redirect If true, then don't redirect if not logged in
  * @return boolean
  */
-function check_login($no_redirect = false)
+function check_login(bool $no_redirect = false)
 {
     $do_redirect = !$no_redirect;
     $uid = get_userid(!$no_redirect);
@@ -120,7 +120,7 @@ function check_login($no_redirect = false)
  * @param string $permname The permission name
  * @return boolean
  */
-function check_permission($userid, $permname)
+function check_permission(int $userid, string $permname)
 {
     return UserOperations::get_instance()->CheckPermission($userid,$permname);
 }
@@ -137,7 +137,7 @@ function check_permission($userid, $permname)
  * @param  integer A valid content id.
  * @return boolean
  */
-function check_authorship($userid, $contentid = '')
+function check_authorship(int $userid, int $contentid = null)
 {
     return ContentOperations::get_instance()->CheckPageAuthorship($userid,$contentid);
 }
@@ -151,7 +151,7 @@ function check_authorship($userid, $contentid = '')
  * @param  integer The user id.
  * @return array   An array of pages this user is an author of.
  */
-function author_pages($userid)
+function author_pages(int $userid)
 {
     return ContentOperations::get_instance()->GetPageAccessForUser($userid);
 }
@@ -167,7 +167,7 @@ function author_pages($userid)
  * @param mixed  $defaultvalue The default value if the preference does not exist
  * @return mixed
  */
-function get_site_preference($prefname, $defaultvalue = '')
+function get_site_preference(string $prefname, $defaultvalue = null)
 {
     return cms_siteprefs::get($prefname,$defaultvalue);
 }
@@ -193,7 +193,10 @@ function get_site_preference($prefname, $defaultvalue = '')
  * @deprecated
  * @see CmsFormUtils::create_textarea
  */
-function create_textarea($enablewysiwyg, $text, $name, $classname = '', $id = '', $encoding = '', $stylesheet = '', $width = '80', $height = '15', $forcewysiwyg = '', $wantedsyntax = '', $addtext = '')
+function create_textarea(bool $enablewysiwyg, string $text, string $name, string $classname = '',
+                         string $id = '', string $encoding = '', string $stylesheet = '',
+                         int $width = 80, int $height = 15,
+                         string $forcewysiwyg = '', string $wantedsyntax = '', string $addtext = '')
 {
     $parms = array();
     $parms['enablewysiwyg'] = $enablewysiwyg;
@@ -260,8 +263,9 @@ function is_sitedown()
  * @param boolean A flag indicating wether the output should be sorted.
  * @return string
  */
-function create_file_dropdown($name,$dir,$value,$allowed_extensions,$optprefix='',$allownone=false,$extratext='',
-			      $fileprefix='',$excludefiles=1,$sortresults = 0)
+function create_file_dropdown(string $name,string $dir,string $value,string $allowed_extensions,string $optprefix='',
+                              bool $allownone=false,string $extratext='',
+                              string $fileprefix='',bool $excludefiles=true,bool $sortresults = false)
 {
   $files = array();
   $files = get_matching_files($dir,$allowed_extensions,true,true,$fileprefix,$excludefiles);

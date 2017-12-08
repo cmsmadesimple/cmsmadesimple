@@ -45,6 +45,11 @@ class cms_install extends \__appbase\app
 
     public function __construct()
     {
+        // for every request we're gonna make sure it's not cached.
+        session_cache_limiter('private');
+        // and make sure we are in UTF-8
+        header('Content-Type:text/html; charset=UTF-8');
+
         parent::__construct(__FILE__);
 
         // initialize the session.
@@ -387,12 +392,6 @@ class cms_install extends \__appbase\app
 
         // set our selected language...
         \__appbase\translator()->set_selected_language($lang);
-
-        // for every request we're gonna make sure it's not cached.
-        session_cache_limiter('private');
-
-        // and make sure we are in UTF-8
-        header('Content-Type:text/html; charset=UTF-8');
 
         // and do our stuff.
         try {

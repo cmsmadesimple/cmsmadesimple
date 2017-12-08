@@ -175,7 +175,7 @@ abstract class CmsAdminThemeBase
 	/**
 	 * @ignore
 	 */
-	public function __get($key)
+	public function __get(string $key)
 	{
 		if( $key == 'themeName' ) {
 			$class = get_class($this);
@@ -195,7 +195,7 @@ abstract class CmsAdminThemeBase
      * @param str string to have its spaces converted
 	 * @ignore
      */
-    private function _FixSpaces($str)
+    private function _FixSpaces(string $str)
     {
 		$tmp = preg_replace('/\s+/u',"&nbsp;",$str); // PREG UTF8
 		if(!empty($tmp)) return $tmp;
@@ -205,7 +205,7 @@ abstract class CmsAdminThemeBase
 	/**
 	 * @ignore
 	 */
-	private function _fix_url_userkey($url)
+	private function _fix_url_userkey(string $url)
 	{
 		$newurl = $url;
 		if( strpos($url,CMS_SECURE_PARAM_NAME) !== FALSE ) {
@@ -344,7 +344,7 @@ abstract class CmsAdminThemeBase
 	 * @access private
 	 * @ignore
      */
-	private function _SetAggregatePermissions($force = FALSE)
+	private function _SetAggregatePermissions(bool $force = FALSE)
 	{
 		if( is_array($this->_perms) && !$force ) return;
 
@@ -402,9 +402,9 @@ abstract class CmsAdminThemeBase
 	 * @access private
      * @ignore
      */
-    private function _populate_admin_navigation($subtitle='')
+    private function _populate_admin_navigation(string $subtitle = null)
     {
-        if (count($this->_menuItems) > 0) return;
+        if ($this->_menuitems && count($this->_menuItems) > 0) return;
 		// note: it would be interesting if we could cache these menuItems in the session
 		// then clear this data when the cache is cleared (for when modules become available)
 
@@ -755,7 +755,7 @@ abstract class CmsAdminThemeBase
 	 * @since 2.0
 	 * @param string $str The page title.
 	 */
-	public function SetTitle($str)
+	public function SetTitle(string $str)
 	{
 		if( $str == '' ) $str = null;
 		$this->_title = $str;
@@ -770,7 +770,7 @@ abstract class CmsAdminThemeBase
 	 * @since 2.0
 	 * @param string $str The page subtitle.
 	 */
-	public function SetSubTitle($str)
+	public function SetSubTitle(string $str)
 	{
 		if( $str == '' ) $str = null;
 		$this->_subtitle = $str;
@@ -785,7 +785,7 @@ abstract class CmsAdminThemeBase
      * @param string $permission the permission to check.
 	 * @return bool
      */
-    protected function HasPerm($permission)
+    protected function HasPerm(string $permission)
     {
 		$this->_SetAggregatePermissions();
 
@@ -815,14 +815,12 @@ abstract class CmsAdminThemeBase
 	 *
 	 * @ignore
 	 */
-	private function _get_navigation_tree_sub($parent = -1,$maxdepth = -1, $depth = 0)
+	private function _get_navigation_tree_sub(string $parent = null,int $maxdepth = -1,int $depth = 0)
 	{
 		$result = array();
 		$flatitems = $this->get_admin_navigation();
 		foreach( $flatitems as $key => $one ) {
-			if( !$one['show_in_menu'] ) continue;
-			if( (!isset($one['parent']) && $parent == -1) ||
-				(isset($one['parent']) && $one['parent'] == $parent) ) {
+			if( (empty($one['parent']) && !$parent) || ($one['parent'] == '-1' && !$parent) || (isset($one['parent']) && $one['parent'] == $parent) ) {
 				if( isset($one['children']) ) unset($one['children']);
 
 				if( $maxdepth < 0 || $depth + 1 < $maxdepth ) {
@@ -845,7 +843,7 @@ abstract class CmsAdminThemeBase
 	 * @param int $maxdepth The maximum depth of the tree.  -1 indicates no maximum depth
 	 * @return array A nested array of menu nodes.  The children member represents the nesting.
 	 */
-	public function get_navigation_tree($parent = -1,$maxdepth = -1)
+	public function get_navigation_tree(string $parent = null,int $maxdepth = -1)
 	{
 		$nodes = $this->_get_navigation_tree_sub($parent,$maxdepth);
 		return $nodes;
@@ -857,7 +855,7 @@ abstract class CmsAdminThemeBase
 	 * @since 2.0
 	 * @param string $module_name the module name.
 	 */
-	public function set_action_module($module_name)
+	public function set_action_module(string $module_name)
 	{
 		if( !$module_name ) return;
 		$this->_action_module = $module_name;
@@ -883,7 +881,7 @@ abstract class CmsAdminThemeBase
 	 * @access protected
 	 * @param string $module_name
 	 */
-	protected function get_module_help_url($module_name = null)
+	protected function get_module_help_url(string $module_name = null)
 	{
 		if( !$module_name ) $module_name = $this->get_action_module();
 		if( !$module_name ) return;
@@ -901,7 +899,7 @@ abstract class CmsAdminThemeBase
 	 * @param string $title The title to search for
 	 * @return string The matching key, or null
 	 */
-	protected function find_menuitem_by_title($title)
+	protected function find_menuitem_by_title(string $title)
 	{
 		$nav = $this->get_admin_navigation();
 		foreach( $nav as $key => $rec ) {
@@ -916,7 +914,7 @@ abstract class CmsAdminThemeBase
 	 * @param bool $pure if False the shortcuts for adding and managing bookmarks are added to the list.
 	 * @return array Array of Bookmark objects
 	 */
-	public function get_bookmarks($pure = FALSE)
+	public function get_bookmarks(bool $pure = FALSE)
 	{
 		$bookops = CmsApp::get_instance()->GetBookmarkOperations();
 		$marks = array_reverse($bookops->LoadBookmarks($this->userid));
@@ -985,7 +983,7 @@ abstract class CmsAdminThemeBase
 	 * @param string $key
 	 * @returns void
 	 */
-	public function get_value($key)
+	public function get_value(string $key)
 	{
 		if( is_array($this->_data) && isset($this->_data[$key]) ) return $this->_data[$key];
 	}
@@ -1000,7 +998,7 @@ abstract class CmsAdminThemeBase
 	 * @param string $section section to test
 	 * @return bool
 	 */
-	public function HasDisplayableChildren($section)
+	public function HasDisplayableChildren(string $section)
 	{
 		$displayableChildren=false;
 		foreach($this->_menuItems[$section]['children'] as $thisChild) {
@@ -1022,7 +1020,7 @@ abstract class CmsAdminThemeBase
 	 * @param int $height height
 	 * @param string $class class
 	 */
-	public function DisplayImage($imageName, $alt='', $width='', $height='', $class='')
+	public function DisplayImage(string $imageName, string $alt='', $width = '', $height = '', string $class = null)
 	{
 		// @todo: fix me...
 		if( !is_array($this->_imageLink) ) $this->_imageLink = array();
@@ -1047,8 +1045,8 @@ abstract class CmsAdminThemeBase
 
 		$retStr = '<img src="'.$this->_imageLink[$imageName].'"';
 		if ($class != '') $retStr .= ' class="'.$class.'"';
-		if ($width != '') $retStr .= ' width="'.$width.'"';
-		if ($height != '') $retStr .= ' height="'.$height.'"';
+		if ($width != '') $retStr .= ' width="'.(int)$width.'"';
+		if ($height != '') $retStr .= ' height="'.(int)$height.'"';
 		if ($alt != '') $retStr .= ' alt="'.$alt.'" title="'.$alt.'"';
 		$retStr .= ' />';
 		return $retStr;
@@ -1062,7 +1060,7 @@ abstract class CmsAdminThemeBase
 	 * @param mixed $errors The errors, either a string, or an array of strings
 	 * @param string $get_var An optional get variable name that can contain an error string key.  If specified, errors is ignored.
 	 */
-	abstract public function ShowErrors($errors,$get_var='');
+	abstract public function ShowErrors($errors,string $get_var = null );
 
 	/**
 	 * Abstrct function for showing messages in the admin theme.
@@ -1071,7 +1069,7 @@ abstract class CmsAdminThemeBase
 	 * @param mixed $message The message, either a string, or an array of stri9ngs
 	 * @param string $get_var An optional get variable name that can contain an error string key.  If specified, message param is ignored.
 	 */
-	abstract public function ShowMessage($message,$get_var='');
+	abstract public function ShowMessage($message,string $get_var = null );
 
 	/**
 	 * Abstract method for showing a header in the content area of a theme
@@ -1084,7 +1082,7 @@ abstract class CmsAdminThemeBase
 	 * @param string $link_text Text to show in the module help link (depends on the module_help_type param)
 	 * @param mixed  $module_help_type Flag for how to display module help types.   Possible values are TRUE to display a simple link, FALSE for no help, and 'both' for both types of links
 	 */
-	abstract public function ShowHeader($title_name,$extra_lang_params = array(),$link_text = '',$module_help_type = FALSE);
+	abstract public function ShowHeader(string $title_name,array $extra_lang_params = [],string $link_text = null,$module_help_type = FALSE);
 
 
 	/**
@@ -1134,7 +1132,7 @@ abstract class CmsAdminThemeBase
 	 * @param string $name optional theme name.
 	 * @return CmsAdminThemeBase Reference to the initialized admin theme.
 	 */
-	static public function GetThemeObject($name = '')
+	static public function GetThemeObject(string $name = null)
 	{
 		if( is_object(self::$_instance) ) return self::$_instance;
 
@@ -1191,7 +1189,7 @@ abstract class CmsAdminThemeBase
 	 * @param string $module The module name.
 	 * @param string $html The contents of the notification
 	 */
-	public function AddNotification($priority,$module,$html)
+	public function AddNotification(int $priority,string $module,string $html)
 	{
 	  $notification = new CmsAdminThemeNotification;
 	  $notification->priority = max(1,min(3,$priority));
@@ -1220,7 +1218,7 @@ abstract class CmsAdminThemeBase
 	 * @param bool $none A flag indicating wether 'none' should be the first option.
 	 * @return array The keys of the array are langified strings to display to the user.  The values are URLS.
 	 */
-    public function GetAdminPages($none = TRUE)
+    public function GetAdminPages(bool $none = TRUE)
 	{
 		$opts = array();
 		if( $none ) $opts[ucfirst(lang('none'))] = '';
@@ -1264,7 +1262,7 @@ abstract class CmsAdminThemeBase
 	 *                           is marked as selected.
 	 * @return string The select list of pages
 	 */
-	public function GetAdminPageDropdown($name,$selected,$id = '')
+	public function GetAdminPageDropdown(string $name,string $selected,string $id = null)
 	{
 		$opts = $this->GetAdminPages();
         $attrs = array('name'=>trim((string)$name));
@@ -1297,7 +1295,7 @@ abstract class CmsAdminThemeBase
 	 */
 	public function BackUrl()
 	{
-		$count = count($this->_breadcrumbs) - 2;
+		$count = $this->_breadcrumbs ? count($this->_breadcrumbs) - 2 : -1;
 		$urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 		if ($count > -1) {
 			$txt = $this->_breadcrumbs[$count]['url'];
@@ -1392,7 +1390,7 @@ abstract class CmsAdminThemeBase
 	 * @param string $section_name The section name.  An empty string indicates that a navigation of all top level items should be created.
 	 * @return string html contents.
 	 */
-	abstract public function do_toppage($section_name);
+	abstract public function do_toppage(string $section_name);
 
 	/**
 	 * An abstract function for processing the login form.
@@ -1400,7 +1398,7 @@ abstract class CmsAdminThemeBase
 	 * @param  array $params
 	 * @return string html contents for the login page.
 	 */
-	abstract public function do_login($params);
+	abstract public function do_login(string $params);
 
 	/**
 	 * An abstract function for processing the content area of the page.
@@ -1409,7 +1407,7 @@ abstract class CmsAdminThemeBase
 	 * @param string $html HTML contents
 	 * @return string the HTML contents of the entire page.
 	 */
-	abstract public function postprocess($html);
+	abstract public function postprocess(string $html);
 
 	/**
 	 * ------------------------------------------------------------------
@@ -1492,7 +1490,7 @@ abstract class CmsAdminThemeBase
 	 * @param array $params Parameters
 	 * @return string
 	 */
-	public final function StartTab($tabid, $params = array())
+	public final function StartTab(string $tabid, array $params = [])
 	{
 		$message = '';
 		if (FALSE == empty($this->_activetab) && $tabid == $this->_activetab && FALSE == empty($params['tab_message'])) {
@@ -1548,7 +1546,7 @@ class CmsAdminThemeNotification
 	/**
 	 * @ignore
 	 */
-	public function __get($key)
+	public function __get(string $key)
 	{
 		switch( $key ) {
 		case 'module':
@@ -1564,7 +1562,7 @@ class CmsAdminThemeNotification
 	/**
 	 * @ignore
 	 */
-	public function __set($key,$value)
+	public function __set(string $key,string $value)
 	{
 		switch( $key ) {
 		case 'module':
