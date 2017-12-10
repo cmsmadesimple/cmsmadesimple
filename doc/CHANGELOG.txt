@@ -1,4 +1,4 @@
-Version 2.2.5 - 
+Version 2.2.5 - Wawa
 ----------------------------------
 Core - General
   - Fix minor security issue in the way login information was cached in cookies and the session.
