@@ -1668,14 +1668,15 @@ abstract class ContentBase
 		if (isset($params['showinmenu'])) $this->mShowInMenu = (int) $params['showinmenu'];
 
 		// alias
-		$tmp = null;
-        $is_owner = ContentOperations::get_instance()->CheckPageOwnership(get_userid(), $this->Id());
-        $is_admin  = check_permission(get_userid(),'Manage All Content');
-        // if we are adding, set alias to the field value, or calculate one
-        // if we have a new alias, set alias to the provided one (as long as it is okay)
-        // if editing, and we have a current alias AND no new alias AND (we are pages owner or admin of all page), set the alias
-		if( !$editing || $tmp || ($this->Alias() && !$tmp && ($is_owner || $is_admin)) ) {
-            $this->SetAlias($tmp);
+        // alias field can exist if the user has manage all content... OR alias is a basic property
+        // and this user has other edit rights to the content page.
+        // empty value on the alias field means we need to generate a new alias
+		$new_alias = null;
+        $alias_field_exists = isset( $params['alias'] );
+		if( isset($params['alias']) ) $new_alias = trim(strip_tags($params['alias']));
+        // if we are adding or we have a new alias, set alias to the field value, or calculate one, adjust as needed
+		if( $new_alias || $alias_field_exists ) {
+            $this->SetAlias($new_alias);
 		}
 
 		// target
