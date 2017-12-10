@@ -1,0 +1,6 @@
+Version 2.2.5 - Wawa
+----------------------------------
+Core - General
+  - Fix minor security issue in the way login information was cached in cookies and the session.
+  - Simplify rules around alias editing/generation in fillparams.  if the alias field exists then we can adjust it's value or
+    recalculate an alias.   Use basic properties, and ownership and permissions to determine if that field exists on the edit form.
