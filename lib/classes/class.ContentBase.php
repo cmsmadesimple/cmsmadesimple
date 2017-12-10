@@ -1037,26 +1037,6 @@ abstract class ContentBase
                 $test = $prefix.'-'.$num;
             } while( $testnum < 100 );
             if( $testnum >= 100 && $test != $alias ) throw new \CmsContentException(lang('aliasalreadyused'));
-
-            /*
-			if( $error !== FALSE ) {
-                // check for duplicates.
-                $alias = munge_string_to_url($alias);
-                $error = $contentops->CheckAliasError($alias, $this->Id());
-                if( $error !== FALSE ) {
-                    // If a '-2' version of the alias already exists, Check the '-3' version etc.
-                    $prefix = $alias;
-                    if( endswith($prefix,'-') ) $prefix = substr($prefix,0,strlen($prefix)-1);
-                    $test = null;
-                    for( $alias_num = 2; $alias_num < 100; $alias_num++ ) {
-                        $test = $prefix.'-'.$alias_num;
-                        if( ($tmp = $contentops->CheckAliasError($test)) === FALSE ) break;
-                    }
-                    if( $alias_num >= 100 ) throw new \CmsContentException($error);
-                    $alias = $test;
-                }
-            }
-            */
 		}
 
 		$this->mAlias = $alias;
@@ -1795,15 +1775,15 @@ abstract class ContentBase
 		if (isset($params['showinmenu'])) $this->mShowInMenu = (int) $params['showinmenu'];
 
 		// alias
-		$tmp = null;
-		if( isset($params['alias']) ) $tmp = strip_tags(trim($params['alias']));
-        $is_owner = ContentOperations::get_instance()->CheckPageOwnership(get_userid(), $this->Id());
-        $is_admin  = check_permission(get_userid(),'Manage All Content');
-        // if we are adding, set alias to the field value, or calculate one
-        // if we have a new alias, set alias to the provided one (as long as it is okay)
-        // if editing, and we have a current alias AND no new alias AND (we are pages owner or admin of all page), set the alias
-		if( !$editing || $tmp || ($this->Alias() && !$tmp && ($is_owner || $is_admin)) ) {
-            $this->SetAlias($tmp);
+        // alias field can exist if the user has manage all content... OR alias is a basic property
+        // and this user has other edit rights to the content page.
+        // empty value on the alias field means we need to generate a new alias
+		$new_alias = null;
+        $alias_field_exists = isset( $params['alias'] );
+		if( isset($params['alias']) ) $new_alias = trim(strip_tags($params['alias']));
+        // if we are adding or we have a new alias, set alias to the field value, or calculate one, adjust as needed
+		if( $new_alias || $alias_field_exists ) {
+            $this->SetAlias($new_alias);
 		}
 
 		// target
