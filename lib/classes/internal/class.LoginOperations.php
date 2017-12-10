@@ -50,23 +50,14 @@ final class LoginOperations
         $userops = \UserOperations::get_instance();
         $oneuser = $userops->LoadUserByID((int) $uid);
         if( !$oneuser ) return FALSE;
+        if( !$oneuser->active ) return FALSE;
+        $checksum = (string) $checksum;
+        if( !$checksum ) return FALSE;
 
         $tmp = array(md5(__FILE__),$oneuser->password,$uid,\cms_utils::get_real_ip(),$_SERVER['HTTP_USER_AGENT']);
         $tmp = sha1(serialize($tmp));
-        if ($oneuser && (string)$checksum != '' && $checksum === $tmp ) return TRUE;
+        if( $checksum === $tmp ) return TRUE;
         return FALSE;
-    }
-
-    protected function _encrypt($user_rec)
-    {
-        // this is not strong encryption, just enough to make the data obfuscated
-        // only a username and userid, and a password hash are stored anyways.
-        return str_rot13(base64_encode(serialize($user_rec)));
-    }
-
-    protected function _decrypt($data)
-    {
-        return unserialize(base64_decode(str_rot13($data)));
     }
 
     public function save_authentication(\User $user,\User $effective_user = null)
@@ -74,20 +65,24 @@ final class LoginOperations
         // saves session/cookie data
         if( $user->id < 1 || empty($user->password) ) throw new \LogicException('User information invalid for '.__METHOD__);
 
-        $tmp = array(md5(__FILE__),$user->password,$user->id,\cms_utils::get_real_ip(),$_SERVER['HTTP_USER_AGENT']);
-        $tmp = sha1(serialize($tmp));
+        $tmp = [ md5(__FILE__),\cms_utils::get_real_ip(),$_SERVER['HTTP_USER_AGENT'].CMS_VERSION ];
+        $salt = sha1(serialize($tmp));
+
+        $tmp = [ md5(__FILE__),$user->password,$user->id,\cms_utils::get_real_ip(),$_SERVER['HTTP_USER_AGENT'] ];
+        $cksum = sha1(serialize($tmp));
 
         $private_data = array();
         $private_data['uid'] = $user->id;
         $private_data['username'] = $user->username;
-        $private_data['cksum'] = $tmp;
         $private_data['eff_uid'] = null;
         $private_data['eff_username'] = null;
+        $private_data['cksum'] = $cksum;
         if( $effective_user && $effective_user->id > 0 && $effective_user->id != $user->id ) {
             $private_data['eff_uid'] = $effective_user->id;
             $private_data['eff_username'] = $effective_user->username;
         }
-        $_SESSION[$this->_loginkey] = $this->_encrypt($private_data);
+        $tmp = base64_encode( serialize( $private_data ) );
+        $_SESSION[$this->_loginkey] = sha1( $tmp.$salt ).'::'.$tmp;
         \cms_cookies::set($this->_loginkey,$_SESSION[$this->_loginkey]);
 
         $key = substr(str_shuffle(sha1(__DIR__.$user->id.time().session_id())),-19);
@@ -111,7 +106,14 @@ final class LoginOperations
         }
 
         if( !$private_data ) return;
-        $private_data = $this->_decrypt($private_data);
+        $parts = explode('::',$private_data,2);
+        if( count($parts) != 2 ) return;
+
+        $tmp = [ md5(__FILE__),\cms_utils::get_real_ip(),$_SERVER['HTTP_USER_AGENT'].CMS_VERSION ];
+        $salt = sha1(serialize($tmp));
+        if( sha1( $parts[1].$salt ) != $parts[0] ) return;
+        $private_data = unserialize( base64_decode( $parts[1]) );
+
         if( !is_array($private_data) ) return;
         if( empty($private_data['uid']) ) return;
         if( empty($private_data['username']) ) return;
@@ -122,7 +124,7 @@ final class LoginOperations
         if( !\CmsApp::get_instance()->is_frontend_request() && !$this->_check_passhash($private_data['uid'],$private_data['cksum']) ) return;
 
         // if we get here, the user is authenticated.
-        // set the session key for all URL from the cookie if it exists.
+        // set the session key from the cookie if it exists.
         if( !isset($_SESSION[CMS_USER_KEY]) ) {
             if( \cms_cookies::exists(CMS_SECURE_PARAM_NAME) ) $_SESSION[CMS_USER_KEY] = \cms_cookies::get(CMS_SECURE_PARAM_NAME);
         }
