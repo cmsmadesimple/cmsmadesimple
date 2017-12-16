@@ -1780,9 +1780,9 @@ abstract class ContentBase
         // empty value on the alias field means we need to generate a new alias
 		$new_alias = null;
         $alias_field_exists = isset( $params['alias'] );
-		if( isset($params['alias']) ) $new_alias = trim(strip_tags($params['alias']));
+		if( $alias_field_exists ) $new_alias = trim(strip_tags($params['alias']));
         // if we are adding or we have a new alias, set alias to the field value, or calculate one, adjust as needed
-		if( $new_alias || $alias_field_exists ) {
+		if( !$editing || $new_alias || $alias_field_exists ) {
             $this->SetAlias($new_alias);
 		}
 
