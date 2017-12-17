@@ -39,7 +39,7 @@ final class CmsJobManager extends \CMSModule
     public static function table_name() { return cms_db_prefix().'mod_cmsjobmgr'; }
 
     function GetFriendlyName() { return $this->Lang('friendlyname'); }
-    function GetVersion() { return '0.1.1'; }
+    function GetVersion() { return '0.1.2'; }
     function MinimumCMSVersion() { return '2.1.99'; }
     function GetAuthor() { return 'Calguy1000'; }
     function GetAuthorEmail() { return 'calguy1000@cmsmadesimple.org'; }
@@ -120,15 +120,15 @@ final class CmsJobManager extends \CMSModule
     {
         // this is cheaper.
         $out = \CmsJobManager\JobQueue::get_jobs(1);
-        if( count($out) ) return TRUE;
+        if( $out ) return TRUE;
 
         // gotta check for tasks, which is more expensive
         $now = time();
         $lastcheck = (int) $this->GetPreference('tasks_lastcheck');
         if( $lastcheck < $now - 900 ) {
             $this->SetPreference('tasks_lastcheck',$now);
-            $tasks = $this->create_jobs_from_eligible_tasks();
-            if( count($tasks) ) return TRUE;
+            $res = $this->create_jobs_from_eligible_tasks();
+            if( $res ) return TRUE;
         }
         return FALSE;
     }
