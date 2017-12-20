@@ -72,9 +72,9 @@ class cms_tree
    * @param string $key An optional key for a tag
    * @param mixed  $value An optional value for the tag.
    */
-  public function __construct(string $key = '',$value = '')
+  public function __construct($key = null,$value = '')
   {
-	  if( $key ) {
+      if( $key ) {
 		  if( is_string($key) ) {
 			  $this->set_tag($key,$value);
 		  }
