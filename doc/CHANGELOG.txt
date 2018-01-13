@@ -113,6 +113,9 @@ Search  - remember to bump version
 AdminSearch v1.0.5
  - Rationalize the code a bit (remove un-necessary files).
 
+DesignManager v1.1.6
+ - Now properly handle renaming exported stylesheets and templates.
+
 Version 2.2.2 - Hearts Content
 ----------------------------------
 Core - General

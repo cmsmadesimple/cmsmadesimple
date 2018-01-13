@@ -45,7 +45,6 @@ try {
 
     try {
         if (isset($params['submit']) || isset($params['apply']) && $response !== 'error') {
-            if (isset($params['name'])) $css_ob->set_name($params['name']);
             if (isset($params['description'])) $css_ob->set_description($params['description']);
             if (isset($params['content'])) $css_ob->set_content($params['content']);
             $typ = array();
@@ -57,6 +56,17 @@ try {
                 if (isset($params['design_list'])) $design_list = $params['design_list'];
                 $css_ob->set_designs($design_list);
             }
+
+            $old_export_name = $css_ob->get_content_filename();
+            if (isset($params['name'])) $css_ob->set_name($params['name']);
+            $css_ob->set_name($params['name']);
+            $new_export_name = $css_ob->get_content_filename();
+            if( $old_export_name != $new_export_name && is_file( $old_export_name ) ) {
+                if( is_file( $new_export_name ) ) throw new \Exception('Cannot rename exported stylesheet (destination name exists)');
+                $res = rename($old_export_name,$new_export_name);
+                if( !$res ) throw new \Exception( "Problem renaming exported stylesheet" );
+            }
+
             $css_ob->save();
 
             if (!$apply) {

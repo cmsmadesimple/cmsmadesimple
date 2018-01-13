@@ -79,7 +79,15 @@ try {
             if (isset($params['category_id'])) $tpl_obj->set_category($params['category_id']);
             $tpl_obj->set_listable(isset($params['listable'])?$params['listable']:1);
             if( isset($params['contents']) ) $tpl_obj->set_content($params['contents']);
+
+            $old_export_name = $tpl_obj->get_content_filename();
             $tpl_obj->set_name($params['name']);
+            $new_export_name = $tpl_obj->get_content_filename();
+            if( $old_export_name != $new_export_name && is_file( $old_export_name ) ) {
+                if( is_file( $new_export_name ) ) throw new \Exception('Cannot rename exported template (destination name exists)');
+                $res = rename($old_export_name,$new_export_name);
+                if( !$res ) throw new \Exception( "Problem renaming exported template" );
+            }
 
             if ($this->CheckPermission('Manage Designs')) {
                 $design_list = array();
