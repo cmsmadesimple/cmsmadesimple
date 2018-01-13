@@ -83,8 +83,8 @@ $load_perms = function() use ($db) {
             $thisPerm->id = $row['permission_id'];
             $thisPerm->name = $thisPerm->label = $row['permission_text'];
             $thisPerm->source = $row['permission_source'];
-            $thisPerm->label = \CMSMS\HookManager::get_first_hook_result('localizeperm',$thisPerm->source,$thisPerm->name);
-            $thisPerm->description = \CMSMS\HookManager::get_first_hook_result('getperminfo',$thisPerm->source,$thisPerm->name);
+            $thisPerm->label = \CMSMS\HookManager::do_hook_first_result('localizeperm',$thisPerm->source,$thisPerm->name);
+            $thisPerm->description = \CMSMS\HookManager::do_hook_first_result('getperminfo',$thisPerm->source,$thisPerm->name);
             $perm_struct[$row['permission_id']] = $thisPerm;
         }
     }

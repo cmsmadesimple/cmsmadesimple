@@ -23,6 +23,8 @@ class module_info implements \ArrayAccess
             return ModuleOperations::get_instance()->get_module_path( $this->_data['name'] );
 
         case 'writable':
+	    $dir = $this['dir'];
+	    if( !$dir || !is_dir( $dir ) ) return false;
             return is_directory_writable($this['dir']);
 
         case 'root_writable':
