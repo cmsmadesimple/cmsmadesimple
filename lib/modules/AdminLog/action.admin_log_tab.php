@@ -67,4 +67,5 @@ $tpl->assign('pagelist',$pagelist);
 $tpl->assign('severity_list',$severity_list);
 $tpl->assign('page',$page);
 $tpl->assign('filter_applied',$filter_applied);
+$tpl->assign('mod',$this);
 $tpl->display();
