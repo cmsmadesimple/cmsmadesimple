@@ -39,7 +39,7 @@ $(document).ready(function(){
         $('#form_edittemplate').dirtyForm('option','dirty',true);
     });
 
-    $('#form_edittemplate').on('click','[name$=apply],[name$=submit],[$name$=cancel]',function(){
+    $('#form_edittemplate').on('click','[name$=apply],[name$=submit],[name$=cancel]',function(){
         // if we manually click on one of these buttons, the form is no longer considered dirty for the purposes of warnings.
         $('#form_edittemplate').dirtyForm('option','dirty',false);
     });
