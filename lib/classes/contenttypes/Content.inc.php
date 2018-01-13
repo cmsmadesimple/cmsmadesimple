@@ -148,7 +148,7 @@ class Content extends ContentBase
 	 * @param array $params Hash of parameters to load into content attributes
 	 * @param bool  $editing Whether we in an add or edit operation.
 	 */
-    function FillParams($params,$editing = false)
+    function FillParams(array $params,bool $editing = false)
     {
 		if (isset($params)) {
 			$parameters = array('pagedata','searchable','disable_wysiwyg','design_id','wantschildren');
@@ -207,7 +207,7 @@ class Content extends ContentBase
 	 * @param string $param which attribute to return (content_en is assumed)
 	 * @return string the specified content
 	 */
-    function Show($param = 'content_en')
+    function Show(string $param = 'content_en')
     {
 		$param = trim($param);
 		if( !$param ) $param = 'content_en';
@@ -342,7 +342,7 @@ class Content extends ContentBase
 	 * @return array consisting of two elements: A label, and the input element HTML and javascript.
 	 * @internal
 	 */
-    protected function display_single_element($one,$adding)
+    protected function display_single_element(string $one,bool $adding)
     {
 		static $_designs;
 		static $_types;

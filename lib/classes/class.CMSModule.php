@@ -2708,7 +2708,7 @@ abstract class CMSModule
      * @deprecated
      * @return bool
      */
-    public function DoEvent( string $originator, string $eventname, array &$params )
+    public function DoEvent( $originator, $eventname, &$params )
     {
         if ($originator != '' && $eventname != '') {
             $filename = $this->GetModulePath().'/event.' . $originator . "." . $eventname . '.php';
@@ -2733,7 +2733,7 @@ abstract class CMSModule
      * @return string
      * @deprecated
      */
-    public function GetEventDescription( string $eventname )
+    public function GetEventDescription( $eventname )
     {
         return "";
     }
@@ -2749,7 +2749,7 @@ abstract class CMSModule
      * @return string
      * @deprecated
      */
-    public function GetEventHelp( string $eventname )
+    public function GetEventHelp( $eventname )
     {
         return "";
     }
