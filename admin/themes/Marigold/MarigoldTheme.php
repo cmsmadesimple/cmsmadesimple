@@ -36,7 +36,7 @@ class MarigoldTheme extends CmsAdminThemeBase {
 	private $_errors = array();
 	private $_messages = array();
 
-	public function ShowErrors($errors, $get_var = '') {
+	public function ShowErrors($errors, string $get_var = null) {
 		// cache errors for use in the template.
 		if ($get_var != '' && isset($_GET[$get_var]) && !empty($_GET[$get_var])) {
 			if (is_array($_GET[$get_var])) {
@@ -56,7 +56,7 @@ class MarigoldTheme extends CmsAdminThemeBase {
 		return '<!-- Marigold::ShowErrors() called -->';
 	}
 
-	public function ShowMessage($message, $get_var = '') {
+	public function ShowMessage($message, string $get_var = null) {
 		// cache message for use in the template.
 		if ($get_var != '' && isset($_GET[$get_var]) && !empty($_GET[$get_var])) {
 			if (is_array($_GET[$get_var])) {
@@ -75,7 +75,7 @@ class MarigoldTheme extends CmsAdminThemeBase {
 		}
 	}
 
-	public function ShowHeader($title_name, $extra_lang_params = array(), $link_text = '', $module_help_type = FALSE) {
+	public function ShowHeader(string $title_name, array $extra_lang_params = [], string $link_text = null, $module_help_type = FALSE) {
 		if ($title_name) $this->set_value('pagetitle', $title_name);
 		if (is_array($extra_lang_params) && count($extra_lang_params)) $this->set_value('extra_lang_params', $extra_lang_params);
 		$this->set_value('module_help_type', $module_help_type);
@@ -138,7 +138,7 @@ class MarigoldTheme extends CmsAdminThemeBase {
 	public function do_footer() {
 	}
 
-	public function do_toppage($section_name) {
+	public function do_toppage(string $section_name) {
 		$smarty = Smarty_CMS::get_instance();
 		$otd = $smarty->template_dir;
 		$smarty->template_dir = __DIR__ . '/templates';
@@ -163,7 +163,7 @@ class MarigoldTheme extends CmsAdminThemeBase {
 	}
 
 
-	public function do_login($params)
+	public function do_login(array $params)
 	{
 	  // by default we're gonna grab the theme name
         $config = cms_config::get_instance();
@@ -179,7 +179,7 @@ class MarigoldTheme extends CmsAdminThemeBase {
 	  return $_contents;
 	}
 
-	public function postprocess($html) {
+	public function postprocess(string $html) {
 		$smarty = Smarty_CMS::get_instance();
 		$otd = $smarty->template_dir;
 		$smarty->template_dir = __DIR__ . '/templates';
@@ -196,22 +196,23 @@ class MarigoldTheme extends CmsAdminThemeBase {
 				$title = lang($title, $extra);
 			}
 		} else {
-		  if( $this->title ) {
-		    $title = $this->title;
-		  }
-		  else {
-		    // no title, get one from the breadcrumbs.
-		    $bc = $this->get_breadcrumbs();
-		    if (is_array($bc) && count($bc)) {
-		      $title = $bc[count($bc) - 1]['title'];
-		    }
-		  }
+            if( $this->title ) {
+                $title = $this->title;
+            }
+            else {
+                // no title, get one from the breadcrumbs.
+                $bc = $this->get_breadcrumbs();
+                if (is_array($bc) && count($bc)) {
+                    $title = $bc[count($bc) - 1]['title'];
+                }
+            }
+            if( !$title ) $title = '';
 		}
 
         // page title and alias
 		$smarty->assign('pagetitle', $title);
         $smarty->assign('subtitle',$this->subtitle);
-        $smarty->assign('pagealias', munge_string_to_url($alias));
+        $smarty->assign('pagealias', munge_string_to_url($title));
 
 		// module name?
 		if (($module_name = $this->get_value('module_name'))) {

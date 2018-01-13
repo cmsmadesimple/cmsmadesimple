@@ -1060,7 +1060,7 @@ abstract class CmsAdminThemeBase
 	 * @param mixed $errors The errors, either a string, or an array of strings
 	 * @param string $get_var An optional get variable name that can contain an error string key.  If specified, errors is ignored.
 	 */
-	abstract public function ShowErrors($errors,string $get_var = null );
+	abstract public function ShowErrors($errors, string $get_var = null );
 
 	/**
 	 * Abstrct function for showing messages in the admin theme.
@@ -1398,7 +1398,7 @@ abstract class CmsAdminThemeBase
 	 * @param  array $params
 	 * @return string html contents for the login page.
 	 */
-	abstract public function do_login(string $params);
+	abstract public function do_login(array $params);
 
 	/**
 	 * An abstract function for processing the content area of the page.

@@ -96,7 +96,7 @@ if( $USE_THEME ) {
     if( $title ) $module_help_type = null;
     if( !$title ) $title = $themeObject->get_active_title();
     if( !$title ) $title = $modinst->GetFriendlyName();
-    echo $themeObject->ShowHeader($title,'','',$module_help_type).'</div>';
+    echo $themeObject->ShowHeader($title,[],'',$module_help_type).'</div>';
     echo $content;
     echo '</div>';
     include_once("footer.php");

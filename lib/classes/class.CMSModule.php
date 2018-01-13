@@ -1357,7 +1357,7 @@ abstract class CMSModule
      * @param int    $returnid The current page id that is being displayed.
      * @return string output XHTML.
      */
-    public function DoAction(string $name, string $id, array $params, int $returnid = null)
+    public function DoAction($name, $id, $params, $returnid = null)
     {
         if( $returnid == '' ) {
             $key = $this->GetName().'::activetab';
@@ -2474,10 +2474,10 @@ abstract class CMSModule
      * Returns a formatted page status message
      *
      * @final
-     * @param string $message Message to be shown
+     * @param string|string[] $message Message to be shown
      * @return string
      */
-    public function ShowMessage(string $message)
+    public function ShowMessage($message)
     {
         $theme = cms_utils::get_theme_object();
         if( is_object($theme) ) return $theme->ShowMessage($message);
