@@ -299,7 +299,7 @@ $(document).ready(function(){
 </script>
 
 	<div id="testpopup" title="{lang('title_mailtest')}" style="display: none;">
-		<form id="siteprefform_mail" method="post" action="{$formurl}">
+		<form id="siteprefform_mailtest" method="post" action="{$formurl}">
 			<div>
 				<input type="hidden" name="{$SECURE_PARAM_NAME}" value="{$CMS_USER_KEY}"/>
 				<input type="hidden" name="active_tab" value="mail" />
@@ -544,7 +544,7 @@ $(document).ready(function(){
 
 {* +++++++++++++++++++++++++++++++++++++++++++ *}
 {tab_start name='smarty'}
-	<form id="siteprefform_setup" method="post" action="{$formurl}">
+	<form id="siteprefform_smarty" method="post" action="{$formurl}">
 		<div>
 			<input type="hidden" name="{$SECURE_PARAM_NAME}" value="{$CMS_USER_KEY}"/>
 			<input type="hidden" name="active_tab" value="smarty" />
