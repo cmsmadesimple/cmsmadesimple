@@ -218,6 +218,11 @@ abstract class Alert
     public function get_prefname($name = null)
     {
         if( !$name ) $name = $this->name;
+        return self::get_fixed_prefname( $name );
+    }
+
+    protected static function get_fixed_prefname( $name )
+    {
         return 'adminalert_'.md5($name);
     }
 
@@ -262,12 +267,14 @@ abstract class Alert
      * @param string $name The preference name
      * @return Alert
      */
-    public static function load_by_name($name)
+    public static function load_by_name($name, $throw = true )
     {
         $name = trim($name);
         if( !$name ) throw new \InvalidArgumentException('Invalid alert name passed to '.__METHOD__);
-        $tmp = \cms_siteprefs::get($name);
-        if( !$tmp ) throw new \LogicException('Could not find an alert with the name '.$name);
+        if( !startswith( $name, 'adminalert_') ) $name = self::get_fixed_prefname( $name );
+        $tmp = \cms_siteprefs::get( $name );
+        if( !$tmp && $throw ) throw new \LogicException('Could not find an alert with the name '.$name);
+        if( !$tmp ) return;
 
         $obj = self::decode_object($tmp);
         if( !is_object($obj) ) throw new \LogicException('Problem loading alert named '.$name);
