@@ -1,6 +1,11 @@
-Version 2.2.6 -
+Version 2.2.6 - NO NAME SET
+----------------------------------
 Core - General
   - Fixes to AdminAlerts::load_by_name()
+
+Search
+  - Fix notice in PHP 7.1: A non well formed numeric value encountered...
+
 
 Version 2.2.5 - Wawa
 ----------------------------------
