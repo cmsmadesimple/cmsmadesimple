@@ -116,6 +116,138 @@ AdminSearch v1.0.5
 DesignManager v1.1.6
  - Now properly handle renaming exported stylesheets and templates.
 
+
+Version 2.2.6 - NO NAME SET
+----------------------------------
+Core - General
+  - Fixes to AdminAlerts::load_by_name()
+
+Search
+  - Fix notice in PHP 7.1: A non well formed numeric value encountered...
+
+
+Version 2.2.5 - Wawa
+----------------------------------
+Core - General
+  - Fix minor security issue in the way login information was cached in cookies and the session.
+  - Simplify rules around alias editing/generation in fillparams. 
+    If the alias field exists then we can adjust its value or recalculate an alias.
+    Use basic properties, and ownership and permissions to determine if that field exists on the edit form.
+  - Minor fixes to the CmsJobManager.
+
+
+Version 2.2.4 - Little Paradise
+----------------------------------
+Core - General
+  - Improvements to the Hook class.
+  - Minor fix to usertagoperations.
+  - Changes to the hierarchy selector to disallow circular references.
+  - Fix problems with additional editors causing page aliases to be regenerated.
+  - Minor fixes to Admin log browser.
+  - Minor fixes to Admin login.
+  - Add missing call Core::LoginPre hook.
+  - Modify myaccount.php to call Core::EditUserPre hook BEFORE the password is set.
+  - Fix documentation to CallUserTag.
+  - Fix to default handling for content_image block.
+  - Improve the help for the {page_attr} plugin.
+  - Fix a potential warning in the {anchor} tag.
+  - Fix boolean comparison in LoginOperations.
+
+Installation Assistant v1.3.4
+  - Fixes endless recursion issue with setting a tmpdir.
+  - Fix issue with requiring a database prefix on upgrade.
+
+FilePicker v1.0.2
+  - Now allow specifying a 'useprefix' boolean parameter to the action url which will use the current top directory.
+  - Add a prefix on all returned strings.
+  - Slight modification to the profile class.
+  - Now sends the FileManager::OnFileUploaded hook the same way as FileManager does.
+  - Adds an exception handler around the change working directory stuff.
+
+FileManager v1.6.5
+  - Change upload action to call FileManager::OnFileUploaded hook before creating the thumbnail to allow a hook to rename the uploaded file.
+  - Now enable creation of thumbnails on install.
+
+MicroTiny v2.2.2
+  - Minor fix for the filepicker if using a default filepicker profile that specifies a top directory.
+  - Re-adds the table plugin (went missing when we upgraded tinymce).
+
+ModuleManager v2.1.3
+  - Adds audit line displaying status if cannot connect to ModuleRepository.
+
+DesignManager v1.1.4
+  - Fixes problems with the cancel button not marking the form as 'clean' (not dirty).
+
+
+Version 2.2.3.1 - Happy Adventure
+----------------------------------
+Core - General
+  - Fix an issue when parsing multiple content blocks.
+
+
+Version 2.2.3 - Happy Adventure
+----------------------------------
+Core - General
+  - Fixed a redirect loop problem on mixed HTTP/HTTPS sites when the secure flag was set on some pages.
+  - Fixed a problem with prefilters and postfilters not working if placed in /assets/plugins.
+  - Now use our own derivative of Smarty Internal Template so that we can send hooks, etc.
+  - Improved error message if there was an error parsing the template (or a duplicate content block).
+  - Fixes content blocks, image blocks, module blocks containing whitespace in the name.
+  - Minor fix to {cms_filepicker} plugin.
+  - Improve the CmsModuleInfo class such that if the module class file is newer it will be loaded.
+  - Now generate the moduleinfo.ini file automatically on install or upgrade of a module.
+  - Increase the maxlength attribute for password input boxes in myaccount.
+  - Adds a StartsWith JavaScript shiv for IE11.
+  - Revert the protocol-less URI for root_url (more changes coming for 2.3).
+  - Get rid of the smart_url config option.
+  - Fix a problem when testing for duplicate aliases of the form string-###  where the suffix integer was greater than 100.
+  - More fixes to mact preprocessing if {content} was in the top of the template.
+  - Minor fix to ExpandXMLPackage to not throw an exception in brief mode if module is not compatible with the current version of CMSMS.
+  - adds new cms_entities_array function in misc to convert an array recursively to values.
+  - Fixes transposed arguments in UserOperations::AddMemberGroup().
+  - Better detection of duplicate content blocks.
+  - Revert template_stack change to Smarty_CMS from 2.2.2
+  - Improvements to HookManager.
+
+CmsJobManager v0.1.1
+  - Optimization of audit logging.
+  - Change connection timeout to 1 second.
+  - Change processing to be a little more friendly to some environments wrt. content-size header.
+  - Prevent processing from the CLI when root_url is calculated.
+
+MicroTiny v2.2.1
+  - Minor fix for filepicker plugin.
+
+News v2.51.3
+  - For security, no longer urldecode the detailtemplate parameter in detail view.
+    This may have some implications for people that are specifying the detailtemplate parameter (with a template with special characters) from within a WYSIWYG (which is not recommended behavior).
+  - Convert title and dropdown options and text fields to entities before display.
+
+ModuleManager v2.1.2
+  - Now sort modules in the installed tab a bit better.
+  - Now handle module 'not available' a bit better.
+
+FileManager v1.6.4
+  - Add a different icon for navigating up one level.
+  - No longer allow uploading any php (or derivative) file.
+  - No longer allow renaming any file to have a .php extension (or a derivative).
+  - Fixes an issue when improper/invalid values for root path and uploads path are manually specified in the config.php
+
+FilePicker v1.0.1
+  - No longer allow overriding the filepicker type on the URL.
+  - No longer allow uploading any .php files.
+
+CMSContentmanager v1.1.6
+  - Now double check that the 'default parent' for new pages actually exists.
+
+Navigator v1.0.8
+  - Minor english documentation correction.
+
+Installation Assistant v1.3.3
+  - Now look for lib/include.php before include.php in step 8 and step 9 when connecting to CMSMS.
+  - Fixes to upgrade routine for 2.1.5 wrt. the 'Manage Stylesheets' permission (ignore an exception)
+
+
 Version 2.2.2 - Hearts Content
 ----------------------------------
 Core - General

@@ -242,7 +242,7 @@ if ($params['searchinput'] != '') {
     $tpl_ob->assign('results', $col->_ary);
     $tpl_ob->assign('itemcount', count($col->_ary));
 
-    $searchendtime = microtime();
+    $searchendtime = microtime(true);
     $tpl_ob->assign('timetook', ($searchendtime - $searchstarttime));
 }
 else {
