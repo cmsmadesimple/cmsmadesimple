@@ -24,6 +24,7 @@ for ($cnt = 0; $cnt < sizeof($handlers); $cnt++) { ob_end_clean(); }
 $CMS_ADMIN_PAGE=1;
 require_once("../lib/include.php");
 $ruid = get_userid(FALSE);
+if( !$ruid ) return;
 
 $fh = fopen('php://input','r');
 $txt = fread($fh,8192);
