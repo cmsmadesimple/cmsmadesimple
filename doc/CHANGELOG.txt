@@ -1,4 +1,4 @@
-Version 2.2.6 - NO NAME SET
+Version 2.2.6 - Come by Chance
 ----------------------------------
 Core - General
   - Fixes to AdminAlerts::load_by_name()

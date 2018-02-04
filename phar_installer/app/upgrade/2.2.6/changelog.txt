@@ -1,0 +1,9 @@
+Version 2.2.6 - Come by Chance
+----------------------------------
+Core - General
+  - Fixes to AdminAlerts::load_by_name()
+  - SetMessage() and SetError() in the module API now use session variables
+  - Remove support for module_error and module_action request parameters in admin module actions.
+
+Search v1.51.3
+  - Fix notice in PHP 7.1: A non well formed numeric value encountered...
