@@ -100,18 +100,6 @@ abstract class CMSModule
      * @access private
      * @ignore
      */
-    private $__errors;
-
-    /**
-     * @access private
-     * @ignore
-     */
-    private $__messages;
-
-    /**
-     * @access private
-     * @ignore
-     */
     private $__current_tab;
 
     /**
@@ -323,7 +311,6 @@ abstract class CMSModule
      * @see can_cache_output
      * @param bool $forcedb Indicate wether this registration should be forced to be entered in the database. Default value is false (for compatibility)
      * @param bool|null $cachable Indicate wether this plugins output should be cachable.  If null, use the site preferences, and the can_cache_output method.  Otherwise a bool is expected.
-     * @deprecated
      */
     final public function RegisterModulePlugin($forcedb = FALSE,$cachable = false)
     {
@@ -1389,11 +1376,15 @@ abstract class CMSModule
     public function DoAction($name, $id, $params, $returnid='')
     {
         if( $returnid == '' ) {
-            if( isset($params['__activetab']) ) $this->SetCurrentTab(trim($params['__activetab']));
-            if( isset($params['__errors']) ) $this->__errors = explode('::err::',$params['__errors']);
-            if( isset($params['__messages']) ) $this->__messages = explode('::msg::',$params['__messages']);
-            if( is_array($this->__errors) && count($this->__errors) ) echo $this->ShowErrors($this->__errors);
-            if( is_array($this->__messages) && count($this->__messages) ) echo $this->ShowMessage($this->__messages[0]);
+            $errors = $messages = null;
+            if( isset($params['__activetab']) ) $this->SetCurrentTab(trim(cleanValue($params['__activetab'])));
+            $e_key = $this->GetName().'_errors';
+            $m_key = $this->GetName().'_messages';
+            if( isset( $_SESSION[$e_key]) ) $errors = $_SESSION[$e_key];
+            if( isset( $_SESSION[$m_key]) ) $messages = $_SESSION[$m_key];
+            unset( $_SESSION[$e_key], $_SESSION[$m_key] );
+            if( is_array($errors) && count($errors) ) echo $this->ShowErrors($errors);
+            if( is_array($messages) && count($messages) ) echo $this->ShowMessage($messages[0]);
         }
 
         if ($name != '') {
@@ -2361,11 +2352,6 @@ abstract class CMSModule
      */
     public function Redirect($id, $action, $returnid='', $params=array(), $inline=false)
     {
-        if( $returnid == '' ) {
-            if( is_array($this->__errors) && count($this->__errors) ) $params['__errors'] = implode('::err::',$this->__errors);
-            if( is_array($this->__messages) && count($this->__messages) ) $params['__messages'] = implode('::msg::',$this->__messages);
-        }
-
         $this->_loadRedirectMethods();
         return cms_module_Redirect($this, $id, $action, $returnid, $params, $inline);
     }
@@ -2880,9 +2866,10 @@ abstract class CMSModule
      */
     public function SetMessage($str)
     {
-        if( !is_array($this->__messages) ) $this->__messages = array();
-        if( !is_array($str) ) $str = array($str);
-        $this->__messages = array_merge($this->__messages,$str);
+        $key = $this->GetName().'_messages';
+        if( !isset( $_SESSION[$key] ) ) $_SESSION[$key] = [];
+        if( !is_array($str) ) $str = [ $str ];
+        $_SESSION[$key] = array_merge( $_SESSION[$key], $str );
     }
 
     /**
@@ -2909,9 +2896,10 @@ abstract class CMSModule
      */
     public function SetError($str)
     {
-        if( !is_array($this->__errors) ) $this->__errors = array();
+        $key = $this->GetName().'_errors';
+        if( !isset( $_SESSION[$key]) ) $_SESSION[$key] = [];
         if( !is_array($str) ) $str = array($str);
-        $this->__errors = array_merge($this->__errors,$str);
+        $_SESSION[$key] = array_merge( $_SESSION[$key], $str );
     }
 
 
