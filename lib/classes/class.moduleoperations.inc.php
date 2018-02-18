@@ -173,21 +173,31 @@ final class ModuleOperations
         $dir = $this->get_module_path( $modinstance->GetName() );
         if( !is_writable( $dir ) ) throw new CmsFileSystemException(lang('errordirectorynotwritable'));
 
+        $to_string = function( $key, $value ) {
+            $res = null;
+            if( is_numeric($value) && strpos($value,' ') === FALSE ) {
+                $res .= "$key = $value".PHP_EOL;
+            } else {
+                $res .= "$key = \"{$value}\"".PHP_EOL;
+            }
+            return $res;
+        };
+
         $fh = fopen($dir."/moduleinfo.ini",'w');
         fputs($fh,"[module]\n");
-        fputs($fh,"name = ".$modinstance->GetName()."\n");
-        fputs($fh,"version = ".$modinstance->GetVersion()."\n");
-        fputs($fh,"description = \"".$modinstance->GetDescription()."\"\n");
-        fputs($fh,"author = ".$modinstance->GetAuthor()."\n");
-        fputs($fh,"authoremail = ".$modinstance->GetAuthorEmail()."\n");
-        fputs($fh,"mincmsversion = ".$modinstance->MinimumCMSVersion()."\n");
-        fputs($fh,"lazyloadadmin = ".($modinstance->LazyLoadAdmin()?'1':'0')."\n");
-        fputs($fh,"lazyloadfrontend = ".($modinstance->LazyLoadFrontend()?'1':'0')."\n");
+        fputs($fh,$to_string('name',$modinstance->GetName()));
+        fputs($fh,$to_string('version',$modinstance->GetVersion()));
+        //fputs($fh,$to_string('description',$modinstance->GetAdminDescription())); // language sensitive.
+        fputs($fh,$to_string('author',$modinstance->GetAuthor()));
+        fputs($fh,$to_string('authoremail',$modinstance->GetAuthorEmail()));
+        fputs($fh,$to_string('mincmsversion',$modinstance->MinimumCMSVersion()));
+        fputs($fh,$to_string('lazyloadadmin',($modinstance->LazyLoadAdmin())?'1':'0'));
+        fputs($fh,$to_string('lazyloadfrontend',($modinstance->LazyLoadFrontend())?'1':'0'));
         $depends = $modinstance->GetDependencies();
         if( is_array($depends) && count($depends) ) {
             fputs($fh,"[depends]\n");
             foreach( $depends as $key => $val ) {
-                fputs($fh,"$key = $val\n");
+                fputs($fh,$to_string($key,$val));
             }
         }
         fputs($fh,"[meta]\n");

@@ -54,9 +54,7 @@ if( isset($_REQUEST['showtemplate']) && ($_REQUEST['showtemplate'] == 'false')) 
     // for simplicity and compatibility with the frontend.
     $USE_THEME = false;
 }
-if( $USE_THEME && $modinst->SuppressAdminOutput($_REQUEST) != false || isset($_REQUEST['suppressoutput']) ) {
-    $USE_THEME = false;
-}
+if( $USE_THEME && $modinst->SuppressAdminOutput($_REQUEST) != false || isset($_REQUEST['suppressoutput']) ) $USE_THEME = false;
 
 // module output
 $params = ModuleOperations::get_instance()->GetModuleParameters($id);
@@ -84,8 +82,6 @@ if( $USE_THEME ) {
         }
     }
 
-    if (FALSE == empty($params['module_message'])) echo $themeObject->ShowMessage($params['module_message']);
-    if (FALSE == empty($params['module_error'])) echo $themeObject->ShowErrors($params['module_error']);
     include_once("header.php");
 
     // this is hackish

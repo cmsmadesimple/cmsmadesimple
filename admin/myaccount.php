@@ -17,6 +17,7 @@
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 #$Id: editprefs.php 7685 2012-01-22 21:52:55Z calguy1000 $
+use CMSMS\internal\module_meta;
 
 /**
  * Init variables / objects
@@ -28,6 +29,7 @@ $CMS_ADMIN_PAGE = 1;
 $CMS_TOP_MENU = 'admin';
 $CMS_ADMIN_TITLE = 'myaccount';
 require_once ("../lib/include.php");
+check_login();
 $urlext = '?' . CMS_SECURE_PARAM_NAME . '=' . $_SESSION[CMS_USER_KEY];
 $thisurl = basename(__FILE__) . $urlext;
 $userid = get_userid(); // Checks also login
@@ -121,10 +123,13 @@ if (isset($_POST['submit_account']) && check_permission($userid,'Manage My Accou
     $userobj->firstname = $firstname;
     $userobj->lastname = $lastname;
     $userobj->email = $email;
-    if ($password != '') $userobj->SetPassword($password);
-
     \CMSMS\HookManager::do_hook('Core::EditUserPre', [ 'user'=>&$userobj ] );
+
+    if ($password != '') $userobj->SetPassword($password);
     $result = $userobj->Save();
+    if( $password != '' ) {
+        \CMSMS\LoginOperations::save_authentication( $userobj );
+    }
 
     if($result) {
       // put mention into the admin log

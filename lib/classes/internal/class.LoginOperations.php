@@ -41,7 +41,6 @@ final class LoginOperations
     public function deauthenticate()
     {
         \cms_cookies::erase($this->_loginkey);
-        \cms_cookies::erase(CMS_USER_KEY);
         unset($_SESSION[$this->_loginkey],$_SESSION[CMS_USER_KEY]);
     }
 
@@ -54,7 +53,7 @@ final class LoginOperations
         $checksum = (string) $checksum;
         if( !$checksum ) return FALSE;
 
-        $tmp = array(md5(__FILE__),$oneuser->password,$uid,\cms_utils::get_real_ip(),$_SERVER['HTTP_USER_AGENT']);
+        $tmp = array(md5(__FILE__),$oneuser->password,$uid,$_SERVER['HTTP_USER_AGENT']);
         $tmp = sha1(serialize($tmp));
         if( $checksum === $tmp ) return TRUE;
         return FALSE;
@@ -65,10 +64,10 @@ final class LoginOperations
         // saves session/cookie data
         if( $user->id < 1 || empty($user->password) ) throw new \LogicException('User information invalid for '.__METHOD__);
 
-        $tmp = [ md5(__FILE__),\cms_utils::get_real_ip(),$_SERVER['HTTP_USER_AGENT'].CMS_VERSION ];
+        $tmp = [ md5(__FILE__),$_SERVER['HTTP_USER_AGENT'].CMS_VERSION ];
         $salt = sha1(serialize($tmp));
 
-        $tmp = [ md5(__FILE__),$user->password,$user->id,\cms_utils::get_real_ip(),$_SERVER['HTTP_USER_AGENT'] ];
+        $tmp = [ md5(__FILE__),$user->password,$user->id,$_SERVER['HTTP_USER_AGENT'] ];
         $cksum = sha1(serialize($tmp));
 
         $private_data = array();
@@ -85,11 +84,14 @@ final class LoginOperations
         $_SESSION[$this->_loginkey] = sha1( $tmp.$salt ).'::'.$tmp;
         \cms_cookies::set($this->_loginkey,$_SESSION[$this->_loginkey]);
 
-        $key = substr(str_shuffle(sha1(__DIR__.$user->id.time().session_id())),-19);
-        $_SESSION[CMS_USER_KEY] = $key;
-        \cms_cookies::set(CMS_SECURE_PARAM_NAME,$key);
+        $_SESSION[CMS_USER_KEY] = $this->_create_csrf_token( $user->id );
         unset($this->_data);
-        return $key;
+        return $_SESSION[CMS_USER_KEY];
+    }
+
+    protected function _create_csrf_token( $uid )
+    {
+        return substr(str_shuffle(sha1(__DIR__.$uid.time().session_id())),-19);
     }
 
     protected function _get_data()
@@ -109,7 +111,7 @@ final class LoginOperations
         $parts = explode('::',$private_data,2);
         if( count($parts) != 2 ) return;
 
-        $tmp = [ md5(__FILE__),\cms_utils::get_real_ip(),$_SERVER['HTTP_USER_AGENT'].CMS_VERSION ];
+        $tmp = [ md5(__FILE__),$_SERVER['HTTP_USER_AGENT'].CMS_VERSION ];
         $salt = sha1(serialize($tmp));
         if( sha1( $parts[1].$salt ) != $parts[0] ) return;
         $private_data = unserialize( base64_decode( $parts[1]) );
@@ -126,7 +128,7 @@ final class LoginOperations
         // if we get here, the user is authenticated.
         // set the session key from the cookie if it exists.
         if( !isset($_SESSION[CMS_USER_KEY]) ) {
-            if( \cms_cookies::exists(CMS_SECURE_PARAM_NAME) ) $_SESSION[CMS_USER_KEY] = \cms_cookies::get(CMS_SECURE_PARAM_NAME);
+            $_SESSION[CMS_USER_KEY] = $this->_create_csrf_token( $private_data['uid'] );
         }
 
         $this->_data = $private_data;

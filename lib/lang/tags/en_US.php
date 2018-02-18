@@ -365,6 +365,7 @@ $lang['help_function_page_attr'] = <<<EOT
       <li>extra1 - (string) The value of the extra1 attribute.</li>
       <li>extra2 - (string) The value of the extra2 attribute.</li>
       <li>extra3 - (string) The value of the extra3 attribute.</li>
+      <li>pageattr - (string) The value of the page specific smarty data attribute./li>
     </ul>
     <p><strong>Note:</strong> The list above is not inclusive.  You can also retrieve the unparsed contents of additional content blocks or properties added by third party 
   </li>

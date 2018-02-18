@@ -162,7 +162,7 @@ final class UserTagOperations
 	 *
 	 * @param string $name The name of the user defined tag
 	 * @param array  $params Optional parameters.
-	 * @return string|false
+	 * @return mixed|false The returned data from the user defined tag, or FALSE if the UDT could not be found. 
      * @deprecated
 	 */
 	function CallUserTag($name, &$params)

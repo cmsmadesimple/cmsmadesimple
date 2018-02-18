@@ -1082,7 +1082,7 @@ class CmsLayoutTemplate
 		$db = CmsApp::get_instance()->GetDb();
 		$query = 'SELECT * FROM '.CMS_DB_PREFIX.self::TABLENAME.' WHERE type_id = ?';
 		$tmp = $db->GetArray($query,array($type->get_id()));
-		if( !is_array($tmp) || count($tmp) == 0 ) throw new CmsDataNotFoundException('Could not find CmsLayoutTemplate rows for type '.$type->get_id());
+		if( !is_array($tmp) || count($tmp) == 0 ) return;
 
 		$out = array();
 		foreach( $tmp as $row ) {

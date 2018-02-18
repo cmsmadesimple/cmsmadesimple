@@ -97,6 +97,12 @@ abstract class CMSModule
      * @access private
      * @ignore
      */
+    private $restrict_unknown_params = TRUE;
+
+    /**
+     * @access private
+     * @ignore
+     */
     private $_action_tpl;
 
     /**
@@ -1360,17 +1366,16 @@ abstract class CMSModule
     public function DoAction($name, $id, $params, $returnid = null)
     {
         if( $returnid == '' ) {
-            $key = $this->GetName().'::activetab';
-            if( isset($_SESSION[$key]) ) {
-                $this->SetCurrentTab($_SESSION[$key]);
-                unset($_SESSION[$key]);
-            }
-            if( ($errs = $this->GetErrors()) ) {
-                echo $this->ShowErrors();
-            }
-            if( ($msg = $this->GetMessage()) ) {
-                echo $this->Showmessage($msg);
-            }
+            $errors = $messages = null;
+            $t_key = $this->GetName().'::activetab';
+            $e_key = $this->GetName().'_errors';
+            $m_key = $this->GetName().'_messages';
+            if( isset( $_SESSION[$t_key] ) ) $this->SetCurrentTab( $_SESSION[$t_key] );
+            if( isset( $_SESSION[$e_key]) ) $errors = $_SESSION[$e_key];
+            if( isset( $_SESSION[$m_key]) ) $messages = $_SESSION[$m_key];
+            unset( $_SESSION[$t_key], $_SESSION[$m_key], $_SESSION[$m_key] );
+            if( is_array($errors) && count($errors) ) echo $this->ShowErrors($errors);
+            if( is_array($messages) && count($messages) ) echo $this->ShowMessage($messages[0]);
         }
 
         if ($name != '') {
@@ -2303,6 +2308,7 @@ abstract class CMSModule
      */
     public function SetCurrentTab(string $tab)
     {
+        $tab = trim($tab);
         $_SESSION[$this->GetName().'::activetab'] = $tab;
         cms_admin_tabs::set_current_tab($tab);
     }
@@ -2493,8 +2499,10 @@ abstract class CMSModule
      */
     public function SetMessage($str)
     {
-        if( is_string($str) ) $str = [$str];
-        $_SESSION[$this->GetName().'::message'] = $str;
+        $key = $this->GetName().'_messages';
+        if( !isset( $_SESSION[$key] ) ) $_SESSION[$key] = [];
+        if( !is_array($str) ) $str = [ $str ];
+        $_SESSION[$key] = array_merge( $_SESSION[$key], $str );
     }
 
     /**
@@ -2521,8 +2529,10 @@ abstract class CMSModule
      */
     public function SetError($str)
     {
-        $key = $this->GetName().'::errors';
-        $_SSSION[$key][] = $str;
+        $key = $this->GetName().'_errors';
+        if( !isset( $_SESSION[$key]) ) $_SESSION[$key] = [];
+        if( !is_array($str) ) $str = array($str);
+        $_SESSION[$key] = array_merge( $_SESSION[$key], $str );
     }
 
 
