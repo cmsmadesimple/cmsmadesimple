@@ -81,7 +81,7 @@ if ($params['searchinput'] != '') {
     $params['searchinput'] = strip_tags($params['searchinput']);
     \CMSMS\HookManager::do_hook('Search::SearchInitiated', [ trim($params['searchinput'])] );
 
-    $searchstarttime = microtime();
+    $searchstarttime = microtime(true);
 
     $tpl_ob->assign('phrase', $params['searchinput']);
     $words = array_values($this->StemPhrase($params['searchinput']));
