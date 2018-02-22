@@ -44,8 +44,8 @@
 $dirname = __DIR__;
 
 define('CMS_DEFAULT_VERSIONCHECK_URL','https://www.cmsmadesimple.org/latest_version.php');
-define('CMS_SECURE_PARAM_NAME','_sk_');
-define('CMS_USER_KEY','_userkey_');
+define('CMS_SECURE_PARAM_NAME','__c');  // this is used for CSRF protection
+define('CMS_USER_KEY','_userkey_'); // this is used for CSRF protection
 define('CONFIG_FILE_LOCATION',dirname(__DIR__).'/config.php');
 global $CMS_INSTALL_PAGE,$CMS_ADMIN_PAGE,$CMS_LOGIN_PAGE,$DONT_LOAD_DB,$DONT_LOAD_SMARTY;
 

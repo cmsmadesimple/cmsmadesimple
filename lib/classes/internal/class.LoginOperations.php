@@ -29,7 +29,7 @@ final class LoginOperations
 
     protected function __construct()
     {
-        $this->_loginkey = md5(__FILE__.__CLASS__.CMS_VERSION);
+        $this->_loginkey = sha1( CMS_VERSION.$this->_get_salt() );
     }
 
     public static function &get_instance()
@@ -45,8 +45,21 @@ final class LoginOperations
         unset($_SESSION[$this->_loginkey],$_SESSION[CMS_USER_KEY]);
     }
 
+    protected function _get_salt()
+    {
+        // if we do not have a presaved salt.. we generate one
+        $salt = \cms_siteprefs::get(__CLASS__);
+        if( !$salt ) {
+            $salt = sha1( rand().__FILE__.rand() );
+            \cms_siteprefs::set(__CLASS__,$salt);
+        }
+        return $salt;
+    }
+
     protected function _check_passhash($uid,$checksum)
     {
+        // we already validated that payload was not corrupt
+        // now we validate that the user is valid.
         $userops = \UserOperations::get_instance();
         $oneuser = $userops->LoadUserByID((int) $uid);
         if( !$oneuser ) return FALSE;
@@ -54,10 +67,8 @@ final class LoginOperations
         $checksum = (string) $checksum;
         if( !$checksum ) return FALSE;
 
-        $tmp = array(md5(__FILE__),$oneuser->password,$uid,\cms_utils::get_real_ip(),$_SERVER['HTTP_USER_AGENT']);
-        $tmp = sha1(serialize($tmp));
-        if( $checksum === $tmp ) return TRUE;
-        return FALSE;
+        if( !password_verify( $oneuser->id.$oneuser->password.__FILE__, $checksum ) ) return FALSE;
+        return TRUE;
     }
 
     public function save_authentication(\User $user,\User $effective_user = null)
@@ -65,24 +76,19 @@ final class LoginOperations
         // saves session/cookie data
         if( $user->id < 1 || empty($user->password) ) throw new \LogicException('User information invalid for '.__METHOD__);
 
-        $tmp = [ md5(__FILE__),\cms_utils::get_real_ip(),$_SERVER['HTTP_USER_AGENT'].CMS_VERSION ];
-        $salt = sha1(serialize($tmp));
-
-        $tmp = [ md5(__FILE__),$user->password,$user->id,\cms_utils::get_real_ip(),$_SERVER['HTTP_USER_AGENT'] ];
-        $cksum = sha1(serialize($tmp));
-
         $private_data = array();
         $private_data['uid'] = $user->id;
         $private_data['username'] = $user->username;
         $private_data['eff_uid'] = null;
         $private_data['eff_username'] = null;
-        $private_data['cksum'] = $cksum;
+        $private_data['hash'] = password_hash( $user->id.$user->password.__FILE__, PASSWORD_BCRYPT );
         if( $effective_user && $effective_user->id > 0 && $effective_user->id != $user->id ) {
             $private_data['eff_uid'] = $effective_user->id;
             $private_data['eff_username'] = $effective_user->username;
         }
-        $tmp = base64_encode( serialize( $private_data ) );
-        $_SESSION[$this->_loginkey] = sha1( $tmp.$salt ).'::'.$tmp;
+        $enc = base64_encode( json_encode( $private_data ) );
+        $hash = sha1( $this->_get_salt() . $enc );
+        $_SESSION[$this->_loginkey] = $hash.'::'.$enc;
         \cms_cookies::set($this->_loginkey,$_SESSION[$this->_loginkey]);
 
         $key = substr(str_shuffle(sha1(__DIR__.$user->id.time().session_id())),-19);
@@ -109,19 +115,17 @@ final class LoginOperations
         $parts = explode('::',$private_data,2);
         if( count($parts) != 2 ) return;
 
-        $tmp = [ md5(__FILE__),\cms_utils::get_real_ip(),$_SERVER['HTTP_USER_AGENT'].CMS_VERSION ];
-        $salt = sha1(serialize($tmp));
-        if( sha1( $parts[1].$salt ) != $parts[0] ) return;
-        $private_data = unserialize( base64_decode( $parts[1]) );
+        if( $parts[0] != sha1( $this->_get_salt() . $parts[1] ) ) return; // payload corrupted.
+        $private_data = json_decode( base64_decode( $parts[1]), TRUE );
 
         if( !is_array($private_data) ) return;
         if( empty($private_data['uid']) ) return;
         if( empty($private_data['username']) ) return;
-        if( empty($private_data['cksum']) ) return;
+        if( empty($private_data['hash']) ) return;
 
         // now authenticate the passhash
         // requires a database query
-        if( !\CmsApp::get_instance()->is_frontend_request() && !$this->_check_passhash($private_data['uid'],$private_data['cksum']) ) return;
+        if( !\CmsApp::get_instance()->is_frontend_request() && !$this->_check_passhash($private_data['uid'],$private_data['hash']) ) return;
 
         // if we get here, the user is authenticated.
         // set the session key from the cookie if it exists.
