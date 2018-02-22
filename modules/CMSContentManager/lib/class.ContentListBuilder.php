@@ -664,10 +664,12 @@ final class ContentListBuilder
       $display = array_unique($display);
       usort($display,function($a,$b) use ($hm,$contentops) {
               $node_a = $contentops->quickfind_node_by_id($a);
-              $hier_a = $node_a->getHierarchy();
               $node_b = $contentops->quickfind_node_by_id($b);
-              $hier_b = $node_b->getHierarchy();
-              return strcmp($hier_a,$hier_b);
+              if( $node_a && $node_b ) {
+                  $hier_a = $node_a->getHierarchy();
+                  $hier_b = $node_b->getHierarchy();
+                  return strcmp($hier_a,$hier_b);
+              }
           });
 
       $this->_pagelist = $display;

@@ -50,7 +50,7 @@ final class LoginOperations
         // if we do not have a presaved salt.. we generate one
         $salt = \cms_siteprefs::get(__CLASS__);
         if( !$salt ) {
-            $salt = sha1( rand().__FILE__.rand() );
+            $salt = sha1( rand().__FILE__.rand().time() );
             \cms_siteprefs::set(__CLASS__,$salt);
         }
         return $salt;
@@ -91,6 +91,7 @@ final class LoginOperations
         $_SESSION[$this->_loginkey] = $hash.'::'.$enc;
         \cms_cookies::set($this->_loginkey,$_SESSION[$this->_loginkey]);
 
+        // this is for CSRF stuff, doesn't technically belong here.
         $key = substr(str_shuffle(sha1(__DIR__.$user->id.time().session_id())),-19);
         $_SESSION[CMS_USER_KEY] = $key;
         \cms_cookies::set(CMS_SECURE_PARAM_NAME,$key);

@@ -26,6 +26,12 @@ $CMS_LOGIN_PAGE=1;
 require_once("../lib/include.php");
 $gCms = \CmsApp::get_instance();
 $db = $gCms->GetDb();
+
+// if we allow modules to do the login operations
+// module registers itself as 'admin login module' in the constructor
+// getloginModule
+// call the module's getLoginForm() action
+//
 $login_ops = \CMSMS\LoginOperations::get_instance();
 
 $error = "";
@@ -183,17 +189,21 @@ else if( isset($_POST['loginsubmit']) ) {
     try {
         if( !$username || !$password ) throw new \LogicException(lang('usernameincorrect'));
 
-        \CMSMS\HookManager::do_hook('Core::LoginPre', [ 'user'=>$username ] );
-
-        $oneuser = $userops->LoadUserByUsername($username, $password, TRUE, TRUE);
+        // load user by name
+        // do hooks for authentication
+        $oneuser = $userops->LoadUserByUsername($username, '', TRUE, TRUE);
+        // $oneuser = $userops->LoadUserByUsername($username, $password, TRUE, TRUE);
         if( !$oneuser ) throw new CmsLoginError(lang('usernameincorrect'));
+
+        \CMSMS\HookManager::do_hook('Core::LoginPre', [ 'user'=>$oneuser  ] );
+
         $login_ops->save_authentication($oneuser);
 
         // put mention into the admin log
         audit($oneuser->id, "Admin Username: ".$oneuser->username, 'Logged In');
 
         // send the post login event
-        \CMSMS\HookManager::do_hook('Core::LoginPost', [ 'user'=>&$oneuser ] );
+        \CMSMS\HookManager::do_hook('Core::LoginPost', [ 'user'=>$oneuser ] );
 
         // redirect outa hre somewhere
         if( isset($_SESSION['login_redirect_to']) ) {
