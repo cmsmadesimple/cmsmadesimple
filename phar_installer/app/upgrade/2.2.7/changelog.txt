@@ -1,0 +1,6 @@
+Version 2.2.7 - Skookumchuck
+----------------------------------
+Core - General
+  - Change internal CSRF variable name
+  - Fix object insertion bug via deserialize in LoginOperations 
+  - Fix issue where login cookie contents could be forged by determining the hashing salt
