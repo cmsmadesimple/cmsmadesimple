@@ -209,6 +209,7 @@ final class FilePicker extends \CMSModule implements \CMSMS\FilePickerInterface
         if( !$filename ) return FALSE;
 
         if( !$profile->show_hidden && (startswith($filename,'.') || startswith($filename,'_') || $filename == 'index.html') ) return FALSE;
+        if( endswith( $filename, '.' ) ) return FALSE;
         if( $profile->match_prefix && !startswith( $filename, $profile->match_prefix) ) return FALSE;
         if( $profile->exclude_prefix && startswith( $filename, $profile->exclude_prefix) ) return FALSE;
 
