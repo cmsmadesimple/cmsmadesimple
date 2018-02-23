@@ -5,6 +5,12 @@ Core - General
   - Fix object insertion bug via deserialize in LoginOperations 
   - Fix issue where login cookie contents could be forged by determining the hashing salt
 
+FileManager v1.6.6
+  - No longer allow uploading files with names that end in .
+
+Search v1.51.4
+  - Minor fix to microtime calls.
+
 Version 2.2.6 - Come by Chance
 ----------------------------------
 Core - General
