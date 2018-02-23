@@ -104,17 +104,6 @@ final class FilePicker extends \CMSModule implements \CMSMS\FilePickerInterface
         return $out;
     }
 
-//  function ValidateContentBlockFieldValue($blockName,$value,$blockparams,ContentBase $content_obj)
-//  {
-//    echo('<br/>:::::::::::::::::::::<br/>');
-//    debug_display($blockName, '$blockName');
-//    debug_display($value, '$value');
-//    debug_display($blockparams, '$blockparams');
-//    //debug_display($adding, '$adding');
-//    echo('<br/>' . __FILE__ . ' : (' . __CLASS__ . ' :: ' . __FUNCTION__ . ') : ' . __LINE__ . '<br/>');
-//    //die('<br/>RIP!<br/>');
-//  }
-
     public function GetFileList($path = '')
     {
         return filemanager_utils::get_file_list($path);
