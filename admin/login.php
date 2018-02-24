@@ -57,7 +57,9 @@ function send_recovery_email(\User $user)
     $obj->AddAddress($user->email, html_entity_decode($user->firstname . ' ' . $user->lastname));
     $obj->SetSubject(lang('lostpwemailsubject',html_entity_decode(get_site_preference('sitename','CMSMS Site'))));
 
-    $url = $config['admin_url'] . '/login.php?recoverme=' . md5(md5($config['root_path'] . '--' . $user->username . md5($user->password)));
+    $code = md5(md5(__FILE__ . '--' . $user->username . md5($user->password.time())));
+    \cms_userprefs::set_for_user( $user->id, 'pwreset', $code );
+    $url = $config['admin_url'] . '/login.php?recoverme=' . $code;
     $body = lang('lostpwemail',html_entity_decode(get_site_preference('sitename','CMSMS Site')), $user->username, $url, $url);
 
     $obj->SetBody($body);
@@ -81,7 +83,8 @@ function find_recovery_user($hash)
     $userops = $gCms->GetUserOperations();
 
     foreach ($userops->LoadUsers() as $user) {
-        if ($hash == md5(md5($config['root_path'] . '--' . $user->username . md5($user->password)))) return $user;
+        $code = \cms_userprefs::get_for_user( $user->id, 'pwreset' );
+        if( $code && $hash && $hash === $code ) return $user;
     }
 
     return null;
@@ -139,6 +142,7 @@ else if (isset($_REQUEST['forgotpwchangeform']) && $_REQUEST['forgotpwchangeform
                 $user->SetPassword($_REQUEST['password']);
                 $user->Save();
                 // put mention into the admin log
+                \cms_userprefs::remove_for_user( $user->id, 'pwreset' );
                 $ip_passw_recovery = \cms_utils::get_real_ip();
                 audit('','Core','Completed lost password recovery for: '.$user->username.' (IP: '.$ip_passw_recovery.')');
                 \CMSMS\HookManager::do_hook('Core::LostPasswordReset', [ 'uid'=>$user_id, 'username'=>$user->username, 'ip'=>$ip_passw_recovery ] );
@@ -191,7 +195,7 @@ else if( isset($_POST['loginsubmit']) ) {
 
         // load user by name
         // do hooks for authentication
-        $oneuser = $userops->LoadUserByUsername($username, '', TRUE, TRUE);
+        $oneuser = $userops->LoadUserByUsername($username, $password, TRUE, TRUE);
         // $oneuser = $userops->LoadUserByUsername($username, $password, TRUE, TRUE);
         if( !$oneuser ) throw new CmsLoginError(lang('usernameincorrect'));
 
