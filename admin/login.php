@@ -145,7 +145,7 @@ else if (isset($_REQUEST['forgotpwchangeform']) && $_REQUEST['forgotpwchangeform
                 \cms_userprefs::remove_for_user( $user->id, 'pwreset' );
                 $ip_passw_recovery = \cms_utils::get_real_ip();
                 audit('','Core','Completed lost password recovery for: '.$user->username.' (IP: '.$ip_passw_recovery.')');
-                \CMSMS\HookManager::do_hook('Core::LostPasswordReset', [ 'uid'=>$user_id, 'username'=>$user->username, 'ip'=>$ip_passw_recovery ] );
+                \CMSMS\HookManager::do_hook('Core::LostPasswordReset', [ 'uid'=>$user->id, 'username'=>$user->username, 'ip'=>$ip_passw_recovery ] );
                 $acceptLogin = lang('passwordchangedlogin');
                 $changepwhash = '';
             }
