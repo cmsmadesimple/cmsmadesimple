@@ -91,7 +91,7 @@ abstract class CMSModule
      * @access private
      * @ignore
      */
-    private $param_map = array();
+    private $param_map = [];
 
     /**
      * @access private
@@ -117,11 +117,6 @@ abstract class CMSModule
      */
     public function __construct()
     {
-        global $CMS_STYLESHEET;
-        global $CMS_ADMIN_PAGE;
-        global $CMS_MODULE_PAGE;
-        global $CMS_INSTALL_PAGE;
-
         if( CmsApp::get_instance()->is_frontend_request() ) {
             $this->SetParameterType('assign',CLEAN_STRING);
             $this->SetParameterType('module',CLEAN_STRING);
@@ -130,11 +125,6 @@ abstract class CMSModule
             $this->SetParameterType('action',CLEAN_STRING);
             $this->SetParameterType('showtemplate',CLEAN_STRING);
             $this->SetParameterType('inline',CLEAN_INT);
-
-            $this->InitializeFrontend();
-        }
-        else if( isset($CMS_ADMIN_PAGE) && !isset($CMS_STYLESHEET) && !isset($CMS_INSTALL_PAGE) ) {
-            if( \ModuleOperations::get_instance()->IsModuleActive( $this->GetName() ) ) $this->InitializeAdmin();
         }
     }
 
@@ -291,14 +281,11 @@ abstract class CMSModule
     }
 
     /**
-     * Register a plugin to smarty with the
-     * name of the module.  This method should be called
-     * from the module constructor, or from the SetParameters
-     * method.
+     * Register a plugin to smarty with the name of the module.  This method should be called
+     * from the module installation, module constructor or the InitializeFrontend() method.
      *
      * Note:
      * @final
-     * @see CMSModule::SetParameters
      * @see can_cache_output
      * @param bool $forcedb Indicate wether this registration should be forced to be entered in the database. Default value is false (for compatibility)
      * @param bool|null $cachable Indicate wether this plugins output should be cachable.  If null, use the site preferences, and the can_cache_output method.  Otherwise a bool is expected.
@@ -317,7 +304,7 @@ abstract class CMSModule
             // no lazy loading.
             $gCms = CmsApp::get_instance();
             $smarty = $gCms->GetSmarty();
-            $smarty->register_function($this->GetName(), array($this->GetName(),'function_plugin'), $cachable );
+            $smarty->register_function($this->GetName(), [ $this->GetName(),'function_plugin' ], $cachable );
             return TRUE;
         }
         else {
@@ -486,11 +473,10 @@ abstract class CMSModule
      * Note: This method is not compatible wih lazy loading in the front end.
      *
      * @final
-     * @see SetParameters
      * @param string $routeregex Regular Expression Route to register
      * @param array $defaults Associative array containing defaults for parameters that might not be included in the url
      */
-    final public function RegisterRoute($routeregex, $defaults = array())
+    final public function RegisterRoute($routeregex, $defaults = [])
     {
         $route = new CmsRoute($routeregex,$this->GetName(),$defaults);
         cms_route_manager::register($route);
@@ -535,7 +521,7 @@ abstract class CMSModule
     private function _cleanParamHash($modulename,$data,$map = false, $allow_unknown = false,$clean_keys = true)
     {
         $mappedcount = 0;
-        $result = array();
+        $result = [];
         foreach( $data as $key => $value ) {
             $mapped = false;
             $paramtype = '';
@@ -734,8 +720,7 @@ abstract class CMSModule
      */
     final public function CreateParameter(string $param, string $defaultval='', string $helpstring='', bool $optional=true)
     {
-        array_push($this->params, array('name' => $param,'default' => $defaultval,'help' => $helpstring,
-                                        'optional' => $optional ));
+        array_push($this->params, [ 'name' => $param,'default' => $defaultval,'help' => $helpstring, 'optional' => $optional ] );
     }
 
     /**
@@ -1096,7 +1081,7 @@ abstract class CMSModule
      */
     public function GetDependencies()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -1116,7 +1101,7 @@ abstract class CMSModule
         $result = false;
 
         $query = "SELECT child_module FROM ".CMS_DB_PREFIX."module_deps WHERE parent_module = ? LIMIT 1";
-        $tmp = $db->GetOne($query,array($this->GetName()));
+        $tmp = $db->GetOne($query, [ $this->GetName() ] );
         if( $tmp ) $result = true;
         return $result;
     }
@@ -1175,7 +1160,7 @@ abstract class CMSModule
     {
         if( !$this->VisibleToAdminUser() ) return;
 
-        $out = array();
+        $out = null;
         $out[] = CmsAdminMenuItem::from_module($this);
 
         return $out;
@@ -1260,7 +1245,7 @@ abstract class CMSModule
      * @param array  $params An associative array further params to get more detailed info about the capabilities. Should be syncronized with other modules of same type
      * @return bool
      */
-    public function HasCapability($capability, $params = array())
+    public function HasCapability($capability, $params = [])
     {
         return false;
     }
@@ -1394,8 +1379,8 @@ abstract class CMSModule
                     $db = $gCms->GetDb();
                     $config = $gCms->GetConfig();
                     $smarty = $this->_action_tpl; // smarty in scope.
-                    include($filename);
-                    return;
+                    $out = include($filename);
+                    return $out;
                 }
             }
         }
@@ -1508,7 +1493,7 @@ abstract class CMSModule
      * @return string
      */
     function CreateFrontendFormStart($id,$returnid,$action='default',$method='post',
-                                     $enctype='',$inline=true,$idsuffix='',$params=array())
+                                     $enctype='',$inline=true,$idsuffix='',$params=[])
     {
         return $this->CreateFormStart($id,$action,$returnid,$method,$enctype,$inline,$idsuffix,$params);
     }
@@ -1527,7 +1512,7 @@ abstract class CMSModule
      * @param string $extra Text to append to the <form>-statement, for instanse for javascript-validation code
      * @return string
      */
-    function CreateFormStart($id, $action='default', $returnid='', $method='post', $enctype='', $inline=false, $idsuffix='', $params = array(), $extra='')
+    function CreateFormStart($id, $action='default', $returnid='', $method='post', $enctype='', $inline=false, $idsuffix='', $params = [], $extra='')
     {
         $this->_loadFormMethods();
         return cms_module_CreateFormStart($this, $id, $action, $returnid, $method, $enctype, $inline, $idsuffix, $params, $extra);
@@ -1721,7 +1706,7 @@ abstract class CMSModule
      * @return string
      * @deprecated
      */
-    function CreateInputSelectList($id, $name, $items, $selecteditems=array(), $size=3, $addttext='', $multiple = true)
+    function CreateInputSelectList($id, $name, $items, $selecteditems=[], $size=3, $addttext='', $multiple = true)
     {
         $this->_loadFormMethods();
         return cms_module_CreateInputSelectList($this, $id, $name, $items, $selecteditems, $size, $addttext, $multiple);
@@ -1767,7 +1752,7 @@ abstract class CMSModule
      */
     function CreateTextArea($enablewysiwyg, $id, $text, $name, $classname='', $htmlid='', $encoding='', $stylesheet='', $cols='', $rows='',$forcewysiwyg='',$wantedsyntax='',$addtext='')
     {
-        $parms = array();
+        $parms = [];
         $parms['enablewysiwyg'] = $enablewysiwyg;
         $parms['name'] = $id.$name;
         if( $classname ) $parms['class'] = $classname;
@@ -1831,7 +1816,7 @@ abstract class CMSModule
      * @param string $prettyurl An optional pretty url segment (relative to the root of the site) to use when generating the link.
      * @return string
      */
-    function CreateFrontendLink( $id, $returnid, $action, $contents='', $params=array(),
+    function CreateFrontendLink( $id, $returnid, $action, $contents='', $params=[],
                                  $warn_message='', $onlyhref=false, $inline=true, $addtext='',
                                  $targetcontentonly=false, $prettyurl='' )
     {
@@ -1856,7 +1841,7 @@ abstract class CMSModule
      * @param string $prettyurl An optional pretty url segment (related to the root of the website) for a pretty url.
      * @return string
      */
-    function CreateLink($id, $action, $returnid='', $contents='', $params=array(),
+    function CreateLink($id, $action, $returnid='', $contents='', $params=[],
                         $warn_message='', $onlyhref=false, $inline=false, $addttext='',
                         $targetcontentonly=false, $prettyurl='')
     {
@@ -1879,7 +1864,7 @@ abstract class CMSModule
      * @param string  $prettyurl An optional url segment related to the root of the page for pretty url purposes.
      * @return string.
      */
-    public function create_url($id,$action,$returnid='',$params=array(),
+    public function create_url($id,$action,$returnid='',$params=[],
                                $inline=false,$targetcontentonly=false,$prettyurl='')
     {
         $this->_loadFormMethods();
@@ -1900,7 +1885,7 @@ abstract class CMSModule
      * @param bool $inline Wether the target of the output link is the same tag on the same page.
      * @return string
      */
-    public function get_pretty_url($id,$action,$returnid='',$params=array(),$inline=false)
+    public function get_pretty_url($id, $action, $returnid='', $params=[], $inline=false)
     {
         return '';
     }
@@ -1932,7 +1917,7 @@ abstract class CMSModule
      * @param bool $onlyhref A flag to determine if only the href section should be returned
      * @return string
      */
-    public function CreateReturnLink($id, $returnid, $contents='', $params=array(), $onlyhref=false)
+    public function CreateReturnLink($id, $returnid, $contents='', $params=[], $onlyhref=false)
     {
         $this->_loadFormMethods();
         return cms_module_CreateReturnLink($this, $id, $returnid, $contents, $params, $onlyhref);
@@ -1958,7 +1943,7 @@ abstract class CMSModule
      */
     public function RedirectToAdminTab($tab = '',$params = '',$action = '')
     {
-        if( $params == '' ) $params = array();
+        if( $params == '' ) $params = [];
         if( $tab != '' ) $this->SetCurrentTab($tab);
         if( empty($action) ) $action = 'defaultadmin';
         $this->Redirect('m1_',$action,'',$params,FALSE);
@@ -1974,7 +1959,7 @@ abstract class CMSModule
      * @param string $params An array of params that should be inlucded in the URL of the link.	 These should be in a $key=>$value format.
      * @param bool $inline A flag to determine if actions should be handled inline (no moduleinterface.php -- only works for frontend)
      */
-    public function RedirectForFrontEnd($id, $returnid, $action, $params = array(), $inline = true )
+    public function RedirectForFrontEnd($id, $returnid, $action, $params = [], $inline = true )
     {
         return $this->Redirect($id, $action, $returnid, $params, $inline );
     }
@@ -1988,7 +1973,7 @@ abstract class CMSModule
      * @param string $params An array of params that should be inlucded in the URL of the link.	 These should be in a $key=>$value format.
      * @param bool $inline A flag to determine if actions should be handled inline (no moduleinterface.php -- only works for frontend)
      */
-    public function Redirect($id, $action, $returnid='', $params=array(), $inline=false)
+    public function Redirect($id, $action, $returnid='', $params=[], $inline=false)
     {
         $this->_loadRedirectMethods();
         return cms_module_Redirect($this, $id, $action, $returnid, $params, $inline);
@@ -2000,7 +1985,7 @@ abstract class CMSModule
      * @param array  $params optional array of url parameters
      * @deprecated
      */
-    public function RedirectToAdmin($page,$params = array())
+    public function RedirectToAdmin($page,$params = [])
     {
         $this->_loadRedirectMethods();
         return cms_module_RedirectToAdmin($this,$page,$params);
@@ -2047,7 +2032,7 @@ abstract class CMSModule
      */
     final public function GetModulesWithCapability(string $capability, array $params = [])
     {
-        $result=array();
+        $result = [];
         $tmp = ModuleOperations::get_modules_with_capability($capability,$params);
         if( is_array($tmp) && count($tmp) ) {
             for( $i = 0, $n = count($tmp); $i < $n; $i++ ) {
@@ -2531,7 +2516,7 @@ abstract class CMSModule
     {
         $key = $this->GetName().'_errors';
         if( !isset( $_SESSION[$key]) ) $_SESSION[$key] = [];
-        if( !is_array($str) ) $str = array($str);
+        if( !is_array($str) ) $str = [ $str ];
         $_SESSION[$key] = array_merge( $_SESSION[$key], $str );
     }
 

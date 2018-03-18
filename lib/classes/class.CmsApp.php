@@ -57,6 +57,11 @@ final class CmsApp {
 	 */
     const STATE_PARSE_TEMPLATE = 'parse_page_template';
 
+    /**
+     * A constant indicating that the request is for an admin login
+     */
+    const STATE_LOGIN_PAGE = 'login_request';
+
 	/**
 	 * @ignore
 	 */
@@ -86,7 +91,7 @@ final class CmsApp {
 	/**
 	 * @ignore
 	 */
-	private static $_statelist = array(self::STATE_ADMIN_PAGE,self::STATE_STYLESHEET, self::STATE_INSTALL,self::STATE_PARSE_TEMPLATE);
+	private static $_statelist = array(self::STATE_ADMIN_PAGE,self::STATE_STYLESHEET, self::STATE_INSTALL,self::STATE_PARSE_TEMPLATE,self::STATE_LOGIN_PAGE);
 
 	/**
 	 * Database object - adodb reference to the current database
@@ -572,9 +577,11 @@ final class CmsApp {
 			global $CMS_ADMIN_PAGE;
 			global $CMS_INSTALL_PAGE;
 			global $CMS_STYLESHEET;
+            global $CMS_LOGIN_PAGE;
 
 			$this->_states = array();
 
+			if( isset($CMS_LOGIN_PAGE) ) $this->_states[] = self::STATE_LOGIN_PAGE;
 			if( isset($CMS_ADMIN_PAGE) ) $this->_states[] = self::STATE_ADMIN_PAGE;
 			if( isset($CMS_INSTALL_PAGE) ) $this->_states[] = self::STATE_INSTALL;
 			if( isset($CMS_STYLESHEET) ) $this->_states[] = self::STATE_STYLESHEET;

@@ -101,6 +101,16 @@ if (isset($_POST["submit"])) {
         $error .= '<li>' . lang('invalidemail') . ': ' . $email . '</li>';
     }
 
+    if( !empty($password) ) {
+        try {
+            \CMSMS\HookManager::do_hook('Core::PasswordStrengthTest', $password );
+        }
+        catch( \Exception $e ) {
+            $validinfo = false;
+            $error .= '<li>'.$e->GetMessage().'</li>';
+        }
+    }
+
     if (isset($_POST['copyusersettings']) && $_POST['copyusersettings'] > 0) {
         if (isset($_POST['clearusersettings'])) {
             // error: both can't be set
@@ -119,8 +129,9 @@ if (isset($_POST["submit"])) {
             $thisuser->email       = $email;
             $thisuser->adminaccess = $adminaccess;
             $thisuser->active      = $active;
-            if ($password != '')
+            if ($password != '') {
                 $thisuser->SetPassword($password);
+            }
 
             \CMSMS\HookManager::do_hook('Core::EditUserPre', [ 'user'=>&$thisuser ] );
 

@@ -22,13 +22,15 @@
 			<a href="{root_url}/index.php" rel="external" target="_blank" title="{'viewsite'|lang}"><i class="fa fa-desktop"></i></a>
 		</li>
 		{$my_alerts=$theme->get_my_alerts()}
-		{$num_alerts=count($my_alerts)}
-		{if $num_alerts > 0}
-		   {if $num_alerts > 10}{$txt='&#2295'}{else}{$num=$num_alerts}{$txt="{$num}"}{/if}
- 		   <li class="notifications">
-			<a id="alerts" title="{lang('notifications_to_handle2',$num_alerts)}"><i class="fa fa-bell-o"></i><span class="bubble">{$txt}</span></a>
-		   </li>
-		{/if}
+		{if !empty($my_alerts)}
+		    {$num_alerts=count($my_alerts)}
+		    {if $num_alerts > 0}
+		        {if $num_alerts > 10}{$txt='&#2295'}{else}{$num=$num_alerts}{$txt="{$num}"}{/if}
+ 		        <li class="notifications">
+			    <a id="alerts" title="{lang('notifications_to_handle2',$num_alerts)}"><i class="fa fa-bell-o"></i><span class="bubble">{$txt}</span></a>
+		        </li>
+		    {/if}
+                {/if}
 		<li class="logout">
 			<a href="logout.php?{$secureparam}" title="{'logout'|lang}" {if isset($is_sitedown)}onclick="return confirm('{'maintenance_warning'|lang|escape:'javascript'}')"{/if}><i class="fa fa-sign-out"></i></a>
 		</li>

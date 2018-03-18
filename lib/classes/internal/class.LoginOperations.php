@@ -93,7 +93,7 @@ final class LoginOperations
         // this is for CSRF stuff, doesn't technically belong here.
         $_SESSION[CMS_USER_KEY] = $this->_create_csrf_token( $user->id );
         unset($this->_data);
-        return $key;
+        return true;
     }
 
     protected function _create_csrf_token( $uid )

@@ -2501,203 +2501,6 @@ a.toggle-dropzone:focus {
     display: none
 }
 
-
-/* --- LOGIN PAGE --- */
-
-#login #wrapper {
-    padding-top: 10%
-}
-
-#login div.login-container,
-#login div.login-container#error {
-    width: 352px;
-    padding-top: 36px;
-    margin: auto;
-}
-
-#login .logo {
-    width: 180px;
-    height: 36px;
-    position: absolute;
-    right: 10px;
-    top: -29px
-}
-
-#login div.login-box {
-    background: #d5d5d5 url(themes/Marigold/images/layout/sprite_repeatx.png) 214px -339px repeat-x;
-    position: relative;
-    border-radius: 4px 4px 0 4px;
-    border: 1px solid #aaa;
-    box-shadow: #999 0 0 6px;
-    -webkit-box-shadow: #999 0 0 6px;
-    margin: 0 auto;
-    padding: 10px 20px;
-    width: 310px
-}
-
-#login h1 {
-    color: #585858;
-    margin-bottom: 20px;
-    font-size: 12px;
-    text-shadow: 0 1px 0 #fff;
-}
-
-#login aside.info {
-    display: none
-}
-
-#login fieldset {
-    margin: 0 0 10px 0;
-    padding: 0;
-    border: none
-}
-
-#login label {
-    color: #585858;
-    font-size: 13px
-}
-
-#login input[type="text"],
-#login input[type="password"] {
-    margin: 5px 0;
-    border-bottom: 1px solid #fff;
-    border-right: 1px solid #fff;
-    width: 300px
-}
-
-#login input[type="text"]:focus,
-#login input[type="password"]:focus {
-    margin: 5px 0;
-    border: 1px solid #147fdb;
-    box-shadow: 0 0 5px #147fdb;
-    -webkit-box-shadow: 0 0 5px #147fdb;
-    transition: all 0.2s ease-in-out;
-    -webkit-transition: all 200ms ease-in-out;
-    -moz-transition: all 200ms ease-in-out;
-    -o-transition: all 200ms ease-in-out
-}
-
-#login input.loginsubmit {
-    border: 1px solid #838282;
-    color: #fff;
-    text-indent: 0;
-    line-height: 28px;
-    height: 28px;
-    width: auto;
-    padding: 0 14px;
-    margin-top: 15px;
-    background: #838282 url(themes/Marigold/images/layout/input-bg.gif) repeat-x top
-}
-
-#login input.loginsubmit:hover,
-#login input.loginsubmit:focus {
-    border: 1px solid #e87602;
-    background: #fa8106 url(themes/Marigold/images/layout/input-hover-bg.gif) repeat-x top
-}
-
-#login div.info-wrapper {
-    position: absolute;
-    width: 25px;
-    left: -27px;
-    top: 10px
-}
-
-#login div.info-wrapper.open {
-    left: -302px;
-    padding-left: 25px;
-    width: 275px
-}
-
-#login a.toggle-info {
-    width: 25px;
-    outline: none;
-    border-radius: 4px 0 0 4px;
-    position: absolute;
-    top: 0;
-    left: 0;
-    border: 1px solid #aaa;
-    border-right: none;
-    height: 25px;
-    display: block;
-    text-indent: -9999em;
-    background: #ececec url(themes/Marigold/images/layout/information.png) no-repeat center
-}
-
-#login aside.info {
-    font-size: 12px;
-    color: #585858;
-    background: #ececec;
-    width: 255px;
-    padding: 0 10px 10px 10px;
-    border: 1px solid #aaa;
-    border-right: none;
-    border-radius: 0 0 0 4px
-}
-
-#login aside.info p {
-    font-size: 12px
-}
-
-#login aside.info p.warning {
-    background-image: none;
-    margin-top: 5px;
-    padding: 5px
-}
-
-#login aside.info ol {
-    margin-bottom: 0;
-    list-style: decimal
-}
-
-#login div.info-wrapper h2 {
-    font-size: 12px;
-    margin: 5px 0 10px 0
-}
-
-#login img.goback {
-    padding-top: 2px;
-    float: left
-}
-
-#login p.forgotpw {
-    display: inline-block;
-    width: auto;
-    float: right;
-    margin-bottom: 0
-}
-
-#login p.forgotpw a {
-    padding-left: 20px;
-    background: url(themes/Marigold/images/layout/help.png) left 50% no-repeat;
-    color: #585858;
-    text-shadow: 0 1px 0 #fff;
-    font-size: 12px;
-    text-decoration: none
-}
-
-#login .copyright {
-    margin: 5px auto;
-    text-align: center
-}
-
-#login small {
-    text-align: center;
-    font-size: 12px;
-    color: #585858;
-    display: block
-}
-
-#login small a {
-    color: #fa8004;
-    text-decoration: none;
-    font-weight: bold
-}
-
-#login .message {
-    display: block
-}
-
-
 /* 2.0 STYLES, moved from inline .tpl, please do not add inline styles, thank you
  * and this needs more work
  */
@@ -3096,7 +2899,7 @@ padding: 4px 0
 /* hide some table columns  for small devices designs_c */
 #template_area .pagetable,
 #stylesheet_area .pagetable,
-#designs_c .pagetable,  
+#designs_c .pagetable,
 #types_c .pagetable {
 display: table;
 }
@@ -3109,7 +2912,7 @@ display: table;
 #contenttable tr th:nth-child(13), #contenttable tr td:nth-child(13),
 #template_area .pagetable tr th, #template_area .pagetable tr td,
 #stylesheet_area .pagetable tr th, #stylesheet_area .pagetable tr td,
-#designs_c .pagetable tr th, #designs_c .pagetable tr td,  
+#designs_c .pagetable tr th, #designs_c .pagetable tr td,
 #types_c .pagetable tr th, #types_c .pagetable tr td  {
 display:none;
 }

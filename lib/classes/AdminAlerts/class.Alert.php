@@ -315,7 +315,7 @@ abstract class Alert
         if( !$uid ) return;
 
         $alerts = self::load_all();
-        if( !count($alerts) ) return;
+        if( !$alerts || !count($alerts) ) return;
 
         $out = [];
         foreach( $alerts as $alert ) {
@@ -323,7 +323,7 @@ abstract class Alert
                 $out[] = $alert;
             }
         }
-        if( !count($out) ) return;
+        if( !$out || !count($out) ) return;
 
         // now sort these fuggers by priority
         $map = [ Alert::PRIORITY_HIGH => 0, Alert::PRIORITY_NORMAL => 1, Alert::PRIORITY_LOW => 2 ];

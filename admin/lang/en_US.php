@@ -345,6 +345,7 @@ $lang['errorinsertinggroup'] = "Error inserting group";
 $lang['errorinsertingtag'] = "Error inserting User Defined Tag";
 //$lang['errorinsertingtemplate'] = "Error inserting template";
 $lang['errorinsertinguser'] = "Error inserting user";
+$lang['err_mail_sendwithoutsetup'] = 'CMSMS has not been configured to send mail';
 $lang['err_invalidcontentimgpath'] = 'Error: Invalid path specified for {content_image} tag.';
 //$lang['errorinstallfailed'] = "Module installation failed";
 $lang['errormodulenotfound'] = "Internal error, could not find the instance of a module";

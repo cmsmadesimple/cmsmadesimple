@@ -43,12 +43,22 @@ final class ModuleOperations
 	 * @internal
 	 */
 	protected $cmssystemmodules =  [ 'AdminLog', 'AdminSearch', 'CMSContentManager', 'DesignManager', 'FileManager', 'ModuleManager', 'Search','News', 'MicroTiny',
-                                     'Navigator', 'CmsJobManager', 'FilePicker' ];
+                                     'Navigator', 'CmsJobManager', 'FilePicker', 'CoreAdminLogin' ];
 
 	/**
 	 * @ignore
 	 */
 	static private $_instance = null;
+
+    /**
+     * @ignore
+     */
+    const STD_AUTH_MODULE = 'CoreAdminLogin';
+
+    /**
+     * @ignore
+     */
+    private $_auth_module = null;
 
     /**
      * @ignore
@@ -359,8 +369,9 @@ final class ModuleOperations
         // now load the module itself... recurses into the autoloader if possible.
         $class_name = $this->get_module_classname($module_name);
         if( !class_exists($class_name,true) ) {
-            $fname = $this->get_module_filename($module_name);
+            $fname = $this->get_module_filename( $module_name);
             if( !is_file($fname) ) {
+                die("no $fname");
                 warning("Cannot load $module_name because the module file does not exist");
                 return FALSE;
             }
@@ -421,6 +432,14 @@ final class ModuleOperations
             debug_buffer('Cannot load an uninstalled module');
             unset($obj,$this->_modules[$module_name]);
             return false;
+        }
+
+        // now initialize the module.
+        if( !$force_load && !isset($CMS_INSTALL_PAGE) ) {
+            if( CmsApp::get_instance()->is_frontend_request() ) $obj->InitializeFrontend();
+        }
+        else if( isset($CMS_ADMIN_PAGE) && !isset($CMS_STYLESHEET) && !isset($CMS_INSTALL_PAGE) ) {
+            $obj->InitializeAdmin();
         }
 
         // we're all done.
@@ -863,6 +882,19 @@ final class ModuleOperations
         return in_array($module_name,$this->cmssystemmodules);
     }
 
+
+    public function RegisterAdminAuthenticationModule( \CMSModule $mod )
+    {
+        if( $this->_auth_module ) throw new \LogicException( 'Sorry, only one non standard auth module is supported' );
+        if( ! $mod instanceof \CMSMS\IAuthModuleInterface ) throw new \LogicException('Sorry. '.$mod->GetName().' is not a valid authentication module');
+        $this->_auth_module = $mod;
+    }
+
+    public function &GetAdminLoginModule()
+    {
+        if( $this->_auth_module ) return $this->_auth_module;
+        return $this->get_module_instance( self::STD_AUTH_MODULE, '', TRUE );
+    }
 
     /**
      * Return the current syntax highlighter module object

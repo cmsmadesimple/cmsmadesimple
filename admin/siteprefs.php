@@ -202,7 +202,7 @@ if( isset($_POST['testmail']) ) {
         $addr = cleanValue($_POST['mailtest_testaddress']);
         $addr = cms_html_entity_decode($addr);
         if( !is_email($addr) ) {
-            $error .= '<li>'.lang('error_mailtest_notemail').'</li>';
+            $error .= lang('error_mailtest_notemail');
         }
         else {
             // we got an email, and we have settings.
@@ -214,12 +214,13 @@ if( isset($_POST['testmail']) ) {
                 $mailer->SetSubject(lang('mail_testsubject','siteprefs'));
                 $mailer->Send();
                 if( $mailer->IsError() ) {
-                    $error .= '<li>'.$mailer->GetErrorInfo().'</li>';
+                    $error .= $mailer->GetErrorInfo();
+                } else {
+                    $message .= lang('testmsg_success');
                 }
-                $message .= lang('testmsg_success');
             }
             catch( \Exception $e ) {
-                $error .= '<li>'.$e->GetMessage().'</li>';
+                $error .= $e->GetMessage();
             }
         }
     }

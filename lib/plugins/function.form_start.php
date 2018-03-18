@@ -28,7 +28,10 @@ function smarty_function_form_start($params, &$smarty)
 
     $tagparms['method'] = 'post';
     $tagparms['enctype'] = 'multipart/form-data';
-    if( $gCms->test_state(CmsApp::STATE_ADMIN_PAGE) ) {
+    if( $gCms->test_state(CmsApp::STATE_LOGIN_PAGE) ) {
+        $tagparms['action'] = 'login.php';
+    }
+    else if( $gCms->test_state(CmsApp::STATE_ADMIN_PAGE) ) {
         // check if it's a module action
         if( $mactparms['module'] ) {
             $tmp = $smarty->getTemplateVars('_action');
@@ -134,7 +137,9 @@ function smarty_function_form_start($params, &$smarty)
     }
     if( !$gCms->is_frontend_request() ) {
         if( !isset($mactparms['returnid']) || $mactparms['returnid'] == '' ) {
-            $out .= '<input type="hidden" name="'.CMS_SECURE_PARAM_NAME.'" value="'.$_SESSION[CMS_USER_KEY].'"/>';
+	    if( isset( $_SESSION[CMS_USER_KEY] ) ) {
+                $out .= '<input type="hidden" name="'.CMS_SECURE_PARAM_NAME.'" value="'.$_SESSION[CMS_USER_KEY].'"/>';
+            }
         }
     }
     foreach( $parms as $key => $value ) {

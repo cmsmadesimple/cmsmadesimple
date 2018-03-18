@@ -148,6 +148,11 @@ abstract class CmsAdminThemeBase
 	 */
 	private $_valid_sections = array('main','content','layout','files','usersgroups','extensions','siteadmin','ecommerce','myprefs');
 
+    /**
+     * @ignore
+     */
+    private $_primary_content;
+
 	/**
 	 * @ignore
 	 */
@@ -185,6 +190,10 @@ abstract class CmsAdminThemeBase
 		if( $key == 'userid' ) return get_userid();
 		if( $key == 'title' ) return $this->_title;
 		if( $key == 'subtitle' ) return $this->_subtitle;
+        if( $key == 'root_url' ) {
+            $config = \cms_config::get_instance();
+            return $config['admin_url']."/themes/".$this->themeName;
+        }
 	}
 
     /**
@@ -1391,6 +1400,33 @@ abstract class CmsAdminThemeBase
 	 * @return string html contents.
 	 */
 	abstract public function do_toppage(string $section_name);
+
+    abstract public function do_authenticated_page();
+
+    abstract public function do_loginpage( string $pageid = null );
+
+    /**
+     * Set the HTML for the primary content for the page.
+     *
+     * @see do_minimal()
+     */
+    public function set_content( string $content )
+    {
+        $this->_primary_content = $content;
+    }
+
+    /**
+     * Get the HTML for the primary content of the page.
+     */
+    public function get_content()
+    {
+        return $this->_primary_content;
+    }
+
+    /**
+     * An abstract method to output a minimal HTML page (typically for login and other operations that do not require navigations)
+     */
+    abstract public function do_minimal();
 
 	/**
 	 * An abstract function for processing the login form.

@@ -27,229 +27,30 @@ require_once("../lib/include.php");
 $gCms = \CmsApp::get_instance();
 $db = $gCms->GetDb();
 $login_ops = \CMSMS\LoginOperations::get_instance();
+$params = [];
 
-$error = "";
-$forgotmessage = "";
-$changepwhash = "";
+$auth_module = \ModuleOperations::get_instance()->GetAdminLoginModule();
+if( !$auth_module ) throw new \LogicException('FATAL: Could not find a suitable authentication module');
+$action = 'admin_login';
+$id = '__';
+$params = [];
+$smarty = \CmsApp::get_instance()->GetSmarty();
 
-/**
- * A function to send lost password recovery email to a specified admin user (by name)
- *
- * @internal
- * @access private
- * @param string the username
- * @return results from the attempt to send a message.
- */
-function send_recovery_email(\User $user)
-{
-    $gCms = \CmsApp::get_instance();
-    $config = $gCms->GetConfig();
-    $userops = $gCms->GetUserOperations();
+if( isset( $_REQUEST['mact'] ) ) {
+    $parts = explode(',', cms_htmlentities( $_REQUEST['mact'] ), 4 );
+    $module = (isset($parts[0])?trim($parts[0]):null);
+    $id = (isset($parts[1])?trim($parts[1]):$id);
+    $action = (isset($parts[2])?trim($parts[2]):$action);
 
-    $obj = new \cms_mailer;
-    $obj->IsHTML(TRUE);
-    $obj->AddAddress($user->email, html_entity_decode($user->firstname . ' ' . $user->lastname));
-    $obj->SetSubject(lang('lostpwemailsubject',html_entity_decode(get_site_preference('sitename','CMSMS Site'))));
-
-    $url = $config['admin_url'] . '/login.php?recoverme=' . md5(md5($config['root_path'] . '--' . $user->username . md5($user->password)));
-    $body = lang('lostpwemail',html_entity_decode(get_site_preference('sitename','CMSMS Site')), $user->username, $url, $url);
-
-    $obj->SetBody($body);
-
-    audit('','Core','Sent Lost Password Email for '.$user->username);
-    return $obj->Send();
+    if( $module != $auth_module->GetName() ) throw new \RuntimeException('Invalid module in MACT from login module');
+    $params = \ModuleOperations::get_instance()->GetModuleParameters( $id );
 }
 
-/**
- * A function find a matching user id given an identity hash
- *
- * @internal
- * @access private
- * @param string the hash
- * @return object The matching user object if found, or null otherwise.
- */
-function find_recovery_user($hash)
-{
-    $gCms = \CmsApp::get_instance();
-    $config = $gCms->GetConfig();
-    $userops = $gCms->GetUserOperations();
-
-    foreach ($userops->LoadUsers() as $user) {
-        if ($hash == md5(md5($config['root_path'] . '--' . $user->username . md5($user->password)))) return $user;
-    }
-
-    return null;
-}
-
-
-
-//Redirect to the normal login screen if we hit cancel on the forgot pw one
-//Otherwise, see if we have a forgotpw hit
-if ((isset($_REQUEST['forgotpwform']) || isset($_REQUEST['forgotpwchangeform'])) && isset($_REQUEST['logincancel'])) {
-    redirect('login.php');
-}
-else if (isset($_REQUEST['forgotpwform']) && isset($_REQUEST['forgottenusername'])) {
-    $userops = $gCms->GetUserOperations();
-    $forgot_username = cms_html_entity_decode($_REQUEST['forgottenusername']);
-    unset($_REQUEST['forgottenusername'],$_POST['forgottenusername']);
-    \CMSMS\HookManager::do_hook('Core::LostPassword', [ 'username'=>$forgot_username] );
-    $oneuser = $userops->LoadUserByUsername($forgot_username);
-    unset($_REQUEST['loginsubmit'],$_POST['loginsubmit']);
-
-    if ($oneuser != null) {
-        if ($oneuser->email == '') {
-            $error = lang('nopasswordforrecovery');
-        }
-        else if (send_recovery_email($oneuser)) {
-            $warningLogin = lang('recoveryemailsent');
-        }
-        else {
-            $error = lang('errorsendingemail');
-        }
-    }
-    else {
-        unset($_POST['username'],$_POST['password'],$_REQUEST['username'],$_REQUEST['password']);
-        \CMSMS\HookManager::do_hook('Core::LoginFailed', [ 'user'=>$forgot_username ] );
-        $error = lang('usernotfound');
-    }
-}
-else if (isset($_REQUEST['recoverme']) && $_REQUEST['recoverme']) {
-    $user = find_recovery_user($_REQUEST['recoverme']);
-    if ($user == null) {
-        $error = lang('usernotfound');
-    }
-    else {
-        $changepwhash = $_REQUEST['recoverme'];
-    }
-}
-else if (isset($_REQUEST['forgotpwchangeform']) && $_REQUEST['forgotpwchangeform']) {
-    $user = find_recovery_user($_REQUEST['changepwhash']);
-    if ($user == null) {
-        $error = lang('usernotfound');
-    }
-    else {
-        if ($_REQUEST['password'] != '') {
-            if ($_REQUEST['password'] == $_REQUEST['passwordagain']) {
-                $user->SetPassword($_REQUEST['password']);
-                $user->Save();
-                // put mention into the admin log
-                $ip_passw_recovery = \cms_utils::get_real_ip();
-                audit('','Core','Completed lost password recovery for: '.$user->username.' (IP: '.$ip_passw_recovery.')');
-                \CMSMS\HookManager::do_hook('Core::LostPasswordReset', [ 'uid'=>$user_id, 'username'=>$user->username, 'ip'=>$ip_passw_recovery ] );
-                $acceptLogin = lang('passwordchangedlogin');
-                $changepwhash = '';
-            }
-            else {
-                $error = lang('nopasswordmatch');
-                $changepwhash = $_REQUEST['changepwhash'];
-            }
-        }
-        else {
-            $error = lang('nofieldgiven', array(lang('password')));
-            $changepwhash = $_REQUEST['changepwhash'];
-        }
-    }
-}
-
-if (isset($_SESSION['logout_user_now'])) {
-    // this does the actual logout stuff.
-    unset($_SESSION['logout_user_now']);
-    debug_buffer("Logging out.  Cleaning cookies and session variables.");
-    $userid = $login_ops->get_loggedin_uid();
-    $username = $login_ops->get_loggedin_username();
-    \CMSMS\HookManager::do_hook('Core::LogoutPre', [ 'uid'=>$userid, 'username'=>$username ] );
-    $login_ops->deauthenticate(); // unset all the cruft needed to make sure we're logged in.
-    \CMSMS\HookManager::do_hook('Core::LogoutPost', [ 'uid'=>$userid, 'username'=>$username ] );
-    audit($userid, "Admin Username: ".$username, 'Logged Out');
-}
-
-if( isset($_POST['logincancel']) ) {
-    debug_buffer("Login cancelled.  Returning to content.");
-    $login_ops->deauthenticate(); // just in case
-    redirect($config["root_url"].'/index.php', true);
-}
-else if( isset($_POST['loginsubmit']) ) {
-    // login form submitted
-    $login_ops->deauthenticate();
-    $username = $password = null;
-    if (isset($_POST["username"])) $username = cleanValue($_POST["username"]);
-    if (isset($_POST["password"])) $password = $_POST["password"];
-    unset($_POST['username'],$_POST['password'],$_REQUEST['username'],$_REQUEST['password']);
-
-    $userops = $gCms->GetUserOperations();
-
-    class CmsLoginError extends \CmsException {}
-
-    try {
-        if( !$password ) throw new CmsLoginError(lang('usernameincorrect'));
-        $oneuser = $userops->LoadUserByUsername($username, $password, TRUE, TRUE);
-        if( !$oneuser ) throw new CmsLoginError(lang('usernameincorrect'));
-        if( ! $oneuser->Authenticate( $password ) ) {
-            throw new CmsLoginError( lang('usernameincorrect') );
-        }
-        $login_ops->save_authentication($oneuser);
-
-        // put mention into the admin log
-        audit($oneuser->id, "Admin Username: ".$oneuser->username, 'Logged In');
-
-        // send the post login event
-        \CMSMS\HookManager::do_hook('Core::LoginPost', [ 'user'=>&$oneuser ] );
-
-        // redirect outa hre somewhere
-        if( isset($_SESSION['login_redirect_to']) ) {
-            // we previously attempted a URL but didn't have the user key in the request.
-            $url_ob = new \cms_url($_SESSION['login_redirect_to']);
-            unset($_SESSION['login_redirect_to']);
-            $url_ob->erase_queryvar('_s_');
-            $url_ob->erase_queryvar('sp_');
-            $url_ob->set_queryvar(CMS_SECURE_PARAM_NAME,$_SESSION[CMS_USER_KEY]);
-            $url = (string) $url_ob;
-            redirect($url);
-        } else {
-            // find the users homepage, if any, and redirect there.
-            $homepage = \cms_userprefs::get_for_user($oneuser->id,'homepage');
-            if( !$homepage ) $homepage = $config['admin_url'];
-
-            // quick hacks to remove old secure param name from homepage url
-            // and replace with the correct one.
-            $homepage = str_replace('&amp;','&',$homepage);
-            $tmp = explode('?',$homepage);
-            @parse_str($tmp[1],$tmp2);
-            if( in_array('_s_',array_keys($tmp2)) ) unset($tmp2['_s_']);
-            if( in_array('sp_',array_keys($tmp2)) ) unset($tmp2['sp_']);
-            $tmp2[CMS_SECURE_PARAM_NAME] = $_SESSION[CMS_USER_KEY];
-            foreach( $tmp2 as $k => $v ) {
-                $tmp3[] = $k.'='.$v;
-            }
-            $homepage = $tmp[0].'?'.implode('&amp;',$tmp3);
-
-            // and redirect.
-            $homepage = html_entity_decode($homepage);
-            if( !startswith($homepage,'http') && !startswith($homepage,'//') && startswith($homepage,'/') ) $homepage = CMS_ROOT_URL.$homepage;
-            redirect($homepage);
-        }
-    }
-    catch( \Exception $e ) {
-        $error = $e->GetMessage();
-        debug_buffer("Login failed.  Error is: " . $error);
-        \CMSMS\HookManager::do_hook('Core::LoginFailed', [ 'user'=>$username ] );
-        // put mention into the admin log
-        $ip_login_failed = \cms_utils::get_real_ip();
-        audit('', '(IP: ' . $ip_login_failed . ') ' . "Admin Username: " . $username, 'Login Failed');
-    }
-}
-
-//
-// display the login form
-//
-
-// Language shizzle
 cms_admin_sendheaders();
 header("Content-Language: " . \CmsNlsOperations::get_current_language());
-
-$themeObject = \cms_utils::get_theme_object();
-$vars = array('error'=>$error);
-if( isset($warningLogin) ) $vars['warningLogin'] = $warningLogin;
-if( isset($acceptLogin) ) $vars['acceptLogin'] = $acceptLogin;
-if( isset($changepwhash) ) $vars['changepwhash'] = $changepwhash;
-$themeObject->do_login($vars);
+$content = $auth_module->DoActionBase( $action, $id, $params, null, $smarty );
+$theme_object = \cms_utils::get_theme_object();
+$theme_object->SetTitle( lang('logintitle') );
+$theme_object->set_content( $content );
+echo $theme_object->do_loginpage( 'login' );
+return;

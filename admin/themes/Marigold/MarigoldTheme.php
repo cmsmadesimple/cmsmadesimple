@@ -132,11 +132,9 @@ class MarigoldTheme extends CmsAdminThemeBase {
 		}
 	}
 
-	public function do_header() {
-	}
+	public function do_header() {}
 
-	public function do_footer() {
-	}
+	public function do_footer() {}
 
 	public function do_toppage(string $section_name) {
 		$smarty = Smarty_CMS::get_instance();
@@ -162,9 +160,48 @@ class MarigoldTheme extends CmsAdminThemeBase {
 		echo $_contents;
 	}
 
+    public function do_minimal()
+    {
+        $config = \cms_config::get_instance();
+        $smarty->assign('content',$this->get_content());
+        $smarty->assign('title',$this->title);
+        $smarty->assign('subtitle',$this->subtitle);
+        $smarty->assign('admin_root', $config['admin_url']);
+        $smarty->assign('theme_root', $config['admin_url'].'/themes/Marigold');
+        $smarty->assign('footer', $this->do_footer() );
+        return $smarty->fetch('minimal.tpl');
+    }
+
+    public function do_loginpage( string $pageid = null )
+    {
+		$smarty = Smarty_CMS::get_instance();
+        $old = $smarty->GetTemplateDir();
+        $smarty->SetTemplateDir( __DIR__.'/templates' );
+
+        $config = \cms_config::get_instance();
+        $smarty->assign('content',$this->get_content());
+        $smarty->assign('title',$this->title);
+        $smarty->assign('subtitle',$this->subtitle);
+        $smarty->assign('admin_root', $config['admin_url']);
+        $smarty->assign('theme_root', $config['admin_url'].'/themes/Marigold');
+        $smarty->assign('footer', $this->do_footer() );
+        $smarty->assign('lang',get_site_preference('fronendlang'));
+        $smarty->assign('pageid',$pageid);
+        $smarty->assign('dynamic_headtext', $this->get_headtext());
+        $out = $smarty->fetch('login.tpl');
+
+        $smarty->SetTemplateDir( $old );
+        return $out;
+    }
+
+    public function do_authenticated_page()
+    {
+        die(__METHOD__);
+    }
 
 	public function do_login(array $params)
 	{
+        die('not used '.__METHOD__);
 	  // by default we're gonna grab the theme name
         $config = cms_config::get_instance();
         $smarty = Smarty_CMS::get_instance();
