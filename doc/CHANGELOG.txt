@@ -1,3 +1,8 @@
+Version 2.2.8 - NO NAME SET
+----------------------------------
+Core - General
+  - Re-introduce the host_whitelist config entry that got lost in some commit somewhere.
+
 Version 2.2.7 - Skookumchuck
 ----------------------------------
 Core - General
