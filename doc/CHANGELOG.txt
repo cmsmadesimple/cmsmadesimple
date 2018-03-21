@@ -77,6 +77,14 @@ Core - General
     upgrades and resetting lost passwords.
   - Change smarty template directories for admin requests to include /assets/templates.
   - Allow svg files to be cached and deflated in the sample htaccess.txt file
+  - Now call InitializeFrontend() and InitializeAdmin() from within ModuleOperations::_load_module() on success.  instead of the module constructor.
+  - Adds new {theme_root} plugin for admin templates
+  - Adds new {admin_headtext} block plugin for admin templates
+  - Module actions can now return output rather than echoing it.
+  - Allow login via a module (CoreAdminLogin) now is core admin module
+  - Adds a new hook for password strength
+  - cms_mailer class now throws an exception if attempting to send an email without setting preferences first.
+  - New methods and minor cleanup to admin themes (may introduce some breakage)
   - TODO  Migrate the tasks related to the old admin log into AdminLog module.
 
 CMSContentManager - 1.2
@@ -86,8 +94,10 @@ CMSContentManager - 1.2
   - Change processing to be a little more friendly to some environments wrt. content-size header.
   - Adds expand/functionality into reorder content (TODO: needs styling)
 
-Installation Assistant - remember to bump version
+Installation Assistant - v1.3.5
   - Now require at least version 2.0.1 to upgrade
+  - Now test the default character set
+  - Now require at least PHP 7.0 and recommend 7.1
 
 ModuleManaver v2.2
   - XML import code now lives here.
@@ -787,6 +797,8 @@ Core - General
 - Changed cmsms plugins to use $smarty->getTemplateVars() instead of $smarty->get_template_vars() because of scope issues.
 - Minor fix to {form_start} when not used in a module.
 - Improved error handling for cms_stylesheet.  Now will generate a message in the Admin log, and an html comment on error.
+- Module actions can now 'return' their results
+- 
 
 CMSContentManager v1.0.1
 - Fixes for changing content types.

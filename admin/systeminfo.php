@@ -151,6 +151,17 @@ $open_basedir = ini_get('open_basedir');
 list($minimum, $recommended) = getTestValues('php_version');
 $tmp[0]['phpversion'] = testVersionRange(0, 'phpversion', phpversion(), '', $minimum, $recommended, false);
 
+$default_charset = ini_get('default_charset');
+$test = new CmsInstallTest();
+$test->title = lang('default_charset');
+$test->value = $default_charset;
+$test->display_value = false;
+$test->res = (strtolower( $default_charset) == 'utf-8' ) ? 'green' : 'yellow';
+if( $test->res == 'yellow' ) {
+    $test->message = lang('msg_default_charset',$default_charset);
+}
+$tmp[0]['default_charset'] = $test;
+
 $tmp[0]['md5_function'] = testBoolean(0, 'md5_function', function_exists('md5'), '', false, false, 'Function_md5_disabled');
 $tmp[0]['json_function'] = testBoolean(0, 'json_function', function_exists('json_decode'), '', false, false, 'json_disabled');
 

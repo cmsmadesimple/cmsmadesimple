@@ -25,8 +25,8 @@ class wizard_step3 extends \cms_autoinstaller\wizard_step
 
         // required test for php version
         $obj = new _tests_\version_range_test('php_version',phpversion());
-        $obj->minimum = '5.4.11';
-        $obj->recommended = '5.5.2';
+        $obj->minimum = '7.0';
+        $obj->recommended = '7.2';
         $obj->fail_msg = \__appbase\lang('pass_php_version',$obj->minimum,$obj->recommended,phpversion());
         $obj->warn_msg = \__appbase\lang('msg_yourvalue',phpversion());
         $obj->pass_msg = \__appbase\lang('msg_yourvalue',phpversion());
@@ -257,6 +257,13 @@ class wizard_step3 extends \cms_autoinstaller\wizard_step
         $obj->required = 1;
         $obj->fail_key = 'fail_xml_functions';
         $tests[] = $obj;
+
+	// recommended test ... default charset
+	$default_charset = ini_get('default_charset');
+	$obj = new _tests_\boolean_test('default_charset',(strtolower($default_charset) == 'utf-8'));
+	$obj->required = 0;
+	$obj->warn_msg = \__appbase\lang('warn_default_charset',$default_charset);
+	$tests[] = $obj;
 
         // recommended test ... max_execution_time
         $v = (int) ini_get('max_execution_time');
