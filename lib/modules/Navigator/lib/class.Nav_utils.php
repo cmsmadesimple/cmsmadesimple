@@ -78,6 +78,8 @@ final class Nav_utils
 
             $obj = new NavigatorNode;
             $obj->id = $content->Id();
+	    $obj->name = $content->Name();
+	    $obj->title = $content->Name();
             $obj->url = $content->GetURL();
             $obj->accesskey = $content->AccessKey();
             $obj->type = strtolower($content->Type());

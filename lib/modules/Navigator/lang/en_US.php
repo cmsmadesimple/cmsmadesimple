@@ -28,6 +28,7 @@ $lang['help'] = <<<EOT
 <ul>
   <li>\$node->id -- The content object integer ID.</li>
   <li>\$node->url -- URL to the content object.  This should be used when building links.</li>
+  <li>\$node->title -- The page title (if any).</li> 
   <li>\$node->accesskey -- Access Key, if defined.</li>
   <li>\$node->tabindex -- Tab index, if defined.</li>
   <li>\$node->titleattribute -- Description, or Title attribute (title), if defined.</li>

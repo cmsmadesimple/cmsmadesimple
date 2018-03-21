@@ -126,6 +126,8 @@ AdminSearch v1.0.5
 DesignManager v1.1.6
  - Now properly handle renaming exported stylesheets and templates.
 
+Navigator v1.0.9
+ - Adds the title property to each node.
 
 Version 2.2.6 - NO NAME SET
 ----------------------------------
