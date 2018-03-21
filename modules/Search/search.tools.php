@@ -40,7 +40,7 @@ function search_StemPhrase(&$module,$phrase)
                                     $phrase);
 
     // split into words
-    $words = preg_split('/[\s,!.;:\?()+-\/\\\\]+/', $phrase);
+    $words = preg_split('/[\s,!.;:\?()+-\/\\\\]+/u', $phrase);
 
     // strip off anything 3 chars or less
     if( !function_exists('__search_stemphrase_filter') ) {

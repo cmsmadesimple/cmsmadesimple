@@ -3,6 +3,9 @@ Version 2.2.8 - NO NAME SET
 Core - General
   - Re-introduce the host_whitelist config entry that got lost in some commit somewhere.
 
+Search v1.51.5
+  - Now enforce utf-8 on preg_plit
+
 Version 2.2.7 - Skookumchuck
 ----------------------------------
 Core - General
