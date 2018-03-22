@@ -6,6 +6,9 @@ Core - General
 Search v1.51.5
   - Now enforce utf-8 on preg_plit
 
+CMSJobManager v0.1.3
+  - Fix a notice.
+
 Version 2.2.7 - Skookumchuck
 ----------------------------------
 Core - General

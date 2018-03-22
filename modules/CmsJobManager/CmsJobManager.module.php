@@ -39,7 +39,7 @@ final class CmsJobManager extends \CMSModule
     public static function table_name() { return cms_db_prefix().'mod_cmsjobmgr'; }
 
     function GetFriendlyName() { return $this->Lang('friendlyname'); }
-    function GetVersion() { return '0.1.2'; }
+    function GetVersion() { return '0.1.3'; }
     function MinimumCMSVersion() { return '2.1.99'; }
     function GetAuthor() { return 'Calguy1000'; }
     function GetAuthorEmail() { return 'calguy1000@cmsmadesimple.org'; }
@@ -112,7 +112,7 @@ final class CmsJobManager extends \CMSModule
 
     protected function unlock()
     {
-        $this->_unlock = null;
+        $this->_lock = null;
         $this->RemovePreference(self::LOCKPREF);
     }
 
