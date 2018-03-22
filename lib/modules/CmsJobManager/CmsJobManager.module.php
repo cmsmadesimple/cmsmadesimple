@@ -112,7 +112,7 @@ final class CmsJobManager extends \CMSModule
 
     protected function unlock()
     {
-        $this->_unlock = null;
+        $this->_lock = null;
         $this->RemovePreference(self::LOCKPREF);
     }
 
