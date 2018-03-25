@@ -211,9 +211,9 @@ function cms_relative_path(string $in,string $relative_to = null)
  * @param bool $convert_single_quotes A flag indicating wether single quotes should be converted to entities.
  * @return string the converted string.
  */
-function cms_htmlentities(string $val, string $param=ENT_QUOTES, string $charset="UTF-8", bool $convert_single_quotes = false)
+function cms_htmlentities(string $val = null, string $param=ENT_QUOTES, string $charset="UTF-8", bool $convert_single_quotes = false)
 {
-  if ($val == "") return "";
+  if( $val == '') return '';
 
   $val = str_replace( "&#032;", " ", $val );
   $val = str_replace( "&"            , "&amp;"         , $val );
@@ -782,7 +782,8 @@ function munge_string_to_url(string $alias, bool $tolower = false, bool $withsla
  * @return string
  */
 function cleanValue(string $val) {
-  if ($val == "") return $val;
+  if ($val == '') return $val;
+  return filter_var( $val, FILTER_SANITIZE_STRING );
   //Replace odd spaces with safe ones
   $val = str_replace(" ", " ", $val);
   $val = str_replace(chr(0xCA), "", $val);

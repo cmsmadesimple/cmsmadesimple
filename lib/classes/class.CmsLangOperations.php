@@ -107,7 +107,8 @@ final class CmsLangOperations
             }
             else {
                 if( $is_module ) {
-                    $files[] = cms_join_path(CMS_ROOT_PATH,'modules',$realm,'lang','ext',$curlang.'.php');
+                    $files[] = cms_join_path(CMS_ROOT_PATH,'lib','modules',$realm,'lang','ext',$curlang.'.php');
+                    $files[] = cms_join_path(CMS_ASSETS_PATH,'modules',$realm,'lang','ext',$curlang.'.php');
                 }
                 else {
                     $files[] = cms_join_path(CMS_ROOT_PATH,'lib','lang',$realm,'ext',$curlang.'.php');

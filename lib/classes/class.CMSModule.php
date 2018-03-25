@@ -1358,7 +1358,7 @@ abstract class CMSModule
             if( isset( $_SESSION[$t_key] ) ) $this->SetCurrentTab( $_SESSION[$t_key] );
             if( isset( $_SESSION[$e_key]) ) $errors = $_SESSION[$e_key];
             if( isset( $_SESSION[$m_key]) ) $messages = $_SESSION[$m_key];
-            unset( $_SESSION[$t_key], $_SESSION[$m_key], $_SESSION[$m_key] );
+            unset( $_SESSION[$t_key], $_SESSION[$e_key], $_SESSION[$m_key] );
             if( is_array($errors) && count($errors) ) echo $this->ShowErrors($errors);
             if( is_array($messages) && count($messages) ) echo $this->ShowMessage($messages[0]);
         }
