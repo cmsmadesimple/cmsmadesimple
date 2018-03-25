@@ -36,39 +36,41 @@
 if( !isset($gCms) ) exit;
 if( !$this->CanEditContent() ) exit;
 
+$term = null;
 $out = array();
 
 if( isset($_REQUEST['term']) ) {
-  // find all pages with this text...
-  // that this user can edit.
-  $term = trim(strip_tags($_REQUEST['term']));
+    // find all pages with this text...
+    // that this user can edit.
+    $term = trim( strip_tags( filter_var( $_REQUEST['term'], FILTER_SANITIZE_STRING ) ) );
+}
+if( $term ) {
+    $query = 'SELECT content_id,hierarchy,content_name,menu_text,page_url,content_alias FROM '.CMS_DB_PREFIX.'content
+              WHERE (content_name LIKE ? OR menu_text LIKE ? OR page_url LIKE ? OR content_alias LIKE ?)';
+    $str ='%'.$term.'%';
+    $parms = [ $str, $str, $str, $str ];
 
-  $pref = $this->GetPreference('list_namecolumn','title');
-  $field = 'content_name';
-  if( $pref != 'title' ) $field = 'menu_text';
+    if( !$this->CheckPermission('Manage All Content') && !$this->CheckPermission('Modify Any Page') ) {
+        $pages = author_pages(get_userid(FALSE));
+        if( count($pages) == 0 ) return;
 
-  $query = 'SELECT content_id,hierarchy,'.$field.' FROM '.CMS_DB_PREFIX.'content WHERE '.$field.' LIKE ?';
-  $parms = array('%'.$term.'%');
-
-  if( !$this->CheckPermission('Manage All Content') && !$this->CheckPermission('Modify Any Page') ) {
-    $pages = author_pages(get_userid(FALSE));
-    if( count($pages) == 0 ) return;
-
-    // query only these pages.
-    $query .= ' AND content_id IN ('.implode(',',$pages).')';
-  }
-
-  $list = $db->GetArray($query,$parms);
-  if( is_array($list) && count($list) ) {
-    $builder = new \CMSContentManager\ContentListBuilder($this);
-    $builder->expand_all(); // it'd be cool to open all parents to each item.
-    $contentops = ContentOperations::get_instance();
-    foreach( $list as $row ) {
-      $label = $contentops->CreateFriendlyHierarchyPosition($row['hierarchy']);
-      $label = $row[$field]." ({$label})";
-      $out[] = array('label'=>$label,'value'=>$row['content_id']);
+        // query only these pages.
+        $query .= ' AND content_id IN ('.implode(',',$pages).')';
     }
-  }
+
+    $list = $db->GetArray($query,$parms);
+    if( is_array($list) && count($list) ) {
+        $builder = new \CMSContentManager\ContentListBuilder($this);
+        $builder->expand_all(); // it'd be cool to open all parents to each item.
+        $contentops = ContentOperations::get_instance();
+        foreach( $list as $row ) {
+            $label = $contentops->CreateFriendlyHierarchyPosition($row['hierarchy']);
+            $label = $row['content_name'].' / '.$row['menu_text'];
+            if( $row['content_alias'] ) $label .= ' / '.$row['content_alias'];
+            if( $row['page_url'] ) $label .= ' / '.$row['page_url'];
+            $out[] = array('label'=>$label,'value'=>$row['content_id']);
+        }
+    }
 }
 
 echo json_encode($out);
@@ -77,4 +79,3 @@ exit;
 #
 # EOF
 #
-?>

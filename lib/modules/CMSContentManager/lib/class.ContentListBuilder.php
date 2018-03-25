@@ -513,7 +513,7 @@ final class ContentListBuilder
   public function get_display_columns()
   {
       $config = \cms_config::get_instance();
-      $dflt = 'expand,icon1,hier,page,alias,url,template,friendlyname,owner,active,default,move,view,copy,edit,delete,multiselect';
+      $dflt = 'expand,icon1,hier,page,alias,url,template,friendlyname,owner,active,default,move,view,copy,addchild,edit,delete,multiselect';
       $mod = $this->_module;
       $cols = explode(',',$mod->GetPreference('list_visiblecolumns',$dflt));
 
@@ -532,6 +532,7 @@ final class ContentListBuilder
       $columnstodisplay['move'] = (in_array('move',$cols) && ($mod->CheckPermission('Manage All Content') || $mod->CheckPermission('Reorder Content'))) ? 'icon' : null;
       $columnstodisplay['view'] = in_array('view',$cols) ? 'icon' : null;
       $columnstodisplay['copy'] = (in_array('copy',$cols) && ($mod->CheckPermission('Add Pages') || $mod->CheckPermission('Manage All Content'))) ? 'icon' : null;
+      $columnstodisplay['addchild'] = (in_array('addchild',$cols) && ($mod->CheckPermission('Add Pages') || $mod->CheckPermission('Manage All Content'))) ? 'icon' : null;
       $columnstodisplay['edit'] = in_array('edit',$cols) ? 'icon' : null;
       $columnstodisplay['delete'] = (in_array('delete',$cols) && ($mod->CheckPermission('Remove Pages') || $mod->CheckPermission('Manage All Content'))) ? 'icon' : null;
       $columnstodisplay['multiselect'] = (in_array('multiselect',$cols) && ($mod->CheckPermission('Remove Pages') || $mod->CheckPermission('Manage All Content'))) ? 'icon' : null;
@@ -941,9 +942,16 @@ final class ContentListBuilder
               case 'copy':
                   $rec[$column] = '';
                   if( $content->IsCopyable() && !$this->_is_locked($content->Id()) ) {
-                      if( $rec['can_edit'] && ($mod->CheckPermission('Add Pages') || $mod->CheckPermission('Manage All Content')) ) {
+                      if( ($rec['can_edit'] && $mod->CheckPermission('Add Pages')) || $mod->CheckPermission('Manage All Content') ) {
                           $rec[$column] = 'yes';
                       }
+                  }
+                  break;
+
+              case 'addchild':
+                  $rec[$column] = '';
+                  if( ($rec['can_edit'] && $mod->CheckPermission('Add Pages')) || $mod->CheckPermission('Manage All Content') ) {
+                      $rec[$column] = 'yes';
                   }
                   break;
 

@@ -42,12 +42,10 @@ $this->SetCurrentTab('pages');
 //
 try {
     $user_id = get_userid();
-    $content_id = null;
-    $content_obj = null;
+    $content_id = $parent_id = $content_obj = $error = $active_tab = null;
     $pagedefaults = CmsContentManagerUtils::get_pagedefaults();
     $content_type = $pagedefaults['contenttype'];
     $error = null;
-    $active_tab = null;
 
     if( isset($params['content_id']) ) $content_id = (int)$params['content_id'];
 
@@ -85,6 +83,7 @@ try {
     }
     else if( $content_id < 1 ) {
         // creating a new content object
+        if( isset($params['parent_id']) ) $parent_id = (int) $params['parent_id'];
         if( isset($params['content_type']) ) $content_type = trim($params['content_type']);
         $content_obj = $contentops->CreateNewContent($content_type);
         $content_obj->SetOwner($user_id);
@@ -114,7 +113,8 @@ try {
             $node = $contentops->quickfind_node_by_id( $dflt_parent );
             if( !$node ) $dflt_parent = -1;
         }
-        $content_obj->SetParentId($dflt_parent);
+        if( $parent_id < 1 ) $parent_id = $dflt_parent;
+        $content_obj->SetParentId($parent_id);
     }
     else {
         // editint an existing content object

@@ -93,6 +93,9 @@ CMSContentManager - 1.2
   - Change connection timeout to 1 second.
   - Change processing to be a little more friendly to some environments wrt. content-size header.
   - Adds expand/functionality into reorder content (TODO: needs styling)
+  - Remove the 'url' and 'owner' columns from content list... put these values into a tooltip.
+  - Adds new 'add child here' icon in the content list.
+  - Find functionality in content list can now search on page alias and url.
 
 Installation Assistant - v1.3.5
   - Now require at least version 2.0.1 to upgrade

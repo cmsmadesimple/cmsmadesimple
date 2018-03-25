@@ -20,7 +20,7 @@
 
   <div class="pageoptions options-form grid_4" style="float: right;">
     {if isset($content_list)}
-    <span><label for="ajax_find">{$mod->Lang('find')}:</label>&nbsp;<input type="text" id="ajax_find" name="ajax_find" title="{$mod->Lang('title_listcontent_find')}" value="" size="25"/></span>
+    <span><label for="ajax_find">{$mod->Lang('find')}:</label>&nbsp;<input type="text" id="ajax_find" name="ajax_find" title="{$mod->Lang('title_listcontent_find2')}" value="" size="25"/></span>
     {/if}
 
     {if isset($content_list) && $npages > 1}
@@ -49,6 +49,7 @@
   {if isset($content_list)}
     {function do_content_row}
       {foreach $columns as $column => $flag}
+        {if $column == 'owner' || $column == 'url'}{continue}{/if}
         {if !$flag}{continue}{/if}
 	<td class="{$column}">
 	  {if $column == 'expand'}
@@ -74,6 +75,22 @@
 	        <strong>{$mod->Lang('prompt_title')}:</strong> {$row.title|escape}<br/>
 	        <strong>{$mod->Lang('prompt_name')}:</strong> {$row.menutext|escape}<br/>
 	        {if isset($row.alias)}<strong>{$mod->Lang('prompt_alias')}:</strong> {$row.alias}<br/>{/if}
+		{if $row.url}
+  	        <strong>{$mod->Lang('colhdr_url')}:</strong>
+		   {if $prettyurls_ok}
+		      {$row.url}
+		   {else}
+		      <span style="color: red;">{$row.url}</span>
+		   {/if}
+		{/if}
+		<hr/>
+		<strong>{$mod->Lang('prompt_owner')}:</strong> {$row.owner}<br/>
+		<strong>{$mod->Lang('prompt_created')}:</strong> {$row.created|cms_date_format}<br/>
+	        <strong>{$mod->Lang('prompt_lastmodified')}:</strong> {$row.lastmodified|cms_date_format}<br/>
+	        {if isset($row.lastmodifiedby)}
+	          <strong>{$mod->Lang('prompt_lastmodifiedby')}:</strong> {$row.lastmodifiedby}<br/>
+	        {/if}
+		<hr/>
 	        <strong>{$mod->Lang('prompt_cachable')}:</strong> {if $row.cachable}{$mod->Lang('yes')}{else}{$mod->Lang('no')}{/if}<br/>
 	        <strong>{$mod->Lang('prompt_showinmenu')}:</strong> {if $row.showinmenu}{$mod->Lang('yes')}{else}{$mod->Lang('no')}{/if}<br/>
 	        <strong>{lang('wantschildren')}:</strong> {if $row.wantschildren|default:1}{$mod->Lang('yes')}{else}{$mod->Lang('no')}{/if}
@@ -123,15 +140,6 @@
 	    {/if}
 	  {elseif $column == 'friendlyname'}
 	    {$row.friendlyname}
-	  {elseif $column == 'owner'}
-            {capture assign='tooltip_ownerinfo'}{strip}
-	      <strong>{$mod->Lang('prompt_created')}:</strong> {$row.created|cms_date_format}<br/>
-	      <strong>{$mod->Lang('prompt_lastmodified')}:</strong> {$row.lastmodified|cms_date_format}<br/>
-	      {if isset($row.lastmodifiedby)}
-	        <strong>{$mod->Lang('prompt_lastmodifiedby')}:</strong> {$row.lastmodifiedby}<br/>
-	      {/if}
-	    {/strip}{/capture}
-	    <span class="tooltip" data-cms-description='{$tooltip_ownerinfo|htmlentities}'>{$row.owner}</span>
 	  {elseif $column == 'active'}
 	    {if $row.active == 'inactive'}
 	      <a href="{cms_action_url action='defaultadmin' setactive=$row.id}" class="page_setactive" accesskey="a">
@@ -189,6 +197,10 @@
 		</a>
 	      {/if}
 	    {/if}
+	  {elseif $column == 'addchild'}
+	    <a href="{cms_action_url action=admin_editcontent parent_id=$row.id}" accesskey=""a" class="page_edit" title="{$mod->Lang('addchildhere')}">
+               {admin_icon icon='newobject.gif' class="page_addchild" title=$mod->Lang('prompt_page_addchild')}
+            </a>
 	  {elseif $column == 'delete'}
 	    {if $row.can_delete && $row.delete != ''}
 	      <a href="{cms_action_url action='defaultadmin' delete=$row.id}" class="page_delete" accesskey="r">
@@ -204,6 +216,7 @@
 	    {* unknown column *}
 	  {/if}
 	</td>
+
       {/foreach}
     {/function}
 
@@ -211,10 +224,11 @@
     <thead>
       <tr>
         {foreach from=$columns key='column' item='flag'}
+	{if $column == 'owner' || $column == 'url'}{continue}{/if}
 	{if $flag}
-	  <th class="{*$column TODO Rolf *} {if $flag=='icon'}pageicon{/if}"><!-- {$column} -->
-	  {if $column == 'expand' or $column == 'hier' or $column == 'icon1' or $column == 'view' or $column == 'copy' or $column == 'edit' or $column == 'delete'}
-            <span title="{$mod->Lang("coltitle_{$column}")}">&nbsp;</span>{* no column header *}
+	  <th class="col_{$column}" {if $flag=='icon'}pageicon{/if}">
+	  {if $flag == 'icon'}
+            <span>&nbsp;</span>{* no column header *}
   	  {elseif $column == 'multiselect'}
 	    <input type="checkbox" id="selectall" value="1" title="{$mod->Lang('select_all')}"/>
 	  {elseif $column == 'page'}
