@@ -513,7 +513,7 @@ final class ContentListBuilder
   public function get_display_columns()
   {
       $config = \cms_config::get_instance();
-      $dflt = 'expand,icon1,hier,page,alias,url,template,friendlyname,owner,active,default,move,view,copy,addchild,edit,delete,multiselect';
+      $dflt = 'expand,icon1,hier,page,alias,template,friendlyname,active,default,view,copy,addchild,edit,delete,multiselect';
       $mod = $this->_module;
       $cols = explode(',',$mod->GetPreference('list_visiblecolumns',$dflt));
 

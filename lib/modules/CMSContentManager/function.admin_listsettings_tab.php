@@ -41,11 +41,12 @@ $opts = array('title'=>$this->Lang('prompt_page_title'),
 $smarty->assign('namecolumnopts',$opts);
 $smarty->assign('list_namecolumn',$this->GetPreference('list_namecolumn','title'));
 
-$dflts = 'expand,icon1,hier,page,alias,url,template,friendlyname,owner,active,default,move,view,copy,addchild,edit,delete,multiselect';
-$tmp = explode(',',$dflts);
+$allcols = 'expand,icon1,hier,page,alias,url,template,friendlyname,owner,active,default,move,view,copy,addchild,edit,delete,multiselect';
+$dflts = 'expand,icon1,hier,page,alias,template,friendlyname,active,default,view,copy,addchild,edit,delete,multiselect';
+$tmp = explode(',',$allcols);
 $opts = array();
 foreach( $tmp as $one ) {
-  $opts[$one] = $this->Lang('colhdr_'.$one);
+    $opts[$one] = $this->Lang('colhdr_'.$one);
 }
 $smarty->assign('visible_column_opts',$opts);
 $tmp = explode(',',$this->GetPreference('list_visiblecolumns',$dflts));

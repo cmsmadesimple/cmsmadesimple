@@ -49,7 +49,6 @@
   {if isset($content_list)}
     {function do_content_row}
       {foreach $columns as $column => $flag}
-        {if $column == 'owner' || $column == 'url'}{continue}{/if}
         {if !$flag}{continue}{/if}
 	<td class="{$column}">
 	  {if $column == 'expand'}
@@ -140,6 +139,15 @@
 	    {/if}
 	  {elseif $column == 'friendlyname'}
 	    {$row.friendlyname}
+          {elseif $column == 'owner'}
+            {capture assign='tooltip_ownerinfo'}{strip}
+	      <strong>{$mod->Lang('prompt_created')}:</strong> {$row.created|cms_date_format}<br/>
+	      <strong>{$mod->Lang('prompt_lastmodified')}:</strong> {$row.lastmodified|cms_date_format}<br/>
+	      {if isset($row.lastmodifiedby)}
+	        <strong>{$mod->Lang('prompt_lastmodifiedby')}:</strong> {$row.lastmodifiedby}<br/>
+	      {/if}
+	    {/strip}{/capture}
+	    <span class="tooltip" data-cms-description='{$tooltip_ownerinfo|htmlentities}'>{$row.owner}</span>
 	  {elseif $column == 'active'}
 	    {if $row.active == 'inactive'}
 	      <a href="{cms_action_url action='defaultadmin' setactive=$row.id}" class="page_setactive" accesskey="a">
@@ -224,7 +232,6 @@
     <thead>
       <tr>
         {foreach from=$columns key='column' item='flag'}
-	{if $column == 'owner' || $column == 'url'}{continue}{/if}
 	{if $flag}
 	  <th class="col_{$column}" {if $flag=='icon'}pageicon{/if}">
 	  {if $flag == 'icon'}
