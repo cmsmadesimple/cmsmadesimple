@@ -4,7 +4,7 @@
         ul.children('li').each(function() {
             var subtree = $(this).children('ul');
             tags.push($(this).attr('id'));
-            if (subtree.size() > 0) {
+            if (subtree.length > 0) {
                 tags.push(parseTree(subtree));
             }
         });
