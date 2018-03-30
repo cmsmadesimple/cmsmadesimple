@@ -134,6 +134,14 @@ if ($result && $result->RecordCount() > 0) {
         for( $i = 1; $i <= 5; $i++ ) {
             $pagelist[$i] = $i;
         }
+	// around my current page
+	if( $page > 3 ) {
+	    for( $i = $page - 2; $i <= $page + 2; $i++ ) {
+		$pagelist[$i] = $i;
+            }  
+        }
+        
+	// middle 5
         $tpage = $page;
         if( $tpage <= 5 || $tpage >= ($npages - 5) ) $tpage = $npages / 2;
         $x1 = max(1,(int)($tpage - 5 / 2));
@@ -141,6 +149,7 @@ if ($result && $result->RecordCount() > 0) {
         for( $i = $x1; $i <= $x2; $i++ ) {
             $pagelist[] = $i;
         }
+	// last 5
         for( $i = max(1,$npages - 5); $i <= $npages; $i++ ) {
             $pagelist[] = $i;
         }

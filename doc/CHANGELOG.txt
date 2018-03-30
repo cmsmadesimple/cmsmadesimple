@@ -2,6 +2,7 @@ Version 2.2.8 - NO NAME SET
 ----------------------------------
 Core - General
   - Re-introduce the host_whitelist config entry that got lost in some commit somewhere.
+  - Minor fix to pagination in adminlog
 
 Search v1.51.5
   - Now enforce utf-8 on preg_plit.
