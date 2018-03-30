@@ -51,8 +51,8 @@ Core - General
     - No longer handle {$actionid}showtemplate=false parameters.
     - No longer send id, returnid, action parameters in the action $params array.
     - No longer call LoadModules from include.php.. All modules are now loaded on demand.
-    - Tthe deprecated $module->smarty property is now removed.
-  - CHANGE:  For performance reasons, plugins functions should be named smarty_xxxxx instead of smarty_cms_xxx
+    - Tthe long deprecated $module->smarty property is now removed.
+  - COMPATIBILITY CHANGE:  For performance reasons, plugins functions should be named smarty_xxxxx instead of smarty_cms_xxx
   - Optimize the cms_route_manager for performance
   - Adds ModuleOperations::is_module_loaded() method
   - Allow loading action controller classes of the with the name Module/Controllers/<action>_action
@@ -68,6 +68,7 @@ Core - General
     1 - do content processing AFTER the template page top
     2 - do content processing BEFORE any template processing.  (default)
     This config entry controls only when in the rendering, the default content block will be processed.
+    BREAKING functionality
   - Adds the {disable_template} plugin.  Only really useful when content_processing_mode == 2
   - Remove all options for smarty caching.  HTML caching should now be done with external tools like varnish or cloudfare
   - All module actions (except for showtemplate=false or other similar requests) create a new smarty template object
@@ -84,8 +85,14 @@ Core - General
   - Allow login via a module (CoreAdminLogin) now is core admin module
   - Adds a new hook for password strength
   - cms_mailer class now throws an exception if attempting to send an email without setting preferences first.
-  - New methods and minor cleanup to admin themes (may introduce some breakage)
+  - BREAKING: New methods and minor cleanup to admin themes (may introduce some breakage)
+  - BREAKING:  Remove the {cms_jquery} plugin and the cms_get_jquery function in lib/misc.functions.php
+  - Adds {cms_queue_script} and {cms_render_scripts} plugins to allow combining javascripts and rendering them in fewer requests.
+  - Adds new Core::PreProcessScripts and Core::PostProcessScripts hooks
+  - Upgrade the embedded jquery and jquery-ui scripts.
   - TODO  Migrate the tasks related to the old admin log into AdminLog module.
+  - Add: When using {cms_render_scripts} adds the ability to put inline javascript into <script type="text/cms_javascript">...</script>
+    tags that will be deferred loaded.
 
 CMSContentManager - 1.2
   - Gets rid of secure options, flag output and bulk functionaltiy
