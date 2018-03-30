@@ -32,7 +32,7 @@
       {assign var='aclass' value=$aclass|cat:' menuactive menuparent'}
     {/if}
 
-    {if $node->children_exist}
+    {if $node->children}
       {assign var='liclass' value=$liclass|cat:' parent'}
       {assign var='aclass' value=$aclass|cat:' parent'}
     {/if}
