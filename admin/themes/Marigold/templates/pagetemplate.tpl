@@ -25,9 +25,8 @@
 		<![endif]-->
 		<!-- custom jQueryUI Theme 1.10.04 see link in UI Stylesheet for color reference //-->
 		<link rel="stylesheet" href="style.php?{$secureparam}" />
-		{cms_jquery append="`$config.admin_url`/themes/Marigold/includes/standard.js" include_css=0}
+		{cms_jquery append="`$config.admin_url`/themes/Marigold/includes/standard.js"}
 		<link href="{$config.admin_url}/themes/Marigold/css/font-awesome.min.css" rel="stylesheet" />
-		<link href="{$config.admin_url}/themes/Marigold/css/default-cmsms/jquery-ui-1.10.4.custom.min.css" rel="stylesheet" />
 		<!-- THIS IS WHERE HEADER STUFF SHOULD GO -->
 	 	{$headertext|default:''}
 	</head>

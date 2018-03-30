@@ -122,6 +122,11 @@ final class CmsApp {
      */
     private $simple_plugin_manager;
 
+    /**
+     * @ignore
+     */
+    private $scriptcombiner;
+
 	/**
 	 * @ignore
 	 */
@@ -514,6 +519,15 @@ final class CmsApp {
         if( is_null($this->_hrinstance) ) $this->_hrinstance = \CMSMS\internal\global_cache::get('content_tree');
         return $this->_hrinstance;
 	}
+
+    /**
+     * Get a handle to the ScriptCombiner stuff
+     */
+    public function GetScriptManager()
+    {
+        if( is_null( $this->scriptcombiner ) ) $this->scriptcombiner = new \CMSMS\ScriptManager;
+        return $this->scriptcombiner;
+    }
 
 	/**
 	* Disconnect from the database.
