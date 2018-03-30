@@ -4,13 +4,17 @@ Core - General
   - Re-introduce the host_whitelist config entry that got lost in some commit somewhere.
 
 Search v1.51.5
-  - Now enforce utf-8 on preg_plit
+  - Now enforce utf-8 on preg_plit.
 
 CMSJobManager v0.1.3
   - Fix a notice.
 
 FileManager 
   - remove un-necessary files that may cause a security vulnerability.
+
+Navigator
+  - Template fix simple_navigation.tpl. Output correct class for parent without active children.
+
 
 Version 2.2.7 - Skookumchuck
 ----------------------------------
@@ -29,11 +33,12 @@ FilePicker v1.0.2
 Search v1.51.4
   - Minor fix to microtime calls.
 
+
 Version 2.2.6 - Come by Chance
 ----------------------------------
 Core - General
-  - Fixes to AdminAlerts::load_by_name()
-  - SetMessage() and SetError() in the module API now use session variables
+  - Fixes to AdminAlerts::load_by_name().
+  - SetMessage() and SetError() in the module API now use session variables.
   - Remove support for module_error and module_action request parameters in admin module actions.
   - Add call to check_login() in admin actions that were missing them.
 
