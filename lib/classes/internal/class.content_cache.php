@@ -90,7 +90,6 @@ final class content_cache
 	private function __construct()
 	{
 		if( !\CmsApp::get_instance()->is_frontend_request() ) return;
-        debug_buffer('cms_content_cache: begin load needed content objects');
 		$content_ids = null;
 		$deep = FALSE;
 		$this->_key = 'pc'.md5($_SERVER['REQUEST_URI'].serialize($_GET));
@@ -125,6 +124,7 @@ final class content_cache
 	{
 		if( !\CmsApp::get_instance()->is_frontend_request() ) return;
 		if( !$this->_key ) return;
+        if( $this->_preload_cache ) return;
 
 		$list = $this->get_loaded_page_ids();
 		if( is_array($list) && count($list) ) {
