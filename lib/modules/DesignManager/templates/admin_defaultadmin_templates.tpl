@@ -1,5 +1,5 @@
 <script type="text/javascript">
-$(document).ready(function(){
+$(function(){
     // load the templates area.
     cms_busy();
     $('#template_area').autoRefresh({

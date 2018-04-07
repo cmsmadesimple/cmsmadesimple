@@ -1,5 +1,5 @@
-<script type="text/javascript">
-$(document).ready(function(){
+<script>
+$(function(){
     var do_locking = {if !empty($tpl_id) && $tpl_id > 0 && isset($lock_timeout) && $lock_timeout > 0}1{else}0{/if};
     $('#form_edittemplate').dirtyForm({
         beforeUnload: function(is_dirty) {

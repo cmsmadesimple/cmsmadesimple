@@ -7,11 +7,11 @@ $('#tpl_selall').cmsms_checkall();
 <div class="row">
   <div class="pageoptions options-menu half">
     {if $has_add_right}
-      <a id="addtemplate" accesskey="a" title="{$mod->Lang('create_template')}">{admin_icon icon='newobject.gif' alt=$mod->Lang('create_template')}&nbsp;{$mod->Lang('create_template')}</a>&nbsp;&nbsp;
+      <a id="addtemplate" accesskey="a" title="{$mod->Lang('create_template')}">{admin_icon icon='newobject' alt=$mod->Lang('create_template')}&nbsp;{$mod->Lang('create_template')}</a>&nbsp;&nbsp;
     {/if}
-    <a id="edittplfilter" accesskey="f" title="{$mod->Lang('prompt_editfilter')}">{admin_icon icon='view.gif' alt=$mod->Lang('prompt_editfilter')}&nbsp;{$mod->Lang('filter')}</a>&nbsp;&nbsp;
+    <a id="edittplfilter" accesskey="f" title="{$mod->Lang('prompt_editfilter')}">{admin_icon icon='view' alt=$mod->Lang('prompt_editfilter')}&nbsp;{$mod->Lang('filter')}</a>&nbsp;&nbsp;
     {if $have_locks}
-      <a id="clearlocks" accesskey="l" title="{$mod->Lang('title_clearlocks')}" href="{cms_action_url action=admin_clearlocks type=template}">{admin_icon icon='run.gif' alt=''}&nbsp;{$mod->Lang('prompt_clearlocks')}</a>&nbsp;&nbsp;
+      <a id="clearlocks" accesskey="l" title="{$mod->Lang('title_clearlocks')}" href="{cms_action_url action=admin_clearlocks type=template}">{admin_icon icon='run' alt=''}&nbsp;{$mod->Lang('prompt_clearlocks')}</a>&nbsp;&nbsp;
     {/if}
     {if !empty($tpl_filter[0])}
       <span style="color: green;" title="{$mod->Lang('title_filterapplied')}">{$mod->Lang('filterapplied')}</span>
@@ -66,7 +66,7 @@ $('#tpl_selall').cmsms_checkall();
 	    <td><a href="{$edit_tpl}" data-tpl-id="{$template->get_type_id()}" class="edit_tpl tooltip" title="{$mod->Lang('edit_template')}" data-cms-description='{$tpl_tooltip}'>{$template->get_name()}</a></td>
 	  {else}
 	    <td>{$template->get_id()}</td>
-	    <td>{admin_icon icon='warning.gif' title=$mod->Lang('title_locked')}</td>
+	    <td>{admin_icon icon='warning' title=$mod->Lang('title_locked')}</td>
 	    <td><span class="tooltip" data-cms-description='{$tpl_tooltip}'>{$template->get_name()}</span></td>
 	  {/if}
 
@@ -108,9 +108,9 @@ $('#tpl_selall').cmsms_checkall();
 	    {assign var='the_type' value=$list_all_types.$type_id}
 	    {if $the_type->get_dflt_flag()}
 	      {if $template->get_type_dflt()}
-		{admin_icon icon='true.gif' title=$mod->Lang('prompt_dflt_tpl')}
+		{admin_icon icon='true' title=$mod->Lang('prompt_dflt_tpl')}
 	      {else}
-		{admin_icon icon='false.gif' title=$mod->Lang('prompt_notdflt_tpl')}
+		{admin_icon icon='false' title=$mod->Lang('prompt_notdflt_tpl')}
 	      {/if}
 	    {else}
 	      <span title="{$mod->Lang('prompt_title_na')}">{$mod->Lang('prompt_na')}</span>
@@ -119,15 +119,15 @@ $('#tpl_selall').cmsms_checkall();
 
 	  {* edit/copy iconsm, or steal icons *}
 	  {if !$lock_timeout || !$template->locked()}
-	    <td><a href="{$edit_tpl}" data-tpl-id="{$template->get_id()}" class="edit_tpl" title="{$mod->Lang('edit_template')}">{admin_icon icon='edit.gif' title=$mod->Lang('prompt_edit')}</a></td>
+	    <td><a href="{$edit_tpl}" data-tpl-id="{$template->get_id()}" class="edit_tpl" title="{$mod->Lang('edit_template')}">{admin_icon icon='edit' title=$mod->Lang('prompt_edit')}</a></td>
 	    {if $has_add_right}
-	      <td><a href="{$copy_tpl}" title="{$mod->Lang('copy_template')}">{admin_icon icon='copy.gif' title=$mod->Lang('prompt_copy_template')}</a></td>
+	      <td><a href="{$copy_tpl}" title="{$mod->Lang('copy_template')}">{admin_icon icon='copy' title=$mod->Lang('prompt_copy_template')}</a></td>
 	    {/if}
 	  {else}
   	    <td>
 	      {$lock=$template->get_lock()}
 	      {if $lock.expires < $smarty.now}
-	        <a href="{$edit_tpl}" data-tpl-id="{$template->get_id()}" accesskey="e" class="steal_tpl_lock">{admin_icon icon='permissions.gif' class='edit_tpl steal_tpl_lock' title=$mod->Lang('prompt_steal_lock')}</a>
+	        <a href="{$edit_tpl}" data-tpl-id="{$template->get_id()}" accesskey="e" class="steal_tpl_lock">{admin_icon icon='permissions' class='edit_tpl steal_tpl_lock' title=$mod->Lang('prompt_steal_lock')}</a>
 	      {/if}
 	    </td>
 	    {if $has_add_right}<td></td>{/if}
@@ -137,7 +137,7 @@ $('#tpl_selall').cmsms_checkall();
 	  <td>
  	    {if !$template->get_type_dflt() && !$template->locked()}
 	      {if $template->get_owner_id() == get_userid() || $manage_templates}
-		<a href="{$delete_tpl}" title="{$mod->Lang('delete_template')}">{admin_icon icon='delete.gif' title=$mod->Lang('delete_template')}</a>
+		<a href="{$delete_tpl}" title="{$mod->Lang('delete_template')}">{admin_icon icon='delete' title=$mod->Lang('delete_template')}</a>
 	      {/if}
 	    {/if}
 	  </td>

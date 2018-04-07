@@ -1,5 +1,5 @@
-<script type="text/javascript">
-$(document).ready(function(){
+<script>
+$(function(){
   $('img.viewhelp').click(function(){
     var n = $(this).attr('name');
     $('#'+n).dialog();

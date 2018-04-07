@@ -1,5 +1,5 @@
 <script type="text/javascript">
-$(document).ready(function(){
+$(function(){
     cms_busy();
     $('#stylesheet_area').autoRefresh({
       url: '{$ajax_stylesheets_url}',

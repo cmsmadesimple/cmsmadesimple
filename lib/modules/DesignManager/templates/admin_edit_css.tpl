@@ -1,5 +1,5 @@
-<script type="text/javascript">
-$(document).ready(function(){
+<script>
+$(function(){
     var do_locking = {if $css_id > 0 && isset($lock_timeout) && $lock_timeout > 0}1{else}0{/if};
     $('#form_editcss').dirtyForm({
         beforeUnload: function() {

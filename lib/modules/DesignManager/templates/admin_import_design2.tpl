@@ -1,5 +1,5 @@
-<script type="text/javascript">
-$(document).ready(function(){
+<script>
+$(function(){
   $('.helpicon').click(function(){
     var x = $(this).attr('name');
     $('#'+x).dialog({ width: 'auto' });
