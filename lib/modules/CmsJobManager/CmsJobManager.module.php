@@ -39,7 +39,7 @@ final class CmsJobManager extends \CMSModule
     public static function table_name() { return cms_db_prefix().'mod_cmsjobmgr'; }
 
     function GetFriendlyName() { return $this->Lang('friendlyname'); }
-    function GetVersion() { return '0.2'; }
+    function GetVersion() { return '0.3'; }
     function MinimumCMSVersion() { return '2.1.99'; }
     function GetAuthor() { return 'Calguy1000'; }
     function GetAuthorEmail() { return 'calguy1000@cmsmadesimple.org'; }
@@ -272,41 +272,24 @@ final class CmsJobManager extends \CMSModule
             return;
         }
 
-            // gotta determine a scheme
+        // gotta determine a scheme
         $url_ob->set_queryvar('cms_cron',1);
         $url_ob->set_queryvar('showtemplate','false');
         $prefix_scheme = null;
-        if( !$url_ob->get_scheme() ) {
-            // protocol relative URI
-            $url_ob->set_scheme('http');
-            if( CmsApp::get_instance()->is_https_request() ) $url_ob->set_scheme('https');
-        }
-        if( !$url_ob->get_port() ) {
-            $url_ob->set_port(80);
-            if( strtolower($url_ob->get_scheme()) == 'https' ) $url_ob->set_port(443);
-        }
-        if( strtolower($url_ob->get_scheme()) == 'https' ) $prefix_scheme = 'ssl://';
-
-        $endpoint = $url_ob->get_path();
-        $query = urldecode($url_ob->get_query());
-        if( $query ) $endpoint .= '?'.$query;
-        $post_string = $query;
-        $out = "GET ".$endpoint." HTTP/1.1\r\n";
-        $out .= 'Host: '.$url_ob->get_host()."\r\n";
-        $out .= "Connection: Close\r\n\r\n";  // two lines
-
-        $this->SetPreference('last_async_trigger',$now+1);
 
         try {
-            $fp = fsockopen($prefix_scheme.$url_ob->get_host(),$url_ob->get_port(),$errno,$errstr,3);
-            if( !$fp ) throw new \RuntimeException('Could not connect to the async processing action');
-            fwrite($fp,$out);
-            $code = null;
-            $data = fgets($fp);
-            $code = (int) substr($data,9,3);
-            fclose($fp);
+            $ch = curl_init();
+            curl_setopt( $ch, CURLOPT_URL, (string) $url_ob );
+            curl_setopt( $ch, CURLOPT_RETURNTRANSFER, TRUE );
+            curl_setopt( $ch, CURLOPT_TIMEOUT, 3 );
+            curl_setopt( $ch, CURLOPT_CONNECTTIMEOUT, 3 );
+            $response = curl_exec( $ch );
+            $code = curl_getinfo( $ch, CURLINFO_HTTP_CODE );
+            curl_close( $ch );
             if( $code != 200 ) {
                 audit('',$this->GetName(),'Received '.$code.' response when trying to trigger async processing');
+            } else {
+                $this->SetPreference('last_async_trigger',$now+1);
             }
         }
         catch( \Exception $e ) {

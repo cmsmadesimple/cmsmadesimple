@@ -110,6 +110,7 @@ Installation Assistant - v1.3.5
   - Now require at least version 2.0.1 to upgrade
   - Now test the default character set
   - Now require at least PHP 7.0 and recommend 7.1
+  - CURL is now a requirement
 
 ModuleManaver v2.2
   - XML import code now lives here.
@@ -140,6 +141,9 @@ DesignManager v1.1.6
 
 Navigator v1.0.9
  - Adds the title property to each node.
+
+CmsJobManager v0.3
+ - Now uses CURL initiate asynchronous requests
 
 Version 2.2.6 - NO NAME SET
 ----------------------------------

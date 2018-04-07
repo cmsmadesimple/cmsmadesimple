@@ -244,6 +244,12 @@ class wizard_step3 extends \cms_autoinstaller\wizard_step
         $obj->fail_key = 'fail_file_uploads';
         $tests[] = $obj;
 
+        // required test curl extension
+        $obj = new _tests_\boolean_test('curl_extension',_tests_\test_extension_loaded('curl'));
+        $obj->fail_key = 'fail_curl_extension';
+        $obj->required = 1;
+        $tests[] = $obj;
+
         // upload max filesize
         $obj = new _tests_\range_test('upload_max_filesize',ini_get('upload_max_filesize'));
         $obj->minimum = '1M';
@@ -258,12 +264,12 @@ class wizard_step3 extends \cms_autoinstaller\wizard_step
         $obj->fail_key = 'fail_xml_functions';
         $tests[] = $obj;
 
-	// recommended test ... default charset
-	$default_charset = ini_get('default_charset');
-	$obj = new _tests_\boolean_test('default_charset',(strtolower($default_charset) == 'utf-8'));
-	$obj->required = 0;
-	$obj->warn_msg = \__appbase\lang('warn_default_charset',$default_charset);
-	$tests[] = $obj;
+        // recommended test ... default charset
+        $default_charset = ini_get('default_charset');
+        $obj = new _tests_\boolean_test('default_charset',(strtolower($default_charset) == 'utf-8'));
+        $obj->required = 0;
+        $obj->warn_msg = \__appbase\lang('warn_default_charset',$default_charset);
+        $tests[] = $obj;
 
         // recommended test ... max_execution_time
         $v = (int) ini_get('max_execution_time');
@@ -305,11 +311,6 @@ class wizard_step3 extends \cms_autoinstaller\wizard_step
         $obj = new _tests_\boolean_test('remote_url',_tests_\test_remote_file('https://www.cmsmadesimple.org/latest_version.php',3,'cmsmadesimple'));
         $obj->fail_key = 'fail_remote_url';
         $obj->warn_key = 'fail_remote_url';
-        $tests[] = $obj;
-
-        // curl extension
-        $obj = new _tests_\boolean_test('curl_extension',_tests_\test_extension_loaded('curl'));
-        $obj->fail_key = 'fail_curl_extension';
         $tests[] = $obj;
 
         // file get contents.
