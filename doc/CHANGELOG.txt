@@ -97,6 +97,9 @@ Core - General
   - cms_admin_utils::get_icon() and {admin_icon} can now find plugins without specifying an extension.
   - SECURITY:  checksum verification can no longer fish for files outside of the root directory.
 
+News v2.21.5 
+  - Minor cleaning of parameters.
+
 CMSContentManager - 1.2
   - Gets rid of secure options, flag output and bulk functionaltiy
   - modified to use CMS_ROOT_URL
