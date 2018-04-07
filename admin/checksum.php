@@ -201,7 +201,7 @@ $theme = \cms_utils::get_theme_object();
 $smarty = $gCms->GetSmarty();
 $smarty->register_function('lang','checksum_lang');
 $smarty->force_compile = true;
-$db = &$gCms->GetDb();
+$db = $gCms->GetDb();
 
 // Handle output
 $res = true;

@@ -1121,7 +1121,7 @@ class CmsLayoutTemplate
 	 */
 	public static function get_loaded_templates()
 	{
-		if( count(self::$_obj_cache) ) return array_keys(self::$_obj_cache);
+		if( self::$_obj_cache && count(self::$_obj_cache) ) return array_keys(self::$_obj_cache);
 	}
 
 	/**
