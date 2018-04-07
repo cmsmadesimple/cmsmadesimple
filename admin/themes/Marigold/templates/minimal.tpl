@@ -15,7 +15,8 @@
 		        <!--[if lt IE 9]>
 			    <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
 			<![endif]-->
-			{cms_jquery exclude="jquery.ui.nestedSortable-1.3.4.js,jquery.json-2.2.js"}
+                        {cms_queue_script file='lib/jquery/js/jquery-3.3.1.min.js'} 
+			{cms_queue_script file='lib/js/jquery-ui/jquery-ui.min.js'}
 		{/block}
 		{$dynamic_headtext|default:''}
 	</head>
@@ -26,5 +27,6 @@
 	        <footer>
 	                {block name='footer'}{$footer|default:''}{/block}
 	        </footer>
+		{cms_render_scripts}
 	</body>
 </html>

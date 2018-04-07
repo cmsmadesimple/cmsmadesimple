@@ -16,7 +16,7 @@ function smarty_function_cms_queue_script( $params, &$template )
         $config = \cms_config::get_instance();
         $paths = [ CMS_ASSETS_PATH."/$file", $config['uploads_path']."/$file", CMS_ROOT_PATH."/$file" ];
         foreach( $paths as $one ) {
-            if( is_file( $one ) ) $combiner->queue_script( $file );
+            if( is_file( $one ) ) $combiner->queue_script( $one );
         }
     }
 }

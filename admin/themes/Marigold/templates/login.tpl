@@ -3,7 +3,7 @@
     <link rel="stylesheet" href="loginstyle.php" />
 {/block}
 {block name='js' append}
-    <script src="{$theme_root}/includes/login.js"></script>
+    {cms_queue_script file="{$theme_path}/includes/login.js"}
 {/block}
 {block name='footer'}
     <small class="copyright">Copyright &copy; <a rel="external" href="http://www.cmsmadesimple.org">CMS Made Simple&trade;</a></small>

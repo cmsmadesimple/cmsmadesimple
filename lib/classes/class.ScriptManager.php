@@ -3,7 +3,7 @@ namespace CMSMS;
 
 class ScriptManager
 {
-    private $_scripts;
+    private $_scripts = [];
     private $_script_priority = 2;
 
     public function get_script_priority()
@@ -34,7 +34,7 @@ class ScriptManager
 
     public function render_scripts( string $output_path, $force = false, $allow_defer = true )
     {
-        if( !count($this->_scripts) ) return; // nothing to do
+        if( $this->_scripts && !count($this->_scripts) ) return; // nothing to do
         if( !is_dir( $output_path ) ) return; // nowhere to put it
 
         // auto append the defer script
@@ -43,8 +43,8 @@ class ScriptManager
             $this->queue_script( $defer_script, 3 );
         }
 
-        $t_scripts = \CMSMS\HookManager::do_hook( 'Core::PreProcessScripts', $scripts );
-        if( $t_scripts ) $scripts = $$t_scripts;
+        $t_scripts = \CMSMS\HookManager::do_hook( 'Core::PreProcessScripts', $this->_scripts );
+        if( $t_scripts ) $scripts = $t_scripts;
 
         // sort the scripts by their priority, then their index (to preserve order)
         // because module actions can be processed first... we 'lower' their priority
@@ -66,6 +66,7 @@ class ScriptManager
         $js_filename = "cms_$sig.js";
         $output_file = "$output_path/$js_filename";
         if( $force || !is_file($output_file) || filemtime($output_file) < $t_mtime ) {
+	    $output = null;
             foreach( $scripts as $sig => $rec ) {
                 $content = file_get_contents( $rec['file'] );
                 $output .= $content."\n\n";
