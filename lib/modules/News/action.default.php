@@ -170,7 +170,6 @@ if( isset( $params['start'] ) ) {
 }
 
 $dbresult = $db->SelectLimit( $query1, $pagelimit, $startelement );
-debug_display($db->sql);
 $count = (int) $db->GetOne('SELECT FOUND_ROWS()');
 
 {
