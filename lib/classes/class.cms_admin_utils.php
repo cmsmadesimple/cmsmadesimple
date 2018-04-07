@@ -82,17 +82,30 @@ final class cms_admin_utils
 				$dirs[] = array(cms_join_path($obj->GetModulePath(),'images',"{$img}"),$obj->GetModuleURLPath()."/images/{$img}");
 			}
 		}
-		if( basename($icon) == $icon ) $icon = "icons/system/{$icon}";
+		$image_exts = [ 'swg', 'SVG', 'png', 'PNG', 'gif', 'GIF', 'jpg', 'JPG', 'jpeg', 'JPEG', 'webp', 'WEBP', 'bmp', 'BMP' ];
+		$icon = basename($icon);
+		$ext = $extension = strrchr($icon,".");
+
 		$config = \cms_config::get_instance();
-		$dirs[] = array(cms_join_path($config['root_path'],$config['admin_dir'],"themes/{$theme->themeName}/images/{$icon}"),
-						$config['admin_url']."/themes/{$theme->themeName}/images/{$icon}");
+		$dirs[] = [ 'path'=>cms_join_path($config['root_path'],$config['admin_dir'],"themes/{$theme->themeName}/images/icons/system/"),
+			    'url'=>$config['admin_url']."/themes/{$theme->themeName}/images/icons/system/" ];
 
 		$fnd = null;
 		foreach( $dirs as $one ) {
-			if( file_exists($one[0]) ) {
-				$fnd = $one[1];
-				break;
+		    if( $ext ) {
+			if( is_file($one['path'].$icon ) ) {
+			    $fnd = $one['url'].$icon;
+			    break;
 			}
+		    } else {
+ 			foreach( $image_exts as $ext ) {
+			    $fn = $one['path'].$icon.$ext;
+			    if( is_file( $fn ) ) {
+				$fnd = $one['url'].$icon.$ext;
+				break;
+			    }
+			}
+                    }
 		}
 		return $fnd;
 	}
