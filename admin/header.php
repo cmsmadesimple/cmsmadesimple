@@ -1,6 +1,5 @@
 <?php
 
-cms_admin_sendheaders();
 $starttime = microtime();
 if (!(isset($USE_OUTPUT_BUFFERING) && $USE_OUTPUT_BUFFERING == false)) @ob_start();
 
@@ -11,6 +10,7 @@ if (isset($USE_THEME) && $USE_THEME == false) {
     //echo '<!-- admin theme disabled -->';
 }
 else {
+    cms_admin_sendheaders();
     debug_buffer('before theme load');
     $themeObject = cms_utils::get_theme_object();
     $smarty->assign('secureparam', CMS_SECURE_PARAM_NAME . '=' . $_SESSION[CMS_USER_KEY]);

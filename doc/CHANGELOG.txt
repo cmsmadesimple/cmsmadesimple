@@ -95,6 +95,7 @@ Core - General
     tags that will be deferred loaded.
   - Fix lib/nls files so that UTF-8 locales are searched first.
   - cms_admin_utils::get_icon() and {admin_icon} can now find plugins without specifying an extension.
+  - SECURITY:  checksum verification can no longer fish for files outside of the root directory.
 
 CMSContentManager - 1.2
   - Gets rid of secure options, flag output and bulk functionaltiy
