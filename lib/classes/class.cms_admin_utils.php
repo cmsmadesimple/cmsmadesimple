@@ -99,9 +99,9 @@ final class cms_admin_utils
 			}
 		    } else {
  			foreach( $image_exts as $ext ) {
-			    $fn = $one['path'].$icon.$ext;
+			    $fn = $one['path'].$icon.'.'.$ext;
 			    if( is_file( $fn ) ) {
-				$fnd = $one['url'].$icon.$ext;
+				$fnd = $one['url'].$icon.'.'.$ext;
 				break;
 			    }
 			}
