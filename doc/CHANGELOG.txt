@@ -93,6 +93,7 @@ Core - General
   - TODO  Migrate the tasks related to the old admin log into AdminLog module.
   - Add: When using {cms_render_scripts} adds the ability to put inline javascript into <script type="text/cms_javascript">...</script>
     tags that will be deferred loaded.
+  - Fix lib/nls files so that UTF-8 locales are searched first.
 
 CMSContentManager - 1.2
   - Gets rid of secure options, flag output and bulk functionaltiy
