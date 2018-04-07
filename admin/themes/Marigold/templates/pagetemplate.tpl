@@ -26,10 +26,21 @@
 		<!-- custom jQueryUI Theme 1.10.04 see link in UI Stylesheet for color reference //-->
 		<link href="{$config.admin_url}/themes/Marigold/css/font-awesome.min.css" rel="stylesheet" />
 		<link rel="stylesheet" href="style.php?{$secureparam}" />
-		{cms_queue_script file='lib/jquery/js/jquery-3.3.1.min.js'} 
+		{cms_queue_script file='lib/jquery/js/jquery-3.3.1.min.js'}
                 {cms_queue_script file='lib/js/jquery-ui/jquery-ui.min.js'}
+		{cms_queue_script file='lib/jquery/js/jquery-mjs.nestedSortable.js'}
+		{cms_queue_script file='lib/jquery/js/jquery-json-2.4.min.js'}
+		{cms_queue_script file='lib/jquery/js/jquery-migrate-1.2.1.min.js'}
+		{cms_queue_script file='lib/jquery/js/jquery.cms_admin.js'}
+		{cms_queue_script file='lib/jquery/js/jquery.cmsms_dirtyform.js'}
+		{cms_queue_script file='lib/jquery/js/jquery.cmsms_lock.js'}
+		{cms_queue_script file='lib/jquery/js/jquery.cmsms_hierselector.js'}
+		{cms_queue_script file='lib/jquery/js/jquery.cmsms_autorefresh.js'}
+		{cms_queue_script file='lib/jquery/js/jquery.cmsms_filepicker.js'}
+		{cms_queue_script file='lib/jquery/js/jquery.ui.touch-punch.min.js'}
                 {cms_queue_script file="{$theme_path}/includes/jquery.cookie.min.js"}
                 {cms_queue_script file="{$theme_path}/includes/standard.js"}
+		{cms_render_scripts defer=0}
 
 		<!-- THIS IS WHERE HEADER STUFF SHOULD GO -->
 	 	{$headertext|default:''}
@@ -111,6 +122,5 @@
 			{$footertext|default:''}
 		</div>
 		<!-- end container //-->
-		{cms_render_scripts}
 		</body>
 </html>

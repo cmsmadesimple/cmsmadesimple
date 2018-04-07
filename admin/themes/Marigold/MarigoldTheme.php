@@ -297,6 +297,7 @@ class MarigoldTheme extends CmsAdminThemeBase {
 		// get language direction
 		$lang = CmsNlsOperations::get_current_language();
 		$info = CmsNlsOperations::get_language_info($lang);
+		$smarty->assign('theme_path',__DIR__);
 		$smarty->assign('lang_dir',$info->direction());
 
 
