@@ -205,7 +205,7 @@ class cms_content_tree extends cms_tree
 	 * @param  string $key Tag name/key
 	 * @return mixed Node value.
 	 */
-	public function &getTag(string $key = 'id')
+	public function getTag(string $key = 'id')
 	{
 		return $this->get_tag($key);
 	}
@@ -254,21 +254,22 @@ class cms_content_tree extends cms_tree
 	 */
 	public function &getContent(bool $deep = false,bool $loadsiblings = true,bool $loadall = false)
 	{
-		if( !cms_content_cache::content_exists($this->get_tag('id')) ) {
+        $id = $this->get_tag('id');
+		if( !cms_content_cache::content_exists($id) ) {
 			// not in cache
 			$parent = $this->getParent();
 			if( !$loadsiblings || !$parent ) {
 				// only load this content object
 				// todo: LoadContentFromId should use content cache.
-				$content = ContentOperations::get_instance()->LoadContentFromId($this->get_tag('id'), $deep);
+				$content = ContentOperations::get_instance()->LoadContentFromId($id, $deep);
 				return $content;
 			}
 			else {
 				$parent->getChildren($deep,$loadall);
-				if( cms_content_cache::content_exists($this->get_tag('id')) ) return cms_content_cache::get_content($this->get_tag('id'));
+				if( cms_content_cache::content_exists($id) ) return cms_content_cache::get_content($id);
 			}
 		}
-		return cms_content_cache::get_content($this->get_tag('id'));
+		return cms_content_cache::get_content($id);
 	}
 
 
