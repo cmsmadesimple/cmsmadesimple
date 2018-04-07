@@ -11,12 +11,11 @@ function smarty_function_cms_queue_script( $params, &$template )
         return;
     }
 
-    // if it's relative to the ASSETS path
-    if( !startswith( $file, DIRECTORY_SEPARATOR ) ) {
-        $config = \cms_config::get_instance();
-        $paths = [ CMS_ASSETS_PATH."/$file", $config['uploads_path']."/$file", CMS_ROOT_PATH."/$file" ];
-        foreach( $paths as $one ) {
-            if( is_file( $one ) ) $combiner->queue_script( $one );
-        }
+    // if it's relative to a CMSMS path
+    if( !startswith( $file, DIRECTORY_SEPARATOR ) ) $file = "/$file";
+    $config = \cms_config::get_instance();
+    $paths = [ CMS_ASSETS_PATH.$file, $config['uploads_path'].$file, CMS_ROOT_PATH.$file ];
+    foreach( $paths as $one ) {
+        if( is_file( $one ) ) $combiner->queue_script( $one );
     }
 }
