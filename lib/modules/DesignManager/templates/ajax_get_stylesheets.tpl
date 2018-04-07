@@ -67,7 +67,7 @@ $('#css_selall').cmsms_checkall();
 
         <td>
 	  {assign var='t1' value=$css->get_designs()}
-	  {if count($t1) == 1}
+	  {if $t1 && count($t1) == 1}
 	    {assign var='t1' value=$t1[0]}
 	    {assign var='hn' value=$design_names.$t1}
 	    {if $manage_designs}
@@ -76,7 +76,7 @@ $('#css_selall').cmsms_checkall();
 	    {else}
 	      {$hn}
 	    {/if}
-	  {elseif count($t1) == 0}
+	  {elseif !$t1 || count($t1) == 0}
 	    <span title="{$mod->Lang('help_stylesheet_no_designs')}">{$mod->Lang('prompt_none')}</span>
 	  {else}
 	    {capture assign='tooltip_designs'}{strip}

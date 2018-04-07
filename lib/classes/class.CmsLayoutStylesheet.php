@@ -851,6 +851,7 @@ class CmsLayoutStylesheet
      */
     public function get_content_filename()
     {
+	if( !$this->get_name() ) return;
         $config = \cms_config::get_instance();
         $name = munge_string_to_url($this->get_name()).'.'.$this->get_id().'.css';
         return cms_join_path($config['assets_path'],'css',$name);
@@ -865,7 +866,7 @@ class CmsLayoutStylesheet
     public function has_content_file()
     {
         $fn = $this->get_content_filename();
-        if( is_file($fn) && is_readable($fn) ) return TRUE;
+        if( $fn && is_file($fn) && is_readable($fn) ) return TRUE;
     }
 } // end of class
 

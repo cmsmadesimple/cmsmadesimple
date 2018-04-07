@@ -61,7 +61,7 @@ try {
             if (isset($params['name'])) $css_ob->set_name($params['name']);
             $css_ob->set_name($params['name']);
             $new_export_name = $css_ob->get_content_filename();
-            if( $old_export_name != $new_export_name && is_file( $old_export_name ) ) {
+            if( $old_export_name && $old_export_name != $new_export_name && is_file( $old_export_name ) ) {
                 if( is_file( $new_export_name ) ) throw new \Exception('Cannot rename exported stylesheet (destination name exists)');
                 $res = rename($old_export_name,$new_export_name);
                 if( !$res ) throw new \Exception( "Problem renaming exported stylesheet" );
