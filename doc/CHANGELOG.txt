@@ -1,7 +1,7 @@
 Version 2.3 - NO NAME SET
 ----------------------------------
 Core - General
-  - MenuManager is no longer distributed with CMSMS Core.  and it is no longer considered a system module.
+  - REMOVED: MenuManager is no longer distributed with CMSMS Core.  and it is no longer considered a system module.
   - Remove secure option from content pages
   - $config['ssl_url'] is deprecated, and now just an alias for root url
   - $config['ssl_uploads_url'] is now just an alias for uploads_url and is deprecated
@@ -10,105 +10,108 @@ Core - General
   - $config->smart_root_url() is no longer used, and outputs deprecated messages to log.
   - $config->smart_uploads_url() is no longer used, and outputs deprecated messages to log.
   - $config->smart_image_uploads_url() is no longer used, and outputs deprecated messages to log.
-  - new define in cms_config class CMS_UPLOADS_URL
-  - Remove GUI functionality for managing UDT's (udt's will be replaced by simple_plugins)
+  - Added new define in cms_config class CMS_UPLOADS_URL
+  - Added new CMS_ADMIN_PATH define from the config class.
+  - REMOVED: GUI functionality for managing UDT's (udt's will be replaced by simple_plugins)
   - UserTagOperations class is now merely a compatibility stub
   - Replace OneEleven admin theme with the Marigold fork that uses fontawesome.
-  - Sitedown mode now throws a 503 exception and outputs a 503 error code
-  - The 503 error handler (maintenance mode) is now an Error Page.
+  - FEATURE: Sitedown mode now throws a 503 exception and outputs a 503 error code
+  - FEATURE: The 503 error handler (maintenance mode) is now an Error Page.
   - Removed many previously deprecated and seldom used methods from the module API
-  - Removes many deprecated and seldom used methods from the core API
-  - Impement new simple_plugin API. Simple plugins are stored in /assets/plugins and must contain the <?php tag. (we will try to auto add it)
+  - Removed many deprecated and seldom used methods from the core API
+  - CHANGE: Impement new simple_plugin API. Simple plugins are stored in /assets/plugins and must contain the <?php tag. 
+    (we will try to auto add it on upgrade)
   - CHANGE: Adds the new pr_root_url config entry.  to return the protocol relative root URI. root_url will always include the protocol.
-  - Remove long deprecated passthru parameters to effect $_REQUEST because of potential security vulnerabilities.
+  - CHANGE: Remove long deprecated passthru parameters to effect $_REQUEST because of potential security vulnerabilities.
   - Improved error message if there was an error parsing the template (or a duplicate content block).
   - Fixes content blocks, image blocks, module blocks containing whitespace in the name.
   - Minor fix to {cms_filepicker} plugin.
   - Improve the CmsModuleInfo class such that if the module class file is newer it will be loaded.
   - Now generate the moduleinfo.ini file automatically on install or upgrade of a module.
   - Increase the maxlength attribute for password input boxes in myaccount.
-  - Added new CMS_ADMIN_PATH define from the config class.
-  - Move system modules to /lib/modules
-  - Now look for third party modules in /assets/modules
+  - CHANGE: Move system modules to /lib/modules
+  - CHANGE: Now look for third party modules in /assets/modules
   - Remove un-necessary moduleinterface.php from the root directory.
-  - Adds a new hook method to the HookManager class to allow returning the first nonempty value.
+  - FEATURE: Adds a new hook method to the HookManager class to allow returning the first nonempty value.
   - Changes to changegroupperm localization technique.
   - Adds new AuditManager class that is enabled within include.php allows for swapping out auditing methods
-  - By default, the audit manager will output mesages to the HTTP error log, but a module can override this.
-  - Adds new root functions cms_notice, cms_warning, and cms_notice
+    With no audit manager installed, audit messages will be output to the HTTP error log.
+  - FEATURE: Adds new root functions cms_notice, cms_warning, and cms_notice
   - Revise many places where audit() was being called to call the new methods.
   - audit() method now uses the AuditManager class
   - CMSModule::SetError() and CMSModule::SetMessage() now set session variables, and the strings will no longer be on the array
-  - Adds new CMSModule::AddAdminHeadText() method to allow module actions to add dynamic text to the head section of admin requests.
+  - FEATURE: Adds new CMSModule::AddAdminHeadText() method to allow module actions to add dynamic text to the head section of admin requests.
   - Renames a bunch of classes into namespaces, and cleans up a bunch of old, commented out code.
   - Replaces old "admin log" functionality with a new core module that has extra functionality.
-  - Refactor mact processing.  get rid of un-necessary variables and duplicated code.
-  - Autoloader will now try to load modules.  Modules can still only be instantiated once.
+  - CHANGE: Refactor mact processing.  get rid of un-necessary variables and duplicated code.
+  - CHANGE: Autoloader will now try to load modules.  Modules can still only be instantiated once.
   - Improved autoloader now handles namespaced module classes if the module is already loaded.
   - Adds new CmsError400Exception class.
   - Improve exception handling in include.php to handle when showtemplate is false.
-  - COMPATIBILITY CHANGE
+  - CHANGE:
     - No longer handle {$actionid}showtemplate=false parameters.
     - No longer send id, returnid, action parameters in the action $params array.
     - Only modules that are not marked as lazy load (the default) will be loaded automatically.
-    - Tthe long deprecated $module->smarty property is now removed.
-  - COMPATIBILITY CHANGE:  For performance reasons, plugins functions should be named smarty_xxxxx instead of smarty_cms_xxx
+    - The long deprecated $module->smarty property is now removed.
+    - For performance reasons, plugin functions should be named smarty_xxxxx instead of smarty_cms_xxx
   - Optimize the cms_route_manager for performance
   - Adds ModuleOperations::is_module_loaded() method
-  - Allow loading action controller classes of the with the name Module/Controllers/<action>_action
+  - FEATURE: Allow loading action controller classes of the with the name Module/Controllers/<action>_action
     The constructor is sent the module, the actionid and returnid parameters
     The invoke method is sent an array of parameters.
   - Adds CMSModule::get_controller() protected method to allow specifying custom controller mechanisms.
   - Gets rid of content.functions.php (last remaining function moved to page.functions.php)
   - Refactor the cms_module_plugin function for performance).
   - Refactor the route-lookup functionality for performance.
-  - The database connection class now accepts a single scalar for an argument when only one parameter is required in functions like GetOne()
-  - Remove the startup_mact_processing config entry, and replace it with content_processing_mode config entry that supports 3 values
-    0 - no content processing.
-    1 - do content processing AFTER the template page top
-    2 - do content processing BEFORE any template processing.  (default)
-    This config entry controls only when in the rendering, the default content block will be processed.
-    BREAKING functionality
-  - Adds the {disable_template} plugin.  Only really useful when content_processing_mode == 2
-  - Remove all options for smarty caching.  HTML caching should now be done with external tools like varnish or cloudfare
+  - FEATURE: The database connection class now accepts a single scalar for an argument when only one parameter is required in functions like GetOne()
+  - CHANGE:  
+    - Remove the startup_mact_processing config entry, and replace it with content_processing_mode config entry that supports 3 values
+      0 - no content processing.
+      1 - do content processing AFTER the template page top
+      2 - do content processing BEFORE any template processing.  (default)
+      This config entry controls only when in the rendering, the default content block will be processed.
+  - FEATURE: Adds the {disable_template} plugin.  Only really useful when content_processing_mode == 2
+  - REMOVED: all options for smarty caching.  HTML caching should now be done with external tools like varnish or cloudfare
   - All module actions (except for showtemplate=false or other similar requests) create a new smarty template object
     and destroy it when the action is complete.   This allowes ProcessTemplateFromDatabase and ProcessTemplate and other related methods to be
     un-deprecated.
-  - Convert admin passwords to use PHP's builtin password_hash and password_verify methods.  Still backwards compatible with older style for
-    upgrades and resetting lost passwords.
+  - CHANGE: Convert admin passwords to use PHP's builtin password_hash and password_verify methods.
+    - Still backwards compatible with older style for upgrades and resetting lost passwords.
+    - Users upgrading from very old versions may have to reset passwords
   - Change smarty template directories for admin requests to include /assets/templates.
   - Allow svg files to be cached and deflated in the sample htaccess.txt file
-  - Now call InitializeFrontend() and InitializeAdmin() from within ModuleOperations::_load_module() on success.  instead of the module constructor.
+  - CHANGE: Now call InitializeFrontend() and InitializeAdmin() from within ModuleOperations::_load_module() on success.  instead of the module constructor.
   - Adds new {theme_root} plugin for admin templates
   - Adds new {admin_headtext} block plugin for admin templates
-  - Module actions can now return output rather than echoing it.
+  - CHANGE: Module actions can now return output rather than echoing it.
   - Allow login via a module (CoreAdminLogin) now is core admin module
   - Adds a new hook for password strength
   - cms_mailer class now throws an exception if attempting to send an email without setting preferences first.
   - BREAKING: New methods and minor cleanup to admin themes (may introduce some breakage)
   - BREAKING:  Remove the {cms_jquery} plugin and the cms_get_jquery function in lib/misc.functions.php
-  - Adds {cms_queue_script} and {cms_render_scripts} plugins to allow combining javascripts and rendering them in fewer requests.
+    - Users using {cms_jquery} in frontend templates will need to find alternate solutins
+    - See {cms_queue_script} and {cms_render_scripts} 
+  - FEATURE: Adds {cms_queue_script} and {cms_render_scripts} plugins to allow combining javascripts and rendering them in fewer requests.
   - Adds new Core::PreProcessScripts and Core::PostProcessScripts hooks
-  - Upgrade the embedded jquery and jquery-ui scripts.
-  - TODO  Migrate the tasks related to the old admin log into AdminLog module.
+  - BREAKING: Upgrade the embedded jquery and jquery-ui scripts.
+    - some admin side javascript that relies on very old jquery may need changing
   - Add: When using {cms_render_scripts} adds the ability to put inline javascript into <script type="text/cms_javascript">...</script>
     tags that will be deferred loaded.
   - Fix lib/nls files so that UTF-8 locales are searched first.
   - cms_admin_utils::get_icon() and {admin_icon} can now find plugins without specifying an extension.
-  - SECURITY:  checksum verification can no longer fish for files outside of the root directory.
+  - SECURITY: checksum verification can no longer fish for files outside of the root directory.
 
 News v2.21.5 
   - Minor cleaning of parameters.
 
 CMSContentManager - 1.2
-  - Gets rid of secure options, flag output and bulk functionaltiy
+  - REMOVED: Gets rid of secure options, flag output and bulk functionaltiy
   - modified to use CMS_ROOT_URL
   - Change connection timeout to 1 second.
   - Change processing to be a little more friendly to some environments wrt. content-size header.
-  - Adds expand/functionality into reorder content (TODO: needs styling)
-  - Remove the 'url' and 'owner' columns from content list... put these values into a tooltip.
-  - Adds new 'add child here' icon in the content list.
-  - Find functionality in content list can now search on page alias and url.
+  - FEATURE:Adds expand/functionality into reorder content (TODO: needs styling)
+  - FEATURE: Adds new 'add child here' icon in the content list.
+  - FEATURE: Find functionality in content list can now search on page alias and url.
 
 Installation Assistant - v1.3.5
   - Now require at least version 2.0.1 to upgrade
@@ -135,7 +138,7 @@ AdminLog
   - New core module to replace the adminlog.php file
 
 Search  - remember to bump version
- - Now exports a command for cmscli
+  - FEATURE: Now exports a command for cmscli
 
 AdminSearch v1.0.5
  - Rationalize the code a bit (remove un-necessary files).
