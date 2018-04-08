@@ -24,7 +24,7 @@
 		<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
 		<![endif]-->
 		<link rel="stylesheet" href="{root_url}/lib/js/jquery-ui/jquery-ui.min.css" />
-		<link href="{$config.admin_url}/themes/Marigold/css/font-awesome.min.css" rel="stylesheet" />
+		<link href="{$theme_root}/css/font-awesome.min.css" rel="stylesheet" />
 		<link rel="stylesheet" href="style.php?{$secureparam}" />
 		{cms_queue_script file='lib/jquery/js/jquery-3.3.1.min.js'}
                 {cms_queue_script file='lib/js/jquery-ui/jquery-ui.min.js'}
@@ -41,7 +41,7 @@
                 {cms_queue_script file="{$theme_path}/includes/jquery.cookie.min.js"}
                 {cms_queue_script file="{$theme_path}/includes/standard.js"}
 		{cms_render_scripts defer=0}
-		
+		<script src="{$config.admin_url}/cms_js_setup.php?{$secureparam}"></script>
 
 		<!-- THIS IS WHERE HEADER STUFF SHOULD GO -->
 	 	{$headertext|default:''}

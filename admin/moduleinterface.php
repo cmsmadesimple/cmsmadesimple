@@ -25,10 +25,9 @@ $orig_memory = (function_exists('memory_get_usage')?memory_get_usage():0);
 $starttime = microtime();
 
 require_once("../lib/include.php");
-$urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
-
 check_login();
 $userid = get_userid();
+$urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 
 $smarty = \Smarty_CMS::get_instance();
 

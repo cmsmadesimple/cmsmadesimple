@@ -20,5 +20,4 @@
 
 $CMS_ADMIN_PAGE=1;
 require_once("../lib/include.php");
-$_SESSION['logout_user_now'] = "1";
 redirect("login.php");

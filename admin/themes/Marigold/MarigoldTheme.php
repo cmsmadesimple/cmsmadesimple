@@ -149,9 +149,11 @@ class MarigoldTheme extends CmsAdminThemeBase {
 			$smarty->assign('nodes', $nodes);
 		}
 
-		$smarty->assign('config', cms_config::get_instance());
+        $config = \cms_config::get_instance();
+		$smarty->assign('config', $config );
 		$smarty->assign('theme', $this);
 		$smarty->assign('theme_path',__DIR__);
+        $smarty->assign('theme_root', $config['admin_url'].'/themes/Marigold');
 
 		// is the website set down for maintenance?
 		if( get_site_preference('enablesitedownmessage') == '1' )  { $smarty->assign('is_sitedown', 'true'); }
@@ -168,7 +170,7 @@ class MarigoldTheme extends CmsAdminThemeBase {
         $smarty->assign('title',$this->title);
         $smarty->assign('subtitle',$this->subtitle);
         $smarty->assign('admin_root', $config['admin_url']);
-	$smarty->assign('theme_path', __DIR__);
+        $smarty->assign('theme_path', __DIR__);
         $smarty->assign('theme_root', $config['admin_url'].'/themes/Marigold');
         $smarty->assign('footer', $this->do_footer() );
         return $smarty->fetch('minimal.tpl');
@@ -286,8 +288,9 @@ class MarigoldTheme extends CmsAdminThemeBase {
         $smarty->assign('footertext',$this->get_footertext());
 
 		// and some other common variables
+        $config = \cms_config::get_instance();
 		$smarty->assign('content', str_replace('</body></html>', '', $html));
-		$smarty->assign('config', cms_config::get_instance());
+		$smarty->assign('config', $config );
 		$smarty->assign('theme', $this);
 		$smarty->assign('secureparam', CMS_SECURE_PARAM_NAME . '=' . $_SESSION[CMS_USER_KEY]);
 		$userops = UserOperations::get_instance();
@@ -298,6 +301,7 @@ class MarigoldTheme extends CmsAdminThemeBase {
 		$lang = CmsNlsOperations::get_current_language();
 		$info = CmsNlsOperations::get_language_info($lang);
 		$smarty->assign('theme_path',__DIR__);
+        $smarty->assign('theme_root', $config['admin_url'].'/themes/Marigold');
 		$smarty->assign('lang_dir',$info->direction());
 
 

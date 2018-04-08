@@ -1,6 +1,7 @@
 <?php
 
 #A
+$lang['addchildhere'] = 'Add child here';
 $lang['addcontent'] = 'Add New Content';
 $lang['apply'] = 'Apply';
 
