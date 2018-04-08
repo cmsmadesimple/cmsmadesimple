@@ -508,7 +508,7 @@ final class cms_config implements ArrayAccess
             return 'assets';
 
         case 'assets_path':
-            $this->_cache[$key] = $this->OffsetGet('root_path').'/'.$this->OffsetGet('assets_dir');
+            $this->_cache[$key] =  cms_join_path($this->OffsetGet('root_path'), $this->OffsetGet('assets_dir') );
             return $this->_cache[$key];
 
         case 'db_port':
@@ -547,7 +547,7 @@ final class cms_config implements ArrayAccess
             return false;
 
         case 'css_path':
-            return PUBLIC_CACHE_LOCATION.'/';
+            return PUBLIC_CACHE_LOCATION.DIRECTORY_SEPARATOR;
 
         case 'css_url':
             return PUBLIC_CACHE_URL;
