@@ -29,67 +29,52 @@
 function __code_to_utf8($num) {
   if ($num <= 0x7F) {
         $ord = $ord[1];
-        if (preg_match('/^x([0-9a-f]+)$/i', $ord, $match))
-        {
+        if (preg_match('/^x([0-9a-f]+)$/i', $ord, $match)) {
             $ord = hexdec($match[1]);
         }
-        else
-        {
+        else {
             $ord = intval($ord);
         }
 
         $no_bytes = 0;
         $byte = array();
 
-        if ($ord < 128)
-        {
+        if ($ord < 128) {
             return chr($ord);
         }
-        elseif ($ord < 2048)
-        {
+        elseif ($ord < 2048) {
             $no_bytes = 2;
         }
-        elseif ($ord < 65536)
-        {
+        elseif ($ord < 65536) {
             $no_bytes = 3;
         }
-        elseif ($ord < 1114112)
-        {
+        elseif ($ord < 1114112) {
             $no_bytes = 4;
         }
-        else
-        {
+        else {
             return;
         }
 
-        switch($no_bytes)
-        {
+        switch($no_bytes) {
             case 2:
-            {
                 $prefix = array(31, 192);
                 break;
-            }
             case 3:
-            {
                 $prefix = array(15, 224);
                 break;
-            }
             case 4:
-            {
                 $prefix = array(7, 240);
-            }
+                break;
         }
 
-        for ($i = 0; $i < $no_bytes; $i++)
-        {
+        for ($i = 0; $i < $no_bytes; $i++) {
             $byte[$no_bytes - $i - 1] = (($ord & (63 * pow(2, 6 * $i))) / pow(2, 6 * $i)) & 63 | 128;
         }
 
         $byte[0] = ($byte[0] & $prefix[0]) | $prefix[1];
 
         $ret = '';
-        for ($i = 0; $i < $no_bytes; $i++)
-        {
+        for ($i = 0; $i < $no_bytes; $i++) {
             $ret .= chr($byte[$i]);
         }
 
@@ -369,17 +354,13 @@ function cms_html_entity_decode($text_to_convert) {
   $return_text = strtr($return_text, $htmlentities_table);
 
   // convert hex, and numeric entities to their character values.
-  $return_text = preg_replace_callback('~&#x([0-9a-f]+);~i', create_function(
-                                           '$matches',
-                                           '__code_to_utf8($matches[1]);'
-                                           ),
-                                       $return_text);
+  $return_text = preg_replace_callback('~&#x([0-9a-f]+);~i', function( array $matches ) {
+          return __code_to_utf8( $matches[1] );
+      }, $return_text );
+  $return_text = preg_replace_callback('~&#([0-9]+);~', function( array $matches ) {
+          return __code_to_utf8( $matches[1] );
+      }, $return_text );
 
-  $return_text = preg_replace_callback('~&#([0-9]+);~', create_function(
-                                           '$matches',
-                                           '__code_to_utf8($matches[1]);'
-                                           ),
-                                       $return_text);
   return $return_text;
 }
 
