@@ -72,7 +72,6 @@ final class AdminLog extends \CMSModule
     public function IsPluginModule() { return FALSE; }
     public function HasAdmin() { return TRUE; }
     public function GetAdminSection() { return 'siteadmin'; }
-    public function LazyLoadAdmin() { return FALSE; }
     public function VisibleToAdminUser() { return $this->CheckPermission('Modify Site Preferences'); }
 
     public function HasCapability($capability, $params = array())

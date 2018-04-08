@@ -25,7 +25,7 @@ $(function(){
  {/if}
  <a id="filterbtn" href="javascript:void()">{admin_icon icon='run.gif'} {$mod->Lang('filter')} ...</a>
 
-{if count($pagelist) > 1}
+{if $pagelist && count($pagelist) > 1}
   <div style="text-align: right; float: right;">
     {$mod->Lang('page')}:  <select id="pagenum">{html_options options=$pagelist selected=$page}</select>
   </div>

@@ -50,7 +50,7 @@ Core - General
   - COMPATIBILITY CHANGE
     - No longer handle {$actionid}showtemplate=false parameters.
     - No longer send id, returnid, action parameters in the action $params array.
-    - No longer call LoadModules from include.php.. All modules are now loaded on demand.
+    - Only modules that are not marked as lazy load (the default) will be loaded automatically.
     - Tthe long deprecated $module->smarty property is now removed.
   - COMPATIBILITY CHANGE:  For performance reasons, plugins functions should be named smarty_xxxxx instead of smarty_cms_xxx
   - Optimize the cms_route_manager for performance

@@ -60,7 +60,7 @@ if( $resultset->numpages > 0 ) {
 $results = $resultset->GetMatches();
 
 $severity_list = [ 0 => $this->Lang('sev_msg'), 1 => $this->Lang('sev_notice'), $this->Lang('sev_warning'), $this->Lang('sev_error') ];
-$tpl = $smarty->CreateTemplate($this->GetTemplateResource('admin_log_tab.tpl'));
+$tpl = $smarty->CreateTemplate( $this->GetTemplateResource('admin_log_tab.tpl'));
 $tpl->assign('filter',$filter);
 $tpl->assign('results',$results);
 $tpl->assign('pagelist',$pagelist);
@@ -68,4 +68,5 @@ $tpl->assign('severity_list',$severity_list);
 $tpl->assign('page',$page);
 $tpl->assign('filter_applied',$filter_applied);
 $tpl->assign('mod',$this);
+$tpl->assign('actionid',$id);
 $tpl->display();

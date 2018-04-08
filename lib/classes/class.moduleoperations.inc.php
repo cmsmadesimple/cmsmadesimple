@@ -348,7 +348,7 @@ final class ModuleOperations
             return FALSE;
         }
 
-        global $CMS_INSTALL_PAGE;
+        global $CMS_ADMIN_PAGE, $CMS_STYLESHEET, $CMS_INSTALL_PAGE;
 
         // okay, lessee if we can load the dependants
         if( $dependents ) {
@@ -434,12 +434,12 @@ final class ModuleOperations
             return false;
         }
 
-        // now initialize the module.
-        if( !$force_load && !isset($CMS_INSTALL_PAGE) ) {
-            if( CmsApp::get_instance()->is_frontend_request() ) $obj->InitializeFrontend();
-        }
-        else if( isset($CMS_ADMIN_PAGE) && !isset($CMS_STYLESHEET) && !isset($CMS_INSTALL_PAGE) ) {
-            $obj->InitializeAdmin();
+	if( !isset($CMS_INSTALL_PAGE) && !isset($CMS_STYLESHEET) ) {
+            if( isset($CMS_ADMIN_PAGE) ) {
+                $obj->InitializeAdmin();
+            } else if( !$force_load ) {
+                if( CmsApp::get_instance()->is_frontend_request() ) $obj->InitializeFrontend();
+            }
         }
 
         // we're all done.
@@ -486,30 +486,37 @@ final class ModuleOperations
 
 
     /**
-     * Finds all modules that are available to be loaded...
-     * this method uses the information in the database to load the modules that are necessary to load.
+     * Finds all modules that cannot be lazy loaded and loads them.
+     * Handles admin and frontend requests.  but does not load modules for stylesheet requests.
      *
      * @access public
      * @internal
      * @param noadmin boolean indicates that modules marked as admin_only in the database should not be loaded, default is false
      */
-    public function LoadModules($noadmin = false)
+    public function LoadStaticModules()
     {
         global $CMS_ADMIN_PAGE;
         global $CMS_STYLESHEET;
+        if( isset($CMS_STYLESHEET) ) return;
+
         $config = \cms_config::get_instance();
+        debug_buffer('Loading Modules');
         $allinfo = $this->_get_module_info();
         if( !is_array($allinfo) ) return; // no modules installed, probably an empty database... edge case.
 
         foreach( $allinfo as $module_name => $info ) {
             if( $info['status'] != 'installed' ) continue;
             if( !$info['active'] ) continue;
-            if( ($info['admin_only'] || (isset($info['allow_fe_lazyload']) && $info['allow_fe_lazyload'])) && !isset($CMS_ADMIN_PAGE) ) continue;
-            //if( isset($config['admin_loadnomodules']) && isset($CMS_ADMIN_PAGE) ) continue;
-            if( isset($info['allow_admin_lazyload']) && $info['allow_admin_lazyload'] && isset($CMS_ADMIN_PAGE) ) continue;
-            if( isset($CMS_STYLESHEET) && !isset($CMS_STYLESHEET) ) continue;
+            if( isset($CMS_ADMIN_PAGE) ) {
+                // admin request
+                if( isset($info['allow_admin_lazyload']) && $info['allow_admin_lazyload'] ) continue;
+            } else {
+                // frontend request
+                if( isset($info['allow_admin_lazyload']) && $info['allow_admin_lazyload'] ) continue;
+            }
             $this->get_module_instance($module_name);
         }
+        debug_buffer('End of Loading Modules');
     }
 
     /**
