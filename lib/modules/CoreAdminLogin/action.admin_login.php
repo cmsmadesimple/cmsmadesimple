@@ -53,7 +53,7 @@ else if( isset( $params['forgotpwchangeform']) ) {
         \CMSMS\HookManager::do_hook('Core::LoginFailed', [ 'user'=>$username ] );
         $ip_login_failed = \cms_utils::get_real_ip();
         $pwhash = $usercode;
-        audit('', '(IP: ' . $ip_login_failed . ') ' . "Admin Username: " . $username, 'Password reset failed');
+        cms_warning('', '(IP: ' . $ip_login_failed . ') ' . "Admin Username: " . $username, 'Password Reset Failed');
     }
     catch( \Exception $e ) {
         $error = $e->GetMessage();
@@ -87,7 +87,7 @@ else if( isset( $params['forgotpwform']) ) {
         $error = $e->GetMessage();
         \CMSMS\HookManager::do_hook('Core::LoginFailed', [ 'user'=>$username ] );
         $ip_login_failed = \cms_utils::get_real_ip();
-        audit('', '(IP: ' . $ip_login_failed . ') ' . "Admin Username: " . $username, 'Login Failed');
+        cms_warnng('(IP: ' . $ip_login_failed . ') ' . "Admin Username: " . $username, 'Password Recovery Failed');
     }
     catch( \Exception $e ) {
         $error = $e->GetMessage();
@@ -130,7 +130,7 @@ else if( isset( $params['submit'] ) ) {
         $error = $e->GetMessage();
         \CMSMS\HookManager::do_hook('Core::LoginFailed', [ 'user'=>$username ] );
         $ip_login_failed = \cms_utils::get_real_ip();
-        audit('', '(IP: ' . $ip_login_failed . ') ' . "Admin Username: " . $username, 'Login Failed');
+        cms_warning('(IP: ' . $ip_login_failed . ') ' . "Admin Username: " . $username, 'Login Failed');
     }
     catch( \Exception $e ) {
         $error = $e->GetMessage();

@@ -64,24 +64,25 @@ namespace CMSMS {
             return self::$_std_mgr;
         }
 
-        public static function audit( $item, $msg, $item_id )
+        public static function audit( string $item, string $msg, $item_id )
         {
+            if( !empty($item_id) ) $item_id = (int) $item_id;
             self::get_auditor()->audit( $item, $msg, $item_id );
         }
 
-        public static function notice( $msg )
+        public static function notice( string $msg, string $subject = null )
         {
-            self::get_auditor()->notice( $msg );
+            self::get_auditor()->notice( $msg, $subject );
         }
 
-        public static function warning( $msg )
+        public static function warning( string $msg, string $subject = null )
         {
-            self::get_auditor()->warning( $msg );
+            self::get_auditor()->warning( $msg, $subject );
         }
 
-        public static function error( $msg )
+        public static function error( $msg, $subject = null )
         {
-            self::get_auditor()->error( $msg );
+            self::get_auditor()->error( $msg, $subject );
         }
 
     } // end of class
@@ -89,19 +90,19 @@ namespace CMSMS {
 
 
 namespace  {
-    function audit( $item_id, $item, $action ) {
+    function audit( $item_id, string $item, string $action ) {
         \CMSMS\AuditManager::audit( $item, $action, $item_id );
     }
 
-    function cms_notice( $msg, $subject = null ) {
+    function cms_notice( string $msg, string $subject = null ) {
         \CMSMS\AuditManager::notice( $msg, $subject );
     }
 
-    function cms_warning( $msg, $subject = null ) {
+    function cms_warning( string $msg, string $subject = null ) {
         \CMSMS\AuditManager::warning( $msg, $subject );
     }
 
-    function cms_error( $msg, $subject = null ) {
+    function cms_error( string $msg, string $subject = null ) {
         \CMSMS\AuditManager::error( $msg, $subject );
     }
 
