@@ -3,7 +3,7 @@ namespace AdminLog;
 
 final class ReduceLogTask implements \CmsRegularTask
 {
-    const  LASTEXECUTE_SITEPREF = 'ReduceAdminlog_lastexecute';
+    const LASTEXECUTE_SITEPREF = 'ReduceAdminlog_lastexecute';
     private $_queue = [];
 
     public function get_name() { return get_class($this); }

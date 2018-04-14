@@ -715,13 +715,9 @@ class ContentOperations
 	function SetDefaultContent(int $id)
 	{
 		$db = CmsApp::get_instance()->GetDb();
-		$query = "SELECT content_id FROM ".CMS_DB_PREFIX."content WHERE default_content=1";
-		$old_id = $db->GetOne($query);
-		if (isset($old_id)) {
-			$one = $this->LoadContentFromId($old_id);
-			$one->SetDefaultContent(false);
-			$one->Save();
-		}
+		
+		$sql = 'UPDATE '.CMS_DB_PREFIX."content SET default_content=0 WHERE default_content=1";
+		$db->Execute( $sql );
 		$one = $this->LoadContentFromId($id);
 		$one->SetDefaultContent(true);
 		$one->Save();

@@ -100,6 +100,7 @@ Core - General
   - Fix lib/nls files so that UTF-8 locales are searched first.
   - cms_admin_utils::get_icon() and {admin_icon} can now find plugins without specifying an extension.
   - SECURITY: checksum verification can no longer fish for files outside of the root directory.
+  - Improvement to contentoperations::SetDefaultContent()
 
 News v2.21.5 
   - Minor cleaning of parameters.
@@ -112,6 +113,7 @@ CMSContentManager - 1.2
   - FEATURE:Adds expand/functionality into reorder content (TODO: needs styling)
   - FEATURE: Adds new 'add child here' icon in the content list.
   - FEATURE: Find functionality in content list can now search on page alias and url.
+  - FEATURE: Allow setting the default content page from within the page edit form (for pages where it is possible, and permission allows)
 
 Installation Assistant - v1.3.5
   - Now require at least version 2.0.1 to upgrade

@@ -113,12 +113,13 @@ class Content extends ContentBase
     function SetProperties()
     {
       parent::SetProperties();
-	  $this->AddProperty('design_id',0,self::TAB_OPTIONS);
+      $this->AddProperty('design_id',0,self::TAB_OPTIONS);
       $this->AddProperty('template',0,self::TAB_OPTIONS);
       $this->AddProperty('searchable',20,self::TAB_OPTIONS);
       $this->AddProperty('disable_wysiwyg',60,self::TAB_OPTIONS);
       $this->AddProperty('pagemetadata',1,self::TAB_LOGIC);
       $this->AddProperty('pagedata',2,self::TAB_LOGIC);
+      $this->AddProperty('defaultcontent',10,self::TAB_OPTIONS);
       $this->AddProperty('wantschildren',10,self::TAB_OPTIONS);
     }
 
@@ -157,6 +158,10 @@ class Content extends ContentBase
 			if (isset($params['template_id'])) {
 				if ($this->mTemplateId != $params['template_id']) $this->_contentBlocks = null;
 				$this->mTemplateId = (int) $params['template_id'];
+			}
+
+			if( $this->IsDefaultPossible() && isset($params['defaultcontent']) ) {
+				$this->mDefaultContent = (int) $params['defaultcontent'];
 			}
 
 			// add content blocks
@@ -230,7 +235,7 @@ class Content extends ContentBase
 		$props = parent::GetEditableProperties();
 
 		// add in content blocks
-        $blocks = $this->get_content_blocks();
+        	$blocks = $this->get_content_blocks();
 		if( is_array($blocks) && count($blocks) ) {
 			$priority = 100;
 			foreach( $blocks as $block ) {
@@ -431,6 +436,25 @@ class Content extends ContentBase
 						 '<input type="hidden" name="searchable" value="0"/>
                           <input id="id_searchable" type="checkbox" name="searchable" value="1" '.($searchable==1?'checked="checked"':'').'/>');
 
+	        case 'defaultcontent':
+			if( $this->IsDefaultPossible() && check_permission( get_userid(), 'Manage All Content') ) {
+				$default = $this->DefaultContent();
+				$help = '&nbsp'.cms_admin_utils::get_help_tag('core','help_page_default',lang('help_title_page_default'));
+			        $attrtext = '';
+				$label = '<label for="id_dfltcontent">'.lang('prompt_defaultcontent').':</label>'.$help;
+				if( $default ) {
+					return [ $label, 
+						 '<input id="id_dfltcontent" type="checkbox" disabled value="1" checked/>'
+					       ];
+				}
+				else {
+					return [ $label, 
+						 '<input type="hidden" name="defaultcontent" value="0"/>
+						  <input id="id_dfltcontent" type="checkbox" name="defaultcontent" value="1"/>'
+					       ];					
+				}	
+			}
+			
 		case 'disable_wysiwyg':
 			$disable_wysiwyg = $this->GetPropertyValue('disable_wysiwyg');
 			if( $disable_wysiwyg == '' ) $disable_wysiwyg = 0;

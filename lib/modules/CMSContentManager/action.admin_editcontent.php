@@ -166,6 +166,7 @@ try {
         $content_obj = $tmpobj;
     }
 
+    $was_defaultcontent = $content_obj->DefaultContent();
     if( strtoupper($_SERVER['REQUEST_METHOD']) == 'POST' ) {
         // if we're in a POST action, another item may have changed that requires reloading the page
         // filling the params will make sure that no edited content was lost.
@@ -186,6 +187,9 @@ try {
         else if( isset($params['submit']) || isset($params['apply']) ) {
             $content_obj->SetLastModifiedBy(get_userid());
             $content_obj->Save();
+	    if( ! $was_defaultcontent && $content_obj->DefaultContent() ) {
+		$contentops->SetDefaultContent( $content_obj->Id() );
+	    }
             unset($_SESSION['__cms_copy_obj__']);
             audit($content_obj->Id(),'Content','Edited content item '.$content_obj->Name());
             if( isset($params['submit']) ) {

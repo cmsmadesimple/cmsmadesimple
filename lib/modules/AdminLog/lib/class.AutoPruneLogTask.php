@@ -4,7 +4,7 @@ namespace AdminLog;
 class AutoPruneLogTask implements \CmsRegularTask
 {
     const LASTEXECUTE_SITEPREF = 'AdminLog::Prune_lastexecute';
-    const  LIFETIME_SITEPREF = 'adminlog_lifetime';
+    const LIFETIME_SITEPREF = 'adminlog_lifetime';
 
     protected static function &mod()
     {

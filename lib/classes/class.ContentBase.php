@@ -743,7 +743,7 @@ abstract class ContentBase
 	 */
 	public function SetDefaultContent(bool $defaultcontent)
 	{
-		$this->mDefaultContent = (bool) $defaultcontent;
+		if( $this->IsDefaultPossible() ) $this->mDefaultContent = (bool) $defaultcontent;
 	}
 
 	/**
@@ -1277,7 +1277,7 @@ abstract class ContentBase
 	 */
 	public function Save()
 	{
-        \CMSMS\HookManager::do_hook('Core::ContentEditPre', [ 'content' => &$this ] );
+        	\CMSMS\HookManager::do_hook('Core::ContentEditPre', [ 'content' => &$this ] );
 
 		if( !is_array($this->_props) ) {
 			debug_buffer('save is loading properties');
@@ -1291,10 +1291,10 @@ abstract class ContentBase
 			$this->Insert();
 		}
 
-        $contentops = ContentOperations::get_instance();
-        $contentops->SetContentModified();
-        $contentops->SetAllHierarchyPositions();
-        \CMSMS\HookManager::do_hook('Core::ContentEditPost', [ 'content' => &$this ] );
+	        $contentops = ContentOperations::get_instance();
+        	$contentops->SetContentModified();
+        	$contentops->SetAllHierarchyPositions();
+        	\CMSMS\HookManager::do_hook('Core::ContentEditPost', [ 'content' => &$this ] );
 	}
 
 	/**
