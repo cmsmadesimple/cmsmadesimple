@@ -4,6 +4,8 @@ Core - General
   - Re-introduce the host_whitelist config entry that got lost in some commit somewhere.
   - Minor fix to pagination in adminlog
   - Change finnish locale priorities so that UTF-8 is first.
+  - Minor fix to calling hooks with a single associative array parameter.
+  - Minor enhancement to {cms_action_url} wrt. the page to link to if not specified.
 
 Search v1.51.5
   - Now enforce utf-8 on preg_plit.
