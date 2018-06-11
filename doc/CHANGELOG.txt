@@ -2,30 +2,35 @@ Version 2.2.8 - NO NAME SET
 ----------------------------------
 Core - General
   - Re-introduce the host_whitelist config entry that got lost in some commit somewhere.
-  - Minor fix to pagination in adminlog
+  - Minor fix to pagination in Admin log.
   - Change finnish locale priorities so that UTF-8 is first.
   - Minor fix to calling hooks with a single associative array parameter.
   - Minor enhancement to {cms_action_url} wrt. the page to link to if not specified.
-
-Search v1.51.5
-  - Now enforce utf-8 on preg_plit.
+  - PHP 7.2+ fixes.
 
 CMSJobManager v0.1.3
-  - Fix a notice.
+  - Notices fixed.
+  - PHP 7.2+ fixes.
+
+Design Manager
+  - PHP 7.2+ fixes.
 
 FileManager 
-  - remove un-necessary files that may cause a security vulnerability.
+  - Remove un-necessary files that may cause a security vulnerability.
 
 Navigator
   - Template fix simple_navigation.tpl. Output correct class for parent without active children.
+
+Search v1.51.5
+  - Now enforce utf-8 on preg_plit.
 
 
 Version 2.2.7 - Skookumchuck
 ----------------------------------
 Core - General
-  - Change internal CSRF variable name
-  - Fix object insertion bug via deserialize in LoginOperations 
-  - Fix issue where login cookie contents could be forged by determining the hashing salt
+  - Change internal CSRF variable name.
+  - Fix object insertion bug via deserialize in LoginOperations.
+  - Fix issue where login cookie contents could be forged by determining the hashing salt.
   - Refactor the mechanism for generating and verifying admin account password reset codes.
 
 FileManager v1.6.6

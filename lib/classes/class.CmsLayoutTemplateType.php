@@ -721,7 +721,7 @@ class CmsLayoutTemplateType
     {
         $db = CmsApp::get_instance()->GetDb();
         $query = 'SELECT * FROM '.CMS_DB_PREFIX.self::TABLENAME;
-		if( count(self::$_cache) ) $query .= ' WHERE id NOT IN ('.implode(',',array_keys(self::$_cache)).')';
+		if( self::$_cache && count(self::$_cache) ) $query .= ' WHERE id NOT IN ('.implode(',',array_keys(self::$_cache)).')';
 		$query .= '	ORDER BY modified ASC';
         $list = $db->GetArray($query);
         if( !is_array($list) || count($list) == 0 ) return;

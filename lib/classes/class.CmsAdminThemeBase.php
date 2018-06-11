@@ -404,7 +404,7 @@ abstract class CmsAdminThemeBase
      */
     private function _populate_admin_navigation($subtitle='')
     {
-        if (count($this->_menuItems) > 0) return;
+        if ($this->_menuItems && count($this->_menuItems) > 0) return;
 		// note: it would be interesting if we could cache these menuItems in the session
 		// then clear this data when the cache is cleared (for when modules become available)
 

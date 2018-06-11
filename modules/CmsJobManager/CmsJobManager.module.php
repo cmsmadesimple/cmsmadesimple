@@ -262,7 +262,7 @@ final class CmsJobManager extends \CMSModule
         if( $last_trigger >= $now - \CmsJobManager\utils::get_async_freq() ) return; // do nothing
 
         $jobs = $this->check_for_jobs_or_tasks();
-        if( !count($jobs) ) return; // nothing to do.
+        if( $jobs && !count($jobs) ) return; // nothing to do.
 
         // this could go into a function...
         $url_str = html_entity_decode($this->create_url('__','process',$_returnid));

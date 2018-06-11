@@ -32,7 +32,7 @@ try {
 	$smarty->assign('css_nav',$css_nav);
     $smarty->assign('manage_designs',$this->CheckPermission('Manage Designs'));
     $locks = \CmsLockOperations::get_locks('stylesheet');
-    $smarty->assign('have_css_locks',count($locks));
+    $smarty->assign('have_css_locks',($locks) ? count($locks) : 0 );
     $smarty->assign('lock_timeout', $this->GetPreference('lock_timeout'));
 
     echo $this->ProcessTemplate('ajax_get_stylesheets.tpl');
