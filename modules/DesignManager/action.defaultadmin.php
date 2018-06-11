@@ -121,7 +121,7 @@ $opts = array();
 $opts[''] = $this->Lang('prompt_none');
 $types = CmsLayoutTemplateType::get_all();
 $originators = array();
-if( count($types) ) {
+if( $types && count($types) ) {
     $tmp = $tmp2 = $tmp3 = [];
     for( $i = 0; $i < count($types); $i++ ) {
         $tmp['t:'.$types[$i]->get_id()] = $types[$i]->get_langified_display_value();
@@ -150,7 +150,7 @@ if( count($types) ) {
 	$opts[$this->Lang('tpl_originators')] = $originators;
 }
 $cats = CmsLayoutTemplateCategory::get_all();
-if( count($cats) ) {
+if( $cats && count($cats) ) {
     $smarty->assign('list_categories',$cats);
     $tmp = array();
     for( $i = 0; $i < count($cats); $i++ ) {
@@ -159,7 +159,7 @@ if( count($cats) ) {
     $opts[$this->Lang('prompt_categories')] = $tmp;
 }
 $designs = CmsLayoutCollection::get_all();
-if( count($designs) ) {
+if( $designs && count($designs) ) {
     $smarty->assign('list_designs',$designs);
     $tmp = array();
     for( $i = 0; $i < count($designs); $i++ ) {

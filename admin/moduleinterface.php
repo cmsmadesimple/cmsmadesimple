@@ -81,7 +81,7 @@ if( $USE_THEME ) {
 
     // call admin_add_headtext to get any admin data to add to the <head>
     $out = \CMSMS\HookManager::do_hook_accumulate('admin_add_headtext');
-    if( count($out) ) {
+    if( $out && count($out) ) {
         foreach( $out as $one ) {
             $one = trim($one);
             if( $one ) $themeObject->add_headtext($one);
