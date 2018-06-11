@@ -86,7 +86,8 @@ echo $this->StartTabHeaders();
 if( $this->CheckPermission('Modify Modules') ) {
     echo $this->SetTabHeader('installed',$this->Lang('installed'));
     if( $connection_ok ) {
-        echo $this->SetTabHeader('newversions',count($newversions).' '.$this->Lang('tab_newversions') );
+        $num = ( is_array($newversions) ) ? count($newversions) : 0;
+        echo $this->SetTabHeader('newversions',$num.' '.$this->Lang('tab_newversions') );
         echo $this->SetTabHeader('search',$this->Lang('search'));
         echo $this->SetTabHeader('modules',$this->Lang('availmodules'));
     }

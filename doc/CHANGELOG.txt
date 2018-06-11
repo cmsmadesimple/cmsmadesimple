@@ -18,6 +18,9 @@ Design Manager
 FileManager 
   - Remove un-necessary files that may cause a security vulnerability.
 
+Module Manager
+  - PHP 7.2+ fixes.
+
 Navigator
   - Template fix simple_navigation.tpl. Output correct class for parent without active children.
 
