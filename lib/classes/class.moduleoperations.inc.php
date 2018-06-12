@@ -561,7 +561,7 @@ final class ModuleOperations
                 }
 
                 $all_deps = $this->_get_all_module_dependencies();
-                if( count($all_deps) ) {
+                if( is_array($all_deps) && count($all_deps) ) {
                     foreach( $all_deps as $mname => $deps ) {
                         if( is_array($deps) && count($deps) && isset($this->_moduleinfo[$mname]) ) {
                             $minfo =& $this->_moduleinfo[$mname];
