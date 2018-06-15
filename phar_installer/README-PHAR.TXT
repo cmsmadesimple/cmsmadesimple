@@ -18,7 +18,7 @@ Requirements
 2.  For new installations of CMS Made Simple you should create a new mysql database and database user.
     - The database user must have ALL PRIVILEGES to all tables within the new database.
     - Your database user account must have a password.
-3.  CMS Made Simple itself requires at least PHP 5.4.11 with numerous libraries enabled (the install assistant will check for these) including json, tokenizer, xml, and gd.
+3.  CMS Made Simple itself requires at least PHP 5.6 with numerous libraries enabled (the install assistant will check for these) including json, tokenizer, xml, and gd.
 4.  Your PHP environment must include the PHAR extension
 
 ---------------------------
