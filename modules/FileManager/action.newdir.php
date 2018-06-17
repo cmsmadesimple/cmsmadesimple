@@ -9,7 +9,7 @@ $newdirname = "";
 if (isset($params["newdirname"])) {
   $newdirname = trim($params["newdirname"]);
 
-  if (!filemanager_utils::is_valid_filename($params['newdirname'])) {
+  if (!filemanager_utils::is_valid_filename($newdirname) ) {
     // $this->Redirect($id, 'defaultadmin',$returnid,array("fmerror"=>"invalidnewdir"));
     echo $this->ShowErrors($this->Lang("invalidnewdir"));
     //fallthrough
@@ -17,7 +17,7 @@ if (isset($params["newdirname"])) {
 
     $config = cmsms()->GetConfig();
     $base = $config['root_path'];
-    $newdir = $this->Slash($params["path"], $params["newdirname"]);
+    $newdir = $this->Slash($params["path"], $newdirname);
     $newdir = $this->Slash($base, $newdir);
 
     if (is_dir($newdir)) {
@@ -26,7 +26,7 @@ if (isset($params["newdirname"])) {
     } else {
       if (mkdir($newdir)) {
         $params["fmmessage"] = "newdirsuccess"; //strips the file data
-        $this->Audit(0, "File Manager", "Created new directory: " . $params["newdirname"]);
+        $this->Audit(0, "File Manager", "Created new directory: " . $newdirname);
         $this->Redirect($id, "defaultadmin", $returnid, $params);
       } else {
         $params["fmerror"] = "newdirfail";
