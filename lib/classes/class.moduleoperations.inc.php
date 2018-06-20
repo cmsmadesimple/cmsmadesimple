@@ -1339,6 +1339,7 @@ final class ModuleOperations
      * Given a request and an 'id' return the parameters for the module call
      *
      * @internal
+     * @deprecated
      * @param string $id
      * @return array
      */

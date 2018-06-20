@@ -42,6 +42,7 @@ final class LoginOperations
     {
         \cms_cookies::erase($this->_loginkey);
         \cms_cookies::erase(CMS_USER_KEY);
+        \cms_cookies::erase(CMS_SECURE_PARAM_NAME);
         unset($_SESSION[$this->_loginkey],$_SESSION[CMS_USER_KEY]);
     }
 
@@ -144,8 +145,10 @@ final class LoginOperations
         // now we validate that the request has the user key in it somewhere.
         if( !isset($_SESSION[CMS_USER_KEY]) ) throw new \LogicException('Internal: User key not found in session.');
 
+	// we check GET and POST vars specifically incase $_REQUEST also contains cookie values.
         $v = '<no$!tgonna!$happen>';
-        if( isset($_REQUEST[CMS_SECURE_PARAM_NAME]) ) $v = $_REQUEST[CMS_SECURE_PARAM_NAME];
+        if( isset($_GET[CMS_SECURE_PARAM_NAME]) ) $v = $_GET[CMS_SECURE_PARAM_NAME];
+        if( isset($_POST[CMS_SECURE_PARAM_NAME]) ) $v = $_POST[CMS_SECURE_PARAM_NAME];
 
         // validate the key in the request against what we have in the session.
         if( $v != $_SESSION[CMS_USER_KEY] ) {

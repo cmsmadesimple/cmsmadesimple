@@ -93,8 +93,8 @@ abstract class CMSModule
     /**
      * @access private
      * @ignore
-     */
     private $restrict_unknown_params = TRUE;
+     */
 
     /**
      * @access private
@@ -126,14 +126,14 @@ abstract class CMSModule
         global $CMS_INSTALL_PAGE;
 
         if( CmsApp::get_instance()->is_frontend_request() ) {
+            /* 2.2.8
             $this->SetParameterType('assign',CLEAN_STRING);
             $this->SetParameterType('module',CLEAN_STRING);
-            $this->SetParameterType('lang',CLEAN_STRING); // this will be ignored.
             $this->SetParameterType('returnid',CLEAN_INT);
             $this->SetParameterType('action',CLEAN_STRING);
             $this->SetParameterType('showtemplate',CLEAN_STRING);
             $this->SetParameterType('inline',CLEAN_INT);
-
+            */
             $this->InitializeFrontend();
         }
         else if( isset($CMS_ADMIN_PAGE) && !isset($CMS_STYLESHEET) && !isset($CMS_INSTALL_PAGE) ) {
@@ -554,6 +554,7 @@ abstract class CMSModule
      * It uses the map created with the SetParameterType() method in the module api.
      *
      * @internal
+     * @deprecated
      * @param string Module Name
      * @param array  Hash data
      * @param array  A map of param names and type information
@@ -705,11 +706,12 @@ abstract class CMSModule
      * @see SetParameterType
      * @see CreateParameter
      * @final
+     * @deprecated
      * @param bool $flag Indicaties wether unknown params should be restricted.
      */
     final public function RestrictUnknownParams($flag = true)
     {
-        $this->restrict_unknown_params = (bool)$flag;
+        // do nothing (2.2.8)
     }
 
     /**
@@ -725,6 +727,7 @@ abstract class CMSModule
      * @see CreateParameter
      * @see SetParameters
      * @final
+     * @deprecated
      * @param string $param Parameter name;
      * @param define $type  Parameter type;
      */
@@ -754,6 +757,7 @@ abstract class CMSModule
      * @see SetParameters
      * @see SetParameterType
      * @final
+     * @deprecated
      * @param string $param Parameter name;
      * @param string $defaultval Default parameter value
      * @param string $helpstring Help String
@@ -1426,10 +1430,12 @@ abstract class CMSModule
     {
         $name = preg_replace('/[^A-Za-z0-9\-_+]/', '', $name);
         if( $returnid != '' ) {
+            /*
             if( !$this->restrict_unknown_params ) {
                 // put mention into the admin log
                 audit('',$this->GetName(),'Module is not properly cleaning input params');
             }
+            */
 
             // merge in params from module hints.
             $hints = cms_utils::get_app_data('__CMS_MODULE_HINT__'.$this->GetName());
@@ -1444,7 +1450,7 @@ abstract class CMSModule
             // used to try to avert XSS flaws, this will
             // clean as many parameters as possible according
             // to a map specified with the SetParameterType metods.
-            $params = $this->_cleanParamHash($this->GetName(),$params,$this->param_map, !$this->restrict_unknown_params);
+            $params = $this->_cleanParamHash($this->GetName(),$params,$this->param_map, true);
         }
 
         // handle the stupid input type='image' problem.

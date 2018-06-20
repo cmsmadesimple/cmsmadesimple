@@ -14,8 +14,12 @@ Core - General
   Note: In the future,  $params in module actions will only consist of parameters passed on the module tag.
   - PHP 7.2+ fixes.
 
+FilePicker v1.0.3
+  - Minor fix to delete action.
+
 Search v1.51.5
   - Now enforce utf-8 on preg_split.
+  - Minor parameter check
 
 CMSJobManager v0.1.3
   - Notices fixed.
