@@ -13,6 +13,7 @@ Core - General
   Note: modules should now be cleaning parameters directly (see filter_var) from $_POST and $_REQUEST ($_GET is automatically cleaned)
   Note: In the future,  $params in module actions will only consist of parameters passed on the module tag.
   - PHP 7.2+ fixes.
+  - Fix the inactive param in the page_attr plugin.
 
 FilePicker v1.0.3
   - Minor fix to delete action.
