@@ -21,7 +21,7 @@ function smarty_function_page_attr($params, &$smarty)
     $key = trim(get_parameter_value($params,'key'));
     $page = trim(get_parameter_value($params,'page'));
     $assign = trim(get_parameter_value($params,'assign'));
-    $inactive = \cms_to_bool(get_parameter_value($params,'inactive',0));
+    $inactive = \cms_to_bool(get_parameter_value($params,'inactive'));
     $contentobj = null;
 
     if( $page ) {

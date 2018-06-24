@@ -56,7 +56,7 @@ function smarty_function_cms_action_url($params, &$smarty)
     // validate params
     $gCms = CmsApp::get_instance();
     if( $module == '' ) return;
-    if( $gCms->test_state(CmsApp::STATE_ADMIN_PAGE) ) {
+    if( $gCms->test_state(CmsApp::STATE_ADMIN_PAGE) && $returnid == '' ) {
         if( $mid == '' ) $mid = 'm1_';
         if( $action == '' ) $action = 'defaultadmin';
     }
@@ -64,8 +64,11 @@ function smarty_function_cms_action_url($params, &$smarty)
         if( $mid == '' ) $mid = 'cntnt01';
         if( $action == '' ) $action = 'default';
         if( $returnid == '' ) {
-            $contentops = $gCms->GetContentOperations();
-            $returnid = $contentops->GetDefaultContent();
+	    $returnid = \cms_utils::get_current_pageid();
+	    if( $returnid < 1 ) {
+            	$contentops = $gCms->GetContentOperations();
+            	$returnid = $contentops->GetDefaultContent();
+	    }
         }
     }
     if( $action == '' ) return;

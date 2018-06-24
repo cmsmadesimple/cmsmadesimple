@@ -193,12 +193,8 @@ namespace CMSMS {
         public static function do_hook()
         {
             $is_assoc = function($in) {
-                $keys = array_keys($in);
-                $n = 0;
-                for( $n = 0; $n < count($keys); $n++ ) {
-                    if( $keys[$n] != $n ) return FALSE;
-                }
-                return TRUE;
+                if( !is_array($in) ) return FALSE;
+                return array_keys($in) !== range(0, count($in) - 1);
             };
             $args = func_get_args();
             $name = array_shift($args);
@@ -236,7 +232,7 @@ namespace CMSMS {
                 foreach( self::$_hooks[$name]->handlers as $obj ) {
                     // input is passed to the callback, and can be adjusted.
                     // note it's not certain that the same data will be passed out of the handler
-                    if( empty($value) || !is_array($value) ) {
+                    if( empty($value) || !is_array($value) || $is_assoc($value) ) {
                         $value = call_user_func($obj->callable,$value);
                     } else {
                         $value = call_user_func_array($obj->callable,$value);
@@ -261,12 +257,8 @@ namespace CMSMS {
         public static function do_hook_first_result()
         {
             $is_assoc = function($in) {
-                $keys = array_keys($in);
-                $n = 0;
-                for( $n = 0; $n < count($keys); $n++ ) {
-                    if( $keys[$n] != $n ) return FALSE;
-                }
-                return TRUE;
+                if( !is_array($in) ) return FALSE;
+                return array_keys($in) !== range(0, count($in) - 1);
             };
             $args = func_get_args();
             $name = array_shift($args);
@@ -293,7 +285,7 @@ namespace CMSMS {
                 foreach( self::$_hooks[$name]->handlers as $obj ) {
                     // input is passed to the callback, and can be adjusted.
                     // note it's not certain that the same data will be passed out of the handler
-                    if( empty($value) || !is_array($value) ) {
+                    if( empty($value) || !is_array($value) || $is_assoc($value) ) {
                         $value = call_user_func($obj->callable,$value);
                     } else {
                         $value = call_user_func_array($obj->callable,$value);
@@ -319,17 +311,12 @@ namespace CMSMS {
         public static function do_hook_accumulate()
         {
             $is_assoc = function($in) {
-                $keys = array_keys($in);
-                $n = 0;
-                for( $n = 0; $n < count($keys); $n++ ) {
-                    if( $keys[$n] != $n ) return FALSE;
-                }
-                return TRUE;
+                if( !is_array($in) ) return FALSE;
+                return array_keys($in) !== range(0, count($in) - 1);
             };
             $args = func_get_args();
             $name = array_shift($args);
             $name = trim($name);
-            //if( is_array($args) && count($args) == 1 && is_array($args[0]) && !$is_assoc($args[0]) ) $args = $args[0];
             $is_event = false;
             $module = $eventname = null;
             if( strpos($name,':') !== FALSE ) list($module,$eventname) = explode('::',$name);
@@ -359,7 +346,7 @@ namespace CMSMS {
             }
             foreach( self::$_hooks[$name]->handlers as $obj ) {
                 // note: we cannot control what is passed out of the hander.
-                if( empty($value) || !is_array($value) ) {
+                if( empty($value) || !is_array($value) || $is_assoc($value) ) {
                     $out[] = call_user_func($obj->callable,$value);
                 }
                 else {

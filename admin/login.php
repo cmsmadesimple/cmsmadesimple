@@ -26,6 +26,12 @@ $CMS_LOGIN_PAGE=1;
 require_once("../lib/include.php");
 $gCms = \CmsApp::get_instance();
 $db = $gCms->GetDb();
+
+// if we allow modules to do the login operations
+// module registers itself as 'admin login module' in the constructor
+// getloginModule
+// call the module's getLoginForm() action
+//
 $login_ops = \CMSMS\LoginOperations::get_instance();
 $params = [];
 
