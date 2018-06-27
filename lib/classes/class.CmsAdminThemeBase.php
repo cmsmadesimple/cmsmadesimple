@@ -1308,7 +1308,7 @@ abstract class CmsAdminThemeBase
 	 */
 	public function BackUrl()
 	{
-		$count = count($this->_breadcrumbs) - 2;
+		$count = $this->_breadcrumbs ? count($this->_breadcrumbs) - 2 : -1;
 		$urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 		if ($count > -1) {
 			$txt = $this->_breadcrumbs[$count]['url'];
