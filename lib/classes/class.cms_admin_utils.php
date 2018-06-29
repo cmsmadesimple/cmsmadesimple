@@ -171,9 +171,10 @@ final class cms_admin_utils
 		$icon = self::get_icon('info.gif');
 		if( !$icon ) return;
 
-		return '<span class="cms_help" data-cmshelp-key="'.$key.'" data-cmshelp-title="'.$title.'"><img class="cms_helpicon" src="'.$icon.'" alt="'.$icon.'" /></span>';
+		return '<span class="cms_help" data-cmshelp-key="'.$key.'" data-cmshelp-title="'.$title.'"><img class="cms_helpicon" src="'.$icon.'" alt="'.$title.'" /></span>';
 	}
 } // end of class
 
 #
 # EOF
+#
