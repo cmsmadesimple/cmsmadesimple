@@ -289,7 +289,7 @@ abstract class Alert
     public static function load_all()
     {
         $list = \cms_siteprefs::list_by_prefix('adminalert_');
-        if( $list && !count($list) ) return;
+        if( !$list || !count($list) ) return;
 
         $out = [];
         foreach( $list as $prefname ) {
@@ -315,7 +315,7 @@ abstract class Alert
         if( !$uid ) return;
 
         $alerts = self::load_all();
-        if( $alerts && !count($alerts) ) return;
+        if( !$alerts || !count($alerts) ) return;
 
         $out = [];
         foreach( $alerts as $alert ) {
