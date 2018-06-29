@@ -41,9 +41,7 @@ class SearchItemCollection
 
     function CalculateWeights()
     {
-        reset($this->_ary);
-        while (list($key) = each($this->_ary)) {
-            $oneitem =& $this->_ary[$key];
+        foreach ($this->_ary as $oneitem) {
             $oneitem->weight = intval(($oneitem->intweight / $this->maxweight) * 100);
         }
     }
