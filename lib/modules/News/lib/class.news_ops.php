@@ -137,11 +137,13 @@ public static function get_category_list()
 {
     self::get_all_categories();
     $categorylist = array();
-    for( $i = 0, $n = count(self::$_cached_categories); $i < $n; $i++ ) {
-        $row = self::$_cached_categories[$i];
-        $categorylist[$row['long_name']] = $row['news_category_id'];
+    if (!empty(self::$_cached_categories))
+    {
+        for( $i = 0, $n = count(self::$_cached_categories); $i < $n; $i++ ) {
+            $row = self::$_cached_categories[$i];
+            $categorylist[$row['long_name']] = $row['news_category_id'];
+        }
     }
-
     return $categorylist;
 }
 
@@ -149,9 +151,12 @@ public static function get_category_list()
 public static function get_category_names_by_id()
 {
     self::get_all_categories();
-    $list = array();
-    for( $i = 0, $n = count(self::$_cached_categories); $i < $n; $i++ ) {
-        $list[self::$_cached_categories[$i]['news_category_id']] = self::$_cached_categories[$i]['news_category_name'];
+    if (!empty(self::$_cached_categories))
+    {
+        $list = array();
+        for( $i = 0, $n = count(self::$_cached_categories); $i < $n; $i++ ) {
+            $list[self::$_cached_categories[$i]['news_category_id']] = self::$_cached_categories[$i]['news_category_name'];
+        }
     }
     return $list;
 }
@@ -160,9 +165,12 @@ public static function get_category_names_by_id()
 public static function get_category_name_from_id($id)
 {
     self::get_all_categories();
-    for( $i = 0, $n = count(self::$_cached_categories); $i < $n; $i++ ) {
-        if( $id == self::$_cached_categories[$i]['news_category_id'] ) {
-            return self::$_cached_categories[$i]['news_category_name'];
+    if (!empty(self::$_cached_categories))
+    {
+        for( $i = 0, $n = count(self::$_cached_categories); $i < $n; $i++ ) {
+            if( $id == self::$_cached_categories[$i]['news_category_id'] ) {
+                return self::$_cached_categories[$i]['news_category_name'];
+            }
         }
     }
 }
