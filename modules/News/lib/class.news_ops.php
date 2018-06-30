@@ -332,7 +332,7 @@ static private function &get_article_from_row($row,$get_fields = 'PUBLIC')
     if( $get_fields && $get_fields != 'NONE' && $article->id ) {
         self::preloadFieldData($article->id);
         $fields = self::get_fields($article->id);
-        if( count($fields) ) {
+        if( isset($fields) && count($fields) ) {
             foreach( $fields as $field ) {
                 $article->set_field($field);
             }
