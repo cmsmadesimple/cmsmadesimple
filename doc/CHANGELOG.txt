@@ -1,4 +1,4 @@
-Version 2.2.8 - NO NAME SET
+Version 2.2.8 - Flin Flon
 ----------------------------------
 Core - General
   - Re-introduce the host_whitelist config entry that got lost in some commit somewhere.
