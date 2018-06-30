@@ -40,10 +40,6 @@ Navigator
 News
   - Notices fixed.
 
-Search v1.51.5
-  - Now enforce utf-8 on preg_plit.
-
-
 Version 2.2.7 - Skookumchuck
 ----------------------------------
 Core - General
