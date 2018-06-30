@@ -57,7 +57,8 @@ public static function get_categories($id,$params,$returnid=-1)
     }
     unset($tmp);
 
-    if( !count($catinfo) ) return;
+    $cat_count = isset($catinfo) ? count($catinfo) : '';
+    if( !$cat_count ) return;
 
     $cat_ids = array();
     for( $i = 0, $n = count($catinfo); $i < $n; $i++ ) {
