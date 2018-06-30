@@ -309,7 +309,7 @@ if (isset($params['category'])) {
     $catName = $params['category'];
 }
 else if (isset($params['category_id'])) {
-    if( count($items) ) {
+    if( isset($items) && count($items) ) {
         foreach( $items as $item ) {
             if( $item['news_category_id'] == $params['category_id'] ) {
                 $catName = $item['news_category_name'];
@@ -320,7 +320,10 @@ else if (isset($params['category_id'])) {
     //$catName = $db->GetOne('SELECT news_category_name FROM '.CMS_DB_PREFIX . 'module_news_categories where news_category_id=?',array($params['category_id']));
 }
 $tpl_ob->assign('category_name',$catName);
-$tpl_ob->assign('count', count($items));
+
+$count = isset($items) ? count($items) : '0';
+$tpl_ob->assign('count', $count);
+
 $tpl_ob->assign('cats', $items);
 
 // Display template

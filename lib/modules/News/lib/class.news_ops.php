@@ -30,7 +30,7 @@ private static $_cached_fieldvals;
 public static function get_categories($id,$params,$returnid=-1)
 {
     $tmp = self::get_all_categories();
-    if( !count($tmp) ) return;
+    if( isset($tmp) && !count($tmp) ) return;
 
     $catinfo = array();
     if( !isset($params['category']) || $params['category'] == '' ) {
@@ -56,6 +56,7 @@ public static function get_categories($id,$params,$returnid=-1)
         }
     }
     unset($tmp);
+    
     if( !count($catinfo) ) return;
 
     $cat_ids = array();
