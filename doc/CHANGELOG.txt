@@ -31,13 +31,13 @@ FileManager v1.6.7
   - Remove un-necessary files that may cause a security vulnerability.
   - prevent creating directories with leading or trailing whitespace in the name.
 
-Module Manager
+Module Manager v2.1.4
   - PHP 7.2+ fixes.
 
-Navigator
+Navigator v1.0.9
   - Template fix simple_navigation.tpl. Output correct class for parent without active children.
 
-News
+News v2.51.4
   - Notices fixed.
 
 Version 2.2.7 - Skookumchuck
