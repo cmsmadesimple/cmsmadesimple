@@ -38,7 +38,7 @@ Navigator
   - Template fix simple_navigation.tpl. Output correct class for parent without active children.
 
 News
-  - Notice fixed.
+  - Notices fixed.
 
 Search v1.51.5
   - Now enforce utf-8 on preg_plit.
