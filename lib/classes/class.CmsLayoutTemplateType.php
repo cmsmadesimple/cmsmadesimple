@@ -699,7 +699,7 @@ class CmsLayoutTemplateType
 
         $db = CmsApp::get_instance()->GetDb();
         $query = 'SELECT * FROM '.CMS_DB_PREFIX.self::TABLENAME.' WHERE originator = ?';
-        if( count(self::$_cache) ) $query .= ' AND id NOT IN ('.implode(',',array_keys(self::$_cache)).')';
+        if( isset(self::$_cache) && count(self::$_cache) ) $query .= ' AND id NOT IN ('.implode(',',array_keys(self::$_cache)).')';
         $query .= ' ORDER BY modified DESC';
         $list = $db->GetArray($query,array($originator));
         if( !is_array($list) || count($list) == 0 ) return;
