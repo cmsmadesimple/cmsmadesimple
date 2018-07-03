@@ -51,12 +51,13 @@ class wizard_step4 extends \cms_autoinstaller\wizard_step
 
     private function validate($config)
     {
+        $action = $this->get_wizard()->get_data('action');
         if( !isset($config['dbtype']) || !$config['dbtype'] ) throw new \Exception(\__appbase\lang('error_nodbtype'));
         if( !isset($config['dbhost']) || !$config['dbhost'] ) throw new \Exception(\__appbase\lang('error_nodbhost'));
         if( !isset($config['dbname']) || !$config['dbname'] ) throw new \Exception(\__appbase\lang('error_nodbname'));
         if( !isset($config['dbuser']) || !$config['dbuser'] ) throw new \Exception(\__appbase\lang('error_nodbuser'));
         if( !isset($config['dbpass']) || !$config['dbpass'] ) throw new \Exception(\__appbase\lang('error_nodbpass'));
-        if( !isset($config['dbprefix']) || !$config['dbprefix'] ) throw new \Exception(\__appbase\lang('error_nodbprefix'));
+        if( $action == 'install' && ( !isset($config['dbprefix']) || !$config['dbprefix'] ) ) throw new \Exception(\__appbase\lang('error_nodbprefix'));
         if( !isset($config['timezone']) || !$config['timezone'] ) throw new \Exception(\__appbase\lang('error_notimezone'));
 
         $re = '/^[a-zA-Z0-9_\.]*$/';
@@ -86,7 +87,6 @@ class wizard_step4 extends \cms_autoinstaller\wizard_step
         $db->Execute("SET NAMES 'utf8'");
 
         // see if we can create and drop a table.
-        $action = $this->get_wizard()->get_data('action');
         try {
             $db->Execute('CREATE TABLE '.$config['dbprefix'].'_dummyinstall (i int)');
         }

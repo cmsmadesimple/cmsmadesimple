@@ -2,8 +2,6 @@
 
 namespace __appbase;
 
-require_once(dirname(dirname(__FILE__)).'/Smarty/Smarty.class.php');
-
 class cms_smarty extends \Smarty
 {
   private static $_instance;

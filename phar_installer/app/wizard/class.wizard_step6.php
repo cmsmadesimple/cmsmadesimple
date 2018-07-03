@@ -69,7 +69,6 @@ class wizard_step6 extends \cms_autoinstaller\wizard_step
         $smarty->assign('action',$action);
         $smarty->assign('verbose',$this->get_wizard()->get_data('verbose',0));
         $smarty->assign('siteinfo',$this->_siteinfo);
-        $smarty->assign('yesno',array('0'=>\__appbase\lang('no'),'1'=>\__appbase\lang('yes')));
         $languages = \__appbase\get_app()->get_language_list();
         unset($languages['en_US']);
         $smarty->assign('language_list',$languages);

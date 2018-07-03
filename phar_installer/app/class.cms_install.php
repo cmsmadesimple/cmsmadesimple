@@ -1,12 +1,10 @@
 <?php
-
 namespace cms_autoinstaller;
 use \__appbase\utils;
 
-include_once(__DIR__.'/lib/compat.functions.php');
-include_once(dirname(dirname(__FILE__)).'/lib/classes/base/class.app.php');
+require_once( __DIR__.'/lib/class.cms_install_base.php') ;
 
-class cms_install extends \__appbase\app
+class cms_install extends cms_install_base
 {
     private static $_instance;
     private $_archive;
@@ -15,7 +13,6 @@ class cms_install extends \__appbase\app
     private $_dest_schema;
     private $_destdir;
     private $_custom_destdir;
-    private $_nls;
     private $_orig_tz;
     private $_orig_error_level;
     private $_custom_tmpdir;
@@ -193,7 +190,6 @@ class cms_install extends \__appbase\app
             case 'dest':
             case 'destdir':
                 $this->_custom_destdir = $config['dest'] = trim($val);
-
                 break;
             case 'debug':
                 $config['debug'] = utils::to_bool($val);
@@ -207,6 +203,22 @@ class cms_install extends \__appbase\app
                 break;
             }
         }
+
+        if( !$config['tmpdir'] ) {
+            $val = $config['tmpdir'] = parent::get_tmpdir();
+            if( !is_dir($val) || !is_writable($val) ) {
+                // could not find a valid system temporary directory, or none specified. gotta make one
+                $dir = realpath(getcwd()).'/__m'.md5(session_id());
+                if( !@is_dir($dir) && !@mkdir($dir) ) throw new \RuntimeException('Sorry, problem determining a temporary directory, non specified, and we could not create one.');
+                $txt = 'This is temporary directory created for installing CMSMS in punitively restrictive environments.  You may delete this directory and its files once installation is complete.';
+                if( !@file_put_contents($dir.'/__cmsms',$txt) ) throw new \RuntimeException('We could not create a file in the temporary directory we just created (is safe mode on?).');
+                $this->set_config_val('tmpdir',$dir);
+                $this->_custom_tmpdir = $dir;
+                $val = $dir;
+                $config['tmpdir'] = $val;
+            }
+        }
+
         return $config;
     }
 
@@ -219,8 +231,7 @@ class cms_install extends \__appbase\app
                 break;
             case 'tmpdir':
                 if( !$val ) {
-                    // no tmpdir set... gotta find or create one.
-                    $val = parent::get_tmpdir();
+                    throw new \RuntimeException('Invalid config value for '.$key.' - after all attempts, it is either not a directory, or not writable');
                 }
                 if( !is_dir($val) || !is_writable($val) ) {
                     // could not find a valid system temporary directory, or none specified. gotta make one
@@ -228,7 +239,7 @@ class cms_install extends \__appbase\app
                     if( !@is_dir($dir) && !@mkdir($dir) ) throw new \RuntimeException('Sorry, problem determining a temporary directory, non specified, and we could not create one.');
                     $txt = 'This is temporary directory created for installing CMSMS in punitively restrictive environments.  You may delete this directory and its files once installation is complete.';
                     if( !@file_put_contents($dir.'/__cmsms',$txt) ) throw new \RuntimeException('We could not create a file in the temporary directory we just created (is safe mode on?).');
-                    $this->set_config_val('tmpdir',$dir);
+                    $config[$key] = $dir;
                     $this->_custom_tmpdir = $dir;
                     $val = $dir;
                 }
@@ -300,53 +311,6 @@ class cms_install extends \__appbase\app
     public function get_dest_name() { return $this->_dest_name; }
 
     public function get_dest_schema() { return $this->_dest_schema; }
-
-    public function get_phar()
-    {
-        return \Phar::running();
-    }
-
-    public function in_phar() {
-        $x = $this->get_phar();
-        if( !$x ) return FALSE;
-        return TRUE;
-    }
-
-    public function get_nls()
-    {
-        if( is_array($this->_nls) ) return $this->_nls;
-
-        $archive = $this->get_archive();
-        $archive = str_replace('\\','/',$archive); // stupid windoze
-        if( !file_exists($archive) ) throw new \Exception(\__appbase\lang('error_noarchive'));
-
-        $phardata = new \PharData($archive);
-        $nls = array();
-        $found = false;
-        $pharprefix = "phar://".$archive;
-        foreach( new \RecursiveIteratorIterator($phardata) as $file => $it ) {
-            if( ($p = strpos($file,'/lib/nls')) === FALSE ) continue;
-            $tmp = substr($file,$p);
-            if( !\__appbase\endswith($tmp,'.php') ) continue;
-            $found = true;
-            if( preg_match('/\.nls\.php$/',$tmp) ) {
-               $tmpdir = $this->get_tmpdir();
-               $fn = "$tmpdir/tmp_".basename($file);
-               @copy($file,$fn);
-               include($fn);
-               unlink($fn);
-            }
-        }
-        if( !$found ) throw new \Exception(\__appbase\lang('error_nlsnotfound'));
-        $this->_nls = $nls;
-        return $nls;
-    }
-
-    public function get_language_list()
-    {
-        $this->get_nls();
-        return $this->_nls['language'];
-    }
 
     public function get_root_url()
     {

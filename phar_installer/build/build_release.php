@@ -319,6 +319,7 @@ function verbose($lvl,$msg)
 // this is the main function.
 try {
     if( !is_dir($srcdir) && !is_file($srcdir.'/index.php') ) throw new Exception('Problem finding source files in '.$srcdir);
+    if( !is_writable($rootdir) ) throw new Exception('No write access to '.$rootdir.' (for creating directories)');
 
     if( $clean && is_dir($outdir) ) {
         echo "INFO: Removing old output file(s)\n";

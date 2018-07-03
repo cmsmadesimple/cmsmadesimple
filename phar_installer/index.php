@@ -17,17 +17,26 @@ try {
     }
 
     // some basic system wide pre-requisites
-    if(php_sapi_name() == "cli") throw new \Exception("We are sorry but:\n\nCLI based execution of this script is not supported.\nPlease browse to this script with a compatible browser");
+    $cli = false;
+    if(php_sapi_name() == "cli") $cli = true;
+	// throw new \Exception("We are sorry but:\n\nCLI based execution of this script is not supported.\nPlease browse to this script with a compatible browser");
     if( version_compare(phpversion(),'5.4.0') < 0 ) throw new \Exception('We are sorry, but this installer requires at least PHP 5.4.0');
     _detect_bad_ioncube();
 
     // disable some stuff.
     @ini_set('opcache.enable',0); // disable zend opcode caching.
     @ini_set('apc.enabled',0); // disable apc opcode caching (for later versions of APC)
-    @ini_set('xcache.cacher',0); // disable xcache opcode caching 
+    @ini_set('xcache.cacher',0); // disable xcache opcode caching
 
-    require_once('app/class.cms_install.php');
-    $app = new cms_install;
+    require_once( __DIR__.'/lib/vendor/autoload.php' );
+    require_once( __DIR__.'/app/lib/autoload.php' );
+    $app = null;
+    if( $cli ) {
+        $app = new cms_cli_install;
+    }
+    else {
+        $app = new cms_install;
+    }
     $app->run();
 }
 catch( \Exception $e ) {

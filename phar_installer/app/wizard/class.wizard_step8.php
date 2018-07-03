@@ -52,11 +52,14 @@ class wizard_step8 extends \cms_autoinstaller\wizard_step
 
         // setup and initialize the cmsms API's
         // note DONT_LOAD_DB and DONT_LOAD_SMARTY are used.
-        if( is_file("$destdir/include.php") ) {
-            include_once($destdir.'/include.php');
+        if( is_file("$destdir/lib/include.php") ) {
+            include_once("$destdir/lib/include.php");
+        }
+        else if( is_file( "$destdir/include.php")) {
+            include_once( "$destdir/lib/include.php" );
         }
         else {
-            include_once($destdir.'/lib/include.php');
+            throw new \RuntimeException('Could not find include.php file in destination');
         }
 
     }
@@ -164,10 +167,14 @@ class wizard_step8 extends \cms_autoinstaller\wizard_step
         if( !$destconfig ) throw new \Exception(\__appbase\lang('error_internal',703));
 
         // setup and initialize the cmsms API's
-        if( is_file("$destdir/include.php") ) {
-            include_once($destdir.'/include.php');
-        } else {
-            include_once($destdir.'/lib/include.php');
+        if( is_file("$destdir/lib/include.php") ) {
+            include_once("$destdir/lib/include.php");
+        }
+        else if( is_file( "$destdir/include.php")) {
+            include_once( "$destdir/lib/include.php" );
+        }
+        else {
+            throw new \RuntimeException('Could not find include.php file in destination');
         }
 
         // setup database connection
@@ -186,7 +193,8 @@ class wizard_step8 extends \cms_autoinstaller\wizard_step
                 }
             }
 
-            $this->write_config();
+	    // do not need to write config on upgrade
+            // $this->write_config();
 
             $this->message(\__appbase\lang('done'));
         }
