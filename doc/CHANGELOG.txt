@@ -1,7 +1,9 @@
 Version 2.3 - NO NAME SET
 ----------------------------------
 Core - General
+  - Upgrade Smarty to v3.1.32
   - REMOVED: MenuManager is no longer distributed with CMSMS Core.  and it is no longer considered a system module.
+    (note: as of 2.3 it is still operational, just no longer distributed.)
   - Remove secure option from content pages
   - $config['ssl_url'] is deprecated, and now just an alias for root url
   - $config['ssl_uploads_url'] is now just an alias for uploads_url and is deprecated
@@ -115,10 +117,11 @@ CMSContentManager - 1.2
   - FEATURE: Find functionality in content list can now search on page alias and url.
   - FEATURE: Allow setting the default content page from within the page edit form (for pages where it is possible, and permission allows)
 
-Installation Assistant - v1.3.5
+Installation Assistant - v1.4
   - Now require at least version 2.0.1 to upgrade
   - Now test the default character set
   - Now require at least PHP 7.0 and recommend 7.1
+  - Upgrade to smarty v3.1.32
   - CURL is now a requirement
 
 ModuleManaver v2.2
