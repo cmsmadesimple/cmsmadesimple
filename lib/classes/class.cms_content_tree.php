@@ -251,6 +251,7 @@ class cms_content_tree extends cms_tree
 	 * @param bool $deep load all child proeprties for the content object if loading is required.
 	 * @param bool $loadsiblings load all the siblings for the selected content object at the same time (a preformance optimization)
 	 * @param bool $loadall If loading siblings, include inactive/disabled pages.
+     * @return mixed Either the content object specified or FALSE
 	 */
 	public function &getContent(bool $deep = false,bool $loadsiblings = true,bool $loadall = false)
 	{
@@ -352,11 +353,13 @@ class cms_content_tree extends cms_tree
 
 
     /**
+     * Builds a single flat array of all nodes... each node still has references to their children.
+     *
      * @ignore
      */
     private function &_buildFlatList()
     {
-        $result = array();
+        $result = [];
 
         if( $this->get_tag('id') > 0 ) $result[] = $this;
         if( $this->has_children() ) {
@@ -384,9 +387,7 @@ class cms_content_tree extends cms_tree
 	public function &getFlatList()
 	{
         static $result = null;
-        if( is_null($result) ) {
-            $result = $this->_buildFlatList();
-        }
+        if( is_null($result) ) $result = $this->_buildFlatList();
 		return $result;
 	}
 

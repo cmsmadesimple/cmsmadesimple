@@ -29,7 +29,7 @@ final class LoginOperations
 
     protected function __construct()
     {
-        $this->_loginkey = sha1( CMS_VERSION.$this->_get_salt() );
+        $this->_loginkey = '_'.sha1( CMS_VERSION.$this->_get_salt() );
     }
 
     public static function &get_instance()
@@ -110,10 +110,10 @@ final class LoginOperations
         if( isset($_SESSION[$this->_loginkey]) ) {
             $private_data = $_SESSION[$this->_loginkey];
         }
-        else {
-            if( isset($_COOKIE[$this->_loginkey]) ) $private_data = $_SESSION[$this->_loginkey] = $_COOKIE[$this->_loginkey];
+        else if( ($private_data = \cms_cookies::get($this->_loginkey)) ) {
+            $_SESSION[$this->_loginkey] = $private_data;
+        } else {
         }
-
         if( !$private_data ) return;
         $parts = explode('::',$private_data,2);
         if( count($parts) != 2 ) return;

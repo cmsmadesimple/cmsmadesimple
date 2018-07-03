@@ -26,7 +26,7 @@
  * @package   Smarty
  */
 namespace CMSMS\internal;
-require_once(CMS_ROOT_PATH.'/lib/smarty/Smarty.class.php');
+//require_once(CMS_ROOT_PATH.'/lib/smarty/Smarty.class.php');
 
 
 /**

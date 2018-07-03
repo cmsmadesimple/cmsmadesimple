@@ -207,7 +207,6 @@ class ContentOperations
      */
 	function &LoadContentFromId(int $id,bool $loadprops=false)
 	{
-		$result = FALSE;
         $id = (int) $id;
         if( $id < 1 ) $id = $this->GetDefaultContent();
 		if( cms_content_cache::content_exists($id) ) return cms_content_cache::get_content($id);
@@ -224,7 +223,7 @@ class ContentOperations
 				return $contentobj;
 			}
 		}
-		return $result;
+		return FALSE;
 	}
 
 

@@ -62,6 +62,7 @@ $_SERVER = filter_var_array($_SERVER, FILTER_SANITIZE_STRING);
 $_GET = filter_var_array($_GET, FILTER_SANITIZE_STRING);
 
 // include some stuff
+require_once($dirname.DIRECTORY_SEPARATOR.'/vendor/autoload.php');
 require_once($dirname.DIRECTORY_SEPARATOR.'compat.functions.php');
 require_once($dirname.DIRECTORY_SEPARATOR.'misc.functions.php');
 require_once($dirname.DIRECTORY_SEPARATOR.'version.php'); // tells us where the config file is and other things.

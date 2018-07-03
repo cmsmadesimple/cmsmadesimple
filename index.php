@@ -117,7 +117,11 @@ while( $trycount < 2 ) {
 
         if( $config['content_processing_mode'] == 2 ) {
             debug_buffer('preprocess module action');
+            $mgr = $_app->GetScriptManager();
+            $pr = $mgr->get_script_priority();
+            $mgr->set_script_priority( $pr + 1 );
             \CMSMS\internal\content_plugins::get_default_content_block_content( $contentobj->Id(), $smarty );
+            $mgr->set_script_priority( $pr );
         }
 
         $html = null;
@@ -142,7 +146,6 @@ while( $trycount < 2 ) {
                 \CMSMS\internal\content_plugins::get_default_content_block_content( $contentobj->Id() );
             }
 
-            // if the request has a mact in it, process and cache the output.
             debug_buffer('process template body');
             \CMSMS\HookManager::do_hook('Core::PageBodyPreRender', [ 'content'=>&$contentobj, 'html'=>&$body ]);
             $tpl = $smarty->createTemplate('tpl_body:'.$tpl_id);

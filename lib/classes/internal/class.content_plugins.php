@@ -243,7 +243,7 @@ final class content_plugins
         return self::content_return($result, $params, $smarty);
     }
 
-    public static function smarty_fetch_pagedata($params,&$smarty)
+    public static function smarty_fetch_pagedata($params,$smarty)
     {
         $contentobj = \CmsApp::get_instance()->get_content_object();
         if( !is_object($contentobj) || $contentobj->Id() <= 0 ) return self::content_return('', $params, $smarty);

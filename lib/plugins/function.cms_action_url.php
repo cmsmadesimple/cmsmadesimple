@@ -22,8 +22,7 @@ function smarty_function_cms_action_url($params, &$smarty)
     $module = $smarty->getTemplateVars('_module');
     $returnid = $smarty->getTemplateVars('returnid');
     $mid = $smarty->getTemplateVars('actionid');
-    $action = null;
-    $assign = null;
+    $action = $assign = $urlparms = null;
     $forjs  = 0;
 
     $actionparms = array();
@@ -48,7 +47,11 @@ function smarty_function_cms_action_url($params, &$smarty)
             $forjs = 1;
             break;
         default:
-            $actionparms[$key] = $value;
+            if( startswith($key,'_') ) {
+                $urlparms[substr($key,1)] = $value;
+            } else {
+                $actionparms[$key] = $value;
+            }
             break;
         }
     }
@@ -79,9 +82,18 @@ function smarty_function_cms_action_url($params, &$smarty)
     $url = $obj->create_url($mid,$action,$returnid,$actionparms);
     if( !$url ) return;
 
+    if( !empty($urlparms) ) {
+        $url_ob = new \cms_url( $url );
+        foreach( $urlparms as $k => $v ) {
+            $url_ob->set_queryvar( $key, $value );
+        }
+        $url = (string) $url_ob;
+    }
+
     if( $forjs ) {
         $url = str_replace('&amp;','&',$url);
     }
+
     if( $assign ) {
         $smarty->assign($assign,$url);
         return;
