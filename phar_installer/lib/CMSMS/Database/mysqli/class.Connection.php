@@ -5,9 +5,9 @@ namespace CMSMS\Database\mysqli;
 class Connection extends \CMSMS\Database\Connection
 {
     private $_mysql;
-    private $_in_transaction;
-    private $_in_smart_transaction;
-    private $_transaction_failed;
+    private $_in_transaction = 0;
+    private $_in_smart_transaction = 0;
+    private $_transaction_status = TRUE;
 
     public function DbType() { return 'mysqli'; }
 
@@ -140,23 +140,26 @@ class Connection extends \CMSMS\Database\Connection
 
     public function BeginTrans()
     {
-        if( $this->_in_transaction ) {
-            $this->OnError( self::ERROR_TRANSACTION, -1, 'Transactions cannot be nested');
-            return FALSE;
-        }
-        $this->_in_transaction = TRUE;
+        if( $this->_in_smart_transaction ) return TRUE; // allow nesting in this case.
+        $this->_in_transaction++;
         $this->_transaction_failed = FALSE;
-        $this->do_multisql('SET AUTOCOMMIT=0; BEGIN');
+        $this->Execute('BEGIN');
         return TRUE;
     }
 
     public function StartTrans()
     {
+        if( $this->_in_smart_transaction ) {
+            $this->_in_smart_transaction++;
+            return;
+        }
+
         if( $this->_in_transaction ) {
-            $this->OnError( self::ERROR_TRANSACTION, -1, 'Transactions cannot be nested');
+            $this->OnError( self::ERROR_TRANSACTION, -1, 'Bad Transaction: StartTrans called within BeginTrans');
             return FALSE;
         }
-        $this->_in_smart_transaction = TRUE;
+        $this->_transaction_status = TRUE;
+        $this->_in_smart_transaction++;
         $this->BeginTrans();
     }
 
@@ -165,13 +168,10 @@ class Connection extends \CMSMS\Database\Connection
         if( !$this->_in_transaction ) {
             $this->OnError( self::ERROR_TRANSACTION, -1, 'BeginTrans has not been called');
             return FALSE;
-        } else if( $this->_in_smart_transaction ) {
-            $this->OnError( self::ERROR_TRANSACTION, -1, 'Smart and simple transactions cannot be mixed.');
-            return FALSE;
         }
 
-        $this->do_multisql('ROLLBACK; SET AUTOCOMMIT=1;');
-        $this->_in_transaction = FALSE;
+        $this->_in_transaction--;
+        $this->Execute('ROLLBACK');
         return TRUE;
     }
 
@@ -182,43 +182,39 @@ class Connection extends \CMSMS\Database\Connection
         if( !$this->_in_transaction ) {
             $this->OnError( self::ERROR_TRANSACTION, -1, 'BeginTrans has not been called');
             return FALSE;
-        } else if( $this->_in_smart_transaction ) {
-            $this->OnError( self::ERROR_TRANSACTION, -1, 'Smart and simple transactions cannot be mixed.');
-            return FALSE;
         }
 
-		$this->do_multisql('COMMIT; SET AUTOCOMMIT=1');
-        $this->_in_transaction = FALSE;
+        $this->_in_transaction--;
+		$this->Execute('COMMIT');
 		return TRUE;
 	}
 
-    public function CompleteTrans()
+    public function CompleteTrans($autoComplete = true)
     {
-        if( !$this->_in_transaction ) {
-            $this->OnError( self::ERROR_TRANSACTION, -1, 'BeginTrans has not been called');
-            return FALSE;
-        } else if( !$this->_in_smart_transaction ) {
-            $this->OnError( self::ERROR_TRANSACTION, -1, 'StartTrans has not been called');
-            return FALSE;
+        if( $this->_in_smart_transaction > 0 ) {
+            $this->_in_smart_transaction--;
+            return TRUE;
         }
 
-        $this->_in_smart_transaction = FALSE;
-        if( $this->HasFailedTrans() ) {
-            return $this->RollbackTrans();
+        if( $this->_transaction_status && $autoComplete ) {
+            if( !$this->CommitTrans() ) {
+                $this->_transaction_status = FALSE;
+            }
+        } else {
+            $this->RollbackTrans();
         }
-        else {
-            return $this->CommitTrans();
-        }
+        $this->_in_smart_transaction = 0;
+        return $this->_transaction_status;
     }
 
     public function FailTrans()
     {
-        if( $this->_in_transaction ) $this->_tranaction_failed = TRUE;
+        $this->_transaction_status = FALSE;
     }
 
     function HasFailedTrans()
     {
-        if( $this->_in_transaction ) return $this->_transaction_failed;
+        if( $this->_in_smart_transaction > 0 ) return $this->_transaction_status == FALSE;
         return FALSE;
     }
 

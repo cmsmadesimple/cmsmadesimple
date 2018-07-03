@@ -50,7 +50,7 @@ namespace CMSMS\Database;
  * @author Robert Campbell
  * @copyright Copyright (c) 2015, Robert Campbell <calguy1000@cmsmadesimple.org>
  * @since 2.2
- * @param string $type The database connection type
+ * @param string $type The database connection type.  Defaults to 'mysqli'.
  * @param string $host The hostname to connect to.
  * @param string $username The authentication username
  * @param string $password The authentication password
@@ -65,7 +65,7 @@ class ConnectionSpec
     /**
      * @ignore
      */
-    private $_data = array('type'=>null,'host'=>null,'username'=>null,'password'=>null,
+    private $_data = array('type'=>'mysqli','host'=>null,'username'=>null,'password'=>null,
                            'dbname'=>null,'prefix'=>null,'port'=>null,'persistent'=>false,'debug'=>false,
                            'auto_exec'=>null);
 

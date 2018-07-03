@@ -42,6 +42,8 @@
 
 namespace CMSMS\Database {
 
+    class Error extends \Exception {}
+
     /**
      * A class for providing some compatibility functionality with older module code
      *
@@ -96,6 +98,7 @@ namespace CMSMS\Database {
             debug_to_log("Database Error: $errtype($error_number) - $error_msg");
             debug_bt_to_log();
             if( !defined('CMS_DEBUG') || CMS_DEBUG == 0 ) return;
+            throw new Error( $error_msg.' -- '.$db->ErrorMsg(), $error_number );
             \CmsApp::get_instance()->add_error(debug_display($error_msg, '', false, true));
         }
 
@@ -148,7 +151,7 @@ namespace {
     }
 
     /**
-     * A function to load the adodb library.
+     * A function forumerly used to load the adodb library.
      * This method currently has no functionality.
      *
      * @deprecated
@@ -160,7 +163,8 @@ namespace {
     }
 
     /**
-     * An old method to ensure that we are re-connected to the proper database
+     * An old method formerly used to ensure that we were re-connected to the proper database.
+     * This method currently has no functionality.
      *
      * @deprecated
      */
