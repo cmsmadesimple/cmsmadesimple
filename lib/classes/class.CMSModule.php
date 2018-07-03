@@ -663,6 +663,7 @@ abstract class CMSModule
      *
      * @see SetParameterType
      * @see CreateParameter
+     * @deprecated
      * @final
      * @param bool $flag Indicaties wether unknown params should be restricted.
      */

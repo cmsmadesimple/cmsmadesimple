@@ -68,15 +68,14 @@ Core - General
   - FEATURE: The database connection class now accepts a single scalar for an argument when only one parameter is required in functions like GetOne()
   - CHANGE:  
     - Remove the startup_mact_processing config entry, and replace it with content_processing_mode config entry that supports 3 values
-      0 - no content processing.
-      1 - do content processing AFTER the template page top
-      2 - do content processing BEFORE any template processing.  (default)
+      0 - no content preprocessing.
+      1 - do content preprocessing AFTER the template page top
+      2 - do content preprocessing BEFORE any template processing.  (default)
       This config entry controls only when in the rendering, the default content block will be processed.
   - FEATURE: Adds the {disable_template} plugin.  Only really useful when content_processing_mode == 2
   - REMOVED: all options for smarty caching.  HTML caching should now be done with external tools like varnish or cloudfare
   - All module actions (except for showtemplate=false or other similar requests) create a new smarty template object
-    and destroy it when the action is complete.   This allowes ProcessTemplateFromDatabase and ProcessTemplate and other related methods to be
-    un-deprecated.
+    and destroy it when the action is complete.   This allowes ProcessTemplateFromDatabase and ProcessTemplate and other related methods to be un-deprecated.
   - CHANGE: Convert admin passwords to use PHP's builtin password_hash and password_verify methods.
     - Still backwards compatible with older style for upgrades and resetting lost passwords.
     - Users upgrading from very old versions may have to reset passwords
@@ -100,7 +99,7 @@ Core - General
   - Add: When using {cms_render_scripts} adds the ability to put inline javascript into <script type="text/cms_javascript">...</script>
     tags that will be deferred loaded.
   - Fix lib/nls files so that UTF-8 locales are searched first.
-  - cms_admin_utils::get_icon() and {admin_icon} can now find plugins without specifying an extension.
+  - cms_admin_utils::get_icon() and {admin_icon} can now find icons without specifying an extension.
   - SECURITY: checksum verification can no longer fish for files outside of the root directory.
   - Improvement to contentoperations::SetDefaultContent()
 
@@ -123,6 +122,7 @@ Installation Assistant - v1.4
   - Now require at least PHP 7.0 and recommend 7.1
   - Upgrade to smarty v3.1.32
   - CURL is now a requirement
+  - no longer change the config file on upgrade.  Though we will for install and freshen.
 
 ModuleManaver v2.2
   - XML import code now lives here.
