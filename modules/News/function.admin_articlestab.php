@@ -34,7 +34,7 @@ if (isset($params['bulk_action']) ) {
             $query = 'UPDATE '.CMS_DB_PREFIX.'module_news SET news_category_id = ?, modified_date = NOW()
                 WHERE news_id IN ('.implode(',',$sel).')';
             $parms = array((int)$params['category']);
-            $db7->Execute($query,$parms);
+            $db->Execute($query,$parms);
             audit('',$this->GetName(),'category changed on '.count($sel).' articles');
             echo $this->ShowMessage($this->Lang('msg_success'));
             break;
