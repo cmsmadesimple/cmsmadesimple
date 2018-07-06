@@ -983,7 +983,7 @@ function cms_move_uploaded_file( $tmpfile, $destination )
 
 
 /**
- * A function to test wether an IP address matches a list of expressions.
+ * A function to test whether an IP address matches a list of expressions.
  * Credits to J.Adams <jna@retins.net>
  *
  * Expressions can be of the form
@@ -1043,7 +1043,7 @@ function cms_ipmatches($ip,$checklist)
 	  if ( ($ipocts[$i] > $regs[2]) || ($ipocts[$i] < $regs[1])) $result = 0;
 	}
 	else {
-	  if ($maskocts[$i] <> $ipocts[$i]) $result = 0;
+	  if ( isset($maskocts[$i]) && isset($ipocts[$i]) && ($maskocts[$i] <> $ipocts[$i]) ) $result = 0;
 	}
       }
     }
