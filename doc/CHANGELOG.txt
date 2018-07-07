@@ -102,6 +102,7 @@ Core - General
   - cms_admin_utils::get_icon() and {admin_icon} can now find icons without specifying an extension.
   - SECURITY: checksum verification can no longer fish for files outside of the root directory.
   - Improvement to contentoperations::SetDefaultContent()
+  - improve input checking to cms_ipmatches.
 
 News v2.21.5 
   - Minor cleaning of parameters.

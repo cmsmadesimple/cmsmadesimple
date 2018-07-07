@@ -940,6 +940,8 @@ function cms_ipmatches(string $ip,array $checklist)
 
   if( !is_array($checklist) ) $checklist = explode(',',$checklist);
   foreach( $checklist as $one ) {
+    $one = trim($one);
+    if( !$one ) continue;
     if( $_testip(trim($one),$ip) ) return TRUE;
   }
   return FALSE;
