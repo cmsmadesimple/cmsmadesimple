@@ -1,6 +1,12 @@
 <?php
 namespace CMSMS\internal;
 
+/**
+ * A simple class to extend the smarty simple tempmlate
+ * to provide some hook functionality.
+ *
+ * This is set as the default template class in smarty.
+ */
 class template_wrapper extends \Smarty_Internal_Template
 {
     public function fetch($template = null, $cache_id = null, $compile_id = null, $parent = null)

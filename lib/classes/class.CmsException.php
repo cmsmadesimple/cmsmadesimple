@@ -240,6 +240,16 @@ class CmsError403Exception extends CmsException {}
 class CmsError503Exception extends CmsException {}
 
 /**
+ * a special exception indicating that content processing should stop, but other than that it is not
+ * there is no error to display.
+ *
+ * @package CMS
+ * @author Robert Campbell (calguy1000@cmsmadesimple.org)
+ * @since 2.3
+ */
+class CmsStopProcessingContentException extends CmsException {}
+
+/**
  * A special exception indicating an error with a content object
  *
  * @package CMS

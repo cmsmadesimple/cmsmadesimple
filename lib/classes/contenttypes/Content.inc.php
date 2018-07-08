@@ -113,8 +113,8 @@ class Content extends ContentBase
     function SetProperties()
     {
       parent::SetProperties();
-      $this->AddProperty('design_id',0,self::TAB_OPTIONS);
-      $this->AddProperty('template',0,self::TAB_OPTIONS);
+	  $this->AddProperty('design_id',0,self::TAB_OPTIONS);
+      $this->AddProperty('template_rsrc',0,self::TAB_OPTIONS);
       $this->AddProperty('searchable',20,self::TAB_OPTIONS);
       $this->AddProperty('disable_wysiwyg',60,self::TAB_OPTIONS);
       $this->AddProperty('pagemetadata',1,self::TAB_LOGIC);
@@ -155,9 +155,11 @@ class Content extends ContentBase
 			$parameters = array('pagedata','searchable','disable_wysiwyg','design_id','wantschildren');
 
 			//pick up the template id before we do parameters
-			if (isset($params['template_id'])) {
-				if ($this->mTemplateId != $params['template_id']) $this->_contentBlocks = null;
-				$this->mTemplateId = (int) $params['template_id'];
+			if (isset($params['template_rsrc'])) {
+                $newvalue = filter_var( $params['template_rsrc'], FILTER_SANITIZE_STRING );
+                $oldvalue = $this->GetPropertyValue('template_rsrc');
+                if( $newvalue != $oldvalue ) $this->_contentBlocks = null;
+                $this->SetPropertyValue('template_rsrc',$newvalue);
 			}
 
 			if( $this->IsDefaultPossible() && isset($params['defaultcontent']) ) {
@@ -235,7 +237,7 @@ class Content extends ContentBase
 		$props = parent::GetEditableProperties();
 
 		// add in content blocks
-        	$blocks = $this->get_content_blocks();
+        $blocks = $this->get_content_blocks();
 		if( is_array($blocks) && count($blocks) ) {
 			$priority = 100;
 			foreach( $blocks as $block ) {
@@ -271,8 +273,8 @@ class Content extends ContentBase
 		$errors = parent::ValidateData();
 		if( $errors === FALSE ) $errors = array();
 
-		if ($this->mTemplateId <= 0 ) {
-			$errors[] = lang('nofieldgiven',array(lang('template')));
+        if( !$this->GetPropertyValue('template_rsrc') ) {
+			$errors[] = lang('nofieldgiven',[ lang('template') ]);
 			$result = false;
 		}
 
@@ -311,6 +313,37 @@ class Content extends ContentBase
 		return (count($errors) > 0?$errors:FALSE);
 	}
 
+    public function TemplateResource()
+    {
+        $config = \cms_config::get_instance();
+        $tmp = $this->GetPropertyValue('template_rsrc');
+        if( !$tmp ) $tmp = $this->mTemplateId;
+        if( $tmp ) {
+            $num = (int) $tmp;
+            if( $num > 0 && trim($num) == $tmp ) {
+                // numeric assume design manager.
+                return "cms_template:$tmp";
+            } else {
+                return $tmp;
+            }
+        }
+    }
+
+    private function get_template_resource()
+    {
+        // used for the parser.
+        $config = \cms_config::get_instance();
+        if( empty($config['page_template_list']) ) {
+            return 'cms_template:'.$this->TemplateId();
+        } else {
+            $raw = $config['page_template_list'];
+            if( is_string($raw) ) return $raw;
+            $val = current($raw);
+            if( strpos($val,':') === FALSE ) $val = 'cmsfile:'.$val;
+            return $val;
+        }
+    }
+
 	/**
 	 * Return content blocks in the current page's templates.
 	 *
@@ -323,20 +356,43 @@ class Content extends ContentBase
     {
 		if( is_array($this->_contentBlocks) ) return $this->_contentBlocks;
 
-        \CMSMS\internal\content_plugins::reset();
-        $this->_contentBlocks = array();
+        $this->_contentBlocks = null;
         try {
-            $smarty = Smarty_CMS::get_instance();
-            $parser = new \CMSMS\internal\page_template_parser('cms_template:'.$this->TemplateId(),$smarty);
-            $parser->compileTemplateSource();
-
-            $this->_contentBlocks = \CMSMS\internal\content_plugins::get_content_blocks();
+            $parser = \CMSMS\internal\page_template_parser::create( $this->TemplateResource() );
+            $this->_contentBlocks = $parser->get_content_blocks();
+            unset($parser);
         }
         catch( SmartyException $e ) {
             // smarty exceptions here could be a bad template, or missing template, or something else.
             throw new CmsContentException(lang('error_parsing_content_blocks').': '.$e->GetMessage());
         }
         return $this->_contentBlocks;
+    }
+
+    protected function get_template_list()
+    {
+        static $_list;
+        if( is_array($_list) && count($_list) ) return $_list;
+
+        $_list = null;
+		$config = \cms_config::get_instance();
+        if( empty($config['page_template_list']) ) {
+            $_tpl = CmsLayoutTemplate::template_query( ['as_list'=>1] );
+            if( is_array($_tpl) && count($_tpl) > 0 ) {
+                foreach( $_tpl as $tpl_id => $tpl_name ) {
+                    $_list[] = [ 'value'=>$tpl_id,'label'=>$tpl_name ];
+                }
+            }
+        }
+        else {
+            $raw = $config['page_template_list'];
+            if( is_string($raw) ) $raw = [ lang('default')=>$raw ];
+
+            foreach( $raw as $label => $rsrc ) {
+                $_list[] = [ 'label'=>$label, 'value'=>$rsrc ];
+            }
+        }
+        return $_list;
     }
 
 	/**
@@ -349,26 +405,13 @@ class Content extends ContentBase
 	 */
     protected function display_single_element(string $one,bool $adding)
     {
-		static $_designs;
-		static $_types;
-		static $_designtree;
-		static $_designlist;
-		static $_templates;
-		if( $_designlist == null ) {
-			$_tpl = CmsLayoutTemplate::template_query(array('as_list'=>1));
-			if( is_array($_tpl) && count($_tpl) > 0 ) {
-				$_templates = array();
-				foreach( $_tpl as $tpl_id => $tpl_name ) {
-					$_templates[] = array('value'=>$tpl_id,'label'=>$tpl_name);
-				}
-			}
-			$_designlist = CmsLayoutCollection::get_list();
-		}
+        $config = \cms_config::get_instance();
 
 		switch($one) {
-		case 'design_id':
-			// get the dflt/current design id.
-			try {
+        case 'design_id':
+            if( $config['page_template_list'] ) break;
+            try {
+                $_designlist = CmsLayoutCollection::get_list();
 				$design_id = $this->GetPropertyValue('design_id');
                 if( $design_id < 1 ) {
                     try {
@@ -376,7 +419,7 @@ class Content extends ContentBase
                         $design_id = $dflt_design->get_id();
                     }
                     catch( \Exception $e ) {
-                        cms_error('No default design specified');
+                        audit('','CMSContentManager','No default design found');
                     }
                 }
 				$out = '';
@@ -386,27 +429,21 @@ class Content extends ContentBase
 					$help = '&nbsp;'.cms_admin_utils::get_help_tag('core','info_editcontent_design',lang('help_title_editcontent_design'));
 					return array('<label for="design_id">*'.lang('design').':</label>'.$help,$out);
 				}
-			}
+            }
 			catch( CmsException $e ) {
 				// nothing here yet.
 			}
 			break;
 
-		case 'template':
+		case 'template_rsrc':
 			try {
-				$template_id = $this->TemplateId();
-				if( $template_id < 1 ) {
-                    try {
-                        $dflt_tpl = CmsLayoutTemplate::load_dflt_by_type(CmsLayoutTemplateType::CORE.'::page');
-                        $template_id = $dflt_tpl->get_id();
-                    }
-                    catch( \Exception $e ) {
-                        cms_error('No default page template found');
-                    }
-                }
-				$out = CmsFormUtils::create_dropdown('template_id',$_templates,$template_id,array('id'=>'template_id'));
-				$help = '&nbsp;'.cms_admin_utils::get_help_tag('core','info_editcontent_template',lang('help_title_editcontent_template'));
-				return array('<label for="template_id">*'.lang('template').':</label>'.$help,$out);
+                $current = $this->GetPropertyValue('template_rsrc');
+                if( !$current ) $current = $this->TemplateId();
+                $options = $this->get_template_list();
+
+                $out = \CmsFormUtils::create_dropdown('template_rsrc', $options, $current, ['id'=>'template_rsrc'] );
+				$help = '&nbsp;'.cms_admin_utils::get_help_tag('core','info_editcontent_template2',lang('help_title_editcontent_template2'));
+				return array('<label for="template_rsrc">*'.lang('template').':</label>'.$help,$out);
 			}
 			catch( CmsException $e ) {
 				// nothing here yet.
@@ -443,18 +480,18 @@ class Content extends ContentBase
 			        $attrtext = '';
 				$label = '<label for="id_dfltcontent">'.lang('prompt_defaultcontent').':</label>'.$help;
 				if( $default ) {
-					return [ $label, 
+					return [ $label,
 						 '<input id="id_dfltcontent" type="checkbox" disabled value="1" checked/>'
 					       ];
 				}
 				else {
-					return [ $label, 
+					return [ $label,
 						 '<input type="hidden" name="defaultcontent" value="0"/>
 						  <input id="id_dfltcontent" type="checkbox" name="defaultcontent" value="1"/>'
-					       ];					
-				}	
+					       ];
+				}
 			}
-			
+
 		case 'disable_wysiwyg':
 			$disable_wysiwyg = $this->GetPropertyValue('disable_wysiwyg');
 			if( $disable_wysiwyg == '' ) $disable_wysiwyg = 0;

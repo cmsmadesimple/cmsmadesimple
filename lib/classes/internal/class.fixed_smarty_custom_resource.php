@@ -36,8 +36,11 @@ namespace CMSMS\internal;
  */
 abstract class fixed_smarty_custom_resource extends \Smarty_Resource_Custom
 {
+    protected $smarty;
+
     public function populate(\Smarty_Template_Source $source, \Smarty_Internal_Template $_template = null)
     {
+        $this->smarty = $source->smarty;  // hackish.
         $source->filepath = $source->type . ':' . $source->name;
         $source->uid = sha1($source->type . ':' . $source->name);
 

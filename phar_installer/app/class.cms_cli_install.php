@@ -38,6 +38,9 @@ class cms_cli_install extends cms_install_base
         $_loaded = true;
 
         $this->_config['dest'] = realpath( getcwd() );
+	if( !$this->in_phar() ) {
+           $this->_config['dest'] = dirname( $this->_config['dest'] );
+	}
 
         // parse the arguments
         $opts = getopt('nhf:o:',[ 'nofiles', 'tmpdir:','op:','dest:','help']);

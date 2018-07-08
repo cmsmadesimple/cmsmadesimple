@@ -22,7 +22,7 @@ function smarty_function_cms_stylesheet($params, &$smarty)
 	# Initials
 	#---------------------------------------------
 
-    $gCms = CmsApp::get_instance();
+        $gCms = CmsApp::get_instance();
 	$config = $gCms->GetConfig();
 
 	global $CMS_LOGIN_PAGE;

@@ -1381,6 +1381,7 @@ abstract class CMSModule
                     $config = $gCms->GetConfig();
                     $smarty = $this->_action_tpl; // smarty in scope.
                     $out = include($filename);
+                    if( $out === 1 ) $out = null;
                     return $out;
                 }
             }

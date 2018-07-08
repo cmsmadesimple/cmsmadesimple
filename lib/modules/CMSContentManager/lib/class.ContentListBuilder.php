@@ -792,23 +792,26 @@ final class ContentListBuilder
    */
   private function _get_display_data($page_list)
   {
+      $config = \cms_config::get_instance();
       $users = $this->_get_users();
       $contentops = \ContentOperations::get_instance();
       $mod = $this->_module;
       $columns = $this->get_display_columns();
       $userid = $this->_userid;
 
-      // preload the templates.
-      $tpl_list = array();
-      foreach( $page_list as $page_id ) {
-          $node = $contentops->quickfind_node_by_id($page_id);
-          if( !$node ) continue;
-          $content = $node->GetContent(FALSE,FALSE,TRUE);
-          if( !$content ) continue;
-          $tpl_list[] = $content->TemplateId();
+      if( !$config['page_template_llist'] ) {
+          // preload the templates.
+          $tpl_list = array();
+          foreach( $page_list as $page_id ) {
+              $node = $contentops->quickfind_node_by_id($page_id);
+              if( !$node ) continue;
+              $content = $node->GetContent(FALSE,FALSE,TRUE);
+              if( !$content ) continue;
+              $tpl_list[] = $content->TemplateId();
+          }
+          $tpl_list = array_values(array_unique(array_values($tpl_list)));
+          $tpls = \CmsLayoutTemplate::load_bulk($tpl_list);
       }
-      $tpl_list = array_values(array_unique(array_values($tpl_list)));
-      $tpls = \CmsLayoutTemplate::load_bulk($tpl_list);
 
       $out = array();
       foreach( $page_list as $page_id ) {
@@ -882,8 +885,14 @@ final class ContentListBuilder
               case 'template':
                   if( $content->IsViewable() ) {
                       try {
-                          $template = \CmsLayoutTemplate::load($content->TemplateId());
-                          $rec[$column] = $template->get_name();
+                          $rsrc = $content->TemplateResource();
+                          $rec[$column] = $rsrc;
+                          if( !$config['page_template_list'] && startswith($rsrc, 'cms_template') ) {
+                              $template = \CmsLayoutTemplate::load($content->TemplateId());
+                              $rec[$column] = $template->get_name();
+                          } else {
+                              $rec['can_edit_tpl'] = false;
+                          }
                       }
                       catch( Exception $e ) {
                           // can't edit this content object, cuz we can't get the template associated with it.

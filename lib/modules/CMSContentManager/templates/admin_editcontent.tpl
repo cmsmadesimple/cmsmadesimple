@@ -69,7 +69,7 @@ $(document).ready(function(){
 {/if}
 
     // submit the form if disable wysiwyg, template id, and/or content-type fields are changed.
-    $('#id_disablewysiwyg, #template_id, #content_type').on('change', function () {
+    $('#id_disablewysiwyg, #template_rsrc, #content_type').on('change', function () {
         // disable the dirty form stuff, and unlock because we're gonna relockit on reload.
         var self = this;
 	var this_id = $(this).attr('id');
@@ -161,7 +161,7 @@ $(document).ready(function(){
       var data = { '{$actionid}design_id': v };
       $.get('{$designchanged_ajax_url}',data,function(data,text) {
         if( typeof data == 'object' ) {
-	  var sel = $('#template_id').val();
+	  var sel = $('#template_rsrc').val();
 	  var fnd = false;
 	  var first = null;
 	  for( key in data ) {
@@ -173,19 +173,19 @@ $(document).ready(function(){
 	    cms_alert('{$mod->Lang('warn_notemplates_for_design')}');
 	  }
 	  else {
-  	    $('#template_id').val('');
-            $('#template_id').empty();
+  	    $('#template_rsrc').val('');
+            $('#template_rsrc').empty();
             for( key in data ) {
-	      $('#template_id').append('<option value="'+key+'">'+data[key]+'</option>');
+	      $('#template_rsrc').append('<option value="'+key+'">'+data[key]+'</option>');
 	    }
 	    if( fnd ) {
-  	      $('#template_id').val(sel);
+  	      $('#template_rsrc').val(sel);
 	    }
 	    else if( first ) {
-  	      $('#template_id').val(first);
+  	      $('#template_rsrc').val(first);
 	    }
 	    if( typeof edata == 'undefined' || typeof edata.skip_fallthru == 'undefined' ) {
-  	      $('#template_id').trigger('change');
+  	      $('#template_rsrc').trigger('change');
 	    }
           }
 	}
@@ -194,7 +194,7 @@ $(document).ready(function(){
 
     $('#design_id').trigger('change', [{ skip_fallthru: 1 }]);
     $('#design_id').data('lastValue',$('#design_id').val());
-    $('#template_id').data('lastValue',$('#template_id').val());
+    $('#template_rsrc').data('lastValue',$('#template_rsrc').val());
     $('#Edit_Content').dirtyForm('option','dirty',false);
     {/if}
 });

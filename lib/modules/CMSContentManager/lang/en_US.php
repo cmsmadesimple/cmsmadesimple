@@ -16,6 +16,7 @@ $lang['bulk_insecure'] = 'Set Insecure (HTTP)';
 $lang['bulk_noncachable'] = 'Set Not Cachable';
 $lang['bulk_secure'] = 'Set Secure (HTTPS)';
 $lang['bulk_setdesign'] = 'Set Design &amp; Template';
+$lang['bulk_settemplatersrc'] = 'Set template resource';
 $lang['bulk_showinmenu'] = 'Show In Menu';
 
 #C
@@ -77,6 +78,7 @@ $lang['desc_contentmanager_settings'] = 'Adjust settings related to listing, or 
 #E
 $lang['editcontent_confirm_cancel'] = 'Are you sure you want to cancel this operation?  Any changes will be lost!';
 $lang['error_action_contentlocked'] = 'This operation cannot be performed while there is locked content';
+$lang['error_action_invalid'] = 'The action specified is invalid for the current site configuration';
 $lang['error_bulk_permission'] = 'You do not have permission to perform this bulk action';
 $lang['error_contentlocked'] = 'It appears that this content is already locked. Try to refresh this page to see up-to-date information';
 $lang['error_contenttype_disallowed'] = 'Default Content Type is also set to Disallowed';
@@ -179,6 +181,7 @@ $lang['prompt_bulk_changeowner'] = 'Change Page Ownership';
 $lang['prompt_bulk_delete_content'] = 'Bulk Delete Content Pages';
 $lang['prompt_bulk_delete_content2'] = 'These pages are due to be deleted';
 $lang['prompt_bulk_setdesign'] = 'Bulk Change Template and Design';
+$lang['prompt_bulk_settemplatersrc'] = 'Set page template resource';
 $lang['prompt_cachable'] = 'Cachable';
 $lang['prompt_clearlocks'] = 'Remove content locks';
 $lang['prompt_collapseall'] = 'Collapse all pages';

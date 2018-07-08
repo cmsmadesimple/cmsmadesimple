@@ -34,8 +34,9 @@
 #-------------------------------------------------------------------------
 #END_LICENSE
 if( !isset($gCms) ) exit;
+
 $this->SetCurrentTab('pages');
-if( $config['page_template_list'] ) {
+if( !$config['page_template_list'] ) {
     $this->SetError($this->Lang('error_action_invalid'));
     $this->RedirectToAdminTab();
 }
@@ -55,17 +56,12 @@ if( isset($params['cancel']) ) {
 $hm = $gCms->GetHierarchyManager();
 $pagelist = unserialize(base64_decode($params['multicontent']));
 
-$showmore = 0;
-if( isset($params['showmore']) ) {
-    $showmore = (int) $params['showmore'];
-    \cms_userprefs::set('cgcm_bulk_showmore',$showmore);
-}
 if( isset($params['submit']) ) {
     if( !isset($params['confirm1']) || !isset($params['confirm2']) ) {
         $this->SetError($this->Lang('error_notconfirmed'));
         $this->RedirectToAdminTab();
     }
-    if( !isset($params['design']) || !isset($params['template']) ) {
+    if( !isset($params['templatersrc']) ) {
         $this->SetError($this->Lang('error_missingparam'));
         $this->RedirectToAdminTab();
     }
@@ -74,6 +70,8 @@ if( isset($params['submit']) ) {
     try {
         @set_time_limit(9999);
         ContentOperations::get_instance()->LoadChildren(-1,FALSE,FALSE,$pagelist);
+        $rsrc = filter_var( $params['templatersrc'], FILTER_SANITIZE_STRING );
+        if( !$rsrc ) throw new \Exception( $this->Lang('error_missingparam') );
 
         $i = 0;
         foreach( $pagelist as $pid ) {
@@ -82,8 +80,7 @@ if( isset($params['submit']) ) {
             $content = $node->getContent(FALSE,FALSE,TRUE);
             if( !is_object($content) ) continue;
 
-            $content->SetTemplateId((int)$params['template']);
-            $content->SetPropertyValue('design_id',$params['design']);
+            $content->SetPropertyValue('template_rsrc',$rsrc);
             $content->SetLastModifiedBy(get_userid());
             $content->Save();
             $i++;
@@ -91,7 +88,7 @@ if( isset($params['submit']) ) {
         if( $i != count($pagelist) ) {
             throw new CmsException('Bulk operation to set design did not adjust all selected pages');
         }
-        audit('','Content','Changed template and design on '.count($pagelist).' pages');
+        audit('','Content','Changed template resource on '.$i.' pages');
         $this->SetMessage($this->Lang('msg_bulk_successful'));
         $this->RedirectToAdminTab();
     }
@@ -118,34 +115,11 @@ foreach( $pagelist as $pid ) {
     $displaydata[] = $rec;
 }
 
-$smarty->assign('showmore',\cms_userprefs::get('cgcm_bulk_showmore'));
 $smarty->assign('multicontent',$params['multicontent']);
 $smarty->assign('displaydata',$displaydata);
-$smarty->assign('alldesigns',CmsLayoutCollection::get_list());
-$dflt_design = CmsLayoutCollection::load_default();
-$smarty->assign('dflt_design_id',$dflt_design->get_id());
+$smarty->assign('template_list',array_flip($config['page_template_list']));
 
-$dflt_tpl_id = -1;
-try {
-    $dflt_tpl = CmsLayoutTemplate::load_dflt_by_type(CmsLayoutTemplateType::CORE.'::page');
-    $dflt_tpl_id = $dflt_tpl->get_id();
-}
-catch( \Exception $e ) {
-    // ignore
-}
-$smarty->assign('dflt_tpl_id',$dflt_tpl_id);
-if( $showmore ) {
-    $_tpl = CmsLayoutTemplate::template_query(array('as_list'=>1));
-    $smarty->assign('alltemplates',$_tpl);
-}
-else {
-    // gotta get the core page template type
-    $_type = CmsLayoutTemplateType::load(CmsLayoutTemplateType::CORE.'::page');
-    $_tpl = CmsLayoutTemplate::template_query(array('t:'.$_type->get_id(),'as_list'=>1));
-    $smarty->assign('alltemplates',$_tpl);
-}
-
-echo $this->ProcessTemplate('admin_bulk_setdesign.tpl');
+echo $this->ProcessTemplate('admin_bulk_settemplatersrc.tpl');
 
 #
 # EOF

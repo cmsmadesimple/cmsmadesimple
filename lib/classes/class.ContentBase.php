@@ -574,12 +574,25 @@ abstract class ContentBase
 	/**
 	 * Return the id of the template associated with this content page.
 	 *
+     * @deprecated
 	 * @return int.
 	 */
 	public function TemplateId()
 	{
 		return $this->mTemplateId;
 	}
+
+    /**
+     * Return a smarty resource string for the template assigned to this page.
+     *
+     * @since 2.3
+     * @abstract
+     * @return string
+     */
+    public function TemplateResource()
+    {
+        die('this method must be overridden for displayable content pages');
+    }
 
 	/**
 	 * Set the id of the template associated with this content page.

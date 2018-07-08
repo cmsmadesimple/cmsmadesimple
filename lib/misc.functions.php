@@ -928,14 +928,14 @@ function cms_ipmatches(string $ip,array $checklist)
       // perform a range match
       for ($i=0; $i<4; $i++) {
 	if (preg_match("/\[([0-9]+)\-([0-9]+)\]/",$maskocts[$i],$regs)) {
-	  if ( ($ipocts[$i] > $regs[2]) || ($ipocts[$i] < $regs[1])) $result = 0;
+	  if ( ($ipocts[$i] > $regs[2]) || ($ipocts[$i] < $regs[1])) return 0;
 	}
 	else {
-	  if ($maskocts[$i] <> $ipocts[$i]) $result = 0;
+	  if ($maskocts[$i] != $ipocts[$i]) return 0;
 	}
       }
     }
-    return $result;
+    return 1;
   }; // _testip
 
   if( !is_array($checklist) ) $checklist = explode(',',$checklist);

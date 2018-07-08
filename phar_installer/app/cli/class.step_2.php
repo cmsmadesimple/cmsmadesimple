@@ -93,10 +93,10 @@ class step_2 extends cli_task
                 $this->app()->merge_options( $info['config'] );
                 break;
             case 'freshen':
-                die('incomplete at '.__FILE__.'::'.__LINE__);
+                die('incomplete at '.__FILE__.'::'.__LINE__."\n");
             }
         } else {
-            die('incomplete at '.__FILE__.'::'.__LINE__);
+            die('incomplete at '.__FILE__.'::'.__LINE__."\n");
         }
     }
 } // class

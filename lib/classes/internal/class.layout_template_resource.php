@@ -28,6 +28,9 @@ use \CmsLayoutTemplateType;
 /**
  * A simple class for handling layout templates as a resource.
  *
+ * handles numeric and string template naems.
+ * handles a suffix of ;top ;head or ;body.
+ *
  * @package CMS
  * @author Robert Campbell
  * @internal
@@ -37,24 +40,12 @@ use \CmsLayoutTemplateType;
  */
 class layout_template_resource extends fixed_smarty_custom_resource
 {
-	private $_section;
-
-	public function __construct($section = '')
-	{
-		if( in_array($section,array('top','head','body')) ) $this->_section = $section;
-	}
-
-	public function buildUniqueResourceName(\Smarty $smarty,$resource_name, $is_config = false)
-	{
-		return parent::buildUniqueResourceName($smarty,$resource_name,$is_config).'--'.$this->_section;
-	}
-
 	private function &get_template($name)
 	{
-		$obj = \CmsLayoutTemplate::load($name);
-		$ret = new \StdClass;
-		$ret->modified = $obj->get_modified();
-		$ret->content = $obj->get_content();
+        $obj = \CmsLayoutTemplate::load($name);
+        $ret = new \StdClass;
+        $ret->modified = $obj->get_modified();
+        $ret->content = $obj->get_content();
 		return $ret;
 	}
 
@@ -72,7 +63,10 @@ class layout_template_resource extends fixed_smarty_custom_resource
 			return;
 		}
 
-		$source = '';
+        $parts = explode(';',$name,2);
+        $name = $parts[0];
+        $section = (isset($parts[1]) && $parts[1]) ? trim($parts[1]) : null;
+		$source = null;
 		$mtime = null;
 
 		try {
@@ -84,7 +78,7 @@ class layout_template_resource extends fixed_smarty_custom_resource
 			return;
 		}
 
-		switch( $this->_section ) {
+		switch( $section ) {
 		case 'top':
 			$mtime = $tpl->modified;
 			$pos1 = stripos($tpl->content,'<head');

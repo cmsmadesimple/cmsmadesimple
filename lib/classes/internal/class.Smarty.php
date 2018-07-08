@@ -57,25 +57,27 @@ class Smarty extends smarty_base_template
         $this->template_class = '\\CMSMS\internal\template_wrapper';
 
         // common resources.
+        //$this->registerResource('cmsfile',new \CMSMS\internal\smarty_resource_cmsfile());
+        $this->registerResource('cmsfile',new \CMSMS\internal\smarty_resource_cmsfile());
         $this->registerResource('module_db_tpl',new \CMSMS\internal\module_db_template_resource());
         $this->registerResource('module_file_tpl',new \CMSMS\internal\module_file_template_resource());
         $this->registerResource('cms_template',new \CMSMS\internal\layout_template_resource());
-        //$this->registerResource('template',new CmsTemplateResource()); // <- Should proably be global and removed from parser? // deprecated
         $this->registerResource('cms_stylesheet',new \CMSMS\internal\layout_stylesheet_resource());
+        //$this->default_resource_type = 'cmsfile';
 
         // register default plugin handler
         $this->registerDefaultPluginHandler( [ $this, 'defaultPluginHandler' ] );
 
-        $this->addConfigDir(CMS_ASSETS_PATH.'/configs');
         $this->addPluginsDir(CMS_ASSETS_PATH.'/plugins');
-        $this->addPluginsDir(CMS_ROOT_PATH.'/plugins'); // deprecated
         $this->addPluginsDir(CMS_ROOT_PATH.'/lib/plugins');
+        $this->addPluginsDir(CMS_ROOT_PATH.'/plugins'); // deprecated
+        $this->addConfigDir(CMS_ASSETS_PATH.'/configs');
+        $this->addTemplateDir(CMS_ASSETS_PATH.'/templates');
+        $this->addTemplateDir(CMS_ROOT_PATH.'/lib/assets/templates');
 
         $_gCms = \CmsApp::get_instance();
         $config = \cms_config::get_instance();
         if( $_gCms->is_frontend_request()) {
-            $this->addTemplateDir(CMS_ASSETS_PATH.'/templates');
-            $this->addTemplateDir(CMS_ROOT_PATH.'/lib/assets/templates');
 
             // Check if we are at install page, don't register anything if so, cause nothing below is needed.
             if(isset($CMS_INSTALL_PAGE)) return;
@@ -86,9 +88,6 @@ class Smarty extends smarty_base_template
             }
 
             // Load resources
-            $this->registerResource('tpl_top',new \CMSMS\internal\layout_template_resource('top'));
-            $this->registerResource('tpl_head',new \CMSMS\internal\layout_template_resource('head'));
-            $this->registerResource('tpl_body',new \CMSMS\internal\layout_template_resource('body'));
             $this->registerResource('content',new \CMSMS\internal\content_template_resource());
 
             // just for frontend actions.
@@ -109,7 +108,6 @@ class Smarty extends smarty_base_template
             $admin_dir = $config['admin_path'];
             $this->addPluginsDir($admin_dir.'/plugins');
             $this->addTemplateDir($admin_dir.'/templates');
-            $this->addTemplateDir(CMS_ROOT_PATH.'/lib/assets/templates');
             $this->setConfigDir($admin_dir.'/configs');;
         }
     }
@@ -188,7 +186,7 @@ class Smarty extends smarty_base_template
         // plugins with the smarty_cms_function
         $cachable = TRUE;
         $dirs = [];
-        $dirs[] = cms_join_path(CMS_ROOT_PATH,'assets','plugins',$type.'.'.$name.'.php');
+        $dirs[] = cms_join_path(CMS_ASSETS_PATH,'plugins',$type.'.'.$name.'.php');
         $dirs[] = cms_join_path(CMS_ROOT_PATH,'plugins',$type.'.'.$name.'.php');
         $dirs[] = cms_join_path(CMS_ROOT_PATH,'lib','plugins',$type.'.'.$name.'.php');
         foreach( $dirs as $fn ) {
@@ -245,7 +243,7 @@ class Smarty extends smarty_base_template
 
     public function createTemplate($template, $cache_id = null, $compile_id = null, $parent = null, $do_clone = true)
     {
-        if( !startswith($template,'eval:') && !startswith($template,'string:') ) {
+        if( !startswith($template,'eval:') && !startswith($template,'string:') && !startswith($template,'cmsfile:') ) {
             if( ($pos = strpos($template,'*')) > 0 ) throw new \LogicException("$template is an invalid CMSMS resource specification");
             if( ($pos = strpos($template,'/')) > 0 ) throw new \LogicException("$template is an invalid CMSMS resource specification");
         }
@@ -314,7 +312,7 @@ class Smarty extends smarty_base_template
         // if type is "internal", get plugin from sysplugins
         if (strtolower($_name_parts[1]) == 'internal') {
             $file = SMARTY_SYSPLUGINS_DIR . strtolower($plugin_name) . '.php';
-            if (file_exists($file)) {
+            if (is_file($file)) {
                 require_once($file);
                 return $file;
             } else {

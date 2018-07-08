@@ -115,6 +115,7 @@ switch( $bulkaction ) {
    $this->Redirect($id,'admin_bulk_showinmenu',$returnid,$parms);
    break;
 
+ case 'settemplatersrc':
  case 'setdesign':
  case 'changeowner':
  case 'delete':

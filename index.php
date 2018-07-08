@@ -59,6 +59,40 @@ $showtemplate = true;
 \CMSMS\internal\content_cache::get_instance();
 $_tpl_cache = new \CMSMS\internal\TemplateCache();
 
+$get_content_in_parts = function( $smarty, $top_rsrc, $body_rsrc, $head_rsrc ) {
+    $config = \cms_config::get_instance();
+
+    debug_buffer('process template top');
+    \CMSMS\HookManager::do_hook('Core::PageTopPreRender', [ 'content'=>&$contentobj, 'html'=>&$top ]);
+    $tpl = $smarty->createTemplate($top_rsrc);
+    $top .= $tpl->fetch();
+    unset($tpl);
+    \CMSMS\HookManager::do_hook('Core::PageTopPostRender', [ 'content'=>&$contentobj, 'html'=>&$top ]);
+
+    if( $config['content_processing_mode'] == 1 ) {
+        debug_buffer('preprocess module action');
+        \CMSMS\internal\content_plugins::get_default_content_block_content( $contentobj->Id() );
+    }
+
+    debug_buffer('process template body');
+    \CMSMS\HookManager::do_hook('Core::PageBodyPreRender', [ 'content'=>&$contentobj, 'html'=>&$body ]);
+    $tpl = $smarty->createTemplate($body_rsrc);
+    $body .= $tpl->fetch();
+    unset($tpl);
+    \CMSMS\HookManager::do_hook('Core::PageBodyPostRender', [ 'content'=>&$contentobj, 'html'=>&$body ]);
+
+    debug_buffer('process template head');
+    \CMSMS\HookManager::do_hook('Core::PageHeadPreRender', [ 'content'=>&$contentobj, 'html'=>&$head ]);
+    //$tpl = $smarty->createTemplate('tpl_head:'.$tpl_id);
+    $tpl = $smarty->createTemplate($head_rsrc);
+    $head .= $tpl->fetch();
+    unset($tpl);
+    \CMSMS\HookManager::do_hook('Core::PageHeadPostRender', [ 'content'=>&$contentobj, 'html'=>&$head ]);
+
+    $html = $top.$head.$body;
+    return $html;
+};
+
 while( $trycount < 2 ) {
     $trycount++;
     try {
@@ -67,8 +101,8 @@ while( $trycount < 2 ) {
 
         // preview
         if( $page == -100) {
-            if( !isset($_SESSION['__cms_preview__']) ) throw new CmsException('preview selected, but temp data not found');
             setup_session(false);
+            if( !isset($_SESSION['__cms_preview__']) ) throw new CmsException('preview selected, but temp data not found');
 
             // todo: get the content type, and load it.
             $contentops->LoadContentType($_SESSION['__cms_preview_type__']);
@@ -131,38 +165,40 @@ while( $trycount < 2 ) {
             $trycount = 99;
         }
         else {
-            $tpl_id = $contentobj->TemplateId();
-            $top = $body = $head = null;
+            $main_rsrc = $contentobj->TemplateResource();
+            if( startswith( $main_rsrc, 'cmsfile:' ) ) {
+                //$top_rsrc = str_replace('cmsfile:','_top:',$main_rsrc);
+                //$body_rsrc = str_replace('cmsfile:','_body:',$main_rsrc);
+                //$head_rsrc = str_replace('cmsfile:','_head:',$main_rsrc);
+                $top_rsrc = $main_rsrc.';top';
+                $body_rsrc = $main_rsrc.';body';
+                $head_rsrc = $main_rsrc.';head';
 
-            debug_buffer('process template top');
-            \CMSMS\HookManager::do_hook('Core::PageTopPreRender', [ 'content'=>&$contentobj, 'html'=>&$top ]);
-            $tpl = $smarty->createTemplate('tpl_top:'.$tpl_id);
-            $top .= $tpl->fetch();
-            unset($tpl);
-            \CMSMS\HookManager::do_hook('Core::PageTopPostRender', [ 'content'=>&$contentobj, 'html'=>&$top ]);
+                $html = $get_content_in_parts( $smarty, $top_rsrc, $body_rsrc, $head_rsrc );
+            }
+            else if( startswith( $main_rsrc, 'cms_template') ) {
+                $top_rsrc = $main_rsrc.';top';
+                $body_rsrc = $main_rsrc.';body';
+                $head_rsrc = $main_rsrc.';head';
 
-            if( $config['content_processing_mode'] == 1 ) {
-                debug_buffer('preprocess module action');
-                \CMSMS\internal\content_plugins::get_default_content_block_content( $contentobj->Id() );
+                $html = $get_content_in_parts( $smarty, $top_rsrc, $body_rsrc, $head_rsrc );
+            }
+            else {
+                // not a cmsfile or cms_template resource, we process it as one chunk.
+                $tpl = $smarty->createTemplate($main_rsrc);
+                $html = $tpl->fetch();
+                unset($tpl);
             }
 
-            debug_buffer('process template body');
-            \CMSMS\HookManager::do_hook('Core::PageBodyPreRender', [ 'content'=>&$contentobj, 'html'=>&$body ]);
-            $tpl = $smarty->createTemplate('tpl_body:'.$tpl_id);
-            $body .= $tpl->fetch();
-            unset($tpl);
-            \CMSMS\HookManager::do_hook('Core::PageBodyPostRender', [ 'content'=>&$contentobj, 'html'=>&$body ]);
-
-            debug_buffer('process template head');
-            \CMSMS\HookManager::do_hook('Core::PageHeadPreRender', [ 'content'=>&$contentobj, 'html'=>&$head ]);
-            $tpl = $smarty->createTemplate('tpl_head:'.$tpl_id);
-            $head .= $tpl->fetch();
-            unset($tpl);
-            \CMSMS\HookManager::do_hook('Core::PageHeadPostRender', [ 'content'=>&$contentobj, 'html'=>&$head ]);
-
-            $html = $top.$head.$body;
             $trycount = 99; // no more iterations
         }
+    }
+
+    catch (CmsStopProcessingContentException $e ) {
+        // we do not display an error message.
+        // this can be useful for caching siutations or in certain situations
+        // where we only want to gather limited output
+        break;
     }
 
     catch (CmsError404Exception $e) {

@@ -62,136 +62,13 @@ final class content_plugins
         self::$_contentBlocks = null;
     }
 
-    public static function smarty_compiler_contentblock($params,$smarty)
-    {
-        // todo: should be in page_template_parser
-        // {content} tag encountered.
-        $rec = array('type'=>'text','id'=>'','name'=>'','noedit'=>false, 'usewysiwyg'=>'true','oneline'=>'false','default'=>'','label'=>'',
-                     'size'=>'50','tab'=>'','maxlength'=>'255','required'=>0,'placeholder'=>'','priority'=>'','cssname'=>'','adminonly'=>0);
-        foreach( $params as $key => $value ) {
-            $value = trim($value,'"\'');
-            if( $key == 'type' ) continue;
-            if( $key == 'block' ) $key = 'name';
-            if( $key == 'wysiwyg' ) $key = 'usewysiwyg';
-            if( startswith( $key, 'data-') ) {
-                $rec[$key] = $value;
-                continue;
-            }
-            if( isset($rec[$key]) ) $rec[$key] = $value;
-        }
-
-        if( !$rec['name'] ) $rec['name'] = $rec['id'] = 'content_en';
-        if( strpos($rec['name'],' ') !== FALSE ) {
-            if( !$rec['label'] ) $rec['label'] = $rec['name'];
-            $rec['name'] = str_replace(' ','_',$rec['name']);
-        }
-        if( !$rec['id'] ) $rec['id'] = str_replace(' ','_',$rec['name']);
-
-        /*
-        // check for duplicate
-        if( isset(self::$_contentBlocks[$rec['name']]) ) throw new CmsEditContentException('Duplicate content block: '.$rec['name']);
-        */
-
-        // set priority
-        if( empty($rec['priority']) || !$rec['priority'] ) {
-            if( !self::$_priority ) self::$_priority = 100;
-            $rec['priority'] = self::$_priority++;
-        }
-
-        if( !is_array(self::$_contentBlocks) ) self::$_contentBlocks = array();
-        self::$_contentBlocks[$rec['name']] = $rec;
-    }
-
-    public static function smarty_compiler_imageblock($params,$smarty)
-    {
-        // todo: should be in page_template_parser
-        // {content_image} tag encountered.
-        if( !isset($params['block']) || empty($params['block']) ) throw new CmsEditContentException('{content_image} tag requires block parameter');
-
-        $rec = [ 'type'=>'image','name'=>'','label'=>'','upload'=>true,'dir'=>'','default'=>'','tab'=>'',
-                 'priority'=>'','exclude'=>'','sort'=>0, 'profile'=>'' ];
-        foreach( $params as $key => $value ) {
-            if( $key == 'type' ) continue;
-            if( $key == 'block' ) $key = 'name';
-            if( isset($rec[$key]) ) $rec[$key] = trim($value,"'\"");
-        }
-
-        if( !$rec['name'] ) {
-            $n = count(self::$_contentBlocks)+1;
-            $rec['name'] = 'image_'.$n;
-        }
-        if( strpos($rec['name'],' ') !== FALSE ) {
-            if( !$rec['label'] ) $rec['label'] = $rec['name'];
-            $rec['name'] = str_replace(' ','_',$rec['name']);
-        }
-        if( empty($rec['id']) ) $rec['id'] = str_replace(' ','_',$rec['name']);
-        if( !$rec['priority'] ) {
-            if( !self::$_priority ) self::$_priority = 100;
-            $rec['priority'] = self::$_priority++;
-        }
-
-        // set priority
-        if( empty($rec['priority']) || $rec['priority'] == 0 ) {
-            if( !self::$_priority ) self::$_priority = 100;
-            $rec['priority'] = self::$_priority++;
-        }
-
-        if( !is_array(self::$_contentBlocks) ) self::$_contentBlocks = array();
-        self::$_contentBlocks[$rec['name']] = $rec;
-    }
-
-    public static function smarty_compiler_moduleblock($params,$smarty)
-    {
-        // todo: should be in page_template_parser
-        // {content_module} tag encountered.
-        if( !isset($params['block']) || empty($params['block']) ) throw new CmsEditContentException('{content_module} tag requires block parameter');
-
-        $rec = array('type'=>'module','id'=>'','name'=>'','module'=>'','label'=>'', 'blocktype'=>'','tab'=>'','priority'=>'');
-        $parms = array();
-        foreach( $params as $key => $value ) {
-            if( $key == 'block' ) $key = 'name';
-
-            $value = trim(trim($value,'"\''));
-            if( isset($rec[$key]) ) {
-                $rec[$key] = $value;
-            }
-            else {
-                $parms[$key] = $value;
-            }
-        }
-
-        if( !$rec['name'] ) {
-            $n = count(self::$_contentBlocks)+1;
-            $rec['id'] = $rec['name'] = 'module_'.$n;
-        }
-        if( strpos($rec['name'],' ') !== FALSE ) {
-            if( !$rec['label'] ) $rec['label'] = $rec['name'];
-            $rec['name'] = str_replace(' ','_',$rec['name']);
-        }
-        if( !$rec['id'] ) $rec['id'] = str_replace(' ','_',$rec['name']);
-        $rec['params'] = $parms;
-        if( $rec['module'] == '' ) throw new CmsEditContentException('Missing module param for content_module tag');
-        if( !$rec['priority'] ) {
-            if( !self::$_priority ) self::$_priority = 100;
-            $rec['priority'] = self::$_priority++;
-        }
-
-        // set priority
-        if( empty($rec['priority']) || !$rec['priority'] ) {
-            if( !self::$_priority ) self::$_priority = 100;
-            $rec['priority'] = self::$_priority++;
-        }
-
-        if( !is_array(self::$_contentBlocks) ) self::$_contentBlocks = array();
-        self::$_contentBlocks[$rec['name']] = $rec;
-    }
-
     /**
      * Compile a content block tag into PHP code.
+     * On Frontend requests {content} is a compiler tag (this function) that gnerates php code that will fetch the content block.
+     * this allows for numerous functionalities, including pre-processing the mact and permissions.
      */
     public static function smarty_compile_fecontentblock($params,$template)
     {
-        // todo: should be in page_template_parser
         $ptext = 'array(';
         $tmp = array();
         foreach($params as $k => $v) {
@@ -225,7 +102,7 @@ final class content_plugins
             // otherwise other block
             $output = null;
             if( $block == 'content_en' ) {
-		// was the data prefetched ?
+                // was the data prefetched ?
                 $result = self::get_default_content_block_content( $contentobj->Id(), $smarty );
             }
             if( !$result ) {
@@ -343,54 +220,16 @@ final class content_plugins
         return $result;
     }
 
-    public static function smarty_fetch_textblock($params,&$smarty)
+    public static function smarty_fetch_textblock($params, $smarty)
     {
         // never returns content on frontend requests
         return;
     }
 
-    public static function smarty_compile_contenttext($params,$smarty)
-    {
-        // todo: should be in page_template_parser
-        // {content_text} tag encountered.
-        //if( !isset($params['block']) || empty($params['block']) ) throw new \CmsEditContentException('{content_text} smarty block tag requires block parameter');
-
-        $rec = [ 'type'=>'static','name'=>'','label'=>'','upload'=>true,'dir'=>'','default'=>'','tab'=>'',
-                 'priority'=>'','exclude'=>'','sort'=>0, 'profile'=>'', 'text'=>'' ];
-        foreach( $params as $key => $value ) {
-            if( $key == 'type' ) continue;
-            if( $key == 'block' ) $key = 'name';
-            if( isset($rec[$key]) ) $rec[$key] = trim($value,"'\"");
-        }
-
-        if( !$rec['name'] ) {
-            $n = count(self::$_contentBlocks)+1;
-            $rec['name'] = 'static_'.$n;
-        }
-        if( strpos($rec['name'],' ') !== FALSE ) {
-            if( !$rec['label'] ) $rec['label'] = $rec['name'];
-            $rec['name'] = str_replace(' ','_',$rec['name']);
-        }
-        if( empty($rec['id']) ) $rec['id'] = str_replace(' ','_',$rec['name']);
-        if( !$rec['priority'] ) {
-            if( !self::$_priority ) self::$_priority = 100;
-            $rec['priority'] = self::$_priority++;
-        }
-
-        // set priority
-        if( empty($rec['priority']) || $rec['priority'] == 0 ) {
-            if( !self::$_priority ) self::$_priority = 100;
-            $rec['priority'] = self::$_priority++;
-        }
-
-        if( !$rec['text'] ) return; // do nothing.
-        $rec['static_content'] = trim(strip_tags($rec['text']));
-        if( !is_array(self::$_contentBlocks) ) self::$_contentBlocks = array();
-        self::$_contentBlocks[$rec['name']] = $rec;
-    }
-
     public static function get_default_content_block_content( $page_id, &$smarty)
     {
+        // this is what preprocessess the mact (before template processing, depending on config entries).
+        // and caches the result in memory.
         $result = null;
         if( self::$_primary_content ) return self::$_primary_content;
 
@@ -424,7 +263,7 @@ final class content_plugins
         }
         else {
             $block = 'content_en';
-            if( isset($_SESSION['__cms_preview__']) && $contentobj->Id() == __CMS_PREVIEW_PAGE__ ) {
+            if( isset($_SESSION['__cms_preview__']) && $page_id == -100 ) {
                 // note: content precompile/postcompile events will not be triggererd in preview.
                 //$val = $contentobj->Show($block);
                 //$result = $smarty->fetch('eval:'.$val);
