@@ -165,6 +165,7 @@ AdminSearch v1.0.5
 
 DesignManager v1.1.6
  - Now properly handle renaming exported stylesheets and templates.
+ - Now only reads {Navigator} tags, will not read {cms_module module=Navigator} tags (for a bit).
 
 Navigator v1.0.9
  - Adds the title property to each node.
