@@ -1,6 +1,8 @@
 <?php
-
 namespace cms_autoinstaller;
+use \CmsLayoutTemplateType;
+use \CmsLayoutTemplate;
+use \Exception;
 use \__appbase;
 
 class wizard_step9 extends \cms_autoinstaller\wizard_step
@@ -71,6 +73,9 @@ class wizard_step9 extends \cms_autoinstaller\wizard_step
         $siteinfo = $this->get_wizard()->get_data('siteinfo');
         if( !$siteinfo ) throw new \Exception(\__appbase\lang('error_internal',902));
 
+        $destconfig = $this->get_wizard()->get_data('config');
+        if( !$destconfig ) throw new \Exception(\__appbase\lang('error_internal',904));
+
         // install modules
         $this->message(\__appbase\lang('install_modules'));
         $this->connect_to_cmsms();
@@ -84,6 +89,52 @@ class wizard_step9 extends \cms_autoinstaller\wizard_step
                 $module = $modops->get_module_instance($name,'',TRUE);
             }
         }
+
+        $dmmod = $modops->get_module_instance('DesignManager');
+        $cmmod = $modops->get_module_instance('CMSContentManager');
+        if( !$dmmod || !$cmmod ) throw new \Exception( \__appbase\lang('error_internal',905) );
+        if( !class_exists( '\dm_design_reader' ) ) throw new \Exception( \__appbase\lang('error_internal',906) );
+
+        $this->message(\__appbase\lang('install_defaultcontent'));
+        $dir = \__appbase\get_app()->get_appdir().'/install';
+        if( ! $destconfig['samplecontent'] ) {
+            $fn = $dir.'/initial.php';
+            include_once($fn);
+        } else {
+            // install a theme.
+            $filename = $dir.'/initial_theme.xml';
+            $reader = new \dm_design_reader( $filename );
+            $design = $reader->import();
+
+            // get the default page template.
+            $page_tpl = null;
+            $tpl_type = CmsLayoutTemplateType::load('Core::Page');
+            try {
+                $page_tpl = $tpl_type->get_dflt_template();
+            }
+            catch( \CmsDataNotFoundException $e ) {
+                // no default page template found... get the first page template and set it as default.
+                $parms = [ 't:'.$tpl_type->get_id() ];
+                $list = CmsLayoutTemplate::template_query($parms);
+                if( !$list ) throw new \Exception( \__appbase\lang('error_internal',907) );
+                $page_tpl = $list[0];
+
+                // set this as the default
+                $page_tpl->set_type_dflt( true );
+                $page_tpl->save();
+            }
+
+            // default content
+            $filename = $dir.'/initial_content.xml';
+            $contentops = \ContentOperations::get_instance();
+            $reader = new \__appbase\content_reader( $filename, $contentops, $page_tpl->get_id() );
+            $reader->import();
+        }
+
+        // update all hierarchy positioss
+        $this->message(\__appbase\lang('install_updatehierarchy'));
+        $contentops = cmsms()->GetContentOperations();
+        $contentops->SetAllHierarchyPositions();
 
         // write protect config.php
         @chmod("$destdir/config.php",0444);
@@ -188,7 +239,7 @@ class wizard_step9 extends \cms_autoinstaller\wizard_step
             include_once($destdir.'/lib/include.php');
         }
         else {
-            // do not need to test /include.php as if it still exists, it is bad... and 
+            // do not need to test /include.php as if it still exists, it is bad... and
             // and it should have been deleted by now.
             throw new \RuntimeException("Could not find $destdir/lib/include.php");
         }
@@ -229,8 +280,8 @@ class wizard_step9 extends \cms_autoinstaller\wizard_step
             }
 
             // clear the session.
-            $sess = \__appbase\session::get();
-            $sess->clear();
+            // $sess = \__appbase\session::get();
+            // $sess->clear();
 
             $this->finish();
         }
@@ -238,9 +289,7 @@ class wizard_step9 extends \cms_autoinstaller\wizard_step
             $this->error($e->GetMessage());
         }
 
-        $app->cleanup();
+        // $app->cleanup(); debug
     }
 
 } // end of class
-
-?>

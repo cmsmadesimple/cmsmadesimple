@@ -113,20 +113,13 @@ class wizard_step8 extends \cms_autoinstaller\wizard_step
 
             include_once($dir.'/base.php');
 
-            $this->message(\__appbase\lang('install_defaultcontent'));
-            $fn = $dir.'/initial.php';
-            if( $destconfig['samplecontent'] ) $fn = $dir.'/extra.php';
-            include_once($fn);
+            $this->message(\__appbase\lang('install_core_template_types'));
+            include_once( "$dir/core_tpl_types.php" );
 
             $this->verbose(\__appbase\lang('install_setsitename'));
             \cms_siteprefs::set('sitename',$siteinfo['sitename']);
 
             $this->write_config();
-
-            // update all hierarchy positioss
-            $this->message(\__appbase\lang('install_updatehierarchy'));
-            $contentops = cmsms()->GetContentOperations();
-            $contentops->SetAllHierarchyPositions();
 
             // todo: install default preferences
             \cms_siteprefs::set('global_umask','022');
