@@ -42,7 +42,7 @@ final class ModuleOperations
 	 * @access private
 	 * @internal
 	 */
-	protected $cmssystemmodules =  [ 'AdminLog', 'AdminSearch', 'CMSContentManager', 'DesignManager', 'FileManager', 'ModuleManager', 'Search','News', 'MicroTiny',
+	protected $cmssystemmodules =  [ 'AdminLog', 'AdminSearch', 'DesignManager', 'CMSContentManager', 'FileManager', 'ModuleManager', 'Search','News', 'MicroTiny',
                                      'Navigator', 'CmsJobManager', 'FilePicker', 'CoreAdminLogin' ];
 
 	/**
