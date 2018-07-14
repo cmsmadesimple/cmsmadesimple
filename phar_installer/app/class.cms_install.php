@@ -25,6 +25,11 @@ class cms_install extends cms_install_base
         return $config['tmpdir'];
     }
 
+    public function get_my_tmpdir()
+    {
+        return $this->get_tmpdir().'/m'.md5(__FILE__.session_id());
+    }
+
     private function fixup_tmpdir_environment()
     {
         // if the system temporary directory is not the same as the config temporary directory
@@ -74,7 +79,7 @@ class cms_install extends cms_install_base
 
         $fn = $this->get_appdir().'/build.ini';
         $build = null;
-        if( file_exists($fn) ) $build = parse_ini_file($fn);
+        if( is_file($fn) ) $build = parse_ini_file($fn);
         if( isset($build['build_time']) ) $smarty->assign('build_time',$build['build_time']);
 
         // handle debug mode
@@ -94,15 +99,15 @@ class cms_install extends cms_install_base
         // find our archive, copy it... and rename it securely.
         // we do this because phar data cannot read from a .tar.gz file that is already embedded within a phar
         // (some environments)
-        $tmpdir = $this->get_tmpdir().'/m'.md5(__FILE__.session_id());
+        $tmpdir = $this->get_my_tmpdir();
         $src_archive = (isset($config['archive']))?$config['archive']:'data/data.tar.gz';
         $src_archive = dirname(__DIR__).DIRECTORY_SEPARATOR.$src_archive;
-        if( !file_exists($src_archive) ) throw new \Exception('Could not find installation archive at '.$src_archive);
+        if( !is_file($src_archive) ) throw new \Exception('Could not find installation archive at '.$src_archive);
         $dest_archive = $tmpdir.DIRECTORY_SEPARATOR."f".md5($src_archive.session_id()).'.tgz';
         $src_md5 = md5_file($src_archive);
 
         for( $i = 0; $i < 2; $i++ ) {
-            if( !file_exists($dest_archive) ) {
+            if( !is_file($dest_archive) ) {
                 @mkdir($tmpdir,0777,TRUE);
                 @copy($src_archive,$dest_archive);
             }
@@ -140,7 +145,7 @@ class cms_install extends cms_install_base
         $dirs = array(__DIR__,__DIR__.'/base',__DIR__.'/lib',__DIR__.'/wizard');
         foreach( $dirs as $dir ) {
             $fn = $dir."/class.$classname.php";
-            if( file_exists($fn) ) {
+            if( is_file($fn) ) {
                 include_once($fn);
                 return;
             }
@@ -378,8 +383,6 @@ class cms_install extends cms_install_base
 
     public function cleanup()
     {
-        if( $this->_custom_tmpdir ) {
-            utils::rrmdir($this->_custom_tmpdir);
-        }
+        if( $this->_custom_tmpdir ) utils::rrmdir($this->_custom_tmpdir);
     }
 } // end of class

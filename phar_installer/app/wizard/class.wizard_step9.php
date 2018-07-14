@@ -102,32 +102,42 @@ class wizard_step9 extends \cms_autoinstaller\wizard_step
             include_once($fn);
         } else {
             // install a theme.
-            $filename = $dir.'/initial_theme.xml';
-            $reader = new \dm_design_reader( $filename );
-            $design = $reader->import();
-
-            // get the default page template.
-            $page_tpl = null;
-            $tpl_type = CmsLayoutTemplateType::load('Core::Page');
             try {
-                $page_tpl = $tpl_type->get_dflt_template();
+                $dsn = \CmsLayoutCollection::load('simplex');
+                $dsn->delete( TRUE );
             }
             catch( \CmsDataNotFoundException $e ) {
-                // no default page template found... get the first page template and set it as default.
-                $parms = [ 't:'.$tpl_type->get_id() ];
-                $list = CmsLayoutTemplate::template_query($parms);
-                if( !$list ) throw new \Exception( \__appbase\lang('error_internal',907) );
-                $page_tpl = $list[0];
-
-                // set this as the default
-                $page_tpl->set_type_dflt( true );
-                $page_tpl->save();
+                // not an error.
             }
+
+            // copy the filename into the temporary directory.
+            $theme_file = 'simplex_theme.zip';
+            $src_filename = $dir.DIRECTORY_SEPARATOR.$theme_file;
+            $tmp_filename = $app->get_my_tmpdir().DIRECTORY_SEPARATOR.$theme_file;
+            $cksum = md5_file($src_filename);
+            copy($src_filename,$tmp_filename);
+            $cksum2 = md5_file($tmp_filename);
+            if( $cksum != $cksum2 ) throw new \Exception( \__appbase\lang('error_internal', 907 ));
+            $reader = new design_importer( $tmp_filename, $destdir.DIRECTORY_SEPARATOR.'assets' );
+            $design = $reader->import_design();
+
+            // set the 'Simplex-Sub' template as the default.
+            $simplex_sub = \CmsLayoutTemplate::load('Simplex Sub');
+            $simplex_sub->set_type_dflt( TRUE );
+            $simplex_sub->save();
+            // get the simplex-home template.
+            $simplex_home = \CmsLayoutTemplate::load('Simplex Home');
 
             // default content
             $filename = $dir.'/initial_content.xml';
             $contentops = \ContentOperations::get_instance();
-            $reader = new \__appbase\content_reader( $filename, $contentops, $page_tpl->get_id() );
+            $reader = new \__appbase\content_reader( $filename, $contentops, null, $design->get_id() );
+            $reader->set_template_callback( function( \ContentBase $obj ) use ($simplex_sub,$simplex_home) {
+                    // callback to get the template id
+                    // given a content object.
+                    if( $obj->Name() == 'Home' ) return $simplex_home->get_id();
+                    return $simplex_sub->get_id();
+                });
             $reader->import();
         }
 

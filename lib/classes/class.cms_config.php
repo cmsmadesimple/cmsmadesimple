@@ -199,6 +199,7 @@ final class cms_config implements ArrayAccess
         $this->_types['public_cache_location'] = self::TYPE_STRING;
         $this->_types['public_cache_url'] = self::TYPE_STRING;
         $this->_types['assets_dir'] = self::TYPE_STRING;
+        $this->_types['assets_url'] = self::TYPE_STRING;
         $this->_types['assets_path'] = self::TYPE_STRING;
         $this->_types['permissive_smarty'] = self::TYPE_BOOL;
         $this->_types['content_processing_mode'] = self::TYPE_INT;
@@ -325,12 +326,20 @@ final class cms_config implements ArrayAccess
 
 
                 /**
-                 * A cnstant containing the CMSMS uploads url.
+                 * A constant containing the CMSMS uploads url.
                  * If the uploads_url is not specified in the config file, then CMSMS will calculate one from the root url.
                  *
                  * @return string
                  */
                 define('CMS_UPLOADS_URL',self::$_instance['uploads_url']);
+
+                /**
+                 * A constant containing the CMSMS assets url.
+                 * If the assets_url is not specified in the config file, then CMSMS will calculate one from the root url and the assets_dir setting.
+                 *
+                 * @return string
+                 */
+                define('CMS_ASSETS_URL',self::$_instance['assets_url']);
 
                 /**
                  * A constant containing the CMSMS database table prefix to be used on all queries.
@@ -509,6 +518,10 @@ final class cms_config implements ArrayAccess
 
         case 'assets_path':
             $this->_cache[$key] =  cms_join_path($this->OffsetGet('root_path'), $this->OffsetGet('assets_dir') );
+            return $this->_cache[$key];
+
+        case 'assets_url':
+            $this->_cache[$key] = $this->offsetGet('root_url').'/'.$this->offsetGet('assets_dir');
             return $this->_cache[$key];
 
         case 'db_port':

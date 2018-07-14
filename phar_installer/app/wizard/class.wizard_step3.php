@@ -130,9 +130,9 @@ class wizard_step3 extends \cms_autoinstaller\wizard_step
         $obj->fail_key = 'fail_func_gzopen';
         $tests[] = $obj;
 
-        // recommended test ... ZipArchive
+        // required test ... ZipArchive
         $obj = new _tests_\boolean_test('func_ziparchive',class_exists('ZipArchive'));
-        $obj->required = false;
+        $obj->required = true;
         $obj->fail_key = 'fail_func_ziparchive';
         $tests[] = $obj;
 

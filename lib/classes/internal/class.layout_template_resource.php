@@ -66,8 +66,8 @@ class layout_template_resource extends fixed_smarty_custom_resource
         $parts = explode(';',$name,2);
         $name = $parts[0];
         $section = (isset($parts[1]) && $parts[1]) ? trim($parts[1]) : null;
-		$source = null;
-		$mtime = null;
+        $source = '';
+        $mtime = null;
 
 		try {
 			$tpl = $this->get_template($name);
@@ -78,9 +78,10 @@ class layout_template_resource extends fixed_smarty_custom_resource
 			return;
 		}
 
+		$mtime = $tpl->modified;
+
 		switch( $section ) {
 		case 'top':
-			$mtime = $tpl->modified;
 			$pos1 = stripos($tpl->content,'<head');
 			$pos2 = stripos($tpl->content,'<header');
 			if( $pos1 === FALSE || $pos1 == $pos2 ) return;
@@ -88,7 +89,6 @@ class layout_template_resource extends fixed_smarty_custom_resource
 			return;
 
 		case 'head':
-			$mtime = $tpl->modified;
 			$pos1 = stripos($tpl->content,'<head');
 			$pos1a = stripos($tpl->content,'<header');
 			$pos2 = stripos($tpl->content,'</head>');
@@ -97,7 +97,6 @@ class layout_template_resource extends fixed_smarty_custom_resource
 			return;
 
 		case 'body':
-			$mtime = $tpl->modified;
 			$pos = stripos($tpl->content,'</head>');
 			if( $pos !== FALSE ) {
 				$source = trim(substr($tpl->content,$pos+7));
@@ -109,7 +108,6 @@ class layout_template_resource extends fixed_smarty_custom_resource
 
 		default:
 			$source = trim($tpl->content);
-			$mtime = $tpl->modified;
 			return;
 		}
 	}

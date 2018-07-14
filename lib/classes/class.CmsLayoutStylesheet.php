@@ -354,7 +354,7 @@ class CmsLayoutStylesheet
 
         // note: should load designs before adding.
         $designs = $this->get_designs();
-        if( !in_array($n,$designs) ) {
+        if( empty($designs) || !in_array($n,$designs) ) {
             $this->_design_assoc[] = (int) $n;
             $this->_dirty = TRUE;
         }

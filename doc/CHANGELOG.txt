@@ -115,6 +115,10 @@ Core - General
   - Added the ability to stop processing content, via an exception.  This is useful in situations where output is retrieved from a cache.
   - FEATURE: Added the {content_text} plugin to alloa adding simple static text instructions for editors on the edit content page.
       text must be hardcoded.  i.e {content_text text='This is a test'}
+  - FEATURE: Added the {assets_url} plugin to provide the complete URL to the assets folder.
+  - FEATURE: added the CMS_ASSETS_URL define and assets_url config entry.
+  - New cleaned up simplex theme on initial install
+  - New default content on initial install
 
 News v2.21.5
   - Minor cleaning of parameters.
@@ -137,7 +141,10 @@ Installation Assistant - v1.4
   - Now require at least PHP 7.0 and recommend 7.1
   - Upgrade to smarty v3.1.32
   - CURL is now a requirement
+  - ZipArchive is now a requirement (at least for the installer)
   - no longer change the config file on upgrade.  Though we will for install and freshen.
+  - Now install default theme from a zip file into the /assets/simplex directory (hardcoded)
+  - Now install default content from an XML file exported by CGCU
 
 ModuleManaver v2.2
   - XML import code now lives here.

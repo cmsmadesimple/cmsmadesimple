@@ -8,13 +8,17 @@ class content_reader
     protected $filename;
     protected $contentops;
     protected $tpl_id;
+    protected $design_id;
+    private   $_default_template;
+    private   $_template_cb;
 
-    public function __construct( $filename, \ContentOperations $ops, $tpl_id = null )
+    public function __construct( $filename, \ContentOperations $ops, $tpl_id = null, $design_id = null )
     {
         $tpl_id = (int) $tpl_id;
         if( $tpl_id < 1 ) $tpl_id = $this->_getDefaultTemplateId();
         if( $tpl_id < 1 ) throw new \Exception('Could not get a valid template id');
         if( !is_file( $filename ) ) throw new \InvalidArgumentException("invalid filename passed to ".___METHOD__);
+        $this->design_id = $design_id;
         $this->filename = $filename;
         $this->contentops = $ops;
         $this->tpl_id = (int) $tpl_id;
@@ -36,22 +40,6 @@ class content_reader
         return NULL;
     }
 
-    function _getTemplateNameFromId($tplid)
-    {
-        if( !$this->_template_cache ) {
-            $tpl_type = CmsLayoutTemplateType::load('Core::Page');
-            $tpl = $tpl_type->get_dflt_template();
-            $parms = array();
-            $parms[] = 't:'.$tpl_type->get_id();
-            $parms['as_list'] = 1;
-            $list = CmsLayoutTemplate::template_query($parms);
-            $this->_template_cache = array();
-            if( count($list) ) $this->_template_cache = $list;
-        }
-
-        if( isset($this->_template_cache[$tplid]) ) return $this->_template_cache[$tplid];
-    }
-
     protected function _getDefaultTemplateId()
     {
         if( !$this->_default_template ) {
@@ -60,6 +48,19 @@ class content_reader
             $this->_default_template = $tpl->get_id();
         }
         return $this->_default_template;
+    }
+
+    public function set_template_callback( callable $cb )
+    {
+        $this->_template_cb = $cb;
+    }
+
+    protected function get_template_for_content( \ContentBase $content )
+    {
+        if( $this->_template_cb && is_callable( $this->_template_cb ) ) {
+            return call_user_func( $this->_template_cb, $content );
+        }
+        return $this->tpl_id;
     }
 
     protected function node_to_content_obj( $node )
@@ -84,7 +85,8 @@ class content_reader
         $tmp = $this->contentops->CheckAliasError($alias);
         if( $tmp ) $alias = '';
         $content_obj->SetAlias($alias);
-        $content_obj->SetTemplateId($this->tpl_id);
+        $tpl_id = $this->get_template_for_content( $content_obj );
+        $content_obj->SetTemplateId($tpl_id);
 
         // now to get the properties.
         $children = $node->childNodes;
@@ -97,6 +99,8 @@ class content_reader
             $content_obj->setPropertyValue($propname,$propval);
         }
 
+        // set the design_id as a property afterwards.
+        if( $this->design_id > 0 ) $content_obj->setPropertyValue( 'design_id', $this->design_id );
         return $content_obj;
     }
 
