@@ -119,6 +119,9 @@ Core - General
   - FEATURE: added the CMS_ASSETS_URL define and assets_url config entry.
   - New cleaned up simplex theme on initial install
   - New default content on initial install
+  - New hook on cache clear
+  - in HookManager::do_hook now smartly handle hook handlers that return null or no result.
+  - {cms_textarea} now supports the readonly and disabled attributes.
 
 News v2.21.5
   - Minor cleaning of parameters.

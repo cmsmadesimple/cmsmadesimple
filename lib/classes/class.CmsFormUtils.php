@@ -254,6 +254,8 @@ final class CmsFormUtils
         if( !$attribs['name'] ) throw new CmsInvalidDataException('"name" is a required parameter"');
         $attribs['id'] = get_parameter_value($parms,'id',$attribs['name']);
         $attribs['class'] = get_parameter_value($parms,'class','cms_textarea');
+        $attribs['readonly'] = cms_to_bool( get_parameter_value($params,'readonly', false ) );
+        $attribs['disabled'] = cms_to_bool( get_parameter_value($params,'disabled') );
         $attribs['class'] = get_parameter_value($parms,'classname',$attribs['class']); // classname param can override class.
 
         $forcemodule = get_parameter_value($parms,'forcemodule');
@@ -295,6 +297,8 @@ final class CmsFormUtils
 
         $required = cms_to_bool(get_parameter_value($parms,'required','false'));
         if( $required ) $attribs['required'] = 'required';
+        if( $attribs['readonly'] ) $attribs['readonly'] = 'readonly';
+        if( $attribs['disabled'] ) $attribs['disabled'] = 'disabled';
         $attribs['cols'] = get_parameter_value($parms,'cols');
         $attribs['cols'] = get_parameter_value($parms,'width',$attribs['cols']);
         if( $attribs['cols'] <= 0 || $attribs['cols'] == '') $attribs['cols'] = 20;

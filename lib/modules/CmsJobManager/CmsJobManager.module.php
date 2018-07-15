@@ -91,29 +91,40 @@ final class CmsJobManager extends \CMSModule
         $this->_current_job = $job;
     }
 
-    protected function is_locked()
+    private function read_lock()
     {
-        $this->_lock = (int) $this->GetPreference(self::LOCKPREF);
-        return ($this->_lock > 0);
-    }
-
-    protected function lock_expired()
-    {
-        $this->_lock = (int) $this->GetPreference(self::LOCKPREF);
-        if( $this->_lock && $this->_lock < time() - \CmsJobManager\utils::get_async_freq() ) return TRUE;
-        return FALSE;
+        if( $this->_lock < 0 ) {
+            $fn = TMP_CACHE_LOCATION.md5(__FILE__.__CLASS__.'1').'.dat';
+            $this->_lock = (is_file($fn)) ? filemtime($fn) : 0;
+        }
+        return $this->_lock;
     }
 
     protected function lock()
     {
+        $fn = TMP_CACHE_LOCATION.md5(__FILE__.__CLASS__.'1').'.dat';
+        touch( $fn );
         $this->_lock = time();
-        $this->SetPreference(self::LOCKPREF,$this->_lock);
     }
 
     protected function unlock()
     {
+        $fn = TMP_CACHE_LOCATION.md5(__FILE__.__CLASS__.'1').'.dat';
+        if( is_file($fn) ) unlink($fn);
         $this->_lock = null;
-        $this->RemovePreference(self::LOCKPREF);
+    }
+
+    protected function is_locked()
+    {
+        return ($this->read_lock() > 0);
+    }
+
+    protected function lock_expired()
+    {
+        $lock_time = $this->read_lock();
+        $freq = \CmsJobManager\utils::get_async_freq();
+        if( $freq > 0 && $lock_time < time() - $freq ) return TRUE;
+        return FALSE;
     }
 
     protected function check_for_jobs_or_tasks()
@@ -265,7 +276,8 @@ final class CmsJobManager extends \CMSModule
         if( is_array($jobs) && !count($jobs) ) return; // nothing to do.
 
         // this could go into a function...
-        $url_str = html_entity_decode($this->create_url('__','process',$_returnid));
+        $url_str = $config['async_processing_url'];
+        if( !$url_str ) $url_str = html_entity_decode($this->create_url('__','process',$_returnid));
         $url_ob = new \cms_url($url_str);
         if( !$url_ob->get_host() ) {
             // todo: audit something
@@ -287,7 +299,7 @@ final class CmsJobManager extends \CMSModule
             $code = curl_getinfo( $ch, CURLINFO_HTTP_CODE );
             curl_close( $ch );
             if( $code != 200 ) {
-                audit('',$this->GetName(),'Received '.$code.' response when trying to trigger async processing');
+                cms_warning('Received '.$code.' response when trying to trigger async processing','CmsJobManager');
             } else {
                 $this->SetPreference('last_async_trigger',$now+1);
             }

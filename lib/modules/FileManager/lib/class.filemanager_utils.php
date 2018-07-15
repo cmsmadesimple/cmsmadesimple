@@ -172,7 +172,7 @@ final class filemanager_utils
         $ext = substr(strrchr($file, '.'), 1);
         if( !$ext ) return FALSE;
 
-        $tmp = array('gif','jpg','jpeg','png');
+        $tmp = array('gif','jpg','jpeg','png','svg');
         if( in_array(strtolower($ext),$tmp) ) return TRUE;
         return FALSE;
     }

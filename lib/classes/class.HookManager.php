@@ -232,11 +232,13 @@ namespace CMSMS {
                 foreach( self::$_hooks[$name]->handlers as $obj ) {
                     // input is passed to the callback, and can be adjusted.
                     // note it's not certain that the same data will be passed out of the handler
+                    $res = null;
                     if( empty($value) || !is_array($value) || $is_assoc($value) ) {
-                        $value = call_user_func($obj->callable,$value);
+                        $res = call_user_func($obj->callable,$value);
                     } else {
-                        $value = call_user_func_array($obj->callable,$value);
+                        $res = call_user_func_array($obj->callable,$value);
                     }
+                    if( !is_null($res) ) $value = $res;
                 }
             }
             array_pop(self::$_in_process);

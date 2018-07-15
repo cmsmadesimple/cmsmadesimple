@@ -87,12 +87,10 @@ try {
 
     if( $this->is_locked() ) {
         if( $this->lock_expired() ) {
-            debug_to_log($this->GetName().': Removing an expired lock (probably an error occurred)');
-            audit('',$this->GetName(),'Removing an expired lock.. An error probably occurred with a previous job.');
+            cms_notice('Removing an expired lock.. An error probably occurred with a previous job.',$this->GetName());
             $this->unlock();
         } else {
-            debug_to_log($this->GetName().': Processing still locked (probably because of an error)... wait for a bit');
-            audit('',$this->GetName(),'Processing is already occurring..');
+            cms_notice($this->GetName(),'Processing is already occurring..', $this->GetName());
             exit;
         }
     }
@@ -126,7 +124,7 @@ try {
         }
         catch( \Exception $e ) {
             $job = $this->get_current_job();
-            audit('','CmsJobManager','An error occurred while processing: '.$job->name);
+            cms_error('An error occurred while processing job '.$job->name,$this->GetName());
             _cmsjobmgr_joberrorhandler($job,$e->GetMessage(),$e->GetFile(),$e->GetLine());
         }
     }
@@ -135,6 +133,7 @@ try {
 }
 catch( \Exception $e ) {
     // some other error occurred, not processing jobs.
+    cms_error('Processing error: '.$e->GetMessage(), $this->GetName() );
     debug_to_log('--Major async processing exception--');
     debug_to_log('exception '.$e->GetMessage());
     debug_to_log($e->GetTraceAsString());

@@ -606,6 +606,8 @@ $lang['help_function_cms_textarea'] = <<<EOT
     <li>height - alias for the rows parameter.</li>
     <li>maxlength - optional integer : maxlength attribute of the text area (syntax/WYSIWYG module may ignore this).</li>
     <li>required  - optional boolean : indicates a required field.</li>
+    <li>disabled  - optional boolean : indicates a disabled field.</li>
+    <li>readonly  - optional boolean : indicates a readonly field.</li>
     <li>placeholder - optional string : placeholder attribute of the text area (syntax/WYSIWYG module may ignore this).</li>
     <li>value - optional string : default text for the text area, will undergo entity conversion.</li>
     <li>text - alias for the value parameter</li>
