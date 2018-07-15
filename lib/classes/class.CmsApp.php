@@ -576,7 +576,7 @@ final class CmsApp {
             @touch(cms_join_path($start_dir,'index.html'));
 		}
 
-        HookManager::do_hook( 'Core::OnCacheClear', $the_time )
+        HookManager::do_hook( 'Core::OnCacheClear', $the_time );
 	}
 
 	/**

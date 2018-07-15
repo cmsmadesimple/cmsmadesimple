@@ -1,4 +1,78 @@
 <?php
+$lang['help_function_cms_render_scripts'] = <<<EOT
+<h3>What does this do?</h3>
+<p>This plugin will use all of the input from various calls to {cms_queue_script}, read each of the files in order that they were queuexd, concatenate them together, and output a single javascript file, along with the appropriate HTML tag to attach the combined file to your HTML output.</p>
+<p>This plugin is smart in that it will only generate a new javascrip file if one of the queued script files has changed.  Unless of course, the force flag is enabled.</p>
+<p>If defered mode is enabled, then the output HTML will include the defer attribute in the script tag, but will also include support for the special text/cms_javascript script type which allows embedding scripts in module templates, and deferring their execution until after the primary scripts are loaded.</p>
+<h3>Usage:</h3>
+<ul>
+    <li>force - <em>(bool,default=false)</em> - Force the scripts to be concatenated together and a new file output EVEN if the source scripts have not changed.</li>
+    <li>nocache - <em>(bool,default=false)</em> - Append information to the output HTML to prevent browsers from caching the output javascript file.</li>
+    <li>defer - <em>(bool,optional,default=true)</em> - enable deferred javascript.</li>
+    <li>assign - <em>(string,optional)</em> - Optionally assign the output to a smarty variable with this name in local scope.</li>
+</ul>
+
+<h3>Example:</h3>
+<p>The following example illustrates queueing the inclusion of a jquery library from a file located in /assets/js/jquery.min.js and then rendering the script tags.   On news detail pages the user should be presented with an alert message using deferred execution via the text/cms_javascript script type.</p> 
+<h4>In News detail template:</h4>
+<pre><code>&lt;script type="text/cms_javascript"&gt;
+$(function(){
+    alert('this is a test');
+};
+&lt;/script&gt;</code></pre>
+<h4>In your page template:</h4>
+<pre><code>{cms_queue_script file="{assets_url}/js/jquery.min.js"}
+{cms_render_scripts}&lt;body&gt;
+</code></pre>
+EOT;
+$lang['help_function_cms_queue_script'] = <<<EOT
+<h3>What does this do?</h3>
+<p>this plugin will take a relative or absolute <strong>FILE</strong> reference <em>(note: it does not understand URLS)</em> and queue it for inclusion via usage of the {cms_render_scripts} plugin.  This is useful for attaching necessary scripts to your rendered HTML output.</p>
+<p>A special note, that {cms_queue_script} can be called from within a module action template, to attach scripts that are only relevant to that module action.</p>
+<h3>Usage:</h3>
+<ul>
+   <li>file - <em>(string)</em> - An absolute path to a script file, or a path relative to the CMSMS Assets path, uploads_path or CMSMS root path in that order.</li>
+</ul>
+<p>Note: This plugin produces no output.</p>
+
+<h3>Example:</h3>
+<pre><code>{cms_queue_script file='js/app.js'}</code>
+EOT;
+$lang['help_function_assets_url'] = <<<EOT
+<h3>What does this do?</h3>
+<p>This smarty plugin returns the full URL string to the CMSMS assets directory, as configured.  It is useful for referencing stylesheets, fonts, scripts and other assets relative to the assets directory.</p>
+<h3>Usage:</h3>
+<ul>
+   <li>assign - <em>(string,optional)</em> - Optionally assign the output to a smarty variable with this name in local scope.</li>
+</ul>
+
+<h3>Example:</h3>
+<pre><code>&lt;script src="{assets_url}/js/app.js"&gt;&lt;/script&gt;</code></pre>
+EOT;
+$lang['help_block_admin_headtext'] = <<<EOT
+<h3>What does this do?</h3>
+<p>This is a block plugin useful only in admin side actions that allows the module action template to insert HTML content into the HEAD section of the rendered HTML output.  A module action template can insert javascript, or inline styles, or meta tags.</p>
+<p>Note: This plugin produces no output.</p>
+<h3>Example:</h3>
+<pre><code>{admin_headtext}&lt;!-- this text will be injected into the HEAD output --&gt;{/admin_headtext}</code></pre>
+EOT;
+$lang['help_function_disable_template'] = <<<EOT
+<h3>What does this do?</h3>
+<p>This smarty plugin is usable under specific conditions, when pre-processing a module action, to disable further processing of the page template.</p>
+<p>Particularly for actions that provide a REST service, or output a subset of HTML or javascript, this function can be used to optimize performance so that page template processing is not performed.</p>
+<p>This plugin is a wrapper around the <code>CmsApp::disable_template_processing()</code> method.  and is only really useful when the <code>\$config['content_processing_mode']</code> is set to 2.
+<p>Note: This plugin produces no output.</p>
+<h3>Example:</h3>
+<pre><code>{disable_template}</code></pre>
+EOT;
+$lang['help_function_theme_root'] = <<<EOT
+<h3>What does this do?</h3>
+<p>This admin plugin provides the ability to get a URL string to the top level of the admin theme directory.  This is useful in admin theme templates to locate images, scripts, css, and other resources.</p>
+<h3>Usage:</h3>
+<ul>
+   <li>assign - <em>(string,optional)</em> - Optionally assign the output to a smarty variable with this name in local scope.</li>
+</ul>
+EOT;
 $lang['help_function_page_selector'] = <<<EOT
 <h3>What does this do?</h3>
 <p>This admin plugin provides a control to allow selecting a content page, or other item.  This is suitable for allowing a site administrator to select a page that will be stored in a preference.</p>

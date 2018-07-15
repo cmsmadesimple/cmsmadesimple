@@ -276,6 +276,7 @@ final class CmsJobManager extends \CMSModule
         if( is_array($jobs) && !count($jobs) ) return; // nothing to do.
 
         // this could go into a function...
+	$config = cmsms()->GetConfig();
         $url_str = $config['async_processing_url'];
         if( !$url_str ) $url_str = html_entity_decode($this->create_url('__','process',$_returnid));
         $url_ob = new \cms_url($url_str);
