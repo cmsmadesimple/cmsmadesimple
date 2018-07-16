@@ -68,6 +68,7 @@ $load_perms = function() use ($db) {
     \CMSMS\HookManager::add_hook('getperminfo',function($perm_name){
             $key = 'permdesc_'.str_replace(' ','_',$perm_name);
             if( \CmsLangOperations::lang_key_exists('admin',$key) ) return \CmsLangOperations::lang_from_realm('admin',$key);
+	    // return null
         },\CMSMS\HookManager::PRIORITY_HIGH);
 
     $perm_struct = array();
@@ -83,8 +84,8 @@ $load_perms = function() use ($db) {
             $thisPerm->id = $row['permission_id'];
             $thisPerm->name = $thisPerm->label = $row['permission_text'];
             $thisPerm->source = $row['permission_source'];
-            $thisPerm->label = \CMSMS\HookManager::do_hook('localizeperm',$thisPerm->name);
-            $thisPerm->description = \CMSMS\HookManager::do_hook('getperminfo',$thisPerm->name);
+            $thisPerm->label = \CMSMS\HookManager::do_hook_first_result('localizeperm',$thisPerm->name);
+            $thisPerm->description = \CMSMS\HookManager::do_hook_first_result('getperminfo',$thisPerm->name);
             $perm_struct[$row['permission_id']] = $thisPerm;
         }
     }

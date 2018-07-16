@@ -216,6 +216,62 @@ namespace CMSMS {
                 \Events::SendEvent($module,$eventname,$data);
                 $value[0] = $data; // transitive.
             }
+	    // $value is an array, or null
+            if( isset(self::$_hooks[$name]->handlers) && count(self::$_hooks[$name]->handlers) ) {
+                // sort the handlers.
+                if( !self::$_hooks[$name]->sorted ) {
+                    if( count(self::$_hooks[$name]->handlers) > 1 ) {
+                        usort(self::$_hooks[$name]->handlers,function($a,$b){
+                                if( $a->priority < $b->priority ) return -1;
+                                if( $a->priority > $b->priority ) return 1;
+                                return 0;
+                            });
+                    }
+                    self::$_hooks[$name]->sorted = TRUE;
+                }
+
+                foreach( self::$_hooks[$name]->handlers as $obj ) {
+                    // input is passed to the callback, and can be adjusted.
+                    // note it's not certain that the same data will be passed out of the handler
+	            $res = null;
+                    if( empty($value) || !is_array($value) || $is_assoc($value) ) {
+                        $res = call_user_func($obj->callable,$value);
+                    } else {
+                        $res = call_user_func_array($obj->callable,$value);
+                    }
+		    if( !is_null($res) ) $value = $res;
+                }
+            }
+            array_pop(self::$_in_process);
+            return $value;
+        }
+
+        /**
+         * Trigger a hook, returning the first non empty value.
+         * This method does not call event handlers with similar names.
+         *
+         * This method accepts variable arguments.  The first argument (required) is the name of the hook to execute.
+         * Further arguments will be passed to the various handlers.
+         *
+         * This method will always pass the same input arguments to each hook handler.
+         *
+         * @return mixed The output of this method depends on the hook.
+         */
+        public static function do_hook_first_result()
+        {
+            $is_assoc = function($in) {
+                if( !is_array($in) ) return FALSE;
+                return array_keys($in) !== range(0, count($in) - 1);
+            };
+            $args = func_get_args();
+            $name = array_shift($args);
+            $name = trim($name);
+            if( !isset(self::$_hooks[$name]) || !count(self::$_hooks[$name]->handlers)  ) return; // nothing to do.
+
+            // note $args is an array
+            $value = $args;
+            self::$_in_process[] = $name;
+
             if( isset(self::$_hooks[$name]->handlers) && count(self::$_hooks[$name]->handlers) ) {
                 // sort the handlers.
                 if( !self::$_hooks[$name]->sorted ) {
@@ -237,6 +293,7 @@ namespace CMSMS {
                     } else {
                         $value = call_user_func_array($obj->callable,$value);
                     }
+                    if( !empty( $value ) ) break;
                 }
             }
             array_pop(self::$_in_process);

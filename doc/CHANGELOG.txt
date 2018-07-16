@@ -5,6 +5,9 @@ Core - General
   - Minor fix to pagination in Admin log.
   - Change Finnish locale priorities so that UTF-8 is first.
   - Minor fix to calling hooks with a single associative array parameter.
+  - Adds new HookManager::do_hook_first_result() method
+  - cangegroupperms now calls HookManager::do_hook_first_result
+  - Minor enhancement to moduleoperations::_load_module() to check if the class exists.
   - Minor enhancement to {cms_action_url} wrt. the page to link to if not specified.
   - Deprecate CMSModule::SetParameterType and CMSModule::CreateParameter methods.
   - Deprecate ModuleOperations::GetModuleParameters() method.

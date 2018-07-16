@@ -628,8 +628,11 @@ final class ModuleOperations
             require_once($fname);
         }
 
-        $obj = null;
         $classname = self::get_module_classname($module_name);
+        if( !class_exists($classname,FALSE) ) {
+            debug_buffer("Cannot load $module_name because the class still does not exist");
+            return FALSE;
+        }
 
         $obj = new $classname;
         if( !is_object($obj) || ! $obj instanceof \CMSModule ) {
