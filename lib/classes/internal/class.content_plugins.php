@@ -90,7 +90,7 @@ final class content_plugins
      * @internal
      * @ignore
      */
-    public static function smarty_internal_fetch_contentblock($params,&$smarty)
+    public static function smarty_internal_fetch_contentblock($params,$smarty)
     {
         $contentobj = \CmsApp::get_instance()->get_content_object();
         $result = null;
@@ -133,7 +133,7 @@ final class content_plugins
         return $result;
     }
 
-    public static function smarty_fetch_imageblock($params,&$smarty)
+    public static function smarty_fetch_imageblock($params,$smarty)
     {
         $ignored = [ 'block','type','name','label','upload','dir','default','tab','priority','exclude','sort', 'profile', 'urlonly','assign' ];
         $gCms = \CmsApp::get_instance();
@@ -193,7 +193,7 @@ final class content_plugins
         return $out;
     }
 
-    public static function smarty_fetch_moduleblock($params,&$smarty)
+    public static function smarty_fetch_moduleblock($params,$smarty)
     {
         $result = '';
         $key = '';
