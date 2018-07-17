@@ -254,8 +254,8 @@ final class CmsFormUtils
         if( !$attribs['name'] ) throw new CmsInvalidDataException('"name" is a required parameter"');
         $attribs['id'] = get_parameter_value($parms,'id',$attribs['name']);
         $attribs['class'] = get_parameter_value($parms,'class','cms_textarea');
-        $attribs['readonly'] = cms_to_bool( get_parameter_value($params,'readonly', false ) );
-        $attribs['disabled'] = cms_to_bool( get_parameter_value($params,'disabled') );
+        $attribs['readonly'] = cms_to_bool( get_parameter_value($parms,'readonly', false ) );
+        $attribs['disabled'] = cms_to_bool( get_parameter_value($parms,'disabled') );
         $attribs['class'] = get_parameter_value($parms,'classname',$attribs['class']); // classname param can override class.
 
         $forcemodule = get_parameter_value($parms,'forcemodule');

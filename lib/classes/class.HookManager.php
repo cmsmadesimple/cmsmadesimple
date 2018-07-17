@@ -270,6 +270,7 @@ namespace CMSMS {
             // note $args is an array
             $value = $args;
             self::$_in_process[] = $name;
+            $res = null;
 
             if( isset(self::$_hooks[$name]->handlers) && count(self::$_hooks[$name]->handlers) ) {
                 // sort the handlers.
@@ -288,15 +289,15 @@ namespace CMSMS {
                     // input is passed to the callback, and can be adjusted.
                     // note it's not certain that the same data will be passed out of the handler
                     if( empty($value) || !is_array($value) || $is_assoc($value) ) {
-                        $value = call_user_func($obj->callable,$value);
+                        $res = call_user_func($obj->callable,$value);
                     } else {
-                        $value = call_user_func_array($obj->callable,$value);
+                        $res = call_user_func_array($obj->callable,$value);
                     }
-                    if( !empty( $value ) ) break;
+                    if( !empty( $res ) ) break;
                 }
             }
             array_pop(self::$_in_process);
-            return $value;
+            return $res;
         }
 
         /**

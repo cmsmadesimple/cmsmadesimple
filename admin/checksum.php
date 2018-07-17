@@ -35,7 +35,7 @@ include_once("header.php");
 define('CMS_BASE', dirname(dirname(__FILE__)));
 require_once cms_join_path(CMS_BASE, 'lib', 'test.functions.php');
 
-function checksum_lang($params,&$smarty)
+function checksum_lang($params,$smarty)
 {
     if( isset($params['key']) ) return lang($params['key']);
 }

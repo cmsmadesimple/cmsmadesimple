@@ -3,13 +3,13 @@ if( !isset($gCms) ) exit;
 if( !isset($_REQUEST['cms_cron']) ) exit();
 
 while(ob_get_level()) @ob_end_clean();
-ignore_user_abort();
-header('Connection: close');
+@header('Connection: close');
 $tout = 'X-CMSMS: Processing';
 $size = strlen($tout);
-header("Content-Length: $size");
-header($tout);
+@header("Content-Length: $size");
+@header($tout);
 flush();
+ignore_user_abort();
 
 if( !function_exists('_cmsjobmgr_errorhandler') ) {
     // on cleanup, put this cruft into a utils class..

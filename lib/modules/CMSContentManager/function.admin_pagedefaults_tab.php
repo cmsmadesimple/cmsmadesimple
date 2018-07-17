@@ -1,10 +1,10 @@
 <?php
 #BEGIN_LICENSE
 #-------------------------------------------------------------------------
-# Module: Content (c) 2013 by Robert Campbell 
+# Module: Content (c) 2013 by Robert Campbell
 #         (calguy1000@cmsmadesimple.org)
 #  A module for managing content in CMSMS.
-# 
+#
 #-------------------------------------------------------------------------
 # CMS - CMS Made Simple is (c) 2004 by Ted Kulp (wishy@cmsmadesimple.org)
 # Visit our homepage at: http://www.cmsmadesimple.org
@@ -19,7 +19,7 @@
 # However, as a special exception to the GPL, this software is distributed
 # as an addon module to CMS Made Simple.  You may not use this software
 # in any Non GPL version of CMS Made simple, or in any version of CMS
-# Made simple that does not indicate clearly and obviously in its admin 
+# Made simple that does not indicate clearly and obviously in its admin
 # section that the site was built with CMS Made simple.
 #
 # This program is distributed in the hope that it will be useful,
@@ -36,16 +36,20 @@
 if( !isset($gCms) ) exit;
 if( !$this->CheckPermission('Modify Site Preferences') ) return;
 
-$page_prefs = CmsContentManagerUtils::get_pagedefaults();
-$smarty->assign('page_prefs',$page_prefs);
-$smarty->assign('all_contenttypes',ContentOperations::get_instance()->ListContentTypes(FALSE,FALSE));
-$smarty->assign('design_list',CmsLayoutCollection::get_list());
-$smarty->assign('template_list',CmsLayoutTemplate::template_query(array('as_list'=>1)));
-$smarty->assign('addteditor_list',ContentBase::GetAdditionalEditorOptions());
+try {
+    $page_prefs = CmsContentManagerUtils::get_pagedefaults();
+    $smarty->assign('page_prefs',$page_prefs);
+    $smarty->assign('all_contenttypes',ContentOperations::get_instance()->ListContentTypes(FALSE,FALSE));
+    $smarty->assign('design_list',CmsLayoutCollection::get_list());
+    $smarty->assign('template_list',CmsLayoutTemplate::template_query(array('as_list'=>1)));
+    $smarty->assign('addteditor_list',ContentBase::GetAdditionalEditorOptions());
 
-echo $this->ProcessTemplate('admin_pagedefaults_tab.tpl');
-
+    echo $this->ProcessTemplate('admin_pagedefaults_tab.tpl');
+}
+catch( \Exception $e ) {
+    debug_display( $e ); die();
+    echo $this->ShowErrors( $e->GetMessage() );
+}
 #
 # EOF
 #
-?>

@@ -44,20 +44,19 @@ function installerHelpLanguage( $lang, $default_null=null )
         return substr($lang, 0, 2);
 }
 
-function systeminfo_lang($params,&$smarty)
+function systeminfo_lang($params,$smarty)
 {
-	if( count($params) )
-	{
+	if( count($params) ) {
 		$tmp = array();
-		foreach( $params as $k=>$v)
-		{
+		foreach( $params as $k=>$v) 	{
 			$tmp[] = $v;
 		}
 
 		$str = $tmp[0];
 		$tmp2 = array();
-		for( $i = 1; $i < count($tmp); $i++ )
+		for( $i = 1; $i < count($tmp); $i++ ) {
 			$tmp2[] = $params[$i];
+        }
 		return lang($str,$tmp2);
 	}
 }
@@ -67,8 +66,6 @@ $smarty = $gCms->GetSmarty();
 $smarty->register_function('si_lang','systeminfo_lang');
 $smarty->force_compile = true;
 $db = $gCms->GetDb();
-
-
 
 //smartyfier
 $smarty->assign('themename', $themeObject->themeName);

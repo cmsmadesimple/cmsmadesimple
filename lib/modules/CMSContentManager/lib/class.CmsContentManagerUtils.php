@@ -55,7 +55,7 @@ final class CmsContentManagerUtils
 
   public static function get_pagedefaults()
   {
-      $tpl_id = null;
+      $design_id = $tpl_id = null;
       try {
           $tpl = CmsLayoutTemplate::load_dflt_by_type(CmsLayoutTemplateType::CORE.'::page');
           $tpl_id = $tpl->get_id();
@@ -67,9 +67,15 @@ final class CmsContentManagerUtils
           $tpl_id = $tpl->get_id();
       }
 
+      try {
+          $design_id = \CmsLayoutCollection::load_default()->get_id();
+      }
+      catch( \CmsException $e ) {
+          // ignore this
+      }
       $page_prefs = array('contenttype'=>'content', // string
                           'disallowed_types'=>'', // array of strings
-                          'design_id'=>CmsLayoutCollection::load_default()->get_id(), // int
+                          'design_id'=> $design_id,
                           'template_id'=>$tpl_id,
                           'parent_id'=>-2, // int
                           'secure'=>0, // boolean
