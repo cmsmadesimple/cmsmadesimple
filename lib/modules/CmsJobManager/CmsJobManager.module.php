@@ -26,6 +26,7 @@ if( !isset($gCms) ) exit;
 
 use \CMSMS\Async\Job as Job;
 use \CMSMS\Async\CronJobTrait;
+use CmsJobManager\utils;
 
 final class CmsJobManager extends \CMSModule
 {
@@ -122,7 +123,7 @@ final class CmsJobManager extends \CMSModule
     protected function lock_expired()
     {
         $lock_time = $this->read_lock();
-        $freq = \CmsJobManager\utils::get_async_freq();
+        $freq = utils::get_async_freq();
         if( $freq > 0 && $lock_time < time() - $freq ) return TRUE;
         return FALSE;
     }
@@ -131,8 +132,7 @@ final class CmsJobManager extends \CMSModule
     {
         // this is cheaper.
         $out = \CmsJobManager\JobQueue::get_jobs(1);
-        if( !$out ) return FALSE;
-        if( count($out) ) return TRUE;
+        if( $out ) return TRUE;
 
         // gotta check for tasks, which is more expensive
         $now = time();
@@ -140,7 +140,7 @@ final class CmsJobManager extends \CMSModule
         if( $lastcheck < $now - 900 ) {
             $this->SetPreference('tasks_lastcheck',$now);
             $tasks = $this->create_jobs_from_eligible_tasks();
-            if( count($tasks) ) return TRUE;
+            if( !empty($tasks) ) return TRUE;
         }
         return FALSE;
     }
@@ -220,7 +220,7 @@ final class CmsJobManager extends \CMSModule
     public function save_job(Job &$job)
     {
         $recurs = $until = null;
-        if( \CmsJobManager\utils::job_recurs($job) ) {
+        if( utils::job_recurs($job) ) {
             $recurs = $job->frequency;
             $until = $job->until;
         }
@@ -271,12 +271,13 @@ final class CmsJobManager extends \CMSModule
         // if we triggered the thing less than N minutes ago... do nothing
         $now = time();
         $last_trigger = (int) $this->GetPreference('last_async_trigger');
-        if( $last_trigger >= $now - \CmsJobManager\utils::get_async_freq() ) return; // do nothing
+        debug_to_log(__METHOD__.' '.strftime('%X',$last_trigger).' = '.strftime('%X').' - '.utils::get_async_freq());
+        if( $last_trigger >= $now - utils::get_async_freq() ) return; // do nothing
         $jobs = $this->check_for_jobs_or_tasks();
         if( is_array($jobs) && !count($jobs) ) return; // nothing to do.
 
         // this could go into a function...
-	$config = cmsms()->GetConfig();
+        $config = cmsms()->GetConfig();
         $url_str = $config['async_processing_url'];
         if( !$url_str ) $url_str = html_entity_decode($this->create_url('__','process',$_returnid));
         $url_ob = new \cms_url($url_str);

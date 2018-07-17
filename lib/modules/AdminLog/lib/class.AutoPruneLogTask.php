@@ -48,7 +48,7 @@ class AutoPruneLogTask implements \CmsRegularTask
         $storage = new \AdminLog\storage( $mod );
         $lifetime = $this->get_lifetime();
         $lifetime = max($lifetime,$oneday);
-        $the_time = $time() - $lifetime;
+        $the_time = $time - $lifetime;
         $storage->remove_older_than( $the_time );
         return TRUE;
     }
