@@ -17,6 +17,7 @@
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 #$Id: class.global.inc.php 6939 2011-03-06 00:12:54Z calguy1000 $
+use CMSMS\HookManager;
 
 /**
  * Global class for easy access to all important variables.
@@ -563,7 +564,7 @@ final class CmsApp {
 		global $CMS_LOGIN_PAGE, $CMS_INSTALL_PAGE;
 		if( !defined('TMP_CACHE_LOCATION') ) return;
         $age_days = max(0,(int)$age_days);
-        \CMSMS\HookManager::do_hook('clear_cached_files', [ 'older_than' => $age_days ]);
+        HookManager::do_hook('clear_cached_files', [ 'older_than' => $age_days ]);
 		$the_time = time() - $age_days * 24*60*60;
 
 		$dirs = array(TMP_CACHE_LOCATION,PUBLIC_CACHE_LOCATION,TMP_TEMPLATES_C_LOCATION);
