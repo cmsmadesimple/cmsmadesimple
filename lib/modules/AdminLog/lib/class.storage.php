@@ -30,7 +30,7 @@ class storage
     {
         $time = (int) $time;
         $db = $this->_mod->GetDb();
-        $sql = 'DELETE FROM '.self::table_name().' WHERE timestamp > ?';
+        $sql = 'DELETE FROM '.self::table_name().' WHERE timestamp < ?';
         $db->Execute( $sql, [ $time ] );
     }
 }

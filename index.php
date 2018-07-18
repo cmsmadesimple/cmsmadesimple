@@ -120,7 +120,6 @@ while( $trycount < 2 ) {
         $cachable = $contentobj->Cachable();
         $uid = get_userid(FALSE);
         if( $page == __CMS_PREVIEW_PAGE__ || $uid || $_SERVER['REQUEST_METHOD'] != 'GET' ) $cachable = false;
-        setup_session($cachable);
 
         // from here in, we're assured to have a content object of some sort
 
@@ -133,6 +132,7 @@ while( $trycount < 2 ) {
 
         if( !$contentobj->IsPermitted() ) throw new CmsError403Exception('Permission denied');
 
+        setup_session($cachable);
         $_app->set_content_object($contentobj);
         $smarty->assignGlobal('content_obj',$contentobj);
         $smarty->assignGlobal('content_id', $contentobj->Id());
@@ -167,9 +167,6 @@ while( $trycount < 2 ) {
         else {
             $main_rsrc = $contentobj->TemplateResource();
             if( startswith( $main_rsrc, 'cmsfile:' ) ) {
-                //$top_rsrc = str_replace('cmsfile:','_top:',$main_rsrc);
-                //$body_rsrc = str_replace('cmsfile:','_body:',$main_rsrc);
-                //$head_rsrc = str_replace('cmsfile:','_head:',$main_rsrc);
                 $top_rsrc = $main_rsrc.';top';
                 $body_rsrc = $main_rsrc.';body';
                 $head_rsrc = $main_rsrc.';head';
