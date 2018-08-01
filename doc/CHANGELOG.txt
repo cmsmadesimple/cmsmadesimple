@@ -1,3 +1,11 @@
+Version 2.2.9 -
+----------------------------------
+MicroTiny v2.2.3
+  - More entropy in the mt_config.js filename to fix issues with js caching when switching users.
+
+FileManager v1.6.8
+  - Fixes an upload issue
+
 Version 2.2.8 - Flin Flon
 ----------------------------------
 Core - General

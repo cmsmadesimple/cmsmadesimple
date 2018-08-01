@@ -1,6 +1,7 @@
 <?php
 if (!function_exists("cmsms")) exit;
 if (!$this->CheckPermission("Modify Files") && !$this->AdvancedAccessAllowed()) exit;
+require_once( __DIR__.'/lib/class.jquery_upload_handler.php' );
 
 class FileManagerUploadHandler extends jquery_upload_handler
 {
