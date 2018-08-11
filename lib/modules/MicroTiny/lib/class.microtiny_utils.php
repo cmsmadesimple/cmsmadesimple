@@ -94,7 +94,7 @@ class microtiny_utils
           $output .= '<script type="text/javascript" src="'.CMS_ROOT_URL.'/lib/modules/MicroTiny/lib/js/tinymce/tinymce.min.js"></script>';
       }
 
-      $fn = cms_join_path(PUBLIC_CACHE_LOCATION,'mt_'.md5(__DIR__.session_id().$frontend.$selector.$css_name.$languageid).'.js');
+      $fn = cms_join_path(PUBLIC_CACHE_LOCATION,'mt_'.md5(__DIR__.session_id().$frontend.$selector.$css_name.get_userid(FALSE).$languageid).'.js');
       if( !file_exists($fn) || filemtime($fn) < $mtime ) {
           // we have to generate an mt config js file.
           self::_save_static_config($fn,$frontend,$selector,$css_name,$languageid);
