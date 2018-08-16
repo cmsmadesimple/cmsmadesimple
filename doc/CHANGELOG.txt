@@ -1,10 +1,16 @@
 Version 2.2.9 -
 ----------------------------------
+Core - General
+  - PHP 7.2+ fixes
+
 MicroTiny v2.2.3
   - More entropy in the mt_config.js filename to fix issues with js caching when switching users.
 
 FileManager v1.6.8
   - Fixes an upload issue
+
+ModuleManager v2.1.5 
+  - PHP 7.2+ fixes
 
 Version 2.2.8 - Flin Flon
 ----------------------------------

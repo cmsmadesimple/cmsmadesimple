@@ -72,7 +72,7 @@ if( !$connection_ok ) echo $this->ShowErrors($this->Lang('error_request_problem'
 // this is a bit ugly.
 modmgr_utils::get_images();
 
-$newversions = null;
+$newversions = [];
 if( $connection_ok ) {
     try {
         $newversions = modulerep_client::get_newmoduleversions();
