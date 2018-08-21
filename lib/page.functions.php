@@ -39,6 +39,7 @@
  */
 function get_userid($redirect = true)
 {
+    if( cmsms()->is_cli() ) return 1;
     $login_ops = \CMSMS\LoginOperations::get_instance();
     $uid = $login_ops->get_effective_uid();
     if( !$uid && $redirect ) {
@@ -61,6 +62,7 @@ function get_userid($redirect = true)
  */
 function get_username($check = true)
 {
+    if( cmsms()->is_cli() ) return '';
     $login_ops = \CMSMS\LoginOperations::get_instance();
     $uname = $login_ops->get_effective_username();
     if( !$uname && $check ) {
@@ -190,8 +192,8 @@ function author_pages($userid)
 function audit($itemid, $itemname, $action)
 {
     if( !isset($action) ) $action = '-- unset --';
-    $app = CmsApp::get_instance();
-    $db = CmsApp::get_instance()->GetDb();
+    $app = cmsms();
+    $db = $app->GetDb();
 
     $userid = get_userid(FALSE);
     $username = get_username(FALSE);
@@ -199,7 +201,7 @@ function audit($itemid, $itemname, $action)
     if( $itemid == '' ) $itemid = -1;
     if( $userid < 1 ) $userid = 0;
 
-    if( $userid > 0 ) $ip_addr = cms_utils::get_real_ip();
+    if( $userid > 0 && $app->is_cli() ) $ip_addr = cms_utils::get_real_ip();
 
     $query = "INSERT INTO ".CMS_DB_PREFIX."adminlog (timestamp, user_id, username, item_id, item_name, action, ip_addr) VALUES (?,?,?,?,?,?,?)";
     $db->Execute($query,array(time(),$userid,$username,$itemid,$itemname,$action,$ip_addr));

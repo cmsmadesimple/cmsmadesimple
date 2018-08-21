@@ -120,20 +120,14 @@ abstract class CMSModule
      */
     public function __construct()
     {
+        global $CMS_FORCELOAD;
         global $CMS_STYLESHEET;
         global $CMS_ADMIN_PAGE;
         global $CMS_MODULE_PAGE;
         global $CMS_INSTALL_PAGE;
 
+        if( isset($CMS_FORCELOAD) && $CMS_FORCELOAD ) return;
         if( CmsApp::get_instance()->is_frontend_request() ) {
-            /* 2.2.8
-            $this->SetParameterType('assign',CLEAN_STRING);
-            $this->SetParameterType('module',CLEAN_STRING);
-            $this->SetParameterType('returnid',CLEAN_INT);
-            $this->SetParameterType('action',CLEAN_STRING);
-            $this->SetParameterType('showtemplate',CLEAN_STRING);
-            $this->SetParameterType('inline',CLEAN_INT);
-            */
             $this->InitializeFrontend();
         }
         else if( isset($CMS_ADMIN_PAGE) && !isset($CMS_STYLESHEET) && !isset($CMS_INSTALL_PAGE) ) {

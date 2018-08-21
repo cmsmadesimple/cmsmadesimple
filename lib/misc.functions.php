@@ -40,10 +40,15 @@
  */
 function redirect($to)
 {
+    $app = cmsms();
+    if( $app->is_cli() ) {
+	// cannot redirect cli based scripts
+	die("ERROR: no redirect on cli based scripts ---\n");
+    }
     $_SERVER['PHP_SELF'] = null;
 
     $schema = 'http';
-    if( CmsApp::get_instance()->is_https_request() ) $schema = 'https';
+    if( $app->is_https_request() ) $schema = 'https';
 
     $host = $_SERVER['HTTP_HOST'];
     $components = parse_url($to);

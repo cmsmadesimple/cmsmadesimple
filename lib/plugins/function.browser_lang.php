@@ -19,73 +19,62 @@
 function smarty_function_browser_lang($params, &$smarty)
 {
   $default = 'en';
+  $res = null;
 
   //
   // get the default language
   //
-  if( isset($params['default']) )
-    {
-      $default = strtolower(substr($params['default'],0,2));
-    }
+  if( isset($params['default']) ) $default = strtolower(substr($params['default'],0,2));
 
   // 
   // get the accepted languages
   //
-  if( !isset($params['accepted']) )
-    {
-      return $default;
-    }
-  $tmp = trim($params['accepted']);
-  $tmp = trim($tmp,',');
-  $tmp2 = explode(',',$tmp);
-  if( !is_array($tmp2) || count($tmp2) == 0 )
-    {
-      return $default;
-    }
-  $accepted = array();
-  for( $i = 0; $i < count($tmp2); $i++ )
-    {
-      if( strlen($tmp2[$i]) < 2 ) continue;
-      $accepted[] = strtolower(substr($tmp2[$i],0,2));
-    }
+  $accept_str = get_parameter_value( $params, 'accepted' );
+  if( !$accept_str ) $accept_str = get_parameter_value( $params, 'accept' );
+  if( $accept_str ) {
+      $tmp = trim($accept_str);
+      $tmp = trim($tmp,',');
+      $tmp2 = explode(',',$tmp);
+      if( is_array($tmp2) && count($tmp2) > 0 ) {
+          $accepted = [];
+          for( $i = 0; $i < count($tmp2); $i++ ) {
+              if( strlen($tmp2[$i]) < 2 ) continue;
+              $accepted[] = strtolower(substr($tmp2[$i],0,2));
+          }
 
-  //
-  // process the accepted languages and the default
-  // makes sure the array is unique, and that the default
-  // is listed first
-  //
-  $accepted = array_merge(array($default),$accepted);
-  $accepted = array_unique($accepted);
+          //
+          // process the accepted languages and the default
+          // makes sure the array is unique, and that the default
+          // is listed first
+          //
+          $accepted = array_merge(array($default),$accepted);
+          $accepted = array_unique($accepted);
+          
+          // 
+          // now process browser language
+          //
+          $res = $default;
+          if (isset($_SERVER["HTTP_ACCEPT_LANGUAGE"])) {
+              $alllang = $_SERVER["HTTP_ACCEPT_LANGUAGE"];
+              if (strpos($alllang, ";") !== FALSE) $alllang = substr($alllang,0,strpos($alllang, ";"));
+              $langs = explode(",", $alllang);
+              if( is_array($langs) && count($langs) ) {
+                  foreach( $langs as $one ) {
+                      $tmp = strtolower(substr($one,0,2));
+                      if( in_array($tmp,$accepted) ) {
+                          $res = $tmp;
+                          break;
+                      }
+                  }
+              }
+          }
+      }
+  }
 
-  // 
-  // now process browser language
-  //
-  $res = $default;
-  if (isset($_SERVER["HTTP_ACCEPT_LANGUAGE"])) 
-    {
-		$alllang = $_SERVER["HTTP_ACCEPT_LANGUAGE"];
-		if (strpos($alllang, ";") !== FALSE)
-			$alllang = substr($alllang,0,strpos($alllang, ";"));
-		$langs = explode(",", $alllang);
-
-		if( is_array($langs) && count($langs) )
-		{
-			foreach( $langs as $one )
-			{
-				if( in_array($one,$accepted) )
-				{
-					$res = $one;
-				break;
-				}
-			}
-		}
-    }
-
-  if( isset($params['assign']) )
-    {
+  if( isset($params['assign']) ) {
 		$smarty->assign(trim($params['assign']),$res);
 		return;
-    }
+  }
   
   return $res;
 }

@@ -620,6 +620,18 @@ final class CmsApp {
     }
 
     /**
+     * A convenience method to test if the current request was executed via the CLI.
+     *
+     * @since 2.2.9
+     * @author Robert Campbell
+     * @return bool
+     */
+    public function is_cli()
+    {
+	return (php_sapi_name() == 'cli');
+    }
+
+    /**
 	 * A convenience method to test if the current request is a frontend request.
 	 *
 	 * @since 1.11.2

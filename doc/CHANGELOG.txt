@@ -2,6 +2,10 @@ Version 2.2.9 -
 ----------------------------------
 Core - General
   - PHP 7.2+ fixes
+  - Now do not call Module::InitializeAdmin() or Module::InitializeFrontend() if the module loading is being forced
+    (as is the case sometimes within ModuleManager);
+  - Minor changes and fixes to prevent warnings/notices in CLI based scripts
+  - Improvements to the {browser_lang} plugin.
 
 MicroTiny v2.2.3
   - More entropy in the mt_config.js filename to fix issues with js caching when switching users.
@@ -9,7 +13,7 @@ MicroTiny v2.2.3
 FileManager v1.6.8
   - Fixes an upload issue
 
-ModuleManager v2.1.5 
+ModuleManager v2.1.5
   - PHP 7.2+ fixes
 
 Version 2.2.8 - Flin Flon

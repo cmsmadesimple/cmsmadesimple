@@ -634,7 +634,10 @@ final class ModuleOperations
             return FALSE;
         }
 
+        global $CMS_FORCELOAD;
+        $CMS_FORCELOAD = $force_load;
         $obj = new $classname;
+        unset($CMS_FORCELOAD);
         if( !is_object($obj) || ! $obj instanceof \CMSModule ) {
             // oops, some problem loading.
             audit('','Module',"Cannot load module $module_name ... some problem instantiating the class");
