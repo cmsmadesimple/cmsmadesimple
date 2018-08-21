@@ -124,7 +124,6 @@ final class CmsAdminMenuItem
     /**
      * A convenience method to build a standard admin menu item from module methods.
      *
-     * @internal
      * @param CMSModule $mod
      */
     public static function &from_module(\CMSModule $mod)

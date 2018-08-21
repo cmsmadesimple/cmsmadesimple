@@ -17,7 +17,7 @@ class auditor implements \CMSMS\IAuditManager
         $parms = [];
         $parms['uid']= get_userid(FALSE);
         $parms['username'] = get_username(FALSE);
-        if( $parms['uid'] ) $parms['ip_addr'] = \cms_utils::get_real_ip();
+        if( $parms['uid'] && !cmsms()->is_cli() ) $parms['ip_addr'] = \cms_utils::get_real_ip();
         return $parms;
     }
 

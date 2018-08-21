@@ -39,6 +39,7 @@
  */
 function get_userid(bool $redirect = true)
 {
+    if( cmsms()->is_cli() ) return 1;
     $login_ops = \CMSMS\LoginOperations::get_instance();
     $uid = $login_ops->get_effective_uid();
     if( !$uid && $redirect ) {
@@ -61,6 +62,7 @@ function get_userid(bool $redirect = true)
  */
 function get_username(bool $check = true)
 {
+    if( cmsms()->is_cli() ) return '';
     $login_ops = \CMSMS\LoginOperations::get_instance();
     $uname = $login_ops->get_effective_username();
     if( !$uname && $check ) {

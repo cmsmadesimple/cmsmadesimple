@@ -437,10 +437,10 @@ final class ModuleOperations
             return false;
         }
 
-	if( !isset($CMS_INSTALL_PAGE) && !isset($CMS_STYLESHEET) ) {
+        if( !isset($CMS_INSTALL_PAGE) && !isset($CMS_STYLESHEET) && !$force_load ) {
             if( isset($CMS_ADMIN_PAGE) ) {
                 $obj->InitializeAdmin();
-            } else if( !$force_load ) {
+            } else {
                 if( CmsApp::get_instance()->is_frontend_request() ) $obj->InitializeFrontend();
             }
         }
