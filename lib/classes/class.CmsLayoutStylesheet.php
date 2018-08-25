@@ -525,7 +525,6 @@ class CmsLayoutStylesheet
         $this->_dirty = FALSE;
         CmsTemplateCache::clear_cache();
         audit($this->get_id(),'CMSMS','Stylesheet '.$this->get_name().' Created');
-        die();
     }
 
 	/**
