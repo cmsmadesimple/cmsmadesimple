@@ -136,7 +136,7 @@ if( version_compare(phpversion(),'5.5') >= 0 ) {
 }
 $res = (bool) get_site_preference('use_smartycache', FALSE);
 $tmp[0]['smarty_cache'] = testBoolean(0, lang('prompt_use_smartycaching'),$res,lang('test_smarty_caching'), FALSE);
-$res = get_site_preference('use_smarty_compilecheck', FALSE);
+$res = get_site_preference('use_smartycompilecheck', FALSE);
 $tmp[0]['smarty_compilecheck'] = testBoolean(0, lang('prompt_smarty_compilecheck'),$res,lang('test_smarty_caching'),FALSE,TRUE);
 $res = get_site_preference('auto_clear_cache_age', 0);
 $tmp[0]['auto_clear_cache_age'] = testBoolean(0, lang('autoclearcache2'),$res,lang('test_auto_clear_cache_age'), FALSE);
