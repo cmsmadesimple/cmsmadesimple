@@ -24,6 +24,9 @@ ModuleManager v2.1.5
 CMSContentManager v1.1.7
   - Fixes an issue with changing content type after copying a content page.
 
+DesignManager v1.1.5
+  - Fixes ownership issue on templates with importing a design.
+
 Version 2.2.8 - Flin Flon
 ----------------------------------
 Core - General

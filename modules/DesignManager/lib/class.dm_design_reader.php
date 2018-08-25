@@ -358,10 +358,10 @@ class dm_design_reader extends dm_reader_base
     $newname = $this->get_new_name();
     $destdir = $this->get_destination_dir();
     $info    = $this->get_design_info();
+    $owner_id = get_userid(false);
 
     // create new design... fill it with info
     $design = new CmsLayoutCollection();
-    // $design->set_owner(get_userid(FALSE));
     $design->set_name($newname);
     $description = $this->get_suggested_description();
 
@@ -469,6 +469,7 @@ class dm_design_reader extends dm_reader_base
         $template->set_type($type_obj);
       }
 
+      if( $owner_id > 0 ) $template->set_owner( $owner_id );
       $template->save();
       $tpl_recs['newname'] = $template->get_name();
       $design->add_template($template);
