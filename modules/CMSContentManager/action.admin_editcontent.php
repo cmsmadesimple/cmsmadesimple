@@ -78,10 +78,11 @@ try {
     //
     // load or create the initial content object
     //
-    if( $content_id == 'copy' && isset($_SESSION['__cms_copy_obj__']) ) {
+    if( $content_id === 0 && isset($_SESSION['__cms_copy_obj__']) ) {
         // we're copying a content object.
         $content_obj = unserialize($_SESSION['__cms_copy_obj__']);
         $content_type = $content_obj->Type();
+        if( isset($params['content_type']) ) $content_type = trim($params['content_type']);
     }
     else if( $content_id < 1 ) {
         // creating a new content object
@@ -118,7 +119,7 @@ try {
         $content_obj->SetParentId($dflt_parent);
     }
     else {
-        // editint an existing content object
+        // editing an existing content object
         $content_obj = $contentops->LoadContentFromId($content_id);
         $content_type = $content_obj->Type();
         if( isset($params['content_type']) ) {

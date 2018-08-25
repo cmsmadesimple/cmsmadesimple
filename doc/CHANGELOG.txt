@@ -21,6 +21,9 @@ FileManager v1.6.8
 ModuleManager v2.1.5
   - PHP 7.2+ fixes
 
+CMSContentManager v1.1.7
+  - Fixes an issue with changing content type after copying a content page.
+
 Version 2.2.8 - Flin Flon
 ----------------------------------
 Core - General
