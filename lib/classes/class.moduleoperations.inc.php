@@ -508,7 +508,6 @@ final class ModuleOperations
     /**
      * Install a module into the database
      *
-     * @internal
      * @param string $module The name of the module to install
      * @param bool $loadifnecessary If true, loads the module before trying to install it
      * @return array Returns a tuple of whether the install was successful and a message if applicable
