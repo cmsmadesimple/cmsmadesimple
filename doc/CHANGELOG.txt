@@ -6,6 +6,7 @@ Core - General
     (as is the case sometimes within ModuleManager);
   - Minor changes and fixes to prevent warnings/notices in CLI based scripts
   - Improvements to the {browser_lang} plugin.
+  - Fixes a bug in the CmsLayoutTemplateQuery class.
 
 MicroTiny v2.2.3
   - More entropy in the mt_config.js filename to fix issues with js caching when switching users.

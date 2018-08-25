@@ -113,7 +113,7 @@ o	 * @throws CmsInvalidDataException
 					if( in_array($tmp3,$tmp2) ) continue;
 					$tmp2[] = $tmp3;
 				}
-				$where['id'][] = 'id IN '.implode(',',$tmp2);
+				$where['id'][] = 'tpl.id IN ('.implode(',',$tmp2).')';
 				break;
 
             case 't': // type
