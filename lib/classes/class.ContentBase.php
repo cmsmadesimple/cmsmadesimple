@@ -1800,7 +1800,7 @@ abstract class ContentBase
 		if (isset($params['accesskey'])) $this->mAccessKey = strip_tags($params['accesskey']);
 
 		// tab index
-		if (isset($params['tabindex'])) $this->mTabIndex = (int) $params['tabindex'];
+		if (isset($params['tabindex'])) $this->mTabIndex = (empty($params['tabIndex'])) ? '' : (int) $params['tabindex'];
 
 		// cachable
 		if (isset($params['cachable'])) {
@@ -2423,7 +2423,7 @@ abstract class ContentBase
 		case 'accesskey':
 			$help = '&nbsp;'.cms_admin_utils::get_help_tag('core','help_content_accesskey',lang('help_title_content_accesskey'));
 			return array('<label for="accesskey">'.lang('accesskey').':</label>'.$help,
-						 '<input type="text" name=accesskey" id="accesskey" maxlength="5" value="'.cms_htmlentities($this->mAccessKey).'" />');
+						 '<input type="text" name="accesskey" id="accesskey" maxlength="5" value="'.cms_htmlentities($this->mAccessKey).'" />');
 
 		case 'tabindex':
 			$help = '&nbsp;'.cms_admin_utils::get_help_tag('core','help_content_tabindex',lang('help_title_content_tabindex'));
