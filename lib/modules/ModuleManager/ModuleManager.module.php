@@ -94,6 +94,11 @@ class ModuleManager extends CMSModule
     function DoAction($action, $id, $params, $returnid=-1)
     {
         @set_time_limit(9999);
+        if( isset( $params['__activetab'] ) ) {
+            $tab = filter_var( $params['__activetab'], FILTER_SANITIZE_STRING );
+            $this->SetCurrentTab( $tab );
+            unset( $params['__activetab'] );
+        }
         $smarty = \Smarty_CMS::get_instance();
         $smarty->assign($this->GetName(), $this);
         $smarty->assign('mod', $this);
