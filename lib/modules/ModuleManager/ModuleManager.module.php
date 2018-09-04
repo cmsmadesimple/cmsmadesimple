@@ -94,11 +94,9 @@ class ModuleManager extends CMSModule
     function DoAction($action, $id, $params, $returnid=-1)
     {
         @set_time_limit(9999);
-        /*
-          $smarty = \Smarty_CMS::get_instance();
-          $smarty->assign($this->GetName(), $this);
-          $smarty->assign('mod', $this);
-        */
+        $smarty = \Smarty_CMS::get_instance();
+        $smarty->assign($this->GetName(), $this);
+        $smarty->assign('mod', $this);
         parent::DoAction( $action, $id, $params, $returnid );
     }
 

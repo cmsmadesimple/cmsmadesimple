@@ -71,12 +71,12 @@ try {
             }
 
             // expand all of the xml files.
-            $ops = cmsms()->GetModuleOperations();
+            $ops = $this->get_operations();
             foreach( $modlist as $key => &$rec ) {
                 if( $rec['action'] != 'i' && $rec['action'] != 'u' ) continue;
                 $xml_filename = modmgr_utils::get_module_xml($rec['filename'],$rec['size'],(isset($rec['md5sum']))?$rec['md5sum']:'');
                 $rec['tmpfile'] = $xml_filename;
-                $res = $ops->ExpandXMLPackage( $xml_filename, 1 );
+                $res = $ops->expand_xml_package( $xml_filename, 1 );
             }
 
             // now put this data into the session and redirect for the install part

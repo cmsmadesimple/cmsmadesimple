@@ -356,7 +356,6 @@ class dm_design_reader extends dm_reader_base
 
       // create new design... fill it with info
       $design = new CmsLayoutCollection();
-      // $design->set_owner(get_userid(FALSE));
       $design->set_name($newname);
       $description = $this->get_suggested_description();
 
@@ -463,6 +462,7 @@ class dm_design_reader extends dm_reader_base
               $template->set_type($type_obj);
           }
 
+          $uid = get_userid(FALSE); if( $uid > 0 ) $template->set_owner( $uid );
           $template->save();
           $tpl_recs['newname'] = $template->get_name();
           $design->add_template($template);

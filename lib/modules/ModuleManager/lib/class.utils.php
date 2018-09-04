@@ -177,10 +177,10 @@ final class utils
     public static function get_module_xml($filename,$size,$md5sum = null)
     {
         $mod = \cms_utils::get_module('ModuleManager');
-        $xml_filename = modulerep_client::get_repository_xml($filename,$size);
+        $xml_filename = \modulerep_client::get_repository_xml($filename,$size);
         if( !$xml_filename ) throw new \CmsCommunicationException($mod->Lang('error_downloadxml',$filename));
 
-        if( !$md5sum ) $md5sum = modulerep_client::get_module_md5($filename);
+        if( !$md5sum ) $md5sum = \modulerep_client::get_module_md5($filename);
         $dl_md5 = md5_file($xml_filename);
 
         if( $md5sum != $dl_md5 ) {
