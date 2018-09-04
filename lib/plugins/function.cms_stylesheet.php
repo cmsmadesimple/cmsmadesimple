@@ -76,7 +76,7 @@ function smarty_function_cms_stylesheet($params, &$smarty)
         $query = null;
         if( $name != '' ) {
             // stylesheet by name
-            $query = new CmsLayoutStylesheetQuery(array('name'=>$params['name']) );
+            $query = new CmsLayoutStylesheetQuery( [ 'fullname'=>$name ] );
         } else if( $design_id > 0 ) {
             // stylesheet by design id
             $query = new \CmsLayoutStylesheetQuery( [ 'design'=>$design_id ] );
