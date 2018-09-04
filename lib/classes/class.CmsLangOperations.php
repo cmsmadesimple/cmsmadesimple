@@ -95,7 +95,7 @@ final class CmsLangOperations
             }
             if( is_dir(cms_join_path(CMS_ASSETS_PATH,'modules',$realm)) ) {
                 $is_module = true;
-                $files[] = cms_join_path(CMS_ROOT_PATH,'lib','modules',$realm,'lang','en_US.php');
+                $files[] = cms_join_path(CMS_ASSETS_PATH,'modules',$realm,'lang','en_US.php');
             }
             $files[] = cms_join_path(CMS_ROOT_PATH,'lib','lang',$realm,'en_US.php');
         }

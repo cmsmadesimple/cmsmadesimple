@@ -269,7 +269,6 @@ final class ModuleOperations
     /**
      * Install a module into the database
      *
-     * @internal
      * @param string $module The name of the module to install
      * @return array Returns a tuple of whether the install was successful and a message if applicable
      */
@@ -371,7 +370,6 @@ final class ModuleOperations
         if( !class_exists($class_name,true) ) {
             $fname = $this->get_module_filename( $module_name);
             if( !is_file($fname) ) {
-                die("no $fname");
                 warning("Cannot load $module_name because the module file does not exist");
                 return FALSE;
             }
@@ -385,7 +383,10 @@ final class ModuleOperations
             return FALSE;
         }
 
+        global $CMS_FORCELOAD;
+        $CMS_FORCELOAD = $force_load;
         $obj = new $class_name;
+        unset($CMS_FORCELOAD);
         if( !is_object($obj) || ! $obj instanceof \CMSModule ) {
             // oops, some problem loading.
             cms_error("Cannot load module $module_name ... some problem instantiating the class");
@@ -435,14 +436,6 @@ final class ModuleOperations
             debug_buffer('Cannot load an uninstalled module');
             unset($obj,$this->_modules[$module_name]);
             return false;
-        }
-
-        if( !isset($CMS_INSTALL_PAGE) && !isset($CMS_STYLESHEET) && !$force_load ) {
-            if( isset($CMS_ADMIN_PAGE) ) {
-                $obj->InitializeAdmin();
-            } else {
-                if( CmsApp::get_instance()->is_frontend_request() ) $obj->InitializeFrontend();
-            }
         }
 
         // we're all done.

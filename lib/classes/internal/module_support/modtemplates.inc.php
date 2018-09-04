@@ -107,3 +107,20 @@ function cms_module_SetTemplate(&$modinstance, $tpl_name, $content, $modulename 
 		$db->Execute($query, array($content, $modulename != ''?$modulename:$modinstance->GetName(), $tpl_name));
 	}
 }
+
+/**
+ * @access private
+ */
+function cms_module_DeleteTemplate(&$modinstance, $tpl_name = '', $modulename = '')
+{
+	$db = CmsApp::get_instance()->GetDb();
+
+	$parms = array($modulename != ''?$modulename:$modinstance->GetName());
+	$query = "DELETE FROM ".CMS_DB_PREFIX."module_templates WHERE module_name = ?";
+	if( $tpl_name != '' ) {
+		$query .= 'AND template_name = ?';
+	    $parms[] = $tpl_name;
+	}
+	$result = $db->Execute($query, $parms);
+	return ($result == false)?false:true;
+}

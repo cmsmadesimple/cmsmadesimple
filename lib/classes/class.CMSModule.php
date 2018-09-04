@@ -117,6 +117,14 @@ abstract class CMSModule
      */
     public function __construct()
     {
+        global $CMS_FORCELOAD;
+        global $CMS_STYLESHEET;
+        global $CMS_ADMIN_PAGE;
+        global $CMS_MODULE_PAGE;
+        global $CMS_INSTALL_PAGE;
+
+        if( isset($CMS_FORCELOAD) && $CMS_FORCELOAD ) return;
+        if( cmsms()->is_cli() ) return;
         if( CmsApp::get_instance()->is_frontend_request() ) {
             $this->SetParameterType('assign',CLEAN_STRING);
             $this->SetParameterType('module',CLEAN_STRING);
@@ -125,6 +133,10 @@ abstract class CMSModule
             $this->SetParameterType('action',CLEAN_STRING);
             $this->SetParameterType('showtemplate',CLEAN_STRING);
             $this->SetParameterType('inline',CLEAN_INT);
+            $this->InitializeFrontend();
+        }
+        else if( isset($CMS_ADMIN_PAGE) && !isset($CMS_STYLESHEET) && !isset($CMS_INSTALL_PAGE) ) {
+            $this->InitializeAdmin();
         }
     }
 
@@ -502,6 +514,7 @@ abstract class CMSModule
      */
     final public function GetParameters()
     {
+        stack_trace(); die( __METHOD__ );
         if( count($this->params) == 0 ) $this->InitializeAdmin(); // quick hack to load parameters if they are not already loaded.
         return $this->params;
     }
@@ -1387,7 +1400,6 @@ abstract class CMSModule
             }
         }
 
-        die("not found ".$this->GetName().' action = '.$name);
         @trigger_error("$name is an unknown acton of module ".$this->GetName());
         throw new \CmsError404Exception("Module action not found");
     }

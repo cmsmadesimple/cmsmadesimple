@@ -298,8 +298,8 @@ class CmsLayoutStylesheet
 	 */
     public function get_designs()
     {
-        if( !$this->get_id() ) return;
         if( !is_array($this->_design_assoc) ) {
+            if( !$this->get_id() ) return;
             $this->_design_assoc = null;
             $db = CmsApp::get_instance()->GetDb();
             $query = 'SELECT design_id FROM '.CMS_DB_PREFIX.CmsLayoutCollection::CSSTABLE.' WHERE css_id = ?';
@@ -517,9 +517,10 @@ class CmsLayoutStylesheet
 
         $t = $this->get_designs();
         if( is_array($t) && count($t) ) {
-            $query = 'INSERT INTO '.CMS_DB_PREFIX.CmsLayoutCollection::CSSTABLE.' (css_id,design_id) VALUES(?,?)';
+            $query = 'INSERT INTO '.CMS_DB_PREFIX.CmsLayoutCollection::CSSTABLE.' (css_id,design_id,item_order) VALUES(?,?,?)';
+            $item_order = 1;
             foreach( $t as $one ) {
-				$dbr = $db->Execute($query,array($this->get_id(),(int)$one));
+				$dbr = $db->Execute($query,[ $this->get_id(),(int)$one,$item_order++ ] );
             }
         }
 

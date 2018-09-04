@@ -94,6 +94,11 @@ class CmsLayoutStylesheetQuery extends CmsDbQueryBase
                 $where[] = 'name LIKE '.$db->qstr($val.'%');
                 break;
 
+            case 'fullname':
+                $val = trim($val);
+                $where[] = 'name = '.$db->qstr($val.'%');
+                break;
+
             case 'd': // design
             case 'design':
                 $query .= ' LEFT JOIN '.CMS_DB_PREFIX.CmsLayoutCollection::CSSTABLE.' D ON S.id = D.css_id';

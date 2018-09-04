@@ -44,7 +44,7 @@ function cms_module_CreateFormStart(&$modinstance, $id, $action='default', $retu
 	if ($idsuffix == '') $idsuffix = $_formcount++;
 
 	$goto = 'moduleinterface.php';
-	if( $returnid != '' ) {
+	if( $returnid > 0 ) {
         $goto = 'index.php';
         $content_obj = \cms_utils::get_current_content();
         if( $content_obj ) $goto = $content_obj->GetURL();
@@ -57,7 +57,7 @@ function cms_module_CreateFormStart(&$modinstance, $id, $action='default', $retu
 	if ($enctype != '') $text .= ' enctype="'.$enctype.'"';
 	if ($extra != '') $text .= ' '.$extra;
 	$text .= '>'."\n".'<div class="hidden">'."\n".'<input type="hidden" name="mact" value="'.$modinstance->GetName().','.$id.','.$action.','.($inline == true?1:0).'" />'."\n";
-	if ($returnid != '') {
+	if ($returnid > 0 ) {
 		$text .= '<input type="hidden" name="'.$id.'returnid" value="'.$returnid.'" />'."\n";
 		if ($inline) $text .= '<input type="hidden" name="'.$modinstance->cms->config['query_var'].'" value="'.$returnid.'" />'."\n";
 	}
@@ -351,11 +351,9 @@ function cms_module_create_url(&$modinstance,$id,$action,$returnid='',$params=ar
 	$base_url = CMS_ROOT_URL;
 
 	// get the destination content object
-	if( $returnid != '' ) {
-		$content_obj = CmsApp::get_instance()->GetContentOperations()->LoadContentFromId($returnid);
-	}
+	if( $returnid > 0 ) $content_obj = CmsApp::get_instance()->GetContentOperations()->LoadContentFromId($returnid);
 
-	if ($prettyurl != '' && $config['url_rewriting'] == 'mod_rewrite') {
+	if ($prettyurl <= 0 && $config['url_rewriting'] == 'mod_rewrite') {
 		$text = $base_url . '/' . $prettyurl . $config['page_extension'];
 	}
 	else if ($prettyurl != '' && $config['url_rewriting'] == 'internal') {
@@ -363,24 +361,28 @@ function cms_module_create_url(&$modinstance,$id,$action,$returnid='',$params=ar
 	}
 	else {
 		$text = '';
-		if ($targetcontentonly || ($returnid != '' && !$inline)) $id = 'cntnt01';
 		$goto = 'index.php';
-		if ($returnid == '') $goto = 'moduleinterface.php';
+        if( $returnid <= 0 ) {
+            $id = 'm1';
+            $goto = 'moduleinterface.php';
+        } else if( $targetcontentonly && !$inline ) {
+            $id = 'cntnt01';
+        }
 
 		$text = $base_url;
 		if( $returnid <= 0 ) $text = $config['admin_url'];
 
 		$secureparam = '';
-		if( $returnid == '' ) $secureparam='&amp;'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
+		if( $returnid <= 0 ) $secureparam='&amp;'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 		$text .= '/'.$goto.'?mact='.$modinstance->GetName().','.$id.','.$action.','.($inline == true?1:0).$secureparam;
-		if( isset($params['returnid']) && $returnid != '' ) unset($params['returnid']);
+		if( isset($params['returnid']) && $returnid <= 0 ) unset($params['returnid']);
 		foreach ($params as $key=>$value) {
 			$key = cms_htmlentities($key);
 			if( in_array($key,array('assign','id','returnid','action','module')) ) continue;
 			$value = cms_htmlentities($value);
 			$text .= '&amp;'.$id.$key.'='.rawurlencode($value);
 		}
-		if ($returnid != '') {
+		if( $returnid <= 0 ) {
 			$text .= '&amp;'.$id.'returnid='.$returnid;
 			if ($inline) $text .= '&amp;'.$config['query_var'].'='.$returnid;
 		}
