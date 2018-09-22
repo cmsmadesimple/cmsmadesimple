@@ -155,7 +155,11 @@ if ($params['searchinput'] != '') {
                 $node = $hm->sureGetNodeById($result->fields['content_id']);
                 if (isset($node)) {
                     $content = $node->GetContent();
-                    if (isset($content) && $content->Active()) $col->AddItem($content->Name(), $content->GetURL(), $content->Name(), $result->fields['total_weight']);
+                    if (isset($content) && $content->Active()) {
+                        $col->AddItem($content->Name(), $content->GetURL(),
+                                      $content->Name(), $result->fields['total_weight'].
+                                      '_content_', $result->fields['content_id']);
+                    }
                 }
             }
         }
