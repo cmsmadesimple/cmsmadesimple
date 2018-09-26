@@ -11,6 +11,7 @@ Core - General
   - Fixes a minor issue in system information (smarty compilecheck)
   - Fixes a minor issue with the tabIndex and accesskey fields in edit content.
   - Fixes issue in the CmsLayoutStylesheet class related to associating designs with new stylesheets.
+  - Now check for an english language file first in module_custom/xxxxx/lang before a file for the current language.
 
 MicroTiny v2.2.3
   - More entropy in the mt_config.js filename to fix issues with js caching when switching users.

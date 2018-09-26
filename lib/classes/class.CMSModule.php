@@ -126,6 +126,7 @@ abstract class CMSModule
         global $CMS_MODULE_PAGE;
         global $CMS_INSTALL_PAGE;
 
+        if( cmsms()->is_cli() ) return;
         if( isset($CMS_FORCELOAD) && $CMS_FORCELOAD ) return;
         if( CmsApp::get_instance()->is_frontend_request() ) {
             $this->InitializeFrontend();
