@@ -58,7 +58,7 @@ final class cms_admin_tabs
    */
   public static function set_current_tab($tab)
   {
-    self::$_current_tab = $tab;
+      self::$_current_tab = $tab;
   }
 
   /**
@@ -68,8 +68,8 @@ final class cms_admin_tabs
    */
   public static function start_tab_headers()
   {
-    self::$_start_headers_sent = 1;
-    return '<div id="page_tabs">';
+      self::$_start_headers_sent = 1;
+      return '<div id="page_tabs">';
   }
 
   /**

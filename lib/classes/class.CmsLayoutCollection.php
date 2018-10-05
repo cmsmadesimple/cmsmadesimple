@@ -412,29 +412,31 @@ class CmsLayoutCollection
 
         $db = CmsApp::get_instance()->GetDb();
         $query = 'INSERT INtO '.CMS_DB_PREFIX.self::TABLENAME.' (name,description,dflt,created,modified) VALUES (?,?,?,?,?)';
-        $dbr = $db->Execute($query,array($this->get_name(), $this->get_description(), ($this->get_default())?1:0, time(),time()));
+        $dbr = $db->Execute($query, [ $this->get_name(), $this->get_description(), ($this->get_default())?1:0, time(),time() ]);
         if( !$dbr ) throw new CmsSQLErrorException($db->sql.' -- '.$db->ErrorMsg());
 
         $this->_data['id'] = $db->Insert_ID();
 
+        /*
 		if( $this->get_default() ) {
-			$query = 'UPDATE '.CMS_DB_PREFIX.self::TABLENAME.' SET dflt = 0 WHERE id != ?';
-			$dbr = $db->Execute($query,array($this->get_id()));
+			$query = 'UPDATE '.CMS_DB_PREFIX.self::TABLENAME.' SET dflt = 1 WHERE id != ?';
+			$dbr = $db->Execute($query, [ $this->get_id() ]);
 			if( !$dbr ) throw new CmsSQLErrorException($db->sql.' -- '.$db->ErrorMsg());
 		}
+        */
 
         if( count($this->_css_assoc) ) {
             $query = 'INSERT INTO '.CMS_DB_PREFIX.self::CSSTABLE.' (design_id,css_id,item_order) VALUES (?,?,?)';
             for( $i = 0, $n = count($this->_css_assoc); $i < $n; $i++ ) {
 				$css_id = $this->_css_assoc[$i];
-				$dbr = $db->Execute($query,array($this->get_id(),$css_id,$i+1));
+				$dbr = $db->Execute($query, [ $this->get_id(),$css_id,$i+1 ] );
             }
         }
         if( count($this->_tpl_assoc) ) {
             $query = 'INSERT INTO '.CMS_DB_PREFIX.self::TPLTABLE.' (design_id,tpl_id) VALUES(?,?)';
             for( $i = 0, $n = count($this->_tpl_assoc); $i < $n; $i++ ) {
 				$tpl_id = $this->_tpl_assoc[$i];
-				$dbr = $db->Execute($query,array($this->get_id(),$tpl_id));
+				$dbr = $db->Execute($query, [ $this->get_id(),$tpl_id ] );
             }
         }
 

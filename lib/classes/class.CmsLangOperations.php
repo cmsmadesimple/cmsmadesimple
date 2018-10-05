@@ -122,6 +122,7 @@ final class CmsLangOperations
         }
         else {
             if( $is_module ) {
+                $files[] = cms_join_path($config['assets_path'],'module_custom',$realm,'lang','en_US.php');
                 $files[] = cms_join_path($config['assets_path'],'module_custom',$realm,'lang',$curlang.'.php');
                 $files[] = cms_join_path($config['assets_path'],'module_custom',$realm,'lang','ext',$curlang.'.php');
             }

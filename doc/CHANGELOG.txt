@@ -167,8 +167,9 @@ FilePicker v1.0.1
 AdminLog
   - New core module to replace the adminlog.php file
 
-Search  - remember to bump version
+Search  - v1.52
   - FEATURE: Now exports a command for cmscli
+  - The search results now contain _content_ and the page id for content pages.
 
 AdminSearch v1.0.5
  - Rationalize the code a bit (remove un-necessary files).
