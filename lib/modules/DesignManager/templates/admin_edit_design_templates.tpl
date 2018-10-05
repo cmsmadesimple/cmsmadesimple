@@ -42,7 +42,7 @@
             <legend>{$mod->Lang('attached_templates')}</legend>
             <div id="selected-templates">
                 <ul class="sortable-templates sortable-list selected-templates">
-                    {if $design->get_templates()|@count == 0}<li class="placeholder no-sort">{$mod->Lang('drop_items')}</li>{/if}
+                    {if empty($tmpl)}<li class="placeholder no-sort">{$mod->Lang('drop_items')}</li>{/if}
                     {foreach from=$all_templates item='tpl'}
                         {if $tmpl && in_array($tpl->get_id(),$tmpl)}
                             <li class="ui-state-default cf sortable-item no-sort" data-cmsms-item-id="{$tpl->get_id()}" tabindex="-1">

@@ -42,8 +42,8 @@
             <legend>{$mod->Lang('attached_stylesheets')}</legend>
             <div id="selected-stylesheets">
                 <ul class="sortable-stylesheets sortable-list selected-stylesheets">
-                    {if $design->get_stylesheets()|count == 0}<li class="placeholder">{$mod->Lang('drop_items')}</li>{/if}
-                    {foreach from=$design->get_stylesheets() item='one'}
+                    {if empty($cssl)}<li class="placeholder">{$mod->Lang('drop_items')}</li>{/if}
+                    {foreach from=$cssl item='one'}
                         <li class="ui-state-default cf sortable-item" data-cmsms-item-id="{$one}">
                             <a href="{cms_action_url action=admin_edit_css css=$one}" class="edit_css" title="{$mod->Lang('edit_stylesheet')}">{$list_stylesheets.$one}</a>
                             <a href="#" "title="{$mod->Lang('remove')}" class="ui-icon ui-icon-trash sortable-remove" title="{$mod->Lang('remove')}">{$mod->Lang('remove')}</a>

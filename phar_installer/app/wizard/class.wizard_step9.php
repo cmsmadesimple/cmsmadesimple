@@ -121,6 +121,11 @@ class wizard_step9 extends \cms_autoinstaller\wizard_step
             $reader = new design_importer( $tmp_filename, $destdir.DIRECTORY_SEPARATOR.'assets' );
             $design = $reader->import_design();
 
+            $design_id = $design->get_id();
+            $design = \CmsLayoutCollection::load( $design_id ); // re-load the design
+            $design->set_default( TRUE );
+            $design->save();
+
             // set the 'Simplex-Sub' template as the default.
             $simplex_sub = \CmsLayoutTemplate::load('Simplex Sub');
             $simplex_sub->set_type_dflt( TRUE );

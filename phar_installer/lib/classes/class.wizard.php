@@ -154,7 +154,8 @@ class wizard
       $url = $request->raw_server('REQUEST_URI');
       $urlmain = explode('?',$url);
 
-      $parts = parse_str($url);
+      $parts = null;
+      parse_str($url,$parts);
       $parts[$this->_stepvar] = $idx;
 
       $tmp = array();
@@ -172,7 +173,8 @@ class wizard
       $url = $request->raw_server('REQUEST_URI');
       $urlmain = explode('?',$url);
 
-      $parts = parse_str($url);
+      $parts = null; 
+      parse_str($url,$parts);
       $parts[$this->_stepvar] = $this->cur_step() + 1;
       if( $parts[$this->_stepvar] > $this->num_steps() ) return;
 
@@ -191,7 +193,8 @@ class wizard
       $url = $request->raw_server('REQUEST_URI');
       $urlmain = explode('?',$url);
 
-      $parts = parse_str($url);
+      $parts = null;
+      parse_str($url,$parts);
       $parts[$this->_stepvar] = $this->cur_step() - 1;
       if( $parts[$this->_stepvar] <= 0 ) return;
 

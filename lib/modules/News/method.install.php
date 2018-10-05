@@ -293,8 +293,11 @@ $db->Execute($query, array($catid, 'General', -1));
 
 # Setup initial news article
 $articleid = $db->GenID(CMS_DB_PREFIX."module_news_seq");
-$query = 'INSERT INTO '.CMS_DB_PREFIX.'module_news ( NEWS_ID, NEWS_CATEGORY_ID, AUTHOR_ID, NEWS_TITLE, NEWS_DATA, NEWS_DATE, SUMMARY, START_TIME, END_TIME, STATUS, ICON, SEARCHABLE, CREATE_DATE, MODIFIED_DATE ) VALUES (?,?,?,?,?,'.$db->DBTimeStamp(time()).',?,?,?,?,?,?,'.$db->DBTimeStamp(time()).','.$db->DBTimeStamp(time()).')';
-$db->Execute($query, array($articleid, $catid, 1, 'News Module Installed', 'The news module was installed.  Exciting. This news article is not using the Summary field and therefore there is no link to read more. But you can click on the news heading to read only this article.', null, null, null, 'published', null, 1));
+$query = 'INSERT INTO '.CMS_DB_PREFIX.'module_news ( NEWS_ID, NEWS_CATEGORY_ID, AUTHOR_ID, NEWS_TITLE, NEWS_DATA, NEWS_DATE, SUMMARY, START_TIME, END_TIME, STATUS, ICON, SEARCHABLE, CREATE_DATE, MODIFIED_DATE ) VALUES (?,?,1,?,?,NOW(),null,null,null,\'published\',null,1,NOW(),NOW())';
+$db->Execute($query,
+             [ $articleid, $catid, 'News Module Installed',
+               'The news module was installed.  Exciting. This news article is not using the Summary field and therefore there is no link to read more. But you can click on the news heading to read only this article.']
+    );
 news_admin_ops::UpdateHierarchyPositions();
 
 # Setup permissions
