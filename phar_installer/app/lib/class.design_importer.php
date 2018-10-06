@@ -69,9 +69,15 @@ class design_importer
         return $this->info['design']['name'];
     }
 
-    protected function extract_files()
+    public function get_destdir()
     {
         $dirname = $this->dest.'/'.$this->get_name();
+        return $dirname;
+    }
+
+    protected function extract_files()
+    {
+        $dirname = $this->get_destdir();
         if( !is_dir($dirname) ) {
             $res = mkdir( $dirname );
             if( !$res ) throw new \RuntimeException('Problem creating directory at '.$dirname);

@@ -4,7 +4,6 @@ global $admin_user;
 //
 // Types
 //
-verbose_msg('debug: page template type');
 $page_template_type = new CmsLayoutTemplateType();
 $page_template_type->set_originator(CmsLayoutTemplateType::CORE);
 $page_template_type->set_name('page');
@@ -16,7 +15,6 @@ $page_template_type->reset_content_to_factory();
 $page_template_type->set_content_block_flag(TRUE);
 $page_template_type->save();
 
-verbose_msg('debug: generic template type');
 $gcb_template_type = new CmsLayoutTemplateType();
 $gcb_template_type->set_originator(CmsLayoutTemplateType::CORE);
 $gcb_template_type->set_name('generic');

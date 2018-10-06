@@ -216,6 +216,7 @@ $lang['install_setsequence'] = 'Reset sequence tables';
 $lang['install_setsitename'] = 'Set site name';
 $lang['install_stylesheets'] = 'Create default stylesheets';
 $lang['install_templates'] = 'Create default templates';
+$lang['install_theme'] = 'Install initial theme';
 $lang['install_templatetypes'] = 'Create standard template types';
 $lang['install_update_sequences'] = 'Update sequence tables';
 $lang['install_updatehierarchy'] = 'Update content hierarchy positions';
@@ -240,6 +241,7 @@ $lang['msg_upgrade_module'] = 'Upgrading module %s';
 $lang['msg_upgrademodules'] = 'Upgrading modules';
 $lang['msg_yourvalue'] = 'You have: %s';
 $lang['multibyte_support'] = 'Check for multibyte support';
+$lang['msg_copy_theme_images'] = 'Copy theme images to uploads';
 
 # N
 $lang['next'] = 'Next';

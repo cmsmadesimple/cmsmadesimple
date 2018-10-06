@@ -95,9 +95,9 @@ class wizard_step9 extends \cms_autoinstaller\wizard_step
         if( !$dmmod || !$cmmod ) throw new \Exception( \__appbase\lang('error_internal',905) );
         if( !class_exists( '\dm_design_reader' ) ) throw new \Exception( \__appbase\lang('error_internal',906) );
 
-        $this->message(\__appbase\lang('install_defaultcontent'));
         $dir = \__appbase\get_app()->get_appdir().'/install';
         if( ! $destconfig['samplecontent'] ) {
+            $this->message(\__appbase\lang('install_defaultcontent'));
             $fn = $dir.'/initial.php';
             include_once($fn);
         } else {
@@ -111,6 +111,7 @@ class wizard_step9 extends \cms_autoinstaller\wizard_step
             }
 
             // copy the filename into the temporary directory.
+            $this->message(\__appbase\lang('install_theme'));
             $theme_file = 'simplex_theme.zip';
             $src_filename = $dir.DIRECTORY_SEPARATOR.$theme_file;
             $tmp_filename = $app->get_my_tmpdir().DIRECTORY_SEPARATOR.$theme_file;
@@ -126,6 +127,27 @@ class wizard_step9 extends \cms_autoinstaller\wizard_step
             $design->set_default( TRUE );
             $design->save();
 
+            // copy assets/simplex/images to uploads/simplex/images because
+            // some of the initial content references images in there.
+            $this->verbose(\__appbase\lang('msg_copy_theme_images'));
+            $fromdir = $reader->get_destdir().'/images';
+            $todir = "$destdir/uploads/".$reader->get_name().'/images';
+            if( is_dir( $fromdir ) && is_readable( $fromdir ) && !is_dir( $todir ) ) {
+                // copy all files in this directory (not recursively)
+                $this->verbose('destdir is '.$todir);
+                $res = @mkdir( $todir, 0777, true );
+                if( $res ) {
+                    @touch( $todir.'/index.html' );
+                    $files = glob( $fromdir.'/*.*' );
+                    for( $i = 0, $n = count($files); $i < $n; $i++ ) {
+                        $src = $files[$i];
+                        $bn = basename( $src );
+                        $dest = $todir.'/'.$bn;
+                        @copy( $src, $dest );
+                    }
+                }
+            }
+
             // set the 'Simplex-Sub' template as the default.
             $simplex_sub = \CmsLayoutTemplate::load('Simplex Sub');
             $simplex_sub->set_type_dflt( TRUE );
@@ -134,6 +156,7 @@ class wizard_step9 extends \cms_autoinstaller\wizard_step
             $simplex_home = \CmsLayoutTemplate::load('Simplex Home');
 
             // default content
+            $this->message(\__appbase\lang('install_defaultcontent'));
             $filename = $dir.'/initial_content.xml';
             $contentops = \ContentOperations::get_instance();
             $reader = new \__appbase\content_reader( $filename, $contentops, null, $design->get_id() );
@@ -304,7 +327,7 @@ class wizard_step9 extends \cms_autoinstaller\wizard_step
             $this->error($e->GetMessage());
         }
 
-        // $app->cleanup(); debug
+        $app->cleanup(); // for debug, remove me.
     }
 
 } // end of class
