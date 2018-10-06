@@ -138,9 +138,17 @@
 		</div>
 	</body>
 	{/strip}
-	{cms_jquery exclude='ui_touch_punch,nestedSortable,json,migrate,cms_autorefresh,cms_dirtyform,cms_hiersel,cms_lock,cms_filepicker'}
+
+        {cms_queue_script file='lib/jquery/js/jquery-3.3.1.min.js'}
+        {cms_queue_script file='lib/js/jquery-ui/jquery-ui.min.js'}
+        {cms_queue_script file='lib/jquery/js/jquery.cms_admin.js'}
+	{cms_queue_script file="{$mod->GetModulePath()}/js/ext/jquery.fileupload.js"}
+	{cms_queue_script file="{$mod->GetModulePath()}/lib/js/cmsms_filebrowser/filebrowser.js"}
+        {*
         <script type="text/javascript" src="{$mod->GetModuleURLPath()}/js/ext/jquery.fileupload.js"></script>
         <script type="text/javascript" src="{$mod->GetModuleURLPath()}/lib/js/cmsms_filebrowser/filebrowser.js"></script>
+	*}
+        {cms_render_scripts defer=0}
   	<script type="text/javascript">
           $(document).ready(function(){
             var options = {};
