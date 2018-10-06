@@ -134,7 +134,6 @@ class wizard_step9 extends \cms_autoinstaller\wizard_step
             $todir = "$destdir/uploads/".$reader->get_name().'/images';
             if( is_dir( $fromdir ) && is_readable( $fromdir ) && !is_dir( $todir ) ) {
                 // copy all files in this directory (not recursively)
-                $this->verbose('destdir is '.$todir);
                 $res = @mkdir( $todir, 0777, true );
                 if( $res ) {
                     @touch( $todir.'/index.html' );
