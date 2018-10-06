@@ -244,7 +244,7 @@ abstract class CMSModule
      * @internal
      * @return mixed module call output.
      */
-    final static public function function_plugin($params,&$template)
+    final static public function function_plugin($params,$template)
     {
         $class = get_called_class();
         if( $class != 'CMSModule' && !isset($params['module']) ) $params['module'] = $class;
@@ -474,7 +474,7 @@ abstract class CMSModule
      * @param  array $request The input request.  This can be used to test conditions wether or not admin output should be suppressed.
      * @return bool
      */
-    public function SuppressAdminOutput(array $request)
+    public function SuppressAdminOutput(&$request)
     {
         return false;
     }
@@ -732,7 +732,7 @@ abstract class CMSModule
      * @param string $helpstring Help String
      * @param bool $optional Flag indicating wether this parameter is optional or required.
      */
-    final public function CreateParameter(string $param, string $defaultval='', string $helpstring='', bool $optional=true)
+    final public function CreateParameter(string $param, string $defaultval=null, string $helpstring='', bool $optional=true)
     {
         array_push($this->params, [ 'name' => $param,'default' => $defaultval,'help' => $helpstring, 'optional' => $optional ] );
     }
