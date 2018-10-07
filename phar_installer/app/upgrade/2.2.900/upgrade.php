@@ -53,13 +53,13 @@ if( is_dir( $fr ) && !is_dir( $to ) ) {
 }
 
 // tweak callbacks for page and generic layout templatet types.
-$page_type = \CMSLayoutTemplateType::load('__CORE__::page');
+$page_type = \CmsLayoutTemplateType::load('__CORE__::page');
 $page_type->set_lang_callback('\\CMSMS\internal\\std_layout_template_callbacks::page_type_lang_callback');
 $page_type->set_content_callback('\\CMSMS\internal\\std_layout_template_callbacks::reset_page_type_defaults');
 $page_type->set_help_callback('\\CMSMS\internal\\std_layout_template_callbacks::template_help_callback');
 $page_type->save();
 
-$generic_type = \CMSLayoutTemplateType::load('__CORE__::generic');
+$generic_type = \CmsLayoutTemplateType::load('__CORE__::generic');
 $generic_type_type->set_lang_callback('\\CMSMS\internal\\std_layout_template_callbacks::generic_type_lang_callback');
 $generic_type_type->set_help_callback('\\CMSMS\internal\\std_layout_template_callbacks::template_help_callback');
 $page_type->save();
