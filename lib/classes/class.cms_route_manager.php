@@ -98,7 +98,7 @@ final class cms_route_manager
 			}
 		}
 
-        if( isset( $absolute[$needle] ) ) return $absolute[$neele];
+        if( isset( $absolute[$needle] ) ) return $absolute[$needle];
 
 		// do the linear regex thing.
 		for( $i = 0, $n = count($regex); $i < $n; $i++ ) {

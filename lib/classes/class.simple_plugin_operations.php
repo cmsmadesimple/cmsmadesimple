@@ -43,14 +43,14 @@ final class simple_plugin_operations
         return $out;
     }
 
-    protected function get_plugin_filename( $name )
+    protected function get_plugin_filename( string $name )
     {
         $config = \cms_config::get_instance();
         $name = $config['assets_path'].'/simple_plugins/'.$name.'.php';
         return $name;
     }
 
-    public function plugin_exists( $name )
+    public function plugin_exists( string $name )
     {
         if( !$this->is_valid_plugin_name( $name ) ) throw new \LogicException("Invalid name passed to ".__METHOD__);
         $filename = $this->get_plugin_filename( $name );
@@ -65,7 +65,7 @@ final class simple_plugin_operations
         return TRUE;
     }
 
-    public function load_plugin($name)
+    public function load_plugin(string $name)
     {
         // test if the simple plugin exists
         // output is a string like: '\\CMSMS\\simple_plugin::the_name';
@@ -84,7 +84,12 @@ final class simple_plugin_operations
         return $this->_loaded[$name];
     }
 
-    public static function __callStatic($name,$args)
+    public function call_plugin( string $name )
+    {
+        self::__callStatic( $name, [ [], cmsms()->GetSmarty() ] );
+    }
+
+    public static function __callStatic(string $name,array $args = null)
     {
         // invoking simple_plugin_operations::call_abcdefg
         // get the appropriate filename
