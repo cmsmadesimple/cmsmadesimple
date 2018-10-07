@@ -147,16 +147,22 @@ class wizard_step7 extends \cms_autoinstaller\wizard_step
                             $nfailed++;
                         }
                         else {
+                            // it is a directory
                             if( is_dir($fn) ) {
-				if( is_file($fn.'/index.html') ) @unlink($fn.'/index.html');
-                                $res = @rmdir($fn);
-				if( !$res ) {
-				    $this->error('problem removing directory: '.$fn);
-				    $nfailed++;
- 				} else {
-                                    $this->verbose('removed directory: '.$fn);
-                                    $ndeleted++;
-				}
+                                if( is_file($fn.'/index.html') ) $res = @unlink($fn.'/index.html');
+                                if( !$res ) {
+                                    $this->error('problem removing file '.$fn.'/index.html');
+                                }
+                                else {
+                                    $res = @rmdir($fn);
+                                    if( !$res ) {
+                                        $this->error('problem removing directory: '.$fn);
+                                        $nfailed++;
+                                    } else {
+                                        $this->verbose('removed directory: '.$fn);
+                                        $ndeleted++;
+                                    }
+                                }
                             }
                             else {
                                 $res = @unlink($fn);
