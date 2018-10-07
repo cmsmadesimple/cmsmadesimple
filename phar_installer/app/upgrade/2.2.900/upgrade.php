@@ -62,4 +62,4 @@ $page_type->save();
 $generic_type = \CmsLayoutTemplateType::load('__CORE__::generic');
 $generic_type->set_lang_callback('\\CMSMS\internal\\std_layout_template_callbacks::generic_type_lang_callback');
 $generic_type->set_help_callback('\\CMSMS\internal\\std_layout_template_callbacks::template_help_callback');
-$page_type->save();
+$generic_type->save();
