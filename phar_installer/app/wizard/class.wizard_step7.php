@@ -154,6 +154,7 @@ class wizard_step7 extends \cms_autoinstaller\wizard_step
                                     $this->error('problem removing file '.$fn.'/index.html');
                                 }
                                 else {
+				    if( is_file($fn.'/moduleinfo.ini') ) $res = unlink($fn.'/moduleinfo.ini');
                                     $res = @rmdir($fn);
                                     if( !$res ) {
                                         $this->error('problem removing directory: '.$fn);
