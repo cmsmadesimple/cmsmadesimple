@@ -38,8 +38,8 @@ if( count($udt_list) ) {
     $db->Execute( 'ALTER TABLE '.CMS_DB_PREFIX.'users MODIFY username VARCHAR(80)' );
     $db->Execute( 'ALTER TABLE '.CMS_DB_PREFIX.'users MODIFY password VARCHAR(128)' );
 
-    verbose_msg(ilang('upgrading_schema',202));
-    $query = 'UPDATE '.CMS_DB_PREFIX.'version SET version = 202';
+    verbose_msg(ilang('upgrading_schema',203));
+    $query = 'UPDATE '.CMS_DB_PREFIX.'version SET version = 203';
     $db->Execute($query);
 
 
