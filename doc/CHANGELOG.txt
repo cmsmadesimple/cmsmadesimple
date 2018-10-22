@@ -107,7 +107,7 @@ Core - General
   - FEATURE: cms_admin_utils::get_icon() and {admin_icon} can now find icons without specifying an extension.
   - SECURITY: checksum verification can no longer fish for files outside of the root directory.
   - Improvement to contentoperations::SetDefaultContent()
-  - improve input checking to cms_ipmatches.
+  - Improve input checking to cms_ipmatches.
   - FEATURE: Adds the cmsfile: smarty resource which is similar to the file resource but more restrictive
      (templates must exist BELOW one of the allowed template directories).  This resource also supports the ;top ;head and ;body
      suffixes to allow parsing a subset of the template.
@@ -126,6 +126,7 @@ Core - General
   - CHANGE: in HookManager::do_hook now smartly handle hook handlers that return null or no result.
   - FEATURE: {cms_textarea} now supports the readonly and disabled attributes.
   - CHANGE: Remove redundant returnid parameter from mact url's
+  - IMPROVE: {content_image} now allows alt="".
 
 News v2.21.5
   - Minor cleaning of parameters.

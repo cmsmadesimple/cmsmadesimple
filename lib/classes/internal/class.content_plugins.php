@@ -42,7 +42,7 @@ final class content_plugins
 
     private static function content_return($result, &$params, &$smarty)
     {
-        // this is a smarty tempalte, not the global smarty instance
+        // this is a smarty template, not the global smarty instance
         if ( !empty($params['assign']) ) {
             $smarty->assign(trim($params['assign']), $result);
         }
@@ -172,9 +172,9 @@ final class content_plugins
                     foreach( $params as $key => $val ) {
                         $key = trim($key);
                         if( !$key ) continue;
-                        $val = trim($val);
-                        if( !$val ) continue;
                         if( in_array($key,$ignored) ) continue;
+                        $val = trim($val);
+                        if( !$val && $key != 'alt' ) continue;
                         $tagparms[$key] = $val;
                     }
 
