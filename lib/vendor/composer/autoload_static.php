@@ -10,9 +10,25 @@ class ComposerStaticInitd18639a29ebb3a53c6fb73530cfbf2b9
         'f084d01b0a599f67676cffef638aa95b' => __DIR__ . '/..' . '/smarty/smarty/libs/bootstrap.php',
     );
 
+    public static $prefixLengthsPsr4 = array (
+        'P' => 
+        array (
+            'PHPMailer\\PHPMailer\\' => 20,
+        ),
+    );
+
+    public static $prefixDirsPsr4 = array (
+        'PHPMailer\\PHPMailer\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/phpmailer/phpmailer/src',
+        ),
+    );
+
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
+            $loader->prefixLengthsPsr4 = ComposerStaticInitd18639a29ebb3a53c6fb73530cfbf2b9::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitd18639a29ebb3a53c6fb73530cfbf2b9::$prefixDirsPsr4;
 
         }, null, ClassLoader::class);
     }

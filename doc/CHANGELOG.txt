@@ -1,7 +1,10 @@
 Version 2.3 - NO NAME SET
 ----------------------------------
 Core - General
-  - Upgrade Smarty to v3.1.32
+  - Upgrade Smarty to v3.1.33 and now use composer
+  - Upgrade PHPMailer to v6.0.5 and now use composer
+  - BREAKING: Any third party functionality that uses PHPMailer directly may now break due to namespace changes
+  - CHANGE: Add more functions to the smarty security policy, and fix incorrect initialization of members.
   - REMOVED: MenuManager is no longer distributed with CMSMS Core.  and it is no longer considered a system module.
     (note: as of 2.3 it is still operational, just no longer distributed.)
   - BREAKING: Remove secure option from content pages
@@ -22,8 +25,8 @@ Core - General
   - Replace OneEleven admin theme with the Marigold fork that uses fontawesome.
   - FEATURE: Sitedown mode now throws a 503 exception and outputs a 503 error code
   - FEATURE: The 503 error handler (maintenance mode) is now an Error Page.
-  - Removed many previously deprecated and seldom used methods from the module API
-  - Removed many deprecated and seldom used methods from the core API
+  - BREAKING: Removed many previously deprecated and seldom used methods from the module API
+  - BREAKING: Removed many deprecated and seldom used methods from the core API
   - CHANGE: Adds the new pr_root_url config entry.  to return the protocol relative root URI. root_url will always include the protocol.
   - CHANGE: Remove long deprecated passthru parameters to effect $_REQUEST because of potential security vulnerabilities.
   - Improved error message if there was an error parsing the template (or a duplicate content block).
@@ -119,9 +122,10 @@ Core - General
       text must be hardcoded.  i.e {content_text text='This is a test'}
   - FEATURE: Added the {assets_url} plugin to provide the complete URL to the assets folder.
   - FEATURE: New cleaned up simplex theme on initial install demonstrates template inheritance and other techniques
-  - New default content on initial install
+  - FEATURE: New default content on initial install
   - CHANGE: in HookManager::do_hook now smartly handle hook handlers that return null or no result.
   - FEATURE: {cms_textarea} now supports the readonly and disabled attributes.
+  - CHANGE: Remove redundant returnid parameter from mact url's
 
 News v2.21.5
   - Minor cleaning of parameters.
