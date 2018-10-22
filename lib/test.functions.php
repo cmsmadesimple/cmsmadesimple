@@ -824,12 +824,12 @@ function permission_octal2string( $mode )
 		$type = '?';
 	}
 
-	$owner  = ($mode & 00400) ? 'r' : '-';
-	$owner .= ($mode & 00200) ? 'w' : '-';
+	$fowner  = ($mode & 00400) ? 'r' : '-';
+	$fowner .= ($mode & 00200) ? 'w' : '-';
 	if($mode & 0x800) {
-		$owner .= ($mode & 00100) ? 's' : 'S';
+		$fowner .= ($mode & 00100) ? 's' : 'S';
 	} else {
-		$owner .= ($mode & 00100) ? 'x' : '-';
+		$fowner .= ($mode & 00100) ? 'x' : '-';
 	}
 
 	$group  = ($mode & 00040) ? 'r' : '-';
@@ -848,7 +848,7 @@ function permission_octal2string( $mode )
 		$other .= ($mode & 00001) ? 'x' : '-';
 	}
 
-	return $type . $owner . $group . $other;
+	return $type . $fowner . $group . $other;
 }
 
 /**
