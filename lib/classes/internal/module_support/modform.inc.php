@@ -365,7 +365,7 @@ function cms_module_create_url(&$modinstance,$id,$action,$returnid='',$params=ar
         if( $returnid <= 0 ) {
             $id = 'm1';
             $goto = 'moduleinterface.php';
-        } else if( $targetcontentsonly || !$inline ) {
+        } else if( $targetcontentonly || !$inline ) {
             $id = 'cntnt01';
         }
 
