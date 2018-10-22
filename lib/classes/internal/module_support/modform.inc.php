@@ -365,7 +365,7 @@ function cms_module_create_url(&$modinstance,$id,$action,$returnid='',$params=ar
         if( $returnid <= 0 ) {
             $id = 'm1';
             $goto = 'moduleinterface.php';
-        } else if( $targetcontentonly && !$inline ) {
+        } else if( $targetcontentsonly || !$inline ) {
             $id = 'cntnt01';
         }
 
@@ -382,10 +382,7 @@ function cms_module_create_url(&$modinstance,$id,$action,$returnid='',$params=ar
 			$value = cms_htmlentities($value);
 			$text .= '&amp;'.$id.$key.'='.rawurlencode($value);
 		}
-		if( $returnid <= 0 ) {
-			$text .= '&amp;'.$id.'returnid='.$returnid;
-			if ($inline) $text .= '&amp;'.$config['query_var'].'='.$returnid;
-		}
+		if( $returnid > 0 ) $text .= '&amp;'.$config['query_var'].'='.$returnid;
 	}
 
 	return $text;
