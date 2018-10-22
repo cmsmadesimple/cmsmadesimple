@@ -122,7 +122,7 @@ function check_login(bool $no_redirect = false)
  * @param string $permname The permission name
  * @return boolean
  */
-function check_permission(int $userid, string $permname)
+function check_permission(int $userid = null, string $permname)
 {
     return UserOperations::get_instance()->CheckPermission($userid,$permname);
 }
@@ -139,7 +139,7 @@ function check_permission(int $userid, string $permname)
  * @param  integer A valid content id.
  * @return boolean
  */
-function check_authorship(int $userid, int $contentid = null)
+function check_authorship(int $userid = null, int $contentid = null)
 {
     return ContentOperations::get_instance()->CheckPageAuthorship($userid,$contentid);
 }
@@ -153,7 +153,7 @@ function check_authorship(int $userid, int $contentid = null)
  * @param  integer The user id.
  * @return array   An array of pages this user is an author of.
  */
-function author_pages(int $userid)
+function author_pages(int $userid = null)
 {
     return ContentOperations::get_instance()->GetPageAccessForUser($userid);
 }
