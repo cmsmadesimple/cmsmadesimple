@@ -33,19 +33,14 @@
  */
 final class CMSSmartySecurityPolicy extends Smarty_Security
 {
-    public $php_handling = Smarty::PHP_REMOVE;
-
-    public $secure_dir = null; // this is the magic that stops stuff from happening outside of the specified directories.
-    public $php_modifiers = array();
-    //public $php_modifiers = array('escape','count','preg_replace','lang', 'ucwords','print_r','var_dump','trim','htmlspecialchars','explode','htmlspecialchars_decode','strpos','strrpos','startswith','endswith','substr);
-    public $streams = null;
-    public $allow_constants = false;
-    //public $allow_super_globals = false;
-    public $allow_php_tag = false;
-
     public function __construct($smarty)
     {
         parent::__construct($smarty);
+	$this->php_handling = Smarty::PHP_REMOVE;
+	$this->secure_dir = null;
+	$this->php_modifiers = [];
+	$this->streams = null;
+	$this->allow_constants = false;
         $this->allow_php_tag = FALSE;
         $gCms = CmsApp::get_instance();
         if($gCms->is_frontend_request() ) {
@@ -56,16 +51,16 @@ final class CMSSmartySecurityPolicy extends Smarty_Security
                 $this->static_classes = null;
                 // this should allow most stuff that does modification to data or formatting.
                 // i.e: string searches, array searches, string comparison, sorting, etc.
-                $this->php_functions = array('isset', 'implode','explode','empty','count', 'sizeof','in_array', 'is_array','time','lang',
+                $this->php_functions = array('isset', 'implode','explode','empty','count', 'sizeof','in_array', 'is_array','time','lang','date',
                                              'str_replace','is_string','strpos','substr','strtolower','strtoupper','strcmp','strcasecmp','strlen','array_search','sort','ksort','asort',
                                              'nl2br','file_exists', 'is_object', 'is_file','is_dir','print_r','var_dump', 'array_reverse', 'array_flip','shuffle','array_rand',
                                              'debug_display','startswith', 'endswith', 'urlencode','json_encode','json_decode','is_email',
-                                             'htmlspecialchars','htmlspecialchars_decode','cms_html_entity_decode');
+                                             'htmlspecialchars','htmlspecialchars_decode','cms_html_entity_decode','cms_to_bool');
             }
         }
         else {
-            $this->php_functions = array();
-            $this->static_classes = array();
+            $this->php_functions = [];
+            $this->static_classes = [];
             $this->allow_constants = true;
         }
     }
