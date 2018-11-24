@@ -140,7 +140,7 @@ final class ModuleOperations
         if( !$module ) return;
         $config = \cms_config::get_instance();
         $path = CMS_ROOT_PATH.'/lib/modules';
-        if( !self::get_instance()->IsSystemModule( $module ) ) $path = CMS_ASSETS_PATH.'/modules/';
+        if( !self::get_instance()->IsSystemModule( $module ) ) $path = CMS_ASSETS_PATH.'/modules';
         $fn = $path."/$module/$module.module.php";
         if( is_file($fn) ) return $fn;
     }
@@ -370,7 +370,7 @@ final class ModuleOperations
         if( !class_exists($class_name,true) ) {
             $fname = $this->get_module_filename( $module_name);
             if( !is_file($fname) ) {
-                warning("Cannot load $module_name because the module file does not exist");
+                cms_warning("Cannot load $module_name because the module file does not exist");
                 return FALSE;
             }
 
@@ -436,6 +436,14 @@ final class ModuleOperations
             debug_buffer('Cannot load an uninstalled module');
             unset($obj,$this->_modules[$module_name]);
             return false;
+        }
+
+        if( !isset($CMS_INSTALL_PAGE) && !isset($CMS_STYLESHEET) && !$force_load ) {
+            if( isset($CMS_ADMIN_PAGE) ) {
+                $obj->InitializeAdmin();
+            } else if( $gCms->is_frontend_request() ) {
+                $obj->InitializeFrontend();
+            }
         }
 
         // we're all done.

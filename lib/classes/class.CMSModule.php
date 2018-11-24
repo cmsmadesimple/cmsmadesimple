@@ -133,10 +133,10 @@ abstract class CMSModule
             $this->SetParameterType('action',CLEAN_STRING);
             $this->SetParameterType('showtemplate',CLEAN_STRING);
             $this->SetParameterType('inline',CLEAN_INT);
-            $this->InitializeFrontend();
+            //$this->InitializeFrontend();
         }
         else if( isset($CMS_ADMIN_PAGE) && !isset($CMS_STYLESHEET) && !isset($CMS_INSTALL_PAGE) ) {
-            $this->InitializeAdmin();
+            //$this->InitializeAdmin();
         }
     }
 
@@ -514,7 +514,6 @@ abstract class CMSModule
      */
     final public function GetParameters()
     {
-        stack_trace(); die( __METHOD__ );
         if( count($this->params) == 0 ) $this->InitializeAdmin(); // quick hack to load parameters if they are not already loaded.
         return $this->params;
     }
