@@ -64,8 +64,8 @@ final class ReduceLogTask implements \CmsRegularTask
         $db = \CmsApp::get_instance()->GetDB();
         $sql = "DELETE FROM $table WHERE timestamp = ? AND user_id = ? AND username = ? AND item_id = ? AND item_name = ? AND action = ? AND ip_addr = ?";
         for( $i = 0; $i < $n; $i++ ) {
-            $rec = $this->_queue[$i];
-            $db->Execute($sql,array($rec['timestamp'],$rec['user_id'],$rec['username'],
+	    $rec = $this->_queue[$i];
+            $db->Execute($sql,array($rec['timestamp'],$rec['uid'],$rec['username'],
                                     $rec['item_id'],$rec['item_name'],$rec['action'],$rec['ip_addr']));
         }
         $this->_queue = [];
