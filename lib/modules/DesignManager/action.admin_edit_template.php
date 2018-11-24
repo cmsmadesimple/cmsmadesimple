@@ -67,7 +67,7 @@ try {
     $type_obj = CmsLayoutTemplateType::load($tpl_obj->get_type_id());
 
     try {
-        if (isset($params['submit']) || isset($params['apply']) ) {
+        if ( isset($params['submit']) || $apply ) {
             // do the magic.
             if (isset($params['description'])) $tpl_obj->set_description($params['description']);
             if (isset($params['type'])) $tpl_obj->set_type($params['type']);

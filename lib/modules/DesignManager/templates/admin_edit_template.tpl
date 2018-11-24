@@ -61,19 +61,22 @@ $(function(){
 
     $(document).on('click', '#applybtn', function(e){
         e.preventDefault();
-        var url = $('#form_edittemplate').attr('action')+'?showtemplate=false&m1_apply=1',
         data = $('#form_edittemplate').serializeArray();
+	data.forEach((item) => {
+	    if( item.name == 'mact' ) {
+	       let prefix = item.value.split(',')[1]
+	       data.push({ name: prefix+'apply', value: 1 })
+            }
+        })
+        var url = $('#form_edittemplate').attr('action')+'?showtemplate=false'
 
         $.post(url, data, function(data,textStatus,jqXHR) {
-
             var $response = $('<aside/>').addClass('message');
             if (data.status === 'success') {
-
                 $response.addClass('pagemcontainer')
                     .append($('<span>').text('Close').addClass('close-warning'))
                     .append($('<p/>').text(data.message));
             } else if (data.status === 'error') {
-
                 $response.addClass('pageerrorcontainer')
                     .append($('<span>').text('Close').addClass('close-warning'))
                     .append($('<p/>').text(data.message));
