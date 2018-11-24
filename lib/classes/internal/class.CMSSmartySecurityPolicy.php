@@ -36,11 +36,11 @@ final class CMSSmartySecurityPolicy extends Smarty_Security
     public function __construct($smarty)
     {
         parent::__construct($smarty);
-	$this->php_handling = Smarty::PHP_REMOVE;
-	$this->secure_dir = null;
-	$this->php_modifiers = [];
-	$this->streams = null;
-	$this->allow_constants = false;
+        $this->php_handling = Smarty::PHP_REMOVE;
+        $this->secure_dir = null;
+        $this->php_modifiers = [];
+        $this->streams = null;
+        $this->allow_constants = false;
         $this->allow_php_tag = FALSE;
         $gCms = CmsApp::get_instance();
         if($gCms->is_frontend_request() ) {
@@ -51,11 +51,13 @@ final class CMSSmartySecurityPolicy extends Smarty_Security
                 $this->static_classes = null;
                 // this should allow most stuff that does modification to data or formatting.
                 // i.e: string searches, array searches, string comparison, sorting, etc.
-                $this->php_functions = array('isset', 'implode','explode','empty','count', 'sizeof','in_array', 'is_array','time','lang','date',
-                                             'str_replace','is_string','strpos','substr','strtolower','strtoupper','strcmp','strcasecmp','strlen','array_search','sort','ksort','asort',
-                                             'nl2br','file_exists', 'is_object', 'is_file','is_dir','print_r','var_dump', 'array_reverse', 'array_flip','shuffle','array_rand',
-                                             'debug_display','startswith', 'endswith', 'urlencode','json_encode','json_decode','is_email',
-                                             'htmlspecialchars','htmlspecialchars_decode','cms_html_entity_decode','cms_to_bool');
+                $this->php_functions = ['isset', 'implode','explode','empty','count', 'sizeof','in_array', 'is_array','time','lang',
+                                        'date','strftime','strtotime',
+                                        'str_replace','is_string','strpos','substr','strtolower','strtoupper','strcmp','strcasecmp','strlen',
+                                        'array_search','array_reverse', 'array_flip','shuffle','array_rand','sort','ksort','asort',
+                                        'nl2br','file_exists', 'is_object', 'is_file','is_dir','print_r','var_dump',
+                                        'debug_display','startswith', 'endswith', 'urlencode','json_encode','json_decode','is_email',
+                                        'htmlspecialchars','htmlspecialchars_decode','cms_html_entity_decode','cms_to_bool' ];
             }
         }
         else {
@@ -65,5 +67,3 @@ final class CMSSmartySecurityPolicy extends Smarty_Security
         }
     }
 } // end of class
-
-?>
