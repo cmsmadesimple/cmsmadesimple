@@ -47,7 +47,7 @@ $lang['help'] = <<<EOT
   <li>\$node->modified -- Item modified date</li>
   <li>\$node->parent -- TRUE if this node is a parent of the currently selected page</li>
   <li>\$node->current -- TRUE if this node is the currently selected page</li>
-  <li>\$node->children_existn -- TRUE if this node has any children at all.</li>
+  <li>\$node->children_exist -- TRUE if this node has any children at all.</li>
   <li>\$node->children -- An array of node objects representing the displayable children of this node. Not set if node does not have children to display.</li>
   <li>\$node->has_children -- TRUE if this node has any children that could be displayed but are not being displayed due to other filtering parameters (number of levels, etc).</li>
 </ul>
