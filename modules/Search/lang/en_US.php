@@ -56,7 +56,7 @@ $lang['export_to_csv'] = 'Export to CSV';
 $lang['help'] = '<h3>What does this do?</h3>
 <p>Search is a module for searching "core" content along with certain registered modules.  You put in a word or two and it gives you back matching, relevant results.</p>
 <h3>How do I use it?</h3>
-<p>The easiest way to use it is with the {search} wrapper tag (wraps the module in a tag, to simplify the syntax). This will insert the module into your template or page anywhere you wish, and display the search form.  The code would look something like: <code>{search}</code></p>
+<p>The easiest way to use it is with the {Search} wrapper tag (wraps the module in a tag, to simplify the syntax). This will insert the module into your template or page anywhere you wish, and display the search form.  The code would look something like: <code>{Search}</code></p>
 <h4>How do i prevent certain content from being indexed</h4>
 <p>The search module will not search any "inactive" pages. However on occasion, when you are using the CustomContent module, or other smarty logic to show different content to different groups of users, it may be advisable to prevent the entire page from being indexed even when it is live.  To do this include the following tag anywhere on the page <em>&lt;!-- pageAttribute: NotSearchable --&gt;</em> When the search module sees this tag in the page it will not index any content for that page.</p>
 <p>The <em>&lt;!-- pageAttribute: NotSearchable --&gt;</em> tag can be placed in the template as well.  if this is done, none of the pages attached to that template will be indexed.  Those pages will be re-indexed if the tag is removed</p>
@@ -105,7 +105,7 @@ $lang['searchresultsfor'] = 'Search Results For';
 $lang['searchsubmit'] = 'Submit';
 $lang['searchtemplate'] = 'Search Template';
 $lang['searchtemplateupdated'] = 'Search Template Updated';
-$lang['search_method'] = 'Pretty URLs Compatibility via Method POST, default value is always GET, to make this work just put {search search_method="post"} ';
+$lang['search_method'] = 'Pretty URLs Compatibility via Method POST, default value is always GET, to make this work just put {Search search_method="post"} ';
 $lang['statistics'] = 'Statistics';
 $lang['stopwords'] = 'Stop Words';
 $lang['submit'] = 'Submit';
