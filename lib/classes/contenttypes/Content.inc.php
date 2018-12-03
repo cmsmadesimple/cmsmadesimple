@@ -403,7 +403,7 @@ class Content extends ContentBase
 	 * @return array consisting of two elements: A label, and the input element HTML and javascript.
 	 * @internal
 	 */
-    protected function display_single_element(string $one,bool $adding)
+    protected function display_single_element(string $one, bool $adding)
     {
         $config = \cms_config::get_instance();
 

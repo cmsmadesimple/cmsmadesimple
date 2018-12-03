@@ -56,7 +56,7 @@ class SectionHeader extends ContentBase
     public function HasUsableLink() { return false; }
 	public function RequiresAlias() { return TRUE; }
 	public function HasSearchableContent() { return FALSE; }
-    public function GetURL($rewrite = true) { return '#'; }
+    public function GetURL(bool $rewrite = true) { return '#'; }
     public function IsViewable() { return FALSE; }
 
     function TabNames()

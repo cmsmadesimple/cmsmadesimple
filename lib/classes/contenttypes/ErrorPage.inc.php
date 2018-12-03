@@ -113,7 +113,7 @@ class ErrorPage extends Content
         return true;
     }
 
-    function FillParams($params,$editing = false)
+    function FillParams(array $params,bool $editing = false)
     {
         parent::FillParams($params,$editing);
         $this->mParentId = -1;

@@ -1746,7 +1746,7 @@ abstract class ContentBase
 	 * @param bool $rewrite if true, and mod_rewrite is enabled, build a URL suitable for mod_rewrite.
 	 * @return string
 	 */
-	public function GetURL($rewrite = true)
+	public function GetURL(bool $rewrite = true)
 	{
 		$config = \cms_config::get_instance();
 		$url = "";
@@ -2194,7 +2194,7 @@ abstract class ContentBase
 	 * @param bool $adding Whether or not we are in add or edit mode.
 	 * @return array consisting of two elements.  A label, and the input element.
 	 */
-	protected function display_single_element($one, $adding)
+	protected function display_single_element(string $one, $bool $adding)
 	{
 		$config = \cms_config::get_instance();
 

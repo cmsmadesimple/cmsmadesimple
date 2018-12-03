@@ -112,7 +112,6 @@ final class LoginOperations
         }
         else if( ($private_data = \cms_cookies::get($this->_loginkey)) ) {
             $_SESSION[$this->_loginkey] = $private_data;
-        } else {
         }
         if( !$private_data ) return;
         $parts = explode('::',$private_data,2);

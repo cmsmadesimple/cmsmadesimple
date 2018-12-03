@@ -50,7 +50,7 @@ class Link extends ContentBase
 		$this->AddProperty('url',3,self::TAB_MAIN,TRUE,TRUE);
     }
 
-    function FillParams($params,$editing = false)
+    function FillParams(array $params,bool $editing = false)
     {
 		parent::FillParams($params,$editing);
 
@@ -86,7 +86,7 @@ class Link extends ContentBase
 		return $res;
     }
 
-    function display_single_element($one,$adding)
+    function display_single_element(string $one, bool $adding)
     {
 		switch($one) {
 		case 'url':
@@ -110,7 +110,7 @@ class Link extends ContentBase
 		}
     }
 
-    function GetURL($rewrite = true)
+    function GetURL(bool $rewrite = true)
     {
 		return $this->GetPropertyValue('url');
 		//return cms_htmlentities($this->GetPropertyValue('url'));

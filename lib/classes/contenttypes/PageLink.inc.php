@@ -64,7 +64,7 @@ class PageLink extends ContentBase
 		$this->mCachable = false;
     }
 
-    function FillParams($params,$editing = false)
+    function FillParams(array $params,bool $editing = false)
     {
 		parent::FillParams($params,$editing);
 
@@ -145,7 +145,7 @@ class PageLink extends ContentBase
 		}
     }
 
-    function GetURL($rewrite = true)
+    function GetURL(bool $rewrite = true)
     {
 		$page = $this->GetPropertyValue('page');
 		$params = $this->GetPropertyValue('params');
