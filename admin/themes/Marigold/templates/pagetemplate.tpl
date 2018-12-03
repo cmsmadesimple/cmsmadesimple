@@ -28,7 +28,7 @@
 		<link rel="stylesheet" href="style.php?{$secureparam}" />
 		{cms_queue_script file='lib/jquery/js/jquery-3.3.1.min.js'}
                 {cms_queue_script file='lib/js/jquery-ui/jquery-ui.min.js'}
-		{cms_queue_script file='lib/jquery/js/jquery-mjs.nestedSortable.js'}
+		{cms_queue_script file='lib/jquery/js/jquery.mjs.nestedSortable.js'}
 		{cms_queue_script file='lib/jquery/js/jquery-json-2.4.min.js'}
 		{cms_queue_script file='lib/jquery/js/jquery-migrate-1.2.1.min.js'}
 		{cms_queue_script file='lib/jquery/js/jquery.cms_admin.js'}
