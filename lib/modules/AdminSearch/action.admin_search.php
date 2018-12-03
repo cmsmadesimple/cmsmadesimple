@@ -72,11 +72,16 @@ if( is_array($slaves) && count($slaves) ) {
         if( !in_array($one_slave['class'],$params['slaves']) ) continue;
         $module = cms_utils::get_module($one_slave['module']);
         if( !is_object($module) ) continue;
-        if( !class_exists($one_slave['class']) ) continue;
-        if( !is_subclass_of($one_slave['class'],'AdminSearch_slave') ) continue;
-
-        $obj = new $one_slave['class'];
+        $obj = null;
+        if( isset($one_slave['object']) ) {
+            $obj = $one_slave['object'];
+        } else {
+            if( !class_exists($one_slave['class']) ) continue;
+            if( !is_subclass_of($one_slave['class'],'AdminSearch_slave') ) continue;
+            $obj = new $one_slave['class'];
+        }
         if( !is_object($obj) ) continue;
+        if( !is_a($obj,'AdminSearch_slave') ) continue;
         if( !$obj->check_permission() ) continue;
 
         $obj->set_params($searchparams);
@@ -84,7 +89,7 @@ if( is_array($slaves) && count($slaves) ) {
         if( is_array($results) && count($results) ) {
             begin_section($one_slave['class'],$obj->get_name(),$obj->get_section_description());
             foreach( $results as $one ) {
-          debug_to_log($one);
+                debug_to_log($one);
                 $text = isset($one['text'])?$one['text']:'';
                 if( $text ) $text = addslashes($text);
                 $url = isset($one['edit_url'])?$one['edit_url']:'';
@@ -99,8 +104,3 @@ if( is_array($slaves) && count($slaves) ) {
 }
 status_msg($this->Lang('finished'));
 exit;
-
-#
-# EOF
-#
-?>

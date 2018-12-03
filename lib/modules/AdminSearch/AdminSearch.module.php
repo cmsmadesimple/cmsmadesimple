@@ -71,18 +71,18 @@ final class AdminSearch extends CMSModule
 
   public function get_adminsearch_slaves()
   {
-    $dir = dirname(__FILE__).'/lib/';
-    $files = glob($dir.'/class.AdminSearch*slave.php');
-    if( count($files) ) {
-      $output = array();
-      foreach( $files as $onefile ) {
-	$parts = explode('.',basename($onefile));
-	$classname = implode('.',array_slice($parts,1,count($parts)-2));
-	if( $classname == 'AdminSearch_slave' ) continue;
-	$output[] = $classname;
+      $dir = dirname(__FILE__).'/lib/';
+      $files = glob($dir.'/class.AdminSearch*slave.php');
+      if( count($files) ) {
+          $output = array();
+          foreach( $files as $onefile ) {
+              $parts = explode('.',basename($onefile));
+              $classname = implode('.',array_slice($parts,1,count($parts)-2));
+              if( $classname == 'AdminSearch_slave' ) continue;
+              $output[] = $classname;
+          }
+          return $output;
       }
-      return $output;
-    }
   }
 
 } // class
