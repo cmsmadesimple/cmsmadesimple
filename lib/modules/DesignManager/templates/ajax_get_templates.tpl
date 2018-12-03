@@ -30,22 +30,22 @@ $('#tpl_selall').cmsms_checkall();
 </div>
 
 {if isset($templates)}
-  <table class="pagetable">
+  <table class="pagetable" id="templatetable">
     <thead>
       <tr>
-        <th title="{$mod->Lang('title_tpl_id')}">{$mod->Lang('prompt_id')}</th>
-		<th class="pageicon"></th>
-		<th title="{$mod->Lang('title_tpl_name')}">{$mod->Lang('prompt_name')}</th>
-		<th title="{$mod->Lang('title_tpl_type')}">{$mod->Lang('prompt_type')}</th>
-		<th title="{$mod->Lang('title_tpl_filename')}">{$mod->Lang('prompt_filename')}</th>
-		<th title="{$mod->Lang('title_tpl_design')}">{$mod->Lang('prompt_design')}</th>
-		<th title="{$mod->Lang('title_tpl_dflt')}" class="pageicon">{$mod->Lang('prompt_dflt')}</th>{* dflt *}
-		<th class="pageicon"></th>{* edit *}
-		{if $has_add_right}
-			<th class="pageicon"></th>{* copy *}
-		{/if}
-		<th class="pageicon"></th>{* delete *}
-		<th class="pageicon"><input type="checkbox" value="1" id="tpl_selall" title="{$mod->Lang('prompt_select_all')}"/></th>{* checkbox *}
+        <th class="col_id" title="{$mod->Lang('title_tpl_id')}">{$mod->Lang('prompt_id')}</th>
+        <th class="col_lock pageicon"></th>
+        <th class="col_name" title="{$mod->Lang('title_tpl_name')}">{$mod->Lang('prompt_name')}</th>
+        <th class="col_type" title="{$mod->Lang('title_tpl_type')}">{$mod->Lang('prompt_type')}</th>
+        <th class="col_filename" title="{$mod->Lang('title_tpl_filename')}">{$mod->Lang('prompt_filename')}</th>
+        <th class="col_design" title="{$mod->Lang('title_tpl_design')}">{$mod->Lang('prompt_design')}</th>
+        <th class="col_dflt" title="{$mod->Lang('title_tpl_dflt')}" class="pageicon">{$mod->Lang('prompt_dflt')}</th>{* dflt *}
+        <th class="col_edit pageicon"></th>{* edit *}
+        {if $has_add_right}
+          <th class="col_copy pageicon"></th>{* copy *}
+        {/if}
+        <th class="col_delete pageicon"></th>{* delete *}
+        <th class="col_multiselect pageicon"><input type="checkbox" value="1" id="tpl_selall" title="{$mod->Lang('prompt_select_all')}"/></th>{* checkbox *}
       </tr>
     </thead>
     <tbody>
@@ -61,31 +61,31 @@ $('#tpl_selall').cmsms_checkall();
 
   	  {* template id, and template name columns *}
   	  {if !$template->locked()}
-	    <td><a href="{$edit_tpl}" data-tpl-id="{$template->get_id()}" class="edit_tpl tooltip" title="{$mod->Lang('edit_template')}" data-cms-description='{$tpl_tooltip}'>{$template->get_id()}</a></td>
-            <td></td>
-	    <td><a href="{$edit_tpl}" data-tpl-id="{$template->get_type_id()}" class="edit_tpl tooltip" title="{$mod->Lang('edit_template')}" data-cms-description='{$tpl_tooltip}'>{$template->get_name()}</a></td>
+	    <td class="col_id"><a href="{$edit_tpl}" data-tpl-id="{$template->get_id()}" class="edit_tpl tooltip" title="{$mod->Lang('edit_template')}" data-cms-description='{$tpl_tooltip}'>{$template->get_id()}</a></td>
+            <td class="col_lock"></td>
+	    <td class="col_name"><a href="{$edit_tpl}" data-tpl-id="{$template->get_type_id()}" class="edit_tpl tooltip" title="{$mod->Lang('edit_template')}" data-cms-description='{$tpl_tooltip}'>{$template->get_name()}</a></td>
 	  {else}
-	    <td>{$template->get_id()}</td>
-	    <td>{admin_icon icon='warning' title=$mod->Lang('title_locked')}</td>
-	    <td><span class="tooltip" data-cms-description='{$tpl_tooltip}'>{$template->get_name()}</span></td>
+	    <td class="col_id">{$template->get_id()}</td>
+	    <td class="col_lock">{admin_icon icon='warning' title=$mod->Lang('title_locked')}</td>
+	    <td class="col_name"><span class="tooltip" data-cms-description='{$tpl_tooltip}'>{$template->get_name()}</span></td>
 	  {/if}
 
 	  {* template type column *}
-	  <td>
+	  <td class="col_type">
 	    {$type_id=$template->get_type_id()}
 	    {include file='module_file_tpl:DesignManager;admin_defaultadmin_tpltype_tooltip.tpl' assign='tpltype_tooltip'}
 	    <span class="tooltip" data-cms-description='{$tpltype_tooltip}'>{$list_types.$type_id}</span>
 	  </td>
 
 	  {* filename column *}
-	  <td>
+	  <td class="col_filename">
 	     {if $template->has_content_file()}
 	       {basename($template->get_content_filename())}
 	     {/if}
 	  </td>
 
 	  {* design column *}
-	  <td>
+	  <td class="col_design">
 	    {assign var='t1' value=$template->get_designs()}
 	    {if count($t1) == 1}
 	      {assign var='t1' value=$t1[0]}
@@ -104,7 +104,7 @@ $('#tpl_selall').cmsms_checkall();
 	  </td>
 
 	  {* default column *}
-	  <td>
+	  <td class="col_dflt">
 	    {assign var='the_type' value=$list_all_types.$type_id}
 	    {if $the_type->get_dflt_flag()}
 	      {if $template->get_type_dflt()}
@@ -119,12 +119,12 @@ $('#tpl_selall').cmsms_checkall();
 
 	  {* edit/copy iconsm, or steal icons *}
 	  {if !$lock_timeout || !$template->locked()}
-	    <td><a href="{$edit_tpl}" data-tpl-id="{$template->get_id()}" class="edit_tpl" title="{$mod->Lang('edit_template')}">{admin_icon icon='edit' title=$mod->Lang('prompt_edit')}</a></td>
+	    <td class="col_edit"><a href="{$edit_tpl}" data-tpl-id="{$template->get_id()}" class="edit_tpl" title="{$mod->Lang('edit_template')}">{admin_icon icon='edit' title=$mod->Lang('prompt_edit')}</a></td>
 	    {if $has_add_right}
-	      <td><a href="{$copy_tpl}" title="{$mod->Lang('copy_template')}">{admin_icon icon='copy' title=$mod->Lang('prompt_copy_template')}</a></td>
+	      <td class="col_copy"><a href="{$copy_tpl}" title="{$mod->Lang('copy_template')}">{admin_icon icon='copy' title=$mod->Lang('prompt_copy_template')}</a></td>
 	    {/if}
 	  {else}
-  	    <td>
+  	    <td class="col_edit">
 	      {$lock=$template->get_lock()}
 	      {if $lock.expires < $smarty.now}
 	        <a href="{$edit_tpl}" data-tpl-id="{$template->get_id()}" accesskey="e" class="steal_tpl_lock">{admin_icon icon='permissions' class='edit_tpl steal_tpl_lock' title=$mod->Lang('prompt_steal_lock')}</a>
@@ -134,7 +134,7 @@ $('#tpl_selall').cmsms_checkall();
 	  {/if}
 
 	  {* delete column *}
-	  <td>
+	  <td class="col_delete">
  	    {if !$template->get_type_dflt() && !$template->locked()}
 	      {if $template->get_owner_id() == get_userid() || $manage_templates}
 		<a href="{$delete_tpl}" title="{$mod->Lang('delete_template')}">{admin_icon icon='delete' title=$mod->Lang('delete_template')}</a>
@@ -143,7 +143,7 @@ $('#tpl_selall').cmsms_checkall();
 	  </td>
 
 	  {* checkbox column *}
-	  <td>
+	  <td class="col_multiselect">
 	    {if !$template->locked() && ($template->get_owner_id() == get_userid() || $manage_templates) }
 	      <input type="checkbox" class="tpl_select" name="{$actionid}tpl_select[]" value="{$template->get_id()}" title="{$mod->Lang('title_tpl_bulk')}"/>
 	    {/if}

@@ -45,7 +45,7 @@ final class DesignManager extends CMSModule
             $this->CheckPermission('Modify Templates') ||
             $this->CheckPermission('Manage Stylesheets') ||
             $this->CheckPermission('Manage Designs') ||
-            count(CmsLayoutTemplate::get_editable_templates(get_userid())) ) return TRUE;
+            !empty(CmsLayoutTemplate::get_editable_templates(get_userid())) ) return TRUE;
         return FALSE;
     }
 
