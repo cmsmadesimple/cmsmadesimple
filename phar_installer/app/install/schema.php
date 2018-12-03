@@ -145,8 +145,8 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 		last_modified_by I,
 		create_date DT,
 		modified_date DT,
-        secure I1,
-        page_url C(255)
+        	secure I1,
+        	page_url C(255)
 	";
 	$sqlarray = $dbdict->CreateTableSQL(CMS_DB_PREFIX."content", $flds, $taboptarray);
 	$return = $dbdict->ExecuteSQLArray($sqlarray);
@@ -521,19 +521,20 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 	verbose_msg(ilang('install_creating_index', 'idx_layout_tpl_2', $ado_ret));
 
 	$flds = "
-         id I KEY AUTO,
-         name C(100) NOTNULL,
-         content X2,
-         description X,
+             id I KEY AUTO,
+             name C(100) NOTNULL,
+             content X2,
+             description X,
   	     media_type C(255),
 	     media_query X,
-         created I,
-         modified I";
+             created I,
+             modified I";
 	$sqlarray = $dbdict->CreateTableSQL(CMS_DB_PREFIX.CmsLayoutStylesheet::TABLENAME, $flds, $taboptarray);
 	$return = $dbdict->ExecuteSQLArray($sqlarray);
 	$ado_ret = ($return == 2) ? ilang('done') : ilang('failed');
 	verbose_msg(ilang('install_created_table', CmsLayoutStylesheet::TABLENAME, $ado_ret));
-    $sqlarray = $dbdict->CreateIndexSQL(CMS_DB_PREFIX.'idx_layout_css_1',CMS_DB_PREFIX.CmsLayoutStylesheet::TABLENAME, 'name', array('UNIQUE'));
+        $sqlarray = $dbdict->CreateIndexSQL(CMS_DB_PREFIX.'idx_layout_css_1',
+					    CMS_DB_PREFIX.CmsLayoutStylesheet::TABLENAME, 'name', array('UNIQUE'));
 	$return = $dbdict->ExecuteSQLArray($sqlarray);
 	$ado_ret = ($return == 2) ? ilang('done') : ilang('failed');
 	verbose_msg(ilang('install_created_index', 'idx_layout_css_1', $ado_ret));
