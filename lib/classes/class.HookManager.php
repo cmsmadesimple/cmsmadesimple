@@ -216,6 +216,11 @@ namespace CMSMS {
                 \Events::SendEvent($module,$eventname,$data);
                 $value[0] = $data; // transitive.
             }
+
+            if( is_array($value) && count($value) == 1 && isset($value[0]) ) {
+                $value = $value[0];
+            }
+
             if( isset(self::$_hooks[$name]->handlers) && count(self::$_hooks[$name]->handlers) ) {
                 // sort the handlers.
                 if( !self::$_hooks[$name]->sorted ) {
