@@ -45,8 +45,8 @@ function smarty_function_form_start($params, &$smarty)
     }
     else if( $gCms->is_frontend_request() ) {
         if( $mactparms['module'] ) {
-            $tmp = $smarty->getTemplateVars('actionparams');
-            if( is_array($tmp) && isset($tmp['action']) ) $mactparms['action'] = $tmp['action'];
+            $tmp = $smarty->getTemplateVars('_action');
+            if( $tmp ) $mactparms['action'] = $tmp;
 
             $tagparms['action'] = 'moduleinterface.php';
             if( !$mactparms['returnid'] ) $mactparms['returnid'] = CmsApp::get_instance()->get_content_id();
@@ -54,7 +54,9 @@ function smarty_function_form_start($params, &$smarty)
             $node = $hm->sureGetNodeById($mactparms['returnid']);
             if( $node ) {
                 $content_obj = $node->getContent();
-                if( $content_obj ) $tagparms['action'] = $content_obj->GetURL();
+                if( $content_obj ) {
+                    $tagparms['action'] = $content_obj->GetURL();
+                }
             }
         }
     }

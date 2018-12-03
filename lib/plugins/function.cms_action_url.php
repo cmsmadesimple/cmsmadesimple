@@ -67,11 +67,11 @@ function smarty_function_cms_action_url($params, &$smarty)
         if( $mid == '' ) $mid = 'cntnt01';
         if( $action == '' ) $action = 'default';
         if( $returnid == '' ) {
-	    $returnid = \cms_utils::get_current_pageid();
-	    if( $returnid < 1 ) {
+            $returnid = \cms_utils::get_current_pageid();
+            if( $returnid < 1 ) {
             	$contentops = $gCms->GetContentOperations();
             	$returnid = $contentops->GetDefaultContent();
-	    }
+            }
         }
     }
     if( $action == '' ) return;
