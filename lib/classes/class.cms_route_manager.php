@@ -312,6 +312,8 @@ final class cms_route_manager
 	 */
 	public static function load_routes()
 	{
+        return;
+        /*
 		global $CMS_ADMIN_PAGE;
 		$flag = false;
 		if( isset($CMS_ADMIN_PAGE) ) {
@@ -327,6 +329,7 @@ final class cms_route_manager
 		}
 
 		if( $flag ) $CMS_ADMIN_PAGE = $flag;
+        */
 	}
 
 	/**
