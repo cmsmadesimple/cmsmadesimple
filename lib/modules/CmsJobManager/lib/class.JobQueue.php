@@ -24,6 +24,7 @@ final class JobQueue
 
         $out = [];
         foreach( $list as $row ) {
+            $mod = null;
             if( !empty($row['module']) ) {
                 $mod = \cms_utils::get_module($row['module']);
                 if( !is_object($mod) ) throw new \RuntimeException('Job '.$row['name'].' requires module '.$row['module'].' That could not be loaded');
