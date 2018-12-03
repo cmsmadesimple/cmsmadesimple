@@ -2194,7 +2194,7 @@ abstract class ContentBase
 	 * @param bool $adding Whether or not we are in add or edit mode.
 	 * @return array consisting of two elements.  A label, and the input element.
 	 */
-	protected function display_single_element(string $one,bool $adding)
+	protected function display_single_element($one, $adding)
 	{
 		$config = \cms_config::get_instance();
 
