@@ -1,0 +1,32 @@
+#contenttable .col_active {
+    padding-left: 2px;
+    padding-right: 2px;
+}
+#contenttable .col_default {
+    padding-left: 2px;
+    padding-right: 2px;
+}
+#contenttable .col_view {
+    padding-left: 2px;
+    padding-right: 2px;
+}
+#contenttable .col_copy {
+    padding-left: 2px;
+    padding-right: 2px;
+}
+#contenttable .col_addchild {
+    padding-left: 2px;
+    padding-right: 2px;
+}
+#contenttable .col_edit {
+    padding-left: 2px;
+    padding-right: 2px;
+}
+#contenttable .col_delete {
+    padding-left: 2px;
+    padding-right: 2px;
+}
+#contenttable .col_multiselect {
+    padding-left: 2px;
+    padding-right: 2px;
+}

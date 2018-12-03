@@ -50,7 +50,7 @@
     {function do_content_row}
       {foreach $columns as $column => $flag}
         {if !$flag}{continue}{/if}
-	<td class="{$column}">
+	<td class="col_{$column}">
 	  {if $column == 'expand'}
 	    {if $row.expand == 'open'}
 	    <a href="{cms_action_url action='defaultadmin' collapse=$row.id}" class="page_collapse" accesskey="C" title="{$mod->Lang('prompt_page_collapse')}">

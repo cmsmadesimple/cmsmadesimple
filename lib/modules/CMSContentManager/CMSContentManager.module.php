@@ -90,4 +90,10 @@ final class CMSContentManager extends CMSModule
         return $out;
     }
 
+    public function GetHeaderHTML()
+    {
+        $url = $this->GetModuleURLPath().'/css/defaultadmin.css';
+        $out = sprintf('<link rel="stylesheet" href="%s" />',$url);
+        return $out;
+    }
 } // class
