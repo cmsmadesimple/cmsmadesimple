@@ -49,10 +49,10 @@ final class ReduceLogTask implements \CmsRegularTask
 
         $db = \CmsApp::get_instance()->GetDB();
         $table = $this->table();
-        $lastrec['action'] = $lastrec['action'] . sprintf(" (repeated %d times)",$n);
-        $sql = "UPDATE table SET action = ? WHERE timestamp = ? AND user_id = ? AND username = ? AND item_id = ? AND item_name = ? AND ip_addr = ?";
-        $db->Execute($sql,array($lastrec['action'],$lastrec['timestamp'],$lastrec['user_id'],$lastrec['username'],
-                                $lastrec['item_id'],$lastrec['item_name'],$lastrec['ip_addr']));
+        $lastrec['msg'] = $lastrec['msg'] . sprintf(" (repeated %d times)",$n);
+        $sql = "UPDATE $table SET msg = ? WHERE timestamp = ? AND uid = ? AND username = ? AND item_id = ? AND ip_addr = ?";
+        $db->Execute($sql,array($lastrec['msg'],$lastrec['timestamp'],$lastrec['uid'],$lastrec['username'],
+                                $lastrec['item_id'],$lastrec['ip_addr']));
     }
 
     public function clear_queued()
@@ -62,11 +62,11 @@ final class ReduceLogTask implements \CmsRegularTask
 
         $table = $this->table();
         $db = \CmsApp::get_instance()->GetDB();
-        $sql = "DELETE FROM $table WHERE timestamp = ? AND user_id = ? AND username = ? AND item_id = ? AND item_name = ? AND action = ? AND ip_addr = ?";
+        $sql = "DELETE FROM $table WHERE timestamp = ? AND uid = ? AND username = ? AND item_id = ? AND msg = ? AND ip_addr = ?";
         for( $i = 0; $i < $n; $i++ ) {
 	    $rec = $this->_queue[$i];
             $db->Execute($sql,array($rec['timestamp'],$rec['uid'],$rec['username'],
-                                    $rec['item_id'],$rec['item_name'],$rec['action'],$rec['ip_addr']));
+                                    $rec['item_id'],$rec['msg'],$rec['ip_addr']));
         }
         $this->_queue = [];
     }
