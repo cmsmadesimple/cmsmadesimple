@@ -56,7 +56,6 @@ abstract class CMSModule
      */
     private $params = [];
 
-
     /**
      * @access private
      * @ignore
@@ -97,7 +96,7 @@ abstract class CMSModule
      * @access private
      * @ignore
      */
-    private $restrict_unknown_params = TRUE;
+    private $restrict_unknown_params = FALSE;
 
     /**
      * @access private
@@ -659,6 +658,8 @@ abstract class CMSModule
      * set handled parameters, and perform other initialization tasks
      * that need to be setup for all frontend actions.
      *
+     * Note: it is possible that this method is called multiple times.
+     *
      * @abstract
      * @see CreateParameter
      */
@@ -681,7 +682,7 @@ abstract class CMSModule
      */
     final public function RestrictUnknownParams($flag = true)
     {
-        // empty stub.
+        $this->restrict_unknown_params = $flag;
     }
 
     /**
@@ -733,7 +734,7 @@ abstract class CMSModule
      */
     final public function CreateParameter(string $param, string $defaultval=null, string $helpstring='', bool $optional=true)
     {
-        array_push($this->params, [ 'name' => $param,'default' => $defaultval,'help' => $helpstring, 'optional' => $optional ] );
+        $this->params[] = [ 'name' => $param,'default' => $defaultval,'help' => $helpstring, 'optional' => $optional ];
     }
 
     /**
@@ -1433,10 +1434,13 @@ abstract class CMSModule
                 unset($hints);
             }
 
+            // filter out the params that are in the param map, clean them an
             // used to try to avert XSS flaws, this will
             // clean as many parameters as possible according
             // to a map specified with the SetParameterType metods.
-            $params = $this->_cleanParamHash( $this->GetName(),$params,$this->param_map );
+            if( $this->restrict_unknown_params ) {
+                $params = $this->_cleanParamHash( $this->GetName(), $params, $this->param_map );
+            }
         }
 
         // handle the stupid input type='image' problem.
@@ -1956,7 +1960,7 @@ abstract class CMSModule
      */
     public function RedirectToAdminTab($tab = '',$params = '',$action = '')
     {
-        if( $params == '' ) $params = [];
+        if( empty($params) ) $params = [];
         if( $tab != '' ) $this->SetCurrentTab($tab);
         if( empty($action) ) $action = 'defaultadmin';
         $this->Redirect('m1_',$action,'',$params,FALSE);

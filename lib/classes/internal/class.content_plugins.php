@@ -233,12 +233,11 @@ final class content_plugins
         $result = null;
         if( self::$_primary_content ) return self::$_primary_content;
 
-        $do_mact = $module = $id = $action = $inline = null;
-        if( isset($_REQUEST['mact']) ) {
-            list($module,$id,$action,$inline) = explode(',',$_REQUEST['mact'],4);
-            // do not process inline content.
-            if( $module && !$inline && $id == 'cntnt01' ) $do_mact = true;
-        }
+        $do_mact = $module = $id = $action = $inline = $mact = null;
+        if ( isset( $_REQUEST['mact']) ) $mact = $_REQUEST['mact'];
+        if( $mact ) list($module,$id,$action,$inline) = explode(',',$mact,4);
+        // do not process inline content.
+        if( $module && (!$inline || $id == 'cntnt01') ) $do_mact = true;
 
         if( $do_mact ) {
             $modops = \ModuleOperations::get_instance();
