@@ -17,6 +17,7 @@
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 #$Id$
+use CMSMS\HookManager;
 
 $CMS_ADMIN_PAGE=1;
 
@@ -59,16 +60,16 @@ $load_perms = function() use ($db) {
     $result = $db->Execute($query);
 
     // use hooks to localize permissions.
-    \CMSMS\HookManager::add_hook('localizeperm',function($perm_source,$perm_name){
+    HookManager::add_hook('localizeperm',function($perm_source, $perm_name) {
             $key = 'perm_'.str_replace(' ','_',$perm_name);
             if( \CmsLangOperations::lang_key_exists('admin',$key) ) return \CmsLangOperations::lang_from_realm('admin',$key);
             return $perm_name;
-        },\CMSMS\HookManager::PRIORITY_HIGH);
+        },\CMSMS\HookManager::PRIORITY_LOW);
 
-    \CMSMS\HookManager::add_hook('getperminfo',function($perm_source,$perm_name){
+    HookManager::add_hook('getperminfo',function($perm_source, $perm_name){
             $key = 'permdesc_'.str_replace(' ','_',$perm_name);
             if( \CmsLangOperations::lang_key_exists('admin',$key) ) return \CmsLangOperations::lang_from_realm('admin',$key);
-        },\CMSMS\HookManager::PRIORITY_HIGH);
+        },\CMSMS\HookManager::PRIORITY_LOW);
 
     $perm_struct = array();
     while($result && $row = $result->FetchRow()) {

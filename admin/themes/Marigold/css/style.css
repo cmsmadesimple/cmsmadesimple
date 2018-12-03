@@ -2585,6 +2585,11 @@ a.toggle-dropzone:focus {
 }
 
 
+/* --- Design Manager --- */
+#templatetable .col_dflt, #templatetable .col_edit, #templatetable.col_copy, #templatetable.col_delete {
+    padding-left: 2px;
+    padding-right: 2px;
+}
 
 /* --- SCREEN UP TO 1024px --- */
 
@@ -2757,7 +2762,7 @@ a.toggle-dropzone:focus {
     #oe_mainarea header.pageheader {
         max-height: 50px;
         margin-bottom: 15px;
-border-bottom: 0;
+	border-bottom: 0;
     }
     #oe_mainarea header.pageheader h1,
     #oe_mainarea header.pageheader span.helptext {
