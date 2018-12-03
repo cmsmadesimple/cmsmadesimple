@@ -193,7 +193,9 @@ $(document).ready(function(){
       </td>
       {if $allow_export}<td>
         {if $item.active && $item.root_writable && $item.e_status != 'need_upgrade' && !$item.missing_deps}
-          <a class="modop mod_export" href="{cms_action_url action='local_export' mod=$item.name}" title="{$ModuleManager->Lang('title_moduleexport')}">{admin_icon icon='xml_rss.gif'}</a>
+          <a class="modop mod_export" href="{cms_action_url action='local_export' mod=$item.name}" title="{$ModuleManager->Lang('title_moduleexport')}">
+	    <img src="{$ModuleManager->GetModuleURLPath()}/images/xml_rss.gif" alt="" height="16"/>
+	  </a>
         {/if}
       </td>{/if}
     </tr>
