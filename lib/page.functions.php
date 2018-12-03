@@ -367,18 +367,18 @@ function get_pageid_or_alias_from_url()
             $page = (int)$route['key2'];
         }
         else {
-            $matches = $route->get_results();
+            $results = $route->get_results();
 
             // it's a module route... setup some default parameters.
-            $arr = ['id'=>'cntnt01', 'action'=>'defaulturl', 'inline'=>false, 'module'=>$route->get_dest() ];
-            $matches = array_merge( $arr, $matches );
-            $tmp = $route->get_defaults();
-            if( $tmp ) $matches = array_merge( $dflts, $matches );
+            $orig = $matches = ['id'=>'cntnt01', 'action'=>'defaulturl', 'inline'=>false, 'module'=>$route->get_dest() ];
+            $dflts = $route->get_defaults();
+            if( $dflts ) $matches = array_merge( $matches, $dflts );
+            if( $results ) $matches = array_merge( $matches, $results );
 
             // Get rid of numeric matches, and put the data into the _REQUEST for later processing.
             foreach ($matches as $key=>$val) {
-                if ( is_int($key)) {
-                    // do nothing
+                if ( is_int($key) || isset($orig[$key]) ) {
+                    continue;
                 }
                 else if ($key != 'id' && $key != 'returnid' && $key != 'action') {
                     $_REQUEST[$matches['id'] . $key] = $val;
@@ -387,13 +387,15 @@ function get_pageid_or_alias_from_url()
 
             // Put the resulting mact into the request for later processing.
             // this is essentially our translation from pretty URLs to non-pretty URLS.
-            $_REQUEST['mact'] = $matches['module'] . ',' . $matches['id'] . ',' . $matches['action'] . ',' . $matches['inline'];
+            $_REQUEST['mact'] = $matches['module'] . ',' . $matches['id'] . ',' . $matches['action'] . ',' . (int) $matches['inline'];
 
             // Get a decent returnid
             $page = $dflt_content;
             if( $matches['returnid'] ) {
                 $page = (int) $matches['returnid'];
                 unset( $matches['returnid'] );
+            } else {
+                throw new \CmsException('Could not determine a content page id from matched route');
             }
         }
     }
