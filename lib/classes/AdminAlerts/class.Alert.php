@@ -244,6 +244,7 @@ abstract class Alert
         } else {
             $obj = unserialize($tmp['data']);
         }
+	if( !is_object($obj) || !$obj instanceof self ) return;
         return $obj;
     }
 
