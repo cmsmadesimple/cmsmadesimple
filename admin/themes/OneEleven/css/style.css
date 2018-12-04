@@ -993,6 +993,8 @@ header .shortcuts li.favorites a {
 #oe_sidebar aside {
 	padding-bottom: 30px;
 	position: relative
+	overflow: auto;
+	min-height: 40px;
 }
 #oe_sidebar nav.navigation {
 	height: auto;
