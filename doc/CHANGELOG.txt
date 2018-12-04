@@ -16,6 +16,7 @@ Core - General
 
 MicroTiny v2.2.3
   - More entropy in the mt_config.js filename to fix issues with js caching when switching users.
+  - Fixes in the cms_linker plugin for when trying to change a link to a CMSMS page where the alias has changed.
 
 FileManager v1.6.8
   - Fixes an upload issue.
