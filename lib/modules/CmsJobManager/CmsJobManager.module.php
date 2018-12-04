@@ -147,6 +147,7 @@ final class CmsJobManager extends \CMSModule
 
     protected function create_jobs_from_eligible_tasks()
     {
+        debug_to_log(__METHOD__.' '.strftime('%x %X'));
         // this creates jobs out of CmsRegularTask objects that we find,and that need to be executed.
         $now = time();
         $res = false;
@@ -271,7 +272,6 @@ final class CmsJobManager extends \CMSModule
         // if we triggered the thing less than N minutes ago... do nothing
         $now = time();
         $last_trigger = (int) $this->GetPreference('last_async_trigger');
-        debug_to_log(__METHOD__.' '.strftime('%X',$last_trigger).' = '.strftime('%X').' - '.utils::get_async_freq());
         if( $last_trigger >= $now - utils::get_async_freq() ) return; // do nothing
         $jobs = $this->check_for_jobs_or_tasks();
         if( is_array($jobs) && !count($jobs) ) return; // nothing to do.
@@ -308,6 +308,7 @@ final class CmsJobManager extends \CMSModule
         }
         catch( \Exception $e ) {
             debug_to_log('exception '.$e->GetMessage());
+            debug_to_log($e->GetTraceAsString());
             // do nothing
         }
     }

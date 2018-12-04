@@ -9,7 +9,7 @@ $(document).ready(function(){
 
 <div class="information">{$mod->Lang('info_background_jobs')}</div>
 
-{if !count($jobs)}
+{if empty($jobs)}
   <div style="text-align: center;">
     <div class="information">{$mod->Lang('info_no_jobs')}</div>
   </div>
@@ -34,11 +34,10 @@ $(document).ready(function(){
 		<td>{$job->module|default:''}</td>
 		<td>{$job->created|relative_time}</td>
 		<td>
-		   {if $job->start < $smarty.now - $async_freq}<span style="color: red;">
+		   {if $job->start && $job->start < $smarty.now - $async_freq}<span style="color: red;">
 			   {elseif $job->start < $smarty.now + async_freq}<span style="color: green;">
-		   {else}<span>
-		   {/if}
-			 {$job->start|relative_time}
+		   {else}<span>{/if}
+		   {if $job->start}{$job->start|relative_time}{/if}
 		   </span>
 		</td>
 		<td>{$recur_list[$job->frequency]}</td>
@@ -50,17 +49,3 @@ $(document).ready(function(){
     </tbody>
   </table>
 {/if}
-
-{* delete me before distributing - TODO ?? 
-
-<a id="simple1" href="{cms_action_url action=test1}" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-icon-primary">
-<span class="ui-button-icon-primary ui-icon ui-icon-circle-check"></span>
-<span class="ui-button-text">Simple Derived Class Test</span>
-</a>
-
-<a href="{cms_action_url action=test2}" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-icon-primary">
-<span class="ui-button-icon-primary ui-icon ui-icon-circle-check"></span>
-<span class="ui-button-text">Simple Derived Cron Test</span>
-</a>
-
-*}
