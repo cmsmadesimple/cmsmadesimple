@@ -82,7 +82,7 @@ class microtiny_utils
       // if this is an action for MicroTiny disable caching.
       $smarty = CmsApp::get_instance()->GetSmarty();
       $module = $smarty->get_template_vars('actionmodule');
-      if( $module == $mod->GetName() ) $mtime = time() + 60;
+      if( $module == $mod->GetName() ) $mtime = time() + 60; // do not cache when we're using this from within the MT modul.
 
       // also disable caching if told to by the config.php
       if( isset($config['mt_disable_cache']) && cms_to_bool($config['mt_disable_cache']) ) $mtime = time() + 60;
@@ -94,7 +94,9 @@ class microtiny_utils
           $output .= '<script type="text/javascript" src="'.CMS_ROOT_URL.'/lib/modules/MicroTiny/lib/js/tinymce/tinymce.min.js"></script>';
       }
 
-      $fn = cms_join_path(PUBLIC_CACHE_LOCATION,'mt_'.md5(__DIR__.session_id().$frontend.$selector.$css_name.get_userid(FALSE).$languageid).'.js');
+      $hash_salt = __DIR__.session_id().$frontend.$selector.$css_name.get_userid(FALSE).$languageid;
+      if( get_userid(false) && !$frontend ) $hash_salt .= $_SESSION[CMS_USER_KEY];
+      $fn = cms_join_path(PUBLIC_CACHE_LOCATION,'mt_'.md5($hash_salt).'.js');
       if( !file_exists($fn) || filemtime($fn) < $mtime ) {
           // we have to generate an mt config js file.
           self::_save_static_config($fn,$frontend,$selector,$css_name,$languageid);
