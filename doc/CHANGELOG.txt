@@ -123,10 +123,13 @@ Core - General
   - FEATURE: Added the {assets_url} plugin to provide the complete URL to the assets folder.
   - FEATURE: New cleaned up simplex theme on initial install demonstrates template inheritance and other techniques
   - FEATURE: New default content on initial install
-  - CHANGE: in HookManager::do_hook now smartly handle hook handlers that return null or no result.
+  - CHANGE: in HookManager::do_hook now smartly handle hook handlers that return null or no result, or single parameters
   - FEATURE: {cms_textarea} now supports the readonly and disabled attributes.
   - CHANGE: Remove redundant returnid parameter from mact url's
   - IMPROVE: {content_image} now allows alt="".
+  - IMPROVE: {cms_action_url} will now use the default content page for frontend links IF a returnid is not specified or cannot be inferred
+  - IMPROVE: get_page_id_or_alias_from_url() can now throw an exception and improve the way that parameters are merged and cleaned.
+  - CHANGE:  RestrictUnknownParams is now OFF by default, AND cleaning is only done if RestrictUnknownParams() is enabled
 
 News v2.21.5
   - Minor cleaning of parameters.
@@ -168,6 +171,7 @@ FileManager v1.6.4
 FilePicker v1.0.1
   - No longer allow overriding the filepicker type on the URL.
   - No longer allow uploading any .php files.
+  - No longer set the size attribute on the input field, use CSS
 
 AdminLog
   - New core module to replace the adminlog.php file
@@ -178,10 +182,14 @@ Search  - v1.52
 
 AdminSearch v1.0.5
  - Rationalize the code a bit (remove un-necessary files).
+ - Now optionally use a hook to get search slaves.
+ - Optmization to the gathering of slaves.
 
 DesignManager v1.1.6
  - Now properly handle renaming exported stylesheets and templates.
  - Now only reads {Navigator} tags, will not read {cms_module module=Navigator} tags (for a bit).
+ - PHP 7 fixes
+ - Minor template fixes in design list.
 
 Navigator v1.0.9
  - Adds the title property to each node.
