@@ -194,7 +194,6 @@ class ContentOperations
 
 		$ctph = $this->LoadContentType($type);
 		if( is_object($ctph) && class_exists($ctph->class) ) $result = new $ctph->class;
-        if( !$result ) die('it failed');
 		return $result;
 	}
 
