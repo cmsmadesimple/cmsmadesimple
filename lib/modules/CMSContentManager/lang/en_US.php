@@ -83,6 +83,7 @@ $lang['error_bulk_permission'] = 'You do not have permission to perform this bul
 $lang['error_contentlocked'] = 'It appears that this content is already locked. Try to refresh this page to see up-to-date information';
 $lang['error_contenttype_disallowed'] = 'Default Content Type is also set to Disallowed';
 $lang['error_copy_permission'] = 'You do not have permission to copy this content page';
+$lang['error_create_content'] = 'We could not create a new content object of type %s';
 $lang['error_delete_defaultcontent'] = 'You cannot delete the default content page';
 $lang['error_delete_haschildren'] = 'You cannot delete a page that has children';
 $lang['error_delete_permission'] = 'You do not have permission to delete this content page';

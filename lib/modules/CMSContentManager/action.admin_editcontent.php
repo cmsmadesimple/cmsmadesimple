@@ -87,6 +87,7 @@ try {
         if( isset($params['parent_id']) ) $parent_id = (int) $params['parent_id'];
         if( isset($params['content_type']) ) $content_type = trim($params['content_type']);
         $content_obj = $contentops->CreateNewContent($content_type);
+        if( !$content_obj ) throw new \RuntimeException( $this->Lang('error_create_content', $content_type) );
         $content_obj->SetOwner($user_id);
         $content_obj->SetLastModifiedBy($user_id);
         $content_obj->SetActive($pagedefaults['active']);
