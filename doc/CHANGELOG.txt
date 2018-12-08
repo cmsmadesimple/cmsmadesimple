@@ -86,6 +86,7 @@ Core - General
   - CHANGE: smarty template directories for admin requests now includes /assets/templates.
   - Allow svg files to be cached and deflated in the sample htaccess.txt file
   - CHANGE: Now call InitializeFrontend() and InitializeAdmin() from within ModuleOperations::_load_module() on success.  instead of the module constructor.
+  - CHANGE: Now call SetParameters from within ModuleOperations::_load_module() and not from the constructor.
   - FEATURE: Adds new {theme_root} plugin for admin templates
   - FEATURE: Adds new {admin_headtext} block plugin for admin templates
   - CHANGE: Module actions can now return output rather than echoing it.
@@ -130,6 +131,8 @@ Core - General
   - IMPROVE: {cms_action_url} will now use the default content page for frontend links IF a returnid is not specified or cannot be inferred
   - IMPROVE: get_page_id_or_alias_from_url() can now throw an exception and improve the way that parameters are merged and cleaned.
   - CHANGE:  RestrictUnknownParams is now OFF by default, AND cleaning is only done if RestrictUnknownParams() is enabled
+  - BREAKING: Modules that register content types cannot be lazy loaded.
+  - CHANGE: LazyLoadAdmin() and LazyLoadFrontend() methods.  Modules should not be lazy loaded anymore, however class files should be kept small
 
 News v2.21.5
   - Minor cleaning of parameters.

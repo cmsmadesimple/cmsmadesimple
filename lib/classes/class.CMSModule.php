@@ -132,10 +132,9 @@ abstract class CMSModule
             $this->SetParameterType('action',CLEAN_STRING);
             $this->SetParameterType('showtemplate',CLEAN_STRING);
             $this->SetParameterType('inline',CLEAN_INT);
-            //$this->InitializeFrontend();
         }
         else if( isset($CMS_ADMIN_PAGE) && !isset($CMS_STYLESHEET) && !isset($CMS_INSTALL_PAGE) ) {
-            //$this->InitializeAdmin();
+            // admin request
         }
     }
 
@@ -620,21 +619,29 @@ abstract class CMSModule
     }
 
     /**
-     * Called from within the constructor,  This method should be overridden to call the CreaeteParameter
-     * method for each parameter that the module understands.
-     *
-     * Note: In past versions of CMSMS This method was used for both admin and frontend requests to
-     * register routes, and create parameters, and register a module plugin, etc.  As of version 1.10
-     * this method is deprecated, and the appropriate functions are InitializeFrontend() and InitializeAdmin()
-     * This method is scheduled for removal in version 1.11
+     * This method can be overriden to perform module initialization that is common to the admin and
+     * frontend actions.
      *
      * @abstract
      * @see CreateParameter
      * @see InitializeFrontend()
      * @see InitializeAdmin()
+     * @see InitializeCommon()
      * @deprecated
      */
-    function SetParameters() {}
+    public function SetParameters() {}
+
+    /**
+     * This method can be overriden to perform module initialization that is common to the admin and
+     * frontend actions.
+     *
+     * @abstract
+     * @since 2.3
+     * @see CreateParameter
+     * @see InitializeFrontend()
+     * @see InitializeAdmin()
+     */
+    public function InitializeCommon() {}
 
     /**
      * Called from within the constructor, ONLY for frontend module
@@ -643,14 +650,12 @@ abstract class CMSModule
      * that need to be setup for all frontend actions.
      *
      * @abstract
+     * @see InitializeCommon()
      * @see SetParameterType
      * @see RegisterRoute
      * @see RegisterModulePlugin
      */
-    protected function InitializeFrontend()
-    {
-        $this->SetParameters(); // for backwards compatibility purposes. may be removed.
-    }
+    public function InitializeFrontend() {}
 
     /**
      * Called from within the constructor, ONLY for admin module
@@ -662,11 +667,10 @@ abstract class CMSModule
      *
      * @abstract
      * @see CreateParameter
+     * @see InitializeCommon()
      */
-    protected function InitializeAdmin()
-    {
-        $this->SetParameters(); // for backwards compatibility purposes. may be removed.
-    }
+    public function InitializeAdmin() {}
+
 
     /**
      * A method to indicate that the system should drop and optionally
@@ -1219,6 +1223,7 @@ abstract class CMSModule
      * In CMSMS 1.10 routes are loaded upon each request, if a module registers routes it cannot be lazy loaded.
      *
      * @since 1.10
+     * @deprecated
      * @abstract
      * @return bool
      */
@@ -1237,6 +1242,7 @@ abstract class CMSModule
      * In CMSMS 1.10 routes are loaded upon each request, if a module registers routes it cannot be lazy loaded.
      *
      * @since 1.10
+     * @deprecated
      * @abstract
      * @return bool
      */

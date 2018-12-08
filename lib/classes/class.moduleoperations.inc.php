@@ -439,6 +439,8 @@ final class ModuleOperations
         }
 
         if( !isset($CMS_INSTALL_PAGE) && !isset($CMS_STYLESHEET) && !$force_load ) {
+            $obj->SetParameters(); // deprecated
+            $obj->InitializeCommon();
             if( isset($CMS_ADMIN_PAGE) ) {
                 $obj->InitializeAdmin();
             } else if( $gCms->is_frontend_request() ) {
@@ -516,7 +518,7 @@ final class ModuleOperations
                 if( isset($info['allow_admin_lazyload']) && $info['allow_admin_lazyload'] ) continue;
             } else {
                 // frontend request
-                if( isset($info['allow_admin_lazyload']) && $info['allow_admin_lazyload'] ) continue;
+                if( isset($info['allow_fe_lazyload']) && $info['allow_fe_lazyload'] ) continue;
             }
             $this->get_module_instance($module_name);
         }
