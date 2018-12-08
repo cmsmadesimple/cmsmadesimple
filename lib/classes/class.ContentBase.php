@@ -404,7 +404,10 @@ abstract class ContentBase
 	 */
 	public function Type()
 	{
-		return strtolower(get_class($this));
+        $classname = get_class($this);
+		$contentops = ContentOperations::get_instance();
+        $ph = $contentops->GetContentTypePlaceholderByClassname( $classname );
+        return $ph->type;
 	}
 
 	/**

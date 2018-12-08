@@ -194,6 +194,7 @@ class ContentOperations
 
 		$ctph = $this->LoadContentType($type);
 		if( is_object($ctph) && class_exists($ctph->class) ) $result = new $ctph->class;
+        if( !$result ) die('it failed');
 		return $result;
 	}
 
@@ -205,7 +206,7 @@ class ContentOperations
      * @param bool $loadprops Also load the properties of that content object. Defaults to false.
      * @return mixed The loaded content object. If nothing is found, returns FALSE.
      */
-	function &LoadContentFromId(int $id,bool $loadprops=false)
+	function LoadContentFromId(int $id,bool $loadprops=false)
 	{
         $id = (int) $id;
         if( $id < 1 ) $id = $this->GetDefaultContent();
@@ -223,7 +224,6 @@ class ContentOperations
 				return $contentobj;
 			}
 		}
-		return FALSE;
 	}
 
 
@@ -311,12 +311,16 @@ class ContentOperations
 			// get the list of modules that have content types.
 			// and load them.  content types from modules are
 			// registered in the constructor.
+            /*
+                content types registered in the contructor... should not need this.
+
 			$module_list = ModuleOperations::get_instance()->get_modules_with_capability(CmsCoreCapabilities::CONTENT_TYPES);
 			if( is_array($module_list) && count($module_list) ) {
 				foreach( $module_list as $module_name ) {
 					cms_utils::get_module($module_name);
 				}
 			}
+            */
 		}
 
 		return $this->_content_types;
@@ -360,6 +364,23 @@ class ContentOperations
 	}
 
 
+    /**
+     * Get a content type placeholder based on a classname of the content type
+     *
+     * @since 2.3
+     * @internal
+     * @param string $classname The class name of the placeholder
+     * @return CmsContentTypePlaceHolder
+     */
+    public function GetContentTypePlaceholderByClassname( string $classname )
+    {
+        $this->_get_content_types();
+        if( $this->_content_types ) {
+            foreach( $this->_content_types as $type => $obj ) {
+                if( $obj->class == $classname ) return $obj;
+            }
+        }
+    }
 
 	/**
      * Returns a hash of valid content types (classes that extend ContentBase)
@@ -714,7 +735,7 @@ class ContentOperations
 	function SetDefaultContent(int $id)
 	{
 		$db = CmsApp::get_instance()->GetDb();
-		
+
 		$sql = 'UPDATE '.CMS_DB_PREFIX."content SET default_content=0 WHERE default_content=1";
 		$db->Execute( $sql );
 		$one = $this->LoadContentFromId($id);
