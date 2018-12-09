@@ -607,28 +607,29 @@ class ContentOperations
 			}
 		}
 
-		// build the content objects
+        $content_types = array_keys($this->ListContentTypes());
 		while( !$dbr->EOF() ) {
 		    $row = $dbr->fields;
 		    $id = $row['content_id'];
 
-		    if (!in_array($row['type'], array_keys($this->ListContentTypes()))) continue;
-		    $contentobj = $this->CreateNewContent($row['type']);
+		    if( in_array($row['type'], $content_types)) {
+                $contentobj = $this->CreateNewContent($row['type']);
+                if ($contentobj) {
+                    $contentobj->LoadFromData($row, false);
+                    if( $loadprops && $contentprops && isset($contentprops[$id]) ) {
+                        // load the properties from local cache.
+                        $props = $contentprops[$id];
+                        foreach( $props as $oneprop ) {
+                            $contentobj->SetPropertyValueNoLoad($oneprop['prop_name'],$oneprop['content']);
+                        }
+                    }
 
-		    if ($contentobj) {
-				$contentobj->LoadFromData($row, false);
-				if( $loadprops && $contentprops && isset($contentprops[$id]) ) {
-					// load the properties from local cache.
-					$props = $contentprops[$id];
-					foreach( $props as $oneprop ) {
-						$contentobj->SetPropertyValueNoLoad($oneprop['prop_name'],$oneprop['content']);
-					}
-				}
+                    // cache the content objects
+                    cms_content_cache::add_content($id,$contentobj->Alias(),$contentobj);
+                }
+            }
 
-				// cache the content objects
-				cms_content_cache::add_content($id,$contentobj->Alias(),$contentobj);
-			}
-			$dbr->MoveNext();
+            $dbr->MoveNext();
 		}
 		$dbr->Close();
 	}
