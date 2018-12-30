@@ -536,10 +536,13 @@ namespace CMSMS\Database {
 
             // strlen(14) allows YYYYMMDDHHMMSS format
             if( is_string($timestamp) ) {
-                if( !preg_match('/[0-9-\s:]*/',$timestamp) ) return 'null';
-                $tmp = strtotime($timestamp);
-                if( $tmp < 1 ) return;
-                $timestamp = $tmp;
+                if( strlen($timestamp) === 14 || !preg_match('/[0-9-\s:]*/',$timestamp) ) {
+                    $tmp = strtotime($timestamp);
+                    if( $tmp < 1 ) return 'null';
+                    $timestamp = $tmp;
+                } else if( is_numeric($timestamp) ) {
+                    $timestamp = (int) $timestamp;
+                }
             }
             if( $timestamp > 0 ) return date("'Y-m-d H:i:s'",$timestamp);
         }

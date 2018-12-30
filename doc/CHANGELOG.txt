@@ -14,6 +14,7 @@ Core - General
   - Now check for an english language file first in module_custom/xxxxx/lang before a file for the current language.
   - Prevent false-positive hit for "multiple_webshells_0018" rule webserver virusscanner (https://github.com/Yara-Rules/rules/blob/master/Webshells/WShell_THOR_Webshells.yar#L4764).
   - Fixes a bug in ContentOperations::LoadAllContent() if the content list had a custom content type from a module that was unvavailable.
+  - Fixes a bug in the Database\Connection::DbTimeStamp()
 
 Search v1.51.6
   - Minor fixes to help
