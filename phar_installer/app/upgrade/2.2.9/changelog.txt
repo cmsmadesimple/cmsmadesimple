@@ -1,0 +1,36 @@
+Version 2.2.9 - Blow Me Down
+----------------------------------
+Core - General
+  - PHP 7.2+ fixes.
+  - Now do not call Module::InitializeAdmin() or Module::InitializeFrontend() if the module loading is being forced
+    (as is the case sometimes within ModuleManager);
+  - Minor changes and fixes to prevent warnings/notices in CLI based scripts
+  - Improvements to the {browser_lang} plugin.
+  - Fixes a bug in the CmsLayoutTemplateQuery class.
+  - Fixes a bug with the name= parameter in the {cms_stylesheet} plugin.
+  - Fixes a minor issue in system information (smarty compilecheck).
+  - Fixes a minor issue with the tabIndex and accesskey fields in edit content.
+  - Fixes issue in the CmsLayoutStylesheet class related to associating designs with new stylesheets.
+  - Now check for an english language file first in module_custom/xxxxx/lang before a file for the current language.
+  - Prevent false-positive hit for "multiple_webshells_0018" rule webserver virusscanner (https://github.com/Yara-Rules/rules/blob/master/Webshells/WShell_THOR_Webshells.yar#L4764).
+  - Fixes a bug in ContentOperations::LoadAllContent() if the content list had a custom content type from a module that was unvavailable.
+  - Fixes a bug in the Database\Connection::DbTimeStamp()
+
+Search v1.51.6
+  - Minor fixes to help
+
+MicroTiny v2.2.3
+  - More entropy in the mt_config.js filename to fix issues with js caching when switching users.
+  - Fixes in the cms_linker plugin for when trying to change a link to a CMSMS page where the alias has changed.
+
+FileManager v1.6.8
+  - Fixes an upload issue.
+
+ModuleManager v2.1.5
+  - PHP 7.2+ fixes.
+
+CMSContentManager v1.1.7
+  - Fixes an issue with changing content type after copying a content page.
+
+DesignManager v1.1.5
+  - Fixes ownership issue on templates with importing a design.
