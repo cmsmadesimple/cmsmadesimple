@@ -353,10 +353,10 @@ function cms_module_create_url(&$modinstance,$id,$action,$returnid='',$params=ar
 	// get the destination content object
 	if( $returnid > 0 ) $content_obj = CmsApp::get_instance()->GetContentOperations()->LoadContentFromId($returnid);
 
-	if ($prettyurl <= 0 && $config['url_rewriting'] == 'mod_rewrite') {
+	if ($prettyurl && $prettyurl != ':NOPRETTY:' && $config['url_rewriting'] == 'mod_rewrite') {
 		$text = $base_url . '/' . $prettyurl . $config['page_extension'];
 	}
-	else if ($prettyurl != '' && $config['url_rewriting'] == 'internal') {
+	else if ($prettyurl && $prettyurl != ':NOPRETTY:' && $config['url_rewriting'] == 'internal') {
 		$text = $base_url . '/index.php/' . $prettyurl . $config['page_extension'];
 	}
 	else {
@@ -378,6 +378,7 @@ function cms_module_create_url(&$modinstance,$id,$action,$returnid='',$params=ar
 		if( isset($params['returnid']) && $returnid <= 0 ) unset($params['returnid']);
 		foreach ($params as $key=>$value) {
 			$key = cms_htmlentities($key);
+            if( startswith($key,'__') ) continue;  // 2.3
 			if( in_array($key,array('assign','id','returnid','action','module')) ) continue;
 			$value = cms_htmlentities($value);
 			$text .= '&amp;'.$id.$key.'='.rawurlencode($value);

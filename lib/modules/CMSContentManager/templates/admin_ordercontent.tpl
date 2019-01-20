@@ -16,7 +16,7 @@
 	    ev.preventDefault();
 	    var form = $(this).closest('form');
             cms_confirm('{$mod->Lang('confirm_reorder')|escape:'javascript'}').done(function(){
-                var tree = $.toJSON(parseTree($('#masterlist')));
+                var tree = JSON.stringify(parseTree($('#masterlist')));
                 var ajax_res = false;
                 $('#orderlist').val(tree);
 		form.submit();

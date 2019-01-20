@@ -133,6 +133,9 @@ Core - General
   - CHANGE:  RestrictUnknownParams is now OFF by default, AND cleaning is only done if RestrictUnknownParams() is enabled
   - BREAKING: Modules that register content types cannot be lazy loaded.
   - CHANGE: LazyLoadAdmin() and LazyLoadFrontend() methods.  Modules should not be lazy loaded anymore, however class files should be kept small
+  - FEATURE: You can now pass :NOPRETTY: as a value for the prettyurl parameter in create_url (and CreateLink and CreateFrontendLink) to disable
+      pretty url determiniation.
+  - FEATURE: cms_action_url plugin now supports the 'alias' parameter.
 
 News v2.21.5
   - Minor cleaning of parameters.

@@ -19,10 +19,8 @@
 
 function smarty_function_cms_action_url($params, &$smarty)
 {
-    $module = $smarty->getTemplateVars('_module');
-    $returnid = $smarty->getTemplateVars('returnid');
-    $mid = $smarty->getTemplateVars('actionid');
-    $action = $assign = $urlparms = null;
+    $assign = trim(get_parameter_value($params,'assign'));
+    $module = $action = $returnid = $mid = null;
     $forjs  = 0;
 
     $actionparms = array();
@@ -34,8 +32,23 @@ function smarty_function_cms_action_url($params, &$smarty)
         case 'action':
             $action = trim($value);
             break;
+        case 'alias':
+            if( !$returnid ) {
+                $value = trim($value);
+                if( $value ) {
+                    $manager = cmsms()->GetHierarchyManager();
+                    $node = $manager->find_by_tag('alias',$value);
+                    if( !$node ) {
+                        cms_error('invalid alias parameter: '.$value,'cms_action_link');
+                    }
+                    else {
+                        $returnid = (int) $node->get_tag('id');
+                    }
+                }
+            }
+            break;
         case 'returnid':
-            $returnid = (int)trim($value);
+            if( !$returnid ) $returnid = (int)trim($value);
             break;
         case 'mid':
             $mid = trim($value);
@@ -55,6 +68,11 @@ function smarty_function_cms_action_url($params, &$smarty)
             break;
         }
     }
+
+    if( !$module ) $module = $smarty->getTemplateVars('_module');
+    if( !$returnid ) $returnid = $smarty->getTemplateVars('returnid');
+    if( !$action ) $action = $assign = $urlparms = null;
+    if( !$mid ) $mid = $smarty->getTemplateVars('actionid');
 
     // validate params
     $gCms = CmsApp::get_instance();

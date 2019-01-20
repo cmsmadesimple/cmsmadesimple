@@ -868,9 +868,10 @@ final class ContentListBuilder
                   break;
 
               case 'page':
-                  if( $content->MenuText() == CMS_CONTENT_HIDDEN_NAME ) continue;
-                  $rec[$column] = strip_tags($content->MenuText());
-                  if( \CmsContentManagerUtils::get_pagenav_display() == 'title' ) $rec[$column] = strip_tags($content->Name());
+                  if( $content->MenuText() != CMS_CONTENT_HIDDEN_NAME ) {
+                    $rec[$column] = strip_tags($content->MenuText());
+		    if( \CmsContentManagerUtils::get_pagenav_display() == 'title' ) $rec[$column] = strip_tags($content->Name());
+		  }
                   break;
 
               case 'alias':

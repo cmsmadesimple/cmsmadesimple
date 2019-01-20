@@ -13,7 +13,7 @@ $lang['help_function_cms_render_scripts'] = <<<EOT
 </ul>
 
 <h3>Example:</h3>
-<p>The following example illustrates queueing the inclusion of a jquery library from a file located in /assets/js/jquery.min.js and then rendering the script tags.   On news detail pages the user should be presented with an alert message using deferred execution via the text/cms_javascript script type.</p> 
+<p>The following example illustrates queueing the inclusion of a jquery library from a file located in /assets/js/jquery.min.js and then rendering the script tags.   On news detail pages the user should be presented with an alert message using deferred execution via the text/cms_javascript script type.</p>
 <h4>In News detail template:</h4>
 <pre><code>&lt;script type="text/cms_javascript"&gt;
 $(function(){
@@ -202,6 +202,7 @@ $lang['help_function_cms_action_url'] = <<<EOT
 <ul>
   <li>module - <em>(optional)</em> - The module name to generate a URL for.  This parameter is not necessary if generating a URL from within a module action to an action within the same module.</li>
   <li>action - <strong>(required)</strong> - The action name to generate a URL to.</li>
+  <li>alias - <em>(optional)</em>- The alias of an active page.  The pageid of this page will be used to create the url.  This parameter is not necessary if the action is to be displayed on the current page, or if the URL is to an admin action from within an admin action.</li>
   <li>returnid - <em>(optional)</em> - The integer pageid to display the results of the action in.  This parameter is not necessary if the action is to be displayed on the current page, or if the URL is to an admin action from within an admin action.</li>
   <li>mid - <em>(optional)</em> - The module action id.  This defaults to &quot;m1_&quot; for admin actions, and &quot;cntnt01&quot; for frontend actions.</li>
   <li>forjs - <em>(optional)</em> - An optional integer indicating that the generated URL should be suitable for use in JavaScript.</li>
@@ -441,7 +442,7 @@ $lang['help_function_page_attr'] = <<<EOT
       <li>extra3 - (string) The value of the extra3 attribute.</li>
       <li>pageattr - (string) The value of the page specific smarty data attribute./li>
     </ul>
-    <p><strong>Note:</strong> The list above is not inclusive.  You can also retrieve the unparsed contents of additional content blocks or properties added by third party 
+    <p><strong>Note:</strong> The list above is not inclusive.  You can also retrieve the unparsed contents of additional content blocks or properties added by third party
   </li>
   <li><em>(optional)</em> inactive (boolean) - Allows reading page attributes from inactive pages.</li>
   <li><em>(optional)</em> assign (string) - Assign the results to a smarty variable with that name.</li>

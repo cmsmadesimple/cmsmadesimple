@@ -1826,6 +1826,9 @@ abstract class CMSModule
      * Returns the xhtml equivalent of an href link	 This is basically a nice little wrapper
      * to make sure that id's are placed in names and also that it's xhtml compliant.
      *
+     * Note: Use of this method is discouraged.  See the create_url method instead.
+     *
+     * @see create_url()
      * @param string $id The id given to the module on execution
      * @param string $returnid The id to eventually return to when the module is finished it's task
      * @param string $action The action that this form should do when the link is clicked
@@ -1851,6 +1854,9 @@ abstract class CMSModule
      * Returns the xhtml equivalent of an href link	 This is basically a nice little wrapper
      * to make sure that id's are placed in names and also that it's xhtml compliant.
      *
+     * Note: Use of this method is discouraged.  See the create_url method instead.
+     *
+     * @see create_url()
      * @param string $id The id given to the module on execution
      * @param string $action The action that this form should do when the link is clicked
      * @param string $returnid The id to eventually return to when the module is finished it's task
@@ -1885,6 +1891,8 @@ abstract class CMSModule
      * @param bool $inline Wether the target of the output link is the same tag on the same page.
      * @param bool $targetcontentonly Wether the target of the output link targets the content area of the destination page.
      * @param string  $prettyurl An optional url segment related to the root of the page for pretty url purposes.
+     *   If empty, and pretty urls are configured for the site, CMSMS will call get_pretty_url() to try to calculate a pretty URL.
+     *.  A special value of ':NOPRETTY:' can be used to skip all automatic pretty url determiniations for the URL.
      * @return string.
      */
     public function create_url($id,$action,$returnid='',$params=[],
