@@ -225,7 +225,7 @@ class wizard_step3 extends \cms_autoinstaller\wizard_step
         // required test ... MEMORY LIMIT
 	$memory_limit = ini_get('memory_limit');
 	if( $memory_limit !== '-1' ) {
-            $obj = new _tests_\range_test('memory_limit',$memory_lmit);
+            $obj = new _tests_\range_test('memory_limit',$memory_limit);
             $obj->minimum = '16M';
             $obj->recommended = '32M';
             $obj->pass_msg = ini_get('memory_limit');
