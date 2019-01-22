@@ -540,7 +540,7 @@ namespace CMSMS\Database {
 
             // strlen(14) allows YYYYMMDDHHMMSS format
             if( is_string($timestamp) ) {
-                if( strlen($timestamp) === 14 || !preg_match('/[0-9-\s:]*/',$timestamp) ) {
+                if( strlen($timestamp) === 14 || preg_match('/[0-9-\s:]*/',$timestamp) ) {
                     $tmp = strtotime($timestamp);
                     if( $tmp < 1 ) return 'null';
                     $timestamp = $tmp;
