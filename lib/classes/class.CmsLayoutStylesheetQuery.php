@@ -96,7 +96,7 @@ class CmsLayoutStylesheetQuery extends CmsDbQueryBase
 
             case 'fullname':
                 $val = trim($val);
-                $where[] = 'name = '.$db->qstr($val.'%');
+                $where[] = 'name = '.$db->qstr($val);
                 break;
 
             case 'd': // design

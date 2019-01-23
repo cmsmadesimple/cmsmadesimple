@@ -32,7 +32,7 @@ try {
   echo $this->ProcessTemplate('settings.tpl');
 }
 catch( Exception $e ) {
-  echo $this->ShowMessage($e->GetMessage());
+  echo $this->ShowErrors($e->GetMessage());
 }
 
 

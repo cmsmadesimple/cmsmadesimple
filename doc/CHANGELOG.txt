@@ -1,3 +1,12 @@
+Version 2.2.9.1
+-------------------------------
+Core - General
+  - fix to the CmsLayoutStylesheetQuery class
+  - fix an edge case in the Database\Connection::DbTimeStamp() method
+
+MicroTiny v2.2.4
+  - Minor fix in error displays.
+
 Version 2.2.9 - Blow Me Down
 -------------------------------
 Core - General
