@@ -16,7 +16,7 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-function smarty_cms_function_cms_stylesheet($params, &$smarty)
+function smarty_function_cms_stylesheet($params, &$smarty)
 {
 	#---------------------------------------------
 	# Initials
@@ -245,11 +245,11 @@ function cms_stylesheet_writeCache($filename, $list, $trimbackground, &$smarty)
         }
 	}
 	catch (SmartyException $e) {
-        // why not just re-throw the exception as it may have a smarty error in it.
-        debug_to_log('Error Processing Stylesheet');
-        debug_to_log($e->GetMessage());
-        audit('','Plugin: cms_stylesheet', 'Smarty Compile process failed, an error in the template?');
-        return;
+            // why not just re-throw the exception as it may have a smarty error in it.
+            debug_to_log('Error Processing Stylesheet');
+            debug_to_log($e->GetMessage());
+            audit('','Plugin: cms_stylesheet', 'Smarty Compile process failed, an error in the template?');
+            return;
 	}
 
 	$smarty->left_delimiter = '{';
