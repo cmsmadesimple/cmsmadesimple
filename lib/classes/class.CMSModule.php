@@ -647,13 +647,11 @@ abstract class CMSModule
     }
 
     /**
-     * Called from within the constructor,  This method should be overridden to call the CreaeteParameter
-     * method for each parameter that the module understands.
+     * This method can be used to perform initialization functions that should be done both for frontend and admin requests
+     * but not necessarily for lighweight module load requests (such as needed by ModuleManager).
      *
-     * Note: In past versions of CMSMS This method was used for both admin and frontend requests to
-     * register routes, and create parameters, and register a module plugin, etc.  As of version 1.10
-     * this method is deprecated, and the appropriate functions are InitializeFrontend() and InitializeAdmin()
-     * This method is scheduled for removal in version 1.11
+     * Note: This method is called from within the InitializeFrontend() and InitializeAdmin methods. so, if your module
+     * overrides one or both of these methods be sure to call the appropriate parent method.
      *
      * @abstract
      * @see CreateParameter
