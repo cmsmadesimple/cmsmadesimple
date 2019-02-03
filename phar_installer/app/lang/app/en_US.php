@@ -250,6 +250,7 @@ $lang['pass_database_support'] = 'At least one compatible database driver found'
 $lang['pass_func_json'] = 'json functionality detected';
 $lang['pass_func_md5'] = 'md5 functionality was detected';
 $lang['pass_func_tempnam'] = 'The tempnam function exists';
+$lang['pass_memory_limit_nolimit'] = 'There is no preset PHP memory limit';
 $lang['pass_multibyte_support'] = 'Multibyte support appears to be enabled';
 $lang['pass_php_version'] = 'The PHP version currently configured does not meet minimum requirements. At a minimum, PHP %s is required, though we recommend %s or higher';
 $lang['pass_pwd_writable'] = 'The HTTP process can write into the destination directory. This is necessary for extracting files';
