@@ -217,14 +217,17 @@ class wizard_step3 extends \cms_autoinstaller\wizard_step
         $tests[] = $obj;
 
         // required test ... MEMORY LIMIT
-        $obj = new _tests_\range_test('memory_limit',ini_get('memory_limit'));
-        $obj->minimum = '16M';
-        $obj->recommended = '32M';
-        $obj->pass_msg = ini_get('memory_limit');
-        $obj->fail_msg = \__appbase\lang('fail_memory_limit',ini_get('memory_limit'),$obj->minimum,$obj->recommended);
-        $obj->warn_msg = \__appbase\lang('warn_memory_limit',ini_get('memory_limit'),$obj->minimum,$obj->recommended);
-        $obj->required = 1;
-        $tests[] = $obj;
+	$memory_limit = ini_get('memory_limit');
+	if( $memory_limit !== -1 ) {
+            $obj = new _tests_\range_test('memory_limit',$memory_limit);
+            $obj->minimum = '16M';
+            $obj->recommended = '32M';
+            $obj->pass_msg = ini_get('memory_limit');
+            $obj->fail_msg = \__appbase\lang('fail_memory_limit',ini_get('memory_limit'),$obj->minimum,$obj->recommended);
+            $obj->warn_msg = \__appbase\lang('warn_memory_limit',ini_get('memory_limit'),$obj->minimum,$obj->recommended);
+            $obj->required = 1;
+            $tests[] = $obj;
+	}
 
         // required test ... safe mode
         $obj = new _tests_\boolean_test('safe_mode',_tests_\test_is_false(ini_get('safe_mode')));

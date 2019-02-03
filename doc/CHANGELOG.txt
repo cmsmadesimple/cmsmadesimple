@@ -7,6 +7,9 @@ Core - General
 MicroTiny v2.2.4
   - Minor fix in error displays.
 
+Phar Installer v1.3.7
+  - Fix to edge case in step 3 where memory_limit is set to -1
+
 Version 2.2.9 - Blow Me Down
 -------------------------------
 Core - General
@@ -43,6 +46,9 @@ CMSContentManager v1.1.7
 
 DesignManager v1.1.5
   - Fixes ownership issue on templates with importing a design.
+
+Phar Installer v1.3.7
+  - Minof fix to detect when PHP's memory limit is set to -1
 
 
 Version 2.2.8 - Flin Flon
