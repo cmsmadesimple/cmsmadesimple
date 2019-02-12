@@ -577,7 +577,6 @@ class CmsLayoutStylesheet
 
         TemplateCache::clear_cache();
         cms_notice('Stylesheet '.$this->get_name().' Deleted');
-		// Events::SendEvent('Core','DeleteStylesheetPost',array(get_class($this)=>&$this));
         \CMSMS\HookManager::do_hook('Core::DeleteStylesheetPost',array(get_class($this)=>&$this));
         unset($this->_data['id']);
         $this->_dirty = TRUE;

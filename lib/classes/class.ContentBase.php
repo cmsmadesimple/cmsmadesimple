@@ -1310,6 +1310,7 @@ abstract class ContentBase
 	        $contentops = ContentOperations::get_instance();
         	$contentops->SetContentModified();
         	$contentops->SetAllHierarchyPositions();
+		debug_display('foobar');
         	\CMSMS\HookManager::do_hook('Core::ContentEditPost', [ 'content' => &$this ] );
 	}
 

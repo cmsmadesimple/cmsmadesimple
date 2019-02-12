@@ -2736,6 +2736,8 @@ abstract class CMSModule
      */
     public function DoEvent( $originator, $eventname, &$params )
     {
+        if( !$this->HandlesEvents() && !$this->HasCapability(\CmsCoreCapabilities::EVENTS) ) return;
+
         if ($originator != '' && $eventname != '') {
             $filename = $this->GetModulePath().'/event.' . $originator . "." . $eventname . '.php';
 

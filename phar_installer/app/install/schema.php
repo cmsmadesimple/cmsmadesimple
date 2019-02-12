@@ -8,8 +8,6 @@ if (isset($CMS_INSTALL_DROP_TABLES)) {
   $db->DropSequence(CMS_DB_PREFIX."additional_users_seq");
   $db->DropSequence(CMS_DB_PREFIX."content_seq");
   $db->DropSequence(CMS_DB_PREFIX."content_props_seq");
-  $db->DropSequence(CMS_DB_PREFIX."events_seq");
-  $db->DropSequence(CMS_DB_PREFIX."event_handler_seq");
   $db->DropSequence(CMS_DB_PREFIX."group_perms_seq");
   $db->DropSequence(CMS_DB_PREFIX."groups_seq");
   $db->DropSequence(CMS_DB_PREFIX."module_deps_seq");
@@ -31,10 +29,6 @@ if (isset($CMS_INSTALL_DROP_TABLES)) {
   $sqlarray = $dbdict->DropTableSQL(CMS_DB_PREFIX."content");
   $dbdict->ExecuteSQLArray($sqlarray);
   $sqlarray = $dbdict->DropTableSQL(CMS_DB_PREFIX."content_props");
-  $dbdict->ExecuteSQLArray($sqlarray);
-  $sqlarray = $dbdict->DropTableSQL(CMS_DB_PREFIX."events");
-  $dbdict->ExecuteSQLArray($sqlarray);
-  $sqlarray = $dbdict->DropTableSQL(CMS_DB_PREFIX."event_handlers");
   $dbdict->ExecuteSQLArray($sqlarray);
   $sqlarray = $dbdict->DropTableSQL(CMS_DB_PREFIX."group_perms");
   $dbdict->ExecuteSQLArray($sqlarray);
@@ -203,46 +197,6 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 	$return = $dbdict->ExecuteSQLArray($sqlarray);
 	$ado_ret = ($return == 2) ? ilang('done') : ilang('failed');
 	verbose_msg(ilang('install_creating_index', 'idx_content_props_by_content', $ado_ret));
-
-	$flds = "
-		event_id I,
-		tag_name C(255),
-		module_name C(160),
-		removable I,
-		handler_order I,
-		handler_id I KEY
-	";
-	$sqlarray = $dbdict->CreateTableSQL(CMS_DB_PREFIX."event_handlers", $flds, $taboptarray);
-	$return = $dbdict->ExecuteSQLArray($sqlarray);
-	$ado_ret = ($return == 2) ? ilang('done') : ilang('failed');
-	verbose_msg(ilang('install_created_table', 'event_handlers', $ado_ret));
-
-
-
-	$flds = "
-		originator C(200) NOTNULL,
-		event_name C(200) NOTNULL,
-		event_id I KEY
-	";
-	$sqlarray = $dbdict->CreateTableSQL(CMS_DB_PREFIX."events", $flds, $taboptarray);
-	$return = $dbdict->ExecuteSQLArray($sqlarray);
-	$ado_ret = ($return == 2) ? ilang('done') : ilang('failed');
-	verbose_msg(ilang('install_created_table', 'events', $ado_ret));
-
-	$sqlarray = $dbdict->CreateIndexSQL(CMS_DB_PREFIX.'originator', CMS_DB_PREFIX."events", 'originator');
-	$return = $dbdict->ExecuteSQLArray($sqlarray);
-	$ado_ret = ($return == 2) ? ilang('done') : ilang('failed');
-	verbose_msg(ilang('install_creating_index', 'originator', $ado_ret));
-
-	$sqlarray = $dbdict->CreateIndexSQL(CMS_DB_PREFIX.'event_name', CMS_DB_PREFIX."events", 'event_name');
-	$return = $dbdict->ExecuteSQLArray($sqlarray);
-	$ado_ret = ($return == 2) ? ilang('done') : ilang('failed');
-	verbose_msg(ilang('install_creating_index', 'event_name', $ado_ret));
-
-	$sqlarray = $dbdict->CreateIndexSQL(CMS_DB_PREFIX.'event_id', CMS_DB_PREFIX."events", 'event_id');
-	$return = $dbdict->ExecuteSQLArray($sqlarray);
-	$ado_ret = ($return == 2) ? ilang('done') : ilang('failed');
-	verbose_msg(ilang('install_creating_index', 'event_id', $ado_ret));
 
 	$flds = "
 		group_perm_id I KEY,

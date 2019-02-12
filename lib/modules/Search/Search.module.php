@@ -17,6 +17,7 @@
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 #$Id: News.module.php 2114 2005-11-04 21:51:13Z wishy $
+use CMSMS\HookManager;
 
 include_once(dirname(__FILE__) . '/PorterStemmer.class.php');
 
@@ -41,14 +42,13 @@ class Search extends CMSModule
         }
     }
 
-    public function LazyLoadFrontend() { return TRUE; }
-    public function LazyLoadAdmin() { return TRUE; }
+    public function LazyLoadFrontend() { return FALSE; }
+    public function LazyLoadAdmin() { return FALSE; }
     public function GetName() { return 'Search'; }
     public function GetFriendlyName() { return $this->Lang('search'); }
     public function IsPluginModule() { return true; }
     public function HasAdmin() { return true; }
-    public function HandlesEvents () { return true; }
-    public function GetVersion() { return '1.51.6'; }
+    public function GetVersion() { return '1.51.7.1'; }
     public function MinimumCMSVersion() { return '1.12-alpha0'; }
     public function GetAdminDescription() { return $this->Lang('description'); }
     public function VisibleToAdminUser() { return $this->CheckPermission('Modify Site Preferences'); }
@@ -56,8 +56,13 @@ class Search extends CMSModule
     public function GetAuthor() { return 'Ted Kulp'; }
     public function GetAuthorEmail() { return 'ted@cmsmadesimple.org'; }
     public function GetChangeLog() { return @file_get_contents(__DIR__.'/changelog.inc'); }
-    public function GetEventDescription( $eventname ) { return $this->lang('eventdesc-' . $eventname); }
-    public function GetEventHelp( $eventname ) { return $this->lang('eventhelp-' . $eventname); }
+
+    public function InitializeCommon()
+    {
+        HookManager::add_hook('Core::ContentEditPost', [ $this, 'hook_ContentEditPost' ]);
+        HookManager::add_hook('Core::ContentDeletePost', [ $this, 'hook_ContentDeletePost' ]);
+        HookManager::add_hook('Core::ModuleUninstalled', [ $this, 'hook_ModuleUninstalled'] );
+    }
 
     public function InitializeAdmin()
     {
@@ -75,6 +80,48 @@ class Search extends CMSModule
         $this->CreateParameter('search_method','get',$this->Lang('search_method'));
         $this->CreateParameter('formtemplate','',$this->Lang('param_formtemplate'));
         $this->CreateParameter('resulttemplate','',$this->Lang('param_resulttemplate'));
+    }
+
+    public function hook_ContentEditPost($params)
+    {
+        $this->load_tools();
+        list($originator,$event) = ['Core','ContentEditPost'];
+        search_DoEvent($this,$originator,$event,$params);
+    }
+
+    public function hook_ContentDeletePost($params)
+    {
+        $this->load_tools();
+        list($originator,$event) = ['Core','ContentDeletePost'];
+        search_DoEvent($this,$originator,$event,$params);
+    }
+
+    public function hook_AddTemplatePost($params)
+    {
+        $this->load_tools();
+        list($originator,$event) = ['Core','AddTemplatePost'];
+        search_DoEvent($this,$originator,$event,$params);
+    }
+
+    public function hook_EditTemplatePost($params)
+    {
+        $this->load_tools();
+        list($originator,$event) = ['Core','EditTemplatePost'];
+        search_DoEvent($this,$originator,$event,$params);
+    }
+
+    public function hook_DeleteTemplatePost($params)
+    {
+        $this->load_tools();
+        list($originator,$event) = ['Core','DeleteTemplatePost'];
+        search_DoEvent($this,$originator,$event,$params);
+    }
+
+    public function hook_ModuleUninstalled($params)
+    {
+        $this->load_tools();
+        list($originator,$event) = ['Core','ModuleUninstalled'];
+        search_DoEvent($this,$originator,$event,$params);
     }
 
     public function InitializeFrontend()
@@ -170,30 +217,13 @@ EOT;
         $db = $this->GetDb();
         $db->Execute('TRUNCATE '.CMS_DB_PREFIX.'module_search_index');
         $db->Execute('TRUNCATE '.CMS_DB_PREFIX.'module_search_items');
-
         \CMSMS\HookManager::do_hook('Search::SearchAllItemsDeleted' );
-    }
-
-    public function RegisterEvents()
-    {
-        $this->AddEventHandler( 'Core', 'ContentEditPost', false );
-        $this->AddEventHandler( 'Core', 'ContentDeletePost', false );
-        $this->AddEventHandler( 'Core', 'AddTemplatePost', false );
-        $this->AddEventHandler( 'Core', 'EditTemplatePost', false );
-        $this->AddEventHandler( 'Core', 'DeleteTemplatePost', false );
-        $this->AddEventHandler( 'Core', 'ModuleUninstalled', false );
     }
 
     public function Reindex()
     {
         $this->load_tools();
         return search_Reindex($this);
-    }
-
-    function DoEvent($originator,$eventname,&$params)
-    {
-        $this->load_tools();
-        return search_DoEvent($this, $originator, $eventname, $params);
     }
 
     public function HasCapability($capability,$params = array())

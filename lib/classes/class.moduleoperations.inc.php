@@ -252,7 +252,6 @@ final class ModuleOperations
                     $dbr = $db->Execute($query,array($depname,$module_obj->GetName(),$depversion));
                 }
             }
-            $this->generate_moduleinfo( $module_obj );
             $this->_moduleinfo = array();
             $gCms->clear_cached_files();
 
@@ -403,23 +402,22 @@ final class ModuleOperations
         $this->_modules[$module_name] = $obj;
 
         $tmp = $gCms->get_installed_schema_version();
-        if( $tmp == CMS_SCHEMA_VERSION && isset($CMS_INSTALL_PAGE) && in_array($module_name, $this->cmssystemmodules) ) {
-            // during the phar installer, we can use get_module_instance() to install or upgrade core modules
-            if( !isset($info[$module_name]) || $info[$module_name]['status'] != 'installed' ) {
-                $res = $this->_install_module($obj);
-                if( $res[0] == FALSE ) {
-                    // nope, can't auto install...
-                    unset($obj,$this->_modules[$module_name]);
-                    return FALSE;
-                }
-            }
+        if( $tmp == CMS_SCHEMA_VERSION ) {
+            // schema versions match
+            $needs_upgrade = isset($info[$module_name]) && $info[$module_name]['status'] == 'installed';
+            $needs_upgrade = $needs_upgrade && version_compare($info[$module_name]['version'], $obj->GetVersion()) == -1;
 
-            // can't auto upgrade modules if cmsms schema versions don't match.
-            // check to see if an upgrade is needed.
-            if( isset($info[$module_name]) && $info[$module_name]['status'] == 'installed' ) {
-                $dbversion = $info[$module_name]['version'];
-                if( version_compare($dbversion, $obj->GetVersion()) == -1 ) {
-                    // looks like upgrade is needed
+            if( isset($CMS_INSTALL_PAGE) && in_array($module_name, $this->cmssystemmodules) ) {
+                // during the phar installer, we can use get_module_instance() to install or upgrade core modules
+                if( !isset($info[$module_name]) || $info[$module_name]['status'] != 'installed' ) {
+                    $res = $this->_install_module($obj);
+                    if( $res[0] == FALSE ) {
+                        // nope, can't auto install...
+                        unset($obj,$this->_modules[$module_name]);
+                        return FALSE;
+                    }
+                }
+                else if( $needs_upgrade ) {
                     $res = $this->_upgrade_module($obj);
                     if( !$res ) {
                         // upgrade failed
@@ -430,7 +428,15 @@ final class ModuleOperations
                     }
                 }
             }
+            else if( $needs_upgrade && !$force_load ) {
+                // not in the installer, but the module needs an upgrade
+                cms_error('Cannot load module '.$module_name.' in a regular request,it needs an upgrade');
+                debug_buffer('cannot load a module that nees upgrading');
+                unset($obj,$this->_modules[$module_name]);
+                return FALSE;
+            }
         }
+
 
         if( !$force_load && (!isset($info[$module_name]['status']) || $info[$module_name]['status'] != 'installed') ) {
             debug_buffer('Cannot load an uninstalled module');
@@ -568,7 +574,6 @@ final class ModuleOperations
                     $dbr = $db->Execute($query,array($depname,$module_obj->GetName(),$depversion));
                 }
             }
-            $this->generate_moduleinfo( $module_obj );
             $this->_moduleinfo = array();
             $gCms->clear_cached_files();
             cms_notice('Upgraded module '.$module_obj->GetName().' to version '.$module_obj->GetVersion());
@@ -632,8 +637,6 @@ final class ModuleOperations
             if ($cleanup) {
                 // deprecated
                 $db->Execute('DELETE FROM '.CMS_DB_PREFIX.'module_templates where module_name=?',array($module));
-                $db->Execute('DELETE FROM '.CMS_DB_PREFIX.'event_handlers where module_name=?',array($module));
-                $db->Execute('DELETE FROM '.CMS_DB_PREFIX.'events where originator=?',array($module));
 
                 $types = CmsLayoutTemplateType::load_all_by_originator($module);
                 if( is_array($types) && count($types) ) {
@@ -869,6 +872,7 @@ final class ModuleOperations
                 $obj =& $this->_modules[$module_name];
             }
         }
+
         if( !is_object($obj) ) {
             // gotta load it.
             $res = $this->_load_module($module_name,$force);

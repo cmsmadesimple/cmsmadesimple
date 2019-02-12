@@ -136,6 +136,11 @@ Core - General
   - FEATURE: You can now pass :NOPRETTY: as a value for the prettyurl parameter in create_url (and CreateLink and CreateFrontendLink) to disable
       pretty url determiniation.
   - FEATURE: cms_action_url plugin now supports the 'alias' parameter.
+  - CHANGE:  use the new assets/configs/hook_mapping.json file to map hooks to handlers.  Can specify modules, simple plugins, or callables
+      as handlers to hooks.
+  - REMOVE:  Events and Event handlers functionality from the admin panel
+  - CHANGE:  Deprecate the whole events class, and methods in the CMSModule class
+  - BREAKING: The Events class is now just a lightweight stub to preserve compatibility for most modules.  Some methods have been removed
 
 News v2.21.5
   - Minor cleaning of parameters.
@@ -185,6 +190,7 @@ AdminLog
 Search  - v1.52
   - FEATURE: Now exports a command for cmscli
   - The search results now contain _content_ and the page id for content pages.
+  - Removes all support for events, now uses hooks
 
 AdminSearch v1.0.5
  - Rationalize the code a bit (remove un-necessary files).
@@ -202,6 +208,7 @@ Navigator v1.0.9
 
 CmsJobManager v0.3
  - Now uses CURL initiate asynchronous requests
+ - Removes all support for events, now uses hooks
 
 Version 2.2.6 - NO NAME SET
 ----------------------------------

@@ -99,7 +99,6 @@ namespace CMSMS {
      * A class to manage hooks, and to call hook handlers.
      *
      * This class is capable of managing a flexible list of hooks, registering handlers for those hooks, and calling the handlers
-     * and/or related events.
      *
      * @package CMS
      * @license GPL
@@ -186,8 +185,6 @@ namespace CMSMS {
          * This method accepts variable arguments.  The first argument (required) is the name of the hook to execute.
          * Further arguments will be passed to the various handlers.
          *
-         * If an event with the same name exists, it will be called first.  Arguments will be passed as the $params array.
-         *
          * @return mixed The output of this method depends on the hook.
          */
         public static function do_hook()
@@ -200,22 +197,11 @@ namespace CMSMS {
             $name = array_shift($args);
             $name = trim($name);
 
-            $is_event = false;
-            $module = $eventname = null;
-            if( strpos($name,':') !== FALSE ) list($module,$eventname) = explode('::',$name);
-            if( $module && $eventname ) $is_event = true;
-
-            if( !$is_event && ( !isset(self::$_hooks[$name]) || !count(self::$_hooks[$name]->handlers) )  ) return; // nothing to do.
+            if( !isset(self::$_hooks[$name]) || !count(self::$_hooks[$name]->handlers) ) return; // nothing to do.
 
             // note: $args is an array
             $value = $args;
             self::$_in_process[] = $name;
-            if( $is_event && is_array($value) && count($value) == 1 && isset($value[0]) && is_array($value[0]) ) {
-                // attempt to call an event with this data.
-                $data = $value[0];
-                \Events::SendEvent($module,$eventname,$data);
-                $value[0] = $data; // transitive.
-            }
 
             if( is_array($value) && count($value) == 1 && isset($value[0]) ) {
                 $value = $value[0];
@@ -252,7 +238,6 @@ namespace CMSMS {
 
         /**
          * Trigger a hook, returning the first non empty value.
-         * This method does not call event handlers with similar names.
          *
          * This method accepts variable arguments.  The first argument (required) is the name of the hook to execute.
          * Further arguments will be passed to the various handlers.
@@ -311,10 +296,9 @@ namespace CMSMS {
          * This method accepts variable arguments.  The first argument (required) is the name of the hook to execute.
          * Further arguments will be passed to the various handlers.
          *
-         * If an event with the same name exists, it will be called first.  Arguments will be passed as the $params array.
          * The data returned in the $params array will be appended to the output array.
          *
-         * @return array Mixed data, as it cannot be ascertained what data is passed back from event handlers.
+         * @return array Mixed data, as it cannot be ascertained what data is passed back from handlers.
          */
         public static function do_hook_accumulate()
         {
@@ -325,12 +309,8 @@ namespace CMSMS {
             $args = func_get_args();
             $name = array_shift($args);
             $name = trim($name);
-            $is_event = false;
-            $module = $eventname = null;
-            if( strpos($name,':') !== FALSE ) list($module,$eventname) = explode('::',$name);
-            if( $module && $eventname ) $is_event = true;
 
-            if( !$is_event && ( !isset(self::$_hooks[$name]) || !count(self::$_hooks[$name]->handlers) )  ) return; // nothing to do.
+            if( !isset(self::$_hooks[$name]) || !count(self::$_hooks[$name]->handlers) ) return; // nothing to do.
 
             // sort the handlers.
             if( !self::$_hooks[$name]->sorted ) {
@@ -347,11 +327,7 @@ namespace CMSMS {
             $out = [];
             $value = $args;
             self::$_in_process[] = $name;
-            if( $is_event && is_array($value) && count($value) == 1 && isset($value[0]) && is_array($value[0]) ) {
-                $data = $value[0];
-                \Events::SendEvent($module,$eventname,$data);
-                $value[0] = $data; // this may not be the same as input data.
-            }
+
             foreach( self::$_hooks[$name]->handlers as $obj ) {
                 // note: we cannot control what is passed out of the hander.
                 if( empty($value) || !is_array($value) || $is_assoc($value) ) {

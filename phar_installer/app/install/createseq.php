@@ -6,8 +6,6 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
         'admin_bookmarks'           => array('id' => 'bookmark_id'),
         'content'                   => array('id' => 'content_id'),
         'content_props'             => array('id' => 'content_id'),
-        'events'                    => array('id' => 'event_id'),
-        'event_handlers'            => array('id' => 'handler_id', 'seq' => 'event_handler_seq'),
         'group_perms'               => array('id' => 'group_perm_id'),
         'groups'                    => array('id' => 'group_id'),
         'users'                     => array('id' => 'user_id'),

@@ -155,7 +155,7 @@ $obj = new \CMSMS\internal\global_cachable('module_deps',
                                            });
 \CMSMS\internal\global_cache::add_cachable($obj);
 cms_siteprefs::setup();
-Events::setup();
+$_app->GetHookMappingManager(); // initialize hook mappings.
 ContentOperations::setup_cache();
 
 // Attempt to override the php memory limit

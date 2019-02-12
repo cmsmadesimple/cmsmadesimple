@@ -223,8 +223,8 @@ class wizard_step3 extends \cms_autoinstaller\wizard_step
         $tests[] = $obj;
 
         // required test ... MEMORY LIMIT
-	$memory_limit = ini_get('memory_limit');
-	if( $memory_limit !== '-1' ) {
+        $memory_limit = ini_get('memory_limit');
+        if( $memory_limit !== '-1' ) {
             $obj = new _tests_\range_test('memory_limit',$memory_limit);
             $obj->minimum = '16M';
             $obj->recommended = '32M';
@@ -233,12 +233,12 @@ class wizard_step3 extends \cms_autoinstaller\wizard_step
             $obj->warn_msg = \__appbase\lang('warn_memory_limit',ini_get('memory_limit'),$obj->minimum,$obj->recommended);
             $obj->required = 1;
             $tests[] = $obj;
-	} else {
-	    $obj = new _tests_\boolean_test('memory_limit',true);
-	    $obj->pass_msg = __appbase\lang('pass_memory_limit_nolimit'); 
-	    $obj->required = 1;
-	    $tests[] = $obj;
-	}
+        } else {
+            $obj = new _tests_\boolean_test('memory_limit',true);
+            $obj->pass_msg = \__appbase\lang('pass_memory_limit_nolimit');
+            $obj->required = 1;
+            $tests[] = $obj;
+        }
 
         // required test ... safe mode
         $obj = new _tests_\boolean_test('safe_mode',_tests_\test_is_false(ini_get('safe_mode')));

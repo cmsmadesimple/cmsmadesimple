@@ -52,22 +52,21 @@ final class CmsJobManager extends \CMSModule
     function LazyLoadAdmin() { return FALSE; }
     function VisibleToAdminUser() { return $this->CheckPermission(\CmsJobManager::MANAGE_JOBS); }
     public function GetHelp() { return $this->Lang('help'); }
-    public function HandlesEvents() { return TRUE; }
 
     public function InitializeFrontend()
     {
         $this->RegisterModulePlugin();
         $this->RestrictUnknownParams();
+        HookManager::add_hook('Core::ModuleUninstalled', [ $this, 'hook-ModuleUninstalled'] );
     }
 
-    public function GetEventHelp( $name )
+    /**
+     * @ignore
+     */
+    public function hook_ModuleUninstalled($params)
     {
-        return $this->Lang('evthelp_'.$name);
-    }
-
-    public function GetEventDescription( $name )
-    {
-        return $this->Lang('evtdesc_'.$name);
+        $module_name = trim($params['name']);
+        if( $module_name ) $this->delete_jobs_by_module($module_name);
     }
 
     protected function &create_new_template($str)

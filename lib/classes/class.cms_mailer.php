@@ -80,7 +80,7 @@ class cms_mailer
   public function reset()
   {
     $prefs = unserialize(cms_siteprefs::get('mailprefs'));
-    if( !$prefs ) throw new \RuntimeException( lang('err_mail_sendwithoutsetup') );
+    if( !$prefs ) throw new \RuntimeException( 'CMS Mailer has not been configured' );
     $this->_mailer->Mailer = get_parameter_value($prefs,'mailer','mail');
     $this->_mailer->Sendmail = get_parameter_value($prefs,'sendmail','/usr/sbin/sendmail');
     $this->_mailer->Timeout = get_parameter_value($prefs,'timeout',60);

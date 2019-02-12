@@ -87,6 +87,8 @@ if( version_compare($oldversion,'2.50') < 0 ) {
           $summary_template_type->reset_content_to_factory();
           $summary_template_type->save();
           foreach( $alltemplates as $tplname ) {
+	      $tplname = trim($tplname);
+	      if( !$tplname ) continue;
               $upgrade_template($summary_template_type,'summary',$tplname,'current_summary_template','News-Summary-');
           }
       }

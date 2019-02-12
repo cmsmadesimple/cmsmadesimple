@@ -17,20 +17,6 @@ $db->DropSequence( CMS_DB_PREFIX."module_search_items_seq" );
 
 $this->DeleteTemplate();
 $this->RemovePreference();
-	
-$this->RemoveEvent('SearchInitiated');
-$this->RemoveEvent('SearchCompleted');
-$this->RemoveEvent('SearchItemAdded');
-$this->RemoveEvent('SearchItemDeleted');
-$this->RemoveEvent('SearchAllItemsDeleted');
-
-$this->RemoveEventHandler( 'Core', 'ContentEditPost');
-$this->RemoveEventHandler( 'Core', 'ContentDeletePost');
-$this->RemoveEventHandler( 'Core', 'AddTemplatePost');
-$this->RemoveEventHandler( 'Core', 'EditTemplatePost');
-$this->RemoveEventHandler( 'Core', 'DeleteTemplatePost');
-$this->RemoveEventHandler( 'Core', 'ModuleUninstalled');
-
 $this->RemoveSmartyPlugin();
 
 // remove templates

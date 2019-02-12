@@ -91,7 +91,7 @@ class wizard_step7 extends \cms_autoinstaller\wizard_step
         $version_info = $this->get_wizard()->get_data('version_info');
         $versions = utils::get_upgrade_versions();
         if( is_array($versions) && count($versions) ) {
-            $this->message(\__appbase\lang('preprocessin_files'));
+            $this->message(\__appbase\lang('preprocessing_files'));
             foreach( $versions as $one_version ) {
                 if( version_compare($one_version, $version_info['version']) < 1 ) continue;
 
@@ -125,7 +125,7 @@ class wizard_step7 extends \cms_autoinstaller\wizard_step
                 // check the to version info
                 $manifest = new manifest_reader("$upgrade_dir/$one_version");
                 if( $one_version != $manifest->to_version() ) {
-                    throw new \Exception(\__appbase\lang('error_internal',712));
+                    throw new \Exception(\__appbase\lang('error_internal',712)." - $one_version ".$manifest->to_version());
                 }
 
                 // delete all 'deleted' files

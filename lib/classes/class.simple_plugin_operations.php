@@ -54,7 +54,7 @@ final class simple_plugin_operations
     {
         if( !$this->is_valid_plugin_name( $name ) ) throw new \LogicException("Invalid name passed to ".__METHOD__);
         $filename = $this->get_plugin_filename( $name );
-        if( is_file($name) ) return TRUE;
+        if( is_file($filename) ) return TRUE;
     }
 
     public function is_valid_plugin_name($name)
@@ -69,7 +69,7 @@ final class simple_plugin_operations
     {
         // test if the simple plugin exists
         // output is a string like: '\\CMSMS\\simple_plugin::the_name';
-        // uses callstatic to  invoke,  which finds the file and includes it.
+        // uses callstatic to invoke,  which finds the file and includes it.
         $name = trim($name);
         if( !$this->is_valid_plugin_name( $name ) ) throw new \LogicException("Invalid name passed to ".__METHOD__);
         if( !isset($this->_loaded[$name]) ) {
@@ -84,9 +84,9 @@ final class simple_plugin_operations
         return $this->_loaded[$name];
     }
 
-    public function call_plugin( string $name )
+    public function call_plugin( string $name, array $args = [] )
     {
-        self::__callStatic( $name, [ [], cmsms()->GetSmarty() ] );
+        self::__callStatic( $name, [ $args, cmsms()->GetSmarty() ] );
     }
 
     public static function __callStatic(string $name,array $args = null)
@@ -99,7 +99,12 @@ final class simple_plugin_operations
 
         // these variables are created for plugins to use in scope.
         $params = $args[0];
-        $smarty = $args[1];
+        $smarty = null;
+        if( isset($args[1]) ) $smarty = $args[1];
         include( $fn );
     }
 } // end of filex
+
+/*
+{my_foo1}
+ */

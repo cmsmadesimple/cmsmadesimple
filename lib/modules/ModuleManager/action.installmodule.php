@@ -118,6 +118,11 @@ try {
                 debug_buffer($res,'error info');
                 throw new CmsException( (isset($res[1])) ? $res[1] : 'Error processing module '.$name);
             }
+            else {
+                // for install or upgrade
+                // we should generate the ModuleInfo.ini
+            }
+
         }
 
         // done, rest will be done when the module is loaded.

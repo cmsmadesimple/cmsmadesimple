@@ -18,6 +18,7 @@
 #
 #$Id: class.global.inc.php 6939 2011-03-06 00:12:54Z calguy1000 $
 use CMSMS\HookManager;
+use CMSMS\internal\hook_mapping_manager;
 
 /**
  * Global class for easy access to all important variables.
@@ -383,7 +384,7 @@ final class CmsApp {
 	* @final
 	* @return cms_config The configuration object.
 	*/
-	public function &GetConfig()
+	final public function GetConfig()
 	{
 		return cms_config::get_instance();
 	}
@@ -528,6 +529,20 @@ final class CmsApp {
     {
         if( is_null( $this->scriptcombiner ) ) $this->scriptcombiner = new \CMSMS\ScriptManager;
         return $this->scriptcombiner;
+    }
+
+    /**
+     * Get the hook mapping manager
+     *
+     * @final
+     * @internal
+     * @return \CMSMS\internal\hook_mapping_manager
+     */
+    public function GetHookMappingManager()
+    {
+        static $_mgr;
+        if( !$_mgr ) $_mgr = new hook_mapping_manager(CMS_ASSETS_PATH.'/configs/hook_mapping.json');
+        return $_mgr;
     }
 
 	/**

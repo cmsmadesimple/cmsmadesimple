@@ -31,8 +31,7 @@ require_once("../lib/include.php");
 // if this page was accessed directly, and the secure param name is not in the URL
 // but it is in the session, assume it is correct.
 if( isset($_SESSION[CMS_USER_KEY]) && !isset($_GET[CMS_SECURE_PARAM_NAME]) ) $_POST[CMS_SECURE_PARAM_NAME] = $_SESSION[CMS_USER_KEY];
-
-check_login(false,false);
+check_login(false);
 
 include_once("header.php");
 $section = (isset($_GET['section'])) ? trim($_GET['section']) : '';

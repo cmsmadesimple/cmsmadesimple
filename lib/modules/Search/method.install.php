@@ -125,13 +125,6 @@ catch( CmsException $e ) {
     audit('',$this->GetName(),'Installation Error: '.$e->GetMessage());
 }
 
-$this->CreateEvent('SearchInitiated');
-$this->CreateEvent('SearchCompleted');
-$this->CreateEvent('SearchItemAdded');
-$this->CreateEvent('SearchItemDeleted');
-$this->CreateEvent('SearchAllItemsDeleted');
-
-$this->RegisterEvents();
 $this->RegisterModulePlugin(true);
 $this->RegisterSmartyPlugin('search','function','function_plugin');
 

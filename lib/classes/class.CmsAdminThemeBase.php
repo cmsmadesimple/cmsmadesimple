@@ -318,6 +318,7 @@ abstract class CmsAdminThemeBase
 				if (! isset($this->_sectionCount[$section])) $this->_sectionCount[$section] = 0;
 
 				// fix up the session key stuff.
+                if( !$obj->url ) { debug_display($obj); die(); }
 				$obj->url = $this->_fix_url_userkey($obj->url);
 
 				// find an icon for this thing.
@@ -386,10 +387,9 @@ abstract class CmsAdminThemeBase
 		// extensions
         $this->_perms['codeBlockPerms'] = check_permission($this->userid, 'Modify User-defined Tags');
         $this->_perms['modulePerms'] = check_permission($this->userid, 'Modify Modules');
-        $this->_perms['eventPerms'] = check_permission($this->userid, 'Modify Events');
 		$this->_perms['taghelpPerms'] = check_permission($this->userid, 'View Tag Help');
         $this->_perms['extensionsPerms'] = $this->_perms['codeBlockPerms'] |
-            $this->_perms['modulePerms'] | $this->_perms['eventPerms'] | $this->_perms['taghelpPerms'] |
+            $this->_perms['modulePerms'] | $this->_perms['taghelpPerms'] |
             (isset($this->_sectionCount['extensions']) && $this->_sectionCount['extensions'] > 0);
 
 		$this->_perms['myaccount'] = check_permission($this->userid,'Manage My Settings') |
@@ -490,14 +490,6 @@ abstract class CmsAdminThemeBase
 							   'title'=>$this->_FixSpaces(lang('tags')),
 							   'description'=>lang('tagdescription'),
 							   'show_in_menu'=>$this->HasPerm('taghelpPerms'));
-		$items['eventhandlers'] = array('url'=>'eventhandlers.php','parent'=>'extensions',
-										'title'=>$this->_FixSpaces(lang('eventhandlers')),
-										'description'=>lang('eventhandlerdescription'),
-										'show_in_menu'=>$this->HasPerm('eventPerms'));
-		$items['editeventhandler'] = array('url'=>'editevent.php','parent'=>'eventhandlers',
-										   'title'=>$this->_FixSpaces(lang('editeventhandler')),
-										   'description'=>lang('editeventhandlerdescription'),
-										   'show_in_menu'=>false);
 		// base admin menu ---------------------------------------------------------
 		$items['siteadmin'] = array('url'=>'index.php?section=siteadmin','parent'=>-1,
 									'title'=>$this->_FixSpaces(lang('admin')),'priority'=>7,
