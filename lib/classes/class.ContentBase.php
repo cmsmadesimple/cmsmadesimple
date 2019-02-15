@@ -1051,11 +1051,12 @@ abstract class ContentBase
 	private function _load_properties()
 	{
 		if( $this->mId <= 0 ) return FALSE;
+        if( is_array($this->_props) ) return TRUE;
 
 		$this->_props = array();
 		$db = CmsApp::get_instance()->GetDb();
 		$query = 'SELECT * FROM '.CMS_DB_PREFIX.'content_props WHERE content_id = ?';
-		$dbr = $db->GetArray($query,array((int)$this->mId));
+		$dbr = $db->GetArray($query,[(int)$this->mId]);
 
 		foreach( $dbr as $row ) {
 			$this->_props[$row['prop_name']] = $row['content'];
@@ -1293,7 +1294,7 @@ abstract class ContentBase
 	 */
 	public function Save()
 	{
-        	\CMSMS\HookManager::do_hook('Core::ContentEditPre', [ 'content' => &$this ] );
+        \CMSMS\HookManager::do_hook('Core::ContentEditPre', [ 'content' => &$this ] );
 
 		if( !is_array($this->_props) ) {
 			debug_buffer('save is loading properties');
@@ -1307,11 +1308,10 @@ abstract class ContentBase
 			$this->Insert();
 		}
 
-	        $contentops = ContentOperations::get_instance();
-        	$contentops->SetContentModified();
-        	$contentops->SetAllHierarchyPositions();
-		debug_display('foobar');
-        	\CMSMS\HookManager::do_hook('Core::ContentEditPost', [ 'content' => &$this ] );
+        $contentops = ContentOperations::get_instance();
+        $contentops->SetContentModified();
+        $contentops->SetAllHierarchyPositions();
+        \CMSMS\HookManager::do_hook('Core::ContentEditPost', [ 'content' => &$this ] );
 	}
 
 	/**

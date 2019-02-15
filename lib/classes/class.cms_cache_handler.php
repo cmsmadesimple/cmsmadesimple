@@ -12,6 +12,7 @@
  * By default this uses the cms_filecache_driver to cache data in the TMP_CACHE_LOCATION
  * for one hour.
  *
+ * @deprecated See \CmsApp::get_cache_driver()
  * @package CMS
  * @license GPL
 */

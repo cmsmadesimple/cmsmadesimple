@@ -32,6 +32,9 @@ require_once("../lib/include.php");
 // but it is in the session, assume it is correct.
 if( isset($_SESSION[CMS_USER_KEY]) && !isset($_GET[CMS_SECURE_PARAM_NAME]) ) $_POST[CMS_SECURE_PARAM_NAME] = $_SESSION[CMS_USER_KEY];
 check_login(false);
+if( isset($_GET['__clearcache__']) && check_permission('Modify Site Preferences') ) {
+    CmsApp::get_instance()->clear_cached_files();
+}
 
 include_once("header.php");
 $section = (isset($_GET['section'])) ? trim($_GET['section']) : '';

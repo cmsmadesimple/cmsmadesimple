@@ -313,23 +313,6 @@ final class cms_route_manager
 	public static function load_routes()
 	{
         return;
-        /*
-		global $CMS_ADMIN_PAGE;
-		$flag = false;
-		if( isset($CMS_ADMIN_PAGE) ) {
-			// hack to force modules to register their routes.
-			$flag = $CMS_ADMIN_PAGE;
-			unset($CMS_ADMIN_PAGE);
-		}
-
-		// todo:
-		$modules = ModuleOperations::get_instance()->GetLoadedModules();
-		foreach( $modules as $name => &$module ) {
-			$module->SetParameters();
-		}
-
-		if( $flag ) $CMS_ADMIN_PAGE = $flag;
-        */
 	}
 
 	/**
@@ -378,7 +361,7 @@ final class cms_route_manager
 
 		$data = self::_get_routes_from_cache();
 		if( is_array($data) && count($data) ) {
-			self::$_routes = array();
+			self::$_routes = [];
 			for( $i = 0, $n = count($data); $i < $n; $i++ ) {
 				$obj = unserialize($data[$i]['data']);
 				self::$_routes[$obj->signature()] = $obj;
@@ -387,34 +370,29 @@ final class cms_route_manager
 		}
 	}
 
+    private static function _get_cache_driver()
+    {
+        return \CmsApp::get_instance()->get_cache_driver();
+    }
+
 	/**
 	 * @ignore
 	 */
 	private static function _get_routes_from_cache()
 	{
-		$fn = self::_get_cache_filespec();
-		if( !is_file($fn) ) {
+        $driver = self::_get_cache_driver();
+        $data = $driver->get(__CLASS__,__CLASS__);
+        if( !$data ) {
 			$db = CmsApp::get_instance()->GetDb();
 			$query = 'SELECT * FROM '.CMS_DB_PREFIX.'routes';
 			$tmp = $db->GetArray($query);
+            $res = $driver->set(__CLASS__,$tmp,__CLASS__);
 			self::$_routes_loaded = TRUE;
-			if( is_array($tmp) && count($tmp) ) {
-				file_put_contents($fn,serialize($tmp));
-				return $tmp;
-			}
 		}
 		else {
 			self::$_routes_loaded = TRUE;
-			return unserialize(file_get_contents($fn));
+			return $data;
 		}
-	}
-
-	/**
-	 * @ignore
-	 */
-	private static function _get_cache_filespec()
-	{
-		return TMP_CACHE_LOCATION.'/'.md5(TMP_CACHE_LOCATION.__CLASS__).'.dat';
 	}
 
 	/**
@@ -422,7 +400,7 @@ final class cms_route_manager
 	 */
 	private static function _clear_cache()
 	{
-		@unlink(self::_get_cache_filespec());
+        self::_get_cache_driver()->clear(__CLASS__);
 		self::$_routes = null;
 		self::$_routes_loaded = FALSE;
 		// note: dynamic routes don't get cleared.

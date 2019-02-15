@@ -19,7 +19,6 @@
 #$Id$
 
 namespace CMSMS\internal;
-use \cms_cache_handler;
 use \ModuleOperations;
 
 /**
@@ -41,8 +40,12 @@ final class module_meta
 {
     static private $_instance = null;
     private $_data = array();
+    private $_driver;
 
-    private function __construct() {}
+    private function __construct()
+    {
+        $this->_driver = \CmsApp::get_instance()->get_cache_driver();
+    }
 
     /**
      * Get the instance of this object.  The object will be instantiated if necessary
@@ -66,7 +69,7 @@ final class module_meta
 
         if( count($this->_data) == 0 ) {
             $this->_data = array();
-            if( ($data = cms_cache_handler::get_instance()->get(__CLASS__)) ) $this->_data = unserialize($data);
+            if( ($data = $this->_driver->get(__CLASS__)) ) $this->_data = unserialize($data);
         }
     }
 
@@ -76,7 +79,7 @@ final class module_meta
         global $CMS_INSTALL_PAGE;
         if( isset($CMS_INSTALL_PAGE) ) return;
 
-        cms_cache_handler::get_instance()->set(__CLASS__,serialize($this->_data));
+        $this->_driver->set(__CLASS__,serialize($this->_data));
     }
 
 

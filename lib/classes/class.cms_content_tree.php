@@ -33,7 +33,6 @@
 #
 #-------------------------------------------------------------------------
 #END_LICENSE
-use \CMSMS\internal\content_cache as cms_content_cache;
 
 /**
  * Classes and utilities for managing the CMSMS content tree.
@@ -44,8 +43,7 @@ use \CMSMS\internal\content_cache as cms_content_cache;
 
 /**
  * A tree class that allows backward compatibility (somewhat) to the old Tree class used
- * in CMSMS versions prior to 1.9, and provides content retrieval abilities, with interface
- * into the content cache.
+ * in CMSMS versions prior to 1.9, and provides content retrieval abilities.
  *
  * @package CMS
  * @license GPL
@@ -245,32 +243,28 @@ class cms_content_tree extends cms_tree
 	/**
 	 * Retrieve the content object associated with this node.
 	 *
-	 * This method will return the content object associated with this node, loading it
-	 * if necessary, and placing it in the cache for subsequent requests.
+	 * This method will return the content object associated with this node, loading it if necessary.
 	 *
 	 * @param bool $deep load all child proeprties for the content object if loading is required.
 	 * @param bool $loadsiblings load all the siblings for the selected content object at the same time (a preformance optimization)
 	 * @param bool $loadall If loading siblings, include inactive/disabled pages.
      * @return mixed Either the content object specified or FALSE
 	 */
-	public function &getContent(bool $deep = false,bool $loadsiblings = true,bool $loadall = false)
+	public function getContent(bool $deep = false,bool $loadsiblings = true,bool $loadall = false)
 	{
         $id = $this->get_tag('id');
-		if( !cms_content_cache::content_exists($id) ) {
-			// not in cache
-			$parent = $this->getParent();
-			if( !$loadsiblings || !$parent ) {
-				// only load this content object
-				// todo: LoadContentFromId should use content cache.
-				$content = ContentOperations::get_instance()->LoadContentFromId($id, $deep);
-				return $content;
-			}
-			else {
-				$parent->getChildren($deep,$loadall);
-				if( cms_content_cache::content_exists($id) ) return cms_content_cache::get_content($id);
-			}
-		}
-		return cms_content_cache::get_content($id);
+        if( !$id ) throw new \LogicException('Cannot load content if there is no id');
+
+        // if load siblings, get the parent, and it's child ids
+        $ops = \CmsApp::get_instance()->GetContentOperations();
+        if( $loadsiblings  ) {
+            // get the parent, then load it's children... this will fill any cache.
+            $parent = $this->get_parent();
+            if( $parent ) $parent_id = $parent->get_tag('id');
+            if( !$parent_id ) $parent_id = -1;
+            $ops->LoadChildren($parent_id,$deep,$loadall);
+        }
+        return $ops->LoadContentFromId($id, $deep);
 	}
 
 
@@ -325,8 +319,6 @@ class cms_content_tree extends cms_tree
 	 * This method will retrieve a list of the children of this node, loading
 	 * their content objects at the same time (as a preformance enhancement).
 	 *
-	 * This method takes advantage of the content cache.
-	 *
 	 * @param bool $deep Optionally load the properties of the children (only used when loadcontent is true)
 	 * @param bool $all Load all children, including inactive/disabled ones (only used when loadcontent is true)
 	 * @param bool $loadcontent Load content objects for children
@@ -334,19 +326,8 @@ class cms_content_tree extends cms_tree
 	 */
 	public function &getChildren($deep = false,$all = false,$loadcontent = true)
 	{
+        if( $loadcontent ) ContentOperations::get_instance()->LoadChildren($this->get_tag('id'),$deep,$all);
 		$children = $this->get_children();
-		if( is_array($children) && count($children) && $loadcontent ) {
-			// check to see if we need to load anything.
-			$ids = array();
-			for( $i = 0, $n = count($children); $i < $n; $i++ ) {
-				if( !$children[$i]->isContentCached() ) $ids[] = $children[$i]->get_tag('id');
-			}
-
-			if( count($ids) ) {
-				// load the children that aren't loaded yet.
-                ContentOperations::get_instance()->LoadChildren($this->get_tag('id'),$deep,$all,$ids);
-			}
-		}
 
 		return $children;
 	}
@@ -390,19 +371,6 @@ class cms_content_tree extends cms_tree
         if( is_null($result) ) $result = $this->_buildFlatList();
 		return $result;
 	}
-
-
-	/**
-	 * A method to indicate wether the content object for this node is cached.
-	 *
-	 * @return bool
-	 */
-	public function isContentCached()
-	{
-		if( cms_content_cache::content_exists($this->get_tag('id')) ) return TRUE;
-		return FALSE;
-	}
-
 
 	/**
 	 * A recursive method to find the (estimated) hierarchy position of this node.

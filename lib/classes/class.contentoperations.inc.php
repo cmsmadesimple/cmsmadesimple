@@ -17,7 +17,6 @@
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 #$Id$
-use \CMSMS\internal\content_cache as cms_content_cache;
 
 /**
  * Content related functions.
@@ -40,11 +39,6 @@ use \CMSMS\internal\content_cache as cms_content_cache;
  */
 class ContentOperations
 {
-	/**
-	 * @ignore
-	 */
-	protected function __construct() {}
-
 	/**
 	 * @ignore
 	 */
@@ -71,20 +65,23 @@ class ContentOperations
 	private $_ownedpages;
 
 	/**
-	 * Return a reference to the only allowed instance of this singleton object
-	 *
-	 * @return ContentOperations
+	 * @ignore
 	 */
-	public static function &get_instance()
-	{
-		if( !is_object( self::$_instance ) ) self::$_instance = new ContentOperations();
-		return self::$_instance;
-	}
+    private $_cache;
+
+	/**
+	 * @ignore
+	 */
+    private function __construct()
+    {
+        $this->_cache = \CmsApp::get_instance()->get_cache_driver();
+        $this->setup_cache();
+    }
 
     /**
      * @ignore
      */
-    public static function setup_cache()
+    private function setup_cache()
     {
         // two caches, the flat list, and the tree
         $obj = new \CMSMS\internal\global_cachable('content_flatlist',
@@ -95,7 +92,19 @@ class ContentOperations
                                                    });
         \CMSMS\internal\global_cache::add_cachable($obj);
 
-        // two caches, the flat list, and the tree
+        // an index of the content pages, by alias
+        $obj = new \CMSMS\internal\global_cachable('content_aliasmap',
+                                                   function() {
+                                                       $flatlist = \CMSMS\internal\global_cache::get('content_flatlist');
+                                                       $out = null;
+                                                       foreach( $flatlist as $row ) {
+                                                           $alias = $row['content_alias'];
+                                                           if( $alias ) $out[$alias] = (int) $row['content_id'];
+                                                       }
+                                                       return $out;
+                                                   });
+
+        // a content tree
         $obj = new \CMSMS\internal\global_cachable('content_tree',
                                                    function(){
                                                        $flatlist = \CMSMS\internal\global_cache::get('content_flatlist');
@@ -106,14 +115,78 @@ class ContentOperations
                                                    });
         \CMSMS\internal\global_cache::add_cachable($obj);
 
-        // two caches, the flat list, and the tree
+        // a quick index of the content tree, by name
         $obj = new \CMSMS\internal\global_cachable('content_quicklist',
                                                    function(){
                                                        $tree = \CMSMS\internal\global_cache::get('content_tree');
                                                        return $tree->getFlatList();
                                                    });
+
         \CMSMS\internal\global_cache::add_cachable($obj);
     }
+
+
+    /**
+     * @internal
+     */
+    protected function get_cached_content(int $pageid)
+    {
+        if( $this->_cache->exists($pageid,__CLASS__) ) return $this->_cache->get($pageid,__CLASS__);
+    }
+
+
+    /**
+     * @internal
+     */
+    protected function put_cached_content(ContentBase $contentobj)
+    {
+        $cached_ids = $this->_cache->get('PAGELIST',__CLASS__);
+        $cached_ids[] = $contentobj->Id();
+        $cached_ids = array_unique($cached_ids);
+        $this->_cache->set($contentobj->Id(), $contentobj, __CLASS__);
+        $this->_cache->set('PAGELIST',$cached_ids,__CLASS__);
+    }
+
+    /**
+     * @internal
+     */
+    protected function alias_to_id(string $alias)
+    {
+        $alias_map = \CMSMS\internal\global_cache::get('content_flatlist');
+        if( $alias_map ) {
+            foreach( $alias_map as $row ) {
+                if( $row['content_alias'] == $alias ) return $row['content_id'];
+            }
+        }
+    }
+
+    /**
+     * @internal
+     */
+    protected function get_cached_page_ids()
+    {
+        return $this->_cache->get('PAGELIST',__CLASS__);
+    }
+
+    /**
+     * @internal
+     */
+    protected function is_cached($id) : bool
+    {
+        $id = (int) $id;
+        return $this->_cache->content_exists($id);
+    }
+
+	/**
+	 * Return a reference to the only allowed instance of this singleton object
+	 *
+	 * @return ContentOperations
+	 */
+	public static function &get_instance()
+	{
+		if( !is_object( self::$_instance ) ) self::$_instance = new self();
+		return self::$_instance;
+	}
 
 	/**
 	 * Return a content object for the currently requested page.
@@ -123,7 +196,7 @@ class ContentOperations
 	 */
 	public function getContentObject()
 	{
-		return CmsApp::get_instance()->get_content_object();
+		return \CmsApp::get_instance()->get_content_object();
 	}
 
 
@@ -203,13 +276,14 @@ class ContentOperations
      *
      * @param int $id The id of the content object to load
      * @param bool $loadprops Also load the properties of that content object. Defaults to false.
-     * @return mixed The loaded content object. If nothing is found, returns FALSE.
+     * @return mixed The loaded content object. If nothing is found, returns void
      */
-	function LoadContentFromId(int $id,bool $loadprops=false)
+	function LoadContentFromId(int $id = null)
 	{
         $id = (int) $id;
         if( $id < 1 ) $id = $this->GetDefaultContent();
-		if( cms_content_cache::content_exists($id) ) return cms_content_cache::get_content($id);
+        $obj = $this->get_cached_content($id);
+        if( $obj ) return $obj;
 
 		$db = CmsApp::get_instance()->GetDb();
 		$query = "SELECT * FROM ".CMS_DB_PREFIX."content WHERE content_id = ?";
@@ -218,13 +292,29 @@ class ContentOperations
 			$classtype = strtolower($row['type']);
 			$contentobj = $this->CreateNewContent($classtype);
 			if ($contentobj) {
-				$contentobj->LoadFromData($row, $loadprops);
-				cms_content_cache::add_content($id,$row['content_alias'],$contentobj);
+				$contentobj->LoadFromData($row, true);
+                $contentobj->HasProperty('junk'); // forces property load.
+                $this->put_cached_content($contentobj);
 				return $contentobj;
 			}
 		}
 	}
 
+
+    function SmartLoadContentFromAlias(string $alias)
+    {
+        $id = (int) $alias;
+        if( !is_numeric($alias) || (int) $alias < 1 ) {
+            $id = $this->alias_to_id($alias);
+        }
+
+        // get this page's node and call getcontent
+        // this causes loadChildren to be called with the parent id
+        // which forces all properties to load, and caches all siblings as well.
+        if( !$id ) die('could not find id for alias '.$alias);
+        $node = $this->quickfind_node_by_id($id);
+        return $node->getContent(true,true);
+    }
 
     /**
      * Given a content alias, load and return the loaded content object.
@@ -233,17 +323,15 @@ class ContentOperations
      * @param bool $only_active If true, only return the object if it's active flag is true. Defaults to false.
      * @return ContentBase The loaded content object. If nothing is found, returns NULL.
      */
-	function &LoadContentFromAlias(string $alias, bool $only_active = false)
+	function LoadContentFromAlias(string $alias, bool $only_active = false)
 	{
-		if( cms_content_cache::content_exists($alias) ) return cms_content_cache::get_content($alias);
-
-        $hm = Cmsapp::get_instance()->GetHierarchyManager();
-        $node = $hm->sureGetNodeByAlias($alias);
-        $out = null;
-        if( !$node ) return $out;
-        if( $only_active && !$node->get_tag('active') ) return $out;
-        $out = $this->LoadContentFromId($node->get_tag('id'));
-        return $out;
+        $id = (int) $alias;
+        if( !is_numeric($alias) || (int) $alias < 1 ) {
+            $id = $this->alias_to_id($alias);
+        }
+        $obj = $this->get_cached_content($id);
+        if( !$obj ) $obj = $this->LoadContentFromId($id);
+        if( !$only_active || $obj->Active() ) return $obj;
 	}
 
 
@@ -525,25 +613,24 @@ class ContentOperations
         \CMSMS\internal\global_cache::clear('content_flatlist');
         \CMSMS\internal\global_cache::clear('content_tree');
         \CMSMS\internal\global_cache::clear('content_quicklist');
-		cms_content_cache::clear();
+        \CMSMS\internal\global_cache::clear('content_aliasmap');
+        $this->_cache->clear(__CLASS__);
 	}
 
 	/**
 	 * Loads a set of content objects into the cached tree.
 	 *
-	 * @param bool $loadcontent If false, only create the nodes in the tree, don't load the content objects
 	 * @return cms_content_tree The cached tree of content
      * @deprecated
 	 */
-	function GetAllContentAsHierarchy(bool $loadcontent = false)
+	function GetAllContentAsHierarchy()
 	{
-        $tree = \CMSMS\internal\global_cache::get('content_tree');
-		return $tree;
+        return \CMSMS\internal\global_cache::get('content_tree');
 	}
 
 
 	/**
-	 * Load All content in thedatabase into memory
+	 * Load All content in the database into memory
 	 * Use with caution this can chew up alot of memory on larger sites.
 	 *
 	 * @param bool $loadprops Load extended content properties or just the page structure and basic properties
@@ -569,9 +656,9 @@ class ContentOperations
 			$parms[] = 1;
 		}
 
-		$loaded_ids = cms_content_cache::get_loaded_page_ids();
-		if( is_array($loaded_ids) && count($loaded_ids) ) {
-			$expr[] = 'content_id NOT IN ('.implode(',',$loaded_ids).')';
+		$cached_ids = $this->get_cached_page_ids();
+		if( is_array($cached_ids) && count($cached_ids) ) {
+			$expr[] = 'content_id NOT IN ('.implode(',',$cached_ids).')';
 		}
 
 		$query = 'SELECT * FROM '.CMS_DB_PREFIX.'content FORCE INDEX ('.CMS_DB_PREFIX.'index_content_by_idhier) WHERE ';
@@ -625,7 +712,7 @@ class ContentOperations
                     }
 
                     // cache the content objects
-                    cms_content_cache::add_content($id,$contentobj->Alias(),$contentobj);
+                    $this->put_cached_content($contentobj);
                 }
             }
 
@@ -635,7 +722,12 @@ class ContentOperations
 	}
 
 	/**
-	 * Loads additional, active children into a given tree object
+	 * Loads additional, active children into a given tree object.
+     *
+     * This is a smart method that determines what needs to be loaded, and adds them to the content cache
+     * the idea is to optimize memory by requests.
+     *
+     * Note: if the cached content object was not loaded deep.. this method will not load its properties.
 	 *
 	 * @param int $id The parent of the content objects to load into the tree
 	 * @param bool $loadprops If true, load the properties of all loaded content objects
@@ -645,33 +737,47 @@ class ContentOperations
 	 */
 	function LoadChildren(int $id = null, bool $loadprops = false, bool $all = false, array $explicit_ids = [] )
 	{
+        if( !$id && !is_array($explicit_ids) && !count($explicit_ids) ) {
+            throw new \LogicException('Invalid arguments passed to '.__METHOD__);
+        }
+
+        // gotta load it
 		$db = CmsApp::get_instance()->GetDb();
 
 		$contentrows = null;
-		if( is_array($explicit_ids) && count($explicit_ids) ) {
-			$loaded_ids = cms_content_cache::get_loaded_page_ids();
-			if( is_array($loaded_ids) && count($loaded_ids) ) $explicit_ids = array_diff($explicit_ids,$loaded_ids);
+        if( (!is_array($explicit_ids) || !count($explicit_ids)) ) {
+            $node = null;
+            if( $id < 1 ) {
+                $node = $this->GetAllContentAsHierarchy();
+            } else {
+                $node = $this->quickfind_node_by_id($id);
+                $explicit_ids[] = $id;
+            }
+            $children = $node->get_children();
+            for( $i = 0, $n = count($children); $i < $n; $i++ ) {
+                if( $all || $children[$i]->get_tag('active') ) $explicit_ids[] = $children[$i]->get_tag('id');
+            }
         }
-		if( is_array($explicit_ids) && count($explicit_ids) ) {
-			$expr = 'content_id IN ('.implode(',',$explicit_ids).')';
-			if( !$all ) $expr .= ' AND active = 1';
 
-			// note, this is mysql specific...
-			$query = 'SELECT * FROM '.CMS_DB_PREFIX.'content FORCE INDEX ('.CMS_DB_PREFIX.'index_content_by_idhier) WHERE '.$expr.' ORDER BY hierarchy';
-			$contentrows = $db->GetArray($query);
-		}
-		else {
-			if( !$id ) $id = -1;
-			// get the content rows
-			$query = "SELECT * FROM ".CMS_DB_PREFIX."content WHERE parent_id = ? AND active = 1 ORDER BY hierarchy";
-			if( $all ) $query = "SELECT * FROM ".CMS_DB_PREFIX."content WHERE parent_id = ? ORDER BY hierarchy";
-			$contentrows = $db->GetArray($query, array($id));
-		}
+        // now have list of explicit ids, find which ones we have to load frm the database.
+		if( is_array($explicit_ids) && count($explicit_ids) ) {
+			$cached_ids = $this->get_cached_page_ids();
+			if( is_array($cached_ids) && count($cached_ids) ) $explicit_ids = array_diff($explicit_ids,$cached_ids);
+        }
+        if( !is_array($explicit_ids) || !count($explicit_ids) ) return;
+
+        // there is stuff we gotta load
+        $expr = 'content_id IN ('.implode(',',$explicit_ids).')';
+        if( !$all ) $expr .= ' AND active = 1';
+
+        // note, this is mysql specific...
+		$query = 'SELECT * FROM '.CMS_DB_PREFIX.'content FORCE INDEX ('.CMS_DB_PREFIX.'index_content_by_idhier) WHERE '.$expr.' ORDER BY hierarchy';
+		$contentrows = $db->GetArray($query);
 
 		// get the content ids from the returned data
 		$contentprops = null;
-		if( $loadprops ) {
-		    $child_ids = array();
+		if( true /* loadprops */ ) {
+            $child_ids = [];
 		    for( $i = 0, $n = count($contentrows); $i < $n; $i++ ) {
 				$child_ids[] = $contentrows[$i]['content_id'];
 			}
@@ -708,8 +814,8 @@ class ContentOperations
 
 		    if ($contentobj) {
 				$contentobj->LoadFromData($row, false);
-				if( $loadprops && $contentprops && isset($contentprops[$id]) ) {
-					// load the properties from local cache.
+				if( $contentprops && isset($contentprops[$id]) ) {
+                    // load properties into the content objects.
 					foreach( $contentprops[$id] as $oneprop ) {
 						$contentobj->SetPropertyValueNoLoad($oneprop['prop_name'],$oneprop['content']);
 					}
@@ -717,13 +823,10 @@ class ContentOperations
 				}
 
 				// cache the content objects
-				cms_content_cache::add_content($id,$contentobj->Alias(),$contentobj);
+                $this->put_cached_content($contentobj);
 				unset($contentobj);
 			}
 		}
-
-		unset($contentrows);
-		unset($contentprops);
 	}
 
 	/**
@@ -741,6 +844,7 @@ class ContentOperations
 		$one = $this->LoadContentFromId($id);
 		$one->SetDefaultContent(true);
 		$one->Save();
+        $this->SetContentModified();
 	}
 
 
@@ -753,7 +857,7 @@ class ContentOperations
 	 * @param bool $loadprops Not implemented
 	 * @return array The array of content objects
 	 */
-	function &GetAllContent(bool $loadprops=true)
+	function GetAllContent()
 	{
 		debug_buffer('get all content...');
 		$gCms = CmsApp::get_instance();
@@ -761,7 +865,7 @@ class ContentOperations
 		$list = $tree->getFlatList();
 
 		$this->LoadAllContent($loadprops);
-		$output = array();
+		$output = [];
 		foreach( $list as &$one ) {
 			$tmp = $one->GetContent(false,true,true);
 			if( is_object($tmp) ) $output[] = $tmp;

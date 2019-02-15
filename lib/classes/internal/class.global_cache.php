@@ -1,14 +1,23 @@
 <?php
 namespace CMSMS\internal;
+use cms_cache_driver;
+
+/**
+ * @deprecated
+ */
 
 class global_cache
 {
     const TIMEOUT = 604800;
+    private static $_driver;
     private static $_types = array();
     private static $_dirty;
     private static $_cache;
 
-    private function __construct() {}
+    public function __construct(cms_cache_driver $driver)
+    {
+        $this->_driver = $driver;
+    }
 
     public static function add_cachable(global_cachable $obj)
     {
@@ -57,23 +66,29 @@ class global_cache
         }
     }
 
+    public static function set_driver(cms_cache_driver $driver)
+    {
+        if( !self::$_driver ) self::$_driver = $driver;
+    }
+
     private static function _get_driver()
     {
-        static $_driver = null;
-        if( !$_driver ) {
-            $_driver = new \cms_filecache_driver(array('lifetime'=>self::TIMEOUT,'autocleaning'=>1,'group'=>__CLASS__));
+        if( !self::$_driver ) {
+            $self::$_driver = new \cms_filecache_driver(array('lifetime'=>self::TIMEOUT,'autocleaning'=>1,'group'=>__CLASS__));
         }
-        return $_driver;
+        return self::$_driver;
     }
 
     private static function _load()
     {
         $driver = self::_get_driver();
         $keys = array_keys(self::$_types);
-        self::$_cache = array();
+        self::$_cache = [];
         foreach( $keys as $key ) {
-            $tmp = $driver->get($key);
-            self::$_cache[$key] = $tmp;
+            if( $driver->exists($key) ) {
+                $tmp = $driver->get($key);
+                self::$_cache[$key] = $tmp;
+            }
             unset($tmp);
         }
     }

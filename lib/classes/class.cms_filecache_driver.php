@@ -116,7 +116,7 @@ class cms_filecache_driver extends cms_cache_driver
      *   grouop => string (no default)
      * @param string $opts
      */
-    public function __construct($opts)
+    public function __construct($opts = null)
     {
         $_keys = array('lifetime','locking','cache_dir','auto_cleaning','blocking','group');
         if( is_array($opts) ) {
@@ -238,8 +238,7 @@ class cms_filecache_driver extends cms_cache_driver
      */
     private function _get_filename($key,$group)
     {
-        $fn = $this->_cache_dir . '/cache_'.md5(__DIR__.$group).'_'.md5($key.__DIR__).'.cms';
-        return $fn;
+        return $this->_cache_dir . '/cache_'.md5(__DIR__.$group).'_'.md5($key.__DIR__).'.cms';
     }
 
 
@@ -249,7 +248,7 @@ class cms_filecache_driver extends cms_cache_driver
     private function _flock($res,$flag)
     {
         if( !$this->_locking ) return TRUE;
-	if( !$res ) return FALSE;
+        if( !$res ) return FALSE;
 
         $mode = '';
         switch( strtolower($flag) ) {
@@ -371,6 +370,7 @@ class cms_filecache_driver extends cms_cache_driver
         if( !$group ) $group = $this->_group;
 
         $mask = $dir.'/cache_*_*.cg';
+        if( $group == '*' ) $group = null;
         if( $group ) $mask = $dir.'/cache_'.md5(__DIR__.$group).'_*.cg';
 
         $files = glob($mask);

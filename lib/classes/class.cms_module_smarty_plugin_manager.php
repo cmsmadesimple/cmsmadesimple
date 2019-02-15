@@ -73,6 +73,11 @@ final class cms_module_smarty_plugin_manager
 	 */
 	private $_modified;
 
+    /**
+     * @ignore
+     */
+    private $_cache;
+
 	/**
 	 * A flag indicating that the plugin is intended to be available for the frontend
 	 */
@@ -86,7 +91,10 @@ final class cms_module_smarty_plugin_manager
 	/**
 	 * @ignore
 	 */
-	protected function __construct() {}
+	protected function __construct()
+    {
+        $this->_cache = \CmsApp::get_instance()->get_cache_driver();
+    }
 
 	/**
 	 * Get the single allowed instance of this class
@@ -105,16 +113,21 @@ final class cms_module_smarty_plugin_manager
 		if( $this->_loaded == true ) return;
 		// todo: cache this stuff.  does not need to be run on each request
 
+        $data = $this->_cache->get(__CLASS__);
+        $this->_data = [];
 		$this->_loaded = TRUE;
-		$this->_data = array();
-		$db = CmsApp::get_instance()->GetDb();
-		$query = 'SELECT * FROM '.CMS_DB_PREFIX.'module_smarty_plugins ORDER BY module';
-		$tmp = $db->GetArray($query);
-		if( is_array($tmp) ) {
-			for( $i = 0, $n = count($tmp); $i < $n; $i++ ) {
-				$row = $tmp[$i];
-				$row['callback'] = unserialize($row['callback']);
-				// todo, verify signature
+        if( !$data ) {
+            $db = CmsApp::get_instance()->GetDb();
+            $query = 'SELECT * FROM '.CMS_DB_PREFIX.'module_smarty_plugins ORDER BY module';
+            $data = $db->GetArray($query);
+            $this->_cache->set(__CLASS__,$data);
+        }
+
+		if( is_array($data) && count($data) ) {
+			for( $i = 0, $n = count($data); $i < $n; $i++ ) {
+				$row = $data[$i];
+				$tmp2 = unserialize($row['callback']);
+                if( $tmp2 ) $row['callback'] = $tmp2;
 				$this->_data[$row['sig']] = $row;
 			}
 		}
@@ -125,9 +138,9 @@ final class cms_module_smarty_plugin_manager
 	 */
 	private function _save()
 	{
-		if( !is_array($this->_data) || count($this->_data) == 0 || $this->_modified == FALSE )
-			return;
+		if( !is_array($this->_data) || count($this->_data) == 0 || $this->_modified == FALSE ) return;
 
+        $this->_cache->erase(__CLASS__);
 		$db = CmsApp::get_instance()->GetDb();
 		$query = 'TRUNCATE TABLE '.CMS_DB_PREFIX.'module_smarty_plugins';
 		$db->Execute($query);
@@ -135,11 +148,13 @@ final class cms_module_smarty_plugin_manager
 		$query = 'INSERT INTO '.CMS_DB_PREFIX.'module_smarty_plugins (sig,name,module,type,callback,cachable,available) VALUES';
 		$fmt = " ('%s','%s','%s','%s','%s',%d,%d),";
 		foreach( $this->_data as $key => $row ) {
-			$query .= sprintf($fmt,$row['sig'],$row['name'],$row['module'],$row['type'],serialize($row['callback']),$row['cachable'],$row['available']);
+            $row['callback'] = serialize($row['callback']);
+			$query .= sprintf($fmt,$row['sig'],$row['name'],$row['module'],$row['type'],$row['callback'],$row['cachable'],$row['available']);
 		}
 		if( endswith($query,',') ) $query = substr($query,0,-1);
 		$dbr = $db->Execute($query);
 		if( !$dbr ) return FALSE;
+
 		$this->_modified = FALSE;
 		return TRUE;
 	}

@@ -18,6 +18,11 @@
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 #$Id$
+namespace CMSMS;
+use CmsApp;
+use ContentOperations;
+use CmsNlsOperations;
+use cms_config;
 
 $starttime = microtime();
 $orig_memory = (function_exists('memory_get_usage')?memory_get_usage():0);
@@ -47,20 +52,17 @@ if (!is_writable(TMP_TEMPLATES_C_LOCATION) || !is_writable(TMP_CACHE_LOCATION)) 
 
 // initial setup
 $_app = CmsApp::get_instance(); // internal use only, subject to change.
-$config = \cms_config::get_instance();
+$config = $_app->GetConfig();
 $params = array_merge($_GET, $_POST);
 $smarty = $_app->GetSmarty();
 $page = get_pageid_or_alias_from_url();
-$contentops = ContentOperations::get_instance();
+$contentops = $_app->GetContentOperations();
 $contentobj = null;
 $trycount = 0;
 $showtemplate = true;
 
-\CMSMS\internal\content_cache::get_instance();
-$_tpl_cache = new \CMSMS\internal\TemplateCache();
-
 $get_content_in_parts = function( $smarty, $top_rsrc, $body_rsrc, $head_rsrc ) {
-    $config = \cms_config::get_instance();
+    $config = cms_config::get_instance();
 
     debug_buffer('process template top');
     \CMSMS\HookManager::do_hook('Core::PageTopPreRender', [ 'content'=>&$contentobj, 'html'=>&$top ]);
@@ -96,6 +98,7 @@ $get_content_in_parts = function( $smarty, $top_rsrc, $body_rsrc, $head_rsrc ) {
 while( $trycount < 2 ) {
     $trycount++;
     try {
+        // todo: if we have no $page, throw an error
         if( $trycount < 2 && is_file(TMP_CACHE_LOCATION.'/SITEDOWN') ) throw new \CmsError503Exception('Site down for maintenance');
         if( $trycount < 2 && is_sitedown() ) throw new \CmsError503Exception('Site down for maintenance');
 
@@ -112,8 +115,8 @@ while( $trycount < 2 ) {
         }
         else {
             // $page could be an integer ID or a string alias
-            $contentobj = $contentops->LoadContentFromAlias($page,true);
-            if( !is_object($contentobj) ) throw new CmsError404Exception('Page '.$page.' not found');
+            $contentobj = $contentops->SmartLoadContentFromAlias($page,true);
+            if( !is_object($contentobj) || !$contentobj->Active() ) throw new CmsError404Exception('Page '.$page.' not found');
         }
 
         // session stuff is needed from here on.

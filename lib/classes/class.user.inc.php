@@ -186,5 +186,3 @@ class User
 		return $result;
 	}
 }
-
-?>

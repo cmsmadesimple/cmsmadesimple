@@ -1,7 +1,8 @@
 Version 2.3 - NO NAME SET
 ----------------------------------
 Core - General
-  - Upgrade Smarty to v3.1.33 and now use composer
+  - IMPROVEMENT: Upgrade Smarty to v3.1.33 and now use composer
+      When APC is enabled on the server, smarty can now utilize that for compiled templates
   - Upgrade PHPMailer to v6.0.5 and now use composer
   - BREAKING: Any third party functionality that uses PHPMailer directly may now break due to namespace changes
   - CHANGE: Add more functions to the smarty security policy, and fix incorrect initialization of members.
@@ -141,6 +142,16 @@ Core - General
   - REMOVE:  Events and Event handlers functionality from the admin panel
   - CHANGE:  Deprecate the whole events class, and methods in the CMSModule class
   - BREAKING: The Events class is now just a lightweight stub to preserve compatibility for most modules.  Some methods have been removed
+  - FEATURE:  Now allow caching most core data using the APC cache, by adding $config['cache_driver'] = 'APC' to the config.php
+     If not specified, the old file cache mechanism will be used
+  - FEATURE:  Now allow specifying the maximum cache TTL in seconds by adding a $config['cache_ttl'] = <seconds> value to the config.php
+  - FEATURE:  Site administrators (Modify Site Preferences') can clear the cache (including APC cache) by adding ?__clearcache__ to 
+     the /admin/index.php request.  Only for logged in admins.
+  - IMPROVEMENT: Rationalize the CmsLayoutTemplate code to use a manager class, which takes advantage of the cache.
+  - IMPROVEMENT: Rationalize the ContentOperations class to better take advantage of a cache
+  - IMPROVEMENT: CmsApp now acts more as a service provider module.  Begin to remove singletons
+  - IMPROVEMENT: All core functionality that utilizes a cache can now take advantage of the APC cache
+   
 
 News v2.21.5
   - Minor cleaning of parameters.

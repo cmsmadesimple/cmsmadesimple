@@ -18,6 +18,11 @@
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 #$Id$
+namespace CMSMS;
+use CMSMS\internal\global_cache;
+use CmsApp;
+use cms_siteprefs;
+use ModuleOperations;
 
 /**
  * This file is included in every page.  It does all setup functions including
@@ -110,6 +115,11 @@ require_once($dirname.DIRECTORY_SEPARATOR.'std_hooks.php');
 
 // new for 2.0 ... this creates a mechanism whereby items can be cached automatically, and fetched (or calculated) via the use of a callback
 // if the cache is too old, or the cached value has been cleared or not yet been saved.
+$_app->GetContentOperations();
+if( isset($_GET['clearme']) ) {
+    $_app->get_cache_driver()->clear('*');
+}
+global_cache::set_driver($_app->get_cache_driver());
 $obj = new \CMSMS\internal\global_cachable('schema_version',
                                            function(){
                                                $db = \CmsApp::get_instance()->GetDb();
@@ -156,7 +166,6 @@ $obj = new \CMSMS\internal\global_cachable('module_deps',
 \CMSMS\internal\global_cache::add_cachable($obj);
 cms_siteprefs::setup();
 $_app->GetHookMappingManager(); // initialize hook mappings.
-ContentOperations::setup_cache();
 
 // Attempt to override the php memory limit
 if( isset($config['php_memory_limit']) && !empty($config['php_memory_limit'])  ) ini_set('memory_limit',trim($config['php_memory_limit']));

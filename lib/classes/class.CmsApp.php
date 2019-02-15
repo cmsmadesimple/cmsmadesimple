@@ -19,6 +19,8 @@
 #$Id: class.global.inc.php 6939 2011-03-06 00:12:54Z calguy1000 $
 use CMSMS\HookManager;
 use CMSMS\internal\hook_mapping_manager;
+use CMSMS\apc_cache_driver;
+use CMSMS\LayoutTemplateManager;
 
 /**
  * Global class for easy access to all important variables.
@@ -545,6 +547,32 @@ final class CmsApp {
         return $_mgr;
     }
 
+    public function get_cache_driver()
+    {
+        static $_driver;
+        if( !$this->_driver ) {
+            $config = $this->GetConfig();
+            $ttl = (int) $config['cache_ttl'];
+            if( !$ttl ) $ttl = 24 * 3600;
+            if( $config['cache_driver'] == 'APC' ) {
+                // get a TTL.
+                $_driver = new apc_cache_driver( $ttl ); // 24 hours
+            } else {
+                // todo: config options for the filecache driver.
+                $opts = [ 'lifetime'=>$ttl ];
+                $_driver = new cms_filecache_driver();
+            }
+        }
+        return $_driver;
+    }
+
+    public function get_template_manager()
+    {
+        static $mgr;
+        if( !$mgr ) $mgr = new LayoutTemplateManager($this->GetDB(), $this->get_cache_driver());
+        return $mgr;
+    }
+
 	/**
 	* Disconnect from the database.
 	*
@@ -575,6 +603,10 @@ final class CmsApp {
 	 */
 	final public function clear_cached_files($age_days = 0)
 	{
+        // clear APC, or file cache separately and completely
+        $this->get_cache_driver()->clear();
+
+        // additionall clear cached files that are older than N days old.
         $age_days = max(-1,(int) $age_days);
 		global $CMS_LOGIN_PAGE, $CMS_INSTALL_PAGE;
 		if( !defined('TMP_CACHE_LOCATION') ) return;

@@ -143,6 +143,11 @@ abstract class CmsAdminThemeBase
      */
     private $_headtext;
 
+    /**
+     * @ignore
+     */
+    private $_cache_driver;
+
 	/**
 	 * @ignore
 	 */
@@ -160,6 +165,7 @@ abstract class CmsAdminThemeBase
 	{
 		if( is_object(self::$_instance) ) throw new CmsLogicExceptin('Only one instance of a theme object is permitted');
 
+        $this->_cache_driver = \CmsApp::get_instance()->get_cache_driver();
 		$this->_url = $_SERVER['SCRIPT_NAME'];
 		$this->_query = (isset($_SERVER['QUERY_STRING'])?$_SERVER['QUERY_STRING']:'');
 		if( $this->_query == '' && isset($_POST['mact']) ) {
@@ -246,7 +252,7 @@ abstract class CmsAdminThemeBase
 	private function _get_user_module_info()
 	{
 		$uid = get_userid(FALSE);
-		if( ($data = cms_cache_handler::get_instance()->get('themeinfo'.$uid)) ) {
+		if( ($data = $this->_cache_driver->get('themeinfo'.$uid)) ) {
 			$data = base64_decode($data);
 			$data = @unserialize($data);
 		}
@@ -278,7 +284,7 @@ abstract class CmsAdminThemeBase
 			// even if the array is empty... serialize the info.
 			$data = $usermoduleinfo;
 			$tmp = serialize($data);
-			cms_cache_handler::get_instance()->set('themeinfo'.$uid,base64_encode($tmp));
+			$this->_cache_driver->set('themeinfo'.$uid,base64_encode($tmp));
 		}
 
 		return $data;

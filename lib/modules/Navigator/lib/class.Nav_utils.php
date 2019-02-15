@@ -78,8 +78,8 @@ final class Nav_utils
 
             $obj = new NavigatorNode;
             $obj->id = $content->Id();
-	    $obj->name = $content->Name();
-	    $obj->title = $content->Name();
+            $obj->name = $content->Name();
+            $obj->title = $content->Name();
             $obj->url = $content->GetURL();
             $obj->accesskey = $content->AccessKey();
             $obj->type = strtolower($content->Type());
@@ -141,13 +141,17 @@ final class Nav_utils
             if( $node->has_children() ) {
                 $children = $node->getChildren($deep,$show_all);
                 if( is_array($children) && count($children) ) {
+                    $obj->children_exist = TRUE;
+                    /*
                     foreach( $children as $node ) {
                         $id = $node->get_tag('id');
-                        if( \CMSMS\internal\content_cache::content_exists($id) ) {
+                        $ops = $gCms->getContentOperations();
+                        if( $ops->is_cached($id) ) {
                             $obj->children_exist = TRUE;
                             break;
                         }
                     }
+                    */
                 }
             }
 
